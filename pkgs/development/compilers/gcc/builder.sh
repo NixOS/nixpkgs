@@ -3,6 +3,10 @@
 . $stdenv/setup
 
 
+FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
+mkdir $FIXINC_DUMMY
+
+
 preConfigure() {
     
     if test "$noSysDirs" = "1"; then
@@ -60,7 +64,7 @@ postConfigure() {
         # header files from /usr/include.
         mf=gcc/Makefile
         sed \
-            -e "s^NATIVE_SYSTEM_HEADER_DIR =\(.*\)^NATIVE_SYSTEM_HEADER_DIR = /fixinc-disabled^" \
+            -e "s^NATIVE_SYSTEM_HEADER_DIR =\(.*\)^NATIVE_SYSTEM_HEADER_DIR = $FIXINC_DUMMY^" \
             < $mf > $mf.tmp
         mv $mf.tmp $mf
     fi
