@@ -66,8 +66,13 @@ let {
     openssl
     mktemp
     strace
-  ;};
 
+    postgresql
+    jetty
+    blackdown
+    apacheAntBlackdown14
+    subversionWithJava
+  ;};
 
   powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)
     aterm
