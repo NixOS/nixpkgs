@@ -12,7 +12,7 @@ Function(
             [ ("localServer", True)
             , ("httpsClient", True)
             , ("httpServer", True)
-            , ("pythonBindings", True)
+            , ("pythonBindings", False)
             ]),
           ""))
 
