@@ -248,7 +248,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  strategoxt = (import ../development/compilers/ocaml) {
+  ocaml = (import ../development/compilers/ocaml) {
     inherit fetchurl stdenv ;
   };
 
