@@ -1,7 +1,7 @@
 # !!! this should be moved to default.nix eventually (but I delay
 # doing that since it would cause a rebuild of lots of stuff).
 
-{stdenv, fetchurl, yacc}:
+{stdenv, fetchurl, yacc, m4}:
 
 assert !isNull yacc;
 
@@ -15,4 +15,5 @@ derivation {
   };
   stdenv = stdenv;
   yacc = yacc;
+  m4 = m4;
 }

@@ -219,6 +219,7 @@
     fetchurl = fetchurl;
     stdenv = stdenv;
     yacc = bison;
+    m4 = gnum4;
   };
 
   gcc = (import ../development/compilers/gcc) {
