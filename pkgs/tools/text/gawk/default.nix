@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gawk-3.1.3";
+  name = "gawk-3.1.4";
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/gawk/gawk-3.1.3.tar.bz2;
-    md5 = "a116eec17e7ba085febb74c7758823bd";
+    url = ftp://ftp.nluug.nl/pub/gnu/gawk/gawk-3.1.4.tar.bz2;
+    md5 = "b8b532beaf02350e69d2d5dc98cb1e37";
   };
 }
