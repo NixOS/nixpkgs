@@ -60,7 +60,6 @@ sub addPkg {
 #    }
 }
 
-
-foreach my $pkgdir ($ENV{"dirs"}) {
+foreach my $pkgdir (split ' ', $ENV{"dirs"}) {
     addPkg($pkgdir);
 }
