@@ -3,6 +3,7 @@ let {
   body = 
     [ pkgs.zip
       pkgs.unzip
+      pkgs.valgrind
       pkgs.par2cmdline
       pkgs.graphviz
       pkgs.strategoxt093

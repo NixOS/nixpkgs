@@ -182,6 +182,11 @@
     python = python;
   };
 
+  valgrind = (import ../development/tools/misc/valgrind) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   gnumake = (import ../development/tools/build-managers/gnumake) {
     fetchurl = fetchurl;
     stdenv = stdenv;
