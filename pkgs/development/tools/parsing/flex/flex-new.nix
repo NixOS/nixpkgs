@@ -3,17 +3,14 @@
 
 {stdenv, fetchurl, yacc, m4}:
 
-assert yacc != null;
+assert yacc != null && m4 != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "flex-2.5.31";
-  system = stdenv.system;
-  builder = ./builder-new.sh;
   src = fetchurl {
     url = http://heanet.dl.sourceforge.net/sourceforge/lex/flex-2.5.31.tar.bz2;
     md5 = "363dcc4afc917dc51306eb9d3de0152f";
   };
-  stdenv = stdenv;
-  yacc = yacc;
-  m4 = m4;
+  buildInputs = [yacc];
+  propagatedBuildInputs = [m4];
 }
