@@ -5,5 +5,7 @@ Package(
   , ("actPkgConfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("actSubversion", IncludeFix("subversion/subversion.fix"))
   , ("actPan", IncludeFix("pan/pan.fix"))
+  , ("actSDF", IncludeFix("sdf2/sdf2.fix"))
+  , ("actStrategoXT", IncludeFix("strategoxt/strategoxt.fix"))
   ]
 )

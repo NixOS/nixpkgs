@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "sdf2-1.6")
+
+  , ("build", Relative("sdf2/sdf2-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.stratego-language.org/pub/stratego/sdf2/sdf2-bundle-1.6.tar.gz")
+      , ("md5", "283be0b4c7c9575c1b5cc735316e6192")
+      ]))
+
+  , ("aterm", IncludeFix("aterm/aterm.fix"))
+  ]
+)
