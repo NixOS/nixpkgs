@@ -249,7 +249,7 @@ rec {
   };
 
   ocaml = (import ../development/compilers/ocaml) {
-    inherit fetchurl stdenv ;
+    inherit fetchurl stdenv x11;
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
