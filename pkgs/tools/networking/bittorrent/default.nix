@@ -3,12 +3,12 @@
 assert wxPython.python.zlibSupport;
 
 stdenv.mkDerivation {
-  name = "bittorrent-3.3";
+  name = "bittorrent-3.4.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://bitconjurer.org/BitTorrent/BitTorrent-3.3.tar.gz;
-    md5 = "1ecf1fc40b4972470313f9ae728206e8";
+    url = http://heanet.dl.sourceforge.net/sourceforge/bittorrent/BitTorrent-3.4.2.tar.gz;
+    md5 = "b854f25a33289565bcaeaded04955c1a";
   };
-  python = wxPython.python;
   inherit wxPython;
+  inherit (wxPython) python;
 }
