@@ -13,12 +13,12 @@ assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl)
 assert swigBindings -> swig != null && swig.pythonSupport;
 
 stdenv.mkDerivation {
-  name = "subversion-1.0.5";
+  name = "subversion-1.0.6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/tarballs/subversion-1.0.5.tar.bz2;
-    md5 = "8e8288fee061f5278ec201fc5e5e141c";
+    url = http://subversion.tigris.org/tarballs/subversion-1.0.6.tar.bz2;
+    md5 = "bb05fe041fef7491b3555904d97f5e1c";
   };
 
   openssl = if sslSupport then openssl else null;
