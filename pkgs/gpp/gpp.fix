@@ -1,17 +1,21 @@
 Function(["rev"],
   Package(
-    [ ("name", "xtc")
+    [ ("name", "gpp")
 
-    , ("build", Relative("xtc/xtc-build.sh"))
+    , ("build", Relative("gpp/gpp-build.sh"))
     , ("pkgbuild", Relative("strategoxt/pkg-build.sh"))
 
     , ("src", App(IncludeFix("strategoxt/fetchsvn.fix"),
-                  [ ("name", "xtc"), ("rev",  Var("rev"))]))
+                  [ ("name", "gpp"), ("rev",  Var("rev"))]))
 
     , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
     , ("aterm",  IncludeFix("aterm/aterm.fix"))
+    , ("sdf2",   IncludeFix("sdf2/sdf2.fix"))
     , ("autoxt", App(IncludeFix("autoxt/autoxt.fix"),[("rev",Var("rev"))]))
     , ("srts",   App(IncludeFix("srts/srts.fix"),[("rev",Var("rev"))]))
+    , ("xtc",    App(IncludeFix("xtc/xtc.fix"),[("rev",Var("rev"))]))
+    , ("stratego_front",    
+	App(IncludeFix("stratego-front/stratego-front.fix"),[("rev",Var("rev"))]))
     ]
   )
 )

@@ -1,17 +1,19 @@
 Function(["rev"],
   Package(
-    [ ("name", "srts")
+    [ ("name", "sc")
 
-    , ("build", Relative("srts/srts-build.sh"))
+    , ("build", Relative("sc/sc-build.sh"))
     , ("pkgbuild", Relative("strategoxt/pkg-build.sh"))
 
     , ("src", App(IncludeFix("strategoxt/fetchsvn.fix"),
-                  [ ("name", "srts"), ("rev",  Var("rev"))]))
+                  [ ("name", "sc"), ("rev",  Var("rev"))]))
 
     , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
     , ("aterm",  IncludeFix("aterm/aterm.fix"))
+    , ("sdf2",   IncludeFix("sdf2/sdf2.fix"))
     , ("autoxt", App(IncludeFix("autoxt/autoxt.fix"),[("rev",Var("rev"))]))
+    , ("srts",   App(IncludeFix("srts/srts.fix"),[("rev",Var("rev"))]))
+    , ("xtc",    App(IncludeFix("xtc/xtc.fix"),[("rev",Var("rev"))]))
     ]
   )
-) 
-
+)

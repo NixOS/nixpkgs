@@ -1,0 +1,8 @@
+Function(["name", "rev"],
+  App(IncludeFix("fetchsvn/fetchsvn.fix"),
+      [ ("name", Var("name"))
+      , ("url",  "http://losser.labs.cs.uu.nl:12080/repos/StrategoXT/trunk/StrategoXT")
+      , ("dir",  Var("name"))
+      , ("rev",  Var("rev"))
+      ])
+)

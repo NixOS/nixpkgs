@@ -1,17 +1,16 @@
-Function(["rev"],
+Function(["name","rev"],
   Package(
-    [ ("name", "srts")
+    [ ("name", Var("name"))
 
-    , ("build", Relative("srts/srts-build.sh"))
-    , ("pkgbuild", Relative("strategoxt/pkg-build.sh"))
+    , ("build", Relative("pkg/pkg-build.sh"))
 
     , ("src", App(IncludeFix("strategoxt/fetchsvn.fix"),
-                  [ ("name", "srts"), ("rev",  Var("rev"))]))
+                  [ ("name", Var("name")), ("rev",  Var("rev"))]))
 
     , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
     , ("aterm",  IncludeFix("aterm/aterm.fix"))
     , ("autoxt", App(IncludeFix("autoxt/autoxt.fix"),[("rev",Var("rev"))]))
+    , ("srts",   App(IncludeFix("srts/srts.fix"),[("rev",Var("rev"))]))
     ]
   )
-) 
-
+)
