@@ -1,5 +1,7 @@
 #! @bash@/bin/sh -e
 
+set -e
+
 . @out@/bin/env.sh
 
 echo "--- Nix ---"
@@ -23,9 +25,9 @@ echo "enabling loopback interface..."
 ifconfig lo 127.0.0.1
 
 echo "enabling ethernet interface..."
-ifconfig eth0 $(cat /etc/networking/local-ip) up
+ifconfig eth0 $(cat /etc/networking/local-ip) up || true
 
 echo "setting up routing table..."
-route add default gw $(cat /etc/networking/gateway-ip)
+route add default gw $(cat /etc/networking/gateway-ip) || true
 
 echo "boot done."
