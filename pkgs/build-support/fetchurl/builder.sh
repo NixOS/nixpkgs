@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 . $stdenv/setup
 
 header "downloading $out from $url"

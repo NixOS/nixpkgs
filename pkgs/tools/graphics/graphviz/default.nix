@@ -3,9 +3,8 @@
 assert x11 != null && libpng != null && libjpeg != null
   && expat != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "graphviz-1.10";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -13,7 +12,6 @@ derivation {
     md5 = "e1402531abff68d146bf94e72b44dc2a";
   };
 
-  stdenv = stdenv;
   x11 = x11;
   libpng = libpng;
   libjpeg = libjpeg;

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 . $stdenv/setup || exit 1
 
 mkdir $out || exit 1

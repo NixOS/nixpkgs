@@ -5,9 +5,8 @@ assert pkgconfig != null && gtk != null && libpng != null;
 # not be linked against png.
 assert libpng == gtk.libpng;
 
-derivation {
+stdenv.mkDerivation {
   name = "gqview-1.3.5";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -15,7 +14,6 @@ derivation {
     md5 = "c44687bdd636ea6e5133fb936abf880a";
   };
 
-  stdenv = stdenv;
   pkgconfig = pkgconfig;
   gtk = gtk;
   libpng = libpng;

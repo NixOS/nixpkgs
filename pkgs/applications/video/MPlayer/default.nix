@@ -4,9 +4,8 @@
 assert x11 != null && freetype != null;
 assert alsaSupport -> alsa != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "MPlayer-1.0pre3";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -20,12 +19,10 @@ derivation {
 
   alsaSupport = alsaSupport;
 
-  stdenv = stdenv;
   x11 = x11;
   freetype = freetype;
   alsa = if alsaSupport then alsa else null;
   win32codecs = (import ./win32codecs) {
-    stdenv = stdenv;
     fetchurl = fetchurl;
   };
 }

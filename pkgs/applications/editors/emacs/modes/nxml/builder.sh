@@ -1,5 +1,3 @@
-#! /bin/sh
-
 . $stdenv/setup || exit 1
 
 mkdir -p $out/emacs/site-lisp || exit 1

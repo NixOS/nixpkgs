@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 . $stdenv/setup
 
 tar xvfz $src

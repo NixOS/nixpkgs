@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$wxGTK $python $pkgconfig $gtk"
 . $stdenv/setup
 

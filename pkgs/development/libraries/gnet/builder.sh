@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $glib"
 . $stdenv/setup || exit 1
 

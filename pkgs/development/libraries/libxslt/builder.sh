@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$libxml2"
 . $stdenv/setup || exit 1
 

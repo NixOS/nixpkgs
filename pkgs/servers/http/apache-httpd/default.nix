@@ -6,9 +6,8 @@ assert sslSupport -> openssl != null;
 assert db4Support -> db4 != null;
 assert expat != null && perl != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "apache-httpd-2.0.49";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -18,7 +17,7 @@ derivation {
 
   inherit sslSupport db4Support;
 
-  inherit stdenv perl expat;
+  inherit perl expat;
   openssl = if sslSupport then openssl else null;
   db4 = if db4Support then db4 else null;
 }

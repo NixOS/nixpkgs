@@ -7,9 +7,8 @@ assert gtk != null;
 assert sslSupport -> openssl != null;
 assert imageSupport -> gdkpixbuf != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "sylpheed-0.9.10";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -19,7 +18,7 @@ derivation {
 
   inherit sslSupport imageSupport;
 
-  inherit stdenv gtk;
+  inherit gtk;
   openssl = if sslSupport then openssl else null;
   gdkpixbuf = if imageSupport then gdkpixbuf else null;
 }

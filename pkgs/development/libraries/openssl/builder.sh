@@ -1,5 +1,3 @@
-#! /bin/sh
-
 . $stdenv/setup || exit 1
 export PATH=$perl/bin:$PATH
 

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $gtk $libxml2"
 . $stdenv/setup
 

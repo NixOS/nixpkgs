@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$aterm $getopt"
 . $stdenv/setup
 

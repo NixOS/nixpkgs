@@ -4,9 +4,8 @@
 assert perlSupport -> perl != null;
 assert pythonSupport -> python != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "swig-1.3.19";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -17,7 +16,6 @@ derivation {
   perlSupport = perlSupport;
   pythonSupport = pythonSupport;
 
-  stdenv = stdenv;
   perl = if perlSupport then perl else null;
   python = if pythonSupport then python else null;
 }

@@ -3,9 +3,8 @@
 assert x11 != null && glib != null;
 assert x11.buildClientLibs;
 
-derivation {
+stdenv.mkDerivation {
   name = "gtk+-1.2.10";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -15,5 +14,4 @@ derivation {
 
   buildInputs = [x11 glib];
   _propagatedBuildInputs = [x11 glib];
-  inherit stdenv;
 }

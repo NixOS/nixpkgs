@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$libdvdread"
 . $stdenv/setup || exit 1
 

@@ -1,8 +1,7 @@
 {stdenv, fetchurl, pkgconfig, xproto, xextensions, libXtrans, libXau}:
 
-derivation {
+stdenv.mkDerivation {
   name = "libX11-6.2.1";
-  system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
     url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libX11-6.2.1.tar.bz2;
@@ -10,5 +9,4 @@ derivation {
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [xproto xextensions libXtrans libXau];
-  inherit stdenv;
 }

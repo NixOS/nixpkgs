@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildInputs="$openssl $db4 $expat $perl"
 . $stdenv/setup
 

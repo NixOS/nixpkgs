@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildInputs="$openssl $db4 $httpd $swig $python $expat"
 . $stdenv/setup
 

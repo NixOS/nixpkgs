@@ -12,9 +12,8 @@ assert httpServer -> httpd != null && httpd.expat == expat;
 assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl);
 assert swigBindings -> swig != null && swig.pythonSupport;
 
-derivation {
+stdenv.mkDerivation {
   name = "subversion-1.0.1";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -28,5 +27,5 @@ derivation {
   swig = if swigBindings then swig else null;
   python = if swigBindings then swig.python else null;
 
-  inherit stdenv expat localServer httpServer sslSupport swigBindings;
+  inherit expat localServer httpServer sslSupport swigBindings;
 }

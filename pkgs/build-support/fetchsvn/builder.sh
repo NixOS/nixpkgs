@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$subversion"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $x11 $glib $xft"
 . $stdenv/setup
 

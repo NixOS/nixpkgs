@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 export PATH=/usr/bin:/bin
 
 mkdir $out

@@ -2,11 +2,10 @@
 
 # Note that `curl' may be `null', in case of the native stdenv.
 
-derivation {
+stdenv.mkDerivation {
   name = baseNameOf (toString url);
-  system = stdenv.system;
   builder = ./builder.sh;
   buildInputs = [curl];
   id = md5;
-  inherit stdenv url md5;
+  inherit url md5;
 }

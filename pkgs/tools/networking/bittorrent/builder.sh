@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$python $wxPython"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 p1=$param1
 p2=$param2
 p3=$param3

@@ -1,4 +1,3 @@
-#!/bin/sh
 
 . $stdenv/setup || exit 1
 version=j2sdk1.4.2_03

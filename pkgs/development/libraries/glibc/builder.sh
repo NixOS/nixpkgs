@@ -1,5 +1,3 @@
-#! /bin/sh
-
 # glibc cannot have itself in its rpath.
 export NIX_NO_SELF_RPATH=1
 

@@ -1,8 +1,7 @@
 {stdenv, fetchurl, patch}:
 
-derivation {
+stdenv.mkDerivation {
   name = "perl-5.8.3";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -19,5 +18,5 @@ derivation {
 
   srcPatch = ./patch;
 
-  inherit stdenv patch;
+  inherit patch;
 }

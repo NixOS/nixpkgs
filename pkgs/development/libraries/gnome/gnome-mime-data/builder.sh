@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $perl"
 . $stdenv/setup || exit 1
 

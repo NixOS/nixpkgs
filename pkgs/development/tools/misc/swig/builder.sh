@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $python"
 . $stdenv/setup || exit 1
 

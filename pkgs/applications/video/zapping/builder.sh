@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $perl $python $x11 $libgnomeui \
   $libglade $scrollkeeper $esound $gettext $zvbi $libjpeg $libpng"
 . $stdenv/setup || exit 1

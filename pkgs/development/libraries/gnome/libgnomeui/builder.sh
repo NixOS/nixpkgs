@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $libgnome $libgnomecanvas $libbonoboui $libglade"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 . $stdenv/setup || exit 1
 
 # !!! hack; this is because $linuxHeaders/config.h includes some

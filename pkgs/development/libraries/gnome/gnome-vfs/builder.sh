@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $perl $glib $libxml2 $GConf $libbonobo \
   $gnomemimedata $popt $bzip2"
 . $stdenv/setup || exit 1

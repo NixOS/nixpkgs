@@ -23,7 +23,10 @@
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ../stdenv/native) {stdenv = stdenvInitial;};
+  stdenvNative = (import ../stdenv/native) {
+    stdenv = stdenvInitial;
+    inherit genericStdenv gccWrapper;
+  };
 
   stdenvNativePkgs = allPackages {
     stdenv = stdenvNative;
@@ -35,10 +38,20 @@
   # The Nix build environment.
   stdenvNix = (import ../stdenv/nix) {
     stdenv = stdenvNative;
-    pkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
+    pkgs = stdenvNixBootPkgs;
+    inherit genericStdenv gccWrapper;
   };
 
-  stdenvNixPkgs = allPackages {stdenv = stdenvNix;};
+  stdenvNixBootPkgs = allPackages {
+    stdenv = stdenvNative;
+    bootCurl = null;
+    noSysDirs = true;
+  };
+
+  stdenvNixPkgs = allPackages {
+    stdenv = stdenvNix;
+    bootCurl = stdenvNixBootPkgs.curl;
+  };
 
 
   # The Linux build environment is a fully bootstrapped Nix

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $perl $libxml2 $libglade $libgnome \
   $libgnomecanvas"
 . $stdenv/setup

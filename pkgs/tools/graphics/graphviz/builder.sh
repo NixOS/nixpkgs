@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$x11 $libpng $libjpeg $expat $freetype"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 export buildinputs="$yacc $m4"
 . $stdenv/setup
 

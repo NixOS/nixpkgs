@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $gtk $libtiff $libjpeg $libpng $zlib"
 . $stdenv/setup
 

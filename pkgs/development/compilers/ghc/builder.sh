@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $ghc $m4"
 . $stdenv/setup || exit 1
 

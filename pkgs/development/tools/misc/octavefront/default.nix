@@ -7,13 +7,12 @@ assert autoconf != null && texinfo != null
   && rna != null && aterm != null;
 assert g77.langF77;
 
-derivation {
+stdenv.mkDerivation {
   name = "octavefront-0.2";
-  system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.radionetworkprocessor.com/pub/radionetworkprocessor/octavefront-0.2.tar.gz;
     md5 = "14e02d060fd6afc6752dbba0a7445ff2";
   };
-  inherit stdenv autoconf g77 texinfo bison flex gperf rna aterm;
+  inherit autoconf g77 texinfo bison flex gperf rna aterm;
 }

@@ -3,9 +3,8 @@
 assert gtk != null && libtiff != null
   && libjpeg != null && libpng != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "gdk-pixbuf-0.22.0";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -14,5 +13,4 @@ derivation {
   };
 
   buildInputs = [gtk libtiff libjpeg libpng];
-  inherit stdenv;
 }

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 export buildinputs="$yacc"
 . $stdenv/setup || exit 1
 

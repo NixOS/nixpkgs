@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$x11 $wxGTK $libdvdcss $libdvdread $libdvdplay $mpeg2dec $a52dec $libmad $alsa"
 . $stdenv/setup || exit 1
 

@@ -15,9 +15,8 @@ assert teletextSupport -> zvbi != null && zvbi.pngSupport
 assert jpegSupport -> libjpeg != null;
 assert pngSupport -> libpng != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "zapping-0.7cvs6";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -29,7 +28,6 @@ derivation {
   jpegSupport = jpegSupport;
   pngSupport = pngSupport;
 
-  stdenv = stdenv;
   pkgconfig = pkgconfig;
   perl = perl;
   python = python;

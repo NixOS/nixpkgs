@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$gettext"
 . $stdenv/setup || exit 1
 

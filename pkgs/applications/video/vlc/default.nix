@@ -6,9 +6,8 @@ assert x11 != null && wxGTK != null && libdvdcss != null
   && libmad != null && alsa != null;
 assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 
-derivation {
+stdenv.mkDerivation {
   name = "vlc-0.7.0";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -16,7 +15,6 @@ derivation {
     md5 = "05efef68528892ca933585c7db0842e3";
   };
 
-  stdenv = stdenv;
   x11 = x11;
   wxGTK = wxGTK;
   libdvdcss = libdvdcss;

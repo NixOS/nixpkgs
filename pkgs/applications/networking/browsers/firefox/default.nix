@@ -6,9 +6,8 @@ assert pkgconfig != null && gtk != null && perl != null
 
 assert libIDL.glib == gtk.glib;
 
-derivation {
+stdenv.mkDerivation {
   name = "firefox-0.8";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -16,7 +15,6 @@ derivation {
     md5 = "cdc85152f4219bf3e3f1a8dc46e04654";
   };
 
-  stdenv = stdenv;
   pkgconfig = pkgconfig;
   gtk = gtk;
   perl = perl;

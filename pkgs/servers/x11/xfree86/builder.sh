@@ -1,5 +1,3 @@
-#! /bin/sh
-
 export buildinputs="$bison $flex"
 . $stdenv/setup || exit 1
 

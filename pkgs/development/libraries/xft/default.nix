@@ -3,15 +3,13 @@
 assert pkgconfig != null && x11 != null && fontconfig != null;
 assert fontconfig.x11 == x11;
 
-derivation {
+stdenv.mkDerivation {
   name = "xft-2.1.2";
-  system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
     url = http://pdx.freedesktop.org/software/fontconfig/releases/xft-2.1.2.tar.gz;
     md5 = "defb7e801d4938b8b15a426ae57e2f3f";
   };
-  stdenv = stdenv;
   pkgconfig = pkgconfig;
   x11 = x11;
   fontconfig = fontconfig;

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$freetype $expat $x11 $ed"
 . $stdenv/setup
 

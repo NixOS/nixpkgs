@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $gtk $libart $libglade"
 . $stdenv/setup
 

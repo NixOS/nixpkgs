@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $expat"
 . $stdenv/setup || exit 1
 

@@ -6,9 +6,8 @@ assert gtk.libjpeg != null;
 assert gtk.libpng != null;
 assert gtk.libpng.zlib != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "wxGTK-2.4.2";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -20,5 +19,5 @@ derivation {
   libjpeg = gtk.libjpeg;
   libpng = gtk.libpng;
   zlib = gtk.libpng.zlib;
-  inherit stdenv pkgconfig gtk compat22;
+  inherit pkgconfig gtk compat22;
 }

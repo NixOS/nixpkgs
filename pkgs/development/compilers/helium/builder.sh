@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$ghc"
 . $stdenv/setup || exit 1
 

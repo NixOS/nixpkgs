@@ -2,9 +2,8 @@
 
 assert patch != null && perl != null && m4 != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "uml-2.4.22-3";
-  system = stdenv.system;
   builder = ./builder.sh;
   linuxSrc = fetchurl {
     url = ftp://ftp.nl.kernel.org/pub/linux/kernel/v2.4/linux-2.4.22.tar.bz2;
@@ -15,5 +14,5 @@ derivation {
     md5 = "1ffa698fed37d14c6750ec841b7d9858";
   };
   config = ./config;
-  inherit stdenv patch perl m4;
+  inherit patch perl m4;
 }

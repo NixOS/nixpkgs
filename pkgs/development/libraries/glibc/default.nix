@@ -2,9 +2,8 @@
 
 assert patch != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "glibc-2.3.2";
-  system = stdenv.system;
   builder = ./builder.sh;
 
   src = fetchurl {
@@ -21,5 +20,5 @@ derivation {
   patches = [./glibc-2.3.2-sscanf-1.patch];
 
   buildInputs = [patch];
-  inherit stdenv kernelHeaders;
+  inherit kernelHeaders;
 }

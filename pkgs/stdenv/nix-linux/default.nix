@@ -1,36 +1,21 @@
 {stdenv, glibc, pkgs, genericStdenv, gccWrapper}:
 
-let {
+genericStdenv {
+  name = "stdenv-nix-linux";
+  preHook = ./prehook.sh;
+  initialPath = (import ../nix/path.nix) {pkgs = pkgs;};
 
-  body =
+  inherit stdenv;
 
-    genericStdenv {
-      name = "stdenv-nix-linux";
-      preHook = ./prehook.sh;
-      initialPath = (import ../nix/path.nix) {pkgs = pkgs;};
+  gcc = gccWrapper {
+    name = pkgs.gcc.name;
+    nativeTools = false;
+    nativeGlibc = false;
+    inherit (pkgs) gcc binutils;
+    inherit glibc;
+  };
 
-      inherit stdenv;
+  bash = pkgs.bash ~ /bin/sh;
 
-      gcc = gccWrapper {
-        name = pkgs.gcc.name;
-        nativeTools = false;
-        nativeGlibc = false;
-        inherit (pkgs) gcc binutils;
-        inherit stdenv glibc;
-      };
-
-      param1 = pkgs.bash;
-    }
-
-    # Add a utility function to produce derivations that use this
-    # stdenv and its the bash shell.
-    // {
-      mkDerivation = attrs: derivation (attrs // {
-        builder = pkgs.bash ~ /bin/sh;
-        args = ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
-        stdenv = body;
-        system = body.system;
-      });
-    };
-
+  param1 = pkgs.bash;
 }

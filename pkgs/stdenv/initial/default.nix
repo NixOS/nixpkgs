@@ -5,7 +5,23 @@
 
 {system, name}:
 
-derivation {
-  inherit system name;
-  builder = ./builder.sh;
+let {
+
+  body = 
+
+    derivation {
+      inherit system name;
+      builder = "/bin/sh";
+      args = ["-e" ./builder.sh];
+    }
+
+    // {
+      mkDerivation = attrs: derivation (attrs // {
+        builder = "/bin/sh";
+        args = ["-e" attrs.builder];
+        stdenv = body;
+        system = body.system;
+      });
+    };
+
 }

@@ -8,9 +8,8 @@ assert pkgconfig != null && gtk != null && gnet != null
 assert spellChecking -> gtkspell != null && gtk == gtkspell.gtk;
 assert gtk.glib == gnet.glib;
 
-derivation {
+stdenv.mkDerivation {
   name = "pan-0.14.2.91";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
@@ -18,6 +17,10 @@ derivation {
     md5 = "4770d899a1c1ba968ce96bc5aeb07b62";
   };
 
-  gtkspell = if spellChecking then gtkspell else null;
-  inherit spellChecking stdenv pkgconfig gtk gnet libxml2 perl pcre;
+  buildInputs = [
+    pkgconfig gtk gnet libxml2 perl pcre
+    (if spellChecking then gtkspell else null)
+  ];
+
+  inherit spellChecking stdenv;
 }

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $gtk $perl $zip $libIDL"
 . $stdenv/setup || exit 1
 

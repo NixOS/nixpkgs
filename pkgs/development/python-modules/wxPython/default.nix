@@ -2,9 +2,8 @@
 
 assert wxGTK.compat22;
 
-derivation {
+stdenv.mkDerivation {
   name = "wxPython-2.4.2.4";
-  system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
     url = http://heanet.dl.sourceforge.net/sourceforge/wxpython/wxPythonSrc-2.4.2.4.tar.gz;
@@ -12,5 +11,5 @@ derivation {
   };
   pkgconfig = wxGTK.pkgconfig;
   gtk = wxGTK.gtk;
-  inherit stdenv wxGTK python;
+  inherit wxGTK python;
 }

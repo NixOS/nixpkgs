@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $gtk $libpng"
 . $stdenv/setup || exit 1
 

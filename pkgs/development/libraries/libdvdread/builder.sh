@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$libdvdcss"
 . $stdenv/setup || exit 1
 

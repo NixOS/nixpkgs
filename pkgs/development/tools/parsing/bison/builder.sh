@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$m4"
 . $stdenv/setup || exit 1
 

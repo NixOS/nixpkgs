@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$patch"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $perl $ORBit2 $libxml2 $popt $yacc $flex"
 . $stdenv/setup
 

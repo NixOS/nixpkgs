@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildinputs="$pkgconfig $perl $glib $gnomevfs $libbonobo $GConf \
   $popt $zlib"
 . $stdenv/setup

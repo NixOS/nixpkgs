@@ -1,8 +1,7 @@
 {stdenv, fetchurl, pkgconfig, libX11, libSM, patch}:
 
-derivation {
+stdenv.mkDerivation {
   name = "libXt-0.1.4";
-  system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
     url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libXt-0.1.4.tar.bz2;
@@ -11,5 +10,4 @@ derivation {
   buildInputs = [pkgconfig libX11 libSM patch];
   # This patch should become unnecessary soon; already been fixed in CVS.
   patches = [./patch];
-  inherit stdenv;
 }

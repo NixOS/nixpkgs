@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$aterm $ptsupport $toolbuslib $asfsupport"
 . $stdenv/setup || exit 1
 

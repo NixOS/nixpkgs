@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $libxml2 $libxslt"
 . $stdenv/setup || exit 1
 

@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 set -x
 
 buildinputs="$autoconf $g77 $texinfo $bison $flex $gperf $rna $aterm"

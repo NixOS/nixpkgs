@@ -1,8 +1,6 @@
-{stdenv, subversion}: {url, rev}: derivation {
+{stdenv, subversion}: {url, rev}: stdenv.mkDerivation {
   name = "svn-checkout";
-  system = stdenv.system;
   builder = ./builder.sh;
-  stdenv = stdenv;
   subversion = subversion;
   url = url;
   rev = rev;

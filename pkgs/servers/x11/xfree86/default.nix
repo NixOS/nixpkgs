@@ -6,9 +6,8 @@ assert !buildServer; # we don't support this currently
 assert buildClientLibs; # we don't support *not* doing this currently
 assert bison != null && flex != null;
 
-derivation {
+stdenv.mkDerivation {
   name = "xfree86-4.3";
-  system = stdenv.system;
 
   builder = ./builder.sh;
   hostdef = ./host.def;
@@ -28,7 +27,6 @@ derivation {
   buildServer = buildServer;
   buildClientLibs = buildClientLibs;
 
-  stdenv = stdenv;
   bison = bison;
   flex = flex;
 }

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 . $stdenv/setup
 
 echo "copying $url into $out..."

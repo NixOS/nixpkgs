@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$aterm $sdf $strategoxt"
 . $stdenv/setup || exit 1
 

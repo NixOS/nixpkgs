@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$x11 $libpng"
 . $stdenv/setup || exit 1
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$pkgconfig $glib $lex $yacc"
 . $stdenv/setup || exit 1
 

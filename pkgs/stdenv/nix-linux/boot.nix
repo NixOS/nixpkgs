@@ -14,4 +14,6 @@ genericStdenv {
     nativePrefix = "/usr";
     inherit stdenv glibc;
   };
+
+  bash = "/bin/sh";
 }

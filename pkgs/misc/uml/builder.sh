@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$patch $perl $m4"
 . $stdenv/setup || exit 1
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $db4"
 . $stdenv/setup || exit 1
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$perl $autoconf"
 . $stdenv/setup || exit 1
 

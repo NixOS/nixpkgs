@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildInputs="$zlib"
 . $stdenv/setup
 

@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs=""
 . $stdenv/setup || exit 1
 

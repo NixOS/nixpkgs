@@ -1,5 +1,3 @@
-#! /bin/sh
-
 buildinputs="$aterm $ptsupport"
 . $stdenv/setup || exit 1
 

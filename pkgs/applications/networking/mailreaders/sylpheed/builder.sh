@@ -1,5 +1,3 @@
-#! /bin/sh -e
-
 buildInputs="$gtk $gdkpixbuf $openssl"
 . $stdenv/setup
 
