@@ -3,10 +3,10 @@
 assert libxml2.pythonSupport == true;
 
 stdenv.mkDerivation {
-  name = "xpf-0.1";
+  name = "xpf-0.2";
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~mbravenb/software/xpf/xpf-0.1.tar.gz;
-    md5 = "e762783664e4bbb3bb2e38a9ea821fa6";
+    url = http://losser.st-lab.cs.uu.nl/~mbravenb/software/xpf/xpf-0.2.tar.gz;
+    md5 = "d92658828139e1495e052d0cfe25d312";
   };
   buildInputs = [python libxml2];
 }
