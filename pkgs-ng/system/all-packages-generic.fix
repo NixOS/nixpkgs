@@ -91,6 +91,11 @@
     binutils = binutils;
   };
 
+  perl = (import ../development/interpreters/perl) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -107,8 +112,38 @@
     stdenv = stdenv;
   };
 
+  expat = (import ../development/libraries/expat) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
 
-### OS-SPECIFIC
+  db4 = (import ../development/libraries/db4) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  openssl = (import ../development/libraries/openssl) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+  };
+
+
+  ### SERVERS
+
+  apacheHttpd = (import ../servers/http/apache-httpd) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    sslSupport = true;
+    db4Support = true;
+    perl = perl;
+    openssl = openssl;
+    db4 = db4;
+    expat = expat;
+  };
+
+
+  ### OS-SPECIFIC
 
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
     fetchurl = fetchurl;
@@ -116,20 +151,19 @@
   };
 
 
-### APPLICATIONS
+  ### APPLICATIONS
 
   subversion = (import ../applications/version-management/subversion) {
     fetchurl = fetchurl;
     stdenv = stdenv;
-    localServer = false;
+    localServer = true;
     httpServer = false;
-    sslSupport = false;
+    sslSupport = true;
     swigBindings = false;
-    openssl = "";
-    httpd = "";
-    db4 = "";
-    libxml2 = "";
-    expat = "";
+    openssl = openssl;
+    httpd = apacheHttpd;
+    db4 = db4;
+    expat = expat;
     swig = "";
   };
 

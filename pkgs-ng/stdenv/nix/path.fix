@@ -12,4 +12,5 @@
   pkgs.binutils
   pkgs.gnumake
   pkgs.gcc
+  pkgs.bash
 ]

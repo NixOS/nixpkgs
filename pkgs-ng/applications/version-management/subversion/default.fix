@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, httpd, db4, libxml2, expat, swig
+{ stdenv, fetchurl, openssl, httpd, db4, expat, swig
 , localServer, httpServer, sslSupport, swigBindings
 }: 
 derivation {
@@ -13,14 +13,13 @@ derivation {
 
   localServer = localServer;
   httpServer = httpServer;
-  sslSupport = httpServer;
-  swigBindings = httpServer;
+  sslSupport = sslSupport;
+  swigBindings = swigBindings;
 
   stdenv = stdenv;
-  libxml2 = libxml2;
   openssl = if sslSupport then openssl else "";
   httpd = if httpServer then httpd else "";
-  expat = if httpServer then "" else expat;
+  expat = expat;
   db4 = if localServer then db4 else "";
   swig = if swigBindings then swig else "";
 }
