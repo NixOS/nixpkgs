@@ -4,7 +4,7 @@
 assert pkgconfig != null && gtk != null && perl != null
   && zip != null && libIDL != null;
 
-assert libIDL.glib == gtk.glib;
+# !!! assert libIDL.glib == gtk.glib;
 
 stdenv.mkDerivation {
   name = "firefox-0.8";
@@ -15,5 +15,5 @@ stdenv.mkDerivation {
     md5 = "cdc85152f4219bf3e3f1a8dc46e04654";
   };
 
-  buildInputs = [pkgconfig, gtk, perl, zip, libIDL];
+  buildInputs = [pkgconfig gtk perl zip libIDL];
 }
