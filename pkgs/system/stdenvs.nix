@@ -74,7 +74,10 @@
   };
 
   # 5) These packages should be pure.
-  stdenvLinuxBoot2Pkgs = allPackages {stdenv = stdenvLinuxBoot2;};
+  stdenvLinuxBoot2Pkgs = allPackages {
+    stdenv = stdenvLinuxBoot2;
+    bootCurl = stdenvLinuxBoot1Pkgs.curl;
+  };
 
   # 6) So finally we can construct the Nix build environment.
   stdenvLinux = (import ../stdenv/nix-linux) {
@@ -87,7 +90,10 @@
   # 7) And we can build all packages against that, but we don't
   #    rebuild stuff from step 6.
   stdenvLinuxPkgs =
-    allPackages {stdenv = stdenvLinux;} //
+    allPackages {
+      stdenv = stdenvLinux;
+      bootCurl = stdenvLinuxBoot2Pkgs.curl;
+    } //
     {inherit (stdenvLinuxBoot2Pkgs)
       gzip bzip2 bash binutils coreutils diffutils findutils gawk gcc
       gnumake gnused gnutar gnugrep wget;
