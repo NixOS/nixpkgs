@@ -820,7 +820,8 @@ rec {
   };
 
   MPlayerPlugin = (import ../applications/video/mplayerplug-in) {
-    inherit fetchurl stdenv x11;
+    inherit fetchurl stdenv pkgconfig firefox;
+    inherit (xlibs) libXpm;
   };
 
   vlc = (import ../applications/video/vlc) {

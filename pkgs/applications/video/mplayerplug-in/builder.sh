@@ -1,9 +1,24 @@
-buildinputs="$x11"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfz $src || exit 1
-cd mplayer* || exit 1
-./configure || exit 1
-make || exit 1
-mkdir -p $out/lib/mozilla/plugins || exit 1
-cp mplayerplug-in.so $out/lib/mozilla/plugins || exit 1
+# The Firefox pkgconfig files are buggy; they are called firefox-*.pc,
+# but they refer to mozilla-*.pc.  Also, mplayerplug-in requires
+# mozilla-*.pc.
+mkdir pkgconfig
+for i in $firefox/lib/pkgconfig/*.pc; do
+    ln -s $i pkgconfig/$(echo $(basename $i) | sed s/firefox/mozilla/)
+done
+PKG_CONFIG_PATH=$NIX_BUILD_TOP/pkgconfig:$PKG_CONFIG_PATH
+
+firefoxIncl=$(echo $firefox/include/firefox-*)
+export NIX_CFLAGS_COMPILE="-I$firefoxIncl $NIX_CFLAGS_COMPILE"
+
+dontMakeInstall=1
+
+postInstall=postInstall
+postInstall() {
+    mkdir -p $out/lib/mozilla/plugins
+    cp -p mplayerplug-in.so mplayerplug-in.xpt $out/lib/mozilla/plugins
+}
+
+genericBuild
+

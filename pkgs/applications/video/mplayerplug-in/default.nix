@@ -1,15 +1,19 @@
-{stdenv, fetchurl, x11}:
+{stdenv, fetchurl, pkgconfig, firefox, libXpm}:
 
-assert x11 != null;
+# Note: we shouldn't be dependent on Firefox.  The only thing we need
+# are the include files so that we can access the plugin API (I
+# think).
 
 stdenv.mkDerivation {
-  name = "mplayerplug-in-1.0pre2";
+  name = "mplayerplug-in-2.70";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/mplayerplug-in/mplayerplug-in-1.0pre2.tar.gz;
-    md5 = "1a6eb243989c143984bb1aac63b5282e";
+    url = http://heanet.dl.sourceforge.net/sourceforge/mplayerplug-in/mplayerplug-in-2.70.tar.gz;
+    md5 = "90784c7ccb40037b446053f0c1d1c2b4";
   };
 
-  x11 = x11;
+  buildInputs = [pkgconfig firefox (firefox.gtk) libXpm];
+  
+  inherit firefox;
 }
