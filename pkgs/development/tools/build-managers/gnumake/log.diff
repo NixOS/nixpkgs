@@ -108,14 +108,14 @@ diff -rc make-3.80-orig/make.h make-3.80/make.h
 + extern int logNestingStderr;
 diff -rc make-3.80-orig/remake.c make-3.80/remake.c
 *** make-3.80-orig/remake.c	2002-08-08 02:11:19.000000000 +0200
---- make-3.80/remake.c	2004-04-02 17:43:00.000000000 +0200
+--- make-3.80/remake.c	2004-04-04 23:10:19.000000000 +0200
 ***************
 *** 1049,1055 ****
 --- 1049,1059 ----
         /* The normal case: start some commands.  */
         if (!touch_flag || file->cmds->any_recurse)
   	{
-+           fprintf(stderr, "\e[pbuilding %s", file->name);
++           fprintf(stderr, "\e[pbuilding %s\n", file->name);
 +           logNestingStderr++;
   	  execute_file_commands (file);
 +           fprintf(stderr, "\e[q");

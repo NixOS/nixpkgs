@@ -4,13 +4,6 @@ export NIX_NO_SELF_RPATH=1
 . $stdenv/setup
 
 
-# !!! Toss the linker flags.  Any sort of rpath is fatal.
-# This probably will cause a failure when building in a pure Nix
-# environment.
-export NIX_LDFLAGS=
-export NIX_GLIBC_FLAGS_SET=1
-
-
 postUnpack() {
     cd $sourceRoot
     unpackFile $linuxthreadsSrc
@@ -35,6 +28,8 @@ postInstall() {
     make localedata/install-locales
     rm $out/etc/ld.so.cache
     (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
+    # `glibcbug' causes a retained dependency on the C compiler.
+    rm $out/bin/glibcbug
 }
 
 postInstall=postInstall

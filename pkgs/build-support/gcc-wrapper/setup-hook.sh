@@ -4,7 +4,7 @@ addCVars () {
     fi
 
     if test -d $1/lib; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib -rpath $1/lib"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib"
     fi
 }
 

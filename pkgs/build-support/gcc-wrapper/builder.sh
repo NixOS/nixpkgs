@@ -10,14 +10,14 @@ if test -z "$nativeGlibc"; then
     # /usr/lib.  The real solution is of course to prevent those paths
     # from being used by gcc in the first place.
     cflagsCompile="$cflagsCompile -B$glibc/lib -isystem $glibc/include"
-    ldflags="$ldflags -L$glibc/lib -rpath $glibc/lib -dynamic-linker $glibc/lib/ld-linux.so.2"
+    ldflags="$ldflags -L$glibc/lib -dynamic-linker $glibc/lib/ld-linux.so.2"
 fi
 
 if test -n "$nativeTools"; then
     gccPath="$nativePrefix/bin"
     ldPath="$nativePrefix/bin"
 else
-    ldflags="$ldflags -L$gcc/lib -rpath $gcc/lib"
+    ldflags="$ldflags -L$gcc/lib"
     gccPath="$gcc/bin"
     ldPath="$binutils/bin"
 fi
