@@ -696,7 +696,7 @@ rec {
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
-    inherit fetchurl stdenv freetype x11;
+    inherit fetchurl stdenv freetype x11 zlib;
     alsaSupport = true;
     alsa = alsaLib;
   };

@@ -1,5 +1,5 @@
 { alsaSupport ? false
-, stdenv, fetchurl, x11, freetype, alsa ? null}:
+, stdenv, fetchurl, x11, freetype, zlib, alsa ? null}:
 
 assert x11 != null && freetype != null;
 assert alsaSupport -> alsa != null;
@@ -17,12 +17,10 @@ stdenv.mkDerivation {
     md5 = "1ecd31d17b51f16332b1fcc7da36b312";
   };
 
-  alsaSupport = alsaSupport;
-
-  x11 = x11;
-  freetype = freetype;
-  alsa = if alsaSupport then alsa else null;
   win32codecs = (import ./win32codecs) {
     inherit stdenv fetchurl;
   };
+
+  alsa = if alsaSupport then alsa else null;
+  inherit alsaSupport x11 freetype zlib;
 }
