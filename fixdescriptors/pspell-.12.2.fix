@@ -2,7 +2,7 @@ Descr(
   [ Bind("pkgId", "pspell-.12.2")
   , Bind("releaseId", "1")
 
-  , Bind("src", Source(Url("http://unc.dl.sourceforge.net/sourceforge/pspell/pspell-.12.2.tar.gz")))
-  , Bind("build", Source("../build/pspell-build.sh"))
+  , Bind("src", Url("cfd3816b2372932a1b71c0ce4e9f881e", "http://unc.dl.sourceforge.net/sourceforge/pspell/pspell-.12.2.tar.gz"))
+  , Bind("build", Local("../build/pspell-build.sh"))
   ]
 )

@@ -7,7 +7,7 @@ Descr(
   , Bind("atk", Fix("./atk-1.2.0.fix"))
   , Bind("pango", Fix("./pango-1.2.1.fix"))
 
-  , Bind("src", Source(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.1.tar.bz2")))
-  , Bind("build", Source("../build/gtk+-build.sh"))
+  , Bind("src", Url("dfd5755fddb26a46c96bfaa813280ac4", "ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.1.tar.bz2"))
+  , Bind("build", Local("../build/gtk+-build.sh"))
   ]
 )

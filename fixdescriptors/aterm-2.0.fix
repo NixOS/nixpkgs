@@ -4,7 +4,7 @@ Descr(
 
   , Bind("createGCC", True)
 
-  , Bind("src", Source(Url("http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz")))
-  , Bind("build", Source("../build/aterm-build.sh"))
+  , Bind("src", Url("853474e4bcf4a85f7d38a0676b36bded", "http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz"))
+  , Bind("build", Local("../build/aterm-build.sh"))
   ]
 )

@@ -4,7 +4,7 @@ Descr(
 
   , Bind("ssl", Fix("./openssl-0.9.7b.fix"))
 
-  , Bind("src", Source(Url("http://apache.cs.uu.nl/dist/httpd/httpd-2.0.45.tar.gz")))
-  , Bind("build", Source("../build/httpd-build.sh"))
+  , Bind("src", Url("1f33e9a2e2de06da190230fa72738d75", "http://apache.cs.uu.nl/dist/httpd/httpd-2.0.45.tar.gz"))
+  , Bind("build", Local("../build/httpd-build.sh"))
   ]
 )

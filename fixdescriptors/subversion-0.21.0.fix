@@ -10,7 +10,7 @@ Descr(
 
   , Bind("httpd", If(Var("httpServer"), Fix("./httpd-2.0.45.fix"), ""))
 
-  , Bind("src", Source(Url("http://subversion.tigris.org/files/documents/15/3712/subversion-0.21.0.tar.gz")))
-  , Bind("build", Source("../build/subversion-build.sh"))
+  , Bind("src", Url("b2ad91127fb652e764b750f4c0002528", "http://subversion.tigris.org/files/documents/15/3712/subversion-0.21.0.tar.gz"))
+  , Bind("build", Local("../build/subversion-build.sh"))
   ]
 )

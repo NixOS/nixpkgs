@@ -5,7 +5,7 @@ Descr(
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
   , Bind("glib", Fix("./glib-2.2.1.fix"))
 
-  , Bind("src", Source(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/atk-1.2.0.tar.bz2")))
-  , Bind("build", Source("../build/atk-build.sh"))
+  , Bind("src", Url("06a84758129554ae044af8865ecb6f1c", "ftp://ftp.gtk.org/pub/gtk/v2.2/atk-1.2.0.tar.bz2"))
+  , Bind("build", Local("../build/atk-build.sh"))
   ]
 )

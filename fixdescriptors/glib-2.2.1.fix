@@ -4,7 +4,7 @@ Descr(
 
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
 
-  , Bind("src", Source(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/glib-2.2.1.tar.bz2")))
-  , Bind("build", Source("../build/glib-build.sh"))
+  , Bind("src", Url("42406a17819080326e105f8333963b97", "ftp://ftp.gtk.org/pub/gtk/v2.2/glib-2.2.1.tar.bz2"))
+  , Bind("build", Local("../build/glib-build.sh"))
   ]
 )

@@ -5,7 +5,7 @@ Descr(
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
   , Bind("glib", Fix("./glib-2.2.1.fix"))
 
-  , Bind("src", Source(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.1.tar.bz2")))
-  , Bind("build", Source("../build/pango-build.sh"))
+  , Bind("src", Url("6b354ef14e75739a92b5b78f4ca3165a", "ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.1.tar.bz2"))
+  , Bind("build", Local("../build/pango-build.sh"))
   ]
 )

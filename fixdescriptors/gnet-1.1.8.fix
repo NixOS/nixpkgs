@@ -5,7 +5,7 @@ Descr(
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
   , Bind("glib", Fix("./glib-2.2.1.fix"))
 
-  , Bind("src", Source(Url("http://www.gnetlibrary.org/src/gnet-1.1.8.tar.gz")))
-  , Bind("build", Source("../build/gnet-build.sh"))
+  , Bind("src", Url("da2b5de278e96a5b907c2e2304bf6542", "http://www.gnetlibrary.org/src/gnet-1.1.8.tar.gz"))
+  , Bind("build", Local("../build/gnet-build.sh"))
   ]
 )

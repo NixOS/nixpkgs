@@ -1,6 +1,6 @@
 Descr(
   [ Bind("pkgId", Str("system"))
-  , Bind("releaseId", Str("2"))
+  , Bind("releaseId", Str("3"))
 
   , Bind("actATerm", Fix("./aterm-2.0.fix"))
   , Bind("actPkgConfig", Fix("./pkgconfig-0.15.0.fix"))
@@ -11,9 +11,9 @@ Descr(
   , Bind("actGnet", Fix("./gnet-1.1.8.fix"))
   , Bind("actPspell", Fix("./pspell-.12.2.fix"))
   , Bind("actGtkspell", Fix("./gtkspell-2.0.2.fix"))
-  , Bind("actPan", Fix("./pan-0.13.95.fix"))
+  , Bind("actPan", Fix("./pan-0.14.0.fix"))
   , Bind("actSubversion", Fix("./subversion-0.21.0.fix"))
 
-  , Bind("build", Source("../../scripts/nix-populate"))
+  , Bind("build", Local("../../scripts/nix-populate"))
   ]
 )

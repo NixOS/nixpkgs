@@ -1,6 +1,6 @@
 Descr(
-  [ Bind("pkgId", "pan-0.13.95")
-  , Bind("releaseId", "2")
+  [ Bind("pkgId", "pan-0.14.0")
+  , Bind("releaseId", "1")
 
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
   , Bind("glib", Fix("./glib-2.2.1.fix"))
@@ -11,7 +11,7 @@ Descr(
   , Bind("pspell", Fix("./pspell-.12.2.fix"))
   , Bind("gtkspell", Fix("./gtkspell-2.0.2.fix"))
 
-  , Bind("src", Source(Url("http://pan.rebelbase.com/download/releases/0.13.95/SOURCE/pan-0.13.95.tar.bz2")))
-  , Bind("build", Source("../build/pan-build-2.sh"))
+  , Bind("src", Url("b2702adadb84c2e0d52d2bb029c05206", "http://pan.rebelbase.com/download/releases/0.14.0/SOURCE/pan-0.14.0.tar.bz2"))
+  , Bind("build", Local("../build/pan-build-2.sh"))
   ]
 )
