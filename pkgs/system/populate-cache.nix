@@ -48,6 +48,7 @@ let {
       pkgs.zapping
       pkgs.gqview
       pkgs.hello
+      pkgs.xchm
       pkgs.nxml
       pkgs.uml
       pkgs.nix

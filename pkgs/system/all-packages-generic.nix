@@ -459,6 +459,10 @@ rec {
     inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
+  chmlib = (import ../development/libraries/chmlib) {
+    inherit fetchurl stdenv libtool;
+  };
+
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
     inherit fetchurl stdenv perl db4;
   };
@@ -589,6 +593,10 @@ rec {
 
   hello = (import ../applications/misc/hello) {
     inherit fetchurl stdenv perl;
+  };
+
+  xchm = (import ../applications/misc/xchm) {
+    inherit fetchurl stdenv wxGTK chmlib;
   };
 
   nxml = (import ../applications/editors/emacs/modes/nxml) {
