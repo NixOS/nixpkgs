@@ -1,13 +1,10 @@
 {stdenv, fetchurl, pkgconfig, mono, gtksharp, gtksourceview, monoDLLFixer}:
 
 stdenv.mkDerivation {
-  name = "gtksourceview-sharp-0.5";
+  name = "gtksourceview-sharp-0.6-pre40261";
 
   builder = ./builder.sh;
-  src = fetchurl {
-    url = http://www.go-mono.com/archive/1.0/gtksourceview-sharp-0.5.tar.gz;
-    md5 = "b82e767e42a542e185a534048db3078d";
-  };
+  src = /home/eelco/gtksourceview-sharp-0.6-pre40261.tar.bz2;
 
   patches = [ ./prefix.patch ];
 
