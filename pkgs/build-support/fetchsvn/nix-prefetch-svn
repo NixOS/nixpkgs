@@ -45,3 +45,7 @@ echo "path is $finalPath" >&2
 rm -rf $tmpPath2 || true
 
 echo $hash
+
+if test -n "$PRINT_PATH"; then
+    echo $finalPath
+fi
