@@ -662,7 +662,9 @@
   };
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv aterm;
+    aterm = aterm_2_0_5;
+    bdb = db4;
   };
 
 }
