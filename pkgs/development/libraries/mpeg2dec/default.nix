@@ -3,8 +3,8 @@
   system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.videolan.org/pub/videolan/vlc/0.6.2/contrib/mpeg2dec-20030612.tar.bz2;
-    md5 = "17b880eb8766a2e46834d2274882d284";
+    url = http://libmpeg2.sourceforge.net/files/mpeg2dec-0.4.0.tar.gz;
+    md5 = "49a70fef1b0f710ed7e64ed32ee82d4d";
   };
   stdenv = stdenv;
 }

@@ -7,13 +7,13 @@ assert !isNull x11 && !isNull wxGTK && !isNull libdvdcss
 assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 
 derivation {
-  name = "vlc-0.6.2";
+  name = "vlc-0.7.0";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.videolan.org/pub/videolan/vlc/0.6.2/vlc-0.6.2.tar.gz;
-    md5 = "619a45ca360d4a7bf935cb5ffd69989d";
+    url = http://download.videolan.org/pub/videolan/vlc/0.7.0/vlc-0.7.0.tar.gz;
+    md5 = "05efef68528892ca933585c7db0842e3";
   };
 
   stdenv = stdenv;
