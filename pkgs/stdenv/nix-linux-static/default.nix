@@ -5,7 +5,7 @@ rec {
     builder = ./bash-static/bash;
     tar = ./gnutar-static/bin/tar;
     gunzip = ./gzip-static/bin/gunzip;
-    curl = ./curl-static/curl-7.12.0-static.tar.gz;
+    curl = ./curl-static/curl-7.12.2-static.tar.gz;
     cp = ./tools/cp;
     system = "i686-linux";
     args = [ ./scripts/curl-unpack ];
@@ -23,21 +23,19 @@ rec {
     inherit postprocess extra extra2;
   };
 
-/*
   glibc = derivation {
     name = "glibc";
-    builder = ./bash;
-    tar = ../gnutar-static/bin/tar;
+    builder = ./bash-static/bash;
+    tar = ./gnutar-static/bin/tar;
     glibc_src = ./glibc-2.3.3.tar.bz2;
     glibc_threads_src = ./glibc-linuxthreads-2.3.3.tar.bz2;
     patch1 = ./no-unit-at-a-time.patch;
     patch2 = ./fixup.patch;
     inherit bzip2 gnumake binutils gcc coreutils gnused diffutils gnugrep gawk linuxHeaders patch;
-    gzip_path = ../gzip-static/bin;
+    gzip_path = ./gzip-static/bin;
     system = "i686-linux";
-    args = [ ./script3 ];
+    args = [ ./scripts/glibc-build ];
   };
-*/
 
   coreutils = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/coreutils-5.0-static.tar.gz; pkgname = "coreutils";};
 
@@ -64,6 +62,7 @@ rec {
 
   linuxHeaders = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/linux-headers-2.4.25-i386.tar.gz; pkgname = "linux-headers";};
 
+/*
   glibc = download {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
@@ -71,6 +70,7 @@ rec {
     extra = linuxHeaders;
     extra2 = coreutils;
   };
+*/
 
   stdenvInitial = let {
 
