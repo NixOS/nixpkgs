@@ -123,7 +123,6 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
     for i in $rpath; do
         extra=(${extra[@]} -rpath $i)
     done
-
 fi
 
 
@@ -143,4 +142,5 @@ if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
     . "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
+echo "ld command: " @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
 exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}

@@ -11,7 +11,7 @@ buildPhase=buildPhase
 installPhase() {
     mkdir $out
     mkdir $out/include
-    cp -prvd include/linux include/asm-i386 $out/include
+    cp -prvd include/linux include/asm-i386 include/asm-generic $out/include
     cd $out/include
     ln -s asm-i386 asm
     echo -n > $out/include/linux/autoconf.h
