@@ -16,3 +16,6 @@ ensureDir $out/bin
 makeWrapper "$out/real/realplay.bin" "$out/bin/realplay" \
     --set HELIX_LIBS "$out/real" \
     --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
+
+echo "$libstdcpp5/lib" > $out/real/mozilla/extra-library-path
+echo "$out/bin" > $out/real/mozilla/extra-bin-path

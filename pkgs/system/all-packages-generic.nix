@@ -1055,7 +1055,12 @@ rec {
 
   firefoxWrapper = (import ../applications/networking/browsers/firefox-wrapper) {
     inherit stdenv firefox;
-    plugins = [MPlayerPlugin flashplayer blackdown];
+    plugins = [
+      MPlayerPlugin
+      flashplayer
+      blackdown
+#      RealPlayer  # disabled by default for legal reasons
+    ];
   };
 
   flashplayer = (import ../applications/networking/browsers/mozilla-plugins/flashplayer) {

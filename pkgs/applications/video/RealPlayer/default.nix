@@ -4,7 +4,7 @@
 
 assert stdenv.system == "i686-linux";
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "RealPlayer-10.0.3.748-GOLD";
 
   builder = ./builder.sh;
@@ -15,5 +15,7 @@ stdenv.mkDerivation {
 
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
 
+  inherit libstdcpp5;
   libPath = [libstdcpp5 glib pango atk gtk libX11];
-}
+  
+}) // {mozillaPlugin = "/real/mozilla";}
