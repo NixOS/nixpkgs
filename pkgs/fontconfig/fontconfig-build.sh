@@ -4,6 +4,10 @@ envpkgs="$freetype $expat"
 . $stdenv/setup || exit 1
 export PATH=$ed/bin:$PATH
 
+# Fontconfig generates a bad `fonts.conf' file is the timezone is not known
+# (because it calls `date').
+export TZ=UTC
+
 tar xvfz $src || exit 1
 cd fcpackage*/fontconfig || exit 1
 ./configure --prefix=$out --with-confdir=$out/etc/fonts \
