@@ -1,5 +1,8 @@
-{stdenv, fetchurl, readline, jdbcSupport ? true, ant ? null}:
+{stdenv, fetchurl, zlib, ncurses, readline, jdbcSupport ? true, ant ? null}:
 
+assert zlib != null;
+assert ncurses != null;
+assert readline != null;
 assert jdbcSupport -> ant != null;
 
 stdenv.mkDerivation {
@@ -11,8 +14,9 @@ stdenv.mkDerivation {
     md5 = "97e750c8e69c208b75b6efedc5a36efb";
   };
 
-  inherit jdbcSupport;
+  inherit readline jdbcSupport;
   ant = if jdbcSupport then ant else null;
 
-  buildInputs = if jdbcSupport then [ant] else [];
+  buildInputs =
+      [zlib ncurses readline (if jdbcSupport then [ant] else [])];
 }

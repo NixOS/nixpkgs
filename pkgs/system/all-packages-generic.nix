@@ -632,7 +632,7 @@ rec {
   };
 
   postgresql = (import ../servers/sql/postgresql) {
-    inherit fetchurl stdenv readline;
+    inherit fetchurl stdenv readline ncurses zlib;
     jdbcSupport = true;
     ant = apacheAntBlackdown14;
   };
