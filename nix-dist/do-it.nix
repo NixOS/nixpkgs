@@ -16,5 +16,11 @@ let {
     rev = import ./head-revision.nix;
   };
 
-  body = sourcedist;
+  testbuild = (import ./nix-test-build.nix) {
+    stdenv = stdenv;
+    getopt = pkgs.getopt;
+    src = sourcedist;
+  };
+
+  body = [sourcedist testbuild];
 }

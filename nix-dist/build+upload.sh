@@ -9,11 +9,16 @@ if ! rev=$(curl --silent -k https://svn.cs.uu.nl:12443/repos/trace/nix/trunk/ \
 
 echo $rev > head-revision.nix
 
-if ! storeexpr=$(nix-instantiate -vvv do-it.nix); then exit 1; fi
+if ! storeexprs=($(nix-instantiate -vvv do-it.nix)); then exit 1; fi
 
-if ! nix-store -vvvv -r "$storeexpr" > /dev/null; then exit 1; fi
+srcexpr=${storeexprs[0]}
+testexpr=${storeexprs[1]}
 
-if ! outpath=$(nix-store -qn "$storeexpr"); then exit 1; fi
+if ! nix-store -vvvv -r "$srcexpr" > /dev/null; then exit 1; fi
+
+if ! nix-store -vvvv -r "$testexpr" > /dev/null; then exit 1; fi
+
+if ! outpath=$(nix-store -qn "$srcexpr"); then exit 1; fi
 
 uploader="http://losser.st-lab.cs.uu.nl/~eelco/cgi-bin/upload.pl/"
 
