@@ -7,4 +7,4 @@ gnet <- ./gnet-1.1.8.nix
 
 src = ../dist/pan-0.13.4.tar.bz2
 
-build = ../dist/pan-build.sh
+build = ../build/pan-build.sh

@@ -3,4 +3,4 @@ glib <- ./glib-2.2.1.nix
 
 src = ../dist/pango-1.2.1.tar.bz2
 
-build = ../dist/pango-build.sh
+build = ../build/pango-build.sh

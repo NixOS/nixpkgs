@@ -5,4 +5,4 @@ pango <- ./pango-1.2.1.nix
 
 src = ../dist/gtk+-2.2.1.tar.bz2
 
-build = ../dist/gtk+-build.sh
+build = ../build/gtk+-build.sh
