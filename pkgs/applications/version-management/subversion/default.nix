@@ -22,16 +22,11 @@ derivation {
     md5 = "048c4d17d5880dc8f3699020eac56224";
   };
 
-  localServer = localServer;
-  httpServer = httpServer;
-  sslSupport = sslSupport;
-  swigBindings = swigBindings;
-
-  stdenv = stdenv;
   openssl = if sslSupport then openssl else null;
   httpd = if httpServer then httpd else null;
-  expat = expat;
   db4 = if localServer then db4 else null;
   swig = if swigBindings then swig else null;
   python = if swigBindings then swig.python else null;
+
+  inherit stdenv expat localServer httpServer sslSupport swigBindings;
 }
