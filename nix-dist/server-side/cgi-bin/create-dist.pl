@@ -4,7 +4,7 @@ use strict;
 
 
 # Global settings.
-my $releasesDir = "/home/eelco/public_html/test";
+my $releasesDir = "/home/eelco/public_html/nix";
 
 umask 0002;
 
@@ -13,6 +13,16 @@ sub printResult {
     my $result = shift;
     print "Content-Type: text/plain\n\n"; 
     print "$result\n"; 
+}
+
+
+sub uploadFileTo {
+    my $path = shift;
+    open OUT, ">$path" or die "cannot create $path: $!";
+    while (<STDIN>) {
+	print OUT "$_" or die;
+    }
+    close OUT or die;
 }
 
 
@@ -48,11 +58,7 @@ elsif ($command eq "upload") {
 
     my $fullPath = "$releasesDir/$sessionName/$path";
 
-    open OUT, ">$fullPath" or die "cannot create $fullPath: $!";
-    while (<STDIN>) {
-	print OUT "$_" or die;
-    }
-    close OUT or die;
+    uploadFileTo $fullPath;
 
     printResult "ok";
 }
@@ -108,6 +114,19 @@ elsif ($command eq "exists") {
     } else {
 	printResult "no";
     }
+}
+
+# Upload a single file, outside of a release.
+elsif ($command eq "put") {
+    $args = "/" . $args;
+    die unless $args =~ /^((\/[A-Za-z0-9-][A-Za-z0-9-\.]*)+)$/;
+    my $path = $1;
+
+    my $fullPath = "$releasesDir/$path";
+    
+    uploadFileTo $fullPath;
+
+    printResult "ok";
 }
 
 else {
