@@ -1,6 +1,6 @@
 # glibc cannot have itself in its rpath.
 export NIX_NO_SELF_RPATH=1
-export NIX_DEBUG=1
+#export NIX_DEBUG=1
 export NIX_DONT_SET_RPATH=1
 
 . $stdenv/setup
@@ -44,14 +44,6 @@ preConfigure() {
 }
 
 preConfigure=preConfigure
-
-configurePhase() {
-   preConfigure
-   $SHELL $configureScript $configureFlags --prefix=$out
-}
-
-configurePhase=configurePhase
-
 
 postInstall() {
     if test -n "$installLocales"; then
