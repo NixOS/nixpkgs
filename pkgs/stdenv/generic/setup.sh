@@ -1,9 +1,11 @@
 set -e
 
+test -z $NIX_GCC && NIX_GCC=@gcc@
+
 
 # Set up the initial path.
 PATH=
-for i in @gcc@ @initialPath@; do
+for i in $NIX_GCC @initialPath@; do
     PATH=$PATH${PATH:+:}$i/bin
 done
 
@@ -18,12 +20,18 @@ param2=@param2@
 param3=@param3@
 param4=@param4@
 param5=@param5@
-. @preHook@
+if test -n "@preHook@"; then
+    . @preHook@
+fi
+
+
+# Check that the pre-hook initialised SHELL.
+if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
 
 
 # Hack: run gcc's setup hook.
-if test -f @gcc@/nix-support/setup-hook; then
-    . @gcc@/nix-support/setup-hook
+if test -f $NIX_GCC/nix-support/setup-hook; then
+    . $NIX_GCC/nix-support/setup-hook
 fi
 
     
@@ -93,7 +101,9 @@ export TZ=UTC
 
 
 # Execute the post-hook.
-. @postHook@
+if test -n "@postHook@"; then
+    . @postHook@
+fi
 
 PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then

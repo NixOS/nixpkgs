@@ -1,12 +1,12 @@
 let {
   system = "i686-linux";
 
-  stdenvInitial = (import ../../stdenv/initial) {
-    name = "stdenv-initial";
-    inherit system;
+  stdenvs = (import ../../system/stdenvs.nix) {
+    system = "i686-linux";
+    allPackages = import ../../system/all-packages-generic.nix;
   };
 
-  stdenv = (import ../../stdenv/native) {stdenv = stdenvInitial;};
+  stdenv = stdenvs.stdenvLinuxBoot1;
 
   test = derivation {
     name = "simple-test";

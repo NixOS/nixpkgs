@@ -1,17 +1,17 @@
-#! /bin/sh
+#! /bin/sh -e
 
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd binutils-* || exit 1
+tar xvfj $src
+cd binutils-*
 
 # Clear the default library search path.
-if test "$noSysDirs" == "1"; then
-    echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt || exit 1
+if test "$enforcePurity" = "1"; then
+    echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
 fi
 
-./configure --prefix=$out || exit 1
-make || exit 1
-make install || exit 1
+./configure --prefix=$out
+make
+make install
 
-strip -S $out/lib/*.a || exit 1
+strip -S $out/lib/*.a

@@ -5,22 +5,22 @@ export NIX_NO_SELF_RPATH=1
 . $stdenv/setup
 
 tar xvfj $glibcSrc
-(cd glibc-* && tar xvfj $linuxthreadsSrc)
+(cd glibc-* && tar xvfj $linuxthreadsSrc) || false
 
-(cd glibc-* && patch -p1 < $vaargsPatch)
+(cd glibc-* && patch -p1 < $vaargsPatch) || false
 
 mkdir build
 cd build
-LDFLAGS=-Wl,-S ../glibc-*/configure --prefix=$out --enable-add-ons --disable-profile
+../glibc-*/configure --prefix=$out --enable-add-ons --disable-profile
 
 make
 make install
-#make localedata/install-locales
+make localedata/install-locales
 strip -S $out/lib/*.a $out/lib/*.so $out/lib/gconv/*.so || true
 strip -s $out/bin/* $out/sbin/* $out/libexec/* || true
 
-ln -sf /etc/ld.so.cache $out/etc/ld.so.cache
+rm $out/etc/ld.so.cache
 
-(cd $out/include && ln -s $kernelHeaders/include/* .)
+(cd $out/include && ln -s $kernelHeaders/include/* .) || false
 
 exit 0

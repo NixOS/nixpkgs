@@ -44,7 +44,7 @@
   # 2) Construct a stdenv consisting of the native build environment,
   #    plus the pure glibc.
   stdenvLinuxBoot1 = (import ../stdenv/nix-linux/boot.nix) {
-    system = system;
+    stdenv = stdenvInitial;
     glibc = stdenvLinuxGlibc;
   };
 
@@ -56,7 +56,7 @@
   #    might end up linking against /lib/libncurses).  So repeat, but
   #    now use the Nix-built tools from step 2/3.
   stdenvLinuxBoot2 = (import ../stdenv/nix-linux) {
-    bootStdenv = stdenvLinuxBoot1;
+    stdenv = stdenvLinuxBoot1;
     pkgs = stdenvLinuxBoot1Pkgs;
     glibc = stdenvLinuxGlibc;
   };

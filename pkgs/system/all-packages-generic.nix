@@ -198,12 +198,12 @@
   };
 
   gcc = (import ../development/compilers/gcc) {
-    inherit fetchurl stdenv binutils;
+    inherit fetchurl stdenv;
   };
 
   g77 = (import ../build-support/gcc-wrapper) {
     inherit stdenv;
-    gcc = (import ../development/compilers/gcc-new) {
+    gcc = (import ../development/compilers/gcc) {
       inherit fetchurl stdenv;
       langF77 = true;
       langCC = false;

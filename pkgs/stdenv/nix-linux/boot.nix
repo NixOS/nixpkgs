@@ -1,13 +1,16 @@
-{system, glibc}: (import ../generic) {
-  name = "stdenv-linux-boot";
-  system = system;
-  prehook = ./prehook-boot.sh;
-  posthook = ./posthook.sh;
+{stdenv, glibc}:
+
+(import ../generic) {
+  name = "stdenv-nix-linux-boot";
+  preHook = ./prehook-boot.sh;
   initialPath = "/usr/local /usr /";
-  param1 = "";
-  param2 = "";
-  param3 = "";
-  param4 = glibc;
-  param5 = "";
-  noSysDirs = true;
+
+  inherit stdenv;
+
+  gcc = (import ../../build-support/gcc-wrapper) {
+    name = "gcc-native";
+    isNative = true;
+    nativePrefix = "/usr";
+    inherit stdenv glibc;
+  };
 }

@@ -1,4 +1,4 @@
-{ stdenv, name, preHook, postHook, initialPath, gcc
+{ stdenv, name, preHook ? null, postHook ? null, initialPath, gcc
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 }:
 

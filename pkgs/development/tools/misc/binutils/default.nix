@@ -1,4 +1,6 @@
-{stdenv, fetchurl}: derivation {
+{stdenv, fetchurl, enforcePurity ? true}:
+
+derivation {
   name = "binutils-2.14";
   system = stdenv.system;
   builder = ./builder.sh;
@@ -6,6 +8,5 @@
     url = ftp://ftp.nluug.nl/pub/gnu/binutils/binutils-2.14.tar.bz2;
     md5 = "2da8def15d28af3ec6af0982709ae90a";
   };
-  stdenv = stdenv;
-  noSysDirs = stdenv.noSysDirs;
+  inherit stdenv enforcePurity;
 }
