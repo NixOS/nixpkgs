@@ -64,7 +64,7 @@ rec {
   staticTools = downloadAndUnpack {
     url = http://catamaran.labs.cs.uu.nl/dist/tarballs/stdenv-linux/static-tools.tar.bz2;
     pkgname = "static-tools";
-    md5 = "9419d3dcccbe1af10d9d0d7d54269785";
+    md5 = "90578c603079313123e8c754a85e40d7";
   };
 
   binutils = downloadAndUnpack {

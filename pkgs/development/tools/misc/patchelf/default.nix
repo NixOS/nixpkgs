@@ -1,10 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "patchelf-0.1pre1513";
+  name = "patchelf-0.1pre2286";
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/patchelf-0.1pre1513.tar.gz;
-    md5 = "874928f46117828c1d8019986aa2eaac";
+    url = http://catamaran.labs.cs.uu.nl/dist/nix/patchelf-0.1pre2286/patchelf-0.1pre2286.tar.gz;
+    md5 = "2b1377e6745c239255b3f4a6ba6c0c87";
   };
-#  src = /home/eelco/Dev/patchelf/patchelf-0.1.tar.gz;
 }
