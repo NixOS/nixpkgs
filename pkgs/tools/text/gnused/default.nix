@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnused-4.0.7";
+  name = "gnused-4.1.2";
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/sed/sed-4.0.7.tar.gz;
-    md5 = "005738e7f97bd77d95b6907156c8202a";
+    url = http://ftp.gnu.org/pub/gnu/sed/sed-4.1.2.tar.gz;
+    md5 = "928f0e06422f414091917401f1a834d0";
   };
 }
