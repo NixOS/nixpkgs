@@ -672,6 +672,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  shadowutils = (import ../os-specific/linux/shadow) {
+    inherit fetchurl stdenv;
+  };
+
   iputils = (import ../os-specific/linux/iputils) {
     inherit fetchurl stdenv kernelHeaders;
     glibc = stdenv.gcc.glibc;
