@@ -1,0 +1,23 @@
+Package(
+  [ ("name", "nix-dist")
+  , ("build", Relative("nix-dist/nix-dist-build.sh"))
+
+  , ("src", App(IncludeFix("fetchsvn/fetchsvn.fix"),
+      [ ("name", "nix")
+      , ("url", "http://losser.st-lab.cs.uu.nl:12080/repos/trace/nix/trunk")
+      , ("rev", "300")
+      ]))
+
+  , ("bdbSrc", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.sleepycat.com/update/snapshot/db-4.0.14.tar.gz")
+      , ("md5", "12262c64fcd64b772e7cffad8e4d0ebc")
+      ]))
+
+  , ("atermSrc", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz")
+      , ("md5", "853474e4bcf4a85f7d38a0676b36bded")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)
