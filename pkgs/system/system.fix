@@ -4,6 +4,9 @@ Package(
 
   , ("actSubversion", IncludeFix("subversion/subversion.fix"))
   , ("actPan", IncludeFix("pan/pan.fix"))
+  , ("actSylpheed", IncludeFix("sylpheed/sylpheed.fix"))
   , ("actMPlayer", IncludeFix("MPlayer/MPlayer.fix"))
+  , ("actStrategoXT", IncludeFix("strategoxt/strategoxt.fix"))
+  , ("actATerm", IncludeFix("aterm/aterm.fix"))
   ]
 )

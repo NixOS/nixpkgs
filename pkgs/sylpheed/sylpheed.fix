@@ -1,0 +1,15 @@
+Package(
+  [ ("name", "sylpheed-0.9.3")
+
+  , ("build", Relative("sylpheed/sylpheed-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://heanet.dl.sourceforge.net/sourceforge/sylpheed-claws/sylpheed-0.9.3.tar.bz2")
+      , ("md5", "6a1ae8e746099e13f8ba968d4604adcf")
+      ]))
+
+  , ("gtk", IncludeFix("gtk+-1/gtk+.fix"))
+  , ("ssl", IncludeFix("openssl/openssl.fix"))
+  ]
+)
