@@ -67,3 +67,6 @@ stdenv.mkDerivation {
 
 
 * Add "exit 0" at the end of configure of rte package.
+
+
+* In stdenv/nix/path.nix: remove gcc.

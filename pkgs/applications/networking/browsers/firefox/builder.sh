@@ -18,6 +18,7 @@ ac_add_options --enable-xft
 ac_add_options --enable-swg
 ac_add_options --enable-strip
 ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --enable-single-profile
 EOF
     echo "ac_add_options --prefix=$out" >> .mozconfig
 }
