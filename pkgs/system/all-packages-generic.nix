@@ -422,7 +422,7 @@ rec {
   };
 
   libxml2 = (import ../development/libraries/libxml2) {
-    inherit fetchurl stdenv zlib;
+    inherit fetchurl stdenv zlib python;
   };
 
   libxslt = (import ../development/libraries/libxslt) {
