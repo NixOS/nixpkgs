@@ -895,6 +895,7 @@ rec {
   uml = (import ../misc/uml) {
     inherit fetchurl stdenv perl;
     m4 = gnum4;
+    gcc = gcc33;
   };
 
   umlutilities = (import ../misc/uml-utilities) {

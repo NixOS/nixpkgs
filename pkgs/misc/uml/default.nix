@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, m4}:
+{stdenv, fetchurl, perl, m4, gcc}:
 
 assert perl != null && m4 != null;
 
@@ -20,4 +20,5 @@ stdenv.mkDerivation {
 #  hostfsAccessPatch = ./hostfs-access.patch;
   config = ./config;
   buildInputs = [perl m4];
+  NIX_GCC = gcc;
 }
