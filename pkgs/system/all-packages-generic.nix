@@ -117,9 +117,9 @@ rec {
     inherit (xlibs) libXaw;
   };
 
-  hevea = (import ../tools/typesetting/hevea) {
-    inherit fetchurl stdenv ocaml;
-  };
+  ##hevea = (import ../tools/typesetting/hevea) {
+  ##  inherit fetchurl stdenv ocaml;
+  ##};
 
   ### SHELLS
 
