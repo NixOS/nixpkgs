@@ -21,6 +21,7 @@ param5=@param5@
 . @preHook@
 
 
+# Hack: run gcc's setup hook.
 if test -f @gcc@/nix-support/setup-hook; then
     . @gcc@/nix-support/setup-hook
 fi
@@ -85,10 +86,16 @@ export NIX_CFLAGS_STRIP="-g0 -Wl,-s"
 export NIX_STORE=$(dirname $out)/ # !!! hack
 
 
+# Set the TZ (timezone) environment variable, otherwise commands like
+# `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
+# be set--see zic manual page 2004').
+export TZ=UTC
+
+
 # Execute the post-hook.
 . @postHook@
 
-PATH=$_PATH${_PATH}$PATH
+PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
     echo "Final path: $PATH"
 fi
