@@ -1,5 +1,5 @@
 Descr(
-  [ Bind("pkgId", "subversion-0.21.0")
+  [ Bind("pkgId", "subversion-0.23.0")
   , Bind("releaseId", "1")
 
   , Bind("httpsClient", Bool(True))
@@ -10,7 +10,7 @@ Descr(
 
   , Bind("httpd", If(Var("httpServer"), Fix("./httpd-2.0.45.fix"), ""))
 
-  , Bind("src", Url("b2ad91127fb652e764b750f4c0002528", "http://subversion.tigris.org/files/documents/15/3712/subversion-0.21.0.tar.gz"))
+  , Bind("src", Url("59661f2145976437b371a0ab3a555dbd", "http://subversion.tigris.org/files/documents/15/4218/subversion-0.23.0.tar.gz"))
   , Bind("build", Local("../build/subversion-build.sh"))
   ]
 )

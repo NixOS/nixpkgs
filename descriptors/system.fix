@@ -1,6 +1,6 @@
 Descr(
   [ Bind("pkgId", Str("system"))
-  , Bind("releaseId", Str("3"))
+  , Bind("releaseId", Str("4"))
 
   , Bind("actATerm", Fix("./aterm-2.0.fix"))
   , Bind("actPkgConfig", Fix("./pkgconfig-0.15.0.fix"))
@@ -12,7 +12,7 @@ Descr(
   , Bind("actPspell", Fix("./pspell-.12.2.fix"))
   , Bind("actGtkspell", Fix("./gtkspell-2.0.2.fix"))
   , Bind("actPan", Fix("./pan-0.14.0.fix"))
-  , Bind("actSubversion", Fix("./subversion-0.21.0.fix"))
+  , Bind("actSubversion", Fix("./subversion-0.23.0.fix"))
 
   , Bind("build", Local("../build/populate-linkdirs.pl"))
   ]
