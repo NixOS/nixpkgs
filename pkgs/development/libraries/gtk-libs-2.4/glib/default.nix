@@ -3,10 +3,10 @@
 assert pkgconfig != null && gettext != null && perl != null;
 
 stdenv.mkDerivation {
-  name = "glib-2.4.6";
+  name = "glib-2.4.7";
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gtk/v2.4/glib-2.4.6.tar.bz2;
-    md5 = "a45db7d82480da431f6cd00ea041a534";
+    url = ftp://ftp.gtk.org/pub/gtk/v2.4/glib-2.4.7.tar.bz2;
+    md5 = "eff6fec89455addf8b0dee5a19e343be";
   };
   buildInputs = [pkgconfig gettext perl];
 }
