@@ -5,13 +5,13 @@ assert !isNull x11 && !isNull freetype;
 assert alsaSupport -> !isNull alsa;
 
 derivation {
-  name = "MPlayer-1.0pre2";
+  name = "MPlayer-1.0pre3";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre2.tar.bz2;
-    md5 = "a60c179468f85e83e3f9e1922e81ad64";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre3.tar.bz2;
+    md5 = "998becb79417c6a14d15c07e85188b82";
   };
   fonts = fetchurl {
     url = http://www2.mplayerhq.hu/MPlayer/releases/fonts/font-arial-iso-8859-1.tar.bz2;
