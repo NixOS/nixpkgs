@@ -440,6 +440,10 @@ rec {
     inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
+  mesa = (import ../development/libraries/mesa) {
+    inherit fetchurl stdenv xlibs;
+  };
+
   chmlib = (import ../development/libraries/chmlib) {
     inherit fetchurl stdenv libtool;
   };
