@@ -21,7 +21,7 @@ rec {
     tar = ./tools/tar;
     bunzip2 = ./tools/bunzip2;
     cp = ./tools/cp;
-    curl = ./curl-static/curl-7.12.2-static.tar.bz2;
+    curl = ./tools/curl-7.12.2-static.tar.bz2;
     system = "i686-linux";
     args = [ ./scripts/unpack-curl.sh ];
   };
