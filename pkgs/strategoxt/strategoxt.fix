@@ -4,7 +4,7 @@ Package(
   , ("build", Relative("strategoxt/strategoxt-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "ftp://ftp.stratego-language.org/pub/stratego/StrategoXT/strategoxt-0.9.2-3067.tar.gz")
+      [ ("url", "http://losser.st-lab.cs.uu.nl/~eelco/mirror/strategoxt-0.9.2-3067.tar.gz")
       , ("md5", "0d849a9409c40cdc66cbdee4d00726b2")
       ]))
 
