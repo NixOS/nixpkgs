@@ -9,5 +9,6 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv-linux/stdenv-nativetools.fix"))
+  , ("binutils", IncludeFix("binutils/binutils.fix"))
   ]
 )
