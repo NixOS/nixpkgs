@@ -916,6 +916,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  haskellMode = (import ../applications/editors/emacs/modes/haskell) {
+    inherit fetchurl stdenv;
+  };
+
   nano = (import ../applications/editors/nano) {
     inherit fetchurl stdenv ncurses;
   };
