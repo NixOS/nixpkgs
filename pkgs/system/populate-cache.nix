@@ -16,6 +16,7 @@ let {
       pkgs.wget
       pkgs.par2cmdline
       pkgs.cksfv
+      pkgs.bittorrent
       pkgs.graphviz
       pkgs.bash
       pkgs.binutils
