@@ -23,6 +23,12 @@ preConfigure() {
 configureFlags="-v -prefix $out -system-zlib -system-libpng -system-libjpeg"
 dontAddPrefix=1
 
+if test -n "$threadSupport"; then
+    configureFlags="-thread";
+else    
+    configureFlags="-no-thread";
+fi
+
 if test -n "$xftSupport"; then
     configureFlags="-xft -L$libXft/lib -I$libXft/include \
       -L$freetype/lib -I$freetype/include \

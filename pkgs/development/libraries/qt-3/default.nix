@@ -1,5 +1,6 @@
 { xftSupport ? true
 , xrenderSupport ? true
+, threadSupport ? true
 , stdenv, fetchurl, x11, libXft ? null, libXrender ? null
 , zlib, libjpeg, libpng, which
 }:
@@ -18,6 +19,6 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
 
-  inherit xftSupport libXft xrenderSupport libXrender;
+  inherit threadSupport xftSupport libXft xrenderSupport libXrender;
   inherit (libXft) freetype fontconfig;
 }
