@@ -21,7 +21,7 @@ cat > $out/bin/firefox <<EOF
 #! $SHELL
 export LD_LIBRARY_PATH=$extraLibPath
 export MOZ_PLUGIN_PATH=$pluginPath
-exec $firefox/bin/firefox
+exec $firefox/bin/firefox "\$@"
 EOF
 
 chmod +x $out/bin/firefox
