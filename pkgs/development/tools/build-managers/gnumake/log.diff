@@ -1,6 +1,6 @@
 diff -rc make-3.80-orig/job.c make-3.80/job.c
 *** make-3.80-orig/job.c	2002-08-10 03:27:17.000000000 +0200
---- make-3.80/job.c	2004-03-18 22:13:11.000000000 +0100
+--- make-3.80/job.c	2004-04-02 17:38:04.000000000 +0200
 ***************
 *** 987,993 ****
        appear.  */
@@ -18,32 +18,34 @@ diff -rc make-3.80-orig/job.c make-3.80/job.c
   
     /* Tell update_goal_chain that a command has been started on behalf of
        this target.  It is important that this happens here and not in
-Only in make-3.80: job.c~
 diff -rc make-3.80-orig/main.c make-3.80/main.c
 *** make-3.80-orig/main.c	2002-08-10 03:27:17.000000000 +0200
---- make-3.80/main.c	2004-03-18 22:23:50.000000000 +0100
+--- make-3.80/main.c	2004-04-02 17:42:50.000000000 +0200
 ***************
 *** 254,259 ****
---- 254,262 ----
+--- 254,263 ----
      they appear out of date or not.  */
   
   int always_make_flag = 0;
 + 
-+ int logNesting = 0;
++ int logNestingStdout = 0;
++ int logNestingStderr = 0;
 + 
   
   /* The usage output.  We write it this way to make life easier for the
      translators, especially those trying to translate to right-to-left
 ***************
 *** 827,832 ****
---- 830,842 ----
+--- 831,845 ----
   }
   
   
 + static void closeNesting()
 + {
-+   while (logNesting--)
++   while (logNestingStdout--)
 +     printf("\e[q");
++   while (logNestingStderr--)
++     fprintf(stderr, "\e[q");
 + }
 + 
 + 
@@ -52,7 +54,7 @@ diff -rc make-3.80-orig/main.c make-3.80/main.c
   main (argc, argv, envp)
 ***************
 *** 854,859 ****
---- 864,871 ----
+--- 867,874 ----
     no_default_sh_exe = 1;
   #endif
   
@@ -63,14 +65,14 @@ diff -rc make-3.80-orig/main.c make-3.80/main.c
   
 ***************
 *** 2782,2787 ****
---- 2794,2805 ----
+--- 2797,2808 ----
   
     /* Use entire sentences to give the translators a fighting chance.  */
   
 +   if (entering)
 +     {
 +       printf("\e[p");
-+       logNesting++;
++       logNestingStdout++;
 +     }
 +   
     if (makelevel == 0)
@@ -78,7 +80,7 @@ diff -rc make-3.80-orig/main.c make-3.80/main.c
         if (entering)
 ***************
 *** 2810,2813 ****
---- 2828,2837 ----
+--- 2831,2840 ----
         else
           printf (_("%s[%u]: Leaving directory `%s'\n"),
                   program, makelevel, starting_directory);
@@ -86,16 +88,15 @@ diff -rc make-3.80-orig/main.c make-3.80/main.c
 +   if (!entering)
 +     {
 +       printf("\e[q");
-+       logNesting--;
++       logNestingStdout--;
 +     }
   }
-Only in make-3.80: main.c~
 diff -rc make-3.80-orig/make.h make-3.80/make.h
 *** make-3.80-orig/make.h	2002-09-11 18:55:44.000000000 +0200
---- make-3.80/make.h	2004-03-18 22:22:00.000000000 +0100
+--- make-3.80/make.h	2004-04-02 17:42:15.000000000 +0200
 ***************
 *** 559,562 ****
---- 559,566 ----
+--- 559,567 ----
   extern int atomic_stat PARAMS ((const char *file, struct stat *buf));
   extern struct dirent *atomic_readdir PARAMS ((DIR *dir));
   
@@ -103,23 +104,22 @@ diff -rc make-3.80-orig/make.h make-3.80/make.h
   #endif
 + 
 + 
-+ extern int logNesting;
-Only in make-3.80: make.h~
++ extern int logNestingStdout;
++ extern int logNestingStderr;
 diff -rc make-3.80-orig/remake.c make-3.80/remake.c
 *** make-3.80-orig/remake.c	2002-08-08 02:11:19.000000000 +0200
---- make-3.80/remake.c	2004-03-18 22:27:04.000000000 +0100
+--- make-3.80/remake.c	2004-04-02 17:43:00.000000000 +0200
 ***************
 *** 1049,1055 ****
 --- 1049,1059 ----
         /* The normal case: start some commands.  */
         if (!touch_flag || file->cmds->any_recurse)
   	{
-+           message(0, "\e[pbuilding %s", file->name);
-+           logNesting++;
++           fprintf(stderr, "\e[pbuilding %s", file->name);
++           logNestingStderr++;
   	  execute_file_commands (file);
-+           printf("\e[q");
-+           logNesting--;
++           fprintf(stderr, "\e[q");
++           logNestingStderr--;
   	  return;
   	}
   
-Only in make-3.80: remake.c~
