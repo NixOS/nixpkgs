@@ -70,6 +70,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  xpf = (import ../tools/text/xml/xpf) {
+    inherit fetchurl stdenv python libxml2;
+  };
+
   gnutar = (import ../tools/archivers/gnutar) {
     inherit fetchurl stdenv;
   };
