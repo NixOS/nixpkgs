@@ -1,3 +1,5 @@
-#! /bin/sh -e
+#! /bin/sh
+
 . $stdenv/setup
+
 genericBuild

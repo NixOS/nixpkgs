@@ -9,6 +9,11 @@ rec {
   inherit stdenv;
 
 
+  ### Symbolic names.
+
+  x11 = xlibs; # !!! should be `x11ClientLibs' or some such
+
+
   ### BUILD SUPPORT
 
   fetchurl = (import ../build-support/fetchurl) {
@@ -104,8 +109,7 @@ rec {
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
-    inherit fetchurl stdenv libpng libjpeg expat;
-    x11 = xfree86;
+    inherit fetchurl stdenv libpng libjpeg expat x11;
   };
 
 
@@ -371,13 +375,11 @@ rec {
   };
 
   fontconfig = (import ../development/libraries/fontconfig) {
-    inherit fetchurl stdenv freetype expat ed;
-    x11 = xfree86;
+    inherit fetchurl stdenv freetype expat ed x11;
   };
 
   xft = (import ../development/libraries/xft) {
-    inherit fetchurl stdenv pkgconfig fontconfig;
-    x11 = xfree86;
+    inherit fetchurl stdenv pkgconfig fontconfig x11;
   };
 
   zlib = (import ../development/libraries/zlib) {
@@ -414,14 +416,12 @@ rec {
   };
 
   pango = (import ../development/libraries/gtk+/pango) {
-    inherit fetchurl stdenv pkgconfig glib xft;
-    x11 = xfree86;
+    inherit fetchurl stdenv pkgconfig glib xft x11;
   };
 
   gtk = (import ../development/libraries/gtk+/gtk+) {
     inherit fetchurl stdenv pkgconfig glib atk pango perl
-            libtiff libjpeg libpng;
-    x11 = xfree86;
+            libtiff libjpeg libpng x11;
   };
 
   glib1 = (import ../development/libraries/gtk+-1/glib) {
@@ -429,8 +429,7 @@ rec {
   };
 
   gtk1 = (import ../development/libraries/gtk+-1/gtk+) {
-    inherit fetchurl stdenv;
-    x11 = xfree86;
+    inherit fetchurl stdenv x11;
     glib = glib1;
   };
 
@@ -541,9 +540,8 @@ rec {
   };
 
   zvbi = (import ../development/libraries/zvbi) {
-    inherit fetchurl stdenv libpng;
+    inherit fetchurl stdenv libpng x11;
     pngSupport = true;
-    x11 = xfree86;
     libpng = libpng;
   };
 
@@ -553,6 +551,44 @@ rec {
 
   rna = (import ../development/libraries/rna) {
     inherit fetchurl stdenv zlib;
+  };
+
+  xproto = (import ../development/libraries/freedesktop/xproto) {
+    inherit fetchurl stdenv;
+  };
+
+  xextensions = (import ../development/libraries/freedesktop/xextensions) {
+    inherit fetchurl stdenv;
+  };
+
+  libXtrans = (import ../development/libraries/freedesktop/libXtrans) {
+    inherit fetchurl stdenv;
+  };
+
+  libXau = (import ../development/libraries/freedesktop/libXau) {
+    inherit fetchurl stdenv pkgconfig xproto;
+  };
+
+  libX11 = (import ../development/libraries/freedesktop/libX11) {
+    inherit fetchurl stdenv pkgconfig xproto xextensions libXtrans libXau;
+  };
+
+
+  libICE = (import ../development/libraries/freedesktop/libICE) {
+    inherit fetchurl stdenv pkgconfig libX11;
+  };
+
+  libSM = (import ../development/libraries/freedesktop/libSM) {
+    inherit fetchurl stdenv pkgconfig libX11 libICE;
+  };
+
+  libXt = (import ../development/libraries/freedesktop/libXt) {
+    inherit fetchurl stdenv pkgconfig libX11 libSM;
+    patch = gnupatch;
+  };
+
+  xlibs = (import ../development/libraries/freedesktop/xlibs) {
+    inherit stdenv libX11 libXt;
   };
 
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
@@ -651,28 +687,24 @@ rec {
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
-    inherit fetchurl stdenv freetype;
+    inherit fetchurl stdenv freetype x11;
     alsaSupport = true;
-    x11 = xfree86;
     alsa = alsaLib;
   };
 
   MPlayerPlugin = (import ../applications/video/mplayerplug-in) {
-    inherit fetchurl stdenv;
-    x11 = xfree86;
+    inherit fetchurl stdenv x11;
   };
 
   vlc = (import ../applications/video/vlc) {
     inherit fetchurl stdenv wxGTK libdvdcss libdvdplay
-            mpeg2dec a52dec libmad;
-    x11 = xfree86;
+            mpeg2dec a52dec libmad x11;
     alsa = alsaLib;
   };
 
   zapping = (import ../applications/video/zapping) {
     inherit fetchurl stdenv pkgconfig perl python libgnomeui libglade
-            scrollkeeper esound gettext zvbi libjpeg libpng;
-    x11 = xfree86;
+            scrollkeeper esound gettext zvbi libjpeg libpng x11;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;

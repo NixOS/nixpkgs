@@ -13,9 +13,6 @@ derivation {
     md5 = "05fcb68ceaa338614ab650c775efc2f2";
   };
 
-  stdenv = stdenv;
-  gtk = gtk;
-  libtiff = libtiff;
-  libjpeg = libjpeg;
-  libpng = libpng;
+  buildInputs = [gtk libtiff libjpeg libpng];
+  inherit stdenv;
 }

@@ -1,5 +1,7 @@
-#! /bin/sh -e
+#! /bin/sh
+
 . $stdenv/setup
+
 genericBuild
 
 if test -n "$_propagatedBuildInputs"; then

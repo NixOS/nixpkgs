@@ -13,7 +13,7 @@ derivation {
     md5 = "4d5cb2fc7fb7830e4af9747a36bfce20";
   };
 
-  stdenv = stdenv;
-  x11 = x11;
-  glib = glib;
+  buildInputs = [x11 glib];
+  _propagatedBuildInputs = [x11 glib];
+  inherit stdenv;
 }

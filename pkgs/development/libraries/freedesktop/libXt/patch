@@ -1,0 +1,360 @@
+diff -x '*~' -rcN libXt-0.1.4-orig/include/X11/ObjectP.h libXt-0.1.4/include/X11/ObjectP.h
+*** libXt-0.1.4-orig/include/X11/ObjectP.h	1970-01-01 01:00:00.000000000 +0100
+--- libXt-0.1.4/include/X11/ObjectP.h	2004-01-14 06:09:40.000000000 +0100
+***************
+*** 0 ****
+--- 1,139 ----
++ /* $Xorg: ObjectP.h,v 1.4 2001/02/09 02:03:56 xorgcvs Exp $ */
++ 
++ /***********************************************************
++ 
++ Copyright 1987, 1988, 1994, 1998  The Open Group
++ 
++ Permission to use, copy, modify, distribute, and sell this software and its
++ documentation for any purpose is hereby granted without fee, provided that
++ the above copyright notice appear in all copies and that both that
++ copyright notice and this permission notice appear in supporting
++ documentation.
++ 
++ The above copyright notice and this permission notice shall be included in
++ all copies or substantial portions of the Software.
++ 
++ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
++ OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
++ AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ 
++ Except as contained in this notice, the name of The Open Group shall not be
++ used in advertising or otherwise to promote the sale, use or other dealings
++ in this Software without prior written authorization from The Open Group.
++ 
++ 
++ Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts.
++ 
++                         All Rights Reserved
++ 
++ Permission to use, copy, modify, and distribute this software and its 
++ documentation for any purpose and without fee is hereby granted, 
++ provided that the above copyright notice appear in all copies and that
++ both that copyright notice and this permission notice appear in 
++ supporting documentation, and that the name of Digital not be
++ used in advertising or publicity pertaining to distribution of the
++ software without specific, written prior permission.  
++ 
++ DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
++ ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
++ DIGITAL BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
++ ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
++ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
++ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
++ SOFTWARE.
++ 
++ ******************************************************************/
++ 
++ #ifndef _Xt_ObjectP_h_
++ #define _Xt_ObjectP_h_
++ 
++ #include <X11/Object.h>
++ 
++ /**********************************************************
++  * Object Instance Data Structures
++  *
++  **********************************************************/
++ /* these fields match CorePart and can not be changed */
++ 
++ typedef struct _ObjectPart {
++     Widget          self;               /* pointer to widget itself          */
++     WidgetClass     widget_class;       /* pointer to Widget's ClassRec      */
++     Widget          parent;             /* parent widget                     */
++     XrmName         xrm_name;           /* widget resource name quarkified   */
++     Boolean         being_destroyed;    /* marked for destroy                */
++     XtCallbackList  destroy_callbacks;  /* who to call when widget destroyed */
++     XtPointer       constraints;        /* constraint record                 */
++ } ObjectPart;
++ 
++ typedef struct _ObjectRec {
++     ObjectPart  object;
++ } ObjectRec;
++ 
++ /********************************************************
++  * Object Class Data Structures
++  *
++  ********************************************************/
++ /* these fields match CoreClassPart and can not be changed */
++ /* ideally these structures would only contain the fields required;
++    but because the CoreClassPart cannot be changed at this late date
++    extraneous fields are necessary to make the field offsets match */
++ 
++ typedef struct _ObjectClassPart {
++ 
++     WidgetClass     superclass;         /* pointer to superclass ClassRec   */
++     String          class_name;         /* widget resource class name       */
++     Cardinal        widget_size;        /* size in bytes of widget record   */
++     XtProc          class_initialize;   /* class initialization proc        */
++     XtWidgetClassProc class_part_initialize; /* dynamic initialization      */
++     XtEnum          class_inited;       /* has class been initialized?      */
++     XtInitProc      initialize;         /* initialize subclass fields       */
++     XtArgsProc      initialize_hook;    /* notify that initialize called    */
++     XtProc          obj1;		/* NULL                             */
++     XtPointer       obj2;               /* NULL                             */
++     Cardinal        obj3;               /* NULL                             */
++     XtResourceList  resources;          /* resources for subclass fields    */
++     Cardinal        num_resources;      /* number of entries in resources   */
++     XrmClass        xrm_class;          /* resource class quarkified        */
++     Boolean         obj4;               /* NULL                             */
++     XtEnum          obj5;               /* NULL                             */
++     Boolean         obj6;               /* NULL				    */
++     Boolean         obj7;               /* NULL                             */
++     XtWidgetProc    destroy;            /* free data for subclass pointers  */
++     XtProc          obj8;               /* NULL                             */
++     XtProc          obj9;               /* NULL			            */
++     XtSetValuesFunc set_values;         /* set subclass resource values     */
++     XtArgsFunc      set_values_hook;    /* notify that set_values called    */
++     XtProc          obj10;              /* NULL                             */
++     XtArgsProc      get_values_hook;    /* notify that get_values called    */
++     XtProc          obj11;              /* NULL                             */
++     XtVersionType   version;            /* version of intrinsics used       */
++     XtPointer       callback_private;   /* list of callback offsets         */
++     String          obj12;              /* NULL                             */
++     XtProc          obj13;              /* NULL                             */
++     XtProc          obj14;              /* NULL                             */
++     XtPointer       extension;          /* pointer to extension record      */
++ }ObjectClassPart;
++ 
++ typedef struct {
++     XtPointer next_extension;	/* 1st 4 required for all extension records */
++     XrmQuark record_type;	/* NULLQUARK; when on ObjectClassPart */
++     long version;		/* must be XtObjectExtensionVersion */
++     Cardinal record_size;	/* sizeof(ObjectClassExtensionRec) */
++     XtAllocateProc allocate;
++     XtDeallocateProc deallocate;
++ } ObjectClassExtensionRec, *ObjectClassExtension;
++ 
++ typedef struct _ObjectClassRec {
++     ObjectClassPart object_class;
++ } ObjectClassRec;
++ 
++ externalref ObjectClassRec objectClassRec;
++ 
++ #define XtObjectExtensionVersion 1L
++ #define XtInheritAllocate ((XtAllocateProc) _XtInherit)
++ #define XtInheritDeallocate ((XtDeallocateProc) _XtInherit)
++ 
++ #endif /*_Xt_ObjectP_h_*/
+diff -x '*~' -rcN libXt-0.1.4-orig/Makefile.in libXt-0.1.4/Makefile.in
+*** libXt-0.1.4-orig/Makefile.in	2004-01-17 05:14:05.000000000 +0100
+--- libXt-0.1.4/Makefile.in	2004-03-27 22:27:07.000000000 +0100
+***************
+*** 163,169 ****
+  
+  SUBDIRS = include util
+  
+! AM_CFLAGS = $(RENDER_CFLAGS) $(X_CFLAGS) -I$(top_srcdir)/include/X11
+  
+  lib_LTLIBRARIES = libXt.la
+  
+--- 163,169 ----
+  
+  SUBDIRS = include util
+  
+! AM_CFLAGS = $(RENDER_CFLAGS) $(X_CFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/include/X11
+  
+  lib_LTLIBRARIES = libXt.la
+  
+***************
+*** 899,904 ****
+--- 899,905 ----
+  	$(top_builddir)/util/makestrs $(STRINGSABIOPTIONS) < $(STRING_LIST) > StringDefs.c
+  	install -d include/X11/
+  	install -m644 $(top_builddir)/StringDefs.h include/X11/
++ 	install -m644 $(top_builddir)/Shell.h include/X11/
+  
+  $(top_builddir)/util/makestrs$(EXEEXT): force
+  	cd util; $(MAKE)
+diff -x '*~' -rcN libXt-0.1.4-orig/ObjectP.h libXt-0.1.4/ObjectP.h
+*** libXt-0.1.4-orig/ObjectP.h	2004-01-14 06:09:40.000000000 +0100
+--- libXt-0.1.4/ObjectP.h	1970-01-01 01:00:00.000000000 +0100
+***************
+*** 1,139 ****
+- /* $Xorg: ObjectP.h,v 1.4 2001/02/09 02:03:56 xorgcvs Exp $ */
+- 
+- /***********************************************************
+- 
+- Copyright 1987, 1988, 1994, 1998  The Open Group
+- 
+- Permission to use, copy, modify, distribute, and sell this software and its
+- documentation for any purpose is hereby granted without fee, provided that
+- the above copyright notice appear in all copies and that both that
+- copyright notice and this permission notice appear in supporting
+- documentation.
+- 
+- The above copyright notice and this permission notice shall be included in
+- all copies or substantial portions of the Software.
+- 
+- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+- OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+- CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- 
+- Except as contained in this notice, the name of The Open Group shall not be
+- used in advertising or otherwise to promote the sale, use or other dealings
+- in this Software without prior written authorization from The Open Group.
+- 
+- 
+- Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts.
+- 
+-                         All Rights Reserved
+- 
+- Permission to use, copy, modify, and distribute this software and its 
+- documentation for any purpose and without fee is hereby granted, 
+- provided that the above copyright notice appear in all copies and that
+- both that copyright notice and this permission notice appear in 
+- supporting documentation, and that the name of Digital not be
+- used in advertising or publicity pertaining to distribution of the
+- software without specific, written prior permission.  
+- 
+- DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+- ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
+- DIGITAL BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
+- ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+- WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+- ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+- SOFTWARE.
+- 
+- ******************************************************************/
+- 
+- #ifndef _Xt_ObjectP_h_
+- #define _Xt_ObjectP_h_
+- 
+- #include <X11/Object.h>
+- 
+- /**********************************************************
+-  * Object Instance Data Structures
+-  *
+-  **********************************************************/
+- /* these fields match CorePart and can not be changed */
+- 
+- typedef struct _ObjectPart {
+-     Widget          self;               /* pointer to widget itself          */
+-     WidgetClass     widget_class;       /* pointer to Widget's ClassRec      */
+-     Widget          parent;             /* parent widget                     */
+-     XrmName         xrm_name;           /* widget resource name quarkified   */
+-     Boolean         being_destroyed;    /* marked for destroy                */
+-     XtCallbackList  destroy_callbacks;  /* who to call when widget destroyed */
+-     XtPointer       constraints;        /* constraint record                 */
+- } ObjectPart;
+- 
+- typedef struct _ObjectRec {
+-     ObjectPart  object;
+- } ObjectRec;
+- 
+- /********************************************************
+-  * Object Class Data Structures
+-  *
+-  ********************************************************/
+- /* these fields match CoreClassPart and can not be changed */
+- /* ideally these structures would only contain the fields required;
+-    but because the CoreClassPart cannot be changed at this late date
+-    extraneous fields are necessary to make the field offsets match */
+- 
+- typedef struct _ObjectClassPart {
+- 
+-     WidgetClass     superclass;         /* pointer to superclass ClassRec   */
+-     String          class_name;         /* widget resource class name       */
+-     Cardinal        widget_size;        /* size in bytes of widget record   */
+-     XtProc          class_initialize;   /* class initialization proc        */
+-     XtWidgetClassProc class_part_initialize; /* dynamic initialization      */
+-     XtEnum          class_inited;       /* has class been initialized?      */
+-     XtInitProc      initialize;         /* initialize subclass fields       */
+-     XtArgsProc      initialize_hook;    /* notify that initialize called    */
+-     XtProc          obj1;		/* NULL                             */
+-     XtPointer       obj2;               /* NULL                             */
+-     Cardinal        obj3;               /* NULL                             */
+-     XtResourceList  resources;          /* resources for subclass fields    */
+-     Cardinal        num_resources;      /* number of entries in resources   */
+-     XrmClass        xrm_class;          /* resource class quarkified        */
+-     Boolean         obj4;               /* NULL                             */
+-     XtEnum          obj5;               /* NULL                             */
+-     Boolean         obj6;               /* NULL				    */
+-     Boolean         obj7;               /* NULL                             */
+-     XtWidgetProc    destroy;            /* free data for subclass pointers  */
+-     XtProc          obj8;               /* NULL                             */
+-     XtProc          obj9;               /* NULL			            */
+-     XtSetValuesFunc set_values;         /* set subclass resource values     */
+-     XtArgsFunc      set_values_hook;    /* notify that set_values called    */
+-     XtProc          obj10;              /* NULL                             */
+-     XtArgsProc      get_values_hook;    /* notify that get_values called    */
+-     XtProc          obj11;              /* NULL                             */
+-     XtVersionType   version;            /* version of intrinsics used       */
+-     XtPointer       callback_private;   /* list of callback offsets         */
+-     String          obj12;              /* NULL                             */
+-     XtProc          obj13;              /* NULL                             */
+-     XtProc          obj14;              /* NULL                             */
+-     XtPointer       extension;          /* pointer to extension record      */
+- }ObjectClassPart;
+- 
+- typedef struct {
+-     XtPointer next_extension;	/* 1st 4 required for all extension records */
+-     XrmQuark record_type;	/* NULLQUARK; when on ObjectClassPart */
+-     long version;		/* must be XtObjectExtensionVersion */
+-     Cardinal record_size;	/* sizeof(ObjectClassExtensionRec) */
+-     XtAllocateProc allocate;
+-     XtDeallocateProc deallocate;
+- } ObjectClassExtensionRec, *ObjectClassExtension;
+- 
+- typedef struct _ObjectClassRec {
+-     ObjectClassPart object_class;
+- } ObjectClassRec;
+- 
+- externalref ObjectClassRec objectClassRec;
+- 
+- #define XtObjectExtensionVersion 1L
+- #define XtInheritAllocate ((XtAllocateProc) _XtInherit)
+- #define XtInheritDeallocate ((XtDeallocateProc) _XtInherit)
+- 
+- #endif /*_Xt_ObjectP_h_*/
+--- 0 ----
+diff -x '*~' -rcN libXt-0.1.4-orig/Xtos.h libXt-0.1.4/Xtos.h
+*** libXt-0.1.4-orig/Xtos.h	2004-01-14 06:09:41.000000000 +0100
+--- libXt-0.1.4/Xtos.h	2004-03-27 21:53:47.000000000 +0100
+***************
+*** 53,61 ****
+  #ifndef _Xtos_h
+  #define _Xtos_h
+  
+! #define ALLOCATE_LOCAL_FALLBACK(_size) XtMalloc((unsigned long)(_size))
+! #define DEALLOCATE_LOCAL_FALLBACK(_ptr) XtFree((XtPointer)(_ptr))
+! #include <X11/Xalloca.h>
+  
+  #ifdef CRAY
+  #define WORD64
+--- 53,77 ----
+  #ifndef _Xtos_h
+  #define _Xtos_h
+  
+! #if HAVE_ALLOCA
+! /* AIX requires this to be the first thing in the file.  */
+! # if HAVE_ALLOCA_H
+! #   include <alloca.h>
+! # else
+! #  ifdef _AIX
+!  #pragma alloca
+! #  else
+! #   ifndef alloca /* predefined by HP cc +Olibcalls */
+! char *alloca ();
+! #   endif
+! #  endif
+! # endif
+! #define ALLOCATE_LOCAL(size) alloca((int)(size))
+! #define DEALLOCATE_LOCAL(ptr) /* as nothing */
+! #else
+! #define ALLOCATE_LOCAL(_size) XtMalloc((unsigned long)(_size))
+! #define DEALLOCATE_LOCAL(_ptr) XtFree((XtPointer)(_ptr))
+! #endif
+  
+  #ifdef CRAY
+  #define WORD64
