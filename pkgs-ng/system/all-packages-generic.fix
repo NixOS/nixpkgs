@@ -164,7 +164,6 @@
     httpd = apacheHttpd;
     db4 = db4;
     expat = expat;
-    swig = "";
   };
 
 }

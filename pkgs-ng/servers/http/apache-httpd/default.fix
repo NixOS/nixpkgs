@@ -7,9 +7,9 @@ derivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-      url = ftp://ftp.cs.uu.nl/mirror/apache.org/dist/httpd/httpd-2.0.48.tar.gz;
-      md5 = "466c63bb71b710d20a5c353df8c1a19c";
-    };
+    url = ftp://ftp.cs.uu.nl/mirror/apache.org/dist/httpd/httpd-2.0.48.tar.gz;
+    md5 = "466c63bb71b710d20a5c353df8c1a19c";
+  };
 
   stdenv = stdenv;
   perl = perl;
