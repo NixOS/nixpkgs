@@ -182,7 +182,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  
+  mjpegtools = (import ../tools/video/mjpegtools) {
+    inherit fetchurl stdenv;
+  };
+ 
   ### SHELLS
 
   bash = (import ../shells/bash) {
@@ -262,7 +265,7 @@ rec {
   };
 
   octave = (import ../development/interpreters/octave) {
-    inherit fetchurl stdenv readline ncurses g77 perl;
+    inherit fetchurl stdenv readline ncurses g77 perl flex;
   };
 
   gnumake = (import ../development/tools/build-managers/gnumake) {
