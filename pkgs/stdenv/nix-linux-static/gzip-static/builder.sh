@@ -1,5 +1,5 @@
 . $stdenv/setup
  
-tar zxvf $src
 mkdir $out
-cp -a gzip-1.3.3/* $out
+cp -a $src1 $out
+cp -a $src2 $out
