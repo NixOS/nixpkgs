@@ -390,6 +390,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  monoDLLFixer = import ../build-support/mono-dll-fixer {
+    inherit stdenv perl;
+  };
+
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
     sdf = sdf_23;
@@ -633,7 +637,7 @@ rec {
   };
 
   gtksharp = (import ../development/libraries/gtk-sharp) {
-    inherit fetchurl stdenv mono pkgconfig libxml2;
+    inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
               libgnomecanvas libgnomeui libgnomeprint 
               libgnomeprintui gconf;
