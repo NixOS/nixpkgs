@@ -10,4 +10,5 @@ Call(IncludeFix("system/system.fix"),
   , ("httpd", True)
   , ("firebird", True)
   , ("graphviz", True)
+  , ("gqview", True)
   ])

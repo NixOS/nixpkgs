@@ -9,6 +9,7 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("x11", IncludeFix("xfree86/xfree86.fix"))
   , ("zlib", IncludeFix("zlib/zlib.fix"))
   , ("libpng", IncludeFix("libpng/libpng.fix"))
   , ("libjpeg", IncludeFix("libjpeg/libjpeg.fix"))

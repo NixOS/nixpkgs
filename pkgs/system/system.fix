@@ -1,6 +1,6 @@
 Function(
   [ "subversion", "strategoxt", "pan", "mplayer", "sylpheed", "libxslt", "libxml"
-  ,  "docbook", "httpd", "firebird", "graphviz"
+  ,  "docbook", "httpd", "firebird", "graphviz", "gqview"
   ],
   Package(
     [ ("name", "system")
@@ -28,6 +28,7 @@ Function(
     , ("actHttpd", If(Var("httpd"), IncludeFix("httpd/httpd.fix"), ""))
     , ("actFirebird", If(Var("firebird"), IncludeFix("firebird/firebird.fix"), ""))
     , ("actGraphviz", If(Var("graphviz"), IncludeFix("graphviz/graphviz.fix"), ""))
+    , ("actGQView", If(Var("gqview"), IncludeFix("gqview/gqview.fix"), ""))
     ]
   )
 )
