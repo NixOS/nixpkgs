@@ -6,3 +6,4 @@ export NIX_CC=@CC@
 export NIX_CXX=@CXX@
 
 export PATH=@PATH@
+export SHELL=@SHELL@

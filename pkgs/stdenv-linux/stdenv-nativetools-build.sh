@@ -4,21 +4,11 @@ export PATH=/bin:/usr/bin
 
 mkdir $out || exit 1
 
-p=
-first=1
-for i in $tools; do
-    if test "$first" == 1; then
-	first=
-    else
-	p=$p:
-    fi
-    p=$p$i/bin
-done
-p=$p':$PATH'
+p='$PATH:/usr/local/bin:/usr/bin:/bin'
 
-cc=$gcc/bin/gcc
-cxx=$gcc/bin/g++
-shell=$shell/bin/sh
+cc=/usr/bin/gcc
+cxx=/usr/bin/g++
+shell=/bin/sh
 
 echo "########## $p"
 

@@ -1,1 +1,9 @@
-Call(IncludeFix("stdenv-linux/stdenv-generic.fix"), [("nativeTools", True)])
+Package(
+  [ ("name", "stdenv-linux")
+  , ("build", Relative("stdenv-linux/stdenv-nativetools-build.sh"))
+
+  , ("setup", Relative("stdenv-linux/setup.sh"))
+  , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
+  , ("glibc", IncludeFix("glibc/glibc.fix"))
+  ]
+)
