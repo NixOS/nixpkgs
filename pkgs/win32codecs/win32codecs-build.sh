@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export PATH=/bin:/usr/bin
+. $stdenv/setup || exit 1
 
 mkdir $out || exit 1
 cd $out || exit 1
