@@ -7,6 +7,8 @@ if ! rev=$(curl --silent -k https://svn.cs.uu.nl:12443/repos/trace/nix/trunk/ \
  | sed 's/.*Revision \(.*\):.*/\1/'); \
  then exit 1; fi
 
+echo "building revision $rev of $url"
+
 echo $rev > head-revision.nix
 
 if ! storeexprs=($(nix-instantiate -vvv do-it.nix)); then exit 1; fi
