@@ -186,6 +186,35 @@
     stdenv = stdenv;
   };
 
+  sdf2 = (import ../development/tools/parsing/sdf2) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm;
+    getopt = getopt;
+  };
+
+  strategoxt = (import ../development/compilers/strategoxt) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm;
+    sdf = sdf2;
+  };
+
+  strategoxt093 = (import ../development/compilers/strategoxt/strategoxt-0.9.3.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm;
+    sdf = sdf2;
+  };
+
+  tiger = (import ../development/compilers/tiger) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm;
+    sdf = sdf2;
+    strategoxt = strategoxt;
+  };
+
   expat = (import ../development/libraries/expat) {
     fetchurl = fetchurl;
     stdenv = stdenv;
