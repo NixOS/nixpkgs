@@ -311,8 +311,9 @@ rec {
   };
 
   jclasslib = (import ../development/tools/java/jclasslib) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv xpf;
     j2re = j2sdk15;
+    ant = apacheant14.body;
   };
 
   ocaml = (import ../development/compilers/ocaml) {
