@@ -64,6 +64,7 @@ let {
     screen
     openssl
     mktemp
+    strace
   ;};
 
 

@@ -172,6 +172,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  strace = (import ../development/tools/misc/strace) {
+    inherit fetchurl stdenv;
+  };
+
   swig = (import ../development/tools/misc/swig) {
     inherit fetchurl stdenv perl python;
     perlSupport = true;
