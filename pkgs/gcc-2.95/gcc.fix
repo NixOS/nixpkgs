@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "gcc-2.95.3")
+
+  , ("build", Relative("gcc-2.95/gcc-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-2.95.3/gcc-2.95.3.tar.gz")
+      , ("md5", "f3ad4f32c2296fad758ed051b5ac8e28")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)
