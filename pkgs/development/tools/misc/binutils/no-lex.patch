@@ -1,0 +1,20 @@
+diff -rc binutils-orig/ld/configure binutils-2.15/ld/configure
+*** binutils-orig/ld/configure	2003-04-24 14:36:07.000000000 +0200
+--- binutils-2.15/ld/configure	2004-09-18 15:18:52.000000000 +0200
+***************
+*** 4414,4420 ****
+  
+  test -n "$LEX" && break
+  done
+! test -n "$LEX" || LEX=""$missing_dir/missing flex""
+  
+  # Extract the first word of "flex", so it can be a program name with args.
+  set dummy flex; ac_word=$2
+--- 4414,4420 ----
+  
+  test -n "$LEX" && break
+  done
+! test -n "$LEX" || LEX="$missing_dir/missing flex"
+  
+  # Extract the first word of "flex", so it can be a program name with args.
+  set dummy flex; ac_word=$2
