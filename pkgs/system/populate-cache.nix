@@ -60,7 +60,6 @@ let {
 
   powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)
     aterm
-    hello
   ;};
 
 
