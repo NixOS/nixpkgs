@@ -230,6 +230,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  lcov = (import ../development/tools/misc/lcov) {
+    inherit fetchurl stdenv perl;
+  };
+
   octave = (import ../development/interpreters/octave) {
     inherit fetchurl stdenv readline ncurses g77 perl;
   };
