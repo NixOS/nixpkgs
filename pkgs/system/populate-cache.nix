@@ -36,7 +36,8 @@ let {
       pkgs.python
       pkgs.libxml2
       pkgs.libxslt
-      pkgs.docbook_xml_dtd
+      pkgs.docbook_xml_dtd_42
+      pkgs.docbook_xml_dtd_43
       pkgs.docbook_xml_ebnf_dtd
       pkgs.docbook_xml_xslt
       pkgs.subversion

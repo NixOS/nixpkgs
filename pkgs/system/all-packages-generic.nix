@@ -380,7 +380,7 @@ rec {
 
   scrollkeeper = (import ../development/libraries/scrollkeeper) {
     inherit fetchurl stdenv perl libxml2 libxslt
-            docbook_xml_dtd perlXMLParser;
+            docbook_xml_dtd_42 perlXMLParser;
   };
 
   gtkLibs = import ../development/libraries/gtk-libs-2.4 {
@@ -522,7 +522,11 @@ rec {
 
   ### DATA
 
-  docbook_xml_dtd = (import ../data/sgml+xml/schemas/xml-dtd/docbook) {
+  docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
+    inherit fetchurl stdenv unzip;
+  };
+
+  docbook_xml_dtd_43 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.3) {
     inherit fetchurl stdenv unzip;
   };
 
