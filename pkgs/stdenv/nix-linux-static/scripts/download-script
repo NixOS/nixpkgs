@@ -1,0 +1,14 @@
+set -x
+set -e
+
+echo $curl
+
+$curl/bin/curl "$url" > .tmp
+
+$gunzip -d < .tmp | $tar xvf -
+
+$cp -prvd * $out
+
+if test -n "$postprocess"; then
+	source $postprocess
+fi
