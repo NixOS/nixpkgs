@@ -5,7 +5,7 @@ Package(
   , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://pan.rebelbase.com/download/releases/0.14.0.90/SOURCE/pan-0.14.0.90.tar.bz2")
+      [ ("url", "http://losser.st-lab.cs.uu.nl/~eelco/mirror/pan-0.14.0.90.tar.bz2")
       , ("md5", "59612bf2551650c0060b214f9742a105")
       ]))
 
