@@ -1,26 +1,26 @@
 let {
   system = "i686-linux";
-  pkgs = (import ../pkgs/system/all-packages.nix) {system = system;};
+  pkgs   = (import ../pkgs/system/all-packages.nix) {system = system;};
   stdenv = pkgs.stdenv_;
 
-  sourcedist = (import ./nix-source-dist.nix) {
-    stdenv = stdenv;
-    autoconf = pkgs.autoconf;
-    automake = pkgs.automake;
-    libxml2 = pkgs.libxml2;
-    libxslt = pkgs.libxslt;
-    docbook_dtd = pkgs.docbook_xml_dtd;
-    docbook_xslt = pkgs.docbook_xml_xslt;
-    fetchurl = pkgs.fetchurl;
-    fetchsvn = pkgs.fetchsvn;
-    rev = import ./head-revision.nix;
+  strategoxtdist = (import ./strategoxt-dist.nix) {
+    stdenv    = stdenv;
+    fetchsvn  = pkgs.fetchsvn;
+    autotools = pkgs.autotools;
+    which     = pkgs.which;
+    aterm     = pkgs.aterm;
+    sdf       = pkgs.sdf2;
   };
 
-  testbuild = (import ./nix-test-build.nix) {
-    stdenv = stdenv;
-    getopt = pkgs.getopt;
-    src = sourcedist;
+  tigerdist = (import ./tiger-dist.nix) {
+    stdenv     = stdenv;
+    fetchsvn   = pkgs.fetchsvn;
+    autotools  = pkgs.autotools;
+    which      = pkgs.which;
+    aterm      = pkgs.aterm;
+    sdf        = pkgs.sdf2;
+    strategoxt = strategoxtdist;
   };
 
-  body = [sourcedist testbuild];
+  body = [strategoxtdist tigerdist];
 }

@@ -1,10 +1,10 @@
 {stdenv, getopt, src}:
 
 derivation {
-  name = "nix-test-build";
+  name = "strategoxt-test-build";
   system = stdenv.system;
 
-  builder = ./nix-test-build.sh;
+  builder = ./strategoxt-test-build.sh;
   src = src;
 
   stdenv = stdenv;
