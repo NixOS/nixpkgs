@@ -15,12 +15,12 @@ assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javaBindings -> swig != null && swig.javaSupport;
 
 stdenv.mkDerivation {
-  name = "subversion-1.1.0pre-rc2";
+  name = "subversion-1.1.0";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/tarballs/subversion-1.1.0-rc2.tar.bz2;
-    md5 = "ecd53e9f065739023da768891b83b70e";
+    url = http://subversion.tigris.org/tarballs/subversion-1.1.0.tar.bz2;
+    md5 = "a91b0d79b8c8ab8747587037c044c6c9";
   };
 
   # This is a hopefully temporary fix for the problem that

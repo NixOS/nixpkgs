@@ -758,7 +758,7 @@ rec {
 
   ### APPLICATIONS
 
-  subversion = (import ../applications/version-management/subversion) {
+  subversion = (import ../applications/version-management/subversion-1.0.x) {
     inherit fetchurl stdenv openssl db4 expat swig;
     localServer = true;
     httpServer = false;
@@ -766,7 +766,7 @@ rec {
     httpd = apacheHttpd;
   };
 
-  subversionWithJava = (import ../applications/version-management/subversion-1.1rc) {
+  subversionWithJava = (import ../applications/version-management/subversion-1.1.x) {
     inherit fetchurl stdenv openssl db4 expat;
     swig = swigWithJava;
     localServer = true;
