@@ -607,6 +607,10 @@ rec {
     inherit (xlibs) xlibs;
   };
 
+  quake3demo = (import ../games/quake3demo) {
+    inherit fetchurl stdenv xlibs mesa;
+  }
+
 
   ### MISC
 
