@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, mono, gtksharp, gtksourceviewsharp
+{ stdenv, fetchurl, file, mono, gtksharp, gtksourceviewsharp
+, gtkmozembedsharp, monodoc
 , perl, perlXMLParser, pkgconfig
-, glib, gconf, gnomevfs, libbonobo}:
+, glib, gtk, gconf, gnomevfs, libbonobo, libglade, libgnome
+}:
 
 stdenv.mkDerivation {
-  name = "monodevelop-0.5.1";
+  name = "monodevelop-0.6-pre2315";
   builder = ./builder.sh;
 
-  src = fetchurl {
-    url = http://www.go-mono.com/archive/1.0.5/monodevelop-0.5.1.tar.gz;
-    md5 = "d89458a2d909da09b2cc1f37e16d8990";
-  };
+  src = /home/eelco/monodevelop-0.6-pre2315.tar.bz2;
 
+  patches = [./prefix.patch];
+  
   buildInputs = [
-    mono gtksharp gtksourceviewsharp perl pkgconfig gnomevfs
-    glib libbonobo gconf
+    file mono gtksharp gtksourceviewsharp perl pkgconfig
+    glib gtk gconf gnomevfs libbonobo libglade libgnome
+    gtkmozembedsharp monodoc
   ];
-  inherit perlXMLParser;
+  
+  inherit perlXMLParser monodoc gtksharp;
 }

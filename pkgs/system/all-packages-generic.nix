@@ -148,6 +148,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  file = (import ../tools/misc/file) {
+    inherit fetchurl stdenv;
+  };
+
   screen = (import ../tools/misc/screen) {
     inherit fetchurl stdenv ncurses;
   };
@@ -631,7 +635,14 @@ rec {
     inherit (xlibs) libXft libXrender;
   };
 
-  gtksharp = (import ../development/libraries/gtk-sharp) {
+  gtksharp1 = (import ../development/libraries/gtk-sharp-1) {
+    inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
+    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
+              libgnomecanvas libgnomeui libgnomeprint 
+              libgnomeprintui gconf;
+  };
+
+  gtksharp2 = (import ../development/libraries/gtk-sharp-2) {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
               libgnomecanvas libgnomeui libgnomeprint 
@@ -639,13 +650,15 @@ rec {
   };
 
   gtksourceviewsharp = import ../development/libraries/gtksourceview-sharp {
-    inherit fetchurl stdenv mono pkgconfig gtksharp monoDLLFixer;
+    inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtksourceview;
+    gtksharp = gtksharp2;
   };
 
-  geckosharp = import ../development/libraries/gecko-sharp {
-    inherit fetchurl stdenv mono pkgconfig gtksharp monoDLLFixer;
+  gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
+    inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtk;
+    gtksharp = gtksharp2;
   };
 
   audiofile = (import ../development/libraries/audiofile) {
@@ -1128,13 +1141,15 @@ rec {
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {
-    inherit fetchurl stdenv mono gtksharp gtksourceviewsharp
-              geckosharp monodoc perl perlXMLParser pkgconfig;
-    inherit (gnome) gnomevfs libbonobo libglade gconf glib gtk;
+    inherit fetchurl stdenv file mono gtksourceviewsharp
+            gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
+    inherit (gnome) gnomevfs libbonobo libglade libgnome gconf glib gtk;
+    gtksharp = gtksharp2;
   };
 
   monodoc = (import ../applications/editors/monodoc) {
-    inherit fetchurl stdenv mono gtksharp pkgconfig;
+    inherit fetchurl stdenv mono pkgconfig;
+    gtksharp = gtksharp1;
   };
 
   emacs = (import ../applications/editors/emacs) {
