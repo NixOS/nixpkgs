@@ -236,6 +236,11 @@
     stdenv = stdenv;
   };
 
+  aterm205 = (import ../development/libraries/aterm/aterm-2.0.5.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   sdf2 = (import ../development/tools/parsing/sdf2) {
     fetchurl = fetchurl;
     stdenv = stdenv;
