@@ -2,7 +2,14 @@ Package(
   [ ("name", "system")
   , ("build", Relative("system/populate-linkdirs.pl"))
 
-  , ("actSubversion", IncludeFix("subversion/subversion.fix"))
+  , ("actSubversion", 
+      Call(IncludeFix("subversion/subversion.fix"), 
+        [ ("localServer", True)
+        , ("httpsClient", True)
+        , ("httpServer", True)
+        , ("pythonBindings", True)
+        ]))
+
   , ("actStrategoXT", IncludeFix("strategoxt/strategoxt.fix"))
   , ("actATerm", IncludeFix("aterm/aterm.fix"))
   , ("actPan", IncludeFix("pan/pan.fix"))

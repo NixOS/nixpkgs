@@ -1,25 +1,28 @@
-Package(
-  [ ("name", "subversion-0.26.0")
+Function(["localServer", "httpsClient", "httpServer", "pythonBindings"],
 
-  , ("build", Relative("subversion/subversion-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
+  Package(
+    [ ("name", "subversion-0.26.0")
 
-  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://subversion.tigris.org/files/documents/15/5322/subversion-0.26.0.tar.gz")
-      , ("md5", "700caa3f59b585d173812c4a078feeba")
-      ]))
+    , ("build", Relative("subversion/subversion-build.sh"))
+    , ("setenv", Relative("helpers/set-env.sh"))
 
-  , ("localServer", "1")
-  , ("httpsClient", "1")
-  , ("httpServer", "1")
-  , ("httpsServer", "1")
-  , ("pythonBindings", "1")
+    , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+        [ ("url", "http://subversion.tigris.org/files/documents/15/5322/subversion-0.26.0.tar.gz")
+        , ("md5", "700caa3f59b585d173812c4a078feeba")
+        ]))
 
-  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
-  , ("ssl", IncludeFix("openssl/openssl.fix"))
-  , ("swig", IncludeFix("swig/swig.fix"))
-  , ("httpd", IncludeFix("httpd/httpd.fix"))
-  , ("db4", IncludeFix("db4/db4.fix"))
-  , ("libxml", IncludeFix("libxml2/libxml2.fix"))
-  ]
+    , ("localServer", Var("localServer"))
+    , ("httpsClient", Var("httpsClient"))
+    , ("httpServer", Var("httpServer"))
+    , ("httpsServer", True)
+    , ("pythonBindings", Var("pythonBindings"))
+
+    , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+    , ("ssl", If(Var("httpsClient"), IncludeFix("openssl/openssl.fix"), ""))
+    , ("swig", If(Var("pythonBindings"), IncludeFix("swig/swig.fix"), ""))
+    , ("httpd", If(Var("httpServer"), IncludeFix("httpd/httpd.fix"), ""))
+    , ("db4", If(Var("localServer"), IncludeFix("db4/db4.fix"), ""))
+    , ("libxml", IncludeFix("libxml2/libxml2.fix"))
+    ]
+  )
 )
