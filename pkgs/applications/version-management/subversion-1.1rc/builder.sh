@@ -36,6 +36,9 @@ postInstall() {
         mkdir subversion/bindings/java/javahl/classes # bug fix
         make javahl
         make install-javahl
+        mkdir -p $out/share/doc/$name
+        $j2sdk/bin/javadoc -d $out/share/doc/$name -windowtitle "JavaHL Subversion Bindings" -link http://java.sun.com/j2se/1.4.2/docs/api/ \
+          subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/*.java
     fi
 }
 postInstall=postInstall
