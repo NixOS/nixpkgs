@@ -3,6 +3,6 @@ set -e
 
 echo $curl
 
-$gunzip -d < $curl | $tar xvf -
+$bunzip2 -d < $curl | $tar xvf -
 
 $cp -prvd * $out

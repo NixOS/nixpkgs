@@ -6,5 +6,5 @@ PATH=$coreutils/bin
 mkdir $out
 
 cat > $out/setup <<EOF
-PATH=$coreutils/bin:$gnused/bin
+PATH=$staticTools/bin
 EOF

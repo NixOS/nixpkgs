@@ -4,7 +4,7 @@ echo "using curl executable $curl"
 
 $curl/bin/curl "$url" > .tmp
 
-$gunzip -d < .tmp | $tar xvf -
+$bunzip2 -d < .tmp | $tar xvf -
 
 $cp -prd * $out
 
