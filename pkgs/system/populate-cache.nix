@@ -64,6 +64,7 @@ let {
     vim
     less
     screen
+    xsel
     openssl
     mktemp
     strace

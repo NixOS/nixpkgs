@@ -138,6 +138,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  xsel = (import ../tools/misc/xsel) {
+    inherit fetchurl stdenv x11;
+  };
+
   openssh = (import ../tools/networking/openssh) {
     inherit fetchurl stdenv zlib openssl;
   };
