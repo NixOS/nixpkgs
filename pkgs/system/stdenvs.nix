@@ -50,9 +50,10 @@
 
 
   # Linux standard environment.
-  inherit (import ../stdenv/nix-linux-static) stdenvLinux stdenvLinuxPkgs;
+  inherit (import ../stdenv/linux {inherit allPackages;})
+    stdenvLinux stdenvLinuxPkgs;
 
-
+    
   # Darwin (Mac OS X) standard environment.  Very simple for now
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
