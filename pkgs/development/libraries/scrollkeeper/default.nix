@@ -2,7 +2,7 @@
 , perlXMLParser}:
 
 assert perl != null && libxml2 != null && libxslt != null
-  && docbook != null_xml_dtd && perlXMLParser != null;
+  && docbook_xml_dtd != null && perlXMLParser != null;
 
 # !!! seems to need iconv, but cannot find it since $glibc/bin is not in PATH
 
