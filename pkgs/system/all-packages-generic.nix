@@ -220,6 +220,16 @@
     stdenv = stdenv;
   };
 
+  python = (import ../development/interpreters/python) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  j2re = (import ../development/interpreters/j2re) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
