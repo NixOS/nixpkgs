@@ -240,6 +240,12 @@
     stdenv = stdenv;
   };
 
+  apacheant = (import ../development/tools/build-managers/apache-ant) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    j2sdk = j2sdk;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
