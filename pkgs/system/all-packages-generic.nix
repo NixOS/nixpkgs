@@ -443,6 +443,7 @@ rec {
 
   xlibs = (import ../development/libraries/xlibs) {
     inherit fetchurl stdenv pkgconfig freetype expat;
+    patch = gnupatch;
   };
 
   mesa = (import ../development/libraries/mesa) {
@@ -579,9 +580,10 @@ rec {
 
   zapping = (import ../applications/video/zapping) {
     inherit fetchurl stdenv pkgconfig perl python 
-            scrollkeeper gettext zvbi libjpeg libpng x11;
+            scrollkeeper gettext zvbi libjpeg libpng x11
+            perlXMLParser;
     inherit (gnome) libgnomeui libglade esound;
-    inherit (xlibs) libXv libXext;
+    inherit (xlibs) libXv libXmu libXext;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;

@@ -1,11 +1,11 @@
-{stdenv, fetchurl, pkgconfig, libX11}:
+{stdenv, fetchurl, pkgconfig, libX11, libXext}:
 
 stdenv.mkDerivation {
-  name = "libXv-2.2.1";
+  name = "libXv-2.2.2";
   src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libXv-2.2.1.tar.bz2;
-    md5 = "89b8ca62a77c662a8a7ded89bcf0dd67";
+    url = http://freedesktop.org/~xlibs/release/libXv-2.2.2.tar.bz2;
+    md5 = "cdd6a79bac8807da83c008dac42fdddb";
   };
   buildInputs = [pkgconfig];
-  propagatedBuildInputs = [libX11];
+  propagatedBuildInputs = [libX11 libXext];
 }

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, libX11}:
 
 stdenv.mkDerivation {
-  name = "libICE-6.3.2";
+  name = "libICE-6.3.3";
   src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libICE-6.3.2.tar.bz2;
-    md5 = "06db02e3df846b127a6e2dc3e345039c";
+    url = http://freedesktop.org/~xlibs/release/libICE-6.3.3.tar.bz2;
+    md5 = "e67d98bebfabf884e58501e44b7efd35";
   };
   buildInputs = [pkgconfig libX11];
 }

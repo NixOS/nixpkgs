@@ -48,7 +48,7 @@ let {
       pkgs.MPlayer
       pkgs.MPlayerPlugin
       pkgs.vlc
-      pkgs.zapping
+#      pkgs.zapping
       pkgs.gqview
       pkgs.hello
       pkgs.xchm

@@ -1,0 +1,20 @@
+diff -rc libXmu-orig/EditresCom.c libXmu-new/EditresCom.c
+*** libXmu-orig/EditresCom.c	2004-05-07 02:19:04.000000000 +0200
+--- libXmu-new/EditresCom.c	2004-06-21 20:01:34.000000000 +0200
+***************
+*** 40,46 ****
+  #include <X11/Xatom.h>
+  #include <X11/Xos.h>		/* for strcpy declaration */
+  #include <X11/Xfuncs.h>
+! #include <X11/Xaw/Cardinals.h>
+  #include <X11/Xmu/EditresP.h>
+  #include <X11/Xmd.h>
+  #include <X11/Xmu/CharSet.h>
+--- 40,46 ----
+  #include <X11/Xatom.h>
+  #include <X11/Xos.h>		/* for strcpy declaration */
+  #include <X11/Xfuncs.h>
+! /* #include <X11/Xaw/Cardinals.h> */
+  #include <X11/Xmu/EditresP.h>
+  #include <X11/Xmd.h>
+  #include <X11/Xmu/CharSet.h>
