@@ -71,6 +71,7 @@ let {
     openssl
     mktemp
     strace
+    qt3
 
     postgresql
     jetty
