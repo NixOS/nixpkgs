@@ -6,11 +6,11 @@ assert pkgconfig != null && gtk != null && libpng != null;
 # !!! assert libpng == gtk.libpng;
 
 stdenv.mkDerivation {
-  name = "gqview-1.4.4";
+  name = "gqview-1.4.5";
 
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/gqview/gqview-1.4.4.tar.gz;
-    md5 = "b3f1e1ca830c9cc0b484966fac9e6f28";
+    url = http://heanet.dl.sourceforge.net/sourceforge/gqview/gqview-1.4.5.tar.gz;
+    md5 = "b196935767c2d3dc61243d9ed0801c2e";
   };
 
   buildInputs = [pkgconfig gtk libpng];
