@@ -860,6 +860,10 @@ rec {
     inherit (xlibs) libXt libXp libXext libX11;
   };
 
+  eclipse = (import ../applications/editors/eclipse) {
+    inherit fetchurl stdenv unzip;
+  };
+
   emacs = (import ../applications/editors/emacs) {
     inherit fetchurl stdenv xlibs;
   };
