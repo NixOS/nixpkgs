@@ -301,7 +301,7 @@ patchPhase() {
 }
 
 
-fixLibtool () {
+fixLibtool() {
     sed 's^eval sys_lib_.*search_path=.*^^' < $1 > $1.tmp
     mv $1.tmp $1
 }
@@ -403,7 +403,7 @@ installPhase() {
 }
 
 
-genericBuild () {
+genericBuild() {
     header "building $out"
     unpackPhase
     cd $sourceRoot
