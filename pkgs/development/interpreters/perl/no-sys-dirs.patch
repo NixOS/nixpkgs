@@ -1,6 +1,150 @@
-diff -rc perl-5.8.3-orig/ext/Errno/Errno_pm.PL perl-5.8.3/ext/Errno/Errno_pm.PL
-*** perl-5.8.3-orig/ext/Errno/Errno_pm.PL	2003-08-04 09:37:13.000000000 +0200
---- perl-5.8.3/ext/Errno/Errno_pm.PL	2004-02-20 16:59:05.000000000 +0100
+diff -rc perl-orig/Configure perl-5.8.5/Configure
+*** perl-orig/Configure	2004-05-12 13:00:41.000000000 +0200
+--- perl-5.8.5/Configure	2004-10-04 12:38:29.000000000 +0200
+***************
+*** 86,100 ****
+  fi
+  
+  : Proper PATH setting
+! paths='/bin /usr/bin /usr/local/bin /usr/ucb /usr/local /usr/lbin'
+! paths="$paths /opt/bin /opt/local/bin /opt/local /opt/lbin"
+! paths="$paths /usr/5bin /etc /usr/gnu/bin /usr/new /usr/new/bin /usr/nbin"
+! paths="$paths /opt/gnu/bin /opt/new /opt/new/bin /opt/nbin"
+! paths="$paths /sys5.3/bin /sys5.3/usr/bin /bsd4.3/bin /bsd4.3/usr/ucb"
+! paths="$paths /bsd4.3/usr/bin /usr/bsd /bsd43/bin /usr/ccs/bin"
+! paths="$paths /etc /usr/lib /usr/ucblib /lib /usr/ccs/lib"
+! paths="$paths /sbin /usr/sbin /usr/libexec"
+! paths="$paths /system/gnu_library/bin"
+  
+  for p in $paths
+  do
+--- 86,92 ----
+  fi
+  
+  : Proper PATH setting
+! paths=''
+  
+  for p in $paths
+  do
+***************
+*** 1221,1228 ****
+  archname=''
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
+! locincpth="$locincpth /opt/gnu/include /usr/GNU/include /opt/GNU/include"
+  :
+  : no include file wanted by default
+  inclwanted=''
+--- 1213,1219 ----
+  archname=''
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth=""
+  :
+  : no include file wanted by default
+  inclwanted=''
+***************
+*** 1230,1245 ****
+  groupstype=''
+  libnames=''
+  : change the next line if compiling for Xenix/286 on Xenix/386
+! xlibpth='/usr/lib/386 /lib/386'
+  : Possible local library directories to search.
+! loclibpth="/usr/local/lib /opt/local/lib /usr/gnu/lib"
+! loclibpth="$loclibpth /opt/gnu/lib /usr/GNU/lib /opt/GNU/lib"
+  
+  : general looking path for locating libraries
+! glibpth="/lib /usr/lib $xlibpth"
+! glibpth="$glibpth /usr/ccs/lib /usr/ucblib /usr/local/lib"
+! test -f /usr/shlib/libc.so && glibpth="/usr/shlib $glibpth"
+! test -f /shlib/libc.so     && glibpth="/shlib $glibpth"
+  
+  : Private path used by Configure to find libraries.  Its value
+  : is prepended to libpth. This variable takes care of special
+--- 1221,1232 ----
+  groupstype=''
+  libnames=''
+  : change the next line if compiling for Xenix/286 on Xenix/386
+! xlibpth=''
+  : Possible local library directories to search.
+! loclibpth=""
+  
+  : general looking path for locating libraries
+! glibpth="$xlibpth"
+  
+  : Private path used by Configure to find libraries.  Its value
+  : is prepended to libpth. This variable takes care of special
+***************
+*** 1270,1277 ****
+  libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
+  : We probably want to search /usr/shlib before most other libraries.
+  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
+- glibpth=`echo " $glibpth " | sed -e 's! /usr/shlib ! !'`
+- glibpth="/usr/shlib $glibpth"
+  : Do not use vfork unless overridden by a hint file.
+  usevfork=false
+  
+--- 1257,1262 ----
+***************
+*** 2267,2273 ****
+  zip
+  "
+  pth=`echo $PATH | sed -e "s/$p_/ /g"`
+- pth="$pth /lib /usr/lib"
+  for file in $loclist; do
+  	eval xxx=\$$file
+  	case "$xxx" in
+--- 2252,2257 ----
+***************
+*** 7908,7920 ****
+  echo " "
+  case "$sysman" in
+  '') 
+! 	syspath='/usr/share/man/man1 /usr/man/man1'
+! 	syspath="$syspath /usr/man/mann /usr/man/manl /usr/man/local/man1"
+! 	syspath="$syspath /usr/man/u_man/man1"
+! 	syspath="$syspath /usr/catman/u_man/man1 /usr/man/l_man/man1"
+! 	syspath="$syspath /usr/local/man/u_man/man1 /usr/local/man/l_man/man1"
+! 	syspath="$syspath /usr/man/man.L /local/man/man1 /usr/local/man/man1"
+! 	sysman=`./loc . /usr/man/man1 $syspath`
+  	;;
+  esac
+  if $test -d "$sysman"; then
+--- 7892,7899 ----
+  echo " "
+  case "$sysman" in
+  '') 
+! 	syspath=''
+! 	sysman=''
+  	;;
+  esac
+  if $test -d "$sysman"; then
+***************
+*** 17947,17955 ****
+  case "$full_ar" in
+  '') full_ar=$ar ;;
+  esac
+  
+  : Store the full pathname to the sed program for use in the C program
+! full_sed=$sed
+  
+  : see what type gids are declared as in the kernel
+  echo " "
+--- 17926,17935 ----
+  case "$full_ar" in
+  '') full_ar=$ar ;;
+  esac
++ full_ar=ar
+  
+  : Store the full pathname to the sed program for use in the C program
+! full_sed=sed
+  
+  : see what type gids are declared as in the kernel
+  echo " "
+diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.5/ext/Errno/Errno_pm.PL
+*** perl-orig/ext/Errno/Errno_pm.PL	2004-03-31 00:01:25.000000000 +0200
+--- perl-5.8.5/ext/Errno/Errno_pm.PL	2004-10-04 10:53:59.000000000 +0200
 ***************
 *** 105,111 ****
   	# Watch out for cross compiling for EPOC (usually done on linux)
@@ -18,12 +162,11 @@ diff -rc perl-5.8.3-orig/ext/Errno/Errno_pm.PL perl-5.8.3/ext/Errno/Errno_pm.PL
   	     ) {
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
-Only in perl-5.8.3/ext/Errno: Errno_pm.PL~
-diff -rc perl-5.8.3-orig/lib/Cwd.pm perl-5.8.3/lib/Cwd.pm
-*** perl-5.8.3-orig/lib/Cwd.pm	2003-12-20 00:05:30.000000000 +0100
---- perl-5.8.3/lib/Cwd.pm	2004-02-20 16:58:16.000000000 +0100
+diff -rc perl-orig/lib/Cwd.pm perl-5.8.5/lib/Cwd.pm
+*** perl-orig/lib/Cwd.pm	2004-07-15 18:49:22.000000000 +0200
+--- perl-5.8.5/lib/Cwd.pm	2004-10-04 10:53:59.000000000 +0200
 ***************
-*** 201,207 ****
+*** 292,298 ****
   
   # The 'natural and safe form' for UNIX (pwd may be setuid root)
   sub _backtick_pwd {
@@ -31,7 +174,7 @@ diff -rc perl-5.8.3-orig/lib/Cwd.pm perl-5.8.3/lib/Cwd.pm
       my $cwd = `$pwd_cmd`;
       # Belt-and-suspenders in case someone said "undef $/".
       local $/ = "\n";
---- 201,207 ----
+--- 292,298 ----
   
   # The 'natural and safe form' for UNIX (pwd may be setuid root)
   sub _backtick_pwd {
@@ -39,4 +182,3 @@ diff -rc perl-5.8.3-orig/lib/Cwd.pm perl-5.8.3/lib/Cwd.pm
       my $cwd = `$pwd_cmd`;
       # Belt-and-suspenders in case someone said "undef $/".
       local $/ = "\n";
-Only in perl-5.8.3/lib: Cwd.pm~
