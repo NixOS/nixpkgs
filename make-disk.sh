@@ -17,21 +17,24 @@ if ! test -f $image; then
 fi
 
 # What to copy?
-storeExpr=$(echo '(import ./pkgs.nix).everything' | nix-instantiate -)
-nix-store -rB $storeExpr
-nix-store -qn --requisites $storeExpr > $storePaths
+
+NIX_CMD_PATH=/nix/bin
+
+storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -)
+$NIX_CMD_PATH/nix-store -rB $storeExpr
+$NIX_CMD_PATH/nix-store -qn --requisites $storeExpr > $storePaths
 
 (while read storepath; do
-  nix-store -q --predecessors $storepath | (while read predecessor; do
+  $NIX_CMD_PATH/nix-store -q --predecessors $storepath | (while read predecessor; do
     echo $predecessor $storepath
   done) 
 done) < $storePaths > $successors
 
 # Location of sysvinit?
-sysvinitPath=$(nix-store -qn $(echo '(import ./pkgs.nix).sysvinit' | nix-instantiate -))
+sysvinitPath=$($NIX_CMD_PATH/nix-store -qn $(echo '(import ./pkgs.nix).sysvinit' | $NIX_CMD_PATH/nix-instantiate -))
 
 # Location of Nix boot scripts?
-bootPath=$(nix-store -qn $(echo '(import ./pkgs.nix).boot' | nix-instantiate -))
+bootPath=$($NIX_CMD_PATH/nix-store -qn $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -))
 
 # Fill the disk with the minimal Nix store.
 if ! test -d /tmp/mnt; then mkdir /tmp/mnt; fi
