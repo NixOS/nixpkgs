@@ -1,13 +1,13 @@
 Function(["localServer", "httpsClient", "httpServer", "pythonBindings"],
 
   Package(
-    [ ("name", "subversion-0.29.0")
+    [ ("name", "subversion-0.30.0")
 
     , ("build", Relative("subversion/subversion-build.sh"))
 
     , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
-        [ ("url", "http://subversion.tigris.org/files/documents/15/5977/subversion-0.29.0.tar.gz")
-        , ("md5", "5de4d92eae7ea5d83fe6c3964a08e261")
+        [ ("url", "http://svn.collab.net/tarballs/subversion-0.30.0.tar.gz")
+        , ("md5", "9dac76a67a217dc6b7f63259761ff93f")
         ]))
 
     , ("localServer", Var("localServer"))
