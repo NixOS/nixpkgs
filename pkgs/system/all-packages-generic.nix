@@ -577,6 +577,10 @@
     inherit fetchurl stdenv gettext;
   };
 
+  nettools = (import ../os-specific/linux/net-tools) {
+    inherit fetchurl stdenv;
+  };
+
 
   ### DATA
 
