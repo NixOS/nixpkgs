@@ -22,5 +22,11 @@ let {
     src = sourcedist;
   };
 
-  body = [sourcedist testbuild];
+  rpmbuild = (import ./nix-rpm-build.nix) {
+    stdenv = stdenv;
+    getopt = pkgs.getopt;
+    src = sourcedist;
+  };
+
+  body = [sourcedist testbuild rpmbuild];
 }

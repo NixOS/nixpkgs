@@ -15,9 +15,9 @@ if ! storeexprs=($(nix-instantiate -vvv do-it.nix)); then exit 1; fi
 
 srcexpr=${storeexprs[0]}
 testexpr=${storeexprs[1]}
+rpmexpr=${storeexprs[2]}
 
 if ! nix-store -vvvv -r "$srcexpr" > /dev/null; then exit 1; fi
-
 if ! outpath=$(nix-store -qn "$srcexpr"); then exit 1; fi
 
 uploader="http://losser.st-lab.cs.uu.nl/~eelco/cgi-bin/upload.pl/"
@@ -26,4 +26,9 @@ curl --silent -T "$outpath/manual.html" "$uploader" || exit 1
 curl --silent -T "$outpath/style.css" "$uploader" || exit 1
 curl --silent -T "$outpath"/nix-*.tar.bz2 "$uploader" || exit 1
 
-if ! nix-store -vvvv -r "$testexpr" > /dev/null; then exit 1; fi
+#if ! nix-store -vvvv -r "$testexpr" > /dev/null; then exit 1; fi
+
+if ! nix-store -vvvv -r "$rpmexpr" > /dev/null; then exit 1; fi
+if ! rpmpath=$(nix-store -qn "$rpmexpr"); then exit 1; fi
+
+curl --silent -T "$rpmpath"/nix-*.rpm "$uploader" || exit 1
