@@ -1,6 +1,7 @@
 #! /bin/sh -e
 
-initExpr=$1
+sysvinitPath=$1
+initPath=$2
 
 make_dir() {
     mode=$1
@@ -18,6 +19,8 @@ mount -t ext2 /dev/discs/disc0/disc $root
 make_dir 00755 /dev
 make_dir 00755 /proc
 make_dir 01777 /tmp
+make_dir 00755 /etc # global non-constant configuration
+make_dir 00755 /var
 make_dir 00755 /nix
 make_dir 00755 /nix/store
 make_dir 00755 /nix/var
@@ -25,6 +28,13 @@ make_dir 00755 /nix/var/nix
 make_dir 00755 /nix/var/nix/db
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
+make_dir 00755 /mnt
+make_dir 00755 /mnt/host
+make_dir 00755 /home
+make_dir 00755 /home/root
+
+rm -f $root/etc/mtab
+ln -s /proc/mounts $root/etc/mtab
 
 export NIX_ROOT=$root
 
@@ -50,9 +60,13 @@ echo registering successors...
 done) < /tmp/successors
 
 echo setting init symlink...
-initPath=$(/nix/bin/nix-store -qn $initExpr)
 rm -f $root/init
-ln -s $initPath/bin/init $root/init
+ln -s $sysvinitPath/sbin/init $root/init
+
+echo setting up inittab...
+rm -f $root/etc/inittab
+echo "id:2:initdefault:" >> $root/etc/inittab
+echo "si::bootwait:$initPath/bin/init" >> $root/etc/inittab
 
 echo unmounting...
 umount $root
