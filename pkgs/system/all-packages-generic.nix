@@ -195,7 +195,7 @@ rec {
   };
 
   octave = (import ../development/interpreters/octave) {
-    inherit fetchurl stdenv autoconf g77 texinfo flex gperf;
+    inherit fetchurl stdenv autoconf g77 texinfo flex gperf readline ncurses;
     bison = bisonnew;
   };
 
