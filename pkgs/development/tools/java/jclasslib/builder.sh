@@ -3,8 +3,7 @@
 tar zxf $src || exit 1
 cd jclasslib || exit 1
 
-xpf-rm -i build.xml "//taskdef" > build.new
-mv build.new build.xml
+xpf-rm -f build.xml "//taskdef"
 
 ant clean || exit 1
 ant jar || exit 1
