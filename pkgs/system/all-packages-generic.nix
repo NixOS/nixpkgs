@@ -295,56 +295,45 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  aterm_2_0_5 = (import ../development/libraries/aterm/aterm-2.0.5.nix) {
-    inherit fetchurl stdenv;
-  };
-
   sdf2 = (import ../development/tools/parsing/sdf2) {
     inherit fetchurl stdenv aterm getopt;
   };
 
   toolbuslib_0_5_1 = (import ../development/tools/parsing/toolbuslib/toolbuslib-0.5.1.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
   };
 
   ptsupport_1_0 = (import ../development/tools/parsing/pt-support/pt-support-1.0.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
     toolbuslib = toolbuslib_0_5_1;
   };
 
   sdfsupport_2_0 = (import ../development/tools/parsing/sdf-support/sdf-support-2.0.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
     toolbuslib = toolbuslib_0_5_1;
     ptsupport = ptsupport_1_0;
   };
 
   sglr_3_10_2 = (import ../development/tools/parsing/sglr/sglr-3.10.2.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
     toolbuslib = toolbuslib_0_5_1;
     ptsupport = ptsupport_1_0;
   };
 
   asfsupport_1_2 = (import ../development/tools/parsing/asf-support/asf-support-1.2.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
     ptsupport = ptsupport_1_0;
   };
 
   ascsupport_1_8 = (import ../development/tools/parsing/asc-support/asc-support-1.8.nix) {
-    inherit fetchurl stdenv;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv aterm;
     toolbuslib = toolbuslib_0_5_1;
     ptsupport = ptsupport_1_0;
     asfsupport	= asfsupport_1_2;
   };
 
   pgen_2_0 = (import ../development/tools/parsing/pgen/pgen-2.0.nix) {
-    inherit fetchurl stdenv getopt;
-    aterm = aterm_2_0_5;
+    inherit fetchurl stdenv getopt aterm;
     toolbuslib = toolbuslib_0_5_1;
     ptsupport = ptsupport_1_0;
     asfsupport = asfsupport_1_2;
@@ -716,7 +705,6 @@ rec {
 
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm;
-    aterm = aterm_2_0_5;
     bdb = db4;
   };
 
