@@ -1,23 +1,19 @@
 #! /bin/sh
 
-root=/home/eelco/Dev/nix/test
-cd $root
-
-mkdir -p db
-mkdir -p pkg
-mkdir -p descr
-mkdir -p netcache
+mkdir -p $NIX/db
+mkdir -p $NIX/pkg
+mkdir -p $NIX/descr
+mkdir -p $NIX/netcache
 
 nix init
 
-if ! nix-instantiate descr netcache tmpl/*.nix; then
+if ! nix-instantiate $NIX/descr $NIX/netcache tmpl/*.nix; then
     exit 1;
 fi
 
-for i in netcache/*; do nix regfile $i; done
+for i in $NIX/netcache/*; do nix regfile $i; done
 for i in build/*; do nix regfile $i; done
-for i in descr/*; do 
+for i in $NIX/descr/*; do 
     md5sum $i
     nix regfile $i
 done
-

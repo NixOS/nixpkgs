@@ -8,3 +8,5 @@ cd aterm-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf aterm-*
