@@ -510,4 +510,9 @@
     perl = perl;
   };
 
+  nxml = (import ../applications/editors/emacs/modes/nxml) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
 }
