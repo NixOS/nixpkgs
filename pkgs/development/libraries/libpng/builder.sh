@@ -1,6 +1,6 @@
 #! /bin/sh -e
 
-buildinputs="$zlib"
+buildInputs="$zlib"
 . $stdenv/setup
 
 tar xvfj $src

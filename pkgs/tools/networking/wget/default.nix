@@ -1,10 +1,12 @@
-{stdenv, fetchurl}: derivation {
-  name = "wget-1.9";
+{stdenv, fetchurl}:
+
+derivation {
+  name = "wget-1.9.1";
   system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/wget/wget-1.9.tar.gz;
-    md5 = "18ac093db70801b210152dd69b4ef08a";
+    url = ftp://ftp.nl.net/pub/gnu/wget/wget-1.9.1.tar.gz;
+    md5 = "e6051f1e1487ec0ebfdbda72bedc70ad";
   };
-  stdenv = stdenv;
+  inherit stdenv;
 }

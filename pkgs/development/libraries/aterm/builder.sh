@@ -1,10 +1,6 @@
 #! /bin/sh
 
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfz $src || exit 1
-cd aterm-* || exit 1
-./configure --prefix=$out --with-gcc || exit 1
-make || exit 1
-make install || exit 1
-strip -S $out/lib/*.a || exit 1
+configureFlags="--with-gcc"
+genericBuild

@@ -2,26 +2,36 @@
 
 # glibc cannot have itself in its rpath.
 export NIX_NO_SELF_RPATH=1
-buildinputs="$patch"
+
 . $stdenv/setup
 
-tar xvfj $glibcSrc
-(cd glibc-* && tar xvfj $linuxthreadsSrc) || false
 
-(cd glibc-* && patch -p1 < $vaargsPatch) || false
+postUnpack() {
+    cd $sourceRoot
+    unpackFile $linuxthreadsSrc
+    cd ..
+}
 
-mkdir build
-cd build
-../glibc-*/configure --prefix=$out --enable-add-ons --disable-profile
+postUnpack=postUnpack
 
-make
-make install
-make localedata/install-locales
-strip -S $out/lib/*.a $out/lib/*.so $out/lib/gconv/*.so || true
-strip -s $out/bin/* $out/sbin/* $out/libexec/* || true
 
-rm $out/etc/ld.so.cache
+preConfigure() {
+    mkdir ../build
+    cd ../build
+    configureScript=../$sourceRoot/configure
+    configureFlags="--enable-add-ons --disable-profile"
+}
 
-(cd $out/include && ln -s $kernelHeaders/include/* .) || false
+preConfigure=preConfigure
 
-exit 0
+
+postInstall() {
+    make localedata/install-locales
+    rm $out/etc/ld.so.cache
+    (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
+}
+
+postInstall=postInstall
+
+
+genericBuild

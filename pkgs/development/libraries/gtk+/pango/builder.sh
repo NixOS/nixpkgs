@@ -5,7 +5,7 @@ buildinputs="$pkgconfig $x11 $glib $xft"
 
 tar xvfj $src
 cd pango-*
-./configure --prefix=$out --x-includes=$x11/include --x-libraries=$x11/lib
+./configure --prefix=$out
 make
 make install
 

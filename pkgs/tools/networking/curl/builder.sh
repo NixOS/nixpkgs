@@ -1,4 +1,4 @@
 #! /bin/sh -e
 . $stdenv/setup
+configureFlags="--without-ssl"
 genericBuild
-(cd $out/bin && ln -s bash sh) || exit 1

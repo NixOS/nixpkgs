@@ -1,14 +1,12 @@
-{stdenv, fetchurl, aterm, sdf}: derivation {
-  name = "strategoxt-0.9.4-4626";
+{stdenv, fetchurl, aterm, sdf}:
+
+derivation {
+  name = "strategoxt-0.9.4";
   system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://losser.labs.cs.uu.nl/~mbravenb/dailydist/strategoxt/src/strategoxt-0.9.4-4626.tar.gz;
-    md5 = "f33ae9fdb9d8628ae01fa0f26bfa0429";
+    url = ftp://ftp.stratego-language.org/pub/stratego/StrategoXT/strategoxt-0.9.4.tar.gz;
+    md5 = "b61aee784cebac6cce0d96383bdb1b37";
   };
-  stdenv = stdenv;
-  aterm = aterm;
-  sdf = sdf;
-  tarfile = "true";
-  dir = "strategoxt";
+  inherit stdenv aterm sdf;
 }

@@ -7,7 +7,7 @@ derivation {
   system = stdenv.system;
   builder = ./builder.sh;
 
-  glibcSrc = fetchurl {
+  src = fetchurl {
     url = ftp://ftp.nl.net/pub/gnu/glibc/glibc-2.3.2.tar.bz2;
     md5 = "ede969aad568f48083e413384f20753c";
   };
@@ -18,7 +18,8 @@ derivation {
 
   # This is a patch to make glibc compile under GCC 3.3.  Presumably
   # later releases of glibc won't need this.
-  vaargsPatch = ./glibc-2.3.2-sscanf-1.patch;
+  patches = [./glibc-2.3.2-sscanf-1.patch];
 
-  inherit stdenv kernelHeaders patch;
+  buildInputs = [patch];
+  inherit stdenv kernelHeaders;
 }

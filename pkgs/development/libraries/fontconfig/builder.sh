@@ -10,7 +10,6 @@ export TZ=UTC
 tar xvfz $src
 cd fontconfig-*
 ./configure --prefix=$out --with-confdir=$out/etc/fonts \
- --x-includes=$x11/include --x-libraries=$x11/lib \
  --with-expat-includes=$expat/include --with-expat-lib=$expat/lib
 make
 make install

@@ -1,13 +1,13 @@
-{stdenv, glibc}:
+{stdenv, glibc, genericStdenv, gccWrapper}:
 
-(import ../generic) {
+genericStdenv {
   name = "stdenv-nix-linux-boot";
   preHook = ./prehook-boot.sh;
   initialPath = "/usr/local /usr /";
 
   inherit stdenv;
 
-  gcc = (import ../../build-support/gcc-wrapper) {
+  gcc = gccWrapper {
     name = "gcc-native";
     nativeTools = true;
     nativeGlibc = false;

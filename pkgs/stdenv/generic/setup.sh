@@ -40,7 +40,14 @@ fi
 findInputs()
 {
     local pkg=$1
-    pkgs=(${pkgs[@]} $pkg)
+
+    case $pkgs in
+        *\ $pkg\ *)
+            return 0
+            ;;
+    esac
+    
+    pkgs="$pkgs $pkg "
 
     if test -f $pkg/nix-support/setup-hook; then
         . $pkg/nix-support/setup-hook
@@ -53,8 +60,11 @@ findInputs()
     fi
 }
 
-pkgs=()
-for i in $buildinputs; do
+pkgs=""
+if test -n "$buildinputs"; then
+    buildInputs="$buildinputs" # compatibility
+fi
+for i in $buildInputs; do
     findInputs $i
 done
 
@@ -66,7 +76,7 @@ addToEnv()
     local pkg=$1
 
     if test -d $1/bin; then
-        export _PATH=$_PATH:$1/bin
+        export _PATH=$_PATH${_PATH:+:}$1/bin
     fi
 
     for i in "${envHooks[@]}"; do
@@ -74,7 +84,7 @@ addToEnv()
     done
 }
 
-for i in "${pkgs[@]}"; do
+for i in $pkgs; do
     addToEnv $i
 done
 
@@ -121,3 +131,285 @@ PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
     echo "Final path: $PATH"
 fi
+
+
+######################################################################
+# What follows is the generic builder.
+
+
+nestingLevel=0
+
+startNest() {
+    nestingLevel=$(($nestingLevel + 1))
+    echo -en "\e[$1p"
+}
+
+stopNest() {
+    nestingLevel=$(($nestingLevel - 1))
+    echo -en "\e[q"
+}
+
+header() {
+    startNest "$2"
+    echo "$1"
+}
+
+# Make sure that even when we exit abnormally, the original nesting
+# level is properly restored.
+closeNest() {
+    while test $nestingLevel -gt 0; do
+        stopNest
+    done
+}
+
+trap "closeNest" EXIT
+
+
+# Utility function: return the base name of the given path, with the
+# prefix `HASH-' removed, if present.
+stripHash() {
+    strippedName=$(basename $1);
+    if echo "$strippedName" | grep -q '^[a-f0-9]\{32\}-'; then
+        strippedName=$(echo "$strippedName" | cut -c34-)
+    fi
+}
+
+
+unpackFile() {
+    local file=$1
+    local cmd
+
+    case $file in
+        *.tar) cmd="tar xvf $file";;
+        *.tar.gz | *.tgz | *.tar.Z) cmd="tar xvfz $file";;
+        *.tar.bz2 | *.tbz2) cmd="tar xvfj $file";;
+        *.zip) cmd="unzip $file";;
+        *)
+            if test -d "$file"; then
+                stripHash $file
+                cmd="cp -prvd $file $strippedName"
+            else
+                if test -n "$findUnpacker"; then
+                    $findUnpacker $1;
+                fi
+                if test -z "$unpackCmd"; then
+                    echo "source archive $file has unknown type"
+                    exit 1
+                fi
+                cmd=$unpackCmd
+            fi
+            ;;
+    esac
+
+    header "unpacking source archive $file (using $cmd)" 3
+    $cmd
+    stopNest
+}
+
+
+unpackW() {
+    if test -n "$unpackPhase"; then
+        $unpackPhase
+        return
+    fi
+
+    if test -z "$srcs"; then
+        if test -z "$src"; then
+            echo 'variable $src or $srcs should point to the source'
+            exit 1
+        fi
+        srcs="$src"
+    fi
+
+    # To determine the source directory created by unpacking the
+    # source archives, we record the contents of the current
+    # directory, then look below which directory got added.  Yeah,
+    # it's rather hacky.
+    local dirsBefore=""
+    for i in *; do
+        if test -d "$i"; then
+            dirsBefore="$dirsBefore $i "
+        fi
+    done
+
+    # Unpack all source archives.
+    for i in $srcs; do
+        unpackFile $i
+    done
+
+    # Find the source directory.
+    if test -n "$setSourceRoot"; then
+        $setSourceRoot
+    else
+        sourceRoot=
+        for i in *; do
+            if test -d "$i"; then
+                case $dirsBefore in
+                    *\ $i\ *)
+                        ;;
+                    *)
+                        if test -n "$sourceRoot"; then
+                            echo "unpacker produced multiple directories"
+                            exit 1
+                        fi
+                        sourceRoot=$i
+                        ;;
+                esac
+            fi
+        done
+    fi
+
+    if test -z "$sourceRoot"; then
+        echo "unpacker appears to have produced no directories"
+        exit 1
+    fi
+
+    echo "source root is $sourceRoot"
+
+    if test -n "$postUnpack"; then
+        $postUnpack
+    fi
+}
+
+
+unpackPhase() {
+    header "unpacking sources"
+    unpackW
+    stopNest
+}
+
+
+patchW() {
+    if test -n "$patchPhase"; then
+        $patchPhase
+        return
+    fi
+
+    for i in $patches; do
+        header "applying patch $i" 3
+        patch -p1 < $i
+        stopNest
+    done
+}
+
+
+patchPhase() {
+    if test -z "$patchPhase" -a -z "$patches"; then return; fi
+    header "patching sources"
+    patchW
+    stopNest
+}
+
+
+fixLibtool () {
+    sed 's^eval sys_lib_.*search_path=.*^^' < $1 > $1.tmp
+    mv $1.tmp $1
+}
+
+
+configureW() {
+    if test -n "$configurePhase"; then
+        $configurePhase
+        stopNest
+        return
+    fi
+
+    if test -n "$preConfigure"; then
+        $preConfigure
+    fi
+
+    if test -z "$configureScript"; then
+        configureScript=./configure
+    fi
+    
+    if ! test -x $configureScript; then
+        echo "no configure script, doing nothing"
+        return
+    fi
+
+    if test -z "$dontFixLibtool" -a -f ./ltmain.sh; then
+        fixLibtool ./ltmain.sh
+    fi
+
+    if test -z "$dontAddPrefix"; then
+        configureFlags="--prefix=$out $configureFlags"
+    fi
+
+    echo "configure flags: $configureFlags"
+    $configureScript $configureFlags
+
+    if test -n "$postConfigure"; then
+        $postConfigure
+    fi
+}
+
+
+configurePhase() {
+    header "configuring"
+    configureW
+    stopNest
+}
+
+
+buildW() {
+    if test -n "$buildPhase"; then
+        $buildPhase
+        return
+    fi
+
+    echo "make flags: $makeFlags"
+    make $makeFlags
+}
+
+
+buildPhase() {
+    header "building"
+    buildW
+    stopNest
+}
+
+
+installW() {
+    if test -n "$installPhase"; then
+        $installPhase
+        return
+    fi
+    
+    if test -n "$preInstall"; then
+        $preInstall
+    fi
+    
+    make install $installFlags
+
+    if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
+        find $out -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
+    fi
+
+    if test -n "$propagatedBuildInputs"; then
+        mkdir -f $out/nix-support
+        echo "$propagatedBuildInputs" > $out/nix-support/propagated-build-inputs
+    fi
+
+    if test -n "$postInstall"; then
+        $postInstall
+    fi
+}
+
+
+installPhase() {
+    header "installing"
+    installW
+    stopNest
+}
+
+
+genericBuild () {
+    header "building $out"
+    unpackPhase
+    cd $sourceRoot
+    patchPhase
+    configurePhase
+    buildPhase
+    installPhase
+    stopNest
+}

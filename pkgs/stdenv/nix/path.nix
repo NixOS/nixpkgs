@@ -8,7 +8,6 @@
   pkgs.gnutar
   pkgs.gzip
   pkgs.bzip2
-  pkgs.wget
   pkgs.binutils
   pkgs.gnumake
   pkgs.gcc

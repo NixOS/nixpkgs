@@ -2,16 +2,13 @@
 
 . $stdenv/setup
 
-tar xvfj $src
-cd binutils-*
+patchConfigure() {
+    # Clear the default library search path.
+    if test "$noSysDirs" = "1"; then
+        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+    fi
+}
 
-# Clear the default library search path.
-if test "$noSysDirs" = "1"; then
-    echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
-fi
+preConfigure=patchConfigure
 
-./configure --prefix=$out
-make
-make install
-
-strip -S $out/lib/*.a
+genericBuild

@@ -3,9 +3,19 @@
 buildinputs="$pkgconfig $x11 $glib $atk $pango $perl $libtiff $libjpeg $libpng"
 . $stdenv/setup
 
+IFS=:
+for i in $PATH; do echo $i; done
+
+#exit 1
+# A utility function for fixing up libtool scripts that scan in
+# default directories like /usr.  This is a bit of a hack.  A better
+# solution would be to fix libtool, but since it is included in so
+# many packages that is not feasible right now.
+
 tar xvfj $src
 cd gtk+-*
-./configure --prefix=$out --x-includes=$x11/include --x-libraries=$x11/lib
+fixLibtool ltmain.sh
+./configure --prefix=$out
 make
 make install
 

@@ -25,7 +25,11 @@
   # with it (e.g., because they require GNU Make).
   stdenvNative = (import ../stdenv/native) {stdenv = stdenvInitial;};
 
-  stdenvNativePkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
+  stdenvNativePkgs = allPackages {
+    stdenv = stdenvNative;
+    bootCurl = null;
+    noSysDirs = false;
+  };
 
 
   # The Nix build environment.
@@ -49,10 +53,14 @@
   stdenvLinuxBoot1 = (import ../stdenv/nix-linux/boot.nix) {
     stdenv = stdenvNative;
     glibc = stdenvLinuxGlibc;
+    inherit genericStdenv gccWrapper;
   };
 
   # 3) Now we can build packages that will have the Nix glibc.
-  stdenvLinuxBoot1Pkgs = allPackages {stdenv = stdenvLinuxBoot1;};
+  stdenvLinuxBoot1Pkgs = allPackages {
+    stdenv = stdenvLinuxBoot1;
+    bootCurl = null;
+  };
 
   # 4) However, since these packages are built by an native C compiler
   #    and linker, they may well pick up impure references (e.g., bash

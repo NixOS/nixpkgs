@@ -5,7 +5,7 @@ buildinputs="$x11 $glib"
 
 tar xvfz $src
 cd gtk+-*
-./configure --prefix=$out --x-includes=$x11/include --x-libraries=$x11/lib
+./configure --prefix=$out
 make
 make install
 

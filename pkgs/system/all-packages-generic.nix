@@ -2,7 +2,7 @@
 # identifier and a standard build environment, returns the set of all
 # packages provided by the Nix Package Collection.
 
-{stdenv, noSysDirs ? true}:
+{stdenv, bootCurl, noSysDirs ? true}:
 
 rec {
 
@@ -13,6 +13,7 @@ rec {
 
   fetchurl = (import ../build-support/fetchurl) {
     inherit stdenv;
+    curl = bootCurl;
   };
 
   fetchsvn = (import ../build-support/fetchsvn) {
@@ -84,6 +85,10 @@ rec {
 
   wget = (import ../tools/networking/wget) {
     inherit fetchurl stdenv;
+  };
+
+  curl = (import ../tools/networking/curl) {
+    inherit fetchurl stdenv zlib;
   };
 
   par2cmdline = (import ../tools/networking/par2cmdline) {
@@ -176,6 +181,7 @@ rec {
 
   gnumake = (import ../development/tools/build-managers/gnumake) {
     inherit fetchurl stdenv;
+    patch = gnupatch;
   };
 
   bison = (import ../development/tools/parsing/bison) {
