@@ -23,6 +23,8 @@ rec {
     inherit postprocess extra extra2;
   };
 
+/*
+
   glibc = derivation {
     name = "glibc";
     builder = ./bash-static/bash;
@@ -36,6 +38,8 @@ rec {
     system = "i686-linux";
     args = [ ./scripts/glibc-build ];
   };
+
+*/
 
   coreutils = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/coreutils-5.0-static.tar.gz; pkgname = "coreutils";};
 
@@ -62,15 +66,14 @@ rec {
 
   linuxHeaders = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/linux-headers-2.4.25-i386.tar.gz; pkgname = "linux-headers";};
 
-/*
   glibc = download {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
+    patchelf = ./patchelf-static/patchelf;
     postprocess = ./scripts/add-symlink.sh;
     extra = linuxHeaders;
     extra2 = coreutils;
   };
-*/
 
   stdenvInitial = let {
 
