@@ -743,12 +743,12 @@ rec {
     inherit fetchurl stdenv libtool;
   };
 
-  perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
-    inherit fetchurl stdenv perl db4;
+  perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
+    inherit fetchurl perl db4;
   };
 
-  perlXMLParser = (import ../development/perl-modules/XML-Parser) {
-    inherit fetchurl stdenv perl expat;
+  perlXMLParser = import ../development/perl-modules/XML-Parser {
+    inherit fetchurl perl expat;
   };
 
   perlXMLLibXML = import ../development/perl-modules/generic perl {

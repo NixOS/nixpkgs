@@ -29,10 +29,10 @@ stdenv.mkDerivation {
     md5 = "dd7b3d920509709692c41c9c6c767746";
   };
 
-  inherit teletextSupport jpegSupport pngSupport libXext perlXMLParser;
+  inherit teletextSupport jpegSupport pngSupport libXext;
 
   buildInputs = [
-    pkgconfig perl python x11 libXv libXmu libgnomeui
+    pkgconfig perl perlXMLParser python x11 libXv libXmu libgnomeui
     libglade scrollkeeper esound gettext
     (if teletextSupport then zvbi else null)
     (if jpegSupport then libjpeg else null)

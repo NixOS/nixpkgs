@@ -8,6 +8,4 @@ stdenv.mkDerivation {
 
   # TODO: maybe this package as dependency on gnome-themes?
   configureFlags = "--disable-hicolor-check";
-
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
 }

@@ -5,8 +5,7 @@
 stdenv.mkDerivation {
   inherit (input) name src;
   patches = [./xmlcatalog.patch];
-  buildInputs = [pkgconfig perl libxml2 libxslt];
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl"; # !!!
+  buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt];
   inherit docbook_xml_dtd_42;
   builder = ./builder.sh;
 }

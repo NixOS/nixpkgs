@@ -1,18 +1,6 @@
-addInputsHook=addInputsHook
-addInputsHook() {
-    # Should be in a Perl setup hook.
-    envHooks=(${envHooks[@]} addPerlLibs)
-}
-
-addPerlLibs() {
-    PERL5LIB="$PERL5LIB${PERL5LIB:+:}$1/lib/site_perl"
-}
-
 . $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/site_perl"
-
-export PERL5LIB
 
 oldIFS=$IFS
 IFS=:
@@ -21,7 +9,7 @@ for i in $PERL5LIB; do
     perlFlags="$perlFlags -I$i"
 done
 IFS=$oldIFS
-echo "$perlFlags"
+echo "Perl flags: $perlFlags"
 
 preConfigure=preConfigure
 preConfigure() {
@@ -42,4 +30,12 @@ preConfigure() {
     perl Makefile.PL PREFIX=$out $makeMakerFlags
 }
 
+if test -n "$perlPreHook"; then
+    . $perlPreHook
+fi
+
 genericBuild
+
+if test -n "$perlPostHook"; then
+    . $perlPostHook
+fi

@@ -6,7 +6,6 @@ assert pkgconfig != null && perl != null && ORBit2 != null
 # todo 2.8.1 doesn;t work
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig perl libxml2 yacc flex];
+  buildInputs = [pkgconfig perl perlXMLParser libxml2 yacc flex];
   propagatedBuildInputs = [ORBit2 popt];
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
 }

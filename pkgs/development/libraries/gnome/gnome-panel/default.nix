@@ -6,9 +6,8 @@
 stdenv.mkDerivation {
   inherit (input) name src;
   buildInputs = [
-    pkgconfig perl gtk glib ORBit2 libgnome libgnomeui
+    pkgconfig perl perlXMLParser gtk glib ORBit2 libgnome libgnomeui
     gnomedesktop libglade libwnck libjpeg libpng scrollkeeper
     libXmu
   ];
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl"; # !!!
 }

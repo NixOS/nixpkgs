@@ -1,6 +1,6 @@
-diff -rc perl-orig/Configure perl-5.8.5/Configure
-*** perl-orig/Configure	2004-05-12 13:00:41.000000000 +0200
---- perl-5.8.5/Configure	2004-10-04 12:38:29.000000000 +0200
+diff -rc perl-orig/Configure perl-5.8.6/Configure
+*** perl-orig/Configure	2004-09-10 08:25:52.000000000 +0200
+--- perl-5.8.6/Configure	2005-03-10 12:53:28.000000000 +0100
 ***************
 *** 86,100 ****
   fi
@@ -11,7 +11,7 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
 ! paths="$paths /usr/5bin /etc /usr/gnu/bin /usr/new /usr/new/bin /usr/nbin"
 ! paths="$paths /opt/gnu/bin /opt/new /opt/new/bin /opt/nbin"
 ! paths="$paths /sys5.3/bin /sys5.3/usr/bin /bsd4.3/bin /bsd4.3/usr/ucb"
-! paths="$paths /bsd4.3/usr/bin /usr/bsd /bsd43/bin /usr/ccs/bin"
+! paths="$paths /bsd4.3/usr/bin /usr/bsd /bsd43/bin /opt/ansic/bin /usr/ccs/bin"
 ! paths="$paths /etc /usr/lib /usr/ucblib /lib /usr/ccs/lib"
 ! paths="$paths /sbin /usr/sbin /usr/libexec"
 ! paths="$paths /system/gnu_library/bin"
@@ -97,7 +97,7 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
   	case "$xxx" in
 --- 2252,2257 ----
 ***************
-*** 7908,7920 ****
+*** 7910,7922 ****
   echo " "
   case "$sysman" in
   '') 
@@ -111,7 +111,7 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
   	;;
   esac
   if $test -d "$sysman"; then
---- 7892,7899 ----
+--- 7894,7901 ----
   echo " "
   case "$sysman" in
   '') 
@@ -121,7 +121,7 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
   esac
   if $test -d "$sysman"; then
 ***************
-*** 17947,17955 ****
+*** 17949,17957 ****
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -131,7 +131,7 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
---- 17926,17935 ----
+--- 17928,17937 ----
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -142,9 +142,9 @@ diff -rc perl-orig/Configure perl-5.8.5/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
-diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.5/ext/Errno/Errno_pm.PL
-*** perl-orig/ext/Errno/Errno_pm.PL	2004-03-31 00:01:25.000000000 +0200
---- perl-5.8.5/ext/Errno/Errno_pm.PL	2004-10-04 10:53:59.000000000 +0200
+diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.6/ext/Errno/Errno_pm.PL
+*** perl-orig/ext/Errno/Errno_pm.PL	2004-11-01 15:31:59.000000000 +0100
+--- perl-5.8.6/ext/Errno/Errno_pm.PL	2005-03-10 12:52:31.000000000 +0100
 ***************
 *** 105,111 ****
   	# Watch out for cross compiling for EPOC (usually done on linux)
@@ -162,9 +162,9 @@ diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.5/ext/Errno/Errno_pm.PL
   	     ) {
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
-diff -rc perl-orig/lib/Cwd.pm perl-5.8.5/lib/Cwd.pm
-*** perl-orig/lib/Cwd.pm	2004-07-15 18:49:22.000000000 +0200
---- perl-5.8.5/lib/Cwd.pm	2004-10-04 10:53:59.000000000 +0200
+diff -rc perl-orig/lib/Cwd.pm perl-5.8.6/lib/Cwd.pm
+*** perl-orig/lib/Cwd.pm	2004-11-01 16:42:41.000000000 +0100
+--- perl-5.8.6/lib/Cwd.pm	2005-03-10 12:52:31.000000000 +0100
 ***************
 *** 292,298 ****
   

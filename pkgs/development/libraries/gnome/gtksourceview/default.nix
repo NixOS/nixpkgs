@@ -10,5 +10,4 @@ stdenv.mkDerivation {
     libbonobo gconf libgnomeprintui libgnomecanvas
   ];
   propagatedBuildInputs = [gtk libxml2 libgnomeprint];
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl"; # !!!
 }

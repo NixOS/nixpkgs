@@ -4,11 +4,9 @@ stdenv.mkDerivation {
   inherit (input) name src;
 
   buildInputs = [
-      perl perlXMLParser pkgconfig popt libxml2
-      glib pango
-    ];
+    perl perlXMLParser pkgconfig popt libxml2
+    glib pango
+  ];
 
   propagatedBuildInputs = [libxml2 libart];
-
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
 }

@@ -19,11 +19,10 @@ stdenv.mkDerivation {
   patches = [./prefix.patch];
   
   buildInputs = [
-    file mono gtksharp gtksourceviewsharp perl pkgconfig
+    file mono gtksharp gtksourceviewsharp perl perlXMLParser pkgconfig
     glib gtk gconf gnomevfs libbonobo libglade libgnome
     gtkmozembedsharp monodoc
   ];
   
-  inherit perlXMLParser mozilla monodoc
-    gtksharp gtkmozembedsharp gtksourceviewsharp;
+  inherit mozilla monodoc gtksharp gtkmozembedsharp gtksourceviewsharp;
 }

@@ -14,6 +14,4 @@ stdenv.mkDerivation {
   inherit (input) name src;
   buildInputs = [pkgconfig perl perlXMLParser popt zlib];
   propagatedBuildInputs = [glib gnomevfs libbonobo gconf];
-
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
 }

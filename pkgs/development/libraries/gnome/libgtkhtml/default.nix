@@ -10,9 +10,7 @@ stdenv.mkDerivation {
   inherit (input) name src;
 
   buildInputs = [
-      perl perlXMLParser pkgconfig gtk libxml2 gail
-    ];
-
-  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
+    perl perlXMLParser pkgconfig gtk libxml2 gail
+  ];
 }
 

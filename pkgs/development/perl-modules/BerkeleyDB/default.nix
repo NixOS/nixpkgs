@@ -1,14 +1,12 @@
-{stdenv, fetchurl, perl, db4}:
+{fetchurl, perl, db4}:
 
-assert perl != null && db4 != null;
-
-stdenv.mkDerivation {
-  name = "perl-BerkeleyDB-0.25";
-  builder = ./builder.sh;
+import ../generic perl {
+  name = "BerkeleyDB-0.26";
   src = fetchurl {
-    url = ftp://ftp.cs.uu.nl/mirror/CPAN/authors/id/P/PM/PMQS/BerkeleyDB-0.25.tar.gz;
-    md5 = "fcef06232d1ccd6c2a9cd114e388ea3d";
+    url = ftp://ftp.cs.uu.nl/mirror/CPAN/authors/id/P/PM/PMQS/BerkeleyDB-0.26.tar.gz;
+    md5 = "6e9882f4e4bac48b24079d082af30e6c";
   };
-  perl = perl;
-  db4 = db4;
+  perlPreHook = ./hook.sh;
+  buildInputs = [db4];
+#  inherit db4;
 }

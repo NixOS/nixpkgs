@@ -1,8 +1,6 @@
 . $stdenv/setup
 . $makeWrapper
 
-export PERL5LIB=$perlXMLParser/lib/site_perl:$PERL5LIB
-
 export MONO_GAC_PREFIX=$monodoc:$gtksharp
 
 postInstall=postInstall
