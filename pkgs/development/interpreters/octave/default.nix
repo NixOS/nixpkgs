@@ -10,5 +10,5 @@ stdenv.mkDerivation {
     md5 = "b781f5d0cd750cb9bb3ef23523f5f339";
   };
   buildInputs = [g77 readline ncurses];
-  configureFlags = "--enable-readline";
+  configureFlags = "--enable-readline --enable-dl --disable-static";
 }
