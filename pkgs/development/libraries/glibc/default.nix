@@ -32,6 +32,9 @@ stdenv.mkDerivation {
     # This is a patch to make glibc compile under GCC 3.3.  Presumably
     # later releases of glibc won't need this.
 #    ./glibc-2.3.2-sscanf-1.patch
+
+    # Fix for localedata loading bug.
+    ./loadlocale.patch
   ];
 
   inherit kernelHeaders installLocales;
