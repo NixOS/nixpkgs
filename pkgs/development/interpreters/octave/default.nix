@@ -4,10 +4,10 @@ assert readline != null && ncurses != null;
 assert g77.langF77;
 
 stdenv.mkDerivation {
-  name = "octave-2.1.57";
+  name = "octave-2.1.60";
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/octave-2.1.57.tar.bz2;
-    md5 = "b781f5d0cd750cb9bb3ef23523f5f339";
+    url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-2.1.60.tar.bz2;
+    md5 = "d332151ada009a14e4e4e37521a4ccfa";
   };
   buildInputs = [g77 readline ncurses];
   configureFlags = "--enable-readline --enable-dl --disable-static --enable-shared";
