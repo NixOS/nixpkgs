@@ -33,8 +33,8 @@ let {
     aterm
     strategoxt
     xdoc
-    ghc
-    helium
+#    ghc
+#    helium
     perl
     python
     libxml2
