@@ -667,8 +667,8 @@ rec {
 
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt perl zlib libxml2 libxslt bzip2
-            perlXMLParser docbook_xml_dtd_42 gettext perl x11
+            flex bison popt zlib libxml2 libxslt bzip2
+            perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs;
     inherit (xlibs) libXmu;
   };
@@ -716,7 +716,6 @@ rec {
   zvbi = (import ../development/libraries/zvbi) {
     inherit fetchurl stdenv libpng x11;
     pngSupport = true;
-    libpng = libpng;
   };
 
   rte = (import ../development/libraries/rte) {
