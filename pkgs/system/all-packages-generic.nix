@@ -423,7 +423,8 @@ rec {
   };
 
   tomcat5 = (import ../servers/http/tomcat) {
-    inherit fetchurl stdenv j2sdk;
+    inherit fetchurl stdenv ;
+    j2sdk = blackdown;
   };
 
   pcre = (import ../development/libraries/pcre) {
