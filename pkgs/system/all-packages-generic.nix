@@ -860,6 +860,10 @@ rec {
     inherit (xlibs) libXt libXp libXext libX11;
   };
 
+  emacs = (import ../applications/editors/emacs) {
+    inherit fetchurl stdenv xlibs;
+  };
+
   nxml = (import ../applications/editors/emacs/modes/nxml) {
     inherit fetchurl stdenv;
   };
