@@ -1,7 +1,7 @@
 #! /bin/sh -e
 
 sysvinitPath=$1
-initPath=$2
+bootPath=$2
 
 make_dir() {
     mode=$1
@@ -66,7 +66,10 @@ ln -s $sysvinitPath/sbin/init $root/init
 echo setting up inittab...
 rm -f $root/etc/inittab
 echo "id:2:initdefault:" >> $root/etc/inittab
-echo "si::bootwait:$initPath/bin/init" >> $root/etc/inittab
+echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
+echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
+echo "1:2345:respawn:$bootPath/bin/login.sh /dev/ttys/0" >> $root/etc/inittab
+echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo unmounting...
 umount $root

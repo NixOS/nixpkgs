@@ -30,10 +30,10 @@ done) < $storePaths > $successors
 # Location of sysvinit?
 sysvinitPath=$(nix-store -qn $(echo '(import ./pkgs.nix).sysvinit' | nix-instantiate -))
 
-# Location of Nix init?
-initPath=$(nix-store -qn $(echo '(import ./pkgs.nix).init' | nix-instantiate -))
+# Location of Nix boot scripts?
+bootPath=$(nix-store -qn $(echo '(import ./pkgs.nix).boot' | nix-instantiate -))
 
 # Fill the disk with the minimal Nix store.
 if ! test -d /tmp/mnt; then mkdir /tmp/mnt; fi
 linux ubd0=$image root=/dev/root rootflags=/ rootfstype=hostfs \
-  init="$(pwd)/fill-disk.sh $sysvinitPath $initPath"
+  init="$(pwd)/fill-disk.sh $sysvinitPath $bootPath"
