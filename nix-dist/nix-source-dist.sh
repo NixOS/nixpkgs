@@ -29,3 +29,4 @@ echo "copying result..."
 mkdir $out || exit 1
 cp -p $pkgname.tar.gz $pkgname.tar.bz2 $out || exit 1
 cp -p doc/manual/book.html $out/manual.html || exit 1
+cp -p doc/manual/style.css $out/ || exit 1
