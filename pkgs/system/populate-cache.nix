@@ -59,6 +59,7 @@ let {
     nix
     ocaml
     hevea
+    vim
   ;};
 
 

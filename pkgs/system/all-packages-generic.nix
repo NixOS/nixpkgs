@@ -646,6 +646,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  vim = (import ../applications/editors/vim) {
+    inherit fetchurl stdenv ncurses;
+  };
 
   ### GAMES
 
