@@ -315,6 +315,11 @@ rec {
     sdf = sdf_22;
   };
 
+  bibtextools = (import ../tools/typesetting/bibtex-tools) {
+    inherit fetchurl stdenv aterm strategoxt hevea;
+    sdf = sdf_22;
+  };
+
   #strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
   #  inherit fetchsvn stdenv autoconf automake libtool which aterm;
   #  sdf = sdf_22;
