@@ -4,112 +4,118 @@
 
 {system, stdenv}: rec {
 
-  # build-support/fetchurl
+  subversion = "./xxxxxxxxxxxxxx/y/z/a/b/c/d/e/ffffffffffffffffffffff";
+
+  ### BUILD SUPPORT
+
   fetchurl = (import ../build-support/fetchurl) {
     stdenv = stdenv;
   };
 
-  # sys-utils/coreutils
-  coreutils = (import ../sys-utils/coreutils) {
+
+  ### TOOLS
+
+  coreutils = (import ../tools/misc/coreutils) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # sys-utils/findutils
-  findutils = (import ../sys-utils/findutils) {
+  findutils = (import ../tools/misc/findutils) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # sys-utils/diffutils
-  diffutils = (import ../sys-utils/diffutils) {
+  diffutils = (import ../tools/text/diffutils) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # sys-utils/gnused
-  gnused = (import ../sys-utils/gnused) {
+  gnused = (import ../tools/text/gnused) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # sys-utils/gnugrep
-  gnugrep = (import ../sys-utils/gnugrep) {
+  gnugrep = (import ../tools/text/gnugrep) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     pcre = pcre;
   };
 
-  # sys-utils/gawk
-  gawk = (import ../sys-utils/gawk) {
+  gawk = (import ../tools/text/gawk) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # archivers/gnutar
-  gnutar = (import ../archivers/gnutar) {
+  gnutar = (import ../tools/archivers/gnutar) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # compression/gzip
-  gzip = (import ../compression/gzip) {
+  gzip = (import ../tools/compression/gzip) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # shells/bash
+  bzip2 = (import ../tools/compression/bzip2) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+
+  ### SHELLS
+
   bash = (import ../shells/bash) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # devel/tools/binutils
-  binutils = (import ../devel/tools/binutils) {
+
+  ### DEVELOPMENT
+
+  binutils = (import ../development/tools/misc/binutils) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # devel/tools/gnumake
-  gnumake = (import ../devel/tools/gnumake) {
+  gnumake = (import ../development/tools/build-managers/gnumake) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # devel/compilers/gcc
-  gcc = (import ../devel/compilers/gcc) {
+  gcc = (import ../development/compilers/gcc) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     binutils = binutils;
   };
 
-  # devel/libs/pcre
-  pcre = (import ../devel/libs/pcre) {
+  pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # devel/libs/glibc
-  glibc = (import ../devel/libs/glibc) {
+  glibc = (import ../development/libraries/glibc) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     kernelHeaders = kernelHeaders;
   };
 
-  # devel/libs/aterm
-  aterm = (import ../devel/libs/aterm) {
+  aterm = (import ../development/libraries/aterm) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # os-specific/linux/kernel-headers
+
+### OS-SPECIFIC
+
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  # applications/version-management/subversion
-  subversion = (import ../applications/version-management/subversion) {
+
+### APPLICATIONS
+
+/*  subversion = (import ../applications/version-management/subversion) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     localServer = false;
@@ -122,5 +128,6 @@
     libxml2 = "";
     expat = "";
     swig = "";
-  };
+  }; */
+
 }

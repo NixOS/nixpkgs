@@ -12,7 +12,6 @@
   # management user interface.
   selectedPkgs = [
     pkgs.aterm
-    pkgs.subversion
   ];
 
   # Create a user environment.
