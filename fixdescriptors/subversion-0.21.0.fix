@@ -1,0 +1,8 @@
+Descr(
+  [ Bind("pkgId", Str("subversion-0.21.0"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("src", File(Url("http://subversion.tigris.org/files/documents/15/3712/subversion-0.21.0.tar.gz")))
+  , Bind("build", File(Local("../build/subversion-build.sh")))
+  ]
+)

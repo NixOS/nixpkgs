@@ -5,6 +5,7 @@ Descr(
   , Bind("actATerm", Pkg(Fix("./aterm-2.0.fix")))
   , Bind("actPkgConfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
   , Bind("actGlib", Pkg(Fix("./glib-2.2.1.fix")))
+  , Bind("actSubversion", Pkg(Fix("./subversion-0.21.0.fix")))
 
   , Bind("build", File(Local("../../scripts/nix-populate")))
   ]
