@@ -24,6 +24,10 @@ let {
     bash
     binutils
     gnum4
+    autoconf
+    automake194
+    libtool
+    pkgconfig
     valgrind
     texinfo
     readline
@@ -64,9 +68,12 @@ let {
     nix
 #    ocaml
     mono
+    monodoc
+    monodevelop
 #    hevea
     vim
     less
+    file
     screen
     xsel
     openssl
