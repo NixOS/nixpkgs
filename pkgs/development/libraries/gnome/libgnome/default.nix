@@ -12,17 +12,10 @@ assert pkgconfig != null && perl != null && glib != null
 
 stdenv.mkDerivation {
   name = "libgnome-2.0.6";
-  builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.gnome.org/pub/gnome/sources/libgnome/2.4/libgnome-2.4.0.tar.bz2;
     md5 = "caec1e12d64b98a2925a4317ac16429f";
   };
-  pkgconfig = pkgconfig;
-  perl = perl;
-  glib = glib;
-  gnomevfs = gnomevfs;
-  libbonobo = libbonobo;
-  GConf = GConf;
-  popt = popt;
-  zlib = zlib;
+  buildInputs = [pkgconfig perl popt zlib];
+  propagatedBuildInputs = [glib gnomevfs libbonobo GConf];
 }

@@ -13,9 +13,6 @@ stdenv.mkDerivation {
     url = http://heanet.dl.sourceforge.net/sourceforge/scrollkeeper/scrollkeeper-0.3.14.tar.gz;
     md5 = "161eb3f29e30e7b24f84eb93ac696155";
   };
-  perl = perl;
-  libxml2 = libxml2;
-  libxslt = libxslt;
-  docbook_xml_dtd = docbook_xml_dtd;
-  perlXMLParser = perlXMLParser;
+  buildInputs = [perl libxml2 libxslt];
+  inherit docbook_xml_dtd perlXMLParser;
 }

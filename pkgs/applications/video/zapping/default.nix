@@ -10,7 +10,7 @@ assert pkgconfig != null && perl != null && python != null &&
   scrollkeeper != null && esound != null && gettext != null;
 
 assert teletextSupport -> zvbi != null && zvbi.pngSupport
-  && pngSupport && zvbi.libpng == libpng;
+  /* !!! && pngSupport && zvbi.libpng == libpng */;
 
 assert jpegSupport -> libjpeg != null;
 assert pngSupport -> libpng != null;
@@ -24,20 +24,13 @@ stdenv.mkDerivation {
     md5 = "cdedc0088c70f4520c37066ec05cb996";
   };
 
-  teletextSupport = teletextSupport;
-  jpegSupport = jpegSupport;
-  pngSupport = pngSupport;
+  inherit teletextSupport jpegSupport pngSupport;
 
-  pkgconfig = pkgconfig;
-  perl = perl;
-  python = python;
-  x11 = x11;
-  libgnomeui = libgnomeui;
-  libglade = libglade;
-  scrollkeeper = scrollkeeper;
-  esound = esound;
-  gettext = gettext;
-  zvbi = if teletextSupport then zvbi else null;
-  libjpeg = if jpegSupport then libjpeg else null;
-  libpng = if pngSupport then libpng else null;
+  buildInputs = [
+    pkgconfig perl python x11 libgnomeui
+    libglade scrollkeeper esound gettext
+    (if teletextSupport then zvbi else null)
+    (if jpegSupport then libjpeg else null)
+    (if pngSupport then libpng else null)
+  ];
 }

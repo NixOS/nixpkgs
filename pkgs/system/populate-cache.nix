@@ -46,7 +46,7 @@ let {
       pkgs.MPlayerPlugin
 #      pkgs.vlc
       pkgs.zapping
-#      pkgs.gqview
+      pkgs.gqview
       pkgs.hello
       pkgs.nxml
       pkgs.uml
