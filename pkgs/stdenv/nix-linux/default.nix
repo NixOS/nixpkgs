@@ -27,7 +27,7 @@ let {
     // {
       mkDerivation = attrs: derivation (attrs // {
         builder = pkgs.bash ~ /bin/sh;
-        args = ["-e" attrs.builder];
+        args = ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
         stdenv = body;
         system = body.system;
       });
