@@ -271,7 +271,7 @@ stopLog() {
 # prefix `HASH-' removed, if present.
 stripHash() {
     strippedName=$(basename $1);
-    if echo "$strippedName" | grep -q '^[a-f0-9]\{32\}-'; then
+    if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
         strippedName=$(echo "$strippedName" | cut -c34-)
     fi
 }
