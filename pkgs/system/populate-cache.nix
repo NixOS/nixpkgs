@@ -5,6 +5,7 @@ let {
       pkgs.unzip
       pkgs.valgrind
       pkgs.par2cmdline
+      pkgs.cksfv
       pkgs.graphviz
       pkgs.strategoxt093
       pkgs.libxml2

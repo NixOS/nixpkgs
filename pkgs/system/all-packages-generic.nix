@@ -103,6 +103,11 @@
     stdenv = stdenv;
   };
 
+  cksfv = (import ../tools/networking/cksfv) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   graphviz = (import ../tools/graphics/graphviz) {
     fetchurl = fetchurl;
     stdenv = stdenv;
