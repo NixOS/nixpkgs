@@ -1,9 +1,0 @@
-Package(
-  [ ("name", "stdenv-nativetools")
-  , ("build", Relative("stdenv-linux/stdenv-nativetools-build.sh"))
-
-  , ("setup", Relative("stdenv-linux/setup-nativetools.sh"))
-  , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
-  , ("glibc", IncludeFix("glibc/glibc.fix"))
-  ]
-)

@@ -1,4 +1,0 @@
-If ( HasSubstr(Platform(), "linux")
-   , IncludeFix("stdenv-linux/stdenv.fix")
-   , IncludeFix("stdenv-native/stdenv.fix")
-   )
