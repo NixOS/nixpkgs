@@ -167,6 +167,10 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
+  patchelf = (import ../development/tools/misc/patchelf) {
+    inherit fetchurl stdenv;
+  };
+
   gnum4 = (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
   };
