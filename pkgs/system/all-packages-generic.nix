@@ -121,6 +121,14 @@ rec {
     inherit fetchurl stdenv ocaml;
   };
 
+  less = (import ../tools/misc/less) {
+    inherit fetchurl stdenv ncurses;
+  };
+
+  screen = (import ../tools/misc/screen) {
+    inherit fetchurl stdenv ncurses;
+
+  };
   ### SHELLS
 
   bash = (import ../shells/bash) {
@@ -650,9 +658,6 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  less = (import ../applications/pagers/less) {
-    inherit fetchurl stdenv ncurses;
-  };
 
   ### GAMES
 

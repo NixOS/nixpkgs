@@ -61,6 +61,7 @@ let {
     hevea
     vim
     less
+    screen
   ;};
 
 
