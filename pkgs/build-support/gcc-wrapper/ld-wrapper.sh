@@ -1,4 +1,4 @@
-#! @bash@ -e
+#! @shell@ -e
 
 if test -n "$NIX_LD_WRAPPER_START_HOOK"; then
     . "$NIX_LD_WRAPPER_START_HOOK"
@@ -9,7 +9,8 @@ fi
 
 # Optionally filter out paths not refering to the store.
 params=("$@")
-if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \
+        -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \); then
     rest=()
     n=0
     while test $n -lt ${#params[*]}; do

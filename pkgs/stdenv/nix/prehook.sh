@@ -1,1 +1,2 @@
-export SHELL=$param1
+export NIX_ENFORCE_PURITY=1
+export NIX_IGNORE_LD_THROUGH_GCC=1

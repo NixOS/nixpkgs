@@ -38,19 +38,14 @@
   # The Nix build environment.
   stdenvNix = (import ../stdenv/nix) {
     stdenv = stdenvNative;
-    pkgs = stdenvNixBootPkgs;
+    pkgs = stdenvNativePkgs;
     inherit genericStdenv gccWrapper;
-  };
-
-  stdenvNixBootPkgs = allPackages {
-    stdenv = stdenvNative;
-    bootCurl = null;
-    noSysDirs = true;
   };
 
   stdenvNixPkgs = allPackages {
     stdenv = stdenvNix;
-    bootCurl = stdenvNixBootPkgs.curl;
+    bootCurl = stdenvNativePkgs.curl;
+    noSysDirs = false;
   };
 
 
@@ -59,40 +54,53 @@
 
   # 1) Build glibc in the Nix build environment.  The result is
   #    pure.
-  stdenvLinuxGlibc = stdenvNativePkgs.glibc; # !!! should be NixPkgs, but doesn't work
+  stdenvLinuxGlibc = stdenvNixPkgs.glibc;
 
-  # 2) Construct a stdenv consisting of the native build environment,
-  #    plus the pure glibc.
-  stdenvLinuxBoot1 = (import ../stdenv/nix-linux/boot.nix) {
+  # 2) Construct a stdenv consisting of the Nix build environment, but
+  #    with a gcc-wrapper that causes linking against the glibc from
+  #    step 1.  However, since the gcc wrapper here *does* look in
+  #    native system directories (e.g., `/usr/lib'), it doesn't
+  #    prevent impurity in the things it builds (e.g., through
+  #    `-lncurses').
+  stdenvLinuxBoot1 = (import ../stdenv/nix-linux) {
     stdenv = stdenvNative;
+    pkgs = stdenvNativePkgs;
     glibc = stdenvLinuxGlibc;
     inherit genericStdenv gccWrapper;
   };
 
-  # 3) Now we can build packages that will have the Nix glibc.
+  # 3) Now we can build packages that will link against the Nix
+  #    glibc.  We are on thin ice here: the compiler used to build
+  #    these packages doesn't prevent impurity, so e.g. bash ends up
+  #    linking against `/lib/libncurses.so', but the glibc from step 1
+  #    *doesn't* search in `/lib' etc.  So these programs won't work.
   stdenvLinuxBoot1Pkgs = allPackages {
     stdenv = stdenvLinuxBoot1;
-    bootCurl = null;
+    bootCurl = stdenvNativePkgs.curl;
+    noSysDirs = true;
   };
 
-  # 4) However, since these packages are built by an native C compiler
-  #    and linker, they may well pick up impure references (e.g., bash
-  #    might end up linking against /lib/libncurses).  So repeat, but
-  #    now use the Nix-built tools from step 2/3.
+  # 4) Therefore we build a new standard environment which is the same
+  #    as the one in step 2, but with a gcc and binutils from step 3
+  #    merged in.  Since these are pure (they don't search native
+  #    system directories), things built by this stdenv should be pure.
   stdenvLinuxBoot2 = (import ../stdenv/nix-linux) {
     stdenv = stdenvLinuxBoot1;
-    pkgs = stdenvLinuxBoot1Pkgs;
+    pkgs = stdenvNativePkgs // {
+      inherit (stdenvLinuxBoot1Pkgs) gcc binutils;
+    };
     glibc = stdenvLinuxGlibc;
     inherit genericStdenv gccWrapper;
   };
 
-  # 5) These packages should be pure.
+  # 5) So these packages should be pure.
   stdenvLinuxBoot2Pkgs = allPackages {
     stdenv = stdenvLinuxBoot2;
-    bootCurl = stdenvLinuxBoot1Pkgs.curl;
+    bootCurl = stdenvNativePkgs.curl;
   };
 
-  # 6) So finally we can construct the Nix build environment.
+  # 6) Finally we can construct the Nix build environment from the
+  #    packages from step 5.
   stdenvLinux = (import ../stdenv/nix-linux) {
     stdenv = stdenvLinuxBoot2;
     pkgs = stdenvLinuxBoot2Pkgs;
@@ -109,7 +117,20 @@
     } //
     {inherit (stdenvLinuxBoot2Pkgs)
       gzip bzip2 bash binutils coreutils diffutils findutils gawk gcc
-      gnumake gnused gnutar gnugrep wget;
+      gnumake gnused gnutar gnugrep curl;
     } //
     {glibc = stdenvLinuxGlibc;};
+
+  # In summary, we build gcc (and binutils) three times:
+  #   - in stdenvLinuxBoot1 (from stdenvNativePkgs); impure
+  #   - in stdenvLinuxBoot2 (from stdenvLinuxBoot1Pkgs); pure
+  #   - in stdenvLinux (from stdenvLinuxBoot2Pkgs); pure
+  # The last one may be redundant, but its good for validation (since
+  # the second one may use impure inputs).  To reduce build time, we
+  # could reduce the number of bootstrap stages inside each gcc build.
+  # Right now there are 3 stages, so gcc is built 9 times!
+
+  # On the other hand, a validating build of glibc is a good idea (it
+  # probably won't work right now due to --rpath madness).
+
 }

@@ -13,6 +13,7 @@ sed \
  -e "s^@postHook@^$postHook^g" \
  -e "s^@initialPath@^$initialPath^g" \
  -e "s^@gcc@^$gcc^g" \
+ -e "s^@shell@^$shell^g" \
  -e "s^@param1@^$p1^g" \
  -e "s^@param2@^$p2^g" \
  -e "s^@param3@^$p3^g" \

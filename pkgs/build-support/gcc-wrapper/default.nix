@@ -6,7 +6,7 @@
 # variables so that the compiler and the linker just "work".
 
 { name, stdenv, nativeTools, nativeGlibc, nativePrefix ? ""
-, gcc ? null, glibc ? null, binutils ? null
+, gcc ? null, glibc ? null, binutils ? null, shell ? ""
 }:
 
 assert nativeTools -> nativePrefix != "";
@@ -23,4 +23,5 @@ stdenv.mkDerivation {
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langF77 = if nativeTools then false else gcc.langF77;
+  shell = if shell == "" then stdenv.shell else shell;
 }

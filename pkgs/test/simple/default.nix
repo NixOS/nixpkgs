@@ -2,15 +2,14 @@ let {
   system = "i686-linux";
 
   stdenvs = (import ../../system/stdenvs.nix) {
-    system = "i686-linux";
+    inherit system;
     allPackages = import ../../system/all-packages-generic.nix;
   };
 
-  stdenv = stdenvs.stdenvLinux;
+  stdenv = stdenvs.stdenvNix;
 
-  test = derivation {
+  test = stdenv.mkDerivation {
     name = "simple-test";
-    inherit system stdenv;
     builder = ./builder.sh;
   };
 

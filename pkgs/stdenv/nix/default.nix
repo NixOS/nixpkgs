@@ -13,9 +13,8 @@ genericStdenv {
     nativeGlibc = true;
     inherit (pkgs) gcc binutils;
     inherit stdenv;
+    shell = pkgs.bash ~ /bin/sh;
   };
 
-  bash = pkgs.bash ~ /bin/sh;
-
-  param1 = pkgs.bash;
+  shell = pkgs.bash ~ /bin/sh;
 }

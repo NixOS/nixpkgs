@@ -7,21 +7,25 @@
 
 let {
 
+  shell = "/bin/sh";
+
   body = 
 
     derivation {
       inherit system name;
-      builder = "/bin/sh";
+      builder = shell;
       args = ["-e" ./builder.sh];
     }
 
     // {
       mkDerivation = attrs: derivation (attrs // {
-        builder = "/bin/sh";
+        builder = shell;
         args = ["-e" attrs.builder];
         stdenv = body;
         system = body.system;
       });
+
+      inherit shell;
     };
 
 }
