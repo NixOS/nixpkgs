@@ -7,13 +7,13 @@ assert !isNull pkgconfig && !isNull gtk && !isNull perl
 assert libIDL.glib == gtk.glib;
 
 derivation {
-  name = "MozillaFirebird-0.7";
+  name = "firefox-0.8";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.mozilla.org/pub/mozilla.org/firebird/releases/0.7/MozillaFirebird-source-0.7.tar.gz;
-    md5 = "35112566a3dca5bdf363972056afc462";
+    url = ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/0.8/firefox-source-0.8.tar.bz2;
+    md5 = "cdc85152f4219bf3e3f1a8dc46e04654";
   };
 
   stdenv = stdenv;

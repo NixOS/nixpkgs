@@ -3,7 +3,7 @@
 buildinputs="$pkgconfig $gtk $perl $zip $libIDL"
 . $stdenv/setup || exit 1
 
-tar xvfz $src || exit 1
+tar xvfj $src || exit 1
 cd mozilla || exit 1
 
 cat > .mozconfig <<EOF

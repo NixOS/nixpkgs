@@ -34,7 +34,7 @@ let {
       pkgs.subversion
       pkgs.pan
       pkgs.sylpheed
-      pkgs.firebird
+      pkgs.firefox
       pkgs.MPlayer
       pkgs.MPlayerPlugin
       pkgs.vlc

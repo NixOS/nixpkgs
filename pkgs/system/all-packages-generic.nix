@@ -576,7 +576,7 @@
     gtk = gtk1;
   };
 
-  firebird = (import ../applications/networking/browsers/firebird) {
+  firefox = (import ../applications/networking/browsers/firefox) {
     inherit fetchurl stdenv pkgconfig gtk perl zip libIDL;
   };
 
