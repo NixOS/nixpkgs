@@ -559,6 +559,11 @@
     inherit fetchurl stdenv;
   };
 
+  utillinux = (import ../os-specific/linux/util-linux) {
+    inherit fetchurl stdenv;
+    patch = gnupatch;
+  };
+
 
   ### DATA
 

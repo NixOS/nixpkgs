@@ -46,7 +46,7 @@
   stdenvLinuxPkgs =
     allPackages {system = system; stdenv = stdenvLinux;} //
     {inherit (stdenvLinuxBootPkgs)
-      gzip bzip2 bash binutils coreutils diffutils findutils gawk gcc
+      gzip bzip2 /* bash */ binutils coreutils diffutils findutils gawk gcc
       gnumake gnused gnutar gnugrep wget;
     } //
     {glibc = stdenvLinuxGlibc;};
