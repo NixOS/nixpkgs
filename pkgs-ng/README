@@ -19,7 +19,7 @@ IF it's used to support SOFTWARE DEVELOPMENT:
     ./development/interpreters
   ELSE IF it's a development TOOL (or set of):
     IF it's a PARSER GENERATOR (incl. lexers):
-      ./development/tools/lexer
+      ./development/tools/parsing
       (e.g., bison, flex)
     ELSE IF it's a BUILD MANAGER:
       ./development/tools/build-managers
@@ -43,7 +43,7 @@ ELSE IF it's a TOOL (or set of):
   ELSE IF it's a SYSTEM utility, i.e., something related or essential
     to the operation of a system:
     ./tools/system
-    (e.g., coreutils)
+    (e.g., init)
   ELSE IF it's an ARCHIVER (which may include a compression function):
     ./tools/archivers
     (e.g., zip, tar)
