@@ -11,9 +11,8 @@
   # This list should be generated automatically by a package
   # management user interface.
   selectedPkgs = [
-    pkgs.aterm
     pkgs.subversion
-    pkgs.xfree86
+    pkgs.pan
   ];
 
   # Create a user environment.

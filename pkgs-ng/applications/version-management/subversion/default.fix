@@ -28,9 +28,9 @@ derivation {
   swigBindings = swigBindings;
 
   stdenv = stdenv;
-  openssl = if sslSupport then openssl else "";
-  httpd = if httpServer then httpd else "";
+  openssl = if sslSupport then openssl else null;
+  httpd = if httpServer then httpd else null;
   expat = expat;
-  db4 = if localServer then db4 else "";
-  swig = if swigBindings then swig else "";
+  db4 = if localServer then db4 else null;
+  swig = if swigBindings then swig else null;
 }

@@ -44,6 +44,11 @@
     stdenv = stdenv;
   };
 
+  ed = (import ../tools/text/ed) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   gnutar = (import ../tools/archivers/gnutar) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -80,12 +85,17 @@
     stdenv = stdenv;
   };
 
-  gnumake = (import ../development/tools/build-managers/gnumake) {
+  gnum4 = (import ../development/tools/misc/gnum4) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
 
-  gnum4 = (import ../development/tools/misc/gnum4) {
+  pkgconfig = (import ../development/tools/misc/pkgconfig) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  gnumake = (import ../development/tools/build-managers/gnumake) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
@@ -134,6 +144,17 @@
     stdenv = stdenv;
   };
 
+  libxml2 = (import ../development/libraries/libxml2) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    zlib = zlib;
+  };
+
+  gettext = (import ../development/libraries/gettext) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   db4 = (import ../development/libraries/db4) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -143,6 +164,97 @@
     fetchurl = fetchurl;
     stdenv = stdenv;
     perl = perl;
+  };
+
+  freetype = (import ../development/libraries/freetype) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  fontconfig = (import ../development/libraries/fontconfig) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    freetype = freetype;
+    expat = expat;
+    ed = ed;
+  };
+
+  xft = (import ../development/libraries/xft) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    x11 = xfree86;
+    fontconfig = fontconfig;
+  };
+
+  zlib = (import ../development/libraries/zlib) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  libjpeg = (import ../development/libraries/libjpeg) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  libtiff = (import ../development/libraries/libtiff) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    zlib = zlib;
+    libjpeg = libjpeg;
+  };
+
+  libpng = (import ../development/libraries/libpng) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    zlib = zlib;
+  };
+
+  glib = (import ../development/libraries/gtk+/glib) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gettext = gettext; 
+    perl = perl;
+  };
+
+  atk = (import ../development/libraries/gtk+/atk) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    glib = glib; 
+    perl = perl;
+  };
+
+  pango = (import ../development/libraries/gtk+/pango) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    x11 = xfree86;
+    glib = glib;
+    xft = xft;
+  };
+
+  gtk = (import ../development/libraries/gtk+/gtk+) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    x11 = xfree86;
+    glib = glib;
+    atk = atk;
+    pango = pango;
+    perl = perl;
+    libtiff = libtiff;
+    libjpeg = libjpeg;
+    libpng = libpng;
+  };
+
+  gnet = (import ../development/libraries/gnet) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    glib = glib;
   };
 
 
@@ -180,16 +292,27 @@
   ### APPLICATIONS
 
   subversion = (import ../applications/version-management/subversion) {
-    fetchurl = fetchurl;
-    stdenv = stdenv;
     localServer = true;
     httpServer = false;
     sslSupport = true;
     swigBindings = false;
+    fetchurl = fetchurl;
+    stdenv = stdenv;
     openssl = openssl;
     httpd = apacheHttpd;
     db4 = db4;
     expat = expat;
+  };
+
+  pan = (import ../applications/networking/newsreaders/pan) {
+    spellChecking = false;
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+    gnet = gnet;
+    libxml2 = libxml2;
+    perl = perl;
   };
 
 }

@@ -10,8 +10,11 @@
 IF it's used to support SOFTWARE DEVELOPMENT:
 
   IF it's a LIBRARY used by other packages:
-    ./development/libraries
-    (e.g., libxml2)
+    IF it's directly related to GTK:
+      ./development/libraries/gtk+
+    ELSE
+      ./development/libraries
+      (e.g., libxml2)
   ELSE IF it's a COMPILER:
     ./development/compilers
     (e.g., gcc)
@@ -79,5 +82,10 @@ ELSE IF it's an APPLICATION:
 
   IF it's a VERSION MANAGEMENT system:
     ./applications/version-management
+  ELSE IF it's for NETWORKING:
+    IF it's a NEWSREADER:
+      ./applications/networking/newsreaders
+    ELSE
+      ./applications/networking/misc
   ELSE
     ./applications/misc

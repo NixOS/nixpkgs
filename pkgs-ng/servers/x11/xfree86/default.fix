@@ -25,6 +25,9 @@ derivation {
     md5 = "b82a0443e1b7bf860e4343e6b6766cb6";
   };
 
+  buildServer = buildServer;
+  buildClientLibs = buildClientLibs;
+
   stdenv = stdenv;
   bison = bison;
   flex = flex;
