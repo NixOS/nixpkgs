@@ -618,6 +618,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  lcms = (import ../development/libraries/lcms) {
+    inherit fetchurl stdenv;
+  };
+
   popt = (import ../development/libraries/popt) {
     inherit fetchurl stdenv gettext;
   };
@@ -1138,7 +1142,7 @@ rec {
   /*
   fspot = (import ../applications/graphics/f-spot) {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
-            libexif libjpeg sqlite;
+            libexif libjpeg sqlite lcms;
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
