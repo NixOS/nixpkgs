@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "gnum4-1.4")
+
+  , ("build", Relative("gnum4/gnum4-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.nluug.nl/pub/gnu/m4/m4-1.4.tar.gz")
+      , ("md5", "9eb2dd07740b2d2f3c7adb3e8d299bda")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

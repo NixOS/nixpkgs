@@ -11,5 +11,7 @@ Package(
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("glib", IncludeFix("glib/glib.fix"))
+  , ("lex", IncludeFix("flex/flex.fix"))
+  , ("yacc", IncludeFix("bison/bison.fix"))
   ]
 )

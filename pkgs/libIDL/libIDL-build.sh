@@ -2,7 +2,7 @@
 
 envpkgs="$glib"
 . $stdenv/setup || exit 1
-export PATH=$pkgconfig/bin:$PATH
+export PATH=$pkgconfig/bin:$lex/bin:$yacc/bin:$PATH
 
 tar xvfj $src || exit 1
 cd libIDL-* || exit 1
