@@ -10,6 +10,8 @@ Descr(
 
   , Bind("httpd", If(Var("httpServer"), Fix("./httpd-2.0.45.fix"), ""))
 
+  , Bind("libxml", Fix("./libxml2-2.5.7.fix"))
+
   , Bind("src", Url("59661f2145976437b371a0ab3a555dbd", "http://subversion.tigris.org/files/documents/15/4218/subversion-0.23.0.tar.gz"))
   , Bind("build", Local("../build/subversion-build.sh"))
   ]

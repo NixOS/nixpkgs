@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export PATH=/bin:/usr/bin
+export PATH=$libxml/bin:/bin:/usr/bin
 
 export LDFLAGS=-s
 

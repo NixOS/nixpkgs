@@ -1,0 +1,8 @@
+Descr(
+  [ Bind("pkgId", "libxml2-2.5.7")
+  , Bind("releaseId", "1")
+
+  , Bind("src", Url("f7ed96959fbddf366af64652804d1b57", "ftp://fr.rpmfind.net/pub/libxml/libxml2-2.5.7.tar.gz"))
+  , Bind("build", Local("../build/libxml2-build.sh"))
+  ]
+)
