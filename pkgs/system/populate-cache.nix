@@ -58,7 +58,7 @@ let {
     uml
     nix
     ocaml
-#    hevea
+    hevea
   ;};
 
 
