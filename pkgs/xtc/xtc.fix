@@ -1,0 +1,20 @@
+Function(["rev"],
+  Package(
+    [ ("name", "xtc")
+
+    , ("build", Relative("xtc/xtc-build.sh"))
+
+    , ("src", App(IncludeFix("fetchsvn/fetchsvn.fix"),
+        [ ("url",  "http://losser.st-lab.cs.uu.nl:12080/repos/StrategoXT/trunk/StrategoXT/xtc")
+        , ("name", "xtc")
+        , ("rev",  Var("rev"))
+        ])
+      )
+
+    , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+    , ("aterm",  IncludeFix("aterm/aterm.fix"))
+    , ("autoxt", App(IncludeFix("autoxt/autoxt.fix"),[("rev",Var("rev"))]))
+    , ("srts",   App(IncludeFix("srts/srts.fix"),[("rev",Var("rev"))]))
+    ]
+  )
+)

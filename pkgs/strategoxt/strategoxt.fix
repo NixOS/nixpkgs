@@ -1,0 +1,16 @@
+Function(["rev"],
+  Package(
+    [ ("name", "strategoxt")
+
+    , ("build",     Relative("system/populate-linkdirs.pl"))
+
+    , ("actAterm",  IncludeFix("aterm/aterm.fix"))
+
+    , ("actAutoxt", App(IncludeFix("autoxt/autoxt.fix"), [("rev",Var("rev"))]))
+
+    , ("actSrts",   App(IncludeFix("srts/srts.fix"), [("rev", Var("rev"))]))
+
+    , ("actXtc",    App(IncludeFix("xtc/xtc.fix"),[("rev", Var("rev"))])) 
+    ]
+  )
+)

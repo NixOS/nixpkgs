@@ -1,0 +1,16 @@
+Function(["rev"],
+  Package(
+    [ ("name", "autoxt")
+
+    , ("build", Relative("autoxt/autoxt-build.sh"))
+
+    , ("src", App(IncludeFix("fetchsvn/fetchsvn.fix"),
+        [ ("url",  "http://losser.st-lab.cs.uu.nl:12080/repos/StrategoXT/trunk/StrategoXT/autoxt")
+        , ("name", "autoxt")
+        , ("rev",  Var("rev"))
+        ]))
+
+    , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+    ]
+  )
+)
