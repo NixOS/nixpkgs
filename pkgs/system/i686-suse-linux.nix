@@ -1,1 +1,1 @@
-(import ./user-environment.nix) {system = "i686-suse-linux"}
+(import ./all-packages.nix) {system = "i686-suse-linux"}
