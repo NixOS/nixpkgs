@@ -41,4 +41,14 @@ configureScript() {
 }
 
 
+postInstall=postInstall
+postInstall() {
+    # Qt's `make install' is broken; it copies ./bin/qmake, which
+    # is a symlink to ./qmake/qmake.  So we end up with a dangling
+    # symlink.
+    rm $out/bin/qmake
+    cp -p qmake/qmake $out/bin
+}
+
+
 genericBuild
