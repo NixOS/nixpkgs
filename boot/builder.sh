@@ -28,6 +28,11 @@ for i in $boot $halt $login $env; do
         -e "s^@shadowutils\@^$shadowutils^g" \
         -e "s^@iputils\@^$iputils^g" \
         -e "s^@gnumake\@^$gnumake^g" \
+        -e "s^@curl\@^$curl^g" \
+        -e "s^@gnused\@^$gnused^g" \
+        -e "s^@gnutar\@^$gnutar^g" \
+        -e "s^@gnugrep\@^$gnugrep^g" \
+        -e "s^@gzip\@^$gzip^g" \
         -e "s^@out\@^$out^g" \
         < $i > $dst
     chmod +x $dst

@@ -14,7 +14,7 @@ make_dir() {
 
 touch_file() {
     name=$1
-    echo creating $name...
+    echo touching $name...
     if ! test -d $root/$name; then touch $root/$name; fi
 }
 root=/tmp/mnt
@@ -22,11 +22,12 @@ root=/tmp/mnt
 echo mounting...
 mount -t ext2 /dev/discs/disc0/disc $root
 
+make_dir 00755 /bin
 make_dir 00755 /dev
 make_dir 00755 /proc
 make_dir 01777 /tmp
 make_dir 00755 /etc # global non-constant configuration
-make_dir 00755 /etc-secret # global non-constant configuration
+make_dir 00755 /etc-secret
 make_dir 00755 /var
 make_dir 00755 /nix
 make_dir 00755 /nix/store

@@ -1,7 +1,7 @@
 #! /bin/sh -e
 
 image=/tmp/disk.img
-size=$(expr 256 \* 1024 \* 1024)
+size=$(expr 2048 \* 1024 \* 1024)
 storePaths=/tmp/storepaths
 successors=/tmp/successors
 
