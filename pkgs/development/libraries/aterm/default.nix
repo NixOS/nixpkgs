@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "aterm-2.0.5";
+  name = "aterm-2.1";
   configureFlags = "--with-gcc";
   src = fetchurl {
-    url = http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.5.tar.gz;
-    md5 = "68aefb0c10b2ab876b8d3c0b2d0cdb1b";
+    url = http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.1.tar.gz;
+    md5 = "b9d541da35b6d287af1cd8460963a7a8";
   };
 }
