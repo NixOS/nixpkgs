@@ -1,9 +1,1 @@
-Package(
-  [ ("name", "stdenv-linux")
-  , ("build", Relative("stdenv-linux/stdenv-build.sh"))
-
-  , ("gccwrapper", Relative("stdenv-linux/gcc-wrapper.sh"))
-
-  , ("glibc", IncludeFix("glibc/glibc.fix"))
-  ]
-)
+Call(IncludeFix("stdenv-linux/stdenv-generic.fix"), [("nativeTools", False)])

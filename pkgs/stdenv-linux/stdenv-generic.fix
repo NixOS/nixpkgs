@@ -1,0 +1,16 @@
+Function(["nativeTools"],
+
+  Package(
+    [ ("name", "stdenv-linux")
+    , ("build", Relative("stdenv-linux/stdenv-build.sh"))
+
+    , ("nativeTools", Var("nativeTools"))
+
+    , ("setup", Relative("stdenv-linux/setup.sh"))
+    , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
+    , ("glibc", IncludeFix("glibc/glibc.fix"))
+
+    , ("coreutils", If(Var("nativeTools"), "", IncludeFix("coreutils/coreutils.fix")))
+    ]
+  )
+)

@@ -21,12 +21,15 @@ IFS=" "
 extra=($NIX_CFLAGS)
 if test "$justcompile" != "1"; then
     extra=(${extra[@]} $NIX_LDFLAGS)
+    if test "$NIX_STRIP_DEBUG" == "1"; then
+	extra=(${extra[@]} -Wl,-s)
+    fi
 fi
 
 if test "$NIX_DEBUG" == "1"; then
-  echo "extra gcc flags:"
+  echo "extra gcc flags:" >&2
   for i in ${extra[@]}; do
-      echo "  $i"
+      echo "  $i" >&2
   done
 fi
 
