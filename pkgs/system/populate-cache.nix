@@ -60,6 +60,7 @@ let {
     ocaml
     hevea
     vim
+    less
   ;};
 
 

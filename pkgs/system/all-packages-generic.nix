@@ -650,6 +650,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  less = (import ../applications/pagers/less) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   ### GAMES
 
   zoom = (import ../games/zoom) {
