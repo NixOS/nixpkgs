@@ -512,14 +512,6 @@ rec {
     inherit fetchurl stdenv getopt aterm;
   };
 
-  sdf_21 = (import ../development/tools/parsing/sdf2/bundle-2.1.nix) {
-    inherit fetchurl stdenv getopt aterm;
-  };
-
-  sdf_20 = (import ../development/tools/parsing/sdf2/bundle-2.0.nix) {
-    inherit fetchurl stdenv getopt aterm;
-  };
-
   sdf2_bundle = (import ../development/tools/parsing/sdf2-bundle) {
     inherit fetchurl stdenv aterm getopt;
   };
