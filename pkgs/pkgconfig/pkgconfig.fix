@@ -3,7 +3,7 @@ Package(
   , ("build", Relative("pkgconfig/pkgconfig-build.sh"))
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-0.15.0.tar.gz")
-      , ("md5", "c62371dd07ef85043e91f298176c771f")
+      , ("md5", "a7e4f60a6657dbc434334deb594cc242")
       ]))
   ]
 )

@@ -6,6 +6,6 @@ Package(
   , ("actPkgConfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("actOpenSSL", IncludeFix("openssl/openssl.fix"))
   , ("actSubversion", IncludeFix("subversion/subversion.fix"))
-  , ("actXft", IncludeFix("Xft/Xft.fix"))
+  , ("actPan", IncludeFix("pan/pan.fix"))
   ]
 )

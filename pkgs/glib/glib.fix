@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "glib-2.2.2")
+
+  , ("build", Relative("glib/glib-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/glib-2.2.2.tar.bz2")
+      , ("md5", "3e9a9512943c81a78cafa0536dcc8b41")
+      ]))
+
+  , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  ]
+)

@@ -1,0 +1,18 @@
+Package(
+  [ ("name", "pan-0.14.0.90")
+
+  , ("build", Relative("pan/pan-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://pan.rebelbase.com/download/releases/0.14.0.90/SOURCE/pan-0.14.0.90.tar.bz2")
+      , ("md5", "59612bf2551650c0060b214f9742a105")
+      ]))
+
+  , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("gtk", IncludeFix("gtk+/gtk+.fix"))
+  , ("gtkspell", IncludeFix("gtkspell/gtkspell.fix"))
+  , ("gnet", IncludeFix("gnet/gnet.fix"))
+  , ("libxml", IncludeFix("libxml2/libxml2.fix"))
+  ]
+)

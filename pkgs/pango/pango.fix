@@ -1,0 +1,16 @@
+Package(
+  [ ("name", "pango-1.2.3")
+
+  , ("build", Relative("pango/pango-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.3.tar.bz2")
+      , ("md5", "12247592ea582907cfd2de81aeb32caf")
+      ]))
+
+  , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("glib", IncludeFix("glib/glib.fix"))
+  , ("Xft", IncludeFix("Xft/Xft.fix"))
+  ]
+)

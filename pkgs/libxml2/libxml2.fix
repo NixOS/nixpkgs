@@ -1,0 +1,11 @@
+Package(
+  [ ("name", "libxml2-2.5.8")
+
+  , ("build", Relative("libxml2/libxml2-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://fr.rpmfind.net/pub/libxml/libxml2-2.5.8.tar.gz")
+      , ("md5", "b2caf6efe9ff9c4d2c175fb0689bd20e")
+      ]))
+  ]
+)
