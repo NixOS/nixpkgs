@@ -8,4 +8,5 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [bison pkgconfig glib];
+  propagatedBuildInputs = [glib];
 }

@@ -1,15 +1,16 @@
-{stdenv, fetchurl, pkgconfig, perl, libxml2, libglade, libgnome
+{input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libglade, libgnome
 , libgnomecanvas}:
 
 assert pkgconfig != null && perl != null && libxml2 != null
   && libglade != null && libgnome != null && libgnomecanvas != null;
 
+# todo 2.8.1 doesn;t work
 stdenv.mkDerivation {
-  name = "libbonoboui-2.4.1";
-  src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libbonoboui-2.4.1.tar.bz2;
-    md5 = "943a2d0e9fc7b9f0e97ba869de0c5f2a";
-  };
+  inherit (input) name src;
   buildInputs = [pkgconfig perl libglade];
   propagatedBuildInputs = [libxml2 libgnome libgnomecanvas];
+
+  PERL5LIB = perlXMLParser ~ "/lib/site_perl";
+
+  LDFLAGS="-lglib-2.0";
 }

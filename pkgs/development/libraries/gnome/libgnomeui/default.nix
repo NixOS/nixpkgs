@@ -1,14 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, libgnome, libgnomecanvas, libbonoboui, libglade }:
+{input, stdenv, fetchurl, pkgconfig, libgnome, libgnomecanvas,
+libbonoboui, libglade, esound, libjpeg, gnomekeyring}:
 
 assert pkgconfig != null && libgnome != null && libgnomecanvas != null
   && libbonoboui != null && libglade != null;
 
 stdenv.mkDerivation {
-  name = "libgnomeui-2.4.0.1";
-  src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libgnomeui-2.4.0.1.tar.bz2;
-    md5 = "196f4a3f1f4a531ff57acaa879e98dd2";
-  };
-  buildInputs = [pkgconfig libglade];
+  inherit (input) name src;
+  buildInputs = [pkgconfig libglade esound libjpeg gnomekeyring];
   propagatedBuildInputs = [libgnome libgnomecanvas libbonoboui];
 }

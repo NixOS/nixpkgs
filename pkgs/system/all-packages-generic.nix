@@ -385,6 +385,11 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
+  mono = (import ../development/compilers/mono) {
+    inherit fetchurl stdenv bison pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
     sdf = sdf_23;
@@ -460,6 +465,10 @@ rec {
 
   clisp = (import ../development/interpreters/clisp) {
     inherit fetchurl stdenv libsigsegv gettext;
+  };
+
+  guile = (import ../development/interpreters/guile) {
+    inherit fetchurl stdenv ncurses readline;
   };
 
   j2re = (import ../development/interpreters/j2re) {
@@ -605,7 +614,7 @@ rec {
             libtiff libjpeg libpng;
   };
 
-  gtkLibs22 = import ../development/libraries/gtk-libs-2.4 {
+  gtkLibs24 = import ../development/libraries/gtk-libs-2.4 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
   };
@@ -623,6 +632,13 @@ rec {
     inherit (xlibs) libXft libXrender;
   };
 
+  gtksharp = (import ../development/libraries/gtk-sharp) {
+    inherit fetchurl stdenv mono pkgconfig libxml2;
+    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
+              libgnomecanvas libgnomeui libgnomeprint 
+              libgnomeprintui gconf;
+  };
+
   audiofile = (import ../development/libraries/audiofile) {
     inherit fetchurl stdenv;
   };
@@ -630,7 +646,8 @@ rec {
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt perl zlib libxml2 bzip2
-            perlXMLParser gtkLibs;
+            perlXMLParser gettext perl x11
+            libtiff libjpeg libpng;
   };
 
   wxGTK = (import ../development/libraries/wxGTK-2.5) {
@@ -972,6 +989,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  kopete = (import ../applications/networking/instant-messengers/kopete) {
+    inherit fetchurl stdenv xlibs zlib libjpeg perl qt3;
+  };
+
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
     inherit fetchurl stdenv;
   };
@@ -1045,6 +1066,15 @@ rec {
 
   eclipse = (import ../applications/editors/eclipse) {
     inherit fetchurl stdenv unzip;
+  };
+
+  monodevelop = (import ../applications/editors/monodevelop) {
+    inherit fetchurl stdenv mono gtksharp perl perlXMLParser pkgconfig;
+    inherit (gnome) gnomevfs libbonobo gconf glib;
+  };
+
+  monodoc = (import ../applications/editors/monodoc) {
+    inherit fetchurl stdenv mono gtksharp  pkgconfig;
   };
 
   emacs = (import ../applications/editors/emacs) {

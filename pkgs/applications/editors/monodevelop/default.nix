@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mono, gtksharp, perl, perlXMLParser, pkgconfig, glib, gnomevfs, libbonobo}:
+{stdenv, fetchurl, mono, gtksharp, perl, perlXMLParser, pkgconfig, glib, gconf, gnomevfs, libbonobo}:
 
 stdenv.mkDerivation {
   name = "MonoDevelop-0.5.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     md5 = "d89458a2d909da09b2cc1f37e16d8990";
   };
 
-  buildInputs = [mono gtksharp perl pkgconfig gnomevfs glib libbonobo];
+  buildInputs = [mono gtksharp perl pkgconfig gnomevfs glib libbonobo gconf];
   inherit perlXMLParser;
 }
   
