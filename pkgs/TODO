@@ -7,3 +7,32 @@
 * In setup.sh: add configureFlagsArray or something
 
 * Inform freedesktop people that Xaw requires Xpm.
+
+* Only add --rpath FOO/lib if FOO/lib is actually used, otherwise we
+  get lots of unneccesarily retained dependencies.
+
+* After building gcc, filter out this sillyness in .../lib/libsupc++.la and .../lib/libstdc++.la:
+
+    /nix/store/fd3dba2a24f0242af8ea7e896380be7e-gcc-3.3.3/lib/libsupc++.la:dependency_libs='
+-L/tmp/nix-26124-33/build/i686-pc-linux-gnu/libstdc++-v3/src
+-L/tmp/nix-26124-33/build/i686-pc-linux-gnu/libstdc++-v3/src/.libs -lm
+-L/tmp/nix-26124-33/build/gcc
+-L/nix/store/e173bb830ba5f727ae63e0673d929bc7-gcc-3.3.3/bin
+-L/nix/store/23ef1e01b61105fee5ef8b47faf30675-glibc-2.3.2/lib
+-L/nix/store/6d3bf84aeb18d6d92a25ce9692b0f4d2-gcc-3.3.3/lib -lgcc_s
+-lc -lgcc_s'
+
+    /nix/store/fd3dba2a24f0242af8ea7e896380be7e-gcc-3.3.3/lib/libstdc++.la:dependency_libs='
+-L/tmp/nix-26124-33/build/i686-pc-linux-gnu/libstdc++-v3/src
+-L/tmp/nix-26124-33/build/i686-pc-linux-gnu/libstdc++-v3/src/.libs -lm
+-lm -lm -L/tmp/nix-26124-33/build/gcc
+-L/nix/store/e173bb830ba5f727ae63e0673d929bc7-gcc-3.3.3/bin
+-L/nix/store/23ef1e01b61105fee5ef8b47faf30675-glibc-2.3.2/lib
+-L/nix/store/6d3bf84aeb18d6d92a25ce9692b0f4d2-gcc-3.3.3/lib -lgcc_s
+-lc -lgcc_s -lm -lgcc_s -lc -lgcc_s'
+
+  in particular references to /tmp/nix... and to /nix/store/...-
+
+  i.e., basically all -L... switches
+
+  this causes lots of unneccesarily retained dependencies
