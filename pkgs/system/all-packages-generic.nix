@@ -159,6 +159,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  
   ### SHELLS
 
   bash = (import ../shells/bash) {
@@ -420,6 +421,10 @@ rec {
     inherit fetchurl stdenv unzip ghc happy;
   };
 
+  nasm = (import ../development/compilers/nasm) {
+    inherit fetchurl stdenv;
+  };
+
   realPerl = (import ../development/interpreters/perl) {
     inherit fetchurl stdenv;
   };
@@ -666,6 +671,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  SDL = (import ../development/libraries/SDL) {
+    inherit fetchurl stdenv x11;
+  };
+
 
   ### SERVERS
 
@@ -691,6 +700,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  
   ### OS-SPECIFIC
 
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
@@ -726,6 +736,7 @@ rec {
     glibc = stdenv.gcc.glibc;
   };
 
+  
   ### DATA
 
   docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
@@ -871,6 +882,11 @@ rec {
 
   ut2004demo = (import ../games/ut2004demo) {
     inherit fetchurl stdenv xlibs mesa;
+  };
+
+  generator = (import ../games/generator) {
+    inherit fetchurl stdenv SDL nasm;
+    inherit (gtkLibs1x) gtk;
   };
 
 

@@ -1,0 +1,37 @@
+diff -rc SDL-orig/src/cpuinfo/SDL_cpuinfo.c SDL-1.2.7/src/cpuinfo/SDL_cpuinfo.c
+*** SDL-orig/src/cpuinfo/SDL_cpuinfo.c	2004-02-10 16:31:35.000000000 +0100
+--- SDL-1.2.7/src/cpuinfo/SDL_cpuinfo.c	2004-09-26 18:49:50.000000000 +0200
+***************
+*** 118,124 ****
+  "        movl    %%edi,%%ebx\n"
+  	: "=m" (features)
+  	:
+! 	: "%eax", "%ebx", "%ecx", "%edx", "%edi"
+  	);
+  #elif defined(_MSC_VER)
+  	__asm {
+--- 118,124 ----
+  "        movl    %%edi,%%ebx\n"
+  	: "=m" (features)
+  	:
+! 	: "%eax", "%ecx", "%edx", "%edi"
+  	);
+  #elif defined(_MSC_VER)
+  	__asm {
+***************
+*** 153,159 ****
+  "        movl    %%edi,%%ebx\n"
+  	: "=m" (features)
+  	:
+! 	: "%eax", "%ebx", "%ecx", "%edx", "%edi"
+  	);
+  #elif defined(_MSC_VER)
+  	__asm {
+--- 153,159 ----
+  "        movl    %%edi,%%ebx\n"
+  	: "=m" (features)
+  	:
+! 	: "%eax", "%ecx", "%edx", "%edi"
+  	);
+  #elif defined(_MSC_VER)
+  	__asm {
