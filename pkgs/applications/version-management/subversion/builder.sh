@@ -25,15 +25,6 @@ fi
 installFlags="$makeFlags"
 
 
-preConfigure() {
-    for i in $(find . -name "ltmain.sh"); do
-        echo "fixing $i"
-        fixLibtool $i
-    done
-}
-preConfigure=preConfigure
-
-
 postInstall() {
     if test "$swigBindings"; then
         make swig-py
