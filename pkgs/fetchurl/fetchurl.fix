@@ -1,0 +1,8 @@
+Function(["url", "hash"],
+  Package(
+    [ ("build", Relative("fetchurl/fetchurl.sh"))
+    , ("url", Var("url"))
+    , ("hash", Var("hash"))
+    ]
+  )
+)
