@@ -43,6 +43,8 @@ rec {
 
   coreutils = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/coreutils-5.0-static.tar.gz; pkgname = "coreutils";};
 
+  patchelf = ./patchelf-static/bin/patchelf;
+
   bzip2 = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/bzip2-1.0.2-static.tar.gz; pkgname = "bzip2";};
 
   gnumake = download {url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/make-3.80-static.tar.gz; pkgname = "gnumake";};
@@ -69,7 +71,7 @@ rec {
   glibc = download {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
-    patchelf = ./patchelf-static/patchelf;
+    patchelf = ./patchelf-static/bin/patchelf;
     extra3 = findutils;
     extra4 = gnused;
     postprocess = ./scripts/add-symlink.sh;
@@ -100,6 +102,7 @@ rec {
 
   stdenvBootFun = {glibc, gcc, binutils}: (import ../generic) {
     name = "stdenv-linux-static-boot";
+    preHook = ./prehook.sh;
     stdenv = stdenvInitial;
     shell = ./bash-static/bash;
     gcc = (import ../../build-support/gcc-wrapper) {
@@ -120,6 +123,7 @@ rec {
       findutils
       diffutils
       patch
+      ./patchelf-static
     ];
   };
 
