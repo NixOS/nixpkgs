@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "gzip-1.3.3")
+
+  , ("build", Relative("gzip/gzip-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.gzip.org/gzip-1.3.3.tar.gz")
+      , ("md5", "52eaf713673507d21f7abefee98ba662")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv-linux/stdenv-nativetools.fix"))
+  ]
+)

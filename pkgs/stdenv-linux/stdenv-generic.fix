@@ -14,6 +14,7 @@ Function(["nativeTools"],
         [],
         [ IncludeFix("coreutils/coreutils.fix")
         , IncludeFix("gnutar/gnutar.fix")
+        , IncludeFix("gzip/gzip.fix")
         ]))
     ]
   )
