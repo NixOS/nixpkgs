@@ -70,8 +70,16 @@ rec {
     inherit fetchurl stdenv pkgconfig libX11 libXext;
   };
 
-  libXi = (import ./libXi) {
+  libXi = (import ./libXi) { # Xi = Xinput (not to be confused with Xinerama)
     inherit fetchurl stdenv pkgconfig libX11;
+  };
+
+  panoramixext = (import ./panoramixext) {
+    inherit fetchurl stdenv;
+  };
+
+  libXinerama = (import ./libXinerama) {
+    inherit fetchurl stdenv pkgconfig libX11 libXext panoramixext;
   };
 
   xlibs = (import ./xlibs) {
