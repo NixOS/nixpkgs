@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "swig-1.3.19")
+  , ("build", Relative("swig/swig-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://heanet.dl.sourceforge.net/sourceforge/swig/swig-1.3.19.tar.gz")
+      , ("md5", "a733455544426b31868dd87fc162e750")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

@@ -9,9 +9,17 @@ Package(
       , ("md5", "700caa3f59b585d173812c4a078feeba")
       ]))
 
-  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("localServer", "1")
   , ("httpsClient", "1")
+  , ("httpServer", "1")
+  , ("httpsServer", "1")
+  , ("pythonBindings", "1")
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("ssl", IncludeFix("openssl/openssl.fix"))
+  , ("swig", IncludeFix("swig/swig.fix"))
+  , ("httpd", IncludeFix("httpd/httpd.fix"))
+  , ("db4", IncludeFix("db4/db4.fix"))
   , ("libxml", IncludeFix("libxml2/libxml2.fix"))
   ]
 )

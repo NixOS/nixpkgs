@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "db-4.0.14")
+  , ("build", Relative("db4/db4-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.sleepycat.com/update/snapshot/db-4.0.14.tar.gz")
+      , ("md5", "12262c64fcd64b772e7cffad8e4d0ebc")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

@@ -1,8 +1,0 @@
-Descr(
-  [ Bind("pkgId", "swig-1.3.19")
-  , Bind("releaseId", "1")
-
-  , Bind("src", Url("a733455544426b31868dd87fc162e750", "http://heanet.dl.sourceforge.net/sourceforge/swig/swig-1.3.19.tar.gz"))
-  , Bind("build", Local("../build/swig-build.sh"))
-  ]
-)
