@@ -1,15 +1,13 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "procps-2.0.11";
+  name = "procps-3.2.4";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surriel.com/procps/procps-2.0.11.tar.bz2;
-    md5 = "8b9464631ebb02f1c2bcda16fb81d62f";
+    url = http://procps.sourceforge.net/procps-3.2.4.tar.gz;
+    md5 = "1bec6740b385b3f73800827437f14f85";
   };
   patches = [./makefile.patch];
   buildInputs = [ncurses];
   inherit ncurses;
-  # Needed for `sort -n +2' invocation in the Makefile.
-  _POSIX2_VERSION = "199209";
 }
