@@ -127,8 +127,12 @@ rec {
 
   screen = (import ../tools/misc/screen) {
     inherit fetchurl stdenv ncurses;
-
   };
+
+  openssh = (import ../tools/networking/openssh) {
+    inherit fetchurl stdenv zlib openssl;
+  };
+
   ### SHELLS
 
   bash = (import ../shells/bash) {

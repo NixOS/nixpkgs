@@ -62,6 +62,7 @@ let {
     vim
     less
     screen
+    openssl
   ;};
 
 
