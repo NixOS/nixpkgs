@@ -190,6 +190,14 @@ rec {
     inherit fetchurl stdenv perl python;
     perlSupport = true;
     pythonSupport = true;
+    javaSupport = false;
+  };
+  
+  swigWithJava = (import ../development/tools/misc/swig) {
+    inherit fetchurl stdenv j2sdk;
+    perlSupport = false;
+    pythonSupport = false;
+    javaSupport = true;
   };
 
   valgrind = (import ../development/tools/misc/valgrind) {
@@ -669,8 +677,17 @@ rec {
     localServer = true;
     httpServer = false;
     sslSupport = true;
-    swigBindings = false;
     httpd = apacheHttpd;
+  };
+
+  subversionWithJava = (import ../applications/version-management/subversion-1.1rc) {
+    inherit fetchurl stdenv openssl db4 expat patch;
+    swig = swigWithJava;
+    localServer = true;
+    httpServer = false;
+    sslSupport = true;
+    httpd = apacheHttpd;
+    javaBindings = true;
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
