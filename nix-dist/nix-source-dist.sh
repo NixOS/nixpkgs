@@ -14,7 +14,7 @@ echo "autoconfing..."
 autoreconf -i || exit 1
 
 echo "configuring..."
-./configure \
+./configure --prefix=`pwd`/inst \
  --with-docbook-catalog=$docbook_dtd/xml/dtd/docbook/docbook.cat \
  --with-docbook-xsl=$docbook_xslt/xml/xsl/docbook \
  --with-xml-flags="--nonet" || exit 1
@@ -28,5 +28,5 @@ tar cvfj $pkgname.tar.bz2 $pkgname || exit 1
 echo "copying result..."
 mkdir $out || exit 1
 cp -p $pkgname.tar.gz $pkgname.tar.bz2 $out || exit 1
-cp -p doc/manual/book.html $out/manual.html || exit 1
-cp -p doc/manual/style.css $out/ || exit 1
+(cd doc/manual && make install) || exit 1
+(cd inst/share/nix && tar cvfj $out/manual.tar.bz2 manual) || exit 1
