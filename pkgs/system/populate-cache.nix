@@ -49,7 +49,7 @@ let {
       pkgs.gqview
       pkgs.hello
       pkgs.nxml
-      pkgs.uml
+#      pkgs.uml
       pkgs.nix
     ];
 }

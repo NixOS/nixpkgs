@@ -1,17 +1,38 @@
-buildinputs="$patch $perl $m4"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $linuxSrc || exit 1
-cd linux-* || exit 1
-bunzip2 < $umlSrc | patch -p1 || exit 1
-cp $config .config || exit 1
-make oldconfig ARCH=um || exit 1
+# !!! hack
+. $NIX_GCC/nix-support/add-flags
+export NIX_LDFLAGS
 
-make linux ARCH=um || exit 1
-strip linux || exit 1
-make modules ARCH=um || exit 1
+postUnpack() {
+    unp() {
+        bunzip2 < $umlPatch > patch
+    }
+    unpackCmd=unp
+    unpackFile $umlPatch
+    patches=`pwd`/patch
+}
+postUnpack=postUnpack
 
-mkdir $out || exit 1
-mkdir $out/bin || exit 1
-cp -p linux $out/bin || exit 1
-make modules_install INSTALL_MOD_PATH=$out ARCH=um || exit 1
+configurePhase() {
+    cp $config .config
+    make oldconfig ARCH=um
+}
+configurePhase=configurePhase
+
+buildPhase() {
+    make linux ARCH=um
+    strip linux
+    make modules ARCH=um
+}
+buildPhase=buildPhase
+
+installPhase() {
+    mkdir $out
+    mkdir $out/bin
+    cp -p linux $out/bin
+    make modules_install INSTALL_MOD_PATH=$out ARCH=um
+}
+installPhase=installPhase
+
+genericBuild

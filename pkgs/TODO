@@ -6,5 +6,7 @@
   directories for libraries (like setup.sh does now). [do we want
   this?]
 
+* Bug in ld-wrapper: should source in add-flags (like gcc-wrapper) - then fix uml builder
+
 
 * Inform freedesktop people that Xaw requires Xpm.
