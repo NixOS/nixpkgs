@@ -1,0 +1,11 @@
+Descr(
+  [ Bind("pkgId", "httpd-2.0.46")
+  , Bind("releaseId", "1")
+
+  , Bind("ssl", Fix("./openssl-0.9.7b.fix"))
+  , Bind("db4", Fix("./db-4.0.14.fix"))
+
+  , Bind("src", Url("ff682f82f0808eb01df60824d959ebe8", "http://apache.cs.uu.nl/dist/httpd/httpd-2.0.46.tar.gz"))
+  , Bind("build", Local("../build/httpd-build.sh"))
+  ]
+)

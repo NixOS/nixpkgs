@@ -1,0 +1,8 @@
+Descr(
+  [ Bind("pkgId", "db-4.0.14")
+  , Bind("releaseId", "1")
+
+  , Bind("src", Url("12262c64fcd64b772e7cffad8e4d0ebc", "http://www.sleepycat.com/update/snapshot/db-4.0.14.tar.gz"))
+  , Bind("build", Local("../build/db4-build.sh"))
+  ]
+)

@@ -17,6 +17,9 @@ Descr(
   , Bind("actGtkspell", Fix("./gtkspell-2.0.2.fix"))
   , Bind("actPan", Fix("./pan-0.14.0.fix"))
   , Bind("actSubversion", Fix("./subversion-0.23.0.fix"))
+  , Bind("actDb4", Fix("./db-4.0.14.fix"))
+  , Bind("actHttpd", Fix("./httpd-2.0.46.fix"))
+  , Bind("actSsl", Fix("./openssl-0.9.7b.fix"))
 
   , Bind("build", Local("../build/populate-linkdirs.pl"))
   ]

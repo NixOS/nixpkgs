@@ -8,9 +8,9 @@ my $selfdir = cwd;
 my @dirs = ("bin", "sbin", "lib", "include", "man");
 
 # Create the subdirectories.
-mkdir $selfdir;
+mkdir $selfdir, 0755;
 foreach my $dir (@dirs) {
-    mkdir "$selfdir/$dir";
+    mkdir "$selfdir/$dir", 0755;
 }
 
 # For each activated package, create symlinks.
@@ -28,7 +28,7 @@ sub createLinks {
         if (-d $srcfile) {
             # !!! hack for resolving name clashes
             if (!-e $dstfile) {
-                mkdir($dstfile) or 
+                mkdir $dstfile, 0755 or 
                     die "error creating directory $dstfile";
             }
             -d $dstfile or die "$dstfile is not a directory";
