@@ -1,4 +1,4 @@
-{stdenv, fetchurl, wxGTK, python}:
+{stdenv, fetchurl, pkgconfig, wxGTK, python}:
 
 assert wxGTK.compat22;
 
@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     url = http://heanet.dl.sourceforge.net/sourceforge/wxpython/wxPythonSrc-2.4.2.4.tar.gz;
     md5 = "ea4eb68e10a0c2a9be643b35dcb78e41";
   };
-  pkgconfig = wxGTK.pkgconfig;
-  gtk = wxGTK.gtk;
-  inherit wxGTK python;
-}
+  buildInputs = [pkgconfig wxGTK (wxGTK.gtk) python];
+  inherit wxGTK; # !!! move this down
+} // { inherit python; } 

@@ -7,21 +7,17 @@ assert x11 != null && wxGTK != null && libdvdcss != null
 assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 
 stdenv.mkDerivation {
-  name = "vlc-0.7.0";
+  name = "vlc-0.7.1";
 
-  builder = ./builder.sh;
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.7.0/vlc-0.7.0.tar.gz;
-    md5 = "05efef68528892ca933585c7db0842e3";
+    url = http://download.videolan.org/pub/videolan/vlc/0.7.1/vlc-0.7.1.tar.gz;
+    md5 = "faa5e3162a3e9b3a3d8c3dcc06f70911";
   };
 
-  x11 = x11;
-  wxGTK = wxGTK;
-  libdvdcss = libdvdcss;
-  libdvdplay = libdvdplay;
-  libdvdread = libdvdplay.libdvdread;
-  mpeg2dec = mpeg2dec;
-  a52dec = a52dec;
-  libmad = libmad;
-  alsa = alsa;
+  buildInputs = [
+    x11 wxGTK libdvdcss libdvdplay libdvdplay.libdvdread
+    mpeg2dec a52dec libmad alsa
+  ];
+
+  configureFlags = "--disable-ffmpeg --enable-alsa";
 }

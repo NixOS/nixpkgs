@@ -479,11 +479,7 @@ rec {
   };
 
   wxGTK = (import ../development/libraries/wxGTK) {
-    inherit fetchurl stdenv;
-    fetchurl = fetchurl;
-    stdenv = stdenv;
-    pkgconfig = pkgconfig;
-    gtk = gtk;
+    inherit fetchurl stdenv pkgconfig gtk;
   };
 
   gnet = (import ../development/libraries/gnet) {
@@ -605,7 +601,7 @@ rec {
   };
 
   wxPython = (import ../development/python-modules/wxPython) {
-    inherit fetchurl stdenv wxGTK python;
+    inherit fetchurl stdenv pkgconfig wxGTK python;
   };
 
 

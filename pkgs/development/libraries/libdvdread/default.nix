@@ -9,5 +9,6 @@ stdenv.mkDerivation {
     url = http://www.videolan.org/pub/videolan/vlc/0.6.2/contrib/libdvdread-20030812.tar.bz2;
     md5 = "9d58beac7c2dfb98d00f4ed0ea3d7274";
   };
-  libdvdcss = libdvdcss;
+  buildInputs = libdvdcss;
+  inherit libdvdcss;
 }
