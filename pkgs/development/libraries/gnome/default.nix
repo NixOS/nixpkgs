@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, audiofile, gtkLibs
 , flex, bison, popt, perl, zlib, libxml2, bzip2
+, perlXMLParser
 }:
 
 rec {
@@ -36,7 +37,7 @@ rec {
 
   gnomevfs = (import ./gnome-vfs) {
     inherit fetchurl stdenv pkgconfig perl glib libxml2 GConf
-            libbonobo gnomemimedata popt bzip2;
+            libbonobo gnomemimedata popt bzip2 perlXMLParser;
     # !!! use stdenv.bzip2
   };
 
