@@ -31,4 +31,12 @@
       md5 = "c77789241d725e189ffc0391eda94361";
     };
   };
+
+  gtksourceview = {
+    name = "gtksourceview-1.1.1";
+    src = fetchurl {
+      url = ftp://ftp.gnome.org/Public/gnome/desktop/2.8/2.8.3/sources/gtksourceview-1.1.1.tar.bz2;
+      md5 = "2e59c8748594181d4bf452320c8c3b5c";
+    };
+  };
 }

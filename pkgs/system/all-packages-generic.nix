@@ -643,6 +643,11 @@ rec {
               libgnomeprintui gconf;
   };
 
+  gtksourceviewsharp = import ../development/libraries/gtksourceview-sharp {
+    inherit fetchurl stdenv mono pkgconfig gtksharp monoDLLFixer;
+    inherit (gnome) gtksourceview;
+  };
+
   audiofile = (import ../development/libraries/audiofile) {
     inherit fetchurl stdenv;
   };
@@ -1122,7 +1127,8 @@ rec {
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {
-    inherit fetchurl stdenv mono gtksharp perl perlXMLParser pkgconfig;
+    inherit fetchurl stdenv mono gtksharp gtksourceviewsharp
+              perl perlXMLParser pkgconfig;
     inherit (gnome) gnomevfs libbonobo gconf glib;
   };
 

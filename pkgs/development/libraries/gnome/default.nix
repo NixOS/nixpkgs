@@ -141,4 +141,11 @@ rec {
     inherit fetchurl stdenv pkgconfig glib gtk;
     input = desktop.gnomekeyring;
   };
+
+  gtksourceview = (import ./gtksourceview) {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2
+            libgnomeprint gnomevfs libbonobo /* !!! <- should be propagated in gnomevfs */
+            gconf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
+    input = desktop.gtksourceview;
+  };
 }

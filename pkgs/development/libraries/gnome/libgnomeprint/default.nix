@@ -5,10 +5,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
       perl perlXMLParser pkgconfig popt libxml2
-      glib pango libart
+      glib pango
     ];
 
-  propagatedBuildInputs = [libxml2];  
+  propagatedBuildInputs = [libxml2 libart];
 
   PERL5LIB = perlXMLParser ~ "/lib/site_perl";
 }
