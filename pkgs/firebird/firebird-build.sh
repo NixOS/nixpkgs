@@ -2,7 +2,7 @@
 
 envpkgs="$gtk $libIDL"
 . $stdenv/setup || exit 1
-export PATH=$pkgconfig/bin:$PATH
+export PATH=$pkgconfig/bin:$perl/bin:$PATH
 
 tar xvfj $src || exit 1
 cd mozilla || exit 1

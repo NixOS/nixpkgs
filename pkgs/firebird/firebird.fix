@@ -11,6 +11,7 @@ Package(
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("gtk", IncludeFix("gtk+/gtk+.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   , ("libIDL", IncludeFix("libIDL/libIDL.fix"))
   ]
 )

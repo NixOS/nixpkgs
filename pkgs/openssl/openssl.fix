@@ -9,5 +9,6 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   ]
 )

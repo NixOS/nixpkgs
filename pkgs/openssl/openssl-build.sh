@@ -1,6 +1,7 @@
 #! /bin/sh
 
 . $stdenv/setup || exit 1
+export PATH=$perl/bin:$PATH
 
 tar xvfz $src || exit 1
 cd openssl-* || exit 1
