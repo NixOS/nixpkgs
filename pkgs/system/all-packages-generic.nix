@@ -286,6 +286,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  blackdown = (import ../development/compilers/blackdown) {
+    inherit fetchurl stdenv;
+  };
+
   j2sdk = (import ../development/compilers/j2sdk) {
     inherit fetchurl stdenv;
   };
