@@ -1,0 +1,8 @@
+{stdenv}: {url, md5}: derivation
+  { name = "fetchurl"
+  , system = stdenv.system
+  , builder = ./builder.sh
+  , stdenv = stdenv
+  , url = url
+  , md5 = md5
+  }

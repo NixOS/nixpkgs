@@ -4,12 +4,11 @@
       }
 
   , fetchurl = (import ../fetchurl)
-      { system = system
+      { stdenv = stdenv
       }
 
   , aterm = (import ../aterm)
-      { system = system
-      , fetchurl = fetchurl
+      { fetchurl = fetchurl
       , stdenv = stdenv
       }
   }
