@@ -7,5 +7,7 @@ Package(
       [ ("url", "http://www2.mplayerhq.hu/MPlayer/releases/codecs/extralite.tar.bz2")
       , ("md5", "4748ecae87f71e8bda9cb2e2a9bd30b4")
       ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   ]
 )
