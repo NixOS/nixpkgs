@@ -232,6 +232,7 @@
 
   perl = (import ../development/interpreters/perl) {
     inherit fetchurl stdenv;
+    patch = gnupatch;
   };
 
   python = (import ../development/interpreters/python) {

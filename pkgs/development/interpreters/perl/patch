@@ -1,0 +1,42 @@
+diff -rc perl-5.8.3-orig/ext/Errno/Errno_pm.PL perl-5.8.3/ext/Errno/Errno_pm.PL
+*** perl-5.8.3-orig/ext/Errno/Errno_pm.PL	2003-08-04 09:37:13.000000000 +0200
+--- perl-5.8.3/ext/Errno/Errno_pm.PL	2004-02-20 16:59:05.000000000 +0100
+***************
+*** 105,111 ****
+  	# Watch out for cross compiling for EPOC (usually done on linux)
+  	$file{'/usr/local/epocemx/epocsdk/include/libc/sys/errno.h'} = 1;
+      } elsif ($^O eq 'linux' &&
+! 	     $Config{gccversion} ne '' # might be using, say, Intel's icc
+  	     ) {
+  	# Some Linuxes have weird errno.hs which generate
+  	# no #file or #line directives
+--- 105,111 ----
+  	# Watch out for cross compiling for EPOC (usually done on linux)
+  	$file{'/usr/local/epocemx/epocsdk/include/libc/sys/errno.h'} = 1;
+      } elsif ($^O eq 'linux' &&
+! 	     $Config{gccversion} eq '' # might be using, say, Intel's icc
+  	     ) {
+  	# Some Linuxes have weird errno.hs which generate
+  	# no #file or #line directives
+Only in perl-5.8.3/ext/Errno: Errno_pm.PL~
+diff -rc perl-5.8.3-orig/lib/Cwd.pm perl-5.8.3/lib/Cwd.pm
+*** perl-5.8.3-orig/lib/Cwd.pm	2003-12-20 00:05:30.000000000 +0100
+--- perl-5.8.3/lib/Cwd.pm	2004-02-20 16:58:16.000000000 +0100
+***************
+*** 201,207 ****
+  
+  # The 'natural and safe form' for UNIX (pwd may be setuid root)
+  sub _backtick_pwd {
+!     local @ENV{qw(PATH IFS CDPATH ENV BASH_ENV)};
+      my $cwd = `$pwd_cmd`;
+      # Belt-and-suspenders in case someone said "undef $/".
+      local $/ = "\n";
+--- 201,207 ----
+  
+  # The 'natural and safe form' for UNIX (pwd may be setuid root)
+  sub _backtick_pwd {
+!     local @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+      my $cwd = `$pwd_cmd`;
+      # Belt-and-suspenders in case someone said "undef $/".
+      local $/ = "\n";
+Only in perl-5.8.3/lib: Cwd.pm~

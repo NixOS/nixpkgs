@@ -1,9 +1,10 @@
-#! /bin/sh
+#! /bin/sh -e
 
-. $stdenv/setup || exit 1
+buildinputs="$patch"
+. $stdenv/setup
 
-tar xvfz $src || exit 1
-cd perl-* || exit 1
+tar xvfz $src
+cd perl-*
 
 # Perl's Configure messes with PATH.  We can't have that, so we patch it.
 # Yeah, this is an ugly hack.
@@ -14,13 +15,14 @@ cat Configure | \
  grep -v '^glibpth=' | \
  grep -v '^loclibpth=' | \
  grep -v '^locincpth=' | \
- cat > Configure.tmp || exit 1
-mv Configure.tmp Configure || exit 1
-chmod +x Configure || exit 1
+ cat > Configure.tmp
+mv Configure.tmp Configure
+chmod +x Configure
+
+patch -p1 < $srcPatch
 
 ./Configure -de -Dcc=gcc -Dprefix=$out -Uinstallusrbinperl \
  -Dlocincpth="$NIX_LIBC_INCLUDES" \
- -Dloclibpth="$NIX_LIBC_LIBS" \
- || exit 1
-make || exit 1
-make install || exit 1
+ -Dloclibpth="$NIX_LIBC_LIBS"
+make
+make install
