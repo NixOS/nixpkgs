@@ -654,6 +654,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  xineLib = (import ../development/libraries/xine-lib) {
+    inherit fetchurl stdenv zlib x11 libdvdcss alsaLib;
+    inherit (xlibs) libXv libXinerama;
+  };
+
   ncurses = (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
   };
@@ -868,6 +873,10 @@ rec {
             mpeg2dec a52dec libmad x11;
     inherit (xlibs) libXv;
     alsa = alsaLib;
+  };
+
+  xineUI = (import ../applications/video/xine-ui) {
+    inherit fetchurl stdenv x11 xineLib libpng;
   };
 
   zapping = (import ../applications/video/zapping) {

@@ -55,6 +55,7 @@ let {
     MPlayer
     MPlayerPlugin
     vlc
+    xineUI
     zapping
     gqview
     hello
