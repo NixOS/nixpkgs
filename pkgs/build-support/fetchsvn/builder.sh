@@ -1,8 +1,19 @@
-buildinputs="$subversion"
 . $stdenv/setup
 
-echo "exporting $url (r$rev) into $out..."
+header "exporting $url (r$rev) into $out"
 
-svn export -r $rev "$url" $out || exit 1
+prefetch=$(dirname $out)/svn-checkout-tmp-$md5
+echo $prefetch
+if test -e "$prefetch"; then
+    mv $prefetch $out
+else
+    svn export -r "$rev" "$url" $out
+fi
 
-echo $rev > $out/svn-revision || exit 1
+actual=$(nix-hash $out)
+if test "$actual" != "$md5"; then
+    echo "hash is $actual, expected $md5" >&2
+    exit 1
+fi
+
+stopNest

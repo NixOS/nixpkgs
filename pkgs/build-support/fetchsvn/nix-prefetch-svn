@@ -1,0 +1,47 @@
+#! /bin/sh -e
+
+url=$1
+rev=$2
+
+if test -z "$url"; then
+    echo "syntax: nix-prefetch-svn URL [REVISION]" >&2
+    exit 1
+fi
+
+test -n "$rev" || rev="HEAD"
+
+# !!! hacky; we should have a way to query the location of the store.
+if storeDir=$(which nix-store); then
+    storeDir=$(dirname $(dirname "$storeDir"))/store
+else
+    storeDir=/nix/store
+fi
+
+# !!! race? should be relatively safe, `svn export' barfs if $tmpPath exists.
+tmpPath1=$storeDir/svn-checkout-tmp-$$
+
+# Perform the checkout.
+svn export -r "$rev" "$url" $tmpPath1 >&2
+
+# Compute the hash.
+hash=$(nix-hash $tmpPath1)
+echo "hash is $hash" >&2
+
+# Rename it so that the fetchsvn builder can find it.
+tmpPath2=$storeDir/svn-checkout-tmp-$hash
+test -e $tmpPath2 || mv $tmpPath1 $tmpPath2 # !!! race
+
+# Create a Nix expression that does a fetchsvn.
+nixExpr=$(dirname $(readlink -f $0))/../../system/i686-linux.nix
+storeExpr=$( \
+  echo "(import $nixExpr).fetchsvn {url=\"$url\"; rev=\"$rev\"; md5=\"$hash\";}" \
+  | nix-instantiate -)
+
+# Realise it.
+finalPath=$(nix-store -qnB --force-realise $storeExpr)
+
+echo "path is $finalPath" >&2
+
+rm -rf $tmpPath2 || true
+
+echo $hash

@@ -1,7 +1,9 @@
-{stdenv, subversion}: {url, rev}: stdenv.mkDerivation {
-  name = "svn-checkout";
+{stdenv, subversion, nix}: {url, rev ? "HEAD", md5}:
+
+stdenv.mkDerivation {
+  name = "svn-export";
   builder = ./builder.sh;
-  subversion = subversion;
-  url = url;
-  rev = rev;
+  buildInputs = [subversion nix];
+  id = md5;
+  inherit url rev md5;
 }
