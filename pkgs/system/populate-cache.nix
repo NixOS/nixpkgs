@@ -96,7 +96,7 @@ let {
     aterm
     subversion
     bisonnew
-    flexnew
+#    flexnew
     libxml2
     libxslt
     docbook_xml_dtd_42
