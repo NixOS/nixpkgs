@@ -140,6 +140,10 @@ rec {
     inherit (xlibs) libXaw;
   };
 
+  exif = (import ../tools/graphics/exif) {
+    inherit fetchurl stdenv pkgconfig libexif popt;
+  };
+
   hevea = (import ../tools/typesetting/hevea) {
     inherit fetchurl stdenv ocaml;
   };
@@ -603,6 +607,10 @@ rec {
   };
 
   libsigsegv = (import ../development/libraries/libsigsegv) {
+    inherit fetchurl stdenv;
+  };
+
+  libexif = (import ../development/libraries/libexif) {
     inherit fetchurl stdenv;
   };
 
@@ -1122,6 +1130,13 @@ rec {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
   };
+
+  /*
+  fspot = (import ../applications/graphics/f-spot) {
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig mono;
+    inherit (gnome) libgnome libgnomeui;
+  };
+  */
 
   hello = (import ../applications/misc/hello/ex-1) {
     inherit fetchurl stdenv perl;

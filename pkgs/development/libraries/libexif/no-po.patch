@@ -1,0 +1,20 @@
+diff -rc libexif-0.6.11-orig/Makefile.in libexif-0.6.11/Makefile.in
+*** libexif-0.6.11-orig/Makefile.in	2004-10-16 14:21:37.000000000 +0200
+--- libexif-0.6.11/Makefile.in	2005-03-11 11:35:24.000000000 +0100
+***************
+*** 215,221 ****
+  sharedstatedir = @sharedstatedir@
+  sysconfdir = @sysconfdir@
+  target_alias = @target_alias@
+! SUBDIRS = libexif libjpeg test po m4
+  EXTRA_DIST = @PACKAGE@.spec
+  
+  ########################################################################
+--- 215,221 ----
+  sharedstatedir = @sharedstatedir@
+  sysconfdir = @sysconfdir@
+  target_alias = @target_alias@
+! SUBDIRS = libexif libjpeg test m4
+  EXTRA_DIST = @PACKAGE@.spec
+  
+  ########################################################################
