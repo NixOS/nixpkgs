@@ -10,7 +10,7 @@ postUnpack() {
     }
     unpackCmd=unp
     unpackFile $umlPatch
-    patches=`pwd`/patch
+    patches="`pwd`/patch $noAioPatch"
 }
 postUnpack=postUnpack
 
