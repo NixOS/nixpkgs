@@ -1,0 +1,10 @@
+Descr(
+  [ Bind("pkgId", "httpd-2.0.45")
+  , Bind("releaseId", "1")
+
+  , Bind("ssl", Fix("./openssl-0.9.7b.fix"))
+
+  , Bind("src", Source(Url("http://apache.cs.uu.nl/dist/httpd/httpd-2.0.45.tar.gz")))
+  , Bind("build", Source("../build/httpd-build.sh"))
+  ]
+)

@@ -1,0 +1,8 @@
+Descr(
+  [ Bind("pkgId", "openssl-0.9.7b")
+  , Bind("releaseId", "1")
+
+  , Bind("src", Source(Url("http://www.openssl.org/source/openssl-0.9.7b.tar.gz")))
+  , Bind("build", Source("../build/openssl-build.sh"))
+  ]
+)

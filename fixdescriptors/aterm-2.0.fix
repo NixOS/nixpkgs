@@ -1,10 +1,10 @@
 Descr(
-  [ Bind("pkgId", Str("aterm-2.0"))
-  , Bind("releaseId", Str("1"))
+  [ Bind("pkgId", "aterm-2.0")
+  , Bind("releaseId", "1")
 
-  , Bind("createGCC", Bool(True))
+  , Bind("createGCC", True)
 
-  , Bind("src", File(Url("http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz")))
-  , Bind("build", File(Local("../build/aterm-build.sh")))
+  , Bind("src", Source(Url("http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz")))
+  , Bind("build", Source("../build/aterm-build.sh"))
   ]
 )
