@@ -13,7 +13,6 @@ Package(
   , ("gtk", IncludeFix("gtk+/gtk+.fix"))
   , ("perl", IncludeFix("perl/perl.fix"))
   , ("zip", IncludeFix("zip/zip.fix"))
-  , ("unzip", IncludeFix("unzip/unzip.fix"))
   , ("libIDL", IncludeFix("libIDL/libIDL.fix"))
   ]
 )
