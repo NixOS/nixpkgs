@@ -250,6 +250,16 @@ rec {
     sdf = sdf2;
   };
 
+  strategoxt094 = (import ../development/compilers/strategoxt/strategoxt-0.9.4.nix) {
+    inherit fetchurl stdenv aterm;
+    sdf = sdf2;
+  };
+
+  strategoxt095 = (import ../development/compilers/strategoxt/strategoxt-0.9.5.nix) {
+    inherit fetchurl stdenv aterm;
+    sdf = sdf2;
+  };
+
   tiger = (import ../development/compilers/tiger) {
     inherit fetchurl stdenv aterm strategoxt;
     sdf = sdf2;

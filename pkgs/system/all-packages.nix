@@ -13,5 +13,5 @@
   body =
     if system == "i686-linux"
     then stdenvs.stdenvLinuxPkgs
-    else stdenvs.stdenvNixPkgs;
+    else (stdenvs.stdenvNixPkgs);
 }
