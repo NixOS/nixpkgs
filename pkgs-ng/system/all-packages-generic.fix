@@ -323,6 +323,11 @@
     stdenv = stdenv;
   };
 
+  alsaLib = (import ../os-specific/linux/alsa/library) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
 
   ### APPLICATIONS
 
@@ -371,10 +376,12 @@
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
+    alsaSupport = true;
     fetchurl = fetchurl;
     stdenv = stdenv;
     x11 = xfree86;
     freetype = freetype;
+    alsa = alsaLib;
   };
 
 }

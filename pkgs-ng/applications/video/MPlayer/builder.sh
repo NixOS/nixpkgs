@@ -1,6 +1,6 @@
 #! /bin/sh
 
-buildinputs="$freetype $x11"
+buildinputs="$freetype $x11 $alsa"
 . $stdenv/setup || exit 1
 
 tar xvfj $src || exit 1
