@@ -446,4 +446,10 @@
     libpng = libpng;
   };
 
+  hello = (import ../applications/misc/hello) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+  };
+
 }
