@@ -48,6 +48,7 @@ let {
     pan
     sylpheed
     firefox
+    thunderbird
     lynx
     MPlayer
     MPlayerPlugin

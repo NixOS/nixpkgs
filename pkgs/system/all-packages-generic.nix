@@ -754,6 +754,19 @@ rec {
     inherit (gnome) libIDL;
   };
 
+  thunderbird = 
+    (import ../applications/networking/mailreaders/thunderbird/linker.nix) {
+      name = "thunderbird-0.8";
+      dir =
+        (import ../applications/networking/mailreaders/thunderbird) {
+          inherit fetchurl stdenv pkgconfig perl zip;
+          inherit (gtkLibs) gtk;
+          inherit (gnome) libIDL;
+        };
+      files = ["bin/thunderbird"];
+      inherit stdenv;
+    };
+
   lynx = (import ../applications/networking/browsers/lynx) {
     inherit fetchurl stdenv ncurses openssl;
   };
