@@ -3,10 +3,10 @@
 assert m4 != null;
 
 stdenv.mkDerivation {
-  name = "bison-1.875c";
+  name = "bison-1.875d";
   src = fetchurl {
-    url = ftp://alpha.gnu.org/pub/gnu/bison/bison-1.875c.tar.gz;
-    md5 = "bba317725fc84013b9d0a6b2576dfaa7";
+    url = ftp://alpha.gnu.org/pub/gnu/bison/bison-1.875d.tar.gz;
+    md5 = "faaa4a271ca722fb6c769d72e18ade0b";
   };
   buildInputs = [m4];
 } // {
