@@ -315,6 +315,13 @@
     libpng = libpng;
   };
 
+  wxGTK = (import ../development/libraries/wxGTK) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+  };
+
   gnet = (import ../development/libraries/gnet) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -329,6 +336,38 @@
     glib = glib;
     lex = flex;
     yacc = bison;
+  };
+
+  libdvdcss = (import ../development/libraries/libdvdcss) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  libdvdread = (import ../development/libraries/libdvdread) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    libdvdcss = libdvdcss;
+  };
+
+  libdvdplay = (import ../development/libraries/libdvdplay) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    libdvdread = libdvdread;
+  };
+
+  mpeg2dec = (import ../development/libraries/mpeg2dec) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  a52dec = (import ../development/libraries/a52dec) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  libmad = (import ../development/libraries/libmad) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
   };
 
 
@@ -442,6 +481,19 @@
     fetchurl = fetchurl;
     stdenv = stdenv;
     x11 = xfree86;
+  };
+
+  vlc = (import ../applications/video/vlc) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    wxGTK = wxGTK;
+    libdvdcss = libdvdcss;
+    libdvdplay = libdvdplay;
+    mpeg2dec = mpeg2dec;
+    a52dec = a52dec;
+    libmad = libmad;
+    alsa = alsaLib;
   };
 
   gqview = (import ../applications/graphics/gqview) {
