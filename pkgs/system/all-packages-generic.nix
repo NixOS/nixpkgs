@@ -854,6 +854,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  cdparanoiaIII = (import ../applications/audio/cdparanoia) {
+    inherit fetchurl stdenv;
+  };
+
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib;
     inherit (xlibs) libXv;
