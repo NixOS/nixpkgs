@@ -13,6 +13,7 @@ Function(["nativeTools"],
     , ("tools", If(Var("nativeTools"), 
         [],
         [ IncludeFix("coreutils/coreutils.fix")
+        , IncludeFix("gnused/gnused.fix")
         , IncludeFix("gnutar/gnutar.fix")
         , IncludeFix("gzip/gzip.fix")
         ]))
