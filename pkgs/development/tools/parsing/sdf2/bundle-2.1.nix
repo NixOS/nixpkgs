@@ -33,4 +33,8 @@ rec {
   pgen = (import ../pgen/pgen-2.1.nix) {
     inherit fetchurl stdenv getopt aterm toolbuslib ptsupport sdfsupport asfsupport ascsupport errorsupport sglr;
   };
+
+  asflibrary = (import ../asf-library/asf-library-1.0.nix) {
+    inherit fetchurl stdenv;
+  };
 }
