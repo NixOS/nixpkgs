@@ -288,13 +288,7 @@ rec {
     profiledCompiler = gccWithProfiling;
   };
 
-  gccWrapped = (import ../build-support/gcc-wrapper) {
-    nativeTools = false;
-    nativeGlibc = false;
-    gcc = stdenv.gcc;
-    inherit (stdenv.gcc) binutils glibc;
-    inherit stdenv;
-  };
+  gccWrapped = stdenv.gcc;
 
   gcc_static = (import ../development/compilers/gcc-static-3.4) {
     inherit fetchurl stdenv;
