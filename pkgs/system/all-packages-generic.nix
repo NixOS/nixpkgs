@@ -122,7 +122,7 @@ rec {
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
-    inherit fetchurl stdenv libpng libjpeg expat x11;
+    inherit fetchurl stdenv libpng libjpeg expat x11 yacc;
     inherit (xlibs) libXaw;
   };
 
@@ -229,19 +229,19 @@ rec {
     m4 = gnum4;
   };
 
+  yacc = bison;
+
   bisonnew = (import ../development/tools/parsing/bison/bison-new.nix) {
     inherit fetchurl stdenv;
     m4 = gnum4;
   };
 
   flex = (import ../development/tools/parsing/flex) {
-    inherit fetchurl stdenv;
-    yacc = bison;
+    inherit fetchurl stdenv yacc;
   };
 
   flexnew = (import ../development/tools/parsing/flex/flex-new.nix) {
-    inherit fetchurl stdenv;
-    yacc = bison;
+    inherit fetchurl stdenv yacc;
     m4 = gnum4;
   };
 
