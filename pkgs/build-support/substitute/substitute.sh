@@ -22,6 +22,13 @@ substitute() {
             sedArgs=("${sedArgs[@]}" "-e" "s^@${varName}@^${!varName}^g")
         fi
 
+        if test "$p" = "--subst-var-by"; then
+            varName=${params[$((n + 1))]}
+            replacement=${params[$((n + 2))]}
+            n=$((n + 2))
+            sedArgs=("${sedArgs[@]}" "-e" "s^@${varName}@^$replacement^g")
+        fi
+
     done
 
     sed "${sedArgs[@]}" < "$input" > "$output".tmp

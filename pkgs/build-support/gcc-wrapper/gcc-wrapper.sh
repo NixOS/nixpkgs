@@ -90,15 +90,15 @@ fi
 
 # Optionally print debug info.
 if test "$NIX_DEBUG" = "1"; then
-  echo "original flags to @gcc@:" >&2
+  echo "original flags to @gccProg@:" >&2
   for i in "${params[@]}"; do
       echo "  $i" >&2
   done
-  echo "extraBefore flags to @gcc@:" >&2
+  echo "extraBefore flags to @gccProg@:" >&2
   for i in ${extraBefore[@]}; do
       echo "  $i" >&2
   done
-  echo "extraAfter flags to @gcc@:" >&2
+  echo "extraAfter flags to @gccProg@:" >&2
   for i in ${extraAfter[@]}; do
       echo "  $i" >&2
   done
@@ -108,4 +108,4 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     . "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
-exec @gcc@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+exec @gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}

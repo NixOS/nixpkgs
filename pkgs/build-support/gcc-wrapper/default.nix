@@ -15,10 +15,12 @@ assert !nativeGlibc -> glibc != null;
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
+  substitute = ../substitute/substitute.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
+  addFlags = ./add-flags;
   inherit nativeTools nativeGlibc nativePrefix gcc glibc binutils;
   name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;

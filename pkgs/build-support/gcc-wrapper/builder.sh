@@ -1,4 +1,5 @@
 . $stdenv/setup
+. $substitute
 
 
 # Force gcc to use ld-wrapper.sh when calling ld.
@@ -29,9 +30,30 @@ fi
 
 mkdir $out
 mkdir $out/bin
+mkdir $out/nix-support
 
 
-mkGccWrapper () {
+doSubstitute() {
+    local src=$1
+    local dst=$2
+    substitute "$src" "$dst" \
+        --subst-var "out" \
+        --subst-var "shell" \
+        --subst-var "gcc" \
+        --subst-var "gccProg" \
+        --subst-var "binutils" \
+        --subst-var "glibc" \
+        --subst-var "cflagsCompile" \
+        --subst-var "cflagsLink" \
+        --subst-var "ldflags" \
+        --subst-var "ldflagsBefore" \
+        --subst-var-by "ld" "$ldPath/ld"
+}
+
+
+# Make wrapper scripts around gcc, g++, and g77.  Also make symlinks
+# cc, c++, and f77.
+mkGccWrapper() {
     local dst=$1
     local src=$2
 
@@ -40,12 +62,9 @@ mkGccWrapper () {
         return
     fi
 
-    sed \
-        -e "s^@gcc@^$src^g" \
-        -e "s^@out@^$out^g" \
-        -e "s^@shell@^$shell^g" \
-        < $gccWrapper > $dst
-    chmod +x $dst
+    gccProg="$src"
+    doSubstitute "$gccWrapper" "$dst"
+    chmod +x "$dst"
 }
 
 mkGccWrapper $out/bin/gcc $gccPath/gcc
@@ -58,33 +77,18 @@ mkGccWrapper $out/bin/g77 $gccPath/g77
 ln -s g77 $out/bin/f77
 
 
-sed \
-    -e "s^@out@^$out^g" \
-    -e "s^@ldflags@^$ldflags^g" \
-    -e "s^@ldflagsBefore@^$ldflagsBefore^g" \
-    -e "s^@ld@^$ldPath/ld^g" \
-    -e "s^@shell@^$shell^g" \
-    < $ldWrapper > $out/bin/ld
-chmod +x $out/bin/ld
+# Make a wrapper around the linker.
+doSubstitute "$ldWrapper" "$out/bin/ld"
+chmod +x "$out/bin/ld"
 
 
-mkdir $out/nix-support
+# Emit a setup hook.  Also store the path to the original GCC and
+# Glibc.
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
 test -n "$glibc" && echo $glibc > $out/nix-support/orig-glibc
 
-cat > $out/nix-support/add-flags <<EOF
-export NIX_CFLAGS_COMPILE="$cflagsCompile \$NIX_CFLAGS_COMPILE"
-export NIX_CFLAGS_LINK="$cflagsLink \$NIX_CFLAGS_LINK"
-export NIX_LDFLAGS="$ldflags \$NIX_LDFLAGS"
-export NIX_LDFLAGS_BEFORE="$ldflagsBefore \$NIX_LDFLAGS_BEFORE"
-export NIX_GLIBC_FLAGS_SET=1
-#export GCC_EXEC_PREFIX=$gcc/libexec/gcc/i686-pc-linux-gnu/3.4.3
-EOF
+doSubstitute "$addFlags" "$out/nix-support/add-flags"
 
-sed \
-    -e "s^@gcc@^$gcc^g" \
-    -e "s^@binutils@^$binutils^g" \
-    -e "s^@glibc@^$glibc^g" \
-    < $setupHook > $out/nix-support/setup-hook
+doSubstitute "$setupHook" "$out/nix-support/setup-hook"
 
 cp -p $utils $out/nix-support/utils
