@@ -1,7 +1,7 @@
 #! /bin/sh
 
 buildinputs="$pkgconfig $perl $python $x11 $libgnomeui \
-  $libglade $scrollkeeper $esound $gettext"
+  $libglade $scrollkeeper $esound $gettext $zvbi $libjpeg $libpng"
 . $stdenv/setup || exit 1
 
 # !!! hack; this is because $linuxHeaders/config.h includes some

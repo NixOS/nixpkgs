@@ -693,6 +693,14 @@
     stdenv = stdenv;
   };
 
+  zvbi = (import ../development/libraries/zvbi) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    pngSupport = true;
+    libpng = libpng;
+  };
+
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -846,6 +854,12 @@
     scrollkeeper = scrollkeeper;
     esound = esound;
     gettext = gettext;
+    teletextSupport = true;
+    zvbi = zvbi;
+    jpegSupport = true;
+    libjpeg = libjpeg;
+    pngSupport = true;
+    libpng = libpng;
   };
 
   gqview = (import ../applications/graphics/gqview) {
