@@ -58,8 +58,8 @@ let {
     nxml
     uml
     nix
-    ocaml
-    hevea
+#    ocaml
+#    hevea
     vim
     less
     screen
