@@ -5,7 +5,7 @@ let {
       pkgs.unzip
       pkgs.par2cmdline
       pkgs.graphviz
-      pkgs.strategoxt
+      pkgs.strategoxt093
       pkgs.libxml2
       pkgs.libxslt
       pkgs.docbook_xml_dtd
