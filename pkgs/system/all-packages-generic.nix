@@ -547,6 +547,10 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
+  libtheora = (import ../development/libraries/libtheora) {
+    inherit fetchurl stdenv libogg libvorbis;
+  };
+
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
   };
@@ -983,10 +987,11 @@ rec {
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
-    inherit fetchurl stdenv freetype x11 zlib;
+    inherit fetchurl stdenv freetype x11 zlib libtheora;
     inherit (xlibs) libXv;
     alsaSupport = true;
     alsa = alsaLib;
+    theoraSupport = true;
   };
 
   MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {

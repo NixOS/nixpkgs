@@ -1,8 +1,10 @@
-{ alsaSupport ? false, xvSupport ? true
-, stdenv, fetchurl, x11, libXv, freetype, zlib, alsa ? null}:
+{ alsaSupport ? false, xvSupport ? true, theoraSupport ? false
+, stdenv, fetchurl, x11, freetype, zlib
+, alsa ? null, libXv ? null, libtheora ? null}:
 
 assert alsaSupport -> alsa != null;
 assert xvSupport -> libXv != null;
+assert theoraSupport -> libtheora != null;
 
 stdenv.mkDerivation {
   name = "MPlayer-1.0pre6";
@@ -25,5 +27,6 @@ stdenv.mkDerivation {
     x11 libXv freetype zlib
     (if alsaSupport then alsa else null)
     (if xvSupport then libXv else null)
+    (if theoraSupport then libtheora else null)
   ];
 }
