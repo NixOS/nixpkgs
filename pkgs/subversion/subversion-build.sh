@@ -14,6 +14,10 @@ fi
 if test $httpServer; then
     extraflags="--with-apxs=$httpd/bin/apxs --with-apr=$httpd --with-apr-util=$httpd $extraflags"
     extramakeflags="APACHE_LIBEXECDIR=$out/modules $extramakeflags"
+else
+    NIX_CFLAGS_COMPILE="-I$expat/include $NIX_CFLAGS_COMPILE"
+    NIX_CFLAGS_LINK="-L$expat/lib $NIX_CFLAGS_LINK"
+    NIX_LDFLAGS="-rpath $expat/lib $NIX_LDFLAGS"
 fi
 
 if test $pythonBindings; then

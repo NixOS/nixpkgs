@@ -22,6 +22,7 @@ Function(["localServer", "httpsClient", "httpServer", "pythonBindings"],
     , ("httpd", If(Var("httpServer"), IncludeFix("httpd/httpd.fix"), ""))
     , ("db4", If(Var("localServer"), IncludeFix("db4/db4.fix"), ""))
     , ("libxml", IncludeFix("libxml2/libxml2.fix"))
+    , ("expat", If(Var("httpServer"), "", IncludeFix("expat/expat.fix")))
     ]
   )
 )
