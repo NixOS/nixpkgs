@@ -23,10 +23,9 @@ srcexpr=${storeexprs[0]}
 testexpr=${storeexprs[1]}
 rpmexpr=${storeexprs[2]}
 
-if ! nix-store -vvvv -r "$srcexpr" > /dev/null; then exit 1; fi
-if ! outpath=$(nix-store -qn "$srcexpr"); then exit 1; fi
+if ! outpath=$(nix-store -vvvv -qnf "$srcexpr"); then exit 1; fi
 
-uploader="http://losser.st-lab.cs.uu.nl/~eelco/cgi-bin/create-dist.pl"
+uploader="http://catamaran.labs.cs.uu.nl/~eelco/cgi-bin/create-dist.pl"
 
 # Extract the name of the release.
 relname=$((cd $outpath && echo nix-*.tar.bz2) | sed -e s/.tar.bz2//)
@@ -54,8 +53,7 @@ $curl -T "$outpath"/manual.tar.bz2 "$uploader/upload-tar/$sessionname" || exit 1
 #if ! nix-store -vvvv -r "$testexpr" > /dev/null; then exit 1; fi
 
 # Perform an RPM build, and upload the RPM to the server.
-if ! nix-store -vvvv -r "$rpmexpr" > /dev/null; then exit 1; fi
-if ! rpmpath=$(nix-store -qn "$rpmexpr"); then exit 1; fi
+if ! rpmpath=$(nix-store -vvvv -qnf "$rpmexpr"); then exit 1; fi
 $curl -T "$rpmpath"/nix-*.rpm "$uploader/upload/$sessionname/" || exit 1
 
 # Finish the upload session.
