@@ -61,6 +61,7 @@ let {
     xineUI
     zapping
     gqview
+    fspot
     hello
     xchm
     nxml
