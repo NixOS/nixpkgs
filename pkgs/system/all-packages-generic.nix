@@ -287,6 +287,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sdf = (import ../development/tools/parsing/sdf2/bundle-2.1.nix) {
+    inherit fetchurl stdenv getopt aterm;
+  };
+
   sdf2 = (import ../development/tools/parsing/sdf2) {
     inherit fetchurl stdenv aterm getopt;
   };

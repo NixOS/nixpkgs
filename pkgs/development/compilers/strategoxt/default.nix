@@ -8,4 +8,5 @@ stdenv.mkDerivation {
     md5 = "526a28e84248b649bb098b22d227cd26";
   };
   inherit aterm sdf;
+  buildInputs = [aterm sdf];
 }
