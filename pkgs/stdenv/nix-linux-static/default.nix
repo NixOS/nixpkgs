@@ -11,7 +11,7 @@ rec {
     args = [ ./scripts/curl-unpack ];
   };
 
-  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null}: derivation {
+  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null, extra3 ? null}: derivation {
     name = pkgname;
     builder = ./bash-static/bash;
     tar = ./gnutar-static/bin/tar;
@@ -20,7 +20,7 @@ rec {
     cp = ./tools/cp;
     system = "i686-linux";
     args = [ ./scripts/download-script ];
-    inherit postprocess extra extra2;
+    inherit postprocess extra extra2 extra3;
   };
 
 /*
@@ -70,7 +70,7 @@ rec {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
     patchelf = ./patchelf-static/patchelf;
-    findutils = findutils;
+    extra3 = findutils;
     postprocess = ./scripts/add-symlink.sh;
     extra = linuxHeaders;
     extra2 = coreutils;
