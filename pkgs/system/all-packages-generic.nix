@@ -93,6 +93,15 @@
     stdenv = stdenv;
   };
 
+  graphviz = (import ../tools/graphics/graphviz) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    libpng = libpng;
+    libjpeg = libjpeg;
+    expat = expat;
+  };
+
 
   ### SHELLS
 
