@@ -1,5 +1,5 @@
 Package(
-  [ ("id", "system")
+  [ ("name", "system")
   , ("build", Relative("system/populate-linkdirs.pl"))
 
   , ("actATerm", IncludeFix("aterm/aterm.fix"))
