@@ -1,8 +1,8 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "win32codecs-1";
+  name = "MPlayer-codecs-essential-20040427";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www2.mplayerhq.hu/MPlayer/releases/codecs/extralite.tar.bz2;
-    md5 = "4748ecae87f71e8bda9cb2e2a9bd30b4";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/codecs/essential-20040427.tar.bz2;
+    md5 = "4ffc1682448aa870aec9d8efc1321a09";
   };
 }

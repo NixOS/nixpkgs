@@ -1,4 +1,3 @@
-buildInputs="$x11 $freetype $zlib $alsa"
 . $stdenv/setup
 
 postUnpack() {
@@ -9,9 +8,6 @@ postUnpack=postUnpack
 configureFlags="\
  --with-win32libdir=$win32codecs \
  --with-reallibdir=$win32codecs \
- --disable-sdl --disable-esd --disable-xanim --disable-cdparanoia --disable-directfb \
- --disable-lirc --disable-svga --disable-libdv \
- --disable-vorbis --disable-png --disable-jpeg --disable-gif \
  --enable-runtime-cpudetection"
 
 postInstall() {
