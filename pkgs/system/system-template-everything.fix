@@ -5,6 +5,7 @@ Call(IncludeFix("system/system.fix"),
   , ("mplayer", True)
   , ("sylpheed", True)
   , ("libxslt", True)
+  , ("libxml", True)
   , ("docbook", True)
   , ("httpd", True)
   , ("firebird", True)
