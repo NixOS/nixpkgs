@@ -1121,6 +1121,13 @@ rec {
     inherit fetchurl stdenv x11 xineLib libpng;
   };
 
+  RealPlayer = import ../applications/video/RealPlayer {
+    inherit fetchurl stdenv;
+    inherit (gtkLibs) glib pango atk gtk;
+    inherit (xlibs) libX11;
+    libstdcpp5 = gcc33.gcc;
+  };
+
   zapping = (import ../applications/video/zapping) {
     inherit fetchurl stdenv pkgconfig perl python 
             gettext zvbi libjpeg libpng x11
