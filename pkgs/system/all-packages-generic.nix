@@ -383,29 +383,18 @@ rec {
 
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
-    sdf = sdf_22;
+    sdf = sdf_23;
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
     inherit fetchurl stdenv aterm strategoxt hevea;
-    sdf = sdf_22;
+    sdf = sdf_23;
   };
 
   xdoc = (import ../development/tools/documentation/xdoc) {
     inherit fetchurl stdenv aterm strategoxt subversion graphviz;
-    sdf = sdf_22;
+    sdf = sdf_23;
   };
-
-
-  #strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
-  #  inherit fetchsvn stdenv autoconf automake libtool which aterm;
-  #  sdf = sdf_22;
-  #};
-
-  #strategoxtdailydist = (import ../development/compilers/strategoxt/dailydist.nix) {
-  #  inherit fetchurl stdenv aterm;
-  #  sdf = sdf_22;
-  #};
 
   #tiger = (import ../development/compilers/tiger) {
   #  inherit fetchurl stdenv aterm strategoxt;
