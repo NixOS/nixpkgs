@@ -4,6 +4,12 @@ stdenv.mkDerivation {
   name = "svn-export";
   builder = ./builder.sh;
   buildInputs = [subversion nix];
+
+  # Nix <= 0.7 compatibility.
   id = md5;
-  inherit url rev md5;
+
+  outputHashAlgo = "md5";
+  outputHash = md5;
+  
+  inherit url rev;
 }

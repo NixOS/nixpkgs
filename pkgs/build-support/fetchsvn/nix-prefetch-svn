@@ -24,6 +24,15 @@ if test -z "$hash"; then
     # !!! race? should be relatively safe, `svn export' barfs if $tmpPath exists.
     tmpPath1=$storeDir/svn-checkout-tmp-$$
 
+    # Test whether we have write permission in the store.  If not,
+    # fetch to /tmp and don't copy to the store.  This is a hack to
+    # make this script at least work somewhat in setuid installations.
+    if ! touch $tmpPath1 2> /dev/null; then
+        echo "(cannot write to the store, result won't be cached)" >&2
+        dummyMode=1
+        tmpPath1=/tmp/nix-prefetch-svn-$$ # !!! security?
+    fi
+
     # Perform the checkout.
     svn export -r "$rev" "$url" $tmpPath1 >&2
 
@@ -32,9 +41,10 @@ if test -z "$hash"; then
     echo "hash is $hash" >&2
 
     # Rename it so that the fetchsvn builder can find it.
-    tmpPath2=$storeDir/svn-checkout-tmp-$hash
-    test -e $tmpPath2 || mv $tmpPath1 $tmpPath2 # !!! race
-
+    if test "$dummyMode" != 1; then
+        tmpPath2=$storeDir/svn-checkout-tmp-$hash
+        test -e $tmpPath2 || mv $tmpPath1 $tmpPath2 # !!! race
+    fi
 fi
 
 # Create a Nix expression that does a fetchsvn.
@@ -44,12 +54,12 @@ storeExpr=$( \
   | nix-instantiate -)
 
 # Realise it.
-finalPath=$(nix-store -qnB --force-realise $storeExpr)
+finalPath=$(nix-store -r $storeExpr)
 
 echo "path is $finalPath" >&2
 
-if test -n "$tmpPath2"; then
-    rm -rf $tmpPath2 || true
+if test -n "$tmpPath1" -o -n "$tmpPath2"; then
+    rm -rf $tmpPath1 $tmpPath2 || true
 fi
 
 echo $hash

@@ -2,7 +2,7 @@
 
 header "exporting $url (r$rev) into $out"
 
-prefetch=$(dirname $out)/svn-checkout-tmp-$md5
+prefetch=$(dirname $out)/svn-checkout-tmp-$outputHash
 echo $prefetch
 if test -e "$prefetch"; then
     mv $prefetch $out
@@ -11,8 +11,8 @@ else
 fi
 
 actual=$(nix-hash $out)
-if test "$actual" != "$md5"; then
-    echo "hash is $actual, expected $md5" >&2
+if test "$actual" != "$outputHash"; then
+    echo "hash is $actual, expected $outputHash" >&2
     exit 1
 fi
 
