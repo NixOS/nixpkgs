@@ -10,7 +10,11 @@ Function(["nativeTools"],
     , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
     , ("glibc", IncludeFix("glibc/glibc.fix"))
 
-    , ("coreutils", If(Var("nativeTools"), "", IncludeFix("coreutils/coreutils.fix")))
+    , ("tools", If(Var("nativeTools"), 
+        [],
+        [ IncludeFix("coreutils/coreutils.fix")
+        , IncludeFix("gnutar/gnutar.fix")
+        ]))
     ]
   )
 )
