@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "zlib-1.1.4")
+
+  , ("build", Relative("zlib/zlib-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.gzip.org/zlib/zlib-1.1.4.tar.gz")
+      , ("md5", "abc405d0bdd3ee22782d7aa20e440f08")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

@@ -8,5 +8,6 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("zlib", IncludeFix("zlib/zlib.fix"))
   ]
 )
