@@ -34,33 +34,4 @@ include/X11/IntrinsicP.h:202:25: X11/ObjectP.h: No such file or directory
 (moved to include/X11; should edit include/Makefile.am)
 
 
-* Doesn't parse:
-
-{stdenv, fetchurl /* pkgconfig, libX11 */ }:
-
-stdenv.mkDerivation {
-  name = "libXi-6.0.1";
-  src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/libXi-6.0.1.tar.bz2;
-    md5 = "7e935a42428d63a387b3c048be0f2756";
-  };
-/*  buildInputs = [pkgconfig];
-  propagatedBuildInputs = [libX11]; */
-}
-
-
-
 * Add "exit 0" at the end of configure of rte package.
-
-
-* Starting at gcc 3.4, all C programs incur a retained dependency on
-  gcc through the rpath stored in the executable, even though the
-  executable doesn't use against any library in gcc.  The reason is
-  that the gcc passes a `-lgcc_s' switch to the linker.  Solution:
-  patch the linker so that rpaths are only added for libraries that we
-  actually use.
-
-
-* Perl has retained dependencies on gcc, binutils, coreutils, sed.
-
-
