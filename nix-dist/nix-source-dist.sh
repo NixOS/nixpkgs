@@ -14,12 +14,12 @@ echo "autoconfing..."
 autoreconf -i || exit 1
 
 echo "configuring..."
-./configure || exit 1
+./configure \
+ --with-docbook-catalog=$docbook_dtd/xml/dtd/docbook/docbook.cat \
+ --with-docbook-xsl=$docbook_xslt/xml/xsl/docbook \
+ --with-xml-flags="--nonet" || exit 1
 
 echo "building..."
-export DOCBOOK_DTD=$docbook_dtd/xml/dtd/docbook
-export DOCBOOK_XSL=$docbook_xslt/xml/xsl/docbook
-#(cd doc && make) || exit 1
 make distdir || exit 1
 pkgname=$(echo nix-*)
 tar cvfz $pkgname.tar.gz $pkgname || exit 1
