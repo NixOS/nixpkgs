@@ -127,8 +127,8 @@ fi
 # Strip debug information by default.
 if test -z "$NIX_STRIP_DEBUG"; then
     export NIX_STRIP_DEBUG=1
-    export NIX_CFLAGS_STRIP="-g0 -Wl,-s"
-fi    
+    export NIX_CFLAGS_STRIP="-g0 -Wl,--strip-debug"
+fi
 
 
 # Do we know where the store is?  This is required for purity checking.
