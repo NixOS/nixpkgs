@@ -1,0 +1,20 @@
+Nix Packages 0.7
+
+* The bootstrap process for the standard build environment on Linux
+  (stdenv-linux) has been improved.  It is no longer dependent in its
+  initial bootstrap stages on the system Glibc, GCC, and other tools.
+  Rather, Nixpkgs contains a statically linked bash and curl, and uses
+  that to download other statically linked tools.  These are then used
+  to build a Glibc and dynamically linked versions of all other
+  tools.
+
+  This change also makes the bootstrap process faster.  For instance,
+  GCC is built only once, not thrice.
+
+  (Contributed by Armijn Hemel.)
+
+* Many packages have been changed and added, but notably:
+
+  - Qt 3 has been added.
+
+  - Mysql has been added.
