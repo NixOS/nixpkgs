@@ -6,7 +6,7 @@ buildinputs="$autoconf $automake $libxml2 $libxslt"
 echo "copying sources..."
 cp -prd $src/* . || exit 1
 chmod -R u+w . || exit 1
-cp -p $bdbSrc externals/db-4.1.25.tar.gz || exit 1 # !!!
+cp -p $bdbSrc externals/db-4.2.52.tar.gz || exit 1 # !!!
 cp -p $atermSrc externals/aterm-2.0.5.tar.gz || exit 1
 cp -p $sdfSrc externals/sdf2-bundle-1.6.tar.gz || exit 1
 
