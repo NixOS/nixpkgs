@@ -8,8 +8,7 @@
   pkgs.gnutar
   pkgs.gzip
   pkgs.bzip2
-  pkgs.binutils
   pkgs.gnumake
-  pkgs.gcc
   pkgs.bash
+  pkgs.patch
 ]
