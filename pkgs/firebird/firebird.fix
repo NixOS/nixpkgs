@@ -1,0 +1,17 @@
+Package(
+  [ ("name", "firebird-0.6.1")
+
+  , ("build", Relative("firebird/firebird-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://ftp.mozilla.org/pub/firebird/releases/0.6.1/MozillaFirebird-source-0.6.1.tar.bz2")
+      , ("md5", "35191de0d02601f7a190b5065a26de85")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("gtk", IncludeFix("gtk+/gtk+.fix"))
+  , ("libIDL", IncludeFix("libIDL/libIDL.fix"))
+  ]
+)
