@@ -798,7 +798,7 @@ rec {
 
   firefoxWrapper = (import ../applications/networking/browsers/firefox-wrapper) {
     inherit stdenv firefox;
-    plugins = [MPlayerPlugin flashplayer];
+    plugins = [MPlayerPlugin flashplayer blackdown];
   };
 
   flashplayer = (import ../applications/networking/browsers/mozilla-plugins/flashplayer) {
