@@ -1,7 +1,7 @@
 Package(
   [ ("name", "strategoxt-0.9.2")
 
-  , ("build", Relative("strategoxt/strategoxt-build.sh"))
+  , ("build", Relative("strategoxt-0.9.2/strategoxt-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://losser.st-lab.cs.uu.nl/~eelco/mirror/strategoxt-0.9.2-3067.tar.gz")
