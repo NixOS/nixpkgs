@@ -254,11 +254,19 @@
     aterm = aterm_2_0_5;
   };
 
-  pt_support_1_0 = (import ../development/tools/parsing/pt-support/pt-support-1.0.nix) {
+  ptsupport_1_0 = (import ../development/tools/parsing/pt-support/pt-support-1.0.nix) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     aterm = aterm_2_0_5;
     toolbuslib = toolbuslib_0_5_1;
+  };
+
+  sdfsupport_2_0 = (import ../development/tools/parsing/sdf-support/sdf-support-2.0.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm_2_0_5;
+    toolbuslib = toolbuslib_0_5_1;
+    ptsupport = ptsupport_1_0;
   };
 
   sglr_3_10_2 = (import ../development/tools/parsing/sglr/sglr-3.10.2.nix) {
@@ -266,7 +274,36 @@
     stdenv = stdenv;
     aterm = aterm_2_0_5;
     toolbuslib = toolbuslib_0_5_1;
-    ptsupport = pt_support_1_0;
+    ptsupport = ptsupport_1_0;
+  };
+
+  asfsupport_1_2 = (import ../development/tools/parsing/asf-support/asf-support-1.2.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm_2_0_5;
+    ptsupport = ptsupport_1_0;
+  };
+
+  ascsupport_1_8 = (import ../development/tools/parsing/asc-support/asc-support-1.8.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm_2_0_5;
+    toolbuslib = toolbuslib_0_5_1;
+    ptsupport = ptsupport_1_0;
+    asfsupport	= asfsupport_1_2;
+  };
+
+  pgen_2_0 = (import ../development/tools/parsing/pgen/pgen-2.0.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    getopt = getopt;
+    aterm = aterm_2_0_5;
+    toolbuslib = toolbuslib_0_5_1;
+    ptsupport = ptsupport_1_0;
+    asfsupport = asfsupport_1_2;
+    ascsupport = ascsupport_1_8;
+    sdfsupport = sdfsupport_2_0;
+    sglr = sglr_3_10_2;
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
