@@ -34,4 +34,17 @@ include/X11/IntrinsicP.h:202:25: X11/ObjectP.h: No such file or directory
 (moved to include/X11; should edit include/Makefile.am)
 
 
-* Add "exit 0" at the end of configure of rte package.
+* `ld' on Mac OS X barfs if the timestamp on static libraries has
+  changed (which happens if they are installed through a substitute).
+
+  Typical error:
+
+  /usr/bin/ld: table of contents for archive: libATerm.a is out of
+  date; rerun ranlib(1) (can't load from it)
+
+  Solution: patch ld.
+
+  Non-solution: extend NAR file format to include timestamps.  We
+  don't want that because they introduce a source of non-determinism.
+  To catch problems like this one determistically, we should change
+  the timestamp on store objects to 0.
