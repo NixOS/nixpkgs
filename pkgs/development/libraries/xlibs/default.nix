@@ -82,6 +82,10 @@ rec {
     inherit fetchurl stdenv pkgconfig libX11 libXext panoramixext;
   };
 
+  libXp = (import ./libXp) {
+    inherit fetchurl stdenv pkgconfig libX11 libXext libXt;
+  };
+
   xlibs = (import ./xlibs) {
     inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
   };
