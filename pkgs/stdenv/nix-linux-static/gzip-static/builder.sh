@@ -1,4 +1,4 @@
 . $stdenv/setup
  
 mkdir $out
-cp -a bin/* $out
+cp -a $src/* $out
