@@ -6,9 +6,9 @@ envpkgs="$gtk $gtkspell $gnet $libxml"
 
 export LDFLAGS=-s
 
-tar xvfj $src
-cd pan-*
-./configure --prefix=$out
-make
-make install
+tar xvfj $src || exit 1
+cd pan-* || exit 1
+./configure --prefix=$out || exit 1
+make || exit 1
+make install || exit 1
 echo $envpkgs > $out/envpkgs || exit 1
