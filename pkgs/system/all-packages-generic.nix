@@ -277,7 +277,7 @@ rec {
     inherit stdenv;
   };
 
-  gcc_static = (import ../stdenv/nix-linux/gcc-static) {
+  gcc_static = (import ../development/compilers/gcc-static-3.4) {
     inherit fetchurl stdenv;
   };
 
