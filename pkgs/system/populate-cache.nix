@@ -37,6 +37,7 @@ let {
       pkgs.libxml2
       pkgs.libxslt
       pkgs.docbook_xml_dtd
+      pkgs.docbook_xml_ebnf_dtd
       pkgs.docbook_xml_xslt
       pkgs.subversion
       pkgs.pan

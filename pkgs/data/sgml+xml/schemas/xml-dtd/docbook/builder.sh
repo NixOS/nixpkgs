@@ -1,5 +1,5 @@
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-mkdir -p $out/xml/dtd/docbook || exit 1
-cd $out/xml/dtd/docbook || exit 1
-$unzip/bin/unzip $src || exit 1
+mkdir -p $out/xml/dtd/docbook
+cd $out/xml/dtd/docbook
+unpackFile $src

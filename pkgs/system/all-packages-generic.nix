@@ -526,6 +526,10 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
+  docbook_xml_ebnf_dtd = (import ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf) {
+    inherit fetchurl stdenv unzip;
+  };
+
   docbook_xml_xslt = (import ../data/sgml+xml/stylesheets/xslt/docbook) {
     inherit fetchurl stdenv;
   };
