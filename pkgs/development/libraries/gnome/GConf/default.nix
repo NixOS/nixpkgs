@@ -2,7 +2,7 @@
 
 assert !isNull pkgconfig && !isNull perl
   && !isNull glib && !isNull gtk
-  && !isNull libxml2 && !isNull ORBit && !isNull popt;
+  && !isNull libxml2 && !isNull ORBit2 && !isNull popt;
 
 derivation {
   name = "GConf-2.4.0.1";
