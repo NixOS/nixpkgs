@@ -11,7 +11,7 @@ rec {
     args = [ ./scripts/curl-unpack ];
   };
 
-  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null, extra3 ? null, patchelf ? null}: derivation {
+  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null, extra3 ? null, extra4? null, patchelf ? null}: derivation {
     name = pkgname;
     builder = ./bash-static/bash;
     tar = ./gnutar-static/bin/tar;
@@ -20,7 +20,7 @@ rec {
     cp = ./tools/cp;
     system = "i686-linux";
     args = [ ./scripts/download-script ];
-    inherit postprocess extra extra2 extra3 patchelf;
+    inherit postprocess extra extra2 extra3 extra4 patchelf;
   };
 
 /*
@@ -71,6 +71,7 @@ rec {
     pkgname = "glibc";
     patchelf = ./patchelf-static/patchelf;
     extra3 = findutils;
+    extra4 = gnused;
     postprocess = ./scripts/add-symlink.sh;
     extra = linuxHeaders;
     extra2 = coreutils;
