@@ -254,12 +254,12 @@ rec {
 
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
-    sdf = sdf2_bundle;
+    sdf = sdf_22;
   };
 
   strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
     inherit fetchsvn stdenv autoconf automake libtool which aterm;
-    sdf = sdf2_bundle;
+    sdf = sdf_22;
   };
 
   strategoxtdailydist = (import ../development/compilers/strategoxt/dailydist.nix) {
@@ -269,7 +269,7 @@ rec {
 
   tiger = (import ../development/compilers/tiger) {
     inherit fetchurl stdenv aterm strategoxt;
-    sdf = sdf2_bundle;
+    sdf = sdf_22;
   };
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
