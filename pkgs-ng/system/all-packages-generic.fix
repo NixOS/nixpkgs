@@ -59,6 +59,11 @@
     stdenv = stdenv;
   };
 
+  wget = (import ../tools/networking/wget) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
 
   ### SHELLS
 
