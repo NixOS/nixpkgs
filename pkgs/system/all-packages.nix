@@ -11,7 +11,7 @@
 
   # Select the right instantiation.
   body =
-    if system == "i686-linux"
-    then stdenvs.stdenvLinuxPkgs
-    else (stdenvs.stdenvNixPkgs);
+    if system == "i686-linux" then stdenvs.stdenvLinuxPkgs
+    else if system == "powerpc-darwin7.3.0" then stdenvs.stdenvDarwinPkgs
+    else stdenvs.stdenvNativePkgs;
 }

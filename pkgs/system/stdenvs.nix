@@ -133,4 +133,18 @@
   # On the other hand, a validating build of glibc is a good idea (it
   # probably won't work right now due to --rpath madness).
 
+
+  # Darwin (Mac OS X) standard environment.  Very simple for now
+  # (essentially it's just the native environment).
+  stdenvDarwin = (import ../stdenv/darwin) {
+    stdenv = stdenvInitial;
+    inherit genericStdenv gccWrapper;
+  };
+
+  stdenvDarwinPkgs = allPackages {
+    stdenv = stdenvDarwin;
+    bootCurl = null;
+    noSysDirs = false;
+  };
+
 }
