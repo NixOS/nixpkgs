@@ -17,4 +17,5 @@ stdenv.mkDerivation {
   };
   buildInputs = [pkgconfig perl libtiff libjpeg libpng];
   propagatedBuildInputs = [x11 glib atk pango];
+  inherit libtiff libjpeg libpng;
 }

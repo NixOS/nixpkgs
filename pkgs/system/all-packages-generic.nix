@@ -588,10 +588,6 @@ rec {
     inherit fetchurl stdenv pkgconfig xproto libX11;
   };
 
-  libXpmdist = (import ../development/libraries/freedesktop/libXpm/make-dist.nix) {
-    inherit stdenv pkgconfig autoconf automake libtool xproto libX11;
-  };
-
   libXaw = (import ../development/libraries/freedesktop/libXaw) {
     inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXmu libXpm;
   };
