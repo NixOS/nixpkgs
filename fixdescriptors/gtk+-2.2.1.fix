@@ -1,0 +1,13 @@
+Descr(
+  [ Bind("pkgId", Str("gtk+-2.2.1"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+  , Bind("glib", Pkg(Fix("./glib-2.2.1.fix")))
+  , Bind("atk", Pkg(Fix("./atk-1.2.0.fix")))
+  , Bind("pango", Pkg(Fix("./pango-1.2.1.fix")))
+
+  , Bind("src", File(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.1.tar.bz2")))
+  , Bind("build", File(Local("../build/gtk+-build.sh")))
+  ]
+)

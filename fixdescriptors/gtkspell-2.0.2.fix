@@ -1,0 +1,15 @@
+Descr(
+  [ Bind("pkgId", Str("gtkspell-2.0.2"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+  , Bind("glib", Pkg(Fix("./glib-2.2.1.fix")))
+  , Bind("atk", Pkg(Fix("./atk-1.2.0.fix")))
+  , Bind("pango", Pkg(Fix("./pango-1.2.1.fix")))
+  , Bind("gtk", Pkg(Fix("./gtk+-2.2.1.fix")))
+  , Bind("pspell", Pkg(Fix("./pspell-.12.2.fix")))
+
+  , Bind("src", File(Url("http://pan.rebelbase.com/download/extras/gtkspell/SOURCES/gtkspell-2.0.2.tar.gz")))
+  , Bind("build", File(Local("../build/gtkspell-build.sh")))
+  ]
+)

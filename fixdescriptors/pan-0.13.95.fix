@@ -1,0 +1,17 @@
+Descr(
+  [ Bind("pkgId", Str("pan-0.13.95"))
+  , Bind("releaseId", Str("2"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+  , Bind("glib", Pkg(Fix("./glib-2.2.1.fix")))
+  , Bind("atk", Pkg(Fix("./atk-1.2.0.fix")))
+  , Bind("pango", Pkg(Fix("./pango-1.2.1.fix")))
+  , Bind("gtk", Pkg(Fix("./gtk+-2.2.1.fix")))
+  , Bind("gnet", Pkg(Fix("./gnet-1.1.8.fix")))
+  , Bind("pspell", Pkg(Fix("./pspell-.12.2.fix")))
+  , Bind("gtkspell", Pkg(Fix("./gtkspell-2.0.2.fix")))
+
+  , Bind("src", File(Url("http://pan.rebelbase.com/download/releases/0.13.95/SOURCE/pan-0.13.95.tar.bz2")))
+  , Bind("build", File(Local("../build/pan-build-2.sh")))
+  ]
+)

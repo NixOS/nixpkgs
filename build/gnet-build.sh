@@ -5,10 +5,10 @@ export PKG_CONFIG_PATH=$glib/lib/pkgconfig
 export LD_LIBRARY_PATH=$glib/lib
 
 top=`pwd`
-tar xvfz $src
-cd gnet-*
-./configure --prefix=$top
-make
-make install
-cd ..
-rm -rf gnet-*
+tar xvfz $src || exit 1
+cd gnet-* || exit 1
+./configure --prefix=$top || exit 1
+make || exit 1
+make install || exit 1
+cd $top || exit 1
+rm -rf gnet-* || exit 1

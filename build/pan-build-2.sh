@@ -11,10 +11,10 @@ export LIBRARY_PATH=$pspell/lib
 export LDFLAGS=-s
 
 top=`pwd`
-tar xvfj $src
-cd pan-*
-./configure --prefix=$top
-make
-make install
-cd ..
-rm -rf pan-*
+tar xvfj $src || exit 1
+cd pan-* || exit 1
+./configure --prefix=$top || exit 1
+make || exit 1
+make install || exit 1
+cd $top || exit 1
+rm -rf pan-* || exit 1

@@ -1,0 +1,11 @@
+Descr(
+  [ Bind("pkgId", Str("gnet-1.1.8"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+  , Bind("glib", Pkg(Fix("./glib-2.2.1.fix")))
+
+  , Bind("src", File(Url("http://www.gnetlibrary.org/src/gnet-1.1.8.tar.gz")))
+  , Bind("build", File(Local("../build/gnet-build.sh")))
+  ]
+)

@@ -6,10 +6,10 @@ export LD_LIBRARY_PATH=$glib/lib:$atk/lib:$pango/lib:$gtk/lib:$pspell/lib
 export C_INCLUDE_PATH=$pspell/include
 
 top=`pwd`
-tar xvfz $src
-cd gtkspell-*
-./configure --prefix=$top
-make
-make install
-cd ..
-rm -rf gtkspell-*
+tar xvfz $src || exit 1
+cd gtkspell-* || exit 1
+./configure --prefix=$top || exit 1
+make || exit 1
+make install || exit 1
+cd $top || exit 1
+rm -rf gtkspell-* || exit 1

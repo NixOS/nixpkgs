@@ -1,0 +1,11 @@
+Descr(
+  [ Bind("pkgId", Str("pango-1.2.1"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+  , Bind("glib", Pkg(Fix("./glib-2.2.1.fix")))
+
+  , Bind("src", File(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.1.tar.bz2")))
+  , Bind("build", File(Local("../build/pango-build.sh")))
+  ]
+)
