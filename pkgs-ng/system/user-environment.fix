@@ -13,6 +13,7 @@
   selectedPkgs = [
     pkgs.aterm
     pkgs.subversion
+    pkgs.xfree86
   ];
 
   # Create a user environment.

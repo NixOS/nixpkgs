@@ -85,6 +85,23 @@
     stdenv = stdenv;
   };
 
+  gnum4 = (import ../development/tools/misc/gnum4) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  bison = (import ../development/tools/parsing/bison) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    m4 = gnum4;
+  };
+
+  flex = (import ../development/tools/parsing/flex) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    yacc = bison;
+  };
+
   gcc = (import ../development/compilers/gcc) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -140,6 +157,15 @@
     openssl = openssl;
     db4 = db4;
     expat = expat;
+  };
+
+  xfree86 = (import ../servers/x11/xfree86) {
+    buildServer = false;
+    buildClientLibs = true;
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    flex = flex;
+    bison = bison;
   };
 
 
