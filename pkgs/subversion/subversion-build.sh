@@ -1,10 +1,9 @@
 #! /bin/sh
 
-export PATH=$libxml/bin:/bin:/usr/bin:/usr/local/bin
-envpkgs="$ssl $db4 $httpd $swig"
-. $setenv
+. $stdenv/setup || exit 1
 
-export LDFLAGS=-s
+envpkgs="$ssl $db4 $httpd $swig $libxml"
+. $setenv
 
 if test $localServer; then
     extraflags="--with-berkeley-db=$db4 $extraflags"
@@ -27,7 +26,7 @@ echo "extra flags: $extraflags"
 
 tar xvfz $src || exit 1
 cd subversion-* || exit 1
-./configure --prefix=$out $extraflags || exit 1
+LDFLAGS=-Wl,-S ./configure --prefix=$out $extraflags || exit 1
 make $extramakeflags || exit 1
 make install $extramakeflags || exit 1
 

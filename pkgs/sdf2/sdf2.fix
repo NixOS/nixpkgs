@@ -8,6 +8,7 @@ Package(
       , ("md5", "283be0b4c7c9575c1b5cc735316e6192")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("aterm", IncludeFix("aterm/aterm.fix"))
   ]
 )

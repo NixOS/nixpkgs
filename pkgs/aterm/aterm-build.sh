@@ -1,6 +1,6 @@
 #! /bin/sh
 
-. $stdenv/setup  || exit 1
+. $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd aterm-* || exit 1

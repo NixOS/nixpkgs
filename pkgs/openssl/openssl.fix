@@ -1,9 +1,12 @@
 Package(
   [ ("name", "openssl-0.9.7b")
   , ("build", Relative("openssl/openssl-build.sh"))
+
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www.openssl.org/source/openssl-0.9.7b.tar.gz")
       , ("md5", "fae4bec090fa78e20f09d76d55b6ccff")
       ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   ]
 )

@@ -1,15 +1,17 @@
 Package(
-  [ ("name", "subversion-0.25.0")
+  [ ("name", "subversion-0.26.0")
 
   , ("build", Relative("subversion/subversion-build.sh"))
   , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://subversion.tigris.org/files/documents/15/5110/subversion-0.25.tar.gz")
-      , ("md5", "a018220d5c790161bc712ccb7d0f1b38")
+      [ ("url", "http://subversion.tigris.org/files/documents/15/5322/subversion-0.26.0.tar.gz")
+      , ("md5", "700caa3f59b585d173812c4a078feeba")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("httpsClient", "1")
   , ("ssl", IncludeFix("openssl/openssl.fix"))
+  , ("libxml", IncludeFix("libxml2/libxml2.fix"))
   ]
 )
