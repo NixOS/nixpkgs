@@ -185,6 +185,8 @@ startLog() {
         ensureDir $logDir
         exec 3>&1
         if test "$dontLogThroughTee" != 1; then
+            # Put this in an `eval' so that non-bash shells (or bash
+            # invoked as `sh') won't choke on parsing this file.
             eval "exec > >(tee $logDir/$logFile) 2>&1"
         else
             exec > $logDir/$logFile 2>&1
@@ -227,11 +229,8 @@ unpackFile() {
         *.zip) cmd="unzip $file";;
         *)
             if test -d "$file"; then
-                # Copy directories and add write permission (this is
-                # because such directories are usually in the store
-                # and are this read-only).
                 stripHash $file
-                cmd="cp -prvd $file $strippedName && chmod -R +w $strippedName"
+                cmd="cp -prvd $file $strippedName"
             else
                 if test -n "$findUnpacker"; then
                     $findUnpacker $1;
@@ -310,6 +309,13 @@ unpackW() {
 
     echo "source root is $sourceRoot"
 
+    # By default, add write permission to the sources.  This is often
+    # necessary when sources have been copied from other store
+    # locations.
+    if test "dontMakeSourcesWritable" != 1; then
+        chmod -R +w $sourceRoot
+    fi
+    
     if test -n "$postUnpack"; then
         $postUnpack
     fi
