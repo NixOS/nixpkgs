@@ -868,6 +868,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  cua = (import ../applications/editors/emacs/modes/cua) {
+    inherit fetchurl stdenv;
+  };
+
   vim = (import ../applications/editors/vim) {
     inherit fetchurl stdenv ncurses;
   };
