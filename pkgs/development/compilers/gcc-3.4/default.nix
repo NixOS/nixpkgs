@@ -6,11 +6,11 @@
 assert langC;
 
 stdenv.mkDerivation {
-  name = "gcc-3.4.1";
+  name = "gcc-3.4.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-3.4.1/gcc-3.4.1.tar.bz2;
-    md5 = "31b459062499f9f68d451db9cbf3205c";
+    url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-3.4.2/gcc-3.4.2.tar.bz2;
+    md5 = "2fada3a3effd2fd791df09df1f1534b3";
   };
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch];
