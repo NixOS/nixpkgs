@@ -4,7 +4,7 @@ export PATH=/bin:/usr/bin
 
 mkdir $out || exit 1
 
-p='$PATH:/usr/local/bin:/usr/bin:/bin'
+p='/usr/local/bin:/usr/bin:/bin'
 
 cc=/usr/bin/gcc
 cxx=/usr/bin/g++

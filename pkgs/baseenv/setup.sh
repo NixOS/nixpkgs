@@ -1,5 +1,5 @@
 # Add the directory containing the GCC wrappers to the PATH.
-export PATH=@OUT@/bin
+export PATH=@OUT@/bin:$PATH
 
 # Recursively add all envpkgs to the relevant environment variables.
 addtoenv()

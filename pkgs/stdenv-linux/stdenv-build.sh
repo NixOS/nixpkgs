@@ -14,7 +14,6 @@ for i in $tools; do
     fi
     p=$p$i/bin
 done
-p=$p':$PATH'
 
 cc=$gcc/bin/gcc
 cxx=$gcc/bin/g++
