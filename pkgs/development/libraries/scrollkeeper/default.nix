@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "scrollkeeper-0.3.14";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/scrollkeeper/scrollkeeper-0.3.14.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/scrollkeeper-0.3.14.tar.gz;
     md5 = "161eb3f29e30e7b24f84eb93ac696155";
   };
   buildInputs = [perl libxml2 libxslt];

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
  
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/less/less-382.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/less-382.tar.gz;
     md5 = "103fe4aef6297b93f0f73f38cc3b1bd7";
   };
  

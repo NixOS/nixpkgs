@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 #  builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://mirrors.sunsite.dk/mysql/Downloads/MySQL-4.1/mysql-4.1.9.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/mysql-4.1.9.tar.gz;
     md5 = "7bc44befe155d619c4e4705f68874278";
   };
 

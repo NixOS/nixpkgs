@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "vlc-0.7.2";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.7.2/vlc-0.7.2.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/vlc-0.7.2.tar.gz;
     md5 = "25dfcc804cb92f46c0b64ce1466515cc";
   };
 

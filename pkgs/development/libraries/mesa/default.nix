@@ -6,11 +6,11 @@ stdenv.mkDerivation {
   name = "mesa-6.0.1";
   srcs = [
     (fetchurl {
-      url = http://heanet.dl.sourceforge.net/sourceforge/mesa3d/MesaLib-6.0.1.tar.bz2;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/MesaLib-6.0.1.tar.bz2;
       md5 = "b7f14088c5c2f14490d2739a91102112";
     })
     (fetchurl {
-      url = http://heanet.dl.sourceforge.net/sourceforge/mesa3d/MesaDemos-6.0.1.tar.bz2;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/MesaDemos-6.0.1.tar.bz2;
       md5 = "dd6aadfd9ca8e1cfa90c6ee492bc6f43";
     })
   ];

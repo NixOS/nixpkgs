@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "SDL-1.2.7";
   src = fetchurl {
-    url = http://www.libsdl.org/release/SDL-1.2.7.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/SDL-1.2.7.tar.gz;
     md5 = "d29b34b6ba3ed213893fc9d8d35e357a";
   };
   buildInputs = [x11];

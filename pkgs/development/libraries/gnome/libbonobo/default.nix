@@ -6,7 +6,7 @@ assert pkgconfig != null && perl != null && ORBit2 != null
 stdenv.mkDerivation {
   name = "libbonobo-2.4.2";
   src = fetchurl {
-    url = ftp://ftp.gnome.org/pub/gnome/sources/libbonobo/2.4/libbonobo-2.4.2.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libbonobo-2.4.2.tar.bz2;
     md5 = "78200cc6ed588c93f0d29177a5f3e003";
   };
   buildInputs = [pkgconfig perl libxml2 yacc flex];

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "wxGTK-2.4.2";
 
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/wxwindows/wxGTK-2.4.2.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/wxGTK-2.4.2.tar.bz2;
     md5 = "cdadfe82fc93f8a65a2ae18a95b0b0e3";
   };
 

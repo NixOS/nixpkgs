@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "wxPython-2.5.2.8";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/wxpython/wxPythonSrc-2.5.2.8.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/wxPythonSrc-2.5.2.8.tar.gz;
     md5 = "573fd376fd39b66ad5fbf44b487aa0b2";
   };
   buildInputs = [pkgconfig wxGTK (wxGTK.gtk) python];

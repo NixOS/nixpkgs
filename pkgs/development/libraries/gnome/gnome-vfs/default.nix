@@ -8,7 +8,7 @@ assert pkgconfig != null && perl != null && glib != null
 stdenv.mkDerivation {
   name = "gnome-vfs-2.4.2";
   src = fetchurl {
-    url = ftp://ftp.gnome.org/pub/gnome/sources/gnome-vfs/2.4/gnome-vfs-2.4.2.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gnome-vfs-2.4.2.tar.bz2;
     md5 = "a0f0e40739214143bbf3050311ff10cd";
   };
   buildInputs = [

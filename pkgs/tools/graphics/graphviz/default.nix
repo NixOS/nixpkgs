@@ -6,9 +6,7 @@ stdenv.mkDerivation {
   name = "graphviz-1.12";
 
   src = fetchurl {
-#    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-1.10.tar.gz;
-#    md5 = "e1402531abff68d146bf94e72b44dc2a";
-    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-1.12.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/graphviz-1.12.tar.gz;
     md5 = "a5c004c42f58c957f772060d0889059c";
   };
 

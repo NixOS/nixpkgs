@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://sylpheed.good-day.net/sylpheed/sylpheed-1.0.0.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/sylpheed-1.0.0.tar.bz2;
     md5 = "864c4fc581a5ab1c7af5e06153c76769";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://archive.apache.org/dist/httpd/httpd-2.0.52.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/httpd-2.0.52.tar.bz2;
     md5 = "0e1b47c53921a1fc8fb006effdb3bf1c";
   };
 

@@ -6,7 +6,7 @@
 (stdenv.mkDerivation {
   name = "libXft-2.1.6";
   src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/libXft-2.1.6.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libXft-2.1.6.tar.bz2;
     md5 = "ba10c9c3f4758f304f04f8d48e2f81a4";
   };
   buildInputs = [pkgconfig];

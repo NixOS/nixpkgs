@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   name = "xine-lib-1.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/xine/xine-lib-1.0.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/xine-lib-1.0.tar.gz;
     md5 = "96e5195c366064e7778af44c3e71f43a";
   };
   buildInputs = [

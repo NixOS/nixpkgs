@@ -7,7 +7,7 @@
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.eunet.ie/mirrors/ftp.mozilla.org/firefox/releases/1.0/source/firefox-1.0-source.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/firefox-1.0-source.tar.bz2;
     md5 = "49c16a71f4de014ea471be81e46b1da8";
   };
 

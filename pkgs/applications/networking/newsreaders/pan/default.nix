@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "pan-0.14.2.91";
 
   src = fetchurl {
-    url = http://pan.rebelbase.com/download/releases/0.14.2.91/SOURCE/pan-0.14.2.91.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/pan-0.14.2.91.tar.bz2;
     md5 = "4770d899a1c1ba968ce96bc5aeb07b62";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://sunsite.rediris.es/mirror/Qt/source/qt-x11-free-3.3.3.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/qt-x11-free-3.3.3.tar.bz2;
     md5 = "3e0a0c8429b0a974b39b5f535ddff01c";
   };
 

@@ -6,7 +6,7 @@ assert pkgconfig != null && libgnome != null && libgnomecanvas != null
 stdenv.mkDerivation {
   name = "libgnomeui-2.4.0.1";
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/desktop/2.4/2.4.1/sources/libgnomeui-2.4.0.1.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libgnomeui-2.4.0.1.tar.bz2;
     md5 = "196f4a3f1f4a531ff57acaa879e98dd2";
   };
   buildInputs = [pkgconfig libglade];

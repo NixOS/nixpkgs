@@ -12,15 +12,15 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   hostdef = ./host.def;
   src1 = fetchurl {
-    url = ftp://gnu.kookel.org/pub/XFree86/4.3.0/source/X430src-1.tgz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/X430src-1.tgz;
     md5 = "4f241a4f867363f40efa2b00dca292af";
   };
   src2 = fetchurl {
-    url = ftp://gnu.kookel.org/pub/XFree86/4.3.0/source/X430src-2.tgz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/X430src-2.tgz;
     md5 = "844c2ee908d21dbf8911fd13115bf8b4";
   };
   src3 = fetchurl {
-    url = ftp://gnu.kookel.org/pub/XFree86/4.3.0/source/X430src-3.tgz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/X430src-3.tgz;
     md5 = "b82a0443e1b7bf860e4343e6b6766cb6";
   };
 

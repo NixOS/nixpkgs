@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libXmu-6.2.3";
   src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/libXmu-6.2.3.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libXmu-6.2.3.tar.bz2;
     md5 = "7671745bd8a1b0595847541479a327d6";
   };
   buildInputs = [pkgconfig];

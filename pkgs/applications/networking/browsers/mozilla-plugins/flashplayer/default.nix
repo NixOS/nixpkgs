@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://fpdownload.macromedia.com/get/shockwave/flash/english/linux/7.0r25/install_flash_player_7_linux.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/install_flash_player_7_linux.tar.gz;
     md5 = "79c59a5ea29347e01c8e6575dd054cd1";
   };
 

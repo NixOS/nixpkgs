@@ -6,7 +6,7 @@ assert g77.langF77;
 stdenv.mkDerivation {
   name = "octave-2.1.64";
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-2.1.64.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/octave-2.1.64.tar.bz2;
     md5 = "01ec8b13bd850123b190129be93adc1f";
   };
   buildInputs = [g77 readline ncurses perl];

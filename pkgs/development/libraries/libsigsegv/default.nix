@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libsigsegv-2.1";
   src = fetchurl {
-    url = ftp://ftp.gnu.org/pub/gnu/libsigsegv/libsigsegv-2.1.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libsigsegv-2.1.tar.gz;
     md5 = "6d75ca3fede5fbfd72a78bc918d9e174";
   };
 }

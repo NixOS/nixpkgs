@@ -5,11 +5,11 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://ftp.gnu.org/pub/gnu/glibc/glibc-2.3.3.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/glibc-2.3.3.tar.bz2;
     md5 = "e825807b98042f807799ccc9dd96d31b";
   };
   linuxthreadsSrc = fetchurl {
-    url = http://ftp.gnu.org/pub/gnu/glibc/glibc-linuxthreads-2.3.3.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/glibc-linuxthreads-2.3.3.tar.bz2;
     md5 = "8149ea62922e75bd692bc3b92e5e766b";
   };
 
