@@ -606,11 +606,6 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  scrollkeeper = (import ../development/libraries/scrollkeeper) {
-    inherit fetchurl stdenv perl libxml2 libxslt
-            docbook_xml_dtd_42 perlXMLParser;
-  };
-
   gtkLibs = gtkLibs26;
 
   gtkLibs26 = import ../development/libraries/gtk-libs-2.6 {
@@ -640,12 +635,17 @@ rec {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
               libgnomecanvas libgnomeui libgnomeprint 
-              libgnomeprintui gconf;
+              libgnomeprintui gconf gnomepanel;
   };
 
   gtksourceviewsharp = import ../development/libraries/gtksourceview-sharp {
     inherit fetchurl stdenv mono pkgconfig gtksharp monoDLLFixer;
     inherit (gnome) gtksourceview;
+  };
+
+  geckosharp = import ../development/libraries/gecko-sharp {
+    inherit fetchurl stdenv mono pkgconfig gtksharp monoDLLFixer;
+    inherit (gnome) gtk;
   };
 
   audiofile = (import ../development/libraries/audiofile) {
@@ -654,9 +654,10 @@ rec {
 
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt perl zlib libxml2 bzip2
-            perlXMLParser gettext perl x11
+            flex bison popt perl zlib libxml2 libxslt bzip2
+            perlXMLParser docbook_xml_dtd_42 gettext perl x11
             libtiff libjpeg libpng gtkLibs;
+    inherit (xlibs) libXmu;
   };
 
   wxGTK = (import ../development/libraries/wxGTK-2.5) {
@@ -1089,9 +1090,9 @@ rec {
 
   zapping = (import ../applications/video/zapping) {
     inherit fetchurl stdenv pkgconfig perl python 
-            scrollkeeper gettext zvbi libjpeg libpng x11
+            gettext zvbi libjpeg libpng x11
             rte perlXMLParser;
-    inherit (gnome) libgnomeui libglade esound;
+    inherit (gnome) scrollkeeper libgnomeui libglade esound;
     inherit (xlibs) libXv libXmu libXext;
     teletextSupport = true;
     jpegSupport = true;
@@ -1128,8 +1129,8 @@ rec {
 
   monodevelop = (import ../applications/editors/monodevelop) {
     inherit fetchurl stdenv mono gtksharp gtksourceviewsharp
-              perl perlXMLParser pkgconfig;
-    inherit (gnome) gnomevfs libbonobo gconf glib;
+              geckosharp monodoc perl perlXMLParser pkgconfig;
+    inherit (gnome) gnomevfs libbonobo libglade gconf glib gtk;
   };
 
   monodoc = (import ../applications/editors/monodoc) {
