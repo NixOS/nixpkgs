@@ -10,7 +10,7 @@ export JAVACMD=$j2sdk/bin/java
 export ANT_OPTS=""
 export ANT_ARGS=""
 
-$ant/bin/core-ant
+$ant/bin/core-ant \$@
 EOF
 
 chmod a+x $out/bin/ant || exit 1
