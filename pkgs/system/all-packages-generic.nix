@@ -183,7 +183,8 @@ rec {
   };
 
   mjpegtools = (import ../tools/video/mjpegtools) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libjpeg;
+    inherit (xlibs) libX11;
   };
  
   ### SHELLS
