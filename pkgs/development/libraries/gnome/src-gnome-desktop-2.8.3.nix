@@ -39,4 +39,37 @@
       md5 = "2e59c8748594181d4bf452320c8c3b5c";
     };
   };
+
+  scrollkeeper = {
+    name = "scrollkeeper-0.3.14";
+    src = fetchurl {
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/scrollkeeper-0.3.14.tar.gz;
+      md5 = "161eb3f29e30e7b24f84eb93ac696155";
+    };
+  };
+  
+  gnomedesktop = {
+    name = "gnome-desktop-2.8.3";
+    src = fetchurl {
+      url = http://ftp.gnome.org/pub/GNOME/desktop/2.8/2.8.3/sources/gnome-desktop-2.8.3.tar.bz2;
+      md5 = "607f8689f931336ad9a1f3f41d98a9c7";
+    };
+  };
+  
+  libwnck = {
+    name = "libwnck-2.8.1";
+    src = fetchurl {
+      url = http://ftp.gnome.org/pub/GNOME/desktop/2.8/2.8.3/sources/libwnck-2.8.1.tar.bz2;
+      md5 = "c0a5a8478064287e167c15e3ec0e82a1";
+    };
+  };
+  
+  gnomepanel = {
+    name = "gnome-panel-2.8.3";
+    src = fetchurl {
+      url = http://ftp.gnome.org/pub/GNOME/desktop/2.8/2.8.3/sources/gnome-panel-2.8.3.tar.bz2;
+      md5 = "d76a09c321e02c18e0fdecb86677550d";
+    };
+  };
+  
 }

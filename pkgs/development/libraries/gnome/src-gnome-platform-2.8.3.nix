@@ -168,4 +168,13 @@
       md5 = "6c732bbc5fba5a0f1f8086e8aa4f490d";
     };
   };
+
+  intltool = {
+    name = "intltool-0.33";
+    src = fetchurl {
+      url = http://ftp.gnome.org/pub/GNOME/platform/2.8/2.8.3/sources/intltool-0.33.tar.bz2;
+      md5 = "7d3b6d421b0fb9beee7faf97daab45e6";
+    };
+  };
+  
 }

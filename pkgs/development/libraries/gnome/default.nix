@@ -1,9 +1,9 @@
 # todo audiofile is also part of the gnome platform. Move it to this collection?
 
 { stdenv, fetchurl, pkgconfig, audiofile
-, flex, bison, popt, perl, zlib, libxml2, bzip2
-, perlXMLParser, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs
+, flex, bison, popt, perl, zlib, libxml2, libxslt, bzip2
+, perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
+, libpng, gtkLibs, libXmu
 }:
 
 rec {
@@ -115,6 +115,12 @@ rec {
     input = platform.libgnomeui;
   };
 
+  intltool = (import ./intltool) {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser;
+    input = platform.intltool;
+  };
+
+
   # Desktop
 
   desktop = (import ./src-gnome-desktop-2.8.3.nix) {
@@ -148,4 +154,29 @@ rec {
             gconf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
     input = desktop.gtksourceview;
   };
+
+  scrollkeeper = (import ./scrollkeeper) {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser
+            libxml2 libxslt docbook_xml_dtd_42;
+    input = desktop.scrollkeeper;
+  };
+
+  gnomedesktop = (import ./gnome-desktop) {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gtk
+            libgnomeui scrollkeeper libjpeg;
+    input = desktop.gnomedesktop;
+  };
+
+  libwnck = (import ./libwnck) {
+    inherit fetchurl stdenv pkgconfig gtk;
+    input = desktop.libwnck;
+  };
+
+  gnomepanel = (import ./gnome-panel) {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gtk ORBit2
+            libgnome libgnomeui gnomedesktop libglade libwnck
+            libjpeg libpng scrollkeeper libXmu;
+    input = desktop.gnomepanel;
+  };
+  
 }
