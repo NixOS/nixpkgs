@@ -1,17 +1,14 @@
 {stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL, libXi}:
 
-assert pkgconfig != null && gtk != null && perl != null
-  && zip != null && libIDL != null;
-
 # !!! assert libIDL.glib == gtk.glib;
 
 stdenv.mkDerivation {
-  name = "firefox-1.0pre-PR";
+  name = "firefox-1.0pre-PR-0.10.1";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.artfiles.org/mozilla.org/firefox/releases/0.10/firefox-1.0PR-source.tar.bz2;
-    md5 = "b81ebc5f01448313add23ed44c47cf5e";
+    url = ftp://ftp.eunet.ie/mirrors/ftp.mozilla.org/firefox/releases/0.10.1/firefox-1.0PR-source.tar.bz2;
+    md5 = "ff9eae3b90b8573bf44293ea44bf3c50";
   };
 
   buildInputs = [pkgconfig gtk perl zip libIDL libXi];
