@@ -7,7 +7,7 @@ preConfigure() {
     # Patch some of the configure files a bit to get of global paths.
     # (Buildings using stuff in those paths will fail anyway, but it
     # will cause ./configure misdetections).
-    for i in config.tests/x11/*.test mkspecs/*/qmake.conf; do
+    for i in config.tests/*/*.test mkspecs/*/qmake.conf; do
         echo "patching $i..."
         sed < $i > $i.tmp \
             -e 's^ /lib^ /FOO^g' \
