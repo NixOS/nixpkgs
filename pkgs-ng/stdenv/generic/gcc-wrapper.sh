@@ -24,10 +24,10 @@ extra=($NIX_CFLAGS_COMPILE)
 if test "$justcompile" != "1"; then
     extra=(${extra[@]} $NIX_CFLAGS_LINK)
     for i in $NIX_LDFLAGS; do
-	extra=(${extra[@]} "-Wl,$i")
+        extra=(${extra[@]} "-Wl,$i")
     done
     if test "$NIX_STRIP_DEBUG" == "1"; then
-	extra=(${extra[@]} -g0 -Wl,-s)
+        extra=(${extra[@]} -g0 -Wl,-s)
     fi
 fi
 

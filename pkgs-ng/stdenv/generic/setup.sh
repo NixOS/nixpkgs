@@ -52,7 +52,9 @@ for i in $oldbuildinputs; do
 done
 
 # Add the output as an rpath.
-export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+if test "$NIX_NO_SELF_RPATH" != "1"; then
+    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+fi
 
 # Strip debug information by default.
 export NIX_STRIP_DEBUG=1

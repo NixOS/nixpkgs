@@ -87,9 +87,23 @@
       , stdenv = stdenv
       }
 
+  # devel/libs/glibc
+  , glibc = (import ../devel/libs/glibc)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      , kernelHeaders = kernelHeaders
+      }
+
   # devel/libs/aterm
   , aterm = (import ../devel/libs/aterm)
       { fetchurl = fetchurl
       , stdenv = stdenv
       }
+
+  # os-specific/linux/kernel-headers
+  , kernelHeaders = (import ../os-specific/linux/kernel-headers)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
   }
