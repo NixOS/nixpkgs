@@ -739,11 +739,10 @@ rec {
     ant = apacheAntBlackdown14;
   };
 
-  /*
-  mysql = (import ../servers/sql/mysql) {
-    inherit fetchurl stdenv;
+  mysql = import ../servers/sql/mysql {
+    inherit fetchurl stdenv ncurses zlib perl;
+    ps = procps; /* !!! Linux only */
   };
-  */
 
   jetty = (import ../servers/http/jetty) {
     inherit fetchurl stdenv;
