@@ -763,7 +763,7 @@ rec {
           inherit (gtkLibs) gtk;
           inherit (gnome) libIDL;
         };
-      files = ["bin/thunderbird"];
+      files = ["bin/thunderbird" "lib/thunderbird-0.8/icons"];
       inherit stdenv;
     };
 
