@@ -444,6 +444,14 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  dylan = (import ../development/compilers/gwydion-dylan) {
+    inherit fetchurl stdenv perl boehmgc yacc flex readline;
+    dylan =
+      (import ../development/compilers/gwydion-dylan/binary.nix) {
+        inherit fetchurl stdenv;
+      };
+  };
+
   clisp = (import ../development/interpreters/clisp) {
     inherit fetchurl stdenv libsigsegv gettext;
   };
@@ -679,6 +687,9 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
+  boehmgc = (import ../development/libraries/boehm-gc) {
+    inherit fetchurl stdenv;
+  };
 
   ### SERVERS
 
