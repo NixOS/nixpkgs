@@ -102,6 +102,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  zdelta = (import ../tools/compression/zdelta) {
+    inherit fetchurl stdenv;
+  };
+
   which = (import ../tools/system/which) {
     inherit fetchurl stdenv;
   };

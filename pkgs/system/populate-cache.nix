@@ -14,6 +14,7 @@ let {
     unzip
     gzip
     bzip2
+    zdelta
     wget
     par2cmdline
     cksfv
