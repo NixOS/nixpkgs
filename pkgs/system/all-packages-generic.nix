@@ -216,7 +216,7 @@ rec {
     inherit fetchurl stdenv perl autoconf;
   };
 
-  automake194 = (import ../development/tools/misc/automake/automake-1.9.4.nix) {
+  automake19x = (import ../development/tools/misc/automake/automake-1.9.x.nix) {
     inherit fetchurl stdenv perl autoconf;
   };
 

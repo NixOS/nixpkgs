@@ -25,7 +25,7 @@ let {
     binutils
     gnum4
     autoconf
-    automake194
+    automake19x
     libtool
     pkgconfig
     valgrind
