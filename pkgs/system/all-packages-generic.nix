@@ -757,7 +757,7 @@ rec {
   };
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv aterm;
+    inherit fetchurl stdenv aterm perl;
     bdb = db4;
   };
 

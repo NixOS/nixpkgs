@@ -17,7 +17,7 @@ let {
       pkgs.wget
       pkgs.par2cmdline
       pkgs.cksfv
-      pkgs.bittorrent
+#      pkgs.bittorrent
       pkgs.graphviz
       pkgs.bash
       pkgs.binutils
@@ -41,12 +41,12 @@ let {
       pkgs.subversion
       pkgs.pan
       pkgs.sylpheed
-      pkgs.firefox
+#      pkgs.firefox
       pkgs.MPlayer
       pkgs.MPlayerPlugin
-      pkgs.vlc
+#      pkgs.vlc
       pkgs.zapping
-      pkgs.gqview
+#      pkgs.gqview
       pkgs.hello
       pkgs.nxml
       pkgs.uml
