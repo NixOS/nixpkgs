@@ -4,11 +4,23 @@
 export PATH=$binutils/bin:$PATH
 
 tar xvfj $src || exit 1
+
+# Disable the standard include directories.
+cd gcc-* || exit 1
+cat >> ./gcc/cppdefault.h <<EOF
+#undef LOCAL_INCLUDE_DIR
+#undef SYSTEM_INCLUDE_DIR
+#undef STANDARD_INCLUDE_DIR
+EOF
+cd .. || exit 1
+
+# Configure.
 mkdir build || exit 1
 cd build || exit 1
 ../gcc-*/configure --prefix=$out --enable-languages=c,c++ || exit 1
 
-extraflags="$NIX_CFLAGS $NIX_LDFLAGS -Wl,-s"
+# Patch some of the makefiles to force linking against our own glibc.
+extraflags="$NIX_CFLAGS $NIX_LDFLAGS -Wl,-s -isystem $linux/include"
 
 mf=Makefile
 sed \
@@ -22,5 +34,14 @@ sed \
  < $mf > $mf.tmp || exit 1
 mv $mf.tmp $mf
 
+# Patch gcc/Makefile to prevent fixinc.sh from "fixing" system header files
+# from /usr/include.
+mf=gcc/Makefile
+sed \
+ -e "s^NATIVE_SYSTEM_HEADER_DIR =\(.*\)^NATIVE_SYSTEM_HEADER_DIR = /fixinc-disabled^" \
+ < $mf > $mf.tmp || exit 1
+mv $mf.tmp $mf
+
+# Build and install.
 make bootstrap || exit 1
 make install || exit 1

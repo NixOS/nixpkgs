@@ -5,6 +5,7 @@ Package(
   , ("setup", Relative("stdenv-linux/setup.sh"))
   , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
   , ("glibc", IncludeFix("glibc/glibc.fix"))
+  , ("linux", IncludeFix("linux-headers/linux-headers.fix"))
 
   , ("tools", 
       [ IncludeFix("coreutils/coreutils.fix")
@@ -21,7 +22,7 @@ Package(
       , IncludeFix("bash/bash.fix")
       ])
 
-    , ("gcc", IncludeFix("gcc/gcc.fix"))
-    , ("shell", IncludeFix("bash/bash.fix"))
+  , ("gcc", IncludeFix("gcc/gcc.fix"))
+  , ("shell", IncludeFix("bash/bash.fix"))
   ]
 )
