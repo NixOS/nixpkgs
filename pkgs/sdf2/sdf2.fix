@@ -10,5 +10,6 @@ Package(
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("aterm", IncludeFix("aterm/aterm.fix"))
+  , ("getopt", IncludeFix("getopt/getopt.fix"))
   ]
 )
