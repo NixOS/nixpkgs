@@ -28,41 +28,42 @@
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvNativePkgsFun = bootstrap: allPackages {
+  stdenvNativePkgs = allPackages {
     stdenv = stdenvNative;
     bootCurl = null;
     noSysDirs = false;
-    gccWithCC = !bootstrap;
-    gccWithProfiling = !bootstrap;
   };
-
-  stdenvNativePkgs = stdenvNativePkgsFun false;
 
 
   # The Nix build environment.
-  stdenvNixFun = bootstrap: (import ../stdenv/nix) {
+  stdenvNix = (import ../stdenv/nix) {
     stdenv = stdenvNative;
-    pkgs = stdenvNativePkgsFun bootstrap;
+    pkgs = stdenvNativePkgs;
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvNix = stdenvNixFun false;
-
-  stdenvNixPkgsFun = bootstrap: allPackages {
-    stdenv = stdenvNixFun bootstrap;
-    bootCurl = (stdenvNativePkgsFun bootstrap).curl;
+  stdenvNixPkgs = allPackages {
+    stdenv = stdenvNix;
+    bootCurl = stdenvNativePkgs.curl;
     noSysDirs = false;
   };
-
-  stdenvNixPkgs = stdenvNixPkgs false;
 
 
   # The Linux build environment is a fully bootstrapped Nix
   # environment, that is, it should contain no external references.
 
+  # 0) ...
+  stdenvLinuxBoot0 = (import ../stdenv/nix-linux-static).stdenvBoot;
+
+  stdenvLinuxBoot0Pkgs = allPackages {
+    stdenv = stdenvLinuxBoot0;
+    bootCurl = (import ../stdenv/nix-linux-static).curl;
+    noSysDirs = true;
+  };
+
   # 1) Build glibc in the Nix build environment.  The result is
   #    pure.
-  stdenvLinuxGlibc = (stdenvNixPkgsFun true).glibc;
+  stdenvLinuxGlibc = stdenvLinuxBoot0Pkgs.glibc;
 
   # 2) Construct a stdenv consisting of the Nix build environment, but
   #    with a gcc-wrapper that causes linking against the glibc from
@@ -70,11 +71,8 @@
   #    native system directories (e.g., `/usr/lib'), it doesn't
   #    prevent impurity in the things it builds (e.g., through
   #    `-lncurses').
-  stdenvLinuxBoot1 = (import ../stdenv/nix-linux) {
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgsFun true;
+  stdenvLinuxBoot1 = (import ../stdenv/nix-linux-static).stdenvBootFun {
     glibc = stdenvLinuxGlibc;
-    inherit genericStdenv gccWrapper;
   };
 
   # 3) Now we can build packages that will link against the Nix
@@ -84,10 +82,8 @@
   #    *doesn't* search in `/lib' etc.  So these programs won't work.
   stdenvLinuxBoot1Pkgs = allPackages {
     stdenv = stdenvLinuxBoot1;
-    bootCurl = (stdenvNativePkgsFun true).curl;
+    bootCurl = (import ../stdenv/nix-linux-static).curl;
     noSysDirs = true;
-    gccWithCC = false;
-    gccWithProfiling = false;
   };
 
   # 4) Therefore we build a new standard environment which is the same
@@ -96,7 +92,7 @@
   #    system directories), things built by this stdenv should be pure.
   stdenvLinuxBoot2 = (import ../stdenv/nix-linux) {
     stdenv = stdenvLinuxBoot1;
-    pkgs = (stdenvNativePkgsFun true) // {
+    pkgs = stdenvLinuxBoot0Pkgs // {
       inherit (stdenvLinuxBoot1Pkgs) gcc binutils;
     };
     glibc = stdenvLinuxGlibc;
@@ -106,7 +102,7 @@
   # 5) So these packages should be pure.
   stdenvLinuxBoot2Pkgs = allPackages {
     stdenv = stdenvLinuxBoot2;
-    bootCurl = (stdenvNativePkgsFun true).curl;
+    bootCurl = stdenvLinuxBoot0Pkgs.curl;
   };
 
   # 6) Finally we can construct the Nix build environment from the
@@ -148,7 +144,7 @@
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
-    genericStdenv = import ../stdenv/generic;
+    genericStdenv = import ../stdenv/generic-branch;
     inherit gccWrapper;
   };
 
@@ -157,5 +153,21 @@
     bootCurl = null;
     noSysDirs = false;
   };
-  
+
+
+  # Testing the new stdenv-linux (TODO: remove this eventually).
+  stdenvLinuxTest = (import ../stdenv/nix-linux) {
+    stdenv = stdenvLinuxBoot2;
+    pkgs = stdenvLinuxBoot2Pkgs;
+    glibc = stdenvLinuxGlibc;
+    genericStdenv = import ../stdenv/generic-branch;
+    inherit gccWrapper;
+  };
+
+  stdenvDarwinTest = (import ../stdenv/darwin) {
+    stdenv = stdenvInitial;
+    genericStdenv = import ../stdenv/generic-branch;
+    inherit gccWrapper;
+  };
+    
 }
