@@ -15,3 +15,8 @@
   depend on 2 copies of coreutils (the first one impure in
   stdenv-nix-linux!)
 
+
+
+* change dontMake & dontMakeInstall into dontBuild and dontInstall in
+  ./development/libraries/xlibs/xlibs/builder.sh (or put it in its
+  default.nix)

@@ -148,4 +148,19 @@
     noSysDirs = false;
   };
 
+
+  # Testing the new stdenv-linux (TODO: remove this eventually).
+  stdenvLinuxTest = (import ../stdenv/nix-linux) {
+    stdenv = stdenvLinuxBoot2;
+    pkgs = stdenvLinuxBoot2Pkgs;
+    glibc = stdenvLinuxGlibc;
+    genericStdenv = import ../stdenv/generic-branch;
+    inherit gccWrapper;
+  };
+  
+  stdenvLinuxTestPkgs = allPackages {
+    stdenv = stdenvLinuxTest;
+    bootCurl = stdenvLinuxBoot2Pkgs.curl;
+  };
+  
 }

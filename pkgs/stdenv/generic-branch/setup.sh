@@ -178,6 +178,13 @@ stripHash() {
 }
 
 
+# Ensure that the given directory exists.
+ensureDir() {
+    local dir=$1
+    if ! test -x "$dir"; then mkdir "$dir"; fi
+}
+
+
 unpackFile() {
     local file=$1
     local cmd
@@ -189,8 +196,11 @@ unpackFile() {
         *.zip) cmd="unzip $file";;
         *)
             if test -d "$file"; then
+                # Copy directories and add write permission (this is
+                # because such directories are usually in the store
+                # and are this read-only).
                 stripHash $file
-                cmd="cp -prvd $file $strippedName"
+                cmd="cp -prvd $file $strippedName && chmod -R +w $strippedName"
             else
                 if test -n "$findUnpacker"; then
                     $findUnpacker $1;
@@ -335,8 +345,16 @@ configureW() {
         done
     fi
 
+    if test -z "$prefix"; then
+        prefix="$out";
+    fi
+
+    if test "$useTempPrefix" = "1"; then
+        prefix="$NIX_BUILD_TOP/tmp_prefix";
+    fi
+
     if test -z "$dontAddPrefix"; then
-        configureFlags="--prefix=$out $configureFlags"
+        configureFlags="--prefix=$prefix $configureFlags"
     fi
 
     echo "configure flags: $configureFlags"
@@ -361,16 +379,42 @@ buildW() {
         return
     fi
 
-    if test -z "$dontMake"; then
-        echo "make flags: $makeFlags"
-        make $makeFlags
-    fi
+    echo "make flags: $makeFlags"
+    make $makeFlags
 }
 
 
 buildPhase() {
+    if test "$dontBuild" = 1; then
+        return
+    fi
     header "building"
     buildW
+    stopNest
+}
+
+
+checkW() {
+    if test -n "$checkPhase"; then
+        $checkPhase
+        return
+    fi
+
+    if test -z "$checkTarget"; then
+        checkTarget="check"
+    fi
+
+    echo "check flags: $checkFlags"
+    make $checkFlags $checkTarget
+}
+
+
+checkPhase() {
+    if test "$doCheck" != 1; then
+        return
+    fi
+    header "checking"
+    checkW
     stopNest
 }
 
@@ -385,7 +429,7 @@ installW() {
         $preInstall
     fi
 
-    if ! test -x "$out"; then mkdir "$out"; fi
+    ensureDir "$prefix"
     
     if test -z "$dontMakeInstall"; then
         echo "install flags: $installFlags"
@@ -393,11 +437,12 @@ installW() {
     fi
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find "$out" -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
+        find "$prefix" -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
     fi
 
     if test -n "$propagatedBuildInputs"; then
-        if ! test -x "$out/nix-support"; then mkdir "$out/nix-support"; fi
+        ensureDir "$out"
+        if ! test -x "$/nix-support"; then mkdir "$out/nix-support"; fi
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
@@ -408,19 +453,67 @@ installW() {
 
 
 installPhase() {
+    if test "$dontInstall" = 1; then
+        return
+    fi
     header "installing"
     installW
     stopNest
 }
 
 
+distW() {
+    if test -n "$distPhase"; then
+        $distPhase
+        return
+    fi
+
+    if test -z "$distTarget"; then
+        distTarget="dist"
+    fi
+
+    echo "dist flags: $distFlags"
+    make $distFlags $distTarget
+
+    if test "$dontCopyDist" != 1; then
+        ensureDir "$out"
+        ensureDir "$out/tarballs"
+
+        if test -z "$tarballs"; then
+            tarballs="*.tar.gz"
+        fi
+
+        # Note: don't quote $tarballs, since we explicitly permit
+        # wildcards in there.
+        cp -pvd $tarballs $out/tarballs
+    fi
+}
+
+
+distPhase() {
+    if test "$doDist" != 1; then
+        return
+    fi
+    header "creating distribution"
+    distW
+    stopNest
+}
+
+
 genericBuild() {
     header "building $out"
+
     unpackPhase
     cd $sourceRoot
-    patchPhase
-    configurePhase
-    buildPhase
-    installPhase
+
+    if test -z "$phases"; then
+        phases="patchPhase configurePhase buildPhase checkPhase \
+            installPhase distPhase";
+    fi
+
+    for i in $phases; do
+        $i
+    done
+    
     stopNest
 }
