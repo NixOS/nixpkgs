@@ -91,6 +91,6 @@ let {
 
   body = [
     i686LinuxPkgs
-    powerpcDarwinPkgs
+#    powerpcDarwinPkgs
   ];
 }
