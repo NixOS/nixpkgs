@@ -4,4 +4,4 @@ export LD_LIBRARY_PATH=$glib/lib:$atk/lib:$pango/lib:$gtk/lib:$gnet/lib:$pspell/
 
 ldd $pan/bin/pan
 
-$pan/bin/pan
+$pan/bin/pan $*
