@@ -17,6 +17,7 @@ let {
       pkgs.MPlayer
       pkgs.MPlayerPlugin
       pkgs.vlc
+      pkgs.zapping
       pkgs.gqview
       pkgs.hello
       pkgs.nxml

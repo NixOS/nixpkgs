@@ -347,6 +347,22 @@
     zlib = zlib;
   };
 
+  popt = (import ../development/libraries/popt) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    gettext = gettext; 
+  };
+
+  scrollkeeper = (import ../development/libraries/scrollkeeper) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+    libxml2 = libxml2;
+    libxslt = libxslt;
+    docbook_xml_dtd = docbook_xml_dtd;
+    perlXMLParser = perlXMLParser;
+  };
+
   glib = (import ../development/libraries/gtk+/glib) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -407,6 +423,136 @@
     libpng = libpng;
   };
 
+  audiofile = (import ../development/libraries/audiofile) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  esound = (import ../development/libraries/gnome/esound) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    audiofile = audiofile;
+  };
+
+  libIDL = (import ../development/libraries/gnome/libIDL) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    glib = glib;
+    lex = flex;
+    yacc = bison;
+  };
+
+  ORBit2 = (import ../development/libraries/gnome/ORBit2) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    glib = glib;
+    libIDL = libIDL;
+    popt = popt;
+  };
+
+  GConf = (import ../development/libraries/gnome/GConf) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    glib = glib;
+    gtk = gtk;
+    libxml2 = libxml2;
+    ORBit2 = ORBit2;
+    popt = popt;
+  };
+
+  libbonobo = (import ../development/libraries/gnome/libbonobo) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    ORBit2 = ORBit2;
+    libxml2 = libxml2;
+    popt = popt;
+    yacc = bison;
+    flex = flex;
+  };
+
+  gnomemimedata = (import ../development/libraries/gnome/gnome-mime-data) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+  };
+
+  gnomevfs = (import ../development/libraries/gnome/gnome-vfs) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    glib = glib;
+    libxml2 = libxml2;
+    GConf = GConf;
+    libbonobo = libbonobo;
+    gnomemimedata = gnomemimedata;
+    popt = popt;
+    bzip2 = bzip2; # !!! use stdenv.bzip2
+  };
+
+  libgnome = (import ../development/libraries/gnome/libgnome) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    glib = glib;
+    gnomevfs = gnomevfs;
+    libbonobo = libbonobo;
+    GConf = GConf;
+    popt = popt;
+    zlib = zlib;
+  };
+
+  libart_lgpl = (import ../development/libraries/gnome/libart_lgpl) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  libglade = (import ../development/libraries/gnome/libglade) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+    libxml2 = libxml2;
+  };
+
+  libgnomecanvas = (import ../development/libraries/gnome/libgnomecanvas) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+    libart = libart_lgpl;
+    libglade = libglade;
+  };
+
+  libbonoboui = (import ../development/libraries/gnome/libbonoboui) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    libxml2 = libxml2;
+    libglade = libglade;
+    libgnome = libgnome;
+    libgnomecanvas = libgnomecanvas;
+  };
+
+  libgnomeui = (import ../development/libraries/gnome/libgnomeui) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    libgnome = libgnome;
+    libgnomecanvas = libgnomecanvas;
+    libbonoboui = libbonoboui;
+    libglade = libglade;
+  };
+
   wxGTK = (import ../development/libraries/wxGTK) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -419,15 +565,6 @@
     stdenv = stdenv;
     pkgconfig = pkgconfig;
     glib = glib;
-  };
-
-  libIDL = (import ../development/libraries/libIDL) {
-    fetchurl = fetchurl;
-    stdenv = stdenv;
-    pkgconfig = pkgconfig;
-    glib = glib;
-    lex = flex;
-    yacc = bison;
   };
 
   libdvdcss = (import ../development/libraries/libdvdcss) {
@@ -467,6 +604,13 @@
     stdenv = stdenv;
     perl = perl;
     db4 = db4;
+  };
+
+  perlXMLParser = (import ../development/perl-modules/XML-Parser) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+    expat = expat;
   };
 
 
@@ -594,6 +738,19 @@
     a52dec = a52dec;
     libmad = libmad;
     alsa = alsaLib;
+  };
+
+  zapping = (import ../applications/video/zapping) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    perl = perl;
+    python = python;
+    x11 = xfree86;
+    libgnomeui = libgnomeui;
+    libglade = libglade;
+    scrollkeeper = scrollkeeper;
+    esound = esound;
   };
 
   gqview = (import ../applications/graphics/gqview) {
