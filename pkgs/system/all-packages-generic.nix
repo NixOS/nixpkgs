@@ -381,6 +381,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  clisp = (import ../development/interpreters/clisp) {
+    inherit fetchurl stdenv libsigsegv gettext;
+  };
+
   j2re = (import ../development/interpreters/j2re) {
     inherit fetchurl stdenv;
   };
