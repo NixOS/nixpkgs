@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ncurses}:
  
 stdenv.mkDerivation {
-  name = "vim-6.3.tar.bz2";
+  name = "vim-6.3;
  
   builder = ./builder.sh;
   src = fetchurl {
