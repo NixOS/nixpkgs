@@ -1,7 +1,8 @@
 #! /bin/sh
 
 export PATH=$libxml/bin:/bin:/usr/bin:/usr/local/bin
-export LD_LIBRARY_PATH=$ssl/lib:
+envpkgs="$ssl $db4 $httpd $swig"
+. $setenv
 
 export LDFLAGS=-s
 
@@ -34,3 +35,5 @@ if test $pythonBindings; then
     make swig-py || exit 1
     make install-swig-py || exit 1
 fi
+
+echo $envpkgs > $out/envpkgs || exit 1
