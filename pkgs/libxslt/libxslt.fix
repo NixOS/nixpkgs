@@ -2,7 +2,6 @@ Package(
   [ ("name", "libxslt-1.0.31")
 
   , ("build", Relative("libxslt/libxslt-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "ftp://xmlsoft.org/libxslt-1.0.31.tar.gz")

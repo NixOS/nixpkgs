@@ -1,9 +1,6 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
 . $stdenv/setup || exit 1
-
 export PATH=$pkgconfig/bin:$PATH
 
 tar xvfj $src || exit 1

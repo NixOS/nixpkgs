@@ -2,7 +2,6 @@ Package(
   [ ("name", "gtk+-2.2.2")
 
   , ("build", Relative("gtk+/gtk+-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.2.tar.bz2")

@@ -2,7 +2,6 @@ Package(
   [ ("name", "httpd-2.0.47")
 
   , ("build", Relative("httpd/httpd-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://apache.cs.uu.nl/dist/httpd/httpd-2.0.47.tar.gz")

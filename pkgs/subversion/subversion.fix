@@ -4,7 +4,6 @@ Function(["localServer", "httpsClient", "httpServer", "pythonBindings"],
     [ ("name", "subversion-0.27.0")
 
     , ("build", Relative("subversion/subversion-build.sh"))
-    , ("setenv", Relative("helpers/set-env.sh"))
 
     , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
         [ ("url", "http://subversion.tigris.org/files/documents/15/5642/subversion-0.27.0.tar.gz")

@@ -1,11 +1,7 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
-. $stdenv/setup || exit 1
-
 envpkgs="$ssl $db4 $httpd $swig $libxml"
-. $setenv || exit 1
+. $stdenv/setup || exit 1
 
 if test $localServer; then
     extraflags="--with-berkeley-db=$db4 $extraflags"

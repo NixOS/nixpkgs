@@ -1,11 +1,7 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
-. $stdenv/setup || exit 1
-
 envpkgs="$ssl $db4 $expat"
-. $setenv || exit 1
+. $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd httpd-* || exit 1

@@ -2,7 +2,6 @@ Package(
   [ ("name", "pan-0.14.0.90")
 
   , ("build", Relative("pan/pan-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://losser.st-lab.cs.uu.nl/~eelco/mirror/pan-0.14.0.90.tar.bz2")

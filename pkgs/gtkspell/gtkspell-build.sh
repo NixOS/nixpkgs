@@ -1,12 +1,8 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
-. $stdenv/setup || exit 1
-
-export PATH=$pkgconfig/bin:$PATH
 envpkgs="$gtk $pspell"
-. $setenv || exit 1
+. $stdenv/setup || exit 1
+export PATH=$pkgconfig/bin:$PATH
 
 export C_INCLUDE_PATH=$pspell/include:$C_INCLUDE_PATH
 

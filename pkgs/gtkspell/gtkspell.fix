@@ -2,7 +2,6 @@ Package(
   [ ("name", "gtkspell-2.0.4")
 
   , ("build", Relative("gtkspell/gtkspell-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://gtkspell.sourceforge.net/download/gtkspell-2.0.4.tar.gz")

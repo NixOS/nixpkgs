@@ -1,12 +1,8 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
-. $stdenv/setup || exit 1
-
-export PATH=$pkgconfig/bin:$PATH
 envpkgs="$glib $Xft"
-. $setenv || exit 1
+. $stdenv/setup || exit 1
+export PATH=$pkgconfig/bin:$PATH
 
 tar xvfj $src || exit 1
 cd pango-* || exit 1

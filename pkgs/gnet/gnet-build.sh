@@ -1,12 +1,8 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
+envpkgs="$glib"
 . $stdenv/setup || exit 1
-
 export PATH=$pkgconfig/bin:/bin:/usr/bin
-envpkgs=$glib
-. $setenv || exit 1
 
 tar xvfz $src || exit 1
 cd gnet-* || exit 1

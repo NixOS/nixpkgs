@@ -2,7 +2,6 @@ Package(
   [ ("name", "Xft-20021121")
 
   , ("build", Relative("Xft/Xft-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://fontconfig.org/release/fcpackage.2_1.tar.gz")

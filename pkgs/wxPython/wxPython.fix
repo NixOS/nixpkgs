@@ -2,7 +2,6 @@ Package(
   [ ("name", "wxPython-2.4.1.2")
 
   , ("build", Relative("wxPython/wxPython-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://belnet.dl.sourceforge.net/sourceforge/wxpython/wxPythonSrc-2.4.1.2.tar.gz")

@@ -1,11 +1,7 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
-. $stdenv/setup || exit 1
-
 envpkgs="$freetype"
-. $setenv || exit 1
+. $stdenv/setup || exit 1
 
 tar xvfj $src || exit 1
 tar xvfj $fonts || exit 1

@@ -1,11 +1,6 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
 . $stdenv/setup || exit 1
-
-envpkgs=""
-. $setenv || exit 1
 
 tar xvfz $src || exit 1
 cd openssl-* || exit 1

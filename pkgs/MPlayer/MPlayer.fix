@@ -2,7 +2,6 @@ Package(
   [ ("name", "MPlayer-0.90")
 
   , ("build", Relative("MPlayer/MPlayer-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-0.90.tar.bz2")

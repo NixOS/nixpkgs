@@ -2,7 +2,6 @@ Package(
   [ ("name", "sylpheed-0.9.3")
 
   , ("build", Relative("sylpheed/sylpheed-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://heanet.dl.sourceforge.net/sourceforge/sylpheed-claws/sylpheed-0.9.3.tar.bz2")

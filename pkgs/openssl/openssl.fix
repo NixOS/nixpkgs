@@ -2,7 +2,6 @@ Package(
   [ ("name", "openssl-0.9.7b")
 
   , ("build", Relative("openssl/openssl-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www.openssl.org/source/openssl-0.9.7b.tar.gz")

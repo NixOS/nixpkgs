@@ -2,7 +2,6 @@ Package(
   [ ("name", "gnet-1.1.9")
 
   , ("build", Relative("gnet/gnet-build.sh"))
-  , ("setenv", Relative("helpers/set-env.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www.gnetlibrary.org/src/gnet-1.1.9.tar.gz")

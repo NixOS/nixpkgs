@@ -1,7 +1,5 @@
 #! /bin/sh
 
-export NIX_LDFLAGS=-Wl,-s
-
 . $stdenv/setup || exit 1
 
 echo "out: $out"
