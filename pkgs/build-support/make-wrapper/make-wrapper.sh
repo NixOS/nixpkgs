@@ -10,6 +10,13 @@ makeWrapper() {
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
+        if test "$p" = "--set"; then
+            varName=${params[$((n + 1))]}
+            value=${params[$((n + 2))]}
+            n=$((n + 2))
+            echo "export $varName=$value" >> $wrapper
+        fi
+
         if test "$p" = "--suffix"; then
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
