@@ -874,6 +874,9 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
+  lame = (import ../applications/audio/lame) {
+    inherit fetchurl stdenv ;
+  };
 
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib;
