@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "boehmgc-6.2")
+  , ("build", Relative("boehmgc/boehmgc-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc6.2.tar.gz")
+      , ("md5", "15492b14ca7b9a9e035238611e9cd1e3")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)
