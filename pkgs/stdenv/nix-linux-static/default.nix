@@ -98,7 +98,7 @@ rec {
   };
 
 
-  stdenvBootFun = {glibc}: (import ../generic) {
+  stdenvBootFun = {glibc, gcc, binutils}: (import ../generic) {
     name = "stdenv-linux-static-boot";
     stdenv = stdenvInitial;
     shell = ./bash-static/bash;
@@ -123,6 +123,7 @@ rec {
     ];
   };
 
+/*
   stdenvBoot = stdenvBootFun {inherit glibc;};
 
   fetchurl = (import ../../build-support/fetchurl) {
@@ -136,5 +137,6 @@ rec {
   };
 
   body = [coreutils bzip2 gnumake binutils diffutils gcc glibc gnused gnugrep diffutils gawk];
+*/
 
 }
