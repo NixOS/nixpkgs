@@ -10,6 +10,3 @@
 
 * After building gcc, filter out references to /tmp/nix... in
   .../lib/libsupc++.la and .../lib/libstdc++.la
-
-* Qt should set QTDIR in all builds that depend on it (using a hook)
-  [after doing that, update mythtv].
