@@ -77,6 +77,11 @@ rec {
     inherit fetchurl stdenv python libxml2;
   };
 
+  jing_tools = (import ../tools/text/xml/jing/jing-script.nix) {
+    inherit fetchurl stdenv unzip;
+    j2re = blackdown;
+  };
+
   gnutar = (import ../tools/archivers/gnutar) {
     inherit fetchurl stdenv;
   };
