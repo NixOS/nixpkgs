@@ -1,4 +1,6 @@
-{stdenv, fetchurl}: stdenv.mkDerivation {
+{stdenv, fetchurl}:
+
+stdenv.mkDerivation {
   name = "getopt-1.1.3";
   builder = ./builder.sh;
   src = fetchurl {
