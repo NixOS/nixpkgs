@@ -1,11 +1,12 @@
 { localServer ? false
 , httpServer ? false
 , sslSupport ? false
+, compressionSupport ? false
 , pythonBindings ? false
 , javaSwigBindings ? false
 , javahlBindings ? false
 , stdenv, fetchurl
-, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, j2sdk ? null
+, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, j2sdk ? null, zlib ? null
 }:
 
 assert expat != null;
@@ -15,14 +16,15 @@ assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl)
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javaSwigBindings -> swig != null && swig.javaSupport;
 assert javahlBindings -> j2sdk != null;
+assert compressionSupport -> zlib != null;
 
 stdenv.mkDerivation {
-  name = "subversion-1.1.2";
+  name = "subversion-1.1.3";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/subversion-1.1.2.tar.bz2;
-    md5 = "b93a792b6bc610dc6c1c254591979a8c";
+    url = http://subversion.tigris.org/tarballs/subversion-1.1.3.tar.bz2;
+    md5 = "a09c2b2fa1a09566c024547954a48478";
   };
 
   # This is a hopefully temporary fix for the problem that
@@ -31,6 +33,7 @@ stdenv.mkDerivation {
   patches = if javahlBindings then [./javahl.patch] else [];
 
   openssl = if sslSupport then openssl else null;
+  zlib = if compressionSupport then zlib else null;
   httpd = if httpServer then httpd else null;
   db4 = if localServer then db4 else null;
   swig = if pythonBindings || javaSwigBindings then swig else null;

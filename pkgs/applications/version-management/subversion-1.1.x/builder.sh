@@ -1,4 +1,4 @@
-buildInputs="$openssl $db4 $httpd $swig $python $j2sdk $expat $patch"
+buildInputs="$openssl $zlib $db4 $httpd $swig $python $j2sdk $expat $patch"
 . $stdenv/setup
 
 configureFlags="--without-gdbm --disable-static"

@@ -924,10 +924,11 @@ rec {
   ### APPLICATIONS
 
   subversion = (import ../applications/version-management/subversion-1.1.x) {
-    inherit fetchurl stdenv openssl db4 expat swig;
+    inherit fetchurl stdenv openssl db4 expat swig zlib;
     localServer = true;
     httpServer = false;
     sslSupport = true;
+    compressionSupport = true;
     httpd = apacheHttpd;
   };
 
