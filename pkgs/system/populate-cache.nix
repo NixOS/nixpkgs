@@ -56,6 +56,8 @@ let {
     nxml
     uml
     nix
+    ocaml
+    hevea
   ;};
 
 
