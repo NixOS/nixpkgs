@@ -29,7 +29,7 @@ let {
       pkgs.bisonnew
       pkgs.flexnew
       pkgs.gcc
-      pkgs.strategoxt093
+      pkgs.strategoxt
       pkgs.ghc
       pkgs.helium
       pkgs.perl
