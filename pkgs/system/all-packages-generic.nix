@@ -4,10 +4,19 @@
 
 {system, stdenv}: rec {
 
+  # Hack: remember stdenv.
+  stdenv_ = stdenv;
+
+
   ### BUILD SUPPORT
 
   fetchurl = (import ../build-support/fetchurl) {
     stdenv = stdenv;
+  };
+
+  fetchsvn = (import ../build-support/fetchsvn) {
+    stdenv = stdenv;
+    subversion = subversion;
   };
 
 
@@ -59,6 +68,11 @@
     stdenv = stdenv;
   };
 
+  unzip = (import ../tools/archivers/unzip) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   gzip = (import ../tools/compression/gzip) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -93,6 +107,20 @@
   gnum4 = (import ../development/tools/misc/gnum4) {
     fetchurl = fetchurl;
     stdenv = stdenv;
+  };
+
+  autoconf = (import ../development/tools/misc/autoconf) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    m4 = gnum4;
+    perl = perl;
+  };
+
+  automake = (import ../development/tools/misc/automake) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+    autoconf = autoconf;
   };
 
   pkgconfig = (import ../development/tools/misc/pkgconfig) {
@@ -153,6 +181,12 @@
     fetchurl = fetchurl;
     stdenv = stdenv;
     zlib = zlib;
+  };
+
+  libxslt = (import ../development/libraries/libxslt) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    libxml2 = libxml2;
   };
 
   gettext = (import ../development/libraries/gettext) {
@@ -324,6 +358,20 @@
   };
 
   alsaLib = (import ../os-specific/linux/alsa/library) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+
+  ### DATA
+
+  docbook_xml_dtd = (import ../data/sgml+xml/schemas/xml-dtd/docbook) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    unzip = unzip;
+  };
+
+  docbook_xml_xslt = (import ../data/sgml+xml/stylesheets/xslt/docbook) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
