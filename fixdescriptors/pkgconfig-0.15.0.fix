@@ -1,0 +1,8 @@
+Descr(
+  [ Bind("pkgId", Str("pkgconfig-0.15.0"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("src", File(Url("http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-0.15.0.tar.gz")))
+  , Bind("build", File(Local("../build/pkgconfig-build.sh")))
+  ]
+)

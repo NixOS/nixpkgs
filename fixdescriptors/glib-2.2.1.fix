@@ -1,0 +1,10 @@
+Descr(
+  [ Bind("pkgId", Str("glib-2.2.1"))
+  , Bind("releaseId", Str("1"))
+
+  , Bind("pkgconfig", Pkg(Fix("./pkgconfig-0.15.0.fix")))
+
+  , Bind("src", File(Url("ftp://ftp.gtk.org/pub/gtk/v2.2/glib-2.2.1.tar.bz2")))
+  , Bind("build", File(Local("../build/glib-build.sh")))
+  ]
+)
