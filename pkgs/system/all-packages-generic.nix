@@ -665,6 +665,10 @@
     patch = gnupatch;
   };
 
+  umlutilities = (import ../misc/uml-utilities) {
+    inherit fetchurl stdenv;
+  };
+
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm;
     aterm = aterm_2_0_5;
