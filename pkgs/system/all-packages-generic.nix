@@ -622,6 +622,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libgphoto2 = (import ../development/libraries/libgphoto2) {
+    inherit fetchurl stdenv;
+  };
+
   popt = (import ../development/libraries/popt) {
     inherit fetchurl stdenv gettext;
   };
