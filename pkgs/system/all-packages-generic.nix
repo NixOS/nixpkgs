@@ -533,6 +533,10 @@
     inherit fetchurl stdenv perl expat;
   };
 
+  wxPython = (import ../development/python-modules/wxPython) {
+    inherit fetchurl stdenv wxGTK python;
+  };
+
 
   ### SERVERS
 
