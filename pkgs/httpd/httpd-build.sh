@@ -2,6 +2,7 @@
 
 envpkgs="$ssl $db4 $expat"
 . $stdenv/setup || exit 1
+export PATH=$perl/bin:$PATH
 
 tar xvfz $src || exit 1
 cd httpd-* || exit 1

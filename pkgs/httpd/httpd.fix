@@ -12,5 +12,6 @@ Package(
   , ("ssl", IncludeFix("openssl/openssl.fix"))
   , ("db4", IncludeFix("db4/db4.fix"))
   , ("expat", IncludeFix("expat/expat.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   ]
 )
