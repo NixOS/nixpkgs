@@ -234,6 +234,18 @@ rec {
     inherit stdenv;
   };
 
+  gcc295 = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-2.95) {
+      inherit fetchurl stdenv noSysDirs;
+      patch = gnupatch;
+    };
+    binutils = stdenv.gcc.binutils;
+    glibc = stdenv.gcc.glibc;
+    inherit stdenv;
+  };
+
   g77 = (import ../build-support/gcc-wrapper) {
     name = "g77";
     nativeTools = false;
