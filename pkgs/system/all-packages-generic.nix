@@ -306,8 +306,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  apacheant = (import ../development/tools/build-managers/apache-ant/core-apache-ant.nix) {
+  apacheant = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
+    j2sdk = j2sdk15;
   };
 
   pcre = (import ../development/libraries/pcre) {
