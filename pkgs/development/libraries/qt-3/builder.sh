@@ -24,9 +24,9 @@ configureFlags="-v -prefix $out -system-zlib -system-libpng -system-libjpeg"
 dontAddPrefix=1
 
 if test -n "$threadSupport"; then
-    configureFlags="-thread";
+    configureFlags="-thread $configureFlags";
 else    
-    configureFlags="-no-thread";
+    configureFlags="-no-thread $configureFlags";
 fi
 
 if test -n "$xftSupport"; then
