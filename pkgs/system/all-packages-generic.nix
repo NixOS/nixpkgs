@@ -123,7 +123,8 @@ rec {
   };
 
   bittorrent = (import ../tools/networking/bittorrent) {
-    inherit fetchurl stdenv wxPython;
+    inherit fetchurl stdenv;
+    wxPython = wxPython24;
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
