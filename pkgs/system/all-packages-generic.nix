@@ -140,6 +140,13 @@
     perl = perl;
   };
 
+  autoconflibtool = (import ../development/tools/misc/autoconf/autoconf-libtool.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    m4 = gnum4;
+    perl = perl;
+  };
+
   automake = (import ../development/tools/misc/automake) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -155,10 +162,10 @@
   };
 
   autotools = {
-    automake = automake;
-    autoconf = autoconf;
+    automake = autoconflibtool;
+    autoconf = autoconflibtool;
     make     = gnumake;
-    libtool  = libtool;
+    libtool  = autoconflibtool;
   };
 
   pkgconfig = (import ../development/tools/misc/pkgconfig) {

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, m4, perl}:
 derivation {
-  name = "autoconf-2.58";
+  name = "libtool-1.5";
   system = stdenv.system;
   builder = ./builder.sh;
   src = fetchurl {
