@@ -604,6 +604,11 @@ rec {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
+  qt = import ../development/libraries/qt-3 {
+    inherit fetchurl stdenv x11 zlib libjpeg libpng;
+    inherit (xlibs) libXft libXrender;
+  };
+
   audiofile = (import ../development/libraries/audiofile) {
     inherit fetchurl stdenv;
   };
@@ -912,6 +917,12 @@ rec {
     pngSupport = true;
     recordingSupport = true;
   };
+
+  /*
+  mythtv = (import ../applications/video/mythtv) {
+    inherit fetchurl stdenv which;
+  };
+  */
 
   gqview = (import ../applications/graphics/gqview) {
     inherit fetchurl stdenv pkgconfig libpng;
