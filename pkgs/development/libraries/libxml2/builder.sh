@@ -9,3 +9,5 @@ cd libxml2-* || exit 1
 make || exit 1
 make install || exit 1
 strip -S $out/lib/*.a || exit 1
+
+echo "$zlib" > $out/propagated-build-inputs || exit 1
