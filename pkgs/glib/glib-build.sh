@@ -1,7 +1,7 @@
 #! /bin/sh
 
 . $stdenv/setup || exit 1
-export PATH=$pkgconfig/bin:$gettext/bin:$PATH
+export PATH=$pkgconfig/bin:$gettext/bin:$perl/bin:$PATH
 
 tar xvfj $src || exit 1
 cd glib-* || exit 1

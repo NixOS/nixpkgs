@@ -11,5 +11,6 @@ Package(
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("gettext", IncludeFix("gettext/gettext.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   ]
 )

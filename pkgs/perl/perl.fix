@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "perl-5.8.0")
+
+  , ("build", Relative("perl/perl-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.perl.com/CPAN/src/5.0/perl-5.8.0.tar.gz")
+      , ("md5", "d9bdb180620306023fd35901a2878b62")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)
