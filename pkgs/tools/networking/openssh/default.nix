@@ -10,5 +10,4 @@ stdenv.mkDerivation {
   };
  
   buildInputs = [zlib openssl];
-  patches = [./openssh-no-host-key.patch];
 }
