@@ -203,6 +203,12 @@
     m4 = gnum4;
   };
 
+  bisonnew = (import ../development/tools/parsing/bison/bison-new.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    m4 = gnum4;
+  };
+
   flex = (import ../development/tools/parsing/flex) {
     fetchurl = fetchurl;
     stdenv = stdenv;

@@ -4,6 +4,7 @@ let {
     [ pkgs.zip
       pkgs.unzip
       pkgs.valgrind
+      pkgs.bisonnew
       pkgs.flexnew
       pkgs.par2cmdline
       pkgs.cksfv
