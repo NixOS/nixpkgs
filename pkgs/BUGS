@@ -48,3 +48,18 @@ In file included from IntrinsicI.h:55,
 include/X11/IntrinsicP.h:202:25: X11/ObjectP.h: No such file or directory
 
 (moved to include/X11; should edit include/Makefile.am)
+
+
+* Doesn't parse:
+
+{stdenv, fetchurl /* pkgconfig, libX11 */ }:
+
+stdenv.mkDerivation {
+  name = "libXi-6.0.1";
+  src = fetchurl {
+    url = http://freedesktop.org/~xlibs/release/libXi-6.0.1.tar.bz2;
+    md5 = "7e935a42428d63a387b3c048be0f2756";
+  };
+/*  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [libX11]; */
+}
