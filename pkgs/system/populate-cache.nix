@@ -33,6 +33,7 @@ let {
     gcc34
     aterm
     strategoxt
+    xdoc
     ghc
     helium
     perl

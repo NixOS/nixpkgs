@@ -355,6 +355,12 @@ rec {
     sdf = sdf_22;
   };
 
+  xdoc = (import ../development/tools/documentation/xdoc) {
+    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
+    sdf = sdf_22;
+  };
+
+
   #strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
   #  inherit fetchsvn stdenv autoconf automake libtool which aterm;
   #  sdf = sdf_22;
