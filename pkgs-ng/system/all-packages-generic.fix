@@ -54,6 +54,11 @@
     stdenv = stdenv;
   };
 
+  zip = (import ../tools/archivers/zip) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   gzip = (import ../tools/compression/gzip) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -278,6 +283,14 @@
     glib = glib;
   };
 
+  libIDL = (import ../development/libraries/libIDL) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    glib = glib;
+    lex = flex;
+    yacc = bison;
+  };
 
 
   ### SERVERS
@@ -345,6 +358,16 @@
     gtk = gtk1;
     openssl = openssl;
     gdkpixbuf = gdkpixbuf;
+  };
+
+  firebird = (import ../applications/networking/browsers/firebird) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+    perl = perl;
+    zip = zip;
+    libIDL = libIDL;
   };
 
 }
