@@ -236,7 +236,7 @@
     stdenv = stdenv;
   };
 
-  aterm205 = (import ../development/libraries/aterm/aterm-2.0.5.nix) {
+  aterm_2_0_5 = (import ../development/libraries/aterm/aterm-2.0.5.nix) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
@@ -248,10 +248,17 @@
     getopt = getopt;
   };
 
-  toolbuslib051 = (import ../development/tools/parsing/toolbuslib/toolbuslib-0.5.1.nix) {
+  toolbuslib_0_5_1 = (import ../development/tools/parsing/toolbuslib/toolbuslib-0.5.1.nix) {
     fetchurl = fetchurl;
     stdenv = stdenv;
-    aterm = aterm205;
+    aterm = aterm_2_0_5;
+  };
+
+  pt_support_1_0 = (import ../development/tools/parsing/pt-support/pt-support-1.0.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm_2_0_5;
+    toolbuslib = toolbuslib_0_5_1;
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
