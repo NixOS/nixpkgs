@@ -7,6 +7,5 @@ import ../generic perl {
     md5 = "6e9882f4e4bac48b24079d082af30e6c";
   };
   perlPreHook = ./hook.sh;
-  buildInputs = [db4];
-#  inherit db4;
+  inherit db4;
 }
