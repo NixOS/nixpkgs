@@ -2,14 +2,12 @@
 
 assert stdenv.system == "i686-linux";
 
-
-derivation {
-  name = "j2re-1.4.2";
-  system = stdenv.system;
+stdenv.mkDerivation {
+  name    = "j2re-1.4.2";
+  version = "j2re1.4.2_04";
   builder = ./builder.sh;
   src = fetchurl {
-      url = http://java.sun.com/webapps/download/AutoDL?BundleId=9500;
-      md5 = "b4aae3fcda73d976bd6ae6349b36a90c";
+      url = http://java.sun.com/webapps/download/AutoDL?BundleId=9562;
+      md5 = "57e31ffc32a2956e6140ceda8aa86e4e";
     };
-  stdenv = stdenv;
 }
