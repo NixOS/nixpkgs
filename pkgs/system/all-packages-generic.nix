@@ -137,6 +137,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  nmap = (import ../tools/security/nmap) {
+    inherit fetchurl stdenv;
+  };
+
   ### SHELLS
 
   bash = (import ../shells/bash) {
