@@ -10,7 +10,8 @@ addCVars () {
 
 envHooks=(${envHooks[@]} addCVars)
 
-if test -z "@isNative@"; then
+export NIX_IS_NATIVE=@isNative@
+if test -z "$NIX_IS_NATIVE"; then
     PATH=$PATH:@gcc@/bin:@glibc@/bin
 fi
 
