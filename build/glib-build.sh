@@ -8,3 +8,5 @@ cd glib-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf glib-*

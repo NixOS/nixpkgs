@@ -8,3 +8,5 @@ cd pkgconfig-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf pkgconfig-*

@@ -8,3 +8,5 @@ cd pspell-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf pspell-*

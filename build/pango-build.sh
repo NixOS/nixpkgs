@@ -10,3 +10,5 @@ cd pango-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf pango-*

@@ -10,3 +10,5 @@ cd gnet-*
 ./configure --prefix=$top
 make
 make install
+cd ..
+rm -rf gnet-*
