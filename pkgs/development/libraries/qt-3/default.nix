@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
 
+  # Don't strip everything so we can get useful backtraces.
+  patches = [./strip.patch];
+  
   inherit threadSupport xftSupport libXft xrenderSupport libXrender;
   inherit mysqlSupport mysql;
   inherit (libXft) freetype fontconfig;
