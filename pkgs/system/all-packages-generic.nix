@@ -1144,6 +1144,7 @@ rec {
     inherit fetchurl stdenv file mono gtksourceviewsharp
             gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
     inherit (gnome) gnomevfs libbonobo libglade libgnome gconf glib gtk;
+    mozilla = firefox;
     gtksharp = gtksharp2;
   };
 

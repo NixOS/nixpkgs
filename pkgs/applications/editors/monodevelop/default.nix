@@ -2,6 +2,7 @@
 , gtkmozembedsharp, monodoc
 , perl, perlXMLParser, pkgconfig
 , glib, gtk, gconf, gnomevfs, libbonobo, libglade, libgnome
+, mozilla
 }:
 
 stdenv.mkDerivation {
@@ -23,5 +24,6 @@ stdenv.mkDerivation {
     gtkmozembedsharp monodoc
   ];
   
-  inherit perlXMLParser monodoc gtksharp gtkmozembedsharp gtksourceviewsharp;
+  inherit perlXMLParser mozilla monodoc
+    gtksharp gtkmozembedsharp gtksourceviewsharp;
 }
