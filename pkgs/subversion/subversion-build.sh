@@ -26,7 +26,8 @@ echo "extra flags: $extraflags"
 
 tar xvfz $src || exit 1
 cd subversion-* || exit 1
-LDFLAGS=-Wl,-S ./configure --prefix=$out $extraflags --without-gdbm || exit 1
+LDFLAGS=-Wl,-S ./configure --prefix=$out $extraflags \
+ --without-gdbm --disable-static || exit 1
 make $extramakeflags || exit 1
 make install $extramakeflags || exit 1
 

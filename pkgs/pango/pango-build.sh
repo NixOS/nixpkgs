@@ -2,7 +2,7 @@
 
 . $stdenv/setup || exit 1
 
-export PATH=$pkgconfig/bin:$PATH
+export PATH=$pkgconfig/bin:/bin:/usr/bin
 envpkgs="$glib $Xft"
 . $setenv
 

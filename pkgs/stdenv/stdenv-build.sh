@@ -15,8 +15,10 @@ sed \
  < $gccwrapper > $out/bin/gcc || exit 1
 chmod +x $out/bin/gcc || exit 1
 
+gplusplus=/usr/bin/g++
+
 sed \
- -e s^@GCC\@^$g++^g \
+ -e s^@GCC\@^$gplusplus^g \
  -e s^@LIBC\@^$glibc^g \
  < $gccwrapper > $out/bin/g++ || exit 1
 chmod +x $out/bin/g++ || exit 1
