@@ -3,25 +3,23 @@
 , stdenv, fetchurl, gtk, openssl ? null, gdkpixbuf ? null
 }:
 
-assert !isNull gtk;
-assert sslSupport -> !isNull openssl;
-assert imageSupport -> !isNull gdkpixbuf;
+assert gtk != null;
+assert sslSupport -> openssl != null;
+assert imageSupport -> gdkpixbuf != null;
 
 derivation {
-  name = "sylpheed-0.9.8a";
+  name = "sylpheed-0.9.10";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://sylpheed.good-day.net/sylpheed/sylpheed-0.9.8a.tar.bz2;
-    md5 = "6ac823f06d8fe4f265f37d9c96068e05";
+    url = http://sylpheed.good-day.net/sylpheed/sylpheed-0.9.10.tar.bz2;
+    md5 = "4e2242436de3cf3977a1b25b1ddc4930";
   };
 
-  sslSupport = sslSupport;
-  imageSupport = imageSupport;
+  inherit sslSupport imageSupport;
 
-  stdenv = stdenv;
-  gtk = gtk;
+  inherit stdenv gtk;
   openssl = if sslSupport then openssl else null;
   gdkpixbuf = if imageSupport then gdkpixbuf else null;
 }

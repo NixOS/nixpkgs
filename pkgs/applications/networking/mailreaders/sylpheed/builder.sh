@@ -1,20 +1,16 @@
-#! /bin/sh
+#! /bin/sh -e
 
-buildinputs="$gtk $gdkpixbuf $openssl"
-. $stdenv/setup || exit 1
+buildInputs="$gtk $gdkpixbuf $openssl"
+. $stdenv/setup
 
 if test $sslSupport; then
-    extraflags="--enable-ssl $extraflags"
+    configureFlags="--enable-ssl $extraflags"
 fi
 
 if test $imageSupport; then
-    extraflags="--enable-gdk-pixbuf $extraflags"
+    configureFlags="--enable-gdk-pixbuf $extraflags"
 else
-    extraflags="--disable-gdk-pixbuf --disable-imlibtest $extraflags"
-fi    
+    configureFlags="--disable-gdk-pixbuf --disable-imlibtest $extraflags"
+fi
 
-tar xvfj $src || exit 1
-cd sylpheed-* || exit 1
-./configure --prefix=$out $extraflags || exit 1
-make || exit 1
-make install || exit 1
+genericBuild
