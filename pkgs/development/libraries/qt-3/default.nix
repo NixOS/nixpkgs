@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   name = "qt-3.3.3";
 
   builder = ./builder.sh;
+  substitute = ../../../build-support/substitute/substitute.sh;
+  hook = ./setup-hook.sh;  
   src = fetchurl {
     url = http://catamaran.labs.cs.uu.nl/dist/tarballs/qt-x11-free-3.3.3.tar.bz2;
     md5 = "3e0a0c8429b0a974b39b5f535ddff01c";

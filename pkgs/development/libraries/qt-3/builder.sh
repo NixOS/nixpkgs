@@ -1,4 +1,8 @@
 . $stdenv/setup
+. $substitute
+
+ensureDir $out/nix-support
+substitute "$hook" "$out/nix-support/setup-hook" --subst-var out
 
 
 preConfigure=preConfigure
@@ -9,11 +13,9 @@ preConfigure() {
     # will cause ./configure misdetections).
     for i in config.tests/unix/checkavail config.tests/*/*.test mkspecs/*/qmake.conf; do
         echo "patching $i..."
-        sed < $i > $i.tmp \
-            -e 's^ /lib^ /FOO^g' \
-            -e 's^/usr^/FOO^g'
-        if test -x $i; then chmod +x $i.tmp; fi
-        mv $i.tmp $i
+        substituteInPlace "$i" \
+            --replace " /lib" " /FOO" \
+            --replace "/usr" "/FOO"
     done
 }
 
