@@ -52,7 +52,7 @@ done) < /tmp/successors
 echo setting init symlink...
 initPath=$(/nix/bin/nix-store -qn $initExpr)
 rm -f $root/init
-ln -s $initPath/bin/sh $root/init
+ln -s $initPath/bin/init $root/init
 
 echo unmounting...
 umount $root

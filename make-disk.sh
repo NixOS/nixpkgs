@@ -18,7 +18,7 @@ fi
 
 
 # What to copy?
-storeexpr=$(nix-instantiate ./bootstrap.nix)
+storeexpr=$(echo '(import ./pkgs.nix).init' | nix-instantiate -)
 nix-store -rB $storeexpr
 nix-store -qn --requisites $storeexpr > $storepaths
 

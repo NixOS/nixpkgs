@@ -2,4 +2,4 @@
 
 image=/tmp/disk.img
 
-linux ubd0=$image init="/init"
+linux ubd0="$image" mem=256M init="/init"
