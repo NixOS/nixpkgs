@@ -1,11 +1,11 @@
 Package(
-  [ ("name", "MPlayer-0.90")
+  [ ("name", "MPlayer-0.91")
 
   , ("build", Relative("MPlayer/MPlayer-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-0.90.tar.bz2")
-      , ("md5", "9a9f294bbaab2071ecbc327f4e870be8")
+      [ ("url", "http://www1.mplayerhq.hu/MPlayer/releases/MPlayer-0.91.tar.bz2")
+      , ("md5", "bb09138564ddf954392d20dbc4b88ebd")
       ]))
 
   , ("fonts", App(IncludeFix("fetchurl/fetchurl.fix"),
