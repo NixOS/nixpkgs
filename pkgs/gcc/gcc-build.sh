@@ -48,3 +48,5 @@ mv $mf.tmp $mf
 # Build and install.
 make bootstrap || exit 1
 make install || exit 1
+
+find $out -name "*.a" -exec strip -S {} \; || exit 1
