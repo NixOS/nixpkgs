@@ -3,7 +3,8 @@
 use strict;
 use Cwd;
 
-my $selfdir = cwd;
+my $selfdir = $ENV{"out"};
+mkdir "$selfdir", 0755 || die "error creating $selfdir";
 
 # For each activated package, create symlinks.
 
@@ -20,7 +21,7 @@ sub createLinks {
         if (-d $srcfile) {
             # !!! hack for resolving name clashes
             if (!-e $dstfile) {
-                mkdir $dstfile, 0755 or 
+                mkdir $dstfile, 0755 || 
                     die "error creating directory $dstfile";
             }
             -d $dstfile or die "$dstfile is not a directory";
@@ -30,7 +31,7 @@ sub createLinks {
             die "collission between $srcfile and $target";
         } else {
             print "linking $dstfile to $srcfile\n";
-            symlink($srcfile, $dstfile) or
+            symlink($srcfile, $dstfile) ||
                 die "error creating link $dstfile";
         }
     }
