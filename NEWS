@@ -9,12 +9,29 @@ Nix Packages 0.7
   tools.
 
   This change also makes the bootstrap process faster.  For instance,
-  GCC is built only once, not thrice.
+  GCC is built only once instead of three times.
 
   (Contributed by Armijn Hemel.)
 
-* Many packages have been changed and added, but notably:
+* Tarballs used by Nixpkgs are now obtained from the same server that
+  hosts Nixpkgs (catamaran.labs.cs.uu.nl).  This reduces the risk of
+  packages being unbuildable due to moved or deleted files on various
+  servers.
 
-  - Qt 3 has been added.
+* There now is a generic mechanism for building Perl modules.  See the
+  various Perl modules defined in pkgs/system/all-packages-generic.nix.
+    
+* Notable new packages:
 
-  - Mysql has been added.
+  - Qt 3
+  - MySQL
+  - MythTV
+  - Mono
+  - MonoDevelop (alpha)
+  - Xine
+
+* Notable updates:
+
+  - GCC 3.4.3
+  - Glibc 2.3.4
+  - GTK 2.6
