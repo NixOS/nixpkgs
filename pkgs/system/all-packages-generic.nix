@@ -261,6 +261,14 @@
     toolbuslib = toolbuslib_0_5_1;
   };
 
+  sglr_3_10_2 = (import ../development/tools/parsing/sglr/sglr-3.10.2.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm_2_0_5;
+    toolbuslib = toolbuslib_0_5_1;
+    ptsupport = pt_support_1_0;
+  };
+
   strategoxt = (import ../development/compilers/strategoxt) {
     fetchurl = fetchurl;
     stdenv = stdenv;

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-buildinputs="$aterm $getopt"
+buildinputs="$aterm"
 . $stdenv/setup || exit 1
 
 tar zxf $src || exit 1

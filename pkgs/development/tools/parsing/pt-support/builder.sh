@@ -1,6 +1,6 @@
 #! /bin/sh
 
-buildinputs="$aterm $getopt $toolbuslib"
+buildinputs="$aterm $toolbuslib"
 . $stdenv/setup || exit 1
 
 tar zxf $src || exit 1
