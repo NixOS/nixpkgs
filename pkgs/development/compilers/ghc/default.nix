@@ -3,11 +3,10 @@
 assert perl != null && ghc != null && m4 != null;
 
 stdenv.mkDerivation {
-  name = "ghc-6.2";
-  builder = ./builder.sh;
+  name = "ghc-6.2.1";
   src = fetchurl {
-    url = http://www.haskell.org/ghc/dist/6.2/ghc-6.2-src.tar.bz2;
-    md5 = "cc495e263f4384e1d6b38e851bf6eca0";
+    url = http://www.haskell.org/ghc/dist/6.2.1/ghc-6.2.1-src.tar.bz2;
+    md5 = "fa9f90fd6b8852679c5fc16509e94d7a";
   };
-  inherit perl ghc m4;
+  buildInputs = [perl ghc m4];
 }
