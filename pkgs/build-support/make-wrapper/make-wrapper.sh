@@ -11,12 +11,13 @@ makeWrapper() {
         p=${params[$n]}
 
         if test "$p" = "--suffix"; then
-            echo FOOBAR
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             value=${params[$((n + 3))]}
             n=$((n + 3))
-            echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
+            if test -n "$value"; then
+                echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
+            fi
         fi
     done
 

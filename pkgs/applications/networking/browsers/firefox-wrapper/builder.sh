@@ -5,20 +5,18 @@ shopt -s nullglob
 
 pluginPath=
 extraLibPath=
-for i in $plugins; do
-    for p in $i/lib/mozilla/plugins $i/jre/plugin/*/mozilla; do
-        if test -e $p; then
-            pluginPath=$pluginPath${pluginPath:+:}$p
-            if test -e $p/extra-library-path; then
-                extraLibPath=$extraLibPath${extraLibPath:+:}$(cat $p/extra-library-path)
-            fi
+for p in $plugins; do
+    if test -e $p; then
+        pluginPath=$pluginPath${pluginPath:+:}$p
+        if test -e $p/extra-library-path; then
+            extraLibPath=$extraLibPath${extraLibPath:+:}$(cat $p/extra-library-path)
         fi
-    done
+    fi
 done
 
 makeWrapper "$firefox/bin/firefox" "$out/bin/firefox" \
-    --suffix MOZ_PLUGIN_PATH ':' $pluginPath \
-    --suffix LD_LIBRARY_PATH ':' $extraLibPath
+    --suffix MOZ_PLUGIN_PATH ':' "$pluginPath" \
+    --suffix LD_LIBRARY_PATH ':' "$extraLibPath"
 
 #    --add-to-env MOZ_PLUGIN_PATH ':' --each lib/mozilla/plugins "$plugins" \
 #    --add-to-env MOZ_PLUGIN_PATH ':' --each 'jre/plugin/*/mozilla' "$plugins" \

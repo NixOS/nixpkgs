@@ -1,6 +1,6 @@
 {stdenv, fetchurl, zlib, libXmu}:
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "flashplayer-7.0r25";
 
   builder = ./builder.sh;
@@ -10,4 +10,4 @@ stdenv.mkDerivation {
   };
 
   inherit zlib libXmu;
-}
+}) // {mozillaPlugin = "/lib/mozilla/plugins";}

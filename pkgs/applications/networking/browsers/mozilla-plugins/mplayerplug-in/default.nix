@@ -4,7 +4,7 @@
 # are the include files so that we can access the plugin API (I
 # think).
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "mplayerplug-in-2.70";
 
   builder = ./builder.sh;
@@ -16,4 +16,4 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig firefox (firefox.gtk) libXpm];
   
   inherit firefox;
-}
+}) // {mozillaPlugin = "/lib/mozilla/plugins";}
