@@ -61,12 +61,6 @@ sub addPkg {
 }
 
 
-foreach my $name (keys %ENV) {
-
-    next unless $name =~ /^act.*$/;
-
-    my $pkgdir = $ENV{$name};
-    next unless $pkgdir =~ /^\//;
-
+foreach my $pkgdir ($ENV{"dirs"}) {
     addPkg($pkgdir);
 }
