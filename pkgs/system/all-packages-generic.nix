@@ -306,6 +306,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  jclasslib = (import ../development/tools/java/jclasslib) {
+    inherit fetchurl stdenv;
+    j2re = j2sdk15;
+  };
+
   ocaml = (import ../development/compilers/ocaml) {
     inherit fetchurl stdenv x11;
   };
