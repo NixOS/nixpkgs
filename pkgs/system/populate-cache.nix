@@ -29,8 +29,7 @@ let {
     gnumake
     bisonnew
     flexnew
-    gcc
-    gcc34
+    gccWrapped
     aterm
     strategoxt
     xdoc
@@ -85,5 +84,5 @@ let {
   body = [
     i686LinuxPkgs
     powerpcDarwinPkgs
-  ];   
+  ];
 }

@@ -251,6 +251,14 @@ rec {
     profiledCompiler = gccWithProfiling;
   };
 
+  gccWrapped = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = stdenv.gcc;
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
   gcc_static = (import ../stdenv/nix-linux/gcc-static) {
     inherit fetchurl stdenv;
   };
@@ -553,11 +561,18 @@ rec {
 
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt perl zlib libxml2 bzip2;
+            flex bison popt perl zlib libxml2 bzip2
+            perlXMLParser;
     gtkLibs = gtkLibs22;
   };
 
-  wxGTK = (import ../development/libraries/wxGTK) {
+  wxGTK = (import ../development/libraries/wxGTK-2.5) {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libXinerama;
+  };
+
+  wxGTK24 = (import ../development/libraries/wxGTK) {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs22) gtk;
   };
@@ -780,7 +795,7 @@ rec {
   };
 
   vlc = (import ../applications/video/vlc) {
-    inherit fetchurl stdenv wxGTK libdvdcss libdvdplay
+    inherit fetchurl stdenv libdvdcss wxGTK libdvdplay
             mpeg2dec a52dec libmad x11;
     inherit (xlibs) libXv;
     alsa = alsaLib;
