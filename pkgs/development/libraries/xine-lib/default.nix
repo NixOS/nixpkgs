@@ -12,11 +12,11 @@ assert encryptedDVDSupport -> libdvdcss != null;
 assert alsaSupport -> alsaLib != null;
 
 stdenv.mkDerivation {
-  name = "xine-lib-1-pre-rc7";
+  name = "xine-lib-1.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/xine/xine-lib-1-rc7.tar.gz;
-    md5 = "b3eaa0dd44fdbb8e3915399895c8414a";
+    url = http://heanet.dl.sourceforge.net/sourceforge/xine/xine-lib-1.0.tar.gz;
+    md5 = "96e5195c366064e7778af44c3e71f43a";
   };
   buildInputs = [
     x11
@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     (if xineramaSupport then libXinerama else null)
     (if alsaSupport then alsaLib else null)
   ];
+  libXv = if xvideoSupport then libXv else null;
   libdvdcss = if encryptedDVDSupport then libdvdcss else null;
   propagatedBuildInputs = [zlib];
 }

@@ -6,4 +6,8 @@ if test -n "$libdvdcss"; then
     export NIX_LDFLAGS="-rpath $libdvdcss/lib -L$libdvdcss/lib -ldvdcss $NIX_LDFLAGS"
 fi
 
+if test -n "$libXv"; then
+    configureFlags="--with-xv-path=$libXv/lib $configureFlags"
+fi
+
 genericBuild
