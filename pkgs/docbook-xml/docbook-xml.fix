@@ -8,5 +8,6 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("unzip", IncludeFix("unzip/unzip.fix"))
   ]
 )
