@@ -2,26 +2,23 @@
 , sslSupport, db4Support
 }:
 
-assert sslSupport -> !isNull openssl;
-assert db4Support -> !isNull db4;
-assert !isNull expat && !isNull perl;
+assert sslSupport -> openssl != null;
+assert db4Support -> db4 != null;
+assert expat != null && perl != null;
 
 derivation {
-  name = "apache-httpd-2.0.48";
+  name = "apache-httpd-2.0.49";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.cs.uu.nl/mirror/apache.org/dist/httpd/httpd-2.0.48.tar.gz;
-    md5 = "466c63bb71b710d20a5c353df8c1a19c";
+    url = ftp://ftp.cs.uu.nl/mirror/apache.org/dist/httpd/httpd-2.0.49.tar.gz;
+    md5 = "275d3d37eed1b070f333d3618f7d1954";
   };
 
-  sslSupport = sslSupport;
-  db4Support = db4Support;
+  inherit sslSupport db4Support;
 
-  stdenv = stdenv;
-  perl = perl;
-  openssl = if sslSupport then openssl else "";
-  db4 = if db4Support then db4 else "";
-  expat = expat;
+  inherit stdenv perl expat;
+  openssl = if sslSupport then openssl else null;
+  db4 = if db4Support then db4 else null;
 }
