@@ -9,4 +9,6 @@
   stdenv = stdenv;
   aterm = aterm;
   sdf = sdf;
+  tarfile = "true";
+  dir = "strategoxt";
 }

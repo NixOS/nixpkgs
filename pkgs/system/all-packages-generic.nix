@@ -88,6 +88,11 @@
     stdenv = stdenv;
   };
 
+  which = (import ../tools/system/which) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   wget = (import ../tools/networking/wget) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -140,6 +145,20 @@
     stdenv = stdenv;
     perl = perl;
     autoconf = autoconf;
+  };
+
+  libtool = (import ../development/tools/misc/libtool) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    m4 = gnum4;
+    perl = perl;
+  };
+
+  autotools = {
+    automake = automake;
+    autoconf = autoconf;
+    make     = gnumake;
+    libtool  = libtool;
   };
 
   pkgconfig = (import ../development/tools/misc/pkgconfig) {
@@ -215,6 +234,15 @@
   strategoxt = (import ../development/compilers/strategoxt) {
     fetchurl = fetchurl;
     stdenv = stdenv;
+    aterm = aterm;
+    sdf = sdf2;
+  };
+
+  strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
+    fetchsvn = fetchsvn;
+    stdenv = stdenv;
+    autotools = autotools;
+    which = which;
     aterm = aterm;
     sdf = sdf2;
   };
