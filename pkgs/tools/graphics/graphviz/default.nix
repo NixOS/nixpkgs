@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/graphviz-2.2.tar.gz;
     md5 = "9275d30695a5c22f360acbef7b85acd3";
   };
 
