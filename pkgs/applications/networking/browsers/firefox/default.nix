@@ -2,7 +2,7 @@
 
 # !!! assert libIDL.glib == gtk.glib;
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "firefox-1.0pre-PR-0.10.1";
 
   builder = ./builder.sh;
@@ -14,4 +14,4 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig gtk perl zip libIDL libXi];
 
   patches = [./writable-copies.patch];
-}
+}) // {inherit gtk;}

@@ -26,7 +26,7 @@ postInstall() {
     strip -S $out/lib/*/* || true
 
     # We don't need this (do we?)
-    rm -rf $out/include
+#    rm -rf $out/include
 
     # This fixes starting Firefox when there already is a running
     # instance.  The `firefox' wrapper script actually expects to be
