@@ -156,7 +156,7 @@ rec {
   };
 
   valgrind = (import ../development/tools/misc/valgrind) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv perl;
   };
 
   texinfo = (import ../development/tools/misc/texinfo) {
