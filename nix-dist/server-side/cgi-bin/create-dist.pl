@@ -19,7 +19,7 @@ sub printResult {
 my $args = $ENV{"PATH_INFO"};
 
 # Parse command.
-die unless $args =~ /^\/([a-z]+)\/(.*)$/;
+die unless $args =~ /^\/([a-z-]+)\/(.*)$/;
 my $command = $1;
 $args = $2;
 
@@ -57,6 +57,19 @@ elsif ($command eq "upload") {
     printResult "ok";
 }
 
+# Upload and unpack a tar file to a release.
+elsif ($command eq "upload-tar") {
+    die unless $args =~ /^([A-Za-z0-9-][A-Za-z0-9-\.]*)((\/[A-Za-z0-9-][A-Za-z0-9-\.]*)*)$/;
+    my $sessionName = $1;
+    my $path = $2; # may be empty
+
+    my $fullPath = "$releasesDir/$sessionName/$path";
+
+    system("cd $fullPath && tar xfj - 1>&2") == 0 or die "cannot unpack: $?";
+    
+    printResult "ok";
+}
+
 # Finish the release.
 elsif ($command eq "finish") {
     die unless $args =~ /^([A-Za-z0-9-][A-Za-z0-9-\.]+)$/;
@@ -67,12 +80,16 @@ elsif ($command eq "finish") {
 
     my $releaseDir1 = "$releasesDir/$sessionName";
     my $releaseDir2 = "$releasesDir/$releaseName";
+
+    system("chmod -R g=u $releaseDir1 1>&2") == 0 or die "cannot chmod: $?";
+
     if (-d $releaseDir2) {
 	my $uniqueNr = int (rand 1000000);
 	my $releaseDir3 = "$releasesDir/replaced-$uniqueNr-$releaseName";
 	rename $releaseDir2, $releaseDir3
 	    or die "cannot rename $releaseDir2 to $releaseDir3";
     }
+
     rename $releaseDir1, $releaseDir2
 	or die "cannot rename $releaseDir1 to $releaseDir2";
 
