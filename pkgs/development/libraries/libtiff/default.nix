@@ -9,6 +9,6 @@ stdenv.mkDerivation {
     url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-v3.5.7.tar.gz;
     md5 = "82243b5ae9b7c9e492aeebc501680990";
   };
-  zlib = zlib;
-  libjpeg = libjpeg;
+  propagatedBuildInputs = [zlib libjpeg];
+  inherit zlib libjpeg;
 }

@@ -8,5 +8,11 @@
 
 * Bug in ld-wrapper: should source in add-flags (like gcc-wrapper) - then fix uml builder
 
+* In setup.sh: move "test -x $configureScript" into "if test -z $configureScript..."
+
+* In setup.sh: remove bogus stopNest in configureW
+
+* In setup.sh: add configureFlagsArray or something
+
 
 * Inform freedesktop people that Xaw requires Xpm.

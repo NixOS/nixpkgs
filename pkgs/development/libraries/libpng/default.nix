@@ -9,5 +9,6 @@ stdenv.mkDerivation {
     url = http://heanet.dl.sourceforge.net/sourceforge/png-mng/libpng-1.2.5.tar.bz2;
     md5 = "3fc28af730f12ace49b14568de4ad934";
   };
-  zlib = zlib;
+  propagatedBuildInputs = [zlib];
+  inherit zlib;
 }

@@ -1,11 +1,10 @@
 . $stdenv/setup
 
-tar xvfz $src
-cd pkgconfig-*
-./configure --prefix=$out
-make
-mkdir $out
-make install
+postInstall() {
+    test -x $out/nix-support || mkdir $out/nix-support
+    cp $setupHook $out/nix-support/setup-hook
+}
+postInstall=postInstall
 
-mkdir $out/nix-support
-cp $setupHook $out/nix-support/setup-hook
+genericBuild
+
