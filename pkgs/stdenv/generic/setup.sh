@@ -230,14 +230,20 @@ startLog() {
             # This required named pipes (fifos).
             logFifo=$NIX_BUILD_TOP/log_fifo
             test -p $logFifo || mkfifo $logFifo
-            tee $logDir/$logFile < $logFifo &
-            logTeePid=$!
+            startLogWrite "$logDir/$logFile" "$logFifo"
             exec > $logFifo 2>&1
         else
             exec > $logDir/$logFile 2>&1
         fi
     fi
 }
+
+# Factored into a separate function so that it can be overriden.
+startLogWrite() {
+    tee "$1" < "$2" &
+    logWriterPid=$!
+}
+
 
 if test -z "$logDir"; then
     logDir=$out/log
@@ -252,9 +258,9 @@ stopLog() {
 
         # Wait until the tee process has died.  Otherwise output from
         # different phases may be mixed up.
-        if test -n "$logTeePid"; then
-            wait $logTeePid
-            logTeePid=
+        if test -n "$logWriterPid"; then
+            wait $logWriterPid
+            logWriterPid=
             rm $logFifo
         fi
     fi
