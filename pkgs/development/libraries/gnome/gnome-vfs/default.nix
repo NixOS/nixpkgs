@@ -12,4 +12,5 @@ stdenv.mkDerivation {
     gnomemimedata popt bzip2 perlXMLParser
   ];
   PERL5LIB = perlXMLParser ~ "/lib/site_perl";
+  patches = [./no-kerberos.patch];
 }
