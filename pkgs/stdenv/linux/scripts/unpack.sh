@@ -1,10 +1,6 @@
 set -e
 
-echo "using curl executable $curl"
-
-$curl/bin/curl "$url" > .tmp
-
-$bunzip2 -d < .tmp | $tar xvf -
+$bunzip2 -d < $tarball | $tar xvf -
 
 $cp -prd * $out
 

@@ -1,4 +1,3 @@
-set -x
 set -e
 
 PATH=$coreutils/bin
