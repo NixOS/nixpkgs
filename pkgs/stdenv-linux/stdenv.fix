@@ -8,6 +8,7 @@ Package(
 
   , ("tools", 
       [ IncludeFix("coreutils/coreutils.fix")
+      , IncludeFix("findutils/findutils.fix")
       , IncludeFix("gnused/gnused.fix")
       , IncludeFix("gnugrep/gnugrep.fix")
       , IncludeFix("gawk/gawk.fix")
