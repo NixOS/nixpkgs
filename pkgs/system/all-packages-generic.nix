@@ -147,6 +147,15 @@
     stdenv = stdenv;
   };
 
+  swig = (import ../development/tools/misc/swig) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perlSupport = true;
+    pythonSupport = true;
+    perl = perl;
+    python = python;
+  };
+
   gnumake = (import ../development/tools/build-managers/gnumake) {
     fetchurl = fetchurl;
     stdenv = stdenv;
@@ -171,6 +180,11 @@
   };
 
   perl = (import ../development/interpreters/perl) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  python = (import ../development/interpreters/python) {
     fetchurl = fetchurl;
     stdenv = stdenv;
   };
@@ -413,6 +427,13 @@
     stdenv = stdenv;
   };
 
+  perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    perl = perl;
+    db4 = db4;
+  };
+
 
   ### SERVERS
 
@@ -477,6 +498,7 @@
     httpd = apacheHttpd;
     db4 = db4;
     expat = expat;
+    swig = swig;
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {

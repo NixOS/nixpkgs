@@ -1,6 +1,6 @@
 let {
   system = "i686-linux";
-  pkgs = (import ../pkgs/system/all-packages.nix) {system = system};
+  pkgs = (import ../pkgs/system/all-packages.nix) {system = system;};
   stdenv = pkgs.stdenv_;
 
   sourcedist = (import ./nix-source-dist.nix) {

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-buildinputs="$openssl $db4 $httpd $swig $expat"
+buildinputs="$openssl $db4 $httpd $swig $python $expat"
 . $stdenv/setup || exit 1
 
 if test $localServer; then

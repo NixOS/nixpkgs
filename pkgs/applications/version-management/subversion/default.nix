@@ -10,7 +10,7 @@ assert !isNull expat;
 assert localServer -> !isNull db4;
 assert httpServer -> !isNull httpd && httpd.expat == expat;
 assert sslSupport -> !isNull openssl && (httpServer -> httpd.openssl == openssl);
-assert swigBindings -> !isNull swig;
+assert swigBindings -> !isNull swig && swig.pythonSupport;
 
 derivation {
   name = "subversion-0.32.1";
@@ -33,4 +33,5 @@ derivation {
   expat = expat;
   db4 = if localServer then db4 else null;
   swig = if swigBindings then swig else null;
+  python = if swigBindings then swig.python else null;
 }

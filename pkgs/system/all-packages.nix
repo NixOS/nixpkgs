@@ -16,15 +16,15 @@
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ../stdenv/native) {system = system};
-  stdenvNativePkgs = allPackages {system = system; stdenv = stdenvNative};
+  stdenvNative = (import ../stdenv/native) {system = system;};
+  stdenvNativePkgs = allPackages {system = system; stdenv = stdenvNative;};
 
   # The Nix build environment.
   stdenvNix = (import ../stdenv/nix) {
     bootStdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
   };
-  stdenvNixPkgs = allPackages {system = system; stdenv = stdenvNix};
+  stdenvNixPkgs = allPackages {system = system; stdenv = stdenvNix;};
 
   # The Linux build environment consists of the Nix build environment
   # built against the GNU C Library.
@@ -33,14 +33,14 @@
     system = system;
     glibc = stdenvLinuxGlibc;
   };
-  stdenvLinuxBootPkgs = allPackages {system = system; stdenv = stdenvLinuxBoot};
+  stdenvLinuxBootPkgs = allPackages {system = system; stdenv = stdenvLinuxBoot;};
 
   stdenvLinux = (import ../stdenv/nix-linux) {
     bootStdenv = stdenvLinuxBoot;
     pkgs = stdenvLinuxBootPkgs;
     glibc = stdenvLinuxGlibc;
   };
-  stdenvLinuxPkgs = allPackages {system = system; stdenv = stdenvLinux};
+  stdenvLinuxPkgs = allPackages {system = system; stdenv = stdenvLinux;};
 
   # Select the right instantiation.
   body =
