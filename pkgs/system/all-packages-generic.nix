@@ -206,6 +206,19 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
+  gcc340 = (import ../build-support/gcc-wrapper) {
+    name = "gcc-3.4.0";
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-3.4) {
+      inherit fetchurl stdenv noSysDirs;
+      patch = gnupatch;
+    };
+    binutils = stdenv.gcc.binutils;
+    glibc = stdenv.gcc.glibc;
+    inherit stdenv;
+  };
+
   g77 = (import ../build-support/gcc-wrapper) {
     name = "g77";
     nativeTools = false;

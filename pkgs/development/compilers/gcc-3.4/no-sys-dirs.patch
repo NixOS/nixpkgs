@@ -1,0 +1,16 @@
+diff -rc gcc-orig/gcc/cppdefault.c gcc-patched/gcc/cppdefault.c
+*** gcc-orig/gcc/cppdefault.c	2003-03-01 15:31:12.000000000 +0100
+--- gcc-patched/gcc/cppdefault.c	2004-06-29 10:08:45.000000000 +0200
+***************
+*** 41,46 ****
+--- 41,50 ----
+  # undef CROSS_INCLUDE_DIR
+  #endif
+  
++ #undef LOCAL_INCLUDE_DIR
++ #undef SYSTEM_INCLUDE_DIR
++ #undef STANDARD_INCLUDE_DIR
++ 
+  const struct default_include cpp_include_defaults[]
+  #ifdef INCLUDE_DEFAULTS
+  = INCLUDE_DEFAULTS;
