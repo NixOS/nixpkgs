@@ -328,7 +328,10 @@ configureW() {
     fi
 
     if test -z "$dontFixLibtool" -a -f ./ltmain.sh; then
-        fixLibtool ./ltmain.sh
+        for i in $(find . -name "ltmain.sh"); do
+            echo "fixing libtool script $i"
+            fixLibtool $i
+        done
     fi
 
     if test -z "$dontAddPrefix"; then
