@@ -19,9 +19,45 @@ makeWrapper() {
                 echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
             fi
         fi
+
+        if test "$p" = "--suffix-each"; then
+            varName=${params[$((n + 1))]}
+            separator=${params[$((n + 2))]}
+            values=${params[$((n + 3))]}
+            n=$((n + 3))
+            for value in $values; do
+                echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
+            done
+        fi
+
+        if test "$p" = "--suffix-contents"; then
+            varName=${params[$((n + 1))]}
+            separator=${params[$((n + 2))]}
+            fileNames=${params[$((n + 3))]}
+            n=$((n + 3))
+            for fileName in $fileNames; do
+                echo "export $varName=\$$varName\${$varName:+$separator}$(cat $fileName)" >> $wrapper
+            done
+        fi
     done
 
     echo "exec \"$original\" \"\$@\"" >> $wrapper
     
     chmod +x $wrapper
+}
+
+addSuffix() {
+    suffix=$1
+    shift
+    for name in "$@"; do
+        echo "$name$suffix"
+    done
+}
+
+filterExisting() {
+    for fn in "$@"; do
+        if test -e "$fn"; then
+            echo "$fn"
+        fi
+    done
 }
