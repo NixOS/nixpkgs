@@ -255,15 +255,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gcc34 = (import ../build-support/gcc-wrapper) {
+  gcc33 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-3.4) {
+    gcc = (import ../development/compilers/gcc-3.3) {
       inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
     };
-    binutils = stdenv.gcc.binutils;
-    glibc = stdenv.gcc.glibc;
+    inherit (stdenv.gcc) binutils glibc;
     inherit stdenv;
   };
 
@@ -273,8 +271,7 @@ rec {
     gcc = (import ../development/compilers/gcc-2.95) {
       inherit fetchurl stdenv noSysDirs;
     };
-    binutils = stdenv.gcc.binutils;
-    glibc = stdenv.gcc.glibc;
+    inherit (stdenv.gcc) binutils glibc;
     inherit stdenv;
   };
 
@@ -287,8 +284,7 @@ rec {
       langF77 = true;
       langCC = false;
     };
-    binutils = stdenv.gcc.binutils;
-    glibc = stdenv.gcc.glibc;
+    inherit (stdenv.gcc) binutils glibc;
     inherit stdenv;
   };
 
@@ -457,7 +453,7 @@ rec {
 
   glibc = (import ../development/libraries/glibc) {
     inherit fetchurl stdenv kernelHeaders;
-    installLocales = false;
+    installLocales = true;
   };
 
   aterm = (import ../development/libraries/aterm) {
