@@ -15,9 +15,5 @@ stdenv.mkDerivation {
     md5 = "cdc85152f4219bf3e3f1a8dc46e04654";
   };
 
-  pkgconfig = pkgconfig;
-  gtk = gtk;
-  perl = perl;
-  zip = zip;
-  libIDL = libIDL;
+  buildInputs = [pkgconfig, gtk, perl, zip, libIDL];
 }

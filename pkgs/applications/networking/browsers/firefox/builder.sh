@@ -1,10 +1,8 @@
-buildinputs="$pkgconfig $gtk $perl $zip $libIDL"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd mozilla || exit 1
 
-cat > .mozconfig <<EOF
+preConfigure() {
+    cat > .mozconfig <<EOF
 export MOZ_PHOENIX=1
 mk_add_options MOZ_PHOENIX=1
 ac_add_options --enable-crypto
@@ -21,8 +19,11 @@ ac_add_options --enable-swg
 ac_add_options --enable-strip
 ac_add_options --enable-default-toolkit=gtk2
 EOF
-echo "ac_add_options --prefix=$out" >> .mozconfig
+    echo "ac_add_options --prefix=$out" >> .mozconfig
+}
+preConfigure=preConfigure
 
-./configure || exit 1
-make -f client.mk build || exit 1
-make install || exit 1
+
+makeFlags="-f client.mk build"
+
+genericBuild

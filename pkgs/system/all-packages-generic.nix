@@ -384,14 +384,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  fontconfig = (import ../development/libraries/fontconfig) {
-    inherit fetchurl stdenv freetype expat ed x11;
-  };
-
-  xft = (import ../development/libraries/xft) {
-    inherit fetchurl stdenv pkgconfig fontconfig x11;
-  };
-
   zlib = (import ../development/libraries/zlib) {
     inherit fetchurl stdenv;
   };
@@ -426,7 +418,7 @@ rec {
   };
 
   pango = (import ../development/libraries/gtk+/pango) {
-    inherit fetchurl stdenv pkgconfig glib xft x11;
+    inherit fetchurl stdenv pkgconfig glib x11;
   };
 
   gtk = (import ../development/libraries/gtk+/gtk+) {
@@ -583,6 +575,9 @@ rec {
     inherit fetchurl stdenv pkgconfig xproto xextensions libXtrans libXau;
   };
 
+  libXext = (import ../development/libraries/freedesktop/libXext) {
+    inherit fetchurl stdenv pkgconfig xproto xextensions libX11;
+  };
 
   libICE = (import ../development/libraries/freedesktop/libICE) {
     inherit fetchurl stdenv pkgconfig libX11;
@@ -597,8 +592,24 @@ rec {
     patch = gnupatch;
   };
 
+  renderext = (import ../development/libraries/freedesktop/renderext) {
+    inherit fetchurl stdenv;
+  };
+
+  libXrender = (import ../development/libraries/freedesktop/libXrender) {
+    inherit fetchurl stdenv pkgconfig libX11 renderext;
+  };
+
+  fontconfig = (import ../development/libraries/freedesktop/fontconfig) {
+    inherit fetchurl stdenv freetype expat;
+  };
+
+  libXft = (import ../development/libraries/freedesktop/libXft) {
+    inherit fetchurl stdenv pkgconfig libX11 libXrender freetype fontconfig;
+  };
+
   xlibs = (import ../development/libraries/freedesktop/xlibs) {
-    inherit stdenv libX11 libXt;
+    inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
   };
 
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {

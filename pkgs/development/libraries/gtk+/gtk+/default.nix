@@ -5,24 +5,16 @@ assert pkgconfig != null && x11 != null && glib != null && atk != null
   && pango != null && perl != null && perl != null && libtiff != null
   && libjpeg != null && libpng != null;
 assert x11.buildClientLibs;
-assert glib == atk.glib;
-assert glib == pango.glib;
-assert x11 == pango.x11;
+#assert glib == atk.glib;
+#assert glib == pango.glib;
+#assert x11 == pango.x11;
 
 stdenv.mkDerivation {
   name = "gtk+-2.2.4";
-  builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.4.tar.bz2;
     md5 = "605332199533e73bc6eec481fb4f1671";
   };
-  pkgconfig = pkgconfig;
-  x11 = x11;
-  glib = glib;
-  atk = atk;
-  pango = pango;
-  perl = perl;
-  libtiff = libtiff;
-  libjpeg = libjpeg;
-  libpng = libpng;
+  buildInputs = [pkgconfig perl libtiff libjpeg libpng];
+  propagatedBuildInputs = [x11 glib atk pango];
 }
