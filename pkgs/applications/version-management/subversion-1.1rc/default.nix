@@ -4,7 +4,7 @@
 , pythonBindings ? false
 , javaBindings ? false
 , stdenv, fetchurl
-, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, patch
+, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null
 }:
 
 assert expat != null;
@@ -35,6 +35,6 @@ stdenv.mkDerivation {
   python = if pythonBindings then swig.python else null;
   j2sdk = if javaBindings then swig.j2sdk else null;
 
-  inherit expat patch localServer httpServer sslSupport
+  inherit expat localServer httpServer sslSupport
           pythonBindings javaBindings;
 }

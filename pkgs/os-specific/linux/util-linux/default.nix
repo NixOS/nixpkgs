@@ -1,4 +1,4 @@
-{stdenv, fetchurl, patch}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "util-linux-2.12";
@@ -8,5 +8,4 @@ stdenv.mkDerivation {
     md5 = "997adf78b98d9d1c5db4f37ea982acff";
   };
   mconfigPatch = ./MCONFIG.patch;
-  inherit patch;
 }

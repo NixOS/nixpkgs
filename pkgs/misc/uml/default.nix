@@ -1,6 +1,6 @@
-{stdenv, fetchurl, patch, perl, m4}:
+{stdenv, fetchurl, perl, m4}:
 
-assert patch != null && perl != null && m4 != null;
+assert perl != null && m4 != null;
 
 stdenv.mkDerivation {
   name = "uml-2.4.24-2";
@@ -19,5 +19,5 @@ stdenv.mkDerivation {
 #  hostfsPatch = ./hostfs.patch;
 #  hostfsAccessPatch = ./hostfs-access.patch;
   config = ./config;
-  buildInputs = [patch perl m4];
+  buildInputs = [perl m4];
 }
