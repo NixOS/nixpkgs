@@ -529,6 +529,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libogg = (import ../development/libraries/libogg) {
+    inherit fetchurl stdenv;
+  };
+
+  libvorbis = (import ../development/libraries/libvorbis) {
+    inherit fetchurl stdenv libogg;
+  };
+
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
   };
@@ -861,6 +869,11 @@ rec {
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
     inherit fetchurl stdenv;
   };
+  
+  flac = (import ../applications/audio/flac) {
+    inherit fetchurl stdenv libogg;
+  };
+
 
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib;
