@@ -60,6 +60,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  enscript = (import ../tools/text/enscript) {
+    inherit fetchurl stdenv;
+  };
+
   ed = (import ../tools/text/ed) {
     inherit fetchurl stdenv;
   };

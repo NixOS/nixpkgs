@@ -9,6 +9,7 @@ let {
       pkgs.gnused
       pkgs.gnugrep
       pkgs.gawk
+      pkgs.enscript
       pkgs.gnutar
       pkgs.zip
       pkgs.unzip
