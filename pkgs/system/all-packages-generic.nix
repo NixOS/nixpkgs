@@ -310,6 +310,10 @@
     inherit fetchurl stdenv libxml2;
   };
 
+  libxml2_265 = (import ../development/libraries/libxml2/libxml2-2.6.5.nix) {
+    inherit fetchurl stdenv zlib;
+  };
+
   gettext = (import ../development/libraries/gettext) {
     inherit fetchurl stdenv;
   };
