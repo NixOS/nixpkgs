@@ -1,0 +1,4 @@
+. $stdenv/setup
+
+configureFlags=""
+genericBuild
