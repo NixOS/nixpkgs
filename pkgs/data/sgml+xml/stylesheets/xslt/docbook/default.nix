@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "docbook-xsl-1.65.1";
+  name = "docbook-xsl-1.68.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/docbook-xsl-1.65.1.tar.gz;
-    md5 = "2f7d446de5523ec34a19ccbe8caf387f";
+    url = http://heanet.dl.sourceforge.net/sourceforge/docbook/docbook-xsl-1.68.1.tar.bz2;
+    md5 = "f4985efbc0f3411af8106928f8752fc5";
   };
 }
