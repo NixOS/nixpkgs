@@ -71,6 +71,10 @@ postInstall() {
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
     find $out/include -name "*.gch" -exec rm -rf {} \; -prune
+
+    # Remove `fixincl' to prevent a retained dependency on the
+    # previous gcc.
+    rm -rf $out/libexec/gcc/*/*/install-tools
 }
 
 

@@ -2,7 +2,10 @@
 # identifier and a standard build environment, returns the set of all
 # packages provided by the Nix Package Collection.
 
-{stdenv, bootCurl, noSysDirs ? true}:
+{ stdenv, bootCurl, noSysDirs ? true
+, gccWithCC ? true
+, gccWithProfiling ? true
+}:
 
 rec {
 
@@ -41,7 +44,7 @@ rec {
   };
 
   diffutils = (import ../tools/text/diffutils) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv coreutils;
   };
 
   gnupatch = (import ../tools/text/gnupatch) {
@@ -218,7 +221,7 @@ rec {
   };
 
   gnumake = (import ../development/tools/build-managers/gnumake) {
-    inherit fetchurl stdenv patch;
+    inherit fetchurl stdenv;
   };
 
   bison = (import ../development/tools/parsing/bison) {
@@ -242,8 +245,10 @@ rec {
     m4 = gnum4;
   };
 
-  gcc = (import ../development/compilers/gcc) {
+  gcc = (import ../development/compilers/gcc-3.4) {
     inherit fetchurl stdenv noSysDirs;
+    langCC = gccWithCC;
+    profiledCompiler = gccWithProfiling;
   };
 
   gcc_static = (import ../stdenv/nix-linux/gcc-static) {
@@ -254,7 +259,7 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.4) {
-      inherit fetchurl stdenv patch noSysDirs;
+      inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
     };
     binutils = stdenv.gcc.binutils;
@@ -266,7 +271,7 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-2.95) {
-      inherit fetchurl stdenv patch noSysDirs;
+      inherit fetchurl stdenv noSysDirs;
     };
     binutils = stdenv.gcc.binutils;
     glibc = stdenv.gcc.glibc;
@@ -277,7 +282,7 @@ rec {
     name = "g77";
     nativeTools = false;
     nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc) {
+    gcc = (import ../development/compilers/gcc-3.3) {
       inherit fetchurl stdenv noSysDirs;
       langF77 = true;
       langCC = false;
@@ -399,7 +404,7 @@ rec {
   };
 
   realPerl = (import ../development/interpreters/perl) {
-    inherit fetchurl stdenv patch;
+    inherit fetchurl stdenv;
   };
 
   sysPerl = (import ../development/interpreters/sys-perl) {
@@ -451,7 +456,8 @@ rec {
   };
 
   glibc = (import ../development/libraries/glibc) {
-    inherit fetchurl stdenv kernelHeaders patch;
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = false;
   };
 
   aterm = (import ../development/libraries/aterm) {
@@ -504,7 +510,7 @@ rec {
 
   zlib = if stdenv.system == "powerpc-darwin" then
     (import ../development/libraries/zlib-mac-fix) {
-      inherit fetchurl stdenv patch;
+      inherit fetchurl stdenv;
     }
   else
     (import ../development/libraries/zlib) {
@@ -609,7 +615,7 @@ rec {
   };
 
   xlibs = (import ../development/libraries/xlibs) {
-    inherit fetchurl stdenv pkgconfig freetype expat patch;
+    inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
   mesa = (import ../development/libraries/mesa) {
@@ -672,11 +678,11 @@ rec {
   };
 
   utillinux = (import ../os-specific/linux/util-linux) {
-    inherit fetchurl stdenv patch;
+    inherit fetchurl stdenv;
   };
 
   sysvinit = (import ../os-specific/linux/sysvinit) {
-    inherit fetchurl stdenv patch;
+    inherit fetchurl stdenv;
   };
 
   e2fsprogs = (import ../os-specific/linux/e2fsprogs) {
@@ -726,7 +732,7 @@ rec {
   };
 
   subversionWithJava = (import ../applications/version-management/subversion-1.1rc) {
-    inherit fetchurl stdenv openssl db4 expat patch;
+    inherit fetchurl stdenv openssl db4 expat;
     swig = swigWithJava;
     localServer = true;
     httpServer = false;
@@ -841,7 +847,7 @@ rec {
   ### MISC
 
   uml = (import ../misc/uml) {
-    inherit fetchurl stdenv perl patch;
+    inherit fetchurl stdenv perl;
     m4 = gnum4;
   };
 

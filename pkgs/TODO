@@ -11,10 +11,6 @@
 * After building gcc, filter out references to /tmp/nix... in
   .../lib/libsupc++.la and .../lib/libstdc++.la
 
-* diffutils retains a dependency on coreutils/bin/pr; causes stdenv to
-  depend on 2 copies of coreutils (the first one impure in
-  stdenv-nix-linux!)
-
 
 
 * change dontMake & dontMakeInstall into dontBuild and dontInstall in

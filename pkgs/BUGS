@@ -14,22 +14,6 @@
     ...
 
 
-* Subtle problems can occur if the Nix store directory or one of its
-  parents is a symlink.  E.g., purity checks can barf:
-
-    impure path `/data/nix/store/099cd9aee7d056a9922fd6dd116a3f5c-gcc-3.3.3/bin/../lib/gcc-lib/i686-pc-linux-gnu/3.3.3/crtbegin.o' used in link
-
-  (This happened because /nix was a symlink to /data/nix.)  Maybe we
-  should disallow this entirely, since, exactly because it is
-  perfectly legal for a builder to expand a symlink, we can end up
-  with derivates referring to paths that existed in the build
-  environment but not in the target environment.
-
-  Disallowing this can be highly inconvenient, since it makes it
-  harder to move the Nix store to a different file system.  (On Linux,
-  `bind' mounts can help here.) 
-
-
 * In libXt:
 
 /bin/sh ./libtool --mode=compile gcc -DHAVE_CONFIG_H -I. -I. -I.     -DXTHREADS -DXUSE_MTSAFE_API -I/nix/store/aadf0bd4a908da11d14f6538503b8408-libX11-6.2.1/include -I/nix/store/ba366e3b944ead64ec9b0490bb615874-xproto-6.6.1/include   -I./include/X11 -g -O2 -c -o ActionHook.lo `test -f 'ActionHook.c' || echo './'`ActionHook.c
@@ -69,4 +53,9 @@ stdenv.mkDerivation {
 * Add "exit 0" at the end of configure of rte package.
 
 
-* In stdenv/nix/path.nix: remove gcc.
+* Starting at gcc 3.4, all C programs incur a retained dependency on
+  gcc through the rpath stored in the executable, even though the
+  executable doesn't use against any library in gcc.  The reason is
+  that the gcc passes a `-lgcc_s' switch to the linker.  Solution:
+  patch the linker so that rpaths are only added for libraries that we
+  actually use.

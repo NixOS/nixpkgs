@@ -28,25 +28,33 @@
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvNativePkgs = allPackages {
+  stdenvNativePkgsFun = bootstrap: allPackages {
     stdenv = stdenvNative;
     bootCurl = null;
     noSysDirs = false;
+    gccWithCC = !bootstrap;
+    gccWithProfiling = !bootstrap;
   };
+
+  stdenvNativePkgs = stdenvNativePkgsFun false;
 
 
   # The Nix build environment.
-  stdenvNix = (import ../stdenv/nix) {
+  stdenvNixFun = bootstrap: (import ../stdenv/nix) {
     stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
+    pkgs = stdenvNativePkgsFun bootstrap;
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvNixPkgs = allPackages {
-    stdenv = stdenvNix;
-    bootCurl = stdenvNativePkgs.curl;
+  stdenvNix = stdenvNixFun false;
+
+  stdenvNixPkgsFun = bootstrap: allPackages {
+    stdenv = stdenvNixFun bootstrap;
+    bootCurl = (stdenvNativePkgsFun bootstrap).curl;
     noSysDirs = false;
   };
+
+  stdenvNixPkgs = stdenvNixPkgs false;
 
 
   # The Linux build environment is a fully bootstrapped Nix
@@ -54,7 +62,7 @@
 
   # 1) Build glibc in the Nix build environment.  The result is
   #    pure.
-  stdenvLinuxGlibc = stdenvNixPkgs.glibc;
+  stdenvLinuxGlibc = (stdenvNixPkgsFun true).glibc;
 
   # 2) Construct a stdenv consisting of the Nix build environment, but
   #    with a gcc-wrapper that causes linking against the glibc from
@@ -64,7 +72,7 @@
   #    `-lncurses').
   stdenvLinuxBoot1 = (import ../stdenv/nix-linux) {
     stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
+    pkgs = stdenvNativePkgsFun true;
     glibc = stdenvLinuxGlibc;
     inherit genericStdenv gccWrapper;
   };
@@ -76,8 +84,10 @@
   #    *doesn't* search in `/lib' etc.  So these programs won't work.
   stdenvLinuxBoot1Pkgs = allPackages {
     stdenv = stdenvLinuxBoot1;
-    bootCurl = stdenvNativePkgs.curl;
+    bootCurl = (stdenvNativePkgsFun true).curl;
     noSysDirs = true;
+    gccWithCC = false;
+    gccWithProfiling = false;
   };
 
   # 4) Therefore we build a new standard environment which is the same
@@ -86,7 +96,7 @@
   #    system directories), things built by this stdenv should be pure.
   stdenvLinuxBoot2 = (import ../stdenv/nix-linux) {
     stdenv = stdenvLinuxBoot1;
-    pkgs = stdenvNativePkgs // {
+    pkgs = (stdenvNativePkgsFun true) // {
       inherit (stdenvLinuxBoot1Pkgs) gcc binutils;
     };
     glibc = stdenvLinuxGlibc;
@@ -96,7 +106,7 @@
   # 5) So these packages should be pure.
   stdenvLinuxBoot2Pkgs = allPackages {
     stdenv = stdenvLinuxBoot2;
-    bootCurl = stdenvNativePkgs.curl;
+    bootCurl = (stdenvNativePkgsFun true).curl;
   };
 
   # 6) Finally we can construct the Nix build environment from the
@@ -138,7 +148,7 @@
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
-    genericStdenv = import ../stdenv/generic-branch;
+    genericStdenv = import ../stdenv/generic;
     inherit gccWrapper;
   };
 
@@ -147,21 +157,5 @@
     bootCurl = null;
     noSysDirs = false;
   };
-
-
-  # Testing the new stdenv-linux (TODO: remove this eventually).
-  stdenvLinuxTest = (import ../stdenv/nix-linux) {
-    stdenv = stdenvLinuxBoot2;
-    pkgs = stdenvLinuxBoot2Pkgs;
-    glibc = stdenvLinuxGlibc;
-    genericStdenv = import ../stdenv/generic-branch;
-    inherit gccWrapper;
-  };
-
-  stdenvDarwinTest = (import ../stdenv/darwin) {
-    stdenv = stdenvInitial;
-    genericStdenv = import ../stdenv/generic-branch;
-    inherit gccWrapper;
-  };
-    
+  
 }

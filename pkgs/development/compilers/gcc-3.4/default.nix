@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patch, noSysDirs
+{ stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
 }:
@@ -14,6 +14,5 @@ stdenv.mkDerivation {
   };
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch];
-  buildInputs = [patch];
   inherit noSysDirs langC langCC langF77 profiledCompiler;
 }

@@ -424,6 +424,14 @@ configureW() {
         $preConfigure
     fi
 
+    if test -z "$prefix"; then
+        prefix="$out";
+    fi
+
+    if test "$useTempPrefix" = "1"; then
+        prefix="$NIX_BUILD_TOP/tmp_prefix";
+    fi
+
     if test -z "$configureScript"; then
         configureScript=./configure
         if ! test -x $configureScript; then
@@ -437,14 +445,6 @@ configureW() {
             echo "fixing libtool script $i"
             fixLibtool $i
         done
-    fi
-
-    if test -z "$prefix"; then
-        prefix="$out";
-    fi
-
-    if test "$useTempPrefix" = "1"; then
-        prefix="$NIX_BUILD_TOP/tmp_prefix";
     fi
 
     if test -z "$dontAddPrefix"; then

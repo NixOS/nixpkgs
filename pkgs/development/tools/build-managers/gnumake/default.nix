@@ -1,4 +1,4 @@
-{stdenv, fetchurl, patch}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "gnumake-3.80";
@@ -7,5 +7,4 @@ stdenv.mkDerivation {
     md5 = "0bbd1df101bc0294d440471e50feca71";
   };
   patches = [./log.diff];
-  buildInputs = [patch];
 }
