@@ -11,5 +11,6 @@ Package(
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("freetype", IncludeFix("freetype/freetype.fix"))
   , ("expat", IncludeFix("expat/expat.fix"))
+  , ("ed", IncludeFix("ed/ed.fix"))
   ]
 )

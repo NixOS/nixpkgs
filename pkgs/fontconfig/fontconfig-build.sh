@@ -2,6 +2,7 @@
 
 envpkgs="$freetype $expat"
 . $stdenv/setup || exit 1
+export PATH=$ed/bin:$PATH
 
 tar xvfz $src || exit 1
 cd fcpackage*/fontconfig || exit 1
