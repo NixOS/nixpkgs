@@ -283,14 +283,38 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sharedobjects = (import ../development/libraries/java/shared-objects) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv;
+  };
+
+  jjtraveler = (import ../development/libraries/java/jjtraveler) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv;
+  };
+
+  atermjava = (import ../development/libraries/java/aterm) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv sharedobjects jjtraveler;
+  };
+
+  jakartaregexp = (import ../development/libraries/java/jakarta-regexp) {
+    inherit fetchurl stdenv;
+  };
+
+  jakartabcel = (import ../development/libraries/java/jakarta-bcel) {
+    regexp = jakartaregexp;
+    inherit fetchurl stdenv;
+  };
+
   ocaml = (import ../development/compilers/ocaml) {
     inherit fetchurl stdenv x11;
   };
 
-  #strategoxt = (import ../development/compilers/strategoxt) {
-  #  inherit fetchurl stdenv aterm;
-  #  sdf = sdf_22;
-  #};
+  strategoxt = (import ../development/compilers/strategoxt) {
+    inherit fetchurl stdenv aterm;
+    sdf = sdf_22;
+  };
 
   #strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
   #  inherit fetchsvn stdenv autoconf automake libtool which aterm;
@@ -347,7 +371,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  apacheant = (import ../development/tools/build-managers/apache-ant) {
+  apacheant14 = (import ../development/tools/build-managers/apache-ant) {
+    inherit fetchurl stdenv j2sdk;
+  };
+
+  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
     j2sdk = j2sdk15;
   };
