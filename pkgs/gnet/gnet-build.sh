@@ -2,7 +2,7 @@
 
 envpkgs="$glib"
 . $stdenv/setup || exit 1
-export PATH=$pkgconfig/bin:/bin:/usr/bin
+export PATH=$pkgconfig/bin:$PATH
 
 tar xvfz $src || exit 1
 cd gnet-* || exit 1
