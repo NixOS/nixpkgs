@@ -20,7 +20,10 @@ cd build || exit 1
 ../gcc-*/configure --prefix=$out --enable-languages=c,c++ || exit 1
 
 # Patch some of the makefiles to force linking against our own glibc.
-extraflags="$NIX_CFLAGS $NIX_LDFLAGS -Wl,-s -isystem $linux/include"
+extraflags="-Wl,-s -isystem $linux/include $NIX_CFLAGS_COMPILE $NIX_CFLAGS_LINK"
+for i in $NIX_LDFLAGS; do
+    extraflags="$extraflags -Wl,$i"
+done
 
 mf=Makefile
 sed \

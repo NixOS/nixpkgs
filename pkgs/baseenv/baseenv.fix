@@ -1,8 +1,9 @@
 Package(
-  [ ("name", "stdenv-native")
+  [ ("name", "baseenv")
   , ("build", Relative("baseenv/baseenv-build.sh"))
 
   , ("setup", Relative("baseenv/setup.sh"))
   , ("gccwrapper", Relative("baseenv/gcc-wrapper.sh"))
+  , ("ldwrapper", Relative("baseenv/ld-wrapper.sh"))
   ]
 )

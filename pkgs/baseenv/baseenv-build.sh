@@ -9,20 +9,17 @@ sed \
  -e s^@OUT\@^$out^g \
  < $setup > $out/setup || exit 1
 
-gcc='$NIX_CC'
-
 sed \
- -e s^@GCC\@^$gcc^g \
+ -e 's^@GCC\@^$NIX_CC^g' \
  < $gccwrapper > $out/bin/gcc || exit 1
 chmod +x $out/bin/gcc || exit 1
-
-ln -s gcc $out/bin/cc
-
-gcc='$NIX_CXX'
+ln -s gcc $out/bin/cc || exit 1
 
 sed \
- -e s^@GCC\@^$gcc^g \
+ -e 's^@GCC\@^$NIX_CXX^g' \
  < $gccwrapper > $out/bin/g++ || exit 1
 chmod +x $out/bin/g++ || exit 1
+ln -s g++ $out/bin/c++ || exit 1
 
-ln -s g++ $out/bin/c++
+cp $ldwrapper $out/bin/ld || exit 1
+chmod +x $out/bin/ld || exit 1

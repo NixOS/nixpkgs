@@ -1,5 +1,5 @@
 Package(
-  [ ("name", "stdenv-linux")
+  [ ("name", "stdenv-nativetools")
   , ("build", Relative("stdenv-linux/stdenv-nativetools-build.sh"))
 
   , ("setup", Relative("stdenv-linux/setup-nativetools.sh"))

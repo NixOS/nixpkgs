@@ -11,7 +11,8 @@ addtoenv()
     fi
 
     if test -d $1/lib; then
-	export NIX_LDFLAGS="-L $1/lib -Wl,-rpath,$1/lib $NIX_LDFLAGS"
+	export NIX_CFLAGS_LINK="-L$1/lib $NIX_CFLAGS_LINK"
+	export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
     fi
 
     if test -d $1/lib/pkgconfig; then
@@ -33,7 +34,7 @@ for i in $oldenvpkgs; do
 done
 
 # Add the output as an rpath.
-export NIX_LDFLAGS="-Wl,-rpath,$out/lib $NIX_LDFLAGS"
+export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
 
 # Strip debug information by default.
 export NIX_STRIP_DEBUG=1

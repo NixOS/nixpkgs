@@ -18,11 +18,11 @@ Package(
       , IncludeFix("gzip/gzip.fix")
       , IncludeFix("bzip2/bzip2.fix")
       , IncludeFix("gnumake/gnumake.fix")
-      , IncludeFix("binutils/binutils.fix")
       , IncludeFix("bash/bash.fix")
       ])
 
   , ("gcc", IncludeFix("gcc/gcc.fix"))
+  , ("binutils", IncludeFix("binutils/binutils.fix"))
   , ("shell", IncludeFix("bash/bash.fix"))
   ]
 )

@@ -6,7 +6,7 @@ mkdir $out || exit 1
 
 p=
 first=1
-for i in $tools; do
+for i in $tools $gcc $binutils $shell; do
     if test "$first" == 1; then
 	first=
     else
@@ -17,6 +17,7 @@ done
 
 cc=$gcc/bin/gcc
 cxx=$gcc/bin/g++
+ld=$binutils/bin/ld
 shell=$shell/bin/sh
 
 echo "########## $p"
@@ -27,6 +28,7 @@ sed \
  -e s^@GCC\@^$gcc^g \
  -e s^@CC\@^$cc^g \
  -e s^@CXX\@^$cxx^g \
+ -e s^@LD\@^$ld^g \
  -e s^@BASEENV\@^$baseenv^g \
  -e s^@PATH\@^$p^g \
  -e s^@SHELL\@^$shell^g \
