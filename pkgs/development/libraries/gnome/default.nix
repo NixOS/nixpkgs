@@ -3,7 +3,7 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, bzip2
 , perlXMLParser, gettext, x11, libtiff, libjpeg
-, libpng
+, libpng, gtkLibs
 }:
 
 rec {
@@ -14,26 +14,13 @@ rec {
     inherit stdenv fetchurl;
   };
 
-  glib = (import ./glib) {
-    inherit fetchurl stdenv pkgconfig gettext perl;
-    input = platform.glib;
-  };
+  glib = gtkLibs.glib;
 
-  atk = (import ./atk) {
-    inherit fetchurl stdenv pkgconfig glib perl;
-    input = platform.atk;
-  };
+  atk = gtkLibs.atk;
 
-  pango = (import ./pango) {
-    inherit fetchurl stdenv pkgconfig glib x11;
-    input = platform.pango;
-  };
+  pango = gtkLibs.pango;
 
-  gtk = (import ./gtk+) {
-    inherit fetchurl stdenv pkgconfig glib atk pango perl
-            libtiff libjpeg libpng x11;
-    input = platform.gtk;
-  };
+  gtk = gtkLibs.gtk;
 
   esound = (import ./esound) {
     inherit fetchurl stdenv audiofile;
@@ -118,7 +105,7 @@ rec {
 
   libbonoboui = (import ./libbonoboui) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 libglade
-            libgnome libgnomecanvas;
+            libgnome libgnomecanvas gettext;
     input = platform.libbonoboui;
   };
 
