@@ -196,6 +196,18 @@ closeNest() {
 trap "closeNest" EXIT
 
 
+# This function is useful for debugging broken Nix builds.  It dumps
+# all environment variables to a file `env-vars' in the build
+# directory.  If the build fails and the `-K' option is used, you can
+# then go to the build directory and source in `env-vars' to reproduce
+# the environment used for building.
+dumpVars() {
+    if test "$noDumpEnvVars" != "1"; then
+        export > $NIX_BUILD_TOP/env-vars
+    fi
+}
+
+
 # Ensure that the given directory exists.
 ensureDir() {
     local dir=$1
@@ -619,8 +631,12 @@ genericBuild() {
     fi
 
     for i in $phases; do
+        dumpVars
         $i
     done
     
     stopNest
 }
+
+
+dumpVars
