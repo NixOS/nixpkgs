@@ -24,9 +24,11 @@ let {
       pkgs.bisonnew
       pkgs.flexnew
       pkgs.gcc
+      pkgs.strategoxt093
+      pkgs.ghc
+      pkgs.helium
       pkgs.perl
       pkgs.python
-      pkgs.strategoxt093
       pkgs.libxml2
       pkgs.libxslt
       pkgs.docbook_xml_dtd

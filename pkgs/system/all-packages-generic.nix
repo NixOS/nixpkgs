@@ -180,6 +180,48 @@
     inherit fetchurl stdenv binutils;
   };
 
+  jikes = (import ../development/compilers/jikes) {
+    inherit fetchurl stdenv;
+  };
+
+  j2sdk = (import ../development/compilers/j2sdk) {
+    inherit fetchurl stdenv;
+  };
+
+  strategoxt = (import ../development/compilers/strategoxt) {
+    inherit fetchurl stdenv aterm;
+    sdf = sdf2;
+  };
+
+  strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
+    inherit fetchsvn stdenv autotools which aterm;
+    sdf = sdf2;
+  };
+
+  strategoxt093 = (import ../development/compilers/strategoxt/strategoxt-0.9.3.nix) {
+    inherit fetchurl stdenv aterm;
+    sdf = sdf2;
+  };
+
+  tiger = (import ../development/compilers/tiger) {
+    inherit fetchurl stdenv aterm strategoxt;
+    sdf = sdf2;
+  };
+
+  ghcboot = (import ../development/compilers/ghc/boot.nix) {
+    inherit fetchurl stdenv perl;
+  };
+
+  ghc = (import ../development/compilers/ghc) {
+    inherit fetchurl stdenv perl;
+    ghc = ghcboot;
+    m4 = gnum4;
+  };
+
+  helium = (import ../development/compilers/helium) {
+    inherit fetchurl stdenv ghc;
+  };
+
   perl = (import ../development/interpreters/perl) {
     inherit fetchurl stdenv;
   };
@@ -193,14 +235,6 @@
   };
 
   j2re = (import ../development/interpreters/j2re) {
-    inherit fetchurl stdenv;
-  };
-
-  jikes = (import ../development/compilers/jikes) {
-    inherit fetchurl stdenv;
-  };
-
-  j2sdk = (import ../development/compilers/j2sdk) {
     inherit fetchurl stdenv;
   };
 
@@ -276,26 +310,6 @@
     ascsupport = ascsupport_1_8;
     sdfsupport = sdfsupport_2_0;
     sglr = sglr_3_10_2;
-  };
-
-  strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf2;
-  };
-
-  strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
-    inherit fetchsvn stdenv autotools which aterm;
-    sdf = sdf2;
-  };
-
-  strategoxt093 = (import ../development/compilers/strategoxt/strategoxt-0.9.3.nix) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf2;
-  };
-
-  tiger = (import ../development/compilers/tiger) {
-    inherit fetchurl stdenv aterm strategoxt;
-    sdf = sdf2;
   };
 
   expat = (import ../development/libraries/expat) {
