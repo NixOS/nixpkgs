@@ -9,4 +9,5 @@ Call(IncludeFix("system/system.fix"),
   , ("docbook", True)
   , ("httpd", True)
   , ("firebird", True)
+  , ("graphviz", True)
   ])
