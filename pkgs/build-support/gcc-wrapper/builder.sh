@@ -56,6 +56,7 @@ ln -s g77 $out/bin/f77
 
 
 sed \
+    -e "s^@out@^$out^g" \
     -e "s^@ldflags@^$ldflags^g" \
     -e "s^@ld@^$ldPath/ld^g" \
     < $ldWrapper > $out/bin/ld
@@ -63,7 +64,7 @@ chmod +x $out/bin/ld
 
 
 mkdir $out/nix-support
-test -z "$gcc" && echo $gcc > $out/nix-support/orig-gcc
+test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
 test -n "$glibc" && echo $glibc > $out/nix-support/orig-glibc
 
 cat > $out/nix-support/add-flags <<EOF
@@ -77,3 +78,5 @@ sed \
     -e "s^@binutils@^$binutils^g" \
     -e "s^@glibc@^$glibc^g" \
     < $setupHook > $out/nix-support/setup-hook
+
+cp -p $utils $out/nix-support/utils

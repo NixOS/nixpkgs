@@ -8,13 +8,15 @@ if test -z "$NIX_GLIBC_FLAGS_SET"; then
     . @out@/nix-support/add-flags
 fi
 
+. @out@/nix-support/utils
+
 
 # Figure out if linker flags should be passed.  GCC prints annoying
 # warnings when they are not needed.
 dontLink=0
 if test "$*" = "-v" -o -z "$*"; then
     dontLink=1
-else    
+else
     for i in "$@"; do
         if test "$i" = "-c"; then
             dontLink=1
@@ -34,19 +36,8 @@ fi
 
 
 # Optionally filter out paths not refering to the store.
-skip () {
-    if test "$NIX_DEBUG" = "1"; then
-        echo "skipping impure path $1" >&2
-    fi
-}
-
-badPath() {
-    p=$1
-    test "${p:0:${#NIX_STORE}}" = "$NIX_STORE" -o "${p:0:4}" = "/tmp"
-}
-
 params=("$@")
-if test "$NIX_ENFORCE_PURITY" = "1x" -a -n "$NIX_STORE"; then
+if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
     rest=()
     n=0
     while test $n -lt ${#params[*]}; do

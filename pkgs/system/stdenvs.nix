@@ -7,6 +7,9 @@
 
 {system, allPackages}: rec {
 
+  gccWrapper = import ../build-support/gcc-wrapper;
+  genericStdenv = import ../stdenv/generic;
+
 
   # Trivial environment used for building other environments.
   stdenvInitial = (import ../stdenv/initial) {
@@ -45,7 +48,6 @@
   #    plus the pure glibc.
   stdenvLinuxBoot1 = (import ../stdenv/nix-linux/boot.nix) {
     stdenv = stdenvNative;
-    pkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
     glibc = stdenvLinuxGlibc;
   };
 
@@ -60,6 +62,7 @@
     stdenv = stdenvLinuxBoot1;
     pkgs = stdenvLinuxBoot1Pkgs;
     glibc = stdenvLinuxGlibc;
+    inherit genericStdenv gccWrapper;
   };
 
   # 5) These packages should be pure.
@@ -70,6 +73,7 @@
     stdenv = stdenvLinuxBoot2;
     pkgs = stdenvLinuxBoot2Pkgs;
     glibc = stdenvLinuxGlibc;
+    inherit genericStdenv gccWrapper;
   };
 
   # 7) And we can build all packages against that, but we don't

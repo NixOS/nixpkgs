@@ -19,6 +19,7 @@ derivation {
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
+  utils = ./utils.sh;
   inherit name stdenv nativeTools nativeGlibc nativePrefix gcc glibc binutils;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;

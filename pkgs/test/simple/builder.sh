@@ -6,10 +6,7 @@ export NIX_DEBUG=1
 
 . $stdenv/setup
 
-#echo starting shell
-#/bin/sh < /dev/tty > /dev/tty 2>&1 
-
-#exit 1
+export NIX_ENFORCE_PURITY=1
 
 mkdir $out
 mkdir $out/bin
@@ -25,7 +22,7 @@ int main(int argc, char * * argv)
 EOF
 
 #gcc -I/nix/store/foo -I /nix/store/foo -I/usr/lib -I /usr/lib hello.c -o $out/bin/hello
-gcc -L /nix/store/abcd/lib -isystem /usr/lib hello.c -o $out/bin/hello
+gcc -I`pwd` -L /nix/store/abcd/lib -isystem /usr/lib hello.c -o $out/bin/hello
 
 $out/bin/hello
 

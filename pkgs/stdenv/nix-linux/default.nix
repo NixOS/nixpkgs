@@ -1,13 +1,13 @@
-{stdenv, glibc, pkgs}:
+{stdenv, glibc, pkgs, genericStdenv, gccWrapper}:
 
-(import ../generic) {
+genericStdenv {
   name = "stdenv-nix-linux";
   preHook = ./prehook.sh;
   initialPath = (import ../nix/path.nix) {pkgs = pkgs;};
 
   inherit stdenv;
 
-  gcc = (import ../../build-support/gcc-wrapper) {
+  gcc = gccWrapper {
     name = pkgs.gcc.name;
     nativeTools = false;
     nativeGlibc = false;

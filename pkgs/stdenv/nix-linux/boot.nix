@@ -1,19 +1,17 @@
-{stdenv, pkgs, glibc}:
+{stdenv, glibc}:
 
 (import ../generic) {
   name = "stdenv-nix-linux-boot";
   preHook = ./prehook-boot.sh;
-  initialPath = (import ../nix/path.nix) {pkgs = pkgs;};
+  initialPath = "/usr/local /usr /";
 
   inherit stdenv;
 
   gcc = (import ../../build-support/gcc-wrapper) {
-    name = pkgs.gcc.name;
-    nativeTools = false;
+    name = "gcc-native";
+    nativeTools = true;
     nativeGlibc = false;
-    inherit (pkgs) gcc binutils;
+    nativePrefix = "/usr";
     inherit stdenv glibc;
   };
-
-  param1 = pkgs.bash;
 }

@@ -69,8 +69,6 @@ addToEnv()
         export _PATH=$_PATH:$1/bin
     fi
 
-    echo "${envHooks[@]}"
-
     for i in "${envHooks[@]}"; do
         $i $pkg
     done
@@ -92,8 +90,20 @@ export NIX_STRIP_DEBUG=1
 export NIX_CFLAGS_STRIP="-g0 -Wl,-s"
 
 
-# Where is the store?  This is required for purity checking.
-export NIX_STORE=$(dirname $out)/ # !!! hack
+# Do we know where the store is?  This is required for purity checking.
+if test -z "$NIX_STORE"; then
+    echo "Error: you have an old version of Nix that does not set the" \
+        "NIX_STORE variable.  Please upgrade." >&2
+    exit 1
+fi
+
+
+# We also need to know the root of the build directory for purity checking.
+if test -z "$NIX_BUILD_TOP"; then
+    echo "Error: you have an old version of Nix that does not set the" \
+        "NIX_BUILD_TOP variable.  Please upgrade." >&2
+    exit 1
+fi
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
