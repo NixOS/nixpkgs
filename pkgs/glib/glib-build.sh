@@ -4,6 +4,6 @@ export PATH=$pkgconfig/bin:/bin:/usr/bin
 
 tar xvfj $src
 cd glib-*
-./configure --prefix=$out
+LDFLAGS=-s ./configure --prefix=$out
 make
 make install
