@@ -16,6 +16,7 @@ Function(["nativeTools"],
         , IncludeFix("gnused/gnused.fix")
         , IncludeFix("gnugrep/gnugrep.fix")
         , IncludeFix("gnutar/gnutar.fix")
+        , IncludeFix("diffutils/diffutils.fix")
         , IncludeFix("gzip/gzip.fix")
         ]))
     ]
