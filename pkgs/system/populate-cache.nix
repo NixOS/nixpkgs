@@ -24,6 +24,7 @@ let {
     gnum4
     valgrind
     texinfo
+    readline
     octave
     gnumake
     bisonnew

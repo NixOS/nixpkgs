@@ -529,6 +529,10 @@ rec {
     inherit fetchurl stdenv pkgconfig wxGTK python;
   };
 
+  readline = (import ../development/libraries/readline) {
+    inherit fetchurl stdenv ncurses;
+  };
+
 
   ### SERVERS
 
