@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     url = http://www.cwi.nl/projects/MetaEnv/pgen/pgen-2.0.tar.gz;
     md5 = "368cd8abeed29591a35660d8cea79975";
   };
-  inherit        stdenv aterm getopt toolbuslib ptsupport sdfsupport asfsupport ascsupport sglr;
-  buildInputs = [stdenv aterm getopt toolbuslib ptsupport sdfsupport asfsupport ascsupport sglr];
+  inherit        aterm toolbuslib ptsupport sdfsupport asfsupport ascsupport sglr;
+  buildInputs = [aterm toolbuslib ptsupport sdfsupport asfsupport ascsupport sglr];
+  propagatedBuildInputs = [getopt];
 }

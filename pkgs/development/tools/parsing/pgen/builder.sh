@@ -7,6 +7,3 @@ configureFlags="--with-aterm=$aterm \
                 --with-asc-support=$asfsupport \
                 --with-sglr=$sglr"
 genericBuild
-
-mkdir $out/nix-support
-echo "$getopt" > $out/nix-support/propagated-build-inputs
