@@ -569,6 +569,10 @@
     patch = gnupatch;
   };
 
+  e2fsprogs = (import ../os-specific/linux/e2fsprogs) {
+    inherit fetchurl stdenv gettext;
+  };
+
 
   ### DATA
 
