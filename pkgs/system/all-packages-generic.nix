@@ -230,6 +230,11 @@
     stdenv = stdenv;
   };
 
+  jikes = (import ../development/compilers/jikes) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
