@@ -63,3 +63,7 @@ stdenv.mkDerivation {
 /*  buildInputs = [pkgconfig];
   propagatedBuildInputs = [libX11]; */
 }
+
+
+
+* Add "exit 0" at the end of configure of rte package.

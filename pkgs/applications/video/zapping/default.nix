@@ -1,10 +1,11 @@
 { teletextSupport ? true
 , jpegSupport ? true
 , pngSupport ? true
+, recordingSupport ? true
 # !!! libXext shouldn't be necessary (it's in x11); but the builder needs it.
 , stdenv, fetchurl, pkgconfig, perl, python, x11, libXv, libXmu, libXext, libgnomeui
 , libglade, scrollkeeper, esound, gettext, perlXMLParser
-, zvbi ? null, libjpeg ? null, libpng ? null }:
+, zvbi ? null, libjpeg ? null, libpng ? null, rte ? null }:
 
 assert pkgconfig != null && perl != null && python != null
   && x11 != null && libXv != null && libXmu != null && libgnomeui != null && libglade != null
@@ -16,6 +17,8 @@ assert teletextSupport -> zvbi != null && zvbi.pngSupport
 
 assert jpegSupport -> libjpeg != null;
 assert pngSupport -> libpng != null;
+
+assert recordingSupport -> rte != null;
 
 stdenv.mkDerivation {
   name = "zapping-0.7cvs8";
@@ -34,5 +37,6 @@ stdenv.mkDerivation {
     (if teletextSupport then zvbi else null)
     (if jpegSupport then libjpeg else null)
     (if pngSupport then libpng else null)
+    (if recordingSupport then rte else null)
   ];
 }

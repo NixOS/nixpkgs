@@ -433,6 +433,10 @@ rec {
     libpng = libpng;
   };
 
+  rte = (import ../development/libraries/rte) {
+    inherit fetchurl stdenv;
+  };
+
   ncurses = (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
   };
@@ -581,12 +585,13 @@ rec {
   zapping = (import ../applications/video/zapping) {
     inherit fetchurl stdenv pkgconfig perl python 
             scrollkeeper gettext zvbi libjpeg libpng x11
-            perlXMLParser;
+            rte perlXMLParser;
     inherit (gnome) libgnomeui libglade esound;
     inherit (xlibs) libXv libXmu libXext;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;
+    recordingSupport = true;
   };
 
   gqview = (import ../applications/graphics/gqview) {
