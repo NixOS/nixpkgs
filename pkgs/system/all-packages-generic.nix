@@ -661,4 +661,8 @@
     patch = gnupatch;
   };
 
+  nix = (import ../misc/nix) {
+    inherit fetchurl stdenv;
+  };
+
 }

@@ -46,5 +46,6 @@ let {
       pkgs.hello
       pkgs.nxml
       pkgs.uml
+      pkgs.nix
     ];
 }
