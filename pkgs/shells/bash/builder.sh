@@ -1,2 +1,3 @@
+. $stdenv/setup
 genericBuild
-(cd $out/bin && ln -s bash sh) || exit 1
+(cd $out/bin && ln -s bash sh)
