@@ -82,6 +82,8 @@ ELSE IF it's an APPLICATION:
 
   IF it's a VERSION MANAGEMENT system:
     ./applications/version-management
+  ELSE IF it's for VIDEO playback/etc:
+    ./applications/video
   ELSE IF it's for NETWORKING:
     IF it's a MAILREADER:
       ./applications/networking/mailreaders

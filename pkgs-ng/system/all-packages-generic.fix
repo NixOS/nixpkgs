@@ -370,4 +370,11 @@
     libIDL = libIDL;
   };
 
+  MPlayer = (import ../applications/video/MPlayer) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    freetype = freetype;
+  };
+
 }

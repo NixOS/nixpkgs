@@ -15,6 +15,7 @@
     pkgs.pan
     pkgs.sylpheed
     pkgs.firebird
+    pkgs.MPlayer
   ];
 
   # Create a user environment.
