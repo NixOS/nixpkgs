@@ -8,10 +8,10 @@
   inherit stdenv;
 
   gcc = (import ../../build-support/gcc-wrapper) {
-    name = "gcc-native";
-    isNative = false;
-    gcc = pkgs.gcc;
-    binutils = pkgs.binutils;
+    name = pkgs.gcc.name;
+    nativeTools = false;
+    nativeGlibc = false;
+    inherit (pkgs) gcc binutils;
     inherit stdenv glibc;
   };
 

@@ -23,7 +23,7 @@ let {
 #      pkgs.binutils
 #      pkgs.gnum4
 #      pkgs.valgrind
-      pkgs.texinfo
+#      pkgs.texinfo
       pkgs.octavefront
 #      pkgs.gnumake
 #      pkgs.bisonnew
@@ -38,8 +38,8 @@ let {
 #      pkgs.libxslt
 #      pkgs.docbook_xml_dtd
 #      pkgs.docbook_xml_xslt
-#      pkgs.subversion
-#      pkgs.pan
+      pkgs.subversion
+      pkgs.pan
 #      pkgs.sylpheed
 #      pkgs.firefox
 #      pkgs.MPlayer

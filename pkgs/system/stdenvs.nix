@@ -22,34 +22,35 @@
   # with it (e.g., because they require GNU Make).
   stdenvNative = (import ../stdenv/native) {stdenv = stdenvInitial;};
 
-  stdenvNativePkgs = allPackages {system = system; stdenv = stdenvNative;};
+  stdenvNativePkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
 
 
   # The Nix build environment.
   stdenvNix = (import ../stdenv/nix) {
-    bootStdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
+    stdenv = stdenvNative;
+    pkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
   };
 
-  stdenvNixPkgs = allPackages {system = system; stdenv = stdenvNix;};
+  stdenvNixPkgs = allPackages {stdenv = stdenvNix;};
 
 
   # The Linux build environment is a fully bootstrapped Nix
   # environment, that is, it should contain no external references.
 
-  # 1) Build glibc in the native build environment.  The result is
-  #    pure (I promise!).
-  stdenvLinuxGlibc = stdenvNativePkgs.glibc;
+  # 1) Build glibc in the Nix build environment.  The result is
+  #    pure.
+  stdenvLinuxGlibc = stdenvNativePkgs.glibc; # !!! should be NixPkgs, but doesn't work
 
   # 2) Construct a stdenv consisting of the native build environment,
   #    plus the pure glibc.
   stdenvLinuxBoot1 = (import ../stdenv/nix-linux/boot.nix) {
-    stdenv = stdenvInitial;
+    stdenv = stdenvNative;
+    pkgs = allPackages {stdenv = stdenvNative; noSysDirs = false;};
     glibc = stdenvLinuxGlibc;
   };
 
   # 3) Now we can build packages that will have the Nix glibc.
-  stdenvLinuxBoot1Pkgs = allPackages {system = system; stdenv = stdenvLinuxBoot1;};
+  stdenvLinuxBoot1Pkgs = allPackages {stdenv = stdenvLinuxBoot1;};
 
   # 4) However, since these packages are built by an native C compiler
   #    and linker, they may well pick up impure references (e.g., bash
@@ -62,11 +63,11 @@
   };
 
   # 5) These packages should be pure.
-  stdenvLinuxBoot2Pkgs = allPackages {system = system; stdenv = stdenvLinuxBoot2;};
+  stdenvLinuxBoot2Pkgs = allPackages {stdenv = stdenvLinuxBoot2;};
 
   # 6) So finally we can construct the Nix build environment.
   stdenvLinux = (import ../stdenv/nix-linux) {
-    bootStdenv = stdenvLinuxBoot2;
+    stdenv = stdenvLinuxBoot2;
     pkgs = stdenvLinuxBoot2Pkgs;
     glibc = stdenvLinuxGlibc;
   };
@@ -74,7 +75,7 @@
   # 7) And we can build all packages against that, but we don't
   #    rebuild stuff from step 6.
   stdenvLinuxPkgs =
-    allPackages {system = system; stdenv = stdenvLinux;} //
+    allPackages {stdenv = stdenvLinux;} //
     {inherit (stdenvLinuxBoot2Pkgs)
       gzip bzip2 bash binutils coreutils diffutils findutils gawk gcc
       gnumake gnused gnutar gnugrep wget;

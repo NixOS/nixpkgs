@@ -1,4 +1,6 @@
-{stdenv, fetchurl, kernelHeaders}:
+{stdenv, fetchurl, kernelHeaders, patch}:
+
+assert patch != null;
 
 derivation {
   name = "glibc-2.3.2";
@@ -18,5 +20,5 @@ derivation {
   # later releases of glibc won't need this.
   vaargsPatch = ./glibc-2.3.2-sscanf-1.patch;
 
-  inherit stdenv kernelHeaders;
+  inherit stdenv kernelHeaders patch;
 }

@@ -40,22 +40,27 @@ skip () {
     fi
 }
 
+badPath() {
+    p=$1
+    test "${p:0:${#NIX_STORE}}" = "$NIX_STORE" -o "${p:0:4}" = "/tmp"
+}
+
 params=("$@")
-if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+if test "$NIX_ENFORCE_PURITY" = "1x" -a -n "$NIX_STORE"; then
     rest=()
     n=0
     while test $n -lt ${#params[*]}; do
         p=${params[n]}
         p2=${params[$((n+1))]}
-        if test "${p:0:3}" = "-L/" -a "${p:2:${#NIX_STORE}}" != "$NIX_STORE"; then
+        if test "${p:0:3}" = "-L/" && badPath "${p:2}"; then
             skip $p
-        elif test "$p" = "-L" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+        elif test "$p" = "-L" && badPath "$p2"; then
             n=$((n + 1)); skip $p2
-        elif test "${p:0:3}" = "-I/" -a "${p:2:${#NIX_STORE}}" != "$NIX_STORE"; then
+        elif test "${p:0:3}" = "-I/" && badPath "${p:2}"; then
             skip $p
-        elif test "$p" = "-I" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+        elif test "$p" = "-I" && badPath "$p2"; then
             n=$((n + 1)); skip $p2
-        elif test "$p" = "-isystem" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+        elif test "$p" = "-isystem" && badPath "$p2"; then
             n=$((n + 1)); skip $p2
         else
             rest=("${rest[@]}" "$p")

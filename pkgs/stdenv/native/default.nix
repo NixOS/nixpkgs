@@ -9,7 +9,8 @@
 
   gcc = (import ../../build-support/gcc-wrapper) {
     name = "gcc-native";
-    isNative = true;
+    nativeTools = true;
+    nativeGlibc = true;
     nativePrefix = "/usr";
     inherit stdenv;
   };

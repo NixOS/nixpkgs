@@ -5,7 +5,7 @@ buildinputs="$binutils"
 
 tar xvfj $src
 
-if test "$enforcePurity" = "1"; then
+if test "$noSysDirs" = "1"; then
     # Disable the standard include directories.
     cd gcc-*
     cat >> ./gcc/cppdefault.h <<EOF
@@ -29,7 +29,7 @@ mkdir build
 cd build
 ../gcc-*/configure --prefix=$out --enable-languages="$langs"
 
-if test "$enforcePurity" = "1"; then
+if test "$noSysDirs" = "1"; then
     # Patch some of the makefiles to force linking against our own glibc.
     . $NIX_GCC/nix-support/add-flags # add glibc/gcc flags
     extraflags="-Wl,-s $NIX_CFLAGS_COMPILE $NIX_CFLAGS_LINK"

@@ -2,7 +2,9 @@
 # identifier and a standard build environment, returns the set of all
 # packages provided by the Nix Package Collection.
 
-{system, stdenv}: rec {
+{stdenv, noSysDirs ? true}:
+
+rec {
 
   inherit stdenv;
 
@@ -112,7 +114,7 @@
   ### DEVELOPMENT
 
   binutils = (import ../development/tools/misc/binutils) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv noSysDirs;
   };
 
   gnum4 = (import ../development/tools/misc/gnum4) {
@@ -198,16 +200,21 @@
   };
 
   gcc = (import ../development/compilers/gcc) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv noSysDirs;
   };
 
   g77 = (import ../build-support/gcc-wrapper) {
-    inherit stdenv;
+    name = "g77";
+    nativeTools = false;
+    nativeGlibc = false;
     gcc = (import ../development/compilers/gcc) {
-      inherit fetchurl stdenv;
+      inherit fetchurl stdenv noSysDirs;
       langF77 = true;
       langCC = false;
     };
+    binutils = stdenv.gcc.binutils;
+    glibc = stdenv.gcc.glibc;
+    inherit stdenv;
   };
 
   jikes = (import ../development/compilers/jikes) {
@@ -275,6 +282,7 @@
 
   glibc = (import ../development/libraries/glibc) {
     inherit fetchurl stdenv kernelHeaders;
+    patch = gnupatch;
   };
 
   aterm = (import ../development/libraries/aterm) {
@@ -349,10 +357,6 @@
 
   libxslt = (import ../development/libraries/libxslt) {
     inherit fetchurl stdenv libxml2;
-  };
-
-  libxml2_265 = (import ../development/libraries/libxml2/libxml2-2.6.5.nix) {
-    inherit fetchurl stdenv zlib;
   };
 
   gettext = (import ../development/libraries/gettext) {

@@ -10,9 +10,6 @@ addCVars () {
 
 envHooks=(${envHooks[@]} addCVars)
 
-export NIX_IS_NATIVE=@isNative@
-export NIX_ENFORCE_PURITY=@enforcePurity@
-
 # Note: these come *after* $out in the PATH (see setup.sh).
 
 if test -n "@gcc@"; then

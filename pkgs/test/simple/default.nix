@@ -6,7 +6,7 @@ let {
     allPackages = import ../../system/all-packages-generic.nix;
   };
 
-  stdenv = stdenvs.stdenvLinuxBoot1;
+  stdenv = stdenvs.stdenvLinuxBoot2;
 
   test = derivation {
     name = "simple-test";

@@ -1,13 +1,19 @@
-{bootStdenv, pkgs}: (import ../generic) {
+{stdenv, pkgs}:
+
+(import ../generic) {
   name = "stdenv-nix";
-  system = bootStdenv.system;
-  prehook = ./prehook.sh;
-  posthook = ./posthook.sh;
+  preHook = ./prehook.sh;
   initialPath = (import ./path.nix) {pkgs = pkgs;};
+
+  inherit stdenv;
+
+  gcc = (import ../../build-support/gcc-wrapper) {
+    name = pkgs.gcc.name;
+    nativeTools = false;
+    nativeGlibc = true;
+    inherit (pkgs) gcc binutils;
+    inherit stdenv;
+  };
+
   param1 = pkgs.bash;
-  param2 = pkgs.gcc;
-  param3 = pkgs.binutils;
-  param4 = "";
-  param5 = "";
-  noSysDirs = false;
 }

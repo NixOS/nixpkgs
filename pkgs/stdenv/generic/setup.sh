@@ -30,6 +30,7 @@ if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
 
 
 # Hack: run gcc's setup hook.
+envHooks=()
 if test -f $NIX_GCC/nix-support/setup-hook; then
     . $NIX_GCC/nix-support/setup-hook
 fi
@@ -47,13 +48,12 @@ findInputs()
     
     if test -f $pkg/nix-support/propagated-build-inputs; then
         for i in $(cat $pkg/nix-support/propagated-build-inputs); do
-            addToEnv $pkg
+            findInputs $i
         done
     fi
 }
 
 pkgs=()
-envHooks=()
 for i in $buildinputs; do
     findInputs $i
 done
@@ -68,6 +68,8 @@ addToEnv()
     if test -d $1/bin; then
         export _PATH=$_PATH:$1/bin
     fi
+
+    echo "${envHooks[@]}"
 
     for i in "${envHooks[@]}"; do
         $i $pkg

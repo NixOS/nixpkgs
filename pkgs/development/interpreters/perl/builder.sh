@@ -23,6 +23,11 @@ fi
 
 patch -p1 < $srcPatch
 
-./Configure -de -Dcc=gcc -Dprefix=$out -Uinstallusrbinperl
+if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+    GLIBC=$(cat $NIX_GCC/nix-support/orig-glibc)
+    extraflags="-Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
+fi
+
+./Configure -de -Dcc=gcc -Dprefix=$out -Uinstallusrbinperl $extraflags
 make
 make install

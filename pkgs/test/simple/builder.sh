@@ -1,10 +1,15 @@
 #! /bin/sh
 
+set -x
+
 export NIX_DEBUG=1
 
 . $stdenv/setup
 
-export NIX_ENFORCE_PURITY=1
+#echo starting shell
+#/bin/sh < /dev/tty > /dev/tty 2>&1 
+
+#exit 1
 
 mkdir $out
 mkdir $out/bin
@@ -23,8 +28,6 @@ EOF
 gcc -L /nix/store/abcd/lib -isystem /usr/lib hello.c -o $out/bin/hello
 
 $out/bin/hello
-
-exit 0
 
 cat > hello2.cc <<EOF
 #include <iostream>

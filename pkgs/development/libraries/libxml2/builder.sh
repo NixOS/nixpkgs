@@ -3,7 +3,7 @@
 buildinputs="$zlib"
 . $stdenv/setup
 
-tar xvfz $src
+tar xvfj $src
 cd libxml2-*
 ./configure --prefix=$out
 make

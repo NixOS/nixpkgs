@@ -1,10 +1,14 @@
-#! /bin/sh
+#! /bin/sh -e
 
+set -x
+export NIX_DEBUG=1
 buildinputs="$pcre"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd grep-* || exit 1
-./configure --prefix=$out || exit 1
-make || exit 1
-make install || exit 1
+echo $NIX_LDFLAGS
+
+tar xvfj $src
+cd grep-*
+./configure --prefix=$out
+make
+make install

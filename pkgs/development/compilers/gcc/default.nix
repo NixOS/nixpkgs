@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enforcePurity ? true
+{ stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
 }:
 
@@ -16,5 +16,5 @@ derivation {
 #    url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-3.3.3/gcc-3.3.3.tar.bz2;
 #    md5 = "3c6cfd9fcd180481063b4058cf6faff2";
 #  };
-  inherit stdenv enforcePurity langC langCC langF77;
+  inherit stdenv noSysDirs langC langCC langF77;
 }

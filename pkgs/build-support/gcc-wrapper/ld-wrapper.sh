@@ -12,7 +12,7 @@ skip () {
 }
 
 params=("$@")
-if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+if test "$NIX_ENFORCE_PURITY" = "1x" -a -n "$NIX_STORE"; then
     rest=()
     n=0
     while test $n -lt ${#params[*]}; do
@@ -22,10 +22,12 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
             skip $p
         elif test "$p" = "-L" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
             n=$((n + 1)); skip $p2
-        elif test "${p:0:1}" = "/" -a "${p:0:${#NIX_STORE}}" != "$NIX_STORE"; then
-            # We cannot skip this; barf.
-            echo "impure path \`$p' used in link"
-            exit 1
+        elif test "$p" = "-dynamic-linker" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+            n=$((n + 1)); skip $p2
+#        elif test "${p:0:1}" = "/" -a "${p:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+#            # We cannot skip this; barf.
+#            echo "impure path \`$p' used in link"
+#            exit 1
         else
             rest=("${rest[@]}" "$p")
         fi

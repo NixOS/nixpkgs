@@ -3,6 +3,9 @@
 buildinputs="$zlib"
 . $stdenv/setup
 
+export NIX_STRIP_DEBUG=
+export NIX_CFLAGS_COMPILE="-g $NIX_CFLAGS_COMPILE"
+
 tar xvfz $src
 cd rna-*
 ./configure --prefix=$out

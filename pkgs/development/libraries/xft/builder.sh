@@ -1,5 +1,7 @@
 #! /bin/sh -e
 
+set -x
+
 buildinputs="$pkgconfig $fontconfig $x11"
 . $stdenv/setup
 

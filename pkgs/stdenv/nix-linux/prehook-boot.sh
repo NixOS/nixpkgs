@@ -1,1 +1,3 @@
-export SHELL=/bin/sh
+export SHELL=$param1
+
+export NIX_ENFORCE_PURITY=

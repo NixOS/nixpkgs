@@ -2,6 +2,7 @@
 
 # glibc cannot have itself in its rpath.
 export NIX_NO_SELF_RPATH=1
+buildinputs="$patch"
 . $stdenv/setup
 
 tar xvfj $glibcSrc
