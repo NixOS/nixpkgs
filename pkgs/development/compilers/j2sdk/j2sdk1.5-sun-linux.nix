@@ -13,12 +13,12 @@
 assert stdenv.system == "i686-linux";
 
 derivation {
-  name = "j2sdk-1.5.0-rc";
-  filename = "jdk-1_5_0-rc";
+  name = "j2sdk-1.5.0";
+  filename = "jdk-1_5_0";
   dirname = "jdk1.5.0";
   system = stdenv.system;
   builder = ./builder.sh;
-  pathname = "/tmp/jdk-1_5_0-rc-linux-i586.bin";
-  md5 = "b8c90fb75b270cb32a72766ab8f89dbb";
+  pathname = "/tmp/jdk-1_5_0-linux-i586.bin";
+  md5 = "81d0511feb32e7b7d61f7c07ee0b15e9";
   stdenv = stdenv;
 }
