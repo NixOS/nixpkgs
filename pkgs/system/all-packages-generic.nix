@@ -201,8 +201,7 @@ rec {
   };
 
   octave = (import ../development/interpreters/octave) {
-    inherit fetchurl stdenv autoconf gcc g77 texinfo flex gperf readline ncurses;
-    bison = bisonnew;
+    inherit fetchurl stdenv readline ncurses g77;
   };
 
   gnumake = (import ../development/tools/build-managers/gnumake) {

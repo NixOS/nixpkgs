@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, autoconf, gcc, g77, texinfo, bison, flex, gperf, readline, ncurses}:
+{stdenv, fetchurl, g77, readline, ncurses}:
 
-assert autoconf != null && texinfo != null
-  && bison != null && flex != null && gperf != null && readline != null && ncurses != null ;
+assert readline != null && ncurses != null;
 assert g77.langF77;
 
 stdenv.mkDerivation {
   name = "octave-2.1.57";
-  builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-2.1.57.tar.gz ;
-    md5 = "a0171814e005ce6d77365e7d831eef45";
+    url = ftp://ftp.octave.org/pub/octave/octave-2.1.57.tar.bz2;
+    md5 = "b781f5d0cd750cb9bb3ef23523f5f339";
   };
-  inherit autoconf gcc g77 texinfo bison flex gperf readline;
-  buildInputs = [autoconf gcc g77 texinfo bison flex gperf readline ncurses] ;
+  buildInputs = [g77 readline ncurses];
+  configureFlags = "--enable-readline";
 }
