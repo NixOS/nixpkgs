@@ -19,3 +19,11 @@ yes yes | ./$src || exit 1
 
 mkdir $out || exit 1
 mv $dirname/* $out/ || exit 1
+
+# remove crap in the root directory
+for file in $out/*
+do
+  if test -f $file ; then
+    rm $file
+  fi
+done
