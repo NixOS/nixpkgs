@@ -10,6 +10,7 @@ cd MPlayer-* || exit 1
 ./configure --prefix=$out --with-win32libdir=$win32codecs \
  --with-reallibdir=$win32codecs \
  --disable-sdl --disable-esd --disable-xanim --disable-cdparanoia --disable-directfb \
+ --disable-lirc --disable-svga --disable-libdv \
  || exit 1
 make || exit 1
 make install || exit 1
