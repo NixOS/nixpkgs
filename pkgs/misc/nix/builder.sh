@@ -1,7 +1,7 @@
 . $stdenv/setup
 
 configureFlags="\
-  --with-store-dir=/nix/store --localstatedir=/nix/var \
+  --with-store-dir=$storeDir --localstatedir=$stateDir \
   --with-aterm=$aterm --with-bdb=$bdb"
 
 genericBuild
