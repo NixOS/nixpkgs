@@ -48,6 +48,25 @@ seems to hang.
 Installing a 2.6 based UML with Nix is not trivial and is not advised.
 
 
+  Using the Nix UML
+
+By default, the Nix UML comes with very little configuration. Apart from the
+networking information and mount information, there is nothing. One of the
+first things to do is to add user and group information, otherwise a lot
+of tools won't work. There are empty passwd, shadow and group files. Due
+to some limitations in Nix it is only possible to modify the password file
+as root.
+
+- add a root user:
+
+useradd root
+
+- edit /etc/passwd and change the UID to 0 ("vim" is provided)
+- add a root group:
+
+groupadd root
+
+
   Adding packages to the UML Nix installation
 
 Packages can be added the the Nix UML installation by editing a few files.
@@ -55,14 +74,13 @@ The first file packages should be added to is 'pkgs.nix'. The other files
 that should be edited all reside in the "boot" directory. In default.nix
 the packages should be added as an argument (first line) and given as an
 argument to the builder (line starting with "inherit"). In "builder.sh"
-there is a giant sed expression which subsitutes all occurences of the
-names of the packages in the files with the right value. If the programs
-that are added need to be added to $PATH the file "env.sh" has to be
-edited.
+there is a sed expression which subsitutes all occurences of the names of
+the packages in the files with the right value. If the programs that are
+added need to be added to $PATH the file "env.sh" has to be edited and the
+UML has to be recreated.
 
-Another option is to enable networking in the UML and use nix-pull to get
-all the right packages. One thing you have to make sure is that the packages
-you want to install are indeed defined in the nix files.
+Another option would be to enable networking in the UML and use nix-pull to
+get all the right packages, however this does not work yet.
 
 
   Differences with a normal UML
