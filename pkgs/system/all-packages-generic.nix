@@ -390,7 +390,7 @@ rec {
 #  };
 
   tomcat5 = (import ../servers/http/tomcat) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv j2sdk;
   };
 
   pcre = (import ../development/libraries/pcre) {
