@@ -863,7 +863,7 @@ rec {
     inherit (gtkLibs) gtk;
   };
 
-  hello = (import ../applications/misc/hello) {
+  hello = (import ../applications/misc/hello/ex-1) {
     inherit fetchurl stdenv perl;
   };
 
