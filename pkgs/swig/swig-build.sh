@@ -5,5 +5,5 @@
 tar xvfz $src || exit 1
 cd SWIG-* || exit 1
 ./configure --prefix=$out || exit 1
-gmake || exit 1
-gmake install || exit 1
+make || exit 1
+make install || exit 1
