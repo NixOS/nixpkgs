@@ -16,6 +16,7 @@
     pkgs.sylpheed
     pkgs.firebird
     pkgs.MPlayer
+    pkgs.gqview
   ];
 
   # Create a user environment.

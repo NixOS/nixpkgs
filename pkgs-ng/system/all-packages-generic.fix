@@ -384,4 +384,12 @@
     alsa = alsaLib;
   };
 
+  gqview = (import ../applications/graphics/gqview) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    pkgconfig = pkgconfig;
+    gtk = gtk;
+    libpng = libpng;
+  };
+
 }
