@@ -3,11 +3,11 @@
 assert zlib != null && libjpeg != null;
 
 stdenv.mkDerivation {
-  name = "libtiff-3.6.1";
+  name = "libtiff-3.7.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/tiff-v3.6.1.tar.gz;
-    md5 = "b3f0ee7617593c2703755672fb1bfed3";
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/tiff-3.7.1.tar.gz;
+    md5 = "37d222df12eb23691614cd40b7b1f215";
   };
   propagatedBuildInputs = [zlib libjpeg];
   inherit zlib libjpeg;

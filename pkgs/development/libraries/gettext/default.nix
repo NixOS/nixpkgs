@@ -1,8 +1,8 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "gettext-0.12.1";
-  builder = ./builder.sh;
+  name = "gettext-0.14";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gettext-0.12.1.tar.gz;
-    md5 = "5d4bddd300072315e668247e5b7d5bdb";
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gettext-0.14.tar.gz;
+    md5 = "e715be150bbe32439ae68fab32df0299";
   };
+  configureFlags = "--disable-csharp";
 }

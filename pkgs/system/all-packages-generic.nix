@@ -600,11 +600,17 @@ rec {
             docbook_xml_dtd_42 perlXMLParser;
   };
 
-  gtkLibs = import ../development/libraries/gtk-libs-2.4 {
+  gtkLibs = gtkLibs26;
+
+  gtkLibs26 = import ../development/libraries/gtk-libs-2.6 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
   };
 
+  gtkLibs22 = import ../development/libraries/gtk-libs-2.4 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng;
+  };
   gtkLibs22 = import ../development/libraries/gtk-libs-2.2 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
