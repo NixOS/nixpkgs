@@ -1,0 +1,26 @@
+{ stdenv, fetchurl, openssl, httpd, db4, libxml2, expat, swig
+, localServer, httpServer, sslSupport, swigBindings
+}: 
+derivation {
+  name = "subversion-0.32.1";
+  system = stdenv.system;
+
+  builder = ./builder.sh;
+  src = fetchurl {
+      url = http://svn.collab.net/tarballs/subversion-0.32.1.tar.gz;
+      md5 = "b06717a8ef50db4b5c4d380af00bd901";
+    };
+
+  localServer = localServer;
+  httpServer = httpServer;
+  sslSupport = httpServer;
+  swigBindings = httpServer;
+
+  stdenv = stdenv;
+  libxml2 = libxml2;
+  openssl = if sslSupport then openssl else "";
+  httpd = if httpServer then httpd else "";
+  expat = if httpServer then "" else expat;
+  db4 = if localServer then db4 else "";
+  swig = if swigBindings then swig else "";
+}

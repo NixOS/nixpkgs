@@ -7,11 +7,15 @@
   # All activated packages.
   pkgs = (import ./all-packages.fix) {system = system};
 
-  # This 
-  selectedPkgs =
-    [ pkgs.aterm
-    ];
+  # The packages selection for inclusion in the user environment.
+  # This list should be generated automatically by a package
+  # management user interface.
+  selectedPkgs = [
+    pkgs.aterm
+    pkgs.subversion
+  ];
 
+  # Create a user environment.
   body = derivation { 
     name = "user-environment";
     system = system;
