@@ -8,13 +8,13 @@ assert sslSupport -> !isNull openssl;
 assert imageSupport -> !isNull gdkpixbuf;
 
 derivation {
-  name = "sylpheed-0.9.7";
+  name = "sylpheed-0.9.8a";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://sylpheed.good-day.net/sylpheed/sylpheed-0.9.7.tar.bz2;
-    md5 = "399deb5abd52396d26d6475689a5ec3f";
+    url = http://sylpheed.good-day.net/sylpheed/sylpheed-0.9.8a.tar.bz2;
+    md5 = "6ac823f06d8fe4f265f37d9c96068e05";
   };
 
   sslSupport = sslSupport;
