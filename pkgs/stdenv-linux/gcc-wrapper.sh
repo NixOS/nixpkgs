@@ -3,7 +3,6 @@
 IFS=
 
 realgcc=@GCC@
-libc=@LIBC@
 
 justcompile=0
 for i in $@; do
@@ -19,7 +18,7 @@ for i in $@; do
 done
 
 IFS=" "
-extra=$NIX_CFLAGS
+extra=($NIX_CFLAGS)
 if test "$justcompile" != "1"; then
     extra=(${extra[@]} $NIX_LDFLAGS)
 fi

@@ -1,9 +1,0 @@
-Package(
-  [ ("name", "stdenv-linux")
-  , ("build", Relative("stdenv/stdenv-build.sh"))
-
-  , ("gccwrapper", Relative("stdenv/gcc-wrapper.sh"))
-
-  , ("glibc", IncludeFix("glibc/glibc.fix"))
-  ]
-)
