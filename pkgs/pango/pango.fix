@@ -1,11 +1,11 @@
 Package(
-  [ ("name", "pango-1.2.3")
+  [ ("name", "pango-1.2.5")
 
   , ("build", Relative("pango/pango-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.3.tar.bz2")
-      , ("md5", "12247592ea582907cfd2de81aeb32caf")
+      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/pango-1.2.5.tar.bz2")
+      , ("md5", "df00fe3e71cd297010f24f439b6c8ee6")
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))

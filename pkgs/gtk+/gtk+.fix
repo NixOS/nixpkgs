@@ -1,11 +1,11 @@
 Package(
-  [ ("name", "gtk+-2.2.2")
+  [ ("name", "gtk+-2.2.4")
 
   , ("build", Relative("gtk+/gtk+-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.2.tar.bz2")
-      , ("md5", "5a7c639f0f2d682bdc17e3f81c17c79c")
+      [ ("url", "ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.4.tar.bz2")
+      , ("md5", "605332199533e73bc6eec481fb4f1671")
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))

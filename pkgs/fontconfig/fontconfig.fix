@@ -1,11 +1,11 @@
 Package(
-  [ ("name", "fontconfig-20021121")
+  [ ("name", "fontconfig-2.2.90")
 
   , ("build", Relative("fontconfig/fontconfig-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://fontconfig.org/release/fcpackage.2_1.tar.gz")
-      , ("md5", "2f2852c80924a9b5356c3037a471c1a1")
+      [ ("url", "http://pdx.freedesktop.org/software/fontconfig/releases/fontconfig-2.2.90.tar.gz")
+      , ("md5", "5cb87476743be1bbf1674ed72a76ae6a")
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))

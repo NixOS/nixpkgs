@@ -9,7 +9,7 @@ export PATH=$ed/bin:$PATH
 export TZ=UTC
 
 tar xvfz $src || exit 1
-cd fcpackage*/fontconfig || exit 1
+cd fontconfig-* || exit 1
 ./configure --prefix=$out --with-confdir=$out/etc/fonts \
  --x-includes=$x11/include --x-libraries=$x11/lib \
  --with-expat-includes=$expat/include --with-expat-lib=$expat/lib || exit 1
