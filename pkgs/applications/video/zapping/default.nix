@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     md5 = "90324a26025a49916c3c6ae5f1738dfa";
   };
 
-  inherit teletextSupport jpegSupport pngSupport perlXMLParser;
+  inherit teletextSupport jpegSupport pngSupport libXext perlXMLParser;
 
   buildInputs = [
     pkgconfig perl python x11 libXv libXmu libgnomeui
