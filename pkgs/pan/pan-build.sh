@@ -1,6 +1,6 @@
 #! /bin/sh
 
-envpkgs="$gtk $gtkspell $gnet $libxml"
+envpkgs="$gtk $gnet $libxml"
 . $stdenv/setup || exit 1
 export PATH=$pkgconfig/bin:$perl/bin:$PATH
 

@@ -14,6 +14,7 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("x11", IncludeFix("xfree86/xfree86.fix"))
   , ("freetype", IncludeFix("freetype/freetype.fix"))
   , ("win32codecs", IncludeFix("win32codecs/win32codecs.fix"))
   ]

@@ -10,6 +10,7 @@ Package(
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("x11", IncludeFix("xfree86/xfree86.fix"))
   , ("glib", IncludeFix("glib/glib.fix"))
   , ("Xft", IncludeFix("Xft/Xft.fix"))
   ]

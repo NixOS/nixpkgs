@@ -9,6 +9,7 @@ Package(
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  , ("x11", IncludeFix("xfree86/xfree86.fix"))
   , ("glib", IncludeFix("glib-1/glib.fix"))
   ]
 )

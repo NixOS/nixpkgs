@@ -1,12 +1,13 @@
 #! /bin/sh
 
-envpkgs="$freetype"
+envpkgs="$freetype $x11"
 . $stdenv/setup || exit 1
 
 tar xvfj $src || exit 1
 tar xvfj $fonts || exit 1
 cd MPlayer-* || exit 1
 ./configure --prefix=$out --with-win32libdir=$win32codecs \
+ --with-x11incdir=$x11/include --with-x11libdir=$x11/lib \
  --with-reallibdir=$win32codecs \
  --disable-sdl --disable-esd --disable-xanim --disable-cdparanoia --disable-directfb \
  --disable-lirc --disable-svga --disable-libdv \

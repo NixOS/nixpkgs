@@ -1,6 +1,6 @@
 #! /bin/sh
 
-envpkgs="$glib $atk $pango $tiff $jpeg $png"
+envpkgs="$glib $atk $pango $tiff $jpeg $png $x11"
 . $stdenv/setup || exit 1
 export PATH=$pkgconfig/bin:$perl/bin:$PATH
 
@@ -10,7 +10,7 @@ export NIX_CFLAGS_COMPILE="-I$tiff/include -I$jpeg/include -I$png/include -I$zli
 
 tar xvfj $src || exit 1
 cd gtk+-* || exit 1
-./configure --prefix=$out --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib \
+./configure --prefix=$out --x-includes=$x11/include --x-libraries=$x11/lib \
  --with-libtiff=$tiff || exit 1
 make || exit 1
 make install || exit 1

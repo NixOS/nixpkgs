@@ -1,6 +1,6 @@
 #! /bin/sh
 
-envpkgs="$freetype $expat"
+envpkgs="$freetype $expat $x11"
 . $stdenv/setup || exit 1
 export PATH=$ed/bin:$PATH
 
@@ -11,7 +11,7 @@ export TZ=UTC
 tar xvfz $src || exit 1
 cd fcpackage*/fontconfig || exit 1
 ./configure --prefix=$out --with-confdir=$out/etc/fonts \
- --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib \
+ --x-includes=$x11/include --x-libraries=$x11/lib \
  --with-expat-includes=$expat/include --with-expat-lib=$expat/lib || exit 1
 make || exit 1
 make install || exit 1
