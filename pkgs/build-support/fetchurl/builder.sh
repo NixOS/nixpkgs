@@ -2,7 +2,7 @@
 
 header "downloading $out from $url"
 
-curl "$url" > "$out"
+curl --fail "$url" > "$out"
 
 actual=$(md5sum -b "$out" | cut -c1-32)
 if test "$actual" != "$md5"; then
