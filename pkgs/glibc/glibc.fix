@@ -1,0 +1,16 @@
+Package(
+  [ ("name", "glibc-2.3.2")
+
+  , ("build", Relative("glibc/glibc-build.sh"))
+
+  , ("glibcSrc", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.nl.net/pub/gnu/glibc/glibc-2.3.2.tar.bz2")
+      , ("md5", "ede969aad568f48083e413384f20753c")
+      ]))
+
+  , ("linuxthreadsSrc", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.nl.net/pub/gnu/glibc/glibc-linuxthreads-2.3.2.tar.bz2")
+      , ("md5", "894b8969cfbdf787c73e139782167607")
+      ]))
+  ]
+)

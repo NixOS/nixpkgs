@@ -1,9 +1,12 @@
 Package(
   [ ("name", "aterm-2.0")
   , ("build", Relative("aterm/aterm-build.sh"))
+
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
       [ ("url", "http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz")
       , ("md5", "853474e4bcf4a85f7d38a0676b36bded")
       ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   ]
 )
