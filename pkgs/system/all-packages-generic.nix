@@ -298,6 +298,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  saxon = (import ../development/libraries/java/saxon) {
+    inherit fetchurl stdenv unzip;
+  };
+
   sharedobjects = (import ../development/libraries/java/shared-objects) {
     j2sdk = j2sdk15;
     inherit fetchurl stdenv;
