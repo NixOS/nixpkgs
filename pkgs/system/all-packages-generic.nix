@@ -386,6 +386,11 @@ rec {
     sdf = sdf_23;
   };
 
+  strategoxt_012 = (import ../development/compilers/strategoxt/strategoxt-0.12.nix) { 
+    inherit fetchurl stdenv aterm;
+    sdf = sdf_22;
+  };
+
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
     inherit fetchurl stdenv aterm strategoxt hevea;
     sdf = sdf_23;

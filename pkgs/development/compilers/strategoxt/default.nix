@@ -1,2 +1,2 @@
-import ./strategoxt-0.12.nix
+import ./strategoxt-0.13.nix
 
