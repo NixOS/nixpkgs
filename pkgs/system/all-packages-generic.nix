@@ -751,6 +751,7 @@
     libglade = libglade;
     scrollkeeper = scrollkeeper;
     esound = esound;
+    gettext = gettext;
   };
 
   gqview = (import ../applications/graphics/gqview) {

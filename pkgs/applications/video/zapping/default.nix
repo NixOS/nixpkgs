@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, perl, python, x11, libgnomeui
-, libglade, scrollkeeper, esound }:
+, libglade, scrollkeeper, esound, gettext }:
 
 assert !isNull pkgconfig && !isNull perl && !isNull python &&
   !isNull x11 && !isNull libgnomeui && !isNull libglade &&
-  !isNull scrollkeeper && !isNull esound;
+  !isNull scrollkeeper && !isNull esound && !isNull gettext;
 
 # !!! zvbi library
 # !!! arts, jpeg, png, rte
 
 derivation {
-  name = "zapping-0.6.8";
+  name = "zapping-0.7cvs6";
   system = stdenv.system;
 
   builder = ./builder.sh;
@@ -27,4 +27,5 @@ derivation {
   libglade = libglade;
   scrollkeeper = scrollkeeper;
   esound = esound;
+  gettext = gettext;
 }
