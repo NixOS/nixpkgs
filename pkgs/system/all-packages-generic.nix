@@ -205,6 +205,10 @@ rec {
     inherit fetchurl stdenv perl autoconf;
   };
 
+  automake194 = (import ../development/tools/misc/automake/automake-1.9.4.nix) {
+    inherit fetchurl stdenv perl autoconf;
+  };
+
   libtool = (import ../development/tools/misc/libtool) {
     inherit fetchurl stdenv perl;
     m4 = gnum4;
