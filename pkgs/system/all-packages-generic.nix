@@ -245,6 +245,10 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
+  gcc_static = (import ../stdenv/nix-linux/gcc-static) {
+    inherit fetchurl stdenv;
+  };
+
   gcc34 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
