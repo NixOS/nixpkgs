@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "j2re-sun-linux-1.4.2")
+  , ("build", Relative("j2re/j2re-sun-linux-build.sh"))
+
+  , ("binzip", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://java.sun.com/webapps/download/AutoDL?BundleId=8573")
+      , ("md5", "2f0ab3bdc03ea51a2da6d0b33e4360f4")
+      ]))
+
+  , ("glibc", IncludeFix("glibc/glibc.fix"))
+  ]
+)
