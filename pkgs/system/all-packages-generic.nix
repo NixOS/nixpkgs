@@ -224,6 +224,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  j2sdk15 = (import ../development/compilers/j2sdk/default-1.5.nix) {
+    inherit fetchurl stdenv;
+  };
+
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
     sdf = sdf2;

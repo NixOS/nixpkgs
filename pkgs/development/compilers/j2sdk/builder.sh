@@ -1,7 +1,7 @@
+#!/bin/sh
 
 . $stdenv/setup || exit 1
-version=j2sdk1.4.2_03
-src=$version.bin
+src=$filename.bin
 
 cp $pathname $src || exit 1
 
@@ -18,4 +18,4 @@ alias more=cat
 yes yes | ./$src || exit 1
 
 mkdir $out || exit 1
-mv $version/* $out/ || exit 1
+mv $dirname/* $out/ || exit 1
