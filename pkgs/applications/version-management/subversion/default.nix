@@ -6,20 +6,20 @@
 , openssl ? null, httpd ? null, db4 ? null, expat, swig ? null
 }:
 
-assert !isNull expat;
-assert localServer -> !isNull db4;
-assert httpServer -> !isNull httpd && httpd.expat == expat;
-assert sslSupport -> !isNull openssl && (httpServer -> httpd.openssl == openssl);
-assert swigBindings -> !isNull swig && swig.pythonSupport;
+assert expat != null;
+assert localServer -> db4 != null;
+assert httpServer -> httpd != null && httpd.expat == expat;
+assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl);
+assert swigBindings -> swig != null && swig.pythonSupport;
 
 derivation {
-  name = "subversion-0.37.0";
+  name = "subversion-1.0.1";
   system = stdenv.system;
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/tarballs/subversion-0.37.0.tar.gz;
-    md5 = "048c4d17d5880dc8f3699020eac56224";
+    url = http://subversion.tigris.org/tarballs/subversion-1.0.1.tar.bz2;
+    md5 = "50ca608d260b76d99ed85909acb7ae92";
   };
 
   openssl = if sslSupport then openssl else null;

@@ -1,35 +1,46 @@
-#! /bin/sh
+#! /bin/sh -e
 
-buildinputs="$openssl $db4 $httpd $swig $python $expat"
-. $stdenv/setup || exit 1
+buildInputs="$openssl $db4 $httpd $swig $python $expat"
+. $stdenv/setup
 
-if test $localServer; then
-    extraflags="--with-berkeley-db=$db4 $extraflags"
+configureFlags="--without-gdbm --disable-static"
+
+if test "$localServer"; then
+    configureFlags="--with-berkeley-db=$db4 $configureFlags"
 fi
 
-if test $sslSupport; then
-    extraflags="--with-ssl --with-libs=$openssl $extraflags"
+if test "$sslSupport"; then
+    configureFlags="--with-ssl --with-libs=$openssl $configureFlags"
 fi
 
-if test $httpServer; then
-    extraflags="--with-apxs=$httpd/bin/apxs --with-apr=$httpd --with-apr-util=$httpd $extraflags"
-    extramakeflags="APACHE_LIBEXECDIR=$out/modules $extramakeflags"
+if test "$httpServer"; then
+    configureFlags="--with-apxs=$httpd/bin/apxs --with-apr=$httpd --with-apr-util=$httpd $configureFlags"
+    makeFlags="APACHE_LIBEXECDIR=$out/modules $makeFlags"
 fi
 
-if test $swigBindings; then
-    extraflags="--with-swig=$swig $extraflags"
+if test "$swigBindings"; then
+    configureFlags="--with-swig=$swig $configureFlags"
 fi
 
-echo "extra flags: $extraflags"
+installFlags="$makeFlags"
 
-tar xvfz $src || exit 1
-cd subversion-* || exit 1
-./configure --prefix=$out $extraflags \
- --without-gdbm --disable-static || exit 1
-make $extramakeflags || exit 1
-make install $extramakeflags || exit 1
 
-if test $swigBindings; then
-    make swig-py || exit 1
-    make install-swig-py || exit 1
-fi
+preConfigure() {
+    for i in $(find . -name "ltmain.sh"); do
+        echo "fixing $i"
+        fixLibtool $i
+    done
+}
+preConfigure=preConfigure
+
+
+postInstall() {
+    if test "$swigBindings"; then
+        make swig-py
+        make install-swig-py
+    fi
+}
+postInstall=postInstall
+
+
+genericBuild
