@@ -1,47 +1,13 @@
-diff -rc mythtv-0.16/settings.pro mythtv-new/settings.pro
-*** mythtv-0.16/settings.pro	2004-09-07 23:20:16.000000000 +0200
---- mythtv-new/settings.pro	2005-01-20 22:28:45.219407664 +0100
+diff -rc mythtv-0.17-orig/settings.pro mythtv-0.17/settings.pro
+*** mythtv-0.17-orig/settings.pro	2005-02-11 05:02:39.000000000 +0100
+--- mythtv-0.17/settings.pro	2005-02-16 13:38:46.351279092 +0100
 ***************
-*** 1,12 ****
+*** 1,6 ****
+--- 1,7 ----
   #CONFIG += debug
   CONFIG += release
   
-! PREFIX = /usr/local
-  
-  LIBVERSION = 0.16
-  
-  INCLUDEPATH += $${PREFIX}/include
-! INCLUDEPATH *= /usr/local/include
-  
-  DEFINES += _GNU_SOURCE
-  DEFINES += _FILE_OFFSET_BITS=64
---- 1,12 ----
-  #CONFIG += debug
-  CONFIG += release
-  
-! PREFIX = $$(out)
-  
-  LIBVERSION = 0.16
-  
-  INCLUDEPATH += $${PREFIX}/include
-! #INCLUDEPATH *= /usr/local/include
-  
-  DEFINES += _GNU_SOURCE
-  DEFINES += _FILE_OFFSET_BITS=64
-***************
-*** 39,45 ****
-  
-  # Default Xv support
-  CONFIG += using_xv
-! EXTRA_LIBS += -L/usr/X11R6/lib -lXinerama -lXv -lX11 -lXext -lXxf86vm
-  
-  # IVTV (PVR-x50) support.  Disable if building on Windows.
-  CONFIG += using_ivtv
---- 39,45 ----
-  
-  # Default Xv support
-  CONFIG += using_xv
-! EXTRA_LIBS += -lXinerama -lXv -lX11 -lXext -lXxf86vm
-  
-  # IVTV (PVR-x50) support.  Disable if building on Windows.
-  CONFIG += using_ivtv
++ PREFIX = $$(out)
+  isEmpty( PREFIX ) {
+      PREFIX = /usr/local
+  }

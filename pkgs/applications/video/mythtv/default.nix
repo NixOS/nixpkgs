@@ -3,12 +3,12 @@
 assert qt3.mysqlSupport;
 
 stdenv.mkDerivation {
-  name = "mythtv-0.16";
+  name = "mythtv-0.17";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/mythtv-0.16.tar.bz2;
-    md5 = "0eba17cf64c96ea3ead23e7e15419cc0";
+    url = http://www.mythtv.org/mc/mythtv-0.17.tar.bz2;
+    md5 = "c996dc690d36e946396fc5cd4b715e3b";
   };
 
   patches = [./settings.patch];
