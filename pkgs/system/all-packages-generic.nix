@@ -11,7 +11,7 @@ rec {
 
   ### Symbolic names.
 
-  x11 = xlibs; # !!! should be `x11ClientLibs' or some such
+  x11 = xlibs.xlibs; # !!! should be `x11ClientLibs' or some such
 
 
   ### BUILD SUPPORT
@@ -109,7 +109,8 @@ rec {
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
-    inherit fetchurl stdenv libpng libjpeg expat x11 libXaw;
+    inherit fetchurl stdenv libpng libjpeg expat x11;
+    inherit (xlibs) libXaw;
   };
 
 
@@ -382,108 +383,33 @@ rec {
             docbook_xml_dtd perlXMLParser;
   };
 
-  glib = (import ../development/libraries/gtk+/glib) {
-    inherit fetchurl stdenv pkgconfig gettext perl;
+  gtkLibs = import ../development/libraries/gtk+ {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng;
   };
 
-  atk = (import ../development/libraries/gtk+/atk) {
-    inherit fetchurl stdenv pkgconfig glib perl;
-  };
-
-  pango = (import ../development/libraries/gtk+/pango) {
-    inherit fetchurl stdenv pkgconfig glib x11;
-  };
-
-  gtk = (import ../development/libraries/gtk+/gtk+) {
-    inherit fetchurl stdenv pkgconfig glib atk pango perl
-            libtiff libjpeg libpng x11;
-  };
-
-  glib1 = (import ../development/libraries/gtk+-1/glib) {
-    inherit fetchurl stdenv;
-  };
-
-  gtk1 = (import ../development/libraries/gtk+-1/gtk+) {
-    inherit fetchurl stdenv x11;
-    glib = glib1;
-  };
-
-  gdkpixbuf = (import ../development/libraries/gtk+-1/gdk-pixbuf) {
-    inherit fetchurl stdenv libtiff libjpeg libpng;
-    gtk = gtk1;
+  gtkLibs1 = import ../development/libraries/gtk+-1 {
+    inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
   audiofile = (import ../development/libraries/audiofile) {
     inherit fetchurl stdenv;
   };
 
-  esound = (import ../development/libraries/gnome/esound) {
-    inherit fetchurl stdenv audiofile;
-  };
-
-  libIDL = (import ../development/libraries/gnome/libIDL) {
-    inherit fetchurl stdenv pkgconfig glib;
-    lex = flex;
-    yacc = bison;
-  };
-
-  ORBit2 = (import ../development/libraries/gnome/ORBit2) {
-    inherit fetchurl stdenv pkgconfig glib libIDL popt;
-  };
-
-  GConf = (import ../development/libraries/gnome/GConf) {
-    inherit fetchurl stdenv pkgconfig perl glib gtk libxml2 ORBit2 popt;
-  };
-
-  libbonobo = (import ../development/libraries/gnome/libbonobo) {
-    inherit fetchurl stdenv pkgconfig perl ORBit2 libxml2 popt flex;
-    yacc = bison;
-  };
-
-  gnomemimedata = (import ../development/libraries/gnome/gnome-mime-data) {
-    inherit fetchurl stdenv pkgconfig perl;
-  };
-
-  gnomevfs = (import ../development/libraries/gnome/gnome-vfs) {
-    inherit fetchurl stdenv pkgconfig perl glib libxml2 GConf
-            libbonobo gnomemimedata popt bzip2;
-    # !!! use stdenv.bzip2
-  };
-
-  libgnome = (import ../development/libraries/gnome/libgnome) {
-    inherit fetchurl stdenv pkgconfig perl glib gnomevfs
-            libbonobo GConf popt zlib;
-  };
-
-  libart_lgpl = (import ../development/libraries/gnome/libart_lgpl) {
-    inherit fetchurl stdenv;
-  };
-
-  libglade = (import ../development/libraries/gnome/libglade) {
-    inherit fetchurl stdenv pkgconfig gtk libxml2;
-  };
-
-  libgnomecanvas = (import ../development/libraries/gnome/libgnomecanvas) {
-    inherit fetchurl stdenv pkgconfig gtk libglade;
-    libart = libart_lgpl;
-  };
-
-  libbonoboui = (import ../development/libraries/gnome/libbonoboui) {
-    inherit fetchurl stdenv pkgconfig perl libxml2 libglade
-            libgnome libgnomecanvas;
-  };
-
-  libgnomeui = (import ../development/libraries/gnome/libgnomeui) {
-    inherit fetchurl stdenv pkgconfig libgnome libgnomecanvas
-            libbonoboui libglade;
+  gnome = import ../development/libraries/gnome {
+    inherit fetchurl stdenv pkgconfig audiofile
+            flex bison popt perl zlib libxml2 bzip2;
+    gtkLibs = gtkLibs;
   };
 
   wxGTK = (import ../development/libraries/wxGTK) {
-    inherit fetchurl stdenv pkgconfig gtk;
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
   };
 
   gnet = (import ../development/libraries/gnet) {
-    inherit fetchurl stdenv pkgconfig glib;
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) glib;
   };
 
   libdvdcss = (import ../development/libraries/libdvdcss) {
@@ -524,72 +450,8 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
-  xproto = (import ../development/libraries/freedesktop/xproto) {
-    inherit fetchurl stdenv;
-  };
-
-  xextensions = (import ../development/libraries/freedesktop/xextensions) {
-    inherit fetchurl stdenv;
-  };
-
-  libXtrans = (import ../development/libraries/freedesktop/libXtrans) {
-    inherit fetchurl stdenv;
-  };
-
-  libXau = (import ../development/libraries/freedesktop/libXau) {
-    inherit fetchurl stdenv pkgconfig xproto;
-  };
-
-  libX11 = (import ../development/libraries/freedesktop/libX11) {
-    inherit fetchurl stdenv pkgconfig xproto xextensions libXtrans libXau;
-  };
-
-  libXext = (import ../development/libraries/freedesktop/libXext) {
-    inherit fetchurl stdenv pkgconfig xproto xextensions libX11;
-  };
-
-  libICE = (import ../development/libraries/freedesktop/libICE) {
-    inherit fetchurl stdenv pkgconfig libX11;
-  };
-
-  libSM = (import ../development/libraries/freedesktop/libSM) {
-    inherit fetchurl stdenv pkgconfig libX11 libICE;
-  };
-
-  libXt = (import ../development/libraries/freedesktop/libXt) {
-    inherit fetchurl stdenv pkgconfig libX11 libSM;
-  };
-
-  renderext = (import ../development/libraries/freedesktop/renderext) {
-    inherit fetchurl stdenv;
-  };
-
-  libXrender = (import ../development/libraries/freedesktop/libXrender) {
-    inherit fetchurl stdenv pkgconfig libX11 renderext;
-  };
-
-  fontconfig = (import ../development/libraries/freedesktop/fontconfig) {
-    inherit fetchurl stdenv freetype expat;
-  };
-
-  libXft = (import ../development/libraries/freedesktop/libXft) {
-    inherit fetchurl stdenv pkgconfig libX11 libXrender freetype fontconfig;
-  };
-
-  libXmu = (import ../development/libraries/freedesktop/libXmu) {
-    inherit fetchurl stdenv pkgconfig xproto libX11 libXt;
-  };
-
-  libXpm = (import ../development/libraries/freedesktop/libXpm) {
-    inherit fetchurl stdenv pkgconfig xproto libX11;
-  };
-
-  libXaw = (import ../development/libraries/freedesktop/libXaw) {
-    inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXmu libXpm;
-  };
-
-  xlibs = (import ../development/libraries/freedesktop/xlibs) {
-    inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
+  xlibs = (import ../development/libraries/freedesktop) {
+    inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
@@ -672,19 +534,22 @@ rec {
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
-    inherit fetchurl stdenv pkgconfig gtk gnet libxml2 perl pcre;
+    inherit fetchurl stdenv pkgconfig gnet libxml2 perl pcre;
+    inherit (gtkLibs) gtk;
     spellChecking = false;
   };
 
   sylpheed = (import ../applications/networking/mailreaders/sylpheed) {
-    inherit fetchurl stdenv openssl gdkpixbuf;
+    inherit fetchurl stdenv openssl;
+    inherit (gtkLibs1) gtk gdkpixbuf;
     sslSupport = true;
     imageSupport = true;
-    gtk = gtk1;
   };
 
   firefox = (import ../applications/networking/browsers/firefox) {
-    inherit fetchurl stdenv pkgconfig gtk perl zip libIDL;
+    inherit fetchurl stdenv pkgconfig perl zip;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
@@ -704,15 +569,17 @@ rec {
   };
 
   zapping = (import ../applications/video/zapping) {
-    inherit fetchurl stdenv pkgconfig perl python libgnomeui libglade
-            scrollkeeper esound gettext zvbi libjpeg libpng x11;
+    inherit fetchurl stdenv pkgconfig perl python 
+            scrollkeeper gettext zvbi libjpeg libpng x11;
+    inherit (gnome) libgnomeui libglade esound;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;
   };
 
   gqview = (import ../applications/graphics/gqview) {
-    inherit fetchurl stdenv pkgconfig gtk libpng;
+    inherit fetchurl stdenv pkgconfig libpng;
+    inherit (gtkLibs) gtk;
   };
 
   hello = (import ../applications/misc/hello) {
@@ -727,7 +594,8 @@ rec {
   ### GAMES
 
   zoom = (import ../games/zoom) {
-    inherit fetchurl stdenv perl expat xlibs freetype;
+    inherit fetchurl stdenv perl expat freetype;
+    inherit (xlibs) xlibs;
   };
 
 
