@@ -10,4 +10,5 @@ make
 make install
 strip -S $out/lib/*.a
 
-echo "$zlib" > $out/propagated-build-inputs
+mkdir $out/nix-support
+echo "$zlib" > $out/nix-support/propagated-build-inputs

@@ -1,10 +1,13 @@
-#! /bin/sh
+#! /bin/sh -e
 
 buildinputs="$pkgconfig $perl $glib"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd atk-* || exit 1
-./configure --prefix=$out || exit 1
-make || exit 1
-make install || exit 1
+tar xvfj $src
+cd atk-*
+./configure --prefix=$out
+make
+make install
+
+mkdir $out/nix-support
+echo "$glib" > $out/nix-support/propagated-build-inputs

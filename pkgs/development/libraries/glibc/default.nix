@@ -1,4 +1,6 @@
-{stdenv, fetchurl, kernelHeaders}: derivation {
+{stdenv, fetchurl, kernelHeaders}:
+
+derivation {
   name = "glibc-2.3.2";
   system = stdenv.system;
   builder = ./builder.sh;
@@ -16,6 +18,5 @@
   # later releases of glibc won't need this.
   vaargsPatch = ./glibc-2.3.2-sscanf-1.patch;
 
-  stdenv = stdenv;
-  kernelHeaders = kernelHeaders;
+  inherit stdenv kernelHeaders;
 }

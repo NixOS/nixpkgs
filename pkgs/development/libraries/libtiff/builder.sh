@@ -1,16 +1,17 @@
-#! /bin/sh
+#! /bin/sh -e
 
 buildinputs="$zlib $libjpeg"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfz $src || exit 1
-cd tiff-* || exit 1
+tar xvfz $src
+cd tiff-*
 ./configure --prefix=$out --with-DIR_MAN=$out/man \
  --with-ZIP --with-JPEG \
- --with-DIRS_LIBINC="$zlib/include $libjpeg/include" || exit 1
-make || exit 1
-mkdir $out || exit 1
-make install || exit 1
-strip -S $out/lib/*.a || exit 1
+ --with-DIRS_LIBINC="$zlib/include $libjpeg/include"
+make
+mkdir $out
+make install
+strip -S $out/lib/*.a
 
-echo "$zlib $libjpeg" > $out/propagated-build-inputs || exit 1
+mkdir $out/nix-support
+echo "$zlib $libjpeg" > $out/nix-support/propagated-build-inputs

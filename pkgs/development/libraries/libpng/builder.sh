@@ -1,16 +1,17 @@
-#! /bin/sh
+#! /bin/sh -e
 
 buildinputs="$zlib"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd libpng-* || exit 1
-make -f scripts/makefile.linux || exit 1
-mkdir $out || exit 1
-mkdir $out/bin || exit 1
-mkdir $out/lib || exit 1
-mkdir $out/include || exit 1
-make -f scripts/makefile.linux install prefix=$out || exit 1
-strip -S $out/lib/*.a || exit 1
+tar xvfj $src
+cd libpng-*
+make -f scripts/makefile.linux
+mkdir $out
+mkdir $out/bin
+mkdir $out/lib
+mkdir $out/include
+make -f scripts/makefile.linux install prefix=$out
+strip -S $out/lib/*.a
 
-echo "$zlib" > $out/propagated-build-inputs || exit 1
+mkdir $out/nix-support
+echo "$zlib" > $out/nix-support/propagated-build-inputs

@@ -1,12 +1,13 @@
-#! /bin/sh
+#! /bin/sh -e
 
 export buildinputs="$yacc $m4"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfj $src || exit 1
-cd flex-* || exit 1
-./configure --prefix=$out || exit 1
-make || exit 1
-make install || exit 1
+tar xvfj $src
+cd flex-*
+./configure --prefix=$out
+make
+make install
 
-echo "$m4" > $out/propagated-build-inputs || exit 1
+mkdir $out/nix-support
+echo "$m4" > $out/nix-support/propagated-build-inputs

@@ -1,11 +1,12 @@
-#! /bin/sh
+#! /bin/sh -e
 
 buildinputs="$aterm $getopt"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar zxf $src || exit 1
-cd sdf2-bundle-* || exit 1
-./configure --prefix=$out --with-aterm=$aterm || exit 1
-make install || exit 1
+tar zxf $src
+cd sdf2-bundle-*
+./configure --prefix=$out --with-aterm=$aterm
+make install
 
-echo "$getopt" > $out/propagated-build-inputs || exit 1
+mkdir $out/nix-support
+echo "$getopt" > $out/nix-support/propagated-build-inputs

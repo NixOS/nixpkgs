@@ -1,18 +1,19 @@
-#! /bin/sh
+#! /bin/sh -e
 
 buildinputs="$freetype $expat $x11 $ed"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
 # Fontconfig generates a bad `fonts.conf' file is the timezone is not known
 # (because it calls `date').
 export TZ=UTC
 
-tar xvfz $src || exit 1
-cd fontconfig-* || exit 1
+tar xvfz $src
+cd fontconfig-*
 ./configure --prefix=$out --with-confdir=$out/etc/fonts \
  --x-includes=$x11/include --x-libraries=$x11/lib \
- --with-expat-includes=$expat/include --with-expat-lib=$expat/lib || exit 1
-make || exit 1
-make install || exit 1
+ --with-expat-includes=$expat/include --with-expat-lib=$expat/lib
+make
+make install
 
-echo "$freetype" > $out/propagated-build-inputs || exit 1
+mkdir $out/nix-support
+echo "$freetype" > $out/nix-support/propagated-build-inputs
