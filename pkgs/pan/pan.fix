@@ -14,5 +14,6 @@ Package(
   , ("gtkspell", IncludeFix("gtkspell/gtkspell.fix"))
   , ("gnet", IncludeFix("gnet/gnet.fix"))
   , ("libxml", IncludeFix("libxml2/libxml2.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   ]
 )

@@ -13,5 +13,6 @@ Package(
   , ("glib", IncludeFix("glib/glib.fix"))
   , ("atk", IncludeFix("atk/atk.fix"))
   , ("pango", IncludeFix("pango/pango.fix"))
+  , ("perl", IncludeFix("perl/perl.fix"))
   ]
 )
