@@ -209,6 +209,12 @@
     yacc = bison;
   };
 
+  flexnew = (import ../development/tools/parsing/flex/flex-new.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    yacc = bison;
+  };
+
   gcc = (import ../development/compilers/gcc) {
     fetchurl = fetchurl;
     stdenv = stdenv;

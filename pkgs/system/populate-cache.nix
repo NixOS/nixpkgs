@@ -4,6 +4,7 @@ let {
     [ pkgs.zip
       pkgs.unzip
       pkgs.valgrind
+      pkgs.flexnew
       pkgs.par2cmdline
       pkgs.cksfv
       pkgs.graphviz
