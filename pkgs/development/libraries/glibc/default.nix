@@ -35,6 +35,10 @@ stdenv.mkDerivation {
 
     # Fix for localedata loading bug.
     ./loadlocale.patch
+
+    # Add a whole bunch of UTF-8 locales.  Most of these seem to be in
+    # the CVS mainline now.
+    ./utf8-locales.patch
   ];
 
   inherit kernelHeaders installLocales;
