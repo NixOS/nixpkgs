@@ -407,12 +407,20 @@ rec {
 
   apacheant14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv j2sdk;
+    name = "ant-j2sdk-1.4.2";
   };
 
-#  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
-#    inherit fetchurl stdenv;
-#    j2sdk = j2sdk15;
-#  };
+  apacheantblackdown14 = (import ../development/tools/build-managers/apache-ant) {
+    inherit fetchurl stdenv;
+    j2sdk = blackdown;
+     name = "ant-blackdown-1.4.2";
+  };
+
+  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
+    inherit fetchurl stdenv;
+    name = "ant-j2sdk-1.5.0";
+    j2sdk = j2sdk15;
+  };
 
   tomcat5 = (import ../servers/http/tomcat) {
     inherit fetchurl stdenv j2sdk;
@@ -622,7 +630,6 @@ rec {
     buildServer = false;
     buildClientLibs = true;
   };
-
 
   ### OS-SPECIFIC
 

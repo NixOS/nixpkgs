@@ -1,9 +1,9 @@
-{stdenv, fetchurl, j2sdk}:
+{stdenv, fetchurl, j2sdk, name}:
 
 rec {
   body =
     stdenv.mkDerivation {
-      name = ant.realname;
+      name = name;
       builder = ./builder.sh;
       buildInputs = [ant j2sdk];
       inherit ant j2sdk;
