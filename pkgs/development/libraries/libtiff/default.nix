@@ -3,11 +3,11 @@
 assert zlib != null && libjpeg != null;
 
 stdenv.mkDerivation {
-  name = "libtiff-3.5.7";
+  name = "libtiff-3.6.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-v3.5.7.tar.gz;
-    md5 = "82243b5ae9b7c9e492aeebc501680990";
+    url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-v3.6.1.tar.gz;
+    md5 = "b3f0ee7617593c2703755672fb1bfed3";
   };
   propagatedBuildInputs = [zlib libjpeg];
   inherit zlib libjpeg;
