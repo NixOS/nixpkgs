@@ -68,9 +68,10 @@ test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
 test -n "$glibc" && echo $glibc > $out/nix-support/orig-glibc
 
 cat > $out/nix-support/add-flags <<EOF
-NIX_CFLAGS_COMPILE="$cflagsCompile \$NIX_CFLAGS_COMPILE"
-NIX_CFLAGS_LINK="$cflagsLink \$NIX_CFLAGS_LINK"
-NIX_LDFLAGS="$ldflags \$NIX_LDFLAGS"
+export NIX_CFLAGS_COMPILE="$cflagsCompile \$NIX_CFLAGS_COMPILE"
+export NIX_CFLAGS_LINK="$cflagsLink \$NIX_CFLAGS_LINK"
+export NIX_LDFLAGS="$ldflags \$NIX_LDFLAGS"
+export NIX_GLIBC_FLAGS_SET=1
 EOF
 
 sed \

@@ -311,7 +311,6 @@ fixLibtool() {
 configureW() {
     if test -n "$configurePhase"; then
         $configurePhase
-        stopNest
         return
     fi
 
@@ -321,14 +320,13 @@ configureW() {
 
     if test -z "$configureScript"; then
         configureScript=./configure
-    fi
-    
-    if ! test -x $configureScript; then
-        echo "no configure script, doing nothing"
-        return
+        if ! test -x $configureScript; then
+            echo "no configure script, doing nothing"
+            return
+        fi
     fi
 
-    if test -z "$dontFixLibtool" -a -f ./ltmain.sh; then
+    if test -z "$dontFixLibtool"; then
         for i in $(find . -name "ltmain.sh"); do
             echo "fixing libtool script $i"
             fixLibtool $i
