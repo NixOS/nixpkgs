@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@nix@/bin:@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@sysvinit@/bin:@sysvinit@/sbin:@e2fsprogs@/bin:@e2fsprogs@/sbin
+. @out@/bin/env.sh
 
 echo "--- Nix ---"
 
@@ -15,5 +15,17 @@ mount -n -o remount,rw /dev/root /
 
 echo "mounting /mnt/host..."
 mount -n -t hostfs none /mnt/host
+
+echo "setting up hostname..."
+hostname uml
+
+echo "enabling loopback interface..."
+ifconfig lo 127.0.0.1
+
+echo "enabling ethernet interface..."
+ifconfig eth0 $(cat /etc/networking/local-ip) up
+
+echo "setting up routing table..."
+route add default gw $(cat /etc/networking/gateway-ip)
 
 echo "boot done."

@@ -1,4 +1,5 @@
-{stdenv, bash, coreutils, findutils, utillinux, sysvinit, e2fsprogs, nix}:
+{ stdenv, bash, coreutils, findutils, utillinux, sysvinit, e2fsprogs
+, nettools, nix}:
 
 derivation {
   name = "boot";
@@ -7,5 +8,7 @@ derivation {
   boot = ./boot.sh;
   halt = ./halt.sh;
   login = ./login.sh;
-  inherit stdenv bash coreutils findutils utillinux sysvinit e2fsprogs nix;
+  env = ./env.sh;
+  inherit stdenv bash coreutils findutils utillinux sysvinit
+          e2fsprogs nettools nix;
 }

@@ -69,7 +69,16 @@ echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
 echo "1:2345:respawn:$bootPath/bin/login.sh /dev/ttys/0" >> $root/etc/inittab
-echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
+#echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
+
+echo setting up networking information...
+make_dir 00755 /etc/networking
+echo 192.168.150.1 > $root/etc/networking/local-ip
+echo 192.168.150.3 > $root/etc/networking/gateway-ip
+cp /etc/resolv.conf $root/etc
+rm -f $root/etc/hosts
+echo "127.0.0.1 localhost" >> $root/etc/hosts
+echo "192.168.150.1 uml" >> $root/etc/hosts
 
 echo unmounting...
 umount $root
