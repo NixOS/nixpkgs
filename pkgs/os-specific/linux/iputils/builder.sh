@@ -25,5 +25,3 @@ install -c rdisc $out/sbin/
 install -c tracepath $out/sbin/
 install -c tracepath6 $out/sbin/
 install -c traceroute6 $out/sbin/
-
-exit(1)
