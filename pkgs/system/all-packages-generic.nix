@@ -230,17 +230,17 @@ rec {
 
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv aterm;
-    sdf = sdf2;
+    sdf = sdf2_bundle;
   };
 
   strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
     inherit fetchsvn stdenv autoconf automake libtool which aterm;
-    sdf = sdf2;
+    sdf = sdf2_bundle;
   };
 
   tiger = (import ../development/compilers/tiger) {
     inherit fetchurl stdenv aterm strategoxt;
-    sdf = sdf2;
+    sdf = sdf2_bundle;
   };
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
@@ -287,55 +287,16 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  sdf = (import ../development/tools/parsing/sdf2/bundle-2.1.nix) {
+  sdf_21 = (import ../development/tools/parsing/sdf2/bundle-2.1.nix) {
     inherit fetchurl stdenv getopt aterm;
   };
 
-  sdf2 = (import ../development/tools/parsing/sdf2) {
+  sdf_20 = (import ../development/tools/parsing/sdf2/bundle-2.0.nix) {
+    inherit fetchurl stdenv getopt aterm;
+  };
+
+  sdf2_bundle = (import ../development/tools/parsing/sdf2-bundle) {
     inherit fetchurl stdenv aterm getopt;
-  };
-
-  toolbuslib_0_5_1 = (import ../development/tools/parsing/toolbuslib/toolbuslib-0.5.1.nix) {
-    inherit fetchurl stdenv aterm;
-  };
-
-  ptsupport_1_0 = (import ../development/tools/parsing/pt-support/pt-support-1.0.nix) {
-    inherit fetchurl stdenv aterm;
-    toolbuslib = toolbuslib_0_5_1;
-  };
-
-  sdfsupport_2_0 = (import ../development/tools/parsing/sdf-support/sdf-support-2.0.nix) {
-    inherit fetchurl stdenv aterm;
-    toolbuslib = toolbuslib_0_5_1;
-    ptsupport = ptsupport_1_0;
-  };
-
-  sglr_3_10_2 = (import ../development/tools/parsing/sglr/sglr-3.10.2.nix) {
-    inherit fetchurl stdenv aterm;
-    toolbuslib = toolbuslib_0_5_1;
-    ptsupport = ptsupport_1_0;
-  };
-
-  asfsupport_1_2 = (import ../development/tools/parsing/asf-support/asf-support-1.2.nix) {
-    inherit fetchurl stdenv aterm;
-    ptsupport = ptsupport_1_0;
-  };
-
-  ascsupport_1_8 = (import ../development/tools/parsing/asc-support/asc-support-1.8.nix) {
-    inherit fetchurl stdenv aterm;
-    toolbuslib = toolbuslib_0_5_1;
-    ptsupport = ptsupport_1_0;
-    asfsupport	= asfsupport_1_2;
-  };
-
-  pgen_2_0 = (import ../development/tools/parsing/pgen/pgen-2.0.nix) {
-    inherit fetchurl stdenv getopt aterm;
-    toolbuslib = toolbuslib_0_5_1;
-    ptsupport = ptsupport_1_0;
-    asfsupport = asfsupport_1_2;
-    ascsupport = ascsupport_1_8;
-    sdfsupport = sdfsupport_2_0;
-    sglr = sglr_3_10_2;
   };
 
   expat = (import ../development/libraries/expat) {
