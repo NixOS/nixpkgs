@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, freetype, expat, patch}:
+{stdenv, fetchurl, pkgconfig, freetype, expat}:
 
 rec {
 
@@ -55,7 +55,7 @@ rec {
   };
 
   libXmu = (import ./libXmu) {
-    inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXext patch;
+    inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXext;
   };
 
   libXpm = (import ./libXpm) {

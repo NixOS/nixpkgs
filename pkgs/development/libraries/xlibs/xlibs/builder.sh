@@ -1,5 +1,5 @@
 . $stdenv/setup
-dontMake=1
+dontBuild=1
 dontMakeInstall=1
 nop() {
     sourceRoot=.

@@ -59,3 +59,8 @@ stdenv.mkDerivation {
   that the gcc passes a `-lgcc_s' switch to the linker.  Solution:
   patch the linker so that rpaths are only added for libraries that we
   actually use.
+
+
+* Perl has retained dependencies on gcc, binutils, coreutils, sed.
+
+
