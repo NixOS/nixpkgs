@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     md5 = "cdadfe82fc93f8a65a2ae18a95b0b0e3";
   };
 
-  buildinputs = [pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib];
+  buildInputs = [pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib];
 
   configureFlags = [
     "--enable-gtk2"
