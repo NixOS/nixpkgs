@@ -11,6 +11,12 @@ make_dir() {
     chmod $mode $root/$name
 }
 
+
+touch_file() {
+    name=$1
+    echo creating $name...
+    if ! test -d $root/$name; then touch $root/$name; fi
+}
 root=/tmp/mnt
 
 echo mounting...
@@ -20,6 +26,7 @@ make_dir 00755 /dev
 make_dir 00755 /proc
 make_dir 01777 /tmp
 make_dir 00755 /etc # global non-constant configuration
+make_dir 00755 /etc-secret # global non-constant configuration
 make_dir 00755 /var
 make_dir 00755 /nix
 make_dir 00755 /nix/store
@@ -33,30 +40,36 @@ make_dir 00755 /mnt/host
 make_dir 00755 /home
 make_dir 00755 /home/root
 
+touch_file /etc/passwd
+touch_file /etc/shadow
+touch_file /etc/group
+
 rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
 export NIX_ROOT=$root
+NIX_CMD_PATH=/usr/home/nix/.nix-profile/bin
 
 echo initialising Nix DB...
-/nix/bin/nix-store --init
+#/nix/bin/nix-store --init
+$NIX_CMD_PATH/nix-store --init
 
 echo verifying Nix DB...
-/nix/bin/nix-store --verify
+$NIX_CMD_PATH/nix-store --verify
 
 echo registering valid paths...
 (while read storepath; do
     echo PATH $storepath
-    if ! /nix/bin/nix-store --isvalid $storepath 2> /dev/null; then
-        (unset NIX_ROOT; /nix/bin/nix-store --dump $storepath) | /nix/bin/nix-store --restore $storepath
-        /nix/bin/nix-store --validpath $storepath
+    if ! $NIX_CMD_PATH/nix-store --isvalid $storepath 2> /dev/null; then
+        (unset NIX_ROOT; $NIX_CMD_PATH/nix-store --dump $storepath) | $NIX_CMD_PATH/nix-store --restore $storepath
+        $NIX_CMD_PATH/nix-store --validpath $storepath
     fi
 done) < /tmp/storepaths
 
 echo registering successors...
 (while read line; do
     echo SUCC $line
-    /nix/bin/nix-store --successor $line
+    $NIX_CMD_PATH/nix-store --successor $line
 done) < /tmp/successors
 
 echo setting init symlink...
