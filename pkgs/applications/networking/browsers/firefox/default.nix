@@ -12,4 +12,6 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [pkgconfig gtk perl zip libIDL libXi];
+
+  patches = [./writable-copies.patch];
 }
