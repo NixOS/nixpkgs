@@ -475,6 +475,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  libsigsegv = (import ../development/libraries/libsigsegv) {
+    inherit fetchurl stdenv;
+  };
+
   popt = (import ../development/libraries/popt) {
     inherit fetchurl stdenv gettext;
   };
