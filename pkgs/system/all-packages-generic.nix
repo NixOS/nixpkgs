@@ -109,7 +109,7 @@ rec {
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
-    inherit fetchurl stdenv libpng libjpeg expat x11;
+    inherit fetchurl stdenv libpng libjpeg expat x11 libXaw;
   };
 
 
@@ -577,7 +577,6 @@ rec {
 
   libXt = (import ../development/libraries/freedesktop/libXt) {
     inherit fetchurl stdenv pkgconfig libX11 libSM;
-    patch = gnupatch;
   };
 
   renderext = (import ../development/libraries/freedesktop/renderext) {
@@ -600,8 +599,16 @@ rec {
     inherit fetchurl stdenv pkgconfig xproto libX11 libXt;
   };
 
+  libXpm = (import ../development/libraries/freedesktop/libXpm) {
+    inherit fetchurl stdenv pkgconfig xproto libX11;
+  };
+
+  libXpmdist = (import ../development/libraries/freedesktop/libXpm/make-dist.nix) {
+    inherit stdenv pkgconfig autoconf automake libtool xproto libX11;
+  };
+
   libXaw = (import ../development/libraries/freedesktop/libXaw) {
-    inherit fetchurl stdenv pkgconfig xproto libX11 libXt;
+    inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXmu libXpm;
   };
 
   xlibs = (import ../development/libraries/freedesktop/xlibs) {

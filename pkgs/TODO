@@ -5,3 +5,6 @@
 * Patch development/tools/misc/libtool not to search standard
   directories for libraries (like setup.sh does now). [do we want
   this?]
+
+
+* Inform freedesktop people that Xaw requires Xpm.
