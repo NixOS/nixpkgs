@@ -16,11 +16,11 @@ if test "$httpServer"; then
     makeFlags="APACHE_LIBEXECDIR=$out/modules $makeFlags"
 fi
 
-if test "$pythonBindings"; then
+if test -n "$pythonBindings" -o -n "$javaSwigBindings"; then
     configureFlags="--with-swig=$swig $configureFlags"
 fi
 
-if test "$javaBindings"; then
+if test "$javahlBindings"; then
     configureFlags="--enable-javahl --with-jdk=$j2sdk $configureFlags"
 fi
 
@@ -32,13 +32,26 @@ postInstall() {
         make swig-py
         make install-swig-py
     fi
-    if test "$javaBindings"; then
-        mkdir subversion/bindings/java/javahl/classes # bug fix
+    if test "$javaSwigBindings"; then
+        # Hack to get Java-Swig bindings to build if Python is not in
+        # scope (this fails because Subversion's configure script does
+        # something silly like `SWIG_JAVA_COMPILE="$SWIG_PY_COMPILE"').
+        FL1='SWIG_JAVA_COMPILE=gcc'
+        FL2='SWIG_JAVA_LINK=gcc -L$(SWIG_BUILD_DIR)/.libs'
+        make swig-java "$FL1" "$FL2"
+        make swig-java-api "$FL1" "$FL2"
+        make swig-java-java "$FL1" "$FL2"
+        make install-swig-java "$FL1" "$FL2"
+    fi
+    if test "$javahlBindings"; then
+        mkdir -p subversion/bindings/java/javahl/classes # bug fix
         make javahl
         make install-javahl
         mkdir -p $out/share/doc/$name
-        $j2sdk/bin/javadoc -d $out/share/doc/$name -windowtitle "JavaHL Subversion Bindings" -link http://java.sun.com/j2se/1.4.2/docs/api/ \
-          subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/*.java
+        $j2sdk/bin/javadoc -d $out/share/doc/$name \
+            -windowtitle "JavaHL Subversion Bindings" \
+            -link http://java.sun.com/j2se/1.4.2/docs/api/ \
+            subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/*.java
     fi
 }
 postInstall=postInstall

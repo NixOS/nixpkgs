@@ -773,7 +773,9 @@ rec {
     httpServer = false;
     sslSupport = true;
     httpd = apacheHttpd;
-    javaBindings = true;
+    javaSwigBindings = true;
+    javahlBindings = true;
+    j2sdk = blackdown;
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
