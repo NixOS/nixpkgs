@@ -1,6 +1,6 @@
 {stdenv, fetchurl, j2sdk, name}:
 
-rec {
+let {
   body =
     stdenv.mkDerivation {
       name = name;

@@ -325,7 +325,7 @@ rec {
   jclasslib = (import ../development/tools/java/jclasslib) {
     inherit fetchurl stdenv xpf;
     j2re = j2sdk15;
-    ant = apacheant14.body;
+    ant = apacheAnt14;
   };
 
   ocaml = (import ../development/compilers/ocaml) {
@@ -405,18 +405,18 @@ rec {
     inherit fetchurl stdenv jikes alsaLib xlibs;
   };
 
-  apacheant14 = (import ../development/tools/build-managers/apache-ant) {
+  apacheAnt14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv j2sdk;
     name = "ant-j2sdk-1.4.2";
   };
 
-  apacheantblackdown14 = (import ../development/tools/build-managers/apache-ant) {
+  apacheAntBlackdown14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
     j2sdk = blackdown;
      name = "ant-blackdown-1.4.2";
   };
 
-  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
+  apacheAnt15 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
     name = "ant-j2sdk-1.5.0";
     j2sdk = j2sdk15;
@@ -629,6 +629,12 @@ rec {
     inherit fetchurl stdenv flex bison;
     buildServer = false;
     buildClientLibs = true;
+  };
+
+  postgresql = (import ../servers/sql/postgresql) {
+    inherit fetchurl stdenv readline;
+    jdbcSupport = true;
+    ant = apacheAntBlackdown14;
   };
 
   ### OS-SPECIFIC
