@@ -1,11 +1,12 @@
-{stdenv, fetchurl, libXt, libXp, libXext, libX11}:
+{stdenv, fetchurl, libXt, libXp, libXext, libX11, glib, pango, atk, gtk, libstdcpp5, zlib}:
 
 stdenv.mkDerivation {
-  name = "acrobat-reader-5.0.10";
+  name = "acrobat-reader-7.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ardownload.adobe.com/pub/adobe/acrobatreader/unix/5.x/linux-5010.tar.gz;
-    md5 = "9721b85d54aab1d9ece37758cc6d64f2";
+    url = ftp://ftp.adobe.com/pub/adobe/reader/unix/7x/7.0/enu/AdbeRdr70_linux_enu.tar.gz;
+    md5 = "f847ce21e5d871837f2dc1d2f1baf9a9";
   };
-  inherit libXt libXp libXext libX11;
+  
+  libPath = [libXt libXp libXext libX11 glib pango atk gtk libstdcpp5 zlib];
 }

@@ -1182,8 +1182,10 @@ rec {
   };
 
   acroread = (import ../applications/misc/acrobat-reader) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv zlib;
     inherit (xlibs) libXt libXp libXext libX11;
+    inherit (gtkLibs) glib pango atk gtk;
+    libstdcpp5 = gcc33.gcc;
   };
 
   eclipse = (import ../applications/editors/eclipse) {
