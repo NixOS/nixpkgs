@@ -92,6 +92,10 @@
     inherit fetchurl stdenv;
   };
 
+  bittorrent = (import ../tools/networking/bittorrent) {
+    inherit fetchurl stdenv wxPython;
+  };
+
   graphviz = (import ../tools/graphics/graphviz) {
     inherit fetchurl stdenv libpng libjpeg expat;
     x11 = xfree86;
@@ -231,11 +235,7 @@
   };
 
   python = (import ../development/interpreters/python) {
-    inherit fetchurl stdenv;
-  };
-
-  python = (import ../development/interpreters/python) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv zlib;
   };
 
   j2re = (import ../development/interpreters/j2re) {
