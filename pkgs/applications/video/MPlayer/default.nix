@@ -1,16 +1,17 @@
-{ alsaSupport ? false
-, stdenv, fetchurl, x11, freetype, zlib, alsa ? null}:
+{ alsaSupport ? false, xvSupport ? true
+, stdenv, fetchurl, x11, libXv, freetype, zlib, alsa ? null}:
 
 assert x11 != null && freetype != null;
 assert alsaSupport -> alsa != null;
+assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0pre3";
+  name = "MPlayer-1.0pre4";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre3.tar.bz2;
-    md5 = "998becb79417c6a14d15c07e85188b82";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre4.tar.bz2;
+    md5 = "83ebac0f05b192516a41fca2350ca01a";
   };
   fonts = fetchurl {
     url = http://www2.mplayerhq.hu/MPlayer/releases/fonts/font-arial-iso-8859-1.tar.bz2;
@@ -21,6 +22,9 @@ stdenv.mkDerivation {
     inherit stdenv fetchurl;
   };
 
-  alsa = if alsaSupport then alsa else null;
-  inherit alsaSupport x11 freetype zlib;
+  buildInputs = [
+    x11 libXv freetype zlib
+    (if alsaSupport then alsa else null)
+    (if xvSupport then libXv else null)
+  ];
 }

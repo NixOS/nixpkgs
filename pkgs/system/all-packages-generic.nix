@@ -571,6 +571,7 @@ rec {
 
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib;
+    inherit (xlibs) libXv;
     alsaSupport = true;
     alsa = alsaLib;
   };
@@ -582,6 +583,7 @@ rec {
   vlc = (import ../applications/video/vlc) {
     inherit fetchurl stdenv wxGTK libdvdcss libdvdplay
             mpeg2dec a52dec libmad x11;
+    inherit (xlibs) libXv;
     alsa = alsaLib;
   };
 
@@ -589,6 +591,7 @@ rec {
     inherit fetchurl stdenv pkgconfig perl python 
             scrollkeeper gettext zvbi libjpeg libpng x11;
     inherit (gnome) libgnomeui libglade esound;
+    inherit (xlibs) libXv libXext;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;

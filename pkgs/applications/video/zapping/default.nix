@@ -1,12 +1,13 @@
 { teletextSupport ? true
 , jpegSupport ? true
 , pngSupport ? true
-, stdenv, fetchurl, pkgconfig, perl, python, x11, libgnomeui
+# !!! libXext shouldn't be necessary (it's in x11); but the builder needs it.
+, stdenv, fetchurl, pkgconfig, perl, python, x11, libXv, libXext, libgnomeui
 , libglade, scrollkeeper, esound, gettext
 , zvbi ? null, libjpeg ? null, libpng ? null }:
 
 assert pkgconfig != null && perl != null && python != null &&
-  x11 != null && libgnomeui != null && libglade != null &&
+  x11 != null && libXv != null && libgnomeui != null && libglade != null &&
   scrollkeeper != null && esound != null && gettext != null;
 
 assert teletextSupport -> zvbi != null && zvbi.pngSupport
@@ -24,10 +25,10 @@ stdenv.mkDerivation {
     md5 = "cdedc0088c70f4520c37066ec05cb996";
   };
 
-  inherit teletextSupport jpegSupport pngSupport;
+  inherit teletextSupport jpegSupport pngSupport libXext;
 
   buildInputs = [
-    pkgconfig perl python x11 libgnomeui
+    pkgconfig perl python x11 libXv libgnomeui
     libglade scrollkeeper esound gettext
     (if teletextSupport then zvbi else null)
     (if jpegSupport then libjpeg else null)

@@ -66,6 +66,10 @@ rec {
     inherit fetchurl stdenv pkgconfig xproto libX11 libXt libXmu libXpm;
   };
 
+  libXv = (import ./libXv) {
+    inherit fetchurl stdenv pkgconfig libX11;
+  };
+
   xlibs = (import ./xlibs) {
     inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
   };
