@@ -213,6 +213,7 @@ rec {
     gcc = (import ../development/compilers/gcc-3.4) {
       inherit fetchurl stdenv noSysDirs;
       patch = gnupatch;
+      profiledCompiler = true;
     };
     binutils = stdenv.gcc.binutils;
     glibc = stdenv.gcc.glibc;

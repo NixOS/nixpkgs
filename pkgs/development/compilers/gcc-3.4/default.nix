@@ -1,5 +1,6 @@
 { stdenv, fetchurl, patch, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
+, profiledCompiler ? false
 }:
 
 assert langC;
@@ -14,5 +15,5 @@ stdenv.mkDerivation {
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch];
   buildInputs = [patch];
-  inherit noSysDirs langC langCC langF77;
+  inherit noSysDirs langC langCC langF77 profiledCompiler;
 }

@@ -67,6 +67,10 @@ preConfigure() {
 preConfigure=preConfigure
 
 
-makeFlags="bootstrap"
+if test -z "$profiledCompiler"; then
+    makeFlags="bootstrap"
+else    
+    makeFlags="profiledbootstrap"
+fi
 
 genericBuild
