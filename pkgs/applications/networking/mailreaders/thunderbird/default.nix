@@ -6,7 +6,7 @@ assert pkgconfig != null && gtk != null && perl != null
 # !!! assert libIDL.glib == gtk.glib;
 
 stdenv.mkDerivation {
-  name = "thunderbird-code-0.8";
+  name = "thunderbird-0.8";
 
   builder = ./builder.sh;
   src = fetchurl {

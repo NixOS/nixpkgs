@@ -755,8 +755,8 @@ rec {
   };
 
   thunderbird = 
-    (import ../applications/networking/mailreaders/thunderbird/linker.nix) {
-      name = "thunderbird-0.8";
+    (import ../build-support/make-symlinks) {
+      inherit stdenv;
       dir =
         (import ../applications/networking/mailreaders/thunderbird) {
           inherit fetchurl stdenv pkgconfig perl zip;
@@ -764,7 +764,6 @@ rec {
           inherit (gnome) libIDL;
         };
       files = ["bin/thunderbird" "lib/thunderbird-0.8/icons"];
-      inherit stdenv;
     };
 
   lynx = (import ../applications/networking/browsers/lynx) {
