@@ -1,10 +1,13 @@
 Descr(
   [ Bind("pkgId", "gtk+-2.2.1")
-  , Bind("releaseId", "1")
+  , Bind("releaseId", "2")
 
   , Bind("pkgconfig", Fix("./pkgconfig-0.15.0.fix"))
   , Bind("glib", Fix("./glib-2.2.1.fix"))
   , Bind("atk", Fix("./atk-1.2.0.fix"))
+  , Bind("freetype", Fix("./freetype-2.1.4.fix"))
+  , Bind("fontconfig", Fix("./fontconfig-20021121.fix"))
+  , Bind("Xft", Fix("./Xft-20021121.fix"))
   , Bind("pango", Fix("./pango-1.2.1.fix"))
 
   , Bind("src", Url("dfd5755fddb26a46c96bfaa813280ac4", "ftp://ftp.gtk.org/pub/gtk/v2.2/gtk+-2.2.1.tar.bz2"))

@@ -1,11 +1,15 @@
 Descr(
   [ Bind("pkgId", Str("system"))
-  , Bind("releaseId", Str("4"))
+  , Bind("releaseId", Str("5"))
 
   , Bind("actATerm", Fix("./aterm-2.0.fix"))
   , Bind("actPkgConfig", Fix("./pkgconfig-0.15.0.fix"))
+  , Bind("actLibxml", Fix("./libxml2-2.5.7.fix"))
   , Bind("actGlib", Fix("./glib-2.2.1.fix"))
   , Bind("actAtk", Fix("./atk-1.2.0.fix"))
+  , Bind("actFreetype", Fix("./freetype-2.1.4.fix"))
+  , Bind("actFontconfig", Fix("./fontconfig-20021121.fix"))
+  , Bind("actXft", Fix("./Xft-20021121.fix"))
   , Bind("actPango", Fix("./pango-1.2.1.fix"))
   , Bind("actGtk", Fix("./gtk+-2.2.1.fix"))
   , Bind("actGnet", Fix("./gnet-1.1.8.fix"))

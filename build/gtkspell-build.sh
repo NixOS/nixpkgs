@@ -2,7 +2,7 @@
 
 export PATH=$pkgconfig/bin:/bin:/usr/bin
 export PKG_CONFIG_PATH=$glib/lib/pkgconfig:$atk/lib/pkgconfig:$pango/lib/pkgconfig:$gtk/lib/pkgconfig
-export LD_LIBRARY_PATH=$glib/lib:$atk/lib:$pango/lib:$gtk/lib:$pspell/lib
+export LD_LIBRARY_PATH=$glib/lib:$atk/lib:$pango/lib:$gtk/lib:$pspell/lib:$fontconfig/lib:$Xft/lib:$freetype/lib:
 export C_INCLUDE_PATH=$pspell/include
 
 top=`pwd`
