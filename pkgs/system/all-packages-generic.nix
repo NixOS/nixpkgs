@@ -258,7 +258,7 @@ rec {
 
   strategoxtdailydist = (import ../development/compilers/strategoxt/dailydist.nix) {
     inherit fetchurl stdenv aterm;
-    sdf = sdf_21;
+    sdf = sdf_22;
   };
 
   tiger = (import ../development/compilers/tiger) {
@@ -322,6 +322,10 @@ rec {
 
   aterm = (import ../development/libraries/aterm) {
     inherit fetchurl stdenv;
+  };
+
+  sdf_22 = (import ../development/tools/parsing/sdf2/bundle-2.2.nix) {
+    inherit fetchurl stdenv getopt aterm;
   };
 
   sdf_21 = (import ../development/tools/parsing/sdf2/bundle-2.1.nix) {
