@@ -94,6 +94,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  unzip552 = (import ../tools/archivers/unzip-5.52) {
+    inherit fetchurl stdenv;
+  };
+
   gzip = (import ../tools/compression/gzip) {
     inherit fetchurl stdenv;
   };

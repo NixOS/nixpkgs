@@ -92,13 +92,23 @@ let {
   ;};
 
   powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)
+    unzip552
     aterm
     subversion
+    bisonnew
+    flexnew
+    libxml2
+    libxslt
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    docbook_xml_ebnf_dtd
+    docbook_xml_xslt
+    nxml
   ;};
 
 
   body = [
     i686LinuxPkgs
-#    powerpcDarwinPkgs
+    powerpcDarwinPkgs
   ];
 }

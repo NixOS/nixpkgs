@@ -58,7 +58,7 @@
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
-    genericStdenv = import ../stdenv/generic-branch;
+    genericStdenv = import ../stdenv/generic;
     inherit gccWrapper;
   };
 
