@@ -231,7 +231,7 @@ rec {
   };
 
   octave = (import ../development/interpreters/octave) {
-    inherit fetchurl stdenv readline ncurses g77;
+    inherit fetchurl stdenv readline ncurses g77 perl;
   };
 
   gnumake = (import ../development/tools/build-managers/gnumake) {
