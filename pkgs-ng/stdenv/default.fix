@@ -1,5 +1,0 @@
-{system}: derivation
-  { name = "stdenv"
-  , system = system
-  , builder = ./builder.sh
-  }

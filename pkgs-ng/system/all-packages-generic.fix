@@ -1,0 +1,82 @@
+# This file evaluates to a function that, when supplied with a system
+# identifier and a standard build environment, returns the set of all
+# packages provided by the Nix Package Collection.
+
+{system, stdenv}: rec
+  { fetchurl = (import ../fetchurl)
+      { stdenv = stdenv
+      }
+
+  # sys-utils/coreutils
+  , coreutils = (import ../sys-utils/coreutils)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # sys-utils/findutils
+  , findutils = (import ../sys-utils/findutils)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # sys-utils/gnused
+  , gnused = (import ../sys-utils/gnused)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # sys-utils/gnugrep
+  , gnugrep = (import ../sys-utils/gnugrep)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      , pcre = pcre
+      }
+
+  # archivers/gnutar
+  , gnutar = (import ../archivers/gnutar)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # compression/gzip
+  , gzip = (import ../compression/gzip)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # shells/bash
+  , bash = (import ../shells/bash)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # devel/tools/binutils
+  , binutils = (import ../devel/tools/binutils)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # devel/tools/gnumake
+  , gnumake = (import ../devel/tools/gnumake)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  # devel/compilers/gcc
+  , gcc = (import ../devel/compilers/gcc)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      , binutils = binutils
+      }
+
+  # devel/libs/pcre
+  , pcre = (import ../devel/libs/pcre)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
+  , aterm = (import ../aterm)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+  }
