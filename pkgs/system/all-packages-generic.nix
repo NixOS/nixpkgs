@@ -499,7 +499,7 @@ rec {
   apacheAntBlackdown14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
     j2sdk = blackdown;
-     name = "ant-blackdown-1.4.2";
+    name = "ant-blackdown-1.4.2";
   };
 
   apacheAnt15 = (import ../development/tools/build-managers/apache-ant) {
@@ -1171,7 +1171,7 @@ rec {
   };
 
   acroread = (import ../applications/misc/acrobat-reader) {
-    inherit fetchurl stdenv patchelf;
+    inherit fetchurl stdenv;
     inherit (xlibs) libXt libXp libXext libX11;
   };
 
