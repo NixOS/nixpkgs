@@ -605,7 +605,7 @@ rec {
   };
 
   qt3 = import ../development/libraries/qt-3 {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng;
+    inherit fetchurl stdenv x11 zlib libjpeg libpng which;
     inherit (xlibs) libXft libXrender;
   };
 

@@ -1,7 +1,7 @@
 { xftSupport ? true
 , xrenderSupport ? true
 , stdenv, fetchurl, x11, libXft ? null, libXrender ? null
-, zlib, libjpeg, libpng
+, zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     md5 = "3e0a0c8429b0a974b39b5f535ddff01c";
   };
 
-  buildInputs = [x11 libXft libXrender zlib libjpeg libpng];
+  buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
 
   inherit xftSupport libXft xrenderSupport libXrender;
   inherit (libXft) freetype fontconfig;

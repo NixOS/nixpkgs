@@ -15,7 +15,7 @@ preConfigure() {
         mv $i.tmp $i
     done
 
-    chmod +x config.tests/x11/*.test
+    chmod +x config.tests/*/*.test
 }
 
 
