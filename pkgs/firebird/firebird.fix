@@ -1,11 +1,11 @@
 Package(
-  [ ("name", "firebird-0.6.1")
+  [ ("name", "firebird-0.7")
 
   , ("build", Relative("firebird/firebird-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
-      [ ("url", "http://ftp.mozilla.org/pub/firebird/releases/0.6.1/MozillaFirebird-source-0.6.1.tar.bz2")
-      , ("md5", "35191de0d02601f7a190b5065a26de85")
+      [ ("url", "ftp://ftp.mozilla.org/pub/mozilla.org/firebird/releases/0.7/MozillaFirebird-source-0.7.tar.gz")
+      , ("md5", "35112566a3dca5bdf363972056afc462")
       ]))
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
