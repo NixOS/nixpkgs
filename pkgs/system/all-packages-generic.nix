@@ -577,6 +577,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  iputils = (import ../os-specific/linux/iputils) {
+    inherit fetchurl stdenv kernelHeaders;
+    glibc = stdenv.gcc.glibc;
+  };
 
   ### DATA
 
