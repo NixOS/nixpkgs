@@ -13,5 +13,6 @@ Package(
   , ("libpng", IncludeFix("libpng/libpng.fix"))
   , ("libjpeg", IncludeFix("libjpeg/libjpeg.fix"))
   , ("expat", IncludeFix("expat/expat.fix"))
+  , ("freetype", IncludeFix("freetype/freetype.fix"))
   ]
 )

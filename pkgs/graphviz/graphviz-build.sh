@@ -1,6 +1,6 @@
 #! /bin/sh
 
-envpkgs="$zlib $libpng $libjpeg $expat"
+envpkgs="$zlib $libpng $libjpeg $expat $freetype"
 . $stdenv/setup || exit 1
 
 NIX_CFLAGS_COMPILE="-I$zlib/include -I$libpng/include -I$libjpeg/include -I$expat/include $NIX_CFLAGS_COMPILE"
