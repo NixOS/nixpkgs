@@ -796,6 +796,11 @@ rec {
     inherit (xlibs) libXi;
   };
 
+  firefoxWrapper = (import ../applications/networking/browsers/firefox-wrapper) {
+    inherit stdenv firefox;
+    plugins = [MPlayerPlugin];
+  };
+
   thunderbird = 
     (import ../build-support/make-symlinks) {
       inherit stdenv;

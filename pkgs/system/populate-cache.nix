@@ -46,7 +46,7 @@ let {
     subversion
     pan
     sylpheed
-    firefox
+    firefoxWrapper
     thunderbird
     lynx
     MPlayer
