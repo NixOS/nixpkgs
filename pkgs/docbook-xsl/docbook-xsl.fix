@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "docbook-xsl-1.61.3")
+  , ("build", Relative("docbook-xsl/docbook-xsl-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://belnet.dl.sourceforge.net/sourceforge/docbook/docbook-xsl-1.61.3.tar.gz")
+      , ("md5", "dc91b494e0afc586482c17e9373c0c56")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

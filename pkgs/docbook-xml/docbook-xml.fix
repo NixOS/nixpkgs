@@ -1,0 +1,12 @@
+Package(
+  [ ("name", "docbook-xml-4.2")
+  , ("build", Relative("docbook-xml/docbook-xml-build.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.oasis-open.org/docbook/xml/4.2/docbook-xml-4.2.zip")
+      , ("md5", "73fe50dfe74ca631c1602f558ed8961f")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
+  ]
+)

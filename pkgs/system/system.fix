@@ -9,5 +9,6 @@ Package(
   , ("actMPlayer", IncludeFix("MPlayer/MPlayer.fix"))
   , ("actSylpheed", IncludeFix("sylpheed/sylpheed.fix"))
   , ("actXslt", IncludeFix("libxslt/libxslt.fix"))
+  , ("actDocbookXsl", IncludeFix("docbook-xsl/docbook-xsl.fix"))
   ]
 )
