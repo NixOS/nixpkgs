@@ -72,7 +72,10 @@ let {
     mktemp
     strace
     qt3
+    xmltv
+    mythtv
 
+    mysql
     postgresql
     jetty
     blackdown
