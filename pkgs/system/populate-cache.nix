@@ -30,8 +30,8 @@ let {
       pkgs.flexnew
       pkgs.gcc
       pkgs.strategoxt
-      pkgs.ghc
-      pkgs.helium
+#      pkgs.ghc
+#      pkgs.helium
       pkgs.perl
       pkgs.python
       pkgs.libxml2
