@@ -1,67 +1,85 @@
+set -e
+
+
 # Set up the initial path.
-for i in @INITIALPATH@; do
-    PATH=$PATH:$i/bin
+PATH=
+for i in @gcc@ @initialPath@; do
+    PATH=$PATH${PATH:+:}$i/bin
 done
-echo $PATH
+
+if test "$NIX_DEBUG" = "1"; then
+    echo "Initial path: $PATH"
+fi
+
 
 # Execute the pre-hook.
-param1=@PARAM1@
-param2=@PARAM2@
-param3=@PARAM3@
-param4=@PARAM4@
-param5=@PARAM5@
-. @PREHOOK@
+param1=@param1@
+param2=@param2@
+param3=@param3@
+param4=@param4@
+param5=@param5@
+. @preHook@
 
-# Add the directory containing the GCC wrappers to the PATH.
-export PATH=@OUT@/bin:$PATH
 
-# Recursively add all buildinputs to the relevant environment variables.
-addtoenv()
+# Recursively find all build inputs.
+findInputs()
 {
-    pkgs="$buildinputs $1"
+    local pkg=$1
+    pkgs=(${pkgs[@]} $pkg)
 
-    if test -d $1/bin; then
-        export PATH=$1/bin:$PATH
+    if test -f $pkg/nix-support/setup-hook; then
+        . $pkg/nix-support/setup-hook
     fi
-
-    if test -d $1/lib; then
-        export NIX_CFLAGS_LINK="-L$1/lib $NIX_CFLAGS_LINK"
-        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
-    fi
-
-    if test -d $1/lib/pkgconfig; then
-        export PKG_CONFIG_PATH=$1/lib/pkgconfig:$PKG_CONFIG_PATH
-    fi
-
-    if test -d $1/include; then
-        export NIX_CFLAGS_COMPILE="-I$1/include $NIX_CFLAGS_COMPILE"
-    fi
-
-    if test -f $1/propagated-build-inputs; then
-        for i in $(cat $1/propagated-build-inputs); do
-            addtoenv $i
+    
+    if test -f $pkg/nix-support/propagated-build-inputs; then
+        for i in $(cat $pkg/nix-support/propagated-build-inputs); do
+            addToEnv $pkg
         done
     fi
 }
 
-oldbuildinputs=$buildinputs
-buildinputs=
-
-for i in $oldbuildinputs; do
-    addtoenv $i
+pkgs=()
+envHooks=()
+for i in $buildinputs; do
+    findInputs $i
 done
+
+
+# Set the relevant environment variables to point to the build inputs
+# found above.
+addToEnv()
+{
+    local pkg=$1
+
+    if test -d $1/bin; then
+        export _PATH=$_PATH:$1/bin
+    fi
+
+    for i in "${envHooks[@]}"; do
+        $i $pkg
+    done
+}
+
+for i in "${pkgs[@]}"; do
+    addToEnv $i
+done
+
 
 # Add the output as an rpath.
 if test "$NIX_NO_SELF_RPATH" != "1"; then
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
 fi
 
+
 # Strip debug information by default.
 export NIX_STRIP_DEBUG=1
+export NIX_CFLAGS_STRIP="-g0 -Wl,-s"
+
 
 # Execute the post-hook.
-. @POSTHOOK@
+. @postHook@
 
-if test "$NIX_DEBUG" == "1"; then
-    echo "Setup: PATH=$PATH"
+PATH=$_PATH${_PATH}$PATH
+if test "$NIX_DEBUG" = "1"; then
+    echo "Final path: $PATH"
 fi

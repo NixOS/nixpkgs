@@ -201,7 +201,7 @@
     inherit fetchurl stdenv binutils;
   };
 
-  g77 = (import ../development/compilers/gcc-wrapper) {
+  g77 = (import ../build-support/gcc-wrapper) {
     inherit stdenv;
     gcc = (import ../development/compilers/gcc-new) {
       inherit fetchurl stdenv;

@@ -1,23 +1,17 @@
-{system, name, noSysDirs, prehook, posthook, initialPath, 
-  param1, param2, param3, param4, param5}:
+{ stdenv, name, preHook, postHook, initialPath, gcc
+, param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
+}:
+
 derivation {
-  name = name;
-  system = system;
+  inherit stdenv name;
+  system = stdenv.system;
+
   builder = ./builder.sh;
-  noSysDirs = noSysDirs;
 
   setup = ./setup.sh;
-  gccwrapper = ./gcc-wrapper.sh;
-  ldwrapper = ./ld-wrapper.sh;
 
-  prehook = prehook;
-  posthook = posthook;
+  inherit preHook postHook initialPath gcc;
 
-  initialPath = initialPath;
   # TODO: make this more elegant.
-  param1 = param1;
-  param2 = param2;
-  param3 = param3;
-  param4 = param4;
-  param5 = param5;
+  inherit param1 param2 param3 param4 param5;
 }
