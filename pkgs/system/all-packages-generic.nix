@@ -918,11 +918,10 @@ rec {
     recordingSupport = true;
   };
 
-  /*
   mythtv = (import ../applications/video/mythtv) {
-    inherit fetchurl stdenv which;
+    inherit fetchurl stdenv which qt3 x11 lame;
+    inherit (xlibs) libXinerama libXv libXxf86vm;
   };
-  */
 
   gqview = (import ../applications/graphics/gqview) {
     inherit fetchurl stdenv pkgconfig libpng;

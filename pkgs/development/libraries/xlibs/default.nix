@@ -86,6 +86,14 @@ rec {
     inherit fetchurl stdenv pkgconfig libX11 libXext libXt;
   };
 
+  xf86vmext = import ./xf86vmext {
+    inherit fetchurl stdenv;
+  };
+
+  libXxf86vm = import ./libXxf86vm {
+    inherit fetchurl stdenv pkgconfig libX11 libXext xf86vmext;
+  };
+
   xlibs = (import ./xlibs) {
     inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
   };
