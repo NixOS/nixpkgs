@@ -16,7 +16,7 @@ derivation {
   name = "j2sdk-1.4.2";
   system = stdenv.system;
   builder = ./builder.sh;
-  pathname = /tmp/j2sdk-1_4_2_03-linux-i586.bin;
+  pathname = "/tmp/j2sdk-1_4_2_03-linux-i586.bin";
   md5 = "859aa6750161477acec83b7bb5d9998d";
   stdenv = stdenv;
 }
