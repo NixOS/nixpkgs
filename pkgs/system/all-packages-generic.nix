@@ -525,6 +525,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libcdaudio = (import ../development/libraries/libcdaudio) {
+    inherit fetchurl stdenv;
+  };
+
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
   };
