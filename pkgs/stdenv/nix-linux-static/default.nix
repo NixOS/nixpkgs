@@ -11,7 +11,7 @@ rec {
     args = [ ./scripts/curl-unpack ];
   };
 
-  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null, extra3 ? null}: derivation {
+  download = {url, pkgname, postprocess ? null, extra ? null, extra2 ? null, extra3 ? null, patchelf ? null}: derivation {
     name = pkgname;
     builder = ./bash-static/bash;
     tar = ./gnutar-static/bin/tar;
