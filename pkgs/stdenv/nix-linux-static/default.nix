@@ -70,6 +70,7 @@ rec {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
     patchelf = ./patchelf-static/patchelf;
+    find = findutils;
     postprocess = ./scripts/add-symlink.sh;
     extra = linuxHeaders;
     extra2 = coreutils;
