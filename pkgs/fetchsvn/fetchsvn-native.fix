@@ -1,0 +1,10 @@
+Function(["name","url","dir","rev"],
+  Package(
+    [ ("name", Var("name"))
+    , ("build", Relative("fetchsvn/fetchsvn.sh"))
+    , ("url",   Var("url"))
+    , ("dir",   Var("dir"))
+    , ("rev",   Var("rev"))
+    ]
+  )
+)
