@@ -142,5 +142,4 @@ if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
     . "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
-echo "ld command: " @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
 exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}

@@ -94,7 +94,7 @@ rec {
     url = http://losser.st-lab.cs.uu.nl/~armijn/.nix/glibc-2.3.3-static-2.tar.gz;
     pkgname = "glibc";
     patchelf = ./patchelf-static/bin/patchelf;
-    postProcess = [./scripts/add-symlink.sh /* ./scripts/fix-outpath.sh */];
+    postProcess = [./scripts/add-symlink.sh ./scripts/fix-outpath.sh];
     addToPath = [coreutils findutils gnused];
     extra = linuxHeaders;
   };
