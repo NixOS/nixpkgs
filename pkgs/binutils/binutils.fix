@@ -1,0 +1,13 @@
+Package(
+  [ ("name", "binutils-2.14")
+
+  , ("build", Relative("binutils/binutils-build.sh"))
+
+  , ("src", Call(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "ftp://ftp.nluug.nl/pub/gnu/binutils/binutils-2.14.tar.bz2")
+      , ("md5", "2da8def15d28af3ec6af0982709ae90a")
+      ]))
+
+  , ("stdenv", IncludeFix("stdenv-linux/stdenv-nativetools.fix"))
+  ]
+)
