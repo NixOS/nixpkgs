@@ -4,6 +4,7 @@ let {
     [ pkgs.coreutils
       pkgs.findutils
       pkgs.diffutils
+      pkgs.gnupatch
       pkgs.gnused
       pkgs.gnugrep
       pkgs.gawk
@@ -44,5 +45,6 @@ let {
       pkgs.gqview
       pkgs.hello
       pkgs.nxml
+      pkgs.uml
     ];
 }

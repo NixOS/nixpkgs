@@ -36,6 +36,10 @@
     inherit fetchurl stdenv;
   };
 
+  gnupatch = (import ../tools/text/gnupatch) {
+    inherit fetchurl stdenv;
+  };
+
   gnused = (import ../tools/text/gnused) {
     inherit fetchurl stdenv;
   };
@@ -632,6 +636,15 @@
 
   nxml = (import ../applications/editors/emacs/modes/nxml) {
     inherit fetchurl stdenv;
+  };
+
+
+  ### MISC
+
+  uml = (import ../misc/uml) {
+    inherit fetchurl stdenv perl;
+    m4 = gnum4;
+    patch = gnupatch;
   };
 
 }
