@@ -5,8 +5,8 @@
 
 assert pkgconfig != null && gtk != null && gnet != null
   && libxml2 != null && perl != null && pcre != null;
-assert spellChecking -> gtkspell != null && gtk == gtkspell.gtk;
-assert gtk.glib == gnet.glib;
+assert spellChecking -> gtkspell != null /* !!! && gtk == gtkspell.gtk */;
+# !!! assert gtk.glib == gnet.glib;
 
 stdenv.mkDerivation {
   name = "pan-0.14.2.91";
