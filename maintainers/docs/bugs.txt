@@ -48,3 +48,8 @@ include/X11/IntrinsicP.h:202:25: X11/ObjectP.h: No such file or directory
   don't want that because they introduce a source of non-determinism.
   To catch problems like this one determistically, we should change
   the timestamp on store objects to 0.
+
+
+* In gtksourceview-sharp: does the prefix patch cause problems (e.g.,
+  makefile.am says "mimeinfodir should be the same as the gnome
+  prefix")?
