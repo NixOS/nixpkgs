@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "ef1cb003448b4a53517b8f25adb12452";
   };
   configureFlags = "--shared";
+  patches = [./darwin.patch];
 }

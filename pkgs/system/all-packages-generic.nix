@@ -508,14 +508,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  zlib = if stdenv.system == "powerpc-darwin" then
-    (import ../development/libraries/zlib-mac-fix) {
-      inherit fetchurl stdenv;
-    }
-  else
-    (import ../development/libraries/zlib) {
-      inherit fetchurl stdenv;
-    };
+  zlib = (import ../development/libraries/zlib) {
+    inherit fetchurl stdenv;
+  };
 
   libjpeg = (import ../development/libraries/libjpeg) {
     inherit fetchurl stdenv;
