@@ -45,6 +45,7 @@ else
 fi
 
 
+preConfigure=preConfigure
 preConfigure() {
     
     # Determine the frontends to build.
@@ -64,7 +65,13 @@ preConfigure() {
     configureFlags="--enable-languages=$langs"
 }
 
-preConfigure=preConfigure
+
+postInstall=postInstall
+postInstall() {
+    # Remove precompiled headers for now.  They are very big and
+    # probably not very useful yet.
+    find $out/include -name "*.gch" -exec rm -rf {} \; -prune
+}
 
 
 if test -z "$profiledCompiler"; then

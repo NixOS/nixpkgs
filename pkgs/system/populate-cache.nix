@@ -29,6 +29,7 @@ let {
     bisonnew
     flexnew
     gcc
+    gcc34
     aterm
     strategoxt
     ghc

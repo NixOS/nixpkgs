@@ -206,7 +206,7 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
-  gcc340 = (import ../build-support/gcc-wrapper) {
+  gcc34 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.4) {
