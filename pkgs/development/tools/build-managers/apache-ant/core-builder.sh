@@ -3,7 +3,7 @@
 # unpack the binary distribution
 tar jxf $src || exit 1
 mkdir -p $out
-mv apache-ant-1.6.1/* $out || exit 1
+mv apache-ant-*/* $out || exit 1
 
 # remove crap in the root directory
 

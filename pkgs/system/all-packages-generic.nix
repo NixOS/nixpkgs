@@ -384,9 +384,13 @@ rec {
     inherit fetchurl stdenv j2sdk;
   };
 
-  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
+#  apacheant15 = (import ../development/tools/build-managers/apache-ant) {
+#    inherit fetchurl stdenv;
+#    j2sdk = j2sdk15;
+#  };
+
+  tomcat5 = (import ../servers/http/tomcat) {
     inherit fetchurl stdenv;
-    j2sdk = j2sdk15;
   };
 
   pcre = (import ../development/libraries/pcre) {
