@@ -12,4 +12,4 @@ if test "$actual" != "$md5"; then
     exit 1
 fi
 
-stopNext
+stopNest
