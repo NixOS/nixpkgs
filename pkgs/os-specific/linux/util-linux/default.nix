@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "util-linux-2.12";
+  name = "util-linux-2.12q";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/util-linux-2.12.tar.gz;
-    md5 = "997adf78b98d9d1c5db4f37ea982acff";
+    url = http://www.kernel.org/pub/linux/utils/util-linux/util-linux-2.12q.tar.bz2;
+    md5 = "54320aa1abbce00c0dc030e2c3afe5d7";
   };
-  mconfigPatch = ./MCONFIG.patch;
+  patches = [./MCONFIG.patch];
 }

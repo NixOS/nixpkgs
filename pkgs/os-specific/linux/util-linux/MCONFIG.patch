@@ -1,7 +1,8 @@
-*** MCONFIG.old	2004-02-16 10:54:10.000000000 +0100
---- MCONFIG.new	2004-02-16 11:38:35.000000000 +0100
+diff -rc util-linux-2.12q-orig/MCONFIG util-linux-2.12q/MCONFIG
+*** util-linux-2.12q-orig/MCONFIG	2004-12-13 00:15:48.000000000 +0100
+--- util-linux-2.12q/MCONFIG	2005-03-10 16:28:53.000000000 +0100
 ***************
-*** 55,66 ****
+*** 64,75 ****
   # If HAVE_WRITE is set to "yes", then write will not be built or
   # installed from the misc-utils subdirectory.
   # (There is a network aware write in netwrite from NetKit 0.16 or later.)
@@ -14,7 +15,7 @@
   
   # If USE_TTY_GROUP is set to "yes", then wall and write will be installed
   # setgid to the "tty" group, and mesg will only set the group write bit.
---- 55,66 ----
+--- 64,75 ----
   # If HAVE_WRITE is set to "yes", then write will not be built or
   # installed from the misc-utils subdirectory.
   # (There is a network aware write in netwrite from NetKit 0.16 or later.)
@@ -28,7 +29,7 @@
   # If USE_TTY_GROUP is set to "yes", then wall and write will be installed
   # setgid to the "tty" group, and mesg will only set the group write bit.
 ***************
-*** 68,74 ****
+*** 77,83 ****
   # user's tty to "tty" [The login in util-linux does this correctly, and
   # xterm will do it correctly if X is compiled with USE_TTY_GROUP set
   # properly.]
@@ -36,7 +37,7 @@
   
   # If HAVE_KILL is set to "yes", then kill will not be built or
   # installed from the misc-utils subdirectory.
---- 68,74 ----
+--- 77,83 ----
   # user's tty to "tty" [The login in util-linux does this correctly, and
   # xterm will do it correctly if X is compiled with USE_TTY_GROUP set
   # properly.]
@@ -45,7 +46,7 @@
   # If HAVE_KILL is set to "yes", then kill will not be built or
   # installed from the misc-utils subdirectory.
 ***************
-*** 88,97 ****
+*** 102,111 ****
   # If HAVE_SLN is set to "yes", then sln won't be installed
   # (but the man page sln.8 will be installed anyway).
   # sln also comes with libc and glibc.
@@ -56,7 +57,7 @@
   
   # If SILENT_PG is set to "yes", then pg will not ring the bell
   # when an invalid key is pressed
---- 88,97 ----
+--- 102,111 ----
   # If HAVE_SLN is set to "yes", then sln won't be installed
   # (but the man page sln.8 will be installed anyway).
   # sln also comes with libc and glibc.
@@ -68,14 +69,14 @@
   # If SILENT_PG is set to "yes", then pg will not ring the bell
   # when an invalid key is pressed
 ***************
-*** 146,162 ****
+*** 168,184 ****
   DEV_DIR=	/dev
   ETC_DIR=	/etc
   SBIN_DIR=	/sbin
 ! USRSBIN_DIR=	/usr/sbin
 ! USRLIB_DIR=	/usr/lib
 ! USRBIN_DIR=	/usr/bin
-  USRGAMES_DIR=	/usr/games
+! USRGAMES_DIR=	/usr/games
 ! USRSHAREMISC_DIR=/usr/share/misc
 ! LOCALE_DIR=	/usr/share/locale
   BIN_DIR=        /bin
@@ -86,14 +87,14 @@
   
   #
   # Paths used for install
---- 146,162 ----
+--- 168,184 ----
   DEV_DIR=	/dev
   ETC_DIR=	/etc
   SBIN_DIR=	/sbin
 ! USRSBIN_DIR=	/sbin
 ! USRLIB_DIR=	/lib
 ! USRBIN_DIR=	/bin
-  USRGAMES_DIR=	/usr/games
+! USRGAMES_DIR=	/games
 ! USRSHAREMISC_DIR=/share/misc
 ! LOCALE_DIR=	/share/locale
   BIN_DIR=        /bin
@@ -105,7 +106,7 @@
   #
   # Paths used for install
 ***************
-*** 190,196 ****
+*** 212,218 ****
   MANMODE=	644
   DATMODE=	644
   INFOMODE=	644
@@ -113,7 +114,7 @@
   
   CHMOD=		chmod
   INSTALL=	install
---- 190,196 ----
+--- 212,218 ----
   MANMODE=	644
   DATMODE=	644
   INFOMODE=	644
@@ -122,7 +123,7 @@
   CHMOD=		chmod
   INSTALL=	install
 ***************
-*** 198,204 ****
+*** 220,226 ****
   INSTALLBIN=	$(INSTALL) -m $(BINMODE)
   INSTALLMAN=	$(INSTALL) -m $(MANMODE)
   INSTALLDAT=	$(INSTALL) -m $(DATMODE)
@@ -130,7 +131,7 @@
   
   ifeq "$(DISABLE_NLS)" "yes"
   NLSFLAGS = -DDISABLE_NLS
---- 198,204 ----
+--- 220,226 ----
   INSTALLBIN=	$(INSTALL) -m $(BINMODE)
   INSTALLMAN=	$(INSTALL) -m $(MANMODE)
   INSTALLDAT=	$(INSTALL) -m $(DATMODE)
