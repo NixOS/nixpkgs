@@ -194,7 +194,8 @@ rec {
   };
   
   swigWithJava = (import ../development/tools/misc/swig) {
-    inherit fetchurl stdenv j2sdk;
+    inherit fetchurl stdenv;
+    j2sdk = blackdown;
     perlSupport = false;
     pythonSupport = false;
     javaSupport = true;
