@@ -8,7 +8,7 @@ derivation {
     url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libSM-6.0.2.tar.bz2;
     md5 = "0ecc3ec75391d9158f25a94a652bd387";
   };
-  buildInputs = [pkgconfig libX11 libICE];
-  _propagatedBuildInputs = [libICE];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [libX11 libICE];
   inherit stdenv;
 }

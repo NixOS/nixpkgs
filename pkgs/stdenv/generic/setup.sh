@@ -64,7 +64,7 @@ pkgs=""
 if test -n "$buildinputs"; then
     buildInputs="$buildinputs" # compatibility
 fi
-for i in $buildInputs; do
+for i in $buildInputs $propagatedBuildInputs; do
     findInputs $i
 done
 
@@ -360,8 +360,10 @@ buildW() {
         return
     fi
 
-    echo "make flags: $makeFlags"
-    make $makeFlags
+    if test -z "$dontMake"; then
+        echo "make flags: $makeFlags"
+        make $makeFlags
+    fi
 }
 
 
@@ -381,16 +383,21 @@ installW() {
     if test -n "$preInstall"; then
         $preInstall
     fi
+
+    if ! test -x "$out"; then mkdir "$out"; fi
     
-    make install $installFlags
+    if test -z "$dontMakeInstall"; then
+        echo "install flags: $installFlags"
+        make install $installFlags
+    fi
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find $out -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
+        find "$out" -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
     fi
 
     if test -n "$propagatedBuildInputs"; then
-        mkdir -f $out/nix-support
-        echo "$propagatedBuildInputs" > $out/nix-support/propagated-build-inputs
+        if ! test -x "$out/nix-support"; then mkdir "$out/nix-support"; fi
+        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
     if test -n "$postInstall"; then

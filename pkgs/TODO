@@ -1,6 +1,0 @@
-* Add $propagatedBuildInputs to $buildInputs in setup.sh.  Then clean
-  up freedesktop/libX11/default.nix, libSM.
-
-* In setup.sh: create $out prior to calling `make install'.
-
-* In setup.sh: `mkdir -f' -> `if ! test -x $out/...; then mkdir ...'.
