@@ -5,9 +5,10 @@
 # derivation provides a wrapper that sets up the right environment
 # variables so that the compiler and the linker just "work".
 
-{name, stdenv, isNative, gcc ? null, glibc ? null, binutils ? null}:
+{ name, stdenv, isNative, nativePrefix ? ""
+, gcc ? null, glibc ? null, binutils ? null}:
 
-assert isNative -> gcc != "";
+assert isNative -> nativePrefix != "";
 assert !isNative -> gcc != null && glibc != null && binutils != null;
 
 derivation {
@@ -16,8 +17,8 @@ derivation {
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
-  inherit name stdenv isNative gcc glibc binutils;
-  enforcePurity = if isNative then false else gcc.noSysDirs;
+  inherit name stdenv isNative nativePrefix gcc glibc binutils;
+  enforcePurity = if isNative then false else gcc.enforcePurity;
   langC = if isNative then true else gcc.langC;
   langCC = if isNative then true else gcc.langCC;
   langF77 = if isNative then false else gcc.langF77;

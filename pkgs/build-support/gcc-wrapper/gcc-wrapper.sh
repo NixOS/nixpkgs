@@ -5,16 +5,14 @@ if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
 fi
 
 if test -z "$NIX_GLIBC_FLAGS_SET"; then
-    NIX_CFLAGS_COMPILE="@cflagsCompile@ $NIX_CFLAGS_COMPILE"
-    NIX_CFLAGS_LINK="@cflagsLink@ $NIX_CFLAGS_LINK"
-    NIX_LDFLAGS="@ldflags@ $NIX_LDFLAGS"
+    . @out@/nix-support/add-flags
 fi
 
 
 # Figure out if linker flags should be passed.  GCC prints annoying
 # warnings when they are not needed.
 dontLink=0
-if test "$*" = "-v"; then
+if test "$*" = "-v" -o -z "$*"; then
     dontLink=1
 else    
     for i in "$@"; do

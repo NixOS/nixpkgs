@@ -11,8 +11,18 @@ addCVars () {
 envHooks=(${envHooks[@]} addCVars)
 
 export NIX_IS_NATIVE=@isNative@
-if test -z "$NIX_IS_NATIVE"; then
-    PATH=$PATH:@gcc@/bin:@glibc@/bin
+export NIX_ENFORCE_PURITY=@enforcePurity@
+
+# Note: these come *after* $out in the PATH (see setup.sh).
+
+if test -n "@gcc@"; then
+    PATH=$PATH:@gcc@/bin
 fi
 
-export NIX_ENFORCE_PURITY=@enforcePurity@
+if test -n "@binutils@"; then
+    PATH=$PATH:@binutils@/bin
+fi
+
+if test -n "@glibc@"; then
+    PATH=$PATH:@glibc@/bin
+fi
