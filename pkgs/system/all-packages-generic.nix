@@ -647,7 +647,7 @@ rec {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt perl zlib libxml2 bzip2
             perlXMLParser gettext perl x11
-            libtiff libjpeg libpng;
+            libtiff libjpeg libpng gtkLibs;
   };
 
   wxGTK = (import ../development/libraries/wxGTK-2.5) {
@@ -989,9 +989,11 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+/*  
   kopete = (import ../applications/networking/instant-messengers/kopete) {
     inherit fetchurl stdenv xlibs zlib libjpeg perl qt3;
   };
+*/
 
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
     inherit fetchurl stdenv;
