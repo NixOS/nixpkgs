@@ -20,7 +20,7 @@ rec {
     cp = ./tools/cp;
     system = "i686-linux";
     args = [ ./scripts/download-script ];
-    inherit postprocess extra;
+    inherit postprocess extra extra2;
   };
 
 /*
