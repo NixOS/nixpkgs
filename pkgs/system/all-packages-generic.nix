@@ -233,21 +233,6 @@ rec {
     sdf = sdf2;
   };
 
-  strategoxt093 = (import ../development/compilers/strategoxt/strategoxt-0.9.3.nix) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf2;
-  };
-
-  strategoxt094 = (import ../development/compilers/strategoxt/strategoxt-0.9.4.nix) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf2;
-  };
-
-  strategoxt095 = (import ../development/compilers/strategoxt/strategoxt-0.9.5.nix) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf2;
-  };
-
   tiger = (import ../development/compilers/tiger) {
     inherit fetchurl stdenv aterm strategoxt;
     sdf = sdf2;
@@ -744,6 +729,13 @@ rec {
 
   nxml = (import ../applications/editors/emacs/modes/nxml) {
     inherit fetchurl stdenv;
+  };
+
+
+  ### GAMES
+
+  zoom = (import ../games/zoom) {
+    inherit fetchurl stdenv perl expat xlibs freetype;
   };
 
 

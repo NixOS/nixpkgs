@@ -104,6 +104,10 @@ ELSE IF it's DATA (i.e., doe not have a straight-forward executable semantics):
     ELSE IF it's an XSLT stylesheet (okay, these are executable...):
       ./data/sgml+xml/stylesheets/xslt
 
+ELSE IF it's a GAME:
+
+  ./games
+
 ELSE:
 
   ./misc

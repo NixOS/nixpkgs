@@ -9,5 +9,6 @@ stdenv.mkDerivation {
     url = http://freedesktop.org/~xlibs/release/libXft-2.1.6.tar.bz2;
     md5 = "ba10c9c3f4758f304f04f8d48e2f81a4";
   };
-  buildInputs = [pkgconfig libX11 libXrender freetype fontconfig];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [libX11 libXrender freetype fontconfig];
 }

@@ -1,10 +1,5 @@
-buildinputs="$aterm $getopt"
 . $stdenv/setup
 
-tar zxf $src
-cd sdf2-bundle-*
-./configure --prefix=$out --with-aterm=$aterm
-make install
+configureFlags="--with-aterm=$aterm"
 
-mkdir $out/nix-support
-echo "$getopt" > $out/nix-support/propagated-build-inputs
+genericBuild
