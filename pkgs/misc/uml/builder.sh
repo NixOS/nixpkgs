@@ -16,7 +16,7 @@ postUnpack=postUnpack
 
 configurePhase() {
     cp $config .config
-    make oldconfig ARCH=um
+    yes | make oldconfig ARCH=um
 }
 configurePhase=configurePhase
 
