@@ -383,12 +383,12 @@ rec {
             docbook_xml_dtd perlXMLParser;
   };
 
-  gtkLibs = import ../development/libraries/gtk+ {
+  gtkLibs = import ../development/libraries/gtk-libs-2.4 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
   };
 
-  gtkLibs1 = import ../development/libraries/gtk+-1 {
+  gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
@@ -450,7 +450,7 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
-  xlibs = (import ../development/libraries/freedesktop) {
+  xlibs = (import ../development/libraries/xlibs) {
     inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
@@ -541,7 +541,7 @@ rec {
 
   sylpheed = (import ../applications/networking/mailreaders/sylpheed) {
     inherit fetchurl stdenv openssl;
-    inherit (gtkLibs1) gtk gdkpixbuf;
+    inherit (gtkLibs1x) gtk gdkpixbuf;
     sslSupport = true;
     imageSupport = true;
   };
