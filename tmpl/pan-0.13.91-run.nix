@@ -1,3 +1,5 @@
+id : pan-0.13.91-run
+
 pan <- ./pan-0.13.91.nix
 
 glib <- ./glib-2.2.1.nix

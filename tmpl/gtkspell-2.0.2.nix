@@ -1,3 +1,5 @@
+id : gtkspell-2.0.2
+
 pkgconfig <- ./pkgconfig-0.15.0.nix
 glib <- ./glib-2.2.1.nix
 atk <- ./atk-1.2.0.nix
