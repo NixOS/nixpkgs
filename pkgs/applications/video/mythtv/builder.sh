@@ -10,6 +10,13 @@ myBuilder() {
 }
 
 
-genericBuild
+postInstall=postInstall
+postInstall() {
+    sqlDir="$out/share/mythtv/sql"
+    ensureDir $sqlDir
+    cp -p ./database/mc.sql $sqlDir/
+    cp -p ./setup/setup $out/bin/mythsetup
+}
 
-exit 1
+
+genericBuild

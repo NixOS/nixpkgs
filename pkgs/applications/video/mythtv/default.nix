@@ -1,5 +1,7 @@
 {stdenv, fetchurl, which, qt3, x11, libXinerama, libXv, libXxf86vm, lame}:
 
+assert qt3.mysqlSupport;
+
 stdenv.mkDerivation {
   name = "mythtv-0.16";
 

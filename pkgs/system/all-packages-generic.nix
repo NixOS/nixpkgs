@@ -156,6 +156,12 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
+  xmltv = import ../tools/misc/xmltv {
+    inherit fetchurl perl perlTermReadKey perlXMLTwig perlXMLWriter
+      perlDateManip perlHTMLTree perlHTMLParser perlHTMLTagset
+      perlURI perlLWP;
+  };
+
   openssh = (import ../tools/networking/openssh) {
     inherit fetchurl stdenv zlib openssl;
   };
@@ -605,7 +611,7 @@ rec {
   };
 
   qt3 = import ../development/libraries/qt-3 {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng which;
+    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql;
     inherit (xlibs) libXft libXrender;
   };
 
@@ -696,6 +702,80 @@ rec {
 
   perlXMLParser = (import ../development/perl-modules/XML-Parser) {
     inherit fetchurl stdenv perl expat;
+  };
+
+  perlXMLTwig = import ../development/perl-modules/generic perl {
+    name = "XML-Twig-3.15";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/M/MI/MIROD/XML-Twig-3.15.tar.gz;
+      md5 = "b26886b8bd19761fff37b23e4964b499";
+    };
+    propagatedBuildInputs = [perlXMLParser];
+  };
+
+  perlXMLWriter = import ../development/perl-modules/generic perl {
+    name = "XML-Writer-0.520";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/J/JO/JOSEPHW/XML-Writer-0.520.tar.gz;
+      md5 = "0a194acc70c906c0be32f4b2b7a9f689";
+    };
+  };
+
+  perlTermReadKey = import ../development/perl-modules/generic perl {
+    name = "TermReadKey-2.30";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/J/JS/JSTOWE/TermReadKey-2.30.tar.gz;
+      md5 = "f0ef2cea8acfbcc58d865c05b0c7e1ff";
+    };
+  };
+
+  perlDateManip = import ../development/perl-modules/generic perl {
+    name = "DateManip-5.42a";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/S/SB/SBECK/DateManip-5.42a.tar.gz;
+      md5 = "648386bbf46d021ae283811f75b07bdf";
+    };
+  };
+
+  perlHTMLTree = import ../development/perl-modules/generic perl {
+    name = "HTML-Tree-3.18";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/S/SB/SBURKE/HTML-Tree-3.18.tar.gz;
+      md5 = "6a9e4e565648c9772e7d8ec6d4392497";
+    };
+  };
+
+  perlHTMLParser = import ../development/perl-modules/generic perl {
+    name = "HTML-Parser-3.45";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/HTML-Parser-3.45.tar.gz;
+      md5 = "c2ac1379ac5848dd32e24347cd679391";
+    };
+  };
+
+  perlHTMLTagset = import ../development/perl-modules/generic perl {
+    name = "HTML-Tagset-3.04";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/S/SB/SBURKE/HTML-Tagset-3.04.tar.gz;
+      md5 = "b82e0f08c1ececefe98b891f30dd56a6";
+    };
+  };
+
+  perlURI = import ../development/perl-modules/generic perl {
+    name = "URI-1.35";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/URI-1.35.tar.gz;
+      md5 = "1a933b1114c41a25587ee59ba8376f7c";
+    };
+  };
+
+  perlLWP = import ../development/perl-modules/generic perl {
+    name = "libwww-perl-5.803";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/libwww-perl-5.803.tar.gz;
+      md5 = "3345d5f15a4f42350847254141725c8f";
+    };
+    propagatedBuildInputs = [perlURI perlHTMLParser];
   };
 
   wxPython = (import ../development/python-modules/wxPython-2.5) {

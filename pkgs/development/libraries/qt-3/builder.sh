@@ -7,15 +7,14 @@ preConfigure() {
     # Patch some of the configure files a bit to get of global paths.
     # (Buildings using stuff in those paths will fail anyway, but it
     # will cause ./configure misdetections).
-    for i in config.tests/*/*.test mkspecs/*/qmake.conf; do
+    for i in config.tests/unix/checkavail config.tests/*/*.test mkspecs/*/qmake.conf; do
         echo "patching $i..."
         sed < $i > $i.tmp \
             -e 's^ /lib^ /FOO^g' \
             -e 's^/usr^/FOO^g'
+        if test -x $i; then chmod +x $i.tmp; fi
         mv $i.tmp $i
     done
-
-    chmod +x config.tests/*/*.test
 }
 
 
@@ -34,6 +33,12 @@ if test -n "$xftSupport"; then
       -L$freetype/lib -I$freetype/include \
       -L$fontconfig/lib -I$fontconfig/include \
       $configureFlags"
+fi
+
+if test -n "$mysqlSupport"; then
+    configureFlags="-qt-sql-mysql -L$mysql/lib/mysql -I$mysql/include/mysql $configureFlags";
+else    
+    configureFlags="-no-thread $configureFlags";
 fi
 
 if test -n "$xrenderSupport"; then

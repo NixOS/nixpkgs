@@ -1,12 +1,14 @@
 { xftSupport ? true
 , xrenderSupport ? true
 , threadSupport ? true
-, stdenv, fetchurl, x11, libXft ? null, libXrender ? null
+, mysqlSupport ? true
+, stdenv, fetchurl, x11, libXft ? null, libXrender ? null, mysql ? null
 , zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXft != null;
+assert mysqlSupport -> mysql != null;
 
 stdenv.mkDerivation {
   name = "qt-3.3.3";
@@ -20,5 +22,6 @@ stdenv.mkDerivation {
   buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
 
   inherit threadSupport xftSupport libXft xrenderSupport libXrender;
+  inherit mysqlSupport mysql;
   inherit (libXft) freetype fontconfig;
 }
