@@ -1,19 +1,19 @@
 #! /bin/sh
 
-mkdir -p $NIX/db
-mkdir -p $NIX/pkg
-mkdir -p $NIX/descr
-mkdir -p $NIX/netcache
+if test -z "$NIX"; then NIX=/nix; fi
 
-nix init
+echo target $NIX
 
-if ! nix-instantiate $NIX/descr $NIX/netcache tmpl/*.nix; then
+if ! nix-instantiate $NIX/var/nix/descriptors $NIX/var/nix/sources tmpl/*.nix; then
     exit 1;
 fi
 
-for i in $NIX/netcache/*; do nix regfile $i; done
-for i in build/*; do nix regfile $i; done
-for i in $NIX/descr/*; do 
+rm -f build/*~
+cp -p build/* $NIX/var/nix/sources
+
+for i in $NIX/var/nix/sources/*; do nix regfile $i; done
+
+for i in $NIX/var/nix/descriptors/*; do 
     md5sum $i
     nix regfile $i
 done
