@@ -1,0 +1,15 @@
+{system}: rec
+  { stdenv = (import ../stdenv)
+      { system = system
+      }
+
+  , fetchurl = (import ../fetchurl)
+      { system = system
+      }
+
+  , aterm = (import ../aterm)
+      { system = system
+      , fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+  }
