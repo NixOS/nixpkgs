@@ -1,22 +1,26 @@
-Package(
-  [ ("name", "system")
-  , ("build", Relative("system/populate-linkdirs.pl"))
+Function(["subversion", "strategoxt", "pan", "mplayer", "sylpheed", "libxslt", "docbook"],
+  Package(
+    [ ("name", "system")
+    , ("build", Relative("system/populate-linkdirs.pl"))
 
-  , ("actSubversion", 
-      Call(IncludeFix("subversion/subversion.fix"), 
-        [ ("localServer", True)
-        , ("httpsClient", True)
-        , ("httpServer", True)
-        , ("pythonBindings", True)
-        ]))
+    , ("actSubversion",
+        If(Var("subversion"),
+          Call(IncludeFix("subversion/subversion.fix"), 
+            [ ("localServer", True)
+            , ("httpsClient", True)
+            , ("httpServer", True)
+            , ("pythonBindings", True)
+            ]),
+          ""))
 
-  , ("actStrategoXT", IncludeFix("strategoxt/strategoxt.fix"))
-  , ("actATerm", IncludeFix("aterm/aterm.fix"))
-  , ("actPan", IncludeFix("pan/pan.fix"))
-  , ("actMPlayer", IncludeFix("MPlayer/MPlayer.fix"))
-  , ("actSylpheed", IncludeFix("sylpheed/sylpheed.fix"))
-  , ("actXslt", IncludeFix("libxslt/libxslt.fix"))
-  , ("actDocbookXml", IncludeFix("docbook-xml/docbook-xml.fix"))
-  , ("actDocbookXsl", IncludeFix("docbook-xsl/docbook-xsl.fix"))
-  ]
+    , ("actStrategoXT", If(Var("strategoxt"), IncludeFix("strategoxt/strategoxt.fix"), ""))
+    , ("actATerm", If(Var("strategoxt"), IncludeFix("aterm/aterm.fix"), ""))
+    , ("actPan", If(Var("pan"), IncludeFix("pan/pan.fix"), ""))
+    , ("actMPlayer", If(Var("mplayer"), IncludeFix("MPlayer/MPlayer.fix"), ""))
+    , ("actSylpheed", If(Var("sylpheed"), IncludeFix("sylpheed/sylpheed.fix"), ""))
+    , ("actLibXslt", If(Var("libxslt"), IncludeFix("libxslt/libxslt.fix"), ""))
+    , ("actDocbookXml", If(Var("docbook"), IncludeFix("docbook-xml/docbook-xml.fix"), ""))
+    , ("actDocbookXsl", If(Var("docbook"), IncludeFix("docbook-xsl/docbook-xsl.fix"), ""))
+    ]
+  )
 )

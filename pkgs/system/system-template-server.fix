@@ -1,0 +1,9 @@
+Call(IncludeFix("system/system.fix"),
+  [ ("subversion", True)
+  , ("strategoxt", False)
+  , ("pan", False)
+  , ("mplayer", False)
+  , ("sylpheed", False)
+  , ("libxslt", False)
+  , ("docbook", False)
+  ])
