@@ -261,6 +261,14 @@ rec {
     inherit fetchurl stdenv ghc;
   };
 
+  happy = (import ../development/tools/parsing/happy) {
+    inherit fetchurl stdenv perl ghc;
+  };
+
+  harp = (import ../development/compilers/harp) {
+    inherit fetchurl stdenv unzip ghc happy;
+  };
+
   perl = (import ../development/interpreters/perl) {
     inherit fetchurl stdenv;
     patch = gnupatch;
