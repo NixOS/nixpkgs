@@ -288,10 +288,16 @@ rec {
     inherit fetchurl stdenv unzip ghc happy;
   };
 
-  perl = (import ../development/interpreters/perl) {
+  realPerl = (import ../development/interpreters/perl) {
     inherit fetchurl stdenv;
     patch = gnupatch;
   };
+
+  sysPerl = (import ../development/interpreters/sys-perl) {
+    inherit stdenv;
+  };
+
+  perl = if stdenv.system == "powerpc-darwin7.3.0" then sysPerl else realPerl;
 
   python = (import ../development/interpreters/python) {
     inherit fetchurl stdenv zlib;
