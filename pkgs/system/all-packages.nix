@@ -44,7 +44,7 @@
 
   # Select the right instantiation.
   body =
-    if system == "i686-suse-linux"
+    if system == "i686-linux"
     then stdenvLinuxPkgs
     else stdenvNixPkgs;
 }
