@@ -10,5 +10,6 @@ Package(
 
   , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("gettext", IncludeFix("gettext/gettext.fix"))
   ]
 )
