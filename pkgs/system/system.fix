@@ -2,9 +2,7 @@ Package(
   [ ("name", "system")
   , ("build", Relative("system/populate-linkdirs.pl"))
 
-  , ("actATerm", IncludeFix("aterm/aterm.fix"))
   , ("actPkgConfig", IncludeFix("pkgconfig/pkgconfig.fix"))
-  , ("actOpenSSL", IncludeFix("openssl/openssl.fix"))
   , ("actSubversion", IncludeFix("subversion/subversion.fix"))
   , ("actPan", IncludeFix("pan/pan.fix"))
   ]

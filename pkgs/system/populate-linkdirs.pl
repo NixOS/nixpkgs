@@ -18,7 +18,8 @@ sub createLinks {
         my $basename = $srcfile;
         $basename =~ s/^.*\///g; # strip directory
         my $dstfile = "$dstdir/$basename";
-        if (-d $srcfile) {
+	if ($srcfile =~ /\/envpkgs$/) {
+	} elsif (-d $srcfile) {
             # !!! hack for resolving name clashes
             if (!-e $dstfile) {
                 mkdir $dstfile, 0755 || 
@@ -37,13 +38,34 @@ sub createLinks {
     }
 }
 
+my %done;
+
+sub addPkg {
+    my $pkgdir = shift;
+
+    return if (defined $done{$pkgdir});
+    $done{$pkgdir} = 1;
+
+    print "merging $pkgdir\n";
+
+    createLinks("$pkgdir", "$selfdir");
+
+    if (-f "$pkgdir/envpkgs") {
+	my $envpkgs = `cat $pkgdir/envpkgs`;
+	chomp $envpkgs;
+	my @envpkgs = split / +/, $envpkgs;
+	foreach my $envpkg (@envpkgs) {
+	    addPkg($envpkg);
+	}
+    }
+}
+
+
 foreach my $name (keys %ENV) {
 
     next unless ($name =~ /^act.*$/);
 
     my $pkgdir = $ENV{$name};
 
-    print "merging $pkgdir\n";
-
-    createLinks("$pkgdir", "$selfdir");
+    addPkg($pkgdir);
 }
