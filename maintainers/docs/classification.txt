@@ -53,6 +53,9 @@ ELSE IF it's a TOOL (or set of):
   ELSE IF it's a COMPRESSION program:
     ./tools/compression
     (e.g., gzip, bzip2)
+  ELSE IF it's a SECURITY program:
+    ./tools/security
+    (e.g., nmap, gnupg)
   ELSE
     ./tools/misc
 
