@@ -138,7 +138,8 @@
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
-    inherit genericStdenv gccWrapper;
+    genericStdenv = import ../stdenv/generic-branch;
+    inherit gccWrapper;
   };
 
   stdenvDarwinPkgs = allPackages {
