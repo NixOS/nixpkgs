@@ -3,7 +3,10 @@
 genericStdenv {
   name = "stdenv-nix-linux";
   preHook = ./prehook.sh;
-  initialPath = (import ../nix/path.nix) {pkgs = pkgs;};
+  initialPath = [
+    ((import ../nix/path.nix) {pkgs = pkgs;})
+    pkgs.patchelf
+  ];
 
   inherit stdenv;
 

@@ -527,6 +527,16 @@ checkPhase() {
 }
 
 
+patchELF() {
+    # Patch all ELF executables and shared libraries.
+    header "patching ELF executables and libraries"
+    find "$prefix" \( -name "*.so*" -o \
+        \( -type f -a -perm +0100 \) \
+        \) -exec patchelf --shrink-rpath {} \;
+    stopNest
+}
+
+
 installW() {
     if test -n "$installPhase"; then
         $installPhase
@@ -547,6 +557,10 @@ installW() {
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
         find "$prefix" -name "*.a" -exec echo stripping {} \; \
             -exec strip -S {} \; || fail
+    fi
+
+    if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
+        patchELF "$prefix"
     fi
 
     if test -n "$propagatedBuildInputs"; then
