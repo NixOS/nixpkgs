@@ -9,6 +9,7 @@ Package(
       , ("md5", "4ded985b8eefdf9ac6fbf79cad69ccbd")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("gtk", IncludeFix("gtk+/gtk+.fix"))
   , ("pspell", IncludeFix("pspell/pspell.fix"))

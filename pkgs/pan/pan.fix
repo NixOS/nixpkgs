@@ -9,9 +9,10 @@ Package(
       , ("md5", "59612bf2551650c0060b214f9742a105")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   , ("gtk", IncludeFix("gtk+/gtk+.fix"))
-  , ("gtkspell", IncludeFix("gtkspell/gtkspell.fix"))
+
   , ("gnet", IncludeFix("gnet/gnet.fix"))
   , ("libxml", IncludeFix("libxml2/libxml2.fix"))
   ]

@@ -8,6 +8,7 @@ Package(
       , ("md5", "3e9a9512943c81a78cafa0536dcc8b41")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("pkgconfig", IncludeFix("pkgconfig/pkgconfig.fix"))
   ]
 )

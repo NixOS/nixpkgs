@@ -9,6 +9,7 @@ Package(
       , ("md5", "4d5cb2fc7fb7830e4af9747a36bfce20")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("glib", IncludeFix("glib-1/glib.fix"))
   ]
 )

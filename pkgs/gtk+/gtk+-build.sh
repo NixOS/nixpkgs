@@ -1,5 +1,7 @@
 #! /bin/sh
 
+. $stdenv/setup || exit 1
+
 export PATH=$pkgconfig/bin:/bin:/usr/bin
 envpkgs="$glib $atk $pango"
 . $setenv

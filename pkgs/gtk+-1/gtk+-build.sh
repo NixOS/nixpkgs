@@ -1,8 +1,9 @@
 #! /bin/sh
 
-export PATH=/bin:/usr/bin
+. $stdenv/setup || exit 1
+
 envpkgs="$glib"
-. $setenv
+. $setenv || exit 1
 
 tar xvfz $src || exit 1
 cd gtk+-* || exit 1

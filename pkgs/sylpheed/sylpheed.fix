@@ -9,6 +9,7 @@ Package(
       , ("md5", "6a1ae8e746099e13f8ba968d4604adcf")
       ]))
 
+  , ("stdenv", IncludeFix("stdenv/stdenv.fix"))
   , ("gtk", IncludeFix("gtk+-1/gtk+.fix"))
   , ("ssl", IncludeFix("openssl/openssl.fix"))
   ]
