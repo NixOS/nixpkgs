@@ -20,6 +20,8 @@ Function(["nativeTools"],
         , IncludeFix("gzip/gzip.fix")
         , IncludeFix("gnumake/gnumake.fix")
         ]))
+
+    , ("gcc", If(Var("nativeTools"), "", IncludeFix("gcc/gcc.fix")))
     ]
   )
 )

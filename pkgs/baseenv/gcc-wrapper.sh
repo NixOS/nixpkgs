@@ -2,8 +2,6 @@
 
 IFS=
 
-realgcc=@GCC@
-
 justcompile=0
 for i in $@; do
     if test "$i" == "-c"; then
@@ -34,4 +32,4 @@ if test "$NIX_DEBUG" == "1"; then
 fi
 
 IFS=
-exec $realgcc $@ ${extra[@]}
+exec @GCC@ $@ ${extra[@]}
