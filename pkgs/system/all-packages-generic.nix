@@ -159,6 +159,19 @@
     inherit fetchurl stdenv;
   };
 
+  texinfo = (import ../development/tools/misc/texinfo) {
+    inherit fetchurl stdenv ncurses;
+  };
+
+  gperf = (import ../development/tools/misc/gperf) {
+    inherit fetchurl stdenv;
+  };
+
+  octavefront = (import ../development/tools/misc/octavefront) {
+    inherit fetchurl stdenv autoconf g77 texinfo flex gperf rna aterm;
+    bison = bisonnew;
+  };
+
   gnumake = (import ../development/tools/build-managers/gnumake) {
     inherit fetchurl stdenv;
   };
@@ -186,6 +199,15 @@
 
   gcc = (import ../development/compilers/gcc) {
     inherit fetchurl stdenv binutils;
+  };
+
+  g77 = (import ../development/compilers/gcc-wrapper) {
+    inherit stdenv;
+    gcc = (import ../development/compilers/gcc-new) {
+      inherit fetchurl stdenv;
+      langF77 = true;
+      langCC = false;
+    };
   };
 
   jikes = (import ../development/compilers/jikes) {
@@ -524,6 +546,14 @@
     pngSupport = true;
     x11 = xfree86;
     libpng = libpng;
+  };
+
+  ncurses = (import ../development/libraries/ncurses) {
+    inherit fetchurl stdenv;
+  };
+
+  rna = (import ../development/libraries/rna) {
+    inherit fetchurl stdenv zlib;
   };
 
   perlBerkeleyDB = (import ../development/perl-modules/BerkeleyDB) {
