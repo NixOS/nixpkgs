@@ -24,6 +24,7 @@ rm $out/bin/* || exit 1
 cat >> $out/bin/core-ant <<EOF
 #! /bin/sh
 
+
 # Variables:
 #   JAVA_HOME
 #   JAVACMD
@@ -39,8 +40,7 @@ else
 fi
 
 if [ -n "\$JIKESPATH" ]; then
-  exec "\$JAVACMD" \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" -Djikes.class.path="\$JIKESPATH" org.apache.tools.ant.launch.Launcher \$ANT_ARGS -l
-ib "$CLASSPATH" "\$@"
+  exec "\$JAVACMD" \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" -Djikes.class.path="\$JIKESPATH" org.apache.tools.ant.launch.Launcher \$ANT_ARGS -lib "$CLASSPATH" "\$@"
 else
   exec "\$JAVACMD" \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" org.apache.tools.ant.launch.Launcher \$ANT_ARGS -lib "$CLASSPATH" "\$@"
   fi

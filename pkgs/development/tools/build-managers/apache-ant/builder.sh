@@ -9,6 +9,7 @@ export JAVA_HOME=$j2sdk
 export JAVACMD=$j2sdk/bin/java
 export ANT_OPTS=""
 export ANT_ARGS=""
+export LANG="en_US"
 
 $ant/bin/core-ant \$@
 EOF
