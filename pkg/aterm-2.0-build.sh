@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export PATH=$utils/bin
+export PATH=$sys1/bin:$sys2/bin
 export LIBRARY_PATH=$glibc/lib
 export CC=$gcc/bin/gcc
 export CFLAGS="-isystem $glibc/include -isystem $kernel/include"

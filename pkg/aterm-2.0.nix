@@ -1,5 +1,6 @@
 # Dependencies.
-utils <- 5703121fe19cbeeaee7edd659cf4a25b # prog-bootstrap
+sys1 <- 1e80cb7e0fbfc9f5c0509a465ecdf6cf # sys1-bootstrap
+sys2 <- 7512824c50c61ea8d89d0f193a4f72d1 # sys2-bootstrap
 gcc <- 02212b3dc4e50349376975367d433929 # gcc-bootstrap
 glibc <- c0ce03ee0bab298babbe7e3b6159d36c # glibc-bootstrap
 kernel <- 3dc8333a2c2b4d627b892755417acf89 # kernel-bootstrap
