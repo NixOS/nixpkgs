@@ -11,7 +11,7 @@
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
-assert !nativeGlibc -> glibc != null;
+#assert !nativeGlibc -> glibc != null;
 
 stdenv.mkDerivation {
   builder = ./builder.sh;

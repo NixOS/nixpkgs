@@ -42,9 +42,11 @@ fi
 
 
 extra=()
+extraBefore=()
 
 if test -z "$NIX_LDFLAGS_SET"; then
     extra=(${extra[@]} $NIX_LDFLAGS)
+    extraBefore=(${extraBefore[@]} $NIX_LDFLAGS_BEFORE)
 fi
 
 
@@ -141,4 +143,4 @@ if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
     . "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
-exec @ld@ "${params[@]}" ${extra[@]}
+exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
