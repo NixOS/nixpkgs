@@ -793,6 +793,10 @@ rec {
     j2sdk = blackdown;
   };
 
+  rcs = (import ../applications/version-management/rcs) {
+    inherit fetchurl stdenv;
+  };
+
   pan = (import ../applications/networking/newsreaders/pan) {
     inherit fetchurl stdenv pkgconfig gnet libxml2 perl pcre;
     inherit (gtkLibs) gtk;
