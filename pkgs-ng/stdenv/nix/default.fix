@@ -3,19 +3,19 @@
   system = bootStdenv.system;
   prehook = ./prehook.sh;
   posthook = ./posthook.sh;
-  initialPath =
-    [ pkgs.coreutils
-    , pkgs.findutils
-    , pkgs.diffutils
-    , pkgs.gnused
-    , pkgs.gnugrep
-    , pkgs.gawk
-    , pkgs.gnutar
-    , pkgs.gzip
-    , pkgs.binutils
-    , pkgs.gnumake
-    , pkgs.gcc
-    ];
+  initialPath = [
+    pkgs.coreutils
+    pkgs.findutils
+    pkgs.diffutils
+    pkgs.gnused
+    pkgs.gnugrep
+    pkgs.gawk
+    pkgs.gnutar
+    pkgs.gzip
+    pkgs.binutils
+    pkgs.gnumake
+    pkgs.gcc
+  ];
   param1 = pkgs.bash;
   param2 = pkgs.gcc;
   param3 = pkgs.binutils;
