@@ -150,7 +150,7 @@
 
 
   # Testing the new stdenv-linux (TODO: remove this eventually).
-  stdenvLinuxTest = (import ../stdenv/nix-linux-branch) {
+  stdenvLinuxTest = (import ../stdenv/nix-linux) {
     stdenv = stdenvLinuxBoot2;
     pkgs = stdenvLinuxBoot2Pkgs;
     glibc = stdenvLinuxGlibc;
@@ -158,7 +158,7 @@
     inherit gccWrapper;
   };
 
-  stdenvDarwinTest = (import ../stdenv/darwin-branch) {
+  stdenvDarwinTest = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
     genericStdenv = import ../stdenv/generic-branch;
     inherit gccWrapper;

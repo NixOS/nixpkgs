@@ -203,19 +203,24 @@ ensureDir() {
 }
 
 
-# Redirect stdout/stderr to a `tee' process that writes the specified
-# file (and also to our original stdout).  This requires bash.  The
-# original stdout is saved in descriptor 3.
+# Redirect stdout/stderr to a named pipe connected to a `tee' process
+# that writes the specified file (and also to our original stdout).
+# The original stdout is saved in descriptor 3.
 startLog() {
     local logFile=${logNr}_$1
     logNr=$((logNr + 1))
     if test "$logPhases" = 1; then
         ensureDir $logDir
+
         exec 3>&1
+
         if test "$dontLogThroughTee" != 1; then
-            # Put this in an `eval' so that non-bash shells (or bash
-            # invoked as `sh') won't choke on parsing this file.
-            eval "exec > >(tee $logDir/$logFile) 2>&1"
+            # This required named pipes (fifos).
+            logFifo=$NIX_BUILD_TOP/log_fifo
+            test -p $logFifo || mkfifo $logFifo
+            tee $logDir/$logFile < $logFifo &
+            logTeePid=$!
+            exec > $logFifo 2>&1
         else
             exec > $logDir/$logFile 2>&1
         fi
@@ -232,6 +237,14 @@ logNr=0
 stopLog() {
     if test "$logPhases" = 1; then
         exec >&3 2>&1
+
+        # Wait until the tee process has died.  Otherwise output from
+        # different phases may be mixed up.
+        if test -n "$logTeePid"; then
+            wait $logTeePid
+            logTeePid=
+            rm $logFifo
+        fi
     fi
 }
 
