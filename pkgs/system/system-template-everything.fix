@@ -7,4 +7,5 @@ Call(IncludeFix("system/system.fix"),
   , ("libxslt", True)
   , ("docbook", True)
   , ("httpd", True)
+  , ("firebird", True)
   ])
