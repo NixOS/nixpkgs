@@ -4,5 +4,8 @@ Package(
 
   , ("actATerm", IncludeFix("aterm/aterm.fix"))
   , ("actPkgConfig", IncludeFix("pkgconfig/pkgconfig.fix"))
+  , ("actOpenSSL", IncludeFix("openssl/openssl.fix"))
+  , ("actSubversion", IncludeFix("subversion/subversion.fix"))
+  , ("actXft", IncludeFix("Xft/Xft.fix"))
   ]
 )

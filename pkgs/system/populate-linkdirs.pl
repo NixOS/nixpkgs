@@ -30,7 +30,7 @@ sub createLinks {
             my $target = readlink($dstfile);
             die "collission between $srcfile and $target";
         } else {
-            print "linking $dstfile to $srcfile\n";
+#            print "linking $dstfile to $srcfile\n";
             symlink($srcfile, $dstfile) ||
                 die "error creating link $dstfile";
         }

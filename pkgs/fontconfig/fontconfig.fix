@@ -1,0 +1,14 @@
+Package(
+  [ ("name", "fontconfig-20021121")
+
+  , ("build", Relative("fontconfig/fontconfig-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://fontconfig.org/release/fcpackage.2_1.tar.gz")
+      , ("md5", "2f2852c80924a9b5356c3037a471c1a1")
+      ]))
+
+  , ("freetype", IncludeFix("freetype/freetype.fix"))
+  ]
+)
