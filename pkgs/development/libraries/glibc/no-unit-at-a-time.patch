@@ -1,0 +1,69 @@
+diff -rc glibc-orig/csu/Makefile glibc-2.3.3/csu/Makefile
+*** glibc-orig/csu/Makefile	2003-09-25 22:29:39.000000000 +0200
+--- glibc-2.3.3/csu/Makefile	2004-09-17 11:06:56.000000000 +0200
+***************
+*** 104,110 ****
+  $(crtstuff:%=$(objpfx)%.o): %.o: %.S $(objpfx)defs.h
+  	$(compile.S) -g0 $(ASFLAGS-.os) -o $@
+  
+! CFLAGS-initfini.s = -g0 -fPIC -fno-inline-functions
+  
+  vpath initfini.c $(full_config_sysdirs)
+  
+--- 104,110 ----
+  $(crtstuff:%=$(objpfx)%.o): %.o: %.S $(objpfx)defs.h
+  	$(compile.S) -g0 $(ASFLAGS-.os) -o $@
+  
+! CFLAGS-initfini.s = -g0 -fPIC -fno-inline-functions -fno-unit-at-a-time
+  
+  vpath initfini.c $(full_config_sysdirs)
+  
+diff -rc glibc-orig/linuxthreads/Makefile glibc-2.3.3/linuxthreads/Makefile
+*** glibc-orig/linuxthreads/Makefile	2003-10-02 20:48:48.000000000 +0200
+--- glibc-2.3.3/linuxthreads/Makefile	2004-09-17 13:06:20.000000000 +0200
+***************
+*** 68,74 ****
+  vpath %.c Examples
+  
+  tst-cancel-ARGS = "$(objpfx)"
+! CFLAGS-tst-cancel.c = -fno-inline -fno-inline-functions
+  
+  include ../Makeconfig
+  
+--- 68,74 ----
+  vpath %.c Examples
+  
+  tst-cancel-ARGS = "$(objpfx)"
+! CFLAGS-tst-cancel.c = -fno-inline -fno-inline-functions -fno-unit-at-a-time
+  
+  include ../Makeconfig
+  
+***************
+*** 101,107 ****
+  extra-objs += $(crti-objs) $(crtn-objs)
+  omit-deps += crti crtn
+  
+! CFLAGS-pt-initfini.s = -g0 -fPIC -fno-inline-functions
+  endif
+  
+  librt-tests = ex10 ex11
+--- 101,107 ----
+  extra-objs += $(crti-objs) $(crtn-objs)
+  omit-deps += crti crtn
+  
+! CFLAGS-pt-initfini.s = -g0 -fPIC -fno-inline-functions -fno-unit-at-a-time
+  endif
+  
+  librt-tests = ex10 ex11
+diff -rc glibc-orig/linuxthreads/sysdeps/unix/sysv/linux/x86_64/Makefile glibc-2.3.3/linuxthreads/sysdeps/unix/sysv/linux/x86_64/Makefile
+*** glibc-orig/linuxthreads/sysdeps/unix/sysv/linux/x86_64/Makefile	2003-04-12 01:34:02.000000000 +0200
+--- glibc-2.3.3/linuxthreads/sysdeps/unix/sysv/linux/x86_64/Makefile	2004-09-17 13:05:43.000000000 +0200
+***************
+*** 1,3 ****
+  ifeq ($(subdir),linuxthreads)
+! CFLAGS-pt-initfini.s = -g0 -fPIC -fno-inline-functions -fno-asynchronous-unwind-tables
+  endif
+--- 1,3 ----
+  ifeq ($(subdir),linuxthreads)
+! CFLAGS-pt-initfini.s = -g0 -fPIC -fno-inline-functions -fno-asynchronous-unwind-tables -fno-unit-at-a-time
+  endif

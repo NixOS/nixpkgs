@@ -1,0 +1,74 @@
+Fixes
+dl-runtime.c:56: error: conflicting types for 'fixup'
+../sysdeps/i386/dl-machine.h:158: error: previous declaration of 'fixup' was here
+when building with gcc-3.4.0
+
+First hunk:
+Define ARCH_FIXUP_ATTRIBUTE and use it in the fixup function declarations.
+http://sources.redhat.com/cgi-bin/cvsweb.cgi/libc/sysdeps/i386/dl-machine.h.diff?r1=1.124&r2=1.125&cvsroot=glibc
+
+Second hunk:
+If ARCH_FIXUP_ATTRIBUTE is not defined, provide dummy definition.
+Use macro in fixup function definitions.
+http://sources.redhat.com/cgi-bin/cvsweb.cgi/libc/elf/dl-runtime.c.diff?r1=1.64&r2=1.65&cvsroot=glibc
+[rediffed against glibc-2.3.2]
+
+===================================================================
+RCS file: /cvs/glibc/libc/sysdeps/i386/dl-machine.h,v
+retrieving revision 1.124
+retrieving revision 1.125
+diff -u -r1.124 -r1.125
+--- libc/sysdeps/i386/dl-machine.h	2004/03/05 10:14:49	1.124
++++ libc/sysdeps/i386/dl-machine.h	2004/03/09 07:42:29	1.125
+@@ -154,11 +154,14 @@
+    destroys the passed register information.  */
+ /* GKM FIXME: Fix trampoline to pass bounds so we can do
+    without the `__unbounded' qualifier.  */
+-static ElfW(Addr) fixup (struct link_map *__unbounded l, ElfW(Word) reloc_offset)
+-     __attribute__ ((regparm (2), unused));
++#define ARCH_FIXUP_ATTRIBUTE __attribute__ ((regparm (3), unused))
++
++static ElfW(Addr) fixup (struct link_map *__unbounded l,
++			 ElfW(Word) reloc_offset)
++     ARCH_FIXUP_ATTRIBUTE;
+ static ElfW(Addr) profile_fixup (struct link_map *l, ElfW(Word) reloc_offset,
+ 				 ElfW(Addr) retaddr)
+-     __attribute__ ((regparm (3), unused));
++     ARCH_FIXUP_ATTRIBUTE;
+ # endif
+ 
+ /* This code is used in dl-runtime.c to call the `fixup' function
+===================================================================
+--- /home/dank/downloads/glibc-2.3.2/elf/dl-runtime.c	Fri Feb  7 11:41:12 2003
++++ glibc-2.3.2/elf/dl-runtime.c	Thu Apr  8 22:24:26 2004
+@@ -36,6 +36,12 @@
+ # define VERSYMIDX(sym)	(DT_NUM + DT_THISPROCNUM + DT_VERSIONTAGIDX (sym))
+ #endif
+ 
++/* The fixup functions might have need special attributes.  If none
++   are provided define the macro as empty.  */
++#ifndef ARCH_FIXUP_ATTRIBUTE
++# define ARCH_FIXUP_ATTRIBUTE
++#endif
++
+ 
+ /* This function is called through a special trampoline from the PLT the
+    first time each PLT entry is called.  We must perform the relocation
+@@ -45,7 +51,7 @@
+    function.  */
+ 
+ #ifndef ELF_MACHINE_NO_PLT
+-static ElfW(Addr) __attribute_used__
++static ElfW(Addr) __attribute_used__ ARCH_FIXUP_ATTRIBUTE
+ fixup (
+ # ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS
+         ELF_MACHINE_RUNTIME_FIXUP_ARGS,
+@@ -132,7 +138,7 @@
+ 
+ #if !defined PROF && !defined ELF_MACHINE_NO_PLT && !__BOUNDED_POINTERS__
+ 
+-static ElfW(Addr) __attribute_used__
++static ElfW(Addr) __attribute_used__ ARCH_FIXUP_ATTRIBUTE
+ profile_fixup (
+ #ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS
+        ELF_MACHINE_RUNTIME_FIXUP_ARGS,
