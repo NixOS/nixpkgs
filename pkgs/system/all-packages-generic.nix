@@ -93,6 +93,11 @@
     stdenv = stdenv;
   };
 
+  par2cmdline = (import ../tools/networking/par2cmdline) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   graphviz = (import ../tools/graphics/graphviz) {
     fetchurl = fetchurl;
     stdenv = stdenv;
