@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libxml2}:
 
-assert !isNull libxml2;
+assert libxml2 != null;
 
 derivation {
   name = "libxslt-1.1.0";

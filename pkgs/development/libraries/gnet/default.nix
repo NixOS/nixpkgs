@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, glib}:
 
-assert !isNull pkgconfig && !isNull glib;
+assert pkgconfig != null && glib != null;
 
 derivation {
   name = "gnet-2.0.4";

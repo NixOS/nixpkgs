@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL
 }:
 
-assert !isNull pkgconfig && !isNull gtk && !isNull perl
-  && !isNull zip && !isNull libIDL;
+assert pkgconfig != null && gtk != null && perl != null
+  && zip != null && libIDL != null;
 
 assert libIDL.glib == gtk.glib;
 

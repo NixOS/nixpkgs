@@ -1,8 +1,8 @@
 { stdenv, fetchurl, perl, libxml2, libxslt, docbook_xml_dtd
 , perlXMLParser}:
 
-assert !isNull perl && !isNull libxml2 && !isNull libxslt
-  && !isNull docbook_xml_dtd && !isNull perlXMLParser;
+assert perl != null && libxml2 != null && libxslt != null
+  && docbook != null_xml_dtd && perlXMLParser != null;
 
 # !!! seems to need iconv, but cannot find it since $glibc/bin is not in PATH
 

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libdvdcss}:
 
-assert !isNull libdvdcss;
+assert libdvdcss != null;
 
 derivation {
   name = "libdvdread-20030812";

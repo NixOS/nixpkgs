@@ -1,5 +1,5 @@
 {stdenv, fetchurl, yacc}:
-assert !isNull yacc;
+assert yacc != null;
 derivation {
   name = "flex-2.5.4a";
   system = stdenv.system;

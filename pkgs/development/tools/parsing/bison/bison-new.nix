@@ -1,6 +1,6 @@
 {stdenv, fetchurl, m4}:
 
-assert !isNull m4;
+assert m4 != null;
 
 derivation {
   name = "bison-1.875c";

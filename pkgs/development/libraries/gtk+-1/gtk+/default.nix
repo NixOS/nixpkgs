@@ -1,6 +1,6 @@
 {stdenv, fetchurl, x11, glib}:
 
-assert !isNull x11 && !isNull glib;
+assert x11 != null && glib != null;
 assert x11.buildClientLibs;
 
 derivation {

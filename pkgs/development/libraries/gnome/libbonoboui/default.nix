@@ -1,8 +1,8 @@
 {stdenv, fetchurl, pkgconfig, perl, libxml2, libglade, libgnome
 , libgnomecanvas}:
 
-assert !isNull pkgconfig && !isNull perl && !isNull libxml2
-  && !isNull libglade && !isNull libgnome && !isNull libgnomecanvas;
+assert pkgconfig != null && perl != null && libxml2 != null
+  && libglade != null && libgnome != null && libgnomecanvas != null;
 
 derivation {
   name = "libbonoboui-2.4.1";

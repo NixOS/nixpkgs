@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, gtk, libxml2}:
 
-assert !isNull pkgconfig && !isNull gtk && !isNull libxml2;
+assert pkgconfig != null && gtk != null && libxml2 != null;
 
 derivation {
   name = "libglade-2.0.1";

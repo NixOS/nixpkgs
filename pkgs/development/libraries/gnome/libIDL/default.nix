@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, glib, lex, yacc}:
 
-assert !isNull pkgconfig && !isNull glib && !isNull lex && !isNull yacc;
+assert pkgconfig != null && glib != null && lex != null && yacc != null;
 
 derivation {
   name = "libIDL-0.8.2";

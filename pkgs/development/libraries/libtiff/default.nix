@@ -1,6 +1,6 @@
 {stdenv, fetchurl, zlib, libjpeg}:
 
-assert !isNull zlib && !isNull libjpeg;
+assert zlib != null && libjpeg != null;
 
 derivation {
   name = "libtiff-3.5.7";

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, perl, ORBit2, libxml2, popt, yacc, flex}:
 
-assert !isNull pkgconfig && !isNull perl && !isNull ORBit2
-  && !isNull libxml2 && !isNull popt && !isNull yacc && !isNull flex;
+assert pkgconfig != null && perl != null && ORBit2 != null
+  && libxml2 != null && popt != null && yacc != null && flex != null;
 
 derivation {
   name = "libbonobo-2.4.2";

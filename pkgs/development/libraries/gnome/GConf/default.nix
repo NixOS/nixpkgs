@@ -1,8 +1,8 @@
 {stdenv, fetchurl, pkgconfig, perl, glib, gtk, libxml2, ORBit2, popt}:
 
-assert !isNull pkgconfig && !isNull perl
-  && !isNull glib && !isNull gtk
-  && !isNull libxml2 && !isNull ORBit2 && !isNull popt;
+assert pkgconfig != null && perl != null
+  && glib != null && gtk != null
+  && libxml2 != null && ORBit2 != null && popt != null;
 
 derivation {
   name = "GConf-2.4.0.1";

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, zlib}:
 
-assert !isNull zlib;
+assert zlib != null;
 
 derivation {
   name = "libpng-1.2.5";

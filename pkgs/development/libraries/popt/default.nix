@@ -1,6 +1,6 @@
 {stdenv, fetchurl, gettext}:
 
-assert !isNull gettext;
+assert gettext != null;
 
 derivation {
   name = "popt-1.7";

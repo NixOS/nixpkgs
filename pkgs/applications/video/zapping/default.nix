@@ -5,15 +5,15 @@
 , libglade, scrollkeeper, esound, gettext
 , zvbi ? null, libjpeg ? null, libpng ? null }:
 
-assert !isNull pkgconfig && !isNull perl && !isNull python &&
-  !isNull x11 && !isNull libgnomeui && !isNull libglade &&
-  !isNull scrollkeeper && !isNull esound && !isNull gettext;
+assert pkgconfig != null && perl != null && python != null &&
+  x11 != null && libgnomeui != null && libglade != null &&
+  scrollkeeper != null && esound != null && gettext != null;
 
-assert teletextSupport -> !isNull zvbi && zvbi.pngSupport
+assert teletextSupport -> zvbi != null && zvbi.pngSupport
   && pngSupport && zvbi.libpng == libpng;
 
-assert jpegSupport -> !isNull libjpeg;
-assert pngSupport -> !isNull libpng;
+assert jpegSupport -> libjpeg != null;
+assert pngSupport -> libpng != null;
 
 derivation {
   name = "zapping-0.7cvs6";

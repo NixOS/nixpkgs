@@ -1,9 +1,9 @@
 { stdenv, fetchurl, x11, wxGTK, libdvdcss, libdvdplay
 , mpeg2dec, a52dec, libmad, alsa}:
 
-assert !isNull x11 && !isNull wxGTK && !isNull libdvdcss
-  && !isNull libdvdplay && !isNull mpeg2dec && !isNull a52dec
-  && !isNull libmad && !isNull alsa;
+assert x11 != null && wxGTK != null && libdvdcss != null
+  && libdvdplay != null && mpeg2dec != null && a52dec != null
+  && libmad != null && alsa != null;
 assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 
 derivation {

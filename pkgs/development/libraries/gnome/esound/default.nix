@@ -1,6 +1,6 @@
 {stdenv, fetchurl, audiofile}:
 
-assert !isNull audiofile;
+assert audiofile != null;
 
 derivation {
   name = "esound-0.2.32";

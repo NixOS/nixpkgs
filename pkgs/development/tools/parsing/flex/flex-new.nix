@@ -3,7 +3,7 @@
 
 {stdenv, fetchurl, yacc, m4}:
 
-assert !isNull yacc;
+assert yacc != null;
 
 derivation {
   name = "flex-2.5.31";

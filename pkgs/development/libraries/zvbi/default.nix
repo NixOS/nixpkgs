@@ -1,8 +1,8 @@
 { pngSupport ? true
 , stdenv, fetchurl, x11, libpng ? null}:
 
-assert !isNull x11;
-assert pngSupport -> !isNull libpng;
+assert x11 != null;
+assert pngSupport -> libpng != null;
 
 derivation {
   name = "zvbi-0.2.5";

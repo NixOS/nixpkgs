@@ -1,8 +1,8 @@
 { perlSupport, pythonSupport
 , stdenv, fetchurl, perl ? null, python ? null}:
 
-assert perlSupport -> !isNull perl;
-assert pythonSupport -> !isNull python;
+assert perlSupport -> perl != null;
+assert pythonSupport -> python != null;
 
 derivation {
   name = "swig-1.3.19";

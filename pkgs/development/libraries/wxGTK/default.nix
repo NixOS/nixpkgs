@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, gtk, compat22 ? true}:
 
-assert !isNull pkgconfig && !isNull gtk;
-assert !isNull gtk.libtiff;
-assert !isNull gtk.libjpeg;
-assert !isNull gtk.libpng;
-assert !isNull gtk.libpng.zlib;
+assert pkgconfig != null && gtk != null;
+assert gtk.libtiff != null;
+assert gtk.libjpeg != null;
+assert gtk.libpng != null;
+assert gtk.libpng.zlib != null;
 
 derivation {
   name = "wxGTK-2.4.2";

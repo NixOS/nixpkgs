@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, gnomevfs, libbonobo
 , GConf, popt, zlib }:
 
-assert !isNull pkgconfig && !isNull perl && !isNull glib
-  && !isNull gnomevfs && !isNull libbonobo && !isNull GConf
-  && !isNull popt && !isNull zlib;
+assert pkgconfig != null && perl != null && glib != null
+  && gnomevfs != null && libbonobo != null && GConf != null
+  && popt != null && zlib != null;
 
 # !!! TO CHECK:
 # libgnome tries to install stuff into GConf (which fails):

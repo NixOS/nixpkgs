@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, db4}:
 
-assert !isNull perl && !isNull db4;
+assert perl != null && db4 != null;
 
 derivation {
   name = "perl-BerkeleyDB-0.25";

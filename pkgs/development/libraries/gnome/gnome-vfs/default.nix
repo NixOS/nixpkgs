@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libxml2, GConf
 , libbonobo, gnomemimedata, popt, bzip2 }:
 
-assert !isNull pkgconfig && !isNull perl && !isNull glib
-  && !isNull libxml2 && !isNull GConf && !isNull libbonobo
-  && !isNull gnomemimedata && !isNull bzip2;
+assert pkgconfig != null && perl != null && glib != null
+  && libxml2 != null && GConf != null && libbonobo != null
+  && gnomemimedata != null && bzip2 != null;
 
 derivation {
   name = "gnome-vfs-2.4.1";

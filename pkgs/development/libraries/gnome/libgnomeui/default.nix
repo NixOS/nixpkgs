@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libgnome, libgnomecanvas, libbonoboui, libglade }:
 
-assert !isNull pkgconfig && !isNull libgnome && !isNull libgnomecanvas
-  && !isNull libbonoboui && !isNull libglade;
+assert pkgconfig != null && libgnome != null && libgnomecanvas != null
+  && libbonoboui != null && libglade != null;
 
 derivation {
   name = "libgnomeui-2.4.0.1";

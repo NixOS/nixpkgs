@@ -1,6 +1,6 @@
 {stdenv, fetchurl, x11}:
 
-assert !isNull x11;
+assert x11 != null;
 
 derivation {
   name = "mplayerplug-in-1.0pre2";

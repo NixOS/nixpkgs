@@ -1,8 +1,8 @@
 { alsaSupport ? false
 , stdenv, fetchurl, x11, freetype, alsa ? null}:
 
-assert !isNull x11 && !isNull freetype;
-assert alsaSupport -> !isNull alsa;
+assert x11 != null && freetype != null;
+assert alsaSupport -> alsa != null;
 
 derivation {
   name = "MPlayer-1.0pre3";

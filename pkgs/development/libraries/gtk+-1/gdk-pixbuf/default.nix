@@ -1,7 +1,7 @@
 {stdenv, fetchurl, gtk, libtiff, libjpeg, libpng}:
 
-assert !isNull gtk && !isNull libtiff
-  && !isNull libjpeg && !isNull libpng;
+assert gtk != null && libtiff != null
+  && libjpeg != null && libpng != null;
 
 derivation {
   name = "gdk-pixbuf-0.22.0";

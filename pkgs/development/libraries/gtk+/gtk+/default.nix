@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, x11, glib, atk
 , pango, perl, libtiff, libjpeg, libpng}:
 
-assert !isNull pkgconfig && !isNull x11 && !isNull glib && !isNull atk
-  && !isNull pango && !isNull perl && !isNull perl && !isNull libtiff
-  && !isNull libjpeg && !isNull libpng;
+assert pkgconfig != null && x11 != null && glib != null && atk != null
+  && pango != null && perl != null && perl != null && libtiff != null
+  && libjpeg != null && libpng != null;
 assert x11.buildClientLibs;
 assert glib == atk.glib;
 assert glib == pango.glib;

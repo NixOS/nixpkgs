@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, gtk, libpng}:
 
-assert !isNull pkgconfig && !isNull gtk && !isNull libpng;
+assert pkgconfig != null && gtk != null && libpng != null;
 # Note that we cannot just copy gtk's png attribute, since gtk might
 # not be linked against png.
 assert libpng == gtk.libpng;

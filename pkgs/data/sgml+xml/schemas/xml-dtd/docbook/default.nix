@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-assert !isNull unzip;
+assert unzip != null;
 
 derivation {
   name = "docbook-xml-4.2";

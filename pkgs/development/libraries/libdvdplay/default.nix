@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libdvdread}:
 
-assert !isNull libdvdread;
+assert libdvdread != null;
 
 derivation {
   name = "libdvdplay-1.0.1";

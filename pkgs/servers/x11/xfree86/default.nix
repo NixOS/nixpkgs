@@ -4,7 +4,7 @@
 
 assert !buildServer; # we don't support this currently
 assert buildClientLibs; # we don't support *not* doing this currently
-assert !isNull bison && !isNull flex;
+assert bison != null && flex != null;
 
 derivation {
   name = "xfree86-4.3";

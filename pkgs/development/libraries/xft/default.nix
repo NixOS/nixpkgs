@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, x11, fontconfig}:
 
-assert !isNull pkgconfig && !isNull x11 && !isNull fontconfig;
+assert pkgconfig != null && x11 != null && fontconfig != null;
 assert fontconfig.x11 == x11;
 
 derivation {

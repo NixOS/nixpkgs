@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, gettext, perl}:
 
-assert !isNull pkgconfig && !isNull gettext && !isNull perl;
+assert pkgconfig != null && gettext != null && perl != null;
 
 derivation {
   name = "glib-2.2.3";

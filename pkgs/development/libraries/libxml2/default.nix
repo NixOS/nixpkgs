@@ -1,6 +1,6 @@
 {stdenv, fetchurl, zlib}:
 
-assert !isNull zlib;
+assert zlib != null;
 
 derivation {
   name = "libxml2-2.6.7";

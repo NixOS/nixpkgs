@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, x11, glib, xft}:
 
-assert !isNull pkgconfig && !isNull x11 && !isNull glib && !isNull xft;
+assert pkgconfig != null && x11 != null && glib != null && xft != null;
 assert x11.buildClientLibs;
 assert xft.x11 == x11;
 

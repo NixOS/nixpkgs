@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, gtk, libart, libglade}:
 
-assert !isNull pkgconfig && !isNull gtk && !isNull libart
-  && !isNull libglade;
+assert pkgconfig != null && gtk != null && libart != null
+  && libglade != null;
 
 derivation {
   name = "libgnomecanvas-2.4.0";

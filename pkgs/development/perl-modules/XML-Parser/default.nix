@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, expat}:
 
-assert !isNull perl && !isNull expat;
+assert perl != null && expat != null;
 
 derivation {
   name = "perl-XML-Parser-2.34";

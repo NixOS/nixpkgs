@@ -1,7 +1,7 @@
 {stdenv, fetchurl, x11, libpng, libjpeg, expat}:
 
-assert !isNull x11 && !isNull libpng && !isNull libjpeg
-  && !isNull expat;
+assert x11 != null && libpng != null && libjpeg != null
+  && expat != null;
 
 derivation {
   name = "graphviz-1.10";

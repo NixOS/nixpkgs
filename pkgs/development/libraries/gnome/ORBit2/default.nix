@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, glib, libIDL, popt}:
 
-assert !isNull pkgconfig && !isNull glib && !isNull libIDL
-  && !isNull popt;
+assert pkgconfig != null && glib != null && libIDL != null
+  && popt != null;
 
 derivation {
   name = "ORBit2-2.8.3";

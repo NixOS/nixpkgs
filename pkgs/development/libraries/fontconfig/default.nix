@@ -1,9 +1,9 @@
 {stdenv, fetchurl, x11, freetype, expat, ed}:
 
-assert !isNull x11 && x11.buildClientLibs;
-assert !isNull freetype;
-assert !isNull expat;
-assert !isNull ed;
+assert x11 != null && x11.buildClientLibs;
+assert freetype != null;
+assert expat != null;
+assert ed != null;
 
 derivation {
   name = "fontconfig-2.2.90";

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, perl}:
 
-assert !isNull pkgconfig && !isNull perl;
+assert pkgconfig != null && perl != null;
 
 derivation {
   name = "gnome-mime-data-2.4.0";

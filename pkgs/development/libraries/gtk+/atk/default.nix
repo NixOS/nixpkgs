@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, glib, perl}:
 
-assert !isNull pkgconfig && !isNull glib && !isNull perl;
+assert pkgconfig != null && glib != null && perl != null;
 
 derivation {
   name = "atk-1.2.4";
