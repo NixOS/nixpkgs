@@ -207,7 +207,6 @@ rec {
   };
 
   gcc340 = (import ../build-support/gcc-wrapper) {
-    name = "gcc-3.4.0";
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.4) {
