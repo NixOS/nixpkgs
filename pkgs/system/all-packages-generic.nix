@@ -1143,14 +1143,12 @@ rec {
     inherit (gtkLibs) gtk;
   };
 
-  /*
   fspot = (import ../applications/graphics/f-spot) {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
-            libexif libjpeg sqlite lcms;
+            libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
-  */
 
   hello = (import ../applications/misc/hello/ex-1) {
     inherit fetchurl stdenv perl;
