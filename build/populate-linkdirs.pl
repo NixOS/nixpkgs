@@ -5,14 +5,6 @@ use Cwd;
 
 my $selfdir = cwd;
 
-my @dirs = ("bin", "sbin", "lib", "include", "man");
-
-# Create the subdirectories.
-mkdir $selfdir, 0755;
-foreach my $dir (@dirs) {
-    mkdir "$selfdir/$dir", 0755;
-}
-
 # For each activated package, create symlinks.
 
 sub createLinks {
@@ -52,7 +44,5 @@ foreach my $name (keys %ENV) {
 
     print "merging $pkgdir\n";
 
-    foreach my $dir (@dirs) {
-        createLinks("$pkgdir/$dir", "$selfdir/$dir");
-    }
+    createLinks("$pkgdir", "$selfdir");
 }
