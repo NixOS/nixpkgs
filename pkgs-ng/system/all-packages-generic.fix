@@ -3,7 +3,7 @@
 # packages provided by the Nix Package Collection.
 
 {system, stdenv}: rec
-  { fetchurl = (import ../fetchurl)
+  { fetchurl = (import ../build-support/fetchurl)
       { stdenv = stdenv
       }
 
@@ -19,6 +19,12 @@
       , stdenv = stdenv
       }
 
+  # sys-utils/diffutils
+  , diffutils = (import ../sys-utils/diffutils)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
+      }
+
   # sys-utils/gnused
   , gnused = (import ../sys-utils/gnused)
       { fetchurl = fetchurl
@@ -30,6 +36,12 @@
       { fetchurl = fetchurl
       , stdenv = stdenv
       , pcre = pcre
+      }
+
+  # sys-utils/gawk
+  , gawk = (import ../sys-utils/gawk)
+      { fetchurl = fetchurl
+      , stdenv = stdenv
       }
 
   # archivers/gnutar
@@ -75,7 +87,8 @@
       , stdenv = stdenv
       }
 
-  , aterm = (import ../aterm)
+  # devel/libs/aterm
+  , aterm = (import ../devel/libs/aterm)
       { fetchurl = fetchurl
       , stdenv = stdenv
       }
