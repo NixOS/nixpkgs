@@ -1,0 +1,20 @@
+Package(
+  [ ("name", "MPlayer-0.90")
+
+  , ("build", Relative("MPlayer/MPlayer-build.sh"))
+  , ("setenv", Relative("helpers/set-env.sh"))
+
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-0.90.tar.bz2")
+      , ("md5", "9a9f294bbaab2071ecbc327f4e870be8")
+      ]))
+
+  , ("fonts", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www2.mplayerhq.hu/MPlayer/releases/fonts/font-arial-iso-8859-1.tar.bz2")
+      , ("md5", "1ecd31d17b51f16332b1fcc7da36b312")
+      ]))
+
+  , ("freetype", IncludeFix("freetype/freetype.fix"))
+  , ("win32codecs", IncludeFix("win32codecs/win32codecs.fix"))
+  ]
+)
