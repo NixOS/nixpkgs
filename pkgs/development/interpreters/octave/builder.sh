@@ -1,6 +1,6 @@
 set -x
 
-buildinputs="$autoconf $g77 $texinfo $bison $flex $gperf $rna $aterm"
+buildinputs="$autoconf $g77 $texinfo $bison $flex $gperf"
 . $stdenv/setup
 
 g77orig=$(cat $g77/nix-support/orig-gcc)
@@ -10,9 +10,9 @@ export NIX_STRIP_DEBUG=
 export NIX_CFLAGS_COMPILE="-g $NIX_CFLAGS_COMPILE"
 
 tar xvfz $src
-cd octavefront-*
+cd octave-*
 ./autogen.sh
-./configure --prefix=$out --disable-readline --enable-rna=$rna --enable-aterm
+./configure --prefix=$out --disable-readline
 make
 make install
 #strip -S $out/lib/*/*.a

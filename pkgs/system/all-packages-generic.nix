@@ -194,8 +194,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  octavefront = (import ../development/tools/misc/octavefront) {
-    inherit fetchurl stdenv autoconf g77 texinfo flex gperf rna aterm;
+  octave = (import ../development/interpreters/octave) {
+    inherit fetchurl stdenv autoconf g77 texinfo flex gperf;
     bison = bisonnew;
   };
 
@@ -502,10 +502,6 @@ rec {
 
   ncurses = (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
-  };
-
-  rna = (import ../development/libraries/rna) {
-    inherit fetchurl stdenv zlib;
   };
 
   xlibs = (import ../development/libraries/xlibs) {

@@ -24,7 +24,7 @@ let {
     gnum4
     valgrind
     texinfo
-    octavefront
+    octave
     gnumake
     bisonnew
     flexnew
