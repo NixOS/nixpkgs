@@ -1,4 +1,4 @@
-id : pan-0.13.91-run
+id : pan-0.13.91
 
 pkgconfig <- ./pkgconfig-0.15.0.nix
 glib <- ./glib-2.2.1.nix
