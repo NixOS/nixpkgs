@@ -1,0 +1,8 @@
+{system}: derivation
+  { name = "user-environment"
+  , system = system
+  , builder = ./populate-linkdirs.pl
+  , pkgs =
+      [ ((import ./all-packages.fix) {system = system}).aterm
+      ]
+  }
