@@ -1,1 +1,0 @@
-(import ./user-environment.fix) {system = "i686-suse-linux"}

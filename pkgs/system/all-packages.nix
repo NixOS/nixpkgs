@@ -1,7 +1,7 @@
 # This file evaluates to a function that, when supplied with a system
 # identifier, returns the set of all packages provided by the Nix
 # Package Collection.  It does this by supplying
-# `all-packages-generic.fix' with a standard build environment.
+# `all-packages-generic.nix' with a standard build environment.
 #
 # On Linux systems, the standard build environment consists of
 # Nix-built instances glibc and the `standard' Unix tools, i.e., the
@@ -9,7 +9,7 @@
 # we use the native C library.
 
 {system}: let {
-  allPackages = import ./all-packages-generic.fix;
+  allPackages = import ./all-packages-generic.nix;
 
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
@@ -29,7 +29,7 @@
   # The Linux build environment consists of the Nix build environment
   # built against the GNU C Library.
   stdenvLinuxGlibc = stdenvNativePkgs.glibc;
-  stdenvLinuxBoot = (import ../stdenv/nix-linux/boot.fix) {
+  stdenvLinuxBoot = (import ../stdenv/nix-linux/boot.nix) {
     system = system;
     glibc = stdenvLinuxGlibc;
   };

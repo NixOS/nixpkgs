@@ -5,7 +5,7 @@
 
 {system}: let {
   # All activated packages.
-  pkgs = (import ./all-packages.fix) {system = system};
+  pkgs = (import ./all-packages.nix) {system = system};
 
   # The packages selection for inclusion in the user environment.
   # This list should be generated automatically by a package
