@@ -584,8 +584,7 @@ rec {
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt perl zlib libxml2 bzip2
-            perlXMLParser;
-    gtkLibs = gtkLibs22;
+            perlXMLParser gtkLibs;
   };
 
   wxGTK = (import ../development/libraries/wxGTK-2.5) {
@@ -934,6 +933,16 @@ rec {
   umlutilities = (import ../misc/uml-utilities) {
     inherit fetchurl stdenv;
   };
+
+  /*
+  atari800 = (import ../misc/emulators/atari800) {
+    inherit fetchurl stdenv zlib SDL;
+  };
+
+  ataripp = (import ../misc/emulators/atari++) {
+    inherit fetchurl stdenv x11 SDL;
+  };
+  */
 
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm perl;
