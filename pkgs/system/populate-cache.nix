@@ -32,7 +32,6 @@ let {
     gccWrapped
     aterm
     strategoxt
-    strategoxt_unstable
     xdoc
 #    ghc
 #    helium
