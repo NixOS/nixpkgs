@@ -83,8 +83,7 @@ Another option would be to enable networking in the UML and use nix-pull to
 get all the right packages, however this does not work yet out of the box.
 A small trick is to symlink /bin/sh to the current version of "sh":
 
-# mkdir /bin
 # cd /bin
-# ln -s `which ssh` sh
+# ln -s `which sh` sh
 
 We're looking for a more permanent solution to fix this.
