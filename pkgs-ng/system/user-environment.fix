@@ -13,6 +13,7 @@
   selectedPkgs = [
     pkgs.subversion
     pkgs.pan
+    pkgs.sylpheed
   ];
 
   # Create a user environment.

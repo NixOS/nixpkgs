@@ -250,12 +250,34 @@
     libpng = libpng;
   };
 
+  glib1 = (import ../development/libraries/gtk+-1/glib) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
+  gtk1 = (import ../development/libraries/gtk+-1/gtk+) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+    glib = glib1;
+  };
+
+  gdkpixbuf = (import ../development/libraries/gtk+-1/gdk-pixbuf) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    gtk = gtk1;
+    libtiff = libtiff;
+    libjpeg = libjpeg;
+    libpng = libpng;
+  };
+
   gnet = (import ../development/libraries/gnet) {
     fetchurl = fetchurl;
     stdenv = stdenv;
     pkgconfig = pkgconfig;
     glib = glib;
   };
+
 
 
   ### SERVERS
@@ -313,6 +335,16 @@
     gnet = gnet;
     libxml2 = libxml2;
     perl = perl;
+  };
+
+  sylpheed = (import ../applications/networking/mailreaders/sylpheed) {
+    sslSupport = true;
+    imageSupport = true;
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    gtk = gtk1;
+    openssl = openssl;
+    gdkpixbuf = gdkpixbuf;
   };
 
 }
