@@ -634,6 +634,7 @@ rec {
 
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm perl;
+    curl = bootCurl; /* !!! ugly */
     bdb = db4;
   };
 

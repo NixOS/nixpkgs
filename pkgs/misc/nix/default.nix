@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aterm, bdb, perl
+{ stdenv, fetchurl, aterm, bdb, perl, curl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
@@ -14,6 +14,6 @@ stdenv.mkDerivation {
     url = http://catamaran.labs.cs.uu.nl/dist/nix/nix-0.5pre927/nix-0.5pre927.tar.bz2;
     md5 = "57d71f86718ba8e75a5ed16a302fcf39";
   };
-  buildInputs = [aterm bdb perl];
+  buildInputs = [aterm bdb perl curl];
   inherit storeDir stateDir aterm bdb;
 }
