@@ -1,14 +1,13 @@
-#! /bin/sh
-
-buildinputs="$aterm $sdf $make $automake $autoconf $libtool $which"
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
 echo "pwd = `pwd`"
 echo "PATH = $PATH"
 
-cp -r $src strategoxt || exit 1
+echo "ACLOCAL_PATH = $ACLOCAL_PATH"
+
+cp -r $src strategoxt
 chmod -R +w strategoxt
-cd strategoxt || exit 1
-./bootstrap || exit 1
-./configure --prefix=$out --with-aterm=$aterm --with-sdf=$sdf || exit 1
-make install || exit 1
+cd strategoxt
+./bootstrap
+./configure --prefix=$out --with-aterm=$aterm --with-sdf=$sdf
+make install

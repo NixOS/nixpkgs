@@ -135,11 +135,6 @@ rec {
     m4 = gnum4;
   };
 
-  autoconflibtool = (import ../development/tools/misc/autoconf/autoconf-libtool.nix) {
-    inherit fetchurl stdenv perl;
-    m4 = gnum4;
-  };
-
   automake = (import ../development/tools/misc/automake) {
     inherit fetchurl stdenv perl autoconf;
   };
@@ -147,13 +142,6 @@ rec {
   libtool = (import ../development/tools/misc/libtool) {
     inherit fetchurl stdenv perl;
     m4 = gnum4;
-  };
-
-  autotools = {
-    automake = autoconflibtool;
-    autoconf = autoconflibtool;
-    make     = gnumake;
-    libtool  = autoconflibtool;
   };
 
   pkgconfig = (import ../development/tools/misc/pkgconfig) {
@@ -241,7 +229,7 @@ rec {
   };
 
   strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
-    inherit fetchsvn stdenv autotools which aterm;
+    inherit fetchsvn stdenv autoconf automake libtool which aterm;
     sdf = sdf2;
   };
 
@@ -606,6 +594,14 @@ rec {
 
   libXft = (import ../development/libraries/freedesktop/libXft) {
     inherit fetchurl stdenv pkgconfig libX11 libXrender freetype fontconfig;
+  };
+
+  libXmu = (import ../development/libraries/freedesktop/libXmu) {
+    inherit fetchurl stdenv pkgconfig xproto libX11 libXt;
+  };
+
+  libXaw = (import ../development/libraries/freedesktop/libXaw) {
+    inherit fetchurl stdenv pkgconfig xproto libX11 libXt;
   };
 
   xlibs = (import ../development/libraries/freedesktop/xlibs) {

@@ -1,1 +1,7 @@
 * Bump freetype to 2.1.7 (but it breaks Pango 1.2.5).
+
+* In setup.sh, remove " -a -f ./ltmain.sh" (and then remove ltmain stuff from Subversion)
+
+* Patch development/tools/misc/libtool not to search standard
+  directories for libraries (like setup.sh does now). [do we want
+  this?]

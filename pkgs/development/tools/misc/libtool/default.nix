@@ -1,11 +1,10 @@
 {stdenv, fetchurl, m4, perl}:
+
 stdenv.mkDerivation {
-  name = "libtool-1.5";
-  builder = ./builder.sh;
+  name = "libtool-1.5.2";
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/libtool/libtool-1.5.tar.gz;
-    md5 = "0e1844f25e2ad74c3715b5776d017545";
+    url = http://ftp.gnu.org/gnu/libtool/libtool-1.5.2.tar.gz;
+    md5 = "db66ba05502f533ad0cfd84dc0e03bd5";
   };
-  m4 = m4;
-  perl = perl;
+  buildInputs = [m4 perl];
 }
