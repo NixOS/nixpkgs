@@ -235,6 +235,11 @@
     stdenv = stdenv;
   };
 
+  j2sdk = (import ../development/compilers/j2sdk) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     fetchurl = fetchurl;
     stdenv = stdenv;
