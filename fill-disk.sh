@@ -49,7 +49,9 @@ rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
 export NIX_ROOT=$root
-NIX_CMD_PATH=/usr/home/nix/.nix-profile/bin
+#NIX_CMD_PATH=/usr/home/nix/.nix-profile/bin
+#NIX_CMD_PATH=/home/armijn/.nix-profile/bin
+NIX_CMD_PATH=/nix/bin
 
 echo initialising Nix DB...
 #/nix/bin/nix-store --init
@@ -65,13 +67,13 @@ echo registering valid paths...
         (unset NIX_ROOT; $NIX_CMD_PATH/nix-store --dump $storepath) | $NIX_CMD_PATH/nix-store --restore $storepath
         $NIX_CMD_PATH/nix-store --validpath $storepath
     fi
-done) < /tmp/storepaths
+done) < /tmp/mystorepaths
 
 echo registering successors...
 (while read line; do
     echo SUCC $line
     $NIX_CMD_PATH/nix-store --successor $line
-done) < /tmp/successors
+done) < /tmp/mysuccessors
 
 echo setting init symlink...
 rm -f $root/init
