@@ -11,7 +11,6 @@ assert gtk.glib == gnet.glib;
 stdenv.mkDerivation {
   name = "pan-0.14.2.91";
 
-  builder = ./builder.sh;
   src = fetchurl {
     url = http://pan.rebelbase.com/download/releases/0.14.2.91/SOURCE/pan-0.14.2.91.tar.bz2;
     md5 = "4770d899a1c1ba968ce96bc5aeb07b62";

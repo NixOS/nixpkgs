@@ -23,6 +23,6 @@ stdenv.mkDerivation {
   freetype = freetype;
   alsa = if alsaSupport then alsa else null;
   win32codecs = (import ./win32codecs) {
-    fetchurl = fetchurl;
+    inherit stdenv fetchurl;
   };
 }

@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation {
   name = "libSM-6.0.2";
-  builder = ./builder.sh;
   src = fetchurl {
     url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libSM-6.0.2.tar.bz2;
     md5 = "0ecc3ec75391d9158f25a94a652bd387";
