@@ -839,6 +839,11 @@ rec {
     inherit fetchurl stdenv wxGTK chmlib;
   };
 
+  acroread = (import ../applications/misc/acrobat-reader) {
+    inherit fetchurl stdenv patchelf;
+    inherit (xlibs) libXt libXp libXext libX11;
+  };
+
   nxml = (import ../applications/editors/emacs/modes/nxml) {
     inherit fetchurl stdenv;
   };
