@@ -798,7 +798,12 @@ rec {
 
   firefoxWrapper = (import ../applications/networking/browsers/firefox-wrapper) {
     inherit stdenv firefox;
-    plugins = [MPlayerPlugin];
+    plugins = [MPlayerPlugin flashplayer];
+  };
+
+  flashplayer = (import ../applications/networking/browsers/mozilla-plugins/flashplayer) {
+    inherit fetchurl stdenv zlib;
+    inherit (xlibs) libXmu;
   };
 
   thunderbird = 
@@ -824,7 +829,7 @@ rec {
     alsa = alsaLib;
   };
 
-  MPlayerPlugin = (import ../applications/video/mplayerplug-in) {
+  MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {
     inherit fetchurl stdenv pkgconfig firefox;
     inherit (xlibs) libXpm;
   };
