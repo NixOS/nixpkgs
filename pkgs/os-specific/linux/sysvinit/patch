@@ -1,0 +1,93 @@
+Only in sysvinit-2.85/src: dowall.o
+Only in sysvinit-2.85/src: halt
+Only in sysvinit-2.85/src: halt.o
+Only in sysvinit-2.85/src: hddown.o
+Only in sysvinit-2.85/src: ifdown.o
+Only in sysvinit-2.85/src: init
+Only in sysvinit-2.85/src: init.o
+Only in sysvinit-2.85/src: init_utmp.o
+Only in sysvinit-2.85/src: killall5
+Only in sysvinit-2.85/src: last
+Only in sysvinit-2.85/src: last.o
+diff -rc sysvinit-2.85-orig/src/Makefile sysvinit-2.85/src/Makefile
+*** sysvinit-2.85-orig/src/Makefile	2001-11-06 12:58:16.000000000 +0100
+--- sysvinit-2.85/src/Makefile	2004-02-16 14:49:01.000000000 +0100
+***************
+*** 24,36 ****
+  BIN_OWNER	= root
+  BIN_GROUP	= root
+  BIN_COMBO	= $(BIN_OWNER).$(BIN_GROUP)
+! INSTALL		= install -o $(BIN_OWNER) -g $(BIN_GROUP)
+! MANDIR		= /usr/share/man
+  
+  # Additional libs for Gnu Libc
+! ifneq ($(wildcard /usr/lib/libcrypt.a),)
+  LCRYPT		= -lcrypt
+! endif
+  
+  all:		$(PROGS)
+  
+--- 24,36 ----
+  BIN_OWNER	= root
+  BIN_GROUP	= root
+  BIN_COMBO	= $(BIN_OWNER).$(BIN_GROUP)
+! INSTALL		= install # -o $(BIN_OWNER) -g $(BIN_GROUP)
+! MANDIR		= /share/man
+  
+  # Additional libs for Gnu Libc
+! #ifneq ($(wildcard /usr/lib/libcrypt.a),)
+  LCRYPT		= -lcrypt
+! #endif
+  
+  all:		$(PROGS)
+  
+***************
+*** 89,104 ****
+  			runlevel shutdown $(ROOT)/sbin
+  		# These are not installed by default
+  ifeq ($(DEBIAN),)
+! 		$(INSTALL) -m 555 utmpdump wall $(ROOT)/usr/bin
+  endif
+  		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
+! 		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
+! 		cd $(ROOT)/sbin; ln -sf halt reboot; chown $(BIN_COMBO) reboot
+! 		cd $(ROOT)/sbin; ln -sf halt poweroff; chown $(BIN_COMBO) poweroff
+! 		cd $(ROOT)/sbin; ln -sf init telinit; chown $(BIN_COMBO) telinit
+! 		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof; chown $(BIN_COMBO) pidof
+! 		cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
+! 		$(INSTALL) -m 644 initreq.h $(ROOT)/usr/include
+  		$(INSTALL) -m 644 ../man/*.8 $(ROOT)$(MANDIR)/man8
+  		$(INSTALL) -m 644 ../man/*.5 $(ROOT)$(MANDIR)/man5
+  ifeq ($(DEBIAN),)
+--- 89,104 ----
+  			runlevel shutdown $(ROOT)/sbin
+  		# These are not installed by default
+  ifeq ($(DEBIAN),)
+! 		$(INSTALL) -m 555 utmpdump wall $(ROOT)/bin
+  endif
+  		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
+! 		$(INSTALL) -m 755 mesg last $(ROOT)/bin
+! 		cd $(ROOT)/sbin; ln -sf halt reboot #; chown $(BIN_COMBO) reboot
+! 		cd $(ROOT)/sbin; ln -sf halt poweroff #; chown $(BIN_COMBO) poweroff
+! 		cd $(ROOT)/sbin; ln -sf init telinit #; chown $(BIN_COMBO) telinit
+! 		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof #; chown $(BIN_COMBO) pidof
+! 		cd $(ROOT)/bin; ln -sf last lastb #; chown $(BIN_COMBO) lastb
+! 		$(INSTALL) -m 644 initreq.h $(ROOT)/include
+  		$(INSTALL) -m 644 ../man/*.8 $(ROOT)$(MANDIR)/man8
+  		$(INSTALL) -m 644 ../man/*.5 $(ROOT)$(MANDIR)/man5
+  ifeq ($(DEBIAN),)
+Only in sysvinit-2.85/src: Makefile~
+Only in sysvinit-2.85/src: mesg
+Only in sysvinit-2.85/src: mesg.o
+Only in sysvinit-2.85/src: runlevel
+Only in sysvinit-2.85/src: runlevel.o
+Only in sysvinit-2.85/src: shutdown
+Only in sysvinit-2.85/src: shutdown.o
+Only in sysvinit-2.85/src: sulogin
+Only in sysvinit-2.85/src: sulogin.o
+Only in sysvinit-2.85/src: utmpdump
+Only in sysvinit-2.85/src: utmpdump.o
+Only in sysvinit-2.85/src: utmp.o
+Only in sysvinit-2.85/src: wall
+Only in sysvinit-2.85/src: wall.o
+Only in sysvinit-2.85/src: x

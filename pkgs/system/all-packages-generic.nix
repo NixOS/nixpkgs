@@ -564,6 +564,11 @@
     patch = gnupatch;
   };
 
+  sysvinit = (import ../os-specific/linux/sysvinit) {
+    inherit fetchurl stdenv;
+    patch = gnupatch;
+  };
+
 
   ### DATA
 
