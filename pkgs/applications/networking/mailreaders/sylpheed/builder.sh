@@ -1,14 +1,14 @@
 buildInputs="$gtk $gdkpixbuf $openssl"
 . $stdenv/setup
 
-if test $sslSupport; then
-    configureFlags="--enable-ssl $extraflags"
+if test "$sslSupport" = 1; then
+    configureFlags="--enable-ssl $configureFlags"
 fi
 
-if test $imageSupport; then
-    configureFlags="--enable-gdk-pixbuf $extraflags"
+if test "$imageSupport" = 1; then
+    configureFlags="--enable-gdk-pixbuf $configureFlags"
 else
-    configureFlags="--disable-gdk-pixbuf --disable-imlibtest $extraflags"
+    configureFlags="--disable-gdk-pixbuf --disable-imlibtest $configureFlags"
 fi
 
 genericBuild
