@@ -8,4 +8,5 @@ stdenv.mkDerivation {
     md5 = "888774accab40217dde927e21979c165";
   };
   config = ./config.h;
+  patch = ./net-tools-labels.patch;
 }

@@ -869,6 +869,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  modutils = (import ../os-specific/linux/modutils) {
+    inherit fetchurl stdenv bison flex;
+  };
+
   shadowutils = (import ../os-specific/linux/shadow) {
     inherit fetchurl stdenv;
   };

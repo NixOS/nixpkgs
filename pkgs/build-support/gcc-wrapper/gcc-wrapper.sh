@@ -63,24 +63,28 @@ fi
 
 
 # Add the flags for the C compiler proper.
-extra=($NIX_CFLAGS_COMPILE)
+extraAfter=($NIX_CFLAGS_COMPILE)
+extraBefore=()
 
 if test "$dontLink" != "1"; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extra=(${extra[@]} $NIX_CFLAGS_LINK)
+    extraAfter=(${extraAfter[@]} $NIX_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS again).
+    for i in $NIX_LDFLAGS_BEFORE; do
+        extraBefore=(${extraBefore[@]} "-Wl,$i")
+    done
     for i in $NIX_LDFLAGS; do
-        extra=(${extra[@]} "-Wl,$i")
+        extraAfter=(${extraAfter[@]} "-Wl,$i")
     done
     export NIX_LDFLAGS_SET=1
 
     if test "$NIX_STRIP_DEBUG" = "1"; then
         # Add executable-stripping flags.
-        extra=(${extra[@]} $NIX_CFLAGS_STRIP)
+        extraAfter=(${extraAfter[@]} $NIX_CFLAGS_STRIP)
     fi
 fi
 
@@ -90,8 +94,12 @@ if test "$NIX_DEBUG" = "1"; then
   for i in "${params[@]}"; do
       echo "  $i" >&2
   done
-  echo "extra flags to @gcc@:" >&2
-  for i in ${extra[@]}; do
+  echo "extraBefore flags to @gcc@:" >&2
+  for i in ${extraBefore[@]}; do
+      echo "  $i" >&2
+  done
+  echo "extraAfter flags to @gcc@:" >&2
+  for i in ${extraAfter[@]}; do
       echo "  $i" >&2
   done
 fi
@@ -100,4 +108,4 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     . "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
-exec @gcc@ "${params[@]}" ${extra[@]}
+exec @gcc@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}

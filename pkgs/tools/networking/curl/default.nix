@@ -7,5 +7,6 @@ stdenv.mkDerivation {
     md5 = "47db6619b849600ba2771074f00da517";
   };
   buildInputs = [zlib];
+  patches = [./configure-cxxcpp.patch];
   configureFlags = "--without-ssl";
 }

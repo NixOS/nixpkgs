@@ -1,7 +1,7 @@
 {stdenv}:
  
 stdenv.mkDerivation {
-  name = "curl-static-7.12.0";
+  name = "curl-static-7.12.2";
   builder = ./builder.sh;
-  src = ./curl-7.12.0-static.tar.gz;
+  src = ./curl-7.12.2-static.tar.gz;
 }

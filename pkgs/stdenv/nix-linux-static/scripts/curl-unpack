@@ -1,0 +1,8 @@
+set -x
+set -e
+
+echo $curl
+
+$gunzip -d < $curl | $tar xvf -
+
+$cp -prvd * $out

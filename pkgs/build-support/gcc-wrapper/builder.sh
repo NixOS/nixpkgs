@@ -9,8 +9,12 @@ if test -z "$nativeGlibc"; then
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  The real solution is of course to prevent those paths
     # from being used by gcc in the first place.
+    # The dynamic linker is passed in `ldflagsBefore' to allow
+    # explicit overrides of the dynamic linker by callers to gcc/ld
+    # (the *last* value counts, so ours should come first).
     cflagsCompile="$cflagsCompile -B$glibc/lib -isystem $glibc/include"
-    ldflags="$ldflags -L$glibc/lib -dynamic-linker $glibc/lib/ld-linux.so.2"
+    ldflags="$ldflags -L$glibc/lib"
+    ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
 fi
 
 if test -n "$nativeTools"; then
@@ -57,6 +61,7 @@ ln -s g77 $out/bin/f77
 sed \
     -e "s^@out@^$out^g" \
     -e "s^@ldflags@^$ldflags^g" \
+    -e "s^@ldflagsBefore@^$ldflagsBefore^g" \
     -e "s^@ld@^$ldPath/ld^g" \
     -e "s^@shell@^$shell^g" \
     < $ldWrapper > $out/bin/ld
@@ -71,7 +76,9 @@ cat > $out/nix-support/add-flags <<EOF
 export NIX_CFLAGS_COMPILE="$cflagsCompile \$NIX_CFLAGS_COMPILE"
 export NIX_CFLAGS_LINK="$cflagsLink \$NIX_CFLAGS_LINK"
 export NIX_LDFLAGS="$ldflags \$NIX_LDFLAGS"
+export NIX_LDFLAGS_BEFORE="$ldflagsBefore \$NIX_LDFLAGS_BEFORE"
 export NIX_GLIBC_FLAGS_SET=1
+#export GCC_EXEC_PREFIX=$gcc/libexec/gcc/i686-pc-linux-gnu/3.4.3
 EOF
 
 sed \
