@@ -13,3 +13,5 @@ envHooks=(${envHooks[@]} addCVars)
 if test -z "@isNative@"; then
     PATH=$PATH:@gcc@/bin:@glibc@/bin
 fi
+
+export NIX_ENFORCE_PURITY=@enforcePurity@

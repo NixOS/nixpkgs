@@ -15,7 +15,7 @@ LDFLAGS=-Wl,-S ../glibc-*/configure --prefix=$out --enable-add-ons --disable-pro
 
 make || exit 1
 make install || exit 1
-make localedata/install-locales || exit 1
+#make localedata/install-locales || exit 1
 strip -S $out/lib/*.a $out/lib/*.so $out/lib/gconv/*.so
 strip -s $out/bin/* $out/sbin/* $out/libexec/*
 

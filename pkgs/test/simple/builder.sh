@@ -4,7 +4,7 @@ export NIX_DEBUG=1
 
 . $stdenv/setup
 
-export NIX_CFLAGS_COMPILE="-v $NIX_CFLAGS_COMPILE"
+#export NIX_CFLAGS_COMPILE="-v $NIX_CFLAGS_COMPILE"
 
 mkdir $out
 mkdir $out/bin
@@ -19,7 +19,8 @@ int main(int argc, char * * argv)
 }
 EOF
 
-gcc hello.c -o $out/bin/hello
+#gcc -I/nix/store/foo -I /nix/store/foo -I/usr/lib -I /usr/lib hello.c -o $out/bin/hello
+gcc -L /nix/store/abcd/lib -isystem /usr/lib hello.c -o $out/bin/hello
 
 $out/bin/hello
 

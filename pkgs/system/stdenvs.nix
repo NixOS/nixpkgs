@@ -8,12 +8,19 @@
 {system, allPackages}: rec {
 
 
+  # Trivial environment used for building other environments.
+  stdenvInitial = (import ../stdenv/initial) {
+    name = "stdenv-initial";
+    inherit system;
+  };
+
+
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ../stdenv/native) {system = system;};
+  stdenvNative = (import ../stdenv/native) {stdenv = stdenvInitial;};
 
   stdenvNativePkgs = allPackages {system = system; stdenv = stdenvNative;};
 

@@ -12,6 +12,6 @@
   # Select the right instantiation.
   body =
     if system == "i686-linux"
-    then stdenvs.stdenvLinuxPkgs
+    then stdenvs.stdenvNativePkgs #stdenvs.stdenvLinuxPkgs
     else stdenvs.stdenvNixPkgs;
 }

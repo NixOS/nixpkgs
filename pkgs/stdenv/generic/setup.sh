@@ -21,6 +21,11 @@ param5=@param5@
 . @preHook@
 
 
+if test -f @gcc@/nix-support/setup-hook; then
+    . @gcc@/nix-support/setup-hook
+fi
+
+    
 # Recursively find all build inputs.
 findInputs()
 {
@@ -74,6 +79,10 @@ fi
 # Strip debug information by default.
 export NIX_STRIP_DEBUG=1
 export NIX_CFLAGS_STRIP="-g0 -Wl,-s"
+
+
+# Where is the store?  This is required for purity checking.
+export NIX_STORE=$(dirname $out)/ # !!! hack
 
 
 # Execute the post-hook.

@@ -10,6 +10,7 @@ if test -z "$NIX_GLIBC_FLAGS_SET"; then
     NIX_LDFLAGS="@ldflags@ $NIX_LDFLAGS"
 fi
 
+
 # Figure out if linker flags should be passed.  GCC prints annoying
 # warnings when they are not needed.
 dontLink=0
@@ -32,6 +33,40 @@ else
         fi
     done
 fi
+
+
+# Optionally filter out paths not refering to the store.
+skip () {
+    if test "$NIX_DEBUG" = "1"; then
+        echo "skipping impure path $1" >&2
+    fi
+}
+
+params=("$@")
+if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+    rest=()
+    n=0
+    while test $n -lt ${#params[*]}; do
+        p=${params[n]}
+        p2=${params[$((n+1))]}
+        if test "${p:0:3}" = "-L/" -a "${p:2:${#NIX_STORE}}" != "$NIX_STORE"; then
+            skip $p
+        elif test "$p" = "-L" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+            n=$((n + 1)); skip $p2
+        elif test "${p:0:3}" = "-I/" -a "${p:2:${#NIX_STORE}}" != "$NIX_STORE"; then
+            skip $p
+        elif test "$p" = "-I" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+            n=$((n + 1)); skip $p2
+        elif test "$p" = "-isystem" -a "${p2:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+            n=$((n + 1)); skip $p2
+        else
+            rest=("${rest[@]}" "$p")
+        fi
+        n=$((n + 1))
+    done
+    params=("${rest[@]}")
+fi
+
 
 # Add the flags for the C compiler proper.
 extra=($NIX_CFLAGS_COMPILE)
@@ -58,7 +93,7 @@ fi
 # Optionally print debug info.
 if test "$NIX_DEBUG" = "1"; then
   echo "original flags to @gcc@:" >&2
-  for i in "$@"; do
+  for i in "${params[@]}"; do
       echo "  $i" >&2
   done
   echo "extra flags to @gcc@:" >&2
@@ -71,4 +106,4 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     . "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
-exec @gcc@ "$@" ${extra[@]}
+exec @gcc@ "${params[@]}" ${extra[@]}

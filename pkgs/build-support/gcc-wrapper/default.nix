@@ -17,6 +17,7 @@ derivation {
   gccWrapper = ./gcc-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
   inherit name stdenv isNative gcc glibc binutils;
+  enforcePurity = if isNative then false else gcc.noSysDirs;
   langC = if isNative then true else gcc.langC;
   langCC = if isNative then true else gcc.langCC;
   langF77 = if isNative then false else gcc.langF77;

@@ -57,6 +57,7 @@ test -z "$isNative" && echo $glibc > $out/nix-support/orig-glibc
 
 sed \
     -e "s^@isNative@^$isNative^g" \
+    -e "s^@enforcePurity@^$enforcePurity^g" \
     -e "s^@gcc@^$gcc^g" \
     -e "s^@glibc@^$glibc^g" \
     < $setupHook > $out/nix-support/setup-hook
