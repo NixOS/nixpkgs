@@ -2,7 +2,7 @@
 
 envpkgs="$gtk $libIDL"
 . $stdenv/setup || exit 1
-export PATH=$pkgconfig/bin:$perl/bin:$PATH
+export PATH=$pkgconfig/bin:$perl/bin:$zip/bin:$unzip/bin:$PATH
 
 tar xvfj $src || exit 1
 cd mozilla || exit 1
@@ -23,6 +23,7 @@ ac_add_options --enable-xft
 ac_add_options --enable-swg
 ac_add_options --enable-strip
 ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --disable-pedantic
 EOF
 echo "ac_add_options --prefix=$out" >> .mozconfig
 
