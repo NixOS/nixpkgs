@@ -3,7 +3,7 @@ Function(["url", "hash"],
     [ ("build", Relative("fetchurl/fetchurl.sh"))
     , ("url", Var("url"))
     , ("hash", Var("hash"))
-    , ("id", "fetched-from-url")
+    , ("id", BaseName(Var("url")))
     ]
   )
 )
