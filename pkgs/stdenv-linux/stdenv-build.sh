@@ -23,6 +23,7 @@ echo "########## $p"
 
 sed \
  -e s^@GLIBC\@^$glibc^g \
+ -e s^@GCC\@^$gcc^g \
  -e s^@CC\@^$cc^g \
  -e s^@CXX\@^$cxx^g \
  -e s^@BASEENV\@^$baseenv^g \

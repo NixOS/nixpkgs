@@ -2,7 +2,7 @@ Package(
   [ ("name", "stdenv-linux")
   , ("build", Relative("stdenv-linux/stdenv-nativetools-build.sh"))
 
-  , ("setup", Relative("stdenv-linux/setup.sh"))
+  , ("setup", Relative("stdenv-linux/setup-nativetools.sh"))
   , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
   , ("glibc", IncludeFix("glibc/glibc.fix"))
   ]

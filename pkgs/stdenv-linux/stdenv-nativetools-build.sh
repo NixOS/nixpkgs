@@ -1,16 +1,8 @@
 #! /bin/sh
 
-export PATH=/bin:/usr/bin
+export PATH=/usr/local/bin:/usr/bin:/bin
 
 mkdir $out || exit 1
-
-p='/usr/local/bin:/usr/bin:/bin'
-
-cc=/usr/bin/gcc
-cxx=/usr/bin/g++
-shell=/bin/sh
-
-echo "########## $p"
 
 sed \
  -e s^@GLIBC\@^$glibc^g \
