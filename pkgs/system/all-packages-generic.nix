@@ -391,10 +391,10 @@ rec {
     sdf = sdf_23;
   };
 
-  xdoc = (import ../development/tools/documentation/xdoc) {
-    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
-    sdf = sdf_23;
-  };
+#  xdoc = (import ../development/tools/documentation/xdoc) {
+#    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
+#    sdf = sdf_23;
+#  };
 
   #tiger = (import ../development/compilers/tiger) {
   #  inherit fetchurl stdenv aterm strategoxt;
