@@ -1,4 +1,4 @@
-Function(["subversion", "strategoxt", "pan", "mplayer", "sylpheed", "libxslt", "docbook"],
+Function(["subversion", "strategoxt", "pan", "mplayer", "sylpheed", "libxslt", "docbook", "httpd"],
   Package(
     [ ("name", "system")
     , ("build", Relative("system/populate-linkdirs.pl"))
@@ -21,6 +21,7 @@ Function(["subversion", "strategoxt", "pan", "mplayer", "sylpheed", "libxslt", "
     , ("actLibXslt", If(Var("libxslt"), IncludeFix("libxslt/libxslt.fix"), ""))
     , ("actDocbookXml", If(Var("docbook"), IncludeFix("docbook-xml/docbook-xml.fix"), ""))
     , ("actDocbookXsl", If(Var("docbook"), IncludeFix("docbook-xsl/docbook-xsl.fix"), ""))
+    , ("actHttpd", If(Var("httpd"), IncludeFix("httpd/httpd.fix"), ""))
     ]
   )
 )

@@ -6,4 +6,5 @@ Call(IncludeFix("system/system.fix"),
   , ("sylpheed", False)
   , ("libxslt", False)
   , ("docbook", False)
+  , ("httpd", True)
   ])
