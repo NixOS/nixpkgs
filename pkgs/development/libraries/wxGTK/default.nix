@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk}:
+{stdenv, fetchurl, pkgconfig, gtk, compat22 ? true}:
 
 assert !isNull pkgconfig && !isNull gtk;
 assert !isNull gtk.libtiff;
@@ -16,11 +16,9 @@ derivation {
     md5 = "cdadfe82fc93f8a65a2ae18a95b0b0e3";
   };
 
-  stdenv = stdenv;
-  pkgconfig = pkgconfig;
-  gtk = gtk;
   libtiff = gtk.libtiff;
   libjpeg = gtk.libjpeg;
   libpng = gtk.libpng;
   zlib = gtk.libpng.zlib;
+  inherit stdenv pkgconfig gtk compat22;
 }
