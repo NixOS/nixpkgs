@@ -5,7 +5,7 @@ use strict;
 my $uploadpath = $ENV{"PATH_INFO"};
 
 # Sanitise upload path.
-die unless $uploadpath =~ /^(\/[A-Za-z0-9-][A-Za-z0-9-\.]+)+$/;
+die unless $uploadpath =~ /^(\/[A-Za-z0-9-][A-Za-z0-9-\.]*)+$/;
 
 my $dst = "/home/eelco/public_html/nix/$uploadpath";
 my $tmp = "${dst}_$$";
