@@ -640,8 +640,13 @@ rec {
     inherit fetchurl stdenv perl expat;
   };
 
-  wxPython = (import ../development/python-modules/wxPython) {
+  wxPython = (import ../development/python-modules/wxPython-2.5) {
     inherit fetchurl stdenv pkgconfig wxGTK python;
+  };
+
+  wxPython24 = (import ../development/python-modules/wxPython) {
+    inherit fetchurl stdenv pkgconfig python;
+    wxGTK = wxGTK24;
   };
 
   readline = (import ../development/libraries/readline) {

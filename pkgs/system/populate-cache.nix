@@ -17,7 +17,7 @@ let {
     wget
     par2cmdline
     cksfv
-    bittorrent
+#    bittorrent
     graphviz
     bash
     binutils
