@@ -384,6 +384,12 @@
     alsa = alsaLib;
   };
 
+  MPlayerPlugin = (import ../applications/video/mplayerplug-in) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    x11 = xfree86;
+  };
+
   gqview = (import ../applications/graphics/gqview) {
     fetchurl = fetchurl;
     stdenv = stdenv;

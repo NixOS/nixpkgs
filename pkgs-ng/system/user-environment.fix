@@ -16,6 +16,7 @@
     pkgs.sylpheed
     pkgs.firebird
     pkgs.MPlayer
+    pkgs.MPlayerPlugin
     pkgs.gqview
   ];
 
