@@ -1,5 +1,5 @@
 let {
-  system = "i686-suse-linux";
+  system = "i686-linux";
   pkgs = (import ../pkgs/system/all-packages.nix) {system = system};
   stdenv = pkgs.stdenv_;
 
