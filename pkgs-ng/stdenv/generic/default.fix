@@ -1,22 +1,23 @@
 {system, name, noSysDirs, prehook, posthook, initialPath, 
- param1, param2, param3, param4, param5}: derivation
-  { name = name
-  , system = system
-  , builder = ./builder.sh
-  , noSysDirs = noSysDirs
+  param1, param2, param3, param4, param5}:
+derivation {
+  name = name;
+  system = system;
+  builder = ./builder.sh;
+  noSysDirs = noSysDirs;
 
-  , setup = ./setup.sh
-  , gccwrapper = ./gcc-wrapper.sh
-  , ldwrapper = ./ld-wrapper.sh
+  setup = ./setup.sh;
+  gccwrapper = ./gcc-wrapper.sh;
+  ldwrapper = ./ld-wrapper.sh;
 
-  , prehook = prehook
-  , posthook = posthook
+  prehook = prehook;
+  posthook = posthook;
 
-  , initialPath = initialPath
+  initialPath = initialPath;
   # TODO: make this more elegant.
-  , param1 = param1
-  , param2 = param2
-  , param3 = param3
-  , param4 = param4
-  , param5 = param5
-  }
+  param1 = param1;
+  param2 = param2;
+  param3 = param3;
+  param4 = param4;
+  param5 = param5;
+}

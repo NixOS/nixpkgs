@@ -1,12 +1,12 @@
-{stdenv, fetchurl, binutils}: derivation
-  { name = "gcc-3.3.2"
-  , system = stdenv.system
-  , builder = ./builder.sh
-  , src = fetchurl
-      { url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-3.3.2/gcc-3.3.2.tar.bz2
-      , md5 = "65999f654102f5438ac8562d13a6eced"
-      }
-  , stdenv = stdenv
-  , binutils = binutils
-  , noSysDirs = stdenv.noSysDirs
-  }
+{stdenv, fetchurl, binutils}: derivation {
+  name = "gcc-3.3.2";
+  system = stdenv.system;
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-3.3.2/gcc-3.3.2.tar.bz2;
+    md5 = "65999f654102f5438ac8562d13a6eced";
+  };
+  stdenv = stdenv;
+  binutils = binutils;
+  noSysDirs = stdenv.noSysDirs;
+}

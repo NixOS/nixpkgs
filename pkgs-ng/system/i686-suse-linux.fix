@@ -1,1 +1,1 @@
-(import ./user-environment.fix) { system = "i686-suse-linux" }
+(import ./user-environment.fix) {system = "i686-suse-linux"}

@@ -1,10 +1,10 @@
-{stdenv, fetchurl}: derivation
-  { name = "aterm-2.0"
-  , system = stdenv.system
-  , builder = ./builder.sh
-  , src = fetchurl
-      { url = http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz
-      , md5 = "853474e4bcf4a85f7d38a0676b36bded"
-      }
-  , stdenv = stdenv
-  }
+{stdenv, fetchurl}: derivation {
+  name = "aterm-2.0";
+  system = stdenv.system;
+  builder = ./builder.sh;
+  src = fetchurl {
+      url = http://www.cwi.nl/projects/MetaEnv/aterm/aterm-2.0.tar.gz;
+      md5 = "853474e4bcf4a85f7d38a0676b36bded";
+    };
+  stdenv = stdenv;
+}

@@ -1,8 +1,21 @@
-{system}: derivation
-  { name = "user-environment"
-  , system = system
-  , builder = ./populate-linkdirs.pl
-  , pkgs =
-      [ ((import ./all-packages.fix) {system = system}).aterm
-      ]
-  }
+# Given a system identifier, this function returns a derivation of a
+# user environment, i.e., a set of symbolic links to `activated'
+# packages.  The resulting package is typically passed to the
+# `nix-switch' command in order to actually activate it.
+
+{system}: let {
+  # All activated packages.
+  pkgs = (import ./all-packages.fix) {system = system};
+
+  # This 
+  selectedPkgs =
+    [ pkgs.aterm
+    ];
+
+  body = derivation { 
+    name = "user-environment";
+    system = system;
+    builder = ./populate-linkdirs.pl;
+    dirs = selectedPkgs;
+  };
+}

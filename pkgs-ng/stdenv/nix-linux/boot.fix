@@ -1,13 +1,13 @@
-{system, glibc}: (import ../generic)
-  { name = "stdenv-linux-boot"
-  , system = system
-  , prehook = ./prehook-boot.sh
-  , posthook = ./posthook.sh
-  , initialPath = "/usr/local /usr /"
-  , param1 = ""
-  , param2 = ""
-  , param3 = ""
-  , param4 = glibc
-  , param5 = ""
-  , noSysDirs = true
-  }
+{system, glibc}: (import ../generic) {
+  name = "stdenv-linux-boot";
+  system = system;
+  prehook = ./prehook-boot.sh;
+  posthook = ./posthook.sh;
+  initialPath = "/usr/local /usr /";
+  param1 = "";
+  param2 = "";
+  param3 = "";
+  param4 = glibc;
+  param5 = "";
+  noSysDirs = true;
+}
