@@ -388,6 +388,11 @@ rec {
             libtiff libjpeg libpng;
   };
 
+  gtkLibs22 = import ../development/libraries/gtk-libs-2.2 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng;
+  };
+
   gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
@@ -399,12 +404,12 @@ rec {
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt perl zlib libxml2 bzip2;
-    gtkLibs = gtkLibs;
+    gtkLibs = gtkLibs22;
   };
 
   wxGTK = (import ../development/libraries/wxGTK) {
     inherit fetchurl stdenv pkgconfig;
-    inherit (gtkLibs) gtk;
+    inherit (gtkLibs22) gtk;
   };
 
   gnet = (import ../development/libraries/gnet) {
