@@ -646,6 +646,10 @@ rec {
     ant = apacheAntBlackdown14;
   };
 
+  jetty = (import ../servers/http/jetty) {
+    inherit fetchurl stdenv;
+  };
+
   ### OS-SPECIFIC
 
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
