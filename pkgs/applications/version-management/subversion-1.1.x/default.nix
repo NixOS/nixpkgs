@@ -17,12 +17,12 @@ assert javaSwigBindings -> swig != null && swig.javaSupport;
 assert javahlBindings -> j2sdk != null;
 
 stdenv.mkDerivation {
-  name = "subversion-1.1.0";
+  name = "subversion-1.1.1";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/tarballs/subversion-1.1.0.tar.bz2;
-    md5 = "a91b0d79b8c8ab8747587037c044c6c9";
+    url = http://subversion.tigris.org/tarballs/subversion-1.1.1.tar.bz2;
+    md5 = "a180c3fe91680389c210c99def54d9e0";
   };
 
   # This is a hopefully temporary fix for the problem that
