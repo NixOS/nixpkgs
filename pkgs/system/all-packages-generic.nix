@@ -389,6 +389,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kaffe =  (import ../development/interpreters/kaffe) {
+    inherit fetchurl stdenv jikes alsaLib xlibs;
+  };
+
   apacheant14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv j2sdk;
   };
