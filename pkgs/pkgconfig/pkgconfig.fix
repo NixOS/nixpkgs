@@ -1,0 +1,9 @@
+Package(
+  [ ("id", "pkgconfig-0.15.0")
+  , ("build", Relative("pkgconfig/pkgconfig-build.sh"))
+  , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),
+      [ ("url", "http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-0.15.0.tar.gz")
+      , ("hash", "c62371dd07ef85043e91f298176c771f")
+      ]))
+  ]
+)
