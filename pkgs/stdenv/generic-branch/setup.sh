@@ -168,6 +168,44 @@ closeNest() {
 trap "closeNest" EXIT
 
 
+# Ensure that the given directory exists.
+ensureDir() {
+    local dir=$1
+    if ! test -x "$dir"; then mkdir -p "$dir"; fi
+}
+
+
+# Redirect stdout/stderr to a `tee' process that writes the specified
+# file (and also to our original stdout).  This requires bash.  The
+# original stdout is saved in descriptor 3.
+startLog() {
+    local logFile=${logNr}_$1
+    logNr=$((logNr + 1))
+    if test "$logPhases" = 1; then
+        ensureDir $logDir
+        exec 3>&1
+        if test "$dontLogThroughTee" != 1; then
+            eval "exec > >(tee $logDir/$logFile) 2>&1"
+        else
+            exec > $logDir/$logFile 2>&1
+        fi
+    fi
+}
+
+if test -z "$logDir"; then
+    logDir=$out/log
+fi
+
+logNr=0
+
+# Restore the original stdout/stderr.
+stopLog() {
+    if test "$logPhases" = 1; then
+        exec >&3 2>&1
+    fi
+}
+
+
 # Utility function: return the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
@@ -175,13 +213,6 @@ stripHash() {
     if echo "$strippedName" | grep -q '^[a-f0-9]\{32\}-'; then
         strippedName=$(echo "$strippedName" | cut -c34-)
     fi
-}
-
-
-# Ensure that the given directory exists.
-ensureDir() {
-    local dir=$1
-    if ! test -x "$dir"; then mkdir "$dir"; fi
 }
 
 
@@ -287,7 +318,9 @@ unpackW() {
 
 unpackPhase() {
     header "unpacking sources"
+    startLog "unpack"
     unpackW
+    stopLog
     stopNest
 }
 
@@ -309,7 +342,9 @@ patchW() {
 patchPhase() {
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     header "patching sources"
+    startLog "patch"
     patchW
+    stopLog
     stopNest
 }
 
@@ -368,7 +403,9 @@ configureW() {
 
 configurePhase() {
     header "configuring"
+    startLog "configure"
     configureW
+    stopLog
     stopNest
 }
 
@@ -389,7 +426,9 @@ buildPhase() {
         return
     fi
     header "building"
+    startLog "build"
     buildW
+    stopLog
     stopNest
 }
 
@@ -414,7 +453,9 @@ checkPhase() {
         return
     fi
     header "checking"
+    startLog "check"
     checkW
+    stopLog
     stopNest
 }
 
@@ -457,7 +498,9 @@ installPhase() {
         return
     fi
     header "installing"
+    startLog "install"
     installW
+    stopLog
     stopNest
 }
 
@@ -495,7 +538,9 @@ distPhase() {
         return
     fi
     header "creating distribution"
+    startLog "dist"
     distW
+    stopLog
     stopNest
 }
 

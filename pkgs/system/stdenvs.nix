@@ -150,7 +150,7 @@
 
 
   # Testing the new stdenv-linux (TODO: remove this eventually).
-  stdenvLinuxTest = (import ../stdenv/nix-linux) {
+  stdenvLinuxTest = (import ../stdenv/nix-linux-branch) {
     stdenv = stdenvLinuxBoot2;
     pkgs = stdenvLinuxBoot2Pkgs;
     glibc = stdenvLinuxGlibc;
