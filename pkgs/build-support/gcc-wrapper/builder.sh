@@ -39,6 +39,7 @@ mkGccWrapper () {
     sed \
         -e "s^@gcc@^$src^g" \
         -e "s^@out@^$out^g" \
+        -e "s^@bash@^$SHELL^g" \
         < $gccWrapper > $dst
     chmod +x $dst
 }
@@ -57,6 +58,7 @@ sed \
     -e "s^@out@^$out^g" \
     -e "s^@ldflags@^$ldflags^g" \
     -e "s^@ld@^$ldPath/ld^g" \
+    -e "s^@bash@^$SHELL^g" \
     < $ldWrapper > $out/bin/ld
 chmod +x $out/bin/ld
 

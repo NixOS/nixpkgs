@@ -1,4 +1,4 @@
-#! /bin/sh
+#! @bash@ -e
 
 if test -n "$NIX_LD_WRAPPER_START_HOOK"; then
     . "$NIX_LD_WRAPPER_START_HOOK"
