@@ -63,6 +63,7 @@ let {
     uml
     nix
 #    ocaml
+    mono
 #    hevea
     vim
     less
@@ -80,7 +81,6 @@ let {
     jetty
     blackdown
     apacheAntBlackdown14
-    subversionWithJava
   ;};
 
   powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)

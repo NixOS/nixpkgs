@@ -919,7 +919,7 @@ rec {
 
   ### APPLICATIONS
 
-  subversion = (import ../applications/version-management/subversion-1.0.x) {
+  subversion = (import ../applications/version-management/subversion-1.1.x) {
     inherit fetchurl stdenv openssl db4 expat swig;
     localServer = true;
     httpServer = false;
@@ -1076,7 +1076,7 @@ rec {
   };
 
   monodoc = (import ../applications/editors/monodoc) {
-    inherit fetchurl stdenv mono gtksharp  pkgconfig;
+    inherit fetchurl stdenv mono gtksharp pkgconfig;
   };
 
   emacs = (import ../applications/editors/emacs) {
