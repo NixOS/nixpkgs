@@ -17,13 +17,17 @@ makeWrapper() {
             echo "export $varName=$value" >> $wrapper
         fi
 
-        if test "$p" = "--suffix"; then
+        if test "$p" = "--suffix" -o "$p" = "--prefix"; then
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             value=${params[$((n + 3))]}
             n=$((n + 3))
             if test -n "$value"; then
-                echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
+                if test "$p" = "--suffix"; then
+                    echo "export $varName=\$$varName\${$varName:+$separator}$value" >> $wrapper
+                else
+                    echo "export $varName=$value\${$varName:+$separator}\$$varName" >> $wrapper
+                fi
             fi
         fi
 
