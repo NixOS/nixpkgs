@@ -739,6 +739,12 @@ rec {
     ant = apacheAntBlackdown14;
   };
 
+  /*
+  mysql = (import ../servers/sql/mysql) {
+    inherit fetchurl stdenv;
+  };
+  */
+
   jetty = (import ../servers/http/jetty) {
     inherit fetchurl stdenv;
   };
@@ -777,6 +783,10 @@ rec {
   iputils = (import ../os-specific/linux/iputils) {
     inherit fetchurl stdenv kernelHeaders;
     glibc = stdenv.gcc.glibc;
+  };
+
+  procps = import ../os-specific/linux/procps {
+    inherit fetchurl stdenv ncurses;
   };
 
   

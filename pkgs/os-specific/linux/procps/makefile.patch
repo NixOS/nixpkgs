@@ -1,0 +1,58 @@
+diff -rc procps-orig/Makefile procps-2.0.11/Makefile
+*** procps-orig/Makefile	2002-12-04 21:49:07.000000000 +0100
+--- procps-2.0.11/Makefile	2005-01-21 19:20:41.092274872 +0100
+***************
+*** 3,19 ****
+  
+  export PREFIX     =  #proc# prefix for program names
+  
+! export DESTDIR    =
+! export MANDIR     =  /usr/share/man
+  export MAN1DIR    =  $(DESTDIR)$(MANDIR)/man1
+  export MAN5DIR    =  $(DESTDIR)$(MANDIR)/man5
+  export MAN8DIR    =  $(DESTDIR)$(MANDIR)/man8
+  export BINDIR     =  $(DESTDIR)/bin
+  export SBINDIR    =  $(DESTDIR)/sbin
+! export XBINDIR    =  $(DESTDIR)/usr/X11R6/bin
+! export USRBINDIR  =  $(DESTDIR)/usr/bin
+! export PROCDIR    =  $(DESTDIR)/usr/bin# /usr/proc/bin for Solaris devotees
+! export OWNERGROUP =  --owner 0 --group 0
+  export INSTALLBIN =  install --strip
+  export INSTALLLIB =  install
+  export INSTALLSCT =  install
+--- 3,19 ----
+  
+  export PREFIX     =  #proc# prefix for program names
+  
+! export DESTDIR    =  $(out)
+! export MANDIR     =  /share/man
+  export MAN1DIR    =  $(DESTDIR)$(MANDIR)/man1
+  export MAN5DIR    =  $(DESTDIR)$(MANDIR)/man5
+  export MAN8DIR    =  $(DESTDIR)$(MANDIR)/man8
+  export BINDIR     =  $(DESTDIR)/bin
+  export SBINDIR    =  $(DESTDIR)/sbin
+! export XBINDIR    =  $(DESTDIR)/bin
+! export USRBINDIR  =  $(DESTDIR)/bin
+! export PROCDIR    =  $(DESTDIR)/bin# /usr/proc/bin for Solaris devotees
+! export OWNERGROUP =  
+  export INSTALLBIN =  install --strip
+  export INSTALLLIB =  install
+  export INSTALLSCT =  install
+***************
+*** 30,36 ****
+  
+  # easy to command-line override
+  export GCC_WARN   =  -Wall -Wstrict-prototypes -Wshadow
+! export INCDIRS    =  -I/usr/include/ncurses -I/usr/X11R6/include
+  export CC         =  gcc #-ggdb # this gets compiling and linking :-)
+  export OPT        =  -O3
+  export CFLAGS     =  -D_GNU_SOURCE $(OPT) $(GCC_WARN) -I$(shell pwd) $(INCDIRS)
+--- 30,36 ----
+  
+  # easy to command-line override
+  export GCC_WARN   =  -Wall -Wstrict-prototypes -Wshadow
+! export INCDIRS    =  
+  export CC         =  gcc #-ggdb # this gets compiling and linking :-)
+  export OPT        =  -O3
+  export CFLAGS     =  -D_GNU_SOURCE $(OPT) $(GCC_WARN) -I$(shell pwd) $(INCDIRS)
+Only in procps-2.0.11/: Makefile.~1.71.~
