@@ -595,6 +595,10 @@ rec {
     inherit (gnome) libIDL;
   };
 
+  lynx = (import ../applications/networking/browsers/lynx) {
+    inherit fetchurl stdenv ncurses openssl;
+  };
+
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib;
     inherit (xlibs) libXv;

@@ -46,6 +46,7 @@ let {
     pan
     sylpheed
     firefox
+    lynx
     MPlayer
     MPlayerPlugin
     vlc
