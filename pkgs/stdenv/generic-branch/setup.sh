@@ -37,6 +37,29 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
 fi
 
     
+# Called when some build action fails.  If $succeedOnFailure is set,
+# create the file `$out/nix-support/failed' to signal failure, and
+# exit normally.  Otherwise, exit with failure.
+fail() {
+    exitCode=$?
+    if test "$succeedOnFailure" = 1; then
+        ensureDir "$out/nix-support"
+        touch "$out/nix-support/failed"
+        exit 0
+    else
+        exit $?
+    fi
+}
+
+
+# Allow the caller to augment buildInputs (it's not always possible to
+# do this before the call to setup.sh, since the PATH is empty at that
+# point; here we have a basic Unix environment).
+if test -n "$addInputsHook"; then
+    $addInputsHook
+fi
+
+
 # Recursively find all build inputs.
 findInputs()
 {
@@ -75,6 +98,11 @@ done
 addToEnv()
 {
     local pkg=$1
+
+    if test "$ignoreFailedInputs" != "1" -a -e $1/nix-support/failed; then
+        echo "failed input $1" >&2
+        fail
+    fi
 
     if test -d $1/bin; then
         export _PATH=$_PATH${_PATH:+:}$1/bin
@@ -245,7 +273,7 @@ unpackFile() {
     esac
 
     header "unpacking source archive $file (using $cmd)" 3
-    $cmd
+    $cmd || fail
     stopNest
 }
 
@@ -339,7 +367,7 @@ patchW() {
 
     for i in $patches; do
         header "applying patch $i" 3
-        patch -p1 < $i
+        patch -p1 < $i || fail
         stopNest
     done
 }
@@ -399,7 +427,7 @@ configureW() {
     fi
 
     echo "configure flags: $configureFlags"
-    $configureScript $configureFlags
+    $configureScript $configureFlags || fail
 
     if test -n "$postConfigure"; then
         $postConfigure
@@ -423,7 +451,7 @@ buildW() {
     fi
 
     echo "make flags: $makeFlags"
-    make $makeFlags
+    make $makeFlags || fail
 }
 
 
@@ -450,7 +478,7 @@ checkW() {
     fi
 
     echo "check flags: $checkFlags"
-    make $checkFlags $checkTarget
+    make $checkFlags $checkTarget || fail
 }
 
 
@@ -480,16 +508,16 @@ installW() {
     
     if test -z "$dontMakeInstall"; then
         echo "install flags: $installFlags"
-        make install $installFlags
+        make install $installFlags || fail
     fi
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find "$prefix" -name "*.a" -exec echo stripping {} \; -exec strip -S {} \;
+        find "$prefix" -name "*.a" -exec echo stripping {} \; \
+            -exec strip -S {} \; || fail
     fi
 
     if test -n "$propagatedBuildInputs"; then
-        ensureDir "$out"
-        if ! test -x "$/nix-support"; then mkdir "$out/nix-support"; fi
+        ensureDir "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
@@ -522,10 +550,9 @@ distW() {
     fi
 
     echo "dist flags: $distFlags"
-    make $distFlags $distTarget
+    make $distFlags $distTarget || fail
 
     if test "$dontCopyDist" != 1; then
-        ensureDir "$out"
         ensureDir "$out/tarballs"
 
         if test -z "$tarballs"; then
