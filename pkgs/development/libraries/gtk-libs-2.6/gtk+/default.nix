@@ -12,7 +12,7 @@ assert x11.buildClientLibs;
 stdenv.mkDerivation {
   name = "gtk+-2.6.4";
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/gtk+/2.6/gtk+-2.6.4.tar.bz2;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gtk+-2.6.4.tar.bz2;
     md5 = "4749fce7b082b784a71a076aa586dc25";
   };
   buildInputs = [pkgconfig perl libtiff libjpeg libpng];

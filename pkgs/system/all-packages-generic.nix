@@ -774,7 +774,7 @@ rec {
   perlXMLLibXML = import ../development/perl-modules/generic perl {
     name = "XML-LibXML-1.58";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/P/PH/PHISH/XML-LibXML-1.58.tar.gz;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-LibXML-1.58.tar.gz;
       md5 = "4691fc436e5c0f22787f5b4a54fc56b0";
     };
     buildInputs = [libxml2];
@@ -784,7 +784,7 @@ rec {
   perlXMLLibXMLCommon = import ../development/perl-modules/generic perl {
     name = "XML-LibXML-Common-0.13";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/P/PH/PHISH/XML-LibXML-Common-0.13.tar.gz;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-LibXML-Common-0.13.tar.gz;
       md5 = "13b6d93f53375d15fd11922216249659";
     };
     buildInputs = [libxml2];
@@ -793,7 +793,7 @@ rec {
   perlXMLSAX = import ../development/perl-modules/generic perl {
     name = "XML-SAX-0.12";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/M/MS/MSERGEANT/XML-SAX-0.12.tar.gz;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-SAX-0.12.tar.gz;
       md5 = "bff58bd077a9693fc8cf32e2b95f571f";
     };
     propagatedBuildInputs = [perlXMLNamespaceSupport];
@@ -802,7 +802,7 @@ rec {
   perlXMLNamespaceSupport = import ../development/perl-modules/generic perl {
     name = "XML-NamespaceSupport-1.08";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RB/RBERJON/XML-NamespaceSupport-1.08.tar.gz;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-NamespaceSupport-1.08.tar.gz;
       md5 = "81bd5ae772906d0579c10061ed735dc8";
     };
     buildInputs = [];
@@ -828,7 +828,7 @@ rec {
   perlXMLSimple = import ../development/perl-modules/generic perl {
     name = "XML-Simple-2.14";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GR/GRANTM/XML-Simple-2.14.tar.gz;
+      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-Simple-2.14.tar.gz;
       md5 = "f321058271815de28d214c8efb9091f9";
     };
     propagatedBuildInputs = [perlXMLParser];
