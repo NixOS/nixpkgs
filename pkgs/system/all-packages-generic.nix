@@ -248,6 +248,12 @@
     getopt = getopt;
   };
 
+  toolbuslib051 = (import ../development/tools/parsing/toolbuslib/toolbuslib-0.5.1.nix) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+    aterm = aterm205;
+  };
+
   strategoxt = (import ../development/compilers/strategoxt) {
     fetchurl = fetchurl;
     stdenv = stdenv;
