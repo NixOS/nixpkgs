@@ -50,14 +50,14 @@ sub addPkg {
 
     createLinks("$pkgdir", "$selfdir");
 
-    if (-f "$pkgdir/envpkgs") {
-	my $envpkgs = `cat $pkgdir/envpkgs`;
-	chomp $envpkgs;
-	my @envpkgs = split / +/, $envpkgs;
-	foreach my $envpkg (@envpkgs) {
-	    addPkg($envpkg);
-	}
-    }
+#    if (-f "$pkgdir/envpkgs") {
+#	my $envpkgs = `cat $pkgdir/envpkgs`;
+#	chomp $envpkgs;
+#	my @envpkgs = split / +/, $envpkgs;
+#	foreach my $envpkg (@envpkgs) {
+#	    addPkg($envpkg);
+#	}
+#    }
 }
 
 

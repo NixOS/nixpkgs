@@ -1,5 +1,5 @@
 Package(
-  [ ("name", "db-4.0.14")
+  [ ("name", "db4-4.0.14")
   , ("build", Relative("db4/db4-build.sh"))
 
   , ("src", App(IncludeFix("fetchurl/fetchurl.fix"),

@@ -7,8 +7,7 @@ addtoenv()
     fi
 
     if test -d $1/lib; then
-        export LIBRARY_PATH=$1/lib:$LIBRARY_PATH
-        export LD_LIBRARY_PATH=$1/lib:$LD_LIBRARY_PATH
+	export NIX_LDFLAGS="-L $1/lib -Wl,-rpath,$1/lib $NIX_LDFLAGS"
     fi
 
     if test -d $1/lib/pkgconfig; then
@@ -28,3 +27,5 @@ envpkgs=
 for i in $oldenvpkgs; do
     addtoenv $i
 done
+
+export NIX_LDFLAGS="-Wl,-rpath,$out/lib $NIX_LDFLAGS"

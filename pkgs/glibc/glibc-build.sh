@@ -15,7 +15,6 @@ make localedata/install-locales || exit 1
 strip -S $out/lib/*.a $out/lib/*.so $out/lib/gconv/*.so
 strip -s $out/bin/* $out/sbin/* $out/libexec/*
 
-ln -s /etc/ld.so.conf $out/etc/ld.so.conf || exit 1
-$out/sbin/ldconfig /lib /usr/lib || exit 1
+ln -sf /etc/ld.so.cache $out/etc/ld.so.cache || exit 1
 
 exit 0

@@ -1,9 +1,11 @@
 #! /bin/sh
 
+export NIX_LDFLAGS=-Wl,-s
+
 . $stdenv/setup || exit 1
 
 envpkgs="$ssl $db4 $httpd $swig $libxml"
-. $setenv
+. $setenv || exit 1
 
 if test $localServer; then
     extraflags="--with-berkeley-db=$db4 $extraflags"
@@ -26,7 +28,7 @@ echo "extra flags: $extraflags"
 
 tar xvfz $src || exit 1
 cd subversion-* || exit 1
-LDFLAGS=-Wl,-S ./configure --prefix=$out $extraflags \
+./configure --prefix=$out $extraflags \
  --without-gdbm --disable-static || exit 1
 make $extramakeflags || exit 1
 make install $extramakeflags || exit 1
