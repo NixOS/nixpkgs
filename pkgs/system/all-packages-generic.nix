@@ -106,6 +106,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  bsdiff = (import ../tools/compression/bsdiff) {
+    inherit fetchurl stdenv;
+  };
+
   which = (import ../tools/system/which) {
     inherit fetchurl stdenv;
   };

@@ -15,6 +15,7 @@ let {
     gzip
     bzip2
     zdelta
+    bsdiff
     wget
     par2cmdline
     cksfv
