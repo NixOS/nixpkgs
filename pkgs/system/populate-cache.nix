@@ -1,14 +1,31 @@
 let {
   pkgs = import ./i686-linux.nix;
   body = 
-    [ pkgs.zip
+    [ pkgs.coreutils
+      pkgs.findutils
+      pkgs.diffutils
+      pkgs.gnused
+      pkgs.gnugrep
+      pkgs.gawk
+      pkgs.gnutar
+      pkgs.zip
       pkgs.unzip
-      pkgs.valgrind
-      pkgs.bisonnew
-      pkgs.flexnew
+      pkgs.gzip
+      pkgs.bzip2
+      pkgs.wget
       pkgs.par2cmdline
       pkgs.cksfv
       pkgs.graphviz
+      pkgs.bash
+      pkgs.binutils
+      pkgs.gnum4
+      pkgs.valgrind
+      pkgs.gnumake
+      pkgs.bisonnew
+      pkgs.flexnew
+      pkgs.gcc
+      pkgs.perl
+      pkgs.python
       pkgs.strategoxt093
       pkgs.libxml2
       pkgs.libxslt
