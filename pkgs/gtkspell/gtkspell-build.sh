@@ -3,8 +3,7 @@
 envpkgs="$gtk $pspell"
 . $stdenv/setup || exit 1
 export PATH=$pkgconfig/bin:$PATH
-
-export C_INCLUDE_PATH=$pspell/include:$C_INCLUDE_PATH
+export NIX_CFLAGS_COMPILE="-I$pspell/include $NIX_CFLAGS_COMPILE"
 
 tar xvfz $src || exit 1
 cd gtkspell-* || exit 1

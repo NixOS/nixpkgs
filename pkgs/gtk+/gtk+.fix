@@ -14,5 +14,9 @@ Package(
   , ("atk", IncludeFix("atk/atk.fix"))
   , ("pango", IncludeFix("pango/pango.fix"))
   , ("perl", IncludeFix("perl/perl.fix"))
+  , ("tiff", IncludeFix("libtiff/libtiff.fix"))
+  , ("jpeg", IncludeFix("libjpeg/libjpeg.fix"))
+  , ("png", IncludeFix("libpng/libpng.fix"))
+  , ("zlib", IncludeFix("zlib/zlib.fix"))
   ]
 )
