@@ -507,6 +507,18 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sdf_23 = {
+    errorsupport = sdf2_bundle;
+    toolbuslib   = sdf2_bundle;
+    ptsupport    = sdf2_bundle;
+    asfsupport   = sdf2_bundle;
+    sdfsupport   = sdf2_bundle;
+    sglr         = sdf2_bundle;
+    ascsupport   = sdf2_bundle;
+    pgen         = sdf2_bundle;
+    asflibrary   = sdf2_bundle;
+  };
+
   sdf_22 = (import ../development/tools/parsing/sdf2/bundle-2.2.nix) {
     inherit fetchurl stdenv getopt aterm;
   };
