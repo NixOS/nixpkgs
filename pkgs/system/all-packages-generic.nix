@@ -401,6 +401,7 @@
     gnet = gnet;
     libxml2 = libxml2;
     perl = perl;
+    pcre = pcre;
   };
 
   sylpheed = (import ../applications/networking/mailreaders/sylpheed) {

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-buildinputs="$pkgconfig $gtk $gtkspell $gnet $libxml2 $perl"
+buildinputs="$pkgconfig $gtk $gtkspell $gnet $libxml2 $perl $pcre"
 . $stdenv/setup || exit 1
 
 tar xvfj $src || exit 1
