@@ -872,6 +872,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  nano = (import ../applications/editors/nano) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   vim = (import ../applications/editors/vim) {
     inherit fetchurl stdenv ncurses;
   };
