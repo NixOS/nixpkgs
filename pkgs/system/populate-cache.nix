@@ -63,6 +63,7 @@ let {
     less
     screen
     openssl
+    mktemp
   ;};
 
 

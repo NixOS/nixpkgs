@@ -133,6 +133,10 @@ rec {
     inherit fetchurl stdenv zlib openssl;
   };
 
+  mktemp = (import ../tools/security/mktemp) {
+    inherit fetchurl stdenv;
+  };
+
   ### SHELLS
 
   bash = (import ../shells/bash) {
@@ -276,25 +280,25 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
-  strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf_22;
-  };
+  #strategoxt = (import ../development/compilers/strategoxt) {
+  #  inherit fetchurl stdenv aterm;
+  #  sdf = sdf_22;
+  #};
 
-  strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
-    inherit fetchsvn stdenv autoconf automake libtool which aterm;
-    sdf = sdf_22;
-  };
+  #strategoxtsvn = (import ../development/compilers/strategoxt/trunk.nix) {
+  #  inherit fetchsvn stdenv autoconf automake libtool which aterm;
+  #  sdf = sdf_22;
+  #};
 
-  strategoxtdailydist = (import ../development/compilers/strategoxt/dailydist.nix) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf_22;
-  };
+  #strategoxtdailydist = (import ../development/compilers/strategoxt/dailydist.nix) {
+  #  inherit fetchurl stdenv aterm;
+  #  sdf = sdf_22;
+  #};
 
-  tiger = (import ../development/compilers/tiger) {
-    inherit fetchurl stdenv aterm strategoxt;
-    sdf = sdf_22;
-  };
+  #tiger = (import ../development/compilers/tiger) {
+  #  inherit fetchurl stdenv aterm strategoxt;
+  #  sdf = sdf_22;
+  #};
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
     inherit fetchurl stdenv perl;
