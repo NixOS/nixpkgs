@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   src = /home/eelco/monodevelop-0.6-pre2315.tar.bz2;
 
+  makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
+  
   patches = [./prefix.patch];
   
   buildInputs = [
@@ -18,5 +20,5 @@ stdenv.mkDerivation {
     gtkmozembedsharp monodoc
   ];
   
-  inherit perlXMLParser monodoc gtksharp;
+  inherit perlXMLParser monodoc gtksharp gtkmozembedsharp gtksourceviewsharp;
 }
