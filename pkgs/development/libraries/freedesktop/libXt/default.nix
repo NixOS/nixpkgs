@@ -1,13 +1,11 @@
-{stdenv, fetchurl, pkgconfig, libX11, libSM, patch}:
+{stdenv, fetchurl, pkgconfig, libX11, libSM}:
 
 stdenv.mkDerivation {
-  name = "libXt-0.1.4";
+  name = "libXt-0.1.4-cvs";
   src = fetchurl {
-    url = http://freedesktop.org/~xlibs/release/xlibs-1.0/libXt-0.1.4.tar.bz2;
-    md5 = "32b6528c9deb058d1a9ed17ffa848df8";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/libXt-0.1.4-cvs.tar.bz2;
+    md5 = "65fd5ad321e846417845e80f44131ea5";
   };
-  buildInputs = [pkgconfig libX11 patch];
-  propagatedBuildInputs = [libSM];
-  # This patch should become unnecessary soon; already been fixed in CVS.
-  patches = [./patch];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [libX11 libSM];
 }
