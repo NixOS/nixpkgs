@@ -749,6 +749,7 @@ rec {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
   };
 
   thunderbird = 

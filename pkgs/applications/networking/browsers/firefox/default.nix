@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL}:
+{stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL, libXi}:
 
 assert pkgconfig != null && gtk != null && perl != null
   && zip != null && libIDL != null;
@@ -14,5 +14,5 @@ stdenv.mkDerivation {
     md5 = "b81ebc5f01448313add23ed44c47cf5e";
   };
 
-  buildInputs = [pkgconfig gtk perl zip libIDL];
+  buildInputs = [pkgconfig gtk perl zip libIDL libXi];
 }
