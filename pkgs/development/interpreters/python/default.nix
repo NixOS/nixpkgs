@@ -3,12 +3,13 @@
 assert zlibSupport -> zlib != null;
 
 stdenv.mkDerivation {
-  name = "python-2.3.3";
-  builder = ./builder.sh;
+  name = "python-2.3.4";
   src = fetchurl {
-      url = http://www.python.org/ftp/python/2.3.3/Python-2.3.3.tar.bz2;
-      md5 = "70ada9f65742ab2c77a96bcd6dffd9b1";
+    url = http://www.python.org/ftp/python/2.3.4/Python-2.3.4.tar.bz2;
+    md5 = "a2c089faa2726c142419c03472fc4063";
   };
-  zlib = if zlibSupport then zlib else null;
+  buildInputs = [
+    (if zlibSupport then zlib else null)
+  ];
   inherit zlibSupport;
 }
