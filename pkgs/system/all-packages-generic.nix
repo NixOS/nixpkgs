@@ -32,6 +32,11 @@
     stdenv = stdenv;
   };
 
+  getopt = (import ../tools/misc/getopt) {
+    fetchurl = fetchurl;
+    stdenv = stdenv;
+  };
+
   diffutils = (import ../tools/text/diffutils) {
     fetchurl = fetchurl;
     stdenv = stdenv;
