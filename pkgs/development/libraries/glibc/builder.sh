@@ -14,6 +14,15 @@ export LD_LIBRARY_PATH=$glibc/lib
 export PWD_P=$(type -tP pwd)
 
 
+postUnpack=postUnpack
+postUnpack() {
+    cd $sourceRoot
+    unpackFile $linuxthreadsSrc
+    rm -rf nptl
+    cd ..
+}
+
+
 preConfigure=preConfigure
 preConfigure() {
 
