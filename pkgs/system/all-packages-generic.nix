@@ -48,6 +48,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  patch = if stdenv.system == "powerpc-darwin" then null else gnupatch;
+
   gnused = (import ../tools/text/gnused) {
     inherit fetchurl stdenv;
   };
@@ -204,8 +206,7 @@ rec {
   };
 
   gnumake = (import ../development/tools/build-managers/gnumake) {
-    inherit fetchurl stdenv;
-    patch = gnupatch;
+    inherit fetchurl stdenv patch;
   };
 
   bison = (import ../development/tools/parsing/bison) {
@@ -237,8 +238,7 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.4) {
-      inherit fetchurl stdenv noSysDirs;
-      patch = gnupatch;
+      inherit fetchurl stdenv patch noSysDirs;
       profiledCompiler = true;
     };
     binutils = stdenv.gcc.binutils;
@@ -250,8 +250,7 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-2.95) {
-      inherit fetchurl stdenv noSysDirs;
-      patch = gnupatch;
+      inherit fetchurl stdenv patch noSysDirs;
     };
     binutils = stdenv.gcc.binutils;
     glibc = stdenv.gcc.glibc;
@@ -331,15 +330,14 @@ rec {
   };
 
   realPerl = (import ../development/interpreters/perl) {
-    inherit fetchurl stdenv;
-    patch = gnupatch;
+    inherit fetchurl stdenv patch;
   };
 
   sysPerl = (import ../development/interpreters/sys-perl) {
     inherit stdenv;
   };
 
-  perl = if stdenv.system == "powerpc-darwin7.3.0" then sysPerl else realPerl;
+  perl = if stdenv.system == "powerpc-darwin" then sysPerl else realPerl;
 
   python = (import ../development/interpreters/python) {
     inherit fetchurl stdenv zlib;
@@ -359,8 +357,7 @@ rec {
   };
 
   glibc = (import ../development/libraries/glibc) {
-    inherit fetchurl stdenv kernelHeaders;
-    patch = gnupatch;
+    inherit fetchurl stdenv kernelHeaders patch;
   };
 
   aterm = (import ../development/libraries/aterm) {
@@ -411,9 +408,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  zlib = (import ../development/libraries/zlib) {
-    inherit fetchurl stdenv;
-  };
+  zlib = if stdenv.system == "powerpc-darwin" then
+    (import ../development/libraries/zlib-mac-fix) {
+      inherit fetchurl stdenv patch;
+    }
+  else
+    (import ../development/libraries/zlib) {
+      inherit fetchurl stdenv;
+    };
 
   libjpeg = (import ../development/libraries/libjpeg) {
     inherit fetchurl stdenv;
@@ -509,8 +511,7 @@ rec {
   };
 
   xlibs = (import ../development/libraries/xlibs) {
-    inherit fetchurl stdenv pkgconfig freetype expat;
-    patch = gnupatch;
+    inherit fetchurl stdenv pkgconfig freetype expat patch;
   };
 
   mesa = (import ../development/libraries/mesa) {
@@ -564,13 +565,11 @@ rec {
   };
 
   utillinux = (import ../os-specific/linux/util-linux) {
-    inherit fetchurl stdenv;
-    patch = gnupatch;
+    inherit fetchurl stdenv patch;
   };
 
   sysvinit = (import ../os-specific/linux/sysvinit) {
-    inherit fetchurl stdenv;
-    patch = gnupatch;
+    inherit fetchurl stdenv patch;
   };
 
   e2fsprogs = (import ../os-specific/linux/e2fsprogs) {
@@ -710,9 +709,8 @@ rec {
   ### MISC
 
   uml = (import ../misc/uml) {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl patch;
     m4 = gnum4;
-    patch = gnupatch;
   };
 
   umlutilities = (import ../misc/uml-utilities) {

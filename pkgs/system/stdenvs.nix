@@ -157,10 +157,11 @@
     genericStdenv = import ../stdenv/generic-branch;
     inherit gccWrapper;
   };
-  
-  stdenvLinuxTestPkgs = allPackages {
-    stdenv = stdenvLinuxTest;
-    bootCurl = stdenvLinuxBoot2Pkgs.curl;
+
+  stdenvDarwinTest = (import ../stdenv/darwin-branch) {
+    stdenv = stdenvInitial;
+    genericStdenv = import ../stdenv/generic-branch;
+    inherit gccWrapper;
   };
-  
+    
 }

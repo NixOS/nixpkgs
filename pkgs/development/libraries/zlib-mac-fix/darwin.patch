@@ -1,0 +1,22 @@
+diff -rc zlib-1.2.1/configure zlib-patched/configure
+*** zlib-1.2.1/configure	2003-11-17 04:50:39.000000000 +0100
+--- zlib-patched/configure	2004-08-05 19:18:59.000000000 +0200
+***************
+*** 89,97 ****
+               SHAREDLIB=libz$shared_ext
+               SHAREDLIBV=libz.$VER$shared_ext
+               SHAREDLIBM=libz.$VER1$shared_ext
+!              LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name /usr/lib/$SHAREDLIBV -compatibility_version $VER2 -current_version $VER"}
+!              libdir='/usr/lib'
+!              includedir='/usr/include';;
+    *)             LDSHARED=${LDSHARED-"$cc -shared"};;
+    esac
+  else
+--- 89,95 ----
+               SHAREDLIB=libz$shared_ext
+               SHAREDLIBV=libz.$VER$shared_ext
+               SHAREDLIBM=libz.$VER1$shared_ext
+!              LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name \${libdir}/$SHAREDLIBV -compatibility_version $VER2 -current_version $VER"};;
+    *)             LDSHARED=${LDSHARED-"$cc -shared"};;
+    esac
+  else

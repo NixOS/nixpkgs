@@ -450,8 +450,16 @@ buildW() {
         return
     fi
 
+    if test -n "$preBuild"; then
+        $preBuild
+    fi
+    
     echo "make flags: $makeFlags"
     make $makeFlags || fail
+
+    if test -n "$postBuild"; then
+        $postBuild
+    fi
 }
 
 
@@ -545,6 +553,10 @@ distW() {
         return
     fi
 
+    if test -n "$preDist"; then
+        $preDist
+    fi
+    
     if test -z "$distTarget"; then
         distTarget="dist"
     fi
@@ -562,6 +574,10 @@ distW() {
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
         cp -pvd $tarballs $out/tarballs
+    fi
+
+    if test -n "$postDist"; then
+        $postDist
     fi
 }
 
