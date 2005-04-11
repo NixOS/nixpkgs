@@ -90,14 +90,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  # !!! fix this
-  unzip = if stdenv.system == "i686-linux" then unzip550 else unzip552;
-
-  unzip550 = (import ../tools/archivers/unzip) {
-    inherit fetchurl stdenv;
-  };
-
-  unzip552 = (import ../tools/archivers/unzip-5.52) {
+  unzip = import ../tools/archivers/unzip {
     inherit fetchurl stdenv;
   };
 

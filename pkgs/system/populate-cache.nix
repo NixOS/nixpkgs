@@ -92,7 +92,7 @@ let {
   ;};
 
   powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)
-    unzip552
+    unzip
     aterm
     subversion
     bisonnew
