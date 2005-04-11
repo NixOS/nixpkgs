@@ -1,9 +1,9 @@
 {stdenv, fetchurl, perl}: stdenv.mkDerivation {
-  name = "openssl-0.9.7d";
+  name = "openssl-0.9.7f";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/openssl-0.9.7d.tar.gz;
-    md5 = "1b49e90fc8a75c3a507c0a624529aca5";
+    url = http://www.openssl.org/source/openssl-0.9.7f.tar.gz;
+    md5 = "b2d37d7eb8a5a5040d834105d5ae1a50";
   };
   inherit perl;
 }
