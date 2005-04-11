@@ -1,11 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "zlib-1.2.1";
+  name = "zlib-1.2.2";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/zlib-1.2.1.tar.gz;
-    md5 = "ef1cb003448b4a53517b8f25adb12452";
+    url = http://www.gzip.org/zlib/zlib-1.2.2.tar.gz;
+    md5 = "68bd51aaa6558c3bc3fd4890e53413de";
   };
   configureFlags = "--shared";
-  patches = [./darwin.patch];
 }
