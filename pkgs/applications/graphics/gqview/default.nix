@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "gqview-2.0.0";
 
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/gqview/gqview-2.0.0.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gqview-2.0.0.tar.gz;
     md5 = "421c9a79827e91e394bdfc924071d66f";
   };
 
