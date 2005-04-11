@@ -10,10 +10,10 @@ assert x11.buildClientLibs;
 #assert x11 == pango.x11;
 
 stdenv.mkDerivation {
-  name = "gtk+-2.6.4";
+  name = "gtk+-2.6.6";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gtk+-2.6.4.tar.bz2;
-    md5 = "4749fce7b082b784a71a076aa586dc25";
+    url = http://ftp.gnome.org/pub/GNOME/sources/gtk+/2.6/gtk+-2.6.6.tar.bz2;
+    md5 = "6bf5a71a7ea6a02821fd0c9edab25904";
   };
   buildInputs = [pkgconfig perl libtiff libjpeg libpng];
   propagatedBuildInputs = [x11 glib atk pango];
