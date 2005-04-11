@@ -1,4 +1,15 @@
-Nix Packages 0.7
+Nix Packages 0.8 (April 11, 2005)
+
+* This release is mostly to remain synchronised with the changed
+  hashing scheme in Nix 0.8.
+
+* Notable updates:
+
+  - Adobe Reader 7.0
+  - Various security updates (zlib 1.2.2, etc.)
+
+
+Nix Packages 0.7 (March 14, 2005)
 
 * The bootstrap process for the standard build environment on Linux
   (stdenv-linux) has been improved.  It is no longer dependent in its
