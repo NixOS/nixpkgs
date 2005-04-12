@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   name = "nix-0.8";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/nix/nix-0.7/nix-0.8.tar.gz;
+    url = http://catamaran.labs.cs.uu.nl/dist/nix/nix-0.8/nix-0.8.tar.gz;
     md5 = "ec09cf46cfe6467d899b07cf47fc85b6";
   };
   buildInputs = [aterm bdb perl curl];
