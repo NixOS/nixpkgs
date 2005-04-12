@@ -32,6 +32,7 @@ if test -z "$hash"; then
         dummyMode=1
         tmpPath1=/tmp/nix-prefetch-svn-$$ # !!! security?
     fi
+    rm -f $tmpPath1
 
     # Perform the checkout.
     svn export -r "$rev" "$url" $tmpPath1 >&2
