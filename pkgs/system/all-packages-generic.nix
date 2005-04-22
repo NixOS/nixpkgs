@@ -28,6 +28,8 @@ rec {
     inherit stdenv subversion nix;
   };
 
+  substituter = ../build-support/substitute/substitute.sh;
+
 
   ### TOOLS
 
@@ -311,6 +313,17 @@ rec {
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.3) {
       inherit fetchurl stdenv noSysDirs;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
+  gcc40 = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-4.0) {
+      inherit fetchurl stdenv noSysDirs;
+      profiledCompiler = true;
     };
     inherit (stdenv.gcc) binutils glibc;
     inherit stdenv;

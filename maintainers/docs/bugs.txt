@@ -53,3 +53,6 @@ include/X11/IntrinsicP.h:202:25: X11/ObjectP.h: No such file or directory
 * In gtksourceview-sharp: does the prefix patch cause problems (e.g.,
   makefile.am says "mimeinfodir should be the same as the gnome
   prefix")?
+
+
+* fgrep/egrep: these fail if grep is not in the $PATH.
