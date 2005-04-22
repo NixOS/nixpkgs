@@ -30,6 +30,8 @@ rec {
 
   substituter = ../build-support/substitute/substitute.sh;
 
+  makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
+
 
   ### TOOLS
 
@@ -133,8 +135,7 @@ rec {
   };
 
   bittorrent = (import ../tools/networking/bittorrent) {
-    inherit fetchurl stdenv;
-    wxPython = wxPython24;
+    inherit fetchurl stdenv python pygtk makeWrapper;
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
@@ -917,6 +918,11 @@ rec {
     wxGTK = wxGTK24;
   };
 
+  pygtk = (import ../development/python-modules/pygtk) {
+    inherit fetchurl stdenv python pkgconfig;
+    inherit (gtkLibs) glib gtk;
+  };
+  
   readline = (import ../development/libraries/readline) {
     inherit fetchurl stdenv ncurses;
   };

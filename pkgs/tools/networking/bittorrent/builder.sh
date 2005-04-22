@@ -1,5 +1,5 @@
-buildInputs="$python $wxPython"
 . $stdenv/setup
+. $makeWrapper
 
 buildPhase=buildPhase
 buildPhase() {
@@ -11,14 +11,12 @@ installPhase() {
     python setup.py install --prefix=$out
 
     # Create wrappers that set the environment correctly.
-    mv $out/bin $out/bin-orig
-    mkdir $out/bin
-    for i in $(cd $out/bin-orig && ls); do
-        cat > $out/bin/$i <<EOF
-#! /bin/sh
-PYTHONPATH=$out/lib/python2.3/site-packages:$wxPython/lib/python2.3/site-packages exec $out/bin-orig/$i "\$@"
-EOF
-        chmod +x $out/bin/$i
+    for i in $(cd $out/bin && ls); do
+        # Note: the GUI apps except to be in a directory called `bin',
+        # so don't move them. 
+        mv $out/bin/$i $out/bin/.orig-$i
+        makeWrapper $out/bin/.orig-$i $out/bin/$i \
+            --set PYTHONPATH "$out/lib/python2.3/site-packages:$pygtk/lib/python2.3/site-packages/gtk-2.0"
     done
 }
 

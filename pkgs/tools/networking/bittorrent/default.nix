@@ -1,14 +1,12 @@
-{stdenv, fetchurl, wxPython}:
-
-assert wxPython.python.zlibSupport;
+{stdenv, fetchurl, python, pygtk, makeWrapper}:
 
 stdenv.mkDerivation {
-  name = "bittorrent-3.4.2";
+  name = "bittorrent-4.0.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/BitTorrent-3.4.2.tar.gz;
-    md5 = "b854f25a33289565bcaeaded04955c1a";
+    url = http://www.bittorrent.com/dl/BitTorrent-4.0.1.tar.gz;
+    md5 = "e890d856d43b3d0af14b28714bc5801a";
   };
-  inherit wxPython;
-  inherit (wxPython) python;
+  buildInputs = [python pygtk];
+  inherit python pygtk makeWrapper;
 }
