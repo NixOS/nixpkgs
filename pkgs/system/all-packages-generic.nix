@@ -233,6 +233,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  pkgconfig017x = (import ../development/tools/misc/pkgconfig/pkgconfig-0.17.2.nix) {
+    inherit fetchurl stdenv;
+  };
+
   strace = (import ../development/tools/misc/strace) {
     inherit fetchurl stdenv;
   };
