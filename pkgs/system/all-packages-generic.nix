@@ -1289,6 +1289,10 @@ rec {
   };
   */
 
+  tetex = (import ../misc/tex/tetex) {
+    inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
+  };
+
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm perl;
     curl = bootCurl; /* !!! ugly */
