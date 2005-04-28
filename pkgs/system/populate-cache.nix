@@ -83,6 +83,7 @@ let {
     qt3
     xmltv
     mythtv
+    tetex
 
     mysql
     postgresql
