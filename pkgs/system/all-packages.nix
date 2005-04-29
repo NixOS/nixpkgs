@@ -4,7 +4,7 @@
 # `all-packages-generic.nix' with one of the standard build
 # environments defined in `stdenvs.nix'.
 
-{system}: let {
+{system ? __currentSystem}: let {
   allPackages = import ./all-packages-generic.nix;
 
   stdenvs = import ./stdenvs.nix {inherit system allPackages;};
