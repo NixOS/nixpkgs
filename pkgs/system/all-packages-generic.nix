@@ -1293,6 +1293,10 @@ rec {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
 
+  ghostscript = (import ../misc/ghostscript) {
+    inherit fetchurl stdenv libjpeg libpng zlib;
+  };
+
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm perl;
     curl = bootCurl; /* !!! ugly */
