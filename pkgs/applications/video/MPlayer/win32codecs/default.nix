@@ -1,8 +1,8 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "MPlayer-codecs-essential-20050115";
+  name = "MPlayer-codecs-essential-20050412";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/essential-20050115.tar.bz2;
-    md5 = "b627e5710c6f2bf38fc2a6ef81c13be8";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/codecs/essential-20050412.tar.bz2;
+    md5 = "5fe89bb095bdf9b4f9cda5479dbde906";
   };
 }

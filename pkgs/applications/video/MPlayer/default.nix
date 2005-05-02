@@ -7,12 +7,12 @@ assert xvSupport -> libXv != null;
 assert theoraSupport -> libtheora != null;
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0pre6";
+  name = "MPlayer-1.0pre7";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/MPlayer-1.0pre6a.tar.bz2;
-    md5 = "a812d945b884c2e2fa7f90c57cd76bff";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre7.tar.bz2;
+    md5 = "5fadd6957d3aab989cd760ff38fb8fdf";
   };
   fonts = fetchurl {
     url = http://catamaran.labs.cs.uu.nl/dist/tarballs/font-arial-iso-8859-1.tar.bz2;
