@@ -410,43 +410,6 @@ diff -rc aterm-2.3.1-orig/configure aterm-2.3.1/configure
      fi;
   
   fi;
-diff -rc aterm-2.3.1-orig/configure.in aterm-2.3.1/configure.in
-*** aterm-2.3.1-orig/configure.in	2004-09-16 13:45:27.000000000 +0200
---- aterm-2.3.1/configure.in	2005-05-02 18:32:12.000000000 +0200
-***************
-*** 35,41 ****
-  INCL_PROF=""
-  
-  CC_NS=gcc
-! CFLAGS_NS="-Wall -DNDEBUG -O -DXGC_VERBOSE -DWITH_STATS" # " -O2" disabled due to gcc optimizer bugs
-  LFLAGS_NS=""
-  DEFS_NS="\$(DEFS) -DNO_SHARING"
-  INCL_NS=""
---- 35,41 ----
-  INCL_PROF=""
-  
-  CC_NS=gcc
-! CFLAGS_NS="-Wall -DNDEBUG -O3 -DXGC_VERBOSE -DWITH_STATS" # " -O2" disabled due to gcc optimizer bugs
-  LFLAGS_NS=""
-  DEFS_NS="\$(DEFS) -DNO_SHARING"
-  INCL_NS=""
-***************
-*** 89,95 ****
-     [  --with-cflags=CFLAGS     standard options of C compiler],
-     CFLAGS=${withval},
-     if test "a${GCC}" = "ayes"; then
-!      CFLAGS="-Wall -DNDEBUG -O -DXGC_VERBOSE -DXHASHPEM  -DWITH_STATS" # " -O2" disabled due to gcc optimizer bugs
-     fi;
-  )
-  
---- 89,95 ----
-     [  --with-cflags=CFLAGS     standard options of C compiler],
-     CFLAGS=${withval},
-     if test "a${GCC}" = "ayes"; then
-!      CFLAGS="-Wall -DNDEBUG -O3 -DXGC_VERBOSE -DXHASHPEM  -DWITH_STATS" # " -O2" disabled due to gcc optimizer bugs
-     fi;
-  )
-  
 diff -rc aterm-2.3.1-orig/README aterm-2.3.1/README
 *** aterm-2.3.1-orig/README	2002-01-16 14:19:35.000000000 +0100
 --- aterm-2.3.1/README	2005-05-02 18:37:48.000000000 +0200
