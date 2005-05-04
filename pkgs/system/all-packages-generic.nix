@@ -489,6 +489,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  ruby = (import ../development/interpreters/ruby) {
+    inherit fetchurl stdenv;
+  };
+
   dylan = (import ../development/compilers/gwydion-dylan) {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
     dylan =
