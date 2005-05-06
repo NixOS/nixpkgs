@@ -143,6 +143,10 @@ rec {
     inherit (xlibs) libXaw;
   };
 
+  gnuplot = (import ../tools/graphics/gnuplot) {
+    inherit fetchurl stdenv zlib libpng texinfo;
+  };
+
   exif = (import ../tools/graphics/exif) {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
