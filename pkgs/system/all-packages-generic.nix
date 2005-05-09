@@ -543,6 +543,10 @@ rec {
     j2sdk = blackdown;
   };
 
+  cil = (import ../development/libraries/cil) {
+    inherit stdenv fetchurl ocaml perl;
+  };
+
   pcre = (import ../development/libraries/pcre) {
     inherit fetchurl stdenv;
   };
