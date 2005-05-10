@@ -487,7 +487,7 @@ rec {
     inherit stdenv;
   };
 
-  perl = if stdenv.system == "powerpc-darwin" then sysPerl else realPerl;
+  perl = if stdenv.system != "i686-linux" then sysPerl else realPerl;
 
   python = (import ../development/interpreters/python) {
     inherit fetchurl stdenv zlib;
@@ -602,6 +602,7 @@ rec {
 
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
+    pythonSupport = stdenv.system == "i686-linux";
   };
 
   libxslt = (import ../development/libraries/libxslt) {

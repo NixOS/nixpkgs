@@ -69,6 +69,22 @@
   };
 
 
+  # FreeBSD standard environment.  Right now this is more or less the
+  # same as the native environemnt.  Eventually we'll want a pure
+  # environment similar to stdenvLinux.
+  stdenvFreeBSD = (import ../stdenv/freebsd) {
+    stdenv = stdenvInitial;
+    inherit genericStdenv;
+    gccWrapper = import ../build-support/gcc-wrapper-freebsd;
+  };
+
+  stdenvFreeBSDPkgs = allPackages {
+    stdenv = stdenvFreeBSD;
+    bootCurl = null;
+    noSysDirs = false;
+  };
+
+
   stdenvTestPkgs = allPackages {
     stdenv = (import ../stdenv/nix-linux-static).stdenvInitial;
     bootCurl = (import ../stdenv/nix-linux-static).curl;
