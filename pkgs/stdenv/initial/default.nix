@@ -7,7 +7,7 @@
 
 let {
 
-  shell = "/bin/sh";
+  shell = "/bin/bash";
 
   body = 
 

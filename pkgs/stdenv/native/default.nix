@@ -15,5 +15,5 @@ genericStdenv {
     inherit stdenv;
   };
 
-  shell = "/bin/sh";
+  shell = "/bin/bash";
 }
