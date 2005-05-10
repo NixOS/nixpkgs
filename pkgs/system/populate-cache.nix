@@ -1,6 +1,8 @@
 let {
 
-  i686LinuxPkgs = {inherit (import ./i686-linux.nix)
+  allPackages = import ./all-packages.nix;
+
+  i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     coreutils
     findutils
     diffutils
@@ -47,7 +49,6 @@ let {
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xml_ebnf_dtd
     docbook_xml_xslt
     subversion
     pan
@@ -92,7 +93,19 @@ let {
     apacheAntBlackdown14
   ;};
 
-  powerpcDarwinPkgs = {inherit (import ./powerpc-darwin.nix)
+  i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
+    unzip
+    subversion
+    curl
+    libxml2
+    libxslt
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    docbook_xml_xslt
+    nxml
+  ;};
+
+  powerpcDarwinPkgs = {inherit (allPackages {system = "powerpc-darwin";})
     unzip
     aterm
     subversion
@@ -102,7 +115,6 @@ let {
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xml_ebnf_dtd
     docbook_xml_xslt
     nxml
   ;};
@@ -110,6 +122,7 @@ let {
 
   body = [
     i686LinuxPkgs
+    i686FreeBSDPkgs
     powerpcDarwinPkgs
   ];
 }
