@@ -95,6 +95,7 @@ let {
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     unzip
+    aterm
     subversion
     curl
     libxml2
