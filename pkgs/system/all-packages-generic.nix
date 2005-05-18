@@ -429,24 +429,17 @@ rec {
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl stdenv aterm;
-    sdf = sdf_23;
-  };
-
-  strategoxt_012 = (import ../development/compilers/strategoxt/strategoxt-0.12.nix) { 
-    inherit fetchurl stdenv aterm;
-    sdf = sdf_22;
+    inherit fetchurl pkgconfig stdenv aterm sdf;
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
-    inherit fetchurl stdenv aterm strategoxt hevea;
-    sdf = sdf_23;
+    inherit fetchurl stdenv aterm strategoxt hevea sdf;
   };
 
-#  xdoc = (import ../development/tools/documentation/xdoc) {
-#    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
-#    sdf = sdf_23;
-#  };
+  #  xdoc = (import ../development/tools/documentation/xdoc) {
+  #    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
+  #    sdf = sdf_23;
+  #  };
 
   #tiger = (import ../development/compilers/tiger) {
   #  inherit fetchurl stdenv aterm strategoxt;
@@ -560,23 +553,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  sdf_23 = {
-    errorsupport = sdf2_bundle;
-    toolbuslib   = sdf2_bundle;
-    ptsupport    = sdf2_bundle;
-    asfsupport   = sdf2_bundle;
-    sdfsupport   = sdf2_bundle;
-    sglr         = sdf2_bundle;
-    ascsupport   = sdf2_bundle;
-    pgen         = sdf2_bundle;
-    asflibrary   = sdf2_bundle;
-  };
-
-  sdf_22 = (import ../development/tools/parsing/sdf2/bundle-2.2.nix) {
-    inherit fetchurl stdenv getopt aterm;
-  };
-
-  sdf2_bundle = (import ../development/tools/parsing/sdf2-bundle) {
+  sdf = (import ../development/tools/parsing/sdf) {
     inherit fetchurl stdenv aterm getopt;
   };
 

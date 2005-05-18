@@ -39,7 +39,7 @@ let {
     flexnew
     gccWrapped
     aterm
-    sdf2_bundle
+    sdf
     strategoxt
 #    ghc
 #    helium
