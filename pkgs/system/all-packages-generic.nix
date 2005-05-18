@@ -276,6 +276,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  help2man = (import ../development/tools/misc/help2man) {
+    inherit fetchurl stdenv perl gettext perlLocaleGettext;
+  };
+
   octave = (import ../development/interpreters/octave) {
     inherit fetchurl stdenv readline ncurses g77 perl flex;
   };
@@ -903,6 +907,14 @@ rec {
     propagatedBuildInputs = [perlURI perlHTMLParser];
   };
 
+  perlLocaleGettext = import ../development/perl-modules/generic perl {
+    name = "LocaleGettext-1.04";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/P/PV/PVANDRY/gettext-1.04.tar.gz;
+      md5 = "578dd0c76f8673943be043435b0fbde4";
+    };
+  };
+
   wxPython = (import ../development/python-modules/wxPython-2.5) {
     inherit fetchurl stdenv pkgconfig wxGTK python;
   };
@@ -1139,6 +1151,7 @@ rec {
   MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {
     inherit fetchurl stdenv pkgconfig firefox;
     inherit (xlibs) libXpm;
+    # !!! should depend on MPlayer
   };
 
   vlc = (import ../applications/video/vlc) {
