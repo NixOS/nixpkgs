@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
 
   name = "strategoxt-0.14";
-  builder = ./builder-0.14.sh;
+  builder = ./builder.sh;
 
   src = fetchurl {
     url = ftp://ftp.stratego-language.org/pub/stratego/StrategoXT/strategoxt-0.14/strategoxt-0.14.tar.gz;

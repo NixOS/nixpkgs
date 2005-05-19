@@ -1,9 +1,7 @@
 {stdenv, fetchurl, aterm, sdf}:
 
 stdenv.mkDerivation {
-
   name = "strategoxt-0.12";
-
   builder = ./builder.sh;
 
   src = fetchurl {
@@ -11,8 +9,6 @@ stdenv.mkDerivation {
     md5 = "bc2b14d9b53a07fc0047c16f2c6edf0c";
   };
 
-  inherit aterm;
-  inherit (sdf) sglr pgen ptsupport asflibrary;
-
-  buildInputs = [aterm sdf.pgen];
+  inherit aterm sdf;
+  buildInputs = [aterm sdf];
 }
