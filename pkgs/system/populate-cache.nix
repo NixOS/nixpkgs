@@ -88,6 +88,7 @@ let {
 
     mysql
     postgresql
+    postgresql_jdbc
     jetty
     blackdown
     apacheAntBlackdown14

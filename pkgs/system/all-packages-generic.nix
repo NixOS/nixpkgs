@@ -960,6 +960,11 @@ rec {
     inherit fetchurl stdenv readline ncurses zlib;
   };
 
+  postgresql_jdbc = (import ../servers/sql/postgresql/jdbc) {
+    inherit fetchurl stdenv;
+    ant = apacheAntBlackdown14;
+  };
+
   mysql = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
