@@ -958,8 +958,6 @@ rec {
 
   postgresql = (import ../servers/sql/postgresql) {
     inherit fetchurl stdenv readline ncurses zlib;
-    jdbcSupport = true;
-    ant = apacheAntBlackdown14;
   };
 
   mysql = import ../servers/sql/mysql {

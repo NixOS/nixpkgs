@@ -1,9 +1,8 @@
-{stdenv, fetchurl, zlib, ncurses, readline, jdbcSupport ? true, ant ? null}:
+{stdenv, fetchurl, zlib, ncurses, readline}:
 
 assert zlib != null;
 assert ncurses != null;
 assert readline != null;
-assert jdbcSupport -> ant != null;
 
 stdenv.mkDerivation {
   name = "postgresql-8.0.3";
@@ -14,9 +13,6 @@ stdenv.mkDerivation {
     md5 = "c0914a133ce6c1e0f1d8b93982d6e881";
   };
 
-  inherit readline jdbcSupport;
-  ant = if jdbcSupport then ant else null;
-
-  buildInputs =
-      [zlib ncurses readline (if jdbcSupport then [ant] else [])];
+  inherit readline;
+  buildInputs = [zlib ncurses readline];
 }
