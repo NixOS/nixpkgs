@@ -6,12 +6,12 @@ assert readline != null;
 assert jdbcSupport -> ant != null;
 
 stdenv.mkDerivation {
-  name = "postgresql-7.4.5";
+  name = "postgresql-8.0.3";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/postgresql-7.4.5.tar.bz2;
-    md5 = "97e750c8e69c208b75b6efedc5a36efb";
+    url = ftp://ftp2.nl.postgresql.org/mirror/postgresql/source/v8.0.3/postgresql-8.0.3.tar.bz2;
+    md5 = "c0914a133ce6c1e0f1d8b93982d6e881";
   };
 
   inherit readline jdbcSupport;

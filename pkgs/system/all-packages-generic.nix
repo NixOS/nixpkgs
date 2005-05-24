@@ -968,7 +968,7 @@ rec {
   };
 
   jetty = (import ../servers/http/jetty) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv unzip;
   };
 
   

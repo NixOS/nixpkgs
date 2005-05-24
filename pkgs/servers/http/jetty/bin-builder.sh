@@ -2,6 +2,6 @@ set -e
 
 . $stdenv/setup
 
-tar zxf $src
+unzip $src
 mkdir $out
 mv jetty*/* $out
