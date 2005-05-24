@@ -19,12 +19,12 @@ assert javahlBindings -> j2sdk != null;
 assert compressionSupport -> zlib != null;
 
 stdenv.mkDerivation {
-  name = "subversion-1.2.0-pre-rc4";
+  name = "subversion-1.2.0";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.2.0-rc4.tar.bz2;
-    md5 = "7913900ef3d92afcbdf63a3163574798";
+    url = http://subversion.tigris.org/downloads/subversion-1.2.0.tar.bz2;
+    md5 = "f25c0c884201f411e99a6cb6c25529ff";
   };
 
   # This is a hopefully temporary fix for the problem that
