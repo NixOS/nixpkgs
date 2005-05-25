@@ -89,9 +89,11 @@ let {
     mysql
     postgresql
     postgresql_jdbc
-    jetty
+
     blackdown
     apacheAntBlackdown14
+    jikes
+    jetty
   ;};
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
