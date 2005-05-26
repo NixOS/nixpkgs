@@ -1087,6 +1087,12 @@ rec {
     imageSupport = true;
   };
 
+  sylpheed_gtk2 = (import ../applications/networking/mailreaders/sylpheed-gtk2) {
+    inherit fetchurl stdenv pkgconfig openssl;
+    inherit (gtkLibs) glib gtk;
+    sslSupport = true;
+  };
+
   firefox = (import ../applications/networking/browsers/firefox) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
