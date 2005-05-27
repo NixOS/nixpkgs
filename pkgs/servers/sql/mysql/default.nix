@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "mysql-4.1.12";
 
   src = fetchurl {
-    url = http://dev.mysql.com/get/Downloads/MySQL-4.1/mysql-4.1.12.tar.gz/from/http://mysql.mirror.nedlinux.nl/;
+    url = http://mysql.mirror.nedlinux.nl/Downloads/MySQL-4.1/mysql-4.1.12.tar.gz;
     md5 = "56a6f5cacd97ae290e07bbe19f279af1";
   };
 
