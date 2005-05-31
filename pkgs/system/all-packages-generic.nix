@@ -437,7 +437,7 @@ rec {
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
-    inherit fetchurl stdenv aterm strategoxt hevea sdf;
+    inherit fetchurl stdenv aterm strategoxt tetex hevea sdf;
   };
 
   #  xdoc = (import ../development/tools/documentation/xdoc) {
