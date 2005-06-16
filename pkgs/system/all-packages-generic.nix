@@ -981,6 +981,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kernel = (import ../os-specific/linux/kernel) {
+    inherit fetchurl stdenv perl;
+  };
+
   alsaLib = (import ../os-specific/linux/alsa/library) {
     inherit fetchurl stdenv;
   };
