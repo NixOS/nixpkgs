@@ -1,8 +1,8 @@
-{input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gnomevfs, libbonobo
-, gconf, popt, zlib }:
+{ input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gnomevfs, libbonobo
+, GConf, popt, zlib }:
 
 assert pkgconfig != null && perl != null && glib != null
-  && gnomevfs != null && libbonobo != null && gconf != null
+  && gnomevfs != null && libbonobo != null && GConf != null
   && popt != null && zlib != null;
 
 # !!! TODO CHECK:
@@ -13,5 +13,5 @@ assert pkgconfig != null && perl != null && glib != null
 stdenv.mkDerivation {
   inherit (input) name src;
   buildInputs = [pkgconfig perl perlXMLParser popt zlib];
-  propagatedBuildInputs = [glib gnomevfs libbonobo gconf];
+  propagatedBuildInputs = [glib gnomevfs libbonobo GConf];
 }

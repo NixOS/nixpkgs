@@ -1,7 +1,7 @@
 # todo audiofile is also part of the gnome platform. Move it to this collection?
 
 { stdenv, fetchurl, pkgconfig, audiofile
-, flex, bison, popt, perl, zlib, libxml2, libxslt, bzip2
+, flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
 , libpng, gtkLibs, libXmu
 }:
@@ -10,8 +10,8 @@ rec {
 
   # Platform
 
-  platform = (import ./src-gnome-platform-2.8.3.nix) {
-    inherit stdenv fetchurl;
+  platform = (import ./src-gnome-platform-2.10.1.nix) {
+    inherit fetchurl;
   };
 
   glib = gtkLibs.glib;
@@ -39,9 +39,9 @@ rec {
     input = platform.ORBit2;
   };
 
-  gconf = (import ./GConf) {
+  GConf = (import ./GConf) {
     inherit fetchurl stdenv pkgconfig perl glib gtk libxml2 ORBit2 popt;
-    input = platform.gconf;
+    input = platform.GConf;
   };
 
   gnomemimedata = (import ./gnome-mime-data) {
@@ -50,9 +50,8 @@ rec {
   };
 
   gnomevfs = (import ./gnome-vfs) {
-    inherit fetchurl stdenv pkgconfig perl glib libxml2 gconf
-            libbonobo gnomemimedata popt bzip2 perlXMLParser;
-    # !!! use stdenv.bzip2
+    inherit fetchurl stdenv pkgconfig perl glib libxml2 GConf
+            libbonobo gnomemimedata popt perlXMLParser;
     input = platform.gnomevfs;
   };
 
@@ -64,7 +63,7 @@ rec {
 
   libgnome = (import ./libgnome) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gnomevfs
-            libbonobo gconf popt zlib;
+            libbonobo GConf popt zlib;
     input = platform.libgnome;
   };
 
@@ -123,8 +122,8 @@ rec {
 
   # Desktop
 
-  desktop = (import ./src-gnome-desktop-2.8.3.nix) {
-    inherit stdenv fetchurl;
+  desktop = (import ./src-gnome-desktop-2.10.1.nix) {
+    inherit fetchurl;
   };
 
   gtkhtml = (import ./gtkhtml) {
@@ -151,7 +150,7 @@ rec {
   gtksourceview = (import ./gtksourceview) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2
             libgnomeprint gnomevfs libbonobo /* !!! <- should be propagated in gnomevfs */
-            gconf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
+            GConf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
     input = desktop.gtksourceview;
   };
 

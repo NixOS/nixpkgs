@@ -703,7 +703,7 @@ rec {
 
   gnome = import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt zlib libxml2 libxslt bzip2
+            flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs;
     inherit (xlibs) libXmu;
