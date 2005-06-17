@@ -3,17 +3,17 @@
 
 
 # Force gcc to use ld-wrapper.sh when calling ld.
-cflagsCompile="-B$out/bin"
+cflagsCompile="-B$out/bin/"
 
 if test -z "$nativeGlibc"; then
-    # The "-B$glibc/lib" flag is a quick hack to force gcc to link
+    # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  The real solution is of course to prevent those paths
     # from being used by gcc in the first place.
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$glibc/lib -isystem $glibc/include"
+    cflagsCompile="$cflagsCompile -B$glibc/lib/ -isystem $glibc/include"
     ldflags="$ldflags -L$glibc/lib"
     ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
 fi

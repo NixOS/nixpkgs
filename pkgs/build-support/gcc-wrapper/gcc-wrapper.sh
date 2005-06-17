@@ -78,7 +78,11 @@ if test "$dontLink" != "1"; then
         extraBefore=(${extraBefore[@]} "-Wl,$i")
     done
     for i in $NIX_LDFLAGS; do
-        extraAfter=(${extraAfter[@]} "-Wl,$i")
+	if test "${i:0:3}" = "-L/"; then
+	    extraAfter=(${extraAfter[@]} "$i")
+	else
+	    extraAfter=(${extraAfter[@]} "-Wl,$i")
+	fi
     done
     export NIX_LDFLAGS_SET=1
 
@@ -108,4 +112,7 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     . "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
-exec @gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+res=0
+@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 2> $NIX_BUILD_TOP/.gcc.errors || res=$?
+grep -v 'file path prefix' < $NIX_BUILD_TOP/.gcc.errors >&2 || true
+exit $res
