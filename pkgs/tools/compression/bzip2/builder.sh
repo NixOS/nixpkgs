@@ -6,16 +6,6 @@ preBuild() {
     make -f Makefile-libbz2_so
 }
 
-patchELF() {
-    # Patch all ELF executables and shared libraries.
-    header "patching ELF executables and libraries (BLA)"
-    find "$prefix" \( \
-        \( -type f -a -name "*.so*" \) -o \
-        \( -type f -a -perm +0100 \) \
-        \) -exec patchelf --shrink-rpath {} \;
-    stopNest
-}
-
 preInstall=preInstall
 preInstall() {
     ensureDir $out/lib
