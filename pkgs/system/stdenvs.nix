@@ -58,8 +58,7 @@
   # (essentially it's just the native environment).
   stdenvDarwin = (import ../stdenv/darwin) {
     stdenv = stdenvInitial;
-    genericStdenv = import ../stdenv/generic;
-    inherit gccWrapper;
+    inherit genericStdenv gccWrapper;
   };
 
   stdenvDarwinPkgs = allPackages {
@@ -74,8 +73,7 @@
   # environment similar to stdenvLinux.
   stdenvFreeBSD = (import ../stdenv/freebsd) {
     stdenv = stdenvInitial;
-    inherit genericStdenv;
-    gccWrapper = import ../build-support/gcc-wrapper-freebsd;
+    inherit genericStdenv gccWrapper;
   };
 
   stdenvFreeBSDPkgs = allPackages {

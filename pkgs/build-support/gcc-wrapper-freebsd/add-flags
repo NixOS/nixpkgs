@@ -1,5 +1,0 @@
-export NIX_CFLAGS_COMPILE="@cflagsCompile@ $NIX_CFLAGS_COMPILE"
-export NIX_CFLAGS_LINK="@cflagsLink@ $NIX_CFLAGS_LINK"
-export NIX_LDFLAGS="@ldflags@ $NIX_LDFLAGS"
-export NIX_LDFLAGS_BEFORE="@ldflagsBefore@ $NIX_LDFLAGS_BEFORE"
-export NIX_GLIBC_FLAGS_SET=1
