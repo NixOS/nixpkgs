@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "core-apache-ant-1.6.4";
-  realname = "apache-ant-1.6.4";
+  name = "core-apache-ant-1.6.5";
+  realname = "apache-ant-1.6.5";
 
   builder = ./core-builder.sh;
   src = fetchurl {
-    url = http://apache.surfnet.nl/ant/binaries/apache-ant-1.6.4-bin.tar.bz2;
-    md5 = "2dd6f927cfe3cbac0970816396b7ad4e";
+    url = http://apache.surfnet.nl/ant/binaries/apache-ant-1.6.5-bin.tar.bz2;
+    md5 = "26031ee1a2fd248ad0cc2e7f17c44c39";
   };
 }
