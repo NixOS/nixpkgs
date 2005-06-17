@@ -7,6 +7,7 @@ assert pkgconfig != null && perl != null && glib != null
 
 stdenv.mkDerivation {
   inherit (input) name src;
+  builder = ./builder.sh;
   buildInputs = [
     pkgconfig perl glib libxml2 GConf libbonobo
     gnomemimedata popt perlXMLParser
