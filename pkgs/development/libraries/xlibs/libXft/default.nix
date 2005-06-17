@@ -4,10 +4,10 @@
 # assert freetype == fontconfig.freetype;
 
 (stdenv.mkDerivation {
-  name = "libXft-2.1.6";
+  name = "libXft-2.1.7";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libXft-2.1.6.tar.bz2;
-    md5 = "ba10c9c3f4758f304f04f8d48e2f81a4";
+    url =http://xlibs.freedesktop.org/release/libXft-2.1.7.tar.bz2 ;
+    md5 = "3e311b4095283d59488b95c8bd772521";
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [libX11 libXrender freetype fontconfig];

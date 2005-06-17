@@ -3,10 +3,10 @@
 assert libxml2 != null;
 
 stdenv.mkDerivation {
-  name = "libxslt-1.1.12";
+  name = "libxslt-1.1.14";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libxslt-1.1.12.tar.gz;
-    md5 = "cf82a767c016ff1668d1c295c47ae700";
+    url = ftp://xmlsoft.org/libxslt-1.1.14.tar.gz;
+    md5 = "db71660bb7d01ccd4e6be990af8d813b";
   };
   buildInputs = [libxml2];
 }

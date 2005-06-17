@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, libX11, renderext}:
 
 stdenv.mkDerivation {
-  name = "libXrender-0.8.4";
+  name = "libXrender-0.9.0";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libXrender-0.8.4.tar.bz2;
-    md5 = "c745339dbe5f05cff8950b71a739e34c";
+    url = http://xlibs.freedesktop.org/release/libXrender-0.9.0.tar.bz2;
+    md5 = "ce7cda009aa0b10a73637941d44ae789";
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [libX11 renderext];

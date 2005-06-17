@@ -12,8 +12,8 @@ assert x11.buildClientLibs;
 stdenv.mkDerivation {
   name = "gtk+-2.6.6";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gtk+-2.6.6.tar.bz2;
-    md5 = "6bf5a71a7ea6a02821fd0c9edab25904";
+    url = ftp://ftp.gtk.org/pub/gtk/v2.6/gtk+-2.6.8.tar.bz2;
+    md5 = "535fa4b62d219445b99953f679b5cf8e";
   };
   buildInputs = [pkgconfig perl libtiff libjpeg libpng];
   propagatedBuildInputs = [x11 glib atk pango];

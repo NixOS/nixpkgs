@@ -1,8 +1,8 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "gettext-0.14";
+  name = "gettext-0.14.5";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gettext-0.14.tar.gz;
-    md5 = "e715be150bbe32439ae68fab32df0299";
+    url = ftp://ftp.gnu.org/pub/gnu/gettext/gettext-0.14.5.tar.gz;
+    md5 = "e2f6581626a22a0de66dce1d81d00de3";
   };
   configureFlags = "--disable-csharp";
 }

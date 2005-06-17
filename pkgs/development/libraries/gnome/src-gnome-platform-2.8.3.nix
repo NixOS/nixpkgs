@@ -82,7 +82,7 @@
   };
 
   libIDL = {
-    name = "libIDL-0.8.5.tar.bz2";
+    name = "libIDL-0.8.5";
     src = fetchurl {
       url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libIDL-0.8.5.tar.bz2;
       md5 = "c63f6513dc7789d0575bea02d62d58d7";
