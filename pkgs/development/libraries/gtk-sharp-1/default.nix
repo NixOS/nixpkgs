@@ -2,7 +2,7 @@
 , glib
 , pango
 , gtk
-, gconf ? null
+, GConf ? null
 , libglade ? null
 , libgtkhtml ? null
 , gtkhtml ? null
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   patches = [ ./dllmap-glue.patch ];
 
   buildInputs = [
-    pkgconfig mono glib pango gtk gconf libglade libgnomecanvas
+    pkgconfig mono glib pango gtk GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
   ];
 

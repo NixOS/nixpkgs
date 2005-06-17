@@ -675,14 +675,14 @@ rec {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
               libgnomecanvas libgnomeui libgnomeprint 
-              libgnomeprintui gconf;
+              libgnomeprintui GConf;
   };
 
   gtksharp2 = (import ../development/libraries/gtk-sharp-2) {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
               libgnomecanvas libgnomeui libgnomeprint 
-              libgnomeprintui gconf gnomepanel;
+              libgnomeprintui GConf gnomepanel;
   };
 
   gtksourceviewsharp = import ../development/libraries/gtksourceview-sharp {
