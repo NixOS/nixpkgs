@@ -5,11 +5,11 @@
 assert langC;
 
 stdenv.mkDerivation {
-  name = "gcc-3.3.3";
+  name = "gcc-3.3.6";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gcc-3.3.3.tar.bz2;
-    md5 = "3c6cfd9fcd180481063b4058cf6faff2";
+    url = http://ftp.gnu.org/gnu/gcc/gcc-3.3.6/gcc-3.3.6.tar.bz2;
+    md5 = "6936616a967da5a0b46f1e7424a06414";
   };
   inherit noSysDirs langC langCC langF77;
 }

@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "bzip2-1.0.2";
+  name = "bzip2-1.0.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/bzip2-1.0.2.tar.gz;
-    md5 = "ee76864958d568677f03db8afad92beb";
+    url = http://www.bzip.org/1.0.3/bzip2-1.0.3.tar.gz;
+    md5 = "8a716bebecb6e647d2e8a29ea5d8447f";
   };
 }

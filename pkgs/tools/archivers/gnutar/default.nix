@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnutar-1.14";
+  name = "gnutar-1.15";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/tar-1.14.tar.bz2;
-    md5 = "f1932e0fbd4641885bfdcc75495c91b7";
+    url = http://ftp.gnu.org/gnu/tar/tar-1.15.tar.bz2;
+    md5 = "412695e2c2ecbe2753d128f303b3ccf4";
   };
 }

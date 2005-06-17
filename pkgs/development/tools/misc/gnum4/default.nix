@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "gnum4-1.4";
+  name = "gnum4-1.4.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/m4-1.4.tar.gz;
-    md5 = "9eb2dd07740b2d2f3c7adb3e8d299bda";
+    url = http://ftp.gnu.org/gnu/m4/m4-1.4.3.tar.bz2;
+    md5 = "1f7d7eba70a0525c44c2edc3998925c7";
   };
 }
