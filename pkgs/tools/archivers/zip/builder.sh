@@ -1,6 +1,7 @@
-. $stdenv/setup || exit 1
+. $stdenv/setup
 
-tar xvfz $src || exit 1
-cd zip-* || exit 1
-make -f unix/Makefile generic || exit 1
-make -f unix/Makefile prefix=$out install || exit 1
+makeFlags="-f unix/Makefile generic"
+
+installFlags="-f unix/Makefile prefix=$out INSTALL=cp"
+
+genericBuild
