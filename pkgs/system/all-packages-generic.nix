@@ -583,7 +583,8 @@ rec {
 
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
-    pythonSupport = stdenv.system == "i686-linux";
+#    pythonSupport = stdenv.system == "i686-linux";
+    pythonSupport = false;
   };
 
   libxslt = (import ../development/libraries/libxslt) {
@@ -1236,7 +1237,7 @@ rec {
   monodevelop = (import ../applications/editors/monodevelop) {
     inherit fetchurl stdenv file mono gtksourceviewsharp
             gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
-    inherit (gnome) gnomevfs libbonobo libglade libgnome gconf glib gtk;
+    inherit (gnome) gnomevfs libbonobo libglade libgnome GConf glib gtk;
     mozilla = firefox;
     gtksharp = gtksharp2;
   };
