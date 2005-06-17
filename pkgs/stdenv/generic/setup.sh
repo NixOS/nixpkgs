@@ -37,6 +37,13 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
 fi
 
     
+# Ensure that the given directory exists.
+ensureDir() {
+    local dir=$1
+    if ! test -x "$dir"; then mkdir -p "$dir"; fi
+}
+
+
 # Called when some build action fails.  If $succeedOnFailure is set,
 # create the file `$out/nix-support/failed' to signal failure, and
 # exit normally.  Otherwise, exit with failure.
@@ -205,13 +212,6 @@ dumpVars() {
     if test "$noDumpEnvVars" != "1"; then
         export > $NIX_BUILD_TOP/env-vars
     fi
-}
-
-
-# Ensure that the given directory exists.
-ensureDir() {
-    local dir=$1
-    if ! test -x "$dir"; then mkdir -p "$dir"; fi
 }
 
 
