@@ -127,7 +127,7 @@ rec {
   };
 
   gtkhtml = (import ./gtkhtml) {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libjpeg;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libjpeg gettext;
     inherit gtk atk gail libgnomeprint libgnomeprintui libgnomeui libglade gnomeicontheme;
     input = desktop.gtkhtml;
   };
