@@ -62,7 +62,7 @@ let {
     xineUI
     zapping
     gqview
-    fspot
+#    fspot
     hello
     xchm
     nxml
@@ -70,8 +70,8 @@ let {
     nix
 #    ocaml
     mono
-    monodoc
-    monodevelop
+#    monodoc
+#    monodevelop
 #    hevea
     vim
     less
