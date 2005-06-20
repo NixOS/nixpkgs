@@ -25,9 +25,9 @@ fi
 
 $latex $rootName
 
-if grep -q '\\bibitem' $rootNameBase.bbl; then
+if grep -q '\\citation' $rootNameBase.aux; then
     bibtex $rootNameBase
-fi    
+fi
 
 $latex $rootName
 

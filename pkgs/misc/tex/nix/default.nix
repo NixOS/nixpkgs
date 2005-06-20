@@ -33,6 +33,9 @@ rec {
       args = [ ./find-includes.pl ];
 
       rootFile = toString rootFile; # !!! hacky
+
+      # Forces rebuilds.
+      hack = __currentTime;
     };
     
 }

@@ -50,7 +50,13 @@ while (scalar @workset > 0) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
 	    push @workset, $path . "/" . $fn2 . ".cls";
-	}
+	} elsif (/\\bibliography\{(.*)\}/) {
+            foreach my $bib (split /,/, $1) {
+                $bib =~ s/^\s+//; # remove leading / trailing whitespace
+                $bib =~ s/\s+$//;
+                push @workset, $path . "/" . $bib . ".bib";
+            }
+        }
         # !!! also support \usepackage
     }
     

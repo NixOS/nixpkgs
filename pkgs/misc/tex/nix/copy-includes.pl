@@ -15,8 +15,6 @@ for (my $n = 0; $n < @ARGV; $n += 2) {
     my $fullPath = $ARGV[$n];
     my $relPath = $ARGV[$n + 1];
 
-    print "$fullPath <- $relPath\n";
-
     createDirs $relPath;
         
     symlink $fullPath, $relPath or die "cannot create symlink `$relPath'";
