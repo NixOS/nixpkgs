@@ -25,8 +25,9 @@ let {
     # stdenv and its shell.
     // {
       mkDerivation = attrs: derivation (attrs // {
-        builder = shell;
-        args = ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
+        builder = if attrs ? realBuilder then attrs.realBuilder else shell;
+        args = if attrs ? args then attrs.args else
+          ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
         stdenv = body;
         system = body.system;
       });
