@@ -24,27 +24,32 @@ while (scalar @workset > 0) {
     my $fn = pop @workset;
     next if (defined $doneset{$fn});
 
+    $doneset{$fn} = 1;
+    
     if (!open FILE, "< $fn") {
 	print STDERR "(cannot open $fn, ignoring)\n";
 	next;
     };
-    
-    print OUT "$fn\n";
-    $doneset{$fn} = 1;
 
+    
+    # Print out the full path *and* its relative path to $root.
+    
+    die if substr($fn, 0, length $path) ne $path;
+    my $relFN = substr($fn, (length $path) + 1);
+
+    print OUT "$fn \"$relFN\"\n";
+
+    
+    # Recursively find include in $fn.
     while (<FILE>) {
 	if (/\\input\{(.*)\}/) {
 	    my $fn2 = $1;
-            if (substr($fn2, 0, 1) ne "/") {
-		$fn2 = $path . "/" . $fn2;
-	    }
-	    push @workset, $fn2;
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+	    push @workset, $path . "/" . $fn2;
 	} elsif (/\\documentclass(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
-            if (substr($fn2, 0, 1) ne "/") {
-		$fn2 = $path . "/" . $fn2;
-	    }
-	    push @workset, $fn2 . ".cls";
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+	    push @workset, $path . "/" . $fn2 . ".cls";
 	}
         # !!! also support \usepackage
     }

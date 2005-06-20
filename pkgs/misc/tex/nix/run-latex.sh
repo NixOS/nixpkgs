@@ -2,13 +2,15 @@
 
 ensureDir $out
 
-for i in $includes; do
-    if test -d $i; then
-        cp $i/* .
-    else
-        cp $i $(stripHash $i; echo $strippedName)
-    fi
-done
+perl $copyIncludes $includes
+
+#for i in $includes; do
+#    if test -d $i; then
+#        cp $i/* .
+#    else
+#        cp $i $(stripHash $i; echo $strippedName)
+#    fi
+#done
 
 rootName=$(basename $(stripHash "$rootFile"; echo $strippedName))
 echo "root name is $rootName"

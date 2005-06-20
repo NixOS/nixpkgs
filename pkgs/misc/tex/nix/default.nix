@@ -10,13 +10,15 @@ rec {
     
     pkgs.stdenv.mkDerivation {
       name = "doc";
+      
       builder = ./run-latex.sh;
+      copyIncludes = ./copy-includes.pl;
       
       inherit rootFile generatePDF;
 
       includes = import (findLaTeXIncludes {inherit rootFile;});
       
-      buildInputs = [ pkgs.tetex ];
+      buildInputs = [ pkgs.tetex pkgs.perl ];
     };
 
     
@@ -24,16 +26,13 @@ rec {
     { rootFile
     }:
 
-    derivation {
-      inherit (pkgs) stdenv;
-      
+    pkgs.stdenv.mkDerivation {
       name = "latex-includes";
-      system = pkgs.stdenv.system;
-      
-      builder = (pkgs.perl ~ /bin/perl);
+
+      realBuilder = pkgs.perl ~ "bin/perl";
       args = [ ./find-includes.pl ];
 
       rootFile = toString rootFile; # !!! hacky
-    };     
+    };
     
 }
