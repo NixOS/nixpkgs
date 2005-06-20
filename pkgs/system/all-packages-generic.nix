@@ -78,7 +78,12 @@ rec {
   };
 
   xpf = (import ../tools/text/xml/xpf) {
-    inherit fetchurl stdenv python libxml2;
+    inherit fetchurl stdenv python;
+
+    libxml2 = (import ../development/libraries/libxml2) {
+      inherit fetchurl stdenv zlib python;
+      pythonSupport = true;
+    };
   };
 
   jing_tools = (import ../tools/text/xml/jing/jing-script.nix) {
