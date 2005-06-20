@@ -6,6 +6,7 @@ rec {
   runLaTeX =
     { rootFile
     , generatePDF ? true
+    , extraFiles ? []
     }:
     
     pkgs.stdenv.mkDerivation {
@@ -14,7 +15,7 @@ rec {
       builder = ./run-latex.sh;
       copyIncludes = ./copy-includes.pl;
       
-      inherit rootFile generatePDF;
+      inherit rootFile generatePDF extraFiles;
 
       includes = import (findLaTeXIncludes {inherit rootFile;});
       
@@ -37,5 +38,20 @@ rec {
       # Forces rebuilds.
       hack = __currentTime;
     };
-    
+
+
+  dot2pdf =
+    { dotGraph
+    }:
+
+    pkgs.stdenv.mkDerivation {
+      name = "pdf";
+      builder = ./dot2pdf.sh;
+      inherit dotGraph;
+      buildInputs = [
+        pkgs.perl pkgs.tetex pkgs.graphviz pkgs.ghostscript
+      ];
+    };
+  
+       
 }
