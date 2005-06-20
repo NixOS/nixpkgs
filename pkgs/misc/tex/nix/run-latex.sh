@@ -2,7 +2,7 @@
 
 ensureDir $out
 
-for i in $rootFile $sources; do
+for i in $includes; do
     if test -d $i; then
         cp $i/* .
     else
