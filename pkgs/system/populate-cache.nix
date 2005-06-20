@@ -85,6 +85,7 @@ let {
     xmltv
     mythtv
     tetex
+    ghostscript
 
     mysql
     postgresql
