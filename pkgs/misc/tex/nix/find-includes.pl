@@ -56,6 +56,11 @@ while (scalar @workset > 0) {
                 $bib =~ s/\s+$//;
                 push @workset, $path . "/" . $bib . ".bib";
             }
+	} elsif (/\\includegraphics(\[.*\])?\{(.*)\}/) {
+	    my $fn2 = $2;
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+	    push @workset, $path . "/" . $fn2 . ".pdf";
+	    push @workset, $path . "/" . $fn2 . ".ps";
         }
         # !!! also support \usepackage
     }
