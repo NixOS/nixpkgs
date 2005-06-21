@@ -16,7 +16,7 @@ installPhase() {
         # so don't move them. 
         mv $out/bin/$i $out/bin/.orig-$i
         makeWrapper $out/bin/.orig-$i $out/bin/$i \
-            --set PYTHONPATH "$out/lib/python2.3/site-packages:$pygtk/lib/python2.3/site-packages/gtk-2.0"
+            --set PYTHONPATH "$out/lib/python2.4/site-packages:$pygtk/lib/python2.4/site-packages/gtk-2.0"
     done
 }
 
