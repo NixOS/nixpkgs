@@ -39,6 +39,13 @@ let {
     flexnew
     gccWrapped
     aterm
+
+    atermjava
+    jjtraveler
+    sharedobjects
+    jakartabcel
+    jakartaregexp
+
     sdf
     strategoxt
 #    ghc
