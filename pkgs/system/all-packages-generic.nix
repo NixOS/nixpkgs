@@ -991,6 +991,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  mingetty = (import ../os-specific/linux/mingetty) {
+    inherit fetchurl stdenv;
+  };
+
   alsaLib = (import ../os-specific/linux/alsa/library) {
     inherit fetchurl stdenv;
   };
