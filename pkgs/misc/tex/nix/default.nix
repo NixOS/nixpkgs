@@ -53,5 +53,11 @@ rec {
       ];
     };
   
-       
+
+  animateDot = dotGraph: nrFrames: pkgs.stdenv.mkDerivation {
+    name = "dot-frames";
+    builder = ./animatedot.sh;
+    inherit dotGraph nrFrames;
+  };
+
 }
