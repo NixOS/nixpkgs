@@ -441,6 +441,10 @@ rec {
     inherit fetchurl pkgconfig stdenv aterm sdf;
   };
 
+  strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
+    inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
+  };
+
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
     inherit fetchurl stdenv aterm strategoxt tetex hevea sdf;
   };

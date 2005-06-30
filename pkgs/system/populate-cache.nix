@@ -48,6 +48,7 @@ let {
 
     sdf
     strategoxt
+    strategoxtUtils
 #    ghc
 #    helium
     perl
