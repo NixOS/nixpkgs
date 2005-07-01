@@ -2,7 +2,7 @@
 
 ensureDir $out
 
-for i in $(seq 1 $nrFrames); do
+for ((i = 1; i <= $nrFrames; i++)); do
     echo "producing frame $i...";
     targetName=$out/$(basename $(stripHash $dotGraph; echo $strippedName) .dot)-f-$i.dot
     cpp -DFRAME=$i < $dotGraph > $targetName
