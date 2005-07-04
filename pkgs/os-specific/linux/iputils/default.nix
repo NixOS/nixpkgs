@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "iputils";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/iputils-ss021109-try.tar.bz2;
-    md5 = "dd10ef3d76480990a2174d2bb0daddaf";
+    url = ftp://ftp.nl.debian.org/debian/pool/main/i/iputils/iputils_20020927.orig.tar.gz;
+    md5 = "b5493f7a2997130a4f86c486c9993b86";
   };
 
   inherit kernelHeaders glibc;

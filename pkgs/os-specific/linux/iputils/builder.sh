@@ -1,6 +1,6 @@
 . $stdenv/setup
 
-tar jxvf $src
+tar zxvf $src
 cd iputils
 
 echo $src
