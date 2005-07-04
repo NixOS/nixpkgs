@@ -14,6 +14,8 @@ fi
 if test "$httpServer"; then
     configureFlags="--with-apxs=$httpd/bin/apxs --with-apr=$httpd --with-apr-util=$httpd $configureFlags"
     makeFlags="APACHE_LIBEXECDIR=$out/modules $makeFlags"
+else
+    configureFlags="--without-apxs $configureFlags"
 fi
 
 if test -n "$pythonBindings" -o -n "$javaSwigBindings"; then
