@@ -34,6 +34,7 @@ for i in $boot $halt $login $env; do
         -e "s^@gnugrep\@^$gnugrep^g" \
         -e "s^@gzip\@^$gzip^g" \
         -e "s^@gcc\@^$gcc^g" \
+        -e "s^@mingetty\@^$mingetty^g" \
         -e "s^@out\@^$out^g" \
         < $i > $dst
     chmod +x $dst

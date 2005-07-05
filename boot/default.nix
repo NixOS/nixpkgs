@@ -1,7 +1,7 @@
-{ stdenv, bash, coreutils, findutils, utillinux, sysvinit, e2fsprogs
+{ stdenv, kernel, bash, coreutils, findutils, utillinux, sysvinit, e2fsprogs
 , nettools, nix, subversion, gcc, wget, which, vim, less, screen, openssh
 , binutils, strace, shadowutils, iputils, gnumake, curl, gnused, gnugrep
-, gnutar, gzip}:
+, gnutar, gzip, mingetty}:
 
 derivation {
   name = "boot";
@@ -11,8 +11,8 @@ derivation {
   halt = ./halt.sh;
   login = ./login.sh;
   env = ./env.sh;
-  inherit stdenv bash coreutils findutils utillinux sysvinit
+  inherit stdenv kernel bash coreutils findutils utillinux sysvinit
           e2fsprogs nettools nix subversion gcc wget which vim less screen
           openssh binutils strace shadowutils iputils gnumake curl gnused
-          gnutar gnugrep gzip;
+          gnutar gnugrep gzip mingetty;
 }
