@@ -1,7 +1,7 @@
 #! /bin/sh -e
 
-sysvinitPath=$1
-bootPath=$2
+sysvinitPath=@sysvinitPath@
+bootPath=@bootPath@
 
 make_dir() {
     mode=$1
@@ -49,8 +49,6 @@ rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
 export NIX_ROOT=$root
-#NIX_CMD_PATH=/usr/home/nix/.nix-profile/bin
-#NIX_CMD_PATH=/home/armijn/.nix-profile/bin
 NIX_CMD_PATH=/nix/bin
 
 echo initialising Nix DB...
@@ -60,20 +58,20 @@ $NIX_CMD_PATH/nix-store --init
 echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
 
-echo registering valid paths...
-(while read storepath; do
-    echo PATH $storepath
-    if ! $NIX_CMD_PATH/nix-store --isvalid $storepath 2> /dev/null; then
-        (unset NIX_ROOT; $NIX_CMD_PATH/nix-store --dump $storepath) | $NIX_CMD_PATH/nix-store --restore $storepath
-        $NIX_CMD_PATH/nix-store --validpath $storepath
-    fi
-done) < /tmp/mystorepaths
+#echo registering valid paths...
+#(while read storepath; do
+#    echo PATH $storepath
+#    if ! $NIX_CMD_PATH/nix-store --isvalid $storepath 2> /dev/null; then
+#        (unset NIX_ROOT; $NIX_CMD_PATH/nix-store --dump $storepath) | $NIX_CMD_PATH/nix-store --restore $storepath
+#        $NIX_CMD_PATH/nix-store --validpath $storepath
+#    fi
+#done) < /tmp/mystorepaths
 
-echo registering successors...
-(while read line; do
-    echo SUCC $line
-    $NIX_CMD_PATH/nix-store --successor $line
-done) < /tmp/mysuccessors
+#echo registering successors...
+#(while read line; do
+#    echo SUCC $line
+#    $NIX_CMD_PATH/nix-store --successor $line
+#done) < /tmp/mysuccessors
 
 echo setting init symlink...
 rm -f $root/init
@@ -95,12 +93,3 @@ cp /etc/resolv.conf $root/etc
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
-
-echo unmounting...
-umount $root
-
-echo syncing...
-sync
-
-echo halting...
-/sbin/halt -d -f
