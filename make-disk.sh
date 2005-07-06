@@ -2,7 +2,9 @@
 
 archivesDir=/tmp/arch
 manifest=${archivesDir}/MANIFEST
-nixpkgs=/nixpkgs/trunk/pkgs
+nixpkgs=/nixpkgs2/trunk/pkgs
+
+rm -rf ${archivesDir}/*
 
 NIX_CMD_PATH=/nix/bin
 
@@ -16,4 +18,6 @@ $NIX_CMD_PATH/nix-push --copy $archivesDir $manifest $(nix-store -r $storeExpr) 
 # Location of Nix boot scripts?
 #bootPath=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -))
 
-cp -a ${nixpkgs} ${archivesDir}
+cp -fa ${nixpkgs} ${archivesDir}
+mkdir ${archivesDir}/scripts
+cp -fa * ${archivesDir}/scripts
