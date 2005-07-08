@@ -19,9 +19,6 @@ touch_file() {
 }
 root=/tmp/mnt
 
-echo mounting...
-mount -t ext2 /dev/discs/disc0/disc $root
-
 make_dir 00755 /bin
 make_dir 00755 /dev
 make_dir 00755 /proc
@@ -49,7 +46,7 @@ rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
 export NIX_ROOT=$root
-NIX_CMD_PATH=/nix/bin
+NIX_CMD_PATH=@NIX_CMD_PATH@/bin
 
 echo initialising Nix DB...
 #/nix/bin/nix-store --init

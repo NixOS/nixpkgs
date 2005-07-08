@@ -18,12 +18,15 @@ sysvinitPath=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).sysvinit' 
 # Location of Nix boot scripts?
 bootPath=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -))
 
-echo "bootPath: ${bootPath}"
+#echo "bootPath: ${bootPath}"
+
+nix=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
 cp -fa ${nixpkgs} ${archivesDir}
 mkdir ${archivesDir}/scripts
 cp -fa * ${archivesDir}/scripts
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
+    -e "s^@NIX_CMD_PATH\@^$nix^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
