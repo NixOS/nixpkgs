@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = ftp://ftp.stratego-language.org/pub/stratego/StrategoXT/strategoxt-0.15/strategoxt-0.15.tar.gz;
-    md5 = "143f01cc27231ccd5eddb695a7b79c69";
+    md5 = "2f6dbbf09abe3b2fb14c2a5126e5c970";
   };
 
   inherit aterm sdf;
