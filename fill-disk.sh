@@ -33,6 +33,7 @@ make_dir 00755 /nix/var/nix
 make_dir 00755 /nix/var/nix/db
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
+make_dir 00755 /nixpkgs
 make_dir 00755 /mnt
 make_dir 00755 /mnt/host
 make_dir 00755 /home
@@ -54,6 +55,12 @@ $NIX_CMD_PATH/nix-store --init
 
 echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
+
+echo copying nixpkgs...
+cp -fa ../pkgs $root/nixpkgs
+
+echo adding packages...
+$NIX_CMD_PATH/nix-pull file:///$(manifest)
 
 #echo registering valid paths...
 #(while read storepath; do
