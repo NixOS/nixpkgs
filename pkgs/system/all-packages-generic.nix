@@ -40,7 +40,7 @@ rec {
   };
 
   findutils = (import ../tools/misc/findutils) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv coreutils;
   };
 
   getopt = (import ../tools/misc/getopt) {
