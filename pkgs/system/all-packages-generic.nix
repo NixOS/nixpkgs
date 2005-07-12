@@ -1083,7 +1083,6 @@ rec {
     httpServer = false;
     sslSupport = true;
     httpd = apacheHttpd;
-    javaSwigBindings = true;
     javahlBindings = true;
     j2sdk = blackdown;
   };

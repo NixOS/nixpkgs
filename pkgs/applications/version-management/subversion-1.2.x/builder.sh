@@ -18,7 +18,7 @@ else
     configureFlags="--without-apxs $configureFlags"
 fi
 
-if test -n "$pythonBindings" -o -n "$javaSwigBindings"; then
+if test -n "$pythonBindings"; then
     configureFlags="--with-swig=$swig $configureFlags"
 fi
 
@@ -33,17 +33,6 @@ postInstall() {
     if test "$pythonBindings"; then
         make swig-py
         make install-swig-py
-    fi
-    if test "$javaSwigBindings"; then
-        # Hack to get Java-Swig bindings to build if Python is not in
-        # scope (this fails because Subversion's configure script does
-        # something silly like `SWIG_JAVA_COMPILE="$SWIG_PY_COMPILE"').
-        FL1='SWIG_JAVA_COMPILE=gcc'
-        FL2='SWIG_JAVA_LINK=gcc -L$(SWIG_BUILD_DIR)/.libs'
-        make swig-java "$FL1" "$FL2"
-        make swig-java-api "$FL1" "$FL2"
-        make swig-java-java "$FL1" "$FL2"
-        make install-swig-java "$FL1" "$FL2"
     fi
     if test "$javahlBindings"; then
         mkdir -p subversion/bindings/java/javahl/classes # bug fix
