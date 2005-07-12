@@ -112,7 +112,9 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     . "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
-res=0
-@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 2> $NIX_BUILD_TOP/.gcc.errors || res=$?
-grep -v 'file path prefix' < $NIX_BUILD_TOP/.gcc.errors >&2 || true
-exit $res
+
+# Call the real `gcc'.  Filter out warnings about unused `-B' flags,
+# since they confuse some programs.
+@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} \
+    | (grep -v 'file path prefix' || true)
+exit ${PIPESTATUS[0]}
