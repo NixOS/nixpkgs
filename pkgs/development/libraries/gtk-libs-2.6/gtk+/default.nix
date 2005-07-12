@@ -10,7 +10,7 @@ assert x11.buildClientLibs;
 #assert x11 == pango.x11;
 
 stdenv.mkDerivation {
-  name = "gtk+-2.6.6";
+  name = "gtk+-2.6.8";
   src = fetchurl {
     url = ftp://ftp.gtk.org/pub/gtk/v2.6/gtk+-2.6.8.tar.bz2;
     md5 = "535fa4b62d219445b99953f679b5cf8e";
