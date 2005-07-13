@@ -40,10 +40,10 @@ let {
     gccWrapped
     aterm
 
-    atermjava
-    jjtraveler
-    sharedobjects
-    jakartabcel
+#    atermjava
+#    jjtraveler
+#    sharedobjects
+#    jakartabcel
     jakartaregexp
 
     sdf
