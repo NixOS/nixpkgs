@@ -113,8 +113,9 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
 fi
 
 
-# Call the real `gcc'.  Filter out warnings about unused `-B' flags,
-# since they confuse some programs.
-@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} \
-    | (grep -v 'file path prefix' || true)
-exit ${PIPESTATUS[0]}
+# Call the real `gcc'.  Filter out warnings from stderr about unused
+# `-B' flags, since they confuse some programs.  Deep bash magic to
+# apply grep to stderr (by swapping stdin/stderr twice).
+(@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 3>&2 2>&1 1>&3- \
+    | (grep -v 'file path prefix' || true); exit ${PIPESTATUS[0]}) 3>&2 2>&1 1>&3-
+exit $?
