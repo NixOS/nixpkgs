@@ -3,6 +3,14 @@
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 
+if ! test -n "$1"
+then
+    echo "need URL for manifest!"
+    exit
+else
+    manifest=$1
+fi
+
 make_dir() {
     mode=$1
     name=$2
@@ -31,6 +39,7 @@ make_dir 00755 /nix/store
 make_dir 00755 /nix/var
 make_dir 00755 /nix/var/nix
 make_dir 00755 /nix/var/nix/db
+make_dir 00755 /nix/var/nix/manifests
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
 make_dir 00755 /nixpkgs
@@ -44,9 +53,10 @@ touch_file /etc/shadow
 touch_file /etc/group
 
 rm -f $root/etc/mtab
-ln -s /proc/mounts $root/etc/mtab
+#ln -s /proc/mounts $root/etc/mtab
 
-export NIX_ROOT=$root
+#export NIX_ROOT=$root
+export NIX_STATE_DIR=$root/nix/var/nix
 NIX_CMD_PATH=@NIX_CMD_PATH@/bin
 
 echo initialising Nix DB...
@@ -60,7 +70,7 @@ echo copying nixpkgs...
 cp -fa ../pkgs $root/nixpkgs
 
 echo adding packages...
-$NIX_CMD_PATH/nix-pull file:///$(manifest)
+$NIX_CMD_PATH/nix-pull $manifest
 
 #echo registering valid paths...
 #(while read storepath; do
