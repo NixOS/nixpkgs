@@ -5,7 +5,7 @@ manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs2/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 
-chmod -R +w ${archivesDir}/*
+chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*
 
 NIX_CMD_PATH=/nix/bin
