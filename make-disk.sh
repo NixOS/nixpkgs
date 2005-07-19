@@ -2,9 +2,10 @@
 
 archivesDir=/tmp/arch
 manifest=${archivesDir}/MANIFEST
-nixpkgs=/nixpkgs2/trunk/pkgs
+nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 
+touch ${archivesDir}/blah
 chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*
 
