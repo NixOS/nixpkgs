@@ -43,10 +43,13 @@ make_dir 00755 /nix/var/nix/manifests
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
 make_dir 00755 /nixpkgs
+make_dir 00755 /nixpkgs/trunk
 make_dir 00755 /mnt
 make_dir 00755 /mnt/host
 make_dir 00755 /home
 make_dir 00755 /home/root
+
+mknod $root/dev/null c 1 3
 
 touch_file /etc/passwd
 touch_file /etc/shadow
@@ -55,8 +58,10 @@ touch_file /etc/group
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
 
-#export NIX_ROOT=$root
+export NIX_DATA_DIR=$root/nix/share
+export NIX_LOG_DIR=$root/nix/log/nix
 export NIX_STATE_DIR=$root/nix/var/nix
+export NIX_CONF_DIR=$root/nix/etc
 NIX_CMD_PATH=@NIX_CMD_PATH@/bin
 
 echo initialising Nix DB...
@@ -67,10 +72,23 @@ echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
 
 echo copying nixpkgs...
-cp -fa ../pkgs $root/nixpkgs
+cp -fa ../pkgs $root/nixpkgs/trunk
 
-echo adding packages...
+make_dir 0755 /tmp/scripts
+cp -fa ../scripts $/tmp/scripts
+
+echo adding manifest
 $NIX_CMD_PATH/nix-pull $manifest
+
+echo adding packages
+export NIX_ROOT=$root
+unset NIX_DATA_DIR
+unset NIX_LOG_DIR
+unset NIX_STATE_DIR
+unset NIX_CONF_DIR
+
+storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
+$NIX_CMD_PATH/nix-store -r $storeExpr
 
 #echo registering valid paths...
 #(while read storepath; do
