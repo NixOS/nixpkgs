@@ -566,6 +566,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  atermdynamic = (import ../development/libraries/aterm/dynamic.nix) {
+    inherit fetchurl stdenv;
+  };
+
   sdf = (import ../development/tools/parsing/sdf) {
     inherit fetchurl stdenv aterm getopt;
   };
