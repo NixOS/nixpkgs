@@ -75,7 +75,7 @@ echo copying nixpkgs...
 cp -fa ../pkgs $root/nixpkgs/trunk
 
 make_dir 0755 /tmp/scripts
-cp -fa ../scripts $root/tmp/scripts
+cp -fa ../scripts $root/tmp
 
 echo adding manifest
 $NIX_CMD_PATH/nix-pull $manifest
