@@ -47,6 +47,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  grub = (import ../tools/misc/grub) {
+    inherit fetchurl stdenv;
+  };
+
   diffutils = (import ../tools/text/diffutils) {
     inherit fetchurl stdenv coreutils;
   };
@@ -1032,7 +1036,7 @@ rec {
   };
 
   iputils = (import ../os-specific/linux/iputils) {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv kernelHeaders bison flex openssl;
     glibc = stdenv.gcc.glibc;
   };
 
