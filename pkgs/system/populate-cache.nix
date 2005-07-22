@@ -121,6 +121,9 @@ let {
 
   powerpcDarwinPkgs = {inherit (allPackages {system = "powerpc-darwin";})
     unzip
+    autoconf
+    automake19x
+    libtool
     aterm
     subversion
     bisonnew
