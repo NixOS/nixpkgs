@@ -1036,7 +1036,7 @@ rec {
   };
 
   iputils = (import ../os-specific/linux/iputils) {
-    inherit fetchurl stdenv kernelHeaders bison flex openssl;
+    inherit fetchurl stdenv kernelHeaders;
     glibc = stdenv.gcc.glibc;
   };
 
