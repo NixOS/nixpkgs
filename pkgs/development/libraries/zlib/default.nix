@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "zlib-1.2.2";
+  name = "zlib-1.2.3";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/zlib-1.2.2.tar.gz;
-    md5 = "68bd51aaa6558c3bc3fd4890e53413de";
+    url = http://www.zlib.net/zlib-1.2.3.tar.gz;
+    md5 = "debc62758716a169df9f62e6ab2bc634";
   };
   configureFlags = "--shared";
 }
