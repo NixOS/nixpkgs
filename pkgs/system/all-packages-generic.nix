@@ -1044,7 +1044,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  
+ syslinux = import ../os-specific/linux/syslinux {
+    inherit fetchurl stdenv nasm perl;
+  };
+
   ### DATA
 
   docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
