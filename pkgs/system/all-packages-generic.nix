@@ -570,7 +570,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  atermdynamic = (import ../development/libraries/aterm/dynamic.nix) {
+  atermDynamic = (import ../development/libraries/aterm/dynamic.nix) {
     inherit fetchurl stdenv;
   };
 
