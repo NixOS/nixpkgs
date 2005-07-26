@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   };
 
   inherit kernelHeaders glibc;
+  #buildInputs = [bison flex openssl];
 }

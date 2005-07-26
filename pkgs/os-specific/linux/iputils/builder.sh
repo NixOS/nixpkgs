@@ -3,16 +3,13 @@
 tar zxvf $src
 cd iputils
 
-echo $src
-echo $kernelHeaders
-echo $glibc
-
 sed -e "s^KERNEL_INCLUDE=.*$^KERNEL_INCLUDE=$kernelHeaders/include^" < Makefile > Makefile.new
 
 mv Makefile.new Makefile
 sed -e "s^LIBC_INCLUDE=.*$^LIBC_INCLUDE=$glibc/include^" < Makefile > Makefile.new
 mv Makefile.new Makefile
 
+#make ping arping tracepath
 make
 
 mkdir -p $out/bin
