@@ -1,10 +1,19 @@
-. $stdenv/setup || exit 1
+set -e
+
+. $stdenv/setup
 
 mkdir -p $out/bin $out/lib
 
-tar xvfz $src || exit 1
-cd hevea-* || exit 1
-sed s+/usr/local+$out+ Makefile > Makefile.new || exit 1
+tar xvfz $src
+cd hevea-*
+
+sed s+/usr/local+$out+ Makefile > Makefile.new
 mv Makefile.new Makefile
-make || exit 1
-make install || exit 1
+
+if test "x$system" = "xpowerpc-darwin"; then
+  sed s/CPP=cpp\ -E\ -P/CPP=m4\ -E\ -E\ -P/ Makefile > Makefile.new
+  mv Makefile.new Makefile
+fi
+
+make
+make install
