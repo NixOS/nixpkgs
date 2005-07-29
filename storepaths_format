@@ -6,3 +6,7 @@
 Amount of dependencies determined by:
 
 nix-store -q --references p
+
+or better (for a large expression)
+
+nix-store -q --requisites p
