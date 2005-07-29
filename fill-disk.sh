@@ -5,10 +5,10 @@ bootPath=@bootPath@
 
 if ! test -n "$1"
 then
-    echo "need URL for manifest!"
+    echo "need harddisk device for installing!"
     exit
 else
-    manifest=$1
+    device=$1
 fi
 
 make_dir() {
@@ -26,6 +26,17 @@ touch_file() {
     if ! test -d $root/$name; then touch $root/$name; fi
 }
 root=/tmp/mnt
+
+mkdir -p /tmp/mnt
+
+mount $device /tmp/mnt
+
+mkdir -p /nix
+mkdir -p /nixpkgs/trunk/pkgs
+
+# temporary hack
+mount --bind /mnt/cdrom1/nix /nix
+mount --bind /mnt/cdrom1/pkgs /nixpkgs/trunk/pkgs
 
 make_dir 00755 /bin
 make_dir 00755 /dev
@@ -77,8 +88,8 @@ cp -fa ../pkgs $root/nixpkgs/trunk
 make_dir 0755 /tmp/scripts
 cp -fa ../scripts $root/tmp
 
-echo adding manifest
-$NIX_CMD_PATH/nix-pull $manifest
+#echo adding manifest
+#$NIX_CMD_PATH/nix-pull $manifest
 
 echo adding packages
 export NIX_ROOT=$root
@@ -87,8 +98,21 @@ unset NIX_LOG_DIR
 unset NIX_STATE_DIR
 unset NIX_CONF_DIR
 
-storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
-$NIX_CMD_PATH/nix-store -r $storeExpr
+#storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
+#storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
+#$NIX_CMD_PATH/nix-store -r $storeExpr
+#echo $storeExpr
+#storeExpr2=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $storeExpr))
+#echo storeExpr $storeExpr
+#echo $($NIX_CMD_PATH/nix-store -qR --include-outputs $storeExpr)
+
+echo copying store
+
+(while read storepaths; do
+  cp -fa $storepaths $root/nix/store
+done) < /mnt/cdrom1/mystorepaths
+
+#cp -fa ../nix/store/* $root/nix/store
 
 #echo registering valid paths...
 #(while read storepath; do
@@ -104,6 +128,8 @@ $NIX_CMD_PATH/nix-store -r $storeExpr
 #    echo SUCC $line
 #    $NIX_CMD_PATH/nix-store --successor $line
 #done) < /tmp/mysuccessors
+
+exit
 
 echo setting init symlink...
 rm -f $root/init
