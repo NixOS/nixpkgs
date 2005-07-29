@@ -1,0 +1,8 @@
+/nix/store/abcd-<package>
+2
+/nix/store/1234-<package-1>
+/nix/store/5678-<package-2>
+
+Amount of dependencies determined by:
+
+nix-store -q --references p
