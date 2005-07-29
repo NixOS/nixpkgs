@@ -90,6 +90,7 @@ let {
     openssl
     mktemp
     strace
+    xauth
     qt3
     xmltv
     mythtv

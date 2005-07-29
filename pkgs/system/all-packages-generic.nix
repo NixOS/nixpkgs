@@ -202,7 +202,13 @@ rec {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
   };
- 
+
+  xauth = (import ../tools/X11/xauth) {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libXau libXext libXmu;
+  };
+
+   
   ### SHELLS
 
   bash = (import ../shells/bash) {
