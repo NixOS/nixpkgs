@@ -8,4 +8,5 @@ stdenv.mkDerivation {
     md5 = "dd403b15ef18bb0e5d78d3f552f822a5";
   };
  buildInputs = [nasm perl];
+ patches = [./syslinux-installpath.patch];
 }
