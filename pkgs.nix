@@ -10,5 +10,5 @@ rec {
     less screen openssh binutils strace shadowutils iputils gnumake curl
     gnused gnutar gnugrep gzip mingetty grub;};
 
-  everything = [boot sysvinit];
+  everything = [boot sysvinit kernel];
 }

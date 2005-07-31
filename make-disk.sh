@@ -1,5 +1,6 @@
 #! /bin/sh -e
 
+# deps is an array
 declare -a deps
 
 archivesDir=/tmp/arch
@@ -8,7 +9,9 @@ nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 storePaths=$archivesDir/mystorepaths
 validatePaths=$archivesDir/validatepaths
+bootiso=/tmp/nixos.iso
 
+# keep chmod happy
 touch ${archivesDir}/blah
 chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*
@@ -27,6 +30,8 @@ bootPath=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).boot' | $NIX_C
 nix=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
 syslinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).syslinux' | $NIX_CMD_PATH/nix-instantiate -))
+
+kernel=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
 
 #nixDeps=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
@@ -77,7 +82,18 @@ echo copying bootimage
 mkdir ${archivesDir}/isolinux
 cp ${syslinux}/lib/syslinux/isolinux.bin ${archivesDir}/isolinux
 chmod u+w ${archivesDir}/isolinux/*
-mkisofs -rJ -o /tmp/nix-pull.iso -b isolinux/isolinux.bin -c isolinux/boot.cat \
+
+echo copying kernel
+
+# By following the symlink we don't have to know the version number
+# of the kernel here.
+cp -L $kernel/vmlinuz ${archivesDir}/isolinux/linux
+
+# echo making ramdisk
+# todo!
+
+echo creating ISO image
+
+mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
                 -no-emul-boot -boot-load-size 4 -boot-info-table \
                 ${archivesDir}
-
