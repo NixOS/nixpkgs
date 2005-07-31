@@ -52,7 +52,7 @@ rec {
   };
 
   parted = (import ../tools/misc/parted) {
-    inherit fetchurl stdenv e2fsprogs;
+    inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
 
 
