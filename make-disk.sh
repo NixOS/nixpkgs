@@ -26,6 +26,8 @@ bootPath=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).boot' | $NIX_C
 
 nix=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
+syslinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).syslinux' | $NIX_CMD_PATH/nix-instantiate -))
+
 #nixDeps=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
 #nixDeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -51,9 +53,17 @@ for i in $utilLinux; do
   fi
 done
 
+echo copying nixpkgs
+
 cp -fa ${nixpkgs} ${archivesDir}
+
+echo copying packges from store
+
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
+
+echo copying scripts
+
 mkdir ${archivesDir}/scripts
 cp -fa * ${archivesDir}/scripts
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
@@ -61,3 +71,13 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@NIX_CMD_PATH\@^$nix^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
+
+echo copying bootimage
+
+mkdir ${archivesDir}/isolinux
+cp ${syslinux}/lib/syslinux/isolinux.bin ${archivesDir}/isolinux
+chmod u+w ${archivesDir}/isolinux/*
+mkisofs -rJ -o /tmp/nix-pull.iso -b isolinux/isolinux.bin -c isolinux/boot.cat \
+                -no-emul-boot -boot-load-size 4 -boot-info-table \
+                ${archivesDir}
+
