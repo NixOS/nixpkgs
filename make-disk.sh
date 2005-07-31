@@ -81,6 +81,7 @@ echo copying bootimage
 
 mkdir ${archivesDir}/isolinux
 cp ${syslinux}/lib/syslinux/isolinux.bin ${archivesDir}/isolinux
+cp isolinux.cfg ${archivesDir}/isolinux
 chmod u+w ${archivesDir}/isolinux/*
 
 echo copying kernel
@@ -91,6 +92,8 @@ cp -L $kernel/vmlinuz ${archivesDir}/isolinux/linux
 
 # echo making ramdisk
 # todo!
+mkdir ${archivesDir}/sbin
+ln -s /scripts/fill-disk.sh ${archivesDir}/sbin/init
 
 echo creating ISO image
 
