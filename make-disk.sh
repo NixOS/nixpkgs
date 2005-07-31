@@ -88,7 +88,7 @@ echo copying kernel
 
 # By following the symlink we don't have to know the version number
 # of the kernel here.
-cp -L $kernel/vmlinuz ${archivesDir}/isolinux/linux
+cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 
 # echo making ramdisk
 # todo!
