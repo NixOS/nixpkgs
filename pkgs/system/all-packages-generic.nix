@@ -51,6 +51,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  parted = (import ../tools/misc/parted) {
+    inherit fetchurl stdenv e2fsprogs;
+  };
+
+
   diffutils = (import ../tools/text/diffutils) {
     inherit fetchurl stdenv coreutils;
   };
