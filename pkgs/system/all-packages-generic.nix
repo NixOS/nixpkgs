@@ -55,6 +55,10 @@ rec {
     inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
 
+  qtparted = (import ../tools/misc/qtparted) {
+    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
+    inherit (xlibs) libX11 libXext;
+  };
 
   diffutils = (import ../tools/text/diffutils) {
     inherit fetchurl stdenv coreutils;
