@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "7e46a32def60ea355c193d9225691742";
   };
   buildInputs = [e2fsprogs ncurses readline];
+  patches = [./parted-trailingcomma.patch];
 }
