@@ -10,6 +10,8 @@ fill_disk=$archivesDir/scripts/fill-disk.sh
 storePaths=$archivesDir/mystorepaths
 validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
+#initrd=/tmp/initrd.img
+initrd=/tmp/initram.img
 
 # keep chmod happy
 touch ${archivesDir}/blah
@@ -42,6 +44,8 @@ echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).ni
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
 
+bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
 done) < $storePaths
@@ -58,6 +62,18 @@ for i in $utilLinux; do
   fi
 done
 
+echo creating directories for bootimage
+
+mkdir ${archivesDir}/bin
+mkdir ${archivesDir}/sbin
+mkdir -p ${archivesDir}/usr/bin
+mkdir -p ${archivesDir}/usr/sbin
+mkdir ${archivesDir}/tmp
+mkdir ${archivesDir}/proc
+mkdir ${archivesDir}/var
+mkdir ${archivesDir}/etc
+mkdir ${archivesDir}/dev
+
 echo copying nixpkgs
 
 cp -fa ${nixpkgs} ${archivesDir}
@@ -67,6 +83,8 @@ echo copying packges from store
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
 
+echo bash $bash
+
 echo copying scripts
 
 mkdir ${archivesDir}/scripts
@@ -74,6 +92,7 @@ cp -fa * ${archivesDir}/scripts
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@NIX_CMD_PATH\@^$nix^g" \
+    -e "s^@bash\@^$bash^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
@@ -92,8 +111,18 @@ cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 
 # echo making ramdisk
 # todo!
-mkdir ${archivesDir}/sbin
-ln -s /scripts/fill-disk.sh ${archivesDir}/sbin/init
+# mkdir ${archivesDir}/sbin
+# ln -s /scripts/fill-disk.sh ${archivesDir}/sbin/init
+ln -s /scripts/fill-disk.sh ${archivesDir}/init
+
+echo creating ramdisk
+
+rm -f ${initrd}
+(cd ${archivesDir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+
+#mkcramfs ${archivesDir} /tmp/initramdisk.img
+
+cp ${initrd} ${archivesDir}/isolinux
 
 echo creating ISO image
 

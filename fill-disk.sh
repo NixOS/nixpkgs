@@ -1,4 +1,5 @@
-#! /bin/sh -e
+#! @bash@ -e
+##  #! /bin/sh -e
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
@@ -31,12 +32,12 @@ mkdir -p /tmp/mnt
 
 mount $device /tmp/mnt
 
-mkdir -p /nix
-mkdir -p /nixpkgs/trunk/pkgs
+# mkdir -p /nix
+# mkdir -p /nixpkgs/trunk/pkgs
 
 # temporary hack
-mount --bind /mnt/cdrom1/nix /nix
-mount --bind /mnt/cdrom1/pkgs /nixpkgs/trunk/pkgs
+# mount --bind /mnt/cdrom1/nix /nix
+# mount --bind /mnt/cdrom1/pkgs /nixpkgs/trunk/pkgs
 
 make_dir 00755 /bin
 make_dir 00755 /dev
