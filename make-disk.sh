@@ -70,14 +70,16 @@ echo creating directories for bootimage
 
 mkdir ${initdir}
 mkdir ${initdir}/bin
+mkdir ${initdir}/dev
+mkdir ${initdir}/etc
+mkdir ${initdir}/installimage
+mkdir ${initdir}/proc
 mkdir ${initdir}/sbin
+mkdir ${initdir}/sys
+mkdir ${initdir}/tmp
 mkdir -p ${initdir}/usr/bin
 mkdir -p ${initdir}/usr/sbin
-mkdir ${initdir}/tmp
-mkdir ${initdir}/proc
 mkdir ${initdir}/var
-mkdir ${initdir}/etc
-mkdir ${initdir}/dev
 
 echo copying nixpkgs
 
@@ -87,6 +89,7 @@ echo copying packges from store
 
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
+#cp -fau --parents ${kernel} ${archivesDir}
 
 bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
@@ -128,16 +131,12 @@ echo creating ramdisk
 rm -f ${initrd}
 cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
 cp ${bash}/bin/* ${initdir}/bin
-#cp /nix/store/570hmhmx3v57605cqg9yfvvyh0nnb8k8-bash ${initdir}/bin/sh
+#cp -f /nix/store/570hmhmx3v57605cqg9yfvvyh0nnb8k8-bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 cp -fau --parents ${bashdeps} ${initdir}
 
-#mknod ${initdir}/dev/null c 1 3
-#mknod ${initdir}/dev/console c 5 1
-
-(cd ${archivesDir}/initdisk; find . |cpio -c -o) | gzip -9 > ${initrd}
-
-#mkcramfs ${archivesDir} /tmp/initramdisk.img
+#(cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+(cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}
 
 cp ${initrd} ${archivesDir}/isolinux
 
