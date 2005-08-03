@@ -134,6 +134,7 @@ cp ${bash}/bin/* ${initdir}/bin
 #cp -f /nix/store/570hmhmx3v57605cqg9yfvvyh0nnb8k8-bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 cp -fau --parents ${bashdeps} ${initdir}
+cp -fau --parents ${utilLinux} ${initdir}
 
 #(cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
 (cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}
