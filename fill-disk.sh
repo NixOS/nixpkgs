@@ -1,8 +1,14 @@
 #! @bash@ -e
-##  #! /bin/sh -e
+
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
+
+mknod /dev/null c 1 3
+mknod /dev/console c 5 1
+
+echo "blaat"
 
 if ! test -n "$1"
 then

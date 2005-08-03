@@ -12,6 +12,7 @@ validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
 #initrd=/tmp/initrd.img
 initrd=/tmp/initram.img
+initdir=${archivesDir}/initdir
 
 # keep chmod happy
 touch ${archivesDir}/blah
@@ -45,6 +46,9 @@ echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).ni
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
 
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
+findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutils' | $NIX_CMD_PATH/nix-instantiate -))
+utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -64,15 +68,16 @@ done
 
 echo creating directories for bootimage
 
-mkdir ${archivesDir}/bin
-mkdir ${archivesDir}/sbin
-mkdir -p ${archivesDir}/usr/bin
-mkdir -p ${archivesDir}/usr/sbin
-mkdir ${archivesDir}/tmp
-mkdir ${archivesDir}/proc
-mkdir ${archivesDir}/var
-mkdir ${archivesDir}/etc
-mkdir ${archivesDir}/dev
+mkdir ${initdir}
+mkdir ${initdir}/bin
+mkdir ${initdir}/sbin
+mkdir -p ${initdir}/usr/bin
+mkdir -p ${initdir}/usr/sbin
+mkdir ${initdir}/tmp
+mkdir ${initdir}/proc
+mkdir ${initdir}/var
+mkdir ${initdir}/etc
+mkdir ${initdir}/dev
 
 echo copying nixpkgs
 
@@ -83,7 +88,7 @@ echo copying packges from store
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
 
-echo bash $bash
+bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
 echo copying scripts
 
@@ -93,6 +98,9 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@NIX_CMD_PATH\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
+    -e "s^@findutils\@^$findutils^g" \
+    -e "s^@coreutils\@^$coreutils^g" \
+    -e "s^@utillinux\@^$utillinux^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
@@ -113,12 +121,21 @@ cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 # todo!
 # mkdir ${archivesDir}/sbin
 # ln -s /scripts/fill-disk.sh ${archivesDir}/sbin/init
-ln -s /scripts/fill-disk.sh ${archivesDir}/init
+# ln -s /scripts/fill-disk.sh ${archivesDir}/init
 
 echo creating ramdisk
 
 rm -f ${initrd}
-(cd ${archivesDir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
+cp ${bash}/bin/* ${initdir}/bin
+#cp /nix/store/570hmhmx3v57605cqg9yfvvyh0nnb8k8-bash ${initdir}/bin/sh
+chmod u+x ${initdir}/init
+cp -fau --parents ${bashdeps} ${initdir}
+
+#mknod ${initdir}/dev/null c 1 3
+#mknod ${initdir}/dev/console c 5 1
+
+(cd ${archivesDir}/initdisk; find . |cpio -c -o) | gzip -9 > ${initrd}
 
 #mkcramfs ${archivesDir} /tmp/initramdisk.img
 
