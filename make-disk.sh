@@ -44,6 +44,7 @@ echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).ni
 #echo $nixDeps > $storePaths
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
+coreUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -)))
 
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
@@ -131,13 +132,13 @@ echo creating ramdisk
 rm -f ${initrd}
 cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
 cp ${bash}/bin/* ${initdir}/bin
-#cp -f /nix/store/570hmhmx3v57605cqg9yfvvyh0nnb8k8-bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 cp -fau --parents ${bashdeps} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
+cp -fau --parents ${coreUtils} ${initdir}
 
-#(cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
-(cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}
+(cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+#(cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}
 
 cp ${initrd} ${archivesDir}/isolinux
 

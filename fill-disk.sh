@@ -15,7 +15,7 @@ mount -t sysfs sys /sys
 
 # consoles
 
-mknod -m 0600 /dev/console c 5 1
+#mknod -m 0600 /dev/console c 5 1
 mknod -m 0600 /dev/ttyS0 c 4 64
 mknod -m 0600 /dev/ttyS1 c 4 65
 mknod -m 0600 /dev/ttyS2 c 4 66
@@ -49,13 +49,15 @@ mknod -m 0644 /dev/urandom c 1 9
 
 echo "blaat"
 
-if ! test -n "$1"
-then
-    echo "need harddisk device for installing!"
-    exit
-else
-    device=$1
-fi
+#if ! test -n "$1"
+#then
+#    echo "need harddisk device for installing!"
+#    exit
+#else
+#    device=$1
+#fi
+
+device=/dev/hda1
 
 make_dir() {
     mode=$1
@@ -75,7 +77,9 @@ root=/tmp/mnt
 
 mkdir -p /tmp/mnt
 
-mount $device /tmp/mnt
+mount -t ext2 $device /tmp/mnt
+
+cd /sys; echo *
 
 # mkdir -p /nix
 # mkdir -p /nixpkgs/trunk/pkgs
