@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     md5 = "b8253bf21eaebe1f2c22b50462e8046c";
   };
   buildInputs = [e2fsprogs ncurses readline parted libXext libX11 zlib qt3];
-  configureFlags = "--disable-reiserfs --disable-jfs --disable-xfs";
+  configureFlags = "--disable-reiserfs --disable-jfs --disable-xfs --disable-ntfs";
 }
