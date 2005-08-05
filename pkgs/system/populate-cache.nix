@@ -86,6 +86,9 @@ let {
     less
     file
     screen
+    grub
+    parted
+    qtparted
     xsel
     openssl
     mktemp
