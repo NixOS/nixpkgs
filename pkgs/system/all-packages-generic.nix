@@ -157,7 +157,7 @@ rec {
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
-    inherit fetchurl stdenv libpng libjpeg expat x11 yacc;
+    inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;
     inherit (xlibs) libXaw;
   };
 

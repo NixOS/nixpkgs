@@ -1,17 +1,17 @@
-{stdenv, fetchurl, x11, libpng, libjpeg, expat, libXaw, yacc}:
+{stdenv, fetchurl, x11, libpng, libjpeg, expat, libXaw, yacc, libtool}:
 
 assert libpng != null && libjpeg != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "graphviz-2.2";
+  name = "graphviz-2.4";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/graphviz-2.2.tar.gz;
-    md5 = "9275d30695a5c22f360acbef7b85acd3";
+    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.4.tar.gz;
+    md5 = "f1074d38a7eeb5e5b2ebfdb643aebf8a";
   };
 
-  buildInputs = [x11 libpng libjpeg expat libXaw yacc];
+  buildInputs = [x11 libpng libjpeg expat libXaw yacc libtool];
   configureFlags = [
     (if x11 == null then "--without-x" else "")
   ];
