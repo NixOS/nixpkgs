@@ -66,3 +66,5 @@ mkswap /dev/hda2
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
 ## Find out how Knoppix and SUSE do this...
+
+$(./install-disk.sh)
