@@ -10,5 +10,8 @@ rec {
     less screen openssh binutils strace shadowutils iputils gnumake curl
     gnused gnutar gnugrep gzip mingetty grub parted;};
 
-  everything = [boot sysvinit kernel];
+  init = (import ./init) {inherit stdenv bash coreutils 
+    utillinux e2fsprogs nix shadowutils mingetty grub parted;};
+
+  everything = [boot init sysvinit kernel];
 }

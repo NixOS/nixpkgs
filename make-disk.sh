@@ -45,11 +45,13 @@ echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).ni
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
 coreUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -)))
+e2fsProgs=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX_CMD_PATH/nix-instantiate -)))
 
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
 findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutils' | $NIX_CMD_PATH/nix-instantiate -))
 utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
+e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -105,6 +107,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutils\@^$coreutils^g" \
     -e "s^@utillinux\@^$utillinux^g" \
+    -e "s^@e2fsprogs\@^$e2fsprogs^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
@@ -136,6 +139,7 @@ chmod u+x ${initdir}/init
 cp -fau --parents ${bashdeps} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
 cp -fau --parents ${coreUtils} ${initdir}
+cp -fau --parents ${e2fsProgs} ${initdir}
 
 (cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
 #(cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}

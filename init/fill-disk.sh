@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
@@ -47,22 +47,7 @@ mknod -m 0666 /dev/ptmx c 5 2
 mknod -m 0644 /dev/random c 1 8
 mknod -m 0644 /dev/urandom c 1 9
 
-mknod -m 0660 /dev/hda b 3 0
-mknod -m 0660 /dev/hda1 b 3 1
-mknod -m 0660 /dev/hda2 b 3 2
-mknod -m 0660 /dev/hda3 b 3 3
-
-#mknod -m 0660 /dev/sda b 8 0
-#mknod -m 0660 /dev/sda1 b 8 1
-#mknod -m 0660 /dev/sda2 b 8 2
-#mknod -m 0660 /dev/sda3 b 8 3
-
-echo "dev"
-cd /dev; echo *
-
-mkfs.ext2 /dev/hda1
-mkswap /dev/hda2
-
+echo "blaat"
 
 #if ! test -n "$1"
 #then
@@ -73,8 +58,6 @@ mkswap /dev/hda2
 #fi
 
 device=/dev/hda1
-#device=/dev/sda1
-
 
 make_dir() {
     mode=$1
@@ -105,10 +88,6 @@ cd /sys; echo *
 # mount --bind /mnt/cdrom1/nix /nix
 # mount --bind /mnt/cdrom1/pkgs /nixpkgs/trunk/pkgs
 
-##
-## Create a directory tree on the installation disk.
-##
-
 make_dir 00755 /bin
 make_dir 00755 /dev
 make_dir 00755 /proc
@@ -131,10 +110,6 @@ make_dir 00755 /mnt/host
 make_dir 00755 /home
 make_dir 00755 /home/root
 
-##
-## Add a few devices to /dev on the install disk. This is by far complete.
-##
-
 mknod $root/dev/null c 1 3
 
 touch_file /etc/passwd
@@ -143,12 +118,6 @@ touch_file /etc/group
 
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
-
-cat /proc/mounts
-
-## Probe for CD device which contains our CD here and mount /nix and
-## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
-## Find out how Knoppix and SUSE do this...
 
 export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
@@ -232,7 +201,3 @@ cp /etc/resolv.conf $root/etc
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
-
-###
-### Do funky stuff with grub here.
-###
