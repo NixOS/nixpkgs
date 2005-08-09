@@ -4,6 +4,7 @@ export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinu
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
+modutils=@modutils@
 
 mount -t proc proc /proc
 mount -t sysfs sys /sys
@@ -150,6 +151,8 @@ cat /proc/mounts
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
 ## Find out how Knoppix and SUSE do this...
 
+cat /proc/ide/hd*/driver
+
 export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
 export NIX_STATE_DIR=$root/nix/var/nix
@@ -236,3 +239,4 @@ echo "192.168.150.1 uml" >> $root/etc/hosts
 ###
 ### Do funky stuff with grub here.
 ###
+
