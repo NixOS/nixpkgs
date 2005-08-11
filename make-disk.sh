@@ -146,6 +146,8 @@ cp -fau --parents ${coreUtils} ${initdir}
 cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${modUtils} ${initdir}
 
+touch ${initdir}/NIXOS
+
 (cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
 #(cd ${archivesDir}/initdir; find . |cpio -c -o) | gzip -9 > ${initrd}
 
