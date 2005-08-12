@@ -389,6 +389,11 @@ rec {
     inherit stdenv;
   };
 
+  opencxx = (import ../development/compilers/opencxx) {
+    inherit fetchurl stdenv libtool;
+    gcc = gcc33;
+  };
+
   jikes = (import ../development/compilers/jikes) {
     inherit fetchurl stdenv;
   };
