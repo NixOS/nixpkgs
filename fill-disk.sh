@@ -119,6 +119,7 @@ cd /sys; echo *
 ##
 
 make_dir 00755 /bin
+make_dir 00755 /boot
 make_dir 00755 /dev
 make_dir 00755 /proc
 make_dir 01777 /tmp
