@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
@@ -252,8 +252,6 @@ done) < /cdrom/mystorepaths
 #    $NIX_CMD_PATH/nix-store --successor $line
 #done) < /tmp/mysuccessors
 
-exit
-
 echo setting init symlink...
 rm -f $root/init
 ln -s $sysvinitPath/sbin/init $root/init
@@ -270,7 +268,7 @@ echo setting up networking information...
 make_dir 00755 /etc/networking
 echo 192.168.150.1 > $root/etc/networking/local-ip
 echo 192.168.150.3 > $root/etc/networking/gateway-ip
-cp /etc/resolv.conf $root/etc
+#cp /etc/resolv.conf $root/etc
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
