@@ -53,6 +53,21 @@ mknod -m 0660 /dev/hda1 b 3 1
 mknod -m 0660 /dev/hda2 b 3 2
 mknod -m 0660 /dev/hda3 b 3 3
 
+mknod -m 0660 /dev/hdb b 3 64
+mknod -m 0660 /dev/hdb1 b 3 65
+mknod -m 0660 /dev/hdb2 b 3 66
+mknod -m 0660 /dev/hdb3 b 3 67
+
+mknod -m 0660 /dev/hdc b 22 0
+mknod -m 0660 /dev/hdc1 b 22 1
+mknod -m 0660 /dev/hdc2 b 22 2
+mknod -m 0660 /dev/hdc3 b 22 3
+
+mknod -m 0660 /dev/hdd b 22 64
+mknod -m 0660 /dev/hdd1 b 22 65
+mknod -m 0660 /dev/hdd2 b 22 66
+mknod -m 0660 /dev/hdd3 b 22 67
+
 #mknod -m 0660 /dev/sda b 8 0
 #mknod -m 0660 /dev/sda1 b 8 1
 #mknod -m 0660 /dev/sda2 b 8 2
@@ -99,13 +114,6 @@ mount -t ext2 $device /tmp/mnt
 
 cd /sys; echo *
 
-# mkdir -p /nix
-# mkdir -p /nixpkgs/trunk/pkgs
-
-# temporary hack
-# mount --bind /mnt/cdrom1/nix /nix
-# mount --bind /mnt/cdrom1/pkgs /nixpkgs/trunk/pkgs
-
 ##
 ## Create a directory tree on the installation disk.
 ##
@@ -151,7 +159,38 @@ cat /proc/mounts
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
 ## Find out how Knoppix and SUSE do this...
 
-cat /proc/ide/hd*/driver
+#devices=$(grep -r cdrom hd* | cut -d '/' -f 1 | sort | uniq)
+#echo devices ${devices}
+
+DEVICES="/dev/hd?"
+
+echo devices ${DEVICES}
+
+for i in ${DEVICES}
+do
+echo "Looking for CDROM in: $i"
+if mount -t iso9660 $i /cdrom >/dev/null 2>&1
+then
+  echo "cdrom contents"
+  ls /cdrom
+  if test -f /cdrom/NIXOS
+  then
+    cddevice=$i
+    echo "Accessing NixOS CDROM at $i"
+  break
+fi
+#umount /cdrom
+fi
+done
+
+echo cddevice ${cddevice}
+
+#echo path $PATH
+ls -l @coreutils@/bin/l*
+#rm -rf /nix
+ln -s /cdrom/nixpkgs /nixpkgs
+mount --bind /cdrom/nix /nix
+
 
 export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
@@ -167,10 +206,10 @@ echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
 
 echo copying nixpkgs...
-cp -fa ../pkgs $root/nixpkgs/trunk
+cp -fa /nixpkgs $root/nixpkgs/trunk
 
 make_dir 0755 /tmp/scripts
-cp -fa ../scripts $root/tmp
+cp -fa /cdrom/scripts $root/tmp
 
 #echo adding manifest
 #$NIX_CMD_PATH/nix-pull $manifest
@@ -194,7 +233,7 @@ echo copying store
 
 (while read storepaths; do
   cp -fa $storepaths $root/nix/store
-done) < /mnt/cdrom1/mystorepaths
+done) < /cdrom/mystorepaths
 
 #cp -fa ../nix/store/* $root/nix/store
 

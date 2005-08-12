@@ -75,6 +75,7 @@ echo creating directories for bootimage
 
 mkdir ${initdir}
 mkdir ${initdir}/bin
+mkdir ${initdir}/cdrom
 mkdir ${initdir}/dev
 mkdir ${initdir}/etc
 mkdir ${initdir}/installimage
