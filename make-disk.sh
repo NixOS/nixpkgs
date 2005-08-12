@@ -54,7 +54,7 @@ findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutils' | 
 utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
 e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX_CMD_PATH/nix-instantiate -))
 modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).modutils' | $NIX_CMD_PATH/nix-instantiate -))
-grub=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).grub' | $NIX_CMD_PATH/nix-instantiate -))
+grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grub' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
