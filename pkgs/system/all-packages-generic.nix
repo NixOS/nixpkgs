@@ -51,6 +51,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+   grubWrapper = (import ../tools/misc/grub-wrapper) {
+     inherit stdenv grub diffutils gnused gnugrep;
+  };
+
   parted = (import ../tools/misc/parted) {
     inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
