@@ -58,6 +58,7 @@ let {
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
+    docbook_ng
     docbook_xml_xslt
     subversion
     pan
