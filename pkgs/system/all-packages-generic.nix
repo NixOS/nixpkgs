@@ -178,7 +178,10 @@ rec {
   };
 
   xmlroff = (import ../tools/typesetting/xmlroff) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv pkgconfig libxml2 libxslt popt;
+    inherit (gtkLibs) glib pango gtk;
+    inherit (gnome) libgnomeprint;
+    inherit pangoxsl;
   };
 
   less = (import ../tools/misc/less) {
@@ -710,6 +713,11 @@ rec {
 
   gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
+  };
+
+  pangoxsl = (import ../development/libraries/pangoxsl) {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) glib pango;
   };
 
   qt3 = import ../development/libraries/qt-3 {
