@@ -1,7 +1,7 @@
 {stdenv, fetchurl, j2re, unzip} :
 
 stdenv.mkDerivation {
-  name = "jing-tools";
+  name = "jing-tools-20030619";
   builder = ./script-builder.sh;
 
   jing = (import ./default.nix) {
