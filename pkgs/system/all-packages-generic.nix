@@ -173,6 +173,10 @@ rec {
     inherit fetchurl stdenv ocaml;
   };
 
+  xmlroff = (import ../tools/typesetting/xmlroff) {
+    inherit fetchurl stdenv;
+  };
+
   less = (import ../tools/misc/less) {
     inherit fetchurl stdenv ncurses;
   };

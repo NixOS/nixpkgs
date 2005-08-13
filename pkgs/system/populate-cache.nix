@@ -60,6 +60,7 @@ let {
     docbook_xml_dtd_43
     docbook_ng
     docbook_xml_xslt
+    jing_tools
     subversion
     pan
     sylpheed
