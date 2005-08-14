@@ -109,9 +109,9 @@ touch_file() {
 }
 root=/tmp/mnt
 
-mkdir -p /tmp/mnt
+mkdir -p $root
 
-mount -t ext2 $device /tmp/mnt
+mount -t ext2 $device $root
 
 cd /sys; echo *
 
@@ -140,6 +140,7 @@ make_dir 00755 /nixpkgs
 make_dir 00755 /nixpkgs/trunk
 make_dir 00755 /proc
 make_dir 00755 /sbin
+make_dir 00755 /sys
 make_dir 01777 /tmp
 make_dir 00755 /usr
 make_dir 00755 /var
@@ -286,11 +287,16 @@ echo "192.168.150.1 uml" >> $root/etc/hosts
 ### Do funky stuff with grub here.
 ###
 
-ln -s @kernel@/vmlinuz /tmp/mnt/boot/vmlinuz
-ln -s @sysvinitPath@/sbin/init /tmp/mnt/sbin/init
+ln -s @kernel@/vmlinuz $root/boot/vmlinuz
+ln -s @sysvinitPath@/sbin/init $root/sbin/init
 
-grub-install --root-directory=/tmp/mnt --no-floppy ${targetdrive}
+echo installing bootloader
+
+grub-install --root-directory=${root} --no-floppy ${targetdrive}
+
+echo umounting filesystem
+
+umount $root
 
 echo install done
 telinit 0
-
