@@ -1,6 +1,8 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin
+
+kernel=@kernel@
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
@@ -8,8 +10,6 @@ modutils=@modutils@
 
 mount -t proc proc /proc
 mount -t sysfs sys /sys
-
-#mount -t /dev/hdc /installimage
 
 # make a complete /dev filesystem
 # ripped permissions and everything from anaconda (loader2/devices.h)
@@ -73,11 +73,15 @@ mknod -m 0660 /dev/hdd3 b 22 67
 #mknod -m 0660 /dev/sda2 b 8 2
 #mknod -m 0660 /dev/sda3 b 8 3
 
+mknod -m 0600 /dev/initctl p
+
 echo "dev"
 cd /dev; echo *
 
-mkfs.ext2 /dev/hda1
-mkswap /dev/hda2
+targetdrive=/dev/hda
+device=${targetdrive}1
+mkfs.ext2 ${device}
+mkswap ${targetdrive}2
 
 
 #if ! test -n "$1"
@@ -87,9 +91,6 @@ mkswap /dev/hda2
 #else
 #    device=$1
 #fi
-
-device=/dev/hda1
-#device=/dev/sda1
 
 
 make_dir() {
@@ -121,11 +122,12 @@ cd /sys; echo *
 make_dir 00755 /bin
 make_dir 00755 /boot
 make_dir 00755 /dev
-make_dir 00755 /proc
-make_dir 01777 /tmp
 make_dir 00755 /etc # global non-constant configuration
 make_dir 00755 /etc-secret
-make_dir 00755 /var
+make_dir 00755 /home
+make_dir 00755 /home/root
+make_dir 00755 /mnt
+make_dir 00755 /mnt/host
 make_dir 00755 /nix
 make_dir 00755 /nix/store
 make_dir 00755 /nix/var
@@ -136,16 +138,18 @@ make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
 make_dir 00755 /nixpkgs
 make_dir 00755 /nixpkgs/trunk
-make_dir 00755 /mnt
-make_dir 00755 /mnt/host
-make_dir 00755 /home
-make_dir 00755 /home/root
+make_dir 00755 /proc
+make_dir 00755 /sbin
+make_dir 01777 /tmp
+make_dir 00755 /usr
+make_dir 00755 /var
 
 ##
 ## Add a few devices to /dev on the install disk. This is by far complete.
 ##
 
 mknod $root/dev/null c 1 3
+mknod -m 0600 $root/dev/console c 5 1
 
 touch_file /etc/passwd
 touch_file /etc/shadow
@@ -232,11 +236,11 @@ unset NIX_CONF_DIR
 
 echo copying store
 
-(while read storepaths; do
-  cp -fa $storepaths $root/nix/store
-done) < /cdrom/mystorepaths
+#(while read storepaths; do
+  #cp -fa $storepaths $root/nix/store
+#done) < /cdrom/mystorepaths
 
-#cp -fa ../nix/store/* $root/nix/store
+cp -fa /nix/store/* $root/nix/store
 
 #echo registering valid paths...
 #(while read storepath; do
@@ -274,7 +278,16 @@ rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
 
+
 ###
 ### Do funky stuff with grub here.
 ###
+
+ln -s @kernel@/vmlinuz /tmp/mnt/boot/vmlinuz
+ln -s @sysvinitPath@/sbin/init /tmp/mnt/sbin/init
+
+grub-install --root-directory=/tmp/mnt --no-floppy ${targetdrive}
+
+echo install done
+telinit 0
 
