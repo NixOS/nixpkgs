@@ -8,11 +8,15 @@ sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 modutils=@modutils@
 
+echo mounting special filesystems
+
 mount -t proc proc /proc
 mount -t sysfs sys /sys
 
 # make a complete /dev filesystem
 # ripped permissions and everything from anaconda (loader2/devices.h)
+
+echo making device nodes
 
 # consoles
 
@@ -75,9 +79,6 @@ mknod -m 0660 /dev/hdd3 b 22 67
 
 mknod -m 0600 /dev/initctl p
 
-echo "dev"
-cd /dev; echo *
-
 targetdrive=/dev/hda
 device=${targetdrive}1
 mkfs.ext2 ${device}
@@ -111,13 +112,15 @@ root=/tmp/mnt
 
 mkdir -p $root
 
-mount -t ext2 $device $root
+echo mounting the target drive
 
-cd /sys; echo *
+mount -t ext2 $device $root
 
 ##
 ## Create a directory tree on the installation disk.
 ##
+
+echo creating file system hierarchy on target drive
 
 make_dir 00755 /bin
 make_dir 00755 /boot
@@ -149,6 +152,8 @@ make_dir 00755 /var
 ## Add a few devices to /dev on the install disk. This is by far complete.
 ##
 
+echo making device nodes on target drive
+
 mknod $root/dev/null c 1 3
 mknod -m 0600 $root/dev/console c 5 1
 mknod -m 0600 $root/dev/tty c 5 0
@@ -162,7 +167,7 @@ touch_file /etc/group
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
 
-cat /proc/mounts
+#cat /proc/mounts
 
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
@@ -172,8 +177,6 @@ cat /proc/mounts
 #echo devices ${devices}
 
 DEVICES="/dev/hd?"
-
-echo devices ${DEVICES}
 
 for i in ${DEVICES}
 do
@@ -192,11 +195,8 @@ fi
 fi
 done
 
-echo cddevice ${cddevice}
+echo switch to /nix and /nixpkgs from CD
 
-#echo path $PATH
-ls -l @coreutils@/bin/l*
-#rm -rf /nix
 ln -s /cdrom/nixpkgs /nixpkgs
 mount --bind /cdrom/nix /nix
 
@@ -224,6 +224,7 @@ cp -fa /cdrom/scripts $root/tmp
 #$NIX_CMD_PATH/nix-pull $manifest
 
 echo adding packages
+
 export NIX_ROOT=$root
 unset NIX_DATA_DIR
 unset NIX_LOG_DIR

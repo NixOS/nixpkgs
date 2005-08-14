@@ -103,8 +103,6 @@ cp -fa ${nixpkgs} ${archivesDir}
 
 echo copying packges from store
 
-echo GRUB ${Grub}
-
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
 cp -fau --parents ${Grub} ${archivesDir}
