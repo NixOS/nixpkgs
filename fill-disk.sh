@@ -150,6 +150,9 @@ make_dir 00755 /var
 
 mknod $root/dev/null c 1 3
 mknod -m 0600 $root/dev/console c 5 1
+mknod -m 0600 $root/dev/tty c 5 0
+mknod -m 0600 $root/dev/tty0 c 4 0
+mknod -m 0600 $root/dev/tty1 c 4 1
 
 touch_file /etc/passwd
 touch_file /etc/shadow
@@ -266,7 +269,7 @@ rm -f $root/etc/inittab
 echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
-echo "1:2345:respawn:$bootPath/bin/login.sh /dev/ttys/0" >> $root/etc/inittab
+echo "1:2345:respawn:$bootPath/bin/login.sh /dev/tty1" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...
