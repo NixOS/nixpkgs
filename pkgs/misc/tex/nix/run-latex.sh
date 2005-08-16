@@ -83,4 +83,6 @@ echo "STATS:"
 printf "%5d overfull/underfull h/vboxes\n" $(cat $tmpFile | egrep -c "Overfull|Underfull" || true)
 printf "%5d undefined references\n" $(cat $tmpFile | grep -c "Reference.*undefined" || true)
 printf "%5d undefined citations\n" $(cat $tmpFile | grep -c "Citation.*undefined" || true)
+printf "%5d pages\n" \
+    $(cat $tmpFile | grep "Output written.*(.*pages" | sed "s/.*(\([0-9]*\) pages.*/\1/" || true)
 echo
