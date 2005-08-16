@@ -10,9 +10,10 @@ fill_disk=$archivesDir/scripts/fill-disk.sh
 storePaths=$archivesDir/mystorepaths
 validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
-#initrd=/tmp/initrd.img
 initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
+
+echo cleaning old build
 
 # keep chmod happy
 touch ${archivesDir}/blah
@@ -102,7 +103,7 @@ echo copying nixpkgs
 svn export ${nixpkgs} ${archivesDir}/pkgs
 #cp -fa ${nixpkgs} ${archivesDir}
 
-echo copying packges from store
+echo copying packages from store
 
 #cp -fa --parents ${nixDeps} ${archivesDir}
 cp -fau --parents ${utilLinux} ${archivesDir}
@@ -177,6 +178,9 @@ mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
                 ${archivesDir}
 
 # cleanup, be diskspace friendly
+
+echo cleaning up
+
 rm -f ${initrd}
 chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*
