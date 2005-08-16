@@ -215,7 +215,7 @@ echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
 
 echo copying nixpkgs...
-cp -fLa /nixpkgs $root/nixpkgs/trunk
+cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
 
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
