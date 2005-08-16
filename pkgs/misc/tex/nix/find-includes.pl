@@ -27,7 +27,7 @@ while (scalar @workset > 0) {
     $doneset{$fn} = 1;
     
     if (!open FILE, "< $fn") {
-	print STDERR "(cannot open $fn, ignoring)\n";
+#	print STDERR "(cannot open $fn, ignoring)\n";
 	next;
     };
 
