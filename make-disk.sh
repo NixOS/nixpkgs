@@ -99,7 +99,8 @@ mkdir ${initdir}/var
 
 echo copying nixpkgs
 
-cp -fa ${nixpkgs} ${archivesDir}
+svn export ${nixpkgs} ${archivesDir}/pkgs
+#cp -fa ${nixpkgs} ${archivesDir}
 
 echo copying packges from store
 
