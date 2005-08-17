@@ -620,7 +620,7 @@ rec {
 
   sdf = (import ../development/tools/parsing/sdf) {
     inherit fetchurl stdenv getopt;
-    aterm =  (import ../development/libraries/aterm/aterm-2.3.1) {
+    aterm =  (import ../development/libraries/aterm/aterm-2.3.1.nix) {
       inherit fetchurl stdenv;
     };
   };
