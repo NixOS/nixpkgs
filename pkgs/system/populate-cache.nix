@@ -39,7 +39,6 @@ let {
     flexnew
     gccWrapped
     aterm
-    atermDynamic
 
 #    atermjava
 #    jjtraveler

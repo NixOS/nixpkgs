@@ -400,6 +400,23 @@ rec {
     inherit stdenv;
   };
 
+/*
+  gcj = (import ../build-support/gcc-wrapper/default2.nix) {
+    name = "gcj";
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-4.0) {
+      inherit fetchurl stdenv noSysDirs;
+      langJava = true;
+      langCC   = false;
+      langC    = false;
+      langF77  = false;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+*/
+
   opencxx = (import ../development/compilers/opencxx) {
     inherit fetchurl stdenv libtool;
     gcc = gcc33;
@@ -598,10 +615,6 @@ rec {
   };
 
   aterm = (import ../development/libraries/aterm) {
-    inherit fetchurl stdenv;
-  };
-
-  atermDynamic = (import ../development/libraries/aterm/dynamic.nix) {
     inherit fetchurl stdenv;
   };
 
