@@ -619,7 +619,7 @@ rec {
   };
 
   sdf = (import ../development/tools/parsing/sdf) {
-    inherit fetchurl stdenv aterm getopt;
+    inherit fetchurl stdenv aterm getopt pkgconfig;
   };
 
   expat = (import ../development/libraries/expat) {
