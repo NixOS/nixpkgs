@@ -7,6 +7,7 @@ kernel=@kernel@
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 modutils=@modutils@
+hotplug=@hotplug@
 
 echo mounting special filesystems
 
@@ -290,6 +291,10 @@ echo "192.168.150.1 uml" >> $root/etc/hosts
 
 ln -s @kernel@/vmlinuz $root/boot/vmlinuz
 ln -s @sysvinitPath@/sbin/init $root/sbin/init
+ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
+ln -s @hotplug@/etc/hotplug $root/etc/hotplug
+ln -s @hotplug@/etc/hotplug.d $root/etc/hotplug.d
+ln -s $device $root/dev/root
 
 echo installing bootloader
 
