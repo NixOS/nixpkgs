@@ -47,8 +47,8 @@ let {
     jakartaregexp
 
     sdf
-#   strategoxt
-#    strategoxtUtils
+    strategoxt
+    strategoxtUtils
 
 #    ghc
 #    helium
