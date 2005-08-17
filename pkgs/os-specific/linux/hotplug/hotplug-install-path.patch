@@ -1,0 +1,12 @@
+diff -ruN hotplug-2004_03_29/Makefile hotplug-2004_03_29.new/Makefile
+--- hotplug-2004_03_29/Makefile	2003-06-28 02:13:10.000000000 +0200
++++ hotplug-2004_03_29.new/Makefile	2005-08-17 19:35:53.000000000 +0200
+@@ -5,7 +5,7 @@
+ REV=$(shell date "+%Y_%m_%d"| awk '{print $$1}')
+ 
+ # System locations
+-prefix =
++prefix = ${out}
+ exec_prefix = ${prefix}
+ etcdir = ${prefix}/etc
+ sbindir = ${exec_prefix}/sbin

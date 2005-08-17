@@ -1100,6 +1100,10 @@ rec {
     inherit fetchurl stdenv nasm perl;
   };
 
+ hotplug = import ../os-specific/linux/hotplug {
+    inherit fetchurl stdenv;
+  };
+
   ### DATA
 
   docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
