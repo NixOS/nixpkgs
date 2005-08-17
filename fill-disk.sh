@@ -160,6 +160,7 @@ mknod -m 0600 $root/dev/console c 5 1
 mknod -m 0600 $root/dev/tty c 5 0
 mknod -m 0600 $root/dev/tty0 c 4 0
 mknod -m 0600 $root/dev/tty1 c 4 1
+mknod -m 0444 $root/dev/urandom c 1 9
 
 touch_file /etc/passwd
 touch_file /etc/shadow
