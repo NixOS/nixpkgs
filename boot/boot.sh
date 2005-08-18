@@ -9,6 +9,9 @@ echo "--- Nix ---"
 echo "mounting /proc..."
 mount -n -t proc none /proc
 
+echo "mounting /sys..."
+mount -n -t sysfs none /sys
+
 #echo "checking /dev/root..."
 #e2fsck -y /dev/root || test "$?" -le 1
 
