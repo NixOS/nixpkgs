@@ -3,7 +3,7 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "linux-2.6.11.12-i386";
+  name = "linux-2.6.11.12";
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.nluug.nl/pub/os/Linux/system/kernel/v2.6/linux-2.6.11.12.tar.bz2;
