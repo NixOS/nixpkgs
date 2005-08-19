@@ -31,9 +31,9 @@ buildPhase() {
 
         # copy architecture dependent files
 
-        cp -a arch/$arch/scripts $out/lib/modules/${version}/build
-        cp -a arch/$arch/*lds $out/lib/modules/${version}/build
-        cp -a --parents arch/$arch/kernel/asm-offsets.s $out/lib/modules/${version}/build/arch/$arch/kernel
+        cp -a arch/$arch/scripts $out/lib/modules/${version}/build || :
+        cp -a arch/$arch/*lds $out/lib/modules/${version}/build || :
+        cp -a --parents arch/$arch/kernel/asm-offsets.s $out/lib/modules/${version}/build/arch/$arch/kernel || :
 
         # copy scripts
         rm -rf scripts/*.o
@@ -51,6 +51,7 @@ buildPhase() {
         # external modules can be built
         touch -r $out/lib/modules/$version/build/Makefile $out/lib/modules/$version/build/include/linux/version.h
         touch -r $out/lib/modules/$version/build/.config $out/lib/modules/$version/build/include/linux/autoconf.h
+         exit 1
 
 }
 
