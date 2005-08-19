@@ -130,6 +130,8 @@ make_dir 00755 /etc # global non-constant configuration
 make_dir 00755 /etc-secret
 make_dir 00755 /home
 make_dir 00755 /home/root
+make_dir 00755 /lib
+make_dir 00755 /lib/modules
 make_dir 00755 /mnt
 make_dir 00755 /mnt/host
 make_dir 00755 /nix
