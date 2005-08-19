@@ -52,7 +52,6 @@ buildPhase() {
         touch -r $out/lib/modules/$version/build/Makefile $out/lib/modules/$version/build/include/linux/version.h
         touch -r $out/lib/modules/$version/build/.config $out/lib/modules/$version/build/include/linux/autoconf.h
 
-        exit 1
 }
 
 buildPhase=buildPhase
