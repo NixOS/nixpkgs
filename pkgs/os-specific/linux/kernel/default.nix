@@ -12,5 +12,5 @@ stdenv.mkDerivation {
   config = ./config;
   inherit perl;
   buildInputs = [perl];
-  arch=i386
+  arch="i386";
 }
