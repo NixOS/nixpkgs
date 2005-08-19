@@ -63,8 +63,7 @@ e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | 
 modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).modutils' | $NIX_CMD_PATH/nix-instantiate -))
 grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 hotplug=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).hotplug' | $NIX_CMD_PATH/nix-instantiate -))
-#gnused=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX_CMD_PATH/nix-instantiate -))
-#gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
+udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -115,6 +114,7 @@ cp -fau --parents ${Kernel} ${archivesDir}
 cp -fau --parents ${SysVinit} ${archivesDir}
 cp -fau --parents ${BootPath} ${archivesDir}
 cp -fau --parents ${hotplug} ${archivesDir}
+cp -fau --parents ${udev} ${archivesDir}
 
 bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
@@ -172,6 +172,9 @@ cp -fau --parents ${hotplug} ${initdir}
 touch ${initdir}/NIXOS
 
 (cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+
+chmod -f -R +w ${initdir}/*
+rm -rf ${initdir}
 
 cp ${initrd} ${archivesDir}/isolinux
 
