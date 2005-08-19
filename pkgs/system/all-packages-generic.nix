@@ -1109,6 +1109,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+ udev = import ../os-specific/linux/udev {
+    inherit fetchurl stdenv;
+  };
+
   ### DATA
 
   docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
