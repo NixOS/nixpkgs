@@ -36,6 +36,7 @@ for i in $boot $halt $login $env; do
         -e "s^@gcc\@^$gcc^g" \
         -e "s^@mingetty\@^$mingetty^g" \
         -e "s^@grub\@^$grub^g" \
+        -e "s^@udev\@^$udev^g" \
         -e "s^@out\@^$out^g" \
         < $i > $dst
     chmod +x $dst

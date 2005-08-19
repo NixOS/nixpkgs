@@ -18,8 +18,8 @@ mount -n -t sysfs none /sys
 echo "remounting / writable..."
 mount -n -o remount,rw /dev/root /
 
-echo "mounting /mnt/host..."
-mount -n -t hostfs none /mnt/host
+echo "starting udev..."
+@udev@/sbin/udevstart
 
 echo "setting up hostname..."
 hostname uml
