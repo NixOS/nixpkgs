@@ -3,15 +3,15 @@ rec {
     stdenv kernel bash coreutils findutils utillinux sysvinit e2fsprogs
     nettools nix subversion gcc wget which vim less screen openssh binutils
     strace shadowutils iputils gnumake curl gnused gnutar gnugrep gzip
-    mingetty grubWrapper syslinux parted modutils hotplug udev;
+    mingetty grubWrapper syslinux parted module_init_tools hotplug udev;
 
   boot = (import ./boot) {inherit stdenv kernel bash coreutils findutils
     utillinux sysvinit e2fsprogs nettools nix subversion gcc wget which vim
     less screen openssh binutils strace shadowutils iputils gnumake curl
-    gnused gnutar gnugrep gzip mingetty grubWrapper parted modutils hotplug udev;};
+    gnused gnutar gnugrep gzip mingetty grubWrapper parted module_init_tools hotplug udev;};
 
   init = (import ./init) {inherit stdenv bash coreutils 
-    utillinux e2fsprogs nix shadowutils mingetty grubWrapper parted modutils hotplug;};
+    utillinux e2fsprogs nix shadowutils mingetty grubWrapper parted module_init_tools hotplug;};
 
   everything = [boot init sysvinit kernel];
 }

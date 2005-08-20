@@ -1,4 +1,4 @@
-{ stdenv, bash, coreutils, utillinux, e2fsprogs, nix, shadowutils, mingetty, grubWrapper, parted, modutils, hotplug}:
+{ stdenv, bash, coreutils, utillinux, e2fsprogs, nix, shadowutils, mingetty, grubWrapper, parted, module_init_tools, hotplug}:
 
 derivation {
   name = "init";
@@ -7,5 +7,5 @@ derivation {
   stage1 = ./prepare-disk.sh;
   stage2 = ./install-disk.sh;
   inherit stdenv bash coreutils utillinux e2fsprogs nix shadowutils
-          mingetty grubWrapper parted modutils;
+          mingetty grubWrapper parted module_init_tools;
 }

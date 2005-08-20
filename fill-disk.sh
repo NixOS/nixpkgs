@@ -150,6 +150,11 @@ make_dir 00755 /sys
 make_dir 01777 /tmp
 make_dir 00755 /usr
 make_dir 00755 /var
+make_dir 00755 /var/log
+make_dir 00755 /var/run
+make_dir 00755 /var/spool
+make_dir 00755 /var/state
+make_dir 00755 /var/tmp
 
 ##
 ## Add a few devices to /dev on the install disk. This is by far complete.
@@ -286,6 +291,16 @@ echo 192.168.150.3 > $root/etc/networking/gateway-ip
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
+
+###
+### Do kernel stuff here.
+###
+strippedName=$(basename @kernel@);
+if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
+        strippedName=$(echo "$strippedName" | cut -c34-)
+fi
+
+echo "stripped" $strippedName
 
 
 ###
