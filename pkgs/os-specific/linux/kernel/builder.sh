@@ -45,13 +45,13 @@ buildPhase() {
         cd include
         cp -a acpi config linux math-emu media net pcmcia rxrpc scsi sound video asm asm-generic $out/lib/modules/$version/build/include
         cp -a `readlink asm` $out/lib/modules/$version/build/include
+        cd ..
 
 
         # Make sure the Makefile and version.h have a matching timestamp so that
         # external modules can be built
         touch -r $out/lib/modules/$version/build/Makefile $out/lib/modules/$version/build/include/linux/version.h
         touch -r $out/lib/modules/$version/build/.config $out/lib/modules/$version/build/include/linux/autoconf.h
-         exit 1
 
 }
 
