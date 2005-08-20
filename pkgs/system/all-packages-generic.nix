@@ -1088,6 +1088,10 @@ rec {
     inherit fetchurl stdenv bison flex;
   };
 
+  module_init_tools = (import ../os-specific/linux/module-init-tools) {
+    inherit fetchurl stdenv;
+  };
+
   shadowutils = (import ../os-specific/linux/shadow) {
     inherit fetchurl stdenv;
   };
