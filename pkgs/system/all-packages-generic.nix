@@ -86,6 +86,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  groff = (import ../tools/text/groff) {
+    inherit fetchurl stdenv;
+  };
+
   enscript = (import ../tools/text/enscript) {
     inherit fetchurl stdenv;
   };
@@ -158,6 +162,10 @@ rec {
 
   bittorrent = (import ../tools/networking/bittorrent) {
     inherit fetchurl stdenv python pygtk makeWrapper;
+  };
+
+  dhcp = (import ../tools/networking/dhcp) {
+    inherit fetchurl stdenv;
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
