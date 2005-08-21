@@ -1,0 +1,13 @@
+diff -ruN dhcp-3.0.3/client/dhclient.c dhcp-3.0.3.new/client/dhclient.c
+--- dhcp-3.0.3/client/dhclient.c	2005-03-03 17:55:22.000000000 +0100
++++ dhcp-3.0.3.new/client/dhclient.c	2005-08-21 22:23:49.000000000 +0200
+@@ -2607,7 +2607,8 @@
+ 			wstatus = 0;
+ 		}
+ 	} else {
+-		execve (scriptName, argv, envp);
++		/* execve (scriptName, argv, envp); */
++		execv (scriptName, argv);
+ 		log_error ("execve (%s, ...): %m", scriptName);
+ 		exit (0);
+ 	}

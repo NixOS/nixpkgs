@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     md5 = "f91416a0b8ed3fd0601688cf0b7df58f";
   };
   buildInputs = [groff];
-#  patches = [./dhcp-makefile.patch];
+  patches = [./dhclient-execve.patch];
 }
