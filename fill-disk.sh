@@ -169,9 +169,9 @@ mknod -m 0600 $root/dev/tty0 c 4 0
 mknod -m 0600 $root/dev/tty1 c 4 1
 mknod -m 0444 $root/dev/urandom c 1 9
 
-touch_file /etc/passwd
-touch_file /etc/shadow
-touch_file /etc/group
+#touch_file /etc/passwd
+#touch_file /etc/shadow
+#touch_file /etc/group
 
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
@@ -291,6 +291,12 @@ echo 192.168.150.3 > $root/etc/networking/gateway-ip
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo "192.168.150.1 uml" >> $root/etc/hosts
+
+echo setting up initial account information...
+
+echo "root:x:0:root" > $root/etc/group
+echo "root:x:0:0:root:/root:/bin/sh" > $root/etc/passwd
+echo "root::12757:0:99999:7:::" > $root/etc/shadow
 
 ###
 ### Do kernel stuff here.

@@ -38,6 +38,7 @@ for i in $boot $halt $login $env; do
         -e "s^@module_init_tools\@^$module_init_tools^g" \
         -e "s^@grub\@^$grub^g" \
         -e "s^@udev\@^$udev^g" \
+        -e "s^@dhcp\@^$dhcp^g" \
         -e "s^@out\@^$out^g" \
         < $i > $dst
     chmod +x $dst
