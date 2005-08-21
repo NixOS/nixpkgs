@@ -275,7 +275,8 @@ cp -fa /nix/store/* $root/nix/store
 echo setting init symlink...
 rm -f $root/init
 ln -s $sysvinitPath/sbin/init $root/init
-ln -s $bash/bin/sh $root/bin/sh
+ln -s @bash@/bin/sh $root/bin/sh
+ln -s @bash@/bin/bash $root/bin/bash
 
 echo setting up inittab...
 rm -f $root/etc/inittab
