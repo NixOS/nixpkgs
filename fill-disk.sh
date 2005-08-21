@@ -154,6 +154,7 @@ make_dir 00755 /var/log
 make_dir 00755 /var/run
 make_dir 00755 /var/spool
 make_dir 00755 /var/state
+make_dir 00755 /var/state/dhcp
 make_dir 00755 /var/tmp
 
 ##
@@ -274,6 +275,7 @@ cp -fa /nix/store/* $root/nix/store
 echo setting init symlink...
 rm -f $root/init
 ln -s $sysvinitPath/sbin/init $root/init
+ln -s $bash/bin/sh $root/bin/sh
 
 echo setting up inittab...
 rm -f $root/etc/inittab

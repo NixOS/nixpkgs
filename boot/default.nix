@@ -2,7 +2,7 @@
 , nettools, nix, subversion, gcc, wget, which, vim, less, screen, openssh
 , binutils, strace, shadowutils, iputils, gnumake, curl, gnused, gnugrep
 , gnutar, gzip, mingetty, grubWrapper, parted, module_init_tools, hotplug
-, udev, dhcp}:
+, udev, dhcpWrapper}:
 
 derivation {
   name = "boot";
@@ -16,5 +16,5 @@ derivation {
           e2fsprogs nettools nix subversion gcc wget which vim less screen
           openssh binutils strace shadowutils iputils gnumake curl gnused
           gnutar gnugrep gzip mingetty grubWrapper parted module_init_tools
-          udev dhcp;
+          udev dhcpWrapper;
 }
