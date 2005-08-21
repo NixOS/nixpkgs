@@ -165,7 +165,7 @@ rec {
   };
 
   dhcp = (import ../tools/networking/dhcp) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv groff;
   };
 
   graphviz = (import ../tools/graphics/graphviz) {
