@@ -168,6 +168,11 @@ rec {
     inherit fetchurl stdenv groff;
   };
 
+  dhcpWrapper = (import ../tools/networking/dhcp-wrapper) {
+    inherit stdenv dhcp;
+  };
+
+
   graphviz = (import ../tools/graphics/graphviz) {
     inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;
     inherit (xlibs) libXaw;
