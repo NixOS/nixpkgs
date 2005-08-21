@@ -129,7 +129,6 @@ make_dir 00755 /dev
 make_dir 00755 /etc # global non-constant configuration
 make_dir 00755 /etc-secret
 make_dir 00755 /home
-make_dir 00755 /home/root
 make_dir 00755 /lib
 make_dir 00755 /lib/modules
 make_dir 00755 /mnt
@@ -145,6 +144,7 @@ make_dir 00755 /nix/var/log/nix
 make_dir 00755 /nixpkgs
 make_dir 00755 /nixpkgs/trunk
 make_dir 00755 /proc
+make_dir 00750 /root
 make_dir 00755 /sbin
 make_dir 00755 /sys
 make_dir 01777 /tmp
