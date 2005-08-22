@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/swig-1.3.19.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/swig-1.3.19.tar.gz;
     md5 = "a733455544426b31868dd87fc162e750";
   };
 

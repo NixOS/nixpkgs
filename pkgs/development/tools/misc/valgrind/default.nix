@@ -8,7 +8,7 @@
 stdenv.mkDerivation {
   name = "valgrind-2.4.0";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/valgrind-2.4.0.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/valgrind-2.4.0.tar.bz2;
     md5 = "1d0bd81d368789946d32d18a468ea0cf";
   };
   buildInputs = [perl];

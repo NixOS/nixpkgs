@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/zapping-0.7.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/zapping-0.7.tar.bz2;
     md5 = "dd7b3d920509709692c41c9c6c767746";
   };
 

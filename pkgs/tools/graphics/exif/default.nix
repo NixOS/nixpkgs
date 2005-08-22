@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "exif-0.6.9";
 
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/exif-0.6.9.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/exif-0.6.9.tar.gz;
     md5 = "555029098386fa677c461eb249d852d7";
   };
 

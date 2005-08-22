@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/thunderbird-source-0.8.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/thunderbird-source-0.8.tar.bz2;
     md5 = "76de1827d66ac482cfc4dd32e7b1e257";
   };
 

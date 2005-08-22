@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libXi-6.0.1";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libXi-6.0.1.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/libXi-6.0.1.tar.bz2;
     md5 = "7e935a42428d63a387b3c048be0f2756";
   };
   buildInputs = [pkgconfig];

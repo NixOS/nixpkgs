@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/perl-5.8.6.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/perl-5.8.6.tar.bz2;
     md5 = "3d030b6ff2a433840edb1a407d18dc0a";
   };
 

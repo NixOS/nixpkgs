@@ -62,19 +62,19 @@ rec {
   # The various statically linked components that make up the standard
   # environment.
   staticTools = downloadAndUnpack {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/stdenv-linux/static-tools.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/static-tools.tar.bz2;
     pkgname = "static-tools";
     md5 = "90578c603079313123e8c754a85e40d7";
   };
 
   binutils = downloadAndUnpack {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/stdenv-linux/binutils-2.15-static.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/binutils-2.15-static.tar.bz2;
     pkgname = "binutils";
     md5 = "9c134038b7f1894a4b307d600207047c";
   };
 
   gcc = (downloadAndUnpack {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/stdenv-linux/gcc-3.4.2-static.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/gcc-3.4.2-static.tar.bz2;
     pkgname = "gcc";
     md5 = "600452fac470a49a41ea81d39c209f35";
     postProcess = [./scripts/fix-outpath.sh];
@@ -82,7 +82,7 @@ rec {
   }) // { langC = true; langCC = false; langF77 = false; };
 
   glibc = downloadAndUnpack {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/stdenv-linux/glibc-2.3.3-static.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/glibc-2.3.3-static.tar.bz2;
     pkgname = "glibc";
     md5 = "36ff244e666c60784edfe1cc66f68e4c";
     postProcess = [./scripts/fix-outpath.sh];

@@ -6,7 +6,7 @@
 import ../../../development/perl-modules/generic perl {
   name = "xmltv-0.5.37";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/xmltv-0.5.37.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/xmltv-0.5.37.tar.bz2;
     md5 = "40b7675cc1b7632065ebbd1e0ecf860f";
   };
   makeMakerFlags = "-components tv_grab_nl";

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gtk+-1.2.10.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/gtk+-1.2.10.tar.gz;
     md5 = "4d5cb2fc7fb7830e4af9747a36bfce20";
   };
 

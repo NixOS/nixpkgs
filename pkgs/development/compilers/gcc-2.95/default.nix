@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "gcc-2.95.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/gcc-2.95.3.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/gcc-2.95.3.tar.gz;
     md5 = "f3ad4f32c2296fad758ed051b5ac8e28";
   };
   # !!! apply only if noSysDirs is set

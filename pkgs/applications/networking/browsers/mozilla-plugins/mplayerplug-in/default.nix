@@ -9,7 +9,7 @@
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/mplayerplug-in-2.80.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/mplayerplug-in-2.80.tar.gz;
     md5 = "ce3235ff7d46fae416cfb175193a5f25";
   };
 

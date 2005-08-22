@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "wxGTK-2.5.2";
 
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/wxGTK-2.5.2.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/wxGTK-2.5.2.tar.bz2;
     md5 = "b45874428b0164bfa5bd1a5a11b3eb4a";
   };
 

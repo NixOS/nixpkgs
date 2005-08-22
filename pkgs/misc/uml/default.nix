@@ -6,11 +6,11 @@ stdenv.mkDerivation {
   name = "uml-2.4.27-1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/linux-2.4.27.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/linux-2.4.27.tar.bz2;
     md5 = "59a2e6fde1d110e2ffa20351ac8b4d9e";
   };
   umlPatch = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/uml-patch-2.4.27-1.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/uml-patch-2.4.27-1.bz2;
     md5 = "63178bbd3a383a1005738f4628ff583e";
   };
   noAioPatch = ./no-aio.patch;

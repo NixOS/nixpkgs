@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "happy-1.14";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/happy-1.14-src.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/happy-1.14-src.tar.gz;
     md5 = "501b5b63533b2e2838de18085e8c4492";
   };
   buildInputs = [ghc perl];

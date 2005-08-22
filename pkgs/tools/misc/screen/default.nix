@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "screen-4.0.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/screen-4.0.2.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/screen-4.0.2.tar.gz;
     md5 = "ed68ea9b43d9fba0972cb017a24940a1";
   };
 

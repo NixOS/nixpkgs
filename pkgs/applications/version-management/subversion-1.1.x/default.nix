@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/subversion-1.1.4.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/subversion-1.1.4.tar.bz2;
     md5 = "6e557ae65b6b8d7577cc7704ede85a23";
   };
 

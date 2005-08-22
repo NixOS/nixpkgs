@@ -7,7 +7,7 @@ assert pngSupport -> libpng != null;
 stdenv.mkDerivation {
   name = "zvbi-0.2.8";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/zvbi-0.2.8.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/zvbi-0.2.8.tar.bz2;
     md5 = "8701d3e4387cd896ff8b68831b57d814";
   };
   buildInputs = [x11 (if pngSupport then libpng else null)];

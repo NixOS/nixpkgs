@@ -878,7 +878,7 @@ rec {
   perlXMLLibXML = import ../development/perl-modules/generic perl {
     name = "XML-LibXML-1.58";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-LibXML-1.58.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-LibXML-1.58.tar.gz;
       md5 = "4691fc436e5c0f22787f5b4a54fc56b0";
     };
     buildInputs = [libxml2];
@@ -888,7 +888,7 @@ rec {
   perlXMLLibXMLCommon = import ../development/perl-modules/generic perl {
     name = "XML-LibXML-Common-0.13";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-LibXML-Common-0.13.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-LibXML-Common-0.13.tar.gz;
       md5 = "13b6d93f53375d15fd11922216249659";
     };
     buildInputs = [libxml2];
@@ -897,7 +897,7 @@ rec {
   perlXMLSAX = import ../development/perl-modules/generic perl {
     name = "XML-SAX-0.12";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-SAX-0.12.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-SAX-0.12.tar.gz;
       md5 = "bff58bd077a9693fc8cf32e2b95f571f";
     };
     propagatedBuildInputs = [perlXMLNamespaceSupport];
@@ -906,7 +906,7 @@ rec {
   perlXMLNamespaceSupport = import ../development/perl-modules/generic perl {
     name = "XML-NamespaceSupport-1.08";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-NamespaceSupport-1.08.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-NamespaceSupport-1.08.tar.gz;
       md5 = "81bd5ae772906d0579c10061ed735dc8";
     };
     buildInputs = [];
@@ -915,7 +915,7 @@ rec {
   perlXMLTwig = import ../development/perl-modules/generic perl {
     name = "XML-Twig-3.15";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-Twig-3.15.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-Twig-3.15.tar.gz;
       md5 = "b26886b8bd19761fff37b23e4964b499";
     };
     propagatedBuildInputs = [perlXMLParser];
@@ -924,7 +924,7 @@ rec {
   perlXMLWriter = import ../development/perl-modules/generic perl {
     name = "XML-Writer-0.520";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-Writer-0.520.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-Writer-0.520.tar.gz;
       md5 = "0a194acc70c906c0be32f4b2b7a9f689";
     };
   };
@@ -932,7 +932,7 @@ rec {
   perlXMLSimple = import ../development/perl-modules/generic perl {
     name = "XML-Simple-2.14";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/XML-Simple-2.14.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/XML-Simple-2.14.tar.gz;
       md5 = "f321058271815de28d214c8efb9091f9";
     };
     propagatedBuildInputs = [perlXMLParser];
@@ -941,7 +941,7 @@ rec {
   perlTermReadKey = import ../development/perl-modules/generic perl {
     name = "TermReadKey-2.30";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/TermReadKey-2.30.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/TermReadKey-2.30.tar.gz;
       md5 = "f0ef2cea8acfbcc58d865c05b0c7e1ff";
     };
   };
@@ -949,7 +949,7 @@ rec {
   perlDateManip = import ../development/perl-modules/generic perl {
     name = "DateManip-5.42a";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/DateManip-5.42a.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/DateManip-5.42a.tar.gz;
       md5 = "648386bbf46d021ae283811f75b07bdf";
     };
   };
@@ -957,7 +957,7 @@ rec {
   perlHTMLTree = import ../development/perl-modules/generic perl {
     name = "HTML-Tree-3.18";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/HTML-Tree-3.18.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Tree-3.18.tar.gz;
       md5 = "6a9e4e565648c9772e7d8ec6d4392497";
     };
   };
@@ -965,7 +965,7 @@ rec {
   perlHTMLParser = import ../development/perl-modules/generic perl {
     name = "HTML-Parser-3.45";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/HTML-Parser-3.45.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Parser-3.45.tar.gz;
       md5 = "c2ac1379ac5848dd32e24347cd679391";
     };
   };
@@ -973,7 +973,7 @@ rec {
   perlHTMLTagset = import ../development/perl-modules/generic perl {
     name = "HTML-Tagset-3.04";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/HTML-Tagset-3.04.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Tagset-3.04.tar.gz;
       md5 = "b82e0f08c1ececefe98b891f30dd56a6";
     };
   };
@@ -981,7 +981,7 @@ rec {
   perlURI = import ../development/perl-modules/generic perl {
     name = "URI-1.35";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/URI-1.35.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/URI-1.35.tar.gz;
       md5 = "1a933b1114c41a25587ee59ba8376f7c";
     };
   };
@@ -989,7 +989,7 @@ rec {
   perlLWP = import ../development/perl-modules/generic perl {
     name = "libwww-perl-5.803";
     src = fetchurl {
-      url = http://catamaran.labs.cs.uu.nl/dist/tarballs/libwww-perl-5.803.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/libwww-perl-5.803.tar.gz;
       md5 = "3345d5f15a4f42350847254141725c8f";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser];

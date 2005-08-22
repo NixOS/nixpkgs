@@ -5,7 +5,7 @@ stdenv.mkDerivation {
  
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/vim-6.3.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/vim-6.3.tar.bz2;
     md5 = "821fda8f14d674346b87e3ef9cb96389";
   };
  

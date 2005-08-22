@@ -8,7 +8,7 @@ assert yacc != null && m4 != null;
 stdenv.mkDerivation {
   name = "flex-2.5.31";
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/flex-2.5.31.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/flex-2.5.31.tar.bz2;
     md5 = "363dcc4afc917dc51306eb9d3de0152f";
   };
   buildInputs = [yacc];

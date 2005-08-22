@@ -5,7 +5,7 @@ stdenv.mkDerivation {
    
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/shadow-4.0.6.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/shadow-4.0.6.tar.bz2;
     md5 = "3ca79b02c0aaa82128f4c32cb68ffe4f";
   };
    

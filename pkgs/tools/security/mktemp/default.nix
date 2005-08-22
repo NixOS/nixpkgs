@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/mktemp-1.5.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/mktemp-1.5.tar.gz;
     md5 = "9a35c59502a228c6ce2be025fc6e3ff2";
   };
   

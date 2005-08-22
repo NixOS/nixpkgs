@@ -5,7 +5,7 @@ stdenv.mkDerivation {
  
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/openssh-3.8.1p1.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/openssh-3.8.1p1.tar.gz;
     md5 = "1dbfd40ae683f822ae917eebf171ca42";
   };
  

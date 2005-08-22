@@ -5,7 +5,7 @@
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://catamaran.labs.cs.uu.nl/dist/tarballs/install_flash_player_7_linux.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/install_flash_player_7_linux.tar.gz;
     md5 = "79c59a5ea29347e01c8e6575dd054cd1";
   };
 
