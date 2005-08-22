@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.cs.uu.nl/mirror/apache.org/dist/httpd/httpd-2.0.54.tar.bz2;
+    url = http://apache.cs.uu.nl/dist/httpd/httpd-2.0.54.tar.bz2;
     md5 = "4ae8a38c6b5db9046616ce10a0d551a2";
   };
 
