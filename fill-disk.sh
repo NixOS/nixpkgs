@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin
 
 kernel=@kernel@
 
@@ -256,7 +256,7 @@ echo copying store
   #cp -fa $storepaths $root/nix/store
 #done) < /cdrom/mystorepaths
 
-cp -fa /nix/store/* $root/nix/store
+cp -fva /nix/store/* $root/nix/store
 
 #echo registering valid paths...
 #(while read storepath; do

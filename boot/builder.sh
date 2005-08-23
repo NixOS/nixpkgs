@@ -10,7 +10,7 @@ for i in $boot $halt $login $env; do
     sed \
         -e "s^@bash\@^$bash^g" \
         -e "s^@coreutils\@^$coreutils^g" \
-        -e "s^@findutils\@^$findutils^g" \
+        -e "s^@findutilsWrapper\@^$findutilsWrapper^g" \
         -e "s^@utillinux\@^$utillinux^g" \
         -e "s^@sysvinit\@^$sysvinit^g" \
         -e "s^@e2fsprogs\@^$e2fsprogs^g" \
@@ -39,6 +39,8 @@ for i in $boot $halt $login $env; do
         -e "s^@grub\@^$grub^g" \
         -e "s^@udev\@^$udev^g" \
         -e "s^@dhcpWrapper\@^$dhcpWrapper^g" \
+        -e "s^@man\@^$man^g" \
+        -e "s^@nano\@^$nano^g" \
         -e "s^@out\@^$out^g" \
         < $i > $dst
     chmod +x $dst

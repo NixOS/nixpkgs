@@ -57,7 +57,7 @@ BootPath=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix
 
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
-findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutils' | $NIX_CMD_PATH/nix-instantiate -))
+findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
 e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX_CMD_PATH/nix-instantiate -))
 modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).module_init_tools' | $NIX_CMD_PATH/nix-instantiate -))
@@ -65,6 +65,7 @@ grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NI
 hotplug=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).hotplug' | $NIX_CMD_PATH/nix-instantiate -))
 udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_PATH/nix-instantiate -))
 dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX_CMD_PATH/nix-instantiate -))
+nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -107,16 +108,17 @@ svn export ${nixpkgs} ${archivesDir}/pkgs
 echo copying packages from store
 
 #cp -fa --parents ${nixDeps} ${archivesDir}
-cp -fau --parents ${utilLinux} ${archivesDir}
-cp -fau --parents ${Grub} ${archivesDir}
+cp -fvau --parents ${utilLinux} ${archivesDir}
+cp -fvau --parents ${Grub} ${archivesDir}
 #cp -fau --parents ${gnuSed} ${archivesDir}
 #cp -fau --parents ${gnuGrep} ${archivesDir}
-cp -fau --parents ${Kernel} ${archivesDir}
-cp -fau --parents ${SysVinit} ${archivesDir}
-cp -fau --parents ${BootPath} ${archivesDir}
-cp -fau --parents ${hotplug} ${archivesDir}
-cp -fau --parents ${udev} ${archivesDir}
-cp -fau --parents ${dhcp} ${archivesDir}
+cp -fvau --parents ${Kernel} ${archivesDir}
+cp -fvau --parents ${SysVinit} ${archivesDir}
+cp -fvau --parents ${BootPath} ${archivesDir}
+cp -fvau --parents ${hotplug} ${archivesDir}
+cp -fvau --parents ${udev} ${archivesDir}
+cp -fvau --parents ${dhcp} ${archivesDir}
+cp -fvau --parents ${nano} ${archivesDir}
 
 bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
