@@ -59,6 +59,10 @@ rec {
      inherit stdenv grub diffutils gnused gnugrep;
   };
 
+  man = (import ../tools/misc/man) {
+     inherit fetchurl stdenv db4 groff;
+  };
+
   parted = (import ../tools/misc/parted) {
     inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
