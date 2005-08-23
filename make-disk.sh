@@ -66,6 +66,7 @@ hotplug=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).hotplug' | $NIX
 udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_PATH/nix-instantiate -))
 dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
+gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -138,6 +139,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@grub\@^$grub^g" \
     -e "s^@kernel\@^$kernel^g" \
     -e "s^@hotplug\@^$hotplug^g" \
+    -e "s^@gnugrep\@^$gnugrep^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
