@@ -307,11 +307,15 @@ echo "root::12757:0:99999:7:::" > $root/etc/shadow
 ###
 strippedName=$(basename @kernel@);
 if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        strippedName=$(echo "$strippedName" | cut -c34-)
+        strippedName=$(echo "$strippedName" | cut -c34- | cut -c 7-)
 fi
 
-echo "stripped" $strippedName
+kernelhash=$(basename @kernel@);
+if echo "$kernelhash" | grep -q '^[a-z0-9]\{32\}-'; then
+        kernelhash=$(echo "$kernelhash" | cut -c -32)
+fi
 
+echo "kernelthing" $strippedName-$kernelhash
 
 ###
 ### Do funky stuff with grub here.
