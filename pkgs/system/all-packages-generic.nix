@@ -43,6 +43,10 @@ rec {
     inherit fetchurl stdenv coreutils;
   };
 
+  findutilsWrapper = (import ../tools/misc/findutils-wrapper) {
+    inherit stdenv findutils;
+  };
+
   getopt = (import ../tools/misc/getopt) {
     inherit fetchurl stdenv;
   };
@@ -51,7 +55,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-   grubWrapper = (import ../tools/misc/grub-wrapper) {
+  grubWrapper = (import ../tools/misc/grub-wrapper) {
      inherit stdenv grub diffutils gnused gnugrep;
   };
 
