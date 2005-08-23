@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "7c8e12165b221dd67a19c00d780437a4";
   };
   buildInputs = [coreutils];
+  patches = [./findutils-path.patch];
 }
