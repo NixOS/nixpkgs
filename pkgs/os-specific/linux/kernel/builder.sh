@@ -2,6 +2,15 @@
 
 buildPhase() {
 	cp $config .config
+        #mkdir $out
+        hashname=$(basename $out)
+        echo $hashname
+        if echo "$hashname" | grep -q '^[a-z0-9]\{32\}-'; then
+          hashname=$(echo "$hashname" | cut -c -32)
+        fi
+
+        extraname=$(grep ^EXTRAVERSION Makefile)
+        perl -p -i -e "s/^EXTRAVERSION.*/$extraname-$hashname/" Makefile
 	echo "export INSTALL_PATH=$out" >> Makefile
 	export INSTALL_MOD_PATH=$out
 	make
@@ -10,7 +19,7 @@ buildPhase() {
         # move this to install later on
         # largely copied from early FC3 kernel spec files
         stripHash $out
-        version=$(echo $strippedName | cut -c 7-)
+        version=$(echo $strippedName | cut -c 7-)-$hashname
 
         # remove symlinks and create directories
         rm $out/lib/modules/${version}/build
