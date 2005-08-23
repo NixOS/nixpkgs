@@ -315,7 +315,14 @@ if echo "$kernelhash" | grep -q '^[a-z0-9]\{32\}-'; then
         kernelhash=$(echo "$kernelhash" | cut -c -32)
 fi
 
-echo "kernelthing" $strippedName-$kernelhash
+version=$strippedName-$kernelhash
+
+make_dir 0755 /lib/modules/$version
+
+ln -s @kernel@/lib/modules/$version/build $root/lib/modules/$version/build
+ln -s @kernel@/lib/modules/$version/kernel $root/lib/modules/$version/kernel
+cp @kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
+chmod 644 $root/lib/modules/$version/modules.*
 
 ###
 ### Do funky stuff with grub here.
