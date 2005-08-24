@@ -1,6 +1,6 @@
 set -e
 
-PATH=$coreutils/bin
+PATH=$staticTools/bin
 
 mkdir $out
 
