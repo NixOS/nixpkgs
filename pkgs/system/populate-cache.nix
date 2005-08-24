@@ -67,6 +67,7 @@ let {
     firefoxWrapper
     thunderbird
     lynx
+    gaim
     MPlayer
     MPlayerPlugin
     vlc

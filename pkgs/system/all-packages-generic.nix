@@ -693,6 +693,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  nss = (import ../development/libraries/nss) {
+    inherit fetchurl stdenv perl zip;
+  };
+
   freetype = (import ../development/libraries/freetype) {
     inherit fetchurl stdenv;
   };
@@ -1253,11 +1257,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
-/*  
-  kopete = (import ../applications/networking/instant-messengers/kopete) {
-    inherit fetchurl stdenv xlibs zlib libjpeg perl qt3;
+  gaim = (import ../applications/networking/instant-messengers/gaim) {
+    inherit fetchurl stdenv pkgconfig perl libxml2 openssl nss;
+    inherit (gtkLibs) glib gtk;
   };
-*/
 
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
     inherit fetchurl stdenv;
