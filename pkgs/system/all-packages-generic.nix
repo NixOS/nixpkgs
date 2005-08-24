@@ -717,6 +717,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  aalib = (import ../development/libraries/aalib) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   libsigsegv = (import ../development/libraries/libsigsegv) {
     inherit fetchurl stdenv;
   };
