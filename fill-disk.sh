@@ -139,7 +139,10 @@ make_dir 00755 /nix/store
 make_dir 00755 /nix/var
 make_dir 00755 /nix/var/nix
 make_dir 00755 /nix/var/nix/db
+make_dir 00755 /nix/var/nix/gcroots
 make_dir 00755 /nix/var/nix/manifests
+make_dir 00755 /nix/var/nix/profiles
+make_dir 00755 /nix/var/nix/temproots
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
 make_dir 00755 /nixpkgs
