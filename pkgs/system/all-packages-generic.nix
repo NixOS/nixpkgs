@@ -1085,6 +1085,10 @@ rec {
   
   ### OS-SPECIFIC
 
+  hwdata = (import ../os-specific/linux/hwdata) {
+    inherit fetchurl stdenv;
+  };
+
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
     inherit fetchurl stdenv;
   };
@@ -1094,6 +1098,10 @@ rec {
   };
 
   mingetty = (import ../os-specific/linux/mingetty) {
+    inherit fetchurl stdenv;
+  };
+
+  nfsUtils = (import ../os-specific/linux/nfs-utils) {
     inherit fetchurl stdenv;
   };
 
