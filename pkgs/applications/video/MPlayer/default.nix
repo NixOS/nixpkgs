@@ -1,10 +1,12 @@
-{ alsaSupport ? false, xvSupport ? true, theoraSupport ? false
+{ alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
 , stdenv, fetchurl, x11, freetype, zlib
-, alsa ? null, libXv ? null, libtheora ? null}:
+, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null
+}:
 
 assert alsaSupport -> alsa != null;
 assert xvSupport -> libXv != null;
 assert theoraSupport -> libtheora != null;
+assert cacaSupport -> libcaca != null;
 
 stdenv.mkDerivation {
   name = "MPlayer-1.0pre7";
@@ -28,5 +30,8 @@ stdenv.mkDerivation {
     (if alsaSupport then alsa else null)
     (if xvSupport then libXv else null)
     (if theoraSupport then libtheora else null)
+    (if cacaSupport then libcaca else null)
   ];
+
+  configureFlags = if cacaSupport then "--enable-caca" else "--disable-caca";
 }

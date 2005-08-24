@@ -721,6 +721,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  libcaca = (import ../development/libraries/libcaca) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   libsigsegv = (import ../development/libraries/libsigsegv) {
     inherit fetchurl stdenv;
   };
@@ -1279,11 +1283,12 @@ rec {
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
-    inherit fetchurl stdenv freetype x11 zlib libtheora;
+    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca;
     inherit (xlibs) libXv;
     alsaSupport = true;
     alsa = alsaLib;
     theoraSupport = true;
+    cacaSupport = true;
   };
 
   MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {
