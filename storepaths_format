@@ -1,4 +1,5 @@
 /nix/store/abcd-<package>
+deriver
 2
 /nix/store/1234-<package-1>
 /nix/store/5678-<package-2>
