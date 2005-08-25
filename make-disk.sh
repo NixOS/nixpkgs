@@ -40,9 +40,24 @@ kernel=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_C
 #nixDeps=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
 
 #nixDeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
-echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))) >> $storePaths
+#echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))) >> $storePaths
+#$NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)) >> $storePaths
 
-#echo $nixDeps > $storePaths
+nixblaat=$(nix-store -r $(echo '(import ./pkgs.nix).nix'| $NIX_CMD_PATH/nix-instantiate -))
+echo $nixblaat >> $storePaths
+echo '' >> $storePaths
+#echo 13 >> $storePaths
+## Nix does --references, not --requisites for registering paths
+nixdeps=$($NIX_CMD_PATH/nix-store -q --references $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
+
+pkgs=$(echo $nixdeps | wc -w)
+
+echo $pkgs >> $storePaths
+
+for i in $nixdeps
+do
+  echo $i >> $storePaths
+done
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
 coreUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -67,6 +82,7 @@ udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_P
 dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
 gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
+which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -100,6 +116,7 @@ mkdir ${initdir}/tmp
 mkdir -p ${initdir}/usr/bin
 mkdir -p ${initdir}/usr/sbin
 mkdir ${initdir}/var
+mkdir ${initdir}/var/run
 
 echo copying nixpkgs
 
@@ -140,6 +157,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@kernel\@^$kernel^g" \
     -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
+    -e "s^@which\@^$which^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
@@ -174,6 +192,7 @@ cp -fau --parents ${coreUtils} ${initdir}
 cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${modUtils} ${initdir}
 cp -fau --parents ${hotplug} ${initdir}
+cp -fau --parents ${which} ${initdir}
 
 touch ${initdir}/NIXOS
 
@@ -183,6 +202,7 @@ chmod -f -R +w ${initdir}/*
 rm -rf ${initdir}
 
 cp ${initrd} ${archivesDir}/isolinux
+rm -f ${initrd}
 
 echo creating ISO image
 
@@ -194,6 +214,5 @@ mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
 
 echo cleaning up
 
-rm -f ${initrd}
 chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*

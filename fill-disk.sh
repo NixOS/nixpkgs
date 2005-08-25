@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin
 
 kernel=@kernel@
 
@@ -82,6 +82,7 @@ mknod -m 0600 /dev/initctl p
 
 targetdrive=/dev/hda
 device=${targetdrive}1
+echo ext2 fs blaat `which mkfs.ext2`
 mkfs.ext2 ${device}
 mkswap ${targetdrive}2
 
@@ -245,10 +246,12 @@ unset NIX_LOG_DIR
 unset NIX_STATE_DIR
 unset NIX_CONF_DIR
 
+storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -v -v -)
 #storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
 #storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
 #$NIX_CMD_PATH/nix-store -r $storeExpr
-#echo $storeExpr
+echo $storeExpr > $root/tmp/storeExpr
+cp /cdrom/mystorepaths $root/tmp
 #storeExpr2=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $storeExpr))
 #echo storeExpr $storeExpr
 #echo $($NIX_CMD_PATH/nix-store -qR --include-outputs $storeExpr)
@@ -347,4 +350,5 @@ echo umounting filesystem
 umount $root
 
 echo install done
-telinit 0
+#telinit 0
+shutdown -h now
