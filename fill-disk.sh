@@ -263,7 +263,8 @@ echo copying store
   #cp -fa $storepaths $root/nix/store
 #done) < /cdrom/mystorepaths
 
-cp -fva /nix/store/* $root/nix/store
+#cp -fva /nix/store/* $root/nix/store
+tar cf - /nix/store | tar --directory=$root -xvf -
 
 #echo registering valid paths...
 #(while read storepath; do
@@ -301,7 +302,7 @@ echo 192.168.150.3 > $root/etc/networking/gateway-ip
 #cp /etc/resolv.conf $root/etc
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
-echo "192.168.150.1 uml" >> $root/etc/hosts
+#echo "192.168.150.1 uml" >> $root/etc/hosts
 
 echo setting up initial account information...
 
@@ -352,4 +353,5 @@ umount $root
 
 echo install done
 #telinit 0
+ln -s @sysvinitPath@/sbin/init /sbin/init
 shutdown -h now
