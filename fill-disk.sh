@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin
+export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin
 
 kernel=@kernel@
 
@@ -230,7 +230,8 @@ echo verifying Nix DB...
 $NIX_CMD_PATH/nix-store --verify
 
 echo copying nixpkgs...
-cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
+#cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
+tar --directory=/cdrom -cf - pkgs | tar --directory=$root/nixpkgs/trunk -xvf -
 
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp

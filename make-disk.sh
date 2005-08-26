@@ -22,7 +22,7 @@ rm -rf ${archivesDir}/*
 
 NIX_CMD_PATH=/nix/bin
 
-storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
+storeExpr=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -))
 #$NIX_CMD_PATH/nix-push --copy $archivesDir $manifest $(nix-store -r $storeExpr) $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
 
 # Location of sysvinit?
@@ -59,6 +59,11 @@ do
   echo $i >> $storePaths
 done
 
+for i in $storeExpr
+do
+  echo $i >> $archivesDir/store-expressions
+done
+
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
 coreUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -)))
 e2fsProgs=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -83,6 +88,7 @@ dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NI
 nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
 gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
 which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD_PATH/nix-instantiate -))
+gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
 
 (while read storepath; do
    cp -fa --parents ${storepath} ${archivesDir}
@@ -137,6 +143,7 @@ cp -fvau --parents ${hotplug} ${archivesDir}
 cp -fvau --parents ${udev} ${archivesDir}
 cp -fvau --parents ${dhcp} ${archivesDir}
 cp -fvau --parents ${nano} ${archivesDir}
+cp -fvau --parents ${gnutar} ${archivesDir}
 
 bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
@@ -158,6 +165,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
+    -e "s^@gnutar\@^$gnutar^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
