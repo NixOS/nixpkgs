@@ -347,6 +347,15 @@ echo installing bootloader
 
 grub-install --root-directory=${root} --no-floppy ${targetdrive}
 
+# FIXME "root (hd0,0)"
+cat > $root/boot/grub/menu.lst << GRUBEND
+default=0
+timeout=5
+title NixOS
+        root (hd0,0)
+        kernel @kernel@/vmlinuz root=$device
+GRUBEND
+
 echo umounting filesystem
 
 umount $root
