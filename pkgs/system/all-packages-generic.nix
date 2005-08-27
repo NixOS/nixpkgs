@@ -1089,6 +1089,10 @@ rec {
   
   ### OS-SPECIFIC
 
+  dietlibc = (import ../os-specific/linux/dietlibc) {
+    inherit fetchurl stdenv;
+  };
+
   hwdata = (import ../os-specific/linux/hwdata) {
     inherit fetchurl stdenv;
   };
