@@ -1101,6 +1101,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  mingettyWrapper = (import ../os-specific/linux/mingetty-wrapper) {
+    inherit stdenv mingetty shadowutils;
+  };
+
   nfsUtils = (import ../os-specific/linux/nfs-utils) {
     inherit fetchurl stdenv;
   };
