@@ -36,7 +36,7 @@ for i in $boot $halt $login $env; do
         -e "s^@gcc\@^$gcc^g" \
         -e "s^@mingetty\@^$mingetty^g" \
         -e "s^@module_init_tools\@^$module_init_tools^g" \
-        -e "s^@grub\@^$grub^g" \
+        -e "s^@grub\@^$grubWrapper^g" \
         -e "s^@udev\@^$udev^g" \
         -e "s^@dhcpWrapper\@^$dhcpWrapper^g" \
         -e "s^@man\@^$man^g" \

@@ -22,7 +22,7 @@ rm -rf ${archivesDir}/*
 
 NIX_CMD_PATH=/nix/bin
 
-storeExpr=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -))
+storeExpr=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -)))
 #$NIX_CMD_PATH/nix-push --copy $archivesDir $manifest $(nix-store -r $storeExpr) $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
 
 # Location of sysvinit?
@@ -43,25 +43,37 @@ kernel=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_C
 #echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))) >> $storePaths
 #$NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)) >> $storePaths
 
-nixblaat=$(nix-store -r $(echo '(import ./pkgs.nix).nix'| $NIX_CMD_PATH/nix-instantiate -))
-echo $nixblaat >> $storePaths
-echo '' >> $storePaths
+#nixblaat=$(nix-store -r $(echo '(import ./pkgs.nix).nix'| $NIX_CMD_PATH/nix-instantiate -))
+#echo $nixblaat >> $storePaths
+#echo '' >> $storePaths
 #echo 13 >> $storePaths
 ## Nix does --references, not --requisites for registering paths
-nixdeps=$($NIX_CMD_PATH/nix-store -q --references $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
+#nixdeps=$($NIX_CMD_PATH/nix-store -q --references $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
 
-pkgs=$(echo $nixdeps | wc -w)
+#pkgs=$(echo $nixdeps | wc -w)
 
-echo $pkgs >> $storePaths
+#echo $pkgs >> $storePaths
 
-for i in $nixdeps
-do
-  echo $i >> $storePaths
-done
+#for i in $nixdeps
+#do
+  #echo $i >> $storePaths
+#done
 
 for i in $storeExpr
 do
   echo $i >> $archivesDir/store-expressions
+  echo $i >> $archivesDir/store-expressions-storepath
+  echo $i >> $storePaths
+  echo '' >> $storePaths
+  deps=$($NIX_CMD_PATH/nix-store -q --references $i)
+  pkgs=$(echo $deps | wc -w)
+  echo $pkgs >> $storePaths
+  for j in $deps
+  do
+    echo $j >> $storePaths
+  done
+  echo copying from store: $i
+  tar -cf - $i | tar --directory=$archivesDir -xf -
 done
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -90,9 +102,9 @@ gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX
 which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD_PATH/nix-instantiate -))
 gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
 
-(while read storepath; do
-   cp -fa --parents ${storepath} ${archivesDir}
-done) < $storePaths
+#(while read storepath; do
+   #cp -fa --parents ${storepath} ${archivesDir}
+#done) < $storePaths
 
 echo utillinux $utilLinux
 
@@ -129,21 +141,21 @@ echo copying nixpkgs
 svn export ${nixpkgs} ${archivesDir}/pkgs
 #cp -fa ${nixpkgs} ${archivesDir}
 
-echo copying packages from store
+#echo copying packages from store
 
 #cp -fa --parents ${nixDeps} ${archivesDir}
-cp -fvau --parents ${utilLinux} ${archivesDir}
-cp -fvau --parents ${Grub} ${archivesDir}
-#cp -fau --parents ${gnuSed} ${archivesDir}
-#cp -fau --parents ${gnuGrep} ${archivesDir}
-cp -fvau --parents ${Kernel} ${archivesDir}
-cp -fvau --parents ${SysVinit} ${archivesDir}
-cp -fvau --parents ${BootPath} ${archivesDir}
-cp -fvau --parents ${hotplug} ${archivesDir}
-cp -fvau --parents ${udev} ${archivesDir}
-cp -fvau --parents ${dhcp} ${archivesDir}
-cp -fvau --parents ${nano} ${archivesDir}
-cp -fvau --parents ${gnutar} ${archivesDir}
+#cp -fvau --parents ${utilLinux} ${archivesDir}
+#cp -fvau --parents ${Grub} ${archivesDir}
+##cp -fau --parents ${gnuSed} ${archivesDir}
+##cp -fau --parents ${gnuGrep} ${archivesDir}
+#cp -fvau --parents ${Kernel} ${archivesDir}
+#cp -fvau --parents ${SysVinit} ${archivesDir}
+#cp -fvau --parents ${BootPath} ${archivesDir}
+#cp -fvau --parents ${hotplug} ${archivesDir}
+#cp -fvau --parents ${udev} ${archivesDir}
+#cp -fvau --parents ${dhcp} ${archivesDir}
+#cp -fvau --parents ${nano} ${archivesDir}
+#cp -fvau --parents ${gnutar} ${archivesDir}
 
 bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
 
