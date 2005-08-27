@@ -4,6 +4,8 @@ export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinu
 
 kernel=@kernel@
 
+storePaths=/mystorepaths
+
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 modutils=@modutils@
@@ -82,7 +84,6 @@ mknod -m 0600 /dev/initctl p
 
 targetdrive=/dev/hda
 device=${targetdrive}1
-echo ext2 fs blaat `which mkfs.ext2`
 mkfs.ext2 ${device}
 mkswap ${targetdrive}2
 
@@ -198,8 +199,6 @@ do
 echo "Looking for CDROM in: $i"
 if mount -t iso9660 $i /cdrom >/dev/null 2>&1
 then
-  echo "cdrom contents"
-  ls /cdrom
   if test -f /cdrom/NIXOS
   then
     cddevice=$i
@@ -266,7 +265,10 @@ echo copying store
 #cp -fva /nix/store/* $root/nix/store
 tar cf - /nix/store | tar --directory=$root -xvf -
 
-#echo registering valid paths...
+echo registering valid paths...
+
+$NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
+
 #(while read storepath; do
 #    echo PATH $storepath
 #    if ! $NIX_CMD_PATH/nix-store --isvalid $storepath 2> /dev/null; then
@@ -336,7 +338,6 @@ chmod 644 $root/lib/modules/$version/modules.*
 ### Do funky stuff with grub here.
 ###
 
-ln -s @kernel@/vmlinuz $root/boot/vmlinuz
 ln -s @sysvinitPath@/sbin/init $root/sbin/init
 ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
 ln -s @hotplug@/etc/hotplug $root/etc/hotplug
