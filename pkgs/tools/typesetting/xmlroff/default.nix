@@ -2,10 +2,10 @@
 , glib, pango, libgnomeprint, pangoxsl, gtk}:
 
 stdenv.mkDerivation {
-  name = "xmlroff-0.3.4";
+  name = "xmlroff-0.3.5";
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/xmlroff/xmlroff-0.3.4.tar.gz;
-    md5 = "f6432e8a66e6f934823463a3f127e4ca";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/xmlroff/xmlroff-0.3.5.tar.gz;
+    md5 = "4f03dffa0451c28e7c777f6ee1fa38da";
   };
 
   buildInputs = [
