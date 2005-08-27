@@ -360,6 +360,10 @@ rec {
     inherit fetchurl stdenv yacc;
   };
 
+  flexWrapper = (import ../development/tools/parsing/flex-wrapper) {
+    inherit stdenv flex ;
+  };
+
   flexnew = (import ../development/tools/parsing/flex/flex-new.nix) {
     inherit fetchurl stdenv yacc;
     m4 = gnum4;
@@ -1097,6 +1101,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  klibc = (import ../os-specific/linux/klibc) {
+    inherit fetchurl stdenv kernel perl bison flexWrapper;
+  };
+
   mingetty = (import ../os-specific/linux/mingetty) {
     inherit fetchurl stdenv;
   };
@@ -1105,9 +1113,9 @@ rec {
     inherit stdenv mingetty shadowutils;
   };
 
-  nfsUtils = (import ../os-specific/linux/nfs-utils) {
-    inherit fetchurl stdenv;
-  };
+  #nfsUtils = (import ../os-specific/linux/nfs-utils) {
+  #  inherit fetchurl stdenv;
+  #};
 
   alsaLib = (import ../os-specific/linux/alsa/library) {
     inherit fetchurl stdenv;
