@@ -6,6 +6,8 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/coreutils-5.2.1.tar.bz2;
     md5 = "172ee3c315af93d3385ddfbeb843c53f";
   };
+  # patch from
+  # http://invaders.mars-attacks.org/~boklm/browse/doc/srs2005/alink/files/patch-coreutils-5.2.1-alink0.1.diff
   patches = [./coreutils-dummy.patch];
   buildInputs = [perl];
   NIX_GCC = dietgcc;
