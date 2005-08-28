@@ -77,7 +77,7 @@ do
 done
 
 utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
-coreUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -)))
+coreUtilsDiet=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
 e2fsProgs=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
 modUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_tools' | $NIX_CMD_PATH/nix-instantiate -)))
 Grub=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -88,6 +88,7 @@ SysVinit=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix
 BootPath=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -)))
 
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+coreutilsdiet=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
 findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
@@ -169,6 +170,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@NIX_CMD_PATH\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
     -e "s^@findutils\@^$findutils^g" \
+    -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
     -e "s^@coreutils\@^$coreutils^g" \
     -e "s^@utillinux\@^$utillinux^g" \
     -e "s^@e2fsprogs\@^$e2fsprogs^g" \
@@ -210,7 +212,7 @@ ln -s ${bash}/bin/bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 cp -fau --parents ${bashdeps} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
-cp -fau --parents ${coreUtils} ${initdir}
+cp -fau --parents ${coreUtilsDiet} ${initdir}
 cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${modUtils} ${initdir}
 cp -fau --parents ${hotplug} ${initdir}
