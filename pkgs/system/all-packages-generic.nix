@@ -39,6 +39,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  coreutilsDiet = (import ../tools/misc/coreutils-diet) {
+    inherit fetchurl stdenv dietgcc perl;
+  };
+
   findutils = (import ../tools/misc/findutils) {
     inherit fetchurl stdenv coreutils;
   };
