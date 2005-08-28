@@ -381,6 +381,17 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  dietgcc = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../os-specific/linux/dietlibc-wrapper) {
+      inherit stdenv dietlibc;
+      gcc = stdenv.gcc;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
   gcc33 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
@@ -1093,6 +1104,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  dietlibcWrapper = (import ../os-specific/linux/dietlibc-wrapper) {
+    inherit stdenv dietlibc;
+    gcc = stdenv.gcc;
+  };
+
   hwdata = (import ../os-specific/linux/hwdata) {
     inherit fetchurl stdenv;
   };
@@ -1135,6 +1151,10 @@ rec {
 
   e2fsprogs = (import ../os-specific/linux/e2fsprogs) {
     inherit fetchurl stdenv gettext;
+  };
+
+  e2fsprogsDiet = (import ../os-specific/linux/e2fsprogs-diet) {
+    inherit fetchurl stdenv gettext dietgcc;
   };
 
   nettools = (import ../os-specific/linux/net-tools) {
