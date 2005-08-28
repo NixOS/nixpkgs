@@ -34,7 +34,7 @@ for i in $boot $halt $login $env; do
         -e "s^@gnugrep\@^$gnugrep^g" \
         -e "s^@gzip\@^$gzip^g" \
         -e "s^@gcc\@^$gcc^g" \
-        -e "s^@mingetty\@^$mingetty^g" \
+        -e "s^@mingettyWrapper\@^$mingettyWrapper^g" \
         -e "s^@module_init_tools\@^$module_init_tools^g" \
         -e "s^@grub\@^$grubWrapper^g" \
         -e "s^@udev\@^$udev^g" \

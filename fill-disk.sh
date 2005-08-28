@@ -2,6 +2,11 @@
 
 export PATH=@bash@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin
 
+##
+## In the beginning we want to have a minimalistic environment, built with
+## klibc.
+##
+
 kernel=@kernel@
 
 storePaths=/mystorepaths
@@ -10,6 +15,7 @@ sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 modutils=@modutils@
 hotplug=@hotplug@
+mingetty=@mingetty@
 
 echo mounting special filesystems
 
@@ -176,21 +182,12 @@ mknod -m 0600 $root/dev/tty0 c 4 0
 mknod -m 0600 $root/dev/tty1 c 4 1
 mknod -m 0444 $root/dev/urandom c 1 9
 
-#touch_file /etc/passwd
-#touch_file /etc/shadow
-#touch_file /etc/group
-
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
-
-#cat /proc/mounts
 
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
 ## Find out how Knoppix and SUSE do this...
-
-#devices=$(grep -r cdrom hd* | cut -d '/' -f 1 | sort | uniq)
-#echo devices ${devices}
 
 DEVICES="/dev/hd?"
 
@@ -204,12 +201,13 @@ then
     cddevice=$i
     echo "Accessing NixOS CDROM at $i"
   break
-fi
-#umount /cdrom
+  fi
 fi
 done
 
 echo switch to /nix and /nixpkgs from CD
+
+## starting here it's OK to have full blown glibc
 
 ln -s /cdrom/nixpkgs /nixpkgs
 mount --bind /cdrom/nix /nix
@@ -222,7 +220,6 @@ export NIX_CONF_DIR=$root/nix/etc
 NIX_CMD_PATH=@NIX_CMD_PATH@/bin
 
 echo initialising Nix DB...
-#/nix/bin/nix-store --init
 $NIX_CMD_PATH/nix-store --init
 
 echo verifying Nix DB...
@@ -258,10 +255,6 @@ cp /cdrom/mystorepaths $root/tmp
 
 echo copying store
 
-#(while read storepaths; do
-  #cp -fa $storepaths $root/nix/store
-#done) < /cdrom/mystorepaths
-
 #cp -fva /nix/store/* $root/nix/store
 tar cf - /nix/store | tar --directory=$root -xvf -
 
@@ -269,23 +262,10 @@ echo registering valid paths...
 
 $NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
 
-#(while read storepath; do
-#    echo PATH $storepath
-#    if ! $NIX_CMD_PATH/nix-store --isvalid $storepath 2> /dev/null; then
-#        (unset NIX_ROOT; $NIX_CMD_PATH/nix-store --dump $storepath) | $NIX_CMD_PATH/nix-store --restore $storepath
-#        $NIX_CMD_PATH/nix-store --validpath $storepath
-#    fi
-#done) < /tmp/mystorepaths
-
-#echo registering successors...
-#(while read line; do
-#    echo SUCC $line
-#    $NIX_CMD_PATH/nix-store --successor $line
-#done) < /tmp/mysuccessors
-
 echo setting init symlink...
 rm -f $root/init
-ln -s $sysvinitPath/sbin/init $root/init
+#ln -s $sysvinitPath/sbin/init $root/init
+ln -s @sysvinitPath@/sbin/init $root/sbin/init
 ln -s @bash@/bin/sh $root/bin/sh
 ln -s @bash@/bin/bash $root/bin/bash
 
@@ -295,6 +275,7 @@ echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
 echo "1:2345:respawn:$bootPath/bin/login.sh /dev/tty1" >> $root/etc/inittab
+echo "2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...
@@ -338,7 +319,6 @@ chmod 644 $root/lib/modules/$version/modules.*
 ### Do funky stuff with grub here.
 ###
 
-ln -s @sysvinitPath@/sbin/init $root/sbin/init
 ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
 ln -s @hotplug@/etc/hotplug $root/etc/hotplug
 ln -s @hotplug@/etc/hotplug.d $root/etc/hotplug.d
