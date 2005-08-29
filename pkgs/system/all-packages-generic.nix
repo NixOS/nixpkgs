@@ -364,9 +364,9 @@ rec {
     inherit fetchurl stdenv yacc;
   };
 
-  flexWrapper = (import ../development/tools/parsing/flex-wrapper) {
-    inherit stdenv flex ;
-  };
+  #flexWrapper = (import ../development/tools/parsing/flex-wrapper) {
+  #  inherit stdenv flex ;
+  #};
 
   flexnew = (import ../development/tools/parsing/flex/flex-new.nix) {
     inherit fetchurl stdenv yacc;
