@@ -1145,6 +1145,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  alsaUtils = (import ../os-specific/linux/alsa/utils) {
+    inherit fetchurl stdenv alsaLib ncurses gettext;
+  };
+
   utillinux = (import ../os-specific/linux/util-linux) {
     inherit fetchurl stdenv;
   };
