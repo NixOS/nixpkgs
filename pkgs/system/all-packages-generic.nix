@@ -1125,9 +1125,9 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
-  klibc = (import ../os-specific/linux/klibc) {
-    inherit fetchurl stdenv kernel perl bison flexWrapper;
-  };
+  #klibc = (import ../os-specific/linux/klibc) {
+  #  inherit fetchurl stdenv kernel perl bison flexWrapper;
+  #};
 
   mingetty = (import ../os-specific/linux/mingetty) {
     inherit fetchurl stdenv;
