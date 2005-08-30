@@ -264,9 +264,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  bashDiet = (import ../shells/bash-diet) {
-    inherit fetchurl stdenv dietgcc;
-  };
+  #bashDiet = (import ../shells/bash-diet) {
+  #  inherit fetchurl stdenv dietgcc;
+  #};
 
 
   ### DEVELOPMENT
