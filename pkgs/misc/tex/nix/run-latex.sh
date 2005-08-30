@@ -2,7 +2,8 @@
 
 ensureDir $out
 
-perl $copyIncludes $includes
+startDir=$(perl $copyIncludes $includes)
+cd $startDir
 
 for i in $extraFiles; do
     if test -d $i; then
