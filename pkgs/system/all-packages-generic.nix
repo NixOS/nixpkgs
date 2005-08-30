@@ -906,6 +906,10 @@ rec {
     inherit fetchurl stdenv libtool;
   };
 
+  dclib = (import ../development/libraries/dclib) {
+    inherit fetchurl stdenv libxml2 openssl;
+  };
+
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit fetchurl perl db4;
   };
@@ -1277,6 +1281,11 @@ rec {
     inherit fetchurl stdenv pkgconfig openssl;
     inherit (gtkLibs) glib gtk;
     sslSupport = true;
+  };
+
+  valknut = (import ../applications/networking/p2p/valknut) {
+    inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
+    qt = qt3;
   };
 
   firefox = (import ../applications/networking/browsers/firefox) {
