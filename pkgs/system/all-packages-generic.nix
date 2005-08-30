@@ -1413,6 +1413,10 @@ rec {
     gtksharp = gtksharp1;
   };
 
+  cdrtools = (import ../applications/misc/cdrtools) {
+    inherit fetchurl stdenv;
+  };
+
   hello = (import ../applications/misc/hello/ex-1) {
     inherit fetchurl stdenv perl;
   };
