@@ -124,6 +124,10 @@ rec {
     j2re = blackdown;
   };
 
+  cpio = (import ../tools/archivers/cpio) {
+    inherit fetchurl stdenv;
+  };
+
   gnutar = (import ../tools/archivers/gnutar) {
     inherit fetchurl stdenv;
   };
@@ -258,6 +262,10 @@ rec {
 
   bash = (import ../shells/bash) {
     inherit fetchurl stdenv;
+  };
+
+  bashDiet = (import ../shells/bash-diet) {
+    inherit fetchurl stdenv dietgcc;
   };
 
 
