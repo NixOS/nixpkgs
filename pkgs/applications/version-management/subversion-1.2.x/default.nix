@@ -17,12 +17,12 @@ assert javahlBindings -> j2sdk != null;
 assert compressionSupport -> zlib != null;
 
 stdenv.mkDerivation {
-  name = "subversion-1.2.1";
+  name = "subversion-1.2.3";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.2.1.tar.bz2;
-    md5 = "0b546195ca794c327c6830f2e88661f7";
+    url = http://subversion.tigris.org/downloads/subversion-1.2.3.tar.bz2;
+    md5 = "a14bc6590241b6e5c2ff2b354cc184a1";
   };
 
   openssl = if sslSupport then openssl else null;
