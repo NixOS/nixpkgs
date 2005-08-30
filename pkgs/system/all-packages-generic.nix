@@ -1510,7 +1510,8 @@ rec {
   };
 
   ghostscript = (import ../misc/ghostscript) {
-    inherit fetchurl stdenv libjpeg libpng zlib;
+    inherit fetchurl stdenv libjpeg libpng zlib x11;
+    x11Support = false;
   };
 
   nix = (import ../misc/nix) {

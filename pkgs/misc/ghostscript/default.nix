@@ -1,4 +1,8 @@
-{stdenv, fetchurl, libjpeg, libpng, zlib}:
+{ stdenv, fetchurl, libjpeg, libpng, zlib
+, x11Support, x11 ? null
+}:
+
+assert x11Support -> x11 != null;
 
 stdenv.mkDerivation {
   name = "ghostscript-8.15";
@@ -17,7 +21,10 @@ stdenv.mkDerivation {
     # ... add other fonts here
   ];
 
-  buildInputs = [libjpeg libpng zlib];
+  buildInputs = [
+    libjpeg libpng zlib
+    (if x11Support then x11 else null)
+  ];
 
-  configureFlags = "--without-x";
+  configureFlags = if x11Support then "--with-x" else "--without-x";
 }
