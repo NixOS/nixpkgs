@@ -43,26 +43,8 @@ kernel=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_C
 #echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))) >> $storePaths
 #$NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)) >> $storePaths
 
-#nixblaat=$(nix-store -r $(echo '(import ./pkgs.nix).nix'| $NIX_CMD_PATH/nix-instantiate -))
-#echo $nixblaat >> $storePaths
-#echo '' >> $storePaths
-#echo 13 >> $storePaths
-## Nix does --references, not --requisites for registering paths
-#nixdeps=$($NIX_CMD_PATH/nix-store -q --references $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
-
-#pkgs=$(echo $nixdeps | wc -w)
-
-#echo $pkgs >> $storePaths
-
-#for i in $nixdeps
-#do
-  #echo $i >> $storePaths
-#done
-
 for i in $storeExpr
 do
-  echo $i >> $archivesDir/store-expressions
-  echo $i >> $archivesDir/store-expressions-storepath
   echo $i >> $storePaths
   echo '' >> $storePaths
   deps=$($NIX_CMD_PATH/nix-store -q --references $i)
@@ -197,12 +179,6 @@ echo copying kernel
 # By following the symlink we don't have to know the version number
 # of the kernel here.
 cp -L $kernel/vmlinuz ${archivesDir}/isolinux
-
-# echo making ramdisk
-# todo!
-# mkdir ${archivesDir}/sbin
-# ln -s /scripts/fill-disk.sh ${archivesDir}/sbin/init
-# ln -s /scripts/fill-disk.sh ${archivesDir}/init
 
 echo creating ramdisk
 
