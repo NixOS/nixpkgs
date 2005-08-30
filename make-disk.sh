@@ -20,7 +20,7 @@ touch ${archivesDir}/blah
 chmod -f -R +w ${archivesDir}/*
 rm -rf ${archivesDir}/*
 
-NIX_CMD_PATH=/nix/bin
+NIX_CMD_PATH=$(dirname $(which nix-store))
 
 storeExpr=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -)))
 #$NIX_CMD_PATH/nix-push --copy $archivesDir $manifest $(nix-store -r $storeExpr) $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
@@ -216,7 +216,7 @@ cp -fau --parents ${coreUtilsDiet} ${initdir}
 cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${modUtils} ${initdir}
 cp -fau --parents ${hotplug} ${initdir}
-cp -fau --parents ${which} ${initdir}
+#cp -fau --parents ${which} ${initdir}
 
 touch ${initdir}/NIXOS
 
