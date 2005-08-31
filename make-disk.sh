@@ -7,6 +7,7 @@ archivesDir=/tmp/arch
 manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
+ramdisk_login=$archivesDir/scripts/ramdisk-login.sh
 storePaths=$archivesDir/mystorepaths
 validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
@@ -172,6 +173,26 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
+sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
+    -e "s^@bootPath\@^$bootPath^g" \
+    -e "s^@NIX_CMD_PATH\@^$nix^g" \
+    -e "s^@bash\@^$bash^g" \
+    -e "s^@findutils\@^$findutils^g" \
+    -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
+    -e "s^@coreutils\@^$coreutils^g" \
+    -e "s^@utillinux\@^$utillinux^g" \
+    -e "s^@e2fsprogs\@^$e2fsprogs^g" \
+    -e "s^@modutils\@^$modutils^g" \
+    -e "s^@grub\@^$grub^g" \
+    -e "s^@kernel\@^$kernel^g" \
+    -e "s^@hotplug\@^$hotplug^g" \
+    -e "s^@gnugrep\@^$gnugrep^g" \
+    -e "s^@which\@^$which^g" \
+    -e "s^@gnutar\@^$gnutar^g" \
+    -e "s^@mingetty\@^$mingettyWrapper^g" \
+    < $ramdisk_login > $ramdisk_login.tmp
+mv $ramdisk_login.tmp $ramdisk_login
+
 echo copying bootimage
 
 mkdir ${archivesDir}/isolinux
@@ -190,10 +211,12 @@ echo creating ramdisk
 rm -f ${initrd}
 #cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
 cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
+cp ${archivesDir}/scripts/ramdisk-login.sh ${initdir}/
 cp ${archivesDir}/scripts/init.sh ${initdir}/init
 ln -s ${bash}/bin/bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 chmod u+x ${initdir}/fill-disk.sh
+chmod u+x ${initdir}/ramdisk-login.sh
 cp -fau --parents ${bashdeps} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
 cp -fau --parents ${coreUtilsDiet} ${initdir}

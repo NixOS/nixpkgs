@@ -88,6 +88,10 @@ mknod -m 0660 /dev/hdd3 b 22 67
 
 mknod -m 0600 /dev/initctl p
 
+echo starting emergency shell on tty2
+
+exec ./ramdisk-login.sh /dev/tty2 &
+
 targetdrive=/dev/hda
 device=${targetdrive}1
 mkfs.ext2 ${device}
