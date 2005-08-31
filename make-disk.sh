@@ -196,7 +196,7 @@ cp -fau --parents ${hotplug} ${initdir}
 
 touch ${initdir}/NIXOS
 
-(cd ${initdir}; find . |cpio -c -o) | gzip -9 > ${initrd}
+(cd ${initdir}; find . |cpio -H newc -o) | gzip -9 > ${initrd}
 
 chmod -f -R +w ${initdir}/*
 rm -rf ${initdir}
