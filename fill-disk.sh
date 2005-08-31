@@ -348,8 +348,13 @@ cp /tmp/install-log $root/root
 echo umounting filesystem
 
 umount $root
+umount /cdrom
 
 echo install done
-#telinit 0
 ln -s @sysvinitPath@/sbin/init /sbin/init
-shutdown -h now
+
+echo it\'s safe to turn off your machine
+
+while true; do
+   sleep 60;
+done
