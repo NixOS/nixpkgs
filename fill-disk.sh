@@ -337,6 +337,10 @@ title NixOS
         kernel @kernel@/vmlinuz root=$device
 GRUBEND
 
+echo copying install log
+
+cp /tmp/install-log $root/root
+
 echo umounting filesystem
 
 umount $root

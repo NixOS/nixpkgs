@@ -12,6 +12,7 @@ validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
 initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
+initscript=$archivesDir/scripts/init.sh
 
 echo cleaning old build
 
@@ -147,6 +148,10 @@ echo copying scripts
 
 mkdir ${archivesDir}/scripts
 cp -fa * ${archivesDir}/scripts
+sed -e "s^@bash\@^$bash^g" \
+    -e "s^@coreutils\@^$coreutilsdiet^g" \
+    < $initscript > $initscript.tmp
+mv $initscript.tmp $initscript
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@NIX_CMD_PATH\@^$nix^g" \
@@ -183,9 +188,12 @@ cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 echo creating ramdisk
 
 rm -f ${initrd}
-cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
+#cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
+cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
+cp ${archivesDir}/scripts/init.sh ${initdir}/init
 ln -s ${bash}/bin/bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
+chmod u+x ${initdir}/fill-disk.sh
 cp -fau --parents ${bashdeps} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
 cp -fau --parents ${coreUtilsDiet} ${initdir}
