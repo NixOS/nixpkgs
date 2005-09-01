@@ -141,6 +141,7 @@ let {
     docbook_xml_dtd_43
     docbook_xml_xslt
     nxml
+    tetex
   ;};
 
 
