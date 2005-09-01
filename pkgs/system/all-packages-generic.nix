@@ -168,6 +168,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  curiDiet = (import ../tools/networking/curl-diet) {
+    inherit fetchurl stdenv zlib dietgcc;
+  };
+
   par2cmdline = (import ../tools/networking/par2cmdline) {
     inherit fetchurl stdenv;
   };
@@ -1123,6 +1127,10 @@ rec {
   dietlibcWrapper = (import ../os-specific/linux/dietlibc-wrapper) {
     inherit stdenv dietlibc;
     gcc = stdenv.gcc;
+  };
+
+  eject = (import ../os-specific/linux/eject) {
+    inherit fetchurl stdenv gettext;
   };
 
   hwdata = (import ../os-specific/linux/hwdata) {
