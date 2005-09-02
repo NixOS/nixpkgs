@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin
+export PATH=@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -187,7 +187,7 @@ mknod -m 0600 $root/dev/tty1 c 4 1
 mknod -m 0444 $root/dev/urandom c 1 9
 
 rm -f $root/etc/mtab
-#ln -s /proc/mounts $root/etc/mtab
+ln -s /proc/mounts $root/etc/mtab
 
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
@@ -198,15 +198,15 @@ DEVICES="/dev/hd?"
 for i in ${DEVICES}
 do
 echo "Looking for CDROM in: $i"
-if mount -t iso9660 $i /cdrom >/dev/null 2>&1
-then
-  if test -f /cdrom/NIXOS
+  if mount -t iso9660 $i /cdrom >/dev/null 2>&1
   then
-    cddevice=$i
-    echo "Accessing NixOS CDROM at $i"
-  break
+    if test -f /cdrom/NIXOS
+    then
+      cddevice=$i
+      echo "Accessing NixOS CDROM at $i"
+    break
+    fi
   fi
-fi
 done
 
 echo switch to /nix and /nixpkgs from CD
@@ -327,6 +327,7 @@ ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
 ln -s @hotplug@/etc/hotplug $root/etc/hotplug
 ln -s @hotplug@/etc/hotplug.d $root/etc/hotplug.d
 ln -s $device $root/dev/root
+ln -s @sysvinitPath@/sbin/init /sbin/init
 
 echo installing bootloader
 
@@ -348,11 +349,12 @@ cp /tmp/install-log $root/root
 echo umounting filesystem
 
 umount $root
+#umount /nix
 umount /cdrom
+#echo ejecting $cddevice
+#eject $cddevice
 
 echo install done
-ln -s @sysvinitPath@/sbin/init /sbin/init
-
 echo it\'s safe to turn off your machine
 
 while true; do

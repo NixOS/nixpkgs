@@ -87,6 +87,7 @@ nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_P
 gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
 which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD_PATH/nix-instantiate -))
 gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
+eject=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX_CMD_PATH/nix-instantiate -))
 
 #(while read storepath; do
    #cp -fa --parents ${storepath} ${archivesDir}
@@ -168,6 +169,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
+    -e "s^@eject\@^$eject^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
     < $fill_disk > $fill_disk.tmp
@@ -223,9 +225,9 @@ cp -fau --parents ${coreUtilsDiet} ${initdir}
 cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${modUtils} ${initdir}
 cp -fau --parents ${hotplug} ${initdir}
-#cp -fau --parents ${which} ${initdir}
+cp -fau --parents ${eject} ${initdir}
 
-touch ${initdir}/NIXOS
+touch ${archivesDir}/NIXOS
 
 (cd ${initdir}; find . |cpio -H newc -o) | gzip -9 > ${initrd}
 
