@@ -25,12 +25,9 @@ while (scalar @workset > 0) {
     next if (defined $doneset{$fn});
 
     $doneset{$fn} = 1;
-    
-    if (!open FILE, "< $fn") {
-#	print STDERR "(cannot open $fn, ignoring)\n";
-	next;
-    };
 
+    next unless -e "$fn";
+    
     
     # Print out the full path *and* its relative path to $root.
     
@@ -40,7 +37,10 @@ while (scalar @workset > 0) {
     print OUT "$fn \"$relFN\"\n";
 
     
-    # Recursively find include in $fn.
+    # If this is a TeX file, recursively find include in $fn.
+    next unless $fn =~ /.tex$/ or $fn =~ /.ltx$/; 
+    open FILE, "< $fn" or die;
+    
     while (<FILE>) {
 	if (/\\input\{(.*)\}/) {
 	    my $fn2 = $1;
@@ -62,6 +62,12 @@ while (scalar @workset > 0) {
 	    push @workset, $path . "/" . $fn2 . ".pdf";
 	    push @workset, $path . "/" . $fn2 . ".png";
 	    push @workset, $path . "/" . $fn2 . ".ps";
+	} elsif (/\\pgfdeclareimage(\[.*\])?\{.*\}\{(.*)\}/) {
+	    my $fn2 = $2;
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+	    push @workset, $path . "/" . $fn2 . ".pdf";
+	    push @workset, $path . "/" . $fn2 . ".png";
+	    push @workset, $path . "/" . $fn2 . ".jpg";
         }
         # !!! also support \usepackage
     }
