@@ -168,9 +168,9 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
-  #curlDiet = (import ../tools/networking/curl-diet) {
-  #  inherit fetchurl stdenv zlib dietgcc;
-  #};
+  curlDiet = (import ../tools/networking/curl-diet) {
+    inherit fetchurl stdenv zlib dietgcc;
+  };
 
   par2cmdline = (import ../tools/networking/par2cmdline) {
     inherit fetchurl stdenv;
