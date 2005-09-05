@@ -132,6 +132,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gnutarDiet = (import ../tools/archivers/gnutar-diet) {
+    inherit fetchurl stdenv dietgcc;
+  };
+
   zip = (import ../tools/archivers/zip) {
     inherit fetchurl stdenv;
   };
