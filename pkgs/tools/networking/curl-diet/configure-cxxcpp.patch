@@ -1,0 +1,21 @@
+diff -ruN curl-7.12.2/configure curl-7.12.2-new/configure
+--- curl-7.12.2/configure	2004-10-18 00:22:10.000000000 +0200
++++ curl-7.12.2-new/configure	2004-12-09 13:58:57.670095179 +0100
+@@ -6835,11 +6835,12 @@
+ if $ac_preproc_ok; then
+   :
+ else
+-  { { echo "$as_me:$LINENO: error: C++ preprocessor \"$CXXCPP\" fails sanity check
+-See \`config.log' for more details." >&5
+-echo "$as_me: error: C++ preprocessor \"$CXXCPP\" fails sanity check
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++  #{ { echo "$as_me:$LINENO: error: C++ preprocessor \"$CXXCPP\" fails sanity check
++#See \`config.log' for more details." >&5
++#echo "$as_me: error: C++ preprocessor \"$CXXCPP\" fails sanity check
++#See \`config.log' for more details." >&2;}
++   #{ (exit 1); exit 1; }; }
++  :
+ fi
+ 
+ ac_ext=cc
