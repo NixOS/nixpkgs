@@ -482,6 +482,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ecj = (import ../development/compilers/ecj) {
+    inherit fetchurl stdenv unzip j2re;
+    ant  = apacheAntBlackdown14;
+  };
+
   blackdown = (import ../development/compilers/blackdown) {
     inherit fetchurl stdenv;
   };

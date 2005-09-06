@@ -110,6 +110,8 @@ let {
     blackdown
     apacheAntBlackdown14
     jikes
+    ecj
+    j2re
     jetty
   ;};
 
