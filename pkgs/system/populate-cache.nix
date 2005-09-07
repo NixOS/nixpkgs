@@ -75,6 +75,7 @@ let {
     zapping
     gqview
     inkscape
+    batik
 #    fspot
     hello
     xchm
