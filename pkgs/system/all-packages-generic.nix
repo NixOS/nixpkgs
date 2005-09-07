@@ -813,6 +813,21 @@ rec {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
+  gtkmm = import ../development/libraries/gtk-libs-2.6/gtkmm {
+    inherit fetchurl stdenv pkgconfig libsigcxx;
+    inherit (gtkLibs26) gtk atk;
+    inherit glibmm;
+  };
+
+  glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
+    inherit fetchurl stdenv pkgconfig libsigcxx;
+    inherit (gtkLibs26) glib;
+  };
+
+  libsigcxx = import ../development/libraries/libsigcxx {
+    inherit fetchurl stdenv pkgconfig;
+  };
+
   pangoxsl = (import ../development/libraries/pangoxsl) {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib pango;
@@ -1425,6 +1440,18 @@ rec {
   gqview = (import ../applications/graphics/gqview) {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
+  };
+
+  batik = (import ../applications/graphics/batik) {
+    inherit fetchurl stdenv unzip;
+  };
+
+  inkscape = (import ../applications/graphics/inkscape) {
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt libxml2 libxslt libpng boehmgc;
+    inherit (gtkLibs) gtk;
+    inherit gtkmm glibmm libsigcxx;
+    inherit (xlibs) libXft fontconfig;
+    inherit (gnome) glib;
   };
 
   fspot = (import ../applications/graphics/f-spot) {

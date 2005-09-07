@@ -74,6 +74,7 @@ let {
     xineUI
     zapping
     gqview
+    inkscape
 #    fspot
     hello
     xchm
