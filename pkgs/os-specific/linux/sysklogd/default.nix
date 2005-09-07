@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation {
   name = "sysklogd-1.4.1";
+  builder = ./builder.sh;
   src = fetchurl {
     url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.4.1.tar.gz;
     md5 = "d214aa40beabf7bdb0c9b3c64432c774";
