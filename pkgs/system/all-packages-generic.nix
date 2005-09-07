@@ -482,9 +482,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  ecj = (import ../development/compilers/ecj) {
+  ecj = (import ../development/eclipse/ecj) {
     inherit fetchurl stdenv unzip j2re;
     ant  = apacheAntBlackdown14;
+  };
+
+  jdtsdk = (import ../development/eclipse/jdt-sdk) {
+    inherit fetchurl stdenv unzip;
   };
 
   blackdown = (import ../development/compilers/blackdown) {
