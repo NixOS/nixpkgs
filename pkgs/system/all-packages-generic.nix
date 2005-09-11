@@ -604,6 +604,10 @@ rec {
     inherit fetchurl stdenv libsigsegv gettext;
   };
 
+  php = (import ../development/interpreters/php) {
+    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
+  };
+
   guile = (import ../development/interpreters/guile) {
     inherit fetchurl stdenv ncurses readline;
   };
@@ -1498,6 +1502,12 @@ rec {
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
+  };
+
+  gimp = (import ../applications/graphics/gimp) {
+    inherit fetchurl stdenv pkgconfig freetype libtiff libjpeg libpng libexif zlib perl perlXMLParser;
+    inherit (xlibs) fontconfig;
+    inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
   };
 
   cdrtools = (import ../applications/misc/cdrtools) {
