@@ -503,44 +503,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  saxon = (import ../development/libraries/java/saxon) {
-    inherit fetchurl stdenv unzip;
-  };
-
-  saxonb = (import ../development/libraries/java/saxon/default8.nix) {
-    inherit fetchurl stdenv unzip;
-  };
-
-  sharedobjects = (import ../development/libraries/java/shared-objects) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv;
-  };
-
-  jjtraveler = (import ../development/libraries/java/jjtraveler) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv;
-  };
-
-  atermjava = (import ../development/libraries/java/aterm) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv sharedobjects jjtraveler;
-  };
-
-  jakartaregexp = (import ../development/libraries/java/jakarta-regexp) {
-    inherit fetchurl stdenv;
-  };
-
-  jakartabcel = (import ../development/libraries/java/jakarta-bcel) {
-    regexp = jakartaregexp;
-    inherit fetchurl stdenv;
-  };
-
-  jclasslib = (import ../development/tools/java/jclasslib) {
-    inherit fetchurl stdenv xpf;
-    j2re = j2sdk15;
-    ant = apacheAnt14;
-  };
-
   ocaml = (import ../development/compilers/ocaml) {
     inherit fetchurl stdenv x11;
   };
@@ -598,16 +560,18 @@ rec {
     inherit fetchurl stdenv ghc;
   };
 
-  happy = (import ../development/tools/parsing/happy) {
-    inherit fetchurl stdenv perl ghc;
-  };
-
   harp = (import ../development/compilers/harp) {
     inherit fetchurl stdenv unzip ghc happy;
   };
 
   nasm = (import ../development/compilers/nasm) {
     inherit fetchurl stdenv;
+  };
+
+  ### DEVELOPMENT / INTERPRETERS
+
+  happy = (import ../development/tools/parsing/happy) {
+    inherit fetchurl stdenv perl ghc;
   };
 
   realPerl = (import ../development/interpreters/perl) {
@@ -949,6 +913,81 @@ rec {
   dclib = (import ../development/libraries/dclib) {
     inherit fetchurl stdenv libxml2 openssl;
   };
+
+  ### DEVELOPMENT / LIBRARIES / JAVA
+
+  saxon = (import ../development/libraries/java/saxon) {
+    inherit fetchurl stdenv unzip;
+  };
+
+  saxonb = (import ../development/libraries/java/saxon/default8.nix) {
+    inherit fetchurl stdenv unzip;
+  };
+
+  sharedobjects = (import ../development/libraries/java/shared-objects) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv;
+  };
+
+  jjtraveler = (import ../development/libraries/java/jjtraveler) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv;
+  };
+
+  atermjava = (import ../development/libraries/java/aterm) {
+    j2sdk = j2sdk15;
+    inherit fetchurl stdenv sharedobjects jjtraveler;
+  };
+
+  jakartaregexp = (import ../development/libraries/java/jakarta-regexp) {
+    inherit fetchurl stdenv;
+  };
+
+  jakartabcel = (import ../development/libraries/java/jakarta-bcel) {
+    regexp = jakartaregexp;
+    inherit fetchurl stdenv;
+  };
+
+  jclasslib = (import ../development/tools/java/jclasslib) {
+    inherit fetchurl stdenv xpf;
+    j2re = j2sdk15;
+    ant = apacheAnt14;
+  };
+
+  lucene = import ../development/libraries/java/lucene {
+      inherit stdenv fetchurl;
+  };
+
+  jdom = import ../development/libraries/java/jdom {
+      inherit stdenv fetchurl;
+  };
+
+  javaCup = import ../development/libraries/java/cup {
+      inherit stdenv fetchurl;
+      j2sdk = j2sdk15;
+  };
+
+  jflex = import ../development/libraries/java/jflex {
+      inherit stdenv fetchurl;
+  };
+
+  junit = import ../development/libraries/java/junit {
+      inherit stdenv fetchurl unzip;
+  };
+
+  httpunit = import ../development/libraries/java/httpunit {
+      inherit stdenv fetchurl unzip;
+  };
+
+  mockobjects = import ../development/libraries/java/mockobjects {
+      inherit stdenv fetchurl;
+  };
+
+  commonsFileUpload = import ../development/libraries/java/jakarta-commons/file-upload {
+      inherit stdenv fetchurl;
+  };
+
+  ### DEVELOPMENT / PERL MODULES
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit fetchurl perl db4;
