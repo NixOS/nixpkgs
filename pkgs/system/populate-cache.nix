@@ -39,6 +39,7 @@ let {
     flexnew
     gccWrapped
     aterm
+    kernel
 
 #    atermjava
 #    jjtraveler
