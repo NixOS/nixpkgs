@@ -640,7 +640,11 @@ rec {
   dovecot = (import ../servers/mail/dovecot) {
     inherit fetchurl stdenv ;
   };
-
+  
+  vsftpd = (import ../servers/ftp/vsftpd) {
+    inherit fetchurl stdenv openssl ;
+  };
+ 
   tomcat5 = (import ../servers/http/tomcat) {
     inherit fetchurl stdenv ;
     j2sdk = blackdown;
