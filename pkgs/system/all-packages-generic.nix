@@ -637,6 +637,10 @@ rec {
     j2sdk = j2sdk15;
   };
 
+  dovecot = (import ../servers/mail/dovecot) {
+    inherit fetchurl stdenv ;
+  };
+
   tomcat5 = (import ../servers/http/tomcat) {
     inherit fetchurl stdenv ;
     j2sdk = blackdown;
