@@ -296,13 +296,15 @@ rec {
     m4 = gnum4;
   };
 
-  automake = (import ../development/tools/misc/automake) {
+  automake17x = (import ../development/tools/misc/automake/automake-1.7.x.nix) {
     inherit fetchurl stdenv perl autoconf;
   };
 
   automake19x = (import ../development/tools/misc/automake/automake-1.9.x.nix) {
     inherit fetchurl stdenv perl autoconf;
   };
+
+  automake = automake19x;
 
   libtool = (import ../development/tools/misc/libtool) {
     inherit fetchurl stdenv perl;
