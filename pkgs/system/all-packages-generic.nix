@@ -1423,6 +1423,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  w3m = (import ../applications/networking/browsers/w3m) {
+    inherit fetchurl stdenv ncurses openssl boehmgc gettext;
+  };
+
   gaim = (import ../applications/networking/instant-messengers/gaim) {
     inherit fetchurl stdenv pkgconfig perl libxml2 openssl nss;
     inherit (gtkLibs) glib gtk;
