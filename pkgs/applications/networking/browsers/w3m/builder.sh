@@ -1,6 +1,5 @@
 . $stdenv/setup
 
-configureFlags="--with-ssl=$openssl $configureFlags"
-#export CFLAGS="-I$ncurses/include/ncurses"
+configureFlags="--with-ssl=$openssl --with-gc=$boehmgc $configureFlags"
 
 genericBuild
