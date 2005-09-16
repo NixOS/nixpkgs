@@ -13,4 +13,5 @@ stdenv.mkDerivation {
   };
   inherit openssl boehmgc;
   buildInputs = [ncurses (if sslSupport then openssl else null) boehmgc gettext];
+  patches = [./bsd.patch];
 }
