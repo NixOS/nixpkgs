@@ -1,4 +1,4 @@
-{stdenv, fetchurl, j2re, unzip} :
+{stdenv, fetchurl, jre, unzip} :
 
 stdenv.mkDerivation {
   name = "jing-tools-20030619";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     inherit stdenv fetchurl unzip;
   };
 
-  inherit j2re;
+  inherit jre;
 }

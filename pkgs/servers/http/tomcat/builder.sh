@@ -7,7 +7,7 @@ cd jakarta-tomcat*/bin
 
 tar xvfz jsvc.tar.gz
 cd jsvc-src
-sh ./configure --with-java=$sdk
+sh ./configure --with-java=$jdk
 make
 cp jsvc ..
 cd ..

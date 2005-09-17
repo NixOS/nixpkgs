@@ -1,12 +1,12 @@
-{stdenv, fetchurl, j2sdk, name}:
+{stdenv, fetchurl, jdk, name}:
 
 let {
   body =
     stdenv.mkDerivation {
       name = name;
       builder = ./builder.sh;
-      buildInputs = [ant j2sdk];
-      inherit ant j2sdk;
+      buildInputs = [ant jdk];
+      inherit ant jdk;
     };
 
   ant =

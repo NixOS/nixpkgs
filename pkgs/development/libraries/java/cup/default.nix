@@ -1,4 +1,4 @@
-{stdenv, fetchurl, j2sdk} :
+{stdenv, fetchurl, jdk} :
 
 stdenv.mkDerivation {
   name = "java-cup-10k";
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
     md5 = "8b11edfec13c590ea443d0f0ae0da479";
   };
 
-  inherit j2sdk;
+  inherit jdk;
 }

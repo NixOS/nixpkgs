@@ -1,9 +1,9 @@
 { perlSupport, pythonSupport, javaSupport
-, stdenv, fetchurl, perl ? null, python ? null, j2sdk ? null}:
+, stdenv, fetchurl, perl ? null, python ? null, jdk ? null}:
 
 assert perlSupport -> perl != null;
 assert pythonSupport -> python != null;
-assert javaSupport -> j2sdk != null;
+assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation {
   name = "swig-1.3.19";
@@ -18,5 +18,5 @@ stdenv.mkDerivation {
 
   perl = if perlSupport then perl else null;
   python = if pythonSupport then python else null;
-  j2sdk = if javaSupport then j2sdk else null;
+  jdk = if javaSupport then jdk else null;
 }

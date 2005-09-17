@@ -1,4 +1,4 @@
-{stdenv, fetchurl, j2sdk, sharedobjects, jjtraveler}:
+{stdenv, fetchurl, jdk, sharedobjects, jjtraveler}:
 
 stdenv.mkDerivation {
   name = "aterm-java-1.6";
@@ -6,5 +6,5 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/aterm-java-1.6.tar.gz;
     md5 = "abf475dae2f5efca865fcdff871feb5e";
   };
-  buildInputs = [stdenv j2sdk sharedobjects jjtraveler];
+  buildInputs = [stdenv jdk sharedobjects jjtraveler];
 }

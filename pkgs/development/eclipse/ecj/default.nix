@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, ant, j2re}: 
+{stdenv, fetchurl, unzip, ant, jre}: 
 
 stdenv.mkDerivation {
   name = "ecj-3.1";
@@ -8,6 +8,6 @@ stdenv.mkDerivation {
     md5 = "19ad65d52005da5eaa1d3687b3a50de2";
   };
 
-  inherit j2re;
-  buildInputs = [unzip ant j2re];
+  inherit jre;
+  buildInputs = [unzip ant jre];
 }

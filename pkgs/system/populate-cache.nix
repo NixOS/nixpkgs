@@ -114,7 +114,7 @@ let {
     apacheAntBlackdown14
     jikes
     ecj
-    j2re
+    jre
     jetty
   ;};
 

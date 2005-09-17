@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xpf, j2re, ant}:
+{stdenv, fetchurl, xpf, jre, ant}:
 
 stdenv.mkDerivation {
   name = "jclasslib-2.0";
@@ -8,6 +8,6 @@ stdenv.mkDerivation {
     md5 = "31d91bb03fee23410689d2f1c4c439b1";
   };
 
-  inherit j2re xpf ant;
+  inherit jre xpf ant;
   buildInputs = [xpf ant];
 }

@@ -2,7 +2,7 @@
 
 if stdenv.system == "i686-linux"
   then
-    (import ./jre-sun-linux.nix) {
+    (import ./j2sdk-1.4.x-sun-linux.nix) {
       inherit stdenv fetchurl;
     }
   else

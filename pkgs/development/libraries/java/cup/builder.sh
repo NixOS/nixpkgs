@@ -3,8 +3,8 @@ set -e
 
 tar zxvf $src
 
-$j2sdk/bin/javac java_cup/*.java
-$j2sdk/bin/javac java_cup/runtime/*.java
+$jdk/bin/javac java_cup/*.java
+$jdk/bin/javac java_cup/runtime/*.java
 
 mkdir -p $out/java_cup/runtime
 

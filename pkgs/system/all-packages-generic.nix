@@ -121,7 +121,7 @@ rec {
 
   jing_tools = (import ../tools/text/xml/jing/jing-script.nix) {
     inherit fetchurl stdenv unzip;
-    j2re = blackdown;
+    jre = blackdown;
   };
 
   cpio = (import ../tools/archivers/cpio) {
@@ -332,7 +332,7 @@ rec {
   
   swigWithJava = (import ../development/tools/misc/swig) {
     inherit fetchurl stdenv;
-    j2sdk = blackdown;
+    jdk = blackdown;
     perlSupport = false;
     pythonSupport = false;
     javaSupport = true;
@@ -485,7 +485,7 @@ rec {
   };
 
   ecj = (import ../development/eclipse/ecj) {
-    inherit fetchurl stdenv unzip j2re;
+    inherit fetchurl stdenv unzip jre;
     ant  = apacheAntBlackdown14;
   };
 
@@ -497,11 +497,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  j2sdk = (import ../development/compilers/j2sdk) {
+  jdk = (import ../development/compilers/jdk) {
     inherit fetchurl stdenv;
   };
 
-  j2sdk15 = (import ../development/compilers/j2sdk/default-1.5.nix) {
+  j2sdk14x = (import ../development/compilers/jdk/default-1.4.nix) {
     inherit fetchurl stdenv;
   };
 
@@ -614,7 +614,7 @@ rec {
     inherit fetchurl stdenv ncurses readline;
   };
 
-  j2re = (import ../development/interpreters/j2re) {
+  jre = (import ../development/interpreters/jre) {
     inherit fetchurl stdenv;
   };
 
@@ -623,20 +623,19 @@ rec {
   };
 
   apacheAnt14 = (import ../development/tools/build-managers/apache-ant) {
-    inherit fetchurl stdenv j2sdk;
-    name = "ant-j2sdk-1.4.2";
+    inherit fetchurl stdenv jdk;
+    name = "ant-jdk-1.4.2";
   };
 
   apacheAntBlackdown14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
-    j2sdk = blackdown;
+    jdk = blackdown;
     name = "ant-blackdown-1.4.2";
   };
 
-  apacheAnt15 = (import ../development/tools/build-managers/apache-ant) {
-    inherit fetchurl stdenv;
-    name = "ant-j2sdk-1.5.0";
-    j2sdk = j2sdk15;
+  apacheAnt = (import ../development/tools/build-managers/apache-ant) {
+    inherit fetchurl stdenv jdk;
+    name = "ant-jdk-1.5.0";
   };
 
   dovecot = (import ../servers/mail/dovecot) {
@@ -649,7 +648,7 @@ rec {
  
   tomcat5 = (import ../servers/http/tomcat) {
     inherit fetchurl stdenv ;
-    j2sdk = blackdown;
+    jdk = blackdown;
   };
 
   cil = (import ../development/libraries/cil) {
@@ -939,18 +938,15 @@ rec {
   };
 
   sharedobjects = (import ../development/libraries/java/shared-objects) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv jdk;
   };
 
   jjtraveler = (import ../development/libraries/java/jjtraveler) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv jdk;
   };
 
   atermjava = (import ../development/libraries/java/aterm) {
-    j2sdk = j2sdk15;
-    inherit fetchurl stdenv sharedobjects jjtraveler;
+    inherit fetchurl stdenv sharedobjects jjtraveler jdk;
   };
 
   jakartaregexp = (import ../development/libraries/java/jakarta-regexp) {
@@ -963,8 +959,7 @@ rec {
   };
 
   jclasslib = (import ../development/tools/java/jclasslib) {
-    inherit fetchurl stdenv xpf;
-    j2re = j2sdk15;
+    inherit fetchurl stdenv xpf jre;
     ant = apacheAnt14;
   };
 
@@ -977,8 +972,7 @@ rec {
   };
 
   javaCup = import ../development/libraries/java/cup {
-      inherit stdenv fetchurl;
-      j2sdk = j2sdk15;
+    inherit stdenv fetchurl jdk;
   };
 
   jflex = import ../development/libraries/java/jflex {
@@ -1354,7 +1348,7 @@ rec {
     sslSupport = true;
     httpd = apacheHttpd;
     javahlBindings = true;
-    j2sdk = blackdown;
+    jdk = blackdown;
   };
 
   rcs = (import ../applications/version-management/rcs) {
@@ -1386,6 +1380,13 @@ rec {
   };
 
   firefox = (import ../applications/networking/browsers/firefox) {
+    inherit fetchurl stdenv pkgconfig perl zip;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+  };
+
+  firefoxbeta = (import ../applications/networking/browsers/firefox-1.5beta) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, j2sdk}:
+{stdenv, fetchurl, jdk}:
 
 stdenv.mkDerivation {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     md5 = "b802ee042677e284bcf65738c7bdc3b6";
   };
 
-  sdk = j2sdk;
+  inherit jdk;
 }
 
 

@@ -1,3 +1,3 @@
-buildInputs="$perl $python $j2sdk"
+buildInputs="$perl $python $jdk"
 . $stdenv/setup
 genericBuild

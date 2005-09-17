@@ -6,7 +6,7 @@
 , javaSwigBindings ? false
 , javahlBindings ? false
 , stdenv, fetchurl
-, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, j2sdk ? null, zlib ? null
+, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, jdk ? null, zlib ? null
 }:
 
 assert expat != null;
@@ -15,7 +15,7 @@ assert httpServer -> httpd != null && httpd.expat == expat;
 assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl);
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javaSwigBindings -> swig != null && swig.javaSupport;
-assert javahlBindings -> j2sdk != null;
+assert javahlBindings -> jdk != null;
 assert compressionSupport -> zlib != null;
 
 stdenv.mkDerivation {
@@ -38,8 +38,8 @@ stdenv.mkDerivation {
   db4 = if localServer then db4 else null;
   swig = if pythonBindings || javaSwigBindings then swig else null;
   python = if pythonBindings then swig.python else null;
-  j2sdk = if javaSwigBindings then swig.j2sdk else
-          if javahlBindings then j2sdk else null;
+  jdk = if javaSwigBindings then swig.jdk else
+          if javahlBindings then jdk else null;
 
   inherit expat localServer httpServer sslSupport
           pythonBindings javaSwigBindings javahlBindings;

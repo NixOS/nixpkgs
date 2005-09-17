@@ -12,10 +12,10 @@ mkdir -p $out/bin
 cat >> $out/bin/ecj <<EOF
 #! /bin/sh
 
-export JAVA_HOME=$j2re
+export JAVA_HOME=$jre
 export LANG="en_US"
 
-$j2re/bin/java -cp $out/share/ecj/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main \$@
+$jre/bin/java -cp $out/share/ecj/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main \$@
 EOF
 
 chmod u+x $out/bin/ecj

@@ -14,9 +14,9 @@ mv build/jclasslib.jar $out/bin/ || exit 1
 cat >> $out/bin/jclasslib <<EOF
 #! /bin/sh
 
-export JAVA_HOME=$j2re
+export JAVA_HOME=$jre
 
-$j2re/bin/java -jar $out/bin/jclasslib.jar \$@
+$jre/bin/java -jar $out/bin/jclasslib.jar \$@
 EOF
 
 chmod a+x $out/bin/jclasslib || exit 1
