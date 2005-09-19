@@ -2,6 +2,6 @@ set -e
 
 . $stdenv/setup
 
-$unzip/bin/unzip $src 
+tar zxvf $src 
 mkdir $out
 mv eclipse $out/

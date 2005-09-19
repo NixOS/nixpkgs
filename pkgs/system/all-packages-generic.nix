@@ -1545,7 +1545,7 @@ rec {
   };
 
   eclipse = (import ../applications/editors/eclipse) {
-    inherit fetchurl stdenv unzip;
+    inherit fetchurl stdenv;
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {
