@@ -1,4 +1,4 @@
-{fetchurl, stdenv}:
+{fetchurl, stdenv, makeWrapper}:
 
 let {
   body =
@@ -6,6 +6,7 @@ let {
       name = "eclipse-sdk-3.1";
       builder = ./builder.sh;
       src = bindist;
+      inherit makeWrapper;
    };
 
   bindist = 

@@ -1545,7 +1545,7 @@ rec {
   };
 
   eclipse = (import ../applications/editors/eclipse) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv makeWrapper;
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {

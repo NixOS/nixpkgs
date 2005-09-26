@@ -1,7 +1,8 @@
-set -e
+source $stdenv/setup
+source $makeWrapper
 
-. $stdenv/setup
-
-tar zxvf $src 
-mkdir $out
+unpackFile $src 
+ensureDir $out
 mv eclipse $out/
+
+makeWrapper $out/eclipse/eclipse $out/bin/eclipse
