@@ -279,7 +279,7 @@ echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
 echo "1:2345:respawn:$bootPath/bin/login.sh /dev/tty1" >> $root/etc/inittab
-#echo "2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
+echo #"2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...

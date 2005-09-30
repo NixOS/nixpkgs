@@ -5,7 +5,7 @@ rec {
     nettools nix subversion gcc wget which vim less screen openssh binutils
     strace shadowutils iputils gnumake curl gnused gnutar gnugrep gzip
     mingettyWrapper grubWrapper syslinux parted module_init_tools hotplug udev
-    dhcpWrapper man nano eject;
+    dhcpWrapper man nano eject sysklogd;
 
   boot = (import ./boot) {inherit stdenv kernel bash coreutils findutilsWrapper
     utillinux sysvinit e2fsprogs nettools nix subversion gcc wget which vim
@@ -17,5 +17,5 @@ rec {
     nix shadowutils mingettyWrapper grubWrapper parted module_init_tools hotplug
     dhcpWrapper man nano eject;};
 
-  everything = [boot sysvinit kernel eject];
+  everything = [boot sysvinit kernel sysklogd];
 }
