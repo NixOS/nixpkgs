@@ -1147,9 +1147,15 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
   
-  readline = (import ../development/libraries/readline) {
+  readline4 = (import ../development/libraries/readline/readline4.nix) {
     inherit fetchurl stdenv ncurses;
   };
+
+  readline5 = (import ../development/libraries/readline/readline5.nix) {
+    inherit fetchurl stdenv ncurses;
+  };
+
+  readline = readline5;
 
   SDL = (import ../development/libraries/SDL) {
     inherit fetchurl stdenv x11;
