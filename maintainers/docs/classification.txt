@@ -99,7 +99,7 @@ ELSE IF it's an APPLICATION:
   ELSE
     ./applications/misc
 
-ELSE IF it's DATA (i.e., doe not have a straight-forward executable semantics):
+ELSE IF it's DATA (i.e., does not have a straight-forward executable semantics):
 
   IF it's related to SGML/XML processing:
     IF it's a XML DTD:
