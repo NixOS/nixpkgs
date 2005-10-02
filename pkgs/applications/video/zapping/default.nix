@@ -3,14 +3,10 @@
 , pngSupport ? true
 , recordingSupport ? true
 # !!! libXext shouldn't be necessary (it's in x11); but the builder needs it.
-, stdenv, fetchurl, pkgconfig, perl, python, x11, libXv, libXmu, libXext, libgnomeui
+, stdenv, fetchurl, pkgconfig, perl, python, x11
+, libXv, libXmu, libXext, libgnomeui
 , libglade, scrollkeeper, esound, gettext, perlXMLParser
 , zvbi ? null, libjpeg ? null, libpng ? null, rte ? null }:
-
-assert pkgconfig != null && perl != null && python != null
-  && x11 != null && libXv != null && libXmu != null && libgnomeui != null && libglade != null
-  && scrollkeeper != null && esound != null && gettext != null
-  && perlXMLParser != null;
 
 assert teletextSupport -> zvbi != null && zvbi.pngSupport
   /* !!! && pngSupport && zvbi.libpng == libpng */;
@@ -21,12 +17,12 @@ assert pngSupport -> libpng != null;
 assert recordingSupport -> rte != null;
 
 stdenv.mkDerivation {
-  name = "zapping-0.7";
+  name = "zapping-0.9.6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/zapping-0.7.tar.bz2;
-    md5 = "dd7b3d920509709692c41c9c6c767746";
+    url = http://heanet.dl.sourceforge.net/sourceforge/zapping/zapping-0.9.6.tar.bz2;
+    md5 = "8306775c6a11de4d72345b5eee970ea6";
   };
 
   inherit teletextSupport jpegSupport pngSupport libXext;
