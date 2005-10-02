@@ -46,6 +46,7 @@ echo
 if grep -q '\\citation' $rootNameBase.aux; then
     echo "RUNNING BIBTEX..."
     bibtex --terse $rootNameBase
+    cp $rootNameBase.bbl $out
     echo
 fi
 
