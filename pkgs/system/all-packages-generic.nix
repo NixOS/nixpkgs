@@ -1554,7 +1554,7 @@ rec {
     inherit (xlibs) libXt libXp libXext libX11;
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
-#    patchelf = patchelfNew;
+    patchelf = patchelfNew;
   };
 
   eclipse = (import ../applications/editors/eclipse) {
