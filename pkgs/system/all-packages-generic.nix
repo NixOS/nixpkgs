@@ -287,6 +287,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  patchelfNew = (import ../development/tools/misc/patchelf/new.nix) {
+    inherit fetchurl stdenv;
+  };
+
   gnum4 = (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
   };
@@ -549,7 +553,9 @@ rec {
   #};
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl ncurses;
+    readline = readline4;
+    patchelf = patchelfNew;
   };
 
   ghc = (import ../development/compilers/ghc) {
@@ -1548,6 +1554,7 @@ rec {
     inherit (xlibs) libXt libXp libXext libX11;
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
+#    patchelf = patchelfNew;
   };
 
   eclipse = (import ../applications/editors/eclipse) {

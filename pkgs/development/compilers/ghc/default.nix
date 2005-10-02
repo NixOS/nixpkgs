@@ -1,12 +1,10 @@
 {stdenv, fetchurl, perl, ghc, m4}:
 
-assert perl != null && ghc != null && m4 != null;
-
 stdenv.mkDerivation {
-  name = "ghc-6.2.1";
+  name = "ghc-6.4.1";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ghc-6.2.1-src.tar.bz2;
-    md5 = "fa9f90fd6b8852679c5fc16509e94d7a";
+    url = http://www.haskell.org/ghc/dist/6.4.1/ghc-6.4.1-src.tar.bz2;
+    md5 = "fd289bc7c3afa272ff831a71a50b5b00";
   };
   buildInputs = [perl ghc m4];
 }
