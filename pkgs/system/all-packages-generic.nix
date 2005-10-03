@@ -989,6 +989,10 @@ rec {
       inherit stdenv fetchurl unzip;
   };
 
+  javasvn = import ../development/libraries/java/javasvn {
+      inherit stdenv fetchurl unzip;
+  };
+
   httpunit = import ../development/libraries/java/httpunit {
       inherit stdenv fetchurl unzip;
   };
