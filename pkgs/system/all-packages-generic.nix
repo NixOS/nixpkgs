@@ -1301,15 +1301,15 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
- syslinux = import ../os-specific/linux/syslinux {
+  syslinux = import ../os-specific/linux/syslinux {
     inherit fetchurl stdenv nasm perl;
   };
 
- hotplug = import ../os-specific/linux/hotplug {
+  hotplug = import ../os-specific/linux/hotplug {
     inherit fetchurl stdenv;
   };
 
- udev = import ../os-specific/linux/udev {
+  udev = import ../os-specific/linux/udev {
     inherit fetchurl stdenv;
   };
 
