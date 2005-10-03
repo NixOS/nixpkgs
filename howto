@@ -1,0 +1,74 @@
+NixOS installation HOWTO -- October 3, 2005
+
+This is small HOWTO of how to build and install the current version of
+NixOS.
+
+
+  Building
+
+Install Nix. Checkout nixpkgs from Subversion, as well as nixu. Adapt the
+scripts in nixu to reflect the location of nixpkgs (default /nixpkgs).
+Make a directory /tmp/arch. Run ./make-disk.sh. Wait.
+
+  Burning
+
+Use your favourite tool to burn the ISO image to a CD.
+
+  Preparing the host machine
+
+Currently NixOS can only be installed with machines that have a specific
+hardware set up:
+
+An ATA harddisk on the first ATA controller (hda) with:
+- data partition (hda1)
+- swap partition (hda2)
+
+All data on these two partitions will be wiped and the bootloader in the
+Master Boot Record (MBR) will be overwritten with GRUB.
+
+  Booting
+
+Insert the CD, make sure it can boot from CD and reboot. Let it run for a
+while.
+
+  Configuring
+
+To get NixOS in a working state, do the following:
+
+- load the networkdriver. This is machine dependent. On the labmachines this
+is the e1000 driver:
+
+# modprobe e1000
+
+- bring the interface up:
+
+# ifconfig eth0 up
+
+If the interface is different (say, eth1) replace eth0 with the right
+interface.
+
+- if DHCP is used, run a DHCP client to obtain an IP address:
+
+# dhclient eth0
+
+The interface will not be configured, but it will give you all the right
+information needed to configure the interface.
+
+# ifconfig eth0 <ip address> netmask <netmask>
+# route add default gw <gateway ip address>
+# vim /etc/resolv.conf
+
+  Making logins on virtual consoles work.
+
+Logins on virtual consoles are disabled by default. To make them work:
+
+- edit /etc/inittab and outcomment the lines with "mingetty" in them
+- copy /etc/services from a working Linux machine to /etc/services on the
+NixOS machine (needed for sysklogd)
+- copy /etc/syslog.conf from a working Linux machine to /etc/syslog.conf on the
+NixOS machine (needed for sysklogd)
+- launch sysklogd
+- copy /etc/login.defs from a working Linux machine to /etc/login.defs on the
+NixOS machine (needed for mingetty)
+- chmod +x /path/to/mingetty
+- relaunch init
