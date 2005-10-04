@@ -51,7 +51,7 @@ let {
     strategoxt
     strategoxtUtils
 
-#    ghc
+    ghc
 #    helium
     perl
     python
