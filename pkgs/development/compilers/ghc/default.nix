@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, ghc, m4}:
+{stdenv, fetchurl, perl, ghc, m4, readline, ncurses}:
 
 stdenv.mkDerivation {
   name = "ghc-6.4.1";
@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "fd289bc7c3afa272ff831a71a50b5b00";
   };
   buildInputs = [perl ghc m4];
+  propagatedBuildInputs = [readline ncurses];
 }
