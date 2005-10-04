@@ -1,13 +1,10 @@
 {stdenv, fetchurl, ncurses}:
 
-assert ncurses != null;
-
 stdenv.mkDerivation {
-  name = "texinfo-4.6";
-  builder = ./builder.sh;
+  name = "texinfo-4.8";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/texinfo-4.6.tar.gz;
-    md5 = "5730c8c0c7484494cca7a7e2d7459c64";
+    url = http://ftp.gnu.org/gnu/texinfo/texinfo-4.8.tar.bz2;
+    md5 = "6ba369bbfe4afaa56122e65b3ee3a68c";
   };
-  inherit ncurses;
+  buildInputs = [ncurses];
 }

@@ -7,5 +7,6 @@ stdenv.mkDerivation {
     url = http://surfnet.dl.sourceforge.net/sourceforge/aa-project/aalib-1.4rc4.tar.gz;
     md5 = "d5aa8e9eae07b7441298b5c30490f6a6";
   };
+  buildInputs = [ncurses];
   inherit ncurses;
 }
