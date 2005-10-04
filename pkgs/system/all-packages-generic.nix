@@ -501,9 +501,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  jdk = (import ../development/compilers/jdk) {
-    inherit fetchurl stdenv;
-  };
+  jdk = 
+    if stdenv.system == "powerpc-darwin" then 
+      "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
+    else
+      (import ../development/compilers/jdk) {
+        inherit fetchurl stdenv;
+      };
 
   j2sdk14x = (import ../development/compilers/jdk/default-1.4.nix) {
     inherit fetchurl stdenv;
