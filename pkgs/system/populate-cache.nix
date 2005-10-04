@@ -63,6 +63,7 @@ let {
     docbook_xml_xslt
     jing_tools
     subversion
+    darcs
     pan
     sylpheed
     firefoxWrapper

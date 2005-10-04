@@ -1371,6 +1371,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  darcs = import ../applications/version-management/darcs {
+    inherit fetchurl stdenv ghc zlib ncurses;
+  };
+
   pan = (import ../applications/networking/newsreaders/pan) {
     inherit fetchurl stdenv pkgconfig gnet libxml2 perl pcre;
     inherit (gtkLibs) gtk;
