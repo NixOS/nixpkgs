@@ -1614,9 +1614,9 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  vimDiet = (import ../applications/editors/vim-diet) {
-    inherit fetchurl stdenv ncurses dietgcc;
-  };
+#  vimDiet = (import ../applications/editors/vim-diet) {
+#    inherit fetchurl stdenv ncurses dietgcc;
+#  };
 
   ### GAMES
 
