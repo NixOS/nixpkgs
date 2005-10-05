@@ -1268,6 +1268,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sysklogd = (import ../os-specific/linux/sysklogd) {
+    inherit fetchurl stdenv;
+  };
+
   sysvinit = (import ../os-specific/linux/sysvinit) {
     inherit fetchurl stdenv;
   };
@@ -1610,6 +1614,9 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  vimDiet = (import ../applications/editors/vim-diet) {
+    inherit fetchurl stdenv ncurses dietgcc;
+  };
 
   ### GAMES
 
