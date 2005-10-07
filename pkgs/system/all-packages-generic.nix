@@ -76,6 +76,10 @@ rec {
     inherit (xlibs) libX11 libXext;
   };
 
+  jdiskreport = (import ../tools/misc/jdiskreport) {
+    inherit fetchurl stdenv unzip jdk;
+  };
+
   diffutils = (import ../tools/text/diffutils) {
     inherit fetchurl stdenv coreutils;
   };
