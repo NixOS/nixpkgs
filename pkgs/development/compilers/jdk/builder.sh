@@ -1,29 +1,38 @@
-#!/bin/sh
+source $stdenv/setup
 
-. $stdenv/setup || exit 1
 src=$filename.bin
 
-cp $pathname $src || exit 1
+if ! test -e "$pathname"; then
+    echo ""
+    echo "SORRY!"
+    echo "You should download \`$(basename $pathname)' from Sun and place it in $(dirname $pathname)."
+    echo "Blame Sun, not us."
+    echo ""
+    exit 1
+fi
 
-actual=$(md5sum -b $src | cut -c1-32)
+actual=$(md5sum -b $pathname | cut -c1-32)
 if test "$actual" != "$md5"; then
     echo "hash is $actual, expected $md5"
     exit 1
 fi
 
-chmod u+x $src || exit 1
+unzip $pathname || true
 
-alias more=cat
+ensureDir $out
+mv $dirname/* $out/
 
-yes yes | ./$src || exit 1
-
-mkdir $out || exit 1
-mv $dirname/* $out/ || exit 1
-
-# remove crap in the root directory
+# Remove crap in the root directory.
 for file in $out/*
 do
   if test -f $file ; then
     rm $file
   fi
+done
+
+# Unpack .pack files.
+for i in $(find $out -name "*.pack"); do
+    echo "unpacking $i..."
+    $out/bin/unpack200 "$i" "$(dirname $i)/$(basename $i .pack).jar"
+    rm "$i"
 done
