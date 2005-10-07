@@ -8,9 +8,13 @@
  *
  * @author Martin Bravenboer <martin@cs.uu.nl>
  */
-{stdenv, fetchurl, unzip}:
+{ swingSupport ? true
+, stdenv, fetchurl, unzip, patchelf, libX11 ? null, libXext ? null
+}:
 
 assert stdenv.system == "i686-linux";
+
+assert swingSupport -> libX11 != null && libXext != null;
 
 stdenv.mkDerivation {
   name = "jdk-1.5.0";
@@ -19,5 +23,7 @@ stdenv.mkDerivation {
   dirname = "jdk1.5.0_05";
   pathname = "/tmp/jdk-1_5_0_05-linux-i586.bin";
   md5 = "2f83bf2a38fff1f8ac51b02ec7391ca3";
-  buildInputs = [unzip];
+  buildInputs = [unzip patchelf];
+  libraries =
+    (if swingSupport then [libX11 libXext] else []);
 }

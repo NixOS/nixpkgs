@@ -490,7 +490,7 @@ rec {
 
   ecj = (import ../development/eclipse/ecj) {
     inherit fetchurl stdenv unzip jre;
-    ant  = apacheAntBlackdown14;
+    ant = apacheAntBlackdown14;
   };
 
   jdtsdk = (import ../development/eclipse/jdt-sdk) {
@@ -507,6 +507,8 @@ rec {
     else
       (import ../development/compilers/jdk) {
         inherit fetchurl stdenv unzip;
+        patchelf = patchelfNew;
+        inherit (xlibs) libX11 libXext;
       };
 
   j2sdk14x = (import ../development/compilers/jdk/default-1.4.nix) {
