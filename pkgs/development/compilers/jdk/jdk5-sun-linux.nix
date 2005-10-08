@@ -16,7 +16,7 @@ assert stdenv.system == "i686-linux";
 
 assert swingSupport -> libX11 != null && libXext != null;
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "jdk-1.5.0";
   builder = ./builder.sh;
   filename = "jdk-1_5_0_05";
@@ -26,4 +26,4 @@ stdenv.mkDerivation {
   buildInputs = [unzip patchelf];
   libraries =
     (if swingSupport then [libX11 libXext] else []);
-}
+} // {inherit swingSupport;})
