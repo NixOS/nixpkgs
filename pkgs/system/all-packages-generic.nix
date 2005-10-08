@@ -1580,7 +1580,10 @@ rec {
   };
 
   eclipse = (import ../applications/editors/eclipse) {
-    inherit fetchurl stdenv makeWrapper;
+    inherit fetchurl stdenv makeWrapper jdk;
+    inherit (gtkLibs) gtk glib;
+    inherit (xlibs) libXtst;
+    patchelf = patchelfNew;
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {

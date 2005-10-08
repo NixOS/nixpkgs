@@ -1,4 +1,4 @@
-{fetchurl, stdenv, makeWrapper}:
+{fetchurl, stdenv, makeWrapper, patchelf, jdk, gtk, glib, libXtst}:
 
 let {
   body =
@@ -6,7 +6,9 @@ let {
       name = "eclipse-sdk-3.1";
       builder = ./builder.sh;
       src = bindist;
-      inherit makeWrapper;
+      inherit makeWrapper jdk;
+      buildInputs = [patchelf];
+      libraries = [gtk glib libXtst];
    };
 
   bindist = 
