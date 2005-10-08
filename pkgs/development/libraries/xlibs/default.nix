@@ -98,4 +98,11 @@ rec {
     inherit stdenv libX11 libXt freetype fontconfig libXft libXext;
   };
 
+  recordext = (import ./recordext) {
+    inherit fetchurl stdenv;
+  };
+
+  libXtst = (import ./libXtst) {
+    inherit fetchurl stdenv pkgconfig libX11 libXext recordext libXtrans;
+  };
 }
