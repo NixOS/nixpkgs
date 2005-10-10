@@ -35,6 +35,10 @@ rec {
 
   ### TOOLS
 
+  bc = (import ../tools/misc/bc) {
+    inherit fetchurl stdenv flex;
+  };
+
   coreutils = (import ../tools/misc/coreutils) {
     inherit fetchurl stdenv;
   };
@@ -639,7 +643,8 @@ rec {
   };
 
   apacheAnt14 = (import ../development/tools/build-managers/apache-ant) {
-    inherit fetchurl stdenv jdk;
+    inherit fetchurl stdenv;
+    jdk = j2sdk14x;
     name = "ant-jdk-1.4.2";
   };
 
