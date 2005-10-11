@@ -295,10 +295,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  patchelfNew = (import ../development/tools/misc/patchelf/new.nix) {
-    inherit fetchurl stdenv;
-  };
-
   gnum4 = (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
   };
@@ -515,7 +511,6 @@ rec {
     else
       (import ../development/compilers/jdk) {
         inherit fetchurl stdenv unzip;
-        patchelf = patchelfNew;
         inherit (xlibs) libX11 libXext;
       };
 
@@ -569,7 +564,6 @@ rec {
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
     inherit fetchurl stdenv perl ncurses;
     readline = readline4;
-    patchelf = patchelfNew;
   };
 
   ghc = (import ../development/compilers/ghc) {
@@ -1581,14 +1575,12 @@ rec {
     inherit (xlibs) libXt libXp libXext libX11;
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
-    patchelf = patchelfNew;
   };
 
   eclipse = (import ../applications/editors/eclipse) {
     inherit fetchurl stdenv makeWrapper jdk;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXtst;
-    patchelf = patchelfNew;
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {

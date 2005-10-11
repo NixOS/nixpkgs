@@ -1,4 +1,4 @@
-{fetchurl, stdenv, makeWrapper, patchelf, jdk, gtk, glib, libXtst}:
+{fetchurl, stdenv, makeWrapper, jdk, gtk, glib, libXtst}:
 
 let {
   body =
@@ -7,7 +7,6 @@ let {
       builder = ./builder.sh;
       src = bindist;
       inherit makeWrapper jdk;
-      buildInputs = [patchelf];
       libraries = [gtk glib libXtst];
    };
 
