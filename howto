@@ -8,7 +8,7 @@ NixOS.
 
 Install Nix. Checkout nixpkgs from Subversion, as well as nixu. Adapt the
 scripts in nixu to reflect the location of nixpkgs (default /nixpkgs).
-Make a directory /tmp/arch. Run ./make-disk.sh. Wait.
+Make sure mktemp is installed. Run ./make-disk.sh. Wait.
 
   Burning
 

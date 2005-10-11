@@ -3,7 +3,7 @@
 # deps is an array
 declare -a deps
 
-archivesDir=/tmp/arch
+archivesDir=$(mktemp -d)
 manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
@@ -14,13 +14,6 @@ bootiso=/tmp/nixos.iso
 initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
-
-echo cleaning old build
-
-# keep chmod happy
-touch ${archivesDir}/blah
-chmod -f -R +w ${archivesDir}/*
-rm -rf ${archivesDir}/*
 
 NIX_CMD_PATH=$(dirname $(which nix-store))
 
@@ -250,4 +243,4 @@ mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
 echo cleaning up
 
 chmod -f -R +w ${archivesDir}/*
-#rm -rf ${archivesDir}/*
+rm -rf ${archivesDir}/*
