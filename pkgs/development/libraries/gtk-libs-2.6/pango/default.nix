@@ -4,10 +4,10 @@ assert pkgconfig != null && x11 != null && glib != null;
 assert x11.buildClientLibs;
 
 stdenv.mkDerivation {
-  name = "pango-1.8.1";
+  name = "pango-1.8.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pango-1.8.1.tar.bz2;
-    md5 = "88aa6bf1876766db6864f3b93577887c";
+    url = http://nix.cs.uu.nl/dist/tarballs/pango-1.8.2.tar.bz2;
+    md5 = "f5b5da7a173f0566d8217ec112fde993";
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [x11 glib];
