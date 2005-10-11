@@ -2,8 +2,8 @@
   name = "openssl-0.9.7g";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.openssl.org/source/openssl-0.9.7g.tar.gz;
-    md5 = "991615f73338a571b6a1be7d74906934";
+    url = http://www.openssl.org/source/openssl-0.9.7h.tar.gz;
+    sha1 = "9fe535fce89af967b29c4727dedd25f2b4cc2f0d";
   };
   buildInputs = [perl];
 }
