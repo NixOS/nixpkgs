@@ -40,6 +40,8 @@ is the e1000 driver:
 
 # modprobe e1000
 
+In vmware the driver is "pcnet32".
+
 - bring the interface up:
 
 # ifconfig eth0 up

@@ -150,7 +150,7 @@ sed -e "s^@bash\@^$bash^g" \
 mv $initscript.tmp $initscript
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
-    -e "s^@NIX_CMD_PATH\@^$nix^g" \
+    -e "s^@nix\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \

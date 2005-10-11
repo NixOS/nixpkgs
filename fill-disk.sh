@@ -221,7 +221,7 @@ export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
 export NIX_STATE_DIR=$root/nix/var/nix
 export NIX_CONF_DIR=$root/nix/etc
-NIX_CMD_PATH=@NIX_CMD_PATH@/bin
+NIX_CMD_PATH=@nix@/bin
 
 echo initialising Nix DB...
 $NIX_CMD_PATH/nix-store --init
@@ -265,6 +265,7 @@ tar cf - /nix/store | tar --directory=$root -xvf -
 echo registering valid paths...
 
 $NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
+$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/system/i686-linux.nix nix
 
 echo setting init symlink...
 rm -f $root/init
@@ -296,6 +297,9 @@ echo setting up initial account information...
 echo "root:x:0:root" > $root/etc/group
 echo "root:x:0:0:root:/root:/bin/sh" > $root/etc/passwd
 echo "root::12757:0:99999:7:::" > $root/etc/shadow
+
+echo default profile for root
+echo "source @nix@/etc/profile.d/nix.sh" > $root/root/.profile
 
 ###
 ### Do kernel stuff here.
