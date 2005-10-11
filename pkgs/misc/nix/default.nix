@@ -15,5 +15,6 @@ stdenv.mkDerivation {
     md5 = "fc3a24f72760e357ac29935b2aebce0b";
   };
   buildInputs = [aterm bdb perl curl];
+  patches = [./nix-profile-0.9.2.patch];
   inherit storeDir stateDir aterm bdb;
 }
