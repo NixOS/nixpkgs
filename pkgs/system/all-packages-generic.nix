@@ -785,7 +785,17 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  gtkLibs = gtkLibs26;
+  cairo = (import ../development/libraries/cairo) {
+    inherit fetchurl stdenv pkgconfig x11 freetype zlib libpng;
+    inherit (xlibs) fontconfig;
+  };
+
+  gtkLibs = gtkLibs28;
+
+  gtkLibs28 = import ../development/libraries/gtk-libs-2.8 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng cairo;
+  };
 
   gtkLibs26 = import ../development/libraries/gtk-libs-2.6 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
