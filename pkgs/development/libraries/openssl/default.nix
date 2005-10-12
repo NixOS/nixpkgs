@@ -6,4 +6,5 @@
     sha1 = "9fe535fce89af967b29c4727dedd25f2b4cc2f0d";
   };
   buildInputs = [perl];
+  patches = [./darwin-makefile.patch];
 }

@@ -12,10 +12,3 @@
 * Add gettext to glib propagatedBuildInputs?  Glib's `gi18n.h' doesn't
   seem to like Glibc `libintl.h'; needs the gettext one instead.
   [Move from libbonoboui]
-
-* In libxml2: python2.3 -> python2.4 (or even better, make this
-  generic; also in bittorrent).
-
-* Packages that need ncurses almost always need special flags.  They
-  expect "ncurses.h" rather than "ncurses/ncurses.h" to be in the
-  include path.  Fix this.
