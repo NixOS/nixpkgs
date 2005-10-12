@@ -49,12 +49,12 @@ In vmware the driver is "pcnet32".
 If the interface is different (say, eth1) replace eth0 with the right
 interface.
 
-- if DHCP is used, run a DHCP client to obtain an IP address:
+- if DHCP is used, run a DHCP client to obtain an IP address, routing
+and resolving information:
 
 # dhclient eth0
 
-The interface will not be configured, but it will give you all the right
-information needed to configure the interface.
+Otherwise, do this yourself:
 
 # ifconfig eth0 <ip address> netmask <netmask>
 # route add default gw <gateway ip address>
