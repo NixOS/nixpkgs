@@ -1429,14 +1429,14 @@ rec {
     inherit (xlibs) libXi;
   };
 
-  firefoxbeta = (import ../applications/networking/browsers/firefox-1.5beta) {
+  firefoxBeta = (import ../applications/networking/browsers/firefox-1.5beta) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
   };
 
-  firefoxWrapper = (import ../applications/networking/browsers/firefox-wrapper) {
+  wrapFirefox = firefox: (import ../applications/networking/browsers/firefox-wrapper) {
     inherit stdenv firefox;
     plugins = [
       MPlayerPlugin
@@ -1445,6 +1445,10 @@ rec {
 #      RealPlayer  # disabled by default for legal reasons
     ];
   };
+
+  firefoxWrapper = wrapFirefox firefox;
+
+  firefoxBetaWrapper = wrapFirefox firefoxBeta;
 
   flashplayer = (import ../applications/networking/browsers/mozilla-plugins/flashplayer) {
     inherit fetchurl stdenv zlib;

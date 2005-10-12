@@ -67,6 +67,7 @@ let {
     pan
     sylpheed
     firefoxWrapper
+    firefoxBetaWrapper
     thunderbird
     lynx
     gaim
