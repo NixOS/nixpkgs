@@ -1361,6 +1361,10 @@ rec {
 
   ### APPLICATIONS
 
+  cvs = (import ../applications/version-management/cvs) {
+    inherit fetchurl stdenv vim;
+  };
+
   subversion11x = (import ../applications/version-management/subversion-1.1.x) {
     inherit fetchurl stdenv openssl db4 expat swig zlib;
     localServer = true;
