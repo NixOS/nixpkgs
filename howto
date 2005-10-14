@@ -72,5 +72,4 @@ NixOS machine (needed for sysklogd)
 - launch sysklogd
 - copy /etc/login.defs from a working Linux machine to /etc/login.defs on the
 NixOS machine (needed for mingetty)
-- chmod +x /path/to/mingetty
 - relaunch init
