@@ -62,6 +62,7 @@ let {
     docbook_ng
     docbook_xml_xslt
     jing_tools
+    apacheHttpd
     subversion
     darcs
     pan
