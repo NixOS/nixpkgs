@@ -1409,13 +1409,6 @@ rec {
   };
 
   sylpheed = (import ../applications/networking/mailreaders/sylpheed) {
-    inherit fetchurl stdenv openssl;
-    inherit (gtkLibs1x) gtk gdkpixbuf;
-    sslSupport = true;
-    imageSupport = true;
-  };
-
-  sylpheed_gtk2 = (import ../applications/networking/mailreaders/sylpheed-gtk2) {
     inherit fetchurl stdenv pkgconfig openssl;
     inherit (gtkLibs) glib gtk;
     sslSupport = true;
