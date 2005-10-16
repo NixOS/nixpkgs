@@ -272,7 +272,7 @@ rm -f $root/init
 #ln -s $sysvinitPath/sbin/init $root/init
 ln -s @sysvinitPath@/sbin/init $root/sbin/init
 ln -s @bash@/bin/sh $root/bin/sh
-ln -s @bash@/bin/bash $root/bin/bash
+#ln -s @bash@/bin/bash $root/bin/bash
 
 echo setting up inittab...
 rm -f $root/etc/inittab
