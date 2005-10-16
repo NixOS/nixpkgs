@@ -197,7 +197,7 @@ rec {
   };
 
   dhcp = (import ../tools/networking/dhcp) {
-    inherit fetchurl stdenv groff nettools coreutils iputils gnused;
+    inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
   };
 
   dhcpWrapper = (import ../tools/networking/dhcp-wrapper) {
