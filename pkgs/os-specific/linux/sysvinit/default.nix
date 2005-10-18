@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     md5 = "8a2d8f1ed5a2909da04132fefa44905e";
   };
   #srcPatch = ./patch;
-  patches = [./patch];
+  patches = [./patch ./sysvinit-2.85-exec.patch];
 }
