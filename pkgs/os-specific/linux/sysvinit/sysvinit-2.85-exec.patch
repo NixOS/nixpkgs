@@ -1,0 +1,35 @@
+diff -ruN sysvinit-2.85/src/halt.c sysvinit-2.85.new/src/halt.c
+--- sysvinit-2.85/src/halt.c	2001-11-27 13:12:03.000000000 +0100
++++ sysvinit-2.85.new/src/halt.c	2005-10-18 20:09:47.000000000 +0200
+@@ -53,6 +53,10 @@
+ #define KERNEL_MONITOR	1 /* If halt() puts you into the kernel monitor. */
+ #define RUNLVL_PICKY	0 /* Be picky about the runlevel */
+ 
++#ifndef EXEC_PATH
++  #define EXEC_PATH "/sbin/shutdown"
++#endif
++
+ extern int ifdown(void);
+ extern int hddown(void);
+ extern void write_wtmp(char *user, char *id, int pid, int type, char *line);
+@@ -139,7 +143,7 @@
+ 	args[i++] = "now";
+ 	args[i++] = NULL;
+ 
+-	execv("/sbin/shutdown", args);
++	execv(EXEC_PATH, args);
+ 	execv("/etc/shutdown", args);
+ 	execv("/bin/shutdown", args);
+ 
+diff -ruN sysvinit-2.85/src/Makefile sysvinit-2.85.new/src/Makefile
+--- sysvinit-2.85/src/Makefile	2001-11-06 12:58:16.000000000 +0100
++++ sysvinit-2.85.new/src/Makefile	2005-10-18 23:37:46.000000000 +0200
+@@ -9,7 +9,7 @@
+ #
+ 
+ CC	= cc
+-CFLAGS	= -Wall -O2 -D_GNU_SOURCE
++CFLAGS	= -Wall -save-temps -O2 -D_GNU_SOURCE -DEXEC_PATH=\"${out}/sbin/shutdown\"
+ LDFLAGS	= -s
+ STATIC	=
+ 
