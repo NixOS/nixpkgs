@@ -266,6 +266,7 @@ echo registering valid paths...
 
 $NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
 $NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/system/i686-linux.nix nix
+$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/system/i686-linux.nix coreutils
 
 echo setting init symlink...
 rm -f $root/init
