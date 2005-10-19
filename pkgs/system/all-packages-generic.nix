@@ -878,7 +878,15 @@ rec {
     inherit (xlibs) libXmu;
   };
 
-  wxGTK = (import ../development/libraries/wxGTK-2.5) {
+  wxGTK = wxGTK26;
+
+  wxGTK26 = (import ../development/libraries/wxGTK-2.6) {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libXinerama;
+  };
+
+  wxGTK25 = (import ../development/libraries/wxGTK-2.5) {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXinerama;

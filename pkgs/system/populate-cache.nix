@@ -82,7 +82,7 @@ let {
     batik
 #    fspot
     hello
-#    xchm
+    xchm
     nxml
     uml
     nix

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, wxGTK, chmlib}:
 
 stdenv.mkDerivation {
-  name = "xchm-0.9.1";
+  name = "xchm-1.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/xchm-0.9.1.tar.gz;
-    md5 = "5ba671e09e4c3ac46ffb5ce9d2c985eb";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/xchm/xchm-1.2.tar.gz;
+    md5 = "17f2cda873f61470636dbfeebb4a531d";
   };
   buildInputs = [wxGTK chmlib];
 }
