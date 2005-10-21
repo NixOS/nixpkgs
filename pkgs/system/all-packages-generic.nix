@@ -1497,6 +1497,12 @@ rec {
     inherit fetchurl stdenv ;
   };
 
+  xmms = (import ../applications/audio/xmms) {
+    inherit fetchurl stdenv libogg libvorbis alsaLib;
+    inherit (gnome) esound;
+    inherit (gtkLibs1x) glib gtk;
+  };
+
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca;
     inherit (xlibs) libXv;
