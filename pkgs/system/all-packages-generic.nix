@@ -1707,4 +1707,8 @@ rec {
     bdb = db4;
   };
 
+  cups = (import ../misc/cups) {
+    inherit fetchurl stdenv;
+  };
+
 }
