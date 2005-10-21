@@ -76,6 +76,7 @@ let {
     MPlayerPlugin
     vlc
     xineUI
+    xmms
     zapping
     gqview
     inkscape
@@ -92,6 +93,7 @@ let {
 #    monodevelop
 #    hevea
     vim
+    emacs
     less
     file
     screen
