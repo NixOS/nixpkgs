@@ -107,7 +107,7 @@ let {
     xauth
     qt3
     xmltv
-#    mythtv
+    mythtv
     tetex
     ghostscript
 

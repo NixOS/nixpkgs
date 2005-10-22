@@ -1,13 +1,10 @@
-diff -rc mythtv-0.17-orig/settings.pro mythtv-0.17/settings.pro
-*** mythtv-0.17-orig/settings.pro	2005-02-11 05:02:39.000000000 +0100
---- mythtv-0.17/settings.pro	2005-02-16 13:38:46.351279092 +0100
-***************
-*** 1,6 ****
---- 1,7 ----
-  #CONFIG += debug
-  CONFIG += release
-  
-+ PREFIX = $$(out)
-  isEmpty( PREFIX ) {
-      PREFIX = /usr/local
-  }
+diff -urN mythtv-0.18.1-orig/settings.pro mythtv-0.18.1/settings.pro
+--- mythtv-0.18.1-orig/settings.pro	2005-10-22 15:32:48.000000000 +0200
++++ mythtv-0.18.1/settings.pro	2005-10-22 15:35:01.000000000 +0200
+@@ -1,5 +1,6 @@
+ CONFIG += $$CCONFIG
+ 
++PREFIX = $$(out)
+ isEmpty( PREFIX ) {
+     PREFIX = /usr/local
+ }
