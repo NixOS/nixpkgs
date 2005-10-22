@@ -1427,6 +1427,13 @@ rec {
     qt = qt3;
   };
 
+  mozilla = (import ../applications/networking/browsers/mozilla) {
+    inherit fetchurl pkgconfig stdenv perl zip;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+  };
+
   firefox = (import ../applications/networking/browsers/firefox) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
