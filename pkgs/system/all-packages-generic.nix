@@ -347,7 +347,7 @@ rec {
   };
 
   valgrind = (import ../development/tools/misc/valgrind) {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv;
   };
 
   texinfo = (import ../development/tools/misc/texinfo) {
