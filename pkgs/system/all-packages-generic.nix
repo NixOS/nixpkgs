@@ -284,6 +284,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  tcsh = (import ../shells/tcsh) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   #bashDiet = (import ../shells/bash-diet) {
   #  inherit fetchurl stdenv dietgcc;
   #};
@@ -1372,6 +1376,10 @@ rec {
 
 
   ### APPLICATIONS
+
+  #openoffice = (import ../applications/office/openoffice) {
+  #  inherit fetchurl stdenv tcsh;
+  #};
 
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
