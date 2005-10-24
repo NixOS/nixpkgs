@@ -1,0 +1,14 @@
+diff -ruN Linux-PAM-0.80/configure Linux-PAM-0.80.new/configure
+--- Linux-PAM-0.80/configure	2005-07-04 14:09:55.000000000 +0200
++++ Linux-PAM-0.80.new/configure	2005-10-24 18:33:30.000000000 +0200
+@@ -1336,8 +1336,8 @@
+ 
+ 
+ 
+-LOCALSRCDIR=`/bin/pwd`         ;
+-LOCALOBJDIR=`/bin/pwd`         ;
++LOCALSRCDIR=`pwd`         ;
++LOCALOBJDIR=`pwd`         ;
+ OS=`uname|sed -e 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
+ 
+ 
