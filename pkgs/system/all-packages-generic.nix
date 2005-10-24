@@ -127,6 +127,10 @@ rec {
     };
   };
 
+  jing = (import ../tools/text/xml/jing) {
+    inherit fetchurl stdenv unzip;
+  };
+
   jing_tools = (import ../tools/text/xml/jing/jing-script.nix) {
     inherit fetchurl stdenv unzip;
     jre = blackdown;
