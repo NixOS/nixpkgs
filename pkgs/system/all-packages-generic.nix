@@ -1283,6 +1283,10 @@ rec {
     inherit stdenv mingetty shadowutils;
   };
 
+  pam = (import ../os-specific/linux/pam) {
+    inherit stdenv fetchurl;
+  };
+
   #nfsUtils = (import ../os-specific/linux/nfs-utils) {
   #  inherit fetchurl stdenv;
   #};
@@ -1377,9 +1381,9 @@ rec {
 
   ### APPLICATIONS
 
-  #openoffice = (import ../applications/office/openoffice) {
-  #  inherit fetchurl stdenv tcsh;
-  #};
+  openoffice = (import ../applications/office/openoffice) {
+    inherit fetchurl stdenv tcsh cups;
+  };
 
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
