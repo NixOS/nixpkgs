@@ -968,6 +968,10 @@ rec {
     inherit fetchurl stdenv libxml2 openssl;
   };
 
+  cracklib = (import ../development/libraries/cracklib) {
+    inherit fetchurl stdenv;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxon = (import ../development/libraries/java/saxon) {
