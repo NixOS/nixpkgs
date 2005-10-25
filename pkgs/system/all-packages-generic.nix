@@ -1288,7 +1288,7 @@ rec {
   };
 
   pam = (import ../os-specific/linux/pam) {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl cracklib;
   };
 
   #nfsUtils = (import ../os-specific/linux/nfs-utils) {
