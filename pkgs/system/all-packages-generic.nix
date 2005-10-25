@@ -1381,9 +1381,9 @@ rec {
 
   ### APPLICATIONS
 
-  openoffice = (import ../applications/office/openoffice) {
-    inherit fetchurl stdenv tcsh cups;
-  };
+  #openoffice = (import ../applications/office/openoffice) {
+    #inherit fetchurl stdenv tcsh cups pam;
+  #};
 
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
