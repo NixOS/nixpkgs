@@ -1386,7 +1386,7 @@ rec {
   ### APPLICATIONS
 
   #openoffice = (import ../applications/office/openoffice) {
-    #inherit fetchurl stdenv tcsh cups pam;
+  #  inherit fetchurl stdenv pam python tcsh libxslt;
   #};
 
   cvs = (import ../applications/version-management/cvs) {
