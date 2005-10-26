@@ -127,6 +127,10 @@ rec {
     };
   };
 
+  sablotron = (import ../tools/text/xml/sablotron) {
+    inherit fetchurl stdenv expat;
+  };
+
   jing = (import ../tools/text/xml/jing) {
     inherit fetchurl stdenv unzip;
   };
@@ -715,6 +719,16 @@ rec {
     inherit fetchurl stdenv libogg libvorbis;
   };
 
+  libwpd = (import ../development/libraries/libwpd) {
+    inherit fetchurl stdenv pkgconfig libgsf libxml2;
+    inherit (gnome) glib;
+  };
+
+  libgsf = (import ../development/libraries/libgsf) {
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2;
+    inherit (gnome) glib;
+  };
+
   libxml2 = (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
 #    pythonSupport = stdenv.system == "i686-linux";
@@ -735,6 +749,18 @@ rec {
 
   openssl = (import ../development/libraries/openssl) {
     inherit fetchurl stdenv perl;
+  };
+
+  libmspack = (import ../development/libraries/libmspack) {
+    inherit fetchurl stdenv;
+  };
+
+  libsndfile = (import ../development/libraries/libsndfile) {
+    inherit fetchurl stdenv;
+  };
+
+  neon = (import ../development/libraries/neon) {
+    inherit fetchurl stdenv libxml2;
   };
 
   nss = (import ../development/libraries/nss) {
@@ -1052,6 +1078,14 @@ rec {
 
   perlXMLParser = import ../development/perl-modules/XML-Parser {
     inherit fetchurl perl expat;
+  };
+
+  perlArchiveZip = import ../development/perl-modules/Archive-Zip {
+    inherit fetchurl perl;
+  };
+
+  perlCompressZlib = import ../development/perl-modules/Compress-Zlib {
+    inherit fetchurl perl;
   };
 
   perlXMLLibXML = import ../development/perl-modules/generic perl {
@@ -1385,9 +1419,11 @@ rec {
 
   ### APPLICATIONS
 
-  #openoffice = (import ../applications/office/openoffice) {
-  #  inherit fetchurl stdenv pam python tcsh libxslt;
-  #};
+  openoffice = (import ../applications/office/openoffice) {
+    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon bison flex zip libmspack getopt;
+    inherit (xlibs) libXaw fontconfig;
+    inherit (gtkLibs) gtk;
+  };
 
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
