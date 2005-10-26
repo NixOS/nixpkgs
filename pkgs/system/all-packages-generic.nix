@@ -1420,7 +1420,7 @@ rec {
   ### APPLICATIONS
 
   openoffice = (import ../applications/office/openoffice) {
-    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon flex zip libmspack getopt;
+    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon flex zip libmspack getopt file;
     inherit (xlibs) libXaw fontconfig;
     inherit (gtkLibs) gtk;
 
