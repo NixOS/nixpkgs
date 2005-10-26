@@ -12,4 +12,5 @@ stdenv.mkDerivation {
     (if zlibSupport then zlib else null)
   ];
   inherit zlibSupport;
+  configureFlags = "--enable-shared";
 }
