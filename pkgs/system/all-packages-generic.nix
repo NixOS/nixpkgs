@@ -1420,9 +1420,15 @@ rec {
   ### APPLICATIONS
 
   openoffice = (import ../applications/office/openoffice) {
-    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon bison flex zip libmspack getopt;
+    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon flex zip libmspack getopt;
     inherit (xlibs) libXaw fontconfig;
     inherit (gtkLibs) gtk;
+
+    bison = (import ../development/tools/parsing/bison/bison-2.1.nix) {
+      inherit fetchurl stdenv;
+      m4 = gnum4;
+    };
+
   };
 
   cvs = (import ../applications/version-management/cvs) {
