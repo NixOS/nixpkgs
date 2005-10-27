@@ -1420,7 +1420,7 @@ rec {
   ### APPLICATIONS
 
   openoffice = (import ../applications/office/openoffice) {
-    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile neon flex zip libmspack getopt file;
+    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile flex zip libmspack getopt file;
     inherit (xlibs) libXaw fontconfig;
     inherit (gtkLibs) gtk;
 
@@ -1429,6 +1429,9 @@ rec {
       m4 = gnum4;
     };
 
+    neon = (import ../development/libraries/neon/neon-0.24.7.nix) {
+      inherit fetchurl stdenv libxml2;
+    };
   };
 
   cvs = (import ../applications/version-management/cvs) {
