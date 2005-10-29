@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, x11
-, libtiff, libjpeg, libpng, cairo
+{ xineramaSupport ? false
+, stdenv, fetchurl, pkgconfig, gettext, perl, x11
+, libtiff, libjpeg, libpng, cairo, libXinerama ? null
 }:
 
 rec {
@@ -18,7 +19,8 @@ rec {
 
   gtk = (import ./gtk+) {
     inherit fetchurl stdenv pkgconfig glib atk pango perl
-            libtiff libjpeg libpng x11 cairo;
+            libtiff libjpeg libpng x11 cairo libXinerama
+            xineramaSupport;
   };
 
 }
