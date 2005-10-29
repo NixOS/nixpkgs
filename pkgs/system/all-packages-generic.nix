@@ -1577,11 +1577,12 @@ rec {
 
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca;
-    inherit (xlibs) libXv;
+    inherit (xlibs) libXv libXinerama;
     alsaSupport = true;
     alsa = alsaLib;
     theoraSupport = true;
     cacaSupport = true;
+    xineramaSupport = true;
   };
 
   MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {

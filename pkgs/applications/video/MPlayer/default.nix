@@ -1,20 +1,22 @@
 { alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
+, xineramaSupport ? false
 , stdenv, fetchurl, x11, freetype, zlib
-, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null
+, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null, libXinerama ? null
 }:
 
 assert alsaSupport -> alsa != null;
 assert xvSupport -> libXv != null;
 assert theoraSupport -> libtheora != null;
 assert cacaSupport -> libcaca != null;
+assert xineramaSupport -> libXinerama != null;
 
 stdenv.mkDerivation {
   name = "MPlayer-1.0pre7";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre7.tar.bz2;
-    md5 = "5fadd6957d3aab989cd760ff38fb8fdf";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre7try2.tar.bz2;
+    md5 = "aaca4fd327176c1afb463f0f047ef6f4";
   };
   fonts = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/font-arial-iso-8859-1.tar.bz2;
@@ -31,6 +33,7 @@ stdenv.mkDerivation {
     (if xvSupport then libXv else null)
     (if theoraSupport then libtheora else null)
     (if cacaSupport then libcaca else null)
+    (if xineramaSupport then libXinerama else null)
   ];
 
   configureFlags = if cacaSupport then "--enable-caca" else "--disable-caca";
