@@ -10,5 +10,5 @@ stdenv.mkDerivation {
     x11 xineLib libpng
     (if xineLib.xineramaSupport then xineLib.libXinerama else null)
   ];
-  configureFlags = "--without-readline";
+  configureFlags = "--without-readline --disable-xft";
 }
