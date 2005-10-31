@@ -551,6 +551,10 @@ rec {
     };
   };
 
+  strategoxt_unstable = (import ../development/compilers/strategoxt/strategoxt-0.16.nix) {
+    inherit fetchurl pkgconfig stdenv sdf aterm;
+  };
+
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
     inherit fetchurl pkgconfig stdenv sdf strategoxt;
 
@@ -560,7 +564,8 @@ rec {
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
-    inherit fetchurl stdenv aterm strategoxt tetex hevea sdf;
+    inherit fetchurl stdenv aterm tetex hevea sdf;
+    strategoxt = strategoxt_unstable;
   };
 
   #  xdoc = (import ../development/tools/documentation/xdoc) {
