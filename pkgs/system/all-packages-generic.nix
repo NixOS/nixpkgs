@@ -1401,6 +1401,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  fuse = import ../os-specific/linux/fuse {
+    inherit fetchurl stdenv;
+  };
+
+  
   ### DATA
 
   docbook_xml_dtd_42 = (import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2) {
@@ -1677,9 +1682,10 @@ rec {
 
   acroread = (import ../applications/misc/acrobat-reader) {
     inherit fetchurl stdenv zlib;
-    inherit (xlibs) libXt libXp libXext libX11;
+    inherit (xlibs) libXt libXp libXext libX11 libXinerama;
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
+    xineramaSupport = true;
   };
 
   eclipse = (import ../applications/editors/eclipse) {

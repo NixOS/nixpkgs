@@ -1,4 +1,7 @@
-{stdenv, fetchurl, libXt, libXp, libXext, libX11, glib, pango, atk, gtk, libstdcpp5, zlib}:
+{ xineramaSupport ? false
+, stdenv, fetchurl, libXt, libXp, libXext, libX11, libXinerama ? null
+, glib, pango, atk, gtk, libstdcpp5, zlib
+}:
 
 stdenv.mkDerivation {
   name = "acrobat-reader-7.0.1";
@@ -7,5 +10,8 @@ stdenv.mkDerivation {
     url = http://ardownload.adobe.com/pub/adobe/reader/unix/7x/7.0/enu/AdbeRdr701_linux_enu.tar.gz;
     md5 = "79e5a40aca6b49f7015cb1694876f87a";
   };
-  libPath = [libXt libXp libXext libX11 glib pango atk gtk libstdcpp5 zlib];
+  libPath = [
+    libXt libXp libXext libX11 glib pango atk gtk libstdcpp5 zlib
+    (if xineramaSupport then libXinerama else null)
+  ];
 }
