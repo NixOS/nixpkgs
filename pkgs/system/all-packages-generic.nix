@@ -989,6 +989,14 @@ rec {
     inherit fetchurl stdenv pkgconfig freetype expat;
   };
 
+#  Xaw3d = import ../development/libraries/Xaw3d {
+#    inherit fetchurl stdenv;
+#  };
+
+  libdrm = import ../development/libraries/libdrm {
+    inherit fetchurl stdenv;
+  };
+
   mesa = (import ../development/libraries/mesa) {
     inherit fetchurl stdenv xlibs;
   };
