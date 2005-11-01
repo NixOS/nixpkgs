@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   patches = [./strip.patch];
   
   inherit threadSupport xftSupport libXft xrenderSupport libXrender;
-  inherit mysqlSupport mysql;
+  inherit mysqlSupport;
+  mysql = if mysqlSupport then mysql else null;
   inherit (libXft) freetype fontconfig;
 }
