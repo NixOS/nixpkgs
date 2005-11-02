@@ -300,7 +300,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-i810-1.4.0.1.tar.bz2;
       md5 = "9672a46773966c72d2d46e515c0324be";
     };
-    buildInputs = [pkgconfig xorgserver xproto libXvMC libdrm xf86driproto ];
+    buildInputs = [pkgconfig xorgserver xproto libXvMC libdrm xf86driproto randrproto renderproto mesa glproto fontsproto  ];
+    # !!! possible "randrproto renderproto" should be propagated by xorg-server
   };
     
   libXtst = stdenv.mkDerivation {
@@ -435,7 +436,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-mouse-1.0.0.1.tar.bz2;
       md5 = "43712cd2961c22103827af04a228b4ff";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig xorgserver xproto randrproto inputproto ];
   };
     
   trapproto = stdenv.mkDerivation {
@@ -768,7 +769,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-keyboard-1.0.0.1.tar.bz2;
       md5 = "6d85c8ef6dd037f8824f0fe339383913";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig xorgserver xproto randrproto inputproto kbproto ];
+    # real bug: inputproto kbproto 
   };
     
   xclipboard = stdenv.mkDerivation {
