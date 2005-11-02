@@ -1278,6 +1278,12 @@ rec {
     buildClientLibs = true;
   };
 
+  xorg = import ../servers/x11/xorg {
+    inherit fetchurl stdenv pkgconfig freetype # fontconfig
+      expat libdrm libpng zlib perl mesa;
+    inherit (xlibs) fontconfig;
+  };
+
   postgresql = (import ../servers/sql/postgresql) {
     inherit fetchurl stdenv readline ncurses zlib;
   };

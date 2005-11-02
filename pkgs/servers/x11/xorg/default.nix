@@ -1,6 +1,7 @@
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
 , expat, libdrm, libpng
+, zlib, perl, mesa
 }:
 
 rec {
@@ -281,7 +282,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmag-0.99.1.tar.bz2;
       md5 = "ff2bd7baef9fb864550bf6854e25d6ce";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig libXaw ];
   };
     
   xfd = stdenv.mkDerivation {
@@ -308,7 +309,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXtst-0.99.1.tar.bz2;
       md5 = "c968b5f2df8b306d515c1b63b1e96851";
     };
-    buildInputs = [pkgconfig libX11 libXext recordproto xextproto ];
+    buildInputs = [pkgconfig libX11 libXext recordproto xextproto inputproto ];
   };
     
   xlsfonts = stdenv.mkDerivation {
@@ -812,7 +813,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXres-0.99.1.tar.bz2;
       md5 = "de1a8676b870e28651b0fb2d05d6524c";
     };
-    buildInputs = [pkgconfig libX11 libXext resourceproto ];
+    buildInputs = [pkgconfig libX11 libXext resourceproto xproto xextproto ];
   };
     
   fontbh100dpi = stdenv.mkDerivation {
@@ -866,7 +867,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libfontenc-0.99.1.tar.bz2;
       md5 = "eaef10ae712ac16ad52a65a70a15f8d8";
     };
-    buildInputs = [pkgconfig xproto ];
+    buildInputs = [pkgconfig xproto zlib ];
   };
     
   xf86inputjoystick = stdenv.mkDerivation {
@@ -1091,7 +1092,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/liblbxutil-0.99.1.tar.bz2;
       md5 = "cf88ba52b6dbc00693f9711bd2b3bcd8";
     };
-    buildInputs = [pkgconfig xextproto ];
+    buildInputs = [pkgconfig xproto xextproto zlib ];
   };
     
   randrproto = stdenv.mkDerivation {
@@ -1244,7 +1245,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xedit-0.99.1.tar.bz2;
       md5 = "437e28d886da20181aa879d1f8855f36";
     };
-    buildInputs = [pkgconfig libXprintUtil ];
+    buildInputs = [pkgconfig libXprintUtil libXaw ];
   };
     
   fontadobeutopiatype1 = stdenv.mkDerivation {
@@ -1694,7 +1695,10 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xorg-server-0.99.2.tar.bz2;
       md5 = "a1b532b00400a77217e287d6fd2706fe";
     };
-    buildInputs = [pkgconfig liblbxutil xf86driproto libdrm glproto libXdmcp libXmu libXext libX11 libXrender libXfont libXi dmxproto libXau libXaw libXmu libXt libXpm libdmx libXtst libXres printproto libxkbfile ];
+    buildInputs = [pkgconfig liblbxutil xf86driproto libdrm glproto libXdmcp libXmu libXext libX11 libXrender libXfont libXi dmxproto libXau libXaw libXmu libXt libXpm libdmx libXtst libXres printproto libxkbfile randrproto renderproto fixesproto damageproto xcmiscproto xextproto xproto xtrans xf86miscproto xf86vidmodeproto xf86bigfontproto scrnsaverproto bigreqsproto resourceproto libfontenc fontsproto videoproto compositeproto recordproto resourceproto xineramaproto perl libxkbui libXxf86misc libXxf86vm inputproto xf86dgaproto mesa libSM libICE zlib ];
+    # Strange: randrproto renderproto etc.
+    # Proper bug: inputproto xf86dgaproto libSM libICE
+    # maybe libICE should be propagated by libSM
   };
     
   fontdaewoomisc = stdenv.mkDerivation {
@@ -1847,7 +1851,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXfont-0.99.1.tar.bz2;
       md5 = "5896d187833e5f55d50397f9e8be3cd5";
     };
-    buildInputs = [pkgconfig freetype fontcacheproto xproto xtrans fontsproto libfontenc ];
+    buildInputs = [pkgconfig freetype fontcacheproto xproto xtrans fontsproto libfontenc zlib ];
   };
     
   libXp = stdenv.mkDerivation {
@@ -2018,7 +2022,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXext-0.99.1.tar.bz2;
       md5 = "7dbf302396434d4b74a40c4e9c8a1fb2";
     };
-    buildInputs = [pkgconfig xproto libX11 xextproto ];
+    buildInputs = [pkgconfig xproto libX11 xextproto libXau ];
   };
     
   xf86inputaiptek = stdenv.mkDerivation {
@@ -2333,7 +2337,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXt-0.99.1.tar.bz2;
       md5 = "a3b65703a80cc0582757c595c0875612";
     };
-    buildInputs = [pkgconfig libSM libX11 xproto ];
+    buildInputs = [pkgconfig libSM libX11 xproto kbproto ];
   };
     
   editres = stdenv.mkDerivation {
