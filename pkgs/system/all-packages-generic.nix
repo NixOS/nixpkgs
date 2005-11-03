@@ -303,6 +303,10 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
+  binutilsArm = (import ../development/tools/misc/binutils-arm) {
+    inherit fetchurl stdenv noSysDirs;
+  };
+
   patchelf = (import ../development/tools/misc/patchelf) {
     inherit fetchurl stdenv;
   };
