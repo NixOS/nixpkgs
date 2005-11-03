@@ -997,6 +997,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libpcap = (import ../development/libraries/libpcap) {
+    inherit fetchurl stdenv flex bison;
+  };
+
   mesa = (import ../development/libraries/mesa) {
     inherit fetchurl stdenv xlibs;
   };
@@ -1578,6 +1582,11 @@ rec {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext;
   };
 
+  ethereal = (import ../applications/networking/sniffers/ethereal) {
+    inherit fetchurl stdenv perl pkgconfig libpcap;
+    inherit (gtkLibs) glib;
+  };
+
   gaim = (import ../applications/networking/instant-messengers/gaim) {
     inherit fetchurl stdenv pkgconfig perl libxml2 openssl nss;
     inherit (gtkLibs) glib gtk;
@@ -1808,6 +1817,10 @@ rec {
   };
 
   cups = (import ../misc/cups) {
+    inherit fetchurl stdenv;
+  };
+
+  saneBackends = (import ../misc/sane-backends) {
     inherit fetchurl stdenv;
   };
 
