@@ -1418,7 +1418,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-vesa-1.0.0.1.tar.bz2;
       md5 = "a99a640c5c4ed24bc6ac5ea363af4da1";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig xorgserver xproto randrproto xextproto renderproto fontsproto ];
   };
     
   xf86inputmagictouch = stdenv.mkDerivation {
