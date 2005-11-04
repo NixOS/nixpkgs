@@ -1280,12 +1280,6 @@ rec {
     db4Support = true;
   };
 
-  xfree86 = (import ../servers/x11/xfree86) {
-    inherit fetchurl stdenv flex bison;
-    buildServer = false;
-    buildClientLibs = true;
-  };
-
   xorg = import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype # fontconfig
       expat libdrm libpng zlib perl mesa;
