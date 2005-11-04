@@ -552,11 +552,7 @@ rec {
   };
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
-    inherit fetchurl pkgconfig stdenv sdf strategoxt;
-
-    aterm = (import ../development/libraries/aterm/aterm-2.3.1.nix) {
-      inherit fetchurl stdenv;
-    };
+    inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
