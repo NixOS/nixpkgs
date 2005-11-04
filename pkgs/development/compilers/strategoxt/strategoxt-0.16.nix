@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
 
-  name = "strategoxt-0.16M2pre13214";
+  name = "strategoxt-0.16";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/stratego/strategoxt-0.16M2pre13214/strategoxt-0.16M2pre13214.tar.gz;
-    md5 = "a28b34f3d527e026aab9225a9e4db03a";
+    url = http://nix.cs.uu.nl/dist/stratego/strategoxt-0.16/strategoxt-0.16;
+    md5 = "8b8eabbd785faa84ec20134b63d4829e";
   };
 
   inherit aterm sdf;

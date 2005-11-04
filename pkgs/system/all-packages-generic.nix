@@ -548,16 +548,12 @@ rec {
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl pkgconfig stdenv sdf;
-
-    aterm = (import ../development/libraries/aterm/aterm-2.3.1.nix) {
-      inherit fetchurl stdenv;
-    };
-  };
-
-  strategoxt_unstable = (import ../development/compilers/strategoxt/strategoxt-0.16.nix) {
     inherit fetchurl pkgconfig stdenv sdf aterm;
   };
+
+  # Currently, there is no useful unstable release, so we default to
+  # strategoxt.
+  strategoxt_unstable = strategoxt;
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
     inherit fetchurl pkgconfig stdenv sdf strategoxt;
@@ -571,16 +567,6 @@ rec {
     inherit fetchurl stdenv aterm tetex hevea sdf;
     strategoxt = strategoxt_unstable;
   };
-
-  #  xdoc = (import ../development/tools/documentation/xdoc) {
-  #    inherit fetchurl stdenv aterm strategoxt subversion graphviz;
-  #    sdf = sdf_23;
-  #  };
-
-  #tiger = (import ../development/compilers/tiger) {
-  #  inherit fetchurl stdenv aterm strategoxt;
-  #  sdf = sdf_22;
-  #};
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
     inherit fetchurl stdenv perl ncurses;
