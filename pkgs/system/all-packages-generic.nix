@@ -829,8 +829,7 @@ rec {
   };
 
   cairo = (import ../development/libraries/cairo) {
-    inherit fetchurl stdenv pkgconfig x11 freetype zlib libpng;
-    inherit (xlibs) fontconfig;
+    inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
   gtkLibs = gtkLibs28;
@@ -989,8 +988,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  fontconfig = import ../development/libraries/fontconfig {
+    inherit fetchurl stdenv freetype expat;
+  };
+
   xlibs = (import ../development/libraries/xlibs) {
-    inherit fetchurl stdenv pkgconfig freetype expat;
+    inherit fetchurl stdenv pkgconfig freetype fontconfig;
   };
 
 #  Xaw3d = import ../development/libraries/Xaw3d {
@@ -1281,9 +1284,8 @@ rec {
   };
 
   xorg = import ../servers/x11/xorg {
-    inherit fetchurl stdenv pkgconfig freetype # fontconfig
+    inherit fetchurl stdenv pkgconfig freetype fontconfig
       expat libdrm libpng zlib perl mesa;
-    inherit (xlibs) fontconfig;
   };
 
   postgresql = (import ../servers/sql/postgresql) {
@@ -1448,8 +1450,12 @@ rec {
   ### APPLICATIONS
 
   openoffice = (import ../applications/office/openoffice) {
-    inherit fetchurl stdenv pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl libsndfile flex zip unzip libmspack getopt file;
-    inherit (xlibs) libXaw fontconfig;
+    inherit fetchurl stdenv pam python tcsh libxslt
+      perl perlArchiveZip perlCompressZlib zlib libjpeg
+      expat pkgconfig freetype fontconfig libwpd libxml2
+      db4 sablotron curl libsndfile flex zip unzip libmspack
+      getopt file;
+    inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
 
     bison = (import ../development/tools/parsing/bison/bison-2.1.nix) {
@@ -1669,11 +1675,11 @@ rec {
   };
 
   inkscape = (import ../applications/graphics/inkscape) {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt libxml2 libxslt libpng boehmgc;
-    inherit (gtkLibs) gtk;
-    inherit gtkmm glibmm libsigcxx;
-    inherit (xlibs) libXft fontconfig;
-    inherit (gnome) glib;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
+      popt libxml2 libxslt libpng boehmgc fontconfig gtkmm
+      glibmm libsigcxx;
+    inherit (gtkLibs) gtk glib;
+    inherit (xlibs) libXft;
   };
 
   fspot = (import ../applications/graphics/f-spot) {
@@ -1684,8 +1690,8 @@ rec {
   };
 
   gimp = (import ../applications/graphics/gimp) {
-    inherit fetchurl stdenv pkgconfig freetype libtiff libjpeg libpng libexif zlib perl perlXMLParser;
-    inherit (xlibs) fontconfig;
+    inherit fetchurl stdenv pkgconfig freetype fontconfig
+      libtiff libjpeg libpng libexif zlib perl perlXMLParser;
     inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
   };
 

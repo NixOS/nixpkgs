@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, freetype, expat}:
+{stdenv, fetchurl, pkgconfig, freetype, fontconfig}:
 
 rec {
 
@@ -44,10 +44,6 @@ rec {
 
   libXrender = (import ./libXrender) {
     inherit fetchurl stdenv pkgconfig libX11 renderext;
-  };
-
-  fontconfig = (import ./fontconfig) {
-    inherit fetchurl stdenv freetype expat;
   };
 
   libXft = (import ./libXft) {
