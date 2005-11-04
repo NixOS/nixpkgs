@@ -551,10 +551,6 @@ rec {
     inherit fetchurl pkgconfig stdenv sdf aterm;
   };
 
-  # Currently, there is no useful unstable release, so we default to
-  # strategoxt.
-  strategoxt_unstable = strategoxt;
-
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
     inherit fetchurl pkgconfig stdenv sdf strategoxt;
 
