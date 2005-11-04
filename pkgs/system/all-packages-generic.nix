@@ -560,8 +560,7 @@ rec {
   };
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
-    inherit fetchurl stdenv aterm tetex hevea sdf;
-    strategoxt = strategoxt_unstable;
+    inherit fetchurl stdenv aterm tetex hevea sdf strategoxt;
   };
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {
