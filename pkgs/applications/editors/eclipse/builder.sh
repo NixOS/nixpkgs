@@ -31,3 +31,7 @@ find $out \( -type f -a -perm +0100 \) \
 makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
     --prefix PATH ":" "$jdk/bin" \
     --prefix LD_LIBRARY_PATH ":" "$rpath"
+
+for i in $plugins; do
+    cp $i $out/eclipse/plugins
+done

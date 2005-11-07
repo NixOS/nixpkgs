@@ -1696,6 +1696,11 @@ rec {
     inherit fetchurl stdenv makeWrapper jdk;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXtst;
+    plugins = [spoofax];
+  };
+
+  spoofax = (import ../applications/editors/eclipse/plugins/spoofax) {
+    inherit fetchurl stdenv;
   };
 
   monodevelop = (import ../applications/editors/monodevelop) {
