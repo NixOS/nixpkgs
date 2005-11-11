@@ -366,6 +366,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  callgrind = (import ../development/tools/misc/callgrind) {
+    inherit fetchurl stdenv which perl;
+  };
+
   texinfo = (import ../development/tools/misc/texinfo) {
     inherit fetchurl stdenv ncurses;
   };
