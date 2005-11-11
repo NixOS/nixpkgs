@@ -6,4 +6,8 @@ cd valgrind-* || fail
 make || fail
 make install || fail
 
-genericBuild
+tar zxvf $src
+cd clg3 || fail
+./configure --prefix=$out || fail
+make || fail
+make install || fail

@@ -4,12 +4,12 @@
 {stdenv, fetchurl, which, perl}:
 
 stdenv.mkDerivation {
-  name = "callgrind-0.10.0";
+  name = "callgrind-0.10.1pre";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://kcachegrind.sourceforge.net/callgrind-0.10.0.tar.gz;
-    md5 = "3bd2afd50fde7db4bd5a59dcb412d5e7";
+    url = http://losser.st-lab.cs.uu.nl/~mbravenb/clg3-cvs-2005.11.11.tar.gz;
+    md5 = "c272cff1c567ba154ccc60fe2ff241d8";
   };
 
   valgrindsrc = fetchurl {
