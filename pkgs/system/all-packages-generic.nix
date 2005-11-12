@@ -14,8 +14,18 @@ rec {
 
   ### Symbolic names.
 
-  x11 = xlibs.xlibs; # !!! should be `x11ClientLibs' or some such
+  useOldXLibs = true;
 
+  # `xlibs' is the set of X library components.  This used to be the
+  # old modular X libraries project (called `xlibs') but now it's just
+  # the set of packages in the modular X.org tree (which also includes
+  # non-library components like the server, drivers, fonts, etc.).
+  xlibs = if useOldXLibs then xlibsOld else xorg;
+
+  # `xlibs.xlibs' is a wrapper packages that combines libX11 and a bunch
+  # of other basic X client libraries.
+  x11 = if useOldXLibs then xlibsOld.xlibs else xlibsWrapper;
+  
 
   ### BUILD SUPPORT
 
@@ -979,13 +989,25 @@ rec {
     inherit fetchurl stdenv freetype expat;
   };
 
-  xlibs = (import ../development/libraries/xlibs) {
+  xlibsOld = (import ../development/libraries/xlibs) {
     inherit fetchurl stdenv pkgconfig freetype fontconfig;
   };
 
-#  Xaw3d = import ../development/libraries/Xaw3d {
-#    inherit fetchurl stdenv;
-#  };
+  xlibsWrapper = import ../development/libraries/xlibs-wrapper {
+    inherit stdenv;
+    packages = [
+      freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
+      xlibs.libXft xlibs.libXext xlibs.libSM xlibs.libICE
+      xlibs.xextproto
+    ];
+  };
+
+  Xaw3d = import ../development/libraries/Xaw3d {
+    inherit fetchurl stdenv x11 bison;
+    flex = flexnew;
+    # !!! makedepend is impure
+    inherit (xlibs) xmkmf makedepend libXmu libXpm libXp;
+  };
 
   libdrm = import ../development/libraries/libdrm {
     inherit fetchurl stdenv;
@@ -1727,7 +1749,9 @@ rec {
   };
 
   emacs = (import ../applications/editors/emacs) {
-    inherit fetchurl stdenv xlibs;
+    inherit fetchurl stdenv x11 Xaw3d;
+    inherit (xlibs) libXaw libXpm;
+    xaw3dSupport = false;
   };
 
   nxml = (import ../applications/editors/emacs/modes/nxml) {

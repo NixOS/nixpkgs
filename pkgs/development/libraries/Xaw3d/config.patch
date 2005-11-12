@@ -1,0 +1,51 @@
+diff -rc xc-orig/lib/Xaw3d/Imakefile xc/lib/Xaw3d/Imakefile
+*** xc-orig/lib/Xaw3d/Imakefile	2003-03-08 15:55:18.000000000 +0100
+--- xc/lib/Xaw3d/Imakefile	2005-11-11 20:12:24.000000000 +0100
+***************
+*** 9,15 ****
+  XCOMM For grayed stipple shadows, define GRAY_BLKWHT_STIPPLES:
+  #define GRAY_BLKWHT_STIPPLES
+  XCOMM For scrollbars with arrows, define ARROW_SCROLLBARS:
+! #undef ARROW_SCROLLBARS
+  
+  #define DoNormalLib NormalLibXaw
+  #define DoSharedLib SharedLibXaw
+--- 9,15 ----
+  XCOMM For grayed stipple shadows, define GRAY_BLKWHT_STIPPLES:
+  #define GRAY_BLKWHT_STIPPLES
+  XCOMM For scrollbars with arrows, define ARROW_SCROLLBARS:
+! #define ARROW_SCROLLBARS
+  
+  #define DoNormalLib NormalLibXaw
+  #define DoSharedLib SharedLibXaw
+***************
+*** 22,28 ****
+  #define IncSubSubdir Xaw3d
+  
+  XCOMM When building outside an X11 source tree:
+! XCOMM EXTRA_INCLUDES = -I.
+  
+  #ifdef SharedXawReqs
+  REQUIREDLIBS = SharedXawReqs
+--- 22,28 ----
+  #define IncSubSubdir Xaw3d
+  
+  XCOMM When building outside an X11 source tree:
+! EXTRA_INCLUDES = -I.
+  
+  #ifdef SharedXawReqs
+  REQUIREDLIBS = SharedXawReqs
+diff -rc xc-orig/lib/Xaw3d/laylex.l xc/lib/Xaw3d/laylex.l
+*** xc-orig/lib/Xaw3d/laylex.l	1996-10-15 16:41:26.000000000 +0200
+--- xc/lib/Xaw3d/laylex.l	2005-11-11 20:03:50.000000000 +0100
+***************
+*** 26,31 ****
+--- 26,33 ----
+  #ifdef __STDC__
+  static int count ();
+  #endif
++ 
++ static int LayYY_prev_more_offset = 0;
+  %}
+  %%
+  vertical		return VERTICAL;

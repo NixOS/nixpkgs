@@ -1040,7 +1040,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXft-2.1.8.tar.bz2;
       md5 = "18e7a98444ece30ea5b51a24269f8c7c";
     };
-    buildInputs = [pkgconfig libXrender freetype fontconfig ];
+    buildInputs = [pkgconfig libXrender libX11 ];
+    propagatedBuildInputs = [freetype fontconfig ];
   };
     
   xsm = stdenv.mkDerivation {
@@ -1786,11 +1787,14 @@ rec {
     
   xmkmf = stdenv.mkDerivation {
     name = "xmkmf-0.99.1";
+    builder = ./xmkmf.sh;
     src = fetchurl {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmkmf-0.99.1.tar.bz2;
       md5 = "75013b6eeed99fd7b4e7913144a9de22";
     };
     buildInputs = [pkgconfig ];
+    propagatedBuildInputs = [imake];
+    inherit xorgcffiles;
   };
     
   xorgcffiles = stdenv.mkDerivation {
@@ -1988,7 +1992,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/xclock-0.99.1.tar.bz2;
       md5 = "ec54b47ee229318cef76a3c86da9ef94";
     };
-    buildInputs = [pkgconfig libX11 libXrender libXft libxkbfile ];
+    buildInputs = [pkgconfig libX11 libXrender libXft libxkbfile libXaw ];
   };
     
   xf86videoati = stdenv.mkDerivation {
@@ -2340,6 +2344,7 @@ rec {
       md5 = "a3b65703a80cc0582757c595c0875612";
     };
     buildInputs = [pkgconfig libSM libX11 xproto kbproto ];
+    # !!! prop libSM
   };
     
   editres = stdenv.mkDerivation {
@@ -2438,7 +2443,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXaw-0.99.1.tar.bz2;
       md5 = "731f8a6407765466d1170d609137a922";
     };
-    buildInputs = [pkgconfig xproto libX11 libXext libXt libXmu libXpm libXp ];
+    buildInputs = [pkgconfig xproto libX11 libXext libXt libXpm libXp ];
+    propagatedBuildInputs = [libXmu];
   };
     
   x11perf = stdenv.mkDerivation {
