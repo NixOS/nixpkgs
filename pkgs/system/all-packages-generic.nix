@@ -380,6 +380,10 @@ rec {
     inherit fetchurl stdenv which perl;
   };
 
+  kcachegrind = (import ../development/tools/misc/kcachegrind) {
+    inherit fetchurl stdenv kdelibs;
+  };
+
   texinfo = (import ../development/tools/misc/texinfo) {
     inherit fetchurl stdenv ncurses;
   };
