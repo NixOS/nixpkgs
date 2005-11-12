@@ -865,6 +865,12 @@ rec {
     inherit (xlibs) libXft libXrender;
   };
 
+  kdelibs = import ../development/libraries/kde/kdelibs {
+    inherit fetchurl stdenv zlib perl openssl pcre  pkgconfig libjpeg libpng libtiff libxml2 libxslt libtool expat;
+    inherit (xlibs) libX11 libXt libXext;
+    qt = qt3;
+  };
+
   gtksharp1 = (import ../development/libraries/gtk-sharp-1) {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
