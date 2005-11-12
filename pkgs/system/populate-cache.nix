@@ -100,6 +100,7 @@ let {
     grub
     parted
     qtparted
+    kdelibs
     xsel
     openssl
     mktemp
