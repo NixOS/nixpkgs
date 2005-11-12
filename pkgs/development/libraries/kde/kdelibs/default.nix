@@ -1,5 +1,6 @@
 {stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre,
- pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat}:
+ pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat,
+ freetype}:
 
 stdenv.mkDerivation {
   name = "kdelibs-3.4.3";
@@ -12,6 +13,6 @@ stdenv.mkDerivation {
   inherit openssl libX11;
   buildInputs = [
     libX11 libXt libXext zlib perl qt openssl pcre 
-    pkgconfig libjpeg libpng libtiff libxml2 libxslt expat libtool
+    pkgconfig libjpeg libpng libtiff libxml2 libxslt expat libtool freetype
   ];
 }
