@@ -381,8 +381,8 @@ rec {
   };
 
   kcachegrind = (import ../development/tools/misc/kcachegrind) {
-    inherit fetchurl stdenv kdelibs zlib perl;
-    inherit (xlibs) libX11 libXext;
+    inherit fetchurl stdenv kdelibs zlib perl expat libpng libjpeg;
+    inherit (xlibs) libX11 libXext libSM;
     qt = qt3;
   };
 

@@ -1,6 +1,4 @@
-# todo: make libXext a propaged build input in kdelibs?
-
-{stdenv, fetchurl, kdelibs, libX11, libXext, qt, zlib, perl}:
+{stdenv, fetchurl, kdelibs, libX11, libXext, libSM, libpng, libjpeg, qt, zlib, perl, expat}:
 
 stdenv.mkDerivation {
   name = "kcachegrind-0.4.6";
@@ -12,5 +10,5 @@ stdenv.mkDerivation {
   };
 
   inherit libX11 kdelibs;
-  buildInputs = [kdelibs libX11 libXext zlib perl qt];
+  buildInputs = [kdelibs libX11 libXext libSM zlib perl qt expat libpng libjpeg];
 }
