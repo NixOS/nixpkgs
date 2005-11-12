@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
 
   # Don't strip everything so we can get useful backtraces.
-  patches = [./strip.patch];
+  patches = [./strip.patch ./qt-pwd.patch];
   
   inherit threadSupport xftSupport libXft xrenderSupport libXrender;
   inherit mysqlSupport;
