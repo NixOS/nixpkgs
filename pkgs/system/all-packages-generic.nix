@@ -1718,6 +1718,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  pinfo = (import ../applications/misc/pinfo) {
+    inherit fetchurl stdenv ncurses;
+  };
+
   xchm = (import ../applications/misc/xchm) {
     inherit fetchurl stdenv wxGTK chmlib;
   };
