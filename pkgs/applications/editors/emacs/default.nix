@@ -9,7 +9,7 @@ assert xpmSupport -> libXpm != null;
 assert xaw3dSupport -> Xaw3d != null;
 
 stdenv.mkDerivation {
-  name = "emacs-21.4a-Z";
+  name = "emacs-21.4a";
   builder = ./builder.sh;
   src = fetchurl {
     url = http://ftp.gnu.org/pub/gnu/emacs/emacs-21.4a.tar.gz;
