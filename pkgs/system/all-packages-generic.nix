@@ -394,6 +394,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ctags = (import ../development/tools/misc/ctags) {
+    inherit fetchurl stdenv;
+  };
+
   lcov = (import ../development/tools/misc/lcov) {
     inherit fetchurl stdenv perl;
   };
