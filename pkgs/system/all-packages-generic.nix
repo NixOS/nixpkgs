@@ -1634,6 +1634,10 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
+  rsync = (import ../applications/networking/sync/rsync) {
+    inherit fetchurl stdenv;
+  };
+
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
     inherit fetchurl stdenv;
   };
