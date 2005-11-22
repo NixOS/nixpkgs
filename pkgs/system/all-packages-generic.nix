@@ -1627,7 +1627,7 @@ rec {
 
   xchat = (import ../applications/networking/irc/xchat) {
     inherit fetchurl stdenv pkgconfig tcl;
-    inherit (gtkLibs) glib;
+    inherit (gtkLibs) glib gtk;
   };
 
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
