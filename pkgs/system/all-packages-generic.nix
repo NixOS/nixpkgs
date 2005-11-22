@@ -735,6 +735,10 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
+  speex = (import ../development/libraries/speex) {
+    inherit fetchurl stdenv;
+  };
+
   libtheora = (import ../development/libraries/libtheora) {
     inherit fetchurl stdenv libogg libvorbis;
   };
