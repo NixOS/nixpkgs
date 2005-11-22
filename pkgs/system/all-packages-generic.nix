@@ -608,9 +608,9 @@ rec {
 
   ### DEVELOPMENT / DEBUGGERS
 
-  ltrace = (import ../development/debuggers/ltrace) {
-    inherit fetchurl stdenv;
-  };
+  #ltrace = (import ../development/debuggers/ltrace) {
+  #  inherit fetchurl stdenv;
+  #};
 
   ### DEVELOPMENT / INTERPRETERS
 
