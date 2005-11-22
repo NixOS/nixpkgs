@@ -606,6 +606,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ### DEVELOPMENT / DEBUGGERS
+
+  ltrace = (import ../development/debuggers/ltrace) {
+    inherit fetchurl stdenv;
+  };
+
   ### DEVELOPMENT / INTERPRETERS
 
   happy = (import ../development/tools/parsing/happy) {
@@ -627,6 +633,10 @@ rec {
   };
 
   ruby = (import ../development/interpreters/ruby) {
+    inherit fetchurl stdenv;
+  };
+
+  tcl = (import ../development/interpreters/tcl) {
     inherit fetchurl stdenv;
   };
 
@@ -1613,6 +1623,11 @@ rec {
   gaim = (import ../applications/networking/instant-messengers/gaim) {
     inherit fetchurl stdenv pkgconfig perl libxml2 openssl nss;
     inherit (gtkLibs) glib gtk;
+  };
+
+  xchat = (import ../applications/networking/irc/xchat) {
+    inherit fetchurl stdenv pkgconfig tcl;
+    inherit (gtkLibs) glib;
   };
 
   cdparanoiaIII = (import ../applications/audio/cdparanoia) {
