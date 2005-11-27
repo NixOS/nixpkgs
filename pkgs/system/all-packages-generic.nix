@@ -1753,6 +1753,11 @@ rec {
     inherit fetchurl stdenv wxGTK chmlib;
   };
 
+  xpdf = (import ../applications/misc/xpdf) {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11;
+  };
+
   acroread = (import ../applications/misc/acrobat-reader) {
     inherit fetchurl stdenv zlib;
     inherit (xlibs) libXt libXp libXext libX11 libXinerama;
