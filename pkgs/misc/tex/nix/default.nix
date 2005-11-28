@@ -7,6 +7,7 @@ rec {
     { rootFile
     , generatePDF ? true
     , extraFiles ? []
+    , compressBlanksInIndex ? true
     }:
     
     pkgs.stdenv.mkDerivation {
@@ -15,7 +16,8 @@ rec {
       builder = ./run-latex.sh;
       copyIncludes = ./copy-includes.pl;
       
-      inherit rootFile generatePDF extraFiles;
+      inherit rootFile generatePDF extraFiles
+        compressBlanksInIndex;
 
       includes = import (findLaTeXIncludes {inherit rootFile;});
       

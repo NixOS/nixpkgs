@@ -56,7 +56,10 @@ echo
 
 if test -f $rootNameBase.idx; then
     echo "MAKING INDEX..."
-    makeindex $rootNameBase.idx
+    if test -n "$compressBlanksInIndex"; then
+        makeindexFlags="$makeindexFlags -c"
+    fi
+    makeindex $makeindexFlags $rootNameBase.idx
     echo
 fi    
 
