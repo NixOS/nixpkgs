@@ -472,6 +472,18 @@ rec {
     inherit stdenv;
   };
 
+  gcc40arm = (import ../build-support/gcc-cross-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    cross = "arm-linux";
+    gcc = (import ../development/compilers/gcc-4.0-arm) {
+      inherit fetchurl stdenv noSysDirs binutilsArm kernelHeadersArm;
+      langF77 = false;
+      langCC = false;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
   gcc40 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
@@ -1342,6 +1354,10 @@ rec {
   
   ### OS-SPECIFIC
 
+  uclibc = (import ../development/uclibc) {
+    inherit fetchurl stdenv gcc40arm kernelHeadersArm binutilsArm;
+  };
+
   dietlibc = (import ../os-specific/linux/dietlibc) {
     inherit fetchurl stdenv;
   };
@@ -1360,6 +1376,10 @@ rec {
   };
 
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
+    inherit fetchurl stdenv;
+  };
+
+  kernelHeadersArm = (import ../os-specific/linux/kernel-headers-arm) {
     inherit fetchurl stdenv;
   };
 
