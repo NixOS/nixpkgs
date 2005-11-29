@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, gcc40arm, kernelHeadersArm, binutilsArm}:
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
@@ -8,4 +8,7 @@ stdenv.mkDerivation {
     md5 = "1ada58d919a82561061e4741fb6abd29";
   };
   config = ./config;
+  inherit kernelHeadersArm;
+  buildInputs = [gcc40arm binutilsArm];
+  makeFlags="CROSS=arm-linux-";
 }
