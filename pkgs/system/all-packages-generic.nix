@@ -1586,7 +1586,7 @@ rec {
     inherit (xlibs) libXi;
   };
 
-  firefox = (import ../applications/networking/browsers/firefox-1.5beta) {
+  firefox = (import ../applications/networking/browsers/firefox) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
