@@ -1586,14 +1586,7 @@ rec {
     inherit (xlibs) libXi;
   };
 
-  firefox = (import ../applications/networking/browsers/firefox) {
-    inherit fetchurl stdenv pkgconfig perl zip;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-  };
-
-  firefoxBeta = (import ../applications/networking/browsers/firefox-1.5beta) {
+  firefox = (import ../applications/networking/browsers/firefox-1.5beta) {
     inherit fetchurl stdenv pkgconfig perl zip;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
@@ -1611,8 +1604,6 @@ rec {
   };
 
   firefoxWrapper = wrapFirefox firefox;
-
-  firefoxBetaWrapper = wrapFirefox firefoxBeta;
 
   flashplayer = (import ../applications/networking/browsers/mozilla-plugins/flashplayer) {
     inherit fetchurl stdenv zlib;
