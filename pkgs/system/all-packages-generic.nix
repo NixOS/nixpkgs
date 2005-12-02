@@ -1319,6 +1319,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  lesstif = (import ../development/libraries/lesstif) {
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXp;
+  };
+
   
   ### SERVERS
 
@@ -1765,8 +1770,8 @@ rec {
   };
 
   xpdf = (import ../applications/misc/xpdf) {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11;
+    inherit fetchurl stdenv x11 freetype;
+    motif = lesstif;
   };
 
   acroread = (import ../applications/misc/acrobat-reader) {

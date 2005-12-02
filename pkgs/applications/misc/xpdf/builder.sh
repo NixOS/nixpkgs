@@ -1,5 +1,10 @@
 source $stdenv/setup
 
-configureFlags="--x-includes=$libX11/include --x-libraries=$libX11/lib"
+if test -n "$freetype"; then
+    configureFlags="\
+      --with-freetype2-library=$freetype/lib \
+      --with-freetype2-includes=$freetype/include/freetype2 \
+      $configureFlags"
+fi
 
 genericBuild
