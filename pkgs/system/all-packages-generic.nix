@@ -1324,6 +1324,11 @@ rec {
     inherit (xlibs) libXp;
   };
 
+  t1lib = (import ../development/libraries/t1lib) {
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXaw;
+  };
+
   
   ### SERVERS
 
@@ -1770,7 +1775,7 @@ rec {
   };
 
   xpdf = (import ../applications/misc/xpdf) {
-    inherit fetchurl stdenv x11 freetype;
+    inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
   };
 
