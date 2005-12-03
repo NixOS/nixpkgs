@@ -1891,6 +1891,10 @@ rec {
     inherit (gtkLibs1x) gtk;
   };
 
+  dosbox = (import ../misc/emulators/dosbox) {
+    inherit fetchurl stdenv SDL;
+  };
+
   tetex = (import ../misc/tex/tetex) {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
