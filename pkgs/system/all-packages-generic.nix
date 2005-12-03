@@ -1841,6 +1841,13 @@ rec {
 #    inherit fetchurl stdenv ncurses dietgcc;
 #  };
 
+  nedit = import ../applications/editors/nedit {
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXpm;
+    motif = lesstif;
+  };
+
+
   ### GAMES
 
   zoom = (import ../games/zoom) {

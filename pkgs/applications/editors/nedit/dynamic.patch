@@ -1,0 +1,27 @@
+diff -rc nedit-5.5-orig/makefiles/Makefile.linux nedit-5.5/makefiles/Makefile.linux
+*** nedit-5.5-orig/makefiles/Makefile.linux	2003-05-20 02:27:56.000000000 +0200
+--- nedit-5.5/makefiles/Makefile.linux	2005-12-03 00:42:23.000000000 +0100
+***************
+*** 17,27 ****
+  # To test if the Motif library exports the runtime version
+  # add -DHAVE__XMVERSIONSTRING to CFLAGS
+  #
+! CFLAGS=-O -I/usr/X11R6/include -DUSE_DIRENT -DUSE_LPR_PRINT_CMD
+  
+  ARFLAGS=-urs
+  
+! LIBS= -L/usr/X11R6/lib -Wl,-Bstatic -lXm -Wl,-Bdynamic -lXp -lXpm -lXext -lXt -lSM -lICE -lX11 -lm
+  
+  include Makefile.common
+  
+--- 17,27 ----
+  # To test if the Motif library exports the runtime version
+  # add -DHAVE__XMVERSIONSTRING to CFLAGS
+  #
+! CFLAGS=-O -DUSE_DIRENT -DUSE_LPR_PRINT_CMD
+  
+  ARFLAGS=-urs
+  
+! LIBS= -lXm -lXp -lXpm -lXext -lXt -lSM -lICE -lX11 -lm
+  
+  include Makefile.common
