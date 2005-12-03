@@ -1863,11 +1863,6 @@ rec {
     inherit fetchurl stdenv xlibs mesa;
   };
 
-  generator = (import ../games/generator) {
-    inherit fetchurl stdenv SDL nasm;
-    inherit (gtkLibs1x) gtk;
-  };
-
 
   ### MISC
 
@@ -1890,6 +1885,11 @@ rec {
     inherit fetchurl stdenv x11 SDL;
   };
   */
+
+  generator = (import ../misc/emulators/generator) {
+    inherit fetchurl stdenv SDL nasm;
+    inherit (gtkLibs1x) gtk;
+  };
 
   tetex = (import ../misc/tex/tetex) {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
