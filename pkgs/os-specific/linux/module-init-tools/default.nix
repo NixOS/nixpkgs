@@ -1,9 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "module-init-tools-3.2-pre9";
+  name = "module-init-tools-3.2.1";
   src = fetchurl {
-    url = ftp://ftp.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-3.2-pre9.tar.bz2;
-    md5 = "f0ede5936c52e3d59411bd9594ad364f";
+    url = ftp://ftp.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-3.2.1.tar.bz2;
+    md5 = "29aa770c6ce92cbbc6da00161d2784d8";
   };
 }
+
+
