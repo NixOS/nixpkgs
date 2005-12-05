@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 
 FIXINC_DUMMY=$NIX_BUILD_TOP/dummy

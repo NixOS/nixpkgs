@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd cksfv-*/src || exit 1

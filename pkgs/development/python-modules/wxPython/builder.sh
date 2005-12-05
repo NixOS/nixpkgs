@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 flags="WXPORT=gtk2 BUILD_GLCANVAS=0 BUILD_OGL=0"
 

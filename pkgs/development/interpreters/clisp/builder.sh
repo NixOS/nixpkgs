@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 set -e
 

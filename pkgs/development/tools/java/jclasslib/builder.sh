@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar zxf $src || exit 1
 cd jclasslib || exit 1

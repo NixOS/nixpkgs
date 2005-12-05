@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 echo "copying $url into $out..."
 

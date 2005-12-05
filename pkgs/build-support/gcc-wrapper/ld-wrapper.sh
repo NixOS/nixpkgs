@@ -1,14 +1,14 @@
 #! @shell@ -e
 
 if test -n "$NIX_LD_WRAPPER_START_HOOK"; then
-    . "$NIX_LD_WRAPPER_START_HOOK"
+    source "$NIX_LD_WRAPPER_START_HOOK"
 fi
 
 if test -z "$NIX_GLIBC_FLAGS_SET"; then
-    . @out@/nix-support/add-flags
+    source @out@/nix-support/add-flags
 fi
 
-. @out@/nix-support/utils
+source @out@/nix-support/utils
 
 
 # Optionally filter out paths not refering to the store.
@@ -139,7 +139,7 @@ if test "$NIX_DEBUG" = "1"; then
 fi
 
 if test -n "$NIX_LD_WRAPPER_EXEC_HOOK"; then
-    . "$NIX_LD_WRAPPER_EXEC_HOOK"
+    source "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
 exec @ld@ ${extraBefore[@]} "${params[@]}" ${extra[@]}

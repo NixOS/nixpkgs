@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir $out
 for file in $files

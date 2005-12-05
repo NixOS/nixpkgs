@@ -1,5 +1,5 @@
 buildInputs="$openssl $zlib $db4 $httpd $swig $python $jdk $expat $patch"
-. $stdenv/setup
+source $stdenv/setup
 
 configureFlags="--without-gdbm --disable-static"
 

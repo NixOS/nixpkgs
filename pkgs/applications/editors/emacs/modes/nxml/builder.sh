@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir -p $out/emacs/site-lisp
 cd $out/emacs/site-lisp

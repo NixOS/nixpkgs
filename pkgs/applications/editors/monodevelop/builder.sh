@@ -1,5 +1,5 @@
-. $stdenv/setup
-. $makeWrapper
+source $stdenv/setup
+source $makeWrapper
 
 export MONO_GAC_PREFIX=$monodoc:$gtksharp
 

@@ -5,6 +5,6 @@ addBzip2() {
     buildInputs="$(dirname $(dirname $bzip2)) $buildInputs"
 }
 
-. $stdenv/setup
+source $stdenv/setup
 
 genericBuild

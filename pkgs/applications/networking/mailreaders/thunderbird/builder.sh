@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 preConfigure() {
     cat mail/config/mozconfig > .mozconfig

@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 echo "unpacking $src..."
 tar xvfz $src

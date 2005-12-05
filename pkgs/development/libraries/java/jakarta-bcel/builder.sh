@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 tar zxvf $src
 cd bcel-5.1

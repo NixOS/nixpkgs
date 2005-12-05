@@ -1,6 +1,6 @@
 set -e
 
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir -p $out/bin $out/lib
 

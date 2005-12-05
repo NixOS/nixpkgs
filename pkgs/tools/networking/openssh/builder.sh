@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 
 configureFlags="--with-privsep-path=$out/empty"

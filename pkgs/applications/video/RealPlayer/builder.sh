@@ -1,5 +1,5 @@
-. $stdenv/setup
-. $makeWrapper
+source $stdenv/setup
+source $makeWrapper
 
 ensureDir $out/real
 

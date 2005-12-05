@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 $unzip/bin/unzip $src
 mkdir $out

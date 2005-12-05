@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 ensureDir "$out/bin"
 ensureDir "$out/sbin"

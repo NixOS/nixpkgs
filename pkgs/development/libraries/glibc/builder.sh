@@ -2,8 +2,8 @@
 export NIX_NO_SELF_RPATH=1
 export NIX_DONT_SET_RPATH=1
 
-. $stdenv/setup
-. $substitute
+source $stdenv/setup
+source $substitute
 
 glibc=`cat $NIX_GCC/nix-support/orig-glibc`
 echo $glibc

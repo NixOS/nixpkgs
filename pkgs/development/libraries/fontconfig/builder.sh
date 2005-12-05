@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 configureFlags="--with-confdir=$out/etc/fonts"
 

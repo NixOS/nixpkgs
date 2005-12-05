@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 export LANG=en_US
 

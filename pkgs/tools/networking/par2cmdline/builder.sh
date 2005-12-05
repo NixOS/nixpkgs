@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd par2cmdline-* || exit 1

@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
     GLIBC=$(cat $NIX_GCC/nix-support/orig-glibc)

@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 if test -n "$libdvdcss"; then
     # Ugly hack to force libdvdcss to be present (so the user doesn't

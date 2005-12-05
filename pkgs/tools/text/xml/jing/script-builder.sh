@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 mkdir -p $out/bin || exit 1
 

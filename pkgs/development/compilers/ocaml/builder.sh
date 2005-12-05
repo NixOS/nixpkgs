@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 configureFlags="-prefix $out $configureFlags"
 genericBuild

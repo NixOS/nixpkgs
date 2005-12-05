@@ -1,6 +1,6 @@
 export NIX_DEBUG=1
 
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir $out
 mkdir $out/bin

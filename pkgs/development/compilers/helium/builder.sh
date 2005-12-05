@@ -1,5 +1,5 @@
 buildinputs="$ghc"
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd helium-* || exit 1

@@ -1,3 +1,3 @@
-. $stdenv/setup
+source $stdenv/setup
 
 unzip $src -d $out

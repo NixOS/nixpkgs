@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 # !!! hack
 NIX_LDFLAGS="$NIX_LDFLAGS -rpath $libXext/lib"

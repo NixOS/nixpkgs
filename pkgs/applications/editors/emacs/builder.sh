@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 myglibc=`cat ${NIX_GCC}/nix-support/orig-glibc`
 echo "glibc: $myglibc" 

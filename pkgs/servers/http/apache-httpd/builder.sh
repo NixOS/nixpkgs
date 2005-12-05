@@ -1,5 +1,5 @@
 buildInputs="$openssl $db4 $expat $perl"
-. $stdenv/setup
+source $stdenv/setup
 
 configureFlags="--with-expat=$expat --enable-mods-shared=all --without-gdbm \
  --enable-threads --with-devrandom=/dev/urandom"

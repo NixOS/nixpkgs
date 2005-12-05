@@ -1,5 +1,5 @@
-. $stdenv/setup
-. $substitute
+source $stdenv/setup
+source $substitute
 
 
 # Force gcc to use ld-wrapper.sh when calling ld.

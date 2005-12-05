@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 header "downloading $out from $url"
 

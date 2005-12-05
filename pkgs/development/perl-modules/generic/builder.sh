@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/site_perl"
 
@@ -31,11 +31,11 @@ preConfigure() {
 }
 
 if test -n "$perlPreHook"; then
-    . $perlPreHook
+    source $perlPreHook
 fi
 
 genericBuild
 
 if test -n "$perlPostHook"; then
-    . $perlPostHook
+    source $perlPostHook
 fi

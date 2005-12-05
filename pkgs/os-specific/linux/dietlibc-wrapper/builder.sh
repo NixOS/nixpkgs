@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 #export NIX_GLIBC_FLAGS_SET=1
 

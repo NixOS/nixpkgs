@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar zxf $src
 cd jakarta-tomcat*/bin

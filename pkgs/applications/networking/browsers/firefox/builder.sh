@@ -1,9 +1,9 @@
-. $stdenv/setup
+source $stdenv/setup
 
 preConfigure=preConfigure
 preConfigure() {
     cat > .mozconfig <<EOF
-. \$topsrcdir/browser/config/mozconfig
+source \$topsrcdir/browser/config/mozconfig
 ac_add_options --prefix=$out
 ac_add_options --enable-optimize
 ac_add_options --disable-debug

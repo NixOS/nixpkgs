@@ -1,6 +1,6 @@
 set -e
 
-. $stdenv/setup
+source $stdenv/setup
 
 cp $src .
 bin=`basename $src`

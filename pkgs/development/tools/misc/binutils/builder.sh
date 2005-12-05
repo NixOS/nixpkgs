@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 patchConfigure() {
     # Clear the default library search path.

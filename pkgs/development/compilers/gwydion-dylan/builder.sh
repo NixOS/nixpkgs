@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 export DYLANDIR=$dylan
 export DYLANPATH=$dylan/lib/dylan/2.4.0/x86-linux-gcc

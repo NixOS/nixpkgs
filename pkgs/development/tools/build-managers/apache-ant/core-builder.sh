@@ -1,4 +1,4 @@
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 # unpack the binary distribution
 tar jxf $src || exit 1

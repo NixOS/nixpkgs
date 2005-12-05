@@ -1,5 +1,5 @@
-. $stdenv/setup
-. $makeWrapper
+source $stdenv/setup
+source $makeWrapper
 
 makeWrapper "$firefox/bin/firefox" "$out/bin/firefox" \
     --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \

@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 # The Firefox pkgconfig files are buggy; they are called firefox-*.pc,
 # but they refer to mozilla-*.pc.  Also, mplayerplug-in requires

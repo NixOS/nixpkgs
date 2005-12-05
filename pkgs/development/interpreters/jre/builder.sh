@@ -1,6 +1,6 @@
 #! /bin/sh
 
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 cp $src $version.bin || exit 1
 chmod u+x $version.bin || exit 1

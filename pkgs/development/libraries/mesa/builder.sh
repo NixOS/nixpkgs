@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 makeFlags="linux-x86"
 

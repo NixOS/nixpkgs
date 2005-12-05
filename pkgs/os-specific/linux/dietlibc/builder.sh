@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 preBuild() {
   kernelhash=$(ls $kernel/lib/modules)

@@ -1,5 +1,5 @@
 buildinputs=""
-. $stdenv/setup
+source $stdenv/setup
 
 tar xvfj $src
 cd net-tools-*

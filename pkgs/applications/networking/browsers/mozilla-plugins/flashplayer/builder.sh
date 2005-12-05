@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 dontBuild=1
 dontMakeInstall=1

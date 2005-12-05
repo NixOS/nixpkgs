@@ -1,5 +1,5 @@
 set -e
-. $stdenv/setup
+source $stdenv/setup
 
 tar xvf $src
 mkdir -p $out

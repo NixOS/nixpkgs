@@ -1,5 +1,5 @@
 buildinputs="$gettext"
-. $stdenv/setup || exit 1
+source $stdenv/setup || exit 1
 
 tar xvfz $src || exit 1
 cd popt-* || exit 1

@@ -1,6 +1,6 @@
 set -x
 
-. $stdenv/setup
+source $stdenv/setup
 
 tar xvfz $src
 cd readline-*

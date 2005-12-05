@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 unpackCmd="tar xvfj $src"
 

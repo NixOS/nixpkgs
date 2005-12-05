@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 buildPhase() {
 	cp $config .config

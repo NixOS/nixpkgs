@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 genericBuild
 
 if test -n "$_propagatedBuildInputs"; then

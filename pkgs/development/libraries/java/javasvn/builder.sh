@@ -1,5 +1,5 @@
 set -e
-. $stdenv/setup
+source $stdenv/setup
 
 $unzip/bin/unzip $src
 mkdir -p $out

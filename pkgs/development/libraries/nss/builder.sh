@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 # This must be the ugliest builder in the Nix Packages
 

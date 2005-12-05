@@ -2,7 +2,7 @@ set -x
 
 export NIX_DEBUG=1
 
-. $stdenv/setup
+source $stdenv/setup
 
 export NIX_ENFORCE_PURITY=1
 

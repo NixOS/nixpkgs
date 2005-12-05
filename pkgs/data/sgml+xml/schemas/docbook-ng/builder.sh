@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir -p $out/xml/rng/docbook
 cd $out/xml/rng/docbook

@@ -4,8 +4,8 @@ p3=$param3
 p4=$param4
 p5=$param5
 
-. $stdenv/setup
-. $substitute
+source $stdenv/setup
+source $substitute
 
 mkdir $out
 

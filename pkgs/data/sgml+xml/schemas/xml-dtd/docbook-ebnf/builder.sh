@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir -p $out/xml/dtd/docbook-ebnf
 cd $out/xml/dtd/docbook-ebnf

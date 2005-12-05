@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 skip=7976
 

@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 configureScript=./config
 configureFlags=shared

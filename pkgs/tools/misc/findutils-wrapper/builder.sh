@@ -1,5 +1,5 @@
-. $stdenv/setup
-. $makeWrapper
+source $stdenv/setup
+source $makeWrapper
 
 makeWrapper "$findutils/bin/locate" "$out/bin/locate" \
 --database=/var/locatedb

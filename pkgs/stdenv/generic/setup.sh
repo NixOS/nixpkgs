@@ -22,7 +22,7 @@ param3=@param3@
 param4=@param4@
 param5=@param5@
 if test -n "@preHook@"; then
-    . @preHook@
+    source @preHook@
 fi
 
 
@@ -33,7 +33,7 @@ if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
 # Hack: run gcc's setup hook.
 envHooks=()
 if test -f $NIX_GCC/nix-support/setup-hook; then
-    . $NIX_GCC/nix-support/setup-hook
+    source $NIX_GCC/nix-support/setup-hook
 fi
 
     
@@ -81,7 +81,7 @@ findInputs()
     pkgs="$pkgs $pkg "
 
     if test -f $pkg/nix-support/setup-hook; then
-        . $pkg/nix-support/setup-hook
+        source $pkg/nix-support/setup-hook
     fi
     
     if test -f $pkg/nix-support/propagated-build-inputs; then
@@ -162,7 +162,7 @@ export TZ=UTC
 
 # Execute the post-hook.
 if test -n "@postHook@"; then
-    . @postHook@
+    source @postHook@
 fi
 
 PATH=$_PATH${_PATH:+:}$PATH

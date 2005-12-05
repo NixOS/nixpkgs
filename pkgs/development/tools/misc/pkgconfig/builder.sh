@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 postInstall() {
     test -x $out/nix-support || mkdir $out/nix-support

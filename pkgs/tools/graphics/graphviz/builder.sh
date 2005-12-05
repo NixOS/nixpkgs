@@ -1,4 +1,4 @@
-. $stdenv/setup
+source $stdenv/setup
 
 configureFlags="\
     --with-pngincludedir=$libpng/include \
