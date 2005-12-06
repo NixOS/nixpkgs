@@ -8,10 +8,10 @@ assert xineramaSupport -> libXinerama != null;
 
 
 stdenv.mkDerivation {
-  name = "gtk+-2.8.6";
+  name = "gtk+-2.8.8";
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gtk/v2.8/gtk+-2.8.6.tar.bz2;
-    md5 = "2bcb9e3feb62ac895101cb8ee87ca49a";
+    url = ftp://ftp.gtk.org/pub/gtk/v2.8/gtk+-2.8.8.tar.bz2;
+    md5 = "a048757bbe37f74d0de065aa0ac29c52";
   };
   buildInputs = [
     pkgconfig perl libtiff libjpeg libpng cairo
