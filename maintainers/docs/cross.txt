@@ -131,6 +131,12 @@ Only C is used, because for other languages (such as C++) extra libraries
 need to be compiled, for which libraries compiled for the target system
 are needed.
 
+There is a bit of evilness going on. The cross compiled utilities need
+to be either copied to or be linked from the output tree of the compiler.
+(Is this really true? Back this up with arguments! -- AH)
+
+Symbolic links are not something we want inside the Nix store.
+
 ---
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
@@ -260,6 +266,8 @@ postInstall() {
 genericBuild
 ---
 
-This is enough to compile a C library. In our case we take uClibc. It's
-intended to be a small sized replacement for glibc. It is widely used in
-embedded environments.
+Step 4: build a C library for the target platform.
+
+The previous steps are enough to compile a C library. In our case we take
+uClibc. It's intended to be a small sized replacement for glibc. It is widely
+used in embedded environments.
