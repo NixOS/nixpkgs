@@ -271,3 +271,41 @@ Step 4: build a C library for the target platform.
 The previous steps are enough to compile a C library. In our case we take
 uClibc. It's intended to be a small sized replacement for glibc. It is widely
 used in embedded environments.
+
+...
+
+Step 5: Build a compiler to link with the newly built C library.
+
+...
+
+If we restrict the compiler to just C programs it is relatively easy,
+since we only need to wrap the GCC we built in the previous step with all
+the right tools and the right C library. Successfully compiled programs with
+this compiler and verified to be working on a HP Jornada 820 running Linux
+are "patch", "make" and "wget".
+
+If we want to build C++ programs it gets a lot more difficult. GCC has a
+three step compilation proces. In the first step a simple compiler, called
+xgcc, that can compile only C programs is built. With that compiler it
+compiles itself two more times: one time to build a full compiler, and another
+time to build a full compiler once again with the freshly built compiler from
+step 2. In the second and third step support for C++ is compiled, if this
+is configured.
+
+One of the libraries that has to be built for C++ support step is libstdc++.
+This library uses xgcc, even when cross compiling, since libstdc++ has to be
+compiled for arm-linux.
+
+One of the compiler flags that GCC uses for this compiler is called X_CFLAGS.
+This is used by the Nix build process to set the dynamic linker, glibc
+in the case of i686-linux using the default Nix packages collection.
+
+Obiously, since we need to compile libstc++ for arm-linux with uClibc linking
+will not be done correctly: you can't link object files built for arm-linux
+with a glibc built for i686-linux.
+
+Setting X_CFLAGS to use the uClibc libraries and dynamic linker will fail
+too. Earlier on in the build process these flags are used to compile important
+files like libgcc.a by the host system gcc, which does need to be linked
+to glibc. To make this work correctly you will need to carefully juggle
+with compilation flags. This is still work in progress for Nix.
