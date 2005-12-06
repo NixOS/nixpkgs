@@ -12,5 +12,3 @@
 * Add gettext to glib propagatedBuildInputs?  Glib's `gi18n.h' doesn't
   seem to like Glibc `libintl.h'; needs the gettext one instead.
   [Move from libbonoboui]
-
-* Use new-style builder for GNU patch.

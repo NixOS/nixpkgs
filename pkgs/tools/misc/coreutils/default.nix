@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "coreutils-5.2.1";
+  name = "coreutils-5.93";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/coreutils-5.2.1.tar.bz2;
-    md5 = "172ee3c315af93d3385ddfbeb843c53f";
+    url = http://ftp.gnu.org/pub/gnu/coreutils/coreutils-5.93.tar.bz2;
+    md5 = "955d8abfd3dd8af2ca3af51480f1f9af";
   };
 }
