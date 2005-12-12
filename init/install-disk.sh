@@ -81,6 +81,7 @@ mknod $root/dev/null c 1 3
 touch_file /etc/passwd
 touch_file /etc/shadow
 touch_file /etc/group
+touch_file /etc/login.defs
 
 rm -f $root/etc/mtab
 #ln -s /proc/mounts $root/etc/mtab
