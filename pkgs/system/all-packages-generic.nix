@@ -1381,6 +1381,11 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
+  initscripts = (import ../os-specific/linux/initscripts) {
+    inherit fetchurl stdenv popt pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   hwdata = (import ../os-specific/linux/hwdata) {
     inherit fetchurl stdenv;
   };
