@@ -167,6 +167,8 @@ make_dir 00755 /sys
 make_dir 01777 /tmp
 make_dir 00755 /usr
 make_dir 00755 /var
+make_dir 00755 /var/empty
+make_dir 00111 /var/empty/sshd
 make_dir 00755 /var/log
 make_dir 00755 /var/run
 make_dir 00755 /var/spool
@@ -297,8 +299,11 @@ echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo setting up initial account information...
 
 echo "root:x:0:root" > $root/etc/group
+echo "sshd:x:74:" >> $root/etc/group
 echo "root:x:0:0:root:/root:/bin/sh" > $root/etc/passwd
-echo "root::12757:0:99999:7:::" > $root/etc/shadow
+echo "sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin" >> $root/etc/passwd
+echo "root::12757:0:99999:7:::" >> $root/etc/shadow
+echo "sshd:!!:12757:0:99999:7:::" >> $root/etc/shadow
 
 echo default profile for root
 echo "source @nix@/etc/profile.d/nix.sh" > $root/root/.profile
