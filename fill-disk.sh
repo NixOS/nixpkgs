@@ -140,8 +140,8 @@ make_dir 00755 /boot
 make_dir 00755 /dev
 make_dir 00755 /dev/pts
 make_dir 00755 /etc # global non-constant configuration
+make_dir 00755 /etc/ssh
 make_dir 00755 /etc/sysconfig
-make_dir 00755 /etc-secret
 make_dir 00755 /home
 make_dir 00755 /lib
 make_dir 00755 /lib/modules
