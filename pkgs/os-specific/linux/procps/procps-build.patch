@@ -1,12 +1,12 @@
 diff -ruN procps-3.2.6/Makefile procps-3.2.6.new/Makefile
 --- procps-3.2.6/Makefile	2005-10-30 07:27:04.000000000 +0100
-+++ procps-3.2.6.new/Makefile	2005-12-13 16:47:00.000000000 +0100
++++ procps-3.2.6.new/Makefile	2005-12-13 16:52:02.000000000 +0100
 @@ -43,7 +43,7 @@
  usr/lib                  := $(DESTDIR)/usr/$(lib64)/
  usr/include              := $(DESTDIR)/usr/include/
  
 -#SKIP     := $(bin)kill $(man1)kill.1
-+SKIP     := $(bin)kill $(man1)kill.1
++SKIP     := $(bin)kill $(man1)kill.1 $(usr/bin)uptime $(man1)uptime.1
  
  BINFILES := $(usr/bin)uptime $(usr/bin)tload $(usr/bin)free $(usr/bin)w \
              $(usr/bin)top $(usr/bin)vmstat $(usr/bin)watch $(usr/bin)skill \
@@ -35,11 +35,12 @@ diff -ruN procps-3.2.6/Makefile procps-3.2.6.new/Makefile
 -ALL_CFLAGS += $(call check_gcc,-fweb,)
 -ALL_CFLAGS += $(call check_gcc,-frename-registers,)
 -ALL_CFLAGS += $(call check_gcc,-fomit-frame-pointer,)
+-endif
 +#ifeq (,$(findstring -g,$(filter -g%,$(CFLAGS))))
 +#ALL_CFLAGS += $(call check_gcc,-fweb,)
 +#ALL_CFLAGS += $(call check_gcc,-frename-registers,)
 +#ALL_CFLAGS += $(call check_gcc,-fomit-frame-pointer,)
- endif
++#endif
  
  # in case -O3 is enabled, avoid bloat
 -ALL_CFLAGS += $(call check_gcc,-fno-inline-functions,)
