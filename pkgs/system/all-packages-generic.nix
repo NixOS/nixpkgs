@@ -1822,6 +1822,14 @@ rec {
     xaw3dSupport = false;
   };
 
+  emacs22 = (import ../applications/editors/emacs-22) {
+    inherit fetchurl stdenv pkgconfig x11 Xaw3d;
+    inherit (xlibs) libXaw libXpm;
+    inherit (gtkLibs) gtk;
+    xaw3dSupport = false;
+    gtkGUI = true;
+  };
+
   nxml = (import ../applications/editors/emacs/modes/nxml) {
     inherit fetchurl stdenv;
   };
