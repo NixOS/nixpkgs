@@ -60,16 +60,22 @@ Otherwise, do this yourself:
 # route add default gw <gateway ip address>
 # vim /etc/resolv.conf
 
-  Making logins on virtual consoles work.
+  Making syslog work.
 
-Logins on virtual consoles are disabled by default. To make them work:
-
-- edit /etc/inittab and outcomment the lines with "mingetty" in them
 - copy /etc/services from a working Linux machine to /etc/services on the
 NixOS machine (needed for sysklogd)
 - copy /etc/syslog.conf from a working Linux machine to /etc/syslog.conf on the
 NixOS machine (needed for sysklogd)
 - launch sysklogd
+
+  Making logins on virtual consoles work.
+
+Logins on virtual consoles are disabled by default. To make them work:
+
+- edit /etc/inittab and outcomment the lines with "mingetty" in them
 - copy /etc/login.defs from a working Linux machine to /etc/login.defs on the
-NixOS machine (needed for mingetty)
+NixOS machine (needed for mingetty). Alternatively, do:
+
+# touch /etc/login.defs
+
 - relaunch init
