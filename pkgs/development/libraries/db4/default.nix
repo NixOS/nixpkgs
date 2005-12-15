@@ -11,4 +11,5 @@ stdenv.mkDerivation {
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
     (if cxxSupport then "--enable-compat185" else "--disable-compat185")
   ];
+  patches = [./register.patch]; # <- should be fixed in 4.4.17
 }

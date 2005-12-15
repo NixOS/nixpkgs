@@ -1,0 +1,84 @@
+diff -rc db-4.4.16.NC-orig/env/env_register.c db-4.4.16.NC/env/env_register.c
+*** db-4.4.16.NC-orig/env/env_register.c	2005-10-07 22:21:27.000000000 +0200
+--- db-4.4.16.NC/env/env_register.c	2005-12-08 17:16:44.000000000 +0100
+***************
+*** 217,226 ****
+  		if (nr != PID_LEN)
+  			goto corrupt;
+  
+! 		if (FLD_ISSET(
+! 		    dbenv->verbose, DB_VERB_REGISTER) && PID_ISEMPTY(buf)) {
+  			__db_msg(dbenv, "%02u: EMPTY", lcnt);
+! 			continue;
+  		}
+  
+  		/*
+--- 217,226 ----
+  		if (nr != PID_LEN)
+  			goto corrupt;
+  
+!                 if (PID_ISEMPTY(buf)) {
+!                     if (FLD_ISSET(dbenv->verbose, DB_VERB_REGISTER))
+  			__db_msg(dbenv, "%02u: EMPTY", lcnt);
+!                     continue;
+  		}
+  
+  		/*
+diff -rc db-4.4.16.NC-orig/test/env012.tcl db-4.4.16.NC/test/env012.tcl
+*** db-4.4.16.NC-orig/test/env012.tcl	2005-11-02 21:27:45.000000000 +0100
+--- db-4.4.16.NC/test/env012.tcl	2005-12-08 17:21:19.000000000 +0100
+***************
+*** 168,173 ****
+--- 168,219 ----
+  	logcheckfails $testdir/env$tnum.log.p2 DB_RUNRECOVERY
+  	logcheck $testdir/env$tnum.log.p3
+  
++         # Regression test: check that recovery doesn't run if there is
++ 	# a "X   " slot in the registry.
++ 	puts "\tEnv$tnum.f: Multiple processes can join with -register -recover."
++ 
++         # Make sure that we have at least 2 "X   " slots in the registry.
++ 	puts "\t\tEnv$tnum.f1: Start process 1."
++ 	set p1 [exec $tclsh_path $test_path/wrap.tcl envscript.tcl \
++ 	    $testdir/env$tnum.log.p1 \
++ 	    $testdir $testfile PUT $key $data RECOVER 1 &]
++ 
++ 	puts "\t\tEnv$tnum.f2: Start process 2."
++ 	set p2 [exec $tclsh_path $test_path/wrap.tcl envscript.tcl \
++ 	    $testdir/env$tnum.log.p2 \
++ 	    $testdir $testfile PUT $key $data RECOVER 1 &]
++ 
++ 	watch_procs $p1 1 120
++ 	watch_procs $p2 1 120
++ 
++ 	logcheck $testdir/env$tnum.log.p1
++ 	logcheck $testdir/env$tnum.log.p2
++     
++         # Start a process.  It should not run recovery.  Under the bug
++ 	# we're testing for, it would, because it would get an
++         # exclusive lock on the first "X    " slot.
++ 	puts "\t\tEnv$tnum.f3: Start process 3."
++ 	set p3 [exec $tclsh_path $test_path/wrap.tcl envscript.tcl \
++ 	    $testdir/env$tnum.log.p3 \
++ 	    $testdir $testfile PUT $key $data RECOVER 10 &]
++ 
++         tclsleep 2
++     
++         # Start another process.  It should not run recovery either.
++         # The bug would cause it to run recovery because it would get
++         # an exclusive lock on the second "X    " slot.  This would
++         # cause p3 to panic.
++ 	puts "\t\tEnv$tnum.f4: Start process 4."
++ 	set p4 [exec $tclsh_path $test_path/wrap.tcl envscript.tcl \
++ 	    $testdir/env$tnum.log.p4 \
++ 	    $testdir $testfile PUT $key $data RECOVER 10 &]
++ 
++ 	watch_procs $p3 1 120
++ 	watch_procs $p4 1 120
++ 
++ 	# Check log files for failures.
++ 	logcheck $testdir/env$tnum.log.p3
++ 	logcheck $testdir/env$tnum.log.p4
+  }
+  
+  # Check log file and report failures with FAIL.  Use this when
