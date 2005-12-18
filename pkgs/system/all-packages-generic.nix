@@ -281,6 +281,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gnupg = import ../tools/security/gnupg {
+    inherit fetchurl stdenv;
+    ideaSupport = false; # enable for IDEA crypto support
+  };
+
   mjpegtools = (import ../tools/video/mjpegtools) {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
