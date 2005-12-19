@@ -1074,6 +1074,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libgpgerror = (import ../development/libraries/libgpg-error) {
+    inherit fetchurl stdenv;
+  };
+
+  gpgme = (import ../development/libraries/gpgme) {
+    inherit fetchurl stdenv libgpgerror gnupg;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxon = (import ../development/libraries/java/saxon) {
@@ -1589,9 +1597,10 @@ rec {
   };
 
   sylpheed = (import ../applications/networking/mailreaders/sylpheed) {
-    inherit fetchurl stdenv pkgconfig openssl;
+    inherit fetchurl stdenv pkgconfig openssl gpgme;
     inherit (gtkLibs) glib gtk;
     sslSupport = true;
+    gpgSupport = true;
   };
 
   valknut = (import ../applications/networking/p2p/valknut) {

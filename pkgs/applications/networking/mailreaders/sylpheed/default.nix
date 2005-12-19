@@ -1,20 +1,25 @@
 { sslSupport ? true
-, stdenv, fetchurl, pkgconfig, gtk, glib, openssl ? null, gdkpixbuf ? null
+, gpgSupport ? false
+, stdenv, fetchurl, pkgconfig, gtk, glib
+, openssl ? null
+, gpgme ? null
 }:
 
 assert sslSupport -> openssl != null;
+assert gpgSupport -> gpgme != null;
 
 stdenv.mkDerivation {
-  name = "sylpheed-2.1.3";
+  name = "sylpheed-2.1.9";
 
   src = fetchurl {
-    url = http://sylpheed.good-day.net/sylpheed/v2.1/sylpheed-2.1.3.tar.bz2;
-    md5 = "57f874501c5b0e52b8ec1959fe0359be";
+    url = http://sylpheed.good-day.net/sylpheed/v2.1/sylpheed-2.1.9.tar.bz2;
+    md5 = "fe05714e5037d56ccdcf4b36fe4e9346";
   };
 
   buildInputs = [
     pkgconfig glib gtk
     (if sslSupport then openssl else null)
+    (if gpgSupport then gpgme else null)
   ];
 
   configureFlags = [
