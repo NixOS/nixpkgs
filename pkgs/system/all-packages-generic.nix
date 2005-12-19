@@ -715,6 +715,11 @@ rec {
     jdk = blackdown;
   };
 
+  beecrypt = (import ../development/libraries/beecrypt) {
+    inherit fetchurl stdenv;
+    m4 = gnum4;
+  };
+
   cil = (import ../development/libraries/cil) {
     inherit stdenv fetchurl ocaml perl;
   };
