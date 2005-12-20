@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     md5 = "3f277388b0486c6e8ce9b07fdf53993e";
   };
   buildInputs = [python tcl readline file cpio beecrypt unzip neon gnupg libxml2 perl];
-  configureFlags = "--without-python --with-selinux=no --without-lua";
+  #configureFlags = "--without-python --with-selinux=no --without-lua";
+  configureFlags = "--without-python --with-selinux=no";
   patches = [./rpm-4.4.5-lua.patch ./rpm-4.4.5-beecrypt-include.patch ./rpm-4.4.5-neon-include.patch ./rpm-4.4.5-libxml2-include.patch];
   inherit beecrypt neon libxml2;
 }
