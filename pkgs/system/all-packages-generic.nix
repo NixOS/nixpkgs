@@ -1554,6 +1554,10 @@ rec {
     };
   };
 
+  rpm = (import ../applications/package-management/rpm) {
+    inherit fetchurl stdenv python tcl readline file cpio beecrypt unzip neon gnupg libxml2 perl;
+  };
+
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
   };

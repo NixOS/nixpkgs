@@ -1,0 +1,29 @@
+diff -ruN rpm-4.4.5/tools/Makefile.in rpm-4.4.5.new/tools/Makefile.in
+--- rpm-4.4.5/tools/Makefile.in	2005-12-13 15:19:00.000000000 +0100
++++ rpm-4.4.5.new/tools/Makefile.in	2005-12-19 23:41:44.000000000 +0100
+@@ -424,11 +424,11 @@
+ rpmsort_SOURCES = rpmsort.c
+ #rpmsort_LDFLAGS =	(staticLDFLAGS)
+ rpmtool_SOURCES = rpmtool.c rpmxp.c
+-rpmtool_CFLAGS = -I$(includedir)/libxml2
++rpmtool_CFLAGS = -I$(libxml2)/include/libxml2
+ #rpmtool_LDFLAGS =	$(staticLDFLAGS)
+ rpmtool_LDADD = $(LDADD) -lxml2
+ rpmxml_SOURCES = rpmxml.c # rpmxp.c
+-rpmxml_CFLAGS = -I$(includedir)/libxml2
++rpmxml_CFLAGS = -I$(libxml2)/include/libxml2
+ #rpmxml_LDFLAGS =	$(staticLDFLAGS)
+ rpmxml_LDADD = $(LDADD) -lxml2
+ all: all-am
+diff -ruN rpm-4.4.5/wnh/Makefile.in rpm-4.4.5.new/wnh/Makefile.in
+--- rpm-4.4.5/wnh/Makefile.in	2005-12-13 15:19:00.000000000 +0100
++++ rpm-4.4.5.new/wnh/Makefile.in	2005-12-19 23:42:13.000000000 +0100
+@@ -349,7 +349,7 @@
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+ 	@WITH_POPT_INCLUDE@ \
+-	-I$(includedir)/libxml2 \
++	-I$(libxml2)/include/libxml2 \
+ 	-I$(top_srcdir)/misc \
+ 	@INCPATH@
+ 

@@ -1,0 +1,12 @@
+diff -ruN rpm-4.4.5/configure rpm-4.4.5.new/configure
+--- rpm-4.4.5/configure	2005-12-13 15:19:03.000000000 +0100
++++ rpm-4.4.5.new/configure	2005-12-19 18:27:35.000000000 +0100
+@@ -25944,7 +25944,7 @@
+ fi
+ 
+ 
+-    WITH_BEECRYPT_INCLUDE="-I${includedir}/beecrypt"
++    WITH_BEECRYPT_INCLUDE="-I${beecrypt}/include/beecrypt"
+     WITH_BEECRYPT_LIB="-lbeecrypt"
+ 
+ fi

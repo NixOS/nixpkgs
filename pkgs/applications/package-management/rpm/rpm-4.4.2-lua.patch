@@ -1,0 +1,12 @@
+diff -ruN rpm-4.4.2/Makefile.in rpm-4.4.2.new/Makefile.in
+--- rpm-4.4.2/Makefile.in	2005-07-17 16:58:58.000000000 +0200
++++ rpm-4.4.2.new/Makefile.in	2005-12-19 16:23:55.000000000 +0100
+@@ -404,7 +404,7 @@
+ 	po/*.in po/*.po po/rpm.pot \
+ 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
+ 
+-SUBDIRS = intl po misc @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_MAGIC_SUBDIR@ @WITH_DB_SUBDIR@ @WITH_SQLITE3_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ @WITH_NEON_SUBDIR@ lua rpmio rpmdb lib build @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po misc @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_MAGIC_SUBDIR@ @WITH_DB_SUBDIR@ @WITH_SQLITE3_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ @WITH_NEON_SUBDIR@ @WITH_LUA_SUBDIR@ rpmio rpmdb lib build @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+ INCLUDES = \
+ 	-I$(top_srcdir)/build \
+ 	-I$(top_srcdir)/lib \
