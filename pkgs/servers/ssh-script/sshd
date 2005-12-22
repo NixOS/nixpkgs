@@ -33,8 +33,8 @@ do_rsa1_keygen() {
 	if [ ! -s $RSA1_KEY ]; then
 		echo -n $"Generating SSH1 RSA host key: "
 		if $KEYGEN -q -t rsa1 -f $RSA1_KEY -C '' -N '' >&/dev/null; then
-			chmod 600 $RSA1_KEY
-			chmod 644 $RSA1_KEY.pub
+			@coreutils/bin/chmod 600 $RSA1_KEY
+			@coreutils@/bin/chmod 644 $RSA1_KEY.pub
 			success $"RSA1 key generation"
 			echo
 		else
@@ -49,8 +49,8 @@ do_rsa_keygen() {
 	if [ ! -s $RSA_KEY ]; then
 		echo -n $"Generating SSH2 RSA host key: "
 		if $KEYGEN -q -t rsa -f $RSA_KEY -C '' -N '' >&/dev/null; then
-			chmod 600 $RSA_KEY
-			chmod 644 $RSA_KEY.pub
+			@coreutils@/bin/chmod 600 $RSA_KEY
+			@coreutils@/bin/chmod 644 $RSA_KEY.pub
 			success $"RSA key generation"
 			echo
 		else
@@ -65,8 +65,8 @@ do_dsa_keygen() {
 	if [ ! -s $DSA_KEY ]; then
 		echo -n $"Generating SSH2 DSA host key: "
 		if $KEYGEN -q -t dsa -f $DSA_KEY -C '' -N '' >&/dev/null; then
-			chmod 600 $DSA_KEY
-			chmod 644 $DSA_KEY.pub
+			@coreutils@/bin/chmod 600 $DSA_KEY
+			@coreutils@/bin/chmod 644 $DSA_KEY.pub
 			success $"DSA key generation"
 			echo
 		else
