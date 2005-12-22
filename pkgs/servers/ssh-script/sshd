@@ -28,7 +28,7 @@ RSA1_KEY=/etc/ssh/ssh_host_key
 RSA_KEY=/etc/ssh/ssh_host_rsa_key
 DSA_KEY=/etc/ssh/ssh_host_dsa_key
 PID_FILE=/var/run/sshd.pid
-OPTIONS="-h $DSA_KEY"
+OPTIONS="-h $DSA_KEY -h RSA_KEY -h RSA1_KEY"
 
 do_rsa1_keygen() {
 	if [ ! -s $RSA1_KEY ]; then
