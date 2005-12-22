@@ -589,7 +589,7 @@ rec {
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl pkgconfig stdenv sdf aterm;
+    inherit fetchurl stdenv pkgconfig sdf aterm;
   };
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
@@ -598,6 +598,24 @@ rec {
 
   bibtextools = (import ../tools/typesetting/bibtex-tools) {
     inherit fetchurl stdenv aterm tetex hevea sdf strategoxt;
+  };
+
+  transformers = (import ../development/compilers/transformers) {
+    inherit fetchurl stdenv pkgconfig sdf;
+    aterm = aterm23x;
+
+    strategoxt = (import ../development/compilers/strategoxt/strategoxt-0.14.nix) {
+      inherit fetchurl pkgconfig stdenv sdf;
+      aterm = aterm23x;
+    };
+
+    stlport =  (import ../development/libraries/stlport) {
+      inherit fetchurl stdenv;
+    };
+  };
+
+  aterm23x = (import ../development/libraries/aterm/aterm-2.3.1.nix) {
+    inherit fetchurl stdenv;
   };
 
   ghcboot = (import ../development/compilers/ghc/boot.nix) {

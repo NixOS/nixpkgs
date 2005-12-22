@@ -50,6 +50,7 @@ let {
     sdf
     strategoxt
     strategoxtUtils
+    transformers
 
     ghc
 #    helium
