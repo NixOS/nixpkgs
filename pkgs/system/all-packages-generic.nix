@@ -1831,6 +1831,7 @@ rec {
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
     xineramaSupport = true;
+    fastStart = true;
   };
 
   eclipse = (import ../applications/editors/eclipse) {
@@ -1869,6 +1870,15 @@ rec {
     inherit (gtkLibs) gtk;
     xaw3dSupport = false;
     gtkGUI = true;
+  };
+
+  emacs22aa = (import ../applications/editors/emacs-22-aa) {
+    inherit fetchurl stdenv pkgconfig x11 Xaw3d libpng;
+    inherit (xlibs) libXaw libXpm libXft;
+    inherit (gtkLibs) gtk;
+    xaw3dSupport = false;
+    gtkGUI = true;
+    xftSupport = true;
   };
 
   nxml = (import ../applications/editors/emacs/modes/nxml) {

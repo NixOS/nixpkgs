@@ -12,6 +12,10 @@ tar xvf AdobeReader/ILINXR.TAR -C $out
 # Disable this plugin for now (it needs LDAP, and I'm too lazy to add it).
 rm $out/Reader/intellinux/plug_ins/PPKLite.api
 
+if test -n "$fastStart"; then
+    rm $out/Reader/intellinux/plug_ins/*.api
+fi
+
 glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
 
 fullPath=

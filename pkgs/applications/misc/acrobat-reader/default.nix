@@ -1,6 +1,7 @@
 { xineramaSupport ? false
 , stdenv, fetchurl, libXt, libXp, libXext, libX11, libXinerama ? null
 , glib, pango, atk, gtk, libstdcpp5, zlib
+, fastStart ? false
 }:
 
 stdenv.mkDerivation {
@@ -14,4 +15,5 @@ stdenv.mkDerivation {
     libXt libXp libXext libX11 glib pango atk gtk libstdcpp5 zlib
     (if xineramaSupport then libXinerama else null)
   ];
+  inherit fastStart;
 }
