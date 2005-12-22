@@ -28,6 +28,7 @@ RSA1_KEY=/etc/ssh/ssh_host_key
 RSA_KEY=/etc/ssh/ssh_host_rsa_key
 DSA_KEY=/etc/ssh/ssh_host_dsa_key
 PID_FILE=/var/run/sshd.pid
+OPTIONS="-h $DSA_KEY"
 
 do_rsa1_keygen() {
 	if [ ! -s $RSA1_KEY ]; then
@@ -97,7 +98,7 @@ start()
 	echo -n $"Starting $prog:"
 	@initscripts@/sbin/initlog -c "$SSHD $OPTIONS" && success || failure
 	RETVAL=$?
-	[ "$RETVAL" = 0 ] && touch /var/lock/subsys/sshd
+	[ "$RETVAL" = 0 ] && @coreutils@/bin/touch /var/lock/subsys/sshd
 	echo
 }
 
@@ -106,7 +107,7 @@ stop()
 	echo -n $"Stopping $prog:"
 	killproc $SSHD -TERM
 	RETVAL=$?
-	[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/sshd
+	[ "$RETVAL" = 0 ] && @coreutils@/bin/rm -f /var/lock/subsys/sshd
 	echo
 }
 
