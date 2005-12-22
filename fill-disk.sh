@@ -169,6 +169,8 @@ make_dir 00755 /usr
 make_dir 00755 /var
 make_dir 00755 /var/empty
 make_dir 00111 /var/empty/sshd
+make_dir 00755 /var/lock
+make_dir 00755 /var/lock/subsys
 make_dir 00755 /var/log
 make_dir 00755 /var/run
 make_dir 00755 /var/spool
