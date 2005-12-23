@@ -1,0 +1,12 @@
+diff -ruN kudzu-1.2.16/Makefile kudzu-1.2.16.new/Makefile
+--- kudzu-1.2.16/Makefile	2005-10-28 21:57:55.000000000 +0200
++++ kudzu-1.2.16.new/Makefile	2005-12-23 16:30:37.000000000 +0100
+@@ -17,7 +17,7 @@
+ 
+ CVSTAG = kudzu-r$(subst .,-,$(VERSION))
+ 
+-PYTHONVERS = $(shell ls /usr/include/python*/Python.h | sed "s|/usr/include/||g"| sed "s|/Python.h||g")
++PYTHONVERS = $(shell ls $(python)/include/python*/Python.h | sed "s|$(python)/include/||g"| sed "s|/Python.h||g")
+ 
+ CFLAGS += -I. -DVERSION=\"$(VERSION)\"
+ 
