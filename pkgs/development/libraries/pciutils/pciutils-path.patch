@@ -1,0 +1,12 @@
+diff -ruN pciutils-2.2.1/Makefile pciutils-2.2.1.new/Makefile
+--- pciutils-2.2.1/Makefile	2005-11-26 14:00:57.000000000 +0100
++++ pciutils-2.2.1.new/Makefile	2005-12-23 15:24:14.000000000 +0100
+@@ -7,7 +7,7 @@
+ VERSION=2.2.1
+ DATE=2005-11-26
+ 
+-PREFIX=/usr/local
++PREFIX=$(out)
+ SBINDIR=$(PREFIX)/sbin
+ SHAREDIR=$(PREFIX)/share
+ IDSDIR=$(SHAREDIR)
