@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin
+export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -236,6 +236,8 @@ echo bringing up networking...
 
 nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 
+echo "NIC: $nic"
+
 echo initialising Nix DB...
 $NIX_CMD_PATH/nix-store --init
 
@@ -285,7 +287,7 @@ echo setting init symlink...
 rm -f $root/init
 #ln -s $sysvinitPath/sbin/init $root/init
 ln -s @sysvinitPath@/sbin/init $root/sbin/init
-ln -s @bash@/bin/sh $root/bin/sh
+ln -s @bashGlibc@/bin/sh $root/bin/sh
 #ln -s @bash@/bin/bash $root/bin/bash
 
 echo setting up inittab...
@@ -294,7 +296,8 @@ echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
 echo "1:2345:respawn:$bootPath/bin/login.sh /dev/tty1" >> $root/etc/inittab
-echo "#2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
+echo "2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
+echo "3:2345:respawn:$mingetty/sbin/mingetty tty3" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...
@@ -307,6 +310,7 @@ echo "127.0.0.1 localhost" >> $root/etc/hosts
 echo storing hardware information...
 
 kudzu -p > $root/etc/sysconfig/hwconf
+#cp /etc/modprobe.conf $root/etc/
 
 echo setting up initial account information...
 
@@ -319,6 +323,8 @@ echo "sshd:!!:12757:0:99999:7:::" >> $root/etc/shadow
 
 echo default profile for root
 echo "source @nix@/etc/profile.d/nix.sh" > $root/root/.profile
+
+touch_file /etc/login.defs
 
 ###
 ### Do kernel stuff here.

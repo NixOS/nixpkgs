@@ -64,7 +64,7 @@ Kernel=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).
 SysVinit=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX_CMD_PATH/nix-instantiate -)))
 BootPath=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -)))
 
-#bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+bashGlibc=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
 bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX_CMD_PATH/nix-instantiate -))
 coreutilsdiet=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
@@ -124,6 +124,7 @@ echo copying nixpkgs
 
 #svn export ${nixpkgs} ${archivesDir}/pkgs
 cp -fa ${nixpkgs} ${archivesDir}
+#tar cf $archivesDir
 
 #echo copying packages from store
 
@@ -141,8 +142,6 @@ cp -fa ${nixpkgs} ${archivesDir}
 #cp -fvau --parents ${nano} ${archivesDir}
 #cp -fvau --parents ${gnutar} ${archivesDir}
 
-bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bashStatic' | $NIX_CMD_PATH/nix-instantiate -)))
-
 echo copying scripts
 
 mkdir ${archivesDir}/scripts
@@ -155,6 +154,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@nix\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
+    -e "s^@bashGlibc\@^$bashGlibc^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
     -e "s^@coreutils\@^$coreutils^g" \
@@ -223,20 +223,24 @@ cp ${bash}/bin/bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 chmod u+x ${initdir}/fill-disk.sh
 chmod u+x ${initdir}/ramdisk-login.sh
-#cp -fau --parents ${bashdeps} ${initdir}
 #cp -fau --parents ${utilLinux} ${initdir}
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
 #cp -fau --parents ${e2fsProgs} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
 #cp -fau --parents ${hotplug} ${initdir}
-cp -fau --parents ${bash} ${initdir}
-cp -fau --parents ${utilLinux} ${initdir}
-cp -fau --parents ${coreutilsdiet} ${initdir}
-cp -fau --parents ${e2fsprogs} ${initdir}
-cp -fau --parents ${modutils} ${initdir}
-cp -fau --parents ${hotplug} ${initdir}
+cp -fau --parents ${bash}/bin ${initdir}
+cp -fau --parents ${utilLinux}/bin ${initdir}
+chmod -R u+w ${initdir}
+cp -fau --parents ${utilLinux}/sbin ${initdir}
+cp -fau --parents ${coreutilsdiet}/bin ${initdir}
+cp -fau --parents ${e2fsprogs}/bin ${initdir}
+chmod -R u+w ${initdir}
+cp -fau --parents ${e2fsprogs}/sbin ${initdir}
+cp -fau --parents ${modutils}/bin ${initdir}
+chmod -R u+w ${initdir}
+cp -fau --parents ${modutils}/sbin ${initdir}
+#cp -fau --parents ${hotplug} ${initdir}
 #cp -fau --parents ${kudzu} ${initdir}
-#cp -fau --parents ${eject} ${initdir}
 
 touch ${archivesDir}/NIXOS
 
