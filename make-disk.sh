@@ -53,10 +53,10 @@ do
   tar -cf - $i | tar --directory=$archivesDir -xf -
 done
 
-utilLinux=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -)))
+utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX_CMD_PATH/nix-instantiate -))
 coreUtilsDiet=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
 e2fsProgs=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
-modUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_tools' | $NIX_CMD_PATH/nix-instantiate -)))
+modUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX_CMD_PATH/nix-instantiate -)))
 Grub=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -)))
 #gnuSed=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX_CMD_PATH/nix-instantiate -)))
 #gnuGrep=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -)))
@@ -64,13 +64,14 @@ Kernel=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).
 SysVinit=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX_CMD_PATH/nix-instantiate -)))
 BootPath=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -)))
 
-bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+#bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
+bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX_CMD_PATH/nix-instantiate -))
 coreutilsdiet=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -))
 coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
 findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
 e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX_CMD_PATH/nix-instantiate -))
-modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).module_init_tools' | $NIX_CMD_PATH/nix-instantiate -))
+modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX_CMD_PATH/nix-instantiate -))
 grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 mingettyWrapper=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 hotplug=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).hotplug' | $NIX_CMD_PATH/nix-instantiate -))
@@ -82,22 +83,23 @@ which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD
 gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
 eject=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX_CMD_PATH/nix-instantiate -))
 sysklogd=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX_CMD_PATH/nix-instantiate -))
+kudzu=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX_CMD_PATH/nix-instantiate -))
 
 #(while read storepath; do
    #cp -fa --parents ${storepath} ${archivesDir}
 #done) < $storePaths
 
-echo utillinux $utilLinux
+#echo utillinux $utilLinux
 
-for i in $utilLinux; do
-  echo i $i
-  deps=( $($NIX_CMD_PATH/nix-store -q --references $i) )
-  echo length ${#deps[@]}
-  if test "${#deps[@]}" = 0
-  then
-    echo zarro
-  fi
-done
+#for i in $utilLinux; do
+#  echo i $i
+#  deps=( $($NIX_CMD_PATH/nix-store -q --references $i) )
+#  echo length ${#deps[@]}
+#  if test "${#deps[@]}" = 0
+#  then
+#    echo zarro
+#  fi
+#done
 
 echo creating directories for bootimage
 
@@ -106,6 +108,7 @@ mkdir ${initdir}/bin
 mkdir ${initdir}/cdrom
 mkdir ${initdir}/dev
 mkdir ${initdir}/etc
+mkdir ${initdir}/etc/sysconfig
 mkdir ${initdir}/installimage
 mkdir ${initdir}/modules
 mkdir ${initdir}/proc
@@ -138,7 +141,7 @@ cp -fa ${nixpkgs} ${archivesDir}
 #cp -fvau --parents ${nano} ${archivesDir}
 #cp -fvau --parents ${gnutar} ${archivesDir}
 
-bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -)))
+bashdeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).bashStatic' | $NIX_CMD_PATH/nix-instantiate -)))
 
 echo copying scripts
 
@@ -155,6 +158,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
     -e "s^@coreutils\@^$coreutils^g" \
+    -e "s^@utilLinux\@^$utilLinux^g" \
     -e "s^@utillinux\@^$utillinux^g" \
     -e "s^@e2fsprogs\@^$e2fsprogs^g" \
     -e "s^@modutils\@^$modutils^g" \
@@ -163,7 +167,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
-    -e "s^@eject\@^$eject^g" \
+    -e "s^@kudzu\@^$kudzu^g" \
     -e "s^@sysklogd\@^$sysklogd^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
@@ -177,7 +181,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
     -e "s^@coreutils\@^$coreutils^g" \
-    -e "s^@utillinux\@^$utillinux^g" \
+    -e "s^@utillinux\@^$utilLinux^g" \
     -e "s^@e2fsprogs\@^$e2fsprogs^g" \
     -e "s^@modutils\@^$modutils^g" \
     -e "s^@grub\@^$grub^g" \
@@ -203,6 +207,10 @@ echo copying kernel
 # of the kernel here.
 cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 
+echo linking kernel modules
+
+ln -s $kernel/lib $archivesDir/lib
+
 echo creating ramdisk
 
 rm -f ${initrd}
@@ -210,16 +218,24 @@ rm -f ${initrd}
 cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
 cp ${archivesDir}/scripts/ramdisk-login.sh ${initdir}/
 cp ${archivesDir}/scripts/init.sh ${initdir}/init
-ln -s ${bash}/bin/bash ${initdir}/bin/sh
+#ln -s ${bash}/bin/bash ${initdir}/bin/sh
+cp ${bash}/bin/bash ${initdir}/bin/sh
 chmod u+x ${initdir}/init
 chmod u+x ${initdir}/fill-disk.sh
 chmod u+x ${initdir}/ramdisk-login.sh
-cp -fau --parents ${bashdeps} ${initdir}
+#cp -fau --parents ${bashdeps} ${initdir}
+#cp -fau --parents ${utilLinux} ${initdir}
+#cp -fau --parents ${coreUtilsDiet} ${initdir}
+#cp -fau --parents ${e2fsProgs} ${initdir}
+#cp -fau --parents ${modUtils} ${initdir}
+#cp -fau --parents ${hotplug} ${initdir}
+cp -fau --parents ${bash} ${initdir}
 cp -fau --parents ${utilLinux} ${initdir}
-cp -fau --parents ${coreUtilsDiet} ${initdir}
-cp -fau --parents ${e2fsProgs} ${initdir}
-cp -fau --parents ${modUtils} ${initdir}
+cp -fau --parents ${coreutilsdiet} ${initdir}
+cp -fau --parents ${e2fsprogs} ${initdir}
+cp -fau --parents ${modutils} ${initdir}
 cp -fau --parents ${hotplug} ${initdir}
+#cp -fau --parents ${kudzu} ${initdir}
 #cp -fau --parents ${eject} ${initdir}
 
 touch ${archivesDir}/NIXOS
@@ -243,4 +259,4 @@ mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
 echo cleaning up
 
 chmod -f -R +w ${archivesDir}/*
-rm -rf ${archivesDir}/*
+#rm -rf ${archivesDir}/*

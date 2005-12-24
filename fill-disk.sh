@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin
+export PATH=@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -194,6 +194,7 @@ mknod -m 0444 $root/dev/urandom c 1 9
 rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
+
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
 ## Find out how Knoppix and SUSE do this...
@@ -221,12 +222,19 @@ echo switch to /nix and /nixpkgs from CD
 ln -s /cdrom/nixpkgs /nixpkgs
 mount --bind /cdrom/nix /nix
 
+echo probing for hardware...
+
+kudzu
 
 export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
 export NIX_STATE_DIR=$root/nix/var/nix
 export NIX_CONF_DIR=$root/nix/etc
 NIX_CMD_PATH=@nix@/bin
+
+echo bringing up networking...
+
+nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 
 echo initialising Nix DB...
 $NIX_CMD_PATH/nix-store --init
@@ -290,13 +298,15 @@ echo "#2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...
+
 make_dir 00755 /etc/networking
-echo 192.168.150.1 > $root/etc/networking/local-ip
-echo 192.168.150.3 > $root/etc/networking/gateway-ip
 #cp /etc/resolv.conf $root/etc
 rm -f $root/etc/hosts
 echo "127.0.0.1 localhost" >> $root/etc/hosts
-#echo "192.168.150.1 uml" >> $root/etc/hosts
+
+echo storing hardware information...
+
+kudzu -p > $root/etc/sysconfig/hwconf
 
 echo setting up initial account information...
 
