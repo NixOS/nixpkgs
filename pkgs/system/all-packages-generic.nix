@@ -311,9 +311,9 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  #bashDiet = (import ../shells/bash-diet) {
-  #  inherit fetchurl stdenv dietgcc;
-  #};
+  bashDiet = (import ../shells/bash-diet) {
+    inherit fetchurl stdenv dietgcc;
+  };
 
 
   ### DEVELOPMENT
@@ -467,7 +467,9 @@ rec {
       inherit stdenv dietlibc;
       gcc = stdenv.gcc;
     };
-    inherit (stdenv.gcc) binutils glibc;
+    #inherit (stdenv.gcc) binutils glibc;
+    inherit (stdenv.gcc) binutils;
+    glibc = dietlibc;
     inherit stdenv;
   };
 
@@ -885,6 +887,10 @@ rec {
 
   popt = (import ../development/libraries/popt) {
     inherit fetchurl stdenv gettext;
+  };
+
+  slang = (import ../development/libraries/slang) {
+    inherit fetchurl stdenv pcre libpng;
   };
 
   cairo = (import ../development/libraries/cairo) {
@@ -1976,6 +1982,12 @@ rec {
   ghostscript = (import ../misc/ghostscript) {
     inherit fetchurl stdenv libjpeg libpng zlib x11;
     x11Support = false;
+  };
+
+  nixStatic = (import ../misc/nix-static) {
+    inherit fetchurl stdenv aterm perl;
+    curl = bootCurl; /* !!! ugly */
+    bdb = db4;
   };
 
   nix = (import ../misc/nix) {
