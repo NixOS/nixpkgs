@@ -1698,6 +1698,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  links = (import ../applications/networking/browsers/links) {
+    inherit fetchurl stdenv;
+  };
+
   w3m = (import ../applications/networking/browsers/w3m) {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext;
   };
