@@ -214,6 +214,10 @@ rec {
     inherit fetchurl stdenv python pygtk makeWrapper;
   };
 
+  azureus = import ../tools/networking/azureus {
+    inherit fetchurl stdenv jdk swt;
+  };
+
   dhcp = (import ../tools/networking/dhcp) {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
   };
@@ -1142,11 +1146,11 @@ rec {
   };
 
   lucene = import ../development/libraries/java/lucene {
-      inherit stdenv fetchurl;
+    inherit stdenv fetchurl;
   };
 
   jdom = import ../development/libraries/java/jdom {
-      inherit stdenv fetchurl;
+    inherit stdenv fetchurl;
   };
 
   javaCup = import ../development/libraries/java/cup {
@@ -1154,27 +1158,33 @@ rec {
   };
 
   jflex = import ../development/libraries/java/jflex {
-      inherit stdenv fetchurl;
+    inherit stdenv fetchurl;
   };
 
   junit = import ../development/libraries/java/junit {
-      inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl unzip;
   };
 
   javasvn = import ../development/libraries/java/javasvn {
-      inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl unzip;
   };
 
   httpunit = import ../development/libraries/java/httpunit {
-      inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl unzip;
   };
 
   mockobjects = import ../development/libraries/java/mockobjects {
-      inherit stdenv fetchurl;
+    inherit stdenv fetchurl;
   };
 
   commonsFileUpload = import ../development/libraries/java/jakarta-commons/file-upload {
-      inherit stdenv fetchurl;
+    inherit stdenv fetchurl;
+  };
+
+  swt = import ../development/libraries/java/swt {
+    inherit stdenv fetchurl unzip jdk pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libXtst;
   };
 
   ### DEVELOPMENT / PERL MODULES

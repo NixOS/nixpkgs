@@ -46,3 +46,6 @@ for i in $(find $out -name "*.pack"); do
     $out/bin/unpack200 "$i" "$(dirname $i)/$(basename $i .pack).jar"
     rm "$i"
 done
+
+# Put the *_md.h files in the right place.
+cd $out/include && ln -s */*_md.h .
