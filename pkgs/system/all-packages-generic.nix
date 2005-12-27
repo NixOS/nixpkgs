@@ -311,8 +311,8 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  bashDiet = (import ../shells/bash-diet) {
-    inherit fetchurl stdenv dietgcc;
+  bashStatic = (import ../shells/bash-static) {
+    inherit fetchurl stdenv;
   };
 
 
