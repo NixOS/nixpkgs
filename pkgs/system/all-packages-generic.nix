@@ -1988,11 +1988,11 @@ rec {
     x11Support = false;
   };
 
-  nixStatic = (import ../misc/nix-static) {
-    inherit fetchurl stdenv aterm perl;
-    curl = bootCurl; /* !!! ugly */
-    bdb = db4;
-  };
+  #nixStatic = (import ../misc/nix-static) {
+  # inherit fetchurl stdenv aterm perl;
+  #  curl = bootCurl; /* !!! ugly */
+  #  bdb = db4;
+  #};
 
   nix = (import ../misc/nix) {
     inherit fetchurl stdenv aterm perl;
