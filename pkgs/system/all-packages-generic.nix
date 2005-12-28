@@ -1486,6 +1486,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  utillinuxStatic = (import ../os-specific/linux/util-linux-static) {
+    inherit fetchurl stdenv;
+  };
+
   sysklogd = (import ../os-specific/linux/sysklogd) {
     inherit fetchurl stdenv;
   };
@@ -1511,6 +1515,10 @@ rec {
   };
 
   module_init_tools = (import ../os-specific/linux/module-init-tools) {
+    inherit fetchurl stdenv;
+  };
+
+  module_init_toolsStatic = (import ../os-specific/linux/module-init-tools-static) {
     inherit fetchurl stdenv;
   };
 
