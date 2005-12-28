@@ -5,5 +5,5 @@ export DESTDIR=$out
 
 genericBuild
 
-strip $out/bin/*
-strip $out/sbin/*
+#strip $out/bin/*
+#strip $out/sbin/*
