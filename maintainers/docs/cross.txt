@@ -314,3 +314,18 @@ too. Earlier on in the build process these flags are used to compile important
 files like libgcc.a by the host system gcc, which does need to be linked
 to glibc. To make this work correctly you will need to carefully juggle
 with compilation flags. This is still work in progress for Nix.
+
+
+---
+
+After succesfully completing the whole toolchain you can start building
+packages with the newly built tools. To make everything build correctly
+you will need a stdenv for your target platform. Setting up this platform
+will take some effort. Right now there is a very experimental setup for
+arm-linux, which needs to be cleaned up before it is production ready.
+
+Please note that many packages are not well suited for cross-compilation.
+Even though the package itself might be very well portable often the
+buildscripts are not. One thing that we have seen that causes frequent
+build failures is the use of the LD variable. This is often set to 'ld'
+and not $(CROSS)-ld.
