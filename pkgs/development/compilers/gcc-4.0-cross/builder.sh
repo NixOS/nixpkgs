@@ -64,7 +64,7 @@ preConfigure() {
     ensureDir $out/$platform/bin
     ln -s $binutilsCross/$platform/bin/as $out/$platform/bin/as
     ln -s $binutilsCross/$platform/bin/ld $out/$platform/bin/ld
-    ln -s $binutilsCross/$platform/ar $out/$platform/bin/ar
+    ln -s $binutilsCross/$platform/bin/ar $out/$platform/bin/ar
     ln -s $binutilsCross/$platform/bin/ranlib $out/$platform/bin/ranlib
 
     # Perform the build in a different directory.
