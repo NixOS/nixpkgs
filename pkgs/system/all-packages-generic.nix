@@ -332,6 +332,11 @@ rec {
     cross = "arm-linux";
   };
 
+  binutilsSparc = (import ../development/tools/misc/binutils-cross) {
+    inherit fetchurl stdenv noSysDirs;
+    cross = "sparc-linux";
+  };
+
   patchelf = (import ../development/tools/misc/patchelf) {
     inherit fetchurl stdenv;
   };
@@ -486,6 +491,23 @@ rec {
       inherit fetchurl stdenv noSysDirs;
     };
     inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
+  gcc40sparc = (import ../build-support/gcc-cross-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    cross = "sparc-linux";
+    gcc = (import ../development/compilers/gcc-4.0-cross) {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = false;
+      langCC = false;
+      binutilsCross = binutilsSparc;
+      kernelHeadersCross = kernelHeadersSparc;
+      cross = "sparc-linux";
+    };
+    inherit (stdenv.gcc) glibc;
+    binutils = binutilsSparc;
     inherit stdenv;
   };
 
@@ -1460,6 +1482,14 @@ rec {
     cross = "mips-linux";
   };
 
+  #uclibcSparc = (import ../development/uclibc) {
+  #  inherit fetchurl stdenv;
+  #  kernelHeadersCross = kernelHeadersSparc;
+  #  binutilsCross = binutilsSparc;
+  #  gccCross = gcc40sparc;
+  #  cross = "sparc-linux";
+  #};
+
   dietlibc = (import ../os-specific/linux/dietlibc) {
     inherit fetchurl stdenv;
   };
@@ -1501,6 +1531,11 @@ rec {
   kernelHeadersMips = (import ../os-specific/linux/kernel-headers-cross) {
     inherit fetchurl stdenv;
     cross = "mips-linux";
+  };
+
+  kernelHeadersSparc = (import ../os-specific/linux/kernel-headers-cross) {
+    inherit fetchurl stdenv;
+    cross = "sparc-linux";
   };
 
   kernel = (import ../os-specific/linux/kernel) {
