@@ -11,7 +11,9 @@ stdenv.mkDerivation {
              then ./config-mips-linux
            else if cross == "arm-linux"
                   then ./config-arm-linux
-                else "";
+                else if cross == "sparc-linux"
+                    then ./config-sparc-linux
+                      else "";
 
   inherit kernelHeadersCross;
   buildInputs = [gccCross binutilsCross];
