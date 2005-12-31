@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     md5 = "6a9d529efb285071dad10e1f3d2b2967";
   };
   inherit noSysDirs;
-  configureFlags = if cross=="arm-linux" then "--target=arm-linux" else if cross=="mips-linux" then "--target=mips-linux" else "";
+  #configureFlags = if cross=="arm-linux" then "--target=arm-linux" else if cross=="mips-linux" then "--target=mips-linux" else if cross=="sparc-linux" then "--target=sparc-linux"; 
+  inherit cross;
 }
