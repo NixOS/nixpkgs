@@ -322,8 +322,14 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
-  binutilsArm = (import ../development/tools/misc/binutils-arm) {
+  binutilsMips = (import ../development/tools/misc/binutils-cross) {
     inherit fetchurl stdenv noSysDirs;
+    cross = "mips-linux";
+  };
+
+  binutilsArm = (import ../development/tools/misc/binutils-cross) {
+    inherit fetchurl stdenv noSysDirs;
+    cross = "arm-linux";
   };
 
   patchelf = (import ../development/tools/misc/patchelf) {
@@ -492,7 +498,9 @@ rec {
       langF77 = false;
       langCC = false;
     };
-    inherit (stdenv.gcc) binutils glibc;
+    #inherit (stdenv.gcc) binutils glibc;
+    inherit (stdenv.gcc) glibc;
+    binutils = binutilsArm;
     inherit stdenv;
   };
   gcc40 = (import ../build-support/gcc-wrapper) {
@@ -1423,6 +1431,13 @@ rec {
   dietlibc = (import ../os-specific/linux/dietlibc) {
     inherit fetchurl stdenv;
   };
+
+  #dietlibcArm = (import ../os-specific/linux/dietlibc-cross) {
+  #  inherit fetchurl stdenv;
+  #  gccCross = gcc40arm;
+  #  binutilsCross = binutilsArm;
+  #  arch = "arm";
+  #};
 
   dietlibcWrapper = (import ../os-specific/linux/dietlibc-wrapper) {
     inherit stdenv dietlibc;
