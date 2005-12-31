@@ -489,20 +489,40 @@ rec {
     inherit stdenv;
   };
 
+  gcc40mips = (import ../build-support/gcc-cross-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    cross = "mips-linux";
+    gcc = (import ../development/compilers/gcc-4.0-cross) {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = false;
+      langCC = false;
+      binutilsCross = binutilsMips;
+      kernelHeadersCross = kernelHeadersMips;
+      cross = "mips-linux";
+    };
+    inherit (stdenv.gcc) glibc;
+    binutils = binutilsMips;
+    inherit stdenv;
+  };
+
   gcc40arm = (import ../build-support/gcc-cross-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
     cross = "arm-linux";
-    gcc = (import ../development/compilers/gcc-4.0-arm) {
-      inherit fetchurl stdenv noSysDirs binutilsArm kernelHeadersArm;
+    gcc = (import ../development/compilers/gcc-4.0-cross) {
+      inherit fetchurl stdenv noSysDirs;
       langF77 = false;
       langCC = false;
+      binutilsCross = binutilsArm;
+      kernelHeadersCross = kernelHeadersArm;
+      cross = "arm-linux";
     };
-    #inherit (stdenv.gcc) binutils glibc;
     inherit (stdenv.gcc) glibc;
     binutils = binutilsArm;
     inherit stdenv;
   };
+
   gcc40 = (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
@@ -1424,8 +1444,20 @@ rec {
   
   ### OS-SPECIFIC
 
-  uclibc = (import ../development/uclibc) {
-    inherit fetchurl stdenv gcc40arm kernelHeadersArm binutilsArm;
+  uclibcArm = (import ../development/uclibc) {
+    inherit fetchurl stdenv;
+    kernelHeadersCross = kernelHeadersArm;
+    binutilsCross = binutilsArm;
+    gccCross = gcc40arm;
+    cross = "arm-linux";
+  };
+
+  uclibcMips = (import ../development/uclibc) {
+    inherit fetchurl stdenv;
+    kernelHeadersCross = kernelHeadersMips;
+    binutilsCross = binutilsMips;
+    gccCross = gcc40mips;
+    cross = "mips-linux";
   };
 
   dietlibc = (import ../os-specific/linux/dietlibc) {
@@ -1461,8 +1493,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  kernelHeadersArm = (import ../os-specific/linux/kernel-headers-arm) {
+  kernelHeadersArm = (import ../os-specific/linux/kernel-headers-cross) {
     inherit fetchurl stdenv;
+    cross = "arm-linux";
+  };
+
+  kernelHeadersMips = (import ../os-specific/linux/kernel-headers-cross) {
+    inherit fetchurl stdenv;
+    cross = "mips-linux";
   };
 
   kernel = (import ../os-specific/linux/kernel) {
