@@ -48,7 +48,7 @@ UCLIBC_HAS_FLOATS=y
 HAS_FPU=y
 # DO_C99_MATH is not set
 #KERNEL_SOURCE="/usr/src/linux"
-KERNEL_SOURCE="$(kernelHeadersArm)"
+KERNEL_SOURCE="$(kernelHeadersCross)"
 C_SYMBOL_PREFIX=""
 HAVE_DOT_CONFIG=y
 
