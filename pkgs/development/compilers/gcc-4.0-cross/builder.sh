@@ -60,19 +60,19 @@ preConfigure() {
 
     # Cross compiler evilness
     ensureDir $out
-    ensureDir $out/arm-linux
-    ensureDir $out/arm-linux/bin
-    ln -s $binutilsArm/arm-linux/bin/as $out/arm-linux/bin/as
-    ln -s $binutilsArm/arm-linux/bin/ld $out/arm-linux/bin/ld
-    ln -s $binutilsArm/arm-linux/bin/ar $out/arm-linux/bin/ar
-    ln -s $binutilsArm/arm-linux/bin/ranlib $out/arm-linux/bin/ranlib
+    ensureDir $out/$platform
+    ensureDir $out/$platform/bin
+    ln -s $binutilsCross/$platform/bin/as $out/$platform/bin/as
+    ln -s $binutilsCross/$platform/bin/ld $out/$platform/bin/ld
+    ln -s $binutilsCross/$platform/ar $out/$platform/bin/ar
+    ln -s $binutilsCross/$platform/bin/ranlib $out/$platform/bin/ranlib
 
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
 
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs --target=$platform --disable-threads --disable-libmudflap --disable-shared --with-headers=$kernelHeadersArm/include --disable-multilib"
+    configureFlags="--enable-languages=$langs --target=$platform --disable-threads --disable-libmudflap --disable-shared --with-headers=$kernelHeadersCross/include --disable-multilib"
 }
 
 
