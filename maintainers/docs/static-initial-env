@@ -14,11 +14,11 @@ The tools can be found in nixpkgs in:
 - tools/networking/curl-diet
 - tools/archivers/gnutar-diet
 - tools/compression/gzip-diet
+- tools/compression/bzip2-static
 - tools/text/gnused-diet
 - tools/text/diffutils-diet
 - tools/text/gnupatch-diet
 - tools/misc/findutils-static
-(still missing: bzip2)
 
 Most packages are compiled with dietlibc, an alternate C library, apart
 from bash and findutils, which are statically linked to glibc. The reason
