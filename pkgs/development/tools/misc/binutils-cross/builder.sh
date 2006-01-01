@@ -6,6 +6,10 @@ elif test $cross = "mips-linux" ; then
   configureFlags="--target=mips-linux"
 elif test $cross = "sparc-linux" ; then
   configureFlags="--target=sparc-linux"
+elif test $cross = "powerpc-linux" ; then
+  configureFlags="--target=powerpc-linux"
+elif test $cross = "ppc-linux" ; then
+  configureFlags="--target=powerpc-linux"
 fi
 
 patchConfigure() {
