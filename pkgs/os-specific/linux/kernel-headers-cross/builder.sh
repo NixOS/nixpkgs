@@ -19,6 +19,10 @@ installPhase() {
            arch=mips
     elif test $cross = "sparc-linux"; then
            arch=sparc
+    elif test $cross = "powerpc-linux"; then
+           arch=ppc
+    elif test $cross = "ppc-linux"; then
+           arch=ppc
     fi
     make include/asm ARCH=$arch
     cp -prvd include/linux include/asm include/asm-$arch include/asm-generic $out/include
