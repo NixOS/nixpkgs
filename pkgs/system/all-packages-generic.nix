@@ -1705,7 +1705,7 @@ rec {
     httpd = apacheHttpd;
   };
 
-  subversion = (import ../applications/version-management/subversion-1.2.x) {
+  subversion = (import ../applications/version-management/subversion-1.3.x) {
     inherit fetchurl stdenv openssl db4 expat swig zlib;
     localServer = true;
     httpServer = false;
