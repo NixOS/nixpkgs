@@ -1558,6 +1558,10 @@ rec {
     inherit stdenv mingetty shadowutils;
   };
 
+  ov511 = (import ../os-specific/linux/ov511) {
+    inherit stdenv fetchurl kernel;
+  };
+
   pam = (import ../os-specific/linux/pam) {
     inherit stdenv fetchurl cracklib;
   };
