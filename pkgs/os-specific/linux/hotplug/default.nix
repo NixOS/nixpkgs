@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bash, gnused, coreutils}:
+{stdenv, fetchurl, bash, gnused, coreutils, utillinux, gnugrep, module_init_tools}:
 
 stdenv.mkDerivation {
   name = "hotplug-2004_03_29";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     md5 = "167bd479a1ca30243c51ca088e0942b3";
   };
   patches = [./hotplug-install-path.patch ./hotplug-install.patch ./hotplug-2004_03_29-bash.patch];
-  inherit bash gnused coreutils;
+  inherit bash gnused coreutils utillinux gnugrep module_init_tools;
 }

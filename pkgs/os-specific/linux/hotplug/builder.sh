@@ -24,6 +24,11 @@ preBuild() {
   mv etc/hotplug/pci.rc.tmp etc/hotplug/pci.rc
 
   sed -e "s^@coreutils\@^$coreutils^g" \
+      -e "s^@gnugrep\@^$gnugrep^g" \
+      -e "s^@utillinux\@^$utillinux^g" \
+      -e "s^@module_init_tools\@^$module_init_tools^g" \
+      -e "s^@gnused\@^$gnused^g" \
+      -e "s^@procps\@^$procps^g" \
       < etc/hotplug/usb.rc > etc/hotplug/usb.rc.tmp
   mv etc/hotplug/usb.rc.tmp etc/hotplug/usb.rc
 

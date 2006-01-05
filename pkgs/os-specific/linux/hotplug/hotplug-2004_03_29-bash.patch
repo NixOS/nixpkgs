@@ -55,7 +55,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/pci.rc hotplug-2004_03_29.new/etc/hotpl
          ;;
    status)
 -	echo $"PCI Status for kernel: "  `uname -srm`
-+	echo $"PCI Status for kernel: "  `@coreutils@/bin/uname -srm`
++	echo $"PCI Status for kernel: "  `@coreutils/bin/uname -srm`
  	echo ''
  
  	if [ -f /proc/bus/pci/devices ]; then
@@ -79,8 +79,18 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug/usb.rc hotplug-2004_03_29.new/etc/hotplug/usb.rc
 --- hotplug-2004_03_29/etc/hotplug/usb.rc	2004-03-29 21:34:30.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-05 18:51:06.000000000 +0100
-@@ -331,7 +331,7 @@
++++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-05 20:26:21.000000000 +0100
+@@ -19,7 +19,8 @@
+ # system console can't be removed by accident.
+ 
+ 
+-PATH=/sbin:/bin:/usr/sbin:/usr/bin
++#PATH=/sbin:/bin:/usr/sbin:/usr/bin
++PATH=@coreutils@/bin:@gnugrep@/bin:@utillinux@/bin:@module_init_tools@/sbin:@gnused@/bin:@procps@/bin
+ 
+ unset I_WANT_A_BROKEN_PS
+ PS_PERSONALITY=linux
+@@ -331,7 +332,7 @@
  	maybe_stop_usb
          ;;
    status)
