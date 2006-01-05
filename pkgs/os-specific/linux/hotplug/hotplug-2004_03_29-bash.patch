@@ -1,0 +1,52 @@
+diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.agent hotplug-2004_03_29.new/etc/hotplug/dasd.agent
+--- hotplug-2004_03_29/etc/hotplug/dasd.agent	2002-08-08 12:05:17.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/dasd.agent	2006-01-05 17:04:58.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ #
+ # Dasd hotplug policy agent for Linux 2.4 kernels
+ #
+diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.permissions hotplug-2004_03_29.new/etc/hotplug/dasd.permissions
+--- hotplug-2004_03_29/etc/hotplug/dasd.permissions	2002-08-08 11:53:23.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/dasd.permissions	2006-01-05 17:05:13.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ #
+ # Copyright (c) 2002 SuSE Linux AG, Nuremberg
+ #
+@@ -27,4 +27,4 @@
+ 	*)
+ 	    die "dasd_permissions: don't know what permissions to give $NODE-$MAJOR-$MINOR-$MISC"
+     esac
+-}
+\ No newline at end of file
++}
+diff -ruN hotplug-2004_03_29/etc/hotplug/tape.agent hotplug-2004_03_29.new/etc/hotplug/tape.agent
+--- hotplug-2004_03_29/etc/hotplug/tape.agent	2002-10-10 15:43:24.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/tape.agent	2006-01-05 17:05:48.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ ###############################################################################
+ # Tape hotplug agent for Linux 2.4 kernels
+ #
+diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new/etc/hotplug/tape.permissions
+--- hotplug-2004_03_29/etc/hotplug/tape.permissions	2002-10-08 13:09:14.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/tape.permissions	2006-01-05 17:06:00.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ #
+ # Copyright (c) 2002 IBM Development Germany, Boeblingen
+ #
+diff -ruN hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug
+--- hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug	2004-03-26 23:34:34.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 17:28:47.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ #
+ # This version of /sbin/hotplug should works on most GNU/Linux systems
+ # using Linux 2.2.18+ or 2.4.* kernels.  On 2.2.*, only USB has such
