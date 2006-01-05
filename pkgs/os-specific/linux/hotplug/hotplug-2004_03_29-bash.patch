@@ -23,6 +23,42 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.permissions hotplug-2004_03_29.new
 -}
 \ No newline at end of file
 +}
+diff -ruN hotplug-2004_03_29/etc/hotplug/hotplug.functions hotplug-2004_03_29.new/etc/hotplug/hotplug.functions
+--- hotplug-2004_03_29/etc/hotplug/hotplug.functions	2004-03-29 21:25:59.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/hotplug.functions	2006-01-05 18:48:13.000000000 +0100
+@@ -13,7 +13,7 @@
+ # DEBUG=yes; export DEBUG
+ PATH=/bin:/sbin:/usr/sbin:/usr/bin
+ 
+-KERNEL=`uname -r`
++KERNEL=`@coreutils/bin/uname -r`
+ MODULE_DIR=/lib/modules/$KERNEL
+ 
+ HOTPLUG_DIR=/etc/hotplug
+diff -ruN hotplug-2004_03_29/etc/hotplug/input.rc hotplug-2004_03_29.new/etc/hotplug/input.rc
+--- hotplug-2004_03_29/etc/hotplug/input.rc	2004-03-26 23:34:34.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/input.rc	2006-01-05 18:50:39.000000000 +0100
+@@ -119,7 +119,7 @@
+ 	: not supported currently
+         ;;
+   status)
+-	echo $"INPUT status for kernel: " `uname -srm`
++	echo $"INPUT status for kernel: " `@coreutils@/bin/uname -srm`
+ 	echo ''
+ 
+ 	echo "INPUT devices:"
+diff -ruN hotplug-2004_03_29/etc/hotplug/pci.rc hotplug-2004_03_29.new/etc/hotplug/pci.rc
+--- hotplug-2004_03_29/etc/hotplug/pci.rc	2004-03-26 23:34:24.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/pci.rc	2006-01-05 18:50:53.000000000 +0100
+@@ -70,7 +70,7 @@
+ 	# echo $"pci stop -- ignored"
+         ;;
+   status)
+-	echo $"PCI Status for kernel: "  `uname -srm`
++	echo $"PCI Status for kernel: "  `@coreutils/bin/uname -srm`
+ 	echo ''
+ 
+ 	if [ -f /proc/bus/pci/devices ]; then
 diff -ruN hotplug-2004_03_29/etc/hotplug/tape.agent hotplug-2004_03_29.new/etc/hotplug/tape.agent
 --- hotplug-2004_03_29/etc/hotplug/tape.agent	2002-10-10 15:43:24.000000000 +0200
 +++ hotplug-2004_03_29.new/etc/hotplug/tape.agent	2006-01-05 17:05:48.000000000 +0100
@@ -41,9 +77,21 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new
  #
  # Copyright (c) 2002 IBM Development Germany, Boeblingen
  #
+diff -ruN hotplug-2004_03_29/etc/hotplug/usb.rc hotplug-2004_03_29.new/etc/hotplug/usb.rc
+--- hotplug-2004_03_29/etc/hotplug/usb.rc	2004-03-29 21:34:30.000000000 +0200
++++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-05 18:51:06.000000000 +0100
+@@ -331,7 +331,7 @@
+ 	maybe_stop_usb
+         ;;
+   status)
+-	echo $"USB Status for kernel: " `uname -srm`
++	echo $"USB Status for kernel: " `@coreutils@/bin/uname -srm`
+ 	echo ''
+ 
+ 	if [ -f /proc/bus/usb/devices ]; then
 diff -ruN hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug
 --- hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug	2004-03-26 23:34:34.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 18:35:55.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 18:47:30.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash

@@ -11,6 +11,22 @@ preBuild() {
       < etc/hotplug/tape.agent > etc/hotplug/tape.agent.tmp
   mv etc/hotplug/tape.agent.tmp etc/hotplug/tape.agent
 
+  sed -e "s^@coreutils\@^$coreutils^g" \
+      < etc/hotplug/hotplug.functions > etc/hotplug/hotplug.functions.tmp
+  mv etc/hotplug/hotplug.functions.tmp etc/hotplug/hotplug.functions
+
+  sed -e "s^@coreutils\@^$coreutils^g" \
+      < etc/hotplug/input.rc > etc/hotplug/input.rc.tmp
+  mv etc/hotplug/input.rc.tmp etc/hotplug/input.rc
+
+  sed -e "s^@coreutils\@^$coreutils^g" \
+      < etc/hotplug/pci.rc > etc/hotplug/pci.rc.tmp
+  mv etc/hotplug/pci.rc.tmp etc/hotplug/pci.rc
+
+  sed -e "s^@coreutils\@^$coreutils^g" \
+      < etc/hotplug/usb.rc > etc/hotplug/usb.rc.tmp
+  mv etc/hotplug/usb.rc.tmp etc/hotplug/usb.rc
+
   sed -e "s^@bash\@^$bash^g" \
       -e "s^@gnused\@^$gnused^g" \
       -e "s^@coreutils\@^$coreutils^g" \
