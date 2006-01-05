@@ -31,7 +31,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/hotplug.functions hotplug-2004_03_29.ne
  PATH=/bin:/sbin:/usr/sbin:/usr/bin
  
 -KERNEL=`uname -r`
-+KERNEL=`@coreutils/bin/uname -r`
++KERNEL=`@coreutils@/bin/uname -r`
  MODULE_DIR=/lib/modules/$KERNEL
  
  HOTPLUG_DIR=/etc/hotplug
@@ -55,7 +55,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/pci.rc hotplug-2004_03_29.new/etc/hotpl
          ;;
    status)
 -	echo $"PCI Status for kernel: "  `uname -srm`
-+	echo $"PCI Status for kernel: "  `@coreutils/bin/uname -srm`
++	echo $"PCI Status for kernel: "  `@coreutils@/bin/uname -srm`
  	echo ''
  
  	if [ -f /proc/bus/pci/devices ]; then
