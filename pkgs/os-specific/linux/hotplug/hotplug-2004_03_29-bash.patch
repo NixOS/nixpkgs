@@ -55,7 +55,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug hotplug-2004_
  # DEBUG=yes export DEBUG
  
 -debug_mesg "arguments ($*) env (`env`)"
-+debug_mesg "arguments ($*) @coreutils@/bin/env (`env`)"
++debug_mesg "arguments ($*) env (`@coreutils@/bin/env`)"
  
  #
  # Only one required argument:  event type type being dispatched.
