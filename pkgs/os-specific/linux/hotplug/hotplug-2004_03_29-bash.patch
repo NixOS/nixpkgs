@@ -43,10 +43,28 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug
 --- hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug	2004-03-26 23:34:34.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 17:28:47.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 18:35:55.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash
  #
  # This version of /sbin/hotplug should works on most GNU/Linux systems
  # using Linux 2.2.18+ or 2.4.* kernels.  On 2.2.*, only USB has such
+@@ -32,7 +32,7 @@
+ 
+ # DEBUG=yes export DEBUG
+ 
+-debug_mesg "arguments ($*) env (`env`)"
++debug_mesg "arguments ($*) @coreutils@/bin/env (`env`)"
+ 
+ #
+ # Only one required argument:  event type type being dispatched.
+@@ -47,7 +47,7 @@
+ 
+ 	AGENTS=""
+ 	for AGENT in /etc/hotplug/*.agent ; do
+-	    TYPE=`basename $AGENT | sed s/.agent//`
++	    TYPE=`@coreutils@/bin/basename $AGENT | @gnused@/bin/sed s/.agent//`
+ 	    if [ -x $AGENT ]; then
+ 		AGENTS="$AGENTS $TYPE"
+ 	    else

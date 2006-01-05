@@ -12,6 +12,8 @@ preBuild() {
   mv etc/hotplug/tape.agent.tmp etc/hotplug/tape.agent
 
   sed -e "s^@bash\@^$bash^g" \
+         "s^@gnused\@^$gnused^g" \
+         "s^@coreutils\@^$coreutils^g" \
       < etc/hotplug.d/default/default.hotplug > etc/hotplug.d/default/default.hotplug.tmp
   mv etc/hotplug.d/default/default.hotplug.tmp etc/hotplug.d/default/default.hotplug
 }
