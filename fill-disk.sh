@@ -224,7 +224,7 @@ mount --bind /cdrom/nix /nix
 
 echo probing for hardware...
 
-kudzu
+#kudzu
 
 export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
@@ -232,11 +232,11 @@ export NIX_STATE_DIR=$root/nix/var/nix
 export NIX_CONF_DIR=$root/nix/etc
 NIX_CMD_PATH=@nix@/bin
 
-echo bringing up networking...
+#echo bringing up networking...
 
-nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
+#nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 
-echo "NIC: $nic"
+#echo "NIC: $nic"
 
 echo initialising Nix DB...
 $NIX_CMD_PATH/nix-store --init
@@ -309,7 +309,7 @@ echo "127.0.0.1 localhost" >> $root/etc/hosts
 
 echo storing hardware information...
 
-kudzu -p > $root/etc/sysconfig/hwconf
+#kudzu -p > $root/etc/sysconfig/hwconf
 #cp /etc/modprobe.conf $root/etc/
 
 echo setting up initial account information...

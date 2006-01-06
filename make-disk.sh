@@ -83,7 +83,7 @@ which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD
 gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
 eject=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX_CMD_PATH/nix-instantiate -))
 sysklogd=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX_CMD_PATH/nix-instantiate -))
-kudzu=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX_CMD_PATH/nix-instantiate -))
+#kudzu=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX_CMD_PATH/nix-instantiate -))
 
 #(while read storepath; do
    #cp -fa --parents ${storepath} ${archivesDir}
@@ -231,13 +231,17 @@ chmod u+x ${initdir}/ramdisk-login.sh
 cp -fau --parents ${bash}/bin ${initdir}
 cp -fau --parents ${utilLinux}/bin ${initdir}
 chmod -R u+w ${initdir}
+echo utilLinux $utilLinux
 cp -fau --parents ${utilLinux}/sbin ${initdir}
+echo coreutils
 cp -fau --parents ${coreutilsdiet}/bin ${initdir}
 cp -fau --parents ${e2fsprogs}/bin ${initdir}
 chmod -R u+w ${initdir}
+echo e2fsprogs
 cp -fau --parents ${e2fsprogs}/sbin ${initdir}
 cp -fau --parents ${modutils}/bin ${initdir}
 chmod -R u+w ${initdir}
+echo modutils
 cp -fau --parents ${modutils}/sbin ${initdir}
 #cp -fau --parents ${hotplug} ${initdir}
 #cp -fau --parents ${kudzu} ${initdir}
