@@ -25,7 +25,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.permissions hotplug-2004_03_29.new
 +}
 diff -ruN hotplug-2004_03_29/etc/hotplug/hotplug.functions hotplug-2004_03_29.new/etc/hotplug/hotplug.functions
 --- hotplug-2004_03_29/etc/hotplug/hotplug.functions	2004-03-29 21:25:59.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/hotplug.functions	2006-01-07 23:15:07.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/hotplug.functions	2006-01-08 00:11:10.000000000 +0100
 @@ -11,9 +11,9 @@
  #
  
@@ -62,6 +62,44 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/hotplug.functions hotplug-2004_03_29.ne
      }
  fi
  
+@@ -54,7 +54,7 @@
+ # Autocleaning happens if none of the devices are open, once any of
+ # them gets opened; wrong timing.
+ #
+-MODPROBE="/sbin/modprobe -s -q"
++MODPROBE="@module-init-tools@/sbin/modprobe -s -q"
+ #MODPROBE="/sbin/modprobe -vs"
+ 
+ 
+@@ -128,8 +128,8 @@
+     do
+ 	# maybe driver modules need loading
+         LOADED=false
+-	if ! lsmod | grep -q "^$MODULE " > /dev/null 2>&1; then
+-	    if grep -q "^$MODULE\$" $HOTPLUG_DIR/blacklist \
++	if ! @module-init-tools@/sbin/lsmod | @gnugrep@/bin/grep -q "^$MODULE " > /dev/null 2>&1; then
++	    if @gnugrep@/bin/grep -q "^$MODULE\$" $HOTPLUG_DIR/blacklist \
+ 		    >/dev/null 2>&1; then
+ 		debug_mesg "... blacklisted module:  $MODULE"
+ 		continue
+@@ -166,7 +166,7 @@
+ 	if [ $LOADED = false ]; then
+ 	    mesg "missing kernel or user mode driver $MODULE "
+ 	fi
+-	if echo "$MODULE" | grep -q "usb-storage" > /dev/null 2>&1 ; then
++	if echo "$MODULE" | @gnugrep@/bin/grep -q "usb-storage" > /dev/null 2>&1 ; then
+ 	    [ -x /usr/sbin/updfstab ] &&  /usr/sbin/updfstab
+ 	fi
+     done
+@@ -185,7 +185,7 @@
+ 	echo "HOTPLUG_TIME='$(/bin/date)'"
+     fi
+ 
+-    env | egrep -v '^PATH=|^PWD=|^_=|^OLDPWD=|^SHLVL=|^HOME='
++    @coreutils@/bin/env | @gnugrep@/bin/egrep -v '^PATH=|^PWD=|^_=|^OLDPWD=|^SHLVL=|^HOME='
+     echo ''
+     # empty line terminates events
+ }
 diff -ruN hotplug-2004_03_29/etc/hotplug/input.rc hotplug-2004_03_29.new/etc/hotplug/input.rc
 --- hotplug-2004_03_29/etc/hotplug/input.rc	2004-03-26 23:34:34.000000000 +0100
 +++ hotplug-2004_03_29.new/etc/hotplug/input.rc	2006-01-07 23:10:53.000000000 +0100

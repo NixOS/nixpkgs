@@ -13,6 +13,8 @@ preBuild() {
 
   sed -e "s^@coreutils\@^$coreutils^g" \
       -e "s^@utillinux\@^$utillinux^g" \
+      -e "s^@gnugrep\@^$gnugrep^g" \
+      -e "s^@module_init_tools\@^$module-init-tools^g" \
       < etc/hotplug/hotplug.functions > etc/hotplug/hotplug.functions.tmp
   mv etc/hotplug/hotplug.functions.tmp etc/hotplug/hotplug.functions
 
