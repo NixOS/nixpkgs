@@ -46,4 +46,4 @@ cd $ov511
 find . -not -path "./lib/modules/$kernelVersion/build*" -type d | xargs -n 1 -i% mkdir -p $archivesDir/%
 
 # link all files
-find . -not -path "./lib/modules/$kernelVersion/build*" -type f | xargs -n 1 -i% ln -s $kernel/% $archivesDir/%
+find . -not -path "./lib/modules/$kernelVersion/build*" -type f | xargs -n 1 -i% ln -s $ov511/% $archivesDir/%
