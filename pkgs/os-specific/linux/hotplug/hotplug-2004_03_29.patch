@@ -1,6 +1,6 @@
 diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.agent hotplug-2004_03_29.new/etc/hotplug/dasd.agent
 --- hotplug-2004_03_29/etc/hotplug/dasd.agent	2002-08-08 12:05:17.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/dasd.agent	2006-01-05 17:04:58.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/dasd.agent	2006-01-07 23:10:53.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash
@@ -9,7 +9,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.agent hotplug-2004_03_29.new/etc/h
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.permissions hotplug-2004_03_29.new/etc/hotplug/dasd.permissions
 --- hotplug-2004_03_29/etc/hotplug/dasd.permissions	2002-08-08 11:53:23.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/dasd.permissions	2006-01-05 17:05:13.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/dasd.permissions	2006-01-07 23:10:53.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash
@@ -25,19 +25,46 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/dasd.permissions hotplug-2004_03_29.new
 +}
 diff -ruN hotplug-2004_03_29/etc/hotplug/hotplug.functions hotplug-2004_03_29.new/etc/hotplug/hotplug.functions
 --- hotplug-2004_03_29/etc/hotplug/hotplug.functions	2004-03-29 21:25:59.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/hotplug.functions	2006-01-05 20:29:47.000000000 +0100
-@@ -13,7 +13,7 @@
++++ hotplug-2004_03_29.new/etc/hotplug/hotplug.functions	2006-01-07 23:15:07.000000000 +0100
+@@ -11,9 +11,9 @@
+ #
+ 
  # DEBUG=yes; export DEBUG
- PATH=/bin:/sbin:/usr/sbin:/usr/bin
+-PATH=/bin:/sbin:/usr/sbin:/usr/bin
++#PATH=/bin:/sbin:/usr/sbin:/usr/bin
  
 -KERNEL=`uname -r`
 +KERNEL=`@coreutils@/bin/uname -r`
  MODULE_DIR=/lib/modules/$KERNEL
  
  HOTPLUG_DIR=/etc/hotplug
+@@ -22,10 +22,10 @@
+     . /etc/sysconfig/hotplug
+ fi
+ 
+-if [ -x /usr/bin/logger ]; then
+-    LOGGER=/usr/bin/logger
+-elif [ -x /bin/logger ]; then
+-    LOGGER=/bin/logger
++if [ -x @utillinux@/bin/logger ]; then
++    LOGGER=@utillinux@/bin/logger
++#elif [ -x /bin/logger ]; then
++    #LOGGER=/bin/logger
+ else
+     unset LOGGER
+ fi
+@@ -38,7 +38,7 @@
+     }
+ else
+     mesg () {
+-	$LOGGER -t $(basename $0)"[$$]" "$@"
++	$LOGGER -t $(@coreutils@/bin/basename $0)"[$$]" "$@"
+     }
+ fi
+ 
 diff -ruN hotplug-2004_03_29/etc/hotplug/input.rc hotplug-2004_03_29.new/etc/hotplug/input.rc
 --- hotplug-2004_03_29/etc/hotplug/input.rc	2004-03-26 23:34:34.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug/input.rc	2006-01-05 18:50:39.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/input.rc	2006-01-07 23:10:53.000000000 +0100
 @@ -119,7 +119,7 @@
  	: not supported currently
          ;;
@@ -49,7 +76,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/input.rc hotplug-2004_03_29.new/etc/hot
  	echo "INPUT devices:"
 diff -ruN hotplug-2004_03_29/etc/hotplug/pci.rc hotplug-2004_03_29.new/etc/hotplug/pci.rc
 --- hotplug-2004_03_29/etc/hotplug/pci.rc	2004-03-26 23:34:24.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug/pci.rc	2006-01-05 18:50:53.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/pci.rc	2006-01-07 23:10:53.000000000 +0100
 @@ -70,7 +70,7 @@
  	# echo $"pci stop -- ignored"
          ;;
@@ -61,7 +88,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/pci.rc hotplug-2004_03_29.new/etc/hotpl
  	if [ -f /proc/bus/pci/devices ]; then
 diff -ruN hotplug-2004_03_29/etc/hotplug/tape.agent hotplug-2004_03_29.new/etc/hotplug/tape.agent
 --- hotplug-2004_03_29/etc/hotplug/tape.agent	2002-10-10 15:43:24.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/tape.agent	2006-01-05 17:05:48.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/tape.agent	2006-01-07 23:10:53.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash
@@ -70,7 +97,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.agent hotplug-2004_03_29.new/etc/h
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new/etc/hotplug/tape.permissions
 --- hotplug-2004_03_29/etc/hotplug/tape.permissions	2002-10-08 13:09:14.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/tape.permissions	2006-01-05 17:06:00.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/tape.permissions	2006-01-07 23:10:53.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash
@@ -79,7 +106,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug/usb.agent hotplug-2004_03_29.new/etc/hotplug/usb.agent
 --- hotplug-2004_03_29/etc/hotplug/usb.agent	2004-03-26 23:36:38.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug/usb.agent	2006-01-05 20:44:40.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/usb.agent	2006-01-07 23:10:53.000000000 +0100
 @@ -143,7 +143,7 @@
      if [ ! -f $SYSFS/$DEVPATH/bNumConfigurations ]; then
  	exit 0
@@ -151,7 +178,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/usb.agent hotplug-2004_03_29.new/etc/ho
      fi
 diff -ruN hotplug-2004_03_29/etc/hotplug/usb.rc hotplug-2004_03_29.new/etc/hotplug/usb.rc
 --- hotplug-2004_03_29/etc/hotplug/usb.rc	2004-03-29 21:34:30.000000000 +0200
-+++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-05 20:26:21.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-07 23:10:53.000000000 +0100
 @@ -19,7 +19,8 @@
  # system console can't be removed by accident.
  
@@ -173,7 +200,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/usb.rc hotplug-2004_03_29.new/etc/hotpl
  	if [ -f /proc/bus/usb/devices ]; then
 diff -ruN hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug
 --- hotplug-2004_03_29/etc/hotplug.d/default/default.hotplug	2004-03-26 23:34:34.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-05 18:47:30.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug.d/default/default.hotplug	2006-01-07 23:10:53.000000000 +0100
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!@bash@/bin/bash

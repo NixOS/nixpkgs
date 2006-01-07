@@ -12,6 +12,7 @@ preBuild() {
   mv etc/hotplug/tape.agent.tmp etc/hotplug/tape.agent
 
   sed -e "s^@coreutils\@^$coreutils^g" \
+      -e "s^@utillinux\@^$utillinux^g" \
       < etc/hotplug/hotplug.functions > etc/hotplug/hotplug.functions.tmp
   mv etc/hotplug/hotplug.functions.tmp etc/hotplug/hotplug.functions
 
