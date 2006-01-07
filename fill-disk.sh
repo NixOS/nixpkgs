@@ -173,6 +173,7 @@ make_dir 00755 /var/lock
 make_dir 00755 /var/lock/subsys
 make_dir 00755 /var/log
 make_dir 00755 /var/run
+make_dir 00755 /var/run/usb
 make_dir 00755 /var/spool
 make_dir 00755 /var/state
 make_dir 00755 /var/state/dhcp
