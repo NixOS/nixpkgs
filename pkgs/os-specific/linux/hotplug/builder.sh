@@ -24,6 +24,7 @@ preBuild() {
   mv etc/hotplug/pci.rc.tmp etc/hotplug/pci.rc
 
   sed -e "s^@gnused\@^$gnused^g" \
+      -e "s^@coreutils\@^$coreutils^g" \
       < etc/hotplug/usb.agent > etc/hotplug/usb.agent.tmp
   mv etc/hotplug/usb.agent.tmp etc/hotplug/usb.agent
 
