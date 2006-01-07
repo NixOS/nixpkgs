@@ -835,6 +835,10 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
+  libusb = (import ../development/libraries/libusb) {
+    inherit fetchurl stdenv;
+  };
+
   speex = (import ../development/libraries/speex) {
     inherit fetchurl stdenv;
   };
@@ -1637,6 +1641,10 @@ rec {
 
   hotplug = import ../os-specific/linux/hotplug {
     inherit fetchurl stdenv bash gnused coreutils utillinux gnugrep module_init_tools;
+  };
+
+  usbutils = import ../os-specific/linux/usbutils {
+    inherit fetchurl stdenv libusb;
   };
 
   udev = import ../os-specific/linux/udev {
