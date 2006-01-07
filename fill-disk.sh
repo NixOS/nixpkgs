@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin
+export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@xawtv@/bin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -8,6 +8,7 @@ export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils
 ##
 
 kernel=@kernel@
+xawtv=@xawtv@
 
 storePaths=/mystorepaths
 
@@ -92,11 +93,17 @@ echo starting emergency shell on tty2
 
 exec ./ramdisk-login.sh /dev/tty2 &
 
+echo formatting target device
+
 targetdrive=/dev/hda
 device=${targetdrive}1
 mkfs.ext2 ${device}
-mkswap ${targetdrive}2
+swapdevice=${targetdrive}2
+mkswap $swapdevice
 
+echo enabling swap
+
+swapon $swapdevice
 
 #if ! test -n "$1"
 #then
@@ -297,8 +304,8 @@ echo "id:2:initdefault:" >> $root/etc/inittab
 echo "si::bootwait:$bootPath/bin/boot.sh" >> $root/etc/inittab
 echo "ht:06:wait:$bootPath/bin/halt.sh" >> $root/etc/inittab
 echo "1:2345:respawn:$bootPath/bin/login.sh /dev/tty1" >> $root/etc/inittab
-echo "2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
-echo "3:2345:respawn:$mingetty/sbin/mingetty tty3" >> $root/etc/inittab
+echo "#2:2345:respawn:$mingetty/sbin/mingetty tty2" >> $root/etc/inittab
+echo "#3:2345:respawn:$mingetty/sbin/mingetty tty3" >> $root/etc/inittab
 #echo "2:2345:respawn:$bootPath/bin/login.sh /dev/ttys/1" >> $root/etc/inittab
 
 echo setting up networking information...
@@ -326,6 +333,7 @@ echo default profile for root
 echo "source @nix@/etc/profile.d/nix.sh" > $root/root/.profile
 
 touch_file /etc/login.defs
+touch_file /etc/services
 
 ###
 ### Do kernel stuff here.
