@@ -225,20 +225,14 @@ chmod u+x ${initdir}/fill-disk.sh
 chmod u+x ${initdir}/ramdisk-login.sh
 #cp -fau --parents ${utilLinux} ${initdir}
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
-#cp -fau --parents ${e2fsProgs} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
 #cp -fau --parents ${hotplug} ${initdir}
 cp -fau --parents ${bash}/bin ${initdir}
 cp -fau --parents ${utilLinux}/bin ${initdir}
 chmod -R u+w ${initdir}
-echo utilLinux $utilLinux
 cp -fau --parents ${utilLinux}/sbin ${initdir}
-echo coreutils
+cp -fau --parents ${e2fsProgs} ${initdir}
 cp -fau --parents ${coreutilsdiet}/bin ${initdir}
-cp -fau --parents ${e2fsprogs}/bin ${initdir}
-chmod -R u+w ${initdir}
-echo e2fsprogs
-cp -fau --parents ${e2fsprogs}/sbin ${initdir}
 cp -fau --parents ${modutils}/bin ${initdir}
 chmod -R u+w ${initdir}
 echo modutils

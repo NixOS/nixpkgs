@@ -1,4 +1,4 @@
-{ stdenv, kernel, bash, bashStatic, coreutils, findutilsWrapper, utillinux, utillinuxStatic, sysvinit, e2fsprogs
+{ stdenv, bash, bashStatic, coreutils, findutilsWrapper, utillinux, utillinuxStatic, sysvinit, e2fsprogs
 , nettools, nix, subversion, gcc, wget, which, vim, less, screen, openssh
 , binutils, strace, shadowutils, iputils, gnumake, curl, gnused, gnugrep
 , gnutar, gzip, mingettyWrapper, grubWrapper, parted, module_init_tools, hotplug
@@ -12,7 +12,7 @@ derivation {
   halt = ./halt.sh;
   login = ./login.sh;
   env = ./env.sh;
-  inherit stdenv kernel bash bashStatic coreutils findutilsWrapper utillinux sysvinit
+  inherit stdenv bash bashStatic coreutils findutilsWrapper utillinux sysvinit
           e2fsprogs nettools nix subversion gcc wget which vim less screen
           openssh binutils strace shadowutils iputils gnumake curl gnused
           gnutar gnugrep gzip mingettyWrapper grubWrapper parted module_init_tools
