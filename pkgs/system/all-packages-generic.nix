@@ -1636,7 +1636,7 @@ rec {
   };
 
   hotplug = import ../os-specific/linux/hotplug {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv bash gnused coreutils utillinux gnugrep module_init_tools;
   };
 
   udev = import ../os-specific/linux/udev {
