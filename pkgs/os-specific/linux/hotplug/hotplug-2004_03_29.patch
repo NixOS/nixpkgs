@@ -106,7 +106,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/tape.permissions hotplug-2004_03_29.new
  #
 diff -ruN hotplug-2004_03_29/etc/hotplug/usb.agent hotplug-2004_03_29.new/etc/hotplug/usb.agent
 --- hotplug-2004_03_29/etc/hotplug/usb.agent	2004-03-26 23:36:38.000000000 +0100
-+++ hotplug-2004_03_29.new/etc/hotplug/usb.agent	2006-01-07 23:10:53.000000000 +0100
++++ hotplug-2004_03_29.new/etc/hotplug/usb.agent	2006-01-07 23:59:02.000000000 +0100
 @@ -143,7 +143,7 @@
      if [ ! -f $SYSFS/$DEVPATH/bNumConfigurations ]; then
  	exit 0
@@ -167,7 +167,7 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/usb.agent hotplug-2004_03_29.new/etc/ho
  fi
  export REMOVER
  
-@@ -365,7 +365,7 @@
+@@ -365,13 +365,13 @@
  
      FOUND=false
      if [ -f $SYSFS/$DEVPATH/manufacturer ]; then
@@ -176,6 +176,22 @@ diff -ruN hotplug-2004_03_29/etc/hotplug/usb.agent hotplug-2004_03_29.new/etc/ho
      else
  	LABEL="USB product $PRODUCT"
      fi
+ 
+     if [ -e "$REMOVER" ]; then
+-	rm -f "$REMOVER"
++	@coreutils@/bin/rm -f "$REMOVER"
+     fi
+ 
+     # on 2.4 systems, modutils 2.4.2+ maintains MAP_CURRENT
+@@ -430,7 +430,7 @@
+     if [ -x $REMOVER ]; then
+ 	$REMOVER
+     fi
+-    rm -f $REMOVER
++    @coreutils@/bin/rm -f $REMOVER
+ 
+     if [ -x /usr/sbin/updfstab ]; then
+         /usr/sbin/updfstab
 diff -ruN hotplug-2004_03_29/etc/hotplug/usb.rc hotplug-2004_03_29.new/etc/hotplug/usb.rc
 --- hotplug-2004_03_29/etc/hotplug/usb.rc	2004-03-29 21:34:30.000000000 +0200
 +++ hotplug-2004_03_29.new/etc/hotplug/usb.rc	2006-01-07 23:10:53.000000000 +0100
