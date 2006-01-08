@@ -1,2531 +1,2591 @@
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, expat, libdrm, libpng
-, zlib, perl, mesa
+, expat, libdrm, libpng, zlib, perl, mesa
 }:
 
 rec {
 
-  xf86bigfontproto = stdenv.mkDerivation {
-    name = "xf86bigfontproto-1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86bigfontproto-1.1.1.tar.bz2;
-      md5 = "2094b427cfeb7b4efd24709ead752202";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputfpit = stdenv.mkDerivation {
-    name = "xf86-input-fpit-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-fpit-1.0.0.1.tar.bz2;
-      md5 = "06e99b7891a7217dfba60a24841a756d";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontadobe75dpi = stdenv.mkDerivation {
-    name = "font-adobe-75dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-adobe-75dpi-0.99.1.tar.bz2;
-      md5 = "15812ce5711317909351ab1612287e4e";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  xf86videosavage = stdenv.mkDerivation {
-    name = "xf86-video-savage-2.0.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-savage-2.0.1.1.tar.bz2;
-      md5 = "3ec4c313056367919d6164ec5e2f5b02";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  compositeproto = stdenv.mkDerivation {
-    name = "compositeproto-0.2.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/compositeproto-0.2.1.tar.bz2;
-      md5 = "d3f305df7a840335c37884b0b27653db";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videosunleo = stdenv.mkDerivation {
-    name = "xf86-video-sunleo-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-sunleo-1.0.0.1.tar.bz2;
-      md5 = "31432370c6bef5fb650ffb3435892321";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  scripts = stdenv.mkDerivation {
-    name = "scripts-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/scripts-0.99.1.tar.bz2;
-      md5 = "f93f3c3d91313e60e6ce94462a0efde9";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  bigreqsproto = stdenv.mkDerivation {
-    name = "bigreqsproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/bigreqsproto-1.0.1.tar.bz2;
-      md5 = "8c95cefe2fa6723f96670123c1bc8bba";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xwd = stdenv.mkDerivation {
-    name = "xwd-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xwd-0.99.1.tar.bz2;
-      md5 = "28ee7e7e9cf3f3f5d57415fffd91dbb9";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  fontbitstream100dpi = stdenv.mkDerivation {
-    name = "font-bitstream-100dpi-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bitstream-100dpi-0.99.0.tar.bz2;
-      md5 = "4fd1dbb3e62481f3ffd1e826ffb00267";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xsetpointer = stdenv.mkDerivation {
-    name = "xsetpointer-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xsetpointer-0.99.1.tar.bz2;
-      md5 = "ef37cb3b6d8554caeb7e1f02ecaf3434";
-    };
-    buildInputs = [pkgconfig libXi libX11 ];
-  };
-    
-  libXdmcp = stdenv.mkDerivation {
-    name = "libXdmcp-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXdmcp-0.99.1.tar.bz2;
-      md5 = "616a9f01d5204d372922a14c3a209fa6";
-    };
-    buildInputs = [pkgconfig xproto ];
-  };
-    
-  libXprintUtil = stdenv.mkDerivation {
-    name = "libXprintUtil-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXprintUtil-0.99.1.tar.bz2;
-      md5 = "de33d1024133b1d3b2afc33c5e9bdf47";
-    };
-    buildInputs = [pkgconfig libX11 libXp libXt ];
-  };
-    
-  smproxy = stdenv.mkDerivation {
-    name = "smproxy-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/smproxy-0.99.1.tar.bz2;
-      md5 = "251b41f4582c2b55532ec48e47d1a3f5";
-    };
-    buildInputs = [pkgconfig libXt libXmu ];
-  };
-    
-  fslsfonts = stdenv.mkDerivation {
-    name = "fslsfonts-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fslsfonts-0.99.1.tar.bz2;
-      md5 = "316737ee49fb85ba7e0ce8955bcd7da5";
-    };
-    buildInputs = [pkgconfig libX11 libFS ];
-  };
-    
-  xf86videov4l = stdenv.mkDerivation {
-    name = "xf86-video-v4l-0.0.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-v4l-0.0.1.1.tar.bz2;
-      md5 = "30c7e6bebf3ae5ba9f3dfadd5dbc3338";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputcalcomp = stdenv.mkDerivation {
-    name = "xf86-input-calcomp-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-calcomp-1.0.0.1.tar.bz2;
-      md5 = "3220d46c9e24cf2d7e34651a7eb62a03";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  ico = stdenv.mkDerivation {
-    name = "ico-0.99.2";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/ico-0.99.2.tar.bz2;
-      md5 = "a244a9c7645f90b158409daaab216fcc";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  fontscreencyrillic = stdenv.mkDerivation {
-    name = "font-screen-cyrillic-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-screen-cyrillic-0.99.0.tar.bz2;
-      md5 = "0391b7b1a35b59b4e692ad33ed8a93fe";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  windowswmproto = stdenv.mkDerivation {
-    name = "windowswmproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/windowswmproto-1.0.1.tar.bz2;
-      md5 = "3e1bbd12b6fb91095fac84f6db064e92";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xtrans = stdenv.mkDerivation {
-    name = "xtrans-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xtrans-0.99.1.tar.bz2;
-      md5 = "09f19c8fa017306a3cfb614d90b665ea";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videoi740 = stdenv.mkDerivation {
-    name = "xf86-video-i740-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-i740-1.0.0.1.tar.bz2;
-      md5 = "f4327e32147ba8e1a207d53c19498f21";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputhyperpen = stdenv.mkDerivation {
-    name = "xf86-input-hyperpen-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-hyperpen-1.0.0.1.tar.bz2;
-      md5 = "bae491946753f4431f9315ba5a0f6dd3";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videonv = stdenv.mkDerivation {
-    name = "xf86-video-nv-1.0.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-nv-1.0.1.1.tar.bz2;
-      md5 = "55ddc763e67ef4dbc6808cef00ee9719";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontmiscethiopic = stdenv.mkDerivation {
-    name = "font-misc-ethiopic-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-misc-ethiopic-0.99.1.tar.bz2;
-      md5 = "57456ef69c6fc7d6133076c248704125";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputdynapro = stdenv.mkDerivation {
-    name = "xf86-input-dynapro-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-dynapro-1.0.0.1.tar.bz2;
-      md5 = "f58a104ff01d56dc2b0b1903c9db7423";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86dgaproto = stdenv.mkDerivation {
-    name = "xf86dgaproto-2.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86dgaproto-2.0.1.tar.bz2;
-      md5 = "1dd58688aff1af4be66b1553376c9560";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xdbedizzy = stdenv.mkDerivation {
-    name = "xdbedizzy-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xdbedizzy-0.99.1.tar.bz2;
-      md5 = "7955db459cb69c63e4ed18e7ffbf434e";
-    };
-    buildInputs = [pkgconfig libXp libXext libXprintUtil ];
-  };
-    
-  xf86inputdigitaledge = stdenv.mkDerivation {
-    name = "xf86-input-digitaledge-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-digitaledge-1.0.0.1.tar.bz2;
-      md5 = "c48acca06f918252e000e55966268d08";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xwud = stdenv.mkDerivation {
-    name = "xwud-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xwud-0.99.1.tar.bz2;
-      md5 = "b25b8fa47cce2bf0206c244dfe617ed9";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  xmag = stdenv.mkDerivation {
-    name = "xmag-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmag-0.99.1.tar.bz2;
-      md5 = "ff2bd7baef9fb864550bf6854e25d6ce";
-    };
-    buildInputs = [pkgconfig libXaw ];
-  };
-    
-  xfd = stdenv.mkDerivation {
-    name = "xfd-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfd-0.99.1.tar.bz2;
-      md5 = "d1404167dd6040b11066d0b738d21662";
-    };
-    buildInputs = [pkgconfig freetype fontconfig libXft ];
-  };
-    
-  xf86videoi810 = stdenv.mkDerivation {
-    name = "xf86-video-i810-1.4.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-i810-1.4.0.1.tar.bz2;
-      md5 = "9672a46773966c72d2d46e515c0324be";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libXvMC libdrm xf86driproto randrproto renderproto mesa glproto fontsproto  ];
-    # !!! possible "randrproto renderproto" should be propagated by xorg-server
-  };
-    
-  libXtst = stdenv.mkDerivation {
-    name = "libXtst-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXtst-0.99.1.tar.bz2;
-      md5 = "c968b5f2df8b306d515c1b63b1e96851";
-    };
-    buildInputs = [pkgconfig libX11 libXext recordproto xextproto inputproto ];
-  };
-    
-  xlsfonts = stdenv.mkDerivation {
-    name = "xlsfonts-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xlsfonts-0.99.1.tar.bz2;
-      md5 = "c060717cc4ad6a9eac4235721c043293";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  xfwp = stdenv.mkDerivation {
-    name = "xfwp-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfwp-0.99.1.tar.bz2;
-      md5 = "9bbad1be138f872a4bbdd78cb72b4b27";
-    };
-    buildInputs = [pkgconfig libX11 libICE xproxymanagementprotocol ];
-  };
-    
-  libXrender = stdenv.mkDerivation {
-    name = "libXrender-0.9.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXrender-0.9.0.tar.bz2;
-      md5 = "c226b737371595fb20743c3741534259";
-    };
-    buildInputs = [pkgconfig libX11 renderproto ];
-  };
-    
-  xextproto = stdenv.mkDerivation {
-    name = "xextproto-7.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xextproto-7.0.1.tar.bz2;
-      md5 = "acf940f28d8f827cb4ffa8490e6a29e3";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videosis = stdenv.mkDerivation {
-    name = "xf86-video-sis-0.8.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-sis-0.8.0.1.tar.bz2;
-      md5 = "ac0723c894c7defa85ddaa6a35bbb537";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  fontmisccyrillic = stdenv.mkDerivation {
-    name = "font-misc-cyrillic-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-misc-cyrillic-0.99.0.tar.bz2;
-      md5 = "7d07c72c1ca740caf1d7c211a6fc7115";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fonttosfnt = stdenv.mkDerivation {
-    name = "fonttosfnt-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fonttosfnt-0.99.1.tar.bz2;
-      md5 = "d03539430985d45db534b0273e3d964f";
-    };
-    buildInputs = [pkgconfig libX11 freetype libfontenc ];
-  };
-    
-  fontarabicmisc = stdenv.mkDerivation {
-    name = "font-arabic-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-arabic-misc-0.99.0.tar.bz2;
-      md5 = "d2190624e9895fdeea800b41c678078a";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  lbxproxy = stdenv.mkDerivation {
-    name = "lbxproxy-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/lbxproxy-0.99.1.tar.bz2;
-      md5 = "0c3b5d6017f6d6d6288909d2cca29335";
-    };
-    buildInputs = [pkgconfig xtrans libXext liblbxutil libX11 libICE xproxymanagementprotocol ];
-  };
-    
-  xauth = stdenv.mkDerivation {
-    name = "xauth-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xauth-0.99.1.tar.bz2;
-      md5 = "574215048f5693811cf9d590f0c796c0";
-    };
-    buildInputs = [pkgconfig libX11 libXau libXext libXmu ];
-  };
-    
-  xsetroot = stdenv.mkDerivation {
-    name = "xsetroot-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xsetroot-0.99.1.tar.bz2;
-      md5 = "a2c7e1e929204c6d158dcea8d00747c7";
-    };
-    buildInputs = [pkgconfig libXmu libX11 xbitmaps ];
-  };
-    
-  libXprintAppUtil = stdenv.mkDerivation {
-    name = "libXprintAppUtil-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXprintAppUtil-0.99.1.tar.bz2;
-      md5 = "3fa7ae8be391da9dde4133f9745d5181";
-    };
-    buildInputs = [pkgconfig libX11 libXp libXprintUtil ];
-  };
-    
-  xfindproxy = stdenv.mkDerivation {
-    name = "xfindproxy-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfindproxy-0.99.1.tar.bz2;
-      md5 = "05d9003e93bba4ea6cfd5e4b54dbfc3a";
-    };
-    buildInputs = [pkgconfig libX11 libICE libXt ];
-  };
-    
-  xf86inputmouse = stdenv.mkDerivation {
-    name = "xf86-input-mouse-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-mouse-1.0.0.1.tar.bz2;
-      md5 = "43712cd2961c22103827af04a228b4ff";
-    };
-    buildInputs = [pkgconfig xorgserver xproto randrproto inputproto ];
-  };
-    
-  trapproto = stdenv.mkDerivation {
-    name = "trapproto-3.4.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/trapproto-3.4.1.tar.bz2;
-      md5 = "68d206a7d8f0e0424b7c2b02a19fc640";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputsumma = stdenv.mkDerivation {
-    name = "xf86-input-summa-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-summa-1.0.0.1.tar.bz2;
-      md5 = "a32b1813b6da13a72b5e9541f01447b1";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xlsclients = stdenv.mkDerivation {
-    name = "xlsclients-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xlsclients-0.99.1.tar.bz2;
-      md5 = "7013590b956b3091fa277bb51c6f7928";
-    };
-    buildInputs = [pkgconfig libX11 libXmu ];
-  };
-    
-  libXevie = stdenv.mkDerivation {
-    name = "libXevie-0.99.2";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXevie-0.99.2.tar.bz2;
-      md5 = "2198aa2ce5677cc90bd142637aa14ae3";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXext evieext ];
-  };
-    
-  fontsunmisc = stdenv.mkDerivation {
-    name = "font-sun-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-sun-misc-0.99.0.tar.bz2;
-      md5 = "253b7cd19d0885938e2e89e846f94d98";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xphelloworld = stdenv.mkDerivation {
-    name = "xphelloworld-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xphelloworld-0.99.1.tar.bz2;
-      md5 = "b3aa155f1cd27f75cb352a0de0d228ed";
-    };
-    buildInputs = [pkgconfig libX11 libXaw libXprintUtil libXprintAppUtil libXt ];
-  };
-    
-  fontbhlucidatypewriter75dpi = stdenv.mkDerivation {
-    name = "font-bh-lucidatypewriter-75dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-lucidatypewriter-75dpi-0.99.1.tar.bz2;
-      md5 = "58e384a0f54599989191363f5e95d1d2";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  fontisasmisc = stdenv.mkDerivation {
-    name = "font-isas-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-isas-misc-0.99.0.tar.bz2;
-      md5 = "2dca3516341f7f79579f44bcf6f72b36";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
   applewmproto = stdenv.mkDerivation {
-    name = "applewmproto-1.0.1";
+    name = "applewmproto.0-1.0.3";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/applewmproto-1.0.1.tar.bz2;
-      md5 = "d29019f10bc82e14e7e38c85afadb3ca";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videofbdev = stdenv.mkDerivation {
-    name = "xf86-video-fbdev-0.1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-fbdev-0.1.0.1.tar.bz2;
-      md5 = "53e3959977e18f91ea4ee1a04af14438";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  mkcfm = stdenv.mkDerivation {
-    name = "mkcfm-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/mkcfm-0.99.1.tar.bz2;
-      md5 = "109a62f57b56cdd087e1db9a104dadca";
-    };
-    buildInputs = [pkgconfig libX11 libXfont libFS fontsproto ];
-  };
-    
-  libXi = stdenv.mkDerivation {
-    name = "libXi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXi-0.99.1.tar.bz2;
-      md5 = "614215424104f693ea3b2c959c867e06";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXext inputproto ];
-  };
-    
-  xpr = stdenv.mkDerivation {
-    name = "xpr-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xpr-0.99.1.tar.bz2;
-      md5 = "f3ffc50ea2e7eb94a0b9a3f767149e34";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  fstobdf = stdenv.mkDerivation {
-    name = "fstobdf-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fstobdf-0.99.1.tar.bz2;
-      md5 = "b9d1b5ce5df31c716a18375abae16c48";
-    };
-    buildInputs = [pkgconfig libX11 libFS ];
-  };
-    
-  xwininfo = stdenv.mkDerivation {
-    name = "xwininfo-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xwininfo-0.99.1.tar.bz2;
-      md5 = "fae69f678cf478e418b1f0534623b760";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  xf86videomga = stdenv.mkDerivation {
-    name = "xf86-video-mga-1.2.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-mga-1.2.0.1.tar.bz2;
-      md5 = "4a3e5716a73580f027fa05bb008c54d9";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  libAppleWM = stdenv.mkDerivation {
-    name = "libAppleWM-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libAppleWM-0.99.1.tar.bz2;
-      md5 = "690e50700a4a421a4f21946ae51fe15a";
-    };
-    buildInputs = [pkgconfig libX11 libXext ];
-  };
-    
-  rstart = stdenv.mkDerivation {
-    name = "rstart-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/rstart-0.99.1.tar.bz2;
-      md5 = "8e503f349437961ef0699f51a51958f3";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  libXvMC = stdenv.mkDerivation {
-    name = "libXvMC-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXvMC-0.99.1.tar.bz2;
-      md5 = "ef5e74d3b2e325017a40d9a09b4893ec";
-    };
-    buildInputs = [pkgconfig libX11 libXext libXv xextproto videoproto ];
-  };
-    
-  fixesproto = stdenv.mkDerivation {
-    name = "fixesproto-3.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fixesproto-3.0.1.tar.bz2;
-      md5 = "b30b9210f32c80d31b75980cf4359abc";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86vidmodeproto = stdenv.mkDerivation {
-    name = "xf86vidmodeproto-2.2.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86vidmodeproto-2.2.1.tar.bz2;
-      md5 = "83c0bfe0208e85c597016f49e53b1b53";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontjismisc = stdenv.mkDerivation {
-    name = "font-jis-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-jis-misc-0.99.0.tar.bz2;
-      md5 = "f0a05c4cb5f40751d205568f38913696";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontbhlucidatypewriter100dpi = stdenv.mkDerivation {
-    name = "font-bh-lucidatypewriter-100dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-lucidatypewriter-100dpi-0.99.1.tar.bz2;
-      md5 = "0621e8a31c8ec3dd324e961c03b3c369";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  fontwinitzkicyrillic = stdenv.mkDerivation {
-    name = "font-winitzki-cyrillic-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-winitzki-cyrillic-0.99.0.tar.bz2;
-      md5 = "89a4dd3ab5b5ed4a55ef8dbcbb3fb4c0";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontcacheproto = stdenv.mkDerivation {
-    name = "fontcacheproto-0.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fontcacheproto-0.1.1.tar.bz2;
-      md5 = "7fe13f559df135a37066156536152117";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xrx = stdenv.mkDerivation {
-    name = "xrx-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xrx-0.99.1.tar.bz2;
-      md5 = "ca55528465596a4cb7ef7167c499318a";
-    };
-    buildInputs = [pkgconfig libX11 libXt libXext ];
-  };
-    
-  xf86videocirrus = stdenv.mkDerivation {
-    name = "xf86-video-cirrus-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-cirrus-1.0.0.1.tar.bz2;
-      md5 = "cf159e6fbb3aac5efa6993106587f86d";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontutil = stdenv.mkDerivation {
-    name = "font-util-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-util-0.99.1.tar.bz2;
-      md5 = "c7e2f6c5290f49edeb44ef0ce97fb626";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xprehashprinterlist = stdenv.mkDerivation {
-    name = "xprehashprinterlist-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xprehashprinterlist-0.99.1.tar.bz2;
-      md5 = "b2301cdb55ba664c31063974e99ae785";
-    };
-    buildInputs = [pkgconfig libXp libX11 ];
-  };
-    
-  fontadobe100dpi = stdenv.mkDerivation {
-    name = "font-adobe-100dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-adobe-100dpi-0.99.1.tar.bz2;
-      md5 = "e608ea0c66d9c1bb36ce600a4698a498";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  xf86videoimstt = stdenv.mkDerivation {
-    name = "xf86-video-imstt-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-imstt-1.0.0.1.tar.bz2;
-      md5 = "b9706c21ee180a89bc4d90f7f645ef08";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  dmxproto = stdenv.mkDerivation {
-    name = "dmxproto-2.2.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/dmxproto-2.2.1.tar.bz2;
-      md5 = "0ad84d81f2e2d7522c2ee52ac1b2dd11";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videovga = stdenv.mkDerivation {
-    name = "xf86-video-vga-4.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-vga-4.0.0.1.tar.bz2;
-      md5 = "205d1d1aee4cbfa56514a59631294e95";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libXxf86vm = stdenv.mkDerivation {
-    name = "libXxf86vm-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXxf86vm-0.99.1.tar.bz2;
-      md5 = "7ef000e1f41f03d0d0d94385aa223110";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86vidmodeproto ];
-  };
-    
-  xf86videoglint = stdenv.mkDerivation {
-    name = "xf86-video-glint-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-glint-1.0.0.1.tar.bz2;
-      md5 = "8faedf800d015bc101f2197bb15e9736";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  listres = stdenv.mkDerivation {
-    name = "listres-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/listres-0.99.1.tar.bz2;
-      md5 = "07afee7042af7f9d1c47de4769e29b67";
-    };
-    buildInputs = [pkgconfig libX11 libXt libXmu ];
-  };
-    
-  xf86inputkeyboard = stdenv.mkDerivation {
-    name = "xf86-input-keyboard-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-keyboard-1.0.0.1.tar.bz2;
-      md5 = "6d85c8ef6dd037f8824f0fe339383913";
-    };
-    buildInputs = [pkgconfig xorgserver xproto randrproto inputproto kbproto ];
-    # real bug: inputproto kbproto 
-  };
-    
-  xclipboard = stdenv.mkDerivation {
-    name = "xclipboard-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xclipboard-0.99.1.tar.bz2;
-      md5 = "ba0f16fe39a57491f9fefcd6fc4b52d1";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videoneomagic = stdenv.mkDerivation {
-    name = "xf86-video-neomagic-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-neomagic-1.0.0.1.tar.bz2;
-      md5 = "bac01a98f0b67534b1e2c826f11e391e";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  bdftopcf = stdenv.mkDerivation {
-    name = "bdftopcf-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/bdftopcf-0.99.1.tar.bz2;
-      md5 = "0ec978ead9753cc8e2b7778364c7e91e";
-    };
-    buildInputs = [pkgconfig libXfont ];
-  };
-    
-  xf86inputmicrotouch = stdenv.mkDerivation {
-    name = "xf86-input-microtouch-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-microtouch-1.0.0.1.tar.bz2;
-      md5 = "7de65bd9909717139caeacb5f481846a";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libXres = stdenv.mkDerivation {
-    name = "libXres-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXres-0.99.1.tar.bz2;
-      md5 = "de1a8676b870e28651b0fb2d05d6524c";
-    };
-    buildInputs = [pkgconfig libX11 libXext resourceproto xproto xextproto ];
-  };
-    
-  fontbh100dpi = stdenv.mkDerivation {
-    name = "font-bh-100dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-100dpi-0.99.1.tar.bz2;
-      md5 = "bf1fe9990be94890d8fc71eda7a44777";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  libXfontcache = stdenv.mkDerivation {
-    name = "libXfontcache-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXfontcache-0.99.1.tar.bz2;
-      md5 = "b899e6a5b6910d432907990a98fe61db";
-    };
-    buildInputs = [pkgconfig libX11 libXext xextproto fontcacheproto ];
-  };
-    
-  xf86videosisusb = stdenv.mkDerivation {
-    name = "xf86-video-sisusb-0.7.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-sisusb-0.7.0.1.tar.bz2;
-      md5 = "878470be32ccd67b41ca0013d4b1133e";
-    };
-    buildInputs = [pkgconfig xorgserver xproto xineramaproto ];
-  };
-    
-  xvidtune = stdenv.mkDerivation {
-    name = "xvidtune-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xvidtune-0.99.1.tar.bz2;
-      md5 = "9b74bc47016d867be74c76d212c176f7";
-    };
-    buildInputs = [pkgconfig libXxf86vm ];
-  };
-    
-  fontmuttmisc = stdenv.mkDerivation {
-    name = "font-mutt-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-mutt-misc-0.99.0.tar.bz2;
-      md5 = "5b98c48d37776edf2e2d009200992939";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libfontenc = stdenv.mkDerivation {
-    name = "libfontenc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libfontenc-0.99.1.tar.bz2;
-      md5 = "eaef10ae712ac16ad52a65a70a15f8d8";
-    };
-    buildInputs = [pkgconfig xproto zlib ];
-  };
-    
-  xf86inputjoystick = stdenv.mkDerivation {
-    name = "xf86-input-joystick-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-joystick-1.0.0.1.tar.bz2;
-      md5 = "92badfdc5b843ade8ccb3ade29ee3e31";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xrandr = stdenv.mkDerivation {
-    name = "xrandr-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xrandr-0.99.1.tar.bz2;
-      md5 = "25e219c4a29c0cb9d242c8b23ec60463";
-    };
-    buildInputs = [pkgconfig libXrandr libX11 ];
-  };
-    
-  xtrap = stdenv.mkDerivation {
-    name = "xtrap-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xtrap-0.99.1.tar.bz2;
-      md5 = "d0a612825ebf9918c2e42b36b1027674";
-    };
-    buildInputs = [pkgconfig libX11 libXTrap ];
-  };
-    
-  xf86videorendition = stdenv.mkDerivation {
-    name = "xf86-video-rendition-4.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-rendition-4.0.0.1.tar.bz2;
-      md5 = "10864fed3e34019f12eced3edda2d394";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputdmc = stdenv.mkDerivation {
-    name = "xf86-input-dmc-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-dmc-1.0.0.1.tar.bz2;
-      md5 = "2b33d4b50d36483db40938a2258da810";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videos3 = stdenv.mkDerivation {
-    name = "xf86-video-s3-0.3.5.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-s3-0.3.5.1.tar.bz2;
-      md5 = "d8ed3d627bafb086ba1d4474c0ffc485";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputacecad = stdenv.mkDerivation {
-    name = "xf86-input-acecad-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-acecad-1.0.0.1.tar.bz2;
-      md5 = "7b91a62fe50f3d4641bd1be120c1806f";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontbitstreamspeedo = stdenv.mkDerivation {
-    name = "font-bitstream-speedo-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bitstream-speedo-0.99.1.tar.bz2;
-      md5 = "2a235fe6754ee8980f75a8e1007fd448";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  renderproto = stdenv.mkDerivation {
-    name = "renderproto-0.9.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/renderproto-0.9.1.tar.bz2;
-      md5 = "e3cd4dd27085e02212095ca2f6d711ed";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  inputproto = stdenv.mkDerivation {
-    name = "inputproto-1.3.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/inputproto-1.3.1.tar.bz2;
-      md5 = "a0ad117956edc9975a83c2571c26b686";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xkbevd = stdenv.mkDerivation {
-    name = "xkbevd-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkbevd-0.99.1.tar.bz2;
-      md5 = "ab5ab99a86418328100556ca5f699ada";
-    };
-    buildInputs = [pkgconfig libxkbfile ];
-  };
-    
-  beforelight = stdenv.mkDerivation {
-    name = "beforelight-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/beforelight-0.99.1.tar.bz2;
-      md5 = "28e701c1978db6de57cfabff3df837ee";
-    };
-    buildInputs = [pkgconfig libX11 libXScrnSaver libXt ];
-  };
-    
-  imake = stdenv.mkDerivation {
-    name = "imake-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/imake-0.99.1.tar.bz2;
-      md5 = "bf900c63573539732fe3f1211b69280b";
-    };
-    buildInputs = [pkgconfig xproto ];
-  };
-    
-  fontcursormisc = stdenv.mkDerivation {
-    name = "font-cursor-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-cursor-misc-0.99.0.tar.bz2;
-      md5 = "3835613ee302786e426bd24bcf692e63";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86miscproto = stdenv.mkDerivation {
-    name = "xf86miscproto-0.9.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86miscproto-0.9.1.tar.bz2;
-      md5 = "1dbdee0696dcbc18338369452fb1c90a";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videocyrix = stdenv.mkDerivation {
-    name = "xf86-video-cyrix-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-cyrix-1.0.0.1.tar.bz2;
-      md5 = "53c2ed7e2886d9846a7ca46275445c84";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libxkbui = stdenv.mkDerivation {
-    name = "libxkbui-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libxkbui-0.99.1.tar.bz2;
-      md5 = "29fd7c47ecc89579ad9f0fa2f4a1f014";
-    };
-    buildInputs = [pkgconfig libX11 libXt libxkbfile ];
-  };
-    
-  xf86rushproto = stdenv.mkDerivation {
-    name = "xf86rushproto-1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86rushproto-1.1.1.tar.bz2;
-      md5 = "7fbf63d9167965b431e445ae9af3cea9";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libXft = stdenv.mkDerivation {
-    name = "libXft-2.1.8";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXft-2.1.8.tar.bz2;
-      md5 = "18e7a98444ece30ea5b51a24269f8c7c";
-    };
-    buildInputs = [pkgconfig libXrender libX11 ];
-    propagatedBuildInputs = [freetype fontconfig ];
-  };
-    
-  xsm = stdenv.mkDerivation {
-    name = "xsm-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xsm-0.99.1.tar.bz2;
-      md5 = "6e8ae56836c00892bdf48376887e004b";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputevdev = stdenv.mkDerivation {
-    name = "xf86-input-evdev-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-evdev-1.0.0.1.tar.bz2;
-      md5 = "9de7c0f8bcdab1528459d5fe0ef3a226";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputelo2300 = stdenv.mkDerivation {
-    name = "xf86-input-elo2300-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-elo2300-1.0.0.1.tar.bz2;
-      md5 = "4bf7fb70e958dba3b5463ae08843e1e0";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videosunbw2 = stdenv.mkDerivation {
-    name = "xf86-video-sunbw2-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-sunbw2-1.0.0.1.tar.bz2;
-      md5 = "ce7b7227c3c5786099381ef033909765";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  liboldX = stdenv.mkDerivation {
-    name = "liboldX-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/liboldX-0.99.1.tar.bz2;
-      md5 = "3534a7571a62de08b1a4e8056ec3aef9";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  liblbxutil = stdenv.mkDerivation {
-    name = "liblbxutil-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/liblbxutil-0.99.1.tar.bz2;
-      md5 = "cf88ba52b6dbc00693f9711bd2b3bcd8";
-    };
-    buildInputs = [pkgconfig xproto xextproto zlib ];
-  };
-    
-  randrproto = stdenv.mkDerivation {
-    name = "randrproto-1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/randrproto-1.1.1.tar.bz2;
-      md5 = "d1f245b2c12f418fc4be10e541c221b9";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xrefresh = stdenv.mkDerivation {
-    name = "xrefresh-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xrefresh-0.99.1.tar.bz2;
-      md5 = "0ad6f76dce84ac8cd66c0d1e4d9d0347";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  libICE = stdenv.mkDerivation {
-    name = "libICE-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libICE-0.99.0.tar.bz2;
-      md5 = "6a437911a6f88860536f32065a3e4019";
-    };
-    buildInputs = [pkgconfig xproto xtrans ];
-  };
-    
-  utilmacros = stdenv.mkDerivation {
-    name = "util-macros-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/util-macros-0.99.1.tar.bz2;
-      md5 = "32713d3c4070b949afdc11bf559d2c61";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontmiscmeltho = stdenv.mkDerivation {
-    name = "font-misc-meltho-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-misc-meltho-0.99.1.tar.bz2;
-      md5 = "84362b96a539b09c0c3a0357e76467c5";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xrdb = stdenv.mkDerivation {
-    name = "xrdb-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xrdb-0.99.1.tar.bz2;
-      md5 = "f324cd3b733efb9a27a894b86aea9696";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  xf86videoark = stdenv.mkDerivation {
-    name = "xf86-video-ark-0.5.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-ark-0.5.0.1.tar.bz2;
-      md5 = "0303df2259e14bd4faaf768ae725d86a";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libXv = stdenv.mkDerivation {
-    name = "libXv-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXv-0.99.1.tar.bz2;
-      md5 = "28de5dc16d38bb61bcb7adbf384a6b93";
-    };
-    buildInputs = [pkgconfig libX11 libXext xextproto videoproto ];
-  };
-    
-  makedepend = stdenv.mkDerivation {
-    name = "makedepend-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/makedepend-0.99.1.tar.bz2;
-      md5 = "1e66d034f7e6c47d620c0731531d35af";
-    };
-    buildInputs = [pkgconfig xproto ];
-  };
-    
-  xf86videosiliconmotion = stdenv.mkDerivation {
-    name = "xf86-video-siliconmotion-1.3.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-siliconmotion-1.3.1.1.tar.bz2;
-      md5 = "cc301bc6a48679d420040a2bd719c3bf";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontmicromisc = stdenv.mkDerivation {
-    name = "font-micro-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-micro-misc-0.99.0.tar.bz2;
-      md5 = "99c37238d351e555c699df67443abb17";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libXTrap = stdenv.mkDerivation {
-    name = "libXTrap-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXTrap-0.99.1.tar.bz2;
-      md5 = "4466f9d0b129fc6aed994ff96aed2f43";
-    };
-    buildInputs = [pkgconfig libX11 libXt trapproto libXext xextproto ];
-  };
-    
-  proxymngr = stdenv.mkDerivation {
-    name = "proxymngr-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/proxymngr-0.99.1.tar.bz2;
-      md5 = "af4be82acc787c7e63f956deac436618";
-    };
-    buildInputs = [pkgconfig libICE libXt libX11 xproxymanagementprotocol ];
-  };
-    
-  xf86videosuncg6 = stdenv.mkDerivation {
-    name = "xf86-video-suncg6-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-suncg6-1.0.0.1.tar.bz2;
-      md5 = "5dbd7ba3c934625778a79611bec846b1";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontsonymisc = stdenv.mkDerivation {
-    name = "font-sony-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-sony-misc-0.99.0.tar.bz2;
-      md5 = "23ea0121bb3610253df1fad423f052f7";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontibmtype1 = stdenv.mkDerivation {
-    name = "font-ibm-type1-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-ibm-type1-0.99.0.tar.bz2;
-      md5 = "9dcb4de80c546b95ea3393eeb489aeb5";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xedit = stdenv.mkDerivation {
-    name = "xedit-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xedit-0.99.1.tar.bz2;
-      md5 = "437e28d886da20181aa879d1f8855f36";
-    };
-    buildInputs = [pkgconfig libXprintUtil libXaw ];
-  };
-    
-  fontadobeutopiatype1 = stdenv.mkDerivation {
-    name = "font-adobe-utopia-type1-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-adobe-utopia-type1-0.99.0.tar.bz2;
-      md5 = "9b77d3d9bd71a77d1c053998699926ea";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontmiscmisc = stdenv.mkDerivation {
-    name = "font-misc-misc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-misc-misc-0.99.1.tar.bz2;
-      md5 = "262866521d8f1f4bfd48a8bdcc8ef73e";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  libXau = stdenv.mkDerivation {
-    name = "libXau-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXau-0.99.1.tar.bz2;
-      md5 = "e9f8e470b4bb2f87c3989ae4f995edb8";
-    };
-    buildInputs = [pkgconfig xproto ];
-  };
-    
-  xineramaproto = stdenv.mkDerivation {
-    name = "xineramaproto-1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xineramaproto-1.1.1.tar.bz2;
-      md5 = "bdb8a5c7acb543c72386de3b1da3cc14";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xplsprinters = stdenv.mkDerivation {
-    name = "xplsprinters-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xplsprinters-0.99.1.tar.bz2;
-      md5 = "9a7356c9f11c5f66985da0de36faac56";
-    };
-    buildInputs = [pkgconfig libXp libXprintUtil libX11 ];
-  };
-    
-  kbproto = stdenv.mkDerivation {
-    name = "kbproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/kbproto-1.0.1.tar.bz2;
-      md5 = "f60e8038389a8fec9870fd73aae4b0cd";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontschumachermisc = stdenv.mkDerivation {
-    name = "font-schumacher-misc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-schumacher-misc-0.99.1.tar.bz2;
-      md5 = "264b86f213a42f2d4f2acf96f42e1c02";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  fontbh75dpi = stdenv.mkDerivation {
-    name = "font-bh-75dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-75dpi-0.99.1.tar.bz2;
-      md5 = "4dc742afa7d50c1a8bb6e2503f7ae7e5";
-    };
-    buildInputs = [pkgconfig fontutil ];
-  };
-    
-  oclock = stdenv.mkDerivation {
-    name = "oclock-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/oclock-0.99.1.tar.bz2;
-      md5 = "608013e4de3017b2aed30f1327a5c16d";
-    };
-    buildInputs = [pkgconfig libX11 libXmu libXext ];
-  };
-    
-  xcalc = stdenv.mkDerivation {
-    name = "xcalc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xcalc-0.99.1.tar.bz2;
-      md5 = "8a2fc226ae835aab7be5babceb57da10";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videonsc = stdenv.mkDerivation {
-    name = "xf86-video-nsc-2.7.6.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-nsc-2.7.6.1.tar.bz2;
-      md5 = "e38a368f00c0dbda4f933892d207b98f";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xkill = stdenv.mkDerivation {
-    name = "xkill-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkill-0.99.1.tar.bz2;
-      md5 = "148c0addb15b16e7e7890af66a51e3ea";
-    };
-    buildInputs = [pkgconfig libX11 libXmu ];
-  };
-    
-  xman = stdenv.mkDerivation {
-    name = "xman-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xman-0.99.1.tar.bz2;
-      md5 = "6ff3551d51b1d32e8f802106cfb45cef";
-    };
-    buildInputs = [pkgconfig libXprintUtil ];
-  };
-    
-  xf86inputelographics = stdenv.mkDerivation {
-    name = "xf86-input-elographics-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-elographics-1.0.0.1.tar.bz2;
-      md5 = "a0bce2237c674dab111c85bea3a60961";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  evieext = stdenv.mkDerivation {
-    name = "evieext-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/evieext-1.0.1.tar.bz2;
-      md5 = "e3dfec2dec02857e4710e0fda752ec57";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libXinerama = stdenv.mkDerivation {
-    name = "libXinerama-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXinerama-0.99.1.tar.bz2;
-      md5 = "9845c81794ea3ca7a3b39cb3c19be040";
-    };
-    buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
-  };
-    
-  fontbitstream75dpi = stdenv.mkDerivation {
-    name = "font-bitstream-75dpi-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bitstream-75dpi-0.99.0.tar.bz2;
-      md5 = "3da671b588aa93f8338d4db03b02952e";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  videoproto = stdenv.mkDerivation {
-    name = "videoproto-2.2.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/videoproto-2.2.1.tar.bz2;
-      md5 = "697225b241331fba0f90c072252a8669";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86videovesa = stdenv.mkDerivation {
-    name = "xf86-video-vesa-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-vesa-1.0.0.1.tar.bz2;
-      md5 = "a99a640c5c4ed24bc6ac5ea363af4da1";
-    };
-    buildInputs = [pkgconfig xorgserver xproto randrproto xextproto renderproto fontsproto ];
-  };
-    
-  xf86inputmagictouch = stdenv.mkDerivation {
-    name = "xf86-input-magictouch-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-magictouch-1.0.0.1.tar.bz2;
-      md5 = "96a0f5582e8d92cc2df081d0f2643a48";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontbitstreamtype1 = stdenv.mkDerivation {
-    name = "font-bitstream-type1-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bitstream-type1-0.99.0.tar.bz2;
-      md5 = "3ce4e030ca1b2591bfa971492d8cff4c";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  mkfontdir = stdenv.mkDerivation {
-    name = "mkfontdir-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/mkfontdir-0.99.1.tar.bz2;
-      md5 = "a0e7abcef59422e87f56d71add67e74b";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xcmiscproto = stdenv.mkDerivation {
-    name = "xcmiscproto-1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xcmiscproto-1.1.1.tar.bz2;
-      md5 = "283d1b2712a6c82faded9ec01e582c9c";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xstdcmap = stdenv.mkDerivation {
-    name = "xstdcmap-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xstdcmap-0.99.1.tar.bz2;
-      md5 = "a33c371c9b7ecd66e39e6e2824bf172b";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  xkbdata = stdenv.mkDerivation {
-    name = "xkbdata-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkbdata-0.99.1.tar.bz2;
-      md5 = "ac4b6c4415d5cfb47f2454438048dd8d";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/applewmproto-X11R7.0-1.0.3.tar.bz2;
+      md5 = "2acf46c814a27c40acd3e448ed17fee3";
     };
     buildInputs = [pkgconfig ];
   };
     
   appres = stdenv.mkDerivation {
-    name = "appres-0.99.1";
+    name = "appres.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/appres-0.99.1.tar.bz2;
-      md5 = "4eae4f301d5a9e316da71c8928c1015c";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/appres-X11R7.0-1.0.0.tar.bz2;
+      md5 = "3327357fc851a49e8e5dc44405e7b862";
     };
     buildInputs = [pkgconfig libX11 libXt ];
   };
     
-  recordproto = stdenv.mkDerivation {
-    name = "recordproto-1.13.1";
+  bdftopcf = stdenv.mkDerivation {
+    name = "bdftopcf.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/recordproto-1.13.1.tar.bz2;
-      md5 = "b8f32deca1741af534c9544c451752d2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/bdftopcf-X11R7.0-1.0.0.tar.bz2;
+      md5 = "f43667fcf613054cae0679f5dc5a1e7a";
+    };
+    buildInputs = [pkgconfig libXfont ];
+  };
+    
+  beforelight = stdenv.mkDerivation {
+    name = "beforelight.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/beforelight-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e0326eff9d1bd4e3a1af9e615a0048b3";
+    };
+    buildInputs = [pkgconfig libX11 libXScrnSaver libXt libXaw ];
+  };
+    
+  bigreqsproto = stdenv.mkDerivation {
+    name = "bigreqsproto.0-1.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/bigreqsproto-X11R7.0-1.0.2.tar.bz2;
+      md5 = "ec15d17e3f04ddb5870ef7239b4ab367";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xdpyinfo = stdenv.mkDerivation {
-    name = "xdpyinfo-0.99.1";
+  bitmap = stdenv.mkDerivation {
+    name = "bitmap.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xdpyinfo-0.99.1.tar.bz2;
-      md5 = "086fe5235a5ea200fc41a7cc3e961805";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/bitmap-X11R7.0-1.0.1.tar.bz2;
+      md5 = "bbb3df097821d3edb4d5a4b2ae731de6";
     };
-    buildInputs = [pkgconfig libXext libX11 libXtst xextproto kbproto xf86vidmodeproto libXxf86vm xf86dgaproto libXxf86dga xf86miscproto libXxf86misc inputproto libXi renderproto libXrender xineramaproto libXinerama dmxproto libdmx printproto libXp ];
+    buildInputs = [pkgconfig libX11 libXmu xbitmaps libXt ];
   };
     
-  xf86videosunffb = stdenv.mkDerivation {
-    name = "xf86-video-sunffb-1.0.0.1";
+  compositeproto = stdenv.mkDerivation {
+    name = "compositeproto.0-0.2.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-sunffb-1.0.0.1.tar.bz2;
-      md5 = "c2e9426b5d105b2d20ba546a03aad79a";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  xf86videotrident = stdenv.mkDerivation {
-    name = "xf86-video-trident-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-trident-1.0.0.1.tar.bz2;
-      md5 = "08aeefd115c2ed6e172d9225ec22468e";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86inputjamstudio = stdenv.mkDerivation {
-    name = "xf86-input-jamstudio-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-jamstudio-1.0.0.1.tar.bz2;
-      md5 = "872a5616bf5ef91f7a7ce4866aa0ca22";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xload = stdenv.mkDerivation {
-    name = "xload-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xload-0.99.1.tar.bz2;
-      md5 = "87425195df0c04a186ecbc111e32b736";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  encodings = stdenv.mkDerivation {
-    name = "encodings-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/encodings-0.99.1.tar.bz2;
-      md5 = "2fcf2fc59ba25424ffd967477e98ed7b";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  glproto = stdenv.mkDerivation {
-    name = "glproto-1.4.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/glproto-1.4.1.tar.bz2;
-      md5 = "77f91c775e5a957c33b3ecf7162e3d2a";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  scrnsaverproto = stdenv.mkDerivation {
-    name = "scrnsaverproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/scrnsaverproto-1.0.1.tar.bz2;
-      md5 = "8e065d1f938ec2df89e8a7cf8dc74093";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/compositeproto-X11R7.0-0.2.2.tar.bz2;
+      md5 = "4de13ee64fdfd409134dfee9b184e6a9";
     };
     buildInputs = [pkgconfig ];
   };
     
   damageproto = stdenv.mkDerivation {
-    name = "damageproto-1.0.1";
+    name = "damageproto.0-1.0.3";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/damageproto-1.0.1.tar.bz2;
-      md5 = "5949cade56a91679305b8a0e079e1f92";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/damageproto-X11R7.0-1.0.3.tar.bz2;
+      md5 = "b906344d68e09a5639deb0097bd74224";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xf86videoi128 = stdenv.mkDerivation {
-    name = "xf86-video-i128-1.1.0.1";
+  dmxproto = stdenv.mkDerivation {
+    name = "dmxproto.0-2.2.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-i128-1.1.0.1.tar.bz2;
-      md5 = "958f339ade6697ed6b7e9838535377dd";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xgc = stdenv.mkDerivation {
-    name = "xgc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xgc-0.99.1.tar.bz2;
-      md5 = "0d3bbc77e4862c84db5fdff9de291929";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/dmxproto-X11R7.0-2.2.2.tar.bz2;
+      md5 = "21c79302beb868a078490549f558cdcf";
     };
     buildInputs = [pkgconfig ];
   };
     
-  viewres = stdenv.mkDerivation {
-    name = "viewres-0.99.1";
+  editres = stdenv.mkDerivation {
+    name = "editres.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/viewres-0.99.1.tar.bz2;
-      md5 = "01a7c2b4bfb941e35493b0897d65bd32";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/editres-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a9dc7f3b0cb59f08ab1e6554a5e60721";
+    };
+    buildInputs = [pkgconfig libX11 libXt libXmu ];
+  };
+    
+  encodings = stdenv.mkDerivation {
+    name = "encodings.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/encodings-X11R7.0-1.0.0.tar.bz2;
+      md5 = "385cbd4093b610610ca54c06cbb0f497";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xeyes = stdenv.mkDerivation {
-    name = "xeyes-0.99.1";
+  evieext = stdenv.mkDerivation {
+    name = "evieext.0-1.0.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xeyes-0.99.1.tar.bz2;
-      md5 = "dd11f3fab80ee34a1b9ad0a52d42744e";
-    };
-    buildInputs = [pkgconfig libX11 libXt libXext libXmu ];
-  };
-    
-  resourceproto = stdenv.mkDerivation {
-    name = "resourceproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/resourceproto-1.0.1.tar.bz2;
-      md5 = "8fbe50b8a2c61a9b7f6a9d1cca635137";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/evieext-X11R7.0-1.0.2.tar.bz2;
+      md5 = "411c0d4f9eaa7d220a8d13edc790e3de";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xinit = stdenv.mkDerivation {
-    name = "xinit-0.99.2";
+  fixesproto = stdenv.mkDerivation {
+    name = "fixesproto.0-3.0.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xinit-0.99.2.tar.bz2;
-      md5 = "a9b07d984176d0282937a4d820acae17";
-    };
-    buildInputs = [pkgconfig libX11 ];
-  };
-    
-  xf86inputtek4957 = stdenv.mkDerivation {
-    name = "xf86-input-tek4957-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-tek4957-1.0.0.1.tar.bz2;
-      md5 = "ae3c74bb2899765e22376c256834fa08";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videovia = stdenv.mkDerivation {
-    name = "xf86-video-via-0.1.31.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-via-0.1.31.1.tar.bz2;
-      md5 = "acaab775571c212ebec0634bd8eb8d84";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libXvMC libdrm xf86driproto ];
-  };
-    
-  xf86inputmagellan = stdenv.mkDerivation {
-    name = "xf86-input-magellan-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-magellan-1.0.0.1.tar.bz2;
-      md5 = "b313d8fe2388a6515ffaeef13cfca5e1";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xproxymanagementprotocol = stdenv.mkDerivation {
-    name = "xproxymanagementprotocol-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xproxymanagementprotocol-1.0.1.tar.bz2;
-      md5 = "0a0d5505283b24c1845c40a9c2a41438";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fixesproto-X11R7.0-3.0.2.tar.bz2;
+      md5 = "ff8899d2325ed8a5787cde372ca8f80f";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xf86videotga = stdenv.mkDerivation {
-    name = "xf86-video-tga-1.0.0.1";
+  fontadobe100dpi = stdenv.mkDerivation {
+    name = "font-adobe-100dpi.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-tga-1.0.0.1.tar.bz2;
-      md5 = "2ff549257a0215cafb0520f4ca789649";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  fontbhtype1 = stdenv.mkDerivation {
-    name = "font-bh-type1-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-type1-0.99.0.tar.bz2;
-      md5 = "153a616911d4bcd85a7d5e6fe6cf4cf5";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xfs = stdenv.mkDerivation {
-    name = "xfs-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfs-0.99.1.tar.bz2;
-      md5 = "5be3ea3592f54b4300befccd803419b9";
-    };
-    buildInputs = [pkgconfig libFS fontsproto libXfont ];
-  };
-    
-  xorgserver = stdenv.mkDerivation {
-    name = "xorg-server-0.99.2";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xorg-server-0.99.2.tar.bz2;
-      md5 = "a1b532b00400a77217e287d6fd2706fe";
-    };
-    buildInputs = [pkgconfig liblbxutil xf86driproto libdrm glproto libXdmcp libXmu libXext libX11 libXrender libXfont libXi dmxproto libXau libXaw libXmu libXt libXpm libdmx libXtst libXres printproto libxkbfile randrproto renderproto fixesproto damageproto xcmiscproto xextproto xproto xtrans xf86miscproto xf86vidmodeproto xf86bigfontproto scrnsaverproto bigreqsproto resourceproto libfontenc fontsproto videoproto compositeproto recordproto resourceproto xineramaproto perl libxkbui libXxf86misc libXxf86vm inputproto xf86dgaproto mesa libSM libICE zlib ];
-    # Strange: randrproto renderproto etc.
-    # Proper bug: inputproto xf86dgaproto libSM libICE
-    # maybe libICE should be propagated by libSM
-  };
-    
-  fontdaewoomisc = stdenv.mkDerivation {
-    name = "font-daewoo-misc-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-daewoo-misc-0.99.0.tar.bz2;
-      md5 = "5f1d4ce4f6bd2aeb45135ce5d721928f";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libXxf86misc = stdenv.mkDerivation {
-    name = "libXxf86misc-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXxf86misc-0.99.1.tar.bz2;
-      md5 = "70ef1e9d85a3544d0b7179c4b8a90c67";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86miscproto ];
-  };
-    
-  printproto = stdenv.mkDerivation {
-    name = "printproto-1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/printproto-1.0.1.tar.bz2;
-      md5 = "384b0d42f6fcf7f1a93c7e6ae449da84";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  fontbhttf = stdenv.mkDerivation {
-    name = "font-bh-ttf-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-bh-ttf-0.99.0.tar.bz2;
-      md5 = "91a64778869d638ef5383597ed9d1a44";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xmore = stdenv.mkDerivation {
-    name = "xmore-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmore-0.99.1.tar.bz2;
-      md5 = "d080831a31496fb167d4221bfea95063";
-    };
-    buildInputs = [pkgconfig libXprintUtil ];
-  };
-    
-  libXxf86dga = stdenv.mkDerivation {
-    name = "libXxf86dga-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXxf86dga-0.99.1.tar.bz2;
-      md5 = "1ff5df00261dc8c11e9942c2191ec9c8";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86dgaproto ];
-  };
-    
-  libdmx = stdenv.mkDerivation {
-    name = "libdmx-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libdmx-0.99.1.tar.bz2;
-      md5 = "1e3c93b00223a99494c802b9e38ff4df";
-    };
-    buildInputs = [pkgconfig libX11 libXext xextproto dmxproto ];
-  };
-    
-  fontadobeutopia100dpi = stdenv.mkDerivation {
-    name = "font-adobe-utopia-100dpi-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-adobe-utopia-100dpi-0.99.1.tar.bz2;
-      md5 = "79bf5da7ec818bc522072500d675b1c9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-adobe-100dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "f5de34fa63976de9263f032453348f6c";
     };
     buildInputs = [pkgconfig fontutil ];
   };
     
-  bitmap = stdenv.mkDerivation {
-    name = "bitmap-0.99.1";
+  fontadobe75dpi = stdenv.mkDerivation {
+    name = "font-adobe-75dpi.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/bitmap-0.99.1.tar.bz2;
-      md5 = "4c5c83995902f2f967bd548d68d35429";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-adobe-75dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "361fc4c9da3c34c5105df4f4688029d0";
     };
-    buildInputs = [pkgconfig libX11 libXmu xbitmaps ];
+    buildInputs = [pkgconfig fontutil ];
   };
     
-  xmkmf = stdenv.mkDerivation {
-    name = "xmkmf-0.99.1";
-    builder = ./xmkmf.sh;
+  fontadobeutopia100dpi = stdenv.mkDerivation {
+    name = "font-adobe-utopia-100dpi.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmkmf-0.99.1.tar.bz2;
-      md5 = "75013b6eeed99fd7b4e7913144a9de22";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-adobe-utopia-100dpi-X11R7.0-1.0.1.tar.bz2;
+      md5 = "b720eed8eba0e4c5bcb9fdf6c2003355";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontadobeutopia75dpi = stdenv.mkDerivation {
+    name = "font-adobe-utopia-75dpi.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-adobe-utopia-75dpi-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a6d5d355b92a7e640698c934b0b79b53";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontadobeutopiatype1 = stdenv.mkDerivation {
+    name = "font-adobe-utopia-type1.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-adobe-utopia-type1-X11R7.0-1.0.1.tar.bz2;
+      md5 = "db1cc2f707cffd08a461f093b55ced5e";
     };
     buildInputs = [pkgconfig ];
-    propagatedBuildInputs = [imake];
-    inherit xorgcffiles;
   };
     
-  xorgcffiles = stdenv.mkDerivation {
-    name = "xorg-cf-files-0.99.1";
+  fontalias = stdenv.mkDerivation {
+    name = "font-alias.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xorg-cf-files-0.99.1.tar.bz2;
-      md5 = "8ad3c7e473f5fe5c467ee0f5602c76d9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-alias-X11R7.0-1.0.1.tar.bz2;
+      md5 = "de7035b15ba7edc36f8685ab3c17a9cf";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xproto = stdenv.mkDerivation {
-    name = "xproto-7.0.1";
+  fontarabicmisc = stdenv.mkDerivation {
+    name = "font-arabic-misc.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xproto-7.0.1.tar.bz2;
-      md5 = "66267ac1cddfe54018e33fade13f2ca0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-arabic-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "b95dc750ddc7d511e1f570034d9e1b27";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbh100dpi = stdenv.mkDerivation {
+    name = "font-bh-100dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-100dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "29eeed0ad42653f27b929119581deb3e";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontbh75dpi = stdenv.mkDerivation {
+    name = "font-bh-75dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-75dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "7546c97560eb325400365adbc426308b";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontbhlucidatypewriter100dpi = stdenv.mkDerivation {
+    name = "font-bh-lucidatypewriter-100dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-lucidatypewriter-100dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8a56f4cbea74f4dbbf9bdac95686dca8";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontbhlucidatypewriter75dpi = stdenv.mkDerivation {
+    name = "font-bh-lucidatypewriter-75dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-lucidatypewriter-75dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "e5cccf93f4f1f793cd32adfa81cc1b40";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontbhttf = stdenv.mkDerivation {
+    name = "font-bh-ttf.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-ttf-X11R7.0-1.0.0.tar.bz2;
+      md5 = "53b984889aec3c0c2eb07f8aaa49dba9";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbhtype1 = stdenv.mkDerivation {
+    name = "font-bh-type1.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bh-type1-X11R7.0-1.0.0.tar.bz2;
+      md5 = "302111513d1e94303c0ec0139d5ae681";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbitstream100dpi = stdenv.mkDerivation {
+    name = "font-bitstream-100dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bitstream-100dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "dc595e77074de890974726769f25e123";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbitstream75dpi = stdenv.mkDerivation {
+    name = "font-bitstream-75dpi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bitstream-75dpi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "408515646743d14e1e2e240da4fffdc2";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbitstreamspeedo = stdenv.mkDerivation {
+    name = "font-bitstream-speedo.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bitstream-speedo-X11R7.0-1.0.0.tar.bz2;
+      md5 = "068c78ce48e5e6c4f25e0bba839a6b7a";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontbitstreamtype1 = stdenv.mkDerivation {
+    name = "font-bitstream-type1.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-bitstream-type1-X11R7.0-1.0.0.tar.bz2;
+      md5 = "f4881a7e28eaeb7580d5eaf0f09239da";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontcacheproto = stdenv.mkDerivation {
+    name = "fontcacheproto.0-0.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fontcacheproto-X11R7.0-0.1.2.tar.bz2;
+      md5 = "116997d63cf6f65b75593ff5ae7afecb";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontcronyxcyrillic = stdenv.mkDerivation {
+    name = "font-cronyx-cyrillic.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-cronyx-cyrillic-X11R7.0-1.0.0.tar.bz2;
+      md5 = "447163fff74b57968fc5139d8b2ad988";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontcursormisc = stdenv.mkDerivation {
+    name = "font-cursor-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-cursor-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "82e89de0e1b9c95f32b0fc12f5131d2c";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontdaewoomisc = stdenv.mkDerivation {
+    name = "font-daewoo-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-daewoo-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "2fd7e6c8c21990ad906872efd02f3873";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontdecmisc = stdenv.mkDerivation {
+    name = "font-dec-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-dec-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "7ff9aba4c65aa226bda7528294c7998c";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontibmtype1 = stdenv.mkDerivation {
+    name = "font-ibm-type1.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-ibm-type1-X11R7.0-1.0.0.tar.bz2;
+      md5 = "fab2c49cb0f9fcee0bc0ac77e510d4e5";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontisasmisc = stdenv.mkDerivation {
+    name = "font-isas-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-isas-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "c0981507c9276c22956c7bfe932223d9";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontjismisc = stdenv.mkDerivation {
+    name = "font-jis-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-jis-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "3732ca6c34d03e44c73f0c103512ef26";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontmicromisc = stdenv.mkDerivation {
+    name = "font-micro-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-micro-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "eb0050d73145c5b9fb6b9035305edeb6";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontmisccyrillic = stdenv.mkDerivation {
+    name = "font-misc-cyrillic.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-misc-cyrillic-X11R7.0-1.0.0.tar.bz2;
+      md5 = "58d31311e8e51efbe16517adaf1a239d";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontmiscethiopic = stdenv.mkDerivation {
+    name = "font-misc-ethiopic.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-misc-ethiopic-X11R7.0-1.0.0.tar.bz2;
+      md5 = "190738980705826a27fbf4685650d3b9";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontmiscmeltho = stdenv.mkDerivation {
+    name = "font-misc-meltho.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-misc-meltho-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8812c57220bcd139b4ba6266eafbd712";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontmiscmisc = stdenv.mkDerivation {
+    name = "font-misc-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-misc-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "4a5a7987183a9e1ea232c8391ae4c244";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontmuttmisc = stdenv.mkDerivation {
+    name = "font-mutt-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-mutt-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "139b368edecf8185d16a33b4a7c09657";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontschumachermisc = stdenv.mkDerivation {
+    name = "font-schumacher-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-schumacher-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "d51808138ef63b84363f7d82ed8bb681";
+    };
+    buildInputs = [pkgconfig fontutil ];
+  };
+    
+  fontscreencyrillic = stdenv.mkDerivation {
+    name = "font-screen-cyrillic.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-screen-cyrillic-X11R7.0-1.0.0.tar.bz2;
+      md5 = "c08da585feb173e1b27c3fbf8f90ba45";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontsonymisc = stdenv.mkDerivation {
+    name = "font-sony-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-sony-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "014725f97635da9e5e9b303ab796817e";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontsproto = stdenv.mkDerivation {
+    name = "fontsproto.0-2.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fontsproto-X11R7.0-2.0.2.tar.bz2;
+      md5 = "e2ca22df3a20177f060f04f15b8ce19b";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontsunmisc = stdenv.mkDerivation {
+    name = "font-sun-misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-sun-misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "0259436c430034f24f3b239113c9630e";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fonttosfnt = stdenv.mkDerivation {
+    name = "fonttosfnt.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fonttosfnt-X11R7.0-1.0.1.tar.bz2;
+      md5 = "89b65e010acaa3c5d370e1cc0ea9fce9";
+    };
+    buildInputs = [pkgconfig xproto freetype libfontenc ];
+  };
+    
+  fontutil = stdenv.mkDerivation {
+    name = "font-util.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-util-X11R7.0-1.0.0.tar.bz2;
+      md5 = "73cc445cb20a658037ad3a7ac571f525";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontwinitzkicyrillic = stdenv.mkDerivation {
+    name = "font-winitzki-cyrillic.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-winitzki-cyrillic-X11R7.0-1.0.0.tar.bz2;
+      md5 = "6dc447609609e4e2454ad7da29873501";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fontxfree86type1 = stdenv.mkDerivation {
+    name = "font-xfree86-type1.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-xfree86-type1-X11R7.0-1.0.0.tar.bz2;
+      md5 = "27a6bbf5c8bbe998ff7e8537929ccbc8";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  fslsfonts = stdenv.mkDerivation {
+    name = "fslsfonts.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fslsfonts-X11R7.0-1.0.1.tar.bz2;
+      md5 = "c500b96cfec485e362204a8fc0bdfd44";
+    };
+    buildInputs = [pkgconfig libX11 libFS ];
+  };
+    
+  fstobdf = stdenv.mkDerivation {
+    name = "fstobdf.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fstobdf-X11R7.0-1.0.1.tar.bz2;
+      md5 = "233615dca862b64c69bc212090a22b4c";
+    };
+    buildInputs = [pkgconfig libX11 libFS ];
+  };
+    
+  gccmakedep = stdenv.mkDerivation {
+    name = "gccmakedep.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/gccmakedep-X11R7.0-1.0.1.tar.bz2;
+      md5 = "328eea864d27b2d3a88ceb2fa66eca6d";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  glproto = stdenv.mkDerivation {
+    name = "glproto.0-1.4.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/glproto-X11R7.0-1.4.3.tar.bz2;
+      md5 = "0ecb98487d7457f0592298fe9b8688f0";
     };
     buildInputs = [pkgconfig ];
   };
     
   iceauth = stdenv.mkDerivation {
-    name = "iceauth-0.99.1";
+    name = "iceauth.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/iceauth-0.99.1.tar.bz2;
-      md5 = "2119a44507e738d085047e313cd0e8e6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/iceauth-X11R7.0-1.0.1.tar.bz2;
+      md5 = "92035bd69b4c9aba47607ba0efcc8530";
     };
-    buildInputs = [pkgconfig libX11 libICE ];
+    buildInputs = [pkgconfig xproto libICE ];
   };
     
-  libXrandr = stdenv.mkDerivation {
-    name = "libXrandr-0.99.1";
+  ico = stdenv.mkDerivation {
+    name = "ico.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXrandr-0.99.1.tar.bz2;
-      md5 = "b85d1d0bb241fdfd455605e0a5b26e09";
-    };
-    buildInputs = [pkgconfig libX11 randrproto libXext libXrender renderproto ];
-  };
-    
-  twm = stdenv.mkDerivation {
-    name = "twm-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/twm-0.99.1.tar.bz2;
-      md5 = "ed67ddb7759659875f0fdca9846b1a98";
-    };
-    buildInputs = [pkgconfig libX11 libXt libXmu ];
-  };
-    
-  xf86videosuncg3 = stdenv.mkDerivation {
-    name = "xf86-video-suncg3-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-suncg3-1.0.0.1.tar.bz2;
-      md5 = "09e5ad599ef590ab560c11cfbd3bc723";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libXfont = stdenv.mkDerivation {
-    name = "libXfont-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXfont-0.99.1.tar.bz2;
-      md5 = "5896d187833e5f55d50397f9e8be3cd5";
-    };
-    buildInputs = [pkgconfig freetype fontcacheproto xproto xtrans fontsproto libfontenc zlib ];
-  };
-    
-  libXp = stdenv.mkDerivation {
-    name = "libXp-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXp-0.99.1.tar.bz2;
-      md5 = "63d2af9c41b863aa0004ee520204bbe9";
-    };
-    buildInputs = [pkgconfig libX11 libXext libXau printproto ];
-  };
-    
-  xprop = stdenv.mkDerivation {
-    name = "xprop-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xprop-0.99.1.tar.bz2;
-      md5 = "7502472d560bdf01330deb057bd0ef0e";
-    };
-    buildInputs = [pkgconfig libXmu libX11 ];
-  };
-    
-  xf86videosuntcx = stdenv.mkDerivation {
-    name = "xf86-video-suntcx-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-suntcx-1.0.0.1.tar.bz2;
-      md5 = "99083cc0a5e259422e874fa466fa6ceb";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videovmware = stdenv.mkDerivation {
-    name = "xf86-video-vmware-10.11.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-vmware-10.11.0.1.tar.bz2;
-      md5 = "9148f56a12269cf2f74bf77fef44d64c";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libXcomposite = stdenv.mkDerivation {
-    name = "libXcomposite-0.2.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXcomposite-0.2.1.tar.bz2;
-      md5 = "2039221efe4fa52be5551dde96aee0a0";
-    };
-    buildInputs = [pkgconfig compositeproto ];
-  };
-    
-  libXScrnSaver = stdenv.mkDerivation {
-    name = "libXScrnSaver-0.99.2";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXScrnSaver-0.99.2.tar.bz2;
-      md5 = "91ccc3a94a5ac611d5faab8c1fda8056";
-    };
-    buildInputs = [pkgconfig libX11 libXext xextproto scrnsaverproto ];
-  };
-    
-  xcmsdb = stdenv.mkDerivation {
-    name = "xcmsdb-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xcmsdb-0.99.1.tar.bz2;
-      md5 = "0f26f8759ebaffe061b13695270fdb8b";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/ico-X11R7.0-1.0.1.tar.bz2;
+      md5 = "9c63d68a779819ba79e45d9b15d26b1f";
     };
     buildInputs = [pkgconfig libX11 ];
   };
     
-  xf86inputspaceorb = stdenv.mkDerivation {
-    name = "xf86-input-spaceorb-1.0.0.1";
+  imake = stdenv.mkDerivation {
+    name = "imake.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-spaceorb-1.0.0.1.tar.bz2;
-      md5 = "53b1b074cdad065ca900f93757f8d17f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/imake-X11R7.0-1.0.1.tar.bz2;
+      md5 = "487b4b86b2bd0c09e6d220a85d94efae";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig xproto ];
   };
     
-  xf86inputpenmount = stdenv.mkDerivation {
-    name = "xf86-input-penmount-1.0.0.1";
+  inputproto = stdenv.mkDerivation {
+    name = "inputproto.0-1.3.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-penmount-1.0.0.1.tar.bz2;
-      md5 = "d876e53d39f94b3d640d5b04f812c2aa";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/inputproto-X11R7.0-1.3.2.tar.bz2;
+      md5 = "0da271f396bede5b8d09a61f6d1c4484";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig ];
   };
     
-  libXpm = stdenv.mkDerivation {
-    name = "libXpm-3.5.3";
+  kbproto = stdenv.mkDerivation {
+    name = "kbproto.0-1.0.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXpm-3.5.3.tar.bz2;
-      md5 = "7830c7b5030607b7a0de393f8717aad0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/kbproto-X11R7.0-1.0.2.tar.bz2;
+      md5 = "403f56d717b3fefe465ddd03d9c7bc81";
     };
-    buildInputs = [pkgconfig xproto libX11 libXt libXext ];
+    buildInputs = [pkgconfig ];
   };
     
-  xfsinfo = stdenv.mkDerivation {
-    name = "xfsinfo-0.99.1";
+  lbxproxy = stdenv.mkDerivation {
+    name = "lbxproxy.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfsinfo-0.99.1.tar.bz2;
-      md5 = "a60686cee66253818c3743d076976e0c";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/lbxproxy-X11R7.0-1.0.1.tar.bz2;
+      md5 = "d9c05283660eae742a77dcbc0091841a";
     };
-    buildInputs = [pkgconfig libX11 libFS ];
+    buildInputs = [pkgconfig xtrans libXext liblbxutil libX11 libICE xproxymanagementprotocol bigreqsproto ];
   };
     
-  xcursorgen = stdenv.mkDerivation {
-    name = "xcursorgen-0.99.0";
+  libAppleWM = stdenv.mkDerivation {
+    name = "libAppleWM.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xcursorgen-0.99.0.tar.bz2;
-      md5 = "438a8156e42c9d3aabaa1c1daa85fa85";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libAppleWM-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8af30932ebc278835375fca34a2790f5";
     };
-    buildInputs = [pkgconfig libX11 libXcursor libpng ];
+    buildInputs = [pkgconfig libX11 libXext xextproto applewmproto ];
   };
     
   libFS = stdenv.mkDerivation {
-    name = "libFS-0.99.1";
+    name = "libFS.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libFS-0.99.1.tar.bz2;
-      md5 = "874d771539ed056e6bdc3372601e73ca";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libFS-X11R7.0-1.0.0.tar.bz2;
+      md5 = "12d2d89e7eb6ab0eb5823c3296f4e7a5";
     };
     buildInputs = [pkgconfig xproto fontsproto xtrans ];
   };
     
-  fontadobeutopia75dpi = stdenv.mkDerivation {
-    name = "font-adobe-utopia-75dpi-0.99.1";
+  libICE = stdenv.mkDerivation {
+    name = "libICE.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-adobe-utopia-75dpi-0.99.1.tar.bz2;
-      md5 = "206dc25f8ea6a86c582da29aefade8e0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libICE-X11R7.0-1.0.0.tar.bz2;
+      md5 = "c778084b135311726da8dc74a16b3555";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig xproto xtrans ];
   };
     
-  xclock = stdenv.mkDerivation {
-    name = "xclock-0.99.1";
+  libSM = stdenv.mkDerivation {
+    name = "libSM.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xclock-0.99.1.tar.bz2;
-      md5 = "ec54b47ee229318cef76a3c86da9ef94";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libSM-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8a4eec299e8f14e26200718af7b2dcfc";
     };
-    buildInputs = [pkgconfig libX11 libXrender libXft libxkbfile libXaw ];
+    buildInputs = [pkgconfig libICE xproto xtrans ];
   };
     
-  xf86videoati = stdenv.mkDerivation {
-    name = "xf86-video-ati-6.5.6.1";
+  libWindowsWM = stdenv.mkDerivation {
+    name = "libWindowsWM.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-ati-6.5.6.1.tar.bz2;
-      md5 = "ebc1718e6eb215cec331d11e86802b5f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libWindowsWM-X11R7.0-1.0.0.tar.bz2;
+      md5 = "d94f0389cd655b50e2987d5b988b82a5";
     };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  xf86videodummy = stdenv.mkDerivation {
-    name = "xf86-video-dummy-0.1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-dummy-0.1.0.1.tar.bz2;
-      md5 = "66c0427661a1468debe2b17e065c5b0a";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  libxkbfile = stdenv.mkDerivation {
-    name = "libxkbfile-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libxkbfile-0.99.1.tar.bz2;
-      md5 = "09f12f4177f7172912f74e488ff20e95";
-    };
-    buildInputs = [pkgconfig libX11 kbproto ];
-  };
-    
-  libXext = stdenv.mkDerivation {
-    name = "libXext-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXext-0.99.1.tar.bz2;
-      md5 = "7dbf302396434d4b74a40c4e9c8a1fb2";
-    };
-    buildInputs = [pkgconfig xproto libX11 xextproto libXau ];
-  };
-    
-  xf86inputaiptek = stdenv.mkDerivation {
-    name = "xf86-input-aiptek-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-aiptek-1.0.0.1.tar.bz2;
-      md5 = "4ee82eabd3ccc05894de5213423510f3";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xmh = stdenv.mkDerivation {
-    name = "xmh-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmh-0.99.1.tar.bz2;
-      md5 = "469d536e8b1933bfb5bf6ecfc9b9c920";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xcursorthemes = stdenv.mkDerivation {
-    name = "xcursor-themes-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xcursor-themes-0.99.1.tar.bz2;
-      md5 = "f6eb25fab260b7ae0add3e0c2030abb5";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xset = stdenv.mkDerivation {
-    name = "xset-0.99.2";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xset-0.99.2.tar.bz2;
-      md5 = "8babe3fa82ef4a824610acee9a81dd4a";
-    };
-    buildInputs = [pkgconfig libXmu xextproto libXext kbproto libX11 xf86miscproto libXxf86misc fontcacheproto libXfontcache printproto libXp ];
-  };
-    
-  xbitmaps = stdenv.mkDerivation {
-    name = "xbitmaps-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xbitmaps-0.99.1.tar.bz2;
-      md5 = "941c8694c17566401e45e16b52fcf8ba";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputvoid = stdenv.mkDerivation {
-    name = "xf86-input-void-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-void-1.0.0.1.tar.bz2;
-      md5 = "731f40b90189aeb1a54d6403b41491b8";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videotseng = stdenv.mkDerivation {
-    name = "xf86-video-tseng-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-tseng-1.0.0.1.tar.bz2;
-      md5 = "bcd6fc8d485bbd0fd3aae513a98ec81c";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videoapm = stdenv.mkDerivation {
-    name = "xf86-video-apm-1.0.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-apm-1.0.1.1.tar.bz2;
-      md5 = "8e6637abe5178349b80637ca97284ade";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xgamma = stdenv.mkDerivation {
-    name = "xgamma-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xgamma-0.99.1.tar.bz2;
-      md5 = "6ea7dcdf5e12f5543eb06191178985fd";
-    };
-    buildInputs = [pkgconfig libXxf86vm ];
-  };
-    
-  libXcursor = stdenv.mkDerivation {
-    name = "libXcursor-1.1.4";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXcursor-1.1.4.tar.bz2;
-      md5 = "f706908d7d03705a6ee64a84edcdc8af";
-    };
-    buildInputs = [pkgconfig libXrender libXfixes libX11 ];
-  };
-    
-  xf86inputpalmax = stdenv.mkDerivation {
-    name = "xf86-input-palmax-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-palmax-1.0.0.1.tar.bz2;
-      md5 = "8fd274074fbf9de6efbcc50f4dab02c5";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig libX11 libXext xextproto windowswmproto ];
   };
     
   libX11 = stdenv.mkDerivation {
-    name = "libX11-0.99.2";
+    name = "libX11.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libX11-0.99.2.tar.bz2;
-      md5 = "01e7ab4166bffcba3392feab0c3cb789";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libX11-X11R7.0-1.0.0.tar.bz2;
+      md5 = "dcf59f148c978816ebbe3fbc5c9ef0e1";
     };
-    buildInputs = [pkgconfig bigreqsproto xproto xextproto xtrans libXau xcmiscproto libXdmcp xf86bigfontproto kbproto inputproto ];
+    buildInputs = [pkgconfig bigreqsproto xproto xextproto xtrans libXau xcmiscproto libXdmcp xf86bigfontproto ];
   };
     
-  fontdecmisc = stdenv.mkDerivation {
-    name = "font-dec-misc-0.99.0";
+  libXScrnSaver = stdenv.mkDerivation {
+    name = "libXScrnSaver.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-dec-misc-0.99.0.tar.bz2;
-      md5 = "a13fbb8b64f1f852d67da92816b05ce6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXScrnSaver-X11R7.0-1.0.1.tar.bz2;
+      md5 = "b9deb6ac3194aeab15d8f6220481af6d";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig libX11 libXext xextproto scrnsaverproto ];
   };
     
-  xf86videochips = stdenv.mkDerivation {
-    name = "xf86-video-chips-1.0.0.1";
+  libXTrap = stdenv.mkDerivation {
+    name = "libXTrap.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-chips-1.0.0.1.tar.bz2;
-      md5 = "ed185559bc723cb90b8a12ea0e8453e1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXTrap-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8f2f1cc3b35f005e9030e162d89e2bdd";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
+    buildInputs = [pkgconfig libX11 libXt trapproto libXext xextproto ];
   };
     
-  fontcronyxcyrillic = stdenv.mkDerivation {
-    name = "font-cronyx-cyrillic-0.99.0";
+  libXau = stdenv.mkDerivation {
+    name = "libXau.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-cronyx-cyrillic-0.99.0.tar.bz2;
-      md5 = "472392fa8eb82666bf4f48f57fffea46";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  luit = stdenv.mkDerivation {
-    name = "luit-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/luit-0.99.1.tar.bz2;
-      md5 = "97550cc1456c85018c89c78c64c34b33";
-    };
-    buildInputs = [pkgconfig libX11 libfontenc ];
-  };
-    
-  showfont = stdenv.mkDerivation {
-    name = "showfont-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/showfont-0.99.1.tar.bz2;
-      md5 = "4df4d11dcfe006827b8d1d3d8d512d2d";
-    };
-    buildInputs = [pkgconfig libFS ];
-  };
-    
-  fontxfree86type1 = stdenv.mkDerivation {
-    name = "font-xfree86-type1-0.99.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-xfree86-type1-0.99.0.tar.bz2;
-      md5 = "b57ab755e257d417aef3f2457e548763";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xditview = stdenv.mkDerivation {
-    name = "xditview-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xditview-0.99.1.tar.bz2;
-      md5 = "c365b07a47be067530af56d18ad3f724";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  setxkbmap = stdenv.mkDerivation {
-    name = "setxkbmap-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/setxkbmap-0.99.1.tar.bz2;
-      md5 = "78ebfdee2a5f2f0cb132f7609e254152";
-    };
-    buildInputs = [pkgconfig libxkbfile libX11 ];
-  };
-    
-  xfontsel = stdenv.mkDerivation {
-    name = "xfontsel-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xfontsel-0.99.1.tar.bz2;
-      md5 = "32e91cc661725ccb24a27436c92720d4";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xkbcomp = stdenv.mkDerivation {
-    name = "xkbcomp-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkbcomp-0.99.1.tar.bz2;
-      md5 = "9e6d4fbbe842a7411de0a827cc6fff71";
-    };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
-  };
-    
-  xf86videonewport = stdenv.mkDerivation {
-    name = "xf86-video-newport-0.1.3.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-newport-0.1.3.1.tar.bz2;
-      md5 = "b3e1af53afe9604cd64758d13dba7aa9";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  sessreg = stdenv.mkDerivation {
-    name = "sessreg-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/sessreg-0.99.1.tar.bz2;
-      md5 = "d3aa65328fce867246a8ee5e37f688e4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXau-X11R7.0-1.0.0.tar.bz2;
+      md5 = "51ceac78ae0eaf40ffb77b3cccc028cc";
     };
     buildInputs = [pkgconfig xproto ];
   };
     
-  xev = stdenv.mkDerivation {
-    name = "xev-0.99.1";
+  libXaw = stdenv.mkDerivation {
+    name = "libXaw.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xev-0.99.1.tar.bz2;
-      md5 = "2ed91114c0079ab471e90284edd67874";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXaw-X11R7.0-1.0.1.tar.bz2;
+      md5 = "ded3c7ed6d6ca2c5e257f60079a1a824";
     };
-    buildInputs = [pkgconfig libX11 ];
+    buildInputs = [pkgconfig xproto libX11 libXext xextproto libXt libXmu libXpm libXp printproto libXau ];
   };
     
-  xkbprint = stdenv.mkDerivation {
-    name = "xkbprint-0.99.1";
+  libXcomposite = stdenv.mkDerivation {
+    name = "libXcomposite.0-0.2.2.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkbprint-0.99.1.tar.bz2;
-      md5 = "8199f38e7e9a80171ae9aa2a27946353";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXcomposite-X11R7.0-0.2.2.2.tar.bz2;
+      md5 = "5773fe74d0f44b7264bd37c874efc7b1";
     };
-    buildInputs = [pkgconfig libxkbfile ];
+    buildInputs = [pkgconfig compositeproto ];
   };
     
-  xkbutils = stdenv.mkDerivation {
-    name = "xkbutils-0.99.0";
+  libXcursor = stdenv.mkDerivation {
+    name = "libXcursor.0-1.1.5.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xkbutils-0.99.0.tar.bz2;
-      md5 = "055a0822597ef2cf5c792711effc6134";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXcursor-X11R7.0-1.1.5.2.tar.bz2;
+      md5 = "048e15b725d8e081ac520e021af9a62c";
     };
-    buildInputs = [pkgconfig libxkbfile ];
-  };
-    
-  xsetmode = stdenv.mkDerivation {
-    name = "xsetmode-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xsetmode-0.99.1.tar.bz2;
-      md5 = "4053ac1f8a7411945b8cdd2d4991e462";
-    };
-    buildInputs = [pkgconfig libXi libX11 ];
+    buildInputs = [pkgconfig libXrender libXfixes libX11 fixesproto ];
   };
     
   libXdamage = stdenv.mkDerivation {
-    name = "libXdamage-1.0.1";
+    name = "libXdamage.0-1.0.2.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXdamage-1.0.1.tar.bz2;
-      md5 = "7bd8ce64967790ca9c0ef438105603e2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXdamage-X11R7.0-1.0.2.2.tar.bz2;
+      md5 = "e98c6cc1075db5f6e7e6c8aef303c562";
     };
     buildInputs = [pkgconfig libX11 damageproto ];
   };
     
-  xbiff = stdenv.mkDerivation {
-    name = "xbiff-0.99.1";
+  libXdmcp = stdenv.mkDerivation {
+    name = "libXdmcp.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xbiff-0.99.1.tar.bz2;
-      md5 = "23e101120ee35579677612784f8bb81a";
-    };
-    buildInputs = [pkgconfig xbitmaps ];
-  };
-    
-  libXmu = stdenv.mkDerivation {
-    name = "libXmu-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXmu-0.99.1.tar.bz2;
-      md5 = "0aa2e07630b5dc04964188354d631407";
-    };
-    buildInputs = [pkgconfig libXt libXext libX11 ];
-  };
-    
-  xf86inputcitron = stdenv.mkDerivation {
-    name = "xf86-input-citron-2.1.1.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-citron-2.1.1.1.tar.bz2;
-      md5 = "6c1df5a945e98ebd5dad3db249c9dcbf";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videovoodoo = stdenv.mkDerivation {
-    name = "xf86-video-voodoo-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-voodoo-1.0.0.1.tar.bz2;
-      md5 = "b65be248324e2eef6ce92644cd1805d5";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  rgb = stdenv.mkDerivation {
-    name = "rgb-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/rgb-0.99.1.tar.bz2;
-      md5 = "e0582fba6e706541594122852b896f4d";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXdmcp-X11R7.0-1.0.0.tar.bz2;
+      md5 = "509390dc46af61e3a6d07656fc5ad0ec";
     };
     buildInputs = [pkgconfig xproto ];
   };
     
-  libXt = stdenv.mkDerivation {
-    name = "libXt-0.99.1";
+  libXevie = stdenv.mkDerivation {
+    name = "libXevie.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXt-0.99.1.tar.bz2;
-      md5 = "a3b65703a80cc0582757c595c0875612";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXevie-X11R7.0-1.0.0.tar.bz2;
+      md5 = "70b1787315d8d5f961edac05fef95fd6";
     };
-    buildInputs = [pkgconfig libSM libX11 xproto kbproto ];
-    # !!! prop libSM
+    buildInputs = [pkgconfig xproto libX11 xextproto libXext evieext ];
   };
     
-  editres = stdenv.mkDerivation {
-    name = "editres-0.99.1";
+  libXext = stdenv.mkDerivation {
+    name = "libXext.0-1.0.0";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/editres-0.99.1.tar.bz2;
-      md5 = "081dc951b07f7f0639726d9effabe1ca";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXext-X11R7.0-1.0.0.tar.bz2;
+      md5 = "9e47f574ac747446ac58ff9f6f402ceb";
+    };
+    buildInputs = [pkgconfig xproto libX11 xextproto libXau ];
+  };
+    
+  libXfixes = stdenv.mkDerivation {
+    name = "libXfixes.0-3.0.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfixes-X11R7.0-3.0.1.2.tar.bz2;
+      md5 = "5a027e5959dae32b69dce42118938544";
+    };
+    buildInputs = [pkgconfig libX11 xproto fixesproto ];
+  };
+    
+  libXfont = stdenv.mkDerivation {
+    name = "libXfont.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfont-X11R7.0-1.0.0.tar.bz2;
+      md5 = "955c41694772c9fd214e3e206f5d2178";
+    };
+    buildInputs = [pkgconfig freetype fontcacheproto xproto xtrans fontsproto libfontenc ];
+  };
+    
+  libXfontcache = stdenv.mkDerivation {
+    name = "libXfontcache.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfontcache-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1e3c7718ffaf4f617d3f67ada5a7601e";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto fontcacheproto ];
+  };
+    
+  libXft = stdenv.mkDerivation {
+    name = "libXft.0-2.1.8.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXft-X11R7.0-2.1.8.2.tar.bz2;
+      md5 = "c42292b35325a9eeb24eb0f8d3a6ec52";
+    };
+    buildInputs = [pkgconfig libXrender freetype fontconfig ];
+  };
+    
+  libXi = stdenv.mkDerivation {
+    name = "libXi.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXi-X11R7.0-1.0.0.tar.bz2;
+      md5 = "99503799b4d52ec0cac8e203341bb7b3";
+    };
+    buildInputs = [pkgconfig xproto libX11 xextproto libXext inputproto ];
+  };
+    
+  libXinerama = stdenv.mkDerivation {
+    name = "libXinerama.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXinerama-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1a1be870bb106193a4acc73c8c584dbc";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
+  };
+    
+  libXmu = stdenv.mkDerivation {
+    name = "libXmu.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXmu-X11R7.0-1.0.0.tar.bz2;
+      md5 = "df62f44da82c6780f07dc475a68dd9fa";
+    };
+    buildInputs = [pkgconfig libXt libXext xextproto libX11 ];
+  };
+    
+  libXp = stdenv.mkDerivation {
+    name = "libXp.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXp-X11R7.0-1.0.0.tar.bz2;
+      md5 = "63c3048e06da4f6a033c5ce25217b0c3";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto libXau printproto ];
+  };
+    
+  libXpm = stdenv.mkDerivation {
+    name = "libXpm.0-3.5.4.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXpm-X11R7.0-3.5.4.2.tar.bz2;
+      md5 = "f3b3b6e687f567bbff7688d60edc81ba";
+    };
+    buildInputs = [pkgconfig xproto libX11 libXt libXext xextproto ];
+  };
+    
+  libXprintAppUtil = stdenv.mkDerivation {
+    name = "libXprintAppUtil.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXprintAppUtil-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6d3f5d8d1f6c2c380bfc739128f41909";
+    };
+    buildInputs = [pkgconfig libX11 libXp libXprintUtil printproto libXau ];
+  };
+    
+  libXprintUtil = stdenv.mkDerivation {
+    name = "libXprintUtil.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXprintUtil-X11R7.0-1.0.1.tar.bz2;
+      md5 = "47f1863042a53a48b40c2fb0aa55a8f7";
+    };
+    buildInputs = [pkgconfig libX11 libXp libXt printproto libXau ];
+  };
+    
+  libXrandr = stdenv.mkDerivation {
+    name = "libXrandr.0-1.1.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXrandr-X11R7.0-1.1.0.2.tar.bz2;
+      md5 = "e10aed44c2e1e5d9e6848a62ff2c90c7";
+    };
+    buildInputs = [pkgconfig libX11 randrproto libXext xextproto libXrender renderproto ];
+  };
+    
+  libXrender = stdenv.mkDerivation {
+    name = "libXrender.0-0.9.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXrender-X11R7.0-0.9.0.2.tar.bz2;
+      md5 = "3f0fa590dd84df07568631c91fbe68ab";
+    };
+    buildInputs = [pkgconfig libX11 renderproto ];
+  };
+    
+  libXres = stdenv.mkDerivation {
+    name = "libXres.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXres-X11R7.0-1.0.0.tar.bz2;
+      md5 = "cc5c4f130c9305e5bd973fbb7c56a254";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto resourceproto ];
+  };
+    
+  libXt = stdenv.mkDerivation {
+    name = "libXt.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXt-X11R7.0-1.0.0.tar.bz2;
+      md5 = "d9c1c161f086a4d6c7510a924ee35c94";
+    };
+    buildInputs = [pkgconfig libSM libX11 xproto kbproto ];
+  };
+    
+  libXtst = stdenv.mkDerivation {
+    name = "libXtst.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXtst-X11R7.0-1.0.1.tar.bz2;
+      md5 = "3a3a3b88b4bc2a82f0b6de8ff526cc8c";
+    };
+    buildInputs = [pkgconfig libX11 libXext recordproto xextproto inputproto ];
+  };
+    
+  libXv = stdenv.mkDerivation {
+    name = "libXv.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXv-X11R7.0-1.0.1.tar.bz2;
+      md5 = "9f0075619fc8d8df460be8aaa9d9ab5d";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto videoproto ];
+  };
+    
+  libXvMC = stdenv.mkDerivation {
+    name = "libXvMC.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXvMC-X11R7.0-1.0.1.tar.bz2;
+      md5 = "c3eb4f526f08862489355a99e3eda1bd";
+    };
+    buildInputs = [pkgconfig libX11 libXext libXv xextproto videoproto ];
+  };
+    
+  libXxf86dga = stdenv.mkDerivation {
+    name = "libXxf86dga.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86dga-X11R7.0-1.0.0.tar.bz2;
+      md5 = "d2154a588953d8db4ae6252ebc7db439";
+    };
+    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86dgaproto ];
+  };
+    
+  libXxf86misc = stdenv.mkDerivation {
+    name = "libXxf86misc.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86misc-X11R7.0-1.0.0.tar.bz2;
+      md5 = "338568c9ca48b801f314c89c97327397";
+    };
+    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86miscproto ];
+  };
+    
+  libXxf86vm = stdenv.mkDerivation {
+    name = "libXxf86vm.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86vm-X11R7.0-1.0.0.tar.bz2;
+      md5 = "ed59db622581b33ec2a62e12b2f9c274";
+    };
+    buildInputs = [pkgconfig xproto libX11 xextproto libXext xf86vidmodeproto ];
+  };
+    
+  libdmx = stdenv.mkDerivation {
+    name = "libdmx.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libdmx-X11R7.0-1.0.1.tar.bz2;
+      md5 = "ae6b3c48f1349fc5dfa7d7c4b9cf4718";
+    };
+    buildInputs = [pkgconfig libX11 libXext xextproto dmxproto ];
+  };
+    
+  libfontenc = stdenv.mkDerivation {
+    name = "libfontenc.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libfontenc-X11R7.0-1.0.1.tar.bz2;
+      md5 = "d7971cbb2d1000737bba86a4bd70b900";
+    };
+    buildInputs = [pkgconfig xproto ];
+  };
+    
+  liblbxutil = stdenv.mkDerivation {
+    name = "liblbxutil.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/liblbxutil-X11R7.0-1.0.0.tar.bz2;
+      md5 = "1bcffde85723f78243d1ba60e1ebaef6";
+    };
+    buildInputs = [pkgconfig xextproto xproto ];
+  };
+    
+  liboldX = stdenv.mkDerivation {
+    name = "liboldX.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/liboldX-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a443a2dc15aa96a3d18340a1617d1bae";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  libxkbfile = stdenv.mkDerivation {
+    name = "libxkbfile.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libxkbfile-X11R7.0-1.0.1.tar.bz2;
+      md5 = "0b1bb70a1df474c26dd83feab52e733d";
+    };
+    buildInputs = [pkgconfig libX11 kbproto ];
+  };
+    
+  libxkbui = stdenv.mkDerivation {
+    name = "libxkbui.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libxkbui-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1992547d377b510517fc7681207eead5";
+    };
+    buildInputs = [pkgconfig libX11 libXt libxkbfile ];
+  };
+    
+  listres = stdenv.mkDerivation {
+    name = "listres.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/listres-X11R7.0-1.0.1.tar.bz2;
+      md5 = "2eeb802272a7910bb8a52b308bf0d5f6";
     };
     buildInputs = [pkgconfig libX11 libXt libXmu ];
   };
     
-  fontalias = stdenv.mkDerivation {
-    name = "font-alias-0.99.0";
+  lndir = stdenv.mkDerivation {
+    name = "lndir.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/font-alias-0.99.0.tar.bz2;
-      md5 = "9b8fd1bee2fdf97b980d99fed43c7ec9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/lndir-X11R7.0-1.0.1.tar.bz2;
+      md5 = "aa3616b9795e2445c85b2c79b0f94f7b";
+    };
+    buildInputs = [pkgconfig xproto ];
+  };
+    
+  luit = stdenv.mkDerivation {
+    name = "luit.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/luit-X11R7.0-1.0.1.tar.bz2;
+      md5 = "30428b8ff783a0cfd61dab05a17cfaa7";
+    };
+    buildInputs = [pkgconfig libX11 libfontenc ];
+  };
+    
+  makedepend = stdenv.mkDerivation {
+    name = "makedepend.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/makedepend-X11R7.0-1.0.0.tar.bz2;
+      md5 = "7494c7ff65d8c31ef8db13661487b54c";
+    };
+    buildInputs = [pkgconfig xproto ];
+  };
+    
+  mkcfm = stdenv.mkDerivation {
+    name = "mkcfm.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/mkcfm-X11R7.0-1.0.1.tar.bz2;
+      md5 = "912e6305998441c26852309403742bec";
+    };
+    buildInputs = [pkgconfig libX11 libXfont libFS libfontenc ];
+  };
+    
+  mkfontdir = stdenv.mkDerivation {
+    name = "mkfontdir.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/mkfontdir-X11R7.0-1.0.1.tar.bz2;
+      md5 = "29e6e5e8e7a29ed49abf33af192693cb";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  mkfontscale = stdenv.mkDerivation {
+    name = "mkfontscale.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/mkfontscale-X11R7.0-1.0.1.tar.bz2;
+      md5 = "75bbd1dc425849e415a60afd9e74d2ff";
+    };
+    buildInputs = [pkgconfig libfontenc freetype libX11 ];
+  };
+    
+  oclock = stdenv.mkDerivation {
+    name = "oclock.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/oclock-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e35af9699c49f0b77fad45a3b942c3b1";
+    };
+    buildInputs = [pkgconfig libX11 libXmu libXext libXt ];
+  };
+    
+  printproto = stdenv.mkDerivation {
+    name = "printproto.0-1.0.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/printproto-X11R7.0-1.0.3.tar.bz2;
+      md5 = "15c629a109b074d669886b1c6b7b319e";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  proxymngr = stdenv.mkDerivation {
+    name = "proxymngr.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/proxymngr-X11R7.0-1.0.1.tar.bz2;
+      md5 = "0d2ca6876d84302f966fd105a3b69a8e";
+    };
+    buildInputs = [pkgconfig libICE libXt libX11 xproxymanagementprotocol ];
+  };
+    
+  randrproto = stdenv.mkDerivation {
+    name = "randrproto.0-1.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/randrproto-X11R7.0-1.1.2.tar.bz2;
+      md5 = "bcf36d524f6f50aa16ee8e183350f7b8";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  recordproto = stdenv.mkDerivation {
+    name = "recordproto.0-1.13.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/recordproto-X11R7.0-1.13.2.tar.bz2;
+      md5 = "6f41a40e8cf4452f1c1725d46b08eb2e";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  renderproto = stdenv.mkDerivation {
+    name = "renderproto.0-0.9.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/renderproto-X11R7.0-0.9.2.tar.bz2;
+      md5 = "a7f3be0960c92ecb6a06a1022fe957df";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  resourceproto = stdenv.mkDerivation {
+    name = "resourceproto.0-1.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/resourceproto-X11R7.0-1.0.2.tar.bz2;
+      md5 = "e13d7b0aa5c591224f073bbbd9d1b038";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  rgb = stdenv.mkDerivation {
+    name = "rgb.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/rgb-X11R7.0-1.0.0.tar.bz2;
+      md5 = "675e72f221714c3db8730daf0b50f69f";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  rstart = stdenv.mkDerivation {
+    name = "rstart.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/rstart-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6f33a1bd8e99372b7544ddfcad456369";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  scripts = stdenv.mkDerivation {
+    name = "scripts.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/scripts-X11R7.0-1.0.1.tar.bz2;
+      md5 = "b5b43aa53372b78f1d67c86301e3dc02";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  scrnsaverproto = stdenv.mkDerivation {
+    name = "scrnsaverproto.0-1.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/scrnsaverproto-X11R7.0-1.0.2.tar.bz2;
+      md5 = "3185971597710d8843d986da3271b83f";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  sessreg = stdenv.mkDerivation {
+    name = "sessreg.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/sessreg-X11R7.0-1.0.0.tar.bz2;
+      md5 = "8289a5b947165449c23bdfad9af02b4c";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  setxkbmap = stdenv.mkDerivation {
+    name = "setxkbmap.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/setxkbmap-X11R7.0-1.0.1.tar.bz2;
+      md5 = "28b141ab0b1c44a5e90d31ad73bd1078";
+    };
+    buildInputs = [pkgconfig libxkbfile libX11 ];
+  };
+    
+  showfont = stdenv.mkDerivation {
+    name = "showfont.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/showfont-X11R7.0-1.0.1.tar.bz2;
+      md5 = "334cb5133960108ac2c24ee27e16bb8e";
+    };
+    buildInputs = [pkgconfig libFS ];
+  };
+    
+  smproxy = stdenv.mkDerivation {
+    name = "smproxy.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/smproxy-X11R7.0-1.0.1.tar.bz2;
+      md5 = "60f54881b6fb27a8ba238629e4097c4d";
+    };
+    buildInputs = [pkgconfig libXt libXmu ];
+  };
+    
+  trapproto = stdenv.mkDerivation {
+    name = "trapproto.0-3.4.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/trapproto-X11R7.0-3.4.3.tar.bz2;
+      md5 = "84ab290758d2c177df5924e10bff4835";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  twm = stdenv.mkDerivation {
+    name = "twm.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/twm-X11R7.0-1.0.1.tar.bz2;
+      md5 = "cd525ca3ac5e29d21a61deebc1e0c376";
+    };
+    buildInputs = [pkgconfig libX11 libXext libXt libXmu ];
+  };
+    
+  utilmacros = stdenv.mkDerivation {
+    name = "util-macros.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/util-macros-X11R7.0-1.0.1.tar.bz2;
+      md5 = "bc6be634532d4936eb753de54e1663d3";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  videoproto = stdenv.mkDerivation {
+    name = "videoproto.0-2.2.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/videoproto-X11R7.0-2.2.2.tar.bz2;
+      md5 = "de9e16a8a464531a54a36211d2f983bd";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  viewres = stdenv.mkDerivation {
+    name = "viewres.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/viewres-X11R7.0-1.0.1.tar.bz2;
+      md5 = "004bf8dd4646aca86faf5aa22b0c3f2f";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  windowswmproto = stdenv.mkDerivation {
+    name = "windowswmproto.0-1.0.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/windowswmproto-X11R7.0-1.0.3.tar.bz2;
+      md5 = "ea2f71075f68371fec22eb98a6af8074";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  x11perf = stdenv.mkDerivation {
+    name = "x11perf.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/x11perf-X11R7.0-1.0.1.tar.bz2;
+      md5 = "9986b20301c6a37bb144cb9733bf35a0";
+    };
+    buildInputs = [pkgconfig libX11 libXmu ];
+  };
+    
+  xauth = stdenv.mkDerivation {
+    name = "xauth.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xauth-X11R7.0-1.0.1.tar.bz2;
+      md5 = "ef2359ddaaea6ffaf9072fa342d6eb09";
+    };
+    buildInputs = [pkgconfig libX11 libXau libXext libXmu ];
+  };
+    
+  xbiff = stdenv.mkDerivation {
+    name = "xbiff.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xbiff-X11R7.0-1.0.1.tar.bz2;
+      md5 = "c4eb71a3187586d02365a67fc1445e54";
+    };
+    buildInputs = [pkgconfig xbitmaps libXext ];
+  };
+    
+  xbitmaps = stdenv.mkDerivation {
+    name = "xbitmaps.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xbitmaps-X11R7.0-1.0.1.tar.bz2;
+      md5 = "22c6f4a17220cd6b41d9799905f8e357";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xcalc = stdenv.mkDerivation {
+    name = "xcalc.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcalc-X11R7.0-1.0.1.tar.bz2;
+      md5 = "c1ecea85be15f746a59931e288768bdb";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xclipboard = stdenv.mkDerivation {
+    name = "xclipboard.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xclipboard-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a661b0f922cbdc62514bfd3e700d00fd";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xclock = stdenv.mkDerivation {
+    name = "xclock.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xclock-X11R7.0-1.0.1.tar.bz2;
+      md5 = "00444fed4bf5cd51624476ee11dd1fab";
+    };
+    buildInputs = [pkgconfig libX11 libXrender libXft libxkbfile libXt ];
+  };
+    
+  xcmiscproto = stdenv.mkDerivation {
+    name = "xcmiscproto.0-1.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcmiscproto-X11R7.0-1.1.2.tar.bz2;
+      md5 = "77f3ba0cbef119e0230d235507a1d916";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xcmsdb = stdenv.mkDerivation {
+    name = "xcmsdb.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcmsdb-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1c8396ed5c416e3a6658394ff6c415ad";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  xconsole = stdenv.mkDerivation {
+    name = "xconsole.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xconsole-X11R7.0-1.0.1.tar.bz2;
+      md5 = "f983b589ba9de198d90abee220a80f81";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xcursorgen = stdenv.mkDerivation {
+    name = "xcursorgen.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcursorgen-X11R7.0-1.0.0.tar.bz2;
+      md5 = "4d7b26dbb4442e89ec65c4147b31a5f7";
+    };
+    buildInputs = [pkgconfig libX11 libXcursor libpng ];
+  };
+    
+  xcursorthemes = stdenv.mkDerivation {
+    name = "xcursor-themes.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcursor-themes-X11R7.0-1.0.1.tar.bz2;
+      md5 = "c39afeae55a7d330297b2fec3d113634";
+    };
+    buildInputs = [pkgconfig libXcursor ];
+  };
+    
+  xdbedizzy = stdenv.mkDerivation {
+    name = "xdbedizzy.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdbedizzy-X11R7.0-1.0.1.tar.bz2;
+      md5 = "ceaccde801650ffbffc1e5b0657960d2";
+    };
+    buildInputs = [pkgconfig libXp libXext libXprintUtil libXau ];
+  };
+    
+  xditview = stdenv.mkDerivation {
+    name = "xditview.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xditview-X11R7.0-1.0.1.tar.bz2;
+      md5 = "21887fe4ec1965d637e82b7840650a6f";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xdm = stdenv.mkDerivation {
+    name = "xdm.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdm-X11R7.0-1.0.1.tar.bz2;
+      md5 = "9ac363721dbb8cd39aa1064b260624a6";
+    };
+    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXpm libXdmcp libXt libXext ];
+  };
+    
+  xdpyinfo = stdenv.mkDerivation {
+    name = "xdpyinfo.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdpyinfo-X11R7.0-1.0.1.tar.bz2;
+      md5 = "2b08e9ca783e3aa91d7fb84fdd716e93";
+    };
+    buildInputs = [pkgconfig libXext libX11 libXtst libXxf86vm libXxf86dga libXxf86misc libXi libXrender libXinerama libdmx libXp ];
+  };
+    
+  xdriinfo = stdenv.mkDerivation {
+    name = "xdriinfo.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdriinfo-X11R7.0-1.0.0.tar.bz2;
+      md5 = "75b8b53e29bb295f7fbae7909e0e9770";
+    };
+    buildInputs = [pkgconfig libX11 glproto ];
+  };
+    
+  xedit = stdenv.mkDerivation {
+    name = "xedit.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xedit-X11R7.0-1.0.1.tar.bz2;
+      md5 = "19f607d033f62fb1ee5965f4236b19d4";
+    };
+    buildInputs = [pkgconfig libXprintUtil libXp libXt ];
+  };
+    
+  xev = stdenv.mkDerivation {
+    name = "xev.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xev-X11R7.0-1.0.1.tar.bz2;
+      md5 = "5d0d3c13b03e9516eafe536e6bd756c7";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  xextproto = stdenv.mkDerivation {
+    name = "xextproto.0-7.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xextproto-X11R7.0-7.0.2.tar.bz2;
+      md5 = "c0e88fc3483d90a7fea6a399298d90ea";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xeyes = stdenv.mkDerivation {
+    name = "xeyes.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xeyes-X11R7.0-1.0.1.tar.bz2;
+      md5 = "3ffafa7f222ea799bcd9fcd85c60ab98";
+    };
+    buildInputs = [pkgconfig libX11 libXt libXext libXmu ];
+  };
+    
+  xf86bigfontproto = stdenv.mkDerivation {
+    name = "xf86bigfontproto.0-1.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86bigfontproto-X11R7.0-1.1.2.tar.bz2;
+      md5 = "5509d420a2bc898ca7d817cd8bf1b2a7";
     };
     buildInputs = [pkgconfig ];
   };
     
   xf86dga = stdenv.mkDerivation {
-    name = "xf86dga-0.99.1";
+    name = "xf86dga.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86dga-0.99.1.tar.bz2;
-      md5 = "88242630e45b341b3d49eb1a60e002bb";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86dga-X11R7.0-1.0.1.tar.bz2;
+      md5 = "f518fd7ebef3d9e8dbaa57e50a3e2631";
     };
-    buildInputs = [pkgconfig libX11 libXxf86dga ];
+    buildInputs = [pkgconfig libX11 libXxf86dga libXt libXaw libXmu ];
   };
     
-  fontsproto = stdenv.mkDerivation {
-    name = "fontsproto-2.0.1";
+  xf86dgaproto = stdenv.mkDerivation {
+    name = "xf86dgaproto.0-2.0.2";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/fontsproto-2.0.1.tar.bz2;
-      md5 = "d52b5df46f90337e0c297e0997641d3d";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  libSM = stdenv.mkDerivation {
-    name = "libSM-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libSM-0.99.1.tar.bz2;
-      md5 = "f394a6bb09fc73839d0ac99408374be5";
-    };
-    buildInputs = [pkgconfig libICE xproto xtrans ];
-  };
-    
-  xf86videos3virge = stdenv.mkDerivation {
-    name = "xf86-video-s3virge-1.8.6.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-s3virge-1.8.6.1.tar.bz2;
-      md5 = "2d0801d02ca902781257e36fb23523cb";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xmessage = stdenv.mkDerivation {
-    name = "xmessage-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmessage-0.99.1.tar.bz2;
-      md5 = "27fc3265ed21b15b01402e2f9f14fd98";
-    };
-    buildInputs = [pkgconfig ];
-  };
-    
-  xf86inputmutouch = stdenv.mkDerivation {
-    name = "xf86-input-mutouch-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-input-mutouch-1.0.0.1.tar.bz2;
-      md5 = "9ab44ed3e1c9b7149de5b7ae6efaba11";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videosuncg14 = stdenv.mkDerivation {
-    name = "xf86-video-suncg14-1.0.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-suncg14-1.0.0.1.tar.bz2;
-      md5 = "3b5d58b303de5902004345f5a191a803";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  };
-    
-  xf86videotdfx = stdenv.mkDerivation {
-    name = "xf86-video-tdfx-1.1.0.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86-video-tdfx-1.1.0.1.tar.bz2;
-      md5 = "2bfd24a0c4152793e937ac0f84da2b7e";
-    };
-    buildInputs = [pkgconfig xorgserver xproto libdrm xf86driproto ];
-  };
-    
-  libXaw = stdenv.mkDerivation {
-    name = "libXaw-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXaw-0.99.1.tar.bz2;
-      md5 = "731f8a6407765466d1170d609137a922";
-    };
-    buildInputs = [pkgconfig xproto libX11 libXext libXt libXpm libXp ];
-    propagatedBuildInputs = [libXmu];
-  };
-    
-  x11perf = stdenv.mkDerivation {
-    name = "x11perf-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/x11perf-0.99.1.tar.bz2;
-      md5 = "4be794c83012979dfa5ba30361b38a35";
-    };
-    buildInputs = [pkgconfig libX11 libXmu ];
-  };
-    
-  xvinfo = stdenv.mkDerivation {
-    name = "xvinfo-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xvinfo-0.99.1.tar.bz2;
-      md5 = "522e1c076d4d9ff29b26b3bd1b9bd85e";
-    };
-    buildInputs = [pkgconfig libXv libX11 ];
-  };
-    
-  libXfixes = stdenv.mkDerivation {
-    name = "libXfixes-3.0.0";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/libXfixes-3.0.0.tar.bz2;
-      md5 = "cf114cbb35ecbf895a4b72f1270d9829";
-    };
-    buildInputs = [pkgconfig libX11 xproto fixesproto ];
-  };
-    
-  xconsole = stdenv.mkDerivation {
-    name = "xconsole-0.99.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xconsole-0.99.1.tar.bz2;
-      md5 = "c528dbcaa996ea22a12ba31d99773406";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86dgaproto-X11R7.0-2.0.2.tar.bz2;
+      md5 = "48ddcc6b764dba7e711f8e25596abdb0";
     };
     buildInputs = [pkgconfig ];
   };
     
   xf86driproto = stdenv.mkDerivation {
-    name = "xf86driproto-2.0.1";
+    name = "xf86driproto.0-2.0.3";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xf86driproto-2.0.1.tar.bz2;
-      md5 = "a0520a0b77592d26311e876ca6b209a7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86driproto-X11R7.0-2.0.3.tar.bz2;
+      md5 = "839a70dfb8d5b02bcfc24996ab99a618";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xmodmap = stdenv.mkDerivation {
-    name = "xmodmap-0.99.1";
+  xf86inputacecad = stdenv.mkDerivation {
+    name = "xf86-input-acecad.0-1.0.0.5";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xmodmap-0.99.1.tar.bz2;
-      md5 = "06f98f189698e2d8059a907545c082f6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-acecad-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "b35b1756579ebe296801622bdf063ab1";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputaiptek = stdenv.mkDerivation {
+    name = "xf86-input-aiptek.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-aiptek-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "9ee5109ef33e281ce0784ad077f26cee";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputcalcomp = stdenv.mkDerivation {
+    name = "xf86-input-calcomp.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-calcomp-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "f4199b5df063701462d5a8c84aadd190";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputcitron = stdenv.mkDerivation {
+    name = "xf86-input-citron.0-2.1.1.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-citron-X11R7.0-2.1.1.5.tar.bz2;
+      md5 = "62b5405d337bc055bc9345565cc0da8c";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputdigitaledge = stdenv.mkDerivation {
+    name = "xf86-input-digitaledge.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-digitaledge-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "8342f3a0dcdaa1120af01dd25dabf0d7";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputdmc = stdenv.mkDerivation {
+    name = "xf86-input-dmc.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dmc-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "fdf127a2d419f7c2e02bec27273091d3";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputdynapro = stdenv.mkDerivation {
+    name = "xf86-input-dynapro.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dynapro-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "89dbb839ab4c5fca3dbc3c2805a7efb9";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputelo2300 = stdenv.mkDerivation {
+    name = "xf86-input-elo2300.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-elo2300-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "6009a17f13a37bfde8b60c2fba5b0e5b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputelographics = stdenv.mkDerivation {
+    name = "xf86-input-elographics.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-elographics-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "24c33f833bb2db72a07c3d28bfc0aae9";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputevdev = stdenv.mkDerivation {
+    name = "xf86-input-evdev.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-evdev-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "d982c6f185f4c75a4b65703ceed7be06";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputfpit = stdenv.mkDerivation {
+    name = "xf86-input-fpit.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-fpit-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "fc0e11fefc322623914a2d819d5b6d51";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputhyperpen = stdenv.mkDerivation {
+    name = "xf86-input-hyperpen.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-hyperpen-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "0c4f2a6390e3045e4c48a48b47b6332c";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputjamstudio = stdenv.mkDerivation {
+    name = "xf86-input-jamstudio.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-jamstudio-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "49de35ca024be2cb785832ae37ec30d0";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputjoystick = stdenv.mkDerivation {
+    name = "xf86-input-joystick.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-joystick-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "9e3ba60836f4c1d2e4cebc63a28321b4";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputkeyboard = stdenv.mkDerivation {
+    name = "xf86-input-keyboard.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-keyboard-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "8fb8a30fd9d7f152a1aef4eb8ef32b3f";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputmagellan = stdenv.mkDerivation {
+    name = "xf86-input-magellan.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magellan-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "fd7367f467dc3302604274cee59a7c7b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputmagictouch = stdenv.mkDerivation {
+    name = "xf86-input-magictouch.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magictouch-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "a51d84792b8c0079d7c8d13eb17acf31";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputmicrotouch = stdenv.mkDerivation {
+    name = "xf86-input-microtouch.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-microtouch-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "0c25e0340b6483fb2a600b0e885724a2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputmouse = stdenv.mkDerivation {
+    name = "xf86-input-mouse.0-1.0.3.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mouse-X11R7.0-1.0.3.1.tar.bz2;
+      md5 = "12a908e5a97b1b03e8717abf167f4f27";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputmutouch = stdenv.mkDerivation {
+    name = "xf86-input-mutouch.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mutouch-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "4758e667bfbba517df2a58d51270cfe2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputpalmax = stdenv.mkDerivation {
+    name = "xf86-input-palmax.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-palmax-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "d138024a20298304af883631d23c5338";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputpenmount = stdenv.mkDerivation {
+    name = "xf86-input-penmount.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-penmount-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "065b1cf862864741aebcfefcc7c09539";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputspaceorb = stdenv.mkDerivation {
+    name = "xf86-input-spaceorb.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-spaceorb-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "193ca7b1e87c3995b86f15a01b63b297";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputsumma = stdenv.mkDerivation {
+    name = "xf86-input-summa.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-summa-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "61d780857e5dc139081718c075e74a01";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputtek4957 = stdenv.mkDerivation {
+    name = "xf86-input-tek4957.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-tek4957-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "df633403c91a48c6a316c6a5f48e53e2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputur98 = stdenv.mkDerivation {
+    name = "xf86-input-ur98.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-ur98-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "9b1530b3dcbb77690ad0e61f60489899";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86inputvoid = stdenv.mkDerivation {
+    name = "xf86-input-void.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-void-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "c7ae53dee1f3e95fa5ce9659b34d8446";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86miscproto = stdenv.mkDerivation {
+    name = "xf86miscproto.0-0.9.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86miscproto-X11R7.0-0.9.2.tar.bz2;
+      md5 = "1cc082d8a6da5177ede354bedbacd4ed";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xf86rushproto = stdenv.mkDerivation {
+    name = "xf86rushproto.0-1.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86rushproto-X11R7.0-1.1.2.tar.bz2;
+      md5 = "1a6b258d72c3c3baccfd695d278e847c";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xf86videoapm = stdenv.mkDerivation {
+    name = "xf86-video-apm.0-1.0.1.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-apm-X11R7.0-1.0.1.5.tar.bz2;
+      md5 = "323911ab16a6147d3cabceff9336a3d2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videoark = stdenv.mkDerivation {
+    name = "xf86-video-ark.0-0.5.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ark-X11R7.0-0.5.0.5.tar.bz2;
+      md5 = "342937e275dbc92f437417a3186a8222";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videoati = stdenv.mkDerivation {
+    name = "xf86-video-ati.0-6.5.7.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ati-X11R7.0-6.5.7.3.tar.bz2;
+      md5 = "92525195a7a36f5ffbffcb4e6a564e50";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videochips = stdenv.mkDerivation {
+    name = "xf86-video-chips.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-chips-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "90f23505faceac30d3f46ab94f7293e1";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videocirrus = stdenv.mkDerivation {
+    name = "xf86-video-cirrus.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cirrus-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "7708693ad9d73cd76d4caef7c644a46f";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videocyrix = stdenv.mkDerivation {
+    name = "xf86-video-cyrix.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cyrix-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "14f868d16554b19fef4f30398a7b9cf1";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videodummy = stdenv.mkDerivation {
+    name = "xf86-video-dummy.0-0.1.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-dummy-X11R7.0-0.1.0.5.tar.bz2;
+      md5 = "462654f9be7e3022f97147e3390db97a";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videofbdev = stdenv.mkDerivation {
+    name = "xf86-video-fbdev.0-0.1.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-fbdev-X11R7.0-0.1.0.5.tar.bz2;
+      md5 = "1cf374eeb9151ac16a7ec2cd38048737";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videoglint = stdenv.mkDerivation {
+    name = "xf86-video-glint.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-glint-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "f14c2f1696c05760207adcaac856e5e5";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videoi128 = stdenv.mkDerivation {
+    name = "xf86-video-i128.0-1.1.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i128-X11R7.0-1.1.0.5.tar.bz2;
+      md5 = "078eed8c3673488ee618dfc7a3ef101b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videoi740 = stdenv.mkDerivation {
+    name = "xf86-video-i740.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i740-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "625448b13ebe2a13b7defad1efec05c4";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videoi810 = stdenv.mkDerivation {
+    name = "xf86-video-i810.0-1.4.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i810-X11R7.0-1.4.1.3.tar.bz2;
+      md5 = "fe6bec726fc1657b537508bbe8c2005b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto libXvMC fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videoimstt = stdenv.mkDerivation {
+    name = "xf86-video-imstt.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-imstt-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "cc949688918b78f830d78a9613e6896b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videomga = stdenv.mkDerivation {
+    name = "xf86-video-mga.0-1.2.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-mga-X11R7.0-1.2.1.3.tar.bz2;
+      md5 = "cb0409782020b5cc7edc273624ffdd17";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videoneomagic = stdenv.mkDerivation {
+    name = "xf86-video-neomagic.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-neomagic-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "ffe9015678a41e97bdbd2825066bb47b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videonewport = stdenv.mkDerivation {
+    name = "xf86-video-newport.0-0.1.4.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-newport-X11R7.0-0.1.4.1.tar.bz2;
+      md5 = "d74d9896d57c3caf224ba3472630d874";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videonsc = stdenv.mkDerivation {
+    name = "xf86-video-nsc.0-2.7.6.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nsc-X11R7.0-2.7.6.5.tar.bz2;
+      md5 = "ab16611b3ec7d21503b16b0a31addae0";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videonv = stdenv.mkDerivation {
+    name = "xf86-video-nv.0-1.0.1.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nv-X11R7.0-1.0.1.5.tar.bz2;
+      md5 = "9a88547fe550e20edcc5a938d31e22b1";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videorendition = stdenv.mkDerivation {
+    name = "xf86-video-rendition.0-4.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-rendition-X11R7.0-4.0.1.3.tar.bz2;
+      md5 = "f1a25db74a148dea45115e813027b932";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videos3 = stdenv.mkDerivation {
+    name = "xf86-video-s3.0-0.3.5.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3-X11R7.0-0.3.5.5.tar.bz2;
+      md5 = "83b9e8a9b8fc1c49bda2811358e5007c";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videos3virge = stdenv.mkDerivation {
+    name = "xf86-video-s3virge.0-1.8.6.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3virge-X11R7.0-1.8.6.5.tar.bz2;
+      md5 = "d0164c37749ab5f565db9813487e1900";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosavage = stdenv.mkDerivation {
+    name = "xf86-video-savage.0-2.0.2.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-savage-X11R7.0-2.0.2.3.tar.bz2;
+      md5 = "6b638dd500d10dba1822d3ea5061fc65";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videosiliconmotion = stdenv.mkDerivation {
+    name = "xf86-video-siliconmotion.0-1.3.1.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-siliconmotion-X11R7.0-1.3.1.5.tar.bz2;
+      md5 = "957de4e2a3c687dbb2e9e18582397804";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosis = stdenv.mkDerivation {
+    name = "xf86-video-sis.0-0.8.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sis-X11R7.0-0.8.1.3.tar.bz2;
+      md5 = "e3bac5a208b8bacfbec236b5a5b0ef40";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto xf86dgaproto libdrm xf86driproto ];
+  };
+    
+  xf86videosisusb = stdenv.mkDerivation {
+    name = "xf86-video-sisusb.0-0.7.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sisusb-X11R7.0-0.7.1.3.tar.bz2;
+      md5 = "781d726a0ca54b65521e383ab99043c8";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosunbw2 = stdenv.mkDerivation {
+    name = "xf86-video-sunbw2.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunbw2-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "0cdda1ab939ea1190c142aa8aabfaf83";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86videosuncg14 = stdenv.mkDerivation {
+    name = "xf86-video-suncg14.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg14-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "8f3a734d02ae716415f9c6344fa661bd";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosuncg3 = stdenv.mkDerivation {
+    name = "xf86-video-suncg3.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg3-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "799a54cef1f4435e00fa94a1d97d056f";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosuncg6 = stdenv.mkDerivation {
+    name = "xf86-video-suncg6.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg6-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "2227f3fb86b02148f347e002662e53c8";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosunffb = stdenv.mkDerivation {
+    name = "xf86-video-sunffb.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunffb-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "bb5182e3b74b3baa6fee245ac8bbf09a";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videosunleo = stdenv.mkDerivation {
+    name = "xf86-video-sunleo.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunleo-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "deb17a74ba68ee9593ac774206bd3612";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videosuntcx = stdenv.mkDerivation {
+    name = "xf86-video-suntcx.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suntcx-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "74d6ba5e55afdfebff84db08b6589e26";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videotdfx = stdenv.mkDerivation {
+    name = "xf86-video-tdfx.0-1.1.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tdfx-X11R7.0-1.1.1.3.tar.bz2;
+      md5 = "0201415230bf0454384c3bad099520d2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videotga = stdenv.mkDerivation {
+    name = "xf86-video-tga.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tga-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "fa67bf34454888d38e15708395cfed87";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videotrident = stdenv.mkDerivation {
+    name = "xf86-video-trident.0-1.0.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-trident-X11R7.0-1.0.1.2.tar.bz2;
+      md5 = "69f28afc7b585d01bb06b1e2f872f8ea";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videotseng = stdenv.mkDerivation {
+    name = "xf86-video-tseng.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tseng-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "981f46914c1e54742418f0444ea2e092";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videov4l = stdenv.mkDerivation {
+    name = "xf86-video-v4l.0-0.0.1.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-v4l-X11R7.0-0.0.1.5.tar.bz2;
+      md5 = "e422c63bc83717ecd0686aef2036802b";
+    };
+    buildInputs = [pkgconfig xorgserver xproto ];
+  };
+    
+  xf86videovesa = stdenv.mkDerivation {
+    name = "xf86-video-vesa.0-1.0.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vesa-X11R7.0-1.0.1.3.tar.bz2;
+      md5 = "049ada4df1abb5aa2b6633ba90353e78";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videovga = stdenv.mkDerivation {
+    name = "xf86-video-vga.0-4.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vga-X11R7.0-4.0.0.5.tar.bz2;
+      md5 = "24437857707acc337cab331cc56f64e2";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videovia = stdenv.mkDerivation {
+    name = "xf86-video-via.0-0.1.33.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-via-X11R7.0-0.1.33.2.tar.bz2;
+      md5 = "4d3268d226a40f580ab105796bfed1f5";
+    };
+    buildInputs = [pkgconfig xorgserver xproto libXvMC fontsproto libdrm xf86driproto ];
+  };
+    
+  xf86videovmware = stdenv.mkDerivation {
+    name = "xf86-video-vmware.0-10.11.1.3";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vmware-X11R7.0-10.11.1.3.tar.bz2;
+      md5 = "4df79349e26add4c23f6be8bec347ad4";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto ];
+  };
+    
+  xf86videovoodoo = stdenv.mkDerivation {
+    name = "xf86-video-voodoo.0-1.0.0.5";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-voodoo-X11R7.0-1.0.0.5.tar.bz2;
+      md5 = "e00cc814ebdb3f3067e075bc93b26199";
+    };
+    buildInputs = [pkgconfig xorgserver xproto fontsproto xf86dgaproto ];
+  };
+    
+  xf86vidmodeproto = stdenv.mkDerivation {
+    name = "xf86vidmodeproto.0-2.2.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86vidmodeproto-X11R7.0-2.2.2.tar.bz2;
+      md5 = "475f19a2ffbfab9a0886791c5f89c978";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xfd = stdenv.mkDerivation {
+    name = "xfd.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfd-X11R7.0-1.0.1.tar.bz2;
+      md5 = "26c83a6fe245906cc05055abf877d0f2";
+    };
+    buildInputs = [pkgconfig freetype fontconfig libXft libXt ];
+  };
+    
+  xfindproxy = stdenv.mkDerivation {
+    name = "xfindproxy.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfindproxy-X11R7.0-1.0.1.tar.bz2;
+      md5 = "5ef22b8876bb452f670e0fc425a12504";
+    };
+    buildInputs = [pkgconfig libX11 libICE libXt xproxymanagementprotocol ];
+  };
+    
+  xfontsel = stdenv.mkDerivation {
+    name = "xfontsel.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfontsel-X11R7.0-1.0.1.tar.bz2;
+      md5 = "d1df7b8622b7f8ebca4b2463118d7073";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xfs = stdenv.mkDerivation {
+    name = "xfs.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfs-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a297da3d906110e9c29ec56c5ea578a8";
+    };
+    buildInputs = [pkgconfig libFS libXfont xtrans ];
+  };
+    
+  xfsinfo = stdenv.mkDerivation {
+    name = "xfsinfo.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfsinfo-X11R7.0-1.0.1.tar.bz2;
+      md5 = "55ca0cfd09b1c1555d492d6961d9af46";
+    };
+    buildInputs = [pkgconfig libX11 libFS ];
+  };
+    
+  xfwp = stdenv.mkDerivation {
+    name = "xfwp.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfwp-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e1ef3fef10d1f7fbd936794982a8f0be";
+    };
+    buildInputs = [pkgconfig libX11 libICE xproxymanagementprotocol ];
+  };
+    
+  xgamma = stdenv.mkDerivation {
+    name = "xgamma.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xgamma-X11R7.0-1.0.1.tar.bz2;
+      md5 = "07167da3f6b21985e27174ec70f213c0";
+    };
+    buildInputs = [pkgconfig libX11 libXxf86vm ];
+  };
+    
+  xgc = stdenv.mkDerivation {
+    name = "xgc.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xgc-X11R7.0-1.0.1.tar.bz2;
+      md5 = "8cd01cf558c3eed738115abcf720277d";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xhost = stdenv.mkDerivation {
+    name = "xhost.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xhost-X11R7.0-1.0.0.tar.bz2;
+      md5 = "76c44e84aaf4ad8e97cf15f4dbe4a24a";
+    };
+    buildInputs = [pkgconfig libX11 libXmu libXau ];
+  };
+    
+  xineramaproto = stdenv.mkDerivation {
+    name = "xineramaproto.0-1.1.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xineramaproto-X11R7.0-1.1.2.tar.bz2;
+      md5 = "80516ad305063f4e6c6c3ccf42ea2142";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xinit = stdenv.mkDerivation {
+    name = "xinit.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xinit-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6d2df59fa328cbc99c0de98bc2e14597";
     };
     buildInputs = [pkgconfig libX11 ];
   };
     
-  pclcomp = stdenv.mkDerivation {
-    name = "pclcomp-0.99.1";
+  xkbcomp = stdenv.mkDerivation {
+    name = "xkbcomp.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/pclcomp-0.99.1.tar.bz2;
-      md5 = "abd6e07a362aa2bd6083654bfb05beb5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbcomp-X11R7.0-1.0.1.tar.bz2;
+      md5 = "46d1e015897200d4dfed64990abaa8b9";
+    };
+    buildInputs = [pkgconfig libX11 libxkbfile ];
+  };
+    
+  xkbdata = stdenv.mkDerivation {
+    name = "xkbdata.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbdata-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1f706f92334ee65818512b3b45d7be65";
     };
     buildInputs = [pkgconfig ];
   };
     
-  xhost = stdenv.mkDerivation {
-    name = "xhost-0.99.1";
+  xkbevd = stdenv.mkDerivation {
+    name = "xkbevd.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/xhost-0.99.1.tar.bz2;
-      md5 = "806ec511fa1d495c9c22dc82fd7384ee";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbevd-X11R7.0-1.0.1.tar.bz2;
+      md5 = "7ba0496f079552d1918d73bd09bde9b2";
+    };
+    buildInputs = [pkgconfig libxkbfile libX11 ];
+  };
+    
+  xkbprint = stdenv.mkDerivation {
+    name = "xkbprint.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbprint-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6235c39690968d0a9a4c1b1c16c8905a";
+    };
+    buildInputs = [pkgconfig libxkbfile libX11 ];
+  };
+    
+  xkbutils = stdenv.mkDerivation {
+    name = "xkbutils.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbutils-X11R7.0-1.0.1.tar.bz2;
+      md5 = "798502eca0c6c3e8c02d76fabb910532";
+    };
+    buildInputs = [pkgconfig libxkbfile libX11 ];
+  };
+    
+  xkill = stdenv.mkDerivation {
+    name = "xkill.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkill-X11R7.0-1.0.1.tar.bz2;
+      md5 = "35f47fd58d75c1ea5f414b21a10bdbf3";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   };
     
-  mkfontscale = stdenv.mkDerivation {
-    name = "mkfontscale-0.99.1";
+  xload = stdenv.mkDerivation {
+    name = "xload.0-1.0.1";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/xorg/mkfontscale-0.99.1.tar.bz2;
-      md5 = "840005c72a9898383c6b5e2942a9f8bc";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xload-X11R7.0-1.0.1.tar.bz2;
+      md5 = "11080456822146ebc0118b15f4b911d9";
     };
-    buildInputs = [pkgconfig libfontenc freetype ];
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xlogo = stdenv.mkDerivation {
+    name = "xlogo.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xlogo-X11R7.0-1.0.1.tar.bz2;
+      md5 = "0314b2f5173da64957031400638fa5f8";
+    };
+    buildInputs = [pkgconfig libXprintUtil libXp libXrender libXft libXext libXt ];
+  };
+    
+  xlsatoms = stdenv.mkDerivation {
+    name = "xlsatoms.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xlsatoms-X11R7.0-1.0.1.tar.bz2;
+      md5 = "737b4d7893aa886e8e4181c94380a421";
+    };
+    buildInputs = [pkgconfig libX11 libXmu ];
+  };
+    
+  xlsclients = stdenv.mkDerivation {
+    name = "xlsclients.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xlsclients-X11R7.0-1.0.1.tar.bz2;
+      md5 = "cc0d64e90eab0b90b38355e841824588";
+    };
+    buildInputs = [pkgconfig libX11 libXmu ];
+  };
+    
+  xlsfonts = stdenv.mkDerivation {
+    name = "xlsfonts.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xlsfonts-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e8681e5671e7f01922ce6c8f2327e602";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  xmag = stdenv.mkDerivation {
+    name = "xmag.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmag-X11R7.0-1.0.1.tar.bz2;
+      md5 = "38ac487ac1b75be0253fe7f973947386";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xman = stdenv.mkDerivation {
+    name = "xman.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xman-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a4f21547120952aeb8e5663ebd72e843";
+    };
+    buildInputs = [pkgconfig libXprintUtil libXp libXt ];
+  };
+    
+  xmessage = stdenv.mkDerivation {
+    name = "xmessage.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmessage-X11R7.0-1.0.1.tar.bz2;
+      md5 = "5a17607184fd348c2b36b5499ae9d2e6";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xmh = stdenv.mkDerivation {
+    name = "xmh.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmh-X11R7.0-1.0.1.tar.bz2;
+      md5 = "53af2f87dc096d84f11ca6fbd6748b34";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xmodmap = stdenv.mkDerivation {
+    name = "xmodmap.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmodmap-X11R7.0-1.0.0.tar.bz2;
+      md5 = "240ed53111925e005d2f138ea98ef5e1";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  xmore = stdenv.mkDerivation {
+    name = "xmore.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmore-X11R7.0-1.0.1.tar.bz2;
+      md5 = "99a48c50d486b7c9098b4f5598782cac";
+    };
+    buildInputs = [pkgconfig libXprintUtil libXp libXt ];
+  };
+    
+  xorgcffiles = stdenv.mkDerivation {
+    name = "xorg-cf-files.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-cf-files-X11R7.0-1.0.1.tar.bz2;
+      md5 = "f2dd453c37386293fb207431b4a073dd";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xorgdocs = stdenv.mkDerivation {
+    name = "xorg-docs.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-docs-X11R7.0-1.0.1.tar.bz2;
+      md5 = "ac0d76afa46ef5da9e1cf33558f4b303";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xorgserver = stdenv.mkDerivation {
+    name = "xorg-server.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-server-X11R7.0-1.0.1.tar.bz2;
+      md5 = "0e7527480fb845a3c2e333bd0f47ff50";
+    };
+    buildInputs = [pkgconfig libX11 liblbxutil xf86driproto libdrm glproto printproto libXdmcp libXmu libXext libXrender libXfont libXi dmxproto libXau libXaw libXmu libXt libXpm libdmx libXtst libXres libxkbfile ];
+  };
+    
+  xorgsgmldoctools = stdenv.mkDerivation {
+    name = "xorg-sgml-doctools.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-sgml-doctools-X11R7.0-1.0.1.tar.bz2;
+      md5 = "d08d4fd10ac46d8b4636efe4d8c0de74";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xphelloworld = stdenv.mkDerivation {
+    name = "xphelloworld.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xphelloworld-X11R7.0-1.0.1.tar.bz2;
+      md5 = "80c9a23c7efb72b9674d7af6b7346992";
+    };
+    buildInputs = [pkgconfig libX11 libXaw libXprintUtil libXp libXprintAppUtil libXt ];
+  };
+    
+  xplsprinters = stdenv.mkDerivation {
+    name = "xplsprinters.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xplsprinters-X11R7.0-1.0.1.tar.bz2;
+      md5 = "1d0a68dada5e14ab07d7660abd4d03e3";
+    };
+    buildInputs = [pkgconfig libXp libXprintUtil libX11 ];
+  };
+    
+  xpr = stdenv.mkDerivation {
+    name = "xpr.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xpr-X11R7.0-1.0.1.tar.bz2;
+      md5 = "487b5ab96b373acb80808758ce23eb49";
+    };
+    buildInputs = [pkgconfig libXmu libX11 ];
+  };
+    
+  xprehashprinterlist = stdenv.mkDerivation {
+    name = "xprehashprinterlist.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xprehashprinterlist-X11R7.0-1.0.1.tar.bz2;
+      md5 = "3907bce78d304dedb2a5dd6944bd2ed5";
+    };
+    buildInputs = [pkgconfig libXp libX11 ];
+  };
+    
+  xprop = stdenv.mkDerivation {
+    name = "xprop.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xprop-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6730f0fbad6969825580de46e66b44dd";
+    };
+    buildInputs = [pkgconfig libXmu libX11 ];
+  };
+    
+  xproto = stdenv.mkDerivation {
+    name = "xproto.0-7.0.4";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xproto-X11R7.0-7.0.4.tar.bz2;
+      md5 = "643259d00e02db8e9a6f4c047281b5d9";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xproxymanagementprotocol = stdenv.mkDerivation {
+    name = "xproxymanagementprotocol.0-1.0.2";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xproxymanagementprotocol-X11R7.0-1.0.2.tar.bz2;
+      md5 = "977ee3fd1525418aaa8bfc55ffbf6fc9";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xrandr = stdenv.mkDerivation {
+    name = "xrandr.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrandr-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e433ccca3c4f9ab8609dfd1c9c8e36ea";
+    };
+    buildInputs = [pkgconfig libXrandr libXrender libX11 ];
+  };
+    
+  xrdb = stdenv.mkDerivation {
+    name = "xrdb.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrdb-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a3c1fd6f5391de7f810239a912d39fa5";
+    };
+    buildInputs = [pkgconfig libXmu libX11 ];
+  };
+    
+  xrefresh = stdenv.mkDerivation {
+    name = "xrefresh.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrefresh-X11R7.0-1.0.1.tar.bz2;
+      md5 = "5a46d5fb82aeeb4d6aac58c9cc367439";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  };
+    
+  xrx = stdenv.mkDerivation {
+    name = "xrx.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrx-X11R7.0-1.0.1.tar.bz2;
+      md5 = "9de3b04392c98df59c79a34fd51c385f";
+    };
+    buildInputs = [pkgconfig libX11 libXt libXext xtrans xproxymanagementprotocol libXau ];
+  };
+    
+  xset = stdenv.mkDerivation {
+    name = "xset.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xset-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a0350e334a215829166266e2ce504b1c";
+    };
+    buildInputs = [pkgconfig libXmu libX11 libXext libXxf86misc libXfontcache libXp ];
+  };
+    
+  xsetmode = stdenv.mkDerivation {
+    name = "xsetmode.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xsetmode-X11R7.0-1.0.0.tar.bz2;
+      md5 = "d83d6ef0b73762feab724aab95d9a4a2";
+    };
+    buildInputs = [pkgconfig libXi libX11 ];
+  };
+    
+  xsetpointer = stdenv.mkDerivation {
+    name = "xsetpointer.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xsetpointer-X11R7.0-1.0.0.tar.bz2;
+      md5 = "195614431e2431508e07a42a3b6d4568";
+    };
+    buildInputs = [pkgconfig libXi libX11 ];
+  };
+    
+  xsetroot = stdenv.mkDerivation {
+    name = "xsetroot.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xsetroot-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e2831b39cd395d6f6f4824b0e25f55ed";
+    };
+    buildInputs = [pkgconfig libXmu libX11 xbitmaps ];
+  };
+    
+  xsm = stdenv.mkDerivation {
+    name = "xsm.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xsm-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e3588272ce3b7dc21d42ead683135a8a";
+    };
+    buildInputs = [pkgconfig libXt ];
+  };
+    
+  xstdcmap = stdenv.mkDerivation {
+    name = "xstdcmap.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xstdcmap-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e276aa02d44dcacf5ac13aa0cabd404d";
+    };
+    buildInputs = [pkgconfig libXmu libX11 ];
+  };
+    
+  xtrans = stdenv.mkDerivation {
+    name = "xtrans.0-1.0.0";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xtrans-X11R7.0-1.0.0.tar.bz2;
+      md5 = "153642136a003871a9093c8103d6ac5a";
+    };
+    buildInputs = [pkgconfig ];
+  };
+    
+  xtrap = stdenv.mkDerivation {
+    name = "xtrap.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xtrap-X11R7.0-1.0.1.tar.bz2;
+      md5 = "6d56946322d2875eb33f25f5e5f621a3";
+    };
+    buildInputs = [pkgconfig libX11 libXTrap ];
+  };
+    
+  xvidtune = stdenv.mkDerivation {
+    name = "xvidtune.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xvidtune-X11R7.0-1.0.1.tar.bz2;
+      md5 = "a12e27fb732cb115b6adc4c724c44c5d";
+    };
+    buildInputs = [pkgconfig libXxf86vm libXt ];
+  };
+    
+  xvinfo = stdenv.mkDerivation {
+    name = "xvinfo.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xvinfo-X11R7.0-1.0.1.tar.bz2;
+      md5 = "39d79590345bed51da6df838f6490cbf";
+    };
+    buildInputs = [pkgconfig libXv libX11 ];
+  };
+    
+  xwd = stdenv.mkDerivation {
+    name = "xwd.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xwd-X11R7.0-1.0.1.tar.bz2;
+      md5 = "596c443465ab9ab67c59c794261d4571";
+    };
+    buildInputs = [pkgconfig libXmu libX11 ];
+  };
+    
+  xwininfo = stdenv.mkDerivation {
+    name = "xwininfo.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xwininfo-X11R7.0-1.0.1.tar.bz2;
+      md5 = "3ec67e4e1b9f5a1fe7e56b56ab931893";
+    };
+    buildInputs = [pkgconfig libXmu libXext libX11 ];
+  };
+    
+  xwud = stdenv.mkDerivation {
+    name = "xwud.0-1.0.1";
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xwud-X11R7.0-1.0.1.tar.bz2;
+      md5 = "e08d2ee04abb89a6348f47c84a1ff3ed";
+    };
+    buildInputs = [pkgconfig libX11 ];
   };
     
 }

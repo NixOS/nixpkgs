@@ -1,13 +1,15 @@
 #! /usr/bin/perl -w
 
 # Typical command to generate the list of tarballs:
-# curl http://nix.cs.uu.nl/dist/tarballs/xorg/ | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$1\n"; }; }' > list
+# curl http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/ | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$1\n"; }; }' > list
 
 use strict;
 
-my $baseURL = "http://nix.cs.uu.nl/dist/tarballs/xorg";
+my $baseURL = "http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything";
     
 my $tmpDir = "/tmp/xorg-unpack";
+
+my $version = "X11R7"; # will be removed from package names
 
 
 my %pkgURLs;
@@ -22,6 +24,17 @@ $pcMap{"freetype2"} = "freetype";
 $pcMap{"fontconfig"} = "fontconfig";
 $pcMap{"libpng12"} = "libpng";
 $pcMap{"libdrm"} = "libdrm";
+$pcMap{"libdrm"} = "libdrm";
+
+
+if (-e "cache") {
+    open CACHE, "<cache";
+    while (<CACHE>) {
+        /^(\S+)\s+(\S+)$/ or die;
+        $pkgHashes{$1} = $2;
+    }
+    close CACHE;
+}
 
 
 while (<>) {
@@ -33,16 +46,24 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
+    $pkg =~ s/$version//g if $version ne "";
     $pkgURLs{$pkg} = $tarball;
 #    print "$pkg\n";
 
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball' $pkgHashes{$pkg}`;
     chomp $hash;
     chomp $path;
+    if (!defined $pkgHashes{$pkg}) {
+        open CACHE, ">>cache";
+        print CACHE "$pkg $hash\n";
+        close CACHE;
+    }
     $pkgHashes{$pkg} = $hash;
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
-    $pkgNames{$pkg} = $1;
+    my $pkgName = $1;
+    $pkgName =~ s/-$version//g if $version ne "";
+    $pkgNames{$pkg} = $pkgName;
 
     print "\nunpacking $path\n";
     system "rm -rf '$tmpDir'";
@@ -87,13 +108,13 @@ while (<>) {
 
 print "\nWRITE OUT\n";
 
-open OUT, ">out";
+open OUT, ">default.nix";
 
 print OUT "";
 print OUT <<EOF;
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, expat, libdrm, libpng
+, expat, libdrm, libpng, zlib, perl, mesa
 }:
 
 rec {
@@ -101,7 +122,7 @@ rec {
 EOF
 
 
-foreach my $pkg (keys %pkgURLs) {
+foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
     my $inputs = "";
