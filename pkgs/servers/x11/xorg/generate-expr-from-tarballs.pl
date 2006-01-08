@@ -143,6 +143,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     print OUT <<EOF
   $pkg = stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
+    builder = ./builder.sh;
     src = fetchurl {
       url = $pkgURLs{$pkg};
       md5 = "$pkgHashes{$pkg}";
