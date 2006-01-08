@@ -10,6 +10,7 @@ my $baseURL = "http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything
 my $tmpDir = "/tmp/xorg-unpack";
 
 my $version = "X11R7"; # will be removed from package names
+my $version2 = "X11R7.0"; # will be removed from package names
 
 
 my %pkgURLs;
@@ -46,9 +47,9 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
+    print "$pkg\n";
     $pkg =~ s/$version//g if $version ne "";
     $pkgURLs{$pkg} = $tarball;
-#    print "$pkg\n";
 
     my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball' $pkgHashes{$pkg}`;
     chomp $hash;
@@ -62,7 +63,7 @@ while (<>) {
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;
-    $pkgName =~ s/-$version//g if $version ne "";
+    $pkgName =~ s/-$version2//g if $version2 ne "";
     $pkgNames{$pkg} = $pkgName;
 
     print "\nunpacking $path\n";
@@ -83,9 +84,14 @@ while (<>) {
 
     my @requires = ();
     my %requires = ();
-    open FOO, "cd '$tmpDir'/* && grep PKG_CHECK_MODULES configure.ac |";
+    open FOO, "cd '$tmpDir'/* && cat configure.ac |";
     while (<FOO>) {
-        if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/) {
+        if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||
+            /MODULES=\"(.*)\"/ ||
+            /REQUIRED_LIBS=\"(.*)\"/ ||
+            /REQUIRES=\"(.*)\"/)
+        {
+            print "MATCH: $_\n";
             foreach my $req (split / /, $1) {
                 next if $req eq ">=";
                 next if $req =~ /^\$/;
