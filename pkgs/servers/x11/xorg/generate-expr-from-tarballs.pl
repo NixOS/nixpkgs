@@ -75,7 +75,7 @@ while (<>) {
     print "\nunpacking $path\n";
     system "rm -rf '$tmpDir'";
     mkdir $tmpDir, 0700;
-    system "cd '$tmpDir' && tar xvfj '$path'";
+    system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
@@ -89,31 +89,24 @@ while (<>) {
     }
 
     my @requires = ();
-    my %requires = ();
     open FOO, "cd '$tmpDir'/* && cat configure.ac |";
     while (<FOO>) {
         if (/XAW_CHECK_XPRINT_SUPPORT/) {
-            if (!defined $requires{"libXaw"}) {
-                push @requires, "libXaw";
-                $requires{"libXaw"} = 1;
-            }
+            push @requires, "libXaw";
         }
         if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||
             /MODULES=\"(.*)\"/ ||
             /REQUIRED_LIBS=\"(.*)\"/ ||
             /REQUIRES=\"(.*)\"/)
         {
-            print "MATCH: $_\n";
             foreach my $req (split / /, $1) {
                 next if $req eq ">=";
                 next if $req =~ /^\$/;
                 next if $req =~ /^[0-9]/;
                 $req =~ s/\[//g;
                 $req =~ s/\]//g;
-                if (!defined $requires{$req}) {
-                    push @requires, $req;
-                    $requires{$req} = 1;
-                }
+                print "REQUIRE: $req\n";
+                push @requires, $req;
             }
         }
     }
@@ -143,10 +136,14 @@ EOF
 foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
+    my %requires = ();
     my $inputs = "";
-    foreach my $req (@{$pkgRequires{$pkg}}) {
+    foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
-            $inputs .= "$pcMap{$req} ";
+            if (!defined $requires{$pcMap{$req}}) {
+                $inputs .= "$pcMap{$req} ";
+                $requires{$pcMap{$req}} = 1;
+            }
         } else {
             print "  NOT FOUND: $req\n";
         }
@@ -156,7 +153,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     $extraAttrs = "" unless defined $extraAttrs;
     
     print OUT <<EOF
-  $pkg = stdenv.mkDerivation {
+  $pkg = (stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
@@ -164,7 +161,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       md5 = "$pkgHashes{$pkg}";
     };
     buildInputs = [pkgconfig $inputs];$extraAttrs
-  };
+  }) // {inherit $inputs;};
     
 EOF
 }
