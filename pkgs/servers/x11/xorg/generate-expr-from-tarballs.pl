@@ -20,6 +20,8 @@ my %pkgRequires;
 
 my %pcMap;
 
+my %extraAttrs;
+
 
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"fontconfig"} = "fontconfig";
@@ -27,6 +29,9 @@ $pcMap{"libpng12"} = "libpng";
 $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libXaw"} = "libXaw";
+
+
+$extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; ";
 
 
 if (-e "cache") {
@@ -147,6 +152,9 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
+    my $extraAttrs = $extraAttrs{"$pkg"};
+    $extraAttrs = "" unless defined $extraAttrs;
+    
     print OUT <<EOF
   $pkg = stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
@@ -155,7 +163,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       url = $pkgURLs{$pkg};
       md5 = "$pkgHashes{$pkg}";
     };
-    buildInputs = [pkgconfig $inputs];
+    buildInputs = [pkgconfig $inputs];$extraAttrs
   };
     
 EOF
