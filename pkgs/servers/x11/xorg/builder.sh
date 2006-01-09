@@ -7,13 +7,14 @@ source $stdenv/setup
 postInstall=postInstall
 postInstall() {
     local r p requires
-    requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | sed "s/Requires://")
+    requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | \
+        sed "s/Requires://" | sed "s/,/ /g")
 
     echo "propagating requisites $requires"
 
     for r in $requires; do
         for p in $pkgs; do
-            echo $r $p
+#            echo $r $p
             if test -e $p/lib/pkgconfig/$r.pc; then
                 echo "  found requisite $r in $p"
                 propagatedBuildInputs="$propagatedBuildInputs $p"
@@ -29,7 +30,7 @@ postInstall() {
 installFlags="appdefaultdir=$out/share/X11/app-defaults"
 
 
-if -n "$x11BuildHook"; then
+if test -n "$x11BuildHook"; then
     source $x11BuildHook
 fi   
 

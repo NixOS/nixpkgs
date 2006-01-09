@@ -62,7 +62,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/bitmap-X11R7.0-1.0.1.tar.bz2;
       md5 = "bbb3df097821d3edb4d5a4b2ae731de6";
     };
-    buildInputs = [pkgconfig libX11 libXmu xbitmaps libXt ];
+    buildInputs = [pkgconfig libX11 libXmu libXaw xbitmaps libXt ];
   };
     
   compositeproto = stdenv.mkDerivation {
@@ -102,7 +102,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/editres-X11R7.0-1.0.1.tar.bz2;
       md5 = "a9dc7f3b0cb59f08ab1e6554a5e60721";
     };
-    buildInputs = [pkgconfig libX11 libXt libXmu ];
+    buildInputs = [pkgconfig libXaw libX11 libXt libXmu ];
   };
     
   encodings = stdenv.mkDerivation {
@@ -1072,7 +1072,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/listres-X11R7.0-1.0.1.tar.bz2;
       md5 = "2eeb802272a7910bb8a52b308bf0d5f6";
     };
-    buildInputs = [pkgconfig libX11 libXt libXmu ];
+    buildInputs = [pkgconfig libXaw libX11 libXt libXmu ];
   };
     
   lndir = stdenv.mkDerivation {
@@ -1332,7 +1332,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/viewres-X11R7.0-1.0.1.tar.bz2;
       md5 = "004bf8dd4646aca86faf5aa22b0c3f2f";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   windowswmproto = stdenv.mkDerivation {
@@ -1372,7 +1372,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xbiff-X11R7.0-1.0.1.tar.bz2;
       md5 = "c4eb71a3187586d02365a67fc1445e54";
     };
-    buildInputs = [pkgconfig xbitmaps libXext ];
+    buildInputs = [pkgconfig libXaw xbitmaps libXext ];
   };
     
   xbitmaps = stdenv.mkDerivation {
@@ -1392,7 +1392,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcalc-X11R7.0-1.0.1.tar.bz2;
       md5 = "c1ecea85be15f746a59931e288768bdb";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xclipboard = stdenv.mkDerivation {
@@ -1402,7 +1402,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xclipboard-X11R7.0-1.0.1.tar.bz2;
       md5 = "a661b0f922cbdc62514bfd3e700d00fd";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xclock = stdenv.mkDerivation {
@@ -1412,7 +1412,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xclock-X11R7.0-1.0.1.tar.bz2;
       md5 = "00444fed4bf5cd51624476ee11dd1fab";
     };
-    buildInputs = [pkgconfig libX11 libXrender libXft libxkbfile libXt ];
+    buildInputs = [pkgconfig libX11 libXaw libXrender libXft libxkbfile libXt ];
   };
     
   xcmiscproto = stdenv.mkDerivation {
@@ -1442,7 +1442,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xconsole-X11R7.0-1.0.1.tar.bz2;
       md5 = "f983b589ba9de198d90abee220a80f81";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xcursorgen = stdenv.mkDerivation {
@@ -1482,7 +1482,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xditview-X11R7.0-1.0.1.tar.bz2;
       md5 = "21887fe4ec1965d637e82b7840650a6f";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xdm = stdenv.mkDerivation {
@@ -1492,7 +1492,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdm-X11R7.0-1.0.1.tar.bz2;
       md5 = "9ac363721dbb8cd39aa1064b260624a6";
     };
-    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXpm libXdmcp libXt libXext ];
+    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXpm libXaw libXdmcp libXt libXext ];
   };
     
   xdpyinfo = stdenv.mkDerivation {
@@ -1522,7 +1522,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xedit-X11R7.0-1.0.1.tar.bz2;
       md5 = "19f607d033f62fb1ee5965f4236b19d4";
     };
-    buildInputs = [pkgconfig libXprintUtil libXp libXt libXaw ];
+    buildInputs = [pkgconfig libXaw libXprintUtil libXp libXt ];
   };
     
   xev = stdenv.mkDerivation {
@@ -2322,7 +2322,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfd-X11R7.0-1.0.1.tar.bz2;
       md5 = "26c83a6fe245906cc05055abf877d0f2";
     };
-    buildInputs = [pkgconfig freetype fontconfig libXft libXt ];
+    buildInputs = [pkgconfig libXaw freetype fontconfig libXft libXt ];
   };
     
   xfindproxy = stdenv.mkDerivation {
@@ -2342,7 +2342,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfontsel-X11R7.0-1.0.1.tar.bz2;
       md5 = "d1df7b8622b7f8ebca4b2463118d7073";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xfs = stdenv.mkDerivation {
@@ -2392,7 +2392,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xgc-X11R7.0-1.0.1.tar.bz2;
       md5 = "8cd01cf558c3eed738115abcf720277d";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xhost = stdenv.mkDerivation {
@@ -2472,7 +2472,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbutils-X11R7.0-1.0.1.tar.bz2;
       md5 = "798502eca0c6c3e8c02d76fabb910532";
     };
-    buildInputs = [pkgconfig libxkbfile libX11 ];
+    buildInputs = [pkgconfig libXaw libxkbfile libX11 ];
   };
     
   xkill = stdenv.mkDerivation {
@@ -2492,7 +2492,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xload-X11R7.0-1.0.1.tar.bz2;
       md5 = "11080456822146ebc0118b15f4b911d9";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xlogo = stdenv.mkDerivation {
@@ -2502,7 +2502,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xlogo-X11R7.0-1.0.1.tar.bz2;
       md5 = "0314b2f5173da64957031400638fa5f8";
     };
-    buildInputs = [pkgconfig libXprintUtil libXp libXrender libXft libXext libXt ];
+    buildInputs = [pkgconfig libXaw libXprintUtil libXp libXrender libXft libXext libXt ];
   };
     
   xlsatoms = stdenv.mkDerivation {
@@ -2542,7 +2542,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmag-X11R7.0-1.0.1.tar.bz2;
       md5 = "38ac487ac1b75be0253fe7f973947386";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xman = stdenv.mkDerivation {
@@ -2552,7 +2552,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xman-X11R7.0-1.0.1.tar.bz2;
       md5 = "a4f21547120952aeb8e5663ebd72e843";
     };
-    buildInputs = [pkgconfig libXprintUtil libXp libXt ];
+    buildInputs = [pkgconfig libXaw libXprintUtil libXp libXt ];
   };
     
   xmessage = stdenv.mkDerivation {
@@ -2562,7 +2562,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmessage-X11R7.0-1.0.1.tar.bz2;
       md5 = "5a17607184fd348c2b36b5499ae9d2e6";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xmh = stdenv.mkDerivation {
@@ -2572,7 +2572,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmh-X11R7.0-1.0.1.tar.bz2;
       md5 = "53af2f87dc096d84f11ca6fbd6748b34";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xmodmap = stdenv.mkDerivation {
@@ -2592,7 +2592,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmore-X11R7.0-1.0.1.tar.bz2;
       md5 = "99a48c50d486b7c9098b4f5598782cac";
     };
-    buildInputs = [pkgconfig libXprintUtil libXp libXt ];
+    buildInputs = [pkgconfig libXaw libXprintUtil libXp libXt ];
   };
     
   xorgcffiles = stdenv.mkDerivation {
@@ -2742,7 +2742,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrx-X11R7.0-1.0.1.tar.bz2;
       md5 = "9de3b04392c98df59c79a34fd51c385f";
     };
-    buildInputs = [pkgconfig libX11 libXt libXext xtrans xproxymanagementprotocol libXau ];
+    buildInputs = [pkgconfig libX11 libXt libXext xtrans xproxymanagementprotocol libXau libXaw ];
   };
     
   xset = stdenv.mkDerivation {
@@ -2792,7 +2792,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xsm-X11R7.0-1.0.1.tar.bz2;
       md5 = "e3588272ce3b7dc21d42ead683135a8a";
     };
-    buildInputs = [pkgconfig libXt ];
+    buildInputs = [pkgconfig libXaw libXt ];
   };
     
   xstdcmap = stdenv.mkDerivation {
@@ -2832,7 +2832,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xvidtune-X11R7.0-1.0.1.tar.bz2;
       md5 = "a12e27fb732cb115b6adc4c724c44c5d";
     };
-    buildInputs = [pkgconfig libXxf86vm libXt ];
+    buildInputs = [pkgconfig libXaw libXxf86vm libXt ];
   };
     
   xvinfo = stdenv.mkDerivation {

@@ -26,6 +26,7 @@ $pcMap{"fontconfig"} = "fontconfig";
 $pcMap{"libpng12"} = "libpng";
 $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libdrm"} = "libdrm";
+$pcMap{"libXaw"} = "libXaw";
 
 
 if (-e "cache") {
@@ -86,6 +87,12 @@ while (<>) {
     my %requires = ();
     open FOO, "cd '$tmpDir'/* && cat configure.ac |";
     while (<FOO>) {
+        if (/XAW_CHECK_XPRINT_SUPPORT/) {
+            if (!defined $requires{"libXaw"}) {
+                push @requires, "libXaw";
+                $requires{"libXaw"} = 1;
+            }
+        }
         if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||
             /MODULES=\"(.*)\"/ ||
             /REQUIRED_LIBS=\"(.*)\"/ ||
