@@ -7,5 +7,6 @@ stdenv.mkDerivation {
                 md5 = "dafd350c154990728efb35a7073ca81a";
             };
   patches = [./atermprinter.patch];
+  buildInputs = [ ocaml perl ];
   inherit ocaml perl;
 }  
