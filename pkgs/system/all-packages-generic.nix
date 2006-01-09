@@ -798,7 +798,7 @@ rec {
     inherit stdenv fetchurl ocaml perl;
   };
 
-  cil_aterm = (import ../development/libraries/cil-aterm) {
+  cilaterm = (import ../development/libraries/cil-aterm) {
     inherit stdenv fetchurl ocaml perl;
   };
 
