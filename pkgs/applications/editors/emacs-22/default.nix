@@ -6,9 +6,9 @@
 , pkgconfig ? null, gtk ? null
 }:
 
-assert xawSupport -> libXaw != null;
+assert xawSupport && !xaw3dSupport -> libXaw != null;
+assert xawSupport && xaw3dSupport -> Xaw3d != null;
 assert xpmSupport -> libXpm != null;
-assert xaw3dSupport -> Xaw3d != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 
 stdenv.mkDerivation {
@@ -21,9 +21,8 @@ stdenv.mkDerivation {
   patches = [./crt.patch];
   buildInputs = [
     x11
-    (if xawSupport then libXaw else null)
+    (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
     (if xpmSupport then libXpm else null)
-    (if xaw3dSupport then Xaw3d else null)
   ] ++ (if gtkGUI then [pkgconfig gtk] else []);
   configureFlags =
     if gtkGUI then ["--with-x-toolkit=gtk"] else [];

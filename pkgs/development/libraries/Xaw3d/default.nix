@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, xmkmf, makedepend, libXmu, libXpm, libXp, bison, flex}:
+{stdenv, fetchurl, x11, imake, makedepend, libXmu, libXpm, libXp, bison, flex}:
 
 stdenv.mkDerivation {
   name = "Xaw3d-1.5E";
@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     md5 = "29ecfdcd6bcf47f62ecfd672d31269a1";
   };
   patches = [./config.patch];
-  buildInputs = [x11 xmkmf makedepend libXmu libXpm libXp bison flex];
+  buildInputs = [x11 imake makedepend libXmu libXpm libXp bison flex];
+  propagatedBuildInputs = [x11 libXmu];
 }

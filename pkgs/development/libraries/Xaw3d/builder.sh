@@ -15,6 +15,10 @@ buildPhase() {
 
 installPhase() {
     make install SHLIBDIR=$out/lib USRLIBDIR=$out/lib INCDIR=$out/include
+    cd $out/include/X11 && ln -s Xaw3d Xaw
+
+    ensureDir "$out/nix-support"
+    echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
 }
 
 makeFlags="CDEBUGFLAGS=" # !!! awful hack

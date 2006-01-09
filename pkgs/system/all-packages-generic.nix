@@ -14,7 +14,7 @@ rec {
 
   ### Symbolic names.
 
-  useOldXLibs = true;
+  useOldXLibs = false;
 
   # `xlibs' is the set of X library components.  This used to be the
   # old modular X libraries project (called `xlibs') but now it's just
@@ -1138,7 +1138,7 @@ rec {
     inherit fetchurl stdenv x11 bison;
     flex = flexnew;
     # !!! makedepend is impure
-    inherit (xlibs) xmkmf makedepend libXmu libXpm libXp;
+    inherit (xlibs) imake makedepend libXmu libXpm libXp;
   };
 
   libdrm = import ../development/libraries/libdrm {
@@ -1993,7 +1993,7 @@ rec {
   emacs = (import ../applications/editors/emacs) {
     inherit fetchurl stdenv x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
-    xaw3dSupport = false;
+    xaw3dSupport = true;
   };
 
   emacs22 = (import ../applications/editors/emacs-22) {

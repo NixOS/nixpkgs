@@ -4,9 +4,9 @@
 , stdenv, fetchurl, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 }:
 
-assert xawSupport -> libXaw != null;
+assert xawSupport && !xaw3dSupport -> libXaw != null;
+assert xawSupport && xaw3dSupport -> Xaw3d != null;
 assert xpmSupport -> libXpm != null;
-assert xaw3dSupport -> Xaw3d != null;
 
 stdenv.mkDerivation {
   name = "emacs-21.4a";
@@ -18,8 +18,7 @@ stdenv.mkDerivation {
   patches = [./crt.patch];
   buildInputs = [
     x11
-    (if xawSupport then libXaw else null)
+    (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
     (if xpmSupport then libXpm else null)
-    (if xaw3dSupport then Xaw3d else null)
   ];
 }
