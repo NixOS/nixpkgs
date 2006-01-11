@@ -1137,8 +1137,7 @@ rec {
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
     flex = flexnew;
-    # !!! makedepend is impure
-    inherit (xlibs) imake makedepend libXmu libXpm libXp;
+    inherit (xlibs) imake gccmakedep libXmu libXpm libXp;
   };
 
   libdrm = import ../development/libraries/libdrm {
