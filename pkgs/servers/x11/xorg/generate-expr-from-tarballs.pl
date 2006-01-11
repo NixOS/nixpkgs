@@ -31,7 +31,7 @@ $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libXaw"} = "libXaw";
 
 
-$extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; ";
+$extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
 
 if (-e "cache") {

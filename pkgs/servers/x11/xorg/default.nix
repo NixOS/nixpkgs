@@ -602,7 +602,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/imake-X11R7.0-1.0.1.tar.bz2;
       md5 = "487b4b86b2bd0c09e6d220a85d94efae";
     };
-    buildInputs = [pkgconfig xproto ]; inherit xorgcffiles; x11BuildHook = ./imake.sh; 
+    buildInputs = [pkgconfig xproto ]; inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; 
   }) // {inherit xproto ;};
     
   inputproto = (stdenv.mkDerivation {
