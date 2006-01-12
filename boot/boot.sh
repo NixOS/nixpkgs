@@ -25,7 +25,7 @@ echo "starting udev..."
 @udev@/sbin/udevstart
 
 echo "setting up hostname..."
-hostname uml
+hostname nixos
 
 echo "enabling loopback interface..."
 ifconfig lo 127.0.0.1
