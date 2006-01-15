@@ -40,6 +40,7 @@ let {
     gccWrapped
     aterm
     kernel
+    db4
 
 #    atermjava
 #    jjtraveler
