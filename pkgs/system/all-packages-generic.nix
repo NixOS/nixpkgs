@@ -1447,6 +1447,10 @@ rec {
     db4Support = true;
   };
 
+  mod_python = import ../servers/http/apache-modules/mod_python {
+    inherit fetchurl stdenv apacheHttpd python;
+  };
+
   xorg = import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       expat libdrm libpng zlib perl mesa;

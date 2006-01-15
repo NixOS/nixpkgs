@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit flex bison libxml2 apacheHttpd;
 
   buildInputs = [flex bison libxml2 apacheHttpd];
-  builder = ./builder.sh ;
+  builder = ./builder.sh;
 
   patches = [./fix.patch];
 }
