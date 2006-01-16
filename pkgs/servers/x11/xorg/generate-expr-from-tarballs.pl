@@ -27,9 +27,10 @@ $pcMap{"freetype2"} = "freetype";
 $pcMap{"fontconfig"} = "fontconfig";
 $pcMap{"libpng12"} = "libpng";
 $pcMap{"libdrm"} = "libdrm";
-$pcMap{"libdrm"} = "libdrm";
 $pcMap{"libXaw"} = "libXaw";
 $pcMap{"zlib"} = "zlib";
+$pcMap{"perl"} = "perl";
+$pcMap{"mesa"} = "mesa";
 
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
@@ -54,6 +55,7 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
+#    next unless $pkg eq "xorgserverX11R7";
     print "$pkg\n";
     $pkg =~ s/$version//g if $version ne "";
     $pkgURLs{$pkg} = $tarball;
@@ -90,31 +92,48 @@ while (<>) {
     }
 
     my @requires = ();
-    open FOO, "cd '$tmpDir'/* && cat configure.ac |";
-    while (<FOO>) {
-        if (/XAW_CHECK_XPRINT_SUPPORT/) {
-            push @requires, "libXaw";
-        }
-        if (/zlib is required/ || /AC_CHECK_LIB\(z\,/) {
-            push @requires, "zlib";
-        }
-        if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||
-            /MODULES=\"(.*)\"/ ||
-            /REQUIRED_LIBS=\"(.*)\"/ ||
-            /REQUIRES=\"(.*)\"/)
-        {
-            foreach my $req (split / /, $1) {
-                next if $req eq ">=";
-                next if $req =~ /^\$/;
-                next if $req =~ /^[0-9]/;
-                $req =~ s/\[//g;
-                $req =~ s/\]//g;
-                print "REQUIRE: $req\n";
-                push @requires, $req;
-            }
+    my $file;
+    {
+        local $/;
+        open FOO, "cd '$tmpDir'/* && cat configure.ac |";
+        $file = <FOO>;
+        close FOO;
+    }
+
+    if ($file =~ /XAW_CHECK_XPRINT_SUPPORT/) {
+        push @requires, "libXaw";
+    }
+
+    if ($file =~ /zlib is required/ || $file =~ /AC_CHECK_LIB\(z\,/) {
+        push @requires, "zlib";
+    }
+    
+    if ($file =~ /Perl is required/) {
+        push @requires, "perl";
+    }
+
+    sub process {
+        my $requires = shift;
+        foreach my $req (split / /, $1) {
+            next if $req eq ">=";
+            next if $req =~ /^\$/;
+            next if $req =~ /^[0-9]/;
+            $req =~ s/\[//g;
+            $req =~ s/\]//g;
+            print "REQUIRE: $req\n";
+            push @{$requires}, $req;
         }
     }
-    print "REQUIRES @requires\n";
+
+    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/g;
+    process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+
+    push @requires, "mesa" if $pkg =~ /xorgserver/;
+    push @requires, "zlib" if $pkg =~ /xorgserver/;
+    
+    print "REQUIRES @requires => $pkg\n";
     $pkgRequires{$pkg} = \@requires;
 
     print "done\n";
