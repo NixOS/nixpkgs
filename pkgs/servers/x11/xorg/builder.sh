@@ -27,6 +27,9 @@ postInstall() {
 }
 
 
+configureFlags="--disable-static $configureFlags"
+
+
 installFlags="appdefaultdir=$out/share/X11/app-defaults"
 
 
