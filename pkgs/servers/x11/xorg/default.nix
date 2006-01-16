@@ -812,8 +812,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfont-X11R7.0-1.0.0.tar.bz2;
       md5 = "955c41694772c9fd214e3e206f5d2178";
     };
-    buildInputs = [pkgconfig fontcacheproto libfontenc fontsproto freetype xproto xtrans ];
-  }) // {inherit fontcacheproto libfontenc fontsproto freetype xproto xtrans ;};
+    buildInputs = [pkgconfig fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ];
+  }) // {inherit fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ;};
     
   libXfontcache = (stdenv.mkDerivation {
     name = "libXfontcache-1.0.1";
@@ -1032,8 +1032,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/liblbxutil-X11R7.0-1.0.0.tar.bz2;
       md5 = "1bcffde85723f78243d1ba60e1ebaef6";
     };
-    buildInputs = [pkgconfig xextproto xproto ];
-  }) // {inherit xextproto xproto ;};
+    buildInputs = [pkgconfig xextproto xproto zlib ];
+  }) // {inherit xextproto xproto zlib ;};
     
   liboldX = (stdenv.mkDerivation {
     name = "liboldX-1.0.1";
@@ -1132,8 +1132,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/mkfontscale-X11R7.0-1.0.1.tar.bz2;
       md5 = "75bbd1dc425849e415a60afd9e74d2ff";
     };
-    buildInputs = [pkgconfig libfontenc freetype libX11 ];
-  }) // {inherit libfontenc freetype libX11 ;};
+    buildInputs = [pkgconfig libfontenc freetype libX11 zlib ];
+  }) // {inherit libfontenc freetype libX11 zlib ;};
     
   oclock = (stdenv.mkDerivation {
     name = "oclock-1.0.1";

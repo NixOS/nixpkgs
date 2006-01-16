@@ -29,6 +29,7 @@ $pcMap{"libpng12"} = "libpng";
 $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libXaw"} = "libXaw";
+$pcMap{"zlib"} = "zlib";
 
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
@@ -93,6 +94,9 @@ while (<>) {
     while (<FOO>) {
         if (/XAW_CHECK_XPRINT_SUPPORT/) {
             push @requires, "libXaw";
+        }
+        if (/zlib is required/) {
+            push @requires, "zlib";
         }
         if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||
             /MODULES=\"(.*)\"/ ||
