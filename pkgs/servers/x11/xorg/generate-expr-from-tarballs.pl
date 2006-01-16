@@ -95,7 +95,7 @@ while (<>) {
         if (/XAW_CHECK_XPRINT_SUPPORT/) {
             push @requires, "libXaw";
         }
-        if (/zlib is required/) {
+        if (/zlib is required/ || /AC_CHECK_LIB\(z\,/) {
             push @requires, "zlib";
         }
         if (/PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/ ||

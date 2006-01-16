@@ -632,8 +632,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/lbxproxy-X11R7.0-1.0.1.tar.bz2;
       md5 = "d9c05283660eae742a77dcbc0091841a";
     };
-    buildInputs = [pkgconfig bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans ];
-  }) // {inherit bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans ;};
+    buildInputs = [pkgconfig bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans zlib ];
+  }) // {inherit bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans zlib ;};
     
   libAppleWM = (stdenv.mkDerivation {
     name = "libAppleWM-1.0.0";
@@ -1022,8 +1022,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libfontenc-X11R7.0-1.0.1.tar.bz2;
       md5 = "d7971cbb2d1000737bba86a4bd70b900";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    buildInputs = [pkgconfig xproto zlib ];
+  }) // {inherit xproto zlib ;};
     
   liblbxutil = (stdenv.mkDerivation {
     name = "liblbxutil-1.0.0";
@@ -1092,8 +1092,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/luit-X11R7.0-1.0.1.tar.bz2;
       md5 = "30428b8ff783a0cfd61dab05a17cfaa7";
     };
-    buildInputs = [pkgconfig libfontenc libX11 ];
-  }) // {inherit libfontenc libX11 ;};
+    buildInputs = [pkgconfig libfontenc libX11 zlib ];
+  }) // {inherit libfontenc libX11 zlib ;};
     
   makedepend = (stdenv.mkDerivation {
     name = "makedepend-1.0.0";
