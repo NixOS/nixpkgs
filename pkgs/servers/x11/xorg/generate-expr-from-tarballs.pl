@@ -129,6 +129,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "mesa" if $pkg =~ /xorgserver/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;

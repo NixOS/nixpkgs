@@ -1602,8 +1602,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-acecad-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "b35b1756579ebe296801622bdf063ab1";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputaiptek = (stdenv.mkDerivation {
     name = "xf86-input-aiptek-1.0.0.5";
@@ -1612,8 +1612,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-aiptek-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "9ee5109ef33e281ce0784ad077f26cee";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputcalcomp = (stdenv.mkDerivation {
     name = "xf86-input-calcomp-1.0.0.5";
@@ -1622,8 +1622,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-calcomp-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "f4199b5df063701462d5a8c84aadd190";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputcitron = (stdenv.mkDerivation {
     name = "xf86-input-citron-2.1.1.5";
@@ -1632,8 +1632,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-citron-X11R7.0-2.1.1.5.tar.bz2;
       md5 = "62b5405d337bc055bc9345565cc0da8c";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputdigitaledge = (stdenv.mkDerivation {
     name = "xf86-input-digitaledge-1.0.1.3";
@@ -1642,8 +1642,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-digitaledge-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "8342f3a0dcdaa1120af01dd25dabf0d7";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputdmc = (stdenv.mkDerivation {
     name = "xf86-input-dmc-1.0.0.5";
@@ -1652,8 +1652,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dmc-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "fdf127a2d419f7c2e02bec27273091d3";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputdynapro = (stdenv.mkDerivation {
     name = "xf86-input-dynapro-1.0.0.5";
@@ -1662,8 +1662,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dynapro-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "89dbb839ab4c5fca3dbc3c2805a7efb9";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputelo2300 = (stdenv.mkDerivation {
     name = "xf86-input-elo2300-1.0.0.5";
@@ -1672,8 +1672,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-elo2300-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "6009a17f13a37bfde8b60c2fba5b0e5b";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputelographics = (stdenv.mkDerivation {
     name = "xf86-input-elographics-1.0.0.5";
@@ -1682,8 +1682,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-elographics-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "24c33f833bb2db72a07c3d28bfc0aae9";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputevdev = (stdenv.mkDerivation {
     name = "xf86-input-evdev-1.0.0.5";
@@ -1692,8 +1692,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-evdev-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "d982c6f185f4c75a4b65703ceed7be06";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputfpit = (stdenv.mkDerivation {
     name = "xf86-input-fpit-1.0.0.5";
@@ -1702,8 +1702,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-fpit-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "fc0e11fefc322623914a2d819d5b6d51";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputhyperpen = (stdenv.mkDerivation {
     name = "xf86-input-hyperpen-1.0.0.5";
@@ -1712,8 +1712,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-hyperpen-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "0c4f2a6390e3045e4c48a48b47b6332c";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputjamstudio = (stdenv.mkDerivation {
     name = "xf86-input-jamstudio-1.0.0.5";
@@ -1722,8 +1722,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-jamstudio-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "49de35ca024be2cb785832ae37ec30d0";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputjoystick = (stdenv.mkDerivation {
     name = "xf86-input-joystick-1.0.0.5";
@@ -1732,8 +1732,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-joystick-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "9e3ba60836f4c1d2e4cebc63a28321b4";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputkeyboard = (stdenv.mkDerivation {
     name = "xf86-input-keyboard-1.0.1.3";
@@ -1742,8 +1742,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-keyboard-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "8fb8a30fd9d7f152a1aef4eb8ef32b3f";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
     
   xf86inputmagellan = (stdenv.mkDerivation {
     name = "xf86-input-magellan-1.0.0.5";
@@ -1752,8 +1752,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magellan-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "fd7367f467dc3302604274cee59a7c7b";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputmagictouch = (stdenv.mkDerivation {
     name = "xf86-input-magictouch-1.0.0.5";
@@ -1762,8 +1762,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magictouch-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "a51d84792b8c0079d7c8d13eb17acf31";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputmicrotouch = (stdenv.mkDerivation {
     name = "xf86-input-microtouch-1.0.0.5";
@@ -1772,8 +1772,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-microtouch-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "0c25e0340b6483fb2a600b0e885724a2";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputmouse = (stdenv.mkDerivation {
     name = "xf86-input-mouse-1.0.3.1";
@@ -1782,8 +1782,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mouse-X11R7.0-1.0.3.1.tar.bz2;
       md5 = "12a908e5a97b1b03e8717abf167f4f27";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputmutouch = (stdenv.mkDerivation {
     name = "xf86-input-mutouch-1.0.0.5";
@@ -1792,8 +1792,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mutouch-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "4758e667bfbba517df2a58d51270cfe2";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputpalmax = (stdenv.mkDerivation {
     name = "xf86-input-palmax-1.0.0.5";
@@ -1802,8 +1802,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-palmax-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "d138024a20298304af883631d23c5338";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputpenmount = (stdenv.mkDerivation {
     name = "xf86-input-penmount-1.0.0.5";
@@ -1812,8 +1812,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-penmount-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "065b1cf862864741aebcfefcc7c09539";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputspaceorb = (stdenv.mkDerivation {
     name = "xf86-input-spaceorb-1.0.0.5";
@@ -1822,8 +1822,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-spaceorb-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "193ca7b1e87c3995b86f15a01b63b297";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputsumma = (stdenv.mkDerivation {
     name = "xf86-input-summa-1.0.0.5";
@@ -1832,8 +1832,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-summa-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "61d780857e5dc139081718c075e74a01";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputtek4957 = (stdenv.mkDerivation {
     name = "xf86-input-tek4957-1.0.0.5";
@@ -1842,8 +1842,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-tek4957-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "df633403c91a48c6a316c6a5f48e53e2";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputur98 = (stdenv.mkDerivation {
     name = "xf86-input-ur98-1.0.0.5";
@@ -1852,8 +1852,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-ur98-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "9b1530b3dcbb77690ad0e61f60489899";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputvoid = (stdenv.mkDerivation {
     name = "xf86-input-void-1.0.0.5";
@@ -1862,8 +1862,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-void-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "c7ae53dee1f3e95fa5ce9659b34d8446";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+  }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86miscproto = (stdenv.mkDerivation {
     name = "xf86miscproto-0.9.2";
@@ -1892,8 +1892,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-apm-X11R7.0-1.0.1.5.tar.bz2;
       md5 = "323911ab16a6147d3cabceff9336a3d2";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoark = (stdenv.mkDerivation {
     name = "xf86-video-ark-0.5.0.5";
@@ -1902,8 +1902,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ark-X11R7.0-0.5.0.5.tar.bz2;
       md5 = "342937e275dbc92f437417a3186a8222";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videoati = (stdenv.mkDerivation {
     name = "xf86-video-ati-6.5.7.3";
@@ -1912,8 +1912,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ati-X11R7.0-6.5.7.3.tar.bz2;
       md5 = "92525195a7a36f5ffbffcb4e6a564e50";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videochips = (stdenv.mkDerivation {
     name = "xf86-video-chips-1.0.1.3";
@@ -1922,8 +1922,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-chips-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "90f23505faceac30d3f46ab94f7293e1";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videocirrus = (stdenv.mkDerivation {
     name = "xf86-video-cirrus-1.0.0.5";
@@ -1932,8 +1932,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cirrus-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "7708693ad9d73cd76d4caef7c644a46f";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videocyrix = (stdenv.mkDerivation {
     name = "xf86-video-cyrix-1.0.0.5";
@@ -1942,8 +1942,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cyrix-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "14f868d16554b19fef4f30398a7b9cf1";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videodummy = (stdenv.mkDerivation {
     name = "xf86-video-dummy-0.1.0.5";
@@ -1952,8 +1952,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-dummy-X11R7.0-0.1.0.5.tar.bz2;
       md5 = "462654f9be7e3022f97147e3390db97a";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
     
   xf86videofbdev = (stdenv.mkDerivation {
     name = "xf86-video-fbdev-0.1.0.5";
@@ -1962,8 +1962,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-fbdev-X11R7.0-0.1.0.5.tar.bz2;
       md5 = "1cf374eeb9151ac16a7ec2cd38048737";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
     
   xf86videoglint = (stdenv.mkDerivation {
     name = "xf86-video-glint-1.0.1.3";
@@ -1972,8 +1972,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-glint-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "f14c2f1696c05760207adcaac856e5e5";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ;};
     
   xf86videoi128 = (stdenv.mkDerivation {
     name = "xf86-video-i128-1.1.0.5";
@@ -1982,8 +1982,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i128-X11R7.0-1.1.0.5.tar.bz2;
       md5 = "078eed8c3673488ee618dfc7a3ef101b";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoi740 = (stdenv.mkDerivation {
     name = "xf86-video-i740-1.0.0.5";
@@ -1992,8 +1992,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i740-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "625448b13ebe2a13b7defad1efec05c4";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoi810 = (stdenv.mkDerivation {
     name = "xf86-video-i810-1.4.1.3";
@@ -2002,8 +2002,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i810-X11R7.0-1.4.1.3.tar.bz2;
       md5 = "fe6bec726fc1657b537508bbe8c2005b";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
     
   xf86videoimstt = (stdenv.mkDerivation {
     name = "xf86-video-imstt-1.0.0.5";
@@ -2012,8 +2012,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-imstt-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "cc949688918b78f830d78a9613e6896b";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videomga = (stdenv.mkDerivation {
     name = "xf86-video-mga-1.2.1.3";
@@ -2022,8 +2022,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-mga-X11R7.0-1.2.1.3.tar.bz2;
       md5 = "cb0409782020b5cc7edc273624ffdd17";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
     
   xf86videoneomagic = (stdenv.mkDerivation {
     name = "xf86-video-neomagic-1.0.0.5";
@@ -2032,8 +2032,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-neomagic-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "ffe9015678a41e97bdbd2825066bb47b";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videonewport = (stdenv.mkDerivation {
     name = "xf86-video-newport-0.1.4.1";
@@ -2042,8 +2042,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-newport-X11R7.0-0.1.4.1.tar.bz2;
       md5 = "d74d9896d57c3caf224ba3472630d874";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
     
   xf86videonsc = (stdenv.mkDerivation {
     name = "xf86-video-nsc-2.7.6.5";
@@ -2052,8 +2052,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nsc-X11R7.0-2.7.6.5.tar.bz2;
       md5 = "ab16611b3ec7d21503b16b0a31addae0";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videonv = (stdenv.mkDerivation {
     name = "xf86-video-nv-1.0.1.5";
@@ -2062,8 +2062,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nv-X11R7.0-1.0.1.5.tar.bz2;
       md5 = "9a88547fe550e20edcc5a938d31e22b1";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videorendition = (stdenv.mkDerivation {
     name = "xf86-video-rendition-4.0.1.3";
@@ -2072,8 +2072,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-rendition-X11R7.0-4.0.1.3.tar.bz2;
       md5 = "f1a25db74a148dea45115e813027b932";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videos3 = (stdenv.mkDerivation {
     name = "xf86-video-s3-0.3.5.5";
@@ -2082,8 +2082,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3-X11R7.0-0.3.5.5.tar.bz2;
       md5 = "83b9e8a9b8fc1c49bda2811358e5007c";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videos3virge = (stdenv.mkDerivation {
     name = "xf86-video-s3virge-1.8.6.5";
@@ -2092,8 +2092,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3virge-X11R7.0-1.8.6.5.tar.bz2;
       md5 = "d0164c37749ab5f565db9813487e1900";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videosavage = (stdenv.mkDerivation {
     name = "xf86-video-savage-2.0.2.3";
@@ -2102,8 +2102,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-savage-X11R7.0-2.0.2.3.tar.bz2;
       md5 = "6b638dd500d10dba1822d3ea5061fc65";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
     
   xf86videosiliconmotion = (stdenv.mkDerivation {
     name = "xf86-video-siliconmotion-1.3.1.5";
@@ -2112,8 +2112,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-siliconmotion-X11R7.0-1.3.1.5.tar.bz2;
       md5 = "957de4e2a3c687dbb2e9e18582397804";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videosis = (stdenv.mkDerivation {
     name = "xf86-video-sis-0.8.1.3";
@@ -2122,8 +2122,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sis-X11R7.0-0.8.1.3.tar.bz2;
       md5 = "e3bac5a208b8bacfbec236b5a5b0ef40";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86dgaproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86dgaproto xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosisusb = (stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.7.1.3";
@@ -2132,8 +2132,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sisusb-X11R7.0-0.7.1.3.tar.bz2;
       md5 = "781d726a0ca54b65521e383ab99043c8";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosunbw2 = (stdenv.mkDerivation {
     name = "xf86-video-sunbw2-1.0.0.5";
@@ -2142,8 +2142,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunbw2-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "0cdda1ab939ea1190c142aa8aabfaf83";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig randrproto xorgserver xproto ];
+  }) // {inherit randrproto xorgserver xproto ;};
     
   xf86videosuncg14 = (stdenv.mkDerivation {
     name = "xf86-video-suncg14-1.0.0.5";
@@ -2152,8 +2152,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg14-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "8f3a734d02ae716415f9c6344fa661bd";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videosuncg3 = (stdenv.mkDerivation {
     name = "xf86-video-suncg3-1.0.0.5";
@@ -2162,8 +2162,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg3-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "799a54cef1f4435e00fa94a1d97d056f";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videosuncg6 = (stdenv.mkDerivation {
     name = "xf86-video-suncg6-1.0.0.5";
@@ -2172,8 +2172,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg6-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "2227f3fb86b02148f347e002662e53c8";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videosunffb = (stdenv.mkDerivation {
     name = "xf86-video-sunffb-1.0.1.3";
@@ -2182,8 +2182,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunffb-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "bb5182e3b74b3baa6fee245ac8bbf09a";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ;};
     
   xf86videosunleo = (stdenv.mkDerivation {
     name = "xf86-video-sunleo-1.0.0.5";
@@ -2192,8 +2192,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunleo-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "deb17a74ba68ee9593ac774206bd3612";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videosuntcx = (stdenv.mkDerivation {
     name = "xf86-video-suntcx-1.0.0.5";
@@ -2202,8 +2202,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suntcx-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "74d6ba5e55afdfebff84db08b6589e26";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videotdfx = (stdenv.mkDerivation {
     name = "xf86-video-tdfx-1.1.1.3";
@@ -2212,8 +2212,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tdfx-X11R7.0-1.1.1.3.tar.bz2;
       md5 = "0201415230bf0454384c3bad099520d2";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
     
   xf86videotga = (stdenv.mkDerivation {
     name = "xf86-video-tga-1.0.0.5";
@@ -2222,8 +2222,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tga-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "fa67bf34454888d38e15708395cfed87";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videotrident = (stdenv.mkDerivation {
     name = "xf86-video-trident-1.0.1.2";
@@ -2232,8 +2232,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-trident-X11R7.0-1.0.1.2.tar.bz2;
       md5 = "69f28afc7b585d01bb06b1e2f872f8ea";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videotseng = (stdenv.mkDerivation {
     name = "xf86-video-tseng-1.0.0.5";
@@ -2242,8 +2242,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tseng-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "981f46914c1e54742418f0444ea2e092";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videov4l = (stdenv.mkDerivation {
     name = "xf86-video-v4l-0.0.1.5";
@@ -2252,8 +2252,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-v4l-X11R7.0-0.0.1.5.tar.bz2;
       md5 = "e422c63bc83717ecd0686aef2036802b";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
+  }) // {inherit randrproto videoproto xorgserver xproto ;};
     
   xf86videovesa = (stdenv.mkDerivation {
     name = "xf86-video-vesa-1.0.1.3";
@@ -2262,8 +2262,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vesa-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "049ada4df1abb5aa2b6633ba90353e78";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videovga = (stdenv.mkDerivation {
     name = "xf86-video-vga-4.0.0.5";
@@ -2272,8 +2272,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vga-X11R7.0-4.0.0.5.tar.bz2;
       md5 = "24437857707acc337cab331cc56f64e2";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videovia = (stdenv.mkDerivation {
     name = "xf86-video-via-0.1.33.2";
@@ -2282,8 +2282,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-via-X11R7.0-0.1.33.2.tar.bz2;
       md5 = "4d3268d226a40f580ab105796bfed1f5";
     };
-    buildInputs = [pkgconfig fontsproto libdrm xf86driproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto libdrm xf86driproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
     
   xf86videovmware = (stdenv.mkDerivation {
     name = "xf86-video-vmware-10.11.1.3";
@@ -2292,8 +2292,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vmware-X11R7.0-10.11.1.3.tar.bz2;
       md5 = "4df79349e26add4c23f6be8bec347ad4";
     };
-    buildInputs = [pkgconfig fontsproto xorgserver xproto ];
-  }) // {inherit fontsproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videovoodoo = (stdenv.mkDerivation {
     name = "xf86-video-voodoo-1.0.0.5";
@@ -2302,8 +2302,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-voodoo-X11R7.0-1.0.0.5.tar.bz2;
       md5 = "e00cc814ebdb3f3067e075bc93b26199";
     };
-    buildInputs = [pkgconfig fontsproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto xf86dgaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86vidmodeproto = (stdenv.mkDerivation {
     name = "xf86vidmodeproto-2.2.2";
