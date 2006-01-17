@@ -275,6 +275,8 @@ rec {
 
   openssh = (import ../tools/networking/openssh) {
     inherit fetchurl stdenv zlib openssl;
+    inherit (xlibs) xauth;
+    xforwarding = true;
   };
 
   mktemp = (import ../tools/security/mktemp) {
@@ -293,11 +295,6 @@ rec {
   mjpegtools = (import ../tools/video/mjpegtools) {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
-  };
-
-  xauth = (import ../tools/X11/xauth) {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXau libXext libXmu;
   };
 
    
