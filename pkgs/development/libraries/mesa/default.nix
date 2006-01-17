@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibs}:
+{stdenv, fetchurl, x11, libXmu, libXi}:
 
 assert stdenv.system == "i686-linux";
 
@@ -19,5 +19,5 @@ stdenv.mkDerivation {
     }) */
   ];
   builder = ./builder.sh;
-  buildInputs = [xlibs.xlibs xlibs.libXmu xlibs.libXi];
+  buildInputs = [x11 libXmu libXi];
 }
