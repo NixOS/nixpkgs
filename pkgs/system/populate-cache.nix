@@ -40,6 +40,7 @@ let {
     gccWrapped
     aterm
     kernel
+    ov511
     db4
 
 #    atermjava
@@ -109,6 +110,7 @@ let {
 #    xauth
     qt3
     xmltv
+    xawtv
     tetex
     ghostscript
 
