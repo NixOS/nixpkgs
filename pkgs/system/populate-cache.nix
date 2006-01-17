@@ -106,7 +106,7 @@ let {
     openssl
     mktemp
     strace
-    xauth
+#    xauth
     qt3
     xmltv
     tetex
