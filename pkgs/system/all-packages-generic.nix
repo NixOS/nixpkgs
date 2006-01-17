@@ -1149,7 +1149,8 @@ rec {
   };
 
   mesa = (import ../development/libraries/mesa) {
-    inherit fetchurl stdenv xlibs;
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXmu libXi;
   };
 
   chmlib = (import ../development/libraries/chmlib) {
