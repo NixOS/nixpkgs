@@ -120,6 +120,7 @@ while (<>) {
             next if $req =~ /^[0-9]/;
             $req =~ s/\[//g;
             $req =~ s/\]//g;
+            next if $req =~ /^\s*$/;
             print "REQUIRE: $req\n";
             push @{$requires}, $req;
         }
@@ -131,7 +132,8 @@ while (<>) {
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    push @requires, "mesa" if $pkg =~ /xorgserver/;
+    push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
+    push @requires, "glproto" if $pkg =~ /xf86videoi810/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     
     print "REQUIRES @requires => $pkg\n";

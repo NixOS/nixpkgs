@@ -2002,8 +2002,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i810-X11R7.0-1.4.1.3.tar.bz2;
       md5 = "fe6bec726fc1657b537508bbe8c2005b";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig fontsproto glproto libdrm mesa randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto glproto libdrm mesa randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
     
   xf86videoimstt = (stdenv.mkDerivation {
     name = "xf86-video-imstt-1.0.0.5";
