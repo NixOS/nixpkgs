@@ -1883,6 +1883,11 @@ rec {
     inherit fetchurl stdenv x11 xineLib libpng;
   };
 
+  xawtv = (import ../applications/video/xawtv) {
+    inherit fetchurl stdenv ncurses libjpeg perl;
+    inherit (xlibs) libX11 libXt libXft xproto libFS fontsproto libXaw libXpm libXext libSM libICE xextproto;
+  };
+
   RealPlayer = import ../applications/video/RealPlayer {
     inherit fetchurl stdenv;
     inherit (gtkLibs) glib pango atk gtk;
