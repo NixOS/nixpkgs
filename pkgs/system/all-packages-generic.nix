@@ -20,7 +20,7 @@ rec {
   # old modular X libraries project (called `xlibs') but now it's just
   # the set of packages in the modular X.org tree (which also includes
   # non-library components like the server, drivers, fonts, etc.).
-  xlibs = if useOldXLibs then xlibsOld else xorg;
+  xlibs = if useOldXLibs then xlibsOld else xorg // {xlibs = xlibsWrapper;};
 
   # `xlibs.xlibs' is a wrapper packages that combines libX11 and a bunch
   # of other basic X client libraries.
