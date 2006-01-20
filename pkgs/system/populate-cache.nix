@@ -38,6 +38,7 @@ let {
     bisonnew
     flexnew
     gccWrapped
+    gcc40
     aterm
     kernel
 #    ov511

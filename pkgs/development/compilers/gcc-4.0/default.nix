@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "gcc-4.0.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.0.2/gcc-4.0.2.tar.bz2;
+    url = ftp://ftp.gnu.org/pub/gnu/gcc/gcc-4.0.2/gcc-4.0.2.tar.bz2;
     md5 = "a659b8388cac9db2b13e056e574ceeb0";
   };
   # !!! apply only if noSysDirs is set

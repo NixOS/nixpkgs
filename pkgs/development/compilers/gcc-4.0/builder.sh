@@ -5,6 +5,12 @@ export NIX_FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
 mkdir $NIX_FIXINC_DUMMY
 
 
+# libstdc++ needs this; otherwise it will use /lib/cpp, which is a Bad
+# Thing.
+export CPP="gcc -E"
+export CXXCPP="gcc -E"
+
+
 if test "$noSysDirs" = "1"; then
 
     if test "$noSysDirs" = "1"; then
@@ -12,6 +18,7 @@ if test "$noSysDirs" = "1"; then
         # being generated to make sure that they use our glibc.
         if test -e $NIX_GCC/nix-support/orig-glibc; then
             glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
+
             # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
             # source in $NIX_GCC/nix-support/add-flags, since that
             # would cause *this* GCC to be linked against the
@@ -32,6 +39,11 @@ if test "$noSysDirs" = "1"; then
             hook=$(pwd)/ld-wrapper-hook
             echo "NIX_GLIBC_FLAGS_SET=1" > $hook
             export NIX_LD_WRAPPER_START_HOOK=$hook
+
+            # Use *real* header files, otherwise a limits.h is
+            # generated that does not include Glibc's limits.h
+            # (notably missing SSIZE_MAX, which breaks the build).
+            export NIX_FIXINC_DUMMY=$glibc/include
         fi
 
         export NIX_EXTRA_CFLAGS=$extraCFlags
