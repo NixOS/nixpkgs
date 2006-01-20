@@ -27,6 +27,10 @@ echo "starting udev..."
 echo "setting up hostname..."
 hostname nixos
 
+echo "cleaning utmp and wtmp..."
+echo "" > /var/run/utmp
+echo "" > /var/log/wtmp
+
 echo "enabling loopback interface..."
 ifconfig lo 127.0.0.1
 
