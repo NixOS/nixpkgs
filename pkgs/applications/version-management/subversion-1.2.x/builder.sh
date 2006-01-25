@@ -23,7 +23,7 @@ if test -n "$pythonBindings"; then
 fi
 
 if test "$javahlBindings"; then
-    configureFlags="--enable-javahl --with-jdk=$jdk $configureFlags"
+    configureFlags="--enable-javahl --with-jdk=$jdk --with-jikes=no $configureFlags"
 fi
 
 installFlags="$makeFlags"
