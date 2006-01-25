@@ -1248,6 +1248,12 @@ rec {
     inherit (xlibs) libXtst;
   };
 
+  ### DEVELOPMENT / LIBRARIES / HASKELL
+
+  uulib = import ../development/libraries/haskell/uulib {
+    inherit stdenv fetchurl ghc;
+  };
+  
   ### DEVELOPMENT / PERL MODULES
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {

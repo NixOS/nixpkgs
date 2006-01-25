@@ -56,6 +56,7 @@ let {
     transformers
 
     ghc
+    uulib
 #    helium
     perl
     python
