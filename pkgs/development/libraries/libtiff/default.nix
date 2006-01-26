@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "libtiff-3.7.4";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.7.4.tar.gz;
+    url = ftp://ftp.remotesensing.org/pub/libtiff/old/tiff-3.7.4.tar.gz;
     md5 = "f37a7907bca4e235da85eb0126caa2b0";
   };
   propagatedBuildInputs = [zlib libjpeg];
