@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     url = http://losser.st-lab.cs.uu.nl/~eelco/dist/quake3-icculus-r526.tar.bz2;
     md5 = "63429347b918052c27cdb5c1d15939ad";
   };
-  builder = "./builder.sh";
+  builder = ./builder.sh;
   buildInputs = [x11 SDL mesa openal];
 }
