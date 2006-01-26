@@ -1949,7 +1949,7 @@ rec {
   gimp = (import ../applications/graphics/gimp) {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser;
-    inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
+    inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl python;
   };
 
   cdrtools = (import ../applications/misc/cdrtools) {

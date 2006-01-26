@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, glib, pango, atk, freetype, fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl, perlXMLParser}:
+{stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, glib, pango, atk, freetype, fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl, perlXMLParser, python}:
 
 stdenv.mkDerivation {
   name = "gimp-2.3.0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     md5 = "88e536ba0e4882958eb98bc0eadc8dd4" ;
   };
   
-  buildInputs = [ pkgconfig gtk libgtkhtml glib pango atk freetype fontconfig libart_lgpl libtiff libjpeg libpng libexif zlib perl perlXMLParser ] ;
+  buildInputs = [ pkgconfig gtk libgtkhtml glib pango atk freetype fontconfig libart_lgpl libtiff libjpeg libpng libexif zlib perl perlXMLParser python] ;
 
   configureFlags = [ "--disable-print" ];
 }
