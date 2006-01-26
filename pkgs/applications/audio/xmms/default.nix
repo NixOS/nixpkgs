@@ -7,5 +7,8 @@ stdenv.mkDerivation {
     md5 = "03a85cfc5e1877a2e1f7be4fa1d3f63c" ;
   };
 
+  # Patch borrowed from SuSE 10.0 to fix pause/continue on ALSA.
+  patches = [./alsa.patch];
+
   buildInputs = [alsaLib esound libogg libvorbis glib gtk];
 }
