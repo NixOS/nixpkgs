@@ -1170,6 +1170,10 @@ rec {
     inherit fetchurl stdenv libgpgerror gnupg;
   };
 
+  openal = import ../development/libraries/openal {
+    inherit fetchurl stdenv alsaLib autoconf automake libtool;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxon = (import ../development/libraries/java/saxon) {
@@ -1425,7 +1429,8 @@ rec {
   readline = readline5;
 
   SDL = (import ../development/libraries/SDL) {
-    inherit fetchurl stdenv x11;
+    inherit fetchurl stdenv x11 mesa;
+    openglSupport = true;
   };
 
   boehmgc = (import ../development/libraries/boehm-gc) {
