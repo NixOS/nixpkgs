@@ -1973,6 +1973,11 @@ rec {
     motif = lesstif;
   };
 
+  xterm = (import ../applications/misc/xterm) {
+    inherit fetchurl stdenv ncurses;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+  };
+
   acroread = (import ../applications/misc/acrobat-reader) {
     inherit fetchurl stdenv zlib;
     inherit (xlibs) libXt libXp libXext libX11 libXinerama;
