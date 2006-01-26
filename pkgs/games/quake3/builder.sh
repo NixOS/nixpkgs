@@ -8,5 +8,3 @@ preInstall() {
 }
 
 genericBuild
-
-exit 1
