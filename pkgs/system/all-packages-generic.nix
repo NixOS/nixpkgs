@@ -682,6 +682,16 @@ rec {
     m4 = gnum4;
   };
 
+  ghcWrapper = assert uulib.ghc == ghc;
+               (import ../development/compilers/ghc-wrapper) {
+                   inherit stdenv ghc;
+                   libraries = [ uulib ];
+  };
+
+  uuagc = (import ../development/tools/haskell/uuagc) {
+    inherit fetchurl stdenv ghc uulib;
+  };
+
   helium = (import ../development/compilers/helium) {
     inherit fetchurl stdenv ghc;
   };

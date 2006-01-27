@@ -7,5 +7,6 @@ stdenv.mkDerivation {
     md5 = "0cc9acc6a268e2bc5c8a954e67406e2d";
   };
   builder = ./builder.sh;
+  #buildInputs = [ ghc ];
   inherit ghc;
 }

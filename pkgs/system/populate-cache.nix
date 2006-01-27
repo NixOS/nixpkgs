@@ -55,8 +55,10 @@ let {
     strategoxtUtils
     transformers
 
-    ghc
+#    ghc
+    ghcWrapper
     uulib
+    uuagc
 #    helium
     perl
     python
