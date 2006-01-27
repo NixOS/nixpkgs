@@ -244,6 +244,10 @@ rec {
     inherit fetchurl stdenv ocaml;
   };
 
+  lhs2tex = (import ../tools/typesetting/lhs2tex) {
+    inherit fetchurl stdenv ghc tetex polytable;
+  };
+
   xmlroff = (import ../tools/typesetting/xmlroff) {
     inherit fetchurl stdenv pkgconfig libxml2 libxslt popt;
     inherit (gtkLibs) glib pango gtk;
@@ -2128,6 +2132,14 @@ rec {
 
   tetex = (import ../misc/tex/tetex) {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
+  };
+
+  lazylist = (import ../misc/tex/lazylist) {
+    inherit fetchurl stdenv tetex;
+  };
+
+  polytable = (import ../misc/tex/polytable) {
+    inherit fetchurl stdenv tetex lazylist;
   };
 
   ghostscript = (import ../misc/ghostscript) {

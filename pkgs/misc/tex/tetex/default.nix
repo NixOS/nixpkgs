@@ -15,4 +15,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [flex bison zlib libpng ncurses ed];
+
+  patches = [./environment.patch];
+
+  setupHook = ./setup-hook.sh;
 }

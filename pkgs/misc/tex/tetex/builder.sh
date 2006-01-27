@@ -17,4 +17,10 @@ configureFlags="\
   --with-system-ncurses \
   "
 
+postInstall() {
+    ensureDir "$out/nix-support"
+    cp $setupHook $out/nix-support/setup-hook
+}
+postInstall=postInstall
+
 genericBuild
