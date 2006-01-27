@@ -23,6 +23,16 @@ Need to put this in a wrapper.
 
 Idem for adding the various *.pak files.
 
+On i915:
+
+LD_LIBRARY_PATH=/usr/X11R6/lib/modules/:/nix/store/9gy5fj9x7yvs72y31bm8db7mkl43br8w-libX11-1.0.0/lib:/nix/store/kcbq0frclmskk6mslzcc2qll2ky9l3y0-libXext-1.0.0/lib:/nix/store/54l9jk6l7papbh42z7sjdy1x84m255la-libXp-1.0.0/lib:. ./result/ioquake3.i386 +set fs_basepath ./x
+
+With symlinks for: libexpat.so.0 libGL.so.1 libXxf86vm.so.1
+
+Note that the libGL.so.1 for i915 dynamically loads
+/usr/X11R6/lib/modules/dri/i915_dri.so (which depends on
+libexpat.so).
+
 */
 
 stdenv.mkDerivation {

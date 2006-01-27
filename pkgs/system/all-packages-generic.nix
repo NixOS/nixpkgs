@@ -2086,12 +2086,18 @@ rec {
     inherit (xlibs) xlibs;
   };
 
-  quake3 = import ../games/quake3 {
+  quake3game = import ../games/quake3/game {
     inherit fetchurl stdenv x11 SDL mesa openal;
   };
 
-  quake3demo = (import ../games/quake3demo) {
-    inherit fetchurl stdenv xlibs mesa;
+  quake3demodata = import ../games/quake3/demo {
+    inherit fetchurl stdenv;
+  };
+
+  quake3demo = import ../games/quake3/wrapper {
+    inherit fetchurl stdenv;
+    game = quake3game;
+    paks = [quake3demodata];
   };
 
   ut2004demo = (import ../games/ut2004demo) {
