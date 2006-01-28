@@ -12,8 +12,13 @@ done
 ensureDir $out/bin
 
 cat >$out/bin/quake3 <<EOF
+mesa=$mesa
+
+$(cat $mesaSwitch)
+
 exec $game/ioquake3.i386 \
     +set fs_basepath $out \
+    +set r_allowSoftwareGL 1 \
     "\$@"
 EOF
 

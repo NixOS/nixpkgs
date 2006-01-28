@@ -1,7 +1,7 @@
-{stdenv, fetchurl, game, paks}:
+{stdenv, fetchurl, game, paks, mesa, name}:
 
 stdenv.mkDerivation {
-  name = "quake3";
   builder = ./builder.sh;
-  inherit game paks;
+  inherit game paks mesa name;
+  mesaSwitch = ../../../build-support/opengl/mesa-switch.sh;
 }

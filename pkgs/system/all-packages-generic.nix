@@ -2095,7 +2095,8 @@ rec {
   };
 
   quake3demo = import ../games/quake3/wrapper {
-    inherit fetchurl stdenv;
+    name = "quake3-demo";
+    inherit fetchurl stdenv mesa;
     game = quake3game;
     paks = [quake3demodata];
   };

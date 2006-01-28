@@ -128,6 +128,8 @@ let {
     ecj
     jre
     jetty
+
+    quake3demo
   ;};
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
