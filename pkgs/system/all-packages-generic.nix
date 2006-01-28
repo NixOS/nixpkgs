@@ -2178,4 +2178,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  rssglx = (import ../misc/screensavers/rss-glx) {
+    inherit fetchurl stdenv x11 mesa;
+  };
+
 }

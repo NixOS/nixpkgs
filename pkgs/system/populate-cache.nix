@@ -130,6 +130,7 @@ let {
     jetty
 
     quake3demo
+    rssglx
     xorg_sys_opengl
   ;};
 
