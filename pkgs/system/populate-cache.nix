@@ -130,6 +130,7 @@ let {
     jetty
 
     quake3demo
+    xorg_sys_opengl
   ;};
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})

@@ -1681,6 +1681,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
+    inherit stdenv xlibs expat;
+  };
+
   
   ### DATA
 

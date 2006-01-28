@@ -19,10 +19,10 @@ This will probably be quite slow.
 
 This program will look for a hardware-accelerated implementation of
 OpenGL in the "$profileName" profile of your Nix installation.  For
-instance, to enable NVidia's accelerated driver on non-NixOS systems,
-try
+instance, to enable the (hopefully) accelerated driver provided by
+your (non-NixOS) Linux distribution, try
 
-  $ nix-env -p $profile -i nvidia-sys-opengl
+  $ nix-env -p $profile -i xorg-sys-opengl
 
 Alternatively, you can set the OPENGL_DRIVER environment variable to
 point at the package containing the OpenGL implementation.
