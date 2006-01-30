@@ -3,168 +3,161 @@ let {
   allPackages = import ./all-packages.nix;
 
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
-    coreutils
-    findutils
-    diffutils
-    gnupatch
-    gnused
-    gnugrep
-    gawk
-    enscript
-    gnutar
-    zip
-    unzip
-    gzip
-    bzip2
-    zdelta
-    bsdiff
-    wget
-    par2cmdline
-    cksfv
-    bittorrent
-    graphviz
-    bash
-    binutils
-    gnum4
-    autoconf
-    automake19x
-    libtool
-    pkgconfig
-    valgrind
-    texinfo
-    readline
-    octave
-    gnumake
-    bisonnew
-    flexnew
-    gccWrapped
-    gcc40
-    aterm
-    kernel
-#    ov511
-    db4
-
-#    atermjava
-#    jjtraveler
-#    sharedobjects
-#    jakartabcel
-    jakartaregexp
-
-    sdf
-    strategoxt
-    strategoxtUtils
-    transformers
-
-#    ghc
-    ghcWrapper
-    uulib
-    uuagc
-#    helium
-    perl
-    python
-    libxml2
-    libxslt
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_ng
-    docbook_xml_xslt
-    jing_tools
-    apacheHttpd
-    subversion
-    darcs
-    pan
-    sylpheed
-    firefoxWrapper
-    thunderbird
-    lynx
-    gaim
     MPlayer
     MPlayerPlugin
-    vlc
-    xineUI
-    xmms
-    zapping
-    gqview
-    inkscape
+    apacheAntBlackdown14
+    apacheHttpd
+    aterm
+    autoconf
+    automake19x
+    bash
     batik
-#    fspot
-    hello
-    xchm
-    nxml
-    uml
-    nix
-#    ocaml
-    mono
-#    monodoc
-#    monodevelop
-#    hevea
-    vim
+    binutils
+    bisonnew
+    bittorrent
+    blackdown
+    bsdiff
+    bzip2
+    cksfv
+    coreutils
+    darcs
+    db4
+    diffutils
+    docbook_ng
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    docbook_xml_xslt
+    ecj
     emacs
-    less
+    enscript
     file
-    screen
-    grub
-    parted
-    qtparted
-    kdelibs
-    xsel
-    openssl
-    mktemp
-    strace
-#    xauth
-    qt3
-    xmltv
-#    xawtv
-    tetex
+    findutils
+    firefoxWrapper
+    flexnew
+    gaim
+    gawk
+    gcc40
+    gccWrapped
+    ghcWrapper
     ghostscript
-
+    gnugrep
+    gnum4
+    gnumake
+    gnupatch
+    gnused
+    gnutar
+    gqview
+    graphviz
+    grub
+    gzip
+    hello
+    inkscape
+    jakartaregexp
+    jetty
+    jikes
+    jing_tools
+    jre
+    kdelibs
+    kernel
+    less
+    libtool
+    libxml2
+    libxslt
+    lynx
+    mktemp
+    mono
     mysql
+    nix
+    nxml
+    octave
+    openssl
+    pan
+    par2cmdline
+    parted
+    perl
+    pkgconfig
     postgresql
     postgresql_jdbc
-
-    blackdown
-    apacheAntBlackdown14
-    jikes
-    ecj
-    jre
-    jetty
-
+    python
+    qt3
+    qtparted
     quake3demo
+    readline
     rssglx
+    screen
+    sdf
+    strace
+    strategoxt
+    strategoxtUtils
+    subversion
+    sylpheed
+    tetex
+    texinfo
+    thunderbird
+    transformers
+    uml
+    unzip
+    uuagc
+    uulib
+    valgrind
+    vim
+    vlc
+    wget
+    xchm
+    xineUI
+    xmltv
+    xmms
     xorg_sys_opengl
+    xsel
+    zapping
+    zdelta
+    zip
+#    atermjava
+#    fspot
+#    ghc
+#    helium
+#    hevea
+#    jakartabcel
+#    jjtraveler
+#    monodevelop
+#    monodoc
+#    ocaml
+#    ov511
+#    sharedobjects
+#    xauth
+#    xawtv
   ;};
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
-    unzip
     aterm
-    subversion
     curl
-    libxml2
-    libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
+    libxml2
+    libxslt
     nxml
+    subversion
+    unzip
   ;};
 
   powerpcDarwinPkgs = {inherit (allPackages {system = "powerpc-darwin";})
-    unzip
+    aterm
     autoconf
     automake19x
-    libtool
-    aterm
-    subversion
     bisonnew
-#    flexnew
-    libxml2
-    libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
+    libtool
+    libxml2
+    libxslt
     nxml
+    subversion
     tetex
+    unzip
+#    flexnew
   ;};
-
 
   body = [
     i686LinuxPkgs
