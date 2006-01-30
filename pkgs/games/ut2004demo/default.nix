@@ -5,9 +5,9 @@ assert stdenv.system == "i686-linux";
 let {
 
   raw = stdenv.mkDerivation {
-    name = "ut2004demo-3120";
+    name = "ut2004-demo-3120";
     src = fetchurl {
-      url = ftp://ftp.infogrames.net/demos/ut2004/ut2004-lnx-demo-3120.run.bz2;
+      url = http://ftp.gameaholic.com/pub/demos/ut2004-lnx-demo-3120.run.bz2;
       md5 = "da200b043add9d083f6aa7581e6829f0";
     };
     builder = ./builder.sh;
@@ -18,6 +18,7 @@ let {
     builder = ./make-wrapper.sh;
     inherit raw mesa;
     inherit (xlibs) libX11 libXext;
+    mesaSwitch = ../../build-support/opengl/mesa-switch.sh;
   };
 
 }

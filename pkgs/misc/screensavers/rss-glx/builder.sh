@@ -19,6 +19,8 @@ ensureDir $out/bin/.orig
 for i in $(cd $out/bin && ls); do
     mv $out/bin/$i $out/bin/.orig/$i
     cat >$out/bin/$i <<EOF
+#! $SHELL -e
+
 mesa=$mesa
 
 $(cat $mesaSwitch)

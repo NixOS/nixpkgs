@@ -8,6 +8,7 @@ mkdir $out
 
 (cd $out && tar xvf -) < ut2004demo.tar
 
+
 # Patch the executable from ELF OS/ABI type `Linux' (3) to `SVR4' (0).
 # This doesn't seem to matter to ld-linux.so.2 at all, except that it
 # refuses to load `Linux' executables when invokes explicitly, that
@@ -18,5 +19,13 @@ mkdir $out
 # patch Glibc so it accepts the `Linux' ELF type as well (why doesn't
 # it?); or to use FreeBSD's `brandelf' program to set to ELF type
 # (which is a bit cleaner than patching using `dd' :-) ).
-(cd $out/System && (echo -en "\000" | dd bs=1 seek=7 of=ut2004-bin conv=notrunc))
 
+#(cd $out/System && (echo -en "\000" | dd bs=1 seek=7 of=ut2004-bin conv=notrunc))
+
+
+# Set the ELF interpreter to our own Glibc.
+glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
+
+for i in "$out/System/ucc-bin" "$out/System/ut2004-bin"; do
+    patchelf --set-interpreter "$glibc/lib/ld-linux.so.2" "$i"
+done

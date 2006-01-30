@@ -12,6 +12,8 @@ done
 ensureDir $out/bin
 
 cat >$out/bin/quake3 <<EOF
+#! $SHELL -e
+
 mesa=$mesa
 
 $(cat $mesaSwitch)

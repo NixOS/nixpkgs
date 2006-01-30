@@ -2109,7 +2109,7 @@ rec {
     paks = [quake3demodata];
   };
 
-  ut2004demo = (import ../games/ut2004demo) {
+  ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
   };
 
