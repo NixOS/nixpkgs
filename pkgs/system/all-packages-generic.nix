@@ -38,6 +38,10 @@ rec {
     inherit stdenv subversion nix;
   };
 
+  fetchdarcs = (import ../build-support/fetchdarcs) {
+    inherit stdenv darcs nix;
+  };
+
   substituter = ../build-support/substitute/substitute.sh;
 
   makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
@@ -1271,7 +1275,7 @@ rec {
   uulib = import ../development/libraries/haskell/uulib {
     inherit stdenv fetchurl ghc;
   };
-  
+
   ### DEVELOPMENT / PERL MODULES
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
@@ -1771,7 +1775,7 @@ rec {
   };
 
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv ghc zlib ncurses;
+    inherit fetchurl stdenv ghc zlib ncurses curl;
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
