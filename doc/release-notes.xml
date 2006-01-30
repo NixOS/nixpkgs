@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!DOCTYPE book
+    PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+    "http://www.docbook.org/xml/4.3/docbook-xml-4.3.zip"
+[
+]>
+
+<article><title>Nixpkgs Release Notes</title>
+
+
+<section><title>Release 0.9 (January 31, 2006)</title>
+
+<para>There have been zillions of changes since the last release of
+Nixpkgs.  Among the more notable are:</para>
+
+<itemizedlist>
+
+  <listitem><para>Distribution files have been moved to <ulink
+  url="http://nix.cs.uu.nl" />).</para></listitem>
+
+</itemizedlist>
+
+</section>
+
+
+<section><title>Release 0.8 (April 11, 2005)</title>
+
+<para>This release is mostly to remain synchronised with the changed
+hashing scheme in Nix 0.8.</para>
+
+<para>Notable updates:
+
+<itemizedlist>
+
+  <listitem><para>Adobe Reader 7.0</para></listitem>
+
+  <listitem><para>Various security updates (zlib 1.2.2, etc.)</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</section>
+
+
+<section><title>Release 0.7 (March 14, 2005)</title>
+
+<itemizedlist>
+
+<listitem>
+
+  <para>The bootstrap process for the standard build
+  environment on Linux (stdenv-linux) has been improved.  It is no
+  longer dependent in its initial bootstrap stages on the system
+  Glibc, GCC, and other tools.  Rather, Nixpkgs contains a statically
+  linked bash and curl, and uses that to download other statically
+  linked tools.  These are then used to build a Glibc and dynamically
+  linked versions of all other tools.</para>
+
+  <para>This change also makes the bootstrap process faster.  For
+  instance, GCC is built only once instead of three times.</para>
+
+  <para>(Contributed by Armijn Hemel.)</para>
+
+</listitem>
+
+<listitem>
+
+  <para>Tarballs used by Nixpkgs are now obtained from the same server
+  that hosts Nixpkgs (<ulink url="http://catamaran.labs.cs.uu.nl" />).
+  This reduces the risk of packages being unbuildable due to moved or
+  deleted files on various servers.</para>
+
+</listitem>
+
+<listitem>
+
+  <para>There now is a generic mechanism for building Perl modules.
+  See the various Perl modules defined in
+  pkgs/system/all-packages-generic.nix.</para>
+
+</listitem>
+
+<listitem>
+
+  <para>Notable new packages:
+
+  <itemizedlist>
+
+    <listitem><para>Qt 3</para></listitem>
+    <listitem><para>MySQL</para></listitem>
+    <listitem><para>MythTV</para></listitem>
+    <listitem><para>Mono</para></listitem>
+    <listitem><para>MonoDevelop (alpha)</para></listitem>
+    <listitem><para>Xine</para></listitem>
+
+  </itemizedlist>
+
+  </para>
+
+</listitem>
+
+<listitem>
+
+  <para>Notable updates:
+
+  <itemizedlist>
+
+    <listitem><para>GCC 3.4.3</para></listitem>
+    <listitem><para>Glibc 2.3.4</para></listitem>
+    <listitem><para>GTK 2.6</para></listitem>
+
+  </itemizedlist>
+
+  </para>
+
+</listitem>
+
+</itemizedlist>
+
+</section>
+
+  
+</article>

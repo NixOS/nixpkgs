@@ -1,0 +1,234 @@
+/* Copied from http://bakefile.sourceforge.net/, which appears
+   licensed under the GNU GPL. */
+
+
+/***************************************************************************
+                             Basic headers and text:
+ ***************************************************************************/
+
+body
+{
+    font-family: sans-serif;
+    background: white;
+  
+    margin: 2em 1em 2em 1em;
+}
+
+h1,h2,h3
+{
+    color: #005aa0;
+    text-align: left;
+}
+
+h1 /* title */
+{
+    font-size: 200%;
+}
+
+h2 /* chapters, appendices, subtitle */
+{
+    font-size: 180%;
+}
+
+/* Extra space between chapters, appendices. */
+div.chapter > div.titlepage h2, div.appendix > div.titlepage h2 
+{ 
+    margin-top: 1.5em;
+/*    border-top: solid #005aa0; */
+}
+
+div.sect1 h2 /* sections */
+{
+    font-size: 150%;
+}
+
+div.refnamediv h2, div.refsynopsisdiv h2, div.refsection h2 /* refentry parts */
+{
+    font-size: 125%;
+}
+
+div.refsection h3
+{
+    font-size: 110%;
+}
+
+h3 /* subsections */
+{
+    font-size: 125%;
+}
+
+
+
+/***************************************************************************
+                               Program listings:
+ ***************************************************************************/
+
+div.example
+{
+    border: 1px solid #6185a0;
+    padding: 6px 6px;
+    margin-left: 3em;
+    margin-right: 3em;
+    background: #eeeeee;
+}
+
+pre.programlisting
+{
+    color: #600000;
+    font-family: monospace;
+}
+
+
+/***************************************************************************
+                            Screen dumps:
+ ***************************************************************************/
+
+pre.screen
+{
+    border: 1px solid #6185a0;
+    padding: 6px 6px;
+    margin-left: 3em;
+    margin-right: 3em;
+    color: #600000;
+    background: #eeeeee;
+    font-family: monospace;
+    /* font-size: 90%; */
+}
+
+
+/***************************************************************************
+                               Notes, warnings etc:
+ ***************************************************************************/
+
+.note,.warning
+{
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: 1px solid #6185a0;
+    padding: 0px 1em;
+    background: #fffff5;
+}
+
+div.note,div.warning
+{
+    font-style: italic;
+}
+
+div.warning h3
+{
+    color: red;
+    font-size: 100%;
+}
+
+div.note h3
+{
+    color: blue;
+    font-size: 100%;
+}
+
+div.navfooter *
+{
+    font-size: 90%;
+}
+
+
+/***************************************************************************
+                        Links colors and highlighting: 
+ ***************************************************************************/
+
+a:link { color: #0048b3; }
+a:visited { color: #002a6a; }
+a:hover { background: #ffffcd; }
+
+
+/***************************************************************************
+                              Table of contents:
+ ***************************************************************************/
+
+.toc
+{
+    font-size: 90%;
+}
+
+
+
+/***************************************************************************
+                               Special elements:
+ ***************************************************************************/
+
+tt, code
+{
+    color: #400000;
+}
+
+.term
+{
+    font-weight: bold;
+    
+}
+
+div.variablelist dd
+{
+    margin-bottom: 1em;
+}
+
+.default
+{
+    font-style: italic;
+}
+
+.availability
+{
+    font-style: italic;
+}
+
+.varname
+{
+    color: #400000;
+}
+
+
+div.informaltable table
+{
+  border: 1px solid #6185a0;
+  width: 100%;
+}
+
+div.informaltable td
+{
+  border: 0;
+  padding: 5px;
+}
+
+div.informaltable td.default
+{
+  text-align: right;
+}
+
+div.informaltable th
+{
+  text-align: left;
+  color: #005aa0;
+  border: 0;
+  padding: 5px;
+  background: #fffff5;
+  font-weight: normal;
+  font-style: italic;
+}
+
+td.varname, td.tagname, td.paramname
+{
+  font-weight: bold;
+  vertical-align: top;
+}
+
+div.epigraph
+{
+    font-style: italic;
+    text-align: right;
+}
+
+table.productionset table.productionset
+{
+    font-family: monospace;
+}

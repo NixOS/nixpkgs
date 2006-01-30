@@ -1,0 +1,27 @@
+ENV = SGML_CATALOG_FILES=$(docbookcatalog)
+
+XMLLINT = $(ENV) xmllint --catalogs
+XSLTPROC = $(ENV) xsltproc --catalogs \
+ --param section.autolabel 1 \
+ --param section.label.includes.component.label 1 \
+ --param html.stylesheet \'style.css\' \
+ --param xref.with.number.and.title 1 \
+ --param toc.section.depth 3
+
+NEWS_OPTS = \
+ --stringparam generate.toc "article nop" \
+ --stringparam section.autolabel.max.depth 0 \
+ --stringparam header.rule 0
+
+all: NEWS.html NEWS.txt
+
+NEWS.html: release-notes.xml
+	$(XSLTPROC) --nonet --xinclude --output $@ $(NEWS_OPTS) \
+	  $(docbookxsl)/html/docbook.xsl release-notes.xml
+
+NEWS.txt: release-notes.xml
+	$(XSLTPROC) --nonet --xinclude quote-literals.xsl release-notes.xml | \
+	  $(XSLTPROC) --nonet --output $@.tmp.html $(NEWS_OPTS) \
+	  $(docbookxsl)/html/docbook.xsl -
+	LANG=en_US w3m -dump $@.tmp.html > $@
+	rm $@.tmp.html
