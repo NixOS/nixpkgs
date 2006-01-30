@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "ruby-1.8.2";
+  name = "ruby-1.8.4";
   src = fetchurl {
-    url = ftp://ftp.ruby-lang.org/pub/ruby/ruby-1.8.2.tar.gz;
-    md5 = "8ffc79d96f336b80f2690a17601dea9b";
+    url = ftp://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.4.tar.gz;
+    md5 = "bd8c2e593e1fa4b01fd98eaf016329bb";
   };
 }

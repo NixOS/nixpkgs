@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip, jdk}:
 
-assert jdk.swingSupport;
+#assert jdk.swingSupport;
 
 stdenv.mkDerivation {
   name = "jdiskreport-1.2.3";

@@ -5,12 +5,12 @@ assert ncurses != null;
 assert readline != null;
 
 stdenv.mkDerivation {
-  name = "postgresql-8.0.3";
+  name = "postgresql-8.0.6";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://ftp2.nl.postgresql.org/mirror/postgresql/source/v8.0.3/postgresql-8.0.3.tar.bz2;
-    md5 = "c0914a133ce6c1e0f1d8b93982d6e881";
+    url = ftp://ftp2.nl.postgresql.org/mirror/postgresql/source/v8.0.6/postgresql-8.0.6.tar.bz2;
+    md5 = "f3b27b8171267f9a87592f931c09f0ee";
   };
 
   inherit readline;
