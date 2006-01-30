@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   name = "emacs-22.0.50-pre-xft";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/emacs-22.0.50-xft.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/emacs-22.0.50-xft.tar.bz2;
     md5 = "4f96ada6f18513aeb70adc27b7ac862f";
   };
   patches = [./crt.patch];

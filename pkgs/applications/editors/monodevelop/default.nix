@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://losser.labs.cs.uu.nl/~eelco/mono-tmp/monodevelop-0.6-pre2315.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/monodevelop-0.6-pre2315.tar.bz2;
     md5 = "8c33df5629b0676b7ab552854c1de6fd";
   };
 

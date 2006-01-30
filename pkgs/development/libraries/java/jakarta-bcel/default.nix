@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.cs.uu.nl/dist/jakarta/bcel/binaries/bcel-5.1.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/bcel-5.1.tar.gz;
     md5 = "318f22e4f5f59b68cd004db83a7d65dc";
   };
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~mbravenb/clg3-cvs-2005.11.11.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/clg3-cvs-2005.11.11.tar.gz;
     md5 = "c272cff1c567ba154ccc60fe2ff241d8";
   };
 

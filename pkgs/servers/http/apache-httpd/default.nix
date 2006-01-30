@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://apache.cs.uu.nl/dist/httpd/httpd-2.0.55.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/httpd-2.0.55.tar.bz2;
     md5 = "f1b5b65c8661db9ffe38b5a4a865a0e2";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://losser.labs.cs.uu.nl/~eelco/mono-tmp/gtksourceview-sharp-0.6-pre40261.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gtksourceview-sharp-0.6-pre40261.tar.bz2;
     md5 = "8bc26c182bd897f50988e110a9a11f34";
   };
 

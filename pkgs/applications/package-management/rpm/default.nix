@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "rpm-4.4.5";
 
   src = fetchurl {
-    url = http://losser.labs.cs.uu.nl/~armijn/.nix/rpm-4.4.5.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/rpm-4.4.5.tar.gz;
     #md5 = "e24ce468082479fe850c9d6563f56db5";
     md5 = "3f277388b0486c6e8ce9b07fdf53993e";
   };
