@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "gimp-2.3.6";
   src = fetchurl {
-    url = http://gnu.kookel.org/ftp/gimp/v2.3/gimp-2.3.6.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gimp-2.3.6.tar.bz2;
     md5 = "ce8ad77f4eb47abb868e6b4eb1f97943" ;
   };
   

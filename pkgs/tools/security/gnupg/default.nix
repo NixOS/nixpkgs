@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "gnupg-1.4.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.surfnet.nl/pub/security/gnupg/gnupg/gnupg-1.4.2.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gnupg-1.4.2.tar.bz2;
     md5 = "c7afd50c7d01fcfada229326b3958404";
   };
   idea = if ideaSupport then fetchurl {

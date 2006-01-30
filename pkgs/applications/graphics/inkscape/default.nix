@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   name = "inkscape-0.42.2";
 
   src = fetchurl {
-    url = http://easynews.dl.sourceforge.net/sourceforge/inkscape/inkscape-0.42.2.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/inkscape-0.42.2.tar.bz2;
     md5 = "a27172087018e850e92e97e52b5dad08";
   };
 

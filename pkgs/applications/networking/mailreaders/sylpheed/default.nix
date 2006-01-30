@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "sylpheed-2.1.9";
 
   src = fetchurl {
-    url = http://sylpheed.good-day.net/sylpheed/v2.1/sylpheed-2.1.9.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/sylpheed-2.1.9.tar.bz2;
     md5 = "fe05714e5037d56ccdcf4b36fe4e9346";
   };
 

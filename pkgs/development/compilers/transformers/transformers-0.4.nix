@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "transformers-0.4";
 
   src = fetchurl {
-    url = http://www.lrde.epita.fr/dload/transformers/transformers-0.4.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/transformers-0.4.tar.bz2;
     md5 = "19f5b752aec5f4d09cf45cc199fd5bfb";
   };
 

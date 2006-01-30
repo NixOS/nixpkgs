@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   substitute = ../../../build-support/substitute/substitute.sh;
   hook = ./setup-hook.sh;  
   src = fetchurl {
-    url = http://wftp.tu-chemnitz.de/pub/Qt/qt/source/qt-x11-free-3.3.5.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/qt-x11-free-3.3.5.tar.bz2;
     md5 = "05d04688c0c0230ed54e89102d689ca4";
   };
 

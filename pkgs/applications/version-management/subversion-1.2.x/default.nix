@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.2.3.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/subversion-1.2.3.tar.bz2;
     md5 = "a14bc6590241b6e5c2ff2b354cc184a1";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.cs.princeton.edu/~appel/modern/java/CUP/java_cup_v10k.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/java_cup_v10k.tar.gz;
     md5 = "8b11edfec13c590ea443d0f0ae0da479";
   };
 

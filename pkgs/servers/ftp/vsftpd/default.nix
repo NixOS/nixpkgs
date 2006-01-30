@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "vsftpd-2.0.3";
   src = fetchurl {
-    url = ftp://vsftpd.beasts.org/users/cevans/vsftpd-2.0.3.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/vsftpd-2.0.3.tar.gz;
     md5 = "74936cbd8e8251deb1cd99c5fb18b6f8" ;
   };
   

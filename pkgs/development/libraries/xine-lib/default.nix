@@ -15,7 +15,7 @@ assert alsaSupport -> alsaLib != null;
   name = "xine-lib-1.1.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/xine/xine-lib-1.1.0.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/xine-lib-1.1.0.tar.gz;
     md5 = "3537cfd58d253b4be20a4975e7086e38";
   };
   buildInputs = [

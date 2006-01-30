@@ -6,15 +6,15 @@ stdenv.mkDerivation {
   name = "mesa-6.4";
   srcs = [
     (fetchurl {
-      url = http://surfnet.dl.sourceforge.net/sourceforge/mesa3d/MesaLib-6.4.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/MesaLib-6.4.tar.bz2;
       md5 = "85a84e47a3f718f752f306b9e0954ef6";
     })
 /*    (fetchurl {
-      url = http://surfnet.dl.sourceforge.net/sourceforge/mesa3d/MesaGLUT-6.4.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/MesaGLUT-6.4.tar.bz2;
       md5 = "1a8c4d4fc699233f5fdb902b8753099e";
     })
     (fetchurl {
-      url = http://surfnet.dl.sourceforge.net/sourceforge/mesa3d/MesaDemos-6.4.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/MesaDemos-6.4.tar.bz2;
       md5 = "1a8c4d4fc699233f5fdb902b8753099e";
     }) */
   ];

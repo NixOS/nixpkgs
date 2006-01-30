@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.mythtv.org/mc/mythtv-0.18.1.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/mythtv-0.18.1.tar.bz2;
     md5 = "e6cabf88feeaf6ae8f830d3fdf7b113d";
   };
 

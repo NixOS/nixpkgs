@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "xine-ui-0.99.4";
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/xine/xine-ui-0.99.4.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/xine-ui-0.99.4.tar.gz;
     md5 = "90ea1f76747e9788a30a73e7f4a76cf6";
   };
   buildInputs = [

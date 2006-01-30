@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   name = "gaim-1.5.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/gaim/gaim-1.5.0.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/gaim-1.5.0.tar.gz;
     md5 = "dd984bd3116d8146545a492d314b0dae";
   };
 

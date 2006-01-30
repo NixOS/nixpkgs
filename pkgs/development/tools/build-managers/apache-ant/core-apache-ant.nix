@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   builder = ./core-builder.sh;
   src = fetchurl {
-    url = http://apache.surfnet.nl/ant/binaries/apache-ant-1.6.5-bin.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/apache-ant-1.6.5-bin.tar.bz2;
     md5 = "26031ee1a2fd248ad0cc2e7f17c44c39";
   };
 }

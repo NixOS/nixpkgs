@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://www.iai.uni-bonn.de/~loeh/lhs2tex/lhs2tex-1.10pre.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/lhs2tex-1.10pre.tar.bz2;
     md5 = "4fb875cdc0ba8daacc18b97f76aab4bf";
   };
 

@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   name = "xmlroff-0.3.5";
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/xmlroff/xmlroff-0.3.5.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/xmlroff-0.3.5.tar.gz;
     md5 = "4f03dffa0451c28e7c777f6ee1fa38da";
   };
 

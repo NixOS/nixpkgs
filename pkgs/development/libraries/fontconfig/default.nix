@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "fontconfig-2.3.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.fontconfig.org/release/fontconfig-2.3.2.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/fontconfig-2.3.2.tar.gz;
     md5 = "7354f9f125ea78a8f2851cb9c31d4866";
   };
   buildInputs = [freetype];

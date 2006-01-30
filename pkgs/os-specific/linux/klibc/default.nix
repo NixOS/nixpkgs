@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "klibc-1.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.kernel.org/pub/linux/libs/klibc/klibc-1.0.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/klibc-1.0.tar.bz2;
     md5 = "daaa233fb7905cbe110896fcad9bec7f";
   };
   inherit kernel;

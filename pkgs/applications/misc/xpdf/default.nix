@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.01.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/xpdf-3.01.tar.gz;
     md5 = "e004c69c7dddef165d768b1362b44268";
   };
   

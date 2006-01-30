@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://jdbc.postgresql.org/download/postgresql-jdbc-8.0-311.src.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/postgresql-jdbc-8.0-311.src.tar.gz;
     md5 = "e31b6e68141883e5c89a3a9b0fb95c02";
   };
 

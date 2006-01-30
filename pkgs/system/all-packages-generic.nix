@@ -1417,7 +1417,7 @@ rec {
   perlLocaleGettext = import ../development/perl-modules/generic perl {
     name = "LocaleGettext-1.04";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/P/PV/PVANDRY/gettext-1.04.tar.gz;
+      url = http://nix.cs.uu.nl/dist/tarballs/gettext-1.04.tar.gz;
       md5 = "578dd0c76f8673943be043435b0fbde4";
     };
   };
