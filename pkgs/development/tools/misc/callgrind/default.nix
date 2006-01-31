@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://kcachegrind.sourceforge.net/callgrind-0.10.1.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/callgrind-0.10.1.tar.bz2;
     md5 = "6d8acca6b58b0b72804339d04426d550";
   };
 
