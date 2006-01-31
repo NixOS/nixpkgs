@@ -2177,6 +2177,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  linuxwacom = (import ../misc/linuxwacom) {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXi;
+  };
+
   rssglx = (import ../misc/screensavers/rss-glx) {
     inherit fetchurl stdenv x11 mesa;
   };
