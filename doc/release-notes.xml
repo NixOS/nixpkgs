@@ -16,9 +16,81 @@ Nixpkgs.  Among the more notable are:</para>
 <itemizedlist>
 
   <listitem><para>Distribution files have been moved to <ulink
-  url="http://nix.cs.uu.nl" />).</para></listitem>
+  url="http://nix.cs.uu.nl" />.</para></listitem>
+
+  <listitem><para>The C library on Linux, Glibc, has been updated to
+  version 2.3.6.</para></listitem>
+
+  <listitem><para>The default compiler is now GCC 3.4.5.  GCC 4.0.2 is
+  also available.</para></listitem>
+
+  <listitem><para>The old, unofficial Xlibs has been replaced by the
+  official modularised X11 distribution from X.org, i.e., X11R7.0.
+  X11R7.0 consists of 287 (!) packages, all of which are in Nixpkgs
+  though not all have been tested.  It is now possible to build a
+  working X server.  We use a fully Nixified X server on
+  NixOS.</para></listitem>
+
+  <listitem><para>The Sun JDK 5 has been purified, i.e., it doesn’t
+  require any non-Nix components such as
+  <filename>/lib/ld-linux.so.2</filename>.  This means that Java
+  applications such as Eclipse and Azureus can run on
+  NixOS.</para></listitem>
+
+  <listitem><para>Hardware-accelerated OpenGL support, used by games
+  like Quake 3 (which is now built from source).</para></listitem>
+
+  <listitem><para>Improved support for FreeBSD on
+  x86.</para></listitem>
+
+  <listitem><para>Improved Haskell support; e.g., the GHC build is now
+  pure.</para></listitem>
+
+  <listitem><para>Some support for cross-compilation: cross-compiling
+  builds of GCC and Binutils, and cross-compiled builds of the C
+  library uClibc.</para></listitem>
+
+  <listitem><para>Notable new packages:
+
+    <itemizedlist>
+
+      <listitem><para>teTeX, including support for building LaTeX
+      documents using Nix (with automatic dependency
+      determination).</para></listitem>
+      
+      <listitem><para>Ruby.</para></listitem>
+
+      <listitem><para>System-level packages to support NixOS,
+      e.g. Grub, GNU parted and so on.</para></listitem>
+
+      <listitem><para><literal>ecj</literal>, the Eclipse Compiler for
+      Java, so we finally have a freely distributable compiler that
+      supports Java 5.0.</para></listitem>
+
+      <listitem><para><literal>php</literal>.</para></listitem>
+
+      <listitem><para>The GIMP.</para></listitem>
+
+    </itemizedlist>
+
+  </para></listitem>
 
 </itemizedlist>
+
+<para>The following people contributed to this release:
+
+  Andres Löh,
+  Armijn Hemel,
+  Bogdan Dumitriu,
+  Christof Douma,
+  Eelco Dolstra,
+  Eelco Visser,
+  Mart Kolthof,
+  Martin Bravenboer,
+  Rob Vermaas and
+  Roy van den Broek.
+
+</para>
 
 </section>
 
