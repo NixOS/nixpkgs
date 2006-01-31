@@ -1,10 +1,11 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, pkgconfig, libusb}:
 
 stdenv.mkDerivation {
-  name = "libgphoto2-2.1.5";
+  name = "libgphoto2-2.1.99";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libgphoto2-2.1.5.tar.gz;
-    md5 = "210844f0d88f58842917af6eaff06382";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/gphoto/libgphoto2-2.1.99.tar.bz2;
+    md5 = "3c6d9cb65661915e07491a6f9215d5a9";
   };
+  buildInputs = [pkgconfig libusb];
 }

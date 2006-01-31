@@ -955,7 +955,7 @@ rec {
   };
 
   libgphoto2 = (import ../development/libraries/libgphoto2) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv pkgconfig libusb;
   };
 
   popt = (import ../development/libraries/popt) {
