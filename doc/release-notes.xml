@@ -17,7 +17,7 @@ some of the more notable changes:</para>
 <itemizedlist>
 
   <listitem><para>Distribution files have been moved to <ulink
-  url="http://nix.cs.uu.nl" />.</para></listitem>
+  url="http://nix.cs.uu.nl/" />.</para></listitem>
 
   <listitem><para>The C library on Linux, Glibc, has been updated to
   version 2.3.6.</para></listitem>
@@ -29,8 +29,8 @@ some of the more notable changes:</para>
   official modularised X11 distribution from X.org, i.e., X11R7.0.
   X11R7.0 consists of 287 (!) packages, all of which are in Nixpkgs
   though not all have been tested.  It is now possible to build a
-  working X server.  We use a fully Nixified X server on
-  NixOS.</para></listitem>
+  working X server (previously we only had X client libraries).  We
+  use a fully Nixified X server on NixOS.</para></listitem>
 
   <listitem><para>The Sun JDK 5 has been purified, i.e., it doesn’t
   require any non-Nix components such as
@@ -62,7 +62,8 @@ some of the more notable changes:</para>
       <listitem><para>Ruby.</para></listitem>
 
       <listitem><para>System-level packages to support NixOS,
-      e.g. Grub, GNU parted and so on.</para></listitem>
+      e.g. Grub, GNU <literal>parted</literal> and so
+      on.</para></listitem>
 
       <listitem><para><literal>ecj</literal>, the Eclipse Compiler for
       Java, so we finally have a freely distributable compiler that
