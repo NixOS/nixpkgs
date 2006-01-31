@@ -11,7 +11,8 @@
 <section><title>Release 0.9 (January 31, 2006)</title>
 
 <para>There have been zillions of changes since the last release of
-Nixpkgs.  Among the more notable are:</para>
+Nixpkgs.  Many packages have been added or updated.  The following are
+some of the more notable changes:</para>
 
 <itemizedlist>
 
@@ -70,6 +71,14 @@ Nixpkgs.  Among the more notable are:</para>
       <listitem><para><literal>php</literal>.</para></listitem>
 
       <listitem><para>The GIMP.</para></listitem>
+
+      <listitem><para>Inkscape.</para></listitem>
+
+      <listitem><para>GAIM.</para></listitem>
+
+      <listitem><para><literal>kdelibs</literal>.  This allows us to
+      add KDE-based packages (such as
+      <literal>kcachegrind</literal>).</para></listitem>
 
     </itemizedlist>
 
