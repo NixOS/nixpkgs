@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   builder = ./java-bin-builder.sh;
 
   src = fetchurl {
-    url = http://apache.cs.uu.nl/dist/jakarta/regexp/binaries/jakarta-regexp-1.4.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/jakarta-regexp-1.4.tar.gz;
     md5 = "d903d84c949df848009f3bf205b32c97";
   };
 

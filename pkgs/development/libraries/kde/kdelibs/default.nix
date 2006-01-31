@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "kdelibs-3.5.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.kde.org/pub/kde/stable/3.5/src/kdelibs-3.5.0.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/kdelibs-3.5.0.tar.bz2;
     md5 = "2b11d654e2ea1a3cd16dcfdcbb7d1915";
   };
 
