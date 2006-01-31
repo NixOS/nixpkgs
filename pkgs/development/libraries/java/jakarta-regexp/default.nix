@@ -4,15 +4,15 @@
 # jars can then be added to the CLASSPATH by a dependent package.
 
 stdenv.mkDerivation {
-  name = "jakarta-regexp-1.3";
+  name = "jakarta-regexp-1.4";
   builder = ./java-bin-builder.sh;
 
   src = fetchurl {
-    url = http://apache.cs.uu.nl/dist/jakarta/regexp/binaries/jakarta-regexp-1.3.tar.gz;
-    md5 = "4322f82bea908ca4a7db270f7fa4850d";
+    url = http://apache.cs.uu.nl/dist/jakarta/regexp/binaries/jakarta-regexp-1.4.tar.gz;
+    md5 = "d903d84c949df848009f3bf205b32c97";
   };
 
-  jars = ["jakarta-regexp-1.3.jar"];
+  jars = ["jakarta-regexp-1.4.jar"];
 
   buildInputs = [stdenv];
 }
