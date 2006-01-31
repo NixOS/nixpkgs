@@ -686,6 +686,7 @@ rec {
 
   ghc = (import ../development/compilers/ghc) {
     inherit fetchurl stdenv perl ncurses readline;
+    gcc = stdenv.gcc;
     ghc = ghcboot;
     m4 = gnum4;
   };
