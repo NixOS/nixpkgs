@@ -1,18 +1,20 @@
-{stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre,
- pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat,
- freetype}:
+{ stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre
+, pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
+, freetype
+}:
 
 stdenv.mkDerivation {
-  name = "kdelibs-3.4.3";
+  name = "kdelibs-3.5.0";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/kdelibs-3.4.3.tar.bz2;
-    md5 = "0cd7c0c8a81e5d11b91b407a4aaaf3ff";
+    url = ftp://ftp.kde.org/pub/kde/stable/3.5/src/kdelibs-3.5.0.tar.bz2;
+    md5 = "2b11d654e2ea1a3cd16dcfdcbb7d1915";
   };
 
   inherit openssl libX11 libjpeg;
   buildInputs = [
     libX11 libXt libXext zlib perl qt openssl pcre 
-    pkgconfig libjpeg libpng libtiff libxml2 libxslt expat libtool freetype
+    pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
+    libtool freetype
   ];
 }

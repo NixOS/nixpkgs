@@ -1023,7 +1023,10 @@ rec {
   };
 
   kdelibs = import ../development/libraries/kde/kdelibs {
-    inherit fetchurl stdenv zlib perl openssl pcre  pkgconfig libjpeg libpng libtiff libxml2 libxslt libtool expat freetype;
+    inherit
+      fetchurl stdenv zlib perl openssl pcre  pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool
+      expat freetype;
     inherit (xlibs) libX11 libXt libXext;
     qt = qt3;
   };
