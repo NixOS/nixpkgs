@@ -31,6 +31,9 @@ echo "cleaning utmp and wtmp..."
 echo "" > /var/run/utmp
 echo "" > /var/log/wtmp
 
+echo "loading USB controller modules..."
+@module_init_tools@/sbin/modprobe uhci-hcd
+
 echo "enabling loopback interface..."
 ifconfig lo 127.0.0.1
 
