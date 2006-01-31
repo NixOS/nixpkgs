@@ -1977,6 +1977,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  gphoto2 = (import ../applications/misc/gphoto2) {
+    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt;
+  };
+
   xchm = (import ../applications/misc/xchm) {
     inherit fetchurl stdenv wxGTK chmlib;
   };
