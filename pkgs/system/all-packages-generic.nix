@@ -402,7 +402,7 @@ rec {
   };
 
   callgrind = (import ../development/tools/misc/callgrind) {
-    inherit fetchurl stdenv which perl;
+    inherit fetchurl stdenv which perl valgrind;
   };
 
   kcachegrind = (import ../development/tools/misc/kcachegrind) {

@@ -1,21 +1,18 @@
-# Valgrind has to be in the same prefix and I didn't feel like
-# patching. So, valgrind is installed here as well.
-
-{stdenv, fetchurl, which, perl}:
+{stdenv, fetchurl, which, perl, valgrind}:
 
 stdenv.mkDerivation {
-  name = "callgrind-0.10.1pre";
+  name = "callgrind-0.10.1";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/clg3-cvs-2005.11.11.tar.gz;
-    md5 = "c272cff1c567ba154ccc60fe2ff241d8";
+    url = http://kcachegrind.sourceforge.net/callgrind-0.10.1.tar.bz2;
+    md5 = "6d8acca6b58b0b72804339d04426d550";
   };
 
-  valgrindsrc = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/valgrind-3.0.1.tar.bz2;
-    md5 = "c29efdb7d1a93440f5644a6769054681";
-  };
+  # Callgrind wants to install in the same prefix as Valgrind.  This
+  # patch fixes that.
+  patches = [./prefix.patch];
 
-  buildInputs = [which perl];
+  buildInputs = [which perl valgrind];
+  inherit valgrind;
 }

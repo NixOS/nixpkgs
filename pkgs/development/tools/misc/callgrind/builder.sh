@@ -1,13 +1,9 @@
 source $stdenv/setup
 
-tar jxvf $valgrindsrc || fail
-cd valgrind-* || fail
-./configure --prefix=$out || fail
-make || fail
-make install || fail
+postInstall=postInstall
+postInstall() {
+    # !!! fix for other than x86-linux
+    ln -s $valgrind/lib/valgrind/x86-linux/*.so $out/lib/valgrind/x86-linux/
+}
 
-tar zxvf $src
-cd clg3 || fail
-./configure --prefix=$out || fail
-make || fail
-make install || fail
+genericBuild

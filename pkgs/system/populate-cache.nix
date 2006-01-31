@@ -18,6 +18,7 @@ let {
     blackdown
     bsdiff
     bzip2
+    callgrind
     cksfv
     coreutils
     darcs
@@ -57,7 +58,7 @@ let {
     jikes
     jing_tools
     jre
-    kdelibs
+    kcachegrind
     kernel
     less
     libtool
