@@ -146,7 +146,6 @@ make_dir 00755 /bin
 make_dir 00755 /boot
 make_dir 00755 /dev
 make_dir 00755 /dev/pts
-make_dir 00755 /dev/input
 make_dir 00755 /etc # global non-constant configuration
 make_dir 00755 /etc/ssh
 make_dir 00755 /etc/sysconfig
@@ -359,14 +358,24 @@ cp @kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
 chmod 644 $root/lib/modules/$version/modules.*
 
 ###
-### Do funky stuff with grub here.
+### hotplug
 ###
 
+echo "@hotplug@/sbin/hotplug" > $root/etc/sysconfig/hotplug
 ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
 ln -s @hotplug@/etc/hotplug $root/etc/hotplug
 ln -s @hotplug@/etc/hotplug.d $root/etc/hotplug.d
+
+###
+### init
+###
+
 ln -s $device $root/dev/root
 ln -s @sysvinitPath@/sbin/init /sbin/init
+
+###
+### Do funky stuff with grub here.
+###
 
 echo installing bootloader
 

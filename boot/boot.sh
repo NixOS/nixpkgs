@@ -31,6 +31,9 @@ echo "cleaning utmp and wtmp..."
 echo "" > /var/run/utmp
 echo "" > /var/log/wtmp
 
+echo "setting hotplug..."
+cat /etc/sysconfig/hotplug > /proc/sys/kernel/hotplug
+
 echo "loading USB controller modules..."
 @module_init_tools@/sbin/modprobe uhci-hcd
 
