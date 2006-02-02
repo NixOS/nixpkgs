@@ -6,17 +6,26 @@ MKFLAGS="-w$lua/include/lauxlib.h,$lua/include/luadebug.h,$lua/include/lua.h,$lu
 
 buildPhase() {
   mk timestamps
-  mk $MKFLAGS all all.opt
+  mk $MKFLAGS all.opt
 }
 
 installPhase() {
-mk $MKFLAGS install install.opt
-find $out -name \*.a -exec echo stripping {} \; \
+  mk $MKFLAGS install.opt
+
+  for file in $out/bin/*.opt; do
+    mv $file ${file%.opt}
+  done
+
+  find $out/man -type f -exec gzip -9 {} \;
+
+  find $out -name \*.a -exec echo stripping {} \; \
             -exec strip -S {} \; || fail
-patchELF $out
+
+  patchELF $out
 }
 
 buildPhase=buildPhase
 installPhase=installPhase
+checkPhase="mk $MKFLAGS test.opt"
 
 genericBuild

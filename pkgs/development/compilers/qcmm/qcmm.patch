@@ -107,3 +107,15 @@ diff -ur qc--20060131.orig/doc/mkfile qc--20060131/doc/mkfile
  
  release.tex:D: release.nw
  	noweave -delay $prereq > $target
+diff -ur qc--20060131.orig/mkfile qc--20060131/mkfile
+--- qc--20060131.orig/mkfile	2005-07-01 22:29:52.000000000 +0200
++++ qc--20060131/mkfile	2006-02-02 19:15:53.000000000 +0100
+@@ -97,7 +97,7 @@
+ 	cd test2 && NPROC=1 mk $MKFLAGS all
+ 
+ test.opt:V:         all.opt
+-	cd test2 && NPROC=1 mk QC=../bin/qc--.opt $MKFLAGS all
++	cd test2 && NPROC=1 mk $MKFLAGS QC=../bin/qc--.opt all
+ 
+ coverage: test2/ocamlprof.dump	
+ 	rm -f $target
