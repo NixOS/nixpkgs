@@ -67,6 +67,7 @@ let {
     libxml2
     libxslt
     lynx
+    mk
     mktemp
     mono
     mysql
@@ -82,6 +83,7 @@ let {
     postgresql
     postgresql_jdbc
     python
+    qcmm
     qt3
     qtparted
     quake3demo

@@ -439,6 +439,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  mk = (import ../development/tools/build-managers/mk) {
+    inherit fetchurl stdenv;
+  };
+
+  noweb = (import ../development/tools/literate-programming/noweb) {
+    inherit fetchurl stdenv;
+  };
+
   scons = (import ../development/tools/build-managers/scons) {
     inherit fetchurl stdenv python;
   };
@@ -644,6 +652,11 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
+  qcmm = (import ../development/compilers/qcmm) {
+    lua = lua4;
+    inherit fetchurl stdenv mk ocaml noweb groff;
+  };
+
   mono = (import ../development/compilers/mono) {
     inherit fetchurl stdenv bison pkgconfig;
     inherit (gtkLibs) glib;
@@ -744,6 +757,14 @@ rec {
   };
 
   ruby = (import ../development/interpreters/ruby) {
+    inherit fetchurl stdenv;
+  };
+
+  lua4 = (import ../development/interpreters/lua-4) {
+    inherit fetchurl stdenv;
+  };
+
+  lua5 = (import ../development/interpreters/lua-5) {
     inherit fetchurl stdenv;
   };
 
