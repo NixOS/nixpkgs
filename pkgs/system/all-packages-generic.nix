@@ -439,6 +439,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  scons = (import ../development/tools/build-managers/scons) {
+    inherit fetchurl stdenv python;
+  };
+
   bison = (import ../development/tools/parsing/bison) {
     inherit fetchurl stdenv;
     m4 = gnum4;
