@@ -2217,4 +2217,15 @@ rec {
     inherit fetchurl stdenv x11 mesa;
   };
 
+  toolbuslib = (import ../development/libraries/toolbuslib) {
+    inherit stdenv fetchurl aterm;
+  };
+
+  toolbus = (import ../development/interpreters/toolbus) {
+    inherit stdenv fetchurl atermjava toolbuslib aterm yacc flex;
+  };
+
+  joe = (import ../applications/editors/joe) {
+    inherit stdenv fetchurl;
+  };
 }
