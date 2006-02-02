@@ -1473,6 +1473,10 @@ rec {
     inherit (xlibs) libXaw;
   };
 
+  id3lib = import ../development/libraries/id3lib {
+    inherit fetchurl stdenv;
+  };
+
   
   ### SERVERS
 
@@ -1885,6 +1889,12 @@ rec {
     inherit fetchurl stdenv libogg libvorbis alsaLib;
     inherit (gnome) esound;
     inherit (gtkLibs1x) glib gtk;
+  };
+
+  bmp = import ../applications/audio/bmp {
+    inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
+    inherit (gnome) esound libglade;
+    inherit (gtkLibs) glib gtk;
   };
 
   MPlayer = (import ../applications/video/MPlayer) {
