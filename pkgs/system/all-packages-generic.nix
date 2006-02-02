@@ -1477,6 +1477,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  taglib = import ../development/libraries/taglib {
+    inherit fetchurl stdenv zlib;
+  };
+
+  libmpcdec = import ../development/libraries/libmpcdec {
+    inherit fetchurl stdenv;
+  };
+
   
   ### SERVERS
 
@@ -1894,6 +1902,11 @@ rec {
   bmp = import ../applications/audio/bmp {
     inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
     inherit (gnome) esound libglade;
+    inherit (gtkLibs) glib gtk;
+  };
+
+  bmp_plugin_musepack = import ../applications/audio/bmp-plugins/musepack {
+    inherit fetchurl stdenv pkgconfig bmp libmpcdec taglib;
     inherit (gtkLibs) glib gtk;
   };
 

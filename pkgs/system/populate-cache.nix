@@ -16,6 +16,8 @@ let {
     bisonnew
     bittorrent
     blackdown
+    bmp
+    bmp_plugin_musepack
     bsdiff
     bzip2
     callgrind
