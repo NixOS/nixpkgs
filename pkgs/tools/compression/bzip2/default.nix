@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "bzip2-1.0.3";
   builder =
     if stdenv.system == "powerpc-darwin" then ./builder-darwin.sh
-    if stdenv.system == "i686-freebsd" then ./builder-freebsd.sh
+    else if stdenv.system == "i686-freebsd" then ./builder-freebsd.sh
     else ./builder.sh;
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/bzip2-1.0.3.tar.gz;
