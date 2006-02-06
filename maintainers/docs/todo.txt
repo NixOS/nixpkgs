@@ -12,3 +12,5 @@
 * Add gettext to glib propagatedBuildInputs?  Glib's `gi18n.h' doesn't
   seem to like Glibc `libintl.h'; needs the gettext one instead.
   [Move from libbonoboui]
+
+* Fix the bzip2 build generically.
