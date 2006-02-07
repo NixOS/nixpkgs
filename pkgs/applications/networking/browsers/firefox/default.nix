@@ -3,12 +3,12 @@
 # !!! assert libIDL.glib == gtk.glib;
 
 stdenv.mkDerivation {
-  name = "firefox-1.5";
+  name = "firefox-1.5.0.1";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/firefox-1.5-source.tar.bz2;
-    md5 = "fa915ddcadecda30ed3e13694f26a779";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.1/source/firefox-1.5.0.1-source.tar.bz2;
+    md5 = "c76f02956645bc823241379e27f76bb5";
   };
 
   buildInputs = [pkgconfig gtk perl zip libIDL libXi];
