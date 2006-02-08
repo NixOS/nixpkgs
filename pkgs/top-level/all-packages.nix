@@ -44,7 +44,7 @@ rec {
   defaultStdenv =
     (import ./stdenvs.nix {
       inherit system;
-      allPackages = import ./all-packages-generic.nix;
+      allPackages = import ./all-packages.nix;
     }).stdenv;
 
   bootCurl = null;
