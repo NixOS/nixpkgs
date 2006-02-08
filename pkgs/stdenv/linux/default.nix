@@ -144,8 +144,8 @@ rec {
   # 2) These are the packages that we can build with the first
   #    stdenv.  We only need Glibc (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot1;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot1;
+#    bootCurl = curl;
   };
 
   # 3) Build Glibc with the statically linked tools.  The result is the
@@ -163,8 +163,8 @@ rec {
 
   # 5) The packages that can be built using the second stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot2;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot2;
+#    bootCurl = curl;
   };
 
   # 6) Construct a third stdenv identical to the second, except that
@@ -178,8 +178,8 @@ rec {
 
   # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot3;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot3;
+#    bootCurl = curl;
   };
 
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
@@ -211,8 +211,8 @@ rec {
   #    Reuse the tools built in the previous steps.
   stdenvLinuxPkgs =
     allPackages {
-      stdenv = stdenvLinux;
-      bootCurl = stdenvLinuxBoot3Pkgs.curl;
+      bootStdenv = stdenvLinux;
+#      bootCurl = stdenvLinuxBoot3Pkgs.curl;
     } //
     {inherit (stdenvLinuxBoot2Pkgs) binutils gcc;} //
     {inherit (stdenvLinuxBoot3Pkgs)

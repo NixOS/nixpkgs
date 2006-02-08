@@ -5,7 +5,9 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{system, allPackages}: rec {
+{system, allPackages}:
+
+rec {
 
   gccWrapper = import ../build-support/gcc-wrapper;
   genericStdenv = import ../stdenv/generic;
@@ -29,8 +31,7 @@
   };
 
   stdenvNativePkgs = allPackages {
-    stdenv = stdenvNative;
-    bootCurl = null;
+    bootStdenv = stdenvNative;
     noSysDirs = false;
   };
 
@@ -43,8 +44,7 @@
   };
 
   stdenvNixPkgs = allPackages {
-    stdenv = stdenvNix;
-    bootCurl = stdenvNativePkgs.curl;
+    bootStdenv = stdenvNix;
     noSysDirs = false;
   };
 
@@ -62,8 +62,7 @@
   };
 
   stdenvDarwinPkgs = allPackages {
-    stdenv = stdenvDarwin;
-    bootCurl = null;
+    bootStdenv = stdenvDarwin;
     noSysDirs = false;
   };
 
@@ -77,15 +76,15 @@
   };
 
   stdenvFreeBSDPkgs = allPackages {
-    stdenv = stdenvFreeBSD;
-    bootCurl = null;
+    bootStdenv = stdenvFreeBSD;
     noSysDirs = false;
   };
 
 
-  stdenvTestPkgs = allPackages {
-    stdenv = (import ../stdenv/nix-linux-static).stdenvInitial;
-    bootCurl = (import ../stdenv/nix-linux-static).curl;
-    noSysDirs = true;
-  };
+  # Select the appropriate stdenv for the platform `system'.
+  stdenv =
+    if system == "i686-linux" then stdenvLinux
+    else if system == "i686-freebsd" then stdenvFreeBSD
+    else if system == "powerpc-darwin" then stdenvDarwin
+    else stdenvNative;
 }

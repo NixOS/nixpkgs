@@ -1,16 +1,26 @@
-# This file evaluates to a function that, when supplied with a system
-# identifier and a standard build environment, returns the set of all
-# packages provided by the Nix Package Collection.
+/* This file composes the Nix Packages collection.  That is, it
+   imports the functions that build the various packages, and calls
+   them with appropriate arguments.  The result is a set of all the
+   packages in the Nix Packages collection for some particular
+   platform. */
+   
 
-{ stdenv, bootCurl, noSysDirs ? true
+{ # The system for which to build the packages.
+  system ? __currentSystem
+
+, # The standard environment to use.  Only used for bootstrapping.  If
+  # null, the default standard environment is used.
+  bootStdenv ? null
+
+  # More flags for the bootstrapping of stdenv.
+, noSysDirs ? true
 , gccWithCC ? true
 , gccWithProfiling ? true
+
 }:
 
+
 rec {
-
-  inherit stdenv;
-
 
   ### Symbolic names.
 
@@ -25,6 +35,19 @@ rec {
   # `xlibs.xlibs' is a wrapper packages that combines libX11 and a bunch
   # of other basic X client libraries.
   x11 = if useOldXLibs then xlibsOld.xlibs else xlibsWrapper;
+
+
+  ### STANDARD ENVIRONMENT
+
+  stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
+
+  defaultStdenv =
+    (import ./stdenvs.nix {
+      inherit system;
+      allPackages = import ./all-packages-generic.nix;
+    }).stdenv;
+
+  bootCurl = null;
   
 
   ### BUILD SUPPORT
