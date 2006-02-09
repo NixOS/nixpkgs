@@ -1,5 +1,6 @@
 { stdenv, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
+, extraAttrs ? {}
 }:
 
 let {
@@ -24,6 +25,7 @@ let {
     # Add a utility function to produce derivations that use this
     # stdenv and its shell.
     // {
+    
       mkDerivation = attrs: derivation (attrs // {
         builder = if attrs ? realBuilder then attrs.realBuilder else shell;
         args = if attrs ? args then attrs.args else
@@ -31,6 +33,13 @@ let {
         stdenv = body;
         system = body.system;
       });
-    };
+
+    }
+
+    # Propagate any extra attributes.  For instance, we use this to
+    # "lift" packages like curl from the final stdenv for Linux to
+    # all-packages.nix for that platform (meaning that it has a line
+    # like curl = if stdenv ? curl then stdenv.curl else ...).
+    // extraAttrs;
 
 }

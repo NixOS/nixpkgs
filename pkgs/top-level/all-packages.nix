@@ -37,6 +37,10 @@ rec {
   x11 = if useOldXLibs then xlibsOld.xlibs else xlibsWrapper;
 
 
+  ### Helper functions.
+  useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
+
+
   ### STANDARD ENVIRONMENT
 
   stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
@@ -47,14 +51,11 @@ rec {
       allPackages = import ./all-packages.nix;
     }).stdenv;
 
-  bootCurl = null;
-  
 
   ### BUILD SUPPORT
 
   fetchurl = (import ../build-support/fetchurl) {
-    inherit stdenv;
-    curl = bootCurl;
+    inherit stdenv curl;
   };
 
   fetchsvn = (import ../build-support/fetchsvn) {
@@ -76,17 +77,19 @@ rec {
     inherit fetchurl stdenv flex;
   };
 
-  coreutils = (import ../tools/misc/coreutils) {
+  coreutils = useFromStdenv (stdenv ? coreutils) stdenv.coreutils
+  (import ../tools/misc/coreutils {
     inherit fetchurl stdenv;
-  };
+  });
 
   coreutilsDiet = (import ../tools/misc/coreutils-diet) {
     inherit fetchurl stdenv dietgcc perl;
   };
 
-  findutils = (import ../tools/misc/findutils) {
+  findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
+  (import ../tools/misc/findutils {
     inherit fetchurl stdenv coreutils;
-  };
+  });
 
   findutilsWrapper = (import ../tools/misc/findutils-wrapper) {
     inherit stdenv findutils;
@@ -121,27 +124,29 @@ rec {
     inherit fetchurl stdenv unzip jdk;
   };
 
-  diffutils = (import ../tools/text/diffutils) {
+  diffutils = useFromStdenv (stdenv ? diffutils) stdenv.diffutils
+  (import ../tools/text/diffutils {
     inherit fetchurl stdenv coreutils;
-  };
+  });
 
   gnupatch = (import ../tools/text/gnupatch) {
     inherit fetchurl stdenv;
   };
 
-  patch = if stdenv.system == "powerpc-darwin" then null else gnupatch;
+  patch = useFromStdenv (stdenv ? patch) stdenv.patch
+    (if stdenv.system == "powerpc-darwin" then null else gnupatch);
 
-  gnused = (import ../tools/text/gnused) {
+  gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused (import ../tools/text/gnused {
     inherit fetchurl stdenv;
-  };
+  });
 
-  gnugrep = (import ../tools/text/gnugrep) {
+  gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep (import ../tools/text/gnugrep {
     inherit fetchurl stdenv pcre;
-  };
+  });
 
-  gawk = (import ../tools/text/gawk) {
+  gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk (import ../tools/text/gawk {
     inherit fetchurl stdenv;
-  };
+  });
 
   groff = (import ../tools/text/groff) {
     inherit fetchurl stdenv;
@@ -181,9 +186,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnutar = (import ../tools/archivers/gnutar) {
+  gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar (import ../tools/archivers/gnutar {
     inherit fetchurl stdenv;
-  };
+  });
 
   gnutarDiet = (import ../tools/archivers/gnutar-diet) {
     inherit fetchurl stdenv dietgcc;
@@ -197,13 +202,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gzip = (import ../tools/compression/gzip) {
+  gzip = useFromStdenv (stdenv ? gzip) stdenv.gzip (import ../tools/compression/gzip {
     inherit fetchurl stdenv;
-  };
+  });
 
-  bzip2 = (import ../tools/compression/bzip2) {
+  bzip2 = useFromStdenv (stdenv ? bzip2) stdenv.bzip2 (import ../tools/compression/bzip2 {
     inherit fetchurl stdenv;
-  };
+  });
 
   zdelta = (import ../tools/compression/zdelta) {
     inherit fetchurl stdenv;
@@ -221,7 +226,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  curl = (import ../tools/networking/curl) {
+  curl = useFromStdenv (stdenv ? curl) stdenv.curl realCurl;
+
+  realCurl = (import ../tools/networking/curl) {
     inherit fetchurl stdenv zlib;
   };
 
@@ -331,9 +338,9 @@ rec {
    
   ### SHELLS
 
-  bash = (import ../shells/bash) {
+  bash = useFromStdenv (stdenv ? bash) stdenv.bash (import ../shells/bash {
     inherit fetchurl stdenv;
-  };
+  });
 
   tcsh = (import ../shells/tcsh) {
     inherit fetchurl stdenv ncurses;
@@ -346,9 +353,10 @@ rec {
 
   ### DEVELOPMENT
 
-  binutils = (import ../development/tools/misc/binutils) {
+  binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
+  (import ../development/tools/misc/binutils {
     inherit fetchurl stdenv noSysDirs;
-  };
+  });
 
   binutilsMips = (import ../development/tools/misc/binutils-cross) {
     inherit fetchurl stdenv noSysDirs;
@@ -365,7 +373,8 @@ rec {
     cross = "sparc-linux";
   };
 
-  patchelf = (import ../development/tools/misc/patchelf) {
+  patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
+  (import ../development/tools/misc/patchelf) {
     inherit fetchurl stdenv;
   };
 
@@ -458,9 +467,10 @@ rec {
     inherit fetchurl stdenv readline ncurses g77 perl flex;
   };
 
-  gnumake = (import ../development/tools/build-managers/gnumake) {
+  gnumake = useFromStdenv (stdenv ? gnumake) stdenv.gnumake
+  (import ../development/tools/build-managers/gnumake {
     inherit fetchurl stdenv;
-  };
+  });
 
   mk = (import ../development/tools/build-managers/mk) {
     inherit fetchurl stdenv;
@@ -2233,14 +2243,12 @@ rec {
   };
 
   #nixStatic = (import ../misc/nix-static) {
-  # inherit fetchurl stdenv aterm perl;
-  #  curl = bootCurl; /* !!! ugly */
+  # inherit fetchurl stdenv aterm perl curl;
   #  bdb = db4;
   #};
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv aterm perl;
-    curl = bootCurl; /* !!! ugly */
+    inherit fetchurl stdenv aterm perl curl;
     bdb = db4;
   };
 
@@ -2272,4 +2280,5 @@ rec {
   joe = (import ../applications/editors/joe) {
     inherit stdenv fetchurl;
   };
+
 }
