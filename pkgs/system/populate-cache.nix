@@ -158,6 +158,7 @@ let {
     libxml2
     libxslt
     nxml
+    pkgconfig
     subversion
     tetex
     unzip
