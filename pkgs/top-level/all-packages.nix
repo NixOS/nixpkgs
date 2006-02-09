@@ -42,7 +42,7 @@ rec {
   stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
 
   defaultStdenv =
-    (import ./stdenvs.nix {
+    (import ../stdenv {
       inherit system;
       allPackages = import ./all-packages.nix;
     }).stdenv;
