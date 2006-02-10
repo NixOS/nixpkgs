@@ -1883,6 +1883,13 @@ rec {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext;
   };
 
+  opera = import ../applications/networking/browsers/opera {
+    inherit fetchurl stdenv zlib;
+    inherit (xlibs) libX11 libXt libXext;
+    qt = qt3;
+    motif = lesstif;
+  };
+
   ethereal = (import ../applications/networking/sniffers/ethereal) {
     inherit fetchurl stdenv perl pkgconfig libpcap;
     inherit (gtkLibs) glib;
