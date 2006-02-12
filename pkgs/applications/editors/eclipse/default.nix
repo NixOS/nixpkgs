@@ -1,1 +1,1 @@
-import ./eclipse-sdk-3.1.1.nix
+import ./eclipse-sdk-3.1.2.nix
