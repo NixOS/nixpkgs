@@ -1842,6 +1842,18 @@ rec {
     inherit (xlibs) libXi;
   };
 
+  xulrunner = (import ../development/interpreters/xulrunner) {
+    inherit fetchurl stdenv pkgconfig perl zip;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+  };
+
+  xulrunnerWrapper = {application, launcher}:
+    (import ../development/interpreters/xulrunner/wrapper) {
+      inherit stdenv xulrunner application launcher;
+    };
+
   wrapFirefox = firefox: (import ../applications/networking/browsers/firefox-wrapper) {
     inherit stdenv firefox;
     plugins = [
@@ -1904,6 +1916,14 @@ rec {
     inherit fetchurl stdenv pkgconfig tcl;
     inherit (gtkLibs) glib gtk;
   };
+
+  chatzilla = 
+    xulrunnerWrapper {
+      launcher = "chatzilla";
+      application = (import ../applications/networking/irc/chatzilla) {
+          inherit fetchurl stdenv unzip;
+        };
+    };
 
   rsync = (import ../applications/networking/sync/rsync) {
     inherit fetchurl stdenv;
