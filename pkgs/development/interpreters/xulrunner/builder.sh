@@ -7,7 +7,7 @@ postInstall() {
     # This fixes starting Firefox when there already is a running
     # instance.  The `firefox' wrapper script actually expects to be
     # in the same directory as `run-mozilla.sh', apparently.
-    libDir=$(cd $out/lib && ls xulrunner-*)
+    libDir=$(cd $out/lib && ls -d xulrunner-*)
     test -n "$libDir"
     cd $out/bin
     mv xulrunner ../lib/$libDir/
