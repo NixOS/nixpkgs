@@ -1840,6 +1840,7 @@ rec {
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
+    #enableOfficialBranding = true;
   };
 
   xulrunner = (import ../development/interpreters/xulrunner) {
