@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL, libXi
+, libjpeg, libpng, zlib, cairo
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Deer Park", enable this option.  However, those binaries may
@@ -17,7 +18,9 @@ stdenv.mkDerivation {
     md5 = "c76f02956645bc823241379e27f76bb5";
   };
 
-  buildInputs = [pkgconfig gtk perl zip libIDL libXi];
+  buildInputs = [
+    pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
+  ];
   inherit gtk;
 
   patches = [./writable-copies.patch];
@@ -34,6 +37,7 @@ stdenv.mkDerivation {
     "--with-system-jpeg"
     "--with-system-png"
     "--with-system-zlib"
+    "--with-system-cairo"
   ]
   ++ (if enableOfficialBranding then ["--enable-official-branding"] else []);
 
