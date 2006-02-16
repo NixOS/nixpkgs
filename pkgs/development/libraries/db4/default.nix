@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = http://downloads.sleepycat.com/db-4.4.20.NC.tar.gz;
-    md5 = "bc1f4433cf08c956e5146037ba050581";
+    md5 = "afd9243ea353bbaa04421488d3b37900";
   };
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
