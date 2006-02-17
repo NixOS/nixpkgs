@@ -1451,6 +1451,22 @@ rec {
     };
   };
 
+  perlDigestSHA1 = import ../development/perl-modules/generic perl {
+    name = "Digest-SHA1-2.11";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
+      md5 = "2449bfe21d6589c96eebf94dae24df6b";
+    };
+  };
+
+  perlCGISession = import ../development/perl-modules/generic perl {
+    name = "CGI-Session-3.95";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/S/SH/SHERZODR/CGI-Session-3.95.tar.gz;
+      md5 = "fe9e46496c7c711c54ca13209ded500b";
+    };
+  };
+
   wxPython = (import ../development/python-modules/wxPython-2.5) {
     inherit fetchurl stdenv pkgconfig wxGTK python;
   };
