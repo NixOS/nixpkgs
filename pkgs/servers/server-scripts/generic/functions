@@ -6,3 +6,35 @@
 ## * sanity checking functions
 
 STATEDIR=/var/run/nix-services
+RCDIR=/etc/rc.d/
+
+## resolve $deps to real start/stop scripts first
+
+start_deps() {
+	for i in $deps
+		$i start
+		RETVAL=$?
+		if test $RETVAL != 0; then
+			exit $RETVAL	
+}
+
+start() {
+	# aren't we already running?
+	# @gnugrep@/bin/grep $prog
+	# launch all hard dependencies
+	start_deps
+	# launch all preferred dependencies
+}
+
+stop() {
+	# are we running? If so, then stop, otherwise, do nothing...
+	if test -a $STATDIR/program = 0; then
+		echo "bla"
+}
+
+register() {
+}
+
+unregister() {
+	rm $STATEDIR/$prog
+}
