@@ -31,8 +31,8 @@ diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
  	./config.status $@
 diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 --- cil.orig/src/ext/atermprinter.ml	1970-01-01 01:00:00.000000000 +0100
-+++ cil/src/ext/atermprinter.ml	2006-01-16 10:36:29.000000000 +0100
-@@ -0,0 +1,489 @@
++++ cil/src/ext/atermprinter.ml	2006-02-20 10:50:49.000000000 +0100
+@@ -0,0 +1,488 @@
 +open Cil
 +open Pretty
 +open List
@@ -300,14 +300,13 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +  method dInit (out:out_channel) (i:int) (init1:init) : unit = fprint out i (self#pInit () init1)
 +
 +  (*** auxiliary methods ***)
-+  (* Mart: hmmmm *)
 +  method private pp_storage (s:storage) : doc =
 +    let tok = match s with
 +	      | NoStorage -> "NoStorage"
 +	      | Static    -> "Static"
 +	      | Register  -> "Register"
 +	      | Extern	  -> "Extern"
-+    in pQuoted ("Storage" ^ tok)
++    in text ("Storage_" ^ tok)
 +
 +  method private pp_typeinfo (tinfo:typeinfo) : doc = if !E.verboseFlag then trace "pp_typeinfo" ;
 +    text "Typeinfo" ++ (pParens @ pCommaSep) [   
@@ -389,14 +388,14 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +	      | IULong -> "IULong"
 +	      | ILongLong -> "ILongLong"
 +	      | IULongLong -> "IULongLong"
-+    in  pQuoted ("Ikind" ^ tok)
++    in text ("Ikind_" ^ tok)
 +
 +  method private pp_fkind (fkin:fkind) : doc =
 +    let tok = match fkin with
 +	      | FFloat -> "FFloat"
 +	      | FDouble -> "FDouble"
 +	      | FLongDouble -> "FLongDouble"
-+    in pQuoted ("Fkind" ^ tok)
++    in text ("Fkind_" ^ tok)
 +
 +  method private pp_typsig (tsig:typsig) : doc = if !E.verboseFlag then trace "pp_typsig" ;
 +    match tsig with
@@ -427,7 +426,7 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +	      | Neg -> "Neg"
 +	      | BNot -> "BNot"
 +	      | LNot -> "LNot"
-+    in pQuoted ("UnOp" ^ tok)
++    in text ("UnOp_" ^ tok)
 +
 +  method private pp_binop (bop:binop) : doc = 
 +    let tok = match bop with
@@ -453,7 +452,7 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +	      | BOr -> "BOr"
 +	      | LAnd -> "LAnd"
 +	      | LOr -> "LOr"
-+    in pQuoted ("BinOp" ^ tok )
++    in text ("BinOp_" ^ tok )
 +
 +  method private pp_constant (c:constant) : doc = if !E.verboseFlag then trace "pp_constant" ;
 +    match c with
