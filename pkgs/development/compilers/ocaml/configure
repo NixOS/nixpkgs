@@ -13,7 +13,7 @@
 #                                                                       #
 #########################################################################
 
-# $Id: configure,v 1.215.2.3 2004/07/09 15:08:51 doligez Exp $
+# $Id: configure,v 1.228.2.3 2006/01/04 09:26:42 xleroy Exp $
 
 configure_options="$*"
 prefix=/usr/local
@@ -38,7 +38,6 @@ dl_defs=''
 verbose=no
 withcurses=yes
 withsharedlibs=yes
-binutils_dir=''
 gcc_warnings="-Wall"
 
 # Try to turn internationalization off, can cause config.guess to malfunction!
@@ -99,8 +98,6 @@ while : ; do
         dl_defs="$2"; shift;;
     -dllibs*|--dllibs*)
         dllib="$2"; shift;;
-    -binutils*|--binutils*)
-        binutils_dir=$2; shift;;
     -verbose|--verbose)
         verbose=yes;;
     *) echo "Unknown option \"$1\"." 1>&2; exit 2;;
@@ -284,10 +281,10 @@ case "$bytecc,$host" in
   *,alpha*-*-unicos*)
     # For the Cray T3E
     bytecccompopts="-DUMK";;
-  gcc*,powerpc-*-aix4.3*)
+  gcc*,powerpc-*-aix*)
     # Avoid name-space pollution by requiring Unix98-conformant includes
     bytecccompopts="-fno-defer-pop $gcc_warnings -D_XOPEN_SOURCE=500";;
-  *,powerpc-*-aix4.3*)
+  *,powerpc-*-aix*)
     bytecccompopts="-D_XOPEN_SOURCE=500";;
   gcc*,*-*-cygwin*)
     bytecccompopts="-fno-defer-pop $gcc_warnings -U_WIN32"
@@ -296,7 +293,10 @@ case "$bytecc,$host" in
   gcc*,x86_64-*-linux*)
     bytecccompopts="-fno-defer-pop $gcc_warnings"
     # Tell gcc that we can use 32-bit code addresses for threaded code
-    echo "#define ARCH_CODE32" >> m.h;;
+    # unless we are compiled for a shared library (-fPIC option)
+    echo "#ifndef __PIC__" >> m.h
+    echo "#  define ARCH_CODE32" >> m.h
+    echo "#endif" >> m.h;;
   gcc*)
     bytecccompopts="-fno-defer-pop $gcc_warnings";;
 esac
@@ -326,13 +326,8 @@ set `sh ./runtest sizes.c`
 case "$2,$3" in
   4,4) echo "OK, this is a regular 32 bit architecture."
        echo "#undef ARCH_SIXTYFOUR" >> m.h;;
-  8,8) echo "Wow! A 64 bit architecture!"
-       echo "#define ARCH_SIXTYFOUR" >> m.h;;
   *,8) echo "Wow! A 64 bit architecture!"
-       echo "Unfortunately, Objective Caml cannot work in the case"
-       echo "sizeof(long) != sizeof(long *)."
-       echo "Objective Caml won't run on this architecture."
-       exit 2;;
+       echo "#define ARCH_SIXTYFOUR" >> m.h;;
   *,*) echo "This architecture seems to be neither 32 bits nor 64 bits."
        echo "Objective Caml won't run on this architecture."
        exit 2;;
@@ -349,6 +344,7 @@ fi
 
 echo "#define SIZEOF_INT $1" >> m.h
 echo "#define SIZEOF_LONG $2" >> m.h
+echo "#define SIZEOF_PTR $3" >> m.h
 echo "#define SIZEOF_SHORT $4" >> m.h
 
 if test $2 = 8; then
@@ -382,6 +378,12 @@ else
   esac
 fi
 
+if test $3 = 8 && test $int64_native = false; then
+  echo "This architecture has 64-bit pointers but no 64-bit integer type."
+  echo "Objective Caml won't run on this architecture."
+  exit 2
+fi
+
 # Determine endianness
 
 sh ./runtest endian.c
@@ -401,7 +403,7 @@ esac
 # Determine alignment constraints
 
 case "$host" in
-  sparc-*-*|hppa*-*-*)
+  sparc*-*-*|hppa*-*-*)
     # On Sparc V9 with certain versions of gcc, determination of double
     # alignment is not reliable (PR#1521), hence force it.
     # Same goes for hppa.
@@ -432,7 +434,7 @@ esac
 
 if $int64_native; then
   case "$host" in
-    hppa*-*-*)
+    sparc*-*-*|hppa*-*-*)
       if test $2 = 8; then
         echo "64-bit integers can be word-aligned."
         echo "#undef ARCH_ALIGN_INT64" >> m.h
@@ -660,35 +662,6 @@ case "$arch,$model,$system" in
   *) profiling='noprof';;
 esac
 
-# Where are GNU binutils?
-
-binutils_objcopy=''
-binutils_nm=''
-
-if test "$arch" != "none"; then
-  binutils_path="${binutils_dir}:${PATH}:/usr/libexec/binutils"
-  old_IFS="$IFS"
-  IFS=':'
-  for d in ${binutils_path}; do
-    if test -z "$d"; then continue; fi
-    if test -f "$d/objcopy" && test -f "$d/nm"; then
-      echo "objcopy and nm found in $d"
-      if test `$d/objcopy --help | grep -s -c 'redefine-sym'` -eq 0; then
-        echo "$d/objcopy does not support option --redefine-sym, discarded"
-        continue;
-      fi
-      if test `$d/nm --version | grep -s -c 'GNU nm'` -eq 0; then
-        echo "$d/nm is not from GNU binutils, discarded"
-        continue;
-      fi
-      binutils_objcopy="$d/objcopy"
-      binutils_nm="$d/nm"
-      break
-    fi
-  done
-  IFS="$old_IFS"
-fi
-
 # Where is ranlib?
 
 if sh ./searchpath ranlib; then
@@ -751,6 +724,11 @@ else
 fi
 
 # For the sys module
+
+if sh ./hasgot getrusage; then
+  echo "getrusage() found."
+  echo "#define HAS_GETRUSAGE" >> s.h
+fi
 
 if sh ./hasgot times; then
   echo "times() found."
@@ -1035,7 +1013,7 @@ fi
 # Determine if system stack overflows can be detected
 
 case "$arch,$system" in
-  i386,linux_elf)
+  i386,linux_elf|amd64,linux)
     echo "System stack overflow can be detected."
     echo "#define HAS_STACK_OVERFLOW_DETECTION" >> s.h;;
   *)
@@ -1063,6 +1041,8 @@ echo "BNG_ASM_LEVEL=$bng_asm_level" >> Makefile
 
 # Determine if the POSIX threads library is supported
 
+systhread_support=false
+
 if test "$pthread_wanted" = "yes"; then
   case "$host" in
     *-*-solaris*)  pthread_link="-lpthread -lposix4";;
@@ -1072,6 +1052,7 @@ if test "$pthread_wanted" = "yes"; then
   esac
   if ./hasgot -i pthread.h $pthread_link pthread_self; then
     echo "POSIX threads library supported."
+    systhread_support=true
     otherlibraries="$otherlibraries systhreads"
     bytecccompopts="$bytecccompopts -D_REENTRANT"
     nativecccompopts="$nativecccompopts -D_REENTRANT"
@@ -1172,7 +1153,7 @@ dbm_include="not found"
 dbm_link="not found"
 use_gdbm_ndbm=no
 
-for dir in ; do
+for dir in /usr/include /usr/include/db1 /usr/include/gdbm; do
   if test -f $dir/ndbm.h; then
     dbm_include=$dir
     if sh ./hasgot dbm_open; then
@@ -1234,40 +1215,14 @@ fi
 if test $has_tk = true; then
   tcl_version=''
   tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  if test -z "$tcl_version" && test -z "$tk_defs"; then
-    tk_defs=-I/usr/local/include
+  for tk_incs in \
+    ;
+  do if test -z "$tcl_version"; then
+    tk_defs="$tk_incs"
     tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/local/include/tcl8.2 -I/usr/local/include/tk8.2"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/local/include/tcl8.3 -I/usr/local/include/tk8.3"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/local/include/tcl8.4 -I/usr/local/include/tk8.4"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/include/tcl8.2 -I/usr/include/tk8.2"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/include/tcl8.3 -I/usr/include/tk8.3"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/usr/include/tcl8.4 -I/usr/include/tk8.4"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -z "$tcl_version"; then
-    tk_defs="-I/sw/include"
-    tcl_version=`sh ./runtest $tk_defs $tk_x11_include tclversion.c`
-  fi
-  if test -n "$tcl_version"; then
-    echo "tcl.h version $tcl_version found with \"$tk_defs\"."
+  fi; done
+  if test -n "$tcl_version" && test "x$tcl_version" != "xnone"; then
+    echo "tcl.h and tk.h version $tcl_version found with \"$tk_defs\"."
     case $tcl_version in
     7.5) tclmaj=7 tclmin=5 tkmaj=4 tkmin=1 ;;
     7.6) tclmaj=7 tclmin=6 tkmaj=4 tkmin=2 ;;
@@ -1279,16 +1234,7 @@ if test $has_tk = true; then
     *) echo "This version is not known."; has_tk=false ;;
     esac
   else
-    echo "tcl.h not found."
-    has_tk=false
-  fi
-fi
-
-if test $has_tk = true; then
-  if sh ./hasgot $tk_x11_include $tk_defs -i tk.h; then
-    echo "tk.h found."
-  else
-    echo "tk.h not found."
+    echo "tcl.h and/or tk.h not found."
     has_tk=false
   fi
 fi
@@ -1297,7 +1243,8 @@ tkauxlibs="$mathlib $dllib"
 tcllib=''
 tklib=''
 if test $has_tk = true; then
-  if sh ./hasgot $tk_libs $tk_x11_libs $tkauxlibs Tcl_DoOneEvent
+  if test -n "$tk_libs" && \
+     sh ./hasgot $tk_libs $tk_x11_libs $tkauxlibs Tcl_DoOneEvent
   then tk_libs="$tk_libs $dllib"
   elif sh ./hasgot $tk_libs -ltcl$tclmaj.$tclmin $tkauxlibs Tcl_DoOneEvent
   then
@@ -1312,8 +1259,6 @@ if test $has_tk = true; then
   elif sh ./hasgot $tk_libs -ltcl$tclmaj$tclmin $tkauxlibs Tcl_DoOneEvent
   then
     tk_libs="$tk_libs -ltk$tkmaj$tkmin -ltcl$tclmaj$tclmin $dllib"
-# elif sh ./hasgot $tk_libs -ltcl $tkauxlibs Tcl_DoOneEvent; then
-#   tk_libs="$tk_libs -ltk -ltcl"
   elif sh ./hasgot -L/sw/lib $tk_libs -ltcl$tclmaj.$tclmin $tkauxlibs \
                    Tcl_DoOneEvent
   then tk_libs="-L/sw/lib -ltk$tkmaj.$tkmin -ltcl$tclmaj.$tclmin $dllib"
@@ -1348,12 +1293,17 @@ else
   echo "Configuration failed, LablTk will not be built."
 fi
 
-# Camlp4
-
+# Begin Camlp4
 (
 cd ../../camlp4/config
-EXE=$exe ./configure_batch -bindir "$bindir" -libdir "$libdir" -mandir "$mandir" -ocaml-top ../.. > /dev/null
+EXE=$exe ./configure_batch -prefix "$prefix" -bindir "$bindir" -libdir "$libdir" -mandir "$mandir" -ocaml-top ../.. > /dev/null
 )
+
+case $? in
+    0) echo "Camlp4 correctly configured.";;
+    *) echo "Warning: Camlp4 configuration terminated with error code $?";;
+esac
+# End Camlp4
 
 # Final twiddling of compiler options to work around known bugs
 
@@ -1392,12 +1342,11 @@ echo "ASPP=$aspp" >> Makefile
 echo "ASPPFLAGS=$asppflags" >> Makefile
 echo "ASPPPROFFLAGS=$asppprofflags" >> Makefile
 echo "PROFILING=$profiling" >> Makefile
-echo "BINUTILS_OBJCOPY=$binutils_objcopy" >> Makefile
-echo "BINUTILS_NM=$binutils_nm" >> Makefile
 echo "DYNLINKOPTS=$dllib" >> Makefile
 echo "OTHERLIBRARIES=$otherlibraries" >> Makefile
 echo "DEBUGGER=$debugger" >> Makefile
 echo "CC_PROFILE=$cc_profile" >> Makefile
+echo "SYSTHREAD_SUPPORT=$systhread_support" >>Makefile
 
 rm -f tst hasgot.c
 rm -f ../m.h ../s.h ../Makefile
@@ -1447,11 +1396,6 @@ else
   else
   echo "        profiling with gprof ..... not supported"
   fi
-  if test -n "$binutils_objcopy" && test -n "$binutils_nm"; then
-  echo "        ocamlopt -pack ........... supported"
-  else
-  echo "        ocamlopt -pack ........... not supported (no binutils)"
-  fi
 fi
 
 if test "$debugger" = "ocamldebugger"; then
@@ -1478,5 +1422,9 @@ echo "        use tcl/tk version ....... $tcl_version"
 echo "        options for compiling .... $tk_defs"
 echo "        options for linking ...... $tk_libs"
 else
-echo "The \"labltk\" library: not found"
+echo "The \"labltk\" library: not supported"
 fi
+
+echo
+echo "** Objective Caml configuration completed successfully **"
+echo
