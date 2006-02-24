@@ -2100,12 +2100,16 @@ rec {
     fastStart = true;
   };
 
-  eclipse = (import ../applications/editors/eclipse) {
-    inherit fetchurl stdenv makeWrapper jdk;
-    inherit (gtkLibs) gtk glib;
-    inherit (xlibs) libXtst;
-    plugins = [spoofax];
-  };
+  eclipseSpoofax =
+    eclipse [spoofax];
+
+  eclipse = plugins :
+    (import ../applications/editors/eclipse) {
+      inherit fetchurl stdenv makeWrapper jdk;
+      inherit (gtkLibs) gtk glib;
+      inherit (xlibs) libXtst;
+      inherit plugins;
+    };
 
   spoofax = (import ../applications/editors/eclipse/plugins/spoofax) {
     inherit fetchurl stdenv;
