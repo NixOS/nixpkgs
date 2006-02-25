@@ -32,6 +32,15 @@ makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
     --prefix PATH ":" "$jdk/bin" \
     --prefix LD_LIBRARY_PATH ":" "$rpath"
 
-for i in $plugins; do
-    cp $i $out/eclipse/plugins
+ensureDir plugin-working-dir
+workingdir="$(pwd)/plugin-working-dir"
+for plugin in $plugins; do
+    if test -e $plugin/install; then
+      cd $workingdir
+      $plugin/install "$out/eclipse"
+      rm -rf $workingdir/*
+    else
+      # assume that it is a file
+      cp $plugin $out/eclipse/plugins
+    end
 done

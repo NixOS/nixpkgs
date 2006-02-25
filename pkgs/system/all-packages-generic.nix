@@ -2111,7 +2111,7 @@ rec {
       inherit plugins;
     };
 
-  spoofax = (import ../applications/editors/eclipse/plugins/spoofax) {
+  spoofax = (import ../applications/editors/eclipse/plugins/sp) {
     inherit fetchurl stdenv;
   };
 
