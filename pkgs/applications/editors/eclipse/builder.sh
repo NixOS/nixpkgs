@@ -42,5 +42,5 @@ for plugin in $plugins; do
     else
       # assume that it is a file
       cp $plugin $out/eclipse/plugins
-    end
+    fi
 done
