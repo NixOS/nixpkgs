@@ -3,6 +3,8 @@
 assert stdenv.system == "i686-linux";
 assert motif != null -> libXt != null && libXext != null;
 
+# !!! Add Xinerama and Xrandr dependencies?  Or should those be in Qt?
+
 stdenv.mkDerivation {
   name = "opera-8.51-20051114.6";
 

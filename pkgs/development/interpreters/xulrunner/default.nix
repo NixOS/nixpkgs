@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     "--disable-debug"
     "--enable-xft"
     "--disable-freetype2"
-    "--enable-swg"
+    "--enable-svg"
     "--enable-strip"
     "--enable-default-toolkit=gtk2"
     "--with-system-jpeg"
