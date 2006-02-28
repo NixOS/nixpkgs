@@ -1526,7 +1526,7 @@ rec {
   ### SERVERS
 
   apacheHttpd = (import ../servers/http/apache-httpd) {
-    inherit fetchurl stdenv perl openssl db4 expat;
+    inherit fetchurl stdenv perl openssl db4 expat zlib;
     sslSupport = true;
     db4Support = true;
   };

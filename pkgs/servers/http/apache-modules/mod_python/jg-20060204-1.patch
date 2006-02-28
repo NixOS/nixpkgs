@@ -1,0 +1,265 @@
+diff -rc mod_python-3.2.8-orig/src/connobject.c mod_python-3.2.8/src/connobject.c
+*** mod_python-3.2.8-orig/src/connobject.c	2006-02-02 22:30:55.000000000 +0100
+--- mod_python-3.2.8/src/connobject.c	2006-02-28 11:18:01.000000000 +0100
+***************
+*** 319,332 ****
+  {
+      PyObject *addrobj = makeipaddr(addr);
+      PyObject *ret = NULL;
+      if (addrobj) {
+          apr_port_t port;
+!         if(apr_sockaddr_port_get(&port, addr)==APR_SUCCESS) {
+!             ret = Py_BuildValue("Oi", addrobj, port );
+!         }
+!         else {
+!             PyErr_SetString(PyExc_SystemError,"apr_sockaddr_port_get failure");
+!         }
+          Py_DECREF(addrobj);
+      }
+      return ret;
+--- 319,332 ----
+  {
+      PyObject *addrobj = makeipaddr(addr);
+      PyObject *ret = NULL;
++ 
++     /* apr_sockaddr_port_get was deprecated and removed in apr 1.x
++      * Access the port directly instead
++      */
+      if (addrobj) {
+          apr_port_t port;
+!         port = addr->port; 
+!         ret = Py_BuildValue("Oi", addrobj, port );
+          Py_DECREF(addrobj);
+      }
+      return ret;
+diff -rc mod_python-3.2.8-orig/src/include/mod_python.h.in mod_python-3.2.8/src/include/mod_python.h.in
+*** mod_python-3.2.8-orig/src/include/mod_python.h.in	2005-09-19 19:51:03.000000000 +0200
+--- mod_python-3.2.8/src/include/mod_python.h.in	2006-02-28 11:18:01.000000000 +0100
+***************
+*** 179,184 ****
+--- 179,219 ----
+  
+  #endif /* !Mp_MOD_PYTHON_H */
+  
++ #ifndef APR_STATUS_IS_SUCCESS
++ /* APR_STATUS_IS_SUCCESS is defined in apr_errno.h for apr versions < 1.x.
++  * It was dropped in the current apr version 1.x, which causes a problem
++  * for mod_python connobject.c and filterobject.c in Apache 2.2.
++  * Occurrences of APR_STATUS_IS_SUCCESS in mod_python should be replaced
++  * with something like:
++  *   if (s != APR_SUCCESS) 
++  *     //error handling code
++  *
++  * Their is some uncertainty if the APR_OS_START_SYSERR part of
++  * the test is significant in Win32 (it likely is not), but to be safe 
++  * APR_STATUS_IS_SUCCESS is reproduced here for use with Apache 2.2.
++  * The APR_STATUS_IS_SUCCESS should be considered as deprecated.
++  */
++ 
++ #if defined(OS2) && !defined(DOXYGEN)
++ #define APR_STATUS_IS_SUCCESS(s)           ((s) == APR_SUCCESS \
++                 || (s) == APR_OS_START_SYSERR + NO_ERROR)
++ 
++ #elif defined(WIN32) && !defined(DOXYGEN) /* !defined(OS2) */
++ #define APR_STATUS_IS_SUCCESS(s)           ((s) == APR_SUCCESS \
++                 || (s) == APR_OS_START_SYSERR + ERROR_SUCCESS)
++ 
++ #elif defined(NETWARE) && !defined(DOXYGEN) /* !defined(OS2) && !defined(WIN32) */
++ #define APR_STATUS_IS_SUCCESS(s)           ((s) == APR_SUCCESS)
++ 
++ #else /* !defined(NETWARE) && !defined(OS2) && !defined(WIN32) */
++ 
++ /** no error */
++ #define APR_STATUS_IS_SUCCESS(s)        ((s) == APR_SUCCESS)
++ #endif
++ 
++ #endif /* !APR_STATUS_IS_SUCCESS */
++ 
++ 
+  /*
+  # makes emacs go into C mode
+  ### Local Variables:
+diff -rc mod_python-3.2.8-orig/test/httpdconf.py mod_python-3.2.8/test/httpdconf.py
+*** mod_python-3.2.8-orig/test/httpdconf.py	2005-09-13 22:35:57.000000000 +0200
+--- mod_python-3.2.8/test/httpdconf.py	2006-02-28 11:18:01.000000000 +0100
+***************
+*** 37,44 ****
+  class Container:
+      
+      def __init__(self, *args):
+!         self.args = args
+          self.indent = 0
+  
+      def __str__(self):
+  
+--- 37,47 ----
+  class Container:
+      
+      def __init__(self, *args):
+!         self.args = list(args)
+          self.indent = 0
++     
++     def append(self, value):
++         self.args.append(value)
+  
+      def __str__(self):
+  
+***************
+*** 80,85 ****
+--- 83,98 ----
+      def __init__(self, val):
+          Directive.__init__(self, self.__class__.__name__, val)
+  
++ class AuthBasicAuthoritative(Directive):
++     # New in Apache 2.2
++     def __init__(self, val):
++         Directive.__init__(self, self.__class__.__name__, val)
++ 
++ class AuthBasicProvider(Directive):
++     # New in Apache 2.2
++     def __init__(self, val):
++         Directive.__init__(self, self.__class__.__name__, val)
++ 
+  class AuthType(Directive):
+      def __init__(self, val):
+          Directive.__init__(self, self.__class__.__name__, val)
+***************
+*** 112,117 ****
+--- 125,134 ----
+      def __init__(self, dir, *args):
+          ContainerTag.__init__(self, self.__class__.__name__, dir, args)
+  
++ class KeepAliveTimeout(Directive):
++     def __init__(self, val):
++         Directive.__init__(self, self.__class__.__name__, val)
++ 
+  class Listen(Directive):
+      def __init__(self, val):
+          Directive.__init__(self, self.__class__.__name__, val)
+diff -rc mod_python-3.2.8-orig/test/test.py mod_python-3.2.8/test/test.py
+*** mod_python-3.2.8-orig/test/test.py	2006-02-19 20:51:17.000000000 +0100
+--- mod_python-3.2.8/test/test.py	2006-02-28 11:18:01.000000000 +0100
+***************
+*** 220,225 ****
+--- 220,251 ----
+          s = '"%s"' % s
+      return s
+  
++ def get_apache_version():
++ 
++     print "Checking Apache version...."
++     httpd = quoteIfSpace(HTTPD)
++     cmd = '%s -v' % (httpd)
++     (stdin,stdout) = os.popen2(cmd)
++ 
++     version_str = None
++     for line in stdout:
++         if line.startswith('Server version'):
++              version_str = line.strip()
++              break
++ 
++     if version_str:
++         version_str = version_str.split('/')[1]
++         major,minor,patch = version_str.split('.',3)
++         version = '%s.%s' % (major,minor)
++     else:
++         
++         print "Can't determine Apache version. Assuming 2.0"
++         version = '2.0'
++     print version
++     return version
++ 
++ APACHE_VERSION = get_apache_version()
++ 
+  class HttpdCtrl:
+      # a mixin providing ways to control httpd
+  
+***************
+*** 289,302 ****
+              Listen(PORT),
+              PythonOption('PythonOptionTest sample_value'),
+              DocumentRoot(DOCUMENT_ROOT),
+!             LoadModule("python_module %s" % quoteIfSpace(MOD_PYTHON_SO)),
+!             IfModule("!mod_auth.c",
+                       LoadModule("auth_module %s" %
+                                  quoteIfSpace(os.path.join(modpath, "mod_auth.so")))))
+  
+          f = open(CONFIG, "w")
+          f.write(str(s))
+-         f.write("\n# --APPENDED-- \n\n"+append)
+          f.close()
+  
+      def startHttpd(self,extra=''):
+--- 315,340 ----
+              Listen(PORT),
+              PythonOption('PythonOptionTest sample_value'),
+              DocumentRoot(DOCUMENT_ROOT),
+!             LoadModule("python_module %s" % quoteIfSpace(MOD_PYTHON_SO)))
+! 
+!         if APACHE_VERSION == '2.2':
+!             # mod_auth has been split into mod_auth_basic and some other modules
+!             s.append(IfModule("!mod_auth_basic.c",
+!                      LoadModule("auth_basic_module %s" %
+!                                 quoteIfSpace(os.path.join(modpath, "mod_auth_basic.so")))))
+! 
+!             # Default KeepAliveTimeout is 5 for apache 2.2, but 15 in apache 2.0
+!             # Explicitly set the value so it's the same as 2.0
+!             s.append(KeepAliveTimeout("15"))
+!         else:
+!             s.append(IfModule("!mod_auth.c",
+                       LoadModule("auth_module %s" %
+                                  quoteIfSpace(os.path.join(modpath, "mod_auth.so")))))
+  
++         s.append("\n# --APPENDED-- \n\n"+append)
++ 
+          f = open(CONFIG, "w")
+          f.write(str(s))
+          f.close()
+  
+      def startHttpd(self,extra=''):
+***************
+*** 595,601 ****
+  
+      def test_req_requires_conf(self):
+  
+!         c = VirtualHost("*",
+                          ServerName("test_req_requires"),
+                          DocumentRoot(DOCUMENT_ROOT),
+                          Directory(DOCUMENT_ROOT,
+--- 633,658 ----
+  
+      def test_req_requires_conf(self):
+  
+!         if APACHE_VERSION == '2.2':
+!             # Apache 2.2 needs AuthBasicAuthoritative Off 
+!             # This is necessary when combining mod_auth_basic with third-party
+!             # modules that are not configured with the AuthBasicProvider  
+!             # directive. 
+!             c = VirtualHost("*",
+!                         ServerName("test_req_requires"),
+!                         DocumentRoot(DOCUMENT_ROOT),
+!                         Directory(DOCUMENT_ROOT,
+!                                   SetHandler("mod_python"),
+!                                   AuthName("blah"),
+!                                   AuthType("basic"),
+!                                   Require("valid-user"),
+!                                   AuthBasicAuthoritative("Off"),
+!                                   PythonAuthenHandler("tests::req_requires"),
+!                                   PythonDebug("On")))
+! 
+!         else:
+!             # This configuration is suitable for Apache 2.0
+!             c = VirtualHost("*",
+                          ServerName("test_req_requires"),
+                          DocumentRoot(DOCUMENT_ROOT),
+                          Directory(DOCUMENT_ROOT,
+***************
+*** 605,610 ****
+--- 662,668 ----
+                                    Require("valid-user"),
+                                    PythonAuthenHandler("tests::req_requires"),
+                                    PythonDebug("On")))
++ 
+          return str(c)
+  
+      def test_req_requires(self):
