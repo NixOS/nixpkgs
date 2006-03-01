@@ -528,19 +528,22 @@ rec {
     inherit stdenv;
   };
 
+  gcc40mipsboot = (import ../development/compilers/gcc-4.0-cross) {
+    inherit fetchurl stdenv noSysDirs;
+    langF77 = false;
+    langCC = false;
+    binutilsCross = binutilsMips;
+    kernelHeadersCross = kernelHeadersMips;
+    cross = "mips-linux";
+  };
+
   gcc40mips = (import ../build-support/gcc-cross-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
     cross = "mips-linux";
-    gcc = (import ../development/compilers/gcc-4.0-cross) {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = false;
-      langCC = false;
-      binutilsCross = binutilsMips;
-      kernelHeadersCross = kernelHeadersMips;
-      cross = "mips-linux";
-    };
-    inherit (stdenv.gcc) glibc;
+    gcc = gcc40mipsboot;
+    #inherit (stdenv.gcc) glibc;
+    glibc = uclibcMips;
     binutils = binutilsMips;
     inherit stdenv;
   };
@@ -566,6 +569,17 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-4.0) {
+      inherit fetchurl stdenv noSysDirs;
+      profiledCompiler = true;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
+  gcc41 = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-4.1) {
       inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
     };
@@ -1578,7 +1592,7 @@ rec {
     inherit fetchurl stdenv;
     kernelHeadersCross = kernelHeadersMips;
     binutilsCross = binutilsMips;
-    gccCross = gcc40mips;
+    gccCross = gcc40mipsboot;
     cross = "mips-linux";
   };
 
