@@ -652,9 +652,14 @@ rec {
     inherit fetchurl stdenv x11;
   };
 
+  ocaml3080 = (import ../development/compilers/ocaml/ocaml-3.08.0.nix) {
+    inherit fetchurl stdenv x11;
+  };
+
   qcmm = (import ../development/compilers/qcmm) {
-    lua = lua4;
-    inherit fetchurl stdenv mk ocaml noweb groff;
+    lua   = lua4;
+    ocaml = ocaml3080;
+    inherit fetchurl stdenv mk noweb groff;
   };
 
   mono = (import ../development/compilers/mono) {
