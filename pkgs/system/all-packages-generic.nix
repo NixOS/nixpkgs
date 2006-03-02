@@ -1907,17 +1907,13 @@ rec {
     inherit (xlibs) libXmu;
   };
 
-  thunderbird = 
-    (import ../build-support/make-symlinks) {
-      inherit stdenv;
-      dir =
-        (import ../applications/networking/mailreaders/thunderbird) {
-          inherit fetchurl stdenv pkgconfig perl zip;
-          inherit (gtkLibs) gtk;
-          inherit (gnome) libIDL;
-        };
-      files = ["bin/thunderbird" "lib/thunderbird-0.8/icons"];
-    };
+  thunderbird = import ../applications/networking/mailreaders/thunderbird {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+    #enableOfficialBranding = true;
+  };
 
   lynx = (import ../applications/networking/browsers/lynx) {
     inherit fetchurl stdenv ncurses openssl;
