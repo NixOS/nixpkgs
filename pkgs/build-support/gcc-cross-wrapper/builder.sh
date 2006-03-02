@@ -13,9 +13,10 @@ if test -z "$nativeGlibc"; then
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$glibc/lib/ -isystem $glibc/include"
-    ldflags="$ldflags -L$glibc/lib"
-    ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
+    cflagsCompile="$cflagsCompile -B$glibc/usr/lib/ -isystem $glibc/usr/include"
+    ldflags="$ldflags -L$glibc/usr/lib"
+    #ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
+    ldflagsBefore="-dynamic-linker $glibc/lib/ld-uClibc.so.0"
 fi
 
 if test -n "$nativeTools"; then
@@ -76,10 +77,15 @@ ln -s g++ $out/bin/c++
 mkGccWrapper $out/bin/g77 $gccPath/g77
 ln -s g77 $out/bin/f77
 
+ln -s $binutils/bin/$cross-ar $out/bin/$cross-ar
+ln -s $binutils/bin/$cross-as $out/bin/$cross-as
+ln -s $binutils/bin/$cross-nm $out/bin/$cross-nm
+ln -s $binutils/bin/$cross-strip $out/bin/$cross-strip
+
 
 # Make a wrapper around the linker.
-doSubstitute "$ldWrapper" "$out/bin/ld"
-chmod +x "$out/bin/ld"
+doSubstitute "$ldWrapper" "$out/bin/$cross-ld"
+chmod +x "$out/bin/$cross-ld"
 
 
 # Emit a setup hook.  Also store the path to the original GCC and
