@@ -1589,7 +1589,7 @@ rec {
   };
 
   uclibcMips = (import ../development/uclibc) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersMips;
     binutilsCross = binutilsMips;
     gccCross = gcc40mipsboot;
@@ -2290,6 +2290,12 @@ rec {
 
   cups = (import ../misc/cups) {
     inherit fetchurl stdenv;
+  };
+
+  busybox = (import ../misc/busybox) {
+    inherit fetchurl stdenv;
+    gccCross = gcc40mips;
+    binutilsCross = binutilsMips;
   };
 
   saneBackends = (import ../misc/sane-backends) {
