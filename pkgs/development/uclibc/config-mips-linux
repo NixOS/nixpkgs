@@ -1,5 +1,6 @@
 #
 # Automatically generated make config: don't edit
+# Thu Mar  2 18:05:03 2006
 #
 # TARGET_alpha is not set
 # TARGET_arm is not set
@@ -8,8 +9,10 @@
 # TARGET_e1 is not set
 # TARGET_frv is not set
 # TARGET_h8300 is not set
+# TARGET_hppa is not set
 # TARGET_i386 is not set
 # TARGET_i960 is not set
+# TARGET_ia64 is not set
 # TARGET_m68k is not set
 # TARGET_microblaze is not set
 TARGET_mips=y
@@ -20,48 +23,31 @@ TARGET_mips=y
 # TARGET_sh64 is not set
 # TARGET_sparc is not set
 # TARGET_v850 is not set
+# TARGET_vax is not set
 # TARGET_x86_64 is not set
 
 #
 # Target Architecture Features and Options
 #
-HAVE_ELF=y
-ARCH_SUPPORTS_LITTLE_ENDIAN=y
 TARGET_ARCH="mips"
+FORCE_OPTIONS_FOR_ARCH=y
 ARCH_CFLAGS="-mno-split-addresses"
-ARCH_SUPPORTS_BIG_ENDIAN=y
-# CONFIG_GENERIC_386 is not set
-# CONFIG_386 is not set
-# CONFIG_486 is not set
-# CONFIG_586 is not set
-# CONFIG_586MMX is not set
-# CONFIG_686 is not set
-# CONFIG_PENTIUMII is not set
-# CONFIG_PENTIUMIII is not set
-# CONFIG_PENTIUM4 is not set
-# CONFIG_K6 is not set
-# CONFIG_K7 is not set
-# CONFIG_ELAN is not set
-# CONFIG_CRUSOE is not set
-# CONFIG_WINCHIPC6 is not set
-# CONFIG_WINCHIP2 is not set
-# CONFIG_CYRIXIII is not set
-# CONFIG_NEHEMIAH is not set
 CONFIG_MIPS_ISA_1=y
 # CONFIG_MIPS_ISA_2 is not set
 # CONFIG_MIPS_ISA_3 is not set
 # CONFIG_MIPS_ISA_4 is not set
 # CONFIG_MIPS_ISA_MIPS32 is not set
 # CONFIG_MIPS_ISA_MIPS64 is not set
+ARCH_ANY_ENDIAN=y
 ARCH_LITTLE_ENDIAN=y
-# ARCH_BIG_ENDIAN is not set
-# ARCH_HAS_NO_MMU is not set
+# ARCH_WANTS_BIG_ENDIAN is not set
+ARCH_WANTS_LITTLE_ENDIAN=y
 ARCH_HAS_MMU=y
+ARCH_USE_MMU=y
 UCLIBC_HAS_FLOATS=y
-HAS_FPU=y
-# DO_C99_MATH is not set
+UCLIBC_HAS_FPU=y
+DO_C99_MATH=y
 KERNEL_SOURCE="$(kernelHeadersCross)"
-C_SYMBOL_PREFIX=""
 HAVE_DOT_CONFIG=y
 
 #
@@ -70,41 +56,35 @@ HAVE_DOT_CONFIG=y
 # HAVE_NO_PIC is not set
 DOPIC=y
 # HAVE_NO_SHARED is not set
-HAVE_SHARED=y
 # ARCH_HAS_NO_LDSO is not set
-BUILD_UCLIBC_LDSO=y
-# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
-LDSO_LDD_SUPPORT=y
-LDSO_CACHE_SUPPORT=y
-# LDSO_PRELOAD_FILE_SUPPORT is not set
-LDSO_BASE_FILENAME="ld.so"
-LDSO_RUNPATH=y
-# DL_FINI_CRT_COMPAT is not set
+# HAVE_SHARED is not set
 UCLIBC_CTOR_DTOR=y
 # HAS_NO_THREADS is not set
 UCLIBC_HAS_THREADS=y
 # PTHREADS_DEBUG_SUPPORT is not set
+LINUXTHREADS_OLD=y
 UCLIBC_HAS_LFS=y
-UCLIBC_STATIC_LDCONFIG=y
 # MALLOC is not set
 # MALLOC_SIMPLE is not set
 MALLOC_STANDARD=y
 # MALLOC_GLIBC_COMPAT is not set
 UCLIBC_DYNAMIC_ATEXIT=y
+# COMPAT_ATEXIT is not set
 HAS_SHADOW=y
+# UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
+UCLIBC_HAS___PROGNAME=y
 UNIX98PTY_ONLY=y
-ASSUME_DEVPTS=y
+# ASSUME_DEVPTS is not set
 UCLIBC_HAS_TM_EXTENSIONS=y
-UCLIBC_HAS_TZ_CACHING=y
-UCLIBC_HAS_TZ_FILE=y
-UCLIBC_HAS_TZ_FILE_READ_MANY=y
-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+# UCLIBC_HAS_TZ_CACHING is not set
+# UCLIBC_HAS_TZ_FILE is not set
 
 #
 # Networking Support
 #
 # UCLIBC_HAS_IPV6 is not set
 # UCLIBC_HAS_RPC is not set
+# UCLIBC_USE_NETLINK is not set
 
 #
 # String and Stdio Support
@@ -146,26 +126,33 @@ UCLIBC_HAS_ERRNO_MESSAGES=y
 UCLIBC_HAS_SIGNUM_MESSAGES=y
 # UCLIBC_HAS_SYS_SIGLIST is not set
 UCLIBC_HAS_GNU_GETOPT=y
+UCLIBC_HAS_GNU_GETSUBOPT=y
 
 #
 # Big and Tall
 #
 UCLIBC_HAS_REGEX=y
+UCLIBC_HAS_REGEX_OLD=y
+UCLIBC_HAS_FNMATCH=y
+UCLIBC_HAS_FNMATCH_OLD=y
 # UCLIBC_HAS_WORDEXP is not set
 # UCLIBC_HAS_FTW is not set
 UCLIBC_HAS_GLOB=y
+UCLIBC_HAS_GNU_GLOB=y
 
 #
 # Library Installation Options
 #
-SHARED_LIB_LOADER_PREFIX="$(DEVEL_PREFIX)/lib"
-RUNTIME_PREFIX="$(out)/$(TARGET_ARCH)-linux-uclibc/"
-DEVEL_PREFIX="$(out)/$(TARGET_ARCH)-linux-uclibc/usr/"
+RUNTIME_PREFIX="$(out)/"
+DEVEL_PREFIX="$(out)/usr/"
 
 #
-# uClibc security related options
+# Security options
 #
-# UCLIBC_SECURITY is not set
+# UCLIBC_HAS_ARC4RANDOM is not set
+# HAVE_NO_SSP is not set
+# UCLIBC_HAS_SSP is not set
+UCLIBC_BUILD_NOEXECSTACK=y
 
 #
 # uClibc development/debugging options
@@ -173,8 +160,9 @@ DEVEL_PREFIX="$(out)/$(TARGET_ARCH)-linux-uclibc/usr/"
 CROSS_COMPILER_PREFIX=""
 # DODEBUG is not set
 # DODEBUG_PT is not set
+# NOSTRIP is not set
 # DOASSERTS is not set
-# SUPPORT_LD_DEBUG is not set
-# SUPPORT_LD_DEBUG_EARLY is not set
 WARNINGS="-Wall"
+# EXTRA_WARNINGS is not set
+# DOMULTI is not set
 # UCLIBC_MJN3_ONLY is not set

@@ -1,11 +1,11 @@
-{stdenv, fetchurl, gccCross, kernelHeadersCross, binutilsCross, cross}:
+{stdenv, fetchurl, gccCross, kernelHeadersCross, binutilsCross, cross, mktemp}:
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
   name = "uClibc-0.9.28";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/uClibc-20051001.tar.bz2;
-    md5 = "5442033ed956d506f9a810cf70dc3744";
+    url = http://www.uclibc.org/downloads/snapshots/uClibc-20060302.tar.bz2;
+    md5 = "3502da5973851a63625791545d459734";
     #url = http://www.uclibc.org/downloads/uClibc-0.9.28.tar.bz2;
     #md5 = "1ada58d919a82561061e4741fb6abd29";
   };
@@ -20,6 +20,6 @@ stdenv.mkDerivation {
                       else "";
 
   inherit kernelHeadersCross;
-  buildInputs = [gccCross binutilsCross];
+  buildInputs = [gccCross binutilsCross mktemp];
   inherit cross;
 }
