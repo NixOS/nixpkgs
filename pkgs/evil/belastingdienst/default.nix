@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, patchelf, libX11, libXext}:
 
 stdenv.mkDerivation {
   name = "aangifte2005-1";
@@ -9,5 +9,6 @@ stdenv.mkDerivation {
     md5 = "9cc709b8ad041f4b20154ff1491d0436";
   };
 
-#  buildInputs = [pkgconfig gtk libpng];
+  buildInputs = [patchelf];
+  inherit libX11 libXext;
 }

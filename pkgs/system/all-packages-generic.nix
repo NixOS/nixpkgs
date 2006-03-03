@@ -346,6 +346,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  patchelfNew = (import ../development/tools/misc/patchelf/new.nix) {
+    inherit fetchurl stdenv;
+  };
+
   gnum4 = (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
   };
@@ -2321,6 +2325,8 @@ rec {
 
   aangifte2005 = import ../evil/belastingdienst {
     inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext;
+    patchelf = patchelfNew;
   };
   
 }
