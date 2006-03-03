@@ -2319,7 +2319,7 @@ rec {
     inherit stdenv fetchurl;
   };
 
-  aangifte2005 = import ../evil/belastingdiest {
+  aangifte2005 = import ../evil/belastingdienst {
     inherit stdenv fetchurl;
   };
   
