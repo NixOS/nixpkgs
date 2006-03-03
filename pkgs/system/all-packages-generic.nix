@@ -2318,4 +2318,9 @@ rec {
   joe = (import ../applications/editors/joe) {
     inherit stdenv fetchurl;
   };
+
+  aangifte2005 = import ../evil/belastingdiest {
+    inherit stdenv fetchurl;
+  };
+  
 }
