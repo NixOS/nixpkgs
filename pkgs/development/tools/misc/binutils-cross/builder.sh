@@ -4,6 +4,8 @@ if test $cross = "arm-linux" ; then
   configureFlags="--target=arm-linux"
 elif test $cross = "mips-linux" ; then
   configureFlags="--target=mips-linux"
+elif test $cross = "mipsel-linux" ; then
+  configureFlags="--target=mipsel-linux"
 elif test $cross = "sparc-linux" ; then
   configureFlags="--target=sparc-linux"
 elif test $cross = "powerpc-linux" ; then
