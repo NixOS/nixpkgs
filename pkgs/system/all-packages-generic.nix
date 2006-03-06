@@ -1585,7 +1585,7 @@ rec {
   ### OS-SPECIFIC
 
   uclibcArm = (import ../development/uclibc) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersArm;
     binutilsCross = binutilsArm;
     gccCross = gcc40arm;
@@ -1601,7 +1601,7 @@ rec {
   };
 
   #uclibcSparc = (import ../development/uclibc) {
-  #  inherit fetchurl stdenv;
+  #  inherit fetchurl stdenv mktemp;
   #  kernelHeadersCross = kernelHeadersSparc;
   #  binutilsCross = binutilsSparc;
   #  gccCross = gcc40sparc;
