@@ -1,0 +1,58 @@
+#!@bash@/bin/bash
+#
+# Dummy init file for network, hacketyhack!
+#
+# chkconfig: 2345 55 25
+# description: OpenSSH server daemon
+#
+# processname: sshd
+
+# source function library
+#. @initscripts@/etc/rc.d/init.d/functions
+
+# pull in sysconfig settings
+#[ -f /etc/sysconfig/sshd ] && . /etc/sysconfig/sshd
+
+RETVAL=0
+prog="network"
+
+start()
+{
+	# just do networking
+	echo -n $"Starting $prog:"
+	@dhcp@/sbin/dhclient
+}
+
+stop()
+{
+	echo -n $"Stopping $prog:"
+}
+
+reload()
+{
+	start
+	stop
+}
+
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		stop
+		start
+		;;
+	reload)
+		reload
+		;;
+	status)
+		echo "all OK"
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|reload|status}"
+		RETVAL=1
+esac
+exit $RETVAL
