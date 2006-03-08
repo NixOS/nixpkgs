@@ -232,7 +232,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  curl = useFromStdenv (stdenv ? curl) stdenv.curl realCurl;
+  curl = if stdenv ? curl then stdenv.curl else (assert false; null);
 
   realCurl = (import ../tools/networking/curl) {
     inherit fetchurl stdenv zlib;
