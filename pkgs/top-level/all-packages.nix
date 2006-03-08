@@ -78,18 +78,18 @@ rec {
   };
 
   coreutils = useFromStdenv (stdenv ? coreutils) stdenv.coreutils
-  (import ../tools/misc/coreutils {
-    inherit fetchurl stdenv;
-  });
+    (import ../tools/misc/coreutils {
+      inherit fetchurl stdenv;
+    });
 
   coreutilsDiet = (import ../tools/misc/coreutils-diet) {
     inherit fetchurl stdenv dietgcc perl;
   };
 
   findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
-  (import ../tools/misc/findutils {
-    inherit fetchurl stdenv coreutils;
-  });
+    (import ../tools/misc/findutils {
+      inherit fetchurl stdenv coreutils;
+    });
 
   findutilsWrapper = (import ../tools/misc/findutils-wrapper) {
     inherit stdenv findutils;
@@ -125,9 +125,9 @@ rec {
   };
 
   diffutils = useFromStdenv (stdenv ? diffutils) stdenv.diffutils
-  (import ../tools/text/diffutils {
-    inherit fetchurl stdenv coreutils;
-  });
+    (import ../tools/text/diffutils {
+      inherit fetchurl stdenv coreutils;
+    });
 
   gnupatch = (import ../tools/text/gnupatch) {
     inherit fetchurl stdenv;
@@ -136,17 +136,20 @@ rec {
   patch = useFromStdenv (stdenv ? patch) stdenv.patch
     (if stdenv.system == "powerpc-darwin" then null else gnupatch);
 
-  gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused (import ../tools/text/gnused {
-    inherit fetchurl stdenv;
-  });
+  gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
+    (import ../tools/text/gnused {
+      inherit fetchurl stdenv;
+    });
 
-  gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep (import ../tools/text/gnugrep {
-    inherit fetchurl stdenv pcre;
-  });
+  gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep
+    (import ../tools/text/gnugrep {
+      inherit fetchurl stdenv pcre;
+    });
 
-  gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk (import ../tools/text/gawk {
-    inherit fetchurl stdenv;
-  });
+  gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
+    (import ../tools/text/gawk {
+      inherit fetchurl stdenv;
+    });
 
   groff = (import ../tools/text/groff) {
     inherit fetchurl stdenv;
@@ -186,9 +189,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar (import ../tools/archivers/gnutar {
-    inherit fetchurl stdenv;
-  });
+  gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
+    (import ../tools/archivers/gnutar {
+      inherit fetchurl stdenv;
+    });
 
   gnutarDiet = (import ../tools/archivers/gnutar-diet) {
     inherit fetchurl stdenv dietgcc;
@@ -202,13 +206,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gzip = useFromStdenv (stdenv ? gzip) stdenv.gzip (import ../tools/compression/gzip {
-    inherit fetchurl stdenv;
-  });
+  gzip = useFromStdenv (stdenv ? gzip) stdenv.gzip
+    (import ../tools/compression/gzip {
+      inherit fetchurl stdenv;
+    });
 
-  bzip2 = useFromStdenv (stdenv ? bzip2) stdenv.bzip2 (import ../tools/compression/bzip2 {
-    inherit fetchurl stdenv;
-  });
+  bzip2 = useFromStdenv (stdenv ? bzip2) stdenv.bzip2
+    (import ../tools/compression/bzip2 {
+      inherit fetchurl stdenv;
+    });
 
   zdelta = (import ../tools/compression/zdelta) {
     inherit fetchurl stdenv;
@@ -338,9 +344,10 @@ rec {
    
   ### SHELLS
 
-  bash = useFromStdenv (stdenv ? bash) stdenv.bash (import ../shells/bash {
-    inherit fetchurl stdenv;
-  });
+  bash = useFromStdenv (stdenv ? bash) stdenv.bash
+    (import ../shells/bash {
+      inherit fetchurl stdenv;
+    });
 
   tcsh = (import ../shells/tcsh) {
     inherit fetchurl stdenv ncurses;
@@ -354,9 +361,9 @@ rec {
   ### DEVELOPMENT
 
   binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
-  (import ../development/tools/misc/binutils {
-    inherit fetchurl stdenv noSysDirs;
-  });
+    (import ../development/tools/misc/binutils {
+      inherit fetchurl stdenv noSysDirs;
+    });
 
   binutilsMips = (import ../development/tools/misc/binutils-cross) {
     inherit fetchurl stdenv noSysDirs;
@@ -374,9 +381,9 @@ rec {
   };
 
   patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
-  (import ../development/tools/misc/patchelf) {
-    inherit fetchurl stdenv;
-  };
+    (import ../development/tools/misc/patchelf {
+      inherit fetchurl stdenv;
+    });
 
   gnum4 = (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
@@ -468,9 +475,9 @@ rec {
   };
 
   gnumake = useFromStdenv (stdenv ? gnumake) stdenv.gnumake
-  (import ../development/tools/build-managers/gnumake {
-    inherit fetchurl stdenv;
-  });
+    (import ../development/tools/build-managers/gnumake {
+      inherit fetchurl stdenv;
+    });
 
   mk = (import ../development/tools/build-managers/mk) {
     inherit fetchurl stdenv;
