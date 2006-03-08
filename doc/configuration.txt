@@ -1,0 +1,25 @@
+Configuration in NixOS
+
+Configuration in NixOS is not very straightforward. On other Linux
+distribution site-specific information (password files, host files, and
+so on) are stored with information that is rather generic for a lot of
+operating systems. To be able to handle these in a gentle way I have decided
+to seperate these two a bit more in NixOS.
+
+In particular, in the /etc directory there is a Nix profile called "configs".
+In this profile the generic configuration is kept. In time this can grow
+to keep configuration which is site specific, but which can easily be kept
+in the store, such as "profile" (default system wide Bourne shell profile)
+
+Right now two packages should be in this profile:
+
+* etcServices : installs a file called "services" (/etc/services should
+point to this)
+* etcProtocols : installs a file called "protocols" (/etc/protocols should
+point to this)
+
+During install time these packages should be installed and the right symlinks
+should be made.
+
+When NIX-40 is closed, we might consider making /etc itself a profile and
+keep even more configuration information inside the Nix store.
