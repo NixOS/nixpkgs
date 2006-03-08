@@ -1887,9 +1887,8 @@ rec {
     plugins = [
       MPlayerPlugin
       flashplayer
-      blackdown
 #      RealPlayer  # disabled by default for legal reasons
-    ];
+    ] ++ (if blackdown != null then [blackdown] else []);
   };
 
   firefoxWrapper = wrapFirefox firefox;

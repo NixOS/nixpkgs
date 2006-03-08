@@ -6,4 +6,4 @@ if stdenv.system == "i686-linux"
       inherit stdenv fetchurl;
     }
   else
-    false
+    null
