@@ -18,21 +18,36 @@ start_deps() {
 			exit $RETVAL	
 }
 
+start_softdeps() {
+	for i in $softdeps
+		$i start
+		RETVAL=$?
+		if test $RETVAL != 0; then
+			continue
+}
+
 start() {
-	# aren't we already running?
-	# @gnugrep@/bin/grep $prog
+	# are we already running?
+	# if so, exit with code 0
+	if test -a $STATDIR/$prog = 1; then
+		exit 0
+	# if not, continue
 	# launch all hard dependencies
 	start_deps
 	# launch all preferred dependencies
+	start_softdeps
+	# launch our own program
 }
 
 stop() {
 	# are we running? If so, then stop, otherwise, do nothing...
-	if test -a $STATDIR/program = 0; then
-		echo "bla"
+	if test -a $STATDIR/$prog = 0; then
+		exit 0
+	# stop our own program
 }
 
 register() {
+	touch $STATEDIR/$prog
 }
 
 unregister() {
