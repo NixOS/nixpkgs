@@ -11,31 +11,36 @@ RCDIR=/etc/rc.d/
 ## resolve $deps to real start/stop scripts first
 
 start_deps() {
-	for i in $deps
+	for i in $deps; do
 		$i start
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			exit $RETVAL	
+		fi
+	done
 }
 
 start_softdeps() {
-	for i in $softdeps
+	for i in $softdeps; do
 		$i start
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			continue
+		fi
+	done
 }
 
 start() {
 	# are we already running?
 	# if so, exit with code 0
-	if test -a $STATDIR/$prog = 1; then
+	if test -a $STATDIR/$prog; then
 		exit 0
+	fi
 	# if not, continue
 	# launch all hard dependencies
-	start_deps
+	#start_deps
 	# launch all preferred dependencies
-	start_softdeps
+	#start_softdeps
 	# launch our own program
 }
 
@@ -43,6 +48,7 @@ stop() {
 	# are we running? If so, then stop, otherwise, do nothing...
 	if test -a $STATDIR/$prog = 0; then
 		exit 0
+	fi
 	# stop our own program
 }
 
@@ -52,4 +58,13 @@ register() {
 
 unregister() {
 	rm $STATEDIR/$prog
+}
+
+status() {
+	# are we running? If so, report
+	if test -a $STATDIR/$prog; then
+		echo "running"
+	else
+		echo "stopped"
+	fi
 }

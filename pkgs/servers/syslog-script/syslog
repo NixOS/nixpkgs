@@ -8,7 +8,7 @@
 # processname: sshd
 
 # source function library
-#. @initscripts@/etc/rc.d/init.d/functions
+source @initscripts@/functions
 
 # pull in sysconfig settings
 #[ -f /etc/sysconfig/sshd ] && . /etc/sysconfig/sshd
@@ -16,23 +16,23 @@
 RETVAL=0
 prog=@nicename@
 
-start()
+startService()
 {
 	# just do networking
-	echo -n $"Starting $prog:"
+	echo -n "Starting $prog:"
 	@syslog@/usr/sbin/syslogd
 	@syslog@/usr/sbin/klogd
 }
 
-stop()
+stopService()
 {
-	echo -n $"Stopping $prog:"
+	echo -n "Stopping $prog:"
 }
 
-reload()
+reloadService()
 {
-	start
 	stop
+	start
 }
 
 case "$1" in
@@ -50,7 +50,7 @@ case "$1" in
 		reload
 		;;
 	status)
-		echo "all OK"
+		status
 		;;
 	*)
 		echo $"Usage: $0 {start|stop|restart|reload|status}"
