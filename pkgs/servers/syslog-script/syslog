@@ -27,6 +27,8 @@ startService()
 stopService()
 {
 	echo -n "Stopping $prog:"
+	kill `cat /var/run/syslogd.pid`
+	kill `cat /var/run/klogd.pid`
 }
 
 reloadService()

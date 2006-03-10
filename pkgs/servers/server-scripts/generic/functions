@@ -42,14 +42,20 @@ start() {
 	# launch all preferred dependencies
 	#start_softdeps
 	# launch our own program
+	startService
+	# if successful, then register
+	register
 }
 
 stop() {
+	echo "stopping $prog"
 	# are we running? If so, then stop, otherwise, do nothing...
-	if test -a $STATDIR/$prog = 0; then
+	if ! test -a $STATEDIR/$prog; then
 		exit 0
 	fi
 	# stop our own program
+	stopService
+	unregister
 }
 
 register() {
@@ -62,7 +68,7 @@ unregister() {
 
 status() {
 	# are we running? If so, report
-	if test -a $STATDIR/$prog; then
+	if test -a $STATEDIR/$prog; then
 		echo "running"
 	else
 		echo "stopped"
