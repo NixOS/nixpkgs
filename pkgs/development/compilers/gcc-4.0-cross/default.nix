@@ -26,4 +26,10 @@ stdenv.mkDerivation {
   buildInputs = [binutilsCross];
   inherit kernelHeadersCross binutilsCross;
   platform = cross;
+
+  meta = {
+    homepage = "http://gcc.gnu.org/";
+    license = "GPL/LGPL";
+    description = "GNU Compiler Collection, 4.0.x (cross-compiler for " + cross + ")";
+  };
 }

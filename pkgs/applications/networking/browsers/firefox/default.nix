@@ -15,4 +15,8 @@ stdenv.mkDerivation {
   inherit gtk;
 
   patches = [./writable-copies.patch];
+
+  meta = {
+    description = "Mozilla Firefox - the browser, reloaded";
+  };
 }
