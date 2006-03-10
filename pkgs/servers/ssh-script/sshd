@@ -13,7 +13,7 @@
 # pidfile: /var/run/sshd.pid
 
 # source function library
-. @initscripts@/etc/rc.d/init.d/functions
+source @initscripts@/functions
 
 # pull in sysconfig settings
 [ -f /etc/sysconfig/sshd ] && . /etc/sysconfig/sshd
@@ -34,7 +34,7 @@ do_rsa1_keygen() {
 	if [ ! -s $RSA1_KEY ]; then
 		echo -n $"Generating SSH1 RSA host key: "
 		if $KEYGEN -q -t rsa1 -f $RSA1_KEY -C '' -N '' >&/dev/null; then
-			@coreutils/bin/chmod 600 $RSA1_KEY
+			@coreutils@/bin/chmod 600 $RSA1_KEY
 			@coreutils@/bin/chmod 644 $RSA1_KEY.pub
 			success $"RSA1 key generation"
 			echo
@@ -88,7 +88,7 @@ do_restart_sanity_check()
 	fi
 }
 
-start()
+startService()
 {
 	# Create keys if necessary
 	do_rsa1_keygen
@@ -96,13 +96,14 @@ start()
 	do_dsa_keygen
 
 	echo -n $"Starting $prog:"
-	@initscripts@/sbin/initlog -c "$SSHD $OPTIONS" && success || failure
+	#@initscripts@/sbin/initlog -c "$SSHD $OPTIONS" && success || failure
+	$SSHD $OPTIONS
 	RETVAL=$?
 	[ "$RETVAL" = 0 ] && @coreutils@/bin/touch /var/lock/subsys/sshd
 	echo
 }
 
-stop()
+stopService()
 {
 	echo -n $"Stopping $prog:"
 	killproc $SSHD -TERM
