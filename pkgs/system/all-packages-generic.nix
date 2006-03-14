@@ -883,6 +883,10 @@ rec {
     inherit fetchurl stdenv aterm getopt pkgconfig;
   };
 
+  jikespg = (import ../development/tools/parsing/jikespg) {
+    inherit fetchurl stdenv;
+  };
+
   expat = (import ../development/libraries/expat) {
     inherit fetchurl stdenv;
   };
