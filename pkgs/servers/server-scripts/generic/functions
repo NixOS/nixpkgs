@@ -22,6 +22,7 @@ start_deps() {
 
 start_softdeps() {
 	for i in $softdeps; do
+		echo $i
 		$i start
 		RETVAL=$?
 		if test $RETVAL != 0; then
@@ -40,7 +41,8 @@ start() {
 	# launch all hard dependencies
 	#start_deps
 	# launch all preferred dependencies
-	#start_softdeps
+	echo "softdeps" $softdeps
+	start_softdeps
 	# launch our own program
 	startService
 	# if successful, then register

@@ -6,6 +6,7 @@ sed -e "s^@bash\@^$bash^g" \
     -e "s^@sshd\@^$ssh^g" \
     -e "s^@initscripts\@^$initscripts^g" \
     -e "s^@coreutils\@^$coreutils^g" \
+    -e "s^@softdeps\@^$softdeps^g" \
     < $script > $out/$nicename
 
 chmod +x $out/$nicename

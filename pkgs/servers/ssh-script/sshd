@@ -21,6 +21,8 @@ source @initscripts@/functions
 RETVAL=0
 prog="sshd"
 
+softdeps="@softdeps@"
+
 # Some functions to make the below more readable
 KEYGEN=@sshd@/bin/ssh-keygen
 SSHD=@sshd@/sbin/sshd
@@ -106,7 +108,9 @@ startService()
 stopService()
 {
 	echo -n $"Stopping $prog:"
-	killproc $SSHD -TERM
+	#killproc $SSHD -TERM
+	echo "blaat"
+	@coreutils@/bin/kill `@coreutils@/bin/cat /var/run/sshd.pid`
 	RETVAL=$?
 	[ "$RETVAL" = 0 ] && @coreutils@/bin/rm -f /var/lock/subsys/sshd
 	echo
