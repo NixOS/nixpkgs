@@ -11,4 +11,6 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ps ncurses zlib perl];
+
+  configureFlags = "--enable-thread-safe-client";
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, bison, libxml2, apacheHttpd}:
+{stdenv, fetchurl, flex, bison, libxml2, apacheHttpd, unixODBC ? null}:
 
 assert libxml2 != null;
 
@@ -11,8 +11,13 @@ stdenv.mkDerivation {
   
   inherit flex bison libxml2 apacheHttpd;
 
-  buildInputs = [flex bison libxml2 apacheHttpd];
   builder = ./builder.sh;
+
+  buildInputs = [flex bison libxml2 apacheHttpd];
+
+  inherit unixODBC;
+  
+  odbcSupport = unixODBC != null;
 
   patches = [./fix.patch];
 }

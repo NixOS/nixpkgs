@@ -808,7 +808,7 @@ rec {
   };
 
   php = (import ../development/interpreters/php) {
-    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
+    inherit stdenv fetchurl flex bison libxml2 apacheHttpd unixODBC;
   };
 
   guile = (import ../development/interpreters/guile) {
@@ -1250,6 +1250,10 @@ rec {
 
   unixODBC = import ../development/libraries/unixODBC {
     inherit fetchurl stdenv;
+  };
+
+  mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
+    inherit fetchurl stdenv mysql libtool zlib unixODBC;
   };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
