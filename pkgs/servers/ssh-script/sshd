@@ -153,6 +153,9 @@ case "$1" in
 		status $SSHD
 		RETVAL=$?
 		;;
+	name)
+		name
+		;;
 	*)
 		echo $"Usage: $0 {start|stop|restart|reload|condrestart|status}"
 		RETVAL=1

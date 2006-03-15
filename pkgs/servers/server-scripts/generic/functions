@@ -76,3 +76,7 @@ status() {
 		echo "stopped"
 	fi
 }
+
+name() {
+	echo $prog
+}
