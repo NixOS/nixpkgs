@@ -1248,6 +1248,10 @@ rec {
     inherit fetchurl stdenv alsaLib autoconf automake libtool;
   };
 
+  unixODBC = import ../development/libraries/unixODBC {
+    inherit fetchurl stdenv;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxon = (import ../development/libraries/java/saxon) {
