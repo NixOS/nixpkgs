@@ -54,6 +54,9 @@ case "$1" in
 	status)
 		status
 		;;
+	name)
+		name
+		;;
 	*)
 		echo $"Usage: $0 {start|stop|restart|reload|status}"
 		RETVAL=1

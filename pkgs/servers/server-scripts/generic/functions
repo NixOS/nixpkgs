@@ -7,12 +7,18 @@
 
 STATEDIR=/var/run/nix-services
 RCDIR=/etc/rc.d/
+NIXPKGS=@nixpkgs@
 
 ## resolve $deps to real start/stop scripts first
 
 start_deps() {
 	for i in $deps; do
-		$i start
+		name=`$i/control name`
+		if ! test -a $RCDIR/$name; then
+			echo "blaat"
+		fi
+
+		$i/control start
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			exit $RETVAL	
@@ -23,7 +29,16 @@ start_deps() {
 start_softdeps() {
 	for i in $softdeps; do
 		echo $i
-		$i start
+
+		name=`$i/control name`
+		if ! test -a "$RCDIR/$name"; then
+			echo $RCDIR/$name $i
+			@nix@/bin/nix-env -p $RCDIR/$name -i $i
+		fi
+
+		$i/control start
+
+		#$i start
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			continue
@@ -34,7 +49,7 @@ start_softdeps() {
 start() {
 	# are we already running?
 	# if so, exit with code 0
-	if test -a $STATDIR/$prog; then
+	if test -a $STATEDIR/$prog; then
 		exit 0
 	fi
 	# if not, continue

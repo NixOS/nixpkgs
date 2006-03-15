@@ -109,7 +109,6 @@ stopService()
 {
 	echo -n $"Stopping $prog:"
 	#killproc $SSHD -TERM
-	echo "blaat"
 	@coreutils@/bin/kill `@coreutils@/bin/cat /var/run/sshd.pid`
 	RETVAL=$?
 	[ "$RETVAL" = 0 ] && @coreutils@/bin/rm -f /var/lock/subsys/sshd
