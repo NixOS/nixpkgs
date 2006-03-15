@@ -53,7 +53,7 @@ if test -z "$hash"; then
 fi
 
 # Create a Nix expression that does a fetchsvn.
-nixExpr=$(dirname $(readlink -f $0))/../../system/i686-linux.nix
+nixExpr=$(dirname $0)/../../system/i686-linux.nix
 storeExpr=$( \
   echo "(import $nixExpr).fetchsvn {url=\"$url\"; rev=\"$rev\"; md5=\"$hash\";}" \
   | nix-instantiate -)
