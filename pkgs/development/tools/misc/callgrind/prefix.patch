@@ -11,7 +11,7 @@ diff -rc callgrind-0.10.1-orig/callgrind.in callgrind-0.10.1/callgrind.in
           esac
   esac
   
-! VALGRIND_LIB=@prefix@/lib/valgrind/ exec @VG_BINDIR@/valgrind --tool=callgrind $*
+! VALGRIND_LIB=@prefix@/lib/valgrind/ exec @VG_BINDIR@/valgrind --tool=callgrind "$@"
 diff -rc callgrind-0.10.1-orig/configure callgrind-0.10.1/configure
 *** callgrind-0.10.1-orig/configure	2005-11-25 02:00:26.000000000 +0100
 --- callgrind-0.10.1/configure	2006-01-31 13:41:48.000000000 +0100
