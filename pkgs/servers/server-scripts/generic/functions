@@ -13,6 +13,7 @@ NIXPKGS=@nixpkgs@
 
 start_deps() {
 	for i in $deps; do
+		echo $i
 		name=`$i/control name`
 
 		if ! test -a "$RCDIR/$name"; then
@@ -57,12 +58,28 @@ start() {
 	# if not, continue
 	# launch all hard dependencies
 	start_deps
+
+	RETVAL=$?
+
+	if test $RETVAL != 0; then
+		echo $prog failed
+		exit $RETVAL
+	fi
+
 	# launch all preferred dependencies
 	echo "softdeps" $softdeps
 	start_softdeps
 	# launch our own program
 	startService
 	# if successful, then register
+
+	RETVAL=$?
+
+	if test $RETVAL != 0; then
+		echo $prog failed
+		exit $RETVAL
+	fi
+
 	register
 }
 
@@ -74,6 +91,7 @@ stop() {
 	fi
 	# stop our own program
 	stopService
+	echo "unregistering"
 	unregister
 }
 

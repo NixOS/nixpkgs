@@ -15,17 +15,22 @@ source @initscripts@/functions
 
 RETVAL=0
 prog="network"
+INTERFACE=eth0
 
 startService()
 {
 	# just do networking
-	echo -n $"Starting $prog:"
-	@dhcp@/sbin/dhclient
+	echo -n "Starting $prog:"
+	@dhcp@/sbin/dhclient $INTERFACE
+
+	RETVAL=$?
+	echo "retval $RETVAL"
+	return $RETVAL
 }
 
 stopService()
 {
-	echo -n $"Stopping $prog:"
+	echo "BLAAT"
 }
 
 reload()
