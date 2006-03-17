@@ -14,11 +14,14 @@ NIXPKGS=@nixpkgs@
 start_deps() {
 	for i in $deps; do
 		name=`$i/control name`
-		if ! test -a $RCDIR/$name; then
-			echo "blaat"
+
+		if ! test -a "$RCDIR/$name"; then
+			echo $RCDIR/$name $i
+			@nix@/bin/nix-env -p $RCDIR/$name -i $i
 		fi
 
 		$i/control start
+
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			exit $RETVAL	
@@ -38,7 +41,6 @@ start_softdeps() {
 
 		$i/control start
 
-		#$i start
 		RETVAL=$?
 		if test $RETVAL != 0; then
 			continue
@@ -54,7 +56,7 @@ start() {
 	fi
 	# if not, continue
 	# launch all hard dependencies
-	#start_deps
+	start_deps
 	# launch all preferred dependencies
 	echo "softdeps" $softdeps
 	start_softdeps

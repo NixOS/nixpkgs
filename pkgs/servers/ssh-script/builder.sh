@@ -7,6 +7,7 @@ sed -e "s^@bash\@^$bash^g" \
     -e "s^@initscripts\@^$initscripts^g" \
     -e "s^@coreutils\@^$coreutils^g" \
     -e "s^@softdeps\@^$softdeps^g" \
+    -e "s^@deps\@^$deps^g" \
     < $script > $out/control
 
 chmod +x $out/control

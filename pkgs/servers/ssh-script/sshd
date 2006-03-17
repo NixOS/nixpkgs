@@ -22,6 +22,7 @@ RETVAL=0
 prog="sshd"
 
 softdeps="@softdeps@"
+deps="@deps@"
 
 # Some functions to make the below more readable
 KEYGEN=@sshd@/bin/ssh-keygen
