@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.2.2.tar.bz2;
-    md5 = "f5559ddb004e0638f6bd9efe2bac00134c5065ba";
+    sha1 = "f5559ddb004e0638f6bd9efe2bac00134c5065ba";
   };
   idea = if ideaSupport then fetchurl {
     url = ftp://ftp.gnupg.dk/pub/contrib-dk/idea.c.gz;
