@@ -34,25 +34,36 @@ showError() {
 }
 
 runLaTeX() {
-if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
+    if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
+    runNeeded=
+    if grep -q "LaTeX Warning: Label(s) may have changed." "$tmpFile"; then
+        runNeeded=1
+    fi
 }
 
 echo
+
 
 echo "PASS 1..."
 runLaTeX
 echo
 
+
 if grep -q '\\citation' $rootNameBase.aux; then
     echo "RUNNING BIBTEX..."
     bibtex --terse $rootNameBase
     cp $rootNameBase.bbl $out
+    runNeeded=1
     echo
 fi
 
-echo "PASS 2..."
-runLaTeX
-echo
+
+if test "$runNeeded"; then
+    echo "PASS 2..."
+    runLaTeX
+    echo
+fi
+
 
 if test -f $rootNameBase.idx; then
     echo "MAKING INDEX..."
@@ -60,17 +71,30 @@ if test -f $rootNameBase.idx; then
         makeindexFlags="$makeindexFlags -c"
     fi
     makeindex $makeindexFlags $rootNameBase.idx
+    runNeeded=1
     echo
 fi    
 
-echo "PASS 3..."
-runLaTeX
-echo
+
+if test "$runNeeded"; then
+    echo "PASS 3..."
+    runLaTeX
+    echo
+fi
+
+
+if test "$runNeeded"; then
+    echo "Hm, still not done :-("
+    echo
+fi
+
+
 if test -n "$generatePDF"; then
     cp $rootNameBase.pdf $out
 else
     cp $rootNameBase.dvi $out
 fi
+
 
 echo "OVERFULL/UNDERFULL:"
 cat $tmpFile | egrep "Overfull|Underfull" || true
