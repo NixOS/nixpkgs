@@ -40,6 +40,10 @@ rec {
   ### Helper functions.
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
+  # Applying this to an attribute set will cause nix-env to look
+  # inside the set for derivations.
+  recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
+
 
   ### STANDARD ENVIRONMENT
 
@@ -1036,7 +1040,7 @@ rec {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
-  gtkLibs = gtkLibs28;
+  gtkLibs = recurseIntoAttrs gtkLibs28;
 
   gtkLibs28 = import ../development/libraries/gtk-libs-2.8 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
@@ -1127,13 +1131,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnome = import ../development/libraries/gnome {
+  gnome = recurseIntoAttrs (import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs;
     inherit (xlibs) libXmu;
-  };
+  });
 
   wxGTK = wxGTK26;
 
@@ -1559,10 +1563,10 @@ rec {
     inherit fetchurl stdenv apacheHttpd python;
   };
 
-  xorg = import ../servers/x11/xorg {
+  xorg = recurseIntoAttrs (import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       expat libdrm libpng zlib perl mesa;
-  };
+  });
 
   postgresql = (import ../servers/sql/postgresql) {
     inherit fetchurl stdenv readline ncurses zlib;
