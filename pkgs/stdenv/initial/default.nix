@@ -18,7 +18,7 @@ let {
     }
 
     // {
-      mkDerivation = attrs: derivation (attrs // {
+      mkDerivation = attrs: derivation ((removeAttrs attrs ["meta"]) // {
         builder = shell;
         args = ["-e" attrs.builder];
         stdenv = body;
