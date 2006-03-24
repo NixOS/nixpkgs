@@ -1,5 +1,7 @@
 {stdenv, fetchurl, kdelibs, libX11, libXext, libSM, libpng, libjpeg, qt, zlib, perl, expat}:
 
+# !!! dot is a run-time dependencies
+
 stdenv.mkDerivation {
   name = "kcachegrind-0.4.6";
   builder = ./builder.sh;
