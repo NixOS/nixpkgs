@@ -114,22 +114,26 @@ rec {
 
   # This function builds the various standard environments used during
   # the bootstrap.
-  stdenvBootFun = {glibc, gcc, binutils, staticGlibc}: (import ../generic) {
-    name = "stdenv-linux-boot";
-    param1 = if staticGlibc then "static" else "dynamic";
-    preHook = ./prehook.sh;
-    stdenv = stdenvInitial;
-    shell = ./tools/bash;
-    gcc = (import ../../build-support/gcc-wrapper) {
+  stdenvBootFun =
+    {glibc, gcc, binutils, staticGlibc, extraAttrs ? {}}:
+    
+    import ../generic {
+      name = "stdenv-linux-boot";
+      param1 = if staticGlibc then "static" else "dynamic";
+      preHook = ./prehook.sh;
       stdenv = stdenvInitial;
-      nativeTools = false;
-      nativeGlibc = false;
-      inherit gcc glibc binutils;
+      shell = ./tools/bash;
+      gcc = (import ../../build-support/gcc-wrapper) {
+        stdenv = stdenvInitial;
+        nativeTools = false;
+        nativeGlibc = false;
+        inherit gcc glibc binutils;
+      };
+      initialPath = [
+        staticTools
+      ];
+      inherit extraAttrs;
     };
-    initialPath = [
-      staticTools
-    ];
-  };
 
 
   # Create the first "real" standard environment.  This one consists
@@ -139,13 +143,13 @@ rec {
     # Use the statically linked, downloaded glibc/gcc/binutils.
     inherit glibc gcc binutils;
     staticGlibc = true;
+    extraAttrs = {inherit curl;};
   };
 
   # 2) These are the packages that we can build with the first
   #    stdenv.  We only need Glibc (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot1;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot1;
   };
 
   # 3) Build Glibc with the statically linked tools.  The result is the
@@ -159,12 +163,12 @@ rec {
     glibc = stdenvLinuxGlibc;
     staticGlibc = false;
     inherit gcc binutils;
+    extraAttrs = {inherit curl;};
   };
 
   # 5) The packages that can be built using the second stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot2;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot2;
   };
 
   # 6) Construct a third stdenv identical to the second, except that
@@ -174,12 +178,12 @@ rec {
     glibc = stdenvLinuxGlibc;
     staticGlibc = false;
     inherit (stdenvLinuxBoot2Pkgs) gcc binutils;
+    extraAttrs = {inherit curl;};
   };
 
   # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
-    stdenv = stdenvLinuxBoot3;
-    bootCurl = curl;
+    bootStdenv = stdenvLinuxBoot3;
   };
 
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
@@ -205,20 +209,14 @@ rec {
     };
 
     shell = stdenvLinuxBoot3Pkgs.bash ~ /bin/sh;
+    
+    extraAttrs = {
+      curl = stdenvLinuxBoot3Pkgs.realCurl;
+      inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */;
+      inherit (stdenvLinuxBoot3Pkgs)
+        gzip bzip2 bash coreutils diffutils findutils gawk
+        gnumake gnused gnutar gnugrep patch patchelf;
+    };
   };
 
-  # 8) Finally, the set of components built using the Linux stdenv.
-  #    Reuse the tools built in the previous steps.
-  stdenvLinuxPkgs =
-    allPackages {
-      stdenv = stdenvLinux;
-      bootCurl = stdenvLinuxBoot3Pkgs.curl;
-    } //
-    {inherit (stdenvLinuxBoot2Pkgs) binutils gcc;} //
-    {inherit (stdenvLinuxBoot3Pkgs)
-      gzip bzip2 bash coreutils diffutils findutils gawk
-      gnumake gnused gnutar gnugrep curl patch patchelf;
-    } //
-    {glibc = stdenvLinuxGlibc;};
-    
 }

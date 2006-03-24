@@ -41,4 +41,7 @@ stdenv.mkDerivation {
   ]
   ++ (if enableOfficialBranding then ["--enable-official-branding"] else []);
 
+  meta = {
+    description = "Mozilla Firefox - the browser, reloaded";
+  };
 }

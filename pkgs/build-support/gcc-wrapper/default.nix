@@ -27,4 +27,7 @@ stdenv.mkDerivation {
   langCC = if nativeTools then true else gcc.langCC;
   langF77 = if nativeTools then false else gcc.langF77;
   shell = if shell == "" then stdenv.shell else shell;
+  meta = if gcc != null then gcc.meta else
+    { description = "System C compiler wrapper";
+    };
 }

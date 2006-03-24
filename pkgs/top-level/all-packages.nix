@@ -1,16 +1,26 @@
-# This file evaluates to a function that, when supplied with a system
-# identifier and a standard build environment, returns the set of all
-# packages provided by the Nix Package Collection.
+/* This file composes the Nix Packages collection.  That is, it
+   imports the functions that build the various packages, and calls
+   them with appropriate arguments.  The result is a set of all the
+   packages in the Nix Packages collection for some particular
+   platform. */
+   
 
-{ stdenv, bootCurl, noSysDirs ? true
+{ # The system for which to build the packages.
+  system ? __currentSystem
+
+, # The standard environment to use.  Only used for bootstrapping.  If
+  # null, the default standard environment is used.
+  bootStdenv ? null
+
+  # More flags for the bootstrapping of stdenv.
+, noSysDirs ? true
 , gccWithCC ? true
 , gccWithProfiling ? true
+
 }:
 
+
 rec {
-
-  inherit stdenv;
-
 
   ### Symbolic names.
 
@@ -25,13 +35,31 @@ rec {
   # `xlibs.xlibs' is a wrapper packages that combines libX11 and a bunch
   # of other basic X client libraries.
   x11 = if useOldXLibs then xlibsOld.xlibs else xlibsWrapper;
-  
+
+
+  ### Helper functions.
+  useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
+
+  # Applying this to an attribute set will cause nix-env to look
+  # inside the set for derivations.
+  recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
+
+
+  ### STANDARD ENVIRONMENT
+
+  stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
+
+  defaultStdenv =
+    (import ../stdenv {
+      inherit system;
+      allPackages = import ./all-packages.nix;
+    }).stdenv;
+
 
   ### BUILD SUPPORT
 
   fetchurl = (import ../build-support/fetchurl) {
-    inherit stdenv;
-    curl = bootCurl;
+    inherit stdenv curl;
   };
 
   fetchsvn = (import ../build-support/fetchsvn) {
@@ -53,17 +81,19 @@ rec {
     inherit fetchurl stdenv flex;
   };
 
-  coreutils = (import ../tools/misc/coreutils) {
-    inherit fetchurl stdenv;
-  };
+  coreutils = useFromStdenv (stdenv ? coreutils) stdenv.coreutils
+    (import ../tools/misc/coreutils {
+      inherit fetchurl stdenv;
+    });
 
   coreutilsDiet = (import ../tools/misc/coreutils-diet) {
     inherit fetchurl stdenv dietgcc perl;
   };
 
-  findutils = (import ../tools/misc/findutils) {
-    inherit fetchurl stdenv coreutils;
-  };
+  findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
+    (import ../tools/misc/findutils {
+      inherit fetchurl stdenv coreutils;
+    });
 
   findutilsWrapper = (import ../tools/misc/findutils-wrapper) {
     inherit stdenv findutils;
@@ -98,27 +128,32 @@ rec {
     inherit fetchurl stdenv unzip jdk;
   };
 
-  diffutils = (import ../tools/text/diffutils) {
-    inherit fetchurl stdenv coreutils;
-  };
+  diffutils = useFromStdenv (stdenv ? diffutils) stdenv.diffutils
+    (import ../tools/text/diffutils {
+      inherit fetchurl stdenv coreutils;
+    });
 
   gnupatch = (import ../tools/text/gnupatch) {
     inherit fetchurl stdenv;
   };
 
-  patch = if stdenv.system == "powerpc-darwin" then null else gnupatch;
+  patch = useFromStdenv (stdenv ? patch) stdenv.patch
+    (if stdenv.system == "powerpc-darwin" then null else gnupatch);
 
-  gnused = (import ../tools/text/gnused) {
-    inherit fetchurl stdenv;
-  };
+  gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
+    (import ../tools/text/gnused {
+      inherit fetchurl stdenv;
+    });
 
-  gnugrep = (import ../tools/text/gnugrep) {
-    inherit fetchurl stdenv pcre;
-  };
+  gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep
+    (import ../tools/text/gnugrep {
+      inherit fetchurl stdenv pcre;
+    });
 
-  gawk = (import ../tools/text/gawk) {
-    inherit fetchurl stdenv;
-  };
+  gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
+    (import ../tools/text/gawk {
+      inherit fetchurl stdenv;
+    });
 
   groff = (import ../tools/text/groff) {
     inherit fetchurl stdenv;
@@ -158,9 +193,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnutar = (import ../tools/archivers/gnutar) {
-    inherit fetchurl stdenv;
-  };
+  gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
+    (import ../tools/archivers/gnutar {
+      inherit fetchurl stdenv;
+    });
 
   gnutarDiet = (import ../tools/archivers/gnutar-diet) {
     inherit fetchurl stdenv dietgcc;
@@ -174,13 +210,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gzip = (import ../tools/compression/gzip) {
-    inherit fetchurl stdenv;
-  };
+  gzip = useFromStdenv (stdenv ? gzip) stdenv.gzip
+    (import ../tools/compression/gzip {
+      inherit fetchurl stdenv;
+    });
 
-  bzip2 = (import ../tools/compression/bzip2) {
-    inherit fetchurl stdenv;
-  };
+  bzip2 = useFromStdenv (stdenv ? bzip2) stdenv.bzip2
+    (import ../tools/compression/bzip2 {
+      inherit fetchurl stdenv;
+    });
 
   zdelta = (import ../tools/compression/zdelta) {
     inherit fetchurl stdenv;
@@ -198,7 +236,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  curl = (import ../tools/networking/curl) {
+  curl = if stdenv ? curl then stdenv.curl else (assert false; null);
+
+  realCurl = (import ../tools/networking/curl) {
     inherit fetchurl stdenv zlib;
   };
 
@@ -308,9 +348,10 @@ rec {
    
   ### SHELLS
 
-  bash = (import ../shells/bash) {
-    inherit fetchurl stdenv;
-  };
+  bash = useFromStdenv (stdenv ? bash) stdenv.bash
+    (import ../shells/bash {
+      inherit fetchurl stdenv;
+    });
 
   tcsh = (import ../shells/tcsh) {
     inherit fetchurl stdenv ncurses;
@@ -323,9 +364,10 @@ rec {
 
   ### DEVELOPMENT
 
-  binutils = (import ../development/tools/misc/binutils) {
-    inherit fetchurl stdenv noSysDirs;
-  };
+  binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
+    (import ../development/tools/misc/binutils {
+      inherit fetchurl stdenv noSysDirs;
+    });
 
   binutilsMips = (import ../development/tools/misc/binutils-cross) {
     inherit fetchurl stdenv noSysDirs;
@@ -342,9 +384,10 @@ rec {
     cross = "sparc-linux";
   };
 
-  patchelf = (import ../development/tools/misc/patchelf) {
-    inherit fetchurl stdenv;
-  };
+  patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
+    (import ../development/tools/misc/patchelf {
+      inherit fetchurl stdenv;
+    });
 
   patchelfNew = (import ../development/tools/misc/patchelf/new.nix) {
     inherit fetchurl stdenv;
@@ -439,9 +482,10 @@ rec {
     inherit fetchurl stdenv readline ncurses g77 perl flex;
   };
 
-  gnumake = (import ../development/tools/build-managers/gnumake) {
-    inherit fetchurl stdenv;
-  };
+  gnumake = useFromStdenv (stdenv ? gnumake) stdenv.gnumake
+    (import ../development/tools/build-managers/gnumake {
+      inherit fetchurl stdenv;
+    });
 
   mk = (import ../development/tools/build-managers/mk) {
     inherit fetchurl stdenv;
@@ -1023,7 +1067,7 @@ rec {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
-  gtkLibs = gtkLibs28;
+  gtkLibs = recurseIntoAttrs gtkLibs28;
 
   gtkLibs28 = import ../development/libraries/gtk-libs-2.8 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
@@ -1114,13 +1158,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnome = import ../development/libraries/gnome {
+  gnome = recurseIntoAttrs (import ../development/libraries/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs;
     inherit (xlibs) libXmu;
-  };
+  });
 
   wxGTK = wxGTK26;
 
@@ -1570,10 +1614,10 @@ rec {
     inherit fetchurl stdenv apacheHttpd python;
   };
 
-  xorg = import ../servers/x11/xorg {
+  xorg = recurseIntoAttrs (import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       expat libdrm libpng zlib perl mesa;
-  };
+  });
 
   postgresql = (import ../servers/sql/postgresql) {
     inherit fetchurl stdenv readline ncurses zlib;
@@ -1911,9 +1955,8 @@ rec {
     plugins = [
       MPlayerPlugin
       flashplayer
-      blackdown
 #      RealPlayer  # disabled by default for legal reasons
-    ];
+    ] ++ (if blackdown != null then [blackdown] else []);
   };
 
   firefoxWrapper = wrapFirefox firefox;
@@ -2289,14 +2332,12 @@ rec {
   };
 
   #nixStatic = (import ../misc/nix-static) {
-  # inherit fetchurl stdenv aterm perl;
-  #  curl = bootCurl; /* !!! ugly */
+  # inherit fetchurl stdenv aterm perl curl;
   #  bdb = db4;
   #};
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv aterm perl;
-    curl = bootCurl; /* !!! ugly */
+    inherit fetchurl stdenv aterm perl curl;
     bdb = db4;
   };
 

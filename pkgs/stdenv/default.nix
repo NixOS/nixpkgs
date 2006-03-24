@@ -5,14 +5,16 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{system, allPackages}: rec {
+{system, allPackages}:
+
+rec {
 
   gccWrapper = import ../build-support/gcc-wrapper;
-  genericStdenv = import ../stdenv/generic;
+  genericStdenv = import ./generic;
 
 
   # Trivial environment used for building other environments.
-  stdenvInitial = (import ../stdenv/initial) {
+  stdenvInitial = (import ./initial) {
     name = "stdenv-initial";
     inherit system;
   };
@@ -23,47 +25,44 @@
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ../stdenv/native) {
+  stdenvNative = (import ./native) {
     stdenv = stdenvInitial;
     inherit genericStdenv gccWrapper;
   };
 
   stdenvNativePkgs = allPackages {
-    stdenv = stdenvNative;
-    bootCurl = null;
+    bootStdenv = stdenvNative;
     noSysDirs = false;
   };
 
 
   # The Nix build environment.
-  stdenvNix = (import ../stdenv/nix) {
+  stdenvNix = (import ./nix) {
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
     inherit genericStdenv gccWrapper;
   };
 
   stdenvNixPkgs = allPackages {
-    stdenv = stdenvNix;
-    bootCurl = stdenvNativePkgs.curl;
+    bootStdenv = stdenvNix;
     noSysDirs = false;
   };
 
 
   # Linux standard environment.
-  inherit (import ../stdenv/linux {inherit allPackages;})
+  inherit (import ./linux {inherit allPackages;})
     stdenvLinux stdenvLinuxPkgs;
 
     
   # Darwin (Mac OS X) standard environment.  Very simple for now
   # (essentially it's just the native environment).
-  stdenvDarwin = (import ../stdenv/darwin) {
+  stdenvDarwin = (import ./darwin) {
     stdenv = stdenvInitial;
     inherit genericStdenv gccWrapper;
   };
 
   stdenvDarwinPkgs = allPackages {
-    stdenv = stdenvDarwin;
-    bootCurl = null;
+    bootStdenv = stdenvDarwin;
     noSysDirs = false;
   };
 
@@ -71,21 +70,21 @@
   # FreeBSD standard environment.  Right now this is more or less the
   # same as the native environemnt.  Eventually we'll want a pure
   # environment similar to stdenvLinux.
-  stdenvFreeBSD = (import ../stdenv/freebsd) {
+  stdenvFreeBSD = (import ./freebsd) {
     stdenv = stdenvInitial;
     inherit genericStdenv gccWrapper;
   };
 
   stdenvFreeBSDPkgs = allPackages {
-    stdenv = stdenvFreeBSD;
-    bootCurl = null;
+    bootStdenv = stdenvFreeBSD;
     noSysDirs = false;
   };
 
 
-  stdenvTestPkgs = allPackages {
-    stdenv = (import ../stdenv/nix-linux-static).stdenvInitial;
-    bootCurl = (import ../stdenv/nix-linux-static).curl;
-    noSysDirs = true;
-  };
+  # Select the appropriate stdenv for the platform `system'.
+  stdenv =
+    if system == "i686-linux" then stdenvLinux
+    else if system == "i686-freebsd" then stdenvFreeBSD
+    else if system == "powerpc-darwin" then stdenvDarwin
+    else stdenvNative;
 }

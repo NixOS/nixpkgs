@@ -21,7 +21,6 @@ let {
     bsdiff
     bzip2
     callgrind
-    chatzilla
     cksfv
     coreutils
     darcs
@@ -115,7 +114,6 @@ let {
     xmms
     xorg_sys_opengl
     xsel
-    xulrunner
     zapping
     zdelta
     zip
@@ -160,7 +158,6 @@ let {
     libxml2
     libxslt
     nxml
-    pkgconfig
     subversion
     tetex
     unzip

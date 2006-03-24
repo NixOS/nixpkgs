@@ -16,4 +16,9 @@ genericStdenv {
   };
 
   shell = "/bin/sh";
+
+  extraAttrs = {
+    # Curl should be in /usr/bin or so.
+    curl = null;
+  };
 }
