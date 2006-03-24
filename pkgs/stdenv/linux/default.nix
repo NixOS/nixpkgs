@@ -101,7 +101,7 @@ rec {
       args = ./scripts/builder-stdenv-initial.sh;
       inherit staticTools;
     }  // {
-      mkDerivation = attrs: derivation (attrs // {
+      mkDerivation = attrs: derivation ((removeAttrs attrs ["meta"]) // {
         builder = ./tools/bash;
         args = ["-e" attrs.builder];
         stdenv = body;
