@@ -135,7 +135,7 @@ let {
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     aterm
-    curl
+    realCurl
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
