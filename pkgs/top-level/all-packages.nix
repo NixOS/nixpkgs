@@ -710,14 +710,18 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  aspectj =
+    (import ../development/compilers/aspectj) {
+      inherit stdenv fetchurl jre;
+    };
+
   abc =
     abcPatchable [];
 
   abcPatchable = patches : 
     (import ../development/compilers/abc/default.nix) {
-      inherit stdenv fetchurl patches;
+      inherit stdenv fetchurl patches jre;
       apacheAnt = apacheAntBlackdown14;
-      jre = blackdown;
       javaCup = import ../development/libraries/java/cup {
         inherit stdenv fetchurl;
         jdk = blackdown;

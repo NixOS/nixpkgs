@@ -8,6 +8,7 @@ let {
     abc
     apacheAntBlackdown14
     apacheHttpd
+    aspectj
     aterm
     autoconf
     automake19x
