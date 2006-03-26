@@ -710,6 +710,20 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  abc =
+    abcPatchable [];
+
+  abcPatchable = patches : 
+    (import ../development/compilers/abc/default.nix) {
+      inherit stdenv fetchurl patches;
+      apacheAnt = apacheAntBlackdown14;
+      jre = blackdown;
+      javaCup = import ../development/libraries/java/cup {
+        inherit stdenv fetchurl;
+        jdk = blackdown;
+      };
+    };
+
   ocaml = (import ../development/compilers/ocaml) {
     inherit fetchurl stdenv x11;
   };

@@ -5,6 +5,7 @@ let {
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     MPlayer
     MPlayerPlugin
+    abc
     apacheAntBlackdown14
     apacheHttpd
     aterm
