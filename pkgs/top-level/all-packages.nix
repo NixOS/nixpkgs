@@ -2332,6 +2332,10 @@ rec {
     inherit fetchurl stdenv SDL;
   };
 
+  texFunctions = (import ../misc/tex/nix) {
+    inherit stdenv perl tetex graphviz ghostscript;
+  };
+
   tetex = (import ../misc/tex/tetex) {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
