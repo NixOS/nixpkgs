@@ -1651,6 +1651,11 @@ rec {
     ps = procps; /* !!! Linux only */
   };
 
+  mysql_jdbc = import ../servers/sql/mysql/jdbc {
+    inherit fetchurl stdenv;
+    ant = apacheAntBlackdown14;
+  };
+
   jetty = (import ../servers/http/jetty) {
     inherit fetchurl stdenv unzip;
   };
