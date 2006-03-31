@@ -3,12 +3,12 @@
 assert jdk != null;
 
 stdenv.mkDerivation {
-	name = "maven-2.0.3";
-	mavenBinary = "mvn";
+	name = "maven-1.0.2";
+        mavenBinary = "maven";
 	builder = ./builder.sh;
 	src = fetchurl {
-		url = http://apache.cs.uu.nl/dist/maven/binaries/maven-2.0.3-bin.tar.bz2;
-		md5 = "14b3a62c45f5c7b3a7f72f87ffadb8e0";
+		url = http://apache.cs.uu.nl/dist/maven/binaries/maven-1.0.2.tar.bz2;
+		md5 = "81a6b4393e550635efe19e95cea38718";
 	};
 	makeWrapper = ../../build-support/make-wrapper/make-wrapper.sh;
 	
