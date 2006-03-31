@@ -2408,5 +2408,9 @@ rec {
     inherit (xlibs) libX11 libXext;
     patchelf = patchelfNew;
   };
+
+  maven = (import ../misc/maven) {
+   inherit stdenv fetchurl jdk;
+  };
   
 }

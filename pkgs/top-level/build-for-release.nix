@@ -69,6 +69,7 @@ let {
     libxml2
     libxslt
     lynx
+    maven
     mk
     mktemp
     mono
@@ -159,6 +160,7 @@ let {
     libtool
     libxml2
     libxslt
+    maven
     nxml
     subversion
     tetex
