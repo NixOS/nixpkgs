@@ -1049,6 +1049,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  axis = (import ../development/libraries/axis) {
+    inherit fetchurl stdenv;
+  };
+
   libcaca = (import ../development/libraries/libcaca) {
     inherit fetchurl stdenv ncurses;
   };
@@ -2409,8 +2413,14 @@ rec {
     patchelf = patchelfNew;
   };
 
+  maven = (import ../misc/maven/maven-1.0.nix) {
+    inherit stdenv fetchurl jdk;
+  };
+
+/*
   maven = (import ../misc/maven) {
    inherit stdenv fetchurl jdk;
   };
-  
+*/
+    
 }
