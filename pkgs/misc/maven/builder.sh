@@ -19,6 +19,5 @@ then
   export OLD_HOME=$HOME
   export HOME=.
   $out/bin/maven plugin:download -DgroupId=maven-plugins -DartifactId=maven-axis-plugin -Dversion=0.7
-  $out/bin/maven plugin:download -Dmaven.repo.remote=http://repository.atlassian.com,http://www.ibiblio.org/maven -DartifactId=maven-axis-plugin -DgroupId=atlassian -Dversion=0.7AXIS1.3
   export HOME=OLD_HOME
 fi
