@@ -254,11 +254,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  bittorrent = (import ../tools/networking/bittorrent) {
+  bittorrent = (import ../tools/networking/p2p/bittorrent) {
     inherit fetchurl stdenv python pygtk makeWrapper;
   };
 
-  azureus = import ../tools/networking/azureus {
+  azureus = import ../tools/networking/p2p/azureus {
     inherit fetchurl stdenv jdk swt;
   };
 
