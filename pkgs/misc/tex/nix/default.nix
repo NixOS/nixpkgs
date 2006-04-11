@@ -56,6 +56,20 @@ rec {
     };
   
 
+  dot2ps =
+    { dotGraph
+    }:
+
+    pkgs.stdenv.mkDerivation {
+      name = "ps";
+      builder = ./dot2ps.sh;
+      inherit dotGraph;
+      buildInputs = [
+        pkgs.perl pkgs.tetex pkgs.graphviz pkgs.ghostscript
+      ];
+    };
+
+  
   animateDot = dotGraph: nrFrames: pkgs.stdenv.mkDerivation {
     name = "dot-frames";
     builder = ./animatedot.sh;
