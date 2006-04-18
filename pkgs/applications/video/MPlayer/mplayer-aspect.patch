@@ -1,0 +1,76 @@
+diff -Nur MPlayer.orig/libvo/aspect.c MPlayer/libvo/aspect.c
+--- MPlayer.orig/libvo/aspect.c	2004-10-28 03:15:51.000000000 +0200
++++ MPlayer/libvo/aspect.c	2005-08-24 15:34:14.000000000 +0200
+@@ -11,13 +11,16 @@
+ #include <stdio.h>
+ #endif
+ 
++int vo_physical_width = 0;
++int vo_physical_height = 0;
++
+ int vo_panscan_x = 0;
+ int vo_panscan_y = 0;
+ float vo_panscan_amount = 0;
+ 
+ #include "video_out.h"
+ 
+-float monitor_aspect=4.0/3.0;
++float monitor_aspect=-1.0f;
+ extern float movie_aspect;
+ 
+ static struct {
+@@ -47,11 +50,24 @@
+   aspdat.preh = preh;
+ }
+ 
++static void init_monitor_aspect( void )
++{
++ if (monitor_aspect != -1.0f) return;
++ if (vo_physical_width == 0 || vo_physical_height == 0) {
++  // if there's no other indication, assume square pixels
++  vo_physical_width = aspdat.scrw;
++  vo_physical_height = aspdat.scrh;
++ }
++ mp_msg(MSGT_VO,MSGL_V,"\naspect: monitor aspect detected %d:%d\n", vo_physical_width, vo_physical_height);
++ monitor_aspect = 1.0f * vo_physical_width / vo_physical_height;
++}
++
+ void aspect_save_screenres(int scrw, int scrh){
+ #ifdef ASPECT_DEBUG
+   printf("aspect_save_screenres %dx%d \n",scrw,scrh);
+ #endif
+   aspdat.scrw = scrw;
+   aspdat.scrh = scrh;
++  init_monitor_aspect(); // now is a good time
+ }
+ 
+ /* aspect is called with the source resolution and the
+diff -Nur MPlayer.orig/libvo/aspect.h MPlayer/libvo/aspect.h
+--- MPlayer.orig/libvo/aspect.h	2002-06-05 21:35:54.000000000 +0200
++++ MPlayer/libvo/aspect.h	2005-08-24 00:08:35.000000000 +0200
+@@ -2,6 +2,9 @@
+ #define __ASPECT_H
+ /* Stuff for correct aspect scaling. */
+ 
++extern int vo_physical_width;
++extern int vo_physical_height;
++
+ extern int vo_panscan_x;
+ extern int vo_panscan_y;
+ extern float vo_panscan_amount;
+diff -Nur MPlayer.orig/libvo/x11_common.c MPlayer/libvo/x11_common.c
+--- MPlayer.orig/libvo/x11_common.c	2005-08-23 23:07:07.000000000 +0200
++++ MPlayer/libvo/x11_common.c	2005-08-23 23:42:31.000000000 +0200
+@@ -464,6 +464,12 @@
+         if (!vo_screenheight)
+             vo_screenheight = DisplayHeight(mDisplay, mScreen);
+     }
++    if (vo_physical_width == 0) {
++	vo_physical_width = DisplayWidthMM(mDisplay, mScreen);
++    }
++    if (vo_physical_height == 0) {
++	vo_physical_height = DisplayHeightMM(mDisplay, mScreen);
++    }
+     // get color depth (from root window, or the best visual):
+     XGetWindowAttributes(mDisplay, mRootWin, &attribs);
+     depth = attribs.depth;

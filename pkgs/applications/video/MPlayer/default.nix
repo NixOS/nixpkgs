@@ -1,7 +1,8 @@
 { alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
-, xineramaSupport ? false
+, xineramaSupport ? false, randrSupport ? false
 , stdenv, fetchurl, x11, freetype, zlib
-, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null, libXinerama ? null
+, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null
+, libXinerama ? null, libXrandr ? null
 }:
 
 assert alsaSupport -> alsa != null;
@@ -9,6 +10,7 @@ assert xvSupport -> libXv != null;
 assert theoraSupport -> libtheora != null;
 assert cacaSupport -> libcaca != null;
 assert xineramaSupport -> libXinerama != null;
+assert randrSupport -> libXrandr != null;
 
 stdenv.mkDerivation {
   name = "MPlayer-1.0pre7";
@@ -34,7 +36,13 @@ stdenv.mkDerivation {
     (if theoraSupport then libtheora else null)
     (if cacaSupport then libcaca else null)
     (if xineramaSupport then libXinerama else null)
+    (if randrSupport then libXrandr else null)
   ];
 
   configureFlags = if cacaSupport then "--enable-caca" else "--disable-caca";
+
+  # These fix MPlayer's aspect ratio when run in a screen rotated with
+  # Xrandr.
+  # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
+  patches = [./mplayer-aspect.patch ./mplayer-pivot.patch];
 }

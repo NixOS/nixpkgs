@@ -262,6 +262,11 @@ rec {
     inherit fetchurl stdenv jdk swt;
   };
 
+  gtkgnutella = (import ../tools/networking/p2p/gtk-gnutella) {
+    inherit fetchurl stdenv pkgconfig libxml2;
+    inherit (gtkLibs) glib gtk;
+  };
+
   dhcp = (import ../tools/networking/dhcp) {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
   };
@@ -2078,12 +2083,13 @@ rec {
 
   MPlayer = (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca;
-    inherit (xlibs) libXv libXinerama;
+    inherit (xlibs) libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
     theoraSupport = true;
     cacaSupport = true;
     xineramaSupport = true;
+    randrSupport = true;
   };
 
   MPlayerPlugin = (import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in) {
@@ -2399,9 +2405,11 @@ rec {
     inherit stdenv fetchurl aterm;
   };
 
+  /*
   toolbus = (import ../development/interpreters/toolbus) {
     inherit stdenv fetchurl atermjava toolbuslib aterm yacc flex;
   };
+  */
 
   joe = (import ../applications/editors/joe) {
     inherit stdenv fetchurl;
