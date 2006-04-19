@@ -2425,10 +2425,7 @@ rec {
     inherit stdenv fetchurl jdk;
   };
 
-/*
-  maven = (import ../misc/maven) {
-   inherit stdenv fetchurl jdk;
+  martyr = (import ../development/libraries/martyr) {
+	  inherit stdenv fetchurl apacheAnt;
   };
-*/
-    
 }
