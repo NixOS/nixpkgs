@@ -1077,6 +1077,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sqlite3 = (import ../development/libraries/sqlite-3.3) {
+      inherit stdenv fetchurl;
+  };
+
   lcms = (import ../development/libraries/lcms) {
     inherit fetchurl stdenv;
   };
@@ -1328,6 +1332,10 @@ rec {
 
   mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
     inherit fetchurl stdenv mysql libtool zlib unixODBC;
+  };
+
+  clearsilver = import ../development/libraries/clearsilver {
+    inherit fetchurl stdenv python;
   };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
@@ -2429,6 +2437,28 @@ rec {
   };
 
   martyr = (import ../development/libraries/martyr) {
-	  inherit stdenv fetchurl apacheAnt;
+    inherit stdenv fetchurl apacheAnt;
   };
+
+  trac = (import ../misc/trac) {
+    inherit stdenv fetchurl python clearsilver makeWrapper;
+
+    sqlite = sqlite3;
+    
+    subversion = (import ../applications/version-management/subversion-1.3.x) {
+      inherit fetchurl stdenv openssl db4 expat jdk swig zlib;
+      localServer = true;
+      httpServer = false;
+      sslSupport = true;
+      compressionSupport = true;
+      httpd = apacheHttpd;
+      pythonBindings = true; # Enable python bindings
+    };
+
+    pysqlite = (import ../development/libraries/pysqlite) {
+      inherit stdenv fetchurl python substituter;
+      sqlite = sqlite3;
+    };
+  };
+
 }
