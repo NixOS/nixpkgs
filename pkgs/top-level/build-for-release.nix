@@ -82,6 +82,7 @@ let {
     par2cmdline
     parted
     perl
+    php
     pkgconfig
     postgresql
     postgresql_jdbc
@@ -150,6 +151,7 @@ let {
   ;};
 
   powerpcDarwinPkgs = {inherit (allPackages {system = "powerpc-darwin";})
+    apacheHttpd
     aterm
     autoconf
     automake19x
@@ -162,6 +164,7 @@ let {
     libxslt
     maven
     nxml
+    php
     subversion
     tetex
     unzip

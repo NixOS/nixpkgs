@@ -874,8 +874,11 @@ rec {
     inherit fetchurl stdenv libsigsegv gettext;
   };
 
+  # FIXME: unixODBC needs patching on Darwin (see darwinports)
   php = (import ../development/interpreters/php) {
-    inherit stdenv fetchurl flex bison libxml2 apacheHttpd unixODBC;
+    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
+    unixODBC =
+      if stdenv.system == "powerpc-darwin" then null else unixODBC;
   };
 
   guile = (import ../development/interpreters/guile) {
