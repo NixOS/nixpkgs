@@ -1,5 +1,7 @@
 {stdenv, fetchurl, python, clearsilver, subversion, sqlite, pysqlite, makeWrapper}:
 
+assert stdenv.system == "i686-linux";
+
 stdenv.mkDerivation {
 	name = "trac-0.9.5";
 	src = fetchurl {
