@@ -1416,6 +1416,10 @@ rec {
     inherit (xlibs) libXtst;
   };
 
+  xalanj = import ../development/libraries/java/xalanj {
+    inherit stdenv fetchurl;
+  };
+
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
   uulib = import ../development/libraries/haskell/uulib {
