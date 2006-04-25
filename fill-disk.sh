@@ -15,7 +15,6 @@ storePaths=/mystorepaths
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
 modutils=@modutils@
-hotplug=@hotplug@
 mingetty=@mingetty@
 
 echo mounting special filesystems
@@ -356,15 +355,6 @@ ln -s @kernel@/lib/modules/$version/build $root/lib/modules/$version/build
 ln -s @kernel@/lib/modules/$version/kernel $root/lib/modules/$version/kernel
 cp @kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
 chmod 644 $root/lib/modules/$version/modules.*
-
-###
-### hotplug
-###
-
-echo "@hotplug@/sbin/hotplug" > $root/etc/sysconfig/hotplug
-ln -s @hotplug@/sbin/hotplug $root/sbin/hotplug
-ln -s @hotplug@/etc/hotplug $root/etc/hotplug
-ln -s @hotplug@/etc/hotplug.d $root/etc/hotplug.d
 
 ###
 ### init

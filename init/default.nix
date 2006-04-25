@@ -1,4 +1,4 @@
-{ stdenv, bash, coreutils, utillinux, e2fsprogs, nix, shadowutils, mingetty, grubWrapper, parted, module_init_tools, hotplug, dhcpWrapper}:
+{ stdenv, bash, coreutils, utillinux, e2fsprogs, nix, shadowutils, mingetty, grubWrapper, parted, module_init_tools, dhcpWrapper}:
 
 derivation {
   name = "init";

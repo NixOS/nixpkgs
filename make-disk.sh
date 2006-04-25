@@ -74,7 +74,6 @@ e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet
 modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX_CMD_PATH/nix-instantiate -))
 grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 mingettyWrapper=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX_CMD_PATH/nix-instantiate -))
-hotplug=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).hotplug' | $NIX_CMD_PATH/nix-instantiate -))
 udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_PATH/nix-instantiate -))
 dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX_CMD_PATH/nix-instantiate -))
 nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
@@ -136,7 +135,6 @@ cp -fa ${nixpkgs} ${archivesDir}
 #cp -fvau --parents ${Kernel} ${archivesDir}
 #cp -fvau --parents ${SysVinit} ${archivesDir}
 #cp -fvau --parents ${BootPath} ${archivesDir}
-#cp -fvau --parents ${hotplug} ${archivesDir}
 #cp -fvau --parents ${udev} ${archivesDir}
 #cp -fvau --parents ${dhcp} ${archivesDir}
 #cp -fvau --parents ${nano} ${archivesDir}
@@ -164,7 +162,6 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@modutils\@^$modutils^g" \
     -e "s^@grub\@^$grub^g" \
     -e "s^@kernel\@^$kernel^g" \
-    -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
     -e "s^@kudzu\@^$kudzu^g" \
@@ -186,7 +183,6 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@modutils\@^$modutils^g" \
     -e "s^@grub\@^$grub^g" \
     -e "s^@kernel\@^$kernel^g" \
-    -e "s^@hotplug\@^$hotplug^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
     -e "s^@gnutar\@^$gnutar^g" \
@@ -226,7 +222,6 @@ chmod u+x ${initdir}/ramdisk-login.sh
 #cp -fau --parents ${utilLinux} ${initdir}
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
-#cp -fau --parents ${hotplug} ${initdir}
 cp -fau --parents ${bash}/bin ${initdir}
 cp -fau --parents ${utilLinux}/bin ${initdir}
 chmod -R u+w ${initdir}
@@ -237,7 +232,6 @@ cp -fau --parents ${modutils}/bin ${initdir}
 chmod -R u+w ${initdir}
 echo modutils
 cp -fau --parents ${modutils}/sbin ${initdir}
-#cp -fau --parents ${hotplug} ${initdir}
 #cp -fau --parents ${kudzu} ${initdir}
 
 touch ${archivesDir}/NIXOS
