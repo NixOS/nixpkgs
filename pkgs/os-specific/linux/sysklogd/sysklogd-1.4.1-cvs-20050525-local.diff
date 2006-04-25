@@ -258,10 +258,10 @@ diff -ruN sysklogd-1.4.1/Makefile sysklogd-1.4.1.new/Makefile
 -	${INSTALL} -o ${MAN_OWNER} -g ${MAN_OWNER} -m 644 syslogd.8 ${MANDIR}/man8/syslogd.8
 -	${INSTALL} -o ${MAN_OWNER} -g ${MAN_OWNER} -m 644 syslog.conf.5 ${MANDIR}/man5/syslog.conf.5
 -	${INSTALL} -o ${MAN_OWNER} -g ${MAN_OWNER} -m 644 klogd.8 ${MANDIR}/man8/klogd.8
-+	${INSTALL} -o ${MAN_USER} -g ${MAN_GROUP} -m ${MAN_PERMS} sysklogd.8 ${MANDIR}/man8/sysklogd.8
-+	${INSTALL} -o ${MAN_USER} -g ${MAN_GROUP} -m ${MAN_PERMS} syslogd.8 ${MANDIR}/man8/syslogd.8
-+	${INSTALL} -o ${MAN_USER} -g ${MAN_GROUP} -m ${MAN_PERMS} syslog.conf.5 ${MANDIR}/man5/syslog.conf.5
-+	${INSTALL} -o ${MAN_USER} -g ${MAN_GROUP} -m ${MAN_PERMS} klogd.8 ${MANDIR}/man8/klogd.8
++	${INSTALL} -m ${MAN_PERMS} sysklogd.8 ${MANDIR}/man8/sysklogd.8
++	${INSTALL} -m ${MAN_PERMS} syslogd.8 ${MANDIR}/man8/syslogd.8
++	${INSTALL} -m ${MAN_PERMS} syslog.conf.5 ${MANDIR}/man5/syslog.conf.5
++	${INSTALL} -m ${MAN_PERMS} klogd.8 ${MANDIR}/man8/klogd.8
 diff -ruN sysklogd-1.4.1/module.h sysklogd-1.4.1.new/module.h
 --- sysklogd-1.4.1/module.h	1970-01-01 01:00:00.000000000 +0100
 +++ sysklogd-1.4.1.new/module.h	2006-03-14 16:22:13.000000000 +0100
