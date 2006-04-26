@@ -850,6 +850,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  spidermonkey = (import ../development/interpreters/spidermonkey) {
+    inherit fetchurl stdenv;
+  };
+
   lua4 = (import ../development/interpreters/lua-4) {
     inherit fetchurl stdenv;
   };
