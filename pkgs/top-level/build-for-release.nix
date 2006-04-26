@@ -95,6 +95,7 @@ let {
     rssglx
     screen
     sdf
+    spidermonkey
     strace
     strategoxt
     strategoxtUtils
@@ -165,6 +166,7 @@ let {
     maven
     nxml
     php
+    spidermonkey
     subversion
     tetex
     unzip
