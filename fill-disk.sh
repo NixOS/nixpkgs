@@ -287,8 +287,8 @@ tar cf - /nix/store | tar --directory=$root -xvf -
 echo registering valid paths...
 
 $NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
-$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/system/i686-linux.nix nix
-$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/system/i686-linux.nix coreutils
+$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
+$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
 
 echo setting init symlink...
 rm -f $root/init
