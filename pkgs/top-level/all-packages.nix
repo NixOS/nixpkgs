@@ -2034,7 +2034,9 @@ rec {
   };
 
   w3m = (import ../applications/networking/browsers/w3m) {
-    inherit fetchurl stdenv ncurses openssl boehmgc gettext;
+    inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib;
+    graphicsSupport = false;
+    inherit (gtkLibs1x) gdkpixbuf;
   };
 
   opera = import ../applications/networking/browsers/opera {

@@ -11,5 +11,6 @@ stdenv.mkDerivation {
     md5 = "05fcb68ceaa338614ab650c775efc2f2";
   };
 
-  buildInputs = [gtk libtiff libjpeg libpng];
+  buildInputs = [libtiff libjpeg libpng];
+  propagatedBuildInputs = [gtk];
 }
