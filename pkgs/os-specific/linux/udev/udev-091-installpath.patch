@@ -1,0 +1,12 @@
+diff -ruN udev-091/Makefile udev-091.new/Makefile
+--- udev-091/Makefile	2006-04-25 22:39:59.000000000 +0200
++++ udev-091.new/Makefile	2006-04-28 14:54:55.000000000 +0200
+@@ -104,7 +104,7 @@
+ mandir =	${prefix}/usr/share/man
+ configdir =	${etcdir}/udev
+ udevdir =	/dev
+-DESTDIR =
++DESTDIR = ${out}
+ 
+ INSTALL = /usr/bin/install -c
+ INSTALL_PROGRAM = ${INSTALL}

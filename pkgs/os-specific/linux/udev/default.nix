@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "udev-068";
+  name = "udev-091";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/udev-068.tar.bz2;
-    md5 = "fd9db7375dae81e8aa634414b5ede0d6";
+    url = http://www.us.kernel.org/pub/linux/utils/kernel/hotplug/udev-091.tar.bz2;
+    md5 = "4151022ea7b4dcfaa768c1b7bf2ab9e5";
   };
-  patches = [./udev-installpath.patch];
+  patches = [./udev-091-installpath.patch];
 }
