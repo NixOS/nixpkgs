@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, libXp}:
+{stdenv, fetchurl, x11, libXp, libXau}:
 
 stdenv.mkDerivation {
   name = "lesstif-0.94.4";
@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     md5 = "3096ca456c0bc299d895974d307c82d8";
   };
   buildInputs = [x11];
-  propagatedBuildInputs = [libXp];
+  propagatedBuildInputs = [libXp libXau];
 }

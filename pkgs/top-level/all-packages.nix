@@ -1627,7 +1627,7 @@ rec {
 
   lesstif = (import ../development/libraries/lesstif) {
     inherit fetchurl stdenv x11;
-    inherit (xlibs) libXp;
+    inherit (xlibs) libXp libXau;
   };
 
   t1lib = (import ../development/libraries/t1lib) {
