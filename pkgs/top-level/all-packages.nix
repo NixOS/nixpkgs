@@ -2399,6 +2399,11 @@ rec {
     bdb = db4;
   };
 
+  nixUnstable = (import ../misc/nix-unstable) {
+    inherit fetchurl stdenv aterm perl curl;
+    bdb = db4;
+  };
+
   cups = (import ../misc/cups) {
     inherit fetchurl stdenv;
   };
