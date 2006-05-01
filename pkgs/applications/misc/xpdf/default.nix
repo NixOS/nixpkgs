@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   configureFlags =
     [ "--enable-a4-paper" ] /* We obey ISO standards! */
     ++ (if enablePDFtoPPM then [
-      ("--with-freetype2-library=${freetype}/lib")
-      ("--with-freetype2-includes=${freetype}/include/freetype2")
+      "--with-freetype2-library=${freetype}/lib"
+      "--with-freetype2-includes=${freetype}/include/freetype2"
     ] else []);
 
 }
