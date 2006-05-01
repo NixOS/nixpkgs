@@ -3,10 +3,10 @@
 assert x11.buildClientLibs;
 
 stdenv.mkDerivation {
-  name = "pango-1.10.2";
+  name = "pango-1.10.4";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pango-1.10.2.tar.bz2;
-    md5 = "7302220d93ac17d2c44f356d852e81dc";
+    url = ftp://ftp.gtk.org/pub/gtk/v2.8/pango-1.10.4.tar.bz2;
+    md5 = "d7eeb0f995a93534be8e7c687b465a0c";
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [x11 glib cairo];

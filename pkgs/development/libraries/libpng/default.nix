@@ -3,10 +3,10 @@
 assert zlib != null;
 
 stdenv.mkDerivation {
-  name = "libpng-1.2.8";
+  name = "libpng-1.2.10";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libpng-1.2.8-config.tar.gz;
-    md5 = "e5a39003eed16103cbbd3b6a8bc6b1f9";
+    url = ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.2.10.tar.bz2;
+    md5 = "4f23eebd59ddd01a8f91ff8c823dd7d6";
   };
   propagatedBuildInputs = [zlib];
   inherit zlib;
