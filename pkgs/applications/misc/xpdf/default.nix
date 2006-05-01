@@ -8,7 +8,6 @@ assert useT1Lib -> t1lib != null;
 
 stdenv.mkDerivation {
   name = "xpdf-3.01";
-  builder = ./builder.sh;
 
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/xpdf-3.01.tar.gz;
@@ -18,7 +17,12 @@ stdenv.mkDerivation {
   buildInputs =
     (if enableGUI then [x11 motif] else []) ++
     (if useT1Lib then [t1lib] else []);
-  freetype = if enableGUI || enablePDFtoPPM then freetype else null;
     
-  configureFlags = "--enable-a4-paper"; /* We obey ISO standards! */
+  configureFlags =
+    [ "--enable-a4-paper" ] /* We obey ISO standards! */
+    ++ (if enablePDFtoPPM then [
+      ("--with-freetype2-library=${freetype}/lib")
+      ("--with-freetype2-includes=${freetype}/include/freetype2")
+    ] else []);
+
 }
