@@ -53,7 +53,8 @@ if test -z "$hash"; then
 fi
 
 # Create a Nix expression that does a fetchsvn.
-nixExpr=$(dirname $0)/../../top-level/all-packages.nix
+scriptDir=$(dirname $(readlink -f $0 2> /dev/null || echo $0))
+nixExpr=$scriptDir/../../top-level/all-packages.nix
 storeExpr=$( \
   echo "(import $nixExpr {}).fetchsvn {url=\"$url\"; rev=\"$rev\"; md5=\"$hash\";}" \
   | nix-instantiate -)
