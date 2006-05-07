@@ -1647,6 +1647,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gmime = import ../development/libraries/gmime {
+    inherit fetchurl stdenv pkgconfig zlib;
+    inherit (gtkLibs) glib;
+  };
+
   
   ### SERVERS
 
@@ -1957,7 +1962,8 @@ rec {
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
-    inherit fetchurl stdenv pkgconfig gnet libxml2 perl pcre;
+    inherit fetchurl stdenv pkgconfig gnet perl
+            pcre gmime gettext;
     inherit (gtkLibs) gtk;
     spellChecking = false;
   };
