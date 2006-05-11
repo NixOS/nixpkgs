@@ -66,6 +66,10 @@ rec {
     inherit stdenv subversion nix;
   };
 
+  fetchcvs = (import ../build-support/fetchcvs) {
+    inherit stdenv cvs nix;
+  };
+
   fetchdarcs = (import ../build-support/fetchdarcs) {
     inherit stdenv darcs nix;
   };

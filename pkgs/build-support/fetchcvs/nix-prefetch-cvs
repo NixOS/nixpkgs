@@ -1,0 +1,89 @@
+#! /bin/sh -e
+
+url=$1
+module=$2
+tag=$3
+hash=$4
+
+if test -z "$url"; then
+    echo "syntax: nix-prefetch-cvs URL MODULE [TAG [HASH]]" >&2
+    exit 1
+elif test -z "$module"; then
+    echo "syntax: nix-prefetch-cvs URL MODULE [TAG [HASH]]" >&2
+    exit 1
+fi
+
+# Use a restrictive umask to ensure that the output in the Nix store
+# is not group- or world-writable.  Nix 0.10 complains about this.
+umask 0022
+
+# Determine the hash, unless it was given.
+if test -z "$hash"; then
+
+    # !!! hacky; we should have a way to query the location of the store.
+    if storeDir=$(which nix-store); then
+        storeDir=$(dirname $(dirname "$storeDir"))/store
+    else
+        storeDir=/nix/store
+    fi
+
+    # !!! race? should be relatively safe, `svn export' barfs if $tmpPath exists.
+    cvsPath="cvs-checkout-tmp-$$"
+    tmpPath1=$storeDir/$cvsPath
+
+    # Test whether we have write permission in the store.  If not,
+    # fetch to /tmp and don't copy to the store.  This is a hack to
+    # make this script at least work somewhat in setuid installations.
+    if ! touch $tmpPath1 2> /dev/null; then
+        echo "(cannot write to the store, result won't be cached)" >&2
+        dummyMode=1
+        tmpPath1=/tmp/nix-prefetch-cvs-$$ # !!! security?
+    fi
+    rm -f $tmpPath1
+
+    # Perform the checkout.
+    if test -z "$tag"; then
+      rtag="-DNOW"
+    else
+      rtag="-r $tag"
+    fi
+    # CVS has a problem with absolute paths, so cd into the nix store
+    current=$(pwd)
+    cd $storeDir
+    cvs -f -d $url export $rtag -d $cvsPath $module >&2
+    # Change back to the original directory
+    cd $current
+
+    # Compute the hash.
+    hash=$(nix-hash $tmpPath1)
+    echo "hash is $hash" >&2
+
+    # Rename it so that the fetchcvs builder can find it.
+    if test "$dummyMode" != 1; then
+        tmpPath2=$storeDir/cvs-checkout-tmp-$hash
+        test -e $tmpPath2 || mv $tmpPath1 $tmpPath2 # !!! race
+    fi
+fi
+
+# Create a Nix expression that does a fetchcvs.
+nixExpr=$(dirname $0)/../../top-level/all-packages.nix
+storeExpr=$( \
+  echo "(import $nixExpr {}).fetchcvs {url=\"$url\"; module=\"$module\"; tag=\"$tag\"; md5=\"$hash\";}" \
+  | nix-instantiate -)
+
+# Realise it.
+finalPath=$(nix-store -r $storeExpr)
+
+echo "path is $finalPath" >&2
+
+if test -n "$tmpPath1" -o -n "$tmpPath2"; then
+    rm -rf $tmpPath1 $tmpPath2 || true
+fi
+
+echo "debug hash is $hash" >&2
+echo $hash
+
+if test -n "$PRINT_PATH"; then
+    echo "debug path is $finalPath" >&2
+    echo $finalPath
+fi
