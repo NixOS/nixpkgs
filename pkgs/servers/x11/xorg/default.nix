@@ -1912,8 +1912,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xf86-video-ati-X11R7.0-6.5.7.3.tar.bz2;
       md5 = "92525195a7a36f5ffbffcb4e6a564e50";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto glproto mesa ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto glproto mesa;};
     
   xf86videochips = (stdenv.mkDerivation {
     name = "xf86-video-chips-1.0.1.3";
@@ -1972,8 +1972,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xf86-video-glint-X11R7.0-1.0.1.3.tar.bz2;
       md5 = "f14c2f1696c05760207adcaac856e5e5";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto glproto];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto glproto;};
     
   xf86videoi128 = (stdenv.mkDerivation {
     name = "xf86-video-i128-1.1.0.5";
