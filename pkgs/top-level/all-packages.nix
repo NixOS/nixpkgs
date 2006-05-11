@@ -727,6 +727,7 @@ rec {
     (import ../development/compilers/abc/default.nix) {
       inherit stdenv fetchurl patches jre;
       apacheAnt = apacheAntBlackdown14;
+      apacheAntAbc = apacheAnt;
       javaCup = import ../development/libraries/java/cup {
         inherit stdenv fetchurl;
         jdk = blackdown;
@@ -847,7 +848,7 @@ rec {
   };
 
   ruby = (import ../development/interpreters/ruby) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv readline ncurses;
   };
 
   spidermonkey = (import ../development/interpreters/spidermonkey) {
