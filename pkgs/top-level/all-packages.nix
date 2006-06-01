@@ -202,6 +202,10 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  cabextract = import ../tools/archivers/cabextract {
+    inherit fetchurl stdenv;
+  };
+
   gnutarDiet = (import ../tools/archivers/gnutar-diet) {
     inherit fetchurl stdenv dietgcc;
   };
