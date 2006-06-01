@@ -43,15 +43,9 @@ rec {
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvNixPkgs = allPackages {
-    bootStdenv = stdenvNix;
-    noSysDirs = false;
-  };
-
 
   # Linux standard environment.
-  inherit (import ./linux {inherit allPackages;})
-    stdenvLinux stdenvLinuxPkgs;
+  inherit (import ./linux {inherit allPackages;}) stdenvLinux;
 
     
   # Darwin (Mac OS X) standard environment.  Very simple for now
@@ -59,11 +53,6 @@ rec {
   stdenvDarwin = (import ./darwin) {
     stdenv = stdenvInitial;
     inherit genericStdenv gccWrapper;
-  };
-
-  stdenvDarwinPkgs = allPackages {
-    bootStdenv = stdenvDarwin;
-    noSysDirs = false;
   };
 
 
@@ -75,9 +64,11 @@ rec {
     inherit genericStdenv gccWrapper;
   };
 
-  stdenvFreeBSDPkgs = allPackages {
-    bootStdenv = stdenvFreeBSD;
-    noSysDirs = false;
+
+  # Cygwin standard environment.
+  stdenvCygwin = (import ./cygwin) {
+    stdenv = stdenvInitial;
+    inherit genericStdenv gccWrapper;
   };
 
 
@@ -85,6 +76,7 @@ rec {
   stdenv =
     if system == "i686-linux" then stdenvLinux
     else if system == "i686-freebsd" then stdenvFreeBSD
+    else if system == "i686-cygwin" then stdenvCygwin
     else if system == "powerpc-darwin" then stdenvDarwin
     else stdenvNative;
 }
