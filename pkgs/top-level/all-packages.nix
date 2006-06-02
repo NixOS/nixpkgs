@@ -828,11 +828,17 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  visualcpp = import ../development/compilers/visual-c++ {
+    inherit fetchurl stdenv;
+  };
+
+
   ### DEVELOPMENT / DEBUGGERS
 
   #ltrace = (import ../development/debuggers/ltrace) {
   #  inherit fetchurl stdenv;
   #};
+
 
   ### DEVELOPMENT / INTERPRETERS
 
