@@ -829,7 +829,7 @@ rec {
   };
 
   visualcpp = import ../development/compilers/visual-c++ {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv cabextract;
   };
 
   win32hello = import ../development/compilers/visual-c++/test {
