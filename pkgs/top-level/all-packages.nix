@@ -837,7 +837,7 @@ rec {
   };
 
   win32hello = import ../development/compilers/visual-c++/test {
-    inherit fetchurl stdenv visualcpp;
+    inherit fetchurl stdenv visualcpp windowssdk;
   };
 
 
