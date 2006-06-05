@@ -832,6 +832,10 @@ rec {
     inherit fetchurl stdenv cabextract;
   };
 
+  windowssdk = import ../development/misc/windows-sdk {
+    inherit fetchurl stdenv cabextract;
+  };
+
   win32hello = import ../development/compilers/visual-c++/test {
     inherit fetchurl stdenv visualcpp;
   };
