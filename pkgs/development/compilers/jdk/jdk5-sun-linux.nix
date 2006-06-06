@@ -1,6 +1,6 @@
 /**
  * This Nix expression requires the user to download the jdk
- * distribution to /tmp. Please obtain jdk-1_5_0_06-linux-i586.bin
+ * distribution to /tmp. Please obtain jdk-1_5_0_07-linux-i586.bin
  * from java.sun.com by hand and place it in /tmp. Blame Sun, not me.
  *
  * Note that this is not necessary if someone has already pushed a
@@ -19,10 +19,10 @@ assert swingSupport -> libX11 != null && libXext != null;
 (stdenv.mkDerivation {
   name = "jdk-1.5.0";
   builder = ./builder.sh;
-  filename = "jdk-1_5_0_06";
-  dirname = "jdk1.5.0_06";
-  pathname = "/tmp/jdk-1_5_0_06-linux-i586.bin";
-  md5 = "3cdad4a383b93680f02f6f06198c2227";
+  filename = "jdk-1_5_0_07";
+  dirname = "jdk1.5.0_07";
+  pathname = "/tmp/jdk-1_5_0_07-linux-i586.bin";
+  md5 = "1325082c36b4adcb71bc5449ae4c68cf";
   buildInputs = [unzip];
   libraries =
     (if swingSupport then [libX11 libXext] else []);

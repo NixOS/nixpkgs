@@ -4,10 +4,10 @@ assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
   name    = "jre-1.5.0";
-  version = "jre1.5.0_06";
+  version = "jre1.5.0_07";
   builder = ./builder.sh;
   src = fetchurl {
-      url = "http://jdl.sun.com/webapps/download/AutoDL?BundleId=10336";
-      md5 = "e0a88dbec9bfe3195794bb652bfc6516";
+      url = "http://jdl.sun.com/webapps/download/AutoDL?BundleId=10542";
+      md5 = "e2ad1c9e47f3e34d1efae059b9e2a2d9";
     };
 }
