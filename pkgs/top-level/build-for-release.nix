@@ -22,7 +22,6 @@ let {
     bmp_plugin_musepack
     bsdiff
     bzip2
-    callgrind
     cksfv
     coreutils
     darcs
