@@ -173,9 +173,14 @@ let {
 #    flexnew
   ;};
 
+  cygwinPkgs = {inherit (allPackages {system = "i686-freebsd";})
+    aterm
+  ;};
+
   body = [
     i686LinuxPkgs
     i686FreeBSDPkgs
     powerpcDarwinPkgs
+    cygwinPkgs
   ];
 }
