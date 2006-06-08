@@ -172,7 +172,7 @@ let {
 #    flexnew
   ;};
 
-  cygwinPkgs = {inherit (allPackages {system = "i686-freebsd";})
+  cygwinPkgs = {inherit (allPackages {system = "i686-cygwin";})
     aterm
   ;};
 
