@@ -461,10 +461,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  callgrind = (import ../development/tools/misc/callgrind) {
-    inherit fetchurl stdenv which perl valgrind;
-  };
-
   kcachegrind = (import ../development/tools/misc/kcachegrind) {
     inherit fetchurl stdenv kdelibs zlib perl expat libpng libjpeg;
     inherit (xlibs) libX11 libXext libSM;
