@@ -13,7 +13,8 @@ tar xvf AdobeReader/ILINXR.TAR -C $out
 rm $out/Reader/intellinux/plug_ins/PPKLite.api
 
 if test -n "$fastStart"; then
-    rm $out/Reader/intellinux/plug_ins/*.api
+    echo "removing plugins..."
+    rm -v $(ls $out/Reader/intellinux/plug_ins/*.api | grep -v SearchFind)
 fi
 
 glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
