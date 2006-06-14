@@ -46,6 +46,10 @@ while (scalar @workset > 0) {
 	    my $fn2 = $1;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
 	    push @workset, $path . "/" . $fn2;
+	} elsif (/\\usepackage(\[.*\])?\{(.*)\}/) {
+	    my $fn2 = $2;
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+	    push @workset, $path . "/" . $fn2 . ".sty";
 	} elsif (/\\documentclass(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
