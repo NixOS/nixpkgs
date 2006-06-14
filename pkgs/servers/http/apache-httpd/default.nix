@@ -7,12 +7,12 @@ assert db4Support -> db4 != null;
 assert expat != null && perl != null;
 
 stdenv.mkDerivation {
-  name = "apache-httpd-2.2.0";
+  name = "apache-httpd-2.2.2";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://archive.apache.org/dist/httpd/httpd-2.2.0.tar.bz2;
-    md5 = "402b90a2e47205f94b3b1d91e1a8c459";
+    url = http://archive.apache.org/dist/httpd/httpd-2.2.2.tar.bz2;
+    md5 = "9c759a9744436de6a6aa2ddbc49d6e81";
   };
 
   inherit sslSupport db4Support;
