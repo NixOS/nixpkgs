@@ -139,13 +139,16 @@ let {
 
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     aterm
-    realCurl
+    autoconf
+    automake19x
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
+    libtool
     libxml2
     libxslt
     nxml
+    realCurl
     subversion
     unzip
   ;};
