@@ -88,7 +88,7 @@ let {
     python
     qcmm
     qt3
-    qtparted
+#    qtparted
     quake3demo
     readline
     rssglx
