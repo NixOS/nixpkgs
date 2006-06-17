@@ -124,8 +124,9 @@ rec {
   };
 
   qtparted = (import ../tools/misc/qtparted) {
-    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
+    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib;
     inherit (xlibs) libX11 libXext;
+    qt3 = qt3NoMySQL;
   };
 
   jdiskreport = (import ../tools/misc/jdiskreport) {
@@ -1168,6 +1169,12 @@ rec {
   pangoxsl = (import ../development/libraries/pangoxsl) {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib pango;
+  };
+
+  qt3NoMySQL = import ../development/libraries/qt-3 {
+    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql;
+    inherit (xlibs) libXft libXrender;
+    mysqlSupport = false;
   };
 
   qt3 = import ../development/libraries/qt-3 {
