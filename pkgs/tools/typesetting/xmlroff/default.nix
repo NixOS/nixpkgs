@@ -2,10 +2,11 @@
 , glib, pango, libgnomeprint, pangoxsl, gtk}:
 
 stdenv.mkDerivation {
-  name = "xmlroff-0.3.5";
+  #name = "xmlroff-0.3.5";
+  name = "xmlroff-0.3.98";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/xmlroff-0.3.5.tar.gz;
-    md5 = "4f03dffa0451c28e7c777f6ee1fa38da";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/xmlroff/xmlroff-0.3.98.tar.gz;
+    md5 = "6c1d05b6480e98870751bf9102ea68e2";
   };
 
   buildInputs = [
@@ -19,4 +20,8 @@ stdenv.mkDerivation {
     gtk
     popt
   ];
+
+  configureFlags = "--disable-pangoxsl";
+
+  patches = [./xmlroff.patch];
 }
