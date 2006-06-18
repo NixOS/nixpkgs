@@ -242,7 +242,7 @@ rec {
   };
 
   wget = (import ../tools/networking/wget) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gettext;
   };
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
