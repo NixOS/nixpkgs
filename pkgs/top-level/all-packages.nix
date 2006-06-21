@@ -973,6 +973,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  coredumper = (import ../development/libraries/coredumper) {
+    inherit fetchurl stdenv;
+  };
+
   glibc = (import ../development/libraries/glibc) {
     inherit fetchurl stdenv kernelHeaders;
     installLocales = true;
