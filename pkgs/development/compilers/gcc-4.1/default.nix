@@ -6,14 +6,14 @@
 assert langC;
 
 stdenv.mkDerivation {
-  name = "gcc-4.1.0";
+  name = "gcc-4.1.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.1.0/gcc-4.1.0.tar.bz2;
-    md5 = "88785071f29ed0e0b6b61057a1079442";
+    url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.1.1/gcc-4.1.1.tar.bz2;
+    md5 = "ad9f97a4d04982ccf4fd67cb464879f3";
   };
-  # !!! apply only if noSysDirs is set
-  patches = [./no-sys-dirs.patch];
-  #patches = [./no-sys-dirs.patch ./gcc-4.0.2-cxx.patch];
+  patches =
+    [./pass-cxxcpp.patch]
+    ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
   inherit noSysDirs langC langCC langF77 profiledCompiler;
 }

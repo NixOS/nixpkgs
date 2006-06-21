@@ -534,7 +534,7 @@ rec {
     m4 = gnum4;
   };
 
-  gcc = (import ../development/compilers/gcc-3.4) {
+  gcc = (import ../development/compilers/gcc-4.1) {
     inherit fetchurl stdenv noSysDirs;
     langCC = gccWithCC;
     profiledCompiler = gccWithProfiling;
@@ -563,6 +563,16 @@ rec {
     nativeTools = false;
     nativeGlibc = false;
     gcc = (import ../development/compilers/gcc-3.3) {
+      inherit fetchurl stdenv noSysDirs;
+    };
+    inherit (stdenv.gcc) binutils glibc;
+    inherit stdenv;
+  };
+
+  gcc34 = (import ../build-support/gcc-wrapper) {
+    nativeTools = false;
+    nativeGlibc = false;
+    gcc = (import ../development/compilers/gcc-3.4) {
       inherit fetchurl stdenv noSysDirs;
     };
     inherit (stdenv.gcc) binutils glibc;
