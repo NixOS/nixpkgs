@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "ncurses-5.4";
+  name = "ncurses-5.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ncurses-5.4.tar.gz;
-    md5 = "069c8880072060373290a4fefff43520";
+    url = http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.5.tar.gz;
+    md5 = "e73c1ac10b4bfc46db43b2ddfd6244ef";
   };
 }

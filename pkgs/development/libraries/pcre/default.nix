@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "pcre-6.4";
+  name = "pcre-6.6";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pcre-6.4.tar.bz2;
-    md5 = "c5c73e8767479e8a7751324b0aa32291";
+    url = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-6.6.tar.bz2;
+    md5 = "61067f730c46cf6bdd0f8efe3f4f51b6";
   };
 }
