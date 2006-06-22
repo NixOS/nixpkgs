@@ -1,0 +1,224 @@
+diff -rc aterm-1142707243.10633/aterm/aterm.c aterm/aterm/aterm.c
+*** aterm-1142707243.10633/aterm/aterm.c	2006-02-08 11:35:28.000000000 +0100
+--- aterm/aterm/aterm.c	2006-04-25 17:10:52.000000000 +0200
+***************
+*** 193,198 ****
+--- 193,199 ----
+    /* that have char == 2 bytes, and sizeof(header_type) == 2 */
+    assert(sizeof(header_type) == sizeof(ATerm *));
+    assert(sizeof(header_type) >= 4);
++   assert(sizeof(ATerm) == sizeof(MachineWord));
+  
+    /*}}}  */
+    /*{{{  Initialize buffer */
+diff -rc aterm-1142707243.10633/aterm/memory.c aterm/aterm/memory.c
+*** aterm-1142707243.10633/aterm/memory.c	2006-03-09 15:02:56.000000000 +0100
+--- aterm/aterm/memory.c	2006-04-25 18:22:00.000000000 +0200
+***************
+*** 119,130 ****
+                          hash_number(tmp,3)) 
+  */
+  
+  #define HASHNUMBER3(t)\
+! FINISH(COMBINE(START(((MachineWord*)t)[0]), ((MachineWord*)t)[2]))
+  
+  #define HASHNUMBER4(t)\
+! FINISH(COMBINE(COMBINE(START(((MachineWord*)t)[0]), \
+! 		       ((MachineWord*)t)[2]),((MachineWord*)t)[3]))
+  
+  #define HASHINT(val) \
+  FINISH(COMBINE(START( (AT_INT<<SHIFT_TYPE) ), val))
+--- 119,171 ----
+                          hash_number(tmp,3)) 
+  */
+  
++ /* The ATerm library use some heavy aliasing.  For instance, the
++    various ATermXXX structures are referenced through MachineWord
++    arrays.  This is not generally allowed by the C standard --- see
++    C99, section 6.5, clause 7.  In particular, this means that you
++    cannot assign something through an ATermXXX pointer, e.g.,
++ 
++      protoAppl->header = header;
++ 
++    and then read it through a MachineWord*, e.g.,
++ 
++      hnr = hash_number((ATerm) protoAppl, 2);
++ 
++    (hash_number walks over the term by casting it to a MachineWord*).
++ 
++    However, the same clause of the C standard also specifies that you
++    *can* read the memory location through a union type that contains
++    both the original type (e.g. ATermAppl) and the type used to read
++    the memory location (e.g. MachineWord).  That's what we do
++    below: we have a union of all the types that occur in the various
++    ATerm types.  We then read the "w" element of the union.  The
++    compiler is not allowed to assume absence of aliasing with the
++    other types in the union.
++ 
++    A better solution would be to hash the term through a character
++    pointer (since *any* memory location can be legally read as a
++    character), but I'm too lazy right now.  Performance might also
++    suffer if we do that. */
++ 
++ typedef union 
++ {
++     MachineWord w;
++     header_type header;
++     ATerm term;
++     ATermList list;
++     int i;
++     double d;
++     void* p;
++ } Aliaser;
++ 
++ #define GET_WORD(t, n) (((Aliaser*) (((MachineWord*) t) + n))->w)
++ 
+  #define HASHNUMBER3(t)\
+! FINISH(COMBINE(START(GET_WORD(t, 0)), GET_WORD(t, 2)))
+  
+  #define HASHNUMBER4(t)\
+! FINISH(COMBINE(COMBINE(START(GET_WORD(t, 0)), \
+! 		       GET_WORD(t, 2)), GET_WORD(t, 3)))
+  
+  #define HASHINT(val) \
+  FINISH(COMBINE(START( (AT_INT<<SHIFT_TYPE) ), val))
+***************
+*** 132,144 ****
+  
+  #endif /* HASHPEM */
+  
+! #define PROTO_APPL_ARGS ((ATerm *) (protoTerm + ARG_OFFSET))
+  
+  #define SET_PROTO_APPL_ARG(i, a) \
+!   (PROTO_APPL_ARGS[(i)] = (a))
+  
+  #define GET_PROTO_APPL_ARG(i) \
+!   (PROTO_APPL_ARGS[(i)])
+  
+  #define CHECK_TERM(t) \
+    assert((t) != NULL \
+--- 173,185 ----
+  
+  #endif /* HASHPEM */
+  
+! #define PROTO_APPL_ARGS (protoTerm + ARG_OFFSET)
+  
+  #define SET_PROTO_APPL_ARG(i, a) \
+!   (PROTO_APPL_ARGS[(i)] = (MachineWord) (a))
+  
+  #define GET_PROTO_APPL_ARG(i) \
+!   ((ATerm) PROTO_APPL_ARGS[(i)])
+  
+  #define CHECK_TERM(t) \
+    assert((t) != NULL \
+***************
+*** 323,336 ****
+  #else
+  static HashNumber hash_number(ATerm t, int size)
+  {
+-   MachineWord *words = (MachineWord *) t;
+    int i;
+    HashNumber hnr;
+  
+!   hnr = START(HIDE_AGE_MARK(words[0]));
+    
+    for (i=2; i<size; i++) {
+!     hnr = COMBINE(hnr, words[i]);
+    }
+  
+    return FINISH(hnr);
+--- 364,376 ----
+  #else
+  static HashNumber hash_number(ATerm t, int size)
+  {
+    int i;
+    HashNumber hnr;
+  
+!   hnr = START(HIDE_AGE_MARK(GET_WORD(t, 0)));
+    
+    for (i=2; i<size; i++) {
+!     hnr = COMBINE(hnr, GET_WORD(t, i));
+    }
+  
+    return FINISH(hnr);
+***************
+*** 338,351 ****
+  
+  static HashNumber hash_number_anno(ATerm t, int size, ATerm anno)
+  {
+-   MachineWord *words = (MachineWord *) t;
+    int i;
+    HashNumber hnr;
+  
+!   hnr = START(HIDE_AGE_MARK(words[0]));
+    
+    for (i=2; i<size; i++) {
+!     hnr = COMBINE(hnr, words[i]);
+    }
+    hnr = COMBINE(hnr, (MachineWord)anno);
+  
+--- 378,390 ----
+  
+  static HashNumber hash_number_anno(ATerm t, int size, ATerm anno)
+  {
+    int i;
+    HashNumber hnr;
+  
+!   hnr = START(HIDE_AGE_MARK(GET_WORD(t, 0)));
+    
+    for (i=2; i<size; i++) {
+!     hnr = COMBINE(hnr, GET_WORD(t, i));
+    }
+    hnr = COMBINE(hnr, (MachineWord)anno);
+  
+***************
+*** 1639,1645 ****
+    protoAppl->header = header;
+    CHECK_HEADER(protoAppl->header);
+  
+!   if (args != PROTO_APPL_ARGS) {
+      for (i=0; i<arity; i++) {
+        CHECK_TERM(args[i]);
+        SET_PROTO_APPL_ARG(i, args[i]);
+--- 1678,1684 ----
+    protoAppl->header = header;
+    CHECK_HEADER(protoAppl->header);
+  
+!   if (args != (ATerm *) PROTO_APPL_ARGS) {
+      for (i=0; i<arity; i++) {
+        CHECK_TERM(args[i]);
+        SET_PROTO_APPL_ARG(i, args[i]);
+***************
+*** 1680,1686 ****
+      hashtable[hnr] = cur;
+    }
+  
+!   if (args != PROTO_APPL_ARGS) {
+      for (i=0; i<arity; i++) {
+        protected_buffer[i] = NULL;
+      }
+--- 1719,1725 ----
+      hashtable[hnr] = cur;
+    }
+  
+!   if (args != (ATerm *) PROTO_APPL_ARGS) {
+      for (i=0; i<arity; i++) {
+        protected_buffer[i] = NULL;
+      }
+***************
+*** 2144,2150 ****
+    }
+    SET_PROTO_APPL_ARG(n, arg);
+  
+!   result = ATmakeApplArray(sym, PROTO_APPL_ARGS);
+    annos = AT_getAnnotations((ATerm)appl);
+    if (annos != NULL) {
+      result = (ATermAppl)AT_setAnnotations((ATerm)result, annos);
+--- 2183,2189 ----
+    }
+    SET_PROTO_APPL_ARG(n, arg);
+  
+!   result = ATmakeApplArray(sym, (ATerm *) PROTO_APPL_ARGS);
+    annos = AT_getAnnotations((ATerm)appl);
+    if (annos != NULL) {
+      result = (ATermAppl)AT_setAnnotations((ATerm)result, annos);
