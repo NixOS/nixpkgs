@@ -73,7 +73,7 @@ let {
     mktemp
     mono
     mysql
-    nix
+#    nix
     nxml
     octave
     openssl
