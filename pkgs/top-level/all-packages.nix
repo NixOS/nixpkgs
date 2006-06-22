@@ -497,6 +497,10 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  gnumake380 = import ../development/tools/build-managers/gnumake-3.80 {
+    inherit fetchurl stdenv;
+  };
+
   mk = (import ../development/tools/build-managers/mk) {
     inherit fetchurl stdenv;
   };
@@ -988,6 +992,7 @@ rec {
 
   sdf = (import ../development/tools/parsing/sdf) {
     inherit fetchurl stdenv aterm getopt pkgconfig;
+    make = gnumake380;
   };
 
   jikespg = (import ../development/tools/parsing/jikespg) {

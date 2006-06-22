@@ -1,4 +1,6 @@
-{stdenv, fetchurl, aterm, getopt, pkgconfig}:
+# Note: sdf2-bundle currently requires GNU make 3.80; remove explicit
+# dependency when this is fixed.
+{stdenv, fetchurl, aterm, getopt, pkgconfig, make}:
 
 stdenv.mkDerivation {
   name = "sdf2-bundle-2.3.3";
@@ -7,6 +9,6 @@ stdenv.mkDerivation {
     md5 = "62ecabe5fbb8bbe043ee18470107ef88";
   };
 
-  buildInputs = [aterm pkgconfig];
+  buildInputs = [aterm pkgconfig make];
   propagatedBuildInputs = [getopt];
 }

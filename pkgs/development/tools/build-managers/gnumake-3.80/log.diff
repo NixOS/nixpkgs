@@ -1,0 +1,113 @@
+diff -rc make-orig/job.c make-3.81/job.c
+*** make-orig/job.c	2006-03-20 04:03:04.000000000 +0100
+--- make-3.81/job.c	2006-06-21 17:31:52.000000000 +0200
+***************
+*** 1083,1089 ****
+       appear.  */
+  
+    message (0, (just_print_flag || (!(flags & COMMANDS_SILENT) && !silent_flag))
+! 	   ? "%s" : (char *) 0, p);
+  
+    /* Tell update_goal_chain that a command has been started on behalf of
+       this target.  It is important that this happens here and not in
+--- 1083,1089 ----
+       appear.  */
+  
+    message (0, (just_print_flag || (!(flags & COMMANDS_SILENT) && !silent_flag))
+! 	   ? "\e[3s\e[a%s\e[b" : (char *) 0, p);
+  
+    /* Tell update_goal_chain that a command has been started on behalf of
+       this target.  It is important that this happens here and not in
+diff -rc make-orig/main.c make-3.81/main.c
+*** make-orig/main.c	2006-03-20 03:36:37.000000000 +0100
+--- make-3.81/main.c	2006-06-21 17:48:43.000000000 +0200
+***************
+*** 886,891 ****
+--- 886,900 ----
+  }
+  
+  
++ static void closeNesting()
++ {
++   while (logNestingStdout--)
++     printf("\e[q");
++   while (logNestingStderr--)
++     fprintf(stderr, "\e[q");
++ }
++ 
++ 
+  #ifdef _AMIGA
+  int
+  main (int argc, char **argv)
+***************
+*** 931,936 ****
+--- 940,947 ----
+    atexit (close_stdout);
+  #endif
+  
++   atexit(closeNesting);
++ 
+    /* Needed for OS/2 */
+    initialize_main(&argc, &argv);
+  
+***************
+*** 3095,3100 ****
+--- 3106,3117 ----
+  
+    /* Use entire sentences to give the translators a fighting chance.  */
+  
++   if (entering)
++     {
++       printf("\e[p");
++       logNestingStdout++;
++     }
++   
+    if (makelevel == 0)
+      if (starting_directory == 0)
+        if (entering)
+***************
+*** 3124,3129 ****
+--- 3141,3155 ----
+          printf (_("%s[%u]: Leaving directory `%s'\n"),
+                  program, makelevel, starting_directory);
+  
++   if (!entering)
++     {
++       printf("\e[q");
++       logNestingStdout--;
++     }
++  
+    /* Flush stdout to be sure this comes before any stderr output.  */
+    fflush (stdout);
+  }
++ 
++ int logNestingStdout = 0;
++ int logNestingStderr = 0;
+diff -rc make-orig/make.h make-3.81/make.h
+*** make-orig/make.h	2006-02-16 00:54:43.000000000 +0100
+--- make-3.81/make.h	2006-06-21 17:39:35.000000000 +0200
+***************
+*** 609,611 ****
+--- 609,613 ----
+  #define ENULLLOOP(_v,_c)   do{ errno = 0; \
+                                 while (((_v)=_c)==0 && errno==EINTR); }while(0)
+  
++ extern int logNestingStdout;
++ extern int logNestingStderr;
+diff -rc make-orig/remake.c make-3.81/remake.c
+*** make-orig/remake.c	2006-03-20 03:36:37.000000000 +0100
+--- make-3.81/remake.c	2006-06-21 17:31:52.000000000 +0200
+***************
+*** 1120,1126 ****
+--- 1120,1130 ----
+        /* The normal case: start some commands.  */
+        if (!touch_flag || file->cmds->any_recurse)
+  	{
++           fprintf(stderr, "\e[pbuilding %s\n", file->name);
++           logNestingStderr++;
+  	  execute_file_commands (file);
++           fprintf(stderr, "\e[q");
++           logNestingStderr--;
+  	  return;
+  	}
+  
