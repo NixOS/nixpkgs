@@ -777,6 +777,7 @@ rec {
 
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl stdenv pkgconfig sdf aterm;
+    make = gnumake380;
   };
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {

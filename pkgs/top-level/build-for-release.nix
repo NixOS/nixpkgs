@@ -55,7 +55,7 @@ let {
     grub
     gzip
     hello
-    inkscape
+#    inkscape
     jakartaregexp
     jetty
     jikes
@@ -91,7 +91,7 @@ let {
 #    qtparted
     quake3demo
     readline
-    rssglx
+#    rssglx
     screen
     sdf
     spidermonkey
