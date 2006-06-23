@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "groff-1.19.1";
+  name = "groff-1.19.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/groff-1.19.1.tar.gz;
-    md5 = "57d155378640c12a80642664dfdfc892";
+    url = ftp://ftp.gnu.org/gnu/groff/groff-1.19.2.tar.gz;
+    md5 = "f7c9cf2e4b9967d3af167d7c9fadaae4";
   };
 }
