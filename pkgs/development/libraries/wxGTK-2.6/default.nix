@@ -7,11 +7,11 @@ assert gtk.libpng != null;
 assert gtk.libpng.zlib != null;
 
 stdenv.mkDerivation {
-  name = "wxGTK-2.6.2";
+  name = "wxGTK-2.6.3";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/wxGTK-2.6.2.tar.bz2;
-    md5 = "ba2afe7bd028062c5fff6d5ef3249c67";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/wxwindows/wxGTK-2.6.3.tar.bz2;
+    md5 = "3cd76c3c47913e52a3175dd47239c6ec";
   };
 
   buildInputs = [
