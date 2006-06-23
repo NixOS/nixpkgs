@@ -13,12 +13,12 @@ assert xineramaSupport -> libXinerama != null;
 assert randrSupport -> libXrandr != null;
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0pre7";
+  name = "MPlayer-1.0pre8";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/MPlayer-1.0pre7try2.tar.bz2;
-    md5 = "aaca4fd327176c1afb463f0f047ef6f4";
+    url = http://www4.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre8.tar.bz2;
+    md5 = "f82bb2bc51b6cd5e5dd96f88f6f98582";
   };
   fonts = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/font-arial-iso-8859-1.tar.bz2;
@@ -40,9 +40,4 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = if cacaSupport then "--enable-caca" else "--disable-caca";
-
-  # These fix MPlayer's aspect ratio when run in a screen rotated with
-  # Xrandr.
-  # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
-  patches = [./mplayer-aspect.patch ./mplayer-pivot.patch];
 }

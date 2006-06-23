@@ -1,8 +1,5 @@
 source $stdenv/setup
 
-# !!! Remove eventually.
-export _POSIX2_VERSION=199209
-
 postUnpack() {
     unpackFile $fonts
 }
