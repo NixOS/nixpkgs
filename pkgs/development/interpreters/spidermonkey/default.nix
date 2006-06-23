@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, gcc}:
 
 stdenv.mkDerivation {
   name = "spidermonkey-1.5";
@@ -8,4 +8,6 @@ stdenv.mkDerivation {
   };
 
   builder = ./builder.sh;
+
+  NIX_GCC = gcc; # remove when the "internal compiler error" in gcc 4.1.x is fixed
 }

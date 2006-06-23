@@ -885,6 +885,7 @@ rec {
 
   spidermonkey = (import ../development/interpreters/spidermonkey) {
     inherit fetchurl stdenv;
+    gcc = gcc34;
   };
 
   lua4 = (import ../development/interpreters/lua-4) {
