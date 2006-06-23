@@ -75,7 +75,7 @@ let {
     mysql
 #    nix
     nxml
-    octave
+#    octave
     openssl
     pan
     par2cmdline

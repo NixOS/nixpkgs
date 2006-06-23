@@ -44,6 +44,20 @@ rec {
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
 
+  # Override the compiler in stdenv for specific packages.
+  overrideGCC = stdenv: gcc: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
+    };
+
+  # Add some arbitrary packages to buildInputs for specific packages.
+  # Used to override packages in stenv like Make.  Should not be used
+  # for other dependencies.
+  overrideInStdenv = stdenv: pkgs: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args //
+        { buildInputs = (if args ? buildInputs then args.buildInputs else []) ++ pkgs; }
+      );
+    };
+
 
   ### STANDARD ENVIRONMENT
 
@@ -256,7 +270,8 @@ rec {
   };
 
   par2cmdline = (import ../tools/networking/par2cmdline) {
-    inherit fetchurl stdenv;
+    inherit fetchurl;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   cksfv = (import ../tools/networking/cksfv) {
@@ -757,7 +772,8 @@ rec {
   };
 
   ocaml3080 = (import ../development/compilers/ocaml/ocaml-3.08.0.nix) {
-    inherit fetchurl stdenv x11;
+    inherit fetchurl x11;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   qcmm = (import ../development/compilers/qcmm) {
@@ -776,8 +792,8 @@ rec {
   };
 
   strategoxt = (import ../development/compilers/strategoxt) {
-    inherit fetchurl stdenv pkgconfig sdf aterm;
-    make = gnumake380;
+    inherit fetchurl pkgconfig sdf aterm;
+    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
@@ -884,9 +900,10 @@ rec {
     inherit fetchurl stdenv readline ncurses;
   };
 
-  spidermonkey = (import ../development/interpreters/spidermonkey) {
-    inherit fetchurl stdenv;
-    gcc = gcc34;
+  spidermonkey = import ../development/interpreters/spidermonkey {
+    inherit fetchurl;
+    # remove when the "internal compiler error" in gcc 4.1.x is fixed
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   lua4 = (import ../development/interpreters/lua-4) {
@@ -993,8 +1010,10 @@ rec {
   };
 
   sdf = (import ../development/tools/parsing/sdf) {
-    inherit fetchurl stdenv aterm getopt pkgconfig;
-    make = gnumake380;
+    inherit fetchurl aterm getopt pkgconfig;
+    # Note: sdf2-bundle currently requires GNU make 3.80; remove
+    # explicit dependency when this is fixed.
+    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   jikespg = (import ../development/tools/parsing/jikespg) {
@@ -2138,9 +2157,10 @@ rec {
   };
 
   xmms = (import ../applications/audio/xmms) {
-    inherit fetchurl stdenv libogg libvorbis alsaLib;
+    inherit fetchurl libogg libvorbis alsaLib;
     inherit (gnome) esound;
     inherit (gtkLibs1x) glib gtk;
+    stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
   };
 
   bmp = import ../applications/audio/bmp {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, aterm, sdf, pkgconfig, make}:
+{stdenv, fetchurl, aterm, sdf, pkgconfig}:
 
 stdenv.mkDerivation {
 
@@ -11,5 +11,5 @@ stdenv.mkDerivation {
   };
 
   inherit aterm sdf;
-  buildInputs = [pkgconfig aterm sdf make];
+  buildInputs = [pkgconfig aterm sdf];
 }
