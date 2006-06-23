@@ -809,7 +809,7 @@ rec {
     aterm = aterm23x;
 
     strategoxt = (import ../development/compilers/strategoxt/strategoxt-0.14.nix) {
-      inherit fetchurl pkgconfig stdenv sdf;
+      inherit fetchurl pkgconfig sdf;
       aterm = aterm23x;
       stdenv = overrideInStdenv stdenv [gnumake380];
     };
