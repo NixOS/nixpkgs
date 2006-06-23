@@ -168,7 +168,7 @@ let {
     maven
     nxml
     php
-    spidermonkey
+#    spidermonkey
     subversion
     tetex
     unzip
