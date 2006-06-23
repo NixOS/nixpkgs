@@ -62,7 +62,7 @@ let {
     jing_tools
     jre
     kcachegrind
-    kernel
+#    kernel
     less
     libtool
     libxml2
