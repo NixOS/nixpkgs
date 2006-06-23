@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "inkscape-0.42.2";
+  name = "inkscape-0.43";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/inkscape-0.42.2.tar.bz2;
-    md5 = "a27172087018e850e92e97e52b5dad08";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/inkscape/inkscape-0.43.tar.bz2;
+    md5 = "97c606182f5e177eef70c1e8a55efc1f";
   };
 
   buildInputs = [
