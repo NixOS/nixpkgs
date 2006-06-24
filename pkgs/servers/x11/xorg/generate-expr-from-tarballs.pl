@@ -59,7 +59,6 @@ while (<>) {
 #    next unless $pkg eq "xorgserverX11R7";
 #    print "$pkg\n";
     $pkg =~ s/$version//g if $version ne "";
-    $pkgURLs{$pkg} = $tarball;
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;
@@ -72,6 +71,7 @@ while (<>) {
 	next;
     }
 
+    $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $pkgName;
 
     my $maybeHash = $pkgHashes{$pkg};

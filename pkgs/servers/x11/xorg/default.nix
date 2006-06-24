@@ -59,7 +59,7 @@ rec {
     name = "bitmap-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/bitmap-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/bitmap-X11R7.1-1.0.2.tar.bz2;
       md5 = "5a6228512bcce7d9fabe8fc2d66269bf";
     };
     buildInputs = [pkgconfig libXaw libX11 xbitmaps libXmu libXt ];
@@ -69,7 +69,7 @@ rec {
     name = "compositeproto-0.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/compositeproto-X11R7.0-0.2.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/compositeproto-X11R7.1-0.3.1.tar.bz2;
       md5 = "8e85c1e19a3169a42c5e860c36ec3e3b";
     };
     buildInputs = [pkgconfig ];
@@ -129,7 +129,7 @@ rec {
     name = "fixesproto-4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fixesproto-X11R7.0-3.0.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/fixesproto-X11R7.1-4.0.tar.bz2;
       md5 = "7ba155d9209fa7320fc387b338457bc6";
     };
     buildInputs = [pkgconfig ];
@@ -509,7 +509,7 @@ rec {
     name = "font-util-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/font-util-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/font-util-X11R7.1-1.0.1.tar.bz2;
       md5 = "69ba2181665e291ea09908a11136c21a";
     };
     buildInputs = [pkgconfig ];
@@ -549,7 +549,7 @@ rec {
     name = "fstobdf-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/fstobdf-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/fstobdf-X11R7.1-1.0.2.tar.bz2;
       md5 = "e6f102e10f0861c972a250e4fc57fdc2";
     };
     buildInputs = [pkgconfig libFS libX11 ];
@@ -559,7 +559,7 @@ rec {
     name = "gccmakedep-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/gccmakedep-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/gccmakedep-X11R7.1-1.0.2.tar.bz2;
       md5 = "519e8b1a9911bdddfa2ee46fb36b9774";
     };
     buildInputs = [pkgconfig ];
@@ -569,7 +569,7 @@ rec {
     name = "glproto-1.4.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/glproto-X11R7.0-1.4.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/glproto-X11R7.1-1.4.7.tar.bz2;
       md5 = "26744ff426147b2400b20e5c8b1eb735";
     };
     buildInputs = [pkgconfig ];
@@ -599,7 +599,7 @@ rec {
     name = "imake-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/imake-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/imake-X11R7.1-1.0.2.tar.bz2;
       md5 = "db33c65135ebc78e55c6009292c51b43";
     };
     buildInputs = [pkgconfig xproto ]; inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; 
@@ -659,7 +659,7 @@ rec {
     name = "libICE-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libICE-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libICE-X11R7.1-1.0.1.tar.bz2;
       md5 = "b372dcd527fd5b5058e77ee1b586afdf";
     };
     buildInputs = [pkgconfig xproto xtrans ];
@@ -669,7 +669,7 @@ rec {
     name = "libSM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libSM-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libSM-X11R7.1-1.0.1.tar.bz2;
       md5 = "dc10726abe267727fa5e3c552594e3c8";
     };
     buildInputs = [pkgconfig libICE xproto xtrans ];
@@ -699,7 +699,7 @@ rec {
     name = "libXScrnSaver-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXScrnSaver-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXScrnSaver-X11R7.1-1.1.0.tar.bz2;
       md5 = "e9a4ed1a499595003b75a34a5633e93e";
     };
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
@@ -719,7 +719,7 @@ rec {
     name = "libXau-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXau-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXau-X11R7.1-1.0.1.tar.bz2;
       md5 = "ae91d7080784df34b2fab7bff75cfb41";
     };
     buildInputs = [pkgconfig xproto ];
@@ -729,7 +729,7 @@ rec {
     name = "libXaw-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXaw-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXaw-X11R7.1-1.0.2.tar.bz2;
       md5 = "99f2e6a3ff8e5535710150aa30f5b3c3";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
@@ -739,7 +739,7 @@ rec {
     name = "libXcomposite-0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXcomposite-X11R7.0-0.2.2.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXcomposite-X11R7.1-0.3.tar.bz2;
       md5 = "f5229a7a38bc3d90380b7c18de10db5e";
     };
     buildInputs = [pkgconfig compositeproto ];
@@ -749,7 +749,7 @@ rec {
     name = "libXcursor-1.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXcursor-X11R7.0-1.1.5.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXcursor-X11R7.1-1.1.6.tar.bz2;
       md5 = "a69f8735a0c1fc1df260ca4feaf4be87";
     };
     buildInputs = [pkgconfig fixesproto libX11 libXfixes libXrender ];
@@ -759,7 +759,7 @@ rec {
     name = "libXdamage-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXdamage-X11R7.0-1.0.2.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXdamage-X11R7.1-1.0.3.tar.bz2;
       md5 = "e9cd3688623c9c5a86d7ddb62fd88d76";
     };
     buildInputs = [pkgconfig damageproto libX11 ];
@@ -769,7 +769,7 @@ rec {
     name = "libXdmcp-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXdmcp-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXdmcp-X11R7.1-1.0.1.tar.bz2;
       md5 = "d74e6e52d598544f92e2c185e114e656";
     };
     buildInputs = [pkgconfig xproto ];
@@ -779,7 +779,7 @@ rec {
     name = "libXevie-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXevie-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXevie-X11R7.1-1.0.1.tar.bz2;
       md5 = "0f0eb4c5441a26341d3b774bc9db35ba";
     };
     buildInputs = [pkgconfig evieext libX11 libXext xextproto xproto ];
@@ -789,7 +789,7 @@ rec {
     name = "libXext-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXext-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXext-X11R7.1-1.0.1.tar.bz2;
       md5 = "273845ee8a2d5e272bb3fa08810512f3";
     };
     buildInputs = [pkgconfig libX11 libXau xextproto xproto ];
@@ -799,7 +799,7 @@ rec {
     name = "libXfixes-4.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfixes-X11R7.0-3.0.1.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXfixes-X11R7.1-4.0.1.tar.bz2;
       md5 = "d6e91a6d366a72c090cae83da88af184";
     };
     buildInputs = [pkgconfig fixesproto libX11 xproto ];
@@ -809,7 +809,7 @@ rec {
     name = "libXfont-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfont-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXfont-X11R7.1-1.1.0.tar.bz2;
       md5 = "d25a2c90b882c5f2ff7f13a300aa18f4";
     };
     buildInputs = [pkgconfig fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ];
@@ -819,7 +819,7 @@ rec {
     name = "libXfontcache-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXfontcache-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXfontcache-X11R7.1-1.0.2.tar.bz2;
       md5 = "87299d9c6d74b3b68e60bb4b693f5d62";
     };
     buildInputs = [pkgconfig fontcacheproto libX11 libXext xextproto ];
@@ -839,7 +839,7 @@ rec {
     name = "libXi-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXi-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXi-X11R7.1-1.0.1.tar.bz2;
       md5 = "2e3782d25d5fa6c98cfcaf055556f5c7";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
@@ -859,7 +859,7 @@ rec {
     name = "libXmu-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXmu-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXmu-X11R7.1-1.0.1.tar.bz2;
       md5 = "d68cacb66ee72e43d0a6b1f8b2dc901a";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto libXt ];
@@ -879,7 +879,7 @@ rec {
     name = "libXpm-3.5.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXpm-X11R7.0-3.5.4.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXpm-X11R7.1-3.5.5.tar.bz2;
       md5 = "00d91c2bcc4d2941e08339f3989c2351";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
@@ -909,7 +909,7 @@ rec {
     name = "libXrandr-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXrandr-X11R7.0-1.1.0.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXrandr-X11R7.1-1.1.1.tar.bz2;
       md5 = "021e870b637f26be58b4b1acbdea19ca";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto libXrender ];
@@ -919,7 +919,7 @@ rec {
     name = "libXrender-0.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXrender-X11R7.0-0.9.0.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXrender-X11R7.1-0.9.1.tar.bz2;
       md5 = "54dbd492753409496066383a500a6e3e";
     };
     buildInputs = [pkgconfig renderproto libX11 ];
@@ -929,7 +929,7 @@ rec {
     name = "libXres-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXres-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXres-X11R7.1-1.0.1.tar.bz2;
       md5 = "60e5bc7d04f8995bd16febcd14c034ba";
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto ];
@@ -939,7 +939,7 @@ rec {
     name = "libXt-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXt-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXt-X11R7.1-1.0.2.tar.bz2;
       md5 = "a617ba32277ecffbb79be6bac49792d1";
     };
     buildInputs = [pkgconfig kbproto libSM libX11 xproto ];
@@ -969,7 +969,7 @@ rec {
     name = "libXvMC-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXvMC-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXvMC-X11R7.1-1.0.2.tar.bz2;
       md5 = "f5fe1d950925e5d70401570df3ca8ebb";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto libXv ];
@@ -979,7 +979,7 @@ rec {
     name = "libXxf86dga-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86dga-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXxf86dga-X11R7.1-1.0.1.tar.bz2;
       md5 = "8350ee065737f68072c4b59bc0c66df1";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
@@ -989,7 +989,7 @@ rec {
     name = "libXxf86misc-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86misc-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXxf86misc-X11R7.1-1.0.1.tar.bz2;
       md5 = "19ba9ff3f98d769a46525b0d8ce0d1e2";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
@@ -999,7 +999,7 @@ rec {
     name = "libXxf86vm-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libXxf86vm-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libXxf86vm-X11R7.1-1.0.1.tar.bz2;
       md5 = "3a5d54d0d2321c3d61c9cd9f3e2204a3";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
@@ -1009,7 +1009,7 @@ rec {
     name = "libdmx-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libdmx-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libdmx-X11R7.1-1.0.2.tar.bz2;
       md5 = "fbc2c1fa3ef95a69e1a816fbe81372f8";
     };
     buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
@@ -1019,7 +1019,7 @@ rec {
     name = "libfontenc-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libfontenc-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libfontenc-X11R7.1-1.0.2.tar.bz2;
       md5 = "d8ca3192867c98669bd7d6a41ed26b09";
     };
     buildInputs = [pkgconfig xproto zlib ];
@@ -1029,7 +1029,7 @@ rec {
     name = "liblbxutil-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/liblbxutil-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/liblbxutil-X11R7.1-1.0.1.tar.bz2;
       md5 = "6cef76df73f86482fa478ad8252d9055";
     };
     buildInputs = [pkgconfig xextproto xproto zlib ];
@@ -1049,7 +1049,7 @@ rec {
     name = "libxkbfile-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libxkbfile-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libxkbfile-X11R7.1-1.0.3.tar.bz2;
       md5 = "598ce15a8b8c9da26944ab4691df6984";
     };
     buildInputs = [pkgconfig kbproto libX11 ];
@@ -1059,7 +1059,7 @@ rec {
     name = "libxkbui-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/libxkbui-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/libxkbui-X11R7.1-1.0.2.tar.bz2;
       md5 = "e66230bc7f369e113112d1d282f7833d";
     };
     buildInputs = [pkgconfig libX11 libxkbfile libXt ];
@@ -1119,7 +1119,7 @@ rec {
     name = "mkfontdir-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/mkfontdir-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/mkfontdir-X11R7.1-1.0.2.tar.bz2;
       md5 = "384ee10787c455c520bcf031989de6f3";
     };
     buildInputs = [pkgconfig ];
@@ -1209,7 +1209,7 @@ rec {
     name = "rgb-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/rgb-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/rgb-X11R7.1-1.0.1.tar.bz2;
       md5 = "5b37afc6009cb754afb79847555d1aee";
     };
     buildInputs = [pkgconfig xproto ];
@@ -1219,7 +1219,7 @@ rec {
     name = "rstart-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/rstart-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/rstart-X11R7.1-1.0.2.tar.bz2;
       md5 = "5efe197e5ffc2ffb576714a8d6054f53";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -1239,7 +1239,7 @@ rec {
     name = "scrnsaverproto-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/scrnsaverproto-X11R7.0-1.0.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/scrnsaverproto-X11R7.1-1.1.0.tar.bz2;
       md5 = "567152e8b564c220f5eefa2e8464e550";
     };
     buildInputs = [pkgconfig ];
@@ -1259,7 +1259,7 @@ rec {
     name = "setxkbmap-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/setxkbmap-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/setxkbmap-X11R7.1-1.0.2.tar.bz2;
       md5 = "350180a6e4132a2b1262c7a15162c007";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
@@ -1279,7 +1279,7 @@ rec {
     name = "smproxy-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/smproxy-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/smproxy-X11R7.1-1.0.2.tar.bz2;
       md5 = "668d00f87fe1123bb5bf0b22dec3e32e";
     };
     buildInputs = [pkgconfig libXmu libXt ];
@@ -1309,7 +1309,7 @@ rec {
     name = "util-macros-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/util-macros-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/util-macros-X11R7.1-1.0.2.tar.bz2;
       md5 = "6ce5a6e85653afdd10c48b89b4bcc8aa";
     };
     buildInputs = [pkgconfig ];
@@ -1349,7 +1349,7 @@ rec {
     name = "x11perf-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/x11perf-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/x11perf-X11R7.1-1.4.1.tar.bz2;
       md5 = "23e2b7b53125d75820fa66db905a6a74";
     };
     buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
@@ -1409,7 +1409,7 @@ rec {
     name = "xclock-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xclock-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xclock-X11R7.1-1.0.2.tar.bz2;
       md5 = "349447c4398be41856f5cc8b67d5d6f4";
     };
     buildInputs = [pkgconfig libXaw libX11 libXft libxkbfile libXrender libXt ];
@@ -1439,7 +1439,7 @@ rec {
     name = "xconsole-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xconsole-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xconsole-X11R7.1-1.0.2.tar.bz2;
       md5 = "dd817a0fabe11b1b463492b37247b013";
     };
     buildInputs = [pkgconfig libXaw libXt ];
@@ -1449,7 +1449,7 @@ rec {
     name = "xcursorgen-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xcursorgen-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xcursorgen-X11R7.1-1.0.1.tar.bz2;
       md5 = "59d8d79fb950a55722c0089496fd18b1";
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
@@ -1489,7 +1489,7 @@ rec {
     name = "xdm-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdm-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xdm-X11R7.1-1.0.4.tar.bz2;
       md5 = "03ca4af9bd9c96ce5240c87cad4f7157";
     };
     buildInputs = [pkgconfig libXaw libX11 libXau libXdmcp libXext libXinerama libXmu libXpm libXt ];
@@ -1509,7 +1509,7 @@ rec {
     name = "xdriinfo-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xdriinfo-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xdriinfo-X11R7.1-1.0.1.tar.bz2;
       md5 = "36cc576a71bca1177ce793003ed78f32";
     };
     buildInputs = [pkgconfig glproto libX11 ];
@@ -1519,7 +1519,7 @@ rec {
     name = "xedit-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xedit-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xedit-X11R7.1-1.0.2.tar.bz2;
       md5 = "591f578f37e0654cc7d1bb0923191797";
     };
     buildInputs = [pkgconfig libXaw libXp libXprintUtil libXt ];
@@ -1599,7 +1599,7 @@ rec {
     name = "xf86-input-acecad-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-acecad-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-acecad-X11R7.1-1.1.0.tar.bz2;
       md5 = "7ed47ca8feb1fbbe305f3a6732181550";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1609,7 +1609,7 @@ rec {
     name = "xf86-input-aiptek-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-aiptek-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-aiptek-X11R7.1-1.0.1.tar.bz2;
       md5 = "e4ede86a636263c02530005ba958b65b";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1619,7 +1619,7 @@ rec {
     name = "xf86-input-calcomp-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-calcomp-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-calcomp-X11R7.1-1.1.0.tar.bz2;
       md5 = "40a557a54cc8ff58cbc4dc1abd37bb18";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1629,7 +1629,7 @@ rec {
     name = "xf86-input-citron-2.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-citron-X11R7.0-2.1.1.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-citron-X11R7.1-2.2.0.tar.bz2;
       md5 = "9d33544dc2beb9643cf329f5f4ab295b";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1639,7 +1639,7 @@ rec {
     name = "xf86-input-digitaledge-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-digitaledge-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-digitaledge-X11R7.1-1.1.0.tar.bz2;
       md5 = "e98d51c032e9324ab961a1353f65b6b2";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1649,7 +1649,7 @@ rec {
     name = "xf86-input-dmc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dmc-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-dmc-X11R7.1-1.1.0.tar.bz2;
       md5 = "d26f4abbb4c14a64cb5d19676edc1a58";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1659,7 +1659,7 @@ rec {
     name = "xf86-input-dynapro-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-dynapro-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-dynapro-X11R7.1-1.1.0.tar.bz2;
       md5 = "5121ef14108585c902753ae6e4b813f7";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1669,7 +1669,7 @@ rec {
     name = "xf86-input-elo2300-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-elo2300-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-elo2300-X11R7.1-1.1.0.tar.bz2;
       md5 = "7eeb9f2018aef32299c37ad2b3744b8d";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1689,7 +1689,7 @@ rec {
     name = "xf86-input-evdev-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-evdev-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-evdev-X11R7.1-1.1.2.tar.bz2;
       md5 = "6eba3b46ff77b99c44f93d2a08cc6935";
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
@@ -1699,7 +1699,7 @@ rec {
     name = "xf86-input-fpit-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-fpit-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-fpit-X11R7.1-1.1.0.tar.bz2;
       md5 = "223ef71e07b18e140ef227feef965ef2";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1709,7 +1709,7 @@ rec {
     name = "xf86-input-hyperpen-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-hyperpen-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-hyperpen-X11R7.1-1.1.0.tar.bz2;
       md5 = "8f1d96c97e48c794a61d2e81dcc1d06a";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1719,7 +1719,7 @@ rec {
     name = "xf86-input-jamstudio-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-jamstudio-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-jamstudio-X11R7.1-1.1.0.tar.bz2;
       md5 = "ca01cca63fa57600c1cf6b307bb9aa8c";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1729,7 +1729,7 @@ rec {
     name = "xf86-input-joystick-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-joystick-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-joystick-X11R7.1-1.1.0.tar.bz2;
       md5 = "6c702a255a1753bb10a3f219a3ac227a";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1739,7 +1739,7 @@ rec {
     name = "xf86-input-keyboard-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-keyboard-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-keyboard-X11R7.1-1.1.0.tar.bz2;
       md5 = "d81490c79db78b0c182f0b2a37e02756";
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver ];
@@ -1749,7 +1749,7 @@ rec {
     name = "xf86-input-magellan-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magellan-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-magellan-X11R7.1-1.1.0.tar.bz2;
       md5 = "9e4bde8bbc56e99f43164bbe79343360";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1759,7 +1759,7 @@ rec {
     name = "xf86-input-magictouch-1.0.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-magictouch-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-magictouch-X11R7.1-1.0.0.5.tar.bz2;
       md5 = "b3ed11fd57bf99ca515d72a16875cf68";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
@@ -1769,7 +1769,7 @@ rec {
     name = "xf86-input-microtouch-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-microtouch-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-microtouch-X11R7.1-1.1.0.tar.bz2;
       md5 = "cc96f2553c3c94dc963c07bc45a8ebb9";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1779,7 +1779,7 @@ rec {
     name = "xf86-input-mouse-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mouse-X11R7.0-1.0.3.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-mouse-X11R7.1-1.1.0.tar.bz2;
       md5 = "e427b9a1dfbed3d4c9de2bf01008fa60";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1789,7 +1789,7 @@ rec {
     name = "xf86-input-mutouch-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-mutouch-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-mutouch-X11R7.1-1.1.0.tar.bz2;
       md5 = "1f15391dc1b24cd400ccb9c370f568d0";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1799,7 +1799,7 @@ rec {
     name = "xf86-input-palmax-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-palmax-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-palmax-X11R7.1-1.1.0.tar.bz2;
       md5 = "7a1404b2ca2d84856d1e43efef69ccfe";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1809,7 +1809,7 @@ rec {
     name = "xf86-input-penmount-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-penmount-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-penmount-X11R7.1-1.1.0.tar.bz2;
       md5 = "6093b35d21ce93029b2b28d8b69a1444";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1819,7 +1819,7 @@ rec {
     name = "xf86-input-spaceorb-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-spaceorb-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-spaceorb-X11R7.1-1.1.0.tar.bz2;
       md5 = "62c381b6c56d41a75858c16dccd06394";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1829,7 +1829,7 @@ rec {
     name = "xf86-input-summa-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-summa-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-summa-X11R7.1-1.1.0.tar.bz2;
       md5 = "56765c5ee99f67802bca8a1134ad7fc1";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1839,7 +1839,7 @@ rec {
     name = "xf86-input-tek4957-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-tek4957-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-tek4957-X11R7.1-1.1.0.tar.bz2;
       md5 = "4b6b9d67d2a7056a417d26115612ecc7";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1849,7 +1849,7 @@ rec {
     name = "xf86-input-ur98-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-ur98-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-ur98-X11R7.1-1.1.0.tar.bz2;
       md5 = "7e8288f4f75bcba1e3aaf6ef68664b38";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1869,7 +1869,7 @@ rec {
     name = "xf86-input-void-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-input-void-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-input-void-X11R7.1-1.1.0.tar.bz2;
       md5 = "3683affae738de5ef130b6720bdfd6dd";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver ];
@@ -1899,7 +1899,7 @@ rec {
     name = "xf86-video-apm-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-apm-X11R7.0-1.0.1.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-apm-X11R7.1-1.1.1.tar.bz2;
       md5 = "a5320411ba92e637ffb233e9cbb80d13";
     };
     buildInputs = [pkgconfig randrproto renderproto videoproto xextproto xorgserver ];
@@ -1909,7 +1909,7 @@ rec {
     name = "xf86-video-ark-0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ark-X11R7.0-0.5.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-ark-X11R7.1-0.6.0.tar.bz2;
       md5 = "a5bed67815b9e650182806da301b488c";
     };
     buildInputs = [pkgconfig randrproto renderproto xextproto xorgserver ];
@@ -1929,7 +1929,7 @@ rec {
     name = "xf86-video-ati-6.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-ati-X11R7.0-6.5.7.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-ati-X11R7.1-6.6.0.tar.bz2;
       md5 = "c490366e7a663b4d05acb45713be45ee";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
@@ -1939,7 +1939,7 @@ rec {
     name = "xf86-video-chips-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-chips-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-chips-X11R7.1-1.1.1.tar.bz2;
       md5 = "cae9b1b131c1fc1b45ad1a9604fdeb66";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -1949,7 +1949,7 @@ rec {
     name = "xf86-video-cirrus-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cirrus-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-cirrus-X11R7.1-1.1.0.tar.bz2;
       md5 = "0af3af1dc5686e1f487815b231b3dc0a";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -1959,7 +1959,7 @@ rec {
     name = "xf86-video-cyrix-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-cyrix-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-cyrix-X11R7.1-1.1.0.tar.bz2;
       md5 = "adb1e6346efd8dfe5dcccd47d46869cb";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
@@ -1969,7 +1969,7 @@ rec {
     name = "xf86-video-dummy-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-dummy-X11R7.0-0.1.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-dummy-X11R7.1-0.2.0.tar.bz2;
       md5 = "d53836ac3d6f99920dc168fc22a09413";
     };
     buildInputs = [pkgconfig randrproto renderproto videoproto xf86dgaproto xorgserver ];
@@ -1979,7 +1979,7 @@ rec {
     name = "xf86-video-fbdev-0.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-fbdev-X11R7.0-0.1.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-fbdev-X11R7.1-0.3.0.tar.bz2;
       md5 = "c209e54fa8dcd3cd3342e84d261b02db";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
@@ -1989,7 +1989,7 @@ rec {
     name = "xf86-video-glint-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-glint-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-glint-X11R7.1-1.1.1.tar.bz2;
       md5 = "99073dcfdfa24df68879c7b01324e91a";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ];
@@ -1999,7 +1999,7 @@ rec {
     name = "xf86-video-i128-1.1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i128-X11R7.0-1.1.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-i128-X11R7.1-1.1.0.5.tar.bz2;
       md5 = "9252e33d14c8869d995bf67e445ffb4e";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2009,7 +2009,7 @@ rec {
     name = "xf86-video-i740-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i740-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-i740-X11R7.1-1.1.0.tar.bz2;
       md5 = "d20c7155266f67c588ecb5c4ada446d2";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2019,7 +2019,7 @@ rec {
     name = "xf86-video-i810-1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-i810-X11R7.0-1.4.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-i810-X11R7.1-1.6.0.tar.bz2;
       md5 = "fe6cc3eab247c7f0a1d152de0ee0fc80";
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm mesa randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
@@ -2029,7 +2029,7 @@ rec {
     name = "xf86-video-imstt-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-imstt-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-imstt-X11R7.1-1.1.0.tar.bz2;
       md5 = "4d76953e97ee760efb7627e7ac721dbf";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2039,7 +2039,7 @@ rec {
     name = "xf86-video-mga-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-mga-X11R7.0-1.2.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-mga-X11R7.1-1.4.1.tar.bz2;
       md5 = "b42cab6a2742bf90a205a991c281f4e2";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -2049,7 +2049,7 @@ rec {
     name = "xf86-video-neomagic-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-neomagic-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-neomagic-X11R7.1-1.1.1.tar.bz2;
       md5 = "7a0830940a0a8e99db1b5c1536b5d212";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -2059,7 +2059,7 @@ rec {
     name = "xf86-video-newport-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-newport-X11R7.0-0.1.4.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-newport-X11R7.1-0.2.0.tar.bz2;
       md5 = "6fa1d4b5f009999284374df1aba92b10";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
@@ -2069,7 +2069,7 @@ rec {
     name = "xf86-video-nsc-2.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nsc-X11R7.0-2.7.6.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-nsc-X11R7.1-2.8.1.tar.bz2;
       md5 = "47a9691971e267073f99dbacf27f0ffc";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -2079,7 +2079,7 @@ rec {
     name = "xf86-video-nv-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-nv-X11R7.0-1.0.1.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-nv-X11R7.1-1.1.1.tar.bz2;
       md5 = "b5c7144231652242ef8436ec8898138c";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2089,7 +2089,7 @@ rec {
     name = "xf86-video-rendition-4.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-rendition-X11R7.0-4.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-rendition-X11R7.1-4.1.0.tar.bz2;
       md5 = "6db91a9a10042424830c094ca870fe65";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
@@ -2099,7 +2099,7 @@ rec {
     name = "xf86-video-s3-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3-X11R7.0-0.3.5.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-s3-X11R7.1-0.4.1.tar.bz2;
       md5 = "3083c03884d44468e395d26a8d990c53";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2109,7 +2109,7 @@ rec {
     name = "xf86-video-s3virge-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-s3virge-X11R7.0-1.8.6.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-s3virge-X11R7.1-1.9.1.tar.bz2;
       md5 = "a7c74570041b2dc9346bfdd6d2a1c582";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2119,7 +2119,7 @@ rec {
     name = "xf86-video-savage-2.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-savage-X11R7.0-2.0.2.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-savage-X11R7.1-2.1.1.tar.bz2;
       md5 = "7df6bc61424a566325e48e5eb89a21e2";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -2129,7 +2129,7 @@ rec {
     name = "xf86-video-siliconmotion-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-siliconmotion-X11R7.0-1.3.1.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-siliconmotion-X11R7.1-1.4.1.tar.bz2;
       md5 = "559b7eeeb598b38afeb1542db6b48a0a";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2139,7 +2139,7 @@ rec {
     name = "xf86-video-sis-0.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sis-X11R7.0-0.8.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-sis-X11R7.1-0.9.1.tar.bz2;
       md5 = "f3ed22290e677381dd6236ef3bbfc7ac";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
@@ -2149,7 +2149,7 @@ rec {
     name = "xf86-video-sisusb-0.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sisusb-X11R7.0-0.7.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-sisusb-X11R7.1-0.8.1.tar.bz2;
       md5 = "11d580e2cc795b902b6f1a326962190b";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
@@ -2159,7 +2159,7 @@ rec {
     name = "xf86-video-sunbw2-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunbw2-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-sunbw2-X11R7.1-1.1.0.tar.bz2;
       md5 = "cae0b4709a2cc489182392094fe0bba3";
     };
     buildInputs = [pkgconfig randrproto xorgserver xproto ];
@@ -2169,7 +2169,7 @@ rec {
     name = "xf86-video-suncg14-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg14-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-suncg14-X11R7.1-1.1.0.tar.bz2;
       md5 = "3d95d9bf985bcf13c0d040a5136334a1";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2179,7 +2179,7 @@ rec {
     name = "xf86-video-suncg3-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg3-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-suncg3-X11R7.1-1.1.0.tar.bz2;
       md5 = "b719d82950a39e33903882c7b878415e";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2189,7 +2189,7 @@ rec {
     name = "xf86-video-suncg6-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suncg6-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-suncg6-X11R7.1-1.1.0.tar.bz2;
       md5 = "de3773fe837b633cd7841546358a90b0";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2199,7 +2199,7 @@ rec {
     name = "xf86-video-sunffb-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunffb-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-sunffb-X11R7.1-1.1.0.tar.bz2;
       md5 = "5bcb5b90c679a046d604d4f98d804d0d";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ];
@@ -2209,7 +2209,7 @@ rec {
     name = "xf86-video-sunleo-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-sunleo-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-sunleo-X11R7.1-1.1.0.tar.bz2;
       md5 = "821ddc77ada3cd3efb0a2a7bc70bf825";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2219,7 +2219,7 @@ rec {
     name = "xf86-video-suntcx-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-suntcx-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-suntcx-X11R7.1-1.1.0.tar.bz2;
       md5 = "fff6932624c93d8e208422913521bb4a";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -2229,7 +2229,7 @@ rec {
     name = "xf86-video-tdfx-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tdfx-X11R7.0-1.1.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-tdfx-X11R7.1-1.2.1.tar.bz2;
       md5 = "21500d264bccecde3122835bc39c7793";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -2239,7 +2239,7 @@ rec {
     name = "xf86-video-tga-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tga-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-tga-X11R7.1-1.1.0.tar.bz2;
       md5 = "0a9356394373e42b96e9500b51f6c45c";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -2249,7 +2249,7 @@ rec {
     name = "xf86-video-trident-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-trident-X11R7.0-1.0.1.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-trident-X11R7.1-1.2.1.tar.bz2;
       md5 = "d08a761111bbfef8d60131d0dc46d784";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -2259,7 +2259,7 @@ rec {
     name = "xf86-video-tseng-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-tseng-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-tseng-X11R7.1-1.1.0.tar.bz2;
       md5 = "62d58d822fdd32e67658bb86ab4e4390";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -2269,7 +2269,7 @@ rec {
     name = "xf86-video-v4l-0.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-v4l-X11R7.0-0.0.1.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-v4l-X11R7.1-0.1.1.tar.bz2;
       md5 = "fac76ca4a56380f0765d884e1b20a487";
     };
     buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
@@ -2279,7 +2279,7 @@ rec {
     name = "xf86-video-vesa-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vesa-X11R7.0-1.0.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-vesa-X11R7.1-1.2.0.tar.bz2;
       md5 = "16a20d6bf7ba858d511e96daaf43700c";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
@@ -2289,7 +2289,7 @@ rec {
     name = "xf86-video-vga-4.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vga-X11R7.0-4.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-vga-X11R7.1-4.1.0.tar.bz2;
       md5 = "b08b488f1b98d9152f5416091bc85055";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
@@ -2299,7 +2299,7 @@ rec {
     name = "xf86-video-via-0.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-via-X11R7.0-0.1.33.2.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-via-X11R7.1-0.2.1.tar.bz2;
       md5 = "f3ee13a05c62dd5298bd773dd0e5e951";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
@@ -2309,7 +2309,7 @@ rec {
     name = "xf86-video-vmware-10.13.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-vmware-X11R7.0-10.11.1.3.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-vmware-X11R7.1-10.13.0.tar.bz2;
       md5 = "ee3c0f3130a68c6833084db5deb441ca";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
@@ -2319,7 +2319,7 @@ rec {
     name = "xf86-video-voodoo-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xf86-video-voodoo-X11R7.0-1.0.0.5.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xf86-video-voodoo-X11R7.1-1.1.0.tar.bz2;
       md5 = "0c96fac2d303dd5981de78e704d3a067";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
@@ -2369,7 +2369,7 @@ rec {
     name = "xfs-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xfs-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xfs-X11R7.1-1.0.2.tar.bz2;
       md5 = "b1650e876b19741762b654dcdb98be47";
     };
     buildInputs = [pkgconfig libFS libXfont xtrans ];
@@ -2419,7 +2419,7 @@ rec {
     name = "xhost-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xhost-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xhost-X11R7.1-1.0.1.tar.bz2;
       md5 = "d12efb18c7e3025c5e6a6f63144c2145";
     };
     buildInputs = [pkgconfig libX11 libXau libXmu ];
@@ -2439,7 +2439,7 @@ rec {
     name = "xinit-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xinit-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xinit-X11R7.1-1.0.2.tar.bz2;
       md5 = "05ae7771d2245bf325ff30b13da92666";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -2449,7 +2449,7 @@ rec {
     name = "xkbcomp-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbcomp-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xkbcomp-X11R7.1-1.0.2.tar.bz2;
       md5 = "ed19a000dc13dae9ee45df8f26cebfc5";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
@@ -2469,7 +2469,7 @@ rec {
     name = "xkbevd-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xkbevd-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xkbevd-X11R7.1-1.0.2.tar.bz2;
       md5 = "af4fb106610b4ee3e36ddfdfe213f40f";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
@@ -2569,7 +2569,7 @@ rec {
     name = "xman-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xman-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xman-X11R7.1-1.0.2.tar.bz2;
       md5 = "89761d6047acca5fb6fb69eb2633afe9";
     };
     buildInputs = [pkgconfig libXaw libXp libXprintUtil libXt ];
@@ -2599,7 +2599,7 @@ rec {
     name = "xmodmap-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xmodmap-X11R7.0-1.0.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xmodmap-X11R7.1-1.0.1.tar.bz2;
       md5 = "0e11f78c00e27e775c4606c7e021cbf4";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -2619,7 +2619,7 @@ rec {
     name = "xorg-cf-files-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-cf-files-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xorg-cf-files-X11R7.1-1.0.2.tar.bz2;
       md5 = "073c1b4f0029249a05800900abd13077";
     };
     buildInputs = [pkgconfig ];
@@ -2629,7 +2629,7 @@ rec {
     name = "xorg-docs-1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-docs-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xorg-docs-X11R7.1-1.2.tar.bz2;
       md5 = "a7c05bf0897ba99fe01af528c0831183";
     };
     buildInputs = [pkgconfig ];
@@ -2639,7 +2639,7 @@ rec {
     name = "xorg-server-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-server-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xorg-server-X11R7.1-1.1.0.tar.bz2;
       md5 = "59bc20bcade0293042edc8a99aa2c832";
     };
     buildInputs = [pkgconfig bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto liblbxutil libdrm mesa perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ];
@@ -2649,7 +2649,7 @@ rec {
     name = "xorg-sgml-doctools-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xorg-sgml-doctools-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xorg-sgml-doctools-X11R7.1-1.1.tar.bz2;
       md5 = "2b820facb5658160a08ff4d9ca906ad5";
     };
     buildInputs = [pkgconfig ];
@@ -2709,7 +2709,7 @@ rec {
     name = "xproto-7.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xproto-X11R7.0-7.0.4.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xproto-X11R7.1-7.0.5.tar.bz2;
       md5 = "930c4c618a6523fec1095827d8117fed";
     };
     buildInputs = [pkgconfig ];
@@ -2729,7 +2729,7 @@ rec {
     name = "xrandr-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrandr-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xrandr-X11R7.1-1.0.2.tar.bz2;
       md5 = "e148e9ba69092127598c8d72debeae90";
     };
     buildInputs = [pkgconfig libX11 libXrandr libXrender ];
@@ -2739,7 +2739,7 @@ rec {
     name = "xrdb-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrdb-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xrdb-X11R7.1-1.0.2.tar.bz2;
       md5 = "2187897f97f0c818b27f8b8d33f31fa8";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
@@ -2749,7 +2749,7 @@ rec {
     name = "xrefresh-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xrefresh-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xrefresh-X11R7.1-1.0.2.tar.bz2;
       md5 = "16df4b8f3d844236dfd24efd88e8ea99";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -2769,7 +2769,7 @@ rec {
     name = "xset-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xset-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xset-X11R7.1-1.0.2.tar.bz2;
       md5 = "ba1e928daa7146e44e3c55db323884f4";
     };
     buildInputs = [pkgconfig libX11 libXext libXfontcache libXmu libXp libXxf86misc ];
@@ -2839,7 +2839,7 @@ rec {
     name = "xtrap-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xtrap-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xtrap-X11R7.1-1.0.2.tar.bz2;
       md5 = "435778018128f2b9402252c9022b44fa";
     };
     buildInputs = [pkgconfig libX11 libXTrap ];
@@ -2879,7 +2879,7 @@ rec {
     name = "xwininfo-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/xwininfo-X11R7.0-1.0.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/xwininfo-X11R7.1-1.0.2.tar.bz2;
       md5 = "6a80a6512b9286f15a5bc47d3a019bc9";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu ];
