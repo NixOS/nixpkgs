@@ -15,34 +15,35 @@ initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
-NIX_CMD_PATH=$(dirname $(which nix-store))
+# determine where we can find the Nix binaries
+NIX=$(dirname $(which nix-store))
 
-storeExpr=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -)))
-#$NIX_CMD_PATH/nix-push --copy $archivesDir $manifest $(nix-store -r $storeExpr) $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
+storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
+#$NIX/nix-push --copy $archivesDir $manifest $($NIX/nix-store -r $storeExpr) $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
 
 # Location of sysvinit?
-sysvinitPath=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX_CMD_PATH/nix-instantiate -))
+sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
 
 # Location of Nix boot scripts?
-bootPath=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -))
+bootPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
 
-nix=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
+nix=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
 
-syslinux=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX_CMD_PATH/nix-instantiate -))
+syslinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX/nix-instantiate -))
 
-kernel=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -))
+kernel=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
 
-#nixDeps=$($NIX_CMD_PATH/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))
+#nixDeps=$($NIX/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
 
-#nixDeps=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)))
-#echo $($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -))) >> $storePaths
-#$NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX_CMD_PATH/nix-instantiate -)) >> $storePaths
+#nixDeps=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -)))
+#echo $($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))) >> $storePaths
+#$NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -)) >> $storePaths
 
 for i in $storeExpr
 do
   echo $i >> $storePaths
   echo '' >> $storePaths
-  deps=$($NIX_CMD_PATH/nix-store -q --references $i)
+  deps=$($NIX/nix-store -q --references $i)
   pkgs=$(echo $deps | wc -w)
   echo $pkgs >> $storePaths
   for j in $deps
@@ -53,36 +54,39 @@ do
   tar -cf - $i | tar --directory=$archivesDir -xf -
 done
 
-utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX_CMD_PATH/nix-instantiate -))
-coreUtilsDiet=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
-e2fsProgs=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX_CMD_PATH/nix-instantiate -)))
-modUtils=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX_CMD_PATH/nix-instantiate -)))
-Grub=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -)))
-#gnuSed=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX_CMD_PATH/nix-instantiate -)))
-#gnuGrep=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -)))
-Kernel=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -)))
-SysVinit=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX_CMD_PATH/nix-instantiate -)))
-BootPath=$($NIX_CMD_PATH/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX_CMD_PATH/nix-instantiate -)))
+utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX/nix-instantiate -))
+coreUtilsDiet=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -)))
 
-bashGlibc=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX_CMD_PATH/nix-instantiate -))
-bash=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX_CMD_PATH/nix-instantiate -))
-coreutilsdiet=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX_CMD_PATH/nix-instantiate -))
-coreutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX_CMD_PATH/nix-instantiate -))
-findutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX_CMD_PATH/nix-instantiate -))
-utillinux=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX_CMD_PATH/nix-instantiate -))
-e2fsprogs=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX_CMD_PATH/nix-instantiate -))
-modutils=$($NIX_CMD_PATH/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX_CMD_PATH/nix-instantiate -))
-grub=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX_CMD_PATH/nix-instantiate -))
-mingettyWrapper=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX_CMD_PATH/nix-instantiate -))
-udev=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX_CMD_PATH/nix-instantiate -))
-dhcp=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX_CMD_PATH/nix-instantiate -))
-nano=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX_CMD_PATH/nix-instantiate -))
-gnugrep=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX_CMD_PATH/nix-instantiate -))
-which=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX_CMD_PATH/nix-instantiate -))
-gnutar=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX_CMD_PATH/nix-instantiate -))
-eject=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX_CMD_PATH/nix-instantiate -))
-sysklogd=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX_CMD_PATH/nix-instantiate -))
-#kudzu=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX_CMD_PATH/nix-instantiate -))
+## temporarily normal e2fsprogs until I can get it to build with dietlibc
+#e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -)))
+e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -)))
+modUtils=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -)))
+Grub=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -)))
+#gnuSed=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -)))
+#gnuGrep=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -)))
+Kernel=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)))
+SysVinit=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -)))
+BootPath=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -)))
+
+bashGlibc=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX/nix-instantiate -))
+bash=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -))
+coreutilsdiet=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -))
+coreutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-instantiate -))
+findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
+utillinux=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
+e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
+modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
+grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
+mingettyWrapper=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX/nix-instantiate -))
+udev=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX/nix-instantiate -))
+dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
+nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
+gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
+which=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX/nix-instantiate -))
+gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
+eject=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX/nix-instantiate -))
+sysklogd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX/nix-instantiate -))
+#kudzu=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX/nix-instantiate -))
 
 #(while read storepath; do
    #cp -fa --parents ${storepath} ${archivesDir}
@@ -92,7 +96,7 @@ sysklogd=$($NIX_CMD_PATH/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $N
 
 #for i in $utilLinux; do
 #  echo i $i
-#  deps=( $($NIX_CMD_PATH/nix-store -q --references $i) )
+#  deps=( $($NIX/nix-store -q --references $i) )
 #  echo length ${#deps[@]}
 #  if test "${#deps[@]}" = 0
 #  then
@@ -173,7 +177,7 @@ mv $fill_disk.tmp $fill_disk
 
 sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
-    -e "s^@NIX_CMD_PATH\@^$nix^g" \
+    -e "s^@NIX\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
     -e "s^@findutils\@^$findutils^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \

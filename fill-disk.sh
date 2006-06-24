@@ -237,7 +237,7 @@ export NIX_DATA_DIR=$root/nix/share
 export NIX_LOG_DIR=$root/nix/log/nix
 export NIX_STATE_DIR=$root/nix/var/nix
 export NIX_CONF_DIR=$root/nix/etc
-NIX_CMD_PATH=@nix@/bin
+NIX=@nix@/bin
 
 #echo bringing up networking...
 
@@ -246,10 +246,10 @@ NIX_CMD_PATH=@nix@/bin
 #echo "NIC: $nic"
 
 echo initialising Nix DB...
-$NIX_CMD_PATH/nix-store --init
+$NIX/nix-store --init
 
 echo verifying Nix DB...
-$NIX_CMD_PATH/nix-store --verify
+$NIX/nix-store --verify
 
 echo copying nixpkgs...
 #cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
@@ -259,7 +259,7 @@ make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
 
 #echo adding manifest
-#$NIX_CMD_PATH/nix-pull $manifest
+#$NIX/nix-pull $manifest
 
 echo adding packages
 
@@ -269,15 +269,15 @@ unset NIX_LOG_DIR
 unset NIX_STATE_DIR
 unset NIX_CONF_DIR
 
-storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).kernel' | $NIX_CMD_PATH/nix-instantiate -v -v -)
-#storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
-#storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX_CMD_PATH/nix-instantiate -v -v -)
-#$NIX_CMD_PATH/nix-store -r $storeExpr
+storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).kernel' | $NIX/nix-instantiate -v -v -)
+#storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).everything' | $NIX/nix-instantiate -v -v -)
+#storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -v -v -)
+#$NIX/nix-store -r $storeExpr
 echo $storeExpr > $root/tmp/storeExpr
 cp /cdrom/mystorepaths $root/tmp
-#storeExpr2=$($NIX_CMD_PATH/nix-store -qR $($NIX_CMD_PATH/nix-store -r $storeExpr))
+#storeExpr2=$($NIX/nix-store -qR $($NIX/nix-store -r $storeExpr))
 #echo storeExpr $storeExpr
-#echo $($NIX_CMD_PATH/nix-store -qR --include-outputs $storeExpr)
+#echo $($NIX/nix-store -qR --include-outputs $storeExpr)
 
 echo copying store
 
@@ -286,9 +286,9 @@ tar cf - /nix/store | tar --directory=$root -xvf -
 
 echo registering valid paths...
 
-$NIX_CMD_PATH/nix-store --register-validity < $root/tmp/mystorepaths
-$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
-$NIX_CMD_PATH/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
+$NIX/nix-store --register-validity < $root/tmp/mystorepaths
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
 
 echo setting init symlink...
 rm -f $root/init
