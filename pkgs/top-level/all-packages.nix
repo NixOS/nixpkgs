@@ -1837,7 +1837,7 @@ rec {
   };
 
   kernel = (import ../os-specific/linux/kernel) {
-    inherit fetchurl perl;
+    inherit fetchurl perl mktemp;
     stdenv = overrideGCC stdenv gcc34;
   };
 
