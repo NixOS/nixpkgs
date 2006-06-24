@@ -106,7 +106,7 @@ let {
     transformers
     uml
     unzip
-    uuagc
+#    uuagc
     uulib
     valgrind
     vim
