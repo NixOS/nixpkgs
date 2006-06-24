@@ -6,11 +6,11 @@ assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
-  name = "vlc-0.7.2";
+  name = "vlc-0.8.5";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/vlc-0.7.2.tar.gz;
-    md5 = "25dfcc804cb92f46c0b64ce1466515cc";
+    url = http://ftp.snt.utwente.nl/pub/software/videolan/vlc/0.8.5/vlc-0.8.5.tar.gz;
+    md5 = "90d19a5ba2ef2e03e6062fadc2e810d2";
   };
 
   buildInputs = [

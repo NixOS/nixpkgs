@@ -1,6 +1,9 @@
 source $stdenv/setup
 
 
+export HOME=$(pwd)/fake-home
+
+
 #add ghc to search path
 test -n "$ghc" && PATH=$PATH:$ghc/bin
 

@@ -110,7 +110,7 @@ let {
     uulib
     valgrind
     vim
-    vlc
+#    vlc
     wget
     xchm
     xineUI
@@ -118,7 +118,7 @@ let {
     xmms
     xorg_sys_opengl
     xsel
-    zapping
+#    zapping
     zdelta
     zip
 #    atermjava
