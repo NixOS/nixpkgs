@@ -1,5 +1,7 @@
 source $stdenv/setup
 
+export HOME=$(pwd)/fake-home
+
 makeWrapper() {
   wrapperBase="$1"
   wrapperName="$2"

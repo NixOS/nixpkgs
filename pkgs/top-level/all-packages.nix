@@ -805,9 +805,11 @@ rec {
   };
 
   transformers = (import ../development/compilers/transformers) {
-    inherit fetchurl stdenv pkgconfig sdf;
+    inherit fetchurl pkgconfig sdf;
     aterm = aterm23x;
 
+    stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
+    
     strategoxt = (import ../development/compilers/strategoxt/strategoxt-0.14.nix) {
       inherit fetchurl pkgconfig sdf;
       aterm = aterm23x;
