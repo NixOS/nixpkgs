@@ -1373,7 +1373,7 @@ rec {
   };
 
   chmlib = (import ../development/libraries/chmlib) {
-    inherit fetchurl stdenv libtool;
+    inherit fetchurl stdenv;
   };
 
   dclib = (import ../development/libraries/dclib) {
