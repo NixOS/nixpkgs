@@ -811,7 +811,7 @@ rec {
     strategoxt = (import ../development/compilers/strategoxt/strategoxt-0.14.nix) {
       inherit fetchurl pkgconfig sdf;
       aterm = aterm23x;
-      stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;;
+      stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
     };
 
     stlport =  (import ../development/libraries/stlport) {
