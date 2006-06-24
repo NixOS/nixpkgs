@@ -1,16 +1,17 @@
 #! /usr/bin/perl -w
 
 # Typical command to generate the list of tarballs:
-# curl http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/ | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$1\n"; }; }' > list
+
+# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' >list
+# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' >>list
+
 
 use strict;
 
-my $baseURL = "http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything";
-    
 my $tmpDir = "/tmp/xorg-unpack";
 
 my $version = "X11R7"; # will be removed from package names
-my $version2 = "X11R7.0"; # will be removed from package names
+my $version2 = "X11R7\\.\\d"; # will be removed from package names
 
 
 my %pkgURLs;
@@ -48,19 +49,34 @@ if (-e "cache") {
 
 while (<>) {
     chomp;
-    my $tarball = "$baseURL/$_";
-    print "DOING TARBALL $tarball\n\n";
+    my $tarball = "$_";
+    print "\nDOING TARBALL $tarball\n";
 
     $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
 #    next unless $pkg eq "xorgserverX11R7";
-    print "$pkg\n";
+#    print "$pkg\n";
     $pkg =~ s/$version//g if $version ne "";
     $pkgURLs{$pkg} = $tarball;
 
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball' $pkgHashes{$pkg}`;
+    $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
+    my $pkgName = $1;
+    $pkgName =~ s/-$version2//g if $version2 ne "";
+
+    print "  $pkg $pkgName\n";
+
+    if (defined $pkgNames{$pkg}) {
+	print "  SKIPPING\n";
+	next;
+    }
+
+    $pkgNames{$pkg} = $pkgName;
+
+    my $maybeHash = $pkgHashes{$pkg};
+    $maybeHash = "" unless defined $maybeHash;
+    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball' $maybeHash`;
     chomp $hash;
     chomp $path;
     if (!defined $pkgHashes{$pkg}) {
@@ -70,15 +86,10 @@ while (<>) {
     }
     $pkgHashes{$pkg} = $hash;
 
-    $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
-    my $pkgName = $1;
-    $pkgName =~ s/-$version2//g if $version2 ne "";
-    $pkgNames{$pkg} = $pkgName;
-
     print "\nunpacking $path\n";
     system "rm -rf '$tmpDir'";
     mkdir $tmpDir, 0700;
-    system "cd '$tmpDir' && tar xf '$path'";
+    system "cd '$tmpDir' && tar xfj '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
@@ -145,7 +156,7 @@ while (<>) {
 
 print "\nWRITE OUT\n";
 
-open OUT, ">default.nix";
+open OUT, ">default2.nix";
 
 print OUT "";
 print OUT <<EOF;
