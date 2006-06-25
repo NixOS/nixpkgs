@@ -570,10 +570,11 @@ rec {
     nativeGlibc = false;
     gcc = (import ../os-specific/linux/dietlibc-wrapper) {
       inherit stdenv dietlibc;
-      gcc = stdenv.gcc;
+      #gcc = stdenv.gcc;
+      gcc = gcc34;
     };
     #inherit (stdenv.gcc) binutils glibc;
-    inherit (stdenv.gcc) binutils;
+    inherit (gcc34) binutils;
     glibc = dietlibc;
     inherit stdenv;
   };
@@ -1837,8 +1838,7 @@ rec {
   };
 
   kernel = (import ../os-specific/linux/kernel) {
-    inherit fetchurl perl mktemp;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl perl mktemp stdenv;
   };
 
   #klibc = (import ../os-specific/linux/klibc) {
