@@ -58,8 +58,8 @@ utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX/nix
 coreUtilsDiet=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -)))
 
 ## temporarily normal e2fsprogs until I can get it to build with dietlibc
-#e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -)))
-e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -)))
+e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -)))
+#e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -)))
 modUtils=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -)))
 Grub=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -)))
 #gnuSed=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -)))
@@ -75,6 +75,7 @@ coreutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 utillinux=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
 e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
+#e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
 modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
 mingettyWrapper=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX/nix-instantiate -))

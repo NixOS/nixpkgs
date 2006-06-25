@@ -14,10 +14,11 @@ rec {
     udev dhcpWrapper man nano;
     nix = nixUnstable;};
 
-  init = (import ./init) {inherit stdenv bash bashStatic coreutilsDiet utillinux e2fsprogsDiet
+  init = (import ./init) {inherit stdenv bash bashStatic coreutilsDiet utillinux
     shadowutils mingettyWrapper grubWrapper parted module_init_tools
-    dhcpWrapper man nano eject;
-    nix = nixUnstable;};
+    dhcpWrapper man nano eject e2fsprogsDiet;
+    nix = nixUnstable;
+    };
 
   everything = [boot sysvinit sysklogd kernel xawtv];
 }
