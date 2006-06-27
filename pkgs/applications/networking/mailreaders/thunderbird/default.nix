@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5/source/thunderbird-1.5-source.tar.bz2;
-    md5 = "781c1cd1a01583d9b666d8c2fe4288e6";
+    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.4/source/thunderbird-1.5.0.4-source.tar.bz2;
+    sha1 = "492dd76460fc14543a70349263b64b0a2803bee9";
   };
 
   buildInputs = [
