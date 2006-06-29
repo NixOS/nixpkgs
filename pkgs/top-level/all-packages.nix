@@ -1312,8 +1312,8 @@ rec {
     inherit fetchurl stdenv libdvdcss;
   };
 
-  libdvdplay = (import ../development/libraries/libdvdplay) {
-    inherit fetchurl stdenv libdvdread;
+  libdvdnav = import ../development/libraries/libdvdnav {
+    inherit fetchurl stdenv;
   };
 
   mpeg2dec = (import ../development/libraries/mpeg2dec) {
@@ -2208,7 +2208,8 @@ rec {
 
   vlc = (import ../applications/video/vlc) {
     inherit fetchurl stdenv perl x11 wxGTK
-            zlib mpeg2dec a52dec libmad ffmpeg;
+            zlib mpeg2dec a52dec libmad ffmpeg
+            libdvdread libdvdnav libdvdcss;
     inherit (xlibs) libXv;
     alsa = alsaLib;
   };

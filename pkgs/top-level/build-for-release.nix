@@ -110,7 +110,7 @@ let {
     uulib
     valgrind
     vim
-#    vlc
+    vlc
     wget
     xchm
     xineUI

@@ -1,10 +1,10 @@
 { xvSupport ? true
 , stdenv, fetchurl, perl, x11, libXv, wxGTK
-#libdvdcss, libdvdplay
+, libdvdread, libdvdnav, libdvdcss
 , zlib, mpeg2dec, a52dec, libmad, ffmpeg, alsa
 }:
 
-#assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
+assert libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
@@ -16,10 +16,15 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    perl x11 wxGTK /* libdvdcss libdvdplay libdvdplay.libdvdread */
+    perl x11 wxGTK 
     zlib mpeg2dec a52dec libmad ffmpeg alsa
+    libdvdread # <- for "simple" DVD playback
+    libdvdnav libdvdcss # <- for DVD playback with menus
     (if xvSupport then libXv else null)
   ];
+
+  # Ensure that libdvdcss will be found without having to set LD_LIBRARY_PATH.
+  NIX_LDFLAGS = "-ldvdcss";
 
   configureFlags = "--enable-alsa";
 }
