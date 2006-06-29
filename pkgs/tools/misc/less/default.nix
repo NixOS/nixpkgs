@@ -1,12 +1,11 @@
 {stdenv, fetchurl, ncurses}:
  
 stdenv.mkDerivation {
-  name = "less-382";
+  name = "less-394";
  
-  builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/less-382.tar.gz;
-    md5 = "103fe4aef6297b93f0f73f38cc3b1bd7";
+    url = http://www.greenwoodsoftware.com/less/less-394.tar.gz;
+    md5 = "a9f072ccefa0d315b325f3e9cdbd4b97";
   };
  
   buildInputs = [ncurses];
