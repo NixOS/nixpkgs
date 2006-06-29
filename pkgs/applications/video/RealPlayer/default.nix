@@ -9,8 +9,8 @@ assert stdenv.system == "i686-linux";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://software-dl.real.com/01f1001c4b44265b0020/unix/RealPlayer10GOLD.bin;
-    md5 = "5f04938c28395ace2af822dd1bd57f5a";
+    url = http://software-dl.real.com/29f67eab92b913a6d805/unix/RealPlayer10GOLD.bin;
+    md5 = "3ef0d073320106d1bf75bdac8e4b250e";
   };
 
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;

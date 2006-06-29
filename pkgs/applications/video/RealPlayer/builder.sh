@@ -3,7 +3,7 @@ source $makeWrapper
 
 ensureDir $out/real
 
-skip=143209
+skip=143273 # Look for "BZh91" in the executable. 
 
 (dd bs=1 count=$skip of=/dev/null && dd) < $src | (cd $out/real && tar xvfj -)
 
