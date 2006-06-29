@@ -436,7 +436,7 @@ rec {
     m4 = gnum4;
   };
 
-  autoconf = autocon259;
+  autoconf = autoconf259;
 
   automake17x = (import ../development/tools/misc/automake/automake-1.7.x.nix) {
     inherit fetchurl stdenv perl autoconf;
