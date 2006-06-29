@@ -1,12 +1,11 @@
 {stdenv, fetchurl}:
    
 stdenv.mkDerivation {
-  name = "shadow-4.0.6";
+  name = "shadow-4.0.16";
    
-  builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/shadow-4.0.6.tar.bz2;
-    md5 = "3ca79b02c0aaa82128f4c32cb68ffe4f";
+    url = http://losser.labs.cs.uu.nl/~armijn/.nix/shadow-4.0.16.tar.bz2;
+    md5 = "1d91f7479143d1d705b94180c0d4874b";
   };
-   
+  configureFlags = "--with-selinux=no";
 }
