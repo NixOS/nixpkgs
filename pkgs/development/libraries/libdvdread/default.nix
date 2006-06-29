@@ -1,14 +1,11 @@
 {stdenv, fetchurl, libdvdcss}:
 
-assert libdvdcss != null;
-
 stdenv.mkDerivation {
-  name = "libdvdread-20030812";
-  builder = ./builder.sh;
+  name = "libdvdread-0.9.6";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libdvdread-20030812.tar.bz2;
-    md5 = "9d58beac7c2dfb98d00f4ed0ea3d7274";
+    url = http://www.dtek.chalmers.se/groups/dvd/dist/libdvdread-0.9.6.tar.gz;
+    md5 = "329401b84ad0b00aaccaad58f2fc393c";
   };
-  buildInputs = libdvdcss;
+  configureFlags = "--with-libdvdcss=${libdvdcss}";
   inherit libdvdcss;
 }

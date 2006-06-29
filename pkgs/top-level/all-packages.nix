@@ -426,10 +426,17 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  autoconf = (import ../development/tools/misc/autoconf) {
+  autoconf259 = (import ../development/tools/misc/autoconf) {
     inherit fetchurl stdenv perl;
     m4 = gnum4;
   };
+
+  autoconf260 = (import ../development/tools/misc/autoconf-2.60) {
+    inherit fetchurl stdenv perl;
+    m4 = gnum4;
+  };
+
+  autoconf = autocon259;
 
   automake17x = (import ../development/tools/misc/automake/automake-1.7.x.nix) {
     inherit fetchurl stdenv perl autoconf;
@@ -1321,6 +1328,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ffmpeg = import ../development/libraries/ffmpeg {
+    inherit fetchurl stdenv;
+  };
+
   zvbi = (import ../development/libraries/zvbi) {
     inherit fetchurl stdenv libpng x11;
     pngSupport = true;
@@ -2196,8 +2207,8 @@ rec {
   };
 
   vlc = (import ../applications/video/vlc) {
-    inherit fetchurl stdenv libdvdcss wxGTK libdvdplay
-            mpeg2dec a52dec libmad x11;
+    inherit fetchurl stdenv perl x11 wxGTK
+            zlib mpeg2dec a52dec libmad ffmpeg;
     inherit (xlibs) libXv;
     alsa = alsaLib;
   };

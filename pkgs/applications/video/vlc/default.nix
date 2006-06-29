@@ -1,23 +1,25 @@
 { xvSupport ? true
-, stdenv, fetchurl, x11, libXv, wxGTK, libdvdcss, libdvdplay
-, mpeg2dec, a52dec, libmad, alsa}:
+, stdenv, fetchurl, perl, x11, libXv, wxGTK
+#libdvdcss, libdvdplay
+, zlib, mpeg2dec, a52dec, libmad, ffmpeg, alsa
+}:
 
-assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
+#assert libdvdplay.libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
   name = "vlc-0.8.5";
 
   src = fetchurl {
-    url = http://ftp.snt.utwente.nl/pub/software/videolan/vlc/0.8.5/vlc-0.8.5.tar.gz;
-    md5 = "90d19a5ba2ef2e03e6062fadc2e810d2";
+    url = http://ftp.snt.utwente.nl/pub/software/videolan/vlc/0.8.5/vlc-0.8.5.tar.bz2;
+    md5 = "16bb5bf87ed94879a8eb7b0ff9b4f16f";
   };
 
   buildInputs = [
-    x11 wxGTK libdvdcss libdvdplay libdvdplay.libdvdread
-    mpeg2dec a52dec libmad alsa
+    perl x11 wxGTK /* libdvdcss libdvdplay libdvdplay.libdvdread */
+    zlib mpeg2dec a52dec libmad ffmpeg alsa
     (if xvSupport then libXv else null)
   ];
 
-  configureFlags = "--disable-ffmpeg --enable-alsa";
+  configureFlags = "--enable-alsa";
 }

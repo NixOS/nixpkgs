@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libdvdcss-1.2.8";
+  name = "libdvdcss-1.2.9";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libdvdcss-1.2.8.tar.gz;
-    md5 = "e35e4240b6ca0b66a0218065dffe6adb";
+    url = http://download.videolan.org/pub/libdvdcss/1.2.9/libdvdcss-1.2.9.tar.bz2;
+    md5 = "553383d898826c285afb2ee453b07868";
   };
 }
