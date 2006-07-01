@@ -27,7 +27,7 @@ let {
     darcs
     db4
     diffutils
-    docbook_ng
+    docbook5x
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt

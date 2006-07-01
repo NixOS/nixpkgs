@@ -1981,8 +1981,8 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
-  docbook_ng = (import ../data/sgml+xml/schemas/docbook-ng) {
-    inherit fetchurl stdenv unzip;
+  docbook5x = (import ../data/sgml+xml/schemas/xml-dtd/docbook-5.0) {
+    inherit fetchurl stdenv;
   };
 
   docbook_xml_ebnf_dtd = (import ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf) {
