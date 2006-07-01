@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "cracklib-2.8.5";
+  name = "cracklib-2.8.9";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/cracklib-2.8.5.tar.gz;
-    md5 = "68674db41be7569099b7aa287719b248";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/cracklib/cracklib-2.8.9.tar.gz;
+    md5 = "9a8c9eb26b48787c84024ac779f64bb2";
   };
   dicts = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/cracklib-words.gz;
