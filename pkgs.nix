@@ -5,7 +5,7 @@ rec {
     nettools nixUnstable subversion gcc wget which vim less screen openssh binutils
     strace shadowutils iputils gnumake curl gnused gnutar gnugrep gzip
     mingettyWrapper grubWrapper syslinux parted module_init_tools module_init_toolsStatic udev
-    dhcpWrapper man nano eject sysklogd kudzu xawtv;
+    dhcpWrapper man nano eject sysklogd kudzu xawtv mktemp;
 
   boot = (import ./boot) {inherit stdenv bash bashStatic coreutils findutilsWrapper
     utillinux utillinuxStatic sysvinit e2fsprogs nettools subversion gcc wget which vim

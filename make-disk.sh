@@ -3,7 +3,13 @@
 # deps is an array
 declare -a deps
 
-archivesDir=$(mktemp -d)
+# determine where we can find the Nix binaries
+NIX=$(dirname $(which nix-store))
+
+# make sure we use our own mktemp, because it is more pure
+mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instantiate -))
+archivesDir=$($mktemp/bin/mktemp -d)
+
 manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
@@ -15,8 +21,6 @@ initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
-# determine where we can find the Nix binaries
-NIX=$(dirname $(which nix-store))
 
 storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
 #$NIX/nix-push --copy $archivesDir $manifest $($NIX/nix-store -r $storeExpr) $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
