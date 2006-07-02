@@ -2492,8 +2492,9 @@ rec {
   #};
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv aterm perl curl;
+    inherit fetchurl aterm perl curl;
     bdb = db4;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   nixUnstable = (import ../misc/nix-unstable) {
