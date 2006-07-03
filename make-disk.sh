@@ -6,10 +6,13 @@ declare -a deps
 # determine where we can find the Nix binaries
 NIX=$(dirname $(which nix-store))
 
-# make sure we use our own mktemp, because it is more pure
+# make sure we use many of our own tools, because it is more pure
 mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instantiate -))
-archivesDir=$($mktemp/bin/mktemp -d)
 
+gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
+gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
+
+archivesDir=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
@@ -55,7 +58,7 @@ do
     echo $j >> $storePaths
   done
   echo copying from store: $i
-  tar -cf - $i | tar --directory=$archivesDir -xf -
+  $gnutar/bin/tar -cf - $i | $gnutar/bin/tar --directory=$archivesDir -xf -
 done
 
 utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX/nix-instantiate -))
@@ -88,7 +91,6 @@ dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-ins
 nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
 gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
 which=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX/nix-instantiate -))
-gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
 eject=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX/nix-instantiate -))
 sysklogd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX/nix-instantiate -))
 #kudzu=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX/nix-instantiate -))
@@ -153,11 +155,11 @@ echo copying scripts
 
 mkdir ${archivesDir}/scripts
 cp -fa * ${archivesDir}/scripts
-sed -e "s^@bash\@^$bash^g" \
+$gnused/bin/sed -e "s^@bash\@^$bash^g" \
     -e "s^@coreutils\@^$coreutilsdiet^g" \
     < $initscript > $initscript.tmp
 mv $initscript.tmp $initscript
-sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
+$gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@nix\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
@@ -180,7 +182,7 @@ sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     < $fill_disk > $fill_disk.tmp
 mv $fill_disk.tmp $fill_disk
 
-sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
+$gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@NIX\@^$nix^g" \
     -e "s^@bash\@^$bash^g" \
