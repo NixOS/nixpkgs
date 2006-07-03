@@ -11,6 +11,7 @@ mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instan
 
 gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
 gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
+cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
 
 archivesDir=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
@@ -257,9 +258,9 @@ rm -f ${initrd}
 
 echo creating ISO image
 
-mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin -c isolinux/boot.cat \
-                -no-emul-boot -boot-load-size 4 -boot-info-table \
-                ${archivesDir}
+$cdrtools/bin/mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin \
+                -c isolinux/boot.cat  -no-emul-boot -boot-load-size 4 \
+                -boot-info-table ${archivesDir}
 
 # cleanup, be diskspace friendly
 
