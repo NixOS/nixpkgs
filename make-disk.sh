@@ -12,6 +12,7 @@ mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instan
 gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
 gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
 cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
+coreutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-instantiate -))
 
 archivesDir=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
@@ -52,7 +53,7 @@ do
   echo $i >> $storePaths
   echo '' >> $storePaths
   deps=$($NIX/nix-store -q --references $i)
-  pkgs=$(echo $deps | wc -w)
+  pkgs=$(echo $deps | $coreutils/bin/wc -w)
   echo $pkgs >> $storePaths
   for j in $deps
   do
@@ -79,7 +80,6 @@ BootPath=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' |
 bashGlibc=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX/nix-instantiate -))
 bash=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -))
 coreutilsdiet=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -))
-coreutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-instantiate -))
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 utillinux=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
 e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
@@ -114,27 +114,27 @@ sysklogd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX/nix-in
 
 echo creating directories for bootimage
 
-mkdir ${initdir}
-mkdir ${initdir}/bin
-mkdir ${initdir}/cdrom
-mkdir ${initdir}/dev
-mkdir ${initdir}/etc
-mkdir ${initdir}/etc/sysconfig
-mkdir ${initdir}/installimage
-mkdir ${initdir}/modules
-mkdir ${initdir}/proc
-mkdir ${initdir}/sbin
-mkdir ${initdir}/sys
-mkdir ${initdir}/tmp
-mkdir -p ${initdir}/usr/bin
-mkdir -p ${initdir}/usr/sbin
-mkdir ${initdir}/var
-mkdir ${initdir}/var/run
+$coreutils/bin/mkdir ${initdir}
+$coreutils/bin/mkdir ${initdir}/bin
+$coreutils/bin/mkdir ${initdir}/cdrom
+$coreutils/bin/mkdir ${initdir}/dev
+$coreutils/bin/mkdir ${initdir}/etc
+$coreutils/bin/mkdir ${initdir}/etc/sysconfig
+$coreutils/bin/mkdir ${initdir}/installimage
+$coreutils/bin/mkdir ${initdir}/modules
+$coreutils/bin/mkdir ${initdir}/proc
+$coreutils/bin/mkdir ${initdir}/sbin
+$coreutils/bin/mkdir ${initdir}/sys
+$coreutils/bin/mkdir ${initdir}/tmp
+$coreutils/bin/mkdir -p ${initdir}/usr/bin
+$coreutils/bin/mkdir -p ${initdir}/usr/sbin
+$coreutils/bin/mkdir ${initdir}/var
+$coreutils/bin/mkdir ${initdir}/var/run
 
 echo copying nixpkgs
 
 #svn export ${nixpkgs} ${archivesDir}/pkgs
-cp -fa ${nixpkgs} ${archivesDir}
+$coreutils/bin/cp -fa ${nixpkgs} ${archivesDir}
 #tar cf $archivesDir
 
 #echo copying packages from store
@@ -154,12 +154,12 @@ cp -fa ${nixpkgs} ${archivesDir}
 
 echo copying scripts
 
-mkdir ${archivesDir}/scripts
-cp -fa * ${archivesDir}/scripts
+$coreutils/bin/mkdir ${archivesDir}/scripts
+$coreutils/bin/cp -fa * ${archivesDir}/scripts
 $gnused/bin/sed -e "s^@bash\@^$bash^g" \
     -e "s^@coreutils\@^$coreutilsdiet^g" \
     < $initscript > $initscript.tmp
-mv $initscript.tmp $initscript
+$coreutils/bin/mv $initscript.tmp $initscript
 $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
     -e "s^@nix\@^$nix^g" \
@@ -181,7 +181,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
     < $fill_disk > $fill_disk.tmp
-mv $fill_disk.tmp $fill_disk
+$coreutils/bin/mv $fill_disk.tmp $fill_disk
 
 $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bootPath\@^$bootPath^g" \
@@ -200,61 +200,61 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
     < $ramdisk_login > $ramdisk_login.tmp
-mv $ramdisk_login.tmp $ramdisk_login
+$coreutils/bin/mv $ramdisk_login.tmp $ramdisk_login
 
 echo copying bootimage
 
-mkdir ${archivesDir}/isolinux
-cp ${syslinux}/lib/syslinux/isolinux.bin ${archivesDir}/isolinux
-cp isolinux.cfg ${archivesDir}/isolinux
-chmod u+w ${archivesDir}/isolinux/*
+$coreutils/bin/mkdir ${archivesDir}/isolinux
+$coreutils/bin/cp ${syslinux}/lib/syslinux/isolinux.bin ${archivesDir}/isolinux
+$coreutils/bin/cp isolinux.cfg ${archivesDir}/isolinux
+$coreutils/bin/chmod u+w ${archivesDir}/isolinux/*
 
 echo copying kernel
 
 # By following the symlink we don't have to know the version number
 # of the kernel here.
-cp -L $kernel/vmlinuz ${archivesDir}/isolinux
+$coreutils/bin/cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 
 echo linking kernel modules
 
-ln -s $kernel/lib $archivesDir/lib
+$coreutils/bin/ln -s $kernel/lib $archivesDir/lib
 
 echo creating ramdisk
 
-rm -f ${initrd}
+$coreutils/bin/rm -f ${initrd}
 #cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
-cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
-cp ${archivesDir}/scripts/ramdisk-login.sh ${initdir}/
-cp ${archivesDir}/scripts/init.sh ${initdir}/init
+$coreutils/bin/cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
+$coreutils/bin/cp ${archivesDir}/scripts/ramdisk-login.sh ${initdir}/
+$coreutils/bin/cp ${archivesDir}/scripts/init.sh ${initdir}/init
 #ln -s ${bash}/bin/bash ${initdir}/bin/sh
-cp ${bash}/bin/bash ${initdir}/bin/sh
-chmod u+x ${initdir}/init
-chmod u+x ${initdir}/fill-disk.sh
-chmod u+x ${initdir}/ramdisk-login.sh
+$coreutils/bin/cp ${bash}/bin/bash ${initdir}/bin/sh
+$coreutils/bin/chmod u+x ${initdir}/init
+$coreutils/bin/chmod u+x ${initdir}/fill-disk.sh
+$coreutils/bin/chmod u+x ${initdir}/ramdisk-login.sh
 #cp -fau --parents ${utilLinux} ${initdir}
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
-cp -fau --parents ${bash}/bin ${initdir}
-cp -fau --parents ${utilLinux}/bin ${initdir}
-chmod -R u+w ${initdir}
-cp -fau --parents ${utilLinux}/sbin ${initdir}
-cp -fau --parents ${e2fsProgs} ${initdir}
-cp -fau --parents ${coreutilsdiet}/bin ${initdir}
-cp -fau --parents ${modutils}/bin ${initdir}
-chmod -R u+w ${initdir}
+$coreutils/bin/cp -fau --parents ${bash}/bin ${initdir}
+$coreutils/bin/cp -fau --parents ${utilLinux}/bin ${initdir}
+$coreutils/bin/chmod -R u+w ${initdir}
+$coreutils/bin/cp -fau --parents ${utilLinux}/sbin ${initdir}
+$coreutils/bin/cp -fau --parents ${e2fsProgs} ${initdir}
+$coreutils/bin/cp -fau --parents ${coreutilsdiet}/bin ${initdir}
+$coreutils/bin/cp -fau --parents ${modutils}/bin ${initdir}
+$coreutils/bin/chmod -R u+w ${initdir}
 echo modutils
-cp -fau --parents ${modutils}/sbin ${initdir}
+$coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
 #cp -fau --parents ${kudzu} ${initdir}
 
-touch ${archivesDir}/NIXOS
+$coreutils/bin/touch ${archivesDir}/NIXOS
 
 (cd ${initdir}; find . |cpio -H newc -o) | gzip -9 > ${initrd}
 
-chmod -f -R +w ${initdir}/*
-rm -rf ${initdir}
+$coreutils/bin/chmod -f -R +w ${initdir}/*
+$coreutils/bin/rm -rf ${initdir}
 
-cp ${initrd} ${archivesDir}/isolinux
-rm -f ${initrd}
+$coreutils/bin/cp ${initrd} ${archivesDir}/isolinux
+$coreutils/bin/rm -f ${initrd}
 
 echo creating ISO image
 
@@ -266,5 +266,5 @@ $cdrtools/bin/mkisofs -rJ -o ${bootiso} -b isolinux/isolinux.bin \
 
 echo cleaning up
 
-chmod -f -R +w ${archivesDir}/*
+$coreutils/bin/chmod -f -R +w ${archivesDir}/*
 #rm -rf ${archivesDir}/*
