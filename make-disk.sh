@@ -13,6 +13,7 @@ gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instan
 gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
 cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
 coreutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-instantiate -))
+gzip=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).gzip' | $NIX/nix-instantiate -))
 
 archivesDir=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
@@ -248,7 +249,7 @@ $coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
 
 $coreutils/bin/touch ${archivesDir}/NIXOS
 
-(cd ${initdir}; find . |cpio -H newc -o) | gzip -9 > ${initrd}
+(cd ${initdir}; find . |cpio -H newc -o) | $gzip/bin/gzip -9 > ${initrd}
 
 $coreutils/bin/chmod -f -R +w ${initdir}/*
 $coreutils/bin/rm -rf ${initdir}
