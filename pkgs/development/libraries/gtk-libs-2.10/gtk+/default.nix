@@ -1,6 +1,6 @@
 { xineramaSupport ? false
 , stdenv, fetchurl, pkgconfig, x11, glib, atk
-, pango, perl, libtiff, libjpeg, libpng, cairo, libXinerama ? null
+, pango, perl, libtiff, libjpeg, libpng, cairo, libXinerama ? null, libXrandr
 }:
 
 assert x11.buildClientLibs;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     md5 = "37cdf73719e8b2af6b0d065df6236542";
   };
   buildInputs = [
-    pkgconfig perl libtiff libjpeg libpng cairo
+    pkgconfig perl libtiff libjpeg libpng cairo libXrandr
     (if xineramaSupport then libXinerama else null)
   ];
   propagatedBuildInputs = [x11 glib atk pango];

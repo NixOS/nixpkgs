@@ -1,6 +1,6 @@
 { xineramaSupport ? false
 , stdenv, fetchurl, pkgconfig, gettext, perl, x11
-, libtiff, libjpeg, libpng, cairo, libXinerama ? null
+, libtiff, libjpeg, libpng, cairo, libXinerama ? null, libXrandr
 }:
 
 rec {
@@ -14,13 +14,13 @@ rec {
   };
 
   pango = (import ./pango) {
-    inherit fetchurl stdenv pkgconfig glib x11 cairo;
+    inherit fetchurl stdenv pkgconfig glib x11 cairo libpng;
   };
 
   gtk = (import ./gtk+) {
     inherit fetchurl stdenv pkgconfig glib atk pango perl
             libtiff libjpeg libpng x11 cairo libXinerama
-            xineramaSupport;
+            xineramaSupport libXrandr;
   };
 
 }
