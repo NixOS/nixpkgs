@@ -2298,6 +2298,11 @@ rec {
     inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
   };
 
+  xara = (import ../applications/graphics/xara) {
+    inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
+      pkgconfig libxml2 zip libpng libjpeg;
+    inherit (gtkLibs) gtk;
+  };
   cdrtools = (import ../applications/misc/cdrtools) {
     inherit fetchurl stdenv;
   };
