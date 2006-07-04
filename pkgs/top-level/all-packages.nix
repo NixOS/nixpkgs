@@ -1186,6 +1186,13 @@ rec {
 
   gtkLibs = recurseIntoAttrs gtkLibs28;
 
+  gtkLibs210 = import ../development/libraries/gtk-libs-2.10 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng cairo;
+    inherit (xlibs) libXinerama libXrandr;
+    xineramaSupport = true;
+  };
+
   gtkLibs28 = import ../development/libraries/gtk-libs-2.8 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng cairo;
