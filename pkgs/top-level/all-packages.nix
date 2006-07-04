@@ -208,6 +208,11 @@ rec {
     jre = blackdown;
   };
 
+  trang = import ../tools/text/xml/trang {
+    inherit fetchurl stdenv unzip;
+    jre = blackdown;
+  };
+
   cpio = (import ../tools/archivers/cpio) {
     inherit fetchurl stdenv;
   };
