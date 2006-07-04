@@ -196,6 +196,8 @@ mknod -m 0600 $root/dev/console c 5 1
 mknod -m 0600 $root/dev/tty c 5 0
 mknod -m 0600 $root/dev/tty0 c 4 0
 mknod -m 0600 $root/dev/tty1 c 4 1
+mknod -m 0600 $root/dev/tty2 c 4 2
+mknod -m 0600 $root/dev/tty3 c 4 3
 mknod -m 0444 $root/dev/urandom c 1 9
 
 rm -f $root/etc/mtab
