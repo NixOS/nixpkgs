@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, libXinerama, compat22 ? true, unicode ? false}:
+{stdenv, fetchurl, pkgconfig, gtk, libXinerama, compat22 ? true, unicode ? true}:
 
 assert pkgconfig != null && gtk != null;
 assert gtk.libtiff != null;
