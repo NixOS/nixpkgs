@@ -38,7 +38,7 @@ sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/ni
 # Location of Nix boot scripts?
 bootPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
 
-nix=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
+nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
 
 syslinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX/nix-instantiate -))
 
