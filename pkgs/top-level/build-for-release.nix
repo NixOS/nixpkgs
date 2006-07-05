@@ -175,6 +175,10 @@ let {
 #    flexnew
   ;};
 
+  i686DarwinPkgs = {inherit (allPackages {system = "i686-darwin";})
+    aterm
+  ;};
+
   cygwinPkgs = {inherit (allPackages {system = "i686-cygwin";})
     aterm
   ;};
@@ -183,6 +187,7 @@ let {
     i686LinuxPkgs
     i686FreeBSDPkgs
     powerpcDarwinPkgs
+    i686DarwinPkgs
     cygwinPkgs
   ];
 }
