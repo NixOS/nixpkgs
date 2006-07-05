@@ -25,4 +25,5 @@ stdenv.mkDerivation {
       "--with-freetype2-includes=${freetype}/include/freetype2"
     ] else []);
 
+  patches = [./xpdf-3.01pl2.patch];
 }
