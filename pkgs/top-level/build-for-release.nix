@@ -177,6 +177,12 @@ let {
 
   i686DarwinPkgs = {inherit (allPackages {system = "i686-darwin";})
     aterm
+    autoconf
+    automake19x
+    libtool
+    libxml2
+    libxslt
+    subversion
   ;};
 
   cygwinPkgs = {inherit (allPackages {system = "i686-cygwin";})
