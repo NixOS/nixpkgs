@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
  
 stdenv.mkDerivation {
-  name = "file-4.13";
+  name = "file-4.17";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/file-4.13.tar.gz;
-    md5 = "2bfc0f878ee22e50441b68df2ccbb984";
+    url = ftp://ftp.astron.com/pub/file/file-4.17.tar.gz;
+    md5 = "50919c65e0181423d66bb25d7fe7b0fd";
   };
 }
