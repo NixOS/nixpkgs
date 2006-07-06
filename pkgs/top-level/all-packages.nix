@@ -58,6 +58,9 @@ rec {
       );
     };
 
+  # Check if stdenv.system denotes Mac OS X.
+  isDarwin = stdenv: stdenv.system == "powerpc-darwin" || stdenv.system == "i686-darwin";
+
 
   ### STANDARD ENVIRONMENT
 
@@ -157,7 +160,7 @@ rec {
   };
 
   patch = useFromStdenv (stdenv ? patch) stdenv.patch
-    (if stdenv.system == "powerpc-darwin" then null else gnupatch);
+    (if isDarwin stdenv then null else gnupatch);
 
   gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
     (import ../tools/text/gnused {
@@ -759,7 +762,7 @@ rec {
   };
 
   jdk = 
-    if stdenv.system == "powerpc-darwin" then 
+    if isDarwin stdenv then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       (import ../development/compilers/jdk) {
@@ -959,7 +962,7 @@ rec {
   php = (import ../development/interpreters/php) {
     inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
     unixODBC =
-      if stdenv.system == "powerpc-darwin" then null else unixODBC;
+      if isDarwin stdenv then null else unixODBC;
   };
 
   guile = (import ../development/interpreters/guile) {
