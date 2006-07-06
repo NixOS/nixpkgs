@@ -8,13 +8,12 @@ assert aterm != null && bdb != null && perl != null;
 # assert aterm.version >= 2.0
 
 stdenv.mkDerivation {
-  name = "nix-0.10pre5429";
+  name = "nix-0.10pre5529";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nix-0.10pre5479/nix-0.10pre5479.tar.bz2;
-    md5 = "20055c95996a694235d09a47aefa24c1";
+    url = http://nix.cs.uu.nl/dist/nix/nix-0.10pre5529/nix-0.10pre5529.tar.bz2;
+    md5 = "583a92e4df47a20d237d2a89bdad9296";
   };
   buildInputs = [aterm bdb perl curl];
-  #patches = [./nix-profile-0.9.2.patch];
   inherit storeDir stateDir aterm bdb;
 }
