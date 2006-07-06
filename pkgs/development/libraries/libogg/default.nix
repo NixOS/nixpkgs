@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libogg-1.1.2";
+  name = "libogg-1.1.3";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libogg-1.1.2.tar.gz;
-    md5 = "4d82996517bf33bb912c97e9d0b635c4" ;
+    url = http://downloads.xiph.org/releases/ogg/libogg-1.1.3.tar.gz;
+    md5 = "eaf7dc6ebbff30975de7527a80831585" ;
   };
 }
