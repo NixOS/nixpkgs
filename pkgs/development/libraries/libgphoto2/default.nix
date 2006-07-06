@@ -9,5 +9,6 @@ stdenv.mkDerivation {
   };
   buildInputs = [pkgconfig libusb];
 
+  ## remove this patch when 2.2.2 is released
   patches = [./libgphoto2-2.2.1.patch];
 }
