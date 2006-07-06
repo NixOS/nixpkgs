@@ -1,10 +1,10 @@
 {stdenv, fetchurl, expat} :
 
 stdenv.mkDerivation {
-  name = "sablotron-1.0.2";
+  name = "sablotron-1.0.3";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/Sablot-1.0.2.tar.gz;
-    md5 = "12243bc21b149cad89e98bc89f9c103e";
+    url = http://download-1.gingerall.cz/download/sablot/Sablot-1.0.3.tar.gz;
+    md5 = "72654c4b832e7562f8240ea675577f5e";
   };
   buildInputs = [expat];
 }
