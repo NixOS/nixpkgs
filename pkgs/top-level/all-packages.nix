@@ -1128,6 +1128,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  fribidi = (import ../development/libraries/fribidi) {
+    inherit fetchurl stdenv;
+  };
+
   zlib = (import ../development/libraries/zlib) {
     inherit fetchurl stdenv;
   };
@@ -2010,6 +2014,12 @@ rec {
 
 
   ### APPLICATIONS
+
+  abiword = (import ../applications/office/abiword) {
+    inherit fetchurl stdenv pkgconfig fribidi libpng popt;
+    inherit (gtkLibs) glib gtk pango;
+    inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
+  };
 
   openoffice = (import ../applications/office/openoffice) {
     inherit fetchurl stdenv pam python tcsh libxslt
