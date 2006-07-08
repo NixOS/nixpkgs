@@ -1,10 +1,10 @@
 {stdenv, fetchurl, SDL}:
 
 stdenv.mkDerivation { 
-  name = "dosbox-0.63";
+  name = "dosbox-0.65";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/dosbox-0.63.tar.gz;
-    md5 = "629413e41224ae9cdd115fdafd55cbdc";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/dosbox/dosbox-0.65.tar.gz;
+    md5 = "fef84c292c3aeae747368b9875c1575a";
   };
   buildInputs = [SDL];
 }
