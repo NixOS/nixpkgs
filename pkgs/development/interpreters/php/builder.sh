@@ -10,6 +10,10 @@ configureFlags="$configureFlags \
 if test -n "$unixODBC"; then
     configureFlags="$configureFlags --with-unixODBC=$unixODBC"
 fi
+
+if test -n "$postgresql"; then
+    configureFlags="$configureFlags --with-pgsql=$postgresql"
+fi
   
 makeFlags="APXS_LIBEXECDIR=$out/modules $makeFlags"
         

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, bison, libxml2, apacheHttpd, unixODBC ? null}:
+{stdenv, fetchurl, flex, bison, libxml2, apacheHttpd, unixODBC ? null, postgresql ? null}:
 
 assert libxml2 != null;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [flex bison libxml2 apacheHttpd];
 
-  inherit unixODBC;
+  inherit unixODBC postgresql;
   
   odbcSupport = unixODBC != null;
 
