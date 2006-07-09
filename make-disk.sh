@@ -3,8 +3,13 @@
 # deps is an array
 declare -a deps
 
+NIXSTORE=`which nix-store`
+NIXINSTANTIATE=`which nix-instantiate`
+
+coreutils=$($NIXSTORE -r $(echo '(import ./pkgs.nix).coreutils' | $NIXINSTANTIATE -))
+
 # determine where we can find the Nix binaries
-NIX=$(dirname $(which nix-store))
+NIX=$($coreutils/bin/dirname $(which nix-store))
 
 # make sure we use many of our own tools, because it is more pure
 mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instantiate -))
@@ -12,7 +17,6 @@ mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instan
 gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
 gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
 cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
-coreutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).coreutils' | $NIX/nix-instantiate -))
 gzip=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gzip' | $NIX/nix-instantiate -))
 cpio=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cpio' | $NIX/nix-instantiate -))
 
