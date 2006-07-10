@@ -1,0 +1,96 @@
+diff -rc MPlayer-1.0pre8-orig/libvo/aspect.c MPlayer-1.0pre8/libvo/aspect.c
+*** MPlayer-1.0pre8-orig/libvo/aspect.c	2006-06-11 20:35:43.000000000 +0200
+--- MPlayer-1.0pre8/libvo/aspect.c	2006-07-10 18:55:11.000000000 +0200
+***************
+*** 11,16 ****
+--- 11,19 ----
+  #include <stdio.h>
+  #endif
+  
++ int vo_physical_width = 0;
++ int vo_physical_height = 0;
++ 
+  int vo_panscan_x = 0;
+  int vo_panscan_y = 0;
+  float vo_panscan_amount = 0;
+***************
+*** 18,24 ****
+  
+  #include "video_out.h"
+  
+! float monitor_aspect=4.0/3.0;
+  float monitor_pixel_aspect=0;
+  extern float movie_aspect;
+  
+--- 21,27 ----
+  
+  #include "video_out.h"
+  
+! float monitor_aspect=-1.0f;
+  float monitor_pixel_aspect=0;
+  extern float movie_aspect;
+  
+***************
+*** 48,53 ****
+--- 51,68 ----
+    aspdat.preh = preh;
+  }
+  
++ static void init_monitor_aspect( void )
++ {
++   if (monitor_aspect != -1.0f) return;
++   if (vo_physical_width == 0 || vo_physical_height == 0) {
++     // if there's no other indication, assume square pixels
++     vo_physical_width = aspdat.scrw;
++     vo_physical_height = aspdat.scrh;
++   }
++   mp_msg(MSGT_VO,MSGL_V,"\naspect: monitor aspect detected %d:%d\n", vo_physical_width, vo_physical_height);
++   monitor_aspect = 1.0f * vo_physical_width / vo_physical_height;
++ }
++ 
+  void aspect_save_screenres(int scrw, int scrh){
+  #ifdef ASPECT_DEBUG
+    printf("aspect_save_screenres %dx%d \n",scrw,scrh);
+***************
+*** 56,61 ****
+--- 71,77 ----
+    aspdat.scrh = scrh;
+    if (monitor_pixel_aspect)
+      monitor_aspect = monitor_pixel_aspect * scrw / scrh;
++   init_monitor_aspect(); // now is a good time
+  }
+  
+  /* aspect is called with the source resolution and the
+diff -rc MPlayer-1.0pre8-orig/libvo/aspect.h MPlayer-1.0pre8/libvo/aspect.h
+*** MPlayer-1.0pre8-orig/libvo/aspect.h	2006-06-11 20:35:43.000000000 +0200
+--- MPlayer-1.0pre8/libvo/aspect.h	2006-07-10 18:52:04.000000000 +0200
+***************
+*** 2,7 ****
+--- 2,10 ----
+  #define __ASPECT_H
+  /* Stuff for correct aspect scaling. */
+  
++ extern int vo_physical_width;
++ extern int vo_physical_height;
++ 
+  extern int vo_panscan_x;
+  extern int vo_panscan_y;
+  extern float vo_panscan_amount;
+diff -rc MPlayer-1.0pre8-orig/libvo/x11_common.c MPlayer-1.0pre8/libvo/x11_common.c
+*** MPlayer-1.0pre8-orig/libvo/x11_common.c	2006-06-11 20:35:43.000000000 +0200
+--- MPlayer-1.0pre8/libvo/x11_common.c	2006-07-10 18:52:04.000000000 +0200
+***************
+*** 463,468 ****
+--- 463,474 ----
+          if (!vo_screenheight)
+              vo_screenheight = DisplayHeight(mDisplay, mScreen);
+      }
++     if (vo_physical_width == 0) {
++ 	vo_physical_width = DisplayWidthMM(mDisplay, mScreen);
++     }
++     if (vo_physical_height == 0) {
++ 	vo_physical_height = DisplayHeightMM(mDisplay, mScreen);
++     }
+      // get color depth (from root window, or the best visual):
+      XGetWindowAttributes(mDisplay, mRootWin, &attribs);
+      depth = attribs.depth;

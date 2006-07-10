@@ -40,4 +40,9 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = if cacaSupport then "--enable-caca" else "--disable-caca";
+
+  # These fix MPlayer's aspect ratio when run in a screen rotated with
+  # Xrandr.
+  # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
+  patches = [./mplayer-aspect.patch ./mplayer-pivot.patch];
 }
