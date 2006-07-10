@@ -40,8 +40,9 @@ let {
     flexnew
     gaim
     gawk
+    gcc
+    gcc34
     gcc40
-    gccWrapped
     ghcWrapper
     ghostscript
     gnugrep

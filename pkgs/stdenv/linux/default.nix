@@ -73,7 +73,7 @@ rec {
     md5 = "9c134038b7f1894a4b307d600207047c";
   };
 
-  gcc = (downloadAndUnpack {
+  staticGCC = (downloadAndUnpack {
     url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/gcc-3.4.2-static.tar.bz2;
     pkgname = "gcc";
     md5 = "600452fac470a49a41ea81d39c209f35";
@@ -88,6 +88,17 @@ rec {
     postProcess = [./scripts/fix-outpath.sh];
     addToPath = [staticTools];
   };
+
+
+  # A helper function to call gcc-wrapper.
+  wrapGCC =
+    {gcc ? staticGCC, glibc, binutils, shell ? ""}:
+    (import ../../build-support/gcc-wrapper) {
+      nativeTools = false;
+      nativeGlibc = false;
+      inherit gcc binutils glibc shell;
+      stdenv = stdenvInitial;
+    };
 
 
   # The "fake" standard environment used to build "real" standard
@@ -115,7 +126,7 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {glibc, gcc, binutils, staticGlibc, extraAttrs ? {}}:
+    {gcc, staticGlibc, extraAttrs ? {}}:
     
     import ../generic {
       name = "stdenv-linux-boot";
@@ -123,16 +134,10 @@ rec {
       preHook = ./prehook.sh;
       stdenv = stdenvInitial;
       shell = ./tools/bash;
-      gcc = (import ../../build-support/gcc-wrapper) {
-        stdenv = stdenvInitial;
-        nativeTools = false;
-        nativeGlibc = false;
-        inherit gcc glibc binutils;
-      };
       initialPath = [
         staticTools
       ];
-      inherit extraAttrs;
+      inherit gcc extraAttrs;
     };
 
 
@@ -141,7 +146,7 @@ rec {
   # the gcc configure script happy.
   stdenvLinuxBoot1 = stdenvBootFun {
     # Use the statically linked, downloaded glibc/gcc/binutils.
-    inherit glibc gcc binutils;
+    gcc = wrapGCC {inherit glibc binutils;};
     staticGlibc = true;
     extraAttrs = {inherit curl;};
   };
@@ -159,12 +164,11 @@ rec {
   # 4) Construct a second stdenv identical to the first, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    statically linked tools.
-  stdenvLinuxBoot2 = stdenvBootFun {
-    glibc = stdenvLinuxGlibc;
+  stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
     staticGlibc = false;
-    inherit gcc binutils;
-    extraAttrs = {inherit curl;};
-  };
+    gcc = wrapGCC {inherit binutils; glibc = stdenvLinuxGlibc;};
+    extraAttrs = {inherit curl; glibc = stdenvLinuxGlibc;};
+  }) ["gcc" "binutils"];
 
   # 5) The packages that can be built using the second stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
@@ -175,9 +179,12 @@ rec {
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still static.
   stdenvLinuxBoot3 = stdenvBootFun {
-    glibc = stdenvLinuxGlibc;
     staticGlibc = false;
-    inherit (stdenvLinuxBoot2Pkgs) gcc binutils;
+    gcc = wrapGCC {
+      inherit (stdenvLinuxBoot2Pkgs) binutils;
+      glibc = stdenvLinuxGlibc;
+      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
+    };
     extraAttrs = {inherit curl;};
   };
 
@@ -199,12 +206,10 @@ rec {
 
     stdenv = stdenvInitial;
 
-    gcc = (import ../../build-support/gcc-wrapper) {
-      stdenv = stdenvInitial;
-      nativeTools = false;
-      nativeGlibc = false;
-      inherit (stdenvLinuxBoot2Pkgs) gcc binutils;
+    gcc = wrapGCC {
+      inherit (stdenvLinuxBoot2Pkgs) binutils;
       glibc = stdenvLinuxGlibc;
+      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       shell = stdenvLinuxBoot3Pkgs.bash ~ /bin/sh;
     };
 
@@ -212,7 +217,7 @@ rec {
     
     extraAttrs = {
       curl = stdenvLinuxBoot3Pkgs.realCurl;
-      inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */;
+      inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
       inherit (stdenvLinuxBoot3Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep patch patchelf;

@@ -577,13 +577,7 @@ rec {
     m4 = gnum4;
   };
 
-  gcc = (import ../development/compilers/gcc-4.1) {
-    inherit fetchurl stdenv noSysDirs;
-    langCC = gccWithCC;
-    profiledCompiler = gccWithProfiling;
-  };
-
-  gccWrapped = stdenv.gcc;
+  gcc = useFromStdenv (stdenv ? gcc) stdenv.gcc gcc41;
 
   gcc_static = (import ../development/compilers/gcc-static-3.4) {
     inherit fetchurl stdenv;
@@ -603,25 +597,34 @@ rec {
     inherit stdenv;
   };
 
-  gcc33 = (import ../build-support/gcc-wrapper) {
+  wrapGCC = baseGCC: (import ../build-support/gcc-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-3.3) {
-      inherit fetchurl stdenv noSysDirs;
-    };
-    inherit (stdenv.gcc) binutils glibc;
-    inherit stdenv;
+    gcc = baseGCC;
+    inherit stdenv binutils glibc;
   };
 
-  gcc34 = (import ../build-support/gcc-wrapper) {
-    nativeTools = false;
-    nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-3.4) {
-      inherit fetchurl stdenv noSysDirs;
-    };
-    inherit (stdenv.gcc) binutils glibc;
-    inherit stdenv;
-  };
+  gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
+    inherit fetchurl stdenv noSysDirs;
+  });
+
+  gcc33 = wrapGCC (import ../development/compilers/gcc-3.3 {
+    inherit fetchurl stdenv noSysDirs;
+  });
+
+  gcc34 = wrapGCC (import ../development/compilers/gcc-3.4 {
+    inherit fetchurl stdenv noSysDirs;
+  });
+
+  gcc40 = wrapGCC (import ../development/compilers/gcc-4.0 {
+    inherit fetchurl stdenv noSysDirs;
+    profiledCompiler = true;
+  });
+
+  gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
+    inherit fetchurl stdenv noSysDirs;
+    profiledCompiler = true;
+  });
 
   gcc40sparc = (import ../build-support/gcc-cross-wrapper) {
     nativeTools = false;
@@ -674,38 +677,6 @@ rec {
     };
     inherit (stdenv.gcc) glibc;
     binutils = binutilsArm;
-    inherit stdenv;
-  };
-
-  gcc40 = (import ../build-support/gcc-wrapper) {
-    nativeTools = false;
-    nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-4.0) {
-      inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
-    };
-    inherit (stdenv.gcc) binutils glibc;
-    inherit stdenv;
-  };
-
-  gcc41 = (import ../build-support/gcc-wrapper) {
-    nativeTools = false;
-    nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-4.1) {
-      inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
-    };
-    inherit (stdenv.gcc) binutils glibc;
-    inherit stdenv;
-  };
-
-  gcc295 = (import ../build-support/gcc-wrapper) {
-    nativeTools = false;
-    nativeGlibc = false;
-    gcc = (import ../development/compilers/gcc-2.95) {
-      inherit fetchurl stdenv noSysDirs;
-    };
-    inherit (stdenv.gcc) binutils glibc;
     inherit stdenv;
   };
 
@@ -1028,10 +999,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  glibc = (import ../development/libraries/glibc) {
-    inherit fetchurl stdenv kernelHeaders;
-    installLocales = true;
-  };
+  glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
+    (import ../development/libraries/glibc {
+      inherit fetchurl stdenv kernelHeaders;
+      installLocales = true;
+    });
 
   aterm = (import ../development/libraries/aterm) {
     inherit fetchurl stdenv;
