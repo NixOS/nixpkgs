@@ -2279,7 +2279,7 @@ rec {
 
   gimp = (import ../applications/graphics/gimp) {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
-      libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk;
+      libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
     inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
   };
 
