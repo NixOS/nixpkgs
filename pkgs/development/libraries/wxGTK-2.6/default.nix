@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     "--enable-gtk2"
     (if compat22 then "--enable-compat22" else "--disable-compat22")
     "--disable-precomp-headers"
-   (if unicode then "--enable-unicode" else "")
+    (if unicode then "--enable-unicode" else "")
   ];
 
   inherit gtk compat22;
