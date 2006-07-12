@@ -2029,6 +2029,15 @@ rec {
     httpd = apacheHttpd;
   };
 
+  subversion14 = (import ../applications/version-management/subversion-1.4.x) {
+    inherit fetchurl stdenv openssl db4 expat swig zlib;
+    localServer = true;
+    httpServer = false;
+    sslSupport = true;
+    compressionSupport = true;
+    httpd = apacheHttpd;
+  };
+
   subversionWithJava = (import ../applications/version-management/subversion-1.2.x) {
     inherit fetchurl stdenv openssl db4 expat jdk;
     swig = swigWithJava;
