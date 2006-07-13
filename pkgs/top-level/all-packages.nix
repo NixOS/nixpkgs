@@ -382,6 +382,11 @@ rec {
     inherit (xlibs) libX11;
   };
 
+  tightvnc = import ../tools/admin/tightvnc {
+    inherit fetchurl stdenv x11 zlib libjpeg;
+    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
+  };
+
    
   ### SHELLS
 
