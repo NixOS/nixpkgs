@@ -1,4 +1,4 @@
-{stdenv, pkgs, genericStdenv, gccWrapper}:
+{stdenv, pkgs, genericStdenv}:
 
 genericStdenv {
   name = "stdenv-nix";
@@ -7,12 +7,12 @@ genericStdenv {
 
   inherit stdenv;
 
-  gcc = gccWrapper {
-    name = pkgs.gcc.name;
+  gcc = import ../../build-support/gcc-wrapper {
     nativeTools = false;
     nativeGlibc = true;
-    inherit (pkgs) gcc binutils;
     inherit stdenv;
+    inherit (pkgs) binutils;
+    gcc = pkgs.gcc.gcc;
     shell = pkgs.bash ~ /bin/sh;
   };
 

@@ -39,8 +39,11 @@ rec {
   # The Nix build environment.
   stdenvNix = (import ./nix) {
     stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-    inherit genericStdenv gccWrapper;
+    pkgs = allPackages {
+      bootStdenv = removeAttrs stdenvNative ["gcc"]; # Hack
+      noSysDirs = false;
+    };
+    inherit genericStdenv;
   };
 
 
