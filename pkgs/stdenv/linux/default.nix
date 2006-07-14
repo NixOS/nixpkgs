@@ -200,7 +200,7 @@ rec {
     name = "stdenv-linux";
     preHook = ./prehook.sh;
     initialPath = [
-      ((import ../nix/path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
+      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
       stdenvLinuxBoot3Pkgs.patchelf
     ];
 
