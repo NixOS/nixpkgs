@@ -13,7 +13,7 @@ import ../generic {
     inherit stdenv;
     binutils = 
       if stdenv.system == "i686-darwin" || stdenv.system == "powerpc-darwin" then
-        import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
+        import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
       else
         pkgs.binutils;
     gcc = pkgs.gcc.gcc;
