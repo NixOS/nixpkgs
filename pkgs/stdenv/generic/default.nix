@@ -22,10 +22,10 @@ let {
       inherit param1 param2 param3 param4 param5;
     }
 
-    # Add a utility function to produce derivations that use this
-    # stdenv and its shell.
     // {
     
+      # Add a utility function to produce derivations that use this
+      # stdenv and its shell.
       mkDerivation = attrs:
         (derivation (
           (removeAttrs attrs ["meta"])
@@ -45,6 +45,9 @@ let {
         # include it in the result, it *is* available to nix-env for
         # queries.
         { meta = if attrs ? meta then attrs.meta else {}; };
+
+      # Utility value: is this a Darwin system?
+      isDarwin = body.system == "i686-darwin" || body.system == "powerpc-darwin";
 
     }
 

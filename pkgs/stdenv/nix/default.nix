@@ -12,11 +12,11 @@ import ../generic {
     nativeGlibc = true;
     inherit stdenv;
     binutils = 
-      if stdenv.system == "i686-darwin" || stdenv.system == "powerpc-darwin" then
+      if stdenv.isDarwin then
         import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
       else
         pkgs.binutils;
-    gcc = pkgs.gcc.gcc;
+    gcc = if stdenv.isDarwin then pkgs.gccApple.gcc else pkgs.gcc.gcc;
     shell = pkgs.bash ~ /bin/sh;
   };
 

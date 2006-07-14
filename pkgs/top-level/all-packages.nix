@@ -625,6 +625,11 @@ rec {
     profiledCompiler = true;
   });
 
+  gccApple = wrapGCC (import ../development/compilers/gcc-apple {
+    inherit fetchurl stdenv noSysDirs;
+    profiledCompiler = true;
+  });
+
   gcc40sparc = (import ../build-support/gcc-cross-wrapper) {
     nativeTools = false;
     nativeGlibc = false;
