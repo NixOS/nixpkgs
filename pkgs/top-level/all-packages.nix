@@ -1113,7 +1113,7 @@ rec {
   };
 
   libjpeg = (import ../development/libraries/libjpeg) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libtool;
   };
 
   libtiff = (import ../development/libraries/libtiff) {
