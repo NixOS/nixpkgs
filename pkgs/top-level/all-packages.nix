@@ -159,8 +159,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  patch = useFromStdenv (stdenv ? patch) stdenv.patch
-    (if isDarwin stdenv then null else gnupatch);
+  patch = useFromStdenv (stdenv ? patch) stdenv.patch gnupatch;
 
   gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
     (import ../tools/text/gnused {
