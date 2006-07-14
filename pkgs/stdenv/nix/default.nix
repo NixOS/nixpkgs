@@ -1,6 +1,6 @@
-{stdenv, pkgs, genericStdenv}:
+{stdenv, pkgs}:
 
-genericStdenv {
+import ../generic {
   name = "stdenv-nix";
   preHook = ./prehook.sh;
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
@@ -11,7 +11,11 @@ genericStdenv {
     nativeTools = false;
     nativeGlibc = true;
     inherit stdenv;
-    inherit (pkgs) binutils;
+    binutils = 
+      if stdenv.system == "i686-darwin" || stdenv.system == "powerpc-darwin" then
+        import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;};
+      else
+        pkgs.binutils;
     gcc = pkgs.gcc.gcc;
     shell = pkgs.bash ~ /bin/sh;
   };

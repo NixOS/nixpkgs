@@ -37,14 +37,13 @@ rec {
 
 
   # The Nix build environment.
-  stdenvNix = (import ./nix) {
-    stdenv = stdenvNative;
+  stdenvNix = (import ./nix) (rec {
+    stdenv = if system == "i686-darwin" then stdenvDarwin else stdenvNative; # !!! hack
     pkgs = allPackages {
-      bootStdenv = removeAttrs stdenvNative ["gcc"]; # Hack
+      bootStdenv = removeAttrs stdenv ["gcc"]; # Hack
       noSysDirs = false;
     };
-    inherit genericStdenv;
-  };
+  });
 
 
   # Linux standard environment.
@@ -81,6 +80,6 @@ rec {
     else if system == "i686-freebsd" then stdenvFreeBSD
     else if system == "i686-cygwin" then stdenvCygwin
     else if system == "powerpc-darwin" then stdenvDarwin
-    else if system == "i686-darwin" then stdenvDarwin
+    else if system == "i686-darwin" then stdenvNix
     else stdenvNative;
 }
