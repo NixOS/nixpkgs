@@ -465,11 +465,6 @@ rec {
     m4 = gnum4;
   };
 
-  libtool_latest = (import ../development/tools/misc/libtool/libtool-1.5.22.nix) {
-    inherit fetchurl stdenv perl;
-    m4 = gnum4;
-  };
-
   pkgconfig = (import ../development/tools/misc/pkgconfig) {
     inherit fetchurl stdenv;
   };
