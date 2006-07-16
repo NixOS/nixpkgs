@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel}:
+{stdenv, fetchurl, kernel, gawk}:
 
 stdenv.mkDerivation {
   name = "qc-usb-0.6.4";
@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     md5 = "7e91c3a633382c99100e3ef4f1d9f50a";
   };
   inherit kernel;
+  buildInputs = [gawk];
   patches = [./quickcam-install.patch];
 }
