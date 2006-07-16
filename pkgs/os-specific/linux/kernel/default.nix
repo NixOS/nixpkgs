@@ -3,11 +3,11 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "linux-2.6.17.5";
+  name = "linux-2.6.17.6";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-2.6.17.5.tar.bz2;
-    md5 = "7db2d258700c135bf490c4ea63edafe3";
+    url = ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-2.6.17.6.tar.bz2;
+    md5 = "5013fbe6049e32675187c203aef92218";
   };
   config = ./config-2.6.17.1;
   inherit perl;
