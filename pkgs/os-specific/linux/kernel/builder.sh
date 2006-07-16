@@ -42,6 +42,7 @@ buildPhase() {
 
         cp -a arch/$arch/scripts $out/lib/modules/${version}/build || :
         cp -a arch/$arch/*lds $out/lib/modules/${version}/build || :
+        cp -a arch/$arch/Makefile.cpu $out/lib/modules/${version}/build/arch/$arch || :
         cp -a --parents arch/$arch/kernel/asm-offsets.s $out/lib/modules/${version}/build/arch/$arch/kernel || :
 
         # copy scripts
