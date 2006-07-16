@@ -1,11 +1,11 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "ov511-2.30";
+  name = "ov511-2.32";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ov511-2.30.tar.bz2;
-    md5 = "9eacf9e54f2f54a59ddbf14221a53f2a";
+    url = http://www.ovcam.org/ov511/download/2.xx/distros/ov511-2.32.tar.bz2;
+    md5 = "6a08025311649356242761641a1df0f2";
   };
   patches = [./ov511-kernel.patch];
   inherit kernel;

@@ -1,40 +1,39 @@
-diff -ruN ov511-2.30/do_install.sh ov511-2.30.new/do_install.sh
---- ov511-2.30/do_install.sh	2003-11-12 09:24:29.000000000 +0100
-+++ ov511-2.30.new/do_install.sh	2006-01-03 16:34:44.000000000 +0100
-@@ -6,10 +6,10 @@
- 	exit 1
- fi
- 
--UNAME=`uname -r`
-+UNAME=$version
- 
--INSTALL_PATH_2_4=/lib/modules/$UNAME/kernel/drivers/usb/
--INSTALL_PATH_2_6=/lib/modules/$UNAME/kernel/drivers/usb/media/
-+INSTALL_PATH_2_4=$out/lib/modules/$UNAME/kernel/drivers/usb/
-+INSTALL_PATH_2_6=$out/lib/modules/$UNAME/kernel/drivers/usb/media/
- 
- MAJMIN=`echo $UNAME | cut -d . -f 1-2`
- 
-@@ -35,7 +35,7 @@
- 	install $MODULE $INSTALL_PATH
- done
- 
--echo Finding module dependencies
--/sbin/depmod -ae
-+#echo Finding module dependencies
-+#/sbin/depmod -ae
- 
- echo All done!
-diff -ruN ov511-2.30/Makefile ov511-2.30.new/Makefile
---- ov511-2.30/Makefile	2005-10-12 11:19:27.000000000 +0200
-+++ ov511-2.30.new/Makefile	2006-01-03 16:02:41.000000000 +0100
-@@ -112,7 +112,8 @@
- 
- else  # We were called from command line
- 
--KDIR := /lib/modules/$(shell uname -r)/build
-+#KDIR := /lib/modules/$(shell uname -r)/build
-+KDIR := $(kernel)/lib/modules/$(version)/build
- PWD  := $(shell pwd)
- 
- default:
+diff -rc ov511-2.32/do_install.sh ov511-2.32.new/do_install.sh
+*** ov511-2.32/do_install.sh	2003-11-12 09:24:29.000000000 +0100
+--- ov511-2.32.new/do_install.sh	2006-07-16 19:44:56.000000000 +0200
+***************
+*** 8,15 ****
+  
+  UNAME=`uname -r`
+  
+! INSTALL_PATH_2_4=/lib/modules/$UNAME/kernel/drivers/usb/
+! INSTALL_PATH_2_6=/lib/modules/$UNAME/kernel/drivers/usb/media/
+  
+  MAJMIN=`echo $UNAME | cut -d . -f 1-2`
+  
+--- 8,15 ----
+  
+  UNAME=`uname -r`
+  
+! INSTALL_PATH_2_4=$out/lib/modules/$UNAME/kernel/drivers/usb/
+! INSTALL_PATH_2_6=$out/lib/modules/$UNAME/kernel/drivers/usb/media/
+  
+  MAJMIN=`echo $UNAME | cut -d . -f 1-2`
+  
+***************
+*** 35,41 ****
+  	install $MODULE $INSTALL_PATH
+  done
+  
+! echo Finding module dependencies
+! /sbin/depmod -ae
+  
+  echo All done!
+--- 35,41 ----
+  	install $MODULE $INSTALL_PATH
+  done
+  
+! #echo Finding module dependencies
+! #/sbin/depmod -ae
+  
+  echo All done!
