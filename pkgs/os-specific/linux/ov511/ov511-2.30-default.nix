@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/ov511-2.30.tar.bz2;
     md5 = "9eacf9e54f2f54a59ddbf14221a53f2a";
   };
-  patches = [./ov511-kernel.patch];
+  patches = [./ov511-kernel.patch ./ov511-2.32-kdir.patch];
   inherit kernel;
   NIX_GLIBC_FLAGS_SET=1;
 }

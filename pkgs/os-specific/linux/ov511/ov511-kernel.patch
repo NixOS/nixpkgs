@@ -15,8 +15,8 @@ diff -rc ov511-2.32/do_install.sh ov511-2.32.new/do_install.sh
   
   UNAME=`uname -r`
   
-! INSTALL_PATH_2_4=$out/lib/modules/$UNAME/kernel/drivers/usb/
-! INSTALL_PATH_2_6=$out/lib/modules/$UNAME/kernel/drivers/usb/media/
+! INSTALL_PATH_2_4=$out/lib/modules/$version/kernel/drivers/usb/
+! INSTALL_PATH_2_6=$out/lib/modules/$version/kernel/drivers/usb/media/
   
   MAJMIN=`echo $UNAME | cut -d . -f 1-2`
   
