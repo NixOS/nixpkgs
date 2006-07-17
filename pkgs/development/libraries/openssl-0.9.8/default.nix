@@ -9,5 +9,5 @@
 
   # Quick fix for a Makefile bug in openssl-0.9.8 (`make install'
   # tries to copy .so files, instead of .dylib files).
-  patches = if stdenv.system == "powerpc-darwin" then [./dylib.patch] else [];
+  patches = if stdenv.isDarwin then [./dylib.patch] else [];
 }

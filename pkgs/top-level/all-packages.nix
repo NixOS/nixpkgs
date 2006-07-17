@@ -58,9 +58,6 @@ rec {
       );
     };
 
-  # Check if stdenv.system denotes Mac OS X.
-  isDarwin = stdenv: stdenv.system == "powerpc-darwin" || stdenv.system == "i686-darwin";
-
 
   ### STANDARD ENVIRONMENT
 
@@ -737,7 +734,7 @@ rec {
   };
 
   jdk = 
-    if isDarwin stdenv then 
+    if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       (import ../development/compilers/jdk) {
@@ -937,7 +934,7 @@ rec {
   php = (import ../development/interpreters/php) {
     inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
     unixODBC =
-      if isDarwin stdenv then null else unixODBC;
+      if stdenv.isDarwin then null else unixODBC;
   };
 
   guile = (import ../development/interpreters/guile) {
