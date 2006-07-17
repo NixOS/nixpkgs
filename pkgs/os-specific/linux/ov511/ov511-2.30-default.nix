@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   };
   patches = [./ov511-kernel.patch];
   inherit kernel;
+  NIX_GLIBC_FLAGS_SET=1;
 }
