@@ -1843,7 +1843,8 @@ rec {
   };
 
   kernel = (import ../os-specific/linux/kernel) {
-    inherit fetchurl perl mktemp stdenv;
+    inherit fetchurl perl mktemp;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   #klibc = (import ../os-specific/linux/klibc) {
