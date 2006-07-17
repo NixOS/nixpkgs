@@ -314,6 +314,11 @@ rec {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
 
+  transfig = (import ../tools/graphics/transfig) {
+    inherit fetchurl stdenv libpng libjpeg zlib;
+    inherit (xlibs) imake;
+  };
+
   hevea = (import ../tools/typesetting/hevea) {
     inherit fetchurl stdenv ocaml;
   };
