@@ -20,21 +20,11 @@ stdenv.mkDerivation rec {
     ./patch-fig2dev-Imakefile;
 
   prefixPatch3 =
-    fetchurl {
-      url = "http://www.darwinports.org/darwinports/dports/print/transfig/files/patch-transfig-Imakefile";
-      md5 = "1cfe0df7d3448f6ff914a7a2d85e6f50";
-    };
+    ./patch-transfig-Imakefile
 
   varargsPatch =
-    fetchurl {
-      url = "http://www.darwinports.org/darwinports/dports/print/transfig/files/patch-fig2dev-fig2dev.h";
-      md5 = "da3cd4f9bee619818c890c5692f042c1";
-    };
+    ./patch-fig2dev-fig2dev.h;
 
   gensvgPatch =
-    fetchurl {
-      url = "http://www.darwinports.org/darwinports/dports/print/transfig/files/patch-fig2dev-dev-gensvg.c";
-      md5 = "66a97cbfc313be48183beeeb950e2c86";
-    };
-
+    ./patch-fig2dev-dev-gensvg.c;
 }
