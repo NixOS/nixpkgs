@@ -16,3 +16,7 @@ export version
 ensureDir $out/lib/modules/$version/kernel/drivers/usb/media/
 
 genericBuild
+
+echo "b0rken"
+
+exit 1
