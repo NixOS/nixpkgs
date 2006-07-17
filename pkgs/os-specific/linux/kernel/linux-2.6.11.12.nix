@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{stdenv, fetchurl, perl, mktemp}:
 
 assert stdenv.system == "i686-linux";
 
@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   };
   config = ./config;
   inherit perl;
-  buildInputs = [perl];
+  buildInputs = [perl mktemp];
   arch="i386";
 }
