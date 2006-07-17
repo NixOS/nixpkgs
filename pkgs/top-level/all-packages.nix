@@ -24,17 +24,13 @@ rec {
 
   ### Symbolic names.
 
-  useOldXLibs = false;
-
   # `xlibs' is the set of X library components.  This used to be the
   # old modular X libraries project (called `xlibs') but now it's just
   # the set of packages in the modular X.org tree (which also includes
   # non-library components like the server, drivers, fonts, etc.).
-  xlibs = if useOldXLibs then xlibsOld else xorg // {xlibs = xlibsWrapper;};
+  xlibs = xorg // {xlibs = xlibsWrapper;};
 
-  # `xlibs.xlibs' is a wrapper packages that combines libX11 and a bunch
-  # of other basic X client libraries.
-  x11 = if useOldXLibs then xlibsOld.xlibs else xlibsWrapper;
+  x11 = xlibsWrapper;
 
 
   ### Helper functions.
@@ -1353,10 +1349,6 @@ rec {
 
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
-  };
-
-  xlibsOld = (import ../development/libraries/xlibs) {
-    inherit fetchurl stdenv pkgconfig freetype fontconfig;
   };
 
   xlibsWrapper = import ../development/libraries/xlibs-wrapper {
