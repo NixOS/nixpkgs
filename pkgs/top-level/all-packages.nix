@@ -1860,7 +1860,8 @@ rec {
   };
 
   ov511 = (import ../os-specific/linux/ov511) {
-    inherit stdenv fetchurl kernel;
+    inherit fetchurl kernel;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   pam = (import ../os-specific/linux/pam) {
