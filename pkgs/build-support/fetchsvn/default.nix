@@ -1,4 +1,4 @@
-{stdenv, subversion, nix}: {url, rev ? "HEAD", md5}:
+{stdenv, subversion, nix, sshSupport ? false, openssh ? null}: {url, rev ? "HEAD", md5}:
 
 stdenv.mkDerivation {
   name = "svn-export";
@@ -12,5 +12,5 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = md5;
   
-  inherit url rev;
+  inherit url rev sshSupport openssh;
 }

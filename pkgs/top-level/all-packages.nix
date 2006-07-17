@@ -73,7 +73,8 @@ rec {
   };
 
   fetchsvn = (import ../build-support/fetchsvn) {
-    inherit stdenv subversion nix;
+    inherit stdenv subversion nix openssh;
+    sshSupport = true;
   };
 
   fetchcvs = (import ../build-support/fetchcvs) {
