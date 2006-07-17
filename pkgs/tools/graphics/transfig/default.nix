@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./patch-fig2dev-Imakefile;
 
   prefixPatch3 =
-    ./patch-transfig-Imakefile
+    ./patch-transfig-Imakefile;
 
   varargsPatch =
     ./patch-fig2dev-fig2dev.h;
