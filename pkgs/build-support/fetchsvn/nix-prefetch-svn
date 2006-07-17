@@ -42,7 +42,8 @@ if test -z "$finalPath"; then
     mkdir $tmpPath
 
     # Perform the checkout.
-    echo p | svn export -r "$rev" "$url" $tmpFile >&2
+    # !!! remove 2>/dev/null when we have fixed the certificate hackery.
+    echo p | svn export -r "$rev" "$url" $tmpFile 2>/dev/null >&2
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
