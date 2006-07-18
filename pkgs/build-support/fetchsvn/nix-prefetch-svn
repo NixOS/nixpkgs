@@ -36,10 +36,11 @@ fi
 # download the file and add it to the store.
 if test -z "$finalPath"; then
 
-    # !!! race? should be relatively safe, `svn export' barfs if $tmpPath exists.
     tmpPath=/tmp/svn-checkout-tmp-$$
     tmpFile=$tmpPath/svn-export
     mkdir $tmpPath
+
+    trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
     # !!! remove 2>/dev/null when we have fixed the certificate hackery.
@@ -51,8 +52,6 @@ if test -z "$finalPath"; then
 
     # Add the downloaded file to the Nix store.
     finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
-
-    if test -n "$tmpPath"; then rm -rf $tmpPath || true; fi
 
     if test -n "$expHash" -a "$expHash" != "$hash"; then
         echo "hash mismatch for URL \`$url'"
