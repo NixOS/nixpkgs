@@ -1,12 +1,12 @@
 {stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL, libXi}:
 
 stdenv.mkDerivation {
-  name = "xulrunner-1.8.0.1";
+  name = "xulrunner-1.8.0.4";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/1.8.0.1/source/xulrunner-1.8.0.1-source.tar.bz2;
-    md5 = "d60ccb6cc28afa7d880c8602a2c88450";
+    url = http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.8.0.4/source/xulrunner-1.8.0.4-source.tar.bz2;
+    md5 = "4dc09831aa4e94fda5182a4897ed08e9";
   };
 
   buildInputs = [pkgconfig gtk perl zip libIDL libXi];

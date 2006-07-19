@@ -1,11 +1,12 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "chatzilla-0.9.70";
+  name = "chatzilla-0.9.74";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://rdmsoft.com/dlfs/cz/chatzilla-0.9.70-xr.zip;
-    md5 = "543ab121916b8c4bfe20d4aa07536e35";
+    # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
+    url = http://chatzilla.rdmsoft.com/xulrunner/download/chatzilla-0.9.74-xr.zip;
+    md5 = "a1eada15b172eab6a771afa5f8670f7a";
   };
 
   buildInputs = [unzip];
