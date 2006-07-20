@@ -23,7 +23,6 @@ import ../generic {
   shell = pkgs.bash ~ /bin/sh;
 
   extraAttrs = {
-    # Curl should be in /usr/bin or so.
-    curl = null;
+    curl = pkgs.realCurl;
   };
 }
