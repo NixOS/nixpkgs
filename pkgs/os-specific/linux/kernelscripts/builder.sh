@@ -11,6 +11,7 @@ for i in $createModules; do
         -e "s^@coreutils\@^$coreutils^g" \
         -e "s^@findutils\@^$findutils^g" \
         -e "s^@kernelpkgs\@^$kernelpkgs^g" \
+        -e "s^@module_init_tools\@^$module_init_tools^g" \
         -e "s^@nix\@^$nix^g" \
         < $i > $dst
     chmod +x $dst

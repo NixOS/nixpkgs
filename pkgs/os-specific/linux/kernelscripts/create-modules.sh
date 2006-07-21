@@ -5,11 +5,13 @@ archivesDir=/
 
 cpwd=@coreutils@/bin/pwd
 
-storeExpr=$(@nix@/bin/nix-store -qR $(@nix@/bin/nix-store -r $(echo '(import @kernelpkgs@).everything' | @nix@/bin/nix-instantiate -)))
+#storeExpr=$(@nix@/bin/nix-store -qR $(@nix@/bin/nix-store -r $(echo '(import @kernelpkgs@).everything' | @nix@/bin/nix-instantiate -)))
 
 kernel=$(@nix@/bin/nix-store -r $(echo '(import @kernelpkgs@).kernel' | @nix@/bin/nix-instantiate -))
 
 ov511=$(@nix@/bin/nix-store -r $(echo '(import @kernelpkgs@).ov511' | @nix@/bin/nix-instantiate -))
+
+module_init_tools=$(@nix@/bin/nix-store -r $(echo '(import @kernelpkgs@).module_init_tools' | @nix@/bin/nix-instantiate -))
 
 #echo making kernel stuff
 
@@ -45,3 +47,7 @@ cd $ov511
 echo linking ov511 modules
 
 @findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type f | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/ln -s $ov511/% $archivesDir/%
+
+echo running depmod
+
+@module_init_tools@/sbin/depmod -ae
