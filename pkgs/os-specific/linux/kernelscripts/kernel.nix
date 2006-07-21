@@ -1,5 +1,5 @@
 rec {
-  inherit (import /nixpkgs/trunk/pkgs/system/i686-linux.nix)
+  inherit (import /nixpkgs/trunk/pkgs/top-level/all-packages.nix {})
     stdenv kernel ov511;
 
   everything = [kernel ov511];

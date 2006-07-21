@@ -1,6 +1,6 @@
 #! /bin/sh -e
 
-. $stdenv/setup
+source $stdenv/setup
 
 mkdir $out
 mkdir $out/bin
