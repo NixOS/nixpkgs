@@ -33,7 +33,9 @@ echo making kernel directories
 
 echo linking kernel modules
 
-@findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type f | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/ln -s $kernel/% $archivesDir/%
+@findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" \
+  -a -not -path "./System*" -a -not -path "./vmlinuz*" \
+ -type f | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/ln -s $kernel/% $archivesDir/%
 
 echo making ov511 directories
 
