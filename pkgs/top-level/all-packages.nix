@@ -2168,6 +2168,10 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
+  amsn = (import ../applications/networking/instant-messengers/amsn) {
+    inherit fetchurl stdenv which tcl tk x11;
+  };
+
   xchat = (import ../applications/networking/irc/xchat) {
     inherit fetchurl stdenv pkgconfig tcl;
     inherit (gtkLibs) glib gtk;
