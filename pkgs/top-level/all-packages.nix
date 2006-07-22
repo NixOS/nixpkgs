@@ -1714,6 +1714,10 @@ rec {
     inherit (xlibs) libXaw;
   };
 
+  tk = import ../development/libraries/tk {
+    inherit fetchurl stdenv tcl x11;
+  };
+
   id3lib = import ../development/libraries/id3lib {
     inherit fetchurl stdenv;
   };
@@ -1850,6 +1854,12 @@ rec {
   kernel = (import ../os-specific/linux/kernel) {
     inherit fetchurl perl mktemp;
     stdenv = overrideGCC stdenv gcc34;
+  };
+
+  kernelscripts = (import ../os-specific/linux/kernelscripts) {
+    inherit coreutils findutils module_init_tools;
+    stdenv = overrideGCC stdenv gcc34;
+    nix = nixUnstable;
   };
 
   #klibc = (import ../os-specific/linux/klibc) {
