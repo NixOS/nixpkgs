@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libxml2}:
 
 stdenv.mkDerivation {
-  name = "neon-0.25.4";
+  name = "neon-0.25.5";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/neon-0.25.4.tar.gz;
-    md5 = "4448c3a91e80429ea733aec8ce300009";
+    url = http://www.webdav.org/neon/neon-0.25.5.tar.gz;
+    md5 = "b5fdb71dd407f0a3de0f267d27c9ab17";
   };
   buildInputs = [libxml2];
 }
