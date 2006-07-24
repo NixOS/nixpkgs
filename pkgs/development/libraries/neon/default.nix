@@ -7,4 +7,6 @@ stdenv.mkDerivation {
     md5 = "b5fdb71dd407f0a3de0f267d27c9ab17";
   };
   buildInputs = [libxml2];
+
+  configureFlags="--enable-shared";
 }
