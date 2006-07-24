@@ -22,6 +22,7 @@ let {
     bmp_plugin_musepack
     bsdiff
     bzip2
+    chatzilla
     cksfv
     coreutils
     darcs
@@ -74,7 +75,7 @@ let {
     mktemp
     mono
     mysql
-#    nix
+    nix
     nxml
 #    octave
     openssl
@@ -104,6 +105,7 @@ let {
     tetex
     texinfo
     thunderbird
+    tightvnc
     transformers
     uml
     unzip
