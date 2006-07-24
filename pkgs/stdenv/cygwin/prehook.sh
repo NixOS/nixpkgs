@@ -1,2 +1,5 @@
 export NIX_ENFORCE_PURITY=
-export configureFlags="$configureFlags --disable-shared"
+
+if test -z "$cygwinConfigureEnableShared"; then
+  export configureFlags="$configureFlags --disable-shared"
+fi
