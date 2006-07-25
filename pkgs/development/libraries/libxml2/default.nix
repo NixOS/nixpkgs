@@ -1,1 +1,1 @@
-import ./libxml2-2.6.23.nix
+import ./libxml2-2.6.26.nix
