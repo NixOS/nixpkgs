@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-configureFlags=""
+configureFlags="--with-zlib=$zlib"
 if test "$pythonSupport"; then
     configureFlags="--with-python=$python $configureFlags"
 fi

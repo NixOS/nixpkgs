@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   python = if pythonSupport then python else null;
-  inherit pythonSupport;
+  inherit pythonSupport zlib;
 
   buildInputs =  if pythonSupport then [python] else [];
   propagatedBuildInputs = [zlib];
