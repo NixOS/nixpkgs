@@ -1111,6 +1111,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  zlibStatic = (import ../development/libraries/zlib) {
+    inherit fetchurl stdenv;
+    static = true;
+  };
+
   libjpeg = (import ../development/libraries/libjpeg) {
     inherit fetchurl stdenv libtool;
   };
