@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "abiword-2.4.4";
+  name = "abiword-2.4.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.abisource.com/downloads/abiword/2.4.4/source/abiword-2.4.4.tar.gz;
-    md5 = "5a2710c2ed89608f30fa8dbed001719c";
+    url = http://www.abisource.com/downloads/abiword/2.4.5/source/abiword-2.4.5.tar.gz;
+    md5 = "e05f15936535c4b737deaa721adf8d09";
   };
 
   buildInputs = [pkgconfig glib gtk pango libglade libgnomeprint
