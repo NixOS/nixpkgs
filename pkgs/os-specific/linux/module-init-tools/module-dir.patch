@@ -41,7 +41,7 @@ diff -rc module-init-tools-3.2.2/depmod.c module-init-tools-3.2.2.new/depmod.c
   		all = 1;
   
 +         if((module_dir = getenv("MODULE_DIR")) == NULL) {
-+                 module_dir = "/lib/modules";
++                 module_dir = "/lib/modules/";
 +         }
 + 
   	dirname = NOFAIL(malloc(strlen(basedir)
