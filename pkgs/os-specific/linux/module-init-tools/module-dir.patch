@@ -1,0 +1,153 @@
+diff -rc module-init-tools-3.2.2/depmod.c module-init-tools-3.2.2.new/depmod.c
+*** module-init-tools-3.2.2/depmod.c	2005-11-21 03:45:15.000000000 +0100
+--- module-init-tools-3.2.2.new/depmod.c	2006-07-27 16:50:35.000000000 +0200
+***************
+*** 25,34 ****
+  
+  #include "testing.h"
+  
+- #ifndef MODULE_DIR
+- #define MODULE_DIR "/lib/modules/"
+- #endif
+- 
+  static int verbose;
+  static unsigned int skipchars;
+  
+--- 25,30 ----
+***************
+*** 756,761 ****
+--- 752,758 ----
+  		*system_map = NULL;
+  	struct module *list = NULL;
+  	int i;
++ 	char *module_dir;
+  
+  	/* Don't print out any errors just yet, we might want to exec
+             backwards compat version. */
+***************
+*** 834,843 ****
+  	if (optind == argc)
+  		all = 1;
+  
+  	dirname = NOFAIL(malloc(strlen(basedir)
+! 			 + strlen(MODULE_DIR)
+  			 + strlen(version) + 1));
+! 	sprintf(dirname, "%s%s%s", basedir, MODULE_DIR, version);
+  
+  	if (maybe_all) {
+  		if (!doing_stdout && !depfile_out_of_date(dirname))
+--- 831,844 ----
+  	if (optind == argc)
+  		all = 1;
+  
++         if((module_dir = getenv("MODULE_DIR")) == NULL) {
++                 module_dir = "/lib/modules";
++         }
++ 
+  	dirname = NOFAIL(malloc(strlen(basedir)
+! 			 + strlen(module_dir)
+  			 + strlen(version) + 1));
+! 	sprintf(dirname, "%s%s%s", basedir, module_dir, version);
+  
+  	if (maybe_all) {
+  		if (!doing_stdout && !depfile_out_of_date(dirname))
+diff -rc module-init-tools-3.2.2/modinfo.c module-init-tools-3.2.2.new/modinfo.c
+*** module-init-tools-3.2.2/modinfo.c	2005-01-18 04:25:23.000000000 +0100
+--- module-init-tools-3.2.2.new/modinfo.c	2006-07-27 16:51:38.000000000 +0200
+***************
+*** 18,27 ****
+  #define streq(a,b) (strcmp((a),(b)) == 0)
+  #define strstarts(a,start) (strncmp((a),(start), strlen(start)) == 0)
+  
+- #ifndef MODULE_DIR
+- #define MODULE_DIR "/lib/modules"
+- #endif
+- 
+  static int elf_endian;
+  static int my_endian;
+  
+--- 18,23 ----
+***************
+*** 277,282 ****
+--- 273,279 ----
+  	char *data;
+  	struct utsname buf;
+  	char *depname, *p;
++ 	char *module_dir;
+  
+  	data = grab_file(name, size);
+  	if (data) {
+***************
+*** 289,297 ****
+  		return NULL;
+  	}
+  
+  	/* Search for it in modules.dep. */
+  	uname(&buf);
+! 	asprintf(&depname, "%s/%s/modules.dep", MODULE_DIR, buf.release);
+  	data = grab_file(depname, size);
+  	if (!data) {
+  		fprintf(stderr, "modinfo: could not open %s\n", depname);
+--- 286,298 ----
+  		return NULL;
+  	}
+  
++         if((module_dir = getenv("MODULE_DIR")) == NULL) {
++                 module_dir = "/lib/modules";
++         }
++ 
+  	/* Search for it in modules.dep. */
+  	uname(&buf);
+! 	asprintf(&depname, "%s/%s/modules.dep", module_dir, buf.release);
+  	data = grab_file(depname, size);
+  	if (!data) {
+  		fprintf(stderr, "modinfo: could not open %s\n", depname);
+diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe.c
+*** module-init-tools-3.2.2/modprobe.c	2005-12-02 00:42:09.000000000 +0100
+--- module-init-tools-3.2.2.new/modprobe.c	2006-07-27 16:51:58.000000000 +0200
+***************
+*** 55,64 ****
+  	char filename[0];
+  };
+  
+- #ifndef MODULE_DIR
+- #define MODULE_DIR "/lib/modules"
+- #endif
+- 
+  typedef void (*errfn_t)(const char *fmt, ...);
+  
+  /* Do we use syslog or stderr for messages? */
+--- 55,60 ----
+***************
+*** 1416,1421 ****
+--- 1412,1418 ----
+  	char *newname = NULL;
+  	char *aliasfilename, *symfilename;
+  	errfn_t error = fatal;
++ 	char *module_dir = NULL;
+  
+  	/* Prepend options from environment. */
+  	argv = merge_args(getenv("MODPROBE_OPTIONS"), argv, &argc);
+***************
+*** 1538,1545 ****
+  	if (argc < optind + 1 && !dump_only && !list_only && !remove)
+  		print_usage(argv[0]);
+  
+! 	dirname = NOFAIL(malloc(strlen(buf.release) + sizeof(MODULE_DIR) + 1));
+! 	sprintf(dirname, "%s/%s", MODULE_DIR, buf.release);
+  	aliasfilename = NOFAIL(malloc(strlen(dirname)
+  				      + sizeof("/modules.alias")));
+  	sprintf(aliasfilename, "%s/modules.alias", dirname);
+--- 1535,1546 ----
+  	if (argc < optind + 1 && !dump_only && !list_only && !remove)
+  		print_usage(argv[0]);
+  
+! 	if((module_dir = getenv("MODULE_DIR")) == NULL) {
+! 		module_dir = "/lib/modules";
+! 	}
+! 
+! 	dirname = NOFAIL(malloc(strlen(buf.release) + sizeof(module_dir) + 1));
+! 	sprintf(dirname, "%s/%s", module_dir, buf.release);
+  	aliasfilename = NOFAIL(malloc(strlen(dirname)
+  				      + sizeof("/modules.alias")));
+  	sprintf(aliasfilename, "%s/modules.alias", dirname);
