@@ -146,7 +146,7 @@ diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe
 ! 		module_dir = "/lib/modules";
 ! 	}
 ! 
-! 	dirname = NOFAIL(malloc(strlen(buf.release) + strlen(module_dir) + 1));
+! 	dirname = NOFAIL(malloc(strlen(buf.release) + strlen(module_dir) + 2));
 ! 	sprintf(dirname, "%s/%s", module_dir, buf.release);
   	aliasfilename = NOFAIL(malloc(strlen(dirname)
   				      + sizeof("/modules.alias")));
