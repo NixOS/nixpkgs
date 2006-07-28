@@ -1,6 +1,6 @@
-#! /bin/sh -e
+source $stdenv/setup
 
-export MODULE_DIR=$out/lib/modules
+export MODULE_DIR=$out/lib/modules/
 
 kernelVersion=$(cd $kernel/lib/modules/; ls -d *)
 
@@ -16,16 +16,16 @@ find . -not -path "./lib/modules/$kernelVersion/build*" -type d | xargs -n 1 -i%
 
 find . -not -path "./lib/modules/$kernelVersion/build*" -a -not -path \
   "./System*" -a -not -path "./vmlinuz*" -type f | xargs -n 1 -i% \
-  ln -s $kernel/% $archivesDir/%
+  ln -s $kernel/% $out/%
 
 # echo making ov511 directories
 
 # cd $ov511
-# @findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type d | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/mkdir -p $archivesDir/%
+# @findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type d | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/mkdir -p $out/%
 # 
 # echo symlinking ov511 modules
 # 
-# @findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type f | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/ln -s $ov511/% $archivesDir/%
+# @findutils@/bin/find . -not -path "./lib/modules/$kernelVersion/build*" -type f | @findutils@/bin/xargs -n 1 -i% @coreutils@/bin/ln -s $ov511/% $out/%
 
 # running depmod
-$module_init_tools/sbin/depmod -ae
+$module_init_tools/sbin/depmod -ae $kernelVersion
