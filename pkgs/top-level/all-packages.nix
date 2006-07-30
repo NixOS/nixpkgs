@@ -1358,6 +1358,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ncursesDiet = (import ../development/libraries/ncurses-diet) {
+    inherit fetchurl;
+    stdenv = overrideGCC stdenv dietgcc;
+  };
+
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
   };
@@ -2028,9 +2033,9 @@ rec {
     };
   };
 
-  rpm = (import ../applications/package-management/rpm) {
-    inherit fetchurl stdenv python tcl readline file cpio beecrypt unzip neon gnupg libxml2 perl;
-  };
+  #rpm = (import ../applications/package-management/rpm) {
+  #  inherit fetchurl stdenv python tcl readline file cpio beecrypt unzip neon gnupg libxml2 perl;
+  #};
 
   cvs = (import ../applications/version-management/cvs) {
     inherit fetchurl stdenv vim;
@@ -2427,9 +2432,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-#  vimDiet = (import ../applications/editors/vim-diet) {
-#    inherit fetchurl stdenv ncurses dietgcc;
-#  };
+  vimDiet = (import ../applications/editors/vim-diet) {
+    inherit fetchurl stdenv dietgcc;
+    ncurses = ncursesDiet;
+  };
 
   nedit = import ../applications/editors/nedit {
     inherit fetchurl stdenv x11;
