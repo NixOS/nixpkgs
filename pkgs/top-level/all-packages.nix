@@ -2432,8 +2432,9 @@ rec {
   };
 
   vimDiet = (import ../applications/editors/vim-diet) {
-    inherit fetchurl stdenv dietgcc;
+    inherit fetchurl;
     ncurses = ncursesDiet;
+    stdenv = overrideGCC stdenv dietgcc;
   };
 
   nedit = import ../applications/editors/nedit {

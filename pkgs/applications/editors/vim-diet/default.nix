@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, dietgcc}:
+{stdenv, fetchurl, ncurses}:
  
 stdenv.mkDerivation {
   name = "vim-7.0";
@@ -11,7 +11,5 @@ stdenv.mkDerivation {
   inherit ncurses;
   buildInputs = [ncurses];
 
-  NIX_GCC = dietgcc;
-  NIX_GLIBC_FLAGS_SET=1;
   NIX_CFLAGS_COMPILE="-D_BSD_SOURCE=1";
 }
