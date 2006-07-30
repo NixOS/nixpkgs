@@ -1867,9 +1867,8 @@ rec {
   };
 
   kernelscripts = (import ../os-specific/linux/kernelscripts) {
-    inherit coreutils findutils module_init_tools;
-    stdenv = overrideGCC stdenv gcc34;
-    nix = nixUnstable;
+    inherit stdenv module_init_tools kernel;
+    modules = [ov511];
   };
 
   #klibc = (import ../os-specific/linux/klibc) {
