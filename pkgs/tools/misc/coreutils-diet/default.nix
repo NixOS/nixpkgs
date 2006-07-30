@@ -11,6 +11,5 @@ stdenv.mkDerivation {
   patches = [./coreutils-dummy.patch];
   buildInputs = [perl];
   NIX_GCC = dietgcc;
-  NIX_GLIBC_FLAGS_SET=1;
   NIX_CFLAGS_COMPILE="-D_BSD_SOURCE=1";
 }
