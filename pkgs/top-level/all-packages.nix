@@ -260,6 +260,11 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
+  wgetDiet = (import ../tools/networking/wget) {
+    inherit fetchurl gettext;
+    stdenv = overrideGCC stdenv dietgcc;
+  };
+
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
 
   realCurl = (import ../tools/networking/curl) {
