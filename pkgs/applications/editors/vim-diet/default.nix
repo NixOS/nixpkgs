@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses, dietgcc}:
  
 stdenv.mkDerivation {
-  name = "vim-6.3";
+  name = "vim-7.0";
  
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/vim-6.3.tar.bz2;
-    md5 = "821fda8f14d674346b87e3ef9cb96389";
+    url = ftp://ftp.vim.org/pub/vim/unix/vim-7.0.tar.bz2;
+    md5 = "4ca69757678272f718b1041c810d82d8";
   };
  
   inherit ncurses;
