@@ -1930,7 +1930,8 @@ rec {
   };
 
   e2fsprogsDiet = (import ../os-specific/linux/e2fsprogs-diet) {
-    inherit fetchurl stdenv gettext dietgcc;
+    inherit fetchurl gettext;
+    stdenv = overrideGCC stdenv dietgcc;
   };
 
   nettools = (import ../os-specific/linux/net-tools) {
