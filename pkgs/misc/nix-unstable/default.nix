@@ -16,4 +16,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [aterm bdb perl curl];
   inherit storeDir stateDir aterm bdb;
+
+  # uncomment if you want to be able to use nix-prefetch-url when NIX_ROOT
+  # is set
+  #patches = [./nix-0.10pre5679.patch];
 }
