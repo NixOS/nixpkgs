@@ -6,10 +6,10 @@
 assert yacc != null && m4 != null;
 
 stdenv.mkDerivation {
-  name = "flex-2.5.31";
+  name = "flex-2.5.33";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/flex-2.5.31.tar.bz2;
-    md5 = "363dcc4afc917dc51306eb9d3de0152f";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/flex/flex-2.5.33.tar.bz2;
+    md5 = "343374a00b38d9e39d1158b71af37150";
   };
   buildInputs = [yacc];
   propagatedBuildInputs = [m4];
