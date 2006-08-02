@@ -1,0 +1,28 @@
+diff -rc nix-0.10pre5896/scripts/download-using-manifests.pl.in nix-0.10pre5896.new/scripts/download-using-manifests.pl.in
+*** nix-0.10pre5896/scripts/download-using-manifests.pl.in	2006-07-24 20:39:47.000000000 +0200
+--- nix-0.10pre5896.new/scripts/download-using-manifests.pl.in	2006-08-02 21:45:53.000000000 +0200
+***************
+*** 9,14 ****
+--- 9,15 ----
+  
+  open LOGFILE, ">>$logFile" or die "cannot open log file $logFile";
+  
++ delete $ENV{"NIX_ROOT"};
+  
+  # Create a temporary directory.
+  my $tmpDir;
+diff -rc nix-0.10pre5896/scripts/nix-prefetch-url.in nix-0.10pre5896.new/scripts/nix-prefetch-url.in
+*** nix-0.10pre5896/scripts/nix-prefetch-url.in	2006-07-24 20:39:47.000000000 +0200
+--- nix-0.10pre5896.new/scripts/nix-prefetch-url.in	2006-08-02 21:13:46.000000000 +0200
+***************
+*** 3,8 ****
+--- 3,11 ----
+  url=$1
+  expHash=$2
+  
++ # to prevent doing more than 1 chroot
++ unset NIX_ROOT
++ 
+  hashType=$NIX_HASH_ALGO
+  if test -z "$hashType"; then
+      hashType=md5

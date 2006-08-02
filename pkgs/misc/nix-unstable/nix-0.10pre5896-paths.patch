@@ -1,0 +1,14 @@
+diff -rc nix-0.10pre5896/scripts/nix-prefetch-url.in nix-0.10pre5896.new/scripts/nix-prefetch-url.in
+*** nix-0.10pre5896/scripts/nix-prefetch-url.in	2006-07-24 20:39:47.000000000 +0200
+--- nix-0.10pre5896.new/scripts/nix-prefetch-url.in	2006-08-02 20:01:15.000000000 +0200
+***************
+*** 3,8 ****
+--- 3,10 ----
+  url=$1
+  expHash=$2
+  
++ export PATH=$PATH:@coreutils@
++ 
+  hashType=$NIX_HASH_ALGO
+  if test -z "$hashType"; then
+      hashType=md5
