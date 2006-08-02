@@ -763,8 +763,8 @@ rec {
 
   abcPatchable = patches : 
     (import ../development/compilers/abc/default.nix) {
-      inherit stdenv fetchurl patches jre;
-      apacheAnt = apacheAntBlackdown14;
+      inherit stdenv fetchurl patches jre apacheAnt;
+      # apacheAnt = apacheAntBlackdown14;
       javaCup = import ../development/libraries/java/cup {
         inherit stdenv fetchurl;
         jdk = blackdown;
@@ -956,6 +956,11 @@ rec {
     inherit fetchurl stdenv jikes alsaLib xlibs;
   };
 
+  apacheAnt = (import ../development/tools/build-managers/apache-ant) {
+    inherit fetchurl stdenv jdk;
+    name = "ant-jdk-1.5.0";
+  };
+
   apacheAnt14 = (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv;
     jdk = j2sdk14x;
@@ -966,11 +971,6 @@ rec {
     inherit fetchurl stdenv;
     jdk = blackdown;
     name = "ant-blackdown-1.4.2";
-  };
-
-  apacheAnt = (import ../development/tools/build-managers/apache-ant) {
-    inherit fetchurl stdenv jdk;
-    name = "ant-jdk-1.5.0";
   };
 
   dovecot = (import ../servers/mail/dovecot) {

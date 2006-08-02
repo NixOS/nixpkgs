@@ -1,13 +1,14 @@
 {stdenv, fetchurl, apacheAnt, javaCup}:
 
 stdenv.mkDerivation {
-  name = "jasmin-dev-20060319162437";
+  name = "jasmin-dev-20060422015512";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://abc.comlab.ox.ac.uk/dists/1.1.1/files/jasmin-dev-20060319162437.tar.gz;
-    md5 = "d161d647ef727335cb1d15976a5e3011";
+    url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/jasmin-dev-20060422015512.tar.gz;
+    md5 = "0e49e532b4658c959582c5d5b5e28bf1";
   };
 
-  inherit apacheAnt javaCup;
+  inherit javaCup;
+  buildInputs = [apacheAnt];
 }

@@ -1,13 +1,13 @@
 {stdenv, fetchurl, apacheAnt}:
 
 stdenv.mkDerivation {
-  name = "polyglot-dev-20060319162437";
+  name = "polyglot-dev-20060422015512";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://abc.comlab.ox.ac.uk/dists/1.1.1/files/polyglot-dev-20060319162437.tar.gz;
-    md5 = "c6c29535e33f3055b7bc8f39f5acf00d";
+    url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/polyglot-dev-20060422015512.tar.gz;
+    md5 = "6972fe537b4edd41872ed1cf24d24b50";
   };
 
-  inherit apacheAnt;
+  buildInputs = [apacheAnt];
 }
