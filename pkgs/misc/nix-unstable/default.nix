@@ -20,4 +20,5 @@ stdenv.mkDerivation {
   # uncomment if you want to be able to use nix-prefetch-url when NIX_ROOT
   # is set
   #patches = [./nix-0.10pre5679.patch];
+  patches = [./nix-0.10pre5896-date.patch];
 }
