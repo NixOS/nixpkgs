@@ -418,6 +418,7 @@ sleep 10;
 
 echo umounting filesystem
 
+umount $root/cdrom
 umount $root
 #umount /nix
 umount /cdrom
