@@ -1,10 +1,10 @@
 #! @bash@/bin/sh -e
 
-export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@xawtv@/bin
+export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@utillinux@/bin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
-## klibc.
+## dietlibc.
 ##
 
 kernel=@kernel@
@@ -143,6 +143,7 @@ echo creating file system hierarchy on target drive
 
 make_dir 00755 /bin
 make_dir 00755 /boot
+make_dir 00755 /cdrom
 make_dir 00755 /dev
 make_dir 00755 /dev/pts
 make_dir 00755 /etc # global non-constant configuration
@@ -224,12 +225,17 @@ echo "Looking for CDROM in: $i"
   fi
 done
 
+
+echo mounting /cdrom in the target
+
+mount --bind /cdrom $root/cdrom
+
 echo switch to /nix and /nixpkgs from CD
-
 ## starting here it's OK to have full blown glibc
-
 ln -s /cdrom/nixpkgs /nixpkgs
+
 mount --bind /cdrom/nix /nix
+
 
 echo probing for hardware...
 
@@ -260,9 +266,6 @@ tar --directory=/cdrom -cf - pkgs | tar --directory=$root/nixpkgs/trunk -xvf -
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
 
-#echo adding manifest
-#$NIX/nix-pull $manifest
-
 echo adding packages
 
 export NIX_ROOT=$root
@@ -283,20 +286,43 @@ cp /cdrom/mystorepaths $root/tmp
 
 echo copying store
 
-#cp -fva /nix/store/* $root/nix/store
+cp -fva /nix/store/* $root/nix/store
 tar cf - /nix/store | tar --directory=$root -xvf -
 
 echo registering valid paths...
 
 $NIX/nix-store --register-validity < $root/tmp/mystorepaths
+
+unset NIX_ROOT
+export NIX_DATA_DIR=$root/nix/share
+export NIX_LOG_DIR=$root/nix/log/nix
+export NIX_STATE_DIR=$root/nix/var/nix
+export NIX_CONF_DIR=$root/nix/etc
+
+echo creating /bin/sh
+ln -s @bashGlibc@/bin/sh $root/bin/sh
+
+echo adding manifest
+$NIX/nix-pull file:///cdrom/MANIFEST
+
+export NIX_ROOT=$root
+unset NIX_DATA_DIR
+unset NIX_LOG_DIR
+unset NIX_STATE_DIR
+unset NIX_CONF_DIR
+
+### Fix this. Probably nix-instantiate, then nix-store -r.
+### Also make sure everything gets installed into an actual profile!
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix gnugrep
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix linux
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix grub
 
 echo setting init symlink...
 rm -f $root/init
 #ln -s $sysvinitPath/sbin/init $root/init
 ln -s @sysvinitPath@/sbin/init $root/sbin/init
-ln -s @bashGlibc@/bin/sh $root/bin/sh
 #ln -s @bash@/bin/bash $root/bin/bash
 
 echo setting up inittab...
@@ -339,12 +365,12 @@ touch_file /etc/services
 ###
 ### Do kernel stuff here.
 ###
-strippedName=$(basename @kernel@);
+strippedName=$(basename $root/@kernel@);
 if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
         strippedName=$(echo "$strippedName" | cut -c34- | cut -c 7-)
 fi
 
-kernelhash=$(basename @kernel@);
+kernelhash=$(basename $root/@kernel@);
 if echo "$kernelhash" | grep -q '^[a-z0-9]\{32\}-'; then
         kernelhash=$(echo "$kernelhash" | cut -c -32)
 fi
@@ -355,7 +381,7 @@ make_dir 0755 /lib/modules/$version
 
 ln -s @kernel@/lib/modules/$version/build $root/lib/modules/$version/build
 ln -s @kernel@/lib/modules/$version/kernel $root/lib/modules/$version/kernel
-cp @kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
+cp $root/@kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
 chmod 644 $root/lib/modules/$version/modules.*
 
 ###
@@ -382,9 +408,13 @@ title NixOS
         kernel @kernel@/vmlinuz root=$device
 GRUBEND
 
+# clear substitutes here?
+# nix-store --clear-substitutes ??
+
 echo copying install log
 
 cp /tmp/install-log $root/root
+sleep 10;
 
 echo umounting filesystem
 

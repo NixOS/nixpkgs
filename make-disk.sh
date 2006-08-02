@@ -32,17 +32,22 @@ initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
+nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
+
+nixDeps=$($NIX/nix-store -qR $nix)
 
 storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
-#$NIX/nix-push --copy $archivesDir $manifest $($NIX/nix-store -r $storeExpr) $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
+#storeExpr=$($NIX/nix-store -r $($NIX/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
+
+### make NAR files for everything we want to install and some more. Make sure
+### the right URL is in there, so specify /cdrom and not cdrom
+$NIX/nix-push --copy $archivesDir $manifest --target /cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
 
 # Location of sysvinit?
 sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
 
 # Location of Nix boot scripts?
 bootPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
-
-nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
 
 syslinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX/nix-instantiate -))
 
@@ -54,7 +59,17 @@ kernel=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instan
 #echo $($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))) >> $storePaths
 #$NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -)) >> $storePaths
 
-for i in $storeExpr
+utillinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
+
+gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
+
+grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
+
+combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub)
+
+#for i in $storeExpr
+#for i in $nixDeps
+for i in $combideps
 do
   echo $i >> $storePaths
   echo '' >> $storePaths
@@ -77,18 +92,17 @@ e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fspr
 #e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -)))
 modUtils=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -)))
 Grub=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -)))
-#gnuSed=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -)))
-#gnuGrep=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -)))
 Kernel=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)))
 SysVinit=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -)))
 BootPath=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -)))
 
 bashGlibc=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX/nix-instantiate -))
-bash=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -)))
+bash=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -))
 coreutilsdiet=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -))
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 utillinux=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
 e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
+#e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
 #e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
 modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
@@ -248,9 +262,7 @@ $coreutils/bin/cp -fau --parents ${e2fsProgs} ${initdir}
 $coreutils/bin/cp -fau --parents ${coreutilsdiet}/bin ${initdir}
 $coreutils/bin/cp -fau --parents ${modutils}/bin ${initdir}
 $coreutils/bin/chmod -R u+w ${initdir}
-echo modutils
 $coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
-#cp -fau --parents ${kudzu} ${initdir}
 
 $coreutils/bin/touch ${archivesDir}/NIXOS
 
