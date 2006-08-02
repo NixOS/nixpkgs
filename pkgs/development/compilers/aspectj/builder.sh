@@ -18,10 +18,10 @@ do
   fi
 done
 
-cat >> $out/bin/ajc-env <<EOF
+cat >> $out/bin/aj-runtime-env <<EOF
 #! $SHELL
 
-export CLASSPATH=$CLASSPATH:.:/pkg/aspectj/lib/aspectjrt.jar
+export CLASSPATH=$CLASSPATH:.:$out/lib/aspectjrt.jar
 EOF
 
-chmod u+x $out/bin/ajc-env
+chmod u+x $out/bin/aj-runtime-env
