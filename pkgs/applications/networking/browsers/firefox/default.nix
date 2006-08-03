@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.6/source/firefox-1.5.0.6-source.tar.bz2;
-    sha1 = "3a659d384744cab77f90920f6d529c89";
+    sha1 = "056cf5bf3a5ed663980ed33f045f3db35c394b50";
   };
 
   buildInputs = [
