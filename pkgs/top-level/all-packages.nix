@@ -580,6 +580,10 @@ rec {
     m4 = gnum4;
   };
 
+  antlr = (import ../development/tools/parsing/antlr) {
+    inherit fetchurl stdenv jre;
+  };
+
   gcc = useFromStdenv (stdenv ? gcc) stdenv.gcc gcc41;
 
   gcc_static = (import ../development/compilers/gcc-static-3.4) {
