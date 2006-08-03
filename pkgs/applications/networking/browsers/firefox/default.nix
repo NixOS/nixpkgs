@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-1.5.0.5";
+  name = "firefox-1.5.0.6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.5/source/firefox-1.5.0.5-source.tar.bz2;
-    sha1 = "e4a5d4fb1a2fd5ee8f65fff1e39f2871bc0113ef";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.6/source/firefox-1.5.0.6-source.tar.bz2;
+    sha1 = "3a659d384744cab77f90920f6d529c89";
   };
 
   buildInputs = [
