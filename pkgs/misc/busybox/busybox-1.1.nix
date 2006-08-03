@@ -11,6 +11,6 @@ stdenv.mkDerivation {
 
   inherit gccCross;
   buildinputs = [binutilsCross];
-  config = ./config-1.1;
+  config = ./mips-config-1.1;
 
 }
