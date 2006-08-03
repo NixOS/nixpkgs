@@ -65,7 +65,7 @@ gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-inst
 
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
 
-combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub)
+combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip)
 
 #for i in $storeExpr
 #for i in $nixDeps
@@ -154,8 +154,8 @@ $coreutils/bin/mkdir ${initdir}/var/run
 echo copying nixpkgs
 
 #svn export ${nixpkgs} ${archivesDir}/pkgs
-$coreutils/bin/cp -fa ${nixpkgs} ${archivesDir}
-#tar cf $archivesDir
+#$coreutils/bin/cp -fa ${nixpkgs} ${archivesDir}
+tar -zcf  ${archivesDir}/nixpkgs.tgz ${nixpkgs}
 
 #echo copying packages from store
 
@@ -199,6 +199,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@kudzu\@^$kudzu^g" \
     -e "s^@sysklogd\@^$sysklogd^g" \
     -e "s^@gnutar\@^$gnutar^g" \
+    -e "s^@gzip\@^$gzip^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
     < $fill_disk > $fill_disk.tmp
 $coreutils/bin/mv $fill_disk.tmp $fill_disk

@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@utillinux@/bin
+export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@utillinux@/bin:@gzip@/bin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -165,8 +165,8 @@ make_dir 00755 /nix/var/nix/profiles
 make_dir 00755 /nix/var/nix/temproots
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
-make_dir 00755 /nixpkgs
-make_dir 00755 /nixpkgs/trunk
+#make_dir 00755 /nixpkgs
+#make_dir 00755 /nixpkgs/trunk
 make_dir 00755 /proc
 make_dir 00750 /root
 make_dir 00755 /sbin
@@ -230,9 +230,9 @@ echo mounting /cdrom in the target
 
 mount --bind /cdrom $root/cdrom
 
-echo switch to /nix and /nixpkgs from CD
+echo switch to /nix from CD
 ## starting here it's OK to have full blown glibc
-ln -s /cdrom/nixpkgs /nixpkgs
+#ln -s /cdrom/nixpkgs /nixpkgs
 
 mount --bind /cdrom/nix /nix
 
@@ -261,7 +261,8 @@ $NIX/nix-store --verify
 
 echo copying nixpkgs...
 #cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
-tar --directory=/cdrom -cf - pkgs | tar --directory=$root/nixpkgs/trunk -xvf -
+#tar --directory=/cdrom -cf - pkgs | tar --directory=$root/nixpkgs/trunk -xvf -
+tar --directory=$root -zxvf /cdrom/nixpkgs.tgz
 
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
