@@ -84,6 +84,8 @@ do
   $gnutar/bin/tar -cf - $i | $gnutar/bin/tar --directory=$archivesDir -xf -
 done
 
+tar zcf ${archivesDir}/nixstore.tgz $combideps
+
 utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX/nix-instantiate -))
 coreUtilsDiet=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -)))
 
@@ -154,23 +156,9 @@ $coreutils/bin/mkdir ${initdir}/var/run
 echo copying nixpkgs
 
 #svn export ${nixpkgs} ${archivesDir}/pkgs
-#$coreutils/bin/cp -fa ${nixpkgs} ${archivesDir}
 tar -zcf  ${archivesDir}/nixpkgs.tgz ${nixpkgs}
 
 #echo copying packages from store
-
-#cp -fa --parents ${nixDeps} ${archivesDir}
-#cp -fvau --parents ${utilLinux} ${archivesDir}
-#cp -fvau --parents ${Grub} ${archivesDir}
-##cp -fau --parents ${gnuSed} ${archivesDir}
-##cp -fau --parents ${gnuGrep} ${archivesDir}
-#cp -fvau --parents ${Kernel} ${archivesDir}
-#cp -fvau --parents ${SysVinit} ${archivesDir}
-#cp -fvau --parents ${BootPath} ${archivesDir}
-#cp -fvau --parents ${udev} ${archivesDir}
-#cp -fvau --parents ${dhcp} ${archivesDir}
-#cp -fvau --parents ${nano} ${archivesDir}
-#cp -fvau --parents ${gnutar} ${archivesDir}
 
 echo copying scripts
 

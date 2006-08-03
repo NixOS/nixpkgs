@@ -287,8 +287,8 @@ cp /cdrom/mystorepaths $root/tmp
 
 echo copying store
 
-cp -fva /nix/store/* $root/nix/store
-tar cf - /nix/store | tar --directory=$root -xvf -
+#cp -fva /nix/store/* $root/nix/store
+tar --directory=$root -zxvf /cdrom/nixstore.tgz
 
 echo registering valid paths...
 
