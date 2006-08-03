@@ -320,6 +320,8 @@ $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix gnugrep
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix linux
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix grub
 
+$NIX/nix-store --clear-substitutes
+
 echo setting init symlink...
 rm -f $root/init
 #ln -s $sysvinitPath/sbin/init $root/init
@@ -410,12 +412,10 @@ title NixOS
 GRUBEND
 
 # clear substitutes here?
-# nix-store --clear-substitutes ??
 
 echo copying install log
 
 cp /tmp/install-log $root/root
-sleep 10;
 
 echo umounting filesystem
 
