@@ -112,6 +112,9 @@ swapon $swapdevice
 #    device=$1
 #fi
 
+##
+## Two convenience shell functions
+##
 
 make_dir() {
     mode=$1
@@ -120,7 +123,6 @@ make_dir() {
     if ! test -d $root/$name; then mkdir $root/$name; fi
     chmod $mode $root/$name
 }
-
 
 touch_file() {
     name=$1
@@ -165,8 +167,6 @@ make_dir 00755 /nix/var/nix/profiles
 make_dir 00755 /nix/var/nix/temproots
 make_dir 00755 /nix/var/log
 make_dir 00755 /nix/var/log/nix
-#make_dir 00755 /nixpkgs
-#make_dir 00755 /nixpkgs/trunk
 make_dir 00755 /proc
 make_dir 00750 /root
 make_dir 00755 /sbin
@@ -232,12 +232,10 @@ mount --bind /cdrom $root/cdrom
 
 echo switch to /nix from CD
 ## starting here it's OK to have full blown glibc
-#ln -s /cdrom/nixpkgs /nixpkgs
 
 mount --bind /cdrom/nix /nix
 
-
-echo probing for hardware...
+#echo probing for hardware...
 
 #kudzu
 
@@ -260,8 +258,6 @@ echo verifying Nix DB...
 $NIX/nix-store --verify
 
 echo copying nixpkgs...
-#cp -fLa /cdrom/pkgs $root/nixpkgs/trunk
-#tar --directory=/cdrom -cf - pkgs | tar --directory=$root/nixpkgs/trunk -xvf -
 tar --directory=$root -zxvf /cdrom/nixpkgs.tgz
 
 make_dir 0755 /tmp/scripts
@@ -275,19 +271,10 @@ unset NIX_LOG_DIR
 unset NIX_STATE_DIR
 unset NIX_CONF_DIR
 
-storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).kernel' | $NIX/nix-instantiate -v -v -)
-#storeExpr=$(echo '(import /tmp/scripts/pkgs.nix).everything' | $NIX/nix-instantiate -v -v -)
-#storeExpr=$(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -v -v -)
-#$NIX/nix-store -r $storeExpr
-echo $storeExpr > $root/tmp/storeExpr
 cp /cdrom/mystorepaths $root/tmp
-#storeExpr2=$($NIX/nix-store -qR $($NIX/nix-store -r $storeExpr))
-#echo storeExpr $storeExpr
-#echo $($NIX/nix-store -qR --include-outputs $storeExpr)
 
 echo copying store
 
-#cp -fva /nix/store/* $root/nix/store
 tar --directory=$root -zxvf /cdrom/nixstore.tgz
 
 echo registering valid paths...
@@ -312,15 +299,14 @@ unset NIX_LOG_DIR
 unset NIX_STATE_DIR
 unset NIX_CONF_DIR
 
-### Fix this. Probably nix-instantiate, then nix-store -r.
-### Also make sure everything gets installed into an actual profile!
+## Fix this. Probably nix-instantiate, then nix-store -r.
+## Also make sure everything gets installed into an actual profile!
+
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix gnugrep
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix linux
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix grub
-
-$NIX/nix-store --clear-substitutes
 
 echo setting init symlink...
 rm -f $root/init
@@ -365,9 +351,9 @@ echo "source @nix@/etc/profile.d/nix.sh" > $root/root/.profile
 touch_file /etc/login.defs
 touch_file /etc/services
 
-###
-### Do kernel stuff here.
-###
+##
+## Do kernel stuff here.
+##
 strippedName=$(basename $root/@kernel@);
 if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
         strippedName=$(echo "$strippedName" | cut -c34- | cut -c 7-)
@@ -387,16 +373,16 @@ ln -s @kernel@/lib/modules/$version/kernel $root/lib/modules/$version/kernel
 cp $root/@kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
 chmod 644 $root/lib/modules/$version/modules.*
 
-###
-### init
-###
+##
+## init
+##
 
 ln -s $device $root/dev/root
 ln -s @sysvinitPath@/sbin/init /sbin/init
 
-###
-### Do funky stuff with grub here.
-###
+##
+## Do funky stuff with grub here.
+##
 
 echo installing bootloader
 
@@ -411,7 +397,9 @@ title NixOS
         kernel @kernel@/vmlinuz root=$device
 GRUBEND
 
-# clear substitutes here?
+echo clearing substitutes
+
+$NIX/nix-store --clear-substitutes
 
 echo copying install log
 
