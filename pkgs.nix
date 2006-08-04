@@ -5,23 +5,23 @@ rec {
     nixUnstable subversion gcc wget which vim less screen openssh binutils
     nixStatic strace shadowutils iputils gnumake curl gnused gnutar gnugrep
     gzip mingettyWrapper grubWrapper syslinux parted module_init_tools
-    module_init_toolsStatic udev dhcpWrapper man nano eject sysklogd mktemp
+    module_init_toolsStatic dhcpWrapper man nano eject sysklogd mktemp
     cdrtools cpio;
 
   boot = (import ./boot) {
-    inherit stdenv bash bashStatic coreutils findutilsWrapper utillinux
-    utillinuxStatic sysvinit e2fsprogs nettools subversion gcc wget which
-    vim less screen openssh binutils strace shadowutils iputils gnumake curl
-    gnused gnutar gnugrep gzip mingettyWrapper grubWrapper parted
-    module_init_tools udev dhcpWrapper man nano;
+    inherit stdenv bash coreutils findutilsWrapper utillinux sysvinit
+    e2fsprogs nettools subversion gcc wget which vim less screen openssh
+    strace shadowutils iputils gnumake curl gnused gnutar gnugrep gzip
+    mingettyWrapper grubWrapper parted module_init_tools dhcpWrapper man
+    nano;
     nix = nixUnstable;
   };
 
-  init = (import ./init) {inherit stdenv bash bashStatic coreutilsDiet
-    utillinux shadowutils mingettyWrapper grubWrapper parted module_init_tools
-    dhcpWrapper man nano eject e2fsprogsDiet;
-    nix = nixUnstable;
-  };
+  #init = (import ./init) {inherit stdenv bash bashStatic coreutilsDiet
+  #  utillinux shadowutils mingettyWrapper grubWrapper parted module_init_tools
+  #  dhcpWrapper man nano eject e2fsprogsDiet;
+  #  nix = nixUnstable;
+  #};
 
-  everything = [boot sysvinit sysklogd kernel ];
+  everything = [boot sysvinit sysklogd kernel];
 }

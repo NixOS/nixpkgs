@@ -21,9 +21,6 @@ mount -n -t devpts none /dev/pts
 echo "remounting / writable..."
 mount -n -o remount,rw /dev/root /
 
-echo "starting udev..."
-@udev@/sbin/udevstart
-
 echo "setting up hostname..."
 hostname nixos
 

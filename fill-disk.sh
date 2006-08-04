@@ -10,7 +10,7 @@ export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils
 kernel=@kernel@
 xawtv=@xawtv@
 
-storePaths=/mystorepaths
+narStorePaths=/cdrom/narstorepaths
 
 sysvinitPath=@sysvinitPath@
 bootPath=@bootPath@
@@ -307,6 +307,8 @@ $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix gnugrep
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix linux
 $NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix grub
+
+cat $narStorePaths | xargs -n 1 -i% $NIX/nix-env -i %
 
 echo setting init symlink...
 rm -f $root/init

@@ -26,6 +26,7 @@ nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 ramdisk_login=$archivesDir/scripts/ramdisk-login.sh
 storePaths=$archivesDir/mystorepaths
+narStorePaths=$archivesDir/narstorepaths
 validatePaths=$archivesDir/validatepaths
 bootiso=/tmp/nixos.iso
 initrd=/tmp/initram.img
@@ -36,7 +37,9 @@ nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-inst
 
 nixDeps=$($NIX/nix-store -qR $nix)
 
-storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
+#storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
+#storeExpr1=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
+storeExpr=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
 #storeExpr=$($NIX/nix-store -r $($NIX/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
 
 ### make NAR files for everything we want to install and some more. Make sure
@@ -65,9 +68,14 @@ gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-inst
 
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
 
-combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip)
+findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 
-#for i in $storeExpr
+combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
+
+for i in $storeExpr
+do
+  echo $i >> $narStorePaths
+done
 #for i in $nixDeps
 for i in $combideps
 do
@@ -101,7 +109,7 @@ BootPath=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' |
 bashGlibc=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bash' | $NIX/nix-instantiate -))
 bash=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -))
 coreutilsdiet=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -))
-findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
+#findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 utillinux=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
 e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
 #e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
@@ -109,7 +117,6 @@ e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/
 modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
 mingettyWrapper=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX/nix-instantiate -))
-udev=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).udev' | $NIX/nix-instantiate -))
 dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
 nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
 gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
