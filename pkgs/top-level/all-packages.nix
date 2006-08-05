@@ -414,6 +414,10 @@ rec {
       inherit fetchurl stdenv noSysDirs;
     });
 
+  binutilsStatic = (import ../development/tools/misc/binutils-static) {
+    inherit fetchurl stdenv noSysDirs;
+  };
+
   binutilsMips = (import ../development/tools/misc/binutils-cross) {
     inherit fetchurl stdenv noSysDirs;
     cross = "mips-linux";
@@ -2533,11 +2537,6 @@ rec {
     x11Support = false;
   };
 
-  #nixStatic = (import ../misc/nix-static) {
-  # inherit fetchurl stdenv aterm perl curl;
-  #  bdb = db4;
-  #};
-
   nix = (import ../misc/nix) {
     inherit fetchurl aterm perl curl;
     bdb = db4;
@@ -2546,6 +2545,11 @@ rec {
 
   nixUnstable = (import ../misc/nix-unstable) {
     inherit fetchurl stdenv aterm perl curl;
+    bdb = db4;
+  };
+
+  nixStatic = (import ../misc/nix-static) {
+    inherit fetchurl stdenv aterm perl curl autoconf automake libtool;
     bdb = db4;
   };
 
