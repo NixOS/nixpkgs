@@ -123,7 +123,7 @@ rec {
   };
 
   grubWrapper = (import ../tools/misc/grub-wrapper) {
-     inherit stdenv grub diffutils gnused gnugrep;
+     inherit stdenv grub diffutils gnused gnugrep coreutils;
   };
 
   man = (import ../tools/misc/man) {
@@ -2567,8 +2567,6 @@ rec {
 
   busybox = (import ../misc/busybox) {
     inherit fetchurl stdenv;
-    gccCross = gcc40mips;
-    binutilsCross = binutilsMips;
   };
 
   saneBackends = (import ../misc/sane-backends) {

@@ -1,4 +1,4 @@
-{stdenv, grub, diffutils, gnused, gnugrep}:
+{stdenv, grub, diffutils, gnused, gnugrep, coreutils}:
 
 stdenv.mkDerivation {
   name = grub.name;
@@ -6,5 +6,5 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
 
-  inherit grub diffutils gnused gnugrep;
+  inherit grub diffutils gnused gnugrep coreutils;
 }
