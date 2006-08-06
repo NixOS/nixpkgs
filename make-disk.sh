@@ -34,6 +34,7 @@ initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
 nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
+busybox=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).busybox' | $NIX/nix-instantiate -))
 
 nixDeps=$($NIX/nix-store -qR $nix)
 
@@ -58,10 +59,6 @@ kernel=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instan
 
 #nixDeps=$($NIX/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
 
-#nixDeps=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -)))
-#echo $($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))) >> $storePaths
-#$NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -)) >> $storePaths
-
 utillinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
 
 gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
@@ -70,7 +67,8 @@ grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-ins
 
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 
-combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
+#combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
+combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils)
 
 for i in $storeExpr
 do
@@ -125,22 +123,6 @@ eject=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX/nix-instanti
 sysklogd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX/nix-instantiate -))
 #kudzu=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX/nix-instantiate -))
 
-#(while read storepath; do
-   #cp -fa --parents ${storepath} ${archivesDir}
-#done) < $storePaths
-
-#echo utillinux $utilLinux
-
-#for i in $utilLinux; do
-#  echo i $i
-#  deps=( $($NIX/nix-store -q --references $i) )
-#  echo length ${#deps[@]}
-#  if test "${#deps[@]}" = 0
-#  then
-#    echo zarro
-#  fi
-#done
-
 echo creating directories for bootimage
 
 $coreutils/bin/mkdir ${initdir}
@@ -173,6 +155,7 @@ $coreutils/bin/mkdir ${archivesDir}/scripts
 $coreutils/bin/cp -fa * ${archivesDir}/scripts
 $gnused/bin/sed -e "s^@bash\@^$bash^g" \
     -e "s^@coreutils\@^$coreutilsdiet^g" \
+    -e "s^@busybox\@^$busybox^g" \
     < $initscript > $initscript.tmp
 $coreutils/bin/mv $initscript.tmp $initscript
 $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
@@ -181,6 +164,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@bash\@^$bash^g" \
     -e "s^@bashGlibc\@^$bashGlibc^g" \
     -e "s^@findutils\@^$findutils^g" \
+    -e "s^@busybox\@^$busybox^g" \
     -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
     -e "s^@coreutils\@^$coreutils^g" \
     -e "s^@utilLinux\@^$utilLinux^g" \
@@ -251,14 +235,15 @@ $coreutils/bin/chmod u+x ${initdir}/ramdisk-login.sh
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
 $coreutils/bin/cp -fau --parents ${bash}/bin ${initdir}
-$coreutils/bin/cp -fau --parents ${utilLinux}/bin ${initdir}
-$coreutils/bin/chmod -R u+w ${initdir}
-$coreutils/bin/cp -fau --parents ${utilLinux}/sbin ${initdir}
+#$coreutils/bin/cp -fau --parents ${utilLinux}/bin ${initdir}
+#$coreutils/bin/chmod -R u+w ${initdir}
+#$coreutils/bin/cp -fau --parents ${utilLinux}/sbin ${initdir}
 $coreutils/bin/cp -fau --parents ${e2fsProgs} ${initdir}
-$coreutils/bin/cp -fau --parents ${coreutilsdiet}/bin ${initdir}
+#$coreutils/bin/cp -fau --parents ${coreutilsdiet}/bin ${initdir}
 $coreutils/bin/cp -fau --parents ${modutils}/bin ${initdir}
 $coreutils/bin/chmod -R u+w ${initdir}
 $coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
+$coreutils/bin/cp -fau --parents ${busybox} ${initdir}
 
 $coreutils/bin/touch ${archivesDir}/NIXOS
 

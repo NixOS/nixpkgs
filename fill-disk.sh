@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=/bin:/sbin:@bash@/bin:@coreutilsdiet@/bin:@coreutils@/bin:@findutils@/bin:@utillinux@/bin:@utillinux@/sbin:@utilLinux@/bin:@utilLinux@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@gnugrep@/bin:@which@/bin:@gnutar@/bin:@eject@/bin:@kudzu@/sbin:@utillinux@/bin:@gzip@/bin
+export PATH=/bin:/sbin:@bash@/bin:@findutils@/bin:@busybox@/bin:@busybox@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@eject@/bin:@kudzu@/sbin:
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -204,6 +204,8 @@ mknod -m 0444 $root/dev/urandom c 1 9
 rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 
+# prevent df from barfing
+ln -s /proc/mounts /etc/mtab
 
 ## Probe for CD device which contains our CD here and mount /nix and
 ## /nixpkgs from it inside the ramdisk. Anaconda uses kudzu for this.
@@ -258,7 +260,7 @@ echo verifying Nix DB...
 $NIX/nix-store --verify
 
 echo copying nixpkgs...
-tar --directory=$root -zxvf /cdrom/nixpkgs.tgz
+tar --directory=$root -zxf /cdrom/nixpkgs.tgz
 
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
@@ -275,7 +277,7 @@ cp /cdrom/mystorepaths $root/tmp
 
 echo copying store
 
-tar --directory=$root -zxvf /cdrom/nixstore.tgz
+tar --directory=$root -zxf /cdrom/nixstore.tgz
 
 echo registering valid paths...
 
