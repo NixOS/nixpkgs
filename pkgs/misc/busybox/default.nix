@@ -1,1 +1,1 @@
-import ./busybox-1.1.nix
+import ./busybox-1.2.nix
