@@ -1842,6 +1842,14 @@ rec {
     gcc = stdenv.gcc;
   };
 
+  MAKEDEV = (import ../os-specific/linux/MAKEDEV) {
+    inherit fetchurl stdenv;
+  };
+
+  MAKEDEVwrapper = (import ../os-specific/linux/MAKEDEV-wrapper) {
+    inherit stdenv MAKEDEV;
+  };
+
   eject = (import ../os-specific/linux/eject) {
     inherit fetchurl stdenv gettext;
   };
