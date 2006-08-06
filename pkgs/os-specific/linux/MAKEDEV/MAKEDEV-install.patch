@@ -1,0 +1,22 @@
+diff -rc MAKEDEV-3.23/Makefile MAKEDEV-3.23.new/Makefile
+*** MAKEDEV-3.23/Makefile	2006-01-27 02:56:12.000000000 +0100
+--- MAKEDEV-3.23.new/Makefile	2006-08-06 21:50:06.000000000 +0200
+***************
+*** 19,26 ****
+  
+  CONF_WITH_SUBDIR=$(patsubst %,makedev.d/%,$(CONF))
+  
+! DESTDIR=
+! DESTDIRS=$(DESTDIR)${DESTDIR:+/}
+  devdir=/dev
+  makedevdir=/dev
+  sbindir=/usr/sbin
+--- 19,26 ----
+  
+  CONF_WITH_SUBDIR=$(patsubst %,makedev.d/%,$(CONF))
+  
+! DESTDIR=${out}
+! DESTDIRS=${out}
+  devdir=/dev
+  makedevdir=/dev
+  sbindir=/usr/sbin
