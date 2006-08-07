@@ -1,0 +1,13 @@
+diff -rc xc-orig/lib/Xaw3d/laylex.l xc/lib/Xaw3d/laylex.l
+*** xc-orig/lib/Xaw3d/laylex.l	2006-08-07 12:12:54.000000000 +0200
+--- xc/lib/Xaw3d/laylex.l	2006-08-07 12:14:49.000000000 +0200
+***************
+*** 27,33 ****
+  static int count ();
+  #endif
+  
+- static int LayYY_prev_more_offset = 0;
+  %}
+  %%
+  vertical		return VERTICAL;
+--- 27,32 ----
