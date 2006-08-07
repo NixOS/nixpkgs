@@ -5,56 +5,69 @@
 
 let {
 
-  body =
+  stdenvGenerator = setupScript: rec {
 
-    stdenv.mkDerivation {
-      inherit name;
+    # The stdenv that we are producing.
+    result =
 
-      builder = ./builder.sh;
+      stdenv.mkDerivation {
+        inherit name;
 
-      substitute = ../../build-support/substitute/substitute.sh;
+        builder = ./builder.sh;
 
-      setup = ./setup.sh;
+        substitute = ../../build-support/substitute/substitute.sh;
 
-      inherit preHook postHook initialPath gcc shell;
+        setup = setupScript;
 
-      # TODO: make this more elegant.
-      inherit param1 param2 param3 param4 param5;
-    }
+        inherit preHook postHook initialPath gcc shell;
 
-    // {
+        # TODO: make this more elegant.
+        inherit param1 param2 param3 param4 param5;
+      }
+
+      // {
     
-      # Add a utility function to produce derivations that use this
-      # stdenv and its shell.
-      mkDerivation = attrs:
-        (derivation (
-          (removeAttrs attrs ["meta"])
+        # Add a utility function to produce derivations that use this
+        # stdenv and its shell.
+        mkDerivation = attrs:
+          (derivation (
+            (removeAttrs attrs ["meta"])
+            //
+            {
+              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
+              args = if attrs ? args then attrs.args else
+                ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
+              stdenv = result;
+              system = result.system;
+            })
+          )
           //
-          {
-            builder = if attrs ? realBuilder then attrs.realBuilder else shell;
-            args = if attrs ? args then attrs.args else
-              ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
-            stdenv = body;
-            system = body.system;
-          })
-        )
-        //
-        # The meta attribute is passed in the resulting attribute set,
-        # but it's not part of the actual derivation, i.e., it's not
-        # passed to the builder and is not a dependency.  But since we
-        # include it in the result, it *is* available to nix-env for
-        # queries.
-        { meta = if attrs ? meta then attrs.meta else {}; };
+          # The meta attribute is passed in the resulting attribute set,
+          # but it's not part of the actual derivation, i.e., it's not
+          # passed to the builder and is not a dependency.  But since we
+          # include it in the result, it *is* available to nix-env for
+          # queries.
+          { meta = if attrs ? meta then attrs.meta else {}; };
 
-      # Utility value: is this a Darwin system?
-      isDarwin = body.system == "i686-darwin" || body.system == "powerpc-darwin";
+        # Utility value: is this a Darwin system?
+        isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin";
 
-    }
+        # Utility function: allow stdenv to be easily regenerated with
+        # a different setup script.  (See all-packages.nix for an
+        # example.)
+        regenerate = stdenvGenerator;
 
-    # Propagate any extra attributes.  For instance, we use this to
-    # "lift" packages like curl from the final stdenv for Linux to
-    # all-packages.nix for that platform (meaning that it has a line
-    # like curl = if stdenv ? curl then stdenv.curl else ...).
-    // extraAttrs;
+      }
+
+      # Propagate any extra attributes.  For instance, we use this to
+      # "lift" packages like curl from the final stdenv for Linux to
+      # all-packages.nix for that platform (meaning that it has a line
+      # like curl = if stdenv ? curl then stdenv.curl else ...).
+      // extraAttrs;
+
+  }.result;
+
+  
+  body = stdenvGenerator ./setup.sh;
 
 }

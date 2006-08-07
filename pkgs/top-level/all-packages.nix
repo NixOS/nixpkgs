@@ -54,6 +54,16 @@ rec {
       );
     };
 
+  # Override the setup script of stdenv.  Useful for testing new
+  # versions of the setup script without causing a rebuild of
+  # everything.
+  #
+  # Example:
+  #   randomPkg = (import ../bla) { ...
+  #     stdenv = overrideSetup stdenv ../stdenv/generic/setup-latest.sh;
+  #   };
+  overrideSetup = stdenv: setup: stdenv.regenerate setup;
+
 
   ### STANDARD ENVIRONMENT
 
