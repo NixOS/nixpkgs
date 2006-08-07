@@ -43,9 +43,11 @@ nixDeps=$($NIX/nix-store -qR $nix)
 storeExpr=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
 #storeExpr=$($NIX/nix-store -r $($NIX/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
 
+kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $NIX/nix-instantiate -))
+
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
-$NIX/nix-push --copy $archivesDir $manifest --target /cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
+$NIX/nix-push --copy $archivesDir $manifest --target /cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
 
 # Location of sysvinit?
 sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
@@ -56,6 +58,7 @@ bootPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instan
 syslinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX/nix-instantiate -))
 
 kernel=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
+kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $NIX/nix-instantiate -))
 
 #nixDeps=$($NIX/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
 
@@ -173,6 +176,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@modutils\@^$modutils^g" \
     -e "s^@grub\@^$grub^g" \
     -e "s^@kernel\@^$kernel^g" \
+    -e "s^@kernelscripts\@^$kernelscripts^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
     -e "s^@kudzu\@^$kudzu^g" \
@@ -195,6 +199,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@modutils\@^$modutils^g" \
     -e "s^@grub\@^$grub^g" \
     -e "s^@kernel\@^$kernel^g" \
+    -e "s^@kernelscripts\@^$kernelscripts^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
     -e "s^@gnutar\@^$gnutar^g" \

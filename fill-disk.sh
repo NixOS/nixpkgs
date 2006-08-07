@@ -304,11 +304,12 @@ unset NIX_CONF_DIR
 ## Fix this. Probably nix-instantiate, then nix-store -r.
 ## Also make sure everything gets installed into an actual profile!
 
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix nix
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix coreutils
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix gnugrep
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix linux
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix grub
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A nixUnstable
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A coreutils
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A gnugrep
+#$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A kernel
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A kernelscripts
+$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A grub
 
 cat $narStorePaths | xargs -n 1 -i% $NIX/nix-env -i %
 
@@ -370,12 +371,7 @@ fi
 
 version=$strippedName-$kernelhash
 
-make_dir 0755 /lib/modules/$version
-
-ln -s @kernel@/lib/modules/$version/build $root/lib/modules/$version/build
-ln -s @kernel@/lib/modules/$version/kernel $root/lib/modules/$version/kernel
-cp $root/@kernel@/lib/modules/$version/modules.* $root/lib/modules/$version
-chmod 644 $root/lib/modules/$version/modules.*
+ln -s @kernelscripts@/lib/modules/$version $root/lib/modules/$version
 
 ##
 ## init
