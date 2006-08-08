@@ -1,6 +1,6 @@
 #! @bash@/bin/sh -e
 
-export PATH=/bin:/sbin:@bash@/bin:@findutils@/bin:@busybox@/bin:@busybox@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@eject@/bin:@kudzu@/sbin:
+export PATH=/bin:/sbin:@bash@/bin:@findutils@/bin:@busybox@/bin:@busybox@/sbin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@eject@/bin:@dhcp@/sbin:@modutils@/sbin
 
 ##
 ## In the beginning we want to have a minimalistic environment, built with
@@ -153,7 +153,6 @@ make_dir 00755 /etc/ssh
 make_dir 00755 /etc/sysconfig
 make_dir 00755 /home
 make_dir 00755 /lib
-make_dir 00755 /lib/modules
 make_dir 00755 /mnt
 make_dir 00755 /mnt/host
 make_dir 00755 /nix
@@ -227,10 +226,10 @@ echo "Looking for CDROM in: $i"
   fi
 done
 
-
 echo mounting /cdrom in the target
 
 mount --bind /cdrom $root/cdrom
+mount --bind /cdrom/lib /lib
 
 echo switch to /nix from CD
 ## starting here it's OK to have full blown glibc
@@ -247,7 +246,14 @@ export NIX_STATE_DIR=$root/nix/var/nix
 export NIX_CONF_DIR=$root/nix/etc
 NIX=@nix@/bin
 
-#echo bringing up networking...
+echo bringing up networking...
+
+modprobe 3c59x
+dhclient eth0
+
+while true; do
+   sleep 60;
+done
 
 #nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 

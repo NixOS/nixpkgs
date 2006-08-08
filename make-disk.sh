@@ -21,6 +21,7 @@ gzip=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gzip' | $NIX/nix-instantiat
 cpio=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cpio' | $NIX/nix-instantiate -))
 
 archivesDir=$($mktemp/bin/mktemp -d)
+archivesDir2=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
@@ -47,7 +48,8 @@ kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $
 
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
-$NIX/nix-push --copy $archivesDir $manifest --target /cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+#$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix/ $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
 
 # Location of sysvinit?
 sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
@@ -70,8 +72,12 @@ grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-ins
 
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 
+modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
+
+dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
+
 #combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
-combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils)
+combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils $modutils $dhcp)
 
 for i in $storeExpr
 do
@@ -135,6 +141,7 @@ $coreutils/bin/mkdir ${initdir}/dev
 $coreutils/bin/mkdir ${initdir}/etc
 $coreutils/bin/mkdir ${initdir}/etc/sysconfig
 $coreutils/bin/mkdir ${initdir}/installimage
+$coreutils/bin/mkdir ${initdir}/lib
 $coreutils/bin/mkdir ${initdir}/modules
 $coreutils/bin/mkdir ${initdir}/proc
 $coreutils/bin/mkdir ${initdir}/sbin
@@ -144,6 +151,7 @@ $coreutils/bin/mkdir -p ${initdir}/usr/bin
 $coreutils/bin/mkdir -p ${initdir}/usr/sbin
 $coreutils/bin/mkdir ${initdir}/var
 $coreutils/bin/mkdir ${initdir}/var/run
+$coreutils/bin/mkdir -p ${initdir}/var/state/dhcp
 
 echo copying nixpkgs
 
@@ -179,7 +187,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@kernelscripts\@^$kernelscripts^g" \
     -e "s^@gnugrep\@^$gnugrep^g" \
     -e "s^@which\@^$which^g" \
-    -e "s^@kudzu\@^$kudzu^g" \
+    -e "s^@dhcp\@^$dhcp^g" \
     -e "s^@sysklogd\@^$sysklogd^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@gzip\@^$gzip^g" \
@@ -220,11 +228,33 @@ echo copying kernel
 # of the kernel here.
 $coreutils/bin/cp -L $kernel/vmlinuz ${archivesDir}/isolinux
 
-echo linking kernel modules
+strippedName=$(basename $kernel);
+if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
+        strippedName=$(echo "$strippedName" | cut -c34- | cut -c 7-)
+fi
 
-$coreutils/bin/ln -s $kernel/lib $archivesDir/lib
+kernelhash=$(basename $root/$kernel);
+if echo "$kernelhash" | grep -q '^[a-z0-9]\{32\}-'; then
+        kernelhash=$(echo "$kernelhash" | cut -c -32)
+fi
+
+version=$strippedName-$kernelhash
+
+echo version: $version
+
+#echo linking kernel modules
+#$coreutils/bin/ln -s $kernel/lib $archivesDir/lib
+
+echo copying network drivers
+#$coreutils/bin/cp -fau --parents --no-preserve=mode $kernel/lib/modules/*/modules.* $archivesDir
+#$coreutils/bin/cp -fau --parents --no-preserve=mode $kernel/lib/modules/*/kernel/drivers/net/* $archivesDir
+
+$gnutar/bin/tar -cf - $kernel/lib/modules/*/modules.* | $gnutar/bin/tar --directory=$archivesDir --strip-components 3 -xf -
+$gnutar/bin/tar -cf - $kernel/lib/modules/*/kernel/drivers/net/* | $gnutar/bin/tar --directory=$archivesDir --strip-components 3 -xf -
 
 echo creating ramdisk
+
+umask 0022
 
 $coreutils/bin/rm -f ${initrd}
 #cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
