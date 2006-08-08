@@ -153,6 +153,7 @@ make_dir 00755 /etc/ssh
 make_dir 00755 /etc/sysconfig
 make_dir 00755 /home
 make_dir 00755 /lib
+make_dir 00755 /lib/modules
 make_dir 00755 /mnt
 make_dir 00755 /mnt/host
 make_dir 00755 /nix
