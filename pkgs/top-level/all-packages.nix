@@ -2491,6 +2491,10 @@ rec {
     inherit (xlibs) xlibs;
   };
 
+  scummvm = (import ../games/scummvm) {
+    inherit fetchurl stdenv SDL;
+  };
+
   quake3game = import ../games/quake3/game {
     inherit fetchurl stdenv x11 SDL mesa openal;
   };
