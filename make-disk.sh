@@ -49,7 +49,7 @@ kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
 #$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
-$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix/ $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
 
 # Location of sysvinit?
 sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))

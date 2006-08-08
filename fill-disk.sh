@@ -248,12 +248,13 @@ NIX=@nix@/bin
 
 echo bringing up networking...
 
-modprobe 3c59x
+#labmachine has 3c59x
+#modprobe 3c59x
+#vmware has pcnet32
+modprobe pcnet32
 dhclient eth0
 
-while true; do
-   sleep 60;
-done
+cp /etc/resolv.conf $root/etc/resolv.conf
 
 #nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 
@@ -406,6 +407,10 @@ GRUBEND
 echo clearing substitutes
 
 $NIX/nix-store --clear-substitutes
+
+echo clearing network information
+
+rm $root/etc/resolv.conf
 
 echo copying install log
 
