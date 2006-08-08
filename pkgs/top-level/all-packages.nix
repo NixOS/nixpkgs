@@ -140,6 +140,10 @@ rec {
      inherit fetchurl stdenv db4 groff;
   };
 
+  manpages = (import ../development/misc/man-pages) {
+     inherit fetchurl stdenv;
+  };
+
   parted = (import ../tools/misc/parted) {
     inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
@@ -594,7 +598,11 @@ rec {
     m4 = gnum4;
   };
 
-  antlr = (import ../development/tools/parsing/antlr) {
+  antlr3 = (import ../development/tools/parsing/antlr) {
+    inherit fetchurl stdenv jre;
+  };
+
+  antlr = (import ../development/tools/parsing/antlr/antlr-2.7.6.nix) {
     inherit fetchurl stdenv jre;
   };
 
