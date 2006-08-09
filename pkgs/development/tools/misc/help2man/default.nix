@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   ];
 
   # So that configure can find `preloadable_libintl.so'.
-  LD_LIBRARY_PATH = gettext ~ "/lib";
+  LD_LIBRARY_PATH = gettext + /lib;
 
   inherit gettext;
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.
-  plugins = map (x: x ~ x.mozillaPlugin) plugins;
+  plugins = map (x: x + x.mozillaPlugin) plugins;
 
   meta = {
     description = firefox.meta.description + " (with various plugins)";

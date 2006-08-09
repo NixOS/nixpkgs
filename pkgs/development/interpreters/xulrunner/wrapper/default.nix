@@ -5,5 +5,5 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   inherit xulrunner launcher;
-  appfile = application ~ "application.ini";
+  appfile = application + /application.ini;
 }
