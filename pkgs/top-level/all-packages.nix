@@ -544,7 +544,7 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
-  help2man = (import ../development/tools/misc/help3man) {
+  help2man = (import ../development/tools/misc/help2man) {
     inherit fetchurl stdenv perl gettext perlLocaleGettext;
   };
 
