@@ -1,9 +1,6 @@
 { input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gnomevfs, libbonobo
-, GConf, popt, zlib }:
-
-assert pkgconfig != null && perl != null && glib != null
-  && gnomevfs != null && libbonobo != null && GConf != null
-  && popt != null && zlib != null;
+, GConf, popt, zlib, esound
+}:
 
 # !!! TODO CHECK:
 # libgnome tries to install stuff into GConf (which fails):
@@ -12,6 +9,6 @@ assert pkgconfig != null && perl != null && glib != null
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig perl perlXMLParser popt zlib];
+  buildInputs = [pkgconfig perl perlXMLParser popt zlib esound];
   propagatedBuildInputs = [glib gnomevfs libbonobo GConf];
 }

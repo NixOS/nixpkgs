@@ -9,10 +9,10 @@ assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
 
 stdenv.mkDerivation {
-  name = "cairo-1.0.4";
+  name = "cairo-1.2.2";
   src = fetchurl {
-    url = http://cairographics.org/releases/cairo-1.0.4.tar.gz;
-    sha1 = "89e72202e5b51a8914fce60f52f7c51ecdea982a";
+    url = http://cairographics.org/releases/cairo-1.2.2.tar.gz;
+    sha1 = "859b9ed4eaa200a03b9e41ccc45f3799742e6c5c";
   };
   buildInputs = [
     pkgconfig x11 fontconfig freetype
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   ];
   propagatedBuildInputs = [
     (if postscriptSupport then zlib else null)
+    (if pngSupport then libpng else null)
   ];
   configureFlags =
     (if pdfSupport then ["--enable-pdf"] else []);

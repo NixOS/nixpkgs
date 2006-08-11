@@ -3,15 +3,14 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs, libXmu
+, libpng, gtkLibs, libXmu, bzip2
 }:
 
 rec {
 
   # Platform
 
-  #platform = (import ./src-gnome-platform-2.14.2.nix) {
-  platform = (import ./src-gnome-platform-2.10.1.nix) {
+  platform = (import ./src-gnome-platform-2.14.3.nix) {
     inherit fetchurl;
   };
 
@@ -52,7 +51,7 @@ rec {
 
   gnomevfs = (import ./gnome-vfs) {
     inherit fetchurl stdenv pkgconfig perl glib libxml2 GConf
-            libbonobo gnomemimedata popt perlXMLParser;
+            libbonobo gnomemimedata popt perlXMLParser gettext bzip2;
     input = platform.gnomevfs;
   };
 
@@ -64,7 +63,7 @@ rec {
 
   libgnome = (import ./libgnome) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gnomevfs
-            libbonobo GConf popt zlib;
+            libbonobo GConf popt zlib esound;
     input = platform.libgnome;
   };
 
@@ -123,8 +122,7 @@ rec {
 
   # Desktop
 
-  #desktop = (import ./src-gnome-desktop-2.14.2.nix) {
-  desktop = (import ./src-gnome-desktop-2.10.1.nix) {
+  desktop = (import ./src-gnome-desktop-2.14.3.nix) {
     inherit fetchurl;
   };
 

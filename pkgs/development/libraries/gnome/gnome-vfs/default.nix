@@ -1,5 +1,6 @@
-{input, stdenv, fetchurl, pkgconfig, perl, glib, libxml2, GConf
-, libbonobo, gnomemimedata, popt, perlXMLParser }:
+{ input, stdenv, fetchurl, pkgconfig, perl, glib, libxml2, GConf
+, libbonobo, gnomemimedata, popt, perlXMLParser, gettext, bzip2
+}:
 
 assert pkgconfig != null && perl != null && glib != null
   && libxml2 != null && GConf != null && libbonobo != null
@@ -7,10 +8,9 @@ assert pkgconfig != null && perl != null && glib != null
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  builder = ./builder.sh;
   buildInputs = [
     pkgconfig perl glib libxml2 GConf libbonobo
-    gnomemimedata popt perlXMLParser
+    gnomemimedata popt perlXMLParser gettext bzip2
   ];
   patches = [./no-kerberos.patch];
 }

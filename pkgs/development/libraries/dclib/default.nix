@@ -1,13 +1,12 @@
-{stdenv, fetchurl, libxml2, openssl}:
+{stdenv, fetchurl, libxml2, openssl, bzip2}:
 
 stdenv.mkDerivation {
   name = "dclib-0.3.7";
-  builder = ./builder.sh;
 
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/dclib-0.3.7.tar.bz2;
     md5 = "d35833414534bcac8ce2c8a62ce903a4";
   };
 
-  buildInputs = [libxml2 openssl];
+  buildInputs = [libxml2 openssl bzip2];
 }

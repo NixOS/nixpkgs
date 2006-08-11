@@ -1207,7 +1207,7 @@ rec {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs28;
+  gtkLibs = recurseIntoAttrs gtkLibs28; # !!! -> gtkLibs10
 
   gtkLibs210 = import ../development/libraries/gtk-libs-2.10 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
@@ -1274,9 +1274,9 @@ rec {
 
   kdelibs = import ../development/libraries/kde/kdelibs {
     inherit
-      fetchurl stdenv zlib perl openssl pcre  pkgconfig
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
       libjpeg libpng libtiff libxml2 libxslt libtool
-      expat freetype;
+      expat freetype bzip2;
     inherit (xlibs) libX11 libXt libXext;
     qt = qt3;
   };
@@ -1315,7 +1315,8 @@ rec {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
-            libtiff libjpeg libpng gtkLibs;
+            libtiff libjpeg libpng bzip2;
+    gtkLibs = gtkLibs28;
     inherit (xlibs) libXmu;
   });
 
@@ -1431,7 +1432,7 @@ rec {
   };
 
   dclib = (import ../development/libraries/dclib) {
-    inherit fetchurl stdenv libxml2 openssl;
+    inherit fetchurl stdenv libxml2 openssl bzip2;
   };
 
   cracklib = (import ../development/libraries/cracklib) {
