@@ -6,6 +6,6 @@ assert pkgconfig != null && libgnome != null && libgnomecanvas != null
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig libglade esound libjpeg gnomekeyring];
-  propagatedBuildInputs = [libgnome libgnomecanvas libbonoboui libjpeg];
+  buildInputs = [pkgconfig libglade esound libjpeg];
+  propagatedBuildInputs = [libgnome libgnomecanvas libbonoboui libjpeg gnomekeyring];
 }

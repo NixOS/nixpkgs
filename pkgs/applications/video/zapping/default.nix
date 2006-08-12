@@ -17,12 +17,12 @@ assert pngSupport -> libpng != null;
 assert recordingSupport -> rte != null;
 
 stdenv.mkDerivation {
-  name = "zapping-0.9.6";
+  name = "zapping-0.10cvs6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/zapping-0.9.6.tar.bz2;
-    md5 = "8306775c6a11de4d72345b5eee970ea6";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/zapping/zapping-0.10cvs6.tar.bz2;
+    md5 = "6aa7614ac3fd5d39c89c2198598ad27b";
   };
 
   inherit teletextSupport jpegSupport pngSupport libXext;
