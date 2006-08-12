@@ -67,19 +67,6 @@ rec {
     input = platform.libgnome;
   };
 
-  libgnomeprint = (import ./libgnomeprint) {
-    inherit fetchurl stdenv libxml2 perl perlXMLParser pkgconfig popt;
-    inherit glib pango;
-    libart = libart_lgpl;
-    input = platform.libgnomeprint;
-  };
-
-  libgnomeprintui = (import ./libgnomeprintui) {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
-    inherit gtk libgnomeprint libgnomecanvas gnomeicontheme;
-    input = platform.libgnomeprintui;
-  };
-
   libart_lgpl = (import ./libart_lgpl) {
     inherit fetchurl stdenv;
     input = platform.libart_lgpl;
@@ -126,16 +113,26 @@ rec {
     inherit fetchurl;
   };
 
+  libgnomeprint = (import ./libgnomeprint) {
+    inherit fetchurl stdenv libxml2 perl perlXMLParser pkgconfig popt;
+    inherit glib pango;
+    libart = libart_lgpl;
+    input = desktop.libgnomeprint;
+  };
+
+  libgnomeprintui = (import ./libgnomeprintui) {
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
+    inherit gtk libgnomeprint libgnomecanvas gnomeicontheme;
+    input = desktop.libgnomeprintui;
+  };
+
   gtkhtml = (import ./gtkhtml) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libjpeg gettext;
     inherit gtk atk gail libgnomeprint libgnomeprintui libgnomeui libglade gnomeicontheme;
     input = desktop.gtkhtml;
   };
 
-  libgtkhtml = (import ./libgtkhtml) {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2 gail;
-    input = desktop.libgtkhtml;
-  };
+  libgtkhtml = gtkhtml;
 
   gnomeicontheme = (import ./gnome-icon-theme) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser;
@@ -176,6 +173,11 @@ rec {
             libgnome libgnomeui gnomedesktop libglade libwnck
             libjpeg libpng scrollkeeper libXmu;
     input = desktop.gnomepanel;
+  };
+
+  libsoup = (import ./libsoup) {
+    inherit stdenv fetchurl pkgconfig libxml2 glib;
+    input = desktop.libsoup;
   };
   
 }
