@@ -2528,11 +2528,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  /*
   atari800 = (import ../misc/emulators/atari800) {
-    inherit fetchurl stdenv zlib SDL;
+    inherit fetchurl stdenv unzip zlib SDL;
   };
 
+  /*
   ataripp = (import ../misc/emulators/atari++) {
     inherit fetchurl stdenv x11 SDL;
   };
