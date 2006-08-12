@@ -114,7 +114,8 @@ rec {
   };
 
   libgnomeprint = (import ./libgnomeprint) {
-    inherit fetchurl stdenv libxml2 perl perlXMLParser pkgconfig popt;
+    inherit fetchurl stdenv libxml2 perl perlXMLParser pkgconfig popt
+         bison flex;
     inherit glib pango;
     libart = libart_lgpl;
     input = desktop.libgnomeprint;
