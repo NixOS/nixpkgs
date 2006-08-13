@@ -1159,6 +1159,15 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  libungif = (import ../development/libraries/libungif) {
+    inherit fetchurl stdenv;
+  };
+
+  imlib = (import ../development/libraries/gnome/imlib) {
+    inherit fetchurl stdenv libjpeg libtiff libungif libpng;
+    inherit (xlibs) libX11 libXext xextproto;
+  };
+
   aalib = (import ../development/libraries/aalib) {
     inherit fetchurl stdenv ncurses;
   };
@@ -1279,6 +1288,14 @@ rec {
       expat freetype bzip2;
     inherit (xlibs) libX11 libXt libXext;
     qt = qt3;
+  };
+
+  arts = import ../development/libraries/kde/arts {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libXext;
+    inherit kdelibs zlib libjpeg libpng perl;
+    qt = qt3;
+    inherit (gnome) glib;
   };
 
   gtksharp1 = (import ../development/libraries/gtk-sharp-1) {
@@ -2330,6 +2347,12 @@ rec {
   gqview = (import ../applications/graphics/gqview) {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
+  };
+
+  kuickshow = (import ../applications/graphics/kuickshow) {
+    inherit fetchurl stdenv kdelibs arts libpng libjpeg libtiff libungif imlib expat perl;
+    inherit (xlibs) libX11 libXext libSM;
+    qt = qt3;
   };
 
   batik = (import ../applications/graphics/batik) {
