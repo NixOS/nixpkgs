@@ -2555,11 +2555,9 @@ rec {
     inherit fetchurl stdenv unzip zlib SDL;
   };
 
-  /*
   ataripp = (import ../misc/emulators/atari++) {
     inherit fetchurl stdenv x11 SDL;
   };
-  */
 
   generator = (import ../misc/emulators/generator) {
     inherit fetchurl stdenv SDL nasm;
