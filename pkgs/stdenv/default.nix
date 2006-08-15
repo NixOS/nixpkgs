@@ -83,7 +83,7 @@ rec {
     if system == "i686-linux" then stdenvLinux
     else if system == "i686-freebsd" then stdenvFreeBSD
     else if system == "i686-cygwin" then stdenvCygwin
-    else if system == "i686-msys" then stdenvMinGW
+    else if system == "i686-mingw" then stdenvMinGW
     else if system == "powerpc-darwin" then stdenvDarwin
     else if system == "i686-darwin" then stdenvNix
     else stdenvNative;

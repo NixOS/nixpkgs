@@ -61,10 +61,11 @@ let {
     stdenvInit1.mkDerivation {
       name = "msys-1.0.11";
       builder = ./msys-builder.sh;
-      src = fetchurl {
+      src = ./msys-1.0.11.tar.gz; 
+      /* fetchurl {
         url = http://www.cs.uu.nl/people/martin/msys-1.0.11.tar.gz;
         md5 = "7e76eec10a205ea63ada6a4e834cc468";
-      };
+      }; */
     };
 
   /**
