@@ -1,12 +1,18 @@
+if test -z "$out"; then
+  out="$OUT"
+  initialPath="$INITIALPATH"
+fi
+
 setupPath=
 for i in $initialPath; do
   setupPath=$setupPath${setupPath:+:}$i
 done
 
 PATH=$setupPath
-echo $setupPath
+export PATH
 
 mkdir $out
+
 cat > $out/setup <<EOF
 PATH=$setupPath
 export PATH
@@ -23,4 +29,5 @@ stopNest() {
   echo "Nothing to do"
 }
 EOF
+
 chmod +x $out/setup
