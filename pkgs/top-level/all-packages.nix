@@ -319,6 +319,10 @@ rec {
     inherit stdenv dhcp;
   };
 
+  netcat = (import ../tools/networking/netcat) {
+    inherit fetchurl stdenv;
+  };
+  
 
   graphviz = (import ../tools/graphics/graphviz) {
     inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;
