@@ -73,12 +73,17 @@ rec {
     inherit genericStdenv gccWrapper;
   };
 
+  # MinGW/MSYS standard environment.
+  stdenvMinGW = (import ./mingw) {
+    inherit system;
+  };
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
     if system == "i686-linux" then stdenvLinux
     else if system == "i686-freebsd" then stdenvFreeBSD
     else if system == "i686-cygwin" then stdenvCygwin
+    else if system == "i686-msys" then stdenvMinGW
     else if system == "powerpc-darwin" then stdenvDarwin
     else if system == "i686-darwin" then stdenvNix
     else stdenvNative;
