@@ -9,7 +9,8 @@ let {
    */
   body = {stdenv, fetchurl} : {
     make = make { inherit stdenv fetchurl; };
-    gcc  = gcc  { inherit stdenv fetchurl; };
+    gccCore  = gccCore { inherit stdenv fetchurl; };
+    binutils = binutils { inherit stdenv fetchurl; };
   };
 
   /**
@@ -29,7 +30,7 @@ let {
   /**
    * GCC. Binary
    */
-  gcc =  {stdenv, fetchurl} :
+  gccCore =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
       name = "mingw-gcc-core-3.4.2-20040916-1";
       builder = ./bin-builder.sh;
@@ -37,6 +38,20 @@ let {
         fetchurl {
           url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz;
           md5 = "d9cd78f926fc31ef101c6fa7072fc65d";
+        };
+    };
+
+  /**
+   * binutils. Binary.
+   */
+  binutils =  {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "mingw-binutils-2.16.91-20060119-1";
+      builder = ./bin-builder.sh;
+      src = 
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/binutils-2.16.91-20060119-1.tar.gz;
+          md5 = "a54f33ca9d6cf56dc99c0c5367f58ea3";
         };
     };
 

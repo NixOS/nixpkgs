@@ -79,6 +79,21 @@ let {
           inherit fetchurl;   
         };
 
+      gcc = (import ../../build-support/gcc-wrapper) {
+        name = "mingw-gcc-wrapper";
+        nativeTools = false;
+        nativeGlibc = true;
+        inherit shell; # Note: this is the MSYS shell.
+        binutils = binpkgs.binutils;
+        gcc = binpkgs.gccCore // { langC = true; langCC = false; langF77 = false; };
+
+        /**
+         * Tricky: gcc-wrapper cannot be constructed using the MSYS shell
+         * so we use the Cygwin shell.
+         */
+        stdenv = stdenvInit1;
+      };
+
       stdenv =
         stdenvInit2.mkDerivation {
           name = "stdenv-mingw";
@@ -86,9 +101,7 @@ let {
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
           initialPath = [binpkgs.make msys];
-          inherit shell;
-          # todo: wrapper?
-          gcc = binpkgs.gcc;
+          inherit shell gcc;
         };
 
       mkDerivationFun = {
