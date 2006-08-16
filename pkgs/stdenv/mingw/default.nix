@@ -1,10 +1,3 @@
-/**
- * Initial stdenv should have:
- * - shell
- * - mkdir
- * - gnu tar
- * - curl
- */
 {system} :
 
 let {
@@ -13,6 +6,8 @@ let {
 
   /**
    * Initial standard environment based on native Cygwin tools.
+   * GCC is not requires.
+   * Required (approx): bash, mkdir, gnu tar, curl.
    */
   stdenvInit1 =
     import ./simple-stdenv {
@@ -151,21 +146,3 @@ let {
      inherit fetchurl;
     };
 }
-
-     /* 
-
-  mingw = {
-    langC = true;
-    langCC = true;
-    langF77 = true;
-  };
-
-    gcc =
-      import ../../build-support/gcc-wrapper {
-        nativeTools = false;
-        nativeGlibc = false;
-        stdenv = stdenvInitial;
-        binutils = msys;
-        gcc = mingw;
-        shell = msys + /bin/sh;
-      }; */
