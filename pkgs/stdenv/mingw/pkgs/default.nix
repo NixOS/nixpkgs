@@ -1,17 +1,7 @@
 /**
  * MinGW packages.
  */
-let {
-
-  /**
-   * stdenv and fetchurl are parameters of every function to make this more flexible:
-   * after some packages, we might be able to use a better stdenv/fetchurl.
-   */
-  body = {stdenv, fetchurl} : {
-    make = make { inherit stdenv fetchurl; };
-    gccCore  = gccCore { inherit stdenv fetchurl; };
-    binutils = binutils { inherit stdenv fetchurl; };
-  };
+rec {
 
   /**
    * Make. Binary.
@@ -52,6 +42,19 @@ let {
         fetchurl {
           url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/binutils-2.16.91-20060119-1.tar.gz;
           md5 = "a54f33ca9d6cf56dc99c0c5367f58ea3";
+        };
+    };
+
+  /**
+   * MinGW Runtime. Source.
+   */
+  mingwRuntime = {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "mingw-runtime-3.10";
+      src =
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10-src.tar.gz;
+          md5 = "9225684e663eafa900b4075731c25f4c";
         };
     };
 

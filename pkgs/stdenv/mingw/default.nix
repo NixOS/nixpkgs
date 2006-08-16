@@ -8,28 +8,97 @@
 {system} :
 
 let {
+  body =
+    stdenvFinal;
+
   /**
-   * Initial standard environment based on native cygwin tools.
+   * Initial standard environment based on native Cygwin tools.
    */
   stdenvInit1 =
     import ./simple-stdenv {
       inherit system;
-      name = "stdenv-initial-cygwin";
+      name = "stdenv-init1-mingw";
       shell = "/bin/bash.exe";
       path = ["/usr/bin" "/bin"];
     };
 
   /**
    * Initial standard environment based on MSYS tools.
-   * From this point, Cygwin should no longer by involved.
    */
   stdenvInit2 =
     import ./simple-stdenv {
       inherit system;
-      name = "stdenv-initial-msys";
-      shell = msys + /bin/sh.exe;
+      name = "stdenv-init2-mingw";
+      shell = msysShell;
       path = [(msys + /bin)];
     };
+
+  /**
+   * Initial standard environment with the most basic MinGW packages.
+   */
+  stdenvInit3 =
+    (import ./simple-stdenv) {
+      inherit system;
+      name = "stdenv-init3-mingw";
+      shell = msysShell;
+      path = [ (make + /bin) (msys + /bin) (binutils /bin) (gccCore + /bin) ];
+    };
+
+  /**
+   * Final standard environment, based on generic stdenv.
+   * It would be better to make the generic stdenv usable on
+   * MINGW (i.e. make all environment variables CAPS).
+   */
+  stdenvFinal =
+    let {
+      body =
+        stdenv // mkDerivationFun;
+
+      shell =
+        msys + /bin/sh + ".exe";
+
+      gccWrapper = (import ../../build-support/gcc-wrapper) {
+        name = "mingw-gcc-wrapper";
+        nativeTools = false;
+        nativeGlibc = true;
+        shell = msysShell;
+        binutils = binutils;
+        gcc = gccCore // { langC = true; langCC = false; langF77 = false; };
+
+        /**
+         * Tricky: gcc-wrapper cannot be constructed using the MSYS shell
+         * so we use the Cygwin shell.
+         */
+        stdenv = stdenvInit1;
+      };
+
+      stdenv =
+        stdenvInit2.mkDerivation {
+          name = "stdenv-mingw";
+          builder = ./builder.sh;
+          substitute = ../../build-support/substitute/substitute.sh;
+          setup = ./setup.sh;
+          initialPath = [make msys];
+          gcc = gccWrapper;
+          shell = msysShell;
+        };
+
+      mkDerivationFun = {
+        mkDerivation = attrs:
+          (derivation (
+            (removeAttrs attrs ["meta"])
+            //
+            {
+              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
+              args = if attrs ? args then attrs.args else
+                ["-e" (if attrs ? builder then attrs.builder else ../generic/default-builder.sh)];
+              inherit stdenv system;
+            })
+          )
+          // { meta = if attrs ? meta then attrs.meta else {}; };
+       };
+     };
+
 
   /**
    * Fetchurl, based on Cygwin curl in stdenvInit1
@@ -61,64 +130,26 @@ let {
         };
     };
 
-  /**
-   * Complete standard environment, based on generic stdenv.
-   * It would be better to make the generic stdenv usable on
-   * MINGW (i.e. make all environment variables CAPS).
-   */
-  body =
-    let {
-      body =
-        stdenv // mkDerivationFun;
+  msysShell = 
+    msys + /bin/sh + ".exe";
 
-      shell = msys + /bin/sh + ".exe";
+  gccCore =
+    (import ./pkgs).gccCore {
+      stdenv = stdenvInit2;
+      inherit fetchurl;
+    };
 
-      binpkgs =
-        (import ./pkgs) {
-          stdenv = stdenvInit2;
-          inherit fetchurl;   
-        };
+  make =
+   (import ./pkgs).make {
+     stdenv = stdenvInit2;
+     inherit fetchurl;
+   };
 
-      gcc = (import ../../build-support/gcc-wrapper) {
-        name = "mingw-gcc-wrapper";
-        nativeTools = false;
-        nativeGlibc = true;
-        inherit shell; # Note: this is the MSYS shell.
-        binutils = binpkgs.binutils;
-        gcc = binpkgs.gccCore // { langC = true; langCC = false; langF77 = false; };
-
-        /**
-         * Tricky: gcc-wrapper cannot be constructed using the MSYS shell
-         * so we use the Cygwin shell.
-         */
-        stdenv = stdenvInit1;
-      };
-
-      stdenv =
-        stdenvInit2.mkDerivation {
-          name = "stdenv-mingw";
-          builder = ./builder.sh;
-          substitute = ../../build-support/substitute/substitute.sh;
-          setup = ./setup.sh;
-          initialPath = [binpkgs.make msys];
-          inherit shell gcc;
-        };
-
-      mkDerivationFun = {
-        mkDerivation = attrs:
-          (derivation (
-            (removeAttrs attrs ["meta"])
-            //
-            {
-              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
-              args = if attrs ? args then attrs.args else
-                ["-e" (if attrs ? builder then attrs.builder else ../generic/default-builder.sh)];
-              inherit stdenv system;
-            })
-          )
-          // { meta = if attrs ? meta then attrs.meta else {}; };
-       };
-     };
+  binutils =
+   (import ./pkgs).binutils {
+     stdenv = stdenvInit2;
+     inherit fetchurl;
+    };
 }
 
      /* 
