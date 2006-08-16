@@ -85,7 +85,7 @@ let {
           builder = ./builder.sh;
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
-          initialPath = [mingwRuntimeSrc make msys];
+          initialPath = [mingwRuntimeSrc w32apiSrc make msys];
           gcc = gccWrapper;
           shell = msysShell;
         };
@@ -178,6 +178,12 @@ let {
    */
   mingwRuntimeSrc =
     (import ./pkgs).mingwRuntimeSrc {
+      stdenv = stdenvInit3;
+      inherit fetchurl;
+    };
+
+  w32apiSrc =
+    (import ./pkgs).w32apiSrc {
       stdenv = stdenvInit3;
       inherit fetchurl;
     };

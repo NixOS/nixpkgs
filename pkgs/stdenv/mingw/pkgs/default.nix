@@ -59,7 +59,7 @@ rec {
   mingwRuntimeSrc = {stdenv, fetchurl} :
     stdenv.mkDerivation {
       name = "mingw-runtime-3.10";
-      builder = ./mingw-runtime-builder.sh;
+      builder = ./src-builder.sh;
       src =
         fetchurl {
           url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10-src.tar.gz;
@@ -78,6 +78,16 @@ rec {
         };
     };
 
+  w32apiSrc = {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "w32api-3.7";
+      builder = ./src-builder.sh;
+      src = 
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/w32api-3.7-src.tar.gz;
+          md5 = "d799c407b4c1b480d0339994d01f355d";
+        };
+    };
 
   /*
   pkgs.coreutils
