@@ -73,10 +73,10 @@ let {
 
       shell = msys + /bin/sh + ".exe";
 
-      make =
-        (import ./pkgs).make {
+      binpkgs =
+        (import ./pkgs) {
           stdenv = stdenvInit2;
-          inherit fetchurl;
+          inherit fetchurl;   
         };
 
       stdenv =
@@ -85,9 +85,10 @@ let {
           builder = ./builder.sh;
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
-          initialPath = [make msys];
+          initialPath = [binpkgs.make msys];
           inherit shell;
-          gcc = msys; # TODO
+          # todo: wrapper?
+          gcc = binpkgs.gcc;
         };
 
       mkDerivationFun = {
