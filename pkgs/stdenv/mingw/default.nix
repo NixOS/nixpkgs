@@ -36,7 +36,19 @@ let {
       inherit system;
       name = "stdenv-init3-mingw";
       shell = msysShell;
-      path = [ (make + /bin) (msys + /bin) (binutils /bin) (gccCore + /bin) ];
+      path = [
+        (make + /bin)
+        (binutils + /bin)
+        (gccCore + /bin)
+        (mingwRuntimeBin + /bin)
+        (w32apiBin + /bin)
+        (msys + /bin)
+      ];
+
+      extraEnv = {
+        C_INCLUDE_PATH = mingwRuntimeBin + "/include" + ":" + w32apiBin + "/include";
+        LIBRARY_PATH = mingwRuntimeBin + "/lib" + ":" + w32apiBin + "/lib";
+      };
     };
 
   /**
@@ -73,7 +85,7 @@ let {
           builder = ./builder.sh;
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
-          initialPath = [make msys];
+          initialPath = [mingwRuntimeSrc make msys];
           gcc = gccWrapper;
           shell = msysShell;
         };
@@ -128,6 +140,9 @@ let {
   msysShell = 
     msys + /bin/sh + ".exe";
 
+  /**
+   * Binary packages, based on stdenvInit2
+   */
   gccCore =
     (import ./pkgs).gccCore {
       stdenv = stdenvInit2;
@@ -144,5 +159,26 @@ let {
    (import ./pkgs).binutils {
      stdenv = stdenvInit2;
      inherit fetchurl;
+    };
+
+  mingwRuntimeBin =
+    (import ./pkgs).mingwRuntimeBin {
+      stdenv = stdenvInit2;
+      inherit fetchurl;
+    };
+
+  w32apiBin =
+    (import ./pkgs).w32apiBin {
+      stdenv = stdenvInit2;
+      inherit fetchurl;
+    };
+
+  /**
+   * Source packages, based on stdenvInit3
+   */
+  mingwRuntimeSrc =
+    (import ./pkgs).mingwRuntimeSrc {
+      stdenv = stdenvInit3;
+      inherit fetchurl;
     };
 }

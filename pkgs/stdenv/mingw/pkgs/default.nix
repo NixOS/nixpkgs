@@ -45,18 +45,39 @@ rec {
         };
     };
 
-  /**
-   * MinGW Runtime. Source.
-   */
-  mingwRuntime = {stdenv, fetchurl} :
+  mingwRuntimeBin = {stdenv, fetchurl} :
     stdenv.mkDerivation {
       name = "mingw-runtime-3.10";
+      builder = ./bin-builder.sh;
+      src = 
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10.tar.gz;
+          md5 = "7fa2638d23136fd84d5d627bef3b408a";
+        };
+    };
+
+  mingwRuntimeSrc = {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "mingw-runtime-3.10";
+      builder = ./mingw-runtime-builder.sh;
       src =
         fetchurl {
           url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10-src.tar.gz;
           md5 = "9225684e663eafa900b4075731c25f4c";
         };
     };
+
+  w32apiBin = {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "w32api-3.7";
+      builder = ./bin-builder.sh;
+      src = 
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/w32api-3.7.tar.gz;
+          md5 = "0b3a6d08136581c93b3a3207588acea9";
+        };
+    };
+
 
   /*
   pkgs.coreutils
