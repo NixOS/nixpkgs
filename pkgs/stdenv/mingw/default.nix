@@ -47,6 +47,8 @@ let {
 
   /**
    * MSYS, installed using stdenvInit1
+   *
+   * @todo Maybe remove the make of msys?
    */
   msys =
     stdenvInit1.mkDerivation {
@@ -71,13 +73,19 @@ let {
 
       shell = msys + /bin/sh + ".exe";
 
+      make =
+        (import ./pkgs).make {
+          stdenv = stdenvInit2;
+          inherit fetchurl;
+        };
+
       stdenv =
         stdenvInit2.mkDerivation {
           name = "stdenv-mingw";
           builder = ./builder.sh;
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
-          initialPath = [msys];
+          initialPath = [make msys];
           inherit shell;
           gcc = msys; # TODO
         };
