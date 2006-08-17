@@ -18,9 +18,18 @@ for i in $NIX_GCC @INITIALPATH@; do
     PATH=$PATH${PATH:+:}$i/bin
 done
 
-if test "$NIX_DEBUG" = "1"; then
-    echo "Initial path: $PATH"
+# Hack: the /tmp of Cygwin is different from the /tmp in MSYS
+if test -d $NIX_BUILD_TOP; then
+  echo "Nix build top already exists. Strange."
+else
+  mkdir $NIX_BUILD_TOP
+  cd $NIX_BUILD_TOP
 fi
+
+# if test "$NIX_DEBUG" = "1"; then
+    echo "Initial path: $PATH"
+    echo "$buildInputs"
+# fi
 
 # Execute the pre-hook.
 export SHELL=@SHELL@
@@ -202,6 +211,8 @@ trap "closeNest" EXIT
 # then go to the build directory and source in `env-vars' to reproduce
 # the environment used for building.
 dumpVars() {
+    pwd
+    ls
     if test "$noDumpEnvVars" != "1"; then
         export > $NIX_BUILD_TOP/env-vars
     fi

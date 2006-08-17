@@ -1,6 +1,7 @@
 if test -z "$out"; then
   out="$OUT"
   initialPath="$INITIALPATH"
+  shell="$SHELL"
 fi
 
 setupPath=

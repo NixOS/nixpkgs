@@ -59,25 +59,10 @@ let {
   stdenvFinal =
     let {
       body =
-        stdenv // mkDerivationFun;
+        stdenv // mkDerivationFun // { inherit fetchurl; };
 
       shell =
         msys + /bin/sh + ".exe";
-
-      gccWrapper = (import ../../build-support/gcc-wrapper) {
-        name = "mingw-gcc-wrapper";
-        nativeTools = false;
-        nativeGlibc = true;
-        shell = msysShell;
-        binutils = binutils;
-        gcc = gccCore // { langC = true; langCC = false; langF77 = false; };
-
-        /**
-         * Tricky: gcc-wrapper cannot be constructed using the MSYS shell
-         * so we use the Cygwin shell.
-         */
-        stdenv = stdenvInit1;
-      };
 
       stdenv =
         stdenvInit2.mkDerivation {
@@ -85,9 +70,15 @@ let {
           builder = ./builder.sh;
           substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
-          initialPath = [mingwRuntimeSrc w32apiSrc make msys];
-          gcc = gccWrapper;
+
+          /**
+           * binutils is on the path because it contains dlltool, which
+           * is invoked on the PATH by some packages.
+           */
+          initialPath = [make binutils gccCore gccCpp mingwRuntimeSrc w32apiSrc msys];
+          gcc = gccCore;
           shell = msysShell;
+          inherit curl;
         };
 
       mkDerivationFun = {
@@ -98,27 +89,42 @@ let {
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
               args = if attrs ? args then attrs.args else
-                ["-e" (if attrs ? builder then attrs.builder else ../generic/default-builder.sh)];
+                ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               inherit stdenv system;
+              C_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
+              CPLUS_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
+              LIBRARY_PATH = mingwRuntimeSrc + "/lib" + ":" + w32apiSrc + "/lib";
             })
           )
           // { meta = if attrs ? meta then attrs.meta else {}; };
        };
      };
 
-
   /**
-   * Fetchurl, based on Cygwin curl in stdenvInit1
+   * fetchurl
    */
-  fetchurl =
+  fetchurlInit1 =
     import ../../build-support/fetchurl {
       stdenv = stdenvInit1;
+      curl =
+        (import ./pkgs).curl {
+          stdenv = stdenvInit1;
+        };
+    };
 
-      /**
-       * use native curl in Cygwin. We could consider to use curl.exe,
-       * which is widely available (or we could bootstrap it ourselves)
-       */
-      curl = null;
+  cygpath =
+    import ./cygpath {
+      stdenv = stdenvInit1;
+    };
+
+  /**
+   * Hack: we need the cygpath of the Cygwin chmod.
+   */
+  fetchurl =
+    import ./fetchurl {
+      stdenv = stdenvInit2;
+      curl = curl + "/bin/curl.exe";
+      chmod = cygpath "/usr/bin/chmod";
     };
 
   /**
@@ -131,7 +137,7 @@ let {
       name = "msys-1.0.11";
       builder = ./msys-builder.sh;
       src =
-        fetchurl {
+        fetchurlInit1 {
           url = http://www.cs.uu.nl/people/martin/msys-1.0.11.tar.gz;
           md5 = "85ce547934797019d2d642ec3b53934b";
         };
@@ -143,8 +149,19 @@ let {
   /**
    * Binary packages, based on stdenvInit2
    */
+  curl =
+    (import ./pkgs).curl {
+      stdenv = stdenvInit2;
+    };
+
   gccCore =
     (import ./pkgs).gccCore {
+      stdenv = stdenvInit2;
+      inherit fetchurl;
+    };
+
+  gccCpp =
+    (import ./pkgs).gccCpp {
       stdenv = stdenvInit2;
       inherit fetchurl;
     };

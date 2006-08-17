@@ -4,6 +4,17 @@
 rec {
 
   /**
+   * Curl, binary
+   */
+  curl =  {stdenv} :
+    stdenv.mkDerivation {
+      name = "curl-7.15.4";
+      exename = "curl.exe";
+      builder = ./single-exe-builder.sh;
+      src = ./curl.exe;
+    };
+
+  /**
    * Make. Binary.
    */
   make = {stdenv, fetchurl} :
@@ -28,6 +39,20 @@ rec {
         fetchurl {
           url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz;
           md5 = "d9cd78f926fc31ef101c6fa7072fc65d";
+        };
+    };
+
+  /**
+   * GCC C++. Binary.
+   */
+  gccCpp =  {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "mingw-gcc-g++-3.4.2-20040916-1";
+      builder = ./bin-builder.sh;
+      src = 
+        fetchurl {
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/gcc-g++-3.4.2-20040916-1.tar.gz;
+          md5 = "e5c7eb2c1e5f7e10842eac03d1d6fcdc";
         };
     };
 
