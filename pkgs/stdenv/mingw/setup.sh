@@ -26,10 +26,10 @@ else
   cd $NIX_BUILD_TOP
 fi
 
-# if test "$NIX_DEBUG" = "1"; then
+if test "$NIX_DEBUG" = "1"; then
     echo "Initial path: $PATH"
     echo "$buildInputs"
-# fi
+fi
 
 # Execute the pre-hook.
 export SHELL=@SHELL@
@@ -211,8 +211,6 @@ trap "closeNest" EXIT
 # then go to the build directory and source in `env-vars' to reproduce
 # the environment used for building.
 dumpVars() {
-    pwd
-    ls
     if test "$noDumpEnvVars" != "1"; then
         export > $NIX_BUILD_TOP/env-vars
     fi

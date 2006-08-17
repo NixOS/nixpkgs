@@ -15,7 +15,6 @@ if test -z "$out"; then
 fi
 
 header "downloading $out from $url"
-echo "curl is $curl"
 $curl --fail --location --max-redirs 20 "$url" > "$out"
 
 if test "$NIX_OUTPUT_CHECKED" != "1"; then
@@ -30,7 +29,6 @@ if test "$NIX_OUTPUT_CHECKED" != "1"; then
     fi
 fi
 
-echo "chmod is $chmod"
 $chmod a-x $out
 
 stopNest

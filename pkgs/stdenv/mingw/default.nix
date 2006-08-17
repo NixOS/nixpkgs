@@ -79,6 +79,7 @@ let {
           gcc = gccCore;
           shell = msysShell;
           inherit curl;
+          isDarwin = false;
         };
 
       mkDerivationFun = {
