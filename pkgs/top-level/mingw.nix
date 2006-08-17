@@ -5,6 +5,6 @@ let {
     };
 
   body = {
-    inherit (pkgs) zlib getopt realCurl;
+    inherit (pkgs) zlib getopt realCurl aterm;
   };
 }

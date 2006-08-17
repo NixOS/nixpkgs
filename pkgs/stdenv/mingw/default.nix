@@ -98,7 +98,7 @@ let {
                     if attrs ? builder then
                       [./fix-builder.sh attrs.builder]
                     else
-                      ./default-builder.sh
+                      [./fix-builder.sh ./default-builder.sh]
                     )
                   ];
               inherit stdenv system;

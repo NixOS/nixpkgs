@@ -2,16 +2,6 @@ set -e
 
 test -z $NIX_GCC && NIX_GCC=@GCC@
 
-# Workaround MSYS shell problem
-if test -z "$out"; then
-  out="$OUT"
-  src="$SRC"
-  srcs="$SRCS"
-  buildInputs="$BUILDINPUTS"
-  propagatedBuildInputs="$PROPAGATEDBUILDINPUTS"
-  succeedOnFailure="$SUCCEEDONFAILURE"
-fi
-
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @INITIALPATH@; do
