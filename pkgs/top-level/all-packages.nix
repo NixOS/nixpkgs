@@ -502,7 +502,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  pkgconfig_latest = (import ../development/tools/misc/pkgconfig/pkgconfig-0.20.nix) {
+  pkgconfig_latest = (import ../development/tools/misc/pkgconfig/pkgconfig-0.21.nix) {
     inherit fetchurl stdenv;
   };
 
