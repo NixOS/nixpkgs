@@ -88,9 +88,19 @@ let {
             (removeAttrs attrs ["meta"])
             //
             {
-              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
-              args = if attrs ? args then attrs.args else
-                ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
+              builder =
+                if attrs ? realBuilder then attrs.realBuilder else shell;
+              args =
+                if attrs ? args then
+                  attrs.args
+                 else
+                  ["-e" (
+                    if attrs ? builder then
+                      [./fix-builder.sh attrs.builder]
+                    else
+                      ./default-builder.sh
+                    )
+                  ];
               inherit stdenv system;
               C_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
               CPLUS_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
