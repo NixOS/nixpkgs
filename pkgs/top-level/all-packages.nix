@@ -78,16 +78,12 @@ rec {
 
   ### BUILD SUPPORT
 
-  /**
-   * Allow the stdenv to determine fetchurl, to cater for strange requirements.
-   */
-  fetchurl =
-    if stdenv ? fetchurl then
-      stdenv.fetchurl
-    else
-      (import ../build-support/fetchurl) {
-        inherit stdenv curl;
-      };
+  # Allow the stdenv to determine fetchurl, to cater for strange
+  # requirements.
+  fetchurl = useFromStdenv (stdenv ? fetchurl) stdenv.fetchurl
+    (import ../build-support/fetchurl {
+      inherit stdenv curl;
+    });
 
   fetchsvn = (import ../build-support/fetchsvn) {
     inherit stdenv subversion nix openssh;
