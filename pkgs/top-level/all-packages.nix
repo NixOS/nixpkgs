@@ -1498,15 +1498,18 @@ rec {
   };
 
   sharedobjects = (import ../development/libraries/java/shared-objects) {
-    inherit fetchurl stdenv jdk;
+    inherit fetchurl jdk;
+    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   jjtraveler = (import ../development/libraries/java/jjtraveler) {
-    inherit fetchurl stdenv jdk;
+    inherit fetchurl jdk;
+    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   atermjava = (import ../development/libraries/java/aterm) {
-    inherit fetchurl stdenv sharedobjects jjtraveler jdk;
+    inherit fetchurl sharedobjects jjtraveler jdk;
+    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   jakartaregexp = (import ../development/libraries/java/jakarta-regexp) {
