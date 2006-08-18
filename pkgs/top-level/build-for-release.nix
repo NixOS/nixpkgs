@@ -28,7 +28,7 @@ let {
     darcs
     db4
     diffutils
-    docbook5x
+    docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
@@ -144,6 +144,7 @@ let {
     aterm
     autoconf
     automake19x
+    docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
@@ -162,6 +163,7 @@ let {
     autoconf
     automake19x
     bisonnew
+    docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
