@@ -398,7 +398,7 @@ rec {
 
   gnupg = import ../tools/security/gnupg {
     inherit fetchurl stdenv;
-    ideaSupport = false; # enable for IDEA crypto support
+    ideaSupport = true; # enable for IDEA crypto support
   };
 
   mjpegtools = (import ../tools/video/mjpegtools) {
@@ -2060,7 +2060,7 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
-  docbook5x = (import ../data/sgml+xml/schemas/xml-dtd/docbook-5.0) {
+  docbook5 = (import ../data/sgml+xml/schemas/docbook5) {
     inherit fetchurl stdenv;
   };
 
