@@ -2060,7 +2060,7 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
-  docbook5 = (import ../data/sgml+xml/schemas/docbook5) {
+  docbook5 = (import ../data/sgml+xml/schemas/docbook-5.0) {
     inherit fetchurl stdenv;
   };
 
