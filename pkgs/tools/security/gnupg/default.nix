@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnupg-1.4.4";
+  name = "gnupg-1.4.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.4.tar.bz2;
-    sha1 = "3414d67f22973576f31e354f44859bafbccb7eee";
+    url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.5.tar.bz2;
+    sha1 = "553fefe0da5a91108dd9468e381faf9487754f9a";
   };
   idea = if ideaSupport then fetchurl {
     url = ftp://ftp.gnupg.dk/pub/contrib-dk/idea.c.gz;
