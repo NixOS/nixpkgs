@@ -3,7 +3,7 @@
   # enabled if it is legal for you to do so.
   ideaSupport ? false
   
-, stdenv, fetchurl
+, stdenv, fetchurl, readline
 }:
 
 stdenv.mkDerivation {
@@ -13,6 +13,7 @@ stdenv.mkDerivation {
     url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.5.tar.bz2;
     sha1 = "553fefe0da5a91108dd9468e381faf9487754f9a";
   };
+  buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
     url = ftp://ftp.gnupg.dk/pub/contrib-dk/idea.c.gz;
     md5 = "9dc3bc086824a8c7a331f35e09a3e57f";

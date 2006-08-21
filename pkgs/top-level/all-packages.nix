@@ -397,7 +397,7 @@ rec {
   };
 
   gnupg = import ../tools/security/gnupg {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv readline;
     ideaSupport = true; # enable for IDEA crypto support
   };
 
