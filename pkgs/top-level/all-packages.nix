@@ -5,8 +5,17 @@
    platform. */
    
 
-{ # The system for which to build the packages.
+{ # The system (e.g., `i686-linux') for which to build the packages.
   system ? __currentSystem
+
+  # Usually, the system type uniquely determines the stdenv and thus
+  # how to build the packages.  But on some platforms we have
+  # different stdenvs, leading to different ways to build the
+  # packages.  For instance, on Windows we support both Cygwin and
+  # Mingw builds.  In both cases, `system' is `i686-cygwin'.  The
+  # attribute `stdenvType' is used to select the specific kind of
+  # stdenv to use, e.g., `i686-mingw'.
+, stdenvType ? system
 
 , # The standard environment to use.  Only used for bootstrapping.  If
   # null, the default standard environment is used.
@@ -71,7 +80,7 @@ rec {
 
   defaultStdenv =
     (import ../stdenv {
-      inherit system;
+      inherit system stdenvType;
       allPackages = import ./all-packages.nix;
     }).stdenv;
 
@@ -1248,6 +1257,7 @@ rec {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
   };
+  
   gtkLibs22 = import ../development/libraries/gtk-libs-2.2 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;

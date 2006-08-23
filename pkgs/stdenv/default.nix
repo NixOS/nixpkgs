@@ -5,7 +5,15 @@
 # Posix utilities, the GNU C compiler, and so on.  On other systems,
 # we use the native C library.
 
-{system, allPackages}:
+
+# stdenvType exists to support multiple kinds of stdenvs on the same
+# system, e.g., cygwin and mingw builds on i686-cygwin.  Most people
+# can ignore it.
+
+{system, stdenvType ? system, allPackages}:
+
+assert system != "i686-cygwin" -> system == stdenvType;
+
 
 rec {
 
@@ -47,7 +55,7 @@ rec {
 
 
   # Linux standard environment.
-  inherit (import ./linux {inherit allPackages;}) stdenvLinux;
+  stdenvLinux = (import ./linux {inherit allPackages;}).stdenvLinux;
 
     
   # Darwin (Mac OS X) standard environment.  Very simple for now
@@ -73,18 +81,20 @@ rec {
     inherit genericStdenv gccWrapper;
   };
 
+  
   # MinGW/MSYS standard environment.
   stdenvMinGW = (import ./mingw) {
     inherit system;
   };
 
+  
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
-    if system == "i686-linux" then stdenvLinux
-    else if system == "i686-freebsd" then stdenvFreeBSD
-    else if system == "i686-cygwin" then stdenvCygwin
-    else if system == "i686-mingw" then stdenvMinGW
-    else if system == "powerpc-darwin" then stdenvDarwin
-    else if system == "i686-darwin" then stdenvNix
+    if stdenvType == "i686-linux" then stdenvLinux
+    else if stdenvType == "i686-freebsd" then stdenvFreeBSD
+    else if stdenvType == "i686-cygwin" then stdenvCygwin
+    else if stdenvType == "i686-mingw" then stdenvMinGW
+    else if stdenvType == "powerpc-darwin" then stdenvDarwin
+    else if stdenvType == "i686-darwin" then stdenvNix
     else stdenvNative;
 }
