@@ -345,6 +345,11 @@ rec {
     inherit fetchurl stdenv zlib libpng texinfo;
   };
 
+  ploticus = (import ../tools/graphics/ploticus) {
+    inherit fetchurl stdenv zlib libpng;
+    inherit (xlibs) libX11;
+  };
+
   exif = (import ../tools/graphics/exif) {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
