@@ -1038,7 +1038,7 @@ rec {
   };
 
   cilaterm = (import ../development/libraries/cil-aterm) {
-    inherit stdenv fetchurl ocaml perl;
+    inherit stdenv fetchurl ocaml3080 perl;
   };
 
   pcre = (import ../development/libraries/pcre) {

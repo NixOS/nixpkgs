@@ -7,6 +7,6 @@ stdenv.mkDerivation {
                 md5 = "a7fa54f19844a20562efd37f67c391da";
             };
   patches = [./cil-aterm-1.3.4.patch];
-  buildInputs = [ ocaml perl ];
+  buildInputs = [ ocaml3080 perl ];
   inherit ocaml perl;
 }  
