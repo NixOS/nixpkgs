@@ -8,6 +8,9 @@
 
 rec {
 
+  system = "i686-linux";
+
+
   # The bootstrap process proceeds in several steps.
 
   # 1) Create a standard environment by downloading pre-built
@@ -22,16 +25,15 @@ rec {
     bunzip2 = ./tools/bunzip2;
     cp = ./tools/cp;
     curl = ./tools/curl-7.15.1-static.tar.bz2;
-    system = "i686-linux";
+    inherit system;
     args = [ ./scripts/unpack-curl.sh ];
   };
 
   # This function downloads a file.
   download = {url, md5, pkgname}: derivation {
     name = baseNameOf (toString url);
-    system = "i686-linux";
     builder = ./tools/bash;
-    inherit curl url;
+    inherit system curl url;
     args = [ ./scripts/download.sh ];
 
     # Nix 0.8 fixed-output derivations.
@@ -49,14 +51,13 @@ rec {
   , extra3 ? null, extra4? null, patchelf ? null}:
   derivation {
     name = pkgname;
-    system = "i686-linux";
     builder = ./tools/bash;
     tar = ./tools/tar;
     bunzip2 = ./tools/bunzip2;
     cp = ./tools/cp;
     args = [ ./scripts/unpack.sh ];
     tarball = download {inherit url md5 pkgname;};
-    inherit postProcess addToPath extra extra2 extra3 extra4 patchelf;
+    inherit system postProcess addToPath extra extra2 extra3 extra4 patchelf;
   };
 
   # The various statically linked components that make up the standard
@@ -107,10 +108,9 @@ rec {
   stdenvInitial = let {
     body = derivation {
       name = "stdenv-linux-initial";
-      system = "i686-linux";
       builder = ./tools/bash;
       args = ./scripts/builder-stdenv-initial.sh;
-      inherit staticTools;
+      inherit system staticTools;
     }  // {
       mkDerivation = attrs: derivation ((removeAttrs attrs ["meta"]) // {
         builder = ./tools/bash;
@@ -154,6 +154,7 @@ rec {
   # 2) These are the packages that we can build with the first
   #    stdenv.  We only need Glibc (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
+    inherit system;
     bootStdenv = stdenvLinuxBoot1;
   };
 
@@ -172,6 +173,7 @@ rec {
 
   # 5) The packages that can be built using the second stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
+    inherit system;
     bootStdenv = stdenvLinuxBoot2;
   };
 
@@ -190,6 +192,7 @@ rec {
 
   # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
+    inherit system;
     bootStdenv = stdenvLinuxBoot3;
   };
 
