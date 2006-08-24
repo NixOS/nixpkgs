@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, perl }:
+{ stdenv, fetchurl, ocaml3080, perl }:
 
 stdenv.mkDerivation {
   name    = "cil-aterm-1.3.4";
