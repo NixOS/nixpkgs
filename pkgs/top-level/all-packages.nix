@@ -1043,7 +1043,8 @@ rec {
   };
 
   cilaterm = (import ../development/libraries/cil-aterm) {
-    inherit stdenv fetchurl ocaml3080 perl;
+    ocaml = ocaml3080;
+    inherit stdenv fetchurl perl;
   };
 
   pcre = (import ../development/libraries/pcre) {

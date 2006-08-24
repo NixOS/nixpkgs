@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml3080, perl }:
+{ stdenv, fetchurl, ocaml, perl }:
 
 stdenv.mkDerivation {
   name    = "cil-aterm-1.3.4";
@@ -7,6 +7,6 @@ stdenv.mkDerivation {
                 md5 = "a7fa54f19844a20562efd37f67c391da";
             };
   patches = [./cil-aterm-1.3.4.patch];
-  buildInputs = [ ocaml3080 perl ];
-  inherit ocaml3080 perl;
+  buildInputs = [ ocaml perl ];
+  inherit ocaml perl;
 }  
