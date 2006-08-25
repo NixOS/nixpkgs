@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, noSysDirs}:
 
 stdenv.mkDerivation {
   name = "gcc-static-3.4.6";
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   };
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch];
-  noSysDirs = 1;
+  inherit noSysDirs;
 }
