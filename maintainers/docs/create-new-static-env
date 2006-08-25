@@ -1,0 +1,6 @@
+Creating a new static stdenv
+----------------------------
+
+When Nix is ported to a new (Linux) platform and you want to have a completely
+pure setup for the stdenv (for example for NixOS) it is necessary to rebuild
+the static tools.

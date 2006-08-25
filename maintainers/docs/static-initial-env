@@ -20,6 +20,9 @@ The tools can be found in nixpkgs in:
 - tools/text/gnupatch-diet
 - tools/misc/findutils-static
 
+and
+- development/compilers/gcc-static-3.4
+
 Most packages are compiled with dietlibc, an alternate C library, apart
 from bash and findutils, which are statically linked to glibc. The reason
 we chose dietlibc has various reasons. First of all, curl cannot be built
