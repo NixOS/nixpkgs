@@ -8,6 +8,6 @@ stdenv.mkDerivation {
     md5 = "4a21ac777d4b5617283ce488b808da7b";
   };
   # !!! apply only if noSysDirs is set
-  patches = [./no-sys-dirs.patch];
   inherit noSysDirs;
+  patches = if noSysDirs then [./no-sys-dirs.patch] else [./ldflags.patch];
 }

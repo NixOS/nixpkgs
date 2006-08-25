@@ -41,8 +41,8 @@ if test "$noSysDirs" = "1"; then
         export LDFLAGS=$extraLDFlags
     fi
 
-else
-    patches=""
+#else
+#    patches=""
 fi
 
 
