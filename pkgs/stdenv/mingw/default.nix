@@ -80,6 +80,7 @@ let {
           shell = msysShell;
           inherit curl;
           isDarwin = false;
+          isMinGW = true;
         };
 
       mkDerivationFun = {

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   patches = 
     [./aterm-alias-fix-2.patch] ++
-    (if stdenv.system == "i686-mingw" then [./mingw-asm.patch] else []);
+    (if stdenv ? isMinGW && stdenv.isMinGW then [./mingw-asm.patch] else []);
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
