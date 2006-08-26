@@ -629,8 +629,13 @@ rec {
 
   gcc = useFromStdenv (stdenv ? gcc) stdenv.gcc gcc41;
 
-  gcc_static = (import ../development/compilers/gcc-static-3.4) {
+  gccStatic = (import ../development/compilers/gcc-static-3.4) {
     inherit fetchurl stdenv noSysDirs;
+  };
+
+  gccStaticBootstrap = (import ../development/compilers/gcc-static-3.4) {
+    inherit fetchurl stdenv;
+    noSysDirs = false;
   };
 
   dietgcc = (import ../build-support/gcc-wrapper) {
