@@ -136,6 +136,10 @@ rec {
     inherit stdenv findutils;
   };
 
+  findutilsStatic = (import ../tools/misc/findutils-static) {
+    inherit stdenv fetchurl coreutils;
+  };
+
   getopt = (import ../tools/misc/getopt) {
     inherit fetchurl stdenv;
   };
