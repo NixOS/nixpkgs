@@ -59,7 +59,10 @@ let {
   stdenvFinal =
     let {
       body =
-        stdenv // mkDerivationFun // { inherit fetchurl; };
+        stdenv // mkDerivationFun // {
+          inherit fetchurl;
+          pkgconfig = pkgconfigBin;
+        };
 
       shell =
         msys + /bin/sh + ".exe";
@@ -199,6 +202,12 @@ let {
   w32apiBin =
     (import ./pkgs).w32apiBin {
       stdenv = stdenvInit2;
+      inherit fetchurl;
+    };
+
+  pkgconfigBin =
+    (import ./pkgs).pkgconfigBin {
+      stdenv = stdenvInit3;
       inherit fetchurl;
     };
 

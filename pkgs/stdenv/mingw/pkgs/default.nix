@@ -114,6 +114,26 @@ rec {
         };
     };
 
+  /**
+   * We need a binary pkg-config to bootstrap the compilation of
+   * glib and pkg-config: pkg-config needs glib, glib needs pkg-config.
+   *
+   * This tarball contains pkg-config and all its dependencies. Once we
+   * have bootstrapped pkg-config we really need to use a statically linked
+   * pkg-config (and provide this .exe at the web: it is really missing
+   * on the web).
+   */
+  pkgconfigBin =  {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "pkg-config-0.20";
+      builder = ./bin-builder.sh;
+      src =
+        fetchurl {
+          url = http://www.cs.uu.nl/people/martin/pkg-config-0.20-bin.tar.gz;
+          md5 = "71f9595a022619b8e8b0f7853790c4c7";
+        };
+    };
+
   /*
   pkgs.coreutils
   pkgs.findutils

@@ -10,6 +10,7 @@ if test -z "$out"; then
   succeedOnFailure=$SUCCEEDONFAILURE
   patches=$PATCHES
   doCheck=$DOCHECK
+  configureFlags=$CONFIGUREFLAGS
 fi
 
 source $@

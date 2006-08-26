@@ -5,7 +5,23 @@ let {
     };
 
   body = {
-    inherit (pkgs) zlib getopt realCurl aterm pkgconfig_latest;
-    inherit (pkgs.gtkLibs28) glib;
+    inherit (pkgs)
+      aterm
+      getopt
+      pkgconfig
+      realCurl
+      strategoLibraries
+      zlib;
+#    inherit profileTest;
   };
+
+#  profileTest =
+#    pkgs.stdenv.mkDerivation {
+#      name = "profile-test";
+#      src = ./char-test.c;
+#      builder = ./profile-builder.sh;
+#      strlib = pkgs.strategoLibraries;
+#      aterm = pkgs.aterm;
+#      buildInputs = [pkgs.aterm pkgs.strategoLibraries];
+#    };
 }

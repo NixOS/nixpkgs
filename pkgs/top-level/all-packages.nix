@@ -512,9 +512,14 @@ rec {
     m4 = gnum4;
   };
 
-  pkgconfig = (import ../development/tools/misc/pkgconfig) {
-    inherit fetchurl stdenv;
-  };
+  /**
+   * pkgconfig is optionally taken from the stdenv to allow bootstrapping
+   * of glib and pkgconfig itself on MinGW.
+   */
+  pkgconfig = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
+    (import ../development/tools/misc/pkgconfig {
+      inherit fetchurl stdenv;
+    });
 
   pkgconfig017x = (import ../development/tools/misc/pkgconfig/pkgconfig-0.17.2.nix) {
     inherit fetchurl stdenv;
@@ -854,6 +859,10 @@ rec {
   strategoxt = (import ../development/compilers/strategoxt) {
     inherit fetchurl pkgconfig sdf aterm;
     stdenv = overrideInStdenv stdenv [gnumake380];
+  };
+
+  strategoLibraries = (import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix) {
+    inherit stdenv fetchurl pkgconfig aterm;
   };
 
   strategoxtUtils = (import ../development/compilers/strategoxt/utils) {
