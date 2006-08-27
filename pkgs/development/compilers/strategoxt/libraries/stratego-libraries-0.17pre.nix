@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation {
   name = "stratego-libraries-0.17";
+  builder = ./builder.sh;
   src =
     fetchurl {
       url = http://www.cs.uu.nl/people/martin/stratego-libraries.tar.gz;
