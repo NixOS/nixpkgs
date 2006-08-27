@@ -47,9 +47,11 @@ storeExpr=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-insta
 
 kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $NIX/nix-instantiate -))
 
+mkinitrd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mkinitrd' | $NIX/nix-instantiate -))
+
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
-$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts $mkinitrd
 #$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
 
 # Location of sysvinit?
@@ -80,7 +82,7 @@ dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-ins
 #combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
 combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils $modutils $dhcp)
 
-for i in $storeExpr
+for i in $storeExpr $mkinitrd
 do
   echo $i >> $narStorePaths
 done

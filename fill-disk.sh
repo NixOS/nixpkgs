@@ -332,7 +332,6 @@ cat > $root/boot/grub/menu.lst << GRUBEND
 default=0
 timeout=5
 title NixOS
-        root (hd0,0)
         kernel @kernel@/vmlinuz root=$device
 GRUBEND
 
@@ -348,6 +347,7 @@ echo copying install log
 
 cp /tmp/install-log $root/root
 
+# bizar. busybox umount doesn't like things with --bind it seems.
 echo umounting filesystem
 
 umount $root/cdrom
