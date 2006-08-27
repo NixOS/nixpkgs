@@ -274,6 +274,10 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  bzip2Static = (import ../tools/compression/bzip2-static) {
+    inherit fetchurl stdenv;
+  };
+
   zdelta = (import ../tools/compression/zdelta) {
     inherit fetchurl stdenv;
   };
