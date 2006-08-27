@@ -17,6 +17,7 @@ if test -z "$out"; then
   src=$SRC
   srcs=$SRCS
   succeedOnFailure=$SUCCEEDONFAILURE
+  system=$SYSTEM
 fi
 
 source $@

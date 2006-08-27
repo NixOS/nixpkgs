@@ -125,8 +125,9 @@ rec {
    */
   pkgconfigBin =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "pkg-config-0.20";
-      builder = ./bin-builder.sh;
+      name = "pkgconfig-0.20";
+      builder = ./pkgconfig-builder.sh;
+      setupHook = ../../../development/tools/misc/pkgconfig/setup-hook.sh;
       src =
         fetchurl {
           url = http://www.cs.uu.nl/people/martin/pkg-config-0.20-bin.tar.gz;
