@@ -10,7 +10,12 @@ if test -z "$out"; then
   succeedOnFailure=$SUCCEEDONFAILURE
   patches=$PATCHES
   doCheck=$DOCHECK
+  doCoverageAnalysis=$DOCOVERAGEANALYSIS
+  dontInstall=$DONTINSTALL
   configureFlags=$CONFIGUREFLAGS
+  buildUtilities=$BUILDUTILITIES
+  logPhases=$LOGPHASES
+  lcov=$LCOV
 fi
 
 source $@
