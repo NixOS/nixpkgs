@@ -1,4 +1,4 @@
-NixOS installation HOWTO -- October 3, 2005
+NixOS installation HOWTO -- August 28, 2006
 
 This is small HOWTO of how to build and install the current version of
 NixOS.
@@ -39,16 +39,16 @@ the script:
 
 # sh fill-disk.sh
 
-The configuration data that grub writes to disk might not be correct. The
-grub configuration writes a file to disk which assumes /dev/hda1 is the root
-partition.
+The configuration data that grub writes to disk might not be correct (should
+be). When something goes wrong you probably won't have to reinstall. The
+manual for grub is quite helpful in these cases.
 
   Configuring
 
 To get NixOS in a working state, do the following:
 
-- load the networkdriver. This is machine dependent. On the labmachines this
-is the e1000 driver:
+- load the networkdriver. This is machine dependent. On the labmachines (Dell
+Optiplex GX-260) this is the e1000 driver:
 
 # modprobe e1000
 
@@ -93,7 +93,7 @@ NixOS machine (needed for mingetty). Alternatively, do:
 - relaunch init
 
 
-  Making hotplugging work
+  Making hotplugging work -- BROKEN RIGHT NOW
 
 Many devices (USB, Firewire) are controlled by so called "hot plugging". The
 kernel executes a program -- usually /sbin/hotplug, but this is configurable
