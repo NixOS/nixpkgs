@@ -14,22 +14,34 @@ Make sure mktemp is installed. Run ./make-disk.sh. Wait.
 
 Use your favourite tool to burn the ISO image to a CD.
 
-  Preparing the host machine
+  Installing
 
 Currently NixOS can only be installed with machines that have a specific
 hardware set up:
 
 An ATA harddisk on the first ATA controller (hda) with:
-- data partition (hda1)
-- swap partition (hda2)
+- data partition
+- swap partition
 
 All data on these two partitions will be wiped and the bootloader in the
 Master Boot Record (MBR) will be overwritten with GRUB.
 
-  Booting
+The NixOS installer will drop you into a shell, from which you can run
+fdisk. Then it expects to find a file called "disklayout" with three
+variables:
 
-Insert the CD, make sure it can boot from CD and reboot. Let it run for a
-while.
+SWAP :: partition to use as swap
+INSTALLDEVICE :: partition that will be /root
+TARGETDRIVE :: drive on which grub will be installed
+
+This file will be read by the install script automatically when you launch
+the script:
+
+# sh fill-disk.sh
+
+The configuration data that grub writes to disk might not be correct. The
+grub configuration writes a file to disk which assumes /dev/hda1 is the root
+partition.
 
   Configuring
 
