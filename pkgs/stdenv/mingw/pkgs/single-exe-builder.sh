@@ -1,5 +1,12 @@
-source $STDENV/setup
+if test -z "$out"; then
+  stdenv=$STDENV
+  out=$OUT
+  src=$SRC
+  exename=$EXENAME
+fi
 
-mkdir $OUT
-mkdir $OUT/bin
-cp $SRC $OUT/bin/$EXENAME
+source $stdenv/setup
+
+mkdir $out
+mkdir $out/bin
+cp $src $out/bin/$exename
