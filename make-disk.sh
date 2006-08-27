@@ -26,6 +26,7 @@ manifest=${archivesDir}/MANIFEST
 nixpkgs=/nixpkgs/trunk/pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 ramdisk_login=$archivesDir/scripts/ramdisk-login.sh
+login_script=$archivesDir/scripts/login.sh
 storePaths=$archivesDir/mystorepaths
 narStorePaths=$archivesDir/narstorepaths
 validatePaths=$archivesDir/validatepaths
@@ -48,8 +49,8 @@ kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $
 
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
-#$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
-$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+#$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
 
 # Location of sysvinit?
 sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
@@ -212,8 +213,30 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@which\@^$which^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
+    -e "s^@busybox\@^$busybox^g" \
     < $ramdisk_login > $ramdisk_login.tmp
 $coreutils/bin/mv $ramdisk_login.tmp $ramdisk_login
+
+$gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
+    -e "s^@bootPath\@^$bootPath^g" \
+    -e "s^@NIX\@^$nix^g" \
+    -e "s^@bash\@^$bash^g" \
+    -e "s^@findutils\@^$findutils^g" \
+    -e "s^@coreutilsdiet\@^$coreutilsdiet^g" \
+    -e "s^@coreutils\@^$coreutils^g" \
+    -e "s^@utillinux\@^$utilLinux^g" \
+    -e "s^@e2fsprogs\@^$e2fsprogs^g" \
+    -e "s^@modutils\@^$modutils^g" \
+    -e "s^@grub\@^$grub^g" \
+    -e "s^@kernel\@^$kernel^g" \
+    -e "s^@kernelscripts\@^$kernelscripts^g" \
+    -e "s^@gnugrep\@^$gnugrep^g" \
+    -e "s^@which\@^$which^g" \
+    -e "s^@gnutar\@^$gnutar^g" \
+    -e "s^@mingetty\@^$mingettyWrapper^g" \
+    -e "s^@busybox\@^$busybox^g" \
+    < $login_script > $login_script.tmp
+$coreutils/bin/mv $login_script.tmp $login_script
 
 echo copying bootimage
 
@@ -260,12 +283,14 @@ $coreutils/bin/rm -f ${initrd}
 #cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/init
 $coreutils/bin/cp ${archivesDir}/scripts/fill-disk.sh ${initdir}/
 $coreutils/bin/cp ${archivesDir}/scripts/ramdisk-login.sh ${initdir}/
+$coreutils/bin/cp ${archivesDir}/scripts/login.sh ${initdir}/
 $coreutils/bin/cp ${archivesDir}/scripts/init.sh ${initdir}/init
 #ln -s ${bash}/bin/bash ${initdir}/bin/sh
 $coreutils/bin/cp ${bash}/bin/bash ${initdir}/bin/sh
 $coreutils/bin/chmod u+x ${initdir}/init
 $coreutils/bin/chmod u+x ${initdir}/fill-disk.sh
 $coreutils/bin/chmod u+x ${initdir}/ramdisk-login.sh
+$coreutils/bin/chmod u+x ${initdir}/login.sh
 #cp -fau --parents ${utilLinux} ${initdir}
 #cp -fau --parents ${coreUtilsDiet} ${initdir}
 #cp -fau --parents ${modUtils} ${initdir}
