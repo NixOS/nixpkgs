@@ -1,21 +1,22 @@
 # Workaround MSYS shell problem
 
 if test -z "$out"; then
-  stdenv=$STDENV
-  out=$OUT
-  src=$SRC
-  srcs=$SRCS
   buildInputs=$BUILDINPUTS
-  propagatedBuildInputs=$PROPAGATEDBUILDINPUTS
-  succeedOnFailure=$SUCCEEDONFAILURE
-  patches=$PATCHES
+  buildUtilities=$BUILDUTILITIES
+  configureFlags=$CONFIGUREFLAGS
   doCheck=$DOCHECK
   doCoverageAnalysis=$DOCOVERAGEANALYSIS
   dontInstall=$DONTINSTALL
-  configureFlags=$CONFIGUREFLAGS
-  buildUtilities=$BUILDUTILITIES
-  logPhases=$LOGPHASES
+  dontLogThroughTee=$DONTLOGTHROUGHTEE
   lcov=$LCOV
+  logPhases=$LOGPHASES
+  out=$OUT
+  patches=$PATCHES
+  propagatedBuildInputs=$PROPAGATEDBUILDINPUTS
+  stdenv=$STDENV
+  src=$SRC
+  srcs=$SRCS
+  succeedOnFailure=$SUCCEEDONFAILURE
 fi
 
 source $@
