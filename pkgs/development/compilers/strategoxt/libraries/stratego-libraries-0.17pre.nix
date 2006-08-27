@@ -16,7 +16,4 @@ stdenv.mkDerivation {
   # avoids loads of warnings about too big description fields because of a broken debug format
   CFLAGS =
     if stdenv ? isMinGW && stdenv.isMinGW then "-O2" else null;
-
-  # MinGW bootstrap pkg-config does not support the pkg-config setup-hook yet.
-  PKG_CONFIG_PATH = aterm + "/lib/pkgconfig";
 }
