@@ -1252,6 +1252,10 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
+  popt110 = (import ../development/libraries/popt/popt-1.10.6.nix) {
+    inherit fetchurl stdenv gettext libtool autoconf automake;
+  };
+
   slang = (import ../development/libraries/slang) {
     inherit fetchurl stdenv pcre libpng;
   };
@@ -1926,12 +1930,25 @@ rec {
     gcc = stdenv.gcc;
   };
 
+  libselinux = (import ../os-specific/linux/libselinux) {
+    inherit fetchurl stdenv libsepol;
+  };
+
+  libsepol = (import ../os-specific/linux/libsepol) {
+    inherit fetchurl stdenv;
+  };
+
   MAKEDEV = (import ../os-specific/linux/MAKEDEV) {
     inherit fetchurl stdenv;
   };
 
   MAKEDEVwrapper = (import ../os-specific/linux/MAKEDEV-wrapper) {
     inherit stdenv MAKEDEV;
+  };
+
+  mkinitrd = (import ../os-specific/linux/mkinitrd) {
+    inherit fetchurl stdenv;
+    popt = popt110;
   };
 
   eject = (import ../os-specific/linux/eject) {
