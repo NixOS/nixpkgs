@@ -109,7 +109,7 @@ rec {
     body = derivation {
       name = "stdenv-linux-initial";
       builder = ./tools/bash;
-      args = ./scripts/builder-stdenv-initial.sh;
+      args = [ ./scripts/builder-stdenv-initial.sh ];
       inherit system staticTools;
     }  // {
       mkDerivation = attrs: derivation ((removeAttrs attrs ["meta"]) // {
