@@ -1,0 +1,28 @@
+diff -rc syslinux-3.20/Makefile syslinux-3.20.new/Makefile
+*** syslinux-3.20/Makefile	2006-08-26 19:32:12.000000000 +0200
+--- syslinux-3.20.new/Makefile	2006-08-28 23:48:18.000000000 +0200
+***************
+*** 25,35 ****
+  
+  NASM	 = nasm -O99
+  NINCLUDE =
+! BINDIR   = /usr/bin
+! SBINDIR  = /sbin
+! LIBDIR   = /usr/lib
+  AUXDIR   = $(LIBDIR)/syslinux
+! INCDIR   = /usr/include
+  
+  PERL     = perl
+  
+--- 25,35 ----
+  
+  NASM	 = nasm -O99
+  NINCLUDE =
+! BINDIR   = $(out)/bin
+! SBINDIR  = $(out)/sbin
+! LIBDIR   = $(out)/lib
+  AUXDIR   = $(LIBDIR)/syslinux
+! INCDIR   = $(out)/include
+  
+  PERL     = perl
+  
