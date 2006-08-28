@@ -75,7 +75,7 @@ grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-ins
 
 findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
 
-modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
+modutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
 
 dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
 
