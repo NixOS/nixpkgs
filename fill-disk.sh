@@ -123,7 +123,7 @@ make_dir 00755 /var/tmp
 
 echo making device nodes on target drive
 
-mknod $root/dev/null c 1 3
+mknod -m 0666 $root/dev/null c 1 3
 mknod -m 0600 $root/dev/console c 5 1
 mknod -m 0600 $root/dev/tty c 5 0
 mknod -m 0600 $root/dev/tty0 c 4 0
