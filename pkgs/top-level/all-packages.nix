@@ -2556,6 +2556,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  nanoDiet = (import ../applications/editors/nano) {
+    inherit fetchurl;
+    ncurses = ncursesDiet;
+    stdenv = overrideGCC stdenv dietgcc;
+  };
+
   vim = (import ../applications/editors/vim) {
     inherit fetchurl stdenv ncurses;
   };

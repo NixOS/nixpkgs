@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     md5 = "f2b3efbf1cf356d736740d531b6b22c4";
   };
   buildInputs = [ncurses];
+  configureFlags = "--enable-tiny";
 }
 
 
