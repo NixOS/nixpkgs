@@ -11,9 +11,15 @@ buildPhase=buildPhase
 installPhase() {
     mkdir $out
     mkdir $out/include
-    cp -prvd include/linux include/asm-i386 include/asm-generic $out/include
-    cd $out/include
-    ln -s asm-i386 asm
+    if test $system = "i686-linux"; then
+        cp -prvd include/linux include/asm-i386 include/asm-generic $out/include
+        cd $out/include
+        ln -s asm-i386 asm
+    elif test $system = "powerpc-linux"; then
+        cp -prvd include/linux include/asm-ppc include/asm-generic $out/include
+        cd $out/include
+        ln -s asm-ppc asm
+    fi
     echo -n > $out/include/linux/autoconf.h
 }
 

@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "linux-headers-2.6.14.3-i386";
+  name = "linux-headers-2.6.14.3";
   builder = ./builder.sh;
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/linux-2.6.14.3.tar.bz2;
