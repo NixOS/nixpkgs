@@ -2553,11 +2553,11 @@ rec {
   };
 
   nano = (import ../applications/editors/nano) {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses gettext;
   };
 
   nanoDiet = (import ../applications/editors/nano) {
-    inherit fetchurl;
+    inherit fetchurl gettext;
     ncurses = ncursesDiet;
     stdenv = overrideGCC stdenv dietgcc;
   };
