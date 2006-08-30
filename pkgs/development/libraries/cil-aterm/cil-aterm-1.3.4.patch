@@ -1,6 +1,6 @@
 diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
 --- cil.orig/Makefile.cil.in	2005-11-22 06:34:41.000000000 +0100
-+++ cil/Makefile.cil.in	2006-01-16 13:33:41.000000000 +0100
++++ cil/Makefile.cil.in	2006-08-30 19:39:53.000000000 +0200
 @@ -78,6 +78,7 @@
                canonicalize heap oneret partial simplemem simplify \
  	      dataslicing \
@@ -18,20 +18,21 @@ diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
  libdir = @libdir@
  pkglibdir = $(libdir)/cil
  datadir = @datadir@
-@@ -554,6 +557,10 @@
+@@ -554,6 +557,11 @@
  	$(INSTALL_DATA) $(install_lib) $(DESTDIR)$(pkglibdir)
  	$(INSTALL) -d $(DESTDIR)$(pkgdatadir)
  	$(INSTALL_DATA) $(addprefix lib/, $(filter %.pm, $(DISTRIB_LIB))) $(DESTDIR)$(pkgdatadir)
 +	$(INSTALL) -d $(bindir)
 +	$(INSTALL) -d $(objdir)
 +	$(INSTALL) bin/* $(bindir)
++	$(INSTALL_DATA) lib/* $(bindir)
 +	$(INSTALL) $(OBJDIR)/*.exe $(objdir)
  
  cil.spec: cil.spec.in
  	./config.status $@
 diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 --- cil.orig/src/ext/atermprinter.ml	1970-01-01 01:00:00.000000000 +0100
-+++ cil/src/ext/atermprinter.ml	2006-02-20 10:50:49.000000000 +0100
++++ cil/src/ext/atermprinter.ml	2006-08-30 06:33:13.000000000 +0200
 @@ -0,0 +1,488 @@
 +open Cil
 +open Pretty
@@ -523,7 +524,7 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +  }
 diff -urN cil.orig/src/maincil.ml cil/src/maincil.ml
 --- cil.orig/src/maincil.ml	2005-11-22 06:34:41.000000000 +0100
-+++ cil/src/maincil.ml	2006-01-16 10:37:24.000000000 +0100
++++ cil/src/maincil.ml	2006-08-30 06:33:13.000000000 +0200
 @@ -105,6 +105,7 @@
      Simplemem.feature;
      Simplify.feature;
