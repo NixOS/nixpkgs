@@ -37,6 +37,8 @@ initscript=$archivesDir/scripts/init.sh
 
 nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
 busybox=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).busybox' | $NIX/nix-instantiate -))
+nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
+nanoDiet=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nanoDiet' | $NIX/nix-instantiate -))
 
 nixDeps=$($NIX/nix-store -qR $nix)
 
@@ -80,7 +82,7 @@ modutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic
 dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
 
 #combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
-combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils $modutils $dhcp)
+combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils $modutils $dhcp $nano)
 
 for i in $storeExpr $mkinitrd
 do
@@ -128,7 +130,6 @@ modutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).module_init_toolsStatic
 grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
 mingettyWrapper=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX/nix-instantiate -))
 dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
-nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
 gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
 which=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX/nix-instantiate -))
 eject=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX/nix-instantiate -))
@@ -237,6 +238,7 @@ $gnused/bin/sed -e "s^@sysvinitPath\@^$sysvinitPath^g" \
     -e "s^@gnutar\@^$gnutar^g" \
     -e "s^@mingetty\@^$mingettyWrapper^g" \
     -e "s^@busybox\@^$busybox^g" \
+    -e "s^@nano\@^$nanoDiet^g" \
     < $login_script > $login_script.tmp
 $coreutils/bin/mv $login_script.tmp $login_script
 
@@ -306,6 +308,7 @@ $coreutils/bin/cp -fau --parents ${modutils}/bin ${initdir}
 $coreutils/bin/chmod -R u+w ${initdir}
 $coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
 $coreutils/bin/cp -fau --parents ${busybox} ${initdir}
+$coreutils/bin/cp -fau --parents ${nanoDiet} ${initdir}
 
 $coreutils/bin/touch ${archivesDir}/NIXOS
 

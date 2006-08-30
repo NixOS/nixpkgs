@@ -132,6 +132,9 @@ mknod -m 0600 $root/dev/tty2 c 4 2
 mknod -m 0600 $root/dev/tty3 c 4 3
 mknod -m 0444 $root/dev/urandom c 1 9
 
+## needed for sshd and friends. Should actually be made by udev.
+mknod -m 0666 $root/dev/ptmx c 5 2
+
 rm -f $root/etc/mtab
 ln -s /proc/mounts $root/etc/mtab
 

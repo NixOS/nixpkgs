@@ -5,8 +5,8 @@ rec {
     e2fsprogs nettools nixUnstable subversion gcc wget which vim less screen
     openssh binutils nixStatic strace shadowutils iputils gnumake curl gnused
     gnutar gnugrep gzip mingettyWrapper grubWrapper syslinux parted
-    module_init_tools module_init_toolsStatic dhcpWrapper man nano eject
-    sysklogd mktemp cdrtools cpio busybox mkinitrd;
+    module_init_tools module_init_toolsStatic dhcpWrapper man nano nanoDiet
+    eject sysklogd mktemp cdrtools cpio busybox mkinitrd;
 
   boot = (import ./boot) {
     inherit stdenv bash coreutils findutilsWrapper utillinux sysvinit
