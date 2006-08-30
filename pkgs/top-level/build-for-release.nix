@@ -140,6 +140,10 @@ let {
 #    xawtv
   ;};
 
+  powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
+    aterm
+  ;};
+  
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     aterm
     autoconf
@@ -196,6 +200,7 @@ let {
 
   body = [
     i686LinuxPkgs
+    powerpcLinuxPkgs
     i686FreeBSDPkgs
     powerpcDarwinPkgs
     i686DarwinPkgs
