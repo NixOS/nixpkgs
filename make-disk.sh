@@ -39,6 +39,7 @@ nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-inst
 busybox=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).busybox' | $NIX/nix-instantiate -))
 nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
 nanoDiet=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nanoDiet' | $NIX/nix-instantiate -))
+ncurses=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).ncursesDiet' | $NIX/nix-instantiate -))
 
 nixDeps=$($NIX/nix-store -qR $nix)
 
@@ -309,6 +310,7 @@ $coreutils/bin/chmod -R u+w ${initdir}
 $coreutils/bin/cp -fau --parents ${modutils}/sbin ${initdir}
 $coreutils/bin/cp -fau --parents ${busybox} ${initdir}
 $coreutils/bin/cp -fau --parents ${nanoDiet} ${initdir}
+$coreutils/bin/cp -fau --parents ${ncurses} ${initdir}
 
 $coreutils/bin/touch ${archivesDir}/NIXOS
 

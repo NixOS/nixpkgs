@@ -6,7 +6,7 @@ rec {
     openssh binutils nixStatic strace shadowutils iputils gnumake curl gnused
     gnutar gnugrep gzip mingettyWrapper grubWrapper syslinux parted
     module_init_tools module_init_toolsStatic dhcpWrapper man nano nanoDiet
-    eject sysklogd mktemp cdrtools cpio busybox mkinitrd;
+    eject sysklogd mktemp cdrtools cpio busybox mkinitrd ncursesDiet;
 
   boot = (import ./boot) {
     inherit stdenv bash coreutils findutilsWrapper utillinux sysvinit
