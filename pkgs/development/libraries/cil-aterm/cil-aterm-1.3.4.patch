@@ -30,6 +30,51 @@ diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
  
  cil.spec: cil.spec.in
  	./config.status $@
+diff -urN cil.orig/ocamlutil/Makefile.ocaml cil/ocamlutil/Makefile.ocaml
+--- cil.orig/ocamlutil/Makefile.ocaml	2005-11-22 06:34:41.000000000 +0100
++++ cil/ocamlutil/Makefile.ocaml	2006-08-31 09:50:11.000000000 +0200
+@@ -135,6 +135,7 @@
+ 
+ CAMLFLAGS    =$(OPT_FLAGS) -I $(OBJDIR)
+ 
++
+ # sm: two styles for echoing compilation progress:
+ #   style 1, by George:
+ #     - print English descriptions of what's happening
+@@ -152,20 +153,12 @@
+ #   $(AT)          - put this before shell commands which are to be executed,
+ #                    and also printed in style 2
+ #   $(ECHO)        - use in place of '@' for things not printed in either style
+-ifdef ECHOSTYLE_SCOTT
+-  # 'true' silently consumes its arguments, whereas 'echo' prints them
+-  NARRATIVE   := true           
+-  COMMAND     := echo
+-  AT          := 
+-  ECHO        := @
+-else
+-  NARRATIVE   := echo
+-  COMMAND     := true
+-  # change these next two definitions to <empty> to echo everything,
+-  # or leave as @ to suppress echoing
+-  AT          := @
+-  ECHO        := @
+-endif
++ 
++# 'true' silently consumes its arguments, whereas 'echo' prints them
++NARRATIVE   := true           
++COMMAND     := echo
++AT          := 
++ECHO        := @
+ 
+ ifdef PREPROC
+   COMPILEFLAGS += -pp "$(PREPROC)$"
+@@ -361,4 +354,4 @@
+ endif
+ 
+ listmodules: 
+-	@echo $(MODULES)
+\ No newline at end of file
++	@echo $(MODULES)
 diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 --- cil.orig/src/ext/atermprinter.ml	1970-01-01 01:00:00.000000000 +0100
 +++ cil/src/ext/atermprinter.ml	2006-08-30 06:33:13.000000000 +0200
