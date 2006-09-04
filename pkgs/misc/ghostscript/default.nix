@@ -26,5 +26,12 @@ stdenv.mkDerivation {
     (if x11Support then x11 else null)
   ];
 
-  configureFlags = if x11Support then "--with-x" else "--without-x";
+  configureFlags = "
+    ${if x11Support then "--with-x" else "--without-x"}
+  ";
+
+  # This patch is required to make Ghostscript at least build in a pure 
+  # environment (like NixOS).  Ghostscript's build process performs 
+  # various tests for the existence of files in /usr/include.
+  patches = [ ./purity.patch ];
 }
