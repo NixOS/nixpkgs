@@ -5,12 +5,12 @@
 assert x11Support -> x11 != null;
 
 stdenv.mkDerivation {
-  name = "ghostscript-8.15";
+  name = "ghostscript-8.54";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ghostscript-8.15.tar.bz2;
-    md5 = "ab8502f30629b730e0c9ca56b88a6b9d";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/ghostscript/ghostscript-8.54-gpl.tar.bz2;
+    md5 = "5d0ad0da8297fe459a788200f0eaeeba";
   };
 
   fonts = [
