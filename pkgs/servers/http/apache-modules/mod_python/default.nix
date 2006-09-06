@@ -1,16 +1,16 @@
 {stdenv, fetchurl, apacheHttpd, python}:
 
 stdenv.mkDerivation {
-  name = "mod_python-3.2.8";
+  name = "mod_python-3.2.10";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.nedmirror.nl/httpd/modpython/mod_python-3.2.8.tgz;
-    md5 = "d03452979a6a334f73cc2b95b39db331";
+    url = http://apache.surfnet.nl/httpd/modpython/mod_python-3.2.10.tgz;
+    md5 = "cc6439f546a6e70cfff7ca51b8c62541";
   };
 
-  patches = [./install.patch ./jg-20060204-1.patch];
+  patches = [./install.patch];
 
   inherit apacheHttpd;
   buildInputs = [apacheHttpd python];
