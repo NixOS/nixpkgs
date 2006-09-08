@@ -2088,6 +2088,10 @@ rec {
     inherit fetchurl stdenv bash gnused coreutils utillinux gnugrep module_init_tools;
   };
 
+  squashfsTools = import ../os-specific/linux/squashfs {
+    inherit fetchurl stdenv zlib;
+  };
+
   usbutils = import ../os-specific/linux/usbutils {
     inherit fetchurl stdenv libusb;
   };
