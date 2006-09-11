@@ -40,5 +40,9 @@ stdenv.mkDerivation {
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
   ";
 
+  # Quick hack to get it to build on Darwin (which may not have all of
+  # the required header files for this option).
+  NIX_CFLAGS_COMPILE = "-U SVN_HAVE_KEYCHAIN_SERVICES";
+
   inherit httpServer pythonBindings javahlBindings;
 }
