@@ -911,10 +911,10 @@ rec {
   };
 
   ghcWrapper = assert uulib.ghc == ghc;
-               (import ../development/compilers/ghc-wrapper) {
-                   inherit stdenv ghc;
-                   libraries = [ uulib ];
-  };
+    (import ../development/compilers/ghc-wrapper) {
+      inherit stdenv ghc;
+      libraries = [ uulib ];
+    };
 
   uuagc = (import ../development/tools/haskell/uuagc) {
     inherit fetchurl stdenv ghc uulib;
@@ -1527,6 +1527,10 @@ rec {
 
   clearsilver = import ../development/libraries/clearsilver {
     inherit fetchurl stdenv python;
+  };
+
+  apr = import ../development/libraries/apr {
+    inherit fetchurl stdenv;
   };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
