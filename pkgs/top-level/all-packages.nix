@@ -1818,8 +1818,10 @@ rec {
   readline = readline5;
 
   SDL = (import ../development/libraries/SDL) {
-    inherit fetchurl stdenv x11 mesa;
+    inherit fetchurl stdenv x11 mesa alsaLib;
+    inherit (xlibs) libXrandr;
     openglSupport = true;
+    alsaSupport = true;
   };
 
   boehmgc = (import ../development/libraries/boehm-gc) {
@@ -2624,6 +2626,10 @@ rec {
 
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
+  };
+
+  exult = import ../games/exult {
+    inherit fetchurl stdenv SDL;
   };
 
 
