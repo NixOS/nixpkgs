@@ -1533,6 +1533,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  aprutil = import ../development/libraries/apr-util {
+    inherit fetchurl stdenv apr expat;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxon = (import ../development/libraries/java/saxon) {
