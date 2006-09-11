@@ -24,8 +24,18 @@ strategies
 
   no-wsp = !appl(prod([], cf(opt(layout())), no-attrs()), [])
 
-  
+
 rules
+
+  list-sep(s): [] -> []
+  list-sep(s): [x | xs] -> [[x | before] | <list-sep(s)> [split | after]]
+    where
+      <split-fetch-keep(s)> xs => (before, split, after)
+  list-sep(s): [x | xs] -> [[x | xs]]
+    where
+      <not(split-fetch-keep(s))> xs
+
+  
 
   sort-attrs:
     appl(p@prod(_, _, attrs([term(cons("Attrs"))])),
@@ -36,18 +46,28 @@ rules
       , lit("}")
       ]
     ) ->
-    appl(p, [lit("{"), <no-wsp>, appl(p2, attrs'), ws2, lit("}")])
+    appl(p, [lit("{"), <no-wsp>, appl(p2, <concat> attrs'), ws2, lit("}")])
     where
       <debug> "found it";
-      <group> [ws1 | attrs] => groups;
-      <qsort(compare-attrs)> groups => attrs';
+      <attach-wsp> [ws1 | attrs] => withWSP;
+      <list-sep(starts-section)> withWSP => groups;
+      <length; debug> groups;
+      <map( \[x | xs] -> [x | <qsort(compare-attrs)> xs]\ )> groups => attrs';
       <debug> "did it"
 
 
-  group: [a, b | cs] -> [(a, b) | <group> cs]
-  group: [] -> []
+  attach-wsp: [a, b | cs] -> [(a, b) | <attach-wsp> cs]
+  attach-wsp: [] -> []
 
-  
+
+  starts-section: x@(appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) -> x
+    where <debug; starts-section'> cs
+
+  starts-section': [35, 35, 35 | cs] -> 1
+  starts-section': [c | cs] -> <starts-section'> cs
+    where <not(?35)> c
+
+
   compare-attrs:
     x@
     ( (_, appl(p1@prod(_, _, attrs([term(cons("Bind"))])), [id1 | xs1]))
@@ -55,9 +75,6 @@ rules
     )
     -> x
     where
-      <debug> "foo";
-      <debug> id1;
-      <debug> id2;
       <string-lt> (id1, id2)
 
 
