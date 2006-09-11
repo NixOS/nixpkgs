@@ -1,38 +1,44 @@
-{ localServer ? false
+{ bdbSupport ? false
 , httpServer ? false
 , sslSupport ? false
 , compressionSupport ? false
 , pythonBindings ? false
 , javahlBindings ? false
-, stdenv, fetchurl
-, openssl ? null, httpd ? null, db4 ? null, expat, swig ? null, jdk ? null, zlib ? null
+, stdenv, fetchurl, apr, aprutil, neon, zlib
+, httpd ? null, expat, swig ? null, jdk ? null
 }:
 
-assert expat != null;
-assert localServer -> db4 != null;
+assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> httpd != null && httpd.expat == expat;
-assert sslSupport -> openssl != null && (httpServer -> httpd.openssl == openssl);
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javahlBindings -> jdk != null;
-assert compressionSupport -> zlib != null;
+assert sslSupport -> neon.sslSupport;
+assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation {
-  name = "subversion-1.4.0pre-rc1";
+  name = "subversion-1.4.0";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.4.0-rc1.tar.bz2;
-    sha1 = "0729403204f4cdebb4c40bdb62531721b0885cd0";
+    url = http://subversion.tigris.org/downloads/subversion-1.4.0.tar.bz2;
+    sha1 = "92671bba140e9b9e300b5ffb526c4a7c59aeb5b1";
   };
 
-  openssl = if sslSupport then openssl else null;
-  zlib = if compressionSupport then zlib else null;
-  httpd = if httpServer then httpd else null;
-  db4 = if localServer then db4 else null;
-  swig = if pythonBindings then swig else null;
-  python = if pythonBindings then swig.python else null;
-  jdk = if javahlBindings then jdk else null;
+  buildInputs =
+    [expat zlib]
+    ++ (if pythonBindings then [swig.python] else []);
 
-  inherit expat localServer httpServer sslSupport
-          pythonBindings javahlBindings;
+  configureFlags = "
+    --without-gdbm --disable-static
+    --with-apr=${apr} -with-apr-util=${aprutil} --with-neon=${neon}
+    ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
+    ${if httpServer then
+        "--with-apxs=${httpd}/bin/apxs --with-apr=${httpd} --with-apr-util=${httpd}"
+      else
+        "--without-apxs"}
+    ${if pythonBindings then "--with-swig=${swig}" else "--without-swig"}
+    ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
+  ";
+
+  inherit httpServer pythonBindings javahlBindings;
 }

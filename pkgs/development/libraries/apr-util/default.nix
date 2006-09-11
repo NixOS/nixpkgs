@@ -1,10 +1,10 @@
 { stdenv, fetchurl, apr, expat
-, bdbSupport ? false, bdb ? null
+, bdbSupport ? false, db4 ? null
 }:
 
-assert bdbSupport -> bdb != null;
+assert bdbSupport -> db4 != null;
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   name = "apr-util-1.2.7";
   src = fetchurl {
     url = http://archive.apache.org/dist/apr/apr-util-1.2.7.tar.bz2;
@@ -12,6 +12,6 @@ stdenv.mkDerivation {
   };
   configureFlags = "
     --with-apr=${apr} --with-expat=${expat}
-    ${if bdbSupport then "--with-berkeley-db=${bdb}" else ""}
+    ${if bdbSupport then "--with-berkeley-db=${db4}" else ""}
   ";
-}
+}) // {inherit bdbSupport;}

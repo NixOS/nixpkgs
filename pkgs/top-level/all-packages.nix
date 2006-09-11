@@ -1167,7 +1167,9 @@ rec {
   };
 
   neon = (import ../development/libraries/neon) {
-    inherit fetchurl stdenv libxml2;
+    inherit fetchurl stdenv libxml2 zlib openssl;
+    compressionSupport = true;
+    sslSupport = true;
   };
 
   nss = (import ../development/libraries/nss) {
@@ -1534,7 +1536,8 @@ rec {
   };
 
   aprutil = import ../development/libraries/apr-util {
-    inherit fetchurl stdenv apr expat;
+    inherit fetchurl stdenv apr expat db4;
+    bdbSupport = true;
   };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
@@ -2175,7 +2178,9 @@ rec {
     inherit fetchurl stdenv vim;
   };
 
-  subversion = (import ../applications/version-management/subversion-1.3.x) {
+  subversion = subversion14;
+
+  subversion13 = (import ../applications/version-management/subversion-1.3.x) {
     inherit fetchurl stdenv openssl db4 expat swig zlib;
     localServer = true;
     httpServer = false;
@@ -2185,8 +2190,8 @@ rec {
   };
 
   subversion14 = (import ../applications/version-management/subversion-1.4.x) {
-    inherit fetchurl stdenv openssl db4 expat swig zlib;
-    localServer = true;
+    inherit fetchurl stdenv apr aprutil neon expat swig zlib;
+    bdbSupport = true;
     httpServer = false;
     sslSupport = true;
     compressionSupport = true;

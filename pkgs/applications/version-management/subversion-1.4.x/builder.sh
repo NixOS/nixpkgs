@@ -1,29 +1,7 @@
-buildInputs="$openssl $zlib $db4 $httpd $swig $python $jdk $expat $patch"
 source $stdenv/setup
 
-configureFlags="--without-gdbm --disable-static"
-
-if test "$localServer"; then
-    configureFlags="--with-berkeley-db=$db4 $configureFlags"
-fi
-
-if test "$sslSupport"; then
-    configureFlags="--with-ssl --with-libs=$openssl $configureFlags"
-fi
-
 if test "$httpServer"; then
-    configureFlags="--with-apxs=$httpd/bin/apxs --with-apr=$httpd --with-apr-util=$httpd $configureFlags"
     makeFlags="APACHE_LIBEXECDIR=$out/modules $makeFlags"
-else
-    configureFlags="--without-apxs $configureFlags"
-fi
-
-if test -n "$pythonBindings"; then
-    configureFlags="--with-swig=$swig $configureFlags"
-fi
-
-if test "$javahlBindings"; then
-    configureFlags="--enable-javahl --with-jdk=$jdk $configureFlags"
 fi
 
 installFlags="$makeFlags"
