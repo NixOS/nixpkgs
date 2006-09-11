@@ -1,0 +1,68 @@
+/* Tool to sort attribute sets.  Primarily useful for keeping
+   all-packages.nix tidy.
+
+   To compile:
+
+   $ strc -i ../../maintainers/scripts/sort-attrs.str -la stratego-lib
+
+   Typical invocation:
+   
+   $ sglr -m -p ~/Dev/nix/src/libexpr/nix.tbl -i all-packages.nix \
+     | implode-asfix --lex \
+     | ../../maintainers/scripts/sort-attrs \
+     | asfix-yield
+*/
+     
+module sort-attrs
+
+imports
+  libstratego-lib
+  libstratego-sglr
+
+
+strategies
+
+  no-wsp = !appl(prod([], cf(opt(layout())), no-attrs()), [])
+
+  
+rules
+
+  sort-attrs:
+    appl(p@prod(_, _, attrs([term(cons("Attrs"))])),
+      [ lit("{")
+      , ws1
+      , appl(p2@list(cf(iter-star(sort("Bind")))), attrs)
+      , ws2
+      , lit("}")
+      ]
+    ) ->
+    appl(p, [lit("{"), <no-wsp>, appl(p2, attrs'), ws2, lit("}")])
+    where
+      <debug> "found it";
+      <group> [ws1 | attrs] => groups;
+      <qsort(compare-attrs)> groups => attrs';
+      <debug> "did it"
+
+
+  group: [a, b | cs] -> [(a, b) | <group> cs]
+  group: [] -> []
+
+  
+  compare-attrs:
+    x@
+    ( (_, appl(p1@prod(_, _, attrs([term(cons("Bind"))])), [id1 | xs1]))
+    , (_, appl(p2@prod(_, _, attrs([term(cons("Bind"))])), [id2 | xs2]))
+    )
+    -> x
+    where
+      <debug> "foo";
+      <debug> id1;
+      <debug> id2;
+      <string-lt> (id1, id2)
+
+
+strategies
+
+  main = io-wrap(
+    topdown(try(sort-attrs))
+  )
