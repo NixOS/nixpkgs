@@ -1825,7 +1825,7 @@ rec {
   };
 
   SDL_mixer = (import ../development/libraries/SDL_mixer) {
-    inherit fetchurl stdenv SDL;
+    inherit fetchurl stdenv SDL libogg libvorbis;
   };
 
   boehmgc = (import ../development/libraries/boehm-gc) {
@@ -2633,7 +2633,7 @@ rec {
   };
 
   exult = import ../games/exult {
-    inherit fetchurl SDL SDL_mixer zlib libpng;
+    inherit fetchurl SDL SDL_mixer zlib libpng unzip;
     stdenv = overrideGCC stdenv gcc34;
   };
 
