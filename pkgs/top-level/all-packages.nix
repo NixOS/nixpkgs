@@ -1065,8 +1065,8 @@ rec {
   };
 
   cilaterm = (import ../development/libraries/cil-aterm) {
-    ocaml = ocaml3080;
-    inherit stdenv fetchurl perl;
+    stdenv = overrideInStdenv stdenv [gnumake380];
+    inherit fetchurl perl ocaml;
   };
 
   pcre = (import ../development/libraries/pcre) {
