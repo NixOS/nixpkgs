@@ -1824,6 +1824,10 @@ rec {
     alsaSupport = true;
   };
 
+  SDL_mixer = (import ../development/libraries/SDL_mixer) {
+    inherit fetchurl stdenv SDL;
+  };
+
   boehmgc = (import ../development/libraries/boehm-gc) {
     inherit fetchurl stdenv;
   };
@@ -2629,7 +2633,8 @@ rec {
   };
 
   exult = import ../games/exult {
-    inherit fetchurl stdenv SDL;
+    inherit fetchurl SDL SDL_mixer zlib libpng;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
 
