@@ -1,6 +1,19 @@
-diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
---- cil.orig/Makefile.cil.in	2005-11-22 06:34:41.000000000 +0100
-+++ cil/Makefile.cil.in	2006-08-30 19:39:53.000000000 +0200
+diff -urN cil-old/bin/CilConfig.pm.in cil-new/bin/CilConfig.pm.in
+--- cil-old/bin/CilConfig.pm.in	2005-11-22 06:34:41.000000000 +0100
++++ cil-new/bin/CilConfig.pm.in	2006-09-13 13:52:44.000000000 +0200
+@@ -1,7 +1,7 @@
+ 
+-use lib "@CILHOME@/lib"; # The libraries are in the lib directory
++use lib "@prefix@/lib"; # The libraries are in the lib directory
+ $::archos    = "@ARCHOS@";
+ $::cc        = "@CC@";
+-$::cilhome   = "@CILHOME@";
++$::cilhome   = "@prefix@";
+ $::default_mode = "@DEFAULT_CIL_MODE@";
+ 
+diff -urN cil-old/Makefile.cil.in cil-new/Makefile.cil.in
+--- cil-old/Makefile.cil.in	2005-11-22 06:34:41.000000000 +0100
++++ cil-new/Makefile.cil.in	2006-09-13 13:52:09.000000000 +0200
 @@ -78,6 +78,7 @@
                canonicalize heap oneret partial simplemem simplify \
  	      dataslicing \
@@ -30,9 +43,9 @@ diff -urN cil.orig/Makefile.cil.in cil/Makefile.cil.in
  
  cil.spec: cil.spec.in
  	./config.status $@
-diff -urN cil.orig/ocamlutil/Makefile.ocaml cil/ocamlutil/Makefile.ocaml
---- cil.orig/ocamlutil/Makefile.ocaml	2005-11-22 06:34:41.000000000 +0100
-+++ cil/ocamlutil/Makefile.ocaml	2006-08-31 09:50:11.000000000 +0200
+diff -urN cil-old/ocamlutil/Makefile.ocaml cil-new/ocamlutil/Makefile.ocaml
+--- cil-old/ocamlutil/Makefile.ocaml	2005-11-22 06:34:41.000000000 +0100
++++ cil-new/ocamlutil/Makefile.ocaml	2006-09-13 13:52:09.000000000 +0200
 @@ -135,6 +135,7 @@
  
  CAMLFLAGS    =$(OPT_FLAGS) -I $(OBJDIR)
@@ -75,9 +88,9 @@ diff -urN cil.orig/ocamlutil/Makefile.ocaml cil/ocamlutil/Makefile.ocaml
 -	@echo $(MODULES)
 \ No newline at end of file
 +	@echo $(MODULES)
-diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
---- cil.orig/src/ext/atermprinter.ml	1970-01-01 01:00:00.000000000 +0100
-+++ cil/src/ext/atermprinter.ml	2006-08-30 06:33:13.000000000 +0200
+diff -urN cil-old/src/ext/atermprinter.ml cil-new/src/ext/atermprinter.ml
+--- cil-old/src/ext/atermprinter.ml	1970-01-01 01:00:00.000000000 +0100
++++ cil-new/src/ext/atermprinter.ml	2006-09-13 13:52:09.000000000 +0200
 @@ -0,0 +1,488 @@
 +open Cil
 +open Pretty
@@ -567,9 +580,9 @@ diff -urN cil.orig/src/ext/atermprinter.ml cil/src/ext/atermprinter.ml
 +    );
 +    fd_post_check = false;
 +  }
-diff -urN cil.orig/src/maincil.ml cil/src/maincil.ml
---- cil.orig/src/maincil.ml	2005-11-22 06:34:41.000000000 +0100
-+++ cil/src/maincil.ml	2006-08-30 06:33:13.000000000 +0200
+diff -urN cil-old/src/maincil.ml cil-new/src/maincil.ml
+--- cil-old/src/maincil.ml	2005-11-22 06:34:41.000000000 +0100
++++ cil-new/src/maincil.ml	2006-09-13 13:52:09.000000000 +0200
 @@ -105,6 +105,7 @@
      Simplemem.feature;
      Simplify.feature;
