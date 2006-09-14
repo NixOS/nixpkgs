@@ -21,31 +21,8 @@ preConfigure() {
 
 
 # !!! TODO: -system-libmng
-configureFlags="-v -prefix $out -system-zlib -system-libpng -system-libjpeg"
+configureFlags="-prefix $out $configureFlags"
 dontAddPrefix=1
-
-if test -n "$threadSupport"; then
-    configureFlags="-thread $configureFlags";
-else    
-    configureFlags="-no-thread $configureFlags";
-fi
-
-if test -n "$xftSupport"; then
-    configureFlags="-xft -L$libXft/lib -I$libXft/include \
-      -L$freetype/lib -I$freetype/include \
-      -L$fontconfig/lib -I$fontconfig/include \
-      $configureFlags"
-fi
-
-if test -n "$mysqlSupport"; then
-    configureFlags="-qt-sql-mysql -L$mysql/lib/mysql -I$mysql/include/mysql $configureFlags";
-else    
-    configureFlags="-no-thread $configureFlags";
-fi
-
-if test -n "$xrenderSupport"; then
-    configureFlags="-xrender -L$libXrender/lib -I$libXrender/include $configureFlags"
-fi
 
 configureScript=configureScript
 configureScript() {

@@ -1,4 +1,6 @@
-{stdenv, fetchurl, which, qt3, x11, libXinerama, libXv, libXxf86vm, libXrandr, lame, zlib}:
+{ stdenv, fetchurl, which, qt3, x11
+, libXinerama, libXv, libXxf86vm, libXrandr, libXmu
+, lame, zlib, mesa}:
 
 assert qt3.mysqlSupport;
 
@@ -14,6 +16,10 @@ stdenv.mkDerivation {
   patches = [./settings.patch];
   configureFlags = "--disable-joystick-menu";
 
-  buildInputs = [which qt3 x11 libXinerama libXv libXxf86vm libXrandr lame zlib];
+  buildInputs = [
+    which qt3 x11 libXinerama libXv libXxf86vm libXrandr libXmu
+    lame zlib mesa
+  ];
+  
   inherit qt3;
 }

@@ -1328,8 +1328,10 @@ rec {
   };
 
   qt3 = import ../development/libraries/qt-3 {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql;
-    inherit (xlibs) libXft libXrender;
+    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
+    inherit (xlibs) libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto;
+    openglSupport = true;
   };
 
   kdelibs = import ../development/libraries/kde/kdelibs {
@@ -2428,8 +2430,8 @@ rec {
   };
 
   mythtv = (import ../applications/video/mythtv) {
-    inherit fetchurl stdenv which qt3 x11 lame zlib;
-    inherit (xlibs) libXinerama libXv libXxf86vm libXrandr;
+    inherit fetchurl stdenv which qt3 x11 lame zlib mesa;
+    inherit (xlibs) libXinerama libXv libXxf86vm libXrandr libXmu;
   };
 
   gqview = (import ../applications/graphics/gqview) {
