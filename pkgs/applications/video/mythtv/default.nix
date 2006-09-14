@@ -1,19 +1,19 @@
-{stdenv, fetchurl, which, qt3, x11, libXinerama, libXv, libXxf86vm, lame}:
+{stdenv, fetchurl, which, qt3, x11, libXinerama, libXv, libXxf86vm, libXrandr, lame, zlib}:
 
 assert qt3.mysqlSupport;
 
 stdenv.mkDerivation {
-  name = "mythtv-0.18.1";
+  name = "mythtv-0.20";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/mythtv-0.18.1.tar.bz2;
-    md5 = "e6cabf88feeaf6ae8f830d3fdf7b113d";
+    url = http://ftp.osuosl.org/pub/mythtv/mythtv-0.20.tar.bz2;
+    md5 = "52bec1e0fadf7d24d6dcac3f773ddf74";
   };
 
   patches = [./settings.patch];
   configureFlags = "--disable-joystick-menu";
 
-  buildInputs = [which qt3 x11 libXinerama libXv libXxf86vm lame];
+  buildInputs = [which qt3 x11 libXinerama libXv libXxf86vm libXrandr lame zlib];
   inherit qt3;
 }

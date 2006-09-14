@@ -2428,8 +2428,8 @@ rec {
   };
 
   mythtv = (import ../applications/video/mythtv) {
-    inherit fetchurl stdenv which qt3 x11 lame;
-    inherit (xlibs) libXinerama libXv libXxf86vm;
+    inherit fetchurl stdenv which qt3 x11 lame zlib;
+    inherit (xlibs) libXinerama libXv libXxf86vm libXrandr;
   };
 
   gqview = (import ../applications/graphics/gqview) {
