@@ -1,0 +1,75 @@
+diff -rc mythtv-0.20-orig/configure mythtv-0.20/configure
+*** mythtv-0.20-orig/configure	2006-08-28 18:18:08.000000000 +0200
+--- mythtv-0.20/configure	2006-09-14 17:05:12.000000000 +0200
+***************
+*** 1225,1231 ****
+  
+  has_library()
+  {
+!     if test -f /etc/ld.so.conf ; then
+          LIBPATHS=`cat /etc/ld.so.conf | grep -v "#" | grep -v "include"`
+      else
+          LIBPATHS=''
+--- 1225,1231 ----
+  
+  has_library()
+  {
+!     if false ; then
+          LIBPATHS=`cat /etc/ld.so.conf | grep -v "#" | grep -v "include"`
+      else
+          LIBPATHS=''
+***************
+*** 1235,1241 ****
+      LIBPATHS="$LIBPATHS `echo $DYLD_LIBRARY_PATH | sed s/':'/' '/g` "
+  
+      # recurse down just one level, should be enough in most cases
+!     if test -f /etc/ld.so.conf ; then
+          INCL=`cat /etc/ld.so.conf | grep -v "#" | grep  "^include"`
+          SRCH=`echo "$INCL" | sed '{ s/^include \//\//; s/^include /\/etc\//}'`
+          for x in $SRCH ; do
+--- 1235,1241 ----
+      LIBPATHS="$LIBPATHS `echo $DYLD_LIBRARY_PATH | sed s/':'/' '/g` "
+  
+      # recurse down just one level, should be enough in most cases
+!     if false ; then
+          INCL=`cat /etc/ld.so.conf | grep -v "#" | grep  "^include"`
+          SRCH=`echo "$INCL" | sed '{ s/^include \//\//; s/^include /\/etc\//}'`
+          for x in $SRCH ; do
+***************
+*** 1244,1250 ****
+          done
+      fi
+  
+!     LIBPATHS="`echo $LIBPATHS /$libdir_name /usr/$libdir_name /usr/local/$libdir_name /usr/X11R6/$libdir_name | sed s/'\/ '/' '/g` "
+  
+      HAS_IT="no"
+      for LIBPATH in $LIBPATHS ; do
+--- 1244,1250 ----
+          done
+      fi
+  
+!     LIBPATHS="`echo $LIBPATHS | sed s/'\/ '/' '/g` "
+  
+      HAS_IT="no"
+      for LIBPATH in $LIBPATHS ; do
+***************
+*** 1257,1265 ****
+  
+  has_header()
+  {
+!     HPATHS="/usr/local/include /usr/include /usr/include/g++-v3 /usr/X11R6/include"
+      INCL=`echo $DYLD_LIBRARY_PATH $LD_LIBRARY_PATH | sed s/':'/' '/g`
+!     HPATHS="$HPATHS `echo $INCL | sed s/$libdir_name/include/g` "
+  
+      HAS_IT="no"
+      for HPATH in $HPATHS ; do
+--- 1257,1265 ----
+  
+  has_header()
+  {
+!     HPATHS=""
+      INCL=`echo $DYLD_LIBRARY_PATH $LD_LIBRARY_PATH | sed s/':'/' '/g`
+!     HPATHS="$HPATHS `echo $INCL | sed "s/$libdir_name\($\|[\/ ]\)/include\1/g"` "
+  
+      HAS_IT="no"
+      for HPATH in $HPATHS ; do
