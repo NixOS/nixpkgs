@@ -2431,7 +2431,7 @@ rec {
 
   mythtv = (import ../applications/video/mythtv) {
     inherit fetchurl stdenv which qt3 x11 lame zlib mesa;
-    inherit (xlibs) libXinerama libXv libXxf86vm libXrandr libXmu;
+    inherit (xlibs) libX11 libXinerama libXv libXxf86vm libXrandr libXmu;
   };
 
   gqview = (import ../applications/graphics/gqview) {
