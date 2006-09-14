@@ -31,7 +31,7 @@ let {
         # stdenv and its shell.
         mkDerivation = attrs:
           (derivation (
-            (removeAttrs attrs ["meta"])
+            (removeAttrs attrs ["meta" "passthru"])
             //
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
@@ -41,13 +41,18 @@ let {
               system = result.system;
             })
           )
-          //
           # The meta attribute is passed in the resulting attribute set,
           # but it's not part of the actual derivation, i.e., it's not
           # passed to the builder and is not a dependency.  But since we
           # include it in the result, it *is* available to nix-env for
           # queries.
-          { meta = if attrs ? meta then attrs.meta else {}; };
+          //
+          { meta = if attrs ? meta then attrs.meta else {}; }
+          # Pass through extra attributes that are not inputs, but
+          # should be made available to Nix expressions using the
+          # derivation (e.g., in assertions).
+          //
+          (if attrs ? passthru then attrs.passthru else {});
 
         # Utility value: is this a Darwin system?
         isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin";

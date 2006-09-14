@@ -57,4 +57,6 @@ stdenv.mkDerivation {
     # randr.h and Xrandr.h need not be in the same prefix.
     ./xrandr.patch
   ];
+
+  passthru = {inherit mysqlSupport;};
 }
