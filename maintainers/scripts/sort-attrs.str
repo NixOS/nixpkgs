@@ -61,11 +61,7 @@ rules
 
 
   starts-section: x@(appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) -> x
-    where <debug; starts-section'> cs
-
-  starts-section': [35, 35, 35 | cs] -> 1
-  starts-section': [c | cs] -> <starts-section'> cs
-    where <not(?35)> c
+    where <implode-string; is-substring(!"###")> cs
 
 
   compare-attrs:
