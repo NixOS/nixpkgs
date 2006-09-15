@@ -63,7 +63,7 @@ rules
           <remove-section-start> x => (x', starts);
           <map(regularise-empty-lines); qsort(compare-attrs)> [x' | xs] => [x'' | xs'];
           <[] <+ \x -> ["\n\n\n" | x]\ > starts => starts';
-          <debug; prepend-layout; debug> (starts', x'') => x'''
+          <prepend-layout> (starts', x'') => x'''
       \ })> groups => attrs';
       <debug> "did it"
 
@@ -100,11 +100,22 @@ rules
       // separate into lines, keeping the \n
       // last whitespace is significant, keep
       <list-sep-end(?10); split-init-last> cs => (init, last);
-      <debug; filter(where(fetch-elem(not(?10 <+ ?32)))); debug; concat> init => cs'; // remove whitespace-only lines
-      <concat> [<explode-string> "\n\n", cs', last] => cs''; // add one empty line
-      <debug> "A";
-      <debug> cs;
-      <debug> cs''
+      <regularise-empty-lines'> init => cs'; // remove whitespace-only lines
+      <concat> [<explode-string> "\n\n", <concat> cs', last] => cs'' // add one empty line
+      
+  /* Dirty hack: *do* keep the first empty line following a non-empty line. !!! order matters */
+  regularise-empty-lines': [] -> []
+      
+  regularise-empty-lines': [x, y | xs] -> [x, y | <regularise-empty-lines'> xs]
+    where
+      <fetch-elem(not(?10 <+ ?32))> x;
+      <not(fetch-elem(not(?10 <+ ?32)))> y
+      
+  regularise-empty-lines': [x | xs] -> [x | <regularise-empty-lines'> xs]
+    where <fetch-elem(not(?10 <+ ?32))> x
+      
+  regularise-empty-lines': [x | xs] -> <regularise-empty-lines'> xs
+    where <not(fetch-elem(not(?10 <+ ?32)))> x
       
 
   prepend-layout:
