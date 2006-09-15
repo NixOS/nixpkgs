@@ -35,6 +35,12 @@ rules
     where
       <not(split-fetch-keep(s))> xs
 
+  list-sep-end(s): xs -> [<conc> (before, [split]) | <list-sep-end(s)> after]
+    where
+      <split-fetch-keep(s)> xs => (before, split, after)
+  list-sep-end(s): xs -> [xs]
+    where
+      <not(split-fetch-keep(s))> xs
   
 
   sort-attrs:
@@ -52,7 +58,13 @@ rules
       <attach-wsp> [ws1 | attrs] => withWSP;
       <list-sep(starts-section)> withWSP => groups;
       <length; debug> groups;
-      <map( \[x | xs] -> [x | <qsort(compare-attrs)> xs]\ )> groups => attrs';
+      <map({x', x'', x''', xs', starts, starts': \[x | xs] -> [x''' | xs']
+        where
+          <remove-section-start> x => (x', starts);
+          <map(regularise-empty-lines); qsort(compare-attrs)> [x' | xs] => [x'' | xs'];
+          <[] <+ \x -> ["\n\n\n" | x]\ > starts => starts';
+          <debug; prepend-layout; debug> (starts', x'') => x'''
+      \ })> groups => attrs';
       <debug> "did it"
 
 
@@ -60,8 +72,47 @@ rules
   attach-wsp: [] -> []
 
 
-  starts-section: x@(appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) -> x
-    where <implode-string; is-substring(!"###")> cs
+strategies
+
+  starts-section =
+    ?x@(appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr);
+    <implode-string; is-substring(!"###")> cs;
+    !x
+
+    
+rules
+    
+  remove-section-start:
+    (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) ->
+    ((appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs'), attr), starts)
+    where
+      !cs;
+      list-sep-end(?10); // separate into lines, keeping the \n
+      map(implode-string);
+      partition(where(is-substring(!"###"))) => (starts, rest);
+      <map(explode-string); concat> rest => cs'
+
+
+  regularise-empty-lines:
+    (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) ->
+    (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs''), attr)
+    where
+      // separate into lines, keeping the \n
+      // last whitespace is significant, keep
+      <list-sep-end(?10); split-init-last> cs => (init, last);
+      <debug; filter(where(fetch-elem(not(?10 <+ ?32)))); debug; concat> init => cs'; // remove whitespace-only lines
+      <concat> [<explode-string> "\n\n", cs', last] => cs''; // add one empty line
+      <debug> "A";
+      <debug> cs;
+      <debug> cs''
+      
+
+  prepend-layout:
+    (text, (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr)) ->
+    (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs''), attr)
+    where
+      <implode-string> cs => cs';
+      <conc-strings; explode-string> (<concat-strings> text, cs') => cs''
 
 
   compare-attrs:
@@ -77,5 +128,5 @@ rules
 strategies
 
   main = io-wrap(
-    topdown(try(sort-attrs))
+    oncetd(sort-attrs)
   )
