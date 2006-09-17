@@ -5,12 +5,12 @@
 # think).
 
 (stdenv.mkDerivation {
-  name = "mplayerplug-in-2.80";
+  name = "mplayerplug-in-3.31";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/mplayerplug-in-2.80.tar.gz;
-    md5 = "ce3235ff7d46fae416cfb175193a5f25";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/mplayerplug-in/mplayerplug-in-3.31.tar.gz;
+    md5 = "be26b17cde385c7a34fc634d2c88c5c9";
   };
 
   buildInputs = [pkgconfig firefox (firefox.gtk) libXpm];
