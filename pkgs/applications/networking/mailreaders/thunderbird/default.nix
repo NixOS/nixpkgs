@@ -13,18 +13,17 @@
 
 
 stdenv.mkDerivation {
-  name = "thunderbird-1.5.0.5";
+  name = "thunderbird-1.5.0.7";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.5/source/thunderbird-1.5.0.5-source.tar.bz2;
-    sha1 = "475ae30ead41847120c36f432b3359f0d60ea9da";
+    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.7/source/thunderbird-1.5.0.7-source.tar.bz2;
+    sha1 = "9e5acff9bd098979dd798c0111805dc8d67479ad";
   };
 
   buildInputs = [
     pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
   ];
-  inherit gtk;
 
   configureFlags = [
     "--enable-application=mail"

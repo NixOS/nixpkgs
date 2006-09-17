@@ -10,18 +10,17 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-1.5.0.6";
+  name = "firefox-1.5.0.7";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.6/source/firefox-1.5.0.6-source.tar.bz2;
-    sha1 = "056cf5bf3a5ed663980ed33f045f3db35c394b50";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/1.5.0.7/source/firefox-1.5.0.7-source.tar.bz2;
+    sha1 = "f10d57af87bddc1b929ec5321688ac0efa880960";
   };
 
   buildInputs = [
     pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
   ];
-  inherit gtk;
 
   patches = [./writable-copies.patch];
 
