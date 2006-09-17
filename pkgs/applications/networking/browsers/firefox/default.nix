@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     "--enable-xft"
     "--disable-freetype2"
     "--enable-svg"
+    "--enable-canvas"
     "--enable-strip"
     "--enable-default-toolkit=gtk2"
     "--with-system-jpeg"
@@ -43,4 +44,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Mozilla Firefox - the browser, reloaded";
   };
+
+  passthru = {inherit gtk;};
 }

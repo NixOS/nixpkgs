@@ -2,7 +2,7 @@
 , libjpeg, libpng, zlib, cairo
 
 , # If you want the resulting program to call itself "Thunderbird"
-  # instead of "Deer Park", enable this option.  However, those
+  # instead of "Mail", enable this option.  However, those
   # binaries may not be distributed without permission from the
   # Mozilla Foundation, see
   # http://www.mozilla.org/foundation/trademarks/.
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     "--enable-xft"
     "--disable-freetype2"
     "--enable-svg"
+    "--enable-canvas"
     "--enable-strip"
     "--enable-default-toolkit=gtk2"
     "--with-system-jpeg"
