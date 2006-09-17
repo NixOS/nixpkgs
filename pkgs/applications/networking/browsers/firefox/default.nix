@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     "--with-system-jpeg"
     "--with-system-png"
     "--with-system-zlib"
-    "--with-system-cairo"
+    "--enable-system-cairo"
   ]
   ++ (if enableOfficialBranding then ["--enable-official-branding"] else []);
 
