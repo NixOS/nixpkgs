@@ -2000,6 +2000,10 @@ rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
+  kernel_2_6_17 = (import ../os-specific/linux/kernel/linux-2.6.17.nix) {
+    inherit fetchurl stdenv perl mktemp;
+  };
+
   kernelHeaders = (import ../os-specific/linux/kernel-headers) {
     inherit fetchurl stdenv;
   };

@@ -1,20 +1,42 @@
 source $stdenv/setup
 
-buildPhase() {
+
+configurePhase=configurePhase
+configurePhase() {
 	cp $config .config
         #mkdir $out
         hashname=$(basename $out)
-        echo $hashname
         if echo "$hashname" | grep -q '^[a-z0-9]\{32\}-'; then
           hashname=$(echo "$hashname" | cut -c -32)
         fi
 
         extraname=$(grep ^EXTRAVERSION Makefile)
         perl -p -i -e "s/^EXTRAVERSION.*/$extraname-$hashname/" Makefile
-	echo "export INSTALL_PATH=$out" >> Makefile
+	export INSTALL_PATH=$out
 	export INSTALL_MOD_PATH=$out
+
+        make oldconfig
+}
+
+
+buildPhase=buildPhase
+buildPhase() {
 	make
+}
+
+
+installPhase=installPhase
+installPhase() {
+
+	ensureDir $out
+        
+	make install
+
 	make modules_install
+
+        # Strip the kernel modules.
+        echo "Stripping kernel modules..."
+        find $out -name "*.ko" -print0 | xargs -0 strip -S
 
         # move this to install later on
         # largely copied from early FC3 kernel spec files
@@ -65,6 +87,5 @@ buildPhase() {
 
 }
 
-buildPhase=buildPhase
 
 genericBuild
