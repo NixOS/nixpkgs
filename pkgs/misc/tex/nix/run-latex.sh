@@ -30,6 +30,7 @@ showError() {
     echo
     echo "LATEX ERROR (LAST LOG LINES SHOWN):"
     tail -n 20 $tmpFile
+    bzip2 $tmpFile
     exit 1
 }
 
@@ -115,3 +116,5 @@ printf "%5d undefined citations\n" $(cat $tmpFile | grep -c "Citation.*undefined
 printf "%5d pages\n" \
     $(cat $tmpFile | grep "Output written.*(.*pages" | sed "s/.*(\([0-9]*\) pages.*/\1/" || true)
 echo
+
+bzip2 $tmpFile
