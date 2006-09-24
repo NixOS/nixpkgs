@@ -77,12 +77,22 @@ rec {
 
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
+  # Return an attribute from nested attribute sets.  For instance ["x"
+  # "y"] applied to some set e returns e.x.y, if it exists.  The
+  # default value is returned otherwise.
+  getAttr = attrPath: default: e:
+    let {
+      attr = builtins.head attrPath;
+      body =
+        if attrPath == [] then e
+        else if builtins ? hasAttr && builtins.hasAttr attr e
+        then getAttr (builtins.tail attrPath) default (builtins.getAttr attr e)
+        else default;
+    };
+  
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
-  getConfig = attr: default:
-    if builtins ? hasAttr && builtins.hasAttr attr config
-    then builtins.getAttr attr config
-    else default;
+  getConfig = attrPath: default: getAttr attrPath default config;
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
@@ -2596,7 +2606,7 @@ rec {
       flashplayer
     ]
     # RealPlayer is disabled by default for legal reasons.
-    ++ (if getConfig "enableRealPlayer" false then [RealPlayer] else [])
+    ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
     ++ (if blackdown != null then [blackdown] else []);
   };
 
