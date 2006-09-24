@@ -2316,6 +2316,12 @@ rec {
     inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
   };
 
+  gnash = (import ../applications/video/gnash) {
+    inherit fetchurl stdenv SDL SDL_mixer GStreamer
+            libogg libxml2 libjpeg mesa libpng;
+    inherit (xlibs) libX11 libXext libXi libXmu;
+  };
+
   gphoto2 = (import ../applications/misc/gphoto2) {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt;
   };
@@ -2323,6 +2329,11 @@ rec {
   gqview = (import ../applications/graphics/gqview) {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
+  };
+
+  GStreamer = (import ../applications/audio/GStreamer) {
+    inherit fetchurl stdenv perl bison flex pkgconfig libxml2;
+    inherit (gtkLibs) glib;
   };
 
   haskellMode = (import ../applications/editors/emacs/modes/haskell) {
