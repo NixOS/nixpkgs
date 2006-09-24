@@ -14,4 +14,4 @@ stdenv.mkDerivation {
   buildInputs = [libX11 libXext libXi libXmu SDL SDL_mixer GStreamer
                  libogg libxml2 libjpeg mesa libpng];
   inherit SDL_mixer SDL;
-}
+} // {mozillaPlugin = "/plugins";}
