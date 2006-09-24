@@ -12,6 +12,8 @@ bootPath=@bootPath@
 modutils=@modutils@
 mingetty=@mingetty@
 
+nixpkgs=/nixpkgs/trunk
+
 echo formatting target device
 
 if test -e disklayout; then
@@ -246,12 +248,12 @@ unset NIX_CONF_DIR
 ## Fix this. Probably nix-instantiate, then nix-store -r.
 ## Also make sure everything gets installed into an actual profile!
 
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A nixUnstable
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A coreutils
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A gnugrep
-#$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A kernel
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A kernelscripts
-$NIX/nix-env -iKf /nixpkgs/trunk/pkgs/top-level/all-packages.nix -A grub
+$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A nixUnstable
+$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A coreutils
+$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A gnugrep
+#$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A kernel
+$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A kernelscripts
+$NIX/nix-env -iKf $nixpkgs/pkgs/top-level/all-packages.nix -A grub
 
 cat $narStorePaths | xargs -n 1 -i% $NIX/nix-env -i %
 
