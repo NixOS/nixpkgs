@@ -99,11 +99,12 @@ rec {
   config =
     let {
       toPath = builtins.toPath;
+      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
       pathExists = name:
         builtins ? pathExists && builtins.pathExists (toPath name);
-      
-      configFile = builtins.getEnv "NIXPKGS_CONFIG";
-      homeDir = builtins.getEnv "HOME";
+
+      configFile = getEnv "NIXPKGS_CONFIG";
+      homeDir = getEnv "HOME";
       configFile2 = homeDir + "/.nixpkgs/config.nix";
 
       body =
