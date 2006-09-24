@@ -77,6 +77,33 @@ rec {
 
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
+  # Return an attribute from the Nixpkgs configuration file, or
+  # a default value if the attribute doesn't exist.
+  getConfig = attr: default:
+    if builtins ? hasAttr && builtins.hasAttr attr config
+    then builtins.getAttr attr config
+    else default;
+
+  # The contents of the configuration file found at $NIXPKGS_CONFIG or
+  # $HOME/.nixpkgs/config.nix.
+  config =
+    let {
+      toPath = builtins.toPath;
+      pathExists = name:
+        builtins ? pathExists && builtins.pathExists (toPath name);
+      
+      configFile = builtins.getEnv "NIXPKGS_CONFIG";
+      homeDir = builtins.getEnv "HOME";
+      configFile2 = homeDir + "/.nixpkgs/config.nix";
+
+      body =
+        if configFile != "" && pathExists configFile
+        then import (toPath configFile)
+        else if homeDir != "" && pathExists configFile2
+        then import (toPath configFile2)
+        else {};
+    };
+
 
   ### STANDARD ENVIRONMENT
 
@@ -2567,8 +2594,10 @@ rec {
     plugins = [
       MPlayerPlugin
       flashplayer
-#      RealPlayer  # disabled by default for legal reasons
-    ] ++ (if blackdown != null then [blackdown] else []);
+    ]
+    # RealPlayer is disabled by default for legal reasons.
+    ++ (if getConfig "enableRealPlayer" false then [RealPlayer] else [])
+    ++ (if blackdown != null then [blackdown] else []);
   };
 
   xara = (import ../applications/graphics/xara) {
