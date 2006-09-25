@@ -5,12 +5,12 @@
 assert stdenv.system == "i686-linux";
 
 (stdenv.mkDerivation {
-  name = "RealPlayer-10.0.3.748-GOLD";
+  name = "RealPlayer-10.0.8.805-GOLD";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://software-dl.real.com/29f67eab92b913a6d805/unix/RealPlayer10GOLD.bin;
-    md5 = "3ef0d073320106d1bf75bdac8e4b250e";
+    url = http://software-dl.real.com/25ae61d70a6855a52c14/unix/RealPlayer10GOLD.bin;
+    md5 = "d28b31261059231a3e93c7466f8153e6";
   };
 
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
