@@ -77,11 +77,11 @@ rec {
 
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
-  inherit (import ../lib) getAttr;
+  library = import ../lib;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
-  getConfig = attrPath: default: getAttr attrPath default config;
+  getConfig = attrPath: default: library.getAttr attrPath default config;
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
