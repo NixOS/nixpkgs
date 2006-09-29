@@ -1,18 +1,23 @@
-{stdenv, fetchurl, qt, zlib, libX11, motif ? null, libXt ? null, libXext ? null}:
+{ stdenv, fetchurl, qt, zlib, libX11, libXext, libSM, libICE, libstdcpp5
+, motif ? null, libXt ? null}:
 
 assert stdenv.system == "i686-linux";
-assert motif != null -> libXt != null && libXext != null;
+assert motif != null -> libXt != null;
 
 # !!! Add Xinerama and Xrandr dependencies?  Or should those be in Qt?
 
+# Hm, does Opera 9.x still use Motif for anything?
+
 stdenv.mkDerivation {
-  name = "opera-8.51-20051114.6";
+  name = "opera-9.02-20060919.5";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.tiscali.nl/pub/mirrors/opera/linux/851/final/en/i386/opera-8.51-20051114.6-shared-qt.i386-en.tar.bz2;
-    md5 = "bf930c45023035ee4258b13b707176c2";
+    url = ftp://ftp.tiscali.nl/pub/mirrors/opera/linux/902/final/en/i386/shared/opera-9.02-20060919.5-shared-qt.i386-en.tar.bz2;
+    md5 = "327d0bf1f3c4eedd47b444b36c9091f6";
   };
 
-  libPath = [qt zlib libX11 motif libXt libXext];
+  libPath =
+    [qt motif zlib libX11 libXext libSM libICE libstdcpp5]
+    ++ (if motif != null then [motif libXt ] else []);
 }

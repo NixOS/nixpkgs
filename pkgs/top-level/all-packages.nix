@@ -2480,9 +2480,10 @@ rec {
 
   opera = import ../applications/networking/browsers/opera {
     inherit fetchurl stdenv zlib;
-    inherit (xlibs) libX11 libXt libXext;
+    inherit (xlibs) libX11 libSM libICE libXt libXext;
     qt = qt3;
-    motif = lesstif;
+    #motif = lesstif;
+    libstdcpp5 = gcc33.gcc;
   };
 
   pan = (import ../applications/networking/newsreaders/pan) {
