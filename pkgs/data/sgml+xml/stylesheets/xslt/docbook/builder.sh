@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-mkdir $out
+ensureDir $out
 cd $out
 unpackFile $src
 mkdir xml
