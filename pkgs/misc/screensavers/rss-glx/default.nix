@@ -1,12 +1,12 @@
 {stdenv, fetchurl, x11, mesa}:
 
 stdenv.mkDerivation {
-  name = "rss-glx-0.8.0";
+  name = "rss-glx-0.8.1";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/rss-glx_0.8.0.tar.bz2;
-    md5 = "d04e909521626a27f9f6d9b5f8a24d6c";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/rss-glx/rss-glx_0.8.1.tar.bz2;
+    md5 = "a2bdf0e10ee4e89c8975f313c5c0ba6f";
   };
 
   buildInputs = [x11 mesa];
