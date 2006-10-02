@@ -38,7 +38,7 @@ let {
     file
     findutils
     firefoxWrapper
-    flexnew
+    flex2533
     gaim
     gawk
     gcc
@@ -181,7 +181,7 @@ let {
     subversion
     tetex
     unzip
-#    flexnew
+#    flex2533
   ;};
 
   i686DarwinPkgs = {inherit (allPackages {system = "i686-darwin";})
