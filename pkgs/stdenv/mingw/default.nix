@@ -98,13 +98,12 @@ let {
                 if attrs ? args then
                   attrs.args
                  else
-                  ["-e" (
+                  ["-e"] ++ (
                     if attrs ? builder then
                       [./fix-builder.sh attrs.builder]
                     else
                       [./fix-builder.sh ./default-builder.sh]
-                    )
-                  ];
+                    );
               inherit stdenv system;
               C_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
               CPLUS_INCLUDE_PATH = mingwRuntimeSrc + "/include" + ":" + w32apiSrc + "/include";
