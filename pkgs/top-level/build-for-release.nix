@@ -15,7 +15,7 @@ let {
     bash
     batik
     binutils
-    bisonnew
+    bison23
     bittorrent
     blackdown
     bmp
@@ -166,7 +166,7 @@ let {
     aterm
     autoconf
     automake19x
-    bisonnew
+    bison23
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43

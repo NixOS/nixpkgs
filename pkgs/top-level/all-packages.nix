@@ -567,12 +567,14 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   };
 
-  bison = (import ../development/tools/parsing/bison) {
+  bison = bison1875;
+
+  bison1875 = (import ../development/tools/parsing/bison/bison-1.875.nix) {
     inherit fetchurl stdenv;
     m4 = gnum4;
   };
 
-  bisonnew = (import ../development/tools/parsing/bison/bison-new.nix) {
+  bison23 = (import ../development/tools/parsing/bison/bison-2.3.nix) {
     inherit fetchurl stdenv;
     m4 = gnum4;
   };
@@ -604,7 +606,9 @@ rec {
     ant = apacheAntBlackdown14;
   };
 
-  flex = (import ../development/tools/parsing/flex) {
+  flex = flex254a;
+
+  flex254a = (import ../development/tools/parsing/flex/flex-2.5.4a.nix) {
     inherit fetchurl stdenv yacc;
   };
 
@@ -612,7 +616,7 @@ rec {
   #  inherit stdenv flex ;
   #};
 
-  flexnew = (import ../development/tools/parsing/flex/flex-new.nix) {
+  flex2533 = (import ../development/tools/parsing/flex/flex-2.5.33.nix) {
     inherit fetchurl stdenv yacc;
     m4 = gnum4;
   };
@@ -1544,7 +1548,7 @@ rec {
 
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
-    flex = flexnew;
+    flex = flex2533;
     inherit (xlibs) imake gccmakedep libXmu libXpm libXp;
   };
 
