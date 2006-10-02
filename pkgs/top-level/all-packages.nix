@@ -2472,10 +2472,7 @@ rec {
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
 
-    bison = (import ../development/tools/parsing/bison/bison-2.1.nix) {
-      inherit fetchurl stdenv;
-      m4 = gnum4;
-    };
+    bison = bison23;
 
     neon = (import ../development/libraries/neon/neon-0.24.7.nix) {
       inherit fetchurl stdenv libxml2;
