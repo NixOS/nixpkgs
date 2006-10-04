@@ -2318,6 +2318,14 @@ rec {
     #enableOfficialBranding = true;
   };
 
+  firefox20 = (import ../applications/networking/browsers/firefox-2.0) {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+    #enableOfficialBranding = true;
+  };
+
   firefoxWrapper = wrapFirefox firefox;
 
   flac = (import ../applications/audio/flac) {
