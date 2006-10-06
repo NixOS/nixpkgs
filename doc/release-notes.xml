@@ -1,11 +1,47 @@
-<?xml version="1.0"?>
-<!DOCTYPE book
-    PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
-    "http://www.docbook.org/xml/4.3/docbook-xml-4.3.zip"
-[
-]>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
 
-<article><title>Nixpkgs Release Notes</title>
+<title>Nixpkgs Release Notes</title>
+
+
+<section><title>Release 0.10 (October ???, 2006)</title>
+
+<note><para>This release of Nixpkgs requires <link
+xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
+0.10</link>.</para></note>
+
+<para>This release has the following improvements:</para>
+
+<itemizedlist>
+
+  <listitem><para>TODO: user configurability.  Configuration file in
+  <filename>~/.nixpkgs/config.nix</filename>.</para></listitem>
+
+  <listitem><para>The default compiler is now GCC 4.1.1.</para></listitem>
+
+  <listitem><para>X11 updated to X11R7.1.</para></listitem>
+
+  <listitem><para>Opera.</para></listitem>
+
+</itemizedlist>
+
+<para>The following people contributed to this release:
+
+  Andres Löh,
+  Armijn Hemel,
+  Christof Douma,
+  Eelco Dolstra,
+  Eelco Visser,
+  Mart Kolthof,
+  Martin Bravenboer,
+  Merijn de Jonge,
+  Rob Vermaas and
+  Roy van den Broek.
+
+</para>
+  
+</section>
 
 
 <section><title>Release 0.9 (January 31, 2006)</title>
@@ -16,8 +52,8 @@ some of the more notable changes:</para>
 
 <itemizedlist>
 
-  <listitem><para>Distribution files have been moved to <ulink
-  url="http://nix.cs.uu.nl/" />.</para></listitem>
+  <listitem><para>Distribution files have been moved to <link
+  xlink:href="http://nix.cs.uu.nl/" />.</para></listitem>
 
   <listitem><para>The C library on Linux, Glibc, has been updated to
   version 2.3.6.</para></listitem>
@@ -32,7 +68,7 @@ some of the more notable changes:</para>
   working X server (previously we only had X client libraries).  We
   use a fully Nixified X server on NixOS.</para></listitem>
 
-  <listitem><para>The Sun JDK 5 has been purified, i.e., it doesn't
+  <listitem><para>The Sun JDK 5 has been purified, i.e., it doesn’t
   require any non-Nix components such as
   <filename>/lib/ld-linux.so.2</filename>.  This means that Java
   applications such as Eclipse and Azureus can run on
@@ -149,9 +185,10 @@ hashing scheme in Nix 0.8.</para>
 <listitem>
 
   <para>Tarballs used by Nixpkgs are now obtained from the same server
-  that hosts Nixpkgs (<ulink url="http://catamaran.labs.cs.uu.nl/" />).
-  This reduces the risk of packages being unbuildable due to moved or
-  deleted files on various servers.</para>
+  that hosts Nixpkgs (<link
+  xlink:href="http://catamaran.labs.cs.uu.nl/" />).  This reduces the
+  risk of packages being unbuildable due to moved or deleted files on
+  various servers.</para>
 
 </listitem>
 

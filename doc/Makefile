@@ -1,12 +1,12 @@
-ENV = SGML_CATALOG_FILES=$(docbookcatalog)
-
-XMLLINT = $(ENV) xmllint --catalogs
-XSLTPROC = $(ENV) xsltproc --catalogs \
+XMLLINT = xmllint --catalogs
+XSLTPROC = xsltproc --catalogs \
  --param section.autolabel 1 \
  --param section.label.includes.component.label 1 \
  --param html.stylesheet \'style.css\' \
  --param xref.with.number.and.title 1 \
- --param toc.section.depth 3
+ --param toc.section.depth 3 \
+ --param admon.style \'\' \
+ --param callout.graphics.extension \'.gif\'
 
 NEWS_OPTS = \
  --stringparam generate.toc "article nop" \

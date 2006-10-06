@@ -10,7 +10,6 @@ body
 {
     font-family: sans-serif;
     background: white;
-  
     margin: 2em 1em 2em 1em;
 }
 
@@ -34,16 +33,28 @@ h2 /* chapters, appendices, subtitle */
 div.chapter > div.titlepage h2, div.appendix > div.titlepage h2 
 { 
     margin-top: 1.5em;
-/*    border-top: solid #005aa0; */
 }
 
-div.sect1 h2 /* sections */
+div.section > div.titlepage h2 /* sections */
 {
     font-size: 150%;
+    margin-top: 1.5em;
+}
+
+h3 /* subsections */
+{
+    font-size: 125%;
+}
+
+div.appendix h3
+{
+    font-size: 150%;
+    margin-top: 1.5em;
 }
 
 div.refnamediv h2, div.refsynopsisdiv h2, div.refsection h2 /* refentry parts */
 {
+    margin-top: 1.4em;
     font-size: 125%;
 }
 
@@ -52,30 +63,23 @@ div.refsection h3
     font-size: 110%;
 }
 
-h3 /* subsections */
-{
-    font-size: 125%;
-}
-
-
 
 /***************************************************************************
-                               Program listings:
+                               Examples:
  ***************************************************************************/
 
 div.example
 {
     border: 1px solid #6185a0;
     padding: 6px 6px;
-    margin-left: 3em;
-    margin-right: 3em;
-    background: #eeeeee;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    background: #f4f4f8;
 }
 
-pre.programlisting
+div.example p.title
 {
-    color: #600000;
-    font-family: monospace;
+    margin-top: 0em;
 }
 
 
@@ -83,16 +87,23 @@ pre.programlisting
                             Screen dumps:
  ***************************************************************************/
 
-pre.screen
+pre.screen, pre.programlisting
 {
     border: 1px solid #6185a0;
-    padding: 6px 6px;
-    margin-left: 3em;
-    margin-right: 3em;
+    padding: 3px 3px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
     color: #600000;
-    background: #eeeeee;
+    background: #f4f4f8;
     font-family: monospace;
     /* font-size: 90%; */
+}
+
+div.example pre.programlisting
+{
+    border: 0px;
+    padding: 0 0;
+    margin: 0 0 0 0;
 }
 
 
@@ -100,24 +111,39 @@ pre.screen
                                Notes, warnings etc:
  ***************************************************************************/
 
-.note,.warning
+.note, .warning
 {
-    margin-top: 1em;
-    margin-bottom: 1em;
     border: 1px solid #6185a0;
-    padding: 0px 1em;
+    padding: 3px 3px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-bottom: 1em;
+    padding: 0.3em 0.3em 0.3em 0.3em;
     background: #fffff5;
 }
 
-div.note,div.warning
+div.note, div.warning
 {
     font-style: italic;
 }
 
-div.warning h3
+div.note h3, div.warning h3
 {
     color: red;
     font-size: 100%;
+//    margin: 0 0 0 0;
+    padding-right: 0.5em;
+    display: inline;
+}
+
+div.note p, div.warning p
+{
+    margin-bottom: 0em;
+}
+
+div.note h3 + p, div.warning h3 + p
+{
+    display: inline;
 }
 
 div.note h3
@@ -167,9 +193,19 @@ tt, code
     
 }
 
-div.variablelist dd
+div.variablelist dd p, div.glosslist dd p
 {
-    margin-bottom: 1em;
+    margin-top: 0em;
+}
+
+div.variablelist dd, div.glosslist dd
+{
+    margin-left: 1.5em;
+}
+
+div.glosslist dt
+{
+    font-style: italic;
 }
 
 .default
@@ -231,4 +267,17 @@ div.epigraph
 table.productionset table.productionset
 {
     font-family: monospace;
+}
+
+strong.command
+{
+//    font-family: monospace;
+//    font-style: italic;
+//    font-weight: normal;
+    color: #400000;
+}
+
+div.calloutlist td
+{
+    padding-bottom: 1em;
 }

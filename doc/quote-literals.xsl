@@ -37,4 +37,8 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="text()">
+    <xsl:value-of select="translate(., '‘’“”—', concat(&quot;`'&quot;, '&quot;&quot;-'))" />
+  </xsl:template>
+  
 </xsl:stylesheet>
