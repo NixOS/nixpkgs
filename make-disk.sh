@@ -35,7 +35,7 @@ initrd=/tmp/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
-nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nixUnstable' | $NIX/nix-instantiate -))
+nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
 busybox=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).busybox' | $NIX/nix-instantiate -))
 nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
 nanoDiet=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nanoDiet' | $NIX/nix-instantiate -))
