@@ -1286,6 +1286,10 @@ rec {
     inherit fetchurl stdenv libdvdcss;
   };
 
+  libevent = (import ../development/libraries/libevent) {
+    inherit fetchurl stdenv;
+  };
+
   libexif = (import ../development/libraries/libexif) {
     inherit fetchurl stdenv;
   };
