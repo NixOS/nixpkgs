@@ -4,15 +4,13 @@
 }:
 
 assert aterm != null && bdb != null && perl != null;
-# assert bdb.version >= 4.2
-# assert aterm.version >= 2.0
 
 stdenv.mkDerivation {
-  name = "nix-0.10";
+  name = "nix-0.10.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nix-0.10/nix-0.10.tar.bz2;
-    md5 = "2e5db8be894b28873b5bb1b25194955f";
+    url = http://nix.cs.uu.nl/dist/nix/nix-0.10.1/nix-0.10.1.tar.bz2;
+    md5 = "22dc0c024ca5bb477da0b38ba834dbf2";
   };
   buildInputs = [aterm bdb perl curl];
   inherit storeDir stateDir aterm bdb;

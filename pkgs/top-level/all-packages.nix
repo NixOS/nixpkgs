@@ -2794,10 +2794,14 @@ rec {
     bdb = db4;
   };
 
+  nixUnstable = nix;
+
+  /*
   nixUnstable = (import ../misc/nix-unstable) {
     inherit fetchurl stdenv aterm perl curl;
     bdb = db4;
   };
+  */
 
   polytable = (import ../misc/tex/polytable) {
     inherit fetchurl stdenv tetex lazylist;
