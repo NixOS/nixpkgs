@@ -1,8 +1,8 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "zip-2.31";
+  name = "zip-2.32";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/zip231.tar.gz;
-    md5 = "6bfc076664416251d7624ab3538d1cb9";
+    url = http://ftp.info-zip.org/pub/infozip/src/zip232.tar.gz;
+    md5 = "8a4da4460386e324debe97f3b7fe4d96";
   };
 }
