@@ -2784,24 +2784,15 @@ rec {
   };
 
   nix = (import ../misc/nix) {
-    inherit fetchurl aterm perl curl;
-    bdb = db4;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv aterm db4 perl curl bzip2;
   };
+
+  nixUnstable = nix;
 
   nixStatic = (import ../misc/nix-static) {
     inherit fetchurl stdenv aterm perl curl autoconf automake libtool;
     bdb = db4;
   };
-
-  nixUnstable = nix;
-
-  /*
-  nixUnstable = (import ../misc/nix-unstable) {
-    inherit fetchurl stdenv aterm perl curl;
-    bdb = db4;
-  };
-  */
 
   polytable = (import ../misc/tex/polytable) {
     inherit fetchurl stdenv tetex lazylist;

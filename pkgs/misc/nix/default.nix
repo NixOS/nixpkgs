@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, aterm, bdb, perl, curl
+{ stdenv, fetchurl, aterm, db4, perl, curl, bzip2
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
-assert aterm != null && bdb != null && perl != null;
-
 stdenv.mkDerivation {
   name = "nix-0.10.1";
-  builder = ./builder.sh;
+  
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/nix/nix-0.10.1/nix-0.10.1.tar.bz2;
     md5 = "22dc0c024ca5bb477da0b38ba834dbf2";
   };
-  buildInputs = [aterm bdb perl curl];
-  inherit storeDir stateDir aterm bdb;
+  
+  buildInputs = [perl curl];
+
+  configureFlags = "
+    --with-store-dir=${storeDir} --localstatedir=${stateDir}
+    --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
+    --disable-init-state";
 }
