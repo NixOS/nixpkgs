@@ -9,6 +9,10 @@ stdenv.mkDerivation {
     md5 = "c18640c6ec31a169d351e3117ecce3ec";
   };
   buildInputs = [m4];
+
+  meta = {
+    description = "A yacc-compatible parser generator";
+  };
 } // {
   glrSupport = true;
 }

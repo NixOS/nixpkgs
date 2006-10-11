@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
     (if xpmSupport then libXpm else null)
   ];
+
+  meta = {
+    description = "All Hail Emacs, the ultimate editor";
+  };
 }

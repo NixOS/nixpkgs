@@ -2690,6 +2690,7 @@ rec {
 
   quake3demo = import ../games/quake3/wrapper {
     name = "quake3-demo";
+    description = "Demo of Quake 3 Arena, a classic first-person shooter";
     inherit fetchurl stdenv mesa;
     game = quake3game;
     paks = [quake3demodata];

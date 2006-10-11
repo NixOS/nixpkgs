@@ -11,4 +11,8 @@ stdenv.mkDerivation {
   patches = [./alsa.patch];
 
   buildInputs = [alsaLib esound libogg libvorbis glib gtk];
+
+  meta = {
+    description = "A music player very similar to Winamp";
+  };
 }

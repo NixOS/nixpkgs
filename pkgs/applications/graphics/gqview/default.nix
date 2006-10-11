@@ -14,4 +14,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [pkgconfig gtk libpng];
+
+  meta = {
+    description = "A fast image viewer";
+  };
 }

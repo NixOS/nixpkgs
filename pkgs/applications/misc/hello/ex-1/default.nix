@@ -8,4 +8,8 @@ stdenv.mkDerivation {
     md5 = "70c9ccf9fac07f762c24f2df2290784d";
   };
   inherit perl;
+
+  meta = {
+    description = "GNU Hello, a classic computer science tool";
+  };
 }

@@ -10,4 +10,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [unzip];
+
+  meta = {
+    description = "Stand-alone version of Chatzilla, an IRC client";
+  };
 }

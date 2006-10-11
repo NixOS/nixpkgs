@@ -41,4 +41,8 @@ stdenv.mkDerivation {
     "--enable-system-cairo"
   ]
   ++ (if enableOfficialBranding then ["--enable-official-branding"] else []);
+
+  meta = {
+    description = "Mozilla Thunderbird, a full-featured email client";
+  };
 }

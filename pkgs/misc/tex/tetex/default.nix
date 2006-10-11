@@ -19,4 +19,8 @@ stdenv.mkDerivation {
   patches = [./environment.patch];
 
   setupHook = ./setup-hook.sh;
+
+  meta = {
+    description = "A full-featured (La)TeX distribution";
+  };
 }

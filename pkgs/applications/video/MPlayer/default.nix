@@ -45,4 +45,8 @@ stdenv.mkDerivation {
   # Xrandr.
   # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
   patches = [./mplayer-aspect.patch ./mplayer-pivot.patch];
+
+  meta = {
+    description = "A movie player that supports many video formats";
+  };
 }

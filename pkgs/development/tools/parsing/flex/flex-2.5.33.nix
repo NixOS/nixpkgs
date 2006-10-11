@@ -13,4 +13,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [yacc];
   propagatedBuildInputs = [m4];
+
+  meta = {
+    description = "A fast lexical analyser generator";
+  };
 }

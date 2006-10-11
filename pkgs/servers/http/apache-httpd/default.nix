@@ -20,4 +20,8 @@ stdenv.mkDerivation {
   inherit perl expat zlib;
   openssl = if sslSupport then openssl else null;
   db4 = if db4Support then db4 else null;
+
+  meta = {
+    description = "Apache HTTPD, the world's most popular web server";
+  };
 }

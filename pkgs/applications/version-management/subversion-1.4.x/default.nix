@@ -42,4 +42,8 @@ stdenv.mkDerivation {
   ";
 
   inherit httpServer pythonBindings javahlBindings;
+
+  meta = {
+    description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+  };
 }

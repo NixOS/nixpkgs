@@ -22,4 +22,8 @@ stdenv.mkDerivation {
   ];
 
   inherit spellChecking stdenv;
+
+  meta = {
+    description = "A GTK+-based Usenet newsreader good at both text and binaries";
+  };
 }

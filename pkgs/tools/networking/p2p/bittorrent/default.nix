@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [python pygtk];
   inherit python pygtk makeWrapper;
+
+  meta = {
+    description = "The original client for the BitTorrent peer-to-peer file sharing protocol";
+  };
 }

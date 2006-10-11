@@ -10,4 +10,8 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [readline ncurses];
   builder = ./builder.sh;
   inherit gcc;
+
+  meta = {
+    description = "The Glasgow Haskell Compiler";
+  };
 }

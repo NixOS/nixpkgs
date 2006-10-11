@@ -13,4 +13,8 @@ stdenv.mkDerivation {
     pkgconfig alsaLib esound libogg libvorbis id3lib
     glib gtk libglade
   ];
+
+  meta = {
+    description = "Beep Media Player, a XMMS fork";
+  };
 }

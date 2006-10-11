@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     md5 = "9a9a4f84ed5b6258f7ab321713adf20b";
   };
   buildInputs = [ghc zlib ncurses curl];
+
+  meta = {
+    description = "Patch-based version management system";
+  };
 }
