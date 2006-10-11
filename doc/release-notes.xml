@@ -9,7 +9,7 @@
 
 <note><para>This release of Nixpkgs requires <link
 xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
-0.10</link>.</para></note>
+0.10</link> or higher.</para></note>
 
 <para>This release has the following improvements:</para>
 
@@ -24,8 +24,36 @@ xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
   override this by specifying a different <varname>system</varname>
   argument.</para></listitem>
 
-  <listitem><para>TODO: user configurability.  Configuration file in
-  <filename>~/.nixpkgs/config.nix</filename>.</para></listitem>
+  <listitem><para>Certain packages in Nixpkgs are now
+  user-configurable through a configuration file, i.e., without having
+  to edit the Nix expressions in Nixpkgs.  For instance, the Firefox
+  provided in the Nixpkgs channel is built without the RealPlayer
+  plugin (for legal reasons).  Previously, you could easily enable
+  RealPlayer support by editing the call to the Firefox function in
+  <filename>all-packages.nix</filename>, but such changes are not
+  respected when Firefox is subsequently updated through the Nixpkgs
+  channel.</para>
+
+  <para>The Nixpkgs configuration file (found in
+  <filename>~/.nixpkgs/config.nix</filename> or through the
+  <envar>NIXPKGS_CONFIG</envar> environment variable) is an attribute
+  set that contains configuration options that
+  <filename>all-packages.nix</filename> reads and uses for certain
+  packages.  For instance, the following configuration file:
+
+<programlisting>
+{
+  firefox = {
+    enableRealPlayer = true;
+  };
+}</programlisting>
+
+  persistently enables RealPlayer support in the Firefox
+  build.</para>
+
+  <para>(Actually, <literal>firefox.enableRealPlayer</literal> is the
+  <emphasis>only</emphasis> configuration option currently available,
+  but more are sure to be added.)</para></listitem>
 
   <listitem><para>Support for new platforms:
 
@@ -113,6 +141,24 @@ exult = import ../games/exult {
 
   </para></listitem>
 
+
+  <listitem><para>It has also become much easier to experiment with
+  changes to the <literal>stdenv</literal> setup script (which notably
+  contains the generic builder).  Since edits to
+  <filename>pkgs/stdenv/generic/setup.sh</filename> trigger a rebuild
+  of <emphasis>everything</emphasis>, this was formerly quite painful.
+  But now <literal>stdenv</literal> contains a function to
+  “regenerate” <literal>stdenv</literal> with a different setup
+  script, allowing the use of a different setup script for specific
+  packages:
+
+<programlisting>
+pkg = import <replaceable>...</replaceable> {
+  stdenv = stdenv.regenerate ./my-setup.sh;
+  <replaceable>...</replaceable>
+}</programlisting>
+
+  </para></listitem>
   
 </itemizedlist>
 
