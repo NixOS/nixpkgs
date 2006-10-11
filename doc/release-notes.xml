@@ -5,7 +5,7 @@
 <title>Nixpkgs Release Notes</title>
 
 
-<section><title>Release 0.10 (October ???, 2006)</title>
+<section><title>Release 0.10 (October 11, 2006)</title>
 
 <note><para>This release of Nixpkgs requires <link
 xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
@@ -15,16 +15,107 @@ xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
 
 <itemizedlist>
 
+  <listitem><para><filename>pkgs/system/all-packages-generic.nix</filename>
+  is gone, we now just have
+  <filename>pkgs/top-level/all-packages.nix</filename> that contains
+  all available packages.  This should cause much less confusion with
+  users.  <filename>all-packages.nix</filename> is a function that by
+  default returns packages for the current platform, but you can
+  override this by specifying a different <varname>system</varname>
+  argument.</para></listitem>
+
   <listitem><para>TODO: user configurability.  Configuration file in
   <filename>~/.nixpkgs/config.nix</filename>.</para></listitem>
 
+  <listitem><para>Support for new platforms:
+
+    <itemizedlist>
+
+      <listitem><para><literal>i686-cygwin</literal>, i.e., Windows
+      (using <link xlink:href="http://www.cygwin.com/">Cygwin</link>).
+      The standard environment on <literal>i686-cygwin</literal> by
+      default builds binaries for the Cygwin environment (i.e., it
+      uses Cygwin tools and produces executables that use the Cygwin
+      library).  However, there is also a standard environment that
+      produces binaries that use <link
+      xlink:href="http://www.mingw.org/">MinGW</link>.  You can use it
+      by calling <filename>all-package.nix</filename> with the
+      <varname>stdenvType</varname> argument set to
+      <literal>"i686-mingw"</literal>.</para></listitem>
+
+      <listitem><para><literal>i686-darwin</literal>, i.e., Mac OS X
+      on Intel CPUs.</para></listitem>
+
+      <listitem><para><literal>powerpc-linux</literal>.</para></listitem>
+
+      <listitem><para><literal>x86_64-linux</literal>, i.e., Linux on
+      64-bit AMD/Intel CPUs.  Unlike <literal>i686-linux</literal>,
+      this platform doesn’t have a pure <literal>stdenv</literal>
+      yet.</para></listitem>
+
+    </itemizedlist>
+
+    </para>
+
+  </listitem>
+        
   <listitem><para>The default compiler is now GCC 4.1.1.</para></listitem>
 
-  <listitem><para>X11 updated to X11R7.1.</para></listitem>
+  <listitem><para>X11 updated to X.org’s X11R7.1.</para></listitem>
 
-  <listitem><para>Opera.</para></listitem>
+  <listitem><para>Notable new packages:
 
+    <itemizedlist>
+
+      <listitem><para>Opera.</para></listitem>
+
+      <listitem><para>Visual C++ 2005 Express Edition and the Windows
+      SDK.</para></listitem>
+
+    </itemizedlist>
+
+    In total there are now around 809 packages in Nixpkgs.</para>
+
+  </listitem>
+
+  
+  <listitem><para>It is now <emphasis>much</emphasis> easier to
+  override the default C compiler and other tools in
+  <literal>stdenv</literal> for specific packages.
+  <filename>all-packages.nix</filename> provides two utility
+  functions for this purpose: <function>overrideGCC</function> and
+  <function>overrideInStdenv</function>.  Both take a
+  <literal>stdenv</literal> and return an augmented
+  <literal>stdenv</literal>; the formed changes the C compiler, and
+  the latter adds additional packages to the front of
+  <literal>stdenv</literal>’s initial <envar>PATH</envar>, allowing
+  tools to be overriden.</para>
+
+  <para>For instance, the package <varname>strategoxt</varname>
+  doesn’t build with the GNU Make in <literal>stdenv</literal>
+  (version 3.81), so we call it with an augmented
+  <literal>stdenv</literal> that uses GNU Make 3.80:
+
+<programlisting>
+strategoxt = (import ../development/compilers/strategoxt) {
+  inherit fetchurl pkgconfig sdf aterm;
+  stdenv = overrideInStdenv stdenv [gnumake380];
+};</programlisting>
+
+  Likewise, there are many packages that don’t compile with the
+  default GCC (4.1.1), but that’s easily fixed:
+
+<programlisting>
+exult = import ../games/exult {
+  inherit fetchurl SDL SDL_mixer zlib libpng unzip;
+  stdenv = overrideGCC stdenv gcc34;
+};</programlisting>
+
+  </para></listitem>
+
+  
 </itemizedlist>
+
 
 <para>The following people contributed to this release:
 
