@@ -761,10 +761,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  harp = (import ../development/compilers/harp) {
-    inherit fetchurl stdenv unzip ghc happy;
-  };
-
   helium = (import ../development/compilers/helium) {
     inherit fetchurl stdenv ghc;
   };
