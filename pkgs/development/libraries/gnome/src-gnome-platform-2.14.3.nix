@@ -18,7 +18,7 @@
   audiofile = {
     name = "audiofile-0.2.6";
     src = fetchurl {
-      url = http://ftp.gnome.org/pub/GNOME/platform/2.14/2.14.3/sources/audiofile-0.2.6.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/audiofile-0.2.6.tar.bz2;
       md5 = "3d01302834660850b6141cac1e6f5501";
     };
   };
@@ -53,7 +53,7 @@
   gnomemimedata = {
     name = "gnome-mime-data-2.4.2";
     src = fetchurl {
-      url = http://ftp.gnome.org/pub/GNOME/platform/2.14/2.14.3/sources/gnome-mime-data-2.4.2.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/gnome-mime-data-2.4.2.tar.bz2;
       md5 = "37242776b08625fa10c73c18b790e552";
     };
   };
@@ -88,7 +88,7 @@
   libart_lgpl = {
     name = "libart_lgpl-2.3.17";
     src = fetchurl {
-      url = http://ftp.gnome.org/pub/GNOME/platform/2.14/2.14.3/sources/libart_lgpl-2.3.17.tar.bz2;
+      url = http://nix.cs.uu.nl/dist/tarballs/libart_lgpl-2.3.17.tar.bz2;
       md5 = "dfca42529393c8a8f59dc4dc10675a46";
     };
   };
