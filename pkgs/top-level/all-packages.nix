@@ -1502,10 +1502,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  sqlite3 = (import ../development/libraries/sqlite-3.3) {
-      inherit stdenv fetchurl;
-  };
-
   sysPerl = (import ../development/interpreters/sys-perl) {
     inherit stdenv;
   };
@@ -2816,10 +2812,8 @@ rec {
   };
 
   trac = (import ../misc/trac) {
-    inherit stdenv fetchurl python clearsilver makeWrapper;
+    inherit stdenv fetchurl python clearsilver makeWrapper sqlite;
 
-    sqlite = sqlite3;
-    
     subversion = (import ../applications/version-management/subversion-1.3.x) {
       inherit fetchurl stdenv openssl db4 expat jdk swig zlib;
       localServer = true;
@@ -2831,8 +2825,7 @@ rec {
     };
 
     pysqlite = (import ../development/libraries/pysqlite) {
-      inherit stdenv fetchurl python substituter;
-      sqlite = sqlite3;
+      inherit stdenv fetchurl python substituter sqlite;
     };
   };
 

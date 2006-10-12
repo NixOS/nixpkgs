@@ -15,6 +15,6 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Beep Media Player, a XMMS fork";
+    description = "Beep Media Player, an XMMS fork";
   };
 }

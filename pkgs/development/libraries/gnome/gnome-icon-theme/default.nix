@@ -8,4 +8,6 @@ stdenv.mkDerivation {
 
   # TODO: maybe this package as dependency on gnome-themes?
   configureFlags = "--disable-hicolor-check";
+
+  patches = [./gnome-icon-theme-2.14.2.patch];
 }
