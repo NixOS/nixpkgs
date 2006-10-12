@@ -5,7 +5,7 @@
 <title>Nixpkgs Release Notes</title>
 
 
-<section><title>Release 0.10 (October 11, 2006)</title>
+<section><title>Release 0.10 (October 12, 2006)</title>
 
 <note><para>This release of Nixpkgs requires <link
 xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
