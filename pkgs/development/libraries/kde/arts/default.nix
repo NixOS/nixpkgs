@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     --x-libraries=${libX11}/lib";
 
   src = fetchurl {
-    url = ftp://ftp.kde.org/pub/kde/stable/latest/src/arts-1.5.4.tar.bz2;
+    url = http://ftp.tiscali.nl/kde/stable/3.5.4/src/arts-1.5.4.tar.bz2;
     md5 = "886ba4a13dc0da312d94c09f50c3ffe6";
   };
 
