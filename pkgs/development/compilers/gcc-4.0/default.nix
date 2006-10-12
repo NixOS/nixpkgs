@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "gcc-4.0.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.0.3/gcc-4.0.3.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gcc-4.0.3.tar.bz2;
     md5 = "6ff1af12c53cbb3f79b27f2d6a9a3d50";
   };
   # !!! apply only if noSysDirs is set

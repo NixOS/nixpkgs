@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "dhcp-3.0.4";
   builder=./builder.sh;
   src = fetchurl {
-    url = http://ftp.isc.org/isc/dhcp/dhcp-3.0.4.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/dhcp-3.0.4.tar.gz;
     md5 = "004ef935fd54b8046b16bdde31a9e151";
   };
   buildInputs = [groff];

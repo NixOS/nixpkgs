@@ -9,7 +9,7 @@
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/mplayerplug-in/mplayerplug-in-3.31.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/mplayerplug-in-3.31.tar.gz;
     md5 = "be26b17cde385c7a34fc634d2c88c5c9";
   };
 

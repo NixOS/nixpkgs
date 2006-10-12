@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/swig/swig-1.3.29.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/swig-1.3.29.tar.gz;
     md5 = "44c6f6d8d724cf7fa4a5109e6f63c9b1";
   };
 

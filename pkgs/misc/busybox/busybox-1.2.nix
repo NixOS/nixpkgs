@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://busybox.net/downloads/busybox-1.2.1.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/busybox-1.2.1.tar.bz2;
     md5 = "362b3dc0f2023ddfda901dc1f1a74391";
   };
 

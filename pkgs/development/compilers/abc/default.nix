@@ -7,7 +7,7 @@ let {
       builder = ./builder.sh;
 
       src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/abc-1.2.0-src.tar.gz;
+        url = http://nix.cs.uu.nl/dist/tarballs/abc-1.2.0-src.tar.gz;
         md5 = "aef9e8eac860f904f2a841e18770dc47";
       };
 
@@ -39,7 +39,7 @@ let {
       jarname = "jedd.runtime";
       builder = ./builder-binjar.sh;
       src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/lib/jedd-runtime-snapshot.jar;
+        url = http://nix.cs.uu.nl/dist/tarballs/jedd-runtime-snapshot.jar;
         md5 = "595c5ac2f6384f4c34f1854891b5e422";
       };
     };
@@ -50,7 +50,7 @@ let {
       jarname = "javabdd";
       builder = ./builder-binjar.sh;
       src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/lib/javabdd_0.6.jar;
+        url = http://nix.cs.uu.nl/dist/tarballs/javabdd_0.6.jar;
         md5 = "6e0246e891b7431f4e7265b5b1471307";
       };
     };
@@ -61,7 +61,7 @@ let {
       jarname = "paddle";
       builder = ./builder-binjar.sh;
       src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/lib/paddle-snapshot.jar;
+        url = http://nix.cs.uu.nl/dist/tarballs/paddle-snapshot.jar;
         md5 = "a8e032310137945124a2850cd8cfc277";
       };
     };
@@ -72,7 +72,7 @@ let {
       jarname = "xact";
       builder = ./builder-binjar.sh;
       src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/lib/xact-complete-1.0-1.jar;
+        url = http://nix.cs.uu.nl/dist/tarballs/xact-complete-1.0-1.jar;
         md5 = "9810ad8762101ea691a895f0a6b7a5c3";
       };
     };

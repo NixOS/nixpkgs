@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/ghostscript/ghostscript-8.54-gpl.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/ghostscript-8.54-gpl.tar.bz2;
     md5 = "5d0ad0da8297fe459a788200f0eaeeba";
   };
 

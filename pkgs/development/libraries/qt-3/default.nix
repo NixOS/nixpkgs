@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   substitute = ../../../build-support/substitute/substitute.sh;
   hook = ./setup-hook.sh;  
   src = fetchurl {
-    url = ftp://ftp.trolltech.com/qt/source/qt-x11-free-3.3.6.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/qt-x11-free-3.3.6.tar.bz2;
     md5 = "dc1384c03ac08af21f6fefab32d982cf";
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
  
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/security/OpenSSH/openssh-4.3p2.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/openssh-4.3p2.tar.gz;
     md5 = "7e9880ac20a9b9db0d3fea30a9ff3d46";
   };
  

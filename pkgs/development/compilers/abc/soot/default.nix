@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/soot-dev-20060422015512.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/soot-dev-20060422015512.tar.gz;
     md5 = "20dae3e31215b7ec88e3ff32a107d713";
   };
 

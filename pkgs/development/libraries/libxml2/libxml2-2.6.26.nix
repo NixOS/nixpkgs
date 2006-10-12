@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://xmlsoft.org/libxml2/libxml2-2.6.26.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/libxml2-2.6.26.tar.gz;
     md5 = "2d8d3805041edab967368b497642f981";
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "gcc-4.0.1-apple-5341";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.opensource.apple.com/darwinsource/tarballs/other/gcc-5341.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/gcc-5341.tar.gz;
     md5 = "a135f107ddc55b773b40dfff4f049640";
   };
   patches =

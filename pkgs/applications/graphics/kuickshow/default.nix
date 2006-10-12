@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/kuickshow/kuickshow-0.8.5.tgz;
+    url = http://nix.cs.uu.nl/dist/tarballs/kuickshow-0.8.5.tgz;
     md5 = "7a95852a0670b18859a1e6789b256ebd";
   };
 

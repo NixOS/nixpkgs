@@ -2,7 +2,7 @@
 stdenv.mkDerivation {
   name = "qcmm-2006-01-31";
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~cddouma/dist/qc--20060131.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/qc--20060131.tar.gz;
     md5 = "9097830775bcf22c9bad54f389f5db23";
   };
   buildInputs = [ mk ocaml noweb groff ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation ({
   name = "db4-4.4.20";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://downloads.sleepycat.com/db-4.4.20.NC.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/db-4.4.20.NC.tar.gz;
     md5 = "afd9243ea353bbaa04421488d3b37900";
   };
   configureFlags = [

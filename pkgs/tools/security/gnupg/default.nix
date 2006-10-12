@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "gnupg-1.4.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.5.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gnupg-1.4.5.tar.bz2;
     sha1 = "553fefe0da5a91108dd9468e381faf9487754f9a";
   };
   buildInputs = [readline];

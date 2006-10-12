@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www4.mplayerhq.hu/MPlayer/releases/MPlayer-1.0pre8.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/MPlayer-1.0pre8.tar.bz2;
     md5 = "f82bb2bc51b6cd5e5dd96f88f6f98582";
   };
   fonts = fetchurl {

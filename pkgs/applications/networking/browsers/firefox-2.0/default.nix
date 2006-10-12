@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/2.0rc1/source/firefox-2.0rc1-source.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/firefox-2.0rc1-source.tar.bz2;
     sha1 = "0f6bcab71becb4fb92900fc900b20301434f4e00";
   };
 

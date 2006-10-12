@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/exult/exult-1.2.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/exult-1.2.tar.gz;
     md5 = "0fc88dee74a91724d25373ba0a8670ba";
   };
 
@@ -17,11 +17,11 @@ stdenv.mkDerivation {
   # we don't need actual MIDI playback capability.
   musicFiles = [
     (fetchurl {
-      url = http://surfnet.dl.sourceforge.net/sourceforge/exult/U7MusicOGG_1of2.zip;
+      url = http://nix.cs.uu.nl/dist/tarballs/U7MusicOGG_1of2.zip;
       md5 = "7746d1a9164fd67509107797496553bf";
     })
     (fetchurl {
-      url = http://surfnet.dl.sourceforge.net/sourceforge/exult/U7MusicOGG_2of2.zip;
+      url = http://nix.cs.uu.nl/dist/tarballs/U7MusicOGG_2of2.zip;
       md5 = "cdae5956d7c52f35e90317913a660123";
     })
   ];    

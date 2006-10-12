@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.tiscali.nl/pub/mirrors/opera/linux/902/final/en/i386/shared/opera-9.02-20060919.5-shared-qt.i386-en.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/opera-9.02-20060919.5-shared-qt.i386-en.tar.bz2;
     md5 = "327d0bf1f3c4eedd47b444b36c9091f6";
   };
 

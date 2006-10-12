@@ -11,7 +11,7 @@ assert pngSupport -> libpng != null;
 stdenv.mkDerivation {
   name = "cairo-1.2.4";
   src = fetchurl {
-    url = http://cairographics.org/releases/cairo-1.2.4.tar.gz;
+    url = http://nix.cs.uu.nl/dist/tarballs/cairo-1.2.4.tar.gz;
     sha1 = "5520b771c8b85acea78fa56fc4c39b4dca6bcc7c";
   };
   buildInputs = [

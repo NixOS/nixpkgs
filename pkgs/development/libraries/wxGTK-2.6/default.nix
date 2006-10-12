@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "wxGTK-2.6.3";
 
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/wxwindows/wxGTK-2.6.3.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/wxGTK-2.6.3.tar.bz2;
     md5 = "3cd76c3c47913e52a3175dd47239c6ec";
   };
 

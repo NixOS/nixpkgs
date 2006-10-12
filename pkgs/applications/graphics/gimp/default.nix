@@ -5,7 +5,7 @@
 stdenv.mkDerivation {
   name = "gimp-2.3.10";
   src = fetchurl {
-    url = ftp://ftp.gimp.org/pub/gimp/v2.3/gimp-2.3.10.tar.bz2;
+    url = http://nix.cs.uu.nl/dist/tarballs/gimp-2.3.10.tar.bz2;
     md5 = "a46acb413484300583ffca1fa54e0874" ;
   };
   

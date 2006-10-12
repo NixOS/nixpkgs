@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "atari++-1.46";
 #  builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.math.tu-berlin.de/~thor/atari++/download/atari++.tgz;
+    url = http://nix.cs.uu.nl/dist/tarballs/atari++.tgz;
     md5 = "0619ec6b63852233111aa0bd263c8ea2";
   };
 #  rom = fetchurl {
