@@ -12,4 +12,8 @@ stdenv.mkDerivation {
   };
   configureFlags = (if sslSupport then "--with-ssl" else "");
   buildInputs = [ncurses (if sslSupport then openssl else null)];
+
+  meta = {
+    description = "A text-mode web browser";
+  };
 }

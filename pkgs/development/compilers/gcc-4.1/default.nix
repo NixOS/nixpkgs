@@ -16,4 +16,10 @@ stdenv.mkDerivation {
     [./pass-cxxcpp.patch]
     ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
   inherit noSysDirs langC langCC langF77 profiledCompiler;
+
+  meta = {
+    homepage = "http://gcc.gnu.org/";
+    license = "GPL/LGPL";
+    description = "GNU Compiler Collection, 4.1.x";
+  };
 }

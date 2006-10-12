@@ -13,6 +13,11 @@ stdenv.mkDerivation {
   plugins = map (x: x + x.mozillaPlugin) plugins;
 
   meta = {
-    description = firefox.meta.description + " (with various plugins)";
+    description =
+      firefox.meta.description
+      + " (with plugins: "
+      + (let lib = import ../../../../lib;
+        in lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins)))
+      + ")";
   };
 }

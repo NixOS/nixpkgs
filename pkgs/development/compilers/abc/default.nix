@@ -12,6 +12,10 @@ let {
       };
 
       inherit apacheAnt polyglot soot javaCup xact jasmin jre javabdd paddle jedd patches;
+
+      meta = {
+        description = "The AspectBench Compiler for AspectJ";
+      };
     };
 
   soot =

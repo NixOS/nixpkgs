@@ -111,13 +111,14 @@ rec {
       builder = ./tools/bash;
       args = [ ./scripts/builder-stdenv-initial.sh ];
       inherit system staticTools;
-    }  // {
-      mkDerivation = attrs: derivation ((removeAttrs attrs ["meta"]) // {
+    } // {
+      # !!! too much duplication with stdenv/generic/default.nix
+      mkDerivation = attrs: (derivation ((removeAttrs attrs ["meta"]) // {
         builder = ./tools/bash;
         args = ["-e" attrs.builder];
         stdenv = body;
         system = body.system;
-      });
+      })) // { meta = if attrs ? meta then attrs.meta else {}; };
       shell = ./tools/bash;
     };
   };

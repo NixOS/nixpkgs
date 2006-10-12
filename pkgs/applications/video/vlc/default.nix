@@ -27,4 +27,8 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = "-ldvdcss";
 
   configureFlags = "--enable-alsa";
+
+  meta = {
+    description = "Cross-platform media player and streaming server";
+  };
 }

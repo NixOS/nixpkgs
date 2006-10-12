@@ -35,6 +35,7 @@ let {
     ecj
     emacs
     enscript
+    exult
     file
     findutils
     firefoxWrapper

@@ -11,4 +11,8 @@ stdenv.mkDerivation {
     (if xineLib.xineramaSupport then xineLib.libXinerama else null)
   ];
   configureFlags = "--without-readline --disable-xft";
+
+  meta = {
+    description = "Xlib-based interface to Xine, a video player";
+  };
 }

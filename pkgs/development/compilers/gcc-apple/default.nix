@@ -4,6 +4,7 @@
 }:
 
 assert langC;
+assert stdenv.isDarwin;
 
 stdenv.mkDerivation {
   name = "gcc-4.0.1-apple-5341";

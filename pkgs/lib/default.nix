@@ -17,6 +17,15 @@ rec {
     fold (x: y: x + y) "";
 
 
+  # Place an element between each element of a list, e.g.,
+  # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
+  intersperse = separator: list:
+    if list == [] || builtins.tail list == []
+    then list
+    else [(builtins.head list) separator]
+         ++ (intersperse separator (builtins.tail list));
+
+
   # Flatten the argument into a single list; that is, nested lists are
   # spliced into the top-level lists.  E.g., `flatten [1 [2 [3] 4] 5]
   # == [1 2 3 4 5]' and `flatten 1 == [1]'.

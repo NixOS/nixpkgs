@@ -11,4 +11,8 @@ stdenv.mkDerivation {
  
   inherit ncurses;
   buildInputs = [ncurses];
+
+  meta = {
+    description = "The most popular clone of the VI editor";
+  };
 }

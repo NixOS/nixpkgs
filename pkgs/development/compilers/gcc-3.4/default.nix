@@ -15,4 +15,10 @@ stdenv.mkDerivation {
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch];
   inherit noSysDirs langC langCC langF77 profiledCompiler;
+
+  meta = {
+    homepage = "http://gcc.gnu.org/";
+    license = "GPL/LGPL";
+    description = "GNU Compiler Collection, 3.4.x";
+  };
 }

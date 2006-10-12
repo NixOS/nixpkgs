@@ -1,7 +1,7 @@
 {stdenv, ghc, libraries}:
 
 stdenv.mkDerivation {
-  name = ghc.name;
+  inherit (ghc) name meta;
   inherit ghc libraries;
   builder = ./builder.sh;
 }

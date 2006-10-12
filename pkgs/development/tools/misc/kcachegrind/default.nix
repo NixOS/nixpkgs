@@ -18,4 +18,8 @@ stdenv.mkDerivation {
     --x-libraries=${libX11}/lib";
     
   buildInputs = [kdelibs libX11 libXext libSM zlib perl qt expat libpng libjpeg];
+
+  meta = {
+    description = "Interactive visualisation tool for Valgrind profiling data";
+  };
 }

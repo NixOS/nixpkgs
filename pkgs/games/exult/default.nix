@@ -25,4 +25,8 @@ stdenv.mkDerivation {
       md5 = "cdae5956d7c52f35e90317913a660123";
     })
   ];    
+
+  meta = {
+    description = "A reimplementation of the Ultima VII game engine";
+  };
 }
