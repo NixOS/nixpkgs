@@ -2472,15 +2472,11 @@ rec {
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
-      getopt file;
+      getopt file neon;
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
 
     bison = bison23;
-
-    neon = (import ../development/libraries/neon/neon-0.24.7.nix) {
-      inherit fetchurl stdenv libxml2;
-    };
   };
 
   opera = import ../applications/networking/browsers/opera {
