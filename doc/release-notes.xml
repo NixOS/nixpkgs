@@ -97,8 +97,8 @@ xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
 
       <listitem><para>Opera.</para></listitem>
 
-      <listitem><para>Visual C++ 2005 Express Edition and the Windows
-      SDK.</para></listitem>
+      <listitem><para>Microsoft Visual C++ 2005 Express Edition and
+      the Windows SDK.</para></listitem>
 
     </itemizedlist>
 
@@ -128,7 +128,9 @@ xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
 strategoxt = (import ../development/compilers/strategoxt) {
   inherit fetchurl pkgconfig sdf aterm;
   stdenv = overrideInStdenv stdenv [gnumake380];
-};</programlisting>
+};
+
+gnumake380 = <replaceable>...</replaceable>;</programlisting>
 
   Likewise, there are many packages that don’t compile with the
   default GCC (4.1.1), but that’s easily fixed:
@@ -159,6 +161,28 @@ pkg = import <replaceable>...</replaceable> {
 }</programlisting>
 
   </para></listitem>
+
+
+  <listitem><para>Packages can now have a human-readable
+  <emphasis>description</emphasis> field.  Package descriptions are
+  shown by <literal>nix-env -qa --description</literal>.  In addition,
+  they’re shown on the Nixpkgs release page.  A description can be
+  added to a package as follows:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "exult-1.2";
+  <replaceable>...</replaceable>
+  meta = {
+    description = "A reimplementation of the Ultima VII game engine";
+  };
+}</programlisting>
+
+  The <varname>meta</varname> attribute is not passed to the builder,
+  so changes to the description do not trigger a rebuild.  Additional
+  <varname>meta</varname> attributes may be defined in the future
+  (such as the URL of the package’s homepage, the license,
+  etc.).</para></listitem>
   
 </itemizedlist>
 
