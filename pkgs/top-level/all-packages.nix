@@ -1076,7 +1076,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  db4 = (import ../development/libraries/db4) {
+  db4 = db44;
+
+  db44 = import ../development/libraries/db4/db4-4.4.nix {
+    inherit fetchurl stdenv;
+  };
+
+  db45 = import ../development/libraries/db4/db4-4.5.nix {
     inherit fetchurl stdenv;
   };
 
@@ -2773,7 +2779,8 @@ rec {
   };
 
   nix = (import ../misc/nix) {
-    inherit fetchurl stdenv aterm db4 perl curl bzip2;
+    inherit fetchurl stdenv aterm perl curl bzip2;
+    db4 = db44;
   };
 
   nixUnstable = nix;
