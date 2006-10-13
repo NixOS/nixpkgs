@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "db4-4.5.20";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/db-4.5.20.NC.tar.gz;
-    md5 = "1bfa6256f8d546b97bef1f448ab09875";
+    url = http://download-east.oracle.com/berkeley-db/db-4.5.20.tar.gz;
+    md5 = "b0f1c777708cb8e9d37fb47e7ed3312d";
   };
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
