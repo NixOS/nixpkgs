@@ -1,10 +1,10 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "texinfo-4.8";
+  name = "texinfo-4.8a";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/texinfo-4.8.tar.bz2;
-    md5 = "6ba369bbfe4afaa56122e65b3ee3a68c";
+    url = ftp://ftp.nluug.nl/pub/gnu/texinfo/texinfo-4.8a.tar.bz2;
+    md5 = "0f429f87de9f20d6c0d952e63bf8e3fa";
   };
   buildInputs = [ncurses];
 }
