@@ -3,11 +3,11 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "mesa-6.4";
+  name = "mesa-6.4.2";
   srcs = [
     (fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/MesaLib-6.4.tar.bz2;
-      md5 = "85a84e47a3f718f752f306b9e0954ef6";
+      url = http://surfnet.dl.sourceforge.net/sourceforge/mesa3d/MesaLib-6.4.2.tar.bz2;
+      md5 = "7674d2c603b5834259e4e5a820cefd5b";
     })
 /*    (fetchurl {
       url = http://nix.cs.uu.nl/dist/tarballs/MesaGLUT-6.4.tar.bz2;
