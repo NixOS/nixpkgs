@@ -76,6 +76,7 @@ let {
     mktemp
     mono
     mysql
+    mythtv
     nix
     nxml
 #    octave

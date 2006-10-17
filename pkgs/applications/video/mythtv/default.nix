@@ -1,6 +1,7 @@
 { stdenv, fetchurl, which, qt3, x11
 , libX11, libXinerama, libXv, libXxf86vm, libXrandr, libXmu
-, lame, zlib, mesa}:
+, lame, zlib, mesa
+}:
 
 assert qt3.mysqlSupport;
 
@@ -25,8 +26,4 @@ stdenv.mkDerivation {
     ./settings.patch
     ./purity.patch # don't search in /usr/include etc.
   ];
-
-  /* Quick workaround for NIXPKGS-30 to get floor() etc. to work in
-     MythTV.  Can be removed once NIXPKGS-30 has been fixed. */
-  NIX_CFLAGS_COMPILE = "-ffast-math";
 }
