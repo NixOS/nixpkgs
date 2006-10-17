@@ -214,10 +214,10 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       glibc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
-      shell = stdenvLinuxBoot3Pkgs.bash + /bin/sh;
+      shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     };
 
-    shell = stdenvLinuxBoot3Pkgs.bash + /bin/sh;
+    shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     
     extraAttrs = {
       curl = stdenvLinuxBoot3Pkgs.realCurl;

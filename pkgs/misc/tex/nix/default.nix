@@ -32,7 +32,7 @@ rec {
     pkgs.stdenv.mkDerivation {
       name = "latex-includes";
 
-      realBuilder = pkgs.perl + /bin/perl;
+      realBuilder = pkgs.perl + "/bin/perl";
       args = [ ./find-includes.pl ];
 
       rootFile = toString rootFile; # !!! hacky

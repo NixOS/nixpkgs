@@ -25,7 +25,7 @@ let {
       inherit system;
       name = "stdenv-init2-mingw";
       shell = msysShell;
-      path = [(msys + /bin)];
+      path = [(msys + "/bin")];
     };
 
   /**
@@ -37,12 +37,12 @@ let {
       name = "stdenv-init3-mingw";
       shell = msysShell;
       path = [
-        (make + /bin)
-        (binutils + /bin)
-        (gccCore + /bin)
-        (mingwRuntimeBin + /bin)
-        (w32apiBin + /bin)
-        (msys + /bin)
+        (make + "/bin")
+        (binutils + "/bin")
+        (gccCore + "/bin")
+        (mingwRuntimeBin + "/bin")
+        (w32apiBin + "/bin")
+        (msys + "/bin")
       ];
 
       extraEnv = {
@@ -65,7 +65,7 @@ let {
         };
 
       shell =
-        msys + /bin/sh + ".exe";
+        msys + "/bin/sh.exe";
 
       stdenv =
         stdenvInit2.mkDerivation {
@@ -158,7 +158,7 @@ let {
     };
 
   msysShell = 
-    msys + /bin/sh + ".exe";
+    msys + "/bin/sh.exe";
 
   /**
    * Binary packages, based on stdenvInit2

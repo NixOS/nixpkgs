@@ -10,5 +10,5 @@ stdenv.mkDerivation {
   };
   buildInputs = [perl expat xlibs freetype];
   # Zoom doesn't add the right directory in the include path.
-  CFLAGS = ["-I" (freetype + /include/freetype2)];
+  CFLAGS = ["-I" (freetype + "/include/freetype2")];
 }

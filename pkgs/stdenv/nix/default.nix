@@ -17,10 +17,10 @@ import ../generic {
       else
         pkgs.binutils;
     gcc = if stdenv.isDarwin then pkgs.gccApple.gcc else pkgs.gcc.gcc;
-    shell = pkgs.bash + /bin/sh;
+    shell = pkgs.bash + "/bin/sh";
   };
 
-  shell = pkgs.bash + /bin/sh;
+  shell = pkgs.bash + "/bin/sh";
 
   extraAttrs = {
     curl = pkgs.realCurl;
