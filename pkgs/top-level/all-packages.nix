@@ -61,6 +61,9 @@ rec {
       );
     };
 
+  addAttrsToDerivation = extraAttrs: stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
+
   # Override the setup script of stdenv.  Useful for testing new
   # versions of the setup script without causing a rebuild of
   # everything.
@@ -70,6 +73,30 @@ rec {
   #     stdenv = overrideSetup stdenv ../stdenv/generic/setup-latest.sh;
   #   };
   overrideSetup = stdenv: setup: stdenv.regenerate setup;
+
+  # Return a modified stdenv that uses dietlibc to create small
+  # statically linked binaries.
+  useDietLibC = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = "-static";
+        
+        # These are added *after* the command-line flags, so we'll
+        # always optimise for size.
+        NIX_CFLAGS_COMPILE = "-Os -s";
+        
+        configureFlags =
+          (if args ? configureFlags then args.configureFlags else "")
+          + " --disable-shared"; # brrr...
+
+        NIX_GCC = import ../build-support/gcc-wrapper {
+          inherit stdenv binutils;
+          gcc = gcc.gcc;
+          glibc = dietlibc;
+          nativeTools = false;
+          nativeGlibc = false;
+        };
+      });
+    };
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
@@ -196,8 +223,9 @@ rec {
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
 
-  curlDiet = import ../tools/networking/curl-diet {
-    inherit fetchurl stdenv zlib dietgcc;
+  curlDiet = import ../tools/networking/curl {
+    inherit fetchurl zlib;
+    stdenv = addAttrsToDerivation {CFLAGS = "-DHAVE_INET_NTOA_R_2_ARGS=1";} (useDietLibC stdenv);
   };
 
   dhcp = import ../tools/networking/dhcp {
@@ -1987,11 +2015,6 @@ rec {
   #  binutilsCross = binutilsArm;
   #  arch = "arm";
   #};
-
-  dietlibcWrapper = import ../os-specific/linux/dietlibc-wrapper {
-    inherit stdenv dietlibc;
-    gcc = stdenv.gcc;
-  };
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl stdenv gettext;
