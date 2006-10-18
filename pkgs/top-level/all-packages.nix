@@ -225,7 +225,9 @@ rec {
 
   curlDiet = import ../tools/networking/curl {
     inherit fetchurl zlib;
-    stdenv = addAttrsToDerivation {CFLAGS = "-DHAVE_INET_NTOA_R_2_ARGS=1";} (useDietLibC stdenv);
+    stdenv = addAttrsToDerivation {
+      CFLAGS = "-DHAVE_INET_NTOA_R_2_ARGS=1";
+    } (useDietLibC stdenv);
   };
 
   dhcp = import ../tools/networking/dhcp {
