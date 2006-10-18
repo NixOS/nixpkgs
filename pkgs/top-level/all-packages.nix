@@ -203,8 +203,9 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  bzip2Static = import ../tools/compression/bzip2-static {
-    inherit fetchurl stdenv;
+  bzip2Diet = import ../tools/compression/bzip2 {
+    inherit fetchurl;
+    stdenv = useDietLibC stdenv;
   };
 
   cabextract = import ../tools/archivers/cabextract {
