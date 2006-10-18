@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "bash-3.1";
   builder = ./builder.sh;
   src = fetchurl {
@@ -12,3 +12,11 @@ stdenv.mkDerivation {
     description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
   };
 }
+
+# libcompat.a is needed on dietlibc for stpcpy().
+// (if stdenv ? isDietLibC then {
+  NIX_LDFLAGS = "-lcompat";
+  patches = [./winsize.patch];
+} else {})
+
+)

@@ -7,6 +7,5 @@ stdenv.mkDerivation ({
     md5 = "bdec4b75c76ac9bf51b6dd1747d3b06e";
   };
 } // (if stdenv ? isDietLibC then {
-  NIX_CFLAGS_COMPILE="-D_BSD_SOURCE=1";
   patches = [./uclibc.patch];
 } else {}))

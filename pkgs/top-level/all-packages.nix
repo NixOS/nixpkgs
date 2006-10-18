@@ -84,7 +84,7 @@ rec {
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
           (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
-          + " -Os -s";
+          + " -Os -s -D_BSD_SOURCE=1";
         
         configureFlags =
           (if args ? configureFlags then args.configureFlags else "")
@@ -510,8 +510,9 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  bashStatic = import ../shells/bash-static {
-    inherit fetchurl stdenv;
+  bashDiet = import ../shells/bash {
+    inherit fetchurl;
+    stdenv = useDietLibC stdenv;
   };
 
   tcsh = import ../shells/tcsh {
