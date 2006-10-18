@@ -61,7 +61,7 @@ rules
       <map({x', x'', x''', xs', starts, starts': \[x | xs] -> [x''' | xs']
         where
           <remove-section-start> x => (x', starts);
-          <map(regularise-empty-lines); qsort(compare-attrs)> [x' | xs] => [x'' | xs'];
+          <map(regularise-empty-lines); if !starts; debug; sortable-section; debug then qsort(compare-attrs) else id end> [x' | xs] => [x'' | xs'];
           <[] <+ \x -> ["\n\n\n" | x]\ > starts => starts';
           <prepend-layout> (starts', x'') => x'''
       \ })> groups => attrs';
@@ -79,9 +79,12 @@ strategies
     <implode-string; is-substring(!"###")> cs;
     !x
 
-    
 rules
+
     
+  sortable-section = ?[s]; !s; explode-string; not(fetch({x: ?x; !(x, 97); geq}))
+
+
   remove-section-start:
     (appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs), attr) ->
     ((appl(prod([cf(layout())], cf(opt(layout())), no-attrs()), cs'), attr), starts)
