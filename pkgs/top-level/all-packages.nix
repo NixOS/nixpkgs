@@ -82,7 +82,9 @@ rec {
         
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
-        NIX_CFLAGS_COMPILE = "-Os -s";
+        NIX_CFLAGS_COMPILE =
+          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
+          + " -Os -s";
         
         configureFlags =
           (if args ? configureFlags then args.configureFlags else "")
@@ -96,6 +98,7 @@ rec {
           nativeGlibc = false;
         };
       });
+      isDietLibC = true;
     };
 
   # Applying this to an attribute set will cause nix-env to look
@@ -217,8 +220,9 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  coreutilsDiet = import ../tools/misc/coreutils-diet {
-    inherit fetchurl stdenv dietgcc perl;
+  coreutilsDiet = import ../tools/misc/coreutils {
+    inherit fetchurl;
+    stdenv = useDietLibC stdenv;
   };
 
   cpio = import ../tools/archivers/cpio {
