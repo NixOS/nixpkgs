@@ -1,11 +1,12 @@
 source $stdenv/setup
 
-preBuild() {
-  kernelhash=$(ls $kernel/lib/modules)
-  echo $kernelhash
-  ln -s $kernel/lib/modules/$kernelhash/build linux
-}
+makeFlags="prefix=$out"
+installFlags="prefix=$out"
 
-preBuild=preBuild
+postInstall=postInstall
+postInstall() {
+    (cd $out && ln -s lib-* lib)
+    (cd $out/lib && ln -s start.o crt1.o)
+}
 
 genericBuild

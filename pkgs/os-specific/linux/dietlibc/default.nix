@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/dietlibc-0.30.tar.bz2;
     md5 = "2465d652fff6f1fad3da3b98e60e83c9";
   };
-  patches = [./dietlibc-install.patch];
+  builder = ./builder.sh;
+#  patches = [./dietlibc-install.patch];
 }
