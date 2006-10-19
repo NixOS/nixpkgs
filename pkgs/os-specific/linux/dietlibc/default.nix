@@ -9,5 +9,10 @@ stdenv.mkDerivation {
     md5 = "2465d652fff6f1fad3da3b98e60e83c9";
   };
   builder = ./builder.sh;
-#  patches = [./dietlibc-install.patch];
+  inherit (stdenv) glibc;
+
+  # dietlibc's sigcontext.h provides a macro called PC(), which is
+  # rather intrusive (e.g., binutils fails to compile because of it).
+  # Rename it.
+  patches = [./pc.patch];
 }

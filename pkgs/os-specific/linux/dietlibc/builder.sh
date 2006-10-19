@@ -12,6 +12,9 @@ postInstall() {
     touch empty.c
     gcc -c empty.c -o $out/lib/crti.o
     gcc -c empty.c -o $out/lib/crtn.o
+
+    # Copy <sys/user.h> from Glibc; binutils wants it.
+    cp $glibc/include/sys/user.h $out/include/sys/
 }
 
 genericBuild
