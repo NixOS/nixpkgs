@@ -3,6 +3,11 @@ source $stdenv/setup
 ensureDir $out/in-nixpkgs
 ensureDir $out/on-server
 
+# Everything we put in check-only is merely to allow Nix to check that
+# we aren't putting binaries with store path references in tarballs.
+ensureDir $out/check-only
+
+
 nukeRefs() {
     # Dirty, disgusting, but it works ;-)
     fileName=$1
@@ -11,11 +16,35 @@ nukeRefs() {
     mv $fileName.tmp $fileName
 }
 
+
 cp $bash/bin/bash $out/in-nixpkgs
 cp $bzip2/bin/bunzip2 $out/in-nixpkgs
-cp $coreutils/bin/cp $out/in-nixpkgs
+cp $gnutar/bin/tar $out/in-nixpkgs
+cp $curl/bin/curl $out/check-only
+bzip2 < $curl/bin/curl > $out/in-nixpkgs/curl.bz2
 
 nukeRefs $out/in-nixpkgs/bash
+nukeRefs $out/in-nixpkgs/tar
 
-chmod +w $out/in-nixpkgs/*
-strip -s $out/in-nixpkgs/*
+for i in $out/in-nixpkgs/*; do
+    if test -x $i; then
+        chmod +w $i
+        strip -s $i
+    fi
+done
+
+
+mkdir tools
+mkdir tools/bin
+
+cp $coreutils/bin/* tools/bin
+rm tools/bin/groups # has references
+rm tools/bin/printf # idem
+
+#cp $patchelf/bin/* tools/bin
+tar cvfj $out/on-server/static-tools.tar.bz2 tools
+
+
+for i in $out/on-server/*.tar.bz2; do
+    (cd $out/check-only && tar xvfj $i)
+done

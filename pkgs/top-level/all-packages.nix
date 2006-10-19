@@ -206,11 +206,6 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  bzip2Diet = import ../tools/compression/bzip2 {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  };
-
   cabextract = import ../tools/archivers/cabextract {
     inherit fetchurl stdenv;
   };
@@ -224,23 +219,11 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  coreutilsDiet = import ../tools/misc/coreutils {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  };
-
   cpio = import ../tools/archivers/cpio {
     inherit fetchurl stdenv;
   };
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
-
-  curlDiet = import ../tools/networking/curl {
-    inherit fetchurl zlib;
-    stdenv = addAttrsToDerivation {
-      CFLAGS = "-DHAVE_INET_NTOA_R_2_ARGS=1";
-    } (useDietLibC stdenv);
-  };
 
   dhcp = import ../tools/networking/dhcp {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
@@ -320,10 +303,6 @@ rec {
     (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;
     });
-
-  gnutarDiet = import ../tools/archivers/gnutar-diet {
-    inherit fetchurl stdenv dietgcc;
-  };
 
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;
@@ -428,6 +407,7 @@ rec {
 
   realCurl = import ../tools/networking/curl {
     inherit fetchurl stdenv zlib;
+    zlibSupport = !stdenv ? isDietLibC;
   };
 
   sablotron = import ../tools/text/xml/sablotron {
@@ -512,11 +492,6 @@ rec {
     (import ../shells/bash {
       inherit fetchurl stdenv;
     });
-
-  bashDiet = import ../shells/bash {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  };
 
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
@@ -1674,6 +1649,7 @@ rec {
 
   zlib = import ../development/libraries/zlib {
     inherit fetchurl stdenv;
+    static = !stdenv ? isDietLibC;
   };
 
   zlibStatic = import ../development/libraries/zlib {
