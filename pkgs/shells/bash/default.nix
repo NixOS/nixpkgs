@@ -13,9 +13,7 @@ stdenv.mkDerivation ({
   };
 }
 
-# libcompat.a is needed on dietlibc for stpcpy().
 // (if stdenv ? isDietLibC then {
-  NIX_LDFLAGS = "-lcompat";
   patches = [./winsize.patch];
 } else {})
 

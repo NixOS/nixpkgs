@@ -79,6 +79,9 @@ rec {
   useDietLibC = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = "-static";
+
+        # libcompat.a contains some commonly used functions.
+        NIX_LDFLAGS = "-lcompat";
         
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
@@ -979,8 +982,9 @@ rec {
     cross = "sparc-linux";
   };
 
-  binutilsStatic = import ../development/tools/misc/binutils-static {
-    inherit fetchurl stdenv noSysDirs;
+  binutilsDiet = import ../development/tools/misc/binutils/binutils-2.17.nix {
+    inherit fetchurl noSysDirs;
+    stdenv = useDietLibC stdenv;
   };
 
   bison = bison1875;
