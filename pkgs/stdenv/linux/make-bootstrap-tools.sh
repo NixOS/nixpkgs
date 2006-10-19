@@ -35,12 +35,14 @@ rm tools/bin/groups # has references
 rm tools/bin/printf # idem
 
 cp $gnused/bin/* tools/bin
+cp $gnugrep/bin/* tools/bin
 cp $gnutar/bin/* tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
 cp $patch/bin/* tools/bin
 
 nukeRefs tools/bin/sed
 nukeRefs tools/bin/tar
+nukeRefs tools/bin/grep
 
 #cp $patchelf/bin/* tools/bin
 
@@ -48,7 +50,7 @@ nukeRefs tools/bin/tar
 for i in $out/in-nixpkgs/* tools/bin/*; do
     if test -x $i; then
         chmod +w $i
-        strip -s $i
+        strip -s $i || true
     fi
 done
 
