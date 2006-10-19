@@ -7,13 +7,13 @@ let
     # stdenv-linux's dependencies, rather than building new ones with
     # dietlibc.
     bootStdenv = removeAttrs (pkgs.useDietLibC pkgs.stdenv)
-      ["bash" "bzip2" "coreutils" "gnutar" "patchelf"];
+      ["coreutils" "gnused" "gnutar" "bzip2" "bash" "patch" "patchelf"];
   };
 
   generator = pkgs.stdenv.mkDerivation {
     name = "bootstrap-tools-generator";
     builder = ./make-bootstrap-tools.sh;
-    inherit (pkgsDiet) bash bzip2 coreutils gnutar;
+    inherit (pkgsDiet) coreutils gnused gnutar bzip2 bash patch;
     curl = pkgsDiet.realCurl;
 
     # The result should not contain any references (store paths) so

@@ -9,4 +9,11 @@
   (if stdenv.system != "i686-linux" then {
     patches = [./setmode.patch];
     configureFlags = "dummy"; # doesn't build on Darwin unless a platform is specified
-  } else {}))
+  } else {})
+  // 
+  # !!! hack
+  (if stdenv ? isDietLibC then {
+    # !!! pass this on all platforms
+    configureFlags = "dummy"; # doesn't build unless a platform is specified
+  } else {})
+)

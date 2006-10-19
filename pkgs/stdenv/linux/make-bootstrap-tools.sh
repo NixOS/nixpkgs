@@ -26,13 +26,6 @@ bzip2 < $curl/bin/curl > $out/in-nixpkgs/curl.bz2
 nukeRefs $out/in-nixpkgs/bash
 nukeRefs $out/in-nixpkgs/tar
 
-for i in $out/in-nixpkgs/*; do
-    if test -x $i; then
-        chmod +w $i
-        strip -s $i
-    fi
-done
-
 
 mkdir tools
 mkdir tools/bin
@@ -41,7 +34,25 @@ cp $coreutils/bin/* tools/bin
 rm tools/bin/groups # has references
 rm tools/bin/printf # idem
 
+cp $gnused/bin/* tools/bin
+cp $gnutar/bin/* tools/bin
+cp $bzip2/bin/bunzip2 tools/bin
+cp $patch/bin/* tools/bin
+
+nukeRefs tools/bin/sed
+nukeRefs tools/bin/tar
+
 #cp $patchelf/bin/* tools/bin
+
+
+for i in $out/in-nixpkgs/* tools/bin/*; do
+    if test -x $i; then
+        chmod +w $i
+        strip -s $i
+    fi
+done
+
+
 tar cvfj $out/on-server/static-tools.tar.bz2 tools
 
 
