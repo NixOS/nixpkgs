@@ -50,8 +50,6 @@ nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
 
-#cp $patchelf/bin/* tools/bin
-
 
 # Create the binutils tarball.
 mkdir binutils
@@ -62,7 +60,7 @@ for i in as ld ar ranlib nm strip; do
 done
 
 
-# Create the gcc tarball
+# Create the gcc tarball.
 mkdir gcc
 mkdir gcc/bin
 cp $gcc/bin/gcc gcc/bin
@@ -79,6 +77,26 @@ rm gcc/lib/*.so*
 rm -rf gcc/lib/gcc/*/*/install-tools
 
 
+# Create the glibc tarball.
+mkdir glibc
+mkdir glibc/lib
+cp $glibc/lib/*.a glibc/lib
+rm glibc/lib/*_p.a
+nukeRefs glibc/lib/libc.a
+cp $glibc/lib/*.o glibc/lib
+cp -prd $glibc/include glibc
+chmod -R +w glibc
+rm glibc/include/linux
+cp -prd $(readlink $glibc/include/linux) glibc/include
+rm glibc/include/asm
+ln -s $(readlink $(readlink $glibc/include/asm)) glibc/include/asm
+for i in glibc/include/asm-*; do
+    target=$(readlink $i)
+    rm $i
+    cp -prd $target glibc/include
+done
+
+
 # Strip executables even further.
 for i in $out/in-nixpkgs/* */bin/* gcc/libexec/gcc/*/*/*; do
     if test -x $i; then
@@ -92,6 +110,7 @@ done
 tar cfj $out/on-server/static-tools.tar.bz2 tools
 tar cfj $out/on-server/binutils.tar.bz2 binutils
 tar cfj $out/on-server/gcc.tar.bz2 gcc
+tar cfj $out/on-server/glibc.tar.bz2 glibc
 
 for i in $out/on-server/*.tar.bz2; do
     (cd $out/check-only && tar xfj $i)

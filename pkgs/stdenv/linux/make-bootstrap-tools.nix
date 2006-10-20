@@ -30,6 +30,8 @@ let
       stdenv = pkgs.makeStaticBinaries pkgs.stdenv;
     };
 
+    glibc = pkgs.glibc;
+
     # The result should not contain any references (store paths) so
     # that we can safely copy them out of the store and to other
     # locations in the store.
