@@ -7,7 +7,7 @@ let
     # stdenv-linux's dependencies, rather than building new ones with
     # dietlibc.
     bootStdenv = removeAttrs (pkgs.useDietLibC pkgs.stdenv)
-      [ "binutils" "gcc" "coreutils" "findutils" "gnused" "gnugrep"
+      [ "binutils" "gcc" "coreutils" "findutils" "diffutils" "gnused" "gnugrep"
         "gawk" "gnutar" "gzip" "bzip2" "gnumake" "bash" "patch" "patchelf"
       ];
   };
@@ -17,7 +17,7 @@ let
     builder = ./make-bootstrap-tools.sh;
     
     inherit (pkgsDiet)
-      coreutils findutils gnugrep gawk
+      coreutils findutils diffutils gnugrep gawk
       gnutar gzip bzip2 gnumake bash patch;
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
     binutils = pkgsDiet.binutils;

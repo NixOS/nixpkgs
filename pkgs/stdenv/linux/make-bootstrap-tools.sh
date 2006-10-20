@@ -40,6 +40,7 @@ rm tools/bin/printf # idem
 
 cp $findutils/bin/find tools/bin
 cp $findutils/bin/xargs tools/bin
+cp $diffutils/bin/* tools/bin
 cp $gnused/bin/* tools/bin
 cp $gnugrep/bin/* tools/bin
 cp $gawk/bin/gawk tools/bin
@@ -51,6 +52,7 @@ cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
 
+nukeRefs tools/bin/diff
 nukeRefs tools/bin/sed
 nukeRefs tools/bin/gawk
 nukeRefs tools/bin/tar
@@ -62,7 +64,7 @@ nukeRefs tools/bin/make
 # Create the binutils tarball.
 mkdir binutils
 mkdir binutils/bin
-for i in as ld ar ranlib nm strip; do
+for i in as ld ar ranlib nm strip readelf; do
     cp $binutils/bin/$i binutils/bin
     nukeRefs binutils/bin/$i
 done
