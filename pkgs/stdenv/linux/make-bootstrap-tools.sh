@@ -37,6 +37,8 @@ cp $coreutils/bin/* tools/bin
 rm tools/bin/groups # has references
 rm tools/bin/printf # idem
 
+cp $findutils/bin/find tools/bin
+cp $findutils/bin/xargs tools/bin
 cp $gnused/bin/* tools/bin
 cp $gnugrep/bin/* tools/bin
 cp $gnutar/bin/* tools/bin

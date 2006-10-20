@@ -271,10 +271,6 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
-  findutilsStatic = import ../tools/misc/findutils-static {
-    inherit stdenv fetchurl coreutils;
-  };
-
   findutilsWrapper = import ../tools/misc/findutils-wrapper {
     inherit stdenv findutils;
   };

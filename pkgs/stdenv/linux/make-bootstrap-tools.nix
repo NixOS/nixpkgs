@@ -7,14 +7,14 @@ let
     # stdenv-linux's dependencies, rather than building new ones with
     # dietlibc.
     bootStdenv = removeAttrs (pkgs.useDietLibC pkgs.stdenv)
-      ["binutils" "gcc" "coreutils" "gnused" "gnugrep" "gnutar" "gzip" "bzip2" "bash" "patch" "patchelf"];
+      ["binutils" "gcc" "coreutils" "findutils" "gnused" "gnugrep" "gnutar" "gzip" "bzip2" "bash" "patch" "patchelf"];
   };
 
   generator = pkgs.stdenv.mkDerivation {
     name = "bootstrap-tools-generator";
     builder = ./make-bootstrap-tools.sh;
     
-    inherit (pkgsDiet) coreutils gnused gnugrep gnutar gzip bzip2 bash patch;
+    inherit (pkgsDiet) coreutils findutils gnused gnugrep gnutar gzip bzip2 bash patch;
     binutils = pkgsDiet.binutils;
     
     gcc = import ../../development/compilers/gcc-static-4.1 {
