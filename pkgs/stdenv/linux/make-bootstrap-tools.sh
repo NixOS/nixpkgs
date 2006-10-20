@@ -60,8 +60,25 @@ for i in as ld ar ranlib nm strip; do
 done
 
 
+# Create the gcc tarball
+mkdir gcc
+mkdir gcc/bin
+cp $gcc/bin/gcc gcc/bin
+cp $gcc/bin/cpp gcc/bin
+nukeRefs gcc/bin/gcc
+nukeRefs gcc/bin/cpp
+cp -prd $gcc/lib gcc
+cp -prd $gcc/libexec gcc
+chmod -R +w gcc
+nukeRefs gcc/libexec/gcc/*/*/cc1
+nukeRefs gcc/libexec/gcc/*/*/collect2
+rm gcc/lib/libmud* gcc/lib/libiberty* gcc/lib/libssp*
+rm gcc/lib/*.so*
+rm -rf gcc/lib/gcc/*/*/install-tools
+
+
 # Strip executables even further.
-for i in $out/in-nixpkgs/* */bin/*; do
+for i in $out/in-nixpkgs/* */bin/* gcc/libexec/gcc/*/*/*; do
     if test -x $i; then
         chmod +w $i
         strip -s $i || true
@@ -72,6 +89,7 @@ done
 # Pack, unpack everything.
 tar cfj $out/on-server/static-tools.tar.bz2 tools
 tar cfj $out/on-server/binutils.tar.bz2 binutils
+tar cfj $out/on-server/gcc.tar.bz2 gcc
 
 for i in $out/on-server/*.tar.bz2; do
     (cd $out/check-only && tar xfj $i)
