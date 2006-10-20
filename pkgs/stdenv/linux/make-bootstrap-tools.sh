@@ -42,6 +42,8 @@ cp $findutils/bin/find tools/bin
 cp $findutils/bin/xargs tools/bin
 cp $gnused/bin/* tools/bin
 cp $gnugrep/bin/* tools/bin
+cp $gawk/bin/gawk tools/bin
+ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin
 cp $gunzip/bin/gunzip tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
@@ -50,6 +52,7 @@ cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
 
 nukeRefs tools/bin/sed
+nukeRefs tools/bin/gawk
 nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
