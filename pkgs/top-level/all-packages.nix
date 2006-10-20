@@ -307,6 +307,10 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  gnused412 = import ../tools/text/gnused/4.1.2.nix {
+    inherit fetchurl stdenv;
+  };
+
   gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
     (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;

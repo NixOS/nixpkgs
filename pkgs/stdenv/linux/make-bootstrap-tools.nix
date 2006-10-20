@@ -14,7 +14,8 @@ let
     name = "bootstrap-tools-generator";
     builder = ./make-bootstrap-tools.sh;
     
-    inherit (pkgsDiet) coreutils findutils gnused gnugrep gnutar gzip bzip2 bash patch;
+    inherit (pkgsDiet) coreutils findutils gnugrep gnutar gzip bzip2 bash patch;
+    gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
     binutils = pkgsDiet.binutils;
     
     gcc = import ../../development/compilers/gcc-static-4.1 {
