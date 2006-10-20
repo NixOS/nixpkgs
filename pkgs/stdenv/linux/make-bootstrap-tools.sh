@@ -17,6 +17,8 @@ nukeRefs() {
 }
 
 
+# Create the tools that need to be in-tree, i.e., the ones that are
+# necessary for the absolute first stage of the bootstrap.
 cp $bash/bin/bash $out/in-nixpkgs
 cp $bzip2/bin/bunzip2 $out/in-nixpkgs
 cp $gnutar/bin/tar $out/in-nixpkgs
@@ -27,6 +29,7 @@ nukeRefs $out/in-nixpkgs/bash
 nukeRefs $out/in-nixpkgs/tar
 
 
+# Create the tools tarball.
 mkdir tools
 mkdir tools/bin
 
@@ -37,6 +40,7 @@ rm tools/bin/printf # idem
 cp $gnused/bin/* tools/bin
 cp $gnugrep/bin/* tools/bin
 cp $gnutar/bin/* tools/bin
+cp $gunzip/bin/gunzip tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
 cp $patch/bin/* tools/bin
 
@@ -47,7 +51,17 @@ nukeRefs tools/bin/grep
 #cp $patchelf/bin/* tools/bin
 
 
-for i in $out/in-nixpkgs/* tools/bin/*; do
+# Create the binutils tarball.
+mkdir binutils
+mkdir binutils/bin
+for i in as ld ar ranlib nm strip; do
+    cp $binutils/bin/$i binutils/bin
+    nukeRefs binutils/bin/$i
+done
+
+
+# Strip executables even further.
+for i in $out/in-nixpkgs/* */bin/*; do
     if test -x $i; then
         chmod +w $i
         strip -s $i || true
@@ -55,9 +69,10 @@ for i in $out/in-nixpkgs/* tools/bin/*; do
 done
 
 
-tar cvfj $out/on-server/static-tools.tar.bz2 tools
-
+# Pack, unpack everything.
+tar cfj $out/on-server/static-tools.tar.bz2 tools
+tar cfj $out/on-server/binutils.tar.bz2 binutils
 
 for i in $out/on-server/*.tar.bz2; do
-    (cd $out/check-only && tar xvfj $i)
+    (cd $out/check-only && tar xfj $i)
 done

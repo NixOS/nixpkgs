@@ -957,9 +957,8 @@ rec {
     cross = "sparc-linux";
   };
 
-  binutilsDiet = import ../development/tools/misc/binutils/binutils-2.17.nix {
-    inherit fetchurl noSysDirs;
-    stdenv = useDietLibC stdenv;
+  binutils217 = import ../development/tools/misc/binutils/binutils-2.17.nix {
+    inherit fetchurl stdenv noSysDirs;
   };
 
   bison = bison1875;
