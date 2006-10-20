@@ -20,13 +20,14 @@ nukeRefs() {
 # Create the tools that need to be in-tree, i.e., the ones that are
 # necessary for the absolute first stage of the bootstrap.
 cp $bash/bin/bash $out/in-nixpkgs
-cp $bzip2/bin/bunzip2 $out/in-nixpkgs
-cp $gnutar/bin/tar $out/in-nixpkgs
-cp $curl/bin/curl $out/check-only
-bzip2 < $curl/bin/curl > $out/in-nixpkgs/curl.bz2
-
 nukeRefs $out/in-nixpkgs/bash
+cp $bzip2/bin/bunzip2 $out/in-nixpkgs
+cp $coreutils/bin/cp $out/in-nixpkgs
+bzip2 < $curl/bin/curl > $out/in-nixpkgs/curl.bz2
+cp $tar/bin/tar $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/tar
+bzip2 $out/in-nixpkgs/tar
+chmod +x $out/in-nixpkgs/*.bz2
 
 
 # Create the tools tarball.
@@ -44,6 +45,7 @@ cp $gnugrep/bin/* tools/bin
 cp $gnutar/bin/* tools/bin
 cp $gunzip/bin/gunzip tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
+cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
 
@@ -51,6 +53,7 @@ nukeRefs tools/bin/sed
 nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
+nukeRefs tools/bin/make
 
 
 # Create the binutils tarball.
@@ -116,4 +119,8 @@ tar cfj $out/on-server/glibc.tar.bz2 glibc
 
 for i in $out/on-server/*.tar.bz2; do
     (cd $out/check-only && tar xfj $i)
+done
+
+for i in $out/in-nixpkgs/*.bz2; do
+    (cd $out/check-only && bunzip2 < $i > $(basename $i .bz2))
 done
