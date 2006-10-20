@@ -1648,7 +1648,6 @@ rec {
 
   zlib = import ../development/libraries/zlib {
     inherit fetchurl stdenv;
-    static = !stdenv ? isDietLibC;
   };
 
   zlibStatic = import ../development/libraries/zlib {
