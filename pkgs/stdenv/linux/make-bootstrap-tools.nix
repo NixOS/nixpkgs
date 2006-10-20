@@ -25,6 +25,11 @@ let
   
     curl = pkgsDiet.realCurl;
 
+    patchelf = import ../../development/tools/misc/patchelf/new.nix {
+      inherit (pkgs) fetchurl;
+      stdenv = pkgs.makeStaticBinaries pkgs.stdenv;
+    };
+
     # The result should not contain any references (store paths) so
     # that we can safely copy them out of the store and to other
     # locations in the store.

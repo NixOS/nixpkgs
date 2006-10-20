@@ -43,10 +43,12 @@ cp $gnutar/bin/* tools/bin
 cp $gunzip/bin/gunzip tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
 cp $patch/bin/* tools/bin
+cp $patchelf/bin/* tools/bin
 
 nukeRefs tools/bin/sed
 nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
+nukeRefs tools/bin/patchelf
 
 #cp $patchelf/bin/* tools/bin
 
