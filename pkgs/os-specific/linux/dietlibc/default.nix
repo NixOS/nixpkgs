@@ -11,8 +11,16 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   inherit (stdenv) glibc;
 
-  # dietlibc's sigcontext.h provides a macro called PC(), which is
-  # rather intrusive (e.g., binutils fails to compile because of it).
-  # Rename it.
-  patches = [./pc.patch];
+  patches = [
+
+    # dietlibc's sigcontext.h provides a macro called PC(), which is
+    # rather intrusive (e.g., binutils fails to compile because of
+    # it).  Rename it.
+    ./pc.patch
+
+    # wchar.h declares lots of functions that don't actually exist.
+    # Remove them.
+    ./no-wchar.h
+
+  ];
 }

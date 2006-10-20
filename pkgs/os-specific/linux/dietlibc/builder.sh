@@ -15,10 +15,6 @@ postInstall() {
 
     # Copy <sys/user.h> from Glibc; binutils wants it.
     cp $glibc/include/sys/user.h $out/include/sys/
-
-    # This header is bogus: it contains declarations that aren't
-    # defined anywhere.
-    rm $out/include/wchar.h
 }
 
 genericBuild
