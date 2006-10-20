@@ -104,6 +104,18 @@ rec {
       isDietLibC = true;
     };
 
+  # Return a modified stdenv that tries to build statically linked
+  # binaries.
+  makeStaticBinaries = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = "-static";
+
+        configureFlags =
+          (if args ? configureFlags then args.configureFlags else "")
+          + " --disable-shared"; # brrr...
+      });
+    };
+
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
