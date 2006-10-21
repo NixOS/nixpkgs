@@ -47,10 +47,12 @@ cp $gawk/bin/gawk tools/bin
 ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin
 cp $gunzip/bin/gunzip tools/bin
+cp $gunzip/bin/gzip tools/bin
 cp $bzip2/bin/bunzip2 tools/bin
 cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
+cp $binutils/bin/readelf tools/bin # !!!
 
 nukeRefs tools/bin/diff
 nukeRefs tools/bin/sed
@@ -59,6 +61,7 @@ nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
 nukeRefs tools/bin/make
+nukeRefs tools/bin/readelf # !!!
 
 
 # Create the binutils tarball.
