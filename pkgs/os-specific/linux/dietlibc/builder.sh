@@ -15,6 +15,10 @@ postInstall() {
 
     # Copy <sys/user.h> from Glibc; binutils wants it.
     cp $glibc/include/sys/user.h $out/include/sys/
+
+    # Remove <dlfcn.h>, it makes some packages think we can load
+    # dynamic libraries.
+    rm $out/include/dlfcn.h
 }
 
 genericBuild
