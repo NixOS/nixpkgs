@@ -56,7 +56,9 @@ let {
 
         # Utility value: is this a Darwin system?
         isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin";
-        isLinux = result.system == "i686-linux" || result.system == "powerpc-linux";
+        isLinux = result.system == "i686-linux"
+               || result.system == "x86_64-linux"
+               || result.system == "powerpc-linux";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an
