@@ -14,8 +14,7 @@ if test "$noSysDirs" = "1"; then
 
     # Figure out what extra flags to pass to the gcc compilers being
     # generated to make sure that they use our glibc.
-    if test -e $NIX_GCC/nix-support/orig-glibc; then
-        glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
+    if test -n $glibc; then
 
         # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
         # source in $NIX_GCC/nix-support/add-flags, since that would
@@ -37,6 +36,10 @@ if test "$noSysDirs" = "1"; then
         echo "NIX_GLIBC_FLAGS_SET=1" > $hook
         export NIX_LD_WRAPPER_START_HOOK=$hook
 
+        # Use *real* header files, otherwise a limits.h is generated
+        # that does not include Glibc's limits.h (notably missing
+        # SSIZE_MAX, which breaks the build).
+        export NIX_FIXINC_DUMMY=$glibc/include
     fi
 
     export NIX_EXTRA_CFLAGS=$extraCFlags
@@ -65,7 +68,7 @@ preConfigure() {
 
     export LDFLFAGS="-static"
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=c"
+    configureFlags="--enable-languages=c --disable-libstdcxx-pch"
 }
 
 
