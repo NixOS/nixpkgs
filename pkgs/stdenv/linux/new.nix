@@ -8,7 +8,10 @@
 
 rec {
 
-  bootstrapTools = import ./bootstrap/i686;
+  bootstrapTools =
+    if system == "i686-linux" then import ./bootstrap/i686
+    else if system == "x86_64-linux" then import ./bootstrap/x86_64
+    else abort "unsupported platform for the pure Linux stdenv";
 
 
   # The bootstrap process proceeds in several steps.
