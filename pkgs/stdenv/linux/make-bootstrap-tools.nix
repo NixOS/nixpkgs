@@ -2,16 +2,24 @@ let
 
   pkgs = import ../../top-level/all-packages.nix {};
 
+  
+  # Have to do removeAttrs to prevent all-packages from copying
+  # stdenv-linux's dependencies, rather than building new ones with
+  # dietlibc.
+  pkgsToRemove = 
+    [ "binutils" "gcc" "coreutils" "findutils" "diffutils" "gnused" "gnugrep"
+      "gawk" "gnutar" "gzip" "bzip2" "gnumake" "bash" "patch" "patchelf"
+    ];
+
   pkgsDiet = import ../../top-level/all-packages.nix {
-    # Have to do removeAttrs to prevent all-packages from copying
-    # stdenv-linux's dependencies, rather than building new ones with
-    # dietlibc.
-    bootStdenv = removeAttrs (pkgs.useDietLibC pkgs.stdenv)
-      [ "binutils" "gcc" "coreutils" "findutils" "diffutils" "gnused" "gnugrep"
-        "gawk" "gnutar" "gzip" "bzip2" "gnumake" "bash" "patch" "patchelf"
-      ];
+    bootStdenv = removeAttrs (pkgs.useDietLibC pkgs.stdenv) pkgsToRemove;
   };
 
+  pkgsStatic = import ../../top-level/all-packages.nix {
+    bootStdenv = removeAttrs (pkgs.makeStaticBinaries pkgs.stdenv) pkgsToRemove;
+  };
+
+  
   generator = pkgs.stdenv.mkDerivation {
     name = "bootstrap-tools-generator";
     builder = ./make-bootstrap-tools.sh;
@@ -19,16 +27,19 @@ let
     inherit (pkgsDiet)
       coreutils findutils diffutils gnugrep
       gnutar gzip bzip2 gnumake bash patch;
+      
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
-    gawk =
+
+    # patchelf is C++, won't work with dietlibc.
+    inherit (pkgsStatic) patchelf;
+
+    gawk = 
       # Dietlibc only provides sufficient math functions (fmod, sin,
       # cos, etc.) on i686.  On other platforms, use Glibc.
       if pkgs.stdenv.system == "i686-linux"
       then pkgsDiet.gawk
-      else import ../../tools/text/gawk {
-        inherit (pkgs) fetchurl;
-        stdenv = pkgs.makeStaticBinaries pkgs.stdenv;
-      };
+      else pkgsStatic.gawk;
+      
     binutils = pkgsDiet.binutils217;
    
     gcc = import ../../development/compilers/gcc-static-4.1 {
@@ -38,11 +49,6 @@ let
     };
   
     curl = pkgsDiet.realCurl;
-
-    patchelf = import ../../development/tools/misc/patchelf/new.nix {
-      inherit (pkgs) fetchurl;
-      stdenv = pkgs.makeStaticBinaries pkgs.stdenv;
-    };
 
     glibc = pkgs.glibc;
 
