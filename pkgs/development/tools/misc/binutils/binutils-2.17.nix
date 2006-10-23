@@ -8,4 +8,5 @@ stdenv.mkDerivation {
     md5 = "e26e2e06b6e4bf3acf1dc8688a94c0d1";
   };
   inherit noSysDirs;
+  configureFlags = "--disable-werror"; # needed for dietlibc build
 }
