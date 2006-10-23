@@ -20,6 +20,7 @@ let {
     blackdown
     bmp
     bmp_plugin_musepack
+    bmp_plugin_wma
     bsdiff
     bzip2
     chatzilla

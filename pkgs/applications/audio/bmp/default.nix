@@ -10,11 +10,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig alsaLib esound libogg libvorbis id3lib
-    glib gtk libglade
+    pkgconfig alsaLib esound libogg libvorbis id3lib libglade
   ];
 
   meta = {
     description = "Beep Media Player, an XMMS fork";
   };
+
+  propagatedBuildInputs = [glib gtk];
 }

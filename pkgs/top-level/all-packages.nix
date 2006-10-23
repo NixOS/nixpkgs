@@ -2284,7 +2284,10 @@ rec {
 
   bmp_plugin_musepack = import ../applications/audio/bmp-plugins/musepack {
     inherit fetchurl stdenv pkgconfig bmp libmpcdec taglib;
-    inherit (gtkLibs) glib gtk;
+  };
+
+  bmp_plugin_wma = import ../applications/audio/bmp-plugins/wma {
+    inherit fetchurl stdenv pkgconfig bmp;
   };
 
   cdparanoiaIII = import ../applications/audio/cdparanoia {
