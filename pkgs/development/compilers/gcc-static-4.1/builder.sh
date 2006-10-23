@@ -68,7 +68,8 @@ preConfigure() {
 
     export LDFLFAGS="-static"
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=c --disable-libstdcxx-pch"
+    configureFlags="--enable-languages=c --disable-libstdcxx-pch \
+        --disable-shared --disable-libmudflap --disable-libssp"
 }
 
 
