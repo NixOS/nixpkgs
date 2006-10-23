@@ -37,12 +37,6 @@ preConfigure() {
     cd ../build
     
     configureScript=../$sourceRoot/configure
-    # `--with-tls --without-__thread' enables support for TLS but
-    # causes it not to be used.  Required if we don't want to barf on
-    # 2.4 kernels.  Or something.
-    configureFlags="--enable-add-ons \
-      --with-headers=$kernelHeaders/include
-      --with-tls --without-__thread --disable-sanity-checks"
 }
 
 

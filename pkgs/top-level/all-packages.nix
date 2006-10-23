@@ -1253,6 +1253,11 @@ rec {
       installLocales = true;
     });
 
+  glibcNew = import ../development/libraries/glibc-new {
+      inherit fetchurl stdenv;
+      kernelHeaders = kernelHeadersNew;
+  };
+
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
     inherit (gtkLibs26) glib;
@@ -2080,6 +2085,10 @@ rec {
   };
 
   kernelHeaders = import ../os-specific/linux/kernel-headers {
+    inherit fetchurl stdenv;
+  };
+
+  kernelHeadersNew = import ../os-specific/linux/kernel-headers/kernel-headers-2.6.18.1.nix {
     inherit fetchurl stdenv;
   };
 
