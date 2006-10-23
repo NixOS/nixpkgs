@@ -52,7 +52,6 @@ cp $bzip2/bin/bunzip2 tools/bin
 cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
-cp $binutils/bin/readelf tools/bin # !!!
 
 nukeRefs tools/bin/diff
 nukeRefs tools/bin/sed
@@ -61,7 +60,6 @@ nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
 nukeRefs tools/bin/make
-nukeRefs tools/bin/readelf # !!!
 
 
 # Create the binutils tarball.
@@ -86,7 +84,7 @@ chmod -R +w gcc
 nukeRefs gcc/libexec/gcc/*/*/cc1
 nukeRefs gcc/libexec/gcc/*/*/collect2
 rm gcc/lib/libmud* gcc/lib/libiberty* gcc/lib/libssp*
-rm gcc/lib/*.so*
+nukeRefs gcc/lib/libgcc_s.so.1
 rm -rf gcc/lib/gcc/*/*/install-tools
 
 
