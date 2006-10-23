@@ -1,6 +1,6 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, glibc}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.isLinux;
 
 stdenv.mkDerivation {
   name = "dietlibc-0.30";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     md5 = "2465d652fff6f1fad3da3b98e60e83c9";
   };
   builder = ./builder.sh;
-  inherit (stdenv) glibc;
+  inherit glibc;
 
   patches = [
 

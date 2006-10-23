@@ -94,10 +94,9 @@ rec {
           + " --disable-shared"; # brrr...
 
         NIX_GCC = import ../build-support/gcc-wrapper {
-          inherit stdenv binutils;
-          gcc = gcc.gcc;
+          inherit stdenv;
           glibc = dietlibc;
-          nativeTools = false;
+          inherit (gcc) gcc binutils name nativeTools nativePrefix;
           nativeGlibc = false;
         };
       });
@@ -2034,7 +2033,7 @@ rec {
   #};
 
   dietlibc = import ../os-specific/linux/dietlibc {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv glibc;
   };
 
   #dietlibcArm = import ../os-specific/linux/dietlibc-cross {
