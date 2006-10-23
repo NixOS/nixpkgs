@@ -5,10 +5,10 @@ export NIX_DONT_SET_RPATH=1
 source $stdenv/setup
 source $substitute
 
-glibc=`cat $NIX_GCC/nix-support/orig-glibc`
-echo $glibc
+#glibc=`cat $NIX_GCC/nix-support/orig-glibc`
+#echo $glibc
 
-export LD_LIBRARY_PATH=$glibc/lib
+#export LD_LIBRARY_PATH=$glibc/lib
 
 # Explicitly tell glibc to use our pwd, not /bin/pwd.
 export PWD_P=$(type -tP pwd)
