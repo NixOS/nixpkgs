@@ -17,11 +17,20 @@ let
     builder = ./make-bootstrap-tools.sh;
     
     inherit (pkgsDiet)
-      coreutils findutils diffutils gnugrep gawk
+      coreutils findutils diffutils gnugrep
       gnutar gzip bzip2 gnumake bash patch;
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
+    gawk =
+      # Dietlibc only provides sufficient math functions (fmod, sin,
+      # cos, etc.) on i686.  On other platforms, use Glibc.
+      if pkgs.stdenv.system == "i686-linux"
+      then pkgsDiet.gawk
+      else import ../../tools/text/gawk {
+        inherit (pkgs) fetchurl;
+        stdenv = pkgs.makeStaticBinaries pkgs.stdenv;
+      };
     binutils = pkgsDiet.binutils217;
-    
+   
     gcc = import ../../development/compilers/gcc-static-4.1 {
       inherit (pkgs) fetchurl stdenv glibc;
       profiledCompiler = false;
