@@ -4,11 +4,11 @@ if test -n "$NIX_LD_WRAPPER_START_HOOK"; then
     source "$NIX_LD_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_GLIBC_FLAGS_SET"; then
-    source @out@/nix-support/add-flags
+if test -z "$NIX_GCC_WRAPPER_FLAGS_SET"; then
+    source @out@/nix-support/add-flags.sh
 fi
 
-source @out@/nix-support/utils
+source @out@/nix-support/utils.sh
 
 
 # Optionally filter out paths not refering to the store.

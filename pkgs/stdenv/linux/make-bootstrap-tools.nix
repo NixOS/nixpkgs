@@ -48,10 +48,12 @@ let
       
     binutils = pkgsDiet.binutils217;
    
-    gcc = import ../../development/compilers/gcc-static-4.1 {
+    gcc = import ../../development/compilers/gcc-4.1 {
       inherit (pkgs) fetchurl stdenv;
-      profiledCompiler = false;
+      noSysDirs = true;
+      profiledCompiler = true;
       langCC = false;
+      staticCompiler = true;
     };
   
     curl = pkgsDiet.realCurl;

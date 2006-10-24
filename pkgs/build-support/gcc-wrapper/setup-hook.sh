@@ -24,6 +24,6 @@ if test -n "@binutils@"; then
     PATH=$PATH:@binutils@/bin
 fi
 
-if test -n "@glibc@"; then
-    PATH=$PATH:@glibc@/bin
+if test -n "@libc@"; then
+    PATH=$PATH:@libc@/bin
 fi

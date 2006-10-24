@@ -95,9 +95,9 @@ rec {
 
         NIX_GCC = import ../build-support/gcc-wrapper {
           inherit stdenv;
-          glibc = dietlibc;
+          libc = dietlibc;
           inherit (gcc) gcc binutils name nativeTools nativePrefix;
-          nativeGlibc = false;
+          nativeLibc = false;
         };
       });
       isDietLibC = true;
@@ -536,7 +536,7 @@ rec {
 
   dietgcc = import ../build-support/gcc-wrapper {
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     gcc = gcc34;
     #inherit (stdenv.gcc) binutils glibc;
     inherit (gcc34) binutils;
@@ -555,7 +555,7 @@ rec {
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     gcc = import ../development/compilers/gcc-3.3 {
       inherit fetchurl stdenv noSysDirs;
       langF77 = true;
@@ -586,7 +586,7 @@ rec {
 
   gcc40arm = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     cross = "arm-linux";
     gcc = import ../development/compilers/gcc-4.0-cross {
       inherit fetchurl stdenv noSysDirs;
@@ -603,7 +603,7 @@ rec {
 
   gcc40mips = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     cross = "mips-linux";
     gcc = gcc40mipsboot;
     #inherit (stdenv.gcc) glibc;
@@ -623,7 +623,7 @@ rec {
 
   gcc40sparc = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     cross = "sparc-linux";
     gcc = import ../development/compilers/gcc-4.0-cross {
       inherit fetchurl stdenv noSysDirs;
@@ -722,7 +722,7 @@ rec {
   gcj = import ../build-support/gcc-wrapper/default2.nix {
     name = "gcj";
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     gcc = import ../development/compilers/gcc-4.0 {
       inherit fetchurl stdenv noSysDirs;
       langJava = true;
@@ -786,7 +786,7 @@ rec {
 
   wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
     nativeTools = false;
-    nativeGlibc = false;
+    nativeLibc = false;
     gcc = baseGCC;
     inherit stdenv binutils glibc;
   };

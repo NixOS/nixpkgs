@@ -10,7 +10,7 @@ genericStdenv {
   gcc = gccWrapper {
     name = "gcc-native";
     nativeTools = true;
-    nativeGlibc = true;
+    nativeLibc = true;
     nativePrefix = "/usr";
     inherit stdenv;
   };

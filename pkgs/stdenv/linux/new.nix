@@ -65,8 +65,18 @@ rec {
     {gcc ? staticGCC, glibc, binutils, shell ? ""}:
     (import ../../build-support/gcc-wrapper) {
       nativeTools = false;
-      nativeGlibc = false;
+      nativeLibc = false;
       inherit gcc binutils glibc shell;
+      stdenv = stdenvInitial;
+    };
+
+  wrapGCC2 =
+    {gcc ? staticGCC, glibc, binutils, shell ? ""}:
+    (import ../../build-support/gcc-wrapper-new) {
+      nativeTools = false;
+      nativeLibc = false;
+      inherit gcc binutils shell;
+      libc = glibc;
       stdenv = stdenvInitial;
     };
 
@@ -140,7 +150,7 @@ rec {
   #    statically linked tools.
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
     staticGlibc = false;
-    gcc = wrapGCC {binutils = staticBinutils; glibc = stdenvLinuxGlibc;};
+    gcc = wrapGCC2 {binutils = staticBinutils; glibc = stdenvLinuxGlibc;};
     extraAttrs = {inherit curl; glibc = stdenvLinuxGlibc;};
   }) ["gcc" "binutils"];
 
@@ -157,7 +167,7 @@ rec {
   #    5.  The other tools (e.g. coreutils) are still static.
   stdenvLinuxBoot3 = stdenvBootFun {
     staticGlibc = false;
-    gcc = wrapGCC {
+    gcc = wrapGCC2 {
 #      inherit (stdenvLinuxBoot2Pkgs) binutils;
       binutils = stdenvLinuxBoot2Pkgs.binutils217;
       glibc = stdenvLinuxGlibc;

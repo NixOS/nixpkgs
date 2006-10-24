@@ -2,20 +2,27 @@ source $stdenv/setup
 source $substitute
 
 
-# Force gcc to use ld-wrapper.sh when calling ld.
-cflagsCompile="-B$out/bin/"
+mkdir $out
+mkdir $out/bin
+mkdir $out/nix-support
 
-if test -z "$nativeGlibc"; then
-    # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
+
+if test -z "$nativeLibc"; then
+    dynamicLinker="$libc/lib/$dynamicLinker"
+    echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+    # The "-B$libc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
-    # /usr/lib.  The real solution is of course to prevent those paths
-    # from being used by gcc in the first place.
+    # /usr/lib.  (This is only an issue when using an `impure'
+    # compiler/linker, i.e., one that searches /usr/lib and so on.)
+    echo "-B$libc/lib/ -isystem $libc/include" > $out/nix-support/libc-cflags
+    
+    echo "-L$libc/lib" > $out/nix-support/libc-ldflags
+
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$glibc/lib/ -isystem $glibc/include"
-    ldflags="$ldflags -L$glibc/lib"
-    ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
+    echo "-dynamic-linker $dynamicLinker" > $out/nix-support/libc-ldflags-before
 fi
 
 if test -n "$nativeTools"; then
@@ -23,17 +30,13 @@ if test -n "$nativeTools"; then
     ldPath="$nativePrefix/bin"
 else
     if test -e "$gcc/lib64"; then
-        ldflags="$ldflags -L$gcc/lib64"
+        gccLDFlags="$gccLDFlags -L$gcc/lib64"
     fi
-    ldflags="$ldflags -L$gcc/lib"
+    gccLDFlags="$gccLDFlags -L$gcc/lib"
+    echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
     gccPath="$gcc/bin"
     ldPath="$binutils/bin"
 fi
-
-
-mkdir $out
-mkdir $out/bin
-mkdir $out/nix-support
 
 
 doSubstitute() {
@@ -45,11 +48,7 @@ doSubstitute() {
         --subst-var "gcc" \
         --subst-var "gccProg" \
         --subst-var "binutils" \
-        --subst-var "glibc" \
-        --subst-var "cflagsCompile" \
-        --subst-var "cflagsLink" \
-        --subst-var "ldflags" \
-        --subst-var "ldflagsBefore" \
+        --subst-var "libc" \
         --subst-var-by "ld" "$ldPath/ld"
 }
 
@@ -88,10 +87,10 @@ chmod +x "$out/bin/ld"
 # Emit a setup hook.  Also store the path to the original GCC and
 # Glibc.
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
-test -n "$glibc" && echo $glibc > $out/nix-support/orig-glibc
+test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 
-doSubstitute "$addFlags" "$out/nix-support/add-flags"
+doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
 
-cp -p $utils $out/nix-support/utils
+cp -p $utils $out/nix-support/utils.sh

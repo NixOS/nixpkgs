@@ -9,7 +9,7 @@ import ../generic {
 
   gcc = import ../../build-support/gcc-wrapper {
     nativeTools = false;
-    nativeGlibc = true;
+    nativeLibc = true;
     inherit stdenv;
     binutils = 
       if stdenv.isDarwin then
