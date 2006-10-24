@@ -3,6 +3,10 @@ addCVars () {
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$1/include"
     fi
 
+    if test -d $1/lib64; then
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib64"
+    fi
+
     if test -d $1/lib; then
         export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib"
     fi

@@ -22,6 +22,9 @@ if test -n "$nativeTools"; then
     gccPath="$nativePrefix/bin"
     ldPath="$nativePrefix/bin"
 else
+    if test -e "$gcc/lib64"; then
+        ldflags="$ldflags -L$gcc/lib64"
+    fi
     ldflags="$ldflags -L$gcc/lib"
     gccPath="$gcc/bin"
     ldPath="$binutils/bin"
