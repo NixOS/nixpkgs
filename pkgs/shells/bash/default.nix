@@ -1,20 +1,16 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation ({
-  name = "bash-3.1";
+stdenv.mkDerivation {
+  name = "bash-3.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/bash-3.1.tar.gz;
-    md5 = "ef5304c4b22aaa5088972c792ed45d72";
+    url = http://ftp.gnu.org/pub/gnu/bash/bash-3.2.tar.gz;
+    md5 = "00bfa16d58e034e3c2aa27f390390d30";
   };
+
+  patches = [./winsize.patch];
 
   meta = {
     description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
   };
 }
-
-// (if stdenv ? isDietLibC then {
-  patches = [./winsize.patch];
-} else {})
-
-)

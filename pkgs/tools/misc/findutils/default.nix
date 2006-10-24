@@ -1,14 +1,14 @@
 {stdenv, fetchurl, coreutils}:
 
 stdenv.mkDerivation {
-  name = "findutils-4.2.27";
+  name = "findutils-4.2.28";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/findutils-4.2.27.tar.gz;
-    md5 = "f1e0ddf09f28f8102ff3b90f3b5bc920";
+    url = http://ftp.gnu.org/pub/gnu/findutils/findutils-4.2.28.tar.gz;
+    md5 = "f5fb3349354ee3d94fceb81dab5c71fd";
   };
   buildInputs = [coreutils];
   patches = [./findutils-path.patch]
-    # Note: the dietlibc is just to get findutils to compile.  The
-    # locate command probably won't work though.
+    # Note: the dietlibc patch is just to get findutils to compile.
+    # The locate command probably won't work though.
     ++ (if stdenv ? isDietLibC then [./dietlibc-hack.patch] else []);
 }
