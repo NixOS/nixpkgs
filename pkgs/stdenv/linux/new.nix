@@ -62,21 +62,11 @@ rec {
 
   # A helper function to call gcc-wrapper.
   wrapGCC =
-    {gcc ? staticGCC, glibc, binutils, shell ? ""}:
+    {gcc ? staticGCC, libc, binutils, shell ? ""}:
     (import ../../build-support/gcc-wrapper) {
       nativeTools = false;
       nativeLibc = false;
-      inherit gcc binutils glibc shell;
-      stdenv = stdenvInitial;
-    };
-
-  wrapGCC2 =
-    {gcc ? staticGCC, glibc, binutils, shell ? ""}:
-    (import ../../build-support/gcc-wrapper-new) {
-      nativeTools = false;
-      nativeLibc = false;
-      inherit gcc binutils shell;
-      libc = glibc;
+      inherit gcc binutils libc shell;
       stdenv = stdenvInitial;
     };
 
@@ -126,7 +116,7 @@ rec {
   # the gcc configure script happy.
   stdenvLinuxBoot1 = stdenvBootFun {
     # Use the statically linked, downloaded glibc/gcc/binutils.
-    gcc = wrapGCC {glibc = staticGlibc; binutils = staticBinutils;};
+    gcc = wrapGCC {libc = staticGlibc; binutils = staticBinutils;};
     staticGlibc = true;
     extraAttrs = {inherit curl;};
   };
@@ -150,7 +140,7 @@ rec {
   #    statically linked tools.
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
     staticGlibc = false;
-    gcc = wrapGCC2 {binutils = staticBinutils; glibc = stdenvLinuxGlibc;};
+    gcc = wrapGCC {binutils = staticBinutils; libc = stdenvLinuxGlibc;};
     extraAttrs = {inherit curl; glibc = stdenvLinuxGlibc;};
   }) ["gcc" "binutils"];
 
@@ -167,10 +157,9 @@ rec {
   #    5.  The other tools (e.g. coreutils) are still static.
   stdenvLinuxBoot3 = stdenvBootFun {
     staticGlibc = false;
-    gcc = wrapGCC2 {
-#      inherit (stdenvLinuxBoot2Pkgs) binutils;
-      binutils = stdenvLinuxBoot2Pkgs.binutils217;
-      glibc = stdenvLinuxGlibc;
+    gcc = wrapGCC {
+      inherit (stdenvLinuxBoot2Pkgs) binutils;
+      libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
     };
     extraAttrs = {inherit curl;};
@@ -198,9 +187,8 @@ rec {
     stdenv = stdenvInitial;
 
     gcc = wrapGCC {
-#      inherit (stdenvLinuxBoot2Pkgs) binutils;
-      binutils = stdenvLinuxBoot2Pkgs.binutils217;
-      glibc = stdenvLinuxGlibc;
+      inherit (stdenvLinuxBoot2Pkgs) binutils;
+      libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     };

@@ -788,7 +788,8 @@ rec {
     nativeTools = false;
     nativeLibc = false;
     gcc = baseGCC;
-    inherit stdenv binutils glibc;
+    libc = glibc;
+    inherit stdenv binutils;
   };
 
 
@@ -966,10 +967,6 @@ rec {
   binutilsSparc = import ../development/tools/misc/binutils-cross {
     inherit fetchurl stdenv noSysDirs;
     cross = "sparc-linux";
-  };
-
-  binutils217 = import ../development/tools/misc/binutils/binutils-2.17.nix {
-    inherit fetchurl stdenv noSysDirs;
   };
 
   bison = bison1875;
