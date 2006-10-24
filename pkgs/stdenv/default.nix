@@ -55,7 +55,7 @@ rec {
 
 
   # Linux standard environment.
-  stdenvLinux = (import ./linux {inherit allPackages;}).stdenvLinux;
+  stdenvLinux = (import ./linux {inherit system allPackages;}).stdenvLinux;
 
     
   # Darwin (Mac OS X) standard environment.  Very simple for now
