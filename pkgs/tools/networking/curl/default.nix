@@ -3,7 +3,7 @@
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name = "curl-7.15.5";
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/curl-7.15.5.tar.bz2;
@@ -16,11 +16,6 @@ stdenv.mkDerivation ({
   configureFlags = "
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
   ";
+  CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   inherit sslSupport openssl;
 }
-
-// (if stdenv ? isDietLibC then {
-  CFLAGS = "-DHAVE_INET_NTOA_R_2_ARGS=1";
-} else {})
-
-)
