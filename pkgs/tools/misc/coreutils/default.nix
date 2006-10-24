@@ -1,11 +1,9 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation ({
-  name = "coreutils-5.97";
+stdenv.mkDerivation {
+  name = "coreutils-6.4";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/coreutils-5.97.tar.gz;
-    md5 = "bdec4b75c76ac9bf51b6dd1747d3b06e";
+    url = http://ftp.gnu.org/pub/gnu/coreutils/coreutils-6.4.tar.bz2;
+    md5 = "a3806c709c7f063b80612be846a9d88c";
   };
-} // (if stdenv ? isDietLibC then {
-  patches = [./uclibc.patch];
-} else {}))
+}
