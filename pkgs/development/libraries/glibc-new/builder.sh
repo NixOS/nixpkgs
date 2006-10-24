@@ -35,16 +35,6 @@ preConfigure() {
 }
 
 
-postConfigure=postConfigure
-postConfigure() {
-    # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
-    # This has to be done *after* `configure' because it builds some
-    # test binaries.
-    export NIX_CFLAGS_LINK=
-    export NIX_LDFLAGS_BEFORE=
-}
-
-
 postInstall=postInstall
 postInstall() {
     if test -n "$installLocales"; then

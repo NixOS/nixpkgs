@@ -100,7 +100,6 @@ rec {
     
     import ../generic {
       name = "stdenv-linux-boot";
-      param1 = if staticGlibc then "static" else "dynamic";
       preHook = ./scripts/prehook.sh;
       stdenv = stdenvInitial;
       shell = bootstrapTools.bash;
