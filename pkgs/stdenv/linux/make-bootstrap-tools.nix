@@ -26,12 +26,18 @@ let
     
     inherit (pkgsDiet)
       coreutils findutils diffutils gnugrep
-      gnutar gzip bzip2 gnumake bash patch;
+      gzip bzip2 gnumake bash patch;
       
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
 
     # patchelf is C++, won't work with dietlibc.
     inherit (pkgsStatic) patchelf;
+
+    gnutar =
+      # Tar seems to be broken on dietlibc on x86_64.
+      if pkgs.stdenv.system == "i686-linux"
+      then pkgsDiet.gnutar
+      else pkgsStatic.gnutar;
 
     gawk = 
       # Dietlibc only provides sufficient math functions (fmod, sin,

@@ -24,7 +24,7 @@ nukeRefs $out/in-nixpkgs/bash
 cp $bzip2/bin/bunzip2 $out/in-nixpkgs
 cp $coreutils/bin/cp $out/in-nixpkgs
 bzip2 < $curl/bin/curl > $out/in-nixpkgs/curl.bz2
-cp $tar/bin/tar $out/in-nixpkgs
+cp $gnutar/bin/tar $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/tar
 bzip2 $out/in-nixpkgs/tar
 chmod +x $out/in-nixpkgs/*.bz2
