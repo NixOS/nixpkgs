@@ -1,17 +1,20 @@
 source $stdenv/setup
 installFlags="PREFIX=$out"
 
-preBuild=preBuild
-preBuild() {
-    make -f Makefile-libbz2_so
-}
+if test -n "$sharedLibrary"; then
 
-preInstall=preInstall
-preInstall() {
-    ensureDir $out/lib
-    cp -pd libbz2.so* $out/lib
-    ln -s libbz2.so.*.*.* $out/lib/libbz2.so
-}
+    preBuild=preBuild
+    preBuild() {
+        make -f Makefile-libbz2_so
+    }
+
+    preInstall=preInstall
+    preInstall() {
+        ensureDir $out/lib
+        mv libbz2.so* $out/lib
+    }
+    
+fi
 
 postInstall=postInstall
 postInstall() {
@@ -21,4 +24,3 @@ postInstall() {
 }
 
 genericBuild
-
