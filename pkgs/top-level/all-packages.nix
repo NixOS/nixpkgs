@@ -2369,7 +2369,7 @@ rec {
     inherit (gtkLibs) glib;
   };
 
-  firefox = import ../applications/networking/browsers/firefox-2.0 {
+  firefox = import ../applications/networking/browsers/firefox {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
