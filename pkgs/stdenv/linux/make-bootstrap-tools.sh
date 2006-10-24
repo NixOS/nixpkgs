@@ -85,6 +85,11 @@ nukeRefs gcc/libexec/gcc/*/*/cc1
 nukeRefs gcc/libexec/gcc/*/*/collect2
 rm -f gcc/lib/libmud* gcc/lib/libiberty* gcc/lib/libssp*
 nukeRefs gcc/lib/libgcc_s.so.1
+if test -e $gcc/lib64; then
+    cp -prd $gcc/lib64 gcc
+    chmod -R +w gcc/lib64
+    nukeRefs gcc/lib64/libgcc_s.so.1
+fi
 rm -rf gcc/lib/gcc/*/*/install-tools
 rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
