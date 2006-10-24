@@ -10,5 +10,5 @@ stdenv.mkDerivation {
   };
 
   sharedLibrary =
-    !stdenv.isDarwin && !(stdenv ? isDietLibC) && system != "i686-cygwin";
+    !stdenv.isDarwin && !(stdenv ? isDietLibC) && stdenv.system != "i686-cygwin";
 }
