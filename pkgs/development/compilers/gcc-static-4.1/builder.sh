@@ -14,7 +14,7 @@ if test "$noSysDirs" = "1"; then
 
     # Figure out what extra flags to pass to the gcc compilers being
     # generated to make sure that they use our glibc.
-    if test -n $glibc; then
+    if test -n "$glibc"; then
 
         # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
         # source in $NIX_GCC/nix-support/add-flags, since that would
@@ -22,7 +22,7 @@ if test "$noSysDirs" = "1"; then
         # Need some more modularity there.
         extraCFlags="-B$glibc/lib -isystem $glibc/include"
         extraLDFlags="-B$glibc/lib -L$glibc/lib -Wl,-s \
-          -Wl,-dynamic-linker,$glibc/lib/ld-linux.so.2 -static"
+          -Wl,-dynamic-linker,$glibc/lib/ld-linux.so.2"
 
         # Oh, what a hack.  I should be shot for this.  In stage 1, we
         # should link against the previous GCC, but not afterwards.
@@ -40,6 +40,11 @@ if test "$noSysDirs" = "1"; then
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
         export NIX_FIXINC_DUMMY=$glibc/include
+
+    else
+        extraCFlags="-isystem /usr/include"
+        extraLDFlags="-L/usr/lib64 -L/usr/lib"
+        export NIX_FIXINC_DUMMY=/usr/include
     fi
 
     export NIX_EXTRA_CFLAGS=$extraCFlags
@@ -48,6 +53,9 @@ if test "$noSysDirs" = "1"; then
     export CXXFLAGS=$extraCFlags
     export LDFLAGS=$extraLDFlags
 fi
+
+
+export makeFlags="LDFLAGS=-static"
 
 
 preConfigure=preConfigure
@@ -66,10 +74,9 @@ preConfigure() {
     mkdir ../build
     cd ../build
 
-    export LDFLFAGS="-static"
     configureScript=../$sourceRoot/configure
     configureFlags="--enable-languages=c --disable-libstdcxx-pch \
-        --disable-shared --disable-libmudflap --disable-libssp"
+        --disable-libmudflap --disable-libssp"
 }
 
 

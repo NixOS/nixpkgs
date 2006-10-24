@@ -43,7 +43,7 @@ let
     binutils = pkgsDiet.binutils217;
    
     gcc = import ../../development/compilers/gcc-static-4.1 {
-      inherit (pkgs) fetchurl stdenv glibc;
+      inherit (pkgs) fetchurl stdenv;
       profiledCompiler = false;
       langCC = false;
     };
