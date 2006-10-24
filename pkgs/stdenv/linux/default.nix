@@ -27,7 +27,7 @@ rec {
     name = "curl";
     builder = bootstrapTools.bash;
     inherit (bootstrapTools) bunzip2 cp curl;
-    args = [ ./new-scripts/unpack-curl.sh ];
+    args = [ ./scripts/unpack-curl.sh ];
   };
 
   # This function downloads a file.
@@ -35,7 +35,7 @@ rec {
     name = baseNameOf (toString url);
     builder = bootstrapTools.bash;
     inherit system curl url;
-    args = [ ./new-scripts/download.sh ];
+    args = [ ./scripts/download.sh ];
     outputHashAlgo = "sha1";
     outputHash = sha1;
   };
@@ -45,7 +45,7 @@ rec {
     name = pkgname;
     builder = bootstrapTools.bash;
     inherit (bootstrapTools) bunzip2 tar cp;
-    args = [ ./new-scripts/unpack.sh ];
+    args = [ ./scripts/unpack.sh ];
     tarball = download {inherit url sha1 pkgname;};
     inherit system;
     allowedReferences = [];
@@ -78,7 +78,7 @@ rec {
     body = derivation {
       name = "stdenv-linux-initial";
       builder = bootstrapTools.bash;
-      args = [ ./new-scripts/builder-stdenv-initial.sh ];
+      args = [ ./scripts/builder-stdenv-initial.sh ];
       inherit system staticTools curl;
     } // {
       # !!! too much duplication with stdenv/generic/default.nix
@@ -101,7 +101,7 @@ rec {
     import ../generic {
       name = "stdenv-linux-boot";
       param1 = if staticGlibc then "static" else "dynamic";
-      preHook = ./new-scripts/prehook.sh;
+      preHook = ./scripts/prehook.sh;
       stdenv = stdenvInitial;
       shell = bootstrapTools.bash;
       initialPath = [
@@ -178,7 +178,7 @@ rec {
   #    of all other tools.
   stdenvLinux = (import ../generic) {
     name = "stdenv-linux";
-    preHook = ./new-scripts/prehook.sh;
+    preHook = ./scripts/prehook.sh;
     initialPath = [
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
       stdenvLinuxBoot3Pkgs.patchelf
