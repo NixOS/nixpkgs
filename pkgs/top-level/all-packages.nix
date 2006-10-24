@@ -648,15 +648,6 @@ rec {
     profiledCompiler = true;
   });
 
-  gccStatic = import ../development/compilers/gcc-static-3.4 {
-    inherit fetchurl stdenv noSysDirs;
-  };
-
-  gccStaticBootstrap = import ../development/compilers/gcc-static-3.4 {
-    inherit fetchurl stdenv;
-    noSysDirs = false;
-  };
-
   ghc = import ../development/compilers/ghc {
     inherit fetchurl stdenv perl ncurses readline;
     gcc = stdenv.gcc;
@@ -1248,11 +1239,6 @@ rec {
       inherit fetchurl stdenv kernelHeaders;
       installLocales = true;
     });
-
-  glibcNew = import ../development/libraries/glibc-new {
-      inherit fetchurl stdenv;
-      kernelHeaders = kernelHeadersNew;
-  };
 
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;

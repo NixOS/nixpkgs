@@ -131,7 +131,7 @@ rec {
   
   # 3) Build Glibc with the statically linked tools.  The result is the
   #    full, dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibcNew;
+  stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibc;
 
   
   # 4) Construct a second stdenv identical to the first, except that
