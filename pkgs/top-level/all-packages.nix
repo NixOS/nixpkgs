@@ -502,6 +502,7 @@ rec {
   bash = useFromStdenv (stdenv ? bash) stdenv.bash
     (import ../shells/bash {
       inherit fetchurl stdenv;
+      bison = bison23;
     });
 
   tcsh = import ../shells/tcsh {
