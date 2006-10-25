@@ -81,7 +81,9 @@ chmod -R +w gcc
 nukeRefs gcc/libexec/gcc/*/*/cc1
 nukeRefs gcc/libexec/gcc/*/*/collect2
 rm -f gcc/lib/libmud* gcc/lib/libiberty* gcc/lib/libssp*
-nukeRefs gcc/lib/libgcc_s.so.1
+if test -e gcc/lib/libgcc_s.so.1; then
+    nukeRefs gcc/lib/libgcc_s.so.1
+fi
 if test -e $gcc/lib64; then
     cp -prd $gcc/lib64 gcc
     chmod -R +w gcc/lib64
@@ -96,7 +98,7 @@ rm -rf gcc/lib/gcc/*/*/include/linux
 mkdir glibc
 mkdir glibc/lib
 cp $glibc/lib/*.a glibc/lib
-rm glibc/lib/*_p.a
+rm -f glibc/lib/*_p.a
 nukeRefs glibc/lib/libc.a
 cp $glibc/lib/*.o glibc/lib
 cp -prd $glibc/include glibc
