@@ -14,6 +14,9 @@ installPhase() {
     cp -prvd include/linux include/asm-generic $out/include
     cp -prvd include/asm-$platform $out/include
     ln -s asm-$platform $out/include/asm
+    for i in $extraIncludeDirs; do
+	cp -prvd include/asm-$i $out/include
+    done
     echo -n > $out/include/linux/autoconf.h
 }
 
