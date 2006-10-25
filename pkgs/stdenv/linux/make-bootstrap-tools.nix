@@ -26,7 +26,7 @@ let
     
     inherit (pkgsDiet)
       coreutils findutils diffutils gnugrep
-      gzip bzip2 gnumake bash patch;
+      gzip bzip2 gnumake bash patch binutils;
       
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
 
@@ -46,8 +46,6 @@ let
       then pkgsDiet.gawk
       else pkgsStatic.gawk;
       
-    binutils = pkgsDiet.binutils217;
-   
     gcc = import ../../development/compilers/gcc-4.1 {
       inherit (pkgs) fetchurl stdenv;
       noSysDirs = true;
