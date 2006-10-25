@@ -10,17 +10,26 @@ mkdir $NIX_FIXINC_DUMMY
 export CPP="gcc -E"
 
 
-if test "$noSysDirs" = "1" -a -e $NIX_GCC/nix-support/orig-libc; then
+if test "$noSysDirs" = "1"; then
 
-    # Figure out what extra flags to pass to the gcc compilers being
-    # generated to make sure that they use our glibc.
-    extraCFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
-    extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
+    if test -e $NIX_GCC/nix-support/orig-libc; then
 
-    # Use *real* header files, otherwise a limits.h is generated that
-    # does not include Glibc's limits.h (notably missing SSIZE_MAX,
-    # which breaks the build).
-    export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
+        # Figure out what extra flags to pass to the gcc compilers
+        # being generated to make sure that they use our glibc.
+        extraCFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
+        extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
+
+        # Use *real* header files, otherwise a limits.h is generated
+        # that does not include Glibc's limits.h (notably missing
+        # SSIZE_MAX, which breaks the build).
+        export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
+        
+    else
+        # Hack: support impure environments.
+        extraCFlags="-isystem /usr/include"
+        extraLDFlags="-L/usr/lib64 -L/usr/lib"
+        export NIX_FIXINC_DUMMY=/usr/include
+    fi
 
     export NIX_EXTRA_CFLAGS=$extraCFlags
     for i in $extraLDFlags; do
@@ -28,7 +37,6 @@ if test "$noSysDirs" = "1" -a -e $NIX_GCC/nix-support/orig-libc; then
     done        
     export CFLAGS=$extraCFlags
     export CXXFLAGS=$extraCFlags
-#    export LDFLAGS=$extraLDFlags
 fi
 
 
