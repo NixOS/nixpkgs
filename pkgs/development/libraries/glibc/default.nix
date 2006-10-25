@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     md5 = "870d76d46dcaba37c13d01dca47d1774";
   };
 
-  patches = [ ./glibc-pwd.patch ];
+  patches = [ ./glibc-pwd.patch ./glibc-getcwd-param-MAX.patch ];
 
   inherit kernelHeaders installLocales;
 
