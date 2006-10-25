@@ -34,6 +34,16 @@ else
     fi
     gccLDFlags="$gccLDFlags -L$gcc/lib"
     echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
+
+    # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
+    # $gcc/lib64 (even though it does actually search there...)..
+    # This confuses libtool.  So add it to the compiler tool search
+    # path explicitly.
+    if test -e "$gcc/lib64"; then
+        gccCFlags="$gccCFlags -B$gcc/lib64"
+    fi
+    echo "$gccCFlags" > $out/nix-support/gcc-cflags
+    
     gccPath="$gcc/bin"
     ldPath="$binutils/bin"
 fi
