@@ -90,11 +90,12 @@ rec {
   
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
-    if stdenvType == "i686-linux" then stdenvLinux
-    else if stdenvType == "i686-freebsd" then stdenvFreeBSD
-    else if stdenvType == "i686-cygwin" then stdenvCygwin
-    else if stdenvType == "i686-mingw" then stdenvMinGW
-    else if stdenvType == "powerpc-darwin" then stdenvDarwin
-    else if stdenvType == "i686-darwin" then stdenvNix
-    else stdenvNative;
+    if stdenvType == "i686-linux" then stdenvLinux else
+    if stdenvType == "x86_64-linux" then stdenvLinux else
+    if stdenvType == "i686-freebsd" then stdenvFreeBSD else
+    if stdenvType == "i686-cygwin" then stdenvCygwin else
+    if stdenvType == "i686-mingw" then stdenvMinGW else
+    if stdenvType == "powerpc-darwin" then stdenvDarwin else
+    if stdenvType == "i686-darwin" then stdenvNix else
+    stdenvNative;
 }
