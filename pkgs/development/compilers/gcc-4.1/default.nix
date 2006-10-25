@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.1.1/gcc-core-4.1.1.tar.bz2;
       md5 = "a1b189c98aa7d7f164036bbe89b9b2a2";
     })] ++
-    (if langCC then [(fetchurl {
+    (if /*langCC*/ true then [(fetchurl {
       url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.1.1/gcc-g++-4.1.1.tar.bz2;
       md5 = "70c786bf8ca042e880a87fecb9e4dfcd";
     })] else []) ++
