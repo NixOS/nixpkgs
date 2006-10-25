@@ -7,21 +7,21 @@
 
   staticToolsURL = {
     url = file:///tmp/tarballs/static-tools.tar.bz2;
-    sha1 = "312eab4537f0d3831089917d7d1e1bc44ecef41a";
+    sha1 = "46899b48cba2f7a53d6c283f4a3706c046900924";
   };
 
   binutilsURL = {
     url = file:///tmp/tarballs/binutils.tar.bz2;
-    sha1 = "6e0e3cfb6a16cc2eb273e8feeacf64cf5570351c";
+    sha1 = "b76ff6427f6930059a548c507fda9860ab31affb";
   };
 
   gccURL = {
     url = file:///tmp/tarballs/gcc.tar.bz2;
-    sha1 = "babaec0a04c55f7cfe8938438ca8f078eabdebe1";
+    sha1 = "ba8e05b80f0fd779c96d597135961f028b4fabcf";
   };
 
   glibcURL = {
     url = file:///tmp/tarballs/glibc.tar.bz2;
-    sha1 = "c68839c95bf2af3275aa37369afdf01c3dbfd416";
+    sha1 = "76774fdc2d73e78d6b63f53507feb01070628dbe";
   };
 }
