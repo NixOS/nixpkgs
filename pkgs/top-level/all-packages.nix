@@ -641,7 +641,7 @@ rec {
 
   gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = true;
+    profiledCompiler = false;
   });
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {

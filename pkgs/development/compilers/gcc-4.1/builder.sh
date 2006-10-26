@@ -73,4 +73,10 @@ postInstall() {
 }
 
 
+if test -z "$profiledCompiler"; then
+    makeFlags="bootstrap $makeFlags"
+else    
+    makeFlags="profiledbootstrap $makeFlags"
+fi
+
 genericBuild
