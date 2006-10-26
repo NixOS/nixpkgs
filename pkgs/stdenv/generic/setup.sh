@@ -62,9 +62,7 @@ fail() {
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
-if test -n "$addInputsHook"; then
-    $addInputsHook
-fi
+eval "$addInputsHook"
 
 
 # Recursively find all build inputs.
@@ -319,7 +317,7 @@ unpackFile() {
 
 unpackW() {
     if test -n "$unpackPhase"; then
-        $unpackPhase
+        eval "$unpackPhase"
         return
     fi
 
@@ -349,7 +347,7 @@ unpackW() {
 
     # Find the source directory.
     if test -n "$setSourceRoot"; then
-        $setSourceRoot
+        eval "$setSourceRoot"
     else
         sourceRoot=
         for i in *; do
@@ -382,10 +380,8 @@ unpackW() {
     if test "dontMakeSourcesWritable" != 1; then
         chmod -R +w $sourceRoot
     fi
-    
-    if test -n "$postUnpack"; then
-        $postUnpack
-    fi
+
+    eval "$postUnpack"
 }
 
 
@@ -400,7 +396,7 @@ unpackPhase() {
 
 patchW() {
     if test -n "$patchPhase"; then
-        $patchPhase
+        eval "$patchPhase"
         return
     fi
 
@@ -430,13 +426,11 @@ fixLibtool() {
 
 configureW() {
     if test -n "$configurePhase"; then
-        $configurePhase
+        eval "$configurePhase"
         return
     fi
 
-    if test -n "$preConfigure"; then
-        $preConfigure
-    fi
+    eval "$preConfigure"
 
     if test -z "$prefix"; then
         prefix="$out";
@@ -465,12 +459,10 @@ configureW() {
         configureFlags="--prefix=$prefix $configureFlags"
     fi
 
-    echo "configure flags: $configureFlags"
-    $configureScript $configureFlags || fail
+    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
+    $configureScript $configureFlags"${configureFlagsArray[@]}" || fail
 
-    if test -n "$postConfigure"; then
-        $postConfigure
-    fi
+    eval "$postConfigure"
 }
 
 
@@ -485,20 +477,16 @@ configurePhase() {
 
 buildW() {
     if test -n "$buildPhase"; then
-        $buildPhase
+        eval "$buildPhase"
         return
     fi
 
-    if test -n "$preBuild"; then
-        $preBuild
-    fi
+    eval "$preBuild"
     
-    echo "make flags: $makeFlags"
-    make $makeFlags || fail
+    echo "make flags: $makeFlags ${makeFlagsArray[@]}"
+    make $makeFlags "${makeFlagsArray[@]}" || fail
 
-    if test -n "$postBuild"; then
-        $postBuild
-    fi
+    eval "$postBuild"
 }
 
 
@@ -516,7 +504,7 @@ buildPhase() {
 
 checkW() {
     if test -n "$checkPhase"; then
-        $checkPhase
+        eval "$checkPhase"
         return
     fi
 
@@ -524,8 +512,8 @@ checkW() {
         checkTarget="check"
     fi
 
-    echo "check flags: $checkFlags"
-    make $checkFlags $checkTarget || fail
+    echo "check flags: $checkFlags ${checkFlagsArray[@]}"
+    make $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
 }
 
 
@@ -554,19 +542,17 @@ patchELF() {
 
 installW() {
     if test -n "$installPhase"; then
-        $installPhase
+        eval "$installPhase"
         return
     fi
-    
-    if test -n "$preInstall"; then
-        $preInstall
-    fi
+
+    eval "$preInstall"
 
     ensureDir "$prefix"
     
     if test -z "$dontMakeInstall"; then
-        echo "install flags: $installFlags"
-        make install $installFlags || fail
+        echo "install flags: $installFlags ${installFlagsArray[@]}"
+        make install $installFlags "${installFlagsArray[@]}" || fail
     fi
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
@@ -583,9 +569,7 @@ installW() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-    if test -n "$postInstall"; then
-        $postInstall
-    fi
+    eval "$postInstall"
 }
 
 
@@ -603,20 +587,18 @@ installPhase() {
 
 distW() {
     if test -n "$distPhase"; then
-        $distPhase
+        eval "$distPhase"
         return
     fi
 
-    if test -n "$preDist"; then
-        $preDist
-    fi
+    eval "$preDist"
     
     if test -z "$distTarget"; then
         distTarget="dist"
     fi
 
-    echo "dist flags: $distFlags"
-    make $distFlags $distTarget || fail
+    echo "dist flags: $distFlags ${distFlagsArray[@]}"
+    make $distFlags "${distFlagsArray[@]}" $distTarget || fail
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
@@ -630,9 +612,7 @@ distW() {
         cp -pvd $tarballs $out/tarballs
     fi
 
-    if test -n "$postDist"; then
-        $postDist
-    fi
+    eval "$postDist"
 }
 
 
@@ -661,7 +641,7 @@ genericBuild() {
 
     for i in $phases; do
         dumpVars
-        $i
+        eval "$i"
     done
     
     stopNest
