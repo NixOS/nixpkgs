@@ -26,6 +26,10 @@ cp $coreutils/bin/cp $out/in-nixpkgs
 cp $gnutar/bin/tar $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/tar
 
+if test "$system" = "powerpc-linux"; then
+    nukeRefs $out/in-nixpkgs/cp
+fi
+
 
 # Create the tools tarball.
 mkdir tools
@@ -57,6 +61,12 @@ nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
 nukeRefs tools/bin/make
+
+if test "$system" = "powerpc-linux"; then
+    for i in tools/bin/*; do
+	nukeRefs $i
+    done
+fi
 
 
 # Create the binutils tarball.
