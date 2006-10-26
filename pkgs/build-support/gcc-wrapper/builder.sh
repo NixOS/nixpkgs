@@ -92,7 +92,7 @@ ln -s g77 $out/bin/f77
 # Create a symlink to as (the assembler).  This is useful when a
 # gcc-wrapper is installed in a user environment, as it ensures that
 # the right assembler is called.
-ln -s $nativePrefix/bin/as $out/bin/as
+ln -s $ldPath/bin/as $out/bin/as
 
 
 # Make a wrapper around the linker.
