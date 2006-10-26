@@ -2,11 +2,13 @@
 
 stdenv.mkDerivation {
   name = "bash-3.2";
-  builder = ./builder.sh;
+
   src = fetchurl {
     url = http://ftp.gnu.org/pub/gnu/bash/bash-3.2.tar.gz;
     md5 = "00bfa16d58e034e3c2aa27f390390d30";
   };
+
+  postInstall = "ln -s bash $out/bin/sh";
 
   patches = [
     # Fix a nasty bug in bash-3.2.
