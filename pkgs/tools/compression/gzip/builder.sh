@@ -1,4 +1,4 @@
-source $stdenv/setup.sh
+source $stdenv/setup
 
 postInstall=postInstall
 postInstall() {
@@ -6,4 +6,4 @@ postInstall() {
     ln -sf gzip $out/bin/zcat
 }
 
-genericBuilder
+genericBuild
