@@ -12,8 +12,9 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/gcc-3.4.6.tar.bz2;
     md5 = "4a21ac777d4b5617283ce488b808da7b";
   };
-  # !!! apply only if noSysDirs is set
-  patches = [./no-sys-dirs.patch];
+
+  patches = if noSysDirs then [./no-sys-dirs.patch] else [];
+
   inherit noSysDirs langC langCC langF77 profiledCompiler;
 
   meta = {
