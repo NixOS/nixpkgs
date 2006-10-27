@@ -48,7 +48,7 @@ let
       then pkgsDiet.gawk
       else pkgsStatic.gawk;
       
-    gcc = import ../../development/compilers/gcc-4.1-temp {
+    gcc = import ../../development/compilers/gcc-4.1 {
       inherit (pkgs) fetchurl stdenv;
       noSysDirs = true;
       langCC = false;
