@@ -198,7 +198,7 @@ let {
   ;};
 
   cygwinPkgs = {inherit (allPackages {system = "i686-cygwin";})
-    aterm
+#    aterm
   ;};
 
   body = [
