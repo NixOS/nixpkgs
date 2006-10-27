@@ -452,11 +452,6 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  wgetDiet = import ../tools/networking/wget {
-    inherit fetchurl gettext;
-    stdenv = overrideGCC stdenv dietgcc;
-  };
-
   which = import ../tools/system/which {
     inherit fetchurl stdenv;
   };
@@ -535,16 +530,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  dietgcc = import ../build-support/gcc-wrapper {
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = gcc34;
-    #inherit (stdenv.gcc) binutils glibc;
-    inherit (gcc34) binutils;
-    glibc = dietlibc;
-    inherit stdenv;
-  };
-
   dylan = import ../development/compilers/gwydion-dylan {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
     dylan =
@@ -562,7 +547,7 @@ rec {
       langF77 = true;
       langCC = false;
     };
-    inherit (stdenv.gcc) binutils glibc;
+    inherit (stdenv.gcc) binutils libc;
     inherit stdenv;
   };
 
@@ -597,7 +582,7 @@ rec {
       kernelHeadersCross = kernelHeadersArm;
       cross = "arm-linux";
     };
-    inherit (stdenv.gcc) glibc;
+    inherit (stdenv.gcc) libc;
     binutils = binutilsArm;
     inherit stdenv;
   };
@@ -607,8 +592,8 @@ rec {
     nativeLibc = false;
     cross = "mips-linux";
     gcc = gcc40mipsboot;
-    #inherit (stdenv.gcc) glibc;
-    glibc = uclibcMips;
+    #inherit (stdenv.gcc) libc;
+    libc = uclibcMips;
     binutils = binutilsMips;
     inherit stdenv;
   };
@@ -634,7 +619,7 @@ rec {
       kernelHeadersCross = kernelHeadersSparc;
       cross = "sparc-linux";
     };
-    inherit (stdenv.gcc) glibc;
+    inherit (stdenv.gcc) libc;
     binutils = binutilsSparc;
     inherit stdenv;
   };
@@ -722,7 +707,7 @@ rec {
       langC    = false;
       langF77  = false;
     };
-    inherit (stdenv.gcc) binutils glibc;
+    inherit (stdenv.gcc) binutils libc;
     inherit stdenv;
   };
 */
@@ -1502,7 +1487,7 @@ rec {
 
   ncursesDiet = import ../development/libraries/ncurses-diet {
     inherit fetchurl;
-    stdenv = overrideGCC stdenv dietgcc;
+    stdenv = useDietLibC stdenv;
   };
 
   neon = import ../development/libraries/neon {
@@ -2035,7 +2020,7 @@ rec {
 
   e2fsprogsDiet = import ../os-specific/linux/e2fsprogs-diet {
     inherit fetchurl gettext;
-    stdenv = overrideGCC stdenv dietgcc;
+    stdenv = useDietLibC stdenv;
   };
 
   eject = import ../os-specific/linux/eject {
@@ -2061,7 +2046,7 @@ rec {
 
   iputils = import ../os-specific/linux/iputils {
     inherit fetchurl stdenv kernelHeaders;
-    glibc = stdenv.gcc.glibc;
+    glibc = stdenv.gcc.libc;
   };
 
   kernel = import ../os-specific/linux/kernel {
@@ -2491,7 +2476,7 @@ rec {
   nanoDiet = import ../applications/editors/nano {
     inherit fetchurl gettext;
     ncurses = ncursesDiet;
-    stdenv = overrideGCC stdenv dietgcc;
+    stdenv = useDietLibC stdenv;
   };
 
   nedit = import ../applications/editors/nedit {
@@ -2611,7 +2596,7 @@ rec {
   vimDiet = import ../applications/editors/vim-diet {
     inherit fetchurl;
     ncurses = ncursesDiet;
-    stdenv = overrideGCC stdenv dietgcc;
+    stdenv = useDietLibC stdenv;
   };
 
   vlc = import ../applications/video/vlc {
