@@ -47,8 +47,8 @@ cp $gnugrep/bin/* tools/bin
 cp $gawk/bin/gawk tools/bin
 ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin
-cp $gunzip/bin/gunzip tools/bin
-cp $gunzip/bin/gzip tools/bin
+cp $gzip/bin/gzip tools/bin
+ln -s gzip tools/bin/gunzip
 cp $bzip2/bin/bunzip2 tools/bin
 cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
@@ -61,12 +61,6 @@ nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
 nukeRefs tools/bin/patchelf
 nukeRefs tools/bin/make
-
-if test "$system" = "powerpc-linux"; then
-    for i in tools/bin/*; do
-	nukeRefs $i
-    done
-fi
 
 
 # Create the binutils tarball.
@@ -153,6 +147,6 @@ done
 
 
 # Check that everything is statically linked
-for i in $(find $out -type x); do
-    ldd $i
+for i in $(find $out -type f -perm +111); do
+    if ldd $i | grep -q "=>"; then echo "not statically linked: $i"; exit 1; fi
 done

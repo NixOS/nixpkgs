@@ -273,6 +273,10 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
+  findutils4227 = import ../tools/misc/findutils/4.2.27.nix {
+    inherit fetchurl stdenv coreutils;
+  };
+
   findutilsWrapper = import ../tools/misc/findutils-wrapper {
     inherit stdenv findutils;
   };
@@ -314,12 +318,13 @@ rec {
   };
 
   gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
-    ((if stdenv ? isDietLibC
-      then import ../tools/archivers/gnutar/1.15.1.nix
-      else import ../tools/archivers/gnutar)
-    {
+    (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;
     });
+
+  gnutar151 = import ../tools/archivers/gnutar/1.15.1.nix {
+    inherit fetchurl stdenv;
+  };
 
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;

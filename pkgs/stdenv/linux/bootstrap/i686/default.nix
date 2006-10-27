@@ -6,22 +6,22 @@
   tar = ./tar.bz2;
 
   staticToolsURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/i686/r6824/static-tools.tar.bz2;
-    sha1 = "4cc936e5c5881eb1466dd8c2cb968e255fa446b7";
+    url = file:///tmp/tarballs/static-tools.tar.bz2;
+    sha1 = "c366d9ee0d969e68311fdb37abc91b46fb13b585";
   };
 
   binutilsURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/i686/r6824/binutils.tar.bz2;
-    sha1 = "d7d85684fae7ec5b51d31e105f8fc041a3553c82";
+    url = file:///tmp/tarballs/binutils.tar.bz2;
+    sha1 = "fa77c29ef4f13ddf43bba3f4f020ceafa6604ccc";
   };
 
   gccURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/i686/r6824/gcc.tar.bz2;
-    sha1 = "c1a6f1a6de2cd3cc1b112614661c9f6adf8a6377";
+    url = file:///tmp/tarballs/gcc.tar.bz2;
+    sha1 = "ea7171fc2f70880e8a6c2480b3d3fed7409b7a4e";
   };
 
   glibcURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/i686/r6824/glibc.tar.bz2;
-    sha1 = "666b5a6c179bd6aedeeb40d34336716eb0d659ce";
+    url = file:///tmp/tarballs/glibc.tar.bz2;
+    sha1 = "728e0a9e66e01cf2815eca8cc638e5ed140a36cd";
   };
 }

@@ -25,8 +25,10 @@ let
     builder = ./make-bootstrap-tools.sh;
 
     inherit (pkgsDiet)
-      coreutils findutils diffutils gnugrep
+      coreutils diffutils gnugrep
       gzip bzip2 gnumake bash patch binutils;
+
+    findutils = pkgsDiet.findutils4227; # 4.2.28 is broken
       
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
 
@@ -35,8 +37,8 @@ let
 
     gnutar =
       # Tar seems to be broken on dietlibc on x86_64.
-      if pkgs.stdenv.system == "i686-linux"
-      then pkgsDiet.gnutar
+      if pkgs.stdenv.system != "x86_64-linux"
+      then pkgsDiet.gnutar151 # 1.16 is broken
       else pkgsStatic.gnutar;
 
     gawk = 
@@ -63,4 +65,4 @@ let
     allowedReferences = [];
   };
 
-in generator.gnutar
+in generator
