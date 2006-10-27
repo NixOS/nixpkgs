@@ -72,7 +72,7 @@ fi
 # Create the binutils tarball.
 mkdir binutils
 mkdir binutils/bin
-for i in as ld ar ranlib nm strip readelf; do
+for i in as ld ar ranlib nm strip readelf objdump; do
     cp $binutils/bin/$i binutils/bin
     nukeRefs binutils/bin/$i
 done
@@ -149,4 +149,10 @@ done
 
 for i in $out/in-nixpkgs/*.bz2; do
     (cd $out/check-only && bunzip2 < $i > $(basename $i .bz2))
+done
+
+
+# Check that everything is statically linked
+for i in $(find $out -type x); do
+    ldd $i
 done

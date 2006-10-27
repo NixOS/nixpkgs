@@ -226,7 +226,10 @@ rec {
   };
 
   coreutils = useFromStdenv (stdenv ? coreutils) stdenv.coreutils
-    (import ../tools/misc/coreutils {
+    ((if stdenv ? isDietLibC
+      then import ../tools/misc/coreutils-5
+      else import ../tools/misc/coreutils)
+    {
       inherit fetchurl stdenv;
     });
 

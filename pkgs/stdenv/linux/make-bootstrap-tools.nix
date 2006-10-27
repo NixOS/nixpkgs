@@ -23,19 +23,15 @@ let
   generator = pkgs.stdenv.mkDerivation {
     name = "bootstrap-tools-generator";
     builder = ./make-bootstrap-tools.sh;
-    
+
     inherit (pkgsDiet)
-      gnugrep gzip bzip2 gnumake bash patch binutils;
+      coreutils findutils diffutils gnugrep
+      gzip bzip2 gnumake bash patch binutils;
       
     gnused = pkgsDiet.gnused412; # 4.1.5 gives "Memory exhausted" errors
 
     # patchelf is C++, won't work with dietlibc.
     inherit (pkgsStatic) patchelf;
-
-    # Coreutils won't build on dietlibc on x86_64 (and by extension,
-    # findutils and diffutils).
-    inherit (if pkgs.stdenv.system == "powerpc-linux" then pkgsStatic else pkgsDiet)
-      coreutils findutils diffutils;
 
     gnutar =
       # Tar seems to be broken on dietlibc on x86_64.
@@ -50,10 +46,9 @@ let
       then pkgsDiet.gawk
       else pkgsStatic.gawk;
       
-    gcc = import ../../development/compilers/gcc-4.1 {
+    gcc = import ../../development/compilers/gcc-4.1-temp {
       inherit (pkgs) fetchurl stdenv;
       noSysDirs = true;
-      profiledCompiler = true;
       langCC = false;
       staticCompiler = true;
     };
