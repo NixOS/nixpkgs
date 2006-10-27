@@ -63,4 +63,4 @@ let
     allowedReferences = [];
   };
 
-in generator
+in generator.gnutar

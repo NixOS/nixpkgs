@@ -314,7 +314,10 @@ rec {
   };
 
   gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
-    (import ../tools/archivers/gnutar {
+    ((if stdenv ? isDietLibC
+      then import ../tools/archivers/gnutar/1.15.1.nix
+      else import ../tools/archivers/gnutar)
+    {
       inherit fetchurl stdenv;
     });
 
