@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
+if test "$NIX_ENFORCE_PURITY" = "1"; then
     GLIBC=$(cat $NIX_GCC/nix-support/orig-libc)
     extraflags="-Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
 fi

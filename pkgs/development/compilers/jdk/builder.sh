@@ -35,9 +35,8 @@ rpath=
 for i in $libraries; do
     rpath=$rpath${rpath:+:}$i/lib
 done
-glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
 find $out -type f -perm +100 \
-    -exec patchelf --interpreter $glibc/lib/ld-linux.so.* \
+    -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath "$rpath" {} \;
 
 # Unpack .pack files.

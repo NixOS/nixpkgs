@@ -17,13 +17,11 @@ if test -n "$fastStart"; then
     rm -v $(ls $out/Reader/intellinux/plug_ins/*.api | grep -v SearchFind)
 fi
 
-glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
-
 fullPath=
 for i in $libPath; do
     fullPath=$fullPath${fullPath:+:}$i/lib
 done
 
-patchelf --interpreter $glibc/lib/ld-linux.so.* \
+patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath $fullPath \
     $out/Reader/intellinux/bin/acroread

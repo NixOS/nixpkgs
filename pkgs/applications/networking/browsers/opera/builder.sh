@@ -11,8 +11,6 @@ installPhase() {
     # want to install icons in some system-wide directories.
     echo no | ./install.sh --prefix=$out
 
-    glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
-
     rpath=/no-such-path
     for i in $libPath; do
         rpath="$rpath:$i/lib"
@@ -24,7 +22,7 @@ installPhase() {
     
     for i in $out/lib/opera/*/opera $out/lib/opera/plugins/opera*; do
         patchelf \
-            --set-interpreter "$glibc/lib/ld-linux.so.2" \
+            --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
             --set-rpath "$rpath" \
             "$i"
     done

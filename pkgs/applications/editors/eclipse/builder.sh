@@ -18,10 +18,9 @@ rpath=
 for i in $libraries; do
     rpath=$rpath${rpath:+:}$i/lib
 done
-glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
 find $out \( -type f -a -perm +0100 \) \
     -print \
-    -exec patchelf --interpreter $glibc/lib/ld-linux.so.* \
+    -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath "$rpath" {} \;
 #find $out \( -type f -a -name "*.so*" \) \
 #    -print \

@@ -2,8 +2,6 @@ source $stdenv/setup
 
 ensureDir $out/bin
 
-glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
-
 cat > $out/bin/ut2004demo <<EOF
 #! $SHELL -e
 

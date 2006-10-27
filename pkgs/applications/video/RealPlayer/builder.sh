@@ -9,8 +9,7 @@ skip=143273 # Look for "BZh91" in the executable.
 
 rm -rf $out/real/Bin $out/real/postinst
 
-glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
-patchelf --interpreter $glibc/lib/ld-linux.so.* $out/real/realplay.bin
+patchelf --interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) $out/real/realplay.bin
 
 ensureDir $out/bin
 makeWrapper "$out/real/realplay.bin" "$out/bin/realplay" \

@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-myglibc=`cat ${NIX_GCC}/nix-support/orig-glibc`
+myglibc=`cat ${NIX_GCC}/nix-support/orig-libc`
 echo "glibc: $myglibc" 
 
 postConfigure() {
