@@ -5,6 +5,103 @@
 <title>Nixpkgs Release Notes</title>
 
 
+<section><title>Release 0.11 (TBA)</title>
+
+<para>This release has the following improvements:
+
+<itemizedlist>
+
+  <listitem><para>The standard build environment
+  (<literal>stdenv</literal>) is now pure on the
+  <literal>x86_64-linux</literal> and <literal>powerpc-linux</literal>
+  platforms, just like <literal>i686-linux</literal>.  (Purity means
+  that building and using the standard environment has no dependencies
+  outside of the Nix store.  For instance, it doesn’t require an
+  external C compiler such as <filename>/usr/bin/gcc</filename>.)
+  Also, the statically linked binaries used in the bootstrap process
+  are now automatically reproducible, making it easy to update the
+  bootstrap tools and to add support for other Linux platforms.  See
+  <filename>pkgs/stdenv/linux/make-bootstrap-tools.nix</filename> for
+  details.</para></listitem>
+
+  
+  <listitem><para>Hook variables in the generic builder are now
+  executed using the <function>eval</function> shell command.  This
+  has a major advantage: you can write hooks directly in Nix
+  expressions.  For instance, rather than write a builder like this:
+
+<programlisting>
+source $stdenv/setup
+
+postInstall=postInstall
+postInstall() {
+    ln -sf gzip $out/bin/gunzip
+    ln -sf gzip $out/bin/zcat
+}
+
+genericBuild</programlisting>
+
+  (the <literal>gzip</literal> builder), you can just add this
+  attribute to the derivation:
+
+<programlisting>
+postInstall = "ln -sf gzip $out/bin/gunzip; ln -sf gzip $out/bin/zcat";</programlisting>
+
+  and so a separate build script becomes unnecessary.  This should
+  allow us to get rid of most builders in Nixpkgs.</para></listitem>
+
+
+  <listitem><para>It is now possible to have the generic builder pass
+  arguments to <command>configure</command> and
+  <command>make</command> that contain whitespace.  Previously, for
+  example, you could say in a builder,
+
+<programlisting>
+configureFlags="CFLAGS=-O0"</programlisting>
+
+  but not
+
+<programlisting>
+configureFlags="CFLAGS=-O0 -g"</programlisting>
+
+  since the <literal>-g</literal> would be interpreted as a separate
+  argument to <command>configure</command>.  Now you can say
+
+<programlisting>
+configureFlagsArray=("CFLAGS=-O0 -g")</programlisting>
+
+  or similarly
+
+<programlisting>
+configureFlagsArray=("CFLAGS=-O0 -g" "LDFLAGS=-L/foo -L/bar")</programlisting>
+
+  which does the right thing.  Idem for <literal>makeFlags</literal>,
+  <literal>installFlags</literal>, <literal>checkFlags</literal> and
+  <literal>distFlags</literal>.</para>
+
+  <para>Unfortunately you can't pass arrays to Bash through the
+  environment, so you can't put the array above in a Nix expression,
+  e.g.,
+
+<programlisting>
+configureFlagsArray = ["CFLAGS=-O0 -g"];</programlisting>
+
+  since it would just be flattened to a since string.  However, you
+  <emphasis>can</emphasis> use the inline hooks described above:
+
+<programlisting>
+preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
+
+  </para></listitem>
+
+
+</itemizedlist>
+
+</para>
+
+</section>
+
+
 <section><title>Release 0.10 (October 12, 2006)</title>
 
 <note><para>This release of Nixpkgs requires <link
