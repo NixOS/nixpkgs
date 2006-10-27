@@ -5,7 +5,7 @@ source $substitute
 # Force gcc to use ld-wrapper.sh when calling ld.
 cflagsCompile="-B$out/bin/"
 
-if test -z "$nativeGlibc"; then
+if test -z "$nativeLibc"; then
     # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  The real solution is of course to prevent those paths
@@ -13,10 +13,10 @@ if test -z "$nativeGlibc"; then
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$glibc/usr/lib/ -isystem $glibc/usr/include"
-    ldflags="$ldflags -L$glibc/usr/lib"
-    #ldflagsBefore="-dynamic-linker $glibc/lib/ld-linux.so.2"
-    ldflagsBefore="-dynamic-linker $glibc/lib/ld-uClibc.so.0"
+    cflagsCompile="$cflagsCompile -B$libc/usr/lib/ -isystem $libc/usr/include"
+    ldflags="$ldflags -L$libc/usr/lib"
+    #ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.2"
+    ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
 fi
 
 if test -n "$nativeTools"; then
@@ -43,7 +43,7 @@ doSubstitute() {
         --subst-var "gcc" \
         --subst-var "gccProg" \
         --subst-var "binutils" \
-        --subst-var "glibc" \
+        --subst-var "libc" \
         --subst-var "cflagsCompile" \
         --subst-var "cflagsLink" \
         --subst-var "ldflags" \
@@ -91,7 +91,7 @@ chmod +x "$out/bin/$cross-ld"
 # Emit a setup hook.  Also store the path to the original GCC and
 # Glibc.
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
-test -n "$glibc" && echo $glibc > $out/nix-support/orig-glibc
+test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 
 doSubstitute "$addFlags" "$out/nix-support/add-flags"
 

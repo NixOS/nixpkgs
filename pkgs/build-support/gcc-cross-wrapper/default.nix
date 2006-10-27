@@ -5,13 +5,13 @@
 # stdenv.mkDerivation provides a wrapper that sets up the right environment
 # variables so that the compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, nativeGlibc, nativePrefix ? ""
-, gcc ? null, glibc ? null, binutils ? null, shell ? "", cross ? ""
+{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
+, gcc ? null, libc ? null, binutils ? null, shell ? "", cross ? ""
 }:
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
-assert !nativeGlibc -> glibc != null;
+assert !nativeLibc -> libc != null;
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
-  inherit nativeTools nativeGlibc nativePrefix gcc glibc binutils cross;
+  inherit nativeTools nativeLibc nativePrefix gcc libc binutils cross;
   name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
