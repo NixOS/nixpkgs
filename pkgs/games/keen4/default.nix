@@ -4,7 +4,10 @@ stdenv.mkDerivation {
   name = "keen4";
   builder = ./builder.sh;
 
-  dist = /home/eelco/keen4.zip;
+  dist = fetchurl {
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/keen4.zip;
+    md5 = "ffcdd9e3bce224d92797166bc3f56f1c";
+  };
 
   buildInputs = [unzip];
 
