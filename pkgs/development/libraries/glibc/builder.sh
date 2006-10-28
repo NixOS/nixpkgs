@@ -56,7 +56,7 @@ postInstall() {
     # Workaround for the wrong <semaphore.h> getting installed.  This
     # appears to be a regression:
     # http://www.mail-archive.com/debian-glibc@lists.debian.org/msg31543.html
-    cp linuxthreads/semaphore.h $out/include
+    cp ../$sourceRoot/linuxthreads/semaphore.h $out/include
 }
 
 
