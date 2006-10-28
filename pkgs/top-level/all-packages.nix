@@ -2726,6 +2726,10 @@ rec {
     inherit (xlibs) xlibs;
   };
 
+  keen4 = import ../games/keen4 {
+    inherit fetchurl stdenv dosbox unzip;
+  };
+
 
   ### MISC
 

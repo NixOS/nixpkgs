@@ -59,14 +59,13 @@ let {
     grub
     gzip
     hello
-#    inkscape
     jakartaregexp
     jetty
     jikes
     jing_tools
     jre
     kcachegrind
-#    kernel
+    keen4
     less
     libtool
     libxml2
@@ -80,7 +79,6 @@ let {
     mythtv
     nix
     nxml
-#    octave
     openssl
     pan
     par2cmdline
@@ -93,10 +91,8 @@ let {
     python
     qcmm
     qt3
-#    qtparted
     quake3demo
     readline
-#    rssglx
     screen
     sdf
     spidermonkey
@@ -112,7 +108,6 @@ let {
     transformers
     uml
     unzip
-#    uuagc
     uulib
     valgrind
     vim
@@ -124,7 +119,6 @@ let {
     xmms
     xorg_sys_opengl
     xsel
-#    zapping
     zdelta
     zip
 #    atermjava
@@ -132,15 +126,22 @@ let {
 #    ghc
 #    helium
 #    hevea
+#    inkscape
 #    jakartabcel
 #    jjtraveler
+#    kernel
 #    monodevelop
 #    monodoc
 #    ocaml
+#    octave
 #    ov511
+#    qtparted
+#    rssglx
 #    sharedobjects
+#    uuagc
 #    xauth
 #    xawtv
+#    zapping
   ;};
 
   powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
@@ -177,7 +178,7 @@ let {
     libtool
     libxml2
     libxslt
-    maven
+#    maven
     nxml
     php
 #    spidermonkey
