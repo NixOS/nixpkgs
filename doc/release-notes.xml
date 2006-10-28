@@ -11,6 +11,7 @@
 
 <itemizedlist>
 
+  
   <listitem><para>The standard build environment
   (<literal>stdenv</literal>) is now pure on the
   <literal>x86_64-linux</literal> and <literal>powerpc-linux</literal>
@@ -95,6 +96,17 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
   </para></listitem>
 
 
+  <listitem><para>Important updates:
+
+    <itemizedlist>
+
+      <listitem><para>Glibc 2.5.</para></listitem>
+      
+    </itemizedlist>.
+
+  </para></listitem>
+
+  
 </itemizedlist>
 
 </para>
