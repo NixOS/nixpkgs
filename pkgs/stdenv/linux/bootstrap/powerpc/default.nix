@@ -6,22 +6,22 @@
   tar = ./tar.bz2;
 
   staticToolsURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6860/static-tools.tar.bz2;
-    sha1 = "90ec30bbdac515e03c90b0909ee09a4cdcfe5214";
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6888/static-tools.tar.bz2;
+    sha1 = "82acee6c1a895f3a45fdbf921d49be6c996abc5b";
   };
 
   binutilsURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6860/binutils.tar.bz2;
-    sha1 = "577b256dcb5297a001acb8b49ce36e9c78ff8fc8";
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6888/binutils.tar.bz2;
+    sha1 = "bc4f9fc931b0d139d0b16e548b1605d5181c74c0";
   };
 
   gccURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6860/gcc.tar.bz2;
-    sha1 = "853d570c3419bddcf18d4340722880d2a80e2a3f";
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6888/gcc.tar.bz2;
+    sha1 = "ade3225a3135b0e3415cc8cb9e1bec61a742e200";
   };
 
   glibcURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6860/glibc.tar.bz2;
-    sha1 = "d34e78fb4a0aa282318b1465e195bc2d4e6e7315";
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/powerpc/r6888/glibc.tar.bz2;
+    sha1 = "e28476443e02b9c2e7881ced27c23cb039421cda";
   };
 }
