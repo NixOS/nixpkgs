@@ -269,9 +269,11 @@ rec {
   };
 
   findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
-    (import ../tools/misc/findutils {
-      inherit fetchurl stdenv coreutils;
-    });
+    (if system == "i686-darwin" then findutils4227 else
+      import ../tools/misc/findutils {
+        inherit fetchurl stdenv coreutils;
+      }
+    );
 
   findutils4227 = import ../tools/misc/findutils/4.2.27.nix {
     inherit fetchurl stdenv coreutils;

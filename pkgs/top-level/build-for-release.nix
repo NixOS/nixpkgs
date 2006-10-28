@@ -45,7 +45,6 @@ let {
     gawk
     gcc
     gcc34
-    gcc40
     ghcWrapper
     ghostscript
     gnugrep
