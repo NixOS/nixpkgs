@@ -40,8 +40,8 @@ postConfigure() {
     if test "$noSysDirs" = "1"; then
         # Patch some of the makefiles to force linking against our own
         # glibc.
-        if test -e $NIX_GCC/nix-support/orig-glibc; then
-            glibc=$(cat $NIX_GCC/nix-support/orig-glibc)
+        if test -e $NIX_GCC/nix-support/orig-libc; then
+            glibc=$(cat $NIX_GCC/nix-support/orig-libc)
             # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
             # source in $NIX_GCC/nix-support/add-flags, since that
             # would cause *this* GCC to be linked against the
