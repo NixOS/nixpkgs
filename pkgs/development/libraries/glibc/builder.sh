@@ -52,6 +52,11 @@ postInstall() {
     fi
     rm $out/etc/ld.so.cache
     (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
+
+    # Workaround for the wrong <semaphore.h> getting installed.  This
+    # appears to be a regression:
+    # http://www.mail-archive.com/debian-glibc@lists.debian.org/msg31543.html
+    cp linuxthreads/semaphore.h $out/include
 }
 
 
