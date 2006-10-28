@@ -2,7 +2,7 @@ source $stdenv/setup
 
 header "downloading $out from $url"
 
-curl --fail --location --max-redirs 20 "$url" > "$out"
+curl --fail --location --max-redirs 20 --disable-epsv "$url" > "$out"
 
 if test "$NIX_OUTPUT_CHECKED" != "1"; then
     if test "$outputHashAlgo" != "md5"; then
