@@ -8,6 +8,9 @@ ensureDir $out/on-server
 ensureDir $out/check-only
 
 
+export PATH=$coreutils/bin:$PATH # !!! temporary hack
+
+
 nukeRefs() {
     # Dirty, disgusting, but it works ;-)
     fileName=$1
@@ -96,6 +99,7 @@ fi
 rm -rf gcc/lib/gcc/*/*/install-tools
 rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
+nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h
 
 
 # Create the glibc tarball.
