@@ -105,7 +105,7 @@ let {
     thunderbird
     tightvnc
 #    transformers
-    uml
+#    uml
     unzip
     uulib
     valgrind
