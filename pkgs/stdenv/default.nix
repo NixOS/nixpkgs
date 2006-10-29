@@ -48,6 +48,7 @@ rec {
   stdenvNix = (import ./nix) (rec {
     stdenv = if system == "i686-darwin" then stdenvDarwin else stdenvNative; # !!! hack
     pkgs = allPackages {
+      inherit system;
       bootStdenv = removeAttrs stdenv ["gcc"]; # Hack
       noSysDirs = false;
     };
