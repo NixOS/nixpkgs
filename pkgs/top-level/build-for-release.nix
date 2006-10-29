@@ -104,7 +104,7 @@ let {
     texinfo
     thunderbird
     tightvnc
-    transformers
+#    transformers
     uml
     unzip
     uulib

@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 # !!! hack
-source $NIX_GCC/nix-support/add-flags
+source $NIX_GCC/nix-support/add-flags.sh
 export NIX_LDFLAGS
 
 postUnpack() {
