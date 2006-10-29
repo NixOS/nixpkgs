@@ -95,7 +95,7 @@ let {
     screen
     sdf
     spidermonkey
-    strace
+#    strace
     strategoxt
     strategoxtUtils
     subversion
