@@ -1,11 +1,17 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "util-linux-2.12r";
-  builder = ./builder.sh;
+  name = "util-linux-2.13-pre7";
+
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/util-linux-2.12r.tar.bz2;
-    md5 = "af9d9e03038481fbf79ea3ac33f116f9";
+    url = ftp://ftp.nl.kernel.org/pub/linux/utils/util-linux/testing/util-linux-2.13-pre7.tar.bz2;
+    md5 = "13cdf4b76533e8421dc49de188f85291";
   };
-  patches = [./MCONFIG.patch];
+  
+  configureFlags = "--disable-use-tty-group";
+
+  preBuild = "
+    makeFlagsArray=(usrbinexecdir=$out/bin usrsbinexecdir=$out/sbin datadir=$out/share exampledir=$out/share/getopt)
+    installFlagsArray=(\"\${makeFlagsArray[@]}\")
+  ";
 }

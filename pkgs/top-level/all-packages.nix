@@ -2206,8 +2206,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  utillinuxStatic = import ../os-specific/linux/util-linux-static {
-    inherit fetchurl stdenv;
+  utillinuxStatic = import ../os-specific/linux/util-linux {
+    inherit fetchurl;
+    stdenv = makeStaticBinaries stdenv;
   };
 
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
