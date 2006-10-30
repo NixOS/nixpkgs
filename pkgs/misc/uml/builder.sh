@@ -31,7 +31,7 @@ installPhase() {
     mkdir $out
     mkdir $out/bin
     cp -p linux $out/bin
-    make modules_install INSTALL_MOD_PATH=$out ARCH=um
+    make modules_install INSTALL_MOD_PATH=$out ARCH=um DEPMOD=$modutils/sbin/depmod
 }
 installPhase=installPhase
 

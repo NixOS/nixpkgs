@@ -2137,7 +2137,8 @@ rec {
   };
 
   modutils = import ../os-specific/linux/modutils {
-    inherit fetchurl stdenv bison flex;
+    inherit fetchurl bison flex;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   nettools = import ../os-specific/linux/net-tools {
@@ -2848,7 +2849,7 @@ rec {
   };
 
   uml = import ../misc/uml {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl modutils;
     m4 = gnum4;
     gcc = gcc33;
   };

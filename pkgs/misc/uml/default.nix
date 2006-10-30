@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, m4, gcc}:
+{stdenv, fetchurl, perl, m4, gcc, modutils}:
 
 assert perl != null && m4 != null;
 
@@ -19,4 +19,11 @@ stdenv.mkDerivation {
   config = ./config;
   buildInputs = [perl m4];
   NIX_GCC = gcc;
+
+  # Quick hack to get UML to build with the latest kernel headers,
+  # which don't export the macro `offsetof' anymore unless __KERNEL__
+  # is set.
+  NIX_CFLAGS_COMPILE = "-Doffsetof(TYPE,MEMBER)=((size_t)&((TYPE*)0)->MEMBER)";
+
+  inherit modutils;
 }
