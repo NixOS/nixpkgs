@@ -1,0 +1,33 @@
+diff -rc strace-4.5.14-orig/strace.c strace-4.5.14/strace.c
+*** strace-4.5.14-orig/strace.c	2006-10-30 16:27:17.000000000 +0100
+--- strace-4.5.14/strace.c	2006-10-30 16:27:27.000000000 +0100
+***************
+*** 2251,2257 ****
+  			if (!cflag
+  			    && (qual_flags[WSTOPSIG(status)] & QUAL_SIGNAL)) {
+  				unsigned long addr = 0, pc = 0;
+! #ifdef PT_GETSIGINFO
+  #				define PSR_RI	41
+  				struct siginfo si;
+  				unsigned long psr;
+--- 2251,2257 ----
+  			if (!cflag
+  			    && (qual_flags[WSTOPSIG(status)] & QUAL_SIGNAL)) {
+  				unsigned long addr = 0, pc = 0;
+! #ifdef PT_CR_IPSR
+  #				define PSR_RI	41
+  				struct siginfo si;
+  				unsigned long psr;
+diff -rc strace-4.5.14-orig/system.c strace-4.5.14/system.c
+*** strace-4.5.14-orig/system.c	2006-01-12 22:21:06.000000000 +0100
+--- strace-4.5.14/system.c	2006-10-30 16:31:46.000000000 +0100
+***************
+*** 1578,1584 ****
+  	{ CTL_KERN, "CTL_KERN" },
+  	{ CTL_VM, "CTL_VM" },
+  	{ CTL_NET, "CTL_NET" },
+- 	{ CTL_PROC, "CTL_PROC" },
+  	{ CTL_FS, "CTL_FS" },
+  	{ CTL_DEBUG, "CTL_DEBUG" },
+  	{ CTL_DEV, "CTL_DEV" },
+--- 1578,1583 ----
