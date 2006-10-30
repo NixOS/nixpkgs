@@ -4,6 +4,8 @@
 
 assert langC;
 
+# !!! impurity: finds /usr/bin/as, /usr/bin/ranlib.
+
 stdenv.mkDerivation {
   name = "gcc-3.3.6";
   builder = ./builder.sh;

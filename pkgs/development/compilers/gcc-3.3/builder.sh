@@ -5,6 +5,11 @@ FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
 mkdir $FIXINC_DUMMY
 
 
+# libstdc++ needs this; otherwise it will use /lib/cpp, which is a Bad
+# Thing.
+export CPP="gcc -E"
+
+
 preConfigure() {
     
     if test "$noSysDirs" = "1"; then
@@ -49,18 +54,10 @@ postConfigure() {
             extraFlags="-Wl,-s -B$glibc/lib -isystem $glibc/include \
                 -L$glibc/lib -Wl,-dynamic-linker -Wl,$glibc/lib/ld-linux.so.2"
 
-            # Oh, what a hack.  I should be shot for this.
-            # In stage 1, we should link against the previous GCC, but
-            # not afterwards.  Otherwise we retain a dependency.
-            # However, ld-wrapper, which adds the linker flags for the
-            # previous GCC, is also used in stage 2/3.  We can prevent
-            # it from adding them by NIX_GLIBC_FLAGS_SET, but then
-            # gcc-wrapper will also not add them, thereby causing
-            # stage 1 to fail.  So we use a trick to only set the
-            # flags in gcc-wrapper.
-            hook=$(pwd)/ld-wrapper-hook
-            echo "NIX_GLIBC_FLAGS_SET=1" > $hook
-            export NIX_LD_WRAPPER_START_HOOK=$hook
+            # Use *real* header files, otherwise a limits.h is generated
+            # that does not include Glibc's limits.h (notably missing
+            # SSIZE_MAX, which breaks the build).
+            export FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
         fi
 
         mf=Makefile
