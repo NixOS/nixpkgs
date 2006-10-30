@@ -99,7 +99,9 @@ fi
 rm -rf gcc/lib/gcc/*/*/install-tools
 rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
-nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h
+if test -e gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h; then
+    nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h
+fi
 
 
 # Create the glibc tarball.
