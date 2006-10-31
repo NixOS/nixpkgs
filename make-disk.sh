@@ -7,22 +7,21 @@ if test -z "$TMPDIR"; then export TMPDIR=/tmp; fi
 # deps is an array
 declare -a deps
 
-NIXSTORE=`which nix-store`
-NIXINSTANTIATE=`which nix-instantiate`
+build="nix-build --no-out-link"
 
-coreutils=$(nix-store -r $(nix-instantiate ./pkgs.nix -A coreutils))
+coreutils=$($build ./pkgs.nix -A coreutils)
 
 # determine where we can find the Nix binaries
 NIX=$($coreutils/bin/dirname $(which nix-store))
 
 # make sure we use many of our own tools, because it is more pure
-mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instantiate -))
+mktemp=$($build ./pkgs.nix -A mktemp)
 
-gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
-gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar151' | $NIX/nix-instantiate -))
-cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
-gzip=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gzip' | $NIX/nix-instantiate -))
-cpio=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cpio' | $NIX/nix-instantiate -))
+gnused=$($build ./pkgs.nix -A gnused)
+gnutar=$($build ./pkgs.nix -A gnutar151)
+cdrtools=$($build ./pkgs.nix -A cdrtools)
+gzip=$($build ./pkgs.nix -A gzip)
+cpio=$($build ./pkgs.nix -A cpio)
 
 archivesDir=$($mktemp/bin/mktemp -d)
 archivesDir2=$($mktemp/bin/mktemp -d)
@@ -39,52 +38,47 @@ initrd=$TMPDIR/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 
-nix=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
-busybox=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).busybox' | $NIX/nix-instantiate -))
-nano=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nano' | $NIX/nix-instantiate -))
-nanoDiet=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).nanoDiet' | $NIX/nix-instantiate -))
-ncurses=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).ncursesDiet' | $NIX/nix-instantiate -))
+nix=$($build ./pkgs.nix -A nix)
+busybox=$($build ./pkgs.nix -A busybox)
+nano=$($build ./pkgs.nix -A nano)
+nanoDiet=$($build ./pkgs.nix -A nanoDiet)
+ncurses=$($build ./pkgs.nix -A ncursesDiet)
 
 nixDeps=$($NIX/nix-store -qR $nix)
 
-#storeExpr=$($NIX/nix-store -qR $($NIX/nix-store -r $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
-#storeExpr1=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
-storeExpr=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
-#storeExpr=$($NIX/nix-store -r $($NIX/nix-store -qR $(echo '(import ./pkgs.nix).everything' | $NIX/nix-instantiate -)))
+storeExpr=$($build ./pkgs.nix -A boot)
 
-kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $NIX/nix-instantiate -))
+kernelscripts=$($build ./pkgs.nix -A kernelscripts)
 
-mkinitrd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mkinitrd' | $NIX/nix-instantiate -))
+mkinitrd=$($build ./pkgs.nix -A mkinitrd)
 
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
-$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts $mkinitrd
-#$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)) $kernelscripts
+$NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($build ./pkgs.nix -A kernel) $kernelscripts $mkinitrd
+#$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($build ./pkgs.nix -A kernel) $kernelscripts
 
 # Location of sysvinit?
-sysvinitPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -))
+sysvinitPath=$($build ./pkgs.nix -A sysvinit)
 
 # Location of Nix boot scripts?
-bootPath=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -))
+bootPath=$($build ./pkgs.nix -A boot)
 
-syslinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).syslinux' | $NIX/nix-instantiate -))
+syslinux=$($build ./pkgs.nix -A syslinux)
 
-kernel=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -))
-kernelscripts=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kernelscripts' | $NIX/nix-instantiate -))
+kernel=$($build ./pkgs.nix -A kernel)
+kernelscripts=$($build ./pkgs.nix -A kernelscripts)
 
-#nixDeps=$($NIX/nix-store -qR $(echo '(import ./pkgs.nix).nix' | $NIX/nix-instantiate -))
+utillinux=$($build ./pkgs.nix -A utillinux)
 
-utillinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
+gnugrep=$($build ./pkgs.nix -A gnugrep)
 
-gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
+grub=$($build ./pkgs.nix -A grubWrapper)
 
-grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
+findutils=$($build ./pkgs.nix -A findutilsWrapper)
 
-findutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
+modutils=$($build ./pkgs.nix -A module_init_toolsStatic)
 
-modutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
-
-dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
+dhcp=$($build ./pkgs.nix -A dhcpWrapper)
 
 #combideps=$($NIX/nix-store -qR $nix $utillinux $gnugrep $grub $gzip $findutils)
 combideps=$($NIX/nix-store -qR $nix $busybox $grub $findutils $modutils $dhcp $nano)
@@ -111,35 +105,32 @@ done
 
 tar zcf ${archivesDir}/nixstore.tgz $combideps
 
-utilLinux=$(nix-store -r $(echo '(import ./pkgs.nix).utillinuxStatic' | $NIX/nix-instantiate -))
-coreUtilsDiet=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -)))
+utilLinux=$($build ./pkgs.nix -A utillinuxStatic)
+coreUtilsDiet=$($NIX/nix-store -qR $($build ./pkgs.nix -A coreutilsDiet))
 
 ## temporarily normal e2fsprogs until I can get it to build with dietlibc
-e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -)))
-#e2fsProgs=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -)))
-modUtils=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -)))
-Grub=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -)))
-Kernel=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).kernel' | $NIX/nix-instantiate -)))
-SysVinit=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).sysvinit' | $NIX/nix-instantiate -)))
-BootPath=$($NIX/nix-store -qR $(nix-store -r $(echo '(import ./pkgs.nix).boot' | $NIX/nix-instantiate -)))
+e2fsProgs=$($NIX/nix-store -qR $($build ./pkgs.nix -A e2fsprogsDiet))
+#e2fsProgs=$($NIX/nix-store -qR $($build ./pkgs.nix -A e2fsprogs))
+modUtils=$($NIX/nix-store -qR $($build ./pkgs.nix -A module_init_toolsStatic))
+Grub=$($NIX/nix-store -qR $($build ./pkgs.nix -A grubWrapper))
+Kernel=$($NIX/nix-store -qR $($build ./pkgs.nix -A kernel))
+SysVinit=$($NIX/nix-store -qR $($build ./pkgs.nix -A sysvinit))
+BootPath=$($NIX/nix-store -qR $($build ./pkgs.nix -A boot))
 
-bashGlibc=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).bash' | $NIX/nix-instantiate -))
-bash=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).bashStatic' | $NIX/nix-instantiate -))
-coreutilsdiet=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).coreutilsDiet' | $NIX/nix-instantiate -))
-#findutils=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).findutilsWrapper' | $NIX/nix-instantiate -))
-utillinux=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).utillinux' | $NIX/nix-instantiate -))
-e2fsprogs=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).e2fsprogsDiet' | $NIX/nix-instantiate -))
-#e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
-#e2fsprogs=$($NIX/nix-store -q $(echo '(import ./pkgs.nix).e2fsprogs' | $NIX/nix-instantiate -))
-modutils=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).module_init_toolsStatic' | $NIX/nix-instantiate -))
-grub=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).grubWrapper' | $NIX/nix-instantiate -))
-mingettyWrapper=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mingettyWrapper' | $NIX/nix-instantiate -))
-dhcp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).dhcpWrapper' | $NIX/nix-instantiate -))
-gnugrep=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnugrep' | $NIX/nix-instantiate -))
-which=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).which' | $NIX/nix-instantiate -))
-eject=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).eject' | $NIX/nix-instantiate -))
-sysklogd=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).sysklogd' | $NIX/nix-instantiate -))
-#kudzu=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).kudzu' | $NIX/nix-instantiate -))
+bashGlibc=$($build ./pkgs.nix -A bash)
+bash=$($build ./pkgs.nix -A diet.bash)
+coreutilsdiet=$($build ./pkgs.nix -A diet.coreutils)
+utillinux=$($build ./pkgs.nix -A utillinux)
+e2fsprogs=$($build ./pkgs.nix -A e2fsprogsDiet)
+modutils=$($build ./pkgs.nix -A module_init_toolsStatic)
+grub=$($build ./pkgs.nix -A grubWrapper)
+mingettyWrapper=$($build ./pkgs.nix -A mingettyWrapper)
+dhcp=$($build ./pkgs.nix -A dhcpWrapper)
+gnugrep=$($build ./pkgs.nix -A gnugrep)
+which=$($build ./pkgs.nix -A which)
+eject=$($build ./pkgs.nix -A eject)
+sysklogd=$($build ./pkgs.nix -A sysklogd)
+#kudzu=$($build ./pkgs.nix -A kudzu)
 
 echo creating directories for bootimage
 
