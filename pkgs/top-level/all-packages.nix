@@ -2091,8 +2091,17 @@ rec {
     modules = [ov511];
   };
 
-  kernel_2_6_17 = import ../os-specific/linux/kernel/linux-2.6.17.nix {
-    inherit fetchurl stdenv perl mktemp;
+  kernel_2_6_18 = import ../os-specific/linux/kernel/linux-2.6.18.nix {
+    inherit fetchurl perl mktemp;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+    kernelPatches = [
+      { name = "skas-2.6.18-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.18-v9-pre9/skas-2.6.18-v9-pre9.patch.bz2;
+          md5 = "f7f45fd71464c1091d06eae692ee4ac0";
+        };
+      }
+    ];
   };
 
   libselinux = import ../os-specific/linux/libselinux {
