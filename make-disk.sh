@@ -1,12 +1,16 @@
 #! /bin/sh -e
 
+set -x
+
+if test -z "$TMPDIR"; then export TMPDIR=/tmp; fi
+
 # deps is an array
 declare -a deps
 
 NIXSTORE=`which nix-store`
 NIXINSTANTIATE=`which nix-instantiate`
 
-coreutils=$($NIXSTORE -r $(echo '(import ./pkgs.nix).coreutils' | $NIXINSTANTIATE -))
+coreutils=$(nix-store -r $(nix-instantiate ./pkgs.nix -A coreutils))
 
 # determine where we can find the Nix binaries
 NIX=$($coreutils/bin/dirname $(which nix-store))
@@ -15,7 +19,7 @@ NIX=$($coreutils/bin/dirname $(which nix-store))
 mktemp=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).mktemp' | $NIX/nix-instantiate -))
 
 gnused=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnused' | $NIX/nix-instantiate -))
-gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar' | $NIX/nix-instantiate -))
+gnutar=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gnutar151' | $NIX/nix-instantiate -))
 cdrtools=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cdrtools' | $NIX/nix-instantiate -))
 gzip=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).gzip' | $NIX/nix-instantiate -))
 cpio=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cpio' | $NIX/nix-instantiate -))
@@ -23,15 +27,15 @@ cpio=$($NIX/nix-store -r $(echo '(import ./pkgs.nix).cpio' | $NIX/nix-instantiat
 archivesDir=$($mktemp/bin/mktemp -d)
 archivesDir2=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
-nixpkgs=/nixpkgs/trunk/pkgs
+nixpkgs=./pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
 ramdisk_login=$archivesDir/scripts/ramdisk-login.sh
 login_script=$archivesDir/scripts/login.sh
 storePaths=$archivesDir/mystorepaths
 narStorePaths=$archivesDir/narstorepaths
 validatePaths=$archivesDir/validatepaths
-bootiso=/tmp/nixos.iso
-initrd=/tmp/initram.img
+bootiso=$TMPDIR/nixos.iso
+initrd=$TMPDIR/initram.img
 initdir=${archivesDir}/initdir
 initscript=$archivesDir/scripts/init.sh
 

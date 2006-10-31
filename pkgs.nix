@@ -4,7 +4,7 @@ rec {
     findutilsWrapper utillinux utillinuxStatic sysvinit e2fsprogsDiet
     e2fsprogs nettools nix subversion gcc wget which vim less screen
     openssh binutils nixStatic strace shadowutils iputils gnumake curl gnused
-    gnutar gnugrep gzip mingettyWrapper grubWrapper syslinux parted
+    gnutar gnutar151 gnugrep gzip mingettyWrapper grubWrapper syslinux parted
     module_init_tools module_init_toolsStatic dhcpWrapper man nano nanoDiet
     eject sysklogd mktemp cdrtools cpio busybox mkinitrd ncursesDiet;
 
