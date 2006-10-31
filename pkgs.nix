@@ -1,5 +1,5 @@
 rec {
-  inherit (import /nixpkgs/trunk/pkgs/top-level/all-packages.nix {})
+  inherit (import ./pkgs/top-level/all-packages.nix {})
     stdenv kernelscripts kernel bash bashStatic coreutils coreutilsDiet
     findutilsWrapper utillinux utillinuxStatic sysvinit e2fsprogsDiet
     e2fsprogs nettools nix subversion gcc wget which vim less screen
