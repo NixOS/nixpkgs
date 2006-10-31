@@ -2062,11 +2062,6 @@ rec {
     glibc = stdenv.gcc.libc;
   };
 
-  kernel = import ../os-specific/linux/kernel {
-    inherit fetchurl perl mktemp;
-    stdenv = overrideGCC stdenv gcc34;
-  };
-
   kernelHeaders = import ../os-specific/linux/kernel-headers {
     inherit fetchurl stdenv;
   };
@@ -2088,8 +2083,10 @@ rec {
 
   kernelscripts = import ../os-specific/linux/kernelscripts {
     inherit stdenv module_init_tools kernel;
-    modules = [ov511];
+    modules = [];
   };
+
+  kernel = kernel_2_6_18;
 
   kernel_2_6_18 = import ../os-specific/linux/kernel/linux-2.6.18.nix {
     inherit fetchurl perl mktemp;
