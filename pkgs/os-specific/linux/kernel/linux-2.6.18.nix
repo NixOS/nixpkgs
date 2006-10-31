@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, mktemp
+{ stdenv, fetchurl, perl, mktemp, module_init_tools
 
   # A list of patches to apply to the kernel.  Each element of this list
   # should be an attribute set {name, patch} where `name' is a
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   
   buildInputs = [perl mktemp];
   arch="i386";
+
+  inherit module_init_tools;
 
   meta = {
     description =

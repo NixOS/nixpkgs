@@ -33,7 +33,7 @@ installPhase() {
         
 	make install
 
-	make modules_install
+	make modules_install DEPMOD=$module_init_tools/sbin/depmod
 
         # Strip the kernel modules.
         echo "Stripping kernel modules..."

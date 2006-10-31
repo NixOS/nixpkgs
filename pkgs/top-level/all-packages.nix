@@ -2089,7 +2089,7 @@ rec {
   kernel = kernel_2_6_18;
 
   kernel_2_6_18 = import ../os-specific/linux/kernel/linux-2.6.18.nix {
-    inherit fetchurl perl mktemp;
+    inherit fetchurl perl mktemp module_init_tools;
     stdenv = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
     kernelPatches = [
       { name = "skas-2.6.18-v9-pre9";
