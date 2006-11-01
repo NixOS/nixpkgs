@@ -2058,8 +2058,9 @@ rec {
   };
 
   iputils = import ../os-specific/linux/iputils {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
     glibc = stdenv.gcc.libc;
+    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
   kernelHeaders = import ../os-specific/linux/kernel-headers {
