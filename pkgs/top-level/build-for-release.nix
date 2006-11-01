@@ -65,6 +65,7 @@ let {
     jre
     kcachegrind
     keen4
+    kernel
     less
     libtool
     libxml2
