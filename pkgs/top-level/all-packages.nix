@@ -2377,6 +2377,11 @@ rec {
     inherit (xlibs) libXmu;
   };
 
+  flashplayer9beta = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9-beta {
+    inherit fetchurl stdenv zlib;
+#    inherit (xlibs) libXmu;
+  };
+
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
@@ -2639,7 +2644,7 @@ rec {
     inherit stdenv firefox;
     plugins = [
       MPlayerPlugin
-      flashplayer
+      flashplayer9beta
     ]
     # RealPlayer is disabled by default for legal reasons.
     ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
