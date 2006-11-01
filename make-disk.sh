@@ -156,7 +156,7 @@ $coreutils/bin/mkdir -p ${initdir}/var/state/dhcp
 echo copying nixpkgs
 
 #svn export ${nixpkgs} ${archivesDir}/pkgs
-tar -zcf  ${archivesDir}/nixpkgs.tgz ${nixpkgs}
+(cd $nixpkgs && tar -zcf  ${archivesDir}/nixpkgs.tgz .)
 
 #echo copying packages from store
 

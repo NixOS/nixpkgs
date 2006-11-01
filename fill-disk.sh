@@ -1,4 +1,6 @@
-#! @bash@/bin/sh -e
+#! @bash@/bin/sh
+
+set -e
 
 export PATH=/bin:/sbin:@bash@/bin:@findutils@/bin:@e2fsprogs@/sbin:@grub@/sbin:@sysvinitPath@/sbin:@eject@/bin:@dhcp@/sbin:@modutils@/sbin:@busybox@/bin:@busybox@/sbin
 
@@ -12,7 +14,7 @@ bootPath=@bootPath@
 modutils=@modutils@
 mingetty=@mingetty@
 
-nixpkgs=/nixpkgs/trunk
+nixpkgs=/nixpkgs
 
 echo formatting target device
 
@@ -188,10 +190,10 @@ echo bringing up networking...
 #labmachine has 3c59x
 #modprobe 3c59x
 #vmware has pcnet32
-modprobe pcnet32
-dhclient eth0
+#modprobe pcnet32
+#dhclient eth0
 
-cp /etc/resolv.conf $root/etc/resolv.conf
+#cp /etc/resolv.conf $root/etc/resolv.conf
 
 #nic=`kudzu -p | grep eth | sort | uniq | cut -d ' ' -f 2`
 
@@ -204,7 +206,8 @@ echo verifying Nix DB...
 $NIX/nix-store --verify
 
 echo copying nixpkgs...
-tar --directory=$root -zxf /cdrom/nixpkgs.tgz
+mkdir -p $root/nixpkgs/pkgs
+tar --directory=$root/nixpkgs/pkgs -zxf /cdrom/nixpkgs.tgz
 
 make_dir 0755 /tmp/scripts
 cp -fa /cdrom/scripts $root/tmp
@@ -344,13 +347,13 @@ echo clearing substitutes
 
 $NIX/nix-store --clear-substitutes
 
-echo clearing network information
+#echo clearing network information
 
-rm $root/etc/resolv.conf
+#rm $root/etc/resolv.conf
 
-echo copying install log
+#echo copying install log
 
-cp /tmp/install-log $root/root
+#cp /tmp/install-log $root/root
 
 # bizar. busybox umount doesn't like things with --bind it seems.
 echo umounting filesystem
