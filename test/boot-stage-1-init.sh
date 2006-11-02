@@ -1,11 +1,9 @@
 #! @shell@
 
 # Print a greeting.
-cat <<EOF
-
-<<< NixOS Stage 1 >>>
-
-EOF
+echo
+echo "<<< NixOS Stage 1 >>>"
+echo
 
 # Set the PATH.
 export PATH=/empty
