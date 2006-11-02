@@ -13,4 +13,5 @@ genericSubstituter {
   path = [
     staticTools
   ];
+  makeDevices = ./make-devices.sh;
 }

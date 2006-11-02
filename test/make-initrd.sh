@@ -12,7 +12,7 @@ packagesClosure=$(/nix/bin/nix-store -qR $packages $init)
 # won't unpack 'em.
 mkdir root
 cd root
-cp -prvd --parents $packagesClosure .
+cp -prd --parents $packagesClosure .
 
 # Put the closure in a gzipped cpio archive.
 ensureDir $out

@@ -11,5 +11,8 @@ for i in @path@; do
     PATH=$PATH:$i/bin
 done
 
+# Create device nodes in /dev.
+source @makeDevices@
+
 # Start an interactive shell.
 exec @shell@
