@@ -34,7 +34,6 @@ rec {
         target = "isolinux/vmlinuz";
       }
       { source = initialRamdisk + "/initrd";
-          #/boot/initrd-2.6.13-15.12-default;
         target = "isolinux/initrd";
       }
     ];
