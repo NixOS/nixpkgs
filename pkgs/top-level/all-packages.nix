@@ -188,6 +188,10 @@ rec {
 
   substituter = ../build-support/substitute/substitute.sh;
 
+  genericSubstituter = import ../build-support/substitute/generic-substituter.nix {
+    inherit stdenv;
+  };
+
 
   ### TOOLS
 
