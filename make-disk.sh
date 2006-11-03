@@ -24,7 +24,6 @@ gzip=$($build ./pkgs.nix -A gzip)
 cpio=$($build ./pkgs.nix -A cpio)
 
 archivesDir=$($mktemp/bin/mktemp -d)
-archivesDir2=$($mktemp/bin/mktemp -d)
 manifest=${archivesDir}/MANIFEST
 nixpkgs=./pkgs
 fill_disk=$archivesDir/scripts/fill-disk.sh
@@ -55,7 +54,6 @@ mkinitrd=$($build ./pkgs.nix -A mkinitrd)
 ### make NAR files for everything we want to install and some more. Make sure
 ### the right URL is in there, so specify /cdrom and not cdrom
 $NIX/nix-push --copy $archivesDir $manifest --target file:///cdrom $storeExpr $($build ./pkgs.nix -A kernel) $kernelscripts $mkinitrd
-#$NIX/nix-push --copy $archivesDir2 $manifest --target http://losser.labs.cs.uu.nl/~armijn/.nix $storeExpr $($build ./pkgs.nix -A kernel) $kernelscripts
 
 # Location of sysvinit?
 sysvinitPath=$($build ./pkgs.nix -A sysvinit)
@@ -106,7 +104,7 @@ done
 tar zcf ${archivesDir}/nixstore.tgz $combideps
 
 utilLinux=$($build ./pkgs.nix -A utillinuxStatic)
-coreUtilsDiet=$($NIX/nix-store -qR $($build ./pkgs.nix -A coreutilsDiet))
+coreUtilsDiet=$($build ./pkgs.nix -A diet.coreutils)
 
 ## temporarily normal e2fsprogs until I can get it to build with dietlibc
 e2fsProgs=$($NIX/nix-store -qR $($build ./pkgs.nix -A e2fsprogsDiet))
