@@ -33,8 +33,12 @@ installPhase() {
         
 	make install
 
-        export MODULE_DIR=$out/lib/modules
-	make modules_install DEPMOD=$module_init_tools/sbin/depmod
+        # Install the modules in $out/lib/modules with matching paths
+        # in modules.dep (i.e., refererring to $out/lib/modules, not
+        # /lib/modules).  The depmod_opts= is to prevent the kernel
+        # from passing `-b PATH' to depmod.
+        export MODULE_DIR=$out/lib/modules/
+	make modules_install DEPMOD=$module_init_tools/sbin/depmod depmod_opts=
 
         # Strip the kernel modules.
         echo "Stripping kernel modules..."
