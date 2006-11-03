@@ -24,6 +24,9 @@ postInstall() {
     # asm directory of kernel-headers unreachable.  So make symlinks
     # from the dietlibc asm to the kernel-headers asm.
     ln -s $kernelHeaders/include/asm/* $out/include/asm/ || true
+
+    # Idem for include/linux.
+    ln -s $kernelHeaders/include/linux/* $out/include/linux/ || true
 }
 
 genericBuild
