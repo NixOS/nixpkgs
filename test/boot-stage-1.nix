@@ -4,14 +4,18 @@
 # the second boot stage.  The closure of the result of this expression
 # is supposed to be put into an initial RAM disk (initrd).
 
-{genericSubstituter, shell, staticTools}:
+{ genericSubstituter, shell, staticTools
+, module_init_tools, utillinux, kernel
+}:
 
 genericSubstituter {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit shell;
+  inherit shell kernel;
   path = [
     staticTools
+    module_init_tools
+    utillinux
   ];
   makeDevices = ./make-devices.sh;
 }

@@ -14,10 +14,18 @@ rec {
   bash = pkgs.bash;
 
 
+  # Determine the set of modules that we need to mount the root FS.
+  modulesClosure = import ./modules-closure.nix {
+    inherit (pkgs) stdenv kernel;
+    rootModules = "ide-cd";
+  };
+
+
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = import ./boot-stage-1.nix {
-    inherit (pkgs) genericSubstituter;
+    inherit (pkgs) genericSubstituter
+      module_init_tools utillinux kernel;
     shell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
   };
