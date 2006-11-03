@@ -2143,10 +2143,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  module_init_toolsStatic = import ../os-specific/linux/module-init-tools-static {
-    inherit fetchurl stdenv;
-  };
-
   modutils = import ../os-specific/linux/modutils {
     inherit fetchurl bison flex;
     stdenv = overrideGCC stdenv gcc34;

@@ -19,6 +19,11 @@ postInstall() {
     # Remove <dlfcn.h>, it makes some packages think we can load
     # dynamic libraries.
     rm $out/include/dlfcn.h
+
+    # Dietlibc has a asm include directory, whose presence makes the
+    # asm directory of kernel-headers unreachable.  So make symlinks
+    # from the dietlibc asm to the kernel-headers asm.
+    ln -s $kernelHeaders/include/asm/* $out/include/asm/ || true
 }
 
 genericBuild
