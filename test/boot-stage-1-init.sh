@@ -26,8 +26,15 @@ mount -t sysfs sys /sys
 source @makeDevices@
 
 # Load some kernel modules.
-export MODULE_DIR=@kernel@
-modprobe ide_disk
+export MODULE_DIR=@kernel@/lib/modules/
+modprobe ide-generic
+modprobe ide-disk
+modprobe ide-cd
+
+# Mount the installation CD.
+mkdir /mnt
+mkdir /mnt/cdrom
+mount -o ro /dev/hdc /mnt/cdrom
 
 # Start an interactive shell.
 exec @shell@
