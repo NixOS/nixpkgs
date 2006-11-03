@@ -26,7 +26,7 @@ mount -t sysfs sys /sys
 source @makeDevices@
 
 # Load some kernel modules.
-export MODULE_DIR=@kernel@/lib/modules/
+export MODULE_DIR=@modules@/lib/modules/
 modprobe ide-generic
 modprobe ide-disk
 modprobe ide-cd

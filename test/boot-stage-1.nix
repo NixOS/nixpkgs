@@ -5,17 +5,17 @@
 # is supposed to be put into an initial RAM disk (initrd).
 
 { genericSubstituter, shell, staticTools
-, module_init_tools, utillinux, kernel
+, module_init_tools, utillinux, modules
 }:
 
 genericSubstituter {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit shell kernel;
+  inherit shell modules;
   path = [
     staticTools
     module_init_tools
-    utillinux
+#    utillinux
   ];
   makeDevices = ./make-devices.sh;
 }
