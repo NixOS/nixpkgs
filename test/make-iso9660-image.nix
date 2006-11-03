@@ -9,6 +9,15 @@
   # grafted in the file system at path `target'.
   contents
 
+, # In addition to `contents', the closure of the store paths listed
+  # in `packages' are also placed in the file system.
+  packages ? []
+
+, # `init' should be a store path, the closure of which is added to
+  # the image, just like `packages'.  However, in addition, a symlink
+  # `/init' to `init' will be created.
+  init ? null
+
   # Whether this should be an El-Torito bootable CD.
 , bootable ? false
 
@@ -23,6 +32,7 @@ stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
   buildInputs = [cdrtools];
-  inherit isoName bootable bootImage;
-  graftList = map ({source, target}: target + "=" + source) contents;
+  inherit isoName packages init bootable bootImage;
+  sources = map ({source, target}: source) contents;
+  targets = map ({source, target}: target) contents;
 }

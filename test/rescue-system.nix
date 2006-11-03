@@ -76,6 +76,8 @@ rec {
         target = "isolinux/initrd";
       }
     ];
+
+    init = pkgs.bash + "/bin/sh";
     
     bootable = true;
     bootImage = "isolinux/isolinux.bin";
