@@ -192,6 +192,10 @@ rec {
     inherit stdenv;
   };
 
+  nukeReferences = import ../build-support/nuke-references/default.nix {
+    inherit stdenv;
+  };
+
 
   ### TOOLS
 
