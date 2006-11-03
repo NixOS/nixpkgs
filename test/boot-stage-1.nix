@@ -5,7 +5,7 @@
 # is supposed to be put into an initial RAM disk (initrd).
 
 { genericSubstituter, shell, staticTools
-, module_init_tools, utillinux, modules
+, module_init_tools, extraUtils, modules
 }:
 
 genericSubstituter {
@@ -15,7 +15,7 @@ genericSubstituter {
   path = [
     staticTools
     module_init_tools
-#    utillinux
+    extraUtils
   ];
   makeDevices = ./make-devices.sh;
 }

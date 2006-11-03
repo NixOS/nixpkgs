@@ -6,6 +6,10 @@ rec {
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
+  pkgsStatic = import ./pkgs/top-level/all-packages.nix {
+    bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
+  };
+
   stdenvLinuxStuff = import ./pkgs/stdenv/linux {
     system = pkgs.stdenv.system;
     allPackages = import ./pkgs/top-level/all-packages.nix;
@@ -19,11 +23,24 @@ rec {
   };
 
 
+  # Some additional utilities needed in stage 1, notably mount.  We
+  # don't want to bring in all of util-linux, so we just copy what we
+  # need.
+  extraUtils = pkgs.stdenv.mkDerivation {
+    name = "extra-utils";
+    builder = builtins.toFile "builder.sh"
+      "source $stdenv/setup; ensureDir $out/bin; cp $utillinux/bin/mount $out/bin; nuke-refs $out/bin/mount";
+    buildInputs = [pkgs.nukeReferences];
+    inherit (pkgsStatic) utillinux;
+  };
+  
+
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = import ./boot-stage-1.nix {
-    inherit (pkgs) genericSubstituter utillinux;
+    inherit (pkgs) genericSubstituter;
     inherit (pkgsDiet) module_init_tools;
+    inherit extraUtils;
     modules = modulesClosure;
     shell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
