@@ -33,6 +33,7 @@ installPhase() {
         
 	make install
 
+        export MODULE_DIR=$out/lib/modules
 	make modules_install DEPMOD=$module_init_tools/sbin/depmod
 
         # Strip the kernel modules.
