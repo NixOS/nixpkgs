@@ -26,7 +26,7 @@ fi
 
 # !!! -f is a quick hack.
 ensureDir $out
-mkisofs -r -J -o $out/$isoName $bootFlags \
+mkisofs -r -J -o $out/iso/$isoName $bootFlags \
     -graft-points $graftList
 
 ensureDir $out/nix-support
