@@ -56,6 +56,14 @@ rec {
   };
 
 
+  # The init script of boot stage 2, which is supposed to do
+  # everything else to bring up the system.
+  bootStage2 = import ./boot-stage-2.nix {
+    inherit (pkgs) genericSubstituter coreutils utillinux;
+    shell = pkgs.bash + "/bin/sh";
+  };
+
+
   # Create an ISO image containing the isolinux boot loader, the
   # kernel, and initrd produced above.
   rescueCD = import ./make-iso9660-image.nix {
@@ -77,7 +85,7 @@ rec {
       }
     ];
 
-    init = pkgs.bash + "/bin/sh";
+    init = bootStage2;
     
     bootable = true;
     bootImage = "isolinux/isolinux.bin";

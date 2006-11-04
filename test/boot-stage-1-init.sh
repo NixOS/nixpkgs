@@ -36,5 +36,10 @@ mkdir /mnt
 mkdir /mnt/cdrom
 mount -o ro /dev/hdc /mnt/cdrom
 
-# Start an interactive shell.
+# Start stage 2.  !!! We use chroot for now, but I guess that should
+# be pivot_root or so.
+chroot /mnt/cdrom /init
+
+# If starting stage 2 failed, start an interactive shell.
+echo "Stage 2 failed, starting emergency shell..."
 exec @shell@
