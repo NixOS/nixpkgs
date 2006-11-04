@@ -25,8 +25,8 @@ if test -n "$init"; then
 fi
 
 # !!! -f is a quick hack.
-ensureDir $out/files
-mkisofs -r -J -o $out/files/$isoName $bootFlags \
+ensureDir $out
+mkisofs -r -J -o $out/$isoName $bootFlags \
     -graft-points $graftList
 
 ensureDir $out/nix-support
