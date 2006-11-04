@@ -17,12 +17,12 @@ for i in @path@; do
 done
 
 # Mount special file systems.
-mkdir /etc # to shut up mount
+mount -t tmpfs none /etc -n # to shut up mount
 touch /etc/fstab # idem
-mkdir /proc
-mount -t proc proc /proc
-mkdir /sys
-mount -t sysfs sys /sys
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /dev
+mount -t tmpfs none /tmp
 
 # Create device nodes in /dev.
 source @makeDevices@

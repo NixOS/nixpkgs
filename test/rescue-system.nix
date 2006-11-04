@@ -64,6 +64,14 @@ rec {
   };
 
 
+  # Since the CD is read-only, the mount points must be on disk.
+  cdMountPoints = pkgs.stdenv.mkDerivation {
+    name = "mount-points";
+    builder = builtins.toFile "builder.sh"
+      "source $stdenv/setup; mkdir $out; cd $out; mkdir proc sys tmp etc dev";
+  };
+
+
   # Create an ISO image containing the isolinux boot loader, the
   # kernel, and initrd produced above.
   rescueCD = import ./make-iso9660-image.nix {
@@ -82,6 +90,9 @@ rec {
       }
       { source = initialRamdisk + "/initrd";
         target = "isolinux/initrd";
+      }
+      { source = cdMountPoints;
+        target = "/";
       }
     ];
 

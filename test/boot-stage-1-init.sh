@@ -18,9 +18,9 @@ done
 mkdir /etc # to shut up mount
 touch /etc/fstab # idem
 mkdir /proc
-mount -t proc proc /proc
+mount -t proc none /proc
 mkdir /sys
-mount -t sysfs sys /sys
+mount -t sysfs none /sys
 
 # Create device nodes in /dev.
 source @makeDevices@
