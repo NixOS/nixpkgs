@@ -27,5 +27,16 @@ mount -t tmpfs none /tmp
 # Create device nodes in /dev.
 source @makeDevices@
 
+# Ensure that the module tools can find the kernel modules.
+export MODULE_DIR=@kernel@/lib/modules/
+
+# Additional path for the interactive shell.
+for i in @extraPath@; do
+    PATH=$PATH:$i/bin
+    if test -e $i/sbin; then
+        PATH=$PATH:$i/sbin
+    fi
+done
+
 # Start an interactive shell.
 exec @shell@
