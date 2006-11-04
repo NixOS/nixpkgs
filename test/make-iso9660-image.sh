@@ -25,7 +25,7 @@ if test -n "$init"; then
 fi
 
 # !!! -f is a quick hack.
-ensureDir $out
+ensureDir $out/iso
 mkisofs -r -J -o $out/iso/$isoName $bootFlags \
     -graft-points $graftList
 
