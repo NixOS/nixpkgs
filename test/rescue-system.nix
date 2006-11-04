@@ -1,12 +1,16 @@
+{system ? __currentSystem}:
+
 rec {
 
-  pkgs = import ./pkgs/top-level/all-packages.nix {};
+  pkgs = import ./pkgs/top-level/all-packages.nix {inherit system;};
 
   pkgsDiet = import ./pkgs/top-level/all-packages.nix {
+    inherit system;
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
   pkgsStatic = import ./pkgs/top-level/all-packages.nix {
+    inherit system;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
   };
 

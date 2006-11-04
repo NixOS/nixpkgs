@@ -1,7 +1,5 @@
 source $stdenv/setup
 
-ensureDir $out
-
 if test -n "$bootable"; then
     bootFlags="-b $bootImage -c boot.cat -no-emul-boot -boot-load-size 4"
 fi
@@ -27,5 +25,9 @@ if test -n "$init"; then
 fi
 
 # !!! -f is a quick hack.
-mkisofs -r -J -o $out/$isoName $bootFlags \
+ensureDir $out/files
+mkisofs -r -J -o $out/files/$isoName $bootFlags \
     -graft-points $graftList
+
+ensureDir $out/nix-support
+echo $system > $out/nix-support/system
