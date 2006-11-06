@@ -1,4 +1,3 @@
-#mknod -m 0600 /dev/console c 5 1
 mknod -m 0600 /dev/ttyS0 c 4 64
 mknod -m 0600 /dev/ttyS1 c 4 65
 mknod -m 0600 /dev/ttyS2 c 4 66
@@ -11,16 +10,12 @@ mknod -m 0666 /dev/zero c 1 5
 
 # tty
 mknod -m 0600 /dev/tty c 5 0
-mknod -m 0600 /dev/tty0 c 4 0
-mknod -m 0600 /dev/tty1 c 4 1
-mknod -m 0600 /dev/tty2 c 4 2
-mknod -m 0600 /dev/tty3 c 4 3
-mknod -m 0600 /dev/tty4 c 4 4
-mknod -m 0600 /dev/tty5 c 4 5
-mknod -m 0600 /dev/tty6 c 4 6
-mknod -m 0600 /dev/tty7 c 4 7
-mknod -m 0600 /dev/tty8 c 4 8
-mknod -m 0600 /dev/tty9 c 4 9
+if ! test -e /dev/console; then
+    mknod -m 0600 /dev/console c 5 1
+fi
+for i in $(seq 0 10); do
+    mknod -m 0600 /dev/tty$i c 4 $i
+done
 
 mkdir -m 0755 /dev/pts
 mknod -m 0666 /dev/ptmx c 5 2

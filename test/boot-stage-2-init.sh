@@ -23,6 +23,12 @@ mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t tmpfs none /dev
 mount -t tmpfs none /tmp
+mount -t tmpfs none /var
+mount -t tmpfs none /nix/var
+
+mkdir -p /nix/var/nix/db
+mkdir -p /nix/var/nix/gcroots
+mkdir -p /nix/var/nix/temproots
 
 # Create device nodes in /dev.
 source @makeDevices@
@@ -38,5 +44,43 @@ for i in @extraPath@; do
     fi
 done
 
+# Start syslogd.
+mkdir -p /var/run
+#mkdir -p /var/log
+#touch /var/log/messages
+echo "*.* /dev/tty10" > /etc/syslog.conf
+echo "syslog 514/udp" > /etc/services # required, even if we don't use it
+@sysklogd@/sbin/syslogd &
+
+# login/su absolutely need this.
+touch /etc/login.defs 
+
+# Enable a password-less root login.
+echo "root::0:0:root:/:@shell@" > /etc/passwd
+echo "root:*:0" > /etc/group
+
+cat > /etc/profile <<EOF
+export PATH=$PATH
+export MODULE_DIR=$MODULE_DIR
+EOF
+
+# Set up inittab.
+for i in $(seq 1 6); do 
+    echo "$i:2345:respawn:@mingetty@/sbin/mingetty --noclear tty$i" >> /etc/inittab
+done
+
+# Show a nice greeting on each terminal.
+cat > /etc/issue <<EOF
+
+<<< Welcome to NixOS (\m) - Kernel \r (\l) >>>
+
+You can log in as \`root'.
+
+
+EOF
+
 # Start an interactive shell.
-exec @shell@
+#exec @shell@
+
+# Start init.
+exec init 2

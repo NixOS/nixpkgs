@@ -36,9 +36,15 @@ mkdir /mnt
 mkdir /mnt/cdrom
 mount -o ro /dev/hdc /mnt/cdrom
 
-# Start stage 2.  !!! We use chroot for now, but I guess that should
-# be pivot_root or so.
-chroot /mnt/cdrom /init
+# Start stage 2.
+# !!! Note: we can't use pivot_root here (the kernel gods have
+# decreed), but we could use run-init from klibc, which deletes all
+# files in the initramfs, remounts the target root on /, and chroots.
+cd /mnt/cdrom
+mount --move . /
+umount /proc # cleanup
+umount /sys
+exec chroot . /init
 
 # If starting stage 2 failed, start an interactive shell.
 echo "Stage 2 failed, starting emergency shell..."

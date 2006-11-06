@@ -33,7 +33,7 @@ rec {
   extraUtils = pkgs.stdenv.mkDerivation {
     name = "extra-utils";
     builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; ensureDir $out/bin; cp $utillinux/bin/mount $out/bin; nuke-refs $out/bin/mount";
+      "source $stdenv/setup; ensureDir $out/bin; cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin; nuke-refs $out/bin/*";
     buildInputs = [pkgs.nukeReferences];
     inherit (pkgsStatic) utillinux;
   };
@@ -63,7 +63,8 @@ rec {
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
-    inherit (pkgs) genericSubstituter coreutils utillinux kernel;
+    inherit (pkgs) genericSubstituter coreutils utillinux kernel
+      sysklogd;
     shell = pkgs.bash + "/bin/sh";
 
     # Additional stuff; add whatever you want here.
@@ -86,7 +87,15 @@ rec {
       pkgs.netcat
       pkgs.nettools
       pkgs.vim
+      pkgs.nix
+      pkgs.strace
+      pkgs.sysvinit
+      pkgs.procps
+      pkgs.shadowutils
+      pkgs.sysklogd
     ];
+
+    mingetty = pkgs.mingettyWrapper;
   };
 
 
@@ -94,12 +103,13 @@ rec {
   cdMountPoints = pkgs.stdenv.mkDerivation {
     name = "mount-points";
     builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; mkdir $out; cd $out; mkdir proc sys tmp etc dev";
+      "source $stdenv/setup; mkdir $out; cd $out; mkdir proc sys tmp etc dev var mnt nix nix/var";
   };
 
 
   # Create an ISO image containing the isolinux boot loader, the
-  # kernel, and initrd produced above.
+  # kernel, the initrd produced above, and the closure of the stage 2
+  # init.
   rescueCD = import ./make-iso9660-image.nix {
     inherit (pkgs) stdenv cdrtools;
     isoName = "nixos.iso";
@@ -128,5 +138,5 @@ rec {
     bootImage = "isolinux/isolinux.bin";
   };
 
-    
+
 }

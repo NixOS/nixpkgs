@@ -1,11 +1,12 @@
 { genericSubstituter, shell, coreutils
-, utillinux, kernel, path ? []
+, utillinux, kernel, sysklogd, mingetty
+, path ? []
 }:
 
 genericSubstituter {
   src = ./boot-stage-2-init.sh;
   isExecutable = true;
-  inherit shell kernel;
+  inherit shell kernel sysklogd mingetty;
   path = [
     coreutils
     utillinux
