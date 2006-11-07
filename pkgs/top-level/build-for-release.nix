@@ -199,7 +199,10 @@ let {
   ;};
 
   cygwinPkgs = {inherit (allPackages {system = "i686-cygwin";})
-#    aterm
+    aterm
+    gnum4
+    readline
+    ncurses
   ;};
 
   body = [
