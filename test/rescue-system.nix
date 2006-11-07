@@ -64,8 +64,10 @@ rec {
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
-      utillinux kernel sysklogd udev module_init_tools;
+      utillinux kernel sysklogd udev module_init_tools
+      nettools;
     shell = pkgs.bash + "/bin/sh";
+    dhcp = pkgs.dhcpWrapper;
 
     # Additional stuff; add whatever you want here.
     path = [
@@ -83,8 +85,7 @@ rec {
       pkgs.less
       pkgs.nano
       pkgs.netcat
-      pkgs.nettools
-      pkgs.vim
+#      pkgs.vim
       pkgs.nix
       pkgs.strace
       pkgs.sysvinit

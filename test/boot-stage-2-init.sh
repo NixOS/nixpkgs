@@ -59,6 +59,18 @@ for i in /sys/bus/pci/devices/*/modalias; do
     modprobe $(cat $i)
 done
 
+# Bring up the network devices.
+modprobe af_packet
+for i in $(cd /sys/class/net && ls -d *); do
+    echo "Bringing up network device $i..."
+    if ifconfig $i up; then
+        if test "$i" != "lo"; then
+            mkdir -p /var/state/dhcp
+            dhclient $i
+        fi
+    fi
+done
+
 # login/su absolutely need this.
 touch /etc/login.defs 
 

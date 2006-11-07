@@ -1,6 +1,6 @@
 { genericSubstituter, shell, coreutils, findutils
 , utillinux, kernel, sysklogd, mingetty, udev
-, module_init_tools
+, module_init_tools, nettools, dhcp
 , path ? []
 }:
 
@@ -14,6 +14,8 @@ genericSubstituter {
     utillinux
     udev
     module_init_tools
+    nettools
+    dhcp
   ];
   extraPath = path;
   makeDevices = ./make-devices.sh;
