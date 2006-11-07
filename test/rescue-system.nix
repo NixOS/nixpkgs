@@ -63,8 +63,8 @@ rec {
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
-    inherit (pkgs) genericSubstituter coreutils utillinux kernel
-      sysklogd;
+    inherit (pkgs) genericSubstituter coreutils findutils
+      utillinux kernel sysklogd udev module_init_tools;
     shell = pkgs.bash + "/bin/sh";
 
     # Additional stuff; add whatever you want here.
@@ -74,7 +74,6 @@ rec {
       pkgs.cpio
       pkgs.curl
       pkgs.e2fsprogs
-      pkgs.findutils
       pkgs.gnugrep
       pkgs.gnused
       pkgs.gnutar
@@ -82,7 +81,6 @@ rec {
       pkgs.gzip
       pkgs.iputils
       pkgs.less
-      pkgs.module_init_tools
       pkgs.nano
       pkgs.netcat
       pkgs.nettools

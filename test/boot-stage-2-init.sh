@@ -30,19 +30,20 @@ mkdir -p /nix/var/nix/db
 mkdir -p /nix/var/nix/gcroots
 mkdir -p /nix/var/nix/temproots
 
-# Create device nodes in /dev.
-source @makeDevices@
-
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
 
-# Additional path for the interactive shell.
-for i in @extraPath@; do
-    PATH=$PATH:$i/bin
-    if test -e $i/sbin; then
-        PATH=$PATH:$i/sbin
-    fi
-done
+# Create device nodes in /dev.
+#source @makeDevices@
+
+# Start udev.
+udevd --daemon
+
+# Let udev create device nodes for all modules that have already been
+# loaded into the kernel (or for which support is built into the
+# kernel).
+udevtrigger
+udevsettle # wait for udev to finish
 
 # Start syslogd.
 mkdir -p /var/run
@@ -52,17 +53,18 @@ echo "*.* /dev/tty10" > /etc/syslog.conf
 echo "syslog 514/udp" > /etc/services # required, even if we don't use it
 @sysklogd@/sbin/syslogd &
 
+# Try to load modules for all PCI devices.
+for i in /sys/bus/pci/devices/*/modalias; do
+    echo "Trying to load a module for $(basename $(dirname $i))..."
+    modprobe $(cat $i)
+done
+
 # login/su absolutely need this.
 touch /etc/login.defs 
 
 # Enable a password-less root login.
 echo "root::0:0:root:/:@shell@" > /etc/passwd
 echo "root:*:0" > /etc/group
-
-cat > /etc/profile <<EOF
-export PATH=$PATH
-export MODULE_DIR=$MODULE_DIR
-EOF
 
 # Set up inittab.
 for i in $(seq 1 6); do 
@@ -77,6 +79,19 @@ cat > /etc/issue <<EOF
 You can log in as \`root'.
 
 
+EOF
+
+# Additional path for the interactive shell.
+for i in @extraPath@; do
+    PATH=$PATH:$i/bin
+    if test -e $i/sbin; then
+        PATH=$PATH:$i/sbin
+    fi
+done
+
+cat > /etc/profile <<EOF
+export PATH=$PATH
+export MODULE_DIR=$MODULE_DIR
 EOF
 
 # Start an interactive shell.
