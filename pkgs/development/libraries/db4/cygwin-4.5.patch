@@ -12,7 +12,7 @@ diff -rc db-4.5.20-orig/os/os_flock.c db-4.5.20/os/os_flock.c
 + 	 * Windows file locking interferes with read/write operations, so we
 + 	 * map the ranges to an area past the end of the file.
 + 	 */
-+ 	DB_ASSERT(offset < (off_t) 1 << 62);
++ 	DB_ASSERT(dbenv, offset < (off_t) 1 << 62);
 + 	offset += (off_t) 1 << 62;
 + #endif
 + 
