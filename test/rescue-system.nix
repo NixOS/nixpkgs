@@ -98,6 +98,13 @@ rec {
   };
 
 
+  # The installer.
+  nixosInstaller = import ./installer.nix {
+    inherit (pkgs) stdenv genericSubstituter nix;
+    shell = pkgs.bash + "/bin/sh";
+  };
+
+
   # Since the CD is read-only, the mount points must be on disk.
   cdMountPoints = pkgs.stdenv.mkDerivation {
     name = "mount-points";
