@@ -7,11 +7,11 @@ assert compressionSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
 (stdenv.mkDerivation {
-  name = "neon-0.25.5";
+  name = "neon-0.26.2";
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/neon-0.25.5.tar.gz;
-    md5 = "b5fdb71dd407f0a3de0f267d27c9ab17";
+    url = http://www.webdav.org/neon/neon-0.26.2.tar.gz;
+    md5 = "65ff7f6d962305b984a60d6ec5b189b5";
   };
   
   buildInputs = [libxml2] ++ (if compressionSupport then [zlib] else []);
