@@ -3,6 +3,7 @@
 
 genericSubstituter {
   src = ./installer.sh;
+  dir = "bin";
   isExecutable = true;
   inherit shell nix;
   

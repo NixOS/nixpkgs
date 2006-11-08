@@ -60,6 +60,13 @@ rec {
   };
 
 
+  # The installer.
+  nixosInstaller = import ./installer.nix {
+    inherit (pkgs) stdenv genericSubstituter nix;
+    shell = pkgs.bash + "/bin/sh";
+  };
+
+
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
@@ -92,16 +99,11 @@ rec {
       pkgs.procps
       pkgs.shadowutils
       pkgs.sysklogd
+      pkgs.rsync
+      nixosInstaller
     ];
 
     mingetty = pkgs.mingettyWrapper;
-  };
-
-
-  # The installer.
-  nixosInstaller = import ./installer.nix {
-    inherit (pkgs) stdenv genericSubstituter nix;
-    shell = pkgs.bash + "/bin/sh";
   };
 
 

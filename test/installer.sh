@@ -37,5 +37,5 @@ mount "$targetDevice" $mountPoint || exit 1
 
 # Copy Nix to the Nix store on the target device.
 mkdir -p $mountPoint/nix/store/
-cp -prd $(cat @nixClosure@) $mountPoint/nix/store/ || exit 1
+rsync -av $(cat @nixClosure@) $mountPoint/nix/store/ || exit 1
 
