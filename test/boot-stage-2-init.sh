@@ -106,6 +106,9 @@ export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
 EOF
 
+# Set the host name.
+hostname nixos
+
 # Start an interactive shell.
 #exec @shell@
 

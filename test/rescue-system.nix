@@ -20,6 +20,10 @@ rec {
   };
 
 
+  # The label used to identify the installation CD.
+  cdromLabel = "NIXOS";
+
+
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ./modules-closure.nix {
     inherit (pkgs) stdenv kernel module_init_tools;
@@ -45,6 +49,7 @@ rec {
     inherit (pkgs) genericSubstituter;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
+    inherit cdromLabel;
     modules = modulesClosure;
     shell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
@@ -110,8 +115,13 @@ rec {
   # Since the CD is read-only, the mount points must be on disk.
   cdMountPoints = pkgs.stdenv.mkDerivation {
     name = "mount-points";
-    builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; mkdir $out; cd $out; mkdir proc sys tmp etc dev var mnt nix nix/var";
+    builder = builtins.toFile "builder.sh" "
+      source $stdenv/setup
+      mkdir $out
+      cd $out
+      mkdir proc sys tmp etc dev var mnt nix nix/var
+      touch $out/${cdromLabel}
+    ";
   };
 
 

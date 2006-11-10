@@ -6,12 +6,13 @@
 
 { genericSubstituter, shell, staticTools
 , module_init_tools, extraUtils, modules
+, cdromLabel ? ""
 }:
 
 genericSubstituter {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit shell modules;
+  inherit shell modules cdromLabel;
   path = [
     staticTools
     module_init_tools
