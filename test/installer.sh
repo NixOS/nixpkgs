@@ -13,33 +13,48 @@
 #   * run hook scripts provided by packages in the configuration?
 # - install/update grub
 
-targetDevice="$1"
+set -e
 
-if test -z "$targetDevice"; then
-    echo "syntax: installer.sh <targetDevice>"
+targetDevice="$1"
+nixExpr="$2"
+
+if test -z "$targetDevice" -o -z "$nixExpr"; then
+    echo "syntax: installer.sh <targetDevice> <nixExpr>"
     exit 1
 fi
 
+nixExpr=$(readlink -f "$nixExpr")
+
 
 # Make sure that the target device isn't mounted.
-umount "$targetDevice" 2> /dev/null
+umount "$targetDevice" 2> /dev/null || true
 
 
 # Check it.
-fsck "$targetDevice" || exit 1
+fsck "$targetDevice"
 
 
 # Mount the target device.
 mountPoint=/tmp/inst-mnt
 mkdir -p $mountPoint
-mount "$targetDevice" $mountPoint || exit 1
+mount "$targetDevice" $mountPoint
 
-mkdir -p $mountPoint/dev $mountPoint/proc $mountPoint/sys || exit 1
-mount --bind /dev $mountPoint/dev || exit 1
-mount --bind /proc $mountPoint/proc || exit 1
-mount --bind /sys $mountPoint/sys || exit 1
+mkdir -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
+mount --rbind / $mountPoint/mnt
+mount --bind /dev $mountPoint/dev
+mount --bind /proc $mountPoint/proc
+mount --bind /sys $mountPoint/sys
 
-trap "umount $mountPoint/dev; umount $mountPoint/proc; umount $mountPoint/sys; umount $mountPoint" EXIT
+cleanup() {
+    for i in $(grep -F "$mountPoint" /proc/mounts \
+        | perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
+        | sort -r);
+    do
+        umount $i
+    done
+}
+
+trap "cleanup" EXIT
 
 mkdir -p $mountPoint/tmp
 mkdir -p $mountPoint/var
@@ -62,7 +77,7 @@ mkdir -p \
 echo "copying Nix to $targetDevice...."
 for i in $(cat @nixClosure@); do
     echo "  $i"
-    rsync -a $i $mountPoint/nix/store/ || exit 1
+    rsync -a $i $mountPoint/nix/store/
 done
 
 
@@ -76,7 +91,7 @@ for i in $(cat @nixClosure@); do
     echo # deriver
     echo 0 # nr of references
 done \
-| chroot $mountPoint @nix@/bin/nix-store --register-validity || exit 1
+| chroot $mountPoint @nix@/bin/nix-store --register-validity
 
 
 # Create the required /bin/sh symlink; otherwise lots of things
@@ -90,16 +105,19 @@ mkdir -p $mountPoint/etc
 cp /etc/resolv.conf $mountPoint/etc/
 
 
-# Do a nix-pull.
+# Do a nix-pull to speed up building.
 nixpkgsURL=http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre6984
 chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
 
 
-# Install some packages.
-rm -rf $mountPoint/scratch
-mkdir $mountPoint/scratch
-curl $nixpkgsURL/nixexprs.tar.bz2 | tar xj -C $mountPoint/scratch
+# Build the specified Nix expression in the target store and install
+# it into the system configuration profile.
 
-nixpkgsName=$(cd $mountPoint/scratch && ls)
+#rm -rf $mountPoint/scratch
+#mkdir $mountPoint/scratch
+#curl $nixpkgsURL/nixexprs.tar.bz2 | tar xj -C $mountPoint/scratch
+#nixpkgsName=$(cd $mountPoint/scratch && ls)
 
-chroot $mountPoint @nix@/bin/nix-env -f /scratch/$nixpkgsName -i aterm
+chroot $mountPoint @nix@/bin/nix-env \
+    -p /nix/var/nix/profiles/system \
+    -f "/mnt/$nixExpr" -i '*'
