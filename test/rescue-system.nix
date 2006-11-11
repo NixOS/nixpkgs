@@ -105,6 +105,7 @@ rec {
       pkgs.shadowutils
       pkgs.sysklogd
       pkgs.rsync
+      pkgs.perl
       nixosInstaller
     ];
 
