@@ -1,4 +1,8 @@
-{system ? __currentSystem}:
+{ system ? __currentSystem
+, autoDetectRootDevice ? false
+, rootDevice ? ""
+, rootLabel ? ""
+}:
 
 rec {
 
@@ -18,10 +22,6 @@ rec {
     system = pkgs.stdenv.system;
     allPackages = import ./pkgs/top-level/all-packages.nix;
   };
-
-
-  # The label used to identify the installation CD.
-  cdromLabel = "NIXOS";
 
 
   # Determine the set of modules that we need to mount the root FS.
@@ -49,7 +49,7 @@ rec {
     inherit (pkgs) genericSubstituter;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
-    inherit cdromLabel;
+    inherit autoDetectRootDevice rootDevice rootLabel;
     modules = modulesClosure;
     shell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
@@ -110,51 +110,6 @@ rec {
     ];
 
     mingetty = pkgs.mingettyWrapper;
-  };
-
-
-  # Since the CD is read-only, the mount points must be on disk.
-  cdMountPoints = pkgs.stdenv.mkDerivation {
-    name = "mount-points";
-    builder = builtins.toFile "builder.sh" "
-      source $stdenv/setup
-      mkdir $out
-      cd $out
-      mkdir proc sys tmp etc dev var mnt nix nix/var
-      touch $out/${cdromLabel}
-    ";
-  };
-
-
-  # Create an ISO image containing the isolinux boot loader, the
-  # kernel, the initrd produced above, and the closure of the stage 2
-  # init.
-  rescueCD = import ./make-iso9660-image.nix {
-    inherit (pkgs) stdenv cdrtools;
-    isoName = "nixos.iso";
-    
-    contents = [
-      { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
-        target = "isolinux/isolinux.bin";
-      }
-      { source = ./isolinux.cfg;
-        target = "isolinux/isolinux.cfg";
-      }
-      { source = pkgs.kernel + "/vmlinuz";
-        target = "isolinux/vmlinuz";
-      }
-      { source = initialRamdisk + "/initrd";
-        target = "isolinux/initrd";
-      }
-      { source = cdMountPoints;
-        target = "/";
-      }
-    ];
-
-    init = bootStage2;
-    
-    bootable = true;
-    bootImage = "isolinux/isolinux.bin";
   };
 
 

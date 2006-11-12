@@ -6,10 +6,12 @@ fail() {
     exec @shell@
 }
 
+
 # Print a greeting.
 echo
 echo "<<< NixOS Stage 1 >>>"
 echo
+
 
 # Set the PATH.
 export PATH=/empty
@@ -20,6 +22,7 @@ for i in @path@; do
     fi
 done
 
+
 # Mount special file systems.
 mkdir /etc # to shut up mount
 touch /etc/fstab # idem
@@ -28,8 +31,10 @@ mount -t proc none /proc
 mkdir /sys
 mount -t sysfs none /sys
 
+
 # Create device nodes in /dev.
 source @makeDevices@
+
 
 # Load some kernel modules.
 export MODULE_DIR=@modules@/lib/modules/
@@ -37,43 +42,57 @@ modprobe ide-generic
 modprobe ide-disk
 modprobe ide-cd
 
-# Try to find and mount the installation CD.
 
-# Mount the installation CD.
+# Try to find and mount the root device.
 mkdir /mnt
-mkdir /mnt/cdrom
+mkdir /mnt/root
 
-echo "probing for the NixOS installation CD..."
+echo "mounting the root device..."
 
-for i in /sys/devices/*/*/media; do
-    if test "$(cat $i)" = "cdrom"; then
+if test -n "@autoDetectRootDevice@"; then
 
-        # Hopefully `drivename' matches the device created in /dev.
-        devName=/dev/$(cat $(dirname $i)/drivename)
+    # Look for the root device by label.
+    echo "probing for the NixOS installation CD..."
 
-        echo "  in $devName..."
+    for i in /sys/devices/*/*/media; do
+        if test "$(cat $i)" = "cdrom"; then
 
-        if mount -o ro -t iso9660 $devName /mnt/cdrom; then
-            if test -e "/mnt/cdrom/@cdromLabel@"; then
-                found=1
-                break
+            # Hopefully `drivename' matches the device created in /dev.
+            devName=/dev/$(cat $(dirname $i)/drivename)
+
+            echo "  in $devName..."
+
+            if mount -o ro -t iso9660 $devName /mnt/root; then
+                if test -e "/mnt/root/@rootLabel@"; then
+                    found=1
+                    break
+                fi
+                umount /mnt/root
             fi
-            umount /mnt/cdrom
-        fi
         
-    fi
-done
+        fi
+    done
 
-if test -z "$found"; then
-    echo "CD not found!"
+    if test -z "$found"; then
+        echo "CD not found!"
+        fail
+    fi
+
+else
+
+    # Hard-coded root device.
+    mount -o ro "@rootDevice@" /mnt/root
+
+    # Testing.
     fail
+
 fi
 
 # Start stage 2.
 # !!! Note: we can't use pivot_root here (the kernel gods have
 # decreed), but we could use run-init from klibc, which deletes all
 # files in the initramfs, remounts the target root on /, and chroots.
-cd /mnt/cdrom
+cd /mnt/root
 mount --move . /
 umount /proc # cleanup
 umount /sys

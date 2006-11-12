@@ -6,13 +6,25 @@
 
 { genericSubstituter, shell, staticTools
 , module_init_tools, extraUtils, modules
-, cdromLabel ? ""
+
+, # Whether to find root device automatically using its label.
+  autoDetectRootDevice
+  
+, # If not scanning, the root must be specified explicitly.
+  rootDevice
+
+  # If scanning, we need a disk label.
+, rootLabel
 }:
+
+assert !autoDetectRootDevice -> rootDevice != "";
+assert autoDetectRootDevice -> rootLabel != "";
 
 genericSubstituter {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit shell modules cdromLabel;
+  inherit shell modules;
+  inherit autoDetectRootDevice rootDevice rootLabel;
   path = [
     staticTools
     module_init_tools
