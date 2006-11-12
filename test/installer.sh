@@ -31,7 +31,7 @@ umount "$targetDevice" 2> /dev/null || true
 
 
 # Check it.
-fsck "$targetDevice"
+fsck -n "$targetDevice"
 
 
 # Mount the target device.
@@ -107,7 +107,7 @@ cp /etc/resolv.conf $mountPoint/etc/
 
 # Do a nix-pull to speed up building.
 nixpkgsURL=http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre6984
-chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
+#chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
 
 
 # Build the specified Nix expression in the target store and install
@@ -120,4 +120,15 @@ chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
 
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt/$nixExpr" -i '*'
+    -f "/mnt/$nixExpr" -i system-configuration
+
+
+# Grub needs a mtab.
+echo "$targetDevice / somefs rw 0 0" > $mountPoint/etc/mtab
+
+
+# Switch to the new system configuration.  This will install Grub with
+# a menu default pointing at the kernel/initrd/etc of the new
+# configuration.
+echo "finalising the installation..."
+chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration

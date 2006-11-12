@@ -6,7 +6,7 @@ set -o pipefail
 # way to get the closure is to call Nix, which is strictly speaking
 # forbidden.  But we do it anyway.  In time, we should add a feature
 # to Nix to let Nix pass closures to builders.
-packagesClosure=$(/nix/bin/nix-store -qR $packages $init)
+packagesClosure=$(nix-store -qR $packages $init)
 
 # Paths in cpio archives *must* be relative, otherwise the kernel
 # won't unpack 'em.

@@ -10,11 +10,11 @@
 # A symlink `/init' is made to the store path passed in the `init'
 # argument.
 
-{stdenv, cpio, packages, init}:
+{stdenv, cpio, packages, init, nix}:
 
 stdenv.mkDerivation {
   name = "initrd";
   builder = ./make-initrd.sh;
-  buildInputs = [cpio];
+  buildInputs = [cpio nix];
   inherit packages init;
 }

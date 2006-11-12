@@ -14,6 +14,8 @@ in
   
 rec {
 
+  inherit nixosInstaller; # !!! debug
+
 
   # Since the CD is read-only, the mount points must be on disk.
   cdMountPoints = pkgs.stdenv.mkDerivation {
