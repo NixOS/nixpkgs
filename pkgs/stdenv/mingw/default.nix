@@ -14,7 +14,7 @@ let {
       inherit system;
       name = "stdenv-init1-mingw";
       shell = "/bin/bash.exe";
-      path = ["/usr/bin" "/bin"];
+      path = ["/usr/bin" "/bin" "/usr/local/bin"];
     };
 
   /**
