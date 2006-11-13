@@ -9,12 +9,14 @@ in
   with import ./rescue-system.nix {
     autoDetectRootDevice = true;
     rootLabel = cdromLabel;
+    stage2Init = "/init";
+    readOnlyRoot = true;
   };
 
   
 rec {
 
-  inherit nixosInstaller; # !!! debug
+  inherit nixosInstaller bootStage1; # !!! debug
 
 
   # Since the CD is read-only, the mount points must be on disk.
@@ -34,7 +36,7 @@ rec {
   # kernel, the initrd produced above, and the closure of the stage 2
   # init.
   rescueCD = import ./make-iso9660-image.nix {
-    inherit (pkgs) stdenv cdrtools;
+    inherit (pkgs) stdenv cdrtools nix;
     isoName = "nixos.iso";
     
     contents = [

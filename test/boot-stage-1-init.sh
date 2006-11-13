@@ -83,9 +83,6 @@ else
     # Hard-coded root device.
     mount -o ro "@rootDevice@" /mnt/root
 
-    # Testing.
-    fail
-
 fi
 
 # Start stage 2.
@@ -96,6 +93,7 @@ cd /mnt/root
 mount --move . /
 umount /proc # cleanup
 umount /sys
-exec chroot . /init
+
+exec chroot . @stage2Init@
 
 fail

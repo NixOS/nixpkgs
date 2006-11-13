@@ -1,4 +1,4 @@
-{ stdenv, cdrtools
+{ stdenv, cdrtools, nix
 
   # The file name of the resulting ISO image.
 , isoName ? "cd.iso"
@@ -31,7 +31,7 @@ assert bootable -> bootImage != "";
 stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
-  buildInputs = [cdrtools];
+  buildInputs = [cdrtools nix];
   inherit isoName packages init bootable bootImage;
   sources = map ({source, target}: source) contents;
   targets = map ({source, target}: target) contents;

@@ -10,7 +10,8 @@ genericSubstituter {
   nixClosure = stdenv.mkDerivation {
     name = "closure";
     builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; /nix/bin/nix-store -qR $nix > $out";
+      "source $stdenv/setup; nix-store -qR $nix > $out";
+    buildInputs = [nix];
     inherit nix;
   };
 }

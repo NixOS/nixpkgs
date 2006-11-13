@@ -15,6 +15,10 @@
 
   # If scanning, we need a disk label.
 , rootLabel
+
+, # The path of the stage 2 init to call once we've mounted the root
+  # device.
+  stage2Init ? "/init"
 }:
 
 assert !autoDetectRootDevice -> rootDevice != "";
@@ -31,4 +35,9 @@ genericSubstituter {
     extraUtils
   ];
   makeDevices = ./make-devices.sh;
+
+  # We only want the path of the stage 2 init, we don't want it as a
+  # dependency (since then it the stage 2 init would end up in the
+  # initrd).
+  stage2Init = toString stage2Init; # !!! doesn't work
 }

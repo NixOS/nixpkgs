@@ -7,14 +7,17 @@ let
   # don't want GRUB to be installed).
   grubDevice = "/dev/hda";
 
-in
-
-  # Build boot scripts for the CD that find the CD-ROM automatically.
-  with import ./rescue-system.nix {
+  # Build boot scripts.
+  bootEnv = import ./rescue-system.nix {
     autoDetectRootDevice = false;
     inherit rootDevice;
+    stage2Init = "/init"; # !!! should be bootEnv.bootStage2;
+    readOnlyRoot = false;
   };
 
+in
+
+with bootEnv;
   
 rec {
 
@@ -24,6 +27,7 @@ rec {
     builder = ./system-configuration.sh;
     inherit (pkgs) grub coreutils gnused gnugrep diffutils;
     inherit grubDevice;
+    inherit bootStage2;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
   };

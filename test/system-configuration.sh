@@ -23,6 +23,7 @@ export PATH=$coreutils/bin:$gnused/bin:$gnugrep/bin:$diffutils/bin
 if test -n "$grubDevice"; then
     $grub/sbin/grub-install "$grubDevice" --no-floppy --recheck
     cp -f $out/menu.lst /boot/grub/menu.lst
+    ln -sf $bootStage2 /init # !!! fix?
 fi
 EOF
 

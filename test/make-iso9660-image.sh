@@ -13,7 +13,7 @@ done
 
 # !!! Just as with make-initrd.nix, the call to Nix here needs to be
 # fixed.
-packagesClosure=$(/nix/bin/nix-store -qR $packages $init)
+packagesClosure=$(nix-store -qR $packages $init)
 
 for i in $packagesClosure; do
     graftList="$graftList ${i:1}=$i"

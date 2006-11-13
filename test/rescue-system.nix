@@ -2,6 +2,8 @@
 , autoDetectRootDevice ? false
 , rootDevice ? ""
 , rootLabel ? ""
+, stage2Init
+, readOnlyRoot
 }:
 
 rec {
@@ -50,6 +52,7 @@ rec {
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
     inherit autoDetectRootDevice rootDevice rootLabel;
+    inherit stage2Init;
     modules = modulesClosure;
     shell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
@@ -110,6 +113,8 @@ rec {
     ];
 
     mingetty = pkgs.mingettyWrapper;
+
+    inherit readOnlyRoot;
   };
 
 
