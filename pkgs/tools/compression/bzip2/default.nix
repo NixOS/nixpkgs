@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "bzip2-1.0.3";
-  builder = ./builder.sh;
+  builder = if stdenv.system == "i686-cygwin" then ./builder-cygwin.sh else ./builder.sh; # !!! merge
     
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/bzip2-1.0.3.tar.gz;
