@@ -8,7 +8,7 @@ let
   grubDevice = "/dev/hda";
 
   # Build boot scripts.
-  bootEnv = import ./rescue-system.nix {
+  bootEnv = import ./boot-environment.nix {
     autoDetectRootDevice = false;
     inherit rootDevice;
     stage2Init = "/init"; # !!! should be bootEnv.bootStage2;

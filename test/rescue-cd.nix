@@ -6,7 +6,7 @@ let
 in
 
   # Build boot scripts for the CD that find the CD-ROM automatically.
-  with import ./rescue-system.nix {
+  with import ./boot-environment.nix {
     autoDetectRootDevice = true;
     rootLabel = cdromLabel;
     stage2Init = "/init";
