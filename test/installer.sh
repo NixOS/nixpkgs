@@ -39,7 +39,7 @@ mountPoint=/tmp/inst-mnt
 mkdir -p $mountPoint
 mount "$targetDevice" $mountPoint
 
-mkdir -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
 mount --rbind / $mountPoint/mnt
 mount --bind /dev $mountPoint/dev
 mount --bind /proc $mountPoint/proc
@@ -56,13 +56,13 @@ cleanup() {
 
 trap "cleanup" EXIT
 
-mkdir -p $mountPoint/tmp
-mkdir -p $mountPoint/var
+mkdir -m 01777 -p $mountPoint/tmp
+mkdir -m 0755 -p $mountPoint/var
 
 
 # Create the necessary Nix directories on the target device, if they
 # don't already exist.
-mkdir -p \
+mkdir -m 0755 -p \
     $mountPoint/nix/store \
     $mountPoint/nix/var/nix/gcroots \
     $mountPoint/nix/var/nix/temproots \
@@ -96,18 +96,18 @@ done \
 
 # Create the required /bin/sh symlink; otherwise lots of things
 # (notably the system() function) won't work.
-mkdir -p $mountPoint/bin
+mkdir -m 0755 -p $mountPoint/bin
 ln -sf $(type -tp sh) $mountPoint/bin/sh
 
 
 # Enable networking in the chroot.
-mkdir -p $mountPoint/etc
+mkdir -m 0755 -p $mountPoint/etc
 cp /etc/resolv.conf $mountPoint/etc/
 
 
 # Do a nix-pull to speed up building.
 nixpkgsURL=http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre6984
-#chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
+chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
 
 
 # Build the specified Nix expression in the target store and install
