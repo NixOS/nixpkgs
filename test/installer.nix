@@ -6,12 +6,17 @@ genericSubstituter {
   dir = "bin";
   isExecutable = true;
   inherit shell nix;
-  
+
   nixClosure = stdenv.mkDerivation {
     name = "closure";
-    builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; nix-store -qR $nix > $out";
-    buildInputs = [nix];
-    inherit nix;
+    exportReferencesGraph = ["refs" nix];
+    builder = builtins.toFile "builder.sh" "
+      source $stdenv/setup
+      if ! test -e refs; then
+        echo 'Your Nix installation is too old!'
+        exit 1
+      fi
+      cp refs $out
+    ";
   };
 }

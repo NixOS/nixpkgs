@@ -73,9 +73,21 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 
+# Get the store paths to copy from the references graph.
+storePaths=""
+while read storePath; do
+    storePaths="$storePaths $storePath"
+    read deriver
+    read count
+    for ((i = 0; i < $count; i++)); do
+        read ref
+    done
+done < @nixClosure@
+
+
 # Copy Nix to the Nix store on the target device.
 echo "copying Nix to $targetDevice...."
-for i in $(cat @nixClosure@); do
+for i in $storePaths; do
     echo "  $i"
     rsync -a $i $mountPoint/nix/store/
 done
@@ -86,12 +98,7 @@ done
 # something.  (I.e., Nix will see that, e.g., the glibc path is not
 # valid, delete it to get it out of the way, but as a result nothing
 # will work anymore.)
-for i in $(cat @nixClosure@); do
-    echo $i
-    echo # deriver
-    echo 0 # nr of references
-done \
-| chroot $mountPoint @nix@/bin/nix-store --register-validity
+chroot $mountPoint @nix@/bin/nix-store --register-validity < @nixClosure@
 
 
 # Create the required /bin/sh symlink; otherwise lots of things
