@@ -1153,6 +1153,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
+    inherit fetchurl stdenv;
+  };
+
   aterm23x = import ../development/libraries/aterm/2.3.nix {
     inherit fetchurl stdenv;
   };
@@ -2812,12 +2816,14 @@ rec {
   };
 
   nix = import ../misc/nix {
-    inherit fetchurl stdenv aterm perl curl bzip2;
+    inherit fetchurl stdenv perl curl bzip2;
+    aterm = aterm242fixes;
     db4 = db44;
   };
 
   nixStatic = import ../misc/nix-static {
-    inherit fetchurl stdenv aterm perl curl autoconf automake libtool;
+    inherit fetchurl stdenv perl curl autoconf automake libtool;
+    aterm = aterm242fixes;
     bdb = db4;
   };
 
