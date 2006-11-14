@@ -1,1 +1,1 @@
-import ./aterm-2.4.nix
+import ./2.4.nix

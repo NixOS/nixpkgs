@@ -1153,7 +1153,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  aterm23x = import ../development/libraries/aterm/aterm-2.3.1.nix {
+  aterm23x = import ../development/libraries/aterm/2.3.nix {
     inherit fetchurl stdenv;
   };
 
