@@ -1221,6 +1221,10 @@ rec {
     inherit fetchurl stdenv libxml2 openssl bzip2;
   };
 
+  directfb = import ../development/libraries/directfb {
+    inherit fetchurl stdenv perl;
+  };
+
   expat = import ../development/libraries/expat {
     inherit fetchurl stdenv;
   };
