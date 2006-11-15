@@ -1,0 +1,140 @@
+diff -rc splashy-0.2.1-orig/doc/Makefile.am splashy-0.2.1/doc/Makefile.am
+*** splashy-0.2.1-orig/doc/Makefile.am	2006-10-26 13:14:33.000000000 +0200
+--- splashy-0.2.1/doc/Makefile.am	2006-11-15 00:19:55.000000000 +0100
+***************
+*** 1,7 ****
+  imagesdir = $(DESTDIR)/$(sysconfdir)/splashy/themes
+  configdir = $(sysconfdir)/splashy
+  # splashy --prefix is /, we need man pages to fall in /usr/share/man
+! mandir = /usr/share/man
+  
+  man1_MANS = splashy.1 splashy_config.1 splashy_update.1 splashy_pgrep.1 splashy-config_xml.5 splashy-theme_xml.5
+  config_DATA = config.xml theme.xml
+--- 1,7 ----
+  imagesdir = $(DESTDIR)/$(sysconfdir)/splashy/themes
+  configdir = $(sysconfdir)/splashy
+  # splashy --prefix is /, we need man pages to fall in /usr/share/man
+! #mandir = /usr/share/man
+  
+  man1_MANS = splashy.1 splashy_config.1 splashy_update.1 splashy_pgrep.1 splashy-config_xml.5 splashy-theme_xml.5
+  config_DATA = config.xml theme.xml
+diff -rc splashy-0.2.1-orig/src/Makefile.am splashy-0.2.1/src/Makefile.am
+*** splashy-0.2.1-orig/src/Makefile.am	2006-10-26 13:14:33.000000000 +0200
+--- splashy-0.2.1/src/Makefile.am	2006-11-15 00:59:05.000000000 +0100
+***************
+*** 11,33 ****
+  	     common_macros.h
+  
+  DFB_PREFIX = $(shell directfb-config --prefix)
+! DFB_VERSION = $(shell directfb-config --version)
+! DFB = $(shell directfb-config --libs \
+!                               --graphics=$(shell ls $(DFB_PREFIX)/lib/directfb-$(DFB_VERSION)/gfxdrivers/*.a \
+!                                                | sed 's,.*/libdirectfb_\(.*\)\.a,\1,g' \
+!                                                | tr "\n" ",") \
+!                               --imageprovider=gif,png,jpeg \
+!                               --input=keyboard \
+!                               --font=default,ft2 \
+!             | sed 's,\.o,.a,g;s,\.so.*,.a,g;s,\-l\([a-z0-9]*\),$(DFB_PREFIX)/lib/lib\1.a,g')
+  
+  ## HACK ALERT! - Otavio Salvador
+  # Express the symbols need for compilation so they will be forced inside of the binary
+! DFBHACK = $(DFB)  -Wl,-udirectfb_fbdev -Wl,-udirectfbwm_default -Wl,-uIDirectFBFont_Default -Wl,-uIDirectFBFont_FT2 \
+!                   -Wl,-uIDirectFBImageProvider_GIF -Wl,-uIDirectFBImageProvider_PNG -Wl,-uIDirectFBImageProvider_JPEG \
+!                   -Wl,-udirectfb_keyboard -Wl,-udirectfb_ati128 -Wl,-udirectfb_cyber5k -Wl,-udirectfb_i810 \
+!                   -Wl,-udirectfb_i830 -Wl,-udirectfb_mach64 -Wl,-udirectfb_neomagic -Wl,-udirectfb_nsc \
+!                   -Wl,-udirectfb_radeon -Wl,-udirectfb_savage -Wl,-udirectfb_sis315 -Wl,-udirectfb_tdfx
+  
+  # set the include path found by configure
+  INCLUDES = $(all_includes) $(splashy_CFLAGS) -I$(DFB_PREFIX)/include/directfb -D_REENTRANT -L$(DFB_PREFIX)/lib/directfb-$(DFB_VERSION)/inputdrivers
+--- 11,36 ----
+  	     common_macros.h
+  
+  DFB_PREFIX = $(shell directfb-config --prefix)
+! #DFB_VERSION = $(shell directfb-config --version)
+! # !!! hack
+! DFB_VERSION = 1.0-0
+! #DFB = $(shell directfb-config --libs \
+! #                              --graphics=$(shell ls $(DFB_PREFIX)/lib/directfb-$(DFB_VERSION)/gfxdrivers/*.a \
+! #                                               | sed 's,.*/libdirectfb_\(.*\)\.a,\1,g' \
+! #                                               | tr "\n" ",") \
+! #                              --imageprovider=gif,png,jpeg \
+! #                              --input=keyboard \
+! #                              --font=default,ft2 \
+! #            | sed 's,\.o,.a,g;s,\.so.*,.a,g;s,\-l\([a-z0-9]*\),$(DFB_PREFIX)/lib/lib\1.a,g')
+! DFB = $(shell directfb-config --libs --input=keyboard)
+  
+  ## HACK ALERT! - Otavio Salvador
+  # Express the symbols need for compilation so they will be forced inside of the binary
+! #DFBHACK = $(DFB)  -Wl,-udirectfb_fbdev -Wl,-udirectfbwm_default -Wl,-uIDirectFBFont_Default -Wl,-uIDirectFBFont_FT2 \
+! #                  -Wl,-uIDirectFBImageProvider_GIF -Wl,-uIDirectFBImageProvider_PNG -Wl,-uIDirectFBImageProvider_JPEG \
+! #                  -Wl,-udirectfb_keyboard -Wl,-udirectfb_ati128 -Wl,-udirectfb_cyber5k -Wl,-udirectfb_i810 \
+! #                  -Wl,-udirectfb_i830 -Wl,-udirectfb_mach64 -Wl,-udirectfb_neomagic -Wl,-udirectfb_nsc \
+! #                  -Wl,-udirectfb_radeon -Wl,-udirectfb_savage -Wl,-udirectfb_sis315 -Wl,-udirectfb_tdfx
+  
+  # set the include path found by configure
+  INCLUDES = $(all_includes) $(splashy_CFLAGS) -I$(DFB_PREFIX)/include/directfb -D_REENTRANT -L$(DFB_PREFIX)/lib/directfb-$(DFB_VERSION)/inputdrivers
+***************
+*** 43,66 ****
+  # - directfb-config (from libdirectfb debian package) is simply a piece of shit. 
+  #   we rolled out our own
+  
+! sbin_PROGRAMS = splashy splashy_config splashy_update splashy_pgrep
+  
+  splashy_SOURCES = splashy_main.c splashy_functions.c xml_parser.c xml_config.c splashy_video.c common_functions.c
+  
+  # -lutil is needed for openpty()... not used any longer 
+! splashy_LDFLAGS = -static -all_load -lgcc_s -lpthread -lm -lc $(DFB) /usr/lib/libglib-2.0.a $(DFBHACK)
+  # if you need a fully statically compile binary, try using this line instead:
+  #splashy_LDFLAGS = -static -all_load -lgcc_s $(DFB) /usr/lib/libglib-2.0.a /usr/lib/libpng.a /usr/lib/libz.a  /usr/lib/libpthread.a /usr/lib/libm.a /usr/lib/libc.a /usr/lib/libsysfs.a $(DFBHACK)
+  
+  splashy_config_SOURCES = splashy_config-main.c splashy_config-functions.c xml_functions.c xml_config.c common_functions.c xml_parser.c 
+! splashy_config_LDFLAGS = -static -all_load $(all_libraries) /usr/lib/libglib-2.0.a /usr/lib/libmagic.a /usr/lib/libz.a
+  
+  splashy_update_SOURCES = splashy_update.c xml_config.c common_functions.c xml_parser.c
+! splashy_update_LDFLAGS = $(splashy_update_LIBS) /usr/lib/libglib-2.0.a
+  
+  # we need pgrep/pkill in /sbin
+  splashy_pgrep_SOURCES = splashy_pgrep.c
+! splashy_pgrep_LDFLAGS = $(splashy_pgrep_LIBS) /usr/lib/libproc.a
+  
+  install-exec-hook:
+  	cd $(DESTDIR)$(sbindir) && \
+--- 46,69 ----
+  # - directfb-config (from libdirectfb debian package) is simply a piece of shit. 
+  #   we rolled out our own
+  
+! sbin_PROGRAMS = splashy splashy_config splashy_update # splashy_pgrep
+  
+  splashy_SOURCES = splashy_main.c splashy_functions.c xml_parser.c xml_config.c splashy_video.c common_functions.c
+  
+  # -lutil is needed for openpty()... not used any longer 
+! splashy_LDFLAGS = -static -all_load $(DFB) -lglib-2.0 $(DFBHACK)
+  # if you need a fully statically compile binary, try using this line instead:
+  #splashy_LDFLAGS = -static -all_load -lgcc_s $(DFB) /usr/lib/libglib-2.0.a /usr/lib/libpng.a /usr/lib/libz.a  /usr/lib/libpthread.a /usr/lib/libm.a /usr/lib/libc.a /usr/lib/libsysfs.a $(DFBHACK)
+  
+  splashy_config_SOURCES = splashy_config-main.c splashy_config-functions.c xml_functions.c xml_config.c common_functions.c xml_parser.c 
+! splashy_config_LDFLAGS = -all-static -all_load $(all_libraries) -lglib-2.0 -lmagic -lz
+  
+  splashy_update_SOURCES = splashy_update.c xml_config.c common_functions.c xml_parser.c
+! splashy_update_LDFLAGS = $(splashy_update_LIBS) -lglib-2.0
+  
+  # we need pgrep/pkill in /sbin
+  splashy_pgrep_SOURCES = splashy_pgrep.c
+! splashy_pgrep_LDFLAGS = $(splashy_pgrep_LIBS) -lproc
+  
+  install-exec-hook:
+  	cd $(DESTDIR)$(sbindir) && \
+diff -rc splashy-0.2.1-orig/src/splashy_main.c splashy-0.2.1/src/splashy_main.c
+*** splashy-0.2.1-orig/src/splashy_main.c	2006-10-26 13:14:33.000000000 +0200
+--- splashy-0.2.1/src/splashy_main.c	2006-11-15 00:46:38.000000000 +0100
+***************
+*** 54,59 ****
+--- 54,61 ----
+  int
+  main (int argc, char *argv[])
+  {
++     printf("FOO\n");
++     
+          /*
+           * we are a daemon ... no need for STDOUT or STDIN
+           */

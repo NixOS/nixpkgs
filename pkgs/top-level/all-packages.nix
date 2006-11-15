@@ -1223,6 +1223,7 @@ rec {
 
   directfb = import ../development/libraries/directfb {
     inherit fetchurl stdenv perl;
+    enableStaticLibraries = true;
   };
 
   expat = import ../development/libraries/expat {
@@ -1316,6 +1317,12 @@ rec {
             libtiff libjpeg libpng cairo;
     inherit (xlibs) libXinerama;
     xineramaSupport = true;
+  };
+
+  # Needed for splashy.
+  glibStatic = import ../development/libraries/glib-static {
+    inherit fetchurl stdenv pkgconfig gettext perl;
+    enableStatic = true;
   };
 
   gtkmm = import ../development/libraries/gtk-libs-2.6/gtkmm {
@@ -2179,6 +2186,12 @@ rec {
 
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
+  };
+
+  splashy = import ../os-specific/linux/splashy {
+    inherit fetchurl stdenv perl pkgconfig directfb file autoconf automake;
+    glib = glibStatic;
+    zlib = zlibStatic;
   };
 
   squashfsTools = import ../os-specific/linux/squashfs {
