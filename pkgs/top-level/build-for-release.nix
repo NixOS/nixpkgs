@@ -26,6 +26,7 @@ let {
     chatzilla
     cksfv
     coreutils
+    cpio
     darcs
     db4
     diffutils
@@ -33,6 +34,7 @@ let {
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xml_xslt
+    e2fsprogs
     ecj
     emacs
     enscript
@@ -58,6 +60,7 @@ let {
     grub
     gzip
     hello
+    iputils
     jakartaregexp
     jetty
     jikes
@@ -77,7 +80,10 @@ let {
     mono
     mysql
     mythtv
+    nano
+    netcat
     nix
+    nixUnstable
     nxml
     openssl
     pan
@@ -88,19 +94,24 @@ let {
     pkgconfig
     postgresql
     postgresql_jdbc
+    procps
     python
     qcmm
     qt3
     quake3demo
     readline
+    rsync
     screen
     sdf
+    shadowutils
     spidermonkey
     strace
     strategoxt
     strategoxtUtils
     subversion
-    sylpheed
+    sylpheed 
+    sysklogd
+    sysvinit
     tetex
     texinfo
     thunderbird
