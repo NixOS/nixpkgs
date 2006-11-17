@@ -2217,6 +2217,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  upstart = import ../os-specific/linux/upstart {
+    inherit fetchurl stdenv;
+  };
+
   usbutils = import ../os-specific/linux/usbutils {
     inherit fetchurl stdenv libusb;
   };
