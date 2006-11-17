@@ -79,6 +79,7 @@ echo "syslog 514/udp" > /etc/services # required, even if we don't use it
 for i in /sys/bus/pci/devices/*/modalias; do
     echo "Trying to load a module for $(basename $(dirname $i))..."
     modprobe $(cat $i)
+    echo ""
 done
 
 

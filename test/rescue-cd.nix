@@ -24,11 +24,39 @@ rec {
     name = "mount-points";
     builder = builtins.toFile "builder.sh" "
       source $stdenv/setup
-      mkdir $out
+      ensureDir $out
       cd $out
       mkdir proc sys tmp etc dev var mnt nix nix/var
       touch $out/${cdromLabel}
     ";
+  };
+
+
+  # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
+  # CD.  We put them in a tarball because accessing that many small
+  # files from a slow device like a CD-ROM takes too long.
+  makeTarball = tarName: input: pkgs.stdenv.mkDerivation {  
+    name = "tarball";
+    inherit tarName input;
+    builder = builtins.toFile "builder.sh" "
+      source $stdenv/setup
+      ensureDir $out
+      (cd $input && tar cvfj $out/$tarName . \\
+        --exclude '*~' --exclude '.svn' \\
+        --exclude 'pkgs' --exclude 'result')
+    ";
+  };
+
+  
+  # Put the current directory in the tarball.  !!! This gives us a lot
+  # of crap (like .svn if this is a working copy).  An "svn export"
+  # would be better, but that's impure.
+  nixosTarball = makeTarball "nixos.tar.bz2" ./.;
+
+  
+  nixpkgsTarball = pkgs.fetchurl {
+    url = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7060/nixpkgs-0.11pre7060.tar.bz2;
+    md5 = "67163e7a71f7b8cb01461e1d0467a6e1";
   };
 
 
@@ -54,6 +82,12 @@ rec {
       }
       { source = cdMountPoints;
         target = "/";
+      }
+      { source = nixosTarball + "/" + nixosTarball.tarName;
+        target = "/" + nixosTarball.tarName;
+      }
+      { source = nixpkgsTarball;
+        target = "/nixpkgs.tar.bz2";
       }
     ];
 

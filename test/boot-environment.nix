@@ -100,15 +100,15 @@ rec {
       pkgs.less
       pkgs.nano
       pkgs.netcat
-#      pkgs.vim
       pkgs.nix
-      pkgs.strace
-      pkgs.sysvinit
-      pkgs.procps
-      pkgs.shadowutils
-      pkgs.sysklogd
-      pkgs.rsync
       pkgs.perl
+      pkgs.procps
+      pkgs.rsync
+      pkgs.shadowutils
+      pkgs.strace
+      pkgs.sysklogd
+      pkgs.sysvinit
+#      pkgs.vim
       nixosInstaller
     ];
 
