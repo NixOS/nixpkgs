@@ -110,6 +110,7 @@ fi
 
 
 # Set up inittab.
+echo -n > /etc/inittab
 for i in $(seq 1 6); do 
     echo "$i:2345:respawn:@mingetty@/sbin/mingetty --noclear tty$i" >> /etc/inittab
 done
