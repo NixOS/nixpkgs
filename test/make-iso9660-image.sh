@@ -11,11 +11,9 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
     graftList="$graftList ${targets_[$i]}=$(readlink -f ${sources_[$i]})"
 done
 
-# !!! Just as with make-initrd.nix, the call to Nix here needs to be
-# fixed.
-packagesClosure=$(nix-store -qR $packages $init)
+storePaths=$($SHELL $pathsFromGraph ./init-closure)
 
-for i in $packagesClosure; do
+for i in $storePaths; do
     graftList="$graftList ${i:1}=$i"
 done
 

@@ -74,16 +74,7 @@ mkdir -m 0755 -p \
 
 
 # Get the store paths to copy from the references graph.
-storePaths=""
-while read storePath; do
-    storePaths="$storePaths $storePath"
-    read deriver
-    read count
-    for ((i = 0; i < $count; i++)); do
-        read ref
-    done
-done < @nixClosure@
-
+storePaths=$(@shell@ @pathsFromGraph@ @nixClosure@)
 
 # Copy Nix to the Nix store on the target device.
 echo "copying Nix to $targetDevice...."

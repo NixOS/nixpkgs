@@ -36,7 +36,7 @@ rec {
   # kernel, the initrd produced above, and the closure of the stage 2
   # init.
   rescueCD = import ./make-iso9660-image.nix {
-    inherit (pkgs) stdenv cdrtools nix;
+    inherit (pkgs) stdenv cdrtools;
     isoName = "nixos.iso";
     
     contents = [
