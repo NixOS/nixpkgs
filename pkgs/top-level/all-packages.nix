@@ -2831,7 +2831,12 @@ rec {
     bdb = db4;
   };
 
-  nixUnstable = nix;
+  # The bleeding edge.
+  nixUnstable = import ../misc/nix/unstable.nix {
+    inherit fetchurl stdenv perl curl bzip2;
+    aterm = aterm242fixes;
+    db4 = db45;
+  };
 
   polytable = import ../misc/tex/polytable {
     inherit fetchurl stdenv tetex lazylist;
