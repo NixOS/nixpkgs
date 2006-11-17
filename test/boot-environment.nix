@@ -73,7 +73,6 @@ rec {
   nixosInstaller = import ./installer.nix {
     inherit (pkgs) stdenv genericSubstituter;
     inherit nix;
-    nix = pkgs.nixUnstable; 
     shell = pkgs.bash + "/bin/sh";
   };
 
