@@ -25,6 +25,8 @@ rec {
     allPackages = import ./pkgs/top-level/all-packages.nix;
   };
 
+  nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
+
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ./modules-closure.nix {
@@ -70,7 +72,8 @@ rec {
   # The installer.
   nixosInstaller = import ./installer.nix {
     inherit (pkgs) stdenv genericSubstituter;
-    nix = pkgs.nixUnstable; # needs the exportReferencesGraph feature
+    inherit nix;
+    nix = pkgs.nixUnstable; 
     shell = pkgs.bash + "/bin/sh";
   };
 
@@ -100,7 +103,6 @@ rec {
       pkgs.less
       pkgs.nano
       pkgs.netcat
-      pkgs.nix
       pkgs.perl
       pkgs.procps
       pkgs.rsync
@@ -109,6 +111,7 @@ rec {
       pkgs.sysklogd
       pkgs.sysvinit
 #      pkgs.vim
+      nix
       nixosInstaller
     ];
 
