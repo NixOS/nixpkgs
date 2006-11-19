@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "269046f41c6418225306280044a799eb";
   };
   configureFlags = "--enable-compat";
+  patches = [./cfgdir.patch];
 }

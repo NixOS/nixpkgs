@@ -1,0 +1,22 @@
+diff -rc upstart-0.3.0-orig/init/main.c upstart-0.3.0/init/main.c
+*** upstart-0.3.0-orig/init/main.c	2006-10-13 14:35:16.000000000 +0200
+--- upstart-0.3.0/init/main.c	2006-11-19 17:02:47.000000000 +0100
+***************
+*** 206,212 ****
+  	control_open ();
+  
+  	/* Read configuration */
+! 	cfg_watch_dir (NULL, CFG_DIR, NULL);
+  
+  	/* Set the PATH environment variable */
+  	setenv ("PATH", PATH, TRUE);
+--- 206,214 ----
+  	control_open ();
+  
+  	/* Read configuration */
+!         char *cfg_dir = getenv("UPSTART_CFG_DIR");
+!         if (!cfg_dir) cfg_dir = CFG_DIR;
+! 	cfg_watch_dir (NULL, cfg_dir, NULL);
+  
+  	/* Set the PATH environment variable */
+  	setenv ("PATH", PATH, TRUE);
