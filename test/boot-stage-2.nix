@@ -1,6 +1,6 @@
 { genericSubstituter, shell, coreutils, findutils
 , utillinux, kernel, udev
-, module_init_tools, nettools, dhcp, upstart
+, module_init_tools, nettools, upstart
 , path ? []
 
 , # Whether the root device is root only.  If so, we'll mount a
@@ -22,7 +22,6 @@ genericSubstituter {
     udev
     module_init_tools
     nettools
-    dhcp
     upstart
   ];
   extraPath = path;

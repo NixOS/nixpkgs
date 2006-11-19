@@ -86,6 +86,11 @@ rec {
       (import ./upstart-jobs/syslogd.nix {
         inherit (pkgs) sysklogd;
       })
+
+      # DHCP client.
+      (import ./upstart-jobs/dhclient.nix {
+        dhcp = pkgs.dhcpWrapper;
+      })
     ]
 
     # The terminals on ttyX.
@@ -115,7 +120,6 @@ rec {
       nettools upstart;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
-    dhcp = pkgs.dhcpWrapper;
 
     # Additional stuff; add whatever you want here.
     path = [

@@ -86,12 +86,7 @@ done
 modprobe af_packet
 for i in $(cd /sys/class/net && ls -d *); do
     echo "Bringing up network device $i..."
-    if ifconfig $i up; then
-        if test "$i" != "lo"; then
-            mkdir -p /var/state/dhcp
-            dhclient $i
-        fi
-    fi
+    ifconfig $i up
 done
 
 
