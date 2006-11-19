@@ -81,25 +81,29 @@ rec {
   upstartJobs = import ./upstart-jobs/gather.nix {
     inherit (pkgs) stdenv;
 
-    jobs = [
-      # For the builtin logd job.
-      pkgs.upstart 
-
-      # The terminals on ttyX.
-      (map 
-        (ttyNumber: import ./upstart-jobs/mingetty.nix {
-          inherit (pkgs) genericSubstituter;
-          mingetty = pkgs.mingettyWrapper;
-          inherit ttyNumber;
-        })
-        [1 2 3 4 5 6]
-      )
-
+    jobs = map makeJob [
       # Syslogd.
       (import ./upstart-jobs/syslogd.nix {
-        inherit (pkgs) genericSubstituter sysklogd;
+        inherit (pkgs) sysklogd;
       })
-    ];
+    ]
+
+    # The terminals on ttyX.
+    ++ (map 
+      (ttyNumber: makeJob (import ./upstart-jobs/mingetty.nix {
+        mingetty = pkgs.mingettyWrapper;
+        inherit ttyNumber;
+      }))
+      [1 2 3 4 5 6]
+    )
+
+    # For the builtin logd job.
+    ++ [pkgs.upstart];
+  };
+
+  
+  makeJob = import ./upstart-jobs/make-job.nix {
+    inherit (pkgs) stdenv;
   };
 
 

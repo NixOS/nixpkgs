@@ -1,8 +1,10 @@
-{genericSubstituter, mingetty, ttyNumber}:
+{mingetty, ttyNumber}:
 
-genericSubstituter {
-  src = ./mingetty.sh;
-  dir = "etc/event.d";
+{
   name = "tty" + toString ttyNumber;
-  inherit mingetty ttyNumber;
+  job = "
+    start on startup
+    stop on shutdown
+    respawn ${mingetty}/sbin/mingetty --noclear tty${toString ttyNumber}
+  ";
 }

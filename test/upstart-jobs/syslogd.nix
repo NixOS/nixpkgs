@@ -1,8 +1,10 @@
-{genericSubstituter, sysklogd}:
+{sysklogd}:
 
-genericSubstituter {
-  src = ./syslogd.sh;
-  dir = "etc/event.d";
+{
   name = "syslogd";
-  inherit sysklogd;
+  job = "
+    start on startup
+    stop on shutdown
+    respawn ${sysklogd}/sbin/syslogd -n
+  ";
 }
