@@ -1,16 +1,19 @@
 diff -rc upstart-0.3.0-orig/init/main.c upstart-0.3.0/init/main.c
 *** upstart-0.3.0-orig/init/main.c	2006-10-13 14:35:16.000000000 +0200
---- upstart-0.3.0/init/main.c	2006-11-19 17:02:47.000000000 +0100
+--- upstart-0.3.0/init/main.c	2006-11-19 21:41:01.000000000 +0100
 ***************
-*** 206,212 ****
+*** 206,215 ****
   	control_open ();
   
   	/* Read configuration */
 ! 	cfg_watch_dir (NULL, CFG_DIR, NULL);
   
   	/* Set the PATH environment variable */
-  	setenv ("PATH", PATH, TRUE);
---- 206,214 ----
+! 	setenv ("PATH", PATH, TRUE);
+  
+  
+  	/* Generate and run the startup event or read the state from the
+--- 206,217 ----
   	control_open ();
   
   	/* Read configuration */
@@ -19,4 +22,7 @@ diff -rc upstart-0.3.0-orig/init/main.c upstart-0.3.0/init/main.c
 ! 	cfg_watch_dir (NULL, cfg_dir, NULL);
   
   	/* Set the PATH environment variable */
-  	setenv ("PATH", PATH, TRUE);
+! 	/* setenv ("PATH", PATH, TRUE); */
+  
+  
+  	/* Generate and run the startup event or read the state from the

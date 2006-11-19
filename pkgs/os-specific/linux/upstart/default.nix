@@ -8,4 +8,5 @@ stdenv.mkDerivation {
   };
   configureFlags = "--enable-compat";
   patches = [./cfgdir.patch];
+  preBuild = "export NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE -DSHELL=\\\"$SHELL\\\"\"";
 }
