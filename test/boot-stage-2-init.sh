@@ -50,6 +50,8 @@ mkdir -m 0755 -p /nix/var/nix/db
 mkdir -m 0755 -p /nix/var/nix/gcroots
 mkdir -m 0755 -p /nix/var/nix/temproots
 
+mkdir -m 0755 -p /var/log
+
 
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
@@ -109,10 +111,18 @@ if ! test -e /etc/group; then
 fi
 
 
-# Set up inittab.
-echo -n > /etc/inittab
+# Set up the Upstart jobs.
+export UPSTART_CFG_DIR=/etc/event.d
+mkdir -p $UPSTART_CFG_DIR
+
+cp -f @upstart@/etc/event.d/logd $UPSTART_CFG_DIR/logd
+
 for i in $(seq 1 6); do 
-    echo "$i:2345:respawn:@mingetty@/sbin/mingetty --noclear tty$i" >> /etc/inittab
+    cat > $UPSTART_CFG_DIR/tty$i <<EOF
+start on startup
+stop on shutdown
+respawn @mingetty@/sbin/mingetty --noclear tty$i
+EOF
 done
 
 
@@ -146,8 +156,8 @@ hostname nixos
 
 
 # Start an interactive shell.
-#exec @shell@
+@shell@ &
 
 
-# Start init.
-exec init 2
+# Start Upstart's init.
+exec @upstart@/sbin/init -v

@@ -82,7 +82,7 @@ rec {
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
       utillinux kernel sysklogd udev module_init_tools
-      nettools;
+      nettools upstart;
     shell = pkgs.bash + "/bin/sh";
     dhcp = pkgs.dhcpWrapper;
 
@@ -108,7 +108,7 @@ rec {
       pkgs.shadowutils
       pkgs.strace
       pkgs.sysklogd
-      pkgs.sysvinit
+#      pkgs.sysvinit
 #      pkgs.vim
       nix
       nixosInstaller

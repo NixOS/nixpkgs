@@ -1,6 +1,6 @@
 { genericSubstituter, shell, coreutils, findutils
 , utillinux, kernel, sysklogd, mingetty, udev
-, module_init_tools, nettools, dhcp
+, module_init_tools, nettools, dhcp, upstart
 , path ? []
 
 , # Whether the root device is root only.  If so, we'll mount a
@@ -11,7 +11,7 @@
 genericSubstituter {
   src = ./boot-stage-2-init.sh;
   isExecutable = true;
-  inherit shell kernel sysklogd mingetty readOnlyRoot;
+  inherit shell kernel sysklogd mingetty upstart readOnlyRoot;
   path = [
     coreutils
     findutils
@@ -20,6 +20,7 @@ genericSubstituter {
     module_init_tools
     nettools
     dhcp
+    upstart
   ];
   extraPath = path;
 }
