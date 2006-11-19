@@ -68,13 +68,10 @@ udevtrigger
 udevsettle # wait for udev to finish
 
 
-# Start syslogd.
+# Necessary configuration for syslogd.
 mkdir -m 0755 -p /var/run
-#mkdir -p /var/log
-#touch /var/log/messages
 echo "*.* /dev/tty10" > /etc/syslog.conf
 echo "syslog 514/udp" > /etc/services # required, even if we don't use it
-@sysklogd@/sbin/syslogd &
 
 
 # Try to load modules for all PCI devices.
@@ -113,17 +110,8 @@ fi
 
 # Set up the Upstart jobs.
 export UPSTART_CFG_DIR=/etc/event.d
-mkdir -p $UPSTART_CFG_DIR
 
-cp -f @upstart@/etc/event.d/logd $UPSTART_CFG_DIR/logd
-
-for i in $(seq 1 6); do 
-    cat > $UPSTART_CFG_DIR/tty$i <<EOF
-start on startup
-stop on shutdown
-respawn @mingetty@/sbin/mingetty --noclear tty$i
-EOF
-done
+ln -sf @upstartJobs@/etc/event.d /etc/event.d
 
 
 # Show a nice greeting on each terminal.
@@ -156,7 +144,7 @@ hostname nixos
 
 
 # Start an interactive shell.
-@shell@ &
+#exec @shell@
 
 
 # Start Upstart's init.

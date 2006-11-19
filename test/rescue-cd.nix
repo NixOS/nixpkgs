@@ -16,7 +16,7 @@ in
   
 rec {
 
-  inherit nixosInstaller bootStage1; # !!! debug
+  inherit nixosInstaller bootStage1 upstartJobs; # !!! debug
 
 
   # Since the CD is read-only, the mount points must be on disk.

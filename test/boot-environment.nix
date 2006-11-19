@@ -77,12 +77,39 @@ rec {
   };
 
 
+  # The services (Upstart) configuration for the system.
+  upstartJobs = import ./upstart-jobs/gather.nix {
+    inherit (pkgs) stdenv;
+
+    jobs = [
+      # For the builtin logd job.
+      pkgs.upstart 
+
+      # The terminals on ttyX.
+      (map 
+        (ttyNumber: import ./upstart-jobs/mingetty.nix {
+          inherit (pkgs) genericSubstituter;
+          mingetty = pkgs.mingettyWrapper;
+          inherit ttyNumber;
+        })
+        [1 2 3 4 5 6]
+      )
+
+      # Syslogd.
+      (import ./upstart-jobs/syslogd.nix {
+        inherit (pkgs) genericSubstituter sysklogd;
+      })
+    ];
+  };
+
+
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
-      utillinux kernel sysklogd udev module_init_tools
+      utillinux kernel udev module_init_tools
       nettools upstart;
+    inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
     dhcp = pkgs.dhcpWrapper;
 
@@ -113,8 +140,6 @@ rec {
       nix
       nixosInstaller
     ];
-
-    mingetty = pkgs.mingettyWrapper;
 
     inherit readOnlyRoot;
   };
