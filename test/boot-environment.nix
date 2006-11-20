@@ -87,9 +87,14 @@ rec {
         inherit (pkgs) sysklogd;
       })
 
+      # Hardware scan; loads modules for PCI devices.
+      (import ./upstart-jobs/hardware-scan.nix {
+        inherit (pkgs) kernel module_init_tools;
+      })
+      
       # Network interfaces.
       (import ./upstart-jobs/network-interfaces.nix {
-        inherit (pkgs) nettools kernel;
+        inherit (pkgs) nettools kernel module_init_tools;
       })
       
       # DHCP client.
@@ -121,7 +126,7 @@ rec {
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
-      utillinux kernel udev module_init_tools
+      utillinux kernel udev
       upstart;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
@@ -140,6 +145,7 @@ rec {
       pkgs.gzip
       pkgs.iputils
       pkgs.less
+      pkgs.module_init_tools
       pkgs.nano
       pkgs.netcat
       pkgs.nettools

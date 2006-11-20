@@ -74,14 +74,6 @@ echo "*.* /dev/tty10" > /etc/syslog.conf
 echo "syslog 514/udp" > /etc/services # required, even if we don't use it
 
 
-# Try to load modules for all PCI devices.
-for i in /sys/bus/pci/devices/*/modalias; do
-    echo "Trying to load a module for $(basename $(dirname $i))..."
-    modprobe $(cat $i)
-    echo ""
-done
-
-
 # login/su absolutely need this.
 test -e /etc/login.defs || touch /etc/login.defs 
 

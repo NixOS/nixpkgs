@@ -6,7 +6,7 @@
   job = "
 description \"DHCP client\"
 
-start on network-interfaces
+start on network-interfaces/started
 stop on network-interfaces/stop
 
 script
