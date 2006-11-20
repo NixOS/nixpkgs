@@ -101,6 +101,16 @@ rec {
       (import ./upstart-jobs/dhclient.nix {
         dhcp = pkgs.dhcpWrapper;
       })
+
+      # Handles the maintenance/stalled event (single-user shell).
+      (import ./upstart-jobs/maintenance-shell.nix {
+        inherit (pkgs) bash;
+      })
+
+      # Handles the reboot/halt events.
+      (import ./upstart-jobs/halt.nix {
+        inherit (pkgs) bash;
+      })
     ]
 
     # The terminals on ttyX.
