@@ -28,7 +28,7 @@ script
     sync || true
 
     # Right now all events above power off the system.
-    exec halt -f
+    exec halt -f -p
 end script
   ";
   
