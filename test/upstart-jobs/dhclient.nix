@@ -6,8 +6,8 @@
   job = "
 description \"DHCP client\"
 
-start on startup
-stop on shutdown
+start on network-interfaces
+stop on network-interfaces/stop
 
 script
     interfaces=

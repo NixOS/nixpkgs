@@ -82,14 +82,6 @@ for i in /sys/bus/pci/devices/*/modalias; do
 done
 
 
-# Bring up the network devices.
-modprobe af_packet
-for i in $(cd /sys/class/net && ls -d *); do
-    echo "Bringing up network device $i..."
-    ifconfig $i up
-done
-
-
 # login/su absolutely need this.
 test -e /etc/login.defs || touch /etc/login.defs 
 

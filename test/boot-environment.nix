@@ -87,6 +87,11 @@ rec {
         inherit (pkgs) sysklogd;
       })
 
+      # Network interfaces.
+      (import ./upstart-jobs/network-interfaces.nix {
+        inherit (pkgs) nettools kernel;
+      })
+      
       # DHCP client.
       (import ./upstart-jobs/dhclient.nix {
         dhcp = pkgs.dhcpWrapper;
@@ -117,7 +122,7 @@ rec {
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
       utillinux kernel udev module_init_tools
-      nettools upstart;
+      upstart;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
 
@@ -137,6 +142,7 @@ rec {
       pkgs.less
       pkgs.nano
       pkgs.netcat
+      pkgs.nettools
       pkgs.perl
       pkgs.procps
       pkgs.rsync

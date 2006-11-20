@@ -1,6 +1,6 @@
 { genericSubstituter, shell, coreutils, findutils
 , utillinux, kernel, udev
-, module_init_tools, nettools, upstart
+, module_init_tools, upstart
 , path ? []
 
 , # Whether the root device is root only.  If so, we'll mount a
@@ -21,7 +21,6 @@ genericSubstituter {
     utillinux
     udev
     module_init_tools
-    nettools
     upstart
   ];
   extraPath = path;
