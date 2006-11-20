@@ -26,3 +26,20 @@ diff -rc upstart-0.3.0-orig/init/main.c upstart-0.3.0/init/main.c
   
   
   	/* Generate and run the startup event or read the state from the
+diff -rc upstart-0.3.0-orig/util/initctl.c upstart-0.3.0/util/initctl.c
+*** upstart-0.3.0-orig/util/initctl.c	2006-10-13 16:18:06.000000000 +0200
+--- upstart-0.3.0/util/initctl.c	2006-11-20 16:53:21.000000000 +0100
+***************
+*** 95,105 ****
+  		} else if (! strcmp (command->command, "stop")) {
+  			msg.type = UPSTART_JOB_STOP;
+  			msg.job_stop.name = *arg;
+- 			break;
+  		} else if (! strcmp (command->command, "status")) {
+  			msg.type = UPSTART_JOB_QUERY;
+  			msg.job_stop.name = *arg;
+- 			break;
+  		}
+  
+  		/* Send the message */
+--- 95,103 ----
