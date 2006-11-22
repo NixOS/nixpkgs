@@ -17,6 +17,13 @@ $path =~ s/\/$//;
 my @workset = ();
 my %doneset = ();
 
+sub addToWorkSetExts {
+    my $base = shift;
+    foreach my $ext (@_) {
+        push @workset, "$base$ext";
+    }
+}
+
 push @workset, $root;
 
 while (scalar @workset > 0) {
@@ -45,37 +52,37 @@ while (scalar @workset > 0) {
 	if (/\\input\{(.*)\}/) {
 	    my $fn2 = $1;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2;
+	    push @workset, "$path/$fn2";
 	} elsif (/\\usepackage(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2 . ".sty";
+	    push @workset, "$path/$fn2.sty";
 	} elsif (/\\documentclass(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2 . ".cls";
+	    push @workset, "$path/$fn2.cls";
 	} elsif (/\\bibliographystyle\{(.*)\}/) {
 	    my $fn2 = $1;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2 . ".bst";
+	    push @workset, "$path/$fn2.bst";
 	} elsif (/\\bibliography\{(.*)\}/) {
             foreach my $bib (split /,/, $1) {
                 $bib =~ s/^\s+//; # remove leading / trailing whitespace
                 $bib =~ s/\s+$//;
-                push @workset, $path . "/" . $bib . ".bib";
+                push @workset, "$path/$bib.bib";
             }
 	} elsif (/\\includegraphics(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2 . ".pdf";
-	    push @workset, $path . "/" . $fn2 . ".png";
-	    push @workset, $path . "/" . $fn2 . ".ps";
+            addToWorkSetExts("$path/$fn2", ".pdf", ".png", ".ps");
 	} elsif (/\\pgfdeclareimage(\[.*\])?\{.*\}\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-	    push @workset, $path . "/" . $fn2 . ".pdf";
-	    push @workset, $path . "/" . $fn2 . ".png";
-	    push @workset, $path . "/" . $fn2 . ".jpg";
+            addToWorkSetExts("$path/$fn2", ".pdf", ".png", ".jpg");
+	} elsif (/\\pgfimage(\[.*\])?\{(.*)\}/) {
+	    my $fn2 = $2;
+            die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
+            addToWorkSetExts("$path/$fn2", ".pdf", ".png", ".jpg");
         }
         # !!! also support \usepackage
     }
