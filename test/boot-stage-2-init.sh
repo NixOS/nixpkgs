@@ -93,7 +93,7 @@ fi
 
 
 # We need "localhost" (!!! destructive hack for NIXOS-41).
-echo "127.0.0.1 localhost" > /etc/localhost
+echo "127.0.0.1 localhost" > /etc/hosts
 echo "hosts: files dns" > /etc/nsswitch.conf
 
 
