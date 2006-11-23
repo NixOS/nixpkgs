@@ -30,8 +30,7 @@ fi
 
 needWritableDir() {
     if test -n "@readOnlyRoot@"; then
-        mount -t tmpfs none $1 $3
-        chmod $2 $1
+        mount -t tmpfs -o "mode=$2" none $1 $3
     else
         mkdir -m $2 -p $1
     fi
@@ -43,7 +42,7 @@ test -e /etc/fstab || touch /etc/fstab # idem
 
 mount -t proc none /proc
 mount -t sysfs none /sys
-needWritableDir /dev 0755
+mount -t tmpfs -o "mode=0755" none /dev
 needWritableDir /tmp 01777
 needWritableDir /var 0755
 needWritableDir /nix/var 0755
