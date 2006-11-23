@@ -42,7 +42,7 @@ needWritableDir /etc 0755 -n # to shut up mount
 test -e /etc/fstab || touch /etc/fstab # idem
 
 mount -n -t proc none /proc
-cp /proc/mounts /etc/mtab
+cat /proc/mounts > /etc/mtab
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755" none /dev
 needWritableDir /tmp 01777
