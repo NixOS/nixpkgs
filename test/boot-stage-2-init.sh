@@ -115,6 +115,9 @@ done
 cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
+if test -f /etc/profile.local; then
+    source /etc/profile.local
+fi
 EOF
 
 
