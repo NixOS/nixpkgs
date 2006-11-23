@@ -93,6 +93,7 @@ fi
 # Set up the Upstart jobs.
 export UPSTART_CFG_DIR=/etc/event.d
 
+rm -f /etc/event.d
 ln -sf @upstartJobs@/etc/event.d /etc/event.d
 
 

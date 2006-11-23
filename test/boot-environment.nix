@@ -102,6 +102,11 @@ rec {
         dhcp = pkgs.dhcpWrapper;
       })
 
+      # SSH daemon.
+      (import ./upstart-jobs/sshd.nix {
+        inherit (pkgs) openssh;
+      })
+
       # Handles the maintenance/stalled event (single-user shell).
       (import ./upstart-jobs/maintenance-shell.nix {
         inherit (pkgs) bash;
