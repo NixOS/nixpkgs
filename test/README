@@ -1,0 +1,14 @@
+Switching to maintenance mode:
+
+$ shutdown now
+
+To get out of maintenance mode:
+
+$ initctl emit startup 
+
+
+Updating the current system configuration:
+
+$ nix-env -p /nix/var/nix/profiles/system -f system-configuration.nix -i -A systemConfiguration
+$ /nix/var/nix/profiles/system/bin/switch-to-configuration
+
