@@ -21,11 +21,12 @@ done
 
 # Mount special file systems, initialise required directories.
 
-rm -f /etc/mtab
-
 if test -z "@readOnlyRoot@"; then
     #rootDev=$(grep "/dev/.* / " /proc/mounts | sed 's/^\([^ ]*\) .*/\1/')
-    mount -o remount,rw /dontcare / # !!! check for failure
+    if mount -t dontcare -o remount,rw /dontcare /; then
+	echo "Couldn't remount / read-writable, starting emergency shell!"
+	exec @shell@
+    fi
 fi
 
 needWritableDir() {
@@ -40,7 +41,8 @@ needWritableDir /etc 0755 -n # to shut up mount
 
 test -e /etc/fstab || touch /etc/fstab # idem
 
-mount -t proc none /proc
+mount -n -t proc none /proc
+cp /proc/mounts /etc/mtab
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755" none /dev
 needWritableDir /tmp 01777
