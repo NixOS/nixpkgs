@@ -1,13 +1,15 @@
-{bash}:
+{bash, event}:
+
+assert event == "reboot"
+    || event == "halt"
+    || event == "system-halt"
+    || event == "power-off";
 
 {
-  name = "sys-halt";
+  name = "sys-" + event;
   
   job = "
-start on reboot
-start on halt
-start on system-halt
-start on power-off
+start on ${event}
 
 script
     exec < /dev/tty1 > /dev/tty1 2>&1
@@ -28,7 +30,11 @@ script
     sync || true
 
     # Right now all events above power off the system.
-    exec halt -f -p
+    if test ${event} = reboot; then
+        exec reboot -f
+    else
+        exec halt -f -p
+    fi
 end script
   ";
   

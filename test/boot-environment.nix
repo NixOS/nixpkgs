@@ -112,12 +112,17 @@ rec {
         inherit (pkgs) bash;
       })
 
-      # Handles the reboot/halt events.
-      (import ./upstart-jobs/halt.nix {
-        inherit (pkgs) bash;
-      })
     ]
 
+    # Handles the reboot/halt events.
+    ++ (map
+      (event: makeJob (import ./upstart-jobs/halt.nix {
+        inherit (pkgs) bash;
+        inherit event;
+      }))
+      ["reboot" "halt" "system-halt" "power-off"]
+    )
+    
     # The terminals on ttyX.
     ++ (map 
       (ttyNumber: makeJob (import ./upstart-jobs/mingetty.nix {
