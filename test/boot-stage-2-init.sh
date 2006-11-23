@@ -92,6 +92,11 @@ if ! test -e /etc/group; then
 fi
 
 
+# We need "localhost" (!!! destructive hack for NIXOS-41).
+echo "127.0.0.1 localhost" > /etc/localhost
+echo "hosts: files dns" > /etc/nsswitch.conf
+
+
 # Set up the Upstart jobs.
 export UPSTART_CFG_DIR=/etc/event.d
 
