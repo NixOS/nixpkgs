@@ -55,8 +55,8 @@ rec {
 
   
   nixpkgsTarball = pkgs.fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7060/nixpkgs-0.11pre7060.tar.bz2;
-    md5 = "67163e7a71f7b8cb01461e1d0467a6e1";
+    url = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7087/nixpkgs-0.11pre7087.tar.bz2;
+    md5 = "c5840fcd049d75e00ad856ecbbef6857)";
   };
 
 
