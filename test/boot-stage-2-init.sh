@@ -23,7 +23,7 @@ done
 
 if test -z "@readOnlyRoot@"; then
     #rootDev=$(grep "/dev/.* / " /proc/mounts | sed 's/^\([^ ]*\) .*/\1/')
-    if mount -t dontcare -o remount,rw /dontcare /; then
+    if ! mount -t dontcare -o remount,rw /dontcare /; then
 	echo "Couldn't remount / read-writable, starting emergency shell!"
 	exec @shell@
     fi
