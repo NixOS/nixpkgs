@@ -118,7 +118,7 @@ chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
 
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt/$nixExpr" -i system-configuration
+    -f "/mnt/$nixExpr" -i -A systemConfiguration
 
 
 # Grub needs a mtab.

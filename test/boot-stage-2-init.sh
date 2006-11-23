@@ -21,6 +21,8 @@ done
 
 # Mount special file systems, initialise required directories.
 
+rm -f /etc/mtab
+
 if test -z "@readOnlyRoot@"; then
     #rootDev=$(grep "/dev/.* / " /proc/mounts | sed 's/^\([^ ]*\) .*/\1/')
     mount -o remount,rw /dontcare / # !!! check for failure
