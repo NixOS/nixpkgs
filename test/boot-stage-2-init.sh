@@ -52,6 +52,8 @@ mkdir -m 0755 -p /nix/var/nix/temproots
 
 mkdir -m 0755 -p /var/log
 
+ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+
 
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
