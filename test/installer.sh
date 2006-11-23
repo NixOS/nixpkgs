@@ -19,7 +19,7 @@ targetDevice="$1"
 nixExpr="$2"
 
 if test -z "$targetDevice" -o -z "$nixExpr"; then
-    echo "syntax: installer.sh <targetDevice> <nixExpr>"
+    echo "Syntax: installer.sh <targetDevice> <nixExpr>"
     exit 1
 fi
 

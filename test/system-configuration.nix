@@ -28,8 +28,16 @@ rec {
     inherit (pkgs) grub coreutils gnused gnugrep diffutils;
     inherit grubDevice;
     inherit bootStage2;
+    inherit grubMenuBuilder;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
+  };
+
+
+  grubMenuBuilder = pkgs.genericSubstituter {
+    src = ./grub-menu-builder.sh;
+    isExecutable = true;
+    inherit (pkgs) bash;
   };
 
 
