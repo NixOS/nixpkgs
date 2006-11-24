@@ -42,8 +42,10 @@ for generation in $(
     | sed 's/system-\([0-9]\+\)-link/\1/' \
     | sort -n -r); do
     echo $generation
-    addEntry "NixOS - Configuration $generation" \
-        /nix/var/nix/profiles/system-$generation-link
+    link=/nix/var/nix/profiles/system-$generation-link
+    date=$(stat --printf="%y\n" $link | sed 's/\..*//')
+    addEntry "NixOS - Configuration $generation ($date)" $link
+        
 done
 
 
