@@ -19,7 +19,7 @@ for i in @path@; do
 done
 
 
-# Mount special file systems, initialise required directories.
+# Mount special file systems.
 
 if test -z "@readOnlyRoot@"; then
     #rootDev=$(grep "/dev/.* / " /proc/mounts | sed 's/^\([^ ]*\) .*/\1/')
@@ -43,6 +43,28 @@ test -e /etc/fstab || touch /etc/fstab # idem
 
 mount -n -t proc none /proc
 cat /proc/mounts > /etc/mtab
+
+
+# Process the kernel command line.
+for o in $(cat /proc/cmdline); do
+    case $o in
+        debugtrace)
+            # Show each command.
+            set -x
+            ;;
+        debug2)
+            echo "Debug shell called from $out"
+            exec @shell@
+            ;;
+        S|s|single)
+            # !!! argh, can't pass a startup event to Upstart yet.
+            exec @shell@
+            ;;
+    esac
+done
+
+
+# More special file systems, initialise required directories.
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755" none /dev
 needWritableDir /tmp 01777
