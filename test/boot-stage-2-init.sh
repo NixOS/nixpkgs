@@ -84,6 +84,13 @@ ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 export MODULE_DIR=@kernel@/lib/modules/
 
 
+# Miscellaneous cleanup.
+rm -f /var/run/*
+
+echo -n > /var/run/utmp # must exist
+chmod 664 /var/run/utmp
+
+
 # Start udev.
 udevd --daemon
 
