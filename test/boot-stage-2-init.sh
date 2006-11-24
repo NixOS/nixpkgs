@@ -131,8 +131,6 @@ cat > /etc/issue <<EOF
 
 <<< Welcome to NixOS (\m) - Kernel \r (\l) >>>
 
-You can log in as \`root'.
-
 
 EOF
 
