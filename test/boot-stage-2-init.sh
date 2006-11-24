@@ -53,7 +53,7 @@ for o in $(cat /proc/cmdline); do
             set -x
             ;;
         debug2)
-            echo "Debug shell called from $out"
+            echo "Debug shell called from @out@"
             exec @shell@
             ;;
         S|s|single)
