@@ -12,11 +12,12 @@ start script
     export MODULE_DIR=${kernel}/lib/modules/
 
     ${module_init_tools}/sbin/modprobe af_packet
-    
+
     for i in $(cd /sys/class/net && ls -d *); do
         echo \"Bringing up network device $i...\"
         ${nettools}/sbin/ifconfig $i up || true
     done
+
 end script
 
 # Hack: Upstart doesn't yet support what we want: a service that
@@ -25,7 +26,7 @@ respawn sleep 10000
 
 stop script
     for i in $(cd /sys/class/net && ls -d *); do
-        echo \"Bringing up network device $i...\"
+        echo \"Taking down network device $i...\"
         ${nettools}/sbin/ifconfig $i down || true
     done
 end script
