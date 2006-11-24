@@ -17,6 +17,7 @@ cat > $out/bin/switch-to-configuration <<EOF
 set -e
 export PATH=$coreutils/bin:$gnused/bin:$gnugrep/bin:$diffutils/bin
 if test -n "$grubDevice"; then
+    mkdir -m 0700 -p /boot/grub
     $grubMenuBuilder $out
     $grub/sbin/grub-install "$grubDevice" --no-floppy --recheck
 fi
