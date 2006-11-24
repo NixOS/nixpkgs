@@ -21,14 +21,6 @@ done
 
 # Mount special file systems.
 
-if test -z "@readOnlyRoot@"; then
-    #rootDev=$(grep "/dev/.* / " /proc/mounts | sed 's/^\([^ ]*\) .*/\1/')
-    if ! mount -t dontcare -o remount,rw /dontcare /; then
-	echo "Couldn't remount / read-writable, starting emergency shell!"
-	exec @shell@
-    fi
-fi
-
 needWritableDir() {
     if test -n "@readOnlyRoot@"; then
         mount -t tmpfs -o "mode=$2" none $1 $3

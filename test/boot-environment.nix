@@ -40,10 +40,16 @@ rec {
   # need.
   extraUtils = pkgs.stdenv.mkDerivation {
     name = "extra-utils";
-    builder = builtins.toFile "builder.sh"
-      "source $stdenv/setup; ensureDir $out/bin; cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin; nuke-refs $out/bin/*";
+    builder = builtins.toFile "builder.sh" "
+      source $stdenv/setup
+      ensureDir $out/bin
+      cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
+      cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
+      nuke-refs $out/bin/*
+    ";
     buildInputs = [pkgs.nukeReferences];
     inherit (pkgsStatic) utillinux;
+    e2fsprogs = pkgs.e2fsprogsDiet;
   };
   
 

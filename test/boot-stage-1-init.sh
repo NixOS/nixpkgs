@@ -81,7 +81,7 @@ if test -n "@autoDetectRootDevice@"; then
 
             echo "  in $devName..."
 
-            if mount -o ro -t iso9660 $devName /mnt/root; then
+            if mount -n -o ro -t iso9660 $devName /mnt/root; then
                 if test -e "/mnt/root/@rootLabel@"; then
                     found=1
                     break
@@ -100,7 +100,31 @@ if test -n "@autoDetectRootDevice@"; then
 else
 
     # Hard-coded root device.
-    mount -o ro "@rootDevice@" /mnt/root
+    rootDevice="@rootDevice@"
+
+    # Check the root device.
+    fsck -C -a "$rootDevice"
+    fsckResult=$?
+
+    if test $(($fsckResult | 2)) = $fsckResult; then
+        echo "fsck finished, rebooting..."
+        sleep 3
+        # reboot -f -d !!! don't have reboot yet
+        fail
+    fi
+
+    if test $(($fsckResult | 4)) = $fsckResult; then
+        echo "$rootDevice has unrepaired errors, please fix them manually."
+        fail
+    fi
+
+    if test $fsckResult -ge 8; then
+        echo "fsck on $rootDevice failed."
+        fail
+    fi
+
+    # Mount read-writable.
+    mount -n -o rw "$rootDevice" /mnt/root || fail
 
 fi
 
