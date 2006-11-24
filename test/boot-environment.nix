@@ -112,6 +112,9 @@ rec {
         inherit (pkgs) bash;
       })
 
+      # Ctrl-alt-delete action.
+      (import ./upstart-jobs/ctrl-alt-delete.nix)
+
     ]
 
     # Handles the reboot/halt events.
