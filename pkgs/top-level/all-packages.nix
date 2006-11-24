@@ -2047,7 +2047,7 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  e2fsprogsDiet = import ../os-specific/linux/e2fsprogs-diet {
+  e2fsprogsDiet = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl gettext;
     stdenv = useDietLibC stdenv;
   };
