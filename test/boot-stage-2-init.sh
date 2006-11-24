@@ -77,7 +77,8 @@ export MODULE_DIR=@kernel@/lib/modules/
 
 
 # Miscellaneous cleanup.
-rm -f /var/run/*
+rm -rf /var/run
+mkdir -m 0755 -p /var/run
 
 echo -n > /var/run/utmp # must exist
 chmod 664 /var/run/utmp
@@ -95,7 +96,6 @@ udevsettle # wait for udev to finish
 
 
 # Necessary configuration for syslogd.
-mkdir -m 0755 -p /var/run
 echo "*.* /dev/tty10" > /etc/syslog.conf
 echo "syslog 514/udp" > /etc/services # required, even if we don't use it
 
