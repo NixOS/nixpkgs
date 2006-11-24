@@ -1,3 +1,8 @@
+To get a Stage 1 shell:
+
+Add "debug1" to the kernel command line.
+
+
 Switching to maintenance mode:
 
 $ shutdown now

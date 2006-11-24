@@ -11,7 +11,7 @@ let
   bootEnv = import ./boot-environment.nix {
     autoDetectRootDevice = false;
     inherit rootDevice;
-    stage2Init = "/init"; # !!! should be bootEnv.bootStage2;
+    stage2Init = ""; # Passed on the command line via Grub.
     readOnlyRoot = false;
   };
 

@@ -32,6 +32,25 @@ mkdir /sys
 mount -t sysfs none /sys
 
 
+# Process the kernel command line.
+stage2Init=@stage2Init@
+for o in $(cat /proc/cmdline); do
+    case $o in
+        init=*)
+            set -- $(IFS==; echo $o)
+            stage2Init=$2
+            ;;
+        debugtrace)
+            # Show each command.
+            set -x
+            ;;
+        debug1)
+            fail
+            ;;
+    esac
+done
+
+
 # Create device nodes in /dev.
 source @makeDevices@
 
@@ -85,6 +104,7 @@ else
 
 fi
 
+
 # Start stage 2.
 # !!! Note: we can't use pivot_root here (the kernel gods have
 # decreed), but we could use run-init from klibc, which deletes all
@@ -94,6 +114,10 @@ mount --move . /
 umount /proc # cleanup
 umount /sys
 
-exec chroot . @stage2Init@
+echo "INIT = $stage2Init"
+
+if test -z "$stage2Init"; then fail; fi
+
+exec chroot . $stage2Init
 
 fail
