@@ -34,6 +34,8 @@ script
         exit 1
     fi
 
+    mkdir -m 755 -p /var/state/dhcp
+
     exec ${dhcp}/sbin/dhclient -d $interfaces
 end script
   ";
