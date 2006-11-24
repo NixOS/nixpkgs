@@ -77,6 +77,7 @@ let {
     maven
     mk
     mktemp
+    module_init_tools
     mono
     mysql
     mythtv
@@ -117,8 +118,11 @@ let {
     thunderbird
     tightvnc
 #    transformers
+    udev
     uml
     unzip
+    upstart
+    utillinux
     uulib
     valgrind
     vim
