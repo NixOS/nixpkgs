@@ -2115,6 +2115,12 @@ rec {
           md5 = "f7f45fd71464c1091d06eae692ee4ac0";
         };
       }
+      { name = "fbsplash-0.9.2-r5-2.6.18-rc4";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.18-rc4.patch;
+          md5 = "4bc612e21ae03e9727aa87969185ccdc";
+        };
+      }
     ];
   };
 

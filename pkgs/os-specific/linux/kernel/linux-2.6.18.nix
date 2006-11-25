@@ -10,12 +10,12 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "linux-2.6.18.1";
+  name = "linux-2.6.18.3";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = ftp://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.18.1.tar.bz2;
-    md5 = "38f00633b02f07819d17bcd87d03eb3a";
+    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.18.3.tar.bz2;
+    md5 = "fb10bd4918f22f349131af0b5121b70e";
   };
   
   patches = map (p: p.patch) kernelPatches;
