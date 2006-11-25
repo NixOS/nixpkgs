@@ -2181,6 +2181,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  splashutils = import ../os-specific/linux/splashutils {
+    inherit fetchurl stdenv;
+  };
+
   squashfsTools = import ../os-specific/linux/squashfs {
     inherit fetchurl stdenv zlib;
   };

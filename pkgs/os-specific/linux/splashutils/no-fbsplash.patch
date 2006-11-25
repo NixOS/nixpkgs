@@ -1,0 +1,48 @@
+diff -rc splashutils-1.3-orig/Makefile splashutils-1.3/Makefile
+*** splashutils-1.3-orig/Makefile	2006-07-15 00:02:22.000000000 +0200
+--- splashutils-1.3/Makefile	2006-11-25 01:22:03.000000000 +0100
+***************
+*** 57,63 ****
+  PNGDEFS = -DPNG_NO_WRITE_TIME -DPNG_NO_FLOATING_POINT_SUPPORTED -DPNG_NO_WRITE_SUPPORTED -DPNG_NO_READ_iTXt \
+  		-DPNG_LEGACY_SUPPORTED -DPNG_NO_PROGRESSIVE_READ -DPNG_NO_MNG_FEATURES -DPNG_NO_CONSOLE_IO \
+  		-DPNG_NO_ERROR_NUMBERS -DPNG_READ_GRAY_TO_RGB_SUPPORTED -DPNG_READ_16_TO_8_SUPPORTED \
+! 		-DPNG_READ_STRIP_ALPHA_SUPPORTED -DPNG_NO_INFO_IMAGE -DPNG_NO_READ_TRANSFORMS -DPNG_NO_READ_ANCILLARY_CHUNKS
+  	  
+  K_LDLIBS = $(OBJDIR)/jpeglib/libjpeg.a
+  K_OBJS 	 = $(KOUT)/kernel.o $(KOUT)/dev.o $(KOUT)/parse.o $(KOUT)/render.o $(KOUT)/image.o \
+--- 57,63 ----
+  PNGDEFS = -DPNG_NO_WRITE_TIME -DPNG_NO_FLOATING_POINT_SUPPORTED -DPNG_NO_WRITE_SUPPORTED -DPNG_NO_READ_iTXt \
+  		-DPNG_LEGACY_SUPPORTED -DPNG_NO_PROGRESSIVE_READ -DPNG_NO_MNG_FEATURES -DPNG_NO_CONSOLE_IO \
+  		-DPNG_NO_ERROR_NUMBERS -DPNG_READ_GRAY_TO_RGB_SUPPORTED -DPNG_READ_16_TO_8_SUPPORTED \
+! 		-DPNG_READ_STRIP_ALPHA_SUPPORTED -DPNG_NO_INFO_IMAGE -DPNG_NO_READ_ANCILLARY_CHUNKS
+  	  
+  K_LDLIBS = $(OBJDIR)/jpeglib/libjpeg.a
+  K_OBJS 	 = $(KOUT)/kernel.o $(KOUT)/dev.o $(KOUT)/parse.o $(KOUT)/render.o $(KOUT)/image.o \
+Only in splashutils-1.3/: Makefile~
+diff -rc splashutils-1.3-orig/splash.h splashutils-1.3/splash.h
+*** splashutils-1.3-orig/splash.h	2006-07-15 00:02:23.000000000 +0200
+--- splashutils-1.3/splash.h	2006-11-25 00:42:08.000000000 +0100
+***************
+*** 21,30 ****
+   */
+  #ifdef TARGET_KERNEL
+  	#include <linux/fb.h>
+! 	#include <linux/console_splash.h>
+  #else
+! 	#include <fb.h>
+! 	#include <console_splash.h>
+  #endif
+  
+  /*
+--- 21,30 ----
+   */
+  #ifdef TARGET_KERNEL
+  	#include <linux/fb.h>
+! //#include <linux/console_splash.h>
+  #else
+! 	#include <linux/fb.h>
+! //#include <console_splash.h>
+  #endif
+  
+  /*
+Only in splashutils-1.3/: splash.h~

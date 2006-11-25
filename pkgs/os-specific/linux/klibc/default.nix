@@ -1,15 +1,15 @@
 {stdenv, fetchurl, kernel, perl, bison, flexWrapper}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "klibc-1.0";
+  name = "klibc-1.4";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/klibc-1.0.tar.bz2;
-    md5 = "daaa233fb7905cbe110896fcad9bec7f";
+    url = http://www.kernel.org/pub/linux/libs/klibc/klibc-1.4.tar.bz2;
+    md5 = "f4e0e17fc660e59c39e448fe1d827d36";
   };
   inherit kernel;
-  buildInputs = [perl bison flexWrapper];
-  patches = [./klibc-installpath.patch];
+#  buildInputs = [perl bison flexWrapper];
+#  patches = [./klibc-installpath.patch];
 }
