@@ -89,7 +89,7 @@ let {
     openssl
     pan
     par2cmdline
-    parted
+    #parted
     perl
     php
     pkgconfig
