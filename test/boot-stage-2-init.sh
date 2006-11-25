@@ -145,6 +145,11 @@ done
 cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
+
+source $(dirname $(type -tp nix-env))/../etc/profile.d/nix.sh
+
+alias ll="ls -l"
+
 if test -f /etc/profile.local; then
     source /etc/profile.local
 fi
