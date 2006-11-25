@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   patches = [./no-fbsplash.patch];
   
   dontAddPrefix = 1;
+  configureScript = "sh ./configure";
   configureFlags = "--without-ttf --without-png --without-fbsplash";
 
   # Hack hack hack.
