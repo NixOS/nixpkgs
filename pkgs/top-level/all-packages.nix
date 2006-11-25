@@ -985,10 +985,6 @@ rec {
 
   flex = flex254a;
 
-  #flexWrapper = import ../development/tools/parsing/flex-wrapper {
-  #  inherit stdenv flex ;
-  #};
-
   flex2533 = import ../development/tools/parsing/flex/flex-2.5.33.nix {
     inherit fetchurl stdenv yacc;
     m4 = gnum4;
@@ -1424,6 +1420,11 @@ rec {
 
   libjpeg = import ../development/libraries/libjpeg {
     inherit fetchurl stdenv libtool;
+  };
+
+  libjpegStatic = import ../development/libraries/libjpeg-static {
+    inherit fetchurl stdenv libtool;
+    static = true;
   };
 
   libmad = import ../development/libraries/libmad {
@@ -2188,7 +2189,9 @@ rec {
   };
 
   splashutils = import ../os-specific/linux/splashutils {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv klibc;
+    zlib = zlibStatic;
+    libjpeg = libjpegStatic;
   };
 
   squashfsTools = import ../os-specific/linux/squashfs {
