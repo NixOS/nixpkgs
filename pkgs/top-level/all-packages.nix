@@ -2140,9 +2140,9 @@ rec {
     inherit stdenv MAKEDEV;
   };
 
-  #klibc = import ../os-specific/linux/klibc {
-  #  inherit fetchurl stdenv kernel perl bison flexWrapper;
-  #};
+  klibc = import ../os-specific/linux/klibc {
+    inherit fetchurl stdenv perl bison mktemp;
+  };
 
   mingetty = import ../os-specific/linux/mingetty {
     inherit fetchurl stdenv;

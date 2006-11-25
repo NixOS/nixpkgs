@@ -1,11 +1,13 @@
 source $stdenv/setup
 
+preBuild=preBuild
 preBuild() {
-  kernelhash=$(ls $kernel/lib/modules)
-  echo $kernelhash
-  ln -s $kernel/lib/modules/$kernelhash/build linux
+  mkdir -p linux/include
+  ln -s $kernelHeaders/include/* linux/include/
 }
 
-preBuild=preBuild
+makeFlagsArray=(V=1 prefix=$out SHLIBDIR=$out/lib)
+
+installFlagsArray=("${makeFlagsArray[@]}")
 
 genericBuild
