@@ -45,6 +45,9 @@ rec {
     { tty = 5;
       theme = themePativo;
     }
+    { tty = 10; # logging console
+      theme = themeGNU;
+    }
   ];
   
 }
