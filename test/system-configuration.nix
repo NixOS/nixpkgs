@@ -15,6 +15,9 @@ let
     readOnlyRoot = false;
   };
 
+  # Extra kernel command line arguments.
+  extraKernelParams = "vga=0x317 console=tty1 splash=verbose";
+
 in
 
 with bootEnv;
@@ -31,6 +34,7 @@ rec {
     inherit grubMenuBuilder;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
+    inherit extraKernelParams;
   };
 
 

@@ -6,7 +6,7 @@ ln -s $kernel $out/kernel
 ln -s $grub $out/grub
 
 cat > $out/menu.lst << GRUBEND
-kernel $kernel selinux=0 apm=on acpi=on init=$bootStage2
+kernel $kernel selinux=0 apm=on acpi=on init=$bootStage2 $extraKernelParams
 initrd $initrd
 GRUBEND
 
