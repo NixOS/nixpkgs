@@ -14,12 +14,9 @@ stdenv.mkDerivation {
   
   dontAddPrefix = 1;
   configureScript = "sh ./configure";
-  configureFlags = "--without-ttf --without-png --without-fbsplash";
+  configureFlags = "--without-ttf --without-png --with-fifo=/var/run/splash_fifo";
 
   makeFlags = "QUIET=false";
-
-  #NIX_CFLAGS_COMPILE = "-Iobjs/jpeglib -Ilibs/jpeg-6b -Ilibs/freetype-2.1.9/include -Ilibs/libpng-1.2.8 -Ilibs/zlib-1.2.3";
-  #NIX_CFLAGS_LINK = "-Lobjs/jpeglib -Lobjs/freetype2/.libs -Llibs/zlib-1.2.3 -Llibs/libpng-1.2.8";
 
   installPhase = "ensureDir $out/bin; cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin";
 }
