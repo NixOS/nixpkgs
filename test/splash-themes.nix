@@ -14,9 +14,14 @@ rec {
     md5 = "da49f04988ab04b7e0de117b0d25061a";
   };
 
-  themePativo = fetchurl {
+  themePativo = fetchurl { # Yeah!
     url = http://www.bootsplash.de/files/themes/Theme-Pativo.tar.bz2;
     md5 = "9e13beaaadf88d43a5293e7ab757d569";
+  };
+
+  themeGNU = fetchurl {
+    url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
+    md5 = "61969309d23c631e57b0a311102ef034";
   };
 
 
@@ -32,13 +37,13 @@ rec {
     { tty = 2;
     }
     { tty = 3;
-      theme = themeFrozenBubble;
+      theme = themeGNU;
     }
     { tty = 4;
-      theme = themePativo;
+      theme = themeGNU;
     }
-    { tty = 6;
-      theme = themeFrozenBubble;
+    { tty = 5;
+      theme = themePativo;
     }
   ];
   

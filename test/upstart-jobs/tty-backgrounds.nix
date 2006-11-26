@@ -20,7 +20,7 @@ rec {
   job = "
 start on hardware-scan
 
-script
+start script
 
     rm -f /etc/splash
     ln -s ${themesUnpacked} /etc/splash
@@ -39,6 +39,16 @@ script
     done
 
 end script
+
+respawn sleep 10000 # !!! Hack
+
+stop script
+    # Disable the theme on each console.
+    for tty in ${toString (map (x: x.tty) backgrounds)}; do
+        ${splashutils}/bin/splash_util --tty $tty -c off || true
+    done
+end script
+
   ";
   
 }
