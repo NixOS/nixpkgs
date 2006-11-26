@@ -23,7 +23,7 @@ for ((n = 0; n < ${#ttys[*]}; n++)); do
 
     echo "TTY $tty -> $theme"
 
-    themeName=$(cd $theme && ls)
+    themeName=$(cd $theme && ls | grep -v default)
     
     ln -sf $theme/$themeName $out/$themeName
 

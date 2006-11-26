@@ -3,10 +3,8 @@
 rec {
   name = "tty-backgrounds";
 
-  unpackTheme = theme: stdenv.mkDerivation {
-    name = "theme";
-    builder = ./unpack-theme.sh;
-    inherit theme;
+  unpackTheme = theme: import ../helpers/unpack-theme.nix {
+    inherit stdenv theme;
   };
 
   themesUnpacked = stdenv.mkDerivation {

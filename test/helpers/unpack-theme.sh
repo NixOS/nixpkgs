@@ -14,3 +14,5 @@ for i in $out/$themeName/config/*.cfg; do
 done
 
 rm $out/$themeName/config/*.cfg
+
+ln -s $themeName $out/default
