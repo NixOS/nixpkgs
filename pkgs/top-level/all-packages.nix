@@ -2142,7 +2142,7 @@ rec {
   };
 
   klibc = import ../os-specific/linux/klibc {
-    inherit fetchurl stdenv perl bison mktemp;
+    inherit fetchurl stdenv perl bison mktemp kernel;
   };
 
   mingetty = import ../os-specific/linux/mingetty {

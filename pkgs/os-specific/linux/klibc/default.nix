@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, bison, mktemp}:
+{stdenv, fetchurl, perl, bison, mktemp, kernel}:
 
 assert stdenv.isLinux;
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     url = http://www.kernel.org/pub/linux/libs/klibc/klibc-1.4.tar.bz2;
     md5 = "f4e0e17fc660e59c39e448fe1d827d36";
   };
-  inherit (stdenv.glibc) kernelHeaders;
+  inherit kernel;
   buildInputs = [perl bison mktemp];
   patches = [./install.patch];
 }
