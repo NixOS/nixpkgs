@@ -19,7 +19,7 @@ cd \$HOME/.keen4
 
 ln -sf $out/share/keen4/* .
 
-dosbox ./KEEN4E.EXE -fullscreen -exit || true
+$dosbox/bin/dosbox ./KEEN4E.EXE -fullscreen -exit || true
 
 # Cleanup the symlinks.
 for i in *; do
