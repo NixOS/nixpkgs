@@ -113,6 +113,14 @@ rec {
         inherit (pkgs) openssh;
       })
 
+      # Transparent TTY backgrounds.
+      (import ./upstart-jobs/tty-backgrounds.nix {
+        inherit (pkgs) stdenv splashutils;
+        backgrounds = (import ./splash-themes.nix {
+          inherit (pkgs) fetchurl;
+        }).ttyBackgrounds;
+      })
+
       # Handles the maintenance/stalled event (single-user shell).
       (import ./upstart-jobs/maintenance-shell.nix {
         inherit (pkgs) bash;
