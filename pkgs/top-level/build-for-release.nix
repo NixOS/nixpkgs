@@ -69,6 +69,7 @@ let {
     kcachegrind
     keen4
     kernel
+    klibc
     less
     libtool
     libxml2
@@ -106,6 +107,7 @@ let {
     sdf
     shadowutils
     spidermonkey
+    splashutils
     strace
     strategoxt
     strategoxtUtils
