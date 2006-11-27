@@ -1,5 +1,11 @@
 # Utility functions.
 
+let
+
+  inherit (builtins) head tail isList;
+
+in
+
 rec {
 
   # "Fold" a binary function `op' between successive elements of
@@ -9,7 +15,7 @@ rec {
   fold = op: nul: list:
     if list == []
     then nul
-    else op (builtins.head list) (fold op nul (builtins.tail list));
+    else op (head list) (fold op nul (tail list));
 
     
   # Concatenate a list of strings.
@@ -20,17 +26,17 @@ rec {
   # Place an element between each element of a list, e.g.,
   # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
   intersperse = separator: list:
-    if list == [] || builtins.tail list == []
+    if list == [] || tail list == []
     then list
-    else [(builtins.head list) separator]
-         ++ (intersperse separator (builtins.tail list));
+    else [(head list) separator]
+         ++ (intersperse separator (tail list));
 
 
   # Flatten the argument into a single list; that is, nested lists are
   # spliced into the top-level lists.  E.g., `flatten [1 [2 [3] 4] 5]
   # == [1 2 3 4 5]' and `flatten 1 == [1]'.
   flatten = x:
-    if builtins.isList x
+    if isList x
     then fold (x: y: (flatten x) ++ y) [] x
     else [x];
 
@@ -40,12 +46,26 @@ rec {
   # default value is returned otherwise.
   getAttr = attrPath: default: e:
     let {
-      attr = builtins.head attrPath;
+      attr = head attrPath;
       body =
         if attrPath == [] then e
         else if builtins ? hasAttr && builtins.hasAttr attr e
-        then getAttr (builtins.tail attrPath) default (builtins.getAttr attr e)
+        then getAttr (tail attrPath) default (builtins.getAttr attr e)
         else default;
     };
+
+
+  # Filter a list using a predicate; that is, return a list containing
+  # every element from `list' for which `pred' returns true.
+  filter = pred: list:
+    fold (x: y: if pred x then [x] ++ y else y) [] list;
+
+
+  # Return true if each element of a list is equal, false otherwise.
+  eqLists = xs: ys:
+    if xs == [] && ys == [] then true
+    else if xs == [] || ys == [] then false
+    else head xs == head ys && eqLists (tail xs) (tail ys);
+
   
 }
