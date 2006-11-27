@@ -157,7 +157,7 @@ EOF
 
 
 # Set the host name.
-hostname nixos
+hostname @hostName@
 
 
 # Start an interactive shell.

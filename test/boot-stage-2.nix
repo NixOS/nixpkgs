@@ -8,12 +8,14 @@
 
 , # The Upstart job configuration.
   upstartJobs
+
+, hostName
 }:
 
 genericSubstituter {
   src = ./boot-stage-2-init.sh;
   isExecutable = true;
-  inherit shell kernel upstart readOnlyRoot upstartJobs;
+  inherit shell kernel upstart readOnlyRoot upstartJobs hostName;
   path = [
     coreutils
     findutils

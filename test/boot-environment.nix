@@ -183,8 +183,7 @@ rec {
   # everything else to bring up the system.
   bootStage2 = import ./boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
-      utillinux kernel udev
-      upstart;
+      utillinux kernel udev upstart;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
 
@@ -218,6 +217,42 @@ rec {
     ];
 
     inherit readOnlyRoot;
+
+    hostName = config.get ["networking" "hostname"];
+  };
+
+
+  lib = import ./pkgs/lib;
+
+
+  config = rec {
+
+    # The user configuration.
+    config = {
+      networking = {
+        hostname = "vindaloo";
+      };
+    };
+
+    # The option declarations, i.e., option names with defaults and
+    # documentation.
+    declarations = import ./options.nix;
+
+    # Get the option named `name' from the user configuration, using
+    # its default value if it's not defined.
+    get = name:
+      let
+        sameName = lib.filter (opt: lib.eqLists opt.name name) declarations;
+        default =
+          if sameName == []
+          then abort ("Undeclared option `" + printName name + "'.")
+          else if !builtins.head sameName ? default
+          then abort ("Option `" + printName name + "' has no default.")
+          else (builtins.head sameName).default;
+      in lib.getAttr name default config;
+  
+    printName = name: lib.concatStrings (lib.intersperse "." name);
+
   };
 
 
