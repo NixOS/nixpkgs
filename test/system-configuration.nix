@@ -16,7 +16,14 @@ let
   };
 
   # Extra kernel command line arguments.
-  extraKernelParams = "vga=0x317 console=tty1 splash=verbose";
+  extraKernelParams = [
+    "selinux=0"
+    "apm=on"
+    "acpi=on"
+    "vga=0x317"
+    "console=tty1"
+    "splash=verbose"
+  ];
 
 in
 

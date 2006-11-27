@@ -4,9 +4,12 @@ ensureDir $out
 
 ln -s $kernel $out/kernel
 ln -s $grub $out/grub
+ln -s $bootStage2 $out/init
+ln -s $initrd $out/initrd
+echo "$extraKernelParams" > $out/kernel-params
 
 cat > $out/menu.lst << GRUBEND
-kernel $kernel selinux=0 apm=on acpi=on init=$bootStage2 $extraKernelParams
+kernel $kernel init=$bootStage2 $extraKernelParams
 initrd $initrd
 GRUBEND
 

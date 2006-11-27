@@ -212,7 +212,6 @@ rec {
       pkgs.shadowutils
       pkgs.strace
       pkgs.sysklogd
-#      pkgs.sysvinit
 #      pkgs.vim
       nix
       nixosInstaller
