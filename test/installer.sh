@@ -129,4 +129,4 @@ echo "$targetDevice / somefs rw 0 0" > $mountPoint/etc/mtab
 # a menu default pointing at the kernel/initrd/etc of the new
 # configuration.
 echo "finalising the installation..."
-chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration
+NIXOS_INSTALL_GRUB=1 chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration
