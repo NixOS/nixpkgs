@@ -24,11 +24,11 @@ done
 
 
 # Mount special file systems.
-mkdir /etc # to shut up mount
+mkdir -p /etc # to shut up mount
 touch /etc/fstab # idem
-mkdir /proc
+mkdir -p /proc
 mount -t proc none /proc
-mkdir /sys
+mkdir -p /sys
 mount -t sysfs none /sys
 
 

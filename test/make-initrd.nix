@@ -1,5 +1,5 @@
 # Create an initial ramdisk containing the closure of the specified
-# `init' package.  An initial ramdisk is used during the initial
+# file system objects.  An initial ramdisk is used during the initial
 # stages of booting a Linux system.  It is loaded by the boot loader
 # along with the kernel image.  It's supposed to contain everything
 # (such as kernel modules) necessary to allow us to mount the root
@@ -8,18 +8,24 @@
 #
 # An initrd is really just a gzipped cpio archive.
 #
-# A symlink `/init' is made to the store path passed in the `init'
+# Symlinks are created for each top-level file system object.  E.g.,
+# `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{stdenv, cpio, init}:
+{stdenv, cpio, contents}:
 
 stdenv.mkDerivation {
   name = "initrd";
   builder = ./make-initrd.sh;
   buildInputs = [cpio];
-  inherit init;
+
+  # !!! should use XML.
+  objects = map (x: x.object) contents;
+  symlinks = map (x: x.symlink) contents;
+  suffices = map (x: if x ? suffix then x.suffix else "none") contents;
   
-  # For obtaining the closure of `init'.
-  exportReferencesGraph = ["init-closure" init];
+  # For obtaining the closure of `contents'.
+  exportReferencesGraph =
+    map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
   pathsFromGraph = ./paths-from-graph.sh;
 }

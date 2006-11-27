@@ -28,6 +28,12 @@ rec {
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
 
 
+  # Splash configuration.
+  splashThemes = import ./splash-themes.nix {
+    inherit (pkgs) fetchurl;
+  };
+
+
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ./modules-closure.nix {
     inherit (pkgs) stdenv kernel module_init_tools;
@@ -45,10 +51,12 @@ rec {
       ensureDir $out/bin
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
+      cp $splashutils/bin/splash_helper $out/bin
       nuke-refs $out/bin/*
     ";
     buildInputs = [pkgs.nukeReferences];
     inherit (pkgsStatic) utillinux;
+    inherit (pkgs) splashutils;
     e2fsprogs = pkgs.e2fsprogsDiet;
   };
   
@@ -71,7 +79,21 @@ rec {
   # the initial RAM disk.
   initialRamdisk = import ./make-initrd.nix {
     inherit (pkgs) stdenv cpio;
-    init = bootStage1;
+    contents = [
+      { object = bootStage1;
+        symlink = "/init";
+      }
+      { object = extraUtils;
+        suffix = "/bin/splash_helper";
+        symlink = "/sbin/splash_helper";
+      }
+      { object = import ./helpers/unpack-theme.nix {
+          inherit (pkgs) stdenv;
+          theme = splashThemes.splashScreen;
+        };
+        symlink = "/etc/splash";
+      }
+    ];
   };
 
 
@@ -116,9 +138,7 @@ rec {
       # Transparent TTY backgrounds.
       (import ./upstart-jobs/tty-backgrounds.nix {
         inherit (pkgs) stdenv splashutils;
-        backgrounds = (import ./splash-themes.nix {
-          inherit (pkgs) fetchurl;
-        }).ttyBackgrounds;
+        backgrounds = splashThemes.ttyBackgrounds;
       })
 
       # Handles the maintenance/stalled event (single-user shell).

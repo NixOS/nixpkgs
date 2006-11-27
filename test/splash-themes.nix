@@ -25,6 +25,11 @@ rec {
   };
 
 
+  # The splash screen.
+  
+  splashScreen = themeBabyTux;
+
+
   # The themes to use for each tty.  For each tty except the first
   # entry in the list, you can omit `theme' to get the same theme as
   # the first one.  If a tty does not appear, it doesn't get a
