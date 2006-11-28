@@ -145,6 +145,7 @@ done
 cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
+export NIX_CONF_DIR=/nix/etc/nix
 
 source $(dirname $(type -tp nix-env))/../etc/profile.d/nix.sh
 
