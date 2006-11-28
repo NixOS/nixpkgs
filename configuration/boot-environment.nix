@@ -182,7 +182,7 @@ rec {
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
-    inherit (pkgs) genericSubstituter coreutils findutils
+    inherit (pkgs) genericSubstituter buildEnv coreutils findutils
       utillinux kernel udev upstart;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";

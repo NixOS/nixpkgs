@@ -11,7 +11,7 @@ echo
 
 # Set the PATH.
 export PATH=/empty
-for i in @path@; do
+for i in @startPath@; do
     PATH=$PATH:$i/bin
     if test -e $i/sbin; then
         PATH=$PATH:$i/sbin
@@ -135,12 +135,7 @@ EOF
 
 
 # Additional path for the interactive shell.
-for i in @extraPath@; do
-    PATH=$PATH:$i/bin
-    if test -e $i/sbin; then
-        PATH=$PATH:$i/sbin
-    fi
-done
+PATH=@fullPath@/bin:@fullPath@/sbin
 
 cat > /etc/profile <<EOF
 export PATH=$PATH
