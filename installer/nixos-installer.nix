@@ -2,12 +2,12 @@
 }:
 
 genericSubstituter {
-  src = ./installer.sh;
+  src = ./nixos-installer.sh;
   dir = "bin";
   isExecutable = true;
   inherit shell nix;
 
-  pathsFromGraph = ./paths-from-graph.sh;
+  pathsFromGraph = ../helpers/paths-from-graph.sh;
 
   nixClosure = stdenv.mkDerivation {
     name = "closure";

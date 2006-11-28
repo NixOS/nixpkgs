@@ -8,21 +8,21 @@
 
 rec {
 
-  pkgs = import ./pkgs/top-level/all-packages.nix {inherit system;};
+  pkgs = import ../pkgs/top-level/all-packages.nix {inherit system;};
 
-  pkgsDiet = import ./pkgs/top-level/all-packages.nix {
+  pkgsDiet = import ../pkgs/top-level/all-packages.nix {
     inherit system;
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
-  pkgsStatic = import ./pkgs/top-level/all-packages.nix {
+  pkgsStatic = import ../pkgs/top-level/all-packages.nix {
     inherit system;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
   };
 
-  stdenvLinuxStuff = import ./pkgs/stdenv/linux {
+  stdenvLinuxStuff = import ../pkgs/stdenv/linux {
     system = pkgs.stdenv.system;
-    allPackages = import ./pkgs/top-level/all-packages.nix;
+    allPackages = import ../pkgs/top-level/all-packages.nix;
   };
 
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
@@ -35,7 +35,7 @@ rec {
 
 
   # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = import ./modules-closure.nix {
+  modulesClosure = import ../helpers/modules-closure.nix {
     inherit (pkgs) stdenv kernel module_init_tools;
     rootModules = ["ide-cd" "ide-disk" "ide-generic"];
   };
@@ -63,7 +63,7 @@ rec {
 
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
-  bootStage1 = import ./boot-stage-1.nix {
+  bootStage1 = import ../boot/boot-stage-1.nix {
     inherit (pkgs) genericSubstituter;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
@@ -77,7 +77,7 @@ rec {
 
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
-  initialRamdisk = import ./make-initrd.nix {
+  initialRamdisk = import ../boot/make-initrd.nix {
     inherit (pkgs) stdenv cpio;
     contents = [
       { object = bootStage1;
@@ -87,7 +87,7 @@ rec {
         suffix = "/bin/splash_helper";
         symlink = "/sbin/splash_helper";
       }
-      { object = import ./helpers/unpack-theme.nix {
+      { object = import ../helpers/unpack-theme.nix {
           inherit (pkgs) stdenv;
           theme = splashThemes.splashScreen;
         };
@@ -98,7 +98,7 @@ rec {
 
 
   # The installer.
-  nixosInstaller = import ./installer.nix {
+  nixosInstaller = import ../installer/nixos-installer.nix {
     inherit (pkgs) stdenv genericSubstituter;
     inherit nix;
     shell = pkgs.bash + "/bin/sh";
@@ -106,54 +106,54 @@ rec {
 
 
   # The services (Upstart) configuration for the system.
-  upstartJobs = import ./upstart-jobs/gather.nix {
+  upstartJobs = import ../upstart-jobs/gather.nix {
     inherit (pkgs) stdenv;
 
     jobs = map makeJob [
       # Syslogd.
-      (import ./upstart-jobs/syslogd.nix {
+      (import ../upstart-jobs/syslogd.nix {
         inherit (pkgs) sysklogd;
       })
 
       # Hardware scan; loads modules for PCI devices.
-      (import ./upstart-jobs/hardware-scan.nix {
+      (import ../upstart-jobs/hardware-scan.nix {
         inherit (pkgs) kernel module_init_tools;
       })
       
       # Network interfaces.
-      (import ./upstart-jobs/network-interfaces.nix {
+      (import ../upstart-jobs/network-interfaces.nix {
         inherit (pkgs) nettools kernel module_init_tools;
       })
       
       # DHCP client.
-      (import ./upstart-jobs/dhclient.nix {
+      (import ../upstart-jobs/dhclient.nix {
         dhcp = pkgs.dhcpWrapper;
       })
 
       # SSH daemon.
-      (import ./upstart-jobs/sshd.nix {
+      (import ../upstart-jobs/sshd.nix {
         inherit (pkgs) openssh;
       })
 
       # Transparent TTY backgrounds.
-      (import ./upstart-jobs/tty-backgrounds.nix {
+      (import ../upstart-jobs/tty-backgrounds.nix {
         inherit (pkgs) stdenv splashutils;
         backgrounds = splashThemes.ttyBackgrounds;
       })
 
       # Handles the maintenance/stalled event (single-user shell).
-      (import ./upstart-jobs/maintenance-shell.nix {
+      (import ../upstart-jobs/maintenance-shell.nix {
         inherit (pkgs) bash;
       })
 
       # Ctrl-alt-delete action.
-      (import ./upstart-jobs/ctrl-alt-delete.nix)
+      (import ../upstart-jobs/ctrl-alt-delete.nix)
 
     ]
 
     # Handles the reboot/halt events.
     ++ (map
-      (event: makeJob (import ./upstart-jobs/halt.nix {
+      (event: makeJob (import ../upstart-jobs/halt.nix {
         inherit (pkgs) bash;
         inherit event;
       }))
@@ -162,7 +162,7 @@ rec {
     
     # The terminals on ttyX.
     ++ (map 
-      (ttyNumber: makeJob (import ./upstart-jobs/mingetty.nix {
+      (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
         mingetty = pkgs.mingettyWrapper;
         inherit ttyNumber;
       }))
@@ -174,14 +174,14 @@ rec {
   };
 
   
-  makeJob = import ./upstart-jobs/make-job.nix {
+  makeJob = import ../upstart-jobs/make-job.nix {
     inherit (pkgs) stdenv;
   };
 
 
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
-  bootStage2 = import ./boot-stage-2.nix {
+  bootStage2 = import ../boot/boot-stage-2.nix {
     inherit (pkgs) genericSubstituter coreutils findutils
       utillinux kernel udev upstart;
     inherit upstartJobs;
@@ -222,7 +222,7 @@ rec {
   };
 
 
-  lib = import ./pkgs/lib;
+  lib = pkgs.library;
 
 
   config = rec {

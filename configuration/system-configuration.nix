@@ -46,7 +46,7 @@ rec {
 
 
   grubMenuBuilder = pkgs.genericSubstituter {
-    src = ./grub-menu-builder.sh;
+    src = ../installer/grub-menu-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
   };

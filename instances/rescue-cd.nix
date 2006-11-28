@@ -6,7 +6,7 @@ let
 in
 
   # Build boot scripts for the CD that find the CD-ROM automatically.
-  with import ./boot-environment.nix {
+  with import ../configuration/boot-environment.nix {
     autoDetectRootDevice = true;
     rootLabel = cdromLabel;
     stage2Init = "/init";
@@ -63,7 +63,7 @@ rec {
   # Create an ISO image containing the isolinux boot loader, the
   # kernel, the initrd produced above, and the closure of the stage 2
   # init.
-  rescueCD = import ./make-iso9660-image.nix {
+  rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv cdrtools;
     isoName = "nixos.iso";
     
@@ -71,7 +71,7 @@ rec {
       { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
         target = "isolinux/isolinux.bin";
       }
-      { source = ./isolinux.cfg;
+      { source = ../helpers/isolinux.cfg;
         target = "isolinux/isolinux.cfg";
       }
       { source = pkgs.kernel + "/vmlinuz";

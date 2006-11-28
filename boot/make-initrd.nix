@@ -27,5 +27,5 @@ stdenv.mkDerivation {
   # For obtaining the closure of `contents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
-  pathsFromGraph = ./paths-from-graph.sh;
+  pathsFromGraph = ../helpers/paths-from-graph.sh;
 }
