@@ -164,6 +164,10 @@ rec {
   ### BUILD SUPPORT
 
 
+  buildEnv = import ../build-support/buildenv {
+    inherit stdenv perl;
+  };
+  
   fetchcvs = import ../build-support/fetchcvs {
     inherit stdenv cvs nix;
   };
