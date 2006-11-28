@@ -135,7 +135,7 @@ EOF
 
 
 # Additional path for the interactive shell.
-PATH=@fullPath@/bin:@fullPath@/sbin
+PATH=@wrapperDir@:@fullPath@/bin:@fullPath@/sbin
 
 cat > /etc/profile <<EOF
 export PATH=$PATH
@@ -150,6 +150,19 @@ if test -f /etc/profile.local; then
     source /etc/profile.local
 fi
 EOF
+
+
+# Make a few setuid programs work.
+wrapperDir=@wrapperDir@
+if test -d $wrapperDir; then rm -f $wrapperDir/*; fi
+mkdir -p $wrapperDir
+for i in passwd su; do
+    program=$(type -tp $i)
+    cp $(type -tp setuid-wrapper) $wrapperDir/$i
+    echo -n $program > $wrapperDir/$i.real
+    chown root.root $wrapperDir/$i
+    chmod 4755 $wrapperDir/$i
+done
 
 
 # Set the host name.

@@ -179,11 +179,18 @@ rec {
   };
 
 
+  setuidWrapper = import ../helpers/setuid {
+    inherit (pkgs) stdenv;
+    wrapperDir = "/var/setuid-wrappers";
+  };
+
+
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
     inherit (pkgs) genericSubstituter buildEnv coreutils findutils
       utillinux kernel udev upstart;
+    inherit setuidWrapper;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
 

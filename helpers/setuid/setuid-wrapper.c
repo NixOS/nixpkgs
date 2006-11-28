@@ -9,7 +9,7 @@
 
 extern char **environ;
 
-static char * wrapperDir = "/home/root/nixos/helpers/setuid";
+static char * wrapperDir = WRAPPER_DIR;
 
 int main(int argc, char * * argv)
 {

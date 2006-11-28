@@ -1,5 +1,5 @@
 { genericSubstituter, buildEnv, shell, coreutils, findutils
-, utillinux, kernel, udev, upstart
+, utillinux, kernel, udev, upstart, setuidWrapper
 , path ? []
 
 , # Whether the root device is root only.  If so, we'll mount a
@@ -20,6 +20,7 @@ let
     utillinux
     udev
     upstart
+    setuidWrapper
   ];
 
 in
@@ -40,6 +41,6 @@ genericSubstituter {
     pathsToLink = ["/bin" "/sbin" "/man/man1" "/share/man/man1"];
     ignoreCollisions = true;
   };
-  
-  extraPath = path;
+
+  wrapperDir = setuidWrapper.wrapperDir;
 }
