@@ -31,6 +31,8 @@ with bootEnv;
   
 rec {
 
+  inherit upstartJobs;
+
 
   systemConfiguration = pkgs.stdenv.mkDerivation {
     name = "system-configuration";

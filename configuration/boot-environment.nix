@@ -135,6 +135,12 @@ rec {
         inherit (pkgs) openssh;
       })
 
+      # X server.
+      (import ../upstart-jobs/xserver.nix {
+        inherit (pkgs) genericSubstituter;
+        inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
+      })
+
       # Transparent TTY backgrounds.
       (import ../upstart-jobs/tty-backgrounds.nix {
         inherit (pkgs) stdenv splashutils;
