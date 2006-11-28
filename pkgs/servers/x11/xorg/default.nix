@@ -1742,7 +1742,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xf86-input-keyboard-X11R7.1-1.1.0.tar.bz2;
       md5 = "d81490c79db78b0c182f0b2a37e02756";
     };
-    buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver ];
+    buildInputs = [pkgconfig xproto inputproto kbproto randrproto xorgserver ];
   }) // {inherit inputproto kbproto randrproto xorgserver ;};
     
   xf86inputmagellan = (stdenv.mkDerivation {
@@ -1782,7 +1782,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/xf86-input-mouse-X11R7.1-1.1.0.tar.bz2;
       md5 = "e427b9a1dfbed3d4c9de2bf01008fa60";
     };
-    buildInputs = [pkgconfig inputproto randrproto xorgserver ];
+    buildInputs = [pkgconfig xproto inputproto randrproto xorgserver ];
   }) // {inherit inputproto randrproto xorgserver ;};
     
   xf86inputmutouch = (stdenv.mkDerivation {
