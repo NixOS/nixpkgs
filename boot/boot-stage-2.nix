@@ -43,4 +43,6 @@ genericSubstituter {
   };
 
   wrapperDir = setuidWrapper.wrapperDir;
+
+  accounts = ../helpers/accounts.sh;
 }

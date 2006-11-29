@@ -63,7 +63,6 @@ mkdir -m 0755 -p $mountPoint/var
 # Create the necessary Nix directories on the target device, if they
 # don't already exist.
 mkdir -m 0755 -p \
-    $mountPoint/nix/store \
     $mountPoint/nix/var/nix/gcroots \
     $mountPoint/nix/var/nix/temproots \
     $mountPoint/nix/var/nix/manifests \
@@ -71,6 +70,9 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/profiles \
     $mountPoint/nix/var/nix/db \
     $mountPoint/nix/var/log/nix/drvs
+
+mkdir -m 1777 -p \
+    $mountPoint/nix/store \
 
 
 # Get the store paths to copy from the references graph.

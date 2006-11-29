@@ -105,9 +105,18 @@ test -e /etc/login.defs || touch /etc/login.defs
 
 
 # Enable a password-less root login.
+source @accounts@
+
 if ! test -e /etc/passwd; then
-    echo "root::0:0:root:/:@shell@" > /etc/passwd
+    if test -n "@readOnlyRoot@"; then
+        rootHome=/
+    else
+        rootHome=/home/root
+        mkdir -p $rootHome
+    fi
+    createUser root '' 0 0 'System administrator' $rootHome/var/empty @shell@
 fi
+
 if ! test -e /etc/group; then
     echo "root:*:0" > /etc/group
 fi
@@ -116,6 +125,28 @@ fi
 # We need "localhost" (!!! destructive hack for NIXOS-41).
 echo "127.0.0.1 localhost" > /etc/hosts
 echo "hosts: files dns" > /etc/nsswitch.conf
+
+
+# Set up Nix accounts.
+if test -z "@readOnlyRoot@"; then
+
+    for i in $(seq 1 10); do
+        account=nix-build-$i
+        if ! userExists $account; then
+            createUser $account x \
+                $((i + 30000)) $((i + 30000)) \
+                'Nix build user' /var/empty /noshell
+        fi
+        accounts="$accounts $account"
+    done
+
+    mkdir -p /nix/etc/nix
+    cat > /nix/etc/nix/nix.conf <<EOF
+build-allow-root = false
+build-users = $accounts
+EOF
+
+fi
 
 
 # Set up the Upstart jobs.
