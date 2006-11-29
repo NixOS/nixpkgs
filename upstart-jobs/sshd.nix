@@ -10,6 +10,8 @@ start on network-interfaces/started
 stop on network-interfaces/stop
 
 start script
+    source ${../helpers/accounts.sh}
+
     mkdir -m 0555 -p /var/empty
 
     mkdir -m 0755 -p /etc/ssh
@@ -20,8 +22,8 @@ start script
         ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ''
     fi
 
-    if ! grep -q '^sshd:' /etc/passwd; then
-        echo 'sshd:x:74:74:SSH privilege separation user:/var/empty:/noshell' >> /etc/passwd
+    if ! userExists sshd; then
+        createUser sshd x 74 74 'SSH privilege separation user' /var/empty /noshell
     fi
 
 end script

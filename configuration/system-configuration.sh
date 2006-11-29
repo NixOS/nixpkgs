@@ -26,6 +26,7 @@ if test -n "$grubDevice"; then
         $grub/sbin/grub-install "$grubDevice" --no-floppy --recheck
     fi
 fi
+sync
 EOF
 
 chmod +x $out/bin/switch-to-configuration
