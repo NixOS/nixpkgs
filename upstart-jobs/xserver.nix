@@ -29,7 +29,7 @@ rec {
   name = "xserver";
 
   job = "
-start on network-interfaces
+#start on network-interfaces
 
 start script
 
