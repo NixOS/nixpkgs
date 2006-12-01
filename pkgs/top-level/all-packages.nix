@@ -1252,7 +1252,7 @@ rec {
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
     (import ../development/libraries/glibc {
       inherit fetchurl stdenv kernelHeaders;
-      installLocales = true;
+      #installLocales = false;
     });
 
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
@@ -2723,6 +2723,13 @@ rec {
   xterm = import ../applications/misc/xterm {
     inherit fetchurl stdenv ncurses;
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+  };
+
+  xvidcap = import ../applications/video/xvidcap {
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) scrollkeeper libglade;
+    inherit (xlibs) libXmu libXext;
   };
 
   zapping = import ../applications/video/zapping {
