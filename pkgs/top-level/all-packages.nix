@@ -2279,6 +2279,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  freefont_ttf = import ../data/fonts/freefont-ttf {
+    inherit fetchurl stdenv;
+  };
+
 
   ### APPLICATIONS
 
@@ -2508,8 +2512,8 @@ rec {
   };
 
   MPlayer = import ../applications/video/MPlayer {
-    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca;
-    inherit (xlibs) libXv libXinerama libXrandr;
+    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf;
+    inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
     theoraSupport = true;
