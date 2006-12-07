@@ -17,7 +17,7 @@ dontMakeInstall=1
 postInstall=postInstall
 postInstall() {
     mkdir -p $out/lib/mozilla/plugins
-    cp -p mplayerplug-in.so mplayerplug-in.xpt $out/lib/mozilla/plugins
+    cp -p mplayerplug-in*.so mplayerplug-in*.xpt $out/lib/mozilla/plugins
 }
 
 genericBuild
