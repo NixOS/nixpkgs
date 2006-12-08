@@ -2181,11 +2181,19 @@ rec {
   };
 
   pam = import ../os-specific/linux/pam {
-    inherit stdenv fetchurl cracklib;
+    inherit stdenv fetchurl cracklib flex;
+  };
+
+  pam_login = import ../os-specific/linux/pam_login {
+    inherit stdenv fetchurl pam;
   };
 
   procps = import ../os-specific/linux/procps {
     inherit fetchurl stdenv ncurses;
+  };
+
+  pwdutils = import ../os-specific/linux/pwdutils {
+    inherit fetchurl stdenv pam openssl;
   };
 
   shadowutils = import ../os-specific/linux/shadow {
