@@ -2708,6 +2708,12 @@ rec {
     inherit fetchurl stdenv wxGTK chmlib;
   };
 
+  xfig = import ../applications/graphics/xfig {
+    stdenv = overrideGCC (overrideSetup stdenv ../stdenv/generic/setup-new.sh) gcc34;
+    inherit fetchurl makeWrapper x11 Xaw3d libpng libjpeg;
+    inherit (xlibs) imake libXpm libXmu libXi libXp;
+  };
+
   xineUI = import ../applications/video/xine-ui {
     inherit fetchurl stdenv x11 xineLib libpng;
   };

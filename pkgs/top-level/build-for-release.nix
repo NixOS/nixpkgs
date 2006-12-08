@@ -131,6 +131,7 @@ let {
     vlc
     wget
     xchm
+    xfig
     xineUI
     xmltv
     xmms
