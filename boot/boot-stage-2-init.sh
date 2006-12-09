@@ -131,21 +131,26 @@ echo "hosts: files dns" > /etc/nsswitch.conf
 if test -z "@readOnlyRoot@"; then
 
     for i in $(seq 1 10); do
-        account=nix-build-$i
+        account=nixbld$i
         if ! userExists $account; then
             createUser $account x \
-                $((i + 30000)) $((i + 30000)) \
+                $((i + 30000)) 30000 \
                 'Nix build user' /var/empty /noshell
         fi
-        accounts="$accounts $account"
+        accounts="$accounts${accounts:+,}$account"
     done
+
+    if ! grep -q "^nixbld:" /etc/group; then
+        echo "nixbld:*:30000:$accounts" >> /etc/group
+    fi
 
     mkdir -p /nix/etc/nix
     cat > /nix/etc/nix/nix.conf <<EOF
-build-allow-root = false
-build-users = $accounts
+build-users-group = nixbld
 EOF
 
+    chown root.nixbld /nix/store
+    chmod 1775 /nix/store
 fi
 
 

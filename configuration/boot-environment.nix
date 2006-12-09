@@ -195,7 +195,7 @@ rec {
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
     inherit (pkgs) genericSubstituter buildEnv coreutils findutils
-      utillinux kernel udev upstart;
+      gnugrep utillinux kernel udev upstart;
     inherit setuidWrapper;
     inherit upstartJobs;
     shell = pkgs.bash + "/bin/sh";
@@ -207,7 +207,6 @@ rec {
       pkgs.cpio
       pkgs.curl
       pkgs.e2fsprogs
-      pkgs.gnugrep
       pkgs.gnused
       pkgs.gnutar
       pkgs.grub
@@ -243,7 +242,7 @@ rec {
     # The user configuration.
     config = {
       networking = {
-        hostname = "vindaloo";
+        hostname = "nixos";
       };
     };
 

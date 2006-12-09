@@ -1,5 +1,5 @@
 { genericSubstituter, buildEnv, shell, coreutils, findutils
-, utillinux, kernel, udev, upstart, setuidWrapper
+, gnugrep, utillinux, kernel, udev, upstart, setuidWrapper
 , path ? []
 
 , # Whether the root device is root only.  If so, we'll mount a
@@ -17,6 +17,7 @@ let
   startPath = [
     coreutils
     findutils
+    gnugrep
     utillinux
     udev
     upstart
