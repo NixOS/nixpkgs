@@ -135,6 +135,11 @@ rec {
         inherit (pkgs) openssh;
       })
 
+      # Nix daemon - required for multi-user Nix.
+      (import ../upstart-jobs/nix-daemon.nix {
+        inherit nix;
+      })
+
       # X server.
       (import ../upstart-jobs/xserver.nix {
         inherit (pkgs) genericSubstituter;

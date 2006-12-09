@@ -105,6 +105,10 @@ udevtrigger
 udevsettle # wait for udev to finish
 
 
+# !!! Hack - should be done with udev rules.
+chmod 666 /dev/null
+
+
 # Enable a password-less root login.
 source @accounts@
 
@@ -164,7 +168,7 @@ cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
 export NIX_CONF_DIR=/nix/etc/nix
-if test "\$HOME" != root; then
+if test "\$USER" != root; then
     export NIX_REMOTE=daemon
 fi
 
