@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     md5 = "51d584b7b6115528c21e8ea32250f2b1";
   };
 
-  installPhase = "ensureDir $out/etc; cp protocols services $out/etc";
+  preInstall = "installFlags=\"PREFIX=$out\"";
 }
