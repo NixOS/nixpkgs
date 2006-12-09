@@ -2376,7 +2376,7 @@ rec {
     eclipse [spoofax];
 
   emacs = import ../applications/editors/emacs {
-    inherit fetchurl stdenv x11 Xaw3d;
+    inherit fetchurl stdenv ncurses x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
     xaw3dSupport = true;
   };

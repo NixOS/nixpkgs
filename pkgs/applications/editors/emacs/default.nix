@@ -1,7 +1,7 @@
 { xawSupport ? true
 , xpmSupport ? true
 , xaw3dSupport ? false
-, stdenv, fetchurl, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
+, stdenv, fetchurl, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 }:
 
 assert xawSupport && !xaw3dSupport -> libXaw != null;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
   patches = [./crt.patch];
   buildInputs = [
-    x11
+    ncurses x11
     (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
     (if xpmSupport then libXpm else null)
   ];
