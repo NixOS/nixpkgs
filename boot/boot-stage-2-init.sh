@@ -73,12 +73,24 @@ ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 
 
 # Set up the statically computed bits of /etc.
-rm -f /etc/static
-ln -s @etc@/etc /etc/static
-for i in $(cd /etc/static && find * -type l); do
+staticEtc=/etc/static
+rm -f $staticEtc
+ln -s @etc@/etc $staticEtc
+for i in $(cd $staticEtc && find * -type l); do
     mkdir -p /etc/$(dirname $i)
     rm -f /etc/$i
-    ln -s /etc/static/$i /etc/$i
+    ln -s $staticEtc/$i /etc/$i
+done
+
+
+# Remove dangling symlinks that point to /etc/static.  These are
+# configuration files that existed in a previous configuration but not
+# in the current one.
+for i in $(find /etc/ -type l); do
+    target=$(readlink "$i")
+    if test "${target:0:${#staticEtc}}" = "$staticEtc" -a ! -e "$i"; then
+        rm -f "$i"
+    fi
 done
 
 
