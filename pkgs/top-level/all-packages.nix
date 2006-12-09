@@ -2291,6 +2291,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  iana_etc = import ../data/misc/iana-etc {
+    inherit fetchurl stdenv;
+  };
+
 
   ### APPLICATIONS
 
