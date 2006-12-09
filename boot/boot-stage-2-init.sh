@@ -72,6 +72,16 @@ mkdir -m 0755 -p /var/log
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 
 
+# Set up the statically computed bits of /etc.
+rm -f /etc/static
+ln -s @etc@/etc /etc/static
+for i in $(cd /etc/static && find * -type l); do
+    mkdir -p /etc/$(dirname $i)
+    rm -f /etc/$i
+    ln -s /etc/static/$i /etc/$i
+done
+
+
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
 
@@ -95,15 +105,6 @@ udevtrigger
 udevsettle # wait for udev to finish
 
 
-# Necessary configuration for syslogd.
-echo "*.* /dev/tty10" > /etc/syslog.conf
-echo "syslog 514/udp" > /etc/services # required, even if we don't use it
-
-
-# login/su absolutely need this.
-test -e /etc/login.defs || touch /etc/login.defs 
-
-
 # Enable a password-less root login.
 source @accounts@
 
@@ -120,11 +121,6 @@ fi
 if ! test -e /etc/group; then
     echo "root:*:0" > /etc/group
 fi
-
-
-# We need "localhost" (!!! destructive hack for NIXOS-41).
-echo "127.0.0.1 localhost" > /etc/hosts
-echo "hosts: files dns" > /etc/nsswitch.conf
 
 
 # Set up Nix accounts.
@@ -161,15 +157,6 @@ rm -f /etc/event.d
 ln -sf @upstartJobs@/etc/event.d /etc/event.d
 
 
-# Show a nice greeting on each terminal.
-cat > /etc/issue <<EOF
-
-<<< Welcome to NixOS (\m) - Kernel \r (\l) >>>
-
-
-EOF
-
-
 # Additional path for the interactive shell.
 PATH=@wrapperDir@:@fullPath@/bin:@fullPath@/sbin
 
@@ -177,6 +164,9 @@ cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=$MODULE_DIR
 export NIX_CONF_DIR=/nix/etc/nix
+if test "\$HOME" != root; then
+    export NIX_REMOTE=daemon
+fi
 
 source $(dirname $(readlink -f $(type -tp nix-env)))/../etc/profile.d/nix.sh
 

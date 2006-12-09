@@ -16,8 +16,6 @@ start script
 
     mkdir -m 0755 -p /etc/ssh
 
-    echo 'X11Forwarding yes' > /etc/ssh/sshd_config
-
     if ! test -f /etc/ssh/ssh_host_dsa_key; then
         ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ''
     fi

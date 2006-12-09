@@ -9,6 +9,10 @@
 , # The Upstart job configuration.
   upstartJobs
 
+, # Static configuration files to be placed (through symlinks) in
+  # /etc.
+  etc
+
 , hostName
 }:
 
@@ -29,7 +33,7 @@ in
 genericSubstituter {
   src = ./boot-stage-2-init.sh;
   isExecutable = true;
-  inherit shell kernel upstart readOnlyRoot upstartJobs hostName;
+  inherit shell kernel upstart readOnlyRoot upstartJobs etc hostName;
   inherit startPath;
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
