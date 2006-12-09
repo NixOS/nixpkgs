@@ -230,7 +230,12 @@ rec {
         source = ./etc/sshd_config;
         target = "ssh/sshd_config";
       }
-    
+
+      { # The Upstart events defined above.
+        source = upstartJobs + "/etc/event.d";
+        target = "event.d";
+      }
+
     ];
   };
 
@@ -246,47 +251,79 @@ rec {
   };
 
 
+  # The packages you want in the boot environment.
+  fullPath = [
+    pkgs.bash
+    pkgs.bzip2
+    pkgs.coreutils
+    pkgs.cpio
+    pkgs.curl
+    pkgs.e2fsprogs
+    pkgs.findutils
+    pkgs.gnugrep
+    pkgs.gnused
+    pkgs.gnutar
+    pkgs.grub
+    pkgs.gzip
+    pkgs.iputils
+    pkgs.less
+    pkgs.module_init_tools
+    pkgs.nano
+    pkgs.netcat
+    pkgs.nettools
+    pkgs.perl
+    pkgs.procps
+    pkgs.rsync
+    pkgs.shadowutils
+    pkgs.strace
+    pkgs.sysklogd
+    pkgs.udev
+    pkgs.upstart
+    pkgs.utillinux
+#    pkgs.vim
+    nix
+    nixosInstaller
+    setuidWrapper
+  ];
+
+
+  # The script that activates the configuration, i.e., it sets up
+  # /etc, accounts, etc.  It doesn't do anything that can only be done
+  # at boot time (such as start `init').
+  activateConfiguration = pkgs.genericSubstituter {
+    src = ./activate-configuration.sh;
+    isExecutable = true;
+
+    shell = pkgs.bash + "/bin/sh";
+
+    inherit etc;
+    inherit readOnlyRoot;
+    inherit (pkgs) kernel;
+    hostName = config.get ["networking" "hostname"];
+    wrapperDir = setuidWrapper.wrapperDir;
+    accounts = ../helpers/accounts.sh;
+
+    # We don't want to put all of `startPath' and `path' in $PATH, since
+    # then we get an embarrassingly long $PATH.  So use the user
+    # environment builder to make a directory with symlinks to those
+    # packages.
+    fullPath = pkgs.buildEnv {
+      name = "boot-stage-2-path";
+      paths = fullPath;
+      pathsToLink = ["/bin" "/sbin" "/man/man1" "/share/man/man1"];
+      ignoreCollisions = true;
+    };
+  };
+
+
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
-    inherit (pkgs) genericSubstituter buildEnv coreutils findutils
+    inherit (pkgs) genericSubstituter coreutils findutils
       gnugrep utillinux kernel udev upstart;
-    inherit setuidWrapper;
-    inherit upstartJobs;
-    inherit etc;
     shell = pkgs.bash + "/bin/sh";
-
-    # Additional stuff; add whatever you want here.
-    path = [
-      pkgs.bash
-      pkgs.bzip2
-      pkgs.cpio
-      pkgs.curl
-      pkgs.e2fsprogs
-      pkgs.gnused
-      pkgs.gnutar
-      pkgs.grub
-      pkgs.gzip
-      pkgs.iputils
-      pkgs.less
-      pkgs.module_init_tools
-      pkgs.nano
-      pkgs.netcat
-      pkgs.nettools
-      pkgs.perl
-      pkgs.procps
-      pkgs.rsync
-      pkgs.shadowutils
-      pkgs.strace
-      pkgs.sysklogd
-#      pkgs.vim
-      nix
-      nixosInstaller
-    ];
-
     inherit readOnlyRoot;
-
-    hostName = config.get ["networking" "hostname"];
+    inherit activateConfiguration;
   };
 
 
