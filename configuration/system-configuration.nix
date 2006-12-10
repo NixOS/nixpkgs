@@ -37,9 +37,10 @@ rec {
   systemConfiguration = pkgs.stdenv.mkDerivation {
     name = "system-configuration";
     builder = ./system-configuration.sh;
-    inherit (pkgs) grub coreutils gnused gnugrep diffutils;
+    inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils;
     inherit grubDevice;
     inherit bootStage2;
+    inherit activateConfiguration;
     inherit grubMenuBuilder;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
