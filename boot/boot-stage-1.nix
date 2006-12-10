@@ -4,7 +4,7 @@
 # the second boot stage.  The closure of the result of this expression
 # is supposed to be put into an initial RAM disk (initrd).
 
-{ genericSubstituter, shell, staticTools
+{ substituteAll, staticShell, staticTools
 , module_init_tools, extraUtils, modules
 
 , # Whether to find root device automatically using its label.
@@ -24,10 +24,10 @@
 assert !autoDetectRootDevice -> rootDevice != "";
 assert autoDetectRootDevice -> rootLabel != "";
 
-genericSubstituter {
+substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit shell modules;
+  inherit staticShell modules;
   inherit autoDetectRootDevice rootDevice rootLabel;
   path = [
     staticTools

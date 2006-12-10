@@ -1,5 +1,8 @@
 #! @bash@/bin/sh -e
 
+export PATH=/empty
+for i in @path@; do PATH=$PATH:$i/bin; done
+
 default=$1
 if test -z "$1"; then
     echo "Syntax: grub-menu-builder.sh <DEFAULT-CONFIG>"

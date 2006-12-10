@@ -64,13 +64,13 @@ rec {
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = import ../boot/boot-stage-1.nix {
-    inherit (pkgs) genericSubstituter;
+    inherit (pkgs) substituteAll;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
     inherit autoDetectRootDevice rootDevice rootLabel;
     inherit stage2Init;
     modules = modulesClosure;
-    shell = stdenvLinuxStuff.bootstrapTools.bash;
+    staticShell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
   };
   
@@ -99,9 +99,8 @@ rec {
 
   # The installer.
   nixosInstaller = import ../installer/nixos-installer.nix {
-    inherit (pkgs) stdenv genericSubstituter;
+    inherit (pkgs) stdenv substituteAll;
     inherit nix;
-    shell = pkgs.bash + "/bin/sh";
   };
 
 
@@ -127,6 +126,7 @@ rec {
       
       # DHCP client.
       (import ../upstart-jobs/dhclient.nix {
+        inherit (pkgs) nettools;
         dhcp = pkgs.dhcpWrapper;
       })
 
@@ -142,7 +142,7 @@ rec {
 
       # X server.
       (import ../upstart-jobs/xserver.nix {
-        inherit (pkgs) genericSubstituter;
+        inherit (pkgs) substituteAll;
         inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
       })
 
@@ -290,11 +290,9 @@ rec {
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
-  activateConfiguration = pkgs.genericSubstituter {
+  activateConfiguration = pkgs.substituteAll {
     src = ./activate-configuration.sh;
     isExecutable = true;
-
-    shell = pkgs.bash + "/bin/sh";
 
     inherit etc;
     inherit readOnlyRoot;
@@ -302,6 +300,8 @@ rec {
     hostName = config.get ["networking" "hostname"];
     wrapperDir = setuidWrapper.wrapperDir;
     accounts = ../helpers/accounts.sh;
+
+    path = [pkgs.coreutils pkgs.gnugrep pkgs.findutils];
 
     # We don't want to put all of `startPath' and `path' in $PATH, since
     # then we get an embarrassingly long $PATH.  So use the user
@@ -319,11 +319,16 @@ rec {
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
-    inherit (pkgs) genericSubstituter coreutils findutils
-      gnugrep utillinux kernel udev upstart;
-    shell = pkgs.bash + "/bin/sh";
+    inherit (pkgs) substituteAll coreutils 
+      utillinux kernel udev upstart;
     inherit readOnlyRoot;
     inherit activateConfiguration;
+    upstartPath = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+    ];
   };
 
 

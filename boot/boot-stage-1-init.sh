@@ -1,9 +1,9 @@
-#! @shell@
+#! @staticShell@
 
 fail() {
     # If starting stage 2 failed, start an interactive shell.
     echo "Stage 2 failed, starting emergency shell..."
-    exec @shell@
+    exec @staticShell@
 }
 
 

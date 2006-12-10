@@ -34,24 +34,29 @@ rec {
   inherit upstartJobs;
 
 
-  systemConfiguration = pkgs.stdenv.mkDerivation {
+  systemConfiguration = pkgs.stdenvNew.mkDerivation {
     name = "system-configuration";
     builder = ./system-configuration.sh;
+    switchToConfiguration = ./switch-to-configuration.sh;
     inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils;
     inherit grubDevice;
     inherit bootStage2;
     inherit activateConfiguration;
     inherit grubMenuBuilder;
+    inherit etc;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     inherit extraKernelParams;
+    # Most of these are needed by grub-install.
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils];
   };
 
 
-  grubMenuBuilder = pkgs.genericSubstituter {
+  grubMenuBuilder = pkgs.substituteAll {
     src = ../installer/grub-menu-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
 
 

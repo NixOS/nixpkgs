@@ -35,7 +35,7 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     mkdir -p $(dirname root/$symlink)
     ln -s $object$suffix root/$symlink
 done
-    
+
 
 # Put the closure in a gzipped cpio archive.
 ensureDir $out

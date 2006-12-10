@@ -1,4 +1,4 @@
-{ genericSubstituter
+{ substituteAll
 
 , xorgserver
 
@@ -18,7 +18,7 @@
 
 let
 
-  config = genericSubstituter {
+  config = substituteAll {
     name = "xserver.conf";
     src = ./xserver.conf;
   };

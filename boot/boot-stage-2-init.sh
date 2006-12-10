@@ -63,30 +63,22 @@ needWritableDir /tmp 01777
 needWritableDir /var 0755
 needWritableDir /nix/var 0755
 
-mkdir -m 0755 -p /nix/var/nix/db
-mkdir -m 0755 -p /nix/var/nix/gcroots
-mkdir -m 0755 -p /nix/var/nix/temproots
 
-mkdir -m 0755 -p /var/log
+# Miscellaneous boot time cleanup.
+rm -rf /var/run
 
-ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+
+# Create the minimal device nodes needed before we run udev.
+mknod -m 0666 /dev/null c 1 3
 
 
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
-source @activateConfiguration@
+@activateConfiguration@
 
 
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
-
-
-# Miscellaneous cleanup.
-rm -rf /var/run
-mkdir -m 0755 -p /var/run
-
-echo -n > /var/run/utmp # must exist
-chmod 664 /var/run/utmp
 
 
 # Start udev.
@@ -106,4 +98,6 @@ udevsettle # wait for udev to finish
 
 # Start Upstart's init.
 export UPSTART_CFG_DIR=/etc/event.d
+export PATH=/empty
+for i in @upstartPath@; do PATH=$PATH:$i/bin; done
 exec @upstart@/sbin/init -v

@@ -1,4 +1,4 @@
-{dhcp}:
+{dhcp, nettools}:
 
 {
   name = "dhclient";
@@ -23,7 +23,7 @@ script
     #    fi
     #done
 
-    for i in $(ifconfig | grep '^[^ ]' | sed 's/ .*//'); do
+    for i in $(${nettools}/sbin/ifconfig | grep '^[^ ]' | sed 's/ .*//'); do
         if test \"$i\" != \"lo\"; then
             interfaces=\"$interfaces $i\"
         fi

@@ -1,8 +1,7 @@
 #! @shell@
 
-
-# !!! Hack - should be done with udev rules.
-chmod 666 /dev/null
+export PATH=/empty
+for i in @path@; do PATH=$PATH:$i/bin; done
 
 
 # Set up the statically computed bits of /etc.
@@ -25,6 +24,15 @@ for i in $(find /etc/ -type l); do
         rm -f "$i"
     fi
 done
+
+
+# Various log directories.
+mkdir -m 0755 -p /var/run
+
+echo -n > /var/run/utmp # must exist
+chmod 664 /var/run/utmp
+
+mkdir -m 0755 -p /var/log
 
 
 # Enable a password-less root login.
@@ -91,6 +99,17 @@ if test -f /etc/profile.local; then
     source /etc/profile.local
 fi
 EOF
+
+
+# Nix initialisation.
+mkdir -m 0755 -p /nix/var/nix/db
+mkdir -m 0755 -p /nix/var/nix/gcroots
+mkdir -m 0755 -p /nix/var/nix/temproots
+
+ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+
+chown root.nixbld /nix/store
+chmod 1775 /nix/store
 
 
 # Make a few setuid programs work.
