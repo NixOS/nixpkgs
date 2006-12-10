@@ -44,21 +44,19 @@ rec {
   # Some additional utilities needed in stage 1, notably mount.  We
   # don't want to bring in all of util-linux, so we just copy what we
   # need.
-  extraUtils = pkgs.stdenv.mkDerivation {
-    name = "extra-utils";
-    builder = builtins.toFile "builder.sh" "
-      source $stdenv/setup
+  extraUtils = pkgs.runCommand "extra-utils"
+    { buildInputs = [pkgs.nukeReferences];
+      inherit (pkgsStatic) utillinux;
+      inherit (pkgs) splashutils;
+      e2fsprogs = pkgs.e2fsprogsDiet;
+    }
+    "
       ensureDir $out/bin
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
       cp $splashutils/bin/splash_helper $out/bin
       nuke-refs $out/bin/*
     ";
-    buildInputs = [pkgs.nukeReferences];
-    inherit (pkgsStatic) utillinux;
-    inherit (pkgs) splashutils;
-    e2fsprogs = pkgs.e2fsprogsDiet;
-  };
   
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -99,14 +97,14 @@ rec {
 
   # The installer.
   nixosInstaller = import ../installer/nixos-installer.nix {
-    inherit (pkgs) stdenv substituteAll;
+    inherit (pkgs) stdenv runCommand substituteAll;
     inherit nix;
   };
 
 
   # The services (Upstart) configuration for the system.
   upstartJobs = import ../upstart-jobs/gather.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) runCommand;
 
     jobs = map makeJob [
       # Syslogd.
@@ -241,7 +239,7 @@ rec {
 
   
   makeJob = import ../upstart-jobs/make-job.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) runCommand;
   };
 
 

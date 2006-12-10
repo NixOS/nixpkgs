@@ -1,7 +1,4 @@
-{stdenv}: job:
+{runCommand}: job:
 
-stdenv.mkDerivation {
-  inherit (job) name job;
-  builder = builtins.toFile "builder.sh"
-    "source $stdenv/setup; ensureDir $out/etc/event.d; echo \"$job\" > $out/etc/event.d/$name";
-}
+runCommand job.name {inherit (job) job;}
+  "ensureDir $out/etc/event.d; echo \"$job\" > $out/etc/event.d/$name"

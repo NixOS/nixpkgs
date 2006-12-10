@@ -1,4 +1,4 @@
-{stdenv, substituteAll, nix}:
+{stdenv, runCommand, substituteAll, nix}:
 
 substituteAll {
   src = ./nixos-installer.sh;
@@ -8,9 +8,7 @@ substituteAll {
 
   pathsFromGraph = ../helpers/paths-from-graph.sh;
 
-  nixClosure = stdenv.mkDerivation {
-    name = "closure";
-    exportReferencesGraph = ["refs" nix];
-    builder = builtins.toFile "builder.sh" "source $stdenv/setup; cp refs $out";
-  };
+  nixClosure = runCommand "closure"
+    {exportReferencesGraph = ["refs" nix];}
+    "cp refs $out";
 }

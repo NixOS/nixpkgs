@@ -20,32 +20,23 @@ rec {
 
 
   # Since the CD is read-only, the mount points must be on disk.
-  cdMountPoints = pkgs.stdenv.mkDerivation {
-    name = "mount-points";
-    builder = builtins.toFile "builder.sh" "
-      source $stdenv/setup
-      ensureDir $out
-      cd $out
-      mkdir proc sys tmp etc dev var mnt nix nix/var
-      touch $out/${cdromLabel}
-    ";
-  };
+  cdMountPoints = pkgs.runCommand "mount-points" {} "
+    ensureDir $out
+    cd $out
+    mkdir proc sys tmp etc dev var mnt nix nix/var
+    touch $out/${cdromLabel}
+  ";
 
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  We put them in a tarball because accessing that many small
   # files from a slow device like a CD-ROM takes too long.
-  makeTarball = tarName: input: pkgs.stdenv.mkDerivation {  
-    name = "tarball";
-    inherit tarName input;
-    builder = builtins.toFile "builder.sh" "
-      source $stdenv/setup
-      ensureDir $out
-      (cd $input && tar cvfj $out/$tarName . \\
-        --exclude '*~' --exclude '.svn' \\
-        --exclude 'pkgs' --exclude 'result')
-    ";
-  };
+  makeTarball = tarName: input: pkgs.runCommand "tarball" "
+    ensureDir $out
+    (cd ${input} && tar cvfj $out/${tarName} . \\
+      --exclude '*~' --exclude '.svn' \\
+      --exclude 'pkgs' --exclude 'result')
+  ";
 
   
   # Put the current directory in the tarball.  !!! This gives us a lot
