@@ -1,5 +1,5 @@
 source $stdenv/setup
-source $substituter
+source $substitute
 
 configurePhase() {
 	substituteInPlace "setup.cfg" \

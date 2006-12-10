@@ -160,6 +160,8 @@ rec {
 
   stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
 
+  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new2.sh;
+
 
   ### BUILD SUPPORT
 
@@ -190,10 +192,15 @@ rec {
 
   makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
 
-  substituter = ../build-support/substitute/substitute.sh;
+  runCommand = name: env: buildCommand: stdenvNew.mkDerivation ({
+    inherit name buildCommand;
+  } // env);
 
-  genericSubstituter = import ../build-support/substitute/generic-substituter.nix {
-    inherit stdenv;
+  # !!! obsolete
+  substitute = ../build-support/substitute/substitute.sh;
+
+  substituteAll = import ../build-support/substitute/substitute-all.nix {
+    stdenv = stdenvNew;
   };
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
@@ -2926,7 +2933,7 @@ rec {
     };
 
     pysqlite = import ../development/libraries/pysqlite {
-      inherit stdenv fetchurl python substituter sqlite;
+      inherit stdenv fetchurl python substitute sqlite;
     };
   };
 
