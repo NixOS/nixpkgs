@@ -21,14 +21,13 @@
   stage2Init ? "/init"
 }:
 
-assert !autoDetectRootDevice -> rootDevice != "";
-assert autoDetectRootDevice -> rootLabel != "";
-
 substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
   inherit staticShell modules;
-  inherit autoDetectRootDevice rootDevice rootLabel;
+  inherit autoDetectRootDevice;
+  rootDevice = if !autoDetectRootDevice then rootDevice else "";
+  rootLabel = if autoDetectRootDevice then rootLabel else "";
   path = [
     staticTools
     module_init_tools

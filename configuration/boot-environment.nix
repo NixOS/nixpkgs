@@ -1,17 +1,13 @@
 { system ? __currentSystem
-, autoDetectRootDevice ? false
-, rootDevice ? ""
-, rootLabel ? ""
 , stage2Init
-, readOnlyRoot
-, configData ? {}
+, configuration
 }:
 
 rec {
 
   # Make a configuration object from which we can retrieve option
   # values.
-  config = import ./config.nix pkgs.library configData;
+  config = import ./config.nix pkgs.library configuration;
   
 
   pkgs = import ../pkgs/top-level/all-packages.nix {inherit system;};
@@ -71,7 +67,9 @@ rec {
     inherit (pkgs) substituteAll;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
-    inherit autoDetectRootDevice rootDevice rootLabel;
+    autoDetectRootDevice = config.get ["boot" "autoDetectRootDevice"];
+    rootDevice = config.get ["boot" "rootDevice"];
+    rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
     modules = modulesClosure;
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
@@ -172,8 +170,8 @@ rec {
     isExecutable = true;
 
     inherit etc;
-    inherit readOnlyRoot;
     inherit (pkgs) kernel;
+    readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostname"];
     wrapperDir = setuidWrapper.wrapperDir;
     accounts = ../helpers/accounts.sh;
@@ -198,8 +196,8 @@ rec {
   bootStage2 = import ../boot/boot-stage-2.nix {
     inherit (pkgs) substituteAll coreutils 
       utillinux kernel udev upstart;
-    inherit readOnlyRoot;
     inherit activateConfiguration;
+    readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     upstartPath = [
       pkgs.coreutils
       pkgs.findutils

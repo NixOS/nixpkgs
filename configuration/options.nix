@@ -1,10 +1,66 @@
-[        
+[
 
-  {
+
+  { 
     name = ["networking" "hostname"];
     default = "nixos";
     description = "The name of the machine.";
   }
+
+  
+  {
+    name = ["boot" "autoDetectRootDevice"];
+    default = false;
+    description = "
+      Whether to find the root device automatically by searching for a
+      device with the right label.  If this option is off, then
+      <option>boot.rootDevice</option> must be set.
+    ";
+  }
+
+
+  {
+    name = ["boot" "rootDevice"];
+    example = "/dev/hda1";
+    description = "
+      The device to be mounted on / at system startup.
+    ";
+  }
+
+
+  {
+    name = ["boot" "readOnlyRoot"];
+    default = false;
+    description = "
+      Whether the root device should be mounted writable.  This should
+      be set when booting from CD-ROM.
+    ";
+  }
+
+
+  {
+    name = ["boot" "rootLabel"];
+    description = "
+      When auto-detecting the root device (see
+      <option>boot.autoDetectRootDevice</option>), this option
+      specifies the label of the root device.  Right now, this is
+      merely a file name that should exist in the root directory of
+      the file system.  It is used to find the boot CD-ROM.
+    ";
+  }
+
+
+  {
+    name = ["boot" "grubDevice"];
+    default = "";
+    example = "/dev/hda";
+    description = "
+      The device on which the boot loader, Grub, will be installed.
+      If empty, Grub won't be installed and it's your responsibility
+      to make the system bootable.
+    ";
+  }
+
 
   {
     name = ["networking" "useDHCP"];
@@ -16,6 +72,7 @@
     ";
   }
 
+  
   {
     name = ["networking" "interfaces"];
     default = [];
@@ -33,6 +90,7 @@
     ";
   }
 
+  
   {
     name = ["filesystems" "mountPoints"];
     example = [
@@ -48,6 +106,7 @@
     ";
   }
 
+  
   {
     name = ["services" "syslogd" "tty"];
     default = 10;
@@ -56,7 +115,8 @@
       messages.
     ";
   }
-    
+
+      
   {
     name = ["services" "mingetty" "ttys"];
     default = [1 2 3 4 5 6];
@@ -65,7 +125,8 @@
       login prompt.
     ";
   }
-    
+
+      
   {
     name = ["services" "mingetty" "waitOnMounts"];
     default = false;
@@ -77,6 +138,7 @@
     ";
   }
 
+  
   {
     name = ["services" "sshd" "enable"];
     default = false;
@@ -86,6 +148,7 @@
     ";
   }
 
+  
   {
     name = ["services" "sshd" "forwardX11"];
     default = false;
@@ -94,4 +157,5 @@
     ";
   }
 
+  
 ]

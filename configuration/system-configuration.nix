@@ -1,18 +1,18 @@
 let
 
-  # The root device.
-  rootDevice = "/dev/hda1";
-
-  # The device on which GRUB should be installed (leave empty if you
-  # don't want GRUB to be installed).
-  grubDevice = "/dev/hda";
+  configuration = {
+    boot = {
+      autoDetectRootDevice = false;
+      rootDevice = "/dev/hda1";
+      readOnlyRoot = false;
+      grubDevice = "/dev/hda";
+    };
+  };
 
   # Build boot scripts.
   bootEnv = import ./boot-environment.nix {
-    autoDetectRootDevice = false;
-    inherit rootDevice;
     stage2Init = ""; # Passed on the command line via Grub.
-    readOnlyRoot = false;
+    inherit configuration;
   };
 
   # Extra kernel command line arguments.
@@ -34,12 +34,12 @@ rec {
   inherit upstartJobs;
 
 
-  systemConfiguration = pkgs.stdenvNew.mkDerivation {
+  system = pkgs.stdenvNew.mkDerivation {
     name = "system-configuration";
     builder = ./system-configuration.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
     inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils;
-    inherit grubDevice;
+    grubDevice = "/dev/hda"; # !!!
     inherit bootStage2;
     inherit activateConfiguration;
     inherit grubMenuBuilder;
