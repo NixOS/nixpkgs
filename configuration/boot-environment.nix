@@ -103,171 +103,17 @@ rec {
 
 
   # The services (Upstart) configuration for the system.
-  upstartJobs = import ../upstart-jobs/gather.nix {
-    inherit (pkgs) runCommand;
-
-    jobs = map makeJob [
-      # Syslogd.
-      (import ../upstart-jobs/syslogd.nix {
-        inherit (pkgs) sysklogd;
-      })
-
-      # Hardware scan; loads modules for PCI devices.
-      (import ../upstart-jobs/hardware-scan.nix {
-        inherit (pkgs) kernel module_init_tools;
-      })
-      
-      # Network interfaces.
-      (import ../upstart-jobs/network-interfaces.nix {
-        inherit (pkgs) nettools kernel module_init_tools;
-      })
-      
-      # DHCP client.
-      (import ../upstart-jobs/dhclient.nix {
-        inherit (pkgs) nettools;
-        dhcp = pkgs.dhcpWrapper;
-      })
-
-      # SSH daemon.
-      (import ../upstart-jobs/sshd.nix {
-        inherit (pkgs) openssh;
-      })
-
-      # Nix daemon - required for multi-user Nix.
-      (import ../upstart-jobs/nix-daemon.nix {
-        inherit nix;
-      })
-
-      # X server.
-      (import ../upstart-jobs/xserver.nix {
-        inherit (pkgs) substituteAll;
-        inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
-      })
-
-      # Transparent TTY backgrounds.
-      (import ../upstart-jobs/tty-backgrounds.nix {
-        inherit (pkgs) stdenv splashutils;
-        backgrounds = splashThemes.ttyBackgrounds;
-      })
-
-      # Handles the maintenance/stalled event (single-user shell).
-      (import ../upstart-jobs/maintenance-shell.nix {
-        inherit (pkgs) bash;
-      })
-
-      # Ctrl-alt-delete action.
-      (import ../upstart-jobs/ctrl-alt-delete.nix)
-
-    ]
-
-    # Handles the reboot/halt events.
-    ++ (map
-      (event: makeJob (import ../upstart-jobs/halt.nix {
-        inherit (pkgs) bash utillinux;
-        inherit event;
-      }))
-      ["reboot" "halt" "system-halt" "power-off"]
-    )
-    
-    # The terminals on ttyX.
-    ++ (map 
-      (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
-        inherit (pkgs) mingetty pam_login;
-        inherit ttyNumber;
-      }))
-      [1 2 3 4 5 6]
-    )
-
-    # For the builtin logd job.
-    ++ [pkgs.upstart];
+  upstartJobs = import ./upstart.nix {
+    inherit pkgs nix splashThemes;
   };
 
 
-  etc = import ../helpers/make-etc.nix {
-    inherit (pkgs) stdenv;
-
-    configFiles = [
-
-      { # TCP/UDP port assignments.
-        source = pkgs.iana_etc + "/etc/services";
-        target = "services";
-      }
-
-      { # IP protocol numbers.
-        source = pkgs.iana_etc + "/etc/protocols";
-        target = "protocols";
-      }
-
-      { # Hostname-to-IP mappings.
-        source = ./etc/hosts;
-        target = "hosts";
-      }
-
-      { # Name Service Switch configuration file.  Required by the C library.
-        source = ./etc/nsswitch.conf;
-        target = "nsswitch.conf";
-      }
-
-      { # Configuration file for the system logging daemon.
-        source = ./etc/syslog.conf;
-        target = "syslog.conf";
-      }
-
-      { # Friendly greeting on the virtual consoles.
-        source = ./etc/issue;
-        target = "issue";
-      }
-
-      { # Configuration for pwdutils (login, passwd, useradd, etc.).
-        # You cannot login without it!
-        source = ./etc/login.defs;
-        target = "login.defs";
-      }
-
-      { # SSH daemon configuration.
-        source = ./etc/sshd_config;
-        target = "ssh/sshd_config";
-      }
-
-      { # The Upstart events defined above.
-        source = upstartJobs + "/etc/event.d";
-        target = "event.d";
-      }
-
-      { # Configuration for passwd and friends (e.g., hash algorithm
-        # for /etc/passwd).
-        source = ./etc/default/passwd;
-        target = "default/passwd";
-      }
-
-    ]
-
-    # A bunch of PAM configuration files for various programs.
-    ++ (map
-      (program:
-        { source = pkgs.substituteAll {
-            src = ./etc/pam.d + ("/" + program);
-            inherit (pkgs) pam_unix2;
-          };
-          target = "pam.d/" + program;
-        }
-      )
-      [
-        "login"
-        "sshd"
-        "passwd"
-        "useradd"
-        "other"
-      ]
-    );
+  # The static parts of /etc.
+  etc = import ./etc.nix {
+    inherit pkgs upstartJobs;
   };
 
   
-  makeJob = import ../upstart-jobs/make-job.nix {
-    inherit (pkgs) runCommand;
-  };
-
-
   setuidWrapper = import ../helpers/setuid {
     inherit (pkgs) stdenv;
     wrapperDir = "/var/setuid-wrappers";
