@@ -254,6 +254,7 @@ rec {
       )
       [
         "login"
+        "sshd"
         "passwd"
         "useradd"
         "other"

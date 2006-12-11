@@ -1,1 +1,2 @@
 X11Forwarding yes
+UsePAM yes
