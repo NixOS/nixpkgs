@@ -163,7 +163,7 @@ rec {
     # Handles the reboot/halt events.
     ++ (map
       (event: makeJob (import ../upstart-jobs/halt.nix {
-        inherit (pkgs) bash;
+        inherit (pkgs) bash utillinux;
         inherit event;
       }))
       ["reboot" "halt" "system-halt" "power-off"]
@@ -172,7 +172,7 @@ rec {
     # The terminals on ttyX.
     ++ (map 
       (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
-        mingetty = pkgs.mingettyWrapper;
+        inherit (pkgs) mingetty pam_login;
         inherit ttyNumber;
       }))
       [1 2 3 4 5 6]
@@ -326,6 +326,7 @@ rec {
       pkgs.findutils
       pkgs.gnugrep
       pkgs.gnused
+      pkgs.upstart
     ];
   };
 

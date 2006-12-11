@@ -1,4 +1,4 @@
-{bash, event}:
+{bash, event, utillinux}:
 
 assert event == "reboot"
     || event == "halt"
@@ -16,6 +16,8 @@ script
     echo \"\"
     echo \"<<< SYSTEM SHUTDOWN >>>\"
     echo \"\"
+
+    export PATH=${utillinux}/bin:$PATH
 
     # Do an initial sync just in case.
     sync || true

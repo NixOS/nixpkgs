@@ -10,13 +10,18 @@ echo
 
 
 # Set the PATH.
-export PATH=/empty
-for i in @startPath@; do
-    PATH=$PATH:$i/bin
-    if test -e $i/sbin; then
-        PATH=$PATH:$i/sbin
-    fi
-done
+setPath() {
+    local dirs="$1"
+    export PATH=/empty
+    for i in $dirs; do
+        PATH=$PATH:$i/bin
+        if test -e $i/sbin; then
+            PATH=$PATH:$i/sbin
+        fi
+    done
+}
+
+setPath "@path@"
 
 
 # Mount special file systems.
@@ -98,6 +103,5 @@ udevsettle # wait for udev to finish
 
 # Start Upstart's init.
 export UPSTART_CFG_DIR=/etc/event.d
-export PATH=/empty
-for i in @upstartPath@; do PATH=$PATH:$i/bin; done
+setPath "@upstartPath@"
 exec @upstart@/sbin/init -v

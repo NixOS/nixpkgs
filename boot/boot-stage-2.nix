@@ -10,20 +10,14 @@
   upstartPath
 }:
 
-let
-
-  startPath = [
+substituteAll {
+  src = ./boot-stage-2-init.sh;
+  isExecutable = true;
+  inherit kernel upstart readOnlyRoot activateConfiguration upstartPath;
+  path = [
     coreutils
     utillinux
     udev
     upstart
   ];
-
-in
-
-substituteAll {
-  src = ./boot-stage-2-init.sh;
-  isExecutable = true;
-  inherit kernel upstart readOnlyRoot activateConfiguration upstartPath;
-  inherit startPath;
 }
