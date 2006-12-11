@@ -2191,6 +2191,10 @@ rec {
     inherit stdenv fetchurl pam;
   };
 
+  pam_unix2 = import ../os-specific/linux/pam_unix2 {
+    inherit stdenv fetchurl pam;
+  };
+
   procps = import ../os-specific/linux/procps {
     inherit fetchurl stdenv ncurses;
   };
