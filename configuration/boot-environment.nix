@@ -4,9 +4,15 @@
 , rootLabel ? ""
 , stage2Init
 , readOnlyRoot
+, configData ? {}
 }:
 
 rec {
+
+  # Make a configuration object from which we can retrieve option
+  # values.
+  config = import ./config.nix pkgs.library configData;
+  
 
   pkgs = import ../pkgs/top-level/all-packages.nix {inherit system;};
 
@@ -113,7 +119,9 @@ rec {
     inherit pkgs upstartJobs;
   };
 
-  
+
+  # The wrapper setuid programs (since we can't have setuid programs
+  # in the Nix store).  
   setuidWrapper = import ../helpers/setuid {
     inherit (pkgs) stdenv;
     wrapperDir = "/var/setuid-wrappers";
@@ -199,16 +207,6 @@ rec {
       pkgs.gnused
       pkgs.upstart
     ];
-  };
-
-
-  config = import ./config.nix pkgs.library configData;
-
-  # The user configuration.
-  configData = {
-    networking = {
-      hostname = "nixos";
-    };
   };
 
 }
