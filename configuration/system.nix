@@ -1,5 +1,5 @@
-{ system ? __currentSystem
-, stage2Init
+{ platform ? __currentSystem
+, stage2Init ? ""
 , configuration
 }:
 
@@ -10,15 +10,15 @@ rec {
   config = import ./config.nix pkgs.library configuration;
   
 
-  pkgs = import ../pkgs/top-level/all-packages.nix {inherit system;};
+  pkgs = import ../pkgs/top-level/all-packages.nix {system = platform;};
 
   pkgsDiet = import ../pkgs/top-level/all-packages.nix {
-    inherit system;
+    system = platform;
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
   pkgsStatic = import ../pkgs/top-level/all-packages.nix {
-    inherit system;
+    system = platform;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
   };
 
@@ -206,5 +206,41 @@ rec {
       pkgs.upstart
     ];
   };
+
+
+  # Script to build the Grub menu containing the current and previous
+  # system configurations.
+  grubMenuBuilder = pkgs.substituteAll {
+    src = ../installer/grub-menu-builder.sh;
+    isExecutable = true;
+    inherit (pkgs) bash;
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+  };
+
+
+  # Putting it all together.  This builds a store object containing
+  # symlinks to the various parts of the built configuration (the
+  # kernel, the Upstart services, the init scripts, etc.) as well as a
+  # script `switch-to-configuration' that activates the configuration
+  # and makes it bootable.
+  system = pkgs.stdenvNew.mkDerivation {
+    name = "system";
+    builder = ./system.sh;
+    switchToConfiguration = ./switch-to-configuration.sh;
+    inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils;
+    grubDevice = config.get ["boot" "grubDevice"];
+    kernelParams =
+      (config.get ["boot" "kernelParams"]) ++
+      (config.get ["boot" "extraKernelParams"]);
+    inherit bootStage2;
+    inherit activateConfiguration;
+    inherit grubMenuBuilder;
+    inherit etc;
+    kernel = pkgs.kernel + "/vmlinuz";
+    initrd = initialRamdisk + "/initrd";
+    # Most of these are needed by grub-install.
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils];
+  };
+
 
 }

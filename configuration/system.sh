@@ -9,10 +9,10 @@ ln -s $initrd $out/initrd
 ln -s $activateConfiguration $out/activate
 ln -s $etc/etc $out/etc
 
-echo "$extraKernelParams" > $out/kernel-params
+echo "$kernelParams" > $out/kernel-params
 
 cat > $out/menu.lst << GRUBEND
-kernel $kernel init=$bootStage2 $extraKernelParams
+kernel $kernel init=$bootStage2 $kernelParams
 initrd $initrd
 GRUBEND
 

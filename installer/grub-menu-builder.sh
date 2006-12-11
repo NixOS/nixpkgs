@@ -23,6 +23,10 @@ addEntry() {
     name="$1"
     path="$2"
 
+    if ! test -e $path/menu.lst; then
+        return
+    fi
+
     cat >> $tmp << GRUBEND
 title $name
 GRUBEND

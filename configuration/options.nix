@@ -63,6 +63,37 @@
 
 
   {
+    name = ["boot" "kernelParams"];
+    default = [
+      "selinux=0"
+      "apm=on"
+      "acpi=on"
+      "vga=0x317"
+      "console=tty1"
+      "splash=verbose"
+    ];
+    description = "
+      The kernel parameters.  If you want to add additional
+      parameters, it's best to set
+      <option>boot.extraKernelParams</options>.
+    ";
+  }
+
+
+  {
+    name = ["boot" "extraKernelParams"];
+    default = [
+    ];
+    example = [
+      "debugtrace"
+    ];
+    description = "
+      Additional user-defined kernel parameters.
+    ";
+  }
+
+
+  {
     name = ["networking" "useDHCP"];
     default = true;
     description = "
