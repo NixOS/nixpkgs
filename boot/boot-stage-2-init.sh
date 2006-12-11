@@ -96,6 +96,8 @@ udevd --daemon
 udevtrigger
 udevsettle # wait for udev to finish
 
+chmod 666 /dev/null # grmbl
+
 
 # Start an interactive shell.
 #exec @shell@
