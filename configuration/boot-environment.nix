@@ -271,8 +271,8 @@ rec {
     pkgs.nettools
     pkgs.perl
     pkgs.procps
+    pkgs.pwdutils
     pkgs.rsync
-    pkgs.shadowutils
     pkgs.strace
     pkgs.sysklogd
     pkgs.udev
