@@ -234,7 +234,31 @@ rec {
         target = "event.d";
       }
 
-    ];
+      { # Configuration for passwd and friends (e.g., hash algorithm
+        # for /etc/passwd).
+        source = ./etc/default/passwd;
+        target = "default/passwd";
+      }
+
+    ]
+
+    # A bunch of PAM configuration files for various programs.
+    ++ (map
+      (program:
+        { source = pkgs.substituteAll {
+            src = ./etc/pam.d + ("/" + program);
+            inherit (pkgs) pam_unix2;
+          };
+          target = "pam.d/" + program;
+        }
+      )
+      [
+        "login"
+        "passwd"
+        "useradd"
+        "other"
+      ]
+    );
   };
 
   
