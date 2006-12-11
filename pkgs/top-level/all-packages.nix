@@ -1499,6 +1499,10 @@ rec {
     inherit (gnome) glib;
   };
 
+  libxcrypt = import ../development/libraries/libxcrypt {
+    inherit fetchurl stdenv;
+  };
+
   libxml2 = import ../development/libraries/libxml2 {
     inherit fetchurl stdenv zlib python;
 #    pythonSupport = stdenv.system == "i686-linux";
@@ -2192,7 +2196,7 @@ rec {
   };
 
   pam_unix2 = import ../os-specific/linux/pam_unix2 {
-    inherit stdenv fetchurl pam;
+    inherit stdenv fetchurl pam libxcrypt;
   };
 
   procps = import ../os-specific/linux/procps {
