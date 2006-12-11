@@ -202,38 +202,13 @@ rec {
   };
 
 
-  lib = pkgs.library;
+  config = import ./config.nix pkgs.library configData;
 
-
-  config = rec {
-
-    # The user configuration.
-    config = {
-      networking = {
-        hostname = "nixos";
-      };
+  # The user configuration.
+  configData = {
+    networking = {
+      hostname = "nixos";
     };
-
-    # The option declarations, i.e., option names with defaults and
-    # documentation.
-    declarations = import ./options.nix;
-
-    # Get the option named `name' from the user configuration, using
-    # its default value if it's not defined.
-    get = name:
-      let
-        sameName = lib.filter (opt: lib.eqLists opt.name name) declarations;
-        default =
-          if sameName == []
-          then abort ("Undeclared option `" + printName name + "'.")
-          else if !builtins.head sameName ? default
-          then abort ("Option `" + printName name + "' has no default.")
-          else (builtins.head sameName).default;
-      in lib.getAttr name default config;
-  
-    printName = name: lib.concatStrings (lib.intersperse "." name);
-
   };
-
 
 }
