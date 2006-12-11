@@ -2160,10 +2160,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  mingettyWrapper = import ../os-specific/linux/mingetty-wrapper {
-    inherit stdenv mingetty shadowutils;
-  };
-
   mkinitrd = import ../os-specific/linux/mkinitrd {
     inherit fetchurl stdenv;
     popt = popt110;
