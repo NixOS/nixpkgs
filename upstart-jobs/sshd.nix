@@ -26,7 +26,7 @@ start script
 
 end script
 
-respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f /etc/ssh/sshd_config
+respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${./sshd_config}
   ";
   
 }

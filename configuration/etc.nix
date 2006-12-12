@@ -41,11 +41,6 @@ import ../helpers/make-etc.nix {
       target = "login.defs";
     }
 
-    { # SSH daemon configuration.
-      source = ./etc/sshd_config;
-      target = "ssh/sshd_config";
-    }
-
     { # The Upstart events defined above.
       source = upstartJobs + "/etc/event.d";
       target = "event.d";
