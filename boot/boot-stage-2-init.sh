@@ -41,6 +41,8 @@ test -e /etc/fstab || touch /etc/fstab # idem
 mount -n -t proc none /proc
 cat /proc/mounts > /etc/mtab
 
+mkdir -m 0755 -p /etc/nixos
+
 
 # Process the kernel command line.
 for o in $(cat /proc/cmdline); do
