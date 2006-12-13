@@ -20,7 +20,7 @@ import ../upstart-jobs/gather.nix {
     # The udev daemon creates devices nodes and runs programs when
     # hardware events occur.
     (import ../upstart-jobs/udev.nix {
-      inherit (pkgs) udev procps;
+      inherit (pkgs) writeText cleanSource udev procps;
     })
       
     # Hardware scan; loads modules for PCI devices.

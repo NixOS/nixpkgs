@@ -1,4 +1,12 @@
-{udev, procps}:
+{writeText, cleanSource, udev, procps}:
+
+let
+
+  conf = writeText "udev.conf" "
+    udev_rules=\"${cleanSource ./udev-rules}\"
+  ";
+
+in
 
 {
   name = "udev";
@@ -6,6 +14,8 @@
   job = "
 start on startup
 stop on shutdown
+
+env UDEV_CONFIG_FILE=${conf}
 
 start script
     echo '' > /proc/sys/kernel/hotplug

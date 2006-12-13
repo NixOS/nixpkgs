@@ -1,0 +1,24 @@
+# Miscellaneous devices.
+KERNEL=="mem|kmem",             GROUP="kmem", MODE="640"
+KERNEL=="port",                 GROUP="kmem", MODE="640"
+KERNEL=="nvram",                GROUP="kmem", MODE="600"
+KERNEL=="null",                 MODE="666"
+KERNEL=="zero",                 MODE="666"
+KERNEL=="full",                 MODE="622"
+KERNEL=="random",               MODE="666"
+KERNEL=="urandom",              MODE="644"
+KERNEL=="rtc",                  MODE="600"
+KERNEL=="sonypi",               MODE="0666"
+KERNEL=="agpgart",              MODE="0600", GROUP="video"
+
+
+# Input devices go under /dev/input.
+KERNEL=="mouse*|mice",          NAME="input/%k", MODE="0640"
+KERNEL=="event*",               NAME="input/%k", MODE="0640"
+KERNEL=="js*",                  NAME="input/%k", MODE="0644"
+KERNEL=="ts*",                  NAME="input/%k", MODE="0600"
+KERNEL=="uinput",               NAME="input/%k", MODE="0600"
+
+
+# Create a symlink for the CD-ROM device.
+KERNEL=="hd[a-z]", BUS=="ide", SYSFS{removable}=="1", SYSFS{device/media}=="cdrom", SYMLINK+="cdrom cdrom-%k"
