@@ -682,10 +682,9 @@ rec {
   });
 
   ghc = import ../development/compilers/ghc {
-    inherit fetchurl stdenv perl ncurses readline;
+    inherit fetchurl stdenv perl ncurses readline m4;
     gcc = stdenv.gcc;
     ghc = ghcboot;
-    m4 = gnum4;
   };
 
   ghcboot = import ../development/compilers/ghc/boot.nix {
@@ -954,13 +953,11 @@ rec {
   autoconf = autoconf259;
 
   autoconf259 = import ../development/tools/misc/autoconf {
-    inherit fetchurl stdenv perl;
-    m4 = gnum4;
+    inherit fetchurl stdenv perl m4;
   };
 
   autoconf260 = import ../development/tools/misc/autoconf-2.60 {
-    inherit fetchurl stdenv perl;
-    m4 = gnum4;
+    inherit fetchurl stdenv perl m4;
   };
 
   automake = automake19x;
@@ -996,13 +993,11 @@ rec {
   bison = bison1875;
 
   bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {
-    inherit fetchurl stdenv;
-    m4 = gnum4;
+    inherit fetchurl stdenv m4;
   };
 
   bison23 = import ../development/tools/parsing/bison/bison-2.3.nix {
-    inherit fetchurl stdenv;
-    m4 = gnum4;
+    inherit fetchurl stdenv m4;
   };
 
   ctags = import ../development/tools/misc/ctags {
@@ -1012,13 +1007,14 @@ rec {
   flex = flex254a;
 
   flex2533 = import ../development/tools/parsing/flex/flex-2.5.33.nix {
-    inherit fetchurl stdenv yacc;
-    m4 = gnum4;
+    inherit fetchurl stdenv yacc m4;
   };
 
   flex254a = import ../development/tools/parsing/flex/flex-2.5.4a.nix {
     inherit fetchurl stdenv yacc;
   };
+
+  m4 = gnum4;
 
   gnum4 = import ../development/tools/misc/gnum4 {
     inherit fetchurl stdenv;
@@ -1060,8 +1056,7 @@ rec {
   };
 
   libtool = import ../development/tools/misc/libtool {
-    inherit fetchurl stdenv perl;
-    m4 = gnum4;
+    inherit fetchurl stdenv perl m4;
   };
 
   mk = import ../development/tools/build-managers/mk {
@@ -1192,8 +1187,7 @@ rec {
   };
 
   beecrypt = import ../development/libraries/beecrypt {
-    inherit fetchurl stdenv;
-    m4 = gnum4;
+    inherit fetchurl stdenv m4;
   };
 
   boehmgc = import ../development/libraries/boehm-gc {
@@ -1285,6 +1279,10 @@ rec {
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib;
     inherit (gtkLibs) glib;
+  };
+
+  gmp = import ../development/libraries/gmp {
+    inherit fetchurl stdenv m4;
   };
 
   gnet = import ../development/libraries/gnet {
@@ -1789,6 +1787,17 @@ rec {
     inherit stdenv fetchurl ghc;
   };
 
+  wxHaskell = import ../development/libraries/haskell/wxHaskell {
+    inherit fetchurl unzip ghc;
+    stdenv = stdenvNew;
+    wxGTK = import ../development/libraries/wxGTK-2.6 {
+      inherit fetchurl stdenv pkgconfig;
+      inherit (gtkLibs) gtk;
+      inherit (xlibs) libXinerama;
+      unicode = false; # not supported by GHC/wxHaskell yet
+    };
+  };
+
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -1958,7 +1967,7 @@ rec {
 
 
   pycrypto = import ../development/python-modules/pycrypto {
-    inherit fetchurl stdenv python;
+    inherit fetchurl stdenv python gmp;
   };
 
   pygtk = import ../development/python-modules/pygtk {
@@ -2954,8 +2963,7 @@ rec {
   };
 
   uml = import ../misc/uml {
-    inherit fetchurl stdenv perl modutils;
-    m4 = gnum4;
+    inherit fetchurl stdenv perl modutils m4;
     gcc = gcc33;
   };
 
