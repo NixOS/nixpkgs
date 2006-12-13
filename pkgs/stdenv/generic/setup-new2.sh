@@ -629,10 +629,14 @@ installW() {
     eval "$preInstall"
 
     ensureDir "$prefix"
-    
-    if test -z "$dontMakeInstall"; then
-        echo "install flags: $installFlags ${installFlagsArray[@]}"
-        make install $installFlags "${installFlagsArray[@]}" || fail
+
+    if test -z "$installCommand"; then
+        if test -z "$dontMakeInstall"; then
+            echo "install flags: $installFlags ${installFlagsArray[@]}"
+            make install $installFlags "${installFlagsArray[@]}" || fail
+        fi
+    else
+        eval "$installCommand"
     fi
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
