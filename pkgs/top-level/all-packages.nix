@@ -1961,8 +1961,16 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
-  wxPython = import ../development/python-modules/wxPython-2.5 {
+  wxPython = import ../development/python-modules/wxPython {
     inherit fetchurl stdenv pkgconfig wxGTK python;
+  };
+
+  twisted = import ../development/python-modules/twisted {
+    inherit fetchurl stdenv python ZopeInterface;
+  };
+
+  ZopeInterface = import ../development/python-modules/ZopeInterface {
+    inherit fetchurl stdenv python;
   };
 
 

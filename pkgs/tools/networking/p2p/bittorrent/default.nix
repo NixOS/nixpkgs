@@ -1,11 +1,11 @@
 {stdenv, fetchurl, python, pygtk, makeWrapper}:
 
 stdenv.mkDerivation {
-  name = "bittorrent-4.4.0";
+  name = "bittorrent-5.0.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/BitTorrent-4.4.0.tar.gz;
-    md5 = "74d4b48202c28f0b27e989b6d5f5b214";
+    url = http://download.bittorrent.com/dl/BitTorrent-5.0.3.tar.gz;
+    md5 = "592363a33c35e9f66759a736dbf7e038";
   };
   buildInputs = [python pygtk];
   inherit python pygtk makeWrapper;
