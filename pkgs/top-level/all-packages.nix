@@ -695,7 +695,7 @@ rec {
   ghcWrapper = assert uulib.ghc == ghc;
     import ../development/compilers/ghc-wrapper {
       inherit stdenv ghc;
-      libraries = [ uulib ];
+      libraries = [];
     };
 
   helium = import ../development/compilers/helium {

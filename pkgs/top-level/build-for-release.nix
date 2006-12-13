@@ -130,6 +130,7 @@ let {
     vim
     vlc
     wget
+    wxHaskell
     xchm
     xfig
     xineUI
