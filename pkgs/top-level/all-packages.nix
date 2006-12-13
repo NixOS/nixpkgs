@@ -192,10 +192,23 @@ rec {
 
   makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
 
+  # Run the shell command `buildCommand' to produce a store object
+  # named `name'.  The attributes in `env' are added to the
+  # environment prior to running the command.
   runCommand = name: env: buildCommand: stdenvNew.mkDerivation ({
     inherit name buildCommand;
   } // env);
 
+  # Write a plain text file to the Nix store.  (The advantage over
+  # plain sources is that `text' can refer to the output paths of
+  # derivations, e.g., "... ${somePkg}/bin/foo ...".
+  writeText = name: text: runCommand name {inherit text;} "echo \"$text\" > $out";
+
+  # Bring in a path as a source, filtering out all hidden Subversion
+  # directories.  TODO: filter out backup files (*~) etc.
+  cleanSource = builtins.filterSource
+    (name: baseNameOf (toString name) != ".svn");
+  
   # !!! obsolete
   substitute = ../build-support/substitute/substitute.sh;
 
