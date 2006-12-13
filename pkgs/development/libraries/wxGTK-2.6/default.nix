@@ -26,5 +26,8 @@ stdenv.mkDerivation {
     (if unicode then "--enable-unicode" else "")
   ];
 
+  postBuild = "(cd contrib/src && make)";
+  postInstall = "(cd contrib/src && make install)";
+
   inherit gtk compat22;
 }

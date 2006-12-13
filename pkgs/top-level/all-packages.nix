@@ -237,7 +237,8 @@ rec {
   };
 
   bittorrent = import ../tools/networking/p2p/bittorrent {
-    inherit fetchurl stdenv python pygtk makeWrapper;
+    inherit fetchurl stdenv makeWrapper python wxPython pycrypto twisted;
+    gui = true;
   };
 
   bsdiff = import ../tools/compression/bsdiff {
@@ -1956,6 +1957,10 @@ rec {
   ### DEVELOPMENT / PYTHON MODULES
 
 
+  pycrypto = import ../development/python-modules/pycrypto {
+    inherit fetchurl stdenv python;
+  };
+
   pygtk = import ../development/python-modules/pygtk {
     inherit fetchurl stdenv python pkgconfig;
     inherit (gtkLibs) glib gtk;
@@ -1966,7 +1971,8 @@ rec {
   };
 
   twisted = import ../development/python-modules/twisted {
-    inherit fetchurl stdenv python ZopeInterface;
+    inherit fetchurl python ZopeInterface;
+    stdenv = stdenvNew;
   };
 
   ZopeInterface = import ../development/python-modules/ZopeInterface {

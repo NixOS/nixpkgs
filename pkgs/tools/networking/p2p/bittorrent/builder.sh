@@ -1,10 +1,13 @@
 source $stdenv/setup
 source $makeWrapper
 
-buildPhase=buildPhase
-buildPhase() {
-    python setup.py build
-}
+# Workaround for:
+#  File "...-python-2.4.4/lib/python2.4/posixpath.py", line 62, in join
+#    elif path == '' or path.endswith('/'):
+# AttributeError: 'NoneType' object has no attribute 'endswith'
+export HOME=$TMP
+
+buildPhase="python setup.py build"
 
 installPhase=installPhase
 installPhase() {
@@ -16,7 +19,7 @@ installPhase() {
         # so don't move them. 
         mv $out/bin/$i $out/bin/.orig-$i
         makeWrapper $out/bin/.orig-$i $out/bin/$i \
-            --set PYTHONPATH "$out/lib/python2.4/site-packages:$pygtk/lib/python2.4/site-packages/gtk-2.0"
+            --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH"
     done
 }
 
