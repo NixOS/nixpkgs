@@ -88,19 +88,6 @@ mknod -m 0666 /dev/null c 1 3
 export MODULE_DIR=@kernel@/lib/modules/
 
 
-# Start udev.
-udevd --daemon
-
-
-# Let udev create device nodes for all modules that have already been
-# loaded into the kernel (or for which support is built into the
-# kernel).
-udevtrigger
-udevsettle # wait for udev to finish
-
-chmod 666 /dev/null # grmbl
-
-
 # Start an interactive shell.
 #exec @shell@
 

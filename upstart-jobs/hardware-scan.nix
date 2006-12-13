@@ -5,7 +5,7 @@
   name = "hardware-scan";
   
   job = "
-start on startup
+start on udev
 
 script
     export MODULE_DIR=${kernel}/lib/modules/
