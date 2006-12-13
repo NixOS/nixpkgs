@@ -1653,17 +1653,6 @@ rec {
 
   wxGTK = wxGTK26;
 
-  wxGTK24 = import ../development/libraries/wxGTK {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (gtkLibs22) gtk;
-  };
-
-  wxGTK25 = import ../development/libraries/wxGTK-2.5 {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (gtkLibs) gtk;
-    inherit (xlibs) libXinerama;
-  };
-
   wxGTK26 = import ../development/libraries/wxGTK-2.6 {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
@@ -1974,11 +1963,6 @@ rec {
 
   wxPython = import ../development/python-modules/wxPython-2.5 {
     inherit fetchurl stdenv pkgconfig wxGTK python;
-  };
-
-  wxPython24 = import ../development/python-modules/wxPython {
-    inherit fetchurl stdenv pkgconfig python;
-    wxGTK = wxGTK24;
   };
 
 
