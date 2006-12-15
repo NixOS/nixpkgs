@@ -14,3 +14,7 @@
   [Move from libbonoboui]
 
 * Fix the bzip2 build generically.
+
+* In stdenv/setup.sh: put the call to patchelf etc. in a separate
+  phase (fixupPhase?) that comes after the installPhase.  This is so
+  that when one overrides installPhase, the fixup stuff is still done.
