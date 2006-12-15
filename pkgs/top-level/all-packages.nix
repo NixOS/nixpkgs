@@ -206,8 +206,8 @@ rec {
 
   # Bring in a path as a source, filtering out all hidden Subversion
   # directories.  TODO: filter out backup files (*~) etc.
-  cleanSource = builtins.filterSource
-    (name: baseNameOf (toString name) != ".svn");
+  cleanSource = src: builtins.filterSource
+    (name: baseNameOf (toString name) != ".svn") src;
   
   # !!! obsolete
   substitute = ../build-support/substitute/substitute.sh;
@@ -681,6 +681,17 @@ rec {
     profiledCompiler = true;
   });
 
+  # ghc66boot = import ../development/compilers/ghc-6.6-boot {
+  #  inherit fetchurl stdenv perl readline;
+  #  m4 = gnum4;
+  #};
+
+  ghc66 = import ../development/compilers/ghc-6.6 {
+    inherit fetchurl stdenv readline perl;
+    m4 = gnum4;
+    ghc = ghcboot;
+  };
+
   ghc = import ../development/compilers/ghc {
     inherit fetchurl stdenv perl ncurses readline m4;
     gcc = stdenv.gcc;
@@ -1128,7 +1139,9 @@ rec {
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
-    inherit fetchurl stdenv ghc uulib;
+    inherit fetchurl stdenv;
+    ghc = ghc66;
+    uulib = uulib66;
   };
 
   valgrind = import ../development/tools/misc/valgrind {
@@ -1785,6 +1798,11 @@ rec {
 
   uulib = import ../development/libraries/haskell/uulib {
     inherit stdenv fetchurl ghc;
+  };
+
+  uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 {
+    inherit stdenv fetchurl autoconf;
+    ghc = ghc66;
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {

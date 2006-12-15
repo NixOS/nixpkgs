@@ -1,19 +1,14 @@
 {stdenv, fetchurl, ghc, uulib}:
 
-#as long as cabal does not allow to specify which package.conf to use we create a wrapper
+stdenv.mkDerivation
+{
+  name = "uuagc-0.9.2";
 
-let {
-  uulibGHC = (import ../../../compilers/ghc-wrapper) {
-    libraries = [ uulib ];
-    inherit stdenv ghc;
-  };
+  src = fetchurl { url = http://www.cs.uu.nl/~ariem/uuagc-0.9.2-src.tar.gz;
+                   md5 = "cbac92287c9c0a858ccbfa37615d9f5f";
+                 };
 
-  body = stdenv.mkDerivation {
-    name = "uuagc-0.9.1";
-    src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/uuagc-0.9.1-src.tar.gz;
-      md5 = "0f29cad75bd759696edc61c24d1a5db9";
-    };
-    buildInputs = [uulibGHC];
-  };
+  buildInputs = [ghc uulib];
+
+  meta = { description = "The UUAG Compiler"; };
 }
