@@ -3,10 +3,10 @@
 assert libxml2 != null;
 
 stdenv.mkDerivation {
-  name = "php-5.0.4";
+  name = "php-5.2.0";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/php-5.0.4.tar.bz2;
-    md5 = "fb1aac107870f897d26563a9cc5053c0";
+    url = http://nl2.php.net/distributions/php-5.2.0.tar.bz2;
+    md5 = "e6029fafcee029edcfa2ceed7a005333";
   };
   
   inherit flex bison libxml2 apacheHttpd;
