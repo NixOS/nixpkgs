@@ -13,12 +13,12 @@
 
 
 stdenv.mkDerivation {
-  name = "thunderbird-1.5.0.7";
+  name = "thunderbird-1.5.0.8";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/thunderbird-1.5.0.7-source.tar.bz2;
-    sha1 = "9e5acff9bd098979dd798c0111805dc8d67479ad";
+    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.8/source/thunderbird-1.5.0.8-source.tar.bz2;
+    sha1 = "25dd00161e2b4a5bc2968ef4b9547e4431296a33";
   };
 
   buildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     "--with-system-png"
     "--with-system-zlib"
     "--enable-system-cairo"
+    "--enable-extensions=default"
   ]
   ++ (if enableOfficialBranding then ["--enable-official-branding"] else []);
 
