@@ -32,7 +32,9 @@ start script
     # Kill udev, let Upstart restart and monitor it.  (This is nasty,
     # but we have to run udevtrigger first.  Maybe we can use
     # Upstart's `binary' keyword, but it isn't implemented yet.)
-    ${procps}/bin/pkill -u root '^udevd$'
+    if ${procps}/bin/pkill -u root '^udevd$'; then
+        echo \"couldn't stop udevd\"
+    fi
 end script
 
 respawn ${udev}/sbin/udevd

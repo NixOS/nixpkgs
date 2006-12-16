@@ -69,6 +69,7 @@ mount -t tmpfs -o "mode=0755" none /dev
 needWritableDir /tmp 01777
 needWritableDir /var 0755
 needWritableDir /nix/var 0755
+needWritableDir /root 0700
 
 
 # Miscellaneous boot time cleanup.
@@ -77,6 +78,7 @@ rm -rf /var/run
 
 # Create the minimal device nodes needed before we run udev.
 mknod -m 0666 /dev/null c 1 3
+mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
 
 
 # Run the script that performs all configuration activation that does

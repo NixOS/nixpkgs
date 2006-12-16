@@ -174,9 +174,12 @@ rec {
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostname"];
     wrapperDir = setuidWrapper.wrapperDir;
-    accounts = ../helpers/accounts.sh;
 
-    path = [pkgs.coreutils pkgs.gnugrep pkgs.findutils];
+    path = [
+      pkgs.coreutils pkgs.gnugrep pkgs.findutils
+      pkgs.glibc # needed for getent
+      pkgs.pwdutils
+    ];
 
     # We don't want to put all of `startPath' and `path' in $PATH, since
     # then we get an embarrassingly long $PATH.  So use the user

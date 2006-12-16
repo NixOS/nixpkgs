@@ -66,10 +66,11 @@ import ../helpers/make-etc.nix {
     )
     [
       "login"
-      "sshd"
-      "passwd"
-      "useradd"
       "other"
+      "passwd"
+      "shadow"
+      "sshd"
+      "useradd"
     ]
   );
 }

@@ -5,6 +5,11 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 action="$1"
 
+if ! test -e /etc/NIXOS; then
+    echo "This is not a NixOS installation (/etc/NIXOS) is missing!"
+    exit 1
+fi
+
 if test -z "$action"; then
     cat <<EOF
 Usage: $0 [switch|boot|test]

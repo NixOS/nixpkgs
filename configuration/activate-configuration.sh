@@ -1,7 +1,7 @@
 #! @shell@
 
 export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
 
 
 # Set up the statically computed bits of /etc.
@@ -35,40 +35,41 @@ chmod 664 /var/run/utmp
 mkdir -m 0755 -p /var/log
 
 
-# Enable a password-less root login.
-source @accounts@
-
+# If there is no password file yet, create a root account with an
+# empty password.
 if ! test -e /etc/passwd; then
-    if test -n "@readOnlyRoot@"; then
-        rootHome=/
-    else
-        rootHome=/home/root
-        mkdir -p $rootHome
-    fi
-    createUser root '' 0 0 'System administrator' $rootHome/var/empty @shell@
-fi
-
-if ! test -e /etc/group; then
-    echo "root:*:0" > /etc/group
+    rootHome=/root
+    touch /etc/passwd; chmod 0755 /etc/passwd
+    touch /etc/group; chmod 0755 /etc/passwd
+    touch /etc/shadow; chmod 0700 /etc/passwd
+    # Can't use useradd, since it complain that it doesn't know us
+    # (bootstrap problem!). 
+    echo "root:x:0:0:System administrator:$rootHome:@shell@" >> /etc/passwd
+    echo "root::::::::" >> /etc/shadow
+    groupadd -g 0 root
+    echo | passwd --stdin root
 fi
 
 
 # Set up Nix accounts.
 if test -z "@readOnlyRoot@"; then
 
+    if ! getent group nixbld > /dev/null; then
+        groupadd -g 30000 nixbld
+    fi
+
+    if ! getent group nogroup > /dev/null; then
+        groupadd -g 65534 nogroup
+    fi
+
     for i in $(seq 1 10); do
         account=nixbld$i
-        if ! userExists $account; then
-            createUser $account x \
-                $((i + 30000)) 30000 \
-                'Nix build user' /var/empty /noshell
+        if ! getent passwd $account > /dev/null; then
+            useradd -u $((i + 30000)) -g nogroup -G nixbld \
+                -d /var/empty -s /noshell \
+                -c "Nix build user $i" $account
         fi
-        accounts="$accounts${accounts:+,}$account"
     done
-
-    if ! grep -q "^nixbld:" /etc/group; then
-        echo "nixbld:*:30000:$accounts" >> /etc/group
-    fi
 
     mkdir -p /nix/etc/nix
     cat > /nix/etc/nix/nix.conf <<EOF
@@ -107,9 +108,6 @@ mkdir -m 0755 -p /nix/var/nix/gcroots
 mkdir -m 0755 -p /nix/var/nix/temproots
 
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
-
-chown root.nixbld /nix/store
-chmod 1775 /nix/store
 
 
 # Make a few setuid programs work.

@@ -32,7 +32,7 @@ rec {
   cdMountPoints = pkgs.runCommand "mount-points" {} "
     ensureDir $out
     cd $out
-    mkdir proc sys tmp etc dev var mnt nix nix/var
+    mkdir proc sys tmp etc dev var mnt nix nix/var root
     touch $out/${configuration.boot.rootLabel}
   ";
 
@@ -64,6 +64,18 @@ rec {
   };
 
 
+  # The configuration file for isolinux.
+  isolinuxCfg = pkgs.writeText "isolinux.cfg" "
+    default linux
+    prompt 1
+    timeout 60
+    label linux
+      kernel vmlinuz
+      append initrd=initrd ${toString (system.config.get ["boot" "kernelParams"])}
+  ";
+    
+
+
   # Create an ISO image containing the isolinux boot loader, the
   # kernel, the initrd produced above, and the closure of the stage 2
   # init.
@@ -75,7 +87,7 @@ rec {
       { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
         target = "isolinux/isolinux.bin";
       }
-      { source = ../helpers/isolinux.cfg;
+      { source = isolinuxCfg;
         target = "isolinux/isolinux.cfg";
       }
       { source = pkgs.kernel + "/vmlinuz";
