@@ -1,19 +1,81 @@
+*** Building the installation CD ***
+
+- Make sure that you have a very recent Nix.
+
+- Pull from the Nixpkgs channel to speed up building.
+
+- Check out https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk/.
+
+- Build the ISO image:
+
+  $ nix-build instances/rescue-cd.nix -A rescueCD
+
+  This gives you an image in result/iso/nixos.iso.
+
+- Burn the ISO image or attach it to a CD-ROM drive in VMware.
+
+
+*** Installation ***
+
+- Boot from the CD.
+
+- The CD contains a pretty complete NixOS installation.  When it's
+  finished booting, it should have detected most of your hardware and
+  brought up networking (check ifconfig).  Networking is necessary for
+  the installer.  It's best if you have a DHCP server on your
+  network.  Otherwise configure manually.
+
+- Login as "root", empty password.
+
+- The NixOS installer doesn't do any partitioning or formatting yet,
+  so you need to that yourself.  Use "fdisk" and "e2fsck".
+
+- Unpack the NixOS and Nixpkgs sources:
+
+  $ tar xf /nixos.tar.bz2
+  $ tar xf /nixpkgs.tar.bz2
+  $ ln -s nixpkgs-*/pkgs .
+
+  (TODO: do this automatically.)
+
+- The installation is declarative; you need to make a description of
+  the configuration that is to be built and activated.  The
+  configuration is specified in a Nix expression.  See
+  instances/examples for example machine configurations.  You can copy
+  and edit one of those (e.g., instances/examples/basic.nix to
+  my-config.nix).  See configuration/options.nix for available
+  configuration settings.  The text editor "nano" is available.
+
+  In particular you need to specify boot.rootDevice and
+  boot.grubDevice for the devices where the OS and Grub are to be
+  installed, respectively.
+
+- Do the installation:
+
+  $ nixos-installer.sh /dev/TARGET . my-config.nix
+
+  where TARGET matched boot.rootDevice in your configuration.  (TODO:
+  this should be extracted automatically.)
+
+- If everything went well:
+
+  $ reboot
+
+  You should now be able to boot into the installed NixOS.
+  
+
+*** Troubleshooting ***        
+
+
 To get a Stage 1 shell:
 
-Add "debug1" to the kernel command line.
+- Add "debug1" to the kernel command line.
 
 
-Switching to maintenance mode:
+To switch to maintenance mode:
 
-$ shutdown now
+  $ shutdown now
 
 To get out of maintenance mode:
 
-$ initctl emit startup 
-
-
-Updating the current system configuration:
-
-$ nix-env -p /nix/var/nix/profiles/system -f system-configuration.nix -i -A systemConfiguration
-$ /nix/var/nix/profiles/system/bin/switch-to-configuration
-
+  $ initctl emit startup 

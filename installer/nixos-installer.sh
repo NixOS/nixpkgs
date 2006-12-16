@@ -16,14 +16,16 @@
 set -e
 
 targetDevice="$1"
-nixExpr="$2"
+nixosDir="$2"
+configuration="$3"
 
-if test -z "$targetDevice" -o -z "$nixExpr"; then
-    echo "Syntax: installer.sh <targetDevice> <nixExpr>"
+if test -z "$targetDevice" -o -z "$nixosDir" -o -z "$configuration"; then
+    echo "Syntax: installer.sh <targetDevice> <nixosDir> <configuration>"
     exit 1
 fi
 
-nixExpr=$(readlink -f "$nixExpr")
+nixosDir=$(readlink -f "$nixosDir")
+configuration=$(readlink -f "$configuration")
 
 
 # Make sure that the target device isn't mounted.
@@ -121,7 +123,17 @@ fi
 
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt/$nixExpr" -i --set system
+    -f "/mnt/$nixosDir/configuration/system.nix" \
+    --arg configuration "import /mnt/$configuration" \
+    --set -A system
+
+
+# Copy the configuration to /etc/nixos.
+if test -e $mountPoint/etc/nixos/configuration.nix; then
+    mv $mountPoint/etc/nixos/configuration.nix \
+       $mountPoint/etc/nixos/configuration.backup-$(date "+%Y%m%d%H%M%S").nix
+fi
+cp $configuration $mountPoint/etc/nixos/configuration.nix
 
 
 # Grub needs a mtab.
