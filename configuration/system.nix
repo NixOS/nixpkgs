@@ -108,7 +108,7 @@ rec {
 
   # The services (Upstart) configuration for the system.
   upstartJobs = import ./upstart.nix {
-    inherit pkgs nix splashThemes;
+    inherit config pkgs nix splashThemes;
   };
 
 

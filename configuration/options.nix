@@ -189,4 +189,13 @@
   }
 
   
+  {
+    name = ["services" "xserver" "enable"];
+    default = false;
+    description = "
+      Whether to enable the X server.
+    ";
+  }
+
+  
 ]

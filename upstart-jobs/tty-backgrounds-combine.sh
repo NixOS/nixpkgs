@@ -24,14 +24,14 @@ for ((n = 0; n < ${#ttys[*]}; n++)); do
     echo "TTY $tty -> $theme"
 
     themeName=$(cd $theme && ls | grep -v default)
-    
-    ln -sf $theme/$themeName $out/$themeName
+
+    ln -sfn $theme/$themeName $out/$themeName
 
     if test -e $out/$tty; then
         echo "Multiple themes defined for the same TTY!"
         exit 1
     fi
 
-    ln -sf $themeName $out/$tty
+    ln -sfn $themeName $out/$tty
     
 done

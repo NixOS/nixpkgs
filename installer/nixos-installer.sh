@@ -106,8 +106,9 @@ cp /etc/resolv.conf $mountPoint/etc/
 
 
 # Do a nix-pull to speed up building.
-nixpkgsURL=http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre6984
-chroot $mountPoint @nix@/bin/nix-pull $nixpkgsURL/MANIFEST
+if test -n "@nixpkgsURL@"; then
+    chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST
+fi
 
 
 # Build the specified Nix expression in the target store and install

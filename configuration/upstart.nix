@@ -1,10 +1,13 @@
-{pkgs, nix, splashThemes}:
+{config, pkgs, nix, splashThemes}:
 
 let 
 
   makeJob = import ../upstart-jobs/make-job.nix {
     inherit (pkgs) runCommand;
   };
+
+  optional = option: service:
+    if config.get option then [service] else [];
 
 in
 
@@ -39,20 +42,9 @@ import ../upstart-jobs/gather.nix {
       dhcp = pkgs.dhcpWrapper;
     })
 
-    # SSH daemon.
-    (import ../upstart-jobs/sshd.nix {
-      inherit (pkgs) openssh;
-    })
-
     # Nix daemon - required for multi-user Nix.
     (import ../upstart-jobs/nix-daemon.nix {
       inherit nix;
-    })
-
-    # X server.
-    (import ../upstart-jobs/xserver.nix {
-      inherit (pkgs) substituteAll;
-      inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
     })
 
     # Transparent TTY backgrounds.
@@ -70,6 +62,19 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/ctrl-alt-delete.nix)
 
   ]
+
+  # SSH daemon.
+  ++ optional ["services" "sshd" "enable"]
+    (import ../upstart-jobs/sshd.nix {
+      inherit (pkgs) openssh;
+    })
+
+  # X server.
+  ++ optional ["services" "xserver" "enable"]
+    (import ../upstart-jobs/xserver.nix {
+      inherit (pkgs) substituteAll;
+      inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
+    })
 
   # Handles the reboot/halt events.
   ++ (map
