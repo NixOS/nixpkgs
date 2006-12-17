@@ -123,17 +123,17 @@ fi
 
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt/$nixosDir/configuration/system.nix" \
-    --arg configuration "import /mnt/$configuration" \
+    -f "/mnt$nixosDir/configuration/system.nix" \
+    --arg configuration "import /mnt$configuration" \
     --set -A system
 
 
 # Copy the configuration to /etc/nixos.
-if test -e $mountPoint/etc/nixos/configuration.nix; then
-    mv $mountPoint/etc/nixos/configuration.nix \
-       $mountPoint/etc/nixos/configuration.backup-$(date "+%Y%m%d%H%M%S").nix
+targetConfig=$mountPoint/etc/nixos/configuration.nix
+if test -e $targetConfig -o -L $targetConfig; then
+    mv $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
 fi
-cp $configuration $mountPoint/etc/nixos/configuration.nix
+cp $configuration $targetConfig
 
 
 # Grub needs a mtab.
@@ -149,4 +149,5 @@ touch $mountPoint/etc/NIXOS
 # a menu default pointing at the kernel/initrd/etc of the new
 # configuration.
 echo "finalising the installation..."
-NIXOS_INSTALL_GRUB=1 chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration
+NIXOS_INSTALL_GRUB=1 chroot $mountPoint \
+    /nix/var/nix/profiles/system/bin/switch-to-configuration boot
