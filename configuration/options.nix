@@ -137,6 +137,15 @@
     ";
   }
 
+
+  {
+    name = ["services" "extraJobs"];
+    default = [];
+    description = "
+      Additional Upstart jobs.
+    ";
+  }
+
   
   {
     name = ["services" "syslogd" "tty"];
