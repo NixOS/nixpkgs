@@ -242,7 +242,14 @@ rec {
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils];
+    path = [
+      pkgs.coreutils
+      pkgs.gnused
+      pkgs.gnugrep
+      pkgs.findutils
+      pkgs.diffutils
+      pkgs.upstart # for initctl
+    ];
   };
 
 

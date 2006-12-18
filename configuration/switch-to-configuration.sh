@@ -2,7 +2,7 @@
 
 set -e
 export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
 action="$1"
 
 if ! test -e /etc/NIXOS; then
@@ -34,9 +34,44 @@ if test "$action" = "switch" -o "$action" = "boot"; then
 fi
 
 if test "$action" = "switch" -o "$action" = "test"; then
+
+    oldEvents=$(readlink -f /etc/event.d || true)
+    newEvents=$(readlink -f @out@/etc/event.d)
+
+    echo "old: $oldEvents"
+    echo "new: $newEvents"
+
+    # Stop all services that are not in the new Upstart
+    # configuration.
+    for event in $(cd $oldEvents && ls); do
+        if ! test -e "$newEvents/$event"; then
+            echo "stopping $event..."
+            initctl stop "$event"
+        fi
+    done
+
+    # Activate the new configuration (i.e., update /etc, make
+    # accounts, and so on).
     echo "Activating the configuration..."
     @out@/activate
-    kill -TERM 1 # make Upstart reload its events    
+
+    # Make Upstart reload its events.  !!! Should wait until it has
+    # finished processing its stop events.
+    kill -TERM 1 
+
+    # Start all new services and restart all changed services.
+    for event in $(cd $newEvents && ls); do
+        if ! test -e "$oldEvents/$event"; then
+            echo "starting $event..."
+            initctl start "$event"
+        elif test "$(readlink "$oldEvents/$event")" != "$(readlink "$newEvents/$event")"; then
+            echo "restarting $event..."
+            initctl stop "$event"
+            initctl start "$event"
+        else
+            echo "unchanged $event"
+        fi
+    done
 fi
 
 sync
