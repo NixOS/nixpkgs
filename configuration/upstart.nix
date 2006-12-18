@@ -91,7 +91,7 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) mingetty pam_login;
       inherit ttyNumber;
     }))
-    [1 2 3 4 5 6]
+    (config.get ["services" "mingetty" "ttys"])
   )
 
   # For the builtin logd job.
