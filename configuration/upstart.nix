@@ -79,7 +79,7 @@ import ../upstart-jobs/gather.nix {
   # Apache httpd.
   ++ optional ["services" "httpd" "enable"]
     (import ../upstart-jobs/httpd.nix {
-      inherit pkgs;
+      inherit config pkgs;
       inherit (pkgs) glibc pwdutils;
     })
 
@@ -104,6 +104,7 @@ import ../upstart-jobs/gather.nix {
   # User-defined events.
   ++ (map makeJob (config.get ["services" "extraJobs"]))
 
-  # For the builtin logd job.
+  # For the built-in logd job.
   ++ [pkgs.upstart];
+  
 }

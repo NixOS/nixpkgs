@@ -1,23 +1,26 @@
-{pkgs, glibc, pwdutils}:
+{config, pkgs, glibc, pwdutils}:
 
 let
 
-  user = "wwwrun";
-  group = "wwwrun";
+  getCfg = option: config.get ["services" "httpd" option];
+
+  user = getCfg "user";
+  group = getCfg "group";
 
   webServer = import ../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNew;
 
-    hostName = "localhost";
-    httpPort = 80;
+    hostName = getCfg "hostName";
+    httpPort = getCfg "httpPort";
+    httpsPort = getCfg "httpsPort";
 
     inherit user group;
     
-    adminAddr = "eelco@cs.uu.nl";
+    adminAddr = getCfg "adminAddr";
 
-    logDir = "/var/log/httpd";
-    stateDir = "/var/run/httpd";
+    logDir = getCfg "logDir";
+    stateDir = getCfg "stateDir";
 
     subServices = [];
   };
@@ -42,9 +45,11 @@ start script
         ${pwdutils}/sbin/useradd -g ${group} -d /var/empty -s /noshell \\
             -c 'Apache httpd user' ${user}
     fi
+
+    ${webServer}/bin/control prepare    
 end script
 
-exec ${webServer}/bin/control start
+respawn ${webServer}/bin/control run
   ";
   
 }

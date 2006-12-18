@@ -2,7 +2,7 @@
 
 
   { 
-    name = ["networking" "hostname"];
+    name = ["networking" "hostName"];
     default = "nixos";
     description = "The name of the machine.";
   }
@@ -212,6 +212,82 @@
     default = false;
     description = "
       Whether to enable the Apache httpd server.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "user"];
+    default = "wwwrun";
+    description = "
+      User account under which httpd runs.  The account is created
+      automatically if it doesn't exist.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "group"];
+    default = "wwwrun";
+    description = "
+      Group under which httpd runs.  The account is created
+      automatically if it doesn't exist.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "hostName"];
+    default = "localhost";
+    description = "
+      Canonical hostname for the server.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "httpPort"];
+    default = 80;
+    description = "
+      Port for unencrypted HTTP requests.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "httpsPort"];
+    default = 443;
+    description = "
+      Port for encrypted HTTP requests.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "adminAddr"];
+    example = "admin@example.org";
+    description = "
+      E-mail address of the server administrator.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "logDir"];
+    default = "/var/log/httpd";
+    description = "
+      Directory for Apache's log files.  It is created automatically.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "stateDir"];
+    default = "/var/run/httpd";
+    description = "
+      Directory for Apache's transient runtime state (such as PID
+      files).  It is created automatically.  Note that the default,
+      /var/run/httpd, is deleted at boot time.
     ";
   }
 

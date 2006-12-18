@@ -172,7 +172,7 @@ rec {
     inherit etc;
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
-    hostName = config.get ["networking" "hostname"];
+    hostName = config.get ["networking" "hostName"];
     wrapperDir = setuidWrapper.wrapperDir;
 
     path = [
