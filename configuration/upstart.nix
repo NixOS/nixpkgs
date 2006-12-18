@@ -7,7 +7,7 @@ let
   };
 
   optional = option: service:
-    if config.get option then [service] else [];
+    if config.get option then [(makeJob service)] else [];
 
 in
 

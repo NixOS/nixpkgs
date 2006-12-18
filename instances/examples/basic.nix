@@ -5,4 +5,9 @@
     readOnlyRoot = false;
     grubDevice = "/dev/hda";
   };
+  services = {
+    sshd = {
+      enable = true;
+    };
+  };
 }
