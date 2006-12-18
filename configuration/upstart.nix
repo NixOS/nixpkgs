@@ -94,6 +94,9 @@ import ../upstart-jobs/gather.nix {
     (config.get ["services" "mingetty" "ttys"])
   )
 
+  # User-defined events.
+  ++ (map makeJob (config.get ["services" "extraJobs"]))
+
   # For the builtin logd job.
   ++ [pkgs.upstart];
 }
