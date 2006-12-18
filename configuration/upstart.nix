@@ -66,7 +66,7 @@ import ../upstart-jobs/gather.nix {
   # SSH daemon.
   ++ optional ["services" "sshd" "enable"]
     (import ../upstart-jobs/sshd.nix {
-      inherit (pkgs) openssh;
+      inherit (pkgs) openssh glibc pwdutils;
     })
 
   # X server.
