@@ -29,6 +29,7 @@ let {
     cpio
     darcs
     db4
+    dietlibc
     diffutils
     docbook5
     docbook_xml_dtd_42
@@ -78,6 +79,7 @@ let {
     maven
     mk
     mktemp
+    mod_python
     module_init_tools
     mono
     mysql
@@ -88,6 +90,8 @@ let {
     nixUnstable
     nxml
     openssl
+    pam_login
+    pam_unix2
     pan
     par2cmdline
     #parted
@@ -97,6 +101,7 @@ let {
     postgresql
     postgresql_jdbc
     procps
+    pwdutils
     python
     qcmm
     qt3
@@ -105,7 +110,6 @@ let {
     rsync
     screen
     sdf
-    shadowutils
     spidermonkey
     splashutils
     strace
