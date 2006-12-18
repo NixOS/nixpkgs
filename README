@@ -6,6 +6,8 @@
 
 - Check out https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk/.
 
+- make a symbolic link called "pkgs" to the location of Nixpkgs
+
 - Build the ISO image:
 
   $ nix-build instances/rescue-cd.nix -A rescueCD
