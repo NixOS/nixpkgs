@@ -76,6 +76,13 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs.xorg) xorgserver xf86inputkeyboard xf86inputmouse xf86videovesa;
     })
 
+  # Apache httpd.
+  ++ optional ["services" "httpd" "enable"]
+    (import ../upstart-jobs/httpd.nix {
+      inherit pkgs;
+      inherit (pkgs) glibc pwdutils;
+    })
+
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {

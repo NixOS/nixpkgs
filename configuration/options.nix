@@ -207,4 +207,13 @@
   }
 
   
+  {
+    name = ["services" "httpd" "enable"];
+    default = false;
+    description = "
+      Whether to enable the Apache httpd server.
+    ";
+  }
+
+  
 ]
