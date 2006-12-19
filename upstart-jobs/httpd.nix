@@ -39,7 +39,7 @@ let
           backupsDir = dataDir + "/backup";
           tmpDir = dataDir + "/tmp";
           
-          inherit logDir adminAddr;
+          inherit user group logDir adminAddr;
           
           canonicalName =
             if webServer.enableSSL then
