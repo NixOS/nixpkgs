@@ -41,12 +41,21 @@ if test "$action" = "switch" -o "$action" = "test"; then
     echo "old: $oldEvents"
     echo "new: $newEvents"
 
+    stopJob() {
+        local job=$1
+        initctl stop "$job"
+        while ! initctl list 2>&1 | grep -q "initctl: $job (stop)"; do
+            echo "waiting for $job..."
+            sleep 1
+        done
+    }
+
     # Stop all services that are not in the new Upstart
     # configuration.
     for event in $(cd $oldEvents && ls); do
         if ! test -e "$newEvents/$event"; then
             echo "stopping $event..."
-            initctl stop "$event"
+            stopJob $event
         fi
     done
 
@@ -66,7 +75,7 @@ if test "$action" = "switch" -o "$action" = "test"; then
             initctl start "$event"
         elif test "$(readlink "$oldEvents/$event")" != "$(readlink "$newEvents/$event")"; then
             echo "restarting $event..."
-            initctl stop "$event"
+            stopJob $event
             initctl start "$event"
         else
             echo "unchanged $event"
