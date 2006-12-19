@@ -3,28 +3,60 @@
 let
 
   getCfg = option: config.get ["services" "httpd" option];
+  getCfgSvn = option: config.get ["services" "httpd" "subservices" "subversion" option];
 
+  optional = conf: subService:
+    if conf then [subService] else [];
+
+    
+  hostName = getCfg "hostName";
+  httpPort = getCfg "httpPort";
+  httpsPort = getCfg "httpsPort";
   user = getCfg "user";
   group = getCfg "group";
+  adminAddr = getCfg "adminAddr";
+  logDir = getCfg "logDir";
+  stateDir = getCfg "stateDir";
+  enableSSL = false;
 
+  
   webServer = import ../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNew;
 
-    hostName = getCfg "hostName";
-    httpPort = getCfg "httpPort";
-    httpsPort = getCfg "httpsPort";
-
-    inherit user group;
+    inherit hostName httpPort httpsPort
+      user group adminAddr logDir stateDir;
     
-    adminAddr = getCfg "adminAddr";
+    subServices =
+    
+      # The Subversion subservice.
+      optional (getCfgSvn "enable") (
+        let dataDir = getCfgSvn "dataDir"; in
+        import ../services/subversion {
+          reposDir = dataDir + "/repos";
+          dbDir = dataDir + "/db";
+          distsDir = dataDir + "/dist";
+          backupsDir = dataDir + "/backup";
+          tmpDir = dataDir + "/tmp";
+          
+          inherit logDir adminAddr;
+          
+          canonicalName =
+            if webServer.enableSSL then
+              "https://" + hostName + ":" + (toString httpsPort)
+            else
+              "http://" + hostName + ":" + (toString httpPort);
 
-    logDir = getCfg "logDir";
-    stateDir = getCfg "stateDir";
+          notificationSender = getCfgSvn "notificationSender";
+          autoVersioning = getCfgSvn "autoVersioning";
 
-    subServices = [];
+          inherit pkgs;
+        })
+        
+      ;
   };
 
+  
 in
 
 {

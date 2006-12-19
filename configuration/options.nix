@@ -292,4 +292,35 @@
   }
 
   
+  {
+    name = ["services" "httpd" "subservices" "subversion" "enable"];
+    default = false;
+    description = "
+      Whether to enable the Subversion subservice in the webserver.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "subservices" "subversion" "notificationSender"];
+    example = "svn-server@example.org";
+    description = "
+      The email address used in the Sender field of commit
+      notification messages sent by the Subversion subservice.
+    ";
+  }
+
+  
+  {
+    name = ["services" "httpd" "subservices" "subversion" "autoVersioning"];
+    default = false;
+    description = "
+      Whether you want the Subversion subservice to support
+      auto-versioning, which enables Subversion repositories to be
+      mounted as read/writable file systems on operating systems that
+      support WebDAV.
+    ";
+  }
+
+  
 ]
