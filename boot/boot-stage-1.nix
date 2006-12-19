@@ -5,7 +5,7 @@
 # is supposed to be put into an initial RAM disk (initrd).
 
 { substituteAll, staticShell, staticTools
-, module_init_tools, extraUtils, modules
+, module_init_tools, extraUtils, modules, modulesDir
 
 , # Whether to find root device automatically using its label.
   autoDetectRootDevice
@@ -24,7 +24,7 @@
 substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
-  inherit staticShell modules;
+  inherit staticShell modules modulesDir;
   inherit autoDetectRootDevice;
   rootDevice = if !autoDetectRootDevice then rootDevice else "";
   rootLabel = if autoDetectRootDevice then rootLabel else "";

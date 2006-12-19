@@ -36,10 +36,15 @@ rec {
   };
 
 
+  rootModules = 
+    (config.get ["boot" "initrd" "kernelModules"]) ++
+    (config.get ["boot" "initrd" "extraKernelModules"]);
+
+
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ../helpers/modules-closure.nix {
     inherit (pkgs) stdenv kernel module_init_tools;
-    rootModules = ["ide-cd" "ide-disk" "ide-generic"];
+    inherit rootModules;
   };
 
 
@@ -71,7 +76,8 @@ rec {
     rootDevice = config.get ["boot" "rootDevice"];
     rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
-    modules = modulesClosure;
+    modulesDir = modulesClosure;
+    modules = rootModules;
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
   };

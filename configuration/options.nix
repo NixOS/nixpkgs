@@ -94,6 +94,33 @@
 
 
   {
+    name = ["boot" "initrd" "kernelModules"];
+    default = ["ide-cd" "ide-disk" "ide-generic" "ext3"];
+    description = "
+      The set of kernel modules in the initial ramdisk used during the
+      boot process.  This set must include all modules necessary for
+      mounting the root device.  That is, it should include modules
+      for the physical device (e.g., SCSI drivers) and for the file
+      system (e.g., ext3).  The set specified here is automatically
+      closed under the module dependency relation, i.e., all
+      dependencies of the modules list here are included
+      automatically.  If you want to add additional
+      modules, it's best to set
+      <option>boot.initrd.extraKernelModules</options>.
+    ";
+  }
+
+
+  {
+    name = ["boot" "initrd" "extraKernelModules"];
+    default = [];
+    description = "
+      Additional kernel modules for the initial ramdisk.
+    ";
+  }
+
+
+  {
     name = ["networking" "useDHCP"];
     default = true;
     description = "

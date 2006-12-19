@@ -56,10 +56,10 @@ source @makeDevices@
 
 
 # Load some kernel modules.
-export MODULE_DIR=@modules@/lib/modules/
-modprobe ide-generic
-modprobe ide-disk
-modprobe ide-cd
+export MODULE_DIR=@modulesDir@/lib/modules/
+for i in @modules@; do
+    modprobe $i
+done
 
 
 # Try to find and mount the root device.
