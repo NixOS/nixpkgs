@@ -1984,6 +1984,10 @@ rec {
   ### DEVELOPMENT / PYTHON MODULES
 
 
+  psyco = import ../development/python-modules/psyco {
+    inherit fetchurl stdenv python;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit fetchurl stdenv python gmp;
   };
