@@ -76,7 +76,7 @@ rec {
     rootDevice =
       (pkgs.library.findSingle (fs: fs.mountPoint == "/")
         (abort "No root mount point declared.")
-        (config.get ["filesystems"])).device;
+        (config.get ["fileSystems"])).device;
     rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
     modulesDir = modulesClosure;

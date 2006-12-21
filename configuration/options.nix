@@ -14,7 +14,7 @@
     description = "
       Whether to find the root device automatically by searching for a
       device with the right label.  If this option is off, then a root
-      file system must be specified using <option>filesystems</option>.
+      file system must be specified using <option>fileSystems</option>.
     ";
   }
 
@@ -141,7 +141,8 @@
 
   
   {
-    name = ["filesystems"];
+    name = ["fileSystems"];
+    default = [];
     example = [
       { mountPoint = "/";
         device = "/dev/hda1";
@@ -155,17 +156,29 @@
     ];
     description = "
       The file systems to be mounted.  It must include an entry for
-      the root directory (<literal>mountPoint = \"/\"</literal>).
-      Each entry in the list is an attribute set with the following
-      fields: <literal>mountPoint</literal>,
-      <literal>device</literal>, <literal>filesystem</literal> (a file
-      system type recognised by <command>mount</command>; defaults to
+      the root directory (<literal>mountPoint = \"/\"</literal>) if
+      <literal>boot.autoDetectRootDevice</literal> is not set.  Each
+      entry in the list is an attribute set with the following fields:
+      <literal>mountPoint</literal>, <literal>device</literal>,
+      <literal>filesystem</literal> (a file system type recognised by
+      <command>mount</command>; defaults to
       <literal>\"auto\"</literal>), <literal>autoMount</literal> (a
       boolean indicating whether the file system is mounted
       automatically; defaults to <literal>true</literal>) and
       <literal>options</literal> (the mount options passed to
       <command>mount</command> using the <option>-o</option> flag;
       defaults to <literal>\"\"</literal>).
+    ";
+  }
+
+
+  {
+    name = ["swapDevices"];
+    default = [];
+    example = ["/dev/hda7" "/dev/hdb3" "/var/swapfile"];
+    description = "
+      The swap devices and swap files.  These must have been
+      initialised using <command>mkswap</command>.
     ";
   }
 

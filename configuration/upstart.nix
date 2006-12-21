@@ -31,6 +31,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) kernel module_init_tools;
     })
       
+    # Swapping.
+    (import ../upstart-jobs/swap.nix {
+      inherit (pkgs) utillinux;
+      swapDevices = config.get ["swapDevices"];
+    })
+
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
       inherit (pkgs) nettools kernel module_init_tools;

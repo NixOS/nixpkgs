@@ -5,11 +5,13 @@
     grubDevice = "/dev/hda";
   };
 
-  filesystems = [
+  fileSystems = [
     { mountPoint = "/";
       device = "/dev/hda1";
     }
   ];
+
+  swapDevices = ["/dev/hdb1"];
   
   services = {
     sshd = {
