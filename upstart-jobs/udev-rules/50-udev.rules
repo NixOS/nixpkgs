@@ -1,15 +1,15 @@
 # Miscellaneous devices.
-KERNEL=="mem|kmem",             GROUP="kmem", MODE="640"
-KERNEL=="port",                 GROUP="kmem", MODE="640"
-KERNEL=="nvram",                GROUP="kmem", MODE="600"
-KERNEL=="null",                 MODE="666"
-KERNEL=="zero",                 MODE="666"
-KERNEL=="full",                 MODE="622"
-KERNEL=="random",               MODE="666"
-KERNEL=="urandom",              MODE="644"
-KERNEL=="rtc",                  MODE="600"
+KERNEL=="mem|kmem",             MODE="0600"
+KERNEL=="port",                 MODE="0600"
+KERNEL=="nvram",                MODE="0600"
+KERNEL=="null",                 MODE="0666"
+KERNEL=="zero",                 MODE="0666"
+KERNEL=="full",                 MODE="0622"
+KERNEL=="random",               MODE="0666"
+KERNEL=="urandom",              MODE="0644"
+KERNEL=="rtc",                  MODE="0600"
 KERNEL=="sonypi",               MODE="0666"
-KERNEL=="agpgart",              MODE="0600", GROUP="video"
+KERNEL=="agpgart",              MODE="0600"
 
 
 # Input devices go under /dev/input.
