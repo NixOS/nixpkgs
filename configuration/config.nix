@@ -15,13 +15,14 @@ rec {
   # its default value if it's not defined.
   get = name:
     let
-      sameName = lib.filter (opt: lib.eqLists opt.name name) declarations;
+      decl =
+        lib.findSingle (decl: lib.eqLists decl.name name)
+          (abort ("Undeclared option `" + printName name + "'."))
+          declarations;
       default =
-        if sameName == []
-        then abort ("Undeclared option `" + printName name + "'.")
-        else if !builtins.head sameName ? default
+        if !decl ? default
         then abort ("Option `" + printName name + "' has no default.")
-        else (builtins.head sameName).default;
+        else decl.default;
     in lib.getAttr name default config;
   
   printName = name: lib.concatStrings (lib.intersperse "." name);

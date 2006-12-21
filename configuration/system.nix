@@ -73,7 +73,10 @@ rec {
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
     autoDetectRootDevice = config.get ["boot" "autoDetectRootDevice"];
-    rootDevice = config.get ["boot" "rootDevice"];
+    rootDevice =
+      (pkgs.library.findSingle (fs: fs.mountPoint == "/")
+        (abort "No root mount point declared.")
+        (config.get ["filesystems"])).device;
     rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
     modulesDir = modulesClosure;

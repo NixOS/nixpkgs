@@ -1,10 +1,16 @@
 {
   boot = {
     autoDetectRootDevice = false;
-    rootDevice = "/dev/hda1";
     readOnlyRoot = false;
     grubDevice = "/dev/hda";
   };
+
+  filesystems = [
+    { mountPoint = "/";
+      device = "/dev/hda1";
+    }
+  ];
+  
   services = {
     sshd = {
       enable = true;
