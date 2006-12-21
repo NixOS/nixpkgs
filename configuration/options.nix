@@ -240,6 +240,29 @@
 
   
   {
+    name = ["services" "ntp" "enable"];
+    default = true;
+    description = "
+      Whether to synchronise your machine's time using the NTP
+      protocol.
+    ";
+  }
+
+  
+  {
+    name = ["services" "ntp" "servers"];
+    default = [
+      "0.pool.ntp.org"
+      "1.pool.ntp.org"
+      "2.pool.ntp.org"
+    ];
+    description = "
+      The set of NTP servers from which to synchronise.
+    ";
+  }
+
+  
+  {
     name = ["services" "xserver" "enable"];
     default = false;
     description = "

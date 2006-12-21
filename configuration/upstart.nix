@@ -81,6 +81,13 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) openssh glibc pwdutils;
     })
 
+  # NTP daemon.
+  ++ optional ["services" "ntp" "enable"]
+    (import ../upstart-jobs/ntpd.nix {
+      inherit (pkgs) ntp glibc pwdutils writeText;
+      servers = config.get ["services" "ntp" "servers"];
+    })
+
   # X server.
   ++ optional ["services" "xserver" "enable"]
     (import ../upstart-jobs/xserver.nix {
