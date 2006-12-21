@@ -23,30 +23,52 @@ script
     fsTypes=(${toString fsTypes})
     optionss=(${toString optionss})
 
-    for ((n = 0; n < \${#mountPoints[*]}; n++)); do
-        mountPoint=\${mountPoints[$n]}
-        device=\${devices[$n]}
-        fsType=\${fsTypes[$n]}
-        options=\${optionss[$n]}
+    newDevices=1
 
-        # If $device is already mounted somewhere else, unmount it first.
-        prevMountPoint=$(cat /proc/mounts | grep \"^$device \" | sed 's|^[^ ]\\+ \\+\\([^ ]\\+\\).*|\\1|')
+    # If we mount any file system, we repeat this loop, because new
+    # mount opportunities may have become available (such as images
+    # for loopback mounts).
+    
+    while test -n \"$newDevices\"; do
 
-        if test \"$prevMountPoint\" = \"$mountPoint\"; then
-             echo \"remounting $device on $mountPoint\"
-             ${utillinux}/bin/mount -t \"$fsType\" -o remount,\"$options\" \"$device\" \"$mountPoint\" || true
-             continue
-        fi
+        newDevices=
 
-        if test -n \"$prevMountPoint\"; then
-            echo \"unmount $device from $prevMountPoint\"
-            ${utillinux}/bin/umount \"$prevMountPoint\" || true
-        fi
+        for ((n = 0; n < \${#mountPoints[*]}; n++)); do
+            mountPoint=\${mountPoints[$n]}
+            device=\${devices[$n]}
+            fsType=\${fsTypes[$n]}
+            options=\${optionss[$n]}
 
-        echo \"mounting $device on $mountPoint\"
+            # If $device is already mounted somewhere else, unmount it first.
+            # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
+            # contains more accurate info when using loop devices.
+            prevMountPoint=$(
+                cat /etc/mtab \\
+                | grep \"^$device \" \\
+                | sed 's|^[^ ]\\+ \\+\\([^ ]\\+\\).*|\\1|' \\
+            )
 
-        mkdir -p \"$mountPoint\" || true
-        ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\" || true
+            if test \"$prevMountPoint\" = \"$mountPoint\"; then
+                 echo \"remounting $device on $mountPoint\"
+                 ${utillinux}/bin/mount -t \"$fsType\" \\
+                     -o remount,\"$options\" \\
+                     \"$device\" \"$mountPoint\" || true
+                 continue
+            fi
+
+            if test -n \"$prevMountPoint\"; then
+                echo \"unmount $device from $prevMountPoint\"
+                ${utillinux}/bin/umount \"$prevMountPoint\" || true
+            fi
+
+            echo \"mounting $device on $mountPoint\"
+
+            if ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
+                newDevices=1
+            fi
+        
+        done
+
     done
 
 end script
