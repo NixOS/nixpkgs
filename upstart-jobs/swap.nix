@@ -5,6 +5,7 @@
   
   job = "
 start on startup
+start on new-devices
 
 script
     for device in ${toString swapDevices}; do
