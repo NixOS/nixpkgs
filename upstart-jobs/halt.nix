@@ -17,16 +17,51 @@ script
     echo \"<<< SYSTEM SHUTDOWN >>>\"
     echo \"\"
 
-    export PATH=${utillinux}/bin:$PATH
+    export PATH=${utillinux}/bin:${utillinux}/sbin:$PATH
 
     # Do an initial sync just in case.
     sync || true
 
-    # Unmount file systems.
-    umount -n -a || true
+    getMountPoints() {
+        cat /proc/mounts \\
+        | grep -v '^rootfs' \\
+        | sed 's|^[^ ]\\+ \\+\\([^ ]\\+\\).*|\\1|' \\
+        | grep -v '/proc\\|/sys\\|/dev'
+    }
 
-    # Remount / read-only
-    mount -n -o remount,ro /dontcare / || true
+    getDevice() {
+        local mountPoint=$1
+        cat /proc/mounts \\
+        | grep -v '^rootfs' \\
+        | grep \"^[^ ]\\+ \\+$mountPoint \\+\" \\
+        | sed 's|^\\([^ ]\\+\\).*|\\1|'
+    }
+
+    # Unmount file systems.  We repeat this until no more file systems
+    # can be unmounted.  This is to handle loopback devices, file
+    # systems  mounted on other file systems and so on.
+    tryAgain=1
+    while test -n \"$tryAgain\"; do
+        tryAgain=
+
+        for mp in $(getMountPoints); do
+            device=$(getDevice $mp)
+            echo \"unmounting $mp...\"
+            if umount -n -r \"$mp\"; then
+                if test \"$mp\" != /; then tryAgain=1; fi
+            fi
+
+            # Hack: work around a bug in mount (mount -o remount on a
+            # loop device forgets the loop=/dev/loopN entry in
+            # /etc/mtab).
+            if echo \"$device\" | grep -q '/dev/loop'; then
+                echo \"removing loop device $device...\"
+                losetup -d \"$device\" || true
+            fi
+        done
+    done
+
+    cat /proc/mounts
 
     # Final sync.
     sync || true
