@@ -1,4 +1,4 @@
-{utillinux, fileSystems}:
+{utillinux, e2fsprogs, fileSystems}:
 
 let
 
@@ -18,6 +18,8 @@ start on startup
 start on new-devices
 
 script
+    PATH=${e2fsprogs}/sbin:$PATH
+
     mountPoints=(${toString mountPoints})  
     devices=(${toString devices})
     fsTypes=(${toString fsTypes})
@@ -38,6 +40,11 @@ script
             device=\${devices[$n]}
             fsType=\${fsTypes[$n]}
             options=\${optionss[$n]}
+
+            if ! test -e \"$device\"; then
+                echo \"skipping $device, doesn't exist (yet)\"
+                continue
+            fi
 
             # If $device is already mounted somewhere else, unmount it first.
             # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
@@ -62,6 +69,9 @@ script
             fi
 
             echo \"mounting $device on $mountPoint\"
+
+            # !!! should do something with the result; also prevent repeated fscks.
+            fsck -a \"$device\" || true
 
             if ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
                 newDevices=1

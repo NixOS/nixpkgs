@@ -33,7 +33,7 @@ import ../upstart-jobs/gather.nix {
       
     # Mount file systems.
     (import ../upstart-jobs/filesystems.nix {
-      inherit (pkgs) utillinux;
+      inherit (pkgs) utillinux e2fsprogs;
       fileSystems = config.get ["fileSystems"];
     })
 
