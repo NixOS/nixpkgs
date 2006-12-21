@@ -31,6 +31,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) kernel module_init_tools;
     })
       
+    # Mount file systems.
+    (import ../upstart-jobs/filesystems.nix {
+      inherit (pkgs) utillinux;
+      fileSystems = config.get ["fileSystems"];
+    })
+
     # Swapping.
     (import ../upstart-jobs/swap.nix {
       inherit (pkgs) utillinux;
