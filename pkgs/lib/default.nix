@@ -61,6 +61,16 @@ rec {
     fold (x: y: if pred x then [x] ++ y else y) [] list;
 
 
+  # Find the sole element in the list matching the specified
+  # predicate, or returns the default value.
+  findSingle = pred: default: list:
+    let found = filter pred list;
+    in if found == [] then default
+       else if tail found != [] then
+         abort "Multiple elements match predicate in findSingle."
+       else head found;
+
+
   # Return true if each element of a list is equal, false otherwise.
   eqLists = xs: ys:
     if xs == [] && ys == [] then true
