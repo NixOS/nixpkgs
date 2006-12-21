@@ -35,6 +35,8 @@ start script
     if ${procps}/bin/pkill -u root '^udevd$'; then
         echo \"couldn't stop udevd\"
     fi
+
+    initctl emit new-devices
 end script
 
 respawn ${udev}/sbin/udevd
