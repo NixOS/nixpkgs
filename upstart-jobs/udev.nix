@@ -20,6 +20,9 @@ env UDEV_CONFIG_FILE=${conf}
 start script
     echo '' > /proc/sys/kernel/hotplug
 
+    # Get rid of possible old udev processes.
+    ${procps}/bin/pkill -u root '^udevd$' || true
+
     # Start udev.
     ${udev}/sbin/udevd --daemon
 
@@ -32,9 +35,13 @@ start script
     # Kill udev, let Upstart restart and monitor it.  (This is nasty,
     # but we have to run udevtrigger first.  Maybe we can use
     # Upstart's `binary' keyword, but it isn't implemented yet.)
-    if ${procps}/bin/pkill -u root '^udevd$'; then
+    if ! ${procps}/bin/pkill -u root '^udevd$'; then
         echo \"couldn't stop udevd\"
     fi
+
+    while ${procps}/bin/pgrep -u root '^udevd$'; do
+        sleep 1
+    done
 
     initctl emit new-devices
 end script
