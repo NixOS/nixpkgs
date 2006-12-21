@@ -149,8 +149,7 @@
       }
       { mountPoint = "/data";
         device = "/dev/hda2";
-        filesystem = "ext3";
-        autoMount = true;
+        fsType = "ext3";
         options = "data=journal";
       }
     ];
@@ -160,14 +159,11 @@
       <literal>boot.autoDetectRootDevice</literal> is not set.  Each
       entry in the list is an attribute set with the following fields:
       <literal>mountPoint</literal>, <literal>device</literal>,
-      <literal>filesystem</literal> (a file system type recognised by
+      <literal>fsType</literal> (a file system type recognised by
       <command>mount</command>; defaults to
-      <literal>\"auto\"</literal>), <literal>autoMount</literal> (a
-      boolean indicating whether the file system is mounted
-      automatically; defaults to <literal>true</literal>) and
-      <literal>options</literal> (the mount options passed to
-      <command>mount</command> using the <option>-o</option> flag;
-      defaults to <literal>\"\"</literal>).
+      <literal>\"auto\"</literal>), and <literal>options</literal>
+      (the mount options passed to <command>mount</command> using the
+      <option>-o</option> flag; defaults to <literal>\"defaults\"</literal>).
     ";
   }
 

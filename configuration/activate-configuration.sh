@@ -4,6 +4,10 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
 
 
+# Needed by some programs.
+ln -sfn /proc/self/fd /dev/fd
+
+
 # Set up the statically computed bits of /etc.
 staticEtc=/etc/static
 rm -f $staticEtc
