@@ -434,6 +434,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ntp = import ../tools/networking/ntp {
+    inherit fetchurl stdenv;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     inherit (xlibs) xauth;
