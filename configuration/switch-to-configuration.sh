@@ -70,6 +70,10 @@ if test "$action" = "switch" -o "$action" = "test"; then
 
     # Start all new services and restart all changed services.
     for event in $(cd $newEvents && ls); do
+
+        # Hack: skip the sys-* events.
+        if echo "$event" | grep -q "^sys-"; then continue; fi
+    
         if ! test -e "$oldEvents/$event"; then
             echo "starting $event..."
             initctl start "$event"
