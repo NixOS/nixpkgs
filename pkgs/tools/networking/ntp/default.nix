@@ -9,6 +9,7 @@ stdenv.mkDerivation {
     md5 = "916fe57525f8327f340b203f129088fa";
   };
   configureFlags = "
+    --without-crypto
     ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
   ";
   buildInputs = if stdenv.isLinux then [libcap] else [];
