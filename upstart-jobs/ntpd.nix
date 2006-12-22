@@ -20,8 +20,9 @@ in
   job = "
 description \"NTP daemon\"
 
-start on network-interfaces/started
-stop on network-interfaces/stop
+start on ip-up
+stop on ip-down
+stop on shutdown
 
 start script
 
@@ -34,12 +35,12 @@ start script
     chown ${ntpUser} ${stateDir}
 
     date
-    ${ntp}/bin/ntpd -ddd -c ${config} -q -g
+    ${ntp}/bin/ntpd -c ${config} -q -g
     date
     
 end script
 
-respawn ${ntp}/bin/ntpd -ddd -n -c ${config}
+respawn ${ntp}/bin/ntpd -n -c ${config}
   ";
   
 }

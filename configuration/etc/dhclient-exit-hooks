@@ -1,0 +1,10 @@
+echo "$reason" >> /tmp/dhcp-exit
+echo "$exit_status" >> /tmp/dhcp-exit
+
+if test "$reason" = BOUND -o "$reason" = REBOOT; then
+    @upstart@/sbin/initctl emit ip-up
+fi
+
+if test "$reason" = EXPIRE -o "$reason" = RELEASE; then
+    @upstart@/sbin/initctl emit ip-down
+fi

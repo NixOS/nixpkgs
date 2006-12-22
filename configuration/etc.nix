@@ -52,6 +52,13 @@ import ../helpers/make-etc.nix {
       target = "default/passwd";
     }
 
+    { # Dhclient hooks for emitting ip-up/ip-down events.
+      source = pkgs.substituteAll {
+        src = ./etc/dhclient-exit-hooks;
+        inherit (pkgs) upstart;
+      };
+      target = "dhclient-exit-hooks";
+    }
   ]
 
   # A bunch of PAM configuration files for various programs.
