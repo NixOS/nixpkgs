@@ -1,4 +1,4 @@
-{ntp, glibc, pwdutils, writeText, servers}:
+{ntp, kernel, module_init_tools, glibc, pwdutils, writeText, servers}:
 
 let
 
@@ -11,6 +11,8 @@ let
 
     ${toString (map (server: "server " + server + "\n") servers)}
   ";
+
+  ntpFlags = "-c ${config} -u ${ntpUser}:nogroup";
 
 in
 
@@ -34,13 +36,15 @@ start script
     mkdir -m 0755 -p ${stateDir}
     chown ${ntpUser} ${stateDir}
 
-    date
-    ${ntp}/bin/ntpd -c ${config} -q -g
-    date
+    # Needed to run ntpd as an unprivileged user.
+    export MODULE_DIR=${kernel}/lib/modules/
+    ${module_init_tools}/sbin/modprobe capability
+
+    ${ntp}/bin/ntpd -q -g ${ntpFlags}
     
 end script
 
-respawn ${ntp}/bin/ntpd -n -c ${config}
+respawn ${ntp}/bin/ntpd -n ${ntpFlags}
   ";
   
 }

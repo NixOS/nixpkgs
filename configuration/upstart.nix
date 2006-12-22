@@ -84,7 +84,7 @@ import ../upstart-jobs/gather.nix {
   # NTP daemon.
   ++ optional ["services" "ntp" "enable"]
     (import ../upstart-jobs/ntpd.nix {
-      inherit (pkgs) ntp glibc pwdutils writeText;
+      inherit (pkgs) ntp kernel module_init_tools glibc pwdutils writeText;
       servers = config.get ["services" "ntp" "servers"];
     })
 
