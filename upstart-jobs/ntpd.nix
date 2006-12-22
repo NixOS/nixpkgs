@@ -12,7 +12,7 @@ let
     ${toString (map (server: "server " + server + "\n") servers)}
   ";
 
-  ntpFlags = "-c ${config} -u ${ntpUser}:nogroup";
+  ntpFlags = "-c ${config} -u ${ntpUser}:nogroup -i ${stateDir}";
 
 in
 
