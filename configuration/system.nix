@@ -37,8 +37,8 @@ rec {
 
 
   rootModules = 
-    (config.get ["boot" "initrd" "kernelModules"]) ++
-    (config.get ["boot" "initrd" "extraKernelModules"]);
+    (config.get ["boot" "initrd" "extraKernelModules"]) ++
+    (config.get ["boot" "initrd" "kernelModules"]);
 
 
   # Determine the set of modules that we need to mount the root FS.

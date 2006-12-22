@@ -59,6 +59,9 @@ for o in $(cat /proc/cmdline); do
             # !!! argh, can't pass a startup event to Upstart yet.
             exec @shell@
             ;;
+        safemode)
+            safeMode=1
+            ;;
     esac
 done
 
@@ -74,6 +77,10 @@ needWritableDir /root 0700
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run
+
+if test -n "$safeMode"; then
+    touch /var/run/safemode
+fi
 
 
 # Create the minimal device nodes needed before we run udev.

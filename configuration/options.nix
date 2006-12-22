@@ -85,6 +85,33 @@
 
 
   {
+    name = ["boot" "hardwareScan"];
+    default = true;
+    description = "
+      Whether to try to load kernel modules for all detected hardware.
+      Usually this does a good job of providing you with the modules
+      you need, but sometimes it can crash the system or cause other
+      nasty effects.  If the hardware scan is turned on, it can be
+      disabled at boot time by adding the <literal>safemode</literal>
+      parameter to the kernel command line.
+    ";
+  }
+
+
+  {
+    name = ["boot" "kernelModules"];
+    default = [];
+    description = "
+      The set of kernel modules to be loaded in the second stage of
+      the boot process.  That is, these modules are not included in
+      the initial ramdisk, so they'd better not be required for
+      mounting the root file system.  Add them to
+      <option>boot.initrd.extraKernelModules</options> if they are.
+    ";
+  }
+
+
+  {
     name = ["boot" "initrd" "kernelModules"];
     default = ["ide-cd" "ide-disk" "ide-generic" "ext3"];
     description = "
@@ -106,7 +133,10 @@
     name = ["boot" "initrd" "extraKernelModules"];
     default = [];
     description = "
-      Additional kernel modules for the initial ramdisk.
+      Additional kernel modules for the initial ramdisk.  These are
+      loaded before the modules listed in
+      <option>boot.initrd.kernelModules</options>, so they take
+      precedence.
     ";
   }
 

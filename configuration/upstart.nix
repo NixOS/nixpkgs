@@ -29,6 +29,8 @@ import ../upstart-jobs/gather.nix {
     # Hardware scan; loads modules for PCI devices.
     (import ../upstart-jobs/hardware-scan.nix {
       inherit (pkgs) kernel module_init_tools;
+      doHardwareScan = config.get ["boot" "hardwareScan"];
+      kernelModules = config.get ["boot" "kernelModules"];
     })
       
     # Mount file systems.
