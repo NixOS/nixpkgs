@@ -435,7 +435,7 @@ rec {
   };
 
   ntp = import ../tools/networking/ntp {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libcap;
   };
 
   openssh = import ../tools/networking/openssh {
@@ -2205,6 +2205,10 @@ rec {
 
   klibc = import ../os-specific/linux/klibc {
     inherit fetchurl stdenv perl bison mktemp kernel;
+  };
+
+  libcap = import ../os-specific/linux/libcap {
+    inherit fetchurl stdenv;
   };
 
   mingetty = import ../os-specific/linux/mingetty {
