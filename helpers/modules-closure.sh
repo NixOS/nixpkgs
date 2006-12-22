@@ -14,7 +14,7 @@ export MODULE_DIR=$kernel/lib/modules/
 closure=
 for module in $rootModules; do
     echo "root module: $module"
-    deps=$(modprobe --set-version "$version" --show-depends "$module" \
+    deps=$(modprobe --config /dev/null --set-version "$version" --show-depends "$module" \
         | sed 's/^insmod //')
     for i in $deps; do echo $i; done
     closure="$closure $deps"
