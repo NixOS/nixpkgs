@@ -13,17 +13,6 @@ mknod -m 0600 /dev/tty c 5 0
 if ! test -e /dev/console; then
     mknod -m 0600 /dev/console c 5 1
 fi
-for i in $(seq 0 10); do
-    mknod -m 0600 /dev/tty$i c 4 $i
-done
-
-mkdir -m 0755 /dev/pts
-mknod -m 0666 /dev/ptmx c 5 2
-
-# random
-
-mknod -m 0644 /dev/random c 1 8
-mknod -m 0644 /dev/urandom c 1 9
 
 mknod -m 0660 /dev/hda b 3 0
 mknod -m 0660 /dev/hda1 b 3 1
@@ -45,9 +34,9 @@ mknod -m 0660 /dev/hdd1 b 22 65
 mknod -m 0660 /dev/hdd2 b 22 66
 mknod -m 0660 /dev/hdd3 b 22 67
 
-#mknod -m 0660 /dev/sda b 8 0
-#mknod -m 0660 /dev/sda1 b 8 1
-#mknod -m 0660 /dev/sda2 b 8 2
-#mknod -m 0660 /dev/sda3 b 8 3
+mknod -m 0660 /dev/sda b 8 0
+mknod -m 0660 /dev/sda1 b 8 1
+mknod -m 0660 /dev/sda2 b 8 2
+mknod -m 0660 /dev/sda3 b 8 3
 
-mknod -m 0600 /dev/initctl p
+mknod -m 0660 /dev/sr0 b 11 0
