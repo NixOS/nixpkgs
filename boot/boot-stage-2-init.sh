@@ -79,6 +79,7 @@ needWritableDir /root 0700
 rm -rf /var/run
 
 if test -n "$safeMode"; then
+    mkdir -m 0755 -p /var/run
     touch /var/run/safemode
 fi
 
