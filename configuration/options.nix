@@ -113,7 +113,15 @@
 
   {
     name = ["boot" "initrd" "kernelModules"];
-    default = ["ide-cd" "ide-disk" "ide-generic" "ext3"];
+    default = [
+      "ahci"
+      "ata_piix"
+      "sr_mod"
+      "ide-cd"
+      "ide-disk"
+      "ide-generic"
+      "ext3"
+    ];
     description = "
       The set of kernel modules in the initial ramdisk used during the
       boot process.  This set must include all modules necessary for
