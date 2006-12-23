@@ -116,6 +116,7 @@
     default = [
       "ahci"
       "ata_piix"
+      "sd_mod"
       "sr_mod"
       "ide-cd"
       "ide-disk"
