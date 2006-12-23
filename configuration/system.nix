@@ -144,6 +144,7 @@ rec {
     pkgs.curl
     pkgs.e2fsprogs
     pkgs.findutils
+    pkgs.glibc # for ldd, getent
     pkgs.gnugrep
     pkgs.gnused
     pkgs.gnutar
@@ -155,6 +156,7 @@ rec {
     pkgs.nano
     pkgs.netcat
     pkgs.nettools
+    pkgs.ntp
     pkgs.perl
     pkgs.procps
     pkgs.pwdutils
