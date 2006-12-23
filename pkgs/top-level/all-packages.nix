@@ -2093,6 +2093,10 @@ rec {
   #  cross = "sparc-linux";
   #};
 
+  devicemapper = import ../os-specific/linux/device-mapper {
+    inherit fetchurl stdenv;
+  };
+
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
@@ -2209,6 +2213,10 @@ rec {
 
   libcap = import ../os-specific/linux/libcap {
     inherit fetchurl stdenv;
+  };
+
+  lvm2 = import ../os-specific/linux/lvm2 {
+    inherit fetchurl stdenv devicemapper;
   };
 
   mingetty = import ../os-specific/linux/mingetty {
