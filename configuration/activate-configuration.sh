@@ -55,15 +55,17 @@ if ! test -e /etc/passwd; then
 fi
 
 
+# Some more required accounts/groups.
+if ! getent group nogroup > /dev/null; then
+    groupadd -g 65534 nogroup
+fi
+
+
 # Set up Nix accounts.
 if test -z "@readOnlyRoot@"; then
 
     if ! getent group nixbld > /dev/null; then
         groupadd -g 30000 nixbld
-    fi
-
-    if ! getent group nogroup > /dev/null; then
-        groupadd -g 65534 nogroup
     fi
 
     for i in $(seq 1 10); do
