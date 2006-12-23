@@ -73,15 +73,20 @@ if test -n "@autoDetectRootDevice@"; then
     # Look for the root device by label.
     echo "probing for the NixOS installation CD..."
 
-    for i in /sys/devices/*/*/media; do
-        if test "$(cat $i)" = "cdrom"; then
+    for i in /sys/block/*; do
+        if test "$(cat $i/removable)" = "1"; then
 
-            # Hopefully `drivename' matches the device created in /dev.
-            devName=/dev/$(cat $(dirname $i)/drivename)
+            echo "  in $(basename $i)..."
 
-            echo "  in $devName..."
+            set -- $(IFS=: ; echo $(cat $i/dev))
+            major="$1"
+            minor="$2"
 
-            if mount -n -o ro -t iso9660 $devName /mnt/root; then
+            # Create a device node for this device.
+            rm -f /dev/tmpdev
+            mknod /dev/tmpdev b "$major" "$minor"
+
+            if mount -n -o ro -t iso9660 /dev/tmpdev /mnt/root; then
                 if test -e "/mnt/root/@rootLabel@"; then
                     found=1
                     break
