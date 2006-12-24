@@ -152,6 +152,7 @@ rec {
     pkgs.gzip
     pkgs.iputils
     pkgs.less
+    pkgs.lvm2
     pkgs.module_init_tools
     pkgs.nano
     pkgs.netcat

@@ -26,6 +26,11 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) writeText cleanSource udev procps;
     })
       
+    # Makes LVM logical volumes available. 
+    (import ../upstart-jobs/lvm.nix {
+      inherit (pkgs) kernel module_init_tools lvm2;
+    })
+      
     # Hardware scan; loads modules for PCI devices.
     (import ../upstart-jobs/hardware-scan.nix {
       inherit (pkgs) kernel module_init_tools;
