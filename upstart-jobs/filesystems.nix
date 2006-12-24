@@ -46,6 +46,8 @@ script
                 continue
             fi
 
+            device=$(readlink -f \"$device\")
+
             # If $device is already mounted somewhere else, unmount it first.
             # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
             # contains more accurate info when using loop devices.
