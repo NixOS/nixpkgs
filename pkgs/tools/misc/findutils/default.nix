@@ -1,10 +1,10 @@
 {stdenv, fetchurl, coreutils}:
 
 stdenv.mkDerivation {
-  name = "findutils-4.2.28";
+  name = "findutils-4.2.29";
   src = fetchurl {
-    url = http://ftp.gnu.org/pub/gnu/findutils/findutils-4.2.28.tar.gz;
-    md5 = "f5fb3349354ee3d94fceb81dab5c71fd";
+    url = ftp://ftp.nluug.nl/pub/gnu/findutils/findutils-4.2.29.tar.gz;
+    md5 = "24e76434ca74ba3c2c6ad621eb64e1ff";
   };
   buildInputs = [coreutils];
   patches = [./findutils-path.patch]
