@@ -30,7 +30,7 @@
 - Login as "root", empty password.
 
 - The NixOS installer doesn't do any partitioning or formatting yet,
-  so you need to that yourself.  Use "fdisk" and "e2fsck".
+  so you need to that yourself.  Use "fdisk", "mkfs.ext2" and "tune2fs".
 
 - Unpack the NixOS and Nixpkgs sources:
 
