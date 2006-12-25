@@ -43,9 +43,9 @@ mkdir -m 0755 -p /var/log
 # empty password.
 if ! test -e /etc/passwd; then
     rootHome=/root
-    touch /etc/passwd; chmod 0755 /etc/passwd
-    touch /etc/group; chmod 0755 /etc/passwd
-    touch /etc/shadow; chmod 0700 /etc/passwd
+    touch /etc/passwd; chmod 0644 /etc/passwd
+    touch /etc/group; chmod 0644 /etc/group
+    touch /etc/shadow; chmod 0600 /etc/shadow
     # Can't use useradd, since it complain that it doesn't know us
     # (bootstrap problem!). 
     echo "root:x:0:0:System administrator:$rootHome:@shell@" >> /etc/passwd
