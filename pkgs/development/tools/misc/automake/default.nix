@@ -1,1 +1,1 @@
-import ./automake-1.9.x.nix
+import ./automake-1.10.x.nix

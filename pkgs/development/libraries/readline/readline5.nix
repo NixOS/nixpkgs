@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
-  name = "readline-5.1";
+  name = "readline-5.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/readline-5.1.tar.gz;
-    md5 = "7ee5a692db88b30ca48927a13fd60e46";
+    url = ftp://ftp.nluug.nl/pub/gnu/readline/readline-5.2.tar.gz;
+    md5 = "e39331f32ad14009b9ff49cc10c5e751";
   };
   propagatedBuildInputs = [ncurses];
 }
