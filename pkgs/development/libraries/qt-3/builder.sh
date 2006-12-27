@@ -1,5 +1,4 @@
 source $stdenv/setup
-source $substitute
 
 ensureDir $out/nix-support
 substitute "$hook" "$out/nix-support/setup-hook" --subst-var out
