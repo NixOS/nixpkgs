@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   
   preBuild = "
     substituteInPlace libcap/Makefile --replace /usr/include ${stdenv.glibc}/include
-    installFlags=\"LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man\"
+    makeFlags=\"LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man\"
   ";
 
   patches = [

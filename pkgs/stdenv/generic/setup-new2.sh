@@ -566,8 +566,10 @@ buildW() {
 
     eval "$preBuild"
     
-    echo "make flags: $makeFlags ${makeFlagsArray[@]}"
-    make $makeFlags "${makeFlagsArray[@]}" || fail
+    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
+    make \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $buildFlags "${buildFlagsArray[@]}" || fail
 
     eval "$postBuild"
 }
@@ -638,8 +640,10 @@ installW() {
             if test -z "$installTargets"; then
                 installTargets=install
             fi
-            echo "install flags: $installTargets $installFlags ${installFlagsArray[@]}"
-            make $installTargets $installFlags "${installFlagsArray[@]}" || fail
+            echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+            make $installTargets \
+                $makeFlags ${makeFlagsArray[@]} \
+                $installFlags "${installFlagsArray[@]}" || fail
         fi
     else
         eval "$installCommand"
