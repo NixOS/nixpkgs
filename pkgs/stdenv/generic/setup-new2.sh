@@ -642,15 +642,13 @@ installW() {
     ensureDir "$prefix"
 
     if test -z "$installCommand"; then
-        if test -z "$dontMakeInstall"; then
-            if test -z "$installTargets"; then
-                installTargets=install
-            fi
-            echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-            make $installTargets \
-                $makeFlags ${makeFlagsArray[@]} \
-                $installFlags "${installFlagsArray[@]}" || fail
+        if test -z "$installTargets"; then
+            installTargets=install
         fi
+        echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+        make $installTargets \
+            $makeFlags ${makeFlagsArray[@]} \
+            $installFlags "${installFlagsArray[@]}" || fail
     else
         eval "$installCommand"
     fi
