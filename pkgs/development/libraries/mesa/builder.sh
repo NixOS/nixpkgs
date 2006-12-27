@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-makeFlags="linux-x86"
+buildFlags="linux-x86"
 
 installPhase=installPhase
 installPhase() {

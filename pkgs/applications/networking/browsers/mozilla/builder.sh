@@ -48,6 +48,6 @@ postInstall() {
     
 }
 
-makeFlags="-f client.mk build"
+buildFlags="-f client.mk build"
 
 genericBuild

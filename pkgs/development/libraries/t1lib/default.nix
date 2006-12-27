@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     md5 = "a05bed4aa63637052e60690ccde70421";
   };
   buildInputs = [x11 libXaw];
-  makeFlags = "without_doc";
+  buildFlags = "without_doc";
 }

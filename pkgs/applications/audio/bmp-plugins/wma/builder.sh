@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-makeFlags="-f Makefile.bmp"
+buildFlags="-f Makefile.bmp"
 
 installPhase=installPhase
 installPhase() {

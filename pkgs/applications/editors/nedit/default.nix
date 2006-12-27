@@ -15,5 +15,5 @@ stdenv.mkDerivation {
   inherit motif;
   buildInputs = [x11 motif libXpm];
 
-  makeFlags = if stdenv.system == "i686-linux" then "linux" else "";
+  buildFlags = if stdenv.system == "i686-linux" then "linux" else "";
 }

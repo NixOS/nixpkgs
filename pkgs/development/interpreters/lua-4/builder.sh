@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-makeFlags="all so sobin"
+buildFlags="all so sobin"
 installFlags="INSTALL_ROOT=$out"
 
 genericBuild

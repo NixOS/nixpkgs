@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   configureScript = ./configure-3.08.0;
   dontAddPrefix = "True";
   configureFlags = ["-no-tk" "-x11lib" x11];
-  makeFlags = ["world" "bootstrap" "opt"];
+  buildFlags = ["world" "bootstrap" "opt"];
   checkTarget = ["opt.opt"];
 }

@@ -85,6 +85,6 @@ postConfigure() {
 postConfigure=postConfigure
 
 
-makeFlags="bootstrap"
+buildFlags="bootstrap"
 
 genericBuild

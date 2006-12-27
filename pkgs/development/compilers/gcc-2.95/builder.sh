@@ -68,6 +68,6 @@ preConfigure() {
 }
 
 
-makeFlags="bootstrap"
+buildFlags="bootstrap"
 
 genericBuild
