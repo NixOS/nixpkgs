@@ -635,8 +635,11 @@ installW() {
 
     if test -z "$installCommand"; then
         if test -z "$dontMakeInstall"; then
-            echo "install flags: $installFlags ${installFlagsArray[@]}"
-            make install $installFlags "${installFlagsArray[@]}" || fail
+            if test -z "$installTargets"; then
+                installTargets=install
+            fi
+            echo "install flags: $installTargets $installFlags ${installFlagsArray[@]}"
+            make $installTargets $installFlags "${installFlagsArray[@]}" || fail
         fi
     else
         eval "$installCommand"
