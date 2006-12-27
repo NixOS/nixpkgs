@@ -180,7 +180,9 @@ substitute() {
 
     local params=("$@")
 
-    local sedArgs=()
+    local sedScript=$NIX_BUILD_TOP/.sedargs
+    rm -f $sedScript
+    touch $sedScript
 
     local n p pattern replacement varName
     
@@ -191,25 +193,26 @@ substitute() {
             pattern=${params[$((n + 1))]}
             replacement=${params[$((n + 2))]}
             n=$((n + 2))
-            sedArgs=("${sedArgs[@]}" "-e" "s^$pattern^$replacement^g")
+            echo "s^$pattern^$replacement^g" >> $sedScript
+            sedArgs=("${sedArgs[@]}" "-e" )
         fi
 
         if test "$p" = "--subst-var"; then
             varName=${params[$((n + 1))]}
             n=$((n + 1))
-            sedArgs=("${sedArgs[@]}" "-e" "s^@${varName}@^${!varName}^g")
+            echo "s^@${varName}@^${!varName}^g" >> $sedScript
         fi
 
         if test "$p" = "--subst-var-by"; then
             varName=${params[$((n + 1))]}
             replacement=${params[$((n + 2))]}
             n=$((n + 2))
-            sedArgs=("${sedArgs[@]}" "-e" "s^@${varName}@^$replacement^g")
+            echo "s^@${varName}@^$replacement^g" >> $sedScript
         fi
 
     done
 
-    sed "${sedArgs[@]}" < "$input" > "$output".tmp
+    sed -f $sedScript < "$input" > "$output".tmp
     if test -x "$output"; then
         chmod +x "$output".tmp
     fi
