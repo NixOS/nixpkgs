@@ -26,8 +26,6 @@ if test "$javahlBindings"; then
     configureFlags="--enable-javahl --with-jdk=$jdk --with-jikes=no $configureFlags"
 fi
 
-installFlags="$makeFlags"
-
 
 postInstall() {
     if test "$pythonBindings"; then

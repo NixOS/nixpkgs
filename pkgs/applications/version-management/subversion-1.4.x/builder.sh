@@ -4,8 +4,6 @@ if test "$httpServer"; then
     makeFlags="APACHE_LIBEXECDIR=$out/modules $makeFlags"
 fi
 
-installFlags="$makeFlags"
-
 
 postInstall() {
     if test "$pythonBindings"; then

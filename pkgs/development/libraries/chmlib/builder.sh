@@ -16,6 +16,4 @@ preInstall() {
     mkdir $out/include
 }
 
-installFlags=$makeFlags
-
 genericBuild
