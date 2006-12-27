@@ -13,12 +13,12 @@
 
 
 stdenv.mkDerivation {
-  name = "thunderbird-1.5.0.8";
+  name = "thunderbird-1.5.0.9";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.8/source/thunderbird-1.5.0.8-source.tar.bz2;
-    sha1 = "25dd00161e2b4a5bc2968ef4b9547e4431296a33";
+    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/1.5.0.9/source/thunderbird-1.5.0.9-source.tar.bz2;
+    sha1 = "ff1b900861422b5c657a5302d9b1deb0601a42e2";
   };
 
   buildInputs = [
