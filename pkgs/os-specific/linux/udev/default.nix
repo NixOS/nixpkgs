@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     md5 = "7360ce47b5ec3f9fa71f18071ecb8b97";
   };
   preBuild = "makeFlagsArray=(etcdir=$out/etc sbindir=$out/sbin usrbindir=$out/bin usrsbindir=$out/sbin mandir=$out/share/man INSTALL='install -c')";
-  preInstall = "installFlagsArray=(\"\${makeFlagsArray[@]}\" udevdir=dummy)";
+  preInstall = "installFlagsArray=(udevdir=dummy)";
 }

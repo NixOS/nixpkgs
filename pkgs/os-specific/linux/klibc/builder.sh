@@ -8,6 +8,4 @@ preBuild() {
 
 makeFlagsArray=(V=1 prefix=$out SHLIBDIR=$out/lib)
 
-installFlagsArray=("${makeFlagsArray[@]}")
-
 genericBuild

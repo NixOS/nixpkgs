@@ -12,7 +12,6 @@ stdenv.mkDerivation {
 
   preBuild = "
     makeFlagsArray=(usrbinexecdir=$out/bin usrsbinexecdir=$out/sbin datadir=$out/share exampledir=$out/share/getopt)
-    installFlagsArray=(\"\${makeFlagsArray[@]}\")
   ";
 
   # Hack to get static builds to work.
