@@ -2212,7 +2212,8 @@ rec {
   };
 
   libcap = import ../os-specific/linux/libcap {
-    inherit fetchurl stdenv;
+    inherit fetchurl;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new2.sh;
   };
 
   lvm2 = import ../os-specific/linux/lvm2 {

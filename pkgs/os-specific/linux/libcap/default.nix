@@ -8,9 +8,7 @@ stdenv.mkDerivation {
   };
   
   preBuild = "
-    sed 's|/usr/include|${stdenv.glibc}/include|' < libcap/Makefile > libcap/Makefile.tmp
-    mv libcap/Makefile.tmp libcap/Makefile
-
+    substituteInPlace libcap/Makefile --replace /usr/include ${stdenv.glibc}/include
     installFlags=\"LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man\"
   ";
 
