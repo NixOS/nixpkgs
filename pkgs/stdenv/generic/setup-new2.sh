@@ -597,8 +597,10 @@ checkW() {
         checkTarget="check"
     fi
 
-    echo "check flags: $checkFlags ${checkFlagsArray[@]}"
-    make $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
+    echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
+    make \
+        $makeFlags ${makeFlagsArray[@]} \
+        $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
 }
 
 
