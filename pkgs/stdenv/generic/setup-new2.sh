@@ -474,6 +474,10 @@ patchW() {
         return
     fi
 
+    if test -z "$patchFlags"; then
+        patchFlags="-p1"
+    fi
+
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -485,7 +489,7 @@ patchW() {
                 uncompress=bunzip2
                 ;;
         esac
-        $uncompress < $i | patch -p1 || fail
+        $uncompress < $i | patch $patchFlags || fail
         stopNest
     done
 }
