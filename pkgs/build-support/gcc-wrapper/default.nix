@@ -15,7 +15,6 @@ assert !nativeLibc -> libc != null;
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
-  substitute = ../substitute/substitute.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;

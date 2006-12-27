@@ -4,7 +4,4 @@ PATH=$staticTools/bin
 
 mkdir $out
 
-cat > $out/setup <<EOF
-PATH=$staticTools/bin
-EOF
-
+sed -e "s^@initialPath@^$staticTools^" -e "s^@preHook@^^" -e "s^@postHook@^^" < $stdenvScript > $out/setup

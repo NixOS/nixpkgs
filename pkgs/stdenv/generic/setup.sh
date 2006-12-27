@@ -16,6 +16,7 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
+export shell=@shell@
 param1=@param1@
 param2=@param2@
 param3=@param3@
@@ -167,6 +168,79 @@ PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
     echo "Final path: $PATH"
 fi
+
+
+######################################################################
+# Textual substitution functions.
+
+
+substitute() {
+    local input="$1"
+    local output="$2"
+
+    local params=("$@")
+
+    local sedScript=$NIX_BUILD_TOP/.sedargs
+    rm -f $sedScript
+    touch $sedScript
+
+    local n p pattern replacement varName
+    
+    for ((n = 2; n < ${#params[*]}; n += 1)); do
+        p=${params[$n]}
+
+        if test "$p" = "--replace"; then
+            pattern=${params[$((n + 1))]}
+            replacement=${params[$((n + 2))]}
+            n=$((n + 2))
+            echo "s^$pattern^$replacement^g" >> $sedScript
+            sedArgs=("${sedArgs[@]}" "-e" )
+        fi
+
+        if test "$p" = "--subst-var"; then
+            varName=${params[$((n + 1))]}
+            n=$((n + 1))
+            echo "s^@${varName}@^${!varName}^g" >> $sedScript
+        fi
+
+        if test "$p" = "--subst-var-by"; then
+            varName=${params[$((n + 1))]}
+            replacement=${params[$((n + 2))]}
+            n=$((n + 2))
+            echo "s^@${varName}@^$replacement^g" >> $sedScript
+        fi
+
+    done
+
+    sed -f $sedScript < "$input" > "$output".tmp
+    if test -x "$output"; then
+        chmod +x "$output".tmp
+    fi
+    mv -f "$output".tmp "$output"
+}
+
+
+substituteInPlace() {
+    local fileName="$1"
+    shift
+    substitute "$fileName" "$fileName" "$@"
+}
+
+
+substituteAll() {
+    local input="$1"
+    local output="$2"
+    
+    # Select all environment variables that start with a lowercase character.
+    for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
+        if test "$NIX_DEBUG" = "1"; then
+            echo "$envVar -> ${!envVar}"
+        fi
+        args="$args --subst-var $envVar"
+    done
+
+    substitute "$input" "$output" $args
+}  
 
 
 ######################################################################
@@ -400,9 +474,22 @@ patchW() {
         return
     fi
 
+    if test -z "$patchFlags"; then
+        patchFlags="-p1"
+    fi
+
     for i in $patches; do
         header "applying patch $i" 3
-        patch -p1 < $i || fail
+        local uncompress=cat
+        case $i in
+            *.gz)
+                uncompress=gunzip
+                ;;
+            *.bz2)
+                uncompress=bunzip2
+                ;;
+        esac
+        $uncompress < $i | patch $patchFlags || fail
         stopNest
     done
 }
@@ -483,8 +570,10 @@ buildW() {
 
     eval "$preBuild"
     
-    echo "make flags: $makeFlags ${makeFlagsArray[@]}"
-    make $makeFlags "${makeFlagsArray[@]}" || fail
+    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
+    make \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $buildFlags "${buildFlagsArray[@]}" || fail
 
     eval "$postBuild"
 }
@@ -512,8 +601,10 @@ checkW() {
         checkTarget="check"
     fi
 
-    echo "check flags: $checkFlags ${checkFlagsArray[@]}"
-    make $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
+    echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
+    make \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
 }
 
 
@@ -549,11 +640,45 @@ installW() {
     eval "$preInstall"
 
     ensureDir "$prefix"
-    
-    if test -z "$dontMakeInstall"; then
-        echo "install flags: $installFlags ${installFlagsArray[@]}"
-        make install $installFlags "${installFlagsArray[@]}" || fail
+
+    if test -z "$installCommand"; then
+        if test -z "$installTargets"; then
+            installTargets=install
+        fi
+        echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+        make $installTargets \
+            $makeFlags "${makeFlagsArray[@]}" \
+            $installFlags "${installFlagsArray[@]}" || fail
+    else
+        eval "$installCommand"
     fi
+
+    eval "$postInstall"
+}
+
+
+installPhase() {
+    if test "$dontInstall" = 1; then
+        return
+    fi
+    header "installing"
+    startLog "install"
+    installW
+    stopLog
+    stopNest
+}
+
+
+# The fixup phase performs generic, package-independent, Nix-related
+# stuff, like running patchelf and setting the
+# propagated-build-inputs.  It should rarely be overriden.
+fixupW() {
+    if test -n "$fixupPhase"; then
+        eval "$fixupPhase"
+        return
+    fi
+
+    eval "$preFixup"
 
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
         find "$prefix" -name "*.a" -exec echo stripping {} \; \
@@ -569,17 +694,17 @@ installW() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-    eval "$postInstall"
+    eval "$postFixup"
 }
 
 
-installPhase() {
-    if test "$dontInstall" = 1; then
+fixupPhase() {
+    if test "$dontFixup" = 1; then
         return
     fi
-    header "installing"
-    startLog "install"
-    installW
+    header "post-installation fixup"
+    startLog "fixup"
+    fixupW
     stopLog
     stopNest
 }
@@ -631,12 +756,17 @@ distPhase() {
 genericBuild() {
     header "building $out"
 
+    if test -n "$buildCommand"; then
+        eval "$buildCommand"
+        return
+    fi
+
     unpackPhase
     cd $sourceRoot
 
     if test -z "$phases"; then
         phases="patchPhase configurePhase buildPhase checkPhase \
-            installPhase distPhase";
+            installPhase fixupPhase distPhase";
     fi
 
     for i in $phases; do

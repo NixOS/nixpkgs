@@ -80,6 +80,7 @@ rec {
       name = "stdenv-linux-initial";
       builder = bootstrapTools.bash;
       args = [ ./scripts/builder-stdenv-initial.sh ];
+      stdenvScript = ../generic/setup.sh;
       inherit system staticTools curl;
     } // {
       # !!! too much duplication with stdenv/generic/default.nix

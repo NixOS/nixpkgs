@@ -160,8 +160,6 @@ rec {
 
   stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
 
-  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new2.sh;
-
 
   ### BUILD SUPPORT
 
@@ -195,7 +193,7 @@ rec {
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
   # environment prior to running the command.
-  runCommand = name: env: buildCommand: stdenvNew.mkDerivation ({
+  runCommand = name: env: buildCommand: stdenv.mkDerivation ({
     inherit name buildCommand;
   } // env);
 
@@ -209,11 +207,8 @@ rec {
   cleanSource = src: builtins.filterSource
     (name: baseNameOf (toString name) != ".svn") src;
   
-  # !!! obsolete
-  substitute = ../build-support/substitute/substitute.sh;
-
   substituteAll = import ../build-support/substitute/substitute-all.nix {
-    stdenv = stdenvNew;
+    inherit stdenv;
   };
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
@@ -1810,8 +1805,7 @@ rec {
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit fetchurl unzip ghc;
-    stdenv = stdenvNew;
+    inherit stdenv fetchurl unzip ghc;
     wxGTK = import ../development/libraries/wxGTK-2.6 {
       inherit fetchurl stdenv pkgconfig;
       inherit (gtkLibs) gtk;
@@ -2006,8 +2000,7 @@ rec {
   };
 
   twisted = import ../development/python-modules/twisted {
-    inherit fetchurl python ZopeInterface;
-    stdenv = stdenvNew;
+    inherit fetchurl stdenv python ZopeInterface;
   };
 
   ZopeInterface = import ../development/python-modules/ZopeInterface {
@@ -2173,8 +2166,7 @@ rec {
   kernel = kernel_2_6_18;
 
   kernel_2_6_18 = import ../os-specific/linux/kernel/linux-2.6.18.nix {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+    inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "skas-2.6.18-v9-pre9";
         patch = fetchurl {
@@ -2212,8 +2204,7 @@ rec {
   };
 
   libcap = import ../os-specific/linux/libcap {
-    inherit fetchurl;
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new2.sh;
+    inherit fetchurl stdenv;
   };
 
   lvm2 = import ../os-specific/linux/lvm2 {
@@ -2792,7 +2783,7 @@ rec {
   };
 
   xfig = import ../applications/graphics/xfig {
-    stdenv = overrideGCC (overrideSetup stdenv ../stdenv/generic/setup-new.sh) gcc34;
+    stdenv = overrideGCC stdenv gcc34;
     inherit fetchurl makeWrapper x11 Xaw3d libpng libjpeg;
     inherit (xlibs) imake libXpm libXmu libXi libXp;
   };
@@ -2997,7 +2988,7 @@ rec {
     };
 
     pysqlite = import ../development/libraries/pysqlite {
-      inherit stdenv fetchurl python substitute sqlite;
+      inherit stdenv fetchurl python sqlite;
     };
   };
 

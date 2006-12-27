@@ -3,7 +3,6 @@ export NIX_NO_SELF_RPATH=1
 export NIX_DONT_SET_RPATH=1
 
 source $stdenv/setup
-source $substitute
 
 # Explicitly tell glibc to use our pwd, not /bin/pwd.
 export PWD_P=$(type -tP pwd)

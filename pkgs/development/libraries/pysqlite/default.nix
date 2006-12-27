@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, sqlite, substitute}:
+{stdenv, fetchurl, python, sqlite}:
 
 stdenv.mkDerivation {
   name = "pysqlite-2.2.2";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
   };
   builder = ./builder.sh;
 
-  inherit stdenv python sqlite substitute;
+  inherit stdenv python sqlite;
 }

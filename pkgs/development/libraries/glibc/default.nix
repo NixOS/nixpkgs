@@ -6,7 +6,6 @@
 stdenv.mkDerivation {
   name = "glibc-2.5";
   builder = ./builder.sh;
-  substitute = ../../../build-support/substitute/substitute.sh;
 
   src = fetchurl {
     url = http://ftp.gnu.org/gnu/glibc/glibc-2.5.tar.bz2;

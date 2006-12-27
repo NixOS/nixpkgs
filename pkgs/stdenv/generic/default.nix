@@ -15,8 +15,6 @@ let {
 
         builder = ./builder.sh;
 
-        substitute = ../../build-support/substitute/substitute.sh;
-
         setup = setupScript;
 
         inherit preHook postHook initialPath gcc shell;
