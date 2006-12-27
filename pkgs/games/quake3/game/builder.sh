@@ -1,10 +1,7 @@
 source $stdenv/setup
 
-dontMakeInstall=1
-preInstall=preInstall
-preInstall() {
-    ensureDir $out/baseq3
-    make copyfiles COPYDIR=$out
-}
+ensureDir $out/baseq3
+installTargets=copyfiles
+installFlags="COPYDIR=$out"
 
 genericBuild

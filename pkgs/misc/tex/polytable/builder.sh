@@ -1,11 +1,9 @@
 source $stdenv/setup
 
-phases="installPhase"
-dontMakeInstall="yes"
-prefix="$out"
+buildPhase=true
 
-preInstall() {
-
+installPhase=myInstallPhase
+myInstallPhase() {
   ensureDir "$out/share/texmf-nix/tex/latex/polytable"
   ensureDir "$out/share/texmf-nix/doc/latex/polytable"
   latex polytable.ins
@@ -13,9 +11,6 @@ preInstall() {
   pdflatex polytable.dtx
   cp polytable.sty "$out/share/texmf-nix/tex/latex/polytable"
   cp polytable.pdf "$out/share/texmf-nix/doc/latex/polytable"
-
 }
-
-preInstall=preInstall
 
 genericBuild

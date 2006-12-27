@@ -12,11 +12,9 @@ PKG_CONFIG_PATH=$NIX_BUILD_TOP/pkgconfig:$PKG_CONFIG_PATH
 firefoxIncl=$(echo $firefox/include/firefox-*)
 export NIX_CFLAGS_COMPILE="-I$firefoxIncl $NIX_CFLAGS_COMPILE"
 
-dontMakeInstall=1
-
-postInstall=postInstall
-postInstall() {
-    mkdir -p $out/lib/mozilla/plugins
+installCommand=myInstall
+myInstall() {
+    ensureDir $out/lib/mozilla/plugins
     cp -p mplayerplug-in*.so mplayerplug-in*.xpt $out/lib/mozilla/plugins
 }
 

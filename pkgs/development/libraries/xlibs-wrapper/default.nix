@@ -2,7 +2,9 @@
 
 stdenv.mkDerivation {
   name = "xlibs-wrapper";
-  builder = ./builder.sh;
+  buildPhase = "true";
+  installPhase = "true";
+  unpackPhase = "sourceRoot=.";
   propagatedBuildInputs = packages;
 } // {
   # For compatability with XFree86.
