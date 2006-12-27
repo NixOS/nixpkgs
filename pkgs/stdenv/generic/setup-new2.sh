@@ -655,6 +655,33 @@ installW() {
         eval "$installCommand"
     fi
 
+    eval "$postInstall"
+}
+
+
+installPhase() {
+    if test "$dontInstall" = 1; then
+        return
+    fi
+    header "installing"
+    startLog "install"
+    installW
+    stopLog
+    stopNest
+}
+
+
+# The fixup phase performs generic, package-independent, Nix-related
+# stuff, like running patchelf and setting the
+# propagated-build-inputs.  It should rarely be overriden.
+fixupW() {
+    if test -n "$fixupPhase"; then
+        eval "$fixupPhase"
+        return
+    fi
+
+    eval "$preFixup"
+
     if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
         find "$prefix" -name "*.a" -exec echo stripping {} \; \
             -exec strip -S {} \; || fail
@@ -669,17 +696,17 @@ installW() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-    eval "$postInstall"
+    eval "$postFixup"
 }
 
 
-installPhase() {
-    if test "$dontInstall" = 1; then
+fixupPhase() {
+    if test "$dontFixup" = 1; then
         return
     fi
-    header "installing"
-    startLog "install"
-    installW
+    header "post-installation fixup"
+    startLog "fixup"
+    fixupW
     stopLog
     stopNest
 }
@@ -741,7 +768,7 @@ genericBuild() {
 
     if test -z "$phases"; then
         phases="patchPhase configurePhase buildPhase checkPhase \
-            installPhase distPhase";
+            installPhase fixupPhase distPhase";
     fi
 
     for i in $phases; do
