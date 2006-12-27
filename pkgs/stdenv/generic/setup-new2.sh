@@ -603,7 +603,7 @@ checkW() {
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make \
-        $makeFlags ${makeFlagsArray[@]} \
+        $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
 }
 
@@ -647,7 +647,7 @@ installW() {
         fi
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
         make $installTargets \
-            $makeFlags ${makeFlagsArray[@]} \
+            $makeFlags "${makeFlagsArray[@]}" \
             $installFlags "${installFlagsArray[@]}" || fail
     else
         eval "$installCommand"
