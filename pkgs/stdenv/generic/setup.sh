@@ -161,6 +161,18 @@ fi
 export TZ=UTC
 
 
+# Set the prefix.  This is generally $out, but it can be overriden,
+# for instance if we just want to perform a test build/install to a
+# temporary location and write a build report to $out.
+if test -z "$prefix"; then
+    prefix="$out";
+fi
+
+if test "$useTempPrefix" = "1"; then
+    prefix="$NIX_BUILD_TOP/tmp_prefix";
+fi
+
+
 # Execute the post-hook.
 if test -n "@postHook@"; then
     source @postHook@
@@ -520,14 +532,6 @@ configureW() {
     fi
 
     eval "$preConfigure"
-
-    if test -z "$prefix"; then
-        prefix="$out";
-    fi
-
-    if test "$useTempPrefix" = "1"; then
-        prefix="$NIX_BUILD_TOP/tmp_prefix";
-    fi
 
     if test -z "$configureScript"; then
         configureScript=./configure
