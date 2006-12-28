@@ -1,8 +1,5 @@
 export PATH=/usr/bin:/bin
 
 mkdir $out
-cat > $out/setup <<EOF
-export PATH=/usr/bin:/bin
-export SHELL=/bin/sh
-EOF
-chmod +x $out/setup
+
+sed -e "s^@initialPath@^/usr /^" -e "s^@preHook@^^" -e "s^@postHook@^^" -e "s^@shell@^/bin/sh^" < $stdenvScript > $out/setup

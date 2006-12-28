@@ -15,6 +15,7 @@ let {
       inherit system name;
       builder = shell;
       args = ["-e" ./builder.sh];
+      stdenvScript = ../generic/setup.sh;
     }
 
     // {
