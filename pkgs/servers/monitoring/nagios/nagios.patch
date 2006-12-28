@@ -1,0 +1,13 @@
+diff -ruN nagios-2.6/configure nagios-2.6.new/configure
+--- nagios-2.6/configure	2006-11-28 03:29:04.000000000 +0100
++++ nagios-2.6.new/configure	2006-12-28 01:22:56.000000000 +0100
+@@ -4810,7 +4810,8 @@
+ #define DEFAULT_NAGIOS_GROUP "$nagios_grp"
+ _ACEOF
+ 
+-INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
++#INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
++INSTALL_OPTS=""
+ 
+ 
+ 
