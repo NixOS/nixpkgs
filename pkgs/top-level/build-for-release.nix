@@ -233,7 +233,7 @@ let {
     powerpcLinuxPkgs
     i686FreeBSDPkgs
     powerpcDarwinPkgs
-    i686DarwinPkgs
+#    i686DarwinPkgs
     cygwinPkgs
   ];
 }
