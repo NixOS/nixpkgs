@@ -178,7 +178,7 @@ substitute() {
     local input="$1"
     local output="$2"
 
-    local params=("$@")
+    local -a params=("$@")
 
     local sedScript=$NIX_BUILD_TOP/.sedargs
     rm -f $sedScript
