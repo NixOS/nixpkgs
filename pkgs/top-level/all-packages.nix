@@ -2039,6 +2039,10 @@ rec {
     ant = apacheAntBlackdown14;
   };
 
+  nagios = import ../servers/monitoring/nagios {
+    inherit fetchurl stdenv perl;
+  };
+
   postgresql = import ../servers/sql/postgresql {
     inherit fetchurl stdenv readline ncurses zlib;
   };
