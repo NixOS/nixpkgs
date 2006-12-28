@@ -16,7 +16,9 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
-export shell=@shell@
+if test -z "$shell"; then
+    export shell=@shell@
+fi
 param1=@param1@
 param2=@param2@
 param3=@param3@
