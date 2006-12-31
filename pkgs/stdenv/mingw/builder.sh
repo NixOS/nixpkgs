@@ -10,6 +10,8 @@ mkdir $OUT
 SHELL=$origShell
 GCC=$origGcc
 
+export NIX_BUILD_TOP=$(pwd)
+
 substitute "$SETUP" "$OUT/setup" \
     --subst-var INITIALPATH \
     --subst-var GCC \
