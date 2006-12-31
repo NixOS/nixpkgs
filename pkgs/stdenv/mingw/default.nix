@@ -71,7 +71,6 @@ let {
         stdenvInit2.mkDerivation {
           name = "stdenv-mingw";
           builder = ./builder.sh;
-          substitute = ../../build-support/substitute/substitute.sh;
           setup = ./setup.sh;
 
           /**
