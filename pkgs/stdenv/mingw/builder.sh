@@ -4,7 +4,6 @@ origShell=$SHELL
 origGcc=$GCC
 
 source $STDENV/setup
-source $SUBSTITUTE
 
 mkdir $OUT
 
