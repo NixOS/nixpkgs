@@ -7,7 +7,11 @@ configurePhase() {
 	export INSTALL_MOD_PATH=$out
 
 	cp $config .config
-        make oldconfig HOST_LOADLIBES= HOST_EXTRACFLAGS=
+
+        substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
+            --replace /usr /no-such-path
+        
+        make silentoldconfig
 }
 
 
