@@ -8,8 +8,11 @@ configurePhase() {
 
 	cp $config .config
 
-        substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
-            --replace /usr /no-such-path
+        #substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
+        #    --replace /usr /no-such-path
+
+        # Necessary until NIXPKGS-38 is fixed:
+        echo "#! $SHELL" >> scripts/kconfig/lxdialog/check-lxdialog.sh
         
         make silentoldconfig
 }
