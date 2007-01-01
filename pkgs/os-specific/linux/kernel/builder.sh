@@ -3,20 +3,11 @@ source $stdenv/setup
 
 configurePhase=configurePhase
 configurePhase() {
-
-        #hashname=$(basename $out)
-        #if echo "$hashname" | grep -q '^[a-z0-9]\{32\}-'; then
-        #  hashname=$(echo "$hashname" | cut -c -32)
-        #fi
-
-        #extraname=$(grep ^EXTRAVERSION Makefile)
-        #perl -p -i -e "s/^EXTRAVERSION.*/$extraname-$hashname/" Makefile
-        
 	export INSTALL_PATH=$out
 	export INSTALL_MOD_PATH=$out
 
 	cp $config .config
-        make oldconfig
+        make oldconfig HOST_LOADLIBES= HOST_EXTRACFLAGS=
 }
 
 
