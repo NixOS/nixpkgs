@@ -12,7 +12,8 @@ configurePhase() {
         #    --replace /usr /no-such-path
 
         # Necessary until NIXPKGS-38 is fixed:
-        echo "#! $SHELL" >> scripts/kconfig/lxdialog/check-lxdialog.sh
+        echo "#! $SHELL" > scripts/kconfig/lxdialog/check-lxdialog.sh
+        chmod +x scripts/kconfig/lxdialog/check-lxdialog.sh
         
         make silentoldconfig
 }
