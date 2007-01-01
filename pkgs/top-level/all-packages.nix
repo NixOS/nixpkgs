@@ -2167,7 +2167,7 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_18;
+  kernel = kernel_2_6_19;
 
   kernel_2_6_18 = import ../os-specific/linux/kernel/linux-2.6.18.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -2182,6 +2182,24 @@ rec {
         patch = fetchurl {
           url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.18-rc4.patch;
           md5 = "4bc612e21ae03e9727aa87969185ccdc";
+        };
+      }
+    ];
+  };
+
+  kernel_2_6_19 = import ../os-specific/linux/kernel/linux-2.6.19.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "skas-2.6.19-rc6-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.19-rc6-v9-pre9/skas-2.6.19-rc6-v9-pre9.patch.bz2;
+          md5 = "262368b6cf29026be44bebfff2e57aed";
+        };
+      }
+      { name = "fbsplash-0.9.2-r5-2.6.19-rc2";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.19-rc2.patch;
+          md5 = "1f58715f3c5f85bb8b6e14c35b2f4463";
         };
       }
     ];
