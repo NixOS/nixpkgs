@@ -3,11 +3,11 @@
 assert libpng != null && libjpeg != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "graphviz-2.4";
+  name = "graphviz-2.12";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/graphviz-2.4.tar.gz;
-    md5 = "f1074d38a7eeb5e5b2ebfdb643aebf8a";
+    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz;
+    md5 = "e5547bc0ec47943c72f5c3e2b5dff58f";
   };
 
   buildInputs = [x11 libpng libjpeg expat libXaw yacc libtool];
