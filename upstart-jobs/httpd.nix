@@ -21,8 +21,7 @@ let
 
   
   webServer = import ../services/apache-httpd {
-    inherit (pkgs) apacheHttpd coreutils;
-    stdenv = pkgs.stdenvNew;
+    inherit (pkgs) stdenv apacheHttpd coreutils;
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir;

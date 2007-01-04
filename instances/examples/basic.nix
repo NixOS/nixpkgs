@@ -1,7 +1,5 @@
 {
   boot = {
-    autoDetectRootDevice = false;
-    readOnlyRoot = false;
     grubDevice = "/dev/hda";
   };
 

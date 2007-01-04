@@ -238,7 +238,7 @@ rec {
   # kernel, the Upstart services, the init scripts, etc.) as well as a
   # script `switch-to-configuration' that activates the configuration
   # and makes it bootable.
-  system = pkgs.stdenvNew.mkDerivation {
+  system = pkgs.stdenv.mkDerivation {
     name = "system";
     builder = ./system.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
