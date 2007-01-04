@@ -10,7 +10,7 @@
 
 - Build the ISO image:
 
-  $ nix-build instances/rescue-cd.nix -A rescueCD
+  $ nix-build configuration/rescue-cd.nix -A rescueCD
 
   This gives you an image in result/iso/nixos.iso.
 
@@ -43,9 +43,9 @@
 - The installation is declarative; you need to make a description of
   the configuration that is to be built and activated.  The
   configuration is specified in a Nix expression.  See
-  instances/examples for example machine configurations.  You can copy
-  and edit one of those (e.g., instances/examples/basic.nix to
-  my-config.nix).  See configuration/options.nix for available
+  configuration/examples for example machine configurations.  You can
+  copy and edit one of those (e.g., configuration/examples/basic.nix
+  to my-config.nix).  See system/options.nix for available
   configuration settings.  The text editor "nano" is available.
 
   In particular you need to specify boot.rootDevice and

@@ -19,7 +19,7 @@ rec {
   };
 
 
-  system = import ../configuration/system.nix {
+  system = import ../system/system.nix {
     inherit configuration;
     stage2Init = "/init";
   };
