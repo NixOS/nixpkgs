@@ -1,15 +1,15 @@
 {
   boot = {
-    grubDevice = "/dev/hda";
+    grubDevice = "/dev/sda";
   };
 
   fileSystems = [
     { mountPoint = "/";
-      device = "/dev/hda1";
+      device = "/dev/sda1";
     }
   ];
 
-  swapDevices = ["/dev/hdb1"];
+  swapDevices = ["/dev/sdb1"];
   
   services = {
     sshd = {
