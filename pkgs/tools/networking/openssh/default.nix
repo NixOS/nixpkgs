@@ -7,12 +7,12 @@ assert pamSupport -> pam != null;
 assert xforwarding -> xauth != null;
  
 stdenv.mkDerivation {
-  name = "openssh-3.8.1p1";
+  name = "openssh-4.5p1";
  
   #builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/openssh-3.8.1p1.tar.gz;
-    md5 = "1dbfd40ae683f822ae917eebf171ca42";
+    url = ftp://sunsite.cnlab-switch.ch/pub/OpenBSD/OpenSSH/portable/openssh-4.5p1.tar.gz;
+    md5 = "6468c339886f78e8a149b88f695839dd";
   };
  
   buildInputs = [zlib openssl perl
@@ -30,5 +30,5 @@ stdenv.mkDerivation {
     ensureDir $out/empty
   ";
 
-  installPhase = "make install-nokeys"; # !!! patchelf etc.
+  installTargets = "install-nokeys";
 }
