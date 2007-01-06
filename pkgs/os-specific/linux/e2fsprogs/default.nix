@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [gettext];
   patches = [./e2fsprogs-1.39_etc.patch];
   preInstall = "installFlagsArray=('LN=ln -s')";
+  postInstall = "make install-libs";
   NIX_CFLAGS_COMPILE =
     if stdenv ? isDietLibC then "-UHAVE_SYS_PRCTL_H" else "";
 }
