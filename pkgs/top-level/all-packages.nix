@@ -475,6 +475,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  sshfsFuse = import ../tools/networking/sshfs-fuse {
+    inherit fetchurl stdenv pkgconfig fuse;
+    inherit (gtkLibs) glib;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
