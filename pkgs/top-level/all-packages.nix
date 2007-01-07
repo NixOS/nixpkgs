@@ -435,9 +435,7 @@ rec {
 
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
-    inherit (xlibs) xauth;
     pamSupport = true;
-    xforwarding = true;
   };
 
   par2cmdline = import ../tools/networking/par2cmdline {
