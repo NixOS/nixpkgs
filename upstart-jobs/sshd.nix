@@ -1,4 +1,18 @@
-{openssh, glibc, pwdutils}:
+{writeText, openssh, glibc, pwdutils, xauth, forwardX11}:
+
+let
+
+  sshdConfig = writeText "sshd_config" "
+    UsePAM yes
+    ${if forwardX11 then "
+      X11Forwarding yes
+      XAuthLocation ${xauth}/bin/xauth
+    " else "
+      X11Forwarding no
+    "}
+  ";
+
+in
 
 {
   name = "sshd";
@@ -24,7 +38,7 @@ start script
     fi
 end script
 
-respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${./sshd_config}
+respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}
   ";
   
 }

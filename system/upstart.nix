@@ -85,7 +85,9 @@ import ../upstart-jobs/gather.nix {
   # SSH daemon.
   ++ optional ["services" "sshd" "enable"]
     (import ../upstart-jobs/sshd.nix {
-      inherit (pkgs) openssh glibc pwdutils;
+      inherit (pkgs) writeText openssh glibc pwdutils;
+      inherit (pkgs.xorg) xauth;
+      forwardX11 = config.get ["services" "sshd" "forwardX11"];
     })
 
   # NTP daemon.

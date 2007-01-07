@@ -271,7 +271,7 @@
   
   {
     name = ["services" "sshd" "forwardX11"];
-    default = false;
+    default = true;
     description = "
       Whether to enable sshd to forward X11 connections.
     ";
