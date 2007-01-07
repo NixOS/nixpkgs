@@ -89,6 +89,7 @@ let {
     nix
     nixUnstable
     nxml
+    openssh
     openssl
     pam_login
     pam_unix2
