@@ -1776,7 +1776,7 @@ rec {
   };
 
   saxonb = import ../development/libraries/java/saxon/default8.nix {
-    inherit fetchurl stdenv unzip;
+    inherit fetchurl stdenv unzip jre;
   };
 
   sharedobjects = import ../development/libraries/java/shared-objects {
