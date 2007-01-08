@@ -10,5 +10,6 @@ stdenv.mkDerivation {
 
   patches = [./nagios.patch];
   buildInputs = [perl];
-  buildPhase = "make all";
+  buildFlags = "all";
+  installTargets = "install install-config";
 }
