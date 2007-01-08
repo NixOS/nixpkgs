@@ -61,6 +61,10 @@ rec {
     fold (x: y: if pred x then [x] ++ y else y) [] list;
 
 
+  # Return true if `list' has an element `x':
+  elem = x: list: fold (a: bs: x == a || bs) false list;
+
+
   # Find the sole element in the list matching the specified
   # predicate, or returns the default value.
   findSingle = pred: default: list:
