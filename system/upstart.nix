@@ -123,8 +123,9 @@ import ../upstart-jobs/gather.nix {
   # The terminals on ttyX.
   ++ (map 
     (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
-      inherit (pkgs) mingetty pam_login;
+      inherit (pkgs) mingetty;
       inherit ttyNumber;
+      loginProgram = "${pkgs.pam_login}/bin/login";
     }))
     (config.get ["services" "mingetty" "ttys"])
   )
