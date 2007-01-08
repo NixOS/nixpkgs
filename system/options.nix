@@ -1,3 +1,5 @@
+{pkgs}:
+
 [
 
 
@@ -233,6 +235,63 @@
     description = "
       The tty device on which syslogd will print important log
       messages.
+    ";
+  }
+
+      
+  {
+    name = ["services" "ttyBackgrounds" "enable"];
+    default = true;
+    description = "
+      Whether to enable graphical backgrounds for the virtual consoles.
+    ";
+  }
+
+      
+  {
+    name = ["services" "ttyBackgrounds" "defaultTheme"];
+    default = pkgs.fetchurl {
+      url = http://www.bootsplash.de/files/themes/Theme-BabyTux.tar.bz2;
+      md5 = "a6d89d1c1cff3b6a08e2f526f2eab4e0";
+    };
+    description = "
+      The default theme for the virtual consoles.  Themes can be found
+      at http://www.bootsplash.de/.
+    ";
+  }
+
+      
+  {
+    name = ["services" "ttyBackgrounds" "defaultSpecificThemes"];
+    default = [
+      { tty = 6;
+        theme = pkgs.fetchurl { # Yeah!
+          url = http://www.bootsplash.de/files/themes/Theme-Pativo.tar.bz2;
+          md5 = "9e13beaaadf88d43a5293e7ab757d569";
+        };
+      }
+      { tty = 10;
+        theme = pkgs.fetchurl {
+          url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
+          md5 = "61969309d23c631e57b0a311102ef034";
+        };
+      }
+    ];
+    description = "
+      This option sets specific themes for virtual consoles.  If you
+      just want to set themes for additional consoles, use
+      <option>services.ttyBackgrounds.specificThemes</option>.
+    ";
+  }
+
+      
+  {
+    name = ["services" "ttyBackgrounds" "specificThemes"];
+    default = [
+    ];
+    description = "
+      This option allows you to set specific themes for virtual
+      consoles.
     ";
   }
 

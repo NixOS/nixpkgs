@@ -1,4 +1,4 @@
-{config, pkgs, nix, splashThemes}:
+{config, pkgs, nix}:
 
 let 
 
@@ -66,12 +66,6 @@ import ../upstart-jobs/gather.nix {
       inherit nix;
     })
 
-    # Transparent TTY backgrounds.
-    (import ../upstart-jobs/tty-backgrounds.nix {
-      inherit (pkgs) stdenv splashutils;
-      backgrounds = splashThemes.ttyBackgrounds;
-    })
-
     # Handles the maintenance/stalled event (single-user shell).
     (import ../upstart-jobs/maintenance-shell.nix {
       inherit (pkgs) bash;
@@ -123,12 +117,46 @@ import ../upstart-jobs/gather.nix {
   # The terminals on ttyX.
   ++ (map 
     (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
-      inherit (pkgs) mingetty;
-      inherit ttyNumber;
-      loginProgram = "${pkgs.pam_login}/bin/login";
+        inherit (pkgs) mingetty;
+        inherit ttyNumber;
+        loginProgram = "${pkgs.pam_login}/bin/login";
     }))
     (config.get ["services" "mingetty" "ttys"])
   )
+
+  # Transparent TTY backgrounds.
+  ++ optional ["services" "ttyBackgrounds" "enable"]
+    (import ../upstart-jobs/tty-backgrounds.nix {
+      inherit (pkgs) stdenv splashutils;
+      
+      backgrounds =
+      
+        let
+        
+          specificThemes =
+            config.get ["services" "ttyBackgrounds" "defaultSpecificThemes"]
+            ++ config.get ["services" "ttyBackgrounds" "specificThemes"];
+            
+          overridenTTYs = map (x: x.tty) specificThemes;
+
+          requiredTTYs =
+            (config.get ["services" "mingetty" "ttys"])
+            ++ [10] /* !!! sync with syslog.conf */ ;
+
+          # Use the default theme for all the mingetty ttys and for the
+          # syslog tty, except those for which a specific theme is
+          # specified.
+          defaultTTYs =
+            pkgs.library.filter (x: !(pkgs.library.elem x overridenTTYs)) requiredTTYs;
+
+        in      
+          (map (ttyNumber: {
+            tty = ttyNumber;
+            theme = config.get ["services" "ttyBackgrounds" "defaultTheme"];
+          }) defaultTTYs)
+          ++ specificThemes;
+          
+    })
 
   # User-defined events.
   ++ (map makeJob (config.get ["services" "extraJobs"]))

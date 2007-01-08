@@ -7,7 +7,7 @@ rec {
 
   # Make a configuration object from which we can retrieve option
   # values.
-  config = import ./config.nix pkgs.library configuration;
+  config = import ./config.nix pkgs configuration;
   
 
   pkgs = import ../pkgs/top-level/all-packages.nix {system = platform;};
@@ -28,12 +28,6 @@ rec {
   };
 
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
-
-
-  # Splash configuration.
-  splashThemes = import ./splash-themes.nix {
-    inherit (pkgs) fetchurl;
-  };
 
 
   rootModules = 
@@ -100,7 +94,7 @@ rec {
       }
       { object = import ../helpers/unpack-theme.nix {
           inherit (pkgs) stdenv;
-          theme = splashThemes.splashScreen;
+          theme = config.get ["services" "ttyBackgrounds" "defaultTheme"];
         };
         symlink = "/etc/splash";
       }
@@ -117,7 +111,7 @@ rec {
 
   # The services (Upstart) configuration for the system.
   upstartJobs = import ./upstart.nix {
-    inherit config pkgs nix splashThemes;
+    inherit config pkgs nix;
   };
 
 

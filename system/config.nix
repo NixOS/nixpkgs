@@ -3,13 +3,15 @@
 # defaults declared in options.nix if no value is given for an
 # option.
 
-lib: config:
+pkgs: config:
+
+let lib = pkgs.library; in
 
 rec {
 
   # The option declarations, i.e., option names with defaults and
   # documentation.
-  declarations = import ./options.nix;
+  declarations = import ./options.nix {inherit pkgs;};
 
   # Get the option named `name' from the user configuration, using
   # its default value if it's not defined.
