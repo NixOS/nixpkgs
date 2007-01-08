@@ -2046,6 +2046,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  nagiosPluginsOfficial = import ../servers/monitoring/nagios/plugins/official {
+    inherit fetchurl stdenv;
+  };
+
   postgresql = import ../servers/sql/postgresql {
     inherit fetchurl stdenv readline ncurses zlib;
   };
