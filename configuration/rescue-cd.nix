@@ -2,20 +2,50 @@ rec {
 
   
   configuration = {
+  
     boot = {
       autoDetectRootDevice = true;
       readOnlyRoot = true;
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
     };
+    
     services = {
+    
       sshd = {
         enable = false;
       };
+      
       xserver = {
         enable = false;
       };
+
+      # Allow the user to do something useful on tty8 while waiting
+      # for the installation to finish.
+      extraJobs = [
+        { name = "rogue";
+          job = "
+            start on udev
+            stop on shutdown
+            respawn ${pkgs.rogue}/bin/rogue < /dev/tty8 > /dev/tty8 2>&1
+          ";
+        }
+      ];
+
+      # And a background to go with that.
+      ttyBackgrounds = {
+        specificThemes = [
+          { tty = 8;
+            theme = pkgs.fetchurl {
+              url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
+              md5 = "61969309d23c631e57b0a311102ef034";
+            };
+          }
+        ];
+      };
+      
     };
+    
   };
 
 
