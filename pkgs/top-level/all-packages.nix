@@ -2882,6 +2882,10 @@ rec {
     inherit fetchurl stdenv x11 SDL mesa openal;
   };
 
+  rogue = import ../games/rogue {
+    inherit fetchurl stdenv ncurses;
+  };
+
   scummvm = import ../games/scummvm {
     inherit fetchurl stdenv SDL;
   };
