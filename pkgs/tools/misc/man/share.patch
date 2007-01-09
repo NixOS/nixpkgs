@@ -1,0 +1,113 @@
+diff -rc man-db-2.4.3/src/manp.c man-db-2.4.3-new/src/manp.c
+*** man-db-2.4.3/src/manp.c	Mon Nov  8 10:06:03 2004
+--- man-db-2.4.3-new/src/manp.c	Tue Jan  9 17:08:31 2007
+***************
+*** 101,107 ****
+  
+  static void mkcatdirs (const char *mandir, const char *catdir);
+  static __inline__ char *get_manpath (char *path);
+! static __inline__ char *has_mandir (const char *p);
+  static __inline__ char *fsstnd (const char *path);
+  static char *def_path (int flag);
+  static void add_dir_to_list (char **lp, const char *dir);
+--- 101,107 ----
+  
+  static void mkcatdirs (const char *mandir, const char *catdir);
+  static __inline__ char *get_manpath (char *path);
+! static __inline__ char *has_mandir (const char *p, const char *mandir);
+  static __inline__ char *fsstnd (const char *path);
+  static char *def_path (int flag);
+  static void add_dir_to_list (char **lp, const char *dir);
+***************
+*** 885,891 ****
+  			if (debug)
+  				fputs ("is not in the config file\n", stderr);
+  
+! 		 	t = has_mandir (p);
+  		 	if (t) {
+  				if (debug)
+  					fprintf (stderr, "but does have a ../man or man subdirectory\n");
+--- 885,891 ----
+  			if (debug)
+  				fputs ("is not in the config file\n", stderr);
+  
+! 		 	t = has_mandir (p, "man");
+  		 	if (t) {
+  				if (debug)
+  					fprintf (stderr, "but does have a ../man or man subdirectory\n");
+***************
+*** 895,900 ****
+--- 895,911 ----
+  		 	} else
+  				if (debug)
+  					fprintf (stderr, "and doesn't have ../man or man subdirectories\n");
++ 
++ 		 	t = has_mandir (p, "share/man");
++ 		 	if (t) {
++ 				if (debug)
++ 					fprintf (stderr, "but does have a ../share/man or share/man subdirectory\n");
++ 	
++ 				add_dir_to_list (tmplist, t);
++ 				free (t);
++ 		 	}
++ 				if (debug)
++ 					fprintf (stderr, "and doesn't have ../share/man or share/man subdirectories\n");
+  		}
+  	}
+  
+***************
+*** 973,979 ****
+  
+  /* path does not exist in config file: check to see if path/../man or 
+     path/man exist.  If so return it, if not return NULL. */
+! static __inline__ char *has_mandir (const char *path)
+  {
+  	char *newpath = NULL;
+  
+--- 984,990 ----
+  
+  /* path does not exist in config file: check to see if path/../man or 
+     path/man exist.  If so return it, if not return NULL. */
+! static __inline__ char *has_mandir (const char *path, const char *mandir)
+  {
+  	char *newpath = NULL;
+  
+***************
+*** 983,991 ****
+  	char *subdir = strrchr (path, '/');
+  	if (subdir) {
+  		const int prefix_len = subdir + 1 - path;
+! 		newpath = xmalloc (prefix_len + sizeof ("man") + 1);
+  		strncpy (newpath, path, prefix_len);
+! 		strcpy (newpath + prefix_len, "man");
+  
+  		if (is_directory (newpath) == 1)
+  			return newpath;
+--- 994,1002 ----
+  	char *subdir = strrchr (path, '/');
+  	if (subdir) {
+  		const int prefix_len = subdir + 1 - path;
+! 		newpath = xmalloc (prefix_len + strlen (mandir) + 2);
+  		strncpy (newpath, path, prefix_len);
+! 		strcpy (newpath + prefix_len, mandir);
+  
+  		if (is_directory (newpath) == 1)
+  			return newpath;
+***************
+*** 993,999 ****
+  			*newpath = '\0';
+  	}
+  
+! 	newpath = strappend (newpath, path, "/man", NULL);
+  
+  	if (is_directory (newpath) == 1)
+  		return newpath;
+--- 1004,1010 ----
+  			*newpath = '\0';
+  	}
+  
+! 	newpath = strappend (newpath, path, "/", mandir, NULL);
+  
+  	if (is_directory (newpath) == 1)
+  		return newpath;
+Only in man-db-2.4.3-new/src: manp.c~
