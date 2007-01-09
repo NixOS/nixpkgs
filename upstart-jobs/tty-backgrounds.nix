@@ -27,9 +27,13 @@ start script
     # this program every time we switch between consoles.
     echo ${splashutils}/bin/splash_helper > /proc/sys/kernel/fbsplash
 
-    # Set the theme for each console, as determined by
-    # tty-backgrounds-combine.sh above.
+    # For each console...
     for tty in ${toString (map (x: x.tty) backgrounds)}; do
+        # Make sure that the console exists.
+        echo -n '' > /dev/tty$tty 
+
+	# Set the theme as determined by tty-backgrounds-combine.sh
+        # above.
         theme=$(readlink ${themesUnpacked}/$tty)
         ${splashutils}/bin/splash_util --tty $tty -c setcfg -t $theme || true
         ${splashutils}/bin/splash_util --tty $tty -c setpic -t $theme || true
