@@ -7,4 +7,5 @@ stdenv.mkDerivation {
     md5 = "30814a47f209f43b152659ba51fc7937";
   };
   buildInputs = [db4 groff];
+  configureFlags = "--disable-setuid";
 }
