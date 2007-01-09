@@ -147,6 +147,7 @@ rec {
     pkgs.iputils
     pkgs.less
     pkgs.lvm2
+    pkgs.man
     pkgs.module_init_tools
     pkgs.nano
     pkgs.netcat
@@ -194,7 +195,7 @@ rec {
     fullPath = pkgs.buildEnv {
       name = "boot-stage-2-path";
       paths = fullPath;
-      pathsToLink = ["/bin" "/sbin" "/man/man1" "/share/man/man1"];
+      pathsToLink = ["/bin" "/sbin" "/man" "/share"];
       ignoreCollisions = true;
     };
   };

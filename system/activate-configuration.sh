@@ -94,6 +94,7 @@ cat > /etc/profile <<EOF
 export PATH=$PATH
 export MODULE_DIR=@kernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
+export PAGER=less
 if test "\$USER" != root; then
     export NIX_REMOTE=daemon
 fi
