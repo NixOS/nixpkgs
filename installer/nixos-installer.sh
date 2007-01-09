@@ -123,7 +123,7 @@ fi
 
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt$nixosDir/configuration/system.nix" \
+    -f "/mnt$nixosDir/system/system.nix" \
     --arg configuration "import /mnt$configuration" \
     --set -A system
 
