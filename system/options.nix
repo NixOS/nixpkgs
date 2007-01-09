@@ -485,4 +485,15 @@
   }
 
   
+  {
+    name = ["installer" "nixpkgsURL"];
+    default = "";
+    example = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7577;
+    description = "
+      URL of the Nixpkgs distribution to use when building the
+      installation CD.
+    ";
+  }
+
+  
 ]

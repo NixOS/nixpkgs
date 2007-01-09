@@ -1,6 +1,9 @@
 rec {
 
   
+  nixpkgsRel = "nixpkgs-0.11pre7577";
+
+
   configuration = {
   
     boot = {
@@ -45,6 +48,10 @@ rec {
       };
       
     };
+
+    installer = {
+      nixpkgsURL = http://nix.cs.uu.nl/dist/nix/ + nixpkgsRel;
+    };
     
   };
 
@@ -85,11 +92,8 @@ rec {
 
 
   # Get a recent copy of Nixpkgs.
-  nixpkgsRel = "nixpkgs-0.11pre7577";
-  nixpkgsURL = http://nix.cs.uu.nl/dist/nix/ + nixpkgsRel;
-
   nixpkgsTarball = pkgs.fetchurl {
-    url = nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
+    url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
     md5 = "0949415aa342679f206fdb7ee9b04b46";
   };
 

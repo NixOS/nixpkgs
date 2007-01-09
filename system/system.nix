@@ -106,6 +106,7 @@ rec {
   nixosInstaller = import ../installer/nixos-installer.nix {
     inherit (pkgs) stdenv runCommand substituteAll;
     inherit nix;
+    nixpkgsURL = config.get ["installer" "nixpkgsURL"];
   };
 
 
