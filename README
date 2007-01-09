@@ -66,7 +66,38 @@
   $ reboot
 
   You should now be able to boot into the installed NixOS.
-  
+
+
+*** Updating NixOS ***
+
+- In NixOS, login as root, then do
+
+  $ checkout-nixos.sh  # !!! should be added to the installation
+
+  This gives you a working copy of NixOS and NixPkgs in nixos/ and
+  nixpkgs/, respectively.  You only need to do this once; you can use
+  "svn up" afterwards.
+
+- The system configuration is in /etc/nixos/configuration.nix.
+
+- To upgrade to a new configuration:
+
+  $ cd nixos
+  $ ./upgrade.sh
+
+  The new configuration is activated immediately (e.g., services may
+  be restarted if necessary), but some changes may require a reboot.
+
+- You can also test a new configuration:
+
+  $ cd nixos
+  $ ./test.sh
+
+  This is like ./upgrade.sh, only the new configuration won't be
+  installed in the system profile so the system will continue to boot
+  from the previous configuration.
+
+
 
 *** Troubleshooting ***        
 
