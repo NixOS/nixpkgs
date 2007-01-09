@@ -38,5 +38,9 @@ mknod -m 0660 /dev/sda b 8 0
 mknod -m 0660 /dev/sda1 b 8 1
 mknod -m 0660 /dev/sda2 b 8 2
 mknod -m 0660 /dev/sda3 b 8 3
+mknod -m 0660 /dev/sda4 b 8 4
+mknod -m 0660 /dev/sda5 b 8 5
+mknod -m 0660 /dev/sda6 b 8 6
+mknod -m 0660 /dev/sda7 b 8 7
 
 mknod -m 0660 /dev/sr0 b 11 0
