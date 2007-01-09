@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [db4 groff];
   configureFlags = "--disable-setuid";
+  patches = [
+    # Search in "share/man" relative to each path in $PATH (in addition to "man").
+    ./share.patch
+  ];
 }
