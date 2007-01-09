@@ -1,12 +1,14 @@
 *** Building the installation CD ***
 
+(Or just grab an ISO from http://nix.cs.uu.nl/dist/nix/.)
+
 - Make sure that you have a very recent Nix.
 
 - Pull from the Nixpkgs channel to speed up building.
 
 - Check out https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk/.
 
-- make a symbolic link called "pkgs" to the location of Nixpkgs
+- Make a symbolic link called "pkgs" to the location of Nixpkgs.
 
 - Build the ISO image:
 
