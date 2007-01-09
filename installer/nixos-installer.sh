@@ -1,7 +1,7 @@
 #! @shell@
 
 # Syntax: installer.sh <DEVICE> <NIX-EXPR>
-# (e.g., installer.sh /dev/hda1 ./my-machine.nix)
+# (e.g., installer.sh /mnt/root ./my-machine.nix)
 
 # - mount target device
 # - make Nix store etc.
@@ -15,12 +15,12 @@
 
 set -e
 
-targetDevice="$1"
+mountPoint="$1"
 nixosDir="$2"
 configuration="$3"
 
-if test -z "$targetDevice" -o -z "$nixosDir" -o -z "$configuration"; then
-    echo "Syntax: installer.sh <targetDevice> <nixosDir> <configuration>"
+if test ! -e "$mountPoint" -o ! -e "$nixosDir" -o ! -e "$configuration"; then
+    echo "Syntax: installer.sh <targetRootDir> <nixosDir> <configuration>"
     exit 1
 fi
 
@@ -28,19 +28,7 @@ nixosDir=$(readlink -f "$nixosDir")
 configuration=$(readlink -f "$configuration")
 
 
-# Make sure that the target device isn't mounted.
-umount "$targetDevice" 2> /dev/null || true
-
-
-# Check it.
-fsck -n "$targetDevice"
-
-
-# Mount the target device.
-mountPoint=/tmp/inst-mnt
-mkdir -p $mountPoint
-mount "$targetDevice" $mountPoint
-
+# Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
 mount --rbind / $mountPoint/mnt
 mount --bind /dev $mountPoint/dev
@@ -48,6 +36,7 @@ mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
 
 cleanup() {
+    # !!! don't umount any we didn't mount ourselves
     for i in $(grep -F "$mountPoint" /proc/mounts \
         | perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
         | sort -r);
@@ -81,7 +70,7 @@ mkdir -m 1777 -p \
 storePaths=$(@shell@ @pathsFromGraph@ @nixClosure@)
 
 # Copy Nix to the Nix store on the target device.
-echo "copying Nix to $targetDevice...."
+echo "copying Nix to $mountPoint...."
 for i in $storePaths; do
     echo "  $i"
     rsync -a $i $mountPoint/nix/store/
@@ -133,13 +122,15 @@ chroot $mountPoint @nix@/bin/nix-env \
 targetConfig=$mountPoint/etc/nixos/configuration.nix
 mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
-    mv $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
+    cp -f $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
 fi
-cp $configuration $targetConfig
+if 
+cp -f $configuration $targetConfig
 
 
 # Grub needs a mtab.
-echo "$targetDevice / somefs rw 0 0" > $mountPoint/etc/mtab
+rootDevice=$(df $mountPoint | grep '^/' | sed 's^ .*^^')
+echo "$rootDevice / somefs rw 0 0" > $mountPoint/etc/mtab
 
 
 # Mark the target as a NixOS installation, otherwise

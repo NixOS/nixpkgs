@@ -34,6 +34,8 @@
 - The NixOS installer doesn't do any partitioning or formatting yet,
   so you need to that yourself.  Use "fdisk", "mkfs.ext2" and "tune2fs".
 
+- Mount the target root device, e.g., under /mnt.
+
 - Unpack the NixOS and Nixpkgs sources:
 
   $ tar xf /nixos.tar.bz2
@@ -56,10 +58,10 @@
 
 - Do the installation:
 
-  $ nixos-installer.sh /dev/TARGET . my-config.nix
+  $ nixos-installer.sh ROOTDIR . my-config.nix
 
-  where TARGET matched boot.rootDevice in your configuration.  (TODO:
-  this should be extracted automatically.)
+  where ROOTDIR is the mount point of the target root device (i.e.,
+  boot.rootDevice in your configuration).
 
 - If everything went well:
 
