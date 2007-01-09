@@ -99,7 +99,8 @@ chroot $mountPoint @nix@/bin/nix-store --register-validity < @nixClosure@
 # Create the required /bin/sh symlink; otherwise lots of things
 # (notably the system() function) won't work.
 mkdir -m 0755 -p $mountPoint/bin
-ln -sf $(type -tp sh) $mountPoint/bin/sh
+# !!! assuming that @shell@ is in the closure
+ln -sf @shell@ $mountPoint/bin/sh
 
 
 # Enable networking in the chroot.
