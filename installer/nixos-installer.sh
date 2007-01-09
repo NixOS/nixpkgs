@@ -131,6 +131,7 @@ chroot $mountPoint @nix@/bin/nix-env \
 
 # Copy the configuration to /etc/nixos.
 targetConfig=$mountPoint/etc/nixos/configuration.nix
+mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
     mv $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
 fi
