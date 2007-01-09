@@ -41,33 +41,42 @@ script
             fsType=\${fsTypes[$n]}
             options=\${optionss[$n]}
 
-            if ! test -e \"$device\"; then
+            isLabel=
+            if echo \"$device\" | grep -q '^LABEL='; then isLabel=1; fi
+
+            if ! test -n \"$isLabel\" -o -e \"$device\"; then
                 echo \"skipping $device, doesn't exist (yet)\"
                 continue
             fi
 
-            device=$(readlink -f \"$device\")
-
             # If $device is already mounted somewhere else, unmount it first.
             # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
             # contains more accurate info when using loop devices.
-            prevMountPoint=$(
-                cat /etc/mtab \\
-                | grep \"^$device \" \\
-                | sed 's|^[^ ]\\+ \\+\\([^ ]\\+\\).*|\\1|' \\
-            )
 
-            if test \"$prevMountPoint\" = \"$mountPoint\"; then
-                 echo \"remounting $device on $mountPoint\"
-                 ${utillinux}/bin/mount -t \"$fsType\" \\
-                     -o remount,\"$options\" \\
-                     \"$device\" \"$mountPoint\" || true
-                 continue
-            fi
+            # !!! not very smart about labels yet; should resolve the label somehow.
+            if test -z \"$isLabel\"; then
 
-            if test -n \"$prevMountPoint\"; then
-                echo \"unmount $device from $prevMountPoint\"
-                ${utillinux}/bin/umount \"$prevMountPoint\" || true
+                device=$(readlink -f \"$device\")
+
+                prevMountPoint=$(
+                    cat /etc/mtab \\
+                    | grep \"^$device \" \\
+                    | sed 's|^[^ ]\\+ \\+\\([^ ]\\+\\).*|\\1|' \\
+                )
+
+                if test \"$prevMountPoint\" = \"$mountPoint\"; then
+                     echo \"remounting $device on $mountPoint\"
+                     ${utillinux}/bin/mount -t \"$fsType\" \\
+                         -o remount,\"$options\" \\
+                         \"$device\" \"$mountPoint\" || true
+                     continue
+                fi
+
+                if test -n \"$prevMountPoint\"; then
+                    echo \"unmount $device from $prevMountPoint\"
+                    ${utillinux}/bin/umount \"$prevMountPoint\" || true
+                fi
+
             fi
 
             echo \"mounting $device on $mountPoint\"
