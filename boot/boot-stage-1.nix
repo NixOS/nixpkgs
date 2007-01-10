@@ -33,7 +33,6 @@ substituteAll {
     module_init_tools
     extraUtils
   ];
-  makeDevices = ./make-devices.sh;
 
   # We only want the path of the stage 2 init, we don't want it as a
   # dependency (since then it the stage 2 init would end up in the

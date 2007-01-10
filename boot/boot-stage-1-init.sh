@@ -51,15 +51,20 @@ for o in $(cat /proc/cmdline); do
 done
 
 
-# Create device nodes in /dev.
-source @makeDevices@
-
-
 # Load some kernel modules.
 export MODULE_DIR=@modulesDir@/lib/modules/
 for i in @modules@; do
     modprobe $i
 done
+
+
+# Create device nodes in /dev.
+mknod -m 0666 /dev/null c 1 3
+export UDEV_CONFIG_FILE=/udev.conf
+echo 'udev_rules="/no-rules"' > $UDEV_CONFIG_FILE
+udevd --daemon
+udevtrigger
+udevsettle
 
 
 # Try to find and mount the root device.
