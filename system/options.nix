@@ -193,6 +193,9 @@
         fsType = "ext3";
         options = "data=journal";
       }
+      { mountPoint = "/bigdisk";
+        label = "bigdisk";
+      }
     ];
     description = "
       The file systems to be mounted.  It must include an entry for
@@ -205,6 +208,11 @@
       <literal>\"auto\"</literal>), and <literal>options</literal>
       (the mount options passed to <command>mount</command> using the
       <option>-o</option> flag; defaults to <literal>\"defaults\"</literal>).
+
+      Instead of specifying <literal>device</literal>, you can also
+      specify a volume label (<literal>volume</literal>) for file
+      systems that support it, such as ext2/ext3 (see <command>mke2fs
+      -L</command>).
     ";
   }
 

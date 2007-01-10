@@ -4,7 +4,7 @@ let
 
   # !!! use XML
   mountPoints = map (fs: fs.mountPoint) fileSystems;
-  devices = map (fs: fs.device) fileSystems;
+  devices = map (fs: if fs ? device then fs.device else "LABEL=" + fs.label) fileSystems;
   fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
   optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
 
