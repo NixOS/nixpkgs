@@ -23,6 +23,7 @@ let {
     bmp_plugin_wma
     bsdiff
     bzip2
+    cdrtools
     chatzilla
     cksfv
     coreutils
@@ -71,12 +72,15 @@ let {
     keen4
     kernel
     klibc
+    lvm2
     less
     libtool
     libxml2
     libxslt
     lynx
+    man
     maven
+    mdadm
     mk
     mktemp
     mod_python
@@ -88,6 +92,7 @@ let {
     netcat
     nix
     nixUnstable
+    ntp    
     nxml
     openssh
     openssl
