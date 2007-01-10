@@ -116,3 +116,15 @@ To switch to maintenance mode:
 To get out of maintenance mode:
 
   $ initctl emit startup 
+
+
+
+*** Development ***
+
+- Building specific parts of NixOS:
+
+  $ nix-build system/system.nix \
+      --arg configuration "import /etc/nixos/configuration.nix" \
+      -A ATTR
+
+  where ATTR is an attribute in system/system.nix (e.g., bootStage1).
