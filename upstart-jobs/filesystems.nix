@@ -16,6 +16,7 @@ in
   job = "
 start on startup
 start on new-devices
+start on ip-up
 
 script
     PATH=${e2fsprogs}/sbin:$PATH
