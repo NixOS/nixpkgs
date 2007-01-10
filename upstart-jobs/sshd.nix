@@ -1,15 +1,24 @@
-{writeText, openssh, glibc, pwdutils, xauth, forwardX11}:
+{ writeText, openssh, glibc, pwdutils, xauth
+, forwardX11, allowSFTP
+}:
 
 let
 
   sshdConfig = writeText "sshd_config" "
     UsePAM yes
+    
     ${if forwardX11 then "
       X11Forwarding yes
       XAuthLocation ${xauth}/bin/xauth
     " else "
       X11Forwarding no
     "}
+
+    ${if allowSFTP then "
+      Subsystem sftp ${openssh}/libexec/sftp-server
+    " else "
+    "}
+    
   ";
 
 in

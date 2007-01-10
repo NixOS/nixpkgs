@@ -355,6 +355,16 @@
 
   
   {
+    name = ["services" "sshd" "allowSFTP"];
+    default = true;
+    description = "
+      Whether to enable the SFTP subsystem in the SSH daemon.  This
+      enables the use of commands such as sftp(1) and sshfs.
+    ";
+  }
+
+  
+  {
     name = ["services" "ntp" "enable"];
     default = true;
     description = "

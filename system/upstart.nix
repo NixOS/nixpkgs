@@ -87,6 +87,7 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) writeText openssh glibc pwdutils;
       inherit (pkgs.xorg) xauth;
       forwardX11 = config.get ["services" "sshd" "forwardX11"];
+      allowSFTP = config.get ["services" "sshd" "allowSFTP"];
     })
 
   # NTP daemon.
