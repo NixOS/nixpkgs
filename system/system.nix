@@ -71,9 +71,11 @@ rec {
     inherit extraUtils;
     autoDetectRootDevice = config.get ["boot" "autoDetectRootDevice"];
     rootDevice =
-      (pkgs.library.findSingle (fs: fs.mountPoint == "/")
-        (abort "No root mount point declared.")
-        (config.get ["fileSystems"])).device;
+      let rootFS = 
+        (pkgs.library.findSingle (fs: fs.mountPoint == "/")
+          (abort "No root mount point declared.")
+          (config.get ["fileSystems"]));
+      in if rootFS ? device then rootFS.device else "LABEL=" + rootFS.label;
     rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
     modulesDir = modulesClosure;
