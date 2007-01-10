@@ -2247,6 +2247,10 @@ rec {
     inherit fetchurl stdenv devicemapper;
   };
 
+  mdadm = import ../os-specific/linux/mdadm {
+    inherit fetchurl stdenv groff;
+  };
+
   mingetty = import ../os-specific/linux/mingetty {
     inherit fetchurl stdenv;
   };
