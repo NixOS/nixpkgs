@@ -46,7 +46,7 @@ import ../upstart-jobs/gather.nix {
 
     # Swapping.
     (import ../upstart-jobs/swap.nix {
-      inherit (pkgs) utillinux;
+      inherit (pkgs) utillinux library;
       swapDevices = config.get ["swapDevices"];
     })
 

@@ -9,7 +9,9 @@
     }
   ];
 
-  swapDevices = ["/dev/sdb1"];
+  swapDevices = [
+    { device = "/dev/sdb1"; }
+  ];
   
   services = {
     sshd = {

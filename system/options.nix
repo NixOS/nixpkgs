@@ -212,10 +212,19 @@
   {
     name = ["swapDevices"];
     default = [];
-    example = ["/dev/hda7" "/dev/hdb3" "/var/swapfile"];
+    example = [
+      {device="/dev/hda7";}
+      {device="/var/swapfile";}
+      {label="bigswap";}
+    ];
     description = "
       The swap devices and swap files.  These must have been
-      initialised using <command>mkswap</command>.
+      initialised using <command>mkswap</command>.  Each element
+      should be an attribute set specifying either the path of the
+      swap device or file (<literal>device</literal>) or the label
+      of the swap device (<literal>label</literal>, see
+      <command>mkswap -L</command</command>).  Using a label is
+      recommended.
     ";
   }
 

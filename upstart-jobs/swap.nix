@@ -1,4 +1,14 @@
-{utillinux, swapDevices}:
+{library, utillinux, swapDevices}:
+
+let
+
+  devicesByPath =
+    map (x: x.device) (library.filter (x: x ? device) swapDevices);
+    
+  devicesByLabel =
+    map (x: x.label) (library.filter (x: x ? label) swapDevices);
+
+in
 
 {
   name = "swap";
@@ -8,21 +18,25 @@ start on startup
 start on new-devices
 
 script
-    for device in ${toString swapDevices}; do
-        # !!! Check whether we are already swapping to $device.
+    for device in ${toString devicesByPath}; do
         ${utillinux}/sbin/swapon \"$device\" || true
     done
 
-    # Remove swap devices not listed in swapDevices.
-    for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
-        found=
-        for device in ${toString swapDevices}; do
-            if test \"$used\" = \"$device\"; then found=1; fi
-        done
-        if test -z \"$found\"; then
-            ${utillinux}/sbin/swapoff \"$used\" || true
-        fi
+    for label in ${toString devicesByLabel}; do
+        ${utillinux}/sbin/swapon -L \"$label\" || true
     done
+
+    # Remove swap devices not listed in swapDevices.
+    # !!! disabled because it doesn't work with labels
+    #for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
+    #    found=
+    #    for device in $ {toString swapDevices}; do
+    #        if test \"$used\" = \"$device\"; then found=1; fi
+    #    done
+    #    if test -z \"$found\"; then
+    #        ${utillinux}/sbin/swapoff \"$used\" || true
+    #    fi
+    #done
     
 end script
   ";
