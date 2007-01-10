@@ -44,7 +44,10 @@ script
             isLabel=
             if echo \"$device\" | grep -q '^LABEL='; then isLabel=1; fi
 
-            if ! test -n \"$isLabel\" -o -e \"$device\"; then
+            isPseudo=
+            if test \"$fsType\" = \"nfs\"; then isPseudo=1; fi
+
+            if ! test -n \"$isLabel\" -o -n \"$isPseudo\" -o -e \"$device\"; then
                 echo \"skipping $device, doesn't exist (yet)\"
                 continue
             fi
@@ -54,7 +57,7 @@ script
             # contains more accurate info when using loop devices.
 
             # !!! not very smart about labels yet; should resolve the label somehow.
-            if test -z \"$isLabel\"; then
+            if test -z \"$isLabel\" -a -z \"$isPseudo\"; then
 
                 device=$(readlink -f \"$device\")
 
@@ -82,7 +85,9 @@ script
             echo \"mounting $device on $mountPoint\"
 
             # !!! should do something with the result; also prevent repeated fscks.
-            fsck -a \"$device\" || true
+            if test -z \"$isPseudo\"; then
+                fsck -a \"$device\" || true
+            fi
 
             if ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
                 newDevices=1
