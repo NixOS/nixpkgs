@@ -47,7 +47,7 @@ script
         for mp in $(getMountPoints); do
             device=$(getDevice $mp)
             echo \"unmounting $mp...\"
-            if umount -n \"$mp\"; then
+            if umount -f -n \"$mp\"; then
                 if test \"$mp\" != /; then tryAgain=1; fi
             else
                 mount -n -o remount,ro \"$mp\"
