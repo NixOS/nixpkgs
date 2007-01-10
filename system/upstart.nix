@@ -66,6 +66,11 @@ import ../upstart-jobs/gather.nix {
       inherit nix;
     })
 
+    # Cron daemon.
+    (import ../upstart-jobs/cron.nix {
+      inherit (pkgs) cron;
+    })
+
     # Handles the maintenance/stalled event (single-user shell).
     (import ../upstart-jobs/maintenance-shell.nix {
       inherit (pkgs) bash;
