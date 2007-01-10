@@ -160,6 +160,8 @@ rec {
 
   stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
 
+  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+  
 
   ### BUILD SUPPORT
 
@@ -263,6 +265,11 @@ rec {
 
   cpio = import ../tools/archivers/cpio {
     inherit fetchurl stdenv;
+  };
+
+  cron = import ../tools/system/cron {
+    inherit fetchurl;
+    stdenv = stdenvNew;
   };
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
