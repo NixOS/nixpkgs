@@ -189,6 +189,7 @@ rec {
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
+    setuidPrograms = config.get ["security" "setuidPrograms"];
     wrapperDir = setuidWrapper.wrapperDir;
 
     path = [

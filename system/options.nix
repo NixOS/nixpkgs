@@ -523,4 +523,14 @@
   }
 
   
+  {
+    name = ["security" "setuidPrograms"];
+    default = ["passwd" "su" "crontab"];
+    description = "
+      Only the programs listed here will be made setuid root (through
+      a wrapper program).
+    ";
+  }
+
+  
 ]

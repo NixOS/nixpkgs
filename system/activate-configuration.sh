@@ -121,7 +121,7 @@ ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 wrapperDir=@wrapperDir@
 if test -d $wrapperDir; then rm -f $wrapperDir/*; fi
 mkdir -p $wrapperDir
-for i in passwd su; do
+for i in @setuidPrograms@; do
     program=$(type -tp $i)
     cp $(type -tp setuid-wrapper) $wrapperDir/$i
     echo -n $program > $wrapperDir/$i.real
