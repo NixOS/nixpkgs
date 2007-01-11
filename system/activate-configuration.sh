@@ -110,6 +110,7 @@ source $(dirname $(readlink -f $(type -tp nix-env)))/../etc/profile.d/nix.sh
 
 alias ls="ls --color=tty"
 alias ll="ls -l"
+alias which="type -p"
 
 if test -f /etc/profile.local; then
     source /etc/profile.local
