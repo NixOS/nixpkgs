@@ -123,6 +123,7 @@ let {
     strategoxtUtils
     su
     subversion
+    swig
     sylpheed 
     sysklogd
     sysvinit
