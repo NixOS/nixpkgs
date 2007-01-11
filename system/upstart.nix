@@ -31,6 +31,11 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) kernel module_init_tools lvm2;
     })
       
+    # Activate software RAID arrays.
+    (import ../upstart-jobs/swraid.nix {
+      inherit (pkgs) kernel module_init_tools mdadm;
+    })
+      
     # Hardware scan; loads modules for PCI devices.
     (import ../upstart-jobs/hardware-scan.nix {
       inherit (pkgs) kernel module_init_tools;
