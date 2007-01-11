@@ -1588,6 +1588,10 @@ rec {
     inherit fetchurl stdenv alsaLib autoconf automake libtool;
   };
 
+  openldap = import ../development/libraries/openldap {
+    inherit fetchurl stdenv openssl;
+  };
+
   openssl = import ../development/libraries/openssl {
     inherit fetchurl stdenv perl;
   };
@@ -2284,6 +2288,10 @@ rec {
 
   pam = import ../os-specific/linux/pam {
     inherit stdenv fetchurl cracklib flex;
+  };
+
+  pam_ldap = import ../os-specific/linux/pam_ldap {
+    inherit stdenv fetchurl pam openldap;
   };
 
   pam_login = import ../os-specific/linux/pam_login {
