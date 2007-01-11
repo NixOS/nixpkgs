@@ -50,7 +50,7 @@ script
             if umount -f -n \"$mp\"; then
                 if test \"$mp\" != /; then tryAgain=1; fi
             else
-                mount -n -o remount,ro \"$mp\"
+                mount -n -o remount,ro \"$mp\" || true
             fi
 
             # Hack: work around a bug in mount (mount -o remount on a
