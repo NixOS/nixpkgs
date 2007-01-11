@@ -73,6 +73,7 @@ import ../helpers/make-etc.nix {
     )
     [
       "login"
+      "su"
       "other"
       "passwd"
       "shadow"

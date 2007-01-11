@@ -166,6 +166,7 @@ rec {
     pkgs.pwdutils
     pkgs.rsync
     pkgs.strace
+    pkgs.su
     pkgs.sysklogd
     pkgs.udev
     pkgs.upstart
