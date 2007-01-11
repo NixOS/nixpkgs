@@ -108,6 +108,7 @@ fi
 
 source $(dirname $(readlink -f $(type -tp nix-env)))/../etc/profile.d/nix.sh
 
+alias ls="ls --color=tty"
 alias ll="ls -l"
 
 if test -f /etc/profile.local; then
