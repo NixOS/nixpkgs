@@ -155,6 +155,7 @@ rec {
     pkgs.less
     pkgs.lvm2
     pkgs.man
+    pkgs.mdadm
     pkgs.module_init_tools
     pkgs.nano
     pkgs.netcat

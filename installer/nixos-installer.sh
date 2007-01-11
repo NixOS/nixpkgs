@@ -19,10 +19,26 @@ mountPoint="$1"
 nixosDir="$2"
 configuration="$3"
 
-if test ! -e "$mountPoint" -o ! -e "$nixosDir" -o ! -e "$configuration"; then
+if test -z "$mountPoint" -o -z "$nixosDir" -o -z "$configuration"; then
     echo "Syntax: installer.sh <targetRootDir> <nixosDir> <configuration>"
     exit 1
 fi
+
+if ! test -e "$mountPoint"; then
+    echo "mount point $mountPoint doesn't exist"
+    exit 1
+fi
+    
+if ! test -e "$nixosDir"; then
+    echo "NixOS source directory $nixosDir doesn't exist"
+    exit 1
+fi
+    
+if ! test -e "$configuration"; then
+    echo "configuration file $configuration doesn't exist"
+    exit 1
+fi
+    
 
 nixosDir=$(readlink -f "$nixosDir")
 configuration=$(readlink -f "$configuration")
@@ -124,8 +140,9 @@ mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
     cp -f $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
 fi
-if 
-cp -f $configuration $targetConfig
+if test "$configuration" != "$targetConfig"; then
+    cp -f $configuration $targetConfig
+fi
 
 
 # Grub needs a mtab.
