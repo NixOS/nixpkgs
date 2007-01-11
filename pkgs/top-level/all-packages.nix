@@ -485,6 +485,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  su = import ../tools/misc/su {
+    inherit fetchurl stdenv pam;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
