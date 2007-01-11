@@ -121,6 +121,7 @@ let {
     strace
     strategoxt
     strategoxtUtils
+    su
     subversion
     sylpheed 
     sysklogd
