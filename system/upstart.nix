@@ -76,6 +76,11 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) cron;
     })
 
+    # Name service cache daemon.
+    (import ../upstart-jobs/nscd.nix {
+      inherit (pkgs) glibc pwdutils;
+    })
+
     # Handles the maintenance/stalled event (single-user shell).
     (import ../upstart-jobs/maintenance-shell.nix {
       inherit (pkgs) bash;
