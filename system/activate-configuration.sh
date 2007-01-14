@@ -95,6 +95,7 @@ export PATH=$PATH
 export MODULE_DIR=@kernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
 export PAGER=less
+export ACLOCAL_PATH=$HOME/.nix-profile/share/aclocal
 
 PROMPT_COLOR="1;31m"
 PS1="\n\[\033[\$PROMPT_COLOR\][\u@\h:\w]\$\[\033[0m\] "
