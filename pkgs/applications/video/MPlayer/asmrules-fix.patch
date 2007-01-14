@@ -1,0 +1,68 @@
+diff -rc MPlayer-1.0rc1-orig/stream/realrtsp/asmrp.c MPlayer-1.0rc1/stream/realrtsp/asmrp.c
+*** MPlayer-1.0rc1-orig/stream/realrtsp/asmrp.c	2006-10-23 00:32:25.000000000 +0200
+--- MPlayer-1.0rc1/stream/realrtsp/asmrp.c	2007-01-14 19:11:06.000000000 +0100
+***************
+*** 40,45 ****
+--- 40,46 ----
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
++ #include "asmrp.h"
+  
+  /*
+  #define LOG
+***************
+*** 645,652 ****
+  #ifdef LOG
+        printf ("rule #%d is true\n", rule_num);
+  #endif
+!       matches[num_matches] = rule_num;
+!       num_matches++;
+      }
+  
+      rule_num++;
+--- 646,655 ----
+  #ifdef LOG
+        printf ("rule #%d is true\n", rule_num);
+  #endif
+!       if(num_matches < MAX_RULEMATCHES - 1)
+!         matches[num_matches++] = rule_num;
+!       else
+!         printf("Ignoring matched asm rule %d, too many matched rules.\n", rule_num);
+      }
+  
+      rule_num++;
+diff -rc MPlayer-1.0rc1-orig/stream/realrtsp/asmrp.h MPlayer-1.0rc1/stream/realrtsp/asmrp.h
+*** MPlayer-1.0rc1-orig/stream/realrtsp/asmrp.h	2006-10-23 00:32:25.000000000 +0200
+--- MPlayer-1.0rc1/stream/realrtsp/asmrp.h	2007-01-14 19:11:06.000000000 +0100
+***************
+*** 40,45 ****
+--- 40,47 ----
+  #ifndef HAVE_ASMRP_H
+  #define HAVE_ASMRP_H
+  
++ #define MAX_RULEMATCHES 16
++ 
+  int asmrp_match (const char *rules, int bandwidth, int *matches) ;
+  
+  #endif
+diff -rc MPlayer-1.0rc1-orig/stream/realrtsp/real.c MPlayer-1.0rc1/stream/realrtsp/real.c
+*** MPlayer-1.0rc1-orig/stream/realrtsp/real.c	2006-10-23 00:32:25.000000000 +0200
+--- MPlayer-1.0rc1/stream/realrtsp/real.c	2007-01-14 19:11:06.000000000 +0100
+***************
+*** 271,277 ****
+      int j=0;
+      int n;
+      char b[64];
+!     int rulematches[16];
+  
+  #ifdef LOG
+      printf("calling asmrp_match with:\n%s\n%u\n", desc->stream[i]->asm_rule_book, bandwidth);
+--- 271,277 ----
+      int j=0;
+      int n;
+      char b[64];
+!     int rulematches[MAX_RULEMATCHES];
+  
+  #ifdef LOG
+      printf("calling asmrp_match with:\n%s\n%u\n", desc->stream[i]->asm_rule_book, bandwidth);

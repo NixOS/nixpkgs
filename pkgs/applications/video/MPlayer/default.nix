@@ -21,7 +21,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0rc1";
+  name = "MPlayer-1.0rc1try2";
 
   src = fetchurl {
     url = http://www1.mplayerhq.hu/MPlayer/releases/MPlayer-1.0rc1.tar.bz2;
@@ -50,10 +50,16 @@ stdenv.mkDerivation {
   # Provide a reasonable standard font.  Maybe we should symlink here.
   postInstall = "cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf";
 
-  # These fix MPlayer's aspect ratio when run in a screen rotated with
-  # Xrandr.
-  # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
-  patches = [./mplayer-aspect.patch ./mplayer-pivot.patch];
+  patches = [
+    # These fix MPlayer's aspect ratio when run in a screen rotated with
+    # Xrandr.
+    # See: http://itdp.de/~itdp/html/mplayer-dev-eng/2005-08/msg00427.html
+    ./mplayer-aspect.patch
+    ./mplayer-pivot.patch
+
+    # Security fix.
+    ./asmrules-fix.patch
+  ];
 
   meta = {
     description = "A movie player that supports many video formats";
