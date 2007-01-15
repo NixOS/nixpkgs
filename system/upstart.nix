@@ -1,4 +1,4 @@
-{config, pkgs, nix}:
+{config, pkgs, nix, nssModulesPath}:
 
 let 
 
@@ -80,6 +80,7 @@ import ../upstart-jobs/gather.nix {
     # Name service cache daemon.
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc pwdutils;
+      inherit nssModulesPath;
     })
 
     # Handles the maintenance/stalled event (single-user shell).
@@ -97,6 +98,7 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/sshd.nix {
       inherit (pkgs) writeText openssh glibc pwdutils;
       inherit (pkgs.xorg) xauth;
+      inherit nssModulesPath;
       forwardX11 = config.get ["services" "sshd" "forwardX11"];
       allowSFTP = config.get ["services" "sshd" "allowSFTP"];
     })

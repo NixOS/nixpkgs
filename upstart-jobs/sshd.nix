@@ -1,4 +1,5 @@
 { writeText, openssh, glibc, pwdutils, xauth
+, nssModulesPath
 , forwardX11, allowSFTP
 }:
 
@@ -31,6 +32,8 @@ description \"SSH server\"
 
 start on network-interfaces/started
 stop on network-interfaces/stop
+
+env LD_LIBRARY_PATH=${nssModulesPath}
 
 start script
     mkdir -m 0555 -p /var/empty

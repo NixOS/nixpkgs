@@ -115,9 +115,16 @@ rec {
   };
 
 
+  # NSS modules.  Hacky!
+  nssModules = [pkgs.nss_ldap];
+
+  nssModulesPath = pkgs.lib.concatStrings (pkgs.lib.intersperse ":" 
+    (map (mod: mod + "/lib") nssModules));
+
+
   # The services (Upstart) configuration for the system.
   upstartJobs = import ./upstart.nix {
-    inherit config pkgs nix;
+    inherit config pkgs nix nssModulesPath;
   };
 
 

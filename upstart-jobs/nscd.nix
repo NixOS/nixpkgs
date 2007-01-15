@@ -1,4 +1,4 @@
-{glibc, pwdutils}:
+{glibc, pwdutils, nssModulesPath}:
 
 {
   name = "nscd";
@@ -9,6 +9,8 @@ description \"Name Service Cache Daemon\"
 start on startup
 stop on shutdown
 
+env LD_LIBRARY_PATH=${nssModulesPath}
+
 start script
 
     if ! ${glibc}/bin/getent passwd nscd > /dev/null; then
@@ -18,6 +20,8 @@ start script
 
     mkdir -m 0755 -p /var/run/nscd
     mkdir -m 0755 -p /var/db/nscd
+
+    rm -f /var/db/nscd/* # for testing
     
 end script
 
