@@ -34,9 +34,15 @@ done
 mkdir -m 0755 -p /var/run
 
 echo -n > /var/run/utmp # must exist
-chmod 664 /var/run/utmp
+chmod 644 /var/run/utmp
 
 mkdir -m 0755 -p /var/log
+
+touch /var/log/wtmp # must exist
+chmod 644 /var/log/wtmp
+
+touch /var/log/lastlog
+chmod 644 /var/log/lastlog
 
 
 # If there is no password file yet, create a root account with an
