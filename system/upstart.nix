@@ -23,7 +23,8 @@ import ../upstart-jobs/gather.nix {
     # The udev daemon creates devices nodes and runs programs when
     # hardware events occur.
     (import ../upstart-jobs/udev.nix {
-      inherit (pkgs) writeText cleanSource udev procps;
+      inherit (pkgs) writeText udev procps;
+      inherit (pkgs.lib) cleanSource;
     })
       
     # Makes LVM logical volumes available. 

@@ -87,8 +87,12 @@ rec {
   
   # Put the current directory in a tarball (making sure to filter
   # out crap like the .svn directories).
-  nixosTarball = makeTarball "nixos.tar.bz2" (builtins.filterSource
-    (name: let base = baseNameOf (toString name); in base != ".svn" && base != "result") ./..);
+  nixosTarball =
+    let filter = name: type:
+      let base = baseNameOf (toString name);
+      in base != ".svn" && base != "result";
+    in
+      makeTarball "nixos.tar.bz2" (builtins.filterSource filter ./..);
 
 
   # Get a recent copy of Nixpkgs.
