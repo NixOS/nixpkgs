@@ -2278,6 +2278,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  nss_ldap = import ../os-specific/linux/nss_ldap {
+    inherit fetchurl stdenv openldap;
+  };
+
   ov511 = import ../os-specific/linux/ov511 {
     inherit fetchurl kernel;
     stdenv = overrideGCC stdenv gcc34;
