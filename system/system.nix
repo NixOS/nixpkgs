@@ -123,20 +123,22 @@ rec {
 
   # The static parts of /etc.
   etc = import ./etc.nix {
-    inherit pkgs upstartJobs;
+    inherit pkgs upstartJobs systemPath wrapperDir;
   };
 
 
   # The wrapper setuid programs (since we can't have setuid programs
-  # in the Nix store).  
+  # in the Nix store).
+  wrapperDir = "/var/setuid-wrappers";
+  
   setuidWrapper = import ../helpers/setuid {
     inherit (pkgs) stdenv;
-    wrapperDir = "/var/setuid-wrappers";
+    inherit wrapperDir;
   };
 
 
   # The packages you want in the boot environment.
-  fullPath = [
+  systemPathList = [
     pkgs.bash
     pkgs.bzip2
     pkgs.coreutils
@@ -178,6 +180,18 @@ rec {
   ];
 
 
+  # We don't want to put all of `startPath' and `path' in $PATH, since
+  # then we get an embarrassingly long $PATH.  So use the user
+  # environment builder to make a directory with symlinks to those
+  # packages.
+  systemPath = pkgs.buildEnv {
+    name = "system-path";
+    paths = systemPathList;
+    pathsToLink = ["/bin" "/sbin" "/man" "/share"];
+    ignoreCollisions = true;
+  };
+
+    
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
@@ -185,12 +199,11 @@ rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
 
-    inherit etc;
+    inherit etc wrapperDir systemPath;
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
     setuidPrograms = config.get ["security" "setuidPrograms"];
-    wrapperDir = setuidWrapper.wrapperDir;
 
     path = [
       pkgs.coreutils pkgs.gnugrep pkgs.findutils
@@ -198,16 +211,6 @@ rec {
       pkgs.pwdutils
     ];
 
-    # We don't want to put all of `startPath' and `path' in $PATH, since
-    # then we get an embarrassingly long $PATH.  So use the user
-    # environment builder to make a directory with symlinks to those
-    # packages.
-    fullPath = pkgs.buildEnv {
-      name = "boot-stage-2-path";
-      paths = fullPath;
-      pathsToLink = ["/bin" "/sbin" "/man" "/share"];
-      ignoreCollisions = true;
-    };
   };
 
 

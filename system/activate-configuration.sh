@@ -87,55 +87,24 @@ EOF
 fi
 
 
-# Additional path for the interactive shell.
-PATH=@wrapperDir@:@fullPath@/bin:@fullPath@/sbin
-
-cat > /etc/profile <<EOF
-export PATH=$PATH
-export MODULE_DIR=@kernel@/lib/modules
-export NIX_CONF_DIR=/nix/etc/nix
-export PAGER=less
-export ACLOCAL_PATH=$HOME/.nix-profile/share/aclocal
-
-PROMPT_COLOR="1;31m"
-PS1="\n\[\033[\$PROMPT_COLOR\][\u@\h:\w]\$\[\033[0m\] "
-if test "x\$TERM" == "xxterm"; then
-    PS1="\033]2;\h:\u:\w\007\033]1;\$PS1"
-fi
-
-if test "\$USER" != root; then
-    export NIX_REMOTE=daemon
-fi
-
-source $(dirname $(readlink -f $(type -tp nix-env)))/../etc/profile.d/nix.sh
-
-alias ls="ls --color=tty"
-alias ll="ls -l"
-alias which="type -p"
-
-if test -f /etc/profile.local; then
-    source /etc/profile.local
-fi
-
-test -r \$HOME/.bashrc && source \$HOME/.bashrc
-EOF
-
-
 # Nix initialisation.
 mkdir -m 0755 -p /nix/var/nix/db
 mkdir -m 0755 -p /nix/var/nix/gcroots
 mkdir -m 0755 -p /nix/var/nix/temproots
+mkdir -m 0755 -p /nix/var/nix/profiles
+mkdir -m 1777 -p /nix/var/nix/profiles/per-user
 
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 
 
 # Make a few setuid programs work.
+PATH=@systemPath@/bin:@systemPath@/sbin:$PATH
 wrapperDir=@wrapperDir@
 if test -d $wrapperDir; then rm -f $wrapperDir/*; fi
 mkdir -p $wrapperDir
 for i in @setuidPrograms@; do
     program=$(type -tp $i)
-    cp $(type -tp setuid-wrapper) $wrapperDir/$i
+    cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
     echo -n $program > $wrapperDir/$i.real
     chown root.root $wrapperDir/$i
     chmod 4755 $wrapperDir/$i

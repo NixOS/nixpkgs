@@ -1,4 +1,4 @@
-{pkgs, upstartJobs}:
+{pkgs, upstartJobs, systemPath, wrapperDir}:
 
 import ../helpers/make-etc.nix {
   inherit (pkgs) stdenv;
@@ -58,6 +58,15 @@ import ../helpers/make-etc.nix {
         inherit (pkgs) upstart;
       };
       target = "dhclient-exit-hooks";
+    }
+
+    { # Script executed when the shell starts.
+      source = pkgs.substituteAll {
+        src = ./etc/profile.sh;
+        inherit systemPath wrapperDir;
+        inherit (pkgs) kernel;
+      };
+      target = "profile";
     }
   ]
 
