@@ -121,6 +121,8 @@ rec {
 
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
+  lib = library;
+
   library = import ../lib;
 
   # Return an attribute from the Nixpkgs configuration file, or
@@ -204,11 +206,6 @@ rec {
   # derivations, e.g., "... ${somePkg}/bin/foo ...".
   writeText = name: text: runCommand name {inherit text;} "echo \"$text\" > $out";
 
-  # Bring in a path as a source, filtering out all hidden Subversion
-  # directories.  TODO: filter out backup files (*~) etc.
-  cleanSource = src: builtins.filterSource
-    (name: baseNameOf (toString name) != ".svn") src;
-  
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
   };

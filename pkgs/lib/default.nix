@@ -82,4 +82,13 @@ rec {
     else head xs == head ys && eqLists (tail xs) (tail ys);
 
   
+  # Bring in a path as a source, filtering out all hidden Subversion
+  # directories.  TODO: filter out backup files (*~) etc.
+  cleanSource =
+    let filter = name: type:
+      type != "directory"
+      || baseNameOf (toString name) != ".svn";
+    in src: builtins.filterSource filter src;
+
+          
 }
