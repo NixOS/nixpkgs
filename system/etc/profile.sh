@@ -17,8 +17,8 @@ fi
 # Set up the per-user profile.
 NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
-if test "$(stat --printf '%U' $NIX_USER_PROFILE_DIR)" != "$USER"; then
-    echo "WARNING: bad ownership on $_NIX_PROFILE_DIR" >&2
+if test "$(stat --printf '%u' $NIX_USER_PROFILE_DIR)" != "$(id -u)"; then
+    echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR" >&2
 fi
 
 if ! test -L $HOME/.nix-profile; then

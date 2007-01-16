@@ -1,0 +1,3 @@
+auth     sufficient     @pam_ldap@/lib/security/pam_ldap.so 
+auth     sufficient     @pam_unix2@/lib/security/pam_unix2.so
+auth     required       pam_deny.so

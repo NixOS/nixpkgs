@@ -1,4 +1,4 @@
-auth     required       @pam_unix2@/lib/security/pam_unix2.so nullok
-account  required       @pam_unix2@/lib/security/pam_unix2.so
-password required       @pam_unix2@/lib/security/pam_unix2.so nullok
-session  required       @pam_unix2@/lib/security/pam_unix2.so
+auth     include        common-auth
+account  include        common-account
+password include        common-password
+session  include        common-session

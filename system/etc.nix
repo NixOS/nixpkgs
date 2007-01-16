@@ -75,7 +75,7 @@ import ../helpers/make-etc.nix {
     (program:
       { source = pkgs.substituteAll {
           src = ./etc/pam.d + ("/" + program);
-          inherit (pkgs) pam_unix2;
+          inherit (pkgs) pam_unix2 pam_ldap;
         };
         target = "pam.d/" + program;
       }
@@ -88,6 +88,10 @@ import ../helpers/make-etc.nix {
       "shadow"
       "sshd"
       "useradd"
+      "common-auth"
+      "common-account"
+      "common-password"
+      "common-session"
     ]
   );
 }
