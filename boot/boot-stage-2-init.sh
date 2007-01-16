@@ -69,6 +69,8 @@ done
 # More special file systems, initialise required directories.
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755" none /dev
+mkdir -m 0755 -p /dev/pts
+mount -t devpts none /dev/pts
 needWritableDir /tmp 01777
 needWritableDir /var 0755
 needWritableDir /nix/var 0755

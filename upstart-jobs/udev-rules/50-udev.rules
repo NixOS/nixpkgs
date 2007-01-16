@@ -12,6 +12,11 @@ KERNEL=="sonypi",               MODE="0666"
 KERNEL=="agpgart",              MODE="0600"
 
 
+# TTYs.
+KERNEL=="tty",                  NAME="%k", MODE="666", OPTIONS="last_rule"  # GROUP="tty"
+KERNEL=="ptmx",                 NAME="%k", MODE="666" # GROUP="tty"
+
+
 # Input devices go under /dev/input.
 KERNEL=="mouse*|mice",          NAME="input/%k", MODE="0640"
 KERNEL=="event*",               NAME="input/%k", MODE="0640"
