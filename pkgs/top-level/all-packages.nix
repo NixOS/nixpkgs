@@ -486,6 +486,10 @@ rec {
     inherit fetchurl stdenv pam;
   };
 
+  tcpdump = import ../tools/networking/tcpdump {
+    inherit fetchurl stdenv libpcap;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
