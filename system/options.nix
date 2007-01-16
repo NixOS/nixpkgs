@@ -533,4 +533,43 @@
   }
 
   
+  {
+    name = ["users" "ldap" "enable"];
+    default = false;
+    description = "
+      Whether to enable authentication against an LDAP server.
+    ";
+  }
+
+  
+  {
+    name = ["users" "ldap" "server"];
+    example = "ldap://ldap.example.org/";
+    description = "
+      The URL of the LDAP server.
+    ";
+  }
+
+  
+  {
+    name = ["users" "ldap" "base"];
+    example = "dc=example,dc=org";
+    description = "
+      The distinguished name of the search base.
+    ";
+  }
+
+  
+  {
+    name = ["users" "ldap" "useTLS"];
+    default = false;
+    description = "
+      If enabled, use TLS (encryption) over an LDAP (port 389)
+      connection.  The alternative is to specify an LDAPS server (port
+      636) in <option>users.ldap.server</option> or to forego
+      security.
+    ";
+  }
+
+  
 ]

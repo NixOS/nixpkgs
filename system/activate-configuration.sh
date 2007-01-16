@@ -33,7 +33,7 @@ done
 # Various log directories.
 mkdir -m 0755 -p /var/run
 
-echo -n > /var/run/utmp # must exist
+touch /var/run/utmp # must exist
 chmod 644 /var/run/utmp
 
 mkdir -m 0755 -p /var/log

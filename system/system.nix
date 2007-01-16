@@ -116,7 +116,8 @@ rec {
 
 
   # NSS modules.  Hacky!
-  nssModules = [pkgs.nss_ldap];
+  nssModules =
+    if config.get ["users" "ldap" "enable"] then [pkgs.nss_ldap] else [];
 
   nssModulesPath = pkgs.lib.concatStrings (pkgs.lib.intersperse ":" 
     (map (mod: mod + "/lib") nssModules));
@@ -130,7 +131,7 @@ rec {
 
   # The static parts of /etc.
   etc = import ./etc.nix {
-    inherit pkgs upstartJobs systemPath wrapperDir;
+    inherit config pkgs upstartJobs systemPath wrapperDir;
   };
 
 

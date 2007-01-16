@@ -1,5 +1,12 @@
-{pkgs, upstartJobs, systemPath, wrapperDir}:
+{config, pkgs, upstartJobs, systemPath, wrapperDir}:
 
+let 
+
+  optional = option: file:
+    if config.get option then [file] else [];
+
+in
+    
 import ../helpers/make-etc.nix {
   inherit (pkgs) stdenv;
 
@@ -68,14 +75,28 @@ import ../helpers/make-etc.nix {
       };
       target = "profile";
     }
+
   ]
 
+  # LDAP configuration.
+  ++ (optional ["users" "ldap" "enable"] {
+    source = import etc/ldap.conf.nix {
+      inherit (pkgs) writeText;
+      inherit config;
+    };
+    target = "ldap.conf";
+  })
+    
   # A bunch of PAM configuration files for various programs.
   ++ (map
     (program:
       { source = pkgs.substituteAll {
           src = ./etc/pam.d + ("/" + program);
-          inherit (pkgs) pam_unix2 pam_ldap;
+          inherit (pkgs) pam_unix2;
+          pam_ldap =
+            if config.get ["users" "ldap" "enable"]
+            then pkgs.pam_ldap
+            else "/no-such-path";
         };
         target = "pam.d/" + program;
       }
