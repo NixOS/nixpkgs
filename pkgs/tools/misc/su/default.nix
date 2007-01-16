@@ -14,7 +14,6 @@ stdenv.mkDerivation {
     # PAM patch taken from SUSE's coreutils-6.7-5.src.rpm.
     ./su-pam.patch
   ];
-  patchFlags = "-p0";
   buildInputs = [pam];
   buildPhase = "
     make -C lib
