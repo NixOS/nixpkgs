@@ -97,6 +97,7 @@ import ../helpers/make-etc.nix {
             if config.get ["users" "ldap" "enable"]
             then pkgs.pam_ldap
             else "/no-such-path";
+          inherit (pkgs.xorg) xauth;
         };
         target = "pam.d/" + program;
       }

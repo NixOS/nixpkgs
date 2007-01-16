@@ -3,3 +3,4 @@ auth     include        common-auth
 account  include        common-account
 password include        common-password
 session  include        common-session
+session  optional       pam_xauth.so xauthpath=@xauth@/bin/xauth systemuser=99
