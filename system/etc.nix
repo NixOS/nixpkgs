@@ -77,6 +77,12 @@ import ../helpers/make-etc.nix {
       target = "profile";
     }
 
+    { # Configuration file for fontconfig used to locate
+      # (X11) client-rendered fonts.
+      source = ./etc/fonts/fonts.conf;
+      target = "fonts/fonts.conf";
+    }
+
   ]
 
   # LDAP configuration.
