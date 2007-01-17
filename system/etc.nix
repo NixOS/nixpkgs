@@ -72,6 +72,7 @@ import ../helpers/make-etc.nix {
         src = ./etc/profile.sh;
         inherit systemPath wrapperDir;
         inherit (pkgs) kernel;
+        timeZone = config.get ["time" "timeZone"];
       };
       target = "profile";
     }

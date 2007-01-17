@@ -9,6 +9,14 @@
     description = "The name of the machine.";
   }
 
+
+  {
+    name = ["time" "timeZone"];
+    default = "CET";
+    example = "America/New_York";
+    description = "The time zone used when displaying times and dates.";
+  }
+
   
   {
     name = ["boot" "autoDetectRootDevice"];

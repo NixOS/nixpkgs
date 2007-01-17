@@ -2,6 +2,7 @@ export PATH=@wrapperDir@:@systemPath@/bin:@systemPath@/sbin
 export MODULE_DIR=@kernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
 export PAGER=less
+export TZ=@timeZone@
 
 PROMPT_COLOR="1;31m"
 PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
