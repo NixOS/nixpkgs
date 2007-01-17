@@ -252,7 +252,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-bh-ttf-X11R7.0-1.0.0.tar.bz2;
       md5 = "53b984889aec3c0c2eb07f8aaa49dba9";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig mkfontdir mkfontscale fontconfig ];
   }) // {inherit ;};
     
   fontbhtype1 = (stdenv.mkDerivation {
@@ -1122,7 +1122,8 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/mkfontdir-X11R7.1-1.0.2.tar.bz2;
       md5 = "384ee10787c455c520bcf031989de6f3";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig mkfontscale ];
+    preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR $(dirname $(type -tp mkfontscale))";
   }) // {inherit ;};
     
   mkfontscale = (stdenv.mkDerivation {
