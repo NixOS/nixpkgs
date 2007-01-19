@@ -1,7 +1,7 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "ed-0.2";
+  name = "ed-0.4";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ed-0.2.tar.gz;
-    md5 = "ddd57463774cae9b50e70cd51221281b";
+    url = ftp://ftp.nluug.nl/pub/gnu/ed/ed-0.4.tar.bz2;
+    md5 = "b5c8606bb306671bbbb2bd708d937bcb";
   };
 }
