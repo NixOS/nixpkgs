@@ -2372,6 +2372,10 @@ rec {
   ### DATA
 
 
+  corefonts = import ../data/fonts/corefonts {
+    inherit fetchurl stdenv cabextract;
+  };
+
   docbook5 = import ../data/sgml+xml/schemas/docbook-5.0 {
     inherit fetchurl stdenv;
   };
