@@ -81,15 +81,26 @@ import ../helpers/make-etc.nix {
       # (X11) client-rendered fonts.
       source = pkgs.substituteAll {
         src = ./etc/fonts/fonts.conf;
-        fontDirectories = map (dir: "<dir>${dir}</dir>")
-          [ # Search for fonts in...
-            # - the user's .fonts directory
-            "~/.fonts"
-            # - the user's current profile
-            "~/.nix-profile/lib/X11/fonts"
-            # - the default profile
-            "/nix/var/nix/profiles/default/lib/X11/fonts"
-          ];
+        fontDirectories =
+          let
+            # Search for fonts in...
+            runtimeDirs = [
+              # - the user's .fonts directory
+              "~/.fonts"
+              # - the user's current profile
+              "~/.nix-profile/lib/X11/fonts"
+              # - the default profile
+              "/nix/var/nix/profiles/default/lib/X11/fonts"
+            ];
+            systemFonts = [
+              # - a few statically built locations
+              pkgs.xorg.fontbhttf
+              pkgs.xorg.fontbh100dpi
+              pkgs.xorg.fontbhlucidatypewriter100dpi
+              pkgs.freefont_ttf
+            ];
+          in
+            map (dir: "<dir>${dir}</dir>") (runtimeDirs ++ systemFonts);
       };
       target = "fonts/fonts.conf";
     }
