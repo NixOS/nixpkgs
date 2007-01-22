@@ -212,7 +212,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-bh-100dpi-X11R7.0-1.0.0.tar.bz2;
       md5 = "29eeed0ad42653f27b929119581deb3e";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale fontutil ];
   }) // {inherit fontutil ;};
     
   fontbh75dpi = (stdenv.mkDerivation {
@@ -222,7 +222,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-bh-75dpi-X11R7.0-1.0.0.tar.bz2;
       md5 = "7546c97560eb325400365adbc426308b";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale fontutil ];
   }) // {inherit fontutil ;};
     
   fontbhlucidatypewriter100dpi = (stdenv.mkDerivation {
@@ -232,7 +232,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-bh-lucidatypewriter-100dpi-X11R7.0-1.0.0.tar.bz2;
       md5 = "8a56f4cbea74f4dbbf9bdac95686dca8";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale fontutil ];
   }) // {inherit fontutil ;};
     
   fontbhlucidatypewriter75dpi = (stdenv.mkDerivation {
@@ -242,7 +242,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-bh-lucidatypewriter-75dpi-X11R7.0-1.0.0.tar.bz2;
       md5 = "e5cccf93f4f1f793cd32adfa81cc1b40";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale fontutil ];
   }) // {inherit fontutil ;};
     
   fontbhttf = (stdenv.mkDerivation {

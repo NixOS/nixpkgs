@@ -2400,6 +2400,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
+    inherit fetchurl stdenv;
+  };
+
 
   ### APPLICATIONS
 
