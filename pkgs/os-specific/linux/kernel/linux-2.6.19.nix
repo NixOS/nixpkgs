@@ -7,23 +7,30 @@
 , kernelPatches ? []
 }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation {
-  name = "linux-2.6.19.1";
+  name = "linux-2.6.19.2";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.19.1.tar.bz2;
-    md5 = "2ab08fdfddc00e09b3d5bc7397d3c8be";
+    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.19.2.tar.bz2;
+    sha256 = "02sl38spz1iwlwdajmnyw6wi55sdc7j12n5k31bz5l8klv554p65";
   };
   
   patches = map (p: p.patch) kernelPatches;
 
-  config = ./config-2.6.19.1-i686-smp;
+  config =
+    if stdenv.system == "i686-linux" then ./config-2.6.19.1-i686-smp else
+    if stdenv.system == "x86_64-linux" then ./config-2.6.19.1-x86_64-smp else
+    abort "No kernel configuration for your platform!";
   
   buildInputs = [perl mktemp];
-  arch="i386";
+  
+  arch =
+    if stdenv.system == "i686-linux" then "i386" else
+    if stdenv.system == "x86_64-linux" then "x86_64" else
+    abort "";
 
   inherit module_init_tools;
 
