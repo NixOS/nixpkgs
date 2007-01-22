@@ -23,6 +23,7 @@
 
       <xsl:for-each select="str:tokenize($fontDirectories)">
         <dir><xsl:value-of select="." /></dir>
+        <xsl:text>&#0010;</xsl:text>
       </xsl:for-each>
       
     </fontconfig>
