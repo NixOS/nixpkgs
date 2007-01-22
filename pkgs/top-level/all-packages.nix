@@ -369,9 +369,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  grub = import ../tools/misc/grub {
-    inherit fetchurl stdenv;
-  };
+  grub =
+    if system == "x86_64-linux" then
+      (import ./all-packages.nix {system = "i686-linux";}).grub
+    else 
+      import ../tools/misc/grub {
+        inherit fetchurl stdenv;
+      };
 
   grubWrapper = import ../tools/misc/grub-wrapper {
      inherit stdenv grub diffutils gnused gnugrep coreutils;
