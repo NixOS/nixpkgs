@@ -79,29 +79,28 @@ import ../helpers/make-etc.nix {
 
     { # Configuration file for fontconfig used to locate
       # (X11) client-rendered fonts.
-      source = pkgs.substituteAll {
-        src = ./etc/fonts/fonts.conf;
-        fontDirectories =
-          let
-            # Search for fonts in...
-            runtimeDirs = [
-              # - the user's .fonts directory
-              "~/.fonts"
-              # - the user's current profile
-              "~/.nix-profile/lib/X11/fonts"
-              # - the default profile
-              "/nix/var/nix/profiles/default/lib/X11/fonts"
-            ];
-            systemFonts = [
-              # - a few statically built locations
-              pkgs.xorg.fontbhttf
-              pkgs.xorg.fontbh100dpi
-              pkgs.xorg.fontbhlucidatypewriter100dpi
-              pkgs.freefont_ttf
-            ];
-          in
-            map (dir: "<dir>${dir}</dir>") (runtimeDirs ++ systemFonts);
-      };
+      source = pkgs.runCommand "fonts.conf"
+        { 
+          fontDirectories = [
+            # - the user's .fonts directory
+            "~/.fonts"
+            # - the user's current profile
+            "~/.nix-profile/lib/X11/fonts"
+            # - the default profile
+            "/nix/var/nix/profiles/default/lib/X11/fonts"
+            # - a few statically built locations
+            pkgs.xorg.fontbhttf
+            pkgs.xorg.fontbh100dpi
+            pkgs.xorg.fontbhlucidatypewriter100dpi
+            pkgs.freefont_ttf
+          ];
+          buildInputs = [pkgs.libxslt];
+          inherit (pkgs) fontconfig;
+        }
+        "xsltproc --stringparam fontDirectories \"$fontDirectories\" \\
+            ${./etc/fonts/make-fonts-conf.xsl} $fontconfig/etc/fonts/fonts.conf \\
+            > $out
+        ";
       target = "fonts/fonts.conf";
     }
 
