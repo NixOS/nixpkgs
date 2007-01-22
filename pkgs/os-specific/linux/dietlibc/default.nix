@@ -22,7 +22,11 @@ stdenv.mkDerivation {
 
     # wchar.h declares lots of functions that don't actually exist.
     # Remove them.
-    ./no-wchar.h
+    ./no-wchar.patch
+
+    # Fix to get DNS resolution to work on 64-bit platforms.  Taken
+    # from 0.31 CVS.
+    ./dns64.patch
 
   ];
 }
