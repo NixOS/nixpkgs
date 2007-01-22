@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   patches = map (p: p.patch) kernelPatches;
 
   config =
-    if stdenv.system == "i686-linux" then ./config-2.6.19.1-i686-smp else
-    if stdenv.system == "x86_64-linux" then ./config-2.6.19.1-x86_64-smp else
+    if stdenv.system == "i686-linux" then ./config-2.6.19.2-i686-smp else
+    if stdenv.system == "x86_64-linux" then ./config-2.6.19.2-x86_64-smp else
     abort "No kernel configuration for your platform!";
   
   buildInputs = [perl mktemp];
