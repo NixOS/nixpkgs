@@ -579,5 +579,18 @@
     ";
   }
 
+
+  {
+    name = ["fonts" "enableFontConfig"];
+    default = true;
+    description = "
+      If enabled, a fontconfig configuration file will be built
+      pointing to a set of default fonts.  If you don't care about
+      running X11 applications or any other program that uses
+      fontconfig, you can turn this option off and prevent a
+      dependency on all those fonts.
+    ";
+  }
+
   
 ]

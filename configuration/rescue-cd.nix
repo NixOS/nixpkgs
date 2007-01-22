@@ -49,10 +49,14 @@ rec {
       
     };
 
+    fonts = {
+      enableFontConfig = false;
+    };
+    
     installer = {
       nixpkgsURL = http://nix.cs.uu.nl/dist/nix/ + nixpkgsRel;
     };
-    
+
   };
 
 
