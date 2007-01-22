@@ -89,12 +89,15 @@ import ../helpers/make-etc.nix {
           "~/.fonts"
           # - the user's current profile
           "~/.nix-profile/lib/X11/fonts"
+          "~/.nix-profile/share/fonts"
           # - the default profile
           "/nix/var/nix/profiles/default/lib/X11/fonts"
+          "/nix/var/nix/profiles/default/share/fonts"
           # - a few statically built locations
           pkgs.xorg.fontbhttf
           pkgs.xorg.fontbh100dpi
           pkgs.xorg.fontbhlucidatypewriter100dpi
+          pkgs.ttf_bitstream_vera
           pkgs.freefont_ttf
         ];
         buildInputs = [pkgs.libxslt];
