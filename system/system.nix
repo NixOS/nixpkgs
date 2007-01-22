@@ -49,7 +49,6 @@ rec {
     { buildInputs = [pkgs.nukeReferences];
       inherit (pkgsStatic) utillinux;
       inherit (pkgsDiet) udev;
-      inherit (pkgs) splashutils;
       e2fsprogs = pkgs.e2fsprogsDiet;
       allowedReferences = []; # prevent accidents like glibc being included in the initrd
     }
@@ -57,7 +56,6 @@ rec {
       ensureDir $out/bin
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
-      cp $splashutils/bin/splash_helper $out/bin
       cp $udev/sbin/udevd $udev/sbin/udevtrigger $udev/sbin/udevsettle $out/bin
       nuke-refs $out/bin/*
     ";
@@ -93,7 +91,8 @@ rec {
       { object = bootStage1;
         symlink = "/init";
       }
-      { object = extraUtils;
+    ] ++ (if config.get ["boot" "initrd" "enableSplashScreen"] then [
+      { object = pkgs.splashutils;
         suffix = "/bin/splash_helper";
         symlink = "/sbin/splash_helper";
       }
@@ -103,7 +102,7 @@ rec {
         };
         symlink = "/etc/splash";
       }
-    ];
+    ] else []);
   };
 
 

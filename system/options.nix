@@ -161,6 +161,15 @@
 
 
   {
+    name = ["boot" "initrd" "enableSplashScreen"];
+    default = true;
+    description = "
+      Whether to show a nice splash screen while booting.
+    ";
+  }
+
+
+  {
     name = ["networking" "useDHCP"];
     default = true;
     description = "
