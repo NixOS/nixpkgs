@@ -9,6 +9,8 @@
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
+let lib = import ../../../lib; in
+
 stdenv.mkDerivation {
   name = "linux-2.6.19.2";
   builder = ./builder.sh;
@@ -19,6 +21,7 @@ stdenv.mkDerivation {
   };
   
   patches = map (p: p.patch) kernelPatches;
+  extraConfig = lib.concatStrings (map (p: "\n" + p.extraConfig + "\n") kernelPatches);
 
   config =
     if stdenv.system == "i686-linux" then ./config-2.6.19.2-i686-smp else
@@ -39,8 +42,7 @@ stdenv.mkDerivation {
       "The Linux kernel" +
       (if kernelPatches == [] then "" else
         " (with patches: "
-        + (let lib = import ../../../lib;
-          in lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches)))
+        + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
   };
 }

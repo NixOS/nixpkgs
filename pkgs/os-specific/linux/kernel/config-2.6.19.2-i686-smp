@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.19.2
-# Mon Jan 22 12:03:13 2007
+# Mon Jan 22 14:44:00 2007
 #
 CONFIG_X86_32=y
 CONFIG_GENERIC_TIME=y
@@ -2776,7 +2776,6 @@ CONFIG_BACKLIGHT_CLASS_DEVICE=m
 CONFIG_BACKLIGHT_DEVICE=y
 CONFIG_LCD_CLASS_DEVICE=m
 CONFIG_LCD_DEVICE=y
-CONFIG_FB_SPLASH=y
 
 #
 # Sound

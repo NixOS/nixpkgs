@@ -7,6 +7,9 @@ configurePhase() {
 	export INSTALL_MOD_PATH=$out
 
 	cp $config .config
+        chmod u+w .config
+
+        echo "$extraConfig" >> .config
 
         #substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
         #    --replace /usr /no-such-path
