@@ -79,7 +79,18 @@ import ../helpers/make-etc.nix {
 
     { # Configuration file for fontconfig used to locate
       # (X11) client-rendered fonts.
-      source = ./etc/fonts/fonts.conf;
+      source = pkgs.substituteAll {
+        src = ./etc/fonts/fonts.conf;
+        fontDirectories = map (dir: "<dir>${dir}</dir>")
+          [ # Search for fonts in...
+            # - the user's .fonts directory
+            "~/.fonts"
+            # - the user's current profile
+            "~/.nix-profile/lib/X11/fonts"
+            # - the default profile
+            "/nix/var/nix/profiles/default/lib/X11/fonts"
+          ];
+      };
       target = "fonts/fonts.conf";
     }
 
