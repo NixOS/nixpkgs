@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   
   patches = map (p: p.patch) kernelPatches;
 
-  config = ./config-2.6.19.1-i686-up;
+  config = ./config-2.6.19.1-i686-smp;
   
   buildInputs = [perl mktemp];
   arch="i386";
