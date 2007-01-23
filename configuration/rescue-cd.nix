@@ -12,7 +12,7 @@ rec {
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       initrd = {
-        enableSplashScreen = pkgs.system != "x86_64-linux";
+        enableSplashScreen = pkgs.stdenv.system != "x86_64-linux";
       };
     };
     
@@ -40,7 +40,7 @@ rec {
 
       # And a background to go with that.
       ttyBackgrounds = {
-        enable = pkgs.system != "x86_64-linux";
+        enable = pkgs.stdenv.system != "x86_64-linux";
         specificThemes = [
           { tty = 8;
             theme = pkgs.fetchurl {
