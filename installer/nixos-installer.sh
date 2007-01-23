@@ -20,7 +20,7 @@ nixosDir="$2"
 configuration="$3"
 
 if test -z "$mountPoint" -o -z "$nixosDir" -o -z "$configuration"; then
-    echo "Syntax: installer.sh <targetRootDir> <nixosDir> <configuration>"
+    echo "Syntax: nixos-installer.sh <targetRootDir> <nixosDir> <configuration>"
     exit 1
 fi
 
@@ -117,7 +117,7 @@ cp /etc/resolv.conf $mountPoint/etc/
 # the CD can be copied directly.
 echo "registering substitutes to speed up builds..."
 chroot $mountPoint @nix@/bin/nix-store --clear-substitutes
-chroot $mountPoint @nix@/bin/nix-pull /mnt/MANIFEST
+chroot $mountPoint @nix@/bin/nix-pull file:///mnt/MANIFEST
 rm -f $mountPoint/tmp/inst-store
 ln -s /mnt/nix/store $mountPoint/tmp/inst-store
 

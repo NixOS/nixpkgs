@@ -2,7 +2,7 @@
 
 let
 
-  tempConf = "/var/state/mdadm.conf";
+  tempConf = "/var/run/mdadm.conf";
 
 in
   
