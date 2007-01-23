@@ -227,7 +227,7 @@
       <option>-o</option> flag; defaults to <literal>\"defaults\"</literal>).
 
       Instead of specifying <literal>device</literal>, you can also
-      specify a volume label (<literal>volume</literal>) for file
+      specify a volume label (<literal>label</literal>) for file
       systems that support it, such as ext2/ext3 (see <command>mke2fs
       -L</command>).
     ";
@@ -339,7 +339,8 @@
     ";
   }
 
-      
+
+  /*      
   {
     name = ["services" "mingetty" "waitOnMounts"];
     default = false;
@@ -350,6 +351,7 @@
       separate partition, you may want to turn this on.
     ";
   }
+  */
 
   
   {
