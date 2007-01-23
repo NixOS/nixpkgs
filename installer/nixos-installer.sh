@@ -113,20 +113,24 @@ mkdir -m 0755 -p $mountPoint/etc
 cp /etc/resolv.conf $mountPoint/etc/
 
 
+# Pull the manifest on the CD so that everything in the Nix store on
+# the CD can be copied directly.
+echo "registering substitutes to speed up builds..."
+chroot $mountPoint @nix@/bin/nix-store --clear-substitutes
+chroot $mountPoint @nix@/bin/nix-pull /mnt/MANIFEST
+rm -f $mountPoint/tmp/inst-store
+ln -s /mnt/nix/store $mountPoint/tmp/inst-store
+
+
 # Do a nix-pull to speed up building.
 if test -n "@nixpkgsURL@"; then
-    chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST
+    chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
 fi
 
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
-
-#rm -rf $mountPoint/scratch
-#mkdir $mountPoint/scratch
-#curl $nixpkgsURL/nixexprs.tar.bz2 | tar xj -C $mountPoint/scratch
-#nixpkgsName=$(cd $mountPoint/scratch && ls)
-
+echo "building the system configuration..."
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
     -f "/mnt$nixosDir/system/system.nix" \
