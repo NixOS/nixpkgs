@@ -62,7 +62,7 @@ import ../helpers/make-etc.nix {
     { # Dhclient hooks for emitting ip-up/ip-down events.
       source = pkgs.substituteAll {
         src = ./etc/dhclient-exit-hooks;
-        inherit (pkgs) upstart;
+        inherit (pkgs) upstart glibc;
       };
       target = "dhclient-exit-hooks";
     }
