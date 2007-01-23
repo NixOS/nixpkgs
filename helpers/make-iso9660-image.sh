@@ -26,6 +26,10 @@ for i in $storePaths; do
 done
 
 
+# Also put a nix-pull manifest of the closures on the CD.
+printManifest=1 perl $pathsFromGraph closure-* > MANIFEST
+
+
 # Add symlinks to the top-level store objects.
 for ((n = 0; n < ${#objects[*]}; n++)); do
     object=${objects[$n]}
