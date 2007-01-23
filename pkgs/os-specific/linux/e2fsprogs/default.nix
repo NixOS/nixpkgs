@@ -15,5 +15,8 @@ stdenv.mkDerivation {
   preInstall = "installFlagsArray=('LN=ln -s')";
   postInstall = "make install-libs";
   NIX_CFLAGS_COMPILE =
-    if stdenv ? isDietLibC then "-UHAVE_SYS_PRCTL_H -DHAVE_LSEEK64_PROTOTYPE=1 -Dstat64=stat" else "";
+    if stdenv ? isDietLibC then
+      "-UHAVE_SYS_PRCTL_H " +
+      (if stdenv.system == "x86_64-linux" then "-DHAVE_LSEEK64_PROTOTYPE=1 -Dstat64=stat" else "")
+    else "";
 }
