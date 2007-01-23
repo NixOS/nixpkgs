@@ -128,7 +128,8 @@ rec {
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv cdrtools;
     isoName = "nixos.iso";
-    
+
+    # Single files to be copied to fixed locations on the CD.
     contents = [
       { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
         target = "isolinux/isolinux.bin";
@@ -153,7 +154,12 @@ rec {
       }
     ];
 
-    init = system.bootStage2;
+    # Closures to be copied to the Nix store on the CD.
+    storeContents = [
+      { object = system.bootStage2;
+        symlink = "/init";
+      }
+    ];
     
     bootable = true;
     bootImage = "isolinux/isolinux.bin";

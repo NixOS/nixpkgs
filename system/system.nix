@@ -92,7 +92,10 @@ rec {
         symlink = "/init";
       }
     ] ++ (if config.get ["boot" "initrd" "enableSplashScreen"] then [
-      { object = pkgs.splashutils;
+      { object = pkgs.runCommand "splashutils" {} "
+          ensureDir $out/bin
+          cp ${pkgs.splashutils}/bin/splash_helper $out/bin
+        ";
         suffix = "/bin/splash_helper";
         symlink = "/sbin/splash_helper";
       }

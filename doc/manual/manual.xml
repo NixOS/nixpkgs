@@ -19,6 +19,7 @@
     
   </info>
 
+  <xi:include href="installation.xml" />
   <xi:include href="options-db.xml" />
 
 </book>
