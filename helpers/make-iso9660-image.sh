@@ -12,28 +12,24 @@ if test -n "$bootable"; then
 fi
 
 
+# Add the individual files.
 graftList=
 for ((i = 0; i < ${#targets_[@]}; i++)); do
     graftList="$graftList ${targets_[$i]}=$(readlink -f ${sources_[$i]})"
 done
 
 
+# Add the closures of the top-level store objects.
+storePaths=$(perl $pathsFromGraph closure-*)
+for i in $storePaths; do
+    graftList="$graftList ${i:1}=$i"
+done
+
+
+# Add symlinks to the top-level store objects.
 for ((n = 0; n < ${#objects[*]}; n++)); do
     object=${objects[$n]}
     symlink=${symlinks[$n]}
-
-    # Get the paths in the closure of `object'.
-    closure=closure-$(basename $symlink)
-    if ! test -e $closure; then
-        echo 'Your Nix installation is too old! Upgrade to nix-0.11pre7038 or newer.'
-        exit 1
-    fi
-    storePaths=$($SHELL $pathsFromGraph $closure)
-
-    for i in $storePaths; do
-        graftList="$graftList ${i:1}=$i"
-    done
-
     if test "$symlink" != "none"; then
         mkdir -p $(dirname ./$symlink)
         ln -s $object ./$symlink

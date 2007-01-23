@@ -1,4 +1,4 @@
-{ stdenv, cdrtools
+{ stdenv, perl, cdrtools
 
   # The file name of the resulting ISO image.
 , isoName ? "cd.iso"
@@ -29,7 +29,7 @@ assert bootable -> bootImage != "";
 stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
-  buildInputs = [cdrtools];
+  buildInputs = [perl cdrtools];
   inherit isoName bootable bootImage;
 
   # !!! should use XML.
@@ -42,6 +42,6 @@ stdenv.mkDerivation {
   
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x.symlink) x.object]) storeContents;
-  pathsFromGraph = ./paths-from-graph.sh;
+    map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
+  pathsFromGraph = ./paths-from-graph.pl;
 }
