@@ -10,6 +10,7 @@
 
   <xsl:output method='xml' encoding="UTF-8" />
 
+  
   <xsl:template match="/expr/list">
 
     <chapter>
@@ -29,10 +30,37 @@
                </option>
              </term>
 
-             <listitem><para>
-               <xsl:value-of disable-output-escaping="yes"
-                             select="attr[@name = 'description']/string/@value" />
-             </para></listitem>
+             <listitem>
+
+               <para>
+                 <xsl:value-of disable-output-escaping="yes"
+                               select="attr[@name = 'description']/string/@value" />
+               </para>
+
+               <para>
+                 <emphasis>Default:</emphasis>
+                 <xsl:choose>
+                   <xsl:when test="attr[@name = 'default']">
+                     <literal>
+                       <xsl:apply-templates select="attr[@name = 'default']" />
+                     </literal>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     none
+                   </xsl:otherwise>
+                 </xsl:choose>
+               </para>
+
+               <xsl:if test="attr[@name = 'example']">
+                 <para>
+                   <emphasis>Example:</emphasis>
+                   <literal>
+                     <xsl:apply-templates select="attr[@name = 'example']" />
+                   </literal>
+                 </para>
+               </xsl:if>
+               
+             </listitem>
 
           </varlistentry>
 
@@ -43,5 +71,61 @@
     </chapter>
 
   </xsl:template>
+
+
+  <xsl:template match="string">
+    <!-- !!! escaping -->
+    "<xsl:value-of select="@value" />"
+  </xsl:template>
+  
+  
+  <xsl:template match="int">
+    <xsl:value-of select="@value" />
+  </xsl:template>
+  
+  
+  <xsl:template match="bool[@value = 'true']">
+    true
+  </xsl:template>
+  
+  
+  <xsl:template match="bool[@value = 'false']">
+    false
+  </xsl:template>
+  
+  
+  <xsl:template match="list">
+    [
+    <xsl:for-each select="*">
+      <xsl:apply-templates select="." />
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
+    ]
+  </xsl:template>
+  
+  
+  <xsl:template match="attrs">
+    {
+    <xsl:for-each select="attr">
+      <xsl:value-of select="@name" />
+      <xsl:text> = </xsl:text>
+      <xsl:apply-templates select="*" />
+      <xsl:text>; </xsl:text>
+    </xsl:for-each>
+    }
+  </xsl:template>
+  
+  
+  <xsl:template match="derivation">
+    <xsl:choose>
+      <xsl:when test="attr[@name = 'url']/string/@value">
+        <emphasis>(download of <xsl:value-of select="attr[@name = 'url']/string/@value" />)</emphasis>
+      </xsl:when>
+      <xsl:otherwise>
+        <emphasis>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</emphasis>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   
 </xsl:stylesheet>
