@@ -2242,6 +2242,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libnscd = import ../os-specific/linux/libnscd {
+    inherit fetchurl stdenv;
+  };
+
   lvm2 = import ../os-specific/linux/lvm2 {
     inherit fetchurl stdenv devicemapper;
   };
@@ -2302,7 +2306,7 @@ rec {
   };
 
   pwdutils = import ../os-specific/linux/pwdutils {
-    inherit fetchurl stdenv pam openssl;
+    inherit fetchurl stdenv pam openssl libnscd;
   };
 
   shadowutils = import ../os-specific/linux/shadow {

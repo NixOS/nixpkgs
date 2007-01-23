@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, openssl}:
+{stdenv, fetchurl, pam, openssl, libnscd}:
    
 stdenv.mkDerivation {
   name = "pwdutils-3.1.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     md5 = "b18c601e282d8695cbb5ddd87eaa473c";
   };
 
-  buildInputs = [pam openssl];
+  buildInputs = [pam openssl libnscd];
 
   configureFlags = "--disable-ldap";
 }
