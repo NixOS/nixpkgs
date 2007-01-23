@@ -28,6 +28,7 @@ done
 
 # Also put a nix-pull manifest of the closures on the CD.
 printManifest=1 perl $pathsFromGraph closure-* > MANIFEST
+graftList="$graftList MANIFEST=MANIFEST"
 
 
 # Add symlinks to the top-level store objects.

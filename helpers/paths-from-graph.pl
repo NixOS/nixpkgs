@@ -33,7 +33,7 @@ if ($ENV{"printManifest"} eq "1") {
     print "}\n";
 
     foreach my $storePath (sort (keys %storePaths)) {
-        print "{\n";
+        print "localPath {\n";
         print "  StorePath: $storePath\n";
         print "  CopyFrom: /tmp/inst-store$storePath\n";
         print "  References: ";
