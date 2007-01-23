@@ -8,9 +8,11 @@ XSLTPROC = xsltproc --catalogs \
  --param admon.style \'\' \
  --param callout.graphics.extension \'.gif\'
 
-options.html: options-db.xml
+docbookxsl = $(HOME)/.nix-profile/xml/xsl/docbook
+
+manual.html: manual.xml options-db.xml
 	$(XSLTPROC) --nonet --xinclude --output $@ \
-	  $(docbookxsl)/html/docbook.xsl options-db.xml
+	  $(docbookxsl)/html/docbook.xsl manual.xml
 
 options-db.xml: options.xml options-to-docbook.xsl
 	xsltproc -o options-db.xml options-to-docbook.xsl options.xml 

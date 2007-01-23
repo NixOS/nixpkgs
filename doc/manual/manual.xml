@@ -1,0 +1,24 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <info>
+
+    <title>NixOS Manual</title>
+
+    <author>
+      <personname>
+        <firstname>Eelco</firstname>
+        <surname>Dolstra</surname>
+      </personname>
+    </author>
+
+    <copyright>
+      <year>2007</year>
+      <holder>Eelco Dolstra</holder>
+    </copyright>
+    
+  </info>
+
+  <xi:include href="options-db.xml" />
+
+</book>
