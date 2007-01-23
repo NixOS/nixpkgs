@@ -86,7 +86,7 @@ rec {
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = import ../boot/make-initrd.nix {
-    inherit (pkgs) stdenv cpio;
+    inherit (pkgs) perl stdenv cpio;
     contents = [
       { object = bootStage1;
         symlink = "/init";

@@ -12,12 +12,12 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{stdenv, cpio, contents}:
+{stdenv, perl, cpio, contents}:
 
 stdenv.mkDerivation {
   name = "initrd";
   builder = ./make-initrd.sh;
-  buildInputs = [cpio];
+  buildInputs = [perl cpio];
 
   # !!! should use XML.
   objects = map (x: x.object) contents;
@@ -27,5 +27,5 @@ stdenv.mkDerivation {
   # For obtaining the closure of `contents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
-  pathsFromGraph = ../helpers/paths-from-graph.sh;
+  pathsFromGraph = ../helpers/paths-from-graph.pl;
 }
