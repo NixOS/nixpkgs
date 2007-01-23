@@ -54,7 +54,7 @@ mount --bind /sys $mountPoint/sys
 cleanup() {
     # !!! don't umount any we didn't mount ourselves
     for i in $(grep -F "$mountPoint" /proc/mounts \
-        | perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
+        | @perl@/bin/perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
         | sort -r);
     do
         umount $i
@@ -83,7 +83,7 @@ mkdir -m 1777 -p \
 
 
 # Get the store paths to copy from the references graph.
-storePaths=$(@shell@ @pathsFromGraph@ @nixClosure@)
+storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 
 # Copy Nix to the Nix store on the target device.
 echo "copying Nix to $mountPoint...."
