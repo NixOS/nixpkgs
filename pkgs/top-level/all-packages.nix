@@ -876,7 +876,7 @@ rec {
     inherit fetchurl stdenv readline ncurses g77 perl flex;
   };
 
-  perl = if stdenv.system != "i686-linux" then sysPerl else realPerl;
+  perl = if !stdenv.isLinux then sysPerl else realPerl;
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   php = import ../development/interpreters/php {
