@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "valgrind-3.2.1";
+  name = "valgrind-3.2.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/valgrind-3.2.1.tar.bz2;
-    md5 = "9407d33961186814cef0e6ecedfd6318";
+    url = http://valgrind.org/downloads/valgrind-3.2.2.tar.bz2;
+    md5 = "de3f68da0c8b7fc72b8fded95a9aebbc";
   };
 
   meta = {
