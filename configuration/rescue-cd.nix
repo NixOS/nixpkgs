@@ -126,7 +126,7 @@ rec {
   # kernel, the initrd produced above, and the closure of the stage 2
   # init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
-    inherit (pkgs) stdenv cdrtools;
+    inherit (pkgs) stdenv perl cdrtools;
     isoName = "nixos.iso";
 
     # Single files to be copied to fixed locations on the CD.
@@ -158,6 +158,10 @@ rec {
     storeContents = [
       { object = system.bootStage2;
         symlink = "/init";
+      }
+      # To speed up the installation, provide the full stdenv.
+      { object = pkgs.stdenv;
+        symlink = "none";
       }
     ];
     
