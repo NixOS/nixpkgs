@@ -3,6 +3,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:str="http://exslt.org/strings"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns="http://docbook.org/ns/docbook"
                 extension-element-prefixes="str"
                 >
@@ -29,7 +30,8 @@
              </term>
 
              <listitem><para>
-               <xsl:value-of select="attr[@name = 'description']/string/@value" />
+               <xsl:value-of disable-output-escaping="yes"
+                             select="attr[@name = 'description']/string/@value" />
              </para></listitem>
 
           </varlistentry>

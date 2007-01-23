@@ -76,7 +76,7 @@
     description = "
       The kernel parameters.  If you want to add additional
       parameters, it's best to set
-      <option>boot.extraKernelParams</options>.
+      <option>boot.extraKernelParams</option>.
     ";
   }
 
@@ -116,7 +116,7 @@
       the boot process.  That is, these modules are not included in
       the initial ramdisk, so they'd better not be required for
       mounting the root file system.  Add them to
-      <option>boot.initrd.extraKernelModules</options> if they are.
+      <option>boot.initrd.extraKernelModules</option> if they are.
     ";
   }
 
@@ -143,7 +143,7 @@
       dependencies of the modules list here are included
       automatically.  If you want to add additional
       modules, it's best to set
-      <option>boot.initrd.extraKernelModules</options>.
+      <option>boot.initrd.extraKernelModules</option>.
     ";
   }
 
@@ -154,7 +154,7 @@
     description = "
       Additional kernel modules for the initial ramdisk.  These are
       loaded before the modules listed in
-      <option>boot.initrd.kernelModules</options>, so they take
+      <option>boot.initrd.kernelModules</option>, so they take
       precedence.
     ";
   }
@@ -248,7 +248,7 @@
       should be an attribute set specifying either the path of the
       swap device or file (<literal>device</literal>) or the label
       of the swap device (<literal>label</literal>, see
-      <command>mkswap -L</command</command>).  Using a label is
+      <command>mkswap -L</command>).  Using a label is
       recommended.
     ";
   }
@@ -290,7 +290,7 @@
     };
     description = "
       The default theme for the virtual consoles.  Themes can be found
-      at http://www.bootsplash.de/.
+      at <link xlink:href='http://www.bootsplash.de/' />.
     ";
   }
 
@@ -376,7 +376,8 @@
     default = true;
     description = "
       Whether to enable the SFTP subsystem in the SSH daemon.  This
-      enables the use of commands such as sftp(1) and sshfs.
+      enables the use of commands such as <command>sftp</command> and
+      <command>sshfs</command>.
     ";
   }
 
@@ -493,7 +494,7 @@
     description = "
       Directory for Apache's transient runtime state (such as PID
       files).  It is created automatically.  Note that the default,
-      /var/run/httpd, is deleted at boot time.
+      <filename>/var/run/httpd</filename>, is deleted at boot time.
     ";
   }
 
