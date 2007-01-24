@@ -2550,7 +2550,7 @@ rec {
   };
 
   flashplayer9beta = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9-beta {
-    inherit fetchurl stdenv zlib;
+    inherit fetchurl stdenv zlib alsaLib;
 #    inherit (xlibs) libXmu;
   };
 
