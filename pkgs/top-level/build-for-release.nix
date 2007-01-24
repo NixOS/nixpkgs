@@ -49,7 +49,7 @@ let {
     gawk
     gcc
     gcc34
-    ghcWrapper
+    ghc
     ghostscript
     gnugrep
     gnum4
@@ -137,7 +137,7 @@ let {
     unzip
     upstart
     utillinux
-    uulib
+#    uulib
     valgrind
     vim
     vlc

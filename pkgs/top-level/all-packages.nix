@@ -723,11 +723,13 @@ rec {
     readline = readline4;
   };
 
+  /*
   ghcWrapper = assert uulib.ghc == ghc;
     import ../development/compilers/ghc-wrapper {
       inherit stdenv ghc;
       libraries = [];
     };
+  */
 
   helium = import ../development/compilers/helium {
     inherit fetchurl stdenv ghc;
@@ -1820,11 +1822,11 @@ rec {
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
 
-  uulib = import ../development/libraries/haskell/uulib {
+  uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
     inherit stdenv fetchurl ghc;
   };
 
-  uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 {
+  uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 { # !!! ugh
     inherit stdenv fetchurl autoconf;
     ghc = ghc66;
   };
