@@ -704,13 +704,15 @@ rec {
   #  m4 = gnum4;
   #};
 
+  ghc = ghc66;
+
   ghc66 = import ../development/compilers/ghc-6.6 {
     inherit fetchurl stdenv readline perl;
     m4 = gnum4;
     ghc = ghcboot;
   };
 
-  ghc = import ../development/compilers/ghc {
+  ghc64 = import ../development/compilers/ghc {
     inherit fetchurl stdenv perl ncurses readline m4;
     gcc = stdenv.gcc;
     ghc = ghcboot;
