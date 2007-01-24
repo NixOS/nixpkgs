@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     sha256 = "1cl0yd3blynjslzz05312bzg1dbymmj8pg88bhnr4p3rqxrlmhx9";
   };
   buildInputs = [unzip ghc wxGTK];
-  buildFlags = "wx";
-  installTargets = "install install-wx";
+  postInstall = "
+    make wx
+    make wx-install
+  ";
 }
