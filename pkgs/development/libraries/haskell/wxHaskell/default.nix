@@ -1,13 +1,12 @@
 {stdenv, fetchurl, unzip, ghc, wxGTK}:
 
 stdenv.mkDerivation {
-  name = "wxHaskell-0.9.4-1";
+  name = "wxHaskell-0.10.1-pre20070124";
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/sourceforge/wxhaskell/wxhaskell-src-0.9.4-1.zip;
-    md5 = "69c3876e1c8ed810cef9db7ed442cb89";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/wxhaskell-src-0.10.1-pre20070124.tar.bz2;
+    sha256 = "1cl0yd3blynjslzz05312bzg1dbymmj8pg88bhnr4p3rqxrlmhx9";
   };
-  #builder = ./builder.sh;
   buildInputs = [unzip ghc wxGTK];
-  installCommand = "make install-files";
-#  inherit ghc;
+  buildFlags = "wx";
+  installTargets = "install install-wx";
 }
