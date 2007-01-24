@@ -17,11 +17,11 @@ makeWrapper() {
   chmod +x "$wrapper"
 }
 
-makeWrapper "ghc"         "-no-user-package-conf -package-conf"  $packages_db
-makeWrapper "ghci"        "-no-user-package-conf -package-conf"  $packages_db
-makeWrapper "runghc"      "-no-user-package-conf -package-conf"  $packages_db
-makeWrapper "runhaskell"  "-no-user-package-conf -package-conf"  $packages_db
-makeWrapper "ghc-pkg"     "--global --global-conf"  $packages_db
+makeWrapper "ghc"         "-no-user-package-conf -package-conf $packages_db"
+makeWrapper "ghci"        "-no-user-package-conf -package-conf $packages_db"
+makeWrapper "runghc"      "-no-user-package-conf -package-conf $packages_db"
+makeWrapper "runhaskell"  "-no-user-package-conf -package-conf $packages_db"
+makeWrapper "ghc-pkg"     "--global-conf $packages_db"
 
 # Add wrappers to search path
 export _PATH=$ghc_support:$_PATH
