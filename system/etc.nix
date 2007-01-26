@@ -5,6 +5,10 @@ let
   optional = option: file:
     if config.get option then [file] else [];
 
+  defaultEnv = pkgs.writeText "environment" "
+    PATH=${systemPath}/bin:${systemPath}/sbin
+  ";
+
 in
     
 import ../helpers/make-etc.nix {
@@ -98,6 +102,7 @@ import ../helpers/make-etc.nix {
           pkgs.xorg.fontbh100dpi
           pkgs.xorg.fontbhlucidatypewriter100dpi
           pkgs.ttf_bitstream_vera
+          pkgs.corefonts
           pkgs.freefont_ttf
         ];
         buildInputs = [pkgs.libxslt];
@@ -130,6 +135,7 @@ import ../helpers/make-etc.nix {
             then pkgs.pam_ldap
             else "/no-such-path";
           inherit (pkgs.xorg) xauth;
+          inherit defaultEnv;
         };
         target = "pam.d/" + program;
       }
