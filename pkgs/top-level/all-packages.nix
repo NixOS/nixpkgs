@@ -1832,13 +1832,7 @@ rec {
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip ghc;
-    wxGTK = import ../development/libraries/wxGTK-2.6 {
-      inherit fetchurl stdenv pkgconfig;
-      inherit (gtkLibs) gtk;
-      inherit (xlibs) libXinerama;
-      unicode = false; # not supported by GHC/wxHaskell yet
-    };
+    inherit stdenv fetchurl unzip ghc wxGTK;
   };
 
 
