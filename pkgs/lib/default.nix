@@ -2,7 +2,8 @@
 
 let
 
-  inherit (builtins) head tail isList;
+  inherit (builtins)
+    head tail isList stringLength substring lessThan sub;
 
 in
 
@@ -81,13 +82,24 @@ rec {
     else if xs == [] || ys == [] then false
     else head xs == head ys && eqLists (tail xs) (tail ys);
 
-  
-  # Bring in a path as a source, filtering out all hidden Subversion
-  # directories.  TODO: filter out backup files (*~) etc.
+
+  # Determine whether a filename ends in the given suffix.
+  hasSuffix = ext: fileName:
+    let lenFileName = stringLength fileName;
+        lenExt = stringLength ext;
+    in !(lessThan lenFileName lenExt) &&
+       substring (sub lenFileName lenExt) lenFileName fileName == ext;
+
+       
+  # Bring in a path as a source, filtering out all Subversion and CVS
+  # directories, as well as backup files (*~).
   cleanSource =
-    let filter = name: type:
-      type != "directory"
-      || baseNameOf (toString name) != ".svn";
+    let filter = name: type: let baseName = baseNameOf (toString name); in ! (
+      # Filter out Subversion and CVS directories.
+      (type == "directory" && (name == ".svn" || name == "CVS")) ||
+      # Filter out backup files.
+      (hasSuffix "~" name)
+    );
     in src: builtins.filterSource filter src;
 
           
