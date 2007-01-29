@@ -39,6 +39,7 @@ stdenv.mkDerivation {
         "--without-apxs"}
     ${if pythonBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
+    --disable-neon-version-check
   ";
 
   inherit httpServer pythonBindings javahlBindings;
