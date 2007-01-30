@@ -5,7 +5,7 @@ let
   optional = option: file:
     if config.get option then [file] else [];
 
-  defaultEnv = pkgs.writeText "environment" "
+  envConf = pkgs.writeText "environment" "
     PATH=${systemPath}/bin:${systemPath}/sbin
   ";
 
@@ -135,7 +135,7 @@ import ../helpers/make-etc.nix {
             then pkgs.pam_ldap
             else "/no-such-path";
           inherit (pkgs.xorg) xauth;
-          inherit defaultEnv;
+          inherit envConf;
         };
         target = "pam.d/" + program;
       }
