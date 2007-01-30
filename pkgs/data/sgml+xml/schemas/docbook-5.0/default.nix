@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "docbook5-5.0-pre-beta7";
+  name = "docbook5-5.0-pre-cr1";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/docbook-5.0b7.tar.gz;
-    md5 = "f1e18aaf56b0f0b2b2ab9eaff4bb6a1e";
+    url = http://www.docbook.org/xml/5.0CR1/docbook-5.0CR1.tar.gz;
+    sha256 = "15bbnydspiry7k7fwl2gdjb53nyw2vg6xwpn3d40f03mcf0bkw11";
   };
 }
