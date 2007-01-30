@@ -1,2 +1,0 @@
-account  optional       @pam_ldap@/lib/security/pam_ldap.so 
-account  required       @pam_unix2@/lib/security/pam_unix2.so

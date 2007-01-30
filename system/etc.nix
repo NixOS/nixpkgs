@@ -148,10 +148,7 @@ import ../helpers/make-etc.nix {
       "shadow"
       "sshd"
       "useradd"
-      "common-auth"
-      "common-account"
-      "common-password"
-      "common-session"
+      "common"
     ]
   );
 }
