@@ -2398,7 +2398,13 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
-  docbook_xml_xslt = import ../data/sgml+xml/stylesheets/xslt/docbook {
+  docbook_xml_xslt = docbook_xsl;
+
+  docbook_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook {
+    inherit fetchurl stdenv;
+  };
+
+  docbook5_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook5 {
     inherit fetchurl stdenv;
   };
 

@@ -35,7 +35,8 @@ let {
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xml_xslt
+    docbook_xsl
+    docbook5_xsl
     e2fsprogs
     ecj
     emacs
@@ -186,7 +187,8 @@ let {
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xml_xslt
+    docbook_xsl
+    docbook5_xsl
     libtool
     libxml2
     libxslt
@@ -205,7 +207,8 @@ let {
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
-    docbook_xml_xslt
+    docbook_xsl
+    docbook5_xsl
     libtool
     libxml2
     libxslt
