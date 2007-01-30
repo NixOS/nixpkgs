@@ -3,12 +3,12 @@
 assert tetex == polytable.tetex;
 
 stdenv.mkDerivation {
-  name = "lhs2tex-1.11";
+  name = "lhs2tex-1.12";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://www.informatik.uni-bonn.de/~loeh/lhs2tex/lhs2tex-1.11.tar.bz2;
-    md5 = "16fb6a150bc1ab5e22c66f52f11cec54";
+    url = http://www.informatik.uni-bonn.de/~loeh/lhs2tex/lhs2tex-1.12.tar.bz2;
+    md5 = "1bc982e96f19201aaf1c39c1d4b5e358";
   };
 
   buildInputs = [tetex ghc];
