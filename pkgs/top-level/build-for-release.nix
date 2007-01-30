@@ -75,6 +75,7 @@ let {
     klibc
     lvm2
     less
+    lhs2tex
     libtool
     libxml2
     libxslt
