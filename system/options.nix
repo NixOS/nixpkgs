@@ -132,6 +132,11 @@
       "ide-disk"
       "ide-generic"
       "ext3"
+      # Support USB keyboards, in case the boot fails and we only have
+      # a USB keyboard.
+      "ehci_hcd"
+      "ohci_hcd"
+      "usbhid"
     ];
     description = "
       The set of kernel modules in the initial ramdisk used during the
