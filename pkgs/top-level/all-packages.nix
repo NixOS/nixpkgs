@@ -2436,7 +2436,7 @@ rec {
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
     xineramaSupport = true;
-    fastStart = true;
+    fastStart = getConfig ["acroread" "fastStart"] false;
   };
 
   amsn = import ../applications/networking/instant-messengers/amsn {
@@ -2546,14 +2546,15 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
-  flashplayer = import ../applications/networking/browsers/mozilla-plugins/flashplayer {
+  flashplayer = flashplayer9;
+
+  flashplayer7 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-7 {
     inherit fetchurl stdenv zlib;
     inherit (xlibs) libXmu;
   };
 
-  flashplayer9beta = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9-beta {
+  flashplayer9 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
     inherit fetchurl stdenv zlib alsaLib;
-#    inherit (xlibs) libXmu;
   };
 
   fspot = import ../applications/graphics/f-spot {
@@ -2818,7 +2819,7 @@ rec {
     inherit stdenv firefox;
     plugins = [
       MPlayerPlugin
-      flashplayer9beta
+      flashplayer
     ]
     # RealPlayer is disabled by default for legal reasons.
     ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])

@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "acrobat-reader-7.0.1";
+  name = "acrobat-reader-7.0.9";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ardownload.adobe.com/pub/adobe/reader/unix/7x/7.0/enu/AdbeRdr701_linux_enu.tar.gz;
-    md5 = "79e5a40aca6b49f7015cb1694876f87a";
+    url = http://ardownload.adobe.com/pub/adobe/reader/unix/7x/7.0.9/enu/AdobeReader_enu-7.0.9-1.i386.tar.gz;
+    sha256 = "0qs8v57gamkk243f44yqxic93izf0bn2d9l4wwbqqy1jv5s125hy";
   };
   libPath = [
     libXt libXp libXext libX11 glib pango atk gtk libstdcpp5 zlib
