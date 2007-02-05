@@ -1,31 +1,35 @@
 #! @shell@
 
-# Syntax: installer.sh <DEVICE> <NIX-EXPR>
-# (e.g., installer.sh /mnt/root ./my-machine.nix)
-
-# - mount target device
+# - [mount target device] <- currently disabled
 # - make Nix store etc.
-# - copy closure of rescue env to target device
+# - copy closure of Nix to target device
 # - register validity
-# - start the "target" installer in a chroot to the target device
+# - with a chroot to the target device:
 #   * do a nix-pull
-#   * nix-env -p system-profile -i <nix-expr for the configuration>
-#   * run hook scripts provided by packages in the configuration?
-# - install/update grub
+#   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
+#   * run the activation script of the configuration (also installs Grub)
 
 set -e
 
-mountPoint="$1"
-nixosDir="$2"
-configuration="$3"
+if test -z "$mountPoint"; then
+    mountPoint=/mnt
+fi
 
-if test -z "$mountPoint" -o -z "$nixosDir" -o -z "$configuration"; then
-    echo "Syntax: nixos-installer.sh <targetRootDir> <nixosDir> <configuration>"
-    exit 1
+if test -z "$nixosDir"; then
+    nixosDir=/etc/nixos/nixos
+fi
+
+if test -z "$nixosConfiguration"; then
+    nixosConfiguration=/etc/nixos/configuration.nix
 fi
 
 if ! test -e "$mountPoint"; then
     echo "mount point $mountPoint doesn't exist"
+    exit 1
+fi
+
+if ! fgrep -q " $mountPoint " /proc/mounts; then
+    echo "$mountPoint doesn't appear to be a mount point"
     exit 1
 fi
     
@@ -34,14 +38,14 @@ if ! test -e "$nixosDir"; then
     exit 1
 fi
     
-if ! test -e "$configuration"; then
-    echo "configuration file $configuration doesn't exist"
+if ! test -e "$nixosConfiguration"; then
+    echo "configuration file $nixosConfiguration doesn't exist"
     exit 1
 fi
     
 
 nixosDir=$(readlink -f "$nixosDir")
-configuration=$(readlink -f "$configuration")
+nixosConfiguration=$(readlink -f "$nixosConfiguration")
 
 
 # Mount some stuff in the target root directory.
@@ -57,7 +61,9 @@ cleanup() {
         | @perl@/bin/perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
         | sort -r);
     do
-        umount $i
+        if test "$i" != "$mountPoint"; then
+            umount $i
+        fi
     done
 }
 
@@ -136,7 +142,7 @@ echo "building the system configuration..."
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
     -f "/mnt$nixosDir/system/system.nix" \
-    --arg configuration "import /mnt$configuration" \
+    --arg configuration "import /mnt$nixosConfiguration" \
     --set -A system
 
 
@@ -146,8 +152,8 @@ mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
     cp -f $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
 fi
-if test "$configuration" != "$targetConfig"; then
-    cp -f $configuration $targetConfig
+if test "$nixosConfiguration" != "$targetConfig"; then
+    cp -f $nixosConfiguration $targetConfig
 fi
 
 
