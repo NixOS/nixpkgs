@@ -147,13 +147,35 @@ chroot $mountPoint @nix@/bin/nix-env \
 
 
 # Copy the configuration to /etc/nixos.
+backupTimestamp=$(date "+%Y%m%d%H%M%S")
 targetConfig=$mountPoint/etc/nixos/configuration.nix
 mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
-    cp -f $targetConfig $targetConfig.backup-$(date "+%Y%m%d%H%M%S")
+    cp -f $targetConfig $targetConfig.backup-$backupTimestamp
 fi
 if test "$nixosConfiguration" != "$targetConfig"; then
     cp -f $nixosConfiguration $targetConfig
+fi
+
+
+# Make a backup of the old NixOS/Nixpkgs sources.
+echo "copying NixOS/Nixpkgs sources to /etc/nixos...."
+
+targetNixos=$mountPoint/etc/nixos/nixos
+if test -e $targetNixos; then
+    mv $targetNixos $targetNixos.backup-$backupTimestamp
+fi
+
+targetNixpkgs=$mountPoint/etc/nixos/nixpkgs
+if test -e $targetNixpkgs; then
+    mv $targetNixpkgs $targetNixpkgs.backup-$backupTimestamp
+fi
+
+
+# Copy the NixOS/Nixpkgs sources to the target.
+cp -prd $nixosDir $targetNixos
+if test -e /etc/nixos/nixpkgs; then
+    cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi
 
 
