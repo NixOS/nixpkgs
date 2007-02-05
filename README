@@ -131,8 +131,9 @@ To get out of maintenance mode:
 
 - Testing the installer:
 
+  $ nix-build configuration/rescue-cd.nix -A system.nixosInstaller
   $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
   $ yes | mke2fs -j diskimage
   $ mount -o loop diskimage /mnt
-  $ nixos-installer /mnt /etc/nixos/nixos/ /etc/nixos/configuration.nix
+  $ ./result/bin/nixos-installer /mnt /etc/nixos/nixos/ /etc/nixos/configuration.nix
 
