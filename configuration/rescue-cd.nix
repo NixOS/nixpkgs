@@ -32,6 +32,7 @@ rec {
           job = "
             start on startup
             script
+              export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
               mkdir -p /etc/nixos/nixos
               tar xjf /nixos.tar.bz2 -C /etc/nixos/nixos
               tar xjf /nixpkgs.tar.bz2 -C /etc/nixos
