@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "valgrind-3.2.2";
+  name = "valgrind-3.2.3";
   src = fetchurl {
-    url = http://valgrind.org/downloads/valgrind-3.2.2.tar.bz2;
-    md5 = "de3f68da0c8b7fc72b8fded95a9aebbc";
+    url = http://valgrind.org/downloads/valgrind-3.2.3.tar.bz2;
+    sha256 = "0hf48y13mm1c1zg59bvkbr0lzcwng5mb33lgiv3d0gzl4w2r5jhv";
   };
 
   meta = {
