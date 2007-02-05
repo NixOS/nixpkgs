@@ -26,9 +26,23 @@ rec {
         enable = false;
       };
 
-      # Allow the user to do something useful on tty8 while waiting
-      # for the installation to finish.
       extraJobs = [
+        # Unpack the NixOS/Nixpkgs sources to /etc/nixos.
+        { name = "unpack-sources";
+          job = "
+            start on startup
+            script
+              mkdir -p /etc/nixos/nixos
+              tar xjf /nixos.tar.bz2 -C /etc/nixos/nixos
+              tar xjf /nixpkgs.tar.bz2 -C /etc/nixos
+              mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs
+              ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
+            end script
+          ";
+        }
+      
+        # Allow the user to do something useful on tty8 while waiting
+        # for the installation to finish.
         { name = "rogue";
           job = "
             start on udev
