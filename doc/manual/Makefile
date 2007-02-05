@@ -10,7 +10,7 @@ XSLTPROC = xsltproc --catalogs \
 
 docbookxsl = $(HOME)/.nix-profile/xml/xsl/docbook
 
-manual.html: manual.xml options-db.xml
+manual.html: *.xml options-db.xml
 	$(XSLTPROC) --nonet --xinclude --output $@ \
 	  $(docbookxsl)/html/docbook.xsl manual.xml
 

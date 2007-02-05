@@ -5,6 +5,7 @@
 }:
 
 substituteAll {
+  name = "nixos-installer";
   src = ./nixos-installer.sh;
   dir = "bin";
   isExecutable = true;

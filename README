@@ -128,3 +128,11 @@ To get out of maintenance mode:
       -A ATTR
 
   where ATTR is an attribute in system/system.nix (e.g., bootStage1).
+
+- Testing the installer:
+
+  $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
+  $ yes | mke2fs -j diskimage
+  $ mount -o loop diskimage /mnt
+  $ nixos-installer /mnt /etc/nixos/nixos/ /etc/nixos/configuration.nix
+

@@ -117,7 +117,9 @@ cp /etc/resolv.conf $mountPoint/etc/
 # the CD can be copied directly.
 echo "registering substitutes to speed up builds..."
 chroot $mountPoint @nix@/bin/nix-store --clear-substitutes
-chroot $mountPoint @nix@/bin/nix-pull file:///mnt/MANIFEST
+if test -e /mnt/MANIFEST; then
+    chroot $mountPoint @nix@/bin/nix-pull file:///mnt/MANIFEST
+fi
 rm -f $mountPoint/tmp/inst-store
 ln -s /mnt/nix/store $mountPoint/tmp/inst-store
 
