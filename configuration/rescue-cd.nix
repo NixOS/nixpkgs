@@ -38,6 +38,7 @@ rec {
               tar xjf /nixpkgs.tar.bz2 -C /etc/nixos
               mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs
               ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
+              chown -R root.root /etc/nixos
             end script
           ";
         }
