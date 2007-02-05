@@ -1,0 +1,39 @@
+diff -rc emacs-snapshot-20070127-orig/src/emacs.c emacs-snapshot-20070127/src/emacs.c
+*** emacs-snapshot-20070127-orig/src/emacs.c	Sun Jan 28 02:08:54 2007
+--- emacs-snapshot-20070127/src/emacs.c	Mon Feb  5 15:35:26 2007
+***************
+*** 1408,1417 ****
+      = argmatch (argv, argc, "-nl", "--no-loadup", 6, NULL, &skip_args);
+  
+  #ifdef USE_FONT_BACKEND
+!   enable_font_backend = 0;
+    if (argmatch (argv, argc, "-enable-font-backend", "--enable-font-backend",
+  		4, NULL, &skip_args))
+      enable_font_backend = 1;
+  #endif	/* USE_FONT_BACKEND */
+  
+  #ifdef HAVE_X_WINDOWS
+--- 1408,1420 ----
+      = argmatch (argv, argc, "-nl", "--no-loadup", 6, NULL, &skip_args);
+  
+  #ifdef USE_FONT_BACKEND
+!   enable_font_backend = 1;
+    if (argmatch (argv, argc, "-enable-font-backend", "--enable-font-backend",
+  		4, NULL, &skip_args))
+      enable_font_backend = 1;
++   if (argmatch (argv, argc, "-disable-font-backend", "--disable-font-backend",
++ 		4, NULL, &skip_args))
++     enable_font_backend = 0;
+  #endif	/* USE_FONT_BACKEND */
+  
+  #ifdef HAVE_X_WINDOWS
+***************
+*** 1817,1822 ****
+--- 1820,1826 ----
+    { "-no-multibyte", "--no-multibyte", 80, 0 },
+    { "-nl", "--no-loadup", 70, 0 },
+    { "-enable-font-backend", "--enable-font-backend", 65, 0 },
++   { "-disable-font-backend", "--disable-font-backend", 64, 0 },
+    /* -d must come last before the options handled in startup.el.  */
+    { "-d", "--display", 60, 1 },
+    { "-display", 0, 60, 1 },

@@ -3,7 +3,7 @@
 , xaw3dSupport ? false
 , gtkGUI ? false
 , xftSupport ? false
-, stdenv, fetchurl, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
+, stdenv, fetchurl, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 , pkgconfig ? null, gtk ? null, libXft ? null, libpng ? null
 }:
 
@@ -14,21 +14,26 @@ assert gtkGUI -> pkgconfig != null && gtk != null;
 assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 
 stdenv.mkDerivation {
-  name = "emacs-22.0.50-pre-xft";
+  name = "emacs-23.0.0.1-pre20070127";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/emacs-22.0.50-pre-xft.tar.bz2;
-    md5 = "4f96ada6f18513aeb70adc27b7ac862f";
+    url = http://debs.peadrop.com/pool/edgy/backports/emacs-snapshot_20070127.orig.tar.gz;
+    sha256 = "1p5ds3sjxx6izzmfq4k3wkvklm8yw7spanl7zgl16s7cln3m7hv2";
   };
-  patches = [./crt.patch];
+  patches = [
+    ./crt.patch
+    # From Debian: use --enable-font-backend by default.
+    ./xft-default.patch
+  ];
   buildInputs = [
-    x11
+    ncurses x11
     (if xawSupport then libXaw else null)
     (if xpmSupport then libXpm else null)
     (if xaw3dSupport then Xaw3d else null)
   ]
   ++ (if gtkGUI then [pkgconfig gtk] else [])
   ++ (if xftSupport then [libXft libpng] else []);
-  configureFlags =
-    if gtkGUI then ["--with-x-toolkit=gtk" "--with-xft"] else [];
+  configureFlags = "
+    ${if gtkGUI then "--with-gtk --enable-font-backend --with-xft" else ""}
+  ";
 }

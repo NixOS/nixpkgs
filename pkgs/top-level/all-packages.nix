@@ -2477,7 +2477,7 @@ rec {
         };
     };
 
-  cua = import ../applications/editors/emacs/modes/cua {
+  cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
 
@@ -2518,10 +2518,11 @@ rec {
     gtkGUI = true;
   };
 
-  emacs22aa = import ../applications/editors/emacs-22-aa {
-    inherit fetchurl stdenv pkgconfig x11 Xaw3d libpng;
+  emacsUnicode = import ../applications/editors/emacs-unicode {
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d libpng;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
+    xawSupport = false;
     xaw3dSupport = false;
     gtkGUI = true;
     xftSupport = true;
@@ -2595,7 +2596,7 @@ rec {
     inherit (gtkLibs) glib;
   };
 
-  haskellMode = import ../applications/editors/emacs/modes/haskell {
+  haskellMode = import ../applications/editors/emacs-modes/haskell {
     inherit fetchurl stdenv;
   };
 
@@ -2687,7 +2688,7 @@ rec {
     motif = lesstif;
   };
 
-  nxml = import ../applications/editors/emacs/modes/nxml {
+  nxml = import ../applications/editors/emacs-modes/nxml {
     inherit fetchurl stdenv;
   };
 
