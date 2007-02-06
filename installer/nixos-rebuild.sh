@@ -4,7 +4,7 @@
 # What are we supposed to do?
 action="$1"
 
-if test -z "$action"; then
+showSyntax() {
     # !!! more or less cut&paste from
     # system/switch-to-configuration.sh (which we call, of course).
     cat <<EOF
@@ -17,7 +17,9 @@ build:  build the configuration, but don't make it the default or
         activate it
 EOF
     exit 1
-fi
+}
+
+if test -z "$action"; then showSyntax; fi
 
 
 # Allow the location of NixOS sources and the system configuration
@@ -34,11 +36,13 @@ if test "$action" = "switch" -o "$action" = "boot"; then
         --arg configuration "import $NIXOS_CONFIG" \
         --set -A system
     pathToConfig=/nix/var/nix/profiles/system
-else
+elif test "$action" = "test" -o "$action" = "build"; then
     nix-build $NIXOS/system/system.nix \
         --arg configuration "import $NIXOS_CONFIG" \
         -A system -K -k
     pathToConfig=./result
+else
+    showSyntax
 fi
 
 
