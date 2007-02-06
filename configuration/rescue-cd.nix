@@ -53,7 +53,6 @@ rec {
 
       # And a background to go with that.
       ttyBackgrounds = {
-        enable = pkgs.stdenv.system != "x86_64-linux";
         specificThemes = [
           { tty = 8;
             theme = pkgs.fetchurl {
