@@ -1101,9 +1101,10 @@ rec {
   };
 
   patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
-    (import ../development/tools/misc/patchelf {
-      inherit fetchurl stdenv;
-    });
+    (if stdenv.system == "x86_64-linux" then patchelfNew else
+      (import ../development/tools/misc/patchelf {
+        inherit fetchurl stdenv;
+      }));
 
   patchelfNew = import ../development/tools/misc/patchelf/new.nix {
     inherit fetchurl stdenv;
