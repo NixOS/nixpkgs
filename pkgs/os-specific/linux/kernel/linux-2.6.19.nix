@@ -12,12 +12,12 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 let lib = import ../../../lib; in
 
 stdenv.mkDerivation {
-  name = "linux-2.6.19.2";
+  name = "linux-2.6.19.3";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.19.2.tar.bz2;
-    sha256 = "02sl38spz1iwlwdajmnyw6wi55sdc7j12n5k31bz5l8klv554p65";
+    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.19.3.tar.bz2;
+    sha256 = "0xr03w5f80gkyqvxv1cskvnmhy0mrzansi3a0l3lv9v0x7fwxnc4";
   };
   
   patches = map (p: p.patch) kernelPatches;
