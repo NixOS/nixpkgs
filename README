@@ -58,7 +58,7 @@
 
 - Do the installation:
 
-  $ nixos-installer.sh ROOTDIR . my-config.nix
+  $ nixos-install.sh ROOTDIR . my-config.nix
 
   where ROOTDIR is the mount point of the target root device (i.e.,
   boot.rootDevice in your configuration).
@@ -131,9 +131,9 @@ To get out of maintenance mode:
 
 - Testing the installer:
 
-  $ nix-build configuration/rescue-cd.nix -A system.nixosInstaller
+  $ nix-build configuration/rescue-cd.nix -A system.nixosInstall
   $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
   $ yes | mke2fs -j diskimage
   $ mount -o loop diskimage /mnt
-  $ ./result/bin/nixos-installer
+  $ ./result/bin/nixos-install
 

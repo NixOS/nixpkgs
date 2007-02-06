@@ -5,8 +5,8 @@
 }:
 
 substituteAll {
-  name = "nixos-installer";
-  src = ./nixos-installer.sh;
+  name = "nixos-install";
+  src = ./nixos-install.sh;
   dir = "bin";
   isExecutable = true;
   inherit nix nixpkgsURL perl;
