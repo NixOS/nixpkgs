@@ -118,7 +118,10 @@ rec {
 
   nixosRebuild = import ../installer/nixos-rebuild.nix {
     inherit (pkgs) substituteAll;
-    inherit nix;
+  };
+
+  nixosCheckout = import ../installer/nixos-checkout.nix {
+    inherit (pkgs) substituteAll;
   };
 
 
@@ -192,6 +195,7 @@ rec {
     nix
     nixosInstall
     nixosRebuild
+    nixosCheckout
     setuidWrapper
   ];
 

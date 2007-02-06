@@ -1,8 +1,8 @@
 {substituteAll}:
 
 substituteAll {
-  name = "nixos-rebuild";
-  src = ./nixos-rebuild.sh;
+  name = "nixos-checkout";
+  src = ./nixos-checkout.sh;
   dir = "bin";
   isExecutable = true;
 }
