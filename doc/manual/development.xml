@@ -1,0 +1,47 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Development</title>
+
+<para>This chapter has some random notes on hacking on
+NixOS.</para>
+
+
+<section>
+
+<title>Building specific parts of NixOS</title>
+
+<para>
+
+<screen>
+$ nix-build system/system.nix \
+    --arg configuration "import /etc/nixos/configuration.nix" \
+    -A <replaceable>attr</replaceable></screen>
+
+where <replaceable>attr</replaceable> is an attribute in
+system/system.nix (e.g., <literal>bootStage1</literal>).</para>
+
+</section>
+
+
+<section>
+
+<title>Testing the installer</title>
+
+<para>Building, burning, and booting from an installation CD is rather
+tedious, so here is a quick way to see if the installer works
+properly:
+
+<screen>
+$ nix-build .../nixos/configuration/rescue-cd.nix -A system.nixosInstall
+$ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
+$ yes | mke2fs -j diskimage
+$ mount -o loop diskimage /mnt
+$ ./result/bin/nixos-install</screen>
+
+</para>
+
+</section>
+
+
+</chapter>

@@ -143,7 +143,7 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
     those (e.g., copy
     <filename>/etc/nixos/nixos/configuration/examples/basic.nix</filename>
     to <filename>/etc/nixos/configuration.nix</filename>).  See <xref
-    linkend="sec-options"/> for a list of the available configuration
+    linkend="ch-options"/> for a list of the available configuration
     options.  The text editor <command>nano</command> is
     available.</para>
 
@@ -191,7 +191,7 @@ $ reboot</screen>
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-changing-config">
 
 <title>Changing the configuration</title>
 
@@ -236,6 +236,36 @@ to build the configuration but nothing more.  This is useful to see
 whether everything compiles cleanly.</para>
 
 </section>
+
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Keeping NixOS up to date</title>
+
+<para>The currently best way to keep your NixOS installation up to
+date is to track the NixOS Subversion repository.  You should replace
+the static NixOS/Nixpkgs sources installed in
+<filename>/etc/nixos</filename> with a Subversion checkout.  The
+program <command>nixos-checkout</command> does that for you (and it
+also installs Subversion into your current profile).</para>
+
+<para>To build the latest and greatest, do
+
+<screen>
+$ svn up /etc/nixos/nixos
+$ svn up /etc/nixos/nixpkgs
+$ nixos-rebuild switch</screen>
+
+(Or instead of <literal>switch</literal>, use any of the alternatives
+shown in <xref linkend="sec-changing-config"/>.)</para>
+
+
+</section>
+
+
 
 
 </chapter>

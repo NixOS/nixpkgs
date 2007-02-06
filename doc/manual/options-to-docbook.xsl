@@ -13,7 +13,7 @@
   
   <xsl:template match="/expr/list">
 
-    <chapter xml:id="sec-options">
+    <chapter xml:id="ch-options">
       <title>List of Options</title>
 
       <variablelist>
