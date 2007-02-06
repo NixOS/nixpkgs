@@ -1,0 +1,64 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Troubleshooting</title>
+
+
+<section>
+  
+<title>Debugging the boot process</title>
+
+<para>To get a Stage 1 shell (i.e., a shell in the initial ramdisk),
+add <literal>debug1</literal> to the kernel command line.  The shell
+gets started before anything useful has been done.  That is, no
+modules have been loaded and no file systems have been mounted, except
+for <filename>/proc</filename> and <filename>/sys</filename>.</para>
+
+<para>To get a Stage 2 shell (i.e., a shell in the actual root file
+system), add <literal>debug2</literal> to the kernel command
+line.  This shell is started right after stage 1 calls the stage 2
+<literal>init</literal> script, so the root file system is there but
+no services have been started.</para>
+
+</section>
+
+
+
+<section>
+  
+<title>Safe mode</title>
+
+<para>If the hardware autodetection (in
+<filename>upstart-jobs/hardware-scan</filename>) causes problems, add
+<literal>safemode</literal> to the kernel command line.  This will
+disable auto-loading of modules for your PCI devices.  However, you
+will probably need to explicitly add modules to
+<option>boot.extraKernelModules</option> to get network support
+etc.</para>
+
+</section>
+
+
+<section>
+  
+<title>Maintenance mode</title>
+
+<para>You can go to maintenance mode by doing
+
+<screen>
+$ shutdown now</screen>
+
+This will eventually give you a single-user root shell.
+
+To get out of maintenance mode, do
+
+<screen>
+$ initctl emit startup</screen>
+
+</para>
+
+</section>
+
+
+
+</chapter>
