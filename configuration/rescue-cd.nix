@@ -1,7 +1,7 @@
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.11pre7861";
+  nixpkgsRel = "nixpkgs-0.11pre7871";
 
 
   configuration = {
@@ -11,9 +11,6 @@ rec {
       readOnlyRoot = true;
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
-      initrd = {
-        enableSplashScreen = pkgs.stdenv.system != "x86_64-linux";
-      };
     };
     
     services = {
@@ -122,7 +119,7 @@ rec {
   # Get a recent copy of Nixpkgs.
   nixpkgsTarball = pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
-    md5 = "f88f686e7bbe33065b3c9f3ce5224fea";
+    md5 = "262eadc0c4d1d954cf0ac8b03a9edfef";
   };
 
 
