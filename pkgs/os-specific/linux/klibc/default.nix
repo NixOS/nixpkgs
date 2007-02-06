@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "klibc-1.4";
+  name = "klibc-1.4.33";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/libs/klibc/klibc-1.4.tar.bz2;
-    md5 = "f4e0e17fc660e59c39e448fe1d827d36";
+    url = http://www.kernel.org/pub/linux/libs/klibc/Testing/klibc-1.4.33.tar.bz2;
+    sha256 = "1831bphb4z1x8vkhqmvxkb617pb4dixq33bm0nc6qrxrwix0ylag";
   };
   inherit kernel;
   buildInputs = [perl bison mktemp];

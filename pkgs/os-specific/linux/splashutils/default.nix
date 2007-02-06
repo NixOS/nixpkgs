@@ -6,7 +6,12 @@ stdenv.mkDerivation {
     url = http://dev.gentoo.org/~spock/projects/splashutils/archive/splashutils-1.3.tar.bz2;
     md5 = "c7c92b98e34b860511aa57bd29d62f76";
   };
-  patches = [./purity.patch ./no-fbsplash.patch];
+  patches = [
+    ./purity.patch
+    ./no-fbsplash.patch
+    # Borrowed from http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-gfx/splashutils/files/splashutils-1.3-fdset.patch?rev=1.1.
+    ./fdset.patch
+  ];
 
   buildInputs = [klibc zlib libjpeg];
   
