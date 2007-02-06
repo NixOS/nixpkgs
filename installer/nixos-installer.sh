@@ -15,12 +15,12 @@ if test -z "$mountPoint"; then
     mountPoint=/mnt
 fi
 
-if test -z "$nixosDir"; then
-    nixosDir=/etc/nixos/nixos
+if test -z "$NIXOS"; then
+    NIXOS=/etc/nixos/nixos
 fi
 
-if test -z "$nixosConfiguration"; then
-    nixosConfiguration=/etc/nixos/configuration.nix
+if test -z "$NIXOS_CONFIG"; then
+    NIXOS_CONFIG=/etc/nixos/configuration.nix
 fi
 
 if ! test -e "$mountPoint"; then
@@ -33,19 +33,19 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     exit 1
 fi
     
-if ! test -e "$nixosDir"; then
-    echo "NixOS source directory $nixosDir doesn't exist"
+if ! test -e "$NIXOS"; then
+    echo "NixOS source directory $NIXOS doesn't exist"
     exit 1
 fi
     
-if ! test -e "$nixosConfiguration"; then
-    echo "configuration file $nixosConfiguration doesn't exist"
+if ! test -e "$NIXOS_CONFIG"; then
+    echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
     
 
-nixosDir=$(readlink -f "$nixosDir")
-nixosConfiguration=$(readlink -f "$nixosConfiguration")
+NIXOS=$(readlink -f "$NIXOS")
+NIXOS_CONFIG=$(readlink -f "$NIXOS_CONFIG")
 
 
 # Mount some stuff in the target root directory.
@@ -141,8 +141,8 @@ fi
 echo "building the system configuration..."
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt$nixosDir/system/system.nix" \
-    --arg configuration "import /mnt$nixosConfiguration" \
+    -f "/mnt$NIXOS/system/system.nix" \
+    --arg configuration "import /mnt$NIXOS_CONFIG" \
     --set -A system
 
 
@@ -153,8 +153,8 @@ mkdir -p $(dirname $targetConfig)
 if test -e $targetConfig -o -L $targetConfig; then
     cp -f $targetConfig $targetConfig.backup-$backupTimestamp
 fi
-if test "$nixosConfiguration" != "$targetConfig"; then
-    cp -f $nixosConfiguration $targetConfig
+if test "$NIXOS_CONFIG" != "$targetConfig"; then
+    cp -f $NIXOS_CONFIG $targetConfig
 fi
 
 
@@ -173,7 +173,7 @@ fi
 
 
 # Copy the NixOS/Nixpkgs sources to the target.
-cp -prd $nixosDir $targetNixos
+cp -prd $NIXOS $targetNixos
 if test -e /etc/nixos/nixpkgs; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi

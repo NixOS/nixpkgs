@@ -135,5 +135,5 @@ To get out of maintenance mode:
   $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
   $ yes | mke2fs -j diskimage
   $ mount -o loop diskimage /mnt
-  $ ./result/bin/nixos-installer /mnt /etc/nixos/nixos/ /etc/nixos/configuration.nix
+  $ ./result/bin/nixos-installer
 
