@@ -6,8 +6,8 @@ let
     if config.get option then [file] else [];
 
   envConf = pkgs.writeText "environment" "
-    PATH=${systemPath}/bin:${systemPath}/sbin
-  ";
+    PATH=${systemPath}/bin:${systemPath}/sbin:${pkgs.openssh}/bin
+  " /* ${pkgs.openssh}/bin is a hack to get remote scp to work */; 
 
 in
     
