@@ -1,0 +1,241 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Installation</title>
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Building the installation CD</title>
+
+<para>Instead of building an installation CD, you could just download
+one from <link xlink:href="http://nix.cs.uu.nl/nixos/"/>.  If you want
+(or need) to build it yourself:
+
+<orderedlist>
+
+  <listitem><para>Make sure that you have a <emphasis>very</emphasis>
+  recent pre-release version of Nix installed (<link
+  xlink:href="http://nix.cs.uu.nl/dist/nix/nix-unstable-latest/"/>).
+  The NixOS Nix expressions frequently use bleading-edge features.  If
+  you get any kind of expression evaluation error, try to upgrade your
+  Nix.</para></listitem>
+
+  <listitem><para>Optional but strongly recommended (and currently
+  <emphasis>required</emphasis> for building the
+  <literal>x86_64</literal> ISO): subscribe/pull from the Nixpkgs
+  channel to speed up building, i.e.,
+
+<screen>
+$ nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
+$ nix-channel --update</screen>
+
+  </para></listitem>
+
+  <listitem><para>Check out NixOS from <link
+  xlink:href="https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk"/> as
+  <literal>nixos</literal>.</para></listitem>
+
+  <listitem><para>If you don’t already have Nixpkgs checkout, Check
+  out Nixpkgs from <link
+  xlink:href="https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk"/> as
+  <literal>nixpkgs</literal>.</para></listitem>
+
+  <listitem><para>In the directory <literal>nixos</literal>, make a
+  symbolic link <literal>pkgs</literal> to the <literal>pkgs</literal>
+  directory of the Nixpkgs tree, e.g.,
+
+<screen>
+$ ln -s nixpkgs/pkgs nixos/</screen>
+
+  </para></listitem>
+
+  <listitem><para>Build the ISO image:
+
+<screen>
+$ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
+
+  If everything goes well, you’ll end up with an ISO image in
+  <filename>./result/iso/nixos.iso</filename>.</para></listitem>
+
+  <listitem><para>Burn the ISO image
+  <filename>./result/iso/nixos.iso</filename> onto a CD or DVD or
+  attach it to a CD-ROM drive in VMware.</para></listitem>
+
+</orderedlist>
+  
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Installation</title>
+
+<orderedlist>
+
+  <listitem><para>Boot from the CD.</para></listitem>
+
+  <listitem><para>The CD contains a basic NixOS installation.  When
+  it’s finished booting, it should have detected most of your hardware
+  and brought up networking (check <command>ifconfig</command>).
+  Networking is necessary for the installer, since it will download
+  lots of stuff (such as source tarballs or Nixpkgs channel binaries).
+  It’s best if you have a DHCP server on your network.  Otherwise
+  configure manually.</para></listitem>
+
+  <listitem><para>Login as <literal>root</literal>, empty
+  password.</para></listitem>
+
+  <listitem><para>The NixOS installer doesn’t do any partitioning or
+  formatting yet, so you need to that yourself.  Use the following
+  commands:
+
+  <itemizedlist>
+
+    <listitem><para>For partitioning:
+    <command>fdisk</command>.</para></listitem>
+    
+    <listitem><para>For initialising Ext2/Ext3 partitions:
+    <command>mke2fs</command>.  Ext3 is recommended; use the
+    <option>-j</option> to create a journalled file system.  It is
+    also recommended that you assign a unique symbolic label to the
+    file system using the option <option>-L
+    <replaceable>label</replaceable></option>.  This will make the
+    file system configuration independent from device
+    changes.</para></listitem>
+
+    <listitem><para>For creating swap partitions:
+    <command>mkswap</command>.  Again it’s recommended to assign a
+    label to the swap partition: <option>-L
+    <replaceable>label</replaceable></option>.</para></listitem>
+    
+    <listitem><para>For creating LVM volumes, the LVM commands, e.g.,
+
+<screen>
+$ pvcreate /dev/sda1 /dev/sdb1
+$ vgcreate MyVolGroup /dev/sda1 /dev/sdb1
+$ lvcreate --size 2G --name bigdisk MyVolGroup 
+$ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
+
+    Possibly you’ll need to do <userinput>initctl start
+    lvm</userinput> after this (TODO: check whether this is
+    needed).</para></listitem>
+
+    <listitem><para>For creating software RAID devices:
+    <command>mdadm</command>.</para></listitem>
+
+    <listitem><para>Mount the target file system on
+    <filename>/mnt</filename>.</para></listitem>
+
+    <listitem><para>The installation is declarative; you need to write
+    a description of the configuration that you want to be built and
+    activated.  The configuration is specified in a Nix expression and
+    should be stored in
+    <filename>/etc/nixos/configuration.nix</filename>.  See
+    <filename>/etc/nixos/nixos/configuration/examples</filename> for
+    example machine configurations.  You can copy and edit one of
+    those (e.g., copy
+    <filename>/etc/nixos/nixos/configuration/examples/basic.nix</filename>
+    to <filename>/etc/nixos/configuration.nix</filename>).  See <xref
+    linkend="sec-options"/> for a list of the available configuration
+    options.  The text editor <command>nano</command> is
+    available.</para>
+
+    <para>In particular you need to specify a root file system in
+    <option>fileSystems</option> and the target device for the Grub
+    boot loader in <option>boot.grubDevice</option>.</para>
+
+    <para>More examples of NixOS configurations for some actual
+    machines can be found at <link
+    xlink:href="https://svn.cs.uu.nl:12443/repos/trace/configurations/trunk/"/>.</para>
+
+    </listitem>
+
+    <listitem><para>Do the installation:
+
+<screen>
+$ nixos-install</screen>
+
+    Cross fingers.</para></listitem>
+
+    <listitem><para>If everything went well:
+
+<screen>
+$ reboot</screen>
+
+    You should now be able to boot into the installed NixOS.  The Grub
+    boot menu shows a list of <emphasis>available
+    configurations</emphasis> (initially just one).  Every time you
+    change the NixOS configuration, a new item appears in the menu.
+    This allows you to go back easily to another configuration if
+    something goes wrong.</para>
+
+    <para>You should log in and change the <literal>root</literal>
+    password with <command>passwd</command>.</para></listitem>
+
+  </itemizedlist>
+
+  </para></listitem>
+    
+</orderedlist>
+
+</section>
+
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Changing the configuration</title>
+
+<para>The file <filename>/etc/nixos/configuration.nix</filename>
+contains the current configuration of your machine.  Whenever you’ve
+changed something to that file, or to the NixOS/Nixpkgs sources in
+<filename>/etc/nixos/nixos</filename> and
+<filename>/etc/nixos/nixpkgs</filename>, respectively, you should do
+
+<screen>
+$ nixos-rebuild switch</screen>
+
+to build the new configuration, make it the default configuration for
+booting, and try to effect the configuration in the running system
+(e.g., by restarting system services).</para>
+
+<para>You can also do 
+
+<screen>
+$ nixos-rebuild test</screen>
+
+to build the configuration and switch the running system to it, but
+without making it the boot default.  So if (say) the configuration
+locks up your machine, you can just reboot to get back to a working
+configuration.</para>
+
+<para>There is also 
+
+<screen>
+$ nixos-rebuild boot</screen>
+
+to build the configuration and make it the boot default, but not
+switch to it now (so it will only take effect after the next
+reboot).</para>
+
+<para>Finally, you can do 
+
+<screen>
+$ nixos-rebuild build</screen>
+
+to build the configuration but nothing more.  This is useful to see
+whether everything compiles cleanly.</para>
+
+</section>
+
+
+</chapter>

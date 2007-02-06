@@ -1,4 +1,5 @@
 <book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <info>
@@ -18,6 +19,21 @@
     </copyright>
     
   </info>
+
+  
+  <preface>
+    <title>Preface</title>
+
+    <para>This manual is very sketchy.  It gives basic information on
+    how to get NixOS up and running, but since NixOS is very much a
+    work in progress, you are likely to encounter problems here and
+    there.  Extensive familiarity with Linux is recommended.  If you
+    encounter problems, please report them on the
+    <literal>nix-dev@cs.uu.nl</literal> mailing list or on <link
+    xlink:href="irc://irc.freenode.net/#trace" />.</para>
+    
+  </preface>
+  
 
   <xi:include href="installation.xml" />
   <xi:include href="options-db.xml" />
