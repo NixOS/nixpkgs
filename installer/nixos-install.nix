@@ -1,4 +1,4 @@
-{ stdenv, perl, runCommand, substituteAll, nix
+{ perl, runCommand, substituteAll, nix
 , # URL of the Nixpkgs distribution that the installer will pull.
   # Leave empty for a pure source distribution.
   nixpkgsURL ? ""

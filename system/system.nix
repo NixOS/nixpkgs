@@ -111,9 +111,14 @@ rec {
 
   # The installer.
   nixosInstall = import ../installer/nixos-install.nix {
-    inherit (pkgs) stdenv perl runCommand substituteAll;
+    inherit (pkgs) perl runCommand substituteAll;
     inherit nix;
     nixpkgsURL = config.get ["installer" "nixpkgsURL"];
+  };
+
+  nixosRebuild = import ../installer/nixos-rebuild.nix {
+    inherit (pkgs) substituteAll;
+    inherit nix;
   };
 
 
@@ -186,6 +191,7 @@ rec {
 #    pkgs.vim
     nix
     nixosInstall
+    nixosRebuild
     setuidWrapper
   ];
 
