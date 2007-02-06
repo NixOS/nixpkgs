@@ -30,6 +30,12 @@ for i in $(find /etc/ -type l); do
 done
 
 
+# Create the required /bin/sh symlink; otherwise lots of things
+# (notably the system() function) won't work.
+mkdir -m 0755 -p $mountPoint/bin
+ln -sfn @shell@ $mountPoint/bin/sh
+
+
 # Various log directories.
 mkdir -m 0755 -p /var/run
 
