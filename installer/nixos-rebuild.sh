@@ -56,8 +56,8 @@ fi
 if test "$action" = "test"; then
     cat >&2 <<EOF
 
-Warning: if you remove the symlink \`$pathToConfig', the active system
-configuration may be garbage collected!  This may render the system
-inoperable (though a reboot will fix things).
+Warning: if you remove or overwrite the symlink \`$pathToConfig', the
+active system configuration may be garbage collected!  This may render
+the system inoperable (though a reboot will fix things).
 EOF
 fi
