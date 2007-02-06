@@ -38,7 +38,7 @@ let
 
 in
 
-assert autoDetectRootDevice -> mountPoints != [];
+assert !autoDetectRootDevice -> mountPoints != [];
 
 substituteAll {
   src = ./boot-stage-1-init.sh;
