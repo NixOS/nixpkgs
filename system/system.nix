@@ -68,12 +68,10 @@ rec {
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
     autoDetectRootDevice = config.get ["boot" "autoDetectRootDevice"];
-    rootDevice =
-      let rootFS = 
-        (pkgs.library.findSingle (fs: fs.mountPoint == "/")
-          (abort "No root mount point declared.")
-          (config.get ["fileSystems"]));
-      in if rootFS ? device then rootFS.device else "LABEL=" + rootFS.label;
+    fileSystems =
+      pkgs.lib.filter
+        (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
+        (config.get ["fileSystems"]);
     rootLabel = config.get ["boot" "rootLabel"];
     inherit stage2Init;
     modulesDir = modulesClosure;

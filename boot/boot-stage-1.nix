@@ -10,8 +10,15 @@
 , # Whether to find root device automatically using its label.
   autoDetectRootDevice
   
-, # If not scanning, the root must be specified explicitly.
-  rootDevice
+, # If not scanning, the root must be specified explicitly.  Actually,
+  # stage 1 can mount multiple file systems.  This is necessary if,
+  # for instance, /nix (necessary for stage 2) is on a different file
+  # system than /.
+  #
+  # This is a list of {mountPoint, device|label} attribute sets, i.e.,
+  # the format used by the fileSystems configuration option.  There
+  # must at least be a file system for the / mount point in this list.
+  fileSystems ? []
 
   # If scanning, we need a disk label.
 , rootLabel
@@ -21,12 +28,23 @@
   stage2Init ? "/init"
 }:
 
+let
+
+  # !!! use XML; copy&pasted from upstart-jobs/filesystems.nix.
+  mountPoints = map (fs: fs.mountPoint) fileSystems;
+  devices = map (fs: if fs ? device then fs.device else "LABEL=" + fs.label) fileSystems;
+  fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
+  optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
+
+in
+
+assert autoDetectRootDevice -> mountPoints != [];
+
 substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
   inherit staticShell modules modulesDir;
-  inherit autoDetectRootDevice;
-  rootDevice = if !autoDetectRootDevice then rootDevice else "";
+  inherit autoDetectRootDevice mountPoints devices fsTypes optionss;
   rootLabel = if autoDetectRootDevice then rootLabel else "";
   path = [
     staticTools

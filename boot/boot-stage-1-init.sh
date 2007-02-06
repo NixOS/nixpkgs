@@ -3,6 +3,7 @@
 fail() {
     # If starting stage 2 failed, start an interactive shell.
     echo "Stage 2 failed, starting emergency shell..."
+    echo "(Stage 1 init script is $stage2Init)"
     exec @staticShell@
 }
 
@@ -67,11 +68,54 @@ udevtrigger
 udevsettle
 
 
+# Function for mounting a file system.
+mountFS() {
+    local device="$1"
+    local mountPoint="$2"
+    local options="$3"
+
+    # Check the root device, if .
+    mustCheck=
+    if test -b "$device"; then
+        mustCheck=1
+    else
+        case $device in
+            LABEL=*)
+                mustCheck=1
+                ;;
+        esac
+    fi
+
+    if test -n "$mustCheck"; then
+        fsck -C -a "$device"
+        fsckResult=$?
+
+        if test $(($fsckResult | 2)) = $fsckResult; then
+            echo "fsck finished, rebooting..."
+            sleep 3
+            # reboot -f -d !!! don't have reboot yet
+            fail
+        fi
+
+        if test $(($fsckResult | 4)) = $fsckResult; then
+            echo "$device has unrepaired errors, please fix them manually."
+            fail
+        fi
+
+        if test $fsckResult -ge 8; then
+            echo "fsck on $device failed."
+            fail
+        fi
+    fi
+
+    # Mount read-writable.
+    mount -n -o "$options" "$device" /mnt/root$mountPoint || fail
+}
+
+
 # Try to find and mount the root device.
 mkdir /mnt
 mkdir /mnt/root
-
-echo "mounting the root device..."
 
 if test -n "@autoDetectRootDevice@"; then
 
@@ -109,33 +153,37 @@ if test -n "@autoDetectRootDevice@"; then
 
 else
 
-    # Hard-coded root device.
-    rootDevice="@rootDevice@"
+    # Hard-coded root device(s).
+    mountPoints=(@mountPoints@)
+    devices=(@devices@)
+    fsTypes=(@fsTypes@)
+    optionss=(@optionss@)
 
-    # Check the root device.
-    fsck -C -a "$rootDevice"
-    fsckResult=$?
+    for ((n = 0; n < ${#mountPoints[*]}; n++)); do
+        mountPoint=${mountPoints[$n]}
+        device=${devices[$n]}
+        fsType=${fsTypes[$n]}
+        options=${optionss[$n]}
 
-    if test $(($fsckResult | 2)) = $fsckResult; then
-        echo "fsck finished, rebooting..."
-        sleep 3
-        # reboot -f -d !!! don't have reboot yet
-        fail
-    fi
+        # !!! Really quick hack to support bind mounts, i.e., where
+        # the "device" should be taken relative to /mnt/root, not /.
+        # Assume that every device that doesn't start with /dev or
+        # LABEL= is a bind mount.
+        case $device in
+            /dev/*)
+                ;;
+            LABEL=*)
+                ;;
+            *)
+                device=/mnt/root$device
+                ;;
+        esac
 
-    if test $(($fsckResult | 4)) = $fsckResult; then
-        echo "$rootDevice has unrepaired errors, please fix them manually."
-        fail
-    fi
+        echo "mounting $device on $mountPoint..."
 
-    if test $fsckResult -ge 8; then
-        echo "fsck on $rootDevice failed."
-        fail
-    fi
-
-    # Mount read-writable.
-    mount -n -o rw "$rootDevice" /mnt/root || fail
-
+        mountFS "$device" "$mountPoint" "$options"
+    done
+    
 fi
 
 
@@ -147,8 +195,6 @@ cd /mnt/root
 mount --move . /
 umount /proc # cleanup
 umount /sys
-
-echo "INIT = $stage2Init"
 
 if test -z "$stage2Init"; then fail; fi
 
