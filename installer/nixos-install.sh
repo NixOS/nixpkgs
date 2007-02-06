@@ -177,6 +177,7 @@ cp -prd $NIXOS $targetNixos
 if test -e /etc/nixos/nixpkgs; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi
+ln -sfn nixpkgs/pkgs/top-level/all-packages.nix $mountPoint/etc/nixos/install-source.nix
 
 
 # Grub needs a mtab.
