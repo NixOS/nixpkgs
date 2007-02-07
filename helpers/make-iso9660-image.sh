@@ -8,7 +8,20 @@ symlinks=($symlinks)
 
 
 if test -n "$bootable"; then
-    bootFlags="-b $bootImage -c boot.cat -no-emul-boot -boot-load-size 4"
+
+    # The -boot-info-table option modifies the $bootImage file, so
+    # find it in `contents' and make a copy of it (since the original
+    # is read-only in the Nix store...).
+    for ((i = 0; i < ${#targets_[@]}; i++)); do
+        if test "${targets_[$i]}" = "$bootImage"; then
+            echo "copying the boot image ${sources_[$i]}"
+            cp "${sources_[$i]}" boot.img
+            chmod u+w boot.img
+            sources_[$i]=boot.img
+        fi
+    done
+
+    bootFlags="-b $bootImage -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
 fi
 
 
