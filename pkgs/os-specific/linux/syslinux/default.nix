@@ -1,10 +1,10 @@
 {stdenv, fetchurl, nasm, perl}:
 
 stdenv.mkDerivation {
-  name = "syslinux-3.31";
+  name = "syslinux-3.35";
   src = fetchurl {
-    url = http://www.nl.kernel.org/pub/linux/utils/boot/syslinux/syslinux-3.31.tar.bz2;
-    sha256 = "1w0hw28w97mj27h4w64wn9bi24zcff1i8ifcxnbh4iing1pcmi2p";
+    url = http://www.kernel.org/pub/linux/utils/boot/syslinux/syslinux-3.35.tar.bz2;
+    sha256 = "16kf2zhd0c4m3ai9xcls2y0ggvajhmzk1g6mv6jrv8nskkg6w0l6";
   };
   buildInputs = [nasm perl];
 
