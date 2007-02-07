@@ -126,6 +126,7 @@
     default = [
       "ahci"
       "ata_piix"
+      "pata_marvell"
       "sd_mod"
       "sr_mod"
       "ide-cd"
