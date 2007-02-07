@@ -2214,6 +2214,10 @@ rec {
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
       }
+      { name = "pata-marvell";
+        patch = ../os-specific/linux/kernel/pata-marvell.patch;
+        extraConfig = "CONFIG_PATA_MARVELL=m";
+      }
     ];
   };
 
