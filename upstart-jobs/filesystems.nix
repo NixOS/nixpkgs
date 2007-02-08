@@ -53,6 +53,16 @@ script
                 continue
             fi
 
+            # !!! quick hack: if mount point already exists, try a
+            # remount to change the options but nothing else.
+            if cat /proc/mounts | grep -F -q \" $mountPoint \"; then
+                echo \"remounting $device on $mountPoint\"
+                ${utillinux}/bin/mount -t \"$fsType\" \\
+                    -o remount,\"$options\" \\
+                    \"$device\" \"$mountPoint\" || true
+                continue
+            fi
+
             # If $device is already mounted somewhere else, unmount it first.
             # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
             # contains more accurate info when using loop devices.
@@ -69,11 +79,11 @@ script
                 )
 
                 if test \"$prevMountPoint\" = \"$mountPoint\"; then
-                     echo \"remounting $device on $mountPoint\"
-                     ${utillinux}/bin/mount -t \"$fsType\" \\
-                         -o remount,\"$options\" \\
-                         \"$device\" \"$mountPoint\" || true
-                     continue
+                    echo \"remounting $device on $mountPoint\"
+                    ${utillinux}/bin/mount -t \"$fsType\" \\
+                        -o remount,\"$options\" \\
+                        \"$device\" \"$mountPoint\" || true
+                    continue
                 fi
 
                 if test -n \"$prevMountPoint\"; then
