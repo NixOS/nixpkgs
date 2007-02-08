@@ -35,7 +35,7 @@ installPhase() {
 
         # Copy the bzImage and System.map.
         cp System.map $out
-        cp arch/$arch/bzImage $out/vmlinuz
+        cp arch/$arch/boot/bzImage $out/vmlinuz
 
         # Install the modules in $out/lib/modules with matching paths
         # in modules.dep (i.e., refererring to $out/lib/modules, not
