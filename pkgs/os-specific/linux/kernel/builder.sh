@@ -32,8 +32,10 @@ installPhase=installPhase
 installPhase() {
 
 	ensureDir $out
-        
-	make install
+
+        # Copy the bzImage and System.map.
+        cp System.map $out
+        cp arch/$arch/bzImage $out/vmlinuz
 
         # Install the modules in $out/lib/modules with matching paths
         # in modules.dep (i.e., refererring to $out/lib/modules, not
