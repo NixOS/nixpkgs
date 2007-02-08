@@ -2193,7 +2193,7 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_19;
+  kernel = kernel_2_6_20;
 
   kernel_2_6_19 = import ../os-specific/linux/kernel/linux-2.6.19.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -2217,6 +2217,28 @@ rec {
       { name = "pata-marvell";
         patch = ../os-specific/linux/kernel/pata-marvell.patch;
         extraConfig = "CONFIG_PATA_MARVELL=m";
+      }
+    ];
+  };
+
+  kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "skas-2.6.20-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
+          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
+        };
+        extraConfig =
+          "CONFIG_PROC_MM=y\n" +
+          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
+      }
+      { name = "fbsplash-0.9.2-r5-2.6.20-rc6";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.20-rc6.patch;
+          sha256 = "11v4f85f4jnh9sbhqcyn47krb7l1czgzjw3w8wgbq14jm0sp9294";
+        };
+        extraConfig = "CONFIG_FB_SPLASH=y";
       }
     ];
   };
