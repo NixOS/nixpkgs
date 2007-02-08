@@ -2,9 +2,11 @@
 set -x
 
 # Obtain Subversion.
-nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
-nix-channel --update
-nix-env -i subversion
+if test -z "$(type -tp svn)"; then
+    nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
+    nix-channel --update
+    nix-env -i subversion
+fi
 
 cd /etc/nixos
 
