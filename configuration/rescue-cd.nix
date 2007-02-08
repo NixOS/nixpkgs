@@ -1,7 +1,7 @@
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.11pre7871";
+  nixpkgsRel = "nixpkgs-0.11pre7883";
 
 
   configuration = {
@@ -118,7 +118,7 @@ rec {
   # Get a recent copy of Nixpkgs.
   nixpkgsTarball = pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
-    md5 = "262eadc0c4d1d954cf0ac8b03a9edfef";
+    md5 = "ed4a3b5b0acd39be511381a81787b0c0";
   };
 
 
