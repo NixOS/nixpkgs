@@ -176,6 +176,17 @@
 
 
   {
+    name = ["boot" "copyKernels"];
+    default = false;
+    description = "
+      Whether the Grub menu builder should copy kernels and initial
+      ramdisks to /boot.  This is necessary when /nix is on a
+      different file system than /.
+    ";
+  }
+
+
+  {
     name = ["networking" "useDHCP"];
     default = true;
     description = "

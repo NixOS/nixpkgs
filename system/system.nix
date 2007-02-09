@@ -256,6 +256,7 @@ rec {
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    copyKernels = config.get ["boot" "copyKernels"];
   };
 
 

@@ -19,22 +19,45 @@ default=0
 timeout=5
 GRUBEND
 
-addEntry() {
-    name="$1"
-    path="$2"
 
-    if ! test -e $path/menu.lst; then
+
+addEntry() {
+    local name="$1"
+    local path="$2"
+
+    if ! test -e $path/kernel -a -e $path/initrd; then
         return
     fi
 
+    local kernel=$(readlink -f $path/kernel)
+    local initrd=$(readlink -f $path/initrd)
+
+    if test -n "@copyKernels@"; then
+        local kernel2=/boot/kernels/$(echo $kernel | sed 's^/^-^g')
+        if ! test -e $kernel2; then
+            cp $kernel $kernel2
+        fi
+        kernel=$kernel2
+
+        local initrd2=/boot/kernels/$(echo $initrd | sed 's^/^-^g')
+        if ! test -e $initrd2; then
+            cp $initrd $initrd2
+        fi
+        initrd=$initrd2
+    fi
+    
     cat >> $tmp << GRUBEND
 title $name
+  kernel $kernel init=$(readlink -f $path/init) $(cat $path/kernel-params)
+  initrd $initrd
 GRUBEND
-
-    #cat $path/menu.lst >> $tmp
-
-    grep -v "title \|default=\|timeout=" < $path/menu.lst >> $tmp
 }
+
+
+rm -rf /boot/kernels
+if test -n "@copyKernels@"; then
+    mkdir -p /boot/kernels
+fi
 
 
 if test -n "$tmp"; then
@@ -52,7 +75,6 @@ for generation in $(
     link=/nix/var/nix/profiles/system-$generation-link
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
     addEntry "NixOS - Configuration $generation ($date)" $link
-        
 done
 
 
