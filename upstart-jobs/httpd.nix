@@ -48,6 +48,7 @@ let
 
           notificationSender = getCfgSvn "notificationSender";
           autoVersioning = getCfgSvn "autoVersioning";
+          userCreationDomain = getCfgSvn "userCreationDomain";
 
           inherit pkgs;
         })

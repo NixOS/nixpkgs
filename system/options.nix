@@ -538,6 +538,17 @@
 
   
   {
+    name = ["services" "httpd" "subservices" "subversion" "userCreationDomain"];
+    example = "example.org";
+    description = "
+      The domain from which user creation is allowed.  A client can
+      only create a new user account if its IP address resolves to
+      this domain.
+    ";
+  }
+
+  
+  {
     name = ["services" "httpd" "subservices" "subversion" "autoVersioning"];
     default = false;
     description = "
