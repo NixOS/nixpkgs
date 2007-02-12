@@ -2169,6 +2169,10 @@ rec {
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
+  iptables = import ../os-specific/linux/iptables {
+    inherit fetchurl stdenv;
+  };
+
   kernelHeaders = import ../os-specific/linux/kernel-headers {
     inherit fetchurl stdenv;
   };
