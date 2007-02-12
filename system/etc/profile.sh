@@ -31,7 +31,7 @@ fi
 NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
 
 for i in $NIX_PROFILES; do # !!! reverse
-    export PATH=$i/bin:$PATH
+    export PATH=$i/bin:$i/sbin:$PATH
 done
 
 
