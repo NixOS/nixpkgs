@@ -1,5 +1,15 @@
 # !!! Don't like it that I have to pass the kernel here.
-{nettools, kernel, module_init_tools}:
+{ nettools, kernel, module_init_tools
+, nameservers, defaultGateway, interfaces
+}:
+
+let
+
+  # !!! use XML
+  names = map (i: i.name) interfaces;
+  ipAddresses = map (i: i.ipAddress) interfaces;
+
+in 
 
 {
   name = "network-interfaces";
@@ -17,6 +27,30 @@ start script
         echo \"Bringing up network device $i...\"
         ${nettools}/sbin/ifconfig $i up || true
     done
+
+    # Configure the manually specified interfaces.
+    names=(${toString names})
+    ipAddresses=(${toString ipAddresses})
+    
+    for ((n = 0; n < \${#names[*]}; n++)); do
+        name=\${names[$n]}
+        ipAddress=\${ipAddresses[$n]}
+        echo \"Configuring interface $i...\"
+        ${nettools}/sbin/ifconfig \"$name\" up \"$ipAddress\" || true
+    done
+
+    # Set the nameservers.
+    if test -n \"${toString nameservers}\"; then
+        rm -f /etc/resolv.conf
+        for i in ${toString nameservers}; do
+            echo \"nameserver $i\" >> /etc/resolv.conf
+        done
+    fi
+
+    # Set the default gateway.
+    if test -n \"${defaultGateway}\"; then
+        ${nettools}/sbin/route add default gw \"${defaultGateway}\" || true
+    fi
 
 end script
 

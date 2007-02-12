@@ -59,14 +59,11 @@ import ../upstart-jobs/gather.nix {
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
       inherit (pkgs) nettools kernel module_init_tools;
+      nameservers = config.get ["networking" "nameservers"];
+      defaultGateway = config.get ["networking" "defaultGateway"];
+      interfaces = config.get ["networking" "interfaces"];
     })
       
-    # DHCP client.
-    (import ../upstart-jobs/dhclient.nix {
-      inherit (pkgs) nettools;
-      dhcp = pkgs.dhcpWrapper;
-    })
-
     # Nix daemon - required for multi-user Nix.
     (import ../upstart-jobs/nix-daemon.nix {
       inherit nix;
@@ -92,6 +89,13 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/ctrl-alt-delete.nix)
 
   ]
+
+  # DHCP client.
+  ++ optional ["networking" "useDHCP"]
+    (import ../upstart-jobs/dhclient.nix {
+      inherit (pkgs) nettools;
+      dhcp = pkgs.dhcpWrapper;
+    })
 
   # SSH daemon.
   ++ optional ["services" "sshd" "enable"]

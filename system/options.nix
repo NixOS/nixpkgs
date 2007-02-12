@@ -201,16 +201,35 @@
     name = ["networking" "interfaces"];
     default = [];
     example = [
-      { interface = "eth0";
+      { name = "eth0";
         ipAddress = "131.211.84.78";
         netmask = "255.255.255.128";
-        gateway = "131.211.84.1";
       }
     ];
     description = "
       The configuration for each network interface.  If
       <option>networking.useDHCP</option> is true, then each interface
       not listed here will be configured using DHCP.
+    ";
+  }
+
+  
+  {
+    name = ["networking" "defaultGateway"];
+    default = "";
+    example = "131.211.84.1";
+    description = "
+      The default gateway.  It can be left empty if it is auto-detected through DHCP.
+    ";
+  }
+
+  
+  {
+    name = ["networking" "nameservers"];
+    default = [];
+    example = ["130.161.158.4" "130.161.33.17"];
+    description = "
+      The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
     ";
   }
 
