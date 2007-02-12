@@ -2173,6 +2173,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kernelHeaders_2_6_20 = import ../os-specific/linux/kernel-headers/2.6.20.nix {
+    inherit fetchurl stdenv;
+  };
+
   kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "arm-linux";
@@ -2261,6 +2265,14 @@ rec {
 
   klibc = import ../os-specific/linux/klibc {
     inherit fetchurl stdenv perl bison mktemp kernel;
+  };
+
+  kvm = kvm12;
+
+  kvm12 = import ../os-specific/linux/kvm/12.nix {
+    inherit fetchurl zlib e2fsprogs SDL alsaLib;
+    stdenv = overrideGCC stdenv gcc34;
+    kernelHeaders = kernelHeaders_2_6_20;
   };
 
   libcap = import ../os-specific/linux/libcap {
