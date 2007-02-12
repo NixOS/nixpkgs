@@ -12,4 +12,6 @@ stdenv.mkDerivation {
 
   # e2fsprogs is needed for libuuid.
   buildInputs = [zlib e2fsprogs SDL alsaLib];
+
+  preConfigure = "for i in configure user/configure; do substituteInPlace $i --replace /bin/bash $shell; done";
 }
