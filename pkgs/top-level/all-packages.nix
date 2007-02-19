@@ -457,6 +457,10 @@ rec {
 
   patch = useFromStdenv (stdenv ? patch) stdenv.patch gnupatch;
 
+  pciutils = import ../tools/system/pciutils {
+    inherit fetchurl stdenv zlib;
+  };
+
   ploticus = import ../tools/graphics/ploticus {
     inherit fetchurl stdenv zlib libpng;
     inherit (xlibs) libX11;

@@ -1,5 +1,6 @@
 source $stdenv/setup
 
+postInstall=postInstall
 postInstall() {
   ensureDir $out/lib
   ensureDir $out/include/pci
@@ -7,6 +8,6 @@ postInstall() {
   cp lib/libpci.a $out/lib
 }
 
-postInstall=postInstall
+makeFlags="PREFIX=$out"
 
 genericBuild
