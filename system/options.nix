@@ -33,8 +33,8 @@
     name = ["boot" "readOnlyRoot"];
     default = false;
     description = "
-      Whether the root device should be mounted writable.  This should
-      be set when booting from CD-ROM.
+      Whether the root device is read-only.  This should be set when
+      booting from CD-ROM.
     ";
   }
 

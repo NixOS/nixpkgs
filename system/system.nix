@@ -179,6 +179,8 @@ rec {
     pkgs.netcat
     pkgs.nettools
     pkgs.ntp
+    pkgs.openssh
+    pkgs.pciutils
     pkgs.perl
     pkgs.procps
     pkgs.pwdutils

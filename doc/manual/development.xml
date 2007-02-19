@@ -19,7 +19,8 @@ $ nix-build system/system.nix \
     -A <replaceable>attr</replaceable></screen>
 
 where <replaceable>attr</replaceable> is an attribute in
-system/system.nix (e.g., <literal>bootStage1</literal>).</para>
+<filename>system/system.nix</filename> (e.g.,
+<literal>bootStage1</literal>).</para>
 
 </section>
 
