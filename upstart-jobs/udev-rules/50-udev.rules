@@ -10,6 +10,7 @@ KERNEL=="urandom",              MODE="0644"
 KERNEL=="rtc",                  MODE="0600"
 KERNEL=="sonypi",               MODE="0666"
 KERNEL=="agpgart",              MODE="0600"
+KERNEL=="kvm",                  MODE="0666"
 
 
 # TTYs.
