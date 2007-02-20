@@ -578,7 +578,22 @@
     ";
   }
 
-  
+  {
+    name = ["services" "httpd" "extraSubservices" "enable"];
+    default = false;
+    description = "
+      Whether to enable the extra subservices in the webserver.
+    ";
+  }
+
+  {
+    name = ["services" "httpd" "extraSubservices" "services"];
+    default = false;
+    description = "
+      Extra subservices to enable in the webserver.
+    ";
+  }
+
   {
     name = ["installer" "nixpkgsURL"];
     default = "";

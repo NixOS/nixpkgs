@@ -3,6 +3,7 @@
 let
 
   getCfg = option: config.get ["services" "httpd" option];
+  getCfgs = options: config.get (["services" "httpd"] ++ options); 
   getCfgSvn = option: config.get ["services" "httpd" "subservices" "subversion" option];
 
   optional = conf: subService:
@@ -29,7 +30,7 @@ let
     subServices =
     
       # The Subversion subservice.
-      optional (getCfgSvn "enable") (
+      (optional (getCfgSvn "enable") (
         let dataDir = getCfgSvn "dataDir"; in
         import ../services/subversion {
           reposDir = dataDir + "/repos";
@@ -52,10 +53,15 @@ let
 
           inherit pkgs;
         })
-        
+      )
+      ++
+
+      (optional (getCfgs ["extraSubservices" "enable"]) (
+        (getCfgs ["extraSubservices" "services"]) webServer pkgs
+        )
+      )
       ;
   };
-
   
 in
 
