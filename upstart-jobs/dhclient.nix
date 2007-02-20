@@ -12,6 +12,8 @@ stop on network-interfaces/stop
 env PATH_DHCLIENT_SCRIPT=${dhcp}/sbin/dhclient-script
 
 script
+    export PATH=${nettools}/sbin:$PATH
+
     # Determine the interface on which to start dhclient.
     interfaces=
 
@@ -25,7 +27,7 @@ script
     #    fi
     #done
 
-    for i in $(${nettools}/sbin/ifconfig | grep '^[^ ]' | sed 's/ .*//'); do
+    for i in $(ifconfig | grep '^[^ ]' | sed 's/ .*//'); do
         if test \"$i\" != \"lo\"; then
             interfaces=\"$interfaces $i\"
         fi
@@ -38,7 +40,7 @@ script
 
     mkdir -m 755 -p /var/state/dhcp
 
-    exec ${dhcp}/sbin/dhclient -d $interfaces
+    exec ${dhcp}/sbin/dhclient -d $interfaces -e \"PATH=$PATH\"
 end script
   ";
   
