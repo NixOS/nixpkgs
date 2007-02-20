@@ -19,9 +19,22 @@ script
 
     export PATH=${utillinux}/bin:${utillinux}/sbin:$PATH
 
+
     # Do an initial sync just in case.
     sync || true
 
+
+    # Kill all remaining processes except init and this one.
+    echo \"Sending the TERM signal to all processes...\"
+    kill -TERM -1
+
+    sleep 1 # wait briefly
+
+    echo \"Sending the KILL signal to all processes...\"
+    kill -KILL -1
+
+
+    # Unmount helper functions.
     getMountPoints() {
         cat /proc/mounts \\
         | grep -v '^rootfs' \\
