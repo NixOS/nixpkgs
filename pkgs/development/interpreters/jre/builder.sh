@@ -1,19 +1,11 @@
-#! /bin/sh
+source $stdenv/setup
 
-source $stdenv/setup || exit 1
+unzip $src || true
 
-cp $src $version.bin || exit 1
-chmod u+x $version.bin || exit 1
-
-alias more=cat
-
-echo "Unpacking J2RE"
-yes yes | ./$version.bin || exit 1
-
-mkdir $out || exit 1
+ensureDir $out
 
 echo "Moving sources to the right location"
-mv $version/* $out/ || exit 1
+mv $version/* $out/
 
 echo "Removing files at top level"
 for file in $out/*
@@ -23,3 +15,19 @@ do
   fi
 done
 rm -rf $out/docs
+
+# Set the dynamic linker.
+rpath=
+for i in $libraries; do
+    rpath=$rpath${rpath:+:}$i/lib
+done
+find $out -type f -perm +100 \
+    -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    --set-rpath "$rpath" {} \;
+
+# Unpack .pack files.
+for i in $(find $out -name "*.pack"); do
+    echo "unpacking $i..."
+    $out/bin/unpack200 "$i" "$(dirname $i)/$(basename $i .pack).jar"
+    rm "$i"
+done

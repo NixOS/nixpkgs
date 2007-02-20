@@ -865,7 +865,7 @@ rec {
   };
 
   jre = import ../development/interpreters/jre {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv unzip;
   };
 
   kaffe =  import ../development/interpreters/kaffe {
