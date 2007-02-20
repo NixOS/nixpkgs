@@ -31,11 +31,11 @@ start script
     # Configure the manually specified interfaces.
     names=(${toString names})
     ipAddresses=(${toString ipAddresses})
-    
+
     for ((n = 0; n < \${#names[*]}; n++)); do
         name=\${names[$n]}
         ipAddress=\${ipAddresses[$n]}
-        echo \"Configuring interface $i...\"
+        echo \"Configuring interface $name...\"
         ${nettools}/sbin/ifconfig \"$name\" up \"$ipAddress\" || true
     done
 
@@ -51,6 +51,10 @@ start script
     if test -n \"${defaultGateway}\"; then
         ${nettools}/sbin/route add default gw \"${defaultGateway}\" || true
     fi
+
+    # Restart dhclient.
+    #initctl stop dhclient || true
+    #initctl start dhclient || true
 
 end script
 
