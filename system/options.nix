@@ -588,7 +588,7 @@
 
   {
     name = ["services" "httpd" "extraSubservices" "services"];
-    default = false;
+    default = [];
     description = "
       Extra subservices to enable in the webserver.
     ";

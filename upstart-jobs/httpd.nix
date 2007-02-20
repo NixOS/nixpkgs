@@ -19,7 +19,6 @@ let
   logDir = getCfg "logDir";
   stateDir = getCfg "stateDir";
   enableSSL = false;
-
   
   webServer = import ../services/apache-httpd {
     inherit (pkgs) stdenv apacheHttpd coreutils;
@@ -56,8 +55,9 @@ let
       )
       ++
 
-      (optional (getCfgs ["extraSubservices" "enable"]) (
-        (getCfgs ["extraSubservices" "services"]) webServer pkgs
+      (optional (getCfgs ["extraSubservices" "enable"])
+        (map (service : service webServer pkgs)
+          (getCfgs ["extraSubservices" "services"])
         )
       )
       ;
