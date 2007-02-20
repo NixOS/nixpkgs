@@ -9,6 +9,8 @@ description \"DHCP client\"
 start on network-interfaces/started
 stop on network-interfaces/stop
 
+env PATH_DHCLIENT_SCRIPT=${dhcp}/sbin/dhclient-script
+
 script
     # Determine the interface on which to start dhclient.
     interfaces=

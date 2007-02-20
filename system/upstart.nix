@@ -93,8 +93,7 @@ import ../upstart-jobs/gather.nix {
   # DHCP client.
   ++ optional ["networking" "useDHCP"]
     (import ../upstart-jobs/dhclient.nix {
-      inherit (pkgs) nettools;
-      dhcp = pkgs.dhcpWrapper;
+      inherit (pkgs) nettools dhcp;
     })
 
   # SSH daemon.
