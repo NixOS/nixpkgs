@@ -12,6 +12,8 @@ assert event == "reboot"
 start on ${event}
 
 script
+    set +e # continue in case of errors
+
     exec < /dev/tty1 > /dev/tty1 2>&1
     echo \"\"
     echo \"<<< SYSTEM SHUTDOWN >>>\"
@@ -20,18 +22,23 @@ script
     export PATH=${utillinux}/bin:${utillinux}/sbin:$PATH
 
 
+    # Set the hardware clock to the system time.
+    echo \"Setting the hardware clock...\"
+    hwclock --systohc --utc || true
+
+
     # Do an initial sync just in case.
     sync || true
 
 
     # Kill all remaining processes except init and this one.
     echo \"Sending the TERM signal to all processes...\"
-    kill -TERM -1
+    kill -TERM -1 || true
 
     sleep 1 # wait briefly
 
     echo \"Sending the KILL signal to all processes...\"
-    kill -KILL -1
+    kill -KILL -1 || true
 
 
     # Unmount helper functions.
@@ -78,8 +85,10 @@ script
 
     cat /proc/mounts
 
+
     # Final sync.
     sync || true
+
 
     # Right now all events above power off the system.
     if test ${event} = reboot; then
@@ -87,6 +96,7 @@ script
     else
         exec halt -f -p
     fi
+
 end script
   ";
   
