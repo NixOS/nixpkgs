@@ -607,7 +607,7 @@
   
   {
     name = ["security" "setuidPrograms"];
-    default = ["passwd" "su" "crontab"];
+    default = ["passwd" "su" "crontab" "ping" "ping6"];
     description = "
       Only the programs listed here will be made setuid root (through
       a wrapper program).
