@@ -4,6 +4,8 @@ installFlags="PREFIX=$out"
 
 preInstall=preInstall
 preInstall() {
+    substituteInPlace bin/install.sh --replace /bin/bash $shell
+
     for i in bin/*; do
         echo "fixing $i..."
         sed -e "s^@PREFIX@^$out^" \
