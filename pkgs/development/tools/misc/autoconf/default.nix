@@ -1,10 +1,10 @@
 {stdenv, fetchurl, m4, perl}:
 
 stdenv.mkDerivation {
-  name = "autoconf-2.59";
+  name = "autoconf-2.61";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/autoconf-2.59.tar.bz2;
-    md5 = "1ee40f7a676b3cfdc0e3f7cd81551b5f";
+    url = http://ftp.gnu.org/gnu/autoconf/autoconf-2.61.tar.bz2;
+    md5 = "36d3fe706ad0950f1be10c46a429efe0";
   };
   buildInputs = [m4 perl];
 }
