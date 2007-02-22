@@ -12,16 +12,16 @@
  * - audiofile-config
  * - doxygen
  */
-{stdenv, fetchurl, pkgconfig, glib, gtk, perl, libxml2, openssl, nss}:
+{stdenv, fetchurl, pkgconfig, glib, gtk, perl, perlXMLParser, libxml2, openssl, nss}:
 
 stdenv.mkDerivation {
-  name = "gaim-1.5.0";
+  name = "gaim-2.0.0pre6";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gaim-1.5.0.tar.gz;
-    md5 = "dd984bd3116d8146545a492d314b0dae";
+    url = http://surfnet.dl.sourceforge.net/sourceforge/gaim/gaim-2.0.0beta6.tar.gz;
+    md5 = "0c7520d4ce083704d196c04c63dcd16a";
   };
 
   inherit nss;
-  buildInputs = [pkgconfig glib gtk perl libxml2 openssl nss];
+  buildInputs = [pkgconfig glib gtk perl perlXMLParser libxml2 openssl nss];
 }

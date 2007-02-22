@@ -1171,6 +1171,10 @@ rec {
     uulib = uulib66;
   };
 
+  gdb = import ../development/tools/misc/gdb {
+    inherit fetchurl stdenv ncurses;
+  };
+
   valgrind = import ../development/tools/misc/valgrind {
     inherit fetchurl stdenv;
   };
@@ -2613,7 +2617,7 @@ rec {
   };
 
   gaim = import ../applications/networking/instant-messengers/gaim {
-    inherit fetchurl stdenv pkgconfig perl libxml2 openssl nss;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss;
     inherit (gtkLibs) glib gtk;
   };
 
