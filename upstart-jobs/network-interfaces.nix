@@ -36,7 +36,7 @@ start script
         name=\${names[$n]}
         ipAddress=\${ipAddresses[$n]}
         echo \"Configuring interface $name...\"
-        ${nettools}/sbin/ifconfig \"$name\" up \"$ipAddress\" || true
+        ${nettools}/sbin/ifconfig \"$name\" \"$ipAddress\" || true
     done
 
     # Set the nameservers.
@@ -51,10 +51,6 @@ start script
     if test -n \"${defaultGateway}\"; then
         ${nettools}/sbin/route add default gw \"${defaultGateway}\" || true
     fi
-
-    # Restart dhclient.
-    #initctl stop dhclient || true
-    #initctl start dhclient || true
 
 end script
 
