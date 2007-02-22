@@ -579,6 +579,30 @@
   }
 
   {
+    name = ["services" "httpd" "subservices" "subversion" "organization" "name"];
+    default = null;
+    description = "
+      Name of the organization hosting the Subversion service.
+    ";
+  }
+
+  {
+    name = ["services" "httpd" "subservices" "subversion" "organization" "url"];
+    default = null;
+    description = "
+      URL of the website of the organization hosting the Subversion service.
+    ";
+  }
+
+  {
+    name = ["services" "httpd" "subservices" "subversion" "organization" "logo"];
+    default = null;
+    description = "
+      Logo the organization hosting the Subversion service.
+    ";
+  }
+
+  {
     name = ["services" "httpd" "extraSubservices" "enable"];
     default = false;
     description = "

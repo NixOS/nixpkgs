@@ -5,6 +5,7 @@ let
   getCfg = option: config.get ["services" "httpd" option];
   getCfgs = options: config.get (["services" "httpd"] ++ options); 
   getCfgSvn = option: config.get ["services" "httpd" "subservices" "subversion" option];
+  getCfgsSvn = options: config.get (["services" "httpd" "subservices" "subversion"] ++ options);
 
   optional = conf: subService:
     if conf then [subService] else [];
@@ -31,7 +32,7 @@ let
       # The Subversion subservice.
       (optional (getCfgSvn "enable") (
         let dataDir = getCfgSvn "dataDir"; in
-        import ../services/subversion {
+        import ../services/subversion ({
           reposDir = dataDir + "/repos";
           dbDir = dataDir + "/db";
           distsDir = dataDir + "/dist";
@@ -51,7 +52,19 @@ let
           userCreationDomain = getCfgSvn "userCreationDomain";
 
           inherit pkgs;
-        })
+        } //
+          ( if getCfgsSvn ["organization" "name"] != null then
+              {
+                orgName = getCfgsSvn ["organization" "name"];
+                orgLogoFile = getCfgsSvn ["organization" "logo"];
+                orgUrl = getCfgsSvn ["organization" "url"];
+              }
+            else
+              # use the default from the subversion service
+              {} 
+          )
+        )
+        )
       )
       ++
 
