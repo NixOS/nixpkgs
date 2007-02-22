@@ -1,4 +1,12 @@
-{dhcp, nettools}:
+{dhcp, nettools, interfaces, lib}:
+
+let 
+
+  # Don't start dhclient on explicitly configured interfaces.
+  ignoredInterfaces = ["lo"] ++
+    map (i: i.name) (lib.filter (i: i ? ipAddress) interfaces);
+
+in
 
 {
   name = "dhclient";
@@ -18,7 +26,7 @@ script
     interfaces=
 
     for i in $(cd /sys/class/net && ls -d *); do
-        if test \"$i\" != \"lo\"; then
+        if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q \"$i\"; then
             echo \"Running dhclient on $i\"
             interfaces=\"$interfaces $i\"
         fi
