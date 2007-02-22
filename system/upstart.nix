@@ -67,6 +67,7 @@ import ../upstart-jobs/gather.nix {
     # Nix daemon - required for multi-user Nix.
     (import ../upstart-jobs/nix-daemon.nix {
       inherit nix;
+      inherit (pkgs) openssl;
     })
 
     # Cron daemon.
