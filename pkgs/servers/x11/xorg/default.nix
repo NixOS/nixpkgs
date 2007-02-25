@@ -332,7 +332,7 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-cursor-misc-X11R7.0-1.0.0.tar.bz2;
       md5 = "82e89de0e1b9c95f32b0fc12f5131d2c";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig fontutil mkfontdir mkfontscale bdftopcf ];
   }) // {inherit ;};
     
   fontdaewoomisc = (stdenv.mkDerivation {
@@ -432,7 +432,9 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/font-misc-misc-X11R7.0-1.0.0.tar.bz2;
       md5 = "4a5a7987183a9e1ea232c8391ae4c244";
     };
-    buildInputs = [pkgconfig fontutil ];
+    buildInputs = [pkgconfig fontutil mkfontdir mkfontscale bdftopcf ];
+    # !!! hack
+    preFixup = "ln -s ${fontalias}/lib/X11/fonts/misc/fonts.alias $out/lib/X11/fonts/misc/fonts.alias";
   }) // {inherit fontutil ;};
     
   fontmuttmisc = (stdenv.mkDerivation {
