@@ -1,4 +1,6 @@
-{ substituteAll
+{ stdenv
+
+, lib
 
 , xorgserver
 
@@ -14,13 +16,29 @@
 , # X display number.
   display ? 0
 
+, # List of font directories.
+  fontDirectories
+
 }:
 
 let
 
-  config = substituteAll {
+  config = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
+    inherit fontDirectories;
+    buildCommand = "
+      buildCommand= # urgh, don't substitute this
+      export fontPaths=
+      for i in $fontDirectories; do
+        if test \"\${i:0:\${#NIX_STORE}}\" == \"$NIX_STORE\"; then
+          for j in $(find $i -name fonts.dir); do
+            fontPaths=\"\${fontPaths}FontPath \\\"$(dirname $j)\\\"\\n\"
+          done
+        fi
+      done
+      substituteAll $src $out
+    ";
   };
 
 in
@@ -39,11 +57,9 @@ end script
 exec ${xorgserver}/bin/X \\
     -ac -nolisten tcp -terminate \\
     -logfile /var/log/X.${toString display}.log \\
-    -fp /var/fonts \\
     -modulepath ${xorgserver}/lib/xorg/modules,${xf86inputkeyboard}/lib/xorg/modules/input,${xf86inputmouse}/lib/xorg/modules/input,${xf86videovesa}/lib/xorg/modules/drivers \\
     -config ${config} \\
     :${toString display} vt${toString tty}
-
   ";
   
 }
