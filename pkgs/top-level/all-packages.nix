@@ -2380,6 +2380,10 @@ rec {
     inherit fetchurl stdenv nasm perl;
   };
 
+  sysstat = import ../os-specific/linux/sysstat {
+    inherit fetchurl stdenv gettext;
+  };
+
   sysvinit = import ../os-specific/linux/sysvinit {
     inherit fetchurl stdenv;
   };
