@@ -1,8 +1,13 @@
-{ stdenv
+{ stdenv, writeText
 
 , lib
 
 , xorgserver
+
+, xinit
+
+, # Initial client/window manager.
+  twm, xterm
 
 , xf86inputkeyboard
 
@@ -41,6 +46,11 @@ let
     ";
   };
 
+  clientScript = writeText "xclient" "
+    ${twm}/bin/twm &
+    ${xterm}/bin/xterm -ls
+  ";
+
 in
 
 rec {
@@ -54,7 +64,7 @@ start script
 end script
 
 # !!! -ac is a bad idea.
-exec ${xorgserver}/bin/X \\
+exec ${xinit}/bin/xinit ${stdenv.bash}/bin/sh ${clientScript} -- ${xorgserver}/bin/X \\
     -ac -nolisten tcp -terminate \\
     -logfile /var/log/X.${toString display}.log \\
     -modulepath ${xorgserver}/lib/xorg/modules,${xf86inputkeyboard}/lib/xorg/modules/input,${xf86inputmouse}/lib/xorg/modules/input,${xf86videovesa}/lib/xorg/modules/drivers \\
