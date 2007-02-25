@@ -4,6 +4,8 @@
 , fastStart ? false
 }:
 
+assert stdenv.system == "i686-linux";
+
 stdenv.mkDerivation {
   name = "acrobat-reader-7.0.9";
   builder = ./builder.sh;
