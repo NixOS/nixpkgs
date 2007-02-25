@@ -2793,6 +2793,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  slim = import ../applications/display-managers/slim {
+    inherit fetchurl stdenv x11 libjpeg libpng freetype;
+    inherit (xlibs) libXmu;
+  };
+
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
     inherit fetchurl stdenv;
   };
