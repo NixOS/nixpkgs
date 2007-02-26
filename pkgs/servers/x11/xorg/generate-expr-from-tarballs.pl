@@ -147,7 +147,9 @@ while (<>) {
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
-        push @requires, "fontconfig";
+	# Don't run fc-cache.
+	die if defined $extraAttrs{$pkg};
+	$extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
     }
 
     sub process {
