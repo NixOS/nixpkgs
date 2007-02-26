@@ -146,6 +146,10 @@ while (<>) {
         push @requires, "mkfontdir";
     }
 
+    if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
+        push @requires, "fontconfig";
+    }
+
     sub process {
         my $requires = shift;
 	my $s = shift;

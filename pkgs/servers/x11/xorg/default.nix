@@ -182,8 +182,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-utopia-type1-X11R7.0-1.0.1.tar.bz2;
       sha256 = "1dnmnma1l7likn1jlbnc5bavs5467ymm45lwdlvj4d5gv4qn59qb";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontalias = (stdenv.mkDerivation {
     name = "font-alias-1.0.1";
@@ -252,8 +252,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-ttf-X11R7.0-1.0.0.tar.bz2;
       sha256 = "1pwy9nzmmwipia4zgp23h95mds1zsh4xiac54x61x6x4058j8s52";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontbhtype1 = (stdenv.mkDerivation {
     name = "font-bh-type1-1.0.0";
@@ -262,8 +262,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-type1-X11R7.0-1.0.0.tar.bz2;
       sha256 = "1mc2a667s2p4kb5p31cyqdr07mpxcqyrvsvfsg1xd0rdx4adxkpp";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontbitstream100dpi = (stdenv.mkDerivation {
     name = "font-bitstream-100dpi-1.0.0";
@@ -302,8 +302,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bitstream-type1-X11R7.0-1.0.0.tar.bz2;
       sha256 = "0vgx360jb9q15kjy6ynll850h2kc0lv3s115b3n5nnc9i8wrvw7n";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontcacheproto = (stdenv.mkDerivation {
     name = "fontcacheproto-0.1.2";
@@ -362,8 +362,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-ibm-type1-X11R7.0-1.0.0.tar.bz2;
       sha256 = "1z2wr67sjl3vsg3x87ja189w0x25ywvir3jddlxny5m2f7si0hjk";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontisasmisc = (stdenv.mkDerivation {
     name = "font-isas-misc-1.0.0";
@@ -412,8 +412,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-ethiopic-X11R7.0-1.0.0.tar.bz2;
       sha256 = "1na882sk7mmb0dhmypzgfj0sv35jf2dap34k6jg5brzlp22500h4";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontmiscmeltho = (stdenv.mkDerivation {
     name = "font-misc-meltho-1.0.0";
@@ -422,8 +422,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-meltho-X11R7.0-1.0.0.tar.bz2;
       sha256 = "0g95r9v7ixbr7120p3d99c2yvxlmj5a6lwb19rzb0pdrap0g1jya";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fontmiscmisc = (stdenv.mkDerivation {
     name = "font-misc-misc-1.0.0";
@@ -532,8 +532,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-xfree86-type1-X11R7.0-1.0.0.tar.bz2;
       sha256 = "0kzr8jqfqp8gm6vh391l16vlmyclz9ck9nw2f9zjaqnlwzbzx96d";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ];
-  }) // {inherit mkfontdir mkfontscale ;};
+    buildInputs = [pkgconfig fontconfig mkfontdir mkfontscale ];
+  }) // {inherit fontconfig mkfontdir mkfontscale ;};
     
   fslsfonts = (stdenv.mkDerivation {
     name = "fslsfonts-1.0.1";
@@ -2052,8 +2052,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-i810-X11R7.2-1.6.5.tar.bz2;
       sha256 = "04f65vcgzjxi7sl7ps9xs8i481q2kj7fj4q2n5cgwlaayamgnlf4";
     };
-    buildInputs = [pkgconfig fontsproto glproto libdrm mesa randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto glproto libdrm mesa randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig fontsproto glproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto glproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
     
   xf86videoimstt = (stdenv.mkDerivation {
     name = "xf86-video-imstt-1.1.0";
