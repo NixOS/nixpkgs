@@ -1,0 +1,26 @@
+diff -rc xorg-server-X11R7.2-1.2.0-orig/GL/glx/glxdri.c xorg-server-X11R7.2-1.2.0/GL/glx/glxdri.c
+*** xorg-server-X11R7.2-1.2.0-orig/GL/glx/glxdri.c	Tue Jan 23 04:13:14 2007
+--- xorg-server-X11R7.2-1.2.0/GL/glx/glxdri.c	Tue Feb 27 00:15:38 2007
+***************
+*** 945,952 ****
+  	goto handle_error;
+      }
+  
+      snprintf(filename, sizeof filename, "%s/%s_dri.so",
+!              dri_driver_path, driverName);
+  
+      screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+      if (screen->driver == NULL) {
+--- 945,955 ----
+  	goto handle_error;
+      }
+  
++     char *real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
++     if (!real_dri_driver_path) real_dri_driver_path = dri_driver_path;
++ 
+      snprintf(filename, sizeof filename, "%s/%s_dri.so",
+!              real_dri_driver_path, driverName);
+  
+      screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+      if (screen->driver == NULL) {
+Only in xorg-server-X11R7.2-1.2.0/GL/glx: glxdri.c~
