@@ -39,6 +39,8 @@ $pcMap{"bdftopcf"} = "bdftopcf";
 $pcMap{"libxslt"} = "libxslt";
 
 
+$extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; ";
+
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
 $extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
@@ -169,7 +171,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
+    #push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
     push @requires, "glproto" if $pkg =~ /xf86videoi810/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
