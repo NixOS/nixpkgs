@@ -1,5 +1,7 @@
 { stdenv, writeText, lib, xorg, xterm, slim
 
+, config
+
 , # Virtual console for the X server.
   tty ? 7
 
@@ -13,17 +15,29 @@
 
 let
 
-  drivers = [
+  getCfg = option: config.get ["services" "xserver" option];
+
+  optional = condition: x: if condition then [x] else [];
+
+
+  videoDriver = getCfg "videoDriver";
+
+  resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (getCfg "resolutions");
+
+
+  modules = [
     xorg.xorgserver
     xorg.xf86inputkeyboard
     xorg.xf86inputmouse
-    xorg.xf86videovesa
-  ];
+  ] 
+  ++ optional (videoDriver == "vesa") xorg.xf86videovesa
+  ++ optional (videoDriver == "i810") xorg.xf86videoi810;
 
-  config = stdenv.mkDerivation {
+
+  configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories;
+    inherit fontDirectories videoDriver resolutions;
     buildCommand = "
       buildCommand= # urgh, don't substitute this
 
@@ -37,7 +51,7 @@ let
       done
 
       export modulePaths=
-      for i in $(find ${toString drivers} -type d); do
+      for i in $(find ${toString modules} -type d); do
         if ls $i/*.so 2> /dev/null; then
           modulePaths=\"\${modulePaths}ModulePath \\\"$i\\\"\\n\"
         fi
@@ -47,17 +61,19 @@ let
     ";
   };
 
+
   clientScript = writeText "xclient" "
     ${xorg.twm}/bin/twm &
     ${xterm}/bin/xterm -ls
   ";
+
 
   xserverArgs = [
     "-ac"
     "-nolisten tcp"
     "-terminate"
     "-logfile" "/var/log/X.${toString display}.log"
-    "-config ${config}"
+    "-config ${configFile}"
     ":${toString display}" "vt${toString tty}"
   ];
 
@@ -69,7 +85,9 @@ xserver_arguments ${toString xserverArgs}
 login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
   ";
 
+
 in
+
 
 rec {
   name = "xserver";

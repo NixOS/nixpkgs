@@ -453,6 +453,25 @@
 
   
   {
+    name = ["services" "xserver" "resolutions"];
+    default = [{x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;}];
+    description = "
+      The screen resolutions for the X server.  The first element is the default resolution.
+    ";
+  }
+
+  
+  {
+    name = ["services" "xserver" "videoDriver"];
+    default = "vesa";
+    example = "i810";
+    description = "
+      The name of the video driver for your graphics card.
+    ";
+  }
+
+
+  {
     name = ["services" "httpd" "enable"];
     default = false;
     description = "
@@ -461,6 +480,7 @@
   }
 
   
+  /*  
   {
     name = ["services" "httpd" "user"];
     default = "wwwrun";
@@ -617,6 +637,7 @@
       Extra subservices to enable in the webserver.
     ";
   }
+  */
 
   {
     name = ["installer" "nixpkgsURL"];
