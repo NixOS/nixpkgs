@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libdrm-2.0";
+  name = "libdrm-2.3.0";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libdrm-2.0.tar.gz;
-    md5 = "9d1aab104eb757ceeb2c1a6d38d57411";
+    url = http://dri.freedesktop.org/libdrm/libdrm-2.3.0.tar.bz2;
+    sha256 = "13l4ysid1raasmq18x1kjp5xmwqg6pv9431n25c88l7agx113izq";
   };
 }

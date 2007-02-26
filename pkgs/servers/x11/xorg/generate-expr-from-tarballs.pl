@@ -2,8 +2,9 @@
 
 # Typical command to generate the list of tarballs:
 
-# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.1/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' >list
-# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.0/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' >>list
+# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' > tarballs
+# manually added xcb tarballs from http://xcb.freedesktop.org/dist/
+# then run: perl ./generate-expr-from-tarballs.pl < tarballs
 
 
 use strict;
@@ -32,9 +33,17 @@ $pcMap{"libXaw"} = "libXaw";
 $pcMap{"zlib"} = "zlib";
 $pcMap{"perl"} = "perl";
 $pcMap{"mesa"} = "mesa";
+$pcMap{"mkfontscale"} = "mkfontscale";
+$pcMap{"mkfontdir"} = "mkfontdir";
+$pcMap{"bdftopcf"} = "bdftopcf";
+$pcMap{"libxslt"} = "libxslt";
 
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
+
+$extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
+
+$extraAttrs{"mkfontdir"} = " preBuild = \"substituteInPlace mkfontdir.cpp --replace BINDIR \${mkfontscale}/bin\"; ";
 
 
 if (-e "cache") {
@@ -123,29 +132,47 @@ while (<>) {
         push @requires, "perl";
     }
 
+    if ($file =~ /AC_PATH_PROG\(BDFTOPCF/) {
+        push @requires, "bdftopcf";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
+        push @requires, "mkfontscale";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
+        push @requires, "mkfontdir";
+    }
+
     sub process {
         my $requires = shift;
-        foreach my $req (split / /, $1) {
+	my $s = shift;
+	print "LOOK IN $s\n";
+	$s =~ s/\[/\ /g;
+	$s =~ s/\]/\ /g;
+	$s =~ s/\,/\ /g;
+	print "AFTER $s\n";
+        foreach my $req (split / /, $s) {
             next if $req eq ">=";
             next if $req =~ /^\$/;
             next if $req =~ /^[0-9]/;
-            $req =~ s/\[//g;
-            $req =~ s/\]//g;
             next if $req =~ /^\s*$/;
             print "REQUIRE: $req\n";
             push @{$requires}, $req;
         }
     }
 
-    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*\[?([^\),\]]*)/g;
+    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)]*)/g;
     process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
     push @requires, "glproto" if $pkg =~ /xf86videoi810/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
+    push @requires, "libxslt" if $pkg =~ /libxcb/;
     
     print "REQUIRES @requires => $pkg\n";
     $pkgRequires{$pkg} = \@requires;
@@ -162,7 +189,7 @@ print OUT "";
 print OUT <<EOF;
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, expat, libdrm, libpng, zlib, perl, mesa
+, libxslt, expat, libdrm, libpng, zlib, perl, mesa
 }:
 
 rec {
@@ -195,7 +222,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     builder = ./builder.sh;
     src = fetchurl {
       url = $pkgURLs{$pkg};
-      md5 = "$pkgHashes{$pkg}";
+      sha256 = "$pkgHashes{$pkg}";
     };
     buildInputs = [pkgconfig $inputs];$extraAttrs
   }) // {inherit $inputs;};

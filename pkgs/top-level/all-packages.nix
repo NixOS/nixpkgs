@@ -2097,7 +2097,7 @@ rec {
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
-      expat libdrm libpng zlib perl mesa;
+      libxslt expat libdrm libpng zlib perl mesa;
   });
 
 

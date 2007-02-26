@@ -1,7 +1,9 @@
-{stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "freetype-2.1.10";
+{stdenv, fetchurl}:
+
+stdenv.mkDerivation {
+  name = "freetype-2.3.1";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/freetype-2.1.10.tar.bz2;
-    md5 = "a4012e7d1f6400df44a16743b11b8423";
+    url = http://switch.dl.sourceforge.net/sourceforge/freetype/freetype-2.3.1.tar.bz2;
+    sha256 = "0mb11mprdlcvxyjb62ganwfgvzg4kk3rmr677li8j0484b6ywf5y";
   };
 }
