@@ -1,5 +1,10 @@
 source $stdenv/setup
 
+preBuild=preBuild
+preBuild() {
+  bunzip2 < $pciids > pci.ids
+}
+
 postInstall=postInstall
 postInstall() {
   ensureDir $out/lib
