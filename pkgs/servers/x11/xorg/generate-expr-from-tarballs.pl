@@ -33,6 +33,7 @@ $pcMap{"libXaw"} = "libXaw";
 $pcMap{"zlib"} = "zlib";
 $pcMap{"perl"} = "perl";
 $pcMap{"mesa"} = "mesa";
+$pcMap{"mesaHeaders"} = "mesaHeaders";
 $pcMap{"mkfontscale"} = "mkfontscale";
 $pcMap{"mkfontdir"} = "mkfontdir";
 $pcMap{"bdftopcf"} = "bdftopcf";
@@ -178,7 +179,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     #push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
-    push @requires, "glproto" if $pkg =~ /xf86videoi810/;
+    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
     
@@ -197,7 +198,7 @@ print OUT "";
 print OUT <<EOF;
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, libxslt, expat, libdrm, libpng, zlib, perl, mesa
+, libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
 }:
 
 rec {
@@ -241,3 +242,4 @@ EOF
 print OUT "}\n";
 
 close OUT;
+>

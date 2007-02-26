@@ -1,6 +1,6 @@
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, libxslt, expat, libdrm, libpng, zlib, perl, mesa
+, libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
 }:
 
 rec {
@@ -2046,13 +2046,13 @@ rec {
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoi810 = (stdenv.mkDerivation {
-    name = "xf86-video-i810-1.6.5";
+    name = "xf86-video-i810-1.7.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-i810-X11R7.2-1.6.5.tar.bz2;
-      sha256 = "04f65vcgzjxi7sl7ps9xs8i481q2kj7fj4q2n5cgwlaayamgnlf4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-i810-1.7.4.tar.bz2;
+      sha256 = "0na2qy78waa9jy0ikd10g805v0w048icnkdcss6yd753kffdi37z";
     };
-    buildInputs = [pkgconfig fontsproto glproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
+    buildInputs = [pkgconfig fontsproto glproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC mesaHeaders ];
   }) // {inherit fontsproto glproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
     
   xf86videoimstt = (stdenv.mkDerivation {

@@ -1575,6 +1575,11 @@ rec {
     inherit (xlibs) libXmu libXi;
   };
 
+  mesaHeaders = import ../development/libraries/mesa/headers.nix {
+    inherit stdenv;
+    mesaSrc = mesa.src;
+  };
+
   mpeg2dec = import ../development/libraries/mpeg2dec {
     inherit fetchurl stdenv;
   };
@@ -2097,7 +2102,7 @@ rec {
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
-      libxslt expat libdrm libpng zlib perl mesa;
+      libxslt expat libdrm libpng zlib perl mesa mesaHeaders;
   });
 
 
