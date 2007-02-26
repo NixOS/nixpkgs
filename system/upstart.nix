@@ -118,9 +118,7 @@ import ../upstart-jobs/gather.nix {
   # X server.
   ++ optional ["services" "xserver" "enable"]
     (import ../upstart-jobs/xserver.nix {
-      inherit (pkgs) stdenv writeText lib xterm slim;
-      inherit (pkgs.xorg) xorgserver xinit twm xauth
-        xf86inputkeyboard xf86inputmouse xf86videovesa;
+      inherit (pkgs) stdenv writeText lib xterm slim xorg;
       fontDirectories = import ./fonts.nix {inherit pkgs;};
     })
 

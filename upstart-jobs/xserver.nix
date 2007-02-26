@@ -1,22 +1,4 @@
-{ stdenv, writeText
-
-, lib
-
-, xorgserver
-
-, xinit
-
-, # Initial client/window manager.
-  twm, xterm
-
-, # Needed for the display manager (SLiM).
-  slim, xauth
-
-, xf86inputkeyboard
-
-, xf86inputmouse
-
-, xf86videovesa
+{ stdenv, writeText, lib, xorg, xterm, slim
 
 , # Virtual console for the X server.
   tty ? 7
@@ -31,12 +13,20 @@
 
 let
 
+  drivers = [
+    xorg.xorgserver
+    xorg.xf86inputkeyboard
+    xorg.xf86inputmouse
+    xorg.xf86videovesa
+  ];
+
   config = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
     inherit fontDirectories;
     buildCommand = "
       buildCommand= # urgh, don't substitute this
+
       export fontPaths=
       for i in $fontDirectories; do
         if test \"\${i:0:\${#NIX_STORE}}\" == \"$NIX_STORE\"; then
@@ -45,12 +35,20 @@ let
           done
         fi
       done
+
+      export modulePaths=
+      for i in $(find ${toString drivers} -type d); do
+        if ls $i/*.so 2> /dev/null; then
+          modulePaths=\"\${modulePaths}ModulePath \\\"$i\\\"\\n\"
+        fi
+      done
+
       substituteAll $src $out
     ";
   };
 
   clientScript = writeText "xclient" "
-    ${twm}/bin/twm &
+    ${xorg.twm}/bin/twm &
     ${xterm}/bin/xterm -ls
   ";
 
@@ -59,15 +57,14 @@ let
     "-nolisten tcp"
     "-terminate"
     "-logfile" "/var/log/X.${toString display}.log"
-    "-modulepath" "${xorgserver}/lib/xorg/modules,${xf86inputkeyboard}/lib/xorg/modules/input,${xf86inputmouse}/lib/xorg/modules/input,${xf86videovesa}/lib/xorg/modules/drivers"
     "-config ${config}"
     ":${toString display}" "vt${toString tty}"
   ];
 
   # Note: lines must not be indented.
   slimConfig = writeText "slim.cfg" "
-xauth_path ${xauth}/bin/xauth
-default_xserver ${xorgserver}/bin/X
+xauth_path ${xorg.xauth}/bin/xauth
+default_xserver ${xorg.xorgserver}/bin/X
 xserver_arguments ${toString xserverArgs}
 login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
   ";
