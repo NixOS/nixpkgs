@@ -3,10 +3,10 @@
 assert pkgconfig != null && glib != null && perl != null;
 
 stdenv.mkDerivation {
-  name = "atk-1.10.3";
+  name = "atk-1.12.4";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/atk-1.10.3.tar.bz2;
-    md5 = "c84a01fea567b365c0d44b227fead948";
+    url = http://ftp.gnome.org/pub/gnome/sources/atk/1.12/atk-1.12.4.tar.bz2;
+    md5 = "0a2c6a7bbc380e3a3d94e9061f76a849";
   };
   buildInputs = [pkgconfig perl];
   propagatedBuildInputs = [glib];
