@@ -132,6 +132,7 @@ import ../helpers/make-etc.nix {
       "shadow"
       "sshd"
       "useradd"
+      "chsh"
       "common"
     ]
   );
