@@ -156,11 +156,9 @@ while (<>) {
     sub process {
         my $requires = shift;
 	my $s = shift;
-	print "LOOK IN $s\n";
 	$s =~ s/\[/\ /g;
 	$s =~ s/\]/\ /g;
 	$s =~ s/\,/\ /g;
-	print "AFTER $s\n";
         foreach my $req (split / /, $s) {
             next if $req eq ">=";
             next if $req =~ /^\$/;
@@ -242,4 +240,3 @@ EOF
 print OUT "}\n";
 
 close OUT;
->
