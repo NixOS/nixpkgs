@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, xorg, xterm, slim
+{ stdenv, writeText, lib, xorg, mesa, xterm, slim
 
 , config
 
@@ -101,6 +101,10 @@ end script
 
 env SLIM_CFGFILE=${slimConfig}
 env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
+
+${if getCfg "driSupport"
+then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
+else ""}
 
 exec ${slim}/bin/slim
   ";

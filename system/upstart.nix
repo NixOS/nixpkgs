@@ -119,7 +119,7 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services" "xserver" "enable"]
     (import ../upstart-jobs/xserver.nix {
       inherit config;
-      inherit (pkgs) stdenv writeText lib xterm slim xorg;
+      inherit (pkgs) stdenv writeText lib xterm slim xorg mesa;
       fontDirectories = import ./fonts.nix {inherit pkgs;};
     })
 

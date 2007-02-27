@@ -472,6 +472,16 @@
 
 
   {
+    name = ["services" "xserver" "driSupport"];
+    default = false;
+    description = "
+      Whether to enable accelerated OpenGL rendering through the
+      Direct Rendering Interface (DRI).
+    ";
+  }
+
+  
+  {
     name = ["services" "httpd" "enable"];
     default = false;
     description = "
