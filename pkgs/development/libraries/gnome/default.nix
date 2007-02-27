@@ -181,4 +181,9 @@ rec {
     input = desktop.libsoup;
   };
   
+  startupnotification = (import ./startup-notification) {
+    inherit stdenv fetchurl pkgconfig x11;
+    input = desktop.startupnotification;
+  };
+  
 }

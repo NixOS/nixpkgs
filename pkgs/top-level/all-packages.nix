@@ -2537,6 +2537,14 @@ rec {
         };
     };
 
+  compiz = import ../applications/window-managers/compiz {
+    inherit fetchurl stdenv pkgconfig libpng mesa;
+    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
+      libXinerama libICE libSM libXrender xextproto;
+    inherit (gnome) startupnotification;
+    inherit (gtkLibs) gtk;
+  };
+
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
