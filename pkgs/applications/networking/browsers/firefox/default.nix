@@ -22,7 +22,13 @@ stdenv.mkDerivation {
     pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
   ];
 
-  patches = [./writable-copies.patch];
+  patches = [
+    ./writable-copies.patch
+    # Ugh, inexplicable problem since GTK+ 2.10.  Probably a Firefox
+    # bug, but I don't know.  See
+    # http://lists.gobolinux.org/pipermail/gobolinux-users/2007-January/004344.html
+    ./xlibs.patch
+  ];
 
   configureFlags = [
     "--enable-application=browser"

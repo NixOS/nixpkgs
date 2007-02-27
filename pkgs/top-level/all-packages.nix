@@ -1118,10 +1118,12 @@ rec {
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
    * of glib and pkgconfig itself on MinGW.
    */
-  pkgconfig = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
+  pkgconfigOld = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
     (import ../development/tools/misc/pkgconfig {
       inherit fetchurl stdenv;
     });
+
+  pkgconfig = pkgconfig_latest;
 
   pkgconfig017x = import ../development/tools/misc/pkgconfig/pkgconfig-0.17.2.nix {
     inherit fetchurl stdenv;
@@ -2732,7 +2734,7 @@ rec {
   };
 
   MPlayerPlugin = import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
-    inherit fetchurl stdenv pkgconfig firefox;
+    inherit fetchurl stdenv pkgconfig firefox gettext;
     inherit (xlibs) libXpm;
     # !!! should depend on MPlayer
   };
