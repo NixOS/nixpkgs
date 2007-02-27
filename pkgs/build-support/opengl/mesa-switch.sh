@@ -6,6 +6,10 @@ if test -z "$OPENGL_DRIVER"; then
     if test -d "$profile/lib"; then
         OPENGL_DRIVER=$profile
     fi
+    # OpenGL driver for current X server on NixOS.
+    if test -d /var/state/opengl-driver; then
+        OPENGL_DRIVER=/var/state/opengl-driver
+    fi
 fi
 
 if test -z "$OPENGL_DRIVER"; then
