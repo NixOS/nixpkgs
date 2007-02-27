@@ -489,8 +489,7 @@
     ";
   }
 
-  
-  /*  
+
   {
     name = ["services" "httpd" "user"];
     default = "wwwrun";
@@ -555,7 +554,7 @@
     ";
   }
 
-  
+
   {
     name = ["services" "httpd" "stateDir"];
     default = "/var/run/httpd";
@@ -616,6 +615,7 @@
     ";
   }
 
+  
   {
     name = ["services" "httpd" "subservices" "subversion" "organization" "url"];
     default = null;
@@ -624,6 +624,7 @@
     ";
   }
 
+  
   {
     name = ["services" "httpd" "subservices" "subversion" "organization" "logo"];
     default = null;
@@ -632,6 +633,7 @@
     ";
   }
 
+  
   {
     name = ["services" "httpd" "extraSubservices" "enable"];
     default = false;
@@ -640,6 +642,7 @@
     ";
   }
 
+  
   {
     name = ["services" "httpd" "extraSubservices" "services"];
     default = [];
@@ -647,8 +650,8 @@
       Extra subservices to enable in the webserver.
     ";
   }
-  */
 
+  
   {
     name = ["installer" "nixpkgsURL"];
     default = "";
