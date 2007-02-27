@@ -93,20 +93,23 @@ rec {
   name = "xserver";
 
   job = "
-#start on network-interfaces
+    #start on network-interfaces
 
-start script
+    start script
+      rm -f /var/state/opengl-driver
+      ${if getCfg "driSupport"
+      then "ln -sf ${mesa} /var/state/opengl-driver"
+      else ""}
+    end script
 
-end script
+    env SLIM_CFGFILE=${slimConfig}
+    env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
 
-env SLIM_CFGFILE=${slimConfig}
-env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
+    ${if getCfg "driSupport"
+    then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
+    else ""}
 
-${if getCfg "driSupport"
-then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
-else ""}
-
-exec ${slim}/bin/slim
+    exec ${slim}/bin/slim
   ";
   
 }
