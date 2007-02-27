@@ -1571,8 +1571,8 @@ rec {
   };
 
   mesa = import ../development/libraries/mesa {
-    inherit fetchurl stdenv x11;
-    inherit (xlibs) libXmu libXi;
+    inherit fetchurl stdenv pkgconfig x11 libdrm;
+    inherit (xlibs) libXmu libXi makedepend glproto libXxf86vm;
   };
 
   mesaHeaders = import ../development/libraries/mesa/headers.nix {
