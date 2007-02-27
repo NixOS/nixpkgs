@@ -1239,7 +1239,8 @@ rec {
   };
 
   cairo = import ../development/libraries/cairo {
-    inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
+    inherit fetchurl stdenv x11 fontconfig freetype zlib libpng;
+    pkgconfig = pkgconfig_latest;
   };
 
   chmlib = import ../development/libraries/chmlib {
@@ -1339,7 +1340,7 @@ rec {
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng bzip2;
-    gtkLibs = gtkLibs28;
+    gtkLibs = gtkLibs210; # !!! correct?
     inherit (xlibs) libXmu;
   });
 
@@ -1347,7 +1348,7 @@ rec {
     inherit fetchurl stdenv libgpgerror gnupg;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs28 /* !!! -> gtkLibs10 */;
+  gtkLibs = recurseIntoAttrs gtkLibs210;
 
   gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
@@ -2541,7 +2542,7 @@ rec {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
-    inherit (gnome) startupnotification;
+    inherit (gnome) startupnotification libwnck;
     inherit (gtkLibs) gtk;
   };
 

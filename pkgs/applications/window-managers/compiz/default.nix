@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libpng, libXcomposite, libXfixes
 , libXdamage, libXrandr, libXinerama, libICE, libSM
-, startupnotification, libXrender, xextproto, mesa, gtk
+, startupnotification, libXrender, xextproto, mesa, gtk, libwnck
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig libpng libXcomposite libXfixes libXdamage libXrandr
     libXinerama libICE libSM startupnotification libXrender xextproto
-    mesa gtk
+    mesa gtk libwnck
   ];
-  configureFlags = "--disable-gconf";
+  configureFlags = "--disable-gconf --enable-gtk";
 }

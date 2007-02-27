@@ -165,7 +165,7 @@ rec {
   };
 
   libwnck = (import ./libwnck) {
-    inherit fetchurl stdenv pkgconfig gtk;
+    inherit fetchurl stdenv pkgconfig gtk perl perlXMLParser gettext;
     input = desktop.libwnck;
   };
 
