@@ -2603,7 +2603,8 @@ rec {
   };
 
   firefox = import ../applications/networking/browsers/firefox {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
+    inherit fetchurl stdenv perl zip libjpeg libpng zlib cairo;
+    pkgconfig = pkgconfig_latest;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
