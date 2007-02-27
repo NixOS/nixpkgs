@@ -5,7 +5,7 @@ let {
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     MPlayer
     MPlayerPlugin
-    abc
+    #abc
     apacheAntBlackdown14
     apacheHttpd
     aspectj
@@ -81,7 +81,7 @@ let {
     libxslt
     lynx
     man
-    maven
+    #maven
     mdadm
     mk
     mktemp
