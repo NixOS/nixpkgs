@@ -664,6 +664,19 @@
 
   
   {
+    name = ["nix" "maxJobs"];
+    default = 1;
+    example = 2;
+    description = "
+      This option defines the maximum number of jobs that Nix will try
+      to build in parallel.  The default is 1.  You should generally
+      set it to the number of CPUs in your system (e.g., 2 on a Athlon
+      64 X2).
+    ";
+  }
+
+  
+  {
     name = ["security" "setuidPrograms"];
     default = ["passwd" "su" "crontab" "ping" "ping6"];
     description = "

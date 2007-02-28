@@ -224,13 +224,13 @@ rec {
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
     setuidPrograms = config.get ["security" "setuidPrograms"];
+    maxJobs = config.get ["nix" "maxJobs"];
 
     path = [
       pkgs.coreutils pkgs.gnugrep pkgs.findutils
       pkgs.glibc # needed for getent
       pkgs.pwdutils
     ];
-
   };
 
 

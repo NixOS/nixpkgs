@@ -91,7 +91,9 @@ if test -z "@readOnlyRoot@"; then
 
     mkdir -p /nix/etc/nix
     cat > /nix/etc/nix/nix.conf <<EOF
+# WARNING: this file is generated.
 build-users-group = nixbld
+build-max-jobs = @maxJobs@
 EOF
 
     chown root.nixbld /nix/store
