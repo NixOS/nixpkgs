@@ -3012,7 +3012,7 @@ rec {
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng bzip2;
     gtkLibs = gtkLibs210; # !!! correct?
-    inherit (xlibs) libXmu;
+    inherit (xlibs) libXmu libXinerama libXrandr libXcursor;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {
