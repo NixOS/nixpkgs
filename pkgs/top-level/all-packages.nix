@@ -1204,7 +1204,7 @@ rec {
     bdbSupport = true;
   };
 
-  arts = import ../development/libraries/kde/arts {
+  arts = import ../development/libraries/arts {
     inherit fetchurl stdenv pkgconfig;
     inherit (xlibs) libX11 libXext;
     inherit kdelibs zlib libjpeg libpng perl;
@@ -1337,15 +1337,6 @@ rec {
     inherit (gtkLibs) glib;
   };
 
-  gnome = recurseIntoAttrs (import ../development/libraries/gnome {
-    inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt zlib libxml2 libxslt
-            perl perlXMLParser docbook_xml_dtd_42 gettext x11
-            libtiff libjpeg libpng bzip2;
-    gtkLibs = gtkLibs210; # !!! correct?
-    inherit (xlibs) libXmu;
-  });
-
   gpgme = import ../development/libraries/gpgme {
     inherit fetchurl stdenv libgpgerror gnupg;
   };
@@ -1424,15 +1415,6 @@ rec {
   imlib = import ../development/libraries/gnome/imlib {
     inherit fetchurl stdenv libjpeg libtiff libungif libpng;
     inherit (xlibs) libX11 libXext xextproto;
-  };
-
-  kdelibs = import ../development/libraries/kde/kdelibs {
-    inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool
-      expat freetype bzip2;
-    inherit (xlibs) libX11 libXt libXext;
-    qt = qt3;
   };
 
   lcms = import ../development/libraries/lcms {
@@ -3020,6 +3002,28 @@ rec {
     inherit fetchurl stdenv dosbox unzip;
   };
 
+
+  ### DESKTOP ENVIRONMENTS
+
+
+  gnome = recurseIntoAttrs (import ../desktops/gnome {
+    inherit fetchurl stdenv pkgconfig audiofile
+            flex bison popt zlib libxml2 libxslt
+            perl perlXMLParser docbook_xml_dtd_42 gettext x11
+            libtiff libjpeg libpng bzip2;
+    gtkLibs = gtkLibs210; # !!! correct?
+    inherit (xlibs) libXmu;
+  });
+
+  kdelibs = import ../desktops/kde/kdelibs {
+    inherit
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool
+      expat freetype bzip2;
+    inherit (xlibs) libX11 libXt libXext;
+    qt = qt3;
+  };
+  
 
   ### MISC
 
