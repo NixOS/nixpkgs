@@ -26,6 +26,7 @@ let {
     cdrtools
     chatzilla
     cksfv
+    compiz
     coreutils
     cpio
     darcs
@@ -179,7 +180,7 @@ let {
 #    xauth
 #    xawtv
 #    zapping
-  ;
+    ;
   inherit ((allPackages {system = "i686-linux";}).xorg)
     xorgserver
     xf86inputkeyboard
@@ -191,7 +192,11 @@ let {
     fontbh100dpi
     fontmiscmisc
     fontcursormisc
-  ;};
+    ;
+  inherit ((allPackages {system = "i686-linux";}).gnome)
+    metacity
+    ;
+  };
 
   powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
     aterm
