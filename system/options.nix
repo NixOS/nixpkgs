@@ -203,7 +203,7 @@
     example = [
       { name = "eth0";
         ipAddress = "131.211.84.78";
-        netmask = "255.255.255.128";
+        subnetMask = "255.255.255.128";
       }
     ];
     description = "

@@ -8,6 +8,7 @@ let
   # !!! use XML
   names = map (i: i.name) interfaces;
   ipAddresses = map (i: i.ipAddress) interfaces;
+  subnetMasks = map (i: if i ? subnetMask then i.subnetMask else "default") interfaces;
 
 in 
 
@@ -31,12 +32,18 @@ start script
     # Configure the manually specified interfaces.
     names=(${toString names})
     ipAddresses=(${toString ipAddresses})
+    subnetMasks=(${toString subnetMasks})
 
     for ((n = 0; n < \${#names[*]}; n++)); do
         name=\${names[$n]}
         ipAddress=\${ipAddresses[$n]}
+        subnetMask=\${subnetMasks[$n]}
         echo \"Configuring interface $name...\"
-        ${nettools}/sbin/ifconfig \"$name\" \"$ipAddress\" || true
+	extraFlags=
+        if test \"$subnetMask\" != default; then
+	    extraFlags=\"$extraFlags netmask $subnetMask\"
+        fi
+        ${nettools}/sbin/ifconfig \"$name\" \"$ipAddress\" $extraFlags || true
     done
 
     # Set the nameservers.
