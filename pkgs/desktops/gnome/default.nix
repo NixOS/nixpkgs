@@ -3,7 +3,7 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs, libXmu, libXinerama, libXrandr, libXcursor, bzip2
+, libpng, gtkLibs, xlibs, bzip2, libcm
 }:
 
 rec {
@@ -172,7 +172,8 @@ rec {
   gnomepanel = import ./gnome-panel.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gtk ORBit2
             libgnome libgnomeui gnomedesktop libglade libwnck
-            libjpeg libpng scrollkeeper libXmu;
+            libjpeg libpng scrollkeeper;
+    inherit (xlibs) libXmu;
     input = desktop.gnomepanel;
   };
 
@@ -188,8 +189,10 @@ rec {
 
   metacity = import ./metacity.nix {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser glib gtk
-      GConf startupnotification libXinerama libXrandr libXcursor
-      gettext;
+      GConf startupnotification gettext libcm;
+    inherit (xlibs) libXinerama libXrandr libXcursor
+      libXcomposite libXfixes libXdamage;
+    enableCompositor = true;
     input = desktop.metacity;
   };
   

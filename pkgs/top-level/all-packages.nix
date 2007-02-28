@@ -1434,6 +1434,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libcm = import ../development/libraries/libcm {
+    inherit fetchurl stdenv pkgconfig xlibs mesa;
+    inherit (gtkLibs) glib;
+  };
+
   libdrm = import ../development/libraries/libdrm {
     inherit fetchurl stdenv;
   };
@@ -3010,9 +3015,7 @@ rec {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
-            libtiff libjpeg libpng bzip2;
-    gtkLibs = gtkLibs210; # !!! correct?
-    inherit (xlibs) libXmu libXinerama libXrandr libXcursor;
+            libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {
