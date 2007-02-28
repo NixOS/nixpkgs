@@ -1412,7 +1412,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  imlib = import ../development/libraries/gnome/imlib {
+  imlib = import ../development/libraries/imlib {
     inherit fetchurl stdenv libjpeg libtiff libungif libpng;
     inherit (xlibs) libX11 libXext xextproto;
   };
