@@ -10,7 +10,7 @@ rec {
 
   # Platform
 
-  platform = (import ./src-gnome-platform-2.14.3.nix) {
+  platform = (import ./src-gnome-platform-2.16.3.nix) {
     inherit fetchurl;
   };
 
@@ -109,7 +109,7 @@ rec {
 
   # Desktop
 
-  desktop = (import ./src-gnome-desktop-2.14.3.nix) {
+  desktop = (import ./src-gnome-desktop-2.16.3.nix) {
     inherit fetchurl;
   };
 
