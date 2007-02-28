@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, xorg, mesa, xterm, slim, metacity
+{ stdenv, writeText, lib, xorg, mesa, xterm, slim, metacity, GConf
 
 , config
 
@@ -68,6 +68,8 @@ let
     ${if windowManager == "twm" then "
     ${xorg.twm}/bin/twm &
     " else if windowManager == "metacity" then "
+    # !!! Hack: load the schemas for Metacity.
+    GCONF_CONFIG_SOURCE=xml::~/.gconf ${GConf}/bin/gconftool-2 --makefile-install-rule ${metacity}/etc/gconf/schemas/*.schemas
     ${metacity}/bin/metacity &
     " else abort ("unknown window manager "+ windowManager)}
     ${xterm}/bin/xterm -ls
