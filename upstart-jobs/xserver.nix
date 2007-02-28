@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, xorg, mesa, xterm, slim
+{ stdenv, writeText, lib, xorg, mesa, xterm, slim, metacity
 
 , config
 
@@ -23,6 +23,8 @@ let
   videoDriver = getCfg "videoDriver";
 
   resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (getCfg "resolutions");
+
+  windowManager = getCfg "windowManager";
 
 
   modules = [
@@ -63,7 +65,11 @@ let
 
 
   clientScript = writeText "xclient" "
+    ${if windowManager == "twm" then "
     ${xorg.twm}/bin/twm &
+    " else if windowManager == "metacity" then "
+    ${metacity}/bin/metacity &
+    " else abort ("unknown window manager "+ windowManager)}
     ${xterm}/bin/xterm -ls
   ";
 

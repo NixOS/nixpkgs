@@ -482,6 +482,17 @@
 
   
   {
+    name = ["services" "xserver" "windowManager"];
+    default = "metacity";
+    description = "
+      This option selects the window manager.  Available values are
+      <literal>twm</literal> (extremely primitive),
+      <literal>metacity</literal>, and <literal>compiz</literal>.
+    ";
+  }
+
+  
+  {
     name = ["services" "httpd" "enable"];
     default = false;
     description = "

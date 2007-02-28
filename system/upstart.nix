@@ -120,6 +120,7 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/xserver.nix {
       inherit config;
       inherit (pkgs) stdenv writeText lib xterm slim xorg mesa;
+      inherit (pkgs.gnome) metacity;
       fontDirectories = import ./fonts.nix {inherit pkgs;};
     })
 
