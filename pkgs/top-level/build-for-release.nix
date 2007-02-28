@@ -84,6 +84,7 @@ let {
     man
     #maven
     mdadm
+    mesa
     mk
     mktemp
     mod_python
@@ -119,6 +120,7 @@ let {
     rsync
     screen
     sdf
+    slim
     spidermonkey
     splashutils
     strace
@@ -153,6 +155,7 @@ let {
     xmms
     xorg_sys_opengl
     xsel
+    xterm
     zdelta
     zip
 #    atermjava
@@ -176,6 +179,18 @@ let {
 #    xauth
 #    xawtv
 #    zapping
+  ;
+  inherit ((allPackages {system = "i686-linux";}).xorg)
+    xorgserver
+    xf86inputkeyboard
+    xf86inputmouse
+    xf86videovesa
+    xf86videoi810
+    fontbhttf
+    fontbhlucidatypewriter100dpi
+    fontbh100dpi
+    fontmiscmisc
+    fontcursormisc
   ;};
 
   powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
