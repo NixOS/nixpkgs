@@ -2433,6 +2433,10 @@ rec {
     stdenv = makeStaticBinaries stdenv;
   };
 
+  wirelesstools = import ../os-specific/linux/wireless-tools {
+    inherit fetchurl stdenv;
+  };
+
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
     inherit stdenv xlibs expat;
   };
