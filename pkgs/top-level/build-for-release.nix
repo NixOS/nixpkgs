@@ -40,6 +40,7 @@ let {
     e2fsprogs
     ecj
     emacs
+    emacsUnicode
     enscript
     exult
     file

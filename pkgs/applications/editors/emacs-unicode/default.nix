@@ -14,11 +14,11 @@ assert gtkGUI -> pkgconfig != null && gtk != null;
 assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 
 stdenv.mkDerivation {
-  name = "emacs-23.0.0.1-pre20070214";
+  name = "emacs-23.0.0.1-pre20070127";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/emacs-snapshot_20070214.orig.tar.gz;
-    sha256 = "0nx6i9vw4m5kqhylrf04jnh0hs26hiv98jxqfpk4amh2m976z2rn";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/emacs-snapshot_20070127.orig.tar.gz;
+    sha256 = "1p5ds3sjxx6izzmfq4k3wkvklm8yw7spanl7zgl16s7cln3m7hv2";
   };
   patches = [
     ./crt.patch
