@@ -17,6 +17,5 @@
   pkgs.freefont_ttf
   pkgs.xorg.fontbh100dpi
   pkgs.xorg.fontmiscmisc
-  pkgs.xorg.fontalias
   pkgs.xorg.fontcursormisc
 ]
