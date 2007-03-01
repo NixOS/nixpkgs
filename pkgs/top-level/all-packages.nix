@@ -3102,7 +3102,7 @@ rec {
 
   # The bleeding edge.
   nixUnstable = import ../misc/nix/unstable.nix {
-    inherit fetchurl stdenv perl curl bzip2;
+    inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
   };
