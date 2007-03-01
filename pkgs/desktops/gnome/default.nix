@@ -45,7 +45,7 @@ rec {
   };
 
   gnomemimedata = import ./gnome-mime-data.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser gettext;
     input = platform.gnomemimedata;
   };
 
@@ -84,7 +84,7 @@ rec {
   };
 
   libbonobo = import ./libbonobo.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser ORBit2 libxml2 popt flex;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser ORBit2 libxml2 popt flex gettext;
     yacc = bison;
     input = platform.libbonobo;
   };
@@ -141,7 +141,7 @@ rec {
   };
 
   gnomekeyring = import ./gnome-keyring.nix {
-    inherit fetchurl stdenv pkgconfig glib gtk;
+    inherit fetchurl stdenv pkgconfig glib gtk perl perlXMLParser gettext;
     input = desktop.gnomekeyring;
   };
 

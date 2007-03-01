@@ -2535,7 +2535,7 @@ rec {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
-    inherit (gnome) startupnotification libwnck;
+    inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
   };
 

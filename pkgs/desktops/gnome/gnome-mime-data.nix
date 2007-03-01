@@ -1,8 +1,8 @@
-{input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser}:
+{input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gettext}:
 
 assert pkgconfig != null && perl != null;
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig perl perlXMLParser];
+  buildInputs = [pkgconfig perl perlXMLParser gettext];
 }
