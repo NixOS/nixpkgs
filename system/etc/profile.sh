@@ -13,6 +13,8 @@ fi
 
 if test "$USER" != root; then
     export NIX_REMOTE=daemon
+else
+    export NIX_REMOTE=
 fi
 
 

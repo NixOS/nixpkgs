@@ -7,6 +7,7 @@ let
 
   envConf = pkgs.writeText "environment" "
     PATH=${systemPath}/bin:${systemPath}/sbin:${pkgs.openssh}/bin
+    NIX_REMOTE=daemon
   " /* ${pkgs.openssh}/bin is a hack to get remote scp to work */; 
 
 in
