@@ -749,4 +749,13 @@
   }
 
   
+  {
+    name = ["sound" "enable"];
+    default = true;
+    description = "
+      Whether to enable ALSA sound.
+    ";
+  }
+
+  
 ]

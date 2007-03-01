@@ -197,7 +197,8 @@ rec {
     nixosRebuild
     nixosCheckout
     setuidWrapper
-  ];
+  ]
+  ++ (if config.get ["sound" "enable"] then [pkgs.alsaUtils] else []);
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since

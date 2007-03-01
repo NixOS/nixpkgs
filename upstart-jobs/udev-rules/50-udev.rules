@@ -28,3 +28,12 @@ KERNEL=="uinput",               NAME="input/%k", MODE="0600"
 
 # Create a symlink for the CD-ROM device.
 KERNEL=="hd[a-z]", BUS=="ide", SYSFS{removable}=="1", SYSFS{device/media}=="cdrom", SYMLINK+="cdrom cdrom-%k"
+
+
+# ALSA sound devices.
+KERNEL=="controlC[0-9]*",       NAME="snd/%k"
+KERNEL=="hwC[D0-9]*",           NAME="snd/%k"
+KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k"
+KERNEL=="midiC[D0-9]*",         NAME="snd/%k"
+KERNEL=="timer",                NAME="snd/%k"
+KERNEL=="seq",                  NAME="snd/%k"

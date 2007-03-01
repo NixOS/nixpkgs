@@ -131,6 +131,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) glibc pwdutils;
     })
 
+  # ALSA sound support.
+  ++ optional ["sound" "enable"]
+    (import ../upstart-jobs/alsa.nix {
+      inherit (pkgs) kernel module_init_tools alsaUtils;
+    })
+
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {
