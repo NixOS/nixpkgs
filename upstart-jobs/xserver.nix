@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, xorg, mesa, xterm, slim, metacity, GConf
+{ stdenv, writeText, lib, xorg, mesa, xterm, slim, metacity, GConf, compiz
 
 , config
 
@@ -67,11 +67,24 @@ let
   clientScript = writeText "xclient" "
     ${if windowManager == "twm" then "
     ${xorg.twm}/bin/twm &
-    " else if windowManager == "metacity" then "
+    "
+
+    else if windowManager == "metacity" then "
     # !!! Hack: load the schemas for Metacity.
     GCONF_CONFIG_SOURCE=xml::~/.gconf ${GConf}/bin/gconftool-2 --makefile-install-rule ${metacity}/etc/gconf/schemas/*.schemas
     ${metacity}/bin/metacity &
-    " else abort ("unknown window manager "+ windowManager)}
+    "
+
+    else if windowManager == "compiz" then "
+    # !!! Hack: load the schemas for Compiz.
+    GCONF_CONFIG_SOURCE=xml::~/.gconf ${GConf}/bin/gconftool-2 --makefile-install-rule ${compiz}/etc/gconf/schemas/*.schemas
+    ${GConf}/bin/gconftool-2 -t list --list-type=string --set /apps/compiz/general/allscreens/options/active_plugins [gconf,png,decoration,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water,wobbly,zoom]
+    ${compiz}/bin/compiz gconf &
+    /nix/store/n4wkqkl9l1bikdq39hcxg1rwywavzzh9-compiz-0.3.6/bin/gtk-window-decorator &
+    "
+
+    else abort ("unknown window manager "+ windowManager)}
+    
     ${xterm}/bin/xterm -ls
   ";
 
