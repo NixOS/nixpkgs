@@ -13,7 +13,7 @@ in
 start on hardware-scan
 stop on shutdown
 
-script
+start script
 
     # Load some additional modules.
     export MODULE_DIR=${kernel}/lib/modules/
@@ -25,6 +25,8 @@ script
     ${alsaUtils}/sbin/alsactl -f ${soundState} restore
 
 end script
+
+respawn sleep 1000000 # !!! hack
 
 stop script
 
