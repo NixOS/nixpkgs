@@ -3,13 +3,13 @@
 
 {stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
 
-{url, outputHash ? "", outputHashAlgo ? "", md5 ? "", sha1 ? "", sha256 ? ""}:
+{name ? "", url, outputHash ? "", outputHashAlgo ? "", md5 ? "", sha1 ? "", sha256 ? ""}:
 
 assert (outputHash != "" && outputHashAlgo != "")
     || md5 != "" || sha1 != "" || sha256 != "";
 
 stdenv.mkDerivation {
-  name = baseNameOf (toString url);
+  name = if name != "" then name else baseNameOf (toString url);
   builder = ./builder.sh;
   buildInputs = [curl];
 
