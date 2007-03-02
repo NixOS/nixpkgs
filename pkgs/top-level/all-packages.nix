@@ -1118,20 +1118,10 @@ rec {
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
    * of glib and pkgconfig itself on MinGW.
    */
-  pkgconfigOld = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
+  pkgconfig = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
     (import ../development/tools/misc/pkgconfig {
       inherit fetchurl stdenv;
     });
-
-  pkgconfig = pkgconfig_latest;
-
-  pkgconfig017x = import ../development/tools/misc/pkgconfig/pkgconfig-0.17.2.nix {
-    inherit fetchurl stdenv;
-  };
-
-  pkgconfig_latest = import ../development/tools/misc/pkgconfig/pkgconfig-0.21.nix {
-    inherit fetchurl stdenv;
-  };
 
   scons = import ../development/tools/build-managers/scons {
     inherit fetchurl stdenv python;
@@ -1241,8 +1231,7 @@ rec {
   };
 
   cairo = import ../development/libraries/cairo {
-    inherit fetchurl stdenv x11 fontconfig freetype zlib libpng;
-    pkgconfig = pkgconfig_latest;
+    inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
   chmlib = import ../development/libraries/chmlib {
@@ -2596,8 +2585,7 @@ rec {
   };
 
   firefox = import ../applications/networking/browsers/firefox {
-    inherit fetchurl stdenv perl zip libjpeg libpng zlib cairo;
-    pkgconfig = pkgconfig_latest;
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
