@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
     (fetchurl {
-      url = http://bugs.freedesktop.org/attachment.cgi?id=8494;
+      # http://bugs.freedesktop.org/attachment.cgi?id=8494
+      url = http://losser.st-lab.cs.uu.nl/~mbravenb/mirror/pkg-config.patch;
       sha256 = "1pcrdbb7dypg2biy0yqc7bdxak5zii8agqljdvk7j4wbyghpqzws";
     })
   ];
