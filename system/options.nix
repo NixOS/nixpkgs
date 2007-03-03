@@ -3,13 +3,6 @@
 [
 
 
-  { 
-    name = ["networking" "hostName"];
-    default = "nixos";
-    description = "The name of the machine.";
-  }
-
-
   {
     name = ["time" "timeZone"];
     default = "CET";
@@ -186,6 +179,13 @@
   }
 
 
+  { 
+    name = ["networking" "hostName"];
+    default = "nixos";
+    description = "The name of the machine.";
+  }
+
+
   {
     name = ["networking" "useDHCP"];
     default = true;
@@ -230,6 +230,19 @@
     example = ["130.161.158.4" "130.161.33.17"];
     description = "
       The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
+    ";
+  }
+
+  
+  {
+    name = ["networking" "enableIntel2200BGFirmware"];
+    default = false;
+    description = "
+      Turn on this option if you want firmware for the Intel
+      PRO/Wireless 2200BG to be loaded automatically.  This is
+      required if you want to use this device.  Intel requires you to
+      accept the license for this firmware, see
+      <link xlink:href='http://ipw2200.sourceforge.net/firmware.php?fid=7'/>.
     ";
   }
 

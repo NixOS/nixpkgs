@@ -1,9 +1,29 @@
-{writeText, cleanSource, udev, procps}:
+{stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs}:
 
 let
 
+  # Perform substitutions in all udev rules files.
+  udevRules = stdenv.mkDerivation {
+    name = "udev-rules";
+    src = cleanSource ./udev-rules;
+    firmwareLoader = substituteAll {
+      src = ./udev-firmware-loader.sh;
+      path = "${stdenv.coreutils}/bin";
+      isExecutable = true;
+      inherit firmwareDirs;
+    };
+    buildCommand = "
+      buildCommand= # urgh
+      ensureDir $out
+      for i in $src/*; do
+        substituteAll $i $out/$(basename $i)
+      done
+    ";
+  };
+
+  # The udev configuration file
   conf = writeText "udev.conf" "
-    udev_rules=\"${cleanSource ./udev-rules}\"
+    udev_rules=\"${udevRules}\"
   ";
 
 in
