@@ -72,7 +72,8 @@ if test "$action" = "switch" -o "$action" = "test"; then
     for event in $(cd $newEvents && ls); do
 
         # Hack: skip the sys-* and ctrl-alt-delete events.
-        if echo "$event" | grep -q "^sys-\|^ctrl-"; then continue; fi
+        # Another hack: don't restart the X server (that would kill all the clients).
+        if echo "$event" | grep -q "^sys-\|^ctrl-|^xserver"; then continue; fi
     
         if ! test -e "$oldEvents/$event"; then
             echo "starting $event..."
