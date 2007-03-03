@@ -2165,6 +2165,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
+    inherit fetchurl stdenv;
+  };
+
   kernelHeaders = import ../os-specific/linux/kernel-headers {
     inherit fetchurl stdenv;
   };
