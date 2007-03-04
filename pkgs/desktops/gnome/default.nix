@@ -3,7 +3,8 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib
+, libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib, ncurses
+, which, libxml2Python
 }:
 
 assert dbus_glib.glib == gtkLibs.glib;
@@ -210,6 +211,18 @@ rec {
     inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
       gettext libxslt;
     input = desktop.gconfeditor;
+  };
+
+  vte = import ./vte.nix {
+    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser ncurses
+      python gettext;
+    input = desktop.vte;
+  };
+  
+  gnometerminal = import ./gnome-terminal.nix {
+    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
+      gettext which python libxml2Python libxslt;
+    input = desktop.gnometerminal;
   };
   
 };

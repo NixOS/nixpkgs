@@ -2,6 +2,8 @@
 , libxml2, libxslt, gettext
 }:
 
+# !!! xml2po needs to store the path to libxml2
+
 stdenv.mkDerivation {
   inherit (input) name src;
   

@@ -1550,8 +1550,12 @@ rec {
 
   libxml2 = import ../development/libraries/libxml2 {
     inherit fetchurl stdenv zlib python;
-#    pythonSupport = stdenv.system == "i686-linux";
     pythonSupport = false;
+  };
+
+  libxml2Python = import ../development/libraries/libxml2 {
+    inherit fetchurl stdenv zlib python;
+    pythonSupport = true;
   };
 
   libxslt = import ../development/libraries/libxslt {
@@ -3017,7 +3021,7 @@ rec {
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm
-            python dbus_glib;
+            python dbus_glib ncurses which libxml2Python;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {
