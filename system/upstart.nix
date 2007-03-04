@@ -1,4 +1,4 @@
-{config, pkgs, nix, nssModulesPath}:
+{config, pkgs, nix, modprobe, nssModulesPath}:
 
 let 
 
@@ -31,17 +31,19 @@ import ../upstart-jobs/gather.nix {
       
     # Makes LVM logical volumes available. 
     (import ../upstart-jobs/lvm.nix {
-      inherit (pkgs) kernel module_init_tools lvm2;
+      inherit modprobe;
+      inherit (pkgs) lvm2;
     })
       
     # Activate software RAID arrays.
     (import ../upstart-jobs/swraid.nix {
-      inherit (pkgs) kernel module_init_tools mdadm;
+      inherit modprobe;
+      inherit (pkgs) mdadm;
     })
       
     # Hardware scan; loads modules for PCI devices.
     (import ../upstart-jobs/hardware-scan.nix {
-      inherit (pkgs) kernel module_init_tools;
+      inherit modprobe;
       doHardwareScan = config.get ["boot" "hardwareScan"];
       kernelModules = config.get ["boot" "kernelModules"];
     })
@@ -60,7 +62,8 @@ import ../upstart-jobs/gather.nix {
 
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
-      inherit (pkgs) nettools kernel module_init_tools wirelesstools;
+      inherit modprobe;
+      inherit (pkgs) nettools wirelesstools;
       nameservers = config.get ["networking" "nameservers"];
       defaultGateway = config.get ["networking" "defaultGateway"];
       interfaces = config.get ["networking" "interfaces"];
@@ -113,7 +116,8 @@ import ../upstart-jobs/gather.nix {
   # NTP daemon.
   ++ optional ["services" "ntp" "enable"]
     (import ../upstart-jobs/ntpd.nix {
-      inherit (pkgs) ntp kernel module_init_tools glibc pwdutils writeText;
+      inherit modprobe;
+      inherit (pkgs) ntp glibc pwdutils writeText;
       servers = config.get ["services" "ntp" "servers"];
     })
 
@@ -136,7 +140,8 @@ import ../upstart-jobs/gather.nix {
   # ALSA sound support.
   ++ optional ["sound" "enable"]
     (import ../upstart-jobs/alsa.nix {
-      inherit (pkgs) kernel module_init_tools alsaUtils;
+      inherit modprobe;
+      inherit (pkgs) alsaUtils;
     })
 
   # Handles the reboot/halt events.

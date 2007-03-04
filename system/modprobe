@@ -1,0 +1,3 @@
+#! @shell@
+export MODULE_DIR=@kernel@/lib/modules
+exec @module_init_tools@/sbin/modprobe "$@"

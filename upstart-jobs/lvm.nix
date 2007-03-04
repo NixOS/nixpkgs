@@ -1,4 +1,4 @@
-{kernel, module_init_tools, lvm2}:
+{modprobe, lvm2}:
 
 {
   name = "lvm";
@@ -10,8 +10,7 @@ start on udev
 script
 
     # Load the device mapper.
-    export MODULE_DIR=${kernel}/lib/modules/
-    ${module_init_tools}/sbin/modprobe dm_mod || true
+    ${modprobe}/sbin/modprobe dm_mod || true
 
     # Scan for block devices that might contain LVM physical volumes
     # and volume groups.

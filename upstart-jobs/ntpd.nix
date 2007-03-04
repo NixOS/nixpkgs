@@ -1,4 +1,4 @@
-{ntp, kernel, module_init_tools, glibc, pwdutils, writeText, servers}:
+{ntp, modprobe, glibc, pwdutils, writeText, servers}:
 
 let
 
@@ -37,8 +37,7 @@ start script
     chown ${ntpUser} ${stateDir}
 
     # Needed to run ntpd as an unprivileged user.
-    export MODULE_DIR=${kernel}/lib/modules/
-    ${module_init_tools}/sbin/modprobe capability
+    ${modprobe}/sbin/modprobe capability
 
     ${ntp}/bin/ntpd -q -g ${ntpFlags}
     

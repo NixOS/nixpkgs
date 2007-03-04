@@ -131,9 +131,18 @@ rec {
     (map (mod: mod + "/lib") nssModules));
 
 
+  # Wrapper around modprobe to set the path to the modules.
+  modprobe = pkgs.substituteAll {
+    dir = "sbin";
+    src = ./modprobe;
+    isExecutable = true;
+    inherit (pkgs) kernel module_init_tools;
+  };
+
+
   # The services (Upstart) configuration for the system.
   upstartJobs = import ./upstart.nix {
-    inherit config pkgs nix nssModulesPath;
+    inherit config pkgs nix modprobe nssModulesPath;
   };
 
 
@@ -155,6 +164,7 @@ rec {
 
   # The packages you want in the boot environment.
   systemPathList = [
+    modprobe # must take precedence over module_init_tools
     pkgs.bash
     pkgs.bzip2
     pkgs.coreutils
@@ -220,7 +230,7 @@ rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
 
-    inherit etc wrapperDir systemPath;
+    inherit etc wrapperDir systemPath modprobe;
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];

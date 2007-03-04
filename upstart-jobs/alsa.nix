@@ -1,4 +1,4 @@
-{kernel, module_init_tools, alsaUtils}:
+{modprobe, alsaUtils}:
 
 let
 
@@ -16,9 +16,8 @@ stop on shutdown
 start script
 
     # Load some additional modules.
-    export MODULE_DIR=${kernel}/lib/modules/
     for mod in snd_pcm_oss; do
-        ${module_init_tools}/sbin/modprobe $mod || true
+        ${modprobe}/sbin/modprobe $mod || true
     done
 
     # Restore the sound state.

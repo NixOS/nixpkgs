@@ -1,4 +1,4 @@
-{kernel, module_init_tools, mdadm}:
+{modprobe, mdadm}:
 
 let
 
@@ -16,9 +16,9 @@ start on udev
 script
 
     # Load the necessary RAID personalities.
-    export MODULE_DIR=${kernel}/lib/modules/
+    # !!! hm, doesn't the kernel load these automatically?
     for mod in raid0 raid1 raid5; do
-        ${module_init_tools}/sbin/modprobe $mod || true
+        ${modprobe}/sbin/modprobe $mod || true
     done
 
     # Scan /proc/partitions for RAID devices.

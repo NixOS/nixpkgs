@@ -36,6 +36,14 @@ mkdir -m 0755 -p $mountPoint/bin
 ln -sfn @shell@ $mountPoint/bin/sh
 
 
+# Allow the kernel to find our wrapped modprobe (which searches in the
+# right location in the Nix store for kernel modules).  We need this
+# when the kernel (or some module) auto-loads a module.
+# !!! maybe this should only happen at boot time, since we shouldn't
+# use modules that don't match the running kernel.
+echo @modprobe@/sbin/modprobe > /proc/sys/kernel/modprobe
+
+
 # Various log directories.
 mkdir -m 0755 -p /var/run
 

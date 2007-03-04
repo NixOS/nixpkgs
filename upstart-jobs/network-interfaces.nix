@@ -1,5 +1,4 @@
-# !!! Don't like it that I have to pass the kernel here.
-{ nettools, kernel, module_init_tools, wirelesstools
+{ nettools, modprobe, wirelesstools
 , nameservers, defaultGateway, interfaces
 }:
 
@@ -22,9 +21,7 @@ start on hardware-scan
 stop on shutdown
 
 start script
-    export MODULE_DIR=${kernel}/lib/modules/
-
-    ${module_init_tools}/sbin/modprobe af_packet
+    ${modprobe}/sbin/modprobe af_packet
 
     for i in $(cd /sys/class/net && ls -d *); do
         echo \"Bringing up network device $i...\"
