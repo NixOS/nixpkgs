@@ -140,7 +140,7 @@ sub addPkg {
 # Symlink to the packages that have been installed explicitly by the user.
 my @args = split ' ', $ENV{"paths"};
 
-foreach my $pkgDir (sort @args) {
+foreach my $pkgDir (@args) {
     addPkg($pkgDir, $ENV{"ignoreCollisions"} eq "1");
 }
 
