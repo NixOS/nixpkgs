@@ -80,7 +80,7 @@ let
     GCONF_CONFIG_SOURCE=xml::~/.gconf ${GConf}/bin/gconftool-2 --makefile-install-rule ${compiz}/etc/gconf/schemas/*.schemas
     ${GConf}/bin/gconftool-2 -t list --list-type=string --set /apps/compiz/general/allscreens/options/active_plugins [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water,zoom]
     ${compiz}/bin/compiz gconf &
-    /nix/store/n4wkqkl9l1bikdq39hcxg1rwywavzzh9-compiz-0.3.6/bin/gtk-window-decorator &
+    ${compiz}/bin/gtk-window-decorator &
     "
 
     else abort ("unknown window manager "+ windowManager)}
