@@ -7,5 +7,6 @@ stdenv.mkDerivation {
     sha256 = "1jn652zb81mczsx4rdcwrrzj3lfhx9d107zjfnasc4l5yljl204a";
   };
   buildInputs = [pkgconfig expat];
+  configureFlags = "--without-x";
   #configureFlags = "--localstatedir=/var";
 }
