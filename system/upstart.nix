@@ -60,7 +60,7 @@ import ../upstart-jobs/gather.nix {
 
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
-      inherit (pkgs) nettools kernel module_init_tools;
+      inherit (pkgs) nettools kernel module_init_tools wirelesstools;
       nameservers = config.get ["networking" "nameservers"];
       defaultGateway = config.get ["networking" "defaultGateway"];
       interfaces = config.get ["networking" "interfaces"];

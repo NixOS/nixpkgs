@@ -1,5 +1,5 @@
 # !!! Don't like it that I have to pass the kernel here.
-{ nettools, kernel, module_init_tools
+{ nettools, kernel, module_init_tools, wirelesstools
 , nameservers, defaultGateway, interfaces
 }:
 
@@ -7,8 +7,10 @@ let
 
   # !!! use XML
   names = map (i: i.name) interfaces;
-  ipAddresses = map (i: i.ipAddress) interfaces;
+  ipAddresses = map (i: if i ? ipAddress then i.ipAddress else "dhcp") interfaces;
   subnetMasks = map (i: if i ? subnetMask then i.subnetMask else "default") interfaces;
+  essids = map (i: if i ? essid then i.essid else "default") interfaces;
+  wepKeys = map (i: if i ? wepKey then i.wepKey else "nokey") interfaces;
 
 in 
 
@@ -33,17 +35,35 @@ start script
     names=(${toString names})
     ipAddresses=(${toString ipAddresses})
     subnetMasks=(${toString subnetMasks})
+    essids=(${toString essids})
+    wepKeys=(${toString wepKeys})
 
     for ((n = 0; n < \${#names[*]}; n++)); do
         name=\${names[$n]}
         ipAddress=\${ipAddresses[$n]}
         subnetMask=\${subnetMasks[$n]}
-        echo \"Configuring interface $name...\"
-	extraFlags=
-        if test \"$subnetMask\" != default; then
-	    extraFlags=\"$extraFlags netmask $subnetMask\"
+        essid=\${essids[$n]}
+        wepKey=\${wepKeys[$n]}
+
+        # Set wireless networking stuff.
+        if test \"$essid\" != dhcp; then
+            ${wirelesstools}/sbin/iwconfig \"$name\" essid \"$essid\"
         fi
-        ${nettools}/sbin/ifconfig \"$name\" \"$ipAddress\" $extraFlags || true
+        
+        if test \"$wepKey\" != nokey; then
+            ${wirelesstools}/sbin/iwconfig \"$name\" key \"$(cat \"$wepKey\")\"
+        fi
+        
+        # Set IP address / netmask.        
+        if test \"$ipAddress\" != dhcp; then
+            echo \"Configuring interface $name...\"
+	    extraFlags=
+            if test \"$subnetMask\" != default; then
+	        extraFlags=\"$extraFlags netmask $subnetMask\"
+            fi
+            ${nettools}/sbin/ifconfig \"$name\" \"$ipAddress\" $extraFlags || true
+        fi
+        
     done
 
     # Set the nameservers.
