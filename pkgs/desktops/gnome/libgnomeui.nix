@@ -1,11 +1,14 @@
-{input, stdenv, fetchurl, pkgconfig, libgnome, libgnomecanvas,
-libbonoboui, libglade, esound, libjpeg, gnomekeyring}:
-
-assert pkgconfig != null && libgnome != null && libgnomecanvas != null
-  && libbonoboui != null && libglade != null;
+{ input, stdenv, fetchurl, gnome, pkgconfig, perl, perlXMLParser
+, esound, libjpeg, gettext
+}:
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig libglade esound libjpeg];
-  propagatedBuildInputs = [libgnome libgnomecanvas libbonoboui libjpeg gnomekeyring];
+  buildInputs = [
+    pkgconfig perl perlXMLParser gnome.libglade esound libjpeg gettext
+  ];
+  propagatedBuildInputs = [
+    gnome.libgnome gnome.libgnomecanvas gnome.libbonoboui libjpeg
+    gnome.gnomekeyring
+  ];
 }

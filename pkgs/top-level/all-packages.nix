@@ -1269,6 +1269,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  dbus = import ../development/libraries/dbus {
+    inherit fetchurl stdenv pkgconfig expat;
+  };
+
+  dbus_glib = import ../development/libraries/dbus-glib {
+    inherit fetchurl stdenv pkgconfig gettext dbus expat;
+    inherit (gtkLibs) glib;
+  };
+
   dclib = import ../development/libraries/dclib {
     inherit fetchurl stdenv libxml2 openssl bzip2;
   };
@@ -3007,7 +3016,8 @@ rec {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
-            libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm;
+            libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm
+            python dbus_glib;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {

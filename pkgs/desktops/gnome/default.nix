@@ -3,8 +3,12 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs, xlibs, bzip2, libcm
+, libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib
 }:
+
+assert dbus_glib.glib == gtkLibs.glib;
+
+let gnome = 
 
 rec {
 
@@ -50,8 +54,8 @@ rec {
   };
 
   gnomevfs = import ./gnome-vfs.nix {
-    inherit fetchurl stdenv pkgconfig perl glib libxml2 GConf
-            libbonobo gnomemimedata popt perlXMLParser gettext bzip2;
+    inherit fetchurl stdenv gnome pkgconfig perl libxml2 popt
+      perlXMLParser gettext bzip2 dbus_glib;
     input = platform.gnomevfs;
   };
 
@@ -62,8 +66,8 @@ rec {
   };
 
   libgnome = import ./libgnome.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gnomevfs
-            libbonobo GConf popt zlib esound;
+    inherit fetchurl stdenv gnome pkgconfig perl perlXMLParser
+      popt zlib esound gettext;
     input = platform.libgnome;
   };
 
@@ -96,8 +100,8 @@ rec {
   };
 
   libgnomeui = import ./libgnomeui.nix {
-    inherit fetchurl stdenv pkgconfig libgnome libgnomecanvas
-            libbonoboui libglade libjpeg esound gnomekeyring;
+    inherit fetchurl stdenv gnome pkgconfig perl perlXMLParser
+      libjpeg esound gettext;
     input = platform.libgnomeui;
   };
 
@@ -195,5 +199,20 @@ rec {
     enableCompositor = true;
     input = desktop.metacity;
   };
+
+  gnomedocutils = import ./gnome-doc-utils.nix {
+    inherit stdenv fetchurl pkgconfig perl perlXMLParser python
+      libxml2 libxslt gettext;
+    input = desktop.gnomedocutils;
+  };
+
+  gconfeditor = import ./gconf-editor.nix {
+    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
+      gettext libxslt;
+    input = desktop.gconfeditor;
+  };
   
-}
+};
+
+in gnome
+

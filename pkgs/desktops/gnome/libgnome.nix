@@ -1,5 +1,5 @@
-{ input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gnomevfs, libbonobo
-, GConf, popt, zlib, esound
+{ input, stdenv, fetchurl, gnome, pkgconfig, perl, perlXMLParser
+, popt, zlib, esound, gettext
 }:
 
 # !!! TODO CHECK:
@@ -9,6 +9,6 @@
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig perl perlXMLParser popt zlib esound];
-  propagatedBuildInputs = [glib gnomevfs libbonobo GConf];
+  buildInputs = [pkgconfig perl perlXMLParser popt zlib esound gettext];
+  propagatedBuildInputs = [gnome.glib gnome.gnomevfs gnome.libbonobo gnome.GConf];
 }

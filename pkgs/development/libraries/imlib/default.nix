@@ -14,8 +14,3 @@ stdenv.mkDerivation {
 
   buildInputs = [libjpeg libXext libX11 xextproto libtiff libungif libpng];
 }
-
-
-
-
-
