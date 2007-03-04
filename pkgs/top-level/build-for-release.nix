@@ -196,6 +196,7 @@ let {
   inherit ((allPackages {system = "i686-linux";}).gnome)
     metacity
     gconfeditor
+    gnometerminal
     ;
   };
 

@@ -2496,7 +2496,7 @@ rec {
     inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
     xineramaSupport = true;
-    fastStart = getConfig ["acroread" "fastStart"] false;
+    fastStart = getConfig ["acroread" "fastStart"] true;
   };
 
   amsn = import ../applications/networking/instant-messengers/amsn {

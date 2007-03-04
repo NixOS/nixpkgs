@@ -26,4 +26,4 @@ patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath $fullPath \
     $out/Reader/intellinux/bin/acroread
 
-substituteInPlace $out/bin/acroread --replace /lib:/usr/lib /no-such-path
+substituteInPlace $out/bin/acroread --replace /lib:/usr/lib /no-such-path --replace /bin/pwd pwd
