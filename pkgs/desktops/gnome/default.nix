@@ -164,8 +164,8 @@ rec {
   };
 
   gnomedesktop = import ./gnome-desktop.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gtk
-            libgnomeui scrollkeeper libjpeg;
+    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser
+      libjpeg gettext which python libxml2Python libxslt;
     input = desktop.gnomedesktop;
   };
 
