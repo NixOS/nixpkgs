@@ -1062,6 +1062,10 @@ rec {
     inherit fetchurl stdenv perl gettext perlLocaleGettext;
   };
 
+  iconnamingutils = import ../development/tools/misc/icon-naming-utils {
+    inherit fetchurl stdenv perl perlXMLSimple;
+  };
+
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
   };
@@ -3015,7 +3019,8 @@ rec {
             flex bison popt zlib libxml2 libxslt
             perl perlXMLParser docbook_xml_dtd_42 gettext x11
             libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm
-            python dbus_glib ncurses which libxml2Python;
+            python dbus_glib ncurses which libxml2Python
+            iconnamingutils;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {

@@ -4,7 +4,7 @@
 , flex, bison, popt, perl, zlib, libxml2, libxslt
 , perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
 , libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib, ncurses
-, which, libxml2Python
+, which, libxml2Python, iconnamingutils
 }:
 
 assert dbus_glib.glib == gtkLibs.glib;
@@ -141,7 +141,8 @@ rec {
   libgtkhtml = gtkhtml;
 
   gnomeicontheme = import ./gnome-icon-theme.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser
+      iconnamingutils gettext;
     input = desktop.gnomeicontheme;
   };
 
@@ -174,11 +175,16 @@ rec {
     input = desktop.libwnck;
   };
 
+  gnomemenus = import ./gnome-menus.nix {
+    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser
+      python gettext;
+    input = desktop.gnomemenus;
+  };
+
   gnomepanel = import ./gnome-panel.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser glib gtk ORBit2
-            libgnome libgnomeui gnomedesktop libglade libwnck
-            libjpeg libpng scrollkeeper;
-    inherit (xlibs) libXmu;
+    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser libjpeg
+      libpng dbus_glib gettext libxslt;
+    inherit (xlibs) libXmu libXau;
     input = desktop.gnomepanel;
   };
 
@@ -223,6 +229,19 @@ rec {
     inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
       gettext which python libxml2Python libxslt;
     input = desktop.gnometerminal;
+  };
+
+  libgtop = import ./libgtop.nix {
+    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
+      popt gettext;
+    input = desktop.libgtop;
+  };
+  
+  gnomeutils = import ./gnome-utils.nix {
+    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
+      gettext libxslt /*  which python libxml2Python libxslt */;
+    inherit (xlibs) libXmu;
+    input = desktop.gnomeutils;
   };
   
 };

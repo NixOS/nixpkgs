@@ -197,6 +197,8 @@ let {
     metacity
     gconfeditor
     gnometerminal
+    gnomeutils
+    gnomepanel
     ;
   };
 

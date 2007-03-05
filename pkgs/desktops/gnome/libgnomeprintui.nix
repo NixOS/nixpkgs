@@ -4,7 +4,10 @@ stdenv.mkDerivation {
   inherit (input) name src;
 
   buildInputs = [
-    perl perlXMLParser pkgconfig
-    gtk libgnomeprint libgnomecanvas gnomeicontheme
+    perl perlXMLParser pkgconfig gtk libgnomecanvas gnomeicontheme
+  ];
+
+  propagatedBuildInputs = [
+    libgnomeprint
   ];
 }

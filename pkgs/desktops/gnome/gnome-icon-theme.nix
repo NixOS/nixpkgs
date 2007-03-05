@@ -1,13 +1,13 @@
-{input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser}:
-
-assert pkgconfig != null && perl != null;
+{ input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser
+, iconnamingutils, gettext
+}:
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  buildInputs = [pkgconfig perl perlXMLParser];
+  buildInputs = [pkgconfig perl perlXMLParser iconnamingutils gettext];
 
-  # TODO: maybe this package as dependency on gnome-themes?
-  configureFlags = "--disable-hicolor-check";
-
-  patches = [./gnome-icon-theme-2.14.2.patch];
+  postInstall = "
+    ensureDir $out/lib
+    ln -s $out/share/pkgconfig $out/lib/pkgconfig # WTF?
+  ";  
 }
