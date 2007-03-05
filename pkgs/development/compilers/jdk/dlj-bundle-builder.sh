@@ -25,9 +25,9 @@ for i in $libraries; do
 done
 
 if test -z "$installjdk"; then
-  rpath=${rpath:+:}$out/lib/i386/jli
+  rpath=$rpath${rpath:+:}$out/lib/i386/jli
 else
-  rpath=${rpath:+:}$out/jre/lib/i386/jli
+  rpath=$rpath${rpath:+:}$out/jre/lib/i386/jli
 fi
 
 find $out -type f -perm +100 \
