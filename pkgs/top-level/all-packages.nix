@@ -404,8 +404,7 @@ rec {
   };
 
   jing_tools = import ../tools/text/xml/jing/jing-script.nix {
-    inherit fetchurl stdenv unzip;
-    jre = blackdown;
+    inherit fetchurl stdenv unzip jre;
   };
 
   less = import ../tools/misc/less {
