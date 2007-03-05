@@ -6,7 +6,7 @@ let {
     MPlayer
     MPlayerPlugin
     #abc
-    apacheAntBlackdown14
+    apacheAnt
     apacheHttpd
     aspectj
     aterm
@@ -17,7 +17,6 @@ let {
     binutils
     bison23
     bittorrent
-    blackdown
     bmp
     bmp_plugin_musepack
     bmp_plugin_wma
@@ -67,6 +66,7 @@ let {
     hello
     iputils
     jakartaregexp
+    jdk
     jetty
     jikes
     jing_tools

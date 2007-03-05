@@ -503,8 +503,7 @@ rec {
   };
 
   trang = import ../tools/text/xml/trang {
-    inherit fetchurl stdenv unzip;
-    jre = blackdown;
+    inherit fetchurl stdenv unzip jre;
   };
 
   transfig = import ../tools/graphics/transfig {
@@ -582,10 +581,8 @@ rec {
   abcPatchable = patches : 
     import ../development/compilers/abc/default.nix {
       inherit stdenv fetchurl patches jre apacheAnt;
-      # apacheAnt = apacheAntBlackdown14;
       javaCup = import ../development/libraries/java/cup {
-        inherit stdenv fetchurl;
-        jdk = blackdown;
+        inherit stdenv fetchurl jdk;
       };
     };
 
@@ -593,10 +590,6 @@ rec {
     import ../development/compilers/aspectj {
       inherit stdenv fetchurl jre;
     };
-
-  blackdown = import ../development/compilers/blackdown {
-    inherit fetchurl stdenv;
-  };
 
   dylan = import ../development/compilers/gwydion-dylan {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
@@ -742,12 +735,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  jdk = 
+  jre = jdkdistro false;
+  jdk = jdkdistro true;
+
+  jdkdistro = installjdk :
     if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       import ../development/compilers/jdk {
-        inherit fetchurl stdenv unzip;
+        inherit fetchurl stdenv unzip installjdk;
         inherit (xlibs) libX11 libXext;
       };
 
@@ -863,10 +859,6 @@ rec {
     inherit fetchurl stdenv ncurses readline;
   };
 
-  jre = import ../development/interpreters/jre {
-    inherit fetchurl stdenv unzip;
-  };
-
   kaffe =  import ../development/interpreters/kaffe {
     inherit fetchurl stdenv jikes alsaLib xlibs;
   };
@@ -941,8 +933,7 @@ rec {
   */
 
   ecj = import ../development/eclipse/ecj {
-    inherit fetchurl stdenv unzip jre;
-    ant = apacheAntBlackdown14;
+    inherit fetchurl stdenv unzip jre ant;
   };
 
   jdtsdk = import ../development/eclipse/jdt-sdk {
@@ -969,21 +960,16 @@ rec {
     inherit fetchurl stdenv jre;
   };
 
+  ant = apacheAnt;
   apacheAnt = import ../development/tools/build-managers/apache-ant {
     inherit fetchurl stdenv jdk;
-    name = "ant-jdk-1.5.0";
+    name = "ant-" + jdk.name;
   };
 
   apacheAnt14 = import ../development/tools/build-managers/apache-ant {
     inherit fetchurl stdenv;
     jdk = j2sdk14x;
-    name = "ant-jdk-1.4.2";
-  };
-
-  apacheAntBlackdown14 = import ../development/tools/build-managers/apache-ant {
-    inherit fetchurl stdenv;
-    jdk = blackdown;
-    name = "ant-blackdown-1.4.2";
+    name = "ant-" + j2sdk14x.name;
   };
 
   autoconf = autoconf259;
@@ -1145,8 +1131,7 @@ rec {
   };
 
   swigWithJava = import ../development/tools/misc/swig {
-    inherit fetchurl stdenv;
-    jdk = blackdown;
+    inherit fetchurl stdenv jdk;
     perlSupport = false;
     pythonSupport = false;
     javaSupport = true;
@@ -2065,8 +2050,7 @@ rec {
   };
 
   mysql_jdbc = import ../servers/sql/mysql/jdbc {
-    inherit fetchurl stdenv;
-    ant = apacheAntBlackdown14;
+    inherit fetchurl stdenv ant;
   };
 
   nagios = import ../servers/monitoring/nagios {
@@ -2082,13 +2066,11 @@ rec {
   };
 
   postgresql_jdbc = import ../servers/sql/postgresql/jdbc {
-    inherit fetchurl stdenv;
-    ant = apacheAntBlackdown14;
+    inherit fetchurl stdenv ant;
   };
 
   tomcat5 = import ../servers/http/tomcat {
-    inherit fetchurl stdenv ;
-    jdk = blackdown;
+    inherit fetchurl stdenv jdk;
   };
 
   vsftpd = import ../servers/ftp/vsftpd {
@@ -2910,7 +2892,7 @@ rec {
     ]
     # RealPlayer is disabled by default for legal reasons.
     ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
-    ++ (if blackdown != null then [blackdown] else []);
+    ++ (if jre != false then [jre] else []);
   };
 
   xara = import ../applications/graphics/xara {
