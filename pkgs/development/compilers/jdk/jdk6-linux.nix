@@ -2,8 +2,7 @@
 , stdenv
 , fetchurl
 , unzip
-, libX11 ? null
-, libXext ? null
+, xlibs ? null
 , installjdk ? true
 }:
 
@@ -11,7 +10,7 @@
  * @todo Support x86_64-linux.
  */
 assert stdenv.system == "i686-linux";
-assert swingSupport -> libX11 != null && libXext != null;
+assert swingSupport -> xlibs != null;
 
 (stdenv.mkDerivation {
   name =
@@ -35,7 +34,7 @@ assert swingSupport -> libX11 != null && libXext != null;
 
   buildInputs = [unzip];
   libraries =
-    (if swingSupport then [libX11 libXext] else []);
+    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
 } // {
   inherit swingSupport;
 } // {

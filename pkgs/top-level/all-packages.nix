@@ -743,8 +743,7 @@ rec {
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       import ../development/compilers/jdk {
-        inherit fetchurl stdenv unzip installjdk;
-        inherit (xlibs) libX11 libXext;
+        inherit fetchurl stdenv unzip installjdk xlibs;
       };
 
   jikes = import ../development/compilers/jikes {
