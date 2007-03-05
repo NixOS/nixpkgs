@@ -1,6 +1,9 @@
 source $stdenv/setup
-sh ${src} --accept-license
 
+echo "Unpacking distribution"
+unzip ${src} || true
+
+echo "Constructing JDK and JRE"
 if test -z "$installjdk"; then
   sh ${construct} . tmp-linux-jdk tmp-linux-jre
   ensureDir $out
