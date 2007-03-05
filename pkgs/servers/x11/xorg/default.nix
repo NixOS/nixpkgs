@@ -1063,6 +1063,7 @@ rec {
       sha256 = "07fi4yvkni7rlkw9gv7z1fa6y63z34gpj3kklc9ydlqg72nb5mhr";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs libXau xcbproto libXdmcp ];
+    patches = [ ./xcb_xlib-no-assert-on-lock.patch ];
   }) // {inherit libxslt libpthreadstubs libXau xcbproto libXdmcp ;};
     
   libxkbfile = (stdenv.mkDerivation {
