@@ -14,9 +14,11 @@ stdenv.mkDerivation {
     sha256 = "1hi53ajypmgsyfz7cziccdk9f8mn3pfl255yjzl0v15nv5kacmiq";
   };
   buildInputs = [
-    pkgconfig libpng libXcomposite libXfixes libXdamage libXrandr
-    libXinerama libICE libSM startupnotification libXrender xextproto
-    mesa gtk libwnck GConf
+    pkgconfig libXrender xextproto gtk libwnck GConf
+  ];
+  propagatedBuildInputs = [
+    libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
+    libICE libSM startupnotification mesa
   ];
   configureFlags = "--enable-gtk";
 }

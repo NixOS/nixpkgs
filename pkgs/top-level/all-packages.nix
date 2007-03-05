@@ -1415,6 +1415,10 @@ rec {
     inherit (xlibs) libX11 libXext xextproto;
   };
 
+  imlib2 = import ../development/libraries/imlib2 {
+    inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng;
+  };
+
   lcms = import ../development/libraries/lcms {
     inherit fetchurl stdenv;
   };
@@ -2545,6 +2549,12 @@ rec {
     inherit (gtkLibs) gtk;
   };
 
+  compizExtra = import ../applications/window-managers/compiz/extra.nix {
+    inherit fetchurl stdenv pkgconfig compiz perl perlXMLParser dbus;
+    inherit (gnome) GConf;
+    inherit (gtkLibs) gtk;
+  };
+
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
@@ -2599,6 +2609,10 @@ rec {
   ethereal = import ../applications/networking/sniffers/ethereal {
     inherit fetchurl stdenv perl pkgconfig libpcap;
     inherit (gtkLibs) glib;
+  };
+
+  feh = import ../applications/graphics/feh {
+    inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
 
   firefox = import ../applications/networking/browsers/firefox {
