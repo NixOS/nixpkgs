@@ -1,0 +1,47 @@
+			     BASH PATCH REPORT
+			     =================
+
+Bash-Release: 3.2
+Patch-ID: bash32-001
+
+Bug-Reported-by:	Greg Schafer <gschafer@zip.com.au>
+Bug-Reference-ID:	<20061012084940.GA15768@tigers.local>
+Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2006-10/msg00046.html
+
+Bug-Description:
+
+When using historical ``-style command substitution, bash incorrectly attempts
+to interpret shell comments while scanning for the closing backquote.
+
+Patch:
+
+*** bash-3.2/parse.y	Tue Sep 19 16:37:21 2006
+--- new-bash/parse.y	Thu Oct 12 10:30:57 2006
+***************
+*** 2736,2740 ****
+    count = 1;
+    pass_next_character = backq_backslash = was_dollar = in_comment = 0;
+!   check_comment = (flags & P_COMMAND) && qc != '\'' && qc != '"' && (flags & P_DQUOTE) == 0;
+  
+    /* RFLAGS is the set of flags we want to pass to recursive calls. */
+--- 2736,2740 ----
+    count = 1;
+    pass_next_character = backq_backslash = was_dollar = in_comment = 0;
+!   check_comment = (flags & P_COMMAND) && qc != '`' && qc != '\'' && qc != '"' && (flags & P_DQUOTE) == 0;
+  
+    /* RFLAGS is the set of flags we want to pass to recursive calls. */
+*** bash-3.2/patchlevel.h	Thu Apr 13 08:31:04 2006
+--- new-bash/patchlevel.h	Mon Oct 16 14:22:54 2006
+***************
+*** 26,30 ****
+     looks for to find the patch level (for the sccs version string). */
+  
+! #define PATCHLEVEL 0
+  
+  #endif /* _PATCHLEVEL_H_ */
+--- 26,30 ----
+     looks for to find the patch level (for the sccs version string). */
+  
+! #define PATCHLEVEL 1
+  
+  #endif /* _PATCHLEVEL_H_ */

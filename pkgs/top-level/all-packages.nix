@@ -567,6 +567,12 @@ rec {
       bison = bison23;
     });
 
+  bashInteractive = import ../shells/bash-interactive {
+    inherit fetchurl stdenv ncurses;
+    bison = bison23;
+    interactive = true;
+  };
+
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
   };
