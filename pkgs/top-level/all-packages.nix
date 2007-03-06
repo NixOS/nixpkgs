@@ -2089,6 +2089,10 @@ rec {
   ### OS-SPECIFIC
 
 
+  _915resolution = import ../os-specific/linux/915resolution {
+    inherit fetchurl stdenv;
+  };
+
   #nfsUtils = import ../os-specific/linux/nfs-utils {
   #  inherit fetchurl stdenv;
   #};
