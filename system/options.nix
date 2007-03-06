@@ -179,6 +179,16 @@
   }
 
 
+  {
+    name = ["boot" "localCommands"];
+    default = "";
+    example = "text=anything; echo You can put $text here.";
+    description = "
+      Shell commands to be executed just before Upstart is started.
+    ";
+  }
+
+
   { 
     name = ["networking" "hostName"];
     default = "nixos";

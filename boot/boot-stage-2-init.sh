@@ -100,6 +100,10 @@ mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
 export MODULE_DIR=@kernel@/lib/modules/
 
 
+# Run any user-specified commands.
+@shell@ @bootLocal@
+
+
 # Start an interactive shell.
 #exec @shell@
 

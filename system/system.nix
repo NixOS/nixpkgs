@@ -248,7 +248,7 @@ rec {
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
-    inherit (pkgs) substituteAll coreutils 
+    inherit (pkgs) substituteAll writeText coreutils 
       utillinux kernel udev upstart;
     inherit activateConfiguration;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
@@ -259,6 +259,7 @@ rec {
       pkgs.gnused
       pkgs.upstart
     ];
+    bootLocal = config.get ["boot" "localCommands"];
   };
 
 

@@ -1,4 +1,4 @@
-{ substituteAll, coreutils
+{ substituteAll, writeText, coreutils
 , utillinux, kernel, udev, upstart
 , activateConfiguration
 
@@ -8,6 +8,9 @@
 
 , # Path for Upstart jobs.  Should be quite minimal.
   upstartPath
+
+, # User-supplied command to be run just before Upstart is started.
+  bootLocal ? ""
 }:
 
 substituteAll {
@@ -20,4 +23,5 @@ substituteAll {
     udev
     upstart
   ];
+  bootLocal = writeText "boot.local" bootLocal;
 }
