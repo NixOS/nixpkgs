@@ -1,12 +1,12 @@
 {stdenv, fetchurl, ant}:
 
 stdenv.mkDerivation {
-  name = "postgresql-jdbc-8.0";
+  name = "postgresql-jdbc-8.2";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/postgresql-jdbc-8.0-311.src.tar.gz;
-    md5 = "e31b6e68141883e5c89a3a9b0fb95c02";
+    url = http://jdbc.postgresql.org/download/postgresql-jdbc-8.2-504.src.tar.gz;
+    sha256 = "1fkza5j4b9pzm69cw1zv35bqk062d92l4l0zhz3qn0g64r08ccm4";
   };
 
   buildInputs = [ant];
