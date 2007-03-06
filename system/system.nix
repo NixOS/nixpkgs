@@ -208,7 +208,7 @@ rec {
     nixosCheckout
     setuidWrapper
   ]
-  ++ (if config.get ["sound" "enable"] then [pkgs.alsaUtils] else []);
+  ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs);
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since

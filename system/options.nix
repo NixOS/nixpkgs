@@ -506,6 +506,30 @@
 
   
   {
+    name = ["services" "xserver" "sessionType"];
+    default = "gnome";
+    example = "xterm";
+    description = "
+      The kind of session to start after login.  Current possibilies
+      are <literal>gnome</literal> (which starts
+      <command>gnome-terminal</command>) and <literal>xterm</literal>
+      (which starts <command>xterm</command>).
+    ";
+  }
+
+  
+  {
+    name = ["services" "xserver" "sessionStarter"];
+    example = "${pkgs.xterm}/bin/xterm -ls";
+    description = "
+      The command executed after login and after the window manager
+      has been started.  Used if
+      <option>services.xserver.sessionType</option> is not empty.
+    ";
+  }
+
+  
+  {
     name = ["services" "httpd" "enable"];
     default = false;
     description = "

@@ -8,6 +8,8 @@ in
   
 {
   name = "alsa";
+
+  extraPath = [alsaUtils];
   
   job = "
 start on hardware-scan

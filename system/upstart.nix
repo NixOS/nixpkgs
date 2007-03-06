@@ -125,8 +125,8 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services" "xserver" "enable"]
     (import ../upstart-jobs/xserver.nix {
       inherit config;
-      inherit (pkgs) stdenv writeText lib xterm slim xorg mesa compiz;
-      inherit (pkgs.gnome) metacity GConf;
+      inherit (pkgs) stdenv writeText lib xterm slim xorg mesa
+        gnome compiz feh;
       fontDirectories = import ./fonts.nix {inherit pkgs;};
     })
 
@@ -201,6 +201,8 @@ import ../upstart-jobs/gather.nix {
   ++ (map makeJob (config.get ["services" "extraJobs"]))
 
   # For the built-in logd job.
-  ++ [pkgs.upstart];
+  ++ [
+    (pkgs.upstart // {extraPath = [];})
+  ];
   
 }
