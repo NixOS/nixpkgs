@@ -19,6 +19,11 @@ rec {
     else op (head list) (fold op nul (tail list));
 
     
+  # Concatenate a list of lists.
+  concatLists =
+    fold (x: y: x ++ y) [];
+
+
   # Concatenate a list of strings.
   concatStrings =
     fold (x: y: x + y) "";
