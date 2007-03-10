@@ -8,6 +8,7 @@ rec {
     , generatePDF ? true
     , extraFiles ? []
     , compressBlanksInIndex ? true
+    , packages ? []
     }:
     
     pkgs.stdenv.mkDerivation {
@@ -21,7 +22,7 @@ rec {
 
       includes = import (findLaTeXIncludes {inherit rootFile;});
       
-      buildInputs = [ pkgs.tetex pkgs.perl ];
+      buildInputs = [ pkgs.tetex pkgs.perl ] ++ packages;
     };
 
     

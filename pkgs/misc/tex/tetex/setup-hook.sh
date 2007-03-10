@@ -1,6 +1,6 @@
 addTeXMFPath () {
     if test -d "$1/share/texmf-nix"; then
-        export TEXMFNIX="${TEXMFNIX}${TEXMFNIX:+:}$1/share/texmf-nix"
+        export TEXINPUTS="${TEXINPUTS}${TEXINPUTS:+:}$1/share/texmf-nix//:"
     fi
 }
 

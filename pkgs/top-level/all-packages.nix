@@ -3122,6 +3122,10 @@ rec {
     db4 = db45;
   };
 
+  pgf = import ../misc/tex/pgf {
+    inherit fetchurl stdenv;
+  };
+
   polytable = import ../misc/tex/polytable {
     inherit fetchurl stdenv tetex lazylist;
   };
