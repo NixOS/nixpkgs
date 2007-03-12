@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     md5 = "c59edf035ae6e19b64b1ae920fea28e7";
   };
 
-  propagatedBuildInputs = [tetex lazylist];
+  buildInputs = [tetex];
+  propagatedBuildInputs = [lazylist];
 
   inherit tetex;
 }
