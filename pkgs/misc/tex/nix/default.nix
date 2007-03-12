@@ -84,4 +84,83 @@ rec {
     inherit dotGraph nrFrames;
   };
 
+
+  # Wrap a piece of TeX code in a document.  Useful when generating
+  # inline images from TeX code.
+  wrapSimpleTeX =
+    { preamble ? null
+    , body
+    , name ? baseNameOf (toString body)
+    }:
+
+    pkgs.stdenv.mkDerivation {
+      inherit name preamble body;
+      buildCommand = "
+        touch $out
+        echo '\\documentclass{article}' >> $out
+        echo '\\pagestyle{empty}' >> $out
+        if test -n \"$preamble\"; then cat $preamble >> $out; fi
+        echo '\\begin{document}' >> $out
+        cat $body >> $out
+        echo '\\end{document}' >> $out
+      ";
+    };
+
+
+  # Convert a Postscript file to a PNG image, trimming it so that
+  # there is no unnecessary surrounding whitespace.    
+  postscriptToPNG =
+    { postscript
+    }:
+
+    pkgs.stdenv.mkDerivation {
+      name = "png";
+      inherit postscript;
+      
+      buildCommand = "
+        if test -d $postscript; then
+          input=$(ls $postscript/*.ps)
+        else
+          input=$(stripHash $postscript; echo $strippedName)
+          ln -s $postscript $input
+        fi
+
+        # !!! Quick hack: no ImageMagick in Nixpkgs yet!
+        export PATH=/usr/bin:$PATH
+        ensureDir $out
+        convert -units PixelsPerInch \\
+          -density 300 \\
+          -trim \\
+          -matte \\
+          -transparent '#ffffff' \\
+          -type PaletteMatte \\
+          +repage \\
+          $input \\
+          \"$out/$(basename $input .ps).png\"
+      ";
+    };
+
+
+  # Convert a piece of TeX code to a PNG image.
+  simpleTeXToPNG =
+    { preamble ? null
+    , body
+    , name ? baseNameOf (toString body)
+    , packages ? []
+    }:
+
+    postscriptToPNG {
+      postscript = runLaTeX {
+        rootFile = wrapSimpleTeX {
+          inherit body preamble;
+        };
+        inherit packages;
+        generatePDF = false;
+        generatePS = true;
+        searchRelativeTo = dirOf (toString body);
+      };
+    };
+
+
+      
 }
