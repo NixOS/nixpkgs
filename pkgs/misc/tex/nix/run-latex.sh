@@ -94,6 +94,11 @@ if test -n "$generatePDF"; then
     cp $rootNameBase.pdf $out
 else
     cp $rootNameBase.dvi $out
+    if test -n "$generatePS"; then
+        echo "CONVERTING TO POSTSCRIPT..."
+        dvips $rootNameBase.dvi -o $out/$rootNameBase.ps
+        echo
+    fi
 fi
 
 

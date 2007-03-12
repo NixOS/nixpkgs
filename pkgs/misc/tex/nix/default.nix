@@ -5,11 +5,15 @@ rec {
 
   runLaTeX =
     { rootFile
-    , generatePDF ? true
+    , generatePDF ? true # generate PDF, not DVI
+    , generatePS ? false # generate PS in addition to DVI
     , extraFiles ? []
     , compressBlanksInIndex ? true
     , packages ? []
+    , searchRelativeTo ? dirOf (toString rootFile) # !!! duplication
     }:
+
+    assert generatePDF -> !generatePS;
     
     pkgs.stdenv.mkDerivation {
       name = "doc";
@@ -17,10 +21,10 @@ rec {
       builder = ./run-latex.sh;
       copyIncludes = ./copy-includes.pl;
       
-      inherit rootFile generatePDF extraFiles
+      inherit rootFile generatePDF generatePS extraFiles
         compressBlanksInIndex;
 
-      includes = import (findLaTeXIncludes {inherit rootFile;});
+      includes = import (findLaTeXIncludes {inherit rootFile searchRelativeTo;});
       
       buildInputs = [ pkgs.tetex pkgs.perl ] ++ packages;
     };
@@ -28,6 +32,7 @@ rec {
     
   findLaTeXIncludes =
     { rootFile
+    , searchRelativeTo ? dirOf (toString rootFile)
     }:
 
     pkgs.stdenv.mkDerivation {
@@ -37,6 +42,8 @@ rec {
       args = [ ./find-includes.pl ];
 
       rootFile = toString rootFile; # !!! hacky
+
+      inherit searchRelativeTo;
 
       # Forces rebuilds.
       hack = __currentTime;

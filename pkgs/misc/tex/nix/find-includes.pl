@@ -3,16 +3,11 @@ use File::Basename;
 
 my $root = $ENV{"rootFile"};
 my $out = $ENV{"out"};
+my $path = $ENV{"searchRelativeTo"};
+my $store = $ENV{"NIX_STORE"};
 
 open OUT, ">$out" or die;
 print OUT "[\n";
-
-# We search for files relative to the root file.  TODO: search
-# relative to the paths in $TEXINPUTS.
-die unless substr($root, 0, 1) eq "/";
-my ($x, $path, $y) = fileparse($root);
-
-$path =~ s/\/$//;
 
 my @workset = ();
 my %doneset = ();
@@ -37,11 +32,18 @@ while (scalar @workset > 0) {
     
     
     # Print out the full path *and* its relative path to $root.
-    
-    die if substr($fn, 0, length $path) ne $path;
-    my $relFN = substr($fn, (length $path) + 1);
 
-    print OUT "$fn \"$relFN\"\n";
+    if (substr($fn, 0, length $path) eq $path) {
+        my $relFN = substr($fn, (length $path) + 1);
+        print OUT "$fn \"$relFN\"\n";
+    } else {
+        my $base = basename $fn;
+        my $x = substr($fn, 0, length($store) + 1);
+        if (substr($fn, 0, length($store) + 1) eq "$store/") {
+            $base = substr($base, 33);
+        }
+        print OUT "$fn \"$base\"\n";
+    }
 
     
     # If this is a TeX file, recursively find include in $fn.
