@@ -100,7 +100,7 @@ let
     # !!! Hack: turn on most Compiz modules.
     ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \\
       --set /apps/compiz/general/allscreens/options/active_plugins \\
-      [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water,zoom]
+      [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
 
     # Start Compiz and the GTK-style window decorator.
     ${compiz}/bin/compiz gconf &
