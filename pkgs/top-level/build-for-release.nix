@@ -6,6 +6,7 @@ let {
     MPlayer
     MPlayerPlugin
     #abc
+    alsaUtils
     apacheAnt
     apacheHttpd
     aspectj
@@ -30,6 +31,7 @@ let {
     cpio
     darcs
     db4
+    dhcp
     dietlibc
     diffutils
     docbook5
@@ -106,6 +108,7 @@ let {
     pan
     par2cmdline
     #parted
+    pciutils
     perl
     php
     pkgconfig
@@ -148,6 +151,7 @@ let {
     vim
     vlc
     wget
+    wirelesstools
     wxHaskell
     xchm
     xfig
@@ -182,23 +186,24 @@ let {
 #    zapping
     ;
   inherit ((allPackages {system = "i686-linux";}).xorg)
-    xorgserver
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbhttf
+    fontcursormisc
+    fontmiscmisc
+    xauth
     xf86inputkeyboard
     xf86inputmouse
-    xf86videovesa
     xf86videoi810
-    fontbhttf
-    fontbhlucidatypewriter100dpi
-    fontbh100dpi
-    fontmiscmisc
-    fontcursormisc
+    xf86videovesa
+    xorgserver
     ;
   inherit ((allPackages {system = "i686-linux";}).gnome)
-    metacity
     gconfeditor
+    gnomepanel
     gnometerminal
     gnomeutils
-    gnomepanel
+    metacity
     ;
   };
 
