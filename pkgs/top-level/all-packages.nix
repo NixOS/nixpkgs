@@ -1878,6 +1878,31 @@ rec {
     };
   };
 
+  perlEmailAddress = import ../development/perl-modules/generic perl {
+    name = "Email-Address-1.886";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Address-1.886.tar.gz;
+      sha256 = "01qgl66pv1s6g9awwjpnikhl8av4xnn6a47365dnf6hazrm1dh2f";
+    };
+  };
+
+  perlEmailSend = import ../development/perl-modules/generic perl {
+    name = "Email-Send-2.185";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Send-2.185.tar.gz;
+      sha256 = "0pbgnnbmv6z3zzqaiq1sdcv5d26ijhw4p8k8kp6ac7arvldblamz";
+    };
+    propagatedBuildInputs = [perlEmailSimple perlEmailAddress perlModulePluggable perlReturnValue];
+  };
+
+  perlEmailSimple = import ../development/perl-modules/generic perl {
+    name = "Email-Simple-1.998";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Simple-1.998.tar.gz;
+      sha256 = "0zpna7wla1hwfydlnfpjvvq9xq9al2ddkm8w993035vik70vssg7";
+    };
+  };
+
   perlHTMLParser = import ../development/perl-modules/generic perl {
     name = "HTML-Parser-3.45";
     src = fetchurl {
@@ -1917,6 +1942,25 @@ rec {
       md5 = "3345d5f15a4f42350847254141725c8f";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser];
+  };
+
+  perlModulePluggable = import ../development/perl-modules/generic perl {
+    name = "Module-Pluggable-3.5";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/S/SI/SIMONW/Module-Pluggable-3.5.tar.gz;
+      sha256 = "08rywi79pqn2c8zr17fmd18lpj5hm8lxd1j4v2k002ni8vhl43nv";
+    };
+    patches = [
+      ../development/perl-modules/module-pluggable.patch
+    ];
+  };
+
+  perlReturnValue = import ../development/perl-modules/generic perl {
+    name = "Return-Value-1.302";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Return-Value-1.302.tar.gz;
+      sha256 = "0hf5rmfap49jh8dnggdpvapy5r4awgx5hdc3acc9ff0vfqav8azm";
+    };
   };
 
   perlTermReadKey = import ../development/perl-modules/generic perl {
