@@ -30,12 +30,23 @@ preConfigure() {
     perl Makefile.PL PREFIX=$out $makeMakerFlags
 }
 
+postFixup=postFixup
+postFixup() {
+    # If a user installs a Perl package, she probably also wants its
+    # dependencies in the user environment (since Perl modules don't
+    # have something like an RPATH, so the only way to find the
+    # dependencies is to have them in the PERL5LIB variable).
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+    fi
+}
+
 if test -n "$perlPreHook"; then
-    source $perlPreHook
+    eval "$perlPreHook"
 fi
 
 genericBuild
 
 if test -n "$perlPostHook"; then
-    source $perlPostHook
+    eval "$perlPostHook"
 fi
