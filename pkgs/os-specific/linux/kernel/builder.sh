@@ -18,7 +18,7 @@ configurePhase() {
         echo "#! $SHELL" > scripts/kconfig/lxdialog/check-lxdialog.sh
         chmod +x scripts/kconfig/lxdialog/check-lxdialog.sh
         
-        make silentoldconfig
+        make oldconfig
 }
 
 
