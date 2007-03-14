@@ -2526,6 +2526,12 @@ rec {
   ### APPLICATIONS
 
 
+  aangifte2005 = import ../applications/taxes/aangifte2005 {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext;
+    patchelf = patchelfNew;
+  };
+
   abiword = import ../applications/office/abiword {
     inherit fetchurl stdenv pkgconfig fribidi libpng popt;
     inherit (gtkLibs) glib gtk pango;
@@ -2730,6 +2736,10 @@ rec {
       glibmm libsigcxx;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXft;
+  };
+
+  joe = import ../applications/editors/joe {
+    inherit stdenv fetchurl;
   };
 
   kuickshow = import ../applications/graphics/kuickshow {
@@ -3090,12 +3100,6 @@ rec {
   ### MISC
 
 
-  aangifte2005 = import ../evil/belastingdienst {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 libXext;
-    patchelf = patchelfNew;
-  };
-
   atari800 = import ../misc/emulators/atari800 {
     inherit fetchurl stdenv unzip zlib SDL;
   };
@@ -3124,10 +3128,6 @@ rec {
   ghostscript = import ../misc/ghostscript {
     inherit fetchurl stdenv libjpeg libpng zlib x11;
     x11Support = false;
-  };
-
-  joe = import ../applications/editors/joe {
-    inherit stdenv fetchurl;
   };
 
   lazylist = import ../misc/tex/lazylist {
