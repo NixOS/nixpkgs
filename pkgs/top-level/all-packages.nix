@@ -2254,32 +2254,6 @@ rec {
 
   kernel = kernel_2_6_20;
 
-  kernel_2_6_19 = import ../os-specific/linux/kernel/linux-2.6.19.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "skas-2.6.19-rc6-v9-pre9";
-        patch = fetchurl {
-          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.19-rc6-v9-pre9/skas-2.6.19-rc6-v9-pre9.patch.bz2;
-          md5 = "262368b6cf29026be44bebfff2e57aed";
-        };
-        extraConfig =
-          "CONFIG_PROC_MM=y\n" +
-          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
-      }
-      { name = "fbsplash-0.9.2-r5-2.6.19-rc2";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.19-rc2.patch;
-          md5 = "1f58715f3c5f85bb8b6e14c35b2f4463";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-      }
-      { name = "pata-marvell";
-        patch = ../os-specific/linux/kernel/pata-marvell.patch;
-        extraConfig = "CONFIG_PATA_MARVELL=m";
-      }
-    ];
-  };
-
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
