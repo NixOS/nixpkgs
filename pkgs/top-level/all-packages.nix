@@ -2526,7 +2526,13 @@ rec {
   ### APPLICATIONS
 
 
-  aangifte2005 = import ../applications/taxes/aangifte2005 {
+  aangifte2005 = import ../applications/taxes/aangifte-2005 {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext;
+    patchelf = patchelfNew;
+  };
+
+  aangifte2006 = import ../applications/taxes/aangifte-2006 {
     inherit stdenv fetchurl;
     inherit (xlibs) libX11 libXext;
     patchelf = patchelfNew;
