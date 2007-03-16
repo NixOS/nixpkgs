@@ -21,7 +21,7 @@ start on hardware-scan
 stop on shutdown
 
 start script
-    ${modprobe}/sbin/modprobe af_packet
+    ${modprobe}/sbin/modprobe af_packet || true
 
     for i in $(cd /sys/class/net && ls -d *); do
         echo \"Bringing up network device $i...\"
@@ -44,11 +44,11 @@ start script
 
         # Set wireless networking stuff.
         if test \"$essid\" != dhcp; then
-            ${wirelesstools}/sbin/iwconfig \"$name\" essid \"$essid\"
+            ${wirelesstools}/sbin/iwconfig \"$name\" essid \"$essid\" || true
         fi
         
         if test \"$wepKey\" != nokey; then
-            ${wirelesstools}/sbin/iwconfig \"$name\" key \"$(cat \"$wepKey\")\"
+            ${wirelesstools}/sbin/iwconfig \"$name\" key \"$(cat \"$wepKey\")\" || true
         fi
         
         # Set IP address / netmask.        
