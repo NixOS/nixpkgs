@@ -4,8 +4,8 @@ source $stdenv/setup
 # '-e' on the command-line.
 makeFlagsArray=(CLIENT_PATH='\"FAKE_PATH=/nothing\"' \
     USERBINDIR=$out/bin BINDIR=$out/sbin CLIENTBINDIR=$out/sbin \
-    ADMMANDIR=$out/share/man/cat8 FFMANDIR=$out/share/man/cat5 \
-    LIBMANDIR=$out/share/man/cat3 USRMANDIR=$out/share/man/cat1 \
+    ADMMANDIR=$out/share/man/man8 FFMANDIR=$out/share/man/man5 \
+    LIBMANDIR=$out/share/man/man3 USRMANDIR=$out/share/man/man1 \
     LIBDIR=$out/lib INCDIR=$out/include \
 )
 
