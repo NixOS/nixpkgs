@@ -103,6 +103,14 @@ import ../upstart-jobs/gather.nix {
       interfaces = config.get ["networking" "interfaces"];
     })
 
+  # DHCP server.
+  ++ optional ["services" "dhcpd" "enable"]
+    (import ../upstart-jobs/dhcpd.nix {
+      inherit (pkgs) dhcp;
+      configFile = config.get ["services" "dhcpd" "configFile"];
+      interfaces = config.get ["services" "dhcpd" "interfaces"];
+    })
+
   # SSH daemon.
   ++ optional ["services" "sshd" "enable"]
     (import ../upstart-jobs/sshd.nix {

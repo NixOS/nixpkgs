@@ -414,6 +414,32 @@
 
   
   {
+    name = ["services" "dhcpd" "enable"];
+    default = false;
+    description = "
+      Whether to enable the DHCP server.
+    ";
+  }
+
+  
+  {
+    name = ["services" "dhcpd" "configFile"];
+    description = "
+      The path of the DHCP server configuration file.
+    ";
+  }
+
+  
+  {
+    name = ["services" "dhcpd" "interfaces"];
+    default = ["eth0"];
+    description = "
+      The interfaces on which the DHCP server should listen.
+    ";
+  }
+
+  
+  {
     name = ["services" "sshd" "enable"];
     default = false;
     description = "
