@@ -6,6 +6,6 @@ import ../generic perl {
     url = http://nix.cs.uu.nl/dist/tarballs/BerkeleyDB-0.27.tar.gz;
     md5 = "43aa72c0c6941af0d656d749ad543e96";
   };
-  perlPreHook = ./hook.sh;
+  perlPreHook = "source ${./hook.sh}";
   inherit db4;
 }
