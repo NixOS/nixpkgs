@@ -21,7 +21,9 @@ stdenv.mkDerivation {
   configureScript = "sh ./configure";
   configureFlags = "--without-ttf --without-png --with-fifo=/var/run/splash_fifo";
 
-  makeFlags = "QUIET=false";
+  # QUIET = false doesn't work due to the use of /dev/stdout (which
+  # doesn't work when the build user doesn't own stdout). 
+  #makeFlags = "QUIET=false;
 
   installPhase = "ensureDir $out/bin; cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin";
 }
