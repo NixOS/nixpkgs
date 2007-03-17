@@ -5,14 +5,6 @@ unpackFile $src
 ensureDir $out
 mv eclipse $out/
 
-# Unpack the jars that contain .so files.
-#echo "unpacking some jars..."
-#for i in $(find $out -name "*.linux*.jar"); do
-#    echo $i
-#    cd $(dirname $i) && $jdk/bin/jar -x < $i
-#    rm $i
-#done
-
 # Set the dynamic linker and RPATH.
 rpath=
 for i in $libraries; do
@@ -22,9 +14,6 @@ find $out \( -type f -a -perm +0100 \) \
     -print \
     -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath "$rpath" {} \;
-#find $out \( -type f -a -name "*.so*" \) \
-#    -print \
-#    -exec patchelf --set-rpath "$rpath" {} \;
 
 # Make a wrapper script so that the proper JDK is found.
 makeWrapper $out/eclipse/eclipse $out/bin/eclipse \

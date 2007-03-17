@@ -2603,6 +2603,8 @@ rec {
       inherit plugins;
     };
 
+  eclipsesdk = eclipse [];
+
   eclipseSpoofax =
     eclipse [spoofax];
 

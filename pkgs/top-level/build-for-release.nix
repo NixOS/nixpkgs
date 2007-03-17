@@ -41,6 +41,7 @@ let {
     docbook5_xsl
     e2fsprogs
     ecj
+    eclipsesdk
     emacs
     emacsUnicode
     enscript
