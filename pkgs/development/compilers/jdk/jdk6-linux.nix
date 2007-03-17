@@ -6,10 +6,7 @@
 , installjdk ? true
 }:
 
-/**
- * @todo Support x86_64-linux.
- */
-assert stdenv.system == "i686-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert swingSupport -> xlibs != null;
 
 (stdenv.mkDerivation {
@@ -17,10 +14,18 @@ assert swingSupport -> xlibs != null;
     if installjdk then "jdk-1.6.0" else "jre-1.6.0";
 
   src =
-    fetchurl {
-      url = http://download.java.net/dlj/binaries/jdk-6-dlj-linux-i586.bin;
-      sha256 = "0rw48124fdc5rhafj6qzrysb4w823jbn3awxgn07kcy1nvnrhkqw";
-    };
+    if stdenv.system == "i686-linux" then
+      fetchurl {
+        url = http://download.java.net/dlj/binaries/jdk-6-dlj-linux-i586.bin;
+        sha256 = "0rw48124fdc5rhafj6qzrysb4w823jbn3awxgn07kcy1nvnrhkqw";
+      }
+    else if stdenv.system == "x86_64-linux" then
+      fetchurl {
+        url = http://download.java.net/dlj/binaries/jdk-6-dlj-linux-amd64.bin;
+        sha256 = "1hr16f5kr3xcyhkl3yc2qi2kxg2avr3cmlxv4awpnj0930rmvwzi";
+      }
+    else
+      abort "jdk requires i686-linux or x86_64 linux";
 
   builder = ./dlj-bundle-builder.sh;
 
@@ -35,10 +40,21 @@ assert swingSupport -> xlibs != null;
   buildInputs = [unzip];
   libraries =
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
-} // {
-  inherit swingSupport;
-} // {
-  mozillaPlugin =
-     if installjdk then "jre/plugin/i386/ns7" else "/plugin/i386/ns7";
+}
+//
+  {
+    inherit swingSupport;
   }
+// 
+  /**
+   * The mozilla plugin is not available in the amd64 distribution (?)
+   */
+  ( if stdenv.system == "i686-linux" then
+      {
+        mozillaPlugin =
+         if installjdk then "jre/plugin/i386/ns7" else "/plugin/i386/ns7";
+      }
+    else
+      {}
+  )
 )

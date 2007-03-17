@@ -1,6 +1,6 @@
 args:
 
-if args.stdenv.system == "i686-linux"  then
+if args.stdenv.system == "i686-linux" || args.stdenv.system == "x86_64-linux" then
   (import ./jdk6-linux.nix) args
 
 else if args.stdenv.system == "powerpc-linux"  then
