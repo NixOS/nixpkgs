@@ -32,9 +32,9 @@ for i in $libraries; do
 done
 
 if test -z "$installjdk"; then
-  rpath=$rpath${rpath:+:}$out/lib/i386/jli
+  rpath=$rpath${rpath:+:}$out/lib/$architecture/jli
 else
-  rpath=$rpath${rpath:+:}$out/jre/lib/i386/jli
+  rpath=$rpath${rpath:+:}$out/jre/lib/$architecture/jli
 fi
 
 # set all the dynamic linkers

@@ -37,6 +37,17 @@ assert swingSupport -> xlibs != null;
   construct = ./jdk6-construct.sh;
   inherit installjdk;
 
+  /**
+   * The JRE libraries are in directories that depend on the CPU.
+   */
+  architecture =
+    if stdenv.system == "i686-linux" then
+      "i386"
+    else if stdenv.system == "x86_64-linux" then
+      "amd64"
+    else
+      abort "jdk requires i686-linux or x86_64 linux";
+
   buildInputs = [unzip];
   libraries =
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
@@ -52,7 +63,7 @@ assert swingSupport -> xlibs != null;
   ( if stdenv.system == "i686-linux" then
       {
         mozillaPlugin =
-         if installjdk then "jre/plugin/i386/ns7" else "/plugin/i386/ns7";
+         if installjdk then "jre/plugin/i386/ns7" else "plugin/i386/ns7";
       }
     else
       {}
