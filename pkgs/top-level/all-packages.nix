@@ -1559,6 +1559,10 @@ rec {
     inherit fetchurl stdenv libxml2;
   };
 
+  libixp03 = import ../development/libraries/libixp/libixp-0.3.nix {
+    inherit fetchurl stdenv;
+  };
+
   mesa = import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig x11 libdrm;
     inherit (xlibs) libXmu libXi makedepend glproto libXxf86vm;
@@ -2931,6 +2935,11 @@ rec {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib;
     graphicsSupport = false;
     inherit (gtkLibs1x) gdkpixbuf;
+  };
+
+  wmii = import ../applications/window-managers/wmii {
+    libixp = libixp03;
+    inherit fetchurl stdenv x11 gawk;
   };
 
   wrapFirefox = firefox: import ../applications/networking/browsers/firefox-wrapper {
