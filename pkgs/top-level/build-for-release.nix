@@ -208,6 +208,22 @@ let {
     ;
   };
 
+  i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
+    aterm
+    autoconf
+    automake19x
+    bash
+    binutils
+    bison23
+    gcc
+    hello
+    kernel
+    libtool
+    nixUnstable
+    subversion
+    ;    
+  };
+  
   powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
     aterm
   ;};
