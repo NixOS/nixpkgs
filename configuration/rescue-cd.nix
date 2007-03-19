@@ -1,3 +1,6 @@
+{ platform ? __currentSystem
+}:
+
 rec {
 
   
@@ -77,7 +80,7 @@ rec {
 
 
   system = import ../system/system.nix {
-    inherit configuration;
+    inherit configuration platform;
     stage2Init = "/init";
   };
 
@@ -139,7 +142,7 @@ rec {
   # init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrtools;
-    isoName = "nixos.iso";
+    isoName = "nixos-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
     contents = [
