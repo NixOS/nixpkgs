@@ -11,6 +11,4 @@ stdenv.mkDerivation {
   preBuild = "
     makeFlagsArray=(PREFIX=$out)
   ";
-
-  #buildInputs = [bison flex openssl];
 }
