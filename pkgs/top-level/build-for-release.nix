@@ -209,7 +209,7 @@ let {
   };
 
   x86_64LinuxPkgs = {inherit (allPackages {system = "x86_64-linux";})
-    aterm
+    aterm242fixes
     autoconf
     automake19x
     bash
