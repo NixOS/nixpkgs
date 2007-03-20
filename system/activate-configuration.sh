@@ -70,7 +70,7 @@ if ! test -e /etc/passwd; then
     touch /etc/shadow; chmod 0600 /etc/shadow
     # Can't use useradd, since it complain that it doesn't know us
     # (bootstrap problem!). 
-    echo "root:x:0:0:System administrator:$rootHome:@shell@" >> /etc/passwd
+    echo "root:x:0:0:System administrator:$rootHome:@defaultShell@" >> /etc/passwd
     echo "root::::::::" >> /etc/shadow
     groupadd -g 0 root
     echo | passwd --stdin root

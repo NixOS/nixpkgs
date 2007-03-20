@@ -1,4 +1,4 @@
-{config, pkgs, upstartJobs, systemPath, wrapperDir}:
+{config, pkgs, upstartJobs, systemPath, wrapperDir, defaultShell}:
 
 let 
 
@@ -62,6 +62,14 @@ import ../helpers/make-etc.nix {
       # for /etc/passwd).
       source = ./etc/default/passwd;
       target = "default/passwd";
+    }
+
+    { # Configuration for useradd.
+      source = pkgs.substituteAll {
+        src = ./etc/default/useradd;
+        inherit defaultShell;
+      };
+      target = "default/useradd";
     }
 
     { # Dhclient hooks for emitting ip-up/ip-down events.

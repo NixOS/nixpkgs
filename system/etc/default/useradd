@@ -1,0 +1,3 @@
+GROUP=100
+HOME=/home
+SHELL=@defaultShell@

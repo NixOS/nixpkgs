@@ -148,7 +148,7 @@ rec {
 
   # The static parts of /etc.
   etc = import ./etc.nix {
-    inherit config pkgs upstartJobs systemPath wrapperDir;
+    inherit config pkgs upstartJobs systemPath wrapperDir defaultShell;
   };
 
 
@@ -222,6 +222,9 @@ rec {
     ignoreCollisions = true;
   };
 
+
+  defaultShell = "/var/run/current-system/sw/bin/bash";
+
     
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
@@ -230,7 +233,7 @@ rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
 
-    inherit etc wrapperDir systemPath modprobe;
+    inherit etc wrapperDir systemPath modprobe defaultShell;
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
