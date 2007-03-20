@@ -165,7 +165,7 @@ rec {
   # The packages you want in the boot environment.
   systemPathList = [
     modprobe # must take precedence over module_init_tools
-    pkgs.bash
+    pkgs.bashInteractive # bash with ncurses support
     pkgs.bzip2
     pkgs.coreutils
     pkgs.cpio
@@ -242,6 +242,8 @@ rec {
       pkgs.glibc # needed for getent
       pkgs.pwdutils
     ];
+
+    bash = pkgs.bashInteractive;
   };
 
 
