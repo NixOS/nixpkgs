@@ -1,16 +1,21 @@
-export PATH=@wrapperDir@:@systemPath@/bin:@systemPath@/sbin
+export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export MODULE_DIR=@kernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
 export PAGER=less
 export TZ=@timeZone@
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 
+
+# A nice prompt.
 PROMPT_COLOR="1;31m"
 PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
 if test "x$TERM" == "xxterm"; then
     PS1="\033]2;\h:\u:\w\007$PS1"
 fi
 
+
+# Set up secure multi-user builds: non-root users build through the
+# Nix daemon.
 if test "$USER" != root; then
     export NIX_REMOTE=daemon
 else
@@ -26,8 +31,13 @@ if test "$(stat --printf '%u' $NIX_USER_PROFILE_DIR)" != "$(id -u)"; then
 fi
 
 if ! test -L $HOME/.nix-profile; then
-    echo "creating $HOME/.nix-profile" >&2
-    ln -s $NIX_USER_PROFILE_DIR/profile $HOME/.nix-profile
+    echo "creating $HOME/.nix-profile" >&2 
+    if test "$USER" != root; then
+        ln -s $NIX_USER_PROFILE_DIR/profile $HOME/.nix-profile
+    else
+        # Root installs in the system-wide profile by default.
+        ln -s /nix/var/nix/profiles/default $HOME/.nix-profile
+    fi
 fi
 
 NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
