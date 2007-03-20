@@ -135,3 +135,10 @@ done
 
 # Set the host name.
 hostname @hostName@
+
+
+# Make this configuration the current configuration.
+ln -sfn @out@ /var/run/current-system
+
+# Prevent the current configuration from being garbage-collected.
+ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
