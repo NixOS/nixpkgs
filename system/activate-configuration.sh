@@ -1,5 +1,7 @@
 #! @shell@
 
+systemConfig="$1"
+
 export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
 
@@ -138,7 +140,9 @@ hostname @hostName@
 
 
 # Make this configuration the current configuration.
-ln -sfn @out@ /var/run/current-system
+if test -n "$systemConfig"; then
+    ln -sfn "$systemConfig" /var/run/current-system
+fi
 
 # Prevent the current configuration from being garbage-collected.
 ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system

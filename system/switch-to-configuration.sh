@@ -62,7 +62,7 @@ if test "$action" = "switch" -o "$action" = "test"; then
     # Activate the new configuration (i.e., update /etc, make
     # accounts, and so on).
     echo "Activating the configuration..."
-    @out@/activate
+    @out@/activate @out@
 
     # Make Upstart reload its events.  !!! Should wait until it has
     # finished processing its stop events.

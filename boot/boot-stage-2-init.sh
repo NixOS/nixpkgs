@@ -62,6 +62,10 @@ for o in $(cat /proc/cmdline); do
         safemode)
             safeMode=1
             ;;
+        systemConfig=*)
+            set -- $(IFS==; echo $o)
+            systemConfig=$2
+            ;;
     esac
 done
 
@@ -93,7 +97,13 @@ mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
 
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
-@activateConfiguration@
+@activateConfiguration@ "$systemConfig"
+
+
+# Record the boot configuration.  !!! Should this be a GC root?
+if test -n "$systemConfig"; then
+    ln -sfn "$systemConfig" /var/run/booted-system
+fi
 
 
 # Ensure that the module tools can find the kernel modules.
@@ -102,10 +112,6 @@ export MODULE_DIR=@kernel@/lib/modules/
 
 # Run any user-specified commands.
 @shell@ @bootLocal@
-
-
-# Start an interactive shell.
-#exec @shell@
 
 
 # Start Upstart's init.

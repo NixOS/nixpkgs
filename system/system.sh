@@ -8,6 +8,7 @@ ln -s $bootStage2 $out/init
 ln -s $initrd $out/initrd
 ln -s $activateConfiguration $out/activate
 ln -s $etc/etc $out/etc
+ln -s $systemPath $out/sw
 
 echo "$kernelParams" > $out/kernel-params
 

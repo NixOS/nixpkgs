@@ -294,6 +294,7 @@ rec {
     inherit activateConfiguration;
     inherit grubMenuBuilder;
     inherit etc;
+    inherit systemPath;
     kernel = pkgs.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.

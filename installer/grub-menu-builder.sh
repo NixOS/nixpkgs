@@ -48,7 +48,7 @@ addEntry() {
     
     cat >> $tmp << GRUBEND
 title $name
-  kernel $kernel init=$(readlink -f $path/init) $(cat $path/kernel-params)
+  kernel $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
   initrd $initrd
 GRUBEND
 }
