@@ -6,6 +6,8 @@ let
   ignoredInterfaces = ["lo"] ++
     map (i: i.name) (lib.filter (i: i ? ipAddress) interfaces);
 
+  stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
+
 in
 
 {
@@ -37,9 +39,9 @@ script
         exit 1
     fi
 
-    mkdir -m 755 -p /var/state/dhcp
+    mkdir -m 755 -p ${stateDir}
 
-    exec ${dhcp}/sbin/dhclient -d $interfaces -e \"PATH=$PATH\"
+    exec ${dhcp}/sbin/dhclient -d $interfaces -e \"PATH=$PATH\" -lf ${stateDir}/dhclient.leases
 end script
   ";
   

@@ -2,7 +2,7 @@
 
 let
 
-  soundState = "/var/state/asound.state";
+  soundState = "/var/lib/alsa/asound.state";
 
 in
   
@@ -16,6 +16,8 @@ start on hardware-scan
 stop on shutdown
 
 start script
+
+    mkdir -m 0755 -p $(dirname ${soundState})
 
     # Load some additional modules.
     for mod in snd_pcm_oss; do
