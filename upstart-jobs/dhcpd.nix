@@ -16,9 +16,15 @@ start on network-interfaces/started
 stop on network-interfaces/stop
 
 script
+
+    mkdir -m 755 -p ${stateDir}
+
+    touch ${stateDir}/dhcpd.leases
+
     exec ${dhcp}/sbin/dhcpd -f -cf ${configFile} \\
         -lf ${stateDir}/dhcpd.leases \\
         ${toString interfaces}
+
 end script
   ";
   
