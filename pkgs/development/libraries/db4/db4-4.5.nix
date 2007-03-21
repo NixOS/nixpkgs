@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
-    (if cxxSupport then "--enable-compat185" else "--disable-compat185")
+    (if compat185 then "--enable-compat185" else "--disable-compat185")
   ];
   patches = [./cygwin-4.5.patch];
 }

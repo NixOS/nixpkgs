@@ -480,6 +480,10 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
+  rpm = import ../tools/package-management/rpm {
+    inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
@@ -1032,6 +1036,10 @@ rec {
   };
 
   ctags = import ../development/tools/misc/ctags {
+    inherit fetchurl stdenv;
+  };
+
+  elfutils = import ../development/tools/misc/elfutils {
     inherit fetchurl stdenv;
   };
 
@@ -2594,10 +2602,6 @@ rec {
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
-
-  #rpm = import ../applications/package-management/rpm {
-  #  inherit fetchurl stdenv python tcl readline file cpio beecrypt unzip neon gnupg libxml2 perl;
-  #};
 
   cvs = import ../applications/version-management/cvs {
     inherit fetchurl stdenv vim;

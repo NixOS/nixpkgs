@@ -9,6 +9,6 @@ stdenv.mkDerivation ({
   };
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
-    (if cxxSupport then "--enable-compat185" else "--disable-compat185")
+    (if compat185 then "--enable-compat185" else "--disable-compat185")
   ];
 } // (if stdenv.system == "i686-cygwin" then {patches = [./cygwin-4.4.patch];} else {}))
