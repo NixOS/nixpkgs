@@ -5,11 +5,11 @@
 assert pamSupport -> pam != null;
  
 stdenv.mkDerivation {
-  name = "openssh-4.5p1";
+  name = "openssh-4.6p1";
  
   src = fetchurl {
-    url = ftp://sunsite.cnlab-switch.ch/pub/OpenBSD/OpenSSH/portable/openssh-4.5p1.tar.gz;
-    md5 = "6468c339886f78e8a149b88f695839dd";
+    url = ftp://ftp.nluug.nl/pub/security/OpenSSH/openssh-4.6p1.tar.gz;
+    sha256 = "0fpjlr3bfind0y94bk442x2ps060byv1s4cnrgcxij40m9zjggkv";
   };
  
   buildInputs = [zlib openssl perl
