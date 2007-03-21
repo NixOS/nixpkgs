@@ -1,9 +1,9 @@
 {stdenv, fetchurl, perl}: stdenv.mkDerivation {
-  name = "openssl-0.9.8d";
+  name = "openssl-0.9.8e";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/openssl-0.9.8d.tar.gz;
-    sha1 = "4136fba00303a3d319d2052bfa8e1f09a2e12fc2";
+    url = ftp://ftp.nluug.nl/pub/security/openssl/openssl-0.9.8e.tar.gz;
+    sha256 = "0h03lrj99d44w2zjcr1mj210aza9j09s7zb5g5q53g2zp4l88kj1";
   };
   buildInputs = [perl];
 }
