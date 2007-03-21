@@ -32,7 +32,7 @@ assert swingSupport -> xlibs != null;
   /**
    * If jdk5 is added, make sure to use the original construct script.
    * This copy removes references to kinit, klist, ktab, which seem to be
-   * gone in jdk.
+   * gone in jdk6.
    */
   construct = ./jdk6-construct.sh;
   inherit installjdk;

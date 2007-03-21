@@ -460,6 +460,10 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  pdfjam = import ../tools/typesetting/pdfjam {
+    inherit fetchurl stdenv;
+  };
+
   ploticus = import ../tools/graphics/ploticus {
     inherit fetchurl stdenv zlib libpng;
     inherit (xlibs) libX11;
