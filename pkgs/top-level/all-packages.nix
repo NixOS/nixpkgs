@@ -2171,6 +2171,10 @@ rec {
     inherit fetchurl stdenv alsaLib ncurses gettext;
   };
 
+  cramfsswap = import ../os-specific/linux/cramfsswap {
+    inherit fetchurl stdenv zlib;
+  };
+
   #uclibcSparc = import ../development/uclibc {
   #  inherit fetchurl stdenv mktemp;
   #  kernelHeadersCross = kernelHeadersSparc;
