@@ -3,15 +3,17 @@
 , xrenderSupport ? true, libXrender ? null
 , xrandrSupport ? true, libXrandr ? null, randrproto ? null
 , xineramaSupport ? true, libXinerama ? null, xineramaproto ? null
+, cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? true, mysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
-, x11, zlib, libjpeg, libpng, which
+, x11, xextproto, zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
 assert xrandrSupport -> libXrandr != null && randrproto != null;
+assert cursorSupport -> libXcursor != null;
 assert mysqlSupport -> mysql != null;
 assert openglSupport -> mesa != null && libXmu != null;
 
@@ -30,6 +32,8 @@ stdenv.mkDerivation {
   configureFlags = "
     -v
     -system-zlib -system-libpng -system-libjpeg
+    -qt-gif
+    -I${xextproto}/include
     ${if openglSupport then "-dlopen-opengl
       -L${mesa}/lib -I${mesa}/include
       -L${libXmu}/lib -I${libXmu}/include" else ""}
@@ -39,6 +43,7 @@ stdenv.mkDerivation {
       -L${libXrandr}/lib -I${libXrandr}/include
       -I${randrproto}/include" else "-no-xrandr"}
     ${if xineramaSupport then "-xinerama -L${libXinerama}/lib -I${xineramaproto}/include" else "-no-xinerama"}
+    ${if cursorSupport then "-L${libXcursor}/lib -I${libXcursor}/include" else ""}
     ${if mysqlSupport then "-qt-sql-mysql -L${mysql}/lib/mysql -I${mysql}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft}/lib -I${libXft}/include

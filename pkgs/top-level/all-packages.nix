@@ -1642,8 +1642,8 @@ rec {
 
   qt3 = import ../development/libraries/qt-3 {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
-    inherit (xlibs) libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor;
     openglSupport = true;
     mysqlSupport = false;
   };
