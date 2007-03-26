@@ -10,8 +10,6 @@
     
 }:
 
-
-
 stdenv.mkDerivation {
   name = "thunderbird-1.5.0.10";
 
