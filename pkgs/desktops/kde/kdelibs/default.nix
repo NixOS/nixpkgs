@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     libtool freetype bzip2
   ];
 
-  configureFlags="
+  configureFlags = "
     --without-arts 
     --with-ssl-dir=${openssl}
     --with-extra-includes=${libjpeg}/include
