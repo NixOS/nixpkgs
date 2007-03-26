@@ -16,13 +16,13 @@ assert mysqlSupport -> mysql != null;
 assert openglSupport -> mesa != null && libXmu != null;
 
 stdenv.mkDerivation {
-  name = "qt-3.3.6";
+  name = "qt-3.3.8";
 
   builder = ./builder.sh;
   hook = ./setup-hook.sh;  
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/qt-x11-free-3.3.6.tar.bz2;
-    md5 = "dc1384c03ac08af21f6fefab32d982cf";
+    url = ftp://ftp.trolltech.com/qt/source/qt-x11-free-3.3.8.tar.bz2;
+    sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 
   buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];

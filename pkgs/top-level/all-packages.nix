@@ -470,9 +470,8 @@ rec {
   };
 
   qtparted = import ../tools/misc/qtparted {
-    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib;
+    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
     inherit (xlibs) libX11 libXext;
-    qt3 = qt3NoMySQL;
   };
 
   realCurl = import ../tools/networking/curl {
@@ -1646,11 +1645,6 @@ rec {
     inherit (xlibs) libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto;
     openglSupport = true;
-  };
-
-  qt3NoMySQL = import ../development/libraries/qt-3 {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql;
-    inherit (xlibs) libXft libXrender;
     mysqlSupport = false;
   };
 
