@@ -64,7 +64,3 @@ alias which="type -p"
 if test -f /etc/profile.local; then
     source /etc/profile.local
 fi
-
-
-# Read user modifications.
-test -r $HOME/.bashrc && source $HOME/.bashrc
