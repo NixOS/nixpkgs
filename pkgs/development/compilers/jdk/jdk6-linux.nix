@@ -4,6 +4,7 @@
 , unzip
 , xlibs ? null
 , installjdk ? true
+, libstdcpp5
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -51,6 +52,11 @@ assert swingSupport -> xlibs != null;
   buildInputs = [unzip];
   libraries =
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
+
+  # necessary for javaws and mozilla plugin
+  makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
+  libPath = [libstdcpp5];
+  inherit libstdcpp5;
 }
 //
   {
@@ -63,7 +69,7 @@ assert swingSupport -> xlibs != null;
   ( if stdenv.system == "i686-linux" then
       {
         mozillaPlugin =
-         if installjdk then "jre/plugin/i386/ns7" else "plugin/i386/ns7";
+         if installjdk then "/jre/plugin/i386/ns7" else "/plugin/i386/ns7";
       }
     else
       {}

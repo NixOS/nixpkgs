@@ -757,6 +757,7 @@ rec {
     else
       import ../development/compilers/jdk {
         inherit fetchurl stdenv unzip installjdk xlibs;
+        libstdcpp5 = gcc33.gcc;
       };
 
   jikes = import ../development/compilers/jikes {
@@ -2448,7 +2449,7 @@ rec {
     userModeLinux = true;
   };
 
-  umlutilities = import ../os-specific/uml-utilities {
+  umlutilities = import ../os-specific/linux/uml-utilities {
     inherit fetchurl stdenv;
   };
 

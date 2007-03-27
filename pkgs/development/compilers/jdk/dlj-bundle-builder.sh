@@ -1,4 +1,5 @@
 source $stdenv/setup
+source $makeWrapper
 
 echo "Unpacking distribution"
 unzip ${src} || true
@@ -41,3 +42,19 @@ fi
 find $out -type f -perm +100 \
     -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath "$rpath" {} \;
+
+mv $out/bin/javaws $out/bin/javaws.bin
+makeWrapper "$out/bin/javaws.bin" "$out/bin/javaws" \
+    --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
+
+
+function mozillaExtraLibPath() {
+  p=$1
+
+  if test -e "$p"; then
+    echo "$libstdcpp5/lib" > $p/extra-library-path
+  fi
+}
+
+mozillaExtraLibPath "$out/jre/plugin/i386/ns7"
+mozillaExtraLibPath "$out/plugin/i386/ns7"
