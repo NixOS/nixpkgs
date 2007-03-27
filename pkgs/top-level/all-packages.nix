@@ -2294,11 +2294,6 @@ rec {
     ];
   };
 
-  umlNew = import ../os-specific/linux/kernel/linux-2.6.20.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    userModeLinux = true;
-  };
-
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
@@ -2445,6 +2440,15 @@ rec {
   };
 
   udev = import ../os-specific/linux/udev {
+    inherit fetchurl stdenv;
+  };
+
+  uml = import ../os-specific/linux/kernel/linux-2.6.20.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    userModeLinux = true;
+  };
+
+  umlutilities = import ../os-specific/uml-utilities {
     inherit fetchurl stdenv;
   };
 
@@ -3225,15 +3229,6 @@ rec {
     pysqlite = import ../development/libraries/pysqlite {
       inherit stdenv fetchurl python sqlite;
     };
-  };
-
-  uml = import ../misc/uml {
-    inherit fetchurl stdenv perl modutils m4;
-    gcc = gcc33;
-  };
-
-  umlutilities = import ../misc/uml-utilities {
-    inherit fetchurl stdenv;
   };
 
 }
