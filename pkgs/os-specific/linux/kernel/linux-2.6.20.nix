@@ -5,6 +5,9 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
 , kernelPatches ? []
+
+, # Whether to build a User-Mode Linux kernel.
+  userModeLinux ? false
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -24,6 +27,7 @@ stdenv.mkDerivation {
   extraConfig = lib.concatStrings (map (p: "\n" + p.extraConfig + "\n") kernelPatches);
 
   config =
+    if userModeLinux then ./config-2.6.20-uml else
     if stdenv.system == "i686-linux" then ./config-2.6.20-i686-smp else
     if stdenv.system == "x86_64-linux" then ./config-2.6.20-x86_64-smp else
     abort "No kernel configuration for your platform!";
@@ -31,15 +35,21 @@ stdenv.mkDerivation {
   buildInputs = [perl mktemp];
   
   arch =
+    if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "";
+
+  makeFlagsArray = if userModeLinux then ["ARCH=um"] else [];
 
   inherit module_init_tools;
 
   meta = {
     description =
-      "The Linux kernel" +
+      (if userModeLinux then
+        "User-Mode Linux"
+       else
+        "The Linux kernel") +
       (if kernelPatches == [] then "" else
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))

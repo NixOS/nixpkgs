@@ -2294,6 +2294,11 @@ rec {
     ];
   };
 
+  umlNew = import ../os-specific/linux/kernel/linux-2.6.20.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    userModeLinux = true;
+  };
+
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
