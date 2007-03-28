@@ -1,5 +1,6 @@
 { stdenv, writeText, lib, xorg, mesa, xterm, slim, gnome
 , compiz, feh
+, kdelibs, kdebase
 
 , config
 
@@ -24,7 +25,6 @@ let
   # Get a bunch of user settings.
   videoDriver = getCfg "videoDriver";
   resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (getCfg "resolutions");
-  windowManager = getCfg "windowManager";
   sessionType = getCfg "sessionType";
   sessionStarter = getCfg "sessionStarter";
 
@@ -36,6 +36,14 @@ let
     abort ("unknown session type "+ sessionType);
 
 
+  windowManager =
+    let wm = getCfg "windowManager"; in
+    if wm != "" then wm else
+    if sessionType == "gnome" then "metacity" else
+    if sessionType == "kde" then "none" /* started by startkde */ else
+    "twm";
+
+    
   modules = [
     xorg.xorgserver
     xorg.xf86inputkeyboard
@@ -75,52 +83,84 @@ let
 
   clientScript = writeText "xclient" "
 
+    source /etc/profile
+
     exec > $HOME/.Xerrors 2>&1
   
 
     ### Start a window manager.
   
     ${if windowManager == "twm" then "
-    ${xorg.twm}/bin/twm &
+      ${xorg.twm}/bin/twm &
     "
 
     else if windowManager == "metacity" then "
-    # !!! Hack: load the schemas for Metacity.
-    GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \\
-      --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas
-    ${gnome.metacity}/bin/metacity &
+      # !!! Hack: load the schemas for Metacity.
+      GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \\
+        --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas
+      ${gnome.metacity}/bin/metacity &
+    "
+
+    else if windowManager == "kwm" then "
+      ${kdebase}/bin/kwin &
     "
 
     else if windowManager == "compiz" then "
     
-    # !!! Hack: load the schemas for Compiz.
-    GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \\
-      --makefile-install-rule ${compiz}/etc/gconf/schemas/*.schemas
+      # !!! Hack: load the schemas for Compiz.
+      GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \\
+        --makefile-install-rule ${compiz}/etc/gconf/schemas/*.schemas
 
-    # !!! Hack: turn on most Compiz modules.
-    ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \\
-      --set /apps/compiz/general/allscreens/options/active_plugins \\
-      [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
+      # !!! Hack: turn on most Compiz modules.
+      ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \\
+        --set /apps/compiz/general/allscreens/options/active_plugins \\
+        [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
 
-    # Start Compiz and the GTK-style window decorator.
-    ${compiz}/bin/compiz gconf &
-    ${compiz}/bin/gtk-window-decorator &
+      # Start Compiz and the GTK-style window decorator.
+      ${compiz}/bin/compiz gconf &
+      ${compiz}/bin/gtk-window-decorator &
     "
 
-    else abort ("unknown window manager "+ windowManager)}
+    else if windowManager == "none" then "
+
+      # The session starter will start the window manager.
+
+    "
+
+    else abort ("unknown window manager " + windowManager)}
 
 
     ### Show a background image.
-    if test -e $HOME/.background-image; then
-      ${feh}/bin/feh --bg-scale $HOME/.background-image
-    fi
+    # (but not if we're starting a full desktop environment that does it for us)
+    ${if sessionType != "kde" then "
+    
+      if test -e $HOME/.background-image; then
+        ${feh}/bin/feh --bg-scale $HOME/.background-image
+      fi
+      
+    " else ""}
     
 
-    ### Start a 'session' (right now, this is just a terminal).
-    # !!! yes, this means that you 'log out' by killing the X server.
-    while ${sessionCmd}; do
-      sleep 1  
-    done
+    ### Start the session.
+    ${if sessionType == "kde" then "
+
+      # Start KDE.
+      export KDEDIRS=${kdebase}:${kdelibs}
+      export XDG_CONFIG_DIRS=${kdebase}/etc/xdg:${kdelibs}/etc/xdg
+      export XDG_DATA_DIRS=${kdebase}/share
+      exec ${kdebase}/bin/startkde
+
+    " else "
+
+      # For all other session types, we currently just start a
+      # terminal of the kind indicated by sessionCmd.
+      # !!! yes, this means that you 'log out' by killing the X server.
+      while ${sessionCmd}; do
+        sleep 1  
+      done
+
+    "}
+    
   "; # */ <- hack to fix syntax highlighting
 
 
@@ -170,6 +210,12 @@ rec {
     gnome.gnometerminal
     gnome.GConf
     gnome.gconfeditor
+  ]
+  ++ optional (sessionType == "kde") [
+    kdelibs
+    kdebase
+    xorg.iceauth # absolutely required by dcopserver
+    xorg.xset # used by startkde, non-essential
   ];
 
     

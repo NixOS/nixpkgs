@@ -531,25 +531,29 @@
 
   
   {
-    name = ["services" "xserver" "windowManager"];
-    default = "metacity";
-    description = "
-      This option selects the window manager.  Available values are
-      <literal>twm</literal> (extremely primitive),
-      <literal>metacity</literal>, and <literal>compiz</literal>.
-    ";
-  }
-
-  
-  {
     name = ["services" "xserver" "sessionType"];
     default = "gnome";
     example = "xterm";
     description = "
       The kind of session to start after login.  Current possibilies
-      are <literal>gnome</literal> (which starts
+      are <literal>kde</literal> (which starts KDE),
+      <literal>gnome</literal> (which starts
       <command>gnome-terminal</command>) and <literal>xterm</literal>
       (which starts <command>xterm</command>).
+    ";
+  }
+
+  
+  {
+    name = ["services" "xserver" "windowManager"];
+    default = "";
+    description = "
+      This option selects the window manager.  Available values are
+      <literal>twm</literal> (extremely primitive),
+      <literal>metacity</literal>, and <literal>compiz</literal>.  If
+      left empty, the <option>sessionType</option> determines the
+      window manager, e.g., Metacity for Gnome, and
+      <command>kwm</command> for KDE.
     ";
   }
 
