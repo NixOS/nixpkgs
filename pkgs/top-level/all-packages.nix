@@ -748,10 +748,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  jre = jdkdistro false;
-  jdk = jdkdistro true;
+  jre = jdkdistro false true;
+  jdk = jdkdistro true true;
 
-  jdkdistro = installjdk :
+  jdkNoPlugin = jdkdistro true false;
+
+  jdkdistro = installjdk : pluginSupport:
     if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else

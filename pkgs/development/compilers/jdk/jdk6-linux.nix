@@ -4,13 +4,15 @@
 , unzip
 , xlibs ? null
 , installjdk ? true
-, libstdcpp5
+, pluginSupport ? true
+, libstdcpp5 ? null
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert swingSupport -> xlibs != null;
+assert pluginSupport -> libstdcpp5 != null;
 
-(stdenv.mkDerivation {
+(stdenv.mkDerivation ({
   name =
     if installjdk then "jdk-1.6.0" else "jre-1.6.0";
 
@@ -53,14 +55,21 @@ assert swingSupport -> xlibs != null;
   libraries =
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
 
+  inherit pluginSupport;
+} // (
   # necessary for javaws and mozilla plugin
-  makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
-  libPath = [libstdcpp5];
-  inherit libstdcpp5;
-}
+  if pluginSupport then
+    {
+      makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
+      libPath = [libstdcpp5];
+      inherit libstdcpp5;
+    }
+  else
+    {}
+))
 //
   {
-    inherit swingSupport;
+    inherit swingSupport pluginSupport;
   }
 // 
   /**
