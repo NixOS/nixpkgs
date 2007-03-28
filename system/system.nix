@@ -202,6 +202,7 @@ rec {
     pkgs.upstart
     pkgs.utillinux
 #    pkgs.vim
+    pkgs.wirelesstools
     nix
     nixosInstall
     nixosRebuild
