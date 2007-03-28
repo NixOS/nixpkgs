@@ -676,8 +676,9 @@ fi
 
 # Do #! scripts work?
 
-if (SHELL=/bin/sh; export SHELL; (./sharpbang || ./sharpbang2) >/dev/null); then
-  echo "#! appears to work in shell scripts"
+# BRAVO: check disabled for NixOS
+# if (SHELL=/bin/sh; export SHELL; (./sharpbang || ./sharpbang2) >/dev/null); then
+#   echo "#! appears to work in shell scripts"
   case "$host" in
     *-*-sunos*|*-*-unicos*)
       echo "We won't use it, though, because under SunOS and Unicos it breaks"
@@ -690,10 +691,10 @@ if (SHELL=/bin/sh; export SHELL; (./sharpbang || ./sharpbang2) >/dev/null); then
     *)
       echo "SHARPBANGSCRIPTS=true" >> Makefile;;
   esac
-else
-  echo "No support for #! in shell scripts"
-  echo "SHARPBANGSCRIPTS=false" >> Makefile
-fi
+# else
+#   echo "No support for #! in shell scripts"
+#   echo "SHARPBANGSCRIPTS=false" >> Makefile
+# fi
 
 # Write the OS type (Unix or Cygwin)
 
