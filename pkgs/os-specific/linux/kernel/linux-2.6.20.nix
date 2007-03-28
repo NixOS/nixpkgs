@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "";
 
-  makeFlagsArray = if userModeLinux then ["ARCH=um"] else [];
+  makeFlags = if userModeLinux then "ARCH=um" else "";
 
   inherit module_init_tools;
 
