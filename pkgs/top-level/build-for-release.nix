@@ -73,7 +73,7 @@ let {
     jetty
     jikes
     jing_tools
-    jre
+    jrePlugin
     kcachegrind
     keen4
     kernel

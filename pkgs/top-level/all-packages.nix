@@ -749,9 +749,11 @@ rec {
   };
 
 
-  jdk       = jdkdistro true false;
-  jre       = jdkdistro false true;
+  jdk       = jdkdistro true  false;
+  jre       = jdkdistro false false;
+
   jdkPlugin = jdkdistro true true;
+  jrePlugin = jdkdistro false true;
 
   jdkdistro = installjdk : pluginSupport:
     if stdenv.isDarwin then 
@@ -2972,7 +2974,7 @@ rec {
     ]
     # RealPlayer is disabled by default for legal reasons.
     ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
-    ++ (if jre != false then [jre] else []);
+    ++ (if jrePlugin != false then [jrePlugin] else []);
   };
 
   xara = import ../applications/graphics/xara {
