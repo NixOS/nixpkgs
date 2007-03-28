@@ -748,17 +748,17 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  jre = jdkdistro false true;
-  jdk = jdkdistro true true;
 
-  jdkNoPlugin = jdkdistro true false;
+  jdk       = jdkdistro true false;
+  jre       = jdkdistro false true;
+  jdkPlugin = jdkdistro true true;
 
   jdkdistro = installjdk : pluginSupport:
     if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       import ../development/compilers/jdk {
-        inherit fetchurl stdenv unzip installjdk xlibs;
+        inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
         libstdcpp5 = gcc33.gcc;
       };
 

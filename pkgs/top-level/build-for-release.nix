@@ -69,7 +69,7 @@ let {
     hello
     iputils
     jakartaregexp
-    jdk
+    jdkPlugin
     jetty
     jikes
     jing_tools
