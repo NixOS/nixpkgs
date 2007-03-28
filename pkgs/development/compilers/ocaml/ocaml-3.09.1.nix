@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11}:
+{stdenv, fetchurl, x11, ncurses}:
 
 stdenv.mkDerivation {
   name = "ocaml-3.09.1";
@@ -12,4 +12,5 @@ stdenv.mkDerivation {
   configureFlags = ["-no-tk" "-x11lib" x11];
   buildFlags = ["world" "bootstrap" "opt"];
   checkTarget = ["opt.opt"];
+  buildInputs = [x11  ncurses];
 }

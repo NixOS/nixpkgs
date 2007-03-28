@@ -780,7 +780,7 @@ rec {
   };
 
   ocaml = import ../development/compilers/ocaml {
-    inherit fetchurl stdenv x11;
+    inherit fetchurl stdenv x11 ncurses;
   };
 
   ocaml3080 = import ../development/compilers/ocaml/ocaml-3.08.0.nix {
