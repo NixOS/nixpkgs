@@ -1,5 +1,4 @@
 source $stdenv/setup
-source $makeWrapper
 
 echo "Unpacking distribution"
 unzip ${src} || true
@@ -53,6 +52,8 @@ function mozillaExtraLibPath() {
 if test -z "$pluginSupport"; then
   rm $out/bin/javaws
 else
+  source $makeWrapper
+
   mv $out/bin/javaws $out/bin/javaws.bin
   makeWrapper "$out/bin/javaws.bin" "$out/bin/javaws" \
     --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
