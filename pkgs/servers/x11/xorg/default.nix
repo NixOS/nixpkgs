@@ -1,6 +1,7 @@
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
 , libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
+, xkeyboard_config
 }:
 
 rec {
@@ -1274,6 +1275,7 @@ rec {
       sha256 = "19jxlksl90i674yad1n7w42s3nv0hhlkwczya2lnavpl0570jr34";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
+    postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share";
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
