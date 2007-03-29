@@ -3113,10 +3113,8 @@ rec {
   
   kdebase = import ../desktops/kde/kdebase {
     inherit
-      fetchurl stdenv pkgconfig x11 zlib libpng libjpeg perl
+      fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
       kdelibs openssl bzip2 fontconfig;
-    inherit (xlibs) libXrandr libXinerama libXau libXdmcp libXcursor
-      libfontenc imake bdftopcf;
     qt = qt3;
   };
   

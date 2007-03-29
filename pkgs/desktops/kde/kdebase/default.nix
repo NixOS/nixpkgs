@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, x11, zlib, libpng, libjpeg, perl, qt
-, kdelibs, openssl, bzip2, fontconfig
-, libXrandr, libXinerama, libXau, libXdmcp, libXcursor, libfontenc
-, imake, bdftopcf
+{ stdenv, fetchurl, pkgconfig, x11, xlibs, zlib, libpng, libjpeg, perl
+, qt, kdelibs, openssl, bzip2, fontconfig
 }:
 
 stdenv.mkDerivation {
@@ -13,10 +11,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig x11 zlib libpng libjpeg perl qt
-    kdelibs openssl bzip2 fontconfig
-    libXrandr libXinerama libXau libXdmcp libXcursor libfontenc
-    imake bdftopcf
+    pkgconfig x11 zlib libpng libjpeg perl
+    qt kdelibs openssl bzip2 fontconfig
+    xlibs.libXrandr xlibs.libXinerama xlibs.libXau xlibs.libXdmcp
+    xlibs.libXcursor xlibs.libfontenc xlibs.imake xlibs.bdftopcf
+    xlibs.libxkbfile xlibs.xf86miscproto xlibs.libXxf86misc
+    xlibs.scrnsaverproto xlibs.libXScrnSaver
   ];
 
   configureFlags = "
