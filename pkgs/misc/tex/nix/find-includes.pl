@@ -28,6 +28,11 @@ while (scalar @workset > 0) {
 
     $doneset{$fn} = 1;
 
+    if (!-e "$fn") {
+        print STDERR "cannot access `$fn': $!\n" if !$!{ENOENT};
+        next;
+    }
+
     next unless -e "$fn";
     
     
