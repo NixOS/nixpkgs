@@ -3,6 +3,7 @@ export MODULE_DIR=@kernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
 export PAGER=less
 export TZ=@timeZone@
+export TZDIR=@glibc@/share/zoneinfo
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 
 

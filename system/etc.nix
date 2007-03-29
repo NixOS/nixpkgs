@@ -84,7 +84,7 @@ import ../helpers/make-etc.nix {
       source = pkgs.substituteAll {
         src = ./etc/profile.sh;
         inherit systemPath wrapperDir;
-        inherit (pkgs) kernel;
+        inherit (pkgs) kernel glibc;
         timeZone = config.get ["time" "timeZone"];
       };
       target = "profile";
