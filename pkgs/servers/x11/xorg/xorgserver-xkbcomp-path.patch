@@ -1,0 +1,15 @@
+diff -rc xorg-server-X11R7.2-1.2.0-orig/xkb/xkbInit.c xorg-server-X11R7.2-1.2.0/xkb/xkbInit.c
+*** xorg-server-X11R7.2-1.2.0-orig/xkb/xkbInit.c	Tue Jan 23 04:13:16 2007
+--- xorg-server-X11R7.2-1.2.0/xkb/xkbInit.c	Fri Mar 30 00:52:53 2007
+***************
+*** 923,928 ****
+--- 923,931 ----
+  	XkbDfltRepeatInterval = (long)atoi(argv[i]);
+  	return 2;
+      }
++     char *xkbBinDir = getenv("XKB_BINDIR");
++     if (xkbBinDir)
++         XkbBinDirectory = _XkbDupString(xkbBinDir);
+      return 0;
+  }
+  
