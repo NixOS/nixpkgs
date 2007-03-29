@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   ICONV = "iconv";
 
   preConfigure = "
-    configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg\"
+    configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86\"
   ";
 }
