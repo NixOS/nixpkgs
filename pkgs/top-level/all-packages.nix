@@ -2528,6 +2528,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  xkeyboard_config = import ../data/misc/xkeyboard-config {
+    inherit fetchurl stdenv perl perlXMLParser;
+    inherit (xlibs) xkbcomp;
+  };
+
 
   ### APPLICATIONS
 
