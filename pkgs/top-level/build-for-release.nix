@@ -75,6 +75,7 @@ let {
     jing_tools
     jrePlugin
     kcachegrind
+    kdebase
     keen4
     kernel
     klibc
