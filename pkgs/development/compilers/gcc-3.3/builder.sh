@@ -49,7 +49,10 @@ postConfigure() {
 
             # Figure out what extra flags to pass to the gcc compilers
             # being generated to make sure that they use our glibc.
-	    extraFlags="$(cat $NIX_GCC/nix-support/libc-cflags) $(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
+	    extraFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
+            for i in $(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before); do
+	        extraFlags="$extraFlags -Wl,$i"
+            done
 
             # Use *real* header files, otherwise a limits.h is generated
             # that does not include Glibc's limits.h (notably missing
