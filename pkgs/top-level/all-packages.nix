@@ -3171,20 +3171,20 @@ rec {
     inherit stdenv fetchurl jdk;
   };
 
-  nix = import ../misc/nix {
+  nix = import ../tools/package-management/nix {
     inherit fetchurl stdenv perl curl bzip2;
     aterm = aterm242fixes;
     db4 = db44;
   };
 
-  nixStatic = import ../misc/nix-static {
+  nixStatic = import ../tools/package-management/nix-static {
     inherit fetchurl stdenv perl curl autoconf automake libtool;
     aterm = aterm242fixes;
     bdb = db4;
   };
 
   # The bleeding edge.
-  nixUnstable = import ../misc/nix/unstable.nix {
+  nixUnstable = import ../tools/package-management/nix/unstable.nix {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
