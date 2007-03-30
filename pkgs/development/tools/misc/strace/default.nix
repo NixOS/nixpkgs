@@ -1,13 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "strace-4.5.14";
+  name = "strace-4.5.15";
 
-  builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/strace-4.5.14.tar.bz2;
-    md5 = "09bcd5d00ece28f8154dec11cadfce3c";
+    url = http://heanet.dl.sourceforge.net/sourceforge/strace/strace-4.5.15.tar.gz;
+    sha256 = "07n62yv53p2hsb59srfaxb0kk8b6p6iq77drmf65pq8jpa50s9ip";
   };
-
-  patches = [./fixes.patch];
 }
