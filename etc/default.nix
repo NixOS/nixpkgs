@@ -28,28 +28,28 @@ import ../helpers/make-etc.nix {
     }
 
     { # Hostname-to-IP mappings.
-      source = ./etc/hosts;
+      source = ./hosts;
       target = "hosts";
     }
 
     { # Name Service Switch configuration file.  Required by the C library.
-      source = ./etc/nsswitch.conf;
+      source = ./nsswitch.conf;
       target = "nsswitch.conf";
     }
 
     { # Configuration file for the system logging daemon.
-      source = ./etc/syslog.conf;
+      source = ./syslog.conf;
       target = "syslog.conf";
     }
 
     { # Friendly greeting on the virtual consoles.
-      source = ./etc/issue;
+      source = ./issue;
       target = "issue";
     }
 
     { # Configuration for pwdutils (login, passwd, useradd, etc.).
       # You cannot login without it!
-      source = ./etc/login.defs;
+      source = ./login.defs;
       target = "login.defs";
     }
 
@@ -60,13 +60,13 @@ import ../helpers/make-etc.nix {
 
     { # Configuration for passwd and friends (e.g., hash algorithm
       # for /etc/passwd).
-      source = ./etc/default/passwd;
+      source = ./default/passwd;
       target = "default/passwd";
     }
 
     { # Configuration for useradd.
       source = pkgs.substituteAll {
-        src = ./etc/default/useradd;
+        src = ./default/useradd;
         inherit defaultShell;
       };
       target = "default/useradd";
@@ -74,7 +74,7 @@ import ../helpers/make-etc.nix {
 
     { # Dhclient hooks for emitting ip-up/ip-down events.
       source = pkgs.substituteAll {
-        src = ./etc/dhclient-exit-hooks;
+        src = ./dhclient-exit-hooks;
         inherit (pkgs) upstart glibc;
       };
       target = "dhclient-exit-hooks";
@@ -82,7 +82,7 @@ import ../helpers/make-etc.nix {
 
     { # Script executed when the shell starts.
       source = pkgs.substituteAll {
-        src = ./etc/profile.sh;
+        src = ./profile.sh;
         inherit systemPath wrapperDir;
         inherit (pkgs) kernel glibc;
         timeZone = config.get ["time" "timeZone"];
@@ -97,12 +97,12 @@ import ../helpers/make-etc.nix {
   ++ (optional ["fonts" "enableFontConfig"] { 
     source = pkgs.runCommand "fonts.conf"
       { 
-        fontDirectories = import ./fonts.nix {inherit pkgs;};
+        fontDirectories = import ../system/fonts.nix {inherit pkgs;};
         buildInputs = [pkgs.libxslt];
         inherit (pkgs) fontconfig;
       }
       "xsltproc --stringparam fontDirectories \"$fontDirectories\" \\
-          ${./etc/fonts/make-fonts-conf.xsl} $fontconfig/etc/fonts/fonts.conf \\
+          ${./fonts/make-fonts-conf.xsl} $fontconfig/etc/fonts/fonts.conf \\
           > $out
       ";
     target = "fonts/fonts.conf";
@@ -121,7 +121,7 @@ import ../helpers/make-etc.nix {
   ++ (map
     (program:
       { source = pkgs.substituteAll {
-          src = ./etc/pam.d + ("/" + program);
+          src = ./pam.d + ("/" + program);
           inherit (pkgs) pam_unix2;
           pam_ldap =
             if config.get ["users" "ldap" "enable"]

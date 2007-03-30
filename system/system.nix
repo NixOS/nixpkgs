@@ -141,13 +141,13 @@ rec {
 
 
   # The services (Upstart) configuration for the system.
-  upstartJobs = import ./upstart.nix {
+  upstartJobs = import ../upstart-jobs/default.nix {
     inherit config pkgs nix modprobe nssModulesPath;
   };
 
 
   # The static parts of /etc.
-  etc = import ./etc.nix {
+  etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir defaultShell;
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
