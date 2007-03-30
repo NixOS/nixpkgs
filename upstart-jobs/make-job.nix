@@ -8,7 +8,8 @@
 //
 
 # Allow jobs to declare extra packages that should be added to the
-# system path.
+# system path, as well as extra files that should be added to /etc.
 {
   extraPath = if job ? extraPath then job.extraPath else [];
+  extraEtc = if job ? extraEtc then job.extraEtc else [];
 }

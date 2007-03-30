@@ -210,7 +210,7 @@ import ../upstart-jobs/gather.nix {
 
   # For the built-in logd job.
   ++ [
-    (pkgs.upstart // {extraPath = [];})
+    (pkgs.upstart // {extraPath = []; extraEtc = [];})
   ];
   
 }

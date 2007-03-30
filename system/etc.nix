@@ -1,4 +1,4 @@
-{config, pkgs, upstartJobs, systemPath, wrapperDir, defaultShell}:
+{config, pkgs, upstartJobs, systemPath, wrapperDir, defaultShell, extraEtc}:
 
 let 
 
@@ -144,5 +144,9 @@ import ../helpers/make-etc.nix {
       "chsh"
       "common"
     ]
-  );
+  )
+
+  # Additional /etc files declared by Upstart jobs.
+  ++ extraEtc;
+  
 }

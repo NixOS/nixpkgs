@@ -149,6 +149,7 @@ rec {
   # The static parts of /etc.
   etc = import ./etc.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir defaultShell;
+    extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
 

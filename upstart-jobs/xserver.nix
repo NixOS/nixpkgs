@@ -228,6 +228,13 @@ rec {
     xorg.xset # used by startkde, non-essential
   ];
 
+
+  extraEtc =
+    optional (sessionType == "kde")
+      { source = "${xkeyboard_config}/etc/X11/xkb";
+        target = "X11/xkb";
+      };
+
     
   job = "
     #start on network-interfaces
