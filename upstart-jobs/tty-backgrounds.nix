@@ -15,13 +15,16 @@ rec {
     themes = map (x: if x ? theme then (unpackTheme x.theme) else "default") backgrounds;
   };
 
+  extraEtc = [
+    { source = themesUnpacked;
+      target = "splash";
+    }
+  ];
+
   job = "
 start on hardware-scan
 
 start script
-
-    rm -f /etc/splash
-    ln -s ${themesUnpacked} /etc/splash
 
     # Critical: tell the kernel where to find splash_helper.  It calls
     # this program every time we switch between consoles.
