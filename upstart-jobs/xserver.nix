@@ -1,6 +1,7 @@
 { stdenv, writeText, lib, xorg, mesa, xterm, slim, gnome
 , compiz, feh
 , kdelibs, kdebase
+, xkeyboard_config
 
 , config
 
@@ -86,6 +87,12 @@ let
     source /etc/profile
 
     exec > $HOME/.Xerrors 2>&1
+
+
+    # Load X defaults.
+    if test -e ~/.Xdefaults; then
+      ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+    fi
   
 
     ### Start a window manager.
@@ -171,6 +178,7 @@ let
     "-logfile" "/var/log/X.${toString display}.log"
     "-config ${configFile}"
     ":${toString display}" "vt${toString tty}"
+    "-xkbdir" "${xkeyboard_config}/etc/X11/xkb"
   ];
 
   
@@ -192,6 +200,8 @@ rec {
   
   extraPath = [
     xorg.xrandr
+    xorg.xrdb
+    xorg.setxkbmap
     feh
   ]
   ++ optional (windowManager == "twm") [
@@ -232,6 +242,7 @@ rec {
 
     env SLIM_CFGFILE=${slimConfig}
     env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
+    env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
 
     ${if getCfg "driSupport"
       then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
