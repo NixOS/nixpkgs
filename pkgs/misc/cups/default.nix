@@ -9,8 +9,23 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [zlib libjpeg libpng libtiff pam];
-  
+
+  preConfigure = "
+    configureFlags=\"--localstatedir=/var\"
+  ";
+
   preBuild = "
     makeFlagsArray=(INITDIR=$out/etc/rc.d)
+  ";
+
+  # Awful hack: CUPS' `make install' wants to write in /var, but it
+  # can't.  So redirect it with a BUILDROOT (=DESTDIR).
+  preInstall = "
+    installFlagsArray=(BUILDROOT=$out/destdir)
+  ";
+
+  postInstall = "
+    mv $out/destdir/$out/* $out
+    rm -rf $out/destdir
   ";
 }
