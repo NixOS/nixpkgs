@@ -530,6 +530,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  x11_ssh_askpass = import ../tools/networking/x11-ssh-askpass {
+    inherit fetchurl stdenv x11;
+    inherit (xorg) imake;
+  };
+
   xmlroff = import ../tools/typesetting/xmlroff {
     inherit fetchurl stdenv pkgconfig libxml2 libxslt popt;
     inherit (gtkLibs) glib pango gtk;
