@@ -570,6 +570,18 @@
 
   
   {
+    name = ["services" "xserver" "startSSHAgent"];
+    default = true;
+    description = "
+      Whether to start the SSH agent when you log in.  The SSH agent
+      remembers private keys for you so that you don't have to type in
+      passphrases every time you make an SSH connection.  Use
+      <command>ssh-add</command> to add a key to the agent.
+    ";
+  }
+
+  
+  {
     name = ["services" "httpd" "enable"];
     default = false;
     description = "

@@ -2,6 +2,7 @@
 , compiz, feh
 , kdelibs, kdebase
 , xkeyboard_config
+, openssh, x11_ssh_askpass
 
 , config
 
@@ -89,10 +90,17 @@ let
     exec > $HOME/.Xerrors 2>&1
 
 
-    # Load X defaults.
+    ### Load X defaults.
     if test -e ~/.Xdefaults; then
       ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
     fi
+
+
+    ${if getCfg "startSSHAgent" then "
+      ### Start the SSH agent.
+      export SSH_ASKPASS=${x11_ssh_askpass}/libexec/x11-ssh-askpass
+      eval $(${openssh}/bin/ssh-agent)
+    " else ""}
   
 
     ### Start a window manager.

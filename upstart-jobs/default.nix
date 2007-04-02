@@ -134,7 +134,8 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/xserver.nix {
       inherit config;
       inherit (pkgs) stdenv writeText lib xterm slim xorg mesa
-        gnome compiz feh kdebase kdelibs xkeyboard_config;
+        gnome compiz feh kdebase kdelibs xkeyboard_config
+        openssh x11_ssh_askpass;
       fontDirectories = import ../system/fonts.nix {inherit pkgs;};
     })
 
