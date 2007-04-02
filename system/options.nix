@@ -753,6 +753,15 @@
 
   
   {
+    name = ["services" "printing" "enable"];
+    default = false;
+    description = "
+      Whether to enable printing support through the CUPS daemon.
+    ";
+  }
+
+  
+  {
     name = ["installer" "nixpkgsURL"];
     default = "";
     example = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7577;

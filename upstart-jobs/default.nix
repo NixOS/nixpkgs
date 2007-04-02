@@ -146,6 +146,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) glibc pwdutils;
     })
 
+  # CUPS (printing) daemon.
+  ++ optional ["services" "printing" "enable"]
+    (import ../upstart-jobs/cupsd.nix {
+      inherit (pkgs) writeText cups;
+    })
+
   # ALSA sound support.
   ++ optional ["sound" "enable"]
     (import ../upstart-jobs/alsa.nix {
