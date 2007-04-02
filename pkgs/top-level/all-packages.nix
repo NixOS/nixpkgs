@@ -3146,7 +3146,7 @@ rec {
   };
 
   cups = import ../misc/cups {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv zlib libjpeg libpng libtiff pam;
   };
 
   dosbox = import ../misc/emulators/dosbox {
