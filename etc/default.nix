@@ -86,6 +86,7 @@ import ../helpers/make-etc.nix {
         inherit systemPath wrapperDir;
         inherit (pkgs) kernel glibc;
         timeZone = config.get ["time" "timeZone"];
+        defaultLocale = config.get ["i18n" "defaultLocale"];
       };
       target = "profile";
     }

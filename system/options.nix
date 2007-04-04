@@ -856,4 +856,16 @@
   }
 
   
+  {
+    name = ["i18n" "defaultLocale"];
+    default = "en_US.UTF-8";
+    example = "nl_NL.UTF-8";
+    description = "
+      The default locale.  It determines the language for program
+      messages, the format for dates and times, sort order, and so on.
+      It also determines the character set, such as UTF-8.
+    ";
+  }
+
+
 ]

@@ -5,6 +5,7 @@ export PAGER=less
 export TZ=@timeZone@
 export TZDIR=@glibc@/share/zoneinfo
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+export LANG=@defaultLocale@
 
 
 # A nice prompt.
