@@ -14,6 +14,7 @@ let {
     autoconf
     automake19x
     bash
+    bashInteractive
     batik
     binutils
     bison23

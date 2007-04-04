@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   buildInputs = [bison] ++ (if interactive then [ncurses] else []);
 
   meta = {
-    description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
+    description =
+      "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
+        (if interactive then " (for interactive use)" else "");
   };
 }
