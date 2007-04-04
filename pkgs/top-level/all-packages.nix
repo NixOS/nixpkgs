@@ -2253,6 +2253,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kbd = import ../os-specific/linux/kbd {
+    inherit fetchurl stdenv bison flex;
+  };
+
   kernelHeaders = import ../os-specific/linux/kernel-headers {
     inherit fetchurl stdenv;
   };
