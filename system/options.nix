@@ -868,4 +868,26 @@
   }
 
 
+  {
+    name = ["i18n" "consoleFont"];
+    default = "lat9w-16";
+    example = "LatArCyrHeb-16";
+    description = "
+      The font used for the virtual consoles.  Leave empty to use
+      whatever the <command>setfont</command> program considers the
+      default font.
+    ";
+  }
+
+
+  {
+    name = ["i18n" "consoleKeyMap"];
+    default = "us";
+    example = "fr";
+    description = "
+      The keyboard mapping table for the virtual consoles.
+    ";
+  }
+
+
 ]

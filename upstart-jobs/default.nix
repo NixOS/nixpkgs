@@ -9,6 +9,10 @@ let
   optional = option: service:
     if config.get option then [(makeJob service)] else [];
 
+  requiredTTYs =
+    (config.get ["services" "mingetty" "ttys"])
+    ++ [10] /* !!! sync with syslog.conf */ ;
+
 in
 
 import ../upstart-jobs/gather.nix {
@@ -84,6 +88,15 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc pwdutils;
       inherit nssModulesPath;
+    })
+
+    # Console font and keyboard maps.
+    (import ../upstart-jobs/kbd.nix {
+      inherit (pkgs) glibc kbd gzip;
+      ttyNumbers = requiredTTYs;
+      defaultLocale = config.get ["i18n" "defaultLocale"];
+      consoleFont = config.get ["i18n" "consoleFont"];
+      consoleKeyMap = config.get ["i18n" "consoleKeyMap"];
     })
 
     # Handles the maintenance/stalled event (single-user shell).
@@ -192,10 +205,6 @@ import ../upstart-jobs/gather.nix {
             ++ config.get ["services" "ttyBackgrounds" "specificThemes"];
             
           overridenTTYs = map (x: x.tty) specificThemes;
-
-          requiredTTYs =
-            (config.get ["services" "mingetty" "ttys"])
-            ++ [10] /* !!! sync with syslog.conf */ ;
 
           # Use the default theme for all the mingetty ttys and for the
           # syslog tty, except those for which a specific theme is
