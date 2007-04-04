@@ -11,7 +11,4 @@ stdenv.mkDerivation {
   buildInputs = [bison flex];
 
   makeFlags = "setowner= ";
-#  preBuild = "
-#    makeFlagsArray=(sbindir=$out/sbin manprefix=$out)
-#  ";
 }
