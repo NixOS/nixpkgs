@@ -153,6 +153,7 @@ let {
     valgrind
     vim
     vlc
+    w3m
     wget
     wirelesstools
     wxHaskell
