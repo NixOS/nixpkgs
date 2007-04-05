@@ -7,11 +7,11 @@ assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
 stdenv.mkDerivation {
-  name = "xpdf-3.01";
+  name = "xpdf-3.02";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/xpdf-3.01.tar.gz;
-    md5 = "e004c69c7dddef165d768b1362b44268";
+    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02.tar.gz;
+    sha256 = "000zq4ddbwyxiki4vdwpmxbnw5n9hsg9hvwra2p33hslyib7sfmk";
   };
   
   buildInputs =
@@ -24,6 +24,4 @@ stdenv.mkDerivation {
       "--with-freetype2-library=${freetype}/lib"
       "--with-freetype2-includes=${freetype}/include/freetype2"
     ] else []);
-
-  patches = [./xpdf-3.01pl2.patch];
 }
