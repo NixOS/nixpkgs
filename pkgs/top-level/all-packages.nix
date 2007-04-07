@@ -2388,6 +2388,10 @@ rec {
     inherit stdenv fetchurl cracklib flex;
   };
 
+  pam_devperm = import ../os-specific/linux/pam_devperm {
+    inherit stdenv fetchurl pam;
+  };
+
   pam_ldap = import ../os-specific/linux/pam_ldap {
     inherit stdenv fetchurl pam openldap;
   };
