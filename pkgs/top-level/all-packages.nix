@@ -218,6 +218,10 @@ rec {
   ### TOOLS
 
 
+  aefs = import ../tools/security/aefs {
+    inherit fetchurl stdenv fuse;
+  };
+
   azureus = import ../tools/networking/p2p/azureus {
     inherit fetchurl stdenv jdk swt;
   };
