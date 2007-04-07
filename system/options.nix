@@ -790,11 +790,23 @@
     default = ["passwd" "su" "crontab" "ping" "ping6"];
     description = "
       Only the programs listed here will be made setuid root (through
-      a wrapper program).
+      a wrapper program).  It's better to set
+      <option>security.extraSetuidPrograms</options>.
     ";
   }
 
   
+  {
+    name = ["security" "extraSetuidPrograms"];
+    default = [];
+    example = ["fusermount"];
+    description = "
+      This option lists additional programs that must be made setuid
+      root.
+    ";
+  }
+
+
   {
     name = ["users" "ldap" "enable"];
     default = false;
@@ -886,6 +898,24 @@
     example = "fr";
     description = "
       The keyboard mapping table for the virtual consoles.
+    ";
+  }
+
+
+  {
+    name = ["environment" "extraPackages"];
+    default = pkgs: [];
+    example = pkgs: [pkgs.firefox pkgs.thunderbird];
+    description = "
+      This option allows you to add additional packages to the system
+      path.  These packages are automatically available to all users,
+      and they are automatically updated every time you rebuild the
+      system configuration.  (The latter is the main difference with
+      installing them in the default profile,
+      <filename>/nix/var/nix/profiles/default</filename>.  The value
+      of this option must be a function that returns a list of
+      packages.  The function will be called with the Nix Packages
+      collection as its argument for convenience.
     ";
   }
 

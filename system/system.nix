@@ -210,7 +210,8 @@ rec {
     nixosCheckout
     setuidWrapper
   ]
-  ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs);
+  ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
+  ++ (config.get ["environment" "extraPackages"]) pkgs;
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
@@ -239,7 +240,9 @@ rec {
     inherit (pkgs) kernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
-    setuidPrograms = config.get ["security" "setuidPrograms"];
+    setuidPrograms =
+      config.get ["security" "setuidPrograms"] ++
+      config.get ["security" "extraSetuidPrograms"];
     maxJobs = config.get ["nix" "maxJobs"];
 
     path = [
