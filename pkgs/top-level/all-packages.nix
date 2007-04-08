@@ -2492,6 +2492,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  wpa_supplicant = import ../os-specific/linux/wpa_supplicant {
+    inherit fetchurl stdenv openssl;
+  };
+
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
     inherit stdenv xlibs expat;
   };

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "wireless-tools-29-pre12";
+  name = "wireless-tools-29-pre17";
 
   src = fetchurl {
-    url = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/wireless_tools.29.pre12.tar.gz;
-    sha256 = "12al9910k2d9a0464j1r1x3lcsyw36zd2hzbyqy357iplplkxnws";
+    url = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/wireless_tools.29.pre17.tar.gz;
+    sha256 = "13488mk5q8zdb6z933287kf2sf2narkn4khni5z3x7y87jvrs127";
   };
 
   preBuild = "
