@@ -966,10 +966,6 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
-  manpages = import ../development/misc/man-pages {
-     inherit fetchurl stdenv;
-  };
-
   windowssdk = import ../development/misc/windows-sdk {
     inherit fetchurl stdenv cabextract;
   };
@@ -2536,6 +2532,10 @@ rec {
 
   freefont_ttf = import ../data/fonts/freefont-ttf {
     inherit fetchurl stdenv;
+  };
+
+  manpages = import ../data/documentation/man-pages {
+     inherit fetchurl stdenv;
   };
 
   iana_etc = import ../data/misc/iana-etc {
