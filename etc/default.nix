@@ -111,7 +111,7 @@ import ../helpers/make-etc.nix {
 
   # LDAP configuration.
   ++ (optional ["users" "ldap" "enable"] {
-    source = import etc/ldap.conf.nix {
+    source = import ./ldap.conf.nix {
       inherit (pkgs) writeText;
       inherit config;
     };
