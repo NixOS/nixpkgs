@@ -49,6 +49,8 @@ for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
 done
 
+export PATH=$HOME/bin:$PATH
+
 
 # Set up a default Nix expression from which to install stuff.
 if ! test -L $HOME/.nix-defexpr; then

@@ -80,7 +80,7 @@ end script
 
 # Hack: Upstart doesn't yet support what we want: a service that
 # doesn't have a running process associated with it.
-respawn sleep 10000
+respawn sleep 100000
 
 stop script
     for i in $(cd /sys/class/net && ls -d *); do
