@@ -994,13 +994,9 @@ rec {
     name = "ant-" + j2sdk14x.name;
   };
 
-  autoconf = autoconf259;
+  autoconf = autoconf261;
 
-  autoconf259 = import ../development/tools/misc/autoconf {
-    inherit fetchurl stdenv perl m4;
-  };
-
-  autoconf260 = import ../development/tools/misc/autoconf-2.60 {
+  autoconf261 = import ../development/tools/misc/autoconf {
     inherit fetchurl stdenv perl m4;
   };
 
