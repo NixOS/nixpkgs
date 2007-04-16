@@ -753,10 +753,11 @@ rec {
     inherit fetchurl stdenv ghc;
   };
 
-  j2sdk14x = import ../development/compilers/jdk/default-1.4.nix {
-    inherit fetchurl stdenv;
-  };
-
+  j2sdk14x =
+    assert system == "i686-linux";
+    import ../development/compilers/jdk/default-1.4.nix {
+      inherit fetchurl stdenv;
+    };
 
   jdk       = jdkdistro true  false;
   jre       = jdkdistro false false;
@@ -764,10 +765,11 @@ rec {
   jdkPlugin = jdkdistro true true;
   jrePlugin = jdkdistro false true;
 
-  jdkdistro = installjdk : pluginSupport:
+  jdkdistro = installjdk: pluginSupport:
     if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
+      assert system == "i686-linux" || system == "x86_64-linux" || system == "powerpc-linux";
       import ../development/compilers/jdk {
         inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
         libstdcpp5 = gcc33.gcc;

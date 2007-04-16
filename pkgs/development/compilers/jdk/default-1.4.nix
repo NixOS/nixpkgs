@@ -6,4 +6,4 @@ if stdenv.system == "i686-linux"
       inherit stdenv fetchurl;
     }
   else
-    false
+    abort "the Java 2 SDK is not supported on this platform"
