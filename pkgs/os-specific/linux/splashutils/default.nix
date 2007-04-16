@@ -1,11 +1,17 @@
 {stdenv, fetchurl, klibc, zlib, libjpeg}:
 
 stdenv.mkDerivation {
-  name = "splashutils-1.4";
+  name = "splashutils-1.3";
   src = fetchurl {
-    url = http://dev.gentoo.org/~spock/projects/gensplash/archive/splashutils-1.4.tar.bz2;
-    sha256 = "1j4jv8yyfdl2nbl6r2kgw5pznih55v7zsxzywcg28z7cyrf49jg2";
+    url = http://dev.gentoo.org/~spock/projects/splashutils/archive/splashutils-1.3.tar.bz2;
+    md5 = "c7c92b98e34b860511aa57bd29d62f76";
   };
+  patches = [
+    ./purity.patch
+    ./no-fbsplash.patch
+    # Borrowed from http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-gfx/splashutils/files/splashutils-1.3-fdset.patch?rev=1.1.
+    ./fdset.patch
+  ];
 
   buildInputs = [klibc zlib libjpeg];
   
@@ -13,19 +19,11 @@ stdenv.mkDerivation {
   
   dontAddPrefix = 1;
   configureScript = "sh ./configure";
-  configureFlags = "--without-ttf --without-png --without-gpm --with-fifo=/var/run/splash_fifo";
+  configureFlags = "--without-ttf --without-png --with-fifo=/var/run/splash_fifo";
 
   # QUIET = false doesn't work due to the use of /dev/stdout (which
   # doesn't work when the build user doesn't own stdout). 
   #makeFlags = "QUIET=false;
 
-  preBuild = "
-    makeFlagsArray=(INSTALL='install -c')
-    substituteInPlace Makefile --replace '/usr/$(LIB)/klibc' ${klibc}/lib/klibc
-  ";
-
-  installPhase = "
-    ensureDir $out/bin
-    cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin
-  ";
+  installPhase = "ensureDir $out/bin; cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin";
 }

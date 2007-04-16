@@ -1,0 +1,21 @@
+diff --git a/splash.h b/splash.h
+index 5dccfe0..eae2939 100644
+--- a/splash.h
++++ b/splash.h
+@@ -30,10 +30,14 @@ #endif
+  */
+ #ifdef TARGET_KERNEL
+ 	#include <linux/fb.h>
+-	#include <linux/console_splash.h>
++	#ifdef CONFIG_FBSPLASH
++		#include <linux/console_splash.h>
++	#endif
+ #else
+ 	#include <fb.h>
+-	#include <console_splash.h>
++	#ifdef CONFIG_FBSPLASH
++		#include <console_splash.h>
++	#endif
+ #endif
+ 
+ /*
