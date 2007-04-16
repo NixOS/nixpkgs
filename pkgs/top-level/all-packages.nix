@@ -653,60 +653,6 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc40arm = import ../build-support/gcc-cross-wrapper {
-    nativeTools = false;
-    nativeLibc = false;
-    cross = "arm-linux";
-    gcc = import ../development/compilers/gcc-4.0-cross {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = false;
-      langCC = false;
-      binutilsCross = binutilsArm;
-      kernelHeadersCross = kernelHeadersArm;
-      cross = "arm-linux";
-    };
-    inherit (stdenv.gcc) libc;
-    binutils = binutilsArm;
-    inherit stdenv;
-  };
-
-  gcc40mips = import ../build-support/gcc-cross-wrapper {
-    nativeTools = false;
-    nativeLibc = false;
-    cross = "mips-linux";
-    gcc = gcc40mipsboot;
-    #inherit (stdenv.gcc) libc;
-    libc = uclibcMips;
-    binutils = binutilsMips;
-    inherit stdenv;
-  };
-
-  gcc40mipsboot = import ../development/compilers/gcc-4.0-cross {
-    inherit fetchurl stdenv noSysDirs;
-    langF77 = false;
-    langCC = false;
-    binutilsCross = binutilsMips;
-    kernelHeadersCross = kernelHeadersMips;
-    cross = "mips-linux";
-  };
-
-  gcc40sparc = import ../build-support/gcc-cross-wrapper {
-    nativeTools = false;
-    nativeLibc = false;
-    cross = "sparc-linux";
-    gcc = import ../development/compilers/gcc-4.0-cross {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = false;
-      langCC = false;
-      binutilsCross = binutilsSparc;
-      kernelHeadersCross = kernelHeadersSparc;
-      cross = "sparc-linux";
-    };
-    inherit (stdenv.gcc) libc;
-    binutils = binutilsSparc;
-    inherit stdenv;
-  };
-
   gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
@@ -1021,21 +967,6 @@ rec {
     (import ../development/tools/misc/binutils {
       inherit fetchurl stdenv noSysDirs;
     });
-
-  binutilsArm = import ../development/tools/misc/binutils-cross {
-    inherit fetchurl stdenv noSysDirs;
-    cross = "arm-linux";
-  };
-
-  binutilsMips = import ../development/tools/misc/binutils-cross {
-    inherit fetchurl stdenv noSysDirs;
-    cross = "mips-linux";
-  };
-
-  binutilsSparc = import ../development/tools/misc/binutils-cross {
-    inherit fetchurl stdenv noSysDirs;
-    cross = "sparc-linux";
-  };
 
   bison = bison1875;
 
@@ -2183,14 +2114,6 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
-  #uclibcSparc = import ../development/uclibc {
-  #  inherit fetchurl stdenv mktemp;
-  #  kernelHeadersCross = kernelHeadersSparc;
-  #  binutilsCross = binutilsSparc;
-  #  gccCross = gcc40sparc;
-  #  cross = "sparc-linux";
-  #};
-
   devicemapper = import ../os-specific/linux/device-mapper {
     inherit fetchurl stdenv;
   };
@@ -2200,13 +2123,6 @@ rec {
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
    stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
-
-  #dietlibcArm = import ../os-specific/linux/dietlibc-cross {
-  #  inherit fetchurl stdenv;
-  #  gccCross = gcc40arm;
-  #  binutilsCross = binutilsArm;
-  #  arch = "arm";
-  #};
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl stdenv gettext;
@@ -2266,21 +2182,6 @@ rec {
 
   kernelHeaders_2_6_20 = import ../os-specific/linux/kernel-headers/2.6.20.nix {
     inherit fetchurl stdenv;
-  };
-
-  kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "arm-linux";
-  };
-
-  kernelHeadersMips = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "mips-linux";
-  };
-
-  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "sparc-linux";
   };
 
   kernelscripts = import ../os-specific/linux/kernelscripts {
@@ -2443,22 +2344,6 @@ rec {
 
   sysvinit = import ../os-specific/linux/sysvinit {
     inherit fetchurl stdenv;
-  };
-
-  uclibcArm = import ../development/uclibc {
-    inherit fetchurl stdenv mktemp;
-    kernelHeadersCross = kernelHeadersArm;
-    binutilsCross = binutilsArm;
-    gccCross = gcc40arm;
-    cross = "arm-linux";
-  };
-
-  uclibcMips = import ../development/uclibc {
-    inherit fetchurl stdenv mktemp;
-    kernelHeadersCross = kernelHeadersMips;
-    binutilsCross = binutilsMips;
-    gccCross = gcc40mipsboot;
-    cross = "mips-linux";
   };
 
   udev = import ../os-specific/linux/udev {
