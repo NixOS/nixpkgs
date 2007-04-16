@@ -765,11 +765,16 @@ rec {
   jdkPlugin = jdkdistro true true;
   jrePlugin = jdkdistro false true;
 
+  supportsJDK =
+    system == "i686-linux" ||
+    system == "x86_64-linux" ||
+    system == "powerpc-linux";
+
   jdkdistro = installjdk: pluginSupport:
     if stdenv.isDarwin then 
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
-      assert system == "i686-linux" || system == "x86_64-linux" || system == "powerpc-linux";
+      assert supportsJDK;
       import ../development/compilers/jdk {
         inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
         libstdcpp5 = gcc33.gcc;
@@ -2999,7 +3004,7 @@ rec {
     ]
     # RealPlayer is disabled by default for legal reasons.
     ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
-    ++ (if jrePlugin != false then [jrePlugin] else []);
+    ++ (if supportsJDK then [jrePlugin] else []);
   };
 
   xara = import ../applications/graphics/xara {
