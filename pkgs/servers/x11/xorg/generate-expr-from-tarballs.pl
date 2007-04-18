@@ -44,7 +44,7 @@ $extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
-$extraAttrs{"setxkbmap"} = " postInstall = \"ln -sfn ${xkeyboard_config}/etc $out/share\"; ";
+$extraAttrs{"setxkbmap"} = " postInstall = \"ln -sfn \${xkeyboard_config}/etc \$out/share\"; ";
 
 # Used to avoid the following assertion error:
 # java: xcb_xlib.c:50: xcb_xlib_unlock: Assertion `c->xlib.lock' failed. 

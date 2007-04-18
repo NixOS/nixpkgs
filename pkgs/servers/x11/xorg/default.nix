@@ -1063,8 +1063,7 @@ rec {
       url = http://xcb.freedesktop.org/dist/libxcb-1.0.tar.bz2;
       sha256 = "07fi4yvkni7rlkw9gv7z1fa6y63z34gpj3kklc9ydlqg72nb5mhr";
     };
-    buildInputs = [pkgconfig libxslt libpthreadstubs libXau xcbproto libXdmcp ];
-    patches = [ ./xcb_xlib-no-assert-on-lock.patch ];
+    buildInputs = [pkgconfig libxslt libpthreadstubs libXau xcbproto libXdmcp ]; patches = [./xcb_xlib-no-assert-on-lock.patch]; 
   }) // {inherit libxslt libpthreadstubs libXau xcbproto libXdmcp ;};
     
   libxkbfile = (stdenv.mkDerivation {
@@ -1274,8 +1273,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/setxkbmap-X11R7.2-1.0.3.tar.bz2;
       sha256 = "19jxlksl90i674yad1n7w42s3nv0hhlkwczya2lnavpl0570jr34";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
-    postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share";
+    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share"; 
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
@@ -2067,6 +2065,16 @@ rec {
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
+    
+  xf86videointel = (stdenv.mkDerivation {
+    name = "xf86-video-intel-1.9.94";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-intel-1.9.94.tar.bz2;
+      sha256 = "0rjlwfad87mkf0c3wh3lnjz8004f3cslajll910q2mk16ih727j9";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
     
   xf86videomga = (stdenv.mkDerivation {
     name = "xf86-video-mga-1.4.6.1";
