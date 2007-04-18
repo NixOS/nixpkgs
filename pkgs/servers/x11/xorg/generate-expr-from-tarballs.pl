@@ -182,8 +182,8 @@ while (<>) {
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    #push @requires, "mesa" if $pkg =~ /xorgserver/ or $pkg =~ /xf86videoi810/;
     push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
+    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videointel/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
     

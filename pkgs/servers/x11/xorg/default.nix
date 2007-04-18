@@ -77,11 +77,11 @@ rec {
   }) // {inherit ;};
     
   damageproto = (stdenv.mkDerivation {
-    name = "damageproto-1.0.3";
+    name = "damageproto-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/damageproto-X11R7.0-1.0.3.tar.bz2;
-      sha256 = "1z4bnnp1wfa36y696h0drhlbvdk2lbdfkmajq1wg0fnl9zvyc6pp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/proto/damageproto-1.1.0.tar.bz2;
+      sha256 = "07b41ninycfm5sgzpjsa168dnm1g55c2mzzgigvwvs9mr3x889lx";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1177,11 +1177,11 @@ rec {
   }) // {inherit libICE libX11 xproxymanagementprotocol libXt ;};
     
   randrproto = (stdenv.mkDerivation {
-    name = "randrproto-1.1.2";
+    name = "randrproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/randrproto-X11R7.0-1.1.2.tar.bz2;
-      sha256 = "1l0agrbz8x4npnyiglx3bwyifwkdvjskn5gvyz15hbyh227vapks";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/proto/randrproto-1.2.1.tar.bz2;
+      sha256 = "0m7n624h2rsxs7m5x03az87x7hlh0gxqphj59q7laqi5iwpx8bqh";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2073,8 +2073,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-intel-1.9.94.tar.bz2;
       sha256 = "0rjlwfad87mkf0c3wh3lnjz8004f3cslajll910q2mk16ih727j9";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
     
   xf86videomga = (stdenv.mkDerivation {
     name = "xf86-video-mga-1.4.6.1";
@@ -2667,11 +2667,11 @@ rec {
   }) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation {
-    name = "xorg-server-1.2.0";
+    name = "xorg-server-1.2.99.905";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xorg-server-X11R7.2-1.2.0.tar.bz2;
-      sha256 = "023a13aay8gd09a7x1s6wndbsj3xr2ismsvgbsi9dz4g7nw8ga96";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/xserver/xorg-server-1.2.99.905.tar.bz2;
+      sha256 = "0lqldvmcsfmdd6gzynmd0ald5hf807v0k9c8r11svl79sbi0r66v";
     };
     buildInputs = [pkgconfig bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; 
   }) // {inherit bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
