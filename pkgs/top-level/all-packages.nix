@@ -1246,6 +1246,10 @@ rec {
     inherit fetchurl stdenv freetype expat;
   };
 
+  freeglut = import ../development/libraries/freeglut {
+    inherit fetchurl stdenv x11 mesa;
+  };
+
   freetype = import ../development/libraries/freetype {
     inherit fetchurl stdenv;
   };
