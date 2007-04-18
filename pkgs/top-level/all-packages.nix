@@ -328,6 +328,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  glxinfo = import ../tools/graphics/glxinfo {
+    inherit fetchurl stdenv x11 mesa;
+  };
+
   gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep
     (import ../tools/text/gnugrep {
       inherit fetchurl stdenv pcre;
