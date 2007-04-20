@@ -199,6 +199,7 @@ rec {
     pkgs.strace
     pkgs.su
     pkgs.sysklogd
+    pkgs.time
     pkgs.udev
     pkgs.upstart
     pkgs.utillinux
