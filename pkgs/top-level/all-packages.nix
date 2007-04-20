@@ -517,6 +517,10 @@ rec {
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
   };
 
+  time = import ../tools/misc/time {
+    inherit fetchurl stdenv;
+  };
+
   trang = import ../tools/text/xml/trang {
     inherit fetchurl stdenv unzip jre;
   };
