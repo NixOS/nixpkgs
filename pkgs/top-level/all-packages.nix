@@ -484,10 +484,10 @@ rec {
     inherit (xlibs) libX11 libXext;
   };
 
-  realCurl = useFromStdenv (stdenv ? curl) stdenv.curl (import ../tools/networking/curl {
+  realCurl = import ../tools/networking/curl {
     inherit fetchurl stdenv zlib;
     zlibSupport = !stdenv ? isDietLibC;
-  });
+  };
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
@@ -2630,6 +2630,10 @@ rec {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
     inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
+  };
+
+  git = import ../applications/version-management/git {
+    inherit fetchurl stdenv curl openssl zlib expat perl;
   };
 
   gnash = import ../applications/video/gnash {
