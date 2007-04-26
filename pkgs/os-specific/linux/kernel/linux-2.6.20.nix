@@ -12,14 +12,20 @@
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
-let lib = import ../../../lib; in
+let
+
+  lib = import ../../../lib;
+
+  version = "2.6.20.7";
+
+in
 
 stdenv.mkDerivation {
-  name = "linux-2.6.20.7";
+  name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.20.7.tar.bz2;
+    url = "http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-${version}.tar.bz2";
     sha256 = "1a6flnnaaj11c7cgsr63ix5ln67wih3ffbv473dvsqb0c2rmwvw5";
   };
   

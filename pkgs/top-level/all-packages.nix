@@ -150,6 +150,16 @@ rec {
         else {};
     };
 
+  # Change the symbolic name of a package for presentation purposes
+  # (i.e., so that nix-env users can tell them apart).
+  setName = name: drv: drv // {inherit name;};
+
+  updateName = updater: drv: drv // {name = updater (drv.name);};
+
+  # !!! the suffix should really be appended *before* the version, at
+  # least most of the time.
+  appendToName = suffix: updateName (name: "${name}-${suffix}");
+  
 
   ### STANDARD ENVIRONMENT
 
@@ -279,10 +289,6 @@ rec {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
   };
 
-  dhcpWrapper = import ../tools/networking/dhcp-wrapper {
-    inherit stdenv dhcp;
-  };
-
   diffutils = useFromStdenv (stdenv ? diffutils) stdenv.diffutils
     (import ../tools/text/diffutils {
       inherit fetchurl stdenv coreutils;
@@ -315,9 +321,9 @@ rec {
     inherit fetchurl stdenv coreutils;
   };
 
-  findutilsWrapper = import ../tools/misc/findutils-wrapper {
+  findutilsWrapper = appendToName "wrapper" (import ../tools/misc/findutils-wrapper {
     inherit stdenv findutils;
-  };
+  });
 
   gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
     (import ../tools/text/gawk {
@@ -337,9 +343,9 @@ rec {
       inherit fetchurl stdenv pcre;
     });
 
-  gnupatch = import ../tools/text/gnupatch {
+  gnupatch = useFromStdenv (stdenv ? patch) stdenv.patch (import ../tools/text/gnupatch {
     inherit fetchurl stdenv;
-  };
+  });
 
   gnupg = import ../tools/security/gnupg {
     inherit fetchurl stdenv readline;
@@ -384,10 +390,6 @@ rec {
       import ../tools/misc/grub {
         inherit fetchurl stdenv;
       };
-
-  grubWrapper = import ../tools/misc/grub-wrapper {
-     inherit stdenv grub diffutils gnused gnugrep coreutils;
-  };
 
   gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
     inherit fetchurl stdenv pkgconfig libxml2;
@@ -462,7 +464,7 @@ rec {
     inherit fetchurl stdenv e2fsprogs ncurses readline;
   };
 
-  patch = useFromStdenv (stdenv ? patch) stdenv.patch gnupatch;
+  patch = gnupatch;
 
   pciutils = import ../tools/system/pciutils {
     inherit fetchurl stdenv zlib;
@@ -482,10 +484,10 @@ rec {
     inherit (xlibs) libX11 libXext;
   };
 
-  realCurl = import ../tools/networking/curl {
+  realCurl = useFromStdenv (stdenv ? curl) stdenv.curl (import ../tools/networking/curl {
     inherit fetchurl stdenv zlib;
     zlibSupport = !stdenv ? isDietLibC;
-  };
+  });
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
@@ -591,11 +593,11 @@ rec {
       bison = bison23;
     });
 
-  bashInteractive = import ../shells/bash-interactive {
+  bashInteractive = appendToName "interactive" (import ../shells/bash-interactive {
     inherit fetchurl stdenv ncurses;
     bison = bison23;
     interactive = true;
-  };
+  });
 
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
@@ -642,7 +644,7 @@ rec {
     inherit stdenv;
   };
 
-  gcc = useFromStdenv (stdenv ? gcc) stdenv.gcc gcc41;
+  gcc = gcc41;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -661,10 +663,10 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
+  gcc41 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
-  });
+  }));
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
@@ -690,10 +692,10 @@ rec {
     ghc = ghcboot;
   };
 
-  ghcboot = import ../development/compilers/ghc/boot.nix {
+  ghcboot = appendToName "boot" (import ../development/compilers/ghc/boot.nix {
     inherit fetchurl stdenv perl ncurses;
     readline = readline4;
-  };
+  });
 
   /*
   ghcWrapper = assert uulib.ghc == ghc;
@@ -729,10 +731,10 @@ rec {
       "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
     else
       assert supportsJDK;
-      import ../development/compilers/jdk {
+      (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
         inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
         libstdcpp5 = gcc33.gcc;
-      };
+      });
 
   jikes = import ../development/compilers/jikes {
     inherit fetchurl stdenv;
@@ -1102,12 +1104,12 @@ rec {
     javaSupport = false;
   };
 
-  swigWithJava = import ../development/tools/misc/swig {
+  swigWithJava = appendToName "with-java" (import ../development/tools/misc/swig {
     inherit fetchurl stdenv jdk;
     perlSupport = false;
     pythonSupport = false;
     javaSupport = true;
-  };
+  });
 
   texinfo = import ../development/tools/misc/texinfo {
     inherit fetchurl stdenv ncurses;
@@ -1442,10 +1444,10 @@ rec {
     inherit fetchurl stdenv libtool;
   };
 
-  libjpegStatic = import ../development/libraries/libjpeg-static {
+  libjpegStatic = appendToName "static" (import ../development/libraries/libjpeg-static {
     inherit fetchurl stdenv libtool;
     static = true;
-  };
+  });
 
   libmad = import ../development/libraries/libmad {
     inherit fetchurl stdenv;
@@ -1517,10 +1519,10 @@ rec {
     pythonSupport = false;
   };
 
-  libxml2Python = import ../development/libraries/libxml2 {
+  libxml2Python = appendToName "with-python" (import ../development/libraries/libxml2 {
     inherit fetchurl stdenv zlib python;
     pythonSupport = true;
-  };
+  });
 
   libxslt = import ../development/libraries/libxslt {
     inherit fetchurl stdenv libxml2;
@@ -1690,10 +1692,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  zlibStatic = import ../development/libraries/zlib {
+  zlibStatic = appendToName "static" (import ../development/libraries/zlib {
     inherit fetchurl stdenv;
     static = true;
-  };
+  });
 
   zvbi = import ../development/libraries/zvbi {
     inherit fetchurl stdenv libpng x11;
@@ -2140,10 +2142,10 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  e2fsprogsDiet = import ../os-specific/linux/e2fsprogs {
+  e2fsprogsDiet = appendToName "diet" (import ../os-specific/linux/e2fsprogs {
     inherit fetchurl gettext;
     stdenv = useDietLibC stdenv;
-  };
+  });
 
   eject = import ../os-specific/linux/eject {
     inherit fetchurl stdenv gettext;
@@ -2231,14 +2233,6 @@ rec {
 
   libsepol = import ../os-specific/linux/libsepol {
     inherit fetchurl stdenv;
-  };
-
-  MAKEDEV = import ../os-specific/linux/MAKEDEV {
-    inherit fetchurl stdenv;
-  };
-
-  MAKEDEVwrapper = import ../os-specific/linux/MAKEDEV-wrapper {
-    inherit stdenv MAKEDEV;
   };
 
   klibc = import ../os-specific/linux/klibc {
@@ -2383,10 +2377,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  utillinuxStatic = import ../os-specific/linux/util-linux {
+  utillinuxStatic = appendToName "static" (import ../os-specific/linux/util-linux {
     inherit fetchurl;
     stdenv = makeStaticBinaries stdenv;
-  };
+  });
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
     inherit fetchurl stdenv;
@@ -2560,8 +2554,7 @@ rec {
 
   eclipsesdk = eclipse [];
 
-  eclipseSpoofax =
-    eclipse [spoofax];
+  eclipseSpoofax = appendToName "with-spoofax" (eclipse [spoofax]);
 
   emacs = import ../applications/editors/emacs {
     inherit fetchurl stdenv ncurses x11 Xaw3d;
@@ -2743,11 +2736,11 @@ rec {
     inherit fetchurl stdenv ncurses gettext;
   };
 
-  nanoDiet = import ../applications/editors/nano {
+  nanoDiet = appendToName "diet" (import ../applications/editors/nano {
     inherit fetchurl gettext;
     ncurses = ncursesDiet;
     stdenv = useDietLibC stdenv;
-  };
+  });
 
   nedit = import ../applications/editors/nedit {
     inherit fetchurl stdenv x11;
@@ -2868,11 +2861,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  vimDiet = import ../applications/editors/vim-diet {
+  vimDiet = appendToName "diet" (import ../applications/editors/vim-diet {
     inherit fetchurl;
     ncurses = ncursesDiet;
     stdenv = useDietLibC stdenv;
-  };
+  });
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK

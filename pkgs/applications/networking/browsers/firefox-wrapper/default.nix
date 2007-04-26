@@ -1,7 +1,7 @@
 {stdenv, firefox, plugins}:
 
 stdenv.mkDerivation {
-  name = firefox.name;
+  name = firefox.name + "-with-plugins";
 
   builder = ./builder.sh;
   makeWrapper = ../../../../build-support/make-wrapper/make-wrapper.sh;
