@@ -9,4 +9,8 @@ stdenv.mkDerivation {
 
   buildInputs = [bison pkgconfig glib];
   propagatedBuildInputs = [glib];
+
+  preBuild = "
+    makeFlagsArray=(INSTALL=`type -tp install`)
+  ";
 }
