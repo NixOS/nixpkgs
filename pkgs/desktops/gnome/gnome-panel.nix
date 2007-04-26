@@ -13,4 +13,12 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = "--disable-scrollkeeper";
+
+  preConfigure = "
+    mkdir wrapper
+    echo \"#! $SHELL\" >> wrapper/xsltproc
+    echo \"exec `type -tp xsltproc` --nonet \\\"\\$@\\\"\" >> wrapper/xsltproc
+    chmod +x wrapper/xsltproc
+    PATH=$(pwd)/wrapper:$PATH
+  ";
 }
