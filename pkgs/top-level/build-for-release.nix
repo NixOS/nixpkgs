@@ -55,6 +55,7 @@ let {
     gawk
     gcc
     gcc34
+    gdb
     ghc
     ghostscript
     gnugrep
