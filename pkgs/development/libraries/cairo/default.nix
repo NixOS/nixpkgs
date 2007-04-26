@@ -9,10 +9,10 @@ assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
 
 stdenv.mkDerivation {
-  name = "cairo-1.2.6";
+  name = "cairo-1.4.4";
   src = fetchurl {
-    url = http://cairographics.org/releases/cairo-1.2.6.tar.gz;
-    sha1 = "b86b4017a9abd565ef11c72b7faee9082a04118f";
+    url = http://cairographics.org/releases/cairo-1.4.4.tar.gz;
+    sha1 = "71a7ce8352500944f7b2b73d4dc25ee947ec56ec";
   };
   buildInputs = [
     pkgconfig x11 fontconfig freetype
