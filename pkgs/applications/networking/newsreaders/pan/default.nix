@@ -1,23 +1,21 @@
 { spellChecking ? true
-, stdenv, fetchurl, pkgconfig, gtk, gtkspell ? null, gnet
+, stdenv, fetchurl, pkgconfig, gtk, gtkspell ? null
 , perl, pcre, gmime, gettext
 }:
 
-assert pkgconfig != null && gtk != null && gnet != null
-  && perl != null && pcre != null;
 assert spellChecking -> gtkspell != null /* !!! && gtk == gtkspell.gtk */;
 # !!! assert gtk.glib == gnet.glib;
 
 stdenv.mkDerivation {
-  name = "pan-0.106";
+  name = "pan-0.128";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pan-0.106.tar.bz2;
-    md5 = "34cdc4b7606f09517f015a2c624044c9";
+    url = http://pan.rebelbase.com/download/releases/0.128/source/pan-0.128.tar.bz2;
+    sha1 = "3fca3cbd3d3ae3cc507d2b0a06a0fe03c993abe6";
   };
 
   buildInputs = [
-    pkgconfig gtk gnet perl pcre gmime gettext
+    pkgconfig gtk perl pcre gmime gettext
     (if spellChecking then gtkspell else null)
   ];
 

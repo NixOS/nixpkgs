@@ -2777,8 +2777,7 @@ rec {
   };
 
   pan = import ../applications/networking/newsreaders/pan {
-    inherit fetchurl stdenv pkgconfig gnet perl
-            pcre gmime gettext;
+    inherit fetchurl stdenv pkgconfig perl pcre gmime gettext;
     inherit (gtkLibs) gtk;
     spellChecking = false;
   };
