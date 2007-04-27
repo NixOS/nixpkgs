@@ -9,4 +9,12 @@ stdenv.mkDerivation {
   };
   inherit noSysDirs;
   configureFlags = "--disable-werror"; # needed for dietlibc build
+
+  meta = {
+    description = "Tools for manipulating binaries (linker, assembler, etc.)";
+
+    /* Give binutils a lower priority than gcc-wrapper to prevent a
+       collision due to the ld/as wrappers/symlinks in the latter. */
+    priority = "10";
+  };
 }
