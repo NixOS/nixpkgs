@@ -159,6 +159,12 @@ rec {
   # !!! the suffix should really be appended *before* the version, at
   # least most of the time.
   appendToName = suffix: updateName (name: "${name}-${suffix}");
+
+  # Decrease the priority of the package, i.e., other
+  # versions/variants will be preferred.
+  lowPrio = drv: drv // {
+    meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
+  };
   
 
   ### STANDARD ENVIRONMENT
@@ -321,9 +327,9 @@ rec {
     inherit fetchurl stdenv coreutils;
   };
 
-  findutilsWrapper = appendToName "wrapper" (import ../tools/misc/findutils-wrapper {
+  findutilsWrapper = lowPrio (appendToName "wrapper" (import ../tools/misc/findutils-wrapper {
     inherit stdenv findutils;
-  });
+  }));
 
   gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
     (import ../tools/text/gawk {
@@ -587,11 +593,11 @@ rec {
   ### SHELLS
 
 
-  bash = useFromStdenv (stdenv ? bash) stdenv.bash
+  bash = lowPrio (useFromStdenv (stdenv ? bash) stdenv.bash
     (import ../shells/bash {
       inherit fetchurl stdenv;
       bison = bison23;
-    });
+    }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash-interactive {
     inherit fetchurl stdenv ncurses;
@@ -692,10 +698,10 @@ rec {
     ghc = ghcboot;
   };
 
-  ghcboot = appendToName "boot" (import ../development/compilers/ghc/boot.nix {
+  ghcboot = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot.nix {
     inherit fetchurl stdenv perl ncurses;
     readline = readline4;
-  });
+  }));
 
   /*
   ghcWrapper = assert uulib.ghc == ghc;
@@ -1104,12 +1110,12 @@ rec {
     javaSupport = false;
   };
 
-  swigWithJava = appendToName "with-java" (import ../development/tools/misc/swig {
+  swigWithJava = lowPrio (appendToName "with-java" (import ../development/tools/misc/swig {
     inherit fetchurl stdenv jdk;
     perlSupport = false;
     pythonSupport = false;
     javaSupport = true;
-  });
+  }));
 
   texinfo = import ../development/tools/misc/texinfo {
     inherit fetchurl stdenv ncurses;
@@ -1160,9 +1166,9 @@ rec {
     inherit (gnome) glib;
   };
 
-  aterm = import ../development/libraries/aterm {
+  aterm = lowPrio (import ../development/libraries/aterm {
     inherit fetchurl stdenv;
-  };
+  });
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
@@ -1444,10 +1450,10 @@ rec {
     inherit fetchurl stdenv libtool;
   };
 
-  libjpegStatic = appendToName "static" (import ../development/libraries/libjpeg-static {
+  libjpegStatic = lowPrio (appendToName "static" (import ../development/libraries/libjpeg-static {
     inherit fetchurl stdenv libtool;
     static = true;
-  });
+  }));
 
   libmad = import ../development/libraries/libmad {
     inherit fetchurl stdenv;
@@ -1519,10 +1525,10 @@ rec {
     pythonSupport = false;
   };
 
-  libxml2Python = appendToName "with-python" (import ../development/libraries/libxml2 {
+  libxml2Python = lowPrio (appendToName "with-python" (import ../development/libraries/libxml2 {
     inherit fetchurl stdenv zlib python;
     pythonSupport = true;
-  });
+  }));
 
   libxslt = import ../development/libraries/libxslt {
     inherit fetchurl stdenv libxml2;
@@ -1692,10 +1698,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  zlibStatic = appendToName "static" (import ../development/libraries/zlib {
+  zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {
     inherit fetchurl stdenv;
     static = true;
-  });
+  }));
 
   zvbi = import ../development/libraries/zvbi {
     inherit fetchurl stdenv libpng x11;
@@ -2142,10 +2148,10 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  e2fsprogsDiet = appendToName "diet" (import ../os-specific/linux/e2fsprogs {
+  e2fsprogsDiet = lowPrio (appendToName "diet" (import ../os-specific/linux/e2fsprogs {
     inherit fetchurl gettext;
     stdenv = useDietLibC stdenv;
-  });
+  }));
 
   eject = import ../os-specific/linux/eject {
     inherit fetchurl stdenv gettext;
@@ -2377,10 +2383,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  utillinuxStatic = appendToName "static" (import ../os-specific/linux/util-linux {
+  utillinuxStatic = lowPrio (appendToName "static" (import ../os-specific/linux/util-linux {
     inherit fetchurl;
     stdenv = makeStaticBinaries stdenv;
-  });
+  }));
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
     inherit fetchurl stdenv;
@@ -2554,7 +2560,7 @@ rec {
 
   eclipsesdk = eclipse [];
 
-  eclipseSpoofax = appendToName "with-spoofax" (eclipse [spoofax]);
+  eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
 
   emacs = import ../applications/editors/emacs {
     inherit fetchurl stdenv ncurses x11 Xaw3d;
@@ -2589,13 +2595,13 @@ rec {
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
 
-  firefox = import ../applications/networking/browsers/firefox {
+  firefox = lowPrio (import ../applications/networking/browsers/firefox {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
     #enableOfficialBranding = true;
-  };
+  });
 
   firefoxWrapper = wrapFirefox firefox;
 
@@ -2740,11 +2746,11 @@ rec {
     inherit fetchurl stdenv ncurses gettext;
   };
 
-  nanoDiet = appendToName "diet" (import ../applications/editors/nano {
+  nanoDiet = lowPrio (appendToName "diet" (import ../applications/editors/nano {
     inherit fetchurl gettext;
     ncurses = ncursesDiet;
     stdenv = useDietLibC stdenv;
-  });
+  }));
 
   nedit = import ../applications/editors/nedit {
     inherit fetchurl stdenv x11;
@@ -2864,11 +2870,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  vimDiet = appendToName "diet" (import ../applications/editors/vim-diet {
+  vimDiet = lowPrio (appendToName "diet" (import ../applications/editors/vim-diet {
     inherit fetchurl;
     ncurses = ncursesDiet;
     stdenv = useDietLibC stdenv;
-  });
+  }));
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
