@@ -52,7 +52,8 @@ let
     xorg.xf86inputmouse
   ] 
   ++ optional (videoDriver == "vesa") xorg.xf86videovesa
-  ++ optional (videoDriver == "i810") xorg.xf86videoi810;
+  ++ optional (videoDriver == "i810") xorg.xf86videoi810
+  ++ optional (videoDriver == "intel") xorg.xf86videointel;
 
 
   configFile = stdenv.mkDerivation {
@@ -245,7 +246,7 @@ rec {
 
     
   job = "
-    #start on network-interfaces
+    start on network-interfaces
 
     start script
       rm -f /var/state/opengl-driver

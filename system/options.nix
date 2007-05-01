@@ -357,12 +357,14 @@
   {
     name = ["services" "ttyBackgrounds" "defaultSpecificThemes"];
     default = [
+      /*
       { tty = 6;
         theme = pkgs.fetchurl { # Yeah!
           url = http://www.bootsplash.de/files/themes/Theme-Pativo.tar.bz2;
           md5 = "9e13beaaadf88d43a5293e7ab757d569";
         };
       }
+      */
       { tty = 10;
         theme = pkgs.fetchurl {
           url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
