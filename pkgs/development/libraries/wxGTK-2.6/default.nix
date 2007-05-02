@@ -7,11 +7,11 @@ assert gtk.libpng != null;
 assert gtk.libpng.zlib != null;
 
 stdenv.mkDerivation {
-  name = "wxGTK-2.6.3";
+  name = "wxGTK-2.6.4";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/wxGTK-2.6.3.tar.bz2;
-    md5 = "3cd76c3c47913e52a3175dd47239c6ec";
+    url = http://prdownloads.sourceforge.net/wxwindows/wxGTK-2.6.4.tar.gz;
+    sha256 = "1yilzg9qxvdpqhhd3sby1w9pj00k7jqw0ikmwyhh5jmaqnnnrb2x";
   };
 
   buildInputs = [
@@ -27,7 +27,10 @@ stdenv.mkDerivation {
   ];
 
   postBuild = "(cd contrib/src && make)";
-  postInstall = "(cd contrib/src && make install)";
+  postInstall = "
+    (cd contrib/src && make install)
+    (cd $out/include && ln -s wx-*/* .)
+  ";
 
   inherit gtk compat22;
 }
