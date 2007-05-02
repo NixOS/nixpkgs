@@ -669,10 +669,14 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc41 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
+  gcc41 = lowPrio (useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
-  }));
+  })));
+
+  # !!! GCC with the new wrapper.  Should be removed eventually (and
+  # then the lowPrio on gcc41 should go, of course).
+  gccNew = wrapGCCNew (gcc.gcc);
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
@@ -835,6 +839,14 @@ rec {
   };
 
   wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
+    nativeTools = false;
+    nativeLibc = false;
+    gcc = baseGCC;
+    libc = glibc;
+    inherit stdenv binutils;
+  };
+
+  wrapGCCNew = baseGCC: import ../build-support/gcc-wrapper-new {
     nativeTools = false;
     nativeLibc = false;
     gcc = baseGCC;
