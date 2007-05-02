@@ -7,7 +7,7 @@ set input-meta on
 set convert-meta off
 set output-meta on
 
-set mark-symlinked-directories on
+#set mark-symlinked-directories on
 
 $if mode=emacs
 
