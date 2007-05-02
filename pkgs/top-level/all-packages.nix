@@ -1223,7 +1223,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  db4 = db44;
+  db4 = db45;
 
   db44 = import ../development/libraries/db4/db4-4.4.nix {
     inherit fetchurl stdenv;
@@ -2024,6 +2024,10 @@ rec {
   ### DEVELOPMENT / PYTHON MODULES
 
 
+  bsddb3 = import ../development/python-modules/bsddb3 {
+    inherit fetchurl stdenv python db4;
+  };
+
   psyco = import ../development/python-modules/psyco {
     inherit fetchurl stdenv python;
   };
@@ -2546,6 +2550,10 @@ rec {
     inherit fetchurl stdenv vim;
   };
 
+  cvs2svn = import ../applications/version-management/cvs2svn {
+    inherit fetchurl stdenv python bsddb3 makeWrapper;
+  };
+  
   darcs = import ../applications/version-management/darcs {
     inherit fetchurl stdenv ghc zlib ncurses curl;
   };
