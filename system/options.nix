@@ -793,7 +793,7 @@
     description = "
       Only the programs listed here will be made setuid root (through
       a wrapper program).  It's better to set
-      <option>security.extraSetuidPrograms</options>.
+      <option>security.extraSetuidPrograms</option>.
     ";
   }
 
