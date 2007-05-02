@@ -91,6 +91,11 @@ import ../helpers/make-etc.nix {
       target = "profile";
     }
 
+    { # Configuration for readline in bash.
+      source = ./inputrc;
+      target = "inputrc";
+    }
+
   ]
 
   # Configuration file for fontconfig used to locate
