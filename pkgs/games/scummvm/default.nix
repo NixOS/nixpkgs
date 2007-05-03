@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, zlib, alsaLib}:
+{stdenv, fetchurl, SDL, zlib, mpeg2dec}:
 
 stdenv.mkDerivation {
   name = "scummvm-0.9.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "06jxq4lbb0s1axpz0md8cjkx8i8086qgkafrhlfzi941cb0dkmaw";
   };
   
-  buildInputs = [SDL zlib alsaLib];
+  buildInputs = [SDL zlib mpeg2dec];
 
   meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
