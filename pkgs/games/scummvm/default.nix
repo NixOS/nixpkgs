@@ -1,10 +1,17 @@
-{stdenv, fetchurl, SDL}:
+{stdenv, fetchurl, SDL, zlib, alsaLib}:
 
 stdenv.mkDerivation {
-  name = "scummvm-0.9.0";
+  name = "scummvm-0.9.1";
+  
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/scummvm-0.9.0.tar.bz2;
-    md5 = "5eede9c97d1883f80770a3e211419783";
+    url = http://ovh.dl.sourceforge.net/sourceforge/scummvm/scummvm-0.9.1.tar.bz2;
+    sha256 = "06jxq4lbb0s1axpz0md8cjkx8i8086qgkafrhlfzi941cb0dkmaw";
   };
-  buildInputs = [SDL];
+  
+  buildInputs = [SDL zlib alsaLib];
+
+  meta = {
+    description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
+    homepage = http://www.scummvm.org/;
+  };
 }

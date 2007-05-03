@@ -3023,7 +3023,7 @@ rec {
   };
 
   scummvm = import ../games/scummvm {
-    inherit fetchurl stdenv SDL;
+    inherit fetchurl stdenv SDL zlib alsaLib;
   };
 
   ut2004demo = import ../games/ut2004demo {
