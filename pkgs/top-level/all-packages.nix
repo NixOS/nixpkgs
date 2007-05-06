@@ -690,6 +690,12 @@ rec {
 
   ghc = ghc66;
 
+  ghc661 = import ../development/compilers/ghc-6.6.1 {
+    inherit fetchurl stdenv readline perl;
+    m4 = gnum4;
+    ghc = ghcboot;
+  };
+
   ghc66 = import ../development/compilers/ghc-6.6 {
     inherit fetchurl stdenv readline perl;
     m4 = gnum4;
