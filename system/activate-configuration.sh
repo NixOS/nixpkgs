@@ -1,6 +1,9 @@
 #! @shell@
 
 systemConfig="$1"
+if test -z "$systemConfig"; then
+    systemConfig="/system" # for the installation CD
+fi
 
 export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
@@ -140,9 +143,8 @@ hostname @hostName@
 
 
 # Make this configuration the current configuration.
-if test -n "$systemConfig"; then
-    ln -sfn "$systemConfig" /var/run/current-system
-fi
+ln -sfn "$systemConfig" /var/run/current-system
+
 
 # Prevent the current configuration from being garbage-collected.
 ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system

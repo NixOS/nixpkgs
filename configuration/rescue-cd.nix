@@ -92,7 +92,7 @@ rec {
   cdMountPoints = pkgs.runCommand "mount-points" {} "
     ensureDir $out
     cd $out
-    mkdir proc sys tmp etc dev var mnt nix nix/var root
+    mkdir proc sys tmp etc dev var mnt nix nix/var root bin
     touch $out/${configuration.boot.rootLabel}
   ";
 
@@ -173,6 +173,9 @@ rec {
     storeContents = [
       { object = system.bootStage2;
         symlink = "/init";
+      }
+      { object = system.system;
+        symlink = "/system";
       }
       # To speed up the installation, provide the full stdenv.
       { object = pkgs.stdenv;

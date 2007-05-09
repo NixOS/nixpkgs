@@ -79,6 +79,7 @@ needWritableDir /tmp 01777
 needWritableDir /var 0755
 needWritableDir /nix/var 0755
 needWritableDir /root 0700
+needWritableDir /bin 0755 # for the /bin/sh symlink
 
 
 # Miscellaneous boot time cleanup.
