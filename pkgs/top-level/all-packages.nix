@@ -1030,6 +1030,10 @@ rec {
     inherit fetchurl stdenv yacc;
   };
 
+  frown = import ../development/tools/parsing/frown {
+    inherit fetchurl stdenv ghc;
+  };
+
   m4 = gnum4;
 
   gnum4 = import ../development/tools/misc/gnum4 {
