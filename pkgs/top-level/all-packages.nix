@@ -2187,6 +2187,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  genext2fs = import ../os-specific/linux/genext2fs {
+    inherit fetchurl stdenv;
+  };
+
   hdparm = import ../os-specific/linux/hdparm {
     inherit fetchurl stdenv;
   };
