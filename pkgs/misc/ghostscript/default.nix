@@ -5,12 +5,12 @@
 assert x11Support -> x11 != null;
 
 stdenv.mkDerivation {
-  name = "ghostscript-8.54";
+  name = "ghostscript-8.56";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/ghostscript-8.54-gpl.tar.bz2;
-    md5 = "5d0ad0da8297fe459a788200f0eaeeba";
+    url = ftp://ftp.nluug.nl/pub/gnu/ghostscript/gnu-ghostscript-8.56.0.tar.bz2;
+    sha256 = "12wkxqf661i9wpcyjj9kp69r4gix7crji52f21s49slqjmbc0f3s";
   };
 
   fonts = [
