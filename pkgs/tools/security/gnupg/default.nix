@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnupg-1.4.5";
+  name = "gnupg-1.4.7";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gnupg-1.4.5.tar.bz2;
-    sha1 = "553fefe0da5a91108dd9468e381faf9487754f9a";
+    url = ftp://ftp.surfnet.nl/pub/security/gnupg/gnupg/gnupg-1.4.7.tar.bz2;
+    sha256 = "13a6qrgswbrfj3z5hcjx62ahraj4j16cpssgxlkwlqiz35yqplb9";
   };
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
