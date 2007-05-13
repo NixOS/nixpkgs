@@ -1,20 +1,20 @@
-diff -rc libexif-0.6.11-orig/Makefile.in libexif-0.6.11/Makefile.in
-*** libexif-0.6.11-orig/Makefile.in	2004-10-16 14:21:37.000000000 +0200
---- libexif-0.6.11/Makefile.in	2005-03-11 11:35:24.000000000 +0100
+diff -rc libexif-0.6.14/Makefile.in libexif-0.6.14.new/Makefile.in
+*** libexif-0.6.14/Makefile.in	2007-05-10 17:14:58.000000000 +0200
+--- libexif-0.6.14.new/Makefile.in	2007-05-13 23:04:05.000000000 +0200
 ***************
-*** 215,221 ****
-  sharedstatedir = @sharedstatedir@
-  sysconfdir = @sysconfdir@
+*** 224,230 ****
   target_alias = @target_alias@
-! SUBDIRS = libexif libjpeg test po m4
-  EXTRA_DIST = @PACKAGE@.spec
-  
-  ########################################################################
---- 215,221 ----
-  sharedstatedir = @sharedstatedir@
-  sysconfdir = @sysconfdir@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+! SUBDIRS = m4m po libexif test doc binary
+  @SHIP_BINARIES_TRUE@README_W32_XDIST = README-Win32.txt
+  EXTRA_DIST = @PACKAGE_TARNAME@.spec autogen.sh $(README_W32_XDIST)
+  ACLOCAL_AMFLAGS = -I auto-m4 -I m4m
+--- 224,230 ----
   target_alias = @target_alias@
-! SUBDIRS = libexif libjpeg test m4
-  EXTRA_DIST = @PACKAGE@.spec
-  
-  ########################################################################
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+! SUBDIRS = m4m libexif test binary
+  @SHIP_BINARIES_TRUE@README_W32_XDIST = README-Win32.txt
+  EXTRA_DIST = @PACKAGE_TARNAME@.spec autogen.sh $(README_W32_XDIST)
+  ACLOCAL_AMFLAGS = -I auto-m4 -I m4m
