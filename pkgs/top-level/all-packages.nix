@@ -467,7 +467,7 @@ rec {
   };
 
   parted = import ../tools/misc/parted {
-    inherit fetchurl stdenv e2fsprogs ncurses readline;
+    inherit fetchurl stdenv e2fsprogs readline;
   };
 
   patch = gnupatch;
