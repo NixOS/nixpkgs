@@ -1,11 +1,11 @@
-{stdenv, fetchurl, python, pkgconfig, glib, gtk}:
+{stdenv, fetchurl, python, pkgconfig, glib, gtk, pygobject, pycairo}:
 
 stdenv.mkDerivation {
-  name = "pygtk-2.6.1";
+  name = "pygtk-2.10.4";
 #  builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pygtk-2.6.1.tar.bz2;
-    md5 = "b4610829e4f57b5538dfa3b8f1fbe026";
+    url = http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.10/pygtk-2.10.4.tar.bz2;
+    sha256 = "1xg8vng42lql29aa5ryva8icc8dwdc7h2y3yn96qjdgl394d96mb";
   };
-  buildInputs = [python pkgconfig glib gtk];
+  buildInputs = [python pkgconfig glib gtk pygobject pycairo];
 }

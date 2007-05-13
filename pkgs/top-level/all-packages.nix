@@ -2064,6 +2064,10 @@ rec {
     inherit fetchurl stdenv python;
   };
 
+  pycairo = import ../development/python-modules/pycairo {
+    inherit fetchurl stdenv python pkgconfig cairo x11;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit fetchurl stdenv python gmp;
   };
@@ -2074,7 +2078,7 @@ rec {
   };
 
   pygtk = import ../development/python-modules/pygtk {
-    inherit fetchurl stdenv python pkgconfig;
+    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
     inherit (gtkLibs) glib gtk;
   };
 
