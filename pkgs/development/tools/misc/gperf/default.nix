@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gperf-3.0.2";
+  name = "gperf-3.0.3";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gperf-3.0.2.tar.gz;
-    md5 = "5359fae9929f9f7235c6601f4b6e8c89";
+    url = ftp://ftp.nluug.nl/pub/gnu/gperf/gperf-3.0.3.tar.gz;
+    sha256 = "0mchz9rawhm9sb6rvm05vdlxajs9ycv4907h3j07xqnrr0kpaa33";
   };
 }
