@@ -1200,6 +1200,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  aspell = import ../development/libraries/aspell {
+    inherit fetchurl stdenv perl;
+  };
+
   audiofile = import ../development/libraries/audiofile {
     inherit fetchurl stdenv;
   };
@@ -1394,6 +1398,12 @@ rec {
     inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtksourceview;
     gtksharp = gtksharp2;
+  };
+
+  gtkspell = import ../development/libraries/gtkspell {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit aspell;
   };
 
   id3lib = import ../development/libraries/id3lib {
@@ -2665,6 +2675,12 @@ rec {
   gaim = import ../applications/networking/instant-messengers/gaim {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss;
     inherit (gtkLibs) glib gtk;
+  };
+
+  pidgin = import ../applications/networking/instant-messengers/pidgin {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext;
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) startupnotification;
   };
 
   gimp = import ../applications/graphics/gimp {
