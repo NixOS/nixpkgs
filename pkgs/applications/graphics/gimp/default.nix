@@ -3,10 +3,10 @@
 , perlXMLParser, python, pygtk, gettext}:
 
 stdenv.mkDerivation {
-  name = "gimp-2.3.10";
+  name = "gimp-2.3.16";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gimp-2.3.10.tar.bz2;
-    md5 = "a46acb413484300583ffca1fa54e0874" ;
+    url = ftp://ftp.gimp.org/pub/gimp/v2.3/gimp-2.3.16.tar.bz2;
+    sha256 = "1x4n9zddvw2krb2vs5rbar488b1vy7jq8jlb82nj92l6kz9sxk7x" ;
   };
   
   buildInputs = [ pkgconfig gtk libgtkhtml glib pango atk freetype fontconfig
