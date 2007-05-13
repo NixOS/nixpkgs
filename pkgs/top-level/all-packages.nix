@@ -2068,6 +2068,11 @@ rec {
     inherit fetchurl stdenv python gmp;
   };
 
+  pygobject = import ../development/python-modules/pygobject {
+    inherit fetchurl stdenv python pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   pygtk = import ../development/python-modules/pygtk {
     inherit fetchurl stdenv python pkgconfig;
     inherit (gtkLibs) glib gtk;
