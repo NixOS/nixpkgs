@@ -51,7 +51,6 @@ let {
     findutils
     firefoxWrapper
     flex2533
-    gaim
     gawk
     gcc
     gcc34
@@ -115,6 +114,7 @@ let {
     pciutils
     perl
     php
+    pidgin
     pkgconfig
     postgresql
     postgresql_jdbc

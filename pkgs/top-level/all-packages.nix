@@ -2681,6 +2681,7 @@ rec {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext;
     inherit (gtkLibs) glib gtk;
     inherit (gnome) startupnotification;
+    inherit (xlibs) libXScrnSaver;
   };
 
   gimp = import ../applications/graphics/gimp {

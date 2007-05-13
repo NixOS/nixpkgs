@@ -12,7 +12,8 @@
  */
 { stdenv, fetchurl, pkgconfig, glib, gtk, gtkspell, aspell,
   GStreamer, startupnotification, gettext,
-  perl, perlXMLParser, libxml2, openssl, nss
+  perl, perlXMLParser, libxml2, openssl, nss,
+  libXScrnSaver
 } :
 
 stdenv.mkDerivation {
@@ -28,5 +29,6 @@ stdenv.mkDerivation {
     pkgconfig glib gtk gtkspell aspell
     GStreamer startupnotification gettext
     perl perlXMLParser libxml2 openssl nss
+    libXScrnSaver
   ];
 }
