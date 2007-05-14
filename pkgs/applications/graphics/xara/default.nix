@@ -10,4 +10,6 @@ stdenv.mkDerivation {
   
   buildInputs = [automake autoconf gettext libtool cvs wxGTK gtk pkgconfig libxml2 zip libpng libjpeg];
   configureFlags = "--with-wx-config --disable-svnversion --disable-international";
+
+  patches = [./gtk_cflags.patch];
 }
