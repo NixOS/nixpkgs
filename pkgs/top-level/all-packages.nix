@@ -1288,6 +1288,10 @@ rec {
     inherit fetchurl stdenv freetype expat;
   };
 
+  freealut = import ../development/libraries/freealut {
+    inherit fetchurl stdenv openal;
+  };
+
   freeglut = import ../development/libraries/freeglut {
     inherit fetchurl stdenv x11 mesa;
   };
@@ -3035,6 +3039,10 @@ rec {
   exult = import ../games/exult {
     inherit fetchurl SDL SDL_mixer zlib libpng unzip;
     stdenv = overrideGCC stdenv gcc34;
+  };
+
+  gemrb = import ../games/gemrb {
+    inherit fetchurl stdenv SDL openal freealut zlib libpng python;
   };
 
   quake3demo = import ../games/quake3/wrapper {
