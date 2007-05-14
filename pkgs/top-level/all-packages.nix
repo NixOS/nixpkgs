@@ -2980,7 +2980,7 @@ rec {
 
   xchat = import ../applications/networking/irc/xchat {
     inherit fetchurl stdenv pkgconfig tcl;
-    inherit (gtkLibs) glib gtk;
+    inherit (gtkLibs) gtk;
   };
 
   xchm = import ../applications/misc/xchm {
