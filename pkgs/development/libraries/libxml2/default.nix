@@ -4,12 +4,12 @@ assert zlib != null;
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation {
-  name = "libxml2-2.6.26";
+  name = "libxml2-2.6.27";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/libxml2-2.6.26.tar.gz;
-    md5 = "2d8d3805041edab967368b497642f981";
+    url = ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.27.tar.bz2;
+    sha256 = "0kp0ghf5wgpv3ny6p4pvv38lj46ykbzsnpqpmv9irg4nidl72wl5";
   };
 
   python = if pythonSupport then python else null;
