@@ -121,7 +121,7 @@ let {
     procps
     pwdutils
     python
-    qcmm
+#    qcmm
     qt3
     quake3demo
     readline
