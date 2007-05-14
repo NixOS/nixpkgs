@@ -1,12 +1,12 @@
 {stdenv, fetchurl, ncurses}:
  
 stdenv.mkDerivation {
-  name = "vim-7.0";
+  name = "vim-7.1";
  
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/vim-7.0.tar.bz2;
-    md5 = "4ca69757678272f718b1041c810d82d8";
+    url = ftp://ftp.nluug.nl/pub/editors/vim/unix/vim-7.1.tar.bz2;
+    sha256 = "0w6gy49gdbw7hby5rjkjpa7cdvc0z5iajsm4j1h8108rvfam22kz";
   };
  
   inherit ncurses;
