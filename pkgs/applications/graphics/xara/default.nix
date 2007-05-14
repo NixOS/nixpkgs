@@ -1,8 +1,8 @@
-{stdenv, fetchurl, autoconf, automake, gettext, libtool, cvs, wxGTK, gtk, pkgconfig, libxml2, zip, libpng, libjpeg}:
+{stdenv, fetchurl, autoconf, automake, gettext, libtool, cvs, wxGTK, gtk,
+pkgconfig, libxml2, zip, libpng, libjpeg}:
 
 stdenv.mkDerivation {
   name = "xaralx-0.7r1766";
-  builder = ./builder.sh;
   src = fetchurl {
     url = http://downloads2.xara.com/opensource/XaraLX-0.7r1766.tar.bz2;
     sha256 = "1rcl7hqvcai586jky7hvzxhnq8q0ka2rsmgiq5ijwclgr5d4ah7n";
