@@ -1,6 +1,6 @@
 { sslSupport ? true
 , gpgSupport ? false
-, stdenv, fetchurl, pkgconfig, gtk, glib
+, stdenv, fetchurl, pkgconfig, gtk
 , openssl ? null
 , gpgme ? null
 }:
@@ -9,15 +9,15 @@ assert sslSupport -> openssl != null;
 assert gpgSupport -> gpgme != null;
 
 stdenv.mkDerivation {
-  name = "sylpheed-2.1.9";
+  name = "sylpheed-2.4.1";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/sylpheed-2.1.9.tar.bz2;
-    md5 = "fe05714e5037d56ccdcf4b36fe4e9346";
+    url = http://sylpheed.sraoss.jp/sylpheed/v2.4/sylpheed-2.4.1.tar.bz2;
+    sha256 = "1hmia3lnh7yr2ca8bgxzn311waxfs0rhk0psck3dcjfhzxzp72zj";
   };
 
   buildInputs = [
-    pkgconfig glib gtk
+    pkgconfig gtk
     (if sslSupport then openssl else null)
     (if gpgSupport then gpgme else null)
   ];
@@ -26,9 +26,4 @@ stdenv.mkDerivation {
     (if sslSupport then "--enable-ssl" else null)
   ];
 
-  # Bug in Sylpheed: it makes direct X11 calls (e.g., XSync), but it
-  # doesn't pass -lX11.  The linker finds the missing symbols
-  # indirectly (through GTK etc.), but doesn't include libX11.so in
-  # the RPATH.  Thus, the executable fails at runtime.
-  NIX_LDFLAGS = "-lX11";
 }

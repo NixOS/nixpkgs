@@ -2909,7 +2909,7 @@ rec {
 
   sylpheed = import ../applications/networking/mailreaders/sylpheed {
     inherit fetchurl stdenv pkgconfig openssl gpgme;
-    inherit (gtkLibs) glib gtk;
+    inherit (gtkLibs) gtk;
     sslSupport = true;
     gpgSupport = true;
   };
