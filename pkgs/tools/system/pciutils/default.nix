@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib}:
 
 stdenv.mkDerivation {
-  name = "pciutils-2.2.4";
+  name = "pciutils-2.2.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/pciutils-2.2.4.tar.gz;
-    sha256 = "17vaa1rij0q2xj8z8b8c6qq7a4g65gj419dsz067zlf6i3v0gz32";
+    url = ftp://ftp.kernel.org/pub/software/utils/pciutils/pciutils-2.2.5.tar.bz2;
+    sha256 = "1zlamdax1i8cf3kvzg7dh7nshvvzlhvkwlxdmym0hbnmbf0p100p";
   };
   buildInputs = [zlib];
 
