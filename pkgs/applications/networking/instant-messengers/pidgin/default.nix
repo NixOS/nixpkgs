@@ -10,7 +10,7 @@
  * - audiofile-config
  * - doxygen
  */
-{ stdenv, fetchurl, pkgconfig, glib, gtk, gtkspell, aspell,
+{ stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
   GStreamer, startupnotification, gettext,
   perl, perlXMLParser, libxml2, openssl, nss,
   libXScrnSaver
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   inherit nss;
   buildInputs = [
-    pkgconfig glib gtk gtkspell aspell
+    pkgconfig gtk gtkspell aspell
     GStreamer startupnotification gettext
     perl perlXMLParser libxml2 openssl nss
     libXScrnSaver

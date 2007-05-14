@@ -2681,14 +2681,9 @@ rec {
     gtksharp = gtksharp1;
   };
 
-  gaim = import ../applications/networking/instant-messengers/gaim {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss;
-    inherit (gtkLibs) glib gtk;
-  };
-
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext;
-    inherit (gtkLibs) glib gtk;
+    inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
     inherit (xlibs) libXScrnSaver;
   };
