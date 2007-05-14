@@ -2523,7 +2523,7 @@ rec {
 
   abiword = import ../applications/office/abiword {
     inherit fetchurl stdenv pkgconfig fribidi libpng popt;
-    inherit (gtkLibs) glib gtk pango;
+    inherit (gtkLibs) gtk;
     inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
@@ -2640,9 +2640,9 @@ rec {
     xftSupport = true;
   };
 
-  ethereal = import ../applications/networking/sniffers/ethereal {
+  wireshark = import ../applications/networking/sniffers/wireshark {
     inherit fetchurl stdenv perl pkgconfig libpcap;
-    inherit (gtkLibs) glib;
+    inherit (gtkLibs) gtk;
   };
 
   feh = import ../applications/graphics/feh {
@@ -2696,7 +2696,7 @@ rec {
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
-    inherit (gnome) gtk libgtkhtml glib pango atk libart_lgpl;
+    inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 
   git = import ../applications/version-management/git {

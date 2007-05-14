@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, glib, pango, atk, freetype
+{stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, freetype
 , fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl
 , perlXMLParser, python, pygtk, gettext}:
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1x4n9zddvw2krb2vs5rbar488b1vy7jq8jlb82nj92l6kz9sxk7x" ;
   };
   
-  buildInputs = [ pkgconfig gtk libgtkhtml glib pango atk freetype fontconfig
+  buildInputs = [ pkgconfig gtk libgtkhtml freetype fontconfig
                   libart_lgpl libtiff libjpeg libpng libexif zlib perl
                    perlXMLParser python pygtk gettext ] ;
 
