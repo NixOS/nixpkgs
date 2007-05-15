@@ -2451,7 +2451,7 @@ rec {
   };
 
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
-    inherit stdenv xlibs expat;
+    inherit stdenv xlibs expat libdrm;
   };
 
 
