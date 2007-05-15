@@ -16,8 +16,17 @@ find . -name "*.nix" | while read fn; do
 
 		if test -e "$newPath"; then
 		    hash=$(fgrep -A 1 "$oldURL" "$fn" | grep md5 | sed 's^.*md5 = \"\(.*\)\";.*^\1^')
+		    hashType=md5
+		    if test -z "$hash"; then
+			hash=$(fgrep -A 1 "$oldURL" "$fn" | grep sha256 | sed 's^.*sha256 = \"\(.*\)\";.*^\1^')
+			hashType="sha256 --base32"
+			if test -z "$hash"; then
+			    echo "WARNING: cannot figure out the hash for $oldURL"
+			    isSafe=
+			fi
+		    fi
 		    echo "HASH = $hash"
-		    if ! test "$(nix-hash --type md5 --flat "$newPath")" = "$hash"; then
+		    if ! test "$(nix-hash --type $hashType --flat "$newPath")" = "$hash"; then
 			echo "WARNING: $newPath exists and differs!"
 			isSafe=
 		    fi
