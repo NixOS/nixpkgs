@@ -8,6 +8,14 @@
 
 , # Whether to build a User-Mode Linux kernel.
   userModeLinux ? false
+
+, # Allows you to set your own kernel version suffix (e.g.,
+  # "-my-kernel").
+  localVersion ? ""
+
+, # Your own kernel configuration file, if you don't want to use the
+  # default. 
+  kernelConfig ? null  
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -33,6 +41,7 @@ stdenv.mkDerivation {
   extraConfig = lib.concatStrings (map (p: "\n" + p.extraConfig + "\n") kernelPatches);
 
   config =
+    if kernelConfig != null then kernelConfig else
     if userModeLinux then ./config-2.6.20-uml else
     if stdenv.system == "i686-linux" then ./config-2.6.20-i686-smp else
     if stdenv.system == "x86_64-linux" then ./config-2.6.20-x86_64-smp else
@@ -44,11 +53,14 @@ stdenv.mkDerivation {
     if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
-    abort "";
+    abort "Platform ${stdenv.system} is not supported.";
 
   makeFlags = if userModeLinux then "ARCH=um SHELL=bash" else "";
 
   inherit module_init_tools;
+
+  allowLocalVersion = false; # don't allow patches to set a suffix
+  inherit localVersion; # but do allow the user to set one.
 
   meta = {
     description =

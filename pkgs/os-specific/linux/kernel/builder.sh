@@ -6,6 +6,19 @@ configurePhase() {
     export INSTALL_PATH=$out
     export INSTALL_MOD_PATH=$out
 
+
+    # Get rid of any "localversion" files installed by patches.
+    if test -z "$allowLocalVersion"; then
+        rm -f localversion*
+    fi
+
+    # Set our own localversion, if specified.
+    if test -n "$localVersion"; then
+        echo "$localVersion" > localversion-nix
+    fi
+
+
+    # Create the config file.
     cp $config .config
     chmod u+w .config
 
