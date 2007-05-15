@@ -25,5 +25,12 @@ stdenv.mkDerivation {
     ensureDir $out/empty
   ";
 
+  postInstall = "
+    # Install ssh-copy-id, it's very useful.
+    cp contrib/ssh-copy-id $out/bin/
+    chmod +x $out/bin/ssh-copy-id
+    cp contrib/ssh-copy-id.1 $out/share/man/cat1/
+  ";
+
   installTargets = "install-nokeys";
 }
