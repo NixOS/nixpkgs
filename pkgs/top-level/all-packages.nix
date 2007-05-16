@@ -844,16 +844,16 @@ rec {
   };
 
   wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
-    nativeTools = false;
-    nativeLibc = false;
+    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
+    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     gcc = baseGCC;
     libc = glibc;
     inherit stdenv binutils;
   };
 
   wrapGCCNew = baseGCC: import ../build-support/gcc-wrapper-new {
-    nativeTools = false;
-    nativeLibc = false;
+    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
+    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     gcc = baseGCC;
     libc = glibc;
     inherit stdenv binutils;

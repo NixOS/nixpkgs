@@ -20,12 +20,14 @@ stdenv.mkDerivation {
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
+  
   inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
   name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langF77 = if nativeTools then false else gcc.langF77;
   shell = if shell == "" then stdenv.shell else shell;
+  
   meta = if gcc != null && (gcc ? meta) then gcc.meta else
     { description = "System C compiler wrapper";
     };
