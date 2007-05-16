@@ -1,5 +1,7 @@
 {stdenv, fetchurl, kernelHeaders, glibc}:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation {
   name = "iputils";
   builder = ./builder.sh;

@@ -1,5 +1,7 @@
 {stdenv, fetchurl}:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation {
   name = "libcap-1.10";
   src = fetchurl {
