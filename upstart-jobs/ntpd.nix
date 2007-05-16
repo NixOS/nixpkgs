@@ -37,7 +37,7 @@ start script
     chown ${ntpUser} ${stateDir}
 
     # Needed to run ntpd as an unprivileged user.
-    ${modprobe}/sbin/modprobe capability
+    ${modprobe}/sbin/modprobe capability || true
 
     ${ntp}/bin/ntpd -q -g ${ntpFlags}
     
