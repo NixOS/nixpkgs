@@ -11,5 +11,5 @@ stdenv.mkDerivation {
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
     (if compat185 then "--enable-compat185" else "--disable-compat185")
   ];
-  patches = [./cygwin-4.5.patch];
+  patches = [./cygwin-4.5.patch ./register-race-fix.patch];
 }
