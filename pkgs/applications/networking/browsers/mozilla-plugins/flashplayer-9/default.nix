@@ -1,5 +1,7 @@
 {stdenv, fetchurl, zlib, alsaLib}:
 
+assert stdenv.system == "i686-linux";
+
 (stdenv.mkDerivation {
   name = "flashplayer-9.0.31.0";
 

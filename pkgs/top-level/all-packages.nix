@@ -165,6 +165,8 @@ rec {
   lowPrio = drv: drv // {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
+
+  optional = cond: elem: if cond then [elem] else [];
   
 
   ### STANDARD ENVIRONMENT
@@ -2959,11 +2961,11 @@ rec {
     inherit stdenv firefox;
     plugins = [
       MPlayerPlugin
-      flashplayer
     ]
+    ++ optional (system == "i686-linux") flashplayer
     # RealPlayer is disabled by default for legal reasons.
-    ++ (if getConfig ["firefox" "enableRealPlayer"] false then [RealPlayer] else [])
-    ++ (if supportsJDK then [jrePlugin] else []);
+    ++ optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
+    ++ optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
   xara = import ../applications/graphics/xara {
