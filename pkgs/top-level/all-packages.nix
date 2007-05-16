@@ -342,7 +342,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  glxinfo = import ../tools/graphics/glxinfo {
+  glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
   };
 
@@ -745,14 +745,11 @@ rec {
     system == "powerpc-linux";
 
   jdkdistro = installjdk: pluginSupport:
-    if stdenv.isDarwin then 
-      "/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
-    else
-      assert supportsJDK;
-      (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
-        inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
-        libstdcpp5 = gcc33.gcc;
-      });
+    assert supportsJDK;
+    (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
+      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
+      libstdcpp5 = gcc33.gcc;
+    });
 
   jikes = import ../development/compilers/jikes {
     inherit fetchurl stdenv;
@@ -1294,7 +1291,7 @@ rec {
     inherit fetchurl stdenv openal;
   };
 
-  freeglut = import ../development/libraries/freeglut {
+  freeglut = assert mesaSupported; import ../development/libraries/freeglut {
     inherit fetchurl stdenv x11 mesa;
   };
 
@@ -1442,7 +1439,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  libcm = import ../development/libraries/libcm {
+  libcm = assert mesaSupported; import ../development/libraries/libcm {
     inherit fetchurl stdenv pkgconfig xlibs mesa;
     inherit (gtkLibs) glib;
   };
@@ -1576,7 +1573,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  mesa = import ../development/libraries/mesa {
+  mesaSupported =
+    system == "i686-linux" ||
+    system == "x86_64-linux";
+  
+  mesa = assert mesaSupported; import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig x11 libdrm;
     inherit (xlibs) libXmu libXi makedepend glproto libXxf86vm;
   };
@@ -1646,7 +1647,7 @@ rec {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto libXcursor;
-    openglSupport = true;
+    openglSupport = mesaSupported;
     mysqlSupport = false;
   };
 
@@ -1667,7 +1668,7 @@ rec {
   SDL = import ../development/libraries/SDL {
     inherit fetchurl stdenv x11 mesa alsaLib;
     inherit (xlibs) libXrandr;
-    openglSupport = true;
+    openglSupport = mesaSupported;
     alsaSupport = true;
   };
 
@@ -2580,7 +2581,7 @@ rec {
         };
     };
 
-  compiz = import ../applications/window-managers/compiz {
+  compiz = assert mesaSupported; import ../applications/window-managers/compiz {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
@@ -2704,7 +2705,7 @@ rec {
     inherit fetchurl stdenv curl openssl zlib expat perl;
   };
 
-  gnash = import ../applications/video/gnash {
+  gnash = assert mesaSupported; import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer GStreamer
             libogg libxml2 libjpeg mesa libpng;
     inherit (xlibs) libX11 libXext libXi libXmu;
