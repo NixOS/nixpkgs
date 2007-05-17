@@ -55,20 +55,44 @@ diff -ruN gcc-4.1.0/gcc/Makefile.in gcc-4.1.0.new/gcc/Makefile.in
    -DCROSS_INCLUDE_DIR=\"$(CROSS_SYSTEM_HEADER_DIR)\" \
    -DTOOL_INCLUDE_DIR=\"$(gcc_tooldir)/include\" \
    @TARGET_SYSTEM_ROOT_DEFINE@
-diff -ruN gcc-4.1.0/libstdc++-v3/include/Makefile.in gcc-4.1.0.new/libstdc++-v3/include/Makefile.in
---- gcc-4.1.0/libstdc++-v3/include/Makefile.in	2006-01-10 18:14:00.000000000 +0100
-+++ gcc-4.1.0.new/libstdc++-v3/include/Makefile.in	2006-03-01 18:57:32.000000000 +0100
-@@ -1257,8 +1257,8 @@
- 	if [ ! -d "${pch_output_builddir}" ]; then \
- 	  mkdir -p ${pch_output_builddir}; \
+diff -ruN gcc-4.2.0/libstdc++-v3/include/Makefile.in gcc-4.2.0.new/libstdc++-v3/include/Makefile.in
+--- gcc-4.2.0/libstdc++-v3/include/Makefile.in	2007-04-13 01:06:37.000000000 +0200
++++ gcc-4.2.0.new/libstdc++-v3/include/Makefile.in	2007-05-18 01:10:04.000000000 +0200
+@@ -1433,14 +1433,14 @@
+ 	if [ ! -d "${pch1_output_builddir}" ]; then \
+ 	  mkdir -p ${pch1_output_builddir}; \
  	fi; \
--	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g.gch; \
--	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g.gch;
-+	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g.gch; \
-+	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g.gch;
+-	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) -O0 -g ${pch1_source} -o $@
++	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) -O0 -g ${pch1_source} -o $@
+ 	touch ${pch1_output_anchor}
+ 
+ ${pch1b_output}: ${allstamped} ${host_builddir}/c++config.h ${pch1_source}
+ 	if [ ! -d "${pch1_output_builddir}" ]; then \
+ 	  mkdir -p ${pch1_output_builddir}; \
+ 	fi; \
+-	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch1_source} -o $@
++	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch1_source} -o $@
+ 	touch ${pch1_output_anchor}
+ 
+ # Build a precompiled TR1 include, stdtr1c++.h.gch/O2.gch
+@@ -1448,7 +1448,7 @@
+ 	if [ ! -d "${pch2_output_builddir}" ]; then \
+ 	  mkdir -p ${pch2_output_builddir}; \
+ 	fi; \
+-	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch2_source} -o $@
++	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch2_source} -o $@
+ 	touch ${pch2_output_anchor}
+ 
+ # Build a precompiled extension include, extc++.h.gch/O2.gch
+@@ -1456,7 +1456,7 @@
+ 	if [ ! -d "${pch3_output_builddir}" ]; then \
+ 	  mkdir -p ${pch3_output_builddir}; \
+ 	fi; \
+-	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch3_source} -o $@
++	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) -O2 -g ${pch3_source} -o $@
+ 	touch ${pch3_output_anchor}
  
  # For robustness sake (in light of junk files or in-source
- # configuration), copy from the build or source tree to the install
 diff -ruN gcc-4.1.0/ltcf-cxx.sh gcc-4.1.0.new/ltcf-cxx.sh
 --- gcc-4.1.0/ltcf-cxx.sh	2005-07-16 04:30:53.000000000 +0200
 +++ gcc-4.1.0.new/ltcf-cxx.sh	2006-03-01 18:58:15.000000000 +0100
