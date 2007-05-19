@@ -676,6 +676,11 @@ rec {
     profiledCompiler = false;
   })));
 
+  gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
+    inherit fetchurl stdenv noSysDirs;
+    profiledCompiler = false;
+  });
+
   # !!! GCC with the new wrapper.  Should be removed eventually (and
   # then the lowPrio on gcc41 should go, of course).
   gccNew = wrapGCCNew (gcc.gcc);
