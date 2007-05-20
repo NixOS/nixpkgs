@@ -35,8 +35,6 @@ stdenv.mkDerivation {
   configureFlags = "
     --disable-multilib
     --disable-libstdcxx-pch
-    --disable-libmudflap
-    --disable-libssp
     --with-system-zlib
     --enable-languages=${
       concatStrings (intersperse ","
