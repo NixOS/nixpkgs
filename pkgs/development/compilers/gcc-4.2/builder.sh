@@ -35,29 +35,24 @@ if test "$noSysDirs" = "1"; then
     for i in $extraLDFlags; do
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done        
-    export CFLAGS=$extraCFlags
-    export CXXFLAGS=$extraCFlags
+
+    makeFlagsArray=( \
+        NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+        SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+        LIMITS_H_TEST=true \
+        X_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        LDFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        )
 fi
 
 
 preConfigure=preConfigure
 preConfigure() {
-    
-    # Determine the frontends to build.
-    langs="c"
-    if test -n "$langCC"; then
-        langs="$langs,c++"
-    fi
-    if test -n "$langF77"; then
-        langs="$langs,f77"
-    fi
-
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
-
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs $configureFlags"
 }
 
 

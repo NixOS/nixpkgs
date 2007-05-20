@@ -6,6 +6,8 @@
 
 assert langC;
 
+with import ../../../lib;
+
 stdenv.mkDerivation {
   name = "gcc-4.2.0";
   builder = ./builder.sh;
@@ -26,22 +28,34 @@ stdenv.mkDerivation {
     
   patches =
     [./pass-cxxcpp.patch]
-    ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
+    ++ optional noSysDirs [./no-sys-dirs.patch];
     
-  inherit noSysDirs langC langCC langF77 profiledCompiler staticCompiler;
+  inherit noSysDirs profiledCompiler staticCompiler;
 
   configureFlags = "
     --disable-multilib
     --disable-libstdcxx-pch
     --disable-libmudflap
     --disable-libssp
+    --with-system-zlib
+    --enable-languages=${
+      concatStrings (intersperse ","
+        (  optional langC   "c"
+        ++ optional langCC  "c++"
+        ++ optional langF77 "f77"
+        )
+      )
+    }
+    ${if stdenv.isi686 then "--with-arch=i686" else ""}
   ";
 
   makeFlags = if staticCompiler then "LDFLAGS=-static" else "";
 
+  passthru = { inherit langC langCC langF77; };
+
   meta = {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
-    description = "GNU Compiler Collection, 4.1.x";
+    description = "GNU Compiler Collection, 4.2.x";
   };
 }
