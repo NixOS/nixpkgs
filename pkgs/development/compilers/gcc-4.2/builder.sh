@@ -31,10 +31,13 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
+    extraCFlags="-g0 $extraCFlags"
+    extraLDFlags="--strip-debug $extraLDFlags"
+
     export NIX_EXTRA_CFLAGS=$extraCFlags
     for i in $extraLDFlags; do
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
-    done        
+    done
 
     makeFlagsArray=( \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
@@ -65,6 +68,9 @@ postInstall() {
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
+
+    # Get rid of some "fixed" header files
+    rm -rf $out/lib/gcc/*/*/include/root
 }
 
 
