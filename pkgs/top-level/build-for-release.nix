@@ -54,6 +54,7 @@ let {
     gawk
     gcc
     gcc34
+    gcc42
     gdb
     ghc
     ghostscript
