@@ -52,11 +52,14 @@ let {
           //
           (if attrs ? passthru then attrs.passthru else {});
 
-        # Utility value: is this a Darwin system?
+        # Utility flags to test the type of platform.
         isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux";
+        isi686 = result.system == "i686-linux"
+               || result.system == "i686-darwin"
+               || result.system == "i686-freebsd";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an
