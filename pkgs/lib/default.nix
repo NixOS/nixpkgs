@@ -107,5 +107,11 @@ rec {
     );
     in src: builtins.filterSource filter src;
 
-          
+
+  # Return a singleton list or an empty list, depending on a boolean
+  # value.  Useful when building lists with optional elements
+  # (e.g. `++ optional (system == "i686-linux") flashplayer').
+  optional = cond: elem: if cond then [elem] else [];
+
+    
 }

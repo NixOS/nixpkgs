@@ -166,8 +166,6 @@ rec {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
-  optional = cond: elem: if cond then [elem] else [];
-  
 
   ### STANDARD ENVIRONMENT
 
@@ -2968,10 +2966,10 @@ rec {
     plugins = [
       MPlayerPlugin
     ]
-    ++ optional (system == "i686-linux") flashplayer
+    ++ lib.optional (system == "i686-linux") flashplayer
     # RealPlayer is disabled by default for legal reasons.
-    ++ optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
-    ++ optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
+    ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
+    ++ lib.optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
   xara = import ../applications/graphics/xara {
