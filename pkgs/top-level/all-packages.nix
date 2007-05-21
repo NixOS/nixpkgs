@@ -676,7 +676,7 @@ rec {
 
   gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = false;
+    profiledCompiler = true;
   });
 
   # !!! GCC with the new wrapper.  Should be removed eventually (and
