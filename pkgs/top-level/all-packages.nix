@@ -2418,6 +2418,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sysvtools = import ../os-specific/linux/sysvinit {
+    inherit fetchurl stdenv;
+    withoutInitTools = true;
+  };
+
   udev = import ../os-specific/linux/udev {
     inherit fetchurl stdenv;
   };
