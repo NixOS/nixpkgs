@@ -20,16 +20,3 @@ diff -ruN sysvinit-2.85/src/halt.c sysvinit-2.85.new/src/halt.c
 +	execv(EXEC_PATH, args);
  	execv("/etc/shutdown", args);
  	execv("/bin/shutdown", args);
- 
-diff -ruN sysvinit-2.85/src/Makefile sysvinit-2.85.new/src/Makefile
---- sysvinit-2.85/src/Makefile	2001-11-06 12:58:16.000000000 +0100
-+++ sysvinit-2.85.new/src/Makefile	2005-10-18 23:37:46.000000000 +0200
-@@ -9,7 +9,7 @@
- #
- 
- CC	= cc
--CFLAGS	= -Wall -O2 -D_GNU_SOURCE
-+CFLAGS	= -Wall -save-temps -O2 -D_GNU_SOURCE -DEXEC_PATH=\"${out}/sbin/shutdown\"
- LDFLAGS	= -s
- STATIC	=
- 
