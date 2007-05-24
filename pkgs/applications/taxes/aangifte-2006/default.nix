@@ -1,4 +1,4 @@
-{stdenv, fetchurl, patchelf, libX11, libXext}:
+{stdenv, fetchurl, libX11, libXext}:
 
 stdenv.mkDerivation {
   name = "aangifte2006-1";
@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     sha256 = "1hgm3vmcr32v34h4y8yz3vxcxbcsxqb12qy1dqqwgbg1bja7nvrc";
   };
 
-  buildInputs = [patchelf];
   inherit libX11 libXext;
 
   meta = {

@@ -1079,14 +1079,9 @@ rec {
   };
 
   patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
-    (if stdenv.system == "x86_64-linux" then patchelfNew else
-      (import ../development/tools/misc/patchelf {
+    (import ../development/tools/misc/patchelf {
         inherit fetchurl stdenv;
-      }));
-
-  patchelfNew = import ../development/tools/misc/patchelf/new.nix {
-    inherit fetchurl stdenv;
-  };
+    });
 
   /**
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
@@ -2511,13 +2506,11 @@ rec {
   aangifte2005 = import ../applications/taxes/aangifte-2005 {
     inherit stdenv fetchurl;
     inherit (xlibs) libX11 libXext;
-    patchelf = patchelfNew;
   };
 
   aangifte2006 = import ../applications/taxes/aangifte-2006 {
     inherit stdenv fetchurl;
     inherit (xlibs) libX11 libXext;
-    patchelf = patchelfNew;
   };
 
   abiword = import ../applications/office/abiword {
