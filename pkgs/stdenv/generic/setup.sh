@@ -40,10 +40,12 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
 fi
 
     
-# Ensure that the given directory exists.
+# Ensure that the given directories exists.
 ensureDir() {
-    local dir=$1
-    if ! test -x "$dir"; then mkdir -p "$dir"; fi
+    local dir
+    for dir in "$@"; do
+        if ! test -x "$dir"; then mkdir -p "$dir"; fi
+    done
 }
 
 
@@ -394,7 +396,7 @@ unpackFile() {
                     echo "source archive $file has unknown type"
                     exit 1
                 fi
-                $unpackCmd || fail
+                eval "$unpackCmd" || fail
             fi
             ;;
     esac
