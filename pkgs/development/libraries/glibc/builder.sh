@@ -56,6 +56,12 @@ postInstall() {
     # appears to be a regression:
     # http://www.mail-archive.com/debian-glibc@lists.debian.org/msg31543.html
     cp ../$sourceRoot/linuxthreads/semaphore.h $out/include
+
+    # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink
+    # "lib64" to "lib".
+    if test -n "$is64bit"; then
+        ln -s lib $out/lib64
+    fi
 }
 
 

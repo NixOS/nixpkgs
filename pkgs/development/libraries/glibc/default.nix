@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   inherit kernelHeaders installLocales;
 
+  inherit (stdenv) is64bit;
+
   # `--with-tls --without-__thread' enables support for TLS but causes
   # it not to be used.  Required if we don't want to barf on 2.4
   # kernels.  Or something.
