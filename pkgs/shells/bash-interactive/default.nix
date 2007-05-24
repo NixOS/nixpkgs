@@ -3,25 +3,22 @@
 assert interactive -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "bash-3.2";
+  name = "bash-3.2-p17";
 
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/bash/bash-3.2.tar.gz;
-    md5 = "00bfa16d58e034e3c2aa27f390390d30";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/bash-3.2-p17.tar.bz2;
+    sha256 = "153gg2z2s3ar7vni3345nnmdisha4b8cxzsj79d8ap6m6i4c35f5";
   };
 
   postInstall = "ln -s bash $out/bin/sh";
 
   patches = [
-    # Fix a nasty bug in bash-3.2.
-    ./bash32-001.patch
-  
     # For dietlibc builds.
     ./winsize.patch
   ];
 
   # !!! only needed for bash-3.2 (because of bash32-001.patch)
-  buildInputs = [bison] ++ (if interactive then [ncurses] else []);
+  buildInputs = [bison] ++ stdenv.lib.optional interactive ncurses;
 
   meta = {
     description =
