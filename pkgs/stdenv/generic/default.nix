@@ -60,11 +60,16 @@ let {
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd";
+        is64bit = result.system == "x86_64-linux";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an
         # example.)
         regenerate = stdenvGenerator;
+
+        # For convenience, bring in the library functions in lib/ so
+        # packages don't have to do that themselves.
+        lib = import ../../lib;
 
       }
 
