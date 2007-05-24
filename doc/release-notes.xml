@@ -126,7 +126,7 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
       
     </itemizedlist>
 
-    </para>
+  </para></listitem>
 
 </itemizedlist>
 
