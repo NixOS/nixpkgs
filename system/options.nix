@@ -258,6 +258,19 @@
 
   
   {
+    name = ["networking" "localCommands"];
+    default = "";
+    example = "text=anything; echo You can put $text here.";
+    description = "
+      Shell commands to be executed at the end of the
+      <literal>network-interfaces</literal> Upstart job.  Note that if
+      you are using DHCP to obtain the network configuration,
+      interfaces may not be fully configured yet.
+    ";
+  }
+
+
+  {
     name = ["fileSystems"];
     default = [];
     example = [

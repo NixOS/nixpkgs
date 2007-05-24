@@ -23,5 +23,5 @@ substituteAll {
     udev
     upstart
   ];
-  bootLocal = writeText "boot.local" bootLocal;
+  bootLocal = writeText "local-cmds" bootLocal;
 }

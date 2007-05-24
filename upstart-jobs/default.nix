@@ -67,10 +67,11 @@ import ../upstart-jobs/gather.nix {
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
       inherit modprobe;
-      inherit (pkgs) nettools wirelesstools;
+      inherit (pkgs) nettools wirelesstools bash writeText;
       nameservers = config.get ["networking" "nameservers"];
       defaultGateway = config.get ["networking" "defaultGateway"];
       interfaces = config.get ["networking" "interfaces"];
+      localCommands = config.get ["networking" "localCommands"];
     })
       
     # Nix daemon - required for multi-user Nix.

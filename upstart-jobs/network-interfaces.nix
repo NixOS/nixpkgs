@@ -1,5 +1,6 @@
-{ nettools, modprobe, wirelesstools
+{ nettools, modprobe, wirelesstools, bash, writeText
 , nameservers, defaultGateway, interfaces
+, localCommands
 }:
 
 let
@@ -21,7 +22,8 @@ start on hardware-scan
 stop on shutdown
 
 start script
-    ${modprobe}/sbin/modprobe af_packet || true
+    export PATH=${modprobe}/sbin:$PATH
+    modprobe af_packet || true
 
     for i in $(cd /sys/class/net && ls -d *); do
         echo \"Bringing up network device $i...\"
@@ -43,7 +45,7 @@ start script
         wepKey=\${wepKeys[$n]}
 
         # Set wireless networking stuff.
-        if test \"$essid\" != dhcp; then
+        if test \"$essid\" != default; then
             ${wirelesstools}/sbin/iwconfig \"$name\" essid \"$essid\" || true
         fi
         
@@ -75,6 +77,9 @@ start script
     if test -n \"${defaultGateway}\"; then
         ${nettools}/sbin/route add default gw \"${defaultGateway}\" || true
     fi
+
+    # Run any user-specified commands.
+    ${bash}/bin/sh ${writeText "local-net-cmds" localCommands} || true
 
 end script
 
