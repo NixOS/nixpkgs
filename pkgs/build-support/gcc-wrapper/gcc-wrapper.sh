@@ -14,24 +14,34 @@ source @out@/nix-support/utils.sh
 # Figure out if linker flags should be passed.  GCC prints annoying
 # warnings when they are not needed.
 dontLink=0
-if test "$*" = "-v" -o -z "$*"; then
+getVersion=0
+nonFlagArgs=0
+
+for i in "$@"; do
+    if test "$i" = "-c"; then
+        dontLink=1
+    elif test "$i" = "-S"; then
+        dontLink=1
+    elif test "$i" = "-E"; then
+        dontLink=1
+    elif test "$i" = "-E"; then
+        dontLink=1
+    elif test "$i" = "-M"; then
+        dontLink=1
+    elif test "$i" = "-MM"; then
+        dontLink=1
+    elif test "${i:0:1}" != "-"; then
+        nonFlagArgs=1
+    fi
+done
+
+# If we pass a flag like -Wl, then gcc will call the linker unless it
+# can figure out that it has to do something else (e.g., because of a
+# "-c" flag).  So if no non-flag arguments are given, don't pass any
+# linker flags.  This catches cases like "gcc" (should just print
+# "gcc: no input files") and "gcc -v" (should print the version).
+if test "$nonFlagArgs" = "0"; then
     dontLink=1
-else
-    for i in "$@"; do
-        if test "$i" = "-c"; then
-            dontLink=1
-        elif test "$i" = "-S"; then
-            dontLink=1
-        elif test "$i" = "-E"; then
-            dontLink=1
-        elif test "$i" = "-E"; then
-            dontLink=1
-        elif test "$i" = "-M"; then
-            dontLink=1
-        elif test "$i" = "-MM"; then
-            dontLink=1
-        fi
-    done
 fi
 
 

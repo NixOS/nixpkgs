@@ -666,19 +666,15 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc41 = lowPrio (useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
+  gcc41 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
-  })));
+  }));
 
   gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
   });
-
-  # !!! GCC with the new wrapper.  Should be removed eventually (and
-  # then the lowPrio on gcc41 should go, of course).
-  gccNew = wrapGCCNew (gcc.gcc);
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
@@ -844,14 +840,6 @@ rec {
   };
 
   wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    gcc = baseGCC;
-    libc = glibc;
-    inherit stdenv binutils;
-  };
-
-  wrapGCCNew = baseGCC: import ../build-support/gcc-wrapper-new {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     gcc = baseGCC;
@@ -2268,8 +2256,7 @@ rec {
   kernel = kernel_2_6_20;
 
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideGCC stdenv gccNew;
+    inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "skas-2.6.20-v9-pre9";
         patch = fetchurl {
