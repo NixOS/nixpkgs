@@ -2239,10 +2239,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_20 = import ../os-specific/linux/kernel-headers/2.6.20.nix {
-    inherit fetchurl stdenv;
-  };
-
   kernelscripts = import ../os-specific/linux/kernelscripts {
     inherit stdenv module_init_tools kernel;
     modules = [];
@@ -2289,7 +2285,7 @@ rec {
   kvm12 = import ../os-specific/linux/kvm/12.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
     stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = kernelHeaders_2_6_20;
+    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
   libcap = import ../os-specific/linux/libcap {
