@@ -7,4 +7,7 @@ stdenv.mkDerivation {
     md5 = "debc62758716a169df9f62e6ab2bc634";
   };
   configureFlags = if static then "" else "--shared";
+
+  # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
+  cygwinConfigureEnableShared = true;
 }
