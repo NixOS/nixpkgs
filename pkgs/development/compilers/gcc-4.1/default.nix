@@ -6,38 +6,49 @@
 
 assert langC;
 
+with import ../../../lib;
+
 stdenv.mkDerivation {
-  name = "gcc-4.1.1";
+  name = "gcc-4.1.2";
   builder = ./builder.sh;
   
   src =
     [(fetchurl {
-      url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.1.1/gcc-core-4.1.1.tar.bz2;
-      md5 = "a1b189c98aa7d7f164036bbe89b9b2a2";
+      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-core-4.1.2.tar.bz2;
+      sha256 = "07binc1hqlr0g387zrg5sp57i12yzd5ja2lgjb83bbh0h3gwbsbv";
     })] ++
     (if /*langCC*/ true then [(fetchurl {
-      url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.1.1/gcc-g++-4.1.1.tar.bz2;
-      md5 = "70c786bf8ca042e880a87fecb9e4dfcd";
+      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-g++-4.1.2.tar.bz2;
+      sha256 = "1qm2izcxna10jai0v4s41myki0xkw9174qpl6k1rnrqhbx0sl1hc";
     })] else []) ++
     (if langF77 then [(fetchurl {
-      url = http://ftp.gnu.org/pub/gnu/gcc/gcc-4.1.1/gcc-fortran-4.1.1.tar.bz2;
-      md5 = "b088a28a1963d16bf505262f8bfd09db";
+      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-fortran-4.1.2.tar.bz2;
+      sha256 = "0772dhmm4gc10420h0d0mfkk2sirvjmjxz8j0ywm8wp5qf8vdi9z";
     })] else []);
     
   patches =
-    [./pass-cxxcpp.patch]
-    ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
+    optional noSysDirs [./no-sys-dirs.patch];
     
-  inherit noSysDirs langC langCC langF77 profiledCompiler staticCompiler;
+  inherit noSysDirs profiledCompiler staticCompiler;
 
   configureFlags = "
     --disable-multilib
     --disable-libstdcxx-pch
-    --disable-libmudflap
-    --disable-libssp
+    --with-system-zlib
+    --enable-languages=${
+      concatStrings (intersperse ","
+        (  optional langC   "c"
+        ++ optional langCC  "c++"
+        ++ optional langF77 "f77"
+        )
+      )
+    }
+    ${if stdenv.isi686 then "--with-arch=i686" else ""}
   ";
 
   makeFlags = if staticCompiler then "LDFLAGS=-static" else "";
+
+  passthru = { inherit langC langCC langF77; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";
