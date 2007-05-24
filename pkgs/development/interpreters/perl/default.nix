@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "perl-5.8.6";
+  name = "perl-5.8.8";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/perl-5.8.6.tar.bz2;
-    md5 = "3d030b6ff2a433840edb1a407d18dc0a";
+    url = http://ftp.funet.fi/pub/CPAN/src/perl-5.8.8.tar.bz2;
+    sha256 = "1j8vzc6lva49mwdxkzhvm78dkxyprqs4n4057amqvsh4kh6i92l1";
   };
 
   # This patch does the following:

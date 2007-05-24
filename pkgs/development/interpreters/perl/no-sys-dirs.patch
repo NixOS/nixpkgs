@@ -162,23 +162,3 @@ diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.6/ext/Errno/Errno_pm.PL
   	     ) {
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
-diff -rc perl-orig/lib/Cwd.pm perl-5.8.6/lib/Cwd.pm
-*** perl-orig/lib/Cwd.pm	2004-11-01 16:42:41.000000000 +0100
---- perl-5.8.6/lib/Cwd.pm	2005-03-10 12:52:31.000000000 +0100
-***************
-*** 292,298 ****
-  
-  # The 'natural and safe form' for UNIX (pwd may be setuid root)
-  sub _backtick_pwd {
-!     local @ENV{qw(PATH IFS CDPATH ENV BASH_ENV)};
-      my $cwd = `$pwd_cmd`;
-      # Belt-and-suspenders in case someone said "undef $/".
-      local $/ = "\n";
---- 292,298 ----
-  
-  # The 'natural and safe form' for UNIX (pwd may be setuid root)
-  sub _backtick_pwd {
-!     local @ENV{qw(IFS CDPATH ENV BASH_ENV)};
-      my $cwd = `$pwd_cmd`;
-      # Belt-and-suspenders in case someone said "undef $/".
-      local $/ = "\n";
