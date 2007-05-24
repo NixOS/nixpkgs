@@ -1,10 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gzip-1.3.9";
+  name = "gzip-1.3.12";
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/gzip/gzip-1.3.9.tar.gz;
-    md5 = "7cf923b24b718c418e85a283b2260e14";
+    url = http://ftp.gnu.org/gnu/gzip/gzip-1.3.12.tar.gz;
+    sha256 = "1bw7sm68xjlnlzgcx66hnw80ac1qqyvhw0vw27zilgbzbzh5nmiz";
   };
-  postInstall = "ln -sf gzip $out/bin/gunzip; ln -sf gzip $out/bin/zcat";
 }
