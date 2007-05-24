@@ -596,7 +596,7 @@ rec {
       bison = bison23;
     }));
 
-  bashInteractive = appendToName "interactive" (import ../shells/bash-interactive {
+  bashInteractive = appendToName "interactive" (import ../shells/bash {
     inherit fetchurl stdenv ncurses;
     bison = bison23;
     interactive = true;
