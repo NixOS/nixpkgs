@@ -102,11 +102,32 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
 
       <listitem><para>Glibc 2.5.</para></listitem>
       
+      <listitem><para>GCC 4.1.2.</para></listitem>
+      
+      <listitem><para>Gnome 2.16.3.</para></listitem>
+      
+      <listitem><para>X11R7.2.</para></listitem>
+      
+      <listitem><para>Linux 2.6.20.11.</para></listitem>
+      
     </itemizedlist>.
 
   </para></listitem>
 
   
+  <listitem><para>Major new packages:
+
+    <itemizedlist>
+
+      <listitem><para>KDE 3.5.6 Base.</para></listitem>
+      
+      <listitem><para>Many Linux system packages to support
+      NixOS.</para></listitem>
+      
+    </itemizedlist>
+
+    </para>
+
 </itemizedlist>
 
 </para>
