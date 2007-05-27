@@ -12,8 +12,13 @@ stdenv.mkDerivation {
 
   # This is needed for the additional pak?.pk3 files.
   update = fetchurl {
-    url = http://www.dev1ance.net/files/quake3/point_release/linux/linuxq3apoint-1.31.x86.run;
-    sha256 = "1n6mk2x99vl40br1zvwvdl8fs8ldsbi7byf7wj385g1xywzvqqr8";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/linuxq3apoint-1.31.x86.run;
+    md5 = "2620b9eefb6d0775f766b6570870157a";
   };
-  
+
+  # Don't rebuild if the inputs change, since the output is guaranteed
+  # to be this value.
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "00453c43a4jnlbm9w9ws1hdi28hkl63xnxbnbqml25h35ckhzs90";
 }
