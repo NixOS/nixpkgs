@@ -8,6 +8,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [ghc zlib ncurses curl];
 
+  NIX_LDFLAGS = "-lz";
+
   meta = {
     description = "Patch-based version management system";
   };
