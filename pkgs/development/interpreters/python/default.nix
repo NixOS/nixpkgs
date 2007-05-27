@@ -7,7 +7,7 @@ with stdenv.lib;
 let
 
   buildInputs =
-    optional (stdenv ? gcc && stdenv.gcc ? libc) stdenv.gcc.libc ++
+    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [bzip2] ++ 
     optional zlibSupport zlib;
 
