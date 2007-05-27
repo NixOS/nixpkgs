@@ -2035,10 +2035,10 @@ rec {
   };
 
   perlXMLWriter = import ../development/perl-modules/generic perl {
-    name = "XML-Writer-0.520";
+    name = "XML-Writer-0.602";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-Writer-0.520.tar.gz;
-      md5 = "0a194acc70c906c0be32f4b2b7a9f689";
+      url = http://search.cpan.org/CPAN/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
+      sha256 = "0kdi022jcn9mwqsxy2fiwl2cjlid4x13r038jvi426fhjknl11nl";
     };
   };
 
