@@ -885,7 +885,7 @@ rec {
   };
 
   python = import ../development/interpreters/python {
-    inherit fetchurl stdenv zlib;
+    inherit fetchurl stdenv zlib bzip2;
   };
 
   realPerl = import ../development/interpreters/perl {

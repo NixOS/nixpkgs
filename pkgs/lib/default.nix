@@ -38,6 +38,10 @@ rec {
          ++ (intersperse separator (tail list));
 
 
+  concatStringsSep = separator: list:
+    concatStrings (intersperse separator list);
+
+
   # Flatten the argument into a single list; that is, nested lists are
   # spliced into the top-level lists.  E.g., `flatten [1 [2 [3] 4] 5]
   # == [1 2 3 4 5]' and `flatten 1 == [1]'.
