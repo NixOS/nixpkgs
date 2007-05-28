@@ -135,6 +135,12 @@ import ../upstart-jobs/gather.nix {
       allowSFTP = config.get ["services" "sshd" "allowSFTP"];
     })
 
+  # Samba service.
+  ++ optional ["services" "samba" "enable"]
+    (import ../upstart-jobs/samba.nix {
+      inherit (pkgs) samba glibc pwdutils;
+    })
+
   # NTP daemon.
   ++ optional ["services" "ntp" "enable"]
     (import ../upstart-jobs/ntpd.nix {

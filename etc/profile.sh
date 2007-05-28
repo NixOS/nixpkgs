@@ -11,7 +11,8 @@ export EDITOR=nano
 
 # A nice prompt.
 PROMPT_COLOR="1;31m"
-PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
+#PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
+PS1='\u@\h:\w\$ '
 if test "x$TERM" == "xxterm"; then
     PS1="\033]2;\h:\u:\w\007$PS1"
 fi
@@ -69,3 +70,11 @@ alias which="type -p"
 if test -f /etc/profile.local; then
     source /etc/profile.local
 fi
+
+#wouter settings
+PATH=$PATH:/home/share/bin
+export PATH
+alias l='ls -alh --color=auto'
+source /home/share/bin/.bash_profile
+
+

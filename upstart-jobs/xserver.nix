@@ -23,6 +23,13 @@ let
 
   optional = condition: x: if condition then [x] else [];
 
+  #TODO, make these parameters
+  nvidiaDrivers = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).nvidiaDrivers;
+  #berylcore = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylCore;
+  #berylmanager = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylManager;
+  #berylemerald = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylEmerald;
+  libX11 = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).xlibs.libX11;
+  libXext = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).xlibs.libXext;
 
   # Get a bunch of user settings.
   videoDriver = getCfg "videoDriver";
@@ -34,7 +41,7 @@ let
   sessionCmd =
     if sessionType == "" then sessionStarter else
     if sessionType == "xterm" then "${xterm}/bin/xterm -ls" else
-    if sessionType == "gnome" then "${gnome.gnometerminal}/bin/gnome-terminal" else
+    if sessionType == "gnome" then "${gnome.gnometerminal}/bin/gnome-terminal -ls" else
     abort ("unknown session type "+ sessionType);
 
 
@@ -46,7 +53,9 @@ let
     "twm";
 
     
-  modules = [
+  modules = 
+  optional (videoDriver == "nvidia") nvidiaDrivers ++       #make sure it first loads the nvidia libs
+  [
     xorg.xorgserver
     xorg.xf86inputkeyboard
     xorg.xf86inputmouse
@@ -54,7 +63,6 @@ let
   ++ optional (videoDriver == "vesa") xorg.xf86videovesa
   ++ optional (videoDriver == "i810") xorg.xf86videoi810
   ++ optional (videoDriver == "intel") xorg.xf86videointel;
-
 
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
@@ -78,6 +86,22 @@ let
           modulePaths=\"\${modulePaths}ModulePath \\\"$i\\\"\\n\"
         fi
       done
+
+      #if only my gf were this dirty
+      if test \"${toString videoDriver}\" == \"nvidia\"; then
+        export moduleSection=\"Load  \\\"glx\\\" \\n \\
+ SubSection \\\"extmod\\\" \\n \\
+ Option \\\"omit xfree86-dga\\\" \\n \\
+ EndSubSection \\n \"
+
+        export screen=\"Option  \\\"AddARGBGLXVisuals\\\" \\\"true\\\" \\n \\
+ Option  \\\"DisableGLXRootClipping\\\" \\\"true\\\" \\n \"
+        export device=\"Option       \\\"RenderAccel\\\" \\\"true\\\" \\n \\
+ Option       \\\"AllowGLXWithComposite\\\" \\\"true\\\" \\n \\
+ Option       \\\"AddARGBGLXVisuals\\\"     \\\"true\\\" \\n \"
+        export extensions=\"Option       \\\"Composite\\\" \\\"Enable\\\" \\n \"
+
+      fi
 
       substituteAll $src $out
     ";
@@ -111,6 +135,7 @@ let
     "
 
     else if windowManager == "metacity" then "
+      env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/
       # !!! Hack: load the schemas for Metacity.
       GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \\
         --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas
@@ -133,9 +158,13 @@ let
         [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
 
       # Start Compiz and the GTK-style window decorator.
+      env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/
       ${compiz}/bin/compiz gconf &
-      ${compiz}/bin/gtk-window-decorator &
+      ${compiz}/bin/gtk-window-decorator --sync &
     "
+    #else if windowManager == "beryl" then "
+    #  ${berylmanager}/bin/beryl-manager &
+    #"
 
     else if windowManager == "none" then "
 
@@ -182,6 +211,8 @@ let
 
   xserverArgs = [
     "-ac"
+    "-logverbose"
+    "-verbose"
     "-nolisten tcp"
     "-terminate"
     "-logfile" "/var/log/X.${toString display}.log"
@@ -222,6 +253,9 @@ rec {
   ++ optional (windowManager == "compiz") [
     compiz
   ]
+  #++ optional (windowManager == "beryl") [
+  #  berylcore berylmanager berylemerald
+  #]
   ++ optional (sessionType == "xterm") [
     xterm
   ]
@@ -250,20 +284,25 @@ rec {
 
     start script
       rm -f /var/state/opengl-driver
-      ${if getCfg "driSupport"
+      ${if videoDriver == "nvidia"        
+        then "ln -sf ${nvidiaDrivers} /var/state/opengl-driver"
+	else if getCfg "driSupport"
         then "ln -sf ${mesa} /var/state/opengl-driver"
         else ""
-      }
+       }
     end script
 
     env SLIM_CFGFILE=${slimConfig}
-    env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
-    env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
+    env FONTCONFIG_FILE=/etc/fonts/fonts.conf  				# !!! cleanup
+    env XKB_BINDIR=${xorg.xkbcomp}/bin         				# Needed for the Xkb extension.
+    env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/          # related to xorg-sys-opengl - needed to load libglx for (AI)GLX support (for compiz)
 
-    ${if getCfg "driSupport"
+    ${if videoDriver == "nvidia"
+      then "env XORG_DRI_DRIVER_PATH=${nvidiaDrivers}/X11R6/lib/modules/drivers/"
+      else if getCfg "driSupport"
       then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
       else ""
-    }
+    } 
 
     exec ${slim}/bin/slim
   ";

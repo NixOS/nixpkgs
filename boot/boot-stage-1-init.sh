@@ -10,7 +10,7 @@ fail() {
 
 # Print a greeting.
 echo
-echo "<<< NixOS Stage 1 >>>"
+echo "<<< Wouters NixOS Stage 1 >>>"
 echo
 
 
@@ -116,6 +116,9 @@ mountFS() {
 # Try to find and mount the root device.
 mkdir /mnt
 mkdir /mnt/root
+
+echo "mounting the root device.... (fix: sleeping 5 seconds to wait for upcoming usb drivers)"
+sleep 5
 
 if test -n "@autoDetectRootDevice@"; then
 

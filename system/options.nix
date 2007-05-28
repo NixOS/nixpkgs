@@ -934,5 +934,14 @@
     ";
   }
 
+  {
+    name = ["services" "samba" "enable"];
+    default = false;
+    description = "
+      Whether to enable the samba server. (to communicate with, and provide windows shares)
+    ";
+  }
+
+
 
 ]
