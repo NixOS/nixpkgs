@@ -1256,13 +1256,6 @@ rec {
     inherit fetchurl stdenv pkgconfig expat;
   };
 
-  dbus1_qt3 = import ../development/libraries/dbus/dbus_qt3.nix {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto libXmu libXinerama xineramaproto libXcursor;
-    inherit (xlibs) libX11 libXext;
-    inherit zlib libjpeg perl qt3 dbus1 libpng;
-  };
-  
   dbus_glib = import ../development/libraries/dbus-glib {
     inherit fetchurl stdenv pkgconfig gettext dbus expat;
     inherit (gtkLibs) glib;
