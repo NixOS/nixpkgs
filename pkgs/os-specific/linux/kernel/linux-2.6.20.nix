@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     sha256 = "1n0xgqckj64ga3l53l8lk1591lfcn6zcrqg3phz2m0y841ck5qlk";
   };
   
-  patches = map (p: p.patch) kernelPatches;
+  patches = [./2.6.20-paravirt-nvidia.patch] ++ (map (p: p.patch) kernelPatches);
   extraConfig = lib.concatStrings (map (p: "\n" + p.extraConfig + "\n") kernelPatches);
 
   config =

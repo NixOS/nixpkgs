@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "compiz-extra-20070305";
   src = fetchurl {
     url = http://gandalfn.club.fr/ubuntu/compiz-extra/compiz-extra-latest.tar.bz2;
-    sha256 = "1cm5cayhpnlhj0fhg8lqghdk52h9gmv4jv98zzadj3r3fd8mwr9z";
+    sha256 = "7fc7faafccfdf22dea7ac1de6629dcb55ec63d84fcb57a14559309cf284fa94f";
   };
   buildInputs = [
     pkgconfig compiz perl perlXMLParser GConf dbus gtk

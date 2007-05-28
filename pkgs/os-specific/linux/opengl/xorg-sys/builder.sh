@@ -10,3 +10,6 @@ ln -s /usr/lib/libnvidia-tls.so.1 $out/lib/
 for i in $neededLibs; do
     ln -s $i/lib/*.so* $out/lib/
 done
+
+
+

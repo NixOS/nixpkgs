@@ -1,6 +1,9 @@
 { stdenv, fetchurl, pkgconfig, libpng, libXcomposite, libXfixes
 , libXdamage, libXrandr, libXinerama, libICE, libSM
 , startupnotification, libXrender, xextproto, mesa, gtk, libwnck, GConf
+, libgnome, libgnomeui, metacity
+, gnomegtk, glib, pango, libglade, libgtkhtml, gtkhtml, libgnomecanvas, libgnomeprint, libgnomeprintui, gnomepanel
+, librsvg, fuse
 }:
 
 stdenv.mkDerivation {
@@ -13,11 +16,18 @@ stdenv.mkDerivation {
     ./tfp-server-extension.patch
   ];
   buildInputs = [
-    pkgconfig libXrender xextproto gtk libwnck GConf
+    pkgconfig libXrender xextproto gtk libwnck GConf libgnome libgnomeui metacity gnomegtk glib pango libglade libgtkhtml gtkhtml libgnomecanvas libgnomeprint libgnomeprintui gnomepanel librsvg fuse
   ];
   propagatedBuildInputs = [
     libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
-    libICE libSM startupnotification mesa
+    libICE libSM startupnotification mesa GConf
   ];
-  configureFlags = "--enable-gtk";
+  configureFlags = "--enable-gtk --enable-fuse --enable-annotate --enable-librsvg";
+
+  postFixup = "
+    for i in $out/bin/*; do
+     patchelf --set-rpath /var/state/opengl-driver/lib:$(patchelf --print-rpath $i) $i
+    done
+  ";
+
 }

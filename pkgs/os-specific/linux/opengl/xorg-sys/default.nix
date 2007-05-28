@@ -13,3 +13,4 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   neededLibs = [xlibs.libXxf86vm xlibs.libXext expat libdrm];
 }
+

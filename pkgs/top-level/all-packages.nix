@@ -339,6 +339,7 @@ rec {
 
   glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
+    inherit (xlibs) libXext;
   };
 
   gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep
@@ -451,6 +452,12 @@ rec {
 
   ntp = import ../tools/networking/ntp {
     inherit fetchurl stdenv libcap;
+  };
+
+  nvidiaDrivers = import ../os-specific/linux/nvidia {
+    inherit stdenv fetchurl kernel coreutils;
+    xorg_server = xorg.xorgserver;
+    inherit (xlibs) libX11 libXext;
   };
 
   openssh = import ../tools/networking/openssh {
@@ -1245,6 +1252,17 @@ rec {
     inherit fetchurl stdenv pkgconfig expat;
   };
 
+  dbus1 = import ../development/libraries/dbus/dbus1.nix {
+    inherit fetchurl stdenv pkgconfig expat;
+  };
+
+  dbus1_qt3 = import ../development/libraries/dbus/dbus_qt3.nix {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto libXmu libXinerama xineramaproto libXcursor;
+    inherit (xlibs) libX11 libXext;
+    inherit zlib libjpeg perl qt3 dbus1 libpng;
+  };
+  
   dbus_glib = import ../development/libraries/dbus-glib {
     inherit fetchurl stdenv pkgconfig gettext dbus expat;
     inherit (gtkLibs) glib;
@@ -2239,6 +2257,25 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kernelHeaders_2_6_20_7 = import ../os-specific/linux/kernel-headers/2.6.20.7.nix {
+    inherit fetchurl stdenv;
+  };
+
+  kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "arm-linux";
+  };
+
+  kernelHeadersMips = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "mips-linux";
+  };
+
+  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "sparc-linux";
+  };
+
   kernelscripts = import ../os-specific/linux/kernelscripts {
     inherit stdenv module_init_tools kernel;
     modules = [];
@@ -2270,6 +2307,14 @@ rec {
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
+  };
+
+  librsvg = import ../development/libraries/librsvg {
+    inherit fetchurl stdenv;
+    inherit libxml2 pkgconfig cairo fontconfig freetype;
+    inherit (gtkLibs) glib pango gtk;
+    #gtkLibs = gtkLibs210;          #need gtk+
+    libart = gnome.libart_lgpl;
   };
 
   libsepol = import ../os-specific/linux/libsepol {
@@ -2568,8 +2613,14 @@ rec {
       libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
+    inherit (gnome) libgnome libgnomeui metacity
+	      glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeprint
+              libgnomeprintui gnomepanel;
+    gnomegtk = gnome.gtk;
+    inherit librsvg fuse;
   };
-
+  
   compizExtra = import ../applications/window-managers/compiz/extra.nix {
     inherit fetchurl stdenv pkgconfig compiz perl perlXMLParser dbus;
     inherit (gnome) GConf;
@@ -3173,8 +3224,17 @@ rec {
     inherit fetchurl stdenv tetex lazylist;
   };
 
+  putty = import ../applications/networking/remote/putty {
+    inherit stdenv fetchurl ncurses;
+    inherit (gtkLibs1x) gtk;
+  };
+
   rssglx = import ../misc/screensavers/rss-glx {
     inherit fetchurl stdenv x11 mesa;
+  };
+
+  samba = import ../../../services/samba {
+    inherit stdenv fetchurl;
   };
 
   saneBackends = import ../misc/sane-backends {

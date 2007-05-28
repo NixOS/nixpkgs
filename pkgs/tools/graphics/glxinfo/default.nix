@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, mesa}:
+{stdenv, fetchurl, x11, mesa, libXext}:
 
 stdenv.mkDerivation {
   name = "glxinfo-6.5.2";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   postFixup = "
     for i in $out/bin/*; do
-      patchelf --set-rpath /var/state/opengl-driver/lib:$(patchelf --print-rpath $i) $i
+      patchelf --set-rpath /var/state/opengl-driver/lib:${libXext}/lib:$(patchelf --print-rpath $i) $i
     done
   ";
 }
