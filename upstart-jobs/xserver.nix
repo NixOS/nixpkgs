@@ -3,6 +3,7 @@
 , kdelibs, kdebase
 , xkeyboard_config
 , openssh, x11_ssh_askpass
+, nvidiaDrivers, libX11, libXext
 
 , config
 
@@ -23,13 +24,10 @@ let
 
   optional = condition: x: if condition then [x] else [];
 
-  #TODO, make these parameters
-  nvidiaDrivers = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).nvidiaDrivers;
-  #berylcore = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylCore;
-  #berylmanager = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylManager;
-  #berylemerald = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).berylEmerald;
-  libX11 = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).xlibs.libX11;
-  libXext = (import ../../nixpkgs/pkgs/top-level/all-packages.nix {}).xlibs.libXext;
+  #Beryl parameters
+  #berylcore
+  #berylmanager
+  #berylemerald
 
   # Get a bunch of user settings.
   videoDriver = getCfg "videoDriver";

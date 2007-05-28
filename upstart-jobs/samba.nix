@@ -1,9 +1,9 @@
-{samba, glibc, pwdutils}:
+{pkgs, samba, glibc, pwdutils}:
 
 let
+  
   user="smbguest";
   group="smbguest";
-
 in
 
 {

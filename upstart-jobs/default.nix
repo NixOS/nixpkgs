@@ -135,12 +135,6 @@ import ../upstart-jobs/gather.nix {
       allowSFTP = config.get ["services" "sshd" "allowSFTP"];
     })
 
-  # Samba service.
-  ++ optional ["services" "samba" "enable"]
-    (import ../upstart-jobs/samba.nix {
-      inherit (pkgs) samba glibc pwdutils;
-    })
-
   # NTP daemon.
   ++ optional ["services" "ntp" "enable"]
     (import ../upstart-jobs/ntpd.nix {
@@ -155,7 +149,9 @@ import ../upstart-jobs/gather.nix {
       inherit config;
       inherit (pkgs) stdenv writeText lib xterm slim xorg mesa
         gnome compiz feh kdebase kdelibs xkeyboard_config
-        openssh x11_ssh_askpass;
+        openssh x11_ssh_askpass nvidiaDrivers;
+      libX11 = pkgs.xlibs.libX11;
+      libXext = pkgs.xlibs.libXext;
       fontDirectories = import ../system/fonts.nix {inherit pkgs;};
     })
 
@@ -164,6 +160,13 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/httpd.nix {
       inherit config pkgs;
       inherit (pkgs) glibc pwdutils;
+    })
+
+  # Samba service.
+  ++ optional ["services" "samba" "enable"]
+    (import ../upstart-jobs/samba.nix {
+      inherit pkgs;
+      inherit (pkgs) glibc pwdutils samba;
     })
 
   # CUPS (printing) daemon.
