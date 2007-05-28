@@ -542,6 +542,10 @@ rec {
     inherit (xlibs) imake;
   };
 
+  unshield = import ../tools/archivers/unshield {
+    inherit fetchurl stdenv zlib;
+  };
+
   unzip = import ../tools/archivers/unzip {
     inherit fetchurl stdenv;
   };
