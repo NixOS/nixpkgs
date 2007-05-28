@@ -2254,10 +2254,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_20_7 = import ../os-specific/linux/kernel-headers/2.6.20.7.nix {
-    inherit fetchurl stdenv;
-  };
-
   kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "arm-linux";
