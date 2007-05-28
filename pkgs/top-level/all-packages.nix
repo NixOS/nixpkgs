@@ -1252,10 +1252,6 @@ rec {
     inherit fetchurl stdenv pkgconfig expat;
   };
 
-  dbus1 = import ../development/libraries/dbus/dbus1.nix {
-    inherit fetchurl stdenv pkgconfig expat;
-  };
-
   dbus_glib = import ../development/libraries/dbus-glib {
     inherit fetchurl stdenv pkgconfig gettext dbus expat;
     inherit (gtkLibs) glib;
