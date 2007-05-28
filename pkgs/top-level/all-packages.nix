@@ -2142,6 +2142,10 @@ rec {
     inherit fetchurl stdenv ant;
   };
 
+  samba = import ../servers/samba {
+    inherit stdenv fetchurl;
+  };
+
   tomcat5 = import ../servers/http/tomcat {
     inherit fetchurl stdenv jdk;
   };
@@ -3224,10 +3228,6 @@ rec {
 
   rssglx = import ../misc/screensavers/rss-glx {
     inherit fetchurl stdenv x11 mesa;
-  };
-
-  samba = import ../../../services/samba {
-    inherit stdenv fetchurl;
   };
 
   saneBackends = import ../misc/sane-backends {
