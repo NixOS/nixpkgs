@@ -52,16 +52,17 @@ let
 
     
   modules = 
-  optional (videoDriver == "nvidia") nvidiaDrivers ++       #make sure it first loads the nvidia libs
-  [
-    xorg.xorgserver
-    xorg.xf86inputkeyboard
-    xorg.xf86inputmouse
-  ] 
-  ++ optional (videoDriver == "vesa") xorg.xf86videovesa
-  ++ optional (videoDriver == "i810") xorg.xf86videoi810
-  ++ optional (videoDriver == "intel") xorg.xf86videointel;
+    optional (videoDriver == "nvidia") nvidiaDrivers ++       #make sure it first loads the nvidia libs
+    [
+      xorg.xorgserver
+      xorg.xf86inputkeyboard
+      xorg.xf86inputmouse
+    ] 
+    ++ optional (videoDriver == "vesa") xorg.xf86videovesa
+    ++ optional (videoDriver == "i810") xorg.xf86videoi810
+    ++ optional (videoDriver == "intel") xorg.xf86videointel;
 
+    
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
@@ -99,6 +100,12 @@ let
  Option       \\\"AddARGBGLXVisuals\\\"     \\\"true\\\" \\n \"
         export extensions=\"Option       \\\"Composite\\\" \\\"Enable\\\" \\n \"
 
+      else
+        export moduleSection='Load \"glx\" \\n \\
+          Load \"dri\" '
+        export screen=
+        export device=
+        export extensions=
       fi
 
       substituteAll $src $out
