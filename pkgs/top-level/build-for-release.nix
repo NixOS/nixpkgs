@@ -5,7 +5,6 @@ let {
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     MPlayer
     MPlayerPlugin
-    #abc
     alsaUtils
     apacheAnt
     apacheHttpd
@@ -24,22 +23,25 @@ let {
     bmp_plugin_wma
     bsdiff
     bzip2
+    cabextract
     cdrtools
     chatzilla
     cksfv
     compiz
     coreutils
     cpio
+    cron
+    cups
     darcs
     db4
     dhcp
     dietlibc
     diffutils
     docbook5
+    docbook5_xsl
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xsl
-    docbook5_xsl
     e2fsprogs
     ecj
     eclipsesdk
@@ -47,6 +49,7 @@ let {
     emacsUnicode
     enscript
     exult
+    feh
     file
     findutils
     firefoxWrapper
@@ -69,6 +72,7 @@ let {
     grub
     gzip
     hello
+    iana_etc
     iputils
     jakartaregexp
     jdkPlugin
@@ -76,22 +80,23 @@ let {
     jikes
     jing_tools
     jrePlugin
+    kbd
     kcachegrind
     kdebase
     keen4
     kernel
     klibc
-    lvm2
     less
     lhs2tex
     libtool
     libxml2
     libxslt
+    lvm2
     lynx
     man
-    #maven
     mdadm
     mesa
+    mingetty
     mk
     mktemp
     mod_python
@@ -111,7 +116,6 @@ let {
     pam_unix2
     pan
     par2cmdline
-    #parted
     pciutils
     perl
     php
@@ -122,7 +126,6 @@ let {
     procps
     pwdutils
     python
-#    qcmm
     qt3
     quake3demo
     readline
@@ -141,17 +144,17 @@ let {
     sylpheed 
     sysklogd
     sysvinit
+    sysvtools
     tetex
     texinfo
     thunderbird
     tightvnc
-#    transformers
+    time
     udev
     uml
     unzip
     upstart
     utillinux
-#    uulib
     valgrind
     vim
     vlc
@@ -159,9 +162,11 @@ let {
     wget
     wirelesstools
     wxHaskell
+    x11_ssh_askpass
     xchm
     xfig
     xineUI
+    xkeyboard_config
     xmltv
     xmms
     xorg_sys_opengl
@@ -169,27 +174,6 @@ let {
     xterm
     zdelta
     zip
-#    atermjava
-#    fspot
-#    ghc
-#    helium
-#    hevea
-#    inkscape
-#    jakartabcel
-#    jjtraveler
-#    kernel
-#    monodevelop
-#    monodoc
-#    ocaml
-#    octave
-#    ov511
-#    qtparted
-#    rssglx
-#    sharedobjects
-#    uuagc
-#    xauth
-#    xawtv
-#    zapping
     ;
   inherit ((allPackages {system = "i686-linux";}).xorg)
     fontbh100dpi
@@ -197,12 +181,18 @@ let {
     fontbhttf
     fontcursormisc
     fontmiscmisc
+    iceauth
+    setxkbmap
     xauth
     xf86inputkeyboard
     xf86inputmouse
     xf86videoi810
     xf86videovesa
+    xkbcomp
     xorgserver
+    xrandr
+    xrdb
+    xset
     ;
   inherit ((allPackages {system = "i686-linux";}).gnome)
     gconfeditor
@@ -265,14 +255,11 @@ let {
     libtool
     libxml2
     libxslt
-#    maven
     nxml
     php
-#    spidermonkey
     subversion
     tetex
     unzip
-#    flex2533
   ;};
 
   i686DarwinPkgs = {inherit (allPackages {system = "i686-darwin";})
