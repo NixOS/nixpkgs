@@ -10,7 +10,7 @@ fail() {
 
 # Print a greeting.
 echo
-echo "<<< Wouters NixOS Stage 1 >>>"
+echo "<<< NixOS Stage 1 >>>"
 echo
 
 
