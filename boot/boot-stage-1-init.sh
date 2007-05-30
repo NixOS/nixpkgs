@@ -45,8 +45,14 @@ for o in $(cat /proc/cmdline); do
             # Show each command.
             set -x
             ;;
-        debug1)
+        debug1) # stop right away
             fail
+            ;;
+        debug1devices) # stop after loading modules and creating device nodes
+            debug1devices=1
+            ;;
+        debug1mounts) # stop after mounting file systems
+            debug1mounts=1
             ;;
     esac
 done
@@ -66,6 +72,8 @@ echo 'udev_rules="/no-rules"' > $UDEV_CONFIG_FILE
 udevd --daemon
 udevtrigger
 udevsettle
+
+if test -n "$debug1devices"; then fail; fi
 
 
 # Function for mounting a file system.
@@ -188,6 +196,8 @@ else
     done
     
 fi
+
+if test -n "$debug1mounts"; then fail; fi
 
 
 # Start stage 2.
