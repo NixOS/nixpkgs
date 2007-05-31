@@ -2301,6 +2301,31 @@ rec {
     ];
   };
 
+  kernel_2_6_21 = import ../os-specific/linux/kernel/linux-2.6.21.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "paravirt-nvidia";
+        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
+      }
+      { name = "skas-2.6.20-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
+          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
+        };
+        extraConfig =
+          "CONFIG_PROC_MM=y\n" +
+          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
+      }
+      { name = "fbsplash-0.9.2-r5-2.6.21";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
+          sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
+        };
+        extraConfig = "CONFIG_FB_SPLASH=y";
+      }
+    ];
+  };
+
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
