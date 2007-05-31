@@ -24,7 +24,7 @@ let
 
   lib = import ../../../lib;
 
-  version = "2.6.20.11";
+  version = "2.6.20.12";
 
 in
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "http://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "1n0xgqckj64ga3l53l8lk1591lfcn6zcrqg3phz2m0y841ck5qlk";
+    sha256 = "1s7vdpg2897q5pcyxxypqcnibwpbdawbimkf3pngmahj8wr9c03x";
   };
   
-  patches = [./2.6.20-paravirt-nvidia.patch] ++ (map (p: p.patch) kernelPatches);
-  extraConfig = lib.concatStrings (map (p: "\n" + p.extraConfig + "\n") kernelPatches);
+  patches = map (p: p.patch) kernelPatches;
+  extraConfig = lib.concatStrings (map (p: "\n" + (if p ? extraConfig then p.extraConfig else "") + "\n") kernelPatches);
 
   config =
     if kernelConfig != null then kernelConfig else

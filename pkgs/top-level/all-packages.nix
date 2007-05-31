@@ -2279,6 +2279,9 @@ rec {
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
+      { name = "paravirt-nvidia";
+        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
+      }
       { name = "skas-2.6.20-v9-pre9";
         patch = fetchurl {
           url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
