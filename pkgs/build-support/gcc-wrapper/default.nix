@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   langF77 = if nativeTools then false else gcc.langF77;
   shell = if shell == "" then stdenv.shell else shell;
   
-  meta = if gcc != null && (gcc ? meta) then gcc.meta else
+  meta = if gcc != null && (gcc ? meta) then removeAttrs gcc.meta ["priority"] else
     { description = "System C compiler wrapper";
     };
 

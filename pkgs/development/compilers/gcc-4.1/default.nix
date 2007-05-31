@@ -54,5 +54,9 @@ stdenv.mkDerivation {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
     description = "GNU Compiler Collection, 4.1.x";
+
+    # Give the real GCC a lower priority than the GCC wrapper so that
+    # both can be installed at the same time.
+    priority = "7";
   };
 }
