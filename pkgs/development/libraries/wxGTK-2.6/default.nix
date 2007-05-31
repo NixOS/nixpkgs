@@ -1,4 +1,6 @@
-{stdenv, fetchurl, pkgconfig, gtk, libXinerama, compat22 ? true, unicode ? true}:
+{ stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+, compat22 ? false, compat24 ? true, unicode ? true
+}:
 
 assert pkgconfig != null && gtk != null;
 assert gtk.libtiff != null;
@@ -16,15 +18,28 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib
-    libXinerama
+    libXinerama libSM libXxf86vm xf86vidmodeproto
   ];
 
   configureFlags = [
     "--enable-gtk2"
     (if compat22 then "--enable-compat22" else "--disable-compat22")
+    (if compat24 then "--enable-compat24" else "--disable-compat24")
     "--disable-precomp-headers"
     (if unicode then "--enable-unicode" else "")
   ];
+
+  # This variable is used by configure to find some dependencies.
+  SEARCH_INCLUDE =
+    "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
+
+  # Work around a bug in configure.
+  NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1";
+
+  preConfigure = "
+    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
+    substituteInPlace configure --replace /usr /no-such-path
+  ";
 
   postBuild = "(cd contrib/src && make)";
   postInstall = "
@@ -32,5 +47,5 @@ stdenv.mkDerivation {
     (cd $out/include && ln -s wx-*/* .)
   ";
 
-  inherit gtk compat22;
+  passthru = {inherit gtk compat22 compat24 unicode;};
 }

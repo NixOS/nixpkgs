@@ -1705,7 +1705,7 @@ rec {
   wxGTK26 = import ../development/libraries/wxGTK-2.6 {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libXinerama;
+    inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
   wxGTK28 = import ../development/libraries/wxGTK-2.8 {

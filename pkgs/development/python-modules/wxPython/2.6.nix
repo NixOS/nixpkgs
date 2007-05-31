@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pkgconfig, wxGTK, python}:
 
-assert wxGTK.compat22;
+assert wxGTK.unicode;
 
 stdenv.mkDerivation {
   name = "wxPython-2.6.3.3";
