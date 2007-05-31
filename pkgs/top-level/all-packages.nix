@@ -249,7 +249,8 @@ rec {
   };
 
   bittorrent = import ../tools/networking/p2p/bittorrent {
-    inherit fetchurl stdenv makeWrapper python wxPython pycrypto twisted;
+    inherit fetchurl stdenv makeWrapper python pycrypto twisted;
+    wxPython = wxPython26;
     gui = true;
   };
 
@@ -1707,6 +1708,12 @@ rec {
     inherit (xlibs) libXinerama;
   };
 
+  wxGTK28 = import ../development/libraries/wxGTK-2.8 {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
+  };
+
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
     flex = flex2533;
@@ -2083,8 +2090,16 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
-  wxPython = import ../development/python-modules/wxPython {
-    inherit fetchurl stdenv pkgconfig wxGTK python;
+  wxPython = wxPython26;
+
+  wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
+    inherit fetchurl stdenv pkgconfig python;
+    wxGTK = wxGTK26;
+  };
+
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit fetchurl stdenv pkgconfig python;
+    wxGTK = wxGTK28;
   };
 
   twisted = import ../development/python-modules/twisted {

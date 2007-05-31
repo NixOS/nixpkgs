@@ -7,7 +7,12 @@ source $makeWrapper
 # AttributeError: 'NoneType' object has no attribute 'endswith'
 export HOME=$TMP
 
-buildPhase="python setup.py build"
+buildPhase=buildPhase
+buildPhase() {
+    #substituteInPlace BitTorrent/GUI_wx/__init__.py --replace "'2.6'" "'2.8'"
+    python setup.py build
+}
+
 
 installPhase=installPhase
 installPhase() {
