@@ -2992,6 +2992,14 @@ rec {
     #enableOfficialBranding = true;
   };
 
+  thunderbird2 = import ../applications/networking/mailreaders/thunderbird-2.x {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+    #enableOfficialBranding = true;
+  };
+
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
     qt = qt3;
