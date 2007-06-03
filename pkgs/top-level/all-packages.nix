@@ -683,10 +683,10 @@ rec {
     profiledCompiler = false;
   }));
 
-  gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
+  gcc42 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
-  });
+  }));
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
