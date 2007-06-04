@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nix-0.11pre8648";
+  name = "nix-0.11pre8816";
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nix-0.11pre8648/nix-0.11pre8648.tar.bz2;
-    md5 = "f3994bff46a9960e9d085ab5e924f8c5";
+    url = http://nix.cs.uu.nl/dist/nix/nix-0.11pre8816/nix-0.11pre8816.tar.bz2;
+    md5 = "dd432e6a05179fe30a95c3758e70ac51";
   };
   
   buildInputs = [perl curl openssl];
