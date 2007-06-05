@@ -141,6 +141,7 @@ import ../helpers/make-etc.nix {
     )
     [
       "login"
+      "slim"
       "su"
       "other"
       "passwd"
