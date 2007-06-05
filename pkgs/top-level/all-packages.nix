@@ -2230,6 +2230,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  hal = import ../os-specific/linux/hal {
+    inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
+      libusb dbus dbus_glib libvolume_id perl perlXMLParser
+      gettext;
+    inherit (gtkLibs) glib;
+  };
+
   hdparm = import ../os-specific/linux/hdparm {
     inherit fetchurl stdenv;
   };
@@ -2370,6 +2377,10 @@ rec {
   };
 
   libnscd = import ../os-specific/linux/libnscd {
+    inherit fetchurl stdenv;
+  };
+
+  libvolume_id = import ../os-specific/linux/libvolume_id {
     inherit fetchurl stdenv;
   };
 

@@ -1,10 +1,20 @@
 {stdenv, fetchurl, libusb}:
 
+let
+
+  usbids = fetchurl {
+    url = http://nix.cs.uu.nl/dist/tarballs/usb.ids.20061212.bz2;
+    sha256 = "112l4fzjn5p3y6fv3x10vbrd36n2v5n04s7pjdlkb2yqv4crp84m";
+  };
+
+in
+
 stdenv.mkDerivation {
-  name = "usbutils-0.71";
+  name = "usbutils-0.72";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/usbutils-0.71.tar.gz;
-    md5 = "479d7c7098ef44cc95e7978fd71c712c";
+    url = http://heanet.dl.sourceforge.net/sourceforge/linux-usb/usbutils-0.72.tar.gz;
+    sha256 = "08s4g4sz7p3a1afvphxd7h5bbfywvp0j611y85wbhwr14i9m6f00";
   };
   buildInputs = [libusb];
+  preBuild = "bunzip2 < ${usbids} > usb.ids";
 }
