@@ -2939,7 +2939,7 @@ rec {
   };
 
   slim = import ../applications/display-managers/slim {
-    inherit fetchurl stdenv x11 libjpeg libpng freetype;
+    inherit fetchurl stdenv x11 libjpeg libpng freetype pam;
     inherit (xlibs) libXmu;
   };
 
