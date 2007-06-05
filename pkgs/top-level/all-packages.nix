@@ -2289,7 +2289,7 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_20;
+  kernel = kernel_2_6_21;
 
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
