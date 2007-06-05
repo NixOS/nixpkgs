@@ -21,6 +21,7 @@
 let
 
   getCfg = option: config.get ["services" "xserver" option];
+  getCfg2 = option: config.get (["services" "xserver"] ++ option);
 
   optional = condition: x: if condition then [x] else [];
 
@@ -236,6 +237,22 @@ login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
   ";
 
 
+  # Unpack the SLiM theme, or use the default.
+  slimThemesDir =
+    let
+      theme = getCfg2 ["slim" "theme"];
+      unpackedTheme = stdenv.mkDerivation {
+        name = "slim-theme";
+        buildCommand = "
+          ensureDir $out
+          cd $out
+          unpackFile ${theme}
+          ln -s * default
+        ";
+      };
+    in if theme == null then "${slim}/share/slim/themes" else unpackedTheme;       
+
+
 in
 
 
@@ -288,6 +305,7 @@ rec {
     start on network-interfaces
 
     start script
+    
       rm -f /var/state/opengl-driver
       ${if videoDriver == "nvidia"        
         then "ln -sf ${nvidiaDrivers} /var/state/opengl-driver"
@@ -295,9 +313,13 @@ rec {
         then "ln -sf ${mesa} /var/state/opengl-driver"
         else ""
        }
+
+       rm -f /var/log/slim.log
+       
     end script
 
     env SLIM_CFGFILE=${slimConfig}
+    env SLIM_THEMESDIR=${slimThemesDir}
     env FONTCONFIG_FILE=/etc/fonts/fonts.conf  				# !!! cleanup
     env XKB_BINDIR=${xorg.xkbcomp}/bin         				# Needed for the Xkb extension.
     env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/          # related to xorg-sys-opengl - needed to load libglx for (AI)GLX support (for compiz)
