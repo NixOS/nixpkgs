@@ -2234,10 +2234,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  hotplug = import ../os-specific/linux/hotplug {
-    inherit fetchurl stdenv bash gnused coreutils utillinux gnugrep module_init_tools;
-  };
-
   hwdata = import ../os-specific/linux/hwdata {
     inherit fetchurl stdenv;
   };
