@@ -71,6 +71,7 @@ let {
     graphviz
     grub
     gzip
+    hal
     hello
     iana_etc
     iputils
