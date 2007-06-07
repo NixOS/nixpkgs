@@ -2272,6 +2272,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.3.nix {
+    inherit fetchurl stdenv;
+  };
+
   kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "arm-linux";
@@ -2370,6 +2374,12 @@ rec {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
     stdenv = overrideGCC stdenv gcc34;
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
+  };
+
+  kvm17 = import ../os-specific/linux/kvm/17.nix {
+    inherit fetchurl zlib e2fsprogs SDL alsaLib;
+    stdenv = overrideGCC stdenv gcc34;
+    kernelHeaders = kernelHeaders_2_6_21;
   };
 
   libcap = import ../os-specific/linux/libcap {

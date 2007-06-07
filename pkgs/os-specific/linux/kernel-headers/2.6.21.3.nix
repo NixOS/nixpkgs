@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "linux-headers-2.6.20.7";
+  name = "linux-headers-2.6.21.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nl.kernel.org/pub/linux/kernel/v2.6/linux-2.6.20.7.tar.bz2;
-    sha256 = "856f5eb3606061bddb38642fe7068cfc184b4b8fc364fdd8612148a5aca5cea8";
+    url = "http://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-2.6.21.3.tar.bz2";
+    sha256 = "17rxvw42z4amijb8nya54c2h6bb8gnxnr628arv8shmsccf8qsp5";
   };
 
   platform = 
