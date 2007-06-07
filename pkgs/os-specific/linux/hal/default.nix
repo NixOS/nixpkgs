@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, python, pciutils, usbutils, expat
 , libusb, dbus, dbus_glib, glib, libvolume_id, perl, perlXMLParser
-, gettext
+, gettext, zlib /* required by pciutils */, eject, libsmbios
 }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   
   buildInputs = [
     pkgconfig python pciutils expat libusb dbus dbus_glib glib
-    libvolume_id perl perlXMLParser gettext
+    libvolume_id perl perlXMLParser gettext zlib libsmbios
   ];
 
   # !!! Hm, maybe the pci/usb.ids location should be in /etc, so that
@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     --disable-docbook-docs
     --disable-gtk-doc
     --localstatedir=/var
+    --with-eject=${eject}/bin/eject
   ";
 
   /*

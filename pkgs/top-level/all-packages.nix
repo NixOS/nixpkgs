@@ -2233,7 +2233,7 @@ rec {
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libvolume_id perl perlXMLParser
-      gettext;
+      gettext zlib eject libsmbios;
     inherit (gtkLibs) glib;
   };
 
@@ -2362,6 +2362,10 @@ rec {
 
   libsepol = import ../os-specific/linux/libsepol {
     inherit fetchurl stdenv;
+  };
+
+  libsmbios = import ../os-specific/linux/libsmbios {
+    inherit fetchurl stdenv libxml2;
   };
 
   klibc = import ../os-specific/linux/klibc {
