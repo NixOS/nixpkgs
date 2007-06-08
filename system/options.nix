@@ -793,6 +793,16 @@
 
   
   {
+    name = ["services" "dbus" "enable"];
+    default = true;
+    description = "
+      Whether to start the D-Bus message bus daemon.  It is required
+      by the HAL service.
+    ";
+  }
+
+  
+  {
     name = ["installer" "nixpkgsURL"];
     default = "";
     example = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7577;

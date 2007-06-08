@@ -182,6 +182,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) alsaUtils;
     })
 
+  # D-Bus system-wide daemon.
+  ++ optional ["services"  "dbus" "enable"]
+    (import ../upstart-jobs/dbus.nix {
+      inherit (pkgs) stdenv dbus;
+    })
+
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {
