@@ -235,8 +235,6 @@ import ../upstart-jobs/gather.nix {
   ++ (map makeJob (config.get ["services" "extraJobs"]))
 
   # For the built-in logd job.
-  ++ [
-    (pkgs.upstart // {extraPath = []; extraEtc = [];})
-  ];
+  ++ [(makeJob { jobDrv = pkgs.upstart; })];
   
 }

@@ -3,6 +3,13 @@
 {
   name = "nscd";
   
+  users = [
+    { name = "nscd";
+      uid = (import ../system/ids.nix).uids.nscd;
+      description = "Name service cache daemon user";
+    }
+  ];
+  
   job = "
 description \"Name Service Cache Daemon\"
 
@@ -12,11 +19,6 @@ stop on shutdown
 env LD_LIBRARY_PATH=${nssModulesPath}
 
 start script
-
-    if ! ${glibc}/bin/getent passwd nscd > /dev/null; then
-        ${pwdutils}/sbin/useradd -g nogroup -d /var/empty -s /noshell \\
-            -c 'Name service cache daemon user' nscd
-    fi
 
     mkdir -m 0755 -p /var/run/nscd
     mkdir -m 0755 -p /var/db/nscd

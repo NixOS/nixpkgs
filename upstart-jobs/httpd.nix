@@ -81,6 +81,12 @@ in
 {
   name = "httpd";
   
+  users = [
+    { name = user;
+      description = "Apache httpd user";
+    }
+  ];
+  
   job = "
 description \"Apache HTTPD\"
 
@@ -90,11 +96,6 @@ stop on network-interfaces/stop
 start script
     if ! ${glibc}/bin/getent group ${group} > /dev/null; then
         ${pwdutils}/sbin/groupadd ${group}
-    fi
-
-    if ! ${glibc}/bin/getent passwd ${user} > /dev/null; then
-        ${pwdutils}/sbin/useradd -g ${group} -d /var/empty -s /noshell \\
-            -c 'Apache httpd user' ${user}
     fi
 
     ${webServer}/bin/control prepare    

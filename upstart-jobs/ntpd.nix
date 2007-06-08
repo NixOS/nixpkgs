@@ -19,6 +19,14 @@ in
 {
   name = "ntpd";
   
+  users = [
+    { name = ntpUser;
+      uid = (import ../system/ids.nix).uids.ntp;
+      description = "NTP daemon user";
+      home = stateDir;
+    }
+  ];
+  
   job = "
 description \"NTP daemon\"
 
@@ -27,11 +35,6 @@ stop on ip-down
 stop on shutdown
 
 start script
-
-    if ! ${glibc}/bin/getent passwd ${ntpUser} > /dev/null; then
-        ${pwdutils}/sbin/useradd -g nogroup -d ${stateDir} -s /noshell \\
-            -c 'NTP daemon user' ${ntpUser}
-    fi
 
     mkdir -m 0755 -p ${stateDir}
     chown ${ntpUser} ${stateDir}

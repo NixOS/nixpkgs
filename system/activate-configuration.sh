@@ -64,6 +64,10 @@ touch /var/log/lastlog
 chmod 644 /var/log/lastlog
 
 
+# Empty, read-only home directory of many system accounts.
+mkdir -m 0555 -p /var/empty
+
+
 # If there is no password file yet, create a root account with an
 # empty password.
 if ! test -e /etc/passwd; then
@@ -71,36 +75,20 @@ if ! test -e /etc/passwd; then
     touch /etc/passwd; chmod 0644 /etc/passwd
     touch /etc/group; chmod 0644 /etc/group
     touch /etc/shadow; chmod 0600 /etc/shadow
-    # Can't use useradd, since it complain that it doesn't know us
+    # Can't use useradd, since it complains that it doesn't know us
     # (bootstrap problem!). 
     echo "root:x:0:0:System administrator:$rootHome:@defaultShell@" >> /etc/passwd
     echo "root::::::::" >> /etc/shadow
-    groupadd -g 0 root
     echo | passwd --stdin root
 fi
 
 
-# Some more required accounts/groups.
-if ! getent group nogroup > /dev/null; then
-    groupadd -g 65534 nogroup
-fi
+# Create system users and groups.
+@shell@ @createUsersGroups@ @usersList@ @groupsList@
 
 
-# Set up Nix accounts.
+# Set up Nix.
 if test -z "@readOnlyRoot@"; then
-
-    if ! getent group nixbld > /dev/null; then
-        groupadd -g 30000 nixbld
-    fi
-
-    for i in $(seq 1 10); do
-        account=nixbld$i
-        if ! getent passwd $account > /dev/null; then
-            useradd -u $((i + 30000)) -g nogroup -G nixbld \
-                -d /var/empty -s /noshell \
-                -c "Nix build user $i" $account
-        fi
-    done
 
     mkdir -p /nix/etc/nix
     cat > /nix/etc/nix/nix.conf <<EOF

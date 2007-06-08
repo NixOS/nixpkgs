@@ -228,6 +228,9 @@ rec {
   };
 
 
+  usersGroups = import ./users-groups.nix { inherit pkgs upstartJobs defaultShell; };
+
+
   defaultShell = "/var/run/current-system/sw/bin/bash";
 
     
@@ -246,6 +249,8 @@ rec {
       config.get ["security" "setuidPrograms"] ++
       config.get ["security" "extraSetuidPrograms"];
     maxJobs = config.get ["nix" "maxJobs"];
+
+    inherit (usersGroups) createUsersGroups usersList groupsList;
 
     path = [
       pkgs.coreutils pkgs.gnugrep pkgs.findutils
