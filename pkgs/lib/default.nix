@@ -117,5 +117,12 @@ rec {
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
   optional = cond: elem: if cond then [elem] else [];
 
-    
+
+  # Return a list of integers from `first' up to and including `last'.
+  range = first: last:
+    if builtins.lessThan last first
+    then []
+    else [first] ++ range (builtins.add first 1) last;
+
+        
 }
