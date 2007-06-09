@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python, pciutils, usbutils, expat
 , libusb, dbus, dbus_glib, glib, libvolume_id, perl, perlXMLParser
 , gettext, zlib /* required by pciutils */, eject, libsmbios
+, udev
 }:
 
 stdenv.mkDerivation {
@@ -19,22 +20,15 @@ stdenv.mkDerivation {
   # !!! Hm, maybe the pci/usb.ids location should be in /etc, so that
   # we don't have to rebuild HAL when we update the PCI/USB IDs.  
   configureFlags = "
-    --with-pci-ids=${pciutils}/share/pci.ids
-    --with-usb-ids=${usbutils}/share/usb.ids
+    --with-pci-ids=${pciutils}/share
+    --with-usb-ids=${usbutils}/share
     --disable-docbook-docs
     --disable-gtk-doc
     --localstatedir=/var
     --with-eject=${eject}/bin/eject
   ";
 
-  /*
-  preInstall = "
-    installFlagsArray=(DESTDIR=$out/destdir)
+  preBuild = "
+    substituteInPlace hald/linux/coldplug.c --replace /usr/bin/udevinfo ${udev}/bin/udevinfo
   ";
-  
-  postInstall = "
-    mv $out/destdir/$out/* $out
-    rm -rf $out/destdir
-  ";
-  */
 }

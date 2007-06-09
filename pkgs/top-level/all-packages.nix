@@ -218,7 +218,7 @@ rec {
   # Write a plain text file to the Nix store.  (The advantage over
   # plain sources is that `text' can refer to the output paths of
   # derivations, e.g., "... ${somePkg}/bin/foo ...".
-  writeText = name: text: runCommand name {inherit text;} "echo \"$text\" > $out";
+  writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
@@ -2233,7 +2233,7 @@ rec {
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libvolume_id perl perlXMLParser
-      gettext zlib eject libsmbios;
+      gettext zlib eject libsmbios udev;
     inherit (gtkLibs) glib;
   };
 
