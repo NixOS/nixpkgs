@@ -7,8 +7,8 @@ if test -z "$OPENGL_DRIVER"; then
         OPENGL_DRIVER=$profile
     fi
     # OpenGL driver for current X server on NixOS.
-    if test -d /var/state/opengl-driver; then
-        OPENGL_DRIVER=/var/state/opengl-driver
+    if test -d /var/run/opengl-driver; then
+        OPENGL_DRIVER=/var/run/opengl-driver
     fi
 fi
 

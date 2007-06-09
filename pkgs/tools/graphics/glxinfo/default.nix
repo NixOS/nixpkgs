@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   postFixup = "
     for i in $out/bin/*; do
-      patchelf --set-rpath /var/state/opengl-driver/lib:${libXext}/lib:$(patchelf --print-rpath $i) $i
+      patchelf --set-rpath /var/run/opengl-driver/lib:${libXext}/lib:$(patchelf --print-rpath $i) $i
     done
   ";
 }
