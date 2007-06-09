@@ -1,4 +1,4 @@
-{stdenv, dbus}:
+{stdenv, dbus, dbusServices ? []}:
 
 let
 
@@ -10,9 +10,13 @@ let
     name = "dbus-conf";
     buildCommand = "
       ensureDir $out
-      ensureDir $out/system.d
       substitute ${dbus}/etc/dbus-1/system.conf $out/system.conf \\
         --replace '<fork/>' ''
+
+      ensureDir $out/system.d
+      for i in ${toString dbusServices}; do
+        ln -s $i/etc/dbus-1/system.d/* $out/system.d/
+      done
     ";
   };
 
@@ -28,6 +32,8 @@ in
       home = homeDir;
     }
   ];
+  
+  extraPath = [dbus];
   
   job = "
 description \"D-Bus system message bus daemon\"

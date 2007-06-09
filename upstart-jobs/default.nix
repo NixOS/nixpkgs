@@ -186,6 +186,14 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services"  "dbus" "enable"]
     (import ../upstart-jobs/dbus.nix {
       inherit (pkgs) stdenv dbus;
+      dbusServices =
+        pkgs.lib.optional (config.get ["services"  "hal" "enable"]) pkgs.hal;
+    })
+
+  # HAL daemon.
+  ++ optional ["services"  "hal" "enable"]
+    (import ../upstart-jobs/hal.nix {
+      inherit (pkgs) stdenv hal;
     })
 
   # Handles the reboot/halt events.

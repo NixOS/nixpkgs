@@ -803,6 +803,15 @@
 
   
   {
+    name = ["services" "hal" "enable"];
+    default = true;
+    description = "
+      Whether to start the HAL daemon.
+    ";
+  }
+
+  
+  {
     name = ["installer" "nixpkgsURL"];
     default = "";
     example = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7577;
