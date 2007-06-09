@@ -3236,7 +3236,7 @@ rec {
   };
 
   generator = import ../misc/emulators/generator {
-    inherit fetchurl stdenv SDL nasm;
+    inherit fetchurl stdenv SDL nasm zlib bzip2 libjpeg;
     inherit (gtkLibs1x) gtk;
   };
 
