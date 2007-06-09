@@ -306,11 +306,11 @@ rec {
 
     start script
     
-      rm -f /var/state/opengl-driver
+      rm -f /var/run/opengl-driver
       ${if videoDriver == "nvidia"        
-        then "ln -sf ${nvidiaDrivers} /var/state/opengl-driver"
+        then "ln -sf ${nvidiaDrivers} /var/run/opengl-driver"
 	else if getCfg "driSupport"
-        then "ln -sf ${mesa} /var/state/opengl-driver"
+        then "ln -sf ${mesa} /var/run/opengl-driver"
         else ""
        }
 
