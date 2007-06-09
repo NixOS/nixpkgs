@@ -16,12 +16,12 @@ assert sslSupport -> neon.sslSupport;
 assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation {
-  name = "subversion-1.4.3";
+  name = "subversion-1.4.4";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.4.3.tar.bz2;
-    sha1 = "7e740c469b61977b7b623642892470207ae64a50";
+    url = http://subversion.tigris.org/downloads/subversion-1.4.4.tar.bz2;
+    sha1 = "1ba850187b3cedb3265850acf32341b7dbe4f945";
   };
 
   buildInputs =
