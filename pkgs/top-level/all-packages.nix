@@ -2441,6 +2441,11 @@ rec {
     inherit stdenv fetchurl cracklib flex;
   };
 
+  pam_console = import ../os-specific/linux/pam_console {
+    inherit stdenv fetchurl pam autoconf automake libtool pkgconfig bison flex;
+    inherit (gtkLibs) glib;
+  };
+
   pam_devperm = import ../os-specific/linux/pam_devperm {
     inherit stdenv fetchurl pam;
   };
