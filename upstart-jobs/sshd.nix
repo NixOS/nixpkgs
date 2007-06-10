@@ -1,4 +1,4 @@
-{ writeText, openssh, glibc, pwdutils, xauth
+{ writeText, openssh, glibc, xauth
 , nssModulesPath
 , forwardX11, allowSFTP
 }:

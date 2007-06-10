@@ -1,4 +1,4 @@
-{config, pkgs, glibc, pwdutils}:
+{config, pkgs, glibc}:
 
 let
 
@@ -86,6 +86,11 @@ in
       description = "Apache httpd user";
     }
   ];
+
+  groups = [
+    { name = group;
+    }
+  ];
   
   job = "
 description \"Apache HTTPD\"
@@ -94,10 +99,6 @@ start on network-interfaces/started
 stop on network-interfaces/stop
 
 start script
-    if ! ${glibc}/bin/getent group ${group} > /dev/null; then
-        ${pwdutils}/sbin/groupadd ${group}
-    fi
-
     ${webServer}/bin/control prepare    
 end script
 

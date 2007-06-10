@@ -13,6 +13,7 @@
 
   gids = {
     root = 0;
+    haldaemon = 5;
     users = 100;
     nixbld = 30000;
     nogroup = 65534;

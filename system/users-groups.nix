@@ -48,20 +48,30 @@ rec {
 
   # System groups.
   systemGroups =
-    [
-      { name = "root";
-        gid = ids.gids.root;
-      }
-      { name = "nogroup";
-        gid = ids.gids.nogroup;
-      }
-      { name = "users";
-        gid = ids.gids.users;
-      }
-      { name = "nixbld";
-        gid = ids.gids.nixbld;
-      }
-    ];
+    let
+      jobGroups = pkgs.lib.concatLists (map (job: job.groups) upstartJobs.jobs);
+
+      defaultGroups = 
+        [
+          { name = "root";
+            gid = ids.gids.root;
+          }
+          { name = "nogroup";
+            gid = ids.gids.nogroup;
+          }
+          { name = "users";
+            gid = ids.gids.users;
+          }
+          { name = "nixbld";
+            gid = ids.gids.nixbld;
+          }
+        ];
+
+      addAttrs =
+        { name, gid ? "" }:
+        { inherit name gid; };
+
+    in map addAttrs (defaultGroups ++ jobGroups);
 
 
   # Awful hackery necessary to pass the users/groups to the activation script.

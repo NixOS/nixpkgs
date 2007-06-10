@@ -87,7 +87,7 @@ import ../upstart-jobs/gather.nix {
 
     # Name service cache daemon.
     (import ../upstart-jobs/nscd.nix {
-      inherit (pkgs) glibc pwdutils;
+      inherit (pkgs) glibc;
       inherit nssModulesPath;
     })
 
@@ -128,7 +128,7 @@ import ../upstart-jobs/gather.nix {
   # SSH daemon.
   ++ optional ["services" "sshd" "enable"]
     (import ../upstart-jobs/sshd.nix {
-      inherit (pkgs) writeText openssh glibc pwdutils;
+      inherit (pkgs) writeText openssh glibc;
       inherit (pkgs.xorg) xauth;
       inherit nssModulesPath;
       forwardX11 = config.get ["services" "sshd" "forwardX11"];
@@ -139,7 +139,7 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services" "ntp" "enable"]
     (import ../upstart-jobs/ntpd.nix {
       inherit modprobe;
-      inherit (pkgs) ntp glibc pwdutils writeText;
+      inherit (pkgs) ntp glibc writeText;
       servers = config.get ["services" "ntp" "servers"];
     })
 
@@ -159,14 +159,14 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services" "httpd" "enable"]
     (import ../upstart-jobs/httpd.nix {
       inherit config pkgs;
-      inherit (pkgs) glibc pwdutils;
+      inherit (pkgs) glibc;
     })
 
   # Samba service.
   ++ optional ["services" "samba" "enable"]
     (import ../upstart-jobs/samba.nix {
       inherit pkgs;
-      inherit (pkgs) glibc pwdutils samba;
+      inherit (pkgs) glibc samba;
     })
 
   # CUPS (printing) daemon.

@@ -1,11 +1,5 @@
 {stdenv, hal}:
 
-let
-
-  homeDir = "/var/run/dbus";
-
-in
-
 {
   name = "hal";
   
@@ -13,7 +7,12 @@ in
     { name = "haldaemon";
       uid = (import ../system/ids.nix).uids.haldaemon;
       description = "HAL daemon user";
-#      home = homeDir;
+    }
+  ];
+
+  groups = [
+    { name = "haldaemon";
+      gid = (import ../system/ids.nix).gids.haldaemon;
     }
   ];
 

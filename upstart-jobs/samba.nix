@@ -1,4 +1,4 @@
-{pkgs, samba, glibc, pwdutils}:
+{pkgs, samba, glibc}:
 
 let
   
@@ -17,6 +17,11 @@ in
     }
   ];
   
+  groups = [
+    { name = group;
+    }
+  ];
+  
   job = "
 
 description \"Samba Service\"
@@ -25,10 +30,6 @@ start on network-interfaces/started
 stop on network-interfaces/stop
 
 start script
-
-  if ! ${glibc}/bin/getent group ${group} > /dev/null; then
-       ${pwdutils}/sbin/groupadd ${group}
-  fi
 
   ${samba}/sbin/nmbd -D &
   ${samba}/sbin/smbd -D &

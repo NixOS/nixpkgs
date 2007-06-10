@@ -1,4 +1,4 @@
-{glibc, pwdutils, nssModulesPath}:
+{glibc, nssModulesPath}:
 
 {
   name = "nscd";

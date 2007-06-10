@@ -22,4 +22,7 @@
 
   # Allow jobs to declare user accounts that should be created.
   users = if job ? users then job.users else [];
+  
+  # Allow jobs to declare groups that should be created.
+  groups = if job ? groups then job.groups else [];
 }

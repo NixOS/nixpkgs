@@ -1,4 +1,4 @@
-{ntp, modprobe, glibc, pwdutils, writeText, servers}:
+{ntp, modprobe, glibc, writeText, servers}:
 
 let
 
