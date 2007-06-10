@@ -13,7 +13,7 @@ diff -rc slim-1.2.6-orig/app.cpp slim-1.2.6/app.cpp
 + #include <string>
 + 
 + pam_handle_t* pamh;
-+ char const* PAM_service = "login"; // <----- Change this, if the patch gets accepted upstream
++ char const* PAM_service = "slim"; // <----- Change this, if the patch gets accepted upstream
 + string password;
 + 
 + int conv(int num_msg, const struct pam_message **msg,
