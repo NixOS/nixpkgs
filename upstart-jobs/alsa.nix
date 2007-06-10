@@ -10,7 +10,15 @@ in
   name = "alsa";
 
   extraPath = [alsaUtils];
-  
+
+  # Alsalib seems to require the existence of this group, even if it's
+  # not used (e.g., doesn't own any devices).
+  groups = [
+    { name = "audio";
+      gid = (import ../system/ids.nix).gids.audio;
+    }
+  ];
+
   job = "
 start on hardware-scan
 stop on shutdown
