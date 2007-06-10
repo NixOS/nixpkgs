@@ -2,15 +2,32 @@
 
 let 
 
+
   optional = option: file:
     if config.get option then [file] else [];
 
+
+  # !!! ugh, these files shouldn't be created here.
+    
+    
   envConf = pkgs.writeText "environment" "
     PATH=${systemPath}/bin:${systemPath}/sbin:${pkgs.openssh}/bin
     NIX_REMOTE=daemon
-  " /* ${pkgs.openssh}/bin is a hack to get remote scp to work */; 
+  " /* ${pkgs.openssh}/bin is a hack to get remote scp to work */;
+
+
+  # Don't indent this file!
+  pamConsoleHandlers = pkgs.writeText "console.handlers" "
+console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
+${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
+${pkgs.pam_console}/sbin/pam_console_apply unlock logfail wait -r -t tty -s -c ${pamConsolePerms}
+";
+
+  pamConsolePerms = ./security/console.perms;
+
 
 in
+
     
 import ../helpers/make-etc.nix {
   inherit (pkgs) stdenv;
@@ -126,15 +143,17 @@ import ../helpers/make-etc.nix {
   # A bunch of PAM configuration files for various programs.
   ++ (map
     (program:
+      let isLDAPEnabled = config.get ["users" "ldap" "enable"]; in
       { source = pkgs.substituteAll {
           src = ./pam.d + ("/" + program);
-          inherit (pkgs) pam_unix2;
+          inherit (pkgs) pam_unix2 pam_console;
           pam_ldap =
-            if config.get ["users" "ldap" "enable"]
+            if isLDAPEnabled
             then pkgs.pam_ldap
             else "/no-such-path";
           inherit (pkgs.xorg) xauth;
-          inherit envConf;
+          inherit envConf pamConsoleHandlers;
+          isLDAPEnabled = if isLDAPEnabled then "" else "#";
         };
         target = "pam.d/" + program;
       }
@@ -150,6 +169,7 @@ import ../helpers/make-etc.nix {
       "useradd"
       "chsh"
       "common"
+      "common-console" # shared stuff for interactive local sessions
     ]
   )
 

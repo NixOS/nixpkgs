@@ -49,8 +49,9 @@ ln -sfn @bash@/bin/sh $mountPoint/bin/sh
 echo @modprobe@/sbin/modprobe > /proc/sys/kernel/modprobe
 
 
-# Various log directories.
+# Various log/runtime directories.
 mkdir -m 0755 -p /var/run
+mkdir -m 0755 -p /var/run/console # for pam_console
 
 touch /var/run/utmp # must exist
 chmod 644 /var/run/utmp
