@@ -8,4 +8,5 @@ stdenv.mkDerivation {
   };
   buildInputs = [x11];
   propagatedBuildInputs = [libXp libXau];
+  patches = [./c-linkage.patch];
 }
