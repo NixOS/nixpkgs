@@ -1214,6 +1214,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  boost = import ../development/libraries/boost {
+    inherit fetchurl stdenv;
+  };
+
   cairo = import ../development/libraries/cairo {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
