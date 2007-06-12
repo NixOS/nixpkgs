@@ -17,11 +17,11 @@
 } :
 
 stdenv.mkDerivation {
-  name = "pidgin-2.0.0";
+  name = "pidgin-2.0.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://kent.dl.sourceforge.net/sourceforge/pidgin/pidgin-2.0.0.tar.bz2;
-    md5 = "132355d7e236d9c2820a2668621eef43";
+    url = http://heanet.dl.sourceforge.net/sourceforge/pidgin/pidgin-2.0.1.tar.bz2;
+    sha256 = "1z2is5hp77qc5lw200jf0d1rai4gp83q2kl9x06ra026c2591yc0";
   };
 
   inherit nss;
