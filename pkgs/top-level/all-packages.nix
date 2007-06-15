@@ -221,7 +221,7 @@ rec {
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
-    inherit stdenv;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
   };
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
