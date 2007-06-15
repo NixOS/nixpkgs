@@ -189,6 +189,19 @@
   }
 
 
+  {
+    name = ["boot" "extraGrubEntries"];
+    default = "";
+    example = "
+      title Windows
+        chainloader (hd0,1)+1
+    ";
+    description = "
+      Any additional entries you want added to the Grub boot menu.
+    ";
+  }
+
+
   { 
     name = ["networking" "hostName"];
     default = "nixos";

@@ -288,6 +288,7 @@ rec {
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     copyKernels = config.get ["boot" "copyKernels"];
+    extraGrubEntries = config.get ["boot" "extraGrubEntries"];
   };
 
 

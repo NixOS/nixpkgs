@@ -65,6 +65,14 @@ if test -n "$tmp"; then
 fi
 
 
+# Additional entries specified verbatim by the configuration.
+cat >> $tmp <<EOF
+
+@extraGrubEntries@
+
+EOF
+
+
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
 for generation in $(
