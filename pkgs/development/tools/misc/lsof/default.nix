@@ -1,9 +1,9 @@
 
-pkgs:
-pkgs.stdenv.mkDerivation {
+{stdenv, fetchurl}:
+stdenv.mkDerivation {
   name = "lsof";
 
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.78.tar.bz2;
     sha256 = "0azvl43niqkq94drx52p6dvp70r38f25fqw181ywmvqn80dbb3c9";
   };

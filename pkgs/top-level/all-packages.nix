@@ -1082,6 +1082,10 @@ rec {
     inherit fetchurl stdenv perl m4;
   };
 
+  lsof = import ../development/tools/misc/lsof {
+    inherit fetchurl stdenv;
+  };
+
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
   };
@@ -2170,7 +2174,8 @@ rec {
   };
 
   vsftpd = import ../servers/ftp/vsftpd {
-    inherit fetchurl stdenv openssl ;
+    inherit fetchurl openssl ;
+    stdenv = overrideGCC stdenv gcc295 ;
   };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg {
