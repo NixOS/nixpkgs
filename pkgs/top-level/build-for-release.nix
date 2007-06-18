@@ -131,6 +131,7 @@ let {
     quake3demo
     readline
     rsync
+    ruby
     screen
     sdf
     slim
