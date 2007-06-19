@@ -516,6 +516,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  sudo = import ../tools/security/sudo {
+    inherit fetchurl stdenv coreutils;
+  };
+
   sshfsFuse = import ../tools/networking/sshfs-fuse {
     inherit fetchurl stdenv pkgconfig fuse;
     inherit (gtkLibs) glib;
