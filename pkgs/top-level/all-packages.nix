@@ -254,6 +254,10 @@ rec {
     gui = true;
   };
 
+  bittornado = import ../tools/networking/p2p/bit-tornado {
+    inherit fetchurl stdenv python wxPython26;
+  };
+
   bsdiff = import ../tools/compression/bsdiff {
     inherit fetchurl stdenv;
   };
