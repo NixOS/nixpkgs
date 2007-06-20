@@ -551,6 +551,10 @@ rec {
     inherit (xlibs) imake;
   };
 
+  units = import ../tools/misc/units {
+    inherit fetchurl stdenv;
+  };
+
   unshield = import ../tools/archivers/unshield {
     inherit fetchurl stdenv zlib;
   };
