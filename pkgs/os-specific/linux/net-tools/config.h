@@ -28,7 +28,7 @@
  */
 #define HAVE_AFUNIX 1
 #define HAVE_AFINET 1
-#define HAVE_AFINET6 0
+#define HAVE_AFINET6 1
 #define HAVE_AFIPX 1
 #define HAVE_AFATALK 1
 #define HAVE_AFAX25 0
