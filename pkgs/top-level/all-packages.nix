@@ -2726,6 +2726,13 @@ rec {
     inherit fetchurl stdenv ghc zlib ncurses curl;
   };
 
+  dia = import ../applications/graphics/dia {
+    inherit stdenv fetchurl pkgconfig perl perlXMLParser 
+	libxml2 gettext python libxml2Python docbook5 docbook_xsl 
+	libxslt;
+    inherit (gtkLibs) gtk glib;
+  };
+
   eclipse = plugins :
     import ../applications/editors/eclipse {
       inherit fetchurl stdenv makeWrapper jdk;
