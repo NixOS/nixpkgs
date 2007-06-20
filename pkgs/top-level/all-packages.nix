@@ -3328,6 +3328,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  synaptics = import ../misc/synaptics {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libXi libXext;
+    inherit (xorg) xorgserver;
+  };
+
   tetex = import ../misc/tex/tetex {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
