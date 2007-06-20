@@ -2271,6 +2271,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  iproute = import ../os-specific/linux/iproute {
+    inherit fetchurl stdenv flex bison db4;
+  };
+
   iputils = import ../os-specific/linux/iputils {
     inherit fetchurl stdenv;
     glibc = stdenv.gcc.libc;
