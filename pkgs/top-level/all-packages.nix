@@ -626,6 +626,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  zsh = import ../shells/zsh {
+    inherit fetchurl stdenv ncurses coreutils;
+  };
+
 
   ### DEVELOPMENT / COMPILERS
 
