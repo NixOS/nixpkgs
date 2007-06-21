@@ -847,6 +847,17 @@
     ";
   }
 
+  {
+    name = ["nix" "extraOptions"];
+    default = "";
+    example = "
+	gc-keep-outputs = true
+	gc-keep-derivations = true
+    ";
+    description = "
+	This option allows to append lines to nix.conf. 
+    ";
+  }
   
   {
     name = ["security" "setuidPrograms"];

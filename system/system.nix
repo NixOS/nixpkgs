@@ -249,6 +249,7 @@ rec {
       config.get ["security" "setuidPrograms"] ++
       config.get ["security" "extraSetuidPrograms"];
     maxJobs = config.get ["nix" "maxJobs"];
+    extraNixOptions = config.get ["nix" "extraOptions"];
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 

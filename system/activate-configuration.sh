@@ -96,6 +96,9 @@ if test -z "@readOnlyRoot@"; then
 # WARNING: this file is generated.
 build-users-group = nixbld
 build-max-jobs = @maxJobs@
+
+@extraNixOptions@
+
 EOF
 
     chown root.nixbld /nix/store
