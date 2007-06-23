@@ -327,6 +327,7 @@ rec {
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
+    configurationName = config.get ["boot" "configurationName"];
   };
 
 

@@ -11,6 +11,7 @@ ln -s $etc/etc $out/etc
 ln -s $systemPath $out/sw
 
 echo "$kernelParams" > $out/kernel-params
+echo "$configurationName" > $out/configuration-name
 
 cat > $out/menu.lst << GRUBEND
 kernel $kernel init=$bootStage2 $kernelParams

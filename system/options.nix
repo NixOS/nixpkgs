@@ -67,6 +67,15 @@
   }
 
   {
+	name = ["boot" "configurationName"];
+        default = "";
+        example = "Stable 2.6.21";
+        description = "
+	Grub entry name instead of default.
+	";
+  }
+
+  {
     name = ["boot" "kernelParams"];
     default = [
       "selinux=0"

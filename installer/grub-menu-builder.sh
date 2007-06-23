@@ -24,6 +24,7 @@ GRUBEND
 addEntry() {
     local name="$1"
     local path="$2"
+    local shortSuffix="$3"
 
     if ! test -e $path/kernel -a -e $path/initrd; then
         return
@@ -46,6 +47,13 @@ addEntry() {
         initrd=$initrd2
     fi
     
+    local confName=$(if test -e $path/configuration-name; then 
+	cat $path/configuration-name; 
+    fi);
+    if test -n "$confName" ; then
+	name="$confName $3";
+    fi;
+
     cat >> $tmp << GRUBEND
 title $name
   kernel $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
@@ -61,7 +69,7 @@ fi
 
 
 if test -n "$tmp"; then
-    addEntry "NixOS - Default" $default
+    addEntry "NixOS - Default" $default ""
 fi
 
 
@@ -82,7 +90,7 @@ for generation in $(
     echo $generation
     link=/nix/var/nix/profiles/system-$generation-link
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
-    addEntry "NixOS - Configuration $generation ($date)" $link
+    addEntry "NixOS - Configuration $generation ($date)" $link "$generation ($date)"
 done
 
 
