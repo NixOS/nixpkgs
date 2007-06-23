@@ -55,6 +55,16 @@
     ";
   }
 
+  {
+	name = ["boot" "useKernel"];
+	default = pkgs :(pkgs.kernel);
+	description = "
+	Function that takes package collection and returns kernel 
+	package. Do not collect old generations after changing it
+	until you get to boot successfully. In principle, you can 
+	specify a kernel that will build, but not boot.
+	";
+  }
 
   {
     name = ["boot" "kernelParams"];

@@ -29,6 +29,7 @@ rec {
 
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
 
+  useKernel = (config.get ["boot" "useKernel"]) pkgs;
 
   rootModules = 
     (config.get ["boot" "initrd" "extraKernelModules"]) ++
@@ -37,7 +38,8 @@ rec {
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ../helpers/modules-closure.nix {
-    inherit (pkgs) stdenv kernel module_init_tools;
+    inherit (pkgs) stdenv module_init_tools;
+    kernel = useKernel;
     inherit rootModules;
   };
 
@@ -136,7 +138,8 @@ rec {
     dir = "sbin";
     src = ./modprobe;
     isExecutable = true;
-    inherit (pkgs) kernel module_init_tools;
+    inherit (pkgs) module_init_tools;
+    kernel = useKernel;
   };
 
 
@@ -242,7 +245,7 @@ rec {
     isExecutable = true;
 
     inherit etc wrapperDir systemPath modprobe defaultShell;
-    inherit (pkgs) kernel;
+    kernel = useKernel;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     hostName = config.get ["networking" "hostName"];
     setuidPrograms =
@@ -267,7 +270,8 @@ rec {
   # everything else to bring up the system.
   bootStage2 = import ../boot/boot-stage-2.nix {
     inherit (pkgs) substituteAll writeText coreutils 
-      utillinux kernel udev upstart;
+      utillinux udev upstart;
+    kernel = useKernel;
     inherit activateConfiguration;
     readOnlyRoot = config.get ["boot" "readOnlyRoot"];
     upstartPath = [
@@ -312,7 +316,7 @@ rec {
     inherit grubMenuBuilder;
     inherit etc;
     inherit systemPath;
-    kernel = pkgs.kernel + "/vmlinuz";
+    kernel = useKernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.
     path = [
