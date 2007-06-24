@@ -555,6 +555,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  unrar = import ../tools/archivers/unrar {
+    inherit fetchurl stdenv;
+  };
+
   unshield = import ../tools/archivers/unshield {
     inherit fetchurl stdenv zlib;
   };
