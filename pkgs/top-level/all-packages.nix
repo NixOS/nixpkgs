@@ -3158,6 +3158,11 @@ rec {
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
   };
 
+  xmove = import ../applications/misc/xmove {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXi imake libXau;
+    inherit (xorg) xauth;
+  };
   xvidcap = import ../applications/video/xvidcap {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig;
     inherit (gtkLibs) gtk;
@@ -3382,5 +3387,13 @@ rec {
       inherit stdenv fetchurl python sqlite;
     };
   };
+
+  /*wine = import ../misc/emulators/wine {
+    inherit fetchurl stdenv flex bison mesa ncurses
+	libjpeg alsaLib lcms;
+    inherit (xlibs) libX11 libICE libXi libXcursor
+	libXinerama libXrandr libXrender libXxf86vm;
+    inherit (gtkLibs) gtk;
+  };*/
 
 }
