@@ -28,4 +28,5 @@ stdenv.mkDerivation {
       md5 = "1a8c4d4fc699233f5fdb902b8753099e";
     }) */
   buildInputs = [pkgconfig x11 libXmu libXi makedepend libdrm glproto libXxf86vm];
+  meta = {description = "OpenGL-compatible 3D library. Supports acceleration.";};
 }

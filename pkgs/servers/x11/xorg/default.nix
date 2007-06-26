@@ -2414,6 +2414,9 @@ rec {
       sha256 = "0h0pa3ynvqqikkvrx7jhgdjg207njbph408k1i6azqscpmwz5g39";
     };
     buildInputs = [pkgconfig libFS libXfont xtrans ];
+    meta = {
+	description = "X font server. Fontpath for it is unix/:7100. ";
+    };
   }) // {inherit libFS libXfont xtrans ;};
     
   xfsinfo = (stdenv.mkDerivation {
@@ -2464,6 +2467,7 @@ rec {
       sha256 = "1n365k4704wnnscl5l00mkq1qc7a79pi0b2cxh3yiidha87s2s5r";
     };
     buildInputs = [pkgconfig libX11 libXau libXmu ];
+    meta = {description = "X per-host access management tool.";};
   }) // {inherit libX11 libXau libXmu ;};
     
   xineramaproto = (stdenv.mkDerivation {

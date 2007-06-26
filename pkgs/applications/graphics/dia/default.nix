@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [gtk glib perl pkgconfig perlXMLParser libxml2 gettext python libxml2Python docbook5 libxslt docbook_xsl];
+
+  meta = {
+    description = "Gnome Diagram drawing software.";
+  };
 }

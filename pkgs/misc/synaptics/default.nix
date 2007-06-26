@@ -9,4 +9,8 @@ stdenv.mkDerivation {
 
   makeFlags="DESTDIR=$out PREFIX=/";
   buildInputs = [libX11 pkgconfig xorgserver libXi libXext];
+
+  meta = {
+    description = "Driver for synaptics touchpad.";
+  };
 }

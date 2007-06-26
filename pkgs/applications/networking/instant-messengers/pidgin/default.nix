@@ -31,4 +31,8 @@ stdenv.mkDerivation {
     perl perlXMLParser libxml2 openssl nss
     libXScrnSaver
   ];
+
+  meta = {
+    description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
+  };
 }

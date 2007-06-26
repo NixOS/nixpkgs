@@ -16,4 +16,8 @@ stdenv.mkDerivation {
 	wxPython26+"/lib/python2.4/site-packages/wx-2.6-gtk2-unicode; "+
 	"python `which btdownloadgui.py` --ipv6_enabled 1 --ipv6_binds_v4 0 \"$@\";' >"+
 	"$out/bin/bittornado ; chmod a+rx $out/bin/bittornado;";
+
+  meta = {
+    description = "Bittorrent client with IPv6 support.";
+  };
 }

@@ -12,4 +12,9 @@ stdenv.mkDerivation {
   preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
   configurePhase = "./Configure -n linux;";
   installPhase = " mkdir -p $out/bin $out/man/man8; cp lsof.8 $out/man/man8/; cp lsof $out/bin";
+
+  meta = {
+    description = "List open files. Can show what process has opened some file, 
+socket (IPv6/IPv4/UNIX local), or partition (by opening a file from it).";
+  };
 }
