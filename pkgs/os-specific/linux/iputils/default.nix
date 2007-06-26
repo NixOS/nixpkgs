@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "iputils";
+  name = "iputils-20020927";
   builder = ./builder.sh;
   src = fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/iputils_20020927.orig.tar.gz;

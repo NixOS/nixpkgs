@@ -1,6 +1,6 @@
 {stdenv, fetchurl, coreutils, ncurses}:
 stdenv.mkDerivation {
-  name = "zsh";
+  name = "zsh-4.2.3";
 
   src = fetchurl {
     url = ftp://nephtys.lip6.fr/pub/unix/shells/zsh/zsh-4.2.3.tar.bz2;

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, gtk, pkgconfig, glib, perl, perlXMLParser, libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl, libxslt }:
 stdenv.mkDerivation {
-  name = "dia";
+  name = "dia-0.96";
 
   src = fetchurl {
     url = http://ftp.gnome.org.nyud.net:8080/pub/gnome/sources/dia/0.96/dia-0.96.1.tar.bz2;

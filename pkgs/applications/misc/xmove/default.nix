@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libX11, libXi, imake, xauth, libXau}:
 stdenv.mkDerivation {
-  name = "xmove";
+  name = "xmove-2.0b2";
 
   src = fetchurl {
     url = http://ftp.debian.org/debian/pool/main/x/xmove/xmove_2.0beta2.orig.tar.gz;

@@ -1,7 +1,7 @@
 
 pkgs:
 pkgs.stdenv.mkDerivation {
-  name = "iproute";
+  name = "iproute-20070313";
 
   src = pkgs.fetchurl {
     url = http://ftp.debian.org/debian/pool/main/i/iproute/iproute_20070313.orig.tar.gz;

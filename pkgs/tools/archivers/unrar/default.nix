@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "unrar";
+  name = "unrar-3.7.6";
 
   src = fetchurl {
     sha256 = "0inzy0jlwqm18i6lq17aq4n2baqqlbjyr6incw4s9cxrvmjq51ls";

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, coreutils}:
 stdenv.mkDerivation {
-  name = "sudo";
+  name = "sudo-1.6.8";
 
   src = fetchurl {
     url = ftp://sunsite.ualberta.ca/pub/Mirror/sudo/sudo-1.6.8p12.tar.gz;
