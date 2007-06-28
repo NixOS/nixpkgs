@@ -1,4 +1,4 @@
-{stdenv, fetchurl, coreutils}:
+{stdenv, fetchurl, coreutils, pam}:
 stdenv.mkDerivation {
   name = "sudo-1.6.8";
 
@@ -13,5 +13,5 @@ stdenv.mkDerivation {
 
   installFlags = " sudoers_uid=nixbld1 sudoers_gid=nixbld sysconfdir=$(prefix)/etc ";
 
-  buildInputs = [coreutils];
+  buildInputs = [coreutils pam];
 }

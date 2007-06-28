@@ -521,7 +521,7 @@ rec {
   };
 
   sudo = import ../tools/security/sudo {
-    inherit fetchurl stdenv coreutils;
+    inherit fetchurl stdenv coreutils pam;
   };
 
   sshfsFuse = import ../tools/networking/sshfs-fuse {
@@ -1624,6 +1624,7 @@ rec {
 
   ncurses = import ../development/libraries/ncurses {
     inherit fetchurl stdenv;
+    unicode = (system != "i686-cygwin");
   };
 
   ncursesDiet = import ../development/libraries/ncurses-diet {
@@ -2475,6 +2476,10 @@ rec {
   nettools = import ../os-specific/linux/net-tools {
     inherit fetchurl stdenv;
   };
+
+  /*gw6c = import ../os-specific/linux/gw6c {
+    inherit fetchurl stdenv nettools openssl;
+  };*/
 
   nss_ldap = import ../os-specific/linux/nss_ldap {
     inherit fetchurl stdenv openldap;
