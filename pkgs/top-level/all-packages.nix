@@ -494,6 +494,10 @@ rec {
     inherit (xlibs) libX11;
   };
 
+  pwgen = import ../tools/security/pwgen {
+    inherit stdenv fetchurl;
+  };
+
   qtparted = import ../tools/misc/qtparted {
     inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
     inherit (xlibs) libX11 libXext;
@@ -2232,6 +2236,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  devicemapperStatic = lowPrio (appendToName "static" (import ../os-specific/linux/device-mapper {
+    inherit fetchurl stdenv;
+    static = true;
+  }));
+
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
@@ -2434,6 +2443,12 @@ rec {
   lvm2 = import ../os-specific/linux/lvm2 {
     inherit fetchurl stdenv devicemapper;
   };
+
+  lvm2Static = lowPrio (appendToName "static" (import ../os-specific/linux/lvm2 {
+    inherit fetchurl stdenv;
+    static = true;
+    devicemapper = devicemapperStatic;
+  }));
 
   mdadm = import ../os-specific/linux/mdadm {
     inherit fetchurl stdenv groff;
@@ -2823,7 +2838,7 @@ rec {
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext ncurses;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
     inherit (xlibs) libXScrnSaver;

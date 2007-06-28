@@ -13,6 +13,7 @@ stdenv.mkDerivation {
       rm -vf $out/lib/lib\${lib}.so
       echo \"INPUT(-l\${lib}w)\" > $out/lib/lib\${lib}.so
       ln -svf lib\${lib}w.a $out/lib/lib\${lib}.a
+      ln -svf lib\${lib}w.so.5 $out/lib/lib\${lib}.so.5
     done;
   ";
 }

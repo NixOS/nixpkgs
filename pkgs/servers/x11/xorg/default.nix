@@ -2183,8 +2183,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sis-X11R7.2-0.9.3.tar.bz2;
       sha256 = "0szg1rm9fag1889p82ws1yb15yyb6knagncq650mlf2xww116vjq";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig glproto mesaHeaders fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit glproto mesaHeaders fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosisusb = (stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.8.1";
