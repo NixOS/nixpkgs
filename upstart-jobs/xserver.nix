@@ -60,6 +60,7 @@ let
       xorg.xf86inputmouse
     ] 
     ++ optional (videoDriver == "vesa") xorg.xf86videovesa
+    ++ optional (videoDriver == "sis") xorg.xf86videosis
     ++ optional (videoDriver == "i810") xorg.xf86videoi810
     ++ optional (videoDriver == "intel") xorg.xf86videointel;
 

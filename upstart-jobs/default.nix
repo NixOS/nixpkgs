@@ -36,7 +36,7 @@ import ../upstart-jobs/gather.nix {
     # Makes LVM logical volumes available. 
     (import ../upstart-jobs/lvm.nix {
       inherit modprobe;
-      inherit (pkgs) lvm2;
+      inherit (pkgs) lvm2 devicemapper;
     })
       
     # Activate software RAID arrays.

@@ -177,6 +177,14 @@
     ";
   }
 
+  {
+    name = ["boot" "initrd" "lvm"];
+    default = false;
+    description = "
+      Whether to include lvm in the initial ramdisk. You should use this option
+      if your ROOT device is on lvm volume.
+    ";
+  }
 
   {
     name = ["boot" "initrd" "enableSplashScreen"];
