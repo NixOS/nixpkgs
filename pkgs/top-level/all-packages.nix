@@ -2765,6 +2765,13 @@ rec {
     inherit (gtkLibs) gtk glib;
   };
 
+  djvulibre = import ../applications/misc/djvulibre {
+    inherit stdenv fetchurl libjpeg libtiff libungif zlib
+	ghostscript libpng x11 mesa;
+    qt = qt3;
+    inherit (xlibs) libX11;
+  };
+
   eclipse = plugins :
     import ../applications/editors/eclipse {
       inherit fetchurl stdenv makeWrapper jdk;
