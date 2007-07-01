@@ -2894,6 +2894,12 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  imagemagick = import ../applications/graphics/ImageMagick {
+    inherit stdenv fetchurl bzip2 freetype graphviz 
+	ghostscript libjpeg libpng libtiff libxml2 zlib;
+    inherit (xlibs) libX11;
+  };
+
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig gtkmm
