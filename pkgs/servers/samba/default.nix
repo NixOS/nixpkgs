@@ -9,12 +9,12 @@
 } :
 
 stdenv.mkDerivation {
-  name = "samba-3.0.24";
+  name = "samba-3.0.25b";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://ftp.bit.nl/mirror/samba/old-versions/samba-3.0.24.tar.gz;		#TODO, change this to a URL of cs.uu.nl/...
-    md5 = "89273F67A6D8067CBBECEFAA13747153";
+    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.25b.tar.gz;		#TODO, change this to a URL of cs.uu.nl/...
+    sha256 = "18l71skn7mryg78jpd8x38pf27wvrx00v33w3z2ycsfnrbcp8l6w";
   };
 
   smbconf = ./smb.conf;
