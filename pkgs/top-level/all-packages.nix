@@ -1223,7 +1223,7 @@ rec {
   };
 
   aspell = import ../development/libraries/aspell {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl which;
   };
 
   audiofile = import ../development/libraries/audiofile {
@@ -3135,12 +3135,11 @@ rec {
 
   wrapFirefox = firefox: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv firefox;
-    plugins = [
-      MPlayerPlugin
-    ]
+    plugins = []
     ++ lib.optional (system == "i686-linux") flashplayer
     # RealPlayer is disabled by default for legal reasons.
     ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
+    ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
     ++ lib.optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
