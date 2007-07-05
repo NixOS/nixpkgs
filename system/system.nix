@@ -58,7 +58,7 @@ rec {
     }
     "
       ensureDir $out/bin
-      if [ -n $devicemapper ]; then
+      if test -n \"$devicemapper\"; then
         cp $devicemapper/sbin/dmsetup.static $out/bin/dmsetup
         cp $lvm2/sbin/lvm.static $out/bin/lvm
         ln -s lvm $out/bin/vgscan
