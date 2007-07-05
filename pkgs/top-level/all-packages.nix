@@ -3083,7 +3083,9 @@ rec {
     gpgSupport = true;
   };
 
-  thunderbird = import ../applications/networking/mailreaders/thunderbird {
+  thunderbird = thunderbird2;
+
+  thunderbird1 = import ../applications/networking/mailreaders/thunderbird-1.x {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
