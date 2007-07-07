@@ -2856,6 +2856,11 @@ rec {
     inherit (xlibs) libXScrnSaver;
   };
 
+  pidginlatex = import ../applications/networking/instant-messengers/pidgin-latex {
+	inherit fetchurl stdenv tetex pkgconfig imagemagick ghostscript pidgin;
+	inherit (gtkLibs) glib gtk;
+  };
+
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
