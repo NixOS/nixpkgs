@@ -1039,6 +1039,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  cmake = import ../development/tools/build-managers/cmake {
+    inherit fetchurl stdenv;
+  };
+
   elfutils = import ../development/tools/misc/elfutils {
     inherit fetchurl stdenv;
   };
@@ -2712,6 +2716,10 @@ rec {
 
   cdrtools = import ../applications/misc/cdrtools {
     inherit fetchurl stdenv;
+  };
+
+  cdrkit = import ../applications/misc/cdrkit {
+    inherit fetchurl stdenv cmake libcap zlib;
   };
 
   chatzilla = 
