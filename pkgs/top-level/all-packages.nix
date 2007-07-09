@@ -447,6 +447,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ncat = import ../tools/networking/ncat {
+    inherit fetchurl stdenv openssl;
+  };
+
   netcat = import ../tools/networking/netcat {
     inherit fetchurl stdenv;
   };
