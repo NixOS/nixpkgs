@@ -2485,9 +2485,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  /*gw6c = import ../os-specific/linux/gw6c {
-    inherit fetchurl stdenv nettools openssl;
-  };*/
+  gw6c = import ../os-specific/linux/gw6c {
+    inherit fetchurl stdenv nettools openssl procps;
+  };
 
   nss_ldap = import ../os-specific/linux/nss_ldap {
     inherit fetchurl stdenv openldap;
