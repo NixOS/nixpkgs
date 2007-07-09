@@ -1028,6 +1028,37 @@
     ";
   }
 
+  {
+	name = ["services" "gw6c" "enable"];
+	default = false;
+	description = "
+	Whether to enable Gateway6 client (IPv6 tunnel).
+";
+  }
 
+  {
+	name = ["services" "gw6c" "username"];
+	default = "";
+	description = "
+	Your Gateway6 login name, if any.
+";
+  }
 
+  {
+	name = ["services" "gw6c" "password"];
+	default = "";
+	description = "
+	Your Gateway6 password, if any.
+";
+  }
+
+  {
+	name = ["services" "gw6c" "server"];
+	default = "anon.freenet6.net";
+	example = "broker.freenet6.net";
+	description = "
+	Used Gateway6 server.
+";
+  }
+  
 ]

@@ -175,6 +175,13 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) writeText cups;
     })
 
+  # Gateway6
+  ++ optional ["services" "gw6c" "enable"]
+    (import ../upstart-jobs/gw6c.nix {
+      inherit config pkgs;
+    })
+
+
   # ALSA sound support.
   ++ optional ["sound" "enable"]
     (import ../upstart-jobs/alsa.nix {
