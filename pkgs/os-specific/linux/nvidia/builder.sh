@@ -28,18 +28,18 @@ echo "Copying all files to " $out/lib""
 cp -R * $out
 
 #add extra symlinks in $out
-ln -sf $out/lib/libGLcore.so.1.0.9755 $out/lib/libGLcore.so
-ln -sf $out/lib/libGLcore.so.1.0.9755 $out/lib/libGLcore.so.1
-ln -sf $out/lib/libGL.so.1.0.9755 $out/lib/libGL.so
-ln -sf $out/lib/libGL.so.1.0.9755 $out/lib/libGL.so.1
-ln -sf $out/lib/libnvidia-cfg.so.1.0.9755 $out/lib/libnvidia-cfg.so.1
-ln -sf $out/lib/libnvidia-tls.so.1.0.9755 $out/lib/libnvidia-tls.so.1
-ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.1.0.9755 $out/X11R6/lib/libXvMCNVIDIA.so.1
-ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.1.0.9755 $out/lib/libXvMCNVIDIA.so.1
-ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.1.0.9755 $out/X11R6/lib/modules/libnvidia-wfb.so.1
-ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.1.0.9755 $out/lib/libnvidia-wfb.so.1
-ln -sf $out/X11R6/lib/modules/extensions/libglx.so.1.0.9755 $out/X11R6/lib/modules/extensions/libglx.so.1
-ln -sf $out/X11R6/lib/modules/extensions/libglx.so.1.0.9755 $out/lib/libglx.so.1
+ln -sf $out/lib/libGLcore.so.$versionNumber $out/lib/libGLcore.so
+ln -sf $out/lib/libGLcore.so.$versionNumber $out/lib/libGLcore.so.1
+ln -sf $out/lib/libGL.so.$versionNumber $out/lib/libGL.so
+ln -sf $out/lib/libGL.so.$versionNumber $out/lib/libGL.so.1
+ln -sf $out/lib/libnvidia-cfg.so.$versionNumber $out/lib/libnvidia-cfg.so.1
+ln -sf $out/lib/libnvidia-tls.so.$versionNumber $out/lib/libnvidia-tls.so.1
+ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.$versionNumber $out/X11R6/lib/libXvMCNVIDIA.so.1
+ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.$versionNumber $out/lib/libXvMCNVIDIA.so.1
+ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.$versionNumber $out/X11R6/lib/modules/libnvidia-wfb.so.1
+ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.$versionNumber $out/lib/libnvidia-wfb.so.1
+ln -sf $out/X11R6/lib/modules/extensions/libglx.so.$versionNumber $out/X11R6/lib/modules/extensions/libglx.so.1
+ln -sf $out/X11R6/lib/modules/extensions/libglx.so.$versionNumber $out/lib/libglx.so.1
 
 #TODO: patchelf binaries !
 #patchelf --set-interpreter ${path glibc TODO  /lib/ld-linux.so.2 $out/bin/....
@@ -48,17 +48,17 @@ ln -sf $out/X11R6/lib/modules/extensions/libglx.so.1.0.9755 $out/lib/libglx.so.1
 
 ensureDir /usr/lib/
 cd /usr/lib
-ln -sf $out/lib/libGLcore.so.1.* libGLcore.so.1
+ln -sf $out/lib/libGLcore.so.$versionNumber libGLcore.so.1
 ln -sf $out/lib/libGL.la libGL.la
-ln -sf $out/lib/libGL.so.1.* libGL.so.1
-ln -sf $out/lib/libnvidia-cfg.so.1.* libnvidia-cfg.so.1
-ln -sf $out/lib/libnvidia-tls.so.1.* libnvidia-tls.so.1
+ln -sf $out/lib/libGL.so.$versionNumber libGL.so.1
+ln -sf $out/lib/libnvidia-cfg.so.$versionNumber libnvidia-cfg.so.1
+ln -sf $out/lib/libnvidia-tls.so.$versionNumber libnvidia-tls.so.1
 ensureDir /usr/lib/tls/
-ln -sf $out/lib/tls/libnvidia-tls.so.1.* /usr/lib/tls/libnvidia-tls.so.1
-ln -sf $out/X11R6/lib/modules/extensions/libglx.so.1.* libglx.so.1
-ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.1.* libnvidia-wfb.so.1
+ln -sf $out/lib/tls/libnvidia-tls.so.$versionNumber /usr/lib/tls/libnvidia-tls.so.1
+ln -sf $out/X11R6/lib/modules/extensions/libglx.so.$versionNumber libglx.so.1
+ln -sf $out/X11R6/lib/modules/libnvidia-wfb.so.$versionNumber libnvidia-wfb.so.1
 ln -sf $out/X11R6/lib/modules/drivers/nvidia_drv.so nvidia_drv.so
-ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.1.* libXvMCNVIDIA.so.1
+ln -sf $out/X11R6/lib/libXvMCNVIDIA.so.$versionNumber libXvMCNVIDIA.so.1
 ln -sf $out/bin/tls_test_dso.so tls_test_dso.so
 ln -sf $out/src/nv/nvidia.ko nvidia.ko
 
@@ -78,9 +78,11 @@ ln -sf /usr/lib/libglx.la libglx.la;
 ln -sf /usr/lib/libglx.so.1 libglx.so;
 ln -sf /usr/lib/libglx.so.1 libglx.so.1;
 ln -sf /usr/lib/nvidia_drv.so nvidia_drv.so;
-ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/$(uname -r)/kernel/drivers/video/nvidia/nvidia.ko;
-
+#ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/$(uname -r)/kernel/drivers/video/nvidia/nvidia.ko;
+ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/*-default/kernel/drivers/video/nvidia/nvidia.ko;
 "
+#TODO ADD /var/run/opengl-driver link ...?
+
 rwlibsfile="$out/bin/nvidia-rewriteLibs.sh"
 
 echo "--------------------------------------------------------"
@@ -90,4 +92,5 @@ echo $rwlibs > $rwlibsfile
 chmod 755 $rwlibsfile
 
 sleep 5
+
 
