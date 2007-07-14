@@ -318,6 +318,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  filelight = import ../tools/system/filelight {
+    inherit fetchurl stdenv kdelibs x11 zlib 
+	perl libpng;
+    qt = qt3;
+  };
+
   findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
     (if system == "i686-darwin" then findutils4227 else
       import ../tools/misc/findutils {
