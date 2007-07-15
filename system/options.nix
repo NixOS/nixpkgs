@@ -736,6 +736,28 @@
     ";
   }
 
+  {
+    name = ["services" "httpd" "noUserDir"];
+    default = true;
+    description = "
+	Set to false to let users to publish ~/public_html as /~user.
+";
+  }
+
+  {
+    name = ["services" "httpd" "extraDirectories"];
+    default = "";
+    example = "
+	<Directory /home>
+		Options FollowSymlinks
+		AllowOverride All
+	</Directory>
+";
+    description = "
+	These lines go to httpd.conf verbatim. They will go after
+	directories and directory aliases defined by default.
+";
+  }
   
   {
     name = ["services" "httpd" "subservices" "subversion" "enable"];

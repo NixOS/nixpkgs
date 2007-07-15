@@ -20,12 +20,16 @@ let
   logDir = getCfg "logDir";
   stateDir = getCfg "stateDir";
   enableSSL = false;
+  noUserDir = getCfg "noUserDir";
+  extraDirectories = getCfg "extraDirectories";
   
   webServer = import ../services/apache-httpd {
-    inherit (pkgs) stdenv apacheHttpd coreutils;
+    inherit (pkgs) apacheHttpd coreutils;
+    stdenv = pkgs.stdenvNewSetupScript;
 
     inherit hostName httpPort httpsPort
-      user group adminAddr logDir stateDir;
+      user group adminAddr logDir stateDir
+      noUserDir extraDirectories;
     
     subServices =
     
