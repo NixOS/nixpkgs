@@ -220,8 +220,10 @@ rec {
   # derivations, e.g., "... ${somePkg}/bin/foo ...".
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
+  stdenvNewSetupScript = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+
   substituteAll = import ../build-support/substitute/substitute-all.nix {
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+    stdenv = stdenvNewSetupScript;
   };
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
