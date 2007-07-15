@@ -520,6 +520,10 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
+  replace = import ../tools/text/replace {
+    inherit fetchurl stdenv;
+  };
+
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
   };
