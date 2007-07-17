@@ -1524,7 +1524,7 @@ rec {
   };
 
   libgsf = import ../development/libraries/libgsf {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext;
     inherit (gnome) glib;
   };
 
