@@ -1,1 +1,1 @@
-import ./gettext-0.16.x.nix
+import ./gettext-0.14.6.nix
