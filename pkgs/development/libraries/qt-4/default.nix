@@ -29,6 +29,7 @@ assert freetypeSupport -> fontconfig != null && freetype != null;
 stdenv.mkDerivation {
   name = "qt-4.3.0";
 
+  builder = ./builder.sh;
   hook = ./setup-hook.sh;  
   src = fetchurl {
     url = ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.0.tar.gz;
@@ -56,7 +57,6 @@ stdenv.mkDerivation {
     ${if xfixesSupport then "-xfixes" else "-no-xfixes"}
     ${if freetypeSupport then "-fontconfig -I${freetype}/include/freetype2" else "-no-fontconfig"}
   ";
-  preConfigure="export configureFlags=\"\$configureFlags -prefix \$out\"";
 
   passthru = {inherit mysqlSupport;};
 }

@@ -1700,7 +1700,7 @@ rec {
   };
 
   # Builds, but not tested yet
-  qt4 = (import ./qt-4) {
+  qt4 = import ../development/libraries/qt-4 {
     inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus fontconfig freetype pkgconfig;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext inputproto fixesproto libXfixes;
@@ -2818,6 +2818,11 @@ rec {
 
   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
 
+  elinks = (import ../applications/networking/browsers/elinks)
+  {
+    inherit stdenv fetchurl python perl ncurses x11 zlib openssl;
+  };
+
   emacs = import ../applications/editors/emacs {
     inherit fetchurl stdenv ncurses x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
@@ -2945,6 +2950,11 @@ rec {
       glibmm libsigcxx;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXft;
+  };
+
+  ion3 = import ../applications/window-managers/ion-3 {
+	  inherit fetchurl stdenv x11 gettext groff;
+	  lua = lua5;
   };
 
   joe = import ../applications/editors/joe {
