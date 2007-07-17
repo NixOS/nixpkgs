@@ -920,7 +920,7 @@ rec {
   };
 
   lua5 = import ../development/interpreters/lua-5 {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ncurses readline;
   };
 
   octave = import ../development/interpreters/octave {
