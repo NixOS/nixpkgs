@@ -1699,6 +1699,16 @@ rec {
     mysqlSupport = false;
   };
 
+  # Builds, but not tested yet
+  qt4 = (import ./qt-4) {
+    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus fontconfig freetype pkgconfig;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext inputproto fixesproto libXfixes;
+    inherit (gnome) glib;
+    openglSupport = mesaSupported;
+    mysqlSupport = true;
+  };
+
   readline = readline5;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
