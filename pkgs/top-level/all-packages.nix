@@ -3049,10 +3049,11 @@ rec {
       getopt file neon;
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
-
     bison = bison23;
+    inherit jre;
+    stdenv = overrideGCC stdenv gcc34;
   };
-
+  
   opera = import ../applications/networking/browsers/opera {
     inherit fetchurl stdenv zlib;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
