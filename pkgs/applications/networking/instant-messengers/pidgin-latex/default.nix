@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     md5 = "12509b38f7a92bb22d565cc73cbd83c7";
   };
 
-  preBuild = "sed -e '/^PREFIX/d' -i Makefile ; sed -e 's@/bin/bash@/var/run/current-system/sw&@; s@/dev/stdin@/proc/self/fd/0@' -i pidgin-latex-convert.sh;";
+  preBuild = "sed -e '/^PREFIX/d' -i Makefile ; 
+	sed -e 's@/bin/bash@/var/run/current-system/sw&@; s@/dev/stdin@/proc/self/fd/0@' -i pidgin-latex-convert.sh;
+	sed -e 's@^latex.*@& ; if let \$?; then rm /tmp/pidgin-latex-tmp.png; exit 1; fi; @' -i pidgin-latex-convert.sh ; ";
 
   makeFlags="PREFIX=\$(out)";
 
