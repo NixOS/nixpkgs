@@ -3042,7 +3042,7 @@ rec {
   };
 
   openoffice = import ../applications/office/openoffice {
-    inherit fetchurl stdenv pam python tcsh libxslt
+    inherit fetchurl pam python tcsh libxslt
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
@@ -3053,7 +3053,7 @@ rec {
     inherit jre;
     stdenv = overrideGCC stdenv gcc34;
   };
-  
+
   opera = import ../applications/networking/browsers/opera {
     inherit fetchurl stdenv zlib;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
