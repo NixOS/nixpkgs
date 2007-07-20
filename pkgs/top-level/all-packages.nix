@@ -2287,6 +2287,15 @@ rec {
     stdenv = useDietLibC stdenv;
   }));
 
+  e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
+    inherit stdenv fetchurl gettext;
+  };
+
+  ext3cowtools = import ../os-specific/linux/ext3cow-tools {
+    inherit stdenv fetchurl;
+    kernel_ext3cowpatched = kernel;
+  };
+
   eject = import ../os-specific/linux/eject {
     inherit fetchurl stdenv gettext;
   };
@@ -2399,6 +2408,14 @@ rec {
   kernel_2_6_21 = import ../os-specific/linux/kernel/linux-2.6.21.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
+      { name = "ext3cow";
+        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
+        extraConfig =  
+	"CONFIG_EXT3COW_FS=m\n" +
+	"CONFIG_EXT3COW_FS_XATTR=y\n" +
+	"CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
+	"CONFIG_EXT3COW_FS_SECURITY=y\n";
+      }
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
       }
@@ -2424,6 +2441,14 @@ rec {
   kernel_2_6_22 = import ../os-specific/linux/kernel/linux-2.6.22.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
+      { name = "ext3cow";
+        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
+        extraConfig =
+        "CONFIG_EXT3COW_FS=m\n" +
+        "CONFIG_EXT3COW_FS_XATTR=y\n" +
+        "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
+        "CONFIG_EXT3COW_FS_SECURITY=y\n";
+      }
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
       }
