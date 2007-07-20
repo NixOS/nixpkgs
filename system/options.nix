@@ -397,7 +397,8 @@
   {
     name = ["services" "ttyBackgrounds" "defaultTheme"];
     default = pkgs.fetchurl {
-      url = http://www.bootsplash.de/files/themes/Theme-BabyTux.tar.bz2;
+      #url = http://www.bootsplash.de/files/themes/Theme-BabyTux.tar.bz2;
+      url = http://www.mirrorservice.org/sites/www.ibiblio.org/gentoo/distfiles/Theme-BabyTux.tar.bz2;
       md5 = "a6d89d1c1cff3b6a08e2f526f2eab4e0";
     };
     description = "
@@ -420,7 +421,8 @@
       */
       { tty = 10;
         theme = pkgs.fetchurl {
-          url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
+          #url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
+          url = http://www.mirrorservice.org/sites/www.ibiblio.org/gentoo/distfiles/Theme-GNU.tar.bz2;
           md5 = "61969309d23c631e57b0a311102ef034";
         };
       }
