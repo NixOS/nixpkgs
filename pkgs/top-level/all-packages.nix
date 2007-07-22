@@ -1283,6 +1283,11 @@ rec {
     inherit fetchurl perl ocaml;
   };
 
+  clanlib = import ../development/libraries/clanlib {
+    inherit fetchurl stdenv zlib libpng libjpeg libvorbis libogg mesa;
+    inherit (xlibs) libX11 xf86vidmodeproto libXmu libXxf86vm;
+  };
+
   clearsilver = import ../development/libraries/clearsilver {
     inherit fetchurl stdenv python;
   };
