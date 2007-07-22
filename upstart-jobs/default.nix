@@ -30,7 +30,9 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
       firmwareDirs =
-        (if config.get ["networking" "enableIntel2200BGFirmware"] then [pkgs.ipw2200fw] else []);
+        pkgs.lib.optional (config.get ["networking" "enableIntel2200BGFirmware"]) pkgs.ipw2200fw;
+      extraUdevPkgs =
+        pkgs.lib.optional (config.get ["services" "hal" "enable"]) pkgs.hal;
     })
       
     # Makes LVM logical volumes available. 
@@ -194,7 +196,7 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/dbus.nix {
       inherit (pkgs) stdenv dbus;
       dbusServices =
-        pkgs.lib.optional (config.get ["services"  "hal" "enable"]) pkgs.hal;
+        pkgs.lib.optional (config.get ["services" "hal" "enable"]) pkgs.hal;
     })
 
   # HAL daemon.

@@ -1,4 +1,6 @@
-{stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs}:
+{ stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs
+, extraUdevPkgs ? []
+}:
 
 let
 
@@ -17,6 +19,12 @@ let
       ensureDir $out
       for i in $src/*; do
         substituteAll $i $out/$(basename $i)
+      done
+      shopt -s nullglob
+      for i in ${toString extraUdevPkgs}; do
+        for j in $i/etc/udev/rules.d/*; do
+          ln -s $j $out/$(basename $j)
+        done
       done
     ";
   };
