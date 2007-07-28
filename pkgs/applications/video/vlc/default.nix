@@ -8,11 +8,11 @@ assert libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
-  name = "vlc-0.8.6";
+  name = "vlc-0.8.6c";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.8.6/vlc-0.8.6.tar.bz2;
-    md5 = "77a275f3408c4c9feae451d4eae47f89";
+    url = http://download.videolan.org/pub/videolan/vlc/0.8.6c/vlc-0.8.6c.tar.bz2;
+    sha256 = "1bmngn66i527vw9g5xnhlpz64xl5gch3j3l6y5d727rcpmxlvhjz";
   };
 
   buildInputs = [
