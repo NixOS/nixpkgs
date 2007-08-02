@@ -15,4 +15,6 @@ stdenv.mkDerivation {
   preConfigure = "
     configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86\"
   ";
+
+  postInstall = "rm \${out}/etc/X11/xkb/compiled";
 }
