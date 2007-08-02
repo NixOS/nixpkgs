@@ -2582,7 +2582,8 @@ rec {
   };
 
   pam_console = import ../os-specific/linux/pam_console {
-    inherit stdenv fetchurl pam autoconf automake libtool pkgconfig bison flex;
+    inherit stdenv fetchurl pam autoconf automake libtool pkgconfig bison;
+    flex = if stdenv.system == "i686-linux" then flex else flex2533;
     inherit (gtkLibs) glib;
   };
 
