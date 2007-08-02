@@ -22,6 +22,9 @@ let
   enableSSL = false;
   noUserDir = getCfg "noUserDir";
   extraDirectories = getCfg "extraDirectories";
+
+  startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
+	then "gw6c" else "network-interfaces";
   
   webServer = import ../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
@@ -99,8 +102,8 @@ in
   job = "
 description \"Apache HTTPD\"
 
-start on network-interfaces/started
-stop on network-interfaces/stop
+start on ${startingDependency}/started
+stop on ${startingDependency}/stop
 
 start script
     ${webServer}/bin/control prepare    

@@ -17,8 +17,8 @@ in
 	job = "
 description \"Gateway6 client\"
 
-start on network/interfaces started
-stop on network/interfaces stop
+start on network-interfaces/started
+stop on network-interfaces/stop
 
 respawn ${gw6cService}/bin/control start
 ";
