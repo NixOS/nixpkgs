@@ -1273,7 +1273,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/setxkbmap-X11R7.2-1.0.3.tar.bz2;
       sha256 = "19jxlksl90i674yad1n7w42s3nv0hhlkwczya2lnavpl0570jr34";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share"; 
+    buildInputs = [pkgconfig libX11 libxkbfile ]; 
+    postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share;"; 
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
@@ -2678,6 +2679,9 @@ rec {
       sha256 = "0x99bhs8v4ja2x4h9mn5g76q5awyvv2j9pbjag0hfxpk8bqmdilk";
     };
     buildInputs = [pkgconfig bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; 
+    postInstall = "for i in ${xkeyboard_config}/etc/X11/xkb/*; 
+			do ln -s $i \${out}/share/X11/xkb/; done;
+	ln -s ${xkbcomp}/bin/xkbcomp \${out}/bin";
   }) // {inherit bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
