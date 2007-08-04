@@ -1,4 +1,14 @@
-{stdenv, fetchurl, zlib, libpng, texinfo}:
+{stdenv, fetchurl, zlib, libpng, texinfo,
+	libX11 ? null,
+	libXt ? null,
+	libXpm ? null,
+	libXaw ? null,
+	x11Support ? false
+}:
+
+assert x11Support -> ((libX11 != null) && 
+	(libXt != null) && (libXpm != null) &&
+	(libXaw != null));
 
 stdenv.mkDerivation {
   # Gnuplot (which isn't open source) has a license that requires that
@@ -13,7 +23,8 @@ stdenv.mkDerivation {
     md5 = "66258443d9f93cc4f46b147dac33e63a";
   };
 
-  configureFlags = ["--without-x"];
+  configureFlags = if x11Support then ["--with-x"] else ["--without-x"];
 
-  buildInputs = [zlib libpng texinfo];
+  buildInputs = [zlib libpng texinfo] ++
+	(if x11Support then [libX11 libXt libXpm libXaw] else []);
 }
