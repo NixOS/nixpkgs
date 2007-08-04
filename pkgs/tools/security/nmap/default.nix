@@ -1,12 +1,11 @@
-{stdenv, fetchurl}:
-  
+{stdenv, fetchurl, libpcap, libX11, gtk, pkgconfig}:
 stdenv.mkDerivation {
-  name = "nmap-3.55";
-  
-  builder = ./builder.sh;
+  name = "Nmap";
+
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/nmap-3.55.tar.bz2;
-    md5 = "88b5f010f43b0e2ee0c2cfb468796aa9";
+    url = http://insecure.org/nmap/dist/nmap-4.21ALPHA4.tar.bz2;
+    md5 = "eae883e12f3640f7c52d66e0844d0ab1";
   };
-  
+
+  buildInputs = [libpcap libX11 gtk pkgconfig];
 }
