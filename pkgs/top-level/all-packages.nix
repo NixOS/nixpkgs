@@ -468,7 +468,9 @@ rec {
   };
 
   nmap = import ../tools/security/nmap {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libpcap pkgconfig;
+	inherit (xlibs) libX11;
+	inherit (gtkLibs) gtk;
   };
 
   ntp = import ../tools/networking/ntp {
