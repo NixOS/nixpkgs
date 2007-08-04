@@ -438,6 +438,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  lftp = import ../tools/networking/lftp {
+    inherit fetchurl stdenv readline;
+  };
+
   lhs2tex = import ../tools/typesetting/lhs2tex {
     inherit fetchurl stdenv ghc tetex polytable;
   };
