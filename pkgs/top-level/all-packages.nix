@@ -373,6 +373,12 @@ rec {
     inherit fetchurl stdenv zlib libpng texinfo;
   };
 
+  gnuplotX = import ../tools/graphics/gnuplot {
+    inherit fetchurl stdenv zlib libpng texinfo;
+	inherit (xlibs) libX11 libXt libXaw libXpm;
+	x11Support = true;
+  };
+
   gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
     (import ../tools/text/gnused {
       inherit fetchurl stdenv;
@@ -3447,6 +3453,12 @@ rec {
   ghostscript = import ../misc/ghostscript {
     inherit fetchurl stdenv libjpeg libpng zlib x11;
     x11Support = false;
+  };
+
+  keynav = import ../tools/X11/keynav {
+	inherit stdenv fetchurl;
+	inherit (xlibs) libX11 xextproto libXtst 
+		imake libXi libXext;
   };
 
   lazylist = import ../misc/tex/lazylist {
