@@ -75,6 +75,7 @@ let {
     hello
     iana_etc
     iputils
+    irssi
     jakartaregexp
     jdkPlugin
     jetty
