@@ -465,6 +465,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  mutt = import ../applications/networking/mailreaders/mutt {
+    inherit fetchurl stdenv ncurses which;
+  };
+
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
   };
@@ -3044,6 +3048,11 @@ rec {
   ion3 = import ../applications/window-managers/ion-3 {
 	  inherit fetchurl stdenv x11 gettext groff;
 	  lua = lua5;
+  };
+
+  irssi = import ../applications/networking/irc/irssi {
+    inherit stdenv fetchurl pkgconfig ncurses openssl;
+    inherit (gtkLibs) glib;
   };
 
   joe = import ../applications/editors/joe {
