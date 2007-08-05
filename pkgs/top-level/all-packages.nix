@@ -1275,7 +1275,7 @@ rec {
   };
 
   boost = import ../development/libraries/boost {
-    inherit fetchurl stdenv zlib bzip2 python;
+    inherit fetchurl stdenv /* zlib bzip2 python */;
   };
 
   cairo = import ../development/libraries/cairo {
