@@ -1,6 +1,7 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
   name = "cmake-2.4.6";
+  setupHook = ./setup-hook.sh;
 
   src = fetchurl {
     url = http://www.cmake.org/files/v2.4/cmake-2.4.6.tar.gz;
@@ -9,9 +10,15 @@ stdenv.mkDerivation {
 
   buildInputs = [];
 
+  preConfigure="find Modules -type f -name '*.cmake' |
+  xargs sed -e 's@/usr@/FOO@g' -e 's@ /\\(bin\\|sbin\\|lib\\)@ /FOO@g' -i";
+
+  postInstall="find \$out/share -type f -name '*.cmake' |
+  xargs sed -e 's@/usr@/FOO@g' -e 's@ /\\(bin\\|sbin\\|lib\\)@ /FOO@g' -i;
+  ensureDir \$out/nix-support;
+  cp -p $setupHook \$out/nix-support/setup-hook";
+
   meta = {
-    description = "
-CMake. Make flavour used by cdrkit.
-";
+    description = "Cross-Platform Makefile Generator";
   };
 }

@@ -1304,6 +1304,14 @@ rec {
     inherit fetchurl stdenv python;
   };
 
+  cluceneContrib = (import ../development/libraries/clucene-contrib) {
+    inherit fetchurl stdenv cluceneCore;
+   };
+
+   cluceneCore = (import ../development/libraries/clucene-core) {
+     inherit fetchurl stdenv;
+   };
+
   coredumper = import ../development/libraries/coredumper {
     inherit fetchurl stdenv;
   };
@@ -1761,6 +1769,12 @@ rec {
 
   sqlite = import ../development/libraries/sqlite {
     inherit fetchurl stdenv;
+  };
+
+  strigi = import ../development/libraries/strigi {
+	  inherit stdenv fetchurl zlib cluceneCore cluceneContrib expat bzip2
+	  pkgconfig cmake dbus libxml2;
+	  qt = qt4;
   };
 
   t1lib = import ../development/libraries/t1lib {
@@ -2742,6 +2756,11 @@ rec {
      inherit fetchurl stdenv;
   };
 
+  shared_mime_info = import ../data/misc/shared-mime-info {
+	inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext libxml2;
+	inherit (gtkLibs) glib;
+  };
+
   iana_etc = import ../data/misc/iana-etc {
     inherit fetchurl stdenv;
   };
@@ -3414,6 +3433,50 @@ rec {
     qt = qt3;
   };
   
+  kdelibs4 = import ../desktops/kde-4/kdelibs {
+    inherit
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups;
+	inherit (xlibs)
+	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
+	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+	  libxkbfile;
+    qt = qt4;
+  };
+
+  kdepimlibs4 = import ../desktops/kde-4/kdepimlibs {
+    inherit
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups boost;
+	inherit (xlibs)
+	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
+	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+	  libxkbfile;
+    qt = qt4;
+	kdelibs = kdelibs4;
+  };
+
+  kdebase4 = import ../desktops/kde-4/kdebase {
+    inherit
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups;
+	inherit (xlibs)
+	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
+	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+	  libxkbfile;
+    qt = qt4;
+	kdelibs = kdelibs4;
+  };
+
   kdebase = import ../desktops/kde/kdebase {
     inherit
       fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl

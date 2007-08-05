@@ -701,10 +701,38 @@ fixupW() {
 
     eval "$preFixup"
 
-    if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find "$prefix" -name "*.a" -exec echo stripping {} \; \
-            -exec strip -S {} \; || fail
+# TODO : strip _only_ ELF executables, and return || fail here...
+    if test -z "$dontStrip"; then
+		test -d "$prefix/lib" && stripDebug="$prefix/lib"
+
+		if test -n "$stripDebug"; then
+			find "$stripDebug" -type f -print0 |
+			xargs -0 strip --strip-debug --verbose || true
+		fi
+
+		test -d "$prefix/bin" && stripAll="$prefix/bin"
+		test -d "$prefix/sbin" && stripAll="${stripAll} $prefix/sbin"
+		if test -n "$stripAll"; then
+			find "$prefix/bin" "$prefix/sbin" -type f -print0 |
+			xargs -0 strip --strip-all --verbose || true
+		fi
     fi
+
+	if test -z "$dontFixupShare"; then
+		for dir in doc info man; do
+			if test -d "$prefix/$dir"; then
+				if test -d "$prefix/share/$dir"; then
+					echo Both "$prefix/$dir" and "$prefix/share/$dir" exists!
+					fail
+				else
+					echo Fixing location of $dir/ subdirectory
+					ensureDir "$prefix/share"
+					mv -v "$prefix/$dir" "$prefix/share"
+					ln -sv "share/$dir" "$prefix"
+				fi
+			fi
+		done
+	fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
         patchELF "$prefix"
