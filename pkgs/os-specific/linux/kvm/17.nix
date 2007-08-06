@@ -1,5 +1,7 @@
 {stdenv, fetchurl, kernelHeaders, zlib, e2fsprogs, SDL, alsaLib}:
    
+assert stdenv.isLinux;
+   
 stdenv.mkDerivation {
   name = "kvm-17";
    
