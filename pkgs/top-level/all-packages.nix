@@ -465,10 +465,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  mutt = import ../applications/networking/mailreaders/mutt {
-    inherit fetchurl stdenv ncurses which openssl;
-  };
-
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
   };
@@ -3112,6 +3108,10 @@ rec {
     inherit fetchurl stdenv pkgconfig firefox gettext;
     inherit (xlibs) libXpm;
     # !!! should depend on MPlayer
+  };
+
+  mutt = import ../applications/networking/mailreaders/mutt {
+    inherit fetchurl stdenv ncurses which openssl;
   };
 
   mythtv = import ../applications/video/mythtv {
