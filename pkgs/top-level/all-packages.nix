@@ -483,12 +483,6 @@ rec {
     inherit fetchurl stdenv libcap;
   };
 
-  nvidiaDrivers = import ../os-specific/linux/nvidia {
-    inherit stdenv fetchurl kernel coreutils;
-    xorg_server = xorg.xorgserver;
-    inherit (xlibs) libX11 libXext;
-  };
-
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = true;
@@ -1516,6 +1510,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  libdaemon = import ../development/libraries/libdaemon {
+    inherit fetchurl stdenv;
+  };
+
   libdrm = import ../development/libraries/libdrm {
     inherit fetchurl stdenv;
   };
@@ -2354,6 +2352,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ifplugd = import ../os-specific/linux/ifplugd {
+    inherit fetchurl stdenv pkgconfig libdaemon;
+  };
+
   initscripts = import ../os-specific/linux/initscripts {
     inherit fetchurl stdenv popt pkgconfig;
     inherit (gtkLibs) glib;
@@ -2588,6 +2590,12 @@ rec {
 
   nettools = import ../os-specific/linux/net-tools {
     inherit fetchurl stdenv;
+  };
+
+  nvidiaDrivers = import ../os-specific/linux/nvidia {
+    inherit stdenv fetchurl kernel coreutils;
+    xorg_server = xorg.xorgserver;
+    inherit (xlibs) libX11 libXext;
   };
 
   gw6c = import ../os-specific/linux/gw6c {
