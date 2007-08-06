@@ -466,7 +466,7 @@ rec {
   };
 
   mutt = import ../applications/networking/mailreaders/mutt {
-    inherit fetchurl stdenv ncurses which;
+    inherit fetchurl stdenv ncurses which openssl;
   };
 
   ncat = import ../tools/networking/ncat {
