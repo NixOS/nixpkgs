@@ -5,16 +5,36 @@
 
 assert langC;
 
+with import ../../../lib;
+
 stdenv.mkDerivation {
-  name = "gcc-4.0.3";
+  name = "gcc-4.0.4";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gcc-4.0.3.tar.bz2;
-    md5 = "6ff1af12c53cbb3f79b27f2d6a9a3d50";
+    url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.0.4/gcc-4.0.4.tar.bz2;
+    sha256 = "0izwr8d69ld3a1yr8z94s7y7k861wi613mplys2c0bvdr58y1zgk";
   };
-  # !!! apply only if noSysDirs is set
-  patches = [./no-sys-dirs.patch];
+  
+  patches =
+    optional noSysDirs [./no-sys-dirs.patch];
+    
   inherit noSysDirs langC langCC langF77 profiledCompiler;
+
+  configureFlags = "
+    --disable-multilib
+    --disable-libstdcxx-pch
+    --disable-libmudflap
+    --with-system-zlib
+    --enable-languages=${
+      concatStrings (intersperse ","
+        (  optional langC   "c"
+        ++ optional langCC  "c++"
+        ++ optional langF77 "f77"
+        )
+      )
+    }
+    ${if stdenv.isi686 then "--with-arch=i686" else ""}
+  ";
 
   meta = {
     homepage = "http://gcc.gnu.org/";
