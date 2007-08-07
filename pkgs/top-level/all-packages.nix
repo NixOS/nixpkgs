@@ -551,6 +551,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  ssmtp = import ../tools/networking/ssmtp {
+    inherit fetchurl stdenv;
+  };
+
   su = import ../tools/misc/su {
     inherit fetchurl stdenv pam;
   };
