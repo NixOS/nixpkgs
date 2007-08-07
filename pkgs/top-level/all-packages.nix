@@ -770,7 +770,8 @@ rec {
 
   ghcboot = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot.nix {
     inherit fetchurl stdenv perl ncurses;
-    readline = readline4;
+    readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    gmp = if stdenv.system == "x86_64-linux" then gmp else null;
   }));
 
   /*
