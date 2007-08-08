@@ -1274,7 +1274,7 @@ rec {
   };
 
   boost = import ../development/libraries/boost {
-    inherit fetchurl stdenv /* zlib bzip2 python */;
+    inherit fetchurl stdenv icu zlib bzip2 python;
   };
 
   cairo = import ../development/libraries/cairo {
@@ -1478,6 +1478,10 @@ rec {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
     inherit aspell;
+  };
+
+  icu = import ../development/libraries/icu {
+    inherit fetchurl stdenv;
   };
 
   id3lib = import ../development/libraries/id3lib {
@@ -1776,7 +1780,7 @@ rec {
 
   strigi = import ../development/libraries/strigi {
 	  inherit stdenv fetchurl zlib cluceneCore cluceneContrib expat bzip2
-	  pkgconfig cmake dbus libxml2;
+	  pkgconfig cmake dbus libxml2 perl;
 	  qt = qt4;
   };
 
@@ -3473,7 +3477,8 @@ rec {
     inherit
       fetchurl stdenv zlib perl openssl pcre pkgconfig
       libjpeg libpng libtiff libxml2 libxslt libtool
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups boost;
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
+	  boost gpgme;
 	inherit (xlibs)
 	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
 	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
@@ -3484,19 +3489,40 @@ rec {
 	kdelibs = kdelibs4;
   };
 
-  kdebase4 = import ../desktops/kde-4/kdebase {
+  kdepim4 = import ../desktops/kde-4/kdepim {
     inherit
       fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups;
+      libjpeg libpng libtiff libxml2 libxslt libtool libusb
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
+	  mesa gpgme boost;
 	inherit (xlibs)
 	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
 	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
 	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
 	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-	  libxkbfile;
+	  libxkbfile libXinerama;
+	inherit (gtkLibs) glib;
     qt = qt4;
 	kdelibs = kdelibs4;
+	kdepimlibs = kdepimlibs4;
+  };
+
+  kdebase4 = import ../desktops/kde-4/kdebase {
+    inherit
+      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      libjpeg libpng libtiff libxml2 libxslt libtool libusb
+	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
+	  mesa;
+	inherit (xlibs)
+	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
+	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+	  libxkbfile libXinerama;
+	inherit (gtkLibs) glib;
+    qt = qt4;
+	kdelibs = kdelibs4;
+	kdepimlibs = kdepimlibs4;
   };
 
   kdebase = import ../desktops/kde/kdebase {

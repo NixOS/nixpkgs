@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "cmake-2.4.6";
+  name = "cmake-2.4.7";
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = http://www.cmake.org/files/v2.4/cmake-2.4.6.tar.gz;
-    sha256 = "0163q13gw9ff28dpbwq23h83qfqabvcxrzsi9cjpyc9dfg7jpf5g";
+    url = http://www.cmake.org/files/v2.4/cmake-2.4.7.tar.gz;
+    sha256 = "0mkx23s7zq48hzzzw3vbzsfzfz3rjsiwgf3i00xawcxrjjrgxm9g";
   };
 
   buildInputs = [];

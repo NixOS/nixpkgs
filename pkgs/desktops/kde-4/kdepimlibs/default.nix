@@ -24,15 +24,15 @@
 , zlib, perl, qt, openssl, pcre
 , pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
 , freetype, bzip2, strigi, cmake, shared_mime_info, alsaLib, libungif
-, cups, kdelibs, boost
+, cups, kdelibs, boost, gpgme
 }:
 
 stdenv.mkDerivation {
-  name = "kdepimlibs-3.91.0";
+  name = "kdepimlibs-4.0beta1";
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/stable/3.91.0/src/kdepimlibs-3.91.0.tar.bz2;
-    sha256 = "0d9ir4xrbk9d1sm8551xac1v2bc0l1ssnqiqzjwni0mcavi6lpf5";
+    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdepimlibs-3.92.0.tar.bz2;
+    sha256 = "0q7zzj8n282xaxvdij74fb17w5c1vja7izxfrkcbq7arn9f40wbx";
   };
 
   buildInputs = [
@@ -43,6 +43,6 @@ stdenv.mkDerivation {
     zlib perl qt openssl pcre 
     pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
     libtool freetype bzip2 strigi cmake shared_mime_info alsaLib libungif cups
-	kdelibs boost
+	kdelibs boost gpgme
   ];
 }

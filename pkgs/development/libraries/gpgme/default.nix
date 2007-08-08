@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libgpgerror, gnupg}:
 
 stdenv.mkDerivation {
-  name = "gpgme-1.0.3";
+  name = "gpgme-1.1.4";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gpgme-1.0.3.tar.gz;
-    md5 = "4d33cbdf844fcee1c724e4cf2a32dd11";
+    url = ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.1.4.tar.bz2;
+    sha256 = "0ncrv7p33rjq1avkxpp9x0gz6wna9y3b3dmw6nv366n5mgvxmpg8";
   };
   buildInputs = [libgpgerror gnupg];
 }

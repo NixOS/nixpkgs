@@ -12,6 +12,7 @@
 , libXfixes
 , libXft
 , libXi
+, libXinerama
 , libXpm
 , libXrandr
 , libXrender
@@ -24,25 +25,31 @@
 , zlib, perl, qt, openssl, pcre
 , pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
 , freetype, bzip2, strigi, cmake, shared_mime_info, alsaLib, libungif
-, cups
+, libusb, glib, mesa, gpgme, boost
+, cups, kdelibs, kdepimlibs
 }:
 
 stdenv.mkDerivation {
-  name = "kdelibs-4.0beta1";
+  name = "kdepim-4.0beta1";
+  builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdelibs-3.92.0.tar.bz2;
-    sha256 = "19jd9nx5g0ayxavj3ys52wx5ppxw9yr9jylxk7qplxsm525ryf1p";
+    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdepim-3.92.0.tar.bz2;
+    sha256 = "1wlq1h7j07f24n1mjnv9wbfsxn2vn24qfn5dgn4j4fsl84qha16i";
   };
 
   buildInputs = [
 	inputproto kbproto scrnsaverproto xextproto xf86miscproto xf86vidmodeproto
 	xineramaproto xproto libICE libX11 libXau libXcomposite libXcursor
 	libXdamage libXdmcp libXext libXfixes libXft libXi libXpm libXrandr
+	libXinerama mesa stdenv.gcc.libc
 	libXrender libXScrnSaver libXt libXtst libXv libXxf86misc libxkbfile
     zlib perl qt openssl pcre 
     pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
     libtool freetype bzip2 strigi cmake shared_mime_info alsaLib libungif cups
+	kdelibs kdepimlibs libusb glib gpgme boost
   ];
-  patchPhase = "sed -e 's@ NO_SYSTEM_PATH@@g' -i ../cmake/modules/FindX11.cmake";
+# TODO : it should be done through setup-hooks
+  KDEDIRS="${kdelibs}/share/apps:${kdepimlibs}/share/apps";
+  inherit qt kdelibs;
 }
