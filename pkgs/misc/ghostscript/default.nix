@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = ftp://ftp.nluug.nl/pub/gnu/ghostscript/gnu-ghostscript-8.56.0.tar.bz2;
-    sha256 = "12wkxqf661i9wpcyjj9kp69r4gix7crji52f21s49slqjmbc0f3s";
+    sha256 = "0pfcf59jfl6h8bhwypzxw0zwljssja14d3jc6gczbkab37d33c1x";
   };
 
   fonts = [
