@@ -2225,6 +2225,10 @@ rec {
     inherit fetchurl stdenv ;
   };
 
+  ircdHybrid = import ../servers/irc/ircd-hybrid {
+		inherit fetchurl stdenv openssl zlib;
+	};
+
   jetty = import ../servers/http/jetty {
     inherit fetchurl stdenv unzip;
   };
@@ -3630,7 +3634,16 @@ rec {
   };
 
   saneBackends = import ../misc/sane-backends {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libusb;
+	gt68xxFirmware = 
+		getConfig ["sane" "gt68xxFirmware"] null;
+  };
+
+  saneFrontends = import ../misc/sane-front {
+    inherit fetchurl stdenv pkgconfig libusb
+	saneBackends;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libX11;
   };
 
   synaptics = import ../misc/synaptics {
@@ -3676,5 +3689,13 @@ rec {
 	libXinerama libXrandr libXrender libXxf86vm;
     inherit (gtkLibs) gtk;
   };*/
+
+  xsane = import ../misc/xsane {
+    inherit fetchurl stdenv pkgconfig libusb
+	saneBackends saneFrontends;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libX11;
+  };
+
 
 }
