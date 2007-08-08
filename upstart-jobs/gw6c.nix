@@ -4,10 +4,12 @@ let
 	procps = pkgs.procps;
 	gw6cService = import ../services/gw6c {
 		inherit (pkgs) stdenv gw6c coreutils 
-		procps upstart nettools;
+		procps upstart iputils gnused 
+		gnugrep;
 		username = getCfg "username";
 		password = getCfg "password";
 		server = getCfg "server";
+		keepAlive = getCfg "keepAlive";
 	};
 in
 {

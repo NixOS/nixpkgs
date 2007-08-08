@@ -1084,5 +1084,90 @@
 	Used Gateway6 server.
 ";
   }
-  
+
+  {
+	name = ["services" "gw6c" "keepAlive"];
+	default = "30";
+	example = "2";
+	description = "
+	Gateway6 keep-alive period.
+";
+  }
+
+	{
+		name = ["services" "ircdHybrid" "enable"];
+		default = false;
+		description = "
+	Enable IRCD.
+";
+	}
+
+   	{
+		name = ["services" "ircdHybrid" "serverName"];
+		default = "hades.arpa";
+		description = "
+	IRCD server name.
+";
+	}
+
+   	{
+		name = ["services" "ircdHybrid" "sid"];
+		default = "0NL";
+		description = "
+	IRCD server unique ID in a net of servers.
+";
+	}
+
+   	{
+		name = ["services" "ircdHybrid" "description"];
+		default = "Hybrid-7 IRC server.";
+		description = "
+	IRCD server description.
+";
+	}
+ 
+   	{
+		name = ["services" "ircdHybrid" "rsaKey"];
+		default = null;
+		example = /root/certificates/irc.key;
+		description = "
+	IRCD server RSA key. 
+";
+	}
+ 
+   	{
+		name = ["services" "ircdHybrid" "certificate"];
+		default = null;
+		example = /root/certificates/irc.pem;
+		description = "
+	IRCD server SSL certificate. There are some limitations - read manual.
+";
+	}
+ 
+   	{
+		name = ["services" "ircdHybrid" "adminEmail"];
+		default = "<bit-bucket@example.com>";
+		example = "<name@domain.tld>";
+		description = "
+	IRCD server administrator e-mail. 
+";
+	}
+	 
+   	{
+		name = ["services" "ircdHybrid" "extraIPs"];
+		default = [];
+		example = ["127.0.0.1"];
+		description = "
+	Extra IP's to bind.
+";
+	}
+	 
+   	{
+		name = ["services" "ircdHybrid" "extraPort"];
+		default = "7117";
+		description = "
+	Extra port to avoid filtering.
+";
+	}
+	
 ]
