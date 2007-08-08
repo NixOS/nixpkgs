@@ -3090,6 +3090,10 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  mercurial = import ../applications/version-management/mercurial {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
   monodevelop = import ../applications/editors/monodevelop {
     inherit fetchurl stdenv file mono gtksourceviewsharp
             gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
