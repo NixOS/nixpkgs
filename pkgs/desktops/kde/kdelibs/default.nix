@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0p0v4gr61qlvnpg9937chrjh3s7xi3nn7wvrg1xjf8dfqq164xh6";
   };
 
-  passthru = {inherit openssl libX11 libjpeg;};
+  passthru = {inherit openssl libX11 libjpeg qt;};
   
   buildInputs = [
     libX11 libXt libXext zlib perl qt openssl pcre 

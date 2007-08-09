@@ -440,6 +440,11 @@ rec {
     inherit fetchurl stdenv unzip jre;
   };
 
+  ktorrent = import ../tools/networking/p2p/ktorrent {
+    inherit fetchurl stdenv pkgconfig kdelibs
+      xlibs zlib libpng libjpeg perl gmp;
+  };
+
   less = import ../tools/misc/less {
     inherit fetchurl stdenv ncurses;
   };
