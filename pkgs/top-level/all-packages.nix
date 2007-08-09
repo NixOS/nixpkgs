@@ -956,6 +956,10 @@ rec {
     inherit fetchurl stdenv zlib bzip2;
   };
 
+  python25 = import ../development/interpreters/python/2.5 {
+    inherit fetchurl stdenv zlib bzip2;
+  };
+
   realPerl = import ../development/interpreters/perl {
     inherit fetchurl stdenv;
   };
