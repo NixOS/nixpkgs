@@ -197,7 +197,7 @@ let
     ${if sessionType == "kde" then "
 
       # Start KDE.
-      export KDEDIRS=${kdebase}:${kdelibs}
+      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${kdebase}:${kdelibs}
       export XDG_CONFIG_DIRS=${kdebase}/etc/xdg:${kdelibs}/etc/xdg
       export XDG_DATA_DIRS=${kdebase}/share
       exec ${kdebase}/bin/startkde
