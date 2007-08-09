@@ -114,6 +114,7 @@ mkdir -m 0755 -p /nix/var/nix/profiles
 mkdir -m 1777 -p /nix/var/nix/profiles/per-user
 
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
 
 
 # Make a few setuid programs work.
