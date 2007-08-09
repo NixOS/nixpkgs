@@ -1767,8 +1767,17 @@ rec {
     alsaSupport = true;
   };
 
+  SDL_image = import ../development/libraries/SDL_image {
+    inherit fetchurl stdenv SDL libjpeg libungif libtiff libpng;
+    inherit (xlibs) libXpm;
+  };
+
   SDL_mixer = import ../development/libraries/SDL_mixer {
     inherit fetchurl stdenv SDL libogg libvorbis;
+  };
+
+  SDL_ttf = import ../development/libraries/SDL_ttf {
+    inherit fetchurl stdenv SDL freetype;
   };
 
   slang = import ../development/libraries/slang {
@@ -2174,6 +2183,10 @@ rec {
     inherit fetchurl stdenv python db4;
   };
 
+  pil = import ../development/python-modules/pil {
+    inherit fetchurl stdenv python zlib libtiff libjpeg freetype;
+  };
+
   psyco = import ../development/python-modules/psyco {
     inherit fetchurl stdenv python;
   };
@@ -2184,6 +2197,11 @@ rec {
 
   pycrypto = import ../development/python-modules/pycrypto {
     inherit fetchurl stdenv python gmp;
+  };
+
+  pygame = import ../development/python-modules/pygame {
+    inherit fetchurl stdenv python pkgconfig SDL SDL_image 
+	SDL_ttf;
   };
 
   pygobject = import ../development/python-modules/pygobject {
@@ -3436,6 +3454,11 @@ rec {
   scummvm = import ../games/scummvm {
     inherit fetchurl stdenv SDL zlib mpeg2dec;
   };
+
+  /*tpm = import ../games/thePenguinMachine {
+    inherit stdenv fetchurl pil pygame SDL; 
+    python24 = python;
+  };*/
 
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
