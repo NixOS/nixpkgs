@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "ImageMagick-6.3.5";
 
   src = fetchurl {
-    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.5-0.tar.bz2;
-    sha256 = "0yp3srha2h21qsnhfsfczjqw8x1qy1bdlc06qsrj1as0bn2br7b4";
+    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.5-5.tar.bz2;
+    sha256 = "0avq6kllxw552krxgsa72c1b44zwyhwi38dk4a4ij3fqy0svy9zh";
   };
 
   configureFlags = " --with-dots --with-gs-font-dir="+ ghostscript +
