@@ -3222,6 +3222,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  pythonmagick = import ../applications/graphics/PythonMagick {
+    inherit fetchurl stdenv pkgconfig imagemagick boost;
+    python = python25;
+  };
+
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
