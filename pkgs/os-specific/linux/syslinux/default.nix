@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "syslinux-3.35";
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/utils/boot/syslinux/syslinux-3.35.tar.bz2;
+    url = http://www.kernel.org/pub/linux/utils/boot/syslinux/Old/syslinux-3.35.tar.bz2;
     sha256 = "16kf2zhd0c4m3ai9xcls2y0ggvajhmzk1g6mv6jrv8nskkg6w0l6";
   };
   buildInputs = [nasm perl];
