@@ -7,11 +7,11 @@ assert spellChecking -> gtkspell != null /* !!! && gtk == gtkspell.gtk */;
 # !!! assert gtk.glib == gnet.glib;
 
 stdenv.mkDerivation {
-  name = "pan-0.130";
+  name = "pan-0.132";
 
   src = fetchurl {
-    url = http://pan.rebelbase.com/download/releases/0.130/source/pan-0.130.tar.bz2;
-    sha1 = "158d1e599fcae2a25431ec5a74a105149bae19b1";
+    url = http://pan.rebelbase.com/download/releases/0.132/source/pan-0.132.tar.bz2;
+    sha1 = "dc0bf586145b9d617039f49101874fbc76a9dc18";
   };
 
   buildInputs = [
