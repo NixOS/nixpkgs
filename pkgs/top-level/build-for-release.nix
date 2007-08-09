@@ -88,6 +88,7 @@ let {
     keen4
     kernel
     klibc
+    ktorrent
     less
     lhs2tex
     libtool
