@@ -124,5 +124,6 @@ rec {
     then []
     else [first] ++ range (builtins.add first 1) last;
 
+  #Return [arg] or [] for null arg
         
 }

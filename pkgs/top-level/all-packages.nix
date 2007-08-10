@@ -3330,7 +3330,7 @@ rec {
   };
 
   vim = import ../applications/editors/vim {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses lib;
   };
 
   vimDiet = lowPrio (appendToName "diet" (import ../applications/editors/vim-diet {
@@ -3338,6 +3338,14 @@ rec {
     ncurses = ncursesDiet;
     stdenv = useDietLibC stdenv;
   }));
+
+  vimHugeX = import ../applications/editors/vim {
+    inherit fetchurl stdenv lib ncurses pkgconfig;
+    inherit (xlibs) libX11 libXext libSM libXpm
+	libXt libXaw libXau;
+    inherit (gtkLibs) glib gtk;
+    hugeFeatures = true;
+  };
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
