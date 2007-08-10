@@ -1,13 +1,15 @@
-{stdenv, fetchurl, libsigsegv, gettext}:
-
-stdenv.mkDerivation {
-  name = "clisp-2.33.2";
+args:
+args.stdenv.mkDerivation {
+  name = "clisp-2.41a";
   builder = ./builder.sh;
-  src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/clisp-2.33.2.tar.bz2;
-    md5 = "ee4ea316db1e843dcb16094bf500012f";
-  };
+  src = args.
+	fetchurl {
+		url = ftp://ftp.gnu.org/pub/gnu/clisp/release/2.41/clisp-2.41a.tar.bz2;
+		sha256 = "08z35bni42dhlqlsg5rr5p025961fl82gqvaadrf0jh20jdqspqy";
+	};
 
-  inherit libsigsegv gettext;
-  buildInputs = [libsigsegv gettext];
+  inherit (args) libsigsegv gettext coreutils;
+  buildInputs = (with args;
+ [libsigsegv gettext ncurses readline libX11 libXau
+	libXt pcre zlib]);
 }

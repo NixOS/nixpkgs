@@ -920,7 +920,9 @@ rec {
 
 
   clisp = import ../development/interpreters/clisp {
-    inherit fetchurl stdenv libsigsegv gettext;
+    inherit fetchurl stdenv libsigsegv gettext 
+	readline ncurses coreutils pcre zlib;
+    inherit (xlibs) libX11 libXau libXt;
   };
 
   guile = import ../development/interpreters/guile {
@@ -3411,6 +3413,12 @@ rec {
   xterm = import ../applications/misc/xterm {
     inherit fetchurl stdenv ncurses;
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+  };
+
+  xmacro = import ../tools/X11/xmacro {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXi 
+	libXtst xextproto inputproto;
   };
 
   xmove = import ../applications/misc/xmove {
