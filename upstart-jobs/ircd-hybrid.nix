@@ -4,7 +4,7 @@ let
 	ircdService = import ../services/ircd-hybrid {
 		stdenv = pkgs.stdenvNewSetupScript;
 		inherit (pkgs) ircdHybrid coreutils 
-			su;
+			su iproute;
 		serverName = getCfg "serverName";
 		sid = getCfg "sid";
 		description = getCfg "description";
@@ -13,6 +13,7 @@ let
 		adminEmail = getCfg "adminEmail";
 		extraIPs = getCfg "extraIPs";
 		extraPort = getCfg "extraPort";
+		gw6cEnabled = config.get ["services" "gw6c" "enable"];
 	};
 
   startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
