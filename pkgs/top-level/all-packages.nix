@@ -1506,6 +1506,11 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng;
   };
 
+  lablgtk = import ../development/libraries/lablgtk {
+    inherit fetchurl stdenv ocaml pkgconfig;
+    inherit (gtkLibs) gtk;
+  };
+
   lcms = import ../development/libraries/lcms {
     inherit fetchurl stdenv;
   };
@@ -3310,6 +3315,11 @@ rec {
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
     #enableOfficialBranding = true;
+  };
+
+  unison = import ../applications/networking/sync/unison {
+    inherit fetchurl stdenv ocaml lablgtk makeWrapper;
+    inherit (xorg) xset fontschumachermisc;
   };
 
   valknut = import ../applications/networking/p2p/valknut {
