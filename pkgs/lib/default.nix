@@ -127,6 +127,7 @@ rec {
   # Return true only if there is an attribute and it is true.
   checkFlag = attrSet: name:
 	if (name == "true") then true else
+	if (name == "false") then false else
 	getAttr [name] false attrSet ;
 
   logicalOR = x: y: x || y;
@@ -160,4 +161,13 @@ rec {
 	if (list == []) then false else
 	if (x == (head list)) then true else
 	isInList (tail list) x;
+  
+  uniqList = {inputList, outputList ? []}:
+	if (inputList == []) then outputList else
+	let x=head inputList; 
+	newOutputList = outputList ++
+	 (if (isInList outputList x) then [] else [x]);
+	in uniqList {outputList=newOutputList; 
+		inputList = (tail inputList);};
+
 }
