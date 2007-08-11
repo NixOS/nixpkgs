@@ -4,7 +4,7 @@ let
 	ircdService = import ../services/ircd-hybrid {
 		stdenv = pkgs.stdenvNewSetupScript;
 		inherit (pkgs) ircdHybrid coreutils 
-			su iproute;
+			su iproute gnugrep;
 		serverName = getCfg "serverName";
 		sid = getCfg "sid";
 		description = getCfg "description";
