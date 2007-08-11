@@ -124,6 +124,40 @@ rec {
     then []
     else [first] ++ range (builtins.add first 1) last;
 
-  #Return [arg] or [] for null arg
-        
+  # Return true only if there is an attribute and it is true.
+  checkFlag = attrSet: name:
+	if (name == "true") then true else
+	getAttr [name] false attrSet ;
+
+  logicalOR = x: y: x || y;
+  logicalAND = x: y: x && y;
+
+  # Input : attrSet, [ [name default] ... ], name
+  # Output : its value or default.
+  getValue = attrSet: argList: name:
+  ( getAttr [name] (if argList == [] then null else
+	let x = builtins.head argList; in
+		if (head x) == name then 
+			(head (tail x))
+		else (getValue attrSet 
+			(tail argList) name)) attrSet );
+
+  # Input : attrSet, [[name default] ...], [ [flagname reqs..] ... ]
+  # Output : are reqs satisfied? It's asserted.
+  checkReqs = attrSet : argList : condList :
+  (
+    fold logicalAND true 
+      (map (x: let name = (head x) ; in
+	
+	((checkFlag attrSet name) -> 
+	(fold logicalAND true
+	(map (y: let val=(getValue attrSet argList y); in
+		(val!=null) && (val!=false)) 
+	(tail x))))) condList)) ;
+	
+   
+  isInList = list: x:
+	if (list == []) then false else
+	if (x == (head list)) then true else
+	isInList (tail list) x;
 }

@@ -6,11 +6,12 @@
 stdenv.mkDerivation {
   name = "nix-0.11pre8816";
   
-  src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nix-0.11pre8816/nix-0.11pre8816.tar.bz2;
-    md5 = "dd432e6a05179fe30a95c3758e70ac51";
-  };
-  
+  src =   
+	fetchurl {
+		url = http://nix.cs.uu.nl/dist/nix/nix-unstable-latest/nix-0.11pre9063.tar.bz2;
+		sha256 = "0fxsvam0ihzcfg694d28d6b3vkx5klh25jvf3y5igyyqszmmhnxj";
+	};
+
   buildInputs = [perl curl openssl];
 
   configureFlags = "

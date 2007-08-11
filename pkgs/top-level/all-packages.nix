@@ -3345,6 +3345,8 @@ rec {
 	libXt libXaw libXau;
     inherit (gtkLibs) glib gtk;
     hugeFeatures = true;
+    gtkGUI = true;
+    x11Support = true;
   };
 
   vlc = import ../applications/video/vlc {

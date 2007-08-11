@@ -1,10 +1,31 @@
-args: 
+args:
+let 
+	defList = [];
+	#stdenv and fetchurl are added automatically
+	notForBuildInputs = []; 
+	getVal = (args.lib.getValue args defList);
+	check = args.lib.checkFlag args;
+	reqsList = [
+	["gtkGUI" "glib" "gtk" "pkgconfig" "libXpm" "libXext" "x11Support"]
+	["athenaGUI" "libXau" "libXt" "libXaw" "libXpm" "libXext" "x11Support"]
+	["x11Support" "libX11"]
+	["hugeFeatures"]
+	["true" "ncurses"]
+	];
+	buildInputsNames = args.lib.filter (x: (null!=getVal x)&&
+		(! args.lib.isInList (notForBuildInputs ++ 
+		["stdenv" "fetchurl" "lib"] ++ 
+		(map builtins.head reqsList)) x)) 
+		/*["libX11" "glib" "gtk" "pkgconfig" "libXpm" "libXext" 
+			"libXau" "libXt" "libXaw" "ncurses"];*/
+		(builtins.attrNames args);
+in
+	assert args.lib.checkReqs args defList reqsList;
 args.stdenv.mkDerivation {
   name = "vim-7.1" +
-	(if ((args ? hugeFeatures) 
-	&& args.hugeFeatures) then 
+	(if (check "hugeFeatures") then 
 	"-huge" else "")
-	+ (if ((args ? libX11)&&(args.libX11 != null))
+	+ (if (check "x11Support")
 	then "-X11" else "")
 	;
  
@@ -15,19 +36,14 @@ args.stdenv.mkDerivation {
  
   inherit (args) ncurses;
 
-  buildInputs =(with ({libX11=null; libXext=null;
-	libSM=null; libXpm=null; libXt=null;
-	libXaw=null; libXau=null; glib=null;
-	gtk=null; pkgconfig=null;
-	} // args); [ncurses] ++
-	(args.lib.filter (x: x != null) 
-	[libX11 libXext libSM libXpm libXt
-	libXaw libXau glib gtk pkgconfig]));
-  
+  debug = builtins.attrNames args;
+  buildInputs = args.lib.filter (x: x!=null) (map getVal buildInputsNames);
+ 
+  preConfigure = "echo \$debug"; 
   postInstall = "ln -s $out/bin/vim $out/bin/vi";
   preBuild="touch src/auto/link.sed";
   configureFlags=" --enable-gui=auto --disable-xim "+
-	(if ((args ? hugeFeatures) && args.hugeFeatures) then 
+	(if (check "hugeFeatures") then 
 	"--with-features=huge --enable-cscope --enable-multibyte --enable-xsmp "
 	else "");
 
