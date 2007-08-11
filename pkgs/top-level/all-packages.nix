@@ -701,6 +701,10 @@ rec {
       };
   };
 
+  fpc = import ../development/compilers/fpc {
+    inherit fetchurl stdenv gawk;
+  };
+
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
     nativeTools = false;
