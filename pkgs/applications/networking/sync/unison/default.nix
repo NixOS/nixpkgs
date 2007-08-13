@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   postInstall = [
     "for i in $(cd $out/bin && ls); do"
     "   mv $out/bin/$i $out/bin/.orig-$i;"
-    "   echo \"#! $SHELL -e\" > $out/bin/$i;"
+    "   echo \"#! $SHELL\" > $out/bin/$i;"
     "   echo \"$xset/bin/xset q | grep -q \\\"$fontschumachermisc\\\" || $xset/bin/xset +fp \\\"$fontschumachermisc/lib/X11/fonts/misc\\\"\" >> $out/bin/$i;"
     "   echo \"exec \\\"$out/bin/.orig-$i\\\" \\\"\\\$@\\\"\" >> $out/bin/$i;"
     "   chmod +x $out/bin/$i;"
