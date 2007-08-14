@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, xineLib, libpng}:
+{stdenv, fetchurl, pkgconfig, x11, xineLib, libpng}:
 
 stdenv.mkDerivation {
   name = "xine-ui-0.99.5";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "07jywadk6fhk3wn1j9m0cfa0zy0i17kz0nyyxwa3shvhznfals0k";
   };
   buildInputs = [
-    x11 xineLib libpng
+    pkgconfig x11 xineLib libpng
     (if xineLib.xineramaSupport then xineLib.libXinerama else null)
   ];
   configureFlags = "--without-readline --disable-xft";

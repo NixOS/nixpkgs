@@ -3409,7 +3409,7 @@ rec {
   };
 
   xineUI = import ../applications/video/xine-ui {
-    inherit fetchurl stdenv x11 xineLib libpng;
+    inherit fetchurl stdenv pkgconfig x11 xineLib libpng;
   };
 
   xmms = import ../applications/audio/xmms {
