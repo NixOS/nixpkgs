@@ -1,10 +1,10 @@
 {stdenv, fetchurl, x11, xineLib, libpng}:
 
 stdenv.mkDerivation {
-  name = "xine-ui-0.99.4";
+  name = "xine-ui-0.99.5";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/xine-ui-0.99.4.tar.gz;
-    md5 = "90ea1f76747e9788a30a73e7f4a76cf6";
+    url = http://mesh.dl.sourceforge.net/sourceforge/xine/xine-ui-0.99.5.tar.gz;
+    sha256 = "07jywadk6fhk3wn1j9m0cfa0zy0i17kz0nyyxwa3shvhznfals0k";
   };
   buildInputs = [
     x11 xineLib libpng

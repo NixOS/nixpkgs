@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   buildInputs = [gettext];
 
   meta = {
-		description = "A console downloading program. Has some features for mirroring sites.";
-	};
+    description = "A console downloading program. Has some features for mirroring sites.";
+  };
 }
