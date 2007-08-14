@@ -3078,6 +3078,10 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  gv = import ../applications/misc/gv {
+    inherit fetchurl stdenv Xaw3d ghostscriptX;
+  };
+ 
   haskellMode = import ../applications/editors/emacs-modes/haskell {
     inherit fetchurl stdenv;
   };
@@ -3643,6 +3647,11 @@ rec {
     x11Support = false;
   };
 
+  ghostscriptX = lowPrio (appendToName "with-X" (import ../misc/ghostscript {
+    inherit fetchurl stdenv libjpeg libpng zlib x11;
+    x11Support = true;
+  }));
+ 
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
 	inherit (xlibs) libX11 xextproto libXtst 
