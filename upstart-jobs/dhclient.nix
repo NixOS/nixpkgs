@@ -12,6 +12,8 @@ in
 
 {
   name = "dhclient";
+
+  extraPath = [dhcp];
   
   job = "
 description \"DHCP client\"

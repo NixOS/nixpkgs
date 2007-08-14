@@ -119,6 +119,13 @@ import ../upstart-jobs/gather.nix {
       interfaces = config.get ["networking" "interfaces"];
     })
 
+  # ifplugd daemon for monitoring Ethernet cables.
+  ++ optional ["networking" "interfaceMonitor" "enable"]
+    (import ../upstart-jobs/ifplugd.nix {
+      inherit (pkgs) ifplugd writeScript bash;
+      inherit config;
+    })
+
   # DHCP server.
   ++ optional ["services" "dhcpd" "enable"]
     (import ../upstart-jobs/dhcpd.nix {

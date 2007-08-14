@@ -311,6 +311,29 @@
 
 
   {
+    name = ["networking" "interfaceMonitor" "enable"];
+    default = false;
+    description = "
+      If <literal>true</literal>, monitor Ethernet interfaces for
+      cables being plugged in or unplugged.  When this occurs, the
+      <optional>dhclient</optional> service is restarted to
+      automatically obtain a new IP address.  This is useful for
+      roaming users (laptops).
+    ";
+  }
+
+
+  {
+    name = ["networking" "interfaceMonitor" "beep"];
+    default = false;
+    description = "
+      If <literal>true</literal>, beep when an Ethernet cable is
+      plugged in or unplugged.
+    ";
+  }
+
+
+  {
     name = ["fileSystems"];
     default = [];
     example = [
