@@ -220,6 +220,8 @@ rec {
   # derivations, e.g., "... ${somePkg}/bin/foo ...".
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
+  writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
+  
   stdenvNewSetupScript = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
