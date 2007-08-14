@@ -11,12 +11,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "thunderbird-2.0.0.5";
+  name = "thunderbird-2.0.0.6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.5/source/thunderbird-2.0.0.5-source.tar.bz2;
-    sha1 = "4133463e804116e9a2bb024ec7271c6028273354";
+    url = http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.6/source/thunderbird-2.0.0.6-source.tar.bz2;
+    sha1 = "c38b17ad0fc51aed96bacafe3ffe7ed0edd0738c";
   };
 
   buildInputs = [
