@@ -128,6 +128,7 @@ rec {
   checkFlag = attrSet: name:
 	if (name == "true") then true else
 	if (name == "false") then false else
+	if (isInList (getAttr ["flags"] [] attrSet) name) then true else
 	getAttr [name] false attrSet ;
 
   logicalOR = x: y: x || y;
@@ -136,7 +137,8 @@ rec {
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
-  ( getAttr [name] (if argList == [] then null else
+  ( getAttr [name] (if checkFlag attrSet name then true else
+	if argList == [] then null else
 	let x = builtins.head argList; in
 		if (head x) == name then 
 			(head (tail x))
