@@ -115,6 +115,7 @@ let {
     nxml
     openssh
     openssl
+    pam_console
     pam_login
     pam_unix2
     pan
@@ -132,6 +133,7 @@ let {
     qt3
     quake3demo
     readline
+    rogue
     rsync
     ruby
     screen
@@ -147,6 +149,7 @@ let {
     swig
     sylpheed 
     sysklogd
+    syslinux
     sysvinit
     sysvtools
     tetex
