@@ -122,7 +122,7 @@ cp /etc/resolv.conf $mountPoint/etc/
 # Pull the manifest on the CD so that everything in the Nix store on
 # the CD can be copied directly.
 echo "registering substitutes to speed up builds..."
-chroot $mountPoint @nix@/bin/nix-store --clear-substitutes
+rm -f $mountPoint/nix/var/nix/manifests/*
 if test -e /MANIFEST; then
     chroot $mountPoint @nix@/bin/nix-pull file:///mnt/MANIFEST
 fi
