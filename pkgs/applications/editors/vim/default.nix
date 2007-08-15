@@ -12,6 +12,15 @@ let
 	["true" "ncurses"]
 	["false" "libSM"]
 	];
+	nameSuffixes = [
+	"hugeFeatures" "-huge"
+	"x11Support" "-X11"
+	];
+	configFlags = [
+	"true" " --disable-xim "
+	"x11Support" " --enable-gui=auto "
+	"hugeFeatures" "--with-features=huge --enable-cscope --enable-multibyte --enable-xsmp"
+	];
 	buildInputsNames = args.lib.filter (x: (null!=getVal x)) 
 		(args.lib.uniqList {inputList = 
 		(args.lib.concatLists (map 
@@ -20,12 +29,7 @@ let
 in
 	assert args.lib.checkReqs args defList reqsList;
 args.stdenv.mkDerivation {
-  name = "vim-7.1" +
-	(if (check "hugeFeatures") then 
-	"-huge" else "")
-	+ (if (check "x11Support")
-	then "-X11" else "")
-	;
+  name = args.lib.condConcat "vim-7.1" nameSuffixes check;
  
   src = args.fetchurl {
     url = ftp://ftp.nluug.nl/pub/editors/vim/unix/vim-7.1.tar.bz2;
@@ -38,10 +42,7 @@ args.stdenv.mkDerivation {
 
   postInstall = "ln -s $out/bin/vim $out/bin/vi";
   preBuild="touch src/auto/link.sed";
-  configureFlags=" --enable-gui=auto --disable-xim "+
-	(if (check "hugeFeatures") then 
-	"--with-features=huge --enable-cscope --enable-multibyte --enable-xsmp "
-	else "");
+  configureFlags = args.lib.condConcat "" configFlags check;
 
   meta = {
     description = "The most popular clone of the VI editor";

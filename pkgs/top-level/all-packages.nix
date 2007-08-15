@@ -3363,9 +3363,7 @@ rec {
     inherit (xlibs) libX11 libXext libSM libXpm
 	libXt libXaw libXau;
     inherit (gtkLibs) glib gtk;
-    hugeFeatures = true;
-    gtkGUI = true;
-    x11Support = true;
+    flags = ["hugeFeatures" "gtkGUI" "x11Support"];
   };
 
   vlc = import ../applications/video/vlc {

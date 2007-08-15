@@ -172,4 +172,14 @@ rec {
 	in uniqList {outputList=newOutputList; 
 		inputList = (tail inputList);};
 
+  condConcat = name: list: checker:
+	if list == [] then name else
+	if checker (head list) then 
+		condConcat 
+			(name + (head (tail list))) 
+			(tail (tail list)) 
+			checker
+	else condConcat
+		name (tail (tail list)) checker;
+
 }

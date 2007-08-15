@@ -16,18 +16,26 @@ let
 		(args.lib.concatLists (map 
 		(x:(if (x==[]) then [] else builtins.tail x)) 
 		reqsList));});
+	configFlags = [
+		"true" ""
+(assert false) - fill it; list consists of pairs "condition" "flags". "True" means always.
+	];
+	nameSuffixes = [
+(assert false) - fill it if needed, or blank it.
+	];
 in
 	assert args.lib.checkReqs args defList reqsList;
 with args; 
 args.stdenv.mkDerivation {
-  name = "
-#!!! Fill me //
-" ;
+  name = args.lib.condConcat "
+#Fill the name //
+" nameSuffixes check;
  
   src = args.
 #Put fetcher here 
  
   buildInputs = args.lib.filter (x: x!=null) (map getVal buildInputsNames);
+  configureFlags = args.lib.condConcat "" configFlags check;
 
   meta = {
     description = "
