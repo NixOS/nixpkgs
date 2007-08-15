@@ -910,6 +910,20 @@
 
   
   {
+    name = ["installer" "manifests"];
+    default = [http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable/MANIFEST];
+    example =
+      [ http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable/MANIFEST
+        http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-stable/MANIFEST
+      ];
+    description = "
+      URLs of manifests to be downloaded when you run
+      <command>nixos-rebuild</command> to speed up builds.
+    ";
+  }
+
+  
+  {
     name = ["nix" "maxJobs"];
     default = 1;
     example = 2;

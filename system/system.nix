@@ -27,6 +27,8 @@ rec {
     allPackages = import ../pkgs/top-level/all-packages.nix;
   };
 
+  manifests = config.get ["installer" "manifests"]; # exported here because nixos-rebuild uses it
+
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
 
   useKernel = (config.get ["boot" "useKernel"]) pkgs;

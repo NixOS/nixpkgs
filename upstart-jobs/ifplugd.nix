@@ -10,6 +10,7 @@ let
   plugScript = writeScript "ifplugd.action" "#! ${bash}/bin/sh
     if test \"$2\" = up; then
       initctl stop dhclient
+      sleep 1
       initctl start dhclient
     fi
   ";
