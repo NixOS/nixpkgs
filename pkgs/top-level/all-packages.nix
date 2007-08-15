@@ -176,7 +176,17 @@ rec {
       allPackages = import ./all-packages.nix;
     }).stdenv;
 
-  stdenv = if bootStdenv == null then defaultStdenv else bootStdenv;
+  stdenv = if (bootStdenv == null) then
+	let 
+		optionPath = ["replaceStdenv"]; in 
+	let
+		changer = getConfig optionPath null; in
+		(if changer != null then
+		changer {stdenv = defaultStdenv;
+		overrideSetup = overrideSetup;}
+		else defaultStdenv)
+		 else 
+	bootStdenv;
 
 
   ### BUILD SUPPORT
