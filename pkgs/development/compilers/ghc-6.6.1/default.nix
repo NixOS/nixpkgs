@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, ghc, perl, m4}:
+{stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
 
 stdenv.mkDerivation {
   name = "ghc-6.6.1";
@@ -21,4 +21,6 @@ stdenv.mkDerivation {
   meta = {
     description = "The Glasgow Haskell Compiler v6.6.1";
   };
+
+  inherit readline gmp ncurses;
 }

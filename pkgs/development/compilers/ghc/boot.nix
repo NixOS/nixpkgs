@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, readline, ncurses, gmp ? null}:
+{stdenv, fetchurl, perl, readline, ncurses, gmp}:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -15,6 +15,6 @@ stdenv.mkDerivation {
              md5 = "8f5fe48798f715cd05214a10987bf6d5";
         });             
   buildInputs = [perl];
-  propagatedBuildInputs = [readline ncurses (if stdenv.system == "x86_64-linux" then gmp else null)];
+  propagatedBuildInputs = [readline ncurses gmp];
   inherit readline ncurses gmp;
 }

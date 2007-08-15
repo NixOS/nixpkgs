@@ -762,27 +762,26 @@ rec {
   ghc = ghc661;
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
-    inherit fetchurl stdenv readline perl;
+    inherit fetchurl stdenv readline perl gmp ncurses;
     m4 = gnum4;
     ghc = ghcboot;
   };
 
   ghc66 = import ../development/compilers/ghc-6.6 {
-    inherit fetchurl stdenv readline perl;
+    inherit fetchurl stdenv readline perl gmp ncurses;
     m4 = gnum4;
     ghc = ghcboot;
   };
 
   ghc64 = import ../development/compilers/ghc {
-    inherit fetchurl stdenv perl ncurses readline m4;
+    inherit fetchurl stdenv perl ncurses readline m4 gmp;
     gcc = stdenv.gcc;
     ghc = ghcboot;
   };
 
   ghcboot = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot.nix {
-    inherit fetchurl stdenv perl ncurses;
+    inherit fetchurl stdenv perl ncurses gmp;
     readline = if stdenv.system == "i686-linux" then readline4 else readline;
-    gmp = if stdenv.system == "x86_64-linux" then gmp else null;
   }));
 
   /*

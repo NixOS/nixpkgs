@@ -11,11 +11,16 @@ postInstall()
 }
 postInstall=postInstall
 
+configureFlags="--with-gmp-libraries=$gmp/lib --with-readline-libraries=\"$readline/lib\""
+
 preConfigure()
 {
     chmod u+x rts/gmp/configure
+    # still requires a hack for ncurses
+    sed -i "s|^\(library-dirs.*$\)|\1 \"$ncurses/lib\"|" libraries/readline/package.conf.in
 }
 preConfigure=preConfigure
+
 
 # Standard configure/make/make install
 genericBuild
