@@ -250,6 +250,10 @@ rec {
     inherit fetchurl stdenv fuse;
   };
 
+  axel = import ../tools/networking/axel {
+    inherit fetchurl stdenv;
+  };
+
   azureus = import ../tools/networking/p2p/azureus {
     inherit fetchurl stdenv jdk swt;
   };
