@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     sha256 = "1x3y5nvqcg9a0lx630cvkjpwv7mmwxpy4pcjfm6fbiqylaxn05bj";
   };
 
-  buildInputs = [libgcrypt];
+  propagatedBuildInputs = [libgcrypt];
 }
