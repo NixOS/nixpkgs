@@ -56,6 +56,9 @@ rec {
           { name = "root";
             gid = ids.gids.root;
           }
+          { name = "wheel";
+            gid = ids.gids.wheel;
+          }
           { name = "nogroup";
             gid = ids.gids.nogroup;
           }

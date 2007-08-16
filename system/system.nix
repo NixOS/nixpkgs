@@ -225,6 +225,7 @@ rec {
     nixosCheckout
     setuidWrapper
   ]
+  ++ pkgs.lib.optional (config.get ["security" "sudo" "enable"]) pkgs.sudo
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ (config.get ["environment" "extraPackages"]) pkgs;
 
@@ -260,7 +261,8 @@ rec {
     hostName = config.get ["networking" "hostName"];
     setuidPrograms =
       config.get ["security" "setuidPrograms"] ++
-      config.get ["security" "extraSetuidPrograms"];
+      config.get ["security" "extraSetuidPrograms"] ++
+      pkgs.lib.optional (config.get ["security" "sudo" "enable"]) "sudo";
     maxJobs = config.get ["nix" "maxJobs"];
     extraNixOptions = config.get ["nix" "extraOptions"];
 

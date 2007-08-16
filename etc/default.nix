@@ -140,6 +140,17 @@ import ../helpers/make-etc.nix {
     target = "ldap.conf";
   })
     
+  # "sudo" configuration.
+  ++ (optional ["security" "sudo" "enable"] {
+    source = pkgs.runCommand "sudoers"
+      { src = pkgs.writeText "sudoers-in" (config.get ["security" "sudo" "configFile"]);
+      }
+      # Make sure that the sudoers file is syntactically valid.
+      "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+    target = "sudoers";
+    mode = "0440";
+  })
+    
   # A bunch of PAM configuration files for various programs.
   ++ (map
     (program:

@@ -20,7 +20,15 @@ ln -s @etc@/etc $staticEtc
 for i in $(cd $staticEtc && find * -type l); do
     mkdir -p /etc/$(dirname $i)
     rm -f /etc/$i
-    ln -s $staticEtc/$i /etc/$i
+    if test -e "$staticEtc/$i.mode"; then
+        # Create a regular file in /etc.
+        cp $staticEtc/$i /etc/$i
+        chown root.root /etc/$i
+        chmod "$(cat "$staticEtc/$i.mode")" /etc/$i
+    else
+        # Create a symlink in /etc.
+        ln -s $staticEtc/$i /etc/$i
+    fi
 done
 
 

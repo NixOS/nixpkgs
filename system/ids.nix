@@ -13,6 +13,7 @@
 
   gids = {
     root = 0;
+    wheel = 1;
     haldaemon = 5;
     audio = 17;
     users = 100;

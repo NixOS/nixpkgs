@@ -76,6 +76,11 @@ rec {
       nixpkgsURL = http://nix.cs.uu.nl/dist/nix/ + nixpkgsRel;
     };
 
+    security = {
+      sudo = {
+        enable = false;
+      };
+    };
   };
 
 

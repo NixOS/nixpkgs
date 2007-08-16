@@ -30,15 +30,17 @@ if test -z "$NIXOS_CONFIG"; then NIXOS_CONFIG=/etc/nixos/configuration.nix; fi
 
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
-manifests=$(nix-instantiate --eval-only --xml --strict \
-    $NIXOS/system/system.nix \
-    --arg configuration "import $NIXOS_CONFIG" \
-    -A manifests \
-    | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
+if test -z "$NIXOS_NO_PULL"; then
+    manifests=$(nix-instantiate --eval-only --xml --strict \
+        $NIXOS/system/system.nix \
+        --arg configuration "import $NIXOS_CONFIG" \
+        -A manifests \
+        | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
     
-for i in $manifests; do
-    NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
-done
+    for i in $manifests; do
+        NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
+    done
+fi
 
 
 # Either upgrade the configuration in the system profile (for "switch"
