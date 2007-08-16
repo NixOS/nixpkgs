@@ -25,11 +25,16 @@ stdenv.mkDerivation {
 
   inherit nss ncurses;
   buildInputs = [
-    pkgconfig gtk gtkspell aspell
-    GStreamer startupnotification gettext
-    perl perlXMLParser libxml2 openssl nss
+    gtkspell aspell
+    GStreamer startupnotification
+    libxml2 openssl nss
     libXScrnSaver ncurses
   ];
+
+  propagatedBuildInputs = [
+    pkgconfig gtk perl perlXMLParser gettext
+  ];
+
   configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include";
   meta = {
     description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
