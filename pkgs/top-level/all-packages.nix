@@ -3071,6 +3071,10 @@ rec {
 	inherit (gtkLibs) glib gtk;
   };
 
+  pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
+	inherit fetchurl stdenv libotr pidgin;
+  };
+
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
