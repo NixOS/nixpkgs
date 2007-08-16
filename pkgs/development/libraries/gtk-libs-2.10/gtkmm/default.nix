@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, gtk, atk, glibmm, libsigcxx}:
 
 stdenv.mkDerivation {
-  name = "gtkmm-2.10.7";
+  name = "gtkmm-2.10.11";
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/gtkmm/2.10/gtkmm-2.10.7.tar.bz2;
-    md5 = "d8885c0c5350deb201417cc4032c4e09";
+    url = http://ftp.gnome.org/pub/GNOME/sources/gtkmm/2.10/gtkmm-2.10.11.tar.bz2;
+    sha256 = "1bri9r0k69dmi5xgzrlfllp3adfzhz8dh9zkcvi6sjkgfwi594vx";
   };
 
   buildInputs = [pkgconfig gtk atk glibmm libsigcxx];
