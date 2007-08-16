@@ -1582,6 +1582,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libgcrypt = import ../development/libraries/libgcrypt {
+    inherit fetchurl stdenv libgpgerror;
+  };
+
   libgpgerror = import ../development/libraries/libgpg-error {
     inherit fetchurl stdenv;
   };
@@ -1618,6 +1622,10 @@ rec {
 
   libogg = import ../development/libraries/libogg {
     inherit fetchurl stdenv;
+  };
+
+  libotr = import ../development/libraries/libotr {
+    inherit fetchurl stdenv libgcrypt;
   };
 
   libpcap = import ../development/libraries/libpcap {
