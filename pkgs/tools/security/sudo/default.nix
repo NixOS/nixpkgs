@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = ftp://sunsite.ualberta.ca/pub/Mirror/sudo/sudo-1.6.9p4.tar.gz;
-    md5 = "0y65f77wxsl285yr1krfh5djcwm95n39p0yb3r1xgg98gir5z7w4";
+    sha256 = "0y65f77wxsl285yr1krfh5djcwm95n39p0yb3r1xgg98gir5z7w4";
   };
 
   # `--with-stow' allows /etc/sudoers to be a symlink.  Only it
