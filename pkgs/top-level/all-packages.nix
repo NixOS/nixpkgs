@@ -3066,7 +3066,7 @@ rec {
     inherit (xlibs) libXScrnSaver;
   };
 
-  pidginlatex = import ../applications/networking/instant-messengers/pidgin-latex {
+  pidginlatex = import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
 	inherit fetchurl stdenv tetex pkgconfig imagemagick ghostscript pidgin;
 	inherit (gtkLibs) glib gtk;
   };

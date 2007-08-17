@@ -11,5 +11,7 @@ stdenv.mkDerivation {
     description = "OTR plugin for Pidgin IM.";
   };
 
+  postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
+
   buildInputs = [libotr pidgin];
 }
