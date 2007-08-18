@@ -29,6 +29,7 @@ let
   webServer = import ../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNewSetupScript;
+    php = if getCfg "mod_php" then pkgs.php else null;
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir

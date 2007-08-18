@@ -783,6 +783,12 @@
 	directories and directory aliases defined by default.
 ";
   }
+
+  {
+    name = ["services" "httpd" "mod_php"];
+    default = false;
+    description = "Whether to enable php module.";
+  }
   
   {
     name = ["services" "httpd" "subservices" "subversion" "enable"];
