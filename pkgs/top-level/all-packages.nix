@@ -1674,6 +1674,12 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
+  libwmf = import ../development/libraries/libwmf {
+    inherit fetchurl stdenv pkgconfig imagemagick 
+	zlib libpng freetype libjpeg libxml2;
+    inherit (gtkLibs) glib;
+  };
+
   libwpd = import ../development/libraries/libwpd {
     inherit fetchurl stdenv pkgconfig libgsf libxml2;
     inherit (gnome) glib;
