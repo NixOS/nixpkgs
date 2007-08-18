@@ -1420,6 +1420,10 @@ rec {
       #installLocales = false;
     });
 
+  glibcNTPL = import ../development/libraries/glibc-ntpl {
+    inherit stdenv fetchurl kernelHeaders; 
+  };
+
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
     inherit (gtkLibs26) glib;
