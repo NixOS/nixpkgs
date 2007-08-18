@@ -626,6 +626,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  wv = import ../tools/misc/wv {
+    inherit fetchurl stdenv libpng zlib imagemagick
+	pkgconfig libgsf libxml2;
+    inherit (gtkLibs) glib;
+  };
+
   x11_ssh_askpass = import ../tools/networking/x11-ssh-askpass {
     inherit fetchurl stdenv x11;
     inherit (xorg) imake;
