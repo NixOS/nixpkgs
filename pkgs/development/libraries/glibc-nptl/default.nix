@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "glibc-2.5";
+  name = "glibc-2.5-nptl";
   builder = ./builder.sh;
 
   src = fetchurl {
