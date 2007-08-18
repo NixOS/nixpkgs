@@ -489,11 +489,13 @@ unpackW() {
 
 
 unpackPhase() {
+    sourceRoot=. # don't change to user dir homeless shelter if custom unpackSource does'nt set sourceRoot
     header "unpacking sources"
     startLog "unpack"
     unpackW
     stopLog
     stopNest
+    cd $sourceRoot
 }
 
 
@@ -521,6 +523,23 @@ patchW() {
         $uncompress < $i | patch $patchFlags || fail
         stopNest
     done
+}
+
+purifyPhase() {
+  # copied and modified from acroread and ghcboot
+  # to be called in postUnpack
+
+  fullPath=
+  for i in \$buildInputs; do
+      fullPath=\$fullPath\${fullPath:+:}\$i/lib
+  done
+
+  dirs=${dirsToPurify:-.}
+  for dir in $dirs; do
+    find $dir -type f -perm +100 \\
+    -exec patchelf --interpreter \"\$(cat \$NIX_GCC/nix-support/dynamic-linker)\" \\
+    --set-rpath \$fullPath {};
+  done
 }
 
 
@@ -833,9 +852,6 @@ genericBuild() {
         eval "$buildCommand"
         return
     fi
-
-    unpackPhase
-    cd $sourceRoot
 
     if test -z "$phases"; then
         phases="patchPhase configurePhase buildPhase checkPhase \
