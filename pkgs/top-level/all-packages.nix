@@ -1420,7 +1420,7 @@ rec {
       #installLocales = false;
     });
 
-  glibcNTPL = import ../development/libraries/glibc-ntpl {
+  glibcNPTL = import ../development/libraries/glibc-nptl {
     inherit stdenv fetchurl kernelHeaders; 
   };
 
