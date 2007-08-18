@@ -764,6 +764,8 @@ rec {
     profiledCompiler = false;
   }));
 
+  gcc41NPTL = wrapGCCWithGlibc gcc41.gcc glibcNPTL;
+
   gcc42 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
@@ -932,7 +934,9 @@ rec {
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
+  wrapGCC = baseGCC: wrapGCCWithGlibc baseGCC glibc;
+
+  wrapGCCWithGlibc = baseGCC: glibc: import ../build-support/gcc-wrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     gcc = baseGCC;
@@ -3802,13 +3806,14 @@ rec {
     };
   };
 
-  /*wine = import ../misc/emulators/wine {
-    inherit fetchurl stdenv flex bison mesa ncurses
+  wine = import ../misc/emulators/wine {
+    stdenv = overrideGCC stdenv gcc41NPTL;
+    inherit fetchurl flex bison mesa ncurses
 	libjpeg alsaLib lcms;
     inherit (xlibs) libX11 libICE libXi libXcursor
 	libXinerama libXrandr libXrender libXxf86vm;
     inherit (gtkLibs) gtk;
-  };*/
+  };
 
   xsane = import ../misc/xsane {
     inherit fetchurl stdenv pkgconfig libusb
