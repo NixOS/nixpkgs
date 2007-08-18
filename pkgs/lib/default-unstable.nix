@@ -220,8 +220,8 @@ rec {
 
     #in args.stdenv.mkDerivation {
 
-    #  # passing the flags in case a library using this want's to check them .. 
-    #  inherit (co) flags buildInputs configureFlags;
+    #  # passing the flags in case a library using this want's to check them (*) .. 
+    #  inherit (co) /* flags */ buildInputs configureFlags;
     #  inherit (co.flags) justAOption;
 
     #  extraSrc = (if co.flags.justAOption then null else src = .. );
@@ -231,6 +231,8 @@ rec {
     #    md5 = "1fb29764a6a650a4d5b409dda227ac9f";
     #  };
     #}
+
+    # (*) does'nt work because nix is seeing this set as derivation and complains about missing outpath.. :-(
 
 
 
@@ -289,7 +291,7 @@ rec {
       configureFlags = concatStrings (intersperse " " ( catAttrs "cfgOption" chosenFlat)) 
           + (if (__hasAttr "profilingLibraries" chosen) then "" else " --disable-profiling");
 
-      flags = map ( flag: av flag (__hasAttr flag chosen) ) (__attrNames flagDescr);
+      flags = listToAttrs (map ( flag: av flag (__hasAttr flag chosen) ) (__attrNames flagDescr));
       };
 
 }
