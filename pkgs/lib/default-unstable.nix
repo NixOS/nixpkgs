@@ -17,7 +17,6 @@ rec {
     if list == []
     then nul
     else op (head list) (fold op nul (tail list));
-
     
   # Concatenate a list of lists.
   concatLists =
@@ -198,6 +197,7 @@ rec {
   catAttrs = attr : l : fold ( s : l : if (__hasAttr attr s) then [(__getAttr attr s)] ++ l else l) [] l;
 
   flattenSet = set : map ( attr : __getAttr attr set) (__attrNames set);
+  mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
 # One example showing how to use mandatory dependencies [1], default flags [2], ..
@@ -218,7 +218,7 @@ rec {
     #    alternativeAddOn  = { cfgOption = "--enable-add-ons-alt"; blocks = ["addOns", "addOns2"]; };
     #    justAOption =  { };
     #  };
-    #  co = chosenOptions flagDescr args args.flags;
+    #  co = chooseOptionsByFlags flagDescr ["libpng", "libjpg"] args;
 
     #in args.stdenv.mkDerivation {
 
@@ -256,7 +256,17 @@ rec {
   #          flags = { flagName = true/ false for each attribute in flagDescr
   #                     ... }
            
-  chosenOptions = flagDescr : args : flags : 
+  # optionals is a list of dependency names. If passed as attribute in args they'll be automatically added
+  # to flags and flagDescr ( optionalName = { buildInputs = optionalName } )
+  chooseOptionsByFlags = flagDescr : optionals : args :
+    let givenOptionals = listToAttrs 
+        (mapIf ( a : (__hasAttr a args) ) 
+               ( x: av x { buildInputs = x; } ) 
+               optionals );
+        fd = flagDescr // givenOptionals;
+    in chooseOptionsByFlags2 fd args ( getAttr ["flags"] [] args ++ (__attrNames givenOptionals ) );
+
+  chooseOptionsByFlags2 = flagDescr : args : flags : 
     let   
         # helper function
         collectFlags = state : flags :
