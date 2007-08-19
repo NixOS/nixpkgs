@@ -183,6 +183,8 @@ rec {
 	else condConcat
 		name (tail (tail list)) checker;
 
+  # calls a function (f attr value ) for each record item. returns a list
+  mapRecordFlatten = f : r : map (attr: f attr (__getAttr attr r) ) (__attrNames r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   av = attr : value : { inherit attr value; };
@@ -209,7 +211,7 @@ rec {
     #    defaults = { implies   = [ "addOns" "addOns2"]; }; [> [2] defaults and mandatory should be the first listed ? Would you like it different?
     #    mandatory ={ cfgOption = [ "--with-headers=${args.kernelHeaders}/include" [> [1]
     #                                "--with-tls" "--without-__thread" "--disable-sanity-checks" ];
-    #                 assert = [ args.glibc.nptl ];
+    #                 assertion = [ args.glibc.nptl ];
     #               };
     #    addOns            = { cfgOption = "--enable-add-ons"; };
     #    addOns2           = { cfgOption = "--enable-add-ons2"; implies = "addOns"; };
@@ -233,6 +235,7 @@ rec {
     #}
 
     # (*) does'nt work because nix is seeing this set as derivation and complains about missing outpath.. :-(
+    # using mkDerivation { ...  } // oc.flags would work but would also force evaluation.. ( would be slower )
 
 
 
@@ -265,20 +268,28 @@ rec {
                                else let fDesc = (__getAttr flag flagDescr);
                                         implied = flatten ( getAttr ["implies"] [] fDesc );
                                         blocked = flatten ( getAttr ["blocks"] [] fDesc ); 
-                                        s2 = assert (fold ( b : t : 
+                                        s2 = s // 
+                                          { blockedFlagsBy = 
+                                              s.blockedFlagsBy  
+                                                // listToAttrs ( map (b: av b flag)
+                                                              blocked );
+                                            result = s.result
+                                              // (collectFlags s implied)
+                                              // listToAttrs [ { attr = flag; value = (__getAttr flag flagDescr); } ]; };
+                                        # add the whole flag to the result set
+                                        in assert (fold ( b : t : __trace (__attrNames s.result) (
                                                  if ( __hasAttr b s.result ) 
                                                    then  throw "flag ${b} is blocked by ${flag}"
-                                                   else t) true (flatten blocked));
-                                             (collectFlags s implied);
-                                        # add the whole flag to the result set
-                                        in s2 // { result = s2.result //
-                                                      listToAttrs [ { attr = flag; value = (__getAttr flag flagDescr); } ]; }
-              ) state flags;
+                                                   else if ( b == flag) then throw "flag ${b} blocks itself"
+                                                        else t)) true blocked);
+                                           s2) state flags;
         # chosen contains flagDescr but only having those attributes elected by flags (or by implies attributes of elected attributes)
-        chosen = (collectFlags { blockedFlagsBy = {}; result = {}; } flags).result;
+        chosen = (collectFlags { blockedFlagsBy = {}; result = {}; } (flags ++ ["mandatory"])).result;
         chosenFlat = flattenSet chosen;
           
-    in assert ( all (id) (catAttrs "assert" chosenFlat));
+    in assert ( all id ( mapRecordFlatten ( attr : r : if ( all id ( flatten (getAttr ["assertion"] [] r ) ) ) 
+                                              then true else throw "assertion failed flag ${attr}" )
+                                         chosen) );
       {
       # compared to flags flagsSet does also contain the implied flags.. This makes it easy to write assertions. ( assert args.
       inherit chosen chosenFlat;
@@ -288,7 +299,7 @@ rec {
 
       #buildInputNames = catAttrs "name" buildInputs;
 
-      configureFlags = concatStrings (intersperse " " ( catAttrs "cfgOption" chosenFlat)) 
+      configureFlags = concatStrings (intersperse " " ( flatten ( catAttrs "cfgOption" chosenFlat) )) 
           + (if (__hasAttr "profilingLibraries" chosen) then "" else " --disable-profiling");
 
       flags = listToAttrs (map ( flag: av flag (__hasAttr flag chosen) ) (__attrNames flagDescr));
