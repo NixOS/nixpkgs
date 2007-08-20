@@ -176,17 +176,15 @@ rec {
       allPackages = import ./all-packages.nix;
     }).stdenv;
 
-  stdenv = if (bootStdenv == null) then
-	let 
-		optionPath = ["replaceStdenv"]; in 
-	let
-		changer = getConfig optionPath null; in
-		(if changer != null then
-		changer {stdenv = defaultStdenv;
-		overrideSetup = overrideSetup;}
-		else defaultStdenv)
-		 else 
-	bootStdenv;
+  stdenv =
+    if bootStdenv != null then bootStdenv else
+      let changer = getConfig ["replaceStdenv"] null;
+      in if changer != null then
+        changer {
+          stdenv = defaultStdenv;
+          overrideSetup = overrideSetup;
+        }
+      else defaultStdenv;
 
 
   ### BUILD SUPPORT
@@ -3012,7 +3010,7 @@ rec {
     inherit (xlibs) libX11;
   };
 
-  eclipse = plugins :
+  eclipse = plugins:
     import ../applications/editors/eclipse {
       inherit fetchurl stdenv makeWrapper jdk;
       inherit (gtkLibs) gtk glib;
@@ -3024,8 +3022,7 @@ rec {
 
   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
 
-  elinks = (import ../applications/networking/browsers/elinks)
-  {
+  elinks = import ../applications/networking/browsers/elinks {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl;
   };
 

@@ -24,7 +24,7 @@ let
 
   lib = import ../../../lib;
 
-  version = "2.6.21.5";
+  version = "2.6.21.7";
 
 in
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "http://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "1vvfm6xhk81vvc88ibv6siqjq4a3m2204c9fkb5llasywchgyh85";
+    sha256 = "1c8ndsz35qd8vyng3xsxjjkjv5bnzyvc9b5vd85fz5v0bjp8hx50";
   };
   
   patches = map (p: p.patch) kernelPatches;
