@@ -818,6 +818,12 @@ rec {
     inherit fetchurl stdenv ghc;
   };
 
+  #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
+  # commented out because it's using the new configuration style proposal which is unstable
+  #hugs = import ../development/compilers/hugs {
+    #inherit lib fetchurl stdenv;
+  #};
+
   j2sdk14x =
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
