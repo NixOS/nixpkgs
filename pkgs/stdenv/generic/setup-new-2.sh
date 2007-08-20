@@ -525,23 +525,6 @@ patchW() {
     done
 }
 
-purifyPhase() {
-  # copied and modified from acroread and ghcboot
-  # to be called in postUnpack
-
-  fullPath=
-  for i in \$buildInputs; do
-      fullPath=\$fullPath\${fullPath:+:}\$i/lib
-  done
-
-  dirs=${dirsToPurify:-.}
-  for dir in $dirs; do
-    find $dir -type f -perm +100 \\
-    -exec patchelf --interpreter \"\$(cat \$NIX_GCC/nix-support/dynamic-linker)\" \\
-    --set-rpath \$fullPath {};
-  done
-}
-
 
 patchPhase() {
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
@@ -854,7 +837,7 @@ genericBuild() {
     fi
 
     if test -z "$phases"; then
-        phases="patchPhase configurePhase buildPhase checkPhase \
+        phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
             installPhase fixupPhase distPhase";
     fi
 
