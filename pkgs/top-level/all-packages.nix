@@ -2081,10 +2081,10 @@ rec {
   };
 
   perlEmailAddress = import ../development/perl-modules/generic perl {
-    name = "Email-Address-1.886";
+    name = "Email-Address-1.888";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Address-1.886.tar.gz;
-      sha256 = "01qgl66pv1s6g9awwjpnikhl8av4xnn6a47365dnf6hazrm1dh2f";
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Address-1.888.tar.gz;
+      sha256 = "0c6b8djnmiy0niskrvywd6867xd1qmn241ffdwj957dkqdakq9yx";
     };
   };
 
@@ -2098,10 +2098,10 @@ rec {
   };
 
   perlEmailSimple = import ../development/perl-modules/generic perl {
-    name = "Email-Simple-1.998";
+    name = "Email-Simple-2.003";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Simple-1.998.tar.gz;
-      sha256 = "0zpna7wla1hwfydlnfpjvvq9xq9al2ddkm8w993035vik70vssg7";
+      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Simple-2.003.tar.gz;
+      sha256 = "0h8873pidhkqy7415s5sx8z614d0haxiknbjwrn65icrr2m0b8g6";
     };
   };
 
