@@ -4,6 +4,7 @@
 , gtkGUI ? false
 , stdenv, fetchurl, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 , pkgconfig ? null, gtk ? null
+, ncurses
 }:
 
 assert xawSupport && !xaw3dSupport -> libXaw != null;
@@ -12,15 +13,15 @@ assert xpmSupport -> libXpm != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 
 stdenv.mkDerivation {
-  name = "emacs-22.0.50-pre20051207";
+  name = "emacs-22.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/emacs-22.0.50-pre20051207.tar.bz2;
-    md5 = "011d40367015691e4319ddc65b4e7843";
+    url = http://ftp.nluug.nl/pub/gnu/emacs/emacs-22.1.tar.gz;
+    sha256 = "1l1y3il98pq3cz464p244wz2d3nga5lq8fkw5pwp5r97f7pkpi0y";
   };
   patches = [./crt.patch];
   buildInputs = [
-    x11
+    ncurses x11
     (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
     (if xpmSupport then libXpm else null)
   ] ++ (if gtkGUI then [pkgconfig gtk] else []);

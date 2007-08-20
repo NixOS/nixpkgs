@@ -3029,14 +3029,16 @@ rec {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl;
   };
 
-  emacs = import ../applications/editors/emacs {
+  emacs = emacs22;
+
+  emacs21 = import ../applications/editors/emacs-21 {
     inherit fetchurl stdenv ncurses x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
     xaw3dSupport = true;
   };
 
   emacs22 = import ../applications/editors/emacs-22 {
-    inherit fetchurl stdenv pkgconfig x11 Xaw3d;
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
     inherit (gtkLibs) gtk;
     xaw3dSupport = false;
