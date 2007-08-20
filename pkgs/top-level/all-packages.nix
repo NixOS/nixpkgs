@@ -1400,6 +1400,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  # commented out because it's using the new configuration style proposal which is unstable
+  # needs some testing ..
+  #fltk20 = (import ../development/libraries/fltk) {
+    #inherit fetchurl stdenv lib mesa mesaHeaders libpng libjpeg zlib ;
+    #inherit (xlibs) libX11 libXext;
+    #flags = [ "useNixLibs" "threads" "shared" ];
+  #};
+
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
   };
