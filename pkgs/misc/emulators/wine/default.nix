@@ -2,6 +2,8 @@
 , ncurses, libpng, libjpeg, lcms, freetype
 }:
 
+assert stdenv.isLinux;
+
 let lib = import ../../../lib/default.nix; in
 
 stdenv.mkDerivation {
