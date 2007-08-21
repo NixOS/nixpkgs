@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
-, ncurses, libpng, libjpeg, lcms, freetype
+, ncurses, libpng, libjpeg, lcms, freetype, fontforge
 }:
 
 assert stdenv.isLinux;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     xlibs.xlibs flex bison xlibs.libXi mesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm alsaLib ncurses
-    libpng libjpeg lcms 
+    libpng libjpeg lcms fontforge
   ];
 
   patches = [

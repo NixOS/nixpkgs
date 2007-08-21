@@ -355,6 +355,11 @@ rec {
     inherit stdenv findutils;
   }));
 
+  fontforge = import ../tools/misc/fontforge {
+    inherit fetchurl stdenv gettext freetype zlib
+      libungif libpng libjpeg libtiff libxml2;
+  };
+
   gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
     (import ../tools/text/gawk {
       inherit fetchurl stdenv;
@@ -3822,7 +3827,8 @@ rec {
   wine = import ../misc/emulators/wine {
     stdenv = overrideGCC stdenv gcc41NPTL;
     inherit fetchurl flex bison mesa ncurses
-      libpng libjpeg alsaLib lcms xlibs freetype;
+      libpng libjpeg alsaLib lcms xlibs freetype
+      fontforge;
   };
 
   xsane = import ../misc/xsane {
