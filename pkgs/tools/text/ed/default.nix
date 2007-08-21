@@ -1,7 +1,7 @@
 {stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "ed-0.6";
+  name = "ed-0.8";
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/ed/ed-0.6.tar.bz2;
-    sha256 = "1fzp9nj8gm4z0d2v486zwqqy8nqx730ygad82zvj0akcnlq7csax";
+    url = ftp://ftp.nluug.nl/pub/gnu/ed/ed-0.8.tar.bz2;
+    sha256 = "07zaw9w6vrcvpc2srd0zkm7948j262zx2xwj5qbb3lhvry3kr61p";
   };
 }
