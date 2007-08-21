@@ -78,10 +78,11 @@ ln -sf /usr/lib/libglx.la libglx.la;
 ln -sf /usr/lib/libglx.so.1 libglx.so;
 ln -sf /usr/lib/libglx.so.1 libglx.so.1;
 ln -sf /usr/lib/nvidia_drv.so nvidia_drv.so;
-#ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/$(uname -r)/kernel/drivers/video/nvidia/nvidia.ko;
 ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/*-default/kernel/drivers/video/nvidia/nvidia.ko;
+rm /var/run/opengl-driver
+ln -sf /var/run/opengl-driver $out
 "
-#TODO ADD /var/run/opengl-driver link ...?
+#TODO ADD ln -sf is sometimes not strong enough ...
 
 rwlibsfile="$out/bin/nvidia-rewriteLibs.sh"
 
