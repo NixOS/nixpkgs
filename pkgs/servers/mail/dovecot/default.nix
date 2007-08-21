@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "dovecot-1.0.alpha2";
+  name = "dovecot-1.0.3";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/dovecot-1.0.alpha2.tar.gz;
-    md5 = "ea33ac1bf13a8252d880082ef6811081" ;
+    url = http://dovecot.org/releases/1.0/dovecot-1.0.3.tar.gz;
+    sha256 = "14b3sbvj9xpm5mjwfavwrcwmzfdgian51ncspl8j83cd8j01jdjz" ;
   };
   
 }
