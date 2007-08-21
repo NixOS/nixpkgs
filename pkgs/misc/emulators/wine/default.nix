@@ -19,6 +19,12 @@ stdenv.mkDerivation {
     libpng libjpeg lcms 
   ];
 
+  patches = [
+    # Based on http://bugs.winehq.org/attachment.cgi?id=5708,
+    # see http://bugs.winehq.org/show_bug.cgi?id=2398.
+    ./opengl-child-window.patch
+  ];
+
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.

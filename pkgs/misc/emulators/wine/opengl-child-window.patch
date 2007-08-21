@@ -1,0 +1,1286 @@
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/dce.c wine-0.9.43/dlls/winex11.drv/dce.c
+*** wine-0.9.43-orig/dlls/winex11.drv/dce.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/dce.c	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 639,644 ****
+--- 639,656 ----
+  
+  
+  /**********************************************************************
++  *      hwnd_from_dce
++  *
++  * Retrieve the HWND from a given dce
++  */
++ HWND hwnd_from_dce( struct dce *dce )
++ {
++     HWND hwnd = 0;
++     if (dce) hwnd = dce->hwnd;
++     return hwnd;
++ }
++ 
++ /**********************************************************************
+   *		WindowFromDC   (X11DRV.@)
+   */
+  HWND X11DRV_WindowFromDC( HDC hdc )
+***************
+*** 650,656 ****
+      EnterCriticalSection( &dce_section );
+      if (!ExtEscape( hdc, X11DRV_ESCAPE, sizeof(escape), (LPCSTR)&escape,
+                      sizeof(dce), (LPSTR)&dce )) dce = NULL;
+!     if (dce) hwnd = dce->hwnd;
+      LeaveCriticalSection( &dce_section );
+      return hwnd;
+  }
+--- 662,668 ----
+      EnterCriticalSection( &dce_section );
+      if (!ExtEscape( hdc, X11DRV_ESCAPE, sizeof(escape), (LPCSTR)&escape,
+                      sizeof(dce), (LPSTR)&dce )) dce = NULL;
+!     hwnd = hwnd_from_dce( dce );
+      LeaveCriticalSection( &dce_section );
+      return hwnd;
+  }
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/event.c wine-0.9.43/dlls/winex11.drv/event.c
+*** wine-0.9.43-orig/dlls/winex11.drv/event.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/event.c	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 957,962 ****
+--- 957,973 ----
+          return X11DRV_AcquireClipboard( hwnd );
+      case WM_X11DRV_DELETE_WINDOW:
+          return SendMessageW( hwnd, WM_SYSCOMMAND, SC_CLOSE, 0 );
++     case WM_X11DRV_GET_PARENT_INFO:
++         {
++             struct x11drv_win_data *data = X11DRV_get_win_data( hwnd );
++             if (data)
++             {
++                 ((void**)lp)[0] = &data->client_rect;
++                 ((void**)lp)[1] = thread_display();
++                 return 1;
++             }
++         }
++         return 0;
+      default:
+          FIXME( "got window msg %x hwnd %p wp %lx lp %lx\n", msg, hwnd, wp, lp );
+          return 0;
+Only in wine-0.9.43/dlls/winex11.drv: event.c.orig
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/init.c wine-0.9.43/dlls/winex11.drv/init.c
+*** wine-0.9.43-orig/dlls/winex11.drv/init.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/init.c	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 129,134 ****
+--- 129,135 ----
+      if (!physDev) return FALSE;
+  
+      *pdev = physDev;
++     physDev->display = gdi_display;
+      physDev->hdc = hdc;
+  
+      if (GetObjectType( hdc ) == OBJ_MEMDC)
+Only in wine-0.9.43/dlls/winex11.drv: init.c.orig
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/opengl.c wine-0.9.43/dlls/winex11.drv/opengl.c
+*** wine-0.9.43-orig/dlls/winex11.drv/opengl.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/opengl.c	2007-08-21 10:31:52.000000000 +0200
+***************
+*** 575,583 ****
+      int tmp;
+      int ctx_vis_id;
+      TRACE(" Context %p have (vis:%p):\n", ctx, ctx->vis);
+!     pglXGetFBConfigAttrib(gdi_display, ctx->fmt->fbconfig, GLX_FBCONFIG_ID, &tmp);
+      TRACE(" - FBCONFIG_ID 0x%x\n", tmp);
+!     pglXGetFBConfigAttrib(gdi_display, ctx->fmt->fbconfig, GLX_VISUAL_ID, &tmp);
+      TRACE(" - VISUAL_ID 0x%x\n", tmp);
+      ctx_vis_id = tmp;
+      return ctx_vis_id;
+--- 575,583 ----
+      int tmp;
+      int ctx_vis_id;
+      TRACE(" Context %p have (vis:%p):\n", ctx, ctx->vis);
+!     pglXGetFBConfigAttrib(ctx->physDev->display, ctx->fmt->fbconfig, GLX_FBCONFIG_ID, &tmp);
+      TRACE(" - FBCONFIG_ID 0x%x\n", tmp);
+!     pglXGetFBConfigAttrib(ctx->physDev->display, ctx->fmt->fbconfig, GLX_VISUAL_ID, &tmp);
+      TRACE(" - VISUAL_ID 0x%x\n", tmp);
+      ctx_vis_id = tmp;
+      return ctx_vis_id;
+***************
+*** 595,614 ****
+      }
+  
+      TRACE(" Drawable %p have :\n", (void*) drawable);
+!     pglXQueryDrawable(gdi_display, drawable, GLX_WIDTH, (unsigned int*) &tmp);
+      TRACE(" - WIDTH as %d\n", tmp);
+!     pglXQueryDrawable(gdi_display, drawable, GLX_HEIGHT, (unsigned int*) &tmp);
+      TRACE(" - HEIGHT as %d\n", tmp);
+!     pglXQueryDrawable(gdi_display, drawable, GLX_FBCONFIG_ID, (unsigned int*) &tmp);
+      TRACE(" - FBCONFIG_ID as 0x%x\n", tmp);
+  
+      attribList[1] = tmp;
+!     fbCfgs = pglXChooseFBConfig(gdi_display, DefaultScreen(gdi_display), attribList, &nElements);
+      if (fbCfgs == NULL) {
+          return -1;
+      }
+  
+!     pglXGetFBConfigAttrib(gdi_display, fbCfgs[0], GLX_VISUAL_ID, &tmp);
+      TRACE(" - VISUAL_ID as 0x%x\n", tmp);
+  
+      XFree(fbCfgs);
+--- 595,614 ----
+      }
+  
+      TRACE(" Drawable %p have :\n", (void*) drawable);
+!     pglXQueryDrawable(ctx->physDev->display, drawable, GLX_WIDTH, (unsigned int*) &tmp);
+      TRACE(" - WIDTH as %d\n", tmp);
+!     pglXQueryDrawable(ctx->physDev->display, drawable, GLX_HEIGHT, (unsigned int*) &tmp);
+      TRACE(" - HEIGHT as %d\n", tmp);
+!     pglXQueryDrawable(ctx->physDev->display, drawable, GLX_FBCONFIG_ID, (unsigned int*) &tmp);
+      TRACE(" - FBCONFIG_ID as 0x%x\n", tmp);
+  
+      attribList[1] = tmp;
+!     fbCfgs = pglXChooseFBConfig(ctx->physDev->display, DefaultScreen(gdi_display), attribList, &nElements);
+      if (fbCfgs == NULL) {
+          return -1;
+      }
+  
+!     pglXGetFBConfigAttrib(ctx->physDev->display, fbCfgs[0], GLX_VISUAL_ID, &tmp);
+      TRACE(" - VISUAL_ID as 0x%x\n", tmp);
+  
+      XFree(fbCfgs);
+***************
+*** 1236,1265 ****
+  
+    wine_tsx11_lock();
+  
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_CONFIG_CAVEAT, &value);
+    if(value == GLX_SLOW_CONFIG)
+        ppfd->dwFlags |= PFD_GENERIC_ACCELERATED;
+  
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_DOUBLEBUFFER, &value); if (value) ppfd->dwFlags |= PFD_DOUBLEBUFFER;
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_STEREO, &value); if (value) ppfd->dwFlags |= PFD_STEREO;
+  
+    /* Pixel type */
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_RENDER_TYPE, &value);
+    if (value & GLX_RGBA_BIT)
+      ppfd->iPixelType = PFD_TYPE_RGBA;
+    else
+      ppfd->iPixelType = PFD_TYPE_COLORINDEX;
+  
+    /* Color bits */
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_BUFFER_SIZE, &value);
+    ppfd->cColorBits = value;
+  
+    /* Red, green, blue and alpha bits / shifts */
+    if (ppfd->iPixelType == PFD_TYPE_RGBA) {
+!     pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_RED_SIZE, &rb);
+!     pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_GREEN_SIZE, &gb);
+!     pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_BLUE_SIZE, &bb);
+!     pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_ALPHA_SIZE, &ab);
+  
+      ppfd->cRedBits = rb;
+      ppfd->cRedShift = gb + bb + ab;
+--- 1236,1265 ----
+  
+    wine_tsx11_lock();
+  
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_CONFIG_CAVEAT, &value);
+    if(value == GLX_SLOW_CONFIG)
+        ppfd->dwFlags |= PFD_GENERIC_ACCELERATED;
+  
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_DOUBLEBUFFER, &value); if (value) ppfd->dwFlags |= PFD_DOUBLEBUFFER;
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_STEREO, &value); if (value) ppfd->dwFlags |= PFD_STEREO;
+  
+    /* Pixel type */
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_RENDER_TYPE, &value);
+    if (value & GLX_RGBA_BIT)
+      ppfd->iPixelType = PFD_TYPE_RGBA;
+    else
+      ppfd->iPixelType = PFD_TYPE_COLORINDEX;
+  
+    /* Color bits */
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_BUFFER_SIZE, &value);
+    ppfd->cColorBits = value;
+  
+    /* Red, green, blue and alpha bits / shifts */
+    if (ppfd->iPixelType == PFD_TYPE_RGBA) {
+!     pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_RED_SIZE, &rb);
+!     pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_GREEN_SIZE, &gb);
+!     pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_BLUE_SIZE, &bb);
+!     pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_ALPHA_SIZE, &ab);
+  
+      ppfd->cRedBits = rb;
+      ppfd->cRedShift = gb + bb + ab;
+***************
+*** 1293,1303 ****
+    ppfd->cAccumAlphaBits = ab;
+  
+    /* Depth bits */
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_DEPTH_SIZE, &value);
+    ppfd->cDepthBits = value;
+  
+    /* stencil bits */
+!   pglXGetFBConfigAttrib(gdi_display, fmt->fbconfig, GLX_STENCIL_SIZE, &value);
+    ppfd->cStencilBits = value;
+  
+    wine_tsx11_unlock();
+--- 1293,1303 ----
+    ppfd->cAccumAlphaBits = ab;
+  
+    /* Depth bits */
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_DEPTH_SIZE, &value);
+    ppfd->cDepthBits = value;
+  
+    /* stencil bits */
+!   pglXGetFBConfigAttrib(physDev->display, fmt->fbconfig, GLX_STENCIL_SIZE, &value);
+    ppfd->cStencilBits = value;
+  
+    wine_tsx11_unlock();
+***************
+*** 1350,1357 ****
+--- 1350,1365 ----
+  BOOL X11DRV_SetPixelFormat(X11DRV_PDEVICE *physDev,
+  			   int iPixelFormat,
+  			   const PIXELFORMATDESCRIPTOR *ppfd) {
++   XSetWindowAttributes attr;
++   XVisualInfo *vis;
++   XVisualInfo template;
++   Display *display;
++   Window gl_child;
++   HWND main_hwnd;
++   RECT rect;
+    WineGLPixelFormat *fmt;
+    int value;
++   int num;
+  
+    TRACE("(%p,%d,%p)\n", physDev, iPixelFormat, ppfd);
+  
+***************
+*** 1374,1380 ****
+--- 1382,1494 ----
+      return 0;
+    }
+  
++   /* Check for an existing pixel format */
++   if (physDev->current_pf) {
++     if (physDev->current_pf != iPixelFormat) {
++       ERR("Pixel format already set for physDev (cur: %d, req: %d)\n", physDev->current_pf, iPixelFormat);
++       return 0;
++     }
++     /* TODO: test if the current gl_drawable is still valid */
++   }
++ 
++   /* Check the window we'll be parenting from */
++   if (!physDev->drawable) {
++     ERR("No drawable associated with physDev %p\n", physDev);
++     return 0;
++   }
++ 
++ 
++   /* Get the window and display for the opengl child */
++   main_hwnd = hwnd_from_dce(physDev->dce);
++   display = X11DRV_get_gl_display(main_hwnd);
++ 
++   TRACE("main_hwnd: %p\n", main_hwnd);
++   /* Make sure this window doesn't already have a gl drawable */
++   if (physDev->gl_drawable) {
++         /* Check if the gl_drawable is still valid */
++         if(X11DRV_get_gl_window(main_hwnd) == 0)
++             physDev->gl_drawable = 0;
++         else
++             WARN("Window already has an opengl child (%p), possible window leak!\n", (void*)physDev->gl_drawable);
++ 
++     physDev->gl_drawable = 0;
++     X11DRV_set_gl_window(main_hwnd, 0);
++   }
++ 
++   /* Force semi-sane values */
++   rect = physDev->dc_rect;
++   if (rect.right <= rect.left) {
++     rect.right = 0;
++     rect.left = -16;
++   }
++   if (rect.bottom <= rect.top) {
++     rect.bottom = 0;
++     rect.top = -16;
++   }
++ 
++   wine_tsx11_lock();
++ 
++   /* Get the visual for the X11 child window and set up a colormap for it */
++   template.visualid = XVisualIDFromVisual(visual);
++   vis = XGetVisualInfo(gdi_display, VisualIDMask, &template, &num);
++   if (!vis) {
++     wine_tsx11_unlock();
++     ERR("No visual for pixel format %i\n", iPixelFormat);
++     return 0;
++   }
++ 
++   if ((vis->class == PseudoColor) || (vis->class == GrayScale) ||
++       (vis->class == DirectColor)) {
++     attr.colormap = XCreateColormap(display, physDev->drawable, vis->visual, AllocAll);
++   }
++   else {
++     attr.colormap = XCreateColormap(display, physDev->drawable, vis->visual, AllocNone);
++   }
++   XInstallColormap(display, attr.colormap);
++ 
++   TRACE("Creating X11 window x=%d,y=%d,w=%d,h=%d, parent=%p\n", rect.left, rect.top,
++         rect.right-rect.left, rect.bottom-rect.top, (void*)physDev->drawable);
++ 
++   /* Create the window */
++   gl_child = XCreateWindow(display, physDev->drawable, rect.left, rect.top,
++ //  gl_child = XCreateWindow(display, RootWindow(display, DefaultScreen(display)), rect.left, rect.top,
++                            rect.right-rect.left, rect.bottom-rect.top, 0,
++                            CopyFromParent, InputOutput, vis->visual,
++                            CWColormap, &attr);
++ 
++   XFree(vis);
++   wine_tsx11_unlock();
++ 
++   if (!gl_child) {
++     ERR("Could not create OpenGL child window!\n");
++     return 0;
++   }
++ 
++   if(!X11DRV_set_gl_window(main_hwnd, gl_child)) {
++     wine_tsx11_lock();
++     XDestroyWindow(display, gl_child);
++     wine_tsx11_unlock();
++     ERR("Could not set OpenGL child window for hwnd %p!\n", main_hwnd);
++     return 0;
++   }
++ 
++   TRACE("Created window %p\n", (void*)gl_child);
++ 
+    physDev->current_pf = iPixelFormat;
++ //if(physDev->dc_rect.left != 4)
++ //physDev->gl_drawable = 0;
++ //else
++   physDev->gl_drawable = gl_child;
++   physDev->display = display;
++ 
++   /* Finally, map the child if the window is visible */
++   if (X11DRV_is_window_rect_mapped(&physDev->dc_rect) &&
++       X11DRV_get_visible(main_hwnd)) {
++     wine_tsx11_lock();
++ //    if(physDev->dc_rect.left == 4)
++     XMapWindow(physDev->display, physDev->gl_drawable);
++     wine_tsx11_unlock();
++   }
+  
+    if (TRACE_ON(opengl)) {
+      int gl_test = 0;
+***************
+*** 1407,1412 ****
+--- 1521,1527 ----
+        TRACE(" - DRAWABLE_TYPE 0x%x\n", value);
+      }
+    }
++ 
+    return TRUE;
+  }
+  
+***************
+*** 1468,1474 ****
+      ret->fmt = fmt;
+  
+      /*ret->vis = vis;*/
+!     ret->vis = pglXGetVisualFromFBConfig(gdi_display, fmt->fbconfig);
+  
+      TRACE(" creating context %p (GL context creation delayed)\n", ret);
+      return (HGLRC) ret;
+--- 1583,1589 ----
+      ret->fmt = fmt;
+  
+      /*ret->vis = vis;*/
+!     ret->vis = pglXGetVisualFromFBConfig(physDev->display, fmt->fbconfig);
+  
+      TRACE(" creating context %p (GL context creation delayed)\n", ret);
+      return (HGLRC) ret;
+***************
+*** 1496,1502 ****
+      * so make sure it is valid first */
+      if (is_valid_context( ctx ))
+      {
+!         if (ctx->ctx) pglXDestroyContext(gdi_display, ctx->ctx);
+          free_context(ctx);
+      }
+      else
+--- 1611,1617 ----
+      * so make sure it is valid first */
+      if (is_valid_context( ctx ))
+      {
+!         if (ctx->ctx) pglXDestroyContext(ctx->physDev->display, ctx->ctx);
+          free_context(ctx);
+      }
+      else
+***************
+*** 1579,1584 ****
+--- 1694,1700 ----
+   */
+  static void sync_current_drawable(BOOL updatedc)
+  {
++ #if 0
+      int dy;
+      int width;
+      int height;
+***************
+*** 1616,1621 ****
+--- 1732,1738 ----
+  
+          wine_tsx11_unlock();
+      }
++ #endif
+  }
+  
+  /**
+***************
+*** 1628,1634 ****
+      HDC hdc = physDev->hdc;
+      DWORD type = GetObjectType(hdc);
+  
+!     TRACE("(%p,%p)\n", hdc, hglrc);
+  
+      if (!has_opengl()) {
+          ERR("No libGL on this box - disabling OpenGL support !\n");
+--- 1745,1751 ----
+      HDC hdc = physDev->hdc;
+      DWORD type = GetObjectType(hdc);
+  
+!     TRACE("(%p %p,%p)\n", physDev, hdc, hglrc);
+  
+      if (!has_opengl()) {
+          ERR("No libGL on this box - disabling OpenGL support !\n");
+***************
+*** 1637,1643 ****
+  
+      wine_tsx11_lock();
+      if (hglrc == NULL) {
+!         ret = pglXMakeCurrent(gdi_display, None, NULL);
+          NtCurrentTeb()->glContext = NULL;
+      } else {
+          Wine_GLContext *ctx = (Wine_GLContext *) hglrc;
+--- 1754,1760 ----
+  
+      wine_tsx11_lock();
+      if (hglrc == NULL) {
+!         ret = pglXMakeCurrent(physDev->display, None, NULL);
+          NtCurrentTeb()->glContext = NULL;
+      } else {
+          Wine_GLContext *ctx = (Wine_GLContext *) hglrc;
+***************
+*** 1654,1668 ****
+               */
+              TRACE(" Creating GLX Context\n");
+              if(ctx->vis)
+!                 ctx->ctx = pglXCreateContext(gdi_display, ctx->vis, NULL, type == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 ctx->ctx = pglXCreateNewContext(gdi_display, ctx->fmt->fbconfig, ctx->fmt->render_type, NULL, True);
+  
+              TRACE(" created a delayed OpenGL context (%p)\n", ctx->ctx);
+          }
+!         TRACE(" make current for dis %p, drawable %p, ctx %p\n", gdi_display, (void*) drawable, ctx->ctx);
+!         ret = pglXMakeCurrent(gdi_display, drawable, ctx->ctx);
+          NtCurrentTeb()->glContext = ctx;
+          if(ret)
+          {
+              ctx->physDev = physDev;
+--- 1771,1786 ----
+               */
+              TRACE(" Creating GLX Context\n");
+              if(ctx->vis)
+!                 ctx->ctx = pglXCreateContext(physDev->display, ctx->vis, NULL, type == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 ctx->ctx = pglXCreateNewContext(physDev->display, ctx->fmt->fbconfig, ctx->fmt->render_type, NULL, True);
+  
+              TRACE(" created a delayed OpenGL context (%p)\n", ctx->ctx);
+          }
+!         TRACE(" make current for dis %p, drawable %p, ctx %p\n", physDev->display, (void*) drawable, ctx->ctx);
+!         ret = pglXMakeCurrent(physDev->display, drawable, ctx->ctx);
+          NtCurrentTeb()->glContext = ctx;
++         
+          if(ret)
+          {
+              ctx->physDev = physDev;
+***************
+*** 1711,1720 ****
+              Drawable d_read = get_glxdrawable(hReadDev);
+  
+              if (ctx->ctx == NULL) {
+!                 ctx->ctx = pglXCreateContext(gdi_display, ctx->vis, NULL, GetObjectType(hDrawDev->hdc) == OBJ_MEMDC ? False : True);
+                  TRACE(" created a delayed OpenGL context (%p)\n", ctx->ctx);
+              }
+!             ret = pglXMakeContextCurrent(gdi_display, d_draw, d_read, ctx->ctx);
+              NtCurrentTeb()->glContext = ctx;
+          }
+      }
+--- 1829,1838 ----
+              Drawable d_read = get_glxdrawable(hReadDev);
+  
+              if (ctx->ctx == NULL) {
+!                 ctx->ctx = pglXCreateContext(ctx->physDev->display, ctx->vis, NULL, GetObjectType(hDrawDev->hdc) == OBJ_MEMDC ? False : True);
+                  TRACE(" created a delayed OpenGL context (%p)\n", ctx->ctx);
+              }
+!             ret = pglXMakeContextCurrent(ctx->physDev->display, d_draw, d_read, ctx->ctx);
+              NtCurrentTeb()->glContext = ctx;
+          }
+      }
+***************
+*** 1749,1757 ****
+              describeContext(org);
+  
+              if(org->vis)
+!                 org->ctx = pglXCreateContext(gdi_display, org->vis, NULL, GetObjectType(org->physDev->hdc) == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 org->ctx = pglXCreateNewContext(gdi_display, org->fmt->fbconfig, org->fmt->render_type, NULL, True);
+              wine_tsx11_unlock();
+              TRACE(" created a delayed OpenGL context (%p) for Wine context %p\n", org->ctx, org);
+          }
+--- 1867,1875 ----
+              describeContext(org);
+  
+              if(org->vis)
+!                 org->ctx = pglXCreateContext(org->physDev->display, org->vis, NULL, GetObjectType(org->physDev->hdc) == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 org->ctx = pglXCreateNewContext(org->physDev->display, org->fmt->fbconfig, org->fmt->render_type, NULL, True);
+              wine_tsx11_unlock();
+              TRACE(" created a delayed OpenGL context (%p) for Wine context %p\n", org->ctx, org);
+          }
+***************
+*** 1760,1768 ****
+              describeContext(dest);
+              /* Create the destination context with display lists shared */
+              if(dest->vis)
+!                 dest->ctx = pglXCreateContext(gdi_display, dest->vis, org->ctx, GetObjectType(org->physDev->hdc) == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 dest->ctx = pglXCreateNewContext(gdi_display, dest->fmt->fbconfig, dest->fmt->render_type, org->ctx, True);
+              wine_tsx11_unlock();
+              TRACE(" created a delayed OpenGL context (%p) for Wine context %p sharing lists with OpenGL ctx %p\n", dest->ctx, dest, org->ctx);
+              return TRUE;
+--- 1878,1886 ----
+              describeContext(dest);
+              /* Create the destination context with display lists shared */
+              if(dest->vis)
+!                 dest->ctx = pglXCreateContext(dest->physDev->display, dest->vis, org->ctx, GetObjectType(org->physDev->hdc) == OBJ_MEMDC ? False : True);
+              else /* Create a GLX Context for a pbuffer */
+!                 dest->ctx = pglXCreateNewContext(dest->physDev->display, dest->fmt->fbconfig, dest->fmt->render_type, org->ctx, True);
+              wine_tsx11_unlock();
+              TRACE(" created a delayed OpenGL context (%p) for Wine context %p sharing lists with OpenGL ctx %p\n", dest->ctx, dest, org->ctx);
+              return TRUE;
+***************
+*** 1937,1942 ****
+--- 2055,2061 ----
+  
+  static void WINAPI X11DRV_wglDisable(GLenum cap)
+  {
++ #if 0
+      if (cap == GL_SCISSOR_TEST)
+      {
+         Wine_GLContext *ctx = (Wine_GLContext *) NtCurrentTeb()->glContext;
+***************
+*** 1945,1950 ****
+--- 2064,2070 ----
+            ctx->scissor_enabled = FALSE;
+      }
+      else
++ #endif
+      {
+          wine_tsx11_lock();
+          pglDisable(cap);
+***************
+*** 1954,1959 ****
+--- 2074,2080 ----
+  
+  static void WINAPI X11DRV_wglEnable(GLenum cap)
+  {
++ #if 0
+      if (cap == GL_SCISSOR_TEST)
+      {
+         Wine_GLContext *ctx = (Wine_GLContext *) NtCurrentTeb()->glContext;
+***************
+*** 1962,1967 ****
+--- 2083,2089 ----
+             ctx->scissor_enabled = TRUE;
+      }
+      else
++ #endif
+      {
+          wine_tsx11_lock();
+          pglEnable(cap);
+***************
+*** 2012,2017 ****
+--- 2134,2140 ----
+  {
+      GLboolean enabled = False;
+  
++ #if 0
+      if (cap == GL_SCISSOR_TEST)
+      {
+         Wine_GLContext *ctx = (Wine_GLContext *) NtCurrentTeb()->glContext;
+***************
+*** 2020,2025 ****
+--- 2143,2149 ----
+             enabled = ctx->scissor_enabled;
+      }
+      else
++ #endif
+      {
+          wine_tsx11_lock();
+          enabled = pglIsEnabled(cap);
+***************
+*** 2030,2035 ****
+--- 2154,2160 ----
+  
+  static void WINAPI X11DRV_wglScissor(GLint x, GLint y, GLsizei width, GLsizei height)
+  {
++ #if 0
+      Wine_GLContext *ctx = (Wine_GLContext *) NtCurrentTeb()->glContext;
+  
+      if (ctx)
+***************
+*** 2041,2050 ****
+--- 2166,2181 ----
+  
+          sync_current_drawable(TRUE);
+      }
++ #else
++     wine_tsx11_lock();
++     pglScissor(x, y, width, height);
++     wine_tsx11_unlock();
++ #endif
+  }
+  
+  static void WINAPI X11DRV_wglViewport(GLint x, GLint y, GLsizei width, GLsizei height)
+  {
++ #if 0
+      Wine_GLContext *ctx = (Wine_GLContext *) NtCurrentTeb()->glContext;
+  
+      if (ctx)
+***************
+*** 2056,2061 ****
+--- 2187,2197 ----
+  
+          sync_current_drawable(TRUE);
+      }
++ #else
++     wine_tsx11_lock();
++     pglViewport(x, y, width, height);
++     wine_tsx11_unlock();
++ #endif
+  }
+  
+  /**
+***************
+*** 2327,2332 ****
+--- 2463,2469 ----
+  
+      /* The function wglGetPbufferDCARB returns a DC to which the pbuffer can be connected.
+       * All formats in our pixelformat list are compatible with each other and the main drawable. */
++     physDev->display = object->display;
+      physDev->current_pf = object->fmt->iPixelFormat;
+      physDev->drawable = object->drawable;
+      SetRect( &physDev->drawable_rect, 0, 0, object->width, object->height );
+***************
+*** 3234,3241 ****
+--- 3371,3381 ----
+              ret = physDev->bitmap->glxpixmap;
+          }
+      }
++     else if(physDev->gl_drawable)
++         ret = physDev->gl_drawable;
+      else
+          ret = physDev->drawable;
++ 
+      return ret;
+  }
+  
+***************
+*** 3264,3270 ****
+  
+    drawable = get_glxdrawable(physDev);
+    wine_tsx11_lock();
+!   pglXSwapBuffers(gdi_display, drawable);
+    wine_tsx11_unlock();
+  
+    /* FPS support */
+--- 3404,3410 ----
+  
+    drawable = get_glxdrawable(physDev);
+    wine_tsx11_lock();
+!   pglXSwapBuffers(physDev->display, drawable);
+    wine_tsx11_unlock();
+  
+    /* FPS support */
+***************
+*** 3285,3290 ****
+--- 3425,3431 ----
+    return TRUE;
+  }
+  
++ 
+  /***********************************************************************
+   *		X11DRV_setup_opengl_visual
+   *
+Only in wine-0.9.43/dlls/winex11.drv: opengl.c.orig
+Only in wine-0.9.43/dlls/winex11.drv: opengl.c.rej
+Only in wine-0.9.43/dlls/winex11.drv: opengl.c~
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/window.c wine-0.9.43/dlls/winex11.drv/window.c
+*** wine-0.9.43-orig/dlls/winex11.drv/window.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/window.c	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 55,61 ****
+--- 55,64 ----
+  
+  static const char whole_window_prop[] = "__wine_x11_whole_window";
+  static const char icon_window_prop[]  = "__wine_x11_icon_window";
++ static const char gl_display_prop[]   = "__wine_x11_gl_display";
++ static const char gl_winptr_prop[]    = "__wine_x11_gl_winptr";
+  static const char managed_prop[]      = "__wine_x11_managed";
++ static const char visible_prop[]      = "__wine_x11_visible";
+  static const char visual_id_prop[]    = "__wine_x11_visual_id";
+  
+  /* for XDG systray icons */
+***************
+*** 604,632 ****
+      BOOL iconic = (style & WS_MINIMIZE) != 0;
+  
+      if (!(data = X11DRV_get_win_data( hwnd ))) return;
+!     if (!data->whole_window || data->whole_window == DefaultRootWindow(display)) return;
+  
+      GetWindowRect( hwnd, &rect );
+  
+      wine_tsx11_lock();
+  
+!     if (!(wm_hints = XGetWMHints( display, data->whole_window ))) wm_hints = XAllocWMHints();
+!     wm_hints->flags |= StateHint | IconPositionHint;
+!     wm_hints->initial_state = iconic ? IconicState : NormalState;
+!     wm_hints->icon_x = rect.left - virtual_screen_rect.left;
+!     wm_hints->icon_y = rect.top - virtual_screen_rect.top;
+!     XSetWMHints( display, data->whole_window, wm_hints );
+! 
+!     if (style & WS_VISIBLE)
+      {
+!         if (iconic)
+!             XIconifyWindow( display, data->whole_window, DefaultScreen(display) );
+!         else
+!             if (X11DRV_is_window_rect_mapped( &rect ))
+!                 XMapWindow( display, data->whole_window );
+      }
+  
+!     XFree(wm_hints);
+      wine_tsx11_unlock();
+  }
+  
+--- 607,650 ----
+      BOOL iconic = (style & WS_MINIMIZE) != 0;
+  
+      if (!(data = X11DRV_get_win_data( hwnd ))) return;
+!     if ((!data->whole_window && !data->gl_window) || data->whole_window == DefaultRootWindow(display)) return;
+  
+      GetWindowRect( hwnd, &rect );
+  
+      wine_tsx11_lock();
+  
+!     if (data->gl_window)
+      {
+!         if (style & WS_VISIBLE)
+!         {
+!             if (iconic)
+!                 XUnmapWindow( data->gl_display, data->gl_window );
+!             else
+!                 if (X11DRV_is_window_rect_mapped( &rect ))
+!                     XMapWindow( data->gl_display, data->gl_window );
+!         }
+      }
+  
+!     if (data->whole_window)
+!     {
+!         if (!(wm_hints = XGetWMHints( display, data->whole_window ))) wm_hints = XAllocWMHints();
+!         wm_hints->flags |= StateHint | IconPositionHint;
+!         wm_hints->initial_state = iconic ? IconicState : NormalState;
+!         wm_hints->icon_x = rect.left - virtual_screen_rect.left;
+!         wm_hints->icon_y = rect.top - virtual_screen_rect.top;
+!         XSetWMHints( display, data->whole_window, wm_hints );
+! 
+!         if (style & WS_VISIBLE)
+!         {
+!             if (iconic)
+!                 XIconifyWindow( display, data->whole_window, DefaultScreen(display) );
+!             else
+!                 if (X11DRV_is_window_rect_mapped( &rect ))
+!                     XMapWindow( display, data->whole_window );
+!         }
+! 
+!         XFree(wm_hints);
+!     }
+      wine_tsx11_unlock();
+  }
+  
+***************
+*** 694,699 ****
+--- 712,748 ----
+      data->client_rect = *new_client_rect;
+      OffsetRect( &data->client_rect, -data->whole_rect.left, -data->whole_rect.top );
+  
++     if (data->gl_window)
++     {
++         changes.width = data->client_rect.right - data->client_rect.left;
++         changes.height = data->client_rect.bottom - data->client_rect.top;
++ 
++         if ( changes.width > 0 && changes.height > 0 )
++         {
++             POINT pt;
++             pt.x = data->gl_offset->left;
++             pt.y = data->gl_offset->top;
++             if (data->hwnd != data->gl_parent)
++                 MapWindowPoints( data->hwnd, data->gl_parent, &pt, 1 );
++ 
++             changes.x = pt.x;
++             changes.y = pt.y;
++ 
++             TRACE( "setting gl_win %lx pos %d,%d,%dx%d\n",
++                    data->gl_window, changes.x, changes.y,
++                    changes.width, changes.height );
++ 
++             wine_tsx11_lock();
++             XReconfigureWMWindow( data->gl_display, data->gl_window,
++                                   DefaultScreen(data->gl_display),
++                                   CWX|CWY|CWWidth|CWHeight, &changes );
++             wine_tsx11_unlock();
++         }
++ 
++         if (!data->whole_window)
++             return;
++     }
++ 
+      if (!data->whole_window || data->lock_changes) return;
+  
+      mask = get_window_changes( &changes, &old_whole_rect, &data->whole_rect );
+***************
+*** 905,910 ****
+--- 954,963 ----
+      if (!(data = X11DRV_get_win_data( hwnd ))) return;
+  
+      free_window_dce( data );
++     wine_tsx11_lock();
++ 
++     if (data->gl_window) XDestroyWindow( data->gl_display, data->gl_window );
++     wine_tsx11_unlock();
+      destroy_whole_window( display, data );
+      destroy_icon_window( display, data );
+  
+***************
+*** 927,932 ****
+--- 980,989 ----
+          data->hwnd          = hwnd;
+          data->whole_window  = 0;
+          data->icon_window   = 0;
++         data->gl_window     = 0;
++         data->gl_parent     = 0;
++         data->gl_offset     = NULL;
++         data->gl_display    = NULL;
+          data->xic           = 0;
+          data->managed       = FALSE;
+          data->dce           = NULL;
+***************
+*** 1056,1061 ****
+--- 1113,1147 ----
+      /* get class or window DC if needed */
+      alloc_window_dce( data );
+  
++     if (!data->whole_window)
++     {
++         HWND parent = hwnd;
++         while ((parent = GetAncestor( parent, GA_PARENT )))
++         {
++             if (X11DRV_get_whole_window( parent ))
++             {
++                 void *params[2];
++                 SendMessageW( parent, WM_X11DRV_GET_PARENT_INFO, 0, (LPARAM)params );
++                 data->gl_parent = parent;
++                 data->gl_offset = params[0];
++                 data->gl_display = params[1];
++                 break;
++             }
++         }
++         if (!parent)
++             ERR( "Could not find drawable parent for HWND %p!\n", hwnd );
++     }
++     else
++     {
++         data->gl_parent = data->hwnd;
++         data->gl_offset = &data->client_rect;
++         data->gl_display = thread_display();
++     }
++ 
++     SetPropA( hwnd, gl_display_prop, (HANDLE)data->gl_display );
++     SetPropA( hwnd, gl_winptr_prop, (HANDLE)&data->gl_window );
++     SetPropA( hwnd, visible_prop, (HANDLE)!!(cs->style&WS_VISIBLE) );
++ 
+      /* Call the WH_CBT hook */
+  
+      /* the window style passed to the hook must be the real window style,
+***************
+*** 1216,1221 ****
+--- 1302,1394 ----
+  
+  
+  /***********************************************************************
++  *		X11DRV_get_gl_display
++  *
++  * Return the X display associated with the full area of a window
++  */
++ Display *X11DRV_get_gl_display( HWND hwnd )
++ {
++     struct x11drv_win_data *data = X11DRV_get_win_data( hwnd );
++ 
++     if (!data) return (Display *)GetPropA( hwnd, gl_display_prop );
++     return data->gl_display;
++ }
++ 
++ 
++ /***********************************************************************
++  *		X11DRV_get_visible
++  *
++  * Returns if the window has the WS_VISIBLE style or not
++  */
++ BOOL X11DRV_get_visible( HWND hwnd )
++ {
++     return (BOOL)GetPropA( hwnd, visible_prop );
++ }
++ 
++ 
++ /***********************************************************************
++  *		X11DRV_set_visible
++  *
++  * Stores the WS_VISIBLE style for the window in a prop
++  */
++ BOOL X11DRV_set_visible( HWND hwnd, BOOL is_visible )
++ {
++     return (BOOL)SetPropA( hwnd, visible_prop, (HANDLE)is_visible );
++ }
++ 
++ 
++ /***********************************************************************
++  *		X11DRV_set_gl_window
++  *
++  * Retrieve the OpenGL child window from the HWND
++  */
++ Window X11DRV_get_gl_window( HWND hwnd )
++ {
++     struct x11drv_win_data *data = X11DRV_get_win_data( hwnd );
++ 
++     if (!data)
++     {
++         Window *WinPtr = (Window *)GetPropA( hwnd, gl_winptr_prop );
++         return *WinPtr;
++     }
++     else
++     {
++         return data->gl_window;
++     }
++ 
++     return 0;
++ }
++ 
++ 
++ /***********************************************************************
++  *		X11DRV_set_gl_window
++  *
++  * Sets the OpenGL child window for the HWND
++  */
++ BOOL X11DRV_set_gl_window( HWND hwnd, Window window )
++ {
++     struct x11drv_win_data *data = X11DRV_get_win_data( hwnd );
++ 
++     if (!data)
++     {
++         Window *WinPtr = (Window *)GetPropA( hwnd, gl_winptr_prop );
++         if (WinPtr)
++         {
++             *WinPtr = window;
++             return TRUE;
++         }
++     }
++     else
++     {
++         data->gl_window = window;
++         return TRUE;
++     }
++ 
++     return FALSE;
++ }
++ 
++ 
++ /***********************************************************************
+   *		X11DRV_get_ic
+   *
+   * Return the X input context associated with a window
+Only in wine-0.9.43/dlls/winex11.drv: window.c.orig
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/winpos.c wine-0.9.43/dlls/winex11.drv/winpos.c
+*** wine-0.9.43-orig/dlls/winex11.drv/winpos.c	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/winpos.c	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 142,158 ****
+  
+      if (changed & WS_VISIBLE)
+      {
+!         if (data->whole_window && X11DRV_is_window_rect_mapped( &data->window_rect ))
+          {
+              if (new_style & WS_VISIBLE)
+              {
+                  TRACE( "mapping win %p\n", hwnd );
+!                 X11DRV_sync_window_style( display, data );
+!                 X11DRV_set_wm_hints( display, data );
+!                 wine_tsx11_lock();
+!                 XMapWindow( display, data->whole_window );
+!                 wine_tsx11_unlock();
+              }
+              /* we don't unmap windows, that causes trouble with the window manager */
+          }
+          invalidate_dce( hwnd, &data->window_rect );
+--- 142,171 ----
+  
+      if (changed & WS_VISIBLE)
+      {
+!         if ((data->whole_window || data->gl_window) &&
+!             X11DRV_is_window_rect_mapped( &data->window_rect ))
+          {
+              if (new_style & WS_VISIBLE)
+              {
+                  TRACE( "mapping win %p\n", hwnd );
+!                 if (data->gl_window)
+!                 {
+!                     wine_tsx11_lock();
+!                     XMapWindow( data->gl_display, data->gl_window );
+!                     wine_tsx11_unlock();
+!                 }
+!                 if (data->whole_window)
+!                 {
+!                     X11DRV_sync_window_style( display, data );
+!                     X11DRV_set_wm_hints( display, data );
+!                     wine_tsx11_lock();
+!                     XMapWindow( display, data->whole_window );
+!                     wine_tsx11_unlock();
+!                 }
+!                 X11DRV_set_visible( hwnd, 1 );
+              }
++             else
++                 X11DRV_set_visible( hwnd, 0 );
+              /* we don't unmap windows, that causes trouble with the window manager */
+          }
+          invalidate_dce( hwnd, &data->window_rect );
+***************
+*** 287,292 ****
+--- 300,307 ----
+      }
+      SERVER_END_REQ;
+  
++ //needs to be cleaned up
++ X11DRV_set_visible ( hwnd, (new_style&WS_VISIBLE)?1 : 0 );
+      if (win == WND_DESKTOP || data->whole_window == DefaultRootWindow(gdi_display))
+      {
+          data->whole_rect = data->client_rect = data->window_rect = *rectWindow;
+***************
+*** 347,360 ****
+          }
+  
+  
+!         if (data->whole_window && !data->lock_changes)
+          {
+              if ((old_style & WS_VISIBLE) && !(new_style & WS_VISIBLE))
+              {
+                  /* window got hidden, unmap it */
+                  TRACE( "unmapping win %p\n", hwnd );
+                  wine_tsx11_lock();
+!                 XUnmapWindow( display, data->whole_window );
+                  wine_tsx11_unlock();
+              }
+              else if ((new_style & WS_VISIBLE) && !X11DRV_is_window_rect_mapped( rectWindow ))
+--- 362,378 ----
+          }
+  
+  
+!         if ((data->whole_window || data->gl_window) && !data->lock_changes)
+          {
+              if ((old_style & WS_VISIBLE) && !(new_style & WS_VISIBLE))
+              {
+                  /* window got hidden, unmap it */
+                  TRACE( "unmapping win %p\n", hwnd );
+                  wine_tsx11_lock();
+!                 if (data->gl_window)
+!                     XUnmapWindow( data->gl_display, data->gl_window );
+!                 if (data->whole_window)
+!                     XUnmapWindow( display, data->whole_window );
+                  wine_tsx11_unlock();
+              }
+              else if ((new_style & WS_VISIBLE) && !X11DRV_is_window_rect_mapped( rectWindow ))
+***************
+*** 362,375 ****
+                  /* resizing to zero size or off screen -> unmap */
+                  TRACE( "unmapping zero size or off-screen win %p\n", hwnd );
+                  wine_tsx11_lock();
+!                 XUnmapWindow( display, data->whole_window );
+                  wine_tsx11_unlock();
+              }
+          }
+  
+          X11DRV_sync_window_position( display, data, swp_flags, rectClient, &new_whole_rect );
+  
+!         if (data->whole_window && !data->lock_changes)
+          {
+              BOOL new_fs_state, mapped = FALSE;
+  
+--- 380,396 ----
+                  /* resizing to zero size or off screen -> unmap */
+                  TRACE( "unmapping zero size or off-screen win %p\n", hwnd );
+                  wine_tsx11_lock();
+!                 if (data->gl_window)
+!                     XUnmapWindow( data->gl_display, data->gl_window );
+!                 if (data->whole_window)
+!                     XUnmapWindow( display, data->whole_window );
+                  wine_tsx11_unlock();
+              }
+          }
+  
+          X11DRV_sync_window_position( display, data, swp_flags, rectClient, &new_whole_rect );
+  
+!         if ((data->whole_window || data->gl_window) && !data->lock_changes)
+          {
+              BOOL new_fs_state, mapped = FALSE;
+  
+***************
+*** 380,402 ****
+                  {
+                      /* window got shown, map it */
+                      TRACE( "mapping win %p\n", hwnd );
+!                     X11DRV_sync_window_style( display, data );
+!                     X11DRV_set_wm_hints( display, data );
+!                     wine_tsx11_lock();
+!                     XMapWindow( display, data->whole_window );
+!                     XFlush( display );
+!                     wine_tsx11_unlock();
+!                     mapped = TRUE;
+                  }
+                  else if ((swp_flags & (SWP_NOSIZE | SWP_NOMOVE)) != (SWP_NOSIZE | SWP_NOMOVE))
+                  {
+                      /* resizing from zero size to non-zero -> map */
+                      TRACE( "mapping non zero size or off-screen win %p\n", hwnd );
+                      wine_tsx11_lock();
+!                     XMapWindow( display, data->whole_window );
+!                     XFlush( display );
+                      wine_tsx11_unlock();
+-                     mapped = TRUE;
+                  }
+                  SetRect( &old_screen_rect, 0, 0, screen_width, screen_height );
+                  if (fullscreen_state_changed( data, &old_client_rect, &old_screen_rect, &new_fs_state ) || mapped)
+--- 401,441 ----
+                  {
+                      /* window got shown, map it */
+                      TRACE( "mapping win %p\n", hwnd );
+!                     if (data->gl_window)
+!                     {
+!                         wine_tsx11_lock();
+!                         XMapWindow( data->gl_display, data->gl_window );
+!                         XFlush( display );
+!                         wine_tsx11_unlock();
+!                     }
+!                     if (data->whole_window)
+!                     {
+!                         X11DRV_sync_window_style( display, data );
+!                         X11DRV_set_wm_hints( display, data );
+!                         wine_tsx11_lock();
+!                         XMapWindow( display, data->whole_window );
+!                         XFlush( display );
+!                         wine_tsx11_unlock();
+!                         mapped = TRUE;
+!                     }
+                  }
+                  else if ((swp_flags & (SWP_NOSIZE | SWP_NOMOVE)) != (SWP_NOSIZE | SWP_NOMOVE))
+                  {
+                      /* resizing from zero size to non-zero -> map */
+                      TRACE( "mapping non zero size or off-screen win %p\n", hwnd );
+                      wine_tsx11_lock();
+!                     if (data->gl_window)
+!                     {
+!                         XMapWindow( data->gl_display, data->gl_window );
+!                         XFlush( data->gl_display );
+!                     }
+!                     if (data->whole_window)
+!                     {
+!                         XMapWindow( display, data->whole_window );
+!                         mapped = TRUE;
+!                         XFlush( display );
+!                     }
+                      wine_tsx11_unlock();
+                  }
+                  SetRect( &old_screen_rect, 0, 0, screen_width, screen_height );
+                  if (fullscreen_state_changed( data, &old_client_rect, &old_screen_rect, &new_fs_state ) || mapped)
+Only in wine-0.9.43/dlls/winex11.drv: winpos.c.orig
+diff -rc wine-0.9.43-orig/dlls/winex11.drv/x11drv.h wine-0.9.43/dlls/winex11.drv/x11drv.h
+*** wine-0.9.43-orig/dlls/winex11.drv/x11drv.h	2007-08-10 18:18:12.000000000 +0200
+--- wine-0.9.43/dlls/winex11.drv/x11drv.h	2007-08-21 10:20:19.000000000 +0200
+***************
+*** 122,130 ****
+--- 122,132 ----
+    /* X physical device */
+  typedef struct
+  {
++     Display      *display;
+      HDC           hdc;
+      GC            gc;          /* X Window GC */
+      Drawable      drawable;
++     Drawable      gl_drawable;
+      RECT          dc_rect;       /* DC rectangle relative to drawable */
+      RECT          drawable_rect; /* Drawable rectangle relative to screen */
+      HRGN          region;        /* Device region (visible region & clip region) */
+***************
+*** 633,639 ****
+  enum x11drv_window_messages
+  {
+      WM_X11DRV_ACQUIRE_SELECTION = 0x80001000,
+!     WM_X11DRV_DELETE_WINDOW
+  };
+  
+  /* x11drv private window data */
+--- 635,642 ----
+  enum x11drv_window_messages
+  {
+      WM_X11DRV_ACQUIRE_SELECTION = 0x80001000,
+!     WM_X11DRV_DELETE_WINDOW,
+!     WM_X11DRV_GET_PARENT_INFO
+  };
+  
+  /* x11drv private window data */
+***************
+*** 642,647 ****
+--- 645,654 ----
+      HWND        hwnd;           /* hwnd that this private data belongs to */
+      Window      whole_window;   /* X window for the complete window */
+      Window      icon_window;    /* X window for the icon */
++     Window      gl_window;      /* X window for OpenGL display */
++     HWND        gl_parent;      /* hwnd that has the drawable the OpenGL display is from */
++     RECT       *gl_offset;      /* The OpenGL parent window's client_rect */
++     Display    *gl_display;     /* The display the OpenGL window uses */
+      RECT        window_rect;    /* USER window rectangle relative to parent */
+      RECT        whole_rect;     /* X window rectangle for the whole window relative to parent */
+      RECT        client_rect;    /* client area relative to whole window */
+***************
+*** 655,666 ****
+--- 662,679 ----
+  
+  extern struct x11drv_win_data *X11DRV_get_win_data( HWND hwnd );
+  extern Window X11DRV_get_whole_window( HWND hwnd );
++ extern Display *X11DRV_get_gl_display( HWND hwnd );
++ extern Window X11DRV_get_gl_window( HWND hwnd );
++ extern BOOL X11DRV_set_gl_window( HWND hwnd, Window window );
++ extern BOOL X11DRV_get_visible( HWND hwnd );
++ extern BOOL X11DRV_set_visible( HWND hwnd, BOOL is_visible );
+  extern BOOL X11DRV_is_window_rect_mapped( const RECT *rect );
+  extern XIC X11DRV_get_ic( HWND hwnd );
+  
+  extern void alloc_window_dce( struct x11drv_win_data *data );
+  extern void free_window_dce( struct x11drv_win_data *data );
+  extern void invalidate_dce( HWND hwnd, const RECT *rect );
++ extern HWND hwnd_from_dce( struct dce *dce );
+  
+  /* X context to associate a hwnd to an X window */
+  extern XContext winContext;
+Only in wine-0.9.43/dlls/winex11.drv: x11drv.h.orig
