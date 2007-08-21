@@ -3822,10 +3822,7 @@ rec {
   wine = import ../misc/emulators/wine {
     stdenv = overrideGCC stdenv gcc41NPTL;
     inherit fetchurl flex bison mesa ncurses
-	libjpeg alsaLib lcms;
-    inherit (xlibs) libX11 libICE libXi libXcursor
-	libXinerama libXrandr libXrender libXxf86vm;
-    inherit (gtkLibs) gtk;
+      libpng libjpeg alsaLib lcms xlibs freetype;
   };
 
   xsane = import ../misc/xsane {

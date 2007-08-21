@@ -1,7 +1,8 @@
-{stdenv, fetchurl, libX11, gtk, flex, libICE, bison, libXi,
-	mesa, libXcursor, libXinerama, libXrandr, 
-	libXrender, libXxf86vm, alsaLib, ncurses, libjpeg,
-	lcms}:
+{ stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
+, ncurses, libpng, libjpeg, lcms, freetype
+}:
+
+let lib = import ../../../lib/default.nix; in
 
 stdenv.mkDerivation {
   name = "wine-0.9.43";
@@ -11,7 +12,22 @@ stdenv.mkDerivation {
     sha256 = "0r6rz3zi5p7razn957lf2zy290hp36jrlfz4cpy23y9179r8i66x";
   };
 
-  buildInputs = [libX11 libICE gtk flex bison libXi mesa libXcursor
-	libXinerama libXrandr libXrender libXxf86vm alsaLib ncurses
-	libjpeg lcms];
+  buildInputs = [
+    xlibs.xlibs flex bison xlibs.libXi mesa
+    xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
+    xlibs.libXrender xlibs.libXxf86vm alsaLib ncurses
+    libpng libjpeg lcms 
+  ];
+
+  # Wine locates a lot of libraries dynamically through dlopen().  Add
+  # them to the RPATH so that the user doesn't have to set them in
+  # LD_LIBRARY_PATH.
+  NIX_LDFLAGS = map (path: "-rpath " + path + "/lib") [
+    freetype stdenv.gcc.gcc mesa mesa.libdrm
+    xlibs.libXinerama xlibs.libXrender xlibs.libXrandr xlibs.libXcursor
+  ];
+
+  # Don't shrink the ELF RPATHs in order to keep the extra RPATH
+  # elements specified above.
+  dontPatchELF = true;
 }
