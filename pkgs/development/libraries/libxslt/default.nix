@@ -3,10 +3,10 @@
 assert libxml2 != null;
 
 stdenv.mkDerivation {
-  name = "libxslt-1.1.20";
+  name = "libxslt-1.1.21";
   src = fetchurl {
-    url = ftp://ftp.gnome.org/pub/GNOME/sources/libxslt/1.1/libxslt-1.1.20.tar.bz2;
-    sha256 = "1gwc88dx7pb435qjr4gmf0klildrmp0hf56h2s3dm2578dwy1k21";
+    url = ftp://xmlsoft.org/libxml2/libxslt-1.1.21.tar.gz;
+    sha256 = "1q2lzdp75lx9w4mxgg99znnk94aacn34m7csmbf2kdwvnb7d9vyc";
   };
   buildInputs = [libxml2];
 }
