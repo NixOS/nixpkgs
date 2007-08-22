@@ -53,6 +53,14 @@ done
 export PATH=$HOME/bin:$PATH
 
 
+# Create the per-user garbage collector roots directory.
+NIX_USER_GCROOTS_DIR=/nix/var/nix/gcroots/per-user/$USER
+mkdir -m 0755 -p $NIX_USER_GCROOTS_DIR
+if test "$(stat --printf '%u' $NIX_USER_GCROOTS_DIR)" != "$(id -u)"; then
+    echo "WARNING: bad ownership on $NIX_USER_GCROOTS_DIR" >&2
+fi
+
+
 # Set up a default Nix expression from which to install stuff.
 if ! test -L $HOME/.nix-defexpr; then
     echo "creating $HOME/.nix-defexpr" >&2

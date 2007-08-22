@@ -117,6 +117,7 @@ fi
 # Nix initialisation.
 mkdir -m 0755 -p /nix/var/nix/db
 mkdir -m 0755 -p /nix/var/nix/gcroots
+mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
 mkdir -m 0755 -p /nix/var/nix/temproots
 mkdir -m 0755 -p /nix/var/nix/profiles
 mkdir -m 1777 -p /nix/var/nix/profiles/per-user
