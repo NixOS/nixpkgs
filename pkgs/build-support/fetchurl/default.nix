@@ -3,15 +3,46 @@
 
 {stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
 
-{name ? "", url, outputHash ? "", outputHashAlgo ? "", md5 ? "", sha1 ? "", sha256 ? ""}:
+{ # URL to fetch.
+  url ? ""
+
+, # Alternatively, a list of URLs specifying alternative download
+  # locations.  They are tried in order.
+  urls ? []
+
+, # Name of the file.  If empty, use the basename of `url' (or of the
+  # first element of `urls').
+  name ? ""
+
+  # Different ways of specifying the hash.
+, outputHash ? ""
+, outputHashAlgo ? ""
+, md5 ? ""
+, sha1 ? ""
+, sha256 ? ""
+}:
+
+assert urls != [] -> url == "";
+assert url != "" -> urls == [];
 
 assert (outputHash != "" && outputHashAlgo != "")
     || md5 != "" || sha1 != "" || sha256 != "";
 
+let urls_ = if urls != [] then urls else [url]; in
+
 stdenv.mkDerivation {
-  name = if name != "" then name else baseNameOf (toString url);
+  name =
+    if name != "" then name
+    else baseNameOf (toString (builtins.head urls_));
   builder = ./builder.sh;
   buildInputs = [curl];
+
+  urls = urls_;
+
+  # The content-addressable mirrors.
+  hashedMirrors = [
+    http://nix.cs.uu.nl/dist/tarballs
+  ];
 
   # Compatibility with Nix <= 0.7.
   id = md5;
@@ -22,8 +53,6 @@ stdenv.mkDerivation {
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
   
-  inherit url;
-
   # We borrow these environment variables from the caller to allow
   # easy proxy configuration.  This is impure, but a fixed-output
   # derivation like fetchurl is allowed to do so since its result is
