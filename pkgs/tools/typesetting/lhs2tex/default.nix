@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [tetex ghc];
   propagatedBuildInputs = [polytable];
+  propagatedUserEnvPackages = [polytable];
 
   inherit tetex;
 }

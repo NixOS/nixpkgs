@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [tetex];
   propagatedBuildInputs = [lazylist];
+  propagatedUserEnvPackages = [lazylist];
 
   inherit tetex;
 }
