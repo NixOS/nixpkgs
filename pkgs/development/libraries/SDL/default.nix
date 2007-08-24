@@ -8,7 +8,7 @@ assert alsaSupport -> alsaLib != null;
 stdenv.mkDerivation {
   name = "SDL-1.2.11";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/SDL-1.2.11.tar.gz;
+    url = http://www.libsdl.org/release/SDL-1.2.11.tar.gz;
     md5 = "418b42956b7cd103bfab1b9077ccc149";
   };
   propagatedBuildInputs = [x11 libXrandr];

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "gdk-pixbuf-0.22.0";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gdk-pixbuf-0.22.0.tar.bz2;
+    url = ftp://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/0.22/gdk-pixbuf-0.22.0.tar.bz2;
     md5 = "05fcb68ceaa338614ab650c775efc2f2";
   };
 

@@ -10,7 +10,7 @@ assert xineramaSupport -> libXinerama != null;
 stdenv.mkDerivation {
   name = "gtk+-2.8.20";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gtk+-2.8.20.tar.bz2;
+    url = ftp://ftp.gtk.org/pub/gtk/v2.8/gtk+-2.8.20.tar.bz2;
     md5 = "74e7ca98194f1fadfe906e66d763d05d";
   };
   buildInputs = [

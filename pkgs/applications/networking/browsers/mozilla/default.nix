@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/mozilla-1.7.12-source.tar.bz2;
+    url = http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7.12/source/mozilla-1.7.12-source.tar.bz2;
     md5 = "f1ad6adbbc0510eb76d352c94c801fac";
   };
 

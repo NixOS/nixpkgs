@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "opencxx-2.8";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/opencxx-2.8.tar.gz;
+    url = http://mesh.dl.sourceforge.net/sourceforge/opencxx/opencxx-2.8.tar.gz;
     md5 = "0f71df82751fe8aba5122d6e0541c98a";
   };
 

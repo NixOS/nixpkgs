@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pl233src.tar.gz;
+    url = http://surfnet.dl.sourceforge.net/sourceforge/ploticus/pl233src.tar.gz;
     md5 = "1e242200e7e52f7a24041c95f58f2fc1";
   };
 

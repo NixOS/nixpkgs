@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/zapping-0.9.6.tar.bz2;
+    url = http://heanet.dl.sourceforge.net/sourceforge/zapping/zapping-0.9.6.tar.bz2;
     md5 = "8306775c6a11de4d72345b5eee970ea6";
   };
 

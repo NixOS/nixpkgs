@@ -6,7 +6,7 @@ assert x11.buildClientLibs;
 stdenv.mkDerivation {
   name = "pango-1.4.1";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/pango-1.4.1.tar.bz2;
+    url = ftp://ftp.gtk.org/pub/gtk/v2.4/pango-1.4.1.tar.bz2;
     md5 = "39868e0da250fd4c00b2970e4eb84389";
   };
   buildInputs = [pkgconfig];

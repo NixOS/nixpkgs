@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   buildInputs = [unzip];
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/jetty-5.1.4.zip;
+    url = http://surfnet.dl.sourceforge.net/sourceforge/jetty/jetty-5.1.4.zip;
     md5 = "5d16bb1ea4a62dff93c0b7f7de00430f";
   };
 }

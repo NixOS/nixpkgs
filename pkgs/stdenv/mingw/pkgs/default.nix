@@ -23,7 +23,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/mingw32-make-3.81-1.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw32-make-3.81-1.tar.gz;
           md5 = "74c2f44ecc699b318edeb07d838feae5";
         };
     };
@@ -37,7 +37,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/gcc-core-3.4.2-20040916-1.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz;
           md5 = "d9cd78f926fc31ef101c6fa7072fc65d";
         };
     };
@@ -51,7 +51,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/gcc-g++-3.4.2-20040916-1.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/gcc-g++-3.4.2-20040916-1.tar.gz;
           md5 = "e5c7eb2c1e5f7e10842eac03d1d6fcdc";
         };
     };
@@ -65,7 +65,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/binutils-2.16.91-20060119-1.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/binutils-2.16.91-20060119-1.tar.gz;
           md5 = "a54f33ca9d6cf56dc99c0c5367f58ea3";
         };
     };
@@ -76,7 +76,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/mingw-runtime-3.10.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10.tar.gz;
           md5 = "7fa2638d23136fd84d5d627bef3b408a";
         };
     };
@@ -87,7 +87,7 @@ rec {
       builder = ./src-builder.sh;
       src =
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/mingw-runtime-3.10-src.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.10-src.tar.gz;
           md5 = "9225684e663eafa900b4075731c25f4c";
         };
     };
@@ -98,7 +98,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/w32api-3.7.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/w32api-3.7.tar.gz;
           md5 = "0b3a6d08136581c93b3a3207588acea9";
         };
     };
@@ -109,7 +109,7 @@ rec {
       builder = ./src-builder.sh;
       src = 
         fetchurl {
-          url = http://nix.cs.uu.nl/dist/tarballs/w32api-3.7-src.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/w32api-3.7-src.tar.gz;
           md5 = "d799c407b4c1b480d0339994d01f355d";
         };
     };

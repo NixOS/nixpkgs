@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/valknut-0.3.7.tar.bz2;
+    url = http://download.berlios.de/dcgui/valknut-0.3.7.tar.bz2;
     md5 = "848f9b3f25af15c3f1837133ac4b9415";
   };
 

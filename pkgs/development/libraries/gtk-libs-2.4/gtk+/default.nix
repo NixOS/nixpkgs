@@ -12,7 +12,7 @@ assert x11.buildClientLibs;
 stdenv.mkDerivation {
   name = "gtk+-2.4.13";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gtk+-2.4.13.tar.bz2;
+    url = ftp://ftp.gtk.org/pub/gtk/v2.4/gtk+-2.4.13.tar.bz2;
     md5 = "3a438e1010704b11acaf060c9ba0fd7b";
   };
   buildInputs = [pkgconfig perl libtiff libjpeg libpng];

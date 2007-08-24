@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
 #  builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gnuplot-4.0.0.tar.gz;
+    url = http://heanet.dl.sourceforge.net/sourceforge/gnuplot/gnuplot-4.0.0.tar.gz;
     md5 = "66258443d9f93cc4f46b147dac33e63a";
   };
 

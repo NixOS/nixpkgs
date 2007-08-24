@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/lazylist-1.0a.tar.bz2;
+    url = http://www.iai.uni-bonn.de/~loeh/lhs2tex/lazylist-1.0a.tar.bz2;
     md5 = "8ef357df5845bd8d6075fca6e1f214ab";
   };
 

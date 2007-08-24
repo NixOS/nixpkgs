@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "transfig-3.2.4";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/transfig.3.2.4.tar.gz;
+    url = ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz;
     md5 = "742de0f7a3cae74d247bbd0c70dd9dd7";
   };
 

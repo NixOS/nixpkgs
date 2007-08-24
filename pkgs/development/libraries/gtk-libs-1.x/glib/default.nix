@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "glib-1.2.10";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/glib-1.2.10.tar.gz;
+    url = ftp://ftp.gtk.org/pub/gtk/v1.2/glib-1.2.10.tar.gz;
     md5 = "6fe30dad87c77b91b632def29dd69ef9";
   };
   # Patch for gcc 3.4 compatibility.  Based on
