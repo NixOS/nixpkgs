@@ -38,4 +38,10 @@ stdenv.mkDerivation {
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
   dontPatchELF = true;
+
+  meta = {
+    homepage = "http://www.winehq.org/";
+    license = "LGPL";
+    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+  };
 }

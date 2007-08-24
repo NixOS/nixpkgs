@@ -167,6 +167,7 @@ let {
     vlc
     w3m
     wget
+    wine
     wirelesstools
     wxHaskell
     x11_ssh_askpass
