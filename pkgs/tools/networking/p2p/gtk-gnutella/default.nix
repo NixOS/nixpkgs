@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "gtk-gnutella-0.96.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://surfnet.dl.sourceforge.net/sourceforge/gtk-gnutella/gtk-gnutella-0.96.1.tar.bz2;
+    url = mirror://sourceforge/gtk-gnutella/gtk-gnutella-0.96.1.tar.bz2;
     md5 = "6529379cc105c1e98f501a67e8e875fd";
   };
   buildInputs = [pkgconfig glib gtk libxml2];

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "wine-0.9.43";
 
   src = fetchurl {
-    url = http://switch.dl.sourceforge.net/sourceforge/wine/wine-0.9.43.tar.bz2;
+    url = mirror://sourceforge/wine/wine-0.9.43.tar.bz2;
     sha256 = "0r6rz3zi5p7razn957lf2zy290hp36jrlfz4cpy23y9179r8i66x";
   };
 

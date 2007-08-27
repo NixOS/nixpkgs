@@ -4,7 +4,7 @@ args.stdenv.mkDerivation {
 
   src = args.
 	fetchurl {
-		url = http://dfn.dl.sourceforge.net/sourceforge/wvware/wv-1.2.4.tar.gz;
+		url = mirror://sourceforge/wvware/wv-1.2.4.tar.gz;
 		sha256 = "1mn2ax6qjy3pvixlnvbkn6ymy6y4l2wxrr4brjaczm121s8hjcb7";
 	};
 

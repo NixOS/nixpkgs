@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "glxinfo-6.5.2";
   
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/mesa3d/MesaDemos-6.5.2.tar.bz2;
+    url = mirror://sourceforge/mesa3d/MesaDemos-6.5.2.tar.bz2;
     sha256 = "1shfwy0sy3kdk3nykp1gv6s0lafqgqnadwarw5cbpw7mkfap8kw0";
   };
 

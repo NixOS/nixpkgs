@@ -12,7 +12,7 @@ in
 stdenv.mkDerivation {
   name = "mesa-6.5.2";
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/sourceforge/mesa3d/MesaLib-6.5.2.tar.bz2;
+    url = mirror://sourceforge/mesa3d/MesaLib-6.5.2.tar.bz2;
     sha256 = "0pxq3zjfdgcpkc92cyzl9hskdmc8qxxp7b2smywixmb10jim0zqk";
   };
   buildFlags = "${target}";

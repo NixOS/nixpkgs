@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pgf-1.10";
   
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/pgf/pgf-1.10.tar.gz;
+    url = mirror://sourceforge/pgf/pgf-1.10.tar.gz;
     sha256 = "1y605wmjxryphh0y5zgzvdq6xjxb2bjb95j36d4wg1a7n93ksswl";
   };
 

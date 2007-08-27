@@ -12,7 +12,7 @@ in
 stdenv.mkDerivation {
   name = "usbutils-0.72";
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/linux-usb/usbutils-0.72.tar.gz;
+    url = mirror://sourceforge/linux-usb/usbutils-0.72.tar.gz;
     sha256 = "08s4g4sz7p3a1afvphxd7h5bbfywvp0j611y85wbhwr14i9m6f00";
   };
   buildInputs = [libusb];

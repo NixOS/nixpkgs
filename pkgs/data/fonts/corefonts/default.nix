@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   name = "corefonts-1";
 
   exes = map ({name, sha256}: fetchurl {
-    url = "http://surfnet.dl.sourceforge.net/sourceforge/corefonts/${name}32.exe";
+    url = "mirror://sourceforge/corefonts/${name}32.exe";
     inherit sha256;
   }) fonts;
 

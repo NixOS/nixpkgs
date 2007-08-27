@@ -19,7 +19,7 @@
 stdenv.mkDerivation {
   name = "pidgin-2.1.1";
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/pidgin/pidgin-2.1.1.tar.bz2;
+    url = mirror://sourceforge/pidgin/pidgin-2.1.1.tar.bz2;
     sha256 = "1pj02hc5s94983q2vg2svckhcgn4hpv2mdayakcp9idc4k96dsyg";
   };
 

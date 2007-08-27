@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "wxGTK-2.8.4";
 
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/wxwindows/wxGTK-2.8.4.tar.gz;
+    url = mirror://sourceforge/wxwindows/wxGTK-2.8.4.tar.gz;
     sha256 = "177hls125f3zjsymsww9jjkd2idb6jmp4ylwg94dsyzygsvyj58k";
   };
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "kvm-12";
    
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/kvm/kvm-12.tar.gz;
+    url = mirror://sourceforge/kvm/kvm-12.tar.gz;
     sha256 = "0w2w4kzir1qsapfav30bhng061570zl12ycyvpgwlx2br4s9mlmw";
   };
 

@@ -9,7 +9,7 @@
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/mplayerplug-in/mplayerplug-in-3.35.tar.gz;
+    url = mirror://sourceforge/mplayerplug-in/mplayerplug-in-3.35.tar.gz;
     sha256 = "0zxd2nnmj4n9rkndd614ljv7ylz4f4jqvx1wswqfw5j7hwxm34dw";
   };
 

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "saxonb-8.8";
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/sourceforge/saxon/saxonb8-8j.zip;
+    url = mirror://sourceforge/saxon/saxonb8-8j.zip;
     md5 = "35c4c376174cfe340f179d2e44dd84f0";
   };
 
