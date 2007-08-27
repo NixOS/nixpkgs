@@ -14,15 +14,15 @@ stdenv.mkDerivation {
   
   src =
     [(fetchurl {
-      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-core-4.1.2.tar.bz2;
+      url = mirror://gnu/gcc/gcc-4.1.2/gcc-core-4.1.2.tar.bz2;
       sha256 = "07binc1hqlr0g387zrg5sp57i12yzd5ja2lgjb83bbh0h3gwbsbv";
     })] ++
     (if /*langCC*/ true then [(fetchurl {
-      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-g++-4.1.2.tar.bz2;
+      url = mirror://gnu/gcc/gcc-4.1.2/gcc-g++-4.1.2.tar.bz2;
       sha256 = "1qm2izcxna10jai0v4s41myki0xkw9174qpl6k1rnrqhbx0sl1hc";
     })] else []) ++
     (if langF77 then [(fetchurl {
-      url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.1.2/gcc-fortran-4.1.2.tar.bz2;
+      url = mirror://gnu/gcc/gcc-4.1.2/gcc-fortran-4.1.2.tar.bz2;
       sha256 = "0772dhmm4gc10420h0d0mfkk2sirvjmjxz8j0ywm8wp5qf8vdi9z";
     })] else []);
     

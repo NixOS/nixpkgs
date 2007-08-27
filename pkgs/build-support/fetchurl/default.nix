@@ -30,7 +30,7 @@ assert (outputHash != "" && outputHashAlgo != "")
 
 let urls_ = if urls != [] then urls else [url]; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name =
     if name != "" then name
     else baseNameOf (toString (builtins.head urls_));
@@ -39,10 +39,9 @@ stdenv.mkDerivation {
 
   urls = urls_;
 
-  # The content-addressable mirrors.
-  hashedMirrors = [
-    http://nix.cs.uu.nl/dist/tarballs
-  ];
+  # If set, prefer the content-addressable mirrors
+  # (http://nix.cs.uu.nl/dist/tarballs) over the original URLs.
+  preferHashedMirrors = true;
 
   # Compatibility with Nix <= 0.7.
   id = md5;
@@ -59,3 +58,8 @@ stdenv.mkDerivation {
   # by definition pure.
   impureEnvVars = ["http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"];
 }
+
+# Pass the mirror locations to the builder.
+// (import ./mirrors.nix)
+
+)

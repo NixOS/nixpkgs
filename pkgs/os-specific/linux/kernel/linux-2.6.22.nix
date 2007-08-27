@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = "http://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-${version}.tar.bz2";
+    url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
     sha256 = "1n8azbky36l27y6h44pp9abc7h3k3vp6f4y1pvrqgzmywxp6gakb";
   };
   

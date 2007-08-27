@@ -1,11 +1,11 @@
 {stdenv, fetchurl, SDL, openal, freealut, zlib, libpng, python}:
 
 stdenv.mkDerivation {
-  name = "gemrb-0.2.8";
+  name = "gemrb-0.2.9";
   
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/gemrb/gemrb-0.2.8.tar.gz;
-    sha256 = "1a0pald30m941i67nc7silz36pc1ixrfgkvsr7dcac6mwqmi89kr";
+    url = mirror://sourceforge/gemrb/gemrb-0.2.9.tar.gz;
+    sha256 = "0mygig4icx87a5skdv33yiwn8q4mv55f5qsks4sn40hrs69gcih0";
   };
 
   buildInputs = [SDL openal freealut libpng python];
