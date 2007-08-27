@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/ghostscript/gnu-ghostscript-8.56.0.tar.bz2;
+    url = mirror://gnu/ghostscript/gnu-ghostscript-8.56.0.tar.bz2;
     sha256 = "0pfcf59jfl6h8bhwypzxw0zwljssja14d3jc6gczbkab37d33c1x";
   };
 

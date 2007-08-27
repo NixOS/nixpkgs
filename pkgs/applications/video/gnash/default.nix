@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/gnash/0.7.2/gnash-0.7.2.tar.bz2;
+    url = mirror://gnu/gnash/0.7.2/gnash-0.7.2.tar.bz2;
     md5 = "ccef0f45be01a4c2992b46c2363a514f";
   };
 

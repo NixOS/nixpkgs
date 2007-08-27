@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   name = "emacs-22.1";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.nluug.nl/pub/gnu/emacs/emacs-22.1.tar.gz;
+    url = mirror://gnu/emacs/emacs-22.1.tar.gz;
     sha256 = "1l1y3il98pq3cz464p244wz2d3nga5lq8fkw5pwp5r97f7pkpi0y";
   };
   patches = [./crt.patch];
