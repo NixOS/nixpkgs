@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pciutils-2.2.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.kernel.org/pub/software/utils/pciutils/pciutils-2.2.5.tar.bz2;
+    url = mirror://kernel/software/utils/pciutils/pciutils-2.2.5.tar.bz2;
     sha256 = "1zlamdax1i8cf3kvzg7dh7nshvvzlhvkwlxdmym0hbnmbf0p100p";
   };
   buildInputs = [zlib];

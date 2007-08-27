@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "git-1.5.1.2";
 
   src = fetchurl {
-    url = http://www.kernel.org/pub/software/scm/git/git-1.5.1.2.tar.bz2;
+    url = mirror://kernel/software/scm/git/git-1.5.1.2.tar.bz2;
     sha256 = "0a7nnw9631h6nxk7sny0cjv89qlibilvsm6947620vr2kgc6p6k2";
   };
 

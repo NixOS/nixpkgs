@@ -5,7 +5,7 @@ assert stdenv.isLinux;
 stdenv.mkDerivation {
   name = "libcap-1.10";
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.4/libcap-1.10.tar.bz2;
+    url = mirror://kernel/linux/libs/security/linux-privs/kernel-2.4/libcap-1.10.tar.bz2;
     md5 = "4426a413128142cab89eb2e6f13d8571";
   };
   
