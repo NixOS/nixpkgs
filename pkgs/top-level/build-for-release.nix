@@ -82,6 +82,7 @@ let {
     jikes
     jing_tools
     jrePlugin
+    jwhois
     kbd
     kcachegrind
     kdebase

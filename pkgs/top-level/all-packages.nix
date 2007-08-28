@@ -459,6 +459,10 @@ rec {
     inherit fetchurl stdenv unzip jre;
   };
 
+  jwhois = import ../tools/networking/jwhois {
+    inherit fetchurl stdenv;
+  };
+
   ktorrent = import ../tools/networking/p2p/ktorrent {
     inherit fetchurl stdenv pkgconfig kdelibs
       xlibs zlib libpng libjpeg perl gmp;
