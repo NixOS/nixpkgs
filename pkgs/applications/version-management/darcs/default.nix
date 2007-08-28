@@ -1,10 +1,10 @@
 {stdenv, fetchurl, ghc, zlib, ncurses, curl}:
 
 stdenv.mkDerivation {
-  name = "darcs-1.0.9rc2";
+  name = "darcs-1.0.9";
   src = fetchurl {
-    url = http://abridgegame.org/darcs/darcs-1.0.9rc2.tar.gz;
-    sha256 = "1as9xc9x7245nf1qw4smfwny08l04lmrr7cag9a32qglssxp528c";
+    url = http://www.darcs.net/darcs-1.0.9.tar.gz;
+    sha256 = "a5fe4d5a743d8052d6cbfcea480a44593f821afd8a42e6d6d4ae37d40ed23cd8";
   };
   buildInputs = [ghc zlib ncurses curl];
 
