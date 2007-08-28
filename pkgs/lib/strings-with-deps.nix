@@ -45,4 +45,5 @@ rec {
 	
 	noDepEntry = text : {inherit text;};
 	FullDepEntry = text : deps: {inherit text args;};
+	PackEntry = deps: {inherit deps; text="";};
 }
