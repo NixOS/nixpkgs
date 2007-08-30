@@ -48,6 +48,10 @@ ensureDir() {
     done
 }
 
+installBin() {
+  ensureDir $out/bin
+  cp "$@" $out/bin
+}
 
 # Called when some build action fails.  If $succeedOnFailure is set,
 # create the file `$out/nix-support/failed' to signal failure, and
