@@ -112,11 +112,13 @@ let {
     netcat
     nix
     nixUnstable
+    nss_ldap
     ntp    
     nxml
     openssh
     openssl
     pam_console
+    pam_ldap
     pam_login
     pam_unix2
     pan
@@ -147,6 +149,7 @@ let {
     strategoxtUtils
     su
     subversion
+    sudo
     swig
     sylpheed 
     sysklogd
