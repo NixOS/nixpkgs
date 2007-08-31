@@ -3124,7 +3124,8 @@ rec {
 
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
-      libtiff libjpeg libpng libexif zlib perl perlXMLParser python pygtk gettext;
+      libtiff libjpeg libpng libexif zlib perl perlXMLParser
+      python pygtk gettext xlibs;
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 

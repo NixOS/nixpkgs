@@ -1,6 +1,7 @@
-{stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, freetype
+{ stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, freetype
 , fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl
-, perlXMLParser, python, pygtk, gettext}:
+, perlXMLParser, python, pygtk, gettext, xlibs
+}:
 
 stdenv.mkDerivation {
   name = "gimp-2.4.0-rc1";
@@ -9,9 +10,20 @@ stdenv.mkDerivation {
     sha256 = "0n9gfmmxjjhi4dpdfwc37z8n4zsyx6byil1ig27agjgic22bydm1" ;
   };
   
-  buildInputs = [ pkgconfig gtk libgtkhtml freetype fontconfig
-                  libart_lgpl libtiff libjpeg libpng libexif zlib perl
-                   perlXMLParser python pygtk gettext ] ;
+  buildInputs = [
+    pkgconfig gtk libgtkhtml freetype fontconfig
+    libart_lgpl libtiff libjpeg libpng libexif zlib perl
+    perlXMLParser python pygtk gettext
+  ];
 
   configureFlags = [ "--disable-print" ];
+
+  # "screenshot" needs this.
+  NIX_LDFLAGS = "-rpath ${xlibs.libX11}/lib";
+
+  meta = {
+    description = "The GNU Image Manipulation Program";
+    homepage = http://www.gimp.org/;
+    license = "GPL";
+  };
 }

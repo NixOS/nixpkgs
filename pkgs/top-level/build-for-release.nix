@@ -61,6 +61,7 @@ let {
     gdb
     ghc
     ghostscript
+    gimp
     gnugrep
     gnum4
     gnumake
