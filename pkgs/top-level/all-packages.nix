@@ -3836,7 +3836,7 @@ rec {
     stdenv = overrideGCC stdenv gcc41NPTL;
     inherit fetchurl flex bison mesa ncurses
       libpng libjpeg alsaLib lcms xlibs freetype
-      fontforge;
+      fontconfig fontforge;
   };
 
   xsane = import ../misc/xsane {
