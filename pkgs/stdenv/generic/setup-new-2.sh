@@ -1,4 +1,5 @@
 set -e
+set -x
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
@@ -51,6 +52,13 @@ ensureDir() {
 installBin() {
   ensureDir $out/bin
   cp "$@" $out/bin
+}
+
+assertEnvExists(){
+  if test -z "${!1}"; then
+      msg=${2:-error: assertion failed: env var $1 is required}
+      echo $msg >&2; exit 1
+  fi
 }
 
 # Called when some build action fails.  If $succeedOnFailure is set,
@@ -145,20 +153,15 @@ if test -z "$NIX_STRIP_DEBUG"; then
 fi
 
 
-# Do we know where the store is?  This is required for purity checking.
-if test -z "$NIX_STORE"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_STORE variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_STORE \
+    "Error: you have an old version of Nix that does not set the
+     NIX_STORE variable. This is required for purity checking.
+     Please upgrade."
 
-
-# We also need to know the root of the build directory for purity checking.
-if test -z "$NIX_BUILD_TOP"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_BUILD_TOP variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_BUILD_TOP \
+    "Error: you have an old version of Nix that does not set the
+     NIX_BUILD_TOP variable. This is required for purity checking.
+     Please upgrade."
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
