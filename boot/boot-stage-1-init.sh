@@ -76,8 +76,8 @@ udevsettle
 if type -p dmsetup > /dev/null; then
   echo "dmsetup found, starting device mapper and lvm"
   dmsetup mknodes
-  vgscan --ignorelockingfailure
-  vgchange -ay --ignorelockingfailure
+  lvm vgscan --ignorelockingfailure
+  lvm vgchange -ay --ignorelockingfailure
 fi
 
 if test -n "$debug1devices"; then fail; fi

@@ -63,8 +63,6 @@ rec {
       if test -n \"$devicemapper\"; then
         cp $devicemapper/sbin/dmsetup.static $out/bin/dmsetup
         cp $lvm2/sbin/lvm.static $out/bin/lvm
-        ln -s lvm $out/bin/vgscan
-        ln -s lvm $out/bin/vgchange
       fi
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
