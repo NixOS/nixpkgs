@@ -3767,6 +3767,10 @@ rec {
     db4 = db45;
   };
 
+  ntfs3g = import ../misc/ntfs-3g {
+	  inherit fetchurl stdenv fuse pkgconfig;
+  };
+
   pgf = import ../misc/tex/pgf {
     inherit fetchurl stdenv;
   };
