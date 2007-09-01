@@ -192,6 +192,23 @@ if test "$NIX_DEBUG" = "1"; then
     echo "Final path: $PATH"
 fi
 
+stripDirs() {
+	local dirs="$1"
+	local stripFlags="$2"
+	local dirsNew=
+
+	for d in ${dirs}; do
+		if test -d "$prefix/$d"; then
+			dirsNew="${dirsNew} $prefix/$d "
+		fi
+	done
+	dirs=${dirsNew}
+
+	if test -n "${dirs}"; then
+		echo $dirs
+		find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+	fi
+}
 
 ######################################################################
 # Textual substitution functions.
@@ -733,19 +750,10 @@ fixupW() {
  
 # TODO : strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-		test -d "$prefix/lib" && stripDebug="$prefix/lib"
-
-		if test -n "$stripDebug"; then
-			find "$stripDebug" -type f -print0 |
-			xargs -0 strip --strip-debug --verbose || true
-		fi
-
-		test -d "$prefix/bin" && stripAll="$prefix/bin"
-		test -d "$prefix/sbin" && stripAll="${stripAll} $prefix/sbin"
-		if test -n "$stripAll"; then
-			find "$prefix/bin" "$prefix/sbin" -type f -print0 |
-			xargs -0 strip --strip-all --verbose || true
-		fi
+		echo "Stripping debuging symbols from files in"
+		stripDirs "${stripDebugList:-lib}" -S
+		echo "Stripping all symbols from files in"
+		stripDirs "${stripAllList:-bin sbin}" -s
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
