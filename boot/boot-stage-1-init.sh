@@ -88,6 +88,7 @@ mountFS() {
     local device="$1"
     local mountPoint="$2"
     local options="$3"
+    local fsType="$4"
 
     # Check the root device, if .
     mustCheck=
@@ -124,7 +125,7 @@ mountFS() {
     fi
 
     # Mount read-writable.
-    mount -n -o "$options" "$device" /mnt/root$mountPoint || fail
+    mount -n -t "$fsType" -o "$options" "$device" /mnt/root$mountPoint || fail
 }
 
 
@@ -185,21 +186,21 @@ else
 
         # !!! Really quick hack to support bind mounts, i.e., where
         # the "device" should be taken relative to /mnt/root, not /.
-        # Assume that every device that doesn't start with /dev or
-        # LABEL= is a bind mount.
+        # Assume that every device that start with / but doesn't
+        # start with /dev or LABEL= is a bind mount.
         case $device in
             /dev/*)
                 ;;
             LABEL=*)
                 ;;
-            *)
+            /*)
                 device=/mnt/root$device
                 ;;
         esac
 
         echo "mounting $device on $mountPoint..."
 
-        mountFS "$device" "$mountPoint" "$options"
+        mountFS "$device" "$mountPoint" "$options" "$fsType"
     done
     
 fi
