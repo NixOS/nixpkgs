@@ -133,6 +133,11 @@ let
       export SSH_ASKPASS=${x11_ssh_askpass}/libexec/x11-ssh-askpass
       eval $(${openssh}/bin/ssh-agent)
     " else ""}
+
+    ### Allow user to override system-wide configuration
+    if test -f ~/.xsession; then
+        source ~/.xsession;
+    fi
   
 
     ### Start a window manager.
