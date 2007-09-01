@@ -129,6 +129,23 @@ rec {
   # a default value if the attribute doesn't exist.
   getConfig = attrPath: default: library.getAttr attrPath default config;
 
+  # Return user-choosen version of given package. If you define package as
+  #
+  # pkgname_alts =
+  # {
+  #   v_0_1 = ();
+  #   v_0_2 = ();
+  #   default = v_0_1;
+  #   recurseForDerivations = true;
+  # };
+  # pkgname = getVersion "name" pkgname_alts;
+  #
+  # user will be able to write in his configuration.nix something like
+  # environment = { versions = { name = v_0_2; }; }; and pkgname will be equal
+  # to pkgname_alts.v_0_2. Using alts.default by default.
+  getVersion = name: alts: builtins.getAttr
+    (getConfig [ "environment" "versions" name ] "default") alts;
+
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   config =
@@ -1439,7 +1456,9 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gettext = import ../development/libraries/gettext {
+  gettext = getVersion "gettext" gettext_alts;
+
+  gettext_alts = import ../development/libraries/gettext {
     inherit fetchurl stdenv;
   };
 
