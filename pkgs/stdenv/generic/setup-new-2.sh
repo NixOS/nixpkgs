@@ -715,14 +715,17 @@ fixupW() {
  		for d in $forceShare; do
  			if test -d "$prefix/$d"; then
  				if test -d "$prefix/share/$d"; then
- 					echo "Both $d/ and share/$d/ exists, aborting" 
+ 					echo "Both $d/ and share/$d/ exists!" 
  				else
+					echo Fixing location of $dir/ subdirectory
  					ensureDir $prefix/share
 					if test -w $prefix/share; then
 	 					mv -v $prefix/$d $prefix/share
  						ln -sv share/$d $prefix
 					fi
  				fi
+			else
+				echo "No $d/ subdirectory, skipping."
  			fi
  		done;
  	fi
@@ -744,23 +747,6 @@ fixupW() {
 			xargs -0 strip --strip-all --verbose || true
 		fi
     fi
-
-	if test -z "$dontFixupShare"; then
-		for dir in doc info man; do
-			if test -d "$prefix/$dir"; then
-				if test -d "$prefix/share/$dir"; then
-					echo Both "$prefix/$dir" and "$prefix/share/$dir" exists!
-				else
-					echo Fixing location of $dir/ subdirectory
-					ensureDir "$prefix/share"
-					if test -w $prefix/share; then
-						mv -v "$prefix/$dir" "$prefix/share"
-						ln -sv "share/$dir" "$prefix"
-					fi
-				fi
-			fi
-		done
-	fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
         patchELF "$prefix"
