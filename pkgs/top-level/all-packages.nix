@@ -2487,6 +2487,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  htop = import ../os-specific/linux/htop {
+	  inherit fetchurl stdenv ncurses;
+  };
+
   hwdata = import ../os-specific/linux/hwdata {
     inherit fetchurl stdenv;
   };
