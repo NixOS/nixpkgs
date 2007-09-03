@@ -26,6 +26,10 @@ installPhase() {
             --set-rpath "$rpath" \
             "$i"
     done
+
+    # opera seems to need libnpp.so in the same path ?
+    # (search the opera help for libnpp..
+    cp $out/lib/opera/plugins/libnpp.so $out/lib/opera/9*
 }
 
 genericBuild
