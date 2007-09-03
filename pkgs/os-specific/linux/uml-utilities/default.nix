@@ -1,6 +1,8 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, kernelHeaders , tunctl ? false}:
 
 stdenv.mkDerivation {
+  inherit tunctl;
+  buildInputs = if tunctl then kernelHeaders else null;
   name = "uml-utilities-20040114";
   builder = ./builder.sh;
   src = fetchurl {

@@ -1,9 +1,9 @@
 args: with args; stdenv.mkDerivation {
-  name = "wmii-20070516";
+  name = "wmiimenu-3.1";
 
   src = fetchurl {
-    url = http://www.suckless.org/snaps/wmii-snap20070304.tgz;
-    sha256 = "01ba1qk48n6wgpnavdwakgwmv895jvqvi75sm2wsvd6bqmc2xp86";
+    url = http://suckless.org/download/wmii-3.1.tar.gz;
+    sha256 = "0sviwxbanpsfdm55zvx9hflncw35slkz41xr517y3yfgxx6qlhlk";
   };
 
   buildInputs = [ libX11 libixp ];
@@ -19,11 +19,17 @@ args: with args; stdenv.mkDerivation {
             -e \"s%^\\(LIBS.*\\)%\\1 \$LDFLAGS%\" \\
             config.mk
      # don't use the default one installed by nixos!
-     sed -i -e \"s%ixpc%\$libixp/bin/ixpc%\" wmiir
-     make install
+     # sed -i -e \"s%ixpc%\$libixp/bin/ixpc%\" wmiir
+
+     # This will fail but wmiimenu has been built (hack!)
+     set +e
+     make &> /dev/null
+     set -e
+     ensureDir \$out/bin
+     cp cmd/wmiimenu \$out/bin
   ";
   meta = { homepage = "www.suckless.org";
-           description = "a really cool window manager which can by driven by keyboard only";
+           description = "one small tool of the wmii window manger to let the user select an item from a list by filtering..";
            license="MIT";
          };
 }

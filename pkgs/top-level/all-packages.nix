@@ -224,6 +224,11 @@ rec {
     sshSupport = true;
   };
 
+  # TODO do some testing
+  fetchhg = import ../build-support/fetchhg {
+    inherit stdenv mercurial nix;
+  };
+
   # Allow the stdenv to determine fetchurl, to cater for strange
   # requirements.
   fetchurl = useFromStdenv (stdenv ? fetchurl) stdenv.fetchurl
@@ -325,6 +330,11 @@ rec {
   };
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
+
+  dnsmasq = import ../tools/networking/dnsmasq {
+    # TODO i18n can be installed as well, implement it? 
+    inherit fetchurl stdenv;
+  };
 
   dhcp = import ../tools/networking/dhcp {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
@@ -1121,6 +1131,10 @@ rec {
     inherit fetchurl stdenv perl autoconf;
   };
 
+  avrdude = import ../development/tools/misc/avrdude {
+    inherit lib fetchurl stdenv flex yacc;
+  };
+
   binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
     (import ../development/tools/misc/binutils {
       inherit fetchurl stdenv noSysDirs;
@@ -1268,6 +1282,10 @@ rec {
 
   texinfo = import ../development/tools/misc/texinfo {
     inherit fetchurl stdenv ncurses;
+  };
+
+  uisp = import ../development/tools/misc/uisp {
+    inherit fetchurl stdenv;
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
@@ -1427,6 +1445,7 @@ rec {
   ffmpeg = import ../development/libraries/ffmpeg {
     inherit fetchurl stdenv;
   };
+
 
   # commented out because it's using the new configuration style proposal which is unstable
   # needs some testing ..
@@ -1759,6 +1778,10 @@ rec {
   libixp03 = import ../development/libraries/libixp/libixp-0.3.nix {
     inherit fetchurl stdenv;
   };
+
+  libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
+    inherit fetchurl stdenv;
+  });
 
   mesaSupported =
     system == "i686-linux" ||
@@ -2410,6 +2433,12 @@ rec {
 
   ### OS-SPECIFIC
 
+  # this creates a patch which can be applied to the kernel to integrate this module..
+  kernel_module_acerhk = import ../os-specific/linux/kernel/acerhk {
+    inherit fetchurl stdenv gnupatch;
+    kernel = kernel_2_6_21;
+    debug = true;
+  };
 
   _915resolution = import ../os-specific/linux/915resolution {
     inherit fetchurl stdenv;
@@ -2592,6 +2621,14 @@ rec {
 	"CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
 	"CONFIG_EXT3COW_FS_SECURITY=y\n";
       }
+      /* commented out because only acer users have need for it.. 
+         It takes quite a while to create the patch when unpacking the kernel sources only for that task
+      { name = "acerhk";
+        patch = kernel_module_acerhk + "/acerhk-patch.tar.bz2" ;
+        extraConfig =  
+	"CONFIG_ACERHK=m\n";
+      }
+      */
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
       }
@@ -2788,6 +2825,15 @@ rec {
     inherit fetchurl stdenv pam openssl libnscd;
   };
 
+  reiserfsprogs = import ../os-specific/linux/reiserfsprogs {
+    inherit fetchurl stdenv;
+  };
+
+  radeontools = import ../os-specific/linux/radeontools {
+    inherit pciutils;
+    inherit fetchurl stdenv;
+  };
+
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
   };
@@ -2833,7 +2879,8 @@ rec {
   };
 
   umlutilities = import ../os-specific/linux/uml-utilities {
-    inherit fetchurl stdenv;
+    inherit fetchurl kernelHeaders stdenv;
+    tunctl = true;
   };
 
   upstart = import ../os-specific/linux/upstart {
@@ -2962,6 +3009,11 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
+  # commented out because it's using the new configuration style proposal which is unstable
+  #biew = import ../applications/misc/biew {
+  #  inherit lib stdenv fetchurl ncurses;
+  #};
+
   bmp = import ../applications/audio/bmp {
     inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
     inherit (gnome) esound libglade;
@@ -3086,6 +3138,10 @@ rec {
     xaw3dSupport = false;
     gtkGUI = true;
     xftSupport = true;
+  };
+
+  fetchmail = import ../applications/misc/fetchmail {
+    inherit stdenv fetchurl;
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
@@ -3279,6 +3335,10 @@ rec {
     inherit fetchurl stdenv ncurses which openssl;
   };
 
+  msmtp = import ../applications/networking/msmtp {
+    inherit fetchurl stdenv;
+  };
+
   mythtv = import ../applications/video/mythtv {
     inherit fetchurl stdenv which qt3 x11 lame zlib mesa;
     inherit (xlibs) libX11 libXinerama libXv libXxf86vm libXrandr libXmu;
@@ -3333,6 +3393,16 @@ rec {
 
   pinfo = import ../applications/misc/pinfo {
     inherit fetchurl stdenv ncurses;
+  };
+
+  # perhaps there are better apps for this task? It's how I had configured my preivous system.
+  # And I don't want to rewrite all rules
+  procmail = import ../applications/misc/procmail {
+    inherit fetchurl stdenv autoconf;
+  };
+
+  pstree = import ../applications/misc/pstree {
+    inherit stdenv fetchurl;
   };
 
   pythonmagick = import ../applications/graphics/PythonMagick {
@@ -3467,9 +3537,17 @@ rec {
     inherit (gtkLibs1x) gdkpixbuf;
   };
 
-  wmii = import ../applications/window-managers/wmii {
+  # I'm keen on wmiimenu only  >wmii-3.5 no longer has it... 
+  wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp03;
-    inherit fetchurl stdenv x11 gawk;
+    inherit fetchurl /* fetchhg */ stdenv gawk;
+    inherit (xlibs) libX11;
+  };
+
+  wmiiSnap = import ../applications/window-managers/wmii {
+    libixp = libixp_for_wmii;
+    inherit fetchurl /* fetchhg */ stdenv gawk;
+    inherit (xlibs) libX11;
   };
 
   wrapFirefox = firefox: import ../applications/networking/browsers/firefox-wrapper {
@@ -3747,6 +3825,11 @@ rec {
     inherit fetchurl stdenv libjpeg libpng zlib x11;
     x11Support = true;
   }));
+
+  #gxemul = (import ../misc/gxemul) {
+    #inherit lib stdenv fetchurl;
+    #inherit (xlibs) libX11;
+  #};
  
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
