@@ -1,13 +1,13 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = ;
     sha256 = "";
   };
 
-  buildInputs =(with args; []);
+  buildInputs =[];
 
   meta = {
     description = "
