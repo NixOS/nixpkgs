@@ -547,6 +547,10 @@ rec {
     pamSupport = true;
   };
 
+  p7zip = import ../tools/archivers/p7zip {
+    inherit fetchurl stdenv;
+  };
+
   par2cmdline = import ../tools/networking/par2cmdline {
     inherit fetchurl;
     stdenv = overrideGCC stdenv gcc34;
