@@ -3344,6 +3344,12 @@ rec {
     # !!! should depend on MPlayer
   };
 
+  # commented out because it's using the new configuration style proposal which is unstable
+  #mrxvt = import ../applications/misc/mrxvt {
+    #inherit lib fetchurl stdenv;
+    #inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+  #};
+
   mutt = import ../applications/networking/mailreaders/mutt {
     inherit fetchurl stdenv ncurses which openssl;
   };
