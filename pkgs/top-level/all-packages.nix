@@ -1135,9 +1135,10 @@ rec {
     inherit fetchurl stdenv perl autoconf;
   };
 
-  avrdude = import ../development/tools/misc/avrdude {
-    inherit lib fetchurl stdenv flex yacc;
-  };
+  # commented out because it's using the new configuration style proposal which is unstable
+  #avrdude = import ../development/tools/misc/avrdude {
+  #  inherit lib fetchurl stdenv flex yacc;
+  #};
 
   binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
     (import ../development/tools/misc/binutils {
@@ -3838,6 +3839,7 @@ rec {
     x11Support = true;
   }));
 
+  # commented out because it's using the new configuration style proposal which is unstable
   #gxemul = (import ../misc/gxemul) {
     #inherit lib stdenv fetchurl;
     #inherit (xlibs) libX11;
