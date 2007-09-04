@@ -1481,6 +1481,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gdal = stdenv.mkDerivation {
+    name = "gdal-1.4.2";
+    src = fetchurl {
+      url = http://download.osgeo.org/gdal/gdal-1.4.2.tar.gz;
+      sha256 = "1vl8ym9y7scm0yd4vghjfqims69b9h1gn9l4zvy2jyglh35p8vpf";
+    };
+  };
+
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
     (import ../development/libraries/glibc {
       inherit fetchurl stdenv kernelHeaders;
