@@ -3450,6 +3450,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  rxvt = import ../applications/misc/rxvt {
+    inherit lib fetchurl stdenv;
+    inherit (xlibs) libXt libX11;
+  };
+
   slim = import ../applications/display-managers/slim {
     inherit fetchurl stdenv x11 libjpeg libpng freetype pam;
     inherit (xlibs) libXmu;
