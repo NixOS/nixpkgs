@@ -1321,6 +1321,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  /*
+  agg = import ../development/libraries/agg {
+    inherit fetchurl stdenv autoconf automake libtool pkgconfig;
+  };
+  */
+
   apr = import ../development/libraries/apr {
     inherit fetchurl stdenv;
   };
@@ -3384,16 +3390,15 @@ rec {
   };
 
   openoffice = import ../applications/office/openoffice {
-    inherit fetchurl pam python tcsh libxslt
+    inherit fetchurl stdenv pam python tcsh libxslt
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
-      getopt file neon;
+      getopt file neon cairo which icu boost;
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
     bison = bison23;
     inherit jre;
-    stdenv = overrideGCC stdenv gcc34;
   };
 
   opera = import ../applications/networking/browsers/opera {

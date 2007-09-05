@@ -1,23 +1,29 @@
 source $stdenv/setup
 
-configurePhase() {
+export nodep=TRUE
+export NO_HIDS=TRUE
 
-  cd config_office/;
-  ./configure --disable-epm --disable-odk --with-java=no --disable-cups --with-system-python \
-  --disable-mozilla --without-nas --disable-pasf --disable-gnome-vfs \
-  --with-system-libs;
+export PATH=$icu/sbin:$PATH
 
-  cd ..
+preConfigure=preConfigure
+preConfigure() {
+    for i in \
+	sysui/desktop/share/makefile.mk \
+	; do 
+	substituteInPlace $i --replace /bin/bash /bin/sh
+    done
+
+    cd config_office/
 }
 
-configurePhase=configurePhase
-
-buildPhase() {
-  ./bootstrap
-  source LinuxIntelEnv.Set.sh 
-  dmake
-}
+postConfigure="cd .."
 
 buildPhase=buildPhase
+buildPhase() {
+  source LinuxX86Env.Set.sh
+  ./bootstrap
+
+  dmake
+}
 
 genericBuild
