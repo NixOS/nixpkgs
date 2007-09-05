@@ -46,3 +46,5 @@ make install
 
 cp -f $smbconf $stateDir/config/smb.conf
 
+ensureDir $stateDir/sambalog/
+touch $stateDir/sambalog/log.smbd

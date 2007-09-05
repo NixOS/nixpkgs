@@ -5,7 +5,7 @@
 , cups ? false
 , iprint ? false
 , activeDirectory ? false
-, stateDir ? "/tmp/sambastate/"                   # (builtins.getEnv "HOME") + "/sambastate/"
+, stateDir ? "/var/samba"                   # (builtins.getEnv "HOME") + "/sambastate/"
 } :
 
 stdenv.mkDerivation {
