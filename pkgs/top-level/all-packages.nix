@@ -3404,7 +3404,7 @@ rec {
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
       getopt file neon cairo which icu boost jre jdk ant hsqldb;
-    inherit (xlibs) libXaw libXext;
+    inherit (xlibs) libXaw libXext libX11 libXtst libXi;
     inherit (gtkLibs) gtk;
     bison = bison23;
   };
