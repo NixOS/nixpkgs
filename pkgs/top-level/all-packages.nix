@@ -1611,6 +1611,10 @@ rec {
     inherit aspell;
   };
 
+  hsqldb = import ../test/hsqldb {
+    inherit stdenv fetchurl unzip;
+  };
+
   icu = import ../development/libraries/icu {
     inherit fetchurl stdenv;
   };
@@ -2538,7 +2542,7 @@ rec {
   hdparm = import ../os-specific/linux/hdparm {
     inherit fetchurl stdenv;
   };
-
+ 
   htop = import ../os-specific/linux/htop {
 	  inherit fetchurl stdenv ncurses;
   };
@@ -3026,6 +3030,7 @@ rec {
 
   amsn = import ../applications/networking/instant-messengers/amsn {
     inherit fetchurl stdenv which tcl tk x11;
+    libstdcpp = gcc33.gcc;
   };
 
   batik = import ../applications/graphics/batik {
@@ -3398,7 +3403,7 @@ rec {
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
-      getopt file neon cairo which icu boost jre jdk ant;
+      getopt file neon cairo which icu boost jre jdk ant hsqldb;
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
     bison = bison23;
