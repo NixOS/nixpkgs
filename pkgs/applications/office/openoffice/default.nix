@@ -2,7 +2,7 @@
 , perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, jre, cairo, which
-, icu, boost, jdk, ant, hsqldb, libXext
+, icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi
 }:
 
 stdenv.mkDerivation rec {
@@ -50,13 +50,15 @@ stdenv.mkDerivation rec {
     --with-hsqldb-jar=${hsqldb}/lib/hsqldb.jar
   ";
 
+  LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${libXext}/lib:${libX11}/lib:${libXtst}/lib";
+
   with_jdk_home = jdk;
 
   buildInputs = [
     pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
-    getopt file jdk cairo which icu boost libXext
+    getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
   ];
 
   inherit icu fontconfig;
