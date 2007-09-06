@@ -54,4 +54,10 @@ stdenv.mkDerivation {
   ];
 
   inherit icu;
+
+  meta = {
+    description = "OpenOffice.org is a multiplatform and multilingual office suite";
+    homepage = http://www.openoffice.org/;
+    license = "LGPL";
+  };
 }

@@ -1167,6 +1167,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  epm = import ../development/tools/misc/epm {
+    inherit fetchurl stdenv rpm;
+  };
+
   flex = flex254a;
 
   flex2533 = import ../development/tools/parsing/flex/flex-2.5.33.nix {
