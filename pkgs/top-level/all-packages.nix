@@ -3398,11 +3398,10 @@ rec {
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
-      getopt file neon cairo which icu boost;
+      getopt file neon cairo which icu boost jre jdk ant;
     inherit (xlibs) libXaw;
     inherit (gtkLibs) gtk;
     bison = bison23;
-    inherit jre;
   };
 
   opera = import ../applications/networking/browsers/opera {

@@ -2,7 +2,7 @@
 , perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, jre, cairo, which
-, icu, boost
+, icu, boost, jdk, ant
 }:
 
 stdenv.mkDerivation {
@@ -30,10 +30,11 @@ stdenv.mkDerivation {
     --with-system-libs
     --with-system-python
     --with-system-boost
+    --with-jdk-home=${jdk}
+    --with-ant-home=${ant}
     --without-afms
     --without-dict
     --without-fonts
-    --without-java
     --without-myspell-dicts
     --without-nas
     --without-ppds
@@ -44,16 +45,17 @@ stdenv.mkDerivation {
     --without-system-xerces
     --without-system-xml-apis
     --without-system-xt
+    --without-system-db
   ";
 
-  buildInputs = [ 
+  buildInputs = [
     pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
-    getopt file jre cairo which icu boost
+    getopt file jdk cairo which icu boost
   ];
 
-  inherit icu;
+  inherit icu fontconfig;
 
   meta = {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";
