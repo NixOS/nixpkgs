@@ -2,7 +2,7 @@
 , perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, jre, cairo, which
-, icu, boost, jdk, ant, hsqldb
+, icu, boost, jdk, ant, hsqldb, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
-    getopt file jdk cairo which icu boost
+    getopt file jdk cairo which icu boost libXext
   ];
 
   inherit icu fontconfig;
