@@ -3030,7 +3030,7 @@ rec {
 
   amsn = import ../applications/networking/instant-messengers/amsn {
     inherit fetchurl stdenv which tcl tk x11;
-    libstdcpp = gcc33.gcc;
+    #libstdcpp = gcc33.gcc;
   };
 
   batik = import ../applications/graphics/batik {
