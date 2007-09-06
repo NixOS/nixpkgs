@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     --with-hsqldb-jar=${hsqldb}/lib/hsqldb.jar
   ";
 
-  LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${libXext}/lib:${libX11}/lib:${libXtst}/lib";
+  LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib";
 
   with_jdk_home = jdk;
 
