@@ -2,10 +2,10 @@
 , perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, jre, cairo, which
-, icu, boost, jdk, ant
+, icu, boost, jdk, ant, hsqldb
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "openoffice.org-2.2.1";
   builder = ./builder.sh;
 
@@ -46,7 +46,10 @@ stdenv.mkDerivation {
     --without-system-xml-apis
     --without-system-xt
     --without-system-db
+    --with-hsqldb-jar=${hsqldb}/lib/hsqldb.jar
   ";
+
+  with_jdk_home = jdk;
 
   buildInputs = [
     pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 

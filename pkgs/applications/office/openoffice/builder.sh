@@ -1,10 +1,11 @@
 source $stdenv/setup
 
+echo $with_jdk_home
+
 export nodep=TRUE
 export NO_HIDS=TRUE
 
 export PATH=$icu/sbin:$PATH
-
 
 preConfigure=preConfigure
 preConfigure() {
@@ -75,3 +76,4 @@ installPhase() {
 
 
 genericBuild
+
