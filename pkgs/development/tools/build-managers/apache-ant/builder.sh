@@ -1,6 +1,6 @@
-source $stdenv/setup || exit 1
+source $stdenv/setup
 
-mkdir -p $out/bin || exit 1
+mkdir -p $out/bin
 
 cat >> $out/bin/ant <<EOF
 #! /bin/sh
@@ -14,4 +14,8 @@ export LANG="en_US"
 $ant/bin/core-ant \$@
 EOF
 
-chmod a+x $out/bin/ant || exit 1
+chmod a+x $out/bin/ant
+
+ln -s $ant/lib $ant/etc $out/
+
+
