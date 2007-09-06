@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     --without-system-xml-apis
     --without-system-xt
     --without-system-db
+    --with-system-hsqldb
     --with-hsqldb-jar=${hsqldb}/lib/hsqldb.jar
   ";
 
