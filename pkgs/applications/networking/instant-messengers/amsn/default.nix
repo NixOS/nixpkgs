@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, tcl, tk, x11}:
+{stdenv, fetchurl, which, tcl, tk, x11, libstdcpp }:
 
 stdenv.mkDerivation {
   name = "amsn-0.96";
@@ -8,6 +8,6 @@ stdenv.mkDerivation {
     md5 = "3df6b0d34ef1997a47c0b8af29b2547a";
   };
 
-  inherit tcl tk;
-  buildInputs = [which tcl tk x11];
+  inherit tcl tk libstdcpp;
+  buildInputs = [which tcl tk x11 ];
 }
