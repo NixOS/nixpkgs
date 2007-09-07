@@ -1,7 +1,5 @@
 source $stdenv/setup
 
-echo $with_jdk_home
-
 export nodep=TRUE
 export NO_HIDS=TRUE
 
@@ -9,9 +7,7 @@ export PATH=$icu/sbin:$PATH
 
 preConfigure=preConfigure
 preConfigure() {
-    for i in \
-	sysui/desktop/share/makefile.mk \
-	; do 
+    for i in sysui/desktop/share/makefile.mk; do 
 	substituteInPlace $i --replace /bin/bash $shell
     done
 
@@ -21,7 +17,16 @@ preConfigure() {
 }
 
 
-postConfigure="cd .."
+postConfigure=postConfigure
+postConfigure() {
+    cd ..
+    for i in LinuxX86Env.Set LinuxX86Env.Set.sh; do
+	substituteInPlace $i --replace /usr /no-such-path
+    done
+    substituteInPlace solenv/inc/libs.mk \
+	--replace /usr/lib/libjpeg.so $libjpeg/lib/libjpeg.so \
+	--replace /usr/lib64/libjpeg.so $libjpeg/lib/libjpeg.so
+}
 
 
 buildPhase=buildPhase
