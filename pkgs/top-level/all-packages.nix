@@ -593,6 +593,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  rdiff_backup = import ../tools/backup/rdiff-backup {
+    inherit fetchurl stdenv librsync gnused;
+    python=python;
+  };
+
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
   };
