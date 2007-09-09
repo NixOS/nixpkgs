@@ -187,6 +187,10 @@ rec {
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   av = attr : value : { inherit attr value; };
+  # attribute set containing one attribute
+  avs = attr : value : listToAttrs [ (av attr value) ];
+  # adds / replaces an attribute of an attribute set
+  setAttr = set : attr : v : set // (avs attr v);
 
   id = x : x;
   # true if all/ at least one element(s) satisfy f
@@ -196,43 +200,51 @@ rec {
   # iterates over a list of attributes collecting the attribute attr if it exists
   catAttrs = attr : l : fold ( s : l : if (__hasAttr attr s) then [(__getAttr attr s)] ++ l else l) [] l;
 
-  flattenSet = set : map ( attr : __getAttr attr set) (__attrNames set);
+  mergeAttrs = fold ( x : y : x // y) {};
+
+  flattenAttrs = set : map ( attr : __getAttr attr set) (__attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
-# One example showing how to use mandatory dependencies [1], default flags [2], ..
+# One example showing how to use mandatory dependencies [1], default flags [2], settings if a flag is not set [3] ..
 # 
 # note that you should be able to use either ["value1"] or just "value" .. (if I haven't forgotten a flatten)
 # linuxthreads
 
-    #args: with args.lib; with args;
-    #let
-    #  flagDescr = {
-    #    defaults = { implies   = [ "addOns" "addOns2"]; }; [> [2] defaults and mandatory should be the first listed ? Would you like it different?
-    #    mandatory ={ cfgOption = [ "--with-headers=${args.kernelHeaders}/include" [> [1]
-    #                                "--with-tls" "--without-__thread" "--disable-sanity-checks" ];
-    #                 assertion = [ args.glibc.nptl ];
-    #               };
-    #    addOns            = { cfgOption = "--enable-add-ons"; };
-    #    addOns2           = { cfgOption = "--enable-add-ons2"; implies = "addOns"; };
-    #    alternativeAddOn  = { cfgOption = "--enable-add-ons-alt"; blocks = ["addOns", "addOns2"]; };
-    #    justAOption =  { };
-    #  };
-    #  co = chooseOptionsByFlags flagDescr ["libpng", "libjpg"] args;
-
-    #in args.stdenv.mkDerivation {
-
-    #  # passing the flags in case a library using this want's to check them (*) .. 
-    #  inherit (co) /* flags */ buildInputs configureFlags;
-    #  inherit (co.flags) justAOption;
-
-    #  extraSrc = (if co.flags.justAOption then null else src = .. );
-
-    #  src = fetchurl {
-    #    url = http://ftp.gnu.org/gnu/glibc/glibc-2.5.tar.bz2;
-    #    md5 = "1fb29764a6a650a4d5b409dda227ac9f";
-    #  };
-    #}
+#    args: with args.lib; with args;
+#    let
+#      co = chooseOptionsByFlags {
+#        inherit args;
+#        flagDescr = {
+#          defaults = { implies   = [ "addOns" "addOns2"]; }; # [2] defaults and mandatory should be the first listed ? Would you like it different?
+#          mandatory ={ cfgOption = [ "--with-headers=${args.kernelHeaders}/include" # [1]
+#                                      "--with-tls" "--without-__thread" "--disable-sanity-checks" ];
+#                       assertion = [ args.glibc.nptl ];
+#                     };
+#          defaultFeature    = {};
+#          no_defaultFeature = { cfgOption = "--disable-defaultFeature"; }; [3]
+#          addOns            = { cfgOption = "--enable-add-ons"; };
+#          addOns2           = { cfgOption = "--enable-add-ons2"; implies = "addOns"; };
+#          alternativeAddOn  = { cfgOption = "--enable-add-ons-alt"; blocks = ["addOns", "addOns2"]; };
+#          justAOption =  { };
+#        };
+#        optionals = ["option1" "option2"]; # are equal to a given flag description like option1 = { buildInputs = "option1"; };
+#        defaultFlags = [ "demos" "doc" ]; # are used if flags is not set by args
+#      };
+#
+#    in args.stdenv.mkDerivation ( {
+#
+#      # passing the flags in case a library using this want's to check them (*) .. 
+#      inherit (co) flags buildInputs configureFlags;
+#      inherit (co.flags) justAOption;
+#
+#      extraSrc = (if co.flags.justAOption then null else src = .. );
+#
+#      src = fetchurl {
+#        url = http://ftp.gnu.org/gnu/glibc/glibc-2.5.tar.bz2;
+#        md5 = "1fb29764a6a650a4d5b409dda227ac9f";
+#      };
+#    } // co.pass)
 
     # (*) does'nt work because nix is seeing this set as derivation and complains about missing outpath.. :-(
     # using mkDerivation { ...  } // oc.flags would work but would also force evaluation.. ( would be slower )
@@ -241,7 +253,7 @@ rec {
 
   # resolves chosen flags based on flagDescr passed dependencies in args
   # flagDescr : { name = { cfgOption = "..."; buildInputs = "..."; blocks = "..."; implies = "..."; 
-  #                        assert = "bool";
+  #                        assert = "bool"; pass = { inherit (args) name }
   #                        any other options you need which you can get by catAttrs  };
   #              ...
   # args = { inherit lib stdenv;
@@ -258,61 +270,68 @@ rec {
            
   # optionals is a list of dependency names. If passed as attribute in args they'll be automatically added
   # to flags and flagDescr ( optionalName = { buildInputs = optionalName } )
-  chooseOptionsByFlags = flagDescr : optionals : args :
+  chooseOptionsByFlags = { flagDescr, args, optionals ? [], defaultFlags ? [],
+                           collectExtraPhaseActions ? [] } :
     let givenOptionals = listToAttrs 
         (mapIf ( a : (__hasAttr a args) ) 
                ( x: av x { buildInputs = x; } ) 
                optionals );
         fd = flagDescr // givenOptionals;
-    in chooseOptionsByFlags2 fd args ( getAttr ["flags"] [] args ++ (__attrNames givenOptionals ) );
+    in chooseOptionsByFlags2 fd collectExtraPhaseActions args ( getAttr ["flags"] defaultFlags args ++ (__attrNames givenOptionals ) );
 
-  chooseOptionsByFlags2 = flagDescr : args : flags : 
+  chooseOptionsByFlags2 = flagDescr : collectExtraPhaseActions : args : flags :
     let   
         # helper function
-        collectFlags = state : flags :
-              fold ( flag : s : 
+        collectFlags = # state : flags :
+              fold ( flag : s : (
                      if (__hasAttr flag s.result) then s # this state has already been visited
-                     else if (__hasAttr flag s.blockedFlagsBy) # flag blocked by priviously visited flags?
-                          then throw "flag ${flag} is blocked by ${__getAttr flag s.blockedFlagsBy}"
-                          else if (! __hasAttr flag flagDescr) then throw "unkown flag `${flag}' specified"
-                               else let fDesc = (__getAttr flag flagDescr);
-                                        implied = flatten ( getAttr ["implies"] [] fDesc );
-                                        blocked = flatten ( getAttr ["blocks"] [] fDesc ); 
-                                        s2 = s // 
-                                          { blockedFlagsBy = 
-                                              s.blockedFlagsBy  
-                                                // listToAttrs ( map (b: av b flag)
-                                                              blocked );
-                                            result = s.result
-                                              // (collectFlags s implied)
-                                              // listToAttrs [ { attr = flag; value = (__getAttr flag flagDescr); } ]; };
-                                        # add the whole flag to the result set
-                                        in assert (fold ( b : t : __trace (__attrNames s.result) (
-                                                 if ( __hasAttr b s.result ) 
-                                                   then  throw "flag ${b} is blocked by ${flag}"
-                                                   else if ( b == flag) then throw "flag ${b} blocks itself"
-                                                        else t)) true blocked);
-                                           s2) state flags;
-        # chosen contains flagDescr but only having those attributes elected by flags (or by implies attributes of elected attributes)
-        chosen = (collectFlags { blockedFlagsBy = {}; result = {}; } (flags ++ ["mandatory"])).result;
-        chosenFlat = flattenSet chosen;
+                     else if (! __hasAttr flag flagDescr) then throw "unkown flag `${flag}' specified"
+                           else let fDesc = (__getAttr flag flagDescr);
+                                    implied = flatten ( getAttr ["implies"] [] fDesc );
+                                    blocked = flatten ( getAttr ["blocks"] [] fDesc ); 
+                                    # add this flag
+                                    s2 = setAttr s "result" ( setAttr s.result flag (__getAttr flag flagDescr) ) ;
+                                    # add implied flags
+                                in collectFlags s2 implied
+                   ));
+
+        # chosen contains flagDescr but only having those attributes elected by flags 
+        # (or by implies attributes of elected attributes)
+        options = let stateOpts = collectFlags { blockedFlagsBy = {}; result = {}; } (flags ++ ["mandatory"]);
+                      # these options have not been chosen (neither by flags nor by implies)
+                      unsetOptions = filter ( x : __hasAttr x stateOpts ) ( __attrNames flagDescr );
+                      # no add the corresponding no_ attributes as well ..
+                      state = collectFlags stateOpts (map ( x : "no_" + x ) unsetOptions);
+                  in # check for blockings:
+                     assert ( mapIf ( b: __hasAttr b state.result )
+                                    ( b: throw "flag ${b} is blocked by ${__getAttr b state.blockedFlagsBy}" )
+                                    (__attrNames state.blockedFlagsBy) == [] ); 
+                    state.result;
+        flatOptions = flattenAttrs options;
+
+        # helper functions :
+        collectAttrs = attr : catAttrs attr flatOptions;
+        optsConcatStrs = delimiter : attrs : concatStrings 
+                ( intersperse delimiter (collectAttrs attrs) );
           
     in assert ( all id ( mapRecordFlatten ( attr : r : if ( all id ( flatten (getAttr ["assertion"] [] r ) ) ) 
                                               then true else throw "assertion failed flag ${attr}" )
-                                         chosen) );
-      {
-      # compared to flags flagsSet does also contain the implied flags.. This makes it easy to write assertions. ( assert args.
-      inherit chosen chosenFlat;
+                                         options) );
+      rec {
 
-      buildInputs = map ( attr: if (! __hasAttr attr args) then throw "argument ${attr} is missing!" else (__getAttr attr args) )
-                    (flatten  (catAttrs "buildInputs" chosenFlat));
+          #foldOptions = attr: f : start: fold f start (catAttrs attr flatOptions);
 
-      #buildInputNames = catAttrs "name" buildInputs;
+          # compared to flags flagsSet does also contain the implied flags.. This makes it easy to write assertions. ( assert args.
+          inherit options flatOptions;
 
-      configureFlags = concatStrings (intersperse " " ( flatten ( catAttrs "cfgOption" chosenFlat) )) 
-          + (if (__hasAttr "profilingLibraries" chosen) then "" else " --disable-profiling");
+          buildInputs = map ( attr: if (! __hasAttr attr args) then throw "argument ${attr} is missing!" else (__getAttr attr args) )
+                        (flatten  (catAttrs "buildInputs" flatOptions));
 
-      flags = listToAttrs (map ( flag: av flag (__hasAttr flag chosen) ) (__attrNames flagDescr));
-      };
+          configureFlags = optsConcatStrs " " "cfgOption";
 
+          flags = listToAttrs (map ( flag: av flag (__hasAttr flag options) ) (__attrNames flagDescr) );
+
+          pass = mergeAttrs (flatten (collectAttrs "pass") );
+      } #  now add additional phase actions (see examples)
+        // listToAttrs ( map ( x : av x (optsConcatStrs "\n" x) ) collectExtraPhaseActions );
 }
