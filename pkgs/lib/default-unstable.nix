@@ -206,132 +206,222 @@ rec {
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
-# One example showing how to use mandatory dependencies [1], default flags [2], settings if a flag is not set [3] ..
-# 
-# note that you should be able to use either ["value1"] or just "value" .. (if I haven't forgotten a flatten)
-# linuxthreads
-
-#    args: with args.lib; with args;
-#    let
-#      co = chooseOptionsByFlags {
-#        inherit args;
-#        flagDescr = {
-#          defaults = { implies   = [ "addOns" "addOns2"]; }; # [2] defaults and mandatory should be the first listed ? Would you like it different?
-#          mandatory ={ cfgOption = [ "--with-headers=${args.kernelHeaders}/include" # [1]
-#                                      "--with-tls" "--without-__thread" "--disable-sanity-checks" ];
-#                       assertion = [ args.glibc.nptl ];
-#                     };
-#          defaultFeature    = {};
-#          no_defaultFeature = { cfgOption = "--disable-defaultFeature"; }; [3]
-#          addOns            = { cfgOption = "--enable-add-ons"; };
-#          addOns2           = { cfgOption = "--enable-add-ons2"; implies = "addOns"; };
-#          alternativeAddOn  = { cfgOption = "--enable-add-ons-alt"; blocks = ["addOns", "addOns2"]; };
-#          justAOption =  { };
-#        };
-#        optionals = ["option1" "option2"]; # are equal to a given flag description like option1 = { buildInputs = "option1"; };
-#        defaultFlags = [ "demos" "doc" ]; # are used if flags is not set by args
-#      };
-#
-#    in args.stdenv.mkDerivation ( {
-#
-#      # passing the flags in case a library using this want's to check them (*) .. 
-#      inherit (co) flags buildInputs configureFlags;
-#      inherit (co.flags) justAOption;
-#
-#      extraSrc = (if co.flags.justAOption then null else src = .. );
-#
-#      src = fetchurl {
-#        url = http://ftp.gnu.org/gnu/glibc/glibc-2.5.tar.bz2;
-#        md5 = "1fb29764a6a650a4d5b409dda227ac9f";
-#      };
-#    } // co.pass)
-
-    # (*) does'nt work because nix is seeing this set as derivation and complains about missing outpath.. :-(
-    # using mkDerivation { ...  } // oc.flags would work but would also force evaluation.. ( would be slower )
-
-
-
-  # resolves chosen flags based on flagDescr passed dependencies in args
-  # flagDescr : { name = { cfgOption = "..."; buildInputs = "..."; blocks = "..."; implies = "..."; 
-  #                        assert = "bool"; pass = { inherit (args) name }
-  #                        any other options you need which you can get by catAttrs  };
-  #              ...
-  # args = { inherit lib stdenv;
-  #        , inherit < all deps >;
-  #        }
-  # flags = list of chosen options..
-  #
-  # returns: chosen ( like flagDescr but only containing the attributes elected by flags or by implies
-  #          chosenFlat ( chosen flattened to list)
-  #          buildInputs
-  #          configureFlags (both to be passed to mkDerivation)
-  #          flags = { flagName = true/ false for each attribute in flagDescr
-  #                     ... }
            
-  # optionals is a list of dependency names. If passed as attribute in args they'll be automatically added
-  # to flags and flagDescr ( optionalName = { buildInputs = optionalName } )
-  chooseOptionsByFlags = { flagDescr, args, optionals ? [], defaultFlags ? [],
-                           collectExtraPhaseActions ? [] } :
-    let givenOptionals = listToAttrs 
-        (mapIf ( a : (__hasAttr a args) ) 
-               ( x: av x { buildInputs = x; } ) 
-               optionals );
-        fd = flagDescr // givenOptionals;
-    in chooseOptionsByFlags2 fd collectExtraPhaseActions args ( getAttr ["flags"] defaultFlags args ++ (__attrNames givenOptionals ) );
+  # calls chooseOptionsByFlags2 with some preprocessing
+  # chooseOptionsByFlags2 returns an attribute set meant to be used to create new derivaitons.
+  # see mkDerivationByConfigruation in all-packages.nix and the examples given below.
+  # You can just copy paste them into all-packages.nix to test them..
 
-  chooseOptionsByFlags2 = flagDescr : collectExtraPhaseActions : args : flags :
+  chooseOptionsByFlags = { flagConfig, args, optionals ? [], defaults ? [],
+                           collectExtraPhaseActions ? [] } :
+    let passedOptionals = filter ( x : __hasAttr x args ) optionals; # these are in optionals and in args
+        # we simply merge in <optional_name> = { buildInputs = <arg.<optional_name>; pass = <arg.optional_name>; }
+        flagConfigWithOptionals = flagConfig // ( listToAttrs
+          (map ( o : av o ( { buildInputs = o; pass = avs o (__getAttr o args); }
+                            // getAttr [o] {} flagConfig )
+               )
+               passedOptionals ) );
+
+    in chooseOptionsByFlags2 flagConfigWithOptionals collectExtraPhaseActions args 
+       ( (getAttr ["flags"] [] args) ++ passedOptionals);
+
+  chooseOptionsByFlags2 = flagConfig : collectExtraPhaseActions : args : flags :
     let   
         # helper function
         collectFlags = # state : flags :
               fold ( flag : s : (
                      if (__hasAttr flag s.result) then s # this state has already been visited
-                     else if (! __hasAttr flag flagDescr) then throw "unkown flag `${flag}' specified"
-                           else let fDesc = (__getAttr flag flagDescr);
+                     else if (! __hasAttr flag flagConfig) then throw "unkown flag `${flag}' specified"
+                           else let fDesc = (__getAttr flag flagConfig);
                                     implied = flatten ( getAttr ["implies"] [] fDesc );
                                     blocked = flatten ( getAttr ["blocks"] [] fDesc ); 
                                     # add this flag
-                                    s2 = setAttr s "result" ( setAttr s.result flag (__getAttr flag flagDescr) ) ;
+                                    s2 =  s // { result = ( setAttr s.result flag (__getAttr flag flagConfig) );
+                                                 blockedFlagsBy = s.blockedFlagsBy 
+                                                   // listToAttrs (map (b: av b flag ) blocked); };
                                     # add implied flags
                                 in collectFlags s2 implied
                    ));
 
-        # chosen contains flagDescr but only having those attributes elected by flags 
+        # chosen contains flagConfig but only having those attributes elected by flags 
         # (or by implies attributes of elected attributes)
-        options = let stateOpts = collectFlags { blockedFlagsBy = {}; result = {}; } (flags ++ ["mandatory"]);
+        options = let stateOpts = collectFlags { blockedFlagsBy = {}; result = {}; } 
+                                               (flags ++ ( if (__hasAttr "mandatory" flagConfig) then ["mandatory"] else [] ));
                       # these options have not been chosen (neither by flags nor by implies)
-                      unsetOptions = filter ( x : __hasAttr x stateOpts ) ( __attrNames flagDescr );
+                      unsetOptions = filter ( x : (! __hasAttr x stateOpts.result) && (__hasAttr ("no_"+x) flagConfig)) 
+                                            ( __attrNames flagConfig );
                       # no add the corresponding no_ attributes as well ..
                       state = collectFlags stateOpts (map ( x : "no_" + x ) unsetOptions);
                   in # check for blockings:
-                     assert ( mapIf ( b: __hasAttr b state.result )
-                                    ( b: throw "flag ${b} is blocked by ${__getAttr b state.blockedFlagsBy}" )
-                                    (__attrNames state.blockedFlagsBy) == [] ); 
+                     assert ( all id ( map ( b: if (__hasAttr b state.result) 
+                                             then throw "flag ${b} is blocked by flag ${__getAttr b state.blockedFlagsBy}"
+                                             else true ) 
+                                           (__attrNames state.blockedFlagsBy) ) ); 
                     state.result;
         flatOptions = flattenAttrs options;
 
         # helper functions :
         collectAttrs = attr : catAttrs attr flatOptions;
         optsConcatStrs = delimiter : attrs : concatStrings 
-                ( intersperse delimiter (collectAttrs attrs) );
+                ( intersperse delimiter (flatten ( collectAttrs attrs ) ) );
           
     in assert ( all id ( mapRecordFlatten ( attr : r : if ( all id ( flatten (getAttr ["assertion"] [] r ) ) ) 
                                               then true else throw "assertion failed flag ${attr}" )
                                          options) );
-      rec {
+      ( rec {
 
           #foldOptions = attr: f : start: fold f start (catAttrs attr flatOptions);
 
           # compared to flags flagsSet does also contain the implied flags.. This makes it easy to write assertions. ( assert args.
-          inherit options flatOptions;
+          inherit options flatOptions collectAttrs optsConcatStrs;
 
           buildInputs = map ( attr: if (! __hasAttr attr args) then throw "argument ${attr} is missing!" else (__getAttr attr args) )
                         (flatten  (catAttrs "buildInputs" flatOptions));
 
           configureFlags = optsConcatStrs " " "cfgOption";
 
-          flags = listToAttrs (map ( flag: av flag (__hasAttr flag options) ) (__attrNames flagDescr) );
+          #flags = listToAttrs (map ( flag: av flag (__hasAttr flag options) ) (__attrNames flagConfig) );
+          flags_prefixed = listToAttrs (map ( flag: av ("flag_set_"+flag) (__hasAttr flag options) ) (__attrNames flagConfig) );
 
           pass = mergeAttrs (flatten (collectAttrs "pass") );
       } #  now add additional phase actions (see examples)
-        // listToAttrs ( map ( x : av x (optsConcatStrs "\n" x) ) collectExtraPhaseActions );
+      // listToAttrs ( map ( x : av x (optsConcatStrs "\n" x) ) collectExtraPhaseActions ) );
 }
+
+/* 
+
+  # ###########################################################################
+  #  configuration tutorial .. examples and tests.. 
+  #  Copy this into all-packages.nix and  try
+
+  # The following derviations will all fail.. 
+  # But they will print the passed options so that you can get to know
+  # how these configurations ought to work.
+  # TODO: There is no nice way to pass an otpion yet.
+  #       I could imagine something like
+  #       flags = [ "flagA" "flagB" { flagC = 4; } ];
+
+  # They are named:
+  # simpleYes, simpleNo, 
+  # defaultsimpleYes, defaultsimpleNo
+  # optionalssimpleYes, optionalssimpleNo
+  # bitingsimpleYes can only be ran with -iA  blockingBiteMonster
+  # assertionsimpleNo
+  # of course you can use -iA and the attribute name as well to select these examples
+
+  # dummy build input
+  whoGetsTheFlagFirst = gnused;
+  whoGetsTheFlagLast = gnumake;
+
+  # simple example demonstrating containing one flag.
+  # features:
+  # * configure options are passed automatically
+  # * buildInputs are collected (they are special, see the setup script)
+  # * they can be passed by additional name as well using pass =
+  # * an attribute named the same way as the flag is added indicating 
+  #   true/ false (flag has been set/ not set)
+  # * extra phase dependend commands can be added
+  #   Its easy to add your own stuff using co.collectAttrs or co.optsConcatStrs 
+  #   ( perhaps this name will change?)
+  simpleFlagYesNoF = namePrefix : extraFlagAttrs : mkDerivationByConfigruation ( {
+    flagConfig = {
+      flag    = { name = namePrefix + "simpleYes"; 
+                  cfgOption = [ "--Yes" "--you-dont-need-a-list" ]; 
+                  buildInputs = [ "whoGetsTheFlagFirst" ]; 
+                  pass = { inherit gnumake; };
+                  extraConfigureCmd = "echo Hello, it worked! ";
+                  blocks = "bitingMonster";
+                };
+      no_flag = { name = namePrefix + "simpleNo"; 
+                  cfgOption = "--no"; 
+                  implies = ["bitingMonster"];
+                };
+      bitingMonster = {
+                  extraConfigureCmd = "echo Ill bite you";
+                };
+      gnutar = { cfgOption="--with-gnutar";
+                  # buildInputs and pass will be added automatically if gnutar is added to optionals
+               };
+      # can be used to check configure options of dependencies
+      # eg testFlag = { assertion = [ arg.desktop.flag_set_wmii (! arg.desktop.flag_set_gnome) (! arg.desktops.flag_set_kde ]; }
+      assertionFlag = { assertion = false; }; # assert is nix language keyword
+                                        
+    }; 
+
+    collectExtraPhaseActions = [ "extraConfigureCmd" ];
+
+    extraAttrs = co : {
+      name = ( __head (co.collectAttrs "name") );
+
+      unpackPhase = "
+       echo my name is 
+       echo \$name
+       echo
+       echo flag given \\(should be 1 or empty string\\) ? 
+       echo \$flag_set_flag
+       echo
+       echo my build inputs are 
+       echo \$buildInputs
+       echo
+       echo my configuration flags are 
+       echo \$configureFlags
+       echo
+       echo what about gnumake? Did it pass?
+       echo \$gnumake
+       echo 
+       echo configurePhase command is
+       echo $\configurePhase
+       echo 
+       echo gnutar passed? \\(optional test\\)
+       echo \$gnutar
+       echo
+       echo dying now
+       echo die_Hopefully_Soon
+      ";
+    configurePhase = co.extraConfigureCmd;
+    };
+  } // extraFlagAttrs );
+
+
+  simpleYes = simpleFlagYesNoF "" {} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+    flags = ["flag"];
+  };
+  # note the "I'll bite you" because of the implies attribute
+  simpleNo = simpleFlagYesNoF "" {} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+    flags = [];
+  };
+
+  # specifying defaults by adding a default attribute
+  
+  yesAgainDefault = simpleFlagYesNoF "default" { defaults = [ "flag" ];} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+  };
+  noAgainOverridingDefault = simpleFlagYesNoF "default" { defaults = [ "flag" ];} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+    flags = [];
+  };
+
+  # requested by Michael Raskin: activate flag automatically if dependency is passed:
+  withGnutarOptional = simpleFlagYesNoF "optionals" { optionals = [ "gnutar" ];} {
+    flags = [ "flag" ]; # I only need to pass this to trigger name optionalssimpleYes
+    inherit whoGetsTheFlagFirst lib stdenv;
+    inherit gnutar;
+  };
+  withoutGnutarOptional = simpleFlagYesNoF "optionals" { optionals = [ "gnutar" ];} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+  };
+
+  # blocking example, this shouldn't even start building:
+  blockingBiteMonster = simpleFlagYesNoF "biting" {} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+    flags = [ "flag" "bitingMonster" ];
+  };
+
+  # assertion example this shouldn't even start building:
+  assertion = simpleFlagYesNoF "assertion" {} {
+    inherit whoGetsTheFlagFirst lib stdenv;
+    flags = [ "assertionFlag" ];
+  };
+*/
