@@ -223,7 +223,7 @@ rec {
                passedOptionals ) );
 
     in chooseOptionsByFlags2 flagConfigWithOptionals collectExtraPhaseActions args 
-       ( (getAttr ["flags"] [] args) ++ passedOptionals);
+       ( (getAttr ["flags"] defaults args) ++ passedOptionals);
 
   chooseOptionsByFlags2 = flagConfig : collectExtraPhaseActions : args : flags :
     let   
