@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pam, python, tcsh, libxslt, perl, perlArchiveZip
 , perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk, libmspack, getopt, file, jre, cairo, which
-, icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi
+, bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
+, icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi, cups
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = "
     --with-package-format=native
-    --disable-cups
     --disable-epm
     --disable-fontooo
     --disable-gnome-vfs
@@ -57,9 +56,10 @@ stdenv.mkDerivation rec {
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
+    cups
   ];
 
-  inherit icu fontconfig libjpeg;
+  inherit icu fontconfig libjpeg jdk cups;
 
   meta = {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";

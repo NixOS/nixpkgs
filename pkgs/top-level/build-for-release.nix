@@ -116,6 +116,7 @@ let {
     nss_ldap
     ntp    
     nxml
+    openoffice
     openssh
     openssl
     pam_console
