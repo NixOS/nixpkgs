@@ -193,7 +193,7 @@ rec {
     let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
-        inherit (co) configureFlags buildInputs /*flags*/;
+        inherit (co) configureFlags buildInputs /*flags* /;
       } // extraAttrs co  // co.pass // co.flags_prefixed );
   */
 
@@ -606,10 +606,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  /*
   rdiff_backup = import ../tools/backup/rdiff-backup {
     inherit fetchurl stdenv librsync gnused;
     python=python;
   };
+  */
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
