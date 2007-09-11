@@ -46,6 +46,10 @@ finish() {
 
 
 tryHashedMirrors() {
+    if test -n "$NIX_HASHED_MIRRORS"; then
+        hashedMirrors="$NIX_HASHED_MIRRORS"
+    fi
+    
     for mirror in $hashedMirrors; do
         url="$mirror/$outputHashAlgo/$outputHash"
         if $curl --fail --silent --show-error --head "$url" \

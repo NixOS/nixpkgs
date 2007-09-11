@@ -52,11 +52,17 @@ stdenv.mkDerivation ({
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
   
-  # We borrow these environment variables from the caller to allow
-  # easy proxy configuration.  This is impure, but a fixed-output
-  # derivation like fetchurl is allowed to do so since its result is
-  # by definition pure.
-  impureEnvVars = ["http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"];
+  impureEnvVars = [
+    # We borrow these environment variables from the caller to allow
+    # easy proxy configuration.  This is impure, but a fixed-output
+    # derivation like fetchurl is allowed to do so since its result is
+    # by definition pure.
+    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
+
+    # This variable allows the user to override hashedMirrors from the
+    # command-line.
+    "NIX_HASHED_MIRRORS"
+  ];
 }
 
 # Pass the mirror locations to the builder.
