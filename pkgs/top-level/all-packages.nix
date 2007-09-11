@@ -3133,6 +3133,11 @@ rec {
   cvs2svn = import ../applications/version-management/cvs2svn {
     inherit fetchurl stdenv python bsddb3 makeWrapper;
   };
+
+  d4x = import ../applications/misc/d4x {
+    inherit fetchurl stdenv pkgconfig openssl boost;
+    inherit (gtkLibs) gtk glib;
+  };
   
   darcs = import ../applications/version-management/darcs {
     inherit fetchurl stdenv ghc zlib ncurses curl;
