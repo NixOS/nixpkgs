@@ -1,3 +1,6 @@
+# You may need to override this.
+docbookxsl = $(HOME)/.nix-profile/xml/xsl/docbook
+
 XMLLINT = xmllint --catalogs
 XSLTPROC = xsltproc --catalogs \
  --param section.autolabel 1 \

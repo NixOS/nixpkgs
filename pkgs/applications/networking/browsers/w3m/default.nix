@@ -8,11 +8,11 @@ assert sslSupport -> openssl != null;
 assert graphicsSupport -> gdkpixbuf != null;
 
 stdenv.mkDerivation {
-  name = "w3m-0.5.1";
+  name = "w3m-0.5.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/w3m/w3m-0.5.1.tar.gz;
-    md5 = "0678b72e07e69c41709d71ef0fe5da13";
+    url = mirror://sourceforge/w3m/w3m-0.5.2.tar.gz;
+    md5 = "ba06992d3207666ed1bf2dcf7c72bf58";
   };
   inherit openssl boehmgc;
   buildInputs = [
@@ -20,5 +20,5 @@ stdenv.mkDerivation {
     (if sslSupport then openssl else null)
     (if graphicsSupport then gdkpixbuf else null)
   ];
-  patches = [./bsd.patch];
+  #patches = [./bsd.patch];
 }

@@ -124,6 +124,7 @@ rec {
     then []
     else [first] ++ range (builtins.add first 1) last;
 
+    
   # Return true only if there is an attribute and it is true.
   checkFlag = attrSet: name:
 	if (name == "true") then true else
@@ -131,9 +132,11 @@ rec {
 	if (isInList (getAttr ["flags"] [] attrSet) name) then true else
 	getAttr [name] false attrSet ;
 
+        
   logicalOR = x: y: x || y;
   logicalAND = x: y: x && y;
 
+  
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
@@ -145,6 +148,7 @@ rec {
 		else (getValue attrSet 
 			(tail argList) name)) attrSet );
 
+                        
   # Input : attrSet, [[name default] ...], [ [flagname reqs..] ... ]
   # Output : are reqs satisfied? It's asserted.
   checkReqs = attrSet : argList : condList :
@@ -163,7 +167,8 @@ rec {
 	if (list == []) then false else
 	if (x == (head list)) then true else
 	isInList (tail list) x;
-  
+
+          
   uniqList = {inputList, outputList ? []}:
 	if (inputList == []) then outputList else
 	let x=head inputList; 
@@ -172,6 +177,7 @@ rec {
 	in uniqList {outputList=newOutputList; 
 		inputList = (tail inputList);};
 
+                
   condConcat = name: list: checker:
 	if list == [] then name else
 	if checker (head list) then 

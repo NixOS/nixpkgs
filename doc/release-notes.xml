@@ -5,7 +5,7 @@
 <title>Nixpkgs Release Notes</title>
 
 
-<section><title>Release 0.11 (TBA)</title>
+<section><title>Release 0.11 (September 11, 2007)</title>
 
 <para>This release has the following improvements:
 
@@ -96,6 +96,56 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
   </para></listitem>
 
 
+  <listitem><para>The function <function>fetchurl</function> now has
+  support for two different kinds of mirroring of files.  First, it
+  has support for <emphasis>content-addressable mirrors</emphasis>.
+  For example, given the <function>fetchurl</function> call
+
+<programlisting>
+fetchurl {
+  url = http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2;
+  sha1 = "eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082";
+}</programlisting>
+
+  <function>fetchurl</function> will first try to download this file
+  from <link
+  xlink:href="http://nix.cs.uu.nl/dist/tarballs/sha1/eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082"/>.
+  If that file doesn’t exist, it will try the original URL.  In
+  general, the “content-addressed” location is
+  <replaceable>mirror</replaceable><literal>/</literal><replaceable>hash-type</replaceable><literal>/</literal><replaceable>hash</replaceable>.
+  There is currently only one content-addressable mirror (<link
+  xlink:href="http://nix.cs.uu.nl/dist/tarballs"/>), but more can be
+  specified in the <varname>hashedMirrors</varname> attribute in
+  <filename>pkgs/build-support/fetchurl/mirrors.nix</filename>, or by
+  setting the <envar>NIX_HASHED_MIRRORS</envar> environment variable
+  to a whitespace-separated list of URLs.</para>
+
+  <para>Second, <function>fetchurl</function> has support for
+  widely-mirrored distribution sites such as SourceForge or the Linux
+  kernel archives.  Given a URL of the form
+  <literal>mirror://<replaceable>site</replaceable>/<replaceable>path</replaceable></literal>,
+  it will try to download <replaceable>path</replaceable> from a
+  configurable list of mirrors for <replaceable>site</replaceable>.
+  (This idea was borrowed from Gentoo Linux.)  Example:
+<programlisting>
+fetchurl {
+  url = mirror://gnu/gcc/gcc-4.2.0/gcc-core-4.2.0.tar.bz2;
+  sha256 = "0ykhzxhr8857dr97z0j9wyybfz1kjr71xk457cfapfw5fjas4ny1";
+}</programlisting>
+  Currently <replaceable>site</replaceable> can be
+  <literal>sourceforge</literal>, <literal>gnu</literal> and
+  <literal>kernel</literal>.  The list of mirrors is defined in
+  <filename>pkgs/build-support/fetchurl/mirrors.nix</filename>.  You
+  can override the list of mirrors for a particular site by setting
+  the environment variable
+  <envar>NIX_MIRRORS_<replaceable>site</replaceable></envar>, e.g.
+<programlisting>
+export NIX_MIRRORS_sourceforge=http://osdn.dl.sourceforge.net/sourceforge/</programlisting>
+  </para>
+
+  </listitem>
+
+
   <listitem><para>Important updates:
 
     <itemizedlist>
@@ -108,9 +158,11 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
       
       <listitem><para>X11R7.2.</para></listitem>
       
-      <listitem><para>Linux 2.6.20.11.</para></listitem>
+      <listitem><para>Linux 2.6.21.7 and 2.6.22.6.</para></listitem>
       
-    </itemizedlist>.
+      <listitem><para>Emacs 22.1.</para></listitem>
+      
+    </itemizedlist>
 
   </para></listitem>
 
@@ -120,6 +172,10 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
     <itemizedlist>
 
       <listitem><para>KDE 3.5.6 Base.</para></listitem>
+      
+      <listitem><para>Wine 0.9.43.</para></listitem>
+      
+      <listitem><para>OpenOffice 2.2.1.</para></listitem>
       
       <listitem><para>Many Linux system packages to support
       NixOS.</para></listitem>
@@ -132,6 +188,21 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
 
 </para>
 
+<para>The following people contributed to this release:
+
+  Andres Löh,
+  Arie Middelkoop,
+  Armijn Hemel,
+  Eelco Dolstra,
+  Marc Weber,
+  Mart Kolthof,
+  Martin Bravenboer,
+  Michael Raskin,
+  Wouter den Breejen and
+  Yury G. Kudryashov.
+
+</para>
+  
 </section>
 
 
