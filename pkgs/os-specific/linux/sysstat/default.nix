@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gettext}:
    
 stdenv.mkDerivation {
-  name = "sysstat-7.1.1";
+  name = "sysstat-8.0.0";
    
   src = fetchurl {
-    url = file:///home/eelco/stuff/sysstat-7.1.1.tar.gz;
-    sha256 = "1dmna652qj39z2cddasm5rj1wjngglima73pmfjqrzz254g0vx9w";
+    url = http://perso.orange.fr/sebastien.godard/sysstat-8.0.0.tar.bz2;
+    md5 = "cb579d5c5d5bc1386cc09193e15765bf";
   };
 
   buildInputs = [gettext];
