@@ -28,7 +28,20 @@ assert url != "" -> urls == [];
 assert (outputHash != "" && outputHashAlgo != "")
     || md5 != "" || sha1 != "" || sha256 != "";
 
-let urls_ = if urls != [] then urls else [url]; in
+let
+
+  urls_ = if urls != [] then urls else [url];
+
+  mirrors = import ./mirrors.nix;
+
+  # Names of the master sites that are mirrored (i.e., "sourceforge",
+  # "gnu", etc.).
+  sites =
+    if builtins ? attrNames
+    then builtins.attrNames mirrors
+    else [] /* backwards compatibility */;
+  
+in
 
 stdenv.mkDerivation ({
   name =
@@ -62,10 +75,10 @@ stdenv.mkDerivation ({
     # This variable allows the user to override hashedMirrors from the
     # command-line.
     "NIX_HASHED_MIRRORS"
-  ];
+  ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 }
 
 # Pass the mirror locations to the builder.
-// (import ./mirrors.nix)
+// mirrors
 
 )

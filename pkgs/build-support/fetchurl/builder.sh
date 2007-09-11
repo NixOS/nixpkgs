@@ -82,8 +82,14 @@ for url in $urls; do
             # Assume that SourceForge/GNU/kernel mirrors have better
             # bandwidth than nix.cs.uu.nl.
             preferHashedMirrors=
-            
-            for url3 in ${!varName}; do
+
+            mirrors=${!varName}
+
+            # Allow command-line override by setting NIX_MIRRORS_$site.
+            varName="NIX_MIRRORS_$site"
+            if test -n "${!varName}"; then mirrors="${!varName}"; fi
+
+            for url3 in $mirrors; do
                 urls2="$urls2 $url3$fileName";
             done
         fi
