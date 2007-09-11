@@ -108,7 +108,7 @@ let {
     module_init_tools
     mono
     mysql
-    mythtv
+    #mythtv
     nano
     netcat
     nix
