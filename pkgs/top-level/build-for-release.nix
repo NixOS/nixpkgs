@@ -270,7 +270,7 @@ let {
     libxml2
     libxslt
     nxml
-    php
+    #php
     subversion
     tetex
     unzip
