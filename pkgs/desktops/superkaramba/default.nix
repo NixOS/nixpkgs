@@ -11,7 +11,7 @@ stdenv.mkDerivation rec{
   xlibs = [ libX11 libXext libXt libXaw libXpm ];
 
   src = fetchurl {
-    src = mirror://sourceforge/netdragon/superkaramba-0.39.tar.gz;
+    url = mirror://sourceforge/netdragon/superkaramba-0.39.tar.gz;
     sha256 = "5f3ab793a08d368f37c6abe4362ab929cbb3da3b1993e285a69180a44e0d8441";
   };
   
