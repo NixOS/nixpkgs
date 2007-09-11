@@ -2,12 +2,9 @@
 
 let
 
-  # Configure script borrowed from the good folks at Gentoo.
-  configure = fetchurl {
-    # !!! move this somewhere safe
-    url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-auth/pam_console/files/pam_console-configure.ac";
-    sha256 = "00wilsxhwjjrkfnv2xzvlw4fxwj36ds4shnac3hksbjwb9qivmpl";
-  };
+  # Configure script borrowed from the good folks at Gentoo 
+  # (http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-auth/pam_console/files/pam_console-configure.ac).
+  configure = ./configure.ac;
 
 in
    

@@ -9,10 +9,8 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig libdaemon];
   configureFlags = "--with-initdir=$out/etc/init.d --disable-lynx";
   patches = [
-    (fetchurl {
-      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-apps/ifplugd/files/ifplugd-0.28-interface.patch?rev=1.1";
-      sha256 = "0rxwy7l7vwxz9gy0prfb93x2ycxaz3r203rhbwmbwrzl4rzy3nqv";
-    })
+    # From http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-apps/ifplugd/files/ifplugd-0.28-interface.patch?rev=1.1.
+    ./interface.patch
   ];
   patchFlags = "-p0";
 }

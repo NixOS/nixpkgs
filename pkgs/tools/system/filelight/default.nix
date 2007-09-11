@@ -4,9 +4,8 @@ stdenv.mkDerivation {
   name = "filelight-1.0";
 
   src = fetchurl {
-    url = http://kde-apps.org/content/download.php?content=9887&id=1;
+    url = http://www.methylblue.com/filelight/packages/filelight-1.0.tar.bz2;
     sha256 = "1mj5q8i818b6qlmjgfk984agp9n72pxi7p7caixzmcm1c2gd8hq7";
-    name = "filelight-1.0.tar.bz2";
   };
 
   buildInputs = [kdelibs qt x11 zlib perl libpng];
