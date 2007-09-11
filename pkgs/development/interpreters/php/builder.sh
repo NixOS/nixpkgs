@@ -5,7 +5,7 @@ alias lex=flex
 configureFlags="$configureFlags \
   --with-libxml-dir=$libxml2 \
   --with-apxs2=$apacheHttpd/bin/apxs \
-  --with-apr-util=$apacheHttpd"
+  --without-libexpat-dir"
 
 if test -n "$unixODBC"; then
     configureFlags="$configureFlags --with-unixODBC=$unixODBC"
