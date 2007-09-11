@@ -629,6 +629,12 @@ rec {
     inherit fetchurl stdenv coreutils pam;
   };
 
+  superkaramba = import ../desktops/superkaramba {
+    inherit stdenv fetchurl kdebase kdelibs zlib libjpeg
+      perl qt3 python libpng freetype expat;
+    inherit (xlibs) libX11 libXext libXt libXaw libXpm;
+  };
+
   sshfsFuse = import ../tools/networking/sshfs-fuse {
     inherit fetchurl stdenv pkgconfig fuse;
     inherit (gtkLibs) glib;
