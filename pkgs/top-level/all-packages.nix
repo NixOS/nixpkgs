@@ -1631,7 +1631,7 @@ rec {
     inherit aspell;
   };
 
-  hsqldb = import ../test/hsqldb {
+  hsqldb = import ../development/libraries/java/hsqldb {
     inherit stdenv fetchurl unzip;
   };
 
