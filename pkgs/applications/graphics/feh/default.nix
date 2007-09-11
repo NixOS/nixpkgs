@@ -25,6 +25,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A light-weight image viewer";
-    url = http://linuxbrit.co.uk/feh/;
+    homepage = http://linuxbrit.co.uk/feh/;
   };
 }

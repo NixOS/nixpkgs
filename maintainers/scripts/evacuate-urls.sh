@@ -9,7 +9,7 @@ find "$1" -name "*.nix" | while read fn; do
         if url=$(echo "$line" | sed 's^url = \(.*\);^\1^'); then
 
             if ! echo "$url" | grep -q -E "www.cs.uu.nl|nix.cs.uu.nl|.stratego-language.org|java.sun.com|ut2004|linuxq3a|RealPlayer|Adbe|belastingdienst|microsoft|armijn/.nix|sun.com|archive.eclipse.org"; then
-                base=$(basename $url)
+                base="$(basename "$url")"
                 newPath="$distDir/$base"
 
 		if test -e "$newPath"; then
@@ -20,7 +20,11 @@ find "$1" -name "*.nix" | while read fn; do
 		    if test -z "$hash"; then
 			hash=$(fgrep -A 1 "$url" "$fn" | grep sha256 | sed 's^.*sha256 = \"\(.*\)\";.*^\1^')
 			hashType="sha256 --base32"
-			if test -z "$hash"; then
+			if test -n "$hash"; then
+			    if test "${#hash}" = 64; then
+				hash=$(nix-hash --to-base32 --type sha256 $hash)
+			    fi
+			else
 			    hash=$(fgrep -A 1 "$url" "$fn" | grep sha1 | sed 's^.*sha1 = \"\(.*\)\";.*^\1^')
 			    hashType="sha1"
 			    if test -z "$hash"; then
@@ -31,13 +35,13 @@ find "$1" -name "*.nix" | while read fn; do
 		    fi
 		    #echo "HASH = $hash"
 		    if ! test "$(nix-hash --type $hashType --flat "$newPath")" = "$hash"; then
-			echo "WARNING: $fn: $newPath exists and differs!"
+			echo "WARNING: $fn: $newPath exists and differs, hash should be $hash!"
 			continue
 		    fi
 
 		else
 
-		    if echo $url | grep -q '^mirror://'; then
+		    if echo $url | grep -q 'mirror://'; then
 			#echo "$fn: skipping mirrored $url"
 			continue
 		    fi
@@ -75,3 +79,5 @@ find "$1" -name "*.nix" | while read fn; do
     done
 
 done
+
+echo DONE

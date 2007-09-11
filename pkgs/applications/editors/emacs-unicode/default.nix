@@ -39,6 +39,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Emacs with Unicode, GTK and Xft support (23.x alpha)";
-    url = http://www.emacswiki.org/cgi-bin/wiki/XftGnuEmacs;
+    homepage = http://www.emacswiki.org/cgi-bin/wiki/XftGnuEmacs;
   };
 }

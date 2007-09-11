@@ -10,8 +10,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ python perl ncurses x11 zlib openssl ];
   configureFlags = "--with-perl --with-python";
+
   meta = {
-	  description = "Full-Featured Text WWW Browser";
-	  homepage = http://elinks.or.cz;
+    description = "Full-Featured Text WWW Browser";
+    homepage = http://elinks.or.cz;
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.25b.tar.gz;		#TODO, change this to a URL of cs.uu.nl/...
+    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.25b.tar.gz;
     sha256 = "18l71skn7mryg78jpd8x38pf27wvrx00v33w3z2ycsfnrbcp8l6w";
   };
 
