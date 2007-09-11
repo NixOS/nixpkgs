@@ -15,7 +15,7 @@
   <listitem><para>The standard build environment
   (<literal>stdenv</literal>) is now pure on the
   <literal>x86_64-linux</literal> and <literal>powerpc-linux</literal>
-  platforms, just like <literal>i686-linux</literal>.  (Purity means
+  platforms, just as on <literal>i686-linux</literal>.  (Purity means
   that building and using the standard environment has no dependencies
   outside of the Nix store.  For instance, it doesn’t require an
   external C compiler such as <filename>/usr/bin/gcc</filename>.)
@@ -29,7 +29,7 @@
   <listitem><para>Hook variables in the generic builder are now
   executed using the <function>eval</function> shell command.  This
   has a major advantage: you can write hooks directly in Nix
-  expressions.  For instance, rather than write a builder like this:
+  expressions.  For instance, rather than writing a builder like this:
 
 <programlisting>
 source $stdenv/setup
