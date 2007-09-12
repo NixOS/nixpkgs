@@ -3498,6 +3498,17 @@ rec {
   rxvt = import ../applications/misc/rxvt {
     inherit lib fetchurl stdenv;
     inherit (xlibs) libXt libX11;
+  ;
+
+  sbagen = import ../applications/misc/sbagen {
+    inherit fetchurl stdenv;
+  };
+
+  skype_linux = import ../applications/networking/skype {
+    inherit fetchurl stdenv;
+    inherit glibc alsaLib freetype fontconfig libsigcxx gcc41;
+    inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor 
+                    libXinerama libXext libX11;
   };
 
   slim = import ../applications/display-managers/slim {
