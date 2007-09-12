@@ -3959,7 +3959,7 @@ rec {
   };
 
   ntfs3g = import ../misc/ntfs-3g {
-	  inherit fetchurl stdenv fuse pkgconfig;
+    inherit fetchurl stdenv fuse pkgconfig;
   };
 
   pgf = import ../misc/tex/pgf {

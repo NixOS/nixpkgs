@@ -1,15 +1,15 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "ntfs3g-1.810";
+  name = "ntfs3g-1.826";
   src = fetchurl {
-    url = http://www.ntfs-3g.org/ntfs-3g-1.810.tgz;
-    sha256 = "14hly6i8b6lh1z54prhml1lf457r0dm8ild0ziqxnnp22s6ydqgy";
+    url = http://www.ntfs-3g.org/ntfs-3g-1.826.tgz;
+    sha256 = "0anxg4nzhc8d8wvxgw78bc2pb2ciim8mflxgcac9p8d3djwdsxyp";
   };
   buildInputs = [fuse pkgconfig];
   preConfigure="sed -e 's:/sbin:@sbindir@:' -i src/Makefile.in";
-  configureFlags="--enable-shared --disable-static --exec-prefix=\${prefix}";
+  configureFlags="--enable-shared --disable-static --disable-ldconfig --exec-prefix=\${prefix}";
 
   meta = {
-	  description = "FUSE-base ntfs driver with full write support";
+    description = "FUSE-base ntfs driver with full write support";
   };
 }
