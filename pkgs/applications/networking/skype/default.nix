@@ -1,3 +1,4 @@
+args:
 args.stdenv.mkDerivation {
   name = "skype-1.4";
 
