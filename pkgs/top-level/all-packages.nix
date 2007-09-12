@@ -652,6 +652,10 @@ rec {
     inherit fetchurl stdenv libpcap;
   };
 
+  testdisk = import ../tools/misc/testdisk {
+    inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
@@ -3498,7 +3502,7 @@ rec {
   rxvt = import ../applications/misc/rxvt {
     inherit lib fetchurl stdenv;
     inherit (xlibs) libXt libX11;
-  ;
+  };
 
   sbagen = import ../applications/misc/sbagen {
     inherit fetchurl stdenv;
