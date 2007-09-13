@@ -3,6 +3,12 @@ set -x
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
+if [ -z ${system##*cygwin*} ]; then
+  PATH_DELIMITER=;
+else
+  PATH_DELIMITER=;
+fi
+
 
 # Set up the initial path.
 PATH=
@@ -40,7 +46,7 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
     source $NIX_GCC/nix-support/setup-hook
 fi
 
-    
+
 # Ensure that the given directories exists.
 ensureDir() {
     local dir
@@ -92,13 +98,13 @@ findInputs()
             return 0
             ;;
     esac
-    
+
     pkgs="$pkgs $pkg "
 
     if test -f $pkg/nix-support/setup-hook; then
         source $pkg/nix-support/setup-hook
     fi
-    
+
     if test -f $pkg/nix-support/propagated-build-inputs; then
         for i in $(cat $pkg/nix-support/propagated-build-inputs); do
             findInputs $i
@@ -237,7 +243,7 @@ substitute() {
     touch $sedScript
 
     local n p pattern replacement varName
-    
+
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
@@ -283,7 +289,7 @@ substituteInPlace() {
 substituteAll() {
     local input="$1"
     local output="$2"
-    
+
     # Select all environment variables that start with a lowercase character.
     for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
         if test "$NIX_DEBUG" = "1"; then
@@ -293,7 +299,7 @@ substituteAll() {
     done
 
     substitute "$input" "$output" $args
-}  
+}
 
 
 ######################################################################
@@ -616,7 +622,7 @@ buildW() {
     fi
 
     eval "$preBuild"
-    
+
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make \
         $makeFlags "${makeFlagsArray[@]}" \
@@ -732,7 +738,7 @@ fixupW() {
  		for d in $forceShare; do
  			if test -d "$prefix/$d"; then
  				if test -d "$prefix/share/$d"; then
- 					echo "Both $d/ and share/$d/ exists!" 
+ 					echo "Both $d/ and share/$d/ exists!"
  				else
 					echo Fixing location of $dir/ subdirectory
  					ensureDir $prefix/share
@@ -746,8 +752,8 @@ fixupW() {
  			fi
  		done;
  	fi
- 
- 
+
+
 # TODO : strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
 		echo "Stripping debuging symbols from files in"
@@ -793,7 +799,7 @@ distW() {
     fi
 
     eval "$preDist"
-    
+
     if test -z "$distTarget"; then
         distTarget="dist"
     fi
@@ -846,7 +852,7 @@ genericBuild() {
         dumpVars
         eval "$i"
     done
-    
+
     stopNest
 }
 
