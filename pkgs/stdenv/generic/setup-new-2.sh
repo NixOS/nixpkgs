@@ -1,5 +1,4 @@
 set -e
-set -x
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
