@@ -3241,6 +3241,10 @@ rec {
     inherit fetchurl stdenv zlib alsaLib;
   };
 
+  flite = import ../applications/misc/flite {
+    inherit fetchurl stdenv;
+  };
+
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
@@ -3387,6 +3391,22 @@ rec {
     xineramaSupport = true;
     randrSupport = true;
   };
+
+ # commented out because it's using the new configuration style proposal which is unstable
+ # should be the same as the nix expression above except support for esound :)
+ /*
+  MPlayer_new_config = import ../applications/video/MPlayer/newconfig.nix {
+    inherit fetchurl stdenv freetype x11 zlib freefont_ttf lib;
+    inherit (xlibs) libX11 xextproto;
+
+    # optional features
+    inherit alsaLib libtheora libcaca;
+    inherit (gnome) esound;
+    inherit (xlibs) libXv libXinerama;
+    inherit (xlibs) libXrandr; # FIXME does this option exist? I couldn't find it as configure option
+  };
+  */
+
 
   MPlayerPlugin = import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
     inherit fetchurl stdenv pkgconfig firefox gettext;
