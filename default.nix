@@ -26,6 +26,8 @@ in
     config
     ;
 
+  nixFallback = system.nix;
+
   manifests = system.config.get ["installer" "manifests"]; # exported here because nixos-rebuild uses it
 
   upstartJobsCombined = system.upstartJobs;

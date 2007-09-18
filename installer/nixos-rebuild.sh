@@ -40,6 +40,13 @@ if test -z "$NIXOS_NO_PULL"; then
 fi
 
 
+# First build Nix, since NixOS may require a newer version than the
+# current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
+# more conservative.
+nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp
+PATH=$HOME/nix-tmp/bin:$PATH
+
+
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
@@ -69,3 +76,6 @@ active system configuration may be garbage collected!  This may render
 the system inoperable (though a reboot will fix things).
 EOF
 fi
+
+
+rm -f $HOME/nix-tmp
