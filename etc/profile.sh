@@ -62,9 +62,15 @@ fi
 
 
 # Set up a default Nix expression from which to install stuff.
-if ! test -L $HOME/.nix-defexpr; then
+if test ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr; then
     echo "creating $HOME/.nix-defexpr" >&2
-    ln -s /etc/nixos/install-source.nix $HOME/.nix-defexpr
+    rm -f $HOME/.nix-defexpr
+    mkdir $HOME/.nix-defexpr
+    ln -s /etc/nixos/install-source.nix $HOME/.nix-defexpr/nixpkgs_sys
+    ln -s /etc/nixos/nixos $HOME/.nix-defexpr/nixos
+    if test "$USER" != root; then
+        ln -s /nix/var/nix/gcroots/per-user/root/channels $HOME/.nix-defexpr/channels_root
+    fi
 fi
 
 

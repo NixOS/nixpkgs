@@ -31,10 +31,7 @@ if test -z "$NIXOS_CONFIG"; then NIXOS_CONFIG=/etc/nixos/configuration.nix; fi
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
 if test -z "$NIXOS_NO_PULL"; then
-    manifests=$(nix-instantiate --eval-only --xml --strict \
-        $NIXOS/system/system.nix \
-        --arg configuration "import $NIXOS_CONFIG" \
-        -A manifests \
+    manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
     
     for i in $manifests; do
@@ -47,14 +44,10 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if test "$action" = "switch" -o "$action" = "boot"; then
-    nix-env -p /nix/var/nix/profiles/system -f $NIXOS/system/system.nix \
-        --arg configuration "import $NIXOS_CONFIG" \
-        --set -A system
+    nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system
     pathToConfig=/nix/var/nix/profiles/system
 elif test "$action" = "test" -o "$action" = "build"; then
-    nix-build $NIXOS/system/system.nix \
-        --arg configuration "import $NIXOS_CONFIG" \
-        -A system -K -k
+    nix-build $NIXOS -A system -K -k
     pathToConfig=./result
 else
     showSyntax

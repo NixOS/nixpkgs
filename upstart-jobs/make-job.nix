@@ -5,8 +5,8 @@
     job.jobDrv
   else
     (
-      runCommand job.name {inherit (job) job;}
-        "ensureDir $out/etc/event.d; echo \"$job\" > $out/etc/event.d/$name"
+      runCommand ("upstart-" + job.name) {inherit (job) job; jobName = job.name;}
+        "ensureDir $out/etc/event.d; echo \"$job\" > $out/etc/event.d/$jobName"
     )
 )
 
