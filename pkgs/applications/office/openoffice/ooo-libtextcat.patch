@@ -1,0 +1,11 @@
+--- OOG680_m5/libtextcat/makefile.mk	2007-06-21 18:09:52.000000000 +0200
++++ OOG680_m5.new/libtextcat/makefile.mk	2007-09-18 23:59:56.000000000 +0200
+@@ -62,7 +62,7 @@
+ 
+ #relative to CONFIGURE_DIR
+ CONFIGURE_ACTION=configure
+-CONFIGURE_FLAGS=
++CONFIGURE_FLAGS=--prefix=${out}
+ 
+ BUILD_ACTION=make
+ 

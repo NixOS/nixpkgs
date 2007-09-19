@@ -3,15 +3,16 @@
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi, cups
+, libXinerama
 }:
 
 stdenv.mkDerivation rec {
-  name = "openoffice.org-2.2.1";
+  name = "openoffice.org-2.3.0";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/office/openoffice/stable/2.2.1/OOo_2.2.1_src_core.tar.bz2;
-    sha256 = "1mn7p68m6z3rlwm2ynvvbzz2idpyds2hjmwlhycfsp1gi644ridd";
+    url = ftp://ftp.nluug.nl/pub/office/openoffice/stable/2.3.0/OOo_2.3.0_src_core.tar.bz2;
+    sha256 = "0mkxn9qj3f03rjkmxc4937gr2w429hnxzb9j5j2grdknfga5a1c3";
   };
 
   configureFlags = "
@@ -56,10 +57,12 @@ stdenv.mkDerivation rec {
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
-    cups
+    cups libXinerama
   ];
 
   inherit icu fontconfig libjpeg jdk cups;
+
+  patches = [./ooo-libtextcat.patch];
 
   meta = {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";
