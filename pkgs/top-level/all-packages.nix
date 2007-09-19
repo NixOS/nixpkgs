@@ -3460,7 +3460,7 @@ rec {
       db4 sablotron curl libsndfile flex zip unzip libmspack
       getopt file neon cairo which icu boost jdk ant hsqldb
       cups;
-    inherit (xlibs) libXaw libXext libX11 libXtst libXi;
+    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     bison = bison23;
   };
