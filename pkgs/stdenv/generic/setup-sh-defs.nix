@@ -3,6 +3,15 @@ with (import ../../lib/strings-with-deps.nix (import ../../lib/default-unstable.
 rec {
 	setStrictMode = noDepEntry "set -e;";
 	setNixGcc = noDepEntry "test -z \$NIX_GCC && NIX_GCC=@gcc@;";
+
+	setPathDelimiter = noDepEntry "
+if [ -z ${system##*cygwin*} ]; then
+  PATH_DELIMITER=;
+else
+  PATH_DELIMITER=;
+fi
+" ;
+
 	
 	initPath = noDepEntry "# Set up the initial path.
 PATH=
@@ -28,18 +37,18 @@ param5=@param5@
 if test -n \"@preHook@\"; then
     source @preHook@
 fi
-" [initPath];
+" [];
 
 	checkShellEnv = FullDepEntry "# Check that the pre-hook initialised SHELL.
 if test -z \"\$SHELL\"; then echo \"SHELL not set\"; exit 1; fi
-" [execPreHook];
+" [];
 
 	gccSetupHook = FullDepEntry "# Hack: run gcc's setup hook.
 envHooks=()
 if test -f \$NIX_GCC/nix-support/setup-hook; then
     source \$NIX_GCC/nix-support/setup-hook
 fi
-" [setNixGcc initPath execPreHook];
+" [setNixGcc];
 
     
 	defEnsureDir = FullDepEntry "# Ensure that the given directories exists.
@@ -49,7 +58,25 @@ ensureDir() {
         if ! test -x \"\$dir\"; then mkdir -p \"\$dir\"; fi
     done
 }
-" [initPath];
+" [];
+
+	defInstallBin = FullDepEntry "
+
+installBin() {
+  ensureDir $out/bin
+  cp "$@" $out/bin
+}
+
+" [];
+
+	defAssertEnvExists = FullDepEntry "
+assertEnvExists(){
+  if test -z "${!1}"; then
+      msg=${2:-error: assertion failed: env var $1 is required}
+      echo $msg >&2; exit 1
+  fi
+}
+" [];
 
 	defFail = FullDepEntry "# Called when some build action fails.  If \$succeedOnFailure is set,
 # create the file `\$out/nix-support/failed' to signal failure, and
@@ -64,13 +91,13 @@ fail() {
         exit \$?
     fi
 }
-" [initPath];
+" [];
 
 	runAddInputsHook = FullDepEntry "# Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
 eval \"\$addInputsHook\"
-" [initPath gccSetupHook defFail];
+" [defFail];
 
 	defFindInputs = FullDepEntry "# Recursively find all build inputs.
 findInputs()
@@ -95,7 +122,7 @@ findInputs()
         done
     fi
 }
-" [initPath];
+" [];
 
 	getInputs = FullDepEntry "pkgs=\"\"
 if test -n \"\$buildinputs\"; then
@@ -104,7 +131,7 @@ fi
 for i in \$buildInputs \$propagatedBuildInputs; do
     findInputs \$i
 done
-" [defFindInputs runAddInputsHook];
+" [defFindInputs];
 
 	defAddToEnv = FullDepEntry "# Set the relevant environment variables to point to the build inputs
 # found above.
@@ -727,84 +754,62 @@ installPhase() {
 
 
 	defFixupW = FullDepEntry "
+
 # The fixup phase performs generic, package-independent, Nix-related
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
 fixupW() {
-    if test -n \"\$fixupPhase\"; then
-        eval \"\$fixupPhase\"
+    if test -n "$fixupPhase"; then
+        eval "$fixupPhase"
         return
     fi
 
-    eval \"\$preFixup\"
+    eval "$preFixup"
 
- 	forceShare=\${forceShare:=man doc info}
- 	if test -n \"\$forceShare\"; then
- 		for d in \$forceShare; do
- 			if test -d \"\$prefix/\$d\"; then
- 				if test -d \"\$prefix/share/\$d\"; then
- 					echo \"Both \$d/ and share/\$d/ exists, aborting\" 
+ 	forceShare=${forceShare:=man doc info}
+ 	if test -n "$forceShare"; then
+ 		for d in $forceShare; do
+ 			if test -d "$prefix/$d"; then
+ 				if test -d "$prefix/share/$d"; then
+ 					echo "Both $d/ and share/$d/ exists!"
  				else
- 					ensureDir \$prefix/share
-					if test -w \$prefix/share; then
-	 					mv -v \$prefix/\$d \$prefix/share
- 						ln -sv share/\$d \$prefix
+					echo Fixing location of $dir/ subdirectory
+ 					ensureDir $prefix/share
+					if test -w $prefix/share; then
+	 					mv -v $prefix/$d $prefix/share
+ 						ln -sv share/$d $prefix
 					fi
  				fi
+			else
+				echo "No $d/ subdirectory, skipping."
  			fi
  		done;
  	fi
- 
- 
+
+
 # TODO : strip _only_ ELF executables, and return || fail here...
-    if test -z \"\$dontStrip\"; then
-		test -d \"\$prefix/lib\" && stripDebug=\"\$prefix/lib\"
-
-		if test -n \"\$stripDebug\"; then
-			find \"\$stripDebug\" -type f -print0 |
-			xargs -0 strip --strip-debug --verbose || true
-		fi
-
-		test -d \"\$prefix/bin\" && stripAll=\"\$prefix/bin\"
-		test -d \"\$prefix/sbin\" && stripAll=\"\${stripAll} \$prefix/sbin\"
-		if test -n \"\$stripAll\"; then
-			find \"\$prefix/bin\" \"\$prefix/sbin\" -type f -print0 |
-			xargs -0 strip --strip-all --verbose || true
-		fi
+    if test -z "$dontStrip"; then
+		echo "Stripping debuging symbols from files in"
+		stripDirs "${stripDebugList:-lib}" -S
+		echo "Stripping all symbols from files in"
+		stripDirs "${stripAllList:-bin sbin}" -s
     fi
 
-	if test -z \"\$dontFixupShare\"; then
-		for dir in doc info man; do
-			if test -d \"\$prefix/\$dir\"; then
-				if test -d \"\$prefix/share/\$dir\"; then
-					echo Both \"\$prefix/\$dir\" and \"\$prefix/share/\$dir\" exists!
-				else
-					echo Fixing location of \$dir/ subdirectory
-					ensureDir \"\$prefix/share\"
-					if test -w \$prefix/share; then
-						mv -v \"\$prefix/\$dir\" \"\$prefix/share\"
-						ln -sv \"share/\$dir\" \"\$prefix\"
-					fi
-				fi
-			fi
-		done
+    if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
+        patchELF "$prefix"
+    fi
+
+    if test -n "$propagatedBuildInputs"; then
+        ensureDir "$out/nix-support"
+        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+    fi
+
+	if test -n "$setupHook"; then
+		ensureDir "$out/nix-support"
+		substituteAll "$setupHook" "$out/nix-support/setup-hook"
 	fi
 
-    if test \"\$havePatchELF\" = 1 -a -z \"\$dontPatchELF\"; then
-        patchELF \"\$prefix\"
-    fi
-
-    if test -n \"\$propagatedBuildInputs\"; then
-        ensureDir \"\$out/nix-support\"
-        echo \"\$propagatedBuildInputs\" > \"\$out/nix-support/propagated-build-inputs\"
-    fi
-
-	if test -n \"\$setupHook\"; then
-		ensureDir \"\$out/nix-support\"
-		substituteAll \"\$setupHook\" \"\$out/nix-support/setup-hook\"
-	fi
-
-    eval \"\$postFixup\"
+    eval "$postFixup"
 }
 " [defPatchElf initPath];
 
