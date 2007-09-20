@@ -1190,7 +1190,7 @@ rec {
   };
 
   cmake = import ../development/tools/build-managers/cmake {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv replace;
   };
 
   elfutils = import ../development/tools/misc/elfutils {

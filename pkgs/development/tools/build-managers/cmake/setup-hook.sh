@@ -12,17 +12,13 @@ addCMakeParamsLibs()
 	fi
 }
 
-fixCmake()
-{
-	echo "fixing Cmake file $i"
-	sed -e 's@/usr@/FOO@g' -e 's@ /\(bin\|sbin\|lib\)@ /FOO@g' -i $i
-}
-
 fixCmakeFiles()
 {
-	for i in $(find $1 -type f -name "*.cmake"); do
-		fixCmake $i;
-	done;
+	local replaceArgs;
+	echo "Fixing cmake files"
+	replaceArgs="-e -f -L -T /usr /FOO"
+   	replaceArgs="${replaceArgs}	-a NO_DEFAULT_PATH \"\" -a NO_SYSTEM_PATH \"\""
+	find $1 -type f -name "*.cmake" | xargs replace ${replaceArgs}
 }
 
 cmakePostUnpack()
@@ -34,21 +30,19 @@ cmakePostUnpack()
 	if [ -z "$dontFixCmake" ]; then
 		fixCmakeFiles .
 	fi
-}
 
-cmakeTweaks()
-{
-	postUnpack="cmakePostUnpack${postUnpack:+; }${postUnpack}"
-	
 	if [ -z "$configureScript" ]; then
-		dontAddPrefix=1
 		configureScript="cmake .."
+	fi
+	if [ -z "$dontAddPrefix" ]; then
+		dontAddPrefix=1
 		configureFlags="-DCMAKE_INSTALL_PREFIX=$out $configureFlags"
 	fi
 }
 
+
 if [ -z "$noCmakeTewaks" ]; then
-	cmakeTweaks
+	postUnpack="cmakePostUnpack${postUnpack:+; }${postUnpack}"
 fi;
 
 envHooks=(${envHooks[@]} addCMakeParamsInclude addCMakeParamsLibs)
