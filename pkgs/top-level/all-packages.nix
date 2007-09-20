@@ -1466,8 +1466,20 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  dbus = import ../development/libraries/dbus {
+  # I think, this is a bad practice to use getVersion for various build
+  # variants, but it's 5 o'clock now...
+  dbus = getVersion "dbus" dbus_alts;
+
+  dbus_alts = rec
+  {
+    noX11 = import ../development/libraries/dbus {
     inherit fetchurl stdenv pkgconfig expat;
+    };
+    withX11 = import ../development/libraries/dbus_x {
+	  inherit fetchurl stdenv pkgconfig expat;
+	  inherit (xlibs) libX11 libICE libSM;
+    };
+	default = noX11;
   };
 
   dbus_glib = import ../development/libraries/dbus-glib {
