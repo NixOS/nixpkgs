@@ -595,7 +595,7 @@ configureW() {
     fi
 
     if test -z "$dontAddPrefix"; then
-        configureFlags="--prefix=$prefix $configureFlags"
+        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
