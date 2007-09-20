@@ -3,9 +3,9 @@ set -e
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
 if [ -z ${system##*cygwin*} ]; then
-  PATH_DELIMITER=;
+  PATH_DELIMITER=';'
 else
-  PATH_DELIMITER=;
+  PATH_DELIMITER=':'
 fi
 
 
