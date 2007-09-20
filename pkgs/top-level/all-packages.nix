@@ -3894,13 +3894,16 @@ rec {
 
   ### MISC
 
-
   atari800 = import ../misc/emulators/atari800 {
     inherit fetchurl stdenv unzip zlib SDL;
   };
 
   ataripp = import ../misc/emulators/atari++ {
     inherit fetchurl stdenv x11 SDL;
+  };
+ 
+  auctex = import ../misc/tex/auctex {
+    inherit stdenv fetchurl emacs tetex;
   };
 
   busybox = import ../misc/busybox {
