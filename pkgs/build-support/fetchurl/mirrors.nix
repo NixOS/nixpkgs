@@ -32,4 +32,12 @@
     http://www.eu.kernel.org/pub/
     http://www.de.kernel.org/pub/
   ];
+
+  # Mirrors of ftp://ftp.kde.org/pub/kde/.
+  kde = [
+    http://ftp.scarlet.be/pub/kde/
+    http://ftp.gwdg.de/pub/x11/kde/
+    ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
+    ftp://ftp.kde.org/pub/kde/
+  ];
 }

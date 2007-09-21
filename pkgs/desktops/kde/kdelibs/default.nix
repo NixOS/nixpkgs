@@ -1,14 +1,16 @@
 { stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre
 , pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
-, freetype, bzip2
+, freetype, bzip2, cups
 }:
 
+let version = "3.5.7"; in
+
 stdenv.mkDerivation {
-  name = "kdelibs-3.5.6";
+  name = "kdelibs-${version}";
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/stable/3.5.6/src/kdelibs-3.5.6.tar.bz2;
-    sha256 = "0p0v4gr61qlvnpg9937chrjh3s7xi3nn7wvrg1xjf8dfqq164xh6";
+    url = "mirror://kde/stable/${version}/src/kdelibs-${version}.tar.bz2";
+    md5 = "50ed644f2ec91963570fe2b155652957";
   };
 
   passthru = {inherit openssl libX11 libjpeg qt;};
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libX11 libXt libXext zlib perl qt openssl pcre 
     pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
-    libtool freetype bzip2
+    libtool freetype bzip2 cups
   ];
 
   configureFlags = "

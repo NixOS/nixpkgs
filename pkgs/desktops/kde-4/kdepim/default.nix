@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdepim-3.92.0.tar.bz2;
+    url = mirror://kde/unstable/3.92/src/kdepim-3.92.0.tar.bz2;
     sha256 = "1wlq1h7j07f24n1mjnv9wbfsxn2vn24qfn5dgn4j4fsl84qha16i";
   };
 

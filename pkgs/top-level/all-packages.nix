@@ -3825,7 +3825,7 @@ rec {
     inherit
       fetchurl stdenv zlib perl openssl pcre pkgconfig
       libjpeg libpng libtiff libxml2 libxslt libtool
-      expat freetype bzip2;
+      expat freetype bzip2 cups;
     inherit (xlibs) libX11 libXt libXext;
     qt = qt3;
   };

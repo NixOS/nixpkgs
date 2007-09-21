@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   name = "kdelibs-4.0beta1";
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdelibs-3.92.0.tar.bz2;
+    url = mirror://kde/unstable/3.92/src/kdelibs-3.92.0.tar.bz2;
     sha256 = "19jd9nx5g0ayxavj3ys52wx5ppxw9yr9jylxk7qplxsm525ryf1p";
   };
 

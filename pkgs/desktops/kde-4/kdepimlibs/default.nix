@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   name = "kdepimlibs-4.0beta1";
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdepimlibs-3.92.0.tar.bz2;
+    url = mirror://kde/unstable/3.92/src/kdepimlibs-3.92.0.tar.bz2;
     sha256 = "0q7zzj8n282xaxvdij74fb17w5c1vja7izxfrkcbq7arn9f40wbx";
   };
 

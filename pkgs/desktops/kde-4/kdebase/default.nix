@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/unstable/3.92/src/kdebase-3.92.0.tar.bz2;
+    url = mirror://kde/unstable/3.92/src/kdebase-3.92.0.tar.bz2;
     sha256 = "1xh5a93l6anmix358fll4xfqm5fl4hpm1ksmlab8hr8s7vqng707";
   };
 

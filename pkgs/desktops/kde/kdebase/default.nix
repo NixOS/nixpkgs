@@ -2,12 +2,14 @@
 , qt, kdelibs, openssl, bzip2, fontconfig
 }:
 
+let version = "3.5.7"; in
+
 stdenv.mkDerivation {
-  name = "kdebase-3.5.6";
+  name = "kdebase-3.5.7";
   
   src = fetchurl {
-    url = http://ftp.scarlet.be/pub/kde/stable/3.5.6/src/kdebase-3.5.6.tar.bz2;
-    sha256 = "0zmxnw4p8bkd2b867cwdzdnp36ikwnz0ffrbx6d3ylz1nbw3anr4";
+    url = "mirror://kde/stable/${version}/src/kdebase-${version}.tar.bz2";
+    md5 = "b421e01b3ee712549ee967f58ed24de0";
   };
 
   buildInputs = [
