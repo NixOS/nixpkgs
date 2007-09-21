@@ -709,6 +709,11 @@ rec {
     inherit (xorg) imake;
   };
 
+  xclip = import ../tools/misc/xclip {
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXmu;
+  };
+
   xmlroff = import ../tools/typesetting/xmlroff {
     inherit fetchurl stdenv pkgconfig libxml2 libxslt popt;
     inherit (gtkLibs) glib pango gtk;
