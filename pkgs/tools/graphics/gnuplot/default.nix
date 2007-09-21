@@ -1,30 +1,29 @@
-{stdenv, fetchurl, zlib, libpng, texinfo,
-	libX11 ? null,
-	libXt ? null,
-	libXpm ? null,
-	libXaw ? null,
-	x11Support ? false
+{ stdenv, fetchurl, zlib, gd, texinfo
+, libX11 ? null
+, libXt ? null
+, libXpm ? null
+, libXaw ? null
+, x11Support ? false
 }:
 
 assert x11Support -> ((libX11 != null) && 
-	(libXt != null) && (libXpm != null) &&
-	(libXaw != null));
+    (libXt != null) && (libXpm != null) &&
+    (libXaw != null));
 
 stdenv.mkDerivation {
   # Gnuplot (which isn't open source) has a license that requires that
   # we "add special version identification to distinguish your version
   # in addition to the base release version number".  Hence the "nix"
   # suffix.
-  name = "gnuplot-4.0-nix";
+  name = "gnuplot-4.2.2-nix";
 
-#  builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/gnuplot/gnuplot-4.0.0.tar.gz;
-    md5 = "66258443d9f93cc4f46b147dac33e63a";
+    url = mirror://sourceforge/gnuplot/gnuplot-4.2.2.tar.gz;
+    sha256 = "14ca8wwdb4hdsgs51fqlrkcny3d4rm1vs54sfg5d0hr7iw2qlvvm";
   };
 
   configureFlags = if x11Support then ["--with-x"] else ["--without-x"];
 
-  buildInputs = [zlib libpng texinfo] ++
-	(if x11Support then [libX11 libXt libXpm libXaw] else []);
+  buildInputs = [zlib gd texinfo] ++
+    (if x11Support then [libX11 libXt libXpm libXaw] else []);
 }

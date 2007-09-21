@@ -429,7 +429,7 @@ rec {
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib libpng texinfo;
+    inherit fetchurl stdenv zlib gd texinfo;
   };
 
   gnuplotX = import ../tools/graphics/gnuplot {
@@ -1536,6 +1536,10 @@ rec {
 
   gettext_alts = import ../development/libraries/gettext {
     inherit fetchurl stdenv;
+  };
+
+  gd = import ../development/libraries/gd {
+    inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
   };
 
   gdal = stdenv.mkDerivation {
