@@ -433,9 +433,9 @@ rec {
   };
 
   gnuplotX = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib libpng texinfo;
-	inherit (xlibs) libX11 libXt libXaw libXpm;
-	x11Support = true;
+    inherit fetchurl stdenv zlib gd texinfo;
+    inherit (xlibs) libX11 libXt libXaw libXpm;
+    x11Support = true;
   };
 
   gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
