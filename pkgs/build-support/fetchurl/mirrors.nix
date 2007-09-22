@@ -1,4 +1,4 @@
-{
+rec {
   # Content-addressable Nix mirrors.
   hashedMirrors = [
     http://nix.cs.uu.nl/dist/tarballs
@@ -18,6 +18,8 @@
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
   ];
+
+  sf = sourceforge;
 
   # GNU.
   gnu = [
