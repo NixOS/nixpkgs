@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/office/openoffice/stable/2.3.0/OOo_2.3.0_src_core.tar.bz2;
+	url = http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=core&version=2.3.0;
+	name = "OOo_2.3.0_src_core.tar.bz2";
     sha256 = "0mkxn9qj3f03rjkmxc4937gr2w429hnxzb9j5j2grdknfga5a1c3";
   };
 
