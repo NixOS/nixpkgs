@@ -2762,13 +2762,13 @@ rec {
         extraConfig = "CONFIG_FB_SPLASH=y";
       }
     ]++
-	/*(if (getConfig ["kernel" "no_hz"] false) then */[
+	(if (getConfig ["kernel" "no_hz"] false) then [
 	{
 		name = "Enable-NO_HZ";
-		patch = /dev/null;
+		patch = ../lib/empty.file;
 		extraConfig = "NO_HZ=y\n";
 	}
-	]/* else [])*/
+	] else [])
 	;
   };
 
