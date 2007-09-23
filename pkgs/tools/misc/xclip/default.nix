@@ -1,4 +1,4 @@
-crgs:
+args:
 args.stdenv.mkDerivation {
   name = "xclip-0.08";
 
