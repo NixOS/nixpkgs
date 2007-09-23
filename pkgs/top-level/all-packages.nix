@@ -2895,6 +2895,10 @@ rec {
     inherit stdenv fetchurl pam libxcrypt;
   };
 
+  powertop = import ../os-specific/linux/powertop {
+    inherit fetchurl stdenv ncurses;
+  };
+
   procps = import ../os-specific/linux/procps {
     inherit fetchurl stdenv ncurses;
   };
