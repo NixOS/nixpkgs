@@ -3632,9 +3632,9 @@ rec {
     #enableOfficialBranding = true;
   };
 
-  timidity = import ../tools/misc/timidity {
-    inherit fetchurl stdenv alsaLib;
-  };
+  #timidity = import ../tools/misc/timidity {
+  #  inherit fetchurl stdenv alsaLib;
+  #};
 
   unison = import ../applications/networking/sync/unison {
     inherit fetchurl stdenv ocaml lablgtk makeWrapper;
