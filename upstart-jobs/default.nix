@@ -162,6 +162,7 @@ import ../upstart-jobs/gather.nix {
       libX11 = pkgs.xlibs.libX11;
       libXext = pkgs.xlibs.libXext;
       fontDirectories = import ../system/fonts.nix {inherit pkgs;};
+	isClone = config.get ["services" "xserver" "isClone"];
     })
 
   # Apache httpd.

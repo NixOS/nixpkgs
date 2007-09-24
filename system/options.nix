@@ -676,6 +676,16 @@
     ";
   }
 
+  {
+    name = ["services" "xserver" "isClone"];
+    default = "on";
+    example = "off";
+    description = "
+      Whether to enable the X server clone mode for dual-head.
+    ";
+  }
+
+
   
   {
     name = ["services" "httpd" "enable"];

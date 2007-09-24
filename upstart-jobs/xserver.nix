@@ -16,6 +16,8 @@
 , # List of font directories.
   fontDirectories
 
+, # Is Clone mode on?
+  isClone ? "on"
 }:
 
 let
@@ -68,7 +70,7 @@ let
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories videoDriver resolutions;
+    inherit fontDirectories videoDriver resolutions isClone;
     buildCommand = "
       buildCommand= # urgh, don't substitute this
 
@@ -76,7 +78,7 @@ let
       for i in $fontDirectories; do
         if test \"\${i:0:\${#NIX_STORE}}\" == \"$NIX_STORE\"; then
           for j in $(find $i -name fonts.dir); do
-            fontPaths=\"\${fontPaths}FontPath \\\"$(dirname $j)\\\"\\n\"
+            fontPaths=\"\${fontPaths}FontPath \\\"$(dirname $j)\\\"\n\"
           done
         fi
       done
@@ -84,13 +86,13 @@ let
       export modulePaths=
       for i in $(find ${toString modules} -type d); do
         if ls $i/*.so 2> /dev/null; then
-          modulePaths=\"\${modulePaths}ModulePath \\\"$i\\\"\\n\"
+          modulePaths=\"\${modulePaths}ModulePath \\\"$i\\\"\n\"
         fi
       done
 
       #if only my gf were this dirty
       if test \"${toString videoDriver}\" == \"nvidia\"; then
-        export moduleSection=\"Load  \\\"glx\\\" \\n \\
+        export moduleSection=\"Load  \\\"glx\\\" \\
  SubSection \\\"extmod\\\" \\n \\
  Option \\\"omit xfree86-dga\\\" \\n \\
  EndSubSection \\n \"
@@ -103,7 +105,7 @@ let
         export extensions=\"Option       \\\"Composite\\\" \\\"Enable\\\" \\n \"
 
       else
-        export moduleSection='Load \"glx\" \\n \\
+        export moduleSection='Load \"glx\" 
           Load \"dri\" '
         export screen=
         export device=
