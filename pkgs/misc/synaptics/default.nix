@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     md5 = "1102cd575045640a064ab6f9b1e391af";
   };
 
-  makeFlags="DESTDIR=$out PREFIX=/";
+  makeFlags="DESTDIR=\${out} PREFIX=/";
   buildInputs = [libX11 pkgconfig xorgserver libXi libXext];
 
   meta = {
