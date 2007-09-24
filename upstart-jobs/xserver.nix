@@ -105,6 +105,12 @@ let
 
 	corePointer = (if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]");
 
+	internalAGPGART = (if (getCfg "useInternalAGPGART") == "yes" then
+		"  Option \"UseInternalAGPGART\" \"yes\"" else 
+		if (getCfg "useInternalAGPGART") == "no" then
+		"  Option \"UseInternalAGPGART\" \"no\"" else 
+		"    ");
+
 
     buildCommand = "
       buildCommand= # urgh, don't substitute this

@@ -720,6 +720,23 @@
 	";
   }  
 
+  {
+	name = ["services" "xserver" "layout"];
+	default = "us";
+	description ="
+	Keyboard layout.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "useInternalAGPGART"];
+	default = "";
+	example = "no";
+	description ="
+	Just the wrapper for an xorg.conf option.
+	";
+  }  
+
   
   {
     name = ["services" "httpd" "enable"];
