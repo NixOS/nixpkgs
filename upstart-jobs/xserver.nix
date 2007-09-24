@@ -4,6 +4,7 @@
 , xkeyboard_config
 , openssh, x11_ssh_askpass
 , nvidiaDrivers, libX11, libXext
+, synaptics
 
 , config
 
@@ -64,13 +65,42 @@ let
     ++ optional (videoDriver == "vesa") xorg.xf86videovesa
     ++ optional (videoDriver == "sis") xorg.xf86videosis
     ++ optional (videoDriver == "i810") xorg.xf86videoi810
-    ++ optional (videoDriver == "intel") xorg.xf86videointel;
-
+    ++ optional (videoDriver == "intel") xorg.xf86videointel
+    ++ (optional (getCfg "isSynaptics") [(synaptics+"/"+xorg.xorgserver) xorg.xf86inputevdev]);
     
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories videoDriver resolutions isClone;
+    inherit fontDirectories videoDriver resolutions isClone synaptics;
+
+	synapticsInputDevice = (if getCfg "isSynaptics" then "
+	Section \"InputDevice\"
+	 Identifier \"Touchpad[0]\"
+	 Driver \"synaptics\"
+	 Option \"Device\" \""+(getCfg "devSynaptics")+"\"
+	 Option \"Protocol\" \"PS/2\"
+	 Option \"LeftEdge\" \"1700\"
+	 Option \"RightEdge\" \"5300\"
+	 Option \"TopEdge\" \"1700\"
+	 Option \"BottomEdge\" \"4200\"
+	 Option \"FingerLow\" \"25\"
+	 Option \"FingerHigh\" \"30\"
+	 Option \"MaxTapTime\" \"180\"
+	 Option \"MaxTapMove\" \"220\"
+	 Option \"VertScrollDelta\" \"100\"
+	 Option \"MinSpeed\" \"0.06\"
+	 Option \"MaxSpeed\" \"0.12\"
+	 Option \"AccelFactor\" \"0.0010\"
+	 Option \"SHMConfig\" \"on\"
+	 Option \"Repeater\" \"/dev/input/mice\"
+	 Option \"TapButton1\" \"1\"
+	 Option \"TapButton2\" \"2\"
+	 Option \"TapButton3\" \"3\"
+	EndSection " else "");
+
+	corePointer = (if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]");
+
+
     buildCommand = "
       buildCommand= # urgh, don't substitute this
 

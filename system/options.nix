@@ -686,6 +686,24 @@
   }
 
 
+  {
+    name = ["services" "xserver" "isSynaptics"];
+    default = false;
+    example = true;
+    description = "
+      Whether to replace mouse with touchpad.
+    ";
+  }
+  
+  { 
+    name = ["services" "xserver" "devSynaptics"];
+    default = "/dev/input/event0";
+    description = "
+      Event device for Synaptics touchpad.
+    ";
+  }
+  
+
   
   {
     name = ["services" "httpd" "enable"];
