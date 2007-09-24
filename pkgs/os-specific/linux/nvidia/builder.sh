@@ -78,9 +78,13 @@ ln -sf /usr/lib/libglx.la libglx.la;
 ln -sf /usr/lib/libglx.so.1 libglx.so;
 ln -sf /usr/lib/libglx.so.1 libglx.so.1;
 ln -sf /usr/lib/nvidia_drv.so nvidia_drv.so;
-ln -sf $out/src/nv/nvidia.ko $kernelOutPath/lib/modules/*-default/kernel/drivers/video/nvidia/nvidia.ko;
-rm /var/run/opengl-driver
-ln -sf /var/run/opengl-driver $out
+
+rm /var/run/opengl-driver;
+ln -sf /var/run/opengl-driver $out;
+
+kerneldrvnvpath=$kernelOutPath/lib/modules/*-default/kernel/drivers/video/nvidia;
+echo TODO kerneldrvnvpath: \$kerneldrvnvpath
+#ln -sf $out/src/nv/nvidia.ko \$kerneldrvnvpath/nvidia.ko;
 "
 #TODO ADD ln -sf is sometimes not strong enough ...
 
