@@ -702,7 +702,23 @@
       Event device for Synaptics touchpad.
     ";
   }
-  
+
+  {
+	name = ["services" "xserver" "layout"];
+	default = "us";
+	description ="
+	Keyboard layout.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "xkbOptions"];
+	default = "";
+	example = "grp:caps_toggle, grp_led:scroll";
+	description ="
+	X keyboard options; layout switching goes here.
+	";
+  }  
 
   
   {

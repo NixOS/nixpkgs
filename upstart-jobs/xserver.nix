@@ -98,6 +98,11 @@ let
 	 Option \"TapButton3\" \"3\"
 	EndSection " else "");
 
+	xkbOptions = (if (getCfg "xkbOptions") == "" then "" else 
+		"  Option \"XkbOptions\" \""+(getCfg "xkbOptions")+"\"");
+
+	layout = getCfg "layout";
+
 	corePointer = (if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]");
 
 
