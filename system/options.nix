@@ -1118,6 +1118,15 @@ root        ALL=(ALL) SETENV: ALL
     ";
   }
 
+  {
+    name = ["fonts" "extraFonts"];
+    default = pkgs:[];
+    description = "
+	Function, returning list of additional fonts.
+    ";
+  }
+
+ 
   
   {
     name = ["sound" "enable"];

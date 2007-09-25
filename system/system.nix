@@ -309,7 +309,7 @@ rec {
   # kernel, the Upstart services, the init scripts, etc.) as well as a
   # script `switch-to-configuration' that activates the configuration
   # and makes it bootable.
-  system = pkgs.stdenv.mkDerivation {
+  system = pkgs.checker (pkgs.stdenv.mkDerivation {
     name = "system";
     builder = ./system.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
@@ -335,7 +335,6 @@ rec {
       pkgs.upstart # for initctl
     ];
     configurationName = config.get ["boot" "configurationName"];
-  };
-
-
+  }) (pkgs.getConfig ["checkConfigurationOptions"] false) 
+	config.declarations configuration ;
 }

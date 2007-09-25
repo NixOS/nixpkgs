@@ -161,7 +161,7 @@ import ../upstart-jobs/gather.nix {
         openssh x11_ssh_askpass nvidiaDrivers synaptics;
       libX11 = pkgs.xlibs.libX11;
       libXext = pkgs.xlibs.libXext;
-      fontDirectories = import ../system/fonts.nix {inherit pkgs;};
+      fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
 	isClone = config.get ["services" "xserver" "isClone"];
     })
 

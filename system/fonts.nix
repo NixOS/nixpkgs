@@ -1,4 +1,4 @@
-{pkgs}:
+{pkgs , config}:
 
 [
   # - the user's .fonts directory
@@ -18,4 +18,6 @@
   pkgs.xorg.fontbh100dpi
   pkgs.xorg.fontmiscmisc
   pkgs.xorg.fontcursormisc
-]
+] ++
+((config.get ["fonts" "extraFonts"]) pkgs)
+

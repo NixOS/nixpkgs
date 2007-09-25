@@ -120,7 +120,7 @@ import ../helpers/make-etc.nix {
   ++ (optional ["fonts" "enableFontConfig"] { 
     source = pkgs.runCommand "fonts.conf"
       { 
-        fontDirectories = import ../system/fonts.nix {inherit pkgs;};
+        fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
         buildInputs = [pkgs.libxslt];
         inherit (pkgs) fontconfig;
       }
