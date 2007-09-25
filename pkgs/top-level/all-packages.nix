@@ -197,6 +197,15 @@ rec {
       } // extraAttrs co  // co.pass // co.flags_prefixed );
   */
 
+  # Check absence of non-used options
+	checker = x: flag: opts: config: 
+		(if flag then let result=( 
+			(import ../build-support/checker) 
+			opts config); in
+			(if (result==null) then x else
+			abort (toString result))
+		else x);
+
   ### STANDARD ENVIRONMENT
 
 
@@ -274,7 +283,6 @@ rec {
   nukeReferences = import ../build-support/nuke-references/default.nix {
     inherit stdenv;
   };
-
 
   ### TOOLS
 
@@ -2766,9 +2774,18 @@ rec {
 	{
 		name = "Enable-NO_HZ";
 		patch = ../lib/empty.file;
-		extraConfig = "NO_HZ=y\n";
+		extraConfig = "CONFIG_NO_HZ=y\n";
 	}
 	] else [])
+	++
+	(if (getConfig ["kernel" "timer_stats"] false) then [
+	{
+		name = "Enable-TIMER_STATS";
+		patch = ../lib/empty.file;
+		extraConfig = "CONFIG_TIMER_STATS=y\n";
+	}
+	] else [])
+	
 	;
   };
 
