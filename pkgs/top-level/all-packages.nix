@@ -2671,6 +2671,9 @@ rec {
 
   kernel = kernel_2_6_21;
 
+  systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
+	kernel_2_6_22 else kernel);
+
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -2810,7 +2813,8 @@ rec {
   };
 
   klibc = import ../os-specific/linux/klibc {
-    inherit fetchurl stdenv perl bison mktemp kernel;
+    inherit fetchurl stdenv perl bison mktemp;
+	kernel = systemKernel;
   };
 
   kvm = kvm12;
@@ -3405,6 +3409,10 @@ rec {
 
   lynx = import ../applications/networking/browsers/lynx {
     inherit fetchurl stdenv ncurses openssl;
+  };
+
+  maxima = import ../applications/misc/maxima {
+    inherit fetchurl stdenv clisp;
   };
 
   mercurial = import ../applications/version-management/mercurial {
