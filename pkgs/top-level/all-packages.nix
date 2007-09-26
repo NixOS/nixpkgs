@@ -2788,7 +2788,23 @@ rec {
 		extraConfig = "CONFIG_TIMER_STATS=y\n";
 	}
 	] else [])
-	
+	++
+	(if (getConfig ["kernel" "usb_suspend"] false) then [
+	{
+		name = "Enable-USB_SUSPEND";
+		patch = ../lib/empty.file;
+		extraConfig = "CONFIG_USB_SUSPEND=y\n";
+	}
+	] else [])
+	++
+	(if (getConfig ["kernel" "no_irqbalance"] false) then [
+	{
+		name = "Disable-IRQBALANCE";
+		patch = ../lib/empty.file;
+		extraConfig = "# CONFIG_IRQBALANCE is not set\n";
+	}
+	] else [])
+
 	;
   };
 
