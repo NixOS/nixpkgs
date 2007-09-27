@@ -2804,6 +2804,13 @@ rec {
 		extraConfig = "# CONFIG_IRQBALANCE is not set\n";
 	}
 	] else [])
+	++
+	[{
+
+		name = "External-config";
+		patch = ../lib/empty.file;
+		extraConfig =( getConfig ["kernel" "addConfig"] "");
+	}]
 
 	;
   };
