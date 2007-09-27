@@ -313,7 +313,7 @@ rec {
     name = "system";
     builder = ./system.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
-    inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils;
+    inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils upstart;
     grubDevice = config.get ["boot" "grubDevice"];
     kernelParams =
       (config.get ["boot" "kernelParams"]) ++

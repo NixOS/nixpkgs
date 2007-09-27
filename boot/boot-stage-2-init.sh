@@ -115,7 +115,10 @@ export MODULE_DIR=@kernel@/lib/modules/
 @shell@ @bootLocal@
 
 
-# Start Upstart's init.
+# Start Upstart's init.  We start it through the
+# /var/run/current-system symlink indirection so that we can upgrade
+# init in a running system by changing the symlink and sending init a
+# HUP signal.
 export UPSTART_CFG_DIR=/etc/event.d
 setPath "@upstartPath@"
-exec @upstart@/sbin/init -v
+exec /var/run/current-system/upstart/sbin/init -v

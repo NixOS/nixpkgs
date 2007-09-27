@@ -9,6 +9,7 @@ ln -s $initrd $out/initrd
 ln -s $activateConfiguration $out/activate
 ln -s $etc/etc $out/etc
 ln -s $systemPath $out/sw
+ln -s $upstart $out/upstart
 
 echo "$kernelParams" > $out/kernel-params
 echo "$configurationName" > $out/configuration-name
