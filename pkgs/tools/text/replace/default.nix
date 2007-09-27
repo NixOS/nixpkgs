@@ -10,6 +10,8 @@ stdenv.mkDerivation {
   buildInputs = [];
   makeFlags = " TREE=\$(out) ";
 
+  postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
+
   meta = {
     description = "
 	Replace verbatim strings. Sed is not fit to do it. Replace is.
