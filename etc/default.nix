@@ -101,7 +101,7 @@ import ../helpers/make-etc.nix {
       source = pkgs.substituteAll {
         src = ./profile.sh;
         inherit systemPath wrapperDir;
-        inherit (pkgs) kernel glibc;
+        inherit (pkgs) systemKernel glibc;
         timeZone = config.get ["time" "timeZone"];
         defaultLocale = config.get ["i18n" "defaultLocale"];
       };
