@@ -2818,7 +2818,19 @@ rec {
 
   kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
+    kernelPatches =
+	[{
+		name = "patch-2.6.23-rc8";
+		patch = fetchurl {
+			url = http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.23-rc8.bz2;
+			sha256 = "1007y8z9zs32fcm1m9ic8dp01jfj7550pr0l2sbhxlwr7v6cy554";
+		};			
+	}
+	]
+	++
+	 [
+
+
       /*{ name = "ext3cow";
         patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
         extraConfig =
@@ -2887,16 +2899,6 @@ rec {
 		patch = ../lib/empty.file;
 		extraConfig =( getConfig ["kernel" "addConfig"] "");
 	}]
-	++
-	[{
-		name = "patch-2.6.23-rc8";
-		patch = fetchurl {
-			url = http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.23-rc8.bz2;
-			sha256 = "1007y8z9zs32fcm1m9ic8dp01jfj7550pr0l2sbhxlwr7v6cy554";
-		};			
-	}
-	]
-
 	;
   };
 
