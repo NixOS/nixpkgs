@@ -964,6 +964,16 @@
     ";
   }
 
+  {
+	name = ["services" "udev" "addFirmware"];
+	default = [];
+	example = ["/mnt/big-storage/firmware/"];
+	description = "
+	To specify firmware that is not too spread to ensure 
+	a package, or have an interactive process of extraction
+	and cannot be redistributed.
+";
+  }
   
   {
     name = ["installer" "nixpkgsURL"];

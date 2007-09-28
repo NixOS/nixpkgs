@@ -30,7 +30,9 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
       firmwareDirs =
-        pkgs.lib.optional (config.get ["networking" "enableIntel2200BGFirmware"]) pkgs.ipw2200fw;
+        pkgs.lib.optional (config.get ["networking" "enableIntel2200BGFirmware"]) pkgs.ipw2200fw
+	++
+	(config.get ["services" "udev" "addFirmware"]);
       extraUdevPkgs =
         pkgs.lib.optional (config.get ["services" "hal" "enable"]) pkgs.hal;
     })
