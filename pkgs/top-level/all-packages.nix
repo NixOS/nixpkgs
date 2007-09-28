@@ -2672,7 +2672,8 @@ rec {
   kernel = kernel_2_6_21;
 
   systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
-	kernel_2_6_22 else kernel);
+	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
+	kernel_2_6_23 else kernel);
 
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -2814,6 +2815,91 @@ rec {
 
 	;
   };
+
+  kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      /*{ name = "ext3cow";
+        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
+        extraConfig =
+        "CONFIG_EXT3COW_FS=m\n" +
+        "CONFIG_EXT3COW_FS_XATTR=y\n" +
+        "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
+        "CONFIG_EXT3COW_FS_SECURITY=y\n";
+      }*/
+      { name = "paravirt-nvidia";
+        patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
+      }
+      /*
+      { name = "skas-2.6.20-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
+          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
+        };
+        extraConfig =
+          "CONFIG_PROC_MM=y\n" +
+          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
+      }
+      */
+      { name = "fbsplash-0.9.2-r5-2.6.21";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
+          sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
+        };
+        extraConfig = "CONFIG_FB_SPLASH=y";
+      }
+    ]++
+	(if (getConfig ["kernel" "no_hz"] false) then [
+	{
+		name = "Enable-NO_HZ";
+		patch = ../lib/empty.file;
+		extraConfig = "CONFIG_NO_HZ=y\n";
+	}
+	] else [])
+	++
+	(if (getConfig ["kernel" "timer_stats"] false) then [
+	{
+		name = "Enable-TIMER_STATS";
+		patch = ../lib/empty.file;
+		extraConfig = "CONFIG_TIMER_STATS=y\n";
+	}
+	] else [])
+	++
+	(if (getConfig ["kernel" "usb_suspend"] false) then [
+	{
+		name = "Enable-USB_SUSPEND";
+		patch = ../lib/empty.file;
+		extraConfig = "CONFIG_USB_SUSPEND=y\n";
+	}
+	] else [])
+	++
+	(if (getConfig ["kernel" "no_irqbalance"] false) then [
+	{
+		name = "Disable-IRQBALANCE";
+		patch = ../lib/empty.file;
+		extraConfig = "# CONFIG_IRQBALANCE is not set\n";
+	}
+	] else [])
+	++
+	[{
+
+		name = "External-config";
+		patch = ../lib/empty.file;
+		extraConfig =( getConfig ["kernel" "addConfig"] "");
+	}]
+	++
+	[{
+		name = "patch-2.6.23-rc8";
+		patch = fetchurl {
+			url = http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.23-rc8.bz2;
+			sha256 = "1007y8z9zs32fcm1m9ic8dp01jfj7550pr0l2sbhxlwr7v6cy554";
+		};			
+	}
+	]
+
+	;
+  };
+
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
