@@ -1,5 +1,5 @@
 export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
-export MODULE_DIR=@kernel@/lib/modules
+export MODULE_DIR=@systemKernel@/lib/modules
 export NIX_CONF_DIR=/nix/etc/nix
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export PAGER=less
