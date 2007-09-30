@@ -10,6 +10,7 @@ let
 		password = getCfg "password";
 		server = getCfg "server";
 		keepAlive = getCfg "keepAlive";
+		everPing = getCfg "everPing";
 	};
 in
 {

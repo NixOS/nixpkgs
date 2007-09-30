@@ -1248,6 +1248,16 @@ root        ALL=(ALL) SETENV: ALL
 ";
   }
 
+  {
+	name = ["services" "gw6c" "everPing"];
+	default = "1000000";
+	example = "2";
+	description = "
+	Gateway6 manual ping period.
+";
+  }
+
+
 	{
 		name = ["services" "ircdHybrid" "enable"];
 		default = false;
