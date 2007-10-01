@@ -1478,6 +1478,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  cyrus_sasl = import ../development/libraries/cyrus-sasl {
+	  inherit fetchurl stdenv openssl db4 gettext;
+  };
+
   db4 = db45;
 
   db44 = import ../development/libraries/db4/db4-4.4.nix {
