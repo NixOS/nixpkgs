@@ -1470,6 +1470,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  cppunit = import ../development/libraries/cppunit {
+	  inherit fetchurl stdenv;
+  };
+
   cracklib = import ../development/libraries/cracklib {
     inherit fetchurl stdenv;
   };
