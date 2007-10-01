@@ -1986,6 +1986,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+# Also known as librdf, includes raptor and rasqal
+  redland = import ../development/libraries/redland {
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl;
+	bdb = db4;
+  };
+
   rte = import ../development/libraries/rte {
     inherit fetchurl stdenv;
   };
