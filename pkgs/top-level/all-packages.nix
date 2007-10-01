@@ -1521,6 +1521,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  exiv2 = import ../development/libraries/exiv2 {
+	  inherit fetchurl stdenv zlib;
+  };
+
   expat = import ../development/libraries/expat {
     inherit fetchurl stdenv;
   };
