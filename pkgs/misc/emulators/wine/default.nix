@@ -7,24 +7,18 @@ assert stdenv.isLinux;
 let lib = import ../../../lib/default.nix; in
 
 stdenv.mkDerivation {
-  name = "wine-0.9.43";
+  name = "wine-0.9.46";
 
   src = fetchurl {
-    url = mirror://sourceforge/wine/wine-0.9.43.tar.bz2;
-    sha256 = "0r6rz3zi5p7razn957lf2zy290hp36jrlfz4cpy23y9179r8i66x";
-  };
+		url = mirror://sourceforge/wine/wine-0.9.46.tar.bz2;
+		sha256 = "0c5fapw38bivipi8yzci3swxyhl9g67dpicqzslwmffwbi9y9z3i";
+	};
 
   buildInputs = [
     xlibs.xlibs flex bison xlibs.libXi mesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm alsaLib ncurses
     libpng libjpeg lcms fontforge
-  ];
-
-  patches = [
-    # Based on http://bugs.winehq.org/attachment.cgi?id=5708,
-    # see http://bugs.winehq.org/show_bug.cgi?id=2398.
-    ./opengl-child-window.patch
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
