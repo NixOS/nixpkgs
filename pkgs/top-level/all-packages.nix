@@ -1051,7 +1051,7 @@ rec {
   };
 
   guile = import ../development/interpreters/guile {
-    inherit fetchurl stdenv ncurses readline;
+    inherit fetchurl stdenv ncurses readline libtool gmp;
   };
 
   kaffe =  import ../development/interpreters/kaffe {
