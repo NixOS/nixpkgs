@@ -3901,6 +3901,7 @@ rec {
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
+    base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
   xterm = import ../applications/misc/xterm {
