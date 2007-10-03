@@ -1109,14 +1109,25 @@ root        ALL=(ALL) SETENV: ALL
 
 
   {
-    name = ["fonts" "enableFontConfig"];
+    name = ["fonts" "enableFontConfig"]; # !!! should be enableFontconfig
     default = true;
     description = "
-      If enabled, a fontconfig configuration file will be built
+      If enabled, a Fontconfig configuration file will be built
       pointing to a set of default fonts.  If you don't care about
       running X11 applications or any other program that uses
-      fontconfig, you can turn this option off and prevent a
+      Fontconfig, you can turn this option off and prevent a
       dependency on all those fonts.
+    ";
+  }
+
+  {
+    name = ["fonts" "enableGhostscriptFonts"];
+    default = false;
+    description = "
+      Whether to add the fonts provided by Ghostscript (such as
+      various URW fonts and the “Base-14” Postscript fonts) to the
+      list of system fonts, making them available to X11
+      applications.
     ";
   }
 

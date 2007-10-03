@@ -1,4 +1,4 @@
-{pkgs , config}:
+{pkgs, config}:
 
 [
   # - the user's .fonts directory
@@ -18,6 +18,8 @@
   pkgs.xorg.fontbh100dpi
   pkgs.xorg.fontmiscmisc
   pkgs.xorg.fontcursormisc
-] ++
-((config.get ["fonts" "extraFonts"]) pkgs)
+]
 
+++ pkgs.lib.optional (config.get ["fonts" "enableGhostscriptFonts"]) "${pkgs.ghostscript}/share/ghostscript/fonts"
+
+++ ((config.get ["fonts" "extraFonts"]) pkgs)
