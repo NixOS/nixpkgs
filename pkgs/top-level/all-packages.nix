@@ -4140,6 +4140,13 @@ rec {
     #inherit lib stdenv fetchurl;
     #inherit (xlibs) libX11;
   #};
+
+  # using the new configuration style proposal which is unstable
+  jackaudio = import ../misc/jackaudio {
+   inherit mkDerivationByConfigruation 
+           ncurses lib stdenv fetchurl;
+   flags = [ "posix_shm" "timestamps"];
+  };
  
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
