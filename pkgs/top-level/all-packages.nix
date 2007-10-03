@@ -3162,6 +3162,10 @@ rec {
   ### DATA
 
 
+  bakoma_ttf = import ../data/fonts/bakoma-ttf {
+    inherit fetchurl stdenv;
+  };
+
   corefonts = import ../data/fonts/corefonts {
     inherit fetchurl stdenv cabextract;
   };
