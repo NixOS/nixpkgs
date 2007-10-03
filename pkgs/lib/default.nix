@@ -76,12 +76,12 @@ rec {
 
 
   # Find the sole element in the list matching the specified
-  # predicate, or returns the default value.
-  findSingle = pred: default: list:
+  # predicate, returns `default' if no such element exists, or
+  # `multiple' if there are multiple matching elements.
+  findSingle = pred: default: multiple: list:
     let found = filter pred list;
     in if found == [] then default
-       else if tail found != [] then
-         abort "Multiple elements match predicate in findSingle."
+       else if tail found != [] then multiple
        else head found;
 
 
