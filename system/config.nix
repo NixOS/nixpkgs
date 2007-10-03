@@ -20,6 +20,7 @@ rec {
       decl =
         lib.findSingle (decl: lib.eqLists decl.name name)
           (abort ("Undeclared option `" + printName name + "'."))
+          (abort ("Multiple declarations for option `" + printName name + "'."))
           declarations;
       default =
         if !decl ? default

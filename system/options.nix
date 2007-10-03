@@ -721,14 +721,6 @@
   }  
 
   {
-	name = ["services" "xserver" "layout"];
-	default = "us";
-	description ="
-	Keyboard layout.
-	";
-  }  
-
-  {
 	name = ["services" "xserver" "useInternalAGPGART"];
 	default = "";
 	example = "no";
