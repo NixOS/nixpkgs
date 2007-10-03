@@ -133,21 +133,33 @@ let
 
       #if only my gf were this dirty
       if test \"${toString videoDriver}\" == \"nvidia\"; then
-        export moduleSection=\"Load  \\\"glx\\\" \\
- SubSection \\\"extmod\\\" \\n \\
- Option \\\"omit xfree86-dga\\\" \\n \\
- EndSubSection \\n \"
+        export moduleSection='
+          Load \"glx\"
+          SubSection \"extmod\"
+            Option \"omit xfree86-dga\"
+          EndSubSection
+        '
 
-        export screen=\"Option  \\\"AddARGBGLXVisuals\\\" \\\"true\\\" \\n \\
- Option  \\\"DisableGLXRootClipping\\\" \\\"true\\\" \\n \"
-        export device=\"Option       \\\"RenderAccel\\\" \\\"true\\\" \\n \\
- Option       \\\"AllowGLXWithComposite\\\" \\\"true\\\" \\n \\
- Option       \\\"AddARGBGLXVisuals\\\"     \\\"true\\\" \\n \"
-        export extensions=\"Option       \\\"Composite\\\" \\\"Enable\\\" \\n \"
+        export screen='
+          Option \"AddARGBGLXVisuals\" \"true\"
+          Option \"DisableGLXRootClipping\" \"true\"
+        '
+        
+        export device='
+          Option \"RenderAccel\" \"true\"
+          Option \"AllowGLXWithComposite\" \"true\"
+          Option \"AddARGBGLXVisuals\" \"true\"
+        '
+        
+        export extensions='
+          Option \"Composite\" \"Enable\"
+        '
 
       else
-        export moduleSection='Load \"glx\" 
-          Load \"dri\" '
+        export moduleSection='
+          Load \"glx\"
+          Load \"dri\"
+        '
         export screen=
         export device=
         export extensions=

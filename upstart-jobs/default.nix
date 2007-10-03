@@ -158,13 +158,14 @@ import ../upstart-jobs/gather.nix {
   ++ optional ["services" "xserver" "enable"]
     (import ../upstart-jobs/xserver.nix {
       inherit config;
-      inherit (pkgs) stdenv writeText lib xterm slim xorg mesa
+      inherit (pkgs) writeText lib xterm slim xorg mesa
         gnome compiz feh kdebase kdelibs xkeyboard_config
         openssh x11_ssh_askpass nvidiaDrivers synaptics;
+      stdenv = pkgs.stdenvNewSetupScript;
       libX11 = pkgs.xlibs.libX11;
       libXext = pkgs.xlibs.libXext;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
-	isClone = config.get ["services" "xserver" "isClone"];
+      isClone = config.get ["services" "xserver" "isClone"];
     })
 
   # Apache httpd.
