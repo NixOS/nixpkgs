@@ -2,12 +2,12 @@ args:
 if ((args ? startFPC) && (args.startFPC != null))
 	then 
 args.stdenv.mkDerivation {
-  name = "fpc-2.0.4";
+  name = "fpc-2.2.0";
 
   src = args.
 	fetchurl {
-		url = ftp://ftp.chg.ru/pub/lang/pascal/fpc/dist/source-2.0.4/fpcbuild-2.0.4.tar.gz;
-		sha256 = "0sxgmslxy891why3d5pwn7zh4w3wj75apmhc7l5czmfhn3f0gcsc";
+		url = ftp://freepascal.stack.nl/pub/fpc/dist/source-2.2.0/fpcbuild-2.2.0.tar.gz;
+		sha256 = "0pvsdmimknkgy8jgdz9kd7w5bs9fy5ynrgswpk0ib6x0y26zxijm";
 	};
 
   buildInputs = [args.startFPC args.gawk];
