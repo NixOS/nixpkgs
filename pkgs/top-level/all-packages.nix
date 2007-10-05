@@ -670,7 +670,7 @@ rec {
   };
 
   tightvnc = import ../tools/admin/tightvnc {
-    inherit fetchurl stdenv x11 zlib libjpeg;
+    inherit fetchurl stdenv x11 zlib libjpeg perl;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
   };
 
