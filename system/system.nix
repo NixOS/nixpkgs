@@ -162,6 +162,11 @@ rec {
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
+  # Font aggregation
+	fontDir = import ./fontdir.nix {
+		inherit (pkgs) stdenv;
+		inherit pkgs config;
+	};
 
   # The wrapper setuid programs (since we can't have setuid programs
   # in the Nix store).
@@ -322,6 +327,8 @@ rec {
     inherit activateConfiguration;
     inherit grubMenuBuilder;
     inherit etc;
+	fontDir = (if config.get ["fonts" "enableFontDir"] then
+		fontDir else null);
     inherit systemPath;
     kernel = kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";

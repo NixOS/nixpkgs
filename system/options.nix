@@ -1130,6 +1130,15 @@ root        ALL=(ALL) SETENV: ALL
       applications.
     ";
   }
+	{
+		name=["fonts" "enableFontDir"];
+		default = false;
+		description = "
+	Whether to create a directory with links to all fonts in share - 
+	so user can configure vncserver script one time (I mean per-user 
+	vncserver, so global service is not a good solution).
+";
+	}
 
   {
     name = ["fonts" "extraFonts"];
