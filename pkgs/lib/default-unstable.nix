@@ -209,10 +209,10 @@ rec {
            
   # calls chooseOptionsByFlags2 with some preprocessing
   # chooseOptionsByFlags2 returns an attribute set meant to be used to create new derivaitons.
-  # see mkDerivationByConfigruation in all-packages.nix and the examples given below.
+  # see mkDerivationByConfiguration in all-packages.nix and the examples given below.
   # You can just copy paste them into all-packages.nix to test them..
 
-  chooseOptionsByFlags = { flagConfig, args, optionals ? [], defaults ? [],
+  /*chooseOptionsByFlags = { flagConfig, args, optionals ? [], defaults ? [],
                            collectExtraPhaseActions ? [] } :
     let passedOptionals = filter ( x : __hasAttr x args ) optionals; # these are in optionals and in args
         # we simply merge in <optional_name> = { buildInputs = <arg.<optional_name>; pass = <arg.optional_name>; }
@@ -223,7 +223,7 @@ rec {
                passedOptionals ) );
 
     in chooseOptionsByFlags2 flagConfigWithOptionals collectExtraPhaseActions args 
-       ( (getAttr ["flags"] defaults args) ++ passedOptionals);
+       ( (getAttr ["flags"] defaults args) ++ passedOptionals);*/
 
   chooseOptionsByFlags2 = flagConfig : collectExtraPhaseActions : args : flags :
     let   
@@ -323,7 +323,7 @@ rec {
   # * extra phase dependend commands can be added
   #   Its easy to add your own stuff using co.collectAttrs or co.optsConcatStrs 
   #   ( perhaps this name will change?)
-  simpleFlagYesNoF = namePrefix : extraFlagAttrs : mkDerivationByConfigruation ( {
+/*  simpleFlagYesNoF = namePrefix : extraFlagAttrs : mkDerivationByConfiguration ( {
     flagConfig = {
       flag    = { name = namePrefix + "simpleYes"; 
                   cfgOption = [ "--Yes" "--you-dont-need-a-list" ]; 
@@ -380,7 +380,7 @@ rec {
       ";
     configurePhase = co.extraConfigureCmd;
     };
-  } // extraFlagAttrs );
+  } // extraFlagAttrs ); */
 
 
   simpleYes = simpleFlagYesNoF "" {} {

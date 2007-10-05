@@ -189,8 +189,8 @@ rec {
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
-  /*
-  mkDerivationByConfigruation = { flagConfig ? {}, optionals ? [], defaults ? [],  
+  
+  /*mkDerivationByConfiguration = ({ flagConfig ? {}, optionals ? [], defaults ? [],  
         extraAttrs, collectExtraPhaseActions ? []} :
     args: with args.lib; with args;
     if ( __isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
@@ -199,8 +199,8 @@ rec {
       args.stdenv.mkDerivation ( 
       {
         inherit (co) configureFlags buildInputs /*flags* /;
-      } // extraAttrs co  // co.pass // co.flags_prefixed );
-  */
+      } // extraAttrs co  // co.pass // co.flags_prefixed ));*/
+  
 
   # Check absence of non-used options
 	checker = x: flag: opts: config: 
@@ -4141,12 +4141,12 @@ rec {
     #inherit (xlibs) libX11;
   #};
 
-  # using the new configuration style proposal which is unstable
+  /*# using the new configuration style proposal which is unstable
   jackaudio = import ../misc/jackaudio {
-   inherit mkDerivationByConfigruation 
+   inherit mkDerivationByConfiguration 
            ncurses lib stdenv fetchurl;
    flags = [ "posix_shm" "timestamps"];
-  };
+  };*/
  
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
