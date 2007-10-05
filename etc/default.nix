@@ -125,6 +125,7 @@ import ../helpers/make-etc.nix {
         inherit (pkgs) fontconfig;
       }
       "xsltproc --stringparam fontDirectories \"$fontDirectories\" \\
+          --stringparam fontconfig \"$fontconfig\" \\
           ${./fonts/make-fonts-conf.xsl} $fontconfig/etc/fonts/fonts.conf \\
           > $out
       ";
