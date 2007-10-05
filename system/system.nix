@@ -229,7 +229,8 @@ rec {
   ]
   ++ pkgs.lib.optional (config.get ["security" "sudo" "enable"]) pkgs.sudo
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
-  ++ (config.get ["environment" "extraPackages"]) pkgs;
+  ++ (config.get ["environment" "extraPackages"]) pkgs
+  ++ pkgs.lib.optional (config.get ["fonts" "enableFontDir"]) fontDir;
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
@@ -327,8 +328,6 @@ rec {
     inherit activateConfiguration;
     inherit grubMenuBuilder;
     inherit etc;
-	fontDir = (if config.get ["fonts" "enableFontDir"] then
-		fontDir else null);
     inherit systemPath;
     kernel = kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
