@@ -166,6 +166,7 @@ rec {
 	fontDir = import ./fontdir.nix {
 		inherit (pkgs) stdenv;
 		inherit pkgs config;
+		inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
 	};
 
   # The wrapper setuid programs (since we can't have setuid programs
