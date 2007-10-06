@@ -124,6 +124,7 @@ rec {
   lib = library;
 
   library = import ../lib;
+  lib_unstable = import ../lib/default-unstable.nix;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
@@ -190,16 +191,16 @@ rec {
 
   # commented out because it's using the new configuration style proposal which is unstable
   
-  /*mkDerivationByConfiguration = ({ flagConfig ? {}, optionals ? [], defaults ? [],  
+  mkDerivationByConfiguration = ({ flagConfig ? {}, optionals ? [], defaults ? [],  
         extraAttrs, collectExtraPhaseActions ? []} :
-    args: with args.lib; with args;
+    args: with args.lib_unstable; with args;
     if ( __isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
     let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
-        inherit (co) configureFlags buildInputs /*flags* /;
-      } // extraAttrs co  // co.pass // co.flags_prefixed ));*/
+        inherit (co) configureFlags buildInputs /*flags*/;
+      } // extraAttrs co  // co.pass // co.flags_prefixed ));
   
 
   # Check absence of non-used options
@@ -4145,12 +4146,12 @@ rec {
     #inherit (xlibs) libX11;
   #};
 
-  /*# using the new configuration style proposal which is unstable
+  # using the new configuration style proposal which is unstable
   jackaudio = import ../misc/jackaudio {
    inherit mkDerivationByConfiguration 
            ncurses lib stdenv fetchurl;
    flags = [ "posix_shm" "timestamps"];
-  };*/
+  };
  
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
