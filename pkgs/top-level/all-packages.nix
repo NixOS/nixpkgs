@@ -296,6 +296,10 @@ rec {
     inherit fetchurl stdenv fuse;
   };
 
+  amule = import ../tools/networking/p2p/amule {
+    inherit fetchurl stdenv zlib wxGTK;
+  };
+
   axel = import ../tools/networking/axel {
     inherit fetchurl stdenv;
   };
