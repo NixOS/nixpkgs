@@ -2274,18 +2274,19 @@ rec {
   };
 
   perlHTMLParser = import ../development/perl-modules/generic perl {
-    name = "HTML-Parser-3.45";
+    name = "HTML-Parser-3.56";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Parser-3.45.tar.gz;
-      md5 = "c2ac1379ac5848dd32e24347cd679391";
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/HTML-Parser-3.56.tar.gz;
+      sha256 = "0x1h42r54aq4yqpwi7mla4jzia9c5ysyqh8ir2nav833f9jm6g2h";
     };
+    propagatedBuildInputs = [perlHTMLTagset];
   };
 
   perlHTMLTagset = import ../development/perl-modules/generic perl {
-    name = "HTML-Tagset-3.04";
+    name = "HTML-Tagset-3.10";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Tagset-3.04.tar.gz;
-      md5 = "b82e0f08c1ececefe98b891f30dd56a6";
+      url = http://search.cpan.org/CPAN/authors/id/P/PE/PETDANCE/HTML-Tagset-3.10.tar.gz;
+      sha256 = "05k292qy7jzjlmmybis8nncpnwwa4jfkm7q3gq6866ydxrzds9xh";
     };
   };
 
@@ -2306,12 +2307,12 @@ rec {
   };
 
   perlLWP = import ../development/perl-modules/generic perl {
-    name = "libwww-perl-5.803";
+    name = "libwww-perl-5.808";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/libwww-perl-5.803.tar.gz;
-      md5 = "3345d5f15a4f42350847254141725c8f";
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/libwww-perl-5.808.tar.gz;
+      sha256 = "1r5rslx68yplyd07bvjahjjrrqb56bhgg6gwdr9c16mv2s57gq12";
     };
-    propagatedBuildInputs = [perlURI perlHTMLParser];
+    propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
   };
 
   perlModulePluggable = import ../development/perl-modules/generic perl {
@@ -2344,9 +2345,19 @@ rec {
   perlURI = import ../development/perl-modules/generic perl {
     name = "URI-1.35";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/URI-1.35.tar.gz;
+      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/URI-1.35.tar.gz;
       md5 = "1a933b1114c41a25587ee59ba8376f7c";
     };
+  };
+
+  perlXMLDOM = import ../development/perl-modules/generic perl {
+    name = "XML-DOM-1.44";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
+      sha256 = "1r0ampc88ni3sjpzr583k86076qg399arfm9xirv3cw49k3k5bzn";
+    };
+#    buildInputs = [libxml2];
+    propagatedBuildInputs = [perlXMLRegExp perlXMLParser perlLWP];
   };
 
   perlXMLLibXML = import ../development/perl-modules/generic perl {
@@ -2379,6 +2390,14 @@ rec {
 
   perlXMLParser = import ../development/perl-modules/XML-Parser {
     inherit fetchurl perl expat;
+  };
+
+  perlXMLRegExp = import ../development/perl-modules/generic perl {
+    name = "XML-RegExp-0.03";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/T/TJ/TJMATHER/XML-RegExp-0.03.tar.gz;
+      sha256 = "1gkarylvdk3mddmchcwvzq09gpvx5z26nybp38dg7mjixm5bs226";
+    };
   };
 
   perlXMLSAX = import ../development/perl-modules/generic perl {
