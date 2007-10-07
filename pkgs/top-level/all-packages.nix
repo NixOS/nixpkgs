@@ -384,6 +384,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  eprover = import ../tools/misc/eProver {
+    inherit fetchurl stdenv which tetex;
+  };
+
   exif = import ../tools/graphics/exif {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
