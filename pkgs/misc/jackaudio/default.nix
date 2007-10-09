@@ -1,7 +1,7 @@
 # Perhaps we can get some ideas from here ? http://gentoo-wiki.com/HOWTO_Jack 
 # still much to test but it compiles now
 args:
-args.mkDerivationByConfigruation {
+args.mkDerivationByConfiguration {
     flagConfig = {
     mandatory = { buildInputs = [ ];};
 

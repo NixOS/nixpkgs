@@ -674,6 +674,10 @@ rec {
     inherit fetchurl stdenv libpcap;
   };
 
+  telnet = import ../tools/networking/telnet {
+    inherit fetchurl stdenv ncurses;
+  };
+
   testdisk = import ../tools/misc/testdisk {
     inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
   };
@@ -4170,11 +4174,13 @@ rec {
   #};
 
   # using the new configuration style proposal which is unstable
+  /*
   jackaudio = import ../misc/jackaudio {
    inherit mkDerivationByConfiguration 
            ncurses lib stdenv fetchurl;
    flags = [ "posix_shm" "timestamps"];
   };
+  */
  
   keynav = import ../tools/X11/keynav {
 	inherit stdenv fetchurl;
