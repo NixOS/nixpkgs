@@ -3249,6 +3249,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  vistafonts = import ../data/fonts/vista-fonts {
+    inherit fetchurl stdenv cabextract;
+  };
+
   xkeyboard_config = import ../data/misc/xkeyboard-config {
     inherit fetchurl stdenv perl perlXMLParser;
     inherit (xlibs) xkbcomp;
