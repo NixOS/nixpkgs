@@ -147,7 +147,9 @@ import ../helpers/make-etc.nix {
       { src = pkgs.writeText "sudoers-in" (config.get ["security" "sudo" "configFile"]);
       }
       # Make sure that the sudoers file is syntactically valid.
-      "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+      # (currently disabled - NIXOS-66)
+      #"${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+      "cp $src $out";
     target = "sudoers";
     mode = "0440";
   })
