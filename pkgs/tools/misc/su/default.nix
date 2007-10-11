@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   patches = [
     # PAM patch taken from SUSE's coreutils-6.7-5.src.rpm.
     ./su-pam.patch
+	../coreutils/gnulib-futimens.patch
   ];
   buildInputs = [pam];
   buildPhase = "
