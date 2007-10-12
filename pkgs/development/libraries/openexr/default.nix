@@ -1,10 +1,11 @@
-{stdenv, fetchurl, zlib}:
+args: with args;
 
 stdenv.mkDerivation {
-  name = "openexr-1.2.2";
+  name = "openexr-1.6.0";
   src = fetchurl {
-    url = http://savannah.nongnu.org/download/openexr/OpenEXR-1.2.2.tar.gz;
-    md5 = "a2e56af78dc47c7294ff188c8f78394b";
+    url = http://FIXME/openexr-1.6.0.tar.gz;
+	sha256 = "0mzbwavkbj26g43ar5jhdrqlvw9nq1mxh9l2044sqlcyharcnfq4";
   };
-  buildInputs = [zlib];
+  propagatedBuildInputs = [pkgconfig zlib ilmbase];
+  configureFlags = "--enable-shared --disable-static --enable-imfexamples";
 }

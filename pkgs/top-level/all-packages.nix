@@ -1717,6 +1717,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ilmbase = import ../development/libraries/ilmbase {
+	  inherit fetchurl stdenv;
+  };
+
   imlib = import ../development/libraries/imlib {
     inherit fetchurl stdenv libjpeg libtiff libungif libpng;
     inherit (xlibs) libX11 libXext xextproto;
@@ -1948,6 +1952,10 @@ rec {
 
   openal = import ../development/libraries/openal {
     inherit fetchurl stdenv alsaLib autoconf automake libtool;
+  };
+
+  openexr = import ../development/libraries/openexr {
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
   };
 
   openldap = import ../development/libraries/openldap {
