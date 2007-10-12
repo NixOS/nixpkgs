@@ -1951,7 +1951,7 @@ rec {
   };
 
   openldap = import ../development/libraries/openldap {
-    inherit fetchurl stdenv openssl;
+    inherit fetchurl stdenv openssl cyrus_sasl db4;
   };
 
   openssl = import ../development/libraries/openssl {
