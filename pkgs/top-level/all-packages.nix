@@ -1534,6 +1534,11 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  enchant = import ../development/libraries/enchant {
+	  inherit fetchurl stdenv aspell pkgconfig;
+	  inherit (gnome) glib;
+  };
+
   exiv2 = import ../development/libraries/exiv2 {
 	  inherit fetchurl stdenv zlib;
   };
