@@ -3,7 +3,8 @@
 let
 
   inherit (builtins)
-    head tail isList stringLength substring lessThan sub listToAttrs;
+    head tail isList stringLength substring lessThan sub
+    listToAttrs attrNames hasAttr;
 
 in
 
@@ -183,7 +184,7 @@ rec {
 		name (tail (tail list)) checker;
 
   # calls a function (f attr value ) for each record item. returns a list
-  mapRecordFlatten = f : r : map (attr: f attr (__getAttr attr r) ) (__attrNames r);
+  mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   av = attr : value : { inherit attr value; };
@@ -198,11 +199,11 @@ rec {
   any = f : l : fold logicalOR false (map f l);
 
   # iterates over a list of attributes collecting the attribute attr if it exists
-  catAttrs = attr : l : fold ( s : l : if (__hasAttr attr s) then [(__getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
 
   mergeAttrs = fold ( x : y : x // y) {};
 
-  flattenAttrs = set : map ( attr : __getAttr attr set) (__attrNames set);
+  flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
@@ -214,10 +215,10 @@ rec {
 
   chooseOptionsByFlags = { flagConfig, args, optionals ? [], defaults ? [],
                            collectExtraPhaseActions ? [] } :
-    let passedOptionals = filter ( x : __hasAttr x args ) optionals; # these are in optionals and in args
+    let passedOptionals = filter ( x : hasAttr x args ) optionals; # these are in optionals and in args
         # we simply merge in <optional_name> = { buildInputs = <arg.<optional_name>; pass = <arg.optional_name>; }
         flagConfigWithOptionals = flagConfig // ( listToAttrs
-          (map ( o : av o ( { buildInputs = o; pass = avs o (__getAttr o args); }
+          (map ( o : av o ( { buildInputs = o; pass = avs o (builtins.getAttr o args); }
                             // getAttr [o] {} flagConfig )
                )
                passedOptionals ) );
@@ -230,13 +231,13 @@ rec {
         # helper function
         collectFlags = # state : flags :
               fold ( flag : s : (
-                     if (__hasAttr flag s.result) then s # this state has already been visited
-                     else if (! __hasAttr flag flagConfig) then throw "unkown flag `${flag}' specified"
-                           else let fDesc = (__getAttr flag flagConfig);
+                     if (hasAttr flag s.result) then s # this state has already been visited
+                     else if (! hasAttr flag flagConfig) then throw "unkown flag `${flag}' specified"
+                           else let fDesc = (builtins.getAttr flag flagConfig);
                                     implied = flatten ( getAttr ["implies"] [] fDesc );
                                     blocked = flatten ( getAttr ["blocks"] [] fDesc ); 
                                     # add this flag
-                                    s2 =  s // { result = ( setAttr s.result flag (__getAttr flag flagConfig) );
+                                    s2 =  s // { result = ( setAttr s.result flag (builtins.getAttr flag flagConfig) );
                                                  blockedFlagsBy = s.blockedFlagsBy 
                                                    // listToAttrs (map (b: av b flag ) blocked); };
                                     # add implied flags
@@ -246,17 +247,17 @@ rec {
         # chosen contains flagConfig but only having those attributes elected by flags 
         # (or by implies attributes of elected attributes)
         options = let stateOpts = collectFlags { blockedFlagsBy = {}; result = {}; } 
-                                               (flags ++ ( if (__hasAttr "mandatory" flagConfig) then ["mandatory"] else [] ));
+                                               (flags ++ ( if (hasAttr "mandatory" flagConfig) then ["mandatory"] else [] ));
                       # these options have not been chosen (neither by flags nor by implies)
-                      unsetOptions = filter ( x : (! __hasAttr x stateOpts.result) && (__hasAttr ("no_"+x) flagConfig)) 
-                                            ( __attrNames flagConfig );
+                      unsetOptions = filter ( x : (! hasAttr x stateOpts.result) && (hasAttr ("no_"+x) flagConfig)) 
+                                            ( attrNames flagConfig );
                       # no add the corresponding no_ attributes as well ..
                       state = collectFlags stateOpts (map ( x : "no_" + x ) unsetOptions);
                   in # check for blockings:
-                     assert ( all id ( map ( b: if (__hasAttr b state.result) 
+                     assert ( all id ( map ( b: if (hasAttr b state.result) 
                                              then throw "flag ${b} is blocked by flag ${__getAttr b state.blockedFlagsBy}"
                                              else true ) 
-                                           (__attrNames state.blockedFlagsBy) ) ); 
+                                           (attrNames state.blockedFlagsBy) ) ); 
                     state.result;
         flatOptions = flattenAttrs options;
 
@@ -275,13 +276,13 @@ rec {
           # compared to flags flagsSet does also contain the implied flags.. This makes it easy to write assertions. ( assert args.
           inherit options flatOptions collectAttrs optsConcatStrs;
 
-          buildInputs = map ( attr: if (! __hasAttr attr args) then throw "argument ${attr} is missing!" else (__getAttr attr args) )
+          buildInputs = map ( attr: if (! hasAttr attr args) then throw "argument ${attr} is missing!" else (builtins.getAttr attr args) )
                         (flatten  (catAttrs "buildInputs" flatOptions));
 
           configureFlags = optsConcatStrs " " "cfgOption";
 
-          #flags = listToAttrs (map ( flag: av flag (__hasAttr flag options) ) (__attrNames flagConfig) );
-          flags_prefixed = listToAttrs (map ( flag: av ("flag_set_"+flag) (__hasAttr flag options) ) (__attrNames flagConfig) );
+          #flags = listToAttrs (map ( flag: av flag (hasAttr flag options) ) (attrNames flagConfig) );
+          flags_prefixed = listToAttrs (map ( flag: av ("flag_set_"+flag) (hasAttr flag options) ) (attrNames flagConfig) );
 
           pass = mergeAttrs (flatten (collectAttrs "pass") );
       } #  now add additional phase actions (see examples)
