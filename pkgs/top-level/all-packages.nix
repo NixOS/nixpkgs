@@ -2572,7 +2572,7 @@ rec {
   };
 
   samba = import ../servers/samba {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl readline openldap pam;
   };
 
   tomcat5 = import ../servers/http/tomcat {

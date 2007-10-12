@@ -1,22 +1,14 @@
-{ stdenv
-, fetchurl
-, pie ? false
-, socketWrapper ? false
-, cups ? false
-, iprint ? false
-, activeDirectory ? false
-, stateDir ? "/var/samba"                   # (builtins.getEnv "HOME") + "/sambastate/"
-} :
+args: with args;
 
 stdenv.mkDerivation {
-  name = "samba-3.0.25b";
-  builder = ./builder.sh;
+  name = "samba-3.0.26a";
 
   src = fetchurl {
-    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.25b.tar.gz;
-    sha256 = "18l71skn7mryg78jpd8x38pf27wvrx00v33w3z2ycsfnrbcp8l6w";
+    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.26a.tar.gz;
+    sha256 = "41e11f69288b2291f12f8db093e2c55dc1360555d4542c83c0758c4c7a3d4d37";
   };
 
-  smbconf = ./smb.conf;
-  inherit stateDir;
+  buildInputs = [readline pam openldap];
+  configureFlags = "--with-pam --with-smbmount";
+  postUnpack = "sourceRoot=\$sourceRoot/source";
 }
