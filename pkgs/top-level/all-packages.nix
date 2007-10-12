@@ -1992,12 +1992,17 @@ rec {
     mysqlSupport = false;
   };
 
+  qt4 = getVersion "qt4" qt4_alts;
   # Builds, but not tested yet
-  qt4 = import ../development/libraries/qt-4 {
-    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus fontconfig freetype pkgconfig;
+  # There are two versions: kde and trolltech
+  qt4_alts = import ../development/libraries/qt-4 {
+	inherit fetchurl fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
+	  fontconfig freetype pkgconfig;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext inputproto fixesproto libXfixes;
+	  libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
+	  inputproto fixesproto libXfixes;
     inherit (gnome) glib;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
     openglSupport = mesaSupported;
     mysqlSupport = true;
   };
