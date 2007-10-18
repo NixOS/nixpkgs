@@ -3228,11 +3228,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  docbook_xml_dtd_42 = import ../data/sgml+xml/schemas/xml-dtd/docbook-4.2 {
+  docbook_xml_dtd_412 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix {
     inherit fetchurl stdenv unzip;
   };
 
-  docbook_xml_dtd_43 = import ../data/sgml+xml/schemas/xml-dtd/docbook-4.3 {
+  docbook_xml_dtd_42 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix {
+    inherit fetchurl stdenv unzip;
+  };
+
+  docbook_xml_dtd_43 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix {
     inherit fetchurl stdenv unzip;
   };
 
