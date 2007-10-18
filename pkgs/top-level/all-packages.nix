@@ -647,6 +647,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  smartmontools = import ../tools/system/smartmontools {
+    inherit fetchurl stdenv;
+  };
+
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
   };
