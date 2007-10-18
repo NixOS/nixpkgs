@@ -4067,9 +4067,9 @@ rec {
   gnome = recurseIntoAttrs (import ../desktops/gnome {
     inherit fetchurl stdenv pkgconfig audiofile
             flex bison popt zlib libxml2 libxslt
-            perl perlXMLParser docbook_xml_dtd_42 gettext x11
-            libtiff libjpeg libpng gtkLibs xlibs bzip2 libcm
-            python dbus_glib ncurses which libxml2Python
+            perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
+            gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
+            libcm python dbus_glib ncurses which libxml2Python
             iconnamingutils;
   });
 

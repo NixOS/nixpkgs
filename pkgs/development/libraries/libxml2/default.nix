@@ -4,12 +4,12 @@ assert zlib != null;
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation {
-  name = "libxml2-2.6.29";
+  name = "libxml2-2.6.30";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = ftp://xmlsoft.org/libxml2/libxml2-2.6.29.tar.gz;
-    sha256 = "14jrjvdbvlbc3m0q9p3np67sk18w317n5zfg9a3h7b6pp7h1jjp3";
+    url = ftp://xmlsoft.org/libxml2/libxml2-2.6.30.tar.gz;
+    sha256 = "0pkk6cw0qd56kz2fkn768dcygbb4ncyvvmvyfiyli1a7yjh64xw7";
   };
 
   python = if pythonSupport then python else null;
@@ -17,4 +17,6 @@ stdenv.mkDerivation {
 
   buildInputs =  if pythonSupport then [python] else [];
   propagatedBuildInputs = [zlib];
+
+  postInstall = "ensureDir $out/nix-support; cp ${./setup-hook.sh} $out/nix-support/setup-hook";
 }

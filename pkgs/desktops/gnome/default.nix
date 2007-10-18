@@ -2,7 +2,8 @@
 
 { stdenv, fetchurl, pkgconfig, audiofile
 , flex, bison, popt, perl, zlib, libxml2, libxslt
-, perlXMLParser, docbook_xml_dtd_42, gettext, x11, libtiff, libjpeg
+, perlXMLParser, docbook_xml_dtd_42, docbook_xml_dtd_412
+, gettext, x11, libtiff, libjpeg
 , libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib, ncurses
 , which, libxml2Python, iconnamingutils
 }:

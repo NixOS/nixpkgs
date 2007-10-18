@@ -4,7 +4,9 @@
 
 stdenv.mkDerivation {
   inherit (input) name src;
-  patches = [./xmlcatalog.patch];
+  preConfigure = "
+    substituteInPlace extract/dtds/Makefile.am --replace /usr/bin/xmlcatalog xmlcatalog
+  ";
   buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt];
   configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat";
 }
