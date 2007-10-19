@@ -1,10 +1,10 @@
 {stdenv, fetchurl, icu, zlib, bzip2, python}:
 
 stdenv.mkDerivation {
-  name = "boost-1.34.0";
+  name = "boost-1.34.1";
   src = fetchurl {
-    url = mirror://sourceforge/boost/boost_1_34_0.tar.bz2;
-    sha256 = "1lpganl8grvmy8rsbps5688yqiswvixjwz15d0kjfndp87xbhp25";
+    url = mirror://sourceforge/boost/boost_1_34_1.tar.bz2;
+    sha256 = "0k7cjsgg3iqy49f9nnhyp945yry0bichd88p04sg3915n1snr1hg";
   };
   buildInputs = [icu zlib bzip2 python];
   preConfigure="
