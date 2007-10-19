@@ -8,7 +8,7 @@ else
   PATH_DELIMITER=':'
 fi
 
-add_to_var_with_delim() {
+addToSearchPathWithCustomDelimiter() {
 	local delimiter=$1
 	local varName=$2
 	local needDir=$3
@@ -23,9 +23,9 @@ add_to_var_with_delim() {
 	fi
 }
 
-add_to_var()
+addToSearchPath()
 {
-	add_to_var_with_delim "${PATH_DELIMITER}" "$@"
+	addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
 # Set up the initial path.
