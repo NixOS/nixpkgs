@@ -24,7 +24,7 @@ let {
     bsdiff
     bzip2
     cabextract
-    cdrtools
+    cdrkit
     chatzilla
     cksfv
     compiz

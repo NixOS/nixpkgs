@@ -1,4 +1,5 @@
 {stdenv, fetchurl, cmake, libcap, zlib}:
+
 stdenv.mkDerivation {
   name = "cdrkit-1.1.6";
 
@@ -12,8 +13,8 @@ stdenv.mkDerivation {
   makeFlags = "PREFIX=\$(out)";
 
   meta = {
-    description = "
-CD and DVD writing kit, mostly compatible with cdrtools.
-";
+    description = "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";
+    homepage = http://cdrkit.org/;
+    license = "GPL2";
   };
 }
