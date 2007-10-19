@@ -199,7 +199,7 @@ rec {
     let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
-        inherit (co) configureFlags buildInputs /*flags*/;
+        inherit (co) configureFlags buildInputs;
       } // extraAttrs co  // co.pass // co.flags_prefixed ));
   */
   
