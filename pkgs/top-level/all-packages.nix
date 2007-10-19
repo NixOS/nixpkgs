@@ -890,6 +890,12 @@ rec {
 
   ghc = ghc661;
 
+  ghc68 = lowPrio (appendToName "snapshot" (import ../development/compilers/ghc-6.8 {
+    inherit fetchurl stdenv readline perl gmp ncurses;
+    m4 = gnum4;
+    ghc = ghcboot;
+  }));
+
   ghc661 = import ../development/compilers/ghc-6.6.1 {
     inherit fetchurl stdenv readline perl gmp ncurses;
     m4 = gnum4;
