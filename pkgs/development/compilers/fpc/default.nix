@@ -15,7 +15,7 @@ args.stdenv.mkDerivation {
   installFlags = "INSTALL_PREFIX=\${out}";
   postInstall = "ln -fs $out/lib/fpc/*/ppc386 $out/bin;
 	mkdir -p $out/lib/fpc/etc/ ;
-	$out/lib/fpc/*/samplecfg $out/lib/fpc/2.* $out/lib/fpc/etc/;";
+	$out/lib/fpc/*/samplecfg $out/lib/fpc/2.2.0 $out/lib/fpc/etc/;";
 
   meta = {
     description = "
