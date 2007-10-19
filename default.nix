@@ -36,7 +36,7 @@ in
   # /etc/nixos/nixos -A upstartJobs.xserver").  
   upstartJobs = { recurseForDerivations = true; } //
     builtins.listToAttrs (map (job:
-      { attr = if job ? jobName then job.jobName else job.name; value = job; }
+      { name = if job ? jobName then job.jobName else job.name; value = job; }
     ) system.upstartJobs.jobs);
 
 }
