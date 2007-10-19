@@ -201,7 +201,7 @@
     description = "
       Whether the Grub menu builder should copy kernels and initial
       ramdisks to /boot.  This is necessary when /nix is on a
-      different file system than /.
+      different file system than /boot.
     ";
   }
 
