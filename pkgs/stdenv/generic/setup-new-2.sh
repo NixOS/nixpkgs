@@ -8,6 +8,25 @@ else
   PATH_DELIMITER=':'
 fi
 
+add_to_var_with_delim() {
+	local delimiter=$1
+	local varName=$2
+	local needDir=$3
+	local addDir=${4:-$needDir}
+	local prefix=$5
+	if [ -d $prefix$needDir ]; then
+		if [ -z ${!varName} ]; then
+			eval export ${varName}=${prefix}$addDir
+		else
+			eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
+		fi
+	fi
+}
+
+add_to_var()
+{
+	add_to_var_with_delim "${PATH_DELIMITER}" "$@"
+}
 
 # Set up the initial path.
 PATH=
@@ -739,7 +758,7 @@ fixupW() {
  				if test -d "$prefix/share/$d"; then
  					echo "Both $d/ and share/$d/ exists!"
  				else
-					echo Fixing location of $dir/ subdirectory
+					echo Fixing location of $d/ subdirectory
  					ensureDir $prefix/share
 					if test -w $prefix/share; then
 	 					mv -v $prefix/$d $prefix/share
