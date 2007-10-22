@@ -3825,7 +3825,7 @@ rec {
   sox = import ../applications/misc/audio/sox {
     inherit fetchurl stdenv lib mkDerivationByConfigruation;
     # optional features 
-    inherit alsaLib /*libao*/;
+    inherit alsaLib; # libao
     inherit libsndfile libogg flac libmad lame libsamplerate;
      # Using the default nix ffmpeg I get this error when linking
      # .libs/libsox_la-ffmpeg.o: In function `audio_decode_frame':
