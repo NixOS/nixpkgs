@@ -1562,6 +1562,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
+    inherit fetchurl stdenv;
+  };
+
 
   # commented out because it's using the new configuration style proposal which is unstable
   # needs some testing ..
@@ -1807,6 +1811,11 @@ rec {
   libgphoto2 = import ../development/libraries/libgphoto2 {
     inherit fetchurl stdenv pkgconfig libusb;
   };
+
+  # commented out because it's using the new configuration style proposal which is unstable
+  #libsamplerate = (import ../development/libraries/libsamplerate) {
+  #  inherit fetchurl stdenv mkDerivationByConfigruation pkgconfig lib;
+  #};
 
   libgsf = import ../development/libraries/libgsf {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext;
@@ -2230,6 +2239,11 @@ rec {
 
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
+
+  # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
+  ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
+     { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
+     "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
 
   uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
@@ -3805,6 +3819,21 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libpng freetype pam;
     inherit (xlibs) libXmu;
   };
+
+  # commented out because it's using the new configuration style proposal which is unstable
+  /*
+  sox = import ../applications/misc/audio/sox {
+    inherit fetchurl stdenv lib mkDerivationByConfigruation;
+    # optional features 
+    inherit alsaLib /*libao*/;
+    inherit libsndfile libogg flac libmad lame libsamplerate;
+     # Using the default nix ffmpeg I get this error when linking
+     # .libs/libsox_la-ffmpeg.o: In function `audio_decode_frame':
+     # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
+     # That's why I'v added ffmpeg_svn
+    ffmpeg = ffmpeg_svn;
+  };
+  */
 
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
     inherit fetchurl stdenv;
