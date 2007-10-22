@@ -5,11 +5,11 @@
 assert pamSupport -> pam != null;
  
 stdenv.mkDerivation {
-  name = "openssh-4.6p1";
+  name = "openssh-4.7p1";
  
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/security/OpenSSH/openssh-4.6p1.tar.gz;
-    sha256 = "0fpjlr3bfind0y94bk442x2ps060byv1s4cnrgcxij40m9zjggkv";
+    url = ftp://ftp.nluug.nl/pub/security/OpenSSH/openssh-4.7p1.tar.gz;
+    sha256 = "1g28npm025a5a8dd2g7sqz8nh8pwi7rvv9wdpy4jhzbkqvq36wfl";
   };
  
   buildInputs = [zlib openssl perl
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = "
+    --with-mantype=man
     ${if pamSupport then "--with-pam" else ""}
   ";
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/cat1/
+    cp contrib/ssh-copy-id.1 $out/share/man/man1/
   ";
 
   installTargets = "install-nokeys";
