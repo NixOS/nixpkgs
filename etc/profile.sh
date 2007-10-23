@@ -48,6 +48,7 @@ NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
 
 for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
+    export ASPELL_EXTRA_DICT_DIRS="$i/lib/aspell${ASPELL_EXTRA_DICT_DIRS:+,}$ASPELL_EXTRA_DICT_DIRS"
 done
 
 export PATH=$HOME/bin:$PATH
