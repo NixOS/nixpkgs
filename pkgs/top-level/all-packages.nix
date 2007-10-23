@@ -2807,7 +2807,7 @@ rec {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "ext3cow";
-        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
+        patch = ../os-specific/linux/kernel/linux-2.6.21.7-ext3cow_wouter.patch;
         extraConfig =  
 	"CONFIG_EXT3COW_FS=m\n" +
 	"CONFIG_EXT3COW_FS_XATTR=y\n" +
