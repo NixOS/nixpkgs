@@ -1433,8 +1433,12 @@ rec {
   };
 
   aspell = import ../development/libraries/aspell {
-    inherit fetchurl stdenv perl which;
+    inherit fetchurl stdenv perl;
   };
+
+  aspellDicts = recurseIntoAttrs (import ../development/libraries/aspell/dictionaries.nix {
+    inherit fetchurl stdenv aspell which;
+  });
 
   audiofile = import ../development/libraries/audiofile {
     inherit fetchurl stdenv;

@@ -9,6 +9,8 @@ let {
     apacheAnt
     apacheHttpd
     aspectj
+    aspell
+    aspellDicts
     aterm
     autoconf
     automake19x
