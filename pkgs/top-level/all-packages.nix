@@ -3590,6 +3590,11 @@ rec {
   hello = import ../applications/misc/hello/ex-1 {
     inherit fetchurl stdenv perl;
   };
+  
+  icewm = import ../applications/window-managers/icewm {
+    inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
+    inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
+  };
 
   imagemagick = import ../applications/graphics/ImageMagick {
     inherit stdenv fetchurl bzip2 freetype graphviz 
