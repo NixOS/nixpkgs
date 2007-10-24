@@ -5,8 +5,11 @@ cd ext3cow-tools/
 
 echo "Using: $kernel"
 
-kernelslashed=$(echo $kernel | sed 's/\//\\\//g')
-sed -i "s/linux\/ext3cow_fs.h/$kernelslashed\/lib\/modules\/2.6.21.5-default\/build\/include\/linux\/ext3cow_fs.h/" ext3cow_tools.h		#ugh dirty header rewrite....
+kernerlext3cowheader=$(ls $kernel/lib/modules/*/build/include/linux/ext3cow_fs.h)
+
+kernerlext3cowheader_slashed=$(echo $kernerlext3cowheader | sed 's/\//\\\//g')
+
+sed -i "s/linux\/ext3cow_fs.h/$kernerlext3cowheader_slashed/" ext3cow_tools.h		#ugh dirty header rewrite....
 
 make
 
