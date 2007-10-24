@@ -3474,7 +3474,8 @@ rec {
   };
 
   emacsUnicode = import ../applications/editors/emacs-unicode {
-    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d libpng;
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
+      libpng libjpeg libungif libtiff;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
     xawSupport = false;
