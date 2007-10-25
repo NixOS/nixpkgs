@@ -363,6 +363,11 @@ rec {
 
   curl = if stdenv ? curl then stdenv.curl else (assert false; null);
 
+  curlftpfs = import ../tools/networking/curlftpfs {
+    inherit fetchurl stdenv fuse curl pkgconfig zlib;
+    inherit (gtkLibs) glib;
+  };
+
   dnsmasq = import ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it? 
     inherit fetchurl stdenv;
