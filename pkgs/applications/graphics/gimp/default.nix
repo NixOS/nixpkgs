@@ -4,10 +4,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gimp-2.4.0-rc1";
+  name = "gimp-2.4.0";
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gimp/v2.4/testing/gimp-2.4.0-rc1.tar.bz2;
-    sha256 = "0n9gfmmxjjhi4dpdfwc37z8n4zsyx6byil1ig27agjgic22bydm1";
+    url = ftp://ftp.gtk.org/pub/gimp/v2.4/gimp-2.4.0.tar.bz2;
+    sha256 = "1p594r45hxk14469ma8g5j96nw5q9j6a3i0n6hbakfsh41izpsnx";
   };
   
   buildInputs = [
