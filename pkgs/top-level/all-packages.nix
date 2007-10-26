@@ -3596,6 +3596,10 @@ rec {
   hello = import ../applications/misc/hello/ex-1 {
     inherit fetchurl stdenv perl;
   };
+
+  i810switch = import ../applications/misc/i810 {
+    inherit fetchurl stdenv pciutils;
+  };
   
   icewm = import ../applications/window-managers/icewm {
     inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
