@@ -286,13 +286,13 @@ let
     "-ac"
     "-logverbose"
     "-verbose"
-    "-nolisten tcp"
     "-terminate"
     "-logfile" "/var/log/X.${toString display}.log"
     "-config ${configFile}"
     ":${toString display}" "vt${toString tty}"
     "-xkbdir" "${xkeyboard_config}/etc/X11/xkb"
-  ];
+  ] ++ (if ! config.get ["services" "xserver" "tcpEnable"]
+	then ["-nolisten tcp"] else []);
 
   
   # Note: lines must not be indented.

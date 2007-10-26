@@ -586,7 +586,14 @@
     ";
   }
 
-  
+  {
+    name = ["services" "xserver" "tcpEnable"];
+    default = false;
+    description = "
+      Whether to enable TCP socket for the X server.
+    ";
+  }
+
   {
     name = ["services" "xserver" "resolutions"];
     default = [{x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;}];
