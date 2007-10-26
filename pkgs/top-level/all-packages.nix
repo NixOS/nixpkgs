@@ -3681,7 +3681,7 @@ rec {
   };
 
   MPlayer = import ../applications/video/MPlayer {
-    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf;
+    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
