@@ -63,6 +63,7 @@ let
       xorg.xf86inputmouse
     ] 
     ++ optional (videoDriver == "vesa") xorg.xf86videovesa
+    ++ optional (videoDriver == "vga") xorg.xf86videovga
     ++ optional (videoDriver == "sis") xorg.xf86videosis
     ++ optional (videoDriver == "i810") xorg.xf86videoi810
     ++ optional (videoDriver == "intel") xorg.xf86videointel
@@ -111,6 +112,11 @@ let
 		"  Option \"UseInternalAGPGART\" \"no\"" else 
 		"    ");
 
+	extraDeviceConfig = getCfg "extraDeviceConfig"; 
+	extraMonitorSettings = getCfg "extraMonitorSettings"; 
+	extraModules = getCfg "extraModules"; 
+	serverLayoutOptions = getCfg "serverLayoutOptions"; 
+	defaultDepth = getCfg "defaultDepth"; 
 
     buildCommand = "
       buildCommand= # urgh, don't substitute this

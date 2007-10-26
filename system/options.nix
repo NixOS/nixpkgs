@@ -729,7 +729,55 @@
 	";
   }  
 
-  
+  {
+	name = ["services" "xserver" "extraDeviceConfig"];
+	default = "";
+	example = "VideoRAM 131072";
+	description ="
+	Just anything to add into Device section.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "extraMonitorSettings"];
+	default = "";
+	example = "HorizSync 28-49";
+	description ="
+	Just anything to add into Monitor section.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "extraModules"];
+	default = "";
+	example = "SubSection \"extmod\"
+			EndSubsection";
+	description ="
+	Just anything to add into Modules section.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "serverLayoutOptions"];
+	default = "";
+	example = "
+	Option \"AIGLX\" \"true\"
+";
+	description ="
+	Just anything to add into Monitor section.
+	";
+  }  
+
+  {
+	name = ["services" "xserver" "defaultDepth"];
+	default = 24;
+	example = 8;
+	description ="
+	Default colour depth.
+	";
+  }  
+
+
   {
     name = ["services" "httpd" "enable"];
     default = false;
