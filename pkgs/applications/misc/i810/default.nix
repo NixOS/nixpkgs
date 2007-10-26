@@ -1,7 +1,7 @@
 args: with args; stdenv.mkDerivation {
   name = "i810switch-0.6.5";
 
-  phases = "installPhase";
+  phases = "unpackPhase installPhase";
 
   installPhase = "
     sed -i -e 's+/usr++' Makefile
