@@ -45,7 +45,10 @@ import ../helpers/make-etc.nix {
     }
 
     { # Hostname-to-IP mappings.
-      source = ./hosts;
+      source = pkgs.substituteAll{
+	src = ./hosts;
+	extraHosts = config.get ["networking" "extraHosts"];
+	};
       target = "hosts";
     }
 

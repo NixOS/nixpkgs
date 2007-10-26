@@ -235,6 +235,12 @@
     description = "The name of the machine.";
   }
 
+  {
+	name = ["networking" "extraHosts"];
+	default = "";
+	example = "192.168.0.1 lanlocalhost";
+	description = "Pasted verbatim into /etc/hosts.";
+  }
 
   {
     name = ["networking" "useDHCP"];
