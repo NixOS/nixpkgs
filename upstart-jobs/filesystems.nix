@@ -46,7 +46,7 @@ script
             if echo \"$device\" | grep -q '^LABEL='; then isLabel=1; fi
 
             isPseudo=
-            if test \"$fsType\" = \"nfs\"; then isPseudo=1; fi
+            if test \"$fsType\" = \"nfs\" || test \"$fsType\" = \"ext3cow\"; then isPseudo=1; fi
 
             if ! test -n \"$isLabel\" -o -n \"$isPseudo\" -o -e \"$device\"; then
                 echo \"skipping $device, doesn't exist (yet)\"
