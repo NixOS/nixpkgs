@@ -9,6 +9,10 @@ in
 
 rec {
 
+  innerSumArgs = f : x : y : (if y == null then (f x)
+	else (innerSumArgs f (x // y)));
+  sumArgs = f : innerSumArgs f {};
+
   # "Fold" a binary function `op' between successive elements of
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
