@@ -853,6 +853,35 @@ rec {
     inherit stdenv;
   };
 
+  g77_40 = import ../build-support/gcc-wrapper {
+    name = "g77-4.0";
+    nativeTools = false;
+    nativeLibc = false;
+    gcc = import ../development/compilers/gcc-4.0 {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = true;
+      langCC = false;
+	inherit gmp mpfr;
+    };
+    inherit (stdenv.gcc) binutils libc;
+    inherit stdenv;
+  };
+ 
+  g77_41 = import ../build-support/gcc-wrapper {
+    name = "g77-4.1";
+    nativeTools = false;
+    nativeLibc = false;
+    gcc = import ../development/compilers/gcc-4.1 {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = true;
+      langCC = false;
+      langC = false;
+	inherit gmp mpfr;
+    };
+    inherit (stdenv.gcc) binutils libc;
+    inherit stdenv;
+  };
+ 
   gcc = gcc41;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
@@ -1096,7 +1125,8 @@ rec {
   };
 
   octave = import ../development/interpreters/octave {
-    inherit fetchurl stdenv readline ncurses g77 perl flex;
+    inherit stdenv fetchurl readline ncurses perl flex;
+	g77 = g77_41;
   };
 
   perl = if !stdenv.isLinux then sysPerl else realPerl;
@@ -1647,6 +1677,11 @@ rec {
     inherit fetchurl stdenv m4;
   };
 
+  #GMP ex-satellite, so better keep it near gmp
+  mpfr = import ../development/libraries/mpfr {
+    inherit fetchurl stdenv gmp;
+  };
+
   gnet = import ../development/libraries/gnet {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
@@ -2119,11 +2154,15 @@ rec {
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
-  wxGTK28 = import ../development/libraries/wxGTK-2.8 {
+  wxGTK28fun = lib.sumArgs (import ../development/libraries/wxGTK-2.8);
+
+  wxGTK28deps = wxGTK28fun {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
+
+  wxGTK28 = wxGTK28deps null;
 
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
@@ -3348,6 +3387,14 @@ rec {
     libstdcpp = gcc33.gcc;
   };
 
+  audacity = import ../applications/audio/audacity {
+    inherit fetchurl libogg libvorbis libsndfile libmad 
+	pkgconfig gettext;
+	inherit (gtkLibs) gtk glib;
+	wxGTK = wxGTK28;
+    stdenv = overrideGCC stdenv gcc41NPTL;
+  };
+
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
   };
@@ -4067,6 +4114,12 @@ rec {
   exult = import ../games/exult {
     inherit fetchurl SDL SDL_mixer zlib libpng unzip;
     stdenv = overrideGCC stdenv gcc34;
+  };
+
+  fsg = import ../games/fsg {
+	inherit stdenv fetchurl pkgconfig;
+	inherit (gtkLibs) glib gtk;
+	wxGTK = wxGTK28deps {unicode = false;};
   };
 
   gemrb = import ../games/gemrb {
