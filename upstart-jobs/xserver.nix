@@ -170,6 +170,12 @@ let
         export device=
         export extensions=
       fi
+	
+	if [ \"${toString videoDriver}\" = i810 ]; then
+		extensions='
+	Option \"Composite\" \"Enable\"
+';
+	fi;
 
       substituteAll $src $out
     ";
