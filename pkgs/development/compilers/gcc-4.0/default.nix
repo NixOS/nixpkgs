@@ -1,6 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
+,gmp ? null , mpfr ? null
 }:
 
 assert langC;
@@ -20,6 +21,11 @@ stdenv.mkDerivation {
     
   inherit noSysDirs langC langCC langF77 profiledCompiler;
 
+  buildInputs = [] 
+	++ (if gmp != null then [gmp] else [])
+	++ (if mpfr != null then [mpfr] else [])
+	;
+
   configureFlags = "
     --disable-multilib
     --disable-libstdcxx-pch
@@ -29,7 +35,7 @@ stdenv.mkDerivation {
       concatStrings (intersperse ","
         (  optional langC   "c"
         ++ optional langCC  "c++"
-        ++ optional langF77 "f77"
+        ++ optional langF77 "f95"
         )
       )
     }

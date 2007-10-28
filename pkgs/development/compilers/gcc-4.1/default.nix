@@ -2,15 +2,17 @@
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
 , staticCompiler ? false
+, gmp ? null
+, mpfr ? null
 }:
 
-assert langC;
+assert langC || langF77;
 
 with import ../../../lib;
 
 stdenv.mkDerivation {
   name = "gcc-4.1.2";
-  builder = ./builder.sh;
+  builder = if langF77 then ./fortran.sh else  ./builder.sh;
   
   src =
     [(fetchurl {
@@ -39,7 +41,7 @@ stdenv.mkDerivation {
       concatStrings (intersperse ","
         (  optional langC   "c"
         ++ optional langCC  "c++"
-        ++ optional langF77 "f77"
+        ++ optional langF77 "fortran"
         )
       )
     }
@@ -49,6 +51,9 @@ stdenv.mkDerivation {
   makeFlags = if staticCompiler then "LDFLAGS=-static" else "";
 
   passthru = { inherit langC langCC langF77; };
+
+  buildInputs = [] ++ (if gmp != null then [gmp] else [])
+	++ (if mpfr != null then [mpfr] else []);
 
   meta = {
     homepage = "http://gcc.gnu.org/";
