@@ -3387,13 +3387,13 @@ rec {
     libstdcpp = gcc33.gcc;
   };
 
-  audacity = import ../applications/audio/audacity {
-    inherit fetchurl libogg libvorbis libsndfile libmad 
-	pkgconfig gettext;
-	inherit (gtkLibs) gtk glib;
-	wxGTK = wxGTK28;
-    stdenv = overrideGCC stdenv gcc41NPTL;
-  };
+#  audacity = import ../applications/audio/audacity {
+#    inherit fetchurl libogg libvorbis libsndfile libmad 
+#  	pkgconfig gettext;
+#  	inherit (gtkLibs) gtk glib;
+#	wxGTK = wxGTK28;
+#    stdenv = overrideGCC stdenv gcc41NPTL;
+#  };
 
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
