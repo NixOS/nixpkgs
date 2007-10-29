@@ -10,7 +10,7 @@ assert langC || langF77;
 
 with import ../../../lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "gcc-4.1.2";
   builder = if langF77 then ./fortran.sh else  ./builder.sh;
   
@@ -52,9 +52,6 @@ stdenv.mkDerivation {
 
   passthru = { inherit langC langCC langF77; };
 
-  buildInputs = [] ++ (if gmp != null then [gmp] else [])
-	++ (if mpfr != null then [mpfr] else []);
-
   meta = {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
@@ -65,3 +62,9 @@ stdenv.mkDerivation {
     priority = "7";
   };
 }
+
+// (if gmp != null || mpfr != null then {
+  buildInputs = []
+    ++ (if gmp != null then [gmp] else [])
+    ++ (if mpfr != null then [mpfr] else []);
+} else {}))
