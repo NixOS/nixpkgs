@@ -4,6 +4,7 @@ args:
 	let 
 		inherit (builtins)	
 			head tail isList;
+in
 rec {
 
 /*
@@ -28,22 +29,20 @@ rec {
 	
 */
 	
-	textClosureDupList = arg:
+	textClosureDupList = arg: 
 	(
 		if isList arg then 
 			textClosureDupList {text = ""; deps = arg;} 
 		else
-			(if (arg ? deps) then 
-				map textClosureDupList arg.deps 
-			else []) 
-		++ [arg]
+			(concatLists (map textClosureDupList arg.deps)) ++ [arg]
 	);
 
-	textClosureList = arg: uniqList (textClosureDupList arg);
-	textClosure = arg: concatStringsSep "
-" (textClosureList arg);
+	textClosureList = arg:
+		(map	(x : x.text) 
+			(uniqList {inputList = textClosureDupList arg;}));
+	textClosure = arg: concatStringsSep "\n" (textClosureList arg);
 	
-	noDepEntry = text : {inherit text;};
-	FullDepEntry = text : deps: {inherit text args;};
+	noDepEntry = text : {inherit text;deps = [];};
+	FullDepEntry = text : deps: {inherit text deps;};
 	PackEntry = deps: {inherit deps; text="";};
 }

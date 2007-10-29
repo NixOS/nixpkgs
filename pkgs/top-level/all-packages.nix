@@ -213,6 +213,14 @@ rec {
 			abort (toString result))
 		else x);
 
+	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
+		inherit stringsWithDeps lib stdenv writeScript;
+	};
+
+	stringsWithDeps = import ../lib/strings-with-deps.nix {
+		inherit stdenv lib;
+	};
+
   ### STANDARD ENVIRONMENT
 
 
@@ -1603,6 +1611,10 @@ rec {
 
   ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
     inherit fetchurl stdenv;
+  };
+
+  fftw = import ../development/libraries/fftw {
+    inherit fetchurl stdenv builderDefs stringsWithDeps;
   };
 
 
@@ -3387,13 +3399,14 @@ rec {
     libstdcpp = gcc33.gcc;
   };
 
-#  audacity = import ../applications/audio/audacity {
-#    inherit fetchurl libogg libvorbis libsndfile libmad 
-#  	pkgconfig gettext;
-#  	inherit (gtkLibs) gtk glib;
-#	wxGTK = wxGTK28;
-#    stdenv = overrideGCC stdenv gcc41NPTL;
-#  };
+  audacity = import ../applications/audio/audacity {
+    inherit fetchurl libogg libvorbis libsndfile libmad 
+	pkgconfig gettext;
+	inherit (gtkLibs) gtk glib;
+	wxGTK = wxGTK28deps;
+    stdenv = overrideGCC stdenv gcc41NPTL;
+	inherit builderDefs stringsWithDeps;
+  };
 
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
@@ -3689,6 +3702,14 @@ rec {
 
   lame = import ../applications/audio/lame {
     inherit fetchurl stdenv ;
+  };
+
+  ladspaH = import ../applications/audio/ladspa-plugins/ladspah.nix {
+    inherit fetchurl stdenv builderDefs stringsWithDeps;
+  };
+
+  ladspaPlugins = import ../applications/audio/ladspa-plugins {
+    inherit fetchurl stdenv builderDefs stringsWithDeps fftw ladspaH pkgconfig;
   };
 
   links = import ../applications/networking/browsers/links {
@@ -4120,6 +4141,15 @@ rec {
 	inherit stdenv fetchurl pkgconfig;
 	inherit (gtkLibs) glib gtk;
 	wxGTK = wxGTK28deps {unicode = false;};
+  };
+	
+  fsgAltBuild = import ../games/fsg/alt-builder.nix {
+	inherit stdenv fetchurl;
+	wxGTK = wxGTK28deps {unicode = false;};
+	stringsWithDeps = import ../lib/strings-with-deps.nix {
+		inherit stdenv lib;
+	};
+	inherit builderDefs;
   };
 
   gemrb = import ../games/gemrb {

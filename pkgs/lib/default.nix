@@ -95,6 +95,8 @@ rec {
     else if xs == [] || ys == [] then false
     else head xs == head ys && eqLists (tail xs) (tail ys);
 
+  # Workaround, but works in stable Nix now.
+  eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
 
   # Determine whether a filename ends in the given suffix.
   hasSuffix = ext: fileName:
@@ -103,6 +105,7 @@ rec {
     in !(lessThan lenFileName lenExt) &&
        substring (sub lenFileName lenExt) lenFileName fileName == ext;
 
+  hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
        
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).

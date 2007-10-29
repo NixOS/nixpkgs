@@ -13,4 +13,5 @@ stdenv.mkDerivation {
   preBuild = "
     makeFlagsArray=(moduledir=$out/lib/compiz)
   ";
+  preConfigure = "touch m4/Makefile.in";
 }
