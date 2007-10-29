@@ -26,7 +26,7 @@ let
   startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
 	then "gw6c" else "network-interfaces";
   
-  webServer = import ../services/apache-httpd {
+  webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNewSetupScript;
     php = if getCfg "mod_php" then pkgs.php else null;
@@ -40,7 +40,7 @@ let
       # The Subversion subservice.
       (optional (getCfgSvn "enable") (
         let dataDir = getCfgSvn "dataDir"; in
-        import ../services/subversion ({
+        import ../../services/subversion ({
           reposDir = dataDir + "/repos";
           dbDir = dataDir + "/db";
           distsDir = dataDir + "/dist";
