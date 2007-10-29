@@ -3673,11 +3673,12 @@ rec {
   };
 
   inkscape = import ../applications/graphics/inkscape {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
+    inherit fetchurl perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig gtkmm
-      glibmm libsigcxx;
+      glibmm libsigcxx lcms boost gettext;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXft;
+    stdenv = overrideGCC stdenv gcc34;
   };
 
   ion3 = import ../applications/window-managers/ion-3 {

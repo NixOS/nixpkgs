@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pkgconfig,
   perl, perlXMLParser,
   gtk, libXft, fontconfig,
-  libpng,
+  libpng, lcms,
   zlib, popt,
   boehmgc,
   libxml2, libxslt,
   glib,
-  gtkmm, glibmm, libsigcxx
+  gtkmm, glibmm, libsigcxx,
+  boost,
+  gettext
 }:
 
 stdenv.mkDerivation {
-  name = "inkscape-0.43";
+  name = "inkscape-0.45";
 
   src = fetchurl {
-    url = mirror://sourceforge/inkscape/inkscape-0.43.tar.bz2;
-    md5 = "97c606182f5e177eef70c1e8a55efc1f";
+    url = mirror://sourceforge/inkscape/inkscape-0.45.1.tar.gz;
+    sha256 = "1y0b9bm8chn6a2ip99dj4dhg0188yn67v571ha0x38wrlmvn4k0d";
   };
 
   buildInputs = [
@@ -27,5 +29,8 @@ stdenv.mkDerivation {
     libxml2 libxslt
     glib
     gtkmm glibmm libsigcxx
+    lcms
+    boost
+    gettext
   ];
 }
