@@ -2636,6 +2636,11 @@ rec {
     ps = procps; /* !!! Linux only */
   };
 
+  mysql5 = import ../servers/sql/mysql5 {
+    inherit fetchurl stdenv ncurses zlib perl;
+    ps = procps; /* !!! Linux only */
+  };
+
   mysql_jdbc = import ../servers/sql/mysql/jdbc {
     inherit fetchurl stdenv ant;
   };
