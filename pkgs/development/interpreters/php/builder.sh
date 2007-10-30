@@ -14,6 +14,10 @@ fi
 if test -n "$postgresql"; then
     configureFlags="$configureFlags --with-pgsql=$postgresql"
 fi
+
+if test -n "$mysql"; then
+    configureFlags="$configureFlags --with-mysql=$mysql"
+fi
   
 makeFlags="APXS_LIBEXECDIR=$out/modules $makeFlags"
         
