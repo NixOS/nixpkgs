@@ -15,7 +15,11 @@
 
 , # Your own kernel configuration file, if you don't want to use the
   # default. 
-  kernelConfig ? null  
+  kernelConfig ? null
+
+, # A list of additional statements to be appended to the
+  # configuration file.
+  extraConfig ? []
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -38,7 +42,11 @@ stdenv.mkDerivation {
   };
   
   patches = map (p: p.patch) kernelPatches;
-  extraConfig = lib.concatStrings (map (p: "\n" + (if p ? extraConfig then p.extraConfig else "") + "\n") kernelPatches);
+  extraConfig =
+    let addNewlines = map (s: "\n" + s + "\n");
+        configFromPatches =
+          map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
+    in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
   config =
     if kernelConfig != null then kernelConfig else
