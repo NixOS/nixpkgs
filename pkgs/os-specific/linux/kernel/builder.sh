@@ -22,23 +22,20 @@ configurePhase() {
     cp $config .config
     chmod u+w .config
 
-	echo --extraConfig--;
-	echo "${extraConfig}";
+    echo --extraConfig--;
+    echo "${extraConfig}";
 
-	echo "$extraConfig" |  while read; do
-		optionName=$( echo "$REPLY" | sed -e 's/[^A-Z_]//g' );
-		echo --optionName--;
-		echo "$REPLY";
-		echo ${optionName};
-		if [ -n "${optionName}" ]; then 
-			sed -e s/.'*'${optionName}.'*'/"$REPLY/" -i .config
-		fi;
-	done;
+    echo "$extraConfig" | while read; do
+	optionName=$( echo "$REPLY" | sed -e 's/[^A-Z_]//g' );
+	echo --optionName--;
+	echo "$REPLY";
+	echo ${optionName};
+	if [ -n "${optionName}" ]; then 
+	    sed -e s/.'*'${optionName}.'*'/"$REPLY/" -i .config
+	fi;
+    done;
 
     echo "$extraConfig" >> .config
-
-	echo --finalConfig--
-	cat .config
 
     #substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
     #    --replace /usr /no-such-path
@@ -49,6 +46,9 @@ configurePhase() {
     
     make oldconfig \
         $makeFlags "${makeFlagsArray[@]}"
+
+    echo --finalConfig--
+    cat .config
 }
 
 

@@ -15,7 +15,11 @@
 
 , # Your own kernel configuration file, if you don't want to use the
   # default. 
-  kernelConfig ? null  
+  kernelConfig ? null
+
+, # A list of additional statements to be appended to the
+  # configuration file.
+  extraConfig ? []
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -24,7 +28,7 @@ let
 
   lib = import ../../../lib;
 
-  version = "2.6.22";
+  version = "2.6.23.1";
 
 in
 
@@ -34,17 +38,21 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "73c10604c53f1a6ee65ef805293d23903696f8cef864f42d7de9506f0d2ba4c7";
+    sha256 = "0737g83h7jbrlss8782b17mhc3nfn8qfbh5s71flz8pjxmbbmg1m";
   };
   
   patches = map (p: p.patch) kernelPatches;
-  extraConfig = lib.concatStrings (map (p: "\n" + (if p ? extraConfig then p.extraConfig else "") + "\n") kernelPatches);
+  extraConfig =
+    let addNewlines = map (s: "\n" + s + "\n");
+        configFromPatches =
+          map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
+    in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
   config =
     if kernelConfig != null then kernelConfig else
-    if userModeLinux then ./config-2.6.22-uml else
-    if stdenv.system == "i686-linux" then ./config-2.6.22-i686-smp else
-    if stdenv.system == "x86_64-linux" then ./config-2.6.22-x86_64-smp else
+    if userModeLinux then ./config-2.6.23-uml else
+    if stdenv.system == "i686-linux" then ./config-2.6.23-i686-smp else
+    if stdenv.system == "x86_64-linux" then ./config-2.6.23-x86_64-smp else
     abort "No kernel configuration for your platform!";
   
   buildInputs = [perl mktemp];
