@@ -14,18 +14,18 @@ assert pluginSupport -> libstdcpp5 != null;
 
 (stdenv.mkDerivation ({
   name =
-    if installjdk then "jdk-1.6.0" else "jre-1.6.0";
+    if installjdk then "jdk-1.6.0_3" else "jre-1.6.0_3";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6-dlj-linux-i586.bin;
-        sha256 = "0rw48124fdc5rhafj6qzrysb4w823jbn3awxgn07kcy1nvnrhkqw";
+        url = http://download.java.net/dlj/binaries/jdk-6u3-dlj-linux-i586.bin;
+        sha256 = "5c44208fbd5f90b3e6a0692ed9e1e98f5feb0c88aa0cfae5186dddb1f05f731b";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6-dlj-linux-amd64.bin;
-        sha256 = "1hr16f5kr3xcyhkl3yc2qi2kxg2avr3cmlxv4awpnj0930rmvwzi";
+        url = http://download.java.net/dlj/binaries/jdk-6u3-dlj-linux-amd64.bin;
+        sha256 = "8bc80ea1bf739674c1cacdfba9987a4d15adb54f4b1462a0b48b79815f56b311";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";

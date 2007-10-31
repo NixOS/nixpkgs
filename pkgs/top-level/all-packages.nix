@@ -3897,6 +3897,12 @@ rec {
     inherit (xlibs) libXt libX11;
   };
 
+  # = urxvt
+  rxvt_unicode = import ../applications/misc/rxvt_unicode {
+    inherit lib fetchurl stdenv perl;
+    inherit (xlibs) libXt libX11 libXft;
+  };
+
   sbagen = import ../applications/misc/sbagen {
     inherit fetchurl stdenv;
   };
