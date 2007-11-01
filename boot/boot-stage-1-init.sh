@@ -103,7 +103,7 @@ mountFS() {
     fi
 
     if test -n "$mustCheck"; then
-        fsck -C -a "$device"
+        FSTAB_FILE="/etc/mtab" fsck -C -a "$device"
         fsckResult=$?
 
         if test $(($fsckResult | 2)) = $fsckResult; then
