@@ -4238,6 +4238,10 @@ rec {
     inherit fetchurl stdenv zlib libjpeg libpng libtiff pam;
   };
 
+  dblatex = import ../misc/tex/dblatex {
+    inherit fetchurl stdenv python libxslt tetex;
+  };
+
   dosbox = import ../misc/emulators/dosbox {
     inherit fetchurl stdenv SDL;
   };
