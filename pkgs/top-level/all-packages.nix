@@ -1353,6 +1353,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ltrace = import ../development/tools/misc/ltrace {
+  	inherit fetchurl stdenv builderDefs stringsWithDeps lib 
+		elfutils;
+  };
+
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
   };

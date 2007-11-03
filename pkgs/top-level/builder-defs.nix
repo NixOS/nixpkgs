@@ -117,7 +117,7 @@ rec
 		}
 	") [minInit];
 
-	toSrcDir = s : FullDepEntry (if (archiveType s) == "tar" then "
+	toSrcDir = s : FullDepEntry ((if (archiveType s) == "tar" then "
 			tar xvf ${s}
 			cd \"\$(tar tf ${s} | head -1 | sed -e 's@/.*@@' )\"
 	" else if (archiveType s) == "tgz" then "
@@ -126,7 +126,9 @@ rec
 	" else if (archiveType s) == "tbz2" then "
 			tar xvjf ${s}
 			cd \"\$(tar tjf ${s} | head -1 | sed -e 's@/.*@@' )\"
-	" else (abort "unknown archive type : ${s}")) [minInit];
+	" else (abort "unknown archive type : ${s}"))+
+		(if args ? goSrcDir then args.goSrcDir else "")
+	) [minInit];
 
 	doConfigure = FullDepEntry ("
 		./configure --prefix=\"\$prefix\" ${toString (getAttr ["configureFlags"] "" args)}
