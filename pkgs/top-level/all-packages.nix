@@ -3829,6 +3829,17 @@ rec {
     inherit (xlibs) libXmu;
   };
 
+  sndFun = lib.sumArgs (import ../applications/audio/snd) {
+  	inherit fetchurl stdenv builderDefs stringsWithDeps lib;
+	inherit pkgconfig gmp gettext;
+	inherit (xlibs) libXpm;
+	inherit (gtkLibs) gtk glib;
+  };
+
+  snd = sndFun {
+  	inherit guile mesa libtool;
+  } null;
+
   # commented out because it's using the new configuration style proposal which is unstable
   /*
   sox = import ../applications/misc/audio/sox {
