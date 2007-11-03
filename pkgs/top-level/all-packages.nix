@@ -3371,7 +3371,7 @@ rec {
         };
     };
 
-  compiz = assert mesaSupported; import ../applications/window-managers/compiz {
+  compiz_050 = assert mesaSupported; import ../applications/window-managers/compiz/0.5.0.nix {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
@@ -3383,6 +3383,37 @@ rec {
               libgnomeprintui gnomepanel;
     gnomegtk = gnome.gtk;
     inherit librsvg fuse;
+  };
+ 
+ compiz_062 = assert mesaSupported; import ../applications/window-managers/compiz/0.6.2.nix {
+ 	inherit lib builderDefs stringsWithDeps;
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
+    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
+      libXinerama libICE libSM libXrender xextproto;
+    inherit (gnome) startupnotification libwnck GConf;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libgnome libgnomeui metacity
+	      glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeprint
+              libgnomeprintui gnomepanel;
+    gnomegtk = gnome.gtk;
+    inherit librsvg fuse;
+  };
+
+  compiz = assert mesaSupported; import ../applications/window-managers/compiz {
+ 	inherit lib builderDefs stringsWithDeps;
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
+    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
+      libXinerama libICE libSM libXrender xextproto;
+    inherit (gnome) startupnotification libwnck GConf;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libgnome libgnomeui metacity
+	      glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeprint
+              libgnomeprintui gnomepanel;
+    gnomegtk = gnome.gtk;
+    inherit librsvg fuse;
+    version = getConfig ["compiz" "version"] "0.5.0";
   };
   
   compizExtra = import ../applications/window-managers/compiz/extra.nix {
