@@ -1415,4 +1415,13 @@ root        ALL=(ALL) SETENV: ALL
 ";
 	}
 	
+	{
+	name = ["services" "xfs" "enable"];
+	default = false;
+	description = "
+	Whether to enable X Font Server.
+";
+  }
+
+
 ]

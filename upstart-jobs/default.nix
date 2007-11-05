@@ -194,6 +194,12 @@ import ../upstart-jobs/gather.nix {
       inherit config pkgs;
     })
 
+  # X Font Server
+  ++ optional ["services" "xfs" "enable"]
+  (import ../upstart-jobs/xfs.nix {
+  	inherit config pkgs;
+  })
+
   ++ optional ["services" "ircdHybrid" "enable"]
     (import ../upstart-jobs/ircd-hybrid.nix {
       inherit config pkgs;
