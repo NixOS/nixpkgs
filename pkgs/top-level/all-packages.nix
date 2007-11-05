@@ -189,8 +189,6 @@ rec {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  /*  
   mkDerivationByConfiguration = ({ flagConfig ? {}, optionals ? [], defaults ? [],  
         extraAttrs, collectExtraPhaseActions ? []} :
     args: with args.lib_unstable; with args;
@@ -201,7 +199,6 @@ rec {
       {
         inherit (co) configureFlags buildInputs;
       } // extraAttrs co  // co.pass // co.flags_prefixed ));
-  */
   
 
   # Check absence of non-used options

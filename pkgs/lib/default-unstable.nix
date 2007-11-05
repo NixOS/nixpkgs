@@ -187,7 +187,7 @@ rec {
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
-  av = attr : value : { inherit attr value; };
+  av = name : value : { inherit name value; };
   # attribute set containing one attribute
   avs = attr : value : listToAttrs [ (av attr value) ];
   # adds / replaces an attribute of an attribute set
@@ -203,6 +203,7 @@ rec {
 
   mergeAttrs = fold ( x : y : x // y) {};
 
+  # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
