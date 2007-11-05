@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   buildInputs = [curl openssl zlib expat];
 
   preBuild = "
-    makeFlagsArray=(prefix=$out PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}/bin/sh)
+    makeFlagsArray=(prefix=$out PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell})
   ";
 }

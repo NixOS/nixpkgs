@@ -134,26 +134,80 @@ rec
 		./configure --prefix=\"\$prefix\" ${toString (getAttr ["configureFlags"] "" args)}
 	") [minInit addInputs doUnpack];
 
+	doAutotools = FullDepEntry ("
+		mkdir -p config
+		libtoolize --copy --force
+		aclocal --force
+		#Some packages do not need this
+		autoheader || true; 
+		automake --add-missing --copy
+		autoconf
+	")[minInit addInputs doUnpack];
+
 	doMake = FullDepEntry ("	
 		make ${toString (getAttr ["makeFlags"] "" args)}
 	") [minInit addInputs doUnpack];
 
 	doUnpack = toSrcDir (toString src);
 
+	installPythonPackage = FullDepEntry ("
+		python setup.py install --prefix=\"\$prefix\" 
+		") [minInit addInputs doUnpack];
+
 	doMakeInstall = FullDepEntry ("
 		make ${toString (getAttr ["makeFlags"] "" args)} "+
 			"${toString (getAttr ["installFlags"] "" args)} install") [doMake];
 
 	doForceShare = FullDepEntry (" 
-		ensureDir \$prefix/share
+		ensureDir \"\$prefix/share\"
 		for d in ${toString forceShare}; do
-			if [ -d \$prefix/\$d -a ! -d \$prefix/share/\$d ]; then
-				mv -v \$prefix/\$d \$prefix/share
-				ln -sv share/\$d \$prefix
+			if [ -d \"\$prefix/\$d\" -a ! -d \"\$prefix/share/\$d\" ]; then
+				mv -v \"\$prefix/\$d\" \"\$prefix/share\"
+				ln -sv share/\$d \"\$prefix\"
 			fi;
 		done;
 	") [minInit defEnsureDir];
 
 	doDump = n: noDepEntry "echo Dump number ${n}; set";
 
+	patchFlags = if args ? patchFlags then args.patchFlags else "-p1";
+
+	patches = getAttr ["patches"] [] args;
+
+	toPatchCommand = s: "cat ${toString s} | patch ${toString patchFlags}";
+
+	doPatch = FullDepEntry (concatStringsSep ";"
+		(map toPatchCommand patches)
+	) [minInit doUnpack];
+
+	envAdderInner = s: x: if x==null then s else y: 
+		a: envAdderInner (s+"echo export ${x}='\"'\"\$${x}:${y}\";'\"'\n") a;
+
+	envAdder = envAdderInner "";
+
+	envAdderList = l:  if l==[] then "" else 
+	"echo export ${__head l}='\"'\"\\\$${__head l}:${__head (__tail l)}\"'\"';\n" +
+		envAdderList (__tail (__tail l));
+
+	wrapEnv = cmd: env: "
+		mv \"${cmd}\" \"${cmd}-orig\";
+		touch \"${cmd}\";
+		chmod a+rx \"${cmd}\";
+		(${envAdderList env}
+		echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
+
+	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) [minInit];
+
+	doPropagate = FullDepEntry ("
+		ensureDir \$out/nix-support
+		echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
+	") [minInit defEnsureDir];
+
+	debug = x:(__trace x x);
+	debugX = x:(__trace (__toXML x) x);
+
+	replaceScriptVar = file: name: value: ("sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}");
+	replaceInScript = file: l: (concatStringsSep "\n" ((pairMap (replaceScriptVar file) l)));
+	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
+	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
 }

@@ -9,7 +9,7 @@ args: with args; stdenv.mkDerivation {
   buildInputs = [ libX11 libixp ];
   inherit libixp;
  
-  phases = "installPhase";
+  phases = (if args.includeUnpack then "unpackPhase " else "")+"installPhase";
 
   installPhase = "
      export CFLAGS=\$NIX_CFLAGS_COMPILE

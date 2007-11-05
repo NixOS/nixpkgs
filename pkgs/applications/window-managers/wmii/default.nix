@@ -8,8 +8,8 @@ args: with args; stdenv.mkDerivation {
 
   buildInputs = [ libX11 libixp ];
   inherit libixp;
- 
-  phases = "installPhase";
+
+  phases = (if args.includeUnpack then "unpackPhase " else "")+"installPhase";
 
   installPhase = "
      export CFLAGS=\$NIX_CFLAGS_COMPILE
@@ -17,6 +17,7 @@ args: with args; stdenv.mkDerivation {
      sed -i -e \"s%^PREFIX.*%PREFIX=\$out%\" \\
             -e \"s%^\\(INCS.*\\)%\\1 \$NIX_CFLAGS_COMPILE%\" \\
             -e \"s%^\\(LIBS.*\\)%\\1 \$LDFLAGS%\" \\
+	    -e 's%^\\(AWKPATH = \\).*%\\1${gawk}/bin/gawk%' \\
             config.mk
      # don't use the default one installed by nixos!
      sed -i -e \"s%ixpc%\$libixp/bin/ixpc%\" wmiir

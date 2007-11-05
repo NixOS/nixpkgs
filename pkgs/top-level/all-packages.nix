@@ -1154,6 +1154,15 @@ rec {
     inherit fetchurl stdenv zlib bzip2;
   };
 
+  pyrexFun = lib.sumArgs (import ../development/interpreters/pyrex) {
+  	inherit fetchurl stdenv stringsWithDeps lib builderDefs;
+	python = python25;
+  };
+
+  pyrex = pyrexFun {
+  	version = "0.9.6";
+  } null;
+
   realPerl = import ../development/interpreters/perl {
     inherit fetchurl stdenv;
   };
@@ -1806,6 +1815,13 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng;
   };
 
+  intltoolFun = lib.sumArgs (import ../development/tools/misc/intltool) {
+  	inherit fetchurl stdenv lib builderDefs stringsWithDeps
+		perl perlXMLParser;
+  };
+
+  intltool = intltoolFun {version = "0.36.2";} null;
+
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
     inherit (gtkLibs) gtk;
@@ -1987,6 +2003,7 @@ rec {
 
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
+    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   });
 
   mesaSupported =
@@ -3400,7 +3417,7 @@ rec {
     inherit librsvg fuse;
   };
 
-  compiz = assert mesaSupported; import ../applications/window-managers/compiz {
+  compizFun = lib.sumArgs (assert mesaSupported; import ../applications/window-managers/compiz) {
  	inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
@@ -3413,7 +3430,36 @@ rec {
               libgnomeprintui gnomepanel;
     gnomegtk = gnome.gtk;
     inherit librsvg fuse;
+    inherit dbus dbus_glib;
+  };
+
+  compiz = compizFun {
     version = getConfig ["compiz" "version"] "0.5.0";
+    extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
+  } null;
+
+  compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
+
+  	version = getConfig ["compizFusion" "version"] "0.6.0" ;
+	inherit compiz;
+
+	inherit stringsWithDeps lib builderDefs;
+
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
+    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
+      libXinerama libICE libSM libXrender xextproto;
+    inherit (gnome) startupnotification libwnck GConf;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libgnome libgnomeui metacity
+	      glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeprint
+              libgnomeprintui gnomepanel gnomedesktop;
+    gnomegtk = gnome.gtk;
+    inherit librsvg fuse dbus dbus_glib git;
+ 
+ 	inherit automake autoconf libtool intltool python pyrex gettext;
+	inherit pygtk pycairo getopt libjpeg glxinfo;
+	inherit (xorg) xvinfo xdpyinfo;
   };
   
   compizExtra = import ../applications/window-managers/compiz/extra.nix {
@@ -4001,12 +4047,14 @@ rec {
     libixp = libixp03;
     inherit fetchurl /* fetchhg */ stdenv gawk;
     inherit (xlibs) libX11;
+    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
   wmiiSnap = import ../applications/window-managers/wmii {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
     inherit (xlibs) libX11;
+    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
   wrapFirefox = firefox: import ../applications/networking/browsers/firefox-wrapper {

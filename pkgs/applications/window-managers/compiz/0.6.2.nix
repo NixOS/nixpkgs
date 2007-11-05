@@ -9,14 +9,17 @@ args : with args;
 			    pkgconfig libXrender xextproto gtk libwnck GConf libgnome 
 			    libgnomeui metacity gnomegtk glib pango libglade libgtkhtml 
 			    gtkhtml libgnomecanvas libgnomeprint libgnomeprintui gnomepanel 
-			    librsvg fuse
+			    librsvg fuse 
 		];
 		  propagatedBuildInputs = [
 		    libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
 		    libICE libSM startupnotification mesa GConf perl perlXMLParser libxslt
+		    dbus dbus_glib 
 		  ];
 		configureFlags = ["--enable-gtk" "--enable-fuse" 
-			"--enable-annotate" "--enable-librsvg"];
+			"--enable-annotate" "--enable-librsvg"] ++ 
+			(if args ? extraConfigureFlags then args.extraConfigureFlags else []);
+		patches = [ ./glx-patch-0.6.2.patch ];
 	} null; /* null is a terminator for sumArgs */
 	with stringsWithDeps;
 let
@@ -24,14 +27,16 @@ let
     for i in $out/bin/*; do
      patchelf --set-rpath /var/run/opengl-driver/lib:$(patchelf --print-rpath $i) $i
     done
-  ") [minInit doMakeInstall];
+    ensureDir \$out/share/compiz-plugins/
+    ln -sfv \$out/lib/compiz \$out/share/compiz-plugins/
+  ") [minInit doMakeInstall defEnsureDir];
 in
 
 stdenv.mkDerivation 
 rec {
 	name = "compiz-0.6.2";
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare postAll]);
+		(textClosure [doPatch doConfigure doMakeInstall doForceShare postAll]);
 	meta = {
 		description = "
 	Compiz window manager
