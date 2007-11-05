@@ -8,5 +8,6 @@ rec
 		bcop pyrex configBackendGConf;});
 	ccsm = import ./ccsm (args // {inherit libcompizconfig bcop compizConfigPython configBackendGConf;});
 	pluginsMain = import ./main (args //{inherit bcop ;});
+	pluginsExtra = import ./extra (args //{inherit bcop pluginsMain;});
 	compizManager = import ./compiz-manager (args // {inherit bcop ccsm;});
 }
