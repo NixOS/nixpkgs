@@ -189,16 +189,16 @@ rec {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
-  mkDerivationByConfiguration = ({ flagConfig ? {}, optionals ? [], defaults ? [],  
+  mkDerivationByConfiguration = { flagConfig ? {}, optionals ? [], defaults ? [],  
         extraAttrs, collectExtraPhaseActions ? []} :
-    args: with args.lib_unstable; with args;
+    args: with args.lib; with args;
     if ( __isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
     let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
-        inherit (co) configureFlags buildInputs;
-      } // extraAttrs co  // co.pass // co.flags_prefixed ));
+        inherit (co) configureFlags buildInputs /*flags*/;
+      } // extraAttrs co  // co.pass // co.flags_prefixed );
   
 
   # Check absence of non-used options
