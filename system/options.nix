@@ -1074,14 +1074,26 @@
   }
 
   {
+    name = ["nix" "useChroot"];
+    default = false;
+    example = true;
+    description = "
+      If set, Nix will perform builds in a chroot-environment that it
+      will set up automatically for each build.  This prevents
+      impurities in builds by disallowing access to dependencies
+      outside of the Nix store.
+    ";
+  }
+  
+  {
     name = ["nix" "extraOptions"];
     default = "";
     example = "
-	gc-keep-outputs = true
-	gc-keep-derivations = true
+      gc-keep-outputs = true
+      gc-keep-derivations = true
     ";
     description = "
-	This option allows to append lines to nix.conf. 
+      This option allows to append lines to nix.conf. 
     ";
   }
   

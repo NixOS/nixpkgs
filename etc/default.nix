@@ -116,6 +116,17 @@ import ../helpers/make-etc.nix {
       target = "inputrc";
     }
 
+    { # Nix configuration.
+      source = pkgs.writeText "nix.conf" "
+        # WARNING: this file is generated.
+        build-users-group = nixbld
+        build-max-jobs = ${toString (config.get ["nix" "maxJobs"])}
+        build-use-chroot = ${if config.get ["nix" "useChroot"] then "true" else "false"}
+        build-chroot-dirs = /dev /proc /bin /etc
+        ${config.get ["nix" "extraOptions"]}
+      ";
+      target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
+    }
   ]
 
   # Configuration file for fontconfig used to locate

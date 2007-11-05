@@ -266,8 +266,6 @@ rec {
       config.get ["security" "setuidPrograms"] ++
       config.get ["security" "extraSetuidPrograms"] ++
       pkgs.lib.optional (config.get ["security" "sudo" "enable"]) "sudo";
-    maxJobs = config.get ["nix" "maxJobs"];
-    extraNixOptions = config.get ["nix" "extraOptions"];
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 

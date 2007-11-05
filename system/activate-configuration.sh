@@ -101,17 +101,8 @@ fi
 
 # Set up Nix.
 if test -z "@readOnlyRoot@"; then
-
     mkdir -p /nix/etc/nix
-    cat > /nix/etc/nix/nix.conf <<EOF
-# WARNING: this file is generated.
-build-users-group = nixbld
-build-max-jobs = @maxJobs@
-
-@extraNixOptions@
-
-EOF
-
+    ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
     chown root.nixbld /nix/store
     chmod 1775 /nix/store
 fi
