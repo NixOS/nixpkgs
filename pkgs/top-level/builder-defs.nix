@@ -203,8 +203,8 @@ rec
 		echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
 	") [minInit defEnsureDir];
 
-	debug = x:(__trace x x);
-	debugX = x:(__trace (__toXML x) x);
+	/*debug = x:(__trace x x);
+	debugX = x:(__trace (__toXML x) x);*/
 
 	replaceScriptVar = file: name: value: ("sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}");
 	replaceInScript = file: l: (concatStringsSep "\n" ((pairMap (replaceScriptVar file) l)));
