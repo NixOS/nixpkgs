@@ -21,6 +21,6 @@ stdenv.mkDerivation {
   meta = {
     description = "The Nix Deployment System";
     homepage = http://nix.cs.uu.nl/;
-    license = "GPL";
+    license = "LGPL";
   };
 }

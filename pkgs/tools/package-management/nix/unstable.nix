@@ -3,14 +3,14 @@
 , stateDir ? "/nix/var"
 }:
 
-let version = "0.11pre9439"; in
+let version = "0.11pre9570"; in
 
 stdenv.mkDerivation {
   name = "nix-${version}";
   
   src = fetchurl {
     url = "http://nix.cs.uu.nl/dist/nix/nix-${version}/nix-${version}.tar.bz2";
-    md5 = "c0336dd00d16355784b07574a2d06b83";
+    md5 = "5170f1b1e8feda2adeb2cac3c5ca5ff9";
   };
 
   buildInputs = [perl curl openssl];
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
   meta = {
     description = "The Nix Deployment System";
     homepage = http://nix.cs.uu.nl/;
-    license = "GPL";
+    license = "LGPL";
   };
 }
