@@ -9,7 +9,7 @@ args : with args;
 stdenv.mkDerivation rec {
 	name = "${abort "Specify name"}";
 	builder = writeScript (name + "-builder")
-		(textClosure [(abort "Specify phases - defined here or in builderDefs")]);
+		(textClosure [(abort "Specify phases - defined here or in builderDefs") doForceShare doPropagate]);
 	meta = {
 		description = "
 		${abort "Write a description"}

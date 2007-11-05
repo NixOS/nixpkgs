@@ -6,7 +6,7 @@ args : with args;
 		sha256 = "0im67mxnm30a3xd3rvfwrgfp4ic2x5axpjdahx0f5p9pnfy0jm4n";
 	};
 		buildInputs = (import ../general-dependencies.nix args) ++
-			[libcompizconfig bcop python pyrex];
+			[libcompizconfig bcop python pyrex configBackendGConf];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
 	with stringsWithDeps;
