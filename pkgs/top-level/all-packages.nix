@@ -240,6 +240,7 @@ rec {
         }
       else defaultStdenv;
 
+  stdenvUsingSetupNew2 = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
 
   ### BUILD SUPPORT
 
@@ -925,6 +926,49 @@ rec {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
   });
+
+  # This new ghc stuff is under heavy development and might change ! 
+
+  # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
+  ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
+     { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
+     "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
+
+  ghcsAndLibs = recurseIntoAttrs (import ../development/compilers/ghcs {
+      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline;
+      inherit ghcPkgUtil;
+      stdenv = stdenvUsingSetupNew2;
+      lib = lib_unstable;
+  });
+
+  # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
+  createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
+        import ../development/compilers/ghc/createGhcWrapper {
+    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil;
+    stdenv = stdenvUsingSetupNew2;
+  };
+
+  # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
+  # So you can have different wrappers with different library combinations
+  # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
+  ghcLibraryWrapper68 = 
+    let ghc = ghcsAndLibs.ghc68.ghc; in
+    createGhcWrapper rec {
+      ghcPackagedLibs = true;
+      name = "ghc68_wrapper";
+      suffix = "68wrapper";
+      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) 
+        [ "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "array-0.1" "containers-0.1" 
+          "hpc-0.5" "bytestring-0.9" "pretty-1.0" "packedstring-0.1" "template-haskell-0.1" 
+          "unix-2.0" "process-1.0" "readline-1.0" "Cabal-1.2.0" "random-1.0" "haskell98-1.0" "ghc-6.8.0.20071004"
+          "array-0.1" "bytestring-0.9" "containers-0.1" "directory-1.0" "filepath-1.0"
+          "ghc-6.8.0.20071004" "haskell98-1.0" "hpc-0.5" "old-locale-1.0" "old-time-1.0" 
+          "packedstring-0.1" "pretty-1.0" "process-1.0" "random-1.0"
+          "readline-1.0" "rts-1.0" "template-haskell-0.1" "unix-2.0"
+        ];
+        # (flatten ghcsAndLibs.ghc68.core_libs);
+      inherit ghc;
+  };
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
@@ -2321,11 +2365,6 @@ rec {
 
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
-
-  # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
-  ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
-     { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
-     "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
 
   uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?

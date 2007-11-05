@@ -16,7 +16,11 @@
 # if not already contained
 setupHookRegisteringPackageDatabase(){
   ensureDir $out/nix-support;
-  local pkgdb=$out/nix-support/package.conf
+  if test -n "$1"; then
+    local pkgdb=$1
+  else
+    local pkgdb=$out/nix-support/package.conf
+  fi
   cat >> $out/nix-support/setup-hook << EOF
     
     echo \$GHC_PACKAGE_PATH | grep -l $pkgdb &> /dev/null || \
@@ -28,6 +32,6 @@ EOF
 createEmptyPackageDatabaseAndSetupHook(){
   ensureDir $out/nix-support;
   PACKAGE_DB=$out/nix-support/package.conf;
-  echo '[]' > $PACKAGE_DB";
+  echo '[]' > "$PACKAGE_DB";
   setupHookRegisteringPackageDatabase
 }
