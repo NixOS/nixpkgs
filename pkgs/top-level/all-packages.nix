@@ -1430,7 +1430,7 @@ rec {
 
   patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
     (import ../development/tools/misc/patchelf {
-        inherit fetchurl stdenv;
+      inherit fetchurl stdenv;
     });
 
   /**
@@ -2064,8 +2064,7 @@ rec {
     system == "x86_64-linux";
   
   mesa = assert mesaSupported; import ../development/libraries/mesa {
-    inherit fetchurl stdenv pkgconfig x11 libdrm;
-    inherit (xlibs) libXmu libXi makedepend glproto libXxf86vm;
+    inherit fetchurl stdenv pkgconfig x11 xlibs libdrm;
   };
 
   mesaHeaders = import ../development/libraries/mesa/headers.nix {
@@ -2747,7 +2746,7 @@ rec {
   xorg = recurseIntoAttrs (import ../servers/x11/xorg {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config;
+      xkeyboard_config gettext;
   });
 
 

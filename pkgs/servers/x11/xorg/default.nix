@@ -1,7 +1,7 @@
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
 , libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
-, xkeyboard_config
+, xkeyboard_config, gettext
 }:
 
 rec {
@@ -10,8 +10,8 @@ rec {
     name = "applewmproto-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/applewmproto-X11R7.0-1.0.3.tar.bz2;
-      sha256 = "1v657wkk6dcpcg9drd92p05wg3ifd4qiy4hzwklfsfspzmvqfwyv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/applewmproto-1.0.3.tar.bz2;
+      sha256 = "0l2d3wmgprs5gl479ba2yw9vj1q3m8rhri82k0vryd9ildzc0f59";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -20,18 +20,18 @@ rec {
     name = "appres-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/appres-X11R7.2-1.0.1.tar.bz2;
-      sha256 = "00k2b66b1ava2yy48c1jflpbj5rv8ab9r8izxggmdyhy3v8yr3n8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/appres-1.0.1.tar.bz2;
+      sha256 = "0qmr5sdbj4alzf3p8lxb8348y7zdmsjdp20c8biwx39b40xgizhm";
     };
     buildInputs = [pkgconfig libX11 libXt ];
   }) // {inherit libX11 libXt ;};
     
   bdftopcf = (stdenv.mkDerivation {
-    name = "bdftopcf-1.0.0";
+    name = "bdftopcf-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/bdftopcf-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "00s8cmhnq95nbv332q9bhyxxyrd2irywk2nh01j62nyg18q0wxjr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/bdftopcf-1.0.1.tar.bz2;
+      sha256 = "1lq5x0kvgwlzdgfhi8sbbchzd1y1nmzdqgq9laysx08p6smlbama";
     };
     buildInputs = [pkgconfig libXfont ];
   }) // {inherit libXfont ;};
@@ -40,8 +40,8 @@ rec {
     name = "beforelight-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/beforelight-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0pmcsjk0jva36c2hrypnwazvbbgnwywgji7yml9rg1mb8hyr38b2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/beforelight-1.0.2.tar.bz2;
+      sha256 = "19s7n2rpq44mrqd3gd6nh4wql4dg41w02j6r9zh9yxwkkiaigqh0";
     };
     buildInputs = [pkgconfig libX11 libXaw libXScrnSaver libXt ];
   }) // {inherit libX11 libXaw libXScrnSaver libXt ;};
@@ -50,8 +50,8 @@ rec {
     name = "bigreqsproto-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/bigreqsproto-X11R7.0-1.0.2.tar.bz2;
-      sha256 = "11nf47y46phdxr222vd867sygg7hdpi9v9z3625g1kmihkzjxn39";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/bigreqsproto-1.0.2.tar.bz2;
+      sha256 = "1vmda2412s5yvawx2xplrbzcghnmqin54r1l352ycy25lac01nih";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -60,18 +60,18 @@ rec {
     name = "bitmap-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/bitmap-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "12zlb4nrdwa8mq0gs6f6f1la5d97a74rw7i2yw2r6fp8mjpablaw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/bitmap-1.0.2.tar.bz2;
+      sha256 = "1g0l9ip2yabz056aq58ijnf2xfnga9d15pmd7hpg82a3mhkrjwc3";
     };
     buildInputs = [pkgconfig libXaw libX11 xbitmaps libXmu libXt ];
   }) // {inherit libXaw libX11 xbitmaps libXmu libXt ;};
     
   compositeproto = (stdenv.mkDerivation {
-    name = "compositeproto-0.3.1";
+    name = "compositeproto-0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/compositeproto-X11R7.1-0.3.1.tar.bz2;
-      sha256 = "0ny28gkdcff1pfvyc0fr9m22nbaamh6fqbyjwgy4gq7vllf2q0nw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/compositeproto-0.4.tar.bz2;
+      sha256 = "00q0wc8skfjy7c9dzngvmi99i29bh68715wrdw7m9dxjcg5d24v0";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -80,7 +80,7 @@ rec {
     name = "damageproto-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/proto/damageproto-1.1.0.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/damageproto-1.1.0.tar.bz2;
       sha256 = "07b41ninycfm5sgzpjsa168dnm1g55c2mzzgigvwvs9mr3x889lx";
     };
     buildInputs = [pkgconfig ];
@@ -90,8 +90,8 @@ rec {
     name = "dmxproto-2.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/dmxproto-X11R7.0-2.2.2.tar.bz2;
-      sha256 = "1nvq1j3x5hiwal8x7blbjjbkf81idwvsixnvrfb0m5c9jmyra6sk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/dmxproto-2.2.2.tar.bz2;
+      sha256 = "1qpw6lp4925zwmkp48b6wsy84d21872i6x2dr8rzfn7csp4xk9ma";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -100,8 +100,8 @@ rec {
     name = "editres-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/editres-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0n8yql1rnv4dah44d229aw2jiwm21i8lj12aiajw83dvc4xki6ra";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/editres-1.0.2.tar.bz2;
+      sha256 = "1pv7q44kzipjn735lhrbiyg3kmx3jhsfkjb3yfjshggg9q9vr3wp";
     };
     buildInputs = [pkgconfig libXaw libX11 libXmu libXt ];
   }) // {inherit libXaw libX11 libXmu libXt ;};
@@ -110,8 +110,8 @@ rec {
     name = "encodings-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/encodings-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "03rdw6zqkrknj15hr8b1i18azkm8nd9f1fbq00aqb6c4qw8s1van";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/encodings-1.0.2.tar.bz2;
+      sha256 = "1b2fdxfvqb0gbg4pz8anp9rwnbg2xj3d4b8cbc46rjdvcrxi06bd";
     };
     buildInputs = [pkgconfig mkfontscale ];
   }) // {inherit mkfontscale ;};
@@ -120,8 +120,8 @@ rec {
     name = "evieext-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/evieext-X11R7.0-1.0.2.tar.bz2;
-      sha256 = "08wzhzzrdjsxzlk6jxnbv1j7khhnaa79agn637n5hq29m54d1nnp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/evieext-1.0.2.tar.bz2;
+      sha256 = "09fijha8ac0iw7lbc75912jwhm5k19ypm73zj8akf23hjwx1318b";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -130,8 +130,8 @@ rec {
     name = "fixesproto-4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fixesproto-X11R7.1-4.0.tar.bz2;
-      sha256 = "14sgwakhia4dhvmp0hcaaxwlgwkzwzjfbvz6yqrsf35afdfdlmga";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fixesproto-4.0.tar.bz2;
+      sha256 = "13xhrva17vcg1zdz6kba5g5jzkf43z1ifwfsg1ndnll1rhf9gzmk";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -140,8 +140,8 @@ rec {
     name = "font-adobe-100dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-100dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1hrcfhr87jj1lkikrs1yw0xa0f7qi9d9iwi8mdk48nhv4rynz9w8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-adobe-100dpi-1.0.0.tar.bz2;
+      sha256 = "06cs5q4hy255i5b64q0cgcapv46kgc315b7jmwjs5j952qx1nv7i";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -150,8 +150,8 @@ rec {
     name = "font-adobe-75dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-75dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "11wxdk7yjd0y54q9y7y1cbzj7p79ad4g90ab73pr279vddzkgizi";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-adobe-75dpi-1.0.0.tar.bz2;
+      sha256 = "0fb32yyqf4mf93bn9a0qbzm9zbl3sxkhc0ipy9az7r7mw2z4a9yn";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -160,8 +160,8 @@ rec {
     name = "font-adobe-utopia-100dpi-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-utopia-100dpi-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1x9s530mjpgqdmnw52qanj8n60gq53llxhxh130p03jij5ddaqmr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-adobe-utopia-100dpi-1.0.1.tar.bz2;
+      sha256 = "1zmmm430rwgv0cr80ybl6bk9qzr697lwh253qwxv2sf1f2mf2hqr";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -170,8 +170,8 @@ rec {
     name = "font-adobe-utopia-75dpi-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-utopia-75dpi-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1xx2x074gkpp4v2gqy2l7cyx52zvy4k4sm59w38834ymp9nk52qn";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-adobe-utopia-75dpi-1.0.1.tar.bz2;
+      sha256 = "12bhr82dsd9iz50kszppghf22fpyjcadrxd0plxpwwmw9ccy5m7b";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -180,8 +180,8 @@ rec {
     name = "font-adobe-utopia-type1-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-adobe-utopia-type1-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1dnmnma1l7likn1jlbnc5bavs5467ymm45lwdlvj4d5gv4qn59qb";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-adobe-utopia-type1-1.0.1.tar.bz2;
+      sha256 = "1p604j44vqfp7iv4a7p38vi6d1qk26grmnkdsz1dapr7zz475ip9";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -190,8 +190,8 @@ rec {
     name = "font-alias-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-alias-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1x12h0l09anljf9yas2h1mly7j7d68an6nsyhfbqs1qycgarm4lw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-alias-1.0.1.tar.bz2;
+      sha256 = "1dl99xmdbgwssd4zgnipc4b4l5g9s2qc08wx29bdif946bb61nvp";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -200,8 +200,8 @@ rec {
     name = "font-arabic-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-arabic-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "18660xka14z6r0f1wk0jgfalrhn1zmhdcqb14b5way54pnk1jh96";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-arabic-misc-1.0.0.tar.bz2;
+      sha256 = "155wyy6vsxha3lx9cvw22pscsdc3iljsgyh6zqpyl19qyfixzsch";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -210,8 +210,8 @@ rec {
     name = "font-bh-100dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-100dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0mdsbmv83c473fdyng4nk651x3clzvxrzwnd55pj6fadbykdwx4g";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-100dpi-1.0.0.tar.bz2;
+      sha256 = "0jpfrxwdx24ib784j6k6qbi6zvy6svyva6gda8pj98krfmvi32mf";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -220,8 +220,8 @@ rec {
     name = "font-bh-75dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-75dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1flqwb0r3hx9q50a5cxrbmqh6a9wxzvpq7m43zfb3rg0apq2bkkk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-75dpi-1.0.0.tar.bz2;
+      sha256 = "1gq55j00g7fqnypxy6f0wvhz5l16056sdysmbp3qk4yc82s6g567";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -230,8 +230,8 @@ rec {
     name = "font-bh-lucidatypewriter-100dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-lucidatypewriter-100dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "00yg08n0vj73a0mbrr7d388ac9qf5ph5a3mdfwxrs6g7703s8nck";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-lucidatypewriter-100dpi-1.0.0.tar.bz2;
+      sha256 = "04vh9mccnh517q42w65k89pz3jd6szim3hazydm7n0wilp5pvm1n";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -240,8 +240,8 @@ rec {
     name = "font-bh-lucidatypewriter-75dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-lucidatypewriter-75dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1mp5x0yvqwklrrsw13pyfqp3j2fvvimlm3bvs5xi4cphkh6mhmcd";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-lucidatypewriter-75dpi-1.0.0.tar.bz2;
+      sha256 = "0im03ms6bx1947fkdarrdzzm8lq69pz5502n89cccj9sadpz7wjh";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -250,8 +250,8 @@ rec {
     name = "font-bh-ttf-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-ttf-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1pwy9nzmmwipia4zgp23h95mds1zsh4xiac54x61x6x4058j8s52";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-ttf-1.0.0.tar.bz2;
+      sha256 = "0i6nsw1i43ydljws2xzadvbmxs1p50jn9akhinwrh8z4yxr5w6ks";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -260,8 +260,8 @@ rec {
     name = "font-bh-type1-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bh-type1-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1mc2a667s2p4kb5p31cyqdr07mpxcqyrvsvfsg1xd0rdx4adxkpp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bh-type1-1.0.0.tar.bz2;
+      sha256 = "0nv4qdr8z68iczqic4gj492ln6y1xy04kxx08dhdaaf8y89mb2js";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -270,8 +270,8 @@ rec {
     name = "font-bitstream-100dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bitstream-100dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1ri3qmjs9dlkwmjkgfzhc4q417hpci8x8mvxk6f8lb8699vqb6ry";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bitstream-100dpi-1.0.0.tar.bz2;
+      sha256 = "1lp260dwrrr4ll9rbdq38cnvlxq843q34rxay6hl2bmmsxs5lw0c";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -280,8 +280,8 @@ rec {
     name = "font-bitstream-75dpi-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bitstream-75dpi-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0svz7c3k1fdr7iznb10h7rk8vbrfkw63rx958aass600dr0vdcbi";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bitstream-75dpi-1.0.0.tar.bz2;
+      sha256 = "1yqv42gf4ksr5fr0b2szwfc8cczis0pppcsg1wdlwllprb6fmprd";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -290,8 +290,8 @@ rec {
     name = "font-bitstream-speedo-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bitstream-speedo-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0lkx56sgp78bj8sbh2nls3pvjv95w38ndcn7x84lrl1zfmqwajzl";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bitstream-speedo-1.0.0.tar.bz2;
+      sha256 = "1rpn2j99cg5dnw3mjzff65darwaz5jwjgi7i0xscq064d9w03b4r";
     };
     buildInputs = [pkgconfig mkfontdir ];
   }) // {inherit mkfontdir ;};
@@ -300,8 +300,8 @@ rec {
     name = "font-bitstream-type1-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-bitstream-type1-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0vgx360jb9q15kjy6ynll850h2kc0lv3s115b3n5nnc9i8wrvw7n";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-bitstream-type1-1.0.0.tar.bz2;
+      sha256 = "00yrahjc884mghhbm713c41x7r2kbg1ply515qs3g20nrwnlkkjg";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -310,8 +310,8 @@ rec {
     name = "fontcacheproto-0.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fontcacheproto-X11R7.0-0.1.2.tar.bz2;
-      sha256 = "0qb4bbrymlls3i92da43fzqa56aly4vybikwhddwa9vgb05219kj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fontcacheproto-0.1.2.tar.bz2;
+      sha256 = "1yfrldprqbxv587zd9lvsn2ayfdabzkgzya5cqvjf290kga3w1j8";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -320,8 +320,8 @@ rec {
     name = "font-cronyx-cyrillic-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-cronyx-cyrillic-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0d2bqh6rfwc3b124m1yiilnxf5hlgp4d7v517c6l73339ch3sn98";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-cronyx-cyrillic-1.0.0.tar.bz2;
+      sha256 = "1vl4yk3sdvcqpym4d4r3lxrpyghxgjpq8yx2kdxygjpm6dq4xj86";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -330,8 +330,8 @@ rec {
     name = "font-cursor-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-cursor-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1d229h1pamf431j46rm6h3llrnylz3165aps7vd3wrc82chcfrss";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-cursor-misc-1.0.0.tar.bz2;
+      sha256 = "1igklmxc0bgbp5a2nbmbwii5d9mh71zsxay2sw0sa6sq2xqy4pcm";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -340,8 +340,8 @@ rec {
     name = "font-daewoo-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-daewoo-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "138lvj6fa747xl633fx8yy8vq32xwadm49s5wz7a2986fcfyyyf2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-daewoo-misc-1.0.0.tar.bz2;
+      sha256 = "09l98sd8wwdhgjdafq8cr6ykki4imh5qi21jwaqkhfil5v4ym67i";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -350,8 +350,8 @@ rec {
     name = "font-dec-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-dec-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0xbblqbrg099xj2aqcqxwv4j7yrs953akfdn16jgrhghhhl9ivp7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-dec-misc-1.0.0.tar.bz2;
+      sha256 = "1fcbnv0zlbzsn68z5as0k3id83ii9k67l6bxiv2ypcfs4l96sf43";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -360,8 +360,8 @@ rec {
     name = "font-ibm-type1-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-ibm-type1-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1z2wr67sjl3vsg3x87ja189w0x25ywvir3jddlxny5m2f7si0hjk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-ibm-type1-1.0.0.tar.bz2;
+      sha256 = "07j6kk7wd0lbnjxn9a4kjahjniiwjyzc8lp1lvw46sahwg193l1h";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -370,8 +370,8 @@ rec {
     name = "font-isas-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-isas-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1xsmdwqn1hli9dil0v4j9qhgvk5ivbvdpx12lcnsq0mwnkhcyif8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-isas-misc-1.0.0.tar.bz2;
+      sha256 = "18jfp92s6wmjs107rhdcz4acmzb2anhcb7s8bpd2kwhbrq9i7rlp";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -380,8 +380,8 @@ rec {
     name = "font-jis-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-jis-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0immg3fl59q8ixyca1w0vngapchn0g10p6z000nj6lpsvpk3qk3z";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-jis-misc-1.0.0.tar.bz2;
+      sha256 = "1fn75mqx6xjqffbd01a1wplc8cf7spwsrxv5h2accizw9zyyw89p";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -390,8 +390,8 @@ rec {
     name = "font-micro-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-micro-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "08mj6nr05fsl7lz5q2pksng4df2qr7s8idm2nf8a07lac4ic5f93";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-micro-misc-1.0.0.tar.bz2;
+      sha256 = "0wm52zgbly62vsbr5c4wz9rh1vk4y1viyv09r20r6bp175cppc8n";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -400,8 +400,8 @@ rec {
     name = "font-misc-cyrillic-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-cyrillic-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0z673j5z6ppzyf7sqmilq038fv6jjqx6a4hr86f02312wrzljcp3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-misc-cyrillic-1.0.0.tar.bz2;
+      sha256 = "1zwh69k7id17jabwia6x43f520lbf8787nf71vs3p78j089sq2vw";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -410,8 +410,8 @@ rec {
     name = "font-misc-ethiopic-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-ethiopic-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1na882sk7mmb0dhmypzgfj0sv35jf2dap34k6jg5brzlp22500h4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-misc-ethiopic-1.0.0.tar.bz2;
+      sha256 = "0hficywkkzl4dpws9sg47d3m1igpb7m4myw8zabkf1na0648dljq";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -420,8 +420,8 @@ rec {
     name = "font-misc-meltho-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-meltho-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0g95r9v7ixbr7120p3d99c2yvxlmj5a6lwb19rzb0pdrap0g1jya";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-misc-meltho-1.0.0.tar.bz2;
+      sha256 = "091ripcw30cs6032p12gwcy2hg8b1y24irgacwsky1dn4scjpqf7";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -430,8 +430,8 @@ rec {
     name = "font-misc-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-misc-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0y1npz2qxi7i29z5k0g6s94n3vyxmd1n996ahyv8pa05fd0bkhdx";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-misc-misc-1.0.0.tar.bz2;
+      sha256 = "1nqp7zhwmrh6ng8j4i4pscqj2xhh57sdmrkbqgklh5hzmmh2b816";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; postInstall = "ln -s ${fontalias}/lib/X11/fonts/misc/fonts.alias $out/lib/X11/fonts/misc/fonts.alias"; 
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -440,8 +440,8 @@ rec {
     name = "font-mutt-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-mutt-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "196i7l8z7jzi3haaq2jb20z68rs7hg7ahd40vw07whpw5x98ssiq";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-mutt-misc-1.0.0.tar.bz2;
+      sha256 = "1zzd3ba1i2ffqh8yyvyqyhcyxa7j474lb8x88b5cxf7js0xih6gj";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -450,8 +450,8 @@ rec {
     name = "font-schumacher-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-schumacher-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1prqzdb998fy3xkrd0vkcgbqmfvi28w67d0jng6x597zjgrckinm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-schumacher-misc-1.0.0.tar.bz2;
+      sha256 = "0ypgas5hjwaad53hfpx2w5s1scybh953vb94rrlmaix4hpw6qkj5";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
@@ -460,8 +460,8 @@ rec {
     name = "font-screen-cyrillic-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-screen-cyrillic-X11R7.2-1.0.1.tar.bz2;
-      sha256 = "0qj94fd642gvsbi05di0s096dk24s02pk6pclbfj2vvin78zkp2k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-screen-cyrillic-1.0.1.tar.bz2;
+      sha256 = "07y52rm2m17ig6piynk9jgyhdv8a4s7jmn5ssa83a61a607mymyr";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -470,8 +470,8 @@ rec {
     name = "font-sony-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-sony-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1kg50acvcq1zaxl4gxdr3ddm7jcssgda6i1gr5jyrixn2jix19sf";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-sony-misc-1.0.0.tar.bz2;
+      sha256 = "08rf8m9mqg9h0w67b5k55hs73v2s9lxz7aab0nq7rd90c3kkms8s";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -480,8 +480,8 @@ rec {
     name = "fontsproto-2.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fontsproto-X11R7.0-2.0.2.tar.bz2;
-      sha256 = "1d30yq17hkmx0yqk5s13cjq3s6f1xbwpv6hpijjq5ri84fnxk9ch";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fontsproto-2.0.2.tar.bz2;
+      sha256 = "0ywb783l7gwypq5nchfmysra0n6dqv9hc3vsf4ra44da65qm9gc3";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -490,8 +490,8 @@ rec {
     name = "font-sun-misc-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-sun-misc-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "01wsl2cymv3arxyjkf08pd5lvyg800c4h3pg3skbs20a0vblq2c0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-sun-misc-1.0.0.tar.bz2;
+      sha256 = "1r99ayxfc1qqcg6zwfkkvbga3qwyf3h3xsh1ymw02zwf9n7jvh83";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -500,8 +500,8 @@ rec {
     name = "fonttosfnt-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fonttosfnt-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0ad9jvl85il05fy21z318dsrv53al1gqg2byr1irw3hqnqz9jaw5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fonttosfnt-1.0.3.tar.bz2;
+      sha256 = "0hsjzpj3hcmcm3qqlk7sz6c5x5zrdb002f2ndjmrg829x94h2awx";
     };
     buildInputs = [pkgconfig libfontenc freetype xproto ];
   }) // {inherit libfontenc freetype xproto ;};
@@ -510,8 +510,8 @@ rec {
     name = "font-util-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-util-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "1ia86i3abv4mjr2rjwbn406linrywxzjj2iqfxh9k285qx19r8gz";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-util-1.0.1.tar.bz2;
+      sha256 = "04h6c24q08d8ljajxzlfwyr1fxfhb88b3w21nfmy6bm3gsqj7304";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -520,8 +520,8 @@ rec {
     name = "font-winitzki-cyrillic-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-winitzki-cyrillic-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "079dfhkm6ks94imyihb1pfk9gr9jxgxpc31mdkjbkrjqfq2rfsav";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-winitzki-cyrillic-1.0.0.tar.bz2;
+      sha256 = "1qzf9f1irn4difbz2s6j8yhn4hdg95j35q89nhss7rpwh5l7z2j7";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   }) // {inherit bdftopcf mkfontdir mkfontscale ;};
@@ -530,8 +530,8 @@ rec {
     name = "font-xfree86-type1-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/font-xfree86-type1-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0kzr8jqfqp8gm6vh391l16vlmyclz9ck9nw2f9zjaqnlwzbzx96d";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/font-xfree86-type1-1.0.0.tar.bz2;
+      sha256 = "0kaaz2vyff4x679d0mv1y0lc1gabml2mj7ncfgzsknhv3nwx6xpg";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
@@ -540,8 +540,8 @@ rec {
     name = "fslsfonts-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fslsfonts-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "08cbvyd0qdvxi0bjyvvgqhra79c6g90q45hxvwzrs057kan14b36";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fslsfonts-1.0.1.tar.bz2;
+      sha256 = "0bm6cgif31ghc04phxbiz5w2c5179gl9y9169s95cs7k4mm01srz";
     };
     buildInputs = [pkgconfig libFS libX11 ];
   }) // {inherit libFS libX11 ;};
@@ -550,8 +550,8 @@ rec {
     name = "fstobdf-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/fstobdf-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "01k95l9g6d96zgw7nlywf65bawlx27fgm89fsd5vnjxjwxx0drnq";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/fstobdf-1.0.2.tar.bz2;
+      sha256 = "08mcwxn8fgsa4ryv0qnn9dny28xl9rigi6mqv5nh75ndaar4a3k9";
     };
     buildInputs = [pkgconfig libFS libX11 ];
   }) // {inherit libFS libX11 ;};
@@ -560,8 +560,8 @@ rec {
     name = "gccmakedep-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/gccmakedep-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0spnqnzrxjb1ablg17lf48bv28457y8agvym3b6wh8g2p9dnhrni";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/gccmakedep-1.0.2.tar.bz2;
+      sha256 = "04dfamx3fvkvqfgs6xy2a6yqbxjrj4777ylxp38g60hhbdl4jg86";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -570,28 +570,28 @@ rec {
     name = "glproto-1.4.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/glproto-X11R7.2-1.4.8.tar.bz2;
-      sha256 = "1p32lbarglg3zviibfjkjym10v4fx9wlavjzki0j3f2mnf3mx1x2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/glproto-1.4.8.tar.bz2;
+      sha256 = "0g05ixvi0nbpzgzhm0gpw6892jca23p6zij6pfvqidjk710q8p9g";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   iceauth = (stdenv.mkDerivation {
-    name = "iceauth-1.0.1";
+    name = "iceauth-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/iceauth-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1gd7vyxkym84x3d0kc9qnpg04c60xalx0iys0bcgp05yvl6jr826";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/iceauth-1.0.2.tar.bz2;
+      sha256 = "1fxmpa9262b1iklxmy3ca72m34x11qixbqsm4b7w98jpvs8iah06";
     };
     buildInputs = [pkgconfig libICE xproto ];
   }) // {inherit libICE xproto ;};
     
   ico = (stdenv.mkDerivation {
-    name = "ico-1.0.1";
+    name = "ico-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/ico-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0zgf28madi8sj74w1wni7bmww8pwzlr27yciafw2lr1mf41iv2lw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/ico-1.0.2.tar.bz2;
+      sha256 = "19ca471c4yscqi0babvp4zpfnz66lxcbgrwx3fwjkk1bibhrcbnv";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -600,18 +600,18 @@ rec {
     name = "imake-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/imake-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0an317zszn8l8k627z3hh7gk2rg10bia8kxhq96m6q0dqc87w5kn";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/imake-1.0.2.tar.bz2;
+      sha256 = "0yxca3hbz4hfk0fm385lbm89061p2nksr5klx2y3x1knmvsgzklp";
     };
     buildInputs = [pkgconfig xproto ]; inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; 
   }) // {inherit xproto ;};
     
   inputproto = (stdenv.mkDerivation {
-    name = "inputproto-1.3.2";
+    name = "inputproto-1.4.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/inputproto-X11R7.0-1.3.2.tar.bz2;
-      sha256 = "1l3820pv683nx0i7frsymb8lgng31khi7s9gr9ygqx5gz6az8j1v";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/inputproto-1.4.2.1.tar.bz2;
+      sha256 = "1vgkmz6hdcj3r6pgbynkwlh5rg9mqjdvjqkql6wm4z6y6xqbfvcv";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -620,8 +620,8 @@ rec {
     name = "kbproto-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/kbproto-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0g4hzskj7yk2673pg1mbisp868cfr8i7gg7fc9kr4y9z9flaci2j";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/kbproto-1.0.3.tar.bz2;
+      sha256 = "1pqrrsag6njdrxpx5sm48gh68w64fv5jpmvp2jkjhynhpdg0003h";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -630,8 +630,8 @@ rec {
     name = "lbxproxy-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/lbxproxy-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0vv0bsf7wavqxcx95xdj1lzgq7g9dw16lj13v60sk50d2vb0sdim";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/lbxproxy-1.0.1.tar.bz2;
+      sha256 = "1hh1rb2cmfvsdd41n0k3wd2sz1cr7mm639ws57pd5994cyc5grz2";
     };
     buildInputs = [pkgconfig bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans zlib ];
   }) // {inherit bigreqsproto libICE liblbxutil libX11 libXext xproxymanagementprotocol xtrans zlib ;};
@@ -640,8 +640,8 @@ rec {
     name = "libAppleWM-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libAppleWM-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1ma0534bcpkaywz8vqi2lyh2m9b0vv5p45r41y51bk0n73avkmb6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libAppleWM-1.0.0.tar.bz2;
+      sha256 = "0zj0n0ykv3zy68d23xyf2c58ddn5m78b8j1zcynb93j1g90gzlpc";
     };
     buildInputs = [pkgconfig applewmproto libX11 libXext xextproto ];
   }) // {inherit applewmproto libX11 libXext xextproto ;};
@@ -650,28 +650,28 @@ rec {
     name = "libFS-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libFS-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1wgn4mqamn2ngp876nxylxi474644zwx85ww5c717frgi5zxvghm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libFS-1.0.0.tar.bz2;
+      sha256 = "1ppxrhqa2lx5am054iz1ckinwp2bsq585fjlq6rym8qq1vxgj61g";
     };
     buildInputs = [pkgconfig fontsproto xproto xtrans ];
   }) // {inherit fontsproto xproto xtrans ;};
     
   libICE = (stdenv.mkDerivation {
-    name = "libICE-1.0.3";
+    name = "libICE-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libICE-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "1lkg6pqr7v1k41a7y92xyb6mblnk7zx058kk9dr58z9q7isk156j";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libICE-1.0.4.tar.bz2;
+      sha256 = "012ga4q5rxajnn3fd249xnirnvw6lms7jyp9bh9vsp349hpmw18k";
     };
     buildInputs = [pkgconfig xproto xtrans ];
   }) // {inherit xproto xtrans ;};
     
   libSM = (stdenv.mkDerivation {
-    name = "libSM-1.0.2";
+    name = "libSM-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libSM-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "01wxyv3i5hrcyigdigfgnywjh01yx0v76gbfvicqzmss5amppgan";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libSM-1.0.3.tar.bz2;
+      sha256 = "017cbndj3c4cr8x3phl5k0063ylhzxvjjdj8scn4bzpgawsjvx2p";
     };
     buildInputs = [pkgconfig libICE xproto xtrans ];
   }) // {inherit libICE xproto xtrans ;};
@@ -680,18 +680,18 @@ rec {
     name = "libWindowsWM-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libWindowsWM-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "17c8yybvyjyxa6w60j54zj3lgpp4krcnzrhgx504q6n5vxmdpk3n";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libWindowsWM-1.0.0.tar.bz2;
+      sha256 = "0shnxkg9ghihgyrl3dzhqdcgssa7146dn1j51rzbl89x2xk75n3a";
     };
     buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
   }) // {inherit windowswmproto libX11 libXext xextproto ;};
     
   libX11 = (stdenv.mkDerivation {
-    name = "libX11-1.1.1";
+    name = "libX11-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libX11-X11R7.2-1.1.1.tar.bz2;
-      sha256 = "1y7xrm8pbb7wsiif9if24iz4yqlyhgcg8wpfi6lfb57ylhhm1dz7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libX11-1.1.3.tar.bz2;
+      sha256 = "0ylip0df6hilh0yf5x2wzhj56wnx32fgmf2whxf9bpd55rp5cbsa";
     };
     buildInputs = [pkgconfig bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ];
   }) // {inherit bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ;};
@@ -700,8 +700,8 @@ rec {
     name = "libXScrnSaver-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXScrnSaver-X11R7.2-1.1.2.tar.bz2;
-      sha256 = "1m3w504q0zwk5x6dbfm3kj73zwqpwf2q5dq444ndxn9ky3d490ch";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXScrnSaver-1.1.2.tar.bz2;
+      sha256 = "0ryckgkyx2zz4r5vvpja0p8h5bhkjq8wm9h84h60w1j6lyydwxbc";
     };
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
   }) // {inherit scrnsaverproto libX11 libXext xextproto ;};
@@ -710,8 +710,8 @@ rec {
     name = "libXTrap-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXTrap-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "00wh69p8zbn75c4bk3r333gg6lskn3y2pbmw0wr6nciyh22hrrf7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXTrap-1.0.0.tar.bz2;
+      sha256 = "1filzv6z59rlrd0d8xglpr1r7ac1zr0jfn106yndwp5xfpk2rlfg";
     };
     buildInputs = [pkgconfig trapproto libX11 libXext xextproto libXt ];
   }) // {inherit trapproto libX11 libXext xextproto libXt ;};
@@ -720,38 +720,38 @@ rec {
     name = "libXau-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXau-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0s91s44vzd9j8kyydax1sj2a2az02dy4ccln5l6c9ihbqgmrwyg8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXau-1.0.3.tar.bz2;
+      sha256 = "0fwyq42q10k4cxar4nj73c7zd7jg6gh16zmxw2b0wwhafy40mhyn";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
     
   libXaw = (stdenv.mkDerivation {
-    name = "libXaw-1.0.2";
+    name = "libXaw-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXaw-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "07p5s29dhsfjdyvwg4yncki5cj70ngx5g8xsjyvjmvln78xa8mfm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXaw-1.0.4.tar.bz2;
+      sha256 = "1yaslcpj6sd6s8gx2hv60gfjf515gggd8f2jv4zqbp5q9wcapx0i";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
   }) // {inherit printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
     
   libXcomposite = (stdenv.mkDerivation {
-    name = "libXcomposite-0.3.1";
+    name = "libXcomposite-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXcomposite-X11R7.2-0.3.1.tar.bz2;
-      sha256 = "194ycacifrkpbx60n8rz9njm6lzyxg241y3ahzh3l2qfrylcg6nl";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXcomposite-0.4.0.tar.bz2;
+      sha256 = "043m7jhqzqfb02g29v8k57xxm4vqbw15gln4wja81xni5pl5kdvx";
     };
     buildInputs = [pkgconfig compositeproto fixesproto libX11 libXext libXfixes ];
   }) // {inherit compositeproto fixesproto libX11 libXext libXfixes ;};
     
   libXcursor = (stdenv.mkDerivation {
-    name = "libXcursor-1.1.8";
+    name = "libXcursor-1.1.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXcursor-X11R7.2-1.1.8.tar.bz2;
-      sha256 = "18qk611mf1cxp327ddgmfss2r9xkh5m7fw07nv456bpwymzggqn3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXcursor-1.1.9.tar.bz2;
+      sha256 = "1d6j2md25f6g45xjb2sqsqwvdidf9i3n3mb682bcxj3i49ab7zqx";
     };
     buildInputs = [pkgconfig fixesproto libX11 libXfixes libXrender ];
   }) // {inherit fixesproto libX11 libXfixes libXrender ;};
@@ -760,8 +760,8 @@ rec {
     name = "libXdamage-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXdamage-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "05zmzdr2dmdhsa4cm0yrsin7qm0rw90wy7p3kxqvgidm7ba25m2r";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXdamage-1.0.4.tar.bz2;
+      sha256 = "0dn64lv1nlc017nq11ixgafd15n8vw52p2knw7wxdqbpz870zyax";
     };
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes ];
   }) // {inherit damageproto fixesproto libX11 xextproto libXfixes ;};
@@ -770,8 +770,8 @@ rec {
     name = "libXdmcp-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXdmcp-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0vv5rk5ra9gawj57s5z78fah9q00l7csxm2zaahzr4dk3h59v7dy";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXdmcp-1.0.2.tar.bz2;
+      sha256 = "1a4n1z0vfzw10pcj27g95rjn06c231cg38l44z14b4ar8wc0rrgk";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
@@ -780,8 +780,8 @@ rec {
     name = "libXevie-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXevie-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0r2x3ic25jc62c9ffl9vz1bz9glg00qsf59dx8krwg8ndg8bjbp6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXevie-1.0.2.tar.bz2;
+      sha256 = "1nkls60q0zmrlrxxy08h4jnsv3b9rgpmqwq6sar2v4s5s4dbhw7z";
     };
     buildInputs = [pkgconfig evieext libX11 libXext xextproto xproto ];
   }) // {inherit evieext libX11 libXext xextproto xproto ;};
@@ -790,8 +790,8 @@ rec {
     name = "libXext-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXext-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0als9pmllyam6nshrzis4abjz4lyxz8laq8x3ykm4p649472ri8i";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXext-1.0.2.tar.bz2;
+      sha256 = "13lg78mlhvnip54yvifcmmqsa6dgnfbd0h7wwscdksvz27slr3in";
     };
     buildInputs = [pkgconfig libX11 libXau xextproto xproto ];
   }) // {inherit libX11 libXau xextproto xproto ;};
@@ -800,18 +800,18 @@ rec {
     name = "libXfixes-4.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXfixes-X11R7.2-4.0.3.tar.bz2;
-      sha256 = "0i5lly8szw6mh5f8l9yh7p1j0vjjzkrlsfzp8c7y0akzl5rq31vh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXfixes-4.0.3.tar.bz2;
+      sha256 = "1p99m3hdh9m6a59jyn4vgwbppabhppsjdkjkwrfbii1pa0y0jzjl";
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
   }) // {inherit fixesproto libX11 xextproto xproto ;};
     
   libXfont = (stdenv.mkDerivation {
-    name = "libXfont-1.2.7";
+    name = "libXfont-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXfont-X11R7.2-1.2.7.tar.bz2;
-      sha256 = "1361xc6jwx5006cclc0dn8hfr4m1b1311g7bwp5hyp603waz0jym";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXfont-1.3.1.tar.bz2;
+      sha256 = "1cd9b10s30z4fcvxvlrp8s5ylr482hhq7fc4r65djsm1h34pvyyw";
     };
     buildInputs = [pkgconfig fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ];
   }) // {inherit fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ;};
@@ -820,8 +820,8 @@ rec {
     name = "libXfontcache-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXfontcache-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "1hbd6g9p03ivwlrsliqmhbflnqww0k3y3aj1qg3cbi7iqxwlwil3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXfontcache-1.0.4.tar.bz2;
+      sha256 = "0770yg0b9vqqlsq34nxb7ri3pf0smlhx018vmxidikc1pz7lgrzz";
     };
     buildInputs = [pkgconfig fontcacheproto libX11 libXext xextproto ];
   }) // {inherit fontcacheproto libX11 libXext xextproto ;};
@@ -830,28 +830,28 @@ rec {
     name = "libXft-2.1.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXft-X11R7.2-2.1.12.tar.bz2;
-      sha256 = "1hm9lj45wxhg430jyq1rbri5b1hasl9zrypf6q2jz6nvhm691gw0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXft-2.1.12.tar.bz2;
+      sha256 = "11l98adf5sxpi9ryhckmxrdpa9ac2jz3m65xfv4302xgra2nzd38";
     };
     buildInputs = [pkgconfig fontconfig freetype libXrender ];
   }) // {inherit fontconfig freetype libXrender ;};
     
   libXi = (stdenv.mkDerivation {
-    name = "libXi-1.0.2";
+    name = "libXi-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXi-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "1xmixmzsvkv0wv7gvm87mr4rag6nchxqf0diihprnq6zb7gj76iz";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXi-1.1.3.tar.bz2;
+      sha256 = "0gqm2a4bplpidhzknqvr6b1ipadcayyz3z6y794sdl6hjyz5nyn7";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
   }) // {inherit inputproto libX11 libXext xextproto xproto ;};
     
   libXinerama = (stdenv.mkDerivation {
-    name = "libXinerama-1.0.1";
+    name = "libXinerama-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXinerama-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0yj6bydlszsx5jx5br4vk2gzd3kynrznyn33i7hz2wnfvncs9dbj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXinerama-1.0.2.tar.bz2;
+      sha256 = "0gfhwmz4bcfiqcsnp85sdlwdi641wzi6c9ncwp2cnvkn9jpdfifj";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
   }) // {inherit libX11 libXext xextproto xineramaproto ;};
@@ -860,8 +860,8 @@ rec {
     name = "libXmu-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXmu-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "12k1j0d0c4021nr7rl3avd2rkxlpvlmld05xrhk3dsdpqmv8ivaj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXmu-1.0.3.tar.bz2;
+      sha256 = "0rkd8qsqmi3a2346ln4mqvqv89jfs0gvip9khjs9r3fs6s730vmm";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto libXt ];
   }) // {inherit libX11 libXext xextproto libXt ;};
@@ -870,28 +870,28 @@ rec {
     name = "libXp-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXp-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "1vj1972kaan7hgxd2s2fcyyx1pzjz9x7j66pc1dgdx7g768cnn3z";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXp-1.0.0.tar.bz2;
+      sha256 = "1blwrr5zhmwwy87j0svmhv3hc13acyn5j14n5rv0anz81iav2r3y";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto ];
   }) // {inherit printproto libX11 libXau libXext xextproto ;};
     
   libXpm = (stdenv.mkDerivation {
-    name = "libXpm-3.5.6";
+    name = "libXpm-3.5.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXpm-X11R7.2-3.5.6.tar.bz2;
-      sha256 = "1q64hxfrh5g7dp0017hbgg0937bxj7x2x1k2wqkh1cxrgx65dbiv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXpm-3.5.7.tar.bz2;
+      sha256 = "1aibr6y6hnlgc7m1a1y5s1qx7863praq4pdp0xrpkc75gkk1lw34";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
-  }) // {inherit libX11 libXext xextproto xproto libXt ;};
+    buildInputs = [pkgconfig gettext libX11 libXext xextproto xproto libXt ];
+  }) // {inherit gettext libX11 libXext xextproto xproto libXt ;};
     
   libXprintAppUtil = (stdenv.mkDerivation {
     name = "libXprintAppUtil-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXprintAppUtil-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1x0h6mk9ggzl346lg22iznyx3yq0smxdc47808x79ky87imjcjc3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXprintAppUtil-1.0.1.tar.bz2;
+      sha256 = "198ad7pmkp31vcs0iwd8z3vw08p69hlyjmzgk7sdny9k01368q14";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXp libXprintUtil ];
   }) // {inherit printproto libX11 libXau libXp libXprintUtil ;};
@@ -900,28 +900,28 @@ rec {
     name = "libXprintUtil-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXprintUtil-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "03hglsjs3z4gmsri790b9yvcn935dz841i5f8wzhlcn0knbap7xv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXprintUtil-1.0.1.tar.bz2;
+      sha256 = "0v3fh9fqgravl8xl509swwd9a2v7iw38szhlpraiyq5r402axdkj";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXp libXt ];
   }) // {inherit printproto libX11 libXau libXp libXt ;};
     
   libXrandr = (stdenv.mkDerivation {
-    name = "libXrandr-1.1.2";
+    name = "libXrandr-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXrandr-X11R7.2-1.1.2.tar.bz2;
-      sha256 = "06saq84vkzq611wrn602gqj1npgv6rmyv1pr372li098y8m51hsi";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXrandr-1.2.2.tar.bz2;
+      sha256 = "161aq7gf5h91jz9y9prxikxvh6zsz84yznvkzc9i4azia348svr0";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto libXrender ];
   }) // {inherit randrproto renderproto libX11 libXext xextproto libXrender ;};
     
   libXrender = (stdenv.mkDerivation {
-    name = "libXrender-0.9.2";
+    name = "libXrender-0.9.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXrender-X11R7.2-0.9.2.tar.bz2;
-      sha256 = "0dcmyksc91w6vwfy9c4l3f73bc9sap6z30dqpxdv9fypq3yv3xbw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXrender-0.9.4.tar.bz2;
+      sha256 = "1v0p63g426x0hii0gynq05ccwihr6dn9azjpls8z4zjfvm1x70jn";
     };
     buildInputs = [pkgconfig renderproto libX11 ];
   }) // {inherit renderproto libX11 ;};
@@ -930,8 +930,8 @@ rec {
     name = "libXres-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXres-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0fid350zzq33ygyq6yjy785gravazp49p6jl6pxf95xnz6ngmpha";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXres-1.0.3.tar.bz2;
+      sha256 = "0c02i8wnwdnzkiaviddc2h7xswg6s58ipw4m204hzv7mfdsvmmd6";
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto ];
   }) // {inherit resourceproto libX11 libXext xextproto ;};
@@ -940,18 +940,18 @@ rec {
     name = "libXt-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXt-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "00w8s0c1971nhxf28qyzq0amy86cavgggjky6mw7shydq3c53dvv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXt-1.0.4.tar.bz2;
+      sha256 = "0ifklh82iq81vgjrwp8pdypyr384zc0kca15flbnrxg8zyr8hw7c";
     };
     buildInputs = [pkgconfig kbproto libSM libX11 xproto ];
   }) // {inherit kbproto libSM libX11 xproto ;};
     
   libXtst = (stdenv.mkDerivation {
-    name = "libXtst-1.0.1";
+    name = "libXtst-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXtst-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1lvslqzamhpdj6ydd80qpry86l05mrwmx0r78smslahyhgxw3nck";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXtst-1.0.3.tar.bz2;
+      sha256 = "01f9b3386v3dzlvdg0ccpa2wyv0d6b9fbxy149rws17bkhyxva5l";
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto ];
   }) // {inherit inputproto recordproto libX11 libXext xextproto ;};
@@ -960,8 +960,8 @@ rec {
     name = "libXv-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXv-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "1pfbp10lj2nsrjw702fwbgd6sf5wp34j2n3knz3snf6afa4bz493";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXv-1.0.3.tar.bz2;
+      sha256 = "06r66s92pxxr73y2yzsyihdszwns4s8rs5c77kf2cg4swddycypq";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto ];
   }) // {inherit videoproto libX11 libXext xextproto ;};
@@ -970,18 +970,18 @@ rec {
     name = "libXvMC-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXvMC-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "1ags2z5rhiy83dgfvw1a6ch6vqnbbpp13pg9w1x6gnfvdsvwgj8n";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXvMC-1.0.4.tar.bz2;
+      sha256 = "1frshf8nfa81hz4q61qg1pc2sz93dl6nsc78dr39hqfnm1dq45qj";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto libXv ];
   }) // {inherit videoproto libX11 libXext xextproto libXv ;};
     
   libXxf86dga = (stdenv.mkDerivation {
-    name = "libXxf86dga-1.0.1";
+    name = "libXxf86dga-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXxf86dga-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "1dzx19sjncfsfixfwdic7h02zdyd5mlmfwwc4vlfnai5fb6d2fzd";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXxf86dga-1.0.2.tar.bz2;
+      sha256 = "09cs62bvnv1wwjqcqyckhj0b0v7wa3dyldlg2icv67qal0q545sr";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
   }) // {inherit libX11 libXext xextproto xf86dgaproto xproto ;};
@@ -990,8 +990,8 @@ rec {
     name = "libXxf86misc-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXxf86misc-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "0z311vqm4gq9p13kycd73bfw82a7mfyhapbvzjbrh45kpc9xxnsa";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXxf86misc-1.0.1.tar.bz2;
+      sha256 = "128jm6nssp5wfic17rb54ssz6j3hibm77c9xxgm6x85a95yxc8i1";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
   }) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
@@ -1000,8 +1000,8 @@ rec {
     name = "libXxf86vm-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libXxf86vm-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "1q2si6n7kzl9fhqm8c3mbxsvz3gn9qr06xrs9i9gfap739bkcij9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXxf86vm-1.0.1.tar.bz2;
+      sha256 = "0ni8r5im508i3yhn5mq78am7zgs53d4i0a6h3rsjyhhwc70w53z0";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
   }) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
@@ -1010,8 +1010,8 @@ rec {
     name = "libdmx-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libdmx-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1fp9fbs9hm7fgfdw0qnjg8dr7z4pypnl5li6l944bspx38f0yphz";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libdmx-1.0.2.tar.bz2;
+      sha256 = "1i5r4spy5s9s5nfxzpxlx06j6xcf865z821cfq2flz1zahdg6gzs";
     };
     buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
   }) // {inherit dmxproto libX11 libXext xextproto ;};
@@ -1020,8 +1020,8 @@ rec {
     name = "libfontenc-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libfontenc-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "1hyf6293y0x2hb80nklrsvfssggh9ji7ll8x7ygnycdz98q0c32c";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libfontenc-1.0.4.tar.bz2;
+      sha256 = "1j2qc9xqc2wibc005abvkj8wwn9hk6b5s2qn94ma2ig82wysm4xr";
     };
     buildInputs = [pkgconfig xproto zlib ];
   }) // {inherit xproto zlib ;};
@@ -1030,8 +1030,8 @@ rec {
     name = "liblbxutil-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/liblbxutil-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "1i9v8scx4ij9w92xi9na4jbwap694yn5h10zdla6qjla5x85vjnr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/liblbxutil-1.0.1.tar.bz2;
+      sha256 = "0n3jgf95svmh788gw601jwdk58gw3sb87h57waaklv8hj1q1rhwl";
     };
     buildInputs = [pkgconfig xextproto xproto zlib ];
   }) // {inherit xextproto xproto zlib ;};
@@ -1040,8 +1040,8 @@ rec {
     name = "liboldX-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/liboldX-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1zn1ybbgv4swsb0cp2hx67gj9xn6i0x36q93q5jg02vc0kxnv84q";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/liboldX-1.0.1.tar.bz2;
+      sha256 = "03rl20g5fx0qfli1a1cxg4mvivgpsblwv9amszjq93z2yl0x748h";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -1057,21 +1057,21 @@ rec {
   }) // {inherit ;};
     
   libxcb = (stdenv.mkDerivation {
-    name = "libxcb-1.0";
+    name = "libxcb-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.0.tar.bz2;
-      sha256 = "07fi4yvkni7rlkw9gv7z1fa6y63z34gpj3kklc9ydlqg72nb5mhr";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.1.tar.bz2;
+      sha256 = "0gyrh8y8hn9k6vs8c66czx3rwi07xyfr5kc191ksajbbi2vrr2rk";
     };
-    buildInputs = [pkgconfig libxslt libpthreadstubs libXau xcbproto libXdmcp ]; patches = [./xcb_xlib-no-assert-on-lock.patch]; 
+    buildInputs = [pkgconfig libxslt libpthreadstubs libXau xcbproto libXdmcp ];
   }) // {inherit libxslt libpthreadstubs libXau xcbproto libXdmcp ;};
     
   libxkbfile = (stdenv.mkDerivation {
     name = "libxkbfile-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libxkbfile-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "117xsyn2x909n3v3yrkkfabms0kbc5jciiwkrk86ksm6pkznvh8m";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libxkbfile-1.0.4.tar.bz2;
+      sha256 = "1bmq4l45a5fzy1g4ap3cwd73c78smf8c5qba9g1sfl9rm97dx2j6";
     };
     buildInputs = [pkgconfig kbproto libX11 ];
   }) // {inherit kbproto libX11 ;};
@@ -1080,8 +1080,8 @@ rec {
     name = "libxkbui-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/libxkbui-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1prdvz6w38k9sdp1yc7ay8xhx0yrf5dw0lw548lbwiinz456k7d6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libxkbui-1.0.2.tar.bz2;
+      sha256 = "0552zyrm0nvhsyy37x7g767cbii9kc3glvb9dmgywd1jsq0k3hi0";
     };
     buildInputs = [pkgconfig libX11 libxkbfile libXt ];
   }) // {inherit libX11 libxkbfile libXt ;};
@@ -1090,8 +1090,8 @@ rec {
     name = "listres-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/listres-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "11rdcbk5kafrak9a8bskarbsajgxnnwlhs8lc6jvhi21r7riywa1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/listres-1.0.1.tar.bz2;
+      sha256 = "18zpmvw4l13h3c4a99af04svp0xj4fwl88mksl0sah724n0famki";
     };
     buildInputs = [pkgconfig libXaw libX11 libXmu libXt ];
   }) // {inherit libXaw libX11 libXmu libXt ;};
@@ -1100,8 +1100,8 @@ rec {
     name = "lndir-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/lndir-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0444vz904n598mxpqyd6jj0rjb892pa60k0lq3y69762i8bkwmlg";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/lndir-1.0.1.tar.bz2;
+      sha256 = "0a84q8m3x8qbyrhx7r2k7wmhdb5588vcb1r21ifkx8yaaw1360fk";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
@@ -1110,28 +1110,28 @@ rec {
     name = "luit-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/luit-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "1xffgs0hfqpv98yq06wysxwyf5i67i56dacfnk013yxwgkfsrl4k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/luit-1.0.2.tar.bz2;
+      sha256 = "171qhbbmfa12jv7anxkxamcrjpwiywyvyqnfyxnn431my1nxgi60";
     };
     buildInputs = [pkgconfig libfontenc libX11 zlib ];
   }) // {inherit libfontenc libX11 zlib ;};
     
   makedepend = (stdenv.mkDerivation {
-    name = "makedepend-1.0.0";
+    name = "makedepend-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/makedepend-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "14nsmf6smwcwwhdm651wl7yix20c0pz3yb8g0id37ybzjr54dbqw";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/makedepend-1.0.1.tar.bz2;
+      sha256 = "1lmi2vagp6svfvkqmhsbafjhchwscii7sfdzr20d90hg46gsslmp";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
     
   mkfontdir = (stdenv.mkDerivation {
-    name = "mkfontdir-1.0.2";
+    name = "mkfontdir-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/mkfontdir-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "039sy6j6b00zpvadg247p52gh65x4db2yj3492v291c5mnbapi4l";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/mkfontdir-1.0.3.tar.bz2;
+      sha256 = "0x1hclcrqsnccxc0n2wkrx5yjxpgr704dd1x4vvcflqsc41nwy1a";
     };
     buildInputs = [pkgconfig ]; preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR ${mkfontscale}/bin"; 
   }) // {inherit ;};
@@ -1140,8 +1140,8 @@ rec {
     name = "mkfontscale-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/mkfontscale-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "1j6mkh08a0ihbnw9d3q4239635zww5hcgisl6ymywdfpbs4gk2wp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/mkfontscale-1.0.3.tar.bz2;
+      sha256 = "087h7bapnsl74w7c0r23j0gikz2sazw8wr0ql1cb8jjvaajs6n04";
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   }) // {inherit libfontenc freetype xproto zlib ;};
@@ -1150,18 +1150,28 @@ rec {
     name = "oclock-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/oclock-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1sdy6ijrycsw5339b9qlysk8hdv0nyxj4fwj3i9y7d3n9s4rh79l";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/oclock-1.0.1.tar.bz2;
+      sha256 = "0z11fj6f2z4q2wcw96m2yf4pg8cxnhwfw4j0f4qbxyq2ci7pvas9";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
   }) // {inherit libX11 libXext libXmu libXt ;};
+    
+  pixman = (stdenv.mkDerivation {
+    name = "pixman-0.9.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/pixman-0.9.6.tar.bz2;
+      sha256 = "0nrksqwkaq1kczzkpqw1nvxc0b2d89d81gzb4j43hz6n729xn165";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  }) // {inherit libX11 ;};
     
   printproto = (stdenv.mkDerivation {
     name = "printproto-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/printproto-X11R7.0-1.0.3.tar.bz2;
-      sha256 = "0wp9hc90cmlwhrl4fflhd9lhmhcgxlypcmqg90a7hy510rwxbgr3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/printproto-1.0.3.tar.bz2;
+      sha256 = "0dbjxinhbd55vjdx3jws97id116lxlgg8jp49gccgpw3va65ydwb";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1170,8 +1180,8 @@ rec {
     name = "proxymngr-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/proxymngr-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1cpx6qy5yc9khxw3wri1jl4pi1g4kijmng7j0pjln36rdvv27kpi";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/proxymngr-1.0.1.tar.bz2;
+      sha256 = "1i95jp3xw1z2llw028rpkr4id03jxkqb0pv0l1vj8mhi6iax9xg9";
     };
     buildInputs = [pkgconfig libICE libX11 xproxymanagementprotocol libXt ];
   }) // {inherit libICE libX11 xproxymanagementprotocol libXt ;};
@@ -1180,7 +1190,7 @@ rec {
     name = "randrproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/proto/randrproto-1.2.1.tar.bz2;
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/randrproto-1.2.1.tar.bz2;
       sha256 = "0m7n624h2rsxs7m5x03az87x7hlh0gxqphj59q7laqi5iwpx8bqh";
     };
     buildInputs = [pkgconfig ];
@@ -1190,18 +1200,18 @@ rec {
     name = "recordproto-1.13.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/recordproto-X11R7.0-1.13.2.tar.bz2;
-      sha256 = "198bwhr2b93q52d3xad5qbhlbjvcxasrzl8yai81gn2smaxfq2h8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/recordproto-1.13.2.tar.bz2;
+      sha256 = "1yfg15k5fznjvndvld3vw7gcbcmq1p6ic0dybf1a2wzk2j5pmrq4";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   renderproto = (stdenv.mkDerivation {
-    name = "renderproto-0.9.2";
+    name = "renderproto-0.9.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/renderproto-X11R7.0-0.9.2.tar.bz2;
-      sha256 = "0hagqwsd9g0418m9rx8nzw50nzdvw4qsq3s634hrawqa24fp8xd8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/renderproto-0.9.3.tar.bz2;
+      sha256 = "0nyl5pmgrvw7p6laqgsrk65b633yvrrf8jx0vakqz2p9fyw0i2n9";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1210,8 +1220,8 @@ rec {
     name = "resourceproto-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/resourceproto-X11R7.0-1.0.2.tar.bz2;
-      sha256 = "1d22vly3jla5px20hc7hmcqm5rzxkp2gqhllrfnpf8gawf7prpvj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/resourceproto-1.0.2.tar.bz2;
+      sha256 = "11rlnn54y15bf39ll7vzn9824l1ib15r7p4v8l0k0j7mxvydccqc";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1220,8 +1230,8 @@ rec {
     name = "rgb-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/rgb-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "0hvjnmmldya6ilv84k1bjip3f004j18w45yiw67h6yb84aa0zvi4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/rgb-1.0.1.tar.bz2;
+      sha256 = "1bch55h8dm382hnc2n52rihx1wp965lsl6camx4c4qigyw1bqdgn";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
@@ -1230,8 +1240,8 @@ rec {
     name = "rstart-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/rstart-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "15sfhxcq1kk432xj6n4gfjbfxva4cr883fmbcz4jaxxvcrrgkbws";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/rstart-1.0.2.tar.bz2;
+      sha256 = "15lmirb2x8icvc7qzj87fcb09p6fk9kbnphf5wkf864h0ssliz02";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -1240,8 +1250,8 @@ rec {
     name = "scripts-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/scripts-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0cvb2xcfxnplgywj8kmbpw239q1zhhpd593vny4k3hpzbivbq0mm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/scripts-1.0.1.tar.bz2;
+      sha256 = "0dm1jhwq1r396xfcxx3g9lvgzydf4mikjicch6cs8b1hb51ln58v";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -1250,39 +1260,38 @@ rec {
     name = "scrnsaverproto-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/scrnsaverproto-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0ha3xscs2vhfjfi14bm0liqx2dqz859262q8kl5f5ld34f9j3v14";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/scrnsaverproto-1.1.0.tar.bz2;
+      sha256 = "13s7rpygj0zm8lk6r9zw1ivs8wj3g4qrfqw80ifc0ff37kvsn2fv";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   sessreg = (stdenv.mkDerivation {
-    name = "sessreg-1.0.2";
+    name = "sessreg-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/sessreg-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "09l4wy1rrg1mr5l1cq5r8hv8mky5b4ipl4ybw9z4wb1p4gvb9d0s";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/sessreg-1.0.3.tar.bz2;
+      sha256 = "1p40013kg73qkgwhhj06l0yrmvcp90r937vlzh4xyv94adfi833x";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
     
   setxkbmap = (stdenv.mkDerivation {
-    name = "setxkbmap-1.0.3";
+    name = "setxkbmap-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/setxkbmap-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "19jxlksl90i674yad1n7w42s3nv0hhlkwczya2lnavpl0570jr34";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/setxkbmap-1.0.4.tar.bz2;
+      sha256 = "1b1brw1v98q2rqhr5x7f8mr3clxq62nw5175gpamg5s172916nwv";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ]; 
-    postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share;"; 
+    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ln -sfn ${xkeyboard_config}/etc $out/share"; 
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
     name = "showfont-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/showfont-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "145khd5pkf1gmczzghchpvadrxq22bhdzgbyaybr72wvnagnnwaq";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/showfont-1.0.1.tar.bz2;
+      sha256 = "033nc48aaq0j5jg36fwksfsxg3wwyg3kaayifjqcdaql57qkrnw7";
     };
     buildInputs = [pkgconfig libFS ];
   }) // {inherit libFS ;};
@@ -1291,8 +1300,8 @@ rec {
     name = "smproxy-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/smproxy-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0nwr7d843mzp138z6803pl6d9lwvhr5xi4mi6l756a75glrkxwan";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/smproxy-1.0.2.tar.bz2;
+      sha256 = "1lk79yfdalpn0c7hm57vpr3xg6rib1dr6p2wl634733wy062zlkn";
     };
     buildInputs = [pkgconfig libXmu libXt ];
   }) // {inherit libXmu libXt ;};
@@ -1301,8 +1310,8 @@ rec {
     name = "trapproto-3.4.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/trapproto-X11R7.0-3.4.3.tar.bz2;
-      sha256 = "01nh71dgb2nc6nc9cycp0zvifm6k2469mby87phqj0mqj99fsbaj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/trapproto-3.4.3.tar.bz2;
+      sha256 = "1qd06blxgah1pf49259gm9njpbqqk1gcisbv8p1ssv39pk9s0cpz";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1311,8 +1320,8 @@ rec {
     name = "twm-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/twm-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0vyhrf4wnmixffcly2y6r5ksxh7lm1iali4mg478pkvsl0raakl0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/twm-1.0.3.tar.bz2;
+      sha256 = "0kiap5xxswx4w6dhbb6ys19blff8nrzzqwxbh8mvz4x8fw25ahav";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
   }) // {inherit libX11 libXext libXmu libXt ;};
@@ -1321,8 +1330,8 @@ rec {
     name = "util-macros-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/util-macros-X11R7.2-1.1.5.tar.bz2;
-      sha256 = "1wk8457n6zpx0bpx8652js2h6k1406chjnlrc5xgknjh5gljmm94";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/util-macros-1.1.5.tar.bz2;
+      sha256 = "06v5ym133460z9r4jyz9k0dfs07hsrhg1ww35q9cr2vbw689g4vm";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1331,8 +1340,8 @@ rec {
     name = "videoproto-2.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/videoproto-X11R7.0-2.2.2.tar.bz2;
-      sha256 = "0dqzgwi8jbd5ka98rmsw4lbv6nh3vl0kksp380wj329y25v4ajq7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/videoproto-2.2.2.tar.bz2;
+      sha256 = "033q4jgrwgkdcwj5q8hwf7vpl5sdzm7z9dsgwcphrlqchdw8825b";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1341,8 +1350,8 @@ rec {
     name = "viewres-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/viewres-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0a2a2k1h02cf79hcrfrkicwpx3fb9nq9pn73s3x612wwvp93zr0f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/viewres-1.0.1.tar.bz2;
+      sha256 = "1f1lrvnjnf5c0lwisribdb7zgsk1874rjz1v5fcsd5xizx2wsjdz";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
@@ -1351,8 +1360,8 @@ rec {
     name = "windowswmproto-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/windowswmproto-X11R7.0-1.0.3.tar.bz2;
-      sha256 = "130ilmsj5bj258rwj7zzyrn501l8v1xn3gj18bfx8fxcywaxqxg5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/windowswmproto-1.0.3.tar.bz2;
+      sha256 = "0lgih20hvpxzdvzwrw5plfynrkb2b930mnfymfnffbdvjsb283bq";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1361,8 +1370,8 @@ rec {
     name = "x11perf-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/x11perf-X11R7.1-1.4.1.tar.bz2;
-      sha256 = "04jlbjvda44vk0r5xxl5kmg2i53g73a0nkhnq7v06k78d9mbcbr0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/x11perf-1.4.1.tar.bz2;
+      sha256 = "0r1h9ndlbnyf87vz36ga97hmqbp05q7zh3lmbfjzv5n5irhij668";
     };
     buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
   }) // {inherit libX11 libXext libXft libXmu libXrender ;};
@@ -1371,18 +1380,28 @@ rec {
     name = "xauth-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xauth-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "03c1zaazhdv61fi0p2h4dy2a2jzrfj60f51s18k74h8rrvqdfi8h";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xauth-1.0.2.tar.bz2;
+      sha256 = "05qzbxjvn947igkyad5bg12y3bbd5ji6v9h43jznmcay3rc5m7jn";
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu ];
   }) // {inherit libX11 libXau libXext libXmu ;};
+    
+  xbacklight = (stdenv.mkDerivation {
+    name = "xbacklight-1.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xbacklight-1.1.tar.bz2;
+      sha256 = "1934bnxa3hx0mzihv3bgcid6qrn75an03ci5dzhnjicp2lgh15f7";
+    };
+    buildInputs = [pkgconfig libX11 libXrandr libXrender ];
+  }) // {inherit libX11 libXrandr libXrender ;};
     
   xbiff = (stdenv.mkDerivation {
     name = "xbiff-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xbiff-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1v5vfr8v6fxdi5gyiyvyajpjj13bdqxr62m0y9n3s1dmvkyrkj69";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xbiff-1.0.1.tar.bz2;
+      sha256 = "00v5m4s7kh93fx612pcjviy893h611lbcsgx067l1z8wibxb2icq";
     };
     buildInputs = [pkgconfig libXaw xbitmaps libXext ];
   }) // {inherit libXaw xbitmaps libXext ;};
@@ -1391,38 +1410,38 @@ rec {
     name = "xbitmaps-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xbitmaps-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1a4llyi5rgkgypfca2im0ydcy0vqcmk5z7zp1shclwc8b37phyrx";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xbitmaps-1.0.1.tar.bz2;
+      sha256 = "0rxqxrnkivn52kk41a9bl1ppy756c5gw5w1rbnw75xvp9rcvx9as";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xcalc = (stdenv.mkDerivation {
-    name = "xcalc-1.0.1";
+    name = "xcalc-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xcalc-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1mjg5glydppwcvvspqv4v954b8d3fxf1hv7qkkk7fw1hfis9rbx1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xcalc-1.0.2.tar.bz2;
+      sha256 = "0cjapca3lc67ypcinmygbwmjb2bd38ycgshb9p8ljwif44nmwdwn";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xcbproto = (stdenv.mkDerivation {
-    name = "xcb-proto-1.0";
+    name = "xcb-proto-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.0.tar.bz2;
-      sha256 = "022fp0h1b482cp1hwyylg7q4ml6izasnwshrpp9sjmwr2c3yhg6z";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.1.tar.bz2;
+      sha256 = "0knih0f85y7j3q2c8dia8s6nw5b25c2fr3zx0m0znxah7pc9ibq6";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xcbutil = (stdenv.mkDerivation {
-    name = "xcb-util-0.1";
+    name = "xcb-util-0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-0.1.tar.bz2;
-      sha256 = "0rnj2fivgbzg9s1lsd125wk4wzv34s5r8744iwaw97nj6wd851lh";
+      url = http://xcb.freedesktop.org/dist/xcb-util-0.2.tar.bz2;
+      sha256 = "06mhfp6n2nyk1flhnbx9kbv2rc3myny2v6rg5y1ymg6wqida3mm0";
     };
     buildInputs = [pkgconfig libxcb ];
   }) // {inherit libxcb ;};
@@ -1431,18 +1450,18 @@ rec {
     name = "xclipboard-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xclipboard-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "15kxc16axcb3p5w38akzd19j38crpflpa28p1av7bln11zf4ksbl";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xclipboard-1.0.1.tar.bz2;
+      sha256 = "1z3h9myc5asq6jacb8r7sjlaym226z45a64fazm14l9805qs569k";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xclock = (stdenv.mkDerivation {
-    name = "xclock-1.0.2";
+    name = "xclock-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xclock-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "06rfd435jqf9dmyqpvvfn2kbi740kfq4aipb8hdnn87mv7bdr10m";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xclock-1.0.3.tar.bz2;
+      sha256 = "0zspx5jqp52wgp4c4d9qaxhp0b9p2fzx2ys4rza10apgx5x7gd8h";
     };
     buildInputs = [pkgconfig libXaw libX11 libXft libxkbfile libXrender libXt ];
   }) // {inherit libXaw libX11 libXft libxkbfile libXrender libXt ;};
@@ -1451,8 +1470,8 @@ rec {
     name = "xcmiscproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xcmiscproto-X11R7.0-1.1.2.tar.bz2;
-      sha256 = "1h7ngg6g6ldzn5znwp1wp5l4ckhidpqrhk1ij7chwndam9mqz3pj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xcmiscproto-1.1.2.tar.bz2;
+      sha256 = "1awjhz3cc06zsds57qnjwgm3y7z5bl4l6akqy6xvfcnnm6b7x05j";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1461,28 +1480,28 @@ rec {
     name = "xcmsdb-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xcmsdb-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0f7q7s268g7y7afkywxs4hfx1ygw8zg1p6fcw7aar659ghhdy73f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xcmsdb-1.0.1.tar.bz2;
+      sha256 = "0bp9xw2cmj9d0d18h5fdzcmc7jnjzbn5sb3vnx6qbbpz86gs6xg2";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
     
   xconsole = (stdenv.mkDerivation {
-    name = "xconsole-1.0.2";
+    name = "xconsole-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xconsole-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1s90vbsrdiy4krr543q96lh3yg2v06vgf9ymqfydcpjvpgrns95y";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xconsole-1.0.3.tar.bz2;
+      sha256 = "0idw8rxcpg16922zrph4ihnp1a7mq5c46ivl7k1zad5dxxgw47hv";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xcursorgen = (stdenv.mkDerivation {
-    name = "xcursorgen-1.0.1";
+    name = "xcursorgen-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xcursorgen-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "0nkx7mwrcgib98j79wxmv1sskssw4gv8xigdyhbab6dzkly08f5f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xcursorgen-1.0.2.tar.bz2;
+      sha256 = "0khp7i7w8b5835q7wfdg385x072fhwbnpjqvv558vvxgs8mk42g0";
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
   }) // {inherit libpng libX11 libXcursor ;};
@@ -1491,8 +1510,8 @@ rec {
     name = "xcursor-themes-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xcursor-themes-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "04x8mgwwf7pfzxdcsps0wxahpv2i3q29ar941m7hjq9nyaj2j03k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xcursor-themes-1.0.1.tar.bz2;
+      sha256 = "184ybhyb6wj082rvr83q4jnnx3g7f1i4kpm3s4dwwifh5i0cszaf";
     };
     buildInputs = [pkgconfig libXcursor ];
   }) // {inherit libXcursor ;};
@@ -1501,8 +1520,8 @@ rec {
     name = "xdbedizzy-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xdbedizzy-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "0gz91n7s7fjzimr543gpdv96y3sqrsq3h76fmzfghdwpvc99aikx";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xdbedizzy-1.0.2.tar.bz2;
+      sha256 = "0b81cq8i6shlfq1nad0zljw329grzwd0fhxg9hkypsz7zvlq5s3l";
     };
     buildInputs = [pkgconfig libX11 libXext ];
   }) // {inherit libX11 libXext ;};
@@ -1511,18 +1530,18 @@ rec {
     name = "xditview-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xditview-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "14h3xklfa7pndgxihm4gxf68w8b7kyym5ybwrnxv0zkzx722srn3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xditview-1.0.1.tar.bz2;
+      sha256 = "05w1an1x7np1x0z418pi5vgrwddfx1rvb8736kww4c9vz3jr8w8p";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xdm = (stdenv.mkDerivation {
-    name = "xdm-1.1.3";
+    name = "xdm-1.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xdm-X11R7.2-1.1.3.tar.bz2;
-      sha256 = "00ip6k9irqpnvmbfya914qk4q56kf57pdvxg9jzmvvcgs0arax61";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xdm-1.1.6.tar.bz2;
+      sha256 = "1kcbb85vliy4644q6iiazpqaq5zzcg9p2j4w9r1gbhx5knfwh6n4";
     };
     buildInputs = [pkgconfig libXaw libX11 libXau libXdmcp libXext libXft libXinerama libXmu libXpm libXt ];
   }) // {inherit libXaw libX11 libXau libXdmcp libXext libXft libXinerama libXmu libXpm libXt ;};
@@ -1531,18 +1550,18 @@ rec {
     name = "xdpyinfo-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xdpyinfo-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1v9z3q3v17a7plbp9qixaammbsjbxpn4555dq2spy3s0ymr2hzyr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xdpyinfo-1.0.1.tar.bz2;
+      sha256 = "0qawlhs5ryg8zpycqcflrrhf525gk5b43vi15rqwkfv05y3bbk8w";
     };
     buildInputs = [pkgconfig libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
   }) // {inherit libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
     
   xdriinfo = (stdenv.mkDerivation {
-    name = "xdriinfo-1.0.1";
+    name = "xdriinfo-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xdriinfo-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "0qnkvxbsf0i3xvvrjbpllrxvm4zzdb9500ksyxq6sndr0ij18jch";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xdriinfo-1.0.2.tar.bz2;
+      sha256 = "0rbj9s0jc265wzqz79q9dkqy7626dmby6qdd4266hybcbc4sq0vv";
     };
     buildInputs = [pkgconfig glproto libX11 ];
   }) // {inherit glproto libX11 ;};
@@ -1551,8 +1570,8 @@ rec {
     name = "xedit-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xedit-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1l1pjbz2niljci5yq99p49gh085s14sp8svi21n1lbx9b6bma8pv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xedit-1.0.2.tar.bz2;
+      sha256 = "1pv26chphq74l7g3d5ps2ylgvyrmq0lw5wv1qbxfzjgqpa5xfn16";
     };
     buildInputs = [pkgconfig libXaw libXp libXprintUtil libXt ];
   }) // {inherit libXaw libXp libXprintUtil libXt ;};
@@ -1561,8 +1580,8 @@ rec {
     name = "xev-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xev-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1dy8mn2b5ybk9iih4ih3lf3zmbkbwn9zfxlya81xd9kzj6ksjzpb";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xev-1.0.1.tar.bz2;
+      sha256 = "0m6vkbgmq5zbam7cjjjdpli3daia0anp3in9v93m2m3qbh0hff65";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -1571,8 +1590,8 @@ rec {
     name = "xextproto-7.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xextproto-X11R7.0-7.0.2.tar.bz2;
-      sha256 = "0fqbnyklhgspm48x6vd60jfab8zkr2wdm4kicq5pr0a3b7893h21";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xextproto-7.0.2.tar.bz2;
+      sha256 = "1ng0247qi8f86p419ig7910g5dp0xdylliyl778qpc39wyd07wsk";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1581,8 +1600,8 @@ rec {
     name = "xeyes-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xeyes-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1whsyhw4nbpsw7h3ljw9iw5in051m80h3dqvb38apklnzqib6fz9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xeyes-1.0.1.tar.bz2;
+      sha256 = "0ac0m9af193lxpyj11k2sp2xpmlhzzn3xrs6kdyy6c11fgl042ak";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
   }) // {inherit libX11 libXext libXmu libXt ;};
@@ -1591,8 +1610,8 @@ rec {
     name = "xf86bigfontproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86bigfontproto-X11R7.0-1.1.2.tar.bz2;
-      sha256 = "0y8byn3zczd4ljradgw5is0rfh4ipk687a70zlpkw4jgylk82jan";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86bigfontproto-1.1.2.tar.bz2;
+      sha256 = "097i2l56kwgcd6033ng8j83xpx9pxlnwx53gvcwaf2bpnaspbd01";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1601,18 +1620,18 @@ rec {
     name = "xf86dga-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86dga-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "1nbp9vnvhkxsq4bwk403xpdwps533wawsci5jc4xj6y2da53y0im";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86dga-1.0.2.tar.bz2;
+      sha256 = "0mqqrifbbfj2bh6hd187kmfzfn1rxgghmhsy9i6s5rcn6yw361k5";
     };
     buildInputs = [pkgconfig libX11 libXaw libXmu libXt libXxf86dga ];
   }) // {inherit libX11 libXaw libXmu libXt libXxf86dga ;};
     
   xf86dgaproto = (stdenv.mkDerivation {
-    name = "xf86dgaproto-2.0.2";
+    name = "xf86dgaproto-2.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86dgaproto-X11R7.0-2.0.2.tar.bz2;
-      sha256 = "1kw2dhbjy1y7qrfhc56ja3slg6pb0lgx1300k0qa68b9mpq20sf6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86dgaproto-2.0.3.tar.bz2;
+      sha256 = "00mhjvbgkgr08d8drjavrvxyvnma5rddnmpxc5y74cmh12ix9i2s";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1621,18 +1640,18 @@ rec {
     name = "xf86driproto-2.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86driproto-X11R7.0-2.0.3.tar.bz2;
-      sha256 = "0979b1vy1jvs1nxs2d9qxmfqbnk14msvc27qgrpbkclppm6d0vr5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86driproto-2.0.3.tar.bz2;
+      sha256 = "1mmqaqkingf8k6qi5kfwrqkb4q4767c2biq4h6q06j1p4jd4c70i";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xf86inputacecad = (stdenv.mkDerivation {
-    name = "xf86-input-acecad-1.1.0";
+    name = "xf86-input-acecad-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-acecad-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0ssmfcb5z88qcw7h3ggpx3w8h5lxpfnxxkmgfvj4b5nbz17dpg5j";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-acecad-1.2.0.tar.bz2;
+      sha256 = "099h36v79sncqvy4gnnwmgq4bq73vfyrb7s1z5h3kvwhfx7jh349";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1641,8 +1660,8 @@ rec {
     name = "xf86-input-aiptek-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-aiptek-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "0a6snv6i6iv96kk4q24xdypi8n5mq9730hfibv54v5v1gwvx430x";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-aiptek-1.0.1.tar.bz2;
+      sha256 = "12n2zjxxppggl3pjs6ndi4yx7did88c6gqkszz13in1lj0jy7c1x";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1651,8 +1670,8 @@ rec {
     name = "xf86-input-calcomp-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-calcomp-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "043nhm0ghr9jcjdnv82a898mn92767c7hbbi0bv5ppgap1h37wl9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-calcomp-1.1.0.tar.bz2;
+      sha256 = "01094hfk3x24m64w0khmk38cwsrplnrf672b228x6wpa9vkldi7b";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1661,8 +1680,8 @@ rec {
     name = "xf86-input-citron-2.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-citron-X11R7.1-2.2.0.tar.bz2;
-      sha256 = "0jl1sdgmhfq70k8yjqzcik0hnj2rzwzlrvdghy1b36f895vr4b9n";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-citron-2.2.0.tar.bz2;
+      sha256 = "1zn3s90xf25vhvrp9imqzr9v7xx59g28dlpw740gi0x3sdasgkr6";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1671,8 +1690,8 @@ rec {
     name = "xf86-input-digitaledge-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-digitaledge-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0m42jnichp7r552knz2381g6vn4l2pqxsrhqp7q2h77kvhqx05m4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-digitaledge-1.1.0.tar.bz2;
+      sha256 = "0f4ap658852ya9876ydcbwbr1yjf7s308br1z3yc4nvbnhciy014";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1681,8 +1700,8 @@ rec {
     name = "xf86-input-dmc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-dmc-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1wsbn3q6zi8zhnsvcdd6kh24fmvzays34vzg1s2rcydgm5ycp1w2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-dmc-1.1.0.tar.bz2;
+      sha256 = "0gs7j23w8ki6yvssfwcibdypx9kp29kd02y1n9khf4z0vyr8zjn5";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1691,8 +1710,8 @@ rec {
     name = "xf86-input-dynapro-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-dynapro-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "17w82dpdk5gxkvljqhhhanfb768d3585mg4bfpia4zwamjfml3zy";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-dynapro-1.1.0.tar.bz2;
+      sha256 = "0shdqpksmh3w5va0vw1jj3gd1fdln0yvgjskv9bzw9x0385xaapw";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1701,8 +1720,8 @@ rec {
     name = "xf86-input-elo2300-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-elo2300-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "020rwjvb7y7hw1ffrh2ck2qclpjb2cq43gaj4bw1qchsh9cx9ls6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-elo2300-1.1.0.tar.bz2;
+      sha256 = "0d11mbd4hxxgnb3d71camg558dmnyqgjs0sdlrkkhmy44izgclcm";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1711,8 +1730,8 @@ rec {
     name = "xf86-input-elographics-1.0.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-elographics-X11R7.0-1.0.0.5.tar.bz2;
-      sha256 = "19yxgi8ii7p2i950gyi2i5kcsalnsdxx7l1wr0c4sgykfm0zidzi";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-elographics-1.0.0.5.tar.bz2;
+      sha256 = "0adai0hs7imn4p7baw2vag5j264gkl42bfjxlqqmqw01g4jgil26";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1721,8 +1740,8 @@ rec {
     name = "xf86-input-evdev-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-evdev-X11R7.1-1.1.2.tar.bz2;
-      sha256 = "1xmdnmfxsb3wnhxjs3iy7fdx9zrwrw0gfmggks17073ywgzv5qp1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-evdev-1.1.2.tar.bz2;
+      sha256 = "15avwy8isbqagzcdj20ngqajl22k40pssfx7vjirhrqyyq19fiwb";
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
   }) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
@@ -1731,8 +1750,8 @@ rec {
     name = "xf86-input-fpit-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-fpit-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "02xcfgirf5552yak8jdym9kng0cp8zfnw2cb5by6bz3bvc5vn7d1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-fpit-1.1.0.tar.bz2;
+      sha256 = "1y4lys3s4qsr4afj7r23ldmjryx778ajb85x1x384qaij3gv5qwf";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1741,8 +1760,8 @@ rec {
     name = "xf86-input-hyperpen-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-hyperpen-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1qw327in2b7fncqpxkwa98v7s912n0h9yfjmhfac7hl52fzcd2vr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-hyperpen-1.1.0.tar.bz2;
+      sha256 = "14zl0zk301w8lvmkgxm4fqab9b66xprdqclqfls5cv7080rhmhni";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1751,28 +1770,28 @@ rec {
     name = "xf86-input-jamstudio-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-jamstudio-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "05gy54xc6hpyj59rikz1nqfz74l9zb39i64bw5s36zz5qh55kk6a";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-jamstudio-1.1.0.tar.bz2;
+      sha256 = "06kyclz260x2l5f0yn7449si8m6869dc5kvrdc1k3sh8pmhb6hff";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputjoystick = (stdenv.mkDerivation {
-    name = "xf86-input-joystick-1.1.0";
+    name = "xf86-input-joystick-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-joystick-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "07hhzq04rr1f5w980p6q5x2f3bp5cffgzs76vciri3q6qhxvy2i4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-joystick-1.2.3.tar.bz2;
+      sha256 = "1xslb7p3c0ihg36y402cphyhcwfar3nihv2n417sj4hf1z5033kh";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputkeyboard = (stdenv.mkDerivation {
-    name = "xf86-input-keyboard-1.1.1";
+    name = "xf86-input-keyboard-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-keyboard-X11R7.2-1.1.1.tar.bz2;
-      sha256 = "0iqq8cszd33cw0i92qidqb4rq090ph7z6zfgnfn1vf6slqg0zm22";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-keyboard-1.2.2.tar.bz2;
+      sha256 = "0wn0gv9mb5ld9mginiikn69jknc9wkwqn3dxjy6r405g9r93any2";
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
   }) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
@@ -1781,8 +1800,8 @@ rec {
     name = "xf86-input-magellan-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-magellan-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0lxs0pgjcxpv2cnf1km14xfxg1y39i5w7midq9iq5kgn0q24www0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-magellan-1.1.0.tar.bz2;
+      sha256 = "0gc3lzq6pb807ffikld4a810asgj6z786wgd62ii71a21jsm9vwf";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1791,8 +1810,8 @@ rec {
     name = "xf86-input-magictouch-1.0.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-magictouch-X11R7.1-1.0.0.5.tar.bz2;
-      sha256 = "0aqzx8qlfgl85ra7cgicrr5v7g7cyqq79d55lb81559xm77z23xc";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-magictouch-1.0.0.5.tar.bz2;
+      sha256 = "0k24sy0wcv49xcm4jwfxq3c5xzla8zqviqzvfgs8js6qx4qwivcw";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1801,18 +1820,18 @@ rec {
     name = "xf86-input-microtouch-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-microtouch-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1sldhsh2ny8smzml9a1nka6h9xylnkvhmi4wwsabx8im91azwxi7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-microtouch-1.1.0.tar.bz2;
+      sha256 = "0f90r8drcpl6bvjibcc8q7svi8ra9gyrhhbl03yzpv4m2i9zb4kz";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputmouse = (stdenv.mkDerivation {
-    name = "xf86-input-mouse-1.1.2";
+    name = "xf86-input-mouse-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-mouse-X11R7.2-1.1.2.tar.bz2;
-      sha256 = "1l9ajcmcbiv41snj7ka5gb28cshb55k3xgwk4zjnz15p65wm6ywv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-mouse-1.2.2.tar.bz2;
+      sha256 = "1pvyiv1xl38jacf7cc18sipz8b10mk9vqh11kcl72sq3n99cpsc0";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1821,8 +1840,8 @@ rec {
     name = "xf86-input-mutouch-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-mutouch-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0kcyl867m471lmy2glqg098jh98v2gqd7jmj40rmkbwn0sijw6vm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-mutouch-1.1.0.tar.bz2;
+      sha256 = "1sk23d6jw63l19c0j26qplwmfb0kfnwl5zhbixwqvk2g9zfy0ryc";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1831,8 +1850,8 @@ rec {
     name = "xf86-input-palmax-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-palmax-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "09kflb64qmqlx8ws5m6h0wlb8qv5dw18ik0zvvp6dfph35la47ii";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-palmax-1.1.0.tar.bz2;
+      sha256 = "0ia1mhp318bk292iszqyz25fns7sq8hjzvib6rssal19xmgch02w";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1841,8 +1860,8 @@ rec {
     name = "xf86-input-penmount-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-penmount-X11R7.2-1.2.0.tar.bz2;
-      sha256 = "0xi1m4h4ppjfwixadfz8qn5ybgv12x81ir1qf7qwvpyjbbshi906";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-penmount-1.2.0.tar.bz2;
+      sha256 = "03hmcvvlkk56aldbpqxyv7vi9pbnyip1zyhwk2yffncgrw3qm8fy";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1851,8 +1870,8 @@ rec {
     name = "xf86-input-spaceorb-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-spaceorb-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0dy74p0iflflhcrvsa5h04iivwafbr0zdxc497pnapjpppsxz906";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-spaceorb-1.1.0.tar.bz2;
+      sha256 = "0588bwr7m03w61p5h7pixaa9nlsrijld6cr2yzriyh5z36vkrmcw";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1861,8 +1880,8 @@ rec {
     name = "xf86-input-summa-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-summa-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1a7djsjiajsgmmvxjwrhjl2d239hc5bacahrixcqvi990kx0sijp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-summa-1.1.0.tar.bz2;
+      sha256 = "1whi5azynj1vv1yiqi47szs0ac0fj5zwh040cnrl02qjsjnjq3zi";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1871,8 +1890,8 @@ rec {
     name = "xf86-input-tek4957-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-tek4957-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "17fi116nd6bpnfc940a2lzhz3v08d7wcxhi9kcdycry13b1pakq6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-tek4957-1.1.0.tar.bz2;
+      sha256 = "09spw5gvyj8p2alqazhmp1xrjx8xdv2jnfbjk3vampmi3dnm1f89";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1881,18 +1900,18 @@ rec {
     name = "xf86-input-ur98-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-ur98-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0rnvkpx3imljslbag4z3jhh0h0d83psqj6lxq913yvsc40jflvgh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-ur98-1.1.0.tar.bz2;
+      sha256 = "0aj7qvpbfk3hfwlx9qqp0rkfdlpf75jxc0yf93a35aajznqcwjr1";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputvmmouse = (stdenv.mkDerivation {
-    name = "xf86-input-vmmouse-12.4.0";
+    name = "xf86-input-vmmouse-12.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-vmmouse-X11R7.1-12.4.0.tar.bz2;
-      sha256 = "0hnv11j0qj5h6f0adx3lgqca9s2d354b3wvayyrpxjfh8aj52flp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-vmmouse-12.4.1.tar.bz2;
+      sha256 = "1vxlf64hxy4sha293axrhgxwdvqwjsql22cr0zpngdn4rxlspln7";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1901,8 +1920,8 @@ rec {
     name = "xf86-input-void-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-input-void-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0hsfa6aqydlzz9xl4x10bp2fq0pj0jpvwsnkmf6fq6pvj1da84j6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-void-1.1.0.tar.bz2;
+      sha256 = "1r5h92v5f3gis7395c1w9h1byf5q383xscd1l6v0dg911295sg5l";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   }) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1911,8 +1930,8 @@ rec {
     name = "xf86miscproto-0.9.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86miscproto-X11R7.0-0.9.2.tar.bz2;
-      sha256 = "0nyybf02bhpqlwrdinyzwsi87bq671p757gw5h2gw1scvgir00gd";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86miscproto-0.9.2.tar.bz2;
+      sha256 = "1rnnv8vi5z457wl5j184qw1z3ai3mvbwssdshm3ysgf736zlraxa";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1921,8 +1940,8 @@ rec {
     name = "xf86rushproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86rushproto-X11R7.0-1.1.2.tar.bz2;
-      sha256 = "08xr8cw6cklq66zjmxqbxf7xidgz9nsifqn09101dsf158g8h6w6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86rushproto-1.1.2.tar.bz2;
+      sha256 = "1bm3d7ck33y4gkvk7cc7djrnd9w7v4sm73xjnl9n6b8zahvv5n87";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1931,8 +1950,8 @@ rec {
     name = "xf86-video-apm-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-apm-X11R7.1-1.1.1.tar.bz2;
-      sha256 = "18p0icaxs6isa22wi7dh7spzrqy3z1i3rq51p2y8lckhwn1d8hqy";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-apm-1.1.1.tar.bz2;
+      sha256 = "1v6wcl47b3lhik1fs221wx2zcn5006rn09dyiqgi8kxr637ydmq9";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1941,8 +1960,8 @@ rec {
     name = "xf86-video-ark-0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-ark-X11R7.1-0.6.0.tar.bz2;
-      sha256 = "0lv6y9fdl3mb2kwbl8fgz71mcv38pwqjaabjm4qjxhv5z8nldhh6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-ark-0.6.0.tar.bz2;
+      sha256 = "1mw4ph6y4cijb8azsjjy4f35gw4na58m5w3kaxnyag34mvsc9az5";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
@@ -1951,8 +1970,8 @@ rec {
     name = "xf86-video-ast-0.81.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-ast-X11R7.1-0.81.0.tar.bz2;
-      sha256 = "04c8mlsrhd75jngj6y5s200bi0ghfss8hs2mdj1b91izra40q0ph";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-ast-0.81.0.tar.bz2;
+      sha256 = "1f2r4j85792b81axil3h4fy2s44i5gp4r4c23h2jivwvz2m56mdr";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1961,8 +1980,8 @@ rec {
     name = "xf86-video-ati-6.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-ati-X11R7.2-6.6.3.tar.bz2;
-      sha256 = "17l5wmwljaxjm8c0vwxpk2bf3bjn83n8hd1333nlcfm1hzd1xc3y";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-ati-6.6.3.tar.bz2;
+      sha256 = "102p6nz1jvd3pgbl83a4zi99smydqr6il61r33l0lqmi3yg452nh";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
@@ -1971,8 +1990,8 @@ rec {
     name = "xf86-video-chips-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-chips-X11R7.1-1.1.1.tar.bz2;
-      sha256 = "0av5vm6gzcxm3s4mp7kkp93mjbqyi841x5lg9mmvwzhpbxazylg8";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-chips-1.1.1.tar.bz2;
+      sha256 = "153lpk2jm6amxag4i8zrpjnk0mfpq1wx49ikdj9pc49idgdira0n";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1981,8 +2000,8 @@ rec {
     name = "xf86-video-cirrus-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-cirrus-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "033c0000bzcrkaqpbjx3kn1ss5lzsm89v1cy3mrv4146nyvpz87i";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-cirrus-1.1.0.tar.bz2;
+      sha256 = "06wv2yqr7jalk6znwqdnidjxy1glwhwjk5d6yrs340fmk4hrd22r";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1991,8 +2010,8 @@ rec {
     name = "xf86-video-cyrix-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-cyrix-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "00lxkyq0hncjnfyxm2hcf7bcsqcd1q2lxnvz4nks4z19vkg45fi5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-cyrix-1.1.0.tar.bz2;
+      sha256 = "1bd65iyacnw76nm9znxmfgvjddbbpn346y55rc3xkpgnw1w6g9nn";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
@@ -2001,8 +2020,8 @@ rec {
     name = "xf86-video-dummy-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-dummy-X11R7.1-0.2.0.tar.bz2;
-      sha256 = "004wdgzprkvzp34cy23ib95ali99gls5vrd0iy7g1jzvxiw85q3k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-dummy-0.2.0.tar.bz2;
+      sha256 = "04690qg07v01d8ncz5ws651i8scyqsmh7mf50mg1lg3gd62kh0a6";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
@@ -2011,18 +2030,28 @@ rec {
     name = "xf86-video-fbdev-0.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-fbdev-X11R7.2-0.3.1.tar.bz2;
-      sha256 = "19iy2agi9yzsab9mmp9sd8nkfli9cby7k981731pxqqn9jhlk782";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-fbdev-0.3.1.tar.bz2;
+      sha256 = "1rznknqy3r0jr1xy3186j120qybpjnq4apf0jjj9wmbpiihiz79h";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
+    
+  xf86videoglide = (stdenv.mkDerivation {
+    name = "xf86-video-glide-1.0.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-glide-1.0.0.tar.bz2;
+      sha256 = "1bsynd01sjz3pp9lkphiiln0nwkjy5fyywymfr1x617r1216szb6";
+    };
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videoglint = (stdenv.mkDerivation {
     name = "xf86-video-glint-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-glint-X11R7.1-1.1.1.tar.bz2;
-      sha256 = "1lhpajac3wp809dwh0q5lpzqyiy7p9slwaxf1m3kq4izb5qhvdr1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-glint-1.1.1.tar.bz2;
+      sha256 = "0vay25kisr8lpmqnl9z3fglw341yr25ad4sij7qvmknfyp9hsgnn";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ;};
@@ -2031,8 +2060,8 @@ rec {
     name = "xf86-video-i128-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-i128-X11R7.2-1.2.1.tar.bz2;
-      sha256 = "1xlsb6gb5phmmshd7h69g6x7yzwsnwvjf6kw09iabzwfq9vq61nm";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-i128-1.2.1.tar.bz2;
+      sha256 = "1cay0pyvbwljaf4x6n9gr4398fann5779mgwiv6l2hhkz2n3q0hd";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -2041,38 +2070,28 @@ rec {
     name = "xf86-video-i740-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-i740-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1xl99kdfy5lr63s39m64r3l2sg0nbl4sm6gnskc5ji487i8c3iai";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-i740-1.1.0.tar.bz2;
+      sha256 = "1idpw8s8wz69qcw0kr3p1826viy17yj3mvkpnkw192kxk1619wmq";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
-    
-  xf86videoi810 = (stdenv.mkDerivation {
-    name = "xf86-video-i810-1.7.4";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-i810-1.7.4.tar.bz2;
-      sha256 = "0na2qy78waa9jy0ikd10g805v0w048icnkdcss6yd753kffdi37z";
-    };
-    buildInputs = [pkgconfig fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
     
   xf86videoimstt = (stdenv.mkDerivation {
     name = "xf86-video-imstt-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-imstt-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "057sc5z6z4rsyax60qnhhari3rcmnm7wpnwjf6c9vaxqidd8faza";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-imstt-1.1.0.tar.bz2;
+      sha256 = "0zgv20zj4gr4sv93ffl3zzsy446041zrs13wndxdsdwlgwjw4f4j";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation {
-    name = "xf86-video-intel-2.0.0";
+    name = "xf86-video-intel-2.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-intel-2.0.0.tar.bz2;
-      sha256 = "15g6090h31d8h346jzm5qzaicywpbaq3f8hjqp2b0447j1zf8qym";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-intel-2.1.1.tar.bz2;
+      sha256 = "0765spq3ksw15hn9mia1sbznainnb2w6zlkgwmdv7d4srjr1awjg";
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
   }) // {inherit fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
@@ -2081,8 +2100,8 @@ rec {
     name = "xf86-video-mga-1.4.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-mga-X11R7.2-1.4.6.1.tar.bz2;
-      sha256 = "0wy6ljmqn88ymzvnpvlssmx7nc6y5bcr0n3cw7sh48rcvln61j2f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-mga-1.4.6.1.tar.bz2;
+      sha256 = "1z7xmyyx2wy69w59cnzir03h4ydhcramzn7rqli428fci30fib57";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -2091,8 +2110,8 @@ rec {
     name = "xf86-video-neomagic-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-neomagic-X11R7.1-1.1.1.tar.bz2;
-      sha256 = "10ffw44h5n44az477cjdqy2yxkqzpwcs4yci4qmxwrjwfyka8frg";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-neomagic-1.1.1.tar.bz2;
+      sha256 = "11lav16j3ymn2sra0zdx5ql7hxa5sjpprpgycfv8b0kvjs070jfn";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
@@ -2101,28 +2120,28 @@ rec {
     name = "xf86-video-newport-0.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-newport-X11R7.2-0.2.1.tar.bz2;
-      sha256 = "0cjybpx3xiif0k7nlz5abn265ays0sjs1aj3979ib64c6n53mva6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-newport-0.2.1.tar.bz2;
+      sha256 = "026fn4c760rr03i2r9pq824k31nxq5nq0xq582bgh3k9a9a8bb36";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
     
   xf86videonsc = (stdenv.mkDerivation {
-    name = "xf86-video-nsc-2.8.2";
+    name = "xf86-video-nsc-2.8.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-nsc-X11R7.2-2.8.2.tar.bz2;
-      sha256 = "0j7x6rb4yjsq5vmwac6d4fzix78v185iwnl0rwhn45fsglrdw73n";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-nsc-2.8.3.tar.bz2;
+      sha256 = "0f8qicx3b5ibi2y62lmc3r7y093366b61h1rxrdrgf3p301a5ig5";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videonv = (stdenv.mkDerivation {
-    name = "xf86-video-nv-1.2.2.1";
+    name = "xf86-video-nv-2.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-nv-X11R7.2-1.2.2.1.tar.bz2;
-      sha256 = "112xs2mm0dnlp9mjma16jdb12bzs169l4gf2sdd21s5dmwsc8zs0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-nv-2.1.3.tar.bz2;
+      sha256 = "0llrjrfm68x7s274m7q5q49qh59ks75kwzqyhbvij6f36yhmx6wd";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -2131,8 +2150,8 @@ rec {
     name = "xf86-video-rendition-4.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-rendition-X11R7.2-4.1.3.tar.bz2;
-      sha256 = "1hibqvb7l54x8ynmm6pa4lq9h4fb9biawc8addsv9axbkmcm5nf4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-rendition-4.1.3.tar.bz2;
+      sha256 = "0224vz4v96y5lbxqp1hnvqwp9jwh67ad1brvb9glhrkl5zvsxrrp";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
@@ -2141,8 +2160,8 @@ rec {
     name = "xf86-video-s3-0.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-s3-X11R7.2-0.5.0.tar.bz2;
-      sha256 = "0z0k7166h0xybjzq3syrzs46v99nfrynr2slys1ki15xw4aw4qc0";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-s3-0.5.0.tar.bz2;
+      sha256 = "15swq2wkccraj6xv3wrqh69283ixj7clfr91h64as2i03b5hc4ja";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -2151,18 +2170,18 @@ rec {
     name = "xf86-video-s3virge-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-s3virge-X11R7.1-1.9.1.tar.bz2;
-      sha256 = "0ciwl5pr2bmi8vam5js8xs1zbwzhcb6wffcahlb0944byfcvlpq7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-s3virge-1.9.1.tar.bz2;
+      sha256 = "08n89fl97rpk5mzwfjl4kyj5syhz4k02sixip1zp77plcclp1xff";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videosavage = (stdenv.mkDerivation {
-    name = "xf86-video-savage-2.1.2";
+    name = "xf86-video-savage-2.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-savage-X11R7.2-2.1.2.tar.bz2;
-      sha256 = "0xzgyjwwh0sjsxdgfd8ywwrp2k7bsiilvr5w8ricrqk2kf3l6l1x";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-savage-2.1.3.tar.bz2;
+      sha256 = "1i9w3ami0brwim7v9p3nawnr2qsx16vxclqlbn9lbd3w6zgm9wgm";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -2171,8 +2190,8 @@ rec {
     name = "xf86-video-siliconmotion-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-siliconmotion-X11R7.2-1.4.2.tar.bz2;
-      sha256 = "13spjwilqwna011s9qdmga48vwqnbh4q0l77w7dj8yr577zqcpf2";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-siliconmotion-1.4.2.tar.bz2;
+      sha256 = "1pazl8m6gh60sv92p57ldnd8ixwk9k3mw2r62ai44hs51j960ym4";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -2181,18 +2200,18 @@ rec {
     name = "xf86-video-sis-0.9.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sis-X11R7.2-0.9.3.tar.bz2;
-      sha256 = "0szg1rm9fag1889p82ws1yb15yyb6knagncq650mlf2xww116vjq";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sis-0.9.3.tar.bz2;
+      sha256 = "1xin2hcjjwj2810h7kxhkmqq841plbsvk0swmjl9py7z2vxyi3l9";
     };
-    buildInputs = [pkgconfig glproto mesaHeaders fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit glproto mesaHeaders fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosisusb = (stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sisusb-X11R7.1-0.8.1.tar.bz2;
-      sha256 = "0kdhqwqzw3q1lbxycgbxd0qahmhlg8vplr236fwxvzrh964ykpdz";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sisusb-0.8.1.tar.bz2;
+      sha256 = "1js5vf5xjxpi0nb0bpjc1glbx2l0fq1wqmnlwayn6cp3nfdbg5hm";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ;};
@@ -2201,8 +2220,8 @@ rec {
     name = "xf86-video-sunbw2-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sunbw2-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "0hsghhsvjpn6768w9v3jzz730b6sphmwjq307c0w3abbzycnqrda";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sunbw2-1.1.0.tar.bz2;
+      sha256 = "0dl16ccbzzy0dchxzv4g7qjc59a2875c4lb68yn733xd87lp846p";
     };
     buildInputs = [pkgconfig randrproto xorgserver xproto ];
   }) // {inherit randrproto xorgserver xproto ;};
@@ -2211,8 +2230,8 @@ rec {
     name = "xf86-video-suncg14-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-suncg14-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "11vl6a2rlhhplw12hlpy53b2bj3mpynjgbnlzv30fijmgjcfx8gr";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-suncg14-1.1.0.tar.bz2;
+      sha256 = "09q5wjay9mn9msskawv4i5in3chqwv1a0qp4z54xn9g7f04jpjhy";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
@@ -2221,8 +2240,8 @@ rec {
     name = "xf86-video-suncg3-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-suncg3-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1nss35irq9anhvmib5wmzzgc4qcym40pnpq60561aclg9wnl1rcv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-suncg3-1.1.0.tar.bz2;
+      sha256 = "1ybxqf8z8q3r12s6pm1ygv0wffp9h7c6d4am8qnqgsnzrk4fnr1m";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
@@ -2231,8 +2250,8 @@ rec {
     name = "xf86-video-suncg6-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-suncg6-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "08g67346jjsgcdkq1whsibqa5hn696y7lwz49xq07kxh07jj4pjv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-suncg6-1.1.0.tar.bz2;
+      sha256 = "0jqr6xjs6i8lb40qyiqnyrfzmy9ch53jhjr0w20m5vspkjvz7cfn";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
@@ -2241,8 +2260,8 @@ rec {
     name = "xf86-video-sunffb-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sunffb-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1k7zrhw74an69nw5g80sfplhppc8zrraid0pfmc6f4xawz26yh1q";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sunffb-1.1.0.tar.bz2;
+      sha256 = "0achhw5gskairc2gjqms64qyni7ai8ly6917v1grdxiwx0ks95zq";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ;};
@@ -2251,8 +2270,8 @@ rec {
     name = "xf86-video-sunleo-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-sunleo-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1m373iqiz304yg2fywn4y5k6dwfjpb24xjm3dqygqg2vdm33jwvc";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sunleo-1.1.0.tar.bz2;
+      sha256 = "1a8d4y9v6gpbdmd3pl8qgklxw93v631wkafjvk4rpshv4q7xa15m";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
@@ -2261,8 +2280,8 @@ rec {
     name = "xf86-video-suntcx-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-suntcx-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1wfj5axndnqmw75nrbs4mszvqwnxp42vbfipqzdi85nisf160ni7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-suntcx-1.1.0.tar.bz2;
+      sha256 = "1kq1gg273x460rin8gh5spl7yhyv23b4795by46zcimph4wnm63j";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
@@ -2271,8 +2290,8 @@ rec {
     name = "xf86-video-tdfx-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-tdfx-X11R7.2-1.3.0.tar.bz2;
-      sha256 = "07lqznsad5m4d4h0pva040ibk3c0431js7gkzp0gwllsh7wwsp0j";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-tdfx-1.3.0.tar.bz2;
+      sha256 = "0946f977bc78gcwv8qzbyd20g5bqylc6yz7h11yq2a4nbkgh06kb";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -2281,8 +2300,8 @@ rec {
     name = "xf86-video-tga-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-tga-X11R7.1-1.1.0.tar.bz2;
-      sha256 = "1dsxfql41k1jy91w9q5h2s3g69gawq4na2sl2j5ny3q7jh6xf3i5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-tga-1.1.0.tar.bz2;
+      sha256 = "16vfzahrcaw1fpgm28j2anzhfm4di6j1h5glq96i3zarsbyks52h";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
@@ -2291,8 +2310,8 @@ rec {
     name = "xf86-video-trident-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-trident-X11R7.2-1.2.3.tar.bz2;
-      sha256 = "0771vzi6sxf8dlq84163fg2hh3swh0s2d2vglpb2ipfv5kfj2l5g";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-trident-1.2.3.tar.bz2;
+      sha256 = "1594fbbax5gv5i01i2k0c7bir83h1kbdqqysckgqs8sx2vxbhgnj";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
@@ -2301,8 +2320,8 @@ rec {
     name = "xf86-video-tseng-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-tseng-X11R7.2-1.1.1.tar.bz2;
-      sha256 = "1nnxs16fvl5gjlql9z0l5vhqll25gljdwrndydh7959dghc5y9v7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-tseng-1.1.1.tar.bz2;
+      sha256 = "0vnmvxngshp4912zjf7bjx7954xbph03swxwd202ddqmhwqz7hf9";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -2311,18 +2330,28 @@ rec {
     name = "xf86-video-v4l-0.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-v4l-X11R7.1-0.1.1.tar.bz2;
-      sha256 = "051i74p7ln4lcw9lfra4qwhygjv4q0prbz942a1a5mkgf6kavdcp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-v4l-0.1.1.tar.bz2;
+      sha256 = "0w68msn8vb1k03mc5sy2cinvral35lzlz5nrb1zxma7nlfg59b9k";
     };
     buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
   }) // {inherit randrproto videoproto xorgserver xproto ;};
+    
+  xf86videovermilion = (stdenv.mkDerivation {
+    name = "xf86-video-vermilion-1.0.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-vermilion-1.0.0.tar.bz2;
+      sha256 = "1vr7vfc35x8dd3ra66i5x2xyycl3ydh98wipz7ks4dkkgs4rh39z";
+    };
+    buildInputs = [pkgconfig fontsproto renderproto xextproto xf86dgaproto xorgserver xproto ];
+  }) // {inherit fontsproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videovesa = (stdenv.mkDerivation {
     name = "xf86-video-vesa-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-vesa-X11R7.2-1.3.0.tar.bz2;
-      sha256 = "0pp645ah12yllclvvg6my67na5g7dirw1yhrbpsbvc5mkpic9zic";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-vesa-1.3.0.tar.bz2;
+      sha256 = "00z2jg409gyn6gkagdrs7la83qmj6k3w9nj4yg73w4pmh6p80v5r";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
@@ -2331,8 +2360,8 @@ rec {
     name = "xf86-video-vga-4.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-vga-X11R7.1-4.1.0.tar.bz2;
-      sha256 = "1rvld4fj0ri37svb41pkylxzzkafjak3lf0yq435q035z31mz27h";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-vga-4.1.0.tar.bz2;
+      sha256 = "0havz5hv46qz3g6g0mq2568758apdapzy0yd5ny8qs06yz0g89fa";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
@@ -2341,8 +2370,8 @@ rec {
     name = "xf86-video-via-0.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-via-X11R7.2-0.2.2.tar.bz2;
-      sha256 = "1bcaq0ijrz9xwxbyw05bgwjqvjr0md1xm8k100vqmmd1v334nrpv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-via-0.2.2.tar.bz2;
+      sha256 = "0qn89m1s50m4jajw95wcidarknyxn19h8696dbkgwy21cjpvs9jh";
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
   }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
@@ -2351,8 +2380,8 @@ rec {
     name = "xf86-video-vmware-10.14.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-vmware-X11R7.2-10.14.1.tar.bz2;
-      sha256 = "1jlml1mb0072ggj3a6b3m484dsba2ln231b70b3wkzy24dy1nm5p";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-vmware-10.14.1.tar.bz2;
+      sha256 = "1aaghvwy7wnk4pkmxym5cw8w499wqi293nqyc71h8hm5dcszsw8r";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xineramaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xineramaproto xorgserver xproto ;};
@@ -2361,8 +2390,8 @@ rec {
     name = "xf86-video-voodoo-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86-video-voodoo-X11R7.2-1.1.1.tar.bz2;
-      sha256 = "0bqhwp8fzmbb8nc3w4abhrb160h4mcalyl7r1pa8saflvjsasxn6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-voodoo-1.1.1.tar.bz2;
+      sha256 = "073mc423wql4w72dbwf73lzr3k0pdxc9drnzs2xb4x76mqdn0x9r";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
@@ -2371,8 +2400,8 @@ rec {
     name = "xf86vidmodeproto-2.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xf86vidmodeproto-X11R7.0-2.2.2.tar.bz2;
-      sha256 = "05gxv4k0nydy4kbrk9jk13mii02zc97hifa0wpgr8bnba5z4i5r4";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86vidmodeproto-2.2.2.tar.bz2;
+      sha256 = "0vnrqhzrsyjh77zgrxlgx53r34dij15crpl9369wb7n71jcjy587";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2381,8 +2410,8 @@ rec {
     name = "xfd-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfd-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "13vyszf9hgcb10s26av1mab7gd325kg7ivqj38kfamx9kaqkbzm3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfd-1.0.1.tar.bz2;
+      sha256 = "07ifbsdany081g6wip0mfq5s2xcdl69p76xnk9rxca84g0bal6qi";
     };
     buildInputs = [pkgconfig fontconfig freetype libXaw libXft libXt ];
   }) // {inherit fontconfig freetype libXaw libXft libXt ;};
@@ -2391,8 +2420,8 @@ rec {
     name = "xfindproxy-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfindproxy-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0v2vn2whva8h3vr51xj088a3f38gx8d2rp70d1msl4gf4r0k7r1k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfindproxy-1.0.1.tar.bz2;
+      sha256 = "1sl836x5dbjp6ipin67i0ikrv1l5whvhin3pw4rv85ryvpm5qn3b";
     };
     buildInputs = [pkgconfig libICE libX11 xproxymanagementprotocol libXt ];
   }) // {inherit libICE libX11 xproxymanagementprotocol libXt ;};
@@ -2401,8 +2430,8 @@ rec {
     name = "xfontsel-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfontsel-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0hxbgvj1pab3zzl0aasizqr62jvc2qqr5nhgzwsixmml3hbmyyxq";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfontsel-1.0.1.tar.bz2;
+      sha256 = "0zsc9a4n4wpy6g6ajpjcqr277zy9anzhiyaal2cc7dz0gc62mjjy";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
@@ -2411,21 +2440,18 @@ rec {
     name = "xfs-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfs-X11R7.2-1.0.4.tar.bz2;
-      sha256 = "0h0pa3ynvqqikkvrx7jhgdjg207njbph408k1i6azqscpmwz5g39";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfs-1.0.4.tar.bz2;
+      sha256 = "06v4xrs2br8h8ailaphfbb2w2yf50xap7fdlihmmmbn74clxwba5";
     };
     buildInputs = [pkgconfig libFS libXfont xtrans ];
-    meta = {
-	description = "X font server. Fontpath for it is unix/:7100. ";
-    };
   }) // {inherit libFS libXfont xtrans ;};
     
   xfsinfo = (stdenv.mkDerivation {
     name = "xfsinfo-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfsinfo-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0qwx0v007yhwa7r910fdr4v5lm7vgw05f9kpypm5i2ca6786lpwd";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfsinfo-1.0.1.tar.bz2;
+      sha256 = "1n8csr613bnq9kkspqg0113z548498005rvx83939wx7nd1k9hxd";
     };
     buildInputs = [pkgconfig libFS libX11 ];
   }) // {inherit libFS libX11 ;};
@@ -2434,18 +2460,18 @@ rec {
     name = "xfwp-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xfwp-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0aglkcyz5043dq24klignlsr6gmib27cpisgklddwv1f284cwcyk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xfwp-1.0.1.tar.bz2;
+      sha256 = "14vdkawdw2lxyx4r6ij2vlcx9ba1frw2d2l007fqc866afsfrmnd";
     };
     buildInputs = [pkgconfig libICE libX11 xproxymanagementprotocol ];
   }) // {inherit libICE libX11 xproxymanagementprotocol ;};
     
   xgamma = (stdenv.mkDerivation {
-    name = "xgamma-1.0.1";
+    name = "xgamma-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xgamma-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "11lamm2as65ywxw63vd06pzwzhi6ccpjcmpjywq0s1vcy0sl6x7c";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xgamma-1.0.2.tar.bz2;
+      sha256 = "07plrky99vwp13463zbp2fqmyfqkvmxc2ra8iypfy2n61wimngax";
     };
     buildInputs = [pkgconfig libX11 libXxf86vm ];
   }) // {inherit libX11 libXxf86vm ;};
@@ -2454,39 +2480,38 @@ rec {
     name = "xgc-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xgc-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1s2lwk4avql8kpy0zlf5wqgksf78zz31jqf4713qgag72a5d0lb1";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xgc-1.0.1.tar.bz2;
+      sha256 = "14qh1qbqh89aa8xyq6zc6qxk9cpnhm0a6axs5nms8qjgqg3dzbbw";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xhost = (stdenv.mkDerivation {
-    name = "xhost-1.0.1";
+    name = "xhost-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xhost-X11R7.1-1.0.1.tar.bz2;
-      sha256 = "1n365k4704wnnscl5l00mkq1qc7a79pi0b2cxh3yiidha87s2s5r";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xhost-1.0.2.tar.bz2;
+      sha256 = "1dhdm6dz2jcnb08qlrjn2g1mzv3gfbyq6yqg9kjmh3r3kp22razd";
     };
     buildInputs = [pkgconfig libX11 libXau libXmu ];
-    meta = {description = "X per-host access management tool.";};
   }) // {inherit libX11 libXau libXmu ;};
     
   xineramaproto = (stdenv.mkDerivation {
     name = "xineramaproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xineramaproto-X11R7.0-1.1.2.tar.bz2;
-      sha256 = "1pq6akfgijmi9a1nhjkbnx9bqgyz99sjfi26cx558gyj8zxhskgp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xineramaproto-1.1.2.tar.bz2;
+      sha256 = "0409qj8wdl1c3jchrqvdkl63s8r08gni4xhlxngkpz5wmwf2p9p8";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xinit = (stdenv.mkDerivation {
-    name = "xinit-1.0.3";
+    name = "xinit-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xinit-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "18908namjyjczp703b1jm7xfx39xahc3lclccfr8q7dka189w428";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xinit-1.0.5.tar.bz2;
+      sha256 = "0bf6y622c0d3i40ch65rs88fjhys1229kdshcy71q91dyf1m5mcm";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -2495,8 +2520,8 @@ rec {
     name = "xkbcomp-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xkbcomp-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0n1lhb5qvhgf9wc9l7mnrm01p4psf6gv704k1l0mi9albqr257kh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xkbcomp-1.0.3.tar.bz2;
+      sha256 = "05n7mvw50v575kzsma1f3zp3l8gs2jp7ax4rpbmk7jg3vbjvld86";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   }) // {inherit libX11 libxkbfile ;};
@@ -2505,8 +2530,8 @@ rec {
     name = "xkbevd-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xkbevd-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0jjwvw7g9q0jr5bxa2kkhv39dx20a0il1c701mlxxlfw8n009aw6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xkbevd-1.0.2.tar.bz2;
+      sha256 = "0azpl6mcvsi718630vv0slls8avixvlsfd7nj614kagrxhbf6y2b";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   }) // {inherit libX11 libxkbfile ;};
@@ -2515,8 +2540,8 @@ rec {
     name = "xkbprint-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xkbprint-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1rqhzhvxjvmy92cbkfbc4n537gfsgbd8pi20rr0h8093iv1c7sfj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xkbprint-1.0.1.tar.bz2;
+      sha256 = "05rfvlla9wpbzlg86j83zf907h8cpywx0h5x7v5q0f11bgmgz380";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   }) // {inherit libX11 libxkbfile ;};
@@ -2525,8 +2550,8 @@ rec {
     name = "xkbutils-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xkbutils-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0bz93fc770vn74zahljl60zvzbnbvpxp5znw1b549s7nbb2a2y41";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xkbutils-1.0.1.tar.bz2;
+      sha256 = "0mjq2yfd1kp3gasc08k6r0q16k4asdsafsxw3259fr5pipnp7bda";
     };
     buildInputs = [pkgconfig libXaw libX11 libxkbfile ];
   }) // {inherit libXaw libX11 libxkbfile ;};
@@ -2535,18 +2560,18 @@ rec {
     name = "xkill-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xkill-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1km3yq0r7h9bk1s0g9ypvii6lq2saa8276wgfzx8xbrzskfdyngy";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xkill-1.0.1.tar.bz2;
+      sha256 = "1pm92hpq1vnj3zjl12x8d9g6a9nyfyz3ahvvicni7qjadsn1m8bp";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
     
   xload = (stdenv.mkDerivation {
-    name = "xload-1.0.1";
+    name = "xload-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xload-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0w47cs1p1w748br0p8vqpz7j9f1jiyzcdjzill2g0ik6ivskwnvb";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xload-1.0.2.tar.bz2;
+      sha256 = "02y5avipnrf9bvhmrs7172j60w3yq7azs6v3qyqmf9f5xyv7dcc6";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
@@ -2555,8 +2580,8 @@ rec {
     name = "xlogo-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xlogo-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0cc1sa52r5cdb4cj2g38krv00i2dgnb5wi5wfdzr1s07mrxkg5qk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xlogo-1.0.1.tar.bz2;
+      sha256 = "1ci6ylnpsy9sgvkkr1jn3rkklx89x8yfr6zk8ps97zj57nzgjnfy";
     };
     buildInputs = [pkgconfig libXaw libXext libXft libXp libXprintUtil libXrender libXt ];
   }) // {inherit libXaw libXext libXft libXp libXprintUtil libXrender libXt ;};
@@ -2565,8 +2590,8 @@ rec {
     name = "xlsatoms-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xlsatoms-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "18z9aq9bwna3bczb7n3diwjqgsl99xzpiknag12r7iws65r9h1va";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xlsatoms-1.0.1.tar.bz2;
+      sha256 = "0nnm2ss1v93wz4jmlvhgxfsrxkx39g9km2jp2nagqdyv1id5fva5";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
@@ -2575,8 +2600,8 @@ rec {
     name = "xlsclients-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xlsclients-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1f6fj472pz5yilahlnyqf3n30qzlfs33r21ji95za7pd4binkhh5";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xlsclients-1.0.1.tar.bz2;
+      sha256 = "160nk39dj9h5laxd0gbq7jl47y4ikpjf6kl4wlzm469mvk37334q";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
@@ -2585,38 +2610,38 @@ rec {
     name = "xlsfonts-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xlsfonts-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0vzwmrppqkz22jilsrap00dzw876v3bnxzn6qrmz1h6syzaj738z";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xlsfonts-1.0.1.tar.bz2;
+      sha256 = "0857x0px3581b89lgv8q05dlc8aly1q71kpdqviviclr88cjdn68";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
     
   xmag = (stdenv.mkDerivation {
-    name = "xmag-1.0.1";
+    name = "xmag-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xmag-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1lcwzl7w1nbiy04zg6kc7vh21qdi37jga81c8n0x8d6kqrbxhffh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xmag-1.0.2.tar.bz2;
+      sha256 = "0hyshs5afqs56y60li86pw65c07vk1wmkk8kzmkq1pbxc0z99pai";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xman = (stdenv.mkDerivation {
-    name = "xman-1.0.2";
+    name = "xman-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xman-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0kk50ixxl9n032599s7fpxhx70msbxxckhril89aj835grvrbwd7";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xman-1.0.3.tar.bz2;
+      sha256 = "0jir4m55jfbpz32bi3s5zc2y8s12jnz3jd9f6iars41x5px3pq1q";
     };
     buildInputs = [pkgconfig libXaw libXp libXprintUtil libXt ];
   }) // {inherit libXaw libXp libXprintUtil libXt ;};
     
   xmessage = (stdenv.mkDerivation {
-    name = "xmessage-1.0.1";
+    name = "xmessage-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xmessage-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0wzl3pv4kq7dgppd3jbi44c3yhdj1301xsh0wbzxx378dbni7jz9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xmessage-1.0.2.tar.bz2;
+      sha256 = "1hy3n227iyrm323hnrdld8knj9h82fz6s7x6bw899axcjdp03d02";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
@@ -2625,18 +2650,18 @@ rec {
     name = "xmh-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xmh-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "12sv1lh39yr7ri2rgl4m7npl5bs19hqf3lmga4bp9bgwsjvvyv78";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xmh-1.0.1.tar.bz2;
+      sha256 = "1yn6q8lrc2ndx60j2d42xagpqn3w86vjlwk5p21cbgz0bi2znwcl";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
     
   xmodmap = (stdenv.mkDerivation {
-    name = "xmodmap-1.0.2";
+    name = "xmodmap-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xmodmap-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "1paqq482v1q62zda59gdpanq1y6a4j5phc72crdvh1hrdh9wn7nh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xmodmap-1.0.3.tar.bz2;
+      sha256 = "0zql66q2l8wbldfrzz53vlxpv7p62yhfj6lc2cn24n18g4jcggy3";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -2645,8 +2670,8 @@ rec {
     name = "xmore-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xmore-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1hglvr9sjbdw00kmc4ibljwy3xdkcln42zn2ys3hg6dasz4d45h6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xmore-1.0.1.tar.bz2;
+      sha256 = "09r5iwzarqgyxx36z3vsams5qi08n0a1wqx6y52vqx64ffz6cdb5";
     };
     buildInputs = [pkgconfig libXaw libXp libXprintUtil libXt ];
   }) // {inherit libXaw libXp libXprintUtil libXt ;};
@@ -2655,41 +2680,38 @@ rec {
     name = "xorg-cf-files-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xorg-cf-files-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0196z9nl2bl50i986zfa58kidajckwjkyi90237c8f3xy1zxyi30";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-cf-files-1.0.2.tar.bz2;
+      sha256 = "15wmz9whf0j9irz5scqyyic4ardr53r6k15x2wcnxmfkqap16ip3";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xorgdocs = (stdenv.mkDerivation {
-    name = "xorg-docs-1.2";
+    name = "xorg-docs-1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xorg-docs-X11R7.1-1.2.tar.bz2;
-      sha256 = "1ysffjsjlzzd7q7b1b87nclqya0lrkwlvc6g6ashihqljafmc62i";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-docs-1.4.tar.bz2;
+      sha256 = "09a9va5nljg0cahajadpkkqbhm0r6nl2z12yv7fyd5p31kjngz7z";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation {
-    name = "xorg-server-1.3.0.0";
+    name = "xorg-server-1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/xserver/xorg-server-1.3.0.0.tar.bz2;
-      sha256 = "0x99bhs8v4ja2x4h9mn5g76q5awyvv2j9pbjag0hfxpk8bqmdilk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-server-1.4.tar.bz2;
+      sha256 = "1hpbq0bl1jkq84gvksp0xzbbrwwgl0wz2wakf11p2hld6bgl5cai";
     };
-    buildInputs = [pkgconfig bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; 
-    postInstall = "for i in ${xkeyboard_config}/etc/X11/xkb/*; 
-			do ln -s $i \${out}/share/X11/xkb/; done;
-	ln -s ${xkbcomp}/bin/xkbcomp \${out}/bin";
-  }) // {inherit bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto renderproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
+    buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; 
+  }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
-    name = "xorg-sgml-doctools-1.1.1";
+    name = "xorg-sgml-doctools-1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xorg-sgml-doctools-X11R7.2-1.1.1.tar.bz2;
-      sha256 = "0hvcs394vv1yka30lilpzn67mqai3hh41cwhf2c7lfzbg4a1i12k";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-sgml-doctools-1.2.tar.bz2;
+      sha256 = "1snvlijv7ycdis0m7zhl6q6ibg2z6as3mdb17dlza0p0w3r7ivsd";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2698,8 +2720,8 @@ rec {
     name = "xphelloworld-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xphelloworld-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1gw2765zgwyj2cqmc53hy8hk5j1w79f4zxfw31rpkc05jkn63g2g";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xphelloworld-1.0.1.tar.bz2;
+      sha256 = "09jlwfbhhxnj46wb4cdhagxfm23gg9qmwryqx5g16nsfpbihijmi";
     };
     buildInputs = [pkgconfig libX11 libXaw libXp libXprintAppUtil libXprintUtil libXt ];
   }) // {inherit libX11 libXaw libXp libXprintAppUtil libXprintUtil libXt ;};
@@ -2708,8 +2730,8 @@ rec {
     name = "xplsprinters-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xplsprinters-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0fvs4pqa2866bs2zgc3ih3vkkrqr8z44mm39b78maiczq2g26m2g";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xplsprinters-1.0.1.tar.bz2;
+      sha256 = "0wmhin7z59fb87288gpqx7ia049ly8i51yg7l1slp5z010c0mimd";
     };
     buildInputs = [pkgconfig libX11 libXp libXprintUtil ];
   }) // {inherit libX11 libXp libXprintUtil ;};
@@ -2718,8 +2740,8 @@ rec {
     name = "xpr-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xpr-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1x6d8vga4ggfr5k5y9idiy4gkp9rqh9h1ny5kba80k0i2dijaxwc";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xpr-1.0.1.tar.bz2;
+      sha256 = "0jb2zpq8ibb9s1qmcb6zr6k1m5afd8m0xzp9k01wakyw4cfj4wdq";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
@@ -2728,18 +2750,18 @@ rec {
     name = "xprehashprinterlist-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xprehashprinterlist-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0wqxy4ay3ssdjxabv5krl1bn8g6a5i83r1l83gki436n8v8gaa6c";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xprehashprinterlist-1.0.1.tar.bz2;
+      sha256 = "0n82yar7hg1npc63fmxrjj84grr6zivddccip1562gbhdwjyjrxs";
     };
     buildInputs = [pkgconfig libX11 libXp ];
   }) // {inherit libX11 libXp ;};
     
   xprop = (stdenv.mkDerivation {
-    name = "xprop-1.0.2";
+    name = "xprop-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xprop-X11R7.2-1.0.2.tar.bz2;
-      sha256 = "1nzpz7faq5v9yyrnp1cqrd0w0nxr93bpsvwl416h38vw6x99p17z";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xprop-1.0.3.tar.bz2;
+      sha256 = "19kz6dia3kw44rmmy39g5ygiwbrvgvh7mbq8lnbczd53i2w27nnx";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
@@ -2748,8 +2770,8 @@ rec {
     name = "xproto-7.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xproto-X11R7.2-7.0.10.tar.bz2;
-      sha256 = "0dwkf445sc8isvfkf2pqk2fwfpv3y2gdn3aq8j293hx23kara75w";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xproto-7.0.10.tar.bz2;
+      sha256 = "1x2dg14c1q1gi5sg1lpkw0aqaq6jkkzr8kqq2j3y8h9d4qh9jrbd";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2758,28 +2780,28 @@ rec {
     name = "xproxymanagementprotocol-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xproxymanagementprotocol-X11R7.0-1.0.2.tar.bz2;
-      sha256 = "13xlwxgm00ycskcrfahifp29paa4sayb6xi1wapc6cnkvx151hpk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xproxymanagementprotocol-1.0.2.tar.bz2;
+      sha256 = "1g0ck81yx1bd0mm4sbf3xk2k1lr5ac7nhx17qlm18p680b87clf4";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
     
   xrandr = (stdenv.mkDerivation {
-    name = "xrandr-1.0.2";
+    name = "xrandr-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xrandr-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "14vpk0hqg7spjhx2y8p06jnswi5iv4d8r59sslikrfblcs1a2cpk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xrandr-1.2.2.tar.bz2;
+      sha256 = "00wkm84radzpvnrk8jbv1sxnkw4sz3jazyvzh1wq4zx0jbs3ybv3";
     };
     buildInputs = [pkgconfig libX11 libXrandr libXrender ];
   }) // {inherit libX11 libXrandr libXrender ;};
     
   xrdb = (stdenv.mkDerivation {
-    name = "xrdb-1.0.2";
+    name = "xrdb-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xrdb-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "15v3726g6qnndqc7mqmsvabf5a3dvzzy66y7lhqd8j22a6q9is4b";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xrdb-1.0.4.tar.bz2;
+      sha256 = "0040krghlckdk2q2mm8ng5krpm0xwlp7lar3bw56vsybx1vxx31z";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
@@ -2788,8 +2810,8 @@ rec {
     name = "xrefresh-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xrefresh-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0jq3jsiqrbig5m3c9ki0fqlfyr9hpw1ziridli7mch31v3crckwn";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xrefresh-1.0.2.tar.bz2;
+      sha256 = "1x9jdgwbd1ying44apk718h1ycbfx411p81mjzr51cn057yk2a2j";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
@@ -2798,18 +2820,18 @@ rec {
     name = "xrx-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xrx-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "03iib9zsw6f0kfgdfa9mkpxj0sfvh14w19v0j88dqby96sgpl5ra";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xrx-1.0.1.tar.bz2;
+      sha256 = "1r640xhbxbyjbmhxsc3gmsfq3cg8rw65jzw0f7krvxzj0z3cf6m5";
     };
     buildInputs = [pkgconfig libXaw libX11 libXau libXext xproxymanagementprotocol libXt xtrans ];
   }) // {inherit libXaw libX11 libXau libXext xproxymanagementprotocol libXt xtrans ;};
     
   xset = (stdenv.mkDerivation {
-    name = "xset-1.0.2";
+    name = "xset-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xset-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1m1n27sdi845k7h1y3vq8dsy0b60m0i39q9s96lkmjnri308szpj";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xset-1.0.3.tar.bz2;
+      sha256 = "04adhsw6dbigiffr7blpq6nbksai88cnlcalr49xyhi4j3cxfgqf";
     };
     buildInputs = [pkgconfig libX11 libXext libXfontcache libXmu libXp libXxf86misc ];
   }) // {inherit libX11 libXext libXfontcache libXmu libXp libXxf86misc ;};
@@ -2818,8 +2840,8 @@ rec {
     name = "xsetmode-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xsetmode-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "0jlyf2ghnsvj27pjczpga2l4afi0kvzx658xq1mp8py3fxn0fzpz";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xsetmode-1.0.0.tar.bz2;
+      sha256 = "1am0mylym97m79n54jvlc45njxdchv1mvqdwmpkcd499jb6lg2wq";
     };
     buildInputs = [pkgconfig libX11 libXi ];
   }) // {inherit libX11 libXi ;};
@@ -2828,18 +2850,18 @@ rec {
     name = "xsetpointer-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xsetpointer-X11R7.0-1.0.0.tar.bz2;
-      sha256 = "01ndlvxydzcawi5pirfzxrfdwhs4mc48xfr77bpkg4iyaajkaghh";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xsetpointer-1.0.0.tar.bz2;
+      sha256 = "0jkxddcf5gv1p1n72vkhfic5m2v0kppcrr1qrx6pckqb898g8rbx";
     };
     buildInputs = [pkgconfig libX11 libXi ];
   }) // {inherit libX11 libXi ;};
     
   xsetroot = (stdenv.mkDerivation {
-    name = "xsetroot-1.0.1";
+    name = "xsetroot-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xsetroot-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0i7yy3bp1hfhwk9rkkmckzsib8nwf7wnnpcddk017g8x96ac49w3";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xsetroot-1.0.2.tar.bz2;
+      sha256 = "079mld5c05dx2xwhncc94xhrkp4n9388xdncx3x7km1h90gpb6jg";
     };
     buildInputs = [pkgconfig libX11 xbitmaps libXmu ];
   }) // {inherit libX11 xbitmaps libXmu ;};
@@ -2848,8 +2870,8 @@ rec {
     name = "xsm-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xsm-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "0jbab4jd2qjfqr5wp7rha2mp64hs6a1qympif8rdraaagc8pavn6";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xsm-1.0.1.tar.bz2;
+      sha256 = "16mjk46iza0sqz2fqik416h77f0r3gm14p5i9c5bwnad76ska99g";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   }) // {inherit libXaw libXt ;};
@@ -2858,18 +2880,18 @@ rec {
     name = "xstdcmap-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xstdcmap-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "134a4dxh0i1zm9d93mnx0nwi650x559wvxi4lj9qbwnx7r17xw1s";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xstdcmap-1.0.1.tar.bz2;
+      sha256 = "0f77yxhb7brwjwnf6a3yc1s28kg1ij65lfznk52m3vkx2dh0d4hd";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
     
   xtrans = (stdenv.mkDerivation {
-    name = "xtrans-1.0.3";
+    name = "xtrans-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xtrans-X11R7.2-1.0.3.tar.bz2;
-      sha256 = "0c2wkzr40np9lxq5yxmbc4h11wp0b4r8a3bb3ypdqsdbdr0da5qk";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xtrans-1.0.4.tar.bz2;
+      sha256 = "133xzvxm3ckgh03cx3z5fqqw4qxz9s74b4qfcnqgzpifhbx1jlkn";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2878,8 +2900,8 @@ rec {
     name = "xtrap-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xtrap-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "1irg89fz09grjzsl4dnwxi7fs27iilhrsjd1bvwlnzvkwdhfc7i9";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xtrap-1.0.2.tar.bz2;
+      sha256 = "1g0gmvf8fnch5ksq7lky3mbpgmlq19hfaxyllgsdyr8cbfj3slcg";
     };
     buildInputs = [pkgconfig libX11 libXTrap ];
   }) // {inherit libX11 libXTrap ;};
@@ -2888,18 +2910,18 @@ rec {
     name = "xvidtune-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xvidtune-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1kgmig2qnzi6ix9iz14rxpi4hv8yabh4sxz5sd3d30crgrfr5czp";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xvidtune-1.0.1.tar.bz2;
+      sha256 = "0dhdfji0di1pjkcnq97y7kgrqn7xh3avjxn7jwfh3mpiq91fn3vd";
     };
     buildInputs = [pkgconfig libXaw libXt libXxf86vm ];
   }) // {inherit libXaw libXt libXxf86vm ;};
     
   xvinfo = (stdenv.mkDerivation {
-    name = "xvinfo-1.0.1";
+    name = "xvinfo-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xvinfo-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "1xlp6sy26n0b6fhad6i6hydf2hz0fqi8zx8mzdr373pg38jafljv";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xvinfo-1.0.2.tar.bz2;
+      sha256 = "0l7i9h3r0lzb6kmmcp751i92xml84rhzmz04i5lgj8y759hjlvhj";
     };
     buildInputs = [pkgconfig libX11 libXv ];
   }) // {inherit libX11 libXv ;};
@@ -2908,18 +2930,18 @@ rec {
     name = "xwd-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xwd-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "04gvy3vn99q9q1w7y72wjczwy75ckds2fxvccs0kd3y89vrsph4f";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xwd-1.0.1.tar.bz2;
+      sha256 = "0cg1x9ga5cs2fc8xhgbxbknvyzr9l61kxalys0n9qhyzck6rpgf8";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
     
   xwininfo = (stdenv.mkDerivation {
-    name = "xwininfo-1.0.2";
+    name = "xwininfo-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xwininfo-X11R7.1-1.0.2.tar.bz2;
-      sha256 = "0pjx2imqd12gawi25gcsgj49q0fk08d1xrwlqs4g0n3fadyn3z2m";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xwininfo-1.0.3.tar.bz2;
+      sha256 = "12j7lmcdw4km9gm0x0cbmw3f39q54slg47wpb0z13yn6zfma3qzv";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu ];
   }) // {inherit libX11 libXext libXmu ;};
@@ -2928,8 +2950,8 @@ rec {
     name = "xwud-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/xwud-X11R7.0-1.0.1.tar.bz2;
-      sha256 = "11hm1w132w17g330rnph0f2dlqn58cvnnld9dr10fbv3mm87j351";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xwud-1.0.1.tar.bz2;
+      sha256 = "0v1kjdn5y7dh3fcp46z1m90i9d3xx1k1y4rdr6nj77j7nhwjvpnj";
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};

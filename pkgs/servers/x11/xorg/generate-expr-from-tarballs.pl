@@ -11,9 +11,6 @@ use strict;
 
 my $tmpDir = "/tmp/xorg-unpack";
 
-my $version = "X11R7"; # will be removed from package names
-my $version2 = "X11R7\\.\\d"; # will be removed from package names
-
 
 my %pkgURLs;
 my %pkgHashes;
@@ -38,6 +35,10 @@ $pcMap{"mkfontscale"} = "mkfontscale";
 $pcMap{"mkfontdir"} = "mkfontdir";
 $pcMap{"bdftopcf"} = "bdftopcf";
 $pcMap{"libxslt"} = "libxslt";
+$pcMap{"gettext"} = "gettext";
+
+$pcMap{"\$PIXMAN"} = "pixman";
+$pcMap{"\$RENDERPROTO"} = "renderproto";
 
 
 $extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; ";
@@ -46,23 +47,14 @@ $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches
 
 $extraAttrs{"setxkbmap"} = " postInstall = \"ln -sfn \${xkeyboard_config}/etc \$out/share\"; ";
 
-# Used to avoid the following assertion error:
-# java: xcb_xlib.c:50: xcb_xlib_unlock: Assertion `c->xlib.lock' failed. 
-$extraAttrs{"libxcb"} = " patches = [./xcb_xlib-no-assert-on-lock.patch]; ";
-
 $extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
 
 $extraAttrs{"mkfontdir"} = " preBuild = \"substituteInPlace mkfontdir.cpp --replace BINDIR \${mkfontscale}/bin\"; ";
 
 
-if (-e "cache") {
-    open CACHE, "<cache";
-    while (<CACHE>) {
-        /^(\S+)\s+(\S+)$/ or die;
-        $pkgHashes{$1} = $2;
-    }
-    close CACHE;
-}
+my $downloadCache = "./download-cache";
+$ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
+mkdir $downloadCache, 0755;
 
 
 while (<>) {
@@ -74,13 +66,11 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
-#    next unless $pkg eq "xorgserverX11R7";
-#    print "$pkg\n";
-    $pkg =~ s/$version//g if $version ne "";
+    #next unless $pkg eq "xorgserver";
+    #print "$pkg\n";
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;
-    $pkgName =~ s/-$version2//g if $version2 ne "";
 
     print "  $pkg $pkgName\n";
 
@@ -92,16 +82,9 @@ while (<>) {
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $pkgName;
 
-    my $maybeHash = $pkgHashes{$pkg};
-    $maybeHash = "" unless defined $maybeHash;
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball' $maybeHash`;
+    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
     chomp $hash;
     chomp $path;
-    if (!defined $pkgHashes{$pkg}) {
-        open CACHE, ">>cache";
-        print CACHE "$pkg $hash\n";
-        close CACHE;
-    }
     $pkgHashes{$pkg} = $hash;
 
     print "\nunpacking $path\n";
@@ -167,25 +150,35 @@ while (<>) {
 	$s =~ s/\,/\ /g;
         foreach my $req (split / /, $s) {
             next if $req eq ">=";
-            next if $req =~ /^\$/;
+            #next if $req =~ /^\$/;
             next if $req =~ /^[0-9]/;
             next if $req =~ /^\s*$/;
+            next if $req eq '$REQUIRED_MODULES';
+            next if $req eq '$REQUIRED_LIBS';
+            next if $req eq '$XDMCP_MODULES';
+            next if $req eq '$XORG_MODULES';
             print "REQUIRE: $req\n";
             push @{$requires}, $req;
         }
     }
 
-    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)]*)/g;
+    #process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*[\[]?([^\)\[]*)/g;
+    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)\,]*)/g;
     process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /XDMCP_MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /XORG_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
     push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videointel/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
+    push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @requires, "gettext" if $pkg =~ /libXpm/;
     
     print "REQUIRES @requires => $pkg\n";
     $pkgRequires{$pkg} = \@requires;
@@ -203,7 +196,7 @@ print OUT <<EOF;
 # This is a generated file.  Do not edit!
 { stdenv, fetchurl, pkgconfig, freetype, fontconfig
 , libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
-, xkeyboard_config
+, xkeyboard_config, gettext
 }:
 
 rec {
