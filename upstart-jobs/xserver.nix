@@ -38,6 +38,7 @@ let
   resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (getCfg "resolutions");
   sessionType = getCfg "sessionType";
   sessionStarter = getCfg "sessionStarter";
+  renderingFlag = getCfg "renderingFlag";
 
 
   sessionCmd =
@@ -238,7 +239,7 @@ let
 
       # Start Compiz and the GTK-style window decorator.
       env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/
-      ${compiz}/bin/compiz gconf &
+      ${compiz}/bin/compiz gconf ${renderingFlag}&
       ${compiz}/bin/gtk-window-decorator --sync &
     "
     #else if windowManager == "beryl" then "

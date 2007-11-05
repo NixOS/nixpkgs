@@ -650,6 +650,14 @@
     ";
   }
 
+	{
+		name = ["services" "xserver" "renderingFlag"];
+		default = "";
+		example = "--indirect-rendering";
+		description = "
+			Possibly pass --indierct-rendering to Compiz.
+		";
+	}
   
   {
     name = ["services" "xserver" "sessionStarter"];

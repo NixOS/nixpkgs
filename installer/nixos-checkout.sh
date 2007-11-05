@@ -21,14 +21,15 @@ if test -e nixpkgs -a ! -e nixpkgs/.svn; then
     mv nixpkgs nixpkgs-$backupTimestamp
 fi
 
-if test -e nixos/services -a ! -e nixos/services/.svn; then
+if test -e services -a ! -e services/.svn; then
     mv nixos/services services-$backupTimestamp
 fi
 
 # Check out the NixOS and Nixpkgs sources.
 svn co https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk nixos
 svn co https://svn.cs.uu.nl:12443/repos/trace/nixpkgs/trunk nixpkgs
-svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk nixos/services
+svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk services
+ln -sf services nixos/services
 
 # A few symlink.
 ln -sfn ../nixpkgs/pkgs nixos/pkgs
