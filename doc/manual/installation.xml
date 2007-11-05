@@ -19,7 +19,7 @@ one from <link xlink:href="http://nix.cs.uu.nl/nixos/"/>.  If you want
   <listitem><para>Make sure that you have a <emphasis>very</emphasis>
   recent pre-release version of Nix installed (<link
   xlink:href="http://nix.cs.uu.nl/dist/nix/nix-unstable-latest/"/>).
-  The NixOS Nix expressions frequently use bleading-edge features.  If
+  The NixOS Nix expressions frequently use bleeding-edge features.  If
   you get any kind of expression evaluation error, try to upgrade your
   Nix.</para></listitem>
 

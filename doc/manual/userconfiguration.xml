@@ -1,0 +1,48 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Configuration in home directory</title>
+
+
+<!--===============================================================-->
+
+<section>
+<title>Compiz Fusion</title>
+<para>
+	Compiz Fusion is just a set of plugins fr Compiz. Your best interest is to have 
+	them found both by Compiz and by Compiz Configuration Settings (also in Compiz Fusion
+	distribution). By default they look in Compiz installation path and in home directory.
+	You do not need to track /nix/store manually - everything is already in 
+	/var/run/current-system/sw/share.
+
+	<orderedlist>
+	<listitem><para><filename>$HOME/.compiz/plugins</filename> 
+	should contain plugins you want to load. All the installed 
+	plugins are available in 
+	<filename>/var/run/current-system/sw/share/compiz-plugins/compiz/</filename>,
+	so you can use symlinks to this directory.
+	</para></listitem>
+
+	<listitem><para><filename>$HOME/.compiz/metadata</filename> 
+	should contain metadata (definition of configuration options) for plugins 
+	you want to load. All the installed metadata is available in 
+	<filename>/var/run/current-system/sw/share/compiz/</filename>,
+	so you can use symlinks to this directory.
+	</para></listitem>
+
+	<listitem><para>
+	Probably a way to load <literal>GConf</literal> configuration backend by default 
+	should be found, but if you run <literal>Compiz</literal> with 
+	<literal>GConf</literal> configuration (default for <literal>X server</literal> job
+	for now), you have to link 
+	<filename>/var/run/current-system/sw/share/compizconfig/backends/libgconf.so</filename>
+	into <filename>$HOME/.compizconfig/backends</filename> directory.
+	</para></listitem>
+
+	</orderedlist>
+
+	Now you can launch <literal>ccsm</literal> and configure everything.
+</para>
+</section>
+
+</chapter>

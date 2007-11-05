@@ -40,6 +40,7 @@
   
 
   <xi:include href="installation.xml" />
+  <xi:include href="userconfiguration.xml" />
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
   <xi:include href="options-db.xml" />
