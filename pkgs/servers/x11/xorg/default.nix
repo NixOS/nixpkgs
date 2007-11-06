@@ -2076,6 +2076,16 @@ rec {
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
+  xf86videoi810 = (stdenv.mkDerivation {
+    name = "xf86-video-i810-1.7.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-i810-1.7.4.tar.bz2;
+      sha256 = "0na2qy78waa9jy0ikd10g805v0w048icnkdcss6yd753kffdi37z";
+    };
+    buildInputs = [pkgconfig fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
+  }) // {inherit fontsproto glproto libdrm mesaHeaders randrproto renderproto libX11 xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
+    
   xf86videoimstt = (stdenv.mkDerivation {
     name = "xf86-video-imstt-1.1.0";
     builder = ./builder.sh;
