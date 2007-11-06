@@ -73,51 +73,52 @@ let
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories videoDriver resolutions isClone synaptics;
+    inherit fontDirectories videoDriver resolutions isClone;
 
-	synapticsInputDevice = (if getCfg "isSynaptics" then "
-	Section \"InputDevice\"
-	 Identifier \"Touchpad[0]\"
-	 Driver \"synaptics\"
-	 Option \"Device\" \""+(getCfg "devSynaptics")+"\"
-	 Option \"Protocol\" \"PS/2\"
-	 Option \"LeftEdge\" \"1700\"
-	 Option \"RightEdge\" \"5300\"
-	 Option \"TopEdge\" \"1700\"
-	 Option \"BottomEdge\" \"4200\"
-	 Option \"FingerLow\" \"25\"
-	 Option \"FingerHigh\" \"30\"
-	 Option \"MaxTapTime\" \"180\"
-	 Option \"MaxTapMove\" \"220\"
-	 Option \"VertScrollDelta\" \"100\"
-	 Option \"MinSpeed\" \"0.06\"
-	 Option \"MaxSpeed\" \"0.12\"
-	 Option \"AccelFactor\" \"0.0010\"
-	 Option \"SHMConfig\" \"on\"
-	 Option \"Repeater\" \"/dev/input/mice\"
-	 Option \"TapButton1\" \"1\"
-	 Option \"TapButton2\" \"2\"
-	 Option \"TapButton3\" \"3\"
-	EndSection " else "");
+    synapticsInputDevice = (if getCfg "isSynaptics" then "
+      Section \"InputDevice\"
+        Identifier \"Touchpad[0]\"
+        Driver \"synaptics\"
+        Option \"Device\" \"${getCfg "devSynaptics"}\"
+        Option \"Protocol\" \"PS/2\"
+        Option \"LeftEdge\" \"1700\"
+        Option \"RightEdge\" \"5300\"
+        Option \"TopEdge\" \"1700\"
+        Option \"BottomEdge\" \"4200\"
+        Option \"FingerLow\" \"25\"
+        Option \"FingerHigh\" \"30\"
+        Option \"MaxTapTime\" \"180\"
+        Option \"MaxTapMove\" \"220\"
+        Option \"VertScrollDelta\" \"100\"
+        Option \"MinSpeed\" \"0.06\"
+        Option \"MaxSpeed\" \"0.12\"
+        Option \"AccelFactor\" \"0.0010\"
+        Option \"SHMConfig\" \"on\"
+        Option \"Repeater\" \"/dev/input/mice\"
+        Option \"TapButton1\" \"1\"
+        Option \"TapButton2\" \"2\"
+        Option \"TapButton3\" \"3\"
+      EndSection " else "");
 
-	xkbOptions = (if (getCfg "xkbOptions") == "" then "" else 
-		"  Option \"XkbOptions\" \""+(getCfg "xkbOptions")+"\"");
+    xkbOptions = if (getCfg "xkbOptions") == "" then "" else 
+      "  Option \"XkbOptions\" \"${getCfg "xkbOptions"}\"";
 
-	layout = getCfg "layout";
+    layout = getCfg "layout";
 
-	corePointer = (if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]");
+    corePointer = if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]";
 
-	internalAGPGART = (if (getCfg "useInternalAGPGART") == "yes" then
-		"  Option \"UseInternalAGPGART\" \"yes\"" else 
-		if (getCfg "useInternalAGPGART") == "no" then
-		"  Option \"UseInternalAGPGART\" \"no\"" else 
-		"    ");
+    internalAGPGART =
+      if (getCfg "useInternalAGPGART") == "yes" then
+        "  Option \"UseInternalAGPGART\" \"yes\""
+      else if (getCfg "useInternalAGPGART") == "no" then
+	"  Option \"UseInternalAGPGART\" \"no\""
+      else "    ";
 
-	extraDeviceConfig = getCfg "extraDeviceConfig"; 
-	extraMonitorSettings = getCfg "extraMonitorSettings"; 
-	extraModules = getCfg "extraModules"; 
-	serverLayoutOptions = getCfg "serverLayoutOptions"; 
-	defaultDepth = getCfg "defaultDepth"; 
+    extraDeviceConfig = getCfg "extraDeviceConfig"; 
+    extraMonitorSettings = getCfg "extraMonitorSettings"; 
+    extraModules = getCfg "extraModules"; 
+    serverLayoutOptions = getCfg "serverLayoutOptions"; 
+    defaultDepth = getCfg "defaultDepth"; 
 
     buildCommand = "
       buildCommand= # urgh, don't substitute this
