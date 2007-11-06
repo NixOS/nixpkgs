@@ -1191,6 +1191,7 @@ rec {
   # tell the apache module where to look for this file is using a compile time flag ;-(
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
+  /*
   php_unstable = (import ../development/interpreters/php_configurable) {
    inherit mkDerivationByConfiguration;
    lib = lib_unstable;
@@ -1198,6 +1199,7 @@ rec {
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
   };
+  */
 
   python = import ../development/interpreters/python {
     inherit fetchurl stdenv zlib bzip2;
