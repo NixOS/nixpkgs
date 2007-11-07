@@ -211,6 +211,7 @@ rec {
     pkgs.perl
     pkgs.procps
     pkgs.pwdutils
+    pkgs.reiserfsprogs
     pkgs.rsync
     pkgs.strace
     pkgs.su
@@ -220,7 +221,7 @@ rec {
     pkgs.udev
     pkgs.upstart
     pkgs.utillinux
-#    pkgs.vim
+    pkgs.vimDiet
     pkgs.wirelesstools
     nix
     nixosInstall
