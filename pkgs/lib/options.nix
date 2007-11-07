@@ -7,7 +7,7 @@ let
 
   combine = defs: opts: opts //
     builtins.listToAttrs (map (defName:
-      { attr = defName;
+      { name = defName;
         value = 
           let
             defValue = builtins.getAttr defName defs;
