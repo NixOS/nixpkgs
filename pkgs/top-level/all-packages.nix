@@ -2921,7 +2921,7 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_23;
+  kernel = kernel_2_6_21;
 
   systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
 	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
