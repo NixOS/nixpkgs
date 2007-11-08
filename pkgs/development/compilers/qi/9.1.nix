@@ -9,7 +9,7 @@ args : with args;
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
 let 
-	bash=stdenv.bash ;
+	shell=stdenv.shell;
 in
 let 
 	allBuild = FullDepEntry ("
@@ -18,7 +18,7 @@ let
 		ensureDir \$out/share
 		ensureDir \$out/bin
 		cp -r . \$out/share/Qi-9.1
-		echo -e '#! ${bash}/bin/bash
+		echo -e '#! ${shell}
 		arg1=\${1:-'\$out'/share/Qi-9.1/startup.txt}
 		shift
 		clisp -M '\$out'/share/Qi-9.1/lispinit.mem \$arg1 \"\$@\"\\n' > \$out/bin/qi
