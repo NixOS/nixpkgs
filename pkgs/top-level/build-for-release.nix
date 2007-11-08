@@ -148,6 +148,7 @@ let {
     slim
     spidermonkey
     splashutils
+    ssmtp
     strace
     strategoxt
     strategoxtUtils

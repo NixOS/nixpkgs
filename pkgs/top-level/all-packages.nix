@@ -679,7 +679,8 @@ rec {
   };
 
   ssmtp = import ../tools/networking/ssmtp {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv openssl;
+    tlsSupport = true;
   };
 
   su = import ../tools/misc/su {
@@ -1774,6 +1775,10 @@ rec {
   gnet = import ../development/libraries/gnet {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
+  };
+
+  gnutls = import ../development/libraries/gnutls {
+    inherit fetchurl stdenv libgcrypt;
   };
 
   gpgme = import ../development/libraries/gpgme {
@@ -3459,9 +3464,9 @@ rec {
     inherit librsvg fuse;
   };
  
- compiz_062 = compizFun { 
- 	version = "0.6.2";
- };
+  compiz_062 = compizFun { 
+    version = "0.6.2";
+  };
 
   compizFun = lib.sumArgs (assert mesaSupported; import ../applications/window-managers/compiz) {
  	inherit lib builderDefs stringsWithDeps;
