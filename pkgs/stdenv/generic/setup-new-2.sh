@@ -28,6 +28,17 @@ addToSearchPath()
 	addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
+# Would adding -e to echo be useful? ( "\n" -> newline. useful for one liners  )
+# usage:
+#  createShScript $out/bin/yourscript \
+#  "#!/bin/sh
+#  echo Hello World"
+#  should we add ensureDir $(basename $1) ?
+createShScript(){
+  echo "$2" > "$1"
+  chmod +x "$1"
+}
+
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
