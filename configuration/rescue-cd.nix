@@ -81,6 +81,13 @@ rec {
         enable = false;
       };
     };
+ 
+    environment = {
+      extraPackages = pkgs: [
+        pkgs.vimDiet
+      ];
+    };
+   
   };
 
 

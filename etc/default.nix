@@ -127,8 +127,20 @@ import ../helpers/make-etc.nix {
       ";
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
+
   ]
 
+  # Configuration for ssmtp.
+  ++ (optional ["networking" "defaultMailServer" "directDelivery"] { 
+    source = pkgs.writeText "ssmtp.conf" "
+mailhub=${config.get ["networking" "defaultMailServer" "hostName"]}
+UseTLS=${if config.get ["networking" "defaultMailServer" "useTLS"] then "YES" else "NO"}
+UseSTARTTLS=${if config.get ["networking" "defaultMailServer" "useSTARTTLS"] then "YES" else "NO"}
+#Debug=YES
+      ";
+    target = "ssmtp/ssmtp.conf";
+  })
+    
   # Configuration file for fontconfig used to locate
   # (X11) client-rendered fonts.
   ++ (optional ["fonts" "enableFontConfig"] { 

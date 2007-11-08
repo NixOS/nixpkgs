@@ -221,7 +221,6 @@ rec {
     pkgs.udev
     pkgs.upstart
     pkgs.utillinux
-    pkgs.vimDiet
     pkgs.wirelesstools
     nix
     nixosInstall
@@ -230,6 +229,7 @@ rec {
     setuidWrapper
   ]
   ++ pkgs.lib.optional (config.get ["security" "sudo" "enable"]) pkgs.sudo
+  ++ pkgs.lib.optional (config.get ["networking" "defaultMailServer" "directDelivery"]) pkgs.ssmtp
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ (config.get ["environment" "extraPackages"]) pkgs
   ++ pkgs.lib.optional (config.get ["fonts" "enableFontDir"]) fontDir;

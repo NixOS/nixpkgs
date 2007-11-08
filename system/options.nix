@@ -236,10 +236,10 @@
   }
 
   {
-	name = ["networking" "extraHosts"];
-	default = "";
-	example = "192.168.0.1 lanlocalhost";
-	description = "Pasted verbatim into /etc/hosts.";
+    name = ["networking" "extraHosts"];
+    default = "";
+    example = "192.168.0.1 lanlocalhost";
+    description = "Pasted verbatim into /etc/hosts.";
   }
 
   {
@@ -322,7 +322,7 @@
     description = "
       If <literal>true</literal>, monitor Ethernet interfaces for
       cables being plugged in or unplugged.  When this occurs, the
-      <optional>dhclient</optional> service is restarted to
+      <command>dhclient</command> service is restarted to
       automatically obtain a new IP address.  This is useful for
       roaming users (laptops).
     ";
@@ -335,6 +335,56 @@
     description = "
       If <literal>true</literal>, beep when an Ethernet cable is
       plugged in or unplugged.
+    ";
+  }
+
+
+  {
+    name = ["networking" "defaultMailServer" "directDelivery"];
+    default = false;
+    example = true;
+    description = "
+      Use the trivial Mail Transfer Agent (MTA)
+      <command>ssmtp</command> package to allow programs to send
+      e-mail.  If you don't want to run a “real” MTA like
+      <command>sendmail</command> or <command>postfix</command> on
+      your machine, set this option to <literal>true</literal>, and
+      set the option
+      <option>networking.defaultMailServer.hostName</option> to the
+      host name of your preferred mail server.
+    ";
+  }
+
+
+  {
+    name = ["networking" "defaultMailServer" "hostName"];
+    example = "mail.example.org";
+    description = "
+      The host name of the default mail server to use to deliver
+      e-mail.
+    ";
+  }
+
+
+  {
+    name = ["networking" "defaultMailServer" "useTLS"];
+    default = false;
+    example = true;
+    description = "
+      Whether TLS should be used to connect to the default mail
+      server.
+    ";
+  }
+
+
+  {
+    name = ["networking" "defaultMailServer" "useSTARTTLS"];
+    default = false;
+    example = true;
+    description = "
+      Whether the STARTTLS should be used to connect to the default
+      mail server.  (This is needed for TLS-capable mail servers
+      running on the default SMTP port 25.)
     ";
   }
 
