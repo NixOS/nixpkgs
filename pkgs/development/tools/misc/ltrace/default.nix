@@ -12,7 +12,6 @@ args : with args;
 			cd ltrace-*;
 		";
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 let
 	preConfigure = FullDepEntry ("
 		sed -e 's@-o root -g root@@' -i Makefile.in;

@@ -9,7 +9,6 @@ args : with args;
 			[bcop];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "libcompizconfig-"+version;
 	builder = writeScript (name + "-builder")

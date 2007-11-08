@@ -8,7 +8,6 @@ args: with args;
 				sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
 			};
 	} null);
-	with stringsWithDeps; 
 let 
 	preBuild = FullDepEntry "
 		sed -e '

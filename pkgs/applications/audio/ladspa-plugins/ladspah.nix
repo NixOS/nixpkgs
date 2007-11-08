@@ -1,5 +1,4 @@
 args: with args;
-	with stringsWithDeps;
 let 
 	src = 
 	fetchurl {

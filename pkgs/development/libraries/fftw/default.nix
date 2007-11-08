@@ -8,7 +8,6 @@ args : with args;
 		buildInputs = [];
 		configureFlags = ["--enable-float --enable-shared"];
 	} null;
-	with stringsWithDeps;
 stdenv.mkDerivation {
 	name = "fftw-3.1.2";
 	builder = writeScript "fftw-3.1.2-builder"

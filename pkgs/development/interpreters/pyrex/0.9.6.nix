@@ -8,7 +8,6 @@ args : with args;
 		buildInputs = [python];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "Pyrex-"+version;
 	builder = writeScript (name + "-builder")

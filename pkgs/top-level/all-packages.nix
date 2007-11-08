@@ -700,7 +700,7 @@ rec {
 
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg perl;
-    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp;
+    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
   };
 
   time = import ../tools/misc/time {
@@ -1216,6 +1216,14 @@ rec {
 
   pyrex = pyrexFun {
   	version = "0.9.6";
+  } null;
+
+  QiFun = lib.sumArgs (import ../development/compilers/qi) {
+    inherit clisp stdenv fetchurl builderDefs unzip;
+  };
+
+  Qi = QiFun {
+    version = getConfig ["Qi" "version"] "9.1";
   } null;
 
   realPerl = import ../development/interpreters/perl {
@@ -4487,7 +4495,7 @@ rec {
 
   synaptics = import ../misc/synaptics {
     inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXi libXext;
+    inherit (xlibs) libX11 libXi libXext pixman;
     inherit (xorg) xorgserver;
   };
 

@@ -8,7 +8,6 @@ args: with args;
 		buildInputs = [fftw ladspaH pkgconfig];
 		configureFlags = [];
 	} null);
-	with stringsWithDeps;
 let
 	postInstall = FullDepEntry ("
 		ensureDir \$out/share/ladspa/

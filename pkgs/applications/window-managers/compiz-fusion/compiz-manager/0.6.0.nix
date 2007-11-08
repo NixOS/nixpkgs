@@ -20,7 +20,6 @@ args : with args;
 			"XORG_DRIVER_PATH" "/nix/store/.*"
 		]];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 let
 	install = FullDepEntry ("
 		sed -e '/Checking for texture_from_pixmap:/areturn 0' -i compiz-manager

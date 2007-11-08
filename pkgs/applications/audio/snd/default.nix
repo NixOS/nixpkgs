@@ -20,7 +20,6 @@ args : with args;
 			++ (lib.optional (args ? sndlib) "--with-midi" )
 			;
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 	let preBuild = FullDepEntry ("
 		cp config.log /tmp/snd-config.log
 	") [minInit doUnpack];

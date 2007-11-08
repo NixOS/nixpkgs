@@ -21,7 +21,6 @@ args : with args;
 			(if args ? extraConfigureFlags then args.extraConfigureFlags else []);
 		patches = [ ./glx-patch-0.6.2.patch ];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 let
 	postAll = FullDepEntry ("
     for i in $out/bin/*; do

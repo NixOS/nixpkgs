@@ -9,7 +9,6 @@ args : with args;
 		propagatedBuildInputs = [getopt libxslt];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 let 
 	fixPkgconfig = FullDepEntry ("
 		ensureDir \$out/lib

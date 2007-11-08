@@ -5,7 +5,6 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "${abort "Specify name"}";
 	builder = writeScript (name + "-builder")

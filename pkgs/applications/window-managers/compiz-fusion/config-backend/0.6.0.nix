@@ -10,7 +10,6 @@ args : with args;
 		configureFlags = [];
 		forceShare = ["man" "doc" "info" "lib/compizconfig"];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "compizconfig-backend-GConf-"+version;
 	builder = writeScript (name + "-builder")

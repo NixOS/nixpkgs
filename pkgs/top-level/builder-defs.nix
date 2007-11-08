@@ -9,6 +9,7 @@ rec
 		(if hasSuffixHack ".tar" s then "tar"
 		else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
 		else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) then "tbz2"
+		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
 		else (abort "unknown archive type : ${s}"));
 
 	minInit = noDepEntry ("
@@ -33,9 +34,39 @@ rec
 		export TZ=UTC
 
 		prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
+
+
+		nestingLevel=0
+
+		startNest() {
+			nestingLevel=\$((\$nestingLevel + 1))
+				echo -en \"\\e[\$1p\"
+		}
+
+		stopNest() {
+			nestingLevel=\$((\$nestingLevel - 1))
+				echo -en \"\\e[q\"
+		}
+
+		header() {
+			startNest \"\$2\"
+				echo \"\$1\"
+		}
+
+		# Make sure that even when we exit abnormally, the original nesting
+		# level is properly restored.
+		closeNest() {
+			while test \$nestingLevel -gt 0; do
+				stopNest
+					done
+		}
+
+		trap \"closeNest\" EXIT
+
+
 		"
 	else ""));
-
+		
 	addInputs = FullDepEntry ("
 		# Recursively find all build inputs.
 		findInputs()
@@ -53,8 +84,6 @@ rec
 			echo \$pkg
 		    if test -f \$pkg/nix-support/setup-hook; then
 			source \$pkg/nix-support/setup-hook
-			cat \$pkg/nix-support/setup-hook
-			echo $PATH;
 		    fi
 		    
 		    if test -f \$pkg/nix-support/propagated-build-inputs; then
@@ -118,14 +147,18 @@ rec
 	") [minInit];
 
 	toSrcDir = s : FullDepEntry ((if (archiveType s) == "tar" then "
-			tar xvf ${s}
-			cd \"\$(tar tf ${s} | head -1 | sed -e 's@/.*@@' )\"
+		tar xvf '${s}'
+		cd \"\$(tar tf '${s}' | head -1 | sed -e 's@/.*@@' )\"
 	" else if (archiveType s) == "tgz" then "
-			tar xvzf ${s}
-			cd \"\$(tar tzf ${s} | head -1 | sed -e 's@/.*@@' )\"
+		tar xvzf '${s}'
+		cd \"\$(tar tzf '${s}' | head -1 | sed -e 's@/.*@@' )\"
 	" else if (archiveType s) == "tbz2" then "
-			tar xvjf ${s}
-			cd \"\$(tar tjf ${s} | head -1 | sed -e 's@/.*@@' )\"
+		tar xvjf '${s}'
+		cd \"\$(tar tjf '${s}' | head -1 | sed -e 's@/.*@@' )\"
+	" else if (archiveType s) == "zip" then "
+		unzip '${s}'
+		cd \"$( unzip -lqq '${s}' | tail -1 | 
+			sed -e 's@^\\(\\s\\+[-0-9:]\\+\\)\\{3,3\\}\\s\\+\\([^/]\\+\\)/.*@\\2@' )\"
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) [minInit];
@@ -210,4 +243,8 @@ rec
 	replaceInScript = file: l: (concatStringsSep "\n" ((pairMap (replaceScriptVar file) l)));
 	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
 	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
+	makeNest = x:(if x==minInit.text then x else "startNest\n" + x + "\nstopNest\n");
+	textClosure = textClosureMap makeNest;
+
+	inherit noDepEntry FullDepEntry PackEntry;
 }

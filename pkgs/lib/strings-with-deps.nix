@@ -42,6 +42,8 @@ rec {
 			(uniqList {inputList = textClosureDupList arg;}));
 	textClosure = arg: concatStringsSep "\n" (textClosureList arg);
 	
+	textClosureMap = f: arg: concatStringsSep "\n" (map f (textClosureList arg));
+
 	noDepEntry = text : {inherit text;deps = [];};
 	FullDepEntry = text : deps: {inherit text deps;};
 	PackEntry = deps: {inherit deps; text="";};

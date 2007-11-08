@@ -9,7 +9,6 @@ args: with args;
   	buildInputs =[(wxGTK null) libogg libvorbis libsndfile libmad pkgconfig gtk 
 		gettext glib];
 	} null);
-	with stringsWithDeps; 
 let 
 	postInstall = FullDepEntry ("
 		old_rpath=$(patchelf --print-rpath \$out/bin/audacity);

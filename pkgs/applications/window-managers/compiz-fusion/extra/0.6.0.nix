@@ -9,7 +9,6 @@ args : with args;
 		[bcop libjpeg gettext pluginsMain];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 let
 	sharePlugins = FullDepEntry ("
 		ensureDir \$out/share/compiz-plugins

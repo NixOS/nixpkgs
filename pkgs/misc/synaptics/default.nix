@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, pkgconfig, xorgserver, libXi, libXext}:
+args: with args;
 stdenv.mkDerivation {
   name = "synaptics-0.14.6";
 
@@ -7,8 +7,9 @@ stdenv.mkDerivation {
     md5 = "1102cd575045640a064ab6f9b1e391af";
   };
 
-  makeFlags="DESTDIR=\${out} PREFIX=/";
-  buildInputs = [libX11 pkgconfig xorgserver libXi libXext];
+  preBuild = "export NIX_CFLAGS_COMPILE=\"\${NIX_CFLAGS_COMPILE} -I${pixman}/include/pixman-1\"";
+  makeFlags="DESTDIR=\${out} PREFIX=/ ";
+  buildInputs = [libX11 pkgconfig xorgserver libXi libXext pixman];
 
   meta = {
     description = "Driver for synaptics touchpad.";

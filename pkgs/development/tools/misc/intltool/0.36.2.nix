@@ -9,7 +9,6 @@ args : with args;
 		buildInputs = [perl perlXMLParser];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "intltool-0.36.2";
 	builder = writeScript (name + "-builder")

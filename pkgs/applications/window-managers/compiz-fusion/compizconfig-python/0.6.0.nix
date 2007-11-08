@@ -9,7 +9,6 @@ args : with args;
 			[libcompizconfig bcop python pyrex configBackendGConf];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "compizconfig-python-"+args.version;
 	builder = writeScript (name + "-builder")

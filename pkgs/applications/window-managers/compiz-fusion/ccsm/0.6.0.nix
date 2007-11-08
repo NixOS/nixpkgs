@@ -15,7 +15,6 @@ args : with args;
 			"PYTHONPATH" "$(toPythonPath ${pygtk})/gtk-2.0"
 		];
 	} null; /* null is a terminator for sumArgs */
-	with stringsWithDeps;
 stdenv.mkDerivation rec {
 	name = "compizconfig-settings-"+args.version;
 	builder = writeScript (name + "-builder")
