@@ -140,6 +140,7 @@ let {
     qt3
     quake3demo
     readline
+    reiserfsprogs
     rogue
     rsync
     ruby
