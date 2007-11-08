@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, openssh}:
 
 stdenv.mkDerivation {
   name = "nagios-plugins-1.4.10";
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
       --with-ping6-command='/var/setuid-wrappers/ping6 -n -U -w %d -c %d %s'
     )
   ";
+
+  buildInputs = [openssh]; # !!! make openssh a runtime dependency only
 
   meta = {
     description = "Official plugins for Nagios";
