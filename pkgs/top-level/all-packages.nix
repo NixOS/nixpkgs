@@ -2734,7 +2734,7 @@ rec {
   };
 
   nagiosPluginsOfficial = import ../servers/monitoring/nagios/plugins/official {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv openssh;
   };
 
   postgresql = import ../servers/sql/postgresql {
