@@ -3679,6 +3679,14 @@ rec {
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
+  gocrFun = lib.sumArgs (import ../applications/graphics/gocr) {
+  	inherit builderDefs fetchurl stdenv;
+  };
+
+  gocr = gocrFun {
+  	version	= "0.44";
+  } null;
+
   gphoto2 = import ../applications/misc/gphoto2 {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt;
   };
@@ -4500,7 +4508,7 @@ rec {
 
   synaptics = import ../misc/synaptics {
     inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXi libXext pixman;
+    inherit (xlibs) libX11 libXi libXext pixman xf86inputevdev;
     inherit (xorg) xorgserver;
   };
 
