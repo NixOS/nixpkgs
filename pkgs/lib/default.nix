@@ -201,4 +201,34 @@ rec {
 	else condConcat
 		name (tail (tail list)) checker;
 
+
+  /* Options. */
+  
+  mkOption = attrs: attrs // {_type = "option";};
+
+  typeOf = x: if x ? _type then x._type else "";
+
+  fillOptionsDefaults = defs: opts: opts //
+    builtins.listToAttrs (map (defName:
+      { name = defName;
+        value = 
+          let
+            defValue = builtins.getAttr defName defs;
+            optValue = builtins.getAttr defName opts;
+          in
+          if typeOf defValue == "option"
+          then
+            # `defValue' is an option.
+            if builtins.hasAttr defName opts
+            then builtins.getAttr defName opts
+            else defValue.default
+          else
+            # `defValue' is an attribute set containing options.
+            # So recurse.
+            if builtins.hasAttr defName opts && builtins.isAttrs optValue 
+            then fillOptionsDefaults defValue optValue
+            else fillOptionsDefaults defValue {};
+      }
+    ) (builtins.attrNames defs));
+
 }
