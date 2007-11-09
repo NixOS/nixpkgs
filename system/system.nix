@@ -31,11 +31,11 @@ rec {
 
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
 
-  kernel = (config.get ["boot" "kernel"]) pkgs;
+  kernel = config.boot.kernel pkgs;
 
   rootModules = 
-    (config.get ["boot" "initrd" "extraKernelModules"]) ++
-    (config.get ["boot" "initrd" "kernelModules"]);
+    config.boot.initrd.extraKernelModules ++
+    config.boot.initrd.kernelModules;
 
 
   # Determine the set of modules that we need to mount the root FS.
