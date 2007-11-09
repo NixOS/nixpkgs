@@ -208,7 +208,7 @@ rec {
 
   typeOf = x: if x ? _type then x._type else "";
 
-  fillOptionsDefaults = defs: opts: opts //
+  addDefaultOptionValues = defs: opts: opts //
     builtins.listToAttrs (map (defName:
       { name = defName;
         value = 
@@ -226,8 +226,8 @@ rec {
             # `defValue' is an attribute set containing options.
             # So recurse.
             if builtins.hasAttr defName opts && builtins.isAttrs optValue 
-            then fillOptionsDefaults defValue optValue
-            else fillOptionsDefaults defValue {};
+            then addDefaultOptionValues defValue optValue
+            else addDefaultOptionValues defValue {};
       }
     ) (builtins.attrNames defs));
 
