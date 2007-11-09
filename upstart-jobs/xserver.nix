@@ -23,8 +23,7 @@
 
 let
 
-  getCfg = option: config.get ["services" "xserver" option];
-  getCfg2 = option: config.get (["services" "xserver"] ++ option);
+  cfg = config.services.xserver;
 
   optional = condition: x: if condition then [x] else [];
 
@@ -34,11 +33,11 @@ let
   #berylemerald
 
   # Get a bunch of user settings.
-  videoDriver = getCfg "videoDriver";
-  resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (getCfg "resolutions");
-  sessionType = getCfg "sessionType";
-  sessionStarter = getCfg "sessionStarter";
-  renderingFlag = getCfg "renderingFlag";
+  videoDriver = cfg.videoDriver;
+  resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (cfg.resolutions);
+  sessionType = cfg.sessionType;
+  sessionStarter = cfg.sessionStarter;
+  renderingFlag = cfg.renderingFlag;
 
 
   sessionCmd =
@@ -49,7 +48,7 @@ let
 
 
   windowManager =
-    let wm = getCfg "windowManager"; in
+    let wm = cfg.windowManager; in
     if wm != "" then wm else
     if sessionType == "gnome" then "metacity" else
     if sessionType == "kde" then "none" /* started by startkde */ else
@@ -68,18 +67,18 @@ let
     ++ optional (videoDriver == "sis") xorg.xf86videosis
     ++ optional (videoDriver == "i810") xorg.xf86videoi810
     ++ optional (videoDriver == "intel") xorg.xf86videointel
-    ++ (optional (getCfg "isSynaptics") [(synaptics+"/"+xorg.xorgserver) /*xorg.xf86inputevdev*/]);
+    ++ (optional (cfg.isSynaptics) [(synaptics+"/"+xorg.xorgserver) /*xorg.xf86inputevdev*/]);
     
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
     inherit fontDirectories videoDriver resolutions isClone;
 
-    synapticsInputDevice = (if getCfg "isSynaptics" then "
+    synapticsInputDevice = (if cfg.isSynaptics then "
       Section \"InputDevice\"
         Identifier \"Touchpad[0]\"
         Driver \"synaptics\"
-        Option \"Device\" \"${getCfg "devSynaptics"}\"
+        Option \"Device\" \"${cfg.devSynaptics}\"
         Option \"Protocol\" \"PS/2\"
         Option \"LeftEdge\" \"1700\"
         Option \"RightEdge\" \"5300\"
@@ -100,25 +99,25 @@ let
         Option \"TapButton3\" \"3\"
       EndSection " else "");
 
-    xkbOptions = if (getCfg "xkbOptions") == "" then "" else 
-      "  Option \"XkbOptions\" \"${getCfg "xkbOptions"}\"";
+    xkbOptions = if (cfg.xkbOptions) == "" then "" else 
+      "  Option \"XkbOptions\" \"${cfg.xkbOptions}\"";
 
-    layout = getCfg "layout";
+    layout = cfg.layout;
 
-    corePointer = if getCfg "isSynaptics" then "Touchpad[0]" else "Mouse[0]";
+    corePointer = if cfg.isSynaptics then "Touchpad[0]" else "Mouse[0]";
 
     internalAGPGART =
-      if (getCfg "useInternalAGPGART") == "yes" then
+      if (cfg.useInternalAGPGART) == "yes" then
         "  Option \"UseInternalAGPGART\" \"yes\""
-      else if (getCfg "useInternalAGPGART") == "no" then
+      else if (cfg.useInternalAGPGART) == "no" then
 	"  Option \"UseInternalAGPGART\" \"no\""
       else "    ";
 
-    extraDeviceConfig = getCfg "extraDeviceConfig"; 
-    extraMonitorSettings = getCfg "extraMonitorSettings"; 
-    extraModules = getCfg "extraModules"; 
-    serverLayoutOptions = getCfg "serverLayoutOptions"; 
-    defaultDepth = getCfg "defaultDepth"; 
+    extraDeviceConfig = cfg.extraDeviceConfig; 
+    extraMonitorSettings = cfg.extraMonitorSettings; 
+    extraModules = cfg.extraModules; 
+    serverLayoutOptions = cfg.serverLayoutOptions; 
+    defaultDepth = cfg.defaultDepth; 
 
     buildCommand = "
       buildCommand= # urgh, don't substitute this
@@ -197,7 +196,7 @@ let
     fi
 
 
-    ${if getCfg "startSSHAgent" then "
+    ${if cfg.startSSHAgent then "
       ### Start the SSH agent.
       export SSH_ASKPASS=${x11_ssh_askpass}/libexec/x11-ssh-askpass
       eval $(${openssh}/bin/ssh-agent)
@@ -299,7 +298,7 @@ let
     "-config ${configFile}"
     ":${toString display}" "vt${toString tty}"
     "-xkbdir" "${xkeyboard_config}/etc/X11/xkb"
-  ] ++ (if ! config.get ["services" "xserver" "tcpEnable"]
+  ] ++ (if ! config.services.xserver.tcpEnable
 	then ["-nolisten tcp"] else []);
 
   
@@ -315,17 +314,16 @@ login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      theme = getCfg2 ["slim" "theme"];
       unpackedTheme = stdenv.mkDerivation {
         name = "slim-theme";
         buildCommand = "
           ensureDir $out
           cd $out
-          unpackFile ${theme}
+          unpackFile ${cfg.slim.theme}
           ln -s * default
         ";
       };
-    in if theme == null then "${slim}/share/slim/themes" else unpackedTheme;       
+    in if cfg.slim.theme == null then "${slim}/share/slim/themes" else unpackedTheme;       
 
 
 in
@@ -384,7 +382,7 @@ rec {
       rm -f /var/run/opengl-driver
       ${if videoDriver == "nvidia"        
         then "ln -sf ${nvidiaDrivers} /var/run/opengl-driver"
-	else if getCfg "driSupport"
+	else if cfg.driSupport
         then "ln -sf ${mesa} /var/run/opengl-driver"
         else ""
        }
@@ -401,7 +399,7 @@ rec {
 
     ${if videoDriver == "nvidia"
       then "env XORG_DRI_DRIVER_PATH=${nvidiaDrivers}/X11R6/lib/modules/drivers/"
-      else if getCfg "driSupport"
+      else if cfg.driSupport
       then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
       else ""
     } 

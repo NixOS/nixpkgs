@@ -3,8 +3,7 @@
 }:
 let
 	configFile = ./xfs.conf;
-  startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
-	then "gw6c" else "network-interfaces";
+  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 in
 rec {
 	name = "xfs";

@@ -20,6 +20,6 @@
   pkgs.xorg.fontcursormisc
 ]
 
-++ pkgs.lib.optional (config.get ["fonts" "enableGhostscriptFonts"]) "${pkgs.ghostscript}/share/ghostscript/fonts"
+++ pkgs.lib.optional (config.fonts.enableGhostscriptFonts) "${pkgs.ghostscript}/share/ghostscript/fonts"
 
-++ ((config.get ["fonts" "extraFonts"]) pkgs)
+++ ((config.fonts.extraFonts) pkgs)

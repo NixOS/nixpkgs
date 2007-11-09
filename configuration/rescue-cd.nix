@@ -144,7 +144,7 @@ rec {
     timeout 60
     label linux
       kernel vmlinuz
-      append initrd=initrd ${toString (system.config.get ["boot" "kernelParams"])}
+      append initrd=initrd ${toString (system.config.boot.kernelParams)}
   ";
     
 

@@ -1,16 +1,16 @@
 {config, pkgs}:
 let
-	getCfg = option: config.get ["services" "gw6c" option];
+	cfg = config.services.gw6c;
 	procps = pkgs.procps;
 	gw6cService = import ../services/gw6c {
 		inherit (pkgs) stdenv gw6c coreutils 
 		procps upstart iputils gnused 
 		gnugrep;
-		username = getCfg "username";
-		password = getCfg "password";
-		server = getCfg "server";
-		keepAlive = getCfg "keepAlive";
-		everPing = getCfg "everPing";
+		username = cfg.username;
+		password = cfg.password;
+		server = cfg.server;
+		keepAlive = cfg.keepAlive;
+		everPing = cfg.everPing;
 	};
 in
 {

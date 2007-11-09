@@ -7,8 +7,10 @@ rec {
 
   # Make a configuration object from which we can retrieve option
   # values.
-  config = import ./config.nix pkgs configuration;
-  
+  config = pkgs.lib.addDefaultOptionValues optionDeclarations configuration;
+
+  optionDeclarations = import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;};
+    
 
   pkgs = import ../pkgs/top-level/all-packages.nix {system = platform;};
 
@@ -27,7 +29,7 @@ rec {
     allPackages = import ../pkgs/top-level/all-packages.nix;
   };
 
-  manifests = config.get ["installer" "manifests"]; # exported here because nixos-rebuild uses it
+  manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 
   nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature
 
@@ -53,8 +55,8 @@ rec {
       inherit (pkgsStatic) utillinux;
       inherit (pkgsDiet) udev;
       e2fsprogs = pkgs.e2fsprogsDiet;
-      devicemapper = if config.get ["boot" "initrd" "lvm"] then pkgs.devicemapperStatic else null;
-      lvm2 = if config.get ["boot" "initrd" "lvm"] then pkgs.lvm2Static else null;
+      devicemapper = if config.boot.initrd.lvm then pkgs.devicemapperStatic else null;
+      lvm2 = if config.boot.initrd.lvm then pkgs.lvm2Static else null;
       allowedReferences = []; # prevent accidents like glibc being included in the initrd
     }
     "
@@ -76,12 +78,12 @@ rec {
     inherit (pkgs) substituteAll;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
-    autoDetectRootDevice = config.get ["boot" "autoDetectRootDevice"];
+    autoDetectRootDevice = config.boot.autoDetectRootDevice;
     fileSystems =
       pkgs.lib.filter
         (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
-        (config.get ["fileSystems"]);
-    rootLabel = config.get ["boot" "rootLabel"];
+        (config.fileSystems);
+    rootLabel = config.boot.rootLabel;
     inherit stage2Init;
     modulesDir = modulesClosure;
     modules = rootModules;
@@ -98,7 +100,7 @@ rec {
       { object = bootStage1;
         symlink = "/init";
       }
-    ] ++ (if config.get ["boot" "initrd" "enableSplashScreen"] then [
+    ] ++ (if config.boot.initrd.enableSplashScreen then [
       { object = pkgs.runCommand "splashutils" {} "
           ensureDir $out/bin
           cp ${pkgs.splashutils}/bin/splash_helper $out/bin
@@ -108,7 +110,7 @@ rec {
       }
       { object = import ../helpers/unpack-theme.nix {
           inherit (pkgs) stdenv;
-          theme = config.get ["services" "ttyBackgrounds" "defaultTheme"];
+          theme = config.services.ttyBackgrounds.defaultTheme;
         };
         symlink = "/etc/splash";
       }
@@ -120,7 +122,7 @@ rec {
   nixosInstall = import ../installer/nixos-install.nix {
     inherit (pkgs) perl runCommand substituteAll;
     inherit nix;
-    nixpkgsURL = config.get ["installer" "nixpkgsURL"];
+    nixpkgsURL = config.installer.nixpkgsURL;
   };
 
   nixosRebuild = import ../installer/nixos-rebuild.nix {
@@ -134,7 +136,7 @@ rec {
 
   # NSS modules.  Hacky!
   nssModules =
-    if config.get ["users" "ldap" "enable"] then [pkgs.nss_ldap] else [];
+    if config.users.ldap.enable then [pkgs.nss_ldap] else [];
 
   nssModulesPath = pkgs.lib.concatStrings (pkgs.lib.intersperse ":" 
     (map (mod: mod + "/lib") nssModules));
@@ -228,11 +230,11 @@ rec {
     nixosCheckout
     setuidWrapper
   ]
-  ++ pkgs.lib.optional (config.get ["security" "sudo" "enable"]) pkgs.sudo
-  ++ pkgs.lib.optional (config.get ["networking" "defaultMailServer" "directDelivery"]) pkgs.ssmtp
+  ++ pkgs.lib.optional (config.security.sudo.enable) pkgs.sudo
+  ++ pkgs.lib.optional (config.networking.defaultMailServer.directDelivery) pkgs.ssmtp
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
-  ++ (config.get ["environment" "extraPackages"]) pkgs
-  ++ pkgs.lib.optional (config.get ["fonts" "enableFontDir"]) fontDir;
+  ++ (config.environment.extraPackages) pkgs
+  ++ pkgs.lib.optional (config.fonts.enableFontDir) fontDir;
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
@@ -261,12 +263,12 @@ rec {
     isExecutable = true;
 
     inherit etc wrapperDir systemPath modprobe defaultShell kernel;
-    readOnlyRoot = config.get ["boot" "readOnlyRoot"];
-    hostName = config.get ["networking" "hostName"];
+    readOnlyRoot = config.boot.readOnlyRoot;
+    hostName = config.networking.hostName;
     setuidPrograms =
-      config.get ["security" "setuidPrograms"] ++
-      config.get ["security" "extraSetuidPrograms"] ++
-      pkgs.lib.optional (config.get ["security" "sudo" "enable"]) "sudo";
+      config.security.setuidPrograms ++
+      config.security.extraSetuidPrograms ++
+      pkgs.lib.optional (config.security.sudo.enable) "sudo";
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 
@@ -286,7 +288,7 @@ rec {
     inherit (pkgs) substituteAll writeText coreutils 
       utillinux udev upstart;
     inherit kernel activateConfiguration;
-    readOnlyRoot = config.get ["boot" "readOnlyRoot"];
+    readOnlyRoot = config.boot.readOnlyRoot;
     upstartPath = [
       pkgs.coreutils
       pkgs.findutils
@@ -294,7 +296,7 @@ rec {
       pkgs.gnused
       pkgs.upstart
     ];
-    bootLocal = config.get ["boot" "localCommands"];
+    bootLocal = config.boot.localCommands;
   };
 
 
@@ -305,8 +307,8 @@ rec {
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    copyKernels = config.get ["boot" "copyKernels"];
-    extraGrubEntries = config.get ["boot" "extraGrubEntries"];
+    copyKernels = config.boot.copyKernels;
+    extraGrubEntries = config.boot.extraGrubEntries;
   };
 
 
@@ -320,10 +322,10 @@ rec {
     builder = ./system.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
     inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils upstart;
-    grubDevice = config.get ["boot" "grubDevice"];
+    grubDevice = config.boot.grubDevice;
     kernelParams =
-      (config.get ["boot" "kernelParams"]) ++
-      (config.get ["boot" "extraKernelParams"]);
+      (config.boot.kernelParams) ++
+      (config.boot.extraKernelParams);
     inherit bootStage2;
     inherit activateConfiguration;
     inherit grubMenuBuilder;
@@ -340,7 +342,7 @@ rec {
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
-    configurationName = config.get ["boot" "configurationName"];
+    configurationName = config.boot.configurationName;
   }) (pkgs.getConfig ["checkConfigurationOptions"] false) 
 	config.declarations configuration ;
 }

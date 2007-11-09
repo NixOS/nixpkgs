@@ -29,7 +29,7 @@ start on network-interfaces/started
 stop on network-interfaces/stop
 
 respawn ${ifplugd}/sbin/ifplugd --no-daemon --no-startup --no-shutdown \\
-    ${if config.get ["networking" "interfaceMonitor" "beep"] then "" else "--no-beep"} \\
+    ${if config.networking.interfaceMonitor.beep then "" else "--no-beep"} \\
     --run ${plugScript}";
   
 }

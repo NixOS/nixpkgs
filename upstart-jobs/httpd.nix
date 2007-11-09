@@ -2,34 +2,30 @@
 
 let
 
-  getCfg = option: config.get ["services" "httpd" option];
-  getCfgs = options: config.get (["services" "httpd"] ++ options); 
-  getCfgSvn = option: config.get ["services" "httpd" "subservices" "subversion" option];
-  getCfgsSvn = options: config.get (["services" "httpd" "subservices" "subversion"] ++ options);
+  cfg = config.services.httpd;
+  cfgSvn = cfg.subservices.subversion;
 
-  optional = conf: subService:
-    if conf then [subService] else [];
+  optional = pkgs.lib.optional;
 
     
-  hostName = getCfg "hostName";
-  httpPort = getCfg "httpPort";
-  httpsPort = getCfg "httpsPort";
-  user = getCfg "user";
-  group = getCfg "group";
-  adminAddr = getCfg "adminAddr";
-  logDir = getCfg "logDir";
-  stateDir = getCfg "stateDir";
+  hostName = cfg.hostName;
+  httpPort = cfg.httpPort;
+  httpsPort = cfg.httpsPort;
+  user = cfg.user;
+  group = cfg.group;
+  adminAddr = cfg.adminAddr;
+  logDir = cfg.logDir;
+  stateDir = cfg.stateDir;
   enableSSL = false;
-  noUserDir = getCfg "noUserDir";
-  extraDirectories = getCfg "extraDirectories";
+  noUserDir = cfg.noUserDir;
+  extraDirectories = cfg.extraDirectories;
 
-  startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
-	then "gw6c" else "network-interfaces";
+  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
   
   webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNewSetupScript;
-    php = if getCfg "mod_php" then pkgs.php else null;
+    php = if cfg.mod_php then pkgs.php else null;
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir
@@ -38,8 +34,8 @@ let
     subServices =
     
       # The Subversion subservice.
-      (optional (getCfgSvn "enable") (
-        let dataDir = getCfgSvn "dataDir"; in
+      (optional cfgSvn.enable (
+        let dataDir = cfgSvn.dataDir; in
         import ../../services/subversion ({
           reposDir = dataDir + "/repos";
           dbDir = dataDir + "/db";
@@ -55,17 +51,17 @@ let
             else
               "http://" + hostName + ":" + (toString httpPort);
 
-          notificationSender = getCfgSvn "notificationSender";
-          autoVersioning = getCfgSvn "autoVersioning";
-          userCreationDomain = getCfgSvn "userCreationDomain";
+          notificationSender = cfgSvn.notificationSender;
+          autoVersioning = cfgSvn.autoVersioning;
+          userCreationDomain = cfgSvn.userCreationDomain;
 
           inherit pkgs;
         } //
-          ( if getCfgsSvn ["organization" "name"] != null then
+          ( if cfgSvn.organization.name != null then
               {
-                orgName = getCfgsSvn ["organization" "name"];
-                orgLogoFile = getCfgsSvn ["organization" "logo"];
-                orgUrl = getCfgsSvn ["organization" "url"];
+                orgName = cfgSvn.organization.name;
+                orgLogoFile = cfgSvn.organization.logo;
+                orgUrl = cfgSvn.organization.url;
               }
             else
               # use the default from the subversion service
@@ -76,12 +72,9 @@ let
       )
       ++
 
-      (optional (getCfgs ["extraSubservices" "enable"])
-        (map (service : service webServer pkgs)
-          (getCfgs ["extraSubservices" "services"])
-        )
-      )
-      ;
+      (optional cfg.extraSubservices.enable
+        (map (service : service webServer pkgs) cfg.extraSubservices.services)
+      );
   };
   
 in

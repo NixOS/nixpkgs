@@ -5,11 +5,11 @@
 
 writeText "ldap.conf" "
 
-uri ${config.get ["users" "ldap" "server"]}
-base ${config.get ["users" "ldap" "base"]}
+uri ${config.users.ldap.server}
+base ${config.users.ldap.base}
   
 ${
-if config.get ["users" "ldap" "useTLS"] then "
+if config.users.ldap.useTLS then "
 ssl start_tls
 tls_checkpeer no
 " else ""

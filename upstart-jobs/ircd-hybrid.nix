@@ -1,23 +1,22 @@
 {config, pkgs}:
 let
-	getCfg = option: config.get ["services" "ircdHybrid" option];
+	cfg = config.services.ircdHybrid;
 	ircdService = import ../services/ircd-hybrid {
 		stdenv = pkgs.stdenvNewSetupScript;
 		inherit (pkgs) ircdHybrid coreutils 
 			su iproute gnugrep procps;
-		serverName = getCfg "serverName";
-		sid = getCfg "sid";
-		description = getCfg "description";
-		rsaKey = getCfg "rsaKey";
-		certificate = getCfg "certificate";
-		adminEmail = getCfg "adminEmail";
-		extraIPs = getCfg "extraIPs";
-		extraPort = getCfg "extraPort";
-		gw6cEnabled = config.get ["services" "gw6c" "enable"];
+		serverName = cfg.serverName;
+		sid = cfg.sid;
+		description = cfg.description;
+		rsaKey = cfg.rsaKey;
+		certificate = cfg.certificate;
+		adminEmail = cfg.adminEmail;
+		extraIPs = cfg.extraIPs;
+		extraPort = cfg.extraPort;
+		gw6cEnabled = config.services.gw6c.enable;
 	};
 
-  startingDependency = if (config.get [ "services" "gw6c" "enable" ]) 
-	then "gw6c" else "network-interfaces";
+  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
 in
 {

@@ -3,8 +3,7 @@
 let 
 
 
-  optional = option: file:
-    if config.get option then [file] else [];
+  optional = pkgs.lib.optional;
 
 
   # !!! ugh, these files shouldn't be created here.
@@ -47,7 +46,7 @@ import ../helpers/make-etc.nix {
     { # Hostname-to-IP mappings.
       source = pkgs.substituteAll{
 	src = ./hosts;
-	extraHosts = config.get ["networking" "extraHosts"];
+	extraHosts = config.networking.extraHosts;
 	};
       target = "hosts";
     }
@@ -105,8 +104,8 @@ import ../helpers/make-etc.nix {
         src = ./profile.sh;
         inherit systemPath wrapperDir;
         inherit (pkgs) systemKernel glibc;
-        timeZone = config.get ["time" "timeZone"];
-        defaultLocale = config.get ["i18n" "defaultLocale"];
+        timeZone = config.time.timeZone;
+        defaultLocale = config.i18n.defaultLocale;
       };
       target = "profile";
     }
@@ -120,10 +119,10 @@ import ../helpers/make-etc.nix {
       source = pkgs.writeText "nix.conf" "
         # WARNING: this file is generated.
         build-users-group = nixbld
-        build-max-jobs = ${toString (config.get ["nix" "maxJobs"])}
-        build-use-chroot = ${if config.get ["nix" "useChroot"] then "true" else "false"}
+        build-max-jobs = ${toString (config.nix.maxJobs)}
+        build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
         build-chroot-dirs = /dev /proc /bin /etc
-        ${config.get ["nix" "extraOptions"]}
+        ${config.nix.extraOptions}
       ";
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
@@ -131,19 +130,19 @@ import ../helpers/make-etc.nix {
   ]
 
   # Configuration for ssmtp.
-  ++ (optional ["networking" "defaultMailServer" "directDelivery"] { 
+  ++ optional config.networking.defaultMailServer.directDelivery { 
     source = pkgs.writeText "ssmtp.conf" "
-mailhub=${config.get ["networking" "defaultMailServer" "hostName"]}
-UseTLS=${if config.get ["networking" "defaultMailServer" "useTLS"] then "YES" else "NO"}
-UseSTARTTLS=${if config.get ["networking" "defaultMailServer" "useSTARTTLS"] then "YES" else "NO"}
+mailhub=${config.networking.defaultMailServer.hostName}
+UseTLS=${if config.networking.defaultMailServer.useTLS then "YES" else "NO"}
+UseSTARTTLS=${if config.networking.defaultMailServer.useSTARTTLS then "YES" else "NO"}
 #Debug=YES
       ";
     target = "ssmtp/ssmtp.conf";
-  })
+  }
     
   # Configuration file for fontconfig used to locate
   # (X11) client-rendered fonts.
-  ++ (optional ["fonts" "enableFontConfig"] { 
+  ++ optional config.fonts.enableFontConfig { 
     source = pkgs.runCommand "fonts.conf"
       { 
         fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
@@ -156,21 +155,21 @@ UseSTARTTLS=${if config.get ["networking" "defaultMailServer" "useSTARTTLS"] the
           > $out
       ";
     target = "fonts/fonts.conf";
-  })
+  }
 
   # LDAP configuration.
-  ++ (optional ["users" "ldap" "enable"] {
+  ++ optional config.users.ldap.enable {
     source = import ./ldap.conf.nix {
       inherit (pkgs) writeText;
       inherit config;
     };
     target = "ldap.conf";
-  })
+  }
     
   # "sudo" configuration.
-  ++ (optional ["security" "sudo" "enable"] {
+  ++ optional config.security.sudo.enable {
     source = pkgs.runCommand "sudoers"
-      { src = pkgs.writeText "sudoers-in" (config.get ["security" "sudo" "configFile"]);
+      { src = pkgs.writeText "sudoers-in" (config.security.sudo.configFile);
       }
       # Make sure that the sudoers file is syntactically valid.
       # (currently disabled - NIXOS-66)
@@ -178,12 +177,12 @@ UseSTARTTLS=${if config.get ["networking" "defaultMailServer" "useSTARTTLS"] the
       "cp $src $out";
     target = "sudoers";
     mode = "0440";
-  })
+  }
     
   # A bunch of PAM configuration files for various programs.
   ++ (map
     (program:
-      let isLDAPEnabled = config.get ["users" "ldap" "enable"]; in
+      let isLDAPEnabled = config.users.ldap.enable; in
       { source = pkgs.substituteAll {
           src = ./pam.d + ("/" + program);
           inherit (pkgs) pam_unix2 pam_console;
