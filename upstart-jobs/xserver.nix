@@ -68,7 +68,7 @@ let
     ++ optional (videoDriver == "sis") xorg.xf86videosis
     ++ optional (videoDriver == "i810") xorg.xf86videoi810
     ++ optional (videoDriver == "intel") xorg.xf86videointel
-    ++ (optional (getCfg "isSynaptics") [(synaptics+"/"+xorg.xorgserver) xorg.xf86inputevdev]);
+    ++ (optional (getCfg "isSynaptics") [(synaptics+"/"+xorg.xorgserver) /*xorg.xf86inputevdev*/]);
     
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
