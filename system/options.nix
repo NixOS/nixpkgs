@@ -318,7 +318,7 @@
         description = "
           Use the trivial Mail Transfer Agent (MTA)
           <command>ssmtp</command> package to allow programs to send
-          e-mail.  If you don't want to run a “real” MTA like
+          e-mail.  If you don't want to run a ``real'' MTA like
           <command>sendmail</command> or <command>postfix</command> on
           your machine, set this option to <literal>true</literal>, and
           set the option
@@ -1358,7 +1358,7 @@ root        ALL=(ALL) SETENV: ALL
       default = false;
       description = "
         Whether to add the fonts provided by Ghostscript (such as
-        various URW fonts and the “Base-14” Postscript fonts) to the
+        various URW fonts and the ``Base-14'' Postscript fonts) to the
         list of system fonts, making them available to X11
         applications.
       ";

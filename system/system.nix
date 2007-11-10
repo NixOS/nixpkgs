@@ -344,5 +344,5 @@ rec {
     ];
     configurationName = config.boot.configurationName;
   }) (pkgs.getConfig ["checkConfigurationOptions"] false) 
-	config.declarations configuration ;
+	optionDeclarations configuration ;
 }
