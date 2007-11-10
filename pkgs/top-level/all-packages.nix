@@ -206,8 +206,8 @@ rec {
 		(if flag then let result=( 
 			(import ../build-support/checker) 
 			opts config); in
-			(if (result==null) then x else
-			abort (toString result))
+			(if (result=="") then x else
+			abort result)
 		else x);
 
 	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
