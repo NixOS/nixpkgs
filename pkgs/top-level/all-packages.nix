@@ -1880,7 +1880,7 @@ rec {
   };
 
   imlib2 = import ../development/libraries/imlib2 {
-    inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng;
+    inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng bzip2;
   };
 
   intltoolFun = lib.sumArgs (import ../development/tools/misc/intltool) {
