@@ -1965,6 +1965,10 @@ rec {
     inherit (gnome) glib;
   };
 
+  libidn = import ../development/libraries/libidn {
+	  inherit fetchurl stdenv;
+  };
+
   libjpeg = import ../development/libraries/libjpeg {
     inherit fetchurl stdenv libtool;
   };
