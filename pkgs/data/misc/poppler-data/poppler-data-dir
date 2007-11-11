@@ -1,0 +1,2 @@
+#!/bin/sh
+echo -n export POPPLER_DATADIR=@out@/share/poppler

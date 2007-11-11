@@ -2141,6 +2141,11 @@ rec {
     unicodeSupport = getFlag "unicode" "pcre" false;
   };
 
+  poppler = import ../development/libraries/poppler {
+	  inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg;
+	  inherit (gtkLibs) glib gtk;
+  };
+
   popt = import ../development/libraries/popt {
     inherit fetchurl stdenv gettext;
   };
@@ -3347,6 +3352,10 @@ rec {
 
   iana_etc = import ../data/misc/iana-etc {
     inherit fetchurl stdenv;
+  };
+
+  poppler_data = import ../data/misc/poppler-data {
+	  inherit fetchurl stdenv;
   };
 
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
