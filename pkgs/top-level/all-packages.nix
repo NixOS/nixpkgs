@@ -2072,6 +2072,10 @@ rec {
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   });
 
+  lzo = import ../development/libraries/lzo {
+	  inherit fetchurl stdenv;
+  };
+
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux";
