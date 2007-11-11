@@ -1236,9 +1236,7 @@ rec {
   };
 
   spidermonkey = import ../development/interpreters/spidermonkey {
-    inherit fetchurl;
-    # remove when the "internal compiler error" in gcc 4.1.x is fixed
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv readline;
   };
 
   sysPerl = import ../development/interpreters/sys-perl {
