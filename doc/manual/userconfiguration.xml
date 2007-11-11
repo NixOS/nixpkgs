@@ -45,4 +45,30 @@
 </para>
 </section>
 
+<section>
+<title>Pidgin-LaTeX</title>
+<para>
+	To have pidgin-latex plugin working after installation, you need the following:
+	<orderedlist>
+	<listitem>
+	Symlink <filename>/var/run/current-system/sw/share/pidgin-latex/pidgin-latex.so</filename>
+	to <filename>$HOME/.purple/plugins/pidgin-latex.so</filename>
+	</listitem>
+	<listitem>
+	Enable smileys. If you do not want to, you can create 
+	<filename>$HOME/.purple/smileys/empty/theme</filename> with the following contents: 
+	<programlisting>
+	Name=Empty
+	Description=No predefined smileys
+	Author=Nobody
+	</programlisting>	
+	Enabling this theme will enable smileys, but define none.
+	</listitem>
+	<listitem>
+	Enable the plugin.
+	</listitem>	
+	</orderedlist>	
+	</para>
+	</section>
+
 </chapter>
