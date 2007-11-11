@@ -2076,6 +2076,10 @@ rec {
 	  inherit fetchurl stdenv zlib;
   };
 
+  log4cxx = import ../development/libraries/log4cxx {
+	  inherit fetchurl stdenv automake autoconf libtool cppunit libxml2;
+  };
+
   lzo = import ../development/libraries/lzo {
 	  inherit fetchurl stdenv;
   };
