@@ -2117,6 +2117,10 @@ rec {
     inherit fetchurl stdenv alsaLib autoconf automake libtool;
   };
 
+  openbabel = import ../development/libraries/openbabel {
+	  inherit fetchurl stdenv zlib libxml2;
+  };
+
   openexr = import ../development/libraries/openexr {
 	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
   };
