@@ -1,14 +1,11 @@
-{stdenv, fetchurl, libgcrypt}:
-
-stdenv.mkDerivation {
-  name = "gnutls-1.1.23";
-  
-  src = fetchurl {
-    url = http://www.gnu.org/software/gnutls/releases/gnutls-1.1.23.tar.bz2;
-    sha256 = "0p5565rrinh1ajyphl9mljr3143mzall48vs02n3y03pv8srh7zh";
-  };
-
-  buildInputs = [libgcrypt];
+args: with args;
+stdenv.mkDerivation rec {
+	name = "gnutls-2.1.5";
+	src = fetchurl {
+		url = "${meta.homepage}/releases/${name}.tar.bz2";
+		sha256 = "0idkp54d1w1c6l17pl41p2mqabcb1qm2akhfmp4mxwa5mabkiyld";
+	};
+	buildInputs = [zlib lzo libgcrypt];
   
   meta = {
     description = "The GNU Transport Layer Security Library";

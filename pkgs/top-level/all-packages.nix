@@ -1776,7 +1776,7 @@ rec {
   };
 
   gnutls = import ../development/libraries/gnutls {
-    inherit fetchurl stdenv libgcrypt;
+	  inherit fetchurl stdenv libgcrypt zlib lzo;
   };
 
   gpgme = import ../development/libraries/gpgme {
