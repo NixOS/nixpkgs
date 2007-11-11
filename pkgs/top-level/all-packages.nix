@@ -2217,7 +2217,7 @@ rec {
   };
 
   speex = import ../development/libraries/speex {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libogg;
   };
 
   sqlite = import ../development/libraries/sqlite {
