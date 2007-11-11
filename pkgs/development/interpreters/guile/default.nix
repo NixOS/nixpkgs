@@ -6,5 +6,5 @@ stdenv.mkDerivation {
 		sha256 = "03kn1ia4s7l24zl2sfbrns6fs3nc9cw2pzsqx8y7wwr80b1nfxhz";
 	};
 
-  buildInputs = [ncurses readline libtool gmp];
+  propagatedBuildInputs = [readline libtool gmp];
 }
