@@ -3567,7 +3567,8 @@ rec {
   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
 
   elinks = import ../applications/networking/browsers/elinks {
-    inherit stdenv fetchurl python perl ncurses x11 zlib openssl;
+    inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
+	guile bzip2;
   };
 
   emacs = emacs22;
