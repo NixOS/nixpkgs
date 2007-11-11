@@ -23,9 +23,9 @@
           <varlistentry>
              <term>
                <option>
-                 <xsl:for-each select="attr[@name = 'name']/list/string">
+                 <xsl:for-each select="attr[@name = 'name']/string">
                    <xsl:value-of select="@value" />
-                   <xsl:if test="position() != last()">.</xsl:if>
+		   <xsl:if test="position() != last()">.</xsl:if>
                  </xsl:for-each>
                </option>
              </term>
