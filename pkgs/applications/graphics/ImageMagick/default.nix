@@ -1,6 +1,5 @@
-{stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript,
-libjpeg, libpng, libtiff, libX11, libxml2, zlib}:
-stdenv.mkDerivation {
+args: with args;
+(stdenv.mkDerivation ({
   name = "ImageMagick-6.3.5";
 
   src = fetchurl {
@@ -9,8 +8,16 @@ stdenv.mkDerivation {
   };
 
   configureFlags = " --with-dots --with-gs-font-dir="+ ghostscript +
-		"/share/ghostscript/fonts --with-gslib ";
+		"/share/ghostscript/fonts --with-gslib " +(
+		if args ? tetex then " --with-frozenpaths " else ""
+		);
 
   buildInputs = [bzip2 freetype ghostscript graphviz libjpeg libpng 
-		libtiff libX11 libxml2 zlib ];
-}
+		libtiff libX11 libxml2 zlib ] ++ (if args ? tetex then [args.tetex] else [])
+		 ++ (if args ? librsvg then [args.librsvg] else [])
+		;
+} // (if args ? tetex then {
+	preConfigure = "
+		export DVIDecodeDelegate=${args.tetex}/bin/dvips
+	";
+} else {})))

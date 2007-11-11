@@ -3654,7 +3654,8 @@ rec {
   };
 
   pidginlatex = import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
-	inherit fetchurl stdenv tetex pkgconfig imagemagick ghostscript pidgin;
+	inherit fetchurl stdenv tetex pkgconfig ghostscript pidgin;
+	imagemagick = imagemagickBig;
 	inherit (gtkLibs) glib gtk;
   };
 
@@ -3722,11 +3723,21 @@ rec {
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
-  imagemagick = import ../applications/graphics/ImageMagick {
-    inherit stdenv fetchurl bzip2 freetype graphviz 
-	ghostscript libjpeg libpng libtiff libxml2 zlib;
-    inherit (xlibs) libX11;
+  imagemagickFun = lib.sumArgs (import ../applications/graphics/ImageMagick) {
+    inherit stdenv fetchurl; 
   };
+
+  imagemagick = imagemagickFun {
+    inherit bzip2 freetype graphviz ghostscript libjpeg libpng libtiff 
+      libxml2 zlib;
+    inherit (xlibs) libX11;
+  } null;
+
+  imagemagickBig = imagemagickFun {
+    inherit bzip2 freetype graphviz ghostscript libjpeg libpng libtiff 
+      libxml2 zlib tetex librsvg;
+    inherit (xlibs) libX11;
+  } null;
 
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl perl perlXMLParser pkgconfig zlib

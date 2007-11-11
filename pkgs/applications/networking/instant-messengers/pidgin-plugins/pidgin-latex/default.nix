@@ -3,16 +3,20 @@
 stdenv.mkDerivation {
   name = "pidgin-latex";
 
-  src = fetchurl {
-    url = http://tapas.affenbande.org/pidgin-latex.tgz;
-    md5 = "12509b38f7a92bb22d565cc73cbd83c7";
-  };
+  src = 
+	fetchurl {
+		url = http://tapas.affenbande.org/pidgin-latex/pidgin-latex-0.9.tgz;
+		sha256 = "1yqd3qgxd3n8hm60qg7yv7j1crr6f3d4yrdpgwdpw2pyf92p8nxp";
+	};
 
-  preBuild = "sed -e '/^PREFIX/d' -i Makefile ; 
-	sed -e 's@/bin/bash@/var/run/current-system/sw&@; s@/dev/stdin@/proc/self/fd/0@' -i pidgin-latex-convert.sh;
-	sed -e 's@^latex.*@pdf& ; if let \$?; then rm /tmp/pidgin-latex-tmp.png; exit 1; fi; @' -i pidgin-latex-convert.sh ; 
-	sed -e 's@[.]dvi@.pdf@' -i pidgin-latex-convert.sh;
-	";
+  preBuild = "
+  	sed -e '/^PREFIX/d' -i Makefile ; 
+	sed -e 's@/usr/bin/latex@${tetex}/bin/pdflatex@g' -i pidgin-latex.h
+	sed -e 's@/usr/bin/convert@${imagemagick}/bin/convert@g' -i pidgin-latex.h
+	sed -e 's@.*convert_path.*@const gchar *convert = CONVERT_PATH;@'
+	sed -e 's@.*latex_path.*@const gchar *convert = LATEX_PATH;@'
+	sed -e 's/%s.dvi/%s.pdf/' -i pidgin-latex.c
+  ";
 
   makeFlags="PREFIX=\$(out)";
 
