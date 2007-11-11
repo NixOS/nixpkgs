@@ -18,5 +18,5 @@ options-db.xml: options.xml options-to-docbook.xsl
 	xsltproc -o options-db.xml options-to-docbook.xsl options.xml 
 
 options.xml: ../../system/options.nix
-	echo 'let pkgs = import ../../pkgs/top-level/all-packages.nix {}; in pkgs.lib.optionAttrSetToDocList (import ../../system/options.nix rec {pkgs = pkgs {}; mkOption = pkgs.lib.mkOption; })' | \
+	echo '((pkgs:(pkgs.lib.optionAttrSetToDocList "" (import ../../system/options.nix {pkgs = pkgs; mkOption = pkgs.lib.mkOption; }))) (import ../../pkgs/top-level/all-packages.nix {}))' | \
 	    nix-instantiate --eval-only --xml --strict - > options.xml || (rm options.xml && false)
