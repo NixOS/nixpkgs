@@ -8,6 +8,11 @@ stdenv.mkDerivation {
 	sha256 = "1rpb5wygmp0f8nal7y3ga4556i7hkjdslv3wdq04fj30gns621vy";
   };
 
+  postInstall = "
+  ensureDir \$out/nix-support
+  cp \$setupHook \$out/nix-support/setup-hook
+  ";
+
   patches = [
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
