@@ -2158,11 +2158,9 @@ rec {
   };
 
   qt4 = getVersion "qt4" qt4_alts;
-  # Builds, but not tested yet
-  # There are two versions: kde and trolltech
   qt4_alts = import ../development/libraries/qt-4 {
 	inherit fetchurl fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
-	  fontconfig freetype pkgconfig;
+	  fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
 	  libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
 	  inputproto fixesproto libXfixes;

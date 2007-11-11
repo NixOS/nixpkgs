@@ -5,14 +5,14 @@ rec {
   propagatedBuildInputs = [libXft libXrender libXrandr randrproto xextproto
   libXinerama xineramaproto libXcursor zlib libjpeg mysql libpng which mesa
   libXmu openssl dbus cups pkgconfig libXext freetype fontconfig inputproto
-  fixesproto libXfixes glib];
+  fixesproto libXfixes glib libtiff];
   prefixKey = "-prefix ";
   configureFlags = "
     -v -no-separate-debug-info -release -nomake examples -nomake demos
     -system-zlib -system-libpng -system-libjpeg -fast
     -qt-gif -confirm-license
     -opengl -xrender -xrandr -xinerama -xcursor -qt-sql-mysql
-    -L${mysql}/lib/mysql -I${mysql}/include/mysql -qdbus -cups -glib -xfixes
+    -qdbus -cups -glib -xfixes
     -fontconfig -I${freetype}/include/freetype2";
   patchPhase = "sed -e 's@/bin/pwd@pwd@' -i configure; sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf";
 }; in
@@ -29,9 +29,10 @@ rec {
 	  name = "qt-kde-4.3svn";
 	  src = fetchsvn {
 		  url = svn://anonsvn.kde.org/home/kde/trunk/qt-copy;
-		  md5 = "b0588d8ef36642613bdb92930a2330b4";
+		  rev = "732646";
+		  md5 = "9757de3dce16b483f2f358d287c848ee";
 	  };
-	  patchPhase = "mkdir .svn; bash apply_patches;patch -R -p0 < patches/0172-prefer-xrandr-over-xinerama.diff;" + common.patchPhase;
+	  patchPhase = "mkdir .svn; bash apply_patches;" + common.patchPhase;
 	});
 	default = kde;
 }
