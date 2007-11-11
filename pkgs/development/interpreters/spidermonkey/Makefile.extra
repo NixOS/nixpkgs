@@ -1,0 +1,7 @@
+install: $(PROGRAM) $(SHARED_LIBRARY)
+	mkdir -pv $(DIST)/{bin,lib}
+	mkdir -pv $(DIST)/include
+	cp -v $(PROGRAM) $(DIST)/bin
+	cp -v $(SHARED_LIBRARY) $(LIBRARY) $(DIST)/lib
+	cp -v $(JS_HFILES) $(API_HFILES) $(OTHER_HFILES) $(DIST)/include
+
