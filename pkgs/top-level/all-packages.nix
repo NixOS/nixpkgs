@@ -2072,6 +2072,10 @@ rec {
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   });
 
+  libzip = import ../development/libraries/libzip {
+	  inherit fetchurl stdenv zlib;
+  };
+
   lzo = import ../development/libraries/lzo {
 	  inherit fetchurl stdenv;
   };
