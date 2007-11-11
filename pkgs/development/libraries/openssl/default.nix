@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}: stdenv.mkDerivation {
+args: with args; stdenv.mkDerivation {
   name = "openssl-0.9.8g";
   builder = ./builder.sh;
   src = fetchurl {
@@ -6,4 +6,5 @@
     sha256 = "1w0wj3pgg9ga0hay3jdxs9sl17bfw307b6qvkxn735fy8ml8h9hf";
   };
   buildInputs = [perl];
+  propagatedBuildInputs = [gmp];
 }

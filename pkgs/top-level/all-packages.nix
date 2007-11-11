@@ -2146,7 +2146,7 @@ rec {
   };
 
   openssl = import ../development/libraries/openssl {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl gmp;
   };
 
   pangoxsl = import ../development/libraries/pangoxsl {
@@ -3597,7 +3597,7 @@ rec {
 
   elinks = import ../applications/networking/browsers/elinks {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
-	guile bzip2;
+	guile bzip2 libtool;
   };
 
   emacs = emacs22;
