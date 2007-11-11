@@ -1,16 +1,13 @@
-{stdenv, cvs, nix}: {url, module, tag, md5}:
+# example tags:
+# "-DNOW" (get current version)
+# "-D2007-20-10" (get the last version before given date)
+# "-r <tagname>" (get version by tag name)
+{stdenv, cvs, nix}: {url, module, tag, sha256}:
 
 stdenv.mkDerivation {
   name = "cvs-export";
   builder = ./builder.sh;
   buildInputs = [cvs nix];
 
-  # Nix <= 0.7 compatibility.
-  id = md5;
-
-  outputHashAlgo = "md5";
-  outputHashMode = "recursive";
-  outputHash = md5;
-  
-  inherit url module tag;
+  inherit url module tag sha256;
 }

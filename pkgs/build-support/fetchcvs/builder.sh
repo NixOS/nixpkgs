@@ -1,24 +1,16 @@
 source $stdenv/setup
 
-header "exporting $url $module into $out"
-
-prefetch=$(dirname $out)/cvs-checkout-tmp-$outputHash
-echo $prefetch
-if test -e "$prefetch"; then
-    mv $prefetch $out
-else
-    if test -z "$tag"; then
-      rtag="-DNOW"
-    else
-      rtag="-r $tag"
-    fi
-    cvs -f -d $url export $rtag -d $out $module
+if test -z "$tag"; then
+  tag="-DNOW"
 fi
+# creating the export drictory and checking out there only to be able to
+# move the content without the root directory into $out ...
+# cvs -f -d "$url" export $tag -d "$out" "$module"
+# should work (but didn't - got no response on #cvs)
+# See als man Page for those options
 
-actual=$(nix-hash $out)
-if test "$actual" != "$outputHash"; then
-    echo "hash is $actual, expected $outputHash" >&2
-    exit 1
-fi
+ensureDir $out export
+cd export; cvs -f -d "$url" export $tag "$module"
+mv */* $out
 
 stopNest

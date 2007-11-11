@@ -4048,6 +4048,12 @@ rec {
     gpgSupport = true;
   };
 
+  # linux only by now 
+  synergy = import ../applications/misc/synergy {
+    inherit fetchcvs stdenv x11;
+    inherit (xlibs) xextproto libXtst inputproto;
+  };
+
   thunderbird = thunderbird2;
 
   thunderbird1 = import ../applications/networking/mailreaders/thunderbird-1.x {
