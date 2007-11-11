@@ -230,5 +230,18 @@ rec {
             else addDefaultOptionValues defValue {};
       }
     ) (builtins.attrNames defs));
+  
+  optionAttrSetToDocList = (l: attrs:
+    (if (getAttr ["_type"] "" attrs) == "option" then
+      [({
+	inherit (attrs) description;
+      }
+      //(if attrs ? example then {inherit(attrs) example;} else {} )
+      //(if attrs ? default then {inherit(attrs) default;} else {} )
+      //{name = l;}
+      )]
+      else (concatLists (map (s: (optionAttrSetToDocList 
+        (l + (if l=="" then "" else ".") + s) (builtins.getAttr s attrs)))
+        (builtins.attrNames attrs)))));
 
 }
