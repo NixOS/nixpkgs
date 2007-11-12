@@ -3579,9 +3579,11 @@ rec {
     inherit (xlibs) libX11;
   };
 
+  /*
   djview4 = import ../applications/graphics/djview4 {
-	  inherit fetchurl stdenv qt4 djvulibre;
+    inherit fetchurl stdenv qt4 djvulibre;
   };
+  */
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
