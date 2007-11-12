@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     )
   ";
 
+  postInstall = "ln -s libexec $out/bin";
+
   buildInputs = [openssh]; # !!! make openssh a runtime dependency only
 
   meta = {
