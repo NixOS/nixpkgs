@@ -16,6 +16,13 @@ preConfigure() {
             --replace "@PWD@" "pwd"
     done
 
+    # In the glibc 2.6/2.7 tarballs C-translit.h is a little bit older
+    # than C-translit.h.in, forcing Make to rebuild it unnecessarily.
+    # This wouldn't be problem except that it requires Perl, which we
+    # don't want as a dependency in the Nixpkgs bootstrap.  So force
+    # the output file to be newer.
+    touch locale/C-translit.h
+    
     mkdir ../build
     cd ../build
     

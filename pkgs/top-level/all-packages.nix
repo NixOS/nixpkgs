@@ -1747,8 +1747,7 @@ rec {
     });
 
   glibcNPTL = import ../development/libraries/glibc-nptl {
-    inherit fetchurl kernelHeaders perl; 
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv kernelHeaders;
   };
 
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
