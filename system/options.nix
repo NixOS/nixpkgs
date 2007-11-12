@@ -1180,6 +1180,36 @@
     };
 
 
+    nagios = {
+
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to use <link
+          xlink:href='http://www.nagios.org/'>Nagios</link> to monitor
+          your system or network.
+        ";
+      };
+
+      objectDefs = mkOption {
+        description = "
+          A list of Nagios object configuration files that must define
+          the hosts, host groups, services and contacts for the
+          network that you want Nagios to monitor.
+        ";
+      };
+
+      plugins = mkOption {
+        default = [pkgs.nagiosPluginsOfficial pkgs.ssmtp];
+        description = "
+          Packages to be added to the Nagios <envar>PATH</envar>.
+          Typically used to add plugins, but can be anything.
+        ";
+      };
+
+    };
+
+
   };
 
 

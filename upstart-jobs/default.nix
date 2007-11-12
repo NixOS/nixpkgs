@@ -226,6 +226,12 @@ import ../upstart-jobs/gather.nix {
       inherit (pkgs) stdenv hal;
     })
 
+  # Nagios system/network monitoring daemon.
+  ++ optional config.services.nagios.enable
+    (import ../upstart-jobs/nagios {
+      inherit config pkgs;
+    })
+
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {

@@ -7,6 +7,7 @@
     ntp = 3;
     messagebus = 4; # D-Bus
     haldaemon = 5;
+    nagios = 6;
     nixbld = 30000; # start of range of uids
     nobody = 65534;
   };
