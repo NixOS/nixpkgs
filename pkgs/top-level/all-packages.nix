@@ -2410,6 +2410,11 @@ rec {
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
+  gtk2hs = import ../development/libraries/haskell/gtk2hs {
+    inherit pkgconfig stdenv fetchurl cairo;
+    inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
+    ghc = ghc661;
+  };
 
   uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
     inherit stdenv fetchurl ghc;
