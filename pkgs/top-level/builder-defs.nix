@@ -1,5 +1,5 @@
 args: with args; with stringsWithDeps; with lib;
-rec
+(rec
 {
 	inherit writeScript; 
 
@@ -12,30 +12,29 @@ rec
 		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
 		else (abort "unknown archive type : ${s}"));
 
-	minInit = noDepEntry ("
-		set -e
-		NIX_GCC=${stdenv.gcc}
-		export SHELL=${stdenv.shell}
-		# Set up the initial path.
-		PATH=
-		for i in \$NIX_GCC ${toString stdenv.initialPath}; do
-		    PATH=\$PATH\${PATH:+:}\$i/bin
-		done
-	" + (if ((stdenv ? preHook) && (stdenv.preHook != null) && 
-			((toString stdenv.preHook) != "")) then 
-		"
-		param1=${stdenv.param1}
-		param2=${stdenv.param2}
-		param3=${stdenv.param3}
-		param4=${stdenv.param4}
-		param5=${stdenv.param5}
-		source ${stdenv.preHook}
+	defAddToSearchPath = FullDepEntry ("
+		addToSearchPathWithCustomDelimiter() {
+			local delimiter=\$1
+			local varName=\$2
+			local needDir=\$3
+			local addDir=\${4:-\$needDir}
+			local prefix=\$5
+			if [ -d \$prefix\$needDir ]; then
+				if [ -z \${!varName} ]; then
+					eval export \${varName}=\${prefix}\$addDir
+				else
+					eval export \${varName}=\${!varName}\${delimiter}\${prefix}\$addDir
+				fi
+			fi
+		}
 
-		export TZ=UTC
+		addToSearchPath()
+		{
+			addToSearchPathWithCustomDelimiter \"\${PATH_DELIMITER}\" \"\$@\"
+		}
+	") [defNest];
 
-		prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
-
-
+	defNest = noDepEntry ("
 		nestingLevel=0
 
 		startNest() {
@@ -62,10 +61,33 @@ rec
 		}
 
 		trap \"closeNest\" EXIT
+	");
 
+	minInit = FullDepEntry ("
+		set -e
+		NIX_GCC=${stdenv.gcc}
+		export SHELL=${stdenv.shell}
+		# Set up the initial path.
+		PATH=
+		for i in \$NIX_GCC ${toString stdenv.initialPath}; do
+		    PATH=\$PATH\${PATH:+:}\$i/bin
+		done
+	" + (if ((stdenv ? preHook) && (stdenv.preHook != null) && 
+			((toString stdenv.preHook) != "")) then 
+		"
+		param1=${stdenv.param1}
+		param2=${stdenv.param2}
+		param3=${stdenv.param3}
+		param4=${stdenv.param4}
+		param5=${stdenv.param5}
+		source ${stdenv.preHook}
+
+		export TZ=UTC
+
+		prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
 
 		"
-	else ""));
+	else "")) [defNest defAddToSearchPath];
 		
 	addInputs = FullDepEntry ("
 		# Recursively find all build inputs.
@@ -243,8 +265,8 @@ rec
 	replaceInScript = file: l: (concatStringsSep "\n" ((pairMap (replaceScriptVar file) l)));
 	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
 	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
-	makeNest = x:(if x==minInit.text then x else "startNest\n" + x + "\nstopNest\n");
+	makeNest = x:(if x==defNest.text then x else "startNest\n" + x + "\nstopNest\n");
 	textClosure = textClosureMap makeNest;
 
 	inherit noDepEntry FullDepEntry PackEntry;
-}
+}) // args

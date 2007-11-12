@@ -17,7 +17,8 @@ in
 stdenv.mkDerivation {
 	name = "swh-plugins-0.4.15";
 	builder = writeScript "swh-plugins-0.4.15-builder"
-		(textClosure [doConfigure doMakeInstall postInstall doForceShare]);
+		(textClosure [doConfigure doMakeInstall 
+			postInstall doForceShare]);
 	meta = {
 		description = "
 	LADSPA format audio plugins.
