@@ -1,11 +1,11 @@
 {stdenv, fetchurl, noSysDirs}:
 
 stdenv.mkDerivation {
-  name = "binutils-2.17";
+  name = "binutils-2.18";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/binutils-2.17.tar.bz2;
-    md5 = "e26e2e06b6e4bf3acf1dc8688a94c0d1";
+    url = mirror://gnu/binutils/binutils-2.18.tar.bz2;
+    sha256 = "16zfc7llbjdn69bbdy7kqgg2xa67ypgj7z5qicgwzvghaaj36yj8";
   };
   inherit noSysDirs;
   configureFlags = "--disable-werror"; # needed for dietlibc build
