@@ -75,6 +75,8 @@ chmod 644 /var/log/wtmp
 touch /var/log/lastlog
 chmod 644 /var/log/lastlog
 
+mkdir -m 1777 -p /var/tmp
+
 
 # Empty, read-only home directory of many system accounts.
 mkdir -m 0555 -p /var/empty
