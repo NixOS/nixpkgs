@@ -16,6 +16,7 @@ rec {
             description = "System administrator";
             home = "/root";
             shell = defaultShell;
+            group = "root";
           }
           { name = "nobody";
             uid = ids.uids.nobody;
