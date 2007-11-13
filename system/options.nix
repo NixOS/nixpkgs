@@ -906,6 +906,7 @@
           };
 
           notificationSender = mkOption {
+            default = "svn-server@example.org";
             example = "svn-server@example.org";
             description = "
               The email address used in the Sender field of commit
@@ -914,6 +915,7 @@
           };
 
           userCreationDomain = mkOption {
+	    default = "example.org"; 
             example = "example.org";
             description = "
               The domain from which user creation is allowed.  A client can
@@ -931,6 +933,13 @@
               support WebDAV.
             ";
           };
+	  
+	  dataDir = mkOption {
+	    default = "/no/such/path/exists";
+	    description = "
+	      Place to put SVN repository.
+	    ";
+	  };
 
           organization = {
 
@@ -1474,6 +1483,14 @@ root        ALL=(ALL) SETENV: ALL
         packages.  The function will be called with the Nix Packages
         collection as its argument for convenience.
       ";
+    };
+
+    nix = mkOption {
+        default = pkgs: pkgs.nixUnstable;
+        example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
+        description = "
+          Use non-default Nix easily. Be careful, though, not to break everything.
+        ";
     };
 
   };
