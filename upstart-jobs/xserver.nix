@@ -27,11 +27,6 @@ let
 
   optional = condition: x: if condition then [x] else [];
 
-  #Beryl parameters
-  #berylcore
-  #berylmanager
-  #berylemerald
-
   # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;
   resolutions = map (res: "\"${toString res.x}x${toString res.y}\"") (cfg.resolutions);
@@ -242,10 +237,6 @@ let
       ${compiz}/bin/compiz gconf ${renderingFlag}&
       ${compiz}/bin/gtk-window-decorator --sync &
     "
-    #else if windowManager == "beryl" then "
-    #  ${berylmanager}/bin/beryl-manager &
-    #"
-
     else if windowManager == "none" then "
 
       # The session starter will start the window manager.
@@ -348,9 +339,6 @@ rec {
   ++ optional (windowManager == "compiz") [
     compiz
   ]
-  #++ optional (windowManager == "beryl") [
-  #  berylcore berylmanager berylemerald
-  #]
   ++ optional (sessionType == "xterm") [
     xterm
   ]
@@ -399,7 +387,7 @@ rec {
 
     ${if videoDriver == "nvidia"
       then "env XORG_DRI_DRIVER_PATH=${nvidiaDrivers}/X11R6/lib/modules/drivers/"
-      else if cfg.driSupport
+    else if cfg.driSupport
       then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
       else ""
     } 
