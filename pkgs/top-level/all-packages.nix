@@ -4524,6 +4524,12 @@ rec {
     db4 = db45;
   };
 
+  nixCustomFun = src: (import ../tools/package-management/nix/custom.nix {
+    inherit fetchurl stdenv perl curl bzip2 openssl src;
+    aterm = aterm242fixes;
+    db4 = db45;
+  });
+
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig;
   };
