@@ -147,6 +147,13 @@ rec {
   getVersion = name: alts: builtins.getAttr
     (getConfig [ "environment" "versions" name ] "default") alts;
 
+  # The same, another syntax.
+  # Warning: syntax for configuration.nix changed too
+  useVersion = name: f: f
+  {
+	  version = getConfig [ "environment" "versions" name ];
+  };
+
   # Whether user enabled given feature for the given package?
   getFlag = flag: package: default:
   getConfig [ "environment" "flags" package flag ]
