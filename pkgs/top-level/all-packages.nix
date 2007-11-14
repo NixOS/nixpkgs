@@ -1214,17 +1214,15 @@ rec {
   };
   */
 
-  python = import ../development/interpreters/python {
-    inherit fetchurl stdenv zlib bzip2;
-  };
+  python = getVersion "python" python_alts;
 
-  python25 = import ../development/interpreters/python/2.5 {
+  python_alts = import ../development/interpreters/python {
     inherit fetchurl stdenv zlib bzip2;
   };
 
   pyrexFun = lib.sumArgs (import ../development/interpreters/pyrex) {
   	inherit fetchurl stdenv stringsWithDeps lib builderDefs;
-	python = python25;
+	python = python_alts.v_2_5;
   };
 
   pyrex = pyrexFun {
@@ -3977,7 +3975,7 @@ rec {
 
   pythonmagick = import ../applications/graphics/PythonMagick {
     inherit fetchurl stdenv pkgconfig imagemagick boost;
-    python = python25;
+    python = python_alts.v_2_5;
   };
 
   ratpoison = import ../applications/window-managers/ratpoison {
