@@ -2260,12 +2260,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  strigi = import ../development/libraries/strigi {
-	  inherit stdenv fetchurl zlib cluceneCore cluceneContrib expat bzip2
-	  pkgconfig cmake dbus libxml2 perl;
-	  qt = qt4;
-  };
-
   t1lib = import ../development/libraries/t1lib {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXaw;
