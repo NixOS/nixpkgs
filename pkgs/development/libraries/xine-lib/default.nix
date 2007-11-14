@@ -12,11 +12,11 @@ assert encryptedDVDSupport -> libdvdcss != null;
 assert alsaSupport -> alsaLib != null;
 
 (stdenv.mkDerivation {
-  name = "xine-lib-1.1.7";
+  name = "xine-lib-1.1.8";
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/xine/xine-lib-1.1.7.tar.bz2;
-    sha256 = "1aycmhvq95gbb5mqw5skgcxyn4nh5qkzq21yclnqk5yzflpwwvvg";
+    url = mirror://sourceforge/xine/xine-lib-1.1.8.tar.bz2;
+    sha256 = "03iwhgsf9kj0x5b4fgv7lzc1vj3frk4afh2idgrqskvixjyi37vc";
   };
   buildInputs = [
     x11
