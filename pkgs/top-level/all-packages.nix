@@ -659,6 +659,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  shebangfix = import ../tools/misc/shebangfix {
+    inherit perl;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+  };
+
   smartmontools = import ../tools/system/smartmontools {
     inherit fetchurl stdenv;
   };
