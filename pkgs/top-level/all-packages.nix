@@ -1075,13 +1075,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  ocaml = import ../development/compilers/ocaml {
-    inherit fetchurl stdenv x11 ncurses;
-  };
+  ocaml = getVersion  "ocaml" ocaml_alts;
 
-  ocaml3080 = import ../development/compilers/ocaml/ocaml-3.08.0.nix {
-    inherit fetchurl x11;
-    stdenv = overrideGCC stdenv gcc34;
+  ocaml_alts = import ../development/compilers/ocaml {
+    inherit fetchurl stdenv x11 ncurses stdenvUsingSetupNew2;
+	stdenv34 = overrideGCC stdenv gcc34;
   };
 
 /*
@@ -1108,7 +1106,7 @@ rec {
 
   qcmm = import ../development/compilers/qcmm {
     lua   = lua4;
-    ocaml = ocaml3080;
+    ocaml = ocaml_alts.v_3_08_0;
     inherit fetchurl stdenv mk noweb groff;
   };
 

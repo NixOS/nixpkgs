@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, ncurses}:
+args: with args;
 
 stdenv.mkDerivation {
   name = "ocaml-3.09.1";
