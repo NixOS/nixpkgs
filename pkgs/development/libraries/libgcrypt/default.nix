@@ -1,10 +1,10 @@
-{stdenv, fetchurl, libgpgerror}:
+args: with args;
 
 stdenv.mkDerivation {
-  name = "libgcrypt-1.2.4";
+  name = "libgcrypt-1.3.1";
   src = fetchurl {
-    url = ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.2.4.tar.gz;
-    sha256 = "1v6rbx2jpwvh9jwf8n91da2p66v2gzmym6s3h1fidfdy7qqkyg6g";
+    url = ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.3.1.tar.bz2;
+    sha256 = "0ip0bjhnn12lvb050j91x64wfhmpk7xlc3p93mxi9g2qczg413nz";
   };
 
   buildInputs = [libgpgerror];
