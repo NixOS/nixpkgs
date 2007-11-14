@@ -1689,6 +1689,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  facile = import ../development/libraries/facile {
+	  inherit fetchurl;
+      # Actually, we don't need this version but we need native-code compilation
+	  ocaml = ocaml.v_3_10_0;
+	  stdenv = stdenvUsingSetupNew2;
+  };
+
   ffmpeg = import ../development/libraries/ffmpeg {
     inherit fetchurl stdenv;
   };
