@@ -4353,6 +4353,29 @@ rec {
     qt = qt3;
   };
   
+  kde4 = recurseIntoAttrs (import ../desktops/kde-4 {
+    inherit
+      fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
+      libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
+	  cppunit cyrus_sasl openldap enchant openexr exiv2 samba nss log4cxx aspell
+      shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
+	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
+	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
+	  openbabel ocaml facile;
+	stdenv = stdenvUsingSetupNew2;
+	cdparanoia = cdparanoiaIII;
+    inherit (xlibs)
+      inputproto kbproto scrnsaverproto xextproto xf86miscproto
+      xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+      libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+      libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+      libxkbfile libXinerama;
+    inherit (gtkLibs) glib;
+    qt = qt4;
+	dbus = dbus_alts.withX11;
+	bison = bison23;
+  });
+
   kdebase = import ../desktops/kde/kdebase {
     inherit
       fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
