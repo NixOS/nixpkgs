@@ -1972,7 +1972,8 @@ rec {
   #};
 
   libgsf = import ../development/libraries/libgsf {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2
+	python;
     inherit (gnome) glib gnomevfs libbonobo;
   };
 
