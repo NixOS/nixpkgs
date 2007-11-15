@@ -1688,7 +1688,7 @@ rec {
   facile = import ../development/libraries/facile {
 	  inherit fetchurl;
       # Actually, we don't need this version but we need native-code compilation
-	  ocaml = ocaml.v_3_10_0;
+	  ocaml = ocaml_alts.v_3_10_0;
 	  stdenv = stdenvUsingSetupNew2;
   };
 
