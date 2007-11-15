@@ -889,7 +889,7 @@ rec {
     inherit stdenv;
   };
  
-  gcc = gcc41;
+  gcc = gcc42;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -908,14 +908,14 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc41 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
+  gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
-  }));
+  });
 
   gcc41NPTL = wrapGCCWithGlibc gcc41.gcc glibcNPTL;
 
-  gcc42 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.2 {
+  gcc42 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
   }));

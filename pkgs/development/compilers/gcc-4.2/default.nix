@@ -9,21 +9,21 @@ assert langC;
 with import ../../../lib;
 
 stdenv.mkDerivation {
-  name = "gcc-4.2.0";
+  name = "gcc-4.2.2";
   builder = ./builder.sh;
   
   src =
     optional /*langC*/ true (fetchurl {
-      url = mirror://gnu/gcc/gcc-4.2.0/gcc-core-4.2.0.tar.bz2;
-      sha256 = "0ykhzxhr8857dr97z0j9wyybfz1kjr71xk457cfapfw5fjas4ny1";
+      url = mirror://gnu/gcc/gcc-4.2.2/gcc-core-4.2.2.tar.bz2;
+      sha256 = "01hdwd4im2xzg159fk022zqyhlxphqvpmabd25bqb8fjbs2yi80a";
     }) ++
     optional /*langCC*/ true (fetchurl {
-      url = mirror://gnu/gcc/gcc-4.2.0/gcc-g++-4.2.0.tar.bz2;
-      sha256 = "0k5ribrfdp9vmljxrglcgx2j2r7xnycd1rvd8sny2y5cj0l8ps12";
+      url = mirror://gnu/gcc/gcc-4.2.2/gcc-g++-4.2.2.tar.bz2;
+      sha256 = "04xankxi3bi4gvgv8rq9h6w3bdx59bg9zh0zv6lyw373gy26ygmq";
     }) ++
     optional langF77 (fetchurl {
-      url = mirror://gnu/gcc/gcc-4.2.0/gcc-fortran-4.2.0.tar.bz2;
-      sha256 = "0vw07qv6qpa5cgxc0qxraq6li2ibh8zrp65jrg92v4j63ivvi3hh";
+      url = mirror://gnu/gcc/gcc-4.2.2/gcc-fortran-4.2.2.tar.bz2;
+      sha256 = "1fybl88w0l99cqppx18i6hnq5dsrssx3qd7vr2ybmmk3nfx8pziq";
     });
     
   patches =
