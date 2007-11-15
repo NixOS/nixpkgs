@@ -67,6 +67,8 @@ mkdir -m 0755 -p /var/run/console # for pam_console
 touch /var/run/utmp # must exist
 chmod 644 /var/run/utmp
 
+mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
+
 mkdir -m 0755 -p /var/log
 
 touch /var/log/wtmp # must exist

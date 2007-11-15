@@ -1,4 +1,4 @@
-{config, pkgs, nix, modprobe, nssModulesPath}:
+{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars}:
 
 let 
 
@@ -79,8 +79,7 @@ import ../upstart-jobs/gather.nix {
       
     # Nix daemon - required for multi-user Nix.
     (import ../upstart-jobs/nix-daemon.nix {
-      inherit nix;
-      inherit (pkgs) openssl;
+      inherit config pkgs nix nixEnvVars;
     })
 
     # Cron daemon.

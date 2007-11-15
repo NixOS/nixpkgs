@@ -153,24 +153,35 @@ rec {
   };
 
 
+  # Environment variables for running Nix.
+  nixEnvVars =
+    "export NIX_CONF_DIR=/nix/etc/nix\n" +
+    (if config.nix.distributedBuilds then
+      "export NIX_BUILD_HOOK=${nix}/libexec/nix/build-remote.pl\n" +
+      "export NIX_REMOTE_SYSTEMS=/etc/nix.machines\n" +
+      "export NIX_CURRENT_LOAD=/var/run/nix/current-load\n"
+    else "");
+
+              
   # The services (Upstart) configuration for the system.
   upstartJobs = import ../upstart-jobs/default.nix {
-    inherit config pkgs nix modprobe nssModulesPath;
+    inherit config pkgs nix modprobe nssModulesPath nixEnvVars;
   };
 
 
   # The static parts of /etc.
   etc = import ../etc/default.nix {
-    inherit config pkgs upstartJobs systemPath wrapperDir defaultShell;
+    inherit config pkgs upstartJobs systemPath wrapperDir
+      defaultShell nixEnvVars;
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
   # Font aggregation
-	fontDir = import ./fontdir.nix {
-		inherit (pkgs) stdenv;
-		inherit pkgs config;
-		inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
-	};
+  fontDir = import ./fontdir.nix {
+    inherit (pkgs) stdenv;
+    inherit pkgs config;
+    inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
+  };
 
   # The wrapper setuid programs (since we can't have setuid programs
   # in the Nix store).

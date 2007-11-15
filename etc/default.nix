@@ -1,4 +1,6 @@
-{config, pkgs, upstartJobs, systemPath, wrapperDir, defaultShell, extraEtc}:
+{ config, pkgs, upstartJobs, systemPath, wrapperDir
+, defaultShell, extraEtc, nixEnvVars
+}:
 
 let 
 
@@ -106,6 +108,7 @@ import ../helpers/make-etc.nix {
         inherit (pkgs) systemKernel glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
+        inherit nixEnvVars;
       };
       target = "profile";
     }
@@ -213,6 +216,16 @@ UseSTARTTLS=${if config.networking.defaultMailServer.useSTARTTLS then "YES" else
     ]
   )
 
+  # List of machines for distributed Nix builds in the format expected
+  # by build-remote.pl.
+  ++ optional config.nix.distributedBuilds {
+    source = pkgs.writeText "nix.machines"
+      (pkgs.lib.concatStrings (map (machine:
+        "${machine.sshUser}@${machine.hostName} ${machine.system} ${machine.sshKey} ${toString machine.maxJobs}\n"
+      ) config.nix.buildMachines));
+    target = "nix.machines";
+  }
+    
   # Additional /etc files declared by Upstart jobs.
   ++ extraEtc;
   

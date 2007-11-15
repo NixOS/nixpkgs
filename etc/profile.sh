@@ -1,6 +1,5 @@
 export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export MODULE_DIR=@systemKernel@/lib/modules
-export NIX_CONF_DIR=/nix/etc/nix
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export PAGER=less
 export TZ=@timeZone@
@@ -25,6 +24,10 @@ if test "$USER" != root; then
 else
     export NIX_REMOTE=
 fi
+
+
+# Set up the environment variables for running Nix.
+@nixEnvVars@
 
 
 # Set up the per-user profile.
