@@ -210,7 +210,7 @@ rec {
 
   gnomedocutils = import ./gnome-doc-utils.nix {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser python
-      libxml2 libxslt gettext;
+      libxml2 libxslt gettext libxml2Python;
     input = desktop.gnomedocutils;
   };
 
