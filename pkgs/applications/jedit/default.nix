@@ -1,4 +1,3 @@
-args:
 args.stdenv.mkDerivation {
   name = "jedit-4.2";
 
@@ -14,6 +13,8 @@ args.stdenv.mkDerivation {
     ant dist
     ensureDir $out/lib
     cp jedit.jar $out/lib
+    ensureDir \$out/lib/modes
+    cp modes/catalog \$out/lib/modes
   ";
 
   buildInputs =(with args; [ant]);
