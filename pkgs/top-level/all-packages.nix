@@ -3090,6 +3090,11 @@ rec {
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
+ 
+  libsexy = import ../development/libraries/libsexy {
+    inherit stdenv fetchurl pkgconfig libxml2;
+    inherit (gtkLibs) glib gtk pango;
+  };
 
   librsvg = import ../development/libraries/librsvg {
     inherit fetchurl stdenv;
@@ -3521,7 +3526,7 @@ rec {
   };
 
   compiz = compizFun {
-    version = getConfig ["compiz" "version"] "0.5.0";
+    version = getConfig ["compiz" "version"] "0.6.2";
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   } null;
 
