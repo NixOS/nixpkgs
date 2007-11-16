@@ -1388,6 +1388,35 @@ root        ALL=(ALL) SETENV: ALL
 
   users = {
 
+    extraUsers = mkOption {
+      default = [];
+      example = [
+        { name = "alice";
+          uid = 1234;
+          description = "Alice";
+          home = "/home/alice";
+          createHome = true;
+          group = "users";
+          extraGroups = ["wheel"];
+        }
+      ];
+      description = "
+        Additional user accounts to be created automatically by the system.
+      ";
+    };
+
+    extraGroups = mkOption {
+      default = [];
+      example = [
+        { name = "students";
+          gid = 1001;
+        }
+      ];
+      description = "
+        Additional groups to be created automatically by the system.
+      ";
+    };
+
     ldap = {
 
       enable = mkOption {

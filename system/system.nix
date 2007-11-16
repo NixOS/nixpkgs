@@ -262,7 +262,7 @@ rec {
   };
 
 
-  usersGroups = import ./users-groups.nix { inherit pkgs upstartJobs defaultShell; };
+  usersGroups = import ./users-groups.nix { inherit pkgs config upstartJobs defaultShell; };
 
 
   defaultShell = "/var/run/current-system/sw/bin/bash";

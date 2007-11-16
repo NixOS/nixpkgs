@@ -26,6 +26,7 @@ cat "$1" | while true; do
     read extraGroups
     read home
     read shell
+    read createHome
 
     if ! curEnt=$(getent passwd "$name"); then
         echo "creating user $name..."
@@ -36,7 +37,8 @@ cat "$1" | while true; do
             --gid "$group" \
             --groups "$extraGroups" \
             --home "$home" \
-            --shell "$shell"
+            --shell "$shell" \
+            ${createHome:+--create-home}
     else
         echo "updating user $name..."
         oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"

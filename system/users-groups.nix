@@ -1,11 +1,11 @@
-{pkgs, upstartJobs, defaultShell}:
+{pkgs, config, upstartJobs, defaultShell}:
 
 let ids = import ./ids.nix; in
 
 rec {
 
-  # System user accounts.
-  systemUsers =
+  # User accounts to be created/updated by NixOS.
+  users =
     let
       jobUsers = pkgs.lib.concatLists (map (job: job.users) upstartJobs.jobs);
       
@@ -40,15 +40,17 @@ rec {
         , group ? "nogroup"
         , extraGroups ? []
         , home ? "/var/empty"
-        , shell ? "/noshell"
+        , shell ? (if useDefaultShell then defaultShell else "/noshell")
+        , createHome ? false
+        , useDefaultShell ? false
         }:
-        { inherit name description uid group extraGroups home shell; };
+        { inherit name description uid group extraGroups home shell createHome; };
 
-    in map addAttrs (defaultUsers ++ jobUsers ++ nixBuildUsers);
+    in map addAttrs (defaultUsers ++ jobUsers ++ nixBuildUsers ++ config.users.extraUsers);
 
 
-  # System groups.
-  systemGroups =
+  # Groups to be created/updated by NixOS.
+  groups =
     let
       jobGroups = pkgs.lib.concatLists (map (job: job.groups) upstartJobs.jobs);
 
@@ -75,12 +77,12 @@ rec {
         { name, gid ? "" }:
         { inherit name gid; };
 
-    in map addAttrs (defaultGroups ++ jobGroups);
+    in map addAttrs (defaultGroups ++ jobGroups ++ config.users.extraGroups);
 
 
   # Awful hackery necessary to pass the users/groups to the activation script.
   createUsersGroups = ../helpers/create-users-groups.sh;
-  usersList = pkgs.writeText "users" (pkgs.lib.concatStrings (map (u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString u.extraGroups}\n${u.home}\n${u.shell}\n") systemUsers));
-  groupsList = pkgs.writeText "groups" (pkgs.lib.concatStrings (map (g: "${g.name}\n${toString g.gid}\n") systemGroups));
+  usersList = pkgs.writeText "users" (pkgs.lib.concatStrings (map (u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString u.extraGroups}\n${u.home}\n${u.shell}\n${toString u.createHome}\n") users));
+  groupsList = pkgs.writeText "groups" (pkgs.lib.concatStrings (map (g: "${g.name}\n${toString g.gid}\n") groups));
     
 }
