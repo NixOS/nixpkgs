@@ -5,6 +5,8 @@
 
 assert langC;
 
+with import ../../../lib;
+
 stdenv.mkDerivation {
   name = "gcc-3.4.6";
   builder = ./builder.sh;
@@ -15,7 +17,22 @@ stdenv.mkDerivation {
 
   patches = if noSysDirs then [./no-sys-dirs.patch] else [];
 
-  inherit noSysDirs langC langCC langF77 profiledCompiler;
+  inherit noSysDirs profiledCompiler;
+
+  configureFlags = "
+    --disable-multilib
+    --with-system-zlib
+    --enable-languages=${
+      concatStrings (intersperse ","
+        (  optional langC   "c"
+        ++ optional langCC  "c++"
+        ++ optional langF77 "f77"
+        )
+      )
+    }
+  ";
+
+  passthru = { inherit langC langCC langF77; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";

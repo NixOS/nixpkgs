@@ -37,22 +37,10 @@ fi
 
 preConfigure=preConfigure
 preConfigure() {
-    
-    # Determine the frontends to build.
-    langs="c"
-    if test -n "$langCC"; then
-        langs="$langs,c++"
-    fi
-    if test -n "$langF77"; then
-        langs="$langs,f77"
-    fi
-
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
-
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs $configureFlags"
 }
 
 
