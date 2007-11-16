@@ -3809,6 +3809,11 @@ rec {
     inherit (gtkLibs) glib;
   };
 
+  jedit = import ../applications/jedit {
+    inherit fetchurl ant;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+  };
+
   joe = import ../applications/editors/joe {
     inherit stdenv fetchurl;
   };
