@@ -9,7 +9,7 @@ args.stdenv.mkDerivation {
 	};
 
   buildInputs =(with args; [zlib imagemagick libpng glib
-	pkgconfig libgsf libxml2]);
+	pkgconfig libgsf libxml2 bzip2]);
 
   meta = {
     description = "

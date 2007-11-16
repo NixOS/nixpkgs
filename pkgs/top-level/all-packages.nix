@@ -755,7 +755,7 @@ rec {
 
   wv = import ../tools/misc/wv {
     inherit fetchurl stdenv libpng zlib imagemagick
-	pkgconfig libgsf libxml2;
+	pkgconfig libgsf libxml2 bzip2;
     inherit (gtkLibs) glib;
   };
 
@@ -2057,7 +2057,7 @@ rec {
   };
 
   libwpd = import ../development/libraries/libwpd {
-    inherit fetchurl stdenv pkgconfig libgsf libxml2;
+    inherit fetchurl stdenv pkgconfig libgsf libxml2 bzip2;
     inherit (gnome) glib;
   };
 
