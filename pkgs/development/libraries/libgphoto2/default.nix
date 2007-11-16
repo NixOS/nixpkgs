@@ -1,14 +1,15 @@
-{stdenv, fetchurl, pkgconfig, libusb}:
+args: with args;
 
-stdenv.mkDerivation {
-  name = "libgphoto2-2.2.1";
+stdenv.mkDerivation rec {
+  name = "libgphoto2-2.4.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/gphoto/libgphoto2-2.2.1.tar.bz2;
-    md5 = "69827311733e39fafa9f77bb05e55b77";
+    url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
+    sha256 = "0yfvpgfly774jnjrfqjf89h99az3sgvzkfpb9diygpk8hmx6phhd";
   };
-  buildInputs = [pkgconfig libusb];
+  buildInputs = [pkgconfig libusb libtool libexif libjpeg gettext];
 
-  ## remove this patch when 2.2.2 is released
-  patches = [./libgphoto2-2.2.1.patch];
+  meta = {
+	  license = "LGPL-2";
+  };
 }

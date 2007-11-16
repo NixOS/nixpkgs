@@ -147,6 +147,13 @@ rec {
   getVersion = name: alts: builtins.getAttr
     (getConfig [ "environment" "versions" name ] "default") alts;
 
+  # The same, another syntax.
+  # Warning: syntax for configuration.nix changed too
+  useVersion = name: f: f
+  {
+	  version = getConfig [ "environment" "versions" name ];
+  };
+
   # Whether user enabled given feature for the given package?
   getFlag = flag: package: default:
   getConfig [ "environment" "flags" package flag ]
@@ -659,6 +666,11 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  shebangfix = import ../tools/misc/shebangfix {
+    inherit perl;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+  };
+
   smartmontools = import ../tools/system/smartmontools {
     inherit fetchurl stdenv;
   };
@@ -743,7 +755,7 @@ rec {
 
   wv = import ../tools/misc/wv {
     inherit fetchurl stdenv libpng zlib imagemagick
-	pkgconfig libgsf libxml2;
+	pkgconfig libgsf libxml2 bzip2;
     inherit (gtkLibs) glib;
   };
 
@@ -1063,13 +1075,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  ocaml = import ../development/compilers/ocaml {
-    inherit fetchurl stdenv x11 ncurses;
-  };
+  ocaml = getVersion  "ocaml" ocaml_alts;
 
-  ocaml3080 = import ../development/compilers/ocaml/ocaml-3.08.0.nix {
-    inherit fetchurl x11;
-    stdenv = overrideGCC stdenv gcc34;
+  ocaml_alts = import ../development/compilers/ocaml {
+    inherit fetchurl stdenv x11 ncurses stdenvUsingSetupNew2;
+	stdenv34 = overrideGCC stdenv gcc34;
   };
 
 /*
@@ -1096,7 +1106,7 @@ rec {
 
   qcmm = import ../development/compilers/qcmm {
     lua   = lua4;
-    ocaml = ocaml3080;
+    ocaml = ocaml_alts.v_3_08_0;
     inherit fetchurl stdenv mk noweb groff;
   };
 
@@ -1202,17 +1212,15 @@ rec {
   };
   */
 
-  python = import ../development/interpreters/python {
-    inherit fetchurl stdenv zlib bzip2;
-  };
+  python = getVersion "python" python_alts;
 
-  python25 = import ../development/interpreters/python/2.5 {
+  python_alts = import ../development/interpreters/python {
     inherit fetchurl stdenv zlib bzip2;
   };
 
   pyrexFun = lib.sumArgs (import ../development/interpreters/pyrex) {
   	inherit fetchurl stdenv stringsWithDeps lib builderDefs;
-	python = python25;
+	python = python_alts.v_2_5;
   };
 
   pyrex = pyrexFun {
@@ -1605,13 +1613,9 @@ rec {
     inherit fetchurl stdenv python;
   };
 
-  cluceneContrib = (import ../development/libraries/clucene-contrib) {
-    inherit fetchurl stdenv cluceneCore;
-   };
-
-   cluceneCore = (import ../development/libraries/clucene-core) {
-     inherit fetchurl stdenv;
-   };
+  cluceneCore = (import ../development/libraries/clucene-core) {
+    inherit fetchurl stdenv;
+  };
 
   coredumper = import ../development/libraries/coredumper {
     inherit fetchurl stdenv;
@@ -1679,6 +1683,13 @@ rec {
 
   expat = import ../development/libraries/expat {
     inherit fetchurl stdenv;
+  };
+
+  facile = import ../development/libraries/facile {
+	  inherit fetchurl;
+      # Actually, we don't need this version but we need native-code compilation
+	  ocaml = ocaml_alts.v_3_10_0;
+	  stdenv = stdenvUsingSetupNew2;
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
@@ -1939,7 +1950,7 @@ rec {
   };
 
   libexif = import ../development/libraries/libexif {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gettext;
   };
 
   libgcrypt = import ../development/libraries/libgcrypt {
@@ -1951,7 +1962,7 @@ rec {
   };
 
   libgphoto2 = import ../development/libraries/libgphoto2 {
-    inherit fetchurl stdenv pkgconfig libusb;
+    inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
@@ -1960,8 +1971,9 @@ rec {
   #};
 
   libgsf = import ../development/libraries/libgsf {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext;
-    inherit (gnome) glib;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2
+	python;
+    inherit (gnome) glib gnomevfs libbonobo;
   };
 
   libidn = import ../development/libraries/libidn {
@@ -2044,7 +2056,7 @@ rec {
   };
 
   libwpd = import ../development/libraries/libwpd {
-    inherit fetchurl stdenv pkgconfig libgsf libxml2;
+    inherit fetchurl stdenv pkgconfig libgsf libxml2 bzip2;
     inherit (gnome) glib;
   };
 
@@ -2145,7 +2157,7 @@ rec {
   };
 
   openssl = import ../development/libraries/openssl {
-    inherit fetchurl stdenv perl gmp;
+    inherit fetchurl stdenv perl;
   };
 
   pangoxsl = import ../development/libraries/pangoxsl {
@@ -2242,12 +2254,6 @@ rec {
 
   sqlite = import ../development/libraries/sqlite {
     inherit fetchurl stdenv;
-  };
-
-  strigi = import ../development/libraries/strigi {
-	  inherit stdenv fetchurl zlib cluceneCore cluceneContrib expat bzip2
-	  pkgconfig cmake dbus libxml2 perl;
-	  qt = qt4;
   };
 
   t1lib = import ../development/libraries/t1lib {
@@ -2409,6 +2415,11 @@ rec {
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
+  gtk2hs = import ../development/libraries/haskell/gtk2hs {
+    inherit pkgconfig stdenv fetchurl cairo;
+    inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
+    ghc = ghc661;
+  };
 
   uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
     inherit stdenv fetchurl ghc;
@@ -3078,6 +3089,11 @@ rec {
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
+ 
+  libsexy = import ../development/libraries/libsexy {
+    inherit stdenv fetchurl pkgconfig libxml2;
+    inherit (gtkLibs) glib gtk pango;
+  };
 
   librsvg = import ../development/libraries/librsvg {
     inherit fetchurl stdenv;
@@ -3126,6 +3142,11 @@ rec {
 
   libnscd = import ../os-specific/linux/libnscd {
     inherit fetchurl stdenv;
+  };
+
+  libnotify = import ../development/libraries/libnotify {
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib;
+    inherit (gtkLibs) gtk glib;
   };
 
   libvolume_id = import ../os-specific/linux/libvolume_id {
@@ -3509,7 +3530,7 @@ rec {
   };
 
   compiz = compizFun {
-    version = getConfig ["compiz" "version"] "0.5.0";
+    version = getConfig ["compiz" "version"] "0.6.2";
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   } null;
 
@@ -3578,11 +3599,9 @@ rec {
     inherit (xlibs) libX11;
   };
 
-  /*
-  djview4 = import ../applications/graphics/djview4 {
+  djview4 = import ../applications/graphics/djview {
     inherit fetchurl stdenv qt4 djvulibre;
   };
-  */
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
@@ -3598,7 +3617,7 @@ rec {
 
   elinks = import ../applications/networking/browsers/elinks {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
-	guile bzip2 libtool;
+	guile bzip2;
   };
 
   emacs = emacs22;
@@ -3720,7 +3739,7 @@ rec {
   } null;
 
   gphoto2 = import ../applications/misc/gphoto2 {
-    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt;
+    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
   };
 
   gqview = import ../applications/graphics/gqview {
@@ -3787,6 +3806,11 @@ rec {
   irssi = import ../applications/networking/irc/irssi {
     inherit stdenv fetchurl pkgconfig ncurses openssl;
     inherit (gtkLibs) glib;
+  };
+
+  jedit = import ../applications/jedit {
+    inherit fetchurl ant;
+    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
   };
 
   joe = import ../applications/editors/joe {
@@ -3961,7 +3985,7 @@ rec {
 
   pythonmagick = import ../applications/graphics/PythonMagick {
     inherit fetchurl stdenv pkgconfig imagemagick boost;
-    python = python25;
+    python = python_alts.v_2_5;
   };
 
   ratpoison = import ../applications/window-managers/ratpoison {
@@ -4344,71 +4368,28 @@ rec {
     qt = qt3;
   };
   
-  kdelibs4 = import ../desktops/kde-4/kdelibs {
+  kde4 = recurseIntoAttrs (import ../desktops/kde-4 {
     inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups;
-	inherit (xlibs)
-	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
-	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
-	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
-	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-	  libxkbfile;
+      fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
+      libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
+	  cppunit cyrus_sasl openldap enchant openexr exiv2 samba nss log4cxx aspell
+      shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
+	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
+	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
+	  openbabel ocaml facile;
+	stdenv = stdenvUsingSetupNew2;
+	cdparanoia = cdparanoiaIII;
+    inherit (xlibs)
+      inputproto kbproto scrnsaverproto xextproto xf86miscproto
+      xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
+      libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
+      libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
+      libxkbfile libXinerama;
+    inherit (gtkLibs) glib;
     qt = qt4;
-  };
-
-  kdepimlibs4 = import ../desktops/kde-4/kdepimlibs {
-    inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
-	  boost gpgme;
-	inherit (xlibs)
-	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
-	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
-	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
-	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-	  libxkbfile;
-    qt = qt4;
-	kdelibs = kdelibs4;
-  };
-
-  kdepim4 = import ../desktops/kde-4/kdepim {
-    inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool libusb
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
-	  mesa gpgme boost;
-	inherit (xlibs)
-	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
-	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
-	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
-	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-	  libxkbfile libXinerama;
-	inherit (gtkLibs) glib;
-    qt = qt4;
-	kdelibs = kdelibs4;
-	kdepimlibs = kdepimlibs4;
-  };
-
-  kdebase4 = import ../desktops/kde-4/kdebase {
-    inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool libusb
-	  expat freetype bzip2 cmake strigi shared_mime_info alsaLib libungif cups
-	  mesa;
-	inherit (xlibs)
-	  inputproto kbproto scrnsaverproto xextproto xf86miscproto
-	  xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
-	  libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
-	  libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-	  libxkbfile libXinerama;
-	inherit (gtkLibs) glib;
-    qt = qt4;
-	kdelibs = kdelibs4;
-	kdepimlibs = kdepimlibs4;
-  };
+	dbus = dbus_alts.withX11;
+	bison = bison23;
+  });
 
   kdebase = import ../desktops/kde/kdebase {
     inherit
@@ -4519,6 +4500,18 @@ rec {
     aterm = aterm242fixes;
     db4 = db45;
   };
+
+  nixCustomFun = src: preConfigure: configureFlags :
+  (import ../tools/package-management/nix/custom.nix {
+    inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
+        autoconf libtool configureFlags;
+    bison = bison23;
+    flex = flex2533;
+    aterm = aterm242fixes;
+    db4 = db45;
+    inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
+
+  });
 
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig;

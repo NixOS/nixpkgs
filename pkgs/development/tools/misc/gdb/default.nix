@@ -1,10 +1,10 @@
-{stdenv, fetchurl, ncurses}:
+args: with args;
 
-stdenv.mkDerivation {
-  name = "gdb-6.6";
+stdenv.mkDerivation rec {
+  name = "gdb-6.7.1";
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/gdb/gdb-6.6.tar.bz2;
-    md5 = "a4df41d28dd514d64e8ccbfe125fd9a6";
+    url = "mirror://gnu/gdb/${name}.tar.bz2";
+	sha256 = "0qig8j8hcqpqfhnnp685rzgj8v88bw2fc5igvbiiqkqg88wfr37r";
   };
   buildInputs = [ncurses];
 }

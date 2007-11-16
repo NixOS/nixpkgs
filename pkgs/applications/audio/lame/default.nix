@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lame-3.96.1";
+  name = "lame-3.97";
   src = fetchurl {
-    url = mirror://sourceforge/lame/lame-3.96.1.tar.gz ;
-    md5 = "e1206c46a5e276feca11a7149e2fc6ac" ;
+    url = mirror://sourceforge/lame/lame-3.97.tar.gz ;
+	sha256 = "05xy9lv6m9s013lzlvhxwvr1586c239xaiiwka52k18hs6k388qa";
   };
 }

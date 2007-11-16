@@ -1,12 +1,12 @@
-{stdenv, fetchurl}:
+args: with args;
 
-stdenv.mkDerivation {
-  name = "libexif-0.6.14";
+stdenv.mkDerivation rec {
+  name = "libexif-0.6.16";
 
   src = fetchurl {
-    url = mirror://sourceforge/libexif/libexif-0.6.14.tar.bz2;
-    sha256 = "0pza5ysvbvvliz7al2i8l3yai64w09xwc6ivy2v5cl7k43almz84";
+    url = "mirror://sourceforge/libexif/${name}.tar.bz2";
+    sha256 = "0hxc3aik3sn8xq4mbmxxb8ycx2lwffmhi5xvz0zjffhfwkaqas6v";
   };
 
-  patches = [./no-po.patch];
+  buildInputs = [gettext];
 }

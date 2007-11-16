@@ -1,16 +1,15 @@
 addCMakeParamsInclude()
 {
-	addToSearchPath CMAKE_INCLUDE_PATH /include "" $1
+	if [ -d $1/include ]; then
+		export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH}${CMAKE_INCLUDE_PATH:+:}$1/include"
+	fi
 }
 
 addCMakeParamsLibs()
 {
-	addToSearchPath CMAKE_LIBRARY_PATH /lib "" $1
-}
-
-addCMakeModulePath()
-{
-	addToSearchPath CMAKE_MODULE_PATH /share/cmake-2.4/Modules "" $1
+	if [ -d $1/lib ]; then
+		export CMAKE_LIBRARY_PATH="${CMAKE_LIBRARY_PATH}${CMAKE_LIBRARY_PATH:+:}$1/lib"
+	fi
 }
 
 fixCmakeFiles()
@@ -46,4 +45,4 @@ if [ -z "$noCmakeTewaks" ]; then
 	postUnpack="cmakePostUnpack${postUnpack:+; }${postUnpack}"
 fi;
 
-envHooks=(${envHooks[@]} addCMakeParamsInclude addCMakeParamsLibs addCMakeModulePath)
+envHooks=(${envHooks[@]} addCMakeParamsInclude addCMakeParamsLibs)

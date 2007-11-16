@@ -244,4 +244,8 @@ rec {
         (l + (if l=="" then "" else ".") + s) (builtins.getAttr s attrs)))
         (builtins.attrNames attrs)))));
 
+  innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
+	innerModifySumArgs f x (a // b);
+  modifySumArgs = f: x: innerModifySumArgs f x {};
+
 }

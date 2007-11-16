@@ -1,9 +1,16 @@
-{stdenv, fetchurl}:
+args: with args;
 
-stdenv.mkDerivation {
-  name = "chmlib-0.38";
+stdenv.mkDerivation rec {
+  name = "chmlib-0.39";
   src = fetchurl {
-    url = http://66.93.236.84/~jedwin/projects/chmlib/chmlib-0.38.tar.bz2;
-    md5 = "d72661526aaea377ed30e9f58a086964";
+    url = "${meta.homepage}/${name}.tar.bz2";
+	sha256 = "0hgzw121ffmk79wbpkd0394y5ah99c3i85z6scp958mmkr25sc6j";
+  };
+
+  meta = {
+	  homepage = http://www.jedrea.com/chmlib;
+	  license = "LGPL";
+	  description = "CHLIB is a library for dealing with Microsoft ITSS/CHM
+	  format files";
   };
 }
