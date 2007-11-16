@@ -3145,7 +3145,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  libnotify = import ../test/libnotify {
+  libnotify = import ../development/libraries/libnotify {
     inherit stdenv fetchurl pkgconfig dbus dbus_glib;
     inherit (gtkLibs) gtk glib;
   };
