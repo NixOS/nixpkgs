@@ -1,3 +1,4 @@
+args:
 args.stdenv.mkDerivation {
   name = "jedit-4.2";
 
