@@ -1951,7 +1951,7 @@ rec {
   };
 
   libexif = import ../development/libraries/libexif {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gettext;
   };
 
   libgcrypt = import ../development/libraries/libgcrypt {
@@ -1963,7 +1963,7 @@ rec {
   };
 
   libgphoto2 = import ../development/libraries/libgphoto2 {
-    inherit fetchurl stdenv pkgconfig libusb;
+    inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
@@ -3740,7 +3740,7 @@ rec {
   } null;
 
   gphoto2 = import ../applications/misc/gphoto2 {
-    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt;
+    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
   };
 
   gqview = import ../applications/graphics/gqview {
