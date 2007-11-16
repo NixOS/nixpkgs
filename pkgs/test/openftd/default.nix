@@ -27,8 +27,8 @@ Heb je geen mozilla, maar heb je wel de firebird/firefox variant geinstalleerd s
 
 { stdenv, fetchurl
 , zlib, libxml2, libxslt, firefox, openssl, curl
-, glib, gtk, libgnomeui
-, pkgconfig, dbus_glib, realCurl, pcre, libsexy, gtkspell
+, glib, gtk, libgnomeui, libgtkhtml
+, pkgconfig, dbus_glib, realCurl, pcre, libsexy, gtkspell, libnotify
 }:
  
 stdenv.mkDerivation {
@@ -42,8 +42,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     zlib libxml2 libxslt firefox openssl curl
-    glib gtk pkgconfig dbus_glib realCurl pcre libsexy libgnomeui gtkspell
+    glib gtk pkgconfig dbus_glib realCurl pcre libsexy libgnomeui gtkspell libnotify libgtkhtml
   ];
 
-  configureFlags="--with-libcurl-libraries=${curl}/lib --with-libcurl-headers=${curl}/include --with-pcre_libraries=${pcre}/lib --with-pcre_headers=${pcre}/include --without-libnotify";  
+  configureFlags="--with-libcurl-libraries=${curl}/lib --with-libcurl-headers=${curl}/include --with-pcre_libraries=${pcre}/lib --with-pcre_headers=${pcre}/include";  
 }
