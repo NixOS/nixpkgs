@@ -3145,6 +3145,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libnotify = import ../test/libnotify {
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib;
+    inherit (gtkLibs) gtk glib;
+  };
+
   libvolume_id = import ../os-specific/linux/libvolume_id {
     inherit fetchurl stdenv;
   };
