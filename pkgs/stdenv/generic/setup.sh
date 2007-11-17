@@ -2,6 +2,31 @@ set -e
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
+if [ -z ${system##*cygwin*} ]; then
+  PATH_DELIMITER=';'
+else
+  PATH_DELIMITER=':'
+fi
+
+addToSearchPathWithCustomDelimiter() {
+	local delimiter=$1
+	local varName=$2
+	local needDir=$3
+	local addDir=${4:-$needDir}
+	local prefix=$5
+	if [ -d $prefix$needDir ]; then
+		if [ -z ${!varName} ]; then
+			eval export ${varName}=${prefix}$addDir
+		else
+			eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
+		fi
+	fi
+}
+
+addToSearchPath()
+{
+	addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+}
 
 # Set up the initial path.
 PATH=
@@ -39,7 +64,7 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
     source $NIX_GCC/nix-support/setup-hook
 fi
 
-    
+
 # Ensure that the given directories exists.
 ensureDir() {
     local dir
@@ -48,6 +73,17 @@ ensureDir() {
     done
 }
 
+installBin() {
+  ensureDir $out/bin
+  cp "$@" $out/bin
+}
+
+assertEnvExists(){
+  if test -z "${!1}"; then
+      msg=${2:-error: assertion failed: env var $1 is required}
+      echo $msg >&2; exit 1
+  fi
+}
 
 # Called when some build action fails.  If $succeedOnFailure is set,
 # create the file `$out/nix-support/failed' to signal failure, and
@@ -80,13 +116,13 @@ findInputs()
             return 0
             ;;
     esac
-    
+
     pkgs="$pkgs $pkg "
 
     if test -f $pkg/nix-support/setup-hook; then
         source $pkg/nix-support/setup-hook
     fi
-    
+
     if test -f $pkg/nix-support/propagated-build-inputs; then
         for i in $(cat $pkg/nix-support/propagated-build-inputs); do
             findInputs $i
@@ -141,20 +177,15 @@ if test -z "$NIX_STRIP_DEBUG"; then
 fi
 
 
-# Do we know where the store is?  This is required for purity checking.
-if test -z "$NIX_STORE"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_STORE variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_STORE \
+    "Error: you have an old version of Nix that does not set the
+     NIX_STORE variable. This is required for purity checking.
+     Please upgrade."
 
-
-# We also need to know the root of the build directory for purity checking.
-if test -z "$NIX_BUILD_TOP"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_BUILD_TOP variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_BUILD_TOP \
+    "Error: you have an old version of Nix that does not set the
+     NIX_BUILD_TOP variable. This is required for purity checking.
+     Please upgrade."
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -185,9 +216,38 @@ if test "$NIX_DEBUG" = "1"; then
     echo "Final path: $PATH"
 fi
 
+stripDirs() {
+	local dirs="$1"
+	local stripFlags="$2"
+	local dirsNew=
+
+	for d in ${dirs}; do
+		if test -d "$prefix/$d"; then
+			dirsNew="${dirsNew} $prefix/$d "
+		fi
+	done
+	dirs=${dirsNew}
+
+	if test -n "${dirs}"; then
+		echo $dirs
+		find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+	fi
+}
 
 ######################################################################
 # Textual substitution functions.
+
+
+# Some disgusting hackery to escape replacements in Sed substitutions.
+# We should really have a tool that replaces literal values by other
+# literal values, without any need for escaping.
+escapeSed() {
+    local s="$1"
+    # The `tr' hack is to escape newlines.  Sed handles newlines very
+    # badly, so we just replace newlines with the magic character 0xff
+    # (377 octal).  So don't use that character in replacements :-P
+    echo -n "$1" | tr '\012' '\377' | sed -e 's^\\^\\\\^g' -e 's^\xff^\\n^g' -e 's/\^/\\^/g' -e 's/&/\\&/g'
+}
 
 
 substitute() {
@@ -201,31 +261,32 @@ substitute() {
     touch $sedScript
 
     local n p pattern replacement varName
-    
+
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
         if test "$p" = "--replace"; then
-            pattern=${params[$((n + 1))]}
-            replacement=${params[$((n + 2))]}
+            pattern="${params[$((n + 1))]}"
+            replacement="${params[$((n + 2))]}"
             n=$((n + 2))
-            echo "s^$pattern^$replacement^g" >> $sedScript
-            sedArgs=("${sedArgs[@]}" "-e" )
         fi
 
         if test "$p" = "--subst-var"; then
-            varName=${params[$((n + 1))]}
+            varName="${params[$((n + 1))]}"
+            pattern="@$varName@"
+            replacement="${!varName}"
             n=$((n + 1))
-            echo "s^@${varName}@^${!varName}^g" >> $sedScript
         fi
 
         if test "$p" = "--subst-var-by"; then
-            varName=${params[$((n + 1))]}
-            replacement=${params[$((n + 2))]}
+            pattern="@${params[$((n + 1))]}@"
+            replacement="${params[$((n + 2))]}"
             n=$((n + 2))
-            echo "s^@${varName}@^$replacement^g" >> $sedScript
         fi
 
+        replacement="$(escapeSed "$replacement")"
+
+        echo "s^$pattern^$replacement^g" >> $sedScript
     done
 
     sed -f $sedScript < "$input" > "$output".tmp
@@ -246,7 +307,7 @@ substituteInPlace() {
 substituteAll() {
     local input="$1"
     local output="$2"
-    
+
     # Select all environment variables that start with a lowercase character.
     for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
         if test "$NIX_DEBUG" = "1"; then
@@ -256,7 +317,7 @@ substituteAll() {
     done
 
     substitute "$input" "$output" $args
-}  
+}
 
 
 ######################################################################
@@ -476,11 +537,13 @@ unpackW() {
 
 
 unpackPhase() {
+    sourceRoot=. # don't change to user dir homeless shelter if custom unpackSource does'nt set sourceRoot
     header "unpacking sources"
     startLog "unpack"
     unpackW
     stopLog
     stopNest
+    cd $sourceRoot
 }
 
 
@@ -551,7 +614,7 @@ configureW() {
     fi
 
     if test -z "$dontAddPrefix"; then
-        configureFlags="--prefix=$prefix $configureFlags"
+        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
@@ -577,7 +640,7 @@ buildW() {
     fi
 
     eval "$preBuild"
-    
+
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make \
         $makeFlags "${makeFlagsArray[@]}" \
@@ -688,9 +751,33 @@ fixupW() {
 
     eval "$preFixup"
 
-    if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find "$prefix" -name "*.a" -exec echo stripping {} \; \
-            -exec strip -S {} \; || fail
+ 	forceShare=${forceShare:=man doc info}
+ 	if test -n "$forceShare"; then
+ 		for d in $forceShare; do
+ 			if test -d "$prefix/$d"; then
+ 				if test -d "$prefix/share/$d"; then
+ 					echo "Both $d/ and share/$d/ exists!"
+ 				else
+					echo Fixing location of $d/ subdirectory
+ 					ensureDir $prefix/share
+					if test -w $prefix/share; then
+	 					mv -v $prefix/$d $prefix/share
+ 						ln -sv share/$d $prefix
+					fi
+ 				fi
+			else
+				echo "No $d/ subdirectory, skipping."
+ 			fi
+ 		done;
+ 	fi
+
+
+# TODO : strip _only_ ELF executables, and return || fail here...
+    if test -z "$dontStrip"; then
+		echo "Stripping debuging symbols from files in"
+		stripDirs "${stripDebugList:-lib}" -S
+		echo "Stripping all symbols from files in"
+		stripDirs "${stripAllList:-bin sbin}" -s
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
@@ -701,6 +788,11 @@ fixupW() {
         ensureDir "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
+
+	if test -n "$setupHook"; then
+		ensureDir "$out/nix-support"
+		substituteAll "$setupHook" "$out/nix-support/setup-hook"
+	fi
 
     eval "$postFixup"
 }
@@ -725,7 +817,7 @@ distW() {
     fi
 
     eval "$preDist"
-    
+
     if test -z "$distTarget"; then
         distTarget="dist"
     fi
@@ -769,11 +861,8 @@ genericBuild() {
         return
     fi
 
-    unpackPhase
-    cd $sourceRoot
-
     if test -z "$phases"; then
-        phases="patchPhase configurePhase buildPhase checkPhase \
+        phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
             installPhase fixupPhase distPhase";
     fi
 
@@ -781,7 +870,7 @@ genericBuild() {
         dumpVars
         eval "$i"
     done
-    
+
     stopNest
 }
 
