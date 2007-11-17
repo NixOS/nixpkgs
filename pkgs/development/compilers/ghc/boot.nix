@@ -16,5 +16,6 @@ stdenv.mkDerivation {
         });             
   buildInputs = [perl];
   propagatedBuildInputs = [readline ncurses gmp];
+  dontStrip = 1;
   inherit readline ncurses gmp;
 }

@@ -1,24 +1,27 @@
-{stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
+args: with args;
 
 stdenv.mkDerivation (rec {
-  name = "ghc-6.8.0.20071018";
+  name = "ghc-6.8.1";
   homepage = "http://www.haskell.org/ghc";
 
   src = map fetchurl [
     { url = "${homepage}/dist/stable/dist/${name}-src.tar.bz2";
-      md5 = "7e61bd2a55c2d6ed5a6d996d19d3f6bf";
+      sha256 = "16gr19bwyjv0fmjdrsj79vqpaxxg5hasni94nwv9d6c85n5myivz";
     }
     { url = "${homepage}/dist/stable/dist/${name}-src-extralibs.tar.bz2";
-      md5 = "7b155c1d1e7daa492cc2161b3828a377";
+      sha256 = "1h3nc6x4g838mdcirymadmv3fsmp1wh062syb3a8aqv6f468akvm";
     }
   ];
 
-  buildInputs = [ghc readline perl m4];
+  buildInputs = [ghc readline perl m4 pkgconfig gtk];
+  patchPhase = "
+  sed -e s@/bin/cat@\$(type -p cat)@ -i configure
+  ";
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "The Glasgow Haskell Compiler v6.8 (snapshot)";
+    description = "The Glasgow Haskell Compiler v6.8.1";
   };
 
   postInstall = "
@@ -29,7 +32,7 @@ stdenv.mkDerivation (rec {
     cat $setupHook    >> $out/nix-support/setup-hook
   ";
 
-  configureFlags="--with-gmp-libraries=$gmp/lib --with-readline-libraries=\"$readline/lib\"";
+  #configureFlags="--with-gmp-libraries=${gmp}/lib --with-readline-libraries=${readline}/lib";
 
   # the presence of this file makes Cabal cry for happy while generating makefiles ...
   preConfigure = "
@@ -37,5 +40,5 @@ stdenv.mkDerivation (rec {
     rm libraries/haskell-src/Language/Haskell/Parser.ly
   ";
 
-  inherit readline gmp ncurses;
+  dontStrip = 1;
 })
