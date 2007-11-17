@@ -9,23 +9,23 @@ else
 fi
 
 addToSearchPathWithCustomDelimiter() {
-	local delimiter=$1
-	local varName=$2
-	local needDir=$3
-	local addDir=${4:-$needDir}
-	local prefix=$5
-	if [ -d $prefix$needDir ]; then
-		if [ -z ${!varName} ]; then
-			eval export ${varName}=${prefix}$addDir
-		else
-			eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
-		fi
-	fi
+    local delimiter=$1
+    local varName=$2
+    local needDir=$3
+    local addDir=${4:-$needDir}
+    local prefix=$5
+    if [ -d $prefix$needDir ]; then
+        if [ -z ${!varName} ]; then
+            eval export ${varName}=${prefix}$addDir
+        else
+            eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
+        fi
+    fi
 }
 
 addToSearchPath()
 {
-	addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
 # Set up the initial path.
@@ -217,21 +217,21 @@ if test "$NIX_DEBUG" = "1"; then
 fi
 
 stripDirs() {
-	local dirs="$1"
-	local stripFlags="$2"
-	local dirsNew=
+    local dirs="$1"
+    local stripFlags="$2"
+    local dirsNew=
 
-	for d in ${dirs}; do
-		if test -d "$prefix/$d"; then
-			dirsNew="${dirsNew} $prefix/$d "
-		fi
-	done
-	dirs=${dirsNew}
+    for d in ${dirs}; do
+        if test -d "$prefix/$d"; then
+            dirsNew="${dirsNew} $prefix/$d "
+        fi
+    done
+    dirs=${dirsNew}
 
-	if test -n "${dirs}"; then
-		echo $dirs
-		find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
-	fi
+    if test -n "${dirs}"; then
+        echo $dirs
+        find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+    fi
 }
 
 ######################################################################
@@ -751,33 +751,33 @@ fixupW() {
 
     eval "$preFixup"
 
- 	forceShare=${forceShare:=man doc info}
- 	if test -n "$forceShare"; then
- 		for d in $forceShare; do
- 			if test -d "$prefix/$d"; then
- 				if test -d "$prefix/share/$d"; then
- 					echo "Both $d/ and share/$d/ exists!"
- 				else
-					echo Fixing location of $d/ subdirectory
- 					ensureDir $prefix/share
-					if test -w $prefix/share; then
-	 					mv -v $prefix/$d $prefix/share
- 						ln -sv share/$d $prefix
-					fi
- 				fi
-			else
-				echo "No $d/ subdirectory, skipping."
- 			fi
- 		done;
- 	fi
+     forceShare=${forceShare:=man doc info}
+     if test -n "$forceShare"; then
+         for d in $forceShare; do
+             if test -d "$prefix/$d"; then
+                 if test -d "$prefix/share/$d"; then
+                     echo "Both $d/ and share/$d/ exists!"
+                 else
+                    echo Fixing location of $d/ subdirectory
+                     ensureDir $prefix/share
+                    if test -w $prefix/share; then
+                         mv -v $prefix/$d $prefix/share
+                         ln -sv share/$d $prefix
+                    fi
+                 fi
+            else
+                echo "No $d/ subdirectory, skipping."
+             fi
+         done;
+     fi
 
 
 # TODO : strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-		echo "Stripping debuging symbols from files in"
-		stripDirs "${stripDebugList:-lib}" -S
-		echo "Stripping all symbols from files in"
-		stripDirs "${stripAllList:-bin sbin}" -s
+        echo "Stripping debuging symbols from files in"
+        stripDirs "${stripDebugList:-lib}" -S
+        echo "Stripping all symbols from files in"
+        stripDirs "${stripAllList:-bin sbin}" -s
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
@@ -789,10 +789,10 @@ fixupW() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-	if test -n "$setupHook"; then
-		ensureDir "$out/nix-support"
-		substituteAll "$setupHook" "$out/nix-support/setup-hook"
-	fi
+    if test -n "$setupHook"; then
+        ensureDir "$out/nix-support"
+        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+    fi
 
     eval "$postFixup"
 }
