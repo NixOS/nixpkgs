@@ -297,7 +297,7 @@ rec {
   stdenvNewSetupScript = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
-    stdenv = stdenvNewSetupScript;
+    inherit stdenv;
   };
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
@@ -667,8 +667,7 @@ rec {
   };
 
   shebangfix = import ../tools/misc/shebangfix {
-    inherit perl;
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+    inherit perl stdenv;
   };
 
   smartmontools = import ../tools/system/smartmontools {
@@ -939,23 +938,20 @@ rec {
 
   # This new ghc stuff is under heavy development and might change ! 
 
-  # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
   ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
   ghcsAndLibs = recurseIntoAttrs (import ../development/compilers/ghcs {
-      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline;
+      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline stdenv;
       inherit ghcPkgUtil;
-      stdenv = stdenvUsingSetupNew2;
       lib = lib_unstable;
   });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
   createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
         import ../development/compilers/ghc/createGhcWrapper {
-    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil;
-    stdenv = stdenvUsingSetupNew2;
+    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil stdenv;
   };
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
@@ -1078,7 +1074,7 @@ rec {
   ocaml = getVersion  "ocaml" ocaml_alts;
 
   ocaml_alts = import ../development/compilers/ocaml {
-    inherit fetchurl stdenv x11 ncurses stdenvUsingSetupNew2;
+    inherit fetchurl stdenv x11 ncurses;
 	stdenv34 = overrideGCC stdenv gcc34;
   };
 
@@ -1204,9 +1200,8 @@ rec {
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
   /*
   php_unstable = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration;
+   inherit mkDerivationByConfiguration stdenv;
    lib = lib_unstable;
-   stdenv = stdenvUsingSetupNew2;
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
   };
@@ -1686,10 +1681,9 @@ rec {
   };
 
   facile = import ../development/libraries/facile {
-	  inherit fetchurl;
+	  inherit fetchurl stdenv;
       # Actually, we don't need this version but we need native-code compilation
 	  ocaml = ocaml_alts.v_3_10_0;
-	  stdenv = stdenvUsingSetupNew2;
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
@@ -2194,12 +2188,11 @@ rec {
   qt4 = getVersion "qt4" qt4_alts;
   qt4_alts = import ../development/libraries/qt-4 {
 	inherit fetchurl fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
-	  fontconfig freetype pkgconfig libtiff;
+	  fontconfig freetype pkgconfig libtiff stdenv;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
 	  libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
 	  inputproto fixesproto libXfixes;
     inherit (gnome) glib;
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
     openglSupport = mesaSupported;
     mysqlSupport = true;
   };
@@ -3809,8 +3802,7 @@ rec {
   };
 
   jedit = import ../applications/jedit {
-    inherit fetchurl ant;
-    stdenv = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+    inherit fetchurl ant stdenv;
   };
 
   joe = import ../applications/editors/joe {
@@ -4376,8 +4368,7 @@ rec {
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
 	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
-	  openbabel ocaml facile;
-	stdenv = stdenvUsingSetupNew2;
+	  openbabel ocaml facile stdenv;
 	cdparanoia = cdparanoiaIII;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto
