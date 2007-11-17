@@ -1,8 +1,7 @@
 args:
-rec {
-	recurseForDerivations = true;
-	default = v_0_14_6;
-	v_0_14_6 = (import ./0.14.6.nix) args;
-	v_0_15 = (import ./0.15.nix) args;
-	v_0_16_x = (import ./0.16.x.nix) args;
-}
+builtins.listToAttrs [
+	{ name = "recurseForDerivations"; value = true; }
+	{ name = "0.14.6"; value = (import ./0.14.6.nix) args; }
+	{ name = "0.15"; value = (import ./0.15.nix) args; }
+	{ name = "0.16.x"; value = (import ./0.16.x.nix) args; }
+]
