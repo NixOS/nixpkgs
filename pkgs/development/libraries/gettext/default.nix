@@ -1,5 +1,5 @@
 args:
-args.lib.listOfListsToAttrs [
+args.stdenv.lib.listOfListsToAttrs [
 	[ "recurseForDerivations" true ]
 	[ "0.14.6" (import ./0.14.6.nix args) ]
 	[ "0.15" (import ./0.15.nix args) ]
