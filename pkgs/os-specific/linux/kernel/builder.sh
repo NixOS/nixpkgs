@@ -66,6 +66,7 @@ installPhase() {
         cp arch/$arch/boot/bzImage $out/vmlinuz
     fi
 
+	sed -e '/-b $(INSTALL_MOD_PATH)/d' -i Makefile
     # Install the modules in $out/lib/modules with matching paths
     # in modules.dep (i.e., refererring to $out/lib/modules, not
     # /lib/modules).  The depmod_opts= is to prevent the kernel
@@ -95,7 +96,7 @@ installPhase() {
     if test "$arch" != um; then
         # copy all Makefiles and Kconfig files
         ln -s $out/lib/modules/$version/build $out/lib/modules/$version/source
-        cp --parents `find  -type f -name Makefile -o -name "Kconfig*"` $out/lib/modules/$version/build
+        cp --parents `find  -type f -name Makefile-\* -o -name "Kconfig*"` $out/lib/modules/$version/build
         cp Module.symvers $out/lib/modules/$version/build
 
         # weed out unneeded stuff
