@@ -2956,7 +2956,7 @@ rec {
 
   kernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
 	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
-	kernel_2_6_23 else kernel);
+	kernel_2_6_23 else kernel_2_6_21);
 
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
