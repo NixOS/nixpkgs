@@ -8,6 +8,7 @@ let
 in
 
 rec {
+  listOfListsToAttrs = ll : builtins.listToAttrs (map (l : { name = (head l); value = (head (tail l)); }) ll);
 
   innerSumArgs = f : x : y : (if y == null then (f x)
 	else (innerSumArgs f (x // y)));
