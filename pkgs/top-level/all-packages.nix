@@ -2952,9 +2952,9 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_21;
+  systemKernel = kernel;
 
-  systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
+  kernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
 	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
 	kernel_2_6_23 else kernel);
 
@@ -3078,11 +3078,12 @@ rec {
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
       }
-    ];
+    ] ++ getConfig ["kernel" "extraPatches"] [];
     extraConfig =
       lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
+	kernelConfig = getConfig ["kernel" "configFile"] null;
   };
 
 
@@ -3112,8 +3113,7 @@ rec {
   };
 
   klibc = import ../os-specific/linux/klibc {
-    inherit fetchurl stdenv perl bison mktemp;
-	kernel = systemKernel;
+    inherit fetchurl stdenv perl bison mktemp kernel;
   };
 
   kvm = kvm49;
