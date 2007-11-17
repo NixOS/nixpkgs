@@ -244,8 +244,6 @@ rec {
         }
       else defaultStdenv;
 
-  stdenvUsingSetupNew2 = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
-
   ### BUILD SUPPORT
 
 
@@ -294,7 +292,7 @@ rec {
 
   writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
   
-  stdenvNewSetupScript = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+  stdenvNewSetupScript = stdenv;
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
