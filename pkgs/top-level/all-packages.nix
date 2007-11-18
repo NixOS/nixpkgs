@@ -2818,6 +2818,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  bridge_utils = import ../os-specific/linux/bridge_utils {
+    inherit fetchurl stdenv autoconf automake;
+  };
+
   alsaUtils = import ../os-specific/linux/alsa/utils {
     inherit fetchurl stdenv alsaLib ncurses gettext;
   };
@@ -2953,7 +2957,7 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_21;
+  kernel = kernel_2_6_23;
 
   systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
 	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
@@ -3111,6 +3115,19 @@ rec {
     kernelPatches = [
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
+      }
+      { # resume with resume=swap:/dev/xx
+        name = "tux on ice"; # (swsusp2)
+        patch = fetchurl {
+          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc2-for-2.6.23.1.patch.bz2";
+          sha256 = "ef86267b6f3d7e309221f5173a881afae1dfa57418be5b3963f2380b0633ca1a";
+        };
+        extraConfig = "
+          CONFIG_SUSPEND2=y
+          CONFIG_SUSPEND2_FILE=y
+          CONFIG_SUSPEND2_SWAP=y
+          CONFIG_CRYPTO_LZF=y
+        ";
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
