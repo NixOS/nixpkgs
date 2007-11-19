@@ -154,13 +154,6 @@ rec {
 	  version = getConfig [ "environment" "versions" name ];
   };
 
-  # The same, another syntax.
-  # Warning: syntax for configuration.nix changed too
-  useVersion = name: f: f
-  {
-	  version = getConfig [ "environment" "versions" name ];
-  };
-
   # Whether user enabled given feature for the given package?
   getFlag = flag: package: default:
   getConfig [ "environment" "flags" package flag ]
