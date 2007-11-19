@@ -15,8 +15,8 @@ let
     ./commands.cfg
   ] ++ config.services.nagios.objectDefs;
 
-  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {}
-    "ensureDir $out; ln -s ${toString nagiosObjectDefs} $out/";
+  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
+    "ensureDir $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile = pkgs.writeText "nagios.cfg" "
   
