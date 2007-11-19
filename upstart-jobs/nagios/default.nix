@@ -58,6 +58,16 @@ in
     }
   ];
 
+  extraPath = [pkgs.nagios];
+
+  # This isn't needed, it's just so that the user can type "nagiostats
+  # -c /etc/nagios.cfg".
+  extraEtc = [
+    { source = nagiosCfgFile;
+      target = "nagios.cfg";
+    }
+  ];
+
   # Run `nagios -v' to check the validity of the configuration file so
   # that a nixos-rebuild fails *before* we kill the running Nagios
   # daemon.
