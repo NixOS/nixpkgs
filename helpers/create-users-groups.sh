@@ -11,7 +11,7 @@ cat "$2" | while true; do
         echo "updating group $name..."
         oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
         prevGid=$3
-        if test "$prevGid" != "$gid"; then
+        if test -n "$gid" -a "$prevGid" != "$gid"; then
             groupmod "$name" --gid $gid
         fi
     fi
