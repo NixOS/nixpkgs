@@ -922,8 +922,6 @@ rec {
     profiledCompiler = false;
   });
 
-  gcc41NPTL = wrapGCCWithGlibc gcc41.gcc glibcNPTL;
-
   gcc42 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
@@ -1745,14 +1743,10 @@ rec {
   };
 
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
-    (import ../development/libraries/glibc {
+    (import ../development/libraries/glibc-2.5 {
       inherit fetchurl stdenv kernelHeaders;
       #installLocales = false;
     });
-
-  glibcNPTL = import ../development/libraries/glibc-nptl {
-    inherit fetchurl stdenv kernelHeaders;
-  };
 
   glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
@@ -2912,15 +2906,13 @@ rec {
     inherit fetchurl stdenv bison flex;
   };
 
-  kernelHeaders = import ../os-specific/linux/kernel-headers {
+  kernelHeaders = kernelHeaders_2_6_23;
+
+  kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.1.nix {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.3.nix {
-    inherit fetchurl stdenv;
-  };
-
-  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.1.nix {
+  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.8.nix {
     inherit fetchurl stdenv;
   };
 
@@ -3436,12 +3428,11 @@ rec {
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl libogg libvorbis libsndfile libmad 
-	pkgconfig gettext;
-	inherit (gtkLibs) gtk glib;
-	wxGTK = wxGTK28deps;
-    stdenv = overrideGCC stdenv gcc41NPTL;
-	inherit builderDefs stringsWithDeps;
+    inherit fetchurl stdenv libogg libvorbis libsndfile libmad 
+      pkgconfig gettext;
+    inherit (gtkLibs) gtk glib;
+    wxGTK = wxGTK28deps;
+    inherit builderDefs stringsWithDeps;
   };
 
   batik = import ../applications/graphics/batik {
@@ -4574,8 +4565,7 @@ rec {
   };
 
   wine = import ../misc/emulators/wine {
-    stdenv = overrideGCC stdenv gcc41NPTL;
-    inherit fetchurl flex bison mesa ncurses
+    inherit fetchurl stdenv flex bison mesa ncurses
       libpng libjpeg alsaLib lcms xlibs freetype
       fontconfig fontforge;
   };
