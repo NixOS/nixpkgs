@@ -154,6 +154,13 @@ rec {
 	  version = getConfig [ "environment" "versions" name ];
   };
 
+  # The same, another syntax.
+  # Warning: syntax for configuration.nix changed too
+  useVersion = name: f: f
+  {
+	  version = getConfig [ "environment" "versions" name ];
+  };
+
   # Whether user enabled given feature for the given package?
   getFlag = flag: package: default:
   getConfig [ "environment" "flags" package flag ]
@@ -2803,6 +2810,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  bridge_utils = import ../os-specific/linux/bridge_utils {
+    inherit fetchurl stdenv autoconf automake;
+  };
+
   alsaUtils = import ../os-specific/linux/alsa/utils {
     inherit fetchurl stdenv alsaLib ncurses gettext;
   };
@@ -3011,14 +3022,16 @@ rec {
   kernel_2_6_22 = import ../os-specific/linux/kernel/linux-2.6.22.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
-      /*{ name = "ext3cow";
-        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
+      /*
+      { name = "ext3cow";
+        patch = ../os-specific/linux/kernel/linux-2.6.21.7-ext3cow_wouter.patch;
         extraConfig =
         "CONFIG_EXT3COW_FS=m\n" +
         "CONFIG_EXT3COW_FS_XATTR=y\n" +
         "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
         "CONFIG_EXT3COW_FS_SECURITY=y\n";
-      }*/
+      }
+      */
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
       }
@@ -3049,11 +3062,62 @@ rec {
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
+  kernel_2_6_21_ck = import ../os-specific/linux/kernel/linux-2.6.21_ck.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "ext3cow";
+        patch = ../os-specific/linux/kernel/linux-2.6.21.7-ext3cow_wouter.patch;
+        extraConfig =
+        "CONFIG_EXT3COW_FS=m\n" +
+        "CONFIG_EXT3COW_FS_XATTR=y\n" +
+        "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
+        "CONFIG_EXT3COW_FS_SECURITY=y\n";
+      }
+      { name = "Con Kolivas Patch";
+        patch = ../os-specific/linux/kernel/patch-2.6.21-ck1;
+      }
+      { name = "paravirt-nvidia";
+        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
+      }
+      { name = "skas-2.6.20-v9-pre9";
+        patch = fetchurl {
+          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
+          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
+        };
+        extraConfig =
+          "CONFIG_PROC_MM=y\n" +
+          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
+      }
+      { name = "fbsplash-0.9.2-r5-2.6.21";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
+          sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
+        };
+        extraConfig = "CONFIG_FB_SPLASH=y";
+      }
+    ];
+  };
+
+
+
   kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "paravirt-nvidia";
         patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
+      }
+      { # resume with resume=swap:/dev/xx
+        name = "tux on ice"; # (swsusp2)
+        patch = fetchurl {
+          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc2-for-2.6.23.1.patch.bz2";
+          sha256 = "ef86267b6f3d7e309221f5173a881afae1dfa57418be5b3963f2380b0633ca1a";
+        };
+        extraConfig = "
+          CONFIG_SUSPEND2=y
+          CONFIG_SUSPEND2_FILE=y
+          CONFIG_SUSPEND2_SWAP=y
+          CONFIG_CRYPTO_LZF=y
+        ";
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
