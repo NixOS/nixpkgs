@@ -4583,6 +4583,10 @@ rec {
     inherit fetchurl stdenv fuse pkgconfig;
   };
 
+  ntfprogs = import ../misc/ntfsprogs {
+    inherit fetchurl stdenv;
+  };
+
   pgf = import ../misc/tex/pgf {
     inherit fetchurl stdenv;
   };
