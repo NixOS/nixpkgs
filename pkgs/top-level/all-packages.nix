@@ -1192,25 +1192,24 @@ rec {
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
-  php = import ../development/interpreters/php {
-    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
-    unixODBC =
-      if stdenv.isDarwin then null else unixODBC;
-  };
+  #php = import ../development/interpreters/php {
+    #inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
+    #unixODBC =
+      #if stdenv.isDarwin then null else unixODBC;
+  #};
 
   # FIXME somehow somewhen: We need to recompile php if the ini file changes because the only way to
   # tell the apache module where to look for this file is using a compile time flag ;-(
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
-  /*
-  php_unstable = (import ../development/interpreters/php_configurable) {
+  php = (import ../development/interpreters/php_configurable) {
    inherit mkDerivationByConfiguration;
    lib = lib_unstable;
    stdenv = stdenvUsingSetupNew2;
-   inherit fetchurl flex bison apacheHttpd mysql; # gettext;
+   inherit fetchurl flex bison apacheHttpd; # gettext;
+   mysql = mysql5;
    inherit libxml2;
   };
-  */
 
   python = getVersion "python" python_alts;
 
@@ -2810,9 +2809,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  #nfsUtils = import ../os-specific/linux/nfs-utils {
-  #  inherit fetchurl stdenv;
-  #};
+  /*
+  nfsUtils = import ../os-specific/linux/nfs-utils {
+   inherit fetchurl stdenv kernelHeaders tcp_wrapper;
+  };
+  */
 
   alsaLib = import ../os-specific/linux/alsa/library {
     inherit fetchurl stdenv;
@@ -3347,6 +3348,13 @@ rec {
     inherit fetchurl stdenv;
     withoutInitTools = true;
   };
+
+  /*
+  # needed for nfs utils
+  tcp_wrapper = import ../os-specific/linux/tcp-wrapper {
+    inherit fetchurl stdenv kernelHeaders gnused;
+  };
+  */
 
   udev = import ../os-specific/linux/udev {
     inherit fetchurl stdenv;
