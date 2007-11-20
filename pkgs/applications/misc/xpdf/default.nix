@@ -24,6 +24,7 @@ stdenv.mkDerivation {
       url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl1.patch;
       sha256 = "1wxv9l0d2kkwi961ihpdwi75whdvk7cgqxkbfym8cjj11fq17xjq";
     })
+    ./xpdf-3.02-protection.patch
   ];
     
   configureFlags =
