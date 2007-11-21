@@ -80,6 +80,12 @@ postInstall() {
             ln -sfn gcc $i
         fi
     done
+
+    for i in $out/bin/*-c++* $out/bin/*-g++*; do
+        if cmp -s $out/bin/g++ $i; then
+            ln -sfn g++ $i
+        fi
+    done
 }
 
 
