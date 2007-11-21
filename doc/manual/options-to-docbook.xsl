@@ -75,7 +75,7 @@
 
   <xsl:template match="string">
     <!-- !!! escaping -->
-    "<xsl:value-of select="@value" />"
+    <xsl:text>"</xsl:text><xsl:value-of select="@value" /><xsl:text>"</xsl:text>
   </xsl:template>
   
   
@@ -85,12 +85,12 @@
   
   
   <xsl:template match="bool[@value = 'true']">
-    true
+    <xsl:text>true</xsl:text>
   </xsl:template>
   
   
   <xsl:template match="bool[@value = 'false']">
-    false
+    <xsl:text>false</xsl:text>
   </xsl:template>
   
   
@@ -109,8 +109,7 @@
     <xsl:for-each select="attr">
       <xsl:value-of select="@name" />
       <xsl:text> = </xsl:text>
-      <xsl:apply-templates select="*" />
-      <xsl:text>; </xsl:text>
+      <xsl:apply-templates select="*" /><xsl:text>; </xsl:text>
     </xsl:for-each>
     }
   </xsl:template>

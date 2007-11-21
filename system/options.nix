@@ -1324,7 +1324,7 @@
         key to be used to connect (<varname>sshKey</varname>).  The
         SSH private key should not have a passphrase, and the
         corresponding public key should be added to
-        <filename>~<replaceable>sshUser<replaceable>/authorized_keys</filename>
+        <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
         on the remote machine.
       ";
     };
