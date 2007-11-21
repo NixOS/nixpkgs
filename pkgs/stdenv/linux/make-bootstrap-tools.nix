@@ -48,11 +48,12 @@ let
       then pkgsDiet.gawk
       else pkgsStatic.gawk;
       
-    gcc = import ../../development/compilers/gcc-4.1 {
+    gcc = import ../../development/compilers/gcc-4.2 {
       inherit (pkgs) fetchurl stdenv;
       noSysDirs = true;
       langCC = false;
       staticCompiler = true;
+      profiledCompiled = true;
     };
   
     curl = pkgsDiet.realCurl;

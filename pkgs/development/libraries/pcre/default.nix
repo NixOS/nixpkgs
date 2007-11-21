@@ -1,4 +1,4 @@
-args: with args;
+{stdenv, fetchurl, unicodeSupport ? false, cplusplusSupport ? true}:
 
 stdenv.mkDerivation {
   name = "pcre-7.4";
@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "1rdks2h5f3p2d71c4jnxaic1c9gmgsfky80djnafcdbdrhzkiyx5";
   };
   configureFlags =
-    if unicodeSupport then
+    (if unicodeSupport then
       "--enable-unicode-properties --enable-shared --disable-static"
-    else "";
+    else "") +
+    (if !cplusplusSupport then "--disable-cpp" else "");
 }

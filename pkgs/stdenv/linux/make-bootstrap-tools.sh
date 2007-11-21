@@ -46,7 +46,7 @@ cp $findutils/bin/find tools/bin
 cp $findutils/bin/xargs tools/bin
 cp $diffutils/bin/* tools/bin
 cp $gnused/bin/* tools/bin
-cp $gnugrep/bin/* tools/bin
+cp $gnugrep/bin/grep tools/bin
 cp $gawk/bin/gawk tools/bin
 ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin

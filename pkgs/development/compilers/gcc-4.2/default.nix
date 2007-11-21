@@ -17,7 +17,7 @@ stdenv.mkDerivation {
       url = mirror://gnu/gcc/gcc-4.2.2/gcc-core-4.2.2.tar.bz2;
       sha256 = "01hdwd4im2xzg159fk022zqyhlxphqvpmabd25bqb8fjbs2yi80a";
     }) ++
-    optional /*langCC*/ true (fetchurl {
+    optional langCC (fetchurl {
       url = mirror://gnu/gcc/gcc-4.2.2/gcc-g++-4.2.2.tar.bz2;
       sha256 = "04xankxi3bi4gvgv8rq9h6w3bdx59bg9zh0zv6lyw373gy26ygmq";
     }) ++
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
   ";
 
-  makeFlags = if staticCompiler then "LDFLAGS=-static" else "";
+  NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 
   passthru = { inherit langC langCC langF77; };
 

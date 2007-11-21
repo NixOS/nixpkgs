@@ -2155,11 +2155,12 @@ rec {
   pcre = import ../development/libraries/pcre {
     inherit fetchurl stdenv;
     unicodeSupport = getFlag "unicode" "pcre" false;
+    cplusplusSupport = !stdenv ? isDietLibC;
   };
 
   poppler = import ../development/libraries/poppler {
-	  inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg;
-	  inherit (gtkLibs) glib gtk;
+    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg;
+    inherit (gtkLibs) glib gtk;
   };
 
   popt = import ../development/libraries/popt {
