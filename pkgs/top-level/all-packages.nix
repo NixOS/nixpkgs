@@ -2827,7 +2827,7 @@ rec {
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
-   stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
+    stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs {

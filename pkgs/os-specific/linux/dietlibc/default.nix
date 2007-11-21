@@ -3,10 +3,10 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "dietlibc-0.30";
+  name = "dietlibc-0.31";
   src = fetchurl {
-    url = mirror://kernel/linux/libs/dietlibc/dietlibc-0.30.tar.bz2;
-    md5 = "2465d652fff6f1fad3da3b98e60e83c9";
+    url = mirror://kernel/linux/libs/dietlibc/dietlibc-0.31.tar.bz2;
+    sha256 = "1kanrwjcmqs28z8arj9py9mbgjx5rgvi7il484pgaizpcxm3sqcr";
   };
   builder = ./builder.sh;
   
@@ -24,14 +24,16 @@ stdenv.mkDerivation {
     # Remove them.
     ./no-wchar.patch
 
-    # Fix to get DNS resolution to work on 64-bit platforms.  Taken
-    # from 0.31 CVS.
-    ./dns64.patch
-
     # Get lseek64 working on x86_64.  From
     # http://svn.annvix.org/cgi-bin/viewvc.cgi/packages/releases/2.0-CURRENT/dietlibc/SOURCES
     ./x86_64-lseek64.patch
     #./x86_64-stat64.patch
 
   ];
+
+  meta = {
+    homepage = http://www.fefe.de/dietlibc/;
+    description = "A small implementation of the C library";
+    license = "GPL";
+  };
 }
