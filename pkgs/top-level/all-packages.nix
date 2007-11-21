@@ -3736,6 +3736,17 @@ rec {
 
   firefoxWrapper = wrapFirefox firefox;
 
+  firefox3b1 = lowPrio (import ../applications/networking/browsers/firefox3b1 {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+    	python curl coreutils;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi;
+    #enableOfficialBranding = true;
+  });
+
+  firefox3b1Wrapper = wrapFirefox firefox3b1;
+ 
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
