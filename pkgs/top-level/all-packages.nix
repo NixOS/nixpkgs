@@ -3713,6 +3713,14 @@ rec {
     xftSupport = true;
   };
 
+  fbpanelFun = lib.sumArgs (import ../applications/window-managers/fbpanel) {
+    inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libX11 libXmu libXpm;
+  };
+
+  fbpanel = fbpanelFun {version="4.12";} null;
+
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl;
   };
