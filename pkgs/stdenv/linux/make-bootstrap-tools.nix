@@ -53,7 +53,7 @@ let
       noSysDirs = true;
       langCC = false;
       staticCompiler = true;
-      profiledCompiled = true;
+      profiledCompiler = true;
     };
   
     curl = pkgsDiet.realCurl;
