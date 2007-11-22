@@ -248,4 +248,7 @@ rec {
 	innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
+  debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
+  debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
+
 }

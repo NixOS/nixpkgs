@@ -186,7 +186,7 @@ args: with args; with stringsWithDeps; with lib;
 	) [minInit];
 
 	doConfigure = FullDepEntry ("
-		./configure --prefix=\"\$prefix\" ${toString (getAttr ["configureFlags"] "" args)}
+		./configure --prefix=\"\$prefix\" ${toString configureFlags}
 	") [minInit addInputs doUnpack];
 
 	doAutotools = FullDepEntry ("
@@ -200,7 +200,7 @@ args: with args; with stringsWithDeps; with lib;
 	")[minInit addInputs doUnpack];
 
 	doMake = FullDepEntry ("	
-		make ${toString (getAttr ["makeFlags"] "" args)}
+		make ${toString makeFlags}
 	") [minInit addInputs doUnpack];
 
 	doUnpack = toSrcDir (toString src);
@@ -269,4 +269,28 @@ args: with args; with stringsWithDeps; with lib;
 	textClosure = textClosureMap makeNest;
 
 	inherit noDepEntry FullDepEntry PackEntry;
+
+	defList = (getAttr ["defList"] [] args);
+	getVal = getValue args defList;
+	check = checkFlag args;
+	reqsList = getAttr ["reqsList"] [] args;
+	buildInputsNames = filter (x: (null != getVal x))
+		(uniqList {inputList = 
+		(concatLists (map 
+		(x:(if (x==[]) then [] else builtins.tail x)) 
+		reqsList));});
+	configFlags = getAttr ["configFlags"] [] args;
+	buildFlags = getAttr ["buildFlags"] [] args;
+	nameSuffixes = getAttr ["nameSuffixes"] [] args;
+	autoBuildInputs = assert (checkReqs args defList reqsList);
+		filter (x: x!=null) (map getVal buildInputsNames);
+	autoConfigureFlags = condConcat "" configFlags check;
+	autoMakeFlags = condConcat "" buildFlags check;
+	useConfig = getAttr ["useConfig"] false args;
+	buildInputs = if useConfig then autoBuildInputs else getAttr ["buildInputs"] [] args;
+	configureFlags = if useConfig then autoConfigureFlags else 
+	    getAttr ["configureFlags"] "" args;
+	makeFlags = if useConfig then autoMakeFlags else getAttr ["makeFlags"] "" args;
+
+	inherit lib;
 }) // args

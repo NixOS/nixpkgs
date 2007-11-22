@@ -4326,6 +4326,19 @@ rec {
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
+  xscreensaverFun = import ../applications/graphics/xscreensaver {
+    inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
+    inherit (xlibs) libX11 libXmu;
+  };
+
+  xscreensaver = xscreensaverFun {
+  	version = "5.04";
+	flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
+	inherit mesa libxml2 libjpeg;
+	inherit (gtkLibs) gtk;
+	inherit (gnome) libglade;
+  } null;
+
   xterm = import ../applications/misc/xterm {
     inherit fetchurl stdenv ncurses;
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
