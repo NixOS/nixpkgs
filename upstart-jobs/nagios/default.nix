@@ -45,6 +45,37 @@ let
     
   ";
 
+  # Plain configuration for the Nagios web-interface with no
+  # authentication.
+  nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf" "
+    main_config_file=${nagiosCfgFile}
+    use_authentication=0
+    url_html_path=/nagios
+  ";
+
+  urlPath = config.services.nagios.urlPath;
+
+  extraHttpdConfig = "
+    ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
+
+    <Directory \"${pkgs.nagios}/sbin\">
+      Options ExecCGI
+      AllowOverride None
+      Order allow,deny
+      Allow from all
+      SetEnv NAGIOS_CGI_CONFIG ${nagiosCGICfgFile}
+    </Directory>
+
+    Alias ${urlPath} ${pkgs.nagios}/share
+
+    <Directory \"${pkgs.nagios}/share\">
+      Options None
+      AllowOverride None
+      Order allow,deny
+      Allow from all
+    </Directory>
+  ";
+    
 in
 
 {
@@ -68,6 +99,9 @@ in
     }
   ];
 
+  extraHttpdConfig =
+    if config.services.nagios.enableWebInterface then extraHttpdConfig else "";
+  
   # Run `nagios -v' to check the validity of the configuration file so
   # that a nixos-rebuild fails *before* we kill the running Nagios
   # daemon.

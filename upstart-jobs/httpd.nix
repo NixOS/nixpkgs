@@ -1,4 +1,4 @@
-{config, pkgs, glibc}:
+{config, pkgs, glibc, extraConfig}:
 
 let
 
@@ -18,7 +18,7 @@ let
   stateDir = cfg.stateDir;
   enableSSL = false;
   noUserDir = cfg.noUserDir;
-  extraDirectories = cfg.extraDirectories;
+  extraDirectories = cfg.extraDirectories + extraConfig;
 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
   

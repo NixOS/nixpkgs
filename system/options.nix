@@ -874,6 +874,7 @@
         ";
       };
 
+      # !!! this is a mis-nomer, should be "extraConfig" or something.
       extraDirectories = mkOption {
         default = "";
         example = "
@@ -1213,6 +1214,23 @@
         description = "
           Packages to be added to the Nagios <envar>PATH</envar>.
           Typically used to add plugins, but can be anything.
+        ";
+      };
+
+      enableWebInterface = mkOption {
+        default = false;
+        description = "
+          Whether to enable the Nagios web interface.  You should also
+          enable Apache (<option>services.httpd.enable</option>).
+        ";
+      };
+
+      urlPath = mkOption {
+        default = "/nagios";
+        description = "
+          The URL path under which the Nagios web interface appears.
+          That is, you can access the Nagios web interface through
+          <literal>http://<replaceable>server</replaceable>/<replaceable>urlPath</replaceable></literal>.
         ";
       };
 

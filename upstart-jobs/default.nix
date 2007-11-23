@@ -12,11 +12,7 @@ let
     (config.services.mingetty.ttys)
     ++ [10] /* !!! sync with syslog.conf */ ;
 
-in
-
-import ../upstart-jobs/gather.nix {
-  inherit (pkgs) runCommand;
-
+    
   jobs = map makeJob [
     # Syslogd.
     (import ../upstart-jobs/syslogd.nix {
@@ -171,6 +167,8 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/httpd.nix {
       inherit config pkgs;
       inherit (pkgs) glibc;
+      extraConfig = pkgs.lib.concatStringsSep "\n"
+        (map (job: job.extraHttpdConfig) jobs);
     })
 
   # Samba service.
@@ -202,7 +200,6 @@ import ../upstart-jobs/gather.nix {
     (import ../upstart-jobs/ircd-hybrid.nix {
       inherit config pkgs;
     })
-
 
   # ALSA sound support.
   ++ optional config.sound.enable
@@ -285,5 +282,9 @@ import ../upstart-jobs/gather.nix {
 
   # For the built-in logd job.
   ++ [(makeJob { jobDrv = pkgs.upstart; })];
+
   
+in import ../upstart-jobs/gather.nix {
+  inherit (pkgs) runCommand;
+  inherit jobs;
 }
