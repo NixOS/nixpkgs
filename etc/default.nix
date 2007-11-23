@@ -134,10 +134,11 @@ import ../helpers/make-etc.nix {
 
   # Configuration for ssmtp.
   ++ optional config.networking.defaultMailServer.directDelivery { 
-    source = pkgs.writeText "ssmtp.conf" "
-mailhub=${config.networking.defaultMailServer.hostName}
-UseTLS=${if config.networking.defaultMailServer.useTLS then "YES" else "NO"}
-UseSTARTTLS=${if config.networking.defaultMailServer.useSTARTTLS then "YES" else "NO"}
+    source = let cfg = config.networking.defaultMailServer; in pkgs.writeText "ssmtp.conf" "
+mailhub=${cfg.hostName}
+${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
+UseTLS=${if cfg.useTLS then "YES" else "NO"}
+UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
 #Debug=YES
       ";
     target = "ssmtp/ssmtp.conf";

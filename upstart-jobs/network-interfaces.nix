@@ -1,16 +1,15 @@
-{ nettools, modprobe, wirelesstools, bash, writeText
-, nameservers, defaultGateway, interfaces
-, localCommands
-}:
+{nettools, modprobe, wirelesstools, bash, writeText, config}:
 
 let
 
+  cfg = config.networking;
+
   # !!! use XML
-  names = map (i: i.name) interfaces;
-  ipAddresses = map (i: if i ? ipAddress then i.ipAddress else "dhcp") interfaces;
-  subnetMasks = map (i: if i ? subnetMask then i.subnetMask else "default") interfaces;
-  essids = map (i: if i ? essid then i.essid else "default") interfaces;
-  wepKeys = map (i: if i ? wepKey then i.wepKey else "nokey") interfaces;
+  names = map (i: i.name) cfg.interfaces;
+  ipAddresses = map (i: if i ? ipAddress then i.ipAddress else "dhcp") cfg.interfaces;
+  subnetMasks = map (i: if i ? subnetMask then i.subnetMask else "default") cfg.interfaces;
+  essids = map (i: if i ? essid then i.essid else "default") cfg.interfaces;
+  wepKeys = map (i: if i ? wepKey then i.wepKey else "nokey") cfg.interfaces;
 
 in 
 
@@ -66,20 +65,23 @@ start script
     done
 
     # Set the nameservers.
-    if test -n \"${toString nameservers}\"; then
+    if test -n \"${toString cfg.nameservers}\"; then
         rm -f /etc/resolv.conf
-        for i in ${toString nameservers}; do
+        if test -n \"${cfg.domain}\"; then
+	    echo \"domain ${cfg.domain}\" >> /etc/resolv.conf
+        fi
+        for i in ${toString cfg.nameservers}; do
             echo \"nameserver $i\" >> /etc/resolv.conf
         done
     fi
 
     # Set the default gateway.
-    if test -n \"${defaultGateway}\"; then
-        ${nettools}/sbin/route add default gw \"${defaultGateway}\" || true
+    if test -n \"${cfg.defaultGateway}\"; then
+        ${nettools}/sbin/route add default gw \"${cfg.defaultGateway}\" || true
     fi
 
     # Run any user-specified commands.
-    ${bash}/bin/sh ${writeText "local-net-cmds" localCommands} || true
+    ${bash}/bin/sh ${writeText "local-net-cmds" cfg.localCommands} || true
 
 end script
 

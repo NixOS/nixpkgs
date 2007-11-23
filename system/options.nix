@@ -265,6 +265,14 @@
       ";
     };
 
+    domain = mkOption {
+      default = "";
+      example = "home";
+      description = "
+        The domain.  It can be left empty if it is auto-detected through DHCP.
+      ";
+    };
+
     enableIntel2200BGFirmware = mkOption {
       default = false;
       description = "
@@ -332,6 +340,14 @@
         description = "
           The host name of the default mail server to use to deliver
           e-mail.
+        ";
+      };
+
+      domain = mkOption {
+        default = "";
+        example = "example.org";
+        description = "
+          The domain from which mail will appear to be sent.
         ";
       };
 

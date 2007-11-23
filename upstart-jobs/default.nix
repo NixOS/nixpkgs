@@ -65,12 +65,8 @@ let
 
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
-      inherit modprobe;
+      inherit modprobe config;
       inherit (pkgs) nettools wirelesstools bash writeText;
-      nameservers = config.networking.nameservers;
-      defaultGateway = config.networking.defaultGateway;
-      interfaces = config.networking.interfaces;
-      localCommands = config.networking.localCommands;
     })
       
     # Nix daemon - required for multi-user Nix.
