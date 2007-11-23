@@ -43,14 +43,14 @@
   # used to automatically get dependencies ( used for core_libs ) 
   # TODO use kind of state and evaluate deps of a dep only once
   resolveDeps = ghc : libs : 
-    let attrs = __listToAttrs libs; in
+    let attrs = builtins.listToAttrs libs; in
       rec {
         # using undocumented feature that attribute can contain hyphens when using listToAttrs
         # You should be able to get the attribute values using __getAttr
-        result = __listToAttrs (map ( l : lib.av l.name (
+        result = builtins.listToAttrs (map ( l : lib.av l.name (
                                packageByPackageDB ghc l.name 
                                       ("lib/ghc-${ghc.version}/${l.name}.conf")
-                                      (map (n: __getAttr n result) l.deps)
+                                      (map (n: builtins.getAttr n result) l.deps)
                 ) ) libs );
       }.result;
 

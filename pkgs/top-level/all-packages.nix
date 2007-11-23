@@ -196,10 +196,13 @@ rec {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
-  mkDerivationByConfiguration = { flagConfig ? {}, optionals ? [], defaults ? [],  
-        extraAttrs, collectExtraPhaseActions ? []} :
+  mkDerivationByConfiguration = 
+    assert builtins ? isAttrs;
+    { flagConfig ? {}, optionals ? [], defaults ? []
+    , extraAttrs, collectExtraPhaseActions ? []
+    }:
     args: with args.lib; with args;
-    if ( __isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
+    if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
     let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
@@ -944,12 +947,14 @@ rec {
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
-  ghcsAndLibs = recurseIntoAttrs (import ../development/compilers/ghcs {
+  ghcsAndLibs = 
+    assert builtins ? listToAttrs;
+    recurseIntoAttrs (import ../development/compilers/ghcs {
       inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline;
       inherit ghcPkgUtil;
       stdenv = stdenvUsingSetupNew2;
       lib = lib_unstable;
-  });
+    });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
   createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
@@ -1192,23 +1197,23 @@ rec {
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
-  #php = import ../development/interpreters/php {
-    #inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
-    #unixODBC =
-      #if stdenv.isDarwin then null else unixODBC;
-  #};
+  phpOld = import ../development/interpreters/php {
+    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
+    unixODBC =
+      if stdenv.isDarwin then null else unixODBC;
+  };
 
   # FIXME somehow somewhen: We need to recompile php if the ini file changes because the only way to
   # tell the apache module where to look for this file is using a compile time flag ;-(
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
-  php = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration;
-   lib = lib_unstable;
-   stdenv = stdenvUsingSetupNew2;
-   inherit fetchurl flex bison apacheHttpd; # gettext;
-   mysql = mysql5;
-   inherit libxml2;
+  php = import ../development/interpreters/php_configurable {
+    inherit mkDerivationByConfiguration;
+    lib = lib_unstable;
+    stdenv = stdenvUsingSetupNew2;
+    inherit fetchurl flex bison apacheHttpd; # gettext;
+    mysql = mysql5;
+    inherit libxml2;
   };
 
   python = getVersion "python" python_alts;
