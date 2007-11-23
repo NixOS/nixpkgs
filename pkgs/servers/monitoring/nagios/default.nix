@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, gdSupport ? false
+, gd ? null, libpng ? null, zlib ? null
+}:
 
 stdenv.mkDerivation {
   name = "nagios-2.10";
@@ -9,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   patches = [./nagios.patch];
-  buildInputs = [perl];
+  buildInputs = [perl] ++ (if gdSupport then [gd libpng zlib] else []);
   buildFlags = "all";
   installTargets = "install install-config";
 
