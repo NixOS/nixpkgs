@@ -1,4 +1,4 @@
-{stdenv, firefox, plugins}:
+args: with args;
 
 stdenv.mkDerivation {
   name = firefox.name + "-with-plugins";
@@ -7,6 +7,8 @@ stdenv.mkDerivation {
   makeWrapper = ../../../../build-support/make-wrapper/make-wrapper.sh;
 
   inherit firefox;
+
+  nameSuffix = (if args ? nameSuffix then args.nameSuffix else "");
 
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.
