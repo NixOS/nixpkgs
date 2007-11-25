@@ -1414,6 +1414,14 @@ rec {
     inherit fetchurl stdenv perl perlXMLSimple;
   };
 
+  indentFun = import ../development/tools/misc/indent {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  indent = indentFun {
+    version = "2.2.9";
+  } null;
+
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
   };
