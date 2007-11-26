@@ -45,7 +45,7 @@ $extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
-$extraAttrs{"setxkbmap"} = " postInstall = \"ln -sfn \${xkeyboard_config}/etc \$out/share\"; ";
+$extraAttrs{"setxkbmap"} = " postInstall = \"ensureDir \$out/share/X11; ln -sfn \${xkeyboard_config}/etc/X11/xkb \$out/share/X11/\"; ";
 
 $extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
 
