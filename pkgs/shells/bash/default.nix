@@ -3,11 +3,11 @@
 assert interactive -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "bash-3.2-p17";
+  name = "bash-3.2-p25";
 
   src = fetchurl {
-    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/bash-3.2-p17.tar.bz2;
-    sha256 = "153gg2z2s3ar7vni3345nnmdisha4b8cxzsj79d8ap6m6i4c35f5";
+    url = http://losser.st-lab.cs.uu.nl/~eelco/dist/bash-3.2-p25.tar.bz2;
+    sha256 = "1x19z386ysvwk00zigzf3nkv1x1xq4kvyckz9ah8qz65a7626cs4";
   };
 
   postInstall = "ln -s bash $out/bin/sh";
