@@ -29,7 +29,7 @@ let {
     cdrkit
     chatzilla
     cksfv
-    compiz
+    #compiz
     coreutils
     cpio
     cron
