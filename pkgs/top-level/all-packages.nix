@@ -2798,6 +2798,11 @@ rec {
     inherit stdenv fetchurl readline openldap pam;
   };
 
+  squid = import ../servers/squid {
+    inherit fetchurl stdenv mkDerivationByConfiguration perl;
+    lib = lib_unstable;
+  };
+
   tomcat5 = import ../servers/http/tomcat {
     inherit fetchurl stdenv jdk;
   };
