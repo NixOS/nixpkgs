@@ -7,6 +7,7 @@ buildPhase() {
 
 installPhase=installPhase
 installPhase() {
+    sed -i 's=/bin/pwd=pwd=' opera install.sh 
     # Note: the "no" is because the install scripts asks whether we
     # want to install icons in some system-wide directories.
     echo no | ./install.sh --prefix=$out
@@ -16,20 +17,18 @@ installPhase() {
         rpath="$rpath:$i/lib"
     done
 
+    [ -z ${system##*64*} ] && suf=64
+
     # !!! ugh, should fix this eventually; just make a normal gcc dependency
     gcc=$(cat $NIX_GCC/nix-support/orig-gcc)
-    rpath="$rpath:$gcc/lib"
+    rpath="$rpath:$libstdcpp5/lib$suf"
     
-    for i in $out/lib/opera/*/opera $out/lib/opera/plugins/opera*; do
+    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugin{wrapper,cleaner}; do
         patchelf \
             --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
             --set-rpath "$rpath" \
             "$i"
     done
-
-    # opera seems to need libnpp.so in the same path ?
-    # (search the opera help for libnpp..
-    cp $out/lib/opera/plugins/libnpp.so $out/lib/opera/9*
 }
 
 genericBuild

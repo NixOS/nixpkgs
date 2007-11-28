@@ -4057,11 +4057,12 @@ rec {
   };
 
   opera = import ../applications/networking/browsers/opera {
-    inherit fetchurl stdenv zlib;
+    inherit fetchurl zlib glibc;
+    stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
     qt = qt3;
-    #motif = lesstif;
-    libstdcpp5 = gcc33.gcc;
+    #33motif = lesstif;
+    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc).gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
