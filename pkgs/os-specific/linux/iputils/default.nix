@@ -11,5 +11,5 @@ stdenv.mkDerivation {
   };
 
   inherit kernelHeaders glibc;
-  #buildInputs = [bison flex openssl];
+  patches = [ ./open-max.patch ];
 }
