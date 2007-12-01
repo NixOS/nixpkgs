@@ -2788,7 +2788,7 @@ rec {
   # this creates a patch which can be applied to the kernel to integrate this module..
   kernel_module_acerhk = import ../os-specific/linux/kernel/acerhk {
     inherit fetchurl stdenv gnupatch;
-    kernel = kernel_2_6_21;
+    kernel = builtins.getAttr kernel "2.6.21";
     debug = true;
   };
 

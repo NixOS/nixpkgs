@@ -1,7 +1,7 @@
 args:
 let
   getValue = aSet: aName: default:
-  (if (aSet ? aName) then (builtins.getAttr aSet aName) else default);
+  (if (builtins.hasAttr aName aSet) then (builtins.getAttr aName aSet) else default);
 in
 
 let
@@ -25,5 +25,6 @@ args.stdenv.lib.listOfListsToAttrs [
   [ "2.6.21-ck" (import ./2.6.21-ck.nix newArgs) ]
   [ "2.6.22" (import ./2.6.22.nix newArgs) ]
   [ "2.6.22-ck" (import ./2.6.22-ck.nix newArgs) ]
+  [ "2.6.23" (import ./2.6.23.nix newArgs) ]
   [ "2.6.23.1" (import ./2.6.23.1.nix newArgs) ]
 ]
