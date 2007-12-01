@@ -96,7 +96,7 @@ installPhase() {
     if test "$arch" != um; then
         # copy all Makefiles and Kconfig files
         ln -s $out/lib/modules/$version/build $out/lib/modules/$version/source
-        cp --parents `find  -type f -name Makefile-\* -o -name "Kconfig*"` $out/lib/modules/$version/build
+        cp --parents `find  -type f -name "Makefile*" -o -name "Kconfig*"` $out/lib/modules/$version/build
         cp Module.symvers $out/lib/modules/$version/build
 
         # weed out unneeded stuff
