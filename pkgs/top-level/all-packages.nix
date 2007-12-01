@@ -455,6 +455,16 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap) {
+    inherit stdenv fetchurl builderDefs pkgconfig libxml2
+      intltool;
+    inherit (gtkLibs) gtk;
+  };
+
+  gdmap = gdmapFun {
+  	version = "0.7.5";
+  } null;
+
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
   };
@@ -536,6 +546,18 @@ rec {
   hevea = import ../tools/typesetting/hevea {
     inherit fetchurl stdenv ocaml;
   };
+
+  /*hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus ) {
+    inherit builderDefs stdenv fetchurl libdbi libdbiDrivers fuse
+      pkgconfig perl gettext dbus dbus_glib pcre libscd;
+    inherit (gtkLibs) glib;
+    bison = bison23;
+    flex = flex2533;
+  };
+
+  hyppocampus = hyppocampusFun {
+    version = "0.3rc1";
+  } null;*/
 
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
@@ -1946,6 +1968,25 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libdbiFun = lib.sumArgs (selectVersion ../development/libraries/libdbi) {
+    inherit stdenv fetchurl builderDefs;
+  };
+
+  libdbi = libdbiFun {
+    version = "0.8.2";
+  } null;
+
+  libdbiDriversFun = lib.sumArgs (selectVersion ../development/libraries/libdbi-drivers) {
+    inherit stdenv fetchurl builderDefs libdbi;
+  };
+
+  libdbiDrivers = libdbiDriversFun {
+    version = "0.8.2-1";
+    mysql = mysql5;
+    inherit sqlite;
+  } null;
+
+
   libdrm = import ../development/libraries/libdrm {
     inherit fetchurl stdenv;
   };
@@ -1969,6 +2010,15 @@ rec {
   libexif = import ../development/libraries/libexif {
     inherit fetchurl stdenv gettext;
   };
+
+  libextractorFun = lib.sumArgs (selectVersion ../development/libraries/libextractor)
+  {
+    inherit fetchurl stdenv builderDefs zlib;
+  };
+
+  libextractor = libextractorFun {
+    version = "0.5.18";
+  } null;
 
   libgcrypt = import ../development/libraries/libgcrypt {
     inherit fetchurl stdenv libgpgerror;
@@ -2033,6 +2083,14 @@ rec {
   libpng = import ../development/libraries/libpng {
     inherit fetchurl stdenv zlib;
   };
+
+  /*libscdFun = lib.sumArgs (selectVersion ../development/libraries/libscd) {
+    inherit stdenv fetchurl builderDefs libextractor perl pkgconfig;
+  };
+
+  libscd = libscdFun {
+    version = "0.4.2";
+  } null;*/
 
   libsigcxx = import ../development/libraries/libsigcxx {
     inherit fetchurl stdenv pkgconfig;
@@ -3572,7 +3630,7 @@ rec {
       libjpeg libpng zlib /* smpeg  sdl */;
     inherit (xlibs) inputproto libXi;
     lib = lib_unstable;
-    python = python25;
+    python = python_alts.v_2_5;
     freealut = freealut_soft;
     openal = openalSoft;
     stdenv = stdenvUsingSetupNew2;
@@ -3634,7 +3692,8 @@ rec {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
-      libXinerama libICE libSM libXrender xextproto;
+      libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
+      damageproto randrproto xineramaproto renderproto kbproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnome libgnomeui metacity
@@ -4505,7 +4564,7 @@ rec {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
-	  cppunit cyrus_sasl openldap enchant openexr exiv2 samba nss log4cxx aspell
+	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
 	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
@@ -4522,6 +4581,7 @@ rec {
     qt = qt4;
 	dbus = dbus_alts.withX11;
 	bison = bison23;
+    openexr = openexr_1_6_1 ;
   });
 
   kdebase = import ../desktops/kde/kdebase {

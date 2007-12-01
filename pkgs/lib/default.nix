@@ -251,4 +251,12 @@ rec {
   debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
 
+  innerClosePropagation = ready: list: if list == [] then ready else
+    if (head list) ? propagatedBuildInputs then 
+      innerClosePropagation (ready ++ [(head list)]) 
+        ((head list).propagatedBuildInputs ++ (tail list)) else
+      innerClosePropagation (ready ++ [(head list)]) (tail list);
+
+  closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
+
 }
