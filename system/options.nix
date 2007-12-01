@@ -1578,6 +1578,14 @@ root        ALL=(ALL) SETENV: ALL
 
   environment = {
 
+    pathsToLink = mkOption {
+      default = ["/bin" "/sbin" "/share"];
+      example = ["/"];
+      description = "
+        This allows to symlink more directories in /var/run/current-system/sw
+      ";
+    };
+
     extraPackages = mkOption {
       default = pkgs: [];
       example = pkgs: [pkgs.firefox pkgs.thunderbird];

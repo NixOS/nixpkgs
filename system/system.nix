@@ -257,7 +257,7 @@ rec {
   systemPath = pkgs.buildEnv {
     name = "system-path";
     paths = systemPathList;
-    pathsToLink = ["/bin" "/sbin" "/man" "/share"];
+    inherit (config.environment) pathsToLink;
     ignoreCollisions = true;
   };
 
