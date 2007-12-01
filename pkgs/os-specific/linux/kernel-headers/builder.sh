@@ -1,26 +1,9 @@
 source $stdenv/setup
 
+patchPhase="sed -i '/scsi/d' include/Kbuild"
 
-buildPhase() {
-    make include/linux/version.h
-}
+buildPhase="make mrproper headers_check";
 
-buildPhase=buildPhase
-
-
-installPhase() {
-    mkdir $out
-    mkdir $out/include
-    cp -prvd include/linux include/asm-generic $out/include
-    cp -prvd include/asm-$platform $out/include
-    ln -s asm-$platform $out/include/asm
-    for i in $extraIncludeDirs; do
-	cp -prvd include/asm-$i $out/include
-    done
-    echo -n > $out/include/linux/autoconf.h
-}
-
-installPhase=installPhase
-
+installPhase="make INSTALL_HDR_PATH=$out headers_install"
 
 genericBuild
