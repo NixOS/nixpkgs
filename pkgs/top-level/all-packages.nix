@@ -1743,7 +1743,7 @@ rec {
   };
 
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
-    (import ../development/libraries/glibc-2.5 {
+    (import ../development/libraries/glibc-2.7 {
       inherit fetchurl stdenv kernelHeaders;
       #installLocales = false;
     });
