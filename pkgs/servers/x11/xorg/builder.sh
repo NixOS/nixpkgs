@@ -4,11 +4,13 @@ source $stdenv/setup
 
 # After installation, automatically add all "Requires" fields in the
 # pkgconfig files (*.pc) to the propagated build inputs.
-origPostInstall=$postInstall
-postInstall=postInstall
-postInstall() {
-    if test -n "$origPostInstall"; then eval "$origPostInstall"; fi
+if test -n "$postInstall"; then
+	postInstall="$postInstall; autoPropagateBuildInputs"
+else
+	postInstall=autoPropagateBuildInputs
+fi
 
+autoPropagateBuildInputs() {
     local r p requires
     requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | \
         sed "s/Requires://" | sed "s/,/ /g")
