@@ -2161,12 +2161,23 @@ rec {
     inherit fetchurl stdenv alsaLib autoconf automake libtool;
   };
 
+  # added because I hope that it has been easier to compile on x86 (for blender)
+  openalSoft = import ../development/libraries/openalSoft {
+    inherit fetchurl stdenv alsaLib libtool cmake;
+  };
+
   openbabel = import ../development/libraries/openbabel {
 	  inherit fetchurl stdenv zlib libxml2;
   };
 
-  openexr = import ../development/libraries/openexr {
+  openexr_1_6_1 = import ../development/libraries/openexr {
 	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+          version = "1.6.1";
+  };
+  # This older version is needed by blender (it complains about missing half.h )
+  openexr_1_4_0 = import ../development/libraries/openexr {
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+          version = "1.4.0";
   };
 
   openldap = import ../development/libraries/openldap {
@@ -3549,6 +3560,24 @@ rec {
   #biew = import ../applications/misc/biew {
   #  inherit lib stdenv fetchurl ncurses;
   #};
+
+  # only to be able to compile blender - I couldn't compile the default openal software
+  # Perhaps this can be removed - don't know which one openal{,soft} is better
+  freealut_soft = import ../development/libraries/freealut {
+    inherit fetchurl stdenv;
+    openal = openalSoft;
+  };
+  blender = import ../applications/misc/blender {
+    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11
+      libjpeg libpng zlib /* smpeg  sdl */;
+    inherit (xlibs) inputproto libXi;
+    lib = lib_unstable;
+    python = python25;
+    freealut = freealut_soft;
+    openal = openalSoft;
+    stdenv = stdenvUsingSetupNew2;
+    openexr = openexr_1_4_0;
+  };
 
   bmp = import ../applications/audio/bmp {
     inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
