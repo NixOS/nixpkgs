@@ -1,11 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "sysklogd-1.4.1";
+  name = "sysklogd-1.5";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.4.1.tar.gz;
-    md5 = "d214aa40beabf7bdb0c9b3c64432c774";
+    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.tar.gz;
+    sha256 = "0wxpkrznqwz4dy11k90s2sqszwp7d4mlc0ag8288wa193plvhsb1";
   };
-  patches = [./sysklogd-1.4.1-cvs-20050525-local.diff ./sysklogd-1.4.1-asm.patch];
 }
