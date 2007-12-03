@@ -18,7 +18,7 @@ args:
         patch = ./2.6.20-paravirt-nvidia.patch;
       }
       { name = "skas-2.6.20-v9-pre9";
-        patch = fetchurl {
+        patch = args.fetchurl {
           url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
           md5 = "02e619e5b3aaf0f9768f03ac42753e74";
         };
@@ -27,7 +27,7 @@ args:
           "# CONFIG_PROC_MM_DUMPABLE is not set\n";
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
+        patch = args.fetchurl {
           url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
         };

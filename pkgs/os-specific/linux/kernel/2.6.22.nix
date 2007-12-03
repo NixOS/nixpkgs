@@ -10,7 +10,7 @@ args:
         patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
+        patch = args.fetchurl {
           url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
