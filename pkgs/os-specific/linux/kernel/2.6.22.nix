@@ -7,7 +7,7 @@ args:
 
 	systemPatches = [
       { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
+        patch = ./2.6.22-paravirt-nvidia.patch;
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = args.fetchurl {
