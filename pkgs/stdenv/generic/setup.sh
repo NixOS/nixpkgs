@@ -437,10 +437,10 @@ unpackFile() {
             tar xvf $file || fail
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gunzip < $file | tar xvf - || fail
+            gzip -d < $file | tar xvf - || fail
             ;;
         *.tar.bz2 | *.tbz2)
-            bunzip2 < $file | tar xvf - || fail
+            bzip2 -d < $file | tar xvf - || fail
             ;;
         *.zip)
             unzip $file || fail
@@ -562,10 +562,10 @@ patchW() {
         local uncompress=cat
         case $i in
             *.gz)
-                uncompress=gunzip
+                uncompress="gzip -d"
                 ;;
             *.bz2)
-                uncompress=bunzip2
+                uncompress="bzip2 -d"
                 ;;
         esac
         $uncompress < $i | patch $patchFlags || fail
