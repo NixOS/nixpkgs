@@ -7,5 +7,5 @@ $cp -prvd . $out
 $cp -prvd . $out/bin
 
 $cp $curl curl.bz2
-$bunzip2 -d curl.bz2
+$bzip2 -d curl.bz2
 $cp curl $out/bin

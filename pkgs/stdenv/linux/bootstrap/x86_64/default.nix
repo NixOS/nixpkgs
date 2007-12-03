@@ -1,27 +1,27 @@
 {
   bash = ./bash;
-  bunzip2 = ./bunzip2;
+  bzip2 = ./bzip2;
   cp = ./cp;
   curl = ./curl.bz2;
   tar = ./tar.bz2;
 
-  staticToolsURL = {
-    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/x86_64/r6905/static-tools.tar.bz2;
-    sha1 = "5467de09c91f0a9bf511a9d476547e10b9f067fb";
-  };
-
   binutilsURL = {
     url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/x86_64/r6905/binutils.tar.bz2;
-    sha1 = "739623c8be225224ed57a76c5f483d5e373fdae8";
+    sha1 = "9ac95e34c96c19cd0b925af46c97c9979becaaca";
   };
 
   gccURL = {
     url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/x86_64/r6905/gcc.tar.bz2;
-    sha1 = "b4bb2b2863d7b368c7c32e789d6877e5b5a97637";
+    sha1 = "e8cb32425c8f55833ca081bd74668a029bdf1755";
   };
 
   glibcURL = {
     url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/x86_64/r6905/glibc.tar.bz2;
-    sha1 = "f0a5e1a224931f59267975a51d4e9c20e6cb3ae8";
+    sha1 = "74b1698a4595ce4b4f43a33b3ceca1e4459e494e";
+  };
+
+  staticToolsURL = {
+    url = http://nix.cs.uu.nl/dist/tarballs/stdenv-linux/x86_64/r6905/static-tools.tar.bz2;
+    sha1 = "4da3af92c9bcd8fc43b31934d8429412e209741b";
   };
 }
