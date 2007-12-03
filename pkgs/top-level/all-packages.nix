@@ -3466,6 +3466,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  upstartJobControl = import ../os-specific/linux/upstart/jobcontrol.nix {
+    inherit stdenv;
+  };
+
   usbutils = import ../os-specific/linux/usbutils {
     inherit fetchurl stdenv libusb;
   };
@@ -4471,6 +4475,16 @@ rec {
 
   ### GAMES
 
+  construoFun = lib.sumArgs (selectVersion ../games/construo) {
+    inherit stdenv fetchurl builderDefs
+      zlib;
+    inherit (xlibs) libX11 xproto;
+  };
+
+  construo = construoFun {
+    inherit mesa freeglut;
+    version = "0.2.2";
+  } null;
 
   exult = import ../games/exult {
     inherit fetchurl SDL SDL_mixer zlib libpng unzip;
