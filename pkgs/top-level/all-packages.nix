@@ -1497,6 +1497,11 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  # couldn't find the source yet
+  selenium_rc_binary = import ../development/tools/selenium/remote-control {
+    inherit fetchurl stdenv unzip;
+  };
+
   scons = import ../development/tools/build-managers/scons {
     inherit fetchurl stdenv python;
   };
@@ -4383,7 +4388,7 @@ rec {
 
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
-      pkgconfig libxml2 zip libpng libjpeg;
+      pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
     inherit (gtkLibs) gtk;
   };
 
