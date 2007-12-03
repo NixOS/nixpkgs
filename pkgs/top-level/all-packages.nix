@@ -1680,7 +1680,7 @@ rec {
   facile = import ../development/libraries/facile {
 	  inherit fetchurl stdenv;
       # Actually, we don't need this version but we need native-code compilation
-	  ocaml = ocaml_alts.v_3_10_0;
+	  ocaml = builtins.getAttr "3.10.0" ocaml_alts;
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
