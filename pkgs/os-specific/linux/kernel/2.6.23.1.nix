@@ -32,10 +32,10 @@ args:
 	];
 
     config = with args;
-      if kernelConfig != null then kernelConfig else
-      if userModeLinux then ./config-2.6.23.1-uml else
-      if stdenv.system == "i686-linux" then ./config-2.6.23.1-i686-smp else
-      if stdenv.system == "x86_64-linux" then ./config-2.6.23.1-x86_64-smp else
+      if config != null then config else
+      if userModeLinux then ./config-2.6.23-uml else
+      if stdenv.system == "i686-linux" then ./config-2.6.23-i686-smp else
+      if stdenv.system == "x86_64-linux" then ./config-2.6.23-x86_64-smp else
       abort "No kernel configuration for your platform!";
   }
 )

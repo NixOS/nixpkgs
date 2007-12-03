@@ -25,7 +25,7 @@ stdenv.mkDerivation {
           map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
     in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
-  config = configFile;
+  inherit config;
   
   buildInputs = [perl mktemp];
   

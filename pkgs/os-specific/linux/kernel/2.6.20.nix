@@ -28,7 +28,7 @@ args:
 	];
 
     config = with args;
-      if kernelConfig != null then kernelConfig else
+      if config != null then config else
       if userModeLinux then ./config-2.6.20-uml else
       if stdenv.system == "i686-linux" then ./config-2.6.20-i686-smp else
       if stdenv.system == "x86_64-linux" then ./config-2.6.20-x86_64-smp else
