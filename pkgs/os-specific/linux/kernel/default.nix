@@ -27,4 +27,5 @@ args.stdenv.lib.listOfListsToAttrs [
   [ "2.6.22-ck" (import ./2.6.22-ck.nix newArgs) ]
   [ "2.6.23" (import ./2.6.23.nix newArgs) ]
   [ "2.6.23.1" (import ./2.6.23.1.nix newArgs) ]
+  [ "default" (import ./2.6.23.1.nix newArgs) ]
 ]
