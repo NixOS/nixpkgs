@@ -1776,6 +1776,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  geos = import ../development/libraries/geos {
+    lib = lib_unstable;
+    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which;
+    use_svn = stdenv.system == "x86_64-linux";
+    python = python;
+    # optional features:  
+    # python / ruby support
+  };
+
   gettext = getVersion "gettext" gettext_alts;
 
   gettext_alts = import ../development/libraries/gettext {
