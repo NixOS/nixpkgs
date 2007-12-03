@@ -24,7 +24,7 @@ nukeRefs() {
 # necessary for the absolute first stage of the bootstrap.
 cp $bash/bin/bash $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/bash
-cp $bzip2/bin/bunzip2 $out/in-nixpkgs
+cp $bzip2/bin/bzip2 $out/in-nixpkgs
 cp $coreutils/bin/cp $out/in-nixpkgs
 cp $gnutar/bin/tar $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/tar
@@ -51,8 +51,7 @@ cp $gawk/bin/gawk tools/bin
 ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin
 cp $gzip/bin/gzip tools/bin
-ln -s gzip tools/bin/gunzip
-cp $bzip2/bin/bunzip2 tools/bin
+cp $bzip2/bin/bzip2 tools/bin
 cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
