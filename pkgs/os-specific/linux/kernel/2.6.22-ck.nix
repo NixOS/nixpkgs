@@ -2,7 +2,7 @@ args:
 (import ./2.6.22.nix)
 ( args //
   {
-      extraPatches = (if (args ? extraPatches) args.extraPatches else []) ++ 
+      extraPatches = (if (args ? extraPatches) then args.extraPatches else []) ++ 
       [
       {
         name = "Con Kolivas Patch";
