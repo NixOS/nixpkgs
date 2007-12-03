@@ -167,6 +167,14 @@ let
         (map (job: job.extraHttpdConfig) jobs);
     })
 
+  # Postgres SQL server
+  ++ optional config.services.postgresql.enable
+    (import ../upstart-jobs/postgresql.nix {
+      inherit config pkgs;
+      startDependency = if config.services.gw6c.enable then 
+        "gw6c" else "network-interfaces";
+    })
+
   # Samba service.
   ++ optional config.services.samba.enable
     (import ../upstart-jobs/samba.nix {
