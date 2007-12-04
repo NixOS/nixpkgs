@@ -33,7 +33,8 @@ if test -z "$NIXOS_CONFIG"; then NIXOS_CONFIG=/etc/nixos/configuration.nix; fi
 if test -z "$NIXOS_NO_PULL"; then
     manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
-    
+
+    mkdir -p /nix/var/nix/channel-cache
     for i in $manifests; do
         NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
     done
