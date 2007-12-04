@@ -204,7 +204,7 @@ rec {
     args: with args.lib; with args;
     if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
-    let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
+    let co = lib_unstable.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
         inherit (co) configureFlags buildInputs /*flags*/;
@@ -673,6 +673,14 @@ rec {
     inherit fetchurl stdenv zlib;
     zlibSupport = !stdenv ? isDietLibC;
   };
+
+  /*relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs) {
+    inherit fetchcvs stdenv ocaml postgresql fuse builderDefs;
+  };
+
+  relfs = relfsFun {
+    version = "cvs.2007.12.01";
+  } null;*/
 
   replace = import ../tools/text/replace {
     inherit fetchurl stdenv;
@@ -1740,7 +1748,7 @@ rec {
   };
 
   ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
-    inherit fetchurl stdenv;
+    inherit fetchsvn stdenv;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -2052,9 +2060,9 @@ rec {
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
-  #libsamplerate = (import ../development/libraries/libsamplerate) {
-  #  inherit fetchurl stdenv mkDerivationByConfigruation pkgconfig lib;
-  #};
+  libsamplerate = if builtins ? listToAttrs then (import ../development/libraries/libsamplerate) {
+    inherit fetchurl stdenv mkDerivationByConfiguration pkgconfig lib;
+  } else null;
 
   libgsf = import ../development/libraries/libgsf {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2
@@ -4260,9 +4268,9 @@ rec {
   } null;
 
   # commented out because it's using the new configuration style proposal which is unstable
-  /*
-  sox = import ../applications/misc/audio/sox {
-    inherit fetchurl stdenv lib mkDerivationByConfigruation;
+  
+  sox = if builtins ? listToAttrs then  import ../applications/misc/audio/sox {
+    inherit fetchurl stdenv lib mkDerivationByConfiguration;
     # optional features 
     inherit alsaLib; # libao
     inherit libsndfile libogg flac libmad lame libsamplerate;
@@ -4271,8 +4279,8 @@ rec {
      # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
      # That's why I'v added ffmpeg_svn
     ffmpeg = ffmpeg_svn;
-  };
-  */
+  } else null;
+  
 
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
     inherit fetchurl stdenv;

@@ -1,5 +1,5 @@
 args:
-( args.mkDerivationByConfigruation {
+( args.mkDerivationByConfiguration {
     flagConfig = {
       mandatory = { buildInputs = ["pkgconfig"];};
     # are these options of interest? We'll see

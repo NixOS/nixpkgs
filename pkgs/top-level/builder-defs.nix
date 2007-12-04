@@ -12,6 +12,7 @@ args: with args; with stringsWithDeps; with lib;
 		else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
 		else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) then "tbz2"
 		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
+		else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
 		else (abort "unknown archive type : ${s}"));
 
 	defAddToSearchPath = FullDepEntry ("
@@ -175,6 +176,9 @@ args: with args; with stringsWithDeps; with lib;
 		unzip '${s}'
 		cd \"$( unzip -lqq '${s}' | tail -1 | 
 			sed -e 's@^\\(\\s\\+[-0-9:]\\+\\)\\{3,3\\}\\s\\+\\([^/]\\+\\)/.*@\\2@' )\"
+	" else if (archiveType s) == "cvs-dir" then "
+		cp -r '${s}' .
+		cd \$(basename ${s})
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) [minInit];
