@@ -1846,6 +1846,11 @@ rec {
     inherit fetchurl stdenv libgpgerror gnupg;
   };
 
+  # gnu scientific library
+  gsl = import ../development/libraries/gsl {
+    inherit fetchurl stdenv;
+  };
+
   gtkLibs = recurseIntoAttrs gtkLibs210;
 
   gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
