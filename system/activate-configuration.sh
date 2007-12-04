@@ -119,6 +119,7 @@ mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
 mkdir -m 0755 -p /nix/var/nix/temproots
 mkdir -m 0755 -p /nix/var/nix/profiles
 mkdir -m 1777 -p /nix/var/nix/profiles/per-user
+mkdir -m 0755 -p /nix/var/nix/channel-cache
 
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
@@ -138,8 +139,17 @@ for i in @setuidPrograms@; do
 done
 
 
-# Set the host name.
-hostname @hostName@
+# Set the host name.  Don't clear it if it's not configured in the
+# NixOS configuration, since it may have been set by dhclient in the
+# meantime.
+if test -n "@hostName@"; then
+    hostname @hostName@
+else
+    # dhclient won't do anything if the hostname isn't empty.
+    if test "$(hostname)" = "(none)"; then
+	hostname ''
+    fi
+fi
 
 
 # Make this configuration the current configuration.

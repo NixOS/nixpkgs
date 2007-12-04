@@ -216,7 +216,10 @@
 
     hostName = mkOption {
       default = "nixos";
-      description = "The name of the machine.";
+      description = "
+        The name of the machine.  Leave it empty if you want to obtain
+        it from a DHCP server (if using DHCP).
+      ";
     };
 
     extraHosts = mkOption {
