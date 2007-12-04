@@ -1,8 +1,26 @@
-{dhcp, configFile, interfaces}:
+{pkgs, config}:
 
 let
 
+  cfg = config.services.dhcpd;
+
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
+
+  machines = pkgs.lib.concatStrings (map (machine: "
+    host ${machine.hostName} {
+      hardware ethernet ${machine.ethernetAddress};
+      fixed-address ${machine.ipAddress};
+    }
+  ") cfg.machines);
+
+  configFile = if cfg.configFile != null then cfg.configFile else pkgs.writeText "dhcpd.conf" "
+    default-lease-time 600;
+    max-lease-time 7200;
+    authoritative;
+    ddns-update-style ad-hoc;
+    ${cfg.extraConfig}
+    ${machines}
+  ";
 
 in
   
@@ -21,9 +39,9 @@ script
 
     touch ${stateDir}/dhcpd.leases
 
-    exec ${dhcp}/sbin/dhcpd -f -cf ${configFile} \\
+    exec ${pkgs.dhcp}/sbin/dhcpd -f -cf ${configFile} \\
         -lf ${stateDir}/dhcpd.leases \\
-        ${toString interfaces}
+        ${toString cfg.interfaces}
 
 end script
   ";

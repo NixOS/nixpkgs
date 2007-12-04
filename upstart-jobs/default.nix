@@ -121,9 +121,7 @@ let
   # DHCP server.
   ++ optional config.services.dhcpd.enable
     (import ../upstart-jobs/dhcpd.nix {
-      inherit (pkgs) dhcp;
-      configFile = config.services.dhcpd.configFile;
-      interfaces = config.services.dhcpd.interfaces;
+      inherit pkgs config;
     })
 
   # SSH daemon.
