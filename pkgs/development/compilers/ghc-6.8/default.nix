@@ -29,6 +29,11 @@ stdenv.mkDerivation (rec {
     cat $setupHook    >> $out/nix-support/setup-hook
   ";
 
+  patch64 = ./x86_64-linux_patch;
+
+  # Thanks to Ian Lynagh ghc now works on x86_64-linux as well 
+  patchPhase = if (stdenv.system == "x86_64-linx") then "patch -p2 < $patch64" else "";
+
   configureFlags="--with-gmp-libraries=$gmp/lib --with-readline-libraries=\"$readline/lib\"";
 
   # the presence of this file makes Cabal cry for happy while generating makefiles ...
