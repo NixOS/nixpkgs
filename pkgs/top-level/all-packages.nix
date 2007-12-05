@@ -1672,6 +1672,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ctl = import ../development/libraries/ctl {
+    inherit fetchurl stdenv ilmbase;
+  };
+
   cppunit = import ../development/libraries/cppunit {
 	  inherit fetchurl stdenv;
   };
@@ -1756,13 +1760,12 @@ rec {
   };
 
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  # needs some testing ..
-  #fltk20 = (import ../development/libraries/fltk) {
-    #inherit fetchurl stdenv lib mesa mesaHeaders libpng libjpeg zlib ;
-    #inherit (xlibs) libX11 libXext;
-    #flags = [ "useNixLibs" "threads" "shared" ];
-  #};
+  fltk20 = (import ../development/libraries/fltk) {
+    inherit mkDerivationByConfiguration x11;
+    inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    flags = [ "useNixLibs" "threads" "shared" "gl" ];
+    lib = lib_unstable;
+  };
 
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
@@ -2255,13 +2258,21 @@ rec {
 	  inherit fetchurl stdenv zlib libxml2;
   };
 
+  # this ctl version is needed by openexr_viewers
+  openexr_ctl = import ../development/libraries/openexr_ctl {
+    inherit fetchurl stdenv ilmbase ctl;
+    openexr = openexr_1_6_1;
+  };
+
   openexr_1_6_1 = import ../development/libraries/openexr {
-	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
           version = "1.6.1";
+          # optional features:
+          inherit ctl;
   };
   # This older version is needed by blender (it complains about missing half.h )
   openexr_1_4_0 = import ../development/libraries/openexr {
-	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
           version = "1.4.0";
   };
 
@@ -2294,6 +2305,11 @@ rec {
 
   popt110 = import ../development/libraries/popt/popt-1.10.6.nix {
     inherit fetchurl stdenv gettext libtool autoconf automake;
+  };
+
+
+  proj = import ../development/libraries/proj.4 {
+    inherit fetchurl stdenv;
   };
 
   qt3 = import ../development/libraries/qt-3 {
@@ -3363,6 +3379,13 @@ rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
+  /* compiles but has to be integrated into the kernel somehow
+  ndiswrapper = import ../os-specific/linux/ndiswrapper {
+    inherit fetchurl stdenv;
+    inherit kernel;
+  };
+  */
+
   nettools = import ../os-specific/linux/net-tools {
     inherit fetchurl stdenv;
   };
@@ -3848,6 +3871,12 @@ rec {
     xaw3dSupport = false;
     gtkGUI = true;
     xftSupport = true;
+  };
+
+  exrdisplay = import ../applications/graphics/exrdisplay {
+    inherit fetchurl stdenv pkgconfig mesa which openexr_ctl;
+    fltk = fltk20;
+    openexr = openexr_1_6_1;
   };
 
   fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel) {

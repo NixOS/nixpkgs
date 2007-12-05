@@ -1,9 +1,9 @@
 args: with args;
 stdenv.mkDerivation {
-	name = "ilmbase-1.0.0";
+	name = "ilmbase-1.0.1";
 	src = fetchurl {
-		url = http://FIXME/ilmbase-1.0.0.tar.gz;
-		sha256 = "1dpgi3hbff9nflg95r2smb6ssg5bh5g8mj9dxh896w29nh08ipnz";
+		url = http://download.savannah.nongnu.org/releases/openexr/ilmbase-1.0.1.tar.gz;
+		sha256 = "0z9r3r0bxyhgwhkdwln0dg1lnxz691qnjygrqlg3jym34rxzq52g";
 	};
 	configureFlags = "--enable-shared --disable-static";
 }
