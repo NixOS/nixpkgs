@@ -3530,6 +3530,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  utillinuxCurses = import ../os-specific/linux/util-linux {
+    inherit fetchurl stdenv ncurses;
+  };
+
   utillinuxStatic = lowPrio (appendToName "static" (import ../os-specific/linux/util-linux {
     inherit fetchurl;
     stdenv = makeStaticBinaries stdenv;
