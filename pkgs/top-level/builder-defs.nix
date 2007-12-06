@@ -179,6 +179,7 @@ args: with args; with stringsWithDeps; with lib;
 	" else if (archiveType s) == "cvs-dir" then "
 		cp -r '${s}' .
 		cd \$(basename ${s})
+		chmod u+rwX -R .
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) [minInit];

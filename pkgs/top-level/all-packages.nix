@@ -674,13 +674,15 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
-  /*relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs) {
-    inherit fetchcvs stdenv ocaml postgresql fuse builderDefs;
+  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs) {
+    inherit fetchcvs stdenv ocaml postgresql fuse pcre
+      builderDefs e2fsprogs pkgconfig;
+    inherit (gnome) gnomevfs GConf;
   };
 
   relfs = relfsFun {
     version = "cvs.2007.12.01";
-  } null;*/
+  } null;
 
   replace = import ../tools/text/replace {
     inherit fetchurl stdenv;
