@@ -23,7 +23,7 @@ in
 description \"PostgreSQL server\"
 
 start on ${startDependency}/started
-stop on ${startDependency}/stop
+stop on shutdown
 
 respawn ${postgresqlService}/bin/control start
 	";
