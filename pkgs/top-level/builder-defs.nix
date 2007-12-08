@@ -3,6 +3,8 @@ args: with args; with stringsWithDeps; with lib;
 {
 	inherit writeScript; 
 
+
+
 	forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
 
 	archiveType = s: 
@@ -107,18 +109,10 @@ args: with args; with stringsWithDeps; with lib;
 		    if test -f \$pkg/nix-support/setup-hook; then
 			source \$pkg/nix-support/setup-hook
 		    fi
-		    
-		    if test -f \$pkg/nix-support/propagated-build-inputs; then
-			for i in \$(cat \$pkg/nix-support/propagated-build-inputs); do
-			    findInputs \$i
-			done
-		    fi
 		}
 
 		pkgs=\"\"
-		for i in \$NIX_GCC ${toString buildInputs} ${toString 
-		(if (args ? propagatedBuildInputs) then 
-		args.propagatedBuildInputs else "")}; do
+		for i in \$NIX_GCC ${toString buildInputs}; do
 		    findInputs \$i
 		done
 
@@ -287,7 +281,11 @@ args: with args; with stringsWithDeps; with lib;
 	autoConfigureFlags = condConcat "" configFlags check;
 	autoMakeFlags = condConcat "" buildFlags check;
 	useConfig = getAttr ["useConfig"] false args;
-	buildInputs = if useConfig then autoBuildInputs else getAttr ["buildInputs"] [] args;
+	buildInputs = 
+		lib.closePropagation ((if useConfig then 
+			autoBuildInputs else 
+			getAttr ["buildInputs"] [] args)++
+			(getAttr ["propagatedBuildInputs"] [] args));
 	configureFlags = if useConfig then autoConfigureFlags else 
 	    getAttr ["configureFlags"] "" args;
 	makeFlags = if useConfig then autoMakeFlags else getAttr ["makeFlags"] "" args;

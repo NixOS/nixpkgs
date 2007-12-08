@@ -6,7 +6,7 @@ args : with args;
 		sha256 = "0k58bkbyqx94ch7scvn3d26296ai9nddfb6lg8v3bhbi2zj4i2n5";
 	};
 		buildInputs = [
-			    pkgconfig libXrender xextproto gtk libwnck GConf libgnome 
+			    pkgconfig gtk libwnck GConf libgnome 
 			    libgnomeui metacity gnomegtk glib pango libglade libgtkhtml 
 			    gtkhtml libgnomecanvas libgnomeprint libgnomeprintui gnomepanel 
 			    librsvg fuse 
@@ -14,7 +14,8 @@ args : with args;
 		  propagatedBuildInputs = [
 		    libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
 		    libICE libSM startupnotification mesa GConf perl perlXMLParser libxslt
-		    dbus dbus_glib 
+		    dbus dbus_glib compositeproto fixesproto damageproto randrproto
+		    xineramaproto renderproto kbproto xextproto libXrender 
 		  ];
 		configureFlags = ["--enable-gtk" "--enable-fuse" 
 			"--enable-annotate" "--enable-librsvg"] ++ 
@@ -35,7 +36,9 @@ stdenv.mkDerivation
 rec {
 	name = "compiz-0.6.2";
 	builder = writeScript (name + "-builder")
-		(textClosure [doPatch doConfigure doMakeInstall doForceShare postAll]);
+		(textClosure [doPatch doConfigure doMakeInstall doPropagate 
+			doForceShare postAll]);
+	inherit propagatedBuildInputs;
 	meta = {
 		description = "
 	Compiz window manager

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure [doAutotools doConfigure doMakeInstall fixPkgconfig fixInterpreter doForceShare 
 			doPropagate]);
+	inherit propagatedBuildInputs;
 	meta = {
 		description = "
 	Compiz BCOP.
