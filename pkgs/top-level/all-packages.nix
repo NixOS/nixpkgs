@@ -4390,7 +4390,7 @@ rec {
     inherit fetchurl stdenv fuse pkgconfig;
   };
 
-  ntfprogs = import ../misc/ntfsprogs {
+  ntfsprogs = import ../misc/ntfsprogs {
     inherit fetchurl stdenv;
   };
 
