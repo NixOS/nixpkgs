@@ -3557,7 +3557,7 @@ rec {
     #enableOfficialBranding = true;
   });
 
-  firefoxWrapper = wrapFirefox firefox;
+  firefoxWrapper = wrapFirefox firefox "";
 
   firefox3b1 = lowPrio (import ../applications/networking/browsers/firefox3b1 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
@@ -3568,7 +3568,7 @@ rec {
     #enableOfficialBranding = true;
   });
 
-  firefox3b1Wrapper = wrapFirefox firefox3b1;
+  firefox3b1Wrapper = wrapFirefox firefox3b1 "";
  
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
@@ -4088,8 +4088,8 @@ rec {
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
-  wrapFirefox = firefox: import ../applications/networking/browsers/firefox-wrapper {
-    inherit stdenv firefox;
+  wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
+    inherit stdenv firefox nameSuffix;
     plugins = []
     ++ lib.optional (system == "i686-linux") flashplayer
     # RealPlayer is disabled by default for legal reasons.
