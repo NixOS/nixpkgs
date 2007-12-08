@@ -2746,7 +2746,8 @@ rec {
   };
 
   nagios = import ../servers/monitoring/nagios {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl gd libpng zlib;
+    gdSupport = true;
   };
 
   nagiosPluginsOfficial = import ../servers/monitoring/nagios/plugins/official {
