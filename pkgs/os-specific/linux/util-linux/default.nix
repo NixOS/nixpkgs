@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+args: with args;
 
 stdenv.mkDerivation {
   name = "util-linux-2.13-pre7";
@@ -9,6 +9,10 @@ stdenv.mkDerivation {
   };
   
   configureFlags = "--disable-use-tty-group";
+
+  buildInputs = [] 
+  	++ (if args ? ncurses then [args.ncurses] else [])
+  ;
 
   preBuild = "
     makeFlagsArray=(usrbinexecdir=$out/bin usrsbinexecdir=$out/sbin datadir=$out/share exampledir=$out/share/getopt)

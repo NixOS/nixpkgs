@@ -1,5 +1,5 @@
 args:
-( args.mkDerivationByConfigruation {
+( args.mkDerivationByConfiguration {
     flagConfig = {
     mandatory = { implies = [ "no_oss" "no_sun_audio" ]; };
     # are these options of interest? We'll see

@@ -24,6 +24,7 @@ stdenv.mkDerivation {
   preConfigure = "
     configureFlags=\"$configureFlags --with-privsep-path=$out/empty\"
     ensureDir $out/empty
+    substituteInPlace pathnames.h --replace 'SSHDIR \"/ssh_config\"' '\"/etc/ssh/ssh_config\"'
   ";
 
   postInstall = "

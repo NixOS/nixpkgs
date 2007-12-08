@@ -204,7 +204,7 @@ rec {
     args: with args.lib; with args;
     if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
-    let co = chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
+    let co = lib_unstable.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
         inherit (co) configureFlags buildInputs /*flags*/;
@@ -672,6 +672,16 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
+  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs) {
+    inherit fetchcvs stdenv ocaml postgresql fuse pcre
+      builderDefs e2fsprogs pkgconfig;
+    inherit (gnome) gnomevfs GConf;
+  };
+
+  relfs = relfsFun {
+    version = "cvs.2007.12.01";
+  } null;
+
   replace = import ../tools/text/replace {
     inherit fetchurl stdenv;
   };
@@ -972,7 +982,7 @@ rec {
   ghcsAndLibs = 
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
-      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline;
+      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline stdenv;
       inherit ghcPkgUtil;
       lib = lib_unstable;
     });
@@ -1013,10 +1023,10 @@ rec {
   ghc = ghc661;
 
   ghc68 = lowPrio (import ../development/compilers/ghc-6.8 {
-    inherit fetchurl stdenv readline perl gmp ncurses libxml2 libxslt pkgconfig;
+    inherit fetchurl stdenv readline perl gmp ncurses pkgconfig;
+	inherit (gtkLibs) gtk;
     m4 = gnum4;
     ghc = ghcboot;
-	inherit (gtkLibs) gtk;
   });
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
@@ -1229,7 +1239,7 @@ rec {
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
   php = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration;
+   inherit mkDerivationByConfiguration stdenv;
    lib = lib_unstable;
    inherit fetchurl flex bison apacheHttpd; # gettext;
    mysql = mysql5;
@@ -1489,6 +1499,11 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  # couldn't find the source yet
+  selenium_rc_binary = import ../development/tools/selenium/remote-control {
+    inherit fetchurl stdenv unzip;
+  };
+
   scons = import ../development/tools/build-managers/scons {
     inherit fetchurl stdenv python;
   };
@@ -1651,6 +1666,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ctl = import ../development/libraries/ctl {
+    inherit fetchurl stdenv ilmbase;
+  };
+
   cppunit = import ../development/libraries/cppunit {
 	  inherit fetchurl stdenv;
   };
@@ -1726,7 +1745,7 @@ rec {
   };
 
   ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
-    inherit fetchurl stdenv;
+    inherit fetchsvn stdenv;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -1734,13 +1753,12 @@ rec {
   };
 
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  # needs some testing ..
-  #fltk20 = (import ../development/libraries/fltk) {
-    #inherit fetchurl stdenv lib mesa mesaHeaders libpng libjpeg zlib ;
-    #inherit (xlibs) libX11 libXext;
-    #flags = [ "useNixLibs" "threads" "shared" ];
-  #};
+  fltk20 = (import ../development/libraries/fltk) {
+    inherit mkDerivationByConfiguration x11;
+    inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    flags = [ "useNixLibs" "threads" "shared" "gl" ];
+    lib = lib_unstable;
+  };
 
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
@@ -1760,6 +1778,15 @@ rec {
 
   fribidi = import ../development/libraries/fribidi {
     inherit fetchurl stdenv;
+  };
+
+  geos = import ../development/libraries/geos {
+    lib = lib_unstable;
+    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which;
+    use_svn = stdenv.system == "x86_64-linux";
+    python = python;
+    # optional features:  
+    # python / ruby support
   };
 
   gettext = getVersion "gettext" gettext_alts;
@@ -1816,6 +1843,11 @@ rec {
 
   gpgme = import ../development/libraries/gpgme {
     inherit fetchurl stdenv libgpgerror gnupg;
+  };
+
+  # gnu scientific library
+  gsl = import ../development/libraries/gsl {
+    inherit fetchurl stdenv;
   };
 
   gtkLibs = recurseIntoAttrs gtkLibs210;
@@ -2019,9 +2051,9 @@ rec {
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
-  #libsamplerate = (import ../development/libraries/libsamplerate) {
-  #  inherit fetchurl stdenv mkDerivationByConfigruation pkgconfig lib;
-  #};
+  libsamplerate = if builtins ? listToAttrs then (import ../development/libraries/libsamplerate) {
+    inherit fetchurl stdenv mkDerivationByConfiguration pkgconfig lib;
+  } else null;
 
   libgsf = import ../development/libraries/libgsf {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2
@@ -2214,13 +2246,21 @@ rec {
 	  inherit fetchurl stdenv zlib libxml2;
   };
 
+  # this ctl version is needed by openexr_viewers
+  openexr_ctl = import ../development/libraries/openexr_ctl {
+    inherit fetchurl stdenv ilmbase ctl;
+    openexr = openexr_1_6_1;
+  };
+
   openexr_1_6_1 = import ../development/libraries/openexr {
-	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
           version = "1.6.1";
+          # optional features:
+          inherit ctl;
   };
   # This older version is needed by blender (it complains about missing half.h )
   openexr_1_4_0 = import ../development/libraries/openexr {
-	  inherit fetchurl stdenv ilmbase zlib pkgconfig;
+	  inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
           version = "1.4.0";
   };
 
@@ -2240,7 +2280,6 @@ rec {
   pcre = import ../development/libraries/pcre {
     inherit fetchurl stdenv;
     unicodeSupport = getFlag "unicode" "pcre" false;
-    cplusplusSupport = !stdenv ? isDietLibC;
   };
 
   poppler = import ../development/libraries/poppler {
@@ -2254,6 +2293,11 @@ rec {
 
   popt110 = import ../development/libraries/popt/popt-1.10.6.nix {
     inherit fetchurl stdenv gettext libtool autoconf automake;
+  };
+
+
+  proj = import ../development/libraries/proj.4 {
+    inherit fetchurl stdenv;
   };
 
   qt3 = import ../development/libraries/qt-3 {
@@ -3146,6 +3190,13 @@ rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
+  /* compiles but has to be integrated into the kernel somehow
+  ndiswrapper = import ../os-specific/linux/ndiswrapper {
+    inherit fetchurl stdenv;
+    inherit kernel;
+  };
+  */
+
   nettools = import ../os-specific/linux/net-tools {
     inherit fetchurl stdenv;
   };
@@ -3276,12 +3327,20 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  upstartJobControl = import ../os-specific/linux/upstart/jobcontrol.nix {
+    inherit stdenv;
+  };
+
   usbutils = import ../os-specific/linux/usbutils {
     inherit fetchurl stdenv libusb;
   };
 
   utillinux = import ../os-specific/linux/util-linux {
     inherit fetchurl stdenv;
+  };
+
+  utillinuxCurses = import ../os-specific/linux/util-linux {
+    inherit fetchurl stdenv ncurses;
   };
 
   utillinuxStatic = lowPrio (appendToName "static" (import ../os-specific/linux/util-linux {
@@ -3436,13 +3495,12 @@ rec {
   };
   blender = import ../applications/misc/blender {
     inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11
-      libjpeg libpng zlib /* smpeg  sdl */;
+      libjpeg libpng zlib stdenv /* smpeg  sdl */;
     inherit (xlibs) inputproto libXi;
     lib = lib_unstable;
-    python = python_alts.v_2_5;
+    python = builtins.getAttr "2.5" python_alts;
     freealut = freealut_soft;
     openal = openalSoft;
-    stdenv = stdenvUsingSetupNew2;
     openexr = openexr_1_4_0;
   };
 
@@ -3626,6 +3684,12 @@ rec {
     xaw3dSupport = false;
     gtkGUI = true;
     xftSupport = true;
+  };
+
+  exrdisplay = import ../applications/graphics/exrdisplay {
+    inherit fetchurl stdenv pkgconfig mesa which openexr_ctl;
+    fltk = fltk20;
+    openexr = openexr_1_6_1;
   };
 
   fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel) {
@@ -4045,9 +4109,9 @@ rec {
   } null;
 
   # commented out because it's using the new configuration style proposal which is unstable
-  /*
-  sox = import ../applications/misc/audio/sox {
-    inherit fetchurl stdenv lib mkDerivationByConfigruation;
+  
+  sox = if builtins ? listToAttrs then  import ../applications/misc/audio/sox {
+    inherit fetchurl stdenv lib mkDerivationByConfiguration;
     # optional features 
     inherit alsaLib; # libao
     inherit libsndfile libogg flac libmad lame libsamplerate;
@@ -4056,8 +4120,8 @@ rec {
      # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
      # That's why I'v added ffmpeg_svn
     ffmpeg = ffmpeg_svn;
-  };
-  */
+  } else null;
+  
 
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
     inherit fetchurl stdenv;
@@ -4188,7 +4252,7 @@ rec {
 
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
-      pkgconfig libxml2 zip libpng libjpeg;
+      pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
     inherit (gtkLibs) gtk;
   };
 
@@ -4280,6 +4344,16 @@ rec {
 
   ### GAMES
 
+  construoFun = lib.sumArgs (selectVersion ../games/construo) {
+    inherit stdenv fetchurl builderDefs
+      zlib;
+    inherit (xlibs) libX11 xproto;
+  };
+
+  construo = construoFun {
+    inherit mesa freeglut;
+    version = "0.2.2";
+  } null;
 
   exult = import ../games/exult {
     inherit fetchurl SDL SDL_mixer zlib libpng unzip;
