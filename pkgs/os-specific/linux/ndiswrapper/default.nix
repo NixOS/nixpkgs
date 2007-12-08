@@ -1,6 +1,5 @@
-args:
-with args;
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "ndiswrapper-1.49-stable";
 
   # need at least .config and include 
@@ -16,7 +15,10 @@ args.stdenv.mkDerivation {
     sha256 = "1b9nqkk7gv6gffzj9b8mjy5myxf2afwpyr2n5wbfsylf15dvvvjr";
   };
 
-  buildInputs =(with args; [kernelHeaders kernel]);
+  buildInputs =[kernelHeaders kernel];
+
+  # this is a patch against svn head, not stable version
+  patches = [./prefix.patch];
 
   meta = { 
       description = "Ndis driver wrapper for the Linux kernel";
