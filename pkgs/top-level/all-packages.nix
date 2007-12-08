@@ -228,6 +228,12 @@ rec {
 		inherit stdenv lib;
 	};
 
+  # Call a specific version of a Nix expression, that is,
+  # `selectVersion ./foo {version = "0.1.2"; args...}' evaluates to
+  # `import ./foo/0.1.2.nix args'.
+  selectVersion = dir: args: import (dir + "/${args.version}.nix") args;
+        
+        
   ### STANDARD ENVIRONMENT
 
 
@@ -1214,16 +1220,14 @@ rec {
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  pyrexFun = lib.sumArgs (import ../development/interpreters/pyrex) {
-  	inherit fetchurl stdenv stringsWithDeps lib builderDefs;
+  pyrexFun = lib.sumArgs (selectVersion ../development/interpreters/pyrex) {
+    inherit fetchurl stdenv stringsWithDeps lib builderDefs;
 	python = builtins.getAttr "2.5" python_alts;
   };
 
-  pyrex = pyrexFun {
-  	version = "0.9.6";
-  } null;
+  pyrex = pyrexFun {version = "0.9.6";} null;
 
-  QiFun = lib.sumArgs (import ../development/compilers/qi) {
+  QiFun = lib.sumArgs (selectVersion ../development/compilers/qi) {
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
 
@@ -1406,7 +1410,7 @@ rec {
     inherit fetchurl stdenv perl perlXMLSimple;
   };
 
-  indentFun = import ../development/tools/misc/indent {
+  indentFun = lib.sumArgs (selectVersion ../development/tools/misc/indent) {
     inherit fetchurl stdenv builderDefs;
   };
 
@@ -1890,9 +1894,9 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng bzip2;
   };
 
-  intltoolFun = lib.sumArgs (import ../development/tools/misc/intltool) {
-  	inherit fetchurl stdenv lib builderDefs stringsWithDeps
-		perl perlXMLParser;
+  intltoolFun = lib.sumArgs (selectVersion ../development/tools/misc/intltool) {
+    inherit fetchurl stdenv lib builderDefs stringsWithDeps
+      perl perlXMLParser;
   };
 
   intltool = intltoolFun {version = "0.36.2";} null;
@@ -3390,10 +3394,9 @@ rec {
       libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
-    inherit (gnome) libgnome libgnomeui metacity
-	      glib pango libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeprint
-              libgnomeprintui gnomepanel;
+    inherit (gnome) libgnome libgnomeui metacity glib pango
+      libglade libgtkhtml gtkhtml libgnomecanvas libgnomeprint
+      libgnomeprintui gnomepanel;
     gnomegtk = gnome.gtk;
     inherit librsvg fuse;
   };
@@ -3402,17 +3405,17 @@ rec {
     version = "0.6.2";
   };
 
-  compizFun = lib.sumArgs (assert mesaSupported; import ../applications/window-managers/compiz) {
- 	inherit lib builderDefs stringsWithDeps;
+  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz) {
+    inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnome libgnomeui metacity
-	      glib pango libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeprint
-              libgnomeprintui gnomepanel;
+      glib pango libglade libgtkhtml gtkhtml
+      libgnomecanvas libgnomeprint
+      libgnomeprintui gnomepanel;
     gnomegtk = gnome.gtk;
     inherit librsvg fuse;
     inherit dbus dbus_glib;
@@ -3424,27 +3427,23 @@ rec {
   } null;
 
   compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
-
-  	version = getConfig ["compizFusion" "version"] "0.6.0" ;
-	inherit compiz;
-
-	inherit stringsWithDeps lib builderDefs;
-
+    version = getConfig ["compizFusion" "version"] "0.6.0";
+    inherit compiz;
+    inherit stringsWithDeps lib builderDefs;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnome libgnomeui metacity
-	      glib pango libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeprint
-              libgnomeprintui gnomepanel gnomedesktop;
+      glib pango libglade libgtkhtml gtkhtml
+      libgnomecanvas libgnomeprint
+      libgnomeprintui gnomepanel gnomedesktop;
     gnomegtk = gnome.gtk;
     inherit librsvg fuse dbus dbus_glib git;
- 
- 	inherit automake autoconf libtool intltool python pyrex gettext;
-	inherit pygtk pycairo getopt libjpeg glxinfo;
-	inherit (xorg) xvinfo xdpyinfo;
+    inherit automake autoconf libtool intltool python pyrex gettext;
+    inherit pygtk pycairo getopt libjpeg glxinfo;
+    inherit (xorg) xvinfo xdpyinfo;
   };
   
   compizExtra = import ../applications/window-managers/compiz/extra.nix {
@@ -3536,7 +3535,7 @@ rec {
     xftSupport = true;
   };
 
-  fbpanelFun = lib.sumArgs (import ../applications/window-managers/fbpanel) {
+  fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel) {
     inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11 libXmu libXpm;
@@ -3638,13 +3637,11 @@ rec {
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
-  gocrFun = lib.sumArgs (import ../applications/graphics/gocr) {
-  	inherit builderDefs fetchurl stdenv;
+  gocrFun = lib.sumArgs (selectVersion ../applications/graphics/gocr) {
+    inherit builderDefs fetchurl stdenv;
   };
 
-  gocr = gocrFun {
-  	version	= "0.44";
-  } null;
+  gocr = gocrFun {version = "0.44";} null;
 
   gphoto2 = import ../applications/misc/gphoto2 {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
@@ -4149,17 +4146,17 @@ rec {
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
-  xscreensaverFun = import ../applications/graphics/xscreensaver {
+  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver) {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
 
   xscreensaver = xscreensaverFun {
-  	version = "5.04";
-	flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
-	inherit mesa libxml2 libjpeg;
-	inherit (gtkLibs) gtk;
-	inherit (gnome) libglade;
+    version = "5.04";
+    flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
+    inherit mesa libxml2 libjpeg;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libglade;
   } null;
 
   xterm = import ../applications/misc/xterm {
