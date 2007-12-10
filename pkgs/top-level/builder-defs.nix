@@ -13,6 +13,7 @@ args: with args; with stringsWithDeps; with lib;
 		else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) then "tbz2"
 		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
 		else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
+		else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
 		else (abort "unknown archive type : ${s}"));
 
 	defAddToSearchPath = FullDepEntry ("
@@ -180,6 +181,9 @@ args: with args; with stringsWithDeps; with lib;
 		cp -r '${s}' .
 		cd \$(basename ${s})
 		chmod u+rwX -R .
+	" else if (archiveType s) == "narbz2" then "
+		bzip2 <${s} | nix-store --restore \$PWD/\$(basename ${s} .nar.bz2)
+		cd \$(basename ${s} .nar.bz2)
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) [minInit];

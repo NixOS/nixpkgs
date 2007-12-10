@@ -3925,7 +3925,16 @@ rec {
     #enableOfficialBranding = true;
   });
 
+  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox3b1/binary.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+    	python curl coreutils freetype fontconfig;
+    inherit (gtkLibs) gtk atk pango glib;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi libX11 libXrender libXft libXt;
+  });
+
   firefox3b1Wrapper = wrapFirefox firefox3b1 "";
+  firefox3b1BinWrapper = wrapFirefox firefox3b1Bin "";
  
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
