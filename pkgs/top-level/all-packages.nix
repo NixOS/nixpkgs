@@ -543,6 +543,10 @@ rec {
       inherit fetchurl stdenv;
     });
 
+  hddtemp = import ../tools/hddtemp {
+    inherit fetchurl stdenv;
+  };
+
   hevea = import ../tools/typesetting/hevea {
     inherit fetchurl stdenv ocaml;
   };
@@ -4530,6 +4534,25 @@ rec {
     inherit (gnome) scrollkeeper libglade;
     inherit (xlibs) libXmu libXext;
   };
+
+  # doesn't compile yet - in case someone else want's to continue .. 
+  /*
+  qgis_svn = import ../applications/misc/qgis_svn {
+    lib = lib_unstable;
+    inherit mkDerivationByConfiguration fetchsvn flex
+            ncurses fetchurl perl cmake gdal geos proj x11
+            gsl libpng zlib
+            sqlite glibc fontconfig freetype;
+    inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
+    inherit (xorg) libICE;
+    stdenv = stdenvUsingSetupNew2;
+    qt = qt4;
+    bison = bison23;
+
+    # optional features
+    # grass = "not yet supported" # cmake -D WITH_GRASS=TRUE  and GRASS_PREFX=..
+  };
+  */
 
   zapping = import ../applications/video/zapping {
     inherit fetchurl stdenv pkgconfig perl python 
