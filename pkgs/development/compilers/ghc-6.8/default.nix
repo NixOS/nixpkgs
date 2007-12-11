@@ -34,12 +34,13 @@ stdenv.mkDerivation (rec {
   # Thanks to Ian Lynagh ghc now works on x86_64-linux as well 
   patchPhase = if (stdenv.system == "x86_64-linux") then "patch -p2 < $patch64" else "";
 
-  configureFlags="--with-gmp-libraries=$gmp/lib --with-readline-libraries=\"$readline/lib\"";
+  configureFlags="--with-gmp-libraries=${gmp}/lib --with-readline-libraries=${readline}/lib";
 
-  # the presence of this file makes Cabal cry for happy while generating makefiles ...
   preConfigure = "
-    echo 'GhcThreaded=NO' > mk/build.mk
+    # the presence of this file makes Cabal cry for happy while generating makefiles ...
     rm libraries/haskell-src/Language/Haskell/Parser.ly
+    # still requires a hack for ncurses
+    sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
   ";
 
   inherit readline gmp ncurses;
