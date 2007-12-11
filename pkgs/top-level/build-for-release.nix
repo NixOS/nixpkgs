@@ -62,6 +62,7 @@ let {
     gcc42
     gdb
     ghc
+    ghc68
     ghostscript
     gimp
     gnugrep
