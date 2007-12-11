@@ -1,5 +1,7 @@
 args: with args;
 
+assert stdenv.system == "i686-linux";
+
 stdenv.mkDerivation {
   name = "firefox-3b1";
 
