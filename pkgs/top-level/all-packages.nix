@@ -664,6 +664,10 @@ rec {
     inherit (xlibs) libX11;
   };
 
+  psmisc = import ../tools/misc/psmisc {
+    inherit stdenv fetchurl ncurses;
+  };
+
   pwgen = import ../tools/security/pwgen {
     inherit stdenv fetchurl;
   };
