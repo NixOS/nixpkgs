@@ -3851,6 +3851,14 @@ rec {
     inherit fetchurl stdenv qt4 djvulibre;
   };
 
+  dvdplusrwtoolsFun = lib.sumArgs (selectVersion ../os-specific/linux/dvd+rw-tools) {
+    inherit fetchurl stdenv builderDefs cdrkit m4;
+  };
+ 
+  dvdplusrwtools = dvdplusrwtoolsFun {
+    version = "7.0";
+  } null;
+
   eclipse = plugins:
     import ../applications/editors/eclipse {
       inherit fetchurl stdenv makeWrapper jdk;
