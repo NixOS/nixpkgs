@@ -3466,6 +3466,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  sdparmFun = lib.sumArgs (selectVersion ../os-specific/linux/sdparm) {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  sdparm = sdparmFun {
+    version = "1.02";
+  } null;
+ 
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
   };
