@@ -37,6 +37,7 @@ rec {
     else [(head list) separator]
          ++ (intersperse separator (tail list));
 
+  toList = x : if (__isList x) then x else [x];
 
   concatStringsSep = separator: list:
     concatStrings (intersperse separator list);
@@ -55,7 +56,7 @@ rec {
   # "y"] applied to some set e returns e.x.y, if it exists.  The
   # default value is returned otherwise.
   # comment: I'd rename this to getAttrRec or something like that .. (has the same name as builtin.getAttr) - Marc Weber
-  getAttr = attrPath: default: e:
+  getAttr = attrPath : default : e :
     let {
       attr = head attrPath;
       body =
@@ -64,6 +65,20 @@ rec {
         then getAttr (tail attrPath) default (builtins.getAttr attr e)
         else default;
     };
+  #getAttr = attrPath: default: e: getAttrMap id;
+
+  # the same as getAttr but if the element exists map the value using function f 
+  # corresponds to the maybe function of haskell
+  getAttrMap = f : attrPath : default : e :
+    let {
+      attr = head attrPath;
+      body =
+        if attrPath == [] then e
+        else if builtins ? hasAttr && builtins.hasAttr attr e
+        then f (getAttr (tail attrPath) default (builtins.getAttr attr e))
+        else default;
+    };
+
 
 
   # Filter a list using a predicate; that is, return a list containing
@@ -116,7 +131,9 @@ rec {
   # Return a singleton list or an empty list, depending on a boolean
   # value.  Useful when building lists with optional elements
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
-  optional = cond: elem: if cond then [elem] else [];
+  optional = cond: elem: if (cond) then [elem] else [];
+
+  whenFlip = x : cond : if (cond) then x else "";
 
     
   # Return a list of integers from `first' up to and including `last'.
@@ -187,11 +204,12 @@ rec {
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
+  # TODO should be renamed to nv because niksnut has renamed the attribute attr to name
   av = name : value : { inherit name value; };
   # attribute set containing one attribute
-  avs = attr : value : listToAttrs [ (av attr value) ];
+  avs = name : value : listToAttrs [ (av name value) ];
   # adds / replaces an attribute of an attribute set
-  setAttr = set : attr : v : set // (avs attr v);
+  setAttr = set : name : v : set // (avs name v);
 
   id = x : x;
   # true if all/ at least one element(s) satisfy f
@@ -203,12 +221,37 @@ rec {
 
   mergeAttrs = fold ( x : y : x // y) {};
 
+  # Using f = a : b = b the result is similar to //
+  # merge attributes with custom function handling the case that the attribute
+  # exists in both sets
+  mergeAttrsWithFunc = f : set1 : set2 :
+    fold (n: set : if (__hasAttr n set) 
+                        then setAttr set n (f (__getAttr n set) (__getAttr n set2))
+                        else set )
+           set1 (__attrNames set2);
+
+  # merging two attribute set concatenating the values of same attribute names
+  # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
+  mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a : b : (toList a) ++ (toList b) );
+
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
-           
+
+  # usage / example
+  # flagConfig = {
+  # } // (enableDisableFeature "flagName" "configure_feature" extraAttrs;)
+  #
+  # is equal to
+  # flagConfig = {
+  #   flagName = { cfgOption = "--enable-configure_feature"; } // extraAttrs;
+  #   no_flagName = { cfgOption = "--disable-configure_feature"; };
+  enableDisableFeature = flagName : configure_feature : extraAttrs :
+    listToAttrs [ ( av flagName ({ cfgOption = "--enable-${configure_feature}"; } // extraAttrs ) )
+                  ( av "no_${flagName}" ({ cfgOption = "--disable-${configure_feature}"; } ) )];
+
   # calls chooseOptionsByFlags2 with some preprocessing
   # chooseOptionsByFlags2 returns an attribute set meant to be used to create new derivaitons.
   # see mkDerivationByConfiguration in all-packages.nix and the examples given below.
