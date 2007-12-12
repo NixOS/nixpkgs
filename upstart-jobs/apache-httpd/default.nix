@@ -9,7 +9,8 @@ let
   httpd = pkgs.apacheHttpd;
 
 
-  documentRoot = "/etc";
+  documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
+    pkgs.runCommand "empty" {} "ensureDir $out";
 
 
   # Names of modules from ${httpd}/modules that we want to load.
@@ -138,12 +139,24 @@ let
       in pkgs.lib.concatStrings (map f apacheModules)
     }
 
-    # !!! is this a good idea?
-    UseCanonicalName Off
-
-    ServerSignature On
-
-    ${if cfg.noUserDir then "" else "UserDir public_html"}
+    ${if cfg.enableUserDir then ''
+    
+      UserDir public_html
+      
+      <Directory "/home/*/public_html">
+          AllowOverride FileInfo AuthConfig Limit Indexes
+          Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+          <Limit GET POST OPTIONS>
+              Order allow,deny
+              Allow from all
+          </Limit>
+          <LimitExcept GET POST OPTIONS>
+              Order deny,allow
+              Deny from all
+          </LimitExcept>
+      </Directory>
+      
+    '' else ""}
 
     AddHandler type-map var
 
@@ -156,6 +169,7 @@ let
     ${loggingConf}
     ${browserHacks}
 
+    Include ${httpd}/conf/extra/httpd-default.conf
     Include ${httpd}/conf/extra/httpd-autoindex.conf
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
@@ -168,6 +182,18 @@ let
     </Directory>
 
     ${documentRootConf}
+
+    ${
+      let makeDirConf = elem: ''
+            Alias ${elem.urlPath} ${elem.dir}/
+            <Directory ${elem.dir}>
+                Order allow,deny
+                Allow from all
+                AllowOverride None
+            </Directory>
+          '';
+      in pkgs.lib.concatStrings (map makeDirConf cfg.servedDirs)
+    }
   '';
 
     
@@ -187,6 +213,10 @@ in
     { name = cfg.group;
     }
   ];
+
+  # Statically verify the syntactic correctness of the generated
+  # httpd.conf.
+  buildHook = "${httpd}/bin/httpd -f ${httpdConf} -t";
 
   job = ''
     description "Apache HTTPD"

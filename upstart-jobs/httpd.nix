@@ -17,7 +17,6 @@ let
   logDir = cfg.logDir;
   stateDir = cfg.stateDir;
   enableSSL = false;
-  noUserDir = cfg.noUserDir;
   extraDirectories = cfg.extraDirectories + extraConfig;
 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
@@ -29,7 +28,8 @@ let
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir
-      noUserDir extraDirectories;
+      extraDirectories;
+    noUserDir = !cfg.enableUserDir;
     
     subServices =
     

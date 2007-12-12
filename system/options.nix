@@ -929,10 +929,32 @@
         ";
       };
 
-      noUserDir = mkOption {
-        default = true;
+      enableUserDir = mkOption {
+        default = false;
         description = "
-          Set to false to let users to publish ~/public_html as /~user.
+          Whether to enable serving <filename>~/public_html</filename> as
+          <literal>/~<replaceable>username</replaceable></literal>.
+        ";
+      };
+
+      documentRoot = mkOption {
+        default = null;
+        example = "/data/webserver/docs";
+        description = "
+          The path of Apache's document root directory.  If left undefined,
+          an empty directory in the Nix store will be used as root.
+        ";
+      };
+
+      servedDirs = mkOption {
+        default = [];
+        example = [
+          { urlPath = "/nix";
+            dir = "/home/eelco/Dev/nix-homepage";
+          }
+        ];
+        description = "
+          This option provides a simple way to serve static directories.
         ";
       };
 
