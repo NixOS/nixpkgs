@@ -1,4 +1,4 @@
-rgs:
+args:
 let edf = args.lib.enableDisableFeature; in
 ( args.mkDerivationByConfiguration {
     # most interpreters aren't tested yet.. (see python for example how to do it)
