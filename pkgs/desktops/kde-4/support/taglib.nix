@@ -2,12 +2,6 @@ args: with args;
 
 stdenv.mkDerivation {
   name = "taglib-1.4svn";
-  
-  src = fetchsvn {
-    url = svn://anonsvn.kde.org/home/kde/trunk/kdesupport/taglib;
-	rev = 732646;
-	md5 = "647d68a76858cf3a667656c486b0a8c2";
-  };
-
+  src = svnSrc "taglib" "1myfgykflbs3l1mrzg4iv8rb1mbd0vpmzl5dnnslfi9b0xg6ydip";
   buildInputs = [ cmake zlib ];
 }
