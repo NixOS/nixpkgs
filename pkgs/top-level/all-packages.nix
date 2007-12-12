@@ -3979,6 +3979,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  freemind = import ../applications/misc/freemind {
+    inherit fetchurl stdenv ant;
+    jdk = jdk;
+    jre = jdk;
+  };
+
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
