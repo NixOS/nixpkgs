@@ -899,6 +899,13 @@
         ";
       };
 
+      enableSSL = mkOption {
+        default = false;
+        description = "
+          Whether to enable SSL (https) support.
+        ";
+      };
+
       adminAddr = mkOption {
         example = "admin@example.org";
         description = "
