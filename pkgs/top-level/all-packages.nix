@@ -1234,10 +1234,9 @@ rec {
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
   php = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration stdenv;
+   inherit mkDerivationByConfiguration stdenv mysql;
    lib = lib_unstable;
    inherit fetchurl flex bison apacheHttpd; # gettext;
-   mysql = mysql5;
    inherit libxml2;
   };
 
@@ -1995,8 +1994,7 @@ rec {
 
   libdbiDrivers = libdbiDriversFun {
     version = "0.8.2-1";
-    mysql = mysql5;
-    inherit sqlite;
+    inherit sqlite mysql;
   } null;
 
 
@@ -2857,12 +2855,12 @@ rec {
     inherit fetchurl stdenv apacheHttpd python;
   };
 
-  mysql = import ../servers/sql/mysql {
+  mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
   };
 
-  mysql5 = import ../servers/sql/mysql5 {
+  mysql = import ../servers/sql/mysql5 {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
   };
