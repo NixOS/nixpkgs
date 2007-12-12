@@ -309,6 +309,9 @@ rec {
         collectAttrs = attr : catAttrs attr flatOptions;
         optsConcatStrs = delimiter : attrs : concatStrings 
                 ( intersperse delimiter (flatten ( collectAttrs attrs ) ) );
+
+        ifStringGetArg = x : if (__isAttrs x) then x # ( TODO implement __isString ?)
+                             else avs x (__getAttr x args);
           
     in assert ( all id ( mapRecordFlatten ( attr : r : if ( all id ( flatten (getAttr ["assertion"] [] r ) ) ) 
                                               then true else throw "assertion failed flag ${attr}" )
@@ -322,13 +325,15 @@ rec {
 
           buildInputs = map ( attr: if (! hasAttr attr args) then throw "argument ${attr} is missing!" else (builtins.getAttr attr args) )
                         (flatten  (catAttrs "buildInputs" flatOptions));
+          propagatedBuildInputs = map ( attr: if (! hasAttr attr args) then throw "argument ${attr} is missing!" else (builtins.getAttr attr args) )
+                        (flatten  (catAttrs "propagatedBuildInputs" flatOptions));
 
           configureFlags = optsConcatStrs " " "cfgOption";
 
           #flags = listToAttrs (map ( flag: av flag (hasAttr flag options) ) (attrNames flagConfig) );
           flags_prefixed = listToAttrs (map ( flag: av ("flag_set_"+flag) (hasAttr flag options) ) (attrNames flagConfig) );
 
-          pass = mergeAttrs (flatten (collectAttrs "pass") );
+          pass = mergeAttrs ( map ifStringGetArg ( flatten (collectAttrs "pass") ) );
       } #  now add additional phase actions (see examples)
       // listToAttrs ( map ( x : av x (optsConcatStrs "\n" x) ) collectExtraPhaseActions ) );
 }
@@ -362,7 +367,8 @@ rec {
   # features:
   # * configure options are passed automatically
   # * buildInputs are collected (they are special, see the setup script)
-  # * they can be passed by additional name as well using pass =
+  # * they can be passed by additional name as well using pass = { inherit (args) python } 
+  #                                       ( or short (value not attrs) : pass = "python" )
   # * an attribute named the same way as the flag is added indicating 
   #   true/ false (flag has been set/ not set)
   # * extra phase dependend commands can be added

@@ -4443,6 +4443,24 @@ rec {
     flags = ["hugeFeatures" "gtkGUI" "x11Support"];
   };
 
+  # gvim: error while loading shared libraries: libXmu.so.6: cannot open shared object file: No such file or directory
+  # What's causing this?
+  vim_configurable = import ../applications/editors/vim_configurable.nix {
+    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration;
+    inherit (xlibs) libX11 libXext libSM libXpm
+        libXt libXaw libXau libXmu;
+    inherit (gtkLibs) glib gtk;
+    lib = lib_unstable;
+    features = "huge"; # one of  tiny, small, normal, big or huge
+    # optional features by passing
+    # python 
+    # TODO mzschemeinterp perlinterp
+    inherit python /*x11*/;
+
+    # optional features by flags
+    flags = [ "X11" ]; # only flag "X11" by now
+  };
+
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
             zlib mpeg2dec a52dec libmad ffmpeg
