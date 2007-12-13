@@ -1,3 +1,5 @@
+# TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
+# but I have gvim with python support now :) - Marc
 args:
 let edf = args.lib.enableDisableFeature; in
 ( args.mkDerivationByConfiguration {
@@ -6,9 +8,7 @@ let edf = args.lib.enableDisableFeature; in
       mandatory = { cfgOption = "--enable-gui=auto --with-features=${args.features}"; 
                     buildInputs = ["ncurses" "pkgconfig"];
                   };
-# x11 = { buildInputs = "x11"; };
-      # using this flag does result in cannot find libXmu..
-      X11 = { buildInputs = [ "x11" "libX11" "libXext" "libSM" "libXpm" "libXt" "libXaw" "libXau" "libXmu" ]; };
+      X11 = { buildInputs = [ "libX11" "libXext" "libSM" "libXpm" "libXt" "libXaw" "libXau" "libXmu" ]; };
 
     } // edf "darwin" "darwin" { } #Disable Darwin (Mac OS X) support.
       // edf "xsmp" "xsmp" { } #Disable XSMP session management
@@ -46,21 +46,27 @@ let edf = args.lib.enableDisableFeature; in
   optionals = ["python"];
 
   extraAttrs = co : {
-    name = "vim_configurable-7.1.0";
+    name = "vim_configurable-7.1";
 
+  src = args.fetchurl {
+    url = ftp://ftp.nluug.nl/pub/editors/vim/unix/vim-7.1.tar.bz2;
+    sha256 = "0w6gy49gdbw7hby5rjkjpa7cdvc0z5iajsm4j1h8108rvfam22kz";
+  };
 
-    #configurePhase = "
-      #set | grep python | grep flag
-      #fail
-    #";
-    src = args.fetchurl {
-      url = ftp://ftp.nluug.nl/pub/editors/vim/unix/vim-7.1.tar.bz2;
-      sha256 = "0w6gy49gdbw7hby5rjkjpa7cdvc0z5iajsm4j1h8108rvfam22kz";
-    };
+  postInstall = "
+    rpath=`patchelf --print-rpath \$out/bin/vim`;
+    for i in $\buildInputs; do
+      echo adding \$i/lib
+      rpath=\$rpath:\$i/lib
+    done
+    echo \$buildInputs
+    echo \$rpath
+    patchelf --set-rpath \$rpath \$out/bin/{vim,gvim}
+  ";
 
-    meta = {
-      description = "The most popular clone of the VI editor";
-      homepage = "www.vim.org";
-    };
+  meta = {
+    description = "The most popular clone of the VI editor";
+    homepage = "www.vim.org";
+  };
 };
 } ) args
