@@ -1,15 +1,15 @@
 {stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
 
 stdenv.mkDerivation (rec {
-  name = "ghc-6.8.1";
+  name = "ghc-6.8.2";
   homepage = "http://www.haskell.org/ghc";
 
   src = map fetchurl [
     { url = "${homepage}/dist/stable/dist/${name}-src.tar.bz2";
-      md5 = "8d47d4dcde96c31fe8bedcee7f99eaf1";
+      md5 = "745c6b7d4370610244419cbfec4b2f84";
     }
     { url = "${homepage}/dist/stable/dist/${name}-src-extralibs.tar.bz2";
-      md5 = "f91de87e7c0a3fe2f27c5a83212d9743";
+      md5 = "d199c50814188fb77355d41058b8613c";
     }
   ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "The Glasgow Haskell Compiler v6.8.1";
+    description = "The Glasgow Haskell Compiler";
   };
 
   postInstall = "
@@ -29,16 +29,9 @@ stdenv.mkDerivation (rec {
     cat $setupHook    >> $out/nix-support/setup-hook
   ";
 
-  patch64 = ./x86_64-linux_patch;
-
-  # Thanks to Ian Lynagh ghc now works on x86_64-linux as well 
-  patchPhase = if (stdenv.system == "x86_64-linux") then "patch -p2 < $patch64" else "";
-
   configureFlags="--with-gmp-libraries=${gmp}/lib --with-readline-libraries=${readline}/lib";
 
   preConfigure = "
-    # the presence of this file makes Cabal cry for happy while generating makefiles ...
-    rm libraries/haskell-src/Language/Haskell/Parser.ly
     # still requires a hack for ncurses
     sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
   ";
