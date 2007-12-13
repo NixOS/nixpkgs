@@ -4446,7 +4446,7 @@ inherit (xlibs) libXrandr; # FIXME does this option exist? I couldn't find it as
     flags = ["hugeFeatures" "gtkGUI" "x11Support"];
   };
 
-  vim_configurable = import ../applications/editors/vim_configurable.nix {
+  vim_configurable = import ../applications/editors/vim/configurable.nix {
     inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration;
     inherit (xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu;
