@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
     }
   ];
 
-  buildInputs = [ghc readline perl m4];
+  buildInputs = [ghc readline perl m4 gmp];
 
   setupHook = ./setup-hook.sh;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (rec {
     cat $setupHook    >> $out/nix-support/setup-hook
   ";
 
-  configureFlags="--with-gmp-libraries=${gmp}/lib --with-readline-libraries=${readline}/lib";
+  configureFlags="--with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include";
 
   preConfigure = "
     # still requires a hack for ncurses
