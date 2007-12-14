@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation {
   name = if stdenv.system == "i686-darwin" then "ghc-6.6.1" else "ghc-6.4.2";
-  builder = ./boot.sh;
 
   src =
     if stdenv.system == "i686-linux" then
