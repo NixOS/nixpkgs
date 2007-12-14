@@ -4406,6 +4406,13 @@ inherit (xlibs) libXrandr; # FIXME does this option exist? I couldn't find it as
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
+  /* does'nt work yet i686-linux only (32bit version)
+  teamspeak_client = import ../applications/networking/instant-messengers/teamspeak/client.nix {
+    inherit fetchurl stdenv;
+    inherit glibc x11;
+  };
+  */
+
   thunderbird = import ../applications/networking/mailreaders/thunderbird-2.x {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
