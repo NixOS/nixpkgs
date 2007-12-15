@@ -10,5 +10,6 @@ stdenv.mkDerivation {
   preConfigure="
     sed -e 's@^BJAM_CONFIG=\"\"@BJAM_CONFIG=\"--layout=system release threading=multi link=shared\"@g' -i configure
   ";
+  patches = [./gcc-4.2.patch];
   configureFlags="--with-icu=${icu}";
 }
