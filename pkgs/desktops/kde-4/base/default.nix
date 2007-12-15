@@ -1,14 +1,12 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdebase-4.0beta4";
-  #builder = ./builder.sh;
-  
+  name = "kdebase-4.0rc2";
+
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdebase-3.95.0.tar.bz2;
-    sha256 = "0qf7bn5jqj70hznjk74vpwb7rvk6f5gx9fxwli930b2hskib3zll";
+    url = mirror://kde/unstable/3.97/src/kdebase-3.97.0.tar.bz2;
+    sha256 = "1iavkzfq7f9308j2r70xd6qfng0fncpww8s49hbigzkkdzrjk8gn";
   };
 
   propagatedBuildInputs = [kdepimlibs libusb];
-  inherit kdelibs;
 }

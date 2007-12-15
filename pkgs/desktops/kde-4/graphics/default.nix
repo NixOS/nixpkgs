@@ -1,13 +1,13 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdegraphics-4.0beta4";
+  name = "kdegraphics-4.0rc2";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdegraphics-3.95.0.tar.bz2;
-    sha256 = "0mfsadv9ihhw6s7pcy1yabc21px47nzfs34c76n1888qb09m5dfw";
+    url = mirror://kde/unstable/3.97/src/kdegraphics-3.97.0.tar.bz2;
+    sha256 = "0f16zyvw37nqhbis34rg6yxg6r95yk2vi9lk3zk8lqjwcs81h5fz";
   };
 
-  buildInputs = [kdelibs kdepimlibs kdeworkspace libgphoto2 saneBackends
+  buildInputs = [kdelibs kdepimlibs libgphoto2 saneBackends
   djvulibre exiv2 poppler chmlib];
 }

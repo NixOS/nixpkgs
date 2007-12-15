@@ -1,14 +1,14 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdeedu-4.0beta4";
+  name = "kdeedu-4.0rc2";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdeedu-3.95.0.tar.bz2;
-    sha256 = "0cydl3pp3l0cbfmf774qh8njyhycaf8yxb27k4xf6mipvw1k9jqf";
+    url = mirror://kde/unstable/3.97/src/kdeedu-3.97.0.tar.bz2;
+    sha256 = "1d2319pzs4ymbp2jgmc1kzkr5d9g5p5d1yg6b5l7z4b2qzhchpl4";
   };
 
-  buildInputs = [kdelibs kdepimlibs kdeworkspace boost readline openbabel ocaml
+  buildInputs = [kdelibs kdepimlibs boost readline openbabel ocaml
   libusb facile python];
   myCmakeFiles = ./myCmakeFiles;
   patchPhase = "
@@ -16,5 +16,4 @@ stdenv.mkDerivation rec {
   sed -e 's@+facile@\${LIBFACILE_INCLUDE_DIR}@' -i \\
   ../kalzium/src/CMakeOCamlInstructions.cmake
   ";
-  configureFlags = "--debug-trycompile";
 }

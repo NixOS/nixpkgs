@@ -2,6 +2,6 @@ args: with args;
 
 stdenv.mkDerivation {
   name = "taglib-1.4svn";
-  src = svnSrc "taglib" "1myfgykflbs3l1mrzg4iv8rb1mbd0vpmzl5dnnslfi9b0xg6ydip";
+  src = svnSrc "taglib" "0jmy1mldpjqnq8ap3ynwagxpjcfxzbisa4qd6zdwlwcm8zb54rak";
   buildInputs = [ cmake zlib ];
 }

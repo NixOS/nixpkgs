@@ -18,11 +18,9 @@ rec {
   decibel = import ./decibel fullargs;
   pim = import ./pim (fullargs // {kdeworkspace = workspace; });
 
-  env = with args; runCommand "kde-env"
+  env = kde_pkgs: with args; [ (runCommand "kde-env"
   {
-	  KDEDIRS = lib.concatStringsSep ":" ([ libs pimlibs graphics multimedia
-	  toys network utils games edu base runtime workspace extragear_plasma pim] ++
-	  support.all);
+	  KDEDIRS = lib.concatStringsSep ":" (kde_pkgs ++ support.all);
 	  scriptName = "echo-kde-dirs";
   }
   "
@@ -31,5 +29,5 @@ rec {
   echo \"#!/bin/sh\" > \${scriptPath}
   echo \"echo -n export KDEDIRS=\${KDEDIRS}\" >> \${scriptPath}
   chmod +x \${scriptPath}
-  ";
+  ")] ++ kde_pkgs ++ support.all ++ [shared_mime_info qt];
 }
