@@ -53,6 +53,17 @@
       ";
     };
 
+    bootMount = mkOption {
+      default = "";
+      example = "(hd0,0)";
+      description = "
+        If the system partition may be wiped on reinstall, it is better
+        to have /boot on a small partition. To do it, we need to explain
+        to GRUB where the kernels live. Specify the partition here (in 
+        GRUB notation.
+      ";
+    };
+
     kernel = mkOption {
       default = pkgs: pkgs.kernel;
       description = "

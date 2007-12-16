@@ -322,6 +322,7 @@ rec {
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     copyKernels = config.boot.copyKernels;
     extraGrubEntries = config.boot.extraGrubEntries;
+    bootMount = config.boot.bootMount;
   };
 
 

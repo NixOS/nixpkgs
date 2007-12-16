@@ -45,6 +45,11 @@ addEntry() {
             cp $initrd $initrd2
         fi
         initrd=$initrd2
+
+        if test -n "@bootMount@"; then
+          kernel=$(echo $kernel2 | sed -e 's^/boot^@bootMount@^')
+          initrd=$(echo $initrd2 | sed -e 's^/boot^@bootMount@^')
+        fi
     fi
     
     local confName=$(if test -e $path/configuration-name; then 
