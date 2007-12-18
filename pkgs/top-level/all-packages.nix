@@ -302,7 +302,9 @@ rec {
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
   writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
-  
+ 
+  writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
+ 
   stdenvNewSetupScript = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
@@ -1261,7 +1263,7 @@ rec {
    # optional features
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
-   flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
+   flags = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
    };
 
 
@@ -2400,7 +2402,7 @@ rec {
 
    t1lib = import ../development/libraries/t1lib {
      inherit fetchurl stdenv x11;
-     inherit (xlibs) libXaw;
+     inherit (xlibs) libXaw libXpm;
    };
 
    taglib = import ../development/libraries/taglib {
