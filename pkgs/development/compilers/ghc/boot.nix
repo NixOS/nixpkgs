@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   postBuild = if stdenv.isLinux then "
     find . -type f -perm +100 \\
         -exec patchelf --interpreter \"$(cat $NIX_GCC/nix-support/dynamic-linker)\" \\
-        --set-rpath \"${readline}/lib:${ncurses}/lib:${gmp}/lib\" {} \;
+        --set-rpath \"${readline}/lib:${ncurses}/lib:${gmp}/lib\" {} \\;
   " else "";
 
   # The binaries for Darwin use frameworks, so fake those frameworks,
