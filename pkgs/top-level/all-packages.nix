@@ -4837,6 +4837,13 @@ inherit (xlibs) libXrandr; # FIXME does this option exist? I couldn't find it as
     inherit stdenv fetchurl jdk;
   };
 
+  # don't have time for the source build right now
+  # maven2
+  mvn_bin = import ../misc/maven/maven-2.nix {
+    inherit fetchurl;
+    stdenv = stdenvUsingSetupNew2;
+  };
+
   nix = import ../tools/package-management/nix {
     inherit fetchurl stdenv perl curl bzip2;
     aterm = aterm242fixes;
