@@ -1736,6 +1736,14 @@ root        ALL=(ALL) SETENV: ALL
     };
 
   };
-
+  
+  nesting = {
+	  children = mkOption {
+	      default = [];
+	      description = "
+		Additional configurations to build.
+	      ";
+	  };
+  };
 
 }

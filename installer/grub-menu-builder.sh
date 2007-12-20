@@ -88,9 +88,13 @@ EOF
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
+for link in $(
+	(ls -d $default/fine-tune/* ) \
+	| sort -n); do
+    date=$(stat --printf="%y\n" $link | sed 's/\..*//')
+    addEntry "NixOS - variation" $link ""
+done
 for generation in $(
-	(cd $default/fine-tune && ls -d *) \
-    | sort -n) $(
     (cd /nix/var/nix/profiles && ls -d system-*-link) \
     | sed 's/system-\([0-9]\+\)-link/\1/' \
     | sort -n -r); do

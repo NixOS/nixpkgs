@@ -14,6 +14,13 @@ ln -s $upstart $out/upstart
 echo "$kernelParams" > $out/kernel-params
 echo "$configurationName" > $out/configuration-name
 
+mkdir $out/fine-tune
+ChildCount=0;
+for i in $children; do 
+	ChildCount=$(( ChildCount + 1 ));
+	ln -s $i $out/fine-tune/child-$ChildCount;
+done
+
 cat > $out/menu.lst << GRUBEND
 kernel $kernel init=$bootStage2 $kernelParams
 initrd $initrd
