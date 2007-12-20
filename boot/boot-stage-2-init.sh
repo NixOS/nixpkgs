@@ -114,6 +114,7 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @bootLocal@
 
+mkswap $(cat /sys/power/tuxonice/resume) || echo 'Failed to clear saved image.'
 
 # Start Upstart's init.  We start it through the
 # /var/run/current-system symlink indirection so that we can upgrade

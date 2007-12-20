@@ -32,7 +32,6 @@ mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
 
-
 # Process the kernel command line.
 stage2Init=@stage2Init@
 for o in $(cat /proc/cmdline); do
@@ -63,6 +62,10 @@ export MODULE_DIR=@modulesDir@/lib/modules/
 for i in @modules@; do
     modprobe $i
 done
+
+# Try to resume - all modules are loaded now
+echo 0 > /sys/power/tuxonice/user_interface/enabled
+echo 1 > /sys/power/tuxonice/do_resume || echo Failed to resume..;
 
 
 # Create device nodes in /dev.
