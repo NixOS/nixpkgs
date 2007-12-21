@@ -13,6 +13,8 @@ preConfigure() {
 
     SRCDIR=
 
+    sed -e '/CURL_NO_OLDIES/d' -i ucb/source/ucp/ftp/makefile.mk
+
     cd config_office/
 }
 
