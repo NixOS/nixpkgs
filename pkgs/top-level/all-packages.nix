@@ -1590,6 +1590,10 @@ rec {
      inherit fetchurl stdenv ncurses;
    };
 
+   acl = import ../development/libraries/acl {
+       inherit stdenv fetchurl autoconf libtool gettext attr;
+   };
+
    /*
       agg = import ../development/libraries/agg {
       inherit fetchurl stdenv autoconf automake libtool pkgconfig;
@@ -1613,6 +1617,14 @@ rec {
      inherit (gnome) glib;
    };
 
+   aspell = import ../development/libraries/aspell {
+     inherit fetchurl stdenv perl;
+   };
+
+   aspellDicts = recurseIntoAttrs (import ../development/libraries/aspell/dictionaries.nix {
+       inherit fetchurl stdenv aspell which;
+       });
+
    aterm = lowPrio (import ../development/libraries/aterm {
        inherit fetchurl stdenv;
        });
@@ -1625,13 +1637,9 @@ rec {
      inherit fetchurl stdenv;
    };
 
-   aspell = import ../development/libraries/aspell {
-     inherit fetchurl stdenv perl;
+   attr = import ../development/libraries/attr {
+       inherit stdenv fetchurl autoconf libtool gettext;
    };
-
-   aspellDicts = recurseIntoAttrs (import ../development/libraries/aspell/dictionaries.nix {
-       inherit fetchurl stdenv aspell which;
-       });
 
    audiofile = import ../development/libraries/audiofile {
      inherit fetchurl stdenv;

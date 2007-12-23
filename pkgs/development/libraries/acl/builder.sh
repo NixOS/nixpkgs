@@ -1,6 +1,7 @@
 source $stdenv/setup
 
 preConfigure() {
+  rm configure
   autoconf
 }
 
