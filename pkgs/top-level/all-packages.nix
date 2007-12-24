@@ -2994,13 +2994,13 @@ rec {
    };
 
    devicemapperStatic = lowPrio (appendToName "static" (import ../os-specific/linux/device-mapper {
-         inherit fetchurl stdenv;
-         static = true;
-         }));
+     inherit fetchurl stdenv;
+     static = true;
+   }));
 
    dietlibc = import ../os-specific/linux/dietlibc {
      inherit fetchurl glibc;
-# Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
+     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
      stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
    };
 
@@ -3266,8 +3266,6 @@ rec {
      }
      ];
    };
-
-
 
    kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
      inherit fetchurl stdenv perl mktemp module_init_tools;
