@@ -63,9 +63,12 @@ for i in @modules@; do
     modprobe $i
 done
 
+
 # Try to resume - all modules are loaded now
-echo 0 > /sys/power/tuxonice/user_interface/enabled
-echo 1 > /sys/power/tuxonice/do_resume || echo Failed to resume..;
+if test -n "$(cat /sys/power/tuxonice/resume)"; then
+    echo 0 > /sys/power/tuxonice/user_interface/enabled
+    echo 1 > /sys/power/tuxonice/do_resume || echo "Failed to resume..."
+fi
 
 
 # Create device nodes in /dev.
