@@ -20,7 +20,7 @@ stdenv.mkDerivation
 			fontDirs=\"\$fontDirs \$(dirname \$i)\";
 		done;
 		mkdir -p \$out/share/X11-fonts/; 
-		for i in \$(find \$fontDirs -type f); do
+		for i in \$(find \$fontDirs -type f -o -type l); do
 			j=\${i##*/}
 			if ! test -e \$out/share/X11-fonts/\${j}; then
 				ln -s \$i \$out/share/X11-fonts/\${j};
@@ -29,6 +29,7 @@ stdenv.mkDerivation
 		cd \$out/share/X11-fonts/
 		rm fonts.dir
 		rm fonts.scale
+		rm fonts.alias
 		mkfontdir
 		mkfontscale
 		cat \$( find \$fontalias/ -name fonts.alias) >fonts.alias

@@ -116,6 +116,9 @@ let
     serverLayoutOptions = cfg.serverLayoutOptions; 
     defaultDepth = cfg.defaultDepth; 
 
+    xfs = (if cfg.useXFS == false then "" else 
+      "FontPath \"${toString cfg.useXFS}\"");
+
     buildCommand = "
       buildCommand= # urgh, don't substitute this
 

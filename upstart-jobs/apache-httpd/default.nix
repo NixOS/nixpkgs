@@ -222,7 +222,7 @@ in
     description "Apache HTTPD"
 
     start on ${startingDependency}/started
-    stop on ${startingDependency}/stop
+    stop on shutdown
 
     respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
   '';

@@ -860,6 +860,14 @@
           Default colour depth.
         ";
       };
+      
+      useXFS = mkOption {
+        default = false;
+	example = "unix/:7100";
+	description = "
+	  Way to access the X Font Server to use.
+	";
+      };
 
     };
 

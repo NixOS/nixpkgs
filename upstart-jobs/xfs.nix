@@ -12,7 +12,7 @@ rec {
 	job = "
 		description = \"X Font Server\"
 		start on ${startingDependency}/started
-		stop on ${startingDependency}/stop
+		stop on shutdown
 
 		respawn ${pkgs.xorg.xfs}/bin/xfs -config ${configFile}
 	";
