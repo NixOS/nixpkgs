@@ -3027,7 +3027,7 @@ rec {
    };
 
    fuse = import ../os-specific/linux/fuse {
-     inherit fetchurl stdenv;
+     inherit fetchurl stdenv utillinux;
    };
 
    genext2fs = import ../os-specific/linux/genext2fs {
@@ -3581,6 +3581,10 @@ xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
 
 ### DATA
 
+wrapFonts = paths : ((import ../data/fonts/fontWrap) {
+  inherit fetchurl stdenv builderDefs paths;
+  inherit (xorg) mkfontdir mkfontscale;
+});
 
 bakoma_ttf = import ../data/fonts/bakoma-ttf {
   inherit fetchurl stdenv;
@@ -3957,6 +3961,15 @@ firefox3b1 = lowPrio (import ../applications/networking/browsers/firefox3b1 {
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
+#enableOfficialBranding = true;
+    });
+
+firefox3b2 = lowPrio (import ../applications/networking/browsers/firefox3b1/3b2.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+    python curl coreutils dbus dbus_glib freetype fontconfig;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi libX11 libXrender libXft libXt;
 #enableOfficialBranding = true;
     });
 

@@ -22,7 +22,9 @@ let build = FullDepEntry ("
 	sed -e '/install:/a\\\tmkdir -p '\$out'/share' -i Makefile
 	make
 	mkdir -p \$out/bin
-	echo 'dropdb relfs_\$1 ; 
+	echo '
+		createuser -A -D \$1
+		dropdb relfs_\$1 ; 
 		rm -rf /tmp/relfs-\$1-tmp;  
 		mkdir /tmp/relfs-\$1-tmp;  
 		USER=\$1 relfs -f -s /tmp/relfs-raskin-tmp  & 

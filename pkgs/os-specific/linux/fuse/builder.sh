@@ -13,4 +13,6 @@ export UDEV_RULES_PATH=$out/etc/udev/rules.d
 # $PATH.
 export NIX_CFLAGS_COMPILE="-DFUSERMOUNT_DIR=\"/no-such-path\""
 
+export preBuild="sed -e 's@/bin/@$utillinux/bin/@g' -i lib/mount_util.c";
+
 genericBuild
