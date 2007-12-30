@@ -3981,8 +3981,8 @@ rec {
     inherit (xlibs) libXi libX11 libXrender libXft libXt;
   });
 
-  firefox3b1Wrapper = wrapFirefox firefox3b1 "";
-  firefox3b1BinWrapper = wrapFirefox firefox3b1Bin "";
+  firefox3b1Wrapper = lowPrio (wrapFirefox firefox3b1 "");
+  firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "");
  
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
