@@ -2,14 +2,24 @@
 
 assert stdenv.system == "i686-linux";
 
-(stdenv.mkDerivation {
-  name = "flashplayer-9.0.31.0";
+stdenv.mkDerivation {
+  name = "flashplayer-9.0.115.0";
 
   builder = ./builder.sh;
   src = fetchurl {
     url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_9_linux.tar.gz;
-    sha256 = "ad2f9eb98e976a82b62e97e7cf3a555464e43b80507b87ed7c469706faa4d897";
+    sha256 = "0yr2n7barlbvqxxzbvgp0pmbwwf7bvjksravqa47yra689jvynr7";
   };
 
   inherit zlib alsaLib;
-}) // {mozillaPlugin = "/lib/mozilla/plugins";}
+
+  passthru = {
+    mozillaPlugin = "/lib/mozilla/plugins";
+  };
+
+  meta = {
+    description = "Adobe Flash Player browser plugin";
+    homepage = http://www.adobe.com/products/flashplayer/;
+  };
+
+}
