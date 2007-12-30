@@ -16,12 +16,12 @@ assert sslSupport -> neon.sslSupport;
 assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation {
-  name = "subversion-1.4.5";
+  name = "subversion-1.4.6";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.4.5.tar.bz2;
-    sha1 = "acc80381cb670736ad626fee1eb04f36ba7e5fc8";
+    url = http://subversion.tigris.org/downloads/subversion-1.4.6.tar.bz2;
+    sha1 = "a9c941e2309744f6a2986200698b60da057a7527";
   };
 
   buildInputs =
@@ -46,5 +46,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+    homepage = http://subversion.tigris.org/;
   };
 }
