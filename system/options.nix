@@ -420,6 +420,9 @@
       specify a volume label (<literal>label</literal>) for file
       systems that support it, such as ext2/ext3 (see <command>mke2fs
       -L</command>).
+
+      <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with 
+      <command>mkdir -p</command> .
     ";
   };
 
@@ -669,6 +672,22 @@
         description = "
           Whether to enable the X server.
         ";
+      };
+
+      autorun = mkOption {
+        default = true;
+	description = "
+	  Switch to false to create upstart-job and configuration, 
+	  but not run it automatically
+	";
+      };
+
+      exportConfiguration = mkOption {
+        default = false;
+	description = "
+	  Create /etc/X11/xorg.conf and a file with environment
+	  variables
+	";
       };
 
       tcpEnable = mkOption {

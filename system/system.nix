@@ -357,7 +357,8 @@ rec {
       pkgs.upstart # for initctl
     ];
     children = map (x: ((import ./system.nix) 
-      {inherit platform stage2Init; configuration = x;}).system) 
+      {inherit platform stage2Init; 
+        configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
       config.nesting.children; 
     configurationName = config.boot.configurationName;
   }) (pkgs.getConfig ["checkConfigurationOptions"] false) 
