@@ -3,11 +3,11 @@
 assert libpng != null && libjpeg != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "graphviz-2.12";
+  name = "graphviz-2.16.1";
 
   src = fetchurl {
-    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz;
-    md5 = "e5547bc0ec47943c72f5c3e2b5dff58f";
+    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.16.1.tar.gz;
+    sha256 = "1lan1hyar0xbqvnkcmlcvv02g8zfpk94gk04y4sik5irpa2s3h9j";
   };
 
   buildInputs = [x11 libpng libjpeg expat libXaw yacc libtool];
@@ -19,5 +19,10 @@ stdenv.mkDerivation {
       "--with-expatincludedir=${expat}/include"
       "--with-expatlibdir=${expat}/lib"
     ]
-    ++ (if x11 == null then ["--without-x"] else []);
+    ++ stdenv.lib.optional (x11 == null) "--without-x";
+
+  meta = {
+    description = "A program for visualising graphs";
+    homepage = http://www.graphviz.org/;
+  };
 }
