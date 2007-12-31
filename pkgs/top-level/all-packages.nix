@@ -4306,6 +4306,28 @@ rec {
     python = python_alts.v_2_5;
   };
 
+  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu ) {
+    inherit fetchurl;
+    stdenv = overrideGCC stdenv gcc34;
+    builderDefs = builderDefs {
+      stdenv = (overrideGCC stdenv gcc34)//{gcc=gcc34;};
+    };
+    inherit SDL zlib which;
+  };
+
+  qemu = qemuFun {
+    version = "0.9.0";
+  } null;
+
+  qemuImageFun = lib.sumArgs 
+    (selectVersion ../applications/virtualization/qemu/linux-img ) {
+    inherit builderDefs fetchurl stdenv;
+  };
+
+  qemuImage = qemuImageFun {
+    version = "0.2";
+  } null;
+
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
@@ -4490,6 +4512,17 @@ rec {
     flags = [ "X11" ]; # only flag "X11" by now
   };
 
+  /*virtualboxFun = lib.sumArgs (selectVersion ../applications/virtualization/virtualbox) {
+    inherit stdenv fetchurl builderDefs bridge_utils umlutilities kernelHeaders 
+      wine jre libxslt SDL qt3 openssl zlib;
+    inherit (xorg) libXcursor;
+    inherit (gnome) libIDL;
+  };
+
+  virtualbox = virtualboxFun {
+    version = "1.5.2";
+  } null;*/
+
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
             zlib mpeg2dec a52dec libmad ffmpeg
@@ -4590,6 +4623,11 @@ rec {
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
   };
 
+  xlaunch = import ../tools/X11/xlaunch {
+    inherit stdenv;
+    inherit (xorg) xorgserver;
+  };
+
   xmacro = import ../tools/X11/xmacro {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXi 
@@ -4601,6 +4639,7 @@ rec {
     inherit (xlibs) libX11 libXi imake libXau;
     inherit (xorg) xauth;
   };
+
   xvidcap = import ../applications/video/xvidcap {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig;
     inherit (gtkLibs) gtk;
