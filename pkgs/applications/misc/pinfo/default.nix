@@ -1,10 +1,12 @@
-{stdenv, fetchurl, ncurses}:
+{stdenv, fetchurl, ncurses, readline}:
 
 stdenv.mkDerivation {
-  name = "pinfo-0.6.8";
+  name = "pinfo-0.6.9";
   src = fetchurl {
-    url = http://dione.cc/~pborys/software/pinfo/pinfo-0.6.8.tar.gz;
-    md5 = "55feb4ebaa709b52bd00a15ed0fb52fb";
+    url = https://alioth.debian.org/frs/download.php/1498/pinfo-0.6.9.tar.bz2;
+    sha256 = "1rbsz1y7nyz6ax9xfkw5wk6pnrhvwz2xcm0wnfnk4sb2wwq760q3";
   };
-  buildInputs = [ncurses];
+  buildInputs = [ncurses readline];
+
+  configureFlags = "--with-curses=${ncurses} --with-readline=${readline}";
 }

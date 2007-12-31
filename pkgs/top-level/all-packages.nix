@@ -4292,7 +4292,7 @@ rec {
   };
 
   pinfo = import ../applications/misc/pinfo {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses readline;
   };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
