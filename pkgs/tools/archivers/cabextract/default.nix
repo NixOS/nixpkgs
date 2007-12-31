@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "cabextract-1.2";
   src = fetchurl {
-    url = http://www.kyz.uklinux.net/downloads/cabextract-1.2.tar.gz;
-    md5 = "dc421a690648b503265c82ade84e143e";
+    url = http://www.cabextract.org.uk/cabextract-1.2.tar.gz;
+    sha256 = "1sr5f7qicj5q2h5m4wbmfcaaqxg5zkl5vkxlhyc11spwfh58d75f";
   };
 }
