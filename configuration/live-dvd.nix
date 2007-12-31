@@ -35,10 +35,12 @@ rec {
               export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
               mkdir -p /etc/nixos/nixos
               tar xjf /nixos.tar.bz2 -C /etc/nixos/nixos
-              tar xjf /nixpkgs.tar.bz2 -C /etc/nixos
-              mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs
+              mkdir -p /etc/nixos/nixpkgs
+              tar xjf /nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
+              mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs || test -e /etc/nixos/nixpkgs
               ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
               chown -R root.root /etc/nixos
+	      touch /etc/resolv.conf
             end script
           ";
         }
@@ -69,11 +71,12 @@ rec {
     };
 
     fonts = {
-      enableFontConfig = false;
+      enableFontConfig = true;
     };
     
     installer = {
-      nixpkgsURL = file:///root/ ;
+      manifests = [ file:///mnt/MANIFEST ];
+      nixpkgsURL = file:///mnt/ ;
     };
 
     security = {
@@ -85,6 +88,51 @@ rec {
     environment = {
       extraPackages = pkgs: [
         pkgs.vimDiet
+	pkgs.irssi
+	pkgs.elinks
+	pkgs.ltrace
+	pkgs.subversion
+        pkgs.which
+	pkgs.file
+	pkgs.zip
+	pkgs.unzip
+	pkgs.unrar
+	pkgs.usbutils
+	pkgs.bc
+	pkgs.cpio
+	pkgs.ncat
+	pkgs.patch
+	pkgs.fuse
+	pkgs.indent
+	pkgs.zsh
+	pkgs.hddtemp
+	pkgs.hdparm
+	pkgs.sdparm
+	pkgs.sqlite
+	pkgs.wpa_supplicant
+	pkgs.lynx
+	pkgs.db4
+	pkgs.rogue
+	pkgs.attr
+	pkgs.acl
+	pkgs.automake
+	pkgs.autoconf
+	pkgs.libtool
+	pkgs.gnupg
+	pkgs.openssl
+	pkgs.units
+	pkgs.gnumake
+	pkgs.manpages
+	pkgs.cabextract
+	pkgs.upstartJobControl
+	pkgs.fpc
+	pkgs.python
+	pkgs.perl
+	pkgs.lftp
+	pkgs.wget
+	pkgs.guile
+	pkgs.utillinuxCurses
+	pkgs.emacs
       ];
     };
    
@@ -116,6 +164,12 @@ rec {
     ensureDir $out
     (cd ${input} && tar cvfj $out/${tarName} . \\
       --exclude '*~' \\
+      --exclude 'result')
+  ";
+  makeTarballNixos = tarName: input: pkgs.runCommand "tarball" {inherit tarName;} "
+    ensureDir $out
+    (cd ${input} && tar cvfj $out/${tarName} . \\
+      --exclude '*~' \\
       --exclude 'pkgs' --exclude 'result')
   ";
 
@@ -125,13 +179,19 @@ rec {
   nixosTarball =
     let filter = name: type:
       let base = baseNameOf (toString name);
-      in base != ".svn" && base != "result";
+      in base != "result";
     in
-      makeTarball "nixos.tar.bz2" (builtins.filterSource filter ./..);
+      makeTarballNixos "nixos.tar.bz2" (builtins.filterSource filter ./..);
 
 
   # Get a recent copy of Nixpkgs.
-  nixpkgsTarball = /root/nixpkgs.tar.bz2;
+  nixpkgsTarball = /* /root/nixpkgs.tar.bz2; */
+    let filter = name: type:
+      let base = baseNameOf (toString name);
+      in base != "result";
+    in
+      makeTarball "nixpkgs.tar.bz2" (builtins.filterSource filter /etc/nixos/nixpkgs);
+
 
   # The configuration file for isolinux.
   isolinuxCfg = pkgs.writeText "isolinux.cfg" "
@@ -172,7 +232,7 @@ rec {
       { source = nixosTarball + "/" + nixosTarball.tarName;
         target = "/" + nixosTarball.tarName;
       }
-      { source = nixpkgsTarball;
+      { source = nixpkgsTarball + "/" +nixpkgsTarball.tarName;
         target = "/nixpkgs.tar.bz2";
       }
     ];
