@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libpcap}:
 
 stdenv.mkDerivation {
-  name = "tcpdump-3.9.5";
+  name = "tcpdump-3.9.8";
   src = fetchurl {
-    url = http://www.tcpdump.org/release/tcpdump-3.9.5.tar.gz;
-    md5 = "2135e7b1f09af0eaf66d2af822bed44a";
+    url = http://www.tcpdump.org/release/tcpdump-3.9.8.tar.gz;
+    sha256 = "16fjm1ih56mwqniffp63adbxwfj5n10x1a7l22j3cx683pmwh293";
   };
   buildInputs = [libpcap];
 }
