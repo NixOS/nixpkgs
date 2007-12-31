@@ -2164,7 +2164,11 @@ rec {
     inherit fetchurl stdenv zlib libjpeg;
   };
 
-  libungif = import ../development/libraries/libungif {
+  giflib = import ../development/libraries/giflib {
+    inherit fetchurl stdenv;
+  };
+
+  libungif = import ../development/libraries/giflib/libungif.nix {
     inherit fetchurl stdenv;
   };
 
