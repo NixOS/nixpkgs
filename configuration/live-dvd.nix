@@ -81,7 +81,7 @@ rec {
 
     security = {
       sudo = {
-        enable = false;
+        enable = true;
       };
     };
  
