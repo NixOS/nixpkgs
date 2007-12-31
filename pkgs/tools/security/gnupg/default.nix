@@ -7,15 +7,20 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnupg-1.4.7";
+  name = "gnupg-1.4.8";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.surfnet.nl/pub/security/gnupg/gnupg/gnupg-1.4.7.tar.bz2;
-    sha256 = "13a6qrgswbrfj3z5hcjx62ahraj4j16cpssgxlkwlqiz35yqplb9";
+    url = ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-1.4.8.tar.bz2;
+    sha1 = "4b63267358e5c70f05b48e27d6877bad2636cabd";
   };
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/idea.c.gz;
     md5 = "9dc3bc086824a8c7a331f35e09a3e57f";
   } else null;
+
+  meta = {
+    description = "A free implementation of the OpenPGP standard for encrypting and signing data";
+    homepage = http://www.gnupg.org/;
+  };  
 }
