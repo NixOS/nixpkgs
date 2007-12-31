@@ -19,6 +19,12 @@
 
 , # Is Clone mode on?
   isClone ? "on"
+
+, # Do we want it to run or just to prepare everything?
+  autorun ? true
+
+, # Create unneeded links in /etc? 
+  exportConfiguration ? false
 }:
 
 let
@@ -364,11 +370,18 @@ rec {
     optional (sessionType == "kde")
       { source = "${xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
-      };
+      }
+    ++
+    optional (exportConfiguration) 
+    {
+      source = "${configFile}";
+      target = "X11/xorg.conf";
+    }
+      ;
 
     
   job = "
-    start on network-interfaces
+    start on ${if autorun then "network-interfaces" else "never"}
 
     start script
     

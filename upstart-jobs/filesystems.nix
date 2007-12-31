@@ -7,6 +7,7 @@ let
   devices = map (fs: if fs ? device then fs.device else "LABEL=" + fs.label) fileSystems;
   fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
   optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
+  autocreates = map (fs: if fs ? autocreate then fs.autocreate else "0") fileSystems;
 
 in 
 
@@ -25,6 +26,7 @@ script
     devices=(${toString devices})
     fsTypes=(${toString fsTypes})
     optionss=(${toString optionss})
+    autocreates=(${toString autocreates})
 
     newDevices=1
 
@@ -41,12 +43,14 @@ script
             device=\${devices[$n]}
             fsType=\${fsTypes[$n]}
             options=\${optionss[$n]}
+            autocreate=\${autocreates[$n]}
 
             isLabel=
             if echo \"$device\" | grep -q '^LABEL='; then isLabel=1; fi
 
             isPseudo=
-            if test \"$fsType\" = \"nfs\" || test \"$fsType\" = \"ext3cow\"; then isPseudo=1; fi
+            if test \"$fsType\" = \"nfs\" || test \"$fsType\" = \"tmpfs\" ||
+	      test \"$fsType\" = \"ext3cow\"; then isPseudo=1; fi
 
             if ! test -n \"$isLabel\" -o -n \"$isPseudo\" -o -e \"$device\"; then
                 echo \"skipping $device, doesn't exist (yet)\"
@@ -99,6 +103,8 @@ script
             if test -z \"$isPseudo\"; then
                 fsck -a \"$device\" || true
             fi
+
+            if test \"\$autocreate\" = 1; then mkdir -p \"\$mountPoint\"; fi
 
             if ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
                 newDevices=1

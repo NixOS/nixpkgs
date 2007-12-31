@@ -154,6 +154,8 @@ let
       libXext = pkgs.xlibs.libXext;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
       isClone = config.services.xserver.isClone;
+      autorun = config.services.xserver.autorun;
+      exportConfiguration = config.services.xserver.exportConfiguration;
     })
 
   # Apache httpd.
