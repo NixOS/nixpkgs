@@ -4907,9 +4907,9 @@ rec {
   };
 
   nix = import ../tools/package-management/nix {
-    inherit fetchurl stdenv perl curl bzip2;
+    inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
-    db4 = db44;
+    db4 = db45;
   };
 
   nixStatic = import ../tools/package-management/nix-static {
