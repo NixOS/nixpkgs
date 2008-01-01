@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "elfutils-0.127";
+  name = "elfutils-0.131";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/elfutils-0.127.tar.gz;
-    sha256 = "12n3h5r3c24a6l2wxz0w2dqq072bvgms0dzckivrwp5vdn22lpdv";
+    url = http://ftp.de.debian.org/debian/pool/main/e/elfutils/elfutils_0.131.orig.tar.gz;
+    sha256 = "0vqfjpcv81m3q0gsk78qykakhz9rbfwd65i4zsi03xr2lrk9ayll";
   };
 }
