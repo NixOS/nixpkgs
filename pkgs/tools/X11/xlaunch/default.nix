@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 	buildCommand = "
 		mkdir -p \$out/bin
 		echo '
-			(egrep \"^ +env\" /etc/event.d/xserver | sed -e s/env// ; echo X;) | bash &
+			(egrep \"^ +env\" /etc/event.d/xserver | sed -e s/env/ export / ; echo X;) | bash &
 			sleep 15; 
 			\"$@\";
 		' >\$out/bin/xlaunch
