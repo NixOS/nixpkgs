@@ -133,6 +133,11 @@ rec {
 	pkgs.guile
 	pkgs.utillinuxCurses
 	pkgs.emacs
+	pkgs.iproute
+	pkgs.MPlayer
+	pkgs.diffutils
+	pkgs.pciutils
+	pkgs.lsof
       ];
     };
    
