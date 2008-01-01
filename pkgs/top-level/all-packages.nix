@@ -1409,9 +1409,14 @@ rec {
     inherit fetchurl stdenv replace;
   };
 
-  elfutils = import ../development/tools/misc/elfutils {
-    inherit fetchurl stdenv;
+  elfutilsFun = lib.sumArgs 
+    (selectVersion ../development/tools/misc/elfutils) {
+      inherit fetchurl stdenv;
   };
+
+  elfutils = elfutilsFun {
+    version = "0.131";
+  } null;
 
   epm = import ../development/tools/misc/epm {
     inherit fetchurl stdenv rpm;
@@ -1493,8 +1498,8 @@ rec {
   };
 
   ltrace = import ../development/tools/misc/ltrace {
-  	inherit fetchurl stdenv builderDefs stringsWithDeps lib 
-		elfutils;
+  	inherit fetchurl stdenv builderDefs stringsWithDeps lib;
+	elfutils = elfutilsFun {version = "0.127";} null;
   };
 
   mk = import ../development/tools/build-managers/mk {
