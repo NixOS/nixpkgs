@@ -84,7 +84,7 @@ rec {
  
     environment = {
       extraPackages = pkgs: [
-        pkgs.vimDiet
+        pkgs.vim
       ];
     };
    
