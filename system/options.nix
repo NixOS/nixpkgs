@@ -607,6 +607,10 @@
             ipAddress = "192.168.1.11";
           }
         ];
+        description = ''
+          A list mapping ethernet addresses to IP addresses for the
+          DHCP server.
+        '';
       };
 
     };
