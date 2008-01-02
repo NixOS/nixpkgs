@@ -44,7 +44,9 @@ fi
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp
+if ! nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp; then
+    nix-build /etc/nixos/nixpkgs -A nixUnstable -o $HOME/nix-tmp
+fi
 PATH=$HOME/nix-tmp/bin:$PATH
 
 
