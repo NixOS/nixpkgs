@@ -34,12 +34,12 @@ KERNEL=="sr[0-9]", BUS=="scsi", SYMLINK+="cdrom cdrom-%k"
 
 
 # ALSA sound devices.
-KERNEL=="controlC[0-9]*",       NAME="snd/%k"
-KERNEL=="hwC[D0-9]*",           NAME="snd/%k"
-KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k"
-KERNEL=="midiC[D0-9]*",         NAME="snd/%k"
-KERNEL=="timer",                NAME="snd/%k"
-KERNEL=="seq",                  NAME="snd/%k"
+KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="@sndMode@"
+KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="@sndMode@"
+KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k", MODE="@sndMode@"
+KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="@sndMode@"
+KERNEL=="timer",                NAME="snd/%k", MODE="@sndMode@"
+KERNEL=="seq",                  NAME="snd/%k", MODE="@sndMode@"
 
 
 # Firmware loading.

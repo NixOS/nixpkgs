@@ -1162,7 +1162,16 @@
           and cannot be redistributed.
         ";
       };
-
+      
+      sndMode = mkOption {
+        default = "0600";
+	example = "0666";
+	description = "
+	  Permissions for /dev/snd/*, in case you have multiple 
+	  logged in users or if the devices belong to root for 
+	  some reason.
+	";
+      };
     };
 
 

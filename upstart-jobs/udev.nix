@@ -1,5 +1,6 @@
 { stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs
 , extraUdevPkgs ? []
+, sndMode ? "0600"
 }:
 
 let
@@ -14,6 +15,7 @@ let
       isExecutable = true;
       inherit firmwareDirs;
     };
+    inherit sndMode;
     buildCommand = "
       buildCommand= # urgh
       ensureDir $out

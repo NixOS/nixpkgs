@@ -30,6 +30,7 @@ let
 	(config.services.udev.addFirmware);
       extraUdevPkgs =
         pkgs.lib.optional (config.services.hal.enable) pkgs.hal;
+	sndMode = config.services.udev.sndMode;
     })
       
     # Makes LVM logical volumes available. 
