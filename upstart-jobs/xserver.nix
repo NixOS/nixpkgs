@@ -118,6 +118,7 @@ let
 
     extraDeviceConfig = cfg.extraDeviceConfig; 
     extraMonitorSettings = cfg.extraMonitorSettings; 
+    extraDisplaySettings = cfg.extraDisplaySettings;
     extraModules = cfg.extraModules; 
     serverLayoutOptions = cfg.serverLayoutOptions; 
     defaultDepth = cfg.defaultDepth; 

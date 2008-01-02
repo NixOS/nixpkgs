@@ -855,6 +855,14 @@
         ";
       };
 
+      extraDisplaySettings = mkOption {
+        default = "";
+        example = "Virtual 2048 2048";
+        description = "
+          Just anything to add into Display subsection (located in Screen section).
+        ";
+      };
+ 
       extraModules = mkOption {
         default = "";
         example = "
