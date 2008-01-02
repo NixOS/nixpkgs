@@ -1768,22 +1768,22 @@ root        ALL=(ALL) SETENV: ALL
     };
 
     nix = mkOption {
-        default = pkgs: pkgs.nixUnstable;
-        example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
-        description = "
-          Use non-default Nix easily. Be careful, though, not to break everything.
-        ";
+      default = pkgs: pkgs.nix;
+      example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
+      description = ''
+        Use non-default Nix easily. Be careful, though, not to break everything.
+      '';
     };
 
   };
   
   nesting = {
-	  children = mkOption {
-	      default = [];
-	      description = "
-		Additional configurations to build.
-	      ";
-	  };
+    children = mkOption {
+      default = [];
+      description = ''
+        Additional configurations to build.
+      '';
+    };
   };
 
 }

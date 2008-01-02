@@ -31,7 +31,6 @@ rec {
 
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 
-  /*nix = pkgs.nixUnstable; # we need the exportReferencesGraph feature*/
   nix = config.environment.nix pkgs;
 
   kernel = config.boot.kernel pkgs;
@@ -237,7 +236,6 @@ rec {
     pkgs.utillinux
     pkgs.wirelesstools
     nix
-    (pkgs.lowPrio (pkgs.nixUnstable)) /* Better safe than sorry */
     nixosInstall
     nixosRebuild
     nixosCheckout
