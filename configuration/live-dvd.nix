@@ -87,7 +87,6 @@ rec {
  
     environment = {
       extraPackages = pkgs: [
-        pkgs.vimDiet
 	pkgs.irssi
 	pkgs.elinks
 	pkgs.ltrace
@@ -138,6 +137,7 @@ rec {
 	pkgs.diffutils
 	pkgs.pciutils
 	pkgs.lsof
+	pkgs.vim
       ];
     };
    
