@@ -28,11 +28,18 @@ EOF
 		mkdir -p \$out/libexec
 		gcc realizeuid.c -o \$out/bin/xlaunch
 		echo '#! ${stdenv.shell}
-			(egrep \"^ +env\" /etc/event.d/xserver | sed -e \"s/env/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments//  \\) ; echo X \\\$_XARGS_ ) | bash -l &
-			while ! test -e /tmp/.X11-unix/X0 &>/dev/null ; do sleep 0.5; done
 			USER=\$(egrep '\\''^[-a-z0-9A-Z_]*:[^:]*:'\\''\$1'\\'':'\\'' /etc/passwd | sed -e '\\''s/:.*//'\\'' )
 			shift
-			su -l \${USER:-identityless-shelter} -c \"DISPLAY=:0 \$*\";
+			case \"\$1\" in 
+				:*) export _display=\"\$1\"; 
+				shift
+			esac
+			_display=\${_display:-:0}
+			_display=\${_display#:}
+			echo Using :\$_display
+			(egrep \"^ +env\" /etc/event.d/xserver | sed -e \"s/env/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments// \\| sed -e s/:0/:\${_display}/ \\| sed -e s/vt7/vt\$((7+_display))/ \\) ; echo X \\\$_XARGS_ ) | bash &
+			while ! test -e /tmp/.X11-unix/X\$_display &>/dev/null ; do sleep 0.5; done
+			su -l \${USER:-identityless-shelter} -c \"DISPLAY=:\$_display \$*\";
 		' >\$out/libexec/xlaunch
 		chmod a+x \$out/libexec/xlaunch
 	";
