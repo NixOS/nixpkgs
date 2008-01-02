@@ -607,10 +607,10 @@
             ipAddress = "192.168.1.11";
           }
         ];
-        description = ''
+        description = "
           A list mapping ethernet addresses to IP addresses for the
           DHCP server.
-        '';
+        ";
       };
 
     };
@@ -1770,9 +1770,9 @@ root        ALL=(ALL) SETENV: ALL
     nix = mkOption {
       default = pkgs: pkgs.nix;
       example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
-      description = ''
+      description = "
         Use non-default Nix easily. Be careful, though, not to break everything.
-      '';
+      ";
     };
 
   };
@@ -1780,9 +1780,9 @@ root        ALL=(ALL) SETENV: ALL
   nesting = {
     children = mkOption {
       default = [];
-      description = ''
+      description = "
         Additional configurations to build.
-      '';
+      ";
     };
   };
 
