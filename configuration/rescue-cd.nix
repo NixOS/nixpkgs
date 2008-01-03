@@ -140,8 +140,9 @@ rec {
 
   # The configuration file for Grub.
   grubCfg = pkgs.writeText "menu.lst" ''
-    default=0
-    timeout=10
+    default 0
+    timeout 10
+    splashimage /boot/background.xpm.gz
     
     title NixOS Installer / Rescue
       kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
@@ -174,6 +175,12 @@ rec {
       }
       { source = pkgs.memtest86 + "/memtest.bin";
         target = "boot/memtest.bin";
+      }
+      { source = pkgs.fetchurl {
+          url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
+        };
+        target = "boot/background.xpm.gz";
       }
       { source = cdMountPoints;
         target = "/";
