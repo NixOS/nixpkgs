@@ -602,6 +602,10 @@ rec {
      inherit fetchurl stdenv db4 groff;
   };
 
+  memtest86 = import ../tools/misc/memtest86 {
+     inherit fetchurl stdenv;
+  };
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
