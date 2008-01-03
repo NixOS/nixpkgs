@@ -141,10 +141,14 @@ rec {
   # The configuration file for Grub.
   grubCfg = pkgs.writeText "menu.lst" ''
     default=0
-    timeout=5
+    timeout=10
+    
     title NixOS Installer / Rescue
       kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
       initrd /boot/initrd
+
+    title Memtest86+
+      kernel /boot/memtest.bin
   '';
 
 
@@ -167,6 +171,9 @@ rec {
       }
       { source = system.initialRamdisk + "/initrd";
         target = "boot/initrd";
+      }
+      { source = pkgs.memtest86 + "/memtest.bin";
+        target = "boot/memtest.bin";
       }
       { source = cdMountPoints;
         target = "/";
