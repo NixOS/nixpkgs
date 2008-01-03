@@ -1256,6 +1256,8 @@ rec {
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
   php = php_unstable;
+
+  # compiling without xdebug is currenlty broken (should be easy to fix though 
   php_unstable = (import ../development/interpreters/php_configurable) {
    inherit mkDerivationByConfiguration autoconf automake;
    lib = lib_unstable;
@@ -1263,8 +1265,8 @@ rec {
    # optional features
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
-   flags = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
-   };
+   flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
+  };
 
   python = getVersion "python" python_alts;
 

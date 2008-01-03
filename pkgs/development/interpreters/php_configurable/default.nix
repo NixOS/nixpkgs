@@ -1,3 +1,15 @@
+/*  TODO check security issues such as :
++--------------------------------------------------------------------+
+|                        *** WARNING ***                             |
+|                                                                    |
+| You will be compiling the CGI version of PHP without any           |
+| redirection checking.  By putting this cgi binary somewhere in     |
+| your web space, users may be able to circumvent existing .htaccess |
+| security by loading files directly through the parser.  See        |
+| http://www.php.net/manual/security.php for more details.           |
+*/
+
+
 args:
 ( args.mkDerivationByConfiguration {
     flagConfig = {
@@ -394,7 +406,7 @@ args:
 
 # SAPI modules:
           apxs2        =      { cfgOption = "--with-apxs2=\$apacheHttpd/bin/apxs";
-                                pass = { inherit (args) apacheHttpd; }; };
+                                pass = "apacheHttpd"; };
 
 # Extensions 
 
@@ -425,6 +437,22 @@ args:
                                       If unspecified, the default locations are searched
           */
 
+          /*
+             Building xdebug withing php to be able to add the parameters to the ini file.. Ther should be a better way
+            meta = { 
+                    description = "debugging support for PHP";
+                    homepage = http://xdebug.org;
+                    license = "based on the PHP license - as is";
+                    };
+          */
+          xdebug = { buildInputs = [ "automake" "autoconf" ];  
+                     pass = { xdebug_src = args.fetchurl {
+                          name = "xdebug-2.0.2.tar.gz";
+                          url = "http://xdebug.org/link.php?url=xdebug202";
+                          sha256 = "1h0bxvf8krr203fmk1k7izrrr81gz537xmd3pqh4vslwdlbhrvic";
+                   };};};
+
+
     };
 
   defaults = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
@@ -436,19 +464,43 @@ args:
   extraAttrs = co : {
     name = "php_configurable-5.2.4";
 
-    buildInputs = ( args.lib.getAttr [ "phpIncludes" ] [] args );
-
+    buildInputs = ( args.lib.getAttr [ "phpIncludes" ] [] args ) ++ co.buildInputs;
 
     configurePhase = 
       "
       iniFile=\$out/etc/\$name.ini
       [[ -z \"\$libxml2\" ]] || export PATH=\$PATH:\$libxml2/bin
-      ./configure --with-config-file-path=\$iniFile --prefix=\$out " + co.configureFlags;
+      ./configure --with-config-file-scan-dir=/etc --with-config-file-path=\$iniFile --prefix=\$out " + co.configureFlags + "
+      echo configurePhase end
+      ";
 
     installPhase = "
       unset installPhase; installPhase;
       cp php.ini-recommended $\iniFile
-      echo \"include_path=.\$PATH_DELIMITER\$out/lib/php\$PATH_DELIMITER\$PHP_INCLUDES\" > \$iniFile
+
+      # Now Let's build xdebug if flag has been given 
+      # TODO I think there are better paths than the given below
+      if [ -n \$flag_set_xdebug ]; then
+        PATH=\$PATH:\$out/bin
+        tar xfz \$xdebug_src; 
+        cd xdebug*
+        phpize
+        ./configure --prefix=\$out
+        make
+        ensureDir \$out/lib; cp modules/xdebug.so $out/lib
+cat >> $iniFile << EOF
+zend_extension=\"\$out/lib/xdebug.so\"
+zend_extension_ts=\"\$out/lib/xdebug.so\"
+zend_extension_debug=\"\$out/lib/xdebug.so\"
+xdebug.remote_enable=true
+xdebug.remote_host=127.0.0.1
+xdebug.remote_port=9000
+xdebug.remote_handler=dbgp
+xdebug.profiler_enable=0
+xdebug.profiler_output_dir=\"/tmp/xdebug\"
+xdebug.remote_mode=req
+EOF
+      fi
     ";
 
     src = args.fetchurl {
