@@ -532,7 +532,7 @@ rec {
       (import ./all-packages.nix {system = "i686-linux";}).grub
     else 
       import ../tools/misc/grub {
-        inherit fetchurl stdenv;
+        inherit fetchurl stdenv autoconf automake;
       };
 
   gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
