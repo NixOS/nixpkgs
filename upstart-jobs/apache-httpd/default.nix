@@ -26,7 +26,7 @@ let
 
       # Other modules.
       "ext_filter" "include" "log_config" "env" "mime_magic"
-      "cern_meta" "expires" "headers" "usertrack" "unique_id" "setenvif"
+      "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite"
@@ -223,6 +223,11 @@ in
 
     start on ${startingDependency}/started
     stop on shutdown
+
+    start script
+      mkdir -m 0700 -p ${cfg.stateDir}
+      mkdir -m 0700 -p ${cfg.logDir}
+    end script
 
     respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
   '';
