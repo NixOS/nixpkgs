@@ -2,7 +2,7 @@
 , xineramaSupport ? true
 , encryptedDVDSupport ? true
 , alsaSupport ? true
-, stdenv, fetchurl, zlib, x11
+, stdenv, fetchurl, zlib, x11, pkgconfig
 , libXv ? null, libXinerama ? null, libdvdcss ? null, alsaLib ? null
 }:
 
@@ -19,7 +19,7 @@ assert alsaSupport -> alsaLib != null;
     sha256 = "03iwhgsf9kj0x5b4fgv7lzc1vj3frk4afh2idgrqskvixjyi37vc";
   };
   buildInputs = [
-    x11
+    x11 pkgconfig
     (if xvideoSupport then libXv else null)
     (if xineramaSupport then libXinerama else null)
     (if alsaSupport then alsaLib else null)
