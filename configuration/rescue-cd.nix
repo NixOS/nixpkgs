@@ -138,38 +138,35 @@ rec {
   };
 
 
-  # The configuration file for isolinux.
-  isolinuxCfg = pkgs.writeText "isolinux.cfg" "
-    default linux
-    prompt 1
-    timeout 60
-    label linux
-      kernel vmlinuz
-      append initrd=initrd ${toString (system.config.boot.kernelParams)}
-  ";
-    
+  # The configuration file for Grub.
+  grubCfg = pkgs.writeText "menu.lst" ''
+    default=0
+    timeout=5
+    title NixOS Installer / Rescue
+      kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
+      initrd /boot/initrd
+  '';
 
 
-  # Create an ISO image containing the isolinux boot loader, the
-  # kernel, the initrd produced above, and the closure of the stage 2
-  # init.
+  # Create an ISO image containing the Grub boot loader, the kernel,
+  # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrtools;
     isoName = "nixos-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
     contents = [
-      { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
-        target = "isolinux/isolinux.bin";
+      { source = "${pkgs.grub}/lib/grub/i386-pc/stage2_eltorito";
+        target = "boot/grub/stage2_eltorito";
       }
-      { source = isolinuxCfg;
-        target = "isolinux/isolinux.cfg";
+      { source = grubCfg;
+        target = "boot/grub/menu.lst";
       }
       { source = pkgs.kernel + "/vmlinuz";
-        target = "isolinux/vmlinuz";
+        target = "boot/vmlinuz";
       }
       { source = system.initialRamdisk + "/initrd";
-        target = "isolinux/initrd";
+        target = "boot/initrd";
       }
       { source = cdMountPoints;
         target = "/";
@@ -197,7 +194,7 @@ rec {
     ];
     
     bootable = true;
-    bootImage = "isolinux/isolinux.bin";
+    bootImage = "boot/grub/stage2_eltorito";
   };
 
 
