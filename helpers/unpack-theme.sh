@@ -2,7 +2,7 @@ source $stdenv/setup
 
 ensureDir $out
 
-tar xvfj $theme -C $out
+(cd $out && unpackFile $theme)
 
 themeName=$(cd $out && ls)
 
