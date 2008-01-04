@@ -900,6 +900,22 @@
 	";
       };
 
+      tty = mkOption {
+        default = 7;
+        example = 9;
+        description = "
+          Virtual console for the X server.
+        ";
+      };
+
+      display = mkOption {
+        default = 0;
+        example = 1;
+        description = "
+          Display number for the X server.
+        ";
+      };
+
     };
 
 

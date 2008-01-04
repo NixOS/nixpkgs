@@ -1,18 +1,4 @@
-{ stdenv, writeText, lib, xorg, mesa, xterm, slim, gnome
-, compiz, feh
-, kdelibs, kdebase
-, xkeyboard_config
-, openssh, x11_ssh_askpass
-, nvidiaDrivers, libX11, libXext
-, synaptics
-
-, config
-
-, # Virtual console for the X server.
-  tty ? 7
-
-, # X display number.
-  display ? 0
+{ config, pkgs
 
 , # List of font directories.
   fontDirectories
@@ -20,9 +6,13 @@
 
 let
 
-  cfg = config.services.xserver;
-
   optional = condition: x: if condition then [x] else [];
+
+  # Abbreviations.
+  cfg = config.services.xserver;
+  xorg = pkgs.xorg;
+  gnome = pkgs.gnome;
+  stdenv = pkgs.stdenvNewSetupScript;
 
   # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;
@@ -34,7 +24,7 @@ let
 
   sessionCmd =
     if sessionType == "" then sessionStarter else
-    if sessionType == "xterm" then "${xterm}/bin/xterm -ls" else
+    if sessionType == "xterm" then "${pkgs.xterm}/bin/xterm -ls" else
     if sessionType == "gnome" then "${gnome.gnometerminal}/bin/gnome-terminal -ls" else
     abort ("unknown session type "+ sessionType);
 
@@ -48,7 +38,7 @@ let
 
     
   modules = 
-    optional (videoDriver == "nvidia") nvidiaDrivers ++       #make sure it first loads the nvidia libs
+    optional (videoDriver == "nvidia") pkgs.nvidiaDrivers ++       #make sure it first loads the nvidia libs
     [
       xorg.xorgserver
       xorg.xf86inputkeyboard
@@ -61,9 +51,9 @@ let
     ++ optional (videoDriver == "intel") xorg.xf86videointel
     ++ optional (videoDriver == "nv") xorg.xf86videonv
     ++ optional (videoDriver == "ati") xorg.xf86videoati
-    ++ (optional (cfg.isSynaptics) [(synaptics+"/"+xorg.xorgserver) /*xorg.xf86inputevdev*/]);
+    ++ (optional cfg.isSynaptics ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
-        
+
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
@@ -185,7 +175,7 @@ let
   };
 
 
-  clientScript = writeText "xclient" ''
+  clientScript = pkgs.writeText "xclient" ''
 
     source /etc/profile
 
@@ -200,8 +190,8 @@ let
 
     ${if cfg.startSSHAgent then ''
       ### Start the SSH agent.
-      export SSH_ASKPASS=${x11_ssh_askpass}/libexec/x11-ssh-askpass
-      eval $(${openssh}/bin/ssh-agent)
+      export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
+      eval $(${pkgs.openssh}/bin/ssh-agent)
     '' else ""}
 
     ### Allow user to override system-wide configuration
@@ -217,7 +207,7 @@ let
     ''
 
     else if windowManager == "metacity" then ''
-      env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/
+      env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
       # !!! Hack: load the schemas for Metacity.
       GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
         --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas
@@ -225,13 +215,13 @@ let
     ''
 
     else if windowManager == "kwm" then ''
-      ${kdebase}/bin/kwin &
+      ${pkgs.kdebase}/bin/kwin &
     ''
 
     else if windowManager == "compiz" then ''
       # !!! Hack: load the schemas for Compiz.
       GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-        --makefile-install-rule ${compiz}/etc/gconf/schemas/*.schemas
+        --makefile-install-rule ${pkgs.compiz}/etc/gconf/schemas/*.schemas
 
       # !!! Hack: turn on most Compiz modules.
       ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \
@@ -239,9 +229,9 @@ let
         [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
 
       # Start Compiz and the GTK-style window decorator.
-      env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/
-      ${compiz}/bin/compiz gconf ${renderingFlag}&
-      ${compiz}/bin/gtk-window-decorator --sync &
+      env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
+      ${pkgs.compiz}/bin/compiz gconf ${renderingFlag}&
+      ${pkgs.compiz}/bin/gtk-window-decorator --sync &
     ''
     
     else if windowManager == "none" then ''
@@ -256,7 +246,7 @@ let
     ${if sessionType != "kde" then ''
     
       if test -e $HOME/.background-image; then
-        ${feh}/bin/feh --bg-scale $HOME/.background-image
+        ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
       fi
       
     '' else ""}
@@ -266,10 +256,10 @@ let
     ${if sessionType == "kde" then ''
 
       # Start KDE.
-      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${kdebase}:${kdelibs}
-      export XDG_CONFIG_DIRS=${kdebase}/etc/xdg:${kdelibs}/etc/xdg
-      export XDG_DATA_DIRS=${kdebase}/share
-      exec ${kdebase}/bin/startkde
+      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kdebase}:${pkgs.kdelibs}
+      export XDG_CONFIG_DIRS=${pkgs.kdebase}/etc/xdg:${pkgs.kdelibs}/etc/xdg
+      export XDG_DATA_DIRS=${pkgs.kdebase}/share
+      exec ${pkgs.kdebase}/bin/startkde
 
     '' else ''
 
@@ -290,14 +280,14 @@ let
     "-logverbose"
     "-verbose"
     "-terminate"
-    "-logfile" "/var/log/X.${toString display}.log"
+    "-logfile" "/var/log/X.${toString cfg.display}.log"
     "-config ${configFile}"
-    ":${toString display}" "vt${toString tty}"
-    "-xkbdir" "${xkeyboard_config}/etc/X11/xkb"
+    ":${toString cfg.display}" "vt${toString cfg.tty}"
+    "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
   ] ++ optional (!config.services.xserver.tcpEnable) "-nolisten tcp";
 
   
-  slimConfig = writeText "slim.cfg" ''
+  slimConfig = pkgs.writeText "slim.cfg" ''
     xauth_path ${xorg.xauth}/bin/xauth
     default_xserver ${xorg.xorgserver}/bin/X
     xserver_arguments ${toString xserverArgs}
@@ -317,7 +307,7 @@ let
           ln -s * default
         '';
       };
-    in if cfg.slim.theme == null then "${slim}/share/slim/themes" else unpackedTheme;       
+    in if cfg.slim.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;       
 
 
 in
@@ -331,7 +321,7 @@ rec {
     xorg.xrandr
     xorg.xrdb
     xorg.setxkbmap
-    feh
+    pkgs.feh
   ]
   ++ optional (windowManager == "twm") [
     xorg.twm
@@ -340,10 +330,10 @@ rec {
     gnome.metacity
   ]
   ++ optional (windowManager == "compiz") [
-    compiz
+    pkgs.compiz
   ]
   ++ optional (sessionType == "xterm") [
-    xterm
+    pkgs.xterm
   ]
   ++ optional (sessionType == "gnome") [
     gnome.gnometerminal
@@ -351,8 +341,8 @@ rec {
     gnome.gconfeditor
   ]
   ++ optional (sessionType == "kde") [
-    kdelibs
-    kdebase
+    pkgs.kdelibs
+    pkgs.kdebase
     xorg.iceauth # absolutely required by dcopserver
     xorg.xset # used by startkde, non-essential
   ];
@@ -360,7 +350,7 @@ rec {
 
   extraEtc =
     optional (sessionType == "kde")
-      { source = "${xkeyboard_config}/etc/X11/xkb";
+      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
       }
     ++
@@ -377,9 +367,9 @@ rec {
     
       rm -f /var/run/opengl-driver
       ${if videoDriver == "nvidia"        
-        then "ln -sf ${nvidiaDrivers} /var/run/opengl-driver"
+        then "ln -sf ${pkgs.nvidiaDrivers} /var/run/opengl-driver"
 	else if cfg.driSupport
-        then "ln -sf ${mesa} /var/run/opengl-driver"
+        then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
         else ""
        }
 
@@ -389,18 +379,18 @@ rec {
 
     env SLIM_CFGFILE=${slimConfig}
     env SLIM_THEMESDIR=${slimThemesDir}
-    env FONTCONFIG_FILE=/etc/fonts/fonts.conf  				# !!! cleanup
-    env XKB_BINDIR=${xorg.xkbcomp}/bin         				# Needed for the Xkb extension.
-    env LD_LIBRARY_PATH=${libX11}/lib:${libXext}/lib:/usr/lib/          # related to xorg-sys-opengl - needed to load libglx for (AI)GLX support (for compiz)
+    env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
+    env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
+    env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/ # related to xorg-sys-opengl - needed to load libglx for (AI)GLX support (for compiz)
 
     ${if videoDriver == "nvidia"
-      then "env XORG_DRI_DRIVER_PATH=${nvidiaDrivers}/X11R6/lib/modules/drivers/"
+      then "env XORG_DRI_DRIVER_PATH=${pkgs.nvidiaDrivers}/X11R6/lib/modules/drivers/"
     else if cfg.driSupport
-      then "env XORG_DRI_DRIVER_PATH=${mesa}/lib/modules/dri"
+      then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/modules/dri"
       else ""
     } 
 
-    exec ${slim}/bin/slim
+    exec ${pkgs.slim}/bin/slim
   '';
   
 }

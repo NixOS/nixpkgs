@@ -146,13 +146,7 @@ let
   # X server.
   ++ optional config.services.xserver.enable
     (import ../upstart-jobs/xserver.nix {
-      inherit config;
-      inherit (pkgs) writeText lib xterm slim xorg mesa
-        gnome compiz feh kdebase kdelibs xkeyboard_config
-        openssh x11_ssh_askpass nvidiaDrivers synaptics;
-      stdenv = pkgs.stdenvNewSetupScript;
-      libX11 = pkgs.xlibs.libX11;
-      libXext = pkgs.xlibs.libXext;
+      inherit config pkgs;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
     })
 
@@ -202,9 +196,9 @@ let
 
   # X Font Server
   ++ optional config.services.xfs.enable
-  (import ../upstart-jobs/xfs.nix {
-  	inherit config pkgs;
-  })
+    (import ../upstart-jobs/xfs.nix {
+      inherit config pkgs;
+    })
 
   ++ optional config.services.ircdHybrid.enable
     (import ../upstart-jobs/ircd-hybrid.nix {
