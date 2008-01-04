@@ -9,6 +9,12 @@ in
 
 rec {
 
+
+  # Identity function.
+  id = x: x;
+
+
+  # !!! need documentation...
   innerSumArgs = f : x : y : (if y == null then (f x)
 	else (innerSumArgs f (x // y)));
   sumArgs = f : innerSumArgs f {};
@@ -19,6 +25,7 @@ rec {
 		f (tail (tail l));
   pairMap = innerPairMap [];
 
+  
   # "Fold" a binary function `op' between successive elements of
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
@@ -65,14 +72,12 @@ rec {
   # "y"] applied to some set e returns e.x.y, if it exists.  The
   # default value is returned otherwise.
   getAttr = attrPath: default: e:
-    let {
-      attr = head attrPath;
-      body =
-        if attrPath == [] then e
-        else if builtins ? hasAttr && builtins.hasAttr attr e
-        then getAttr (tail attrPath) default (builtins.getAttr attr e)
-        else default;
-    };
+    let attr = head attrPath;
+    in
+      if attrPath == [] then e
+      else if builtins ? hasAttr && builtins.hasAttr attr e
+      then getAttr (tail attrPath) default (builtins.getAttr attr e)
+      else default;
 
 
   # Filter a list using a predicate; that is, return a list containing
@@ -95,15 +100,33 @@ rec {
        else head found;
 
 
+  # Return true iff function `pred' returns true for at least element
+  # of `list'.
+  any = pred: list:
+    if list == [] then false
+    else if pred (head list) then true
+    else any pred (tail list);
+
+
+  # Return true iff function `pred' returns true for all elements of
+  # `list'.
+  all = pred: list:
+    if list == [] then true
+    else if pred (head list) then all pred (tail list)
+    else false;
+
+
   # Return true if each element of a list is equal, false otherwise.
   eqLists = xs: ys:
     if xs == [] && ys == [] then true
     else if xs == [] || ys == [] then false
     else head xs == head ys && eqLists (tail xs) (tail ys);
 
+    
   # Workaround, but works in stable Nix now.
   eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
 
+  
   # Determine whether a filename ends in the given suffix.
   hasSuffix = ext: fileName:
     let lenFileName = stringLength fileName;
@@ -123,6 +146,15 @@ rec {
       (hasSuffix "~" name)
     );
     in src: builtins.filterSource filter src;
+
+
+  # Get all files ending with the specified suffices from the given
+  # directory.  E.g. `sourceFilesBySuffices ./dir [".xml" ".c"]'.
+  sourceFilesBySuffices = path: exts:
+    let filter = name: type: 
+      let base = baseNameOf (toString name);
+      in type != "directory" && any (ext: hasSuffix ext base) exts;
+    in builtins.filterSource filter path;
 
 
   # Return a singleton list or an empty list, depending on a boolean
