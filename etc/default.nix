@@ -11,18 +11,17 @@ let
   # !!! ugh, these files shouldn't be created here.
     
     
-  envConf = pkgs.writeText "environment" "
+  envConf = pkgs.writeText "environment" ''
     PATH=${systemPath}/bin:${systemPath}/sbin:${pkgs.openssh}/bin
     NIX_REMOTE=daemon
-  " /* ${pkgs.openssh}/bin is a hack to get remote scp to work */;
+  '' /* ${pkgs.openssh}/bin is a hack to get remote scp to work */;
 
 
-  # Don't indent this file!
-  pamConsoleHandlers = pkgs.writeText "console.handlers" "
-console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
-${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
-${pkgs.pam_console}/sbin/pam_console_apply unlock logfail wait -r -t tty -s -c ${pamConsolePerms}
-";
+  pamConsoleHandlers = pkgs.writeText "console.handlers" ''
+    console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
+    ${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
+    ${pkgs.pam_console}/sbin/pam_console_apply unlock logfail wait -r -t tty -s -c ${pamConsolePerms}
+  '';
 
   pamConsolePerms = ./security/console.perms;
 
@@ -46,10 +45,10 @@ import ../helpers/make-etc.nix {
     }
 
     { # Hostname-to-IP mappings.
-      source = pkgs.substituteAll{
-	src = ./hosts;
-	extraHosts = config.networking.extraHosts;
-	};
+      source = pkgs.substituteAll {
+        src = ./hosts;
+        extraHosts = config.networking.extraHosts;
+      };
       target = "hosts";
     }
 
@@ -64,7 +63,12 @@ import ../helpers/make-etc.nix {
     }
 
     { # Friendly greeting on the virtual consoles.
-      source = ./issue;
+      source = pkgs.writeText "issue" ''
+      
+        [1;32m${config.services.mingetty.greetingLine}[0m
+        ${config.services.mingetty.helpLine}
+        
+      '';
       target = "issue";
     }
 
@@ -119,14 +123,14 @@ import ../helpers/make-etc.nix {
     }
 
     { # Nix configuration.
-      source = pkgs.writeText "nix.conf" "
+      source = pkgs.writeText "nix.conf" ''
         # WARNING: this file is generated.
         build-users-group = nixbld
         build-max-jobs = ${toString (config.nix.maxJobs)}
         build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
         build-chroot-dirs = /dev /proc /bin /etc
         ${config.nix.extraOptions}
-      ";
+      '';
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
 
@@ -134,13 +138,13 @@ import ../helpers/make-etc.nix {
 
   # Configuration for ssmtp.
   ++ optional config.networking.defaultMailServer.directDelivery { 
-    source = let cfg = config.networking.defaultMailServer; in pkgs.writeText "ssmtp.conf" "
-mailhub=${cfg.hostName}
-${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
-UseTLS=${if cfg.useTLS then "YES" else "NO"}
-UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
-#Debug=YES
-      ";
+    source = let cfg = config.networking.defaultMailServer; in pkgs.writeText "ssmtp.conf" ''
+      mailhub=${cfg.hostName}
+      ${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
+      UseTLS=${if cfg.useTLS then "YES" else "NO"}
+      UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
+      #Debug=YES
+    '';
     target = "ssmtp/ssmtp.conf";
   }
     

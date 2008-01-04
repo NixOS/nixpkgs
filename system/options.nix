@@ -575,6 +575,22 @@
         ";
       };
 
+      greetingLine = mkOption {
+        default = ''<<< Welcome to NixOS (\m) - Kernel \r (\l) >>>'';
+        description = "
+          Welcome line printed by mingetty.
+        ";
+      };
+
+      helpLine = mkOption {
+        default = "";
+        description = "
+          Help line printed by mingetty below the welcome line.
+          Used by the installation CD to give some hints on
+          how to proceed.
+        ";
+      };
+
     };
 
 

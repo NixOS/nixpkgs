@@ -82,6 +82,13 @@ rec {
           }
         ];
       };
+
+      mingetty = {
+        helpLine = ''
+        
+          Log in as "root" with an empty password.  Press <Alt-F7> for help.
+        '';
+      };
       
     };
 
