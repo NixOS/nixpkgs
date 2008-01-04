@@ -198,38 +198,49 @@ rec {
       makeTarball "nixpkgs.tar.bz2" (builtins.filterSource filter /etc/nixos/nixpkgs);
 
 
-  # The configuration file for isolinux.
-  isolinuxCfg = pkgs.writeText "isolinux.cfg" "
-    default linux
-    prompt 1
-    timeout 60
-    label linux
-      kernel vmlinuz
-      append initrd=initrd ${toString (system.config.boot.kernelParams)}
-  ";
+  # The configuration file for Grub.
+  grubCfg = pkgs.writeText "menu.lst" ''
+    default 0
+    timeout 10
+    splashimage /boot/background.xpm.gz
     
+    title NixOS Installer / Rescue
+      kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
+      initrd /boot/initrd
+
+    title Memtest86+
+      kernel /boot/memtest.bin
+  '';
 
 
-  # Create an ISO image containing the isolinux boot loader, the
-  # kernel, the initrd produced above, and the closure of the stage 2
-  # init.
+  # Create an ISO image containing the Grub boot loader, the kernel,
+  # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrtools;
     isoName = "nixos-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
     contents = [
-      { source = pkgs.syslinux + "/lib/syslinux/isolinux.bin";
-        target = "isolinux/isolinux.bin";
+      { source = "${pkgs.grub}/lib/grub/i386-pc/stage2_eltorito";
+        target = "boot/grub/stage2_eltorito";
       }
-      { source = isolinuxCfg;
-        target = "isolinux/isolinux.cfg";
+      { source = grubCfg;
+        target = "boot/grub/menu.lst";
       }
       { source = pkgs.kernel + "/vmlinuz";
-        target = "isolinux/vmlinuz";
+        target = "boot/vmlinuz";
       }
       { source = system.initialRamdisk + "/initrd";
-        target = "isolinux/initrd";
+        target = "boot/initrd";
+      }
+      { source = pkgs.memtest86 + "/memtest.bin";
+        target = "boot/memtest.bin";
+      }
+      { source = pkgs.fetchurl {
+          url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
+        };
+        target = "boot/background.xpm.gz";
       }
       { source = cdMountPoints;
         target = "/";
@@ -263,7 +274,7 @@ rec {
     ];
     
     bootable = true;
-    bootImage = "isolinux/isolinux.bin";
+    bootImage = "boot/grub/stage2_eltorito";
   };
 
 
