@@ -3314,7 +3314,6 @@ rec {
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
-
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
@@ -3407,6 +3406,13 @@ rec {
 
   module_init_tools = import ../os-specific/linux/module-init-tools {
     inherit fetchurl stdenv;
+  };
+
+  module_aggregation = moduleSources:  
+  import ../os-specific/linux/module-init-tools/aggregator.nix {
+    inherit fetchurl stdenv module_init_tools moduleSources 
+      builderDefs;
+    inherit (xorg) lndir;
   };
 
   modutils = import ../os-specific/linux/modutils {

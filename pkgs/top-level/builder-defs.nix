@@ -3,7 +3,7 @@ args: with args; with stringsWithDeps; with lib;
 {
 	inherit writeScript; 
 
-
+	addSbinPath = getAttr ["addSbinPath"] false args;
 
 	forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
 
@@ -133,6 +133,11 @@ args: with args; with stringsWithDeps; with lib;
 		    if [ -e \$1/nix-support/failed ]; then
 			echo \"failed input \$1\" >&2
 			fail
+		    fi
+		" else "")
+		+(if addSbinPath then "
+		    if test -d \$1/sbin; then
+			export _PATH=\$_PATH\${_PATH:+:}\$1/sbin
 		    fi
 		" else "")
 		+"
