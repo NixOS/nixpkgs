@@ -1,4 +1,4 @@
-{ stdenv, perl, cdrtools
+{ stdenv, perl, cdrkit
 
   # The file name of the resulting ISO image.
 , isoName ? "cd.iso"
@@ -32,7 +32,7 @@ assert bootable -> bootImage != "";
 stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
-  buildInputs = [perl cdrtools];
+  buildInputs = [perl cdrkit];
   inherit isoName bootable bootImage;
 
   # !!! should use XML.

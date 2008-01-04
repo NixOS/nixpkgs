@@ -156,7 +156,7 @@ rec {
   # Create an ISO image containing the Grub boot loader, the kernel,
   # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
-    inherit (pkgs) stdenv perl cdrtools;
+    inherit (pkgs) stdenv perl cdrkit;
     isoName = "nixos-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
