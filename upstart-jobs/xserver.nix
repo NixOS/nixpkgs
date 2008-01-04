@@ -16,15 +16,6 @@
 
 , # List of font directories.
   fontDirectories
-
-, # Is Clone mode on?
-  isClone ? "on"
-
-, # Do we want it to run or just to prepare everything?
-  autorun ? true
-
-, # Create unneeded links in /etc? 
-  exportConfiguration ? false
 }:
 
 let
@@ -76,7 +67,8 @@ let
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories videoDriver resolutions isClone;
+    inherit fontDirectories videoDriver resolutions;
+    isClone = if cfg.isClone then "on" else "off";
 
     synapticsInputDevice = if cfg.isSynaptics then ''
       Section "InputDevice"
@@ -189,7 +181,7 @@ let
       fi;
 
       substituteAll $src $out
-    '';
+    ''; # */
   };
 
 
@@ -290,7 +282,7 @@ let
 
     ''}
     
-  '';
+  ''; # */
 
 
   xserverArgs = [
@@ -372,14 +364,14 @@ rec {
         target = "X11/xkb";
       }
     ++
-    optional (exportConfiguration) 
+    optional cfg.exportConfiguration
       { source = "${configFile}";
         target = "X11/xorg.conf";
       };
 
     
   job = ''
-    start on ${if autorun then "network-interfaces" else "never"}
+    start on ${if cfg.autorun then "network-interfaces" else "never"}
 
     start script
     

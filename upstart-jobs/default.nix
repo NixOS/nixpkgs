@@ -154,9 +154,6 @@ let
       libX11 = pkgs.xlibs.libX11;
       libXext = pkgs.xlibs.libXext;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
-      isClone = config.services.xserver.isClone;
-      autorun = config.services.xserver.autorun;
-      exportConfiguration = config.services.xserver.exportConfiguration;
     })
 
   # Apache httpd.
@@ -167,6 +164,14 @@ let
       extraConfig = pkgs.lib.concatStringsSep "\n"
         (map (job: job.extraHttpdConfig) jobs);
     })
+
+  # Apache httpd (new style).
+  /*
+  ++ optional config.services.httpd.enable
+    (import ../upstart-jobs/apache-httpd {
+      inherit config pkgs;
+    })
+  */
 
   # Postgres SQL server
   ++ optional config.services.postgresql.enable

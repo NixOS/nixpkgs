@@ -794,8 +794,8 @@
       };
 
       isClone = mkOption {
-        default = "on";
-        example = "off";
+        default = true;
+        example = false;
         description = "
           Whether to enable the X server clone mode for dual-head.
         ";
