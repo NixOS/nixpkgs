@@ -9,8 +9,9 @@ let
   optional = cond: service: pkgs.lib.optional cond (makeJob service);
 
   requiredTTYs =
-    (config.services.mingetty.ttys)
-    ++ [10] /* !!! sync with syslog.conf */ ;
+    config.services.mingetty.ttys
+    ++ config.boot.extraTTYs
+    ++ [config.services.syslogd.tty];
 
     
   jobs = map makeJob [

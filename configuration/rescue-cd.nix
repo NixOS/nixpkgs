@@ -14,6 +14,7 @@ rec {
       readOnlyRoot = true;
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
+      extraTTYs = [7 8]; # manual, rogue
     };
     
     services = {
@@ -43,6 +44,15 @@ rec {
           ";
         }
       
+        # Show the NixOS manual on tty7.
+        { name = "manual";
+          job = "
+            start on udev
+            stop on shutdown
+            respawn ${pkgs.w3m}/bin/w3m ${import ../doc/manual}/manual.html < /dev/tty7 > /dev/tty7 2>&1
+          ";
+        }
+
         # Allow the user to do something useful on tty8 while waiting
         # for the installation to finish.
         { name = "rogue";
@@ -57,6 +67,13 @@ rec {
       # And a background to go with that.
       ttyBackgrounds = {
         specificThemes = [
+          { tty = 7;
+            # Theme is GPL according to http://kde-look.org/content/show.php/Green?content=58501.
+            theme = pkgs.fetchurl {
+              url = http://www.kde-look.org/CONTENT/content-files/58501-green.tar.gz;
+              sha256 = "0sdykpziij1f3w4braq8r8nqg4lnsd7i7gi1k5d7c31m2q3b9a7r";
+            };
+          }
           { tty = 8;
             theme = pkgs.fetchurl {
               url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
@@ -86,6 +103,7 @@ rec {
       extraPackages = pkgs: [
         pkgs.vim
         pkgs.subversion # for nixos-checkout
+        pkgs.w3m # needed for the manual anyway
       ];
     };
    
@@ -99,7 +117,7 @@ rec {
 
 
   pkgs = system.pkgs;
-  
+
 
   # Since the CD is read-only, the mount points must be on disk.
   cdMountPoints = pkgs.runCommand "mount-points" {} "
@@ -176,10 +194,7 @@ rec {
       { source = pkgs.memtest86 + "/memtest.bin";
         target = "boot/memtest.bin";
       }
-      { source = pkgs.fetchurl {
-          url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
-          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-        };
+      { source = system.config.boot.grubSplashImage;
         target = "boot/background.xpm.gz";
       }
       { source = cdMountPoints;

@@ -234,6 +234,19 @@
       ";
     };
 
+    extraTTYs = mkOption {
+      default = [];
+      example = [8 9];
+      description = "
+        Tty (virtual console) devices, in addition to the consoles on
+        which mingetty and syslogd run, that must be initialised.
+        Only useful if you have some program that you want to run on
+        some fixed console.  For example, the NixOS installation CD
+        opens the manual in a web browser on console 7, so it sets
+        <option>boot.extraTTYs</option> to <literal>[7]</literal>.
+      ";
+    };
+
   };
 
 
