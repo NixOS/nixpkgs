@@ -220,6 +220,20 @@
       ";
     };
 
+    grubSplashImage = mkOption {
+      default = pkgs.fetchurl {
+        url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+        sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
+      };
+      example = null;
+      description = "
+        Background image used for Grub.  It must be a 640x480,
+        14-colour image in XPM format, optionally compressed with
+        <command>gzip</command> or <command>bzip2</command>.  Set to
+        <literal>null</literal> to run Grub in text mode.
+      ";
+    };
+
   };
 
 
