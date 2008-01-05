@@ -4936,15 +4936,11 @@ rec {
   };
 
   # The bleeding edge.
-  /*
   nixUnstable = import ../tools/package-management/nix/unstable.nix {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
   };
-  */
-
-  nixUnstable = nix;
 
   nixCustomFun = src: preConfigure: configureFlags :
   (import ../tools/package-management/nix/custom.nix {
