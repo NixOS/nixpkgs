@@ -49,7 +49,7 @@ rec {
           job = "
             start on udev
             stop on shutdown
-            respawn ${pkgs.w3m}/bin/w3m ${import ../doc/manual}/manual.html < /dev/tty7 > /dev/tty7 2>&1
+            respawn ${pkgs.w3m}/bin/w3m ${manual} < /dev/tty7 > /dev/tty7 2>&1
           ";
         }
 
@@ -124,6 +124,14 @@ rec {
 
 
   pkgs = system.pkgs;
+
+
+  # The NixOS manual, with a backward compatibility hack for Nix <=
+  # 0.11 (you won't get the manual).
+  manual =
+    if builtins ? unsafeDiscardStringContext
+    then "${import ../doc/manual}/manual.html"
+    else pkgs.writeText "dummy-manual" "Manual not included in this build!";
 
 
   # Since the CD is read-only, the mount points must be on disk.
