@@ -137,6 +137,10 @@
       kernelModules = mkOption {
         default = [
           "ahci"
+          "sata_nv"
+          "sata_via"
+          "sata_sis"
+          "sata_uli"
           "ata_piix"
           "pata_marvell"
           "sd_mod"
