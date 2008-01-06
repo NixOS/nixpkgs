@@ -1,5 +1,6 @@
 { config, pkgs, upstartJobs, systemPath, wrapperDir
 , defaultShell, extraEtc, nixEnvVars
+, kernel ? null
 }:
 
 let 
@@ -24,7 +25,6 @@ let
   '';
 
   pamConsolePerms = ./security/console.perms;
-
 
 in
 
@@ -109,10 +109,12 @@ import ../helpers/make-etc.nix {
       source = pkgs.substituteAll {
         src = ./profile.sh;
         inherit systemPath wrapperDir;
-        inherit (pkgs) systemKernel glibc;
+        inherit (pkgs) glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
         inherit nixEnvVars;
+	systemKernel = (if kernel == null then 
+		pkgs.systemKernel else kernel);
       };
       target = "profile";
     }

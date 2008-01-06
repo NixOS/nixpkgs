@@ -172,6 +172,7 @@ rec {
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
       defaultShell nixEnvVars;
+    inherit kernel;
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
