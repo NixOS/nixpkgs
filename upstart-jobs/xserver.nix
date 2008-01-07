@@ -130,18 +130,18 @@ let
         fi
       done
 
+      export moduleSection=""
+      export screen=""
+      export device=""
+      export extensions=""
+
+
       #if only my gf were this dirty
       if test "${toString videoDriver}" == "nvidia"; then
-        export moduleSection='
-          Load "glx"
-          SubSection "extmod"
-            Option "omit xfree86-dga"
-          EndSubSection
-        '
-
         export screen='
           Option "AddARGBGLXVisuals" "true"
           Option "DisableGLXRootClipping" "true"
+	  Option "RandRRotation" "on"
         '
         
         export device='
@@ -153,15 +153,6 @@ let
         export extensions='
           Option "Composite" "Enable"
         '
-
-      else
-        export moduleSection='
-          Load "glx"
-          Load "dri"
-        '
-        export screen=
-        export device=
-        export extensions=
       fi
 	
       if [ "${toString videoDriver}" = i810 ]; then
@@ -230,7 +221,7 @@ let
 
       # Start Compiz and the GTK-style window decorator.
       env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
-      ${pkgs.compiz}/bin/compiz gconf ${renderingFlag}&
+      ${pkgs.compiz}/bin/compiz gconf ${renderingFlag} &
       ${pkgs.compiz}/bin/gtk-window-decorator --sync &
     ''
     
