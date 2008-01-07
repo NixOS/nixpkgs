@@ -13,7 +13,7 @@ args: with args;
 		);
 
   buildInputs = [bzip2 freetype ghostscript graphviz libjpeg libpng 
-		libtiff libX11 libxml2 zlib ] ++ (if args ? tetex then [args.tetex] else [])
+		libtiff libX11 libxml2 zlib libtool] ++ (if args ? tetex then [args.tetex] else [])
 		 ++ (if args ? librsvg then [args.librsvg] else [])
 		;
 } // (if args ? tetex then {

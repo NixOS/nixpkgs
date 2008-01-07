@@ -4114,7 +4114,7 @@ rec {
   };
 
   imagemagickFun = lib.sumArgs (import ../applications/graphics/ImageMagick) {
-    inherit stdenv fetchurl; 
+    inherit stdenv fetchurl libtool; 
   };
 
   imagemagick = imagemagickFun {
