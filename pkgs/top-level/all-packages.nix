@@ -3216,9 +3216,6 @@ rec {
         "CONFIG_EXT3COW_FS_SECURITY=y\n";
       }
       */
-      { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
-      }
       /*
       { name = "skas-2.6.20-v9-pre9";
         patch = fetchurl {
@@ -3285,9 +3282,6 @@ rec {
   kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
-      { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.22-paravirt-nvidia.patch;
-      }
       { # resume with resume=swap:/dev/xx
         name = "tux on ice"; # (swsusp2)
         patch = fetchurl {
