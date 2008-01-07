@@ -38,8 +38,8 @@ let
 
     
   modules = 
-    optional (videoDriver == "nvidia") pkgs.nvidiaDrivers ++       #make sure it first loads the nvidia libs
-    [
+    optional (videoDriver == "nvidia") pkgs.nvidiaDrivers #make sure it first loads the nvidia libs
+    ++ [
       xorg.xorgserver
       xorg.xf86inputkeyboard
       xorg.xf86inputmouse
@@ -125,7 +125,7 @@ let
 
       export modulePaths=
       for i in $(find ${toString modules} -type d); do
-        if ls $i/*.so 2> /dev/null; then
+        if ls $i/*.so* > /dev/null 2>&1; then
           modulePaths="''${modulePaths}ModulePath \"$i\"''\n"
         fi
       done
@@ -345,6 +345,9 @@ rec {
     pkgs.kdebase
     xorg.iceauth # absolutely required by dcopserver
     xorg.xset # used by startkde, non-essential
+  ]
+  ++ optional (videoDriver == "nvidia") [
+    pkgs.nvidiaDrivers
   ];
 
 
@@ -367,7 +370,11 @@ rec {
     
       rm -f /var/run/opengl-driver
       ${if videoDriver == "nvidia"        
-        then "ln -sf ${pkgs.nvidiaDrivers} /var/run/opengl-driver"
+        then ''
+          ln -sf ${pkgs.nvidiaDrivers} /var/run/opengl-driver
+          # Ideally, the nvidia driver would be somewhere where modprobe looks for it...
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.nvidiaDrivers}/lib/nvidia.ko || true
+        ''
 	else if cfg.driSupport
         then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
         else ""
@@ -381,14 +388,16 @@ rec {
     env SLIM_THEMESDIR=${slimThemesDir}
     env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
     env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
-    env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/ # related to xorg-sys-opengl - needed to load libglx for (AI)GLX support (for compiz)
 
-    ${if videoDriver == "nvidia"
-      then "env XORG_DRI_DRIVER_PATH=${pkgs.nvidiaDrivers}/X11R6/lib/modules/drivers/"
-    else if cfg.driSupport
+    ${if videoDriver == "nvidia" 
+      then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${pkgs.nvidiaDrivers}/lib" 
+      else ""
+    }
+
+    ${if videoDriver != "nvidia"
       then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/modules/dri"
       else ""
-    } 
+    }
 
     exec ${pkgs.slim}/bin/slim
   '';
