@@ -7,6 +7,7 @@ export TZDIR=@glibc@/share/zoneinfo
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 export LANG=@defaultLocale@
 export EDITOR=nano
+export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
 
 
 # A nice prompt.
@@ -52,6 +53,7 @@ NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
 
 for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
+    export INFOPATH=$i/info:$i/share/info:$INFOPATH
     export ASPELL_EXTRA_DICT_DIRS="$i/lib/aspell${ASPELL_EXTRA_DICT_DIRS:+,}$ASPELL_EXTRA_DICT_DIRS"
 done
 

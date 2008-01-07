@@ -1815,7 +1815,7 @@ root        ALL=(ALL) SETENV: ALL
   environment = {
 
     pathsToLink = mkOption {
-      default = ["/bin" "/sbin" "/share" "/man"];
+      default = ["/bin" "/sbin" "/share" "/man" "/info"];
       example = ["/"];
       description = "
         This allows to symlink more directories in /var/run/current-system/sw
