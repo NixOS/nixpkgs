@@ -869,9 +869,10 @@ rec {
     }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl ncurses;
     bison = bison23;
     interactive = true;
+    stdenv = stdenvUsingSetupNew2;
   });
 
   tcsh = import ../shells/tcsh {
