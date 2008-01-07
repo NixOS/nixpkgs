@@ -3,8 +3,8 @@ set -x
 
 # Obtain Subversion.
 if test -z "$(type -tp svn)"; then
-    nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
-    nix-channel --update
+    #nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
+    #nix-channel --update
     nix-env -i subversion
 fi
 
