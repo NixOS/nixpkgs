@@ -3427,9 +3427,7 @@ rec {
   };
 
   nvidiaDrivers = import ../os-specific/linux/nvidia {
-    inherit stdenv fetchurl kernel coreutils;
-    xorg_server = xorg.xorgserver;
-    inherit (xlibs) libX11 libXext;
+    inherit stdenv fetchurl kernel xlibs gtkLibs;
   };
 
   gw6c = import ../os-specific/linux/gw6c {
