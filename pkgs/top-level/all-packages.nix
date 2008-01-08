@@ -3013,6 +3013,14 @@ rec {
     static = true;
   }));
 
+  dmidecodeFun = lib.sumArgs (selectVersion ../os-specific/linux/dmidecode) {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  dmidecode = dmidecodeFun {
+    version = "2.9";
+  } null;
+
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
@@ -3308,6 +3316,16 @@ rec {
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
   };
+
+  kqemuFun = lib.sumArgs (selectVersion ../os-specific/linux/kqemu) {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  # No finished expression is provided - pick your own kernel
+  kqemuFunCurrent = theKernel:  (kqemuFun { 
+    version = "1.3.0pre11";
+    kernel = theKernel;
+  } null);
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;

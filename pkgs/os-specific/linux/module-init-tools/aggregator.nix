@@ -13,6 +13,7 @@ cd $out/
 for i in $moduleSources; do 
 	lndir $i/
 done
+rm -rf nix-support
 cd lib/modules/
 rm */modules.*
 MODULE_DIR=$PWD/ depmod -a 
