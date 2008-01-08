@@ -41,6 +41,7 @@ KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="@sndMode@"
 KERNEL=="timer",                NAME="snd/%k", MODE="@sndMode@"
 KERNEL=="seq",                  NAME="snd/%k", MODE="@sndMode@"
 
+KERNEL=="kqemu",		NAME="%k", MODE="0666"
 
 # Firmware loading.
 SUBSYSTEM=="firmware", ACTION=="add", RUN+="@firmwareLoader@"
