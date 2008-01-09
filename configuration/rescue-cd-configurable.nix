@@ -18,10 +18,11 @@ let
 	sshdEnabled = arg "sshdEnabled" false;
 	fontConfigEnabled = arg "fontConfigEnabled" false;
 	sudoEnable = arg "sudoEnable" false;
-	packages = arg "packages" [];
+	packages = arg "packages" (pkgs : []);
 	includeMemtest = arg "includeMemtest" true;
 	includeStdenv = arg "includeStdenv" true;
 	includeBuildDeps = arg "includeBuildDeps" false;
+	kernel = arg "kernel" (pkgs : pkgs.kernel);
 in
 
 rec {
@@ -39,6 +40,7 @@ rec {
       rootLabel = "NIXOS";
       extraTTYs = [] ++ (lib.optional manualEnabled 7) ++
         (lib.optional rogueEnabled 8);
+      inherit kernel;
     };
     
     services = {
@@ -64,6 +66,7 @@ rec {
               mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs || true
               ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
               chown -R root.root /etc/nixos
+	      touch /etc/resolv.conf
             end script
           ";
         }] 
@@ -147,7 +150,7 @@ rec {
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
-      ] ++ packages;
+      ] ++ (packages pkgs);
     };
    
   };
@@ -216,7 +219,7 @@ rec {
 
 
   # The configuration file for Grub.
-  grubCfg = pkgs.writeText "menu.lst" ''
+  grubCfg = pkgs.writeText "menu.lst" (''
     default 0
     timeout 10
     splashimage /boot/background.xpm.gz
@@ -230,7 +233,7 @@ rec {
 
     title Memtest86+
       kernel /boot/memtest.bin
-  '' else "");
+  '' else ""));
 
 
   # Create an ISO image containing the Grub boot loader, the kernel,
