@@ -212,7 +212,7 @@ rec {
   nixpkgsTarball = if networkNixpkgs != "" then  pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
     md5 = "6a793b877e2a4fa79827515902e1dfd8";
-  } else makeNixPkgsTarball "nixpkgs.tar.bz2" /etc/nixos/nixpkgs;
+  } else makeNixPkgsTarball "nixpkgs.tar.bz2" "/etc/nixos/nixpkgs";
 
 
   # The configuration file for Grub.
@@ -299,7 +299,7 @@ rec {
         object = system.system.drvPath;
 	symlink = "none";
       }
-    )
+    );
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
