@@ -1,6 +1,7 @@
 { platform ? __currentSystem
 , stage2Init ? ""
 , configuration
+, configFileName ? ""
 }:
 
 rec {
@@ -246,7 +247,10 @@ rec {
   ++ pkgs.lib.optional (config.networking.defaultMailServer.directDelivery) pkgs.ssmtp
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ (config.environment.extraPackages) pkgs
-  ++ pkgs.lib.optional (config.fonts.enableFontDir) fontDir;
+  ++ pkgs.lib.optional (config.fonts.enableFontDir) fontDir
+  ++ pkgs.lib.optional (configFileName != "" ) 
+    (pkgs.runCommand "configuration" {} '' mkdir -p $out/share && cp "${configFileName}" $out/share/configuration.nix '')
+  ;
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
