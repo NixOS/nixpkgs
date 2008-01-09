@@ -11,7 +11,7 @@ if test -z "$1"; then
     exit 1
 fi
 
-bootMount=@bootMount@
+bootMount="@bootMount@"
 if test -z "$bootMount"; then bootMount=/boot; fi
 
 
@@ -30,7 +30,7 @@ if test -n "@grubSplashImage@"; then
     # !!! image in /nix/store doesn't seem to work
     #if test -n "@copyKernels@"; then
 	cp -f $splashLocation /boot/background.xpm.gz
-	splashLocation=$bootMount/background.xpm.gz
+	splashLocation="$bootMount/background.xpm.gz"
     #fi
     echo "splashimage $splashLocation" >> $tmp
 fi
