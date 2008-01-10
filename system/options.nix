@@ -251,6 +251,15 @@
       ";
     };
 
+    configurationLimit = mkOption {
+      default = 100;
+      example = 120;
+      description = "
+        Maximum of configurations in boot menu. GRUB has problems when
+	there are too many entries.
+      ";
+    };
+
   };
 
 

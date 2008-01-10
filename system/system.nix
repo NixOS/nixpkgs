@@ -324,7 +324,7 @@ rec {
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot) copyKernels extraGrubEntries
-      grubSplashImage bootMount;
+      grubSplashImage bootMount configurationLimit;
   };
 
 

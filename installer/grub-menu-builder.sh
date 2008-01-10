@@ -35,11 +35,17 @@ if test -n "@grubSplashImage@"; then
     echo "splashimage $splashLocation" >> $tmp
 fi
 
+configurationCounter=0;
 
 addEntry() {
     local name="$1"
     local path="$2"
     local shortSuffix="$3"
+
+    configurationCounter=$((configurationCounter + 1))
+    if test $configurationCounter -gt @configurationLimit@ ; then
+	    return
+    fi;
 
     if ! test -e $path/kernel -a -e $path/initrd; then
         return
@@ -47,6 +53,16 @@ addEntry() {
 
     local kernel=$(readlink -f $path/kernel)
     local initrd=$(readlink -f $path/initrd)
+
+    if test "$path" = "$default"; then
+	    cp "$kernel" /boot/nixos-kernel
+	    cp "$initrd" /boot/nixos-initrd
+	    cp "$(readlink -f "$path/init")" /boot/nixos-init
+	    cat > /boot/nixos-grub-config <<EOF
+	kernel ${bootMount:-/boot}/nixos-kernel systemConfig=$(readlink -f "$path") init=${bootMount:-/boot}/nixos-init $(cat "$path/kernel-params")
+	initrd ${bootMount:-/boot}/nixos-initrd
+EOF
+    fi
 
     if test -n "@copyKernels@"; then
         local kernel2=/boot/kernels/$(echo $kernel | sed 's^/^-^g')
