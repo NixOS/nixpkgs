@@ -2992,6 +2992,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros) {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  atherosFunCurrent = theKernel: (atherosFun {
+    version = "0.9.3.3";
+    kernel = theKernel;
+  } null);
+
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
   };
