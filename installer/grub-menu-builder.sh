@@ -35,7 +35,15 @@ if test -n "@grubSplashImage@"; then
     echo "splashimage $splashLocation" >> $tmp
 fi
 
-configurationCounter=0;
+configurationCounter=0
+configurationLimit="@configurationLimit@"
+numAlienEntries=$(cat <<EOF | egrep '^[[:space:]]*title' | wc -l
+@extraGrubEntries@
+EOF)
+
+if test $((configurationLimit+numAlienEntries)) -gt 190; then
+	configurationLimit=$((190-numAlienEntries));
+fi
 
 addEntry() {
     local name="$1"
