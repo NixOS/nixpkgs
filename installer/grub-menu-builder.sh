@@ -59,7 +59,8 @@ addEntry() {
 	    cp "$initrd" /boot/nixos-initrd
 	    cp "$(readlink -f "$path/init")" /boot/nixos-init
 	    cat > /boot/nixos-grub-config <<EOF
-	kernel ${bootMount:-/boot}/nixos-kernel systemConfig=$(readlink -f "$path") init=${bootMount:-/boot}/nixos-init $(cat "$path/kernel-params")
+	title Emergency boot
+	kernel ${bootMount:-/boot}/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
 	initrd ${bootMount:-/boot}/nixos-initrd
 EOF
     fi
