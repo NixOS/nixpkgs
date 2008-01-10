@@ -2996,8 +2996,10 @@ rec {
     inherit fetchurl stdenv builderDefs;
   };
 
+  atherosVersion = "0.9.3.3";
+
   atherosFunCurrent = theKernel: (atherosFun {
-    version = "0.9.3.3";
+    version = atherosVersion;
     kernel = theKernel;
   } null);
 
