@@ -23,6 +23,72 @@ let
 	includeStdenv = arg "includeStdenv" true;
 	includeBuildDeps = arg "includeBuildDeps" false;
 	kernel = arg "kernel" (pkgs : pkgs.kernel);
+	addUsers = arg "addUsers" [];
+
+	/* Should return list of {configuration, suffix} attrsets.
+	{configuration=configuration; suffix=""} is always prepended.
+	*/
+	configList = arg "configList" (configuration : []); 
+in 
+let
+
+	systemPackBuilder = {suffix, configuration} : { 
+		system = (import ../system/system.nix) {
+			inherit configuration platform; /* To refactor later - x86+x86_64 DVD */
+			stage2Init = "/init"+suffix;
+		};
+		inherit suffix configuration;
+	};
+
+	systemPackGrubEntry = systemPack : (''
+
+          title NixOS Installer / Rescue ${systemPack.system.config.boot.configurationName}
+            kernel /boot/vmlinuz${systemPack.suffix} ${toString systemPack.system.config.boot.kernelParams} systemConfig=/system${systemPack.suffix}
+            initrd /boot/initrd${systemPack.suffix}
+
+	'');
+
+	systemPackInstallRootList = systemPack : [
+	      { source = systemPack.system.kernel + "/vmlinuz";
+		target = "boot/vmlinuz${systemPack.suffix}";
+	      }
+	      { source = systemPack.system.initialRamdisk + "/initrd";
+		target = "boot/initrd${systemPack.suffix}";
+	      }
+	];
+	systemPackInstallClosures = systemPack : ([
+	      { object = systemPack.system.bootStage2;
+		symlink = "/init${systemPack.suffix}";
+	      }
+	      { object = systemPack.system.system;
+		symlink = "/system${systemPack.suffix}";
+	      }
+	]
+	++
+	    (lib.optional includeStdenv 
+	      # To speed up the installation, provide the full stdenv.
+	      { object = systemPack.system.pkgs.stdenv;
+		symlink = "none";
+	      }
+	    )
+	);
+	systemPackInstallBuildClosure = systemPack : ([
+		{
+			object = systemPack.system.system.drvPath;
+			symlink = "none";
+		}
+	]);
+
+
+	userEntry = user : {
+		name = user;
+		description = "NixOS Live Disk non-root user";
+		home = "/home/${user}";
+		createHome = true;
+		group = "users";
+		extraGroups = ["wheel" "audio"];
+		shell = "/bin/sh";
+	};
 in
 
 rec {
@@ -95,6 +161,22 @@ rec {
             respawn ${pkgs.rogue}/bin/rogue < /dev/tty8 > /dev/tty8 2>&1
           ";
         })
+
+	++
+
+	(lib.optional (addUsers != [])
+	# Set empty passwords
+	{
+		name = "clear-passwords";
+		job = '' 
+                  start on startup
+                  script 
+                        for i in ${lib.concatStringsSep " " addUsers}; do
+                            echo | ${pkgs.pwdutils}/bin/passwd --stdin $i
+                        done
+                  end script
+		'';
+	})
       ;
 
       # And a background to go with that.
@@ -124,7 +206,11 @@ rec {
         helpLine = ''
         
           Log in as "root" with an empty password. 
-        ''+(if manualEnabled then " Press <Alt-F7> for help." else "");
+        ''
+	+(if addUsers != [] then '' These users also have empty passwords:
+	${lib.concatStringsSep " " addUsers }
+	'' else "")
+	+(if manualEnabled then " Press <Alt-F7> for help." else "");
       };
       
     };
@@ -152,17 +238,21 @@ rec {
         pkgs.w3m # needed for the manual anyway
       ] ++ (packages pkgs);
     };
-   
+
+    users = {
+      extraUsers = map userEntry addUsers;
+    };
+ 
   };
 
+  configurations = [{
+    inherit configuration;
+    suffix = "";
+  }] ++ (configList configuration);
+  systemPacks = map systemPackBuilder configurations;
 
-  system = import ../system/system.nix {
-    inherit configuration platform;
-    stage2Init = "/init";
-  };
-
-
-  pkgs = system.pkgs;
+  system = (builtins.head systemPacks).system; /* I hope this is unneeded */
+  pkgs = system.pkgs; /* Nothing non-fixed should be built from it */
 
 
   # The NixOS manual, with a backward compatibility hack for Nix <=
@@ -177,7 +267,7 @@ rec {
   cdMountPoints = pkgs.runCommand "mount-points" {} "
     ensureDir $out
     cd $out
-    mkdir proc sys tmp etc dev var mnt nix nix/var root bin
+    mkdir proc sys tmp etc dev var mnt nix nix/var root bin ${if addUsers != "" then "home" else ""}
     touch $out/${configuration.boot.rootLabel}
   ";
 
@@ -192,7 +282,7 @@ rec {
       --exclude 'pkgs' --exclude 'result')
   ";
 
-  makeNixPkgsTarball = tarName: input: ((pkgs.runCommand "tarball" {inherit tarName;} "
+  makeNixPkgsTarball = tarName: input: ((pkgs.runCommand "tarball-nixpkgs" {inherit tarName;} "
     ensureDir $out
     (cd ${input}/.. && tar cvfj $out/${tarName} nixpkgs \\
       --exclude '*~' \\
@@ -223,11 +313,8 @@ rec {
     default 0
     timeout 10
     splashimage /boot/background.xpm.gz
-    
-    title NixOS Installer / Rescue
-      kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
-      initrd /boot/initrd
-  ''
+  ''+
+  (lib.concatStrings (map systemPackGrubEntry systemPacks))
   + (if includeMemtest then
   ''
 
@@ -243,20 +330,18 @@ rec {
     isoName = "nixos-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
-    contents = [
+    contents = lib.uniqList {inputList =
+    [
       { source = "${pkgs.grub}/lib/grub/i386-pc/stage2_eltorito";
         target = "boot/grub/stage2_eltorito";
       }
       { source = grubCfg;
         target = "boot/grub/menu.lst";
-      }
-      { source = pkgs.kernel + "/vmlinuz";
-        target = "boot/vmlinuz";
-      }
-      { source = system.initialRamdisk + "/initrd";
-        target = "boot/initrd";
-      }
-      { source = system.config.boot.grubSplashImage;
+      }]
+      ++ 
+      (lib.concatLists (map systemPackInstallRootList systemPacks))
+      ++
+      [{ source = system.config.boot.grubSplashImage;
         target = "boot/background.xpm.gz";
       }
       { source = cdMountPoints;
@@ -275,34 +360,22 @@ rec {
         target = "boot/memtest.bin";
       }
     )
-    ;
+    ;};
 
     # Closures to be copied to the Nix store on the CD.
-    storeContents = [
-      { object = system.bootStage2;
-        symlink = "/init";
-      }
-      { object = system.system;
-        symlink = "/system";
-      }
-    ] 
-    ++
-    (lib.optional includeStdenv 
-      # To speed up the installation, provide the full stdenv.
-      { object = pkgs.stdenv;
-        symlink = "none";
-      }
-    )
-    ;
+    storeContents = lib.uniqListExt {
+    	inputList= lib.concatLists 
+		(map systemPackInstallClosures systemPacks);
+	getter = x : x.object.drvPath;
+	compare = lib.eqStrings;
+    };
 
-    buildStoreContents = []
+    buildStoreContents = lib.uniqList {inputList=([]
     ++
-    (lib.optional includeBuildDeps
-      {
-        object = system.system.drvPath;
-	symlink = "none";
-      }
-    );
+    (if includeBuildDeps then lib.concatLists 
+    	(map systemPackInstallBuildClosure systemPacks)
+	else [])
+    );};
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";

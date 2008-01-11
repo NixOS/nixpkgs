@@ -1685,6 +1685,7 @@ root        ALL=(ALL) SETENV: ALL
           createHome = true;
           group = "users";
           extraGroups = ["wheel"];
+	  shell = "/bin/sh";
         }
       ];
       description = "

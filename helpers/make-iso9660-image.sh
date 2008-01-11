@@ -6,7 +6,6 @@ targets_=($targets)
 objects=($objects)
 symlinks=($symlinks)
 
-
 if test -n "$bootable"; then
 
     # The -boot-info-table option modifies the $bootImage file, so
@@ -54,7 +53,6 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
         graftList="$graftList $symlink=./$symlink"
     fi
 done
-
 
 # !!! -f is a quick hack.
 ensureDir $out/iso

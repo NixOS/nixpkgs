@@ -82,7 +82,7 @@ rec {
 
   # Awful hackery necessary to pass the users/groups to the activation script.
   createUsersGroups = ../helpers/create-users-groups.sh;
-  usersList = pkgs.writeText "users" (pkgs.lib.concatStrings (map (u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString u.extraGroups}\n${u.home}\n${u.shell}\n${toString u.createHome}\n") users));
+  usersList = pkgs.writeText "users" (pkgs.lib.concatStrings (map (u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (pkgs.lib.concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n") users));
   groupsList = pkgs.writeText "groups" (pkgs.lib.concatStrings (map (g: "${g.name}\n${toString g.gid}\n") groups));
     
 }

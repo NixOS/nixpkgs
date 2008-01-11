@@ -13,7 +13,8 @@ let
 		adminEmail = cfg.adminEmail;
 		extraIPs = cfg.extraIPs;
 		extraPort = cfg.extraPort;
-		gw6cEnabled = config.services.gw6c.enable;
+		gw6cEnabled = (config.services.gw6c.enable) &&
+			(config.services.gw6c.autorun);
 	};
 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";

@@ -80,7 +80,9 @@ needWritableDir /var 0755
 needWritableDir /nix/var 0755
 needWritableDir /root 0700
 needWritableDir /bin 0755 # for the /bin/sh symlink
-
+if test -d /home ; then
+	needWritableDir /home 0777
+fi
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run
