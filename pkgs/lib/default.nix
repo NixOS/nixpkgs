@@ -222,6 +222,19 @@ rec {
 	in uniqList {outputList=newOutputList; 
 		inputList = (tail inputList);};
 
+  uniqListExt = {inputList, outputList ? [],
+    getter ? (x : x), compare ? (x: y: x==y)}:
+	if (inputList == []) then outputList else
+	let x=head inputList; 
+	isX = y: (compare (getter y) (getter x));
+	newOutputList = outputList ++
+	 (if any isX outputList then [] else [x]);
+	in uniqListExt {outputList=newOutputList; 
+		inputList = (tail inputList);
+		inherit getter compare;
+		};
+
+
                 
   condConcat = name: list: checker:
 	if list == [] then name else
