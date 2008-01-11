@@ -20,7 +20,7 @@ in
 	job = "
 description \"Gateway6 client\"
 
-start on network-interfaces/started
+start on ${ if cfg.autorun then "network-interfaces/started" else "never" }
 stop on network-interfaces/stop
 
 respawn ${gw6cService}/bin/control start

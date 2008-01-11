@@ -1280,6 +1280,14 @@
         ";
       };
 
+      autorun = mkOption {
+        default = true;
+	description = "
+	  Switch to false to create upstart-job and configuration, 
+	  but not run it automatically
+	";
+      };
+
       username = mkOption {
         default = "";
         description = "
