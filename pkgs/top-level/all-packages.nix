@@ -4538,11 +4538,15 @@ rec {
   }));
 
   vimHugeX = import ../applications/editors/vim {
-    inherit fetchurl stdenv lib ncurses pkgconfig;
+    inherit fetchurl stdenv lib ncurses pkgconfig
+    	perl python tcl;
     inherit (xlibs) libX11 libXext libSM libXpm
 	libXt libXaw libXau;
     inherit (gtkLibs) glib gtk;
-    flags = ["hugeFeatures" "gtkGUI" "x11Support"];
+
+    # Looks like python and perl can conflict
+    flags = ["hugeFeatures" "gtkGUI" "x11Support"
+    	/*"perlSupport"*/ "pythonSupport" "tclSupport"];
   };
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
