@@ -3347,6 +3347,11 @@ rec {
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
+
+  libraw1394 = import ../development/libraries/libraw1394 {
+    inherit fetchurl stdenv;
+  };
+
  
   libsexy = import ../development/libraries/libsexy {
     inherit stdenv fetchurl pkgconfig libxml2;
