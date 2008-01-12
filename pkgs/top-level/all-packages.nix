@@ -3118,6 +3118,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  iwlwifi = import ../os-specific/linux/iwlwifi {
+    inherit fetchurl stdenv kernel;
+  };
+
   kbd = import ../os-specific/linux/kbd {
     inherit fetchurl stdenv bison flex;
   };

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssl}:
 
 stdenv.mkDerivation {
-  name = "wpa_supplicant-0.5.7";
+  name = "wpa_supplicant-0.5.9";
 
   src = fetchurl {
-    url = http://hostap.epitest.fi/releases/wpa_supplicant-0.5.7.tar.gz;
-    sha256 = "0mvb2fpvn7qdjinpn86hvmhfwg2ax1822hdkfrw25wx5dglqns6g";
+    url = http://hostap.epitest.fi/releases/wpa_supplicant-0.5.9.tar.gz;
+    sha256 = "1dylaiikp2jb13jbxdrl1h9b9p2lkjmzx06hpmkcpyq5c5g7p0xy";
   };
 
   preBuild = "
