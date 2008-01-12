@@ -2,25 +2,25 @@ args : with args;
 	with builderDefs {
 		addSbinPath = true;
 		src = "";
-		buildInputs = [lndir module_init_tools];
+		buildInputs = [module_init_tools];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
 let 
 
 doCollect = FullDepEntry (''
-ensureDir $out/
+ensureDir $out/lib/modules
 cd $out/
 for i in $moduleSources; do 
-	lndir $i/
+	cp -rs $i/lib/modules lib/
+        chmod -R u+w lib/
 done
-rm -rf nix-support
 cd lib/modules/
 rm */modules.*
 MODULE_DIR=$PWD/ depmod -a 
 '') [minInit addInputs defEnsureDir];
 in
 stdenv.mkDerivation rec {
-	name = "module-aggregator";
+	name = "kernel-modules";
 	inherit moduleSources;
 	builder = writeScript (name + "-builder")
 		(textClosure [doCollect doForceShare doPropagate]);

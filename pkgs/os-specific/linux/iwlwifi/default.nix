@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     # Urgh, we need the complete kernel sources for some header
     # files.  So unpack the original kernel source tarball and copy
     # the configured include directory etc. on top of it.
-    kernelBuild=$(echo ${kernel}/lib/modules/2.6.*/source)
+    kernelVersion=$(cd ${kernel}/lib/modules && ls)
+    kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/source)
     tar xvfj ${kernel.src}
     kernelSource=$(echo $(pwd)/linux-*)
     cp -prd $kernelBuild/* $kernelSource
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
     make $makeFlags || true
     make $makeFlags
 
-    installFlags=KMISC=$out
+    installFlags=KMISC=$out/lib/modules/$kernelVersion/misc
   ''; # */
 
   meta = {

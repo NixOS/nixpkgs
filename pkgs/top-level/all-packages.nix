@@ -3453,9 +3453,7 @@ rec {
 
   module_aggregation = moduleSources:  
   import ../os-specific/linux/module-init-tools/aggregator.nix {
-    inherit fetchurl stdenv module_init_tools moduleSources 
-      builderDefs;
-    inherit (xorg) lndir;
+    inherit fetchurl stdenv module_init_tools moduleSources builderDefs;
   };
 
   modutils = import ../os-specific/linux/modutils {
