@@ -26,12 +26,12 @@ let
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
       firmwareDirs =
-        pkgs.lib.optional (config.networking.enableIntel2200BGFirmware) pkgs.ipw2200fw
-	++
-	(config.services.udev.addFirmware);
+           pkgs.lib.optional config.networking.enableIntel2200BGFirmware pkgs.ipw2200fw
+        ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
+	++ config.services.udev.addFirmware;
       extraUdevPkgs =
-        pkgs.lib.optional (config.services.hal.enable) pkgs.hal;
-	sndMode = config.services.udev.sndMode;
+        pkgs.lib.optional config.services.hal.enable pkgs.hal;
+      sndMode = config.services.udev.sndMode;
     })
       
     # Makes LVM logical volumes available. 

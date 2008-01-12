@@ -6,14 +6,16 @@ exec > /var/log/udev-fw 2>&1
 
 if test "$ACTION" = "add"; then
 
-    ls -l /sys/$DEVPATH >> /tmp/fw 2>&1
+    ls -l /sys/$DEVPATH
 
     if ! test -e /sys/$DEVPATH/loading; then
         echo "Firmware loading is not supported by device \`DEVPATH'."
         exit 1
     fi
 
-    for dir in @firmwareDirs@; do
+    # /root/test-firmware is an impure location allowing quick testing
+    # of firmwares.
+    for dir in /root/test-firmware @firmwareDirs@; do
         if test -e "$dir/$FIRMWARE"; then
             echo "Loading \`$FIRMWARE' for device \`$DEVPATH' from $dir."
             echo 1 > /sys/$DEVPATH/loading

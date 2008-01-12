@@ -338,6 +338,14 @@
       ";
     };
 
+    enableIntel3945ABGFirmware = mkOption {
+      default = true;
+      description = "
+        This option enables automatic loading of the firmware for the Intel
+        PRO/Wireless 3945ABG.
+      ";
+    };
+
     localCommands = mkOption {
       default = "";
       example = "text=anything; echo You can put $text here.";

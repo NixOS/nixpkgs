@@ -4,8 +4,7 @@ let
     let env = builtins.getEnv "NIXOS_CONFIG"; in
     if env == "" then /etc/nixos/configuration.nix else env;
 
-  system = import system/system.nix {configuration = import configFileName; 
-    inherit configFileName; };
+  system = import system/system.nix {configuration = import configFileName;};
 
 in
 
