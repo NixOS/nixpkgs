@@ -142,13 +142,24 @@ rec {
     (map (mod: mod + "/lib") nssModules));
 
 
+  # Tree of kernel modules.  This includes the kernel, plus modules
+  # built outside of the kernel.  We have to combine these into a
+  # single tree of symlinks because modprobe only supports one
+  # directory.
+  modulesTree = pkgs.module_aggregation (
+    [kernel pkgs.iwlwifi]
+    # !!! this should be declared by the xserver Upstart job.
+    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
+  );
+
+  
   # Wrapper around modprobe to set the path to the modules.
   modprobe = pkgs.substituteAll {
     dir = "sbin";
     src = ./modprobe;
     isExecutable = true;
     inherit (pkgs) module_init_tools;
-    inherit kernel;
+    inherit modulesTree;
   };
 
 
@@ -171,8 +182,7 @@ rec {
   # The static parts of /etc.
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
-      defaultShell nixEnvVars;
-    inherit kernel;
+      defaultShell nixEnvVars modulesTree;
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 

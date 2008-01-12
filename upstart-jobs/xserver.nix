@@ -363,8 +363,6 @@ rec {
       ${if videoDriver == "nvidia"        
         then ''
           ln -sf ${pkgs.nvidiaDrivers} /var/run/opengl-driver
-          # Ideally, the nvidia driver would be somewhere where modprobe looks for it...
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.nvidiaDrivers}/lib/nvidia.ko || true
         ''
 	else if cfg.driSupport
         then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"

@@ -1,6 +1,5 @@
 { config, pkgs, upstartJobs, systemPath, wrapperDir
-, defaultShell, extraEtc, nixEnvVars
-, kernel ? null
+, defaultShell, extraEtc, nixEnvVars, modulesTree
 }:
 
 let 
@@ -108,13 +107,11 @@ import ../helpers/make-etc.nix {
     { # Script executed when the shell starts.
       source = pkgs.substituteAll {
         src = ./profile.sh;
-        inherit systemPath wrapperDir;
+        inherit systemPath wrapperDir modulesTree;
         inherit (pkgs) glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
         inherit nixEnvVars;
-	systemKernel = (if kernel == null then 
-		pkgs.systemKernel else kernel);
       };
       target = "profile";
     }
