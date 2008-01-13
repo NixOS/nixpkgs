@@ -2,6 +2,7 @@
 #--enable-udev-rules-dir=PATH
 #                        Where to install udev rules (/etc/udev/rules.d)
 
+#TODO shared version?
 
 
 # This is my config output.. Much TODO ?
@@ -54,13 +55,15 @@ args:
 args.stdenv.mkDerivation {
   name = "kino-1.2.0";
 
+  phases = "unpackPhase configurePhase buildPhase installPhase";
+
   src = args.fetchurl {
     url = http://downloads.sourceforge.net/kino/kino-1.2.0.tar.gz;
     sha256 = "15q1qmii5a2zbrrrg8iba2d1rjzaisa75zvxjhrs86jwglpn4lp9";
   };
 
   buildInputs =(with args; [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 x11 libXv gettext libX11]); # TODOoptional packages 
+      pkgconfig perl perlXMLParser libavc1394 libiec61883 x11 libXv gettext libX11 glib cairo ]); # TODOoptional packages 
 
   #preConfigure = "
   #  grep 11 env-vars
@@ -68,13 +71,14 @@ args.stdenv.mkDerivation {
   #";
 
   postInstall = "
+    rpath=`patchelf --print-rpath \$out/bin/kino`;
     for i in $\buildInputs; do
       echo adding \$i/lib
-      rpath=\$rpath:\$i/lib
+      rpath=\$rpath\${rpath:+:}\$i/lib
     done
-    echo \$buildInputs
-    echo \$rpath
-    patchelf --set-rpath \"\$rpath\" \"\$out/bin/\"*
+    for i in \$out/bin/*; do
+      patchelf --set-rpath \"\$rpath\" \"\$i\"
+    done
   ";
 
 
@@ -84,31 +88,3 @@ args.stdenv.mkDerivation {
       license = "GPL2";
   };
 }
-
-/*
-# is this configure option of interest?
-#--enable-udev-rules-dir=PATH
-#                        Where to install udev rules (/etc/udev/rules.d)
-args:
-( args.mkDerivationByConfiguration {
-    flagConfig = {
-      # TODO optional packages
-      
-    }; 
-
-    extraAttrs = co : {
-      name = "kino-1.2.0";
-
-      src = args.fetchurl {
-        url = http://downloads.sourceforge.net/kino/kino-1.2.0.tar.gz;
-        sha256 = "15q1qmii5a2zbrrrg8iba2d1rjzaisa75zvxjhrs86jwglpn4lp9";
-      };
-
-      meta = { 
-          description = "Kino is a non-linear DV editor for GNU/Linux";
-          homepage = http://www.kinodv.org/;
-          license = "GPL2";
-    };
-  };
-} ) args
-*/

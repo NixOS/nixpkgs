@@ -4203,11 +4203,13 @@ rec {
   };
 
   kino = import ../applications/video/kino {
-    inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser 
-      libdv libraw1394 libavc1394 libiec61883 x11 gettext; /* libavformat */
+    stdenv = stdenvUsingSetupNew2;
+    inherit fetchurl pkgconfig libxml2 perl perlXMLParser 
+      libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
     inherit libsamplerate ffmpeg;
-    inherit (gnome) libglade gtk;
+    inherit (gnome) libglade gtk glib;
     inherit (xlibs) libXv libX11;
+    inherit (gtkLibs) pango;
 
   # #  optional
   #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
