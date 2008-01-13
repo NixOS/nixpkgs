@@ -209,5 +209,15 @@ in
 			};
 		});
 	}
+        {
+                suffix = "X-NVIDIA";
+                configuration = (configuration //
+                {
+                        boot=configuration.boot // {configurationName = "X with NVIDIA graphic card";};
+                        services = configuration.services // {
+                                xserver = xConfiguration // {videoDriver = "nvidia"; driSupport = true;};
+                        };
+                });
+        }
 	];
 }).rescueCD
