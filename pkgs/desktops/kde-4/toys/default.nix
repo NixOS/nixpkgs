@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdetoys-4.0beta4";
+  name = "kdetoys-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdetoys-3.95.0.tar.bz2;
-    sha256 = "0qg9ns640v21sa837pg5basnw8clnkyxap2lm7s69ainsg69662v";
+    url = http://download.kde.org/stable/4.0.0/src/kdetoys-4.0.0.tar.bz2;
+    md5 = "6e4e2eea3d87718f48716f975b48ada2";
   };
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace];

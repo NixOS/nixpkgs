@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdeedu-4.0beta4";
+  name = "kdeedu-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdeedu-3.95.0.tar.bz2;
-    sha256 = "0cydl3pp3l0cbfmf774qh8njyhycaf8yxb27k4xf6mipvw1k9jqf";
+    url = http://download.kde.org/stable/4.0.0/src/kdeedu-4.0.0.tar.bz2;
+    md5 = "73924e158e4a2de2107be441c808251f";
   };
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace boost readline openbabel ocaml

@@ -5,8 +5,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdebase-workspace-3.95.0.tar.bz2;
-    sha256 = "0jripmw8vgs7lxlsif552rr9vqps5kav8jdlfyhmr9c3xw5c99v0";
+    url = http://download.kde.org/stable/4.0.0/src/kdebase-workspace-4.0.0.tar.bz2;
+    md5 = "f3d2155ff5ff7472a8884bd3f31bff16";
   };
 
   buildInputs = [kdelibs kdepimlibs kdebase kderuntime stdenv.gcc.libc];

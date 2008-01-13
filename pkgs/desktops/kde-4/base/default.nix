@@ -5,8 +5,8 @@ stdenv.mkDerivation {
   #builder = ./builder.sh;
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.95/src/kdebase-3.95.0.tar.bz2;
-    sha256 = "0qf7bn5jqj70hznjk74vpwb7rvk6f5gx9fxwli930b2hskib3zll";
+    url = http://download.kde.org/stable/4.0.0/src/kdebase-4.0.0.tar.bz2;
+    md5 = "01d8f2f16cbd4e225efc996b0dd39769";
   };
 
   propagatedBuildInputs = [kdepimlibs libusb];
