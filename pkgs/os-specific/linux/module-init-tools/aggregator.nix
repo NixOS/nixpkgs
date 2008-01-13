@@ -11,8 +11,8 @@ doCollect = FullDepEntry (''
 ensureDir $out/lib/modules
 cd $out/
 for i in $moduleSources; do 
-	cp -rs $i/lib/modules lib/
-        chmod -R u+w lib/
+	cp -rfs $i/* .
+	chmod -R u+w .
 done
 cd lib/modules/
 rm */modules.*
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "
 		A directory to hold all  the modules, including those 
-		built separately from kernel. Earlier directories in 
+		built separately from kernel. Later mentioned directories in 
 		moduleSources have higher priority.
 ";
 	};
