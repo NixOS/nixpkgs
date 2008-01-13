@@ -1,7 +1,7 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdebase-workspace-4.0beta4";
+  name = "kdebase-workspace-4.0.0";
   builder = ./builder.sh;
   
   src = fetchurl {

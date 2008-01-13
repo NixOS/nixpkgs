@@ -1,7 +1,7 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdegraphics-4.0beta4";
+  name = "kdegraphics-4.0.0";
   
   src = fetchurl {
     url = http://download.kde.org/stable/4.0.0/src/kdegraphics-4.0.0.tar.bz2;
