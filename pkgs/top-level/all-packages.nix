@@ -2015,6 +2015,10 @@ rec {
     inherit (xlibs) libXp libXau;
   };
 
+  libavc1394 = import ../development/libraries/libavc1394 {
+    inherit fetchurl stdenv pkgconfig libraw1394;
+  };
+
   libcaca = import ../development/libraries/libcaca {
     inherit fetchurl stdenv ncurses;
   };
@@ -2113,6 +2117,10 @@ rec {
 
   libidn = import ../development/libraries/libidn {
 	  inherit fetchurl stdenv;
+  };
+
+  libiec61883 = import ../development/libraries/libiec61883 {
+    inherit fetchurl stdenv pkgconfig libraw1394;
   };
 
   libjpeg = import ../development/libraries/libjpeg {
@@ -4192,6 +4200,17 @@ rec {
 
   joe = import ../applications/editors/joe {
     inherit stdenv fetchurl;
+  };
+
+  kino = import ../applications/video/kino {
+    inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser 
+      libdv libraw1394 libavc1394 libiec61883 x11 gettext; /* libavformat */
+    inherit libsamplerate ffmpeg;
+    inherit (gnome) libglade gtk;
+    inherit (xlibs) libXv libX11;
+
+  # #  optional
+  #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
 
   kuickshow = import ../applications/graphics/kuickshow {
