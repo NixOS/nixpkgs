@@ -14,9 +14,11 @@ for i in $moduleSources; do
 	cp -rfs $i/* .
 	chmod -R u+w .
 done
+rm -rf nix-support
 cd lib/modules/
 rm */modules.*
 MODULE_DIR=$PWD/ depmod -a 
+cd $out/
 '') [minInit addInputs defEnsureDir];
 in
 stdenv.mkDerivation rec {
