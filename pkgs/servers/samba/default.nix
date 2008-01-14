@@ -9,6 +9,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [readline pam openldap];
-  configureFlags = "--with-pam --with-smbmount";
+  configureFlags = [" --with-pam " " --with-smbmount " 
+  	" --datadir=\$out/share " " --with-acl-support "
+	" --with-aio-support "];
   postUnpack = "sourceRoot=\$sourceRoot/source";
+  postInstall = "rm -rf \$out/var ; ln -s /var/samba $out/var ";
 }
