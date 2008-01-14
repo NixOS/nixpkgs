@@ -4,7 +4,9 @@ let
   
   user = "smbguest";
   group = "smbguest";
-  
+ 
+  smbConfig = ./smb.conf ;
+
 in
 
 {
@@ -31,13 +33,23 @@ stop on network-interfaces/stop
 
 start script
 
-  ${samba}/sbin/nmbd -D &
-  ${samba}/sbin/smbd -D &
-  ${samba}/sbin/winbindd -B &
+  if ! test -d /home/smbd ; then 
+    mkdir -p /home/smbd
+    chown ${user} /home/smbd
+    chmod a+rwx /home/smbd
+  fi
+
+  if ! test -d /var/samba ; then
+    mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
+  fi
+
+  ${samba}/sbin/nmbd -D  -s ${smbConfig} &
+  ${samba}/sbin/smbd -D  -s ${smbConfig} &
+  ${samba}/sbin/winbindd -B -s ${smbConfig} &
 
 end script
 
-respawn ${samba}/sbin/nmbd -D &; ${samba}/sbin/smbd -D &; ${samba}/sbin/winbindd -B &
+respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd -B &
 
   ";
 

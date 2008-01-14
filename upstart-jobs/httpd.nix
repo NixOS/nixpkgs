@@ -19,7 +19,7 @@ let
   enableSSL = false;
   extraDirectories = cfg.extraDirectories + extraConfig;
 
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
+  startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
   
   webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
