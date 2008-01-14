@@ -365,6 +365,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  chkrootkit = import ../tools/security/chkrootkit {
+    inherit fetchurl stdenv;
+  };
+
   cksfv = import ../tools/networking/cksfv {
     inherit fetchurl stdenv;
   };
