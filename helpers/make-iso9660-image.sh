@@ -23,24 +23,24 @@ if test -n "$bootable"; then
     bootFlags="-b $bootImage -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
 fi
 
+touch pathlist
 
 # Add the individual files.
-graftList=
 for ((i = 0; i < ${#targets_[@]}; i++)); do
-    graftList="$graftList ${targets_[$i]}=$(readlink -f ${sources_[$i]})"
+    echo "${targets_[$i]}=$(readlink -f ${sources_[$i]})" >> pathlist
 done
 
 
 # Add the closures of the top-level store objects.
 storePaths=$(perl $pathsFromGraph closure-*)
 for i in $storePaths; do
-    graftList="$graftList ${i:1}=$i"
+    echo "${i:1}=$i" >> pathlist
 done
 
 
 # Also put a nix-pull manifest of the closures on the CD.
 printManifest=1 perl $pathsFromGraph closure-* > MANIFEST
-graftList="$graftList MANIFEST=MANIFEST"
+echo "MANIFEST=MANIFEST" >> pathlist
 
 
 # Add symlinks to the top-level store objects.
@@ -50,14 +50,16 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     if test "$symlink" != "none"; then
         mkdir -p $(dirname ./$symlink)
         ln -s $object ./$symlink
-        graftList="$graftList $symlink=./$symlink"
+        echo "$symlink=./$symlink" >> pathlist
     fi
 done
+
+cat pathlist
 
 # !!! -f is a quick hack.
 ensureDir $out/iso
 genisoimage -r -J -o $out/iso/$isoName $bootFlags \
-    -graft-points $graftList
+    -graft-points -path-list pathlist
 
 ensureDir $out/nix-support
 echo $system > $out/nix-support/system
