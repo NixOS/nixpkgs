@@ -9,17 +9,28 @@ let
 	["athenaGUI" "libXau" "libXt" "libXaw" "libXpm" "libXext" "x11Support"]
 	["x11Support" "libX11"]
 	["hugeFeatures"]
+	["pythonSupport" "python"]
+	["perlSupport" "perl"]
+	["tclSupport" "tcl"]
 	["true" "ncurses"]
 	["false" "libSM"]
 	];
 	nameSuffixes = [
 	"hugeFeatures" "-huge"
 	"x11Support" "-X11"
+	"pythonSupport" "-python"
+	"perlSupport" "-perl"
+	"tclSupport" "-tcl"
+	"ximSupport" "-xim"
 	];
 	configFlags = [
-	"true" " --disable-xim "
+	"true" " "
 	"x11Support" " --enable-gui=auto "
-	"hugeFeatures" "--with-features=huge --enable-cscope --enable-multibyte --enable-xsmp"
+	"hugeFeatures" "--with-features=huge --enable-cscope --enable-multibyte --enable-xsmp "
+	"pythonSupport" " --enable-pythoninterp "
+	"perlSupport" " --enable-perlinterp "
+	"tclSupport" " --enable-tclinterp "
+	"ximSupport" " --enable-xim "
 	];
 	buildInputsNames = args.lib.filter (x: (null!=getVal x)) 
 		(args.lib.uniqList {inputList = 

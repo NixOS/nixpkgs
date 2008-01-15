@@ -1,0 +1,156 @@
+diff -rc curl-7.17.1-orig/lib/connect.c curl-7.17.1/lib/connect.c
+*** curl-7.17.1-orig/lib/connect.c	2007-10-22 16:30:17.000000000 +0200
+--- curl-7.17.1/lib/connect.c	2007-12-19 18:30:32.000000000 +0100
+***************
+*** 99,105 ****
+  singleipconnect(struct connectdata *conn,
+                  const Curl_addrinfo *ai, /* start connecting to this */
+                  long timeout_ms,
+!                 bool *connected);
+  
+  /*
+   * Curl_nonblock() set the given socket to either blocking or non-blocking
+--- 99,106 ----
+  singleipconnect(struct connectdata *conn,
+                  const Curl_addrinfo *ai, /* start connecting to this */
+                  long timeout_ms,
+!                 bool *connected,
+!                 bool *timed_out);
+  
+  /*
+   * Curl_nonblock() set the given socket to either blocking or non-blocking
+***************
+*** 492,497 ****
+--- 493,499 ----
+  {
+    curl_socket_t sockfd;
+    Curl_addrinfo *ai;
++   bool timed_out;
+  
+    /* first close the failed socket */
+    sclose(conn->sock[sockindex]);
+***************
+*** 505,511 ****
+    ai = conn->ip_addr->ai_next;
+  
+    while (ai) {
+!     sockfd = singleipconnect(conn, ai, 0L, connected);
+      if(sockfd != CURL_SOCKET_BAD) {
+        /* store the new socket descriptor */
+        conn->sock[sockindex] = sockfd;
+--- 507,513 ----
+    ai = conn->ip_addr->ai_next;
+  
+    while (ai) {
+!     sockfd = singleipconnect(conn, ai, 0L, connected, &timed_out);
+      if(sockfd != CURL_SOCKET_BAD) {
+        /* store the new socket descriptor */
+        conn->sock[sockindex] = sockfd;
+***************
+*** 669,675 ****
+  singleipconnect(struct connectdata *conn,
+                  const Curl_addrinfo *ai,
+                  long timeout_ms,
+!                 bool *connected)
+  {
+    char addr_buf[128];
+    int rc;
+--- 671,678 ----
+  singleipconnect(struct connectdata *conn,
+                  const Curl_addrinfo *ai,
+                  long timeout_ms,
+!                 bool *connected,
+!                 bool *timed_out)
+  {
+    char addr_buf[128];
+    int rc;
+***************
+*** 689,694 ****
+--- 692,699 ----
+    struct curl_sockaddr *addr=(struct curl_sockaddr*)&addr_storage;
+    const void *iptoprint;
+  
++   *timed_out = FALSE;
++ 
+    addr->family=ai->ai_family;
+    addr->socktype=conn->socktype;
+    addr->protocol=ai->ai_protocol;
+***************
+*** 790,797 ****
+      infof(data, "connected\n");
+      return sockfd;
+    }
+!   else if(WAITCONN_TIMEOUT == rc)
+      infof(data, "Timeout\n");
+    else {
+      data->state.os_errno = error;
+      infof(data, "%s\n", Curl_strerror(conn, error));
+--- 795,804 ----
+      infof(data, "connected\n");
+      return sockfd;
+    }
+!   else if(WAITCONN_TIMEOUT == rc) {
+!     *timed_out = TRUE;
+      infof(data, "Timeout\n");
++   }
+    else {
+      data->state.os_errno = error;
+      infof(data, "%s\n", Curl_strerror(conn, error));
+***************
+*** 822,829 ****
+    Curl_addrinfo *ai;
+    Curl_addrinfo *curr_addr;
+    int timeout_set = 0;
+  
+-   struct timeval after;
+    struct timeval before = Curl_tvnow();
+  
+    /*************************************************************
+--- 829,836 ----
+    Curl_addrinfo *ai;
+    Curl_addrinfo *curr_addr;
+    int timeout_set = 0;
++   bool timed_out;
+  
+    struct timeval before = Curl_tvnow();
+  
+    /*************************************************************
+***************
+*** 891,909 ****
+         curr_addr = curr_addr->ai_next, aliasindex++) {
+  
+      /* start connecting to the IP curr_addr points to */
+!     sockfd = singleipconnect(conn, curr_addr, timeout_per_addr, connected);
+  
+      if(sockfd != CURL_SOCKET_BAD)
+        break;
+  
+!     /* get a new timeout for next attempt */
+!     after = Curl_tvnow();
+!     timeout_ms -= Curl_tvdiff(after, before);
+!     if(timeout_ms < 0) {
+        failf(data, "connect() timed out!");
+        return CURLE_OPERATION_TIMEDOUT;
+      }
+-     before = after;
+    }  /* end of connect-to-each-address loop */
+  
+    if (sockfd == CURL_SOCKET_BAD) {
+--- 898,914 ----
+         curr_addr = curr_addr->ai_next, aliasindex++) {
+  
+      /* start connecting to the IP curr_addr points to */
+!     sockfd = singleipconnect(conn, curr_addr, timeout_per_addr, connected, &timed_out);
+  
+      if(sockfd != CURL_SOCKET_BAD)
+        break;
+  
+!     /* if this is the last address and it timed out, propagate the
+!        timeout to the caller */
+!     if(!curr_addr->ai_next && timed_out) {
+        failf(data, "connect() timed out!");
+        return CURLE_OPERATION_TIMEDOUT;
+      }
+    }  /* end of connect-to-each-address loop */
+  
+    if (sockfd == CURL_SOCKET_BAD) {

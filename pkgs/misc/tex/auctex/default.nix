@@ -1,5 +1,5 @@
 { stdenv, fetchurl, emacs, tetex }:
-
+ 
 stdenv.mkDerivation {
   name = "auctex-11.84";
   meta = {

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib}:
 
 stdenv.mkDerivation {
-  name = "squashfs-3.1-r2";
+  name = "squashfs-3.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/squashfs/squashfs3.1-r2.tar.gz;
-    md5 = "c252e5286b142afa54ca49829c51a33f";
+    url = mirror://sourceforge/squashfs/squashfs3.3.tgz;
+    sha256 = "1j55m26nyvlbld4yxad0r6s1f4rdw9yg89y2gv93ihkx3rx048w4";
   };
   buildInputs = [zlib];
 }

@@ -5,7 +5,8 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = svn://svn.mplayerhq.hu/ffmpeg/trunk ;
     rev = "11164";
-    sha256 = "95658455e466aeab5a302ddd6e7b2f79f620d4495012add46028a548e6c364b2";
+    #sha256 = "95658455e466aeab5a302ddd6e7b2f79f620d4495012add46028a548e6c364b2";
+    sha256 = "c97b0cd791f8408cfc69452ff7afbf00d34b367e493dfbcae830fba99c229189";
   };
   /*fetchurl {
     url = http://ffmpeg.mplayerhq.hu/ffmpeg-export-snapshot.tar.bz2;

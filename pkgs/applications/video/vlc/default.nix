@@ -8,11 +8,11 @@ assert libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
-  name = "vlc-0.8.6c";
+  name = "vlc-0.8.6d";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.8.6c/vlc-0.8.6c.tar.bz2;
-    sha256 = "1bmngn66i527vw9g5xnhlpz64xl5gch3j3l6y5d727rcpmxlvhjz";
+    url = http://download.videolan.org/pub/videolan/vlc/0.8.6d/vlc-0.8.6d.tar.bz2;
+    sha256 = "019jw9cp7fbmhbmlbwvjgpamxwx0rdajyxab2sbmh4n6v04fl266";
   };
 
   buildInputs = [
@@ -30,5 +30,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Cross-platform media player and streaming server";
+    homepage = http://www.videolan.org/vlc/;
   };
 }

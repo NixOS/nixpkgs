@@ -1,11 +1,12 @@
-{stdenv, fetchurl, x11, libXaw}:
+{stdenv, fetchurl, x11, libXaw, libXpm}:
 
 stdenv.mkDerivation {
   name = "t1lib-5.1.0";
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/metalab/libs/graphics/t1lib-5.1.0.tar.gz;
-    md5 = "a05bed4aa63637052e60690ccde70421";
+    url = ftp://ftp.nluug.nl/pub/metalab/libs/graphics/t1lib-5.1.1.tar.gz;
+    sha256 = "0r1wb94kjd8jwym9na2k2snikizrnyc4cf4mf92v89r4yy0apph8";
   };
-  buildInputs = [x11 libXaw];
+  buildInputs = [x11 libXaw libXpm];
   buildFlags = "without_doc";
 }
+

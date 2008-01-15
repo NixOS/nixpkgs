@@ -16,5 +16,8 @@ stdenv.mkDerivation {
     configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86\"
   ";
 
-  postInstall = "rm \${out}/etc/X11/xkb/compiled";
+  postInstall = ''
+  	rm ''${out}/etc/X11/xkb/compiled
+	cat ${./level3-deadkeys-us-intl} >> $out/etc/X11/xkb/symbols/us
+  '';
 }

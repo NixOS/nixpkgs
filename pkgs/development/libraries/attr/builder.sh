@@ -6,4 +6,6 @@ preConfigure() {
 
 preConfigure=preConfigure
 
+installFlags='install-lib install-dev'
+
 genericBuild

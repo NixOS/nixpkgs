@@ -4,10 +4,10 @@ assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation {
-  name = "curl-7.16.2";
+  name = "curl-7.17.1";
   src = fetchurl {
-    url = http://curl.haxx.se/download/curl-7.16.2.tar.bz2;
-    sha256 = "18mzp56y8qhlvi27av7866mvsiyiigb7c5qdppjr8qizsj0kx0rf";
+    url = http://curl.haxx.se/download/curl-7.17.1.tar.bz2;
+    sha256 = "0yz50r75jhfr2ya6wqi6n90bn4ij30299pjglmlckzq6jp28wrkz";
   };
   buildInputs =
     stdenv.lib.optional zlibSupport zlib ++
@@ -19,4 +19,15 @@ stdenv.mkDerivation {
   CXX = "g++";
   CXXCPP = "g++ -E";
   inherit sslSupport openssl;
+
+  patches = [
+    /* Fixes broken retry support when a timeout is used.  The
+       select() system call (used to wait for the connection to come
+       up) can return slightly before the computed deadline (a few
+       milliseconds).  Curl will think the problem is something else,
+       proceed with the next IP address (which usually doesn't exist),
+       then barf with a CURLE_COULDNT_CONNECT error, which is
+       considered non-transient so it won't retry. */
+    ./connect-timeout.patch
+  ];
 }

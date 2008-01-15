@@ -1986,8 +1986,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-ati-6.6.3.tar.bz2;
       sha256 = "102p6nz1jvd3pgbl83a4zi99smydqr6il61r33l0lqmi3yg452nh";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
     
   xf86videochips = (stdenv.mkDerivation {
     name = "xf86-video-chips-1.1.1";

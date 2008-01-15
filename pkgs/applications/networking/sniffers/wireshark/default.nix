@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl, pkgconfig, gtk, libpcap}:
 
 stdenv.mkDerivation {
-  name = "wireshark-0.99.6";
+  name = "wireshark-0.99.7";
   src = fetchurl {
-    url = http://www.wireshark.org/download/src/wireshark-0.99.6.tar.gz;
-    sha256 = "1f2i84dk4nw05nh78b2j4n9pbwdngcqx0grrja5831r6paj35x1y";
+    url = http://www.wireshark.org/download/src/wireshark-0.99.7.tar.bz2;
+    sha256 = "10pb2mn6p40gsq2nbnqdzihrpa078jdgxqh8l4zs33bxa1h37frc";
   };
   buildInputs = [perl pkgconfig gtk libpcap];
 }

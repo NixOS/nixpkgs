@@ -4,7 +4,6 @@ let {
 
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     aterm
-    gcc
     nixUnstable
     pan
     subversion
@@ -27,6 +26,5 @@ let {
   body = [
     i686LinuxPkgs
     x86_64LinuxPkgs
-#   powerpcLinuxPkgs
   ];
 }
