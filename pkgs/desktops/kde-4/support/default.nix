@@ -4,7 +4,7 @@ let
 	svnSrc = name: hash:
 	oldArgs.fetchsvn {
 		url = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/${name}";
-		rev = 747269;
+		rev = 761061;
 		sha256 = hash;
 	};
 	};
