@@ -29,8 +29,8 @@ rec {
 	  name = "qt-kde-4.3svn";
 	  src = fetchsvn {
 		  url = svn://anonsvn.kde.org/home/kde/trunk/qt-copy;
-		  rev = "746559";
-		  sha256 = "0lj2qp2q03m72kxdalrq6jfyrx33cg62ggvqww1c2f4aspvyijls";
+		  rev = "761061";
+		  sha256 = "0i98kh435dj29ln1lnidxwivcha1m553s4l8c1h2b3yd4950w8x4";
 	  };
 	  patchPhase = "mkdir .svn; bash apply_patches;" + common.patchPhase;
 	});
