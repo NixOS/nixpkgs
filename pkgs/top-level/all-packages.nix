@@ -217,7 +217,7 @@ rec {
 			(import ../build-support/checker) 
 			opts config); in
 			(if (result=="") then x else
-			abort result)
+			abort ("Unknown option specified: " + result))
 		else x);
 
 	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
