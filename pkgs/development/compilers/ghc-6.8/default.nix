@@ -29,6 +29,13 @@ stdenv.mkDerivation (rec {
     cat $setupHook  >> $out/nix-support/setup-hook
   '';
 
+  configureFlags=[
+    "--with-gmp-libraries=${gmp}/lib"
+    "--with-readline-libraries=${readline}/lib"
+    "--with-gmp-includes=${gmp}/include"
+    "--with-gcc=${gcc}/bin/gcc"
+  ];
+
   preConfigure = "
     # still requires a hack for ncurses
     sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in

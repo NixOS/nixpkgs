@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdeutils-4.0rc2";
+  name = "kdeutils-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.97/src/kdeutils-3.97.0.tar.bz2;
-    sha256 = "0nhs91xf83xyf4wlpppavrhyi76qdnilhaynwjirx5n85hjl4iiq";
+    url = mirror://kde/stable/4.0/src/kdeutils-4.0.0.tar.bz2;
+    sha256 = "0ha31z79ikkbknhyklihzys0w4jfz4qx8jiyja0gwh428f7mxqj4";
   };
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace gmp libzip python ];

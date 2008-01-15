@@ -153,7 +153,7 @@ rec {
   };
 
   gtksourceview = import ./gtksourceview.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2 gettext
             libgnomeprint gnomevfs libbonobo /* !!! <- should be propagated in gnomevfs */
             GConf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
     input = desktop.gtksourceview;

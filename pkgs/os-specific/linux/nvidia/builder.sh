@@ -20,7 +20,8 @@ myBuildPhase() {
     #patch -p1 < $xenPatch
 
     # Create the module.
-    sysSrc=$(echo $kernel/lib/modules/2.*/build/)
+    kernelVersion=$(cd $kernel/lib/modules && ls)
+    sysSrc=$(echo $kernel/lib/modules/$kernelVersion/build/)
     unset src # used by the nv makefile
     make SYSSRC=$sysSrc module
     cd ../../..
@@ -31,8 +32,8 @@ installPhase=myInstallPhase
 myInstallPhase() {
 
     # Install the kernel module.
-    ensureDir $out/lib
-    cp usr/src/nv/nvidia.ko $out/lib/
+    ensureDir $out/lib/modules/$kernelVersion/misc
+    cp usr/src/nv/nvidia.ko $out/lib/modules/$kernelVersion/misc
 
     # Install libGL and friends.
     cp -prd usr/lib/* usr/X11R6/lib/libXv* $out/lib/

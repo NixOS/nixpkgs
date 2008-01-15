@@ -295,10 +295,10 @@ rec {
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
   writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
-
-  stdenvNewSetupScript = stdenv;
  
   writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
+
+  stdenvNewSetupScript = stdenv;
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
@@ -355,6 +355,10 @@ rec {
     });
 
   cabextract = import ../tools/archivers/cabextract {
+    inherit fetchurl stdenv;
+  };
+
+  chkrootkit = import ../tools/security/chkrootkit {
     inherit fetchurl stdenv;
   };
 
@@ -1990,6 +1994,10 @@ rec {
     inherit (xlibs) libXp libXau;
   };
 
+  libavc1394 = import ../development/libraries/libavc1394 {
+    inherit fetchurl stdenv pkgconfig libraw1394;
+  };
+
   libcaca = import ../development/libraries/libcaca {
     inherit fetchurl stdenv ncurses;
   };
@@ -2087,6 +2095,10 @@ rec {
 
   libidn = import ../development/libraries/libidn {
 	  inherit fetchurl stdenv;
+  };
+
+  libiec61883 = import ../development/libraries/libiec61883 {
+    inherit fetchurl stdenv pkgconfig libraw1394;
   };
 
   libjpeg = import ../development/libraries/libjpeg {
@@ -3091,6 +3103,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  iwlwifi = import ../os-specific/linux/iwlwifi {
+    inherit fetchurl stdenv kernel;
+  };
+
+  iwlwifi3945ucode = import ../os-specific/linux/firmware/iwlwifi-3945-ucode {
+    inherit fetchurl stdenv;
+  };
+
   kbd = import ../os-specific/linux/kbd {
     inherit fetchurl stdenv bison flex;
   };
@@ -3139,6 +3159,16 @@ rec {
 	configFile = getConfig ["kernel" "configFile"] null;
   };
 
+  kqemuFun = lib.sumArgs (selectVersion ../os-specific/linux/kqemu) {
+    inherit fetchurl stdenv builderDefs;
+  };
+
+  # No finished expression is provided - pick your own kernel
+  kqemuFunCurrent = theKernel:  (kqemuFun { 
+    version = "1.3.0pre11";
+    kernel = theKernel;
+  } null);
+
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
   };
@@ -3147,7 +3177,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
- 
   libsexy = import ../development/libraries/libsexy {
     inherit stdenv fetchurl pkgconfig libxml2;
     inherit (gtkLibs) glib gtk pango;
@@ -3239,9 +3268,7 @@ rec {
 
   module_aggregation = moduleSources:  
   import ../os-specific/linux/module-init-tools/aggregator.nix {
-    inherit fetchurl stdenv module_init_tools moduleSources 
-      builderDefs;
-    inherit (xorg) lndir;
+    inherit fetchurl stdenv module_init_tools moduleSources builderDefs;
   };
 
   modutils = import ../os-specific/linux/modutils {
@@ -3977,6 +4004,18 @@ rec {
 
   joe = import ../applications/editors/joe {
     inherit stdenv fetchurl;
+  };
+
+  kino = import ../applications/video/kino {
+    inherit fetchurl pkgconfig libxml2 perl perlXMLParser stdenv
+      libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
+    inherit libsamplerate ffmpeg;
+    inherit (gnome) libglade gtk glib;
+    inherit (xlibs) libXv libX11;
+    inherit (gtkLibs) pango;
+
+  # #  optional
+  #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
 
   kuickshow = import ../applications/graphics/kuickshow {

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   ";
 
   # should we use unstable? 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://kent.dl.sourceforge.net/sourceforge/ndiswrapper/ndiswrapper-1.49.tar.gz;
     sha256 = "1b9nqkk7gv6gffzj9b8mjy5myxf2afwpyr2n5wbfsylf15dvvvjr";
   };

@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdenetwork-4.0rc2";
+  name = "kdenetwork-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.97/src/kdenetwork-3.97.0.tar.bz2;
-    sha256 = "118r55aw0pag78kawjfn3vya7aca12n5ypknm1i4khxs747hxqbr";
+    url = mirror://kde/stable/4.0/src/kdenetwork-4.0.0.tar.bz2;
+    sha256 = "04vigr2z0md64khjdriwslsyaf6mpqxd2iwsnr82g53x4kh0i061";
   };
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace sqlite libidn];

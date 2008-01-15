@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdelibs-4.0rc2";
+  name = "kdelibs-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.97/src/kdelibs-3.97.0.tar.bz2;
-    sha256 = "0g9r7nph6hpdvbmchvp0h5xk4z0da0b5rskqpbixdplsdxcs8xhv";
+    url = mirror://kde/stable/4.0.0/src/kdelibs-4.0.0.tar.bz2;
+    sha256 = "0bfcrb34kl2md77k9rbr924n5bc7chc5wkr10jjvq98742yh0rza";
   };
 
   propagatedBuildInputs = [

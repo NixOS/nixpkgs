@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdebase-4.0rc2";
+  name = "kdebase-4.0.0";
 
   src = fetchurl {
-    url = mirror://kde/unstable/3.97/src/kdebase-3.97.0.tar.bz2;
-    sha256 = "1iavkzfq7f9308j2r70xd6qfng0fncpww8s49hbigzkkdzrjk8gn";
+    url = mirror://kde/stable/4.0/src/kdebase-4.0.0.tar.bz2;
+    sha256 = "1419zijcrx6nk10nay3dbv0vi8525hzcqkm2fw8cvw11i4mk909q";
   };
 
   propagatedBuildInputs = [kdepimlibs libusb];

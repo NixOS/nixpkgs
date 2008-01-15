@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "kdemultimedia-4.0rc2";
+  name = "kdemultimedia-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/unstable/3.97/src/kdemultimedia-3.97.0.tar.bz2;
-    sha256 = "0q78d1gh5na72aj604myy23qn6xb0izw0igsi1h9i4pc2bsis87i";
+    url = mirror://kde/stable/4.0/src/kdemultimedia-4.0.0.tar.bz2;
+    sha256 = "14axr1x09k67vb3vaw4g9zg4mq7j14xn9d90kifwap7b76iljbi5";
   };
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace libogg flac cdparanoia lame
