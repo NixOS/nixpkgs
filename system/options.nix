@@ -1872,6 +1872,13 @@ root        ALL=(ALL) SETENV: ALL
       ";
     };
 
+    checkConfigurationOptions = mkOption {
+      default = false;
+      example = true;
+      description = "
+        If all configuration options must be checked. Non-existing options fail build.
+      ";
+    };
   };
   
   nesting = {

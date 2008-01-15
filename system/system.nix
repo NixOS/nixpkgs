@@ -369,6 +369,8 @@ rec {
         configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
       config.nesting.children; 
     configurationName = config.boot.configurationName;
-  }) (pkgs.getConfig ["checkConfigurationOptions"] false) 
-	optionDeclarations configuration ;
+  }) (pkgs.lib.getAttr ["environment" "checkConfigurationOptions"] 
+  	optionDeclarations.environment.checkConfigurationOptions.default
+	configuration) 
+		optionDeclarations configuration ;
 }
