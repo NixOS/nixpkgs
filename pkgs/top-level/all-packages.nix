@@ -124,7 +124,8 @@ rec {
   lib = library;
 
   library = import ../lib;
-  lib_unstable = import ../lib/default-unstable.nix;
+   # TODO remove
+   # lib_unstable = import ../lib/default-unstable.nix;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
@@ -204,7 +205,7 @@ rec {
     args: with args.lib; with args;
     if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
-    let co = lib_unstable.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
+    let co = lib.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
         inherit (co) configureFlags buildInputs /*flags*/;
@@ -1007,10 +1008,9 @@ rec {
   ghcsAndLibs = 
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
-      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline;
+      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline lib;
       inherit ghcPkgUtil;
       stdenv = stdenvUsingSetupNew2;
-      lib = lib_unstable;
     });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
@@ -1268,8 +1268,7 @@ rec {
 
   # compiling without xdebug is currenlty broken (should be easy to fix though 
   php_unstable = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration autoconf automake;
-   lib = lib_unstable;
+   inherit mkDerivationByConfiguration autoconf automake lib;
    stdenv = stdenvUsingSetupNew2;
    # optional features
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
@@ -1799,10 +1798,9 @@ rec {
 
 
   fltk20 = (import ../development/libraries/fltk) {
-    inherit mkDerivationByConfiguration x11;
+    inherit mkDerivationByConfiguration x11 lib;
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
-    lib = lib_unstable;
   };
 
   fontconfig = import ../development/libraries/fontconfig {
@@ -1826,8 +1824,7 @@ rec {
   };
 
   geos = import ../development/libraries/geos {
-    lib = lib_unstable;
-    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which;
+    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
     use_svn = stdenv.system == "x86_64-linux";
     python = python;
     # optional features:  
@@ -2064,8 +2061,6 @@ rec {
   } null;
 
   libdv = import ../development/libraries/libdv {
-    lib = lib_unstable;
-    inherit fetchurl stdenv mkDerivationByConfiguration;
   };
 
   libdrm = import ../development/libraries/libdrm {
@@ -2970,8 +2965,7 @@ rec {
   };
 
   squid = import ../servers/squid {
-    inherit fetchurl stdenv mkDerivationByConfiguration perl;
-    lib = lib_unstable;
+    inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
   };
 
   tomcat5 = import ../servers/http/tomcat {
@@ -3794,10 +3788,9 @@ rec {
     openal = openalSoft;
   };
   blender = import ../applications/misc/blender {
-    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11
+    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib /* smpeg  sdl */;
     inherit (xlibs) inputproto libXi;
-    lib = lib_unstable;
     python = python_alts.v_2_5;
     freealut = freealut_soft;
     openal = openalSoft;
@@ -4591,11 +4584,10 @@ rec {
   };
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration;
+    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration lib;
     inherit (xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu;
     inherit (gtkLibs) glib gtk;
-    lib = lib_unstable;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python 
@@ -4744,11 +4736,10 @@ rec {
   # doesn't compile yet - in case someone else want's to continue .. 
   /*
   qgis_svn = import ../applications/misc/qgis_svn {
-    lib = lib_unstable;
-    inherit mkDerivationByConfiguration fetchsvn flex
+    inherit mkDerivationByConfiguration fetchsvn flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
             gsl libpng zlib
-            sqlite glibc fontconfig freetype;
+            sqlite glibc fontconfig freetype / * use libc from stdenv ? - to lazy now - Marc * /;
     inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
     inherit (xorg) libICE;
     stdenv = stdenvUsingSetupNew2;
