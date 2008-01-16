@@ -222,6 +222,10 @@ let
       ${pkgs.compiz}/bin/compiz gconf ${cfg.renderingFlag} &
       ${pkgs.compiz}/bin/gtk-window-decorator --sync &
     ''
+
+    else if windowManager == "xmonad" then ''
+      ${pkgs.xmonad}/bin/xmonad &
+    ''
     
     else if windowManager == "none" then ''
       # The session starter will start the window manager.
