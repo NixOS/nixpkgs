@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [x11 mesa];
+  patches = ./freeglut-gcc-4.2.patch;
 }
