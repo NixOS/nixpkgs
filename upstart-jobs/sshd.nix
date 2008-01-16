@@ -5,7 +5,8 @@
 
 let
 
-  sshdConfig = writeText "sshd_config" "
+  sshdConfig = writeText "sshd_config" ''
+  
     UsePAM yes
     
     ${if forwardX11 then "
@@ -20,7 +21,7 @@ let
     " else "
     "}
     
-  ";
+  '';
 
   sshdUid = (import ../system/ids.nix).uids.sshd;
 

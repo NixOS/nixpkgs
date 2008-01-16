@@ -133,6 +133,19 @@ import ../helpers/make-etc.nix {
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
 
+    { # SSH configuration.  Slight duplication of the sshd_config
+      # generation in the sshd service.
+      source = pkgs.writeText "ssh_config" ''
+        ${if config.services.sshd.forwardX11 then ''
+          ForwardX11 yes
+          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+        '' else ''
+          ForwardX11 no
+        ''}
+      '';
+      target = "ssh/ssh_config";
+    }
+
   ]
 
   # Configuration for ssmtp.

@@ -21,6 +21,7 @@ rec {
     
       sshd = {
         enable = false;
+        forwardX11 = false;
       };
       
       xserver = {
