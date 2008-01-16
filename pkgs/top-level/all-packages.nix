@@ -1355,6 +1355,10 @@ rec {
   ### DEVELOPMENT / TOOLS
 
 
+  alex = import ../development/tools/parsing/alex {
+    inherit fetchurl stdenv ghc perl;
+  };
+
   antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
     inherit fetchurl stdenv jre;
   };
@@ -2616,6 +2620,18 @@ rec {
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
     inherit stdenv fetchurl unzip ghc wxGTK;
+  };
+
+  # wxHaskell68 = lowPrio (appendToName "ghc68" (import ../development/libraries/haskell/wxHaskell {
+  #   inherit stdenv fetchurl unzip wxGTK;
+  #   ghc = ghc68;
+  # }));
+
+  X11 = import ../development/libraries/haskell/X11 {
+    inherit stdenv fetchurl;
+    ghc = ghc68;
+    inherit (xlibs) libX11 libXinerama libXext;
+    xineramaSupport = true;
   };
 
 
@@ -4684,6 +4700,12 @@ rec {
     inherit (gnome) esound;
     inherit (gtkLibs1x) glib gtk;
     stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
+  };
+
+  xmonad = import ../applications/window-managers/xmonad {
+    inherit stdenv fetchurl X11;
+    inherit (xlibs) xmessage;
+    ghc=ghc68;
   };
 
   xpdf = import ../applications/misc/xpdf {
