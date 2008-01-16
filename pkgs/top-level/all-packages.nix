@@ -2061,6 +2061,7 @@ rec {
   } null;
 
   libdv = import ../development/libraries/libdv {
+    inherit fetchurl stdenv lib mkDerivationByConfiguration;
   };
 
   libdrm = import ../development/libraries/libdrm {
