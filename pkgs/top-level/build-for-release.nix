@@ -80,6 +80,7 @@ let {
     iana_etc
     iputils
     irssi
+    iwlwifi
     jakartaregexp
     jdkPlugin
     jetty
@@ -231,6 +232,7 @@ let {
     bison23
     gcc
     hello
+    iwlwifi
     kernel
     libtool
     nixUnstable
