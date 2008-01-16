@@ -18,15 +18,13 @@ let
   videoDriver = cfg.videoDriver;
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
   sessionType = cfg.sessionType;
-  sessionStarter = cfg.sessionStarter;
-  renderingFlag = cfg.renderingFlag;
 
 
   sessionCmd =
-    if sessionType == "" then sessionStarter else
+    if sessionType == "" then cfg.sessionStarter else
     if sessionType == "xterm" then "${pkgs.xterm}/bin/xterm -ls" else
     if sessionType == "gnome" then "${gnome.gnometerminal}/bin/gnome-terminal -ls" else
-    abort ("unknown session type "+ sessionType);
+    abort ("unknown session type ${sessionType}");
 
 
   windowManager =
@@ -221,7 +219,7 @@ let
 
       # Start Compiz and the GTK-style window decorator.
       env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
-      ${pkgs.compiz}/bin/compiz gconf ${renderingFlag} &
+      ${pkgs.compiz}/bin/compiz gconf ${cfg.renderingFlag} &
       ${pkgs.compiz}/bin/gtk-window-decorator --sync &
     ''
     

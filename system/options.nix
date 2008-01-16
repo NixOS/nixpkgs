@@ -825,7 +825,7 @@
         description = "
           The command executed after login and after the window manager
           has been started.  Used if
-          <option>services.xserver.sessionType</option> is not empty.
+          <option>services.xserver.sessionType</option> is empty.
         ";
       };
 
