@@ -1852,6 +1852,11 @@ rec {
     };
   };
 
+  glew = import ../development/libraries/glew {
+    inherit fetchurl stdenv mesa x11;
+    inherit (xlibs) libXmu libXi;
+  };
+
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
     (import ../development/libraries/glibc {
       inherit fetchurl stdenv kernelHeaders;
