@@ -1948,6 +1948,10 @@ rec {
     inherit aspell;
   };
 
+  heimdal = import ../development/libraries/kerberos/heimdal.nix {
+	  inherit fetchurl stdenv readline db4 openssl openldap cyrus_sasl;
+  };
+
   hsqldb = import ../development/libraries/java/hsqldb {
     inherit stdenv fetchurl unzip;
   };
@@ -4677,7 +4681,7 @@ rec {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
-	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell
+	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell heimdal
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
 	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib

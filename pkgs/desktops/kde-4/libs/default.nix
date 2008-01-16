@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 	libXrender libXScrnSaver libXt libXtst libXv libXxf86misc libxkbfile zlib
 	perl qt openssl pcre pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
     libtool freetype bzip2 shared_mime_info alsaLib libungif cups
-	gettext enchant openexr aspell stdenv.gcc.libc jasper
+	gettext enchant openexr aspell stdenv.gcc.libc jasper heimdal
   ] ++ kdesupport.all;
   buildInputs = [ cmake ];
   patchPhase = "cp ${findIlmBase} ../cmake/modules/FindIlmBase.cmake;
