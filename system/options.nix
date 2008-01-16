@@ -805,7 +805,8 @@
         description = "
           This option selects the window manager.  Available values are
           <literal>twm</literal> (extremely primitive),
-          <literal>metacity</literal>, and <literal>compiz</literal>.  If
+          <literal>metacity</literal>, <literal>xmonad</literal>
+          and <literal>compiz</literal>.  If
           left empty, the <option>sessionType</option> determines the
           window manager, e.g., Metacity for Gnome, and
           <command>kwm</command> for KDE.
