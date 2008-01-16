@@ -1850,7 +1850,7 @@ rec {
   };
 
   glew = import ../development/libraries/glew {
-    inherit fetchurl stdenv mesa x11;
+    inherit fetchurl stdenv mesa x11 libtool;
     inherit (xlibs) libXmu libXi;
   };
 
