@@ -47,6 +47,8 @@ start script
   ${samba}/sbin/smbd -D  -s ${smbConfig} &
   ${samba}/sbin/winbindd -B -s ${smbConfig} &
 
+  ln -fs ${smbConfig} /var/samba/config
+
 end script
 
 respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd -B &

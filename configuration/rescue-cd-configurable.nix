@@ -24,6 +24,7 @@ let
 	includeBuildDeps = arg "includeBuildDeps" false;
 	kernel = arg "kernel" (pkgs : pkgs.kernel);
 	addUsers = arg "addUsers" [];
+	extraInitrdKernelModules = arg "extraInitrdKernelModules" [];
 
 	/* Should return list of {configuration, suffix} attrsets.
 	{configuration=configuration; suffix=""} is always prepended.
@@ -107,6 +108,9 @@ rec {
       extraTTYs = [] ++ (lib.optional manualEnabled 7) ++
         (lib.optional rogueEnabled 8);
       inherit kernel;
+      initrd = {
+        extraKernelModules = extraInitrdKernelModules;
+      };
     };
     
     services = {
@@ -237,6 +241,7 @@ rec {
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
       ] ++ (packages pkgs);
+      checkConfigurationOptions = true;
     };
 
     users = {
