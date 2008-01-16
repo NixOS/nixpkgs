@@ -1805,6 +1805,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gamin = import ../development/libraries/gamin {
+	  inherit fetchurl stdenv python pkgconfig;
+	  inherit (gtkLibs) glib;
+  };
+
   geos = import ../development/libraries/geos {
     lib = lib_unstable;
     inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which;
@@ -4687,6 +4692,7 @@ rec {
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
 	  openbabel ocaml facile stdenv poppler_data jasper;
 	cdparanoia = cdparanoiaIII;
+	fam = gamin;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
