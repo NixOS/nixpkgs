@@ -1473,6 +1473,11 @@ rec {
     inherit fetchurl stdenv perl ghc;
   };
 
+  happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
+    inherit fetchurl stdenv perl;
+    ghc = ghc68;  # because happy-1.17 depends on cabal-1.2
+  };
+
   help2man = import ../development/tools/misc/help2man {
     inherit fetchurl stdenv perl gettext perlLocaleGettext;
   };
