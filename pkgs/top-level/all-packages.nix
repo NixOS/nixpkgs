@@ -2128,6 +2128,10 @@ rec {
     static = true;
   }));
 
+  libksba = import ../development/libraries/libksba {
+	  inherit fetchurl stdenv libgpgerror;
+  };
+
   libmad = import ../development/libraries/libmad {
     inherit fetchurl stdenv;
   };
