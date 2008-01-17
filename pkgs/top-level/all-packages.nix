@@ -2008,6 +2008,10 @@ rec {
     inherit (xlibs) libXp libXau;
   };
 
+  libassuan = import ../development/libraries/libassuan {
+    inherit fetchurl stdenv pth;
+  };
+
   libavc1394 = import ../development/libraries/libavc1394 {
     inherit fetchurl stdenv pkgconfig libraw1394;
   };
