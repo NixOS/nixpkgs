@@ -1805,6 +1805,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  fam = gamin;
+
   gamin = import ../development/libraries/gamin {
 	  inherit fetchurl stdenv python pkgconfig;
 	  inherit (gtkLibs) glib;
@@ -1952,6 +1954,9 @@ rec {
     inherit (gtkLibs) gtk;
     inherit aspell;
   };
+
+  # TODO : Add MIT Kerberos and let admin choose.
+  kerberos = heimdal;
 
   heimdal = import ../development/libraries/kerberos/heimdal.nix {
 	  inherit fetchurl stdenv readline db4 openssl openldap cyrus_sasl;
@@ -4699,13 +4704,12 @@ rec {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
-	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell heimdal
+	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell kerberos
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
 	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
-	  openbabel ocaml facile stdenv poppler_data jasper;
+	  openbabel ocaml facile stdenv poppler_data jasper fam;
 	cdparanoia = cdparanoiaIII;
-	fam = gamin;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
