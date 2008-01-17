@@ -1,3 +1,18 @@
+/*
+Usage:
+
+  You define you custom builder script by adding all build steps to a list.
+  for example:
+	builder = writeScript "fsg-4.4-builder"
+		(textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
+
+  a step is defined by noDepEntry, FullDepEntry or PackEntry.
+  To ensure that prerequisite are met those are added before the task itself by
+  textClosureDupList. Duplicated items are removed again.
+
+  See trace/nixpkgs/trunk/pkgs/top-level/builder-defs.nix for some predefined build steps
+
+*/
 args: 
 	with args;
 	with lib;
