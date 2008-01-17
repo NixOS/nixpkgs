@@ -2634,6 +2634,10 @@ rec {
     xineramaSupport = true;
   };
 
+  zlibHaskell = import ../development/libraries/haskell/zlib {
+    inherit stdenv fetchurl zlib;
+    ghc = ghc68;
+  };
 
   ### DEVELOPMENT / PERL MODULES
 
