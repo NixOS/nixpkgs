@@ -6,9 +6,6 @@ args:
     src_hash = { sha256 = "0737g83h7jbrlss8782b17mhc3nfn8qfbh5s71flz8pjxmbbmg1m"; };
 
 	systemPatches = [
-      { name = "paravirt-nvidia";
-        patch = ./2.6.22-paravirt-nvidia.patch;
-      }
       { # resume with resume=swap:/dev/xx
         name = "tux on ice"; # (swsusp2)
         patch = args.fetchurl {
