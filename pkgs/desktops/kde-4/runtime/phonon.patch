@@ -1,0 +1,13 @@
+--- ../phonon/CMakeLists.txt	2007/12/27 15:43:14	753486
++++ ../phonon/CMakeLists.txt	2008/01/08 10:21:31	758568
+@@ -34,7 +34,9 @@
+                   macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version is known to have problems when a device is unplugged. Consider upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
+                endif(XINE_BUGFIX_VERSION LESS 5)
+             else(XINE_BUGFIX_VERSION LESS 7)
+-               macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version is known to have problems when playing short sounds. Consider upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
++               if(XINE_BUGFIX_VERSION LESS 9)
++                  macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version is known to have problems when playing short sounds. Consider upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
++               endif(XINE_BUGFIX_VERSION LESS 9)
+             endif(XINE_BUGFIX_VERSION LESS 7)
+          else(XINE_MINOR_VERSION LESS 2 AND XINE_BUGFIX_VERSION LESS 90)
+             macro_log_feature(FALSE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version contains major changes compared to 1.1.x and has not been tested properly for use with this backend. Consider downgrading to version 1.1.9." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
