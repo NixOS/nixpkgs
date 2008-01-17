@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [kdepimlibs libusb];
+  buildInputs = [cmake];
 }
