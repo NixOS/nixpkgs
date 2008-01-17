@@ -8,5 +8,5 @@ stdenv.mkDerivation rec {
 	};
 
 	configureFlags = "--enable-shared --disable-static --with-openldap=${openldap}";
-	buildInputs = [ readline db4 openssl openldap cyrus_sasl ];
+	propagatedBuildInputs = [ readline db4 openssl openldap cyrus_sasl ];
 }
