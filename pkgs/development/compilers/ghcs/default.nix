@@ -47,7 +47,7 @@
       rec {
         # using undocumented feature that attribute can contain hyphens when using listToAttrs
         # You should be able to get the attribute values using __getAttr
-        result = builtins.listToAttrs (map ( l : lib.av l.name (
+        result = builtins.listToAttrs (map ( l : lib.nv l.name (
                                packageByPackageDB ghc l.name 
                                       ("lib/ghc-${ghc.version}/${l.name}.conf")
                                       (map (n: builtins.getAttr n result) l.deps)

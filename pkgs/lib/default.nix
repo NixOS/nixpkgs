@@ -320,11 +320,11 @@ rec {
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   # TODO should be renamed to nv because niksnut has renamed the attribute attr to name
-  av = name : value : { inherit name value; };
+  nv = name : value : { inherit name value; };
   # attribute set containing one attribute
-  avs = name : value : listToAttrs [ (av name value) ];
+  nvs = name : value : listToAttrs [ (nv name value) ];
   # adds / replaces an attribute of an attribute set
-  setAttr = set : name : v : set // (avs name v);
+  setAttr = set : name : v : set // (nvs name v);
 
   # iterates over a list of attributes collecting the attribute attr if it exists
   catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
@@ -359,8 +359,8 @@ rec {
   #   flagName = { cfgOption = "--enable-configure_feature"; } // extraAttrs;
   #   no_flagName = { cfgOption = "--disable-configure_feature"; };
   enableDisableFeature = flagName : configure_feature : extraAttrs :
-    listToAttrs [ ( av flagName ({ cfgOption = "--enable-${configure_feature}"; } // extraAttrs ) )
-                  ( av "no_${flagName}" ({ cfgOption = "--disable-${configure_feature}"; } ) )];
+    listToAttrs [ ( nv flagName ({ cfgOption = "--enable-${configure_feature}"; } // extraAttrs ) )
+                  ( nv "no_${flagName}" ({ cfgOption = "--disable-${configure_feature}"; } ) )];
 
   # calls chooseOptionsByFlags2 with some preprocessing
   # chooseOptionsByFlags2 returns an attribute set meant to be used to create new derivaitons.
@@ -372,7 +372,7 @@ rec {
     let passedOptionals = filter ( x : hasAttr x args ) optionals; # these are in optionals and in args
         # we simply merge in <optional_name> = { buildInputs = <arg.<optional_name>; pass = <arg.optional_name>; }
         flagConfigWithOptionals = flagConfig // ( listToAttrs
-          (map ( o : av o ( { buildInputs = o; pass = avs o (builtins.getAttr o args); }
+          (map ( o : nv o ( { buildInputs = o; pass = nvs o (builtins.getAttr o args); }
                             // getAttr [o] {} flagConfig )
                )
                passedOptionals ) );
@@ -393,7 +393,7 @@ rec {
                                     # add this flag
                                     s2 =  s // { result = ( setAttr s.result flag (builtins.getAttr flag flagConfig) );
                                                  blockedFlagsBy = s.blockedFlagsBy 
-                                                   // listToAttrs (map (b: av b flag ) blocked); };
+                                                   // listToAttrs (map (b: nv b flag ) blocked); };
                                     # add implied flags
                                 in collectFlags s2 implied
                    ));
@@ -421,7 +421,7 @@ rec {
                 ( intersperse delimiter (flatten ( collectAttrs attrs ) ) );
 
         ifStringGetArg = x : if (__isAttrs x) then x # ( TODO implement __isString ?)
-                             else avs x (__getAttr x args);
+                             else nvs x (__getAttr x args);
           
     in assert ( all id ( mapRecordFlatten ( attr : r : if ( all id ( flatten (getAttr ["assertion"] [] r ) ) ) 
                                               then true else throw "assertion failed flag ${attr}" )
@@ -440,12 +440,12 @@ rec {
 
           configureFlags = optsConcatStrs " " "cfgOption";
 
-          #flags = listToAttrs (map ( flag: av flag (hasAttr flag options) ) (attrNames flagConfig) );
-          flags_prefixed = listToAttrs (map ( flag: av ("flag_set_"+flag) (hasAttr flag options) ) (attrNames flagConfig) );
+          #flags = listToAttrs (map ( flag: nv flag (hasAttr flag options) ) (attrNames flagConfig) );
+          flags_prefixed = listToAttrs (map ( flag: nv ("flag_set_"+flag) (hasAttr flag options) ) (attrNames flagConfig) );
 
           pass = mergeAttrs ( map ifStringGetArg ( flatten (collectAttrs "pass") ) );
       } #  now add additional phase actions (see examples)
-      // listToAttrs ( map ( x : av x (optsConcatStrs "\n" x) ) collectExtraPhaseActions ) );
+      // listToAttrs ( map ( x : nv x (optsConcatStrs "\n" x) ) collectExtraPhaseActions ) );
 }
 
 /* 
