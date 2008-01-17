@@ -16,7 +16,8 @@ rec {
   extragear_plasma = import ./extragear (fullargs // { kdeworkspace = workspace; });
   support = import ./support args;
   decibel = import ./decibel fullargs;
-  pim = import ./pim (fullargs // {kdeworkspace = workspace; });
+# kdepim is not included in KDE-4.0.0
+  #pim = import ./pim (fullargs // {kdeworkspace = workspace; });
 
   env = kde_pkgs: with args; [ (runCommand "kde-env"
   {
