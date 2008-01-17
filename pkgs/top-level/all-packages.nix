@@ -2603,6 +2603,11 @@ rec {
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
+  binary = import ../development/libraries/haskell/binary {
+    inherit stdenv fetchurl;
+    ghc = ghc68;
+  };
+
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit pkgconfig stdenv fetchurl cairo;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
