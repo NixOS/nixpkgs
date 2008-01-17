@@ -19,10 +19,6 @@ let {
     ;    
   };
   
-  powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
-    aterm
-  ;};
-  
   body = [
     i686LinuxPkgs
     x86_64LinuxPkgs
