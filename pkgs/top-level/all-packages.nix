@@ -4730,7 +4730,7 @@ rec {
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
       libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-      libxkbfile libXinerama;
+      libxkbfile libXinerama libpthreadstubs;
     inherit (gtkLibs) glib;
     qt = qt4;
 	dbus = dbus_alts.withX11;
