@@ -1,31 +1,14 @@
-{ xvideoSupport ? true
-, xineramaSupport ? true
-, encryptedDVDSupport ? true
-, alsaSupport ? true
-, stdenv, fetchurl, zlib, x11, pkgconfig
-, libXv ? null, libXinerama ? null, libdvdcss ? null, alsaLib ? null
-}:
+args: with args;
 
-assert xvideoSupport -> libXv != null;
-assert xineramaSupport -> libXinerama != null;
-assert encryptedDVDSupport -> libdvdcss != null;
-assert alsaSupport -> alsaLib != null;
-
-(stdenv.mkDerivation {
-  name = "xine-lib-1.1.8";
-  builder = ./builder.sh;
+(stdenv.mkDerivation rec {
+  name = "xine-lib-1.1.9.1";
   src = fetchurl {
-    url = mirror://sourceforge/xine/xine-lib-1.1.8.tar.bz2;
-    sha256 = "03iwhgsf9kj0x5b4fgv7lzc1vj3frk4afh2idgrqskvixjyi37vc";
+    url = "mirror://sourceforge/xine/${name}.tar.bz2";
+    sha256 = "1rz4k2a9pny2ksqb5diw1ci8ijihpcm0mi8qxp5p7nasgzgqcj82";
   };
-  buildInputs = [
-    x11 pkgconfig
-    (if xvideoSupport then libXv else null)
-    (if xineramaSupport then libXinerama else null)
-    (if alsaSupport then alsaLib else null)
-  ];
-  libXv = if xvideoSupport then libXv else null;
-  libdvdcss = if encryptedDVDSupport then libdvdcss else null;
+  buildInputs = [ x11 pkgconfig libXv libXinerama alsaLib mesa aalib SDL
+  libvorbis libtheora speex ];
+  configureFlags = "--with-xv-path=${libXv}/lib";
+  NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss";
   propagatedBuildInputs = [zlib];
-  patches = [ ./xine-lib-linux-headers-2.6.23.patch ];
-}) // {inherit xineramaSupport libXinerama;}
+}) // { xineramaSupport = true; inherit libXinerama; }
