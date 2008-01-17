@@ -15,11 +15,15 @@ rec {
   id = x: x;
 
 
-  # !!! need documentation...
+  # accumulates / merges all attr sets until null is fed.
+  # example: sumArgs id { a = 'a'; x = 'x'; } { y = 'y'; x = 'X'; } null
+  # result : { a = 'a'; x = 'X'; y = 'Y'; }
   innerSumArgs = f : x : y : (if y == null then (f x)
 	else (innerSumArgs f (x // y)));
   sumArgs = f : innerSumArgs f {};
 
+  # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
+  # result: ["ab" "cd"]
   innerPairMap = acc: f: l: 
   	if l == [] then acc else
 	innerPairMap (acc ++ [(f (head l)(head (tail l)))])
@@ -313,8 +317,6 @@ rec {
 
   # calls a function (f attr value ) for each record item. returns a list
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
-
-  whenFlip = x : cond : if (cond) then x else "";
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   # TODO should be renamed to nv because niksnut has renamed the attribute attr to name
