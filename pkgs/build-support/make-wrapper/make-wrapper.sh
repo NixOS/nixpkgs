@@ -72,3 +72,11 @@ filterExisting() {
         fi
     done
 }
+
+# Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
+wrapProgram() {
+    local prog="$1"
+    local hidden="$(dirname "$prog")/.wrapped-$(basename "$prog")"
+    mv $prog $hidden
+    makeWrapper $hidden $prog "$@"
+}

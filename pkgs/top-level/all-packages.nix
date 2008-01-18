@@ -288,7 +288,14 @@ rec {
       inherit stdenv curl;
     });
 
+  makeSetupHook = script: runCommand "hook" {} ''
+    ensureDir $out/nix-support
+    cp ${script} $out/nix-support/setup-hook
+  '';
+
   makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
+
+  makeWrapperNew = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
@@ -3805,6 +3812,11 @@ rec {
 
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
+  };
+
+  bazaar = import ../applications/version-management/bazaar {
+    inherit fetchurl stdenv python;
+    makeWrapper = makeWrapperNew;
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
