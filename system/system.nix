@@ -244,6 +244,7 @@ rec {
     pkgs.time
     pkgs.udev
     pkgs.upstart
+    pkgs.usbutils
     pkgs.utillinux
     pkgs.wirelesstools
     nix
