@@ -1,5 +1,4 @@
 source $stdenv/setup
-source $makeWrapper
 
 makeFlags="XAWLIB=-lXaw3d BINDIR=$out/bin XAPPLOADDIR=$out/etc/X11/app-defaults LIBDIR=$out/lib/X11 XFIGDOCDIR=$out/share/doc/xfig MANPATH=$out/man"
 
@@ -16,9 +15,7 @@ installCommand=myInstall
 myInstall() {
     make install.all $makeFlags
 
-    mv $out/bin/xfig $out/bin/.xfig
-
-    makeWrapper $out/bin/.xfig $out/bin/xfig \
+    wrapProgram $out/bin/xfig \
         --set XAPPLRESDIR $out/etc/X11/app-defaults
 }
 

@@ -1,5 +1,4 @@
 source $stdenv/setup
-source $makeWrapper
 
 # Workaround for:
 #  File "...-python-2.4.4/lib/python2.4/posixpath.py", line 62, in join
@@ -20,10 +19,7 @@ installPhase() {
 
     # Create wrappers that set the environment correctly.
     for i in $(cd $out/bin && ls); do
-        # Note: the GUI apps except to be in a directory called `bin',
-        # so don't move them. 
-        mv $out/bin/$i $out/bin/.orig-$i
-        makeWrapper $out/bin/.orig-$i $out/bin/$i \
+        wrapProgram $out/bin/$i \
             --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH"
     done
 }

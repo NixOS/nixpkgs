@@ -1,5 +1,4 @@
 source $stdenv/setup
-source $makeWrapper
 
 unpackFile $src 
 ensureDir $out

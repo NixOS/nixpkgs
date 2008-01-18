@@ -1,6 +1,7 @@
 makeWrapper() {
-    original=$1
-    wrapper=$2
+    local original=$1
+    local wrapper=$2
+    local params varName value command separator n fileNames
 
     ensureDir "$(dirname $wrapper)"
 
@@ -15,6 +16,12 @@ makeWrapper() {
             value=${params[$((n + 2))]}
             n=$((n + 2))
             echo "export $varName=$value" >> $wrapper
+        fi
+
+        if test "$p" = "--run"; then
+            command=${params[$((n + 1))]}
+            n=$((n + 1))
+            echo "$command" >> $wrapper
         fi
 
         if test "$p" = "--suffix" -o "$p" = "--prefix"; then

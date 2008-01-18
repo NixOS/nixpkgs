@@ -293,9 +293,7 @@ rec {
     cp ${script} $out/nix-support/setup-hook
   '';
 
-  makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
-
-  makeWrapperNew = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
+  makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
@@ -3815,8 +3813,7 @@ rec {
   };
 
   bazaar = import ../applications/version-management/bazaar {
-    inherit fetchurl stdenv python;
-    makeWrapper = makeWrapperNew;
+    inherit fetchurl stdenv python makeWrapper;
   };
 
   # commented out because it's using the new configuration style proposal which is unstable
@@ -3949,7 +3946,7 @@ rec {
   };
 
   cvs2svn = import ../applications/version-management/cvs2svn {
-    inherit fetchurl stdenv python bsddb3 makeWrapper;
+    inherit fetchurl stdenv python makeWrapper;
   };
 
   d4x = import ../applications/misc/d4x {
