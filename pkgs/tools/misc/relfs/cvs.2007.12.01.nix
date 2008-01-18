@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 	src = /* put a fetchurl here */
 	fetchcvs {
 		url = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";
@@ -12,6 +12,7 @@ args : with args;
 			e2fsprogs gnomevfs pkgconfig GConf];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let build = FullDepEntry ("
 	cd deps 
 	sed -e 's/^CPP/#&/ ; s/^# CPP=gcc/CPP=gcc/' -i Makefile.camlidl
@@ -41,7 +42,7 @@ in
 stdenv.mkDerivation rec {
 	name = "relfs-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [build doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [build doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	Relational FS over FUSE.

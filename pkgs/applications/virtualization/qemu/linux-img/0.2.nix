@@ -1,6 +1,6 @@
 
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://fabrice.bellard.free.fr/qemu/linux-0.2.img.bz2;
@@ -9,6 +9,7 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 doCopy = FullDepEntry ("
   ensureDir \$out/share/qemu-images
@@ -18,7 +19,7 @@ in
 stdenv.mkDerivation rec {
 	name = "QEmu-Linux-Image-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doCopy doForceShare doPropagate]);
+		(textClosure localDefs [doCopy doForceShare doPropagate]);
 	meta = {
 		description = "
 		${abort "Write a description"}

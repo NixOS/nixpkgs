@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs { 
 		src = 
 			fetchurl {
 				url = ftp://ftp.fftw.org/pub/fftw/fftw-3.1.2.tar.gz;
@@ -8,10 +8,11 @@ args : with args;
 		buildInputs = [];
 		configureFlags = ["--enable-float --enable-shared"];
 	} null;
+	in with localDefs;
 stdenv.mkDerivation {
 	name = "fftw-3.1.2";
 	builder = writeScript "fftw-3.1.2-builder"
-		(textClosure [doConfigure doMakeInstall doForceShare]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare]);
 	meta = {
 		description = "
 	Fastest Fourier Transform in the West library.

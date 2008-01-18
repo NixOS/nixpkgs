@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://fabrice.bellard.free.fr/qemu/qemu-0.9.0.tar.gz;
@@ -9,6 +9,7 @@ args : with args;
 		buildInputs = [ SDL zlib which ];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 preConfigure = FullDepEntry ("
   gcc --version
@@ -17,7 +18,7 @@ in
 stdenv.mkDerivation rec {
 	name = "qemu-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [ preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [ preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		QEmu processor emulator.

@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 			fetchurl {
 				url = mirror://sourceforge/libdbi/libdbi-0.8.2.tar.gz;
@@ -9,10 +9,11 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "libdbi"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	DB independent interface to DB.	

@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-0.9.6.tar.gz;
@@ -8,10 +8,11 @@ args : with args;
 		buildInputs = [python];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "Pyrex-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [installPythonPackage doForceShare]);
+		(textClosure localDefs [installPythonPackage doForceShare]);
 	meta = {
 		description = "
 	Python package compiler or something like that.	

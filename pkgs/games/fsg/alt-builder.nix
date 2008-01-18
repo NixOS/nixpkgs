@@ -1,13 +1,13 @@
 args: with args; 
-	with (builderDefs 
-	{ 
+	let localDefs = builderDefs {
   		buildInputs =[(wxGTK null)];
 		  src = 
 			fetchurl {
 				url = http://www.piettes.com/fallingsandgame/fsg-src-4.4.tar.gz;
 				sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
 			};
-	} null);
+	} null;
+	in with localDefs;
 let 
 	preBuild = FullDepEntry "
 		sed -e '
@@ -25,7 +25,7 @@ in
 stdenv.mkDerivation {
   name = "fsg-4.4";
 	builder = writeScript "fsg-4.4-builder"
-		(textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
+		(textClosure localDefs [doUnpack addInputs preBuild doMake installPhase doForceShare]);
 
   meta = {
     description = "

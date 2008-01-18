@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.lambdassociates.org/Download/Qi9.1.zip;
@@ -8,6 +8,7 @@ args : with args;
 		buildInputs = [ unzip clisp];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 	shell=stdenv.shell;
 in
@@ -28,7 +29,7 @@ in
 stdenv.mkDerivation rec {
 	name = "Qi-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [allBuild doForceShare doPropagate]);
+		(textClosure localDefs [allBuild doForceShare doPropagate]);
 	meta = {
 		description = "
 		Qi - next generation on top of Common Lisp.

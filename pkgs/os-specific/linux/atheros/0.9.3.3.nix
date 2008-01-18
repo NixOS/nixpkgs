@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://downloads.sourceforge.net/madwifi/madwifi-0.9.3.3.tar.bz2;
@@ -16,6 +16,7 @@ args : with args;
 			sha256 = "11xpx5g9w7ilagvj60prc3s8a3x0n5n4mr0b7nh0lxwrbjdgjjfg";
 		} else "")*/;
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 doPatch = FullDepEntry (if patchAR2425x86 !="" then ''
 	cd hal
@@ -25,7 +26,7 @@ in
 stdenv.mkDerivation rec {
 	name = "atheros-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doPatch doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doPatch doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		Atheros WiFi driver.

@@ -1,4 +1,4 @@
-args : with args; with builderDefs (args // {
+args : with args; let localDefs = builderDefs (args // {
 		src = /* put a fetchurl here */
 		(abort "Specify source");
 		useConfig = true;
@@ -10,10 +10,11 @@ args : with args; with builderDefs (args // {
 		configFlags = [
 		];
 	}) null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "${(abort "Specify name")}"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [(abort "Check phases") doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [(abort "Check phases") doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	${(abort "Specify description")}

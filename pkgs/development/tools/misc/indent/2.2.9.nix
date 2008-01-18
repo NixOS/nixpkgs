@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = ftp://ftp.gnu.org/gnu/indent/indent-2.2.9.tar.gz;
@@ -9,6 +9,7 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 	preBuild = FullDepEntry ("
 		sed -e '/extern FILE [*]output/i#ifndef OUTPUT_DEFINED_ELSEWHERE' -i src/indent.h
@@ -19,7 +20,7 @@ in
 stdenv.mkDerivation rec {
 	name = "indent";
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure preBuild doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure preBuild doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	GNU Indent - a source text formatter.

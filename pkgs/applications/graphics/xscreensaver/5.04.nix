@@ -1,4 +1,4 @@
-args : with args; with builderDefs (args // {
+args : with args; let localDefs = builderDefs (args // {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.jwz.org/xscreensaver/xscreensaver-5.04.tar.gz;
@@ -20,6 +20,7 @@ args : with args; with builderDefs (args // {
 				" --with-hackdir=\$out/share/xscreensaver-hacks ")
 		];
 	}) null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 	preConfigure = FullDepEntry ("
 		sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' "+
@@ -29,7 +30,7 @@ in
 stdenv.mkDerivation rec {
 	name = "xscreensaver-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	The X screensaver daemon. Run xscreensaver-demo to configure.

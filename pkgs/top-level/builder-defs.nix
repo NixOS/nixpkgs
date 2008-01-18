@@ -40,7 +40,7 @@ args: with args; with stringsWithDeps; with lib;
 		{
 			addToSearchPathWithCustomDelimiter \"\${PATH_DELIMITER}\" \"\$@\"
 		}
-	") [defNest];
+	") ["defNest"];
 
 	defNest = noDepEntry ("
 		nestingLevel=0
@@ -95,7 +95,7 @@ args: with args; with stringsWithDeps; with lib;
 		prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
 
 		"
-	else "")) [defNest defAddToSearchPath];
+	else "")) ["defNest" "defAddToSearchPath"];
 		
 	addInputs = FullDepEntry ("
 		# Recursively find all build inputs.
@@ -161,7 +161,7 @@ args: with args; with stringsWithDeps; with lib;
 		fi
 
 		PATH=\$_PATH\${_PATH:+:}\$PATH
-	") [minInit];
+	") ["minInit"];
 	
 	defEnsureDir = FullDepEntry ("
 		# Ensure that the given directories exists.
@@ -171,7 +171,7 @@ args: with args; with stringsWithDeps; with lib;
 			if ! test -x \"\$dir\"; then mkdir -p \"\$dir\"; fi
 		    done
 		}
-	") [minInit];
+	") ["minInit"];
 
 	toSrcDir = s : FullDepEntry ((if (archiveType s) == "tar" then "
 		tar xvf '${s}'
@@ -200,11 +200,11 @@ args: with args; with stringsWithDeps; with lib;
 		cd \$(basename ${s} .bz2)
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
-	) [minInit];
+	) ["minInit"];
 
 	doConfigure = FullDepEntry ("
 		./configure --prefix=\"\$prefix\" ${toString configureFlags}
-	") [minInit addInputs doUnpack];
+	") ["minInit" "addInputs" "doUnpack"];
 
 	doAutotools = FullDepEntry ("
 		mkdir -p config
@@ -214,21 +214,21 @@ args: with args; with stringsWithDeps; with lib;
 		autoheader || true; 
 		automake --add-missing --copy
 		autoconf
-	")[minInit addInputs doUnpack];
+	")["minInit" "addInputs" "doUnpack"];
 
 	doMake = FullDepEntry ("	
 		make ${toString makeFlags}
-	") [minInit addInputs doUnpack];
+	") ["minInit" "addInputs" "doUnpack"];
 
 	doUnpack = toSrcDir (toString src);
 
 	installPythonPackage = FullDepEntry ("
 		python setup.py install --prefix=\"\$prefix\" 
-		") [minInit addInputs doUnpack];
+		") ["minInit" "addInputs" "doUnpack"];
 
 	doMakeInstall = FullDepEntry ("
 		make ${toString (getAttr ["makeFlags"] "" args)} "+
-			"${toString (getAttr ["installFlags"] "" args)} install") [doMake];
+			"${toString (getAttr ["installFlags"] "" args)} install") ["doMake"];
 
 	doForceShare = FullDepEntry (" 
 		ensureDir \"\$prefix/share\"
@@ -238,7 +238,7 @@ args: with args; with stringsWithDeps; with lib;
 				ln -sv share/\$d \"\$prefix\"
 			fi;
 		done;
-	") [minInit defEnsureDir];
+	") ["minInit" "defEnsureDir"];
 
 	doDump = n: noDepEntry "echo Dump number ${n}; set";
 
@@ -250,7 +250,7 @@ args: with args; with stringsWithDeps; with lib;
 
 	doPatch = FullDepEntry (concatStringsSep ";"
 		(map toPatchCommand patches)
-	) [minInit doUnpack];
+	) ["minInit" "doUnpack"];
 
 	envAdderInner = s: x: if x==null then s else y: 
 		a: envAdderInner (s+"echo export ${x}='\"'\"\$${x}:${y}\";'\"'\n") a;
@@ -268,12 +268,12 @@ args: with args; with stringsWithDeps; with lib;
 		(${envAdderList env}
 		echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
 
-	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) [minInit];
+	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
 
 	doPropagate = FullDepEntry ("
 		ensureDir \$out/nix-support
 		echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
-	") [minInit defEnsureDir];
+	") ["minInit" "defEnsureDir"];
 
 	/*debug = x:(__trace x x);
 	debugX = x:(__trace (__toXML x) x);*/
@@ -283,7 +283,7 @@ args: with args; with stringsWithDeps; with lib;
 	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
 	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
 	makeNest = x:(if x==defNest.text then x else "startNest\n" + x + "\nstopNest\n");
-	textClosure = textClosureMap makeNest;
+	textClosure = textClosureMapOveridable makeNest;
 
 	inherit noDepEntry FullDepEntry PackEntry;
 

@@ -1,10 +1,11 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		addSbinPath = true;
 		src = "";
 		buildInputs = [module_init_tools];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 
 doCollect = FullDepEntry (''
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 	name = "kernel-modules";
 	inherit moduleSources;
 	builder = writeScript (name + "-builder")
-		(textClosure [doCollect doForceShare doPropagate]);
+		(textClosure localDefs [doCollect doForceShare doPropagate]);
 	meta = {
 		description = "
 		A directory to hold all  the modules, including those 

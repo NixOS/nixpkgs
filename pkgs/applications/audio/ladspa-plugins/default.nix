@@ -1,5 +1,5 @@
 args: with args;
-	with (builderDefs {
+	let localDefs = builderDefs {
 		src = 
 		fetchurl {
 			url = http://plugin.org.uk/releases/0.4.15/swh-plugins-0.4.15.tar.gz;
@@ -8,6 +8,7 @@ args: with args;
 		buildInputs = [fftw ladspaH pkgconfig];
 		configureFlags = [];
 	} null);
+	in with localDefs;
 let
 	postInstall = FullDepEntry ("
 		ensureDir \$out/share/ladspa/
@@ -17,7 +18,7 @@ in
 stdenv.mkDerivation {
 	name = "swh-plugins-0.4.15";
 	builder = writeScript "swh-plugins-0.4.15-builder"
-		(textClosure [doConfigure doMakeInstall 
+		(textClosure localDefs [doConfigure doMakeInstall 
 			postInstall doForceShare]);
 	meta = {
 		description = "

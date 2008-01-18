@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://savannah.nongnu.org/download/construo/construo-0.2.2.tar.gz;
@@ -11,6 +11,7 @@ args : with args;
 		;
 		configureFlags = [""];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 preConfigure = FullDepEntry ("
   sed -e 's/math[.]h/cmath/' -i vector.cxx
@@ -20,7 +21,7 @@ in
 stdenv.mkDerivation rec {
 	name = "construo-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	Construo masses and springs simulation.
