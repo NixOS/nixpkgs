@@ -7,7 +7,7 @@ args: with args;
 		};
 		buildInputs = [fftw ladspaH pkgconfig];
 		configureFlags = [];
-	} null);
+	} null;
 	in with localDefs;
 let
 	postInstall = FullDepEntry ("
