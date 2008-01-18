@@ -3382,6 +3382,16 @@ rec {
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
       }
+      { name = "unionfs-2.2.2";
+        patch = fetchurl {
+          url = http://download.filesystems.org/unionfs/unionfs-2.x/unionfs-2.2.2_for_2.6.23.13.diff.gz;
+          sha256 = "104hahp6fjpxwprcl2njw5mimyh442ma3cp5r1ww0mzq3vwrcdyz";
+        };
+        extraConfig = ''
+          CONFIG_UNION_FS=m
+          CONFIG_UNION_FS_XATTR=y
+        '';
+      }
     ];
     extraConfig =
       lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
