@@ -28,7 +28,7 @@ let
 
   lib = import ../../../lib;
 
-  version = "2.6.22.10";
+  version = "2.6.22.16";
 
 in
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "0kh196qzm54mvnbrdr9s2q86l9yn2321gnsl5xq44ai2idqp044g";
+    sha256 = "0q8z8gbwshx2mz3h6lrqx5sz37q8sffnv2js3ln2difh3k6bw6j4";
   };
   
   patches = map (p: p.patch) kernelPatches;
