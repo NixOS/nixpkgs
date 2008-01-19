@@ -1478,6 +1478,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  haddock = import ../development/tools/documentation/haddock {
+    inherit fetchurl stdenv;
+    ghc = ghc68;
+  };
+
   happy = import ../development/tools/parsing/happy {
     inherit fetchurl stdenv perl ghc;
   };
