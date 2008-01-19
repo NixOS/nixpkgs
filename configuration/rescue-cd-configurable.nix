@@ -25,6 +25,7 @@ let
 	kernel = arg "kernel" (pkgs : pkgs.kernel);
 	addUsers = arg "addUsers" [];
 	extraInitrdKernelModules = arg "extraInitrdKernelModules" [];
+	bootKernelModules = arg "bootKernelModules" [];
 
 	/* Should return list of {configuration, suffix} attrsets.
 	{configuration=configuration; suffix=""} is always prepended.
@@ -111,6 +112,7 @@ rec {
       initrd = {
         extraKernelModules = extraInitrdKernelModules;
       };
+      kernelModules = bootKernelModules;
     };
     
     services = {
