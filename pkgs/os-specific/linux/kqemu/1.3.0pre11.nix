@@ -14,6 +14,7 @@ let
   	cat config-host.mak
   '') [minInit];
   preConfigure = FullDepEntry ('' 
+  	sed -e 's/`uname -r`/'"$(basename ${kernel}/lib/modules/*)"'/' -i install.sh
   	sed -e '/kernel_path=/akernel_path=$out$kernel_path' -i install.sh
 	sed -e '/depmod/d' -i install.sh
 	cat install.sh

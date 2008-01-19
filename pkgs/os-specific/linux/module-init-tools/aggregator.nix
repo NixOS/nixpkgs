@@ -18,7 +18,7 @@ done
 rm -rf nix-support
 cd lib/modules/
 rm */modules.*
-MODULE_DIR=$PWD/ depmod -a 
+MODULE_DIR=$PWD/ depmod -a *
 cd $out/
 '') [minInit addInputs defEnsureDir];
 in
