@@ -2653,6 +2653,11 @@ rec {
     xineramaSupport = true;
   };
 
+  vty = import ../development/libraries/haskell/vty {
+    inherit stdenv fetchurl;
+    ghc = ghc68;
+  };
+
   zlibHaskell = import ../development/libraries/haskell/zlib {
     inherit stdenv fetchurl zlib;
     ghc = ghc68;
