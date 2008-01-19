@@ -229,6 +229,10 @@ rec {
 		inherit stdenv lib;
 	};
 
+        builderDefs2 = lib.sumArgs ((import ./builder-defs2.nix) (builderDefs null));
+
+        stringsWithDeps2 = (import ../lib/strings-with-deps2.nix) lib;
+
   # Call a specific version of a Nix expression, that is,
   # `selectVersion ./foo {version = "0.1.2"; args...}' evaluates to
   # `import ./foo/0.1.2.nix args'.
