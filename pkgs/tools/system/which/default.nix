@@ -1,9 +1,11 @@
-{stdenv, fetchurl}: stdenv.mkDerivation {
-  name = "which-2.17";
+{stdenv, fetchurl, readline}: stdenv.mkDerivation {
+  name = "which-2.19";
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/which/which-2.17.tar.gz;
-    sha256 = "1nnnbn83da8481blmcyv96gm15ccsilr93fmgmwdlzj8a72fjvqp";
+    url = mirror://gnu/pub/gnu/which/which-2.19.tar.gz;
+    sha256 = "0lnd8mfpc0r1r2ch54vl3vc6r0fnzfl33sqdda2aq62iyrsbhybx";
   };
+
+  buildInputs = [readline];
 }
 
 

@@ -819,7 +819,7 @@ rec {
   };
 
   which = import ../tools/system/which {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv readline;
   };
 
   wv = import ../tools/misc/wv {
