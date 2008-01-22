@@ -1006,6 +1006,7 @@ rec {
   # This new ghc stuff is under heavy development and might change ! 
 
   # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
+  # depreceated -> use functions defined in builderDefs
   ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
@@ -1025,6 +1026,22 @@ rec {
     stdenv = stdenvUsingSetupNew2;
   };
 
+  # this will change in the future 
+  ghc68_extra_libs =
+    ghc : let
+    deriv = name : goSrcDir : deps : 
+      let bd = builderDefs {
+          goSrcDir = "ghc-*/libraries";
+          src = ghc.extra_src;
+        } null; in
+      stdenv.mkDerivation rec {
+        inherit name;
+	builder = bd.writeScript (name + "-builder")
+		(bd.textClosure [builderDefs.haskellBuilderDefs]);
+      };
+    # using nvs to be able to use mtl-1.1.0.0 as name 
+  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
+
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
@@ -1032,17 +1049,19 @@ rec {
     let ghc = ghcsAndLibs.ghc68.ghc; in
     createGhcWrapper rec {
       ghcPackagedLibs = true;
-      name = "ghc68_wrapper";
-      suffix = "68wrapper";
-      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) 
-        [ "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "array-0.1" "containers-0.1" 
-          "hpc-0.5" "bytestring-0.9" "pretty-1.0" "packedstring-0.1" "template-haskell-0.1" 
-          "unix-2.0" "process-1.0" "readline-1.0" "Cabal-1.2.0" "random-1.0" "haskell98-1.0" "ghc-6.8.0.20071004"
-          "array-0.1" "bytestring-0.9" "containers-0.1" "directory-1.0" "filepath-1.0"
-          "ghc-6.8.0.20071004" "haskell98-1.0" "hpc-0.5" "old-locale-1.0" "old-time-1.0" 
-          "packedstring-0.1" "pretty-1.0" "process-1.0" "random-1.0"
-          "readline-1.0" "rts-1.0" "template-haskell-0.1" "unix-2.0"
-        ];
+      name = "ghc${ghc.version}_wrapper";
+      suffix = "${ghc.version}wrapper";
+      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
+            "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" 
+            "hpc-0.5.0.0" "bytestring-0.9.0.1" "pretty-1.0.0.0" "packedstring-0.1.0.0" "template-haskell-2.2.0.0" 
+            "unix-2.3.0.0" "process-1.0.0.0" "readline-1.0.1.0" "Cabal-1.2.3.0" "random-1.0.0.0" "haskell98-1.0.1.0" "ghc-${ghc.version}"
+            "array-0.1.0.0" "bytestring-0.9.0.1" "containers-0.1.0.1" "directory-1.0.0.0" "filepath-1.1.0.0"
+            "ghc-${ghc.version}" "haskell98-1.0.1.0" "hpc-0.5.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" 
+            "packedstring-0.1.0.0" "pretty-1.0.0.0" "process-1.0.0.0" "random-1.0.0.0"
+            "readline-1.0.1.0" "rts-1.0" "unix-2.3.0.0" "base-3.0.1.0"
+          ] ++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [
+            "mtl-1.1.0.0"
+          ];
         # (flatten ghcsAndLibs.ghc68.core_libs);
       inherit ghc;
   };

@@ -1,3 +1,39 @@
+# see dep-strings.nix as well
+/*
+questions:
+
+  add some comments?
+
+  why is prefix used in doConfigure ? shouldn't that be out?
+
+  don't think toSrcDir should cd to the directory.
+  I'd prefer cd `toSrcDir xx.tar.gz`
+  Then you can use it to unpack files
+
+  suggestion:
+  deps before text? why?
+    It's kind of documentation and much less lines most of the time ?
+
+  remove noDepEntry, FullDepEntry, PackEntry all together and use { ... } ?
+    you only have to remember two words: text and deps which isn't hard
+    using noDepEntry FullDepEntry PackEntry you'll have to remember 3 words and argument order
+    You just have to learn it once.. ?
+
+  no way to override steps ?
+
+  separate settings from dep entries
+  (eg patchFlags / forceShare, patches) to get a better overview ? )
+
+  envAdderInner: What about a small example? It took quite some time to understand how to use it
+  eg envAdderInner "" "A" "B" "C" "D" null results in
+     echo export A="$A:B";
+     echo export C="$C:D";
+  does'nt handle the env has been empty don't add delimiter case
+
+
+*/
+
+
 args: with args; with stringsWithDeps; with lib;
 (rec
 {
@@ -18,6 +54,7 @@ args: with args; with stringsWithDeps; with lib;
 		# Last block - for single files!! It should be always after .tar.*
 		else if (hasSuffixHack ".bz2" s) then "plain-bz2"
 
+		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
 		else (abort "unknown archive type : ${s}"));
 
 	defAddToSearchPath = FullDepEntry ("
@@ -40,7 +77,7 @@ args: with args; with stringsWithDeps; with lib;
 		{
 			addToSearchPathWithCustomDelimiter \"\${PATH_DELIMITER}\" \"\$@\"
 		}
-	") ["defNest"];
+	") [defNest];
 
 	defNest = noDepEntry ("
 		nestingLevel=0
@@ -95,7 +132,7 @@ args: with args; with stringsWithDeps; with lib;
 		prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
 
 		"
-	else "")) ["defNest" "defAddToSearchPath"];
+	else "")) [defNest defAddToSearchPath];
 		
 	addInputs = FullDepEntry ("
 		# Recursively find all build inputs.
@@ -114,6 +151,12 @@ args: with args; with stringsWithDeps; with lib;
 			echo \$pkg
 		    if test -f \$pkg/nix-support/setup-hook; then
 			source \$pkg/nix-support/setup-hook
+		    fi
+		    
+		    if test -f \$pkg/nix-support/propagated-build-inputs; then
+			for i in \$(cat \$pkg/nix-support/propagated-build-inputs); do
+			    findInputs \$i
+			done
 		    fi
 		}
 
@@ -161,7 +204,7 @@ args: with args; with stringsWithDeps; with lib;
 		fi
 
 		PATH=\$_PATH\${_PATH:+:}\$PATH
-	") ["minInit"];
+	") [minInit];
 	
 	defEnsureDir = FullDepEntry ("
 		# Ensure that the given directories exists.
@@ -171,7 +214,7 @@ args: with args; with stringsWithDeps; with lib;
 			if ! test -x \"\$dir\"; then mkdir -p \"\$dir\"; fi
 		    done
 		}
-	") ["minInit"];
+	") [minInit];
 
 	toSrcDir = s : FullDepEntry ((if (archiveType s) == "tar" then "
 		tar xvf '${s}'
@@ -200,11 +243,11 @@ args: with args; with stringsWithDeps; with lib;
 		cd \$(basename ${s} .bz2)
 	" else (abort "unknown archive type : ${s}"))+
 		(if args ? goSrcDir then args.goSrcDir else "")
-	) ["minInit"];
+	) [minInit];
 
 	doConfigure = FullDepEntry ("
 		./configure --prefix=\"\$prefix\" ${toString configureFlags}
-	") ["minInit" "addInputs" "doUnpack"];
+	") [minInit addInputs doUnpack];
 
 	doAutotools = FullDepEntry ("
 		mkdir -p config
@@ -214,21 +257,21 @@ args: with args; with stringsWithDeps; with lib;
 		autoheader || true; 
 		automake --add-missing --copy
 		autoconf
-	")["minInit" "addInputs" "doUnpack"];
+	")[minInit addInputs doUnpack];
 
 	doMake = FullDepEntry ("	
 		make ${toString makeFlags}
-	") ["minInit" "addInputs" "doUnpack"];
+	") [minInit addInputs doUnpack];
 
 	doUnpack = toSrcDir (toString src);
 
 	installPythonPackage = FullDepEntry ("
 		python setup.py install --prefix=\"\$prefix\" 
-		") ["minInit" "addInputs" "doUnpack"];
+		") [minInit addInputs doUnpack];
 
 	doMakeInstall = FullDepEntry ("
 		make ${toString (getAttr ["makeFlags"] "" args)} "+
-			"${toString (getAttr ["installFlags"] "" args)} install") ["doMake"];
+			"${toString (getAttr ["installFlags"] "" args)} install") [doMake];
 
 	doForceShare = FullDepEntry (" 
 		ensureDir \"\$prefix/share\"
@@ -238,7 +281,7 @@ args: with args; with stringsWithDeps; with lib;
 				ln -sv share/\$d \"\$prefix\"
 			fi;
 		done;
-	") ["minInit" "defEnsureDir"];
+	") [minInit defEnsureDir];
 
 	doDump = n: noDepEntry "echo Dump number ${n}; set";
 
@@ -250,7 +293,7 @@ args: with args; with stringsWithDeps; with lib;
 
 	doPatch = FullDepEntry (concatStringsSep ";"
 		(map toPatchCommand patches)
-	) ["minInit" "doUnpack"];
+	) [minInit doUnpack];
 
 	envAdderInner = s: x: if x==null then s else y: 
 		a: envAdderInner (s+"echo export ${x}='\"'\"\$${x}:${y}\";'\"'\n") a;
@@ -268,12 +311,12 @@ args: with args; with stringsWithDeps; with lib;
 		(${envAdderList env}
 		echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
 
-	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
+	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) [minInit];
 
 	doPropagate = FullDepEntry ("
 		ensureDir \$out/nix-support
 		echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
-	") ["minInit" "defEnsureDir"];
+	") [minInit defEnsureDir];
 
 	/*debug = x:(__trace x x);
 	debugX = x:(__trace (__toXML x) x);*/
@@ -283,7 +326,7 @@ args: with args; with stringsWithDeps; with lib;
 	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
 	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
 	makeNest = x:(if x==defNest.text then x else "startNest\n" + x + "\nstopNest\n");
-	textClosure = textClosureMapOveridable makeNest;
+	textClosure = textClosureMap makeNest;
 
 	inherit noDepEntry FullDepEntry PackEntry;
 
@@ -317,4 +360,68 @@ args: with args; with stringsWithDeps; with lib;
 
 	surroundWithCommands = x : before : after : {deps=x.deps; text = before + "\n" +
 		x.text + "\n" + after ;};
+
+        # some haskell stuff  - untested!
+        # --------------------------------------------------------
+        # creates a setup hook
+        # adding the package database 
+        # nix-support/package.conf to GHC_PACKAGE_PATH
+        # if not already contained
+        # using nix-support because user does'nt want to have it in it's
+        # nix-profile I think?
+        defSetupHookRegisteringPackageDatabase = noDepEntry (
+          "\nsetupHookRegisteringPackageDatabase(){" +
+          "\n  ensureDir $out/nix-support;" +
+          "\n  if test -n \"$1\"; then" +
+          "\n    local pkgdb=$1" +
+          "\n  else" +
+          "\n    local pkgdb=$out/nix-support/package.conf" +
+          "\n  fi" +
+          "\n  cat >> $out/nix-support/setup-hook << EOF" +
+          "\n    " +
+          "\n    echo \$GHC_PACKAGE_PATH | grep -l $pkgdb &> /dev/null || \" "+
+          "\n      export GHC_PACKAGE_PATH=\$GHC_PACKAGE_PATH\${GHC_PACKAGE_PATH:+$PATH_DELIMITER}$pkgdb;" +
+          "\nEOF" +
+          "\n}");
+
+        # Either rungghc or compile setup.hs 
+        # / which one is better ? runghc had some trouble with ghc-6.6.1
+        defineCabalSetupCmd = noDepEntry "
+          CABAL_SETUP=\"runghc setup.hs\"
+        ";
+        
+        # create an empty package database in which the new library can be registered. 
+        defCreateEmptyPackageDatabaseAndSetupHook = FullDepEntry "
+          createEmptyPackageDatabaseAndSetupHook(){
+            ensureDir $out/nix-support;
+            PACKAGE_DB=$out/nix-support/package.conf;
+            echo '[]' > \"$PACKAGE_DB\";
+            setupHookRegisteringPackageDatabase
+        }" [defSetupHookRegisteringPackageDatabase];
+
+        # Cabal does only support --user ($HOME/.ghc/** ) and --global (/nix/store/*-ghc/lib/...) 
+        # But we need kind of --custom=my-package-db
+        # by accident cabal does support using multiple databases passed by GHC_PACKAGE_PATH
+        # 
+        # Options:
+        # 1) create a local package db containing all dependencies
+        # 2) create a single db file for each package merging them using GHC_PACKAGE_PATH=db1:db2 
+        # (no trailing : which would mean add global and user db)
+        # I prefer 2) (Marc Weber) so the most convinient way is
+        # using ./setup copy to install
+        # and   ./setup register --gen-script to install to our local database 
+        # after replacing /usr/lib etc with our pure $out path
+        defCabalBuild = FullDepEntry 
+          (if (args ? subdir) then "cd ${args.subdir}" else "")+ "
+          createEmptyPackageDatabaseAndSetupHook
+          ghc --make setup.hs -o setup
+          \$CABAL_SETUP configure
+          \$CABAL_SETUP build
+          \$CABAL_SETUP copy --dest-dir=\$out
+          \$CABAL_SETUP register --gen-script
+          sed -e 's=/usr/local/lib=\$out=g' \\
+              -i register.sh
+          GHC_PACKAGE_PATH=\$PACKAGE_DB ./register.sh
+        " [defCreateEmptyPackageDatabaseAndSetupHook defineCabalSetupCmd];
+
 }) // args

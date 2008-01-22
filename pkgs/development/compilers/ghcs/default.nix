@@ -80,6 +80,7 @@
        +" --prefix=\$out "
        +" --with-ghc=\$ghcboot/bin/ghc"
        +" --with-gmp-libraries=$gmp/lib"
+       +" --with-gmp-includes=${gmp}/include"
        +" --with-readline-libraries=\"$readline/lib\"";
 
       # now read the main package.conf and create a single package db file for each of them
@@ -107,26 +108,26 @@
 
     # Why this effort? If you want to use pretty-0.9 you can do this now without cabal choosing the 1.0 version hassle 
     core_libs = resolveDeps ghc
-      [ { name = "Cabal-1.2.0"; deps = ["base-2.1" "pretty-1.0" "old-locale-1.0" "old-time-1.0" "directory-1.0" "unix-2.0" "process-1.0" "array-0.1" "containers-0.1" "rts-1.0" "filepath-1.0"];} #
-        { name = "array-0.1"; deps = ["base-2.1"];}
-        { name = "base-2.1"; deps = [];} #
-        { name = "bytestring-0.9"; deps = [ "base-2.1" "array-0.1" ];}
-        { name = "containers-0.1"; deps = [ "base-2.1" "array-0.1" ];}
-        { name = "directory-1.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0"];}
-        { name = "filepath-1.0"; deps = [ "base-2.1" ];} #
-        { name = "ghc-6.8.0.20071004"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "array-0.1" "containers-0.1" "hpc-0.5" "bytestring-0.9" "pretty-1.0" "packedstring-0.1" "template-haskell-0.1" "unix-2.0" "process-1.0" "readline-1.0" "Cabal-1.2.0" "random-1.0" "haskell98-1.0"];}
-        { name = "haskell98-1.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "random-1.0" "unix-2.0" "process-1.0" "array-0.1"];}
-        { name = "hpc-0.5"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "array-0.1" "containers-0.1"]; }
-        { name = "old-locale-1.0"; deps = [ "base-2.1"];}
-        { name = "old-time-1.0"; deps = [ "base-2.1" "old-locale-1.0" ];}
-        { name = "packedstring-0.1"; deps = [ "base-2.1" "array-0.1" ];}
-        { name = "pretty-1.0"; deps = [ "base-2.1" ];}
-        { name = "process-1.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "unix-2.0"];}
-        { name = "random-1.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0"];}
-        { name = "readline-1.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "unix-2.0" "process-1.0" ];}
-        { name = "rts-1.0"; deps = [ "base-2.1" ];} #
-        { name = "template-haskell-0.1"; deps = [ "base-2.1" "pretty-1.0" "array-0.1" "packedstring-0.1" "containers-0.1" ];}
-        { name = "unix-2.0"; deps = [ "base-2.1" "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" ];}
+      [ { name = "Cabal-1.2.3.0"; deps = ["base-3.0.1.0" "pretty-1.0.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" "rts-1.0" "filepath-1.1.0.0"];} #
+        { name = "array-0.1.0.0"; deps = ["base-3.0.1.0"];}
+        { name = "base-3.0.1.0"; deps = [];} #
+        { name = "bytestring-0.9.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
+        { name = "containers-0.1.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
+        { name = "directory-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0"];}
+        { name = "filepath-1.1.0.0"; deps = [ "base-3.0.1.0" ];} #
+        { name = "ghc-${version}"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" "hpc-0.5.0.0" "bytestring-0.9.0.1" "pretty-1.0.0.0" "packedstring-0.1.0.0" "template-haskell-2.2.0.0" "unix-2.3.0.0" "process-1.0.0.0" "readline-1.0.1.0" "Cabal-1.2.3.0" "random-1.0.0.0" "haskell98-1.0.1.0"];}
+        { name = "haskell98-1.0.1.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "random-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" "array-0.1.0.0"];}
+        { name = "hpc-0.5.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1"]; }
+        { name = "old-locale-1.0.0.0"; deps = [ "base-3.0.1.0"];}
+        { name = "old-time-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" ];}
+        { name = "packedstring-0.1.0.0"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
+        { name = "pretty-1.0.0.0"; deps = [ "base-3.0.1.0" ];}
+        { name = "process-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0"];}
+        { name = "random-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0"];}
+        { name = "readline-1.0.1.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" ];}
+        { name = "rts-1.0"; deps = [ "base-3.0.1.0" ];} #
+        { name = "template-haskell-2.2.0.0"; deps = [ "base-3.0.1.0" "pretty-1.0.0.0" "array-0.1.0.0" "packedstring-0.1.0.0" "containers-0.1.0.1" ];}
+        { name = "unix-2.3.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" ];}
       ];
 
       
@@ -137,18 +138,20 @@
 
   } );
 
-  ghc68 = ghcAndLibraries {
-    version = "6.8.0.20071004";
+  ghc68 = ghcAndLibraries rec {
+    version = "6.8.2";
     src = fetchurl {
-      url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.0.20071004-src.tar.bz2;
-      sha256 = "1yyl7sxykmvkiwfxkfzpqa6cmgw19phkyjcdv99ml22j16wli63l";
+      #url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.0.20071004-src.tar.bz2;
+      #sha256 = "1yyl7sxykmvkiwfxkfzpqa6cmgw19phkyjcdv99ml22j16wli63l";
+      url = "http://www.haskell.org/ghc/dist/stable/dist/ghc-${version}-src.tar.bz2";
+      md5 = "745c6b7d4370610244419cbfec4b2f84";
       #url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.20070912-src.tar.bz2;
       #sha256 = "1b1gvi7hc7sc0fkh29qvzzd5lgnlvdv3ayiak4mkfnzkahvmq85s";
     };
 
     extra_src = fetchurl {
-      url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.0.20071004-src-extralibs.tar.bz2;
-      sha256 = "0vjx4vb2xhv5v2wj74ii3gpjim7x9wj0m87zglqlhc8xn31pmrd2";
+      url = "http://www.haskell.org/ghc/dist/stable/dist/ghc-${version}-src-extralibs.tar.bz2";
+      sha256 = "044mpbzpkbxcnqhjnrnmjs00mr85057d123rrlz2vch795lxbkcn";
       #url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.20070912-src-extralibs.tar.bz2;
       #sha256 = "0py7d9nh3lkhjxr3yb3n9345d0hmzq79bi40al5rcr3sb84rnp9r";
     };
@@ -165,4 +168,3 @@
 
   };
 }
-
