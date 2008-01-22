@@ -1790,6 +1790,10 @@ rec {
     lib = lib_unstable;
   };
 
+  cfitsio = import ../development/libraries/cfitsio {
+    inherit fetchurl stdenv;
+  };
+
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
   };
