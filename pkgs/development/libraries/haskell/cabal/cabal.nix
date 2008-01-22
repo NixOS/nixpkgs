@@ -27,9 +27,10 @@ attrs :
             };
 
             # default buildInputs are just ghc, if more buildInputs are required
-            # buildInputs can be extended by the client, but often propagatedBuildInputs
-            # is preferable anyway
-            buildInputs = [attrs.ghc];
+            # buildInputs can be extended by the client by using extraBuildInputs,
+            # but often propagatedBuildInputs is preferable anyway
+            buildInputs = [attrs.ghc] ++ self.extraBuildInputs;
+            extraBuildInputs = [];
 
             # we make sure that propagatedBuildInputs is defined, so that we don't
             # have to check for its existence
@@ -79,11 +80,13 @@ attrs :
               ./Setup copy
               ./Setup register --gen-script
               mkdir -p $out/nix-support
-              sed -i 's/|.*\(ghc-pkg update\)/| \1/' register.sh
-              cp register.sh $out/nix-support/register-ghclib.sh
-              sed -i 's/\(ghc-pkg update\)/\1 --user/' register.sh
-              mkdir -p $out/bin
-              cp register.sh $out/bin/register-${self.name}.sh
+              if test -f register.sh; then
+                sed -i 's/|.*\(ghc-pkg update\)/| \1/' register.sh
+                cp register.sh $out/nix-support/register-ghclib.sh
+                sed -i 's/\(ghc-pkg update\)/\1 --user/' register.sh
+                mkdir -p $out/bin
+                cp register.sh $out/bin/register-${self.name}.sh
+              fi
 
               eval "$postInstall"
             '';

@@ -1498,8 +1498,7 @@ rec {
   };
 
   haddock = import ../development/tools/documentation/haddock {
-    inherit fetchurl stdenv;
-    ghc = ghc68;
+    cabal = cabal68;
   };
 
   happy = import ../development/tools/parsing/happy {
@@ -1507,8 +1506,8 @@ rec {
   };
 
   happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
-    inherit fetchurl stdenv perl;
-    ghc = ghc68;  # because happy-1.17 depends on cabal-1.2
+    inherit perl;
+    cabal = cabal68;  # because happy-1.17 depends on cabal-1.2
   };
 
   help2man = import ../development/tools/misc/help2man {
