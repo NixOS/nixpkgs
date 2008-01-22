@@ -2167,6 +2167,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libnova = import ../development/libraries/libnova {
+	  inherit fetchurl stdenv;
+  };
+
   libogg = import ../development/libraries/libogg {
     inherit fetchurl stdenv;
   };
