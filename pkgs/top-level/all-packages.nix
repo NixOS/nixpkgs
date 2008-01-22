@@ -2638,6 +2638,12 @@ rec {
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
   binary = import ../development/libraries/haskell/binary {
+    cabal = cabal68;
+  };
+
+  # cabal is a utility function to build cabal-based
+  # Haskell packages
+  cabal68 = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit stdenv fetchurl;
     ghc = ghc68;
   };
@@ -2667,20 +2673,18 @@ rec {
   # }));
 
   X11 = import ../development/libraries/haskell/X11 {
-    inherit stdenv fetchurl;
-    ghc = ghc68;
     inherit (xlibs) libX11 libXinerama libXext;
     xineramaSupport = true;
+    cabal = cabal68;
   };
 
   vty = import ../development/libraries/haskell/vty {
-    inherit stdenv fetchurl;
-    ghc = ghc68;
+    cabal = cabal68;
   };
 
   zlibHaskell = import ../development/libraries/haskell/zlib {
-    inherit stdenv fetchurl zlib;
-    ghc = ghc68;
+    inherit zlib;
+    cabal = cabal68;
   };
 
   ### DEVELOPMENT / PERL MODULES
