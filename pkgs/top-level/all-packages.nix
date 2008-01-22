@@ -1003,6 +1003,8 @@ rec {
     profiledCompiler = true;
   });
 
+  /* doesn't work yet
+
   # This new ghc stuff is under heavy development and might change ! 
 
   # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
@@ -1031,7 +1033,7 @@ rec {
     ghc : let
     deriv = name : goSrcDir : deps : 
       let bd = builderDefs {
-          goSrcDir = "ghc-*/libraries";
+          goSrcDir = "ghc-* /libraries";
           src = ghc.extra_src;
         } null; in
       stdenv.mkDerivation rec {
@@ -1065,6 +1067,8 @@ rec {
         # (flatten ghcsAndLibs.ghc68.core_libs);
       inherit ghc;
   };
+
+  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
