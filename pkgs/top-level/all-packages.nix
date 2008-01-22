@@ -4918,6 +4918,17 @@ rec {
     inherit fetchurl stdenv SDL zlib mpeg2dec;
   };
 
+  # You still can override by passing more arguments.
+  spaceOrbitFun = lib.sumArgs (selectVersion ../games/orbit ) {
+    inherit fetchurl stdenv builderDefs 
+      mesa freeglut;
+    inherit (gnome) esound;
+    inherit (xlibs) libXt libX11 libXmu libXi libXext;
+    version = "1.01";
+  };
+
+  spaceOrbit = spaceOrbitFun null;
+
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL; 
     python24 = python;

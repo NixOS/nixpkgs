@@ -1,4 +1,4 @@
-args : with args;
+args : with args; with builderDefs {src="";} null;
 	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 
