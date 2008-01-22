@@ -53,7 +53,7 @@ attrs :
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --prefix="$out"
+              ./Setup configure --verbose --prefix="$out"
 
               eval "$postConfigure"
             '';
@@ -78,11 +78,11 @@ attrs :
 
               ./Setup copy
               ./Setup register --gen-script
-              mkdir $out/nix-support
+              mkdir -p $out/nix-support
               sed -i 's/|.*\(ghc-pkg update\)/| \1/' register.sh
               cp register.sh $out/nix-support/register-ghclib.sh
               sed -i 's/\(ghc-pkg update\)/\1 --user/' register.sh
-              mkdir $out/bin
+              mkdir -p $out/bin
               cp register.sh $out/bin/register-${self.name}.sh
 
               eval "$postInstall"

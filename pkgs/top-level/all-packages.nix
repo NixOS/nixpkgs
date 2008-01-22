@@ -2648,10 +2648,19 @@ rec {
     ghc = ghc68;
   };
 
+  Crypto = import ../development/libraries/haskell/Crypto {
+    cabal = cabal68;
+  };
+
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit pkgconfig stdenv fetchurl cairo;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
     ghc = ghc661;
+  };
+
+  pcreLight = import ../development/libraries/haskell/pcre-light {
+    inherit pcre;
+    cabal = cabal68;
   };
 
   uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
