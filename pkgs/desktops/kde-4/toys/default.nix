@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     sha256 = "0j7kk4ripg2sw4m8ym96aiyi8rsfb4p7kqp9kmik850flqighhsk";
   };
 
-  buildInputs = [kdelibs kdepimlibs kdeworkspace];
+  propagatedBuildInputs = [kdeworkspace];
+  buildInputs = [cmake];
 }

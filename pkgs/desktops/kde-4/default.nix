@@ -2,6 +2,7 @@ args:
 rec {
   fullargs = args // { kdelibs = libs; kdepimlibs = pimlibs; kdebase = base; kderuntime = runtime; };
   libs = import ./libs (args // { kdesupport = support; });
+  l10n = import ./l10n (args // {kdelibs = libs;});
   pimlibs = import ./pimlibs (args // { kdelibs = libs; });
   graphics = import ./graphics (fullargs // { kdeworkspace = workspace; } );
   multimedia = import ./multimedia (fullargs // { kdeworkspace = workspace; } );
@@ -30,5 +31,5 @@ rec {
   echo \"#!/bin/sh\" > \${scriptPath}
   echo \"echo -n export KDEDIRS=\${KDEDIRS}\" >> \${scriptPath}
   chmod +x \${scriptPath}
-  ")] ++ kde_pkgs ++ support.all ++ [shared_mime_info qt];
+  ")] ++ kde_pkgs ++ support.all ++ [shared_mime_info qt xprop xset];
 }

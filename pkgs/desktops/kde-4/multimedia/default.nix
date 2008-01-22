@@ -8,6 +8,6 @@ stdenv.mkDerivation {
     sha256 = "14axr1x09k67vb3vaw4g9zg4mq7j14xn9d90kifwap7b76iljbi5";
   };
 
-  buildInputs = [kdelibs kdepimlibs kdeworkspace libogg flac cdparanoia lame
-  libvorbis];
+  propagatedBuildInputs = [kdeworkspace libogg flac cdparanoia lame libvorbis];
+  buildInputs = [cmake];
 }

@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wjy1rm7aiib1lv61wx7mcbkbpkk6phcz1q6dy51x0hfrc3rdkg4";
   };
 
-  buildInputs = [kdelibs kdepimlibs boost readline openbabel ocaml
-  libusb facile python];
+  propagatedBuildInputs = [kdepimlibs boost readline openbabel ocaml libusb
+  facile python indilib libnova];
+  buildInputs = [cmake];
   myCmakeFiles = ./myCmakeFiles;
   patchPhase = "
   cp ${myCmakeFiles}/* ../cmake/modules

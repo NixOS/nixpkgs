@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0ha31z79ikkbknhyklihzys0w4jfz4qx8jiyja0gwh428f7mxqj4";
   };
 
-  buildInputs = [kdelibs kdepimlibs kdeworkspace gmp libzip python ];
+  propagatedBuildInputs = [kdeworkspace gmp libzip python libarchive];
+  buildInputs = [cmake];
 # TODO : tpctl
   patchPhase="fixCmakeDbusCalls";
 }

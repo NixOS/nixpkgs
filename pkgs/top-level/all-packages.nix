@@ -4740,16 +4740,18 @@ rec {
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
 	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell kerberos
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
-	  xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
+	  xineLib libgphoto2 djvulibre libogg lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
-	  openbabel ocaml facile stdenv poppler_data jasper fam;
+	  openbabel ocaml facile stdenv jasper fam indilib libnova
+	  libarchive;
+	flac = builtins.getAttr "1.1.2" flacAlts;
 	cdparanoia = cdparanoiaIII;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
       libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-      libxkbfile libXinerama libpthreadstubs;
+      libxkbfile libXinerama libpthreadstubs libXxf86vm xset xprop;
     inherit (gtkLibs) glib;
     qt = qt4;
 	dbus = dbus_alts.withX11;

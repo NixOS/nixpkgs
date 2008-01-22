@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     sha256 = "00np19mzmg8zs8j89g1f47h3kj5azgnv3nspb8lw880zg682yp2f";
   };
 
-  buildInputs = [kdelibs kdepimlibs libgphoto2 saneBackends
-  djvulibre exiv2 poppler chmlib];
+  propagatedBuildInputs = [kdepimlibs libgphoto2 saneBackends djvulibre exiv2
+  poppler chmlib libXxf86vm];
+  buildInputs = [cmake];
 }

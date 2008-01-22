@@ -8,7 +8,10 @@ stdenv.mkDerivation {
     sha256 = "19gmvqkal11gg67gfmdivxbhwvggm2i6ad642984d97yicms7s9k";
   };
 
-  buildInputs = [ kdeworkspace kdebase ];
-  patchPhase = "
-  sed -e 's@<Plasma@<KDE/Plasma@' -i ../applets/*/*.h";
+  buildInputs = [ kdeworkspace cmake ];
+  patchPhase = ''
+  sed -e 's@<Plasma@<KDE/Plasma@' -i ../applets/*/*.h
+  echo ${kdeworkspace}
+  fixCmakeDbusCalls ${kdeworkspace}
+  '';
 }
