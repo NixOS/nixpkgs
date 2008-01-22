@@ -26,6 +26,8 @@ let
 	addUsers = arg "addUsers" [];
 	extraInitrdKernelModules = arg "extraInitrdKernelModules" [];
 	bootKernelModules = arg "bootKernelModules" [];
+	arbitraryOverrides = arg "arbitraryOverrides" (config:{});
+	cleanStart = arg "cleanStart" false;
 
 	/* Should return list of {configuration, suffix} attrsets.
 	{configuration=configuration; suffix=""} is always prepended.
@@ -99,7 +101,7 @@ rec {
   nixpkgsRel = "nixpkgs" + (if networkNixpkgs != "" then "-" + networkNixpkgs else "");
 
 
-  configuration = {
+  configuration = let preConfiguration ={
   
     boot = {
       autoDetectRootDevice = true;
@@ -238,19 +240,20 @@ rec {
     };
  
     environment = {
-      extraPackages = pkgs: [
+      extraPackages = if cleanStart then pkgs:[] else pkgs: [
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
       ] ++ (packages pkgs);
       checkConfigurationOptions = true;
+      cleanStart = cleanStart;
     };
 
     users = {
       extraUsers = map userEntry addUsers;
     };
  
-  };
+  }; in preConfiguration // (arbitraryOverrides preConfiguration);
 
   configurations = [{
     inherit configuration;

@@ -204,7 +204,19 @@ rec {
 
 
   # The packages you want in the boot environment.
-  systemPathList = [
+  systemPathList = (if config.environment.cleanStart then 
+  [
+    # Better leave them here - they are small, needed,
+    # and hard to refer from anywhere outside.
+    modprobe 
+    nix
+    nixosInstall
+    nixosRebuild
+    nixosCheckout
+    setuidWrapper
+  ]
+  else
+  [
     modprobe # must take precedence over module_init_tools
     pkgs.bashInteractive # bash with ncurses support
     pkgs.bzip2
@@ -252,9 +264,9 @@ rec {
     nixosRebuild
     nixosCheckout
     setuidWrapper
-  ]
+  ])
   ++ pkgs.lib.optional (config.security.sudo.enable) pkgs.sudo
-  ++ pkgs.lib.optional (config.networking.defaultMailServer.directDelivery) pkgs.ssmtp
+  ++ pkgs.lib.optional (config.networking.defaultMailServer.directDelivery) pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ (config.environment.extraPackages) pkgs
   ++ pkgs.lib.optional (config.fonts.enableFontDir) fontDir;
