@@ -1075,7 +1075,7 @@ rec {
   #  m4 = gnum4;
   #};
 
-  ghc = ghc661;
+  ghc = ghc68;
 
   ghc68 = import ../development/compilers/ghc-6.8 {
     inherit fetchurl stdenv readline perl gmp ncurses;
@@ -1115,7 +1115,8 @@ rec {
   */
 
   helium = import ../development/compilers/helium {
-    inherit fetchurl stdenv ghc;
+    inherit fetchurl stdenv;
+    ghc = ghc661;
   };
 
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
@@ -1384,7 +1385,7 @@ rec {
 
 
   alex = import ../development/tools/parsing/alex {
-    inherit fetchurl stdenv ghc perl;
+    inherit cabal perl;
   };
 
   antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
@@ -1498,16 +1499,15 @@ rec {
   };
 
   haddock = import ../development/tools/documentation/haddock {
-    cabal = cabal68;
+    inherit cabal;
   };
 
-  happy = import ../development/tools/parsing/happy {
-    inherit fetchurl stdenv perl ghc;
-  };
+  # happy = import ../development/tools/parsing/happy {
+  #   inherit fetchurl stdenv perl ghc;
+  # };
 
-  happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
-    inherit perl;
-    cabal = cabal68;  # because happy-1.17 depends on cabal-1.2
+  happy = import ../development/tools/parsing/happy/happy-1.17.nix {
+    inherit cabal perl;
   };
 
   help2man = import ../development/tools/misc/help2man {
@@ -2641,7 +2641,7 @@ rec {
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
   binary = import ../development/libraries/haskell/binary {
-    cabal = cabal68;
+    inherit cabal; 
   };
 
   # cabal is a utility function to build cabal-based
@@ -2650,9 +2650,10 @@ rec {
     inherit stdenv fetchurl;
     ghc = ghc68;
   };
+  cabal = cabal68;
 
   Crypto = import ../development/libraries/haskell/Crypto {
-    cabal = cabal68;
+    inherit cabal;
   };
 
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
@@ -2662,13 +2663,12 @@ rec {
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {
-    inherit pcre;
-    cabal = cabal68;
+    inherit cabal pcre;
   };
 
-  uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
-    inherit stdenv fetchurl ghc;
-  };
+  # uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
+  #   inherit stdenv fetchurl ghc;
+  # };
 
   uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 { # !!! ugh
     inherit stdenv fetchurl autoconf;
@@ -2676,7 +2676,8 @@ rec {
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip ghc wxGTK;
+    inherit stdenv fetchurl unzip wxGTK;
+    ghc = ghc661;
   };
 
   # wxHaskell68 = lowPrio (appendToName "ghc68" (import ../development/libraries/haskell/wxHaskell {
@@ -2685,18 +2686,17 @@ rec {
   # }));
 
   X11 = import ../development/libraries/haskell/X11 {
+    inherit cabal;
     inherit (xlibs) libX11 libXinerama libXext;
     xineramaSupport = true;
-    cabal = cabal68;
   };
 
   vty = import ../development/libraries/haskell/vty {
-    cabal = cabal68;
+    inherit cabal;
   };
 
   zlibHaskell = import ../development/libraries/haskell/zlib {
-    inherit zlib;
-    cabal = cabal68;
+    inherit cabal zlib;
   };
 
   ### DEVELOPMENT / PERL MODULES
@@ -4014,7 +4014,8 @@ rec {
   };
   
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv ghc zlib ncurses curl;
+    inherit fetchurl stdenv zlib ncurses curl;
+    ghc = ghc661;
   };
 
   dia = import ../applications/graphics/dia {
@@ -4785,9 +4786,8 @@ rec {
   };
 
   xmonad = import ../applications/window-managers/xmonad {
-    inherit stdenv fetchurl X11;
+    inherit stdenv fetchurl ghc X11;
     inherit (xlibs) xmessage;
-    ghc=ghc68;
   };
 
   xpdf = import ../applications/misc/xpdf {
