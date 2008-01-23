@@ -1265,6 +1265,11 @@ rec {
     inherit (xlibs) libX11 libXau libXt;
   };
 
+  erlang = import ../development/interpreters/erlang {
+    stdenv = overrideGCC stdenv gcc41NPTL; 
+    inherit fetchurl perl gnum4 ncurses openssl;
+  };
+
   guile = import ../development/interpreters/guile {
     inherit fetchurl stdenv ncurses readline libtool gmp;
   };
@@ -2995,6 +3000,10 @@ rec {
 
   dovecot = import ../servers/mail/dovecot {
     inherit fetchurl stdenv ;
+  };
+
+  ejabberd = import ../servers/xmpp/ejabberd {
+    inherit fetchurl stdenv expat erlang zlib openssl;
   };
 
   ircdHybrid = import ../servers/irc/ircd-hybrid {
