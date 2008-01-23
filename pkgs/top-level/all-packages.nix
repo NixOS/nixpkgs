@@ -3028,6 +3028,10 @@ rec {
     inherit fetchurl stdenv apacheHttpd python;
   };
 
+  tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
+    inherit fetchurl stdenv apacheHttpd jdk;
+  };
+
   mysql = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
