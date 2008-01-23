@@ -1,7 +1,4 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre
-, pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
-, freetype, bzip2, cups
-}:
+args: with args;
 
 let version = "3.5.7"; in
 
