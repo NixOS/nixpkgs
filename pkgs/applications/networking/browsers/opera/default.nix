@@ -20,8 +20,13 @@ stdenv.mkDerivation rec {
         sha256 = "0vv1q86is9x6vw8fx92wrnvlyn4x29zgk9zjn66rcx37n6grqqah";
       } else if (stdenv.system == "x86_64-linux") then
       fetchurl {
-        url = ftp://ftp.task.gda.pl/pub/opera/linux/950b/final/en/x86_64/opera-9.50-20071024.2-shared-qt.x86_64-1643.tar.bz2;
-        sha256 = "1gv1r18ar3vz1l24nf8qixjlba1yb5d3xvg3by41i4dy0vlznqn6";
+        url = http://snapshot.opera.com/unix/snapshot-1754/x86_64-linux/opera-9.50-20080110.2-shared-qt.x86_64-1754.tar.bz2;
+        sha256 = "08y1ajjncdvbhvcq2izmpgc4fi37bwn43zsw7rz41jf8qhvb5ywv";
+        #url = ftp://ftp.task.gda.pl/pub/opera/linux/950b/final/en/x86_64/opera-9.50-20071024.2-shared-qt.x86_64-1643.tar.bz2;
+        #sha256 = "1gv1r18ar3vz1l24nf8qixjlba1yb5d3xvg3by41i4dy0vlznqn6";
+        #name = opera-9.25-20071214.6-shared-qt.i386-en.tar.gz;
+        #url = http://www.opera.com/download/get.pl?id=30462&location=225&nothanks=yes&sub=marine;
+        #sha256 = "1wnc1s4r5gz73mxs8pgsi9a1msz7x8a8pb1ykb1xgdfn21h69p2p";
       } else throw "unsupported platform ${stdenv.system} (only i686-linux and x86_64 linux supported yet)";
 
   # operapluginwrapper seems to require libXt ?

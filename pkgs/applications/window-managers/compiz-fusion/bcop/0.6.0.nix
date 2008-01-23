@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/0.6.0/compiz-bcop-0.6.0.tar.bz2;
@@ -9,6 +9,7 @@ args : with args;
 		propagatedBuildInputs = [getopt libxslt];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 	fixPkgconfig = FullDepEntry ("
 		ensureDir \$out/lib
@@ -21,7 +22,7 @@ in
 stdenv.mkDerivation rec {
 	name = "compiz-bcop-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doAutotools doConfigure doMakeInstall fixPkgconfig fixInterpreter doForceShare 
+		(textClosure localDefs [doAutotools doConfigure doMakeInstall fixPkgconfig fixInterpreter doForceShare 
 			doPropagate]);
 	inherit propagatedBuildInputs;
 	meta = {

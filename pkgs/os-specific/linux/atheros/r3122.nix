@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://snapshots.madwifi.org/madwifi-ng/madwifi-ng-r3122-20080109.tar.gz;
@@ -10,10 +10,11 @@ args : with args;
 		configureFlags = [];
 		makeFlags = [''KERNELPATH=${kernel}/lib/modules/*/build'' ''DESTDIR=$out''];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "atheros-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		Atheros WiFi driver.

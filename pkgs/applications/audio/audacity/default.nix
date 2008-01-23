@@ -1,5 +1,5 @@
 args: with args;
-	with (builderDefs { 
+	let localDefs = builderDefs { 
 	  src = 
 		fetchurl {
 			url = mirror://sourceforge/audacity/audacity-src-1.3.3.tar.gz;
@@ -8,7 +8,8 @@ args: with args;
 
   	buildInputs =[(wxGTK null) libogg libvorbis libsndfile libmad pkgconfig gtk 
 		gettext glib];
-	} null);
+	} null;
+	in with localDefs;
 let 
 	postInstall = FullDepEntry ("
 		old_rpath=$(patchelf --print-rpath \$out/bin/audacity);
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
   name = "audacity-1.3.3";
 
   builder = writeScript "audacity-1.3.3-builder"
-		(textClosure [addInputs (doDump "0") (noDepEntry "echo \$PATH; ar --version") doConfigure preBuild doMakeInstall postInstall doForceShare]);
+		(textClosure localDefs [addInputs (doDump "0") (noDepEntry "echo \$PATH; ar --version") doConfigure preBuild doMakeInstall postInstall doForceShare]);
 
   meta = {
     description = "

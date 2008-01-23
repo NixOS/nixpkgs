@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = 
 	fetchurl {
 		url = ftp://ccrma-ftp.stanford.edu/pub/Lisp/snd-9.4.tar.gz;
@@ -20,6 +20,7 @@ args : with args;
 			++ (lib.optional (args ? sndlib) "--with-midi" )
 			;
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 	let preBuild = FullDepEntry ("
 		cp config.log /tmp/snd-config.log
 	") [minInit doUnpack];
@@ -27,7 +28,7 @@ in
 stdenv.mkDerivation rec {
 	name = "Snd-9.4";
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure preBuild doMakeInstall doForceShare]);
+		(textClosure localDefs [doConfigure preBuild doMakeInstall doForceShare]);
 	meta = {
 		description = "
 		Snd sound editor.

@@ -42,4 +42,10 @@ rec {
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
   ];
+
+  # Gentoo files.
+  gentoo = [
+    http://www.ibiblio.org/pub/Linux/distributions/gentoo/
+    http://distfiles.gentoo.org/
+  ];
 }

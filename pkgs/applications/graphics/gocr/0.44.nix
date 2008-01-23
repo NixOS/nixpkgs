@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 fetchurl {
 		url = http://prdownloads.sourceforge.net/jocr/gocr-0.44.tar.gz;
@@ -9,10 +9,11 @@ fetchurl {
 		buildInputs = [];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "gocr";
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		GPL Optical Character Recognition

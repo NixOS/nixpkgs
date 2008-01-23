@@ -124,7 +124,8 @@ rec {
   lib = library;
 
   library = import ../lib;
-  lib_unstable = import ../lib/default-unstable.nix;
+   # TODO remove
+   # lib_unstable = import ../lib/default-unstable.nix;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
@@ -199,7 +200,7 @@ rec {
     args: with args.lib; with args;
     if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
-    let co = lib_unstable.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
+    let co = lib.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
         inherit (co) configureFlags buildInputs /*flags*/;
@@ -212,7 +213,7 @@ rec {
 			(import ../build-support/checker) 
 			opts config); in
 			(if (result=="") then x else
-			abort result)
+			abort ("Unknown option specified: " + result))
 		else x);
 
 	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
@@ -280,7 +281,12 @@ rec {
       inherit stdenv curl;
     });
 
-  makeWrapper = ../build-support/make-wrapper/make-wrapper.sh;
+  makeSetupHook = script: runCommand "hook" {} ''
+    ensureDir $out/nix-support
+    cp ${script} $out/nix-support/setup-hook
+  '';
+
+  makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
@@ -608,6 +614,12 @@ rec {
      inherit fetchurl stdenv;
   };
 
+  mc = import ../tools/misc/mc {
+     inherit fetchurl stdenv pkgconfig ncurses;
+     inherit (gtkLibs) glib;
+     inherit (xlibs) libX11;
+  };
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
@@ -806,7 +818,7 @@ rec {
   };
 
   which = import ../tools/system/which {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv readline;
   };
 
   wv = import ../tools/misc/wv {
@@ -991,8 +1003,12 @@ rec {
     profiledCompiler = true;
   });
 
+  /* doesn't work yet
+
   # This new ghc stuff is under heavy development and might change ! 
 
+  # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
+  # depreceated -> use functions defined in builderDefs
   ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
@@ -1000,9 +1016,8 @@ rec {
   ghcsAndLibs = 
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
-      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline stdenv;
+      inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline stdenv lib;
       inherit ghcPkgUtil;
-      lib = lib_unstable;
     });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
@@ -1011,6 +1026,22 @@ rec {
     inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil stdenv;
   };
 
+  # this will change in the future 
+  ghc68_extra_libs =
+    ghc : let
+    deriv = name : goSrcDir : deps : 
+      let bd = builderDefs {
+          goSrcDir = "ghc-* /libraries";
+          src = ghc.extra_src;
+        } null; in
+      stdenv.mkDerivation rec {
+        inherit name;
+	builder = bd.writeScript (name + "-builder")
+		(bd.textClosure [builderDefs.haskellBuilderDefs]);
+      };
+    # using nvs to be able to use mtl-1.1.0.0 as name 
+  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
+
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
@@ -1018,27 +1049,31 @@ rec {
     let ghc = ghcsAndLibs.ghc68.ghc; in
     createGhcWrapper rec {
       ghcPackagedLibs = true;
-      name = "ghc68_wrapper";
-      suffix = "68wrapper";
-      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) 
-        [ "old-locale-1.0" "old-time-1.0" "filepath-1.0" "directory-1.0" "array-0.1" "containers-0.1" 
-          "hpc-0.5" "bytestring-0.9" "pretty-1.0" "packedstring-0.1" "template-haskell-0.1" 
-          "unix-2.0" "process-1.0" "readline-1.0" "Cabal-1.2.0" "random-1.0" "haskell98-1.0" "ghc-6.8.0.20071004"
-          "array-0.1" "bytestring-0.9" "containers-0.1" "directory-1.0" "filepath-1.0"
-          "ghc-6.8.0.20071004" "haskell98-1.0" "hpc-0.5" "old-locale-1.0" "old-time-1.0" 
-          "packedstring-0.1" "pretty-1.0" "process-1.0" "random-1.0"
-          "readline-1.0" "rts-1.0" "template-haskell-0.1" "unix-2.0"
-        ];
+      name = "ghc${ghc.version}_wrapper";
+      suffix = "${ghc.version}wrapper";
+      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
+            "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" 
+            "hpc-0.5.0.0" "bytestring-0.9.0.1" "pretty-1.0.0.0" "packedstring-0.1.0.0" "template-haskell-2.2.0.0" 
+            "unix-2.3.0.0" "process-1.0.0.0" "readline-1.0.1.0" "Cabal-1.2.3.0" "random-1.0.0.0" "haskell98-1.0.1.0" "ghc-${ghc.version}"
+            "array-0.1.0.0" "bytestring-0.9.0.1" "containers-0.1.0.1" "directory-1.0.0.0" "filepath-1.1.0.0"
+            "ghc-${ghc.version}" "haskell98-1.0.1.0" "hpc-0.5.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" 
+            "packedstring-0.1.0.0" "pretty-1.0.0.0" "process-1.0.0.0" "random-1.0.0.0"
+            "readline-1.0.1.0" "rts-1.0" "unix-2.3.0.0" "base-3.0.1.0"
+          ] ++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [
+            "mtl-1.1.0.0"
+          ];
         # (flatten ghcsAndLibs.ghc68.core_libs);
       inherit ghc;
   };
+
+  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
   #  m4 = gnum4;
   #};
 
-  ghc = ghc661;
+  ghc = ghc68;
 
   ghc68 = import ../development/compilers/ghc-6.8 {
     inherit fetchurl stdenv readline perl gmp ncurses;
@@ -1078,7 +1113,8 @@ rec {
   */
 
   helium = import ../development/compilers/helium {
-    inherit fetchurl stdenv ghc;
+    inherit fetchurl stdenv;
+    ghc = ghc661;
   };
 
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
@@ -1091,6 +1127,12 @@ rec {
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
       inherit fetchurl stdenv;
+    };
+
+  jdk5 =
+    assert system == "i686-linux";
+    import ../development/compilers/jdk/default-5.nix {
+      inherit fetchurl stdenv unzip;
     };
 
   jdk       = jdkdistro true  false;
@@ -1221,6 +1263,10 @@ rec {
     inherit (xlibs) libX11 libXau libXt;
   };
 
+  erlang = import ../development/interpreters/erlang {
+    inherit fetchurl perl gnum4 ncurses openssl stdenv;
+  };
+
   guile = import ../development/interpreters/guile {
     inherit fetchurl stdenv ncurses readline libtool gmp;
   };
@@ -1256,8 +1302,7 @@ rec {
   # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
   # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
   php = (import ../development/interpreters/php_configurable) {
-   inherit mkDerivationByConfiguration stdenv mysql;
-   lib = lib_unstable;
+   inherit mkDerivationByConfiguration stdenv mysql lib;
    inherit fetchurl flex bison apacheHttpd; # gettext;
    inherit libxml2;
    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
@@ -1341,6 +1386,10 @@ rec {
 
   ### DEVELOPMENT / TOOLS
 
+
+  alex = import ../development/tools/parsing/alex {
+    inherit cabal perl;
+  };
 
   antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
     inherit fetchurl stdenv jre;
@@ -1452,8 +1501,16 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  happy = import ../development/tools/parsing/happy {
-    inherit fetchurl stdenv perl ghc;
+  haddock = import ../development/tools/documentation/haddock {
+    inherit cabal;
+  };
+
+  # happy = import ../development/tools/parsing/happy {
+  #   inherit fetchurl stdenv perl ghc;
+  # };
+
+  happy = import ../development/tools/parsing/happy/happy-1.17.nix {
+    inherit cabal perl;
   };
 
   help2man = import ../development/tools/misc/help2man {
@@ -1564,9 +1621,7 @@ rec {
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
-    inherit fetchurl stdenv;
-    ghc = ghc66;
-    uulib = uulib66;
+    inherit cabal uulib;
   };
 
   gdb = import ../development/tools/misc/gdb {
@@ -1784,10 +1839,9 @@ rec {
 
 
   fltk20 = (import ../development/libraries/fltk) {
-    inherit mkDerivationByConfiguration x11;
+    inherit mkDerivationByConfiguration x11 lib;
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
-    lib = lib_unstable;
   };
 
   cfitsio = import ../development/libraries/cfitsio {
@@ -1822,8 +1876,7 @@ rec {
   };
 
   geos = import ../development/libraries/geos {
-    lib = lib_unstable;
-    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which;
+    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
     use_svn = stdenv.system == "x86_64-linux";
     python = python;
     # optional features:  
@@ -1846,6 +1899,11 @@ rec {
       url = http://download.osgeo.org/gdal/gdal-1.4.2.tar.gz;
       sha256 = "1vl8ym9y7scm0yd4vghjfqims69b9h1gn9l4zvy2jyglh35p8vpf";
     };
+  };
+
+  glew = import ../development/libraries/glew {
+    inherit fetchurl stdenv mesa x11 libtool;
+    inherit (xlibs) libXmu libXi;
   };
 
   glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
@@ -2078,8 +2136,7 @@ rec {
   } null;
 
   libdv = import ../development/libraries/libdv {
-    lib = lib_unstable;
-    inherit fetchurl stdenv mkDerivationByConfiguration;
+    inherit fetchurl stdenv lib mkDerivationByConfiguration;
   };
 
   libdrm = import ../development/libraries/libdrm {
@@ -2661,25 +2718,59 @@ rec {
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
+  binary = import ../development/libraries/haskell/binary {
+    inherit cabal; 
+  };
+
+  # cabal is a utility function to build cabal-based
+  # Haskell packages
+  cabal68 = import ../development/libraries/haskell/cabal/cabal.nix {
+    inherit stdenv fetchurl;
+    ghc = ghc68;
+  };
+  cabal = cabal68;
+
+  Crypto = import ../development/libraries/haskell/Crypto {
+    inherit cabal;
+  };
+
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit pkgconfig stdenv fetchurl cairo;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
     ghc = ghc661;
   };
 
-  uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
-    inherit stdenv fetchurl ghc;
+  pcreLight = import ../development/libraries/haskell/pcre-light {
+    inherit cabal pcre;
   };
 
-  uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 { # !!! ugh
-    inherit stdenv fetchurl autoconf;
-    ghc = ghc66;
+  uulib = import ../development/libraries/haskell/uulib {
+    inherit cabal;
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip ghc wxGTK;
+    inherit stdenv fetchurl unzip wxGTK;
+    ghc = ghc661;
   };
 
+  # wxHaskell68 = lowPrio (appendToName "ghc68" (import ../development/libraries/haskell/wxHaskell {
+  #   inherit stdenv fetchurl unzip wxGTK;
+  #   ghc = ghc68;
+  # }));
+
+  X11 = import ../development/libraries/haskell/X11 {
+    inherit cabal;
+    inherit (xlibs) libX11 libXinerama libXext;
+    xineramaSupport = true;
+  };
+
+  vty = import ../development/libraries/haskell/vty {
+    inherit cabal;
+  };
+
+  zlibHaskell = import ../development/libraries/haskell/zlib {
+    inherit cabal zlib;
+  };
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -2980,9 +3071,17 @@ rec {
     inherit fetchurl stdenv ;
   };
 
+  ejabberd = import ../servers/xmpp/ejabberd {
+    inherit fetchurl stdenv expat erlang zlib openssl;
+  };
+
   ircdHybrid = import ../servers/irc/ircd-hybrid {
 		inherit fetchurl stdenv openssl zlib;
 	};
+
+  jboss = import ../servers/http/jboss {
+    inherit fetchurl stdenv jdk5 jdk;
+  };
 
   jetty = import ../servers/http/jetty {
     inherit fetchurl stdenv unzip;
@@ -2990,6 +3089,10 @@ rec {
 
   mod_python = import ../servers/http/apache-modules/mod_python {
     inherit fetchurl stdenv apacheHttpd python;
+  };
+
+  tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
+    inherit fetchurl stdenv apacheHttpd jdk;
   };
 
   mysql4 = import ../servers/sql/mysql {
@@ -3029,8 +3132,7 @@ rec {
   };
 
   squid = import ../servers/squid {
-    inherit fetchurl stdenv mkDerivationByConfiguration perl;
-    lib = lib_unstable;
+    inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
   };
 
   tomcat5 = import ../servers/http/tomcat {
@@ -3670,6 +3772,10 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
+  bazaar = import ../applications/version-management/bazaar {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
   # commented out because it's using the new configuration style proposal which is unstable
   #biew = import ../applications/misc/biew {
   #  inherit lib stdenv fetchurl ncurses;
@@ -3682,10 +3788,9 @@ rec {
     openal = openalSoft;
   };
   blender = import ../applications/misc/blender {
-    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11
+    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib stdenv /* smpeg  sdl */;
     inherit (xlibs) inputproto libXi;
-    lib = lib_unstable;
     python = builtins.getAttr "2.5" python_alts;
     freealut = freealut_soft;
     openal = openalSoft;
@@ -3704,6 +3809,10 @@ rec {
 
   bmp_plugin_wma = import ../applications/audio/bmp-plugins/wma {
     inherit fetchurl stdenv pkgconfig bmp;
+  };
+
+  bvi = import ../applications/editors/bvi {
+    inherit fetchurl stdenv ncurses;
   };
 
   cdparanoiaIII = import ../applications/audio/cdparanoia {
@@ -3800,7 +3909,7 @@ rec {
   };
 
   cvs2svn = import ../applications/version-management/cvs2svn {
-    inherit fetchurl stdenv python bsddb3 makeWrapper;
+    inherit fetchurl stdenv python makeWrapper;
   };
 
   d4x = import ../applications/misc/d4x {
@@ -3809,7 +3918,8 @@ rec {
   };
   
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv ghc zlib ncurses curl;
+    inherit fetchurl stdenv zlib ncurses curl;
+    ghc = ghc661;
   };
 
   dia = import ../applications/graphics/dia {
@@ -4479,11 +4589,10 @@ rec {
   };
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration;
+    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration lib;
     inherit (xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu;
     inherit (gtkLibs) glib gtk;
-    lib = lib_unstable;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python 
@@ -4582,6 +4691,11 @@ rec {
     stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
   };
 
+  xmonad = import ../applications/window-managers/xmonad {
+    inherit stdenv fetchurl ghc X11;
+    inherit (xlibs) xmessage;
+  };
+
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
@@ -4633,11 +4747,10 @@ rec {
   # doesn't compile yet - in case someone else want's to continue .. 
   /*
   qgis_svn = import ../applications/misc/qgis_svn {
-    lib = lib_unstable;
-    inherit mkDerivationByConfiguration fetchsvn flex
+    inherit mkDerivationByConfiguration fetchsvn flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
             gsl libpng zlib stdenv
-            sqlite glibc fontconfig freetype;
+            sqlite glibc fontconfig freetype / * use libc from stdenv ? - to lazy now - Marc * /;
     inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
     inherit (xorg) libICE;
     qt = qt4;
@@ -4721,6 +4834,17 @@ rec {
   scummvm = import ../games/scummvm {
     inherit fetchurl stdenv SDL zlib mpeg2dec;
   };
+
+  # You still can override by passing more arguments.
+  spaceOrbitFun = lib.sumArgs (selectVersion ../games/orbit ) {
+    inherit fetchurl stdenv builderDefs 
+      mesa freeglut;
+    inherit (gnome) esound;
+    inherit (xlibs) libXt libX11 libXmu libXi libXext;
+    version = "1.01";
+  };
+
+  spaceOrbit = spaceOrbitFun null;
 
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL; 

@@ -1,9 +1,10 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src =""; /* put a fetchurl here */
 		buildInputs = [mkfontdir mkfontscale];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let
 	doInstall = FullDepEntry ("
 		ensureDir \$out/share/fonts/
@@ -18,10 +19,10 @@ in
 stdenv.mkDerivation rec {
 	name = "wrapped-font-dir";
 	builder = writeScript (name + "-builder")
-		(textClosure [ doInstall doForceShare doPropagate]);
+		(textClosure localDefs [ doInstall doForceShare doPropagate]);
 	meta = {
 		description = "
-		Just a wrapper to create fots.dir and fonts.scale .
+		Just a wrapper to create fonts.dir and fonts.scale .
 ";
 	};
 }

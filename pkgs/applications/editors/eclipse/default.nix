@@ -6,7 +6,8 @@ let {
       name = "eclipse-sdk-3.3.3.1";
       builder = ./builder.sh;
       src = bindist;
-      inherit makeWrapper jdk plugins;
+      buildInputs = [makeWrapper];
+      inherit jdk plugins;
       libraries = [gtk glib libXtst];
    };
 

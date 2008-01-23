@@ -11,22 +11,24 @@ stdenv.mkDerivation {
     url = ftp://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
     md5 = "cd3f3eb54446be6003156158d51f4884";
   };
-  
-  patches = [
-    # Patch to add primitive splash screen support (not the fancy SUSE gfxmenu stuff).
-    # With this you can set splashimage=foo.xpm.gz in menu.lst to get
-    # a 640x480, 14-colour background.
-    (fetchurl {
-      url = "http://cvs.archlinux.org/cgi-bin/viewcvs.cgi/*checkout*/system/grub-gfx/grub-0.97-graphics.patch?rev=HEAD&cvsroot=AUR&only_with_tag=CURRENT&content-type=text/plain";
-      sha256 = "0m6min9cbj71kvp0kxkxdq8dx2dwm3dj0rd5sjz5xdl13ihaj5hy";
-    })
-  ];
+
+  # Lots of patches from Gentoo, in particular splash screen support
+  # (not the fancy SUSE gfxmenu stuff though).  Also a fix for boot
+  # failures on systems with more than 2 GiB RAM.
+  gentooPatches = fetchurl {
+    url = mirror://gentoo/distfiles/grub-0.97-patches-1.4.tar.bz2;
+    sha256 = "1nki5q1b61ahxcmnw6mq7b8ghcysri4lj7q6dx8iqixrvrpxj399";
+  };
 
   # Autoconf/automake required for the splashimage patch.
   buildInputs = [autoconf automake];
 
   preConfigure = ''
+    unpackFile $gentooPatches
+    for i in patch/*.patch; do
+      echo "applying patch $i"
+      patch -p1 < $i || patch -p0 < $i
+    done
     autoreconf
   '';
-  
 }

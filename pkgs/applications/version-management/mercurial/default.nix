@@ -7,20 +7,17 @@ stdenv.mkDerivation {
     sha256 = "1n34yl4z7nc3vmsgpkmqc94hsmy846ny86xgpgv3m371ljm2pq6g";
   };
 
-  inherit makeWrapper;
-
-  buildInputs = [ python ];
-  addInputsHook = "source $makeWrapper";
+  buildInputs = [ python makeWrapper ];
   makeFlags = "PREFIX=$(out)";
-  postInstall = [
-    "for i in $(cd $out/bin && ls); do"
-    "   mv $out/bin/$i $out/bin/.orig-$i;"
-    "   makeWrapper $out/bin/.orig-$i $out/bin/$i"
-    "       --set PYTHONPATH \"$(toPythonPath $out):$PYTHONPATH:\$PYTHONPATH\";"
-    "done"
-  ];
+  postInstall = ''
+    for i in $(cd $out/bin && ls); do
+      wrapProgram $out/bin/$i \
+        --prefix PYTHONPATH : "$(toPythonPath $out)"
+    done
+  '';
 
   meta = {
-    description = "a fast, lightweight SCM system for very large distributed projects";
+    description = "A fast, lightweight SCM system for very large distributed projects";
+    homepage = http://www.selenic.com/mercurial/;
   };
 }

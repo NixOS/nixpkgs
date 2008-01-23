@@ -1,10 +1,11 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		addSbinPath = true;
 		src = "";
 		buildInputs = [module_init_tools];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 
 doCollect = FullDepEntry (''
@@ -17,7 +18,7 @@ done
 rm -rf nix-support
 cd lib/modules/
 rm */modules.*
-MODULE_DIR=$PWD/ depmod -a 
+MODULE_DIR=$PWD/ depmod -a *
 cd $out/
 '') [minInit addInputs defEnsureDir];
 in
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 	name = "kernel-modules";
 	inherit moduleSources;
 	builder = writeScript (name + "-builder")
-		(textClosure [doCollect doForceShare doPropagate]);
+		(textClosure localDefs [doCollect doForceShare doPropagate]);
 	meta = {
 		description = "
 		A directory to hold all  the modules, including those 

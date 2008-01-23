@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/0.6.0/compiz-fusion-plugins-main-0.6.0.tar.bz2;
@@ -9,6 +9,7 @@ args : with args;
 		[bcop libjpeg gettext];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let
 	sharePlugins = FullDepEntry ("
 		ensureDir \$out/share/compiz-plugins
@@ -18,7 +19,7 @@ in
 stdenv.mkDerivation rec {
 	name = "compiz-fusion-plugins-main-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall sharePlugins doForceShare]);
+		(textClosure localDefs [doConfigure doMakeInstall sharePlugins doForceShare]);
 	meta = {
 		description = "
 	Main Compiz Fusion plugins.

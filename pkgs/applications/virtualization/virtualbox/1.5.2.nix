@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.virtualbox.org/download/1.5.2/VirtualBox-1.5.2_OSE.tar.bz2;
@@ -9,10 +9,11 @@ args : with args;
 		      wine jre libxslt libIDL SDL qt3 openssl zlib];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "VirtualBox-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		Virtual Box is just software for running virtual machines. 

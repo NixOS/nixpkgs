@@ -5,7 +5,6 @@ let {
   i686LinuxPkgs = {inherit (allPackages {system = "i686-linux";})
     aterm
     nixUnstable
-    pan
     subversion
     ;
   };
@@ -14,7 +13,6 @@ let {
     aterm
     gcc
     nixUnstable
-    pan
     subversion
     ;    
   };

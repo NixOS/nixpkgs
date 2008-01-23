@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://garr.dl.sourceforge.net/sourceforge/fbpanel/fbpanel-4.12.tgz;
@@ -10,10 +10,11 @@ args : with args;
 		  libpng libjpeg libtiff librsvg];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "fbpanel";
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	Just a desktop panel.	

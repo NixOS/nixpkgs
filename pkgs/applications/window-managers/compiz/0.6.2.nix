@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/compiz/0.6.2/compiz-0.6.2.tar.bz2;
@@ -22,6 +22,7 @@ args : with args;
 			(if args ? extraConfigureFlags then args.extraConfigureFlags else []);
 		patches = [ ./glx-patch-0.6.2.patch ];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let
 	postAll = FullDepEntry ("
     for i in $out/bin/*; do
@@ -36,7 +37,7 @@ stdenv.mkDerivation
 rec {
 	name = "compiz-0.6.2";
 	builder = writeScript (name + "-builder")
-		(textClosure [doPatch doConfigure doMakeInstall doPropagate 
+		(textClosure localDefs [doPatch doConfigure doMakeInstall doPropagate 
 			doForceShare postAll]);
 	inherit propagatedBuildInputs;
 	meta = {

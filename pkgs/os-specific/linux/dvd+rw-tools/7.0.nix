@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://fy.chalmers.se/~appro/linux/DVD+RW/tools/dvd+rw-tools-7.0.tar.gz;
@@ -10,6 +10,7 @@ args : with args;
 		configureFlags = [];
 		makeFlags = [" prefix=\$out "];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let 
 	preBuild = FullDepEntry ("
 		sed -e 's@/usr/local@'\$out'@g' -i Makefile.m4 Makefile
@@ -18,7 +19,7 @@ in
 stdenv.mkDerivation rec {
 	name = "dvd+rw-tools-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [preBuild doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [preBuild doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	DVD+RW tools.

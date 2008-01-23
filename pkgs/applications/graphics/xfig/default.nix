@@ -11,9 +11,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  buildInputs = [imake x11 libXpm libXmu libXi libXp Xaw3d libpng libjpeg];
-
-  inherit makeWrapper;
+  buildInputs = [imake x11 libXpm libXmu libXi libXp Xaw3d libpng libjpeg makeWrapper];
 
   NIX_CFLAGS_COMPILE = "-I${libXpm}/include/X11";
 

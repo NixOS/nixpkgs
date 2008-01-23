@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://dfn.dl.sourceforge.net/sourceforge/gdmap/gdmap-0.7.5.tar.gz;
@@ -9,10 +9,11 @@ args : with args;
 		buildInputs = [gtk pkgconfig libxml2 intltool];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "gdmap"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	Recursive rectangle map of disk usage.	

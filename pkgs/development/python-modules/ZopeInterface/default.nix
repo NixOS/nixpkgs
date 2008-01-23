@@ -1,10 +1,10 @@
 {stdenv, fetchurl, python}:
 
 stdenv.mkDerivation {
-  name = "ZopeInterface-3.1.0c1";
+  name = "ZopeInterface-3.3.0";
   src = fetchurl {
-    url = http://www.zope.org/Products/ZopeInterface/3.1.0c1/ZopeInterface-3.1.0c1.tgz;
-    md5 = "f34cb95f2fbdbe3f1850c95cefddbd2c";
+    url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
+    sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
   };
   buildInputs = [python];
   buildPhase = "true";

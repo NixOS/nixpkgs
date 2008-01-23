@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/0.6.0/ccsm-0.6.0.tar.bz2;
@@ -15,10 +15,11 @@ args : with args;
 			"PYTHONPATH" "$(toPythonPath ${pygtk})/gtk-2.0"
 		];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "compizconfig-settings-"+args.version;
 	builder = writeScript (name + "-builder")
-		(textClosure [installPythonPackage (doWrap "\$out/bin/ccsm")]);
+		(textClosure localDefs [installPythonPackage (doWrap "\$out/bin/ccsm")]);
 	meta = {
 		description = "
 	Compiz Settings Manager

@@ -1,5 +1,5 @@
 args : with args;
-	with builderDefs {
+	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/0.6.0/compiz-manager-0.6.0.tar.bz2;
@@ -20,6 +20,7 @@ args : with args;
 			"XORG_DRIVER_PATH" "/nix/store/.*"
 		]];
 	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
 let
 	install = FullDepEntry ("
 		sed -e '/Checking for texture_from_pixmap:/areturn 0' -i compiz-manager
@@ -34,7 +35,7 @@ in
 stdenv.mkDerivation rec {
 	name = "compiz-manager-"+args.version;
 	builder = writeScript (name + "-builder")
-		(textClosure [doUnpack doReplaceScripts install doPropagate doForceShare]);
+		(textClosure localDefs [doUnpack doReplaceScripts install doPropagate doForceShare]);
 	meta = {
 		description = "
 	Compiz Launch Manager
