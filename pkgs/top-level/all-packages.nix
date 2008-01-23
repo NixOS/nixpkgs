@@ -1618,9 +1618,7 @@ rec {
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
-    inherit fetchurl stdenv;
-    ghc = ghc66;
-    uulib = uulib66;
+    inherit cabal uulib;
   };
 
   gdb = import ../development/tools/misc/gdb {
@@ -2666,13 +2664,8 @@ rec {
     inherit cabal pcre;
   };
 
-  # uulib64 = import ../development/libraries/haskell/uulib { # !!! remove?
-  #   inherit stdenv fetchurl ghc;
-  # };
-
-  uulib66 = import ../development/libraries/haskell/uulib-ghc-6.6 { # !!! ugh
-    inherit stdenv fetchurl autoconf;
-    ghc = ghc66;
+  uulib = import ../development/libraries/haskell/uulib {
+    inherit cabal;
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {

@@ -1,14 +1,12 @@
-{stdenv, fetchurl, ghc, uulib}:
+{cabal, uulib}:
 
-stdenv.mkDerivation
-{
-  name = "uuagc-0.9.2";
-
-  src = fetchurl { url = http://www.cs.uu.nl/~ariem/uuagc-0.9.2-src.tar.gz;
-                   md5 = "cbac92287c9c0a858ccbfa37615d9f5f";
-                 };
-
-  buildInputs = [ghc uulib];
-
-  meta = { description = "The UUAG Compiler"; };
-}
+cabal.mkDerivation (self : {
+  pname = "uuagc";
+  version = "0.9.5";
+  name = self.fname;
+  sha256 = "c5be435efa609f72c09e175dd5cf7835a060bd7eaf6634ec4cde72ea84b99f25";
+  extraBuildInputs = [uulib];
+  meta = {
+    description = "Attribute Grammar System of Universiteit Utrecht";
+  };
+})
