@@ -222,7 +222,7 @@ rec {
 		else x);
 
 	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
-		inherit stringsWithDeps lib stdenv writeScript;
+		inherit stringsWithDeps lib stdenv writeScript fetchurl;
 	};
 
 	stringsWithDeps = import ../lib/strings-with-deps.nix {
@@ -724,6 +724,13 @@ rec {
     python=python;
   };
   */
+
+  rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap) {
+  	version = "0.28";
+	inherit builderDefs readline;
+  };
+
+  rlwrap = rlwrapFun null;
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
