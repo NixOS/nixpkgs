@@ -1137,6 +1137,12 @@ rec {
       inherit fetchurl stdenv;
     };
 
+  jdk5 =
+    assert system == "i686-linux";
+    import ../development/compilers/jdk/default-5.nix {
+      inherit fetchurl stdenv unzip;
+    };
+
   jdk       = jdkdistro true  false;
   jre       = jdkdistro false false;
 
@@ -3009,6 +3015,10 @@ rec {
   ircdHybrid = import ../servers/irc/ircd-hybrid {
 		inherit fetchurl stdenv openssl zlib;
 	};
+
+  jboss = import ../servers/http/jboss {
+    inherit fetchurl stdenv jdk5 jdk;
+  };
 
   jetty = import ../servers/http/jetty {
     inherit fetchurl stdenv unzip;

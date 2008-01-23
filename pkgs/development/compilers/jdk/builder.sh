@@ -1,3 +1,4 @@
+buildInputs="$unzip"
 source $stdenv/setup
 
 src=$filename.bin
