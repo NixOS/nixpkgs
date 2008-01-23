@@ -616,6 +616,12 @@ rec {
      inherit fetchurl stdenv;
   };
 
+  mc = import ../tools/misc/mc {
+     inherit fetchurl stdenv pkgconfig ncurses;
+     inherit (gtkLibs) glib;
+     inherit (xlibs) libX11;
+  };
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
