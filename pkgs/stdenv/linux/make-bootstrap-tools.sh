@@ -100,8 +100,11 @@ rm -f gcc/lib*/libmud* gcc/lib*/libiberty* gcc/lib*/libssp* gcc/lib*/libgomp*
 rm -rf gcc/lib/gcc/*/*/install-tools
 rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
-if test -e gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h; then
-    nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h
+if test "$system" = "powerpc-linux"; then
+    nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/bits/mathdef.h
+    # Dangling symlink "sound", probably produced by fixinclude.
+    # Should investigate why it's there in the first place.
+    rm -f gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/sound
 fi
 
 
@@ -123,6 +126,10 @@ for i in glibc/include/asm-*; do
     rm $i
     cp -prd $target glibc/include
 done
+if test "$system" = "powerpc-linux"; then
+    # Hopefully we won't need these.
+    rm -f glibc/include/mtd glibc/include/rdma glibc/include/sound glibc/include/video
+fi
 
 
 # Strip executables even further.
