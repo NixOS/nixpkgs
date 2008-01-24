@@ -1,6 +1,7 @@
 {
 	pkgs, config
 }:
+if ! config.fonts.enableFontDir then abort "Please enable fontDir (fonts.enableFontDir) to use xfs." else
 let
 	configFile = ./xfs.conf;
   startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
