@@ -11,10 +11,15 @@ rec {
   
     boot = {
       autoDetectRootDevice = true;
-      readOnlyRoot = true;
+      isLiveCD = true;
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
+      initrd = {
+        extraKernelModules = [
+          "unionfs" # needed for live-CD operation
+        ];
+      };
     };
     
     services = {
@@ -48,6 +53,7 @@ rec {
         # Show the NixOS manual on tty7.
         { name = "manual";
           job = "
+            env HOME=/root
             start on udev
             stop on shutdown
             respawn ${pkgs.w3m}/bin/w3m ${manual} < /dev/tty7 > /dev/tty7 2>&1
@@ -58,6 +64,7 @@ rec {
         # for the installation to finish.
         { name = "rogue";
           job = "
+            env HOME=/root
             start on udev
             stop on shutdown
             respawn ${pkgs.rogue}/bin/rogue < /dev/tty8 > /dev/tty8 2>&1
@@ -112,6 +119,7 @@ rec {
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
+        pkgs.gdb # for debugging Nix
       ];
     };
    
@@ -133,15 +141,6 @@ rec {
     if builtins ? unsafeDiscardStringContext
     then "${import ../doc/manual}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
-
-
-  # Since the CD is read-only, the mount points must be on disk.
-  cdMountPoints = pkgs.runCommand "mount-points" {} "
-    ensureDir $out
-    cd $out
-    mkdir proc sys tmp etc dev var mnt nix nix/var root bin
-    touch $out/${configuration.boot.rootLabel}
-  ";
 
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
@@ -213,14 +212,14 @@ rec {
       { source = system.config.boot.grubSplashImage;
         target = "boot/background.xpm.gz";
       }
-      { source = cdMountPoints;
-        target = "/";
-      }
       { source = nixosTarball + "/" + nixosTarball.tarName;
         target = "/" + nixosTarball.tarName;
       }
       { source = nixpkgsTarball;
         target = "/nixpkgs.tar.bz2";
+      }
+      { source = pkgs.writeText "label" "";
+        target = "/${configuration.boot.rootLabel}";
       }
     ];
 

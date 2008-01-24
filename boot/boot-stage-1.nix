@@ -20,8 +20,12 @@
   # must at least be a file system for the / mount point in this list.
   fileSystems ? []
 
-  # If scanning, we need a disk label.
-, rootLabel
+, # If scanning, we need a disk label.
+  rootLabel
+
+, # Whether the root device is read-only and should be made writable
+  # through a unionfs.
+  isLiveCD
 
 , # The path of the stage 2 init to call once we've mounted the root
   # device.
@@ -44,7 +48,7 @@ substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
   inherit staticShell modules modulesDir;
-  inherit autoDetectRootDevice mountPoints devices fsTypes optionss;
+  inherit autoDetectRootDevice isLiveCD mountPoints devices fsTypes optionss;
   rootLabel = if autoDetectRootDevice then rootLabel else "";
   path = [
     staticTools

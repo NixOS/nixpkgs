@@ -211,6 +211,19 @@ else
     
 fi
 
+
+# If this is a live-CD/DVD, then union-mount a tmpfs on top of the
+# original root.
+targetRoot=/mnt/root
+if test -n "@isLiveCD@"; then
+    mkdir /mnt/tmpfs
+    mount -n -t tmpfs -o "mode=755" none /mnt/tmpfs
+    mkdir /mnt/union
+    mount -t unionfs -o dirs=/mnt/tmpfs=rw:$targetRoot=ro none /mnt/union
+    targetRoot=/mnt/union
+fi
+
+
 if test -n "$debug1mounts"; then fail; fi
 
 
@@ -218,7 +231,7 @@ if test -n "$debug1mounts"; then fail; fi
 # !!! Note: we can't use pivot_root here (the kernel gods have
 # decreed), but we could use run-init from klibc, which deletes all
 # files in the initramfs, remounts the target root on /, and chroots.
-cd /mnt/root
+cd "$targetRoot"
 mount --move . /
 umount /proc # cleanup
 umount /sys

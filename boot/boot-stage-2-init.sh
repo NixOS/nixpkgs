@@ -25,19 +25,9 @@ setPath "@path@"
 
 
 # Mount special file systems.
-
-needWritableDir() {
-    if test -n "@readOnlyRoot@"; then
-        mount -t tmpfs -o "mode=$2" none $1 $3
-    else
-        mkdir -m $2 -p $1
-    fi
-}
-
-needWritableDir /etc 0755 -n # to shut up mount
-
-test -e /etc/fstab || touch /etc/fstab # idem
-
+mkdir -m 0755 -p /etc
+test -e /etc/fstab || touch /etc/fstab # to shut up mount
+mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
 cat /proc/mounts > /etc/mtab
 
@@ -71,19 +61,20 @@ done
 
 
 # More special file systems, initialise required directories.
+mkdir -m 0755 -p /sys 
 mount -t sysfs none /sys
+mkdir -m 0755 -p /dev
 mount -t tmpfs -o "mode=0755" none /dev
 mkdir -m 0755 -p /dev/pts
 mount -t devpts none /dev/pts
 mount -t usbfs none /proc/bus/usb
-needWritableDir /tmp 01777
-needWritableDir /var 0755
-needWritableDir /nix/var 0755
-needWritableDir /root 0700
-needWritableDir /bin 0755 # for the /bin/sh symlink
-if test -d /home ; then
-	needWritableDir /home 0777
-fi
+mkdir -m 01777 /tmp 
+mkdir -m 0755 /var
+mkdir -m 0755 /nix/var
+mkdir -m 0700 /root
+mkdir -m 0755 /bin # for the /bin/sh symlink
+mkdir -m 0755 /home
+
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run

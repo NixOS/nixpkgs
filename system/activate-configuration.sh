@@ -104,22 +104,24 @@ fi
 
 
 # Set up Nix.
-if test -z "@readOnlyRoot@"; then
-    mkdir -p /nix/etc/nix
-    ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
-    chown root.nixbld /nix/store
-    chmod 1775 /nix/store
-fi
+mkdir -p /nix/etc/nix
+ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
+chown root.nixbld /nix/store
+chmod 1775 /nix/store
 
 
 # Nix initialisation.
-mkdir -m 0755 -p /nix/var/nix/db
-mkdir -m 0755 -p /nix/var/nix/gcroots
+mkdir -m 0755 -p \
+    /nix/var/nix/gcroots \
+    /nix/var/nix/temproots \
+    /nix/var/nix/manifests \
+    /nix/var/nix/userpool \
+    /nix/var/nix/profiles \
+    /nix/var/nix/db \
+    /nix/var/log/nix/drvs \
+    /nix/var/nix/channel-cache
 mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
-mkdir -m 0755 -p /nix/var/nix/temproots
-mkdir -m 0755 -p /nix/var/nix/profiles
 mkdir -m 1777 -p /nix/var/nix/profiles/per-user
-mkdir -m 0755 -p /nix/var/nix/channel-cache
 
 ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
 ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/

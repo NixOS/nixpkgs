@@ -78,7 +78,7 @@ rec {
     inherit (pkgs) substituteAll;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
-    autoDetectRootDevice = config.boot.autoDetectRootDevice;
+    inherit (config.boot) autoDetectRootDevice isLiveCD;
     fileSystems =
       pkgs.lib.filter
         (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
@@ -298,7 +298,6 @@ rec {
     isExecutable = true;
 
     inherit etc wrapperDir systemPath modprobe defaultShell kernel;
-    readOnlyRoot = config.boot.readOnlyRoot;
     hostName = config.networking.hostName;
     setuidPrograms =
       config.security.setuidPrograms ++
@@ -323,7 +322,7 @@ rec {
     inherit (pkgs) substituteAll writeText coreutils 
       utillinux udev upstart;
     inherit kernel activateConfiguration;
-    readOnlyRoot = config.boot.readOnlyRoot;
+    inherit (config.boot) isLiveCD;
     upstartPath = [
       pkgs.coreutils
       pkgs.findutils
@@ -359,8 +358,7 @@ rec {
     inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils upstart;
     grubDevice = config.boot.grubDevice;
     kernelParams =
-      (config.boot.kernelParams) ++
-      (config.boot.extraKernelParams);
+      config.boot.kernelParams ++ config.boot.extraKernelParams;
     inherit bootStage2;
     inherit activateConfiguration;
     inherit grubMenuBuilder;

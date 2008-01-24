@@ -25,11 +25,13 @@
       ";
     };
 
-    readOnlyRoot = mkOption {
+    isLiveCD = mkOption {
       default = false;
       description = "
-        Whether the root device is read-only.  This should be set when
-        booting from CD-ROM.
+        If set to true, the root device will be mounted read-only and
+        a ramdisk will be mounted on top of it using unionfs to
+        provide a writable root.  This is used for the NixOS
+        Live-CD/DVD.
       ";
     };
 

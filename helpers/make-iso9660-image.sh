@@ -20,7 +20,7 @@ if test -n "$bootable"; then
         fi
     done
 
-    bootFlags="-b $bootImage -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
+    bootFlags="-b $bootImage -c .boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
 fi
 
 touch pathlist
@@ -59,7 +59,7 @@ cat pathlist
 # !!! -f is a quick hack.
 ensureDir $out/iso
 genisoimage -r -J -o $out/iso/$isoName $bootFlags \
-    -graft-points -path-list pathlist
+    -hide-rr-moved -graft-points -path-list pathlist
 
 ensureDir $out/nix-support
 echo $system > $out/nix-support/system
