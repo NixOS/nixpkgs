@@ -10,7 +10,7 @@ rec {
 	groups = [];
 	users = [];
 	job = "
-		description = \"X Font Server\"
+		description \"X Font Server\"
 		start on ${startingDependency}/started
 		stop on shutdown
 
