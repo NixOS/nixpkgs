@@ -13,5 +13,7 @@ stdenv.mkDerivation {
   	" --datadir=\$out/share " " --with-acl-support "
 	" --with-aio-support "];
   postUnpack = "sourceRoot=\$sourceRoot/source";
-  postInstall = "rm -rf \$out/var ; ln -s /var/samba $out/var ";
+  
+  configFile = ./smb.conf;
+  postInstall = "rm -rf \$out/var ; ln -s /var/samba $out/var;  cp $configFile $out/lib/smb.conf";
 }
