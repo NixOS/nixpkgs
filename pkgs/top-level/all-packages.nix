@@ -217,7 +217,7 @@ rec {
 		else x);
 
 	builderDefs = lib.sumArgs (import ./builder-defs.nix) {
-		inherit stringsWithDeps lib stdenv writeScript;
+		inherit stringsWithDeps lib stdenv writeScript fetchurl;
 	};
 
 	stringsWithDeps = import ../lib/strings-with-deps.nix {
@@ -723,6 +723,13 @@ rec {
   };
   */
 
+  rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap) {
+  	version = "0.28";
+	inherit builderDefs readline;
+  };
+
+  rlwrap = rlwrapFun null;
+
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
   };
@@ -742,6 +749,13 @@ rec {
   smartmontools = import ../tools/system/smartmontools {
     inherit fetchurl stdenv;
   };
+
+  smbfsFuseFun = lib.sumArgs (selectVersion ../tools/networking/smbfs-fuse) {
+    version = "0.8.7";
+    inherit builderDefs samba fuse;
+  };
+
+  smbfsFuse = smbfsFuseFun null;
 
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
@@ -1042,6 +1056,22 @@ rec {
     # using nvs to be able to use mtl-1.1.0.0 as name 
   in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
 
+  # this will change in the future 
+  ghc68_extra_libs =
+    ghc : let
+    deriv = name : goSrcDir : deps : 
+      let bd = builderDefs {
+          goSrcDir = "ghc-* /libraries";
+          src = ghc.extra_src;
+        } null; in
+      stdenv.mkDerivation rec {
+        inherit name;
+	builder = bd.writeScript (name + "-builder")
+		(bd.textClosure [builderDefs.haskellBuilderDefs]);
+      };
+    # using nvs to be able to use mtl-1.1.0.0 as name 
+  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
+
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
@@ -1164,6 +1194,10 @@ rec {
 
   monoDLLFixer = import ../build-support/mono-dll-fixer {
     inherit stdenv perl;
+  };
+
+  monotone = import ../applications/version-management/monotone {
+    inherit stdenv fetchurl boost zlib;
   };
 
   nasm = import ../development/compilers/nasm {
@@ -2735,9 +2769,20 @@ rec {
   };
 
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
-    inherit pkgconfig stdenv fetchurl cairo;
+    inherit pkgconfig stdenv fetchurl cairo ghc;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
-    ghc = ghc661;
+  };
+
+  HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
+    inherit cabal;
+  };
+
+  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql-1.1.4.0.nix {
+    inherit cabal HDBC postgresql;
+  };
+
+  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
+    inherit cabal HDBC sqlite;
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {

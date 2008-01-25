@@ -13,4 +13,3 @@ stdenv.mkDerivation rec {
 	  homepage = http://www.ibiblio.org/mc;
   };
 }
-

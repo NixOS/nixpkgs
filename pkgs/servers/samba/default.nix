@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam];
   configureFlags = ''--with-pam --with-smbmount --datadir=$out/share
   --with-aio-support --with-libiconv=${stdenv.gcc.libc}'';
+
   postUnpack = "sourceRoot=\$sourceRoot/source";
   postInstall = ''rm -rf $out/var ; ln -s /var/samba $out/var '';
 }

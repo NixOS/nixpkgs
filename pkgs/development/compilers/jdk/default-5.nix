@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}: 
 
-if stdenv.system == "i686-linux"
+if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
   then
     (import ./jdk5-sun-linux.nix) {
       inherit stdenv fetchurl unzip;
