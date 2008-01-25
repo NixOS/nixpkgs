@@ -2690,9 +2690,20 @@ rec {
   };
 
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
-    inherit pkgconfig stdenv fetchurl cairo;
+    inherit pkgconfig stdenv fetchurl cairo ghc;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
-    ghc = ghc661;
+  };
+
+  HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
+    inherit cabal;
+  };
+
+  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql-1.1.4.0.nix {
+    inherit cabal HDBC postgresql;
+  };
+
+  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
+    inherit cabal HDBC sqlite;
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {
