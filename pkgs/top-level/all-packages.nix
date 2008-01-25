@@ -3185,8 +3185,7 @@ rec {
   };
 
   vsftpd = import ../servers/ftp/vsftpd {
-    inherit fetchurl openssl ;
-    stdenv = overrideGCC stdenv gcc295 ;
+    inherit fetchurl openssl stdenv libcap pam;
   };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg {
