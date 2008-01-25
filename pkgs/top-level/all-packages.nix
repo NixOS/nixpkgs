@@ -1188,6 +1188,10 @@ rec {
     inherit stdenv perl;
   };
 
+  monotone = import ../applications/version-management/monotone {
+    inherit stdenv fetchurl boost zlib;
+  };
+
   nasm = import ../development/compilers/nasm {
     inherit fetchurl stdenv;
   };
