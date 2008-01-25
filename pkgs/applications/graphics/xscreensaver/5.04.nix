@@ -30,7 +30,7 @@ in
 stdenv.mkDerivation rec {
 	name = "xscreensaver-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	The X screensaver daemon. Run xscreensaver-demo to configure.
