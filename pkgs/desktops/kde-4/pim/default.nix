@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "kdepim-4.0.0";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0/src/kdepim-4.0.0.tar.bz2;
+    url = mirror://kde/stable/4.0.0/src/kdepim-4.0.0.tar.bz2;
     sha256 = "kdepim is not included";
   };
 
