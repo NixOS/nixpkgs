@@ -1,4 +1,4 @@
-args : with args; let localDefs = builderDefs (args // {
+args : with args; let localDefs = builderDefs (args // rec {
 		src = /* put a fetchurl here */
 		(abort "Specify source");
 		useConfig = true;

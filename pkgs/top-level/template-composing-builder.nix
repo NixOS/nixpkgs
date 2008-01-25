@@ -1,10 +1,10 @@
 args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs (rec {
 		src = /* put a fetchurl here */
 
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	}) null; /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "${abort "Specify name"}-"+version;
