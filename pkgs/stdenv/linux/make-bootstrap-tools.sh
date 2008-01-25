@@ -120,7 +120,11 @@ chmod -R +w glibc
 rm glibc/include/linux
 cp -prd $(readlink $glibc/include/linux) glibc/include
 rm glibc/include/asm
-ln -s $(readlink $(readlink $glibc/include/asm)) glibc/include/asm
+if test -L "$(readlink $glibc/include/asm)"; then
+    ln -s $(readlink $(readlink $glibc/include/asm)) glibc/include/asm
+else
+    cp -prd "$(readlink $glibc/include/asm)" glibc/include
+fi
 for i in glibc/include/asm-*; do
     target=$(readlink $i)
     rm $i
