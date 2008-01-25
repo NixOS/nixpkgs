@@ -753,6 +753,13 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  smbfsFuseFun = lib.sumArgs (selectVersion ../tools/networking/smbfs-fuse) {
+    version = "0.8.7";
+    inherit builderDefs samba fuse;
+  };
+
+  smbfsFuse = smbfsFuseFun null;
+
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
   };
