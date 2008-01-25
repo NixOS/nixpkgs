@@ -189,7 +189,7 @@ rec {
 
   # Font aggregation
   fontDir = import ./fontdir.nix {
-    stdenv = pkgs.stdenvUsingSetupNew2;
+    stdenv = pkgs.stdenv;
     inherit pkgs config;
     inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
   };
