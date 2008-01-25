@@ -1,15 +1,13 @@
-args:
-	with args;
-stdenv.mkDerivation
-{
-	name="X11-fonts";
-	phases="installPhase";
-	fontDirs = import ./fonts.nix {inherit pkgs config;};	
-	buildInputs = [mkfontdir mkfontscale];
-	inherit fontalias;
-	installCommand = "
+args : with args; with builderDefs {src="";} null;
+	let localDefs = builderDefs rec {
+		src = "";/* put a fetchurl here */
+
+		buildInputs = [mkfontdir mkfontscale];
+		configureFlags = [];
+		fontDirs = import ./fonts.nix {inherit pkgs config;};
+		installPhase = FullDepEntry ("
 		list='';
-		for i in \$fontDirs ; do
+		for i in ${toString fontDirs} ; do
 			if [ -d \$i/ ]; then
 				list=\"\$list \$i\";
 			fi;
@@ -32,6 +30,18 @@ stdenv.mkDerivation
 		rm fonts.alias
 		mkfontdir
 		mkfontscale
-		cat \$( find \$fontalias/ -name fonts.alias) >fonts.alias
-	";
+		cat \$( find ${fontalias}/ -name fonts.alias) >fonts.alias
+	") ["minInit" "addInputs"];
+	} null; /* null is a terminator for sumArgs */
+	in with localDefs;
+stdenv.mkDerivation rec {
+	name = "X11-fonts";
+	builder = writeScript (name + "-builder")
+		(textClosure localDefs 
+			[installPhase doForceShare doPropagate]);
+	meta = {
+		description = "
+		Directory to contain all X11 fonts requested.
+";
+	};
 }
