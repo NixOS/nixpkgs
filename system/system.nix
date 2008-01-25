@@ -147,7 +147,8 @@ rec {
   # single tree of symlinks because modprobe only supports one
   # directory.
   modulesTree = pkgs.module_aggregation (
-    [kernel pkgs.iwlwifi]
+    [kernel]
+	++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
   );
