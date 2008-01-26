@@ -450,6 +450,10 @@ rec {
     inherit stdenv findutils;
   }));
 
+  finger_bsd = import ../tools/networking/bsd-finger {
+	  inherit fetchurl stdenv;
+  };
+
   fontforge = import ../tools/misc/fontforge {
     inherit fetchurl stdenv gettext freetype zlib
       libungif libpng libjpeg libtiff libxml2;
@@ -3118,6 +3122,10 @@ rec {
 
   ejabberd = import ../servers/xmpp/ejabberd {
     inherit fetchurl stdenv expat erlang zlib openssl;
+  };
+
+  fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
+	  inherit fetchurl stdenv;
   };
 
   ircdHybrid = import ../servers/irc/ircd-hybrid {
