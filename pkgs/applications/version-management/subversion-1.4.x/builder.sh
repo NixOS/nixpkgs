@@ -7,8 +7,16 @@ fi
 
 postInstall() {
     if test "$pythonBindings"; then
-        make swig-py
-        make install-swig-py
+        make swig-py swig_pydir=$(toPythonPath $out)
+        make install-swig-py swig_pydir=$(toPythonPath $out)
+    fi
+    if test "$perlBindings"; then
+        make swig-pl-lib
+        make install-swig-pl-lib
+        cd subversion/bindings/swig/perl/native
+        perl Makefile.PL PREFIX=$out
+        make install
+        cd -
     fi
     if test "$javahlBindings"; then
         mkdir -p subversion/bindings/java/javahl/classes # bug fix

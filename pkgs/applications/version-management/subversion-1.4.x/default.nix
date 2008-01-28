@@ -3,6 +3,7 @@
 , sslSupport ? false
 , compressionSupport ? false
 , pythonBindings ? false
+, perlBindings ? false
 , javahlBindings ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib
 , httpd ? null, expat, swig ? null, jdk ? null
@@ -26,7 +27,9 @@ stdenv.mkDerivation {
 
   buildInputs =
     [expat zlib]
-    ++ (if pythonBindings then [swig.python] else []);
+    ++ (if pythonBindings then [swig.python] else [])
+    ++ (if perlBindings then [swig.perl] else [])
+	;
 
   configureFlags = "
     --without-gdbm --disable-static
@@ -37,15 +40,17 @@ stdenv.mkDerivation {
         "--with-apxs=${httpd}/bin/apxs --with-apr=${httpd} --with-apr-util=${httpd}"
       else
         "--without-apxs"}
-    ${if pythonBindings then "--with-swig=${swig}" else "--without-swig"}
+    ${if (pythonBindings || perlBindings) then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     --disable-neon-version-check
   ";
 
-  inherit httpServer pythonBindings javahlBindings;
+  inherit httpServer pythonBindings javahlBindings perlBindings;
+  patches = [ ./subversion-respect_CPPFLAGS_in_perl_bindings.patch ];
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.tigris.org/;
   };
 }
+
