@@ -18,17 +18,19 @@ let
   stateDir = cfg.stateDir;
   enableSSL = false;
   extraDirectories = cfg.extraDirectories + extraConfig;
-
+  applicationMappings = cfg.mod_jk.applicationMappings;
+  
   startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
   
   webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
     stdenv = pkgs.stdenvNewSetupScript;
     php = if cfg.mod_php then pkgs.php else null;
+    tomcat_connectors = if cfg.mod_jk.enable then pkgs.tomcat_connectors else null;
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir
-      extraDirectories;
+      extraDirectories applicationMappings;
     noUserDir = !cfg.enableUserDir;
     
     subServices =
