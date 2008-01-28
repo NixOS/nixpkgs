@@ -4890,7 +4890,8 @@ rec {
   };
 
   xineUI = import ../applications/video/xine-ui {
-    inherit fetchurl stdenv pkgconfig x11 xineLib libpng;
+	inherit fetchurl stdenv pkgconfig x11 xineLib libpng readline ncurses curl;
+	inherit (xorg) libXext libXv libXxf86vm libXtst inputproto;
   };
 
   xmms = import ../applications/audio/xmms {
