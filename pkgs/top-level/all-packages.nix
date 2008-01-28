@@ -2450,6 +2450,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  pth = import ../development/libraries/pth {
+	  inherit fetchurl stdenv;
+  };
+
   qt3 = import ../development/libraries/qt-3 {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
