@@ -4137,7 +4137,7 @@ rec {
   djvulibre = import ../applications/misc/djvulibre {
     inherit stdenv fetchurl libjpeg libtiff libungif zlib
 	ghostscript libpng x11 mesa;
-    qt = qt3;
+    qt = if (getConfig ["djvulibre" "qt3Frontend"] true) then qt3 else null;
     inherit (xlibs) libX11;
   };
 

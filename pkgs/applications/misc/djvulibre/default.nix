@@ -1,7 +1,4 @@
-{stdenv, fetchurl,
-qt, libX11, libjpeg, libtiff, libpng, ghostscript, zlib, libungif,
-x11, mesa
-}:
+args: with args;
 stdenv.mkDerivation {
   name = "djvulibre-3.5.19";
 
