@@ -1157,7 +1157,8 @@
 	  default = [];
 	  description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
 	};
-
+      };
+      
       subservices = {
 
         subversion = {
