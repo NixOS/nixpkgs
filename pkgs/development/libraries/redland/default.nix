@@ -1,11 +1,11 @@
 args:
 with args;
-stdenv.mkDerivation {
-  name = "redland-1.0.6";
+stdenv.mkDerivation rec {
+  name = "redland-1.0.7";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/librdf/redland-1.0.6.tar.gz;
-    sha256 = "16hm8s6wy43avy4xcsq74n2dyzwzsdq2h2l2jav0by7s6mkh5gxw";
+    url = "sf://librdf/${name}.tar.gz";
+    sha256 = "1z160hhrnlyy5c8vh2hjza6kdfmzml8mg9dk8yffifkhnxjq5r2z";
   };
   buildInputs = [ bdb openssl libxml2 pkgconfig perl];
   configureFlags="--without-static --with-threads --with-bdb=${bdb}";
