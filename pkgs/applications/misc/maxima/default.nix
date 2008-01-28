@@ -4,7 +4,7 @@ stdenv.mkDerivation {
 
   src =	fetchurl {
 		name = "maxima-5.13.0.tar.gz";
-		url = http://downloads.sourceforge.net/maxima/maxima-5.13.0.tar.gz?modtime=1188046120&big_mirror=1;
+		url = mirror://sf/maxima/maxima-5.13.0.tar.gz;
 		sha256 = "11zidbbp4cbgsmdfyf9w0j7345ydka469ba0my7p73zqhnby09cn";
 	};
 
