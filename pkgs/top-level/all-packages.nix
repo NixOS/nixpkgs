@@ -2093,6 +2093,10 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng bzip2;
   };
 
+  indilib = import ../development/libraries/indilib {
+	  inherit fetchurl stdenv cfitsio libusb zlib;
+  };
+
   iniparser = import ../development/libraries/iniparser {
     inherit fetchurl stdenv;
   };
