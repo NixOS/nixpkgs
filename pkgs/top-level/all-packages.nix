@@ -4660,6 +4660,7 @@ rec {
     inherit fetchurl stdenv apr aprutil neon expat swig zlib;
     bdbSupport = true;
     httpServer = false;
+    perlBindings = getConfig ["subversion" "perlBindings"] false;
     sslSupport = true;
     compressionSupport = true;
     httpd = apacheHttpd;
