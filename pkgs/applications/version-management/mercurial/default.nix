@@ -1,10 +1,10 @@
-{stdenv, fetchurl, python, makeWrapper}:
+args: with args;
 
 stdenv.mkDerivation {
-  name = "mercurial-0.9.4";
+  name = "mercurial-0.9.5";
   src = fetchurl {
-    url = http://www.selenic.com/mercurial/release/mercurial-0.9.4.tar.gz;
-    sha256 = "26996df67d508e129d2f0a264e25072764e5c2d21606e1658d77c8984e6ed64a";
+    url = http://www.selenic.com/mercurial/release/mercurial-0.9.5.tar.gz;
+    sha256 = "1n34yl4z7nc3vmsgpkmqc94hsmy846ny86xgpgv3m371ljm2pq6g";
   };
 
   buildInputs = [ python makeWrapper ];
