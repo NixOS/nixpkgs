@@ -1892,6 +1892,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  gamin = import ../development/libraries/gamin {
+	  inherit fetchurl stdenv python pkgconfig;
+	  inherit (gtkLibs) glib;
+  };
+
   geos = import ../development/libraries/geos {
     inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
     use_svn = stdenv.system == "x86_64-linux";
