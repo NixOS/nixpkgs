@@ -2083,6 +2083,10 @@ rec {
     inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng bzip2;
   };
 
+  iniparser = import ../development/libraries/iniparser {
+    inherit fetchurl stdenv;
+  };
+
   intltoolFun = lib.sumArgs (selectVersion ../development/tools/misc/intltool) {
     inherit fetchurl stdenv lib builderDefs stringsWithDeps
       perl perlXMLParser;
