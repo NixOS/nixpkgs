@@ -182,6 +182,12 @@ let
         "gw6c" else "network-interfaces";
     })
 
+  # JBoss service
+  ++ optional config.services.jboss.enable
+    (import ../upstart-jobs/jboss.nix {
+      inherit config pkgs;
+    })  
+
   # Samba service.
   ++ optional config.services.samba.enable
     (import ../upstart-jobs/samba.nix {
