@@ -155,11 +155,6 @@ rec {
 	  version = getConfig [ "environment" "versions" name ];
   };
 
-  # Whether user enabled given feature for the given package?
-  getFlag = flag: package: default:
-  getConfig [ "environment" "flags" package flag ]
-  (getConfig [ "environment" "flags" "default" flag ] default);
-
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   config =
@@ -2420,7 +2415,7 @@ rec {
 
   pcre = import ../development/libraries/pcre {
     inherit fetchurl stdenv;
-    unicodeSupport = getFlag "unicode" "pcre" false;
+    unicodeSupport = getConfig ["pcre" "unicode"] false;
   };
 
   poppler = import ../development/libraries/poppler {
