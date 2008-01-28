@@ -143,10 +143,10 @@ rec {
   # pkgname = getVersion "name" pkgname_alts;
   #
   # user will be able to write in his configuration.nix something like
-  # environment = { versions = { name = v_0_2; }; }; and pkgname will be equal
-  # to pkgname_alts.v_0_2. Using alts.default by default.
+  # name = { version = "0.2"; }; and pkgname will be equal
+  # to getAttr pkgname_alts "0.2". Using alts.default by default.
   getVersion = name: alts: builtins.getAttr
-    (getConfig [ "environment" "versions" name ] "default") alts;
+    (getConfig [ name "version" ] "default") alts;
 
   # The same, another syntax.
   # Warning: syntax for configuration.nix changed too
