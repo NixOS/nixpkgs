@@ -1519,6 +1519,40 @@
 
   };
 
+  mysql = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to enable the MySQL server.
+	";
+      };
+      
+      port = mkOption {
+        default = "3306";
+	description = "Port of MySQL"; 
+      };
+      
+      user = mkOption {
+        default = "nobody";
+	description = "User account under which MySQL runs";
+      };
+      
+      datadir = mkOption {
+        default = "/var/mysql";
+	description = "Location where MySQL stores its table files";
+      };
+      
+      log_error = mkOption {
+        default = "/var/log/mysql_err.log";
+	description = "Location of the MySQL error logfile";
+      };
+      
+      pid_file = mkOption {
+        default = "/var/mysql/mysql.pid";
+	description = "Location of the file which stores the PID of the MySQL server";
+      };
+    };
+
 
   installer = {
 

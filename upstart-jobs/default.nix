@@ -168,6 +168,12 @@ let
     })
   */
 
+  # MySQL server
+  ++ optional config.services.mysql.enable
+    (import ../upstart-jobs/mysql.nix {
+      inherit config pkgs;
+    })
+
   # Postgres SQL server
   ++ optional config.services.postgresql.enable
     (import ../upstart-jobs/postgresql.nix {
