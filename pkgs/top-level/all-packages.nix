@@ -1227,7 +1227,7 @@ rec {
 
   qcmm = import ../development/compilers/qcmm {
     lua   = lua4;
-    ocaml = ocaml_alts.v_3_08_0;
+    ocaml = builtins.getAttr "3.08.0" ocaml_alts;
     inherit fetchurl stdenv mk noweb groff;
   };
 
@@ -1348,7 +1348,7 @@ rec {
 
   pyrexFun = lib.sumArgs (selectVersion ../development/interpreters/pyrex) {
     inherit fetchurl stdenv stringsWithDeps lib builderDefs;
-    python = python_alts.v_2_5;
+	python = builtins.getAttr "2.5" python_alts;
   };
 
   pyrex = pyrexFun {version = "0.9.6";} null;
@@ -4537,7 +4537,7 @@ rec {
 
   pythonmagick = import ../applications/graphics/PythonMagick {
     inherit fetchurl stdenv pkgconfig imagemagick boost;
-    python = python_alts.v_2_5;
+    python = builtins.getAttr "2.5" python_alts;
   };
 
   qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu ) {
