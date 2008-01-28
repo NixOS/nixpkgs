@@ -2076,6 +2076,11 @@ rec {
 
   intltool = intltoolFun {version = "0.36.2";} null;
 
+  jasper = import ../development/libraries/jasper {
+	  inherit fetchurl stdenv unzip libjpeg freeglut mesa;
+	  inherit (xlibs) xproto libX11 libICE libXmu libXi libXext libXt;
+  };
+
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
     inherit (gtkLibs) gtk;
