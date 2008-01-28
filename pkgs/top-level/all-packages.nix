@@ -1877,6 +1877,10 @@ rec {
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
+  cfitsio = import ../development/libraries/cfitsio {
+    inherit fetchurl stdenv;
+  };
+
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
   };
