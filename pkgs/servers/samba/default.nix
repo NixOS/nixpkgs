@@ -1,19 +1,22 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "samba-3.0.26a";
+stdenv.mkDerivation rec {
+  name = "samba-3.0.28";
 
   src = fetchurl {
-    url = http://us1.samba.org/samba/ftp/stable/samba-3.0.26a.tar.gz;
-    sha256 = "41e11f69288b2291f12f8db093e2c55dc1360555d4542c83c0758c4c7a3d4d37";
+    url = "http://us1.samba.org/samba/ftp/stable/${name}.tar.gz";
+    sha256 = "13nr4mvh6vxgl7nb94qnqx3njcyd10cf4ji18srlkizpp49r5byw";
   };
 
-  buildInputs = [readline pam openldap];
-  configureFlags = [" --with-pam " " --with-smbmount " 
-  	" --datadir=\$out/share " " --with-acl-support "
-	" --with-aio-support "];
+  buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam];
+  configureFlags = ''--with-pam --with-smbmount --datadir=$out/share
+  --with-aio-support --with-libiconv=${stdenv.gcc.libc}'';
   postUnpack = "sourceRoot=\$sourceRoot/source";
   
   configFile = ./smb.conf;
-  postInstall = "rm -rf \$out/var ; ln -s /var/samba $out/var;  cp $configFile $out/lib/smb.conf";
+  postInstall = ''
+  rm -rf $out/var
+  ln -s /var/samba $out/var
+  cp ${configFile} $out/lib/smb.conf
+  '';
 }

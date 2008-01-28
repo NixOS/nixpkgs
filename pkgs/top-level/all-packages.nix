@@ -3134,7 +3134,8 @@ rec {
   };
 
   samba = import ../servers/samba {
-    inherit stdenv fetchurl readline openldap pam;
+    inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
+	libunwind acl fam;
   };
 
   squid = import ../servers/squid {
