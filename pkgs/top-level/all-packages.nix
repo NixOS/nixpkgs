@@ -1892,6 +1892,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  fam = gamin;
+
   gamin = import ../development/libraries/gamin {
 	  inherit fetchurl stdenv python pkgconfig;
 	  inherit (gtkLibs) glib;
@@ -2048,6 +2050,9 @@ rec {
     inherit (gtkLibs) gtk;
     inherit aspell;
   };
+
+  # TODO : Add MIT Kerberos and let admin choose.
+  kerberos = heimdal;
 
   heimdal = import ../development/libraries/kerberos/heimdal.nix {
 	  inherit fetchurl stdenv readline db4 openssl openldap cyrus_sasl;
