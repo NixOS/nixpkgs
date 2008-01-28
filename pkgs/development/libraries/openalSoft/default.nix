@@ -4,11 +4,11 @@ stdenv.mkDerivation {
 # (neither the ABI or API will break). Please try it out and let me know how it
 #  works. :-)
 
-  name = "openal-soft-testing";
+  name = "openal-soft-1.1.93";
 
   src = fetchurl {
-    url = http://kcat.strangesoft.net/OpenAL.tar.bz2;
-    sha256 = "7b53c3e6eda1a71010651eb058c71c9b0c86b3c15cae5f0ffeeb7222531aa97d";
+    url = http://kcat.strangesoft.net/openal-releases/openal-soft-1.1.93.tar.bz2;
+    sha256 = "162nyv4jy6qzi7s5q3wpdawfph6npyn1n4wjf21haxdxq0mmp6l7";
   };
 
   buildInputs = [cmake alsaLib];
