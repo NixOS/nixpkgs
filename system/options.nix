@@ -986,6 +986,11 @@
     };
 
     jboss = {
+      enable = mkOption {
+        default = false;
+	description = "Whether to enable jboss";
+      };
+
       tempDir = mkOption {
         default = "/tmp";
 	description = "Location where JBoss stores its temp files";
