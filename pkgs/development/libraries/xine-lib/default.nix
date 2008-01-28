@@ -27,4 +27,5 @@ assert alsaSupport -> alsaLib != null;
   libXv = if xvideoSupport then libXv else null;
   libdvdcss = if encryptedDVDSupport then libdvdcss else null;
   propagatedBuildInputs = [zlib];
+  patches = [ ./xine-lib-linux-headers-2.6.23.patch ];
 }) // {inherit xineramaSupport libXinerama;}
