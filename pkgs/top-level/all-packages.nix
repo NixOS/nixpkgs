@@ -2502,7 +2502,7 @@ rec {
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto libXcursor;
     openglSupport = mesaSupported;
-    mysqlSupport = false;
+    mysqlSupport = getConfig ["qt" "mysql"] false;
   };
 
   qt4 = getVersion "qt4" qt4_alts;
