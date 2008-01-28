@@ -495,6 +495,11 @@ rec {
     ideaSupport = true; # enable for IDEA crypto support
   };
 
+  gnupg2 = import ../tools/security/gnupg2 {
+	  inherit fetchurl stdenv readline openldap bzip2 zlib libgpgerror pth
+	    libgcrypt libassuan libksba libusb curl;
+  };
+
   gnuplot = import ../tools/graphics/gnuplot {
     inherit fetchurl stdenv zlib gd texinfo;
   };
