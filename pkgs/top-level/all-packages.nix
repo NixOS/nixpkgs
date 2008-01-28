@@ -2119,6 +2119,10 @@ rec {
     inherit (xlibs) libXp libXau;
   };
 
+  libarchive = import ../development/libraries/libarchive {
+    inherit fetchurl stdenv zlib;
+  };
+
   libassuan = import ../development/libraries/libassuan {
     inherit fetchurl stdenv pth;
   };
