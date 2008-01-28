@@ -12,7 +12,7 @@ args.stdenv.mkDerivation {
   inherit (args) scons SDL freetype openal python openexr mesa;
 
   buildInputs =(with args; [python scons
-         gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff cmake libXi ]);
+         gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff libXi ]);
 
   # patch SConstruct so that we can pass on additional include.  Either blender
   # or openEXR is broken. I think OpenEXR should use include "" isntead of <> to
