@@ -2465,6 +2465,10 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
+  ortp = import ../development/libraries/ortp {
+    inherit fetchurl stdenv;
+  };
+
   pangoxsl = import ../development/libraries/pangoxsl {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib pango;
