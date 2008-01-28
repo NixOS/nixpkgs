@@ -1,9 +1,9 @@
 args: with args;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "dbus-glib-0.74";
   src = fetchurl {
-    url = http://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.74.tar.gz;
+    url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
     sha256 = "1qmbnd9xgg7vahlfywd8sfd9yqhx8jdyczz3cshfsd4qc76xhw78";
   };
   inherit dbus glib;
