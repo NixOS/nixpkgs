@@ -1283,7 +1283,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/setxkbmap-1.0.4.tar.bz2;
       sha256 = "1b1brw1v98q2rqhr5x7f8mr3clxq62nw5175gpamg5s172916nwv";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ensureDir $out/share/X11; ln -sfn ${xkeyboard_config}/etc/X11/xkb $out/share/X11/"; 
+    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ensureDir $out/share; ln -sfn ${xkeyboard_config}/etc/X11 $out/share/X11"; 
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
@@ -2216,8 +2216,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sis-0.9.3.tar.bz2;
       sha256 = "1xin2hcjjwj2810h7kxhkmqq841plbsvk0swmjl9py7z2vxyi3l9";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto glproto mesaHeaders libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto glproto mesaHeaders libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosisusb = (stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.8.1";

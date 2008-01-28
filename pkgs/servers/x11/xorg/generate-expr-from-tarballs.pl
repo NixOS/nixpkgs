@@ -41,15 +41,20 @@ $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 
 
-$extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch]; ";
+$extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; ";
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
-$extraAttrs{"setxkbmap"} = " postInstall = \"ensureDir \$out/share/X11; ln -sfn \${xkeyboard_config}/etc/X11/xkb \$out/share/X11/\"; ";
+$extraAttrs{"setxkbmap"} = " postInstall = \"ensureDir \$out/share; ln -sfn \${xkeyboard_config}/etc/X11 \$out/share/X11\";";
 
 $extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
 
 $extraAttrs{"mkfontdir"} = " preBuild = \"substituteInPlace mkfontdir.cpp --replace BINDIR \${mkfontscale}/bin\"; ";
+
+$extraAttrs{"xf86inputevdev"} = "
+    preBuild = \"
+    sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
+    \";";
 
 
 my $downloadCache = "./download-cache";
@@ -174,6 +179,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
+    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videosis/;
     push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videointel/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
