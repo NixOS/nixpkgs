@@ -2305,6 +2305,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libunwind = import ../development/libraries/libunwind {
+    inherit fetchurl stdenv;
+  };
+
   libvorbis = import ../development/libraries/libvorbis {
     inherit fetchurl stdenv libogg;
   };
