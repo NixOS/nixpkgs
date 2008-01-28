@@ -4572,6 +4572,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  rdesktop = import ../applications/networking/remote/rdesktop {
+    inherit fetchurl stdenv openssl;
+    inherit (xlibs) libX11;
+  };
+
   RealPlayer = import ../applications/video/RealPlayer {
     inherit fetchurl stdenv;
     inherit (gtkLibs) glib pango atk gtk;
