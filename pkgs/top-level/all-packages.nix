@@ -1975,7 +1975,8 @@ rec {
   };
 
   gpgme = import ../development/libraries/gpgme {
-    inherit fetchurl stdenv libgpgerror gnupg;
+    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2;
+	inherit (gtkLibs) glib;
   };
 
   # gnu scientific library
