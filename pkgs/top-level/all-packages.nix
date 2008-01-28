@@ -4031,7 +4031,7 @@ rec {
     inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib /* smpeg  sdl */;
     inherit (xlibs) inputproto libXi;
-    python = python_alts.v_2_5;
+    python = builtins.getAttr "2.5" python_alts;
     freealut = freealut_soft;
     openal = openalSoft;
     stdenv = stdenvUsingSetupNew2;
