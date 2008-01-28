@@ -2381,6 +2381,11 @@ rec {
 	  inherit fetchurl stdenv automake autoconf libtool cppunit libxml2;
   };
 
+  loudmouth = import ../development/libraries/loudmouth {
+	  inherit fetchurl stdenv libidn gnutls pkgconfig;
+	  inherit (gtkLibs) glib;
+  };
+
   lzo = import ../development/libraries/lzo {
 	  inherit fetchurl stdenv;
   };
