@@ -2588,6 +2588,25 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
+  tapioca_qt = import ../development/libraries/tapioca-qt {
+    inherit fetchsvn stdenv cmake telepathy_qt;
+	qt = qt4;
+  };
+
+  telepathy_gabble = import ../development/libraries/telepathy-gabble {
+    inherit fetchurl stdenv pkgconfig libxslt telepathy_glib loudmouth;
+  };
+
+  telepathy_glib = import ../development/libraries/telepathy-glib {
+    inherit fetchurl stdenv dbus_glib pkgconfig libxslt python;
+	inherit (gtkLibs) glib;
+  };
+
+  telepathy_qt = import ../development/libraries/telepathy-qt {
+    inherit fetchsvn stdenv cmake;
+	qt = qt4;
+  };
+
   tk = import ../development/libraries/tk {
     inherit fetchurl stdenv tcl x11;
   };
