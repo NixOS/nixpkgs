@@ -2044,6 +2044,10 @@ rec {
     inherit aspell;
   };
 
+  heimdal = import ../development/libraries/kerberos/heimdal.nix {
+	  inherit fetchurl stdenv readline db4 openssl openldap cyrus_sasl;
+  };
+
   hsqldb = import ../development/libraries/java/hsqldb {
     inherit stdenv fetchurl unzip;
   };
