@@ -4263,9 +4263,11 @@ rec {
   firefox3b1Wrapper = lowPrio (wrapFirefox firefox3b1 "");
   firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "");
  
-  flac = import ../applications/audio/flac {
+  flacAlts = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
+
+  flac = getVersion "flac" flacAlts;
 
   flashplayer = flashplayer9;
 
