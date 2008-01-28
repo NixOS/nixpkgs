@@ -1908,7 +1908,7 @@ rec {
   gettext = getVersion "gettext" gettext_alts;
 
   gettext_alts = import ../development/libraries/gettext {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv lib;
   };
 
   gd = import ../development/libraries/gd {

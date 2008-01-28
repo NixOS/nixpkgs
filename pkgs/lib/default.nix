@@ -9,6 +9,7 @@ let
 in
 
 rec {
+  listOfListsToAttrs = ll : builtins.listToAttrs (map (l : { name = (head l); value = (head (tail l)); }) ll);
 
 
   # Identity function.
