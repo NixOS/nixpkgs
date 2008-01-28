@@ -2551,7 +2551,7 @@ rec {
   };
 
   xineLib = import ../development/libraries/xine-lib {
-    inherit fetchurl stdenv zlib x11 libdvdcss alsaLib;
+    inherit fetchurl stdenv zlib x11 libdvdcss alsaLib pkgconfig;
     inherit (xlibs) libXv libXinerama;
   };
 
