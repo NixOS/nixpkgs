@@ -33,6 +33,7 @@ let
 	{configuration=configuration; suffix=""} is always prepended.
 	*/
 	configList = arg "configList" (configuration : []); 
+	aufs = arg "aufs" true;
 in 
 let
 
@@ -104,17 +105,22 @@ rec {
   configuration = let preConfiguration ={
   
     boot = {
+      isLiveCD = true;
       autoDetectRootDevice = true;
-      readOnlyRoot = true;
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [] ++ (lib.optional manualEnabled 7) ++
         (lib.optional rogueEnabled 8);
       inherit kernel;
       initrd = {
-        extraKernelModules = extraInitrdKernelModules;
+        extraKernelModules = extraInitrdKernelModules
+	++ (if aufs then ["aufs"] else [])
+	;
       };
       kernelModules = bootKernelModules;
+      extraModulePackages = []
+      ++(if aufs then [pkgs.aufs] else [])
+      ;
     };
     
     services = {
