@@ -1729,6 +1729,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  aterm25 = import ../development/libraries/aterm/2.5.nix {
+    inherit fetchurl stdenv;
+  };
+
   attr = import ../development/libraries/attr {
     inherit stdenv fetchurl autoconf libtool gettext;
   };
