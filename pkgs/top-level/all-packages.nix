@@ -1244,6 +1244,13 @@ rec {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  strategoxt017 = import ../development/compilers/strategoxt/strategoxt-0.17.nix {
+    inherit fetchurl pkgconfig;
+    sdf = sdf24;
+    aterm = aterm25;
+    stdenv = overrideInStdenv stdenv [gnumake380];
+  };
+
   strategoxtUtils = import ../development/compilers/strategoxt/utils {
     inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
   };
