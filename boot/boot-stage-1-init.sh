@@ -219,7 +219,7 @@ if test -n "@isLiveCD@"; then
     mkdir /mnt/tmpfs
     mount -n -t tmpfs -o "mode=755" none /mnt/tmpfs
     mkdir /mnt/union
-    mount -t unionfs -o dirs=/mnt/tmpfs=rw:$targetRoot=ro none /mnt/union
+    mount -t aufs -o dirs=/mnt/tmpfs=rw:$targetRoot=ro none /mnt/union
     targetRoot=/mnt/union
 fi
 

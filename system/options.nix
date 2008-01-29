@@ -123,6 +123,14 @@
       ";
     };
 
+    extraModulePackages = mkOption {
+      default = [];
+      example = [pkgs.aufs pkgs.nvidiaDriver];
+      description = ''
+        A list of additional packages supplying kernel modules.
+      '';
+    };
+
     kernelModules = mkOption {
       default = [];
       description = "

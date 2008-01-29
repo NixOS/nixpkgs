@@ -43,7 +43,8 @@ rec {
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = import ../helpers/modules-closure.nix {
     inherit (pkgs) stdenv module_init_tools;
-    inherit kernel rootModules;
+    inherit rootModules;
+    kernel = modulesTree;
   };
 
 
@@ -148,9 +149,10 @@ rec {
   # directory.
   modulesTree = pkgs.module_aggregation (
     [kernel]
-	++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
+    ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
+    ++ config.boot.extraModulePackages
   );
 
   

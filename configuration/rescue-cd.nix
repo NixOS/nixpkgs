@@ -15,9 +15,10 @@ rec {
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
+      extraModulePackages = [pkgs.aufs];
       initrd = {
         extraKernelModules = [
-          "unionfs" # needed for live-CD operation
+          "aufs" # needed for live-CD operation
         ];
       };
     };
