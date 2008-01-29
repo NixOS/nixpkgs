@@ -1164,7 +1164,7 @@ rec {
     };
 
   jdk5 =
-    assert system == "i686-linux";
+    assert system == "i686-linux" || system == "x86_64-linux";
     import ../development/compilers/jdk/default-5.nix {
       inherit fetchurl stdenv unzip;
     };
