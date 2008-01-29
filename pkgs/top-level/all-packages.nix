@@ -5104,6 +5104,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  pgadmin = import ../applications/misc/pgadmin {
+    inherit fetchurl stdenv postgresql libxml2 libxslt openssl;
+    wxGTK = wxGTK28;
+  };
+
   pgf = import ../misc/tex/pgf {
     inherit fetchurl stdenv;
   };
