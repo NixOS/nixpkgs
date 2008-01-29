@@ -3553,10 +3553,8 @@ rec {
       { # resume with resume=swap:/dev/xx
         name = "tux on ice"; # (swsusp2)
         patch = fetchurl {
-          #url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc2-for-2.6.23.1.patch.bz2";
-          #sha256 = "ef86267b6f3d7e309221f5173a881afae1dfa57418be5b3963f2380b0633ca1a";
-          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc3-for-2.6.23.9.patch.bz2";
-          sha256 = "16f61cn0mdi7yklhdx4isi7c85843fzxq2cifd05cpsl6x6ilrfk";
+          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc5-for-2.6.23.14.patch.bz2";
+          sha256 = "187190rxbn9x1c6bwv59mwy1zhff8nn5ad58cfiz23wa5wrk4mif";
         };
         extraConfig = "
           CONFIG_SUSPEND2=y
@@ -5294,6 +5292,11 @@ rec {
 
   ntfsprogs = import ../misc/ntfsprogs {
     inherit fetchurl stdenv;
+  };
+
+  pgadmin = import ../applications/misc/pgadmin {
+    inherit fetchurl stdenv postgresql libxml2 libxslt openssl;
+    wxGTK = wxGTK28;
   };
 
   pgf = import ../misc/tex/pgf {
