@@ -1630,6 +1630,14 @@ rec {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  sdf24 = import ../development/tools/parsing/sdf/sdf2-bundle-2.4.nix {
+    inherit fetchurl getopt pkgconfig;
+    aterm = aterm25;
+    # Note: sdf2-bundle currently requires GNU make 3.80; remove
+    # explicit dependency when this is fixed.
+    stdenv = overrideInStdenv stdenv [gnumake380];
+  };
+
   strace = import ../development/tools/misc/strace {
     inherit fetchurl stdenv;
   };
