@@ -150,9 +150,8 @@ rec {
 
   # The same, another syntax.
   # Warning: syntax for configuration.nix changed too
-  useVersion = name: f: f
-  {
-	  version = getConfig [ "environment" "versions" name ];
+  useVersion = name: f: f {
+    version = getConfig [ "environment" "versions" name ];
   };
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
@@ -3276,10 +3275,14 @@ rec {
 
   atherosVersion = "r3122";
 
-  atherosFunCurrent = theKernel: (atherosFun {
+  atherosFunCurrent = kernel: atherosFun {
     version = atherosVersion;
-    kernel = theKernel;
-  } null);
+    inherit kernel;
+  } null;
+
+  aufs = import ../os-specific/linux/aufs {
+    inherit fetchurl stdenv kernel;
+  };
 
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
@@ -3358,7 +3361,7 @@ rec {
   };
  
   htop = import ../os-specific/linux/htop {
-	  inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses;
   };
 
   hwdata = import ../os-specific/linux/hwdata {
@@ -3975,8 +3978,8 @@ rec {
   };
 
   shared_mime_info = import ../data/misc/shared-mime-info {
-	inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext libxml2;
-	inherit (gtkLibs) glib;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext libxml2;
+    inherit (gtkLibs) glib;
   };
 
   iana_etc = import ../data/misc/iana-etc {
@@ -3984,7 +3987,7 @@ rec {
   };
 
   poppler_data = import ../data/misc/poppler-data {
-	  inherit fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
@@ -4036,11 +4039,11 @@ rec {
 
   audacity = import ../applications/audio/audacity {
     inherit fetchurl libogg libvorbis libsndfile libmad 
-	pkgconfig gettext;
-	inherit (gtkLibs) gtk glib;
-	wxGTK = wxGTK28deps;
+      pkgconfig gettext;
+    inherit (gtkLibs) gtk glib;
+    wxGTK = wxGTK28deps;
     stdenv = overrideGCC stdenv gcc41NPTL;
-	inherit builderDefs stringsWithDeps;
+    inherit builderDefs stringsWithDeps;
   };
 
   batik = import ../applications/graphics/batik {
