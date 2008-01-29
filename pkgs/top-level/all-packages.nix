@@ -3168,6 +3168,10 @@ rec {
     inherit fetchurl stdenv jdk5 jdk;
   };
 
+  jboss_mysql_jdbc = import ../servers/http/jboss/jdbc/mysql {
+    inherit stdenv jboss mysql_jdbc;
+  };
+
   jetty = import ../servers/http/jetty {
     inherit fetchurl stdenv unzip;
   };
