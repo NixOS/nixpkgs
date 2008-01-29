@@ -199,6 +199,7 @@ args: with args; with stringsWithDeps; with lib;
 		bzip2 -d <${s} > \$PWD/\$(basename ${s} .bz2)/\${NAME#*-}
 		cd \$(basename ${s} .bz2)
 	" else (abort "unknown archive type : ${s}"))+
+                # goSrcDir is typically something like "cd mysubdir" .. but can be anything else 
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) ["minInit"];
 
@@ -283,7 +284,7 @@ args: with args; with stringsWithDeps; with lib;
 	replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
 	doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
 	makeNest = x:(if x==defNest.text then x else "startNest\n" + x + "\nstopNest\n");
-	textClosure = textClosureMapOveridable makeNest;
+        textClosure = a : steps : textClosureMapOveridable makeNest a (["defNest"] ++ steps);
 
 	inherit noDepEntry FullDepEntry PackEntry;
 
@@ -355,7 +356,7 @@ args: with args; with stringsWithDeps; with lib;
             PACKAGE_DB=$out/nix-support/package.conf;
             echo '[]' > \"$PACKAGE_DB\";
             setupHookRegisteringPackageDatabase
-        }" [defSetupHookRegisteringPackageDatabase];
+        }" ["defSetupHookRegisteringPackageDatabase" "defEnsureDir"];
 
         # Cabal does only support --user ($HOME/.ghc/** ) and --global (/nix/store/*-ghc/lib/...) 
         # But we need kind of --custom=my-package-db
@@ -370,8 +371,7 @@ args: with args; with stringsWithDeps; with lib;
         # and   ./setup register --gen-script to install to our local database 
         # after replacing /usr/lib etc with our pure $out path
         cabalBuild = FullDepEntry 
-          (if (args ? subdir) then "cd ${args.subdir}" else "")+ "
-          createEmptyPackageDatabaseAndSetupHook
+          " createEmptyPackageDatabaseAndSetupHook
           ghc --make setup.hs -o setup
           \$CABAL_SETUP configure
           \$CABAL_SETUP build
@@ -380,6 +380,6 @@ args: with args; with stringsWithDeps; with lib;
           sed -e 's=/usr/local/lib=\$out=g' \\
               -i register.sh
           GHC_PACKAGE_PATH=\$PACKAGE_DB ./register.sh
-        " [defCreateEmptyPackageDatabaseAndSetupHook defCabalSetupCmd];
+        " ["defCreateEmptyPackageDatabaseAndSetupHook" "defCabalSetupCmd"];
 
 }) // args
