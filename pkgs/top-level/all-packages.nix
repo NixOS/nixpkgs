@@ -1143,6 +1143,13 @@ rec {
     ghc = ghc661;
   };
 
+  javafront = import ../development/compilers/java-front {
+    inherit stdenv fetchurl pkgconfig;
+    sdf = sdf24;
+    aterm = aterm25;
+    strategoxt = strategoxt017;
+  };
+
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
   #hugs = import ../development/compilers/hugs {
