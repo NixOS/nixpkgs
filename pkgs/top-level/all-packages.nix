@@ -1283,6 +1283,13 @@ rec {
     inherit fetchurl stdenv cabextract;
   };
 
+  webdsl = import ../development/compilers/webdsl {
+    inherit stdenv fetchurl pkgconfig javafront;
+    aterm = aterm25;
+    sdf = sdf24;
+    strategoxt = strategoxt017;
+  };
+
   win32hello = import ../development/compilers/visual-c++/test {
     inherit fetchurl stdenv visualcpp windowssdk;
   };
