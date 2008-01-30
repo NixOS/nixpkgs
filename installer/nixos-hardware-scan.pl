@@ -113,6 +113,10 @@ sub pciCheck {
          $device eq "0x7125" ||
          $device eq "0x7128"
         );
+
+    # Assume that all NVIDIA cards are supported by the NVIDIA driver.
+    # There may be exceptions (e.g. old cards).
+    $videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
 }
 
 foreach my $path (glob "/sys/bus/pci/devices/*") {
