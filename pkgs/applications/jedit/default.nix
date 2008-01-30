@@ -1,8 +1,8 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "jedit-4.2";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://kent.dl.sourceforge.net/sourceforge/jedit/jedit42source.tar.gz;
     sha256 = "1ckqghsw2r30kfkqfgjl4k47gdwpz8c1h85haw0y0ymq4rqh798j";
   };
@@ -18,7 +18,7 @@ args.stdenv.mkDerivation {
     cp modes/catalog \$out/lib/modes
   ";
 
-  buildInputs =(with args; [ant]);
+  buildInputs = [ant];
 
   meta = { 
       description = "really nice programmers editor written in Java. Give it a try";

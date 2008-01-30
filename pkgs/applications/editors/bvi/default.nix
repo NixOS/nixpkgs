@@ -1,13 +1,13 @@
-args:
-args.stdenv.mkDerivation {
+args : with args;
+stdenv.mkDerivation {
   name = "bvi-1.3.2";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://prdownloads.sourceforge.net/bvi/bvi-1.3.2.src.tar.gz;
     sha256 = "110wxqnyianqamxq4y53drqqxb9vp4k2fcvic45qggvlqkqhlfgz";
   };
 
-  buildInputs =(with args; [ncurses]);
+  buildInputs = [ncurses];
 
   meta = { 
       description = "hex editor with vim style keybindings";

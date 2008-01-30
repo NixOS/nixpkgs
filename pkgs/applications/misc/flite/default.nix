@@ -1,8 +1,8 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "flite-1.3-release";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://www.speech.cs.cmu.edu/flite/packed/flite-1.3/flite-1.3-release.tar.gz;
     sha256 = "12wanxx57bbqgkag54dlqzv6h2kr9053p0z8mkxs0mqy03vja8lj";
   };
@@ -17,8 +17,6 @@ args.stdenv.mkDerivation {
     ensureDir \$out/share/flite
     cp -r bin \$out
   ";
-
-  buildInputs = (with args; []);
 
   meta = { 
       description = "Flite text to speech engine";

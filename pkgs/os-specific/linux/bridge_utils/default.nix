@@ -1,13 +1,13 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "bridge-utils-1.2";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = mirror://sourceforge/bridge/bridge-utils-1.2.tar.gz;
     sha256 = "0jg3z51c2c34byg4zi39j9g4b66js5kanjhid77hpa0jdfmryfy9";
   };
 
-  buildInputs =(with args; [autoconf automake]);
+  buildInputs = [autoconf automake];
 
   preConfigure="autoreconf";
 

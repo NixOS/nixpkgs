@@ -1,8 +1,8 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "rdiff-backup-1.1.14";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://savannah.nongnu.org/download/rdiff-backup/rdiff-backup-1.1.14.tar.gz;
     sha256 = "0sh2kz90z47yfa9786dyn3q9ba1xcmjvd65rykvm7mg5apnrg27h";
   };
@@ -14,7 +14,7 @@ args.stdenv.mkDerivation {
     
   ";
 
-  buildInputs = (with args; [python librsync gnused ]);
+  buildInputs = [python librsync gnused ];
 
   meta = {
       description = "backup system trying to combine best a mirror and an incremental backup system";

@@ -51,19 +51,19 @@
 #AMR-WB IF2 support        no
 
 
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "kino-1.2.0";
 
   phases = "unpackPhase configurePhase buildPhase installPhase";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://downloads.sourceforge.net/kino/kino-1.2.0.tar.gz;
     sha256 = "15q1qmii5a2zbrrrg8iba2d1rjzaisa75zvxjhrs86jwglpn4lp9";
   };
 
-  buildInputs =(with args; [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 x11 libXv gettext libX11 glib cairo ]); # TODOoptional packages 
+  buildInputs = [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
+      pkgconfig perl perlXMLParser libavc1394 libiec61883 x11 libXv gettext libX11 glib cairo ]; # TODOoptional packages 
 
   #preConfigure = "
   #  grep 11 env-vars

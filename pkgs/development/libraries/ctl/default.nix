@@ -1,16 +1,16 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "ctl-1.4.1";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://surfnet.dl.sourceforge.net/sourceforge/ampasctl/ctl-1.4.1.tar.gz;
     sha256 = "16lzgbpxdyhykdwndj1i9vx3h4bfkxqqcrvasvgg70gb5raxj0mj";
   };
 
-  propagatedBuildInputs = (with args; [ilmbase]);
-  configureFlags="--with-ilmbase-prefix=${args.ilmbase}";
+  propagatedBuildInputs =  [ilmbase];
+  configureFlags="--with-ilmbase-prefix=${ilmbase}";
   #configurePhase = "
-    #export CXXFLAGS=\"-I${args.ilmbase}/include -L${args.ilmbase}/lib\"
+    #export CXXFLAGS=\"-I${ilmbase}/include -L${ilmbase}/lib\"
     #echo $CXXFLAGS
     #unset configurePhase; configurePhase
   #";

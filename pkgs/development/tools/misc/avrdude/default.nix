@@ -12,7 +12,7 @@ let
     #defaultFlags = ["doc"];
   };
 
-in args.stdenv.mkDerivation {
+in stdenv.mkDerivation {
 
   # passing the flags in case a library using this want's to check them (*) .. 
   inherit (co) /* flags */ buildInputs configureFlags;
