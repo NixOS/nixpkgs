@@ -3,22 +3,23 @@
 , stateDir ? "/nix/var"
 }:
 
-let version = "0.12pre10154"; in
+let version = "0.12pre10389"; in
 
 stdenv.mkDerivation {
   name = "nix-${version}";
   
   src = fetchurl {
     url = "http://nix.cs.uu.nl/dist/nix/nix-${version}/nix-${version}.tar.bz2";
-    md5 = "9e5833e34ade23852a1270d0f2a98ce2";
+    md5 = "5824debe60299ebc9c5aa6532e6a8b67";
   };
 
   buildInputs = [perl curl openssl];
 
-  configureFlags = "
+  configureFlags = ''
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
     --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
-    --disable-init-state";
+    --disable-init-state
+  '';
 
   meta = {
     description = "The Nix Deployment System";
