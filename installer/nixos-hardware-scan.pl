@@ -51,6 +51,7 @@ push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 # However, some are needed in the initrd to boot the system.
 
 my $enableIntel2200BGFirmware = "false";
+my $videoDriver = "vesa";
 
 sub pciCheck {
     my $path = shift;
@@ -92,6 +93,26 @@ sub pciCheck {
     $enableIntel2200BGFirmware = "true" if $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
+
+    # Hm, can we extract the PCI ids supported by X drivers somehow?
+    # cf. http://www.calel.org/pci-devices/xorg-device-list.html
+    $videoDriver = "i810" if $vendor eq "0x8086" &&
+        ($device eq "0x1132" ||
+         $device eq "0x2572" ||
+         $device eq "0x2592" ||
+         $device eq "0x2772" ||
+         $device eq "0x2776" ||
+         $device eq "0x2782" ||
+         $device eq "0x2792" ||
+         $device eq "0x2792" ||
+         $device eq "0x27a2" ||
+         $device eq "0x27a6" ||
+         $device eq "0x3582" ||
+         $device eq "0x7121" ||
+         $device eq "0x7123" ||
+         $device eq "0x7125" ||
+         $device eq "0x7128"
+        );
 }
 
 foreach my $path (glob "/sys/bus/pci/devices/*") {
@@ -183,6 +204,14 @@ print <<EOF ;
     # Warning: setting this option to `true' requires acceptance of the
     # firmware license, see http://ipw2200.sourceforge.net/firmware.php?fid=7.
     enableIntel2200BGFirmware = $enableIntel2200BGFirmware;
+  };
+
+  services = {
+
+    xserver = {
+      videoDriver = "$videoDriver";
+    };
+      
   };
 }
 EOF
