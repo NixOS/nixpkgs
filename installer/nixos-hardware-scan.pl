@@ -107,6 +107,7 @@ sub pciCheck {
          $device eq "0x2792" ||
          $device eq "0x27a2" ||
          $device eq "0x27a6" ||
+         $device eq "0x29a2" ||
          $device eq "0x3582" ||
          $device eq "0x7121" ||
          $device eq "0x7123" ||
