@@ -155,7 +155,10 @@ fi
 
 
 # Make this configuration the current configuration.
-ln -sfn "$systemConfig" /var/run/current-system
+# The readlink is there to ensure that when $systemConfig = /system
+# (which is a symlink to the store), /var/run/current-system is still
+# used as a garbage collection root.
+ln -sfn "$(readlink -f "$systemConfig")" /var/run/current-system
 
 
 # Prevent the current configuration from being garbage-collected.

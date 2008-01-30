@@ -19,6 +19,7 @@ if test -z "$NIXOS"; then
     NIXOS=/etc/nixos/nixos
 fi
 
+# NIXOS_CONFIG is interpreted relative to $mountPoint.
 if test -z "$NIXOS_CONFIG"; then
     NIXOS_CONFIG=/etc/nixos/configuration.nix
 fi
@@ -38,14 +39,13 @@ if ! test -e "$NIXOS"; then
     exit 1
 fi
     
-if ! test -e "$NIXOS_CONFIG"; then
-    echo "configuration file $NIXOS_CONFIG doesn't exist"
+if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
+    echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
     exit 1
 fi
     
 
 NIXOS=$(readlink -f "$NIXOS")
-NIXOS_CONFIG=$(readlink -f "$NIXOS_CONFIG")
 
 
 # Mount some stuff in the target root directory.
@@ -142,20 +142,8 @@ echo "building the system configuration..."
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
     -f "/mnt$NIXOS/system/system.nix" \
-    --arg configuration "import /mnt$NIXOS_CONFIG" \
+    --arg configuration "import $NIXOS_CONFIG" \
     --set -A system
-
-
-# Copy the configuration to /etc/nixos.
-backupTimestamp=$(date "+%Y%m%d%H%M%S")
-targetConfig=$mountPoint/etc/nixos/configuration.nix
-mkdir -p $(dirname $targetConfig)
-if test -e $targetConfig -o -L $targetConfig; then
-    cp -f $targetConfig $targetConfig.backup-$backupTimestamp
-fi
-if test "$NIXOS_CONFIG" != "$targetConfig"; then
-    cp -f $NIXOS_CONFIG $targetConfig
-fi
 
 
 # Make a backup of the old NixOS/Nixpkgs sources.
@@ -177,7 +165,6 @@ cp -prd $NIXOS $targetNixos
 if test -e /etc/nixos/nixpkgs; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi
-ln -sfn nixpkgs/pkgs/top-level/all-packages.nix $mountPoint/etc/nixos/install-source.nix
 
 
 # Grub needs a mtab.

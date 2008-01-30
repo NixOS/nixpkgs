@@ -29,8 +29,7 @@ fi
 svn co https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk nixos
 svn co https://svn.cs.uu.nl:12443/repos/trace/nixpkgs/trunk nixpkgs
 svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk services
-ln -sfn ../services nixos/services
 
-# A few symlink.
+# Add a few required symlink.
+ln -sfn ../services nixos/services
 ln -sfn ../nixpkgs/pkgs nixos/pkgs
-ln -sfn nixpkgs/pkgs/top-level/all-packages.nix install-source.nix

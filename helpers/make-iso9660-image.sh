@@ -39,8 +39,8 @@ done
 
 
 # Also put a nix-pull manifest of the closures on the CD.
-printManifest=1 perl $pathsFromGraph closure-* > MANIFEST
-echo "MANIFEST=MANIFEST" >> pathlist
+printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
+echo "nix-path-registration=nix-path-registration" >> pathlist
 
 
 # Add symlinks to the top-level store objects.

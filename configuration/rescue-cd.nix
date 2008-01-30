@@ -36,14 +36,18 @@ rec {
 
       extraJobs = [
         # Unpack the NixOS/Nixpkgs sources to /etc/nixos.
+        # !!! run this synchronously
         { name = "unpack-sources";
           job = "
             start on startup
             script
               export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
+
+              ${system.nix}/bin/nix-store --load-db < /nix-path-registration
+
               mkdir -p /etc/nixos/nixos
-              tar xjf /nixos.tar.bz2 -C /etc/nixos/nixos
-              tar xjf /nixpkgs.tar.bz2 -C /etc/nixos
+              tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
+              tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos
               mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs
               ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
               chown -R root.root /etc/nixos
@@ -66,6 +70,7 @@ rec {
         { name = "rogue";
           job = "
             env HOME=/root
+            chdir /root
             start on udev
             stop on shutdown
             respawn ${pkgs.rogue}/bin/rogue < /dev/tty8 > /dev/tty8 2>&1
@@ -214,10 +219,10 @@ rec {
         target = "boot/background.xpm.gz";
       }
       { source = nixosTarball + "/" + nixosTarball.tarName;
-        target = "/" + nixosTarball.tarName;
+        target = "/install/" + nixosTarball.tarName;
       }
       { source = nixpkgsTarball;
-        target = "/nixpkgs.tar.bz2";
+        target = "/install/nixpkgs.tar.bz2";
       }
       { source = pkgs.writeText "label" "";
         target = "/${configuration.boot.rootLabel}";

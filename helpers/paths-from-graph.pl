@@ -47,6 +47,20 @@ if ($ENV{"printManifest"} eq "1") {
     }
 }
 
+elsif ($ENV{"printRegistration"} eq "1") {
+    # This is the format used by `nix-store --register-validity
+    # --hash-given' / `nix-store --load-db'.
+    foreach my $storePath (sort (keys %storePaths)) {
+        print "$storePath\n";
+        print "0000000000000000000000000000000000000000000000000000000000000000\n"; # !!! fix
+        print "\n"; # don't care about preserving the deriver
+        print scalar(@{$refs{$storePath}}), "\n";
+        foreach my $ref (@{$refs{$storePath}}) {
+            print "$ref\n";
+        }
+    }
+}
+
 else {
     foreach my $storePath (sort (keys %storePaths)) {
         print "$storePath\n";
