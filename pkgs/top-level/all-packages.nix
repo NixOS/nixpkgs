@@ -4532,6 +4532,11 @@ rec {
     inherit fetchurl stdenv ncurses openssl;
   };
 
+  lyx = import ../applications/misc/lyx {
+   inherit fetchurl stdenv tetex python;
+   qt = qt4;
+  };
+
   maxima = import ../applications/misc/maxima {
     inherit fetchurl stdenv clisp;
   };
