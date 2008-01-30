@@ -50,6 +50,8 @@ push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 # modules are auto-detected so we don't need to list them here.
 # However, some are needed in the initrd to boot the system.
 
+my $enableIntel2200BGFirmware = "false";
+
 sub pciCheck {
     my $path = shift;
     my $vendor = readFile "$path/vendor";
@@ -62,9 +64,9 @@ sub pciCheck {
         chomp $module;
     }
     
-    print "$path: $vendor $device $class";
-    print " $module" if defined $module;
-    print "\n";
+    print STDERR "$path: $vendor $device $class";
+    print STDERR " $module" if defined $module;
+    print STDERR "\n";
 
     if (defined $module) {
         # See the bottom of http://pciids.sourceforge.net/pci.ids for
@@ -82,7 +84,14 @@ sub pciCheck {
         {
             push @initrdKernelModules, $module;
         }
-    }        
+    }
+
+    # Can't rely on $module here, since the module may not be loaded
+    # due to missing firmware.  Ideally we would check modules.pcimap
+    # here.
+    $enableIntel2200BGFirmware = "true" if $vendor eq "0x8086" &&
+        ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
+         $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
 }
 
 foreach my $path (glob "/sys/bus/pci/devices/*") {
@@ -104,9 +113,9 @@ sub usbCheck {
         chomp $module;
     }
     
-    print "$path: $class $subclass $protocol";
-    print " $module" if defined $module;
-    print "\n";
+    print STDERR "$path: $class $subclass $protocol";
+    print STDERR " $module" if defined $module;
+    print STDERR "\n";
  
     if (defined $module) {
         if (# Mass-storage controller.  Definitely important.
@@ -127,7 +136,6 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
         usbCheck $path;
     }
 }
-
 
 
 # Generate the configuration file.
@@ -169,6 +177,12 @@ print <<EOF ;
 
   nix = {
     maxJobs = $cpus;
+  };
+
+  networking = {
+    # Warning: setting this option to `true' requires acceptance of the
+    # firmware license, see http://ipw2200.sourceforge.net/firmware.php?fid=7.
+    enableIntel2200BGFirmware = $enableIntel2200BGFirmware;
   };
 }
 EOF
