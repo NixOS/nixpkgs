@@ -634,6 +634,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  mssys = import ../tools/misc/mssys {
+    inherit fetchurl stdenv gettext;
+  };
+
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
   };
