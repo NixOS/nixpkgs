@@ -7,8 +7,8 @@ fi
 
 postInstall() {
     if test "$pythonBindings"; then
-        make swig-py swig_pydir=$(toPythonPath $out)
-        make install-swig-py swig_pydir=$(toPythonPath $out)
+        make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+        make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
     fi
     if test "$perlBindings"; then
         make swig-pl-lib
