@@ -1050,6 +1050,11 @@
         default = "nobody";
 	description = "User account under which Apache Tomcat runs.";
       };      
+      
+      deployFrom = mkOption {
+        default = "";
+	description = "Location where webapplications are stored. Leave empty to use the baseDir.";
+      };
     };
 
     httpd = {

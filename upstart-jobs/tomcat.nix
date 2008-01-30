@@ -5,7 +5,7 @@ let
 cfg = config.services.tomcat;
 tomcatService = import ../services/tomcat {
 	inherit (pkgs) stdenv jdk tomcat6 su;
-	inherit (cfg) baseDir user;
+	inherit (cfg) baseDir user deployFrom;
 };
 
 in
