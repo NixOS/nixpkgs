@@ -1035,6 +1035,23 @@
       };
     };
 
+    tomcat = {
+      enable = mkOption {
+        default = false;
+	description = "Whether to enable Apache Tomcat";
+      };
+      
+      baseDir = mkOption {
+        default = "/var/tomcat";
+	description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+      };
+      
+      user = mkOption {
+        default = "nobody";
+	description = "User account under which Apache Tomcat runs.";
+      };      
+    };
+
     httpd = {
 
       enable = mkOption {
