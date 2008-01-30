@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   
   patches = [./fix.patch];
+
+  meta = {
+    homepage = http://xiph.org/paranoia;
+  };
 }

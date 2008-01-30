@@ -9,4 +9,8 @@ stdenv.mkDerivation rec {
   buildInputs = [pkgconfig libgphoto2 libexif popt gettext];
 # There is a bug in 2.4.0 configure.ac (in their m4 macroses)
   patchPhase = "sed -e 's@_tmp=true@_tmp=false@' -i configure configure.ac";
+
+  meta = {
+    homepage = http://www.gphoto.org;
+  };
 }

@@ -11,5 +11,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GNU Hello, a classic computer science tool";
+    homepage = http://www.gnu.org/software/hello/;
   };
 }

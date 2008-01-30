@@ -57,5 +57,6 @@ args.stdenv.mkDerivation {
 
   meta = {
     description = "The most popular clone of the VI editor";
+    homepage = http://www.vim.org;
   };
 }

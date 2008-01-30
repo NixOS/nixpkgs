@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     md5 = "ae3729ab5592be06ed01b973d4b3e9fe";
   };
   buildInputs = [bluezLibs];
+
+  meta = {
+    homepage = http://www.bluez.org;
+  };
 }

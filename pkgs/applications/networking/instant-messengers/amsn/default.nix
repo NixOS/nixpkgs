@@ -10,4 +10,8 @@ stdenv.mkDerivation {
 
   inherit tcl tk libstdcpp;
   buildInputs = [which tcl tk x11 ];
+
+  meta = {
+    homepage = http://amsn-project.net;
+  };
 }

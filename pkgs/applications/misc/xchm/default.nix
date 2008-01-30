@@ -10,5 +10,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A viewer for Microsoft HTML Help files";
+    homepage = http://xchm.sourceforge.net;
   };
 }

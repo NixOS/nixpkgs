@@ -33,4 +33,8 @@ stdenv.mkDerivation {
     boost
     gettext
   ];
+
+  meta = {
+    homepage = http://www.inkscape.org;
+  };
 }

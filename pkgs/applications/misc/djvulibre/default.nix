@@ -15,6 +15,7 @@ stdenv.mkDerivation {
 	DjVu libre - a library and a viewer for djvu format - compression for
 	scanned images.
 ";
+    homepage = http://djvu.sourceforge.net;
   };
 }
 

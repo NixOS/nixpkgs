@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     (if graphicsSupport then gdkpixbuf else null)
   ];
   #patches = [./bsd.patch];
+
+  meta = {
+    homepage = http://w3m.sourceforge.net;
+  };
 }

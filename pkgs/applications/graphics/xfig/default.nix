@@ -17,5 +17,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An interactive drawing tool for X11";
+    homepage = http://xfig.org;
   };
 }

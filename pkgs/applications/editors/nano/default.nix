@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [ncurses gettext];
   configureFlags = "--enable-tiny";
+
+  meta = {
+    homepage = http://www.nano-editor.org;
+  };
 }

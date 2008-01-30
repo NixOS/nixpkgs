@@ -14,8 +14,11 @@ args: with args;
 
   buildInputs = [bzip2 freetype ghostscript graphviz libjpeg libpng 
 		libtiff libX11 libxml2 zlib libtool] ++ (if args ? tetex then [args.tetex] else [])
-		 ++ (if args ? librsvg then [args.librsvg] else [])
-		;
+		 ++ (if args ? librsvg then [args.librsvg] else []);
+
+  meta = {
+    homepage = http://www.imagemagick.org;
+  };
 } // (if args ? tetex then {
 	preConfigure = "
 		export DVIDecodeDelegate=${args.tetex}/bin/dvips

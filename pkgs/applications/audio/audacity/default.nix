@@ -29,8 +29,7 @@ stdenv.mkDerivation {
 		(textClosure localDefs [addInputs (doDump "0") (noDepEntry "echo \$PATH; ar --version") doConfigure preBuild doMakeInstall postInstall doForceShare]);
 
   meta = {
-    description = "
-	Audacity sound editor.
-";
+    description = "Audacity sound editor.";
+    homepage = http://audacity.sourceforge.net;
   };
 }

@@ -8,5 +8,9 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [libXaw xproto libXt libX11 libSM libICE ncurses];
   configureFlags = ["--enable-wide-chars"];
+
+  meta = {
+    homepage = http://invisible-island.net/xterm;
+  };
 }
 
