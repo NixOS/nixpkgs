@@ -4791,12 +4791,14 @@ rec {
   };
 
   subversion14 = import ../applications/version-management/subversion-1.4.x {
-    inherit fetchurl stdenv apr aprutil neon expat swig zlib;
-    bdbSupport = true;
-    httpServer = false;
+    inherit fetchurl stdenv apr aprutil neon expat swig zlib jdk;
+    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
+    httpServer = getConfig ["subversion" "httpServer"] false;
+    sslSupport = getConfig ["subversion" "sslSupport"] true;
+	pythonBindings = getConfig ["subversion" "pythonBindings"] false;
     perlBindings = getConfig ["subversion" "perlBindings"] false;
-    sslSupport = true;
-    compressionSupport = true;
+	javahlBindings = getConfig ["subversion" "javahlBindings"] false;
+    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
     httpd = apacheHttpd;
   };
 
