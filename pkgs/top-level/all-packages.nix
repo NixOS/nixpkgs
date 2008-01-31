@@ -3224,6 +3224,10 @@ rec {
     inherit fetchurl stdenv jdk;
   };
 
+  tomcat6 = import ../servers/http/tomcat/6.0.nix {
+    inherit fetchurl stdenv jdk;
+  };
+
   vsftpd = import ../servers/ftp/vsftpd {
     inherit fetchurl openssl stdenv libcap pam;
   };
