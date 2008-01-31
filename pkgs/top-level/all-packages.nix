@@ -1020,8 +1020,6 @@ rec {
     profiledCompiler = true;
   });
 
-  /* doesn't work yet
-
   # This new ghc stuff is under heavy development and might change ! 
 
   # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
@@ -1044,20 +1042,20 @@ rec {
   };
 
   # this will change in the future 
-  ghc68_extra_libs =
-    ghc : let
-    deriv = name : goSrcDir : deps : 
-      let bd = builderDefs {
-          goSrcDir = "ghc-* /libraries";
-          src = ghc.extra_src;
-        } null; in
-      stdenv.mkDerivation rec {
-        inherit name;
-	builder = bd.writeScript (name + "-builder")
-		(bd.textClosure [builderDefs.haskellBuilderDefs]);
-      };
+  ghc68_extra_libs = ghc:
+    let deriv = name : goSrcDir : deps : 
+        let localDefs = builderDefs {
+            inherit goSrcDir;
+            src = ghc.extra_src;
+          } null; 
+        in with localDefs;
+          stdenv.mkDerivation rec {
+            inherit name;
+            builder = writeScript (name + "-builder")
+                    (textClosure localDefs [ cabalBuild ]);
+          };
     # using nvs to be able to use mtl-1.1.0.0 as name 
-  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
+  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "cd libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
 
   # this will change in the future 
   ghc68_extra_libs =
@@ -1098,8 +1096,6 @@ rec {
         # (flatten ghcsAndLibs.ghc68.core_libs);
       inherit ghc;
   };
-
-  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
