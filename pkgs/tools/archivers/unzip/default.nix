@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     url = http://nix.cs.uu.nl/dist/tarballs/unzip552.tar.gz;
     md5 = "9d23919999d6eac9217d1f41472034a9";
   };
+
+  meta = {
+	  homepage = http://www.info-zip.org;
+  };
 }

@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     sha256 = "1jx5bwa8abx7aih4lymx4bnrmyip2yb0rp1mza97wpni1q7n6z9h";
   };
   buildInputs = [alsaLib ncurses gettext];
+
+  meta = {
+	  homepage = http://www.alsa-project.org;
+  };
 }
