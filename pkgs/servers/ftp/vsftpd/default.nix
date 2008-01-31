@@ -1,16 +1,20 @@
-{stdenv, fetchurl, openssl}:
+args: with args;
 
-stdenv.mkDerivation {
-  name = "vsftpd-2.0.3";
+stdenv.mkDerivation rec {
+  name = "vsftpd-2.0.5";
   src = fetchurl {
-    url = ftp://vsftpd.beasts.org/users/cevans/vsftpd-2.0.3.tar.gz;
-    md5 = "74936cbd8e8251deb1cd99c5fb18b6f8";
+    url = "ftp://vsftpd.beasts.org/users/cevans/${name}.tar.gz";
+    sha256 = "0nzsxknnaqnfk853yjsmi31sl02jf5ydix9wxbldv4i7vzqfnqjl";
   };
   
-  NIX_LDFLAGS = [ "-lcrypt" "-lssl" "-lcrypto" ];
+  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
 
-  builder = ./builder.sh ;
+  preInstall = ''
+  ensureDir $out/{,s}bin
+  ensureDir $out/man/man{5,8}
+  '';
 
   patches = [ ./fix.patch ] ;
-  buildInputs = [ openssl ];
+  preConfigure = ''sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h'';
+  buildInputs = [ openssl libcap pam ];
 }
