@@ -226,7 +226,15 @@ rec {
   # Call a specific version of a Nix expression, that is,
   # `selectVersion ./foo {version = "0.1.2"; args...}' evaluates to
   # `import ./foo/0.1.2.nix args'.
-  selectVersion = dir: args: import (dir + "/${args.version}.nix") args;
+  selectVersion = dir: defVersion: args:
+    let
+      pVersion =
+        if (args ? version && args.version != "") then
+          args.version
+        else
+          getConfig [ (baseNameOf (toString dir)) "version" ] defVersion;
+    in
+      import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
         
         
   ### STANDARD ENVIRONMENT
@@ -463,15 +471,13 @@ rec {
       inherit fetchurl stdenv;
     });
 
-  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap) {
+  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap "0.7.5") {
     inherit stdenv fetchurl builderDefs pkgconfig libxml2
       intltool;
     inherit (gtkLibs) gtk;
   };
 
-  gdmap = gdmapFun {
-  	version = "0.7.5";
-  } null;
+  gdmap = gdmapFun null;
 
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
@@ -564,17 +570,13 @@ rec {
     inherit fetchurl stdenv ocaml;
   };
 
-  /*hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus ) {
+  /*hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
     inherit builderDefs stdenv fetchurl libdbi libdbiDrivers fuse
       pkgconfig perl gettext dbus dbus_glib pcre libscd;
     inherit (gtkLibs) glib;
     bison = bison23;
     flex = flex2533;
-  };
-
-  hyppocampus = hyppocampusFun {
-    version = "0.3rc1";
-  } null;*/
+  };*/
 
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
@@ -709,15 +711,13 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
-  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs) {
+  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2007.12.01") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs e2fsprogs pkgconfig;
     inherit (gnome) gnomevfs GConf;
   };
 
-  relfs = relfsFun {
-    version = "cvs.2007.12.01";
-  } null;
+  relfs = relfsFun null;
 
   replace = import ../tools/text/replace {
     inherit fetchurl stdenv;
@@ -730,9 +730,8 @@ rec {
   };
   */
 
-  rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap) {
-  	version = "0.28";
-	inherit builderDefs readline;
+  rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap "0.28") {
+    inherit builderDefs readline;
   };
 
   rlwrap = rlwrapFun null;
@@ -757,8 +756,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  smbfsFuseFun = lib.sumArgs (selectVersion ../tools/networking/smbfs-fuse) {
-    version = "0.8.7";
+  smbfsFuseFun = lib.sumArgs (selectVersion ../tools/networking/smbfs-fuse "0.8.7") {
     inherit builderDefs samba fuse;
   };
 
@@ -1356,20 +1354,18 @@ rec {
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  pyrexFun = lib.sumArgs (selectVersion ../development/interpreters/pyrex) {
+  pyrexFun = lib.sumArgs (selectVersion ../development/interpreters/pyrex "0.9.6") {
     inherit fetchurl stdenv stringsWithDeps lib builderDefs;
 	python = builtins.getAttr "2.5" python_alts;
   };
 
-  pyrex = pyrexFun {version = "0.9.6";} null;
+  pyrex = pyrexFun null;
 
-  QiFun = lib.sumArgs (selectVersion ../development/compilers/qi) {
+  QiFun = lib.sumArgs (selectVersion ../development/compilers/qi "9.1") {
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
 
-  Qi = QiFun {
-    version = getConfig ["Qi" "version"] "9.1";
-  } null;
+  Qi = QiFun null;
 
   realPerl = import ../development/interpreters/perl {
     inherit fetchurl stdenv;
@@ -1498,13 +1494,11 @@ rec {
   };
 
   elfutilsFun = lib.sumArgs 
-    (selectVersion ../development/tools/misc/elfutils) {
+    (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
   };
 
-  elfutils = elfutilsFun {
-    version = "0.131";
-  } null;
+  elfutils = elfutilsFun null;
 
   epm = import ../development/tools/misc/epm {
     inherit fetchurl stdenv rpm;
@@ -1563,13 +1557,11 @@ rec {
     inherit fetchurl stdenv perl perlXMLSimple;
   };
 
-  indentFun = lib.sumArgs (selectVersion ../development/tools/misc/indent) {
+  indentFun = lib.sumArgs (selectVersion ../development/tools/misc/indent "2.2.9") {
     inherit fetchurl stdenv builderDefs;
   };
 
-  indent = indentFun {
-    version = "2.2.9";
-  } null;
+  indent = indentFun null;
 
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
@@ -2117,12 +2109,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  intltoolFun = lib.sumArgs (selectVersion ../development/tools/misc/intltool) {
+  intltoolFun = lib.sumArgs (selectVersion ../development/tools/misc/intltool "0.36.2") {
     inherit fetchurl stdenv lib builderDefs stringsWithDeps
       perl perlXMLParser;
   };
 
-  intltool = intltoolFun {version = "0.36.2";} null;
+  intltool = intltoolFun null;
 
   jasper = import ../development/libraries/jasper {
 	  inherit fetchurl stdenv unzip libjpeg freeglut mesa;
@@ -2172,20 +2164,17 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  libdbiFun = lib.sumArgs (selectVersion ../development/libraries/libdbi) {
+  libdbiFun = lib.sumArgs (selectVersion ../development/libraries/libdbi "0.8.2") {
     inherit stdenv fetchurl builderDefs;
   };
 
-  libdbi = libdbiFun {
-    version = "0.8.2";
-  } null;
+  libdbi = libdbiFun null;
 
-  libdbiDriversFun = lib.sumArgs (selectVersion ../development/libraries/libdbi-drivers) {
+  libdbiDriversFun = lib.sumArgs (selectVersion ../development/libraries/libdbi-drivers "0.8.2-1") {
     inherit stdenv fetchurl builderDefs libdbi;
   };
 
   libdbiDrivers = libdbiDriversFun {
-    version = "0.8.2-1";
     inherit sqlite mysql;
   } null;
 
@@ -2217,14 +2206,12 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
-  libextractorFun = lib.sumArgs (selectVersion ../development/libraries/libextractor)
+  libextractorFun = lib.sumArgs (selectVersion ../development/libraries/libextractor "0.5.18")
   {
     inherit fetchurl stdenv builderDefs zlib;
   };
 
-  libextractor = libextractorFun {
-    version = "0.5.18";
-  } null;
+  libextractor = libextractorFun null;
 
   libgcrypt = import ../development/libraries/libgcrypt {
     inherit fetchurl stdenv libgpgerror;
@@ -2302,13 +2289,11 @@ rec {
     inherit fetchurl stdenv zlib;
   };
 
-  /*libscdFun = lib.sumArgs (selectVersion ../development/libraries/libscd) {
+  /*libscdFun = lib.sumArgs (selectVersion ../development/libraries/libscd "0.4.2") {
     inherit stdenv fetchurl builderDefs libextractor perl pkgconfig;
   };
 
-  libscd = libscdFun {
-    version = "0.4.2";
-  } null;*/
+  libscd = libscdFun null;*/
 
   libsigcxx = import ../development/libraries/libsigcxx {
     inherit fetchurl stdenv pkgconfig;
@@ -3250,14 +3235,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros) {
+  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "r3122") {
     inherit fetchurl stdenv builderDefs;
   };
 
-  atherosVersion = "r3122";
-
   atherosFunCurrent = kernel: atherosFun {
-    version = atherosVersion;
     inherit kernel;
   } null;
 
@@ -3286,13 +3268,11 @@ rec {
     static = true;
   }));
 
-  dmidecodeFun = lib.sumArgs (selectVersion ../os-specific/linux/dmidecode) {
+  dmidecodeFun = lib.sumArgs (selectVersion ../os-specific/linux/dmidecode "2.9") {
     inherit fetchurl stdenv builderDefs;
   };
 
-  dmidecode = dmidecodeFun {
-    version = "2.9";
-  } null;
+  dmidecode = dmidecodeFun null;
 
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
@@ -3432,13 +3412,12 @@ rec {
 	configFile = getConfig ["kernel" "configFile"] null;
   };
 
-  kqemuFun = lib.sumArgs (selectVersion ../os-specific/linux/kqemu) {
+  kqemuFun = lib.sumArgs (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
     inherit fetchurl stdenv builderDefs;
   };
 
   # No finished expression is provided - pick your own kernel
   kqemuFunCurrent = theKernel:  (kqemuFun { 
-    version = "1.3.0pre11";
     kernel = theKernel;
   } null);
 
@@ -3624,13 +3603,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  sdparmFun = lib.sumArgs (selectVersion ../os-specific/linux/sdparm) {
+  sdparmFun = lib.sumArgs (selectVersion ../os-specific/linux/sdparm "1.02") {
     inherit fetchurl stdenv builderDefs;
   };
 
-  sdparm = sdparmFun {
-    version = "1.02";
-  } null;
+  sdparm = sdparmFun null;
  
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
@@ -3932,7 +3909,7 @@ rec {
     version = "0.6.2";
   };
 
-  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz) {
+  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.6.2") {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
@@ -3950,7 +3927,6 @@ rec {
   };
 
   compiz = compizFun {
-    version = getConfig ["compiz" "version"] "0.6.2";
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   } null;
 
@@ -4020,13 +3996,12 @@ rec {
     inherit fetchurl stdenv qt4 djvulibre;
   };
 
-  dvdplusrwtoolsFun = lib.sumArgs (selectVersion ../os-specific/linux/dvd+rw-tools) {
+  /* TODO: rename to be able to set version */
+  dvdplusrwtoolsFun = lib.sumArgs (selectVersion ../os-specific/linux/dvd+rw-tools "7.0") {
     inherit fetchurl stdenv builderDefs cdrkit m4;
   };
  
-  dvdplusrwtools = dvdplusrwtoolsFun {
-    version = "7.0";
-  } null;
+  dvdplusrwtools = dvdplusrwtoolsFun null;
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
@@ -4078,13 +4053,13 @@ rec {
     openexr = openexr_1_6_1;
   };
 
-  fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel) {
+  fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel "4.12") {
     inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11 libXmu libXpm;
   };
 
-  fbpanel = fbpanelFun {version="4.12";} null;
+  fbpanel = fbpanelFun null;
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl python procmail;
@@ -4206,11 +4181,11 @@ rec {
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
-  gocrFun = lib.sumArgs (selectVersion ../applications/graphics/gocr) {
+  gocrFun = lib.sumArgs (selectVersion ../applications/graphics/gocr "0.44") {
     inherit builderDefs fetchurl stdenv;
   };
 
-  gocr = gocrFun {version = "0.44";} null;
+  gocr = gocrFun null;
 
   gphoto2 = import ../applications/misc/gphoto2 {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
@@ -4478,7 +4453,7 @@ rec {
     python = builtins.getAttr "2.5" python_alts;
   };
 
-  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu ) {
+  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu "0.9.0") {
     inherit fetchurl;
     stdenv = overrideGCC stdenv gcc34;
     builderDefs = builderDefs {
@@ -4487,18 +4462,14 @@ rec {
     inherit SDL zlib which;
   };
 
-  qemu = qemuFun {
-    version = "0.9.0";
-  } null;
+  qemu = qemuFun null;
 
   qemuImageFun = lib.sumArgs 
-    (selectVersion ../applications/virtualization/qemu/linux-img ) {
+    (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
     inherit builderDefs fetchurl stdenv;
   };
 
-  qemuImage = qemuImageFun {
-    version = "0.2";
-  } null;
+  qemuImage = qemuImageFun null;
 
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline;
@@ -4695,16 +4666,14 @@ rec {
     flags = [ "X11" ]; # only flag "X11" by now
   };
 
-  /*virtualboxFun = lib.sumArgs (selectVersion ../applications/virtualization/virtualbox) {
+  /*virtualboxFun = lib.sumArgs (selectVersion ../applications/virtualization/virtualbox "1.5.2") {
     inherit stdenv fetchurl builderDefs bridge_utils umlutilities kernelHeaders 
       wine jre libxslt SDL qt3 openssl zlib;
     inherit (xorg) libXcursor;
     inherit (gnome) libIDL;
   };
 
-  virtualbox = virtualboxFun {
-    version = "1.5.2";
-  } null;*/
+  virtualbox = virtualboxFun null;*/
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
@@ -4794,13 +4763,12 @@ rec {
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
-  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver) {
+  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver "5.04") {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
 
   xscreensaver = xscreensaverFun {
-    version = "5.04";
     flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
     inherit mesa libxml2 libjpeg;
     inherit (gtkLibs) gtk;
@@ -4868,7 +4836,7 @@ rec {
 
   ### GAMES
 
-  construoFun = lib.sumArgs (selectVersion ../games/construo) {
+  construoFun = lib.sumArgs (selectVersion ../games/construo "0.2.2") {
     inherit stdenv fetchurl builderDefs
       zlib;
     inherit (xlibs) libX11 xproto;
@@ -4876,7 +4844,6 @@ rec {
 
   construo = construoFun {
     inherit mesa freeglut;
-    version = "0.2.2";
   } null;
 
   exult = import ../games/exult {
@@ -4928,12 +4895,11 @@ rec {
   };
 
   # You still can override by passing more arguments.
-  spaceOrbitFun = lib.sumArgs (selectVersion ../games/orbit ) {
+  spaceOrbitFun = lib.sumArgs (selectVersion ../games/orbit "1.01") {
     inherit fetchurl stdenv builderDefs 
       mesa freeglut;
     inherit (gnome) esound;
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
-    version = "1.01";
   };
 
   spaceOrbit = spaceOrbitFun null;
