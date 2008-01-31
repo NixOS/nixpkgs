@@ -8,6 +8,10 @@ stdenv.mkDerivation {
 
   patches = [ ./security-fix.patch ];
 
+  configureFlags = "--enable-fallback=procmail --with-ssl=${openssl}";
+
+  buildInputs = [ openssl python procmail ];
+
   meta = {
     homepage = http://www.fetchmail.info;
   };
