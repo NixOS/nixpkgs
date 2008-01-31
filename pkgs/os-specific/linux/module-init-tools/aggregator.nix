@@ -18,7 +18,8 @@ done
 rm -rf nix-support
 cd lib/modules/
 rm */modules.*
-MODULE_DIR=$PWD/ depmod -a *
+#  linux-* will pass the new kernel version to depmod to take rather than `uname -r` (see man page)
+MODULE_DIR=$PWD/ depmod -a $(basename lib/modules/2.*)
 cd $out/
 '') [minInit addInputs defEnsureDir];
 in
