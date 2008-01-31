@@ -1061,22 +1061,6 @@ rec {
     # using nvs to be able to use mtl-1.1.0.0 as name 
   in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "cd libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
 
-  # this will change in the future 
-  ghc68_extra_libs =
-    ghc : let
-    deriv = name : goSrcDir : deps : 
-      let bd = builderDefs {
-          goSrcDir = "ghc-* /libraries";
-          src = ghc.extra_src;
-        } null; in
-      stdenv.mkDerivation rec {
-        inherit name;
-	builder = bd.writeScript (name + "-builder")
-		(bd.textClosure [builderDefs.haskellBuilderDefs]);
-      };
-    # using nvs to be able to use mtl-1.1.0.0 as name 
-  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
-
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
