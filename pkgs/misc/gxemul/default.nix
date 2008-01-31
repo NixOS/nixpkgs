@@ -12,7 +12,7 @@ let
     optionals = ["libX11"];
     defaultFlags = [ "demos" "doc" ];
   };
-in args.stdenv.mkDerivation {
+in stdenv.mkDerivation {
 
   inherit name;
   inherit (co) /* flags */ buildInputs configureFlags;

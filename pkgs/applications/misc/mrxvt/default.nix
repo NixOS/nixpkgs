@@ -10,11 +10,11 @@ let
     };
 };
 
-in args.stdenv.mkDerivation {
+in stdenv.mkDerivation {
 
   inherit (co) buildInputs configureFlags;
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = mirror://sourceforge/materm/mrxvt-0.5.3.tar.gz;
     sha256 = "04flnn58hp4qvvk6jzyipsj13v1qyrjabgbw5laz5cqxvxzpncp2";
   };

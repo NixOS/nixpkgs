@@ -33,18 +33,18 @@ Sincerly
 Marc Weber (small nix contributor)
 */
 
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "teamspeak-client-rc2-2032";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = ftp://213.202.254.114/teamspeak/releases/ts2_client_rc2_2032.tar.bz2;
     md5 = "e93d17a25e07b1cbe400e4eb028ca8f8";
   };
 
   phases="installPhase";
 
-  rpathInputs = (with args; [ glibc x11 ] );
+  rpathInputs = [ glibc x11 ];
 
   installPhase="
     set -x

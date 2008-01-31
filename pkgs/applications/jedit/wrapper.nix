@@ -1,18 +1,18 @@
-args:
-args.stdenv.mkDerivation {
-    name = args.jedit.name+"_startscript";
+args: with args;
+stdenv.mkDerivation {
+    name = jedit.name+"_startscript";
 
-    java = args.jre+"/bin/java";
-    jeditjar = args.jedit+"/lib/jedit.jar";
+    java = jre+"/bin/java";
+    jeditjar = jedit+"/lib/jedit.jar";
 
     phases = "buildPhase";
 
     buildPhase = "
 ensureDir \$out/bin
-cat > \$out/bin/${args.jedit.name} << EOF
+cat > \$out/bin/${jedit.name} << EOF
 #!/bin/sh
 exec $java -jar $jeditjar \\$*
 EOF
-  chmod +x \$out/bin/${args.jedit.name}
+  chmod +x \$out/bin/${jedit.name}
 ";
 }

@@ -1,15 +1,15 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "freemind-0.9.0_Beta_13";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://downloads.sourceforge.net/freemind/freemind-src-0.9.0_Beta_13_icon_butterfly.tar.gz;
     sha256 = "00389bhg73qknydrq0f3bskb5lyrdg2p58mnnp19wdvzzmfbic4w";
   };
 
-  buildInputs =(with args; [jdk ant]);
+  buildInputs = [jdk ant];
 
-  inherit (args) jre;
+  inherit jre;
 
   phases="buildPhase installPhase";
 

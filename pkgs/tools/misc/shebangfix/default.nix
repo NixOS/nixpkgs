@@ -1,8 +1,8 @@
-args:
-args.stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "shebangfix-0.0";
 
-  buildInputs = [args.perl];
+  buildInputs = [perl];
 
   file = ./shebangfix.pl;
 
