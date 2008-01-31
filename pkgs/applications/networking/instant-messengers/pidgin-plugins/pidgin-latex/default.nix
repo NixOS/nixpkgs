@@ -37,5 +37,6 @@ stdenv.mkDerivation {
 	Enable it for user by linking to ~/.purple/plugins - from 
 	sw/share/pidgin-latex , not from store of course.
 ";
+		homepage = http://tapas.affenbande.org/wordpress/?page_id=70;
   };
 }

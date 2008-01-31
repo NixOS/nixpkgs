@@ -1,4 +1,5 @@
-args: with args; stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name = "rxvt-unicode-8.9";
  
   buildInputs = [ libX11 libXt libXft perl ];

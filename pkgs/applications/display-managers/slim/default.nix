@@ -20,4 +20,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace /usr /no-such-path
     makeFlagsArray=(CC=gcc CXX=g++ PREFIX=$out MANDIR=$out/share/man CFGDIR=$out/etc)
   ";
+
+  meta = {
+    homepage = http://slim.berlios.de;
+  };
 }

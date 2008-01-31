@@ -16,4 +16,8 @@ stdenv.mkDerivation {
   buildInputs = [x11 motif libXpm];
 
   buildFlags = if stdenv.system == "i686-linux" then "linux" else "";
+
+  meta = {
+    homepage = http://www.nedit.org;
+  };
 }

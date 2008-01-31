@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig ncurses glib openssl];
   NIX_LDFLAGS = "-lncurses";
   configureFlags = "--with-proxy --with-ncurses --enable-ssl";
+
+  meta = {
+    homepage = http://irssi.org;
+  };
 }

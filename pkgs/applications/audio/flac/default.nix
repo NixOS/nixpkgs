@@ -7,6 +7,9 @@ let
 			url = "http://downloads.xiph.org/releases/flac/${name}.tar.gz";
 		} // hash);
 		buildInputs = [libogg];
+    meta = {
+      homepage = http://flac.sourceforge.net;
+    };
 	};
 in
 stdenv.lib.listOfListsToAttrs [

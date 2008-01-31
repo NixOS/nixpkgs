@@ -13,4 +13,8 @@ stdenv.mkDerivation {
   postConfigure = [ "sed 's|\\<gs\\>|${ghostscriptX}/bin/gs|g' -i src/*.am src/*.ad" ];
 
   inherit ghostscriptX;
+
+  meta = {
+    homepage = http://wwwthep.physik.uni-mainz.de/~plass/gv;
+  };
 }

@@ -11,8 +11,7 @@ stdenv.mkDerivation {
   buildInputs =[clisp];
 
   meta = {
-    description = "
-	Maxima computer algebra system
-";
+    description = "Maxima computer algebra system";
+    homepage = http://maxima.sourceforge.net;
   };
 }

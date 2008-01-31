@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure preBuild doMakeInstall doForceShare]);
 	meta = {
-		description = "
-		Snd sound editor.
-";
+		description = "Snd sound editor.";
+    homepage = http://ccrma.stanford.edu/software/snd;
 	};
 }

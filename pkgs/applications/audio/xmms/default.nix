@@ -14,5 +14,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A music player very similar to Winamp";
+    homepage = http://www.xmms.org;
   };
 }

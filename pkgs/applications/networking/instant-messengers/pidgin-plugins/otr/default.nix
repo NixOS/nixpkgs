@@ -9,6 +9,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "OTR plugin for Pidgin IM.";
+    homepage = http://www.cypherpunks.ca/otr;
   };
 
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";

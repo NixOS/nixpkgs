@@ -38,5 +38,6 @@ stdenv.mkDerivation {
   configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include";
   meta = {
     description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
+    homepage = http://pidgin.im;
   };
 }

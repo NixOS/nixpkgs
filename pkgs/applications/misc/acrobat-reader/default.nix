@@ -18,4 +18,8 @@ stdenv.mkDerivation {
     (if xineramaSupport then libXinerama else null)
   ];
   inherit fastStart;
+
+  meta = {
+    homepage = http://www.adobe.com/products/reader;
+  };
 }

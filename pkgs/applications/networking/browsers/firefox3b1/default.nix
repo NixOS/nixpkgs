@@ -50,6 +50,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mozilla Firefox - the browser, reloaded";
+    homepage = http://www.mozilla.com/en-US/firefox/;
   };
 
   passthru = {inherit gtk;};

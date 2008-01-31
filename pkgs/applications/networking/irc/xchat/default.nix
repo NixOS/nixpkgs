@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [pkgconfig tcl gtk];
   configureFlags = "--disable-nls";
+
+  meta = {
+    homepage = http://www.xchat.org;
+  };
 }

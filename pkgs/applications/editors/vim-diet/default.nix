@@ -12,4 +12,8 @@ stdenv.mkDerivation {
   buildInputs = [ncurses];
 
   NIX_CFLAGS_COMPILE="-D_BSD_SOURCE=1";
+
+  meta = {
+    homepage = http://www.vim.org;
+  };
 }

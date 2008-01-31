@@ -23,4 +23,8 @@ stdenv.mkDerivation {
   ];
 
   inherit monoDLLFixer gtksharp sqlite libgnomeui;
+
+  meta = {
+    homepage = http://f-spot.org;
+  };
 }

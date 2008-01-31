@@ -15,4 +15,7 @@ stdenv.mkDerivation {
   inherit gtk;
 
   #patches = [./writable-copies.patch];
+  meta = {
+    homepage = http://www.mozilla.org;
+  };
 }

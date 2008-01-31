@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     (if sslSupport then "--with-ssl" else "--without-ssl")
     (if imapSupport then "--enable-imap" else "--disable-imap")
   ];
+
+  meta = {
+    homepage = http://www.mutt.org;
+  };
 }

@@ -11,5 +11,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Gnome Diagram drawing software.";
+    homepage = http://www.gnome.org/projects/dia;
   };
 }

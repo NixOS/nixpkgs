@@ -1,4 +1,5 @@
-args: with args; stdenv.mkDerivation {
+args: with args;
+stdenv.mkDerivation {
   name="procmail-3.22";
   buildInputs = [stdenv.gcc.libc];
   installPhase = "

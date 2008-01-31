@@ -34,4 +34,8 @@ stdenv.mkDerivation rec {
   libPath =
     [glibc qt motif zlib libX11 libXt libXext libSM libICE libstdcpp5]
     ++ (if motif != null then [motif ] else []);
+
+  meta = {
+    homepage = http://www.opera.com;
+  };
 }
