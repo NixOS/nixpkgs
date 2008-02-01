@@ -43,6 +43,9 @@ in
     start on startup
     stop on shutdown
 
+    # Needed to interpret times in the local timezone.
+    env TZ=${config.time.timeZone}
+
     respawn ${pkgs.cron}/sbin/cron -n
   '';
 }
