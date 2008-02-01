@@ -78,7 +78,7 @@ let
 
     # Cron daemon.
     (import ../upstart-jobs/cron.nix {
-      inherit (pkgs) cron;
+      inherit config pkgs;
     })
 
     # Name service cache daemon.

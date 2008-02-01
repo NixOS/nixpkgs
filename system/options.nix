@@ -528,6 +528,24 @@
     };
 
 
+    cron = {
+
+      systemCronJobs = mkOption {
+        default = [];
+        example = [
+          "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
+          "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
+        ];
+        description = ''
+          A list of Cron jobs to be appended to the system-wide
+          crontab.  See the manual page for crontab for the expected
+          format.
+        '';
+      };
+
+    };
+
+
     ttyBackgrounds = {
 
       enable = mkOption {
