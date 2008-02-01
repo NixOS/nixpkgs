@@ -2,11 +2,24 @@
 
 let
 
-  systemCronJobs = config.services.cron.systemCronJobs;
+  # !!! This should be defined somewhere else.
+  locatedb = "/var/cache/locatedb";
+  
+  updatedbCmd =
+    "${config.services.locate.period}  root  " +
+    "mkdir -m 0755 -p $(dirname ${locatedb}) && " +
+    "nice -n 19 ${pkgs.utillinux}/bin/ionice -c 3 " +
+    "updatedb --localuser=nobody --output=${locatedb} > /var/log/updatedb 2>&1";
+  
+
+  # Put all the system cronjobs together.
+  systemCronJobs =
+    config.services.cron.systemCronJobs ++
+    pkgs.lib.optional config.services.locate.enable updatedbCmd;
 
   systemCronJobsFile = pkgs.writeText "system-crontab" ''
     SHELL=${pkgs.bash}/bin/sh
-    PATH=${pkgs.coreutils}/bin
+    PATH=${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnused}/bin:${pkgs.su}/bin
     MAILTO=
     ${pkgs.lib.concatStrings (map (job: job + "\n") systemCronJobs)}
   '';

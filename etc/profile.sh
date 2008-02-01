@@ -8,6 +8,7 @@ export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 export LANG=@defaultLocale@
 export EDITOR=nano
 export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
+export LOCATE_PATH=/var/cache/locatedb
 
 
 # A nice prompt.
