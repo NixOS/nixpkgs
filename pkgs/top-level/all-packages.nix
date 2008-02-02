@@ -4774,8 +4774,8 @@ rec {
   } null;
 
   xterm = import ../applications/misc/xterm {
-    inherit fetchurl stdenv ncurses;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+    inherit fetchurl stdenv ncurses freetype pkgconfig luit;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft;
   };
 
   xlaunch = import ../tools/X11/xlaunch {
