@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
-    python curl coreutils dbus dbus_glib pango freetype fontconfig 
+    python curl coreutils dbus.libs dbus_glib pango freetype fontconfig
     libX11 libXrender libXft libXt
   ];
 

@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, pciutils, usbutils, expat
-, libusb, dbus, dbus_glib, glib, libvolume_id, perl, perlXMLParser
-, gettext, zlib /* required by pciutils */, eject, libsmbios
-, udev
-}:
+args: with args;
 
 stdenv.mkDerivation {
   name = "hal-0.5.9";
@@ -13,7 +9,7 @@ stdenv.mkDerivation {
   };
   
   buildInputs = [
-    pkgconfig python pciutils expat libusb dbus dbus_glib glib
+    pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
     libvolume_id perl perlXMLParser gettext zlib libsmbios
   ];
 

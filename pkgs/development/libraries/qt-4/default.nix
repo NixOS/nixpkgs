@@ -4,7 +4,7 @@ rec {
   setupHook = ./setup-hook.sh;  
   propagatedBuildInputs = [libXft libXrender libXrandr randrproto xextproto
   libXinerama xineramaproto libXcursor zlib libjpeg mysql libpng which mesa
-  libXmu openssl dbus cups pkgconfig libXext freetype fontconfig inputproto
+  libXmu openssl dbus.libs cups pkgconfig libXext freetype fontconfig inputproto
   fixesproto libXfixes glib libtiff];
   prefixKey = "-prefix ";
   configureFlags = "

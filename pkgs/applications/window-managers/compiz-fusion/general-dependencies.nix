@@ -4,6 +4,6 @@ build-essential libxcomposite-dev libpng12-dev libsm-dev libxrandr-dev libxdamag
 args: with args;
 [
 	libpng 
-	GConf mesa metacity librsvg dbus dbus_glib gnomedesktop git autoconf automake
+	GConf mesa metacity librsvg dbus.libs dbus_glib gnomedesktop git autoconf automake
 	libtool libxslt libwnck intltool perl perlXMLParser compiz
 ]

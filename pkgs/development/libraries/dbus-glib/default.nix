@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   inherit dbus glib;
   buildInputs = [pkgconfig gettext glib expat];
-  propagatedBuildInputs = [dbus];
+  propagatedBuildInputs = [dbus.libs];
 
   meta = {
 	  homepage = http://dbus.freedesktop.org;

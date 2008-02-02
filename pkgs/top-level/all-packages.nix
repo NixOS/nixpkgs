@@ -1825,20 +1825,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  # I think, this is a bad practice to use getVersion for various build
-  # variants, but it's 5 o'clock now...
-  dbus = getVersion "dbus" dbus_alts;
-
-  dbus_alts = rec
-  {
-    noX11 = import ../development/libraries/dbus {
+  dbus = import ../development/libraries/dbus {
     inherit fetchurl stdenv pkgconfig expat;
-    };
-    withX11 = import ../development/libraries/dbus_x {
-	  inherit fetchurl stdenv pkgconfig expat;
 	  inherit (xlibs) libX11 libICE libSM;
-    };
-	default = noX11;
+    useX11 = getConfig [ "dbus" "tools" "useX11" ]
+      (getConfig [ "services" "xserver" "enable" ] false);
   };
 
   dbus_glib = import ../development/libraries/dbus-glib {
@@ -4955,7 +4946,7 @@ rec {
 	  xineLib libgphoto2 djvulibre libogg lame libvorbis poppler readline
 	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
 	  openbabel ocaml facile stdenv jasper fam indilib libnova
-	  libarchive;
+	  libarchive dbus;
 	flac = builtins.getAttr "1.1.2" flacAlts;
 	cdparanoia = cdparanoiaIII;
     inherit (xlibs)
@@ -4966,7 +4957,6 @@ rec {
       libxkbfile libXinerama libpthreadstubs libXxf86vm xset xprop;
     inherit (gtkLibs) glib;
     qt = qt4;
-	dbus = dbus_alts.withX11;
 	bison = bison23;
     openexr = openexr_1_6_1 ;
   });
