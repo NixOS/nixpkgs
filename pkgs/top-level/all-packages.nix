@@ -4291,6 +4291,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  luit = import ../applications/misc/luit {
+    inherit fetchurl stdenv zlib pkgconfig;
+    inherit (xlibs) libXt libX11 libXfont libfontenc;
+  };
+
   lynx = import ../applications/networking/browsers/lynx {
     inherit fetchurl stdenv ncurses openssl;
   };
