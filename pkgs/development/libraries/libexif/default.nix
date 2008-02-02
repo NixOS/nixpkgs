@@ -8,5 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hxc3aik3sn8xq4mbmxxb8ycx2lwffmhi5xvz0zjffhfwkaqas6v";
   };
 
-  buildInputs = [gettext];
+  configureFlags = "--enable-shared --disable-static";
+
+  meta = {
+    homepage = http://libexif.sourceforge.net;
+    description = "The EXIF parsing library";
+  };
 }

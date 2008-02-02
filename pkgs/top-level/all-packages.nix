@@ -2205,7 +2205,7 @@ rec {
   };
 
   libexif = import ../development/libraries/libexif {
-    inherit fetchurl stdenv gettext;
+    inherit fetchurl stdenv;
   };
 
   libextractorFun = lib.sumArgs (selectVersion ../development/libraries/libextractor "0.5.18")
