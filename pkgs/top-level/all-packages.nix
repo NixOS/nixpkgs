@@ -832,9 +832,11 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  wget = import ../tools/networking/wget {
+  wgetFun = lib.sumArgs (selectVersion ../tools/networking/wget "1.11") {
     inherit fetchurl stdenv gettext;
   };
+
+  wget = wgetFun null;
 
   which = import ../tools/system/which {
     inherit fetchurl stdenv readline;
