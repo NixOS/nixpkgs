@@ -1929,7 +1929,7 @@ rec {
     # python / ruby support
   };
 
-  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.16.x") {
+  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.17") {
     inherit fetchurl stdenv;
   };
 
