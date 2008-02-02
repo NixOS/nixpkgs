@@ -1,10 +1,10 @@
 args: with args;
-(stdenv.mkDerivation ({
-  name = "ImageMagick-6.3.7-9";
+stdenv.mkDerivation (rec {
+  name = "ImageMagick-6.3.8-2";
 
   src = fetchurl {
-    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.7-9.tar.bz2;
-    sha256 = "1s38s78xvzm20ib22zypsb9vvzva0kbqjf0pf4c1q89jzg205pk0";
+    url = "ftp://ftp.imagemagick.org/pub/ImageMagick/${name}.tar.bz2";
+    sha256 = "05bp10dzpw691w8hdw0n2xr65194xgslpqhzf4xbxla7gz8clnmg";
   };
 
   configureFlags = " --with-dots --with-gs-font-dir="+ ghostscript +
@@ -23,4 +23,4 @@ args: with args;
 	preConfigure = "
 		export DVIDecodeDelegate=${args.tetex}/bin/dvips
 	";
-} else {})))
+} else {}))
