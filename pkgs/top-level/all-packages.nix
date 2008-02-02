@@ -1929,11 +1929,11 @@ rec {
     # python / ruby support
   };
 
-  gettext = getVersion "gettext" gettext_alts;
-
-  gettext_alts = import ../development/libraries/gettext {
+  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.16.x") {
     inherit fetchurl stdenv;
   };
+
+  gettext = gettextFun null;
 
   gd = import ../development/libraries/gd {
     inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
