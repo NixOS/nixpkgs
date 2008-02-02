@@ -7,9 +7,10 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
     sha256 = "0yfvpgfly774jnjrfqjf89h99az3sgvzkfpb9diygpk8hmx6phhd";
   };
-  buildInputs = [pkgconfig libusb libtool libexif libjpeg gettext];
+  buildInputs = [pkgconfig libusb libtool libexif libjpeg];
 
   meta = {
-	  license = "LGPL-2";
+    license = "LGPL-2";
+    homepage = http://www.gphoto.org/proj/libgphoto2;
   };
 }
