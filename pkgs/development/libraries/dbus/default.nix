@@ -21,7 +21,7 @@ in rec {
     name = "dbus-tools-" + version;
     inherit src configureFlags;
     buildInputs = [pkgconfig expat libs]
-      ++ if useX11 then [libX11 libICE libSM] else [];
+      ++ (if useX11 then [libX11 libICE libSM] else []);
     postConfigure = "cd tools";
 
     NIX_LDFLAGS = "-ldbus-1";
