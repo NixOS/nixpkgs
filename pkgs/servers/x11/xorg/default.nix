@@ -1,8 +1,5 @@
 # This is a generated file.  Do not edit!
-{ stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
-, xkeyboard_config, gettext
-}:
+args: with args;
 
 rec {
 
@@ -883,8 +880,9 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/libXpm-3.5.7.tar.bz2;
       sha256 = "1aibr6y6hnlgc7m1a1y5s1qx7863praq4pdp0xrpkc75gkk1lw34";
     };
-    buildInputs = [pkgconfig gettext libX11 libXext xextproto xproto libXt ];
-  }) // {inherit gettext libX11 libXext xextproto xproto libXt ;};
+    buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
+    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
+  }) // {inherit libX11 libXext xextproto xproto libXt ;};
     
   libXprintAppUtil = (stdenv.mkDerivation {
     name = "libXprintAppUtil-1.0.1";
@@ -1283,7 +1281,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/setxkbmap-1.0.4.tar.bz2;
       sha256 = "1b1brw1v98q2rqhr5x7f8mr3clxq62nw5175gpamg5s172916nwv";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ensureDir $out/share; ln -sfn ${xkeyboard_config}/etc/X11 $out/share/X11"; 
+    buildInputs = [pkgconfig libX11 libxkbfile ]; postInstall = "ensureDir $out/share; ln -sfn ${xkeyboard_config}/etc/X11 $out/share/X11";
   }) // {inherit libX11 libxkbfile ;};
     
   showfont = (stdenv.mkDerivation {
@@ -1744,7 +1742,7 @@ rec {
       sha256 = "15avwy8isbqagzcdj20ngqajl22k40pssfx7vjirhrqyyq19fiwb";
     };
     preBuild = "
-  	sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
+    sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
     ";
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
   }) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
@@ -2716,8 +2714,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-server-1.4.tar.bz2;
       sha256 = "1hpbq0bl1jkq84gvksp0xzbbrwwgl0wz2wakf11p2hld6bgl5cai";
     };
-    buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; 
-  }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
+    buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto dbus.libs libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; 
+  }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.2";
