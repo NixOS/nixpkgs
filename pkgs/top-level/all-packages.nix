@@ -1300,8 +1300,8 @@ rec {
 
 
   clisp = import ../development/interpreters/clisp {
-    inherit fetchurl stdenv libsigsegv gettext 
-	readline ncurses coreutils pcre zlib;
+    inherit fetchurl stdenv libsigsegv gettext
+      readline ncurses coreutils pcre zlib;
     inherit (xlibs) libX11 libXau libXt;
   };
 
