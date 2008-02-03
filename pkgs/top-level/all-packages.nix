@@ -2660,9 +2660,12 @@ rec {
 	qt = qt4;
   };
 
-  tk = import ../development/libraries/tk {
+  tkFun = lib.sumArgs (selectVersion ../development/libraries/tk) {
     inherit fetchurl stdenv tcl x11;
+    version = "8.4.16";
   };
+
+  tk = tkFun null;
 
   unixODBC = import ../development/libraries/unixODBC {
     inherit fetchurl stdenv;

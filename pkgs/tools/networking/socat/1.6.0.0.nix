@@ -6,15 +6,14 @@ args : with args; with builderDefs {src="";} null;
             sha256 = "1j01iazwfr63q71cfcfzrdz8digqlg3ldhlbb72yl5mn9awr0w0m";
         };
         patches = [
-        fetchurl {
-            url = http://www.dest-unreach.org/socat/contrib/socat-servicenames.patch;
-            sha256 = "1r8zd6mk257n01i34i5syxl2k6fr35nlr7bqs9sfc79irjl62z66";
-        };
-        fetchurl {
-            url = http://www.dest-unreach.org/socat/contrib/socat-maxfds.patch.gz;
-            sha256 = "0fsn0k0qsrdbjbhj09a6kxfsxb7yhxs4cad26znd9naginsj7pxa";
-        };
-        
+          (fetchurl {
+              url = http://www.dest-unreach.org/socat/contrib/socat-servicenames.patch;
+              sha256 = "1r8zd6mk257n01i34i5syxl2k6fr35nlr7bqs9sfc79irjl62z66";
+          })
+          (fetchurl {
+              url = http://www.dest-unreach.org/socat/contrib/socat-maxfds.patch.gz;
+              sha256 = "0fsn0k0qsrdbjbhj09a6kxfsxb7yhxs4cad26znd9naginsj7pxa";
+          })
         ];
         buildInputs = [openssl];
         configureFlags = [];
