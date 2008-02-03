@@ -3368,6 +3368,10 @@ rec {
     inherit fetchurl stdenv utillinux;
   };
 
+  fxload = import ../os-specific/linux/fxload {
+    inherit fetchurl stdenv;
+  };
+
   genext2fs = import ../os-specific/linux/genext2fs {
     inherit fetchurl stdenv;
   };
