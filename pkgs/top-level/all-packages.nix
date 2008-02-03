@@ -2007,13 +2007,6 @@ rec {
             libtiff libjpeg libpng;
   };
 
-  gtkLibs28 = import ../development/libraries/gtk-libs/2.8 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng cairo;
-    inherit (xlibs) libXinerama;
-    xineramaSupport = true;
-  };
-
   gtkmm = import ../development/libraries/gtk-libs/2.6/gtkmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
     inherit (gtkLibs26) gtk atk;
