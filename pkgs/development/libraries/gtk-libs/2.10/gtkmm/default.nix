@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, atk, glibmm, libsigcxx}:
+args: with args;
 
 stdenv.mkDerivation {
   name = "gtkmm-2.10.11";

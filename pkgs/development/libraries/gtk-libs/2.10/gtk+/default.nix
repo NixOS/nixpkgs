@@ -1,11 +1,4 @@
-{ xineramaSupport ? false
-, stdenv, fetchurl, pkgconfig, x11, glib, atk
-, pango, perl, libtiff, libjpeg, libpng, cairo, libXinerama ? null, libXrandr
-}:
-
-assert x11.buildClientLibs;
-assert xineramaSupport -> libXinerama != null;
-
+args: with args;
 
 stdenv.mkDerivation {
   name = "gtk+-2.10.14";

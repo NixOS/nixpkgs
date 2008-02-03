@@ -1,6 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gettext, perl}:
-
-assert pkgconfig != null && gettext != null && perl != null;
+args: with args;
 
 stdenv.mkDerivation {
   name = "glib-2.12.13"; # <- sic! gtk 2.10 needs glib 2.12

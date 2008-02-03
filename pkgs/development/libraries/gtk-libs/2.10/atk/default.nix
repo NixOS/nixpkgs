@@ -1,6 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, perl}:
-
-assert pkgconfig != null && glib != null && perl != null;
+args: with args;
 
 stdenv.mkDerivation {
   name = "atk-1.12.4";

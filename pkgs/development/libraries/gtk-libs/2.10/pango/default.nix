@@ -1,6 +1,4 @@
-{stdenv, fetchurl, pkgconfig, x11, glib, cairo, libpng}:
-
-assert x11.buildClientLibs;
+args: with args;
 
 stdenv.mkDerivation {
   name = "pango-1.14.10";
