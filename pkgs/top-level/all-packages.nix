@@ -119,7 +119,8 @@ rec {
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
 
-  useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
+  useFromStdenv = it : alternative : if (builtins.hasAttr it stdenv) then
+    (builtins.getAttr it stdenv) else alternative;
 
   lib = library;
 
@@ -283,7 +284,7 @@ rec {
 
   # Allow the stdenv to determine fetchurl, to cater for strange
   # requirements.
-  fetchurl = useFromStdenv (stdenv ? fetchurl) stdenv.fetchurl
+  fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
       inherit stdenv curl;
     });
@@ -362,7 +363,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  bzip2 = useFromStdenv (stdenv ? bzip2) stdenv.bzip2
+  bzip2 = useFromStdenv "bzip2"
     (import ../tools/compression/bzip2 {
       inherit fetchurl stdenv;
     });
@@ -379,7 +380,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  coreutils = useFromStdenv (stdenv ? coreutils) stdenv.coreutils
+  coreutils = useFromStdenv "coreutils"
     ((if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
@@ -411,7 +412,7 @@ rec {
     inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
   };
 
-  diffutils = useFromStdenv (stdenv ? diffutils) stdenv.diffutils
+  diffutils = useFromStdenv "diffutils"
     (import ../tools/text/diffutils {
       inherit fetchurl stdenv coreutils;
     });
@@ -442,7 +443,7 @@ rec {
     qt = qt3;
   };
 
-  findutils = useFromStdenv (stdenv ? findutils) stdenv.findutils
+  findutils = useFromStdenv "findutils"
     (if system == "i686-darwin" then findutils4227 else
       import ../tools/misc/findutils {
         inherit fetchurl stdenv coreutils;
@@ -466,7 +467,7 @@ rec {
       libungif libpng libjpeg libtiff libxml2;
   };
 
-  gawk = useFromStdenv (stdenv ? gawk) stdenv.gawk
+  gawk = useFromStdenv "gawk"
     (import ../tools/text/gawk {
       inherit fetchurl stdenv;
     });
@@ -488,12 +489,12 @@ rec {
     inherit (xlibs) libXext;
   };
 
-  gnugrep = useFromStdenv (stdenv ? gnugrep) stdenv.gnugrep
+  gnugrep = useFromStdenv "gnugrep"
     (import ../tools/text/gnugrep {
       inherit fetchurl stdenv pcre;
     });
 
-  gnupatch = useFromStdenv (stdenv ? patch) stdenv.patch (import ../tools/text/gnupatch {
+  gnupatch = useFromStdenv "patch" (import ../tools/text/gnupatch {
     inherit fetchurl stdenv;
   });
 
@@ -517,7 +518,7 @@ rec {
     x11Support = true;
   };
 
-  gnused = useFromStdenv (stdenv ? gnused) stdenv.gnused
+  gnused = useFromStdenv "gnused"
     (import ../tools/text/gnused {
       inherit fetchurl stdenv;
     });
@@ -526,7 +527,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnutar = useFromStdenv (stdenv ? gnutar) stdenv.gnutar
+  gnutar = useFromStdenv "gnutar"
     (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;
     });
@@ -557,7 +558,7 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
-  gzip = useFromStdenv (stdenv ? gzip) stdenv.gzip
+  gzip = useFromStdenv "gzip"
     (import ../tools/compression/gzip {
       inherit fetchurl stdenv;
     });
@@ -896,7 +897,7 @@ rec {
   ### SHELLS
 
 
-  bash = lowPrio (useFromStdenv (stdenv ? bash) stdenv.bash
+  bash = lowPrio (useFromStdenv "bash"
     (import ../shells/bash {
       inherit fetchurl stdenv;
       bison = bison23;
@@ -1014,7 +1015,7 @@ rec {
     profiledCompiler = false;
   });
 
-  gcc42 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.2 {
+  gcc42 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
   }));
@@ -1472,7 +1473,7 @@ rec {
   #  inherit lib fetchurl stdenv flex yacc;
   #};
 
-  binutils = useFromStdenv (stdenv ? binutils) stdenv.binutils
+  binutils = useFromStdenv "binutils"
     (import ../development/tools/misc/binutils {
       inherit fetchurl stdenv noSysDirs;
     });
@@ -1526,7 +1527,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gnumake = useFromStdenv (stdenv ? gnumake) stdenv.gnumake
+  gnumake = useFromStdenv "gnumake"
     (import ../development/tools/build-managers/gnumake {
       inherit fetchurl stdenv;
     });
@@ -1600,7 +1601,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  patchelf = useFromStdenv (stdenv ? patchelf) stdenv.patchelf
+  patchelf = useFromStdenv "patchelf"
     (import ../development/tools/misc/patchelf {
       inherit fetchurl stdenv;
     });
@@ -1609,7 +1610,7 @@ rec {
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
    * of glib and pkgconfig itself on MinGW.
    */
-  pkgconfig = useFromStdenv (stdenv ? pkgconfig) stdenv.pkgconfig
+  pkgconfig = useFromStdenv "pkgconfig"
     (import ../development/tools/misc/pkgconfig {
       inherit fetchurl stdenv;
     });
@@ -1949,7 +1950,7 @@ rec {
     inherit (xlibs) libXmu libXi;
   };
 
-  glibc = useFromStdenv (stdenv ? glibc) stdenv.glibc
+  glibc = useFromStdenv "glibc"
     (import ../development/libraries/glibc-2.7 {
       inherit fetchurl stdenv kernelHeaders;
       #installLocales = false;
