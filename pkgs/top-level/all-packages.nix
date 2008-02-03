@@ -4263,11 +4263,6 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  luit = import ../applications/misc/luit {
-    inherit fetchurl stdenv zlib pkgconfig;
-    inherit (xlibs) libXt libX11 libXfont libfontenc;
-  };
-
   lynx = import ../applications/networking/browsers/lynx {
     inherit fetchurl stdenv ncurses openssl;
   };
@@ -4746,8 +4741,8 @@ rec {
   } null;
 
   xterm = import ../applications/misc/xterm {
-    inherit fetchurl stdenv ncurses freetype pkgconfig luit;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft;
+    inherit fetchurl stdenv ncurses freetype pkgconfig;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft luit;
   };
 
   xlaunch = import ../tools/X11/xlaunch {
