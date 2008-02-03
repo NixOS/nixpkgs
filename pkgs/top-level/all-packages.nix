@@ -1769,6 +1769,10 @@ rec {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
   };
 
+  cairomm = import ../development/libraries/cairomm {
+    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype;
+  };
+
   chmlib = import ../development/libraries/chmlib {
     inherit fetchurl stdenv;
   };
