@@ -638,6 +638,13 @@ rec {
     inherit fetchurl stdenv gettext;
   };
 
+  nc6Fun = lib.sumArgs (selectVersion ../tools/networking/nc6) {
+    version = "1.0";
+    inherit builderDefs;
+  };
+
+  nc6 = nc6Fun null;
+
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
   };
@@ -4005,10 +4012,13 @@ rec {
     inherit fetchurl stdenv cabextract;
   };
 
-  xkeyboard_config = import ../data/misc/xkeyboard-config {
-    inherit fetchurl stdenv perl perlXMLParser;
+  xkeyboard_configFun = lib.sumArgs (selectVersion ../data/misc/xkeyboard-config ) {
+    inherit fetchurl stdenv perl perlXMLParser gettext;
     inherit (xlibs) xkbcomp;
+    version = "1.2";
   };
+
+  xkeyboard_config = xkeyboard_configFun null;
 
 
   ### APPLICATIONS
@@ -5392,6 +5402,13 @@ rec {
   tetex = import ../misc/tex/tetex {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
+
+  /*tetexX11 = import ../misc/tex/tetex {
+    inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
+    inherit (xlibs) libX11 libXext libXmu libXaw libXt libXpm;
+    inherit freetype t1lib;
+    builderX11 = true;
+  };*/
 
   texFunctions = import ../misc/tex/nix {
     inherit stdenv perl tetex graphviz ghostscript;
