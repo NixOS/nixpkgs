@@ -1955,11 +1955,6 @@ rec {
       #installLocales = false;
     });
 
-  glibmm = import ../development/libraries/gtk-libs/2.6/glibmm {
-    inherit fetchurl stdenv pkgconfig libsigcxx;
-    inherit (gtkLibs26) glib;
-  };
-
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib;
     inherit (gtkLibs) glib;
@@ -2001,7 +1996,7 @@ rec {
 
   gtkLibs210 = import ../development/libraries/gtk-libs/2.10 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng cairo;
+            libtiff libjpeg libpng cairo libsigcxx cairomm;
     inherit (xlibs) libXinerama libXrandr;
     xineramaSupport = true;
   };
@@ -2009,12 +2004,6 @@ rec {
   gtkLibs26 = import ../development/libraries/gtk-libs/2.6 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
-  };
-
-  gtkmm = import ../development/libraries/gtk-libs/2.6/gtkmm {
-    inherit fetchurl stdenv pkgconfig libsigcxx;
-    inherit (gtkLibs26) gtk atk;
-    inherit glibmm;
   };
 
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
@@ -4220,9 +4209,9 @@ rec {
 
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
-      popt libxml2 libxslt libpng boehmgc fontconfig gtkmm
-      glibmm libsigcxx lcms boost gettext;
-    inherit (gtkLibs) gtk glib;
+      popt libxml2 libxslt libpng boehmgc fontconfig
+      libsigcxx lcms boost gettext cairomm;
+    inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
   };
 

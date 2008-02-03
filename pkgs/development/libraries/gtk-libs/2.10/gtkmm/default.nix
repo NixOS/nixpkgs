@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1bri9r0k69dmi5xgzrlfllp3adfzhz8dh9zkcvi6sjkgfwi594vx";
   };
 
-  buildInputs = [pkgconfig gtk atk glibmm libsigcxx];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [glibmm gtk atk cairomm];
 }
 

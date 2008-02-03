@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     sha256 = "02rjjdh0f6kafa1sn4y5ykvm4f2qn3yh4kr4lngcv7vzasqn1dr1";
   };
 
-  buildInputs = [pkgconfig glib libsigcxx];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [glib libsigcxx];
 }
 

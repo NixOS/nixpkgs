@@ -9,4 +9,8 @@ rec {
   pango = (import ./pango) (args // { inherit glib; });
 
   gtk = (import ./gtk+) (args // { inherit glib atk pango; } );
+
+  glibmm = (import ./glibmm) (args // { inherit glib; });
+
+  gtkmm = (import ./gtkmm) (args // { inherit gtk atk glibmm; });
 }
