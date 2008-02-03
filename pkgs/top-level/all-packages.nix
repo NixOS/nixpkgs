@@ -1951,7 +1951,7 @@ rec {
       #installLocales = false;
     });
 
-  glibmm = import ../development/libraries/gtk-libs-2.6/glibmm {
+  glibmm = import ../development/libraries/gtk-libs/2.6/glibmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
     inherit (gtkLibs26) glib;
   };
@@ -1991,30 +1991,30 @@ rec {
 
   gtkLibs = recurseIntoAttrs gtkLibs210;
 
-  gtkLibs1x = import ../development/libraries/gtk-libs-1.x {
+  gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
-  gtkLibs210 = import ../development/libraries/gtk-libs-2.10 {
+  gtkLibs210 = import ../development/libraries/gtk-libs/2.10 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng cairo;
     inherit (xlibs) libXinerama libXrandr;
     xineramaSupport = true;
   };
 
-  gtkLibs26 = import ../development/libraries/gtk-libs-2.6 {
+  gtkLibs26 = import ../development/libraries/gtk-libs/2.6 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
   };
 
-  gtkLibs28 = import ../development/libraries/gtk-libs-2.8 {
+  gtkLibs28 = import ../development/libraries/gtk-libs/2.8 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng cairo;
     inherit (xlibs) libXinerama;
     xineramaSupport = true;
   };
 
-  gtkmm = import ../development/libraries/gtk-libs-2.6/gtkmm {
+  gtkmm = import ../development/libraries/gtk-libs/2.6/gtkmm {
     inherit fetchurl stdenv pkgconfig libsigcxx;
     inherit (gtkLibs26) gtk atk;
     inherit glibmm;
