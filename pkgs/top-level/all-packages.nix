@@ -2001,11 +2001,6 @@ rec {
     xineramaSupport = true;
   };
 
-  gtkLibs26 = import ../development/libraries/gtk-libs/2.6 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng;
-  };
-
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
     inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtk;
