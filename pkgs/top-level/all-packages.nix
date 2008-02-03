@@ -774,6 +774,13 @@ rec {
 
   smbfsFuse = smbfsFuseFun null;
 
+  socatFun = lib.sumArgs (selectVersion ../tools/networking/socat) {
+    version = "1.6.0.0";
+    inherit builderDefs openssl;
+  };
+
+  socat = socatFun null;
+
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
   };
@@ -923,9 +930,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  zsh = import ../shells/zsh {
+  zshFun = lib.sumArgs (selectVersion ../shells/zsh) {
     inherit fetchurl stdenv ncurses coreutils;
+    version = "4.3.5";
   };
+
+  zsh = zshFun null;
 
 
   ### DEVELOPMENT / COMPILERS
