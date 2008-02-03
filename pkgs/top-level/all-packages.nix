@@ -2002,16 +2002,6 @@ rec {
     xineramaSupport = true;
   };
 
-  gtkLibs22 = import ../development/libraries/gtk-libs-2.2 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng;
-  };
-
-  gtkLibs24 = import ../development/libraries/gtk-libs-2.4 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng;
-  };
-
   gtkLibs26 = import ../development/libraries/gtk-libs-2.6 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng;
