@@ -3950,7 +3950,7 @@ rec {
   };
 
   wis_go7007 = import ../os-specific/linux/wis-go7007 {
-    inherit fetchurl stdenv kernel ncurses;
+    inherit fetchurl stdenv kernel ncurses fxload;
   };
 
   wpa_supplicant = import ../os-specific/linux/wpa_supplicant {
