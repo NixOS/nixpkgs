@@ -1049,6 +1049,18 @@
 
     };
 
+    ejabberd = {
+      enable = mkOption {
+        default = false;
+	description = "Whether to enable ejabberd server";
+      };
+      
+      user = mkOption {
+        default = "nobody";
+	description = "User account under which ejabberd runs.";
+      };
+    };
+
     jboss = {
       enable = mkOption {
         default = false;

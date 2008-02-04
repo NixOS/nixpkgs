@@ -181,6 +181,12 @@ let
         "gw6c" else "network-interfaces";
     })
 
+  # EJabberd service
+  ++ optional config.services.ejabberd.enable
+    (import ../upstart-jobs/ejabberd.nix {
+      inherit config pkgs;
+    })  
+
   # JBoss service
   ++ optional config.services.jboss.enable
     (import ../upstart-jobs/jboss.nix {
