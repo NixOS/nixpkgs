@@ -8,13 +8,14 @@ stdenv.mkDerivation {
 
   phases = "buildPhase";
 
-  buildPhase = "
-    ensureDir \$out/bin
-    s=\$out/bin/shebangfix
-    cp \$file \$s
-    chmod +x \$s
-    perl \$s \$s
-  ";
+  buildPhase = ''
+    ensureDir $out/bin
+    s=$out/bin/shebangfix
+    cp $file $s
+    chmod +wx $s
+    ls -l $s
+    perl $s $s
+  '';
 
   meta = { description = "replaces the #!executable with $#!correctpath/executable "; };
 }
