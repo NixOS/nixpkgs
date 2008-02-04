@@ -68,12 +68,12 @@ mount -t tmpfs -o "mode=0755" none /dev
 mkdir -m 0755 -p /dev/pts
 mount -t devpts none /dev/pts
 mount -t usbfs none /proc/bus/usb
-mkdir -m 01777 /tmp 
-mkdir -m 0755 /var
-mkdir -m 0755 /nix/var
-mkdir -m 0700 /root
-mkdir -m 0755 /bin # for the /bin/sh symlink
-mkdir -m 0755 /home
+mkdir -m 01777 -p /tmp 
+mkdir -m 0755 -p /var
+mkdir -m 0755 -p /nix/var
+mkdir -m 0700 -p /root
+mkdir -m 0755 -p /bin # for the /bin/sh symlink
+mkdir -m 0755 -p /home
 
 
 # Miscellaneous boot time cleanup.
