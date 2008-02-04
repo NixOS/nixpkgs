@@ -22,6 +22,10 @@ rec {
         ];
       };
     };
+
+    networking = {
+      enableIntel3945ABGFirmware = true;
+    };
     
     services = {
     

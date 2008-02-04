@@ -32,9 +32,10 @@ let
   };
 
   # The udev configuration file
-  conf = writeText "udev.conf" "
-    udev_rules=\"${udevRules}\"
-  ";
+  conf = writeText "udev.conf" ''
+    udev_rules="${udevRules}"
+    #udev_log="debug"
+  '';
 
   # Dummy file indicating whether we've run udevtrigger/udevsettle.
   # Since that *recreates* all device nodes with default permissions,

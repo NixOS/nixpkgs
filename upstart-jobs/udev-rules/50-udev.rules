@@ -43,5 +43,6 @@ KERNEL=="seq",                  NAME="snd/%k", MODE="@sndMode@"
 
 KERNEL=="kqemu",		NAME="%k", MODE="0666"
 
+
 # Firmware loading.
 SUBSYSTEM=="firmware", ACTION=="add", RUN+="@firmwareLoader@"

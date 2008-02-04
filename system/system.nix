@@ -152,6 +152,7 @@ rec {
     ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
+    ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007
     ++ config.boot.extraModulePackages
   );
 

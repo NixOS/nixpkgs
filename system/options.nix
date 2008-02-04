@@ -273,6 +273,21 @@
   };
 
 
+  # Hm, this sounds like a catch-all...
+  hardware = {
+
+    enableGo7007 = mkOption {
+      default = false;
+      description = ''
+        Enable this option to get support for the WIS GO7007SB
+        multi-format video encoder, which is used in a number of
+        devices such as the Plextor ConvertX TV402U USB TV device.
+      '';
+    };
+  
+  };
+
+
   networking = {
 
     hostName = mkOption {
@@ -1104,6 +1119,13 @@
         default = false;
         description = "
           Whether to enable the Apache httpd server.
+        ";
+      };
+
+      experimental = mkOption {
+        default = false;
+        description = "
+          Whether to use the new-style Apache configuration.
         ";
       };
 

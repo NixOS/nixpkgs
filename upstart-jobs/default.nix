@@ -30,7 +30,8 @@ let
         ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
 	++ config.services.udev.addFirmware;
       extraUdevPkgs =
-        pkgs.lib.optional config.services.hal.enable pkgs.hal;
+           pkgs.lib.optional config.services.hal.enable pkgs.hal
+        ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007;
       sndMode = config.services.udev.sndMode;
     })
       
@@ -152,7 +153,7 @@ let
     })
 
   # Apache httpd.
-  ++ optional config.services.httpd.enable
+  ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
     (import ../upstart-jobs/httpd.nix {
       inherit config pkgs;
       inherit (pkgs) glibc;
@@ -161,12 +162,10 @@ let
     })
 
   # Apache httpd (new style).
-  /*
-  ++ optional config.services.httpd.enable
+  ++ optional (config.services.httpd.enable && config.services.httpd.experimental)
     (import ../upstart-jobs/apache-httpd {
       inherit config pkgs;
     })
-  */
 
   # MySQL server
   ++ optional config.services.mysql.enable
