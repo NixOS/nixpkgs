@@ -352,7 +352,7 @@
       default = false;
       description = "
         This option enables automatic loading of the firmware for the Intel
-        PRO/Wireless 3945ABG.
+        PRO/Wireless 3945ABG / 4965AGN.
       ";
     };
 

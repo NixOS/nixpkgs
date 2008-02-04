@@ -51,6 +51,7 @@ push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 # However, some are needed in the initrd to boot the system.
 
 my $enableIntel2200BGFirmware = "false";
+my $enableIntel3945ABGFirmware = "false";
 my $videoDriver = "vesa";
 
 sub pciCheck {
@@ -93,6 +94,10 @@ sub pciCheck {
     $enableIntel2200BGFirmware = "true" if $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
+
+    $enableIntel3945ABGFirmware = "true" if $vendor eq "0x8086" &&
+        ($device eq "0x4229" || $device eq "0x4230" ||
+         $device eq "0x4222" || $device eq "0x4227");
 
     # Hm, can we extract the PCI ids supported by X drivers somehow?
     # cf. http://www.calel.org/pci-devices/xorg-device-list.html
@@ -206,6 +211,8 @@ print <<EOF ;
   };
 
   networking = {
+    enableIntel3945ABGFirmware = $enableIntel3945ABGFirmware;
+    
     # Warning: setting this option to `true' requires acceptance of the
     # firmware license, see http://ipw2200.sourceforge.net/firmware.php?fid=7.
     enableIntel2200BGFirmware = $enableIntel2200BGFirmware;
