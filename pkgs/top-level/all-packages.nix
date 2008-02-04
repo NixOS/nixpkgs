@@ -410,6 +410,14 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
+  dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools)
+  {
+    inherit builderDefs;
+    version = "2.11deb";
+  };
+
+  dosfstools = dosfstoolsFun null;
+
   ed = import ../tools/text/ed {
     inherit fetchurl stdenv;
   };
