@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     unpackFile $gentooPatches
+    rm patch/400_all_grub-0.97-reiser4-20050808-gentoo.patch
     for i in patch/*.patch; do
       echo "applying patch $i"
       patch -p1 < $i || patch -p0 < $i
