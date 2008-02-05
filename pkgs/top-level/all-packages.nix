@@ -1386,6 +1386,7 @@ rec {
    # optional features
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
+   inherit postgresql;
    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
   };
 

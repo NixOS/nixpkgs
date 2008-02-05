@@ -418,6 +418,8 @@ args:
           no_libxml2    =     { cfgOption =  "--disable-libxml";
                               };
 
+          postgresql   =      { cfgOption = "--with-pgsql=\$postgresql";
+                                pass = { inherit (args) postgresql;}; };
           mysql        =      { cfgOption = "--with-mysql=\$mysql";
                                 pass = { inherit (args) mysql;}; };
 
@@ -457,7 +459,7 @@ args:
     };
 
   defaults = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
-  optionals = [ "libxml2" "gettext" ];
+  optionals = [ "libxml2" "gettext" "postgresql"];
 
   # Don't konw wether they should be default.. I use them - Marc
 
