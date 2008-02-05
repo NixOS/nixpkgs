@@ -82,8 +82,6 @@ if test "$action" = "switch" -o "$action" = "test"; then
             echo "restarting $event..."
             stopJob $event
             initctl start "$event"
-        else
-            echo "unchanged $event"
         fi
     done
 fi

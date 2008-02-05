@@ -8,7 +8,7 @@ cat "$2" | while true; do
             "$name" \
             ${gid:+--gid $gid}
     else
-        echo "updating group $name..."
+        #echo "updating group $name..."
         oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
         prevGid=$3
         if test -n "$gid" -a "$prevGid" != "$gid"; then
@@ -40,7 +40,7 @@ cat "$1" | while true; do
             --shell "$shell" \
             ${createHome:+--create-home}
     else
-        echo "updating user $name..."
+        #echo "updating user $name..."
         oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
         prevUid=$3
         prevHome=$6
