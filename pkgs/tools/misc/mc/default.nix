@@ -8,16 +8,13 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [pkgconfig glib ncurses libX11 shebangfix perl zip];
   configureFlags = "--with-screen=ncurses";
-  # small hacks to support zip
-  postUnpack = "
-    sed  -i 's=/usr/bin/==g' `find -type f`
-  ";
-  postInstall = "
-    find \$out -iname \"*.pl\" | xargs shebangfix;
-  ";
+  makeFlags = "UNZIP=unzip";
+  postInstall = ''
+    find $out -iname "*.pl" | xargs shebangfix;
+  '';
   meta = {
-	  description = "File Manager and User Shell for the GNU Project";
-	  homepage = http://www.ibiblio.org/mc;
+    description = "File Manager and User Shell for the GNU Project";
+    homepage = http://www.ibiblio.org/mc;
   };
 }
 
