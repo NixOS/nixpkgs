@@ -9,6 +9,15 @@ let
   httpd = pkgs.apacheHttpd;
 
 
+  subservices = [
+    (import ./subversion.nix {inherit config pkgs;})
+  ];
+
+
+  writeTextInDir = name: text:
+    pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
+  
+
   documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
     pkgs.runCommand "empty" {} "ensureDir $out";
 
@@ -93,6 +102,7 @@ let
 
     AddType application/x-x509-ca-cert .crt
     AddType application/x-pkcs7-crl    .crl
+    AddType application/x-httpd-php    .php .phtml
 
     <IfModule mod_mime_magic.c>
         MIMEMagicFile ${httpd}/conf/magic
@@ -109,6 +119,20 @@ let
     <Directory "${documentRoot}">
         Options Indexes FollowSymLinks
         AllowOverride None
+        Order allow,deny
+        Allow from all
+    </Directory>
+  '';
+
+
+  robotsTxt = writeTextInDir "robots.txt" ''
+    ${pkgs.lib.concatStrings (map (svc: svc.robotsEntries) subservices)}
+  '';
+  
+  robotsConf = ''
+    Alias /robots.txt ${robotsTxt}/robots.txt
+
+    <Directory ${robotsTxt}>
         Order allow,deny
         Allow from all
     </Directory>
@@ -135,8 +159,13 @@ let
     User ${cfg.user}
     Group ${cfg.group}
 
-    ${let f = name: "LoadModule ${name}_module ${httpd}/modules/mod_${name}.so\n";
-      in pkgs.lib.concatStrings (map f apacheModules)
+    ${let
+        load = {name, path}: "LoadModule ${name}_module ${path}\n";
+        allModules =
+          pkgs.lib.concatMap (svc: svc.extraModulesPre) subservices ++
+          map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
+          pkgs.lib.concatMap (svc: svc.extraModules) subservices;
+      in pkgs.lib.concatStrings (map load allModules)
     }
 
     ${if cfg.enableUserDir then ''
@@ -176,9 +205,13 @@ let
     
     ${if cfg.enableSSL then sslConf else ""}
 
+    # Fascist default - deny access to everything.
+    # !!!
     <Directory />
         Options FollowSymLinks
         AllowOverride None
+#        Order deny,allow
+#        Deny from all
     </Directory>
 
     ${documentRootConf}
@@ -194,6 +227,10 @@ let
           '';
       in pkgs.lib.concatStrings (map makeDirConf cfg.servedDirs)
     }
+
+    ${pkgs.lib.concatStrings (map (svc: svc.extraConfig) subservices)}
+
+    ${robotsConf}
   '';
 
     
@@ -216,7 +253,11 @@ in
 
   # Statically verify the syntactic correctness of the generated
   # httpd.conf.
-  buildHook = "${httpd}/bin/httpd -f ${httpdConf} -t";
+  buildHook = ''
+    echo
+    echo '=== Checking the generated Apache configuration file ==='
+    ${httpd}/bin/httpd -f ${httpdConf} -t
+  '';
 
   job = ''
     description "Apache HTTPD"
@@ -227,7 +268,23 @@ in
     start script
       mkdir -m 0700 -p ${cfg.stateDir}
       mkdir -m 0700 -p ${cfg.logDir}
+
+      # Get rid of old semaphores.  These tend to accumulate across
+      # server restarts, eventually preventing it from restarting
+      # succesfully.
+      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' wwwrun ' | cut -f2 -d ' '); do
+        ${pkgs.utillinux}/bin/ipcrm -s $i
+      done
     end script
+
+    ${
+      let f = {name, value}: "env ${name}=${value}\n";
+      in pkgs.lib.concatStrings (map f (pkgs.lib.concatMap (svc: svc.globalEnvVars) subservices))
+    }
+
+    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraPath) subservices)}
+
+    ${pkgs.diffutils}/bin:${pkgs.gnused}/bin
 
     respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
   '';
