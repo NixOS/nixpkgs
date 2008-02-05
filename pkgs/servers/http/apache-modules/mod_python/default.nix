@@ -1,13 +1,13 @@
 {stdenv, fetchurl, apacheHttpd, python}:
 
 stdenv.mkDerivation {
-  name = "mod_python-3.2.10";
+  name = "mod_python-3.3.1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.surfnet.nl/httpd/modpython/mod_python-3.2.10.tgz;
-    md5 = "cc6439f546a6e70cfff7ca51b8c62541";
+    url = http://archive.eu.apache.org/dist/httpd/modpython/mod_python-3.3.1.tgz;
+    sha256 = "0sss2xi6l1a2z8y6ji0cp8vgyvnhq8zrg0ilkvpj1mygbzyk28xd";
   };
 
   patches = [./install.patch];

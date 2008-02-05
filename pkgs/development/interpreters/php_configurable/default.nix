@@ -9,6 +9,7 @@
 | http://www.php.net/manual/security.php for more details.           |
 */
 
+let version = "5.2.5"; in
 
 args:
 ( args.mkDerivationByConfiguration {
@@ -462,58 +463,57 @@ args:
 
 
   extraAttrs = co : {
-    name = "php_configurable-5.2.4";
+    name = "php_configurable-${version}";
 
     buildInputs = ( args.lib.getAttr [ "phpIncludes" ] [] args ) ++ co.buildInputs;
 
-    configurePhase = 
-      "
-      iniFile=\$out/etc/\$name.ini
-      [[ -z \"\$libxml2\" ]] || export PATH=\$PATH:\$libxml2/bin
-      ./configure --with-config-file-scan-dir=/etc --with-config-file-path=\$iniFile --prefix=\$out " + co.configureFlags + "
+    configurePhase = ''
+      iniFile=$out/etc/$name.ini
+      [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
+      ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$iniFile --prefix=$out ${co.configureFlags}
       echo configurePhase end
-      ";
+    '';
 
-    installPhase = "
+    installPhase = ''
       unset installPhase; installPhase;
-      cp php.ini-recommended $\iniFile
+      cp php.ini-recommended $iniFile
 
       # Now Let's build xdebug if flag has been given 
       # TODO I think there are better paths than the given below
-      if [ -n \$flag_set_xdebug ]; then
-        PATH=\$PATH:\$out/bin
-        tar xfz \$xdebug_src; 
+      if [ -n $flag_set_xdebug ]; then
+        PATH=$PATH:$out/bin
+        tar xfz $xdebug_src; 
         cd xdebug*
         phpize
-        ./configure --prefix=\$out
+        ./configure --prefix=$out
         make
-        ensureDir \$out/lib; cp modules/xdebug.so $out/lib
-cat >> $iniFile << EOF
-zend_extension=\"\$out/lib/xdebug.so\"
-zend_extension_ts=\"\$out/lib/xdebug.so\"
-zend_extension_debug=\"\$out/lib/xdebug.so\"
-xdebug.remote_enable=true
-xdebug.remote_host=127.0.0.1
-xdebug.remote_port=9000
-xdebug.remote_handler=dbgp
-xdebug.profiler_enable=0
-xdebug.profiler_output_dir=\"/tmp/xdebug\"
-xdebug.remote_mode=req
-EOF
+        ensureDir $out/lib; cp modules/xdebug.so $out/lib
+        cat >> $iniFile << EOF
+          zend_extension="$out/lib/xdebug.so"
+          zend_extension_ts="$out/lib/xdebug.so"
+          zend_extension_debug="$out/lib/xdebug.so"
+          xdebug.remote_enable=true
+          xdebug.remote_host=127.0.0.1
+          xdebug.remote_port=9000
+          xdebug.remote_handler=dbgp
+          xdebug.profiler_enable=0
+          xdebug.profiler_output_dir="/tmp/xdebug"
+          xdebug.remote_mode=req
+        EOF
       fi
-    ";
+    '';
 
     src = args.fetchurl {
-      url = http://de.php.net/get/php-5.2.4.tar.bz2/from/this/mirror;
-      sha256 = "1h513j7crz08n7rlh8v7cvxfzisj87mvvyfrkiaa76v1wicm4bsh";
-      name = "php-5.2.4.tar.bz2";
+      url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
+      sha256 = "18xv961924rkk66gdjcmk1mzbzgp2srbiq5jvbgyn6ahvxq1xb2w";
+      name = "php-${version}.tar.bz2";
     };
 
     meta = { 
-        description = "The PHP language runtime engine"; # : CLI, CGI and Apache2 SAPIs ? as well TODO 
-        homepage = http://www.php.net/;
-        license = "PHP-3";
-      };
+      description = "The PHP language runtime engine"; # : CLI, CGI and Apache2 SAPIs ? as well TODO 
+      homepage = http://www.php.net/;
+      license = "PHP-3";
+    };
 
     patches = [./fix.patch];
   };
