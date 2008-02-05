@@ -52,6 +52,10 @@ rec {
     fold (x: y: x + y) "";
 
 
+  # Map and concatenate the result.
+  concatMap = f: list: concatLists (map f list);
+
+
   # Place an element between each element of a list, e.g.,
   # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
   intersperse = separator: list:
