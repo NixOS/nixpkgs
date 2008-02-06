@@ -3228,9 +3228,13 @@ rec {
   };
   */
 
-  alsaLib = import ../os-specific/linux/alsa/library {
-    inherit fetchurl stdenv;
+  alsaFun = lib.sumArgs (selectVersion ../os-specific/linux/alsa "1.0.16") {
+    inherit fetchurl stdenv ncurses gettext;
   };
+
+  alsa = alsaFun null;
+
+  alsaLib = alsa.alsaLib;
 
   atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "r3122") {
     inherit fetchurl stdenv builderDefs;
@@ -3246,10 +3250,6 @@ rec {
 
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
-  };
-
-  alsaUtils = import ../os-specific/linux/alsa/utils {
-    inherit fetchurl stdenv alsaLib ncurses gettext;
   };
 
   cramfsswap = import ../os-specific/linux/cramfsswap {
