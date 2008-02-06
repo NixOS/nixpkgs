@@ -1874,7 +1874,7 @@ rec {
   };
 
   ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
-    inherit fetchsvn stdenv;
+    inherit fetchsvn stdenv a52dec libtheora x11 lame zlib SDL;
   };
 
   fftw = import ../development/libraries/fftw {
