@@ -1,10 +1,15 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "coreutils-6.9";
+  name = "coreutils-6.10";
+  
   src = fetchurl {
-    url = mirror://gnu/coreutils/coreutils-6.9.tar.bz2;
-    sha256 = "1c4p2kiy4m024qcl1przvphy8vhivf8jvclq6bjm1pjps5d8khl9";
+    url = mirror://gnu/coreutils/coreutils-6.10.tar.gz;
+    sha256 = "0zpbxfl16sq45s53fxw43i9i8lrdcc845714c1j5f84zi13ka08x";
   };
-  patches = [ ./gnulib-futimens.patch ] ;
+
+  meta = {
+    homepage = http://www.gnu.org/software/coreutils/;
+    description = "The basic file, shell and text manipulation utilities of the GNU operating system";
+  };
 }

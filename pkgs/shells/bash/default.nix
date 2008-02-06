@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   buildInputs = [bison] ++ stdenv.lib.optional interactive ncurses;
 
   meta = {
+    homepage = http://www.gnu.org/software/bash/;
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
         (if interactive then " (for interactive use)" else "");
