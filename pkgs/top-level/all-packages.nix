@@ -1970,6 +1970,16 @@ rec {
     inherit fetchurl stdenv gmp;
   };
 
+  gst_all = import ../development/libraries/gstreamer {
+    inherit lib selectVersion stdenv fetchurl perl bison flex pkgconfig libxml2
+      python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
+      libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
+      dbus libavc1394 ladspaH taglib;
+    inherit (xorg) libX11 libXv libXext;
+    inherit (gtkLibs) glib pango gtk;
+    inherit (gnome) gnomevfs;
+  };
+
   gnet = import ../development/libraries/gnet {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
@@ -2554,7 +2564,7 @@ rec {
 
   tapioca_qt = import ../development/libraries/tapioca-qt {
     inherit fetchsvn stdenv cmake telepathy_qt;
-	qt = qt4;
+    qt = qt4;
   };
 
   telepathy_gabble = import ../development/libraries/telepathy-gabble {
@@ -3837,6 +3847,8 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  cdparanoia = cdparanoiaIII;
+
   cdparanoiaIII = import ../applications/audio/cdparanoia {
     inherit fetchurl stdenv;
   };
@@ -4113,7 +4125,9 @@ rec {
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext ncurses;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
+      gtkspell aspell gettext ncurses;
+    GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
     inherit (xlibs) libXScrnSaver;
@@ -4141,8 +4155,8 @@ rec {
   };
 
   gnash = assert mesaSupported; import ../applications/video/gnash {
-    inherit fetchurl stdenv SDL SDL_mixer GStreamer
-            libogg libxml2 libjpeg mesa libpng;
+    inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng;
+    GStreamer = gst_all.gstreamer;
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
@@ -4159,11 +4173,6 @@ rec {
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
-  };
-
-  GStreamer = import ../applications/audio/GStreamer {
-    inherit fetchurl stdenv perl bison flex pkgconfig libxml2;
-    inherit (gtkLibs) glib;
   };
 
   gv = import ../applications/misc/gv {

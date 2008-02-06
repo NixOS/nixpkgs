@@ -1,0 +1,22 @@
+diff -Nur gst-plugins-good0.10-0.10.6/ext/taglib/gstid3v2mux.cc gst-plugins-good0.10-0.10.6.new/ext/taglib/gstid3v2mux.cc
+--- gst-plugins-good0.10-0.10.6/ext/taglib/gstid3v2mux.cc	2007-06-13 11:21:10.000000000 +0200
++++ gst-plugins-good0.10-0.10.6.new/ext/taglib/gstid3v2mux.cc	2007-11-24 21:56:04.000000000 +0100
+@@ -532,6 +532,7 @@
+   GST_TAG_TITLE, add_text_tag, "TIT2"}, {
+   GST_TAG_ALBUM, add_text_tag, "TALB"}, {
+   GST_TAG_COPYRIGHT, add_text_tag, "TCOP"}, {
++  GST_TAG_COMPOSER, add_text_tag, "TCOM"}, {
+   GST_TAG_GENRE, add_text_tag, "TCON"}, {
+   GST_TAG_COMMENT, add_comment_tag, ""}, {
+   GST_TAG_EXTENDED_COMMENT, add_comment_tag, ""}, {
+@@ -544,7 +545,9 @@
+   GST_TAG_MUSICBRAINZ_ALBUMARTISTID, add_musicbrainz_tag, "\002"}, {
+   GST_TAG_MUSICBRAINZ_TRMID, add_musicbrainz_tag, "\003"}, {
+   GST_TAG_MUSICBRAINZ_TRACKID, add_unique_file_id_tag, ""}, {
+-  GST_TAG_MUSICBRAINZ_SORTNAME, add_text_tag, "TSOP"}, {
++  GST_TAG_ARTIST_SORTNAME, add_text_tag, "TSOP"}, {
++  GST_TAG_ALBUM_SORTNAME, add_text_tag, "TSOA"}, {
++  GST_TAG_TITLE_SORTNAME, add_text_tag, "TSOT"}, {
+   GST_TAG_TRACK_NUMBER, add_count_or_num_tag, "TRCK"}, {
+   GST_TAG_TRACK_COUNT, add_count_or_num_tag, "TRCK"}, {
+   GST_TAG_ALBUM_VOLUME_NUMBER, add_count_or_num_tag, "TPOS"}, {
