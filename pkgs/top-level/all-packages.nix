@@ -2154,7 +2154,8 @@ rec {
   } null;
 
   libdv = import ../development/libraries/libdv {
-    inherit fetchurl stdenv lib mkDerivationByConfiguration;
+    inherit fetchurl stdenv lib mkDerivationByConfiguration SDL popt pkgconfig;
+    inherit (xorg) libXv libX11;
   };
 
   libdrm = import ../development/libraries/libdrm {
