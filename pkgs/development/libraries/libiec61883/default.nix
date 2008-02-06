@@ -1,17 +1,18 @@
 args: with args;
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libiec61883-1.1.0";
 
   src = fetchurl {
-    url = http://www.linux1394.org/dl/libiec61883-1.1.0.tar.gz;
+    url = "${meta.homepage}/dl/${name}.tar.gz";
     sha256 = "09f0ca7bp6lqlz6601gnyl04mfabv0azg49n1cmjyqpzh35cgxkq";
   };
 
-  buildInputs = [pkgconfig libraw1394];
+  buildInputs = [pkgconfig];
+  propagatedBuildInputs = [libraw1394];
 
   meta = { 
       description = "TODO";
-      homepage = http://www.linux1394.org/;
+      homepage = http://www.linux1394.org;
       license = "LGPL";
     };
 }
