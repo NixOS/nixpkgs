@@ -2637,6 +2637,10 @@ rec {
     inherit fetchurl stdenv SDL libogg libvorbis;
   };
 
+  SDL_net = import ../development/libraries/SDL_net {
+    inherit fetchurl stdenv SDL;
+  };
+
   SDL_ttf = import ../development/libraries/SDL_ttf {
     inherit fetchurl stdenv SDL freetype;
   };
@@ -3965,6 +3969,10 @@ rec {
     inherit fetchurl;
     stdenv = makeStaticBinaries stdenv;
   }));
+
+  wesnoth = import ../games/wesnoth {
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net gettext zlib boost freetype;
+  };
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
     inherit fetchurl stdenv;
