@@ -619,6 +619,10 @@ rec {
     inherit fetchurl stdenv ghc tetex polytable;
   };
 
+  lzma = import ../tools/compression/lzma {
+    inherit fetchurl stdenv;
+  };
+
   man = import ../tools/misc/man {
      inherit fetchurl stdenv db4 groff;
   };
