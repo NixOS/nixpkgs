@@ -2189,6 +2189,13 @@ rec {
 
   libextractor = libextractorFun null;
 
+  libeXosip2Fun = lib.sumArgs
+    (selectVersion ../development/libraries/libeXosip2 "3.0.3") {
+    inherit fetchurl stdenv libosip2;
+  };
+
+  libeXosip2 = libeXosip2Fun null;
+
   libgcrypt = import ../development/libraries/libgcrypt {
     inherit fetchurl stdenv libgpgerror;
   };
@@ -2252,6 +2259,20 @@ rec {
   libogg = import ../development/libraries/libogg {
     inherit fetchurl stdenv;
   };
+
+  liboilFun = lib.sumArgs
+    (selectVersion ../development/libraries/liboil "0.3.12") {
+    inherit fetchurl stdenv pkgconfig;
+  };
+
+  liboil = liboilFun null;
+
+  libosip2Fun = lib.sumArgs
+    (selectVersion ../development/libraries/libosip2 "3.0.3-2") {
+    inherit fetchurl stdenv;
+  };
+
+  libosip2 = libosip2Fun null;
 
   libotr = import ../development/libraries/libotr {
     inherit fetchurl stdenv libgcrypt;
