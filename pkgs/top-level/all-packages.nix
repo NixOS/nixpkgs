@@ -326,6 +326,10 @@ rec {
     inherit fetchurl stdenv zlib wxGTK;
   };
 
+  avahi = import ../development/libraries/avahi {
+    inherit stdenv fetchurl pkgconfig libdaemon dbus;
+  };
+
   axel = import ../tools/networking/axel {
     inherit fetchurl stdenv;
   };
