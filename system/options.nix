@@ -2064,7 +2064,7 @@ root        ALL=(ALL) SETENV: ALL
 	purpose and do not want default package list. Setting 
 	<varname>cleanStart<varname> to <literal>true</literal> allows you 
 	to create a system with empty path - only extraPackages will be 
-	included..
+	included.
       ";
     };
 

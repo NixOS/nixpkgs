@@ -1,7 +1,7 @@
 export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
-export PAGER=less
+export PAGER="less -R"
 export TZ=@timeZone@
 export TZDIR=@glibc@/share/zoneinfo
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
