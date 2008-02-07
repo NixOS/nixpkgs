@@ -102,7 +102,7 @@ let {
     libxslt
     lvm2
     lynx
-    man_db
+    man
     mdadm
     mesa
     mingetty
