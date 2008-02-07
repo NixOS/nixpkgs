@@ -2387,9 +2387,10 @@ rec {
 	  inherit fetchurl stdenv;
   };
 
+#failed to build
   mediastreamerFun = lib.sumArgs (selectVersion
-      ../development/libraries/mediastreamer "2.2.0cvs") {
-    inherit fetchcvs stdenv;
+      ../development/libraries/mediastreamer "2.2.0-cvs20080207") {
+    inherit fetchurl stdenv automake;
   };
 
   mediastreamer = mediastreamerFun null;
