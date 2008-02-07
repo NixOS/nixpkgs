@@ -3728,7 +3728,7 @@ rec {
 	kernel = systemKernel;
   };
 
-  kvm = kvm49;
+  kvm = kvm57;
 
   kvm12 = import ../os-specific/linux/kvm/12.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
@@ -3743,6 +3743,12 @@ rec {
   };
 
   kvm49 = import ../os-specific/linux/kvm/49.nix {
+    inherit fetchurl zlib e2fsprogs SDL alsaLib;
+    stdenv = overrideGCC stdenv gcc34;
+    kernelHeaders = kernelHeaders_2_6_23;
+  };
+
+  kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
     stdenv = overrideGCC stdenv gcc34;
     kernelHeaders = kernelHeaders_2_6_23;
