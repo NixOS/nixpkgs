@@ -1306,7 +1306,7 @@ rec {
     inherit (xlibs) libX11 libXau libXt;
   };
 
-  erlang = import ../development/interpreters/erlang {
+  erlang = selectVersion ../development/interpreters/erlang "R12B-1" {
     inherit fetchurl perl gnum4 ncurses openssl stdenv;
   };
 
@@ -2296,7 +2296,7 @@ rec {
     inherit fetchurl stdenv pkgconfig;
   };
 
-  libsigsegv = import ../development/libraries/libsigsegv {
+  libsigsegv = selectVersion ../development/libraries/libsigsegv "2.5" {
     inherit fetchurl stdenv;
   };
 
