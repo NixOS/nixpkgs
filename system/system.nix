@@ -239,7 +239,7 @@ rec {
     pkgs.iputils
     pkgs.less
     pkgs.lvm2
-    pkgs.man
+    pkgs.man_db
     pkgs.mdadm
     pkgs.module_init_tools
     pkgs.nano
