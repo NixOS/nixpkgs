@@ -1660,17 +1660,17 @@
 	description = "User account under which MySQL runs";
       };
       
-      datadir = mkOption {
+      dataDir = mkOption {
         default = "/var/mysql";
 	description = "Location where MySQL stores its table files";
       };
       
-      log_error = mkOption {
+      logError = mkOption {
         default = "/var/log/mysql_err.log";
 	description = "Location of the MySQL error logfile";
       };
       
-      pid_file = mkOption {
+      pidFile = mkOption {
         default = "/var/mysql/mysql.pid";
 	description = "Location of the file which stores the PID of the MySQL server";
       };

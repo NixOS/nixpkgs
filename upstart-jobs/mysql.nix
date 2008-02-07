@@ -5,8 +5,8 @@ let
 cfg = config.services.mysql;
 mysqlService = import ../services/mysql {
 	inherit (pkgs) stdenv mysql;
-	inherit (cfg) port user datadir
-		log_error pid_file;
+	inherit (cfg) port user dataDir
+		logError pidFile;
 };
 
 in
