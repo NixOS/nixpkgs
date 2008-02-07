@@ -1373,7 +1373,7 @@
 	";
       };
       
-      anonymous_user = mkOption {
+      anonymousUser = mkOption {
         default = false;
 	description = "
 	  Whether to enable the anonymous FTP user.

@@ -1,4 +1,4 @@
-{ vsftpd, anonymous_user }:
+{ vsftpd, anonymousUser }:
 
 {
   name = "vsftpd";
@@ -16,7 +16,7 @@
       home = "/homeless-shelter";
     }
   ] ++
-  (if anonymous_user then [
+  (if anonymousUser then [
     { name = "ftp";
       uid = (import ../system/ids.nix).uids.ftp;
       group = "ftp";
@@ -36,7 +36,7 @@ stop on network-interfaces/stop
 start script
     cat > /etc/vsftpd.conf <<EOF
 " + 
-    (if anonymous_user then 
+    (if anonymousUser then 
 "anonymous_enable=YES"
     else
 "anonymous_enable=NO") +
