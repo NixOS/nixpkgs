@@ -8,6 +8,8 @@
     messagebus = 4; # D-Bus
     haldaemon = 5;
     nagios = 6;
+    vsftpd = 7;
+    ftp = 8;
     nixbld = 30000; # start of range of uids
     nobody = 65534;
   };
@@ -16,6 +18,8 @@
     root = 0;
     wheel = 1;
     haldaemon = 5;
+    vsftpd = 7;
+    ftp = 8;
     audio = 17;
     users = 100;
     nixbld = 30000;

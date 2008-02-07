@@ -1365,7 +1365,22 @@
 
     };
 
-
+    vsftpd = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to enable the vsftpd FTP server.
+	";
+      };
+      
+      anonymous_user = mkOption {
+        default = false;
+	description = "
+	  Whether to enable the anonymous FTP user.
+	";
+      };
+    };
+    
     printing = {
 
       enable = mkOption {
