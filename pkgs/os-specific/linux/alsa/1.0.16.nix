@@ -12,4 +12,3 @@ rec {
     buildInputs = [alsaLib ncurses gettext];
   } args;
 }
-0rb5rc8ppxjrpg5bcb5fw24v7gm5983zphz9762i8is5q2hbcqif
