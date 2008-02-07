@@ -2387,6 +2387,13 @@ rec {
 	  inherit fetchurl stdenv;
   };
 
+  mediastreamerFun = lib.sumArgs (selectVersion
+      ../development/libraries/mediastreamer "2.2.0cvs") {
+    inherit fetchcvs stdenv;
+  };
+
+  mediastreamer = mediastreamerFun null;
+
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux";
@@ -3235,6 +3242,8 @@ rec {
   alsa = alsaFun null;
 
   alsaLib = alsa.alsaLib;
+
+  alsaUtils = alsa.alsaUtils;
 
   atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "r3122") {
     inherit fetchurl stdenv builderDefs;
