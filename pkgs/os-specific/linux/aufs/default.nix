@@ -9,12 +9,15 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
-    mkdir kernelsrc
-    tar xvf ${kernel.src} -C kernelsrc
-  
+
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
-    substituteInPlace fs/aufs/Makefile --replace srctree srctree2
-    make KDIR=${kernel}/lib/modules/$kernelVersion/build srctree2=$(pwd)/kernelsrc/* -f local.mk
+    kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/source)
+    tar xvfj ${kernel.src}
+    kernelSource=$(echo $(pwd)/linux-*)
+    cp -prd $kernelBuild/* $kernelSource
+  
+    substituteInPlace fs/aufs/Makefile
+    make KDIR=$kernelSource -f local.mk
   '';
 
   installPhase = ''
