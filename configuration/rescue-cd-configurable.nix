@@ -139,6 +139,8 @@ rec {
             start on startup
             script
             export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
+
+	    mkdir -p /mnt
         
             ${system.nix}/bin/nix-store --load-db < /nix-path-registration
         
@@ -287,15 +289,6 @@ rec {
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
  
  
-  # Since the CD is read-only, the mount points must be on disk.
-  cdMountPoints = pkgs.runCommand "mount-points" {} ''
-    ensureDir $out
-    cd $out
-    mkdir proc sys tmp etc dev var mnt nix nix/var root bin ${if addUsers != "" then "home" else ""}
-    touch $out/${configuration.boot.rootLabel}
-  '';
- 
- 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD. We put them in a tarball because accessing that many small
   # files from a slow device like a CD-ROM takes too long.
@@ -372,10 +365,6 @@ rec {
         { 
           source = system.config.boot.grubSplashImage;
           target = "boot/background.xpm.gz";
-        }
-        { 
-          source = cdMountPoints;
-          target = "/";
         }
         { 
           source = nixosTarball + "/" + nixosTarball.tarName;
