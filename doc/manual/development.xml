@@ -14,13 +14,49 @@ NixOS.</para>
 <para>
 
 <screen>
-$ nix-build system/system.nix \
-    --arg configuration "import /etc/nixos/configuration.nix" \
-    -A <replaceable>attr</replaceable></screen>
+$ nix-build /etc/nixos/nixos <replaceable>attr</replaceable></screen>
 
 where <replaceable>attr</replaceable> is an attribute in
-<filename>system/system.nix</filename> (e.g.,
-<literal>bootStage1</literal>).</para>
+<filename>/etc/nixos/nixos/default.nix</filename>.  Attributes of interest include:
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>kernel</varname></term>
+    <listitem><para>The kernel.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>initialRamdisk</varname></term>
+    <listitem><para>The initial ramdisk (initrd) for this configuration.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>bootStage1</varname></term>
+    <listitem><para>The stage 1 (initrd) init script.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>bootStage2</varname></term>
+    <listitem><para>The stage 2 init script.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>etc</varname></term>
+    <listitem><para>The statically computed parts of <filename>/etc</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>upstartJobs</varname></term>
+    <listitem><para>An attribute set containing the Upstart jobs.  For
+    instance, the <varname>sshd</varname> Upstart job can be built by
+    doing <literal>nix-build /etc/nixos/nixos -A
+    upstartJobs.sshd</literal>.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
 
 </section>
 

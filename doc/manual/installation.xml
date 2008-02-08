@@ -58,11 +58,9 @@ $ ln -s nixpkgs/pkgs nixos/</screen>
 $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
 
   If everything goes well, you’ll end up with an ISO image in
-  <filename>./result/iso/nixos.iso</filename>.</para></listitem>
-
-  <listitem><para>Burn the ISO image
-  <filename>./result/iso/nixos.iso</filename> onto a CD or DVD or
-  attach it to a CD-ROM drive in VMware.</para></listitem>
+  <filename>./result/iso/nixos-<replaceable>version</replaceable>-<replaceable>platform</replaceable>.iso</filename>
+  that you can burn onto a CD or attach to a virtual CD-ROM drive in
+  your favourite virtual machine software.</para></listitem>
 
 </orderedlist>
   
@@ -81,13 +79,18 @@ $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
 
   <listitem><para>Boot from the CD.</para></listitem>
 
-  <listitem><para>The CD contains a basic NixOS installation.  When
-  it’s finished booting, it should have detected most of your hardware
-  and brought up networking (check <command>ifconfig</command>).
-  Networking is necessary for the installer, since it will download
-  lots of stuff (such as source tarballs or Nixpkgs channel binaries).
-  It’s best if you have a DHCP server on your network.  Otherwise
-  configure manually.</para></listitem>
+  <listitem><para>The CD contains a basic NixOS installation.  (It
+  also contain Memtest86+, useful if you want to test new hardware.)
+  When it’s finished booting, it should have detected most of your
+  hardware and brought up networking (check
+  <command>ifconfig</command>).  Networking is necessary for the
+  installer, since it will download lots of stuff (such as source
+  tarballs or Nixpkgs channel binaries).  It’s best if you have a DHCP
+  server on your network.  Otherwise configure
+  manually.</para></listitem>
+
+  <listitem><para>The NixOS manual is available on virtual console 7
+  (press Alt+F7 to access).</para></listitem>
 
   <listitem><para>Login as <literal>root</literal>, empty
   password.</para></listitem>
@@ -130,34 +133,77 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
     <listitem><para>For creating software RAID devices:
     <command>mdadm</command>.</para></listitem>
 
-    <listitem><para>Mount the target file system on
-    <filename>/mnt</filename>.</para></listitem>
+  </itemizedlist>
 
-    <listitem><para>The installation is declarative; you need to write
-    a description of the configuration that you want to be built and
+  </para></listitem>
+    
+  <listitem><para>Mount the target file system on
+  <filename>/mnt</filename>.</para></listitem>
+
+  <listitem>
+
+    <para>The installation is declarative; you need to write a
+    description of the configuration that you want to be built and
     activated.  The configuration is specified in a Nix expression and
-    should be stored in
-    <filename>/etc/nixos/configuration.nix</filename>.  See
+    must be stored <emphasis>on the target file system</emphasis> in
+    <filename>/mnt/etc/nixos/configuration.nix</filename>.  See
     <filename>/etc/nixos/nixos/configuration/examples</filename> for
     example machine configurations.  You can copy and edit one of
     those (e.g., copy
     <filename>/etc/nixos/nixos/configuration/examples/basic.nix</filename>
-    to <filename>/etc/nixos/configuration.nix</filename>).  See <xref
-    linkend="ch-options"/> for a list of the available configuration
-    options.  The text editor <command>nano</command> is
-    available.</para>
+    to <filename>/mnt/etc/nixos/configuration.nix</filename>).  See
+    <xref linkend="ch-options"/> for a list of the available
+    configuration options.  The text editors <command>nano</command>
+    and <command>vim</command> are available.</para>
 
     <para>In particular you need to specify a root file system in
     <option>fileSystems</option> and the target device for the Grub
     boot loader in <option>boot.grubDevice</option>.</para>
 
+    <para>The command <command>nixos-hardware-scan</command> can
+    generate an initial configuration file for you, i.e.,
+
+<screen>
+$ mkdir -p /mnt/etc/nixos
+$ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix</screen>
+
+    It tries to figure out the modules necessary for mounting the root
+    device, as well as various other hardware characteristics.
+    However, it doesn’t try to figure out the
+    <option>fileSystems</option> option yet.</para>
+
     <para>More examples of NixOS configurations for some actual
     machines can be found at <link
     xlink:href="https://svn.cs.uu.nl:12443/repos/trace/configurations/trunk/"/>.</para>
 
-    </listitem>
+    <note><para>It is very important that you specify in the option
+    <option>boot.initrd.extraKernelModules</option> all kernel modules
+    that are necessary for mounting the root file system, otherwise
+    the installed system will not be able to boot.  (If this happens,
+    boot from CD again, mount the target file system on
+    <filename>/mnt</filename>, fix
+    <filename>/mnt/etc/nixos/configuration.nix</filename> and rerun
+    <filename>nixos-install</filename>.)
+    <command>nixos-hardware-scan</command> should figure out the
+    required modules in most cases.</para></note>
 
-    <listitem><para>Do the installation:
+  </listitem>
+
+  <listitem><para>If your machine has a limited amount of memory, you
+  may want to activate swap devices now (<command>swapon
+  <replaceable>device</replaceable></command>).  The installer (or
+  rather, the build actions that it may spawn) may need quite a bit of
+  RAM, depending on your configuration.</para></listitem>
+
+  <listitem><para>Optionally, you can run
+
+<screen>
+$ nixos-checkout</screen>
+
+  to make the installer use the latest NixOS/Nixpkgs sources from the
+  Subversion repository, rather than the sources on CD.</para></listitem>
+
+  <listitem><para>Do the installation:
 
 <screen>
 $ nixos-install</screen>
@@ -169,21 +215,94 @@ $ nixos-install</screen>
 <screen>
 $ reboot</screen>
 
-    You should now be able to boot into the installed NixOS.  The Grub
-    boot menu shows a list of <emphasis>available
+  </para></listitem>
+
+  <listitem>
+
+    <para>You should now be able to boot into the installed NixOS.
+    The Grub boot menu shows a list of <emphasis>available
     configurations</emphasis> (initially just one).  Every time you
-    change the NixOS configuration, a new item appears in the menu.
+    change the NixOS configuration (see <xref
+    linkend="sec-changing-config" />), a new item appears in the menu.
     This allows you to go back easily to another configuration if
     something goes wrong.</para>
 
     <para>You should log in and change the <literal>root</literal>
-    password with <command>passwd</command>.</para></listitem>
+    password with <command>passwd</command>.</para>
 
-  </itemizedlist>
+    <para>You’ll probably want to create some user accounts as well,
+    which can be done with <command>useradd</command>:
 
-  </para></listitem>
-    
+<screen>
+$ useradd -c 'Eelco Dolstra' -m eelco
+$ passwd eelco</screen>
+
+    </para>
+
+    <para>You may also want to install some software.  For instance,
+
+<screen>
+$ nix-env -qa \*</screen>
+
+    shows what packages are available, and
+
+<screen>    
+$ nix-env -i w3m</screen>
+
+    install the <literal>w3m</literal> browser.</para>
+
+  </listitem>
+
 </orderedlist>
+
+<para><xref linkend="ex-install-sequence" /> shows a typical sequence
+of commands for installing NixOS on an empty hard drive (here
+<filename>/dev/sda).  <xref linkend="ex-config" /> shows a
+corresponding configuration Nix expression.</filename>
+
+</para>
+
+<example xml:id='ex-install-sequence'><title>Commands for installing NixOS on <filename>/dev/sda</filename></title>
+<screen>
+$ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</lineannotation>
+$ mke2fs -j -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
+$ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
+$ mount LABEL=nixos /mnt
+$ mkdir -p /mnt/etc/nixos
+$ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix
+$ nano /mnt/etc/nixos/configuration.nix
+<lineannotation>(in particular, set the fileSystems and swapDevices options)</lineannotation>
+$ nixos-install
+$ reboot</screen>
+</example>
+
+<example xml:id='ex-config'><title>NixOS configuration</title>
+<screen>
+{
+  boot = {
+    initrd = {
+      extraKernelModules = [ "ata_piix" ];
+    };
+    grubDevice = "/dev/sda";
+  };
+
+  fileSystems = [
+    { mountPoint = "/";
+      label = "nixos";
+    }
+  ];
+
+  swapDevices = [
+    { label = "swap"; }
+  ];
+  
+  services = {
+    sshd = {
+      enable = true;
+    };
+  };
+}</screen>
+</example>
 
 </section>
 

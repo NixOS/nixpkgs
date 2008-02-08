@@ -2071,7 +2071,7 @@ root        ALL=(ALL) SETENV: ALL
       description = "
         There are some times when you want really small system for specific 
 	purpose and do not want default package list. Setting 
-	<varname>cleanStart<varname> to <literal>true</literal> allows you 
+	<varname>cleanStart</varname> to <literal>true</literal> allows you 
 	to create a system with empty path - only extraPackages will be 
 	included.
       ";
