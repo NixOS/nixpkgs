@@ -35,4 +35,8 @@ in rec {
 
 # I'm too lazy to separate daemon and libs now.
   daemon = libs;
+  
+  # FIXME TODO
+  # After merger it will be better to correct upstart-job instead.
+  outPath = daemon.outPath;
 }

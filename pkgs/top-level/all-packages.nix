@@ -1347,7 +1347,7 @@ rec {
   php = (import ../development/interpreters/php_configurable) {
    inherit mkDerivationByConfiguration stdenv mysql lib;
    inherit fetchurl flex bison apacheHttpd; # gettext;
-   inherit libxml2;
+   inherit libxml2 automake autoconf postgresql;
    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
   };
 
