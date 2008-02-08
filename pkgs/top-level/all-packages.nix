@@ -1283,6 +1283,15 @@ rec {
     inherit fetchurl stdenv mk noweb groff;
   };
 
+  roadsend = import ../development/compilers/roadsend {
+    inherit fetchurl stdenv flex bison mkDerivationByConfiguration bigloo lib curl;
+    # optional features
+    # all features pcre, fcgi xml mysql, sqlite3, (not implemented: odbc gtk gtk2)
+    flags = ["pcre" "fcgi" "xml" "mysql"];
+    inherit mysql;
+    inherit libxml2;
+  };
+
   strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
     inherit stdenv fetchurl pkgconfig aterm;
   };
