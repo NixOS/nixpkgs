@@ -1,4 +1,4 @@
-#! @perl@ -w
+#! @perl@/bin/perl -w
 
 use File::Spec;
 use File::Basename;
@@ -6,6 +6,12 @@ use File::Basename;
 
 my @kernelModules = ();
 my @initrdKernelModules = ();
+
+
+sub debug {
+    return unless defined $ENV{"DEBUG"};
+    print STDERR @_;
+}
 
 
 # Read a file, returning undef if the file cannot be opened.
@@ -66,9 +72,9 @@ sub pciCheck {
         chomp $module;
     }
     
-    print STDERR "$path: $vendor $device $class";
-    print STDERR " $module" if defined $module;
-    print STDERR "\n";
+    debug "$path: $vendor $device $class";
+    debug " $module" if defined $module;
+    debug "\n";
 
     if (defined $module) {
         # See the bottom of http://pciids.sourceforge.net/pci.ids for
@@ -144,9 +150,9 @@ sub usbCheck {
         chomp $module;
     }
     
-    print STDERR "$path: $class $subclass $protocol";
-    print STDERR " $module" if defined $module;
-    print STDERR "\n";
+    debug "$path: $class $subclass $protocol";
+    debug " $module" if defined $module;
+    debug "\n";
  
     if (defined $module) {
         if (# Mass-storage controller.  Definitely important.
@@ -195,9 +201,9 @@ my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
  
 
+## This is a generated file.  Do not modify!
+## Make changes to /etc/nixos/configuration.nix instead.
 print <<EOF ;
-# This is a generated file.  Do not modify!
-# Make changes to /etc/nixos/configuration.nix instead.
 {
   boot = {
     initrd = {

@@ -18,14 +18,18 @@ in
     initialRamdisk
     kernel
     nix
-    nixosCheckout
-    nixosInstall
-    nixosRebuild
     system
     systemPath
     config
     ;
 
+  inherit (system.nixosTools)
+    nixosCheckout
+    nixosHardwareScan
+    nixosInstall
+    nixosRebuild
+    ;    
+    
   nixFallback = system.nix;
 
   manifests = system.config.installer.manifests; # exported here because nixos-rebuild uses it

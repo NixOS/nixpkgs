@@ -42,7 +42,7 @@ let
 
 in
 
-assert !autoDetectRootDevice -> mountPoints != [];
+if !autoDetectRootDevice && mountPoints == [] then abort "You must specify the fileSystems option!" else
 
 substituteAll {
   src = ./boot-stage-1-init.sh;

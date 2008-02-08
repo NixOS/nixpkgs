@@ -119,19 +119,9 @@ rec {
   };
 
 
-  # The installer.
-  nixosInstall = import ../installer/nixos-install.nix {
-    inherit (pkgs) perl runCommand substituteAll;
-    inherit nix;
-    nixpkgsURL = config.installer.nixpkgsURL;
-  };
-
-  nixosRebuild = import ../installer/nixos-rebuild.nix {
-    inherit (pkgs) substituteAll;
-  };
-
-  nixosCheckout = import ../installer/nixos-checkout.nix {
-    inherit (pkgs) substituteAll;
+  # NixOS installation/updating tools.
+  nixosTools = import ../installer {
+    inherit pkgs config nix;
   };
 
 
@@ -208,20 +198,18 @@ rec {
 
 
   # The packages you want in the boot environment.
-  systemPathList = (if config.environment.cleanStart then 
-  [
+  systemPathList = [
     # Better leave them here - they are small, needed,
     # and hard to refer from anywhere outside.
-    modprobe 
+    modprobe # must take precedence over module_init_tools
     nix
-    nixosInstall
-    nixosRebuild
-    nixosCheckout
+    nixosTools.nixosInstall
+    nixosTools.nixosRebuild
+    nixosTools.nixosCheckout
+    nixosTools.nixosHardwareScan
     setuidWrapper
   ]
-  else
-  [
-    modprobe # must take precedence over module_init_tools
+  ++ pkgs.lib.optionals (!config.environment.cleanStart) [
     pkgs.bashInteractive # bash with ncurses support
     pkgs.bzip2
     pkgs.coreutils
@@ -263,17 +251,12 @@ rec {
     pkgs.usbutils
     pkgs.utillinux
     pkgs.wirelesstools
-    nix
-    nixosInstall
-    nixosRebuild
-    nixosCheckout
-    setuidWrapper
-  ])
-  ++ pkgs.lib.optional (config.security.sudo.enable) pkgs.sudo
-  ++ pkgs.lib.optional (config.networking.defaultMailServer.directDelivery) pkgs.ssmtp 
+  ]
+  ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
+  ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
-  ++ (config.environment.extraPackages) pkgs
-  ++ pkgs.lib.optional (config.fonts.enableFontDir) fontDir;
+  ++ config.environment.extraPackages pkgs
+  ++ pkgs.lib.optional config.fonts.enableFontDir fontDir;
 
 
   # We don't want to put all of `startPath' and `path' in $PATH, since

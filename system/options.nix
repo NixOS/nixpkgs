@@ -125,7 +125,7 @@
 
     extraModulePackages = mkOption {
       default = [];
-      example = [pkgs.aufs pkgs.nvidiaDriver];
+      example = [pkgs.aufs pkgs.nvidiaDrivers];
       description = ''
         A list of additional packages supplying kernel modules.
       '';
@@ -146,6 +146,12 @@
 
       kernelModules = mkOption {
         default = [
+          # Note: most of these (especially the SATA/PATA modules)
+          # shouldn't be included by default since nixos-hardware-scan
+          # detects them, but I'm keeping them for now for backwards
+          # compatibility.
+          
+          # Some SATA/PATA stuff.        
           "ahci"
           "sata_nv"
           "sata_via"
@@ -153,11 +159,14 @@
           "sata_uli"
           "ata_piix"
           "pata_marvell"
+          # Standard SCSI stuff.
           "sd_mod"
           "sr_mod"
-          "ide-cd"
-          "ide-disk"
-          "ide-generic"
+          # Standard IDE stuff.
+          "ide_cd"
+          "ide_disk"
+          "ide_generic"
+          # Filesystems.
           "ext3"
           # Support USB keyboards, in case the boot fails and we only have
           # a USB keyboard.

@@ -119,4 +119,4 @@ fi
 # HUP signal.
 export UPSTART_CFG_DIR=/etc/event.d
 setPath "@upstartPath@"
-exec /var/run/current-system/upstart/sbin/init -v
+exec /var/run/current-system/upstart/sbin/init

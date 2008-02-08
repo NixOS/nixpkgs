@@ -26,7 +26,7 @@ for i in $(cd $staticEtc && find * -type l); do
     if test -e "$staticEtc/$i.mode"; then
         # Create a regular file in /etc.
         cp $staticEtc/$i /etc/$i
-        chown root.root /etc/$i
+        chown 0.0 /etc/$i
         chmod "$(cat "$staticEtc/$i.mode")" /etc/$i
     else
         # Create a symlink in /etc.

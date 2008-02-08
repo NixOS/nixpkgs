@@ -60,6 +60,7 @@ done
 # Load some kernel modules.
 export MODULE_DIR=@modulesDir@/lib/modules/
 for i in @modules@; do
+    echo "trying to load $i..."
     modprobe $i
 done
 

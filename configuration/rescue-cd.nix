@@ -1,10 +1,14 @@
 { platform ? __currentSystem
+, relName ?
+    if builtins.pathExists ../relname
+    then builtins.readFile ../relname
+    else "nixos-${builtins.readFile ../VERSION}"
 }:
 
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.12pre10072";
+  nixpkgsRel = "nixpkgs-0.12pre10553";
 
 
   configuration = {
@@ -16,9 +20,50 @@ rec {
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
       extraModulePackages = [pkgs.aufs];
+      
       initrd = {
         extraKernelModules = [
-          "aufs" # needed for live-CD operation
+          # The initrd should contain any modules necessary for
+          # mounting the CD.
+        
+          # SATA/PATA support.
+          "ahci"
+
+          "ata_piix"
+          
+          "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor"
+          "sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4"
+          "sata_uli" "sata_via" "sata_vsc"
+
+          "pata_ali" "pata_amd" "pata_artop" "pata_atiixp"
+          "pata_cs5520" "pata_cs5530" "pata_cs5535" "pata_efar"
+          "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3"
+          "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell"
+          "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix"
+          "pata_pcmcia" "pata_pdc2027x" "pata_qdi" "pata_rz1000"
+          "pata_sc1200" "pata_serverworks" "pata_sil680" "pata_sis"
+          "pata_sl82c105" "pata_triflex" "pata_via"
+          # "pata_winbond" <-- causes timeouts in sd_mod
+
+          # SCSI support (incomplete).
+          "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" 
+        
+          # USB support, especially for booting from USB CD-ROM
+          # drives.  Also include USB keyboard support for when
+          # something goes wrong in stage 1.
+          "ehci_hcd"
+          "ohci_hcd"
+          "usbhid"
+          "usb_storage"
+
+          # Firewire support.  Not tested.
+          "ohci1394" "sbp2"
+
+          # Wait for SCSI devices to appear.
+          "scsi_wait_scan"
+
+          # Needed for live-CD operation.
+          "aufs"
         ];
       };
     };
@@ -46,6 +91,8 @@ rec {
             start on startup
             script
               export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
+
+              mkdir -p /mnt
 
               ${system.nix}/bin/nix-store --load-db < /nix-path-registration
 
@@ -130,6 +177,8 @@ rec {
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
         pkgs.gdb # for debugging Nix
+        pkgs.testdisk # useful for repairing boot problems
+        pkgs.mssys # for writing Microsoft boot sectors / MBRs
       ];
     };
    
@@ -177,7 +226,7 @@ rec {
   # Get a recent copy of Nixpkgs.
   nixpkgsTarball = pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
-    md5 = "6a793b877e2a4fa79827515902e1dfd8";
+    md5 = "a6f1cd8486b7d588ecc7d98f5baf6a73";
   };
 
 
@@ -200,7 +249,7 @@ rec {
   # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit;
-    isoName = "nixos-${platform}.iso";
+    isoName = "${relName}-${platform}.iso";
 
     # Single files to be copied to fixed locations on the CD.
     contents = [

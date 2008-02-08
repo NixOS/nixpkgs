@@ -56,13 +56,13 @@ mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
 
 cleanup() {
-    # !!! don't umount any we didn't mount ourselves
+    # !!! don't umount anything we didn't mount ourselves
     for i in $(grep -F "$mountPoint" /proc/mounts \
         | @perl@/bin/perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
         | sort -r);
     do
-        if test "$i" != "$mountPoint"; then
-            umount $i
+        if test "$i" != "$mountPoint" -a "$i" != / -a -e "$i"; then
+            umount $i || true
         fi
     done
 }
@@ -148,6 +148,8 @@ chroot $mountPoint @nix@/bin/nix-env \
 
 # Make a backup of the old NixOS/Nixpkgs sources.
 echo "copying NixOS/Nixpkgs sources to /etc/nixos...."
+
+backupTimestamp=$(date "+%Y%m%d%H%M%S")
 
 targetNixos=$mountPoint/etc/nixos/nixos
 if test -e $targetNixos; then
