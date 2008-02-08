@@ -977,6 +977,11 @@ rec {
       inherit stdenv fetchurl jre;
     };
 
+  bigloo = import ../development/compilers/bigloo {
+    inherit fetchurl mkDerivationByConfiguration lib;
+    stdenv = overrideGCC stdenv gcc34;
+  };
+
   dylan = import ../development/compilers/gwydion-dylan {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
     dylan =
