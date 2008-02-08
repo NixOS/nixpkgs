@@ -23,15 +23,26 @@ fi
 
 cd /etc/nixos
 
+if test -n "$NIXOS" && test "$NIXOS_BRANCH" = 1 && test -z "$CHECKOUT_BRANCH" && ! test "$NIXOS" = "/etc/nixos/nixos"; then
+	CHECKOUT_BRANCH=${NIXOS##*/}
+	CHECKOUT_BRANCH=${CHECKOUT_BRANCH#nixos-}
+	CHECKOUT_BRANCH=branches/${CHECKOUT_BRANCH}
+	CHECKOUT_SUFFIX=-${CHECKOUT_BRANCH##*/}
+fi
+
+if test -n "${CHECKOUT_BRANCH}" && test -z "${CHECKOUT_SUFFIX}" ; then
+	CHECKOUT_SUFFIX=-${CHECKOUT_BRANCH##*/}
+fi;
+
 # Move any old nixos or nixpkgs directories out of the way.
 backupTimestamp=$(date "+%Y%m%d%H%M%S")
 
 if test -e nixos -a ! -e nixos/.svn; then
-    mv nixos nixos-$backupTimestamp
+    mv nixos${CHECKOUT_SUFFIX} nixos-$backupTimestamp
 fi
 
 if test -e nixpkgs -a ! -e nixpkgs/.svn; then
-    mv nixpkgs nixpkgs-$backupTimestamp
+    mv nixpkgs${CHECKOUT_SUFFIX} nixpkgs-$backupTimestamp
 fi
 
 if test -e services -a ! -e services/.svn; then
@@ -39,10 +50,10 @@ if test -e services -a ! -e services/.svn; then
 fi
 
 # Check out the NixOS and Nixpkgs sources.
-svn co https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk nixos
-svn co https://svn.cs.uu.nl:12443/repos/trace/nixpkgs/trunk nixpkgs
+svn co https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk nixos${CHECKOUT_SUFFIX}
+svn co https://svn.cs.uu.nl:12443/repos/trace/nixpkgs/${CHECKOUT_BRANCH:-trunk} nixpkgs${CHECKOUT_SUFFIX}
 svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk services
 
 # Add a few required symlink.
-ln -sfn ../services nixos/services
-ln -sfn ../nixpkgs/pkgs nixos/pkgs
+ln -sfn ../services nixos${CHECKOUT_SUFFIX}/services
+ln -sfn ../nixpkgs${CHECKOUT_SUFFIX}/pkgs nixos${CHECKOUT_SUFFIX}/pkgs
