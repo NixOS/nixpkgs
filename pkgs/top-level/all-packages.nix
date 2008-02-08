@@ -1946,6 +1946,10 @@ rec {
 	  stdenv = stdenvUsingSetupNew2;
   };
 
+  fcgi = import ../development/libraries/fcgi {
+      inherit fetchurl stdenv;
+  };
+
   ffmpeg = import ../development/libraries/ffmpeg {
     inherit fetchurl stdenv;
   };
