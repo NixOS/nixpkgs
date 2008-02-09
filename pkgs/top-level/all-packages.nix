@@ -4300,6 +4300,12 @@ rec {
     ghc = ghc661;
   };
 
+  # some speed bottle necks are resolved in this version I think .. perhaps you like to try it? 
+  darcs_2_pre = import ../applications/version-management/darcs_2_pre.nix {
+    inherit fetchurl stdenv zlib ncurses curl;
+    ghc = ghc661;
+  };
+
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser 
 	libxml2 gettext python libxml2Python docbook5 docbook_xsl 
