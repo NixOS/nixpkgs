@@ -5,7 +5,7 @@
      and add all together using GHC_PACKAGE_PATH
 
      First I've tried separating the build of ghc from it's lib. It hase been to painful. I've failed.
-     Now there is splitpackagedb.hs which just takes the installed package.conf
+     Now there is nix_ghc_pkg_tool.hs which just takes the installed package.conf
      and creates a new package db file for each contained package.
 
      The final attribute set looks similar to this:
@@ -31,13 +31,17 @@
 
   */
 
-  # creates a nix package out of the single package.conf files created when after installing ghc (see splitpackagedb.hs)
-  packageByPackageDB = otherPkg : name : packageconfpath : propagatedBuildInputs : stdenv.mkDerivation {
-    inherit name otherPkg propagatedBuildInputs;
+  # creates a nix package out of the single package.conf files created when after installing ghc (see nix_ghc_pkg_tool.hs)
+  packageByPackageDB = ghc : # ghc
+      name : 
+      packageconfpath : 
+      propagatedBuildInputs : 
+    stdenv.mkDerivation {
+    inherit name;
     phases = "buildPhase fixupPhase";
-    buildInputs = [ghcPkgUtil];
-    buildPhase = "setupHookRegisteringPackageDatabase \"$otherPkg/${packageconfpath}\"
-      ";
+    buildInputs = [ ghcPkgUtil ];
+    propagatedBuildInputs = [ ghc ] ++ propagatedBuildInputs;
+    buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/${packageconfpath}\"";
   };
 
   # used to automatically get dependencies ( used for core_libs ) 
@@ -58,7 +62,8 @@
   
   #this only works for ghc-6.8 right now
   ghcAndLibraries = { version, src /* , core_libraries, extra_libraries  */
-                    , extra_src }:
+                    , extra_src
+                    , alias_names }:
                    recurseIntoAttrs ( rec {
     inherit src extra_src version;
 
@@ -74,7 +79,8 @@
         sed -i \"s|^\(library-dirs.*$\)|\1 \\\"$ncurses/lib\\\"|\" libraries/readline/package.conf.in
       ";
 
-      splitpackagedb = ./splitpackagedb.hs;
+      # TODO add unique (filter duplicates?) shouldn't be there? 
+      nix_ghc_pkg_tool = ./nix_ghc_pkg_tool.hs;
 
       configurePhase = "./configure"
        +" --prefix=\$out "
@@ -89,9 +95,10 @@
       #  note : I don't know yet wether it's a good idea to have RUNGHC.. It's faster
       # but you can't pass packages, can you?
       postInstall = "
-        cp \$splitpackagedb splitpackagedb.hs
-        \$out/bin/ghc-\$version --make -o splitpackagedb  splitpackagedb.hs;
-        ./splitpackagedb \$out/lib/ghc-\$version/package.conf \$out/lib/ghc-\$version
+        cp \$nix_ghc_pkg_tool nix_ghc_pkg_tool.hs
+        \$out/bin/ghc-\$version --make -o nix_ghc_pkg_tool  nix_ghc_pkg_tool.hs;
+        ./nix_ghc_pkg_tool split \$out/lib/ghc-\$version/package.conf \$out/lib/ghc-\$version
+        cp nix_ghc_pkg_tool \$out/bin
 
         if test -x \$out/bin/runghc; then
           RUNHGHC=\$out/bin/runghc # > ghc-6.7/8 ?
@@ -110,7 +117,7 @@
     core_libs = resolveDeps ghc
       [ { name = "Cabal-1.2.3.0"; deps = ["base-3.0.1.0" "pretty-1.0.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" "rts-1.0" "filepath-1.1.0.0"];} #
         { name = "array-0.1.0.0"; deps = ["base-3.0.1.0"];}
-        { name = "base-3.0.1.0"; deps = [];} #
+        { name = "base-3.0.1.0"; deps = ["rts-1.0"];} #
         { name = "bytestring-0.9.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
         { name = "containers-0.1.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
         { name = "directory-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0"];}
@@ -125,17 +132,21 @@
         { name = "process-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0"];}
         { name = "random-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0"];}
         { name = "readline-1.0.1.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" ];}
-        { name = "rts-1.0"; deps = [ "base-3.0.1.0" ];} #
+        { name = "rts-1.0"; deps = [];} #
         { name = "template-haskell-2.2.0.0"; deps = [ "base-3.0.1.0" "pretty-1.0.0.0" "array-0.1.0.0" "packedstring-0.1.0.0" "containers-0.1.0.1" ];}
+
         { name = "unix-2.3.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" ];}
       ];
 
-      
 
-    extra_libs = [];
+    extra_libs = {}; # TODO ? at the moment outside of this package 
 
-    #all_libs = core_libs ++ extra_libs;
-
+    # contains core_libs { "base-3.0.1.0" = <derivation> ...
+    # and alias names      base = base-3.0.1.0
+    # (without version)  }
+    # to get a specific version  don't use set.xy-7 but (__getAttr "xy-7" set)
+    all_libs = let all = core_libs // extra_libs;
+        in all // ( builtins.listToAttrs ( lib.mapRecordFlatten (attr : v : lib.nv attr (__getAttr v all ) ) alias_names ) );
   } );
 
   ghc68 = ghcAndLibraries rec {
@@ -154,6 +165,30 @@
       sha256 = "044mpbzpkbxcnqhjnrnmjs00mr85057d123rrlz2vch795lxbkcn";
       #url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.20070912-src-extralibs.tar.bz2;
       #sha256 = "0py7d9nh3lkhjxr3yb3n9345d0hmzq79bi40al5rcr3sb84rnp9r";
+    };
+
+    # to be able to use just array instead of array-0.1.0.0 (versions are likely to change, dependencies not that often)
+    alias_names = {
+      cabal = "Cabal-1.2.3.0";
+      array = "array-0.1.0.0";
+      base = "base-3.0.1.0";
+      bytestring = "bytestring-0.9.0.1";
+      containers = "containers-0.1.0.1";
+      directory = "directory-1.0.0.0";
+      filepath = "filepath-1.1.0.0";
+      haskell98 = "haskell98-1.0.1.0";
+      hpc = "hpc-0.5.0.0";
+      packedstring = "packedstring-0.1.0.0";
+      pretty = "pretty-1.0.0.0";
+      process = "process-1.0.0.0";
+      random = "random-1.0.0.0";
+      readline = "readline-1.0.1.0";
+      rts = "rts-1.0";
+      template = "template-haskell-2.2.0.0";
+      unix = "unix-2.3.0.0";
+      template_haskell = "template-haskell-2.2.0.0";
+      old_time = "old-time-1.0.0.0";
+      old_locale = "old-locale-1.0.0.0";
     };
 
     # this will change because of dependency hell :) 

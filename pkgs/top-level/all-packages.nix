@@ -1072,7 +1072,8 @@ rec {
     profiledCompiler = true;
   });
 
-  # This new ghc stuff is under heavy development and might change ! 
+  # This new ghc stuff is under heavy development and will change ! 
+  # =========  =======================================================
 
   # usage: see ghcPkgUtil.sh - use setup-new2 because of PATH_DELIMITER
   # depreceated -> use functions defined in builderDefs
@@ -1095,43 +1096,206 @@ rec {
     stdenv = stdenvUsingSetupNew2;
   };
 
+  # args must contain src name buildInputs
+  # using this derivation .. my system is dying (> 2.5 g memory usage -> segfault ?)
+  # experimental !
+  ghc_cabal_derivation_X =
+    lib.sumArgs (
+        x : ( let localDefs =  (((builderDefs x) 
+                { debug = true; }) null # end sumArgs 
+                ); in with localDefs;
+        stdenv.mkDerivation rec {
+          inherit name propagatedBuildInputs;
+          builder = writeScript (name + "-builder")
+                  (textClosure localDefs [ cabalBuild ]);
+        }));
+
+  # args must contain src name buildInputs
+  # classic expression style.. seems to work fine
+  # used now
+  ghc_cabal_derivation = args : null_ : with lib; with args;
+    stdenvUsingSetupNew2.mkDerivation {
+      inherit name propagatedBuildInputs src goSrcDir;
+      phases = "unpackPhase buildPhase";
+      buildInputs = (if (args ? buildInputs) then args.buildInputs else [])
+                    ++ [ ghcPkgUtil ];
+      buildPhase ="
+        echo buildPhase is
+          createEmptyPackageDatabaseAndSetupHook
+          export GHC_PACKAGE_PATH
+
+          \$goSrcDir
+          ghc --make Setup.*hs -o setup
+          CABAL_SETUP=./setup
+
+          nix_ghc_pkg_tool join local-pkg-db
+
+          \$CABAL_SETUP configure --package-db=local-pkg-db
+          \$CABAL_SETUP build
+          \$CABAL_SETUP copy --destdir=\$out
+          \$CABAL_SETUP register --gen-script
+          sed -e \"s=/usr/local/lib=\$out/usr/local/lib=g\" \\
+              -e \"s#bin/ghc-pkg --package-conf.*#bin/ghc-pkg --package-conf=\$PACKAGE_DB register -#\" \\
+              -i register.sh
+          ./register.sh
+          rm \${PACKAGE_DB}.old
+
+         ensureDir \"\$out/nix-support\"
+         echo \"\$propagatedBuildInputs\" > \"\$out/nix-support/propagated-build-inputs\"
+      ";
+  };
+
   # this will change in the future 
-  ghc68_extra_libs = ghc:
-    let deriv = name : goSrcDir : deps : 
-        let localDefs = builderDefs {
-            inherit goSrcDir;
-            src = ghc.extra_src;
-          } null; 
-        in with localDefs;
-          stdenv.mkDerivation rec {
-            inherit name;
-            builder = writeScript (name + "-builder")
-                    (textClosure localDefs [ cabalBuild ]);
-          };
-    # using nvs to be able to use mtl-1.1.0.0 as name 
-  in lib.nvs "mtl-1.1.0.0" (deriv "mtl-1.1.0.0" "cd libraries/mtl" [ (__getAttr "base-3.0.1.0"  ghc.core_libs) ]);
+  # TODO enhance speed ! ?
+  ghc68_extra_libs = ghc: rec {
+      #   name (using lowercase letters everywhere because using installing packages having different capitalization is discouraged) - this way there is not that much to remember?
+
+      cabal_darcs_name = "cabal--darcs";
+
+      # introducing p here to speed things up.
+      # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
+      # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
+      pkgs = let x = ghc.all_libs // derivations; in {
+          # ghc extra packages 
+          mtl     = { name="mtl-1.1.0.0";     goSrcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
+          parsec  = { name="parsec-2.1.0.0";  goSrcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
+          network = { name="network-2.1.0.0"; goSrcDir="libraries/network"; p_deps=[ x.base x.parsec x.haskell98 ];       src = ghc.extra_src; };
+          regex_base = { name="regex-base-0.72.0.1"; goSrcDir="libraries/regex-base"; p_deps=[ x.base x.array x.bytestring x.haskell98 ]; src = ghc.extra_src; };
+          regex_posix = { name="regex-posix-0.72.0.2"; goSrcDir="libraries/regex-posix"; p_deps=[ x.regex_base x.haskell98 ]; src = ghc.extra_src; };
+          regex_compat = { name="regex-compat-0.71.0.1"; goSrcDir="libraries/regex-compat"; p_deps=[ x.base x.regex_posix x.regex_base x.haskell98 ]; src = ghc.extra_src; };
+          stm = { name="stm-2.1.1.0"; goSrcDir="libraries/stm"; p_deps=[ x.base x.array ]; src = ghc.extra_src; };
+          hunit = { name="HUnit-1.2.0.0"; goSrcDir="libraries/HUnit"; p_deps=[ x.base ]; src = ghc.extra_src; };
+          quickcheck = { name="QuickCheck-1.1.0.0"; goSrcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
+
+
+          # other pacakges  (hackage etc)
+          binary = rec { name = "binary-0.4.1"; p_deps = [ x.base x.bytestring x.containers x.array ];
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/binary/0.4.1/binary-0.4.1.tar.gz";
+                                        sha256 = "0jg5i1k5fz0xp1piaaf5bzhagqvfl3i73hlpdmgs4gc40r1q4x5v"; };
+                 };
+          # 1.13 is stable. There are more recent non stable versions
+          haxml = rec { name = "HaXml-1.13.3"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 ];
+                       src = fetchurl { url = "http://www.haskell.org/HaXml/${name}.tar.gz";
+                                        sha256 = "08d9wy0rg9m66dd10x0zvkl74l25vxdakz7xp3j88s2gd31jp1v0"; };
+                 };
+          xhtml = rec { name = "xhtml-3000.0.2.2"; p_deps = [ x.base ];
+                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/xhtml/3000.0.2.2/xhtml-3000.0.2.2.tar.gz";
+                                        sha256 = "112mbq26ksh7r22y09h0xvm347kba3p4ns12vj5498fqqj333878"; };
+                 };
+          html = rec { name = "html-1.0.1.1"; p_deps = [ x.base ];
+                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/html/1.0.1.1/html-1.0.1.1.tar.gz";
+                                        sha256 = "10fayfm18p83zlkr9ikxlqgnzxg1ckdqaqvz6wp1xj95fy3p6yl1"; };
+                 };
+          crypto = rec { name = "crypto-4.1.0"; p_deps = [ x.base x.array x.pretty x.quickcheck x.random x.hunit ];
+                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/Crypto/4.1.0/Crypto-4.1.0.tar.gz";
+                                        sha256 = "13rbpbn6p1da6qa9m6f7dmkzdkmpnx6jiyyndzaz99nzqlrwi109"; };
+                 };
+          hslogger = rec { name = "hslogger-1.0.4"; p_deps = [ x.containers x.directory x.mtl x.network x.process];
+                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hslogger/1.0.4/hslogger-1.0.4.tar.gz";
+                                        sha256 = "0kmz8xs1q41rg2xwk22fadyhxdg5mizhw0r4d74y43akkjwj96ar"; };
+                 };
+
+
+        # HAPPS - Libraries
+          http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
+                   src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
+                 };
+          syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
+                   src = fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                 };
+
+        happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty ];
+                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
+                    };
+        happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
+                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                    };
+        happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
+                      x.mtl x.network x.stm x.template_haskell x.hslogger
+                        x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
+                        x.random x.old_time x.old_locale x.unix x.directory x.binary ];
+                      src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
+                                         md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
+                                       };
+                    };
+        happs_plugins_darcs = { name="HAppS-plugins-darcs"; p_deps=[ x.base x.mtl x.hslogger x.happs_util_darcs x.happs_data_darcs x.happs_state_darcs ];
+                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                    };
+        # there is no .cabal yet 
+        #happs_smtp_darcs = { name="HAppS-smtp-darcs"; p_deps=[];
+                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-smtp"; md5 = "5316917e271ea1ed8ad261080bcb47db"; };
+                    #};
+
+        happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
+                          x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
+                          x.template_haskell x.syb_with_class_darcs x.containers ];
+                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
+                                       #md5 = "fa6b24517f09aa16e972f087430967fd"; 
+                                       #tag = "0.9.2";
+                                        # no tag
+                                       md5 = "fa6b24517f09aa16e972f087430967fd"; 
+                                     };
+                    };
+        happs_darcs = { name="happs-darcs"; p_deps=[x.haxml x.parsec x.mtl
+                x.network x.regex_compat x.hslogger x.happs_data_darcs
+                  x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
+                  x.template_haskell x.xhtml x.html x.bytestring x.random
+                  x.containers x.old_time x.old_locale x.directory x.unix];
+                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
+                    };
+        # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
+        # is be added to buildInputs automatically
+        cabal_darcs = { name=cabal_darcs_name; p_deps = with ghc.all_libs; [base rts directory process pretty containers filepath];
+                  src = fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
+                };
+      };
+      toDerivation = attrs : with attrs;
+        ghc_cabal_derivation {
+            inherit name src;
+            propagatedBuildInputs = p_deps ++ (lib.optional (attrs.name != cabal_darcs_name) derivations.cabal_darcs );
+            goSrcDir = "cd ${if attrs ? goSrcDir then attrs.goSrcDir else "."}";
+            patches = if attrs ? patches then attrs.patches else [];
+            # add cabal, take deps either from this list or from ghc.core_libs 
+        } null;
+      # result is { mtl = <deriv>;
+      #             "mtl-1.." = <the same deriv>
+      #           ...}
+      # containing the derivations defined here and in ghc.all_libs
+      derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
+                ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
+    }.derivations;
+
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
+  # the lib to the libraries list below
+  # Doesn't create that much useless symlinks (you seldomly want to read the
+  # .hi and .o files, right?
   ghcLibraryWrapper68 = 
     let ghc = ghcsAndLibs.ghc68.ghc; in
     createGhcWrapper rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
-      libraries = map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
-            "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" 
-            "hpc-0.5.0.0" "bytestring-0.9.0.1" "pretty-1.0.0.0" "packedstring-0.1.0.0" "template-haskell-2.2.0.0" 
-            "unix-2.3.0.0" "process-1.0.0.0" "readline-1.0.1.0" "Cabal-1.2.3.0" "random-1.0.0.0" "haskell98-1.0.1.0" "ghc-${ghc.version}"
-            "array-0.1.0.0" "bytestring-0.9.0.1" "containers-0.1.0.1" "directory-1.0.0.0" "filepath-1.1.0.0"
-            "ghc-${ghc.version}" "haskell98-1.0.1.0" "hpc-0.5.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" 
-            "packedstring-0.1.0.0" "pretty-1.0.0.0" "process-1.0.0.0" "random-1.0.0.0"
-            "readline-1.0.1.0" "rts-1.0" "unix-2.3.0.0" "base-3.0.1.0"
-          ] ++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [
-            "mtl-1.1.0.0"
-          ];
-        # (flatten ghcsAndLibs.ghc68.core_libs);
+      libraries = 
+        # core_libs  distributed with this ghc version
+        #(lib.flatten ghcsAndLibs.ghc68.core_libs)
+          map ( a : __getAttr a ghcsAndLibs.ghc68.all_libs ) [ 
+            "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
+            "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
+            "old_time" "packedstring" "pretty" "process" "random" "readline" "rts"
+            "template" "unix" "template_haskell" ]
+        # some extra libs
+
+           ++  (lib.flattenAttrs (ghc68_extra_libs ghcsAndLibs.ghc68) );
+        # or specify the ones you want to install using this list (possible values see attributes in ghc68_extra_libs
+           #++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) )
+           #[ "mtl" "parsec" "cabal_darcs" "haxml" "network" "regex_base"
+           #"regex_compat" "regex_posix" "stm" "hunit" "quickcheck" "crypto"
+           #"hslogger" "http_darcs" "syb_with_class_darcs"
+           #];
+        # some additional libs
       inherit ghc;
   };
 

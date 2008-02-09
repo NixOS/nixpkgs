@@ -18,6 +18,8 @@ main = do
   args <- getArgs
   case args of
     [inFile, outDir] -> do
+      -- prior to 6.9.x (when exactly) this must be InstalledPackageInfo only (not InstalledPackageInfo_ String) 
+      -- (packagedb :: [InstalledPackageInfo_ String] ) <- fmap read $ readFile inFile
       (packagedb :: [InstalledPackageInfo] ) <- fmap read $ readFile inFile
       mapM_ (\pi -> let fn = outDir </> (showPackageId $ package pi) ++ ".conf"
                     in writeFile fn (show [pi])
