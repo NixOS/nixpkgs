@@ -632,7 +632,7 @@ rec {
   };
 
   mc = import ../tools/misc/mc {
-     inherit fetchurl stdenv pkgconfig ncurses;
+     inherit fetchurl stdenv pkgconfig ncurses shebangfix perl zip;
      inherit (gtkLibs) glib;
      inherit (xlibs) libX11;
   };

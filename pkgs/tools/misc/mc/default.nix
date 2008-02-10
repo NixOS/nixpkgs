@@ -6,8 +6,15 @@ stdenv.mkDerivation rec {
     url = "http://www.ibiblio.org/pub/Linux/utils/file/managers/mc/${name}.tar.gz";
     sha256 = "0zly25mwdn84s0wqx9mzyqi177mm828716nv1n6a4a5cm8yv0sh8";
   };
-  buildInputs = [pkgconfig glib ncurses libX11];
+  buildInputs = [pkgconfig glib ncurses libX11 shebangfix perl zip];
   configureFlags = "--with-screen=ncurses";
+  # small hacks to support zip
+  postUnpack = "
+    sed  -i 's=/usr/bin/==g' `find -type f`
+  ";
+  postInstall = "
+    find \$out -iname \"*.pl\" | xargs shebangfix;
+  ";
   meta = {
 	  description = "File Manager and User Shell for the GNU Project";
 	  homepage = http://www.ibiblio.org/mc;
