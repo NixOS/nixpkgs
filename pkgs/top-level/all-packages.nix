@@ -417,6 +417,13 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
+  dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools "2.11deb")
+  {
+    inherit builderDefs;
+  };
+
+  dosfstools = dosfstoolsFun null;
+
   ed = import ../tools/text/ed {
     inherit fetchurl stdenv;
   };
@@ -612,6 +619,10 @@ rec {
     inherit fetchurl stdenv ghc tetex polytable;
   };
 
+  lzma = import ../tools/compression/lzma {
+    inherit fetchurl stdenv;
+  };
+
   man = import ../tools/misc/man {
      inherit fetchurl stdenv db4 groff;
   };
@@ -638,6 +649,12 @@ rec {
   mssys = import ../tools/misc/mssys {
     inherit fetchurl stdenv gettext;
   };
+
+  nc6Fun = lib.sumArgs (selectVersion ../tools/networking/nc6 "1.0") {
+    inherit builderDefs;
+  };
+
+  nc6 = nc6Fun null;
 
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
@@ -762,6 +779,12 @@ rec {
   };
 
   smbfsFuse = smbfsFuseFun null;
+
+  socatFun = lib.sumArgs (selectVersion ../tools/networking/socat "1.6.0.0") {
+    inherit builderDefs openssl;
+  };
+
+  socat = socatFun null;
 
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
@@ -1588,10 +1611,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  ltrace = import ../development/tools/misc/ltrace {
+  ltraceFun = lib.sumArgs (selectVersion ../development/tools/misc/ltrace "0.5-3deb") {
   	inherit fetchurl stdenv builderDefs stringsWithDeps lib;
 	elfutils = elfutilsFun {version = "0.127";} null;
   };
+
+  ltrace = ltraceFun null;
 
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
@@ -4228,7 +4253,7 @@ rec {
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
-  imagemagickFun = lib.sumArgs (import ../applications/graphics/ImageMagick) {
+  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.3.8-5" ) {
     inherit stdenv fetchurl libtool; 
   };
 

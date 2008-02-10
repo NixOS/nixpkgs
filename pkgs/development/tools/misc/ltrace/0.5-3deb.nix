@@ -1,5 +1,10 @@
-args : with args;
-	let localDefs = builderDefs {
+args : with args;	let 
+        patch = fetchurl {
+          url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5-3.diff.gz;
+          sha256 = "0rin25si7117wld5bc7vf3d73c5k9ph3zach7cbg9h9vvz376c26";
+        };
+	localDefs = with (builderDefs {src="";} null);
+	 builderDefs {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5.orig.tar.gz;
@@ -11,6 +16,10 @@ args : with args;
 		goSrcDir = "
 			cd ltrace-*;
 		";
+		preBuild = FullDepEntry (''
+		  gunzip < ${patch} | patch -Np1
+		  sed -e s@-Werror@@ -i Makefile.in
+		'')["minInit" "doUnpack"];
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
 let
@@ -21,7 +30,7 @@ in
 stdenv.mkDerivation rec {
 	name = "ltrace-0.5";
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare]);
+		(textClosure localDefs [preBuild preConfigure doConfigure doMakeInstall doForceShare]);
 	meta = {
 		description = "
 	Library call tracer.
