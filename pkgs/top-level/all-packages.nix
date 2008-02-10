@@ -3736,6 +3736,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  wis_go7007 = import ../os-specific/linux/wis-go7007 {
+    inherit fetchurl stdenv kernel ncurses;
+  };
+
   wpa_supplicant = import ../os-specific/linux/wpa_supplicant {
     inherit fetchurl stdenv openssl;
   };
