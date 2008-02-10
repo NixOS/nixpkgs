@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "p7zip-4.53";
+  name = "p7zip-4.57";
   
   src = fetchurl {
-    url = mirror://sourceforge/p7zip/p7zip_4.53_src_all.tar.bz2;
-    sha256 = "0pbgvpq852qnzq4isgc13p4nnp416xhy5vmn1rcwm8fk43l5rbqd";
+    url = mirror://sourceforge/p7zip/p7zip_4.57_src_all.tar.bz2;
+    sha256 = "0lsvw1bh6dzpxn8kyl7s79w2drpfxaa1c79khqm56gfmdlw27s80";
   };
   
   preConfigure = "
