@@ -2415,7 +2415,9 @@ rec {
 #failed to build
   mediastreamerFun = lib.sumArgs (selectVersion
       ../development/libraries/mediastreamer "2.2.0-cvs20080207") {
-    inherit fetchurl stdenv automake;
+    inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
+      ortp;
+    ffmpeg = ffmpeg_svn;
   };
 
   mediastreamer = mediastreamerFun null;
