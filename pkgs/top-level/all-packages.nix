@@ -2142,6 +2142,10 @@ rec {
     inherit (xlibs) libXp libXau;
   };
 
+  libaal = import ../development/libraries/libaal {
+    inherit fetchurl stdenv;
+  };
+
   libarchive = import ../development/libraries/libarchive {
     inherit fetchurl stdenv zlib;
   };
@@ -3652,6 +3656,10 @@ rec {
 
   reiserfsprogs = import ../os-specific/linux/reiserfsprogs {
     inherit fetchurl stdenv;
+  };
+
+  reiser4progs = import ../os-specific/linux/reiser4progs {
+    inherit fetchurl stdenv libaal;
   };
 
   radeontools = import ../os-specific/linux/radeontools {
