@@ -944,9 +944,8 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  zshFun = lib.sumArgs (selectVersion ../shells/zsh) {
+  zshFun = lib.sumArgs (selectVersion ../shells/zsh "4.3.5") {
     inherit fetchurl stdenv ncurses coreutils;
-    version = "4.3.5";
   };
 
   zsh = zshFun null;
@@ -2665,9 +2664,8 @@ rec {
 	qt = qt4;
   };
 
-  tkFun = lib.sumArgs (selectVersion ../development/libraries/tk) {
+  tkFun = lib.sumArgs (selectVersion ../development/libraries/tk "8.4.16") {
     inherit fetchurl stdenv tcl x11;
-    version = "8.4.16";
   };
 
   tk = tkFun null;
@@ -3868,10 +3866,9 @@ rec {
     inherit fetchurl stdenv cabextract;
   };
 
-  xkeyboard_configFun = lib.sumArgs (selectVersion ../data/misc/xkeyboard-config ) {
+  xkeyboard_configFun = lib.sumArgs (selectVersion ../data/misc/xkeyboard-config "1.2") {
     inherit fetchurl stdenv perl perlXMLParser gettext;
     inherit (xlibs) xkbcomp;
-    version = "1.2";
   };
 
   xkeyboard_config = xkeyboard_configFun null;
