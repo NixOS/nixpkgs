@@ -3247,6 +3247,10 @@ rec {
     inherit fetchurl stdenv jdk;
   };
 
+  axis2 = import ../servers/http/tomcat/axis2 {
+    inherit fetchurl stdenv jdk apacheAnt unzip;  
+  };
+
   vsftpd = import ../servers/ftp/vsftpd {
     inherit fetchurl openssl stdenv libcap pam;
   };
