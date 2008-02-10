@@ -2632,8 +2632,8 @@ rec {
     inherit fetchurl stdenv libogg;
   };
 
-  sqlite = import ../development/libraries/sqlite {
-    inherit fetchurl stdenv;
+  sqlite = selectVersion ../development/libraries/sqlite "3.5.6" {
+    inherit fetchurl stdenv readline;
   };
 
   t1lib = import ../development/libraries/t1lib {
