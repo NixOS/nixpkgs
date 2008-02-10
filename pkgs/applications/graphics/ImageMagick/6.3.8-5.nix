@@ -1,9 +1,9 @@
 args: with args;
 stdenv.mkDerivation (rec {
-  name = "ImageMagick-6.3.8-2";
+  name = "ImageMagick-6.3.8-5";
 
   src = fetchurl {
-    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.8-5.tar.bz2;
+    url = "ftp://ftp.imagemagick.org/pub/ImageMagick/${name}.tar.bz2";
     sha256 = "0lsvi2z5b5zam6yvjzsyjpa36rg1c0kczifz73k9b4v8zz9a9vfl";
   };
 
