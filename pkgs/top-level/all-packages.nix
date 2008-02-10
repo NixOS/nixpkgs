@@ -2123,13 +2123,12 @@ rec {
   };
 
   ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
-    inherit fetchsvn stdenv;
+    inherit fetchurl stdenv;
   };
 
   fftw = import ../development/libraries/fftw {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
   };
-
 
   fltk20 = (import ../development/libraries/fltk) {
     inherit mkDerivationByConfiguration x11 lib;
