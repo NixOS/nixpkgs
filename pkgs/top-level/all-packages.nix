@@ -3236,7 +3236,7 @@ rec {
     inherit fetchurl stdenv openssh;
   };
 
-  postgresql = import ../servers/sql/postgresql {
+  postgresql = selectVersion ../servers/sql/postgresql "8.3.0" {
     inherit fetchurl stdenv readline ncurses zlib;
   };
 
