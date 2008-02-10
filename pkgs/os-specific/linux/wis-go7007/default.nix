@@ -1,7 +1,7 @@
-{stdenv, fetchurl, kernel, ncurses}:
+{stdenv, fetchurl, kernel, ncurses, fxload}:
 
 stdenv.mkDerivation {
-  name = "wis-go7007-linux-0.9.8";
+  name = "wis-go7007-0.9.8";
 
   src = fetchurl {
     url = http://gentoo.osuosl.org/distfiles/wis-go7007-linux-0.9.8.tar.bz2;
@@ -35,16 +35,22 @@ stdenv.mkDerivation {
     #includeDir=$out/lib/modules/$kernelVersion/source/include/linux
     includeDir=$TMPDIR/scratch
     substituteInPlace Makefile \
-        --replace '$(DESTDIR)$(KSRC)/include/linux' $includeDir
+        --replace '$(DESTDIR)$(KSRC)/include/linux' $includeDir \
+        --replace '$(DESTDIR)$(FIRMWARE_DIR)' '$(FIRMWARE_DIR)'
     ensureDir $includeDir
     ensureDir $out/etc/hotplug/usb
     ensureDir $out/etc/udev/rules.d
  
     makeFlagsArray=(KERNELSRC=$kernelSource \
-        FIRMWARE_DIR=/firmware FXLOAD=false \
+        FIRMWARE_DIR=$out/firmware FXLOAD=${fxload}/sbin/fxload \
         DESTDIR=$out SKIP_DEPMOD=1 \
         USE_UDEV=y)
   ''; # */
+
+  postInstall = ''
+    ensureDir $out/bin
+    cp apps/gorecord apps/modet $out/bin/
+  '';
 
   meta = {
     description = "Kernel module for the Micronas GO7007, used in a number of USB TV devices";
