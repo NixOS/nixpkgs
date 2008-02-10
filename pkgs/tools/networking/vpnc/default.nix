@@ -10,6 +10,7 @@ stdenv.mkDerivation {
   patches = [ ./makefile.patch ];
 
   buildInputs = [libgcrypt perl];
+  builder = ./builder.sh;
 
   meta = {
     description = "VPNC, a virtual private network (VPN) client for Cisco's VPN concentrators";
