@@ -833,6 +833,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  vpnc = import ../tools/networking/vpnc {
+    inherit fetchurl stdenv libgcrypt perl;
+  };
+
   testdisk = import ../tools/misc/testdisk {
     inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
   };
