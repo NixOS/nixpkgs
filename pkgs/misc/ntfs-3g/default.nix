@@ -1,9 +1,9 @@
 args: with args;
 stdenv.mkDerivation rec {
-  name = "ntfs-3g-1.1104";
+  name = "ntfs-3g-1.2129";
   src = fetchurl {
     url = "${meta.homepage}/${name}.tgz";
-    sha256 = "1m96c3vxm051lpy3kyik9s0m390rj6ngm11xmahfhw61794jzbyp";
+    sha256 = "00fqg39m5myi46kgsssxmpya6g8y32z6ggqc2snjrv0znfg3009i";
   };
   buildInputs = [fuse pkgconfig];
   preConfigure="sed -e 's:/sbin:@sbindir@:' -i src/Makefile.in";
