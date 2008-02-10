@@ -30,7 +30,7 @@ rec {
 	  src = fetchsvn {
 		  url = svn://anonsvn.kde.org/home/kde/trunk/qt-copy;
 		  rev = "772114";
-		  sha256 = "0nd437yikz5skyqfczk0376rbgdgmsfc9gpqw207gqv6x5hcp3rj";
+		  sha256 = "cf8b418af39663b37726adf456ac115be5d86bdca700d65954a52042e4992acd";
 	  };
 	  patchPhase = "mkdir .svn; bash apply_patches;" + common.patchPhase;
 	});
