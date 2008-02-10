@@ -936,9 +936,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  zsh = import ../shells/zsh {
+  zshFun = lib.sumArgs (selectVersion ../shells/zsh) {
     inherit fetchurl stdenv ncurses coreutils;
+    version = "4.3.5";
   };
+
+  zsh = zshFun null;
 
 
   ### DEVELOPMENT / COMPILERS

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, coreutils, ncurses}:
+args: with args;
 stdenv.mkDerivation {
   name = "zsh-4.3.4";
 
