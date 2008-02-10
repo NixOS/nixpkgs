@@ -14,7 +14,7 @@ rec {
     -opengl -xrender -xrandr -xinerama -xcursor -qt-sql-mysql
     -qdbus -cups -glib -xfixes
     -fontconfig -I${freetype}/include/freetype2";
-  patchPhase = "sed -e 's@/bin/pwd@pwd@' -i configure; sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf";
+  patchPhase = "sed -i 's@/bin/pwd@pwd@' configure; sed -i 's@/usr@/FOO@' config.tests/*/*.test mkspecs/*/*.conf";
 }; in
 rec {
 	trolltech = stdenv.mkDerivation (common // {
@@ -29,8 +29,8 @@ rec {
 	  name = "qt-kde-4.3svn";
 	  src = fetchsvn {
 		  url = svn://anonsvn.kde.org/home/kde/trunk/qt-copy;
-		  rev = "761061";
-		  sha256 = "0mwbmzgqs9psw6hyh913g1jgvgr702qh4kfi2pvmrpkqvyagysg9";
+		  rev = "772114";
+		  sha256 = "0nd437yikz5skyqfczk0376rbgdgmsfc9gpqw207gqv6x5hcp3rj";
 	  };
 	  patchPhase = "mkdir .svn; bash apply_patches;" + common.patchPhase;
 	});
