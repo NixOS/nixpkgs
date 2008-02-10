@@ -627,6 +627,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  man = import ../tools/misc/man {
+     inherit fetchurl stdenv groff less;
+  };
+
   man_db = import ../tools/misc/man-db {
      inherit fetchurl stdenv db4 groff;
   };
