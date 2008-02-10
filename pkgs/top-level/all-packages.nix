@@ -2592,8 +2592,9 @@ rec {
 
 # Also known as librdf, includes raptor and rasqal
   redland = import ../development/libraries/redland {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl;
-	bdb = db4;
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
+      mysql libxslt curl pcre;
+    bdb = db4;
   };
 
   rte = import ../development/libraries/rte {
