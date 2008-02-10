@@ -1525,7 +1525,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  cmake = import ../development/tools/build-managers/cmake {
+  cmake = (selectVersion ../development/tools/build-managers/cmake "2.4.8") {
     inherit fetchurl stdenv replace;
   };
 
