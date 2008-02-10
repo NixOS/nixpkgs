@@ -2088,6 +2088,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  ilbc = import ../development/libraries/ilbc {
+    inherit stdenv msilbc;
+  };
+
   ilmbase = import ../development/libraries/ilmbase {
 	  inherit fetchurl stdenv;
   };
@@ -2437,6 +2441,10 @@ rec {
 
   mpeg2dec = import ../development/libraries/mpeg2dec {
     inherit fetchurl stdenv;
+  };
+
+  msilbc = selectVersion ../development/libraries/msilbc "2.0.0" {
+    inherit fetchurl stdenv ilbc mediastreamer pkgconfig;
   };
 
   mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
