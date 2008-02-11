@@ -5212,6 +5212,11 @@ rec {
     alsa = alsaLib;
   };
 
+  vorbisTools = import ../applications/audio/vorbis-tools {
+    inherit fetchurl stdenv libogg libvorbis libao pkgconfig curl glibc
+    	    speex flac;
+  };
+
   w3m = import ../applications/networking/browsers/w3m {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib;
     graphicsSupport = false;
