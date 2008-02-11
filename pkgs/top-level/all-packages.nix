@@ -2390,6 +2390,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libao = import ../development/libraries/libao {
+    inherit stdenv fetchurl pkgconfig;
+  };
+
   libarchive = import ../development/libraries/libarchive {
     inherit fetchurl stdenv zlib;
   };
@@ -2495,6 +2499,10 @@ rec {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2
 	python;
     inherit (gnome) glib gnomevfs libbonobo;
+  };
+
+  libid3tag = import ../development/libraries/libid3tag {
+    inherit fetchurl stdenv zlib;
   };
 
   libidn = import ../development/libraries/libidn {
@@ -4838,6 +4846,10 @@ rec {
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
+  };
+
+  mpg321 = import ../applications/audio/mpg321 {
+    inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
 
   MPlayer = import ../applications/video/MPlayer {

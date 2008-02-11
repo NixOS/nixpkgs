@@ -3,7 +3,14 @@
 stdenv.mkDerivation {
   name = "libmad-0.15.1b";
   src = fetchurl {
-    url = ftp://ftp.mars.org/pub/mpeg/libmad-0.15.1b.tar.gz;
-    md5 = "1be543bc30c56fb6bea1d7bf6a64e66c";
+    url = mirror://sourceforge/mad/libmad-0.15.1b.tar.gz;
+    sha256 = "bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690";
+  };
+
+  buildInputs = [];
+
+  meta = {
+    description = "MAD, a high-quality, fixed-point, MPEG audio decoder
+                   supporting MPEG-1 and MPEG-2.";
   };
 }
