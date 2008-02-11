@@ -4323,6 +4323,12 @@ rec {
     inherit builderDefs stringsWithDeps;
   };
 
+  aumix = import ../applications/audio/aumix {
+    inherit fetchurl stdenv ncurses pkgconfig gettext;
+    inherit (gtkLibs) gtk;
+    gtkGUI = false;
+  };
+
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
   };
