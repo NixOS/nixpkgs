@@ -4448,6 +4448,10 @@ rec {
     inherit (gtkLibs) gtk;
   };
 
+  bbdb = import ../applications/editors/emacs-modes/bbdb {
+    inherit fetchurl stdenv emacs texinfo ctags;
+  };
+
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
