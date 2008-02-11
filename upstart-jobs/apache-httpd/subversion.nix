@@ -1,4 +1,5 @@
-{config, pkgs}:
+{ config, pkgs, serverInfo
+}:
 
 let
 
@@ -8,6 +9,7 @@ let
   backupsDir = "/tmp/svn/backup";
   tmpDir = "/tmp/svn/tmp";
   adminAddr = "eelco@cs.uu.nl";
+  userCreationDomain = "10.0.0.0/8";
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
@@ -28,11 +30,16 @@ let
   };
 
 
-  # Access controls for /repos and /repos-xml. 
-  reposConfig = dirName: ''
+  commonAuth = ''
     AuthType Basic
     AuthName "Subversion repositories"
     AuthBasicProvider auth-against-db
+  '';
+  
+
+  # Access controls for /repos and /repos-xml. 
+  reposConfig = dirName: ''
+    ${commonAuth}
 
     AuthAllowNone on
 
@@ -64,9 +71,7 @@ let
 
 
   viewerConfig = dirName: ''
-    AuthType Basic
-    AuthName "Subversion repositories"
-    AuthBasicProvider auth-against-db
+    ${commonAuth}
     AuthAllowNone on
     AuthzRepoPrefix ${prefix}/${dirName}/
     AuthzRepoDBType DB
@@ -88,7 +93,7 @@ let
 
     Alias ${prefix}/viewvc-doc ${viewvc}/viewvc/templates/docroot
 
-    #Redirect permanent /viewcvs @canonicalName@/viewvc
+    Redirect permanent ${prefix}/viewcvs ${serverInfo.canonicalName}/${prefix}/viewvc
   '';
 
 
@@ -125,14 +130,13 @@ let
     isExecutable = true;
     perl = "${pkgs.perl}/bin/perl";
     defaultPath = "";
-    staticPrefix = prefix;
+    urlPrefix = prefix;
     orgUrl = "http://example.org/";
     orgLogoUrl = "http://example.org/";
     orgName = "Example Org";
-    canonicalName = "http://localhost/";
-    userCreationDomain = "localhost";
+    inherit (serverInfo) canonicalName;
     fsType = "fsfs";
-    inherit adminAddr reposDir backupsDir dbDir subversion;
+    inherit adminAddr reposDir backupsDir dbDir subversion userCreationDomain;
 
     # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
     perlFlags = "-I${pkgs.perlBerkeleyDB}/lib/site_perl -I${pkgs.perlEmailSend}/lib/site_perl -I${pkgs.perlEmailSimple}/lib/site_perl -I${pkgs.perlModulePluggable}/lib/site_perl -I${pkgs.perlReturnValue}/lib/site_perl -I${pkgs.perlEmailAddress}/lib/site_perl";
@@ -140,6 +144,41 @@ let
 
   repomanConfig = ''
     ScriptAlias ${prefix}/repoman ${repoman}/repoman.pl
+
+    <Location ${prefix}/repoman/listdetails>
+        ${commonAuth}    
+        Require valid-user
+    </Location>
+
+    <Location ${prefix}/repoman/adduser>
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.1
+        Allow from ${userCreationDomain}
+    </Location>
+
+    <Location ${prefix}/repoman/edituser>
+        ${commonAuth}    
+        Require valid-user
+    </Location>
+
+    <Location ${prefix}/repoman/create>
+        ${commonAuth}    
+        Require valid-user
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.1
+        Allow from ${userCreationDomain}
+    </Location>
+
+    <Location ${prefix}/repoman/update>
+        ${commonAuth}    
+        Require valid-user
+    </Location>
+
+    <Location ${prefix}/repoman/dump>
+        ${viewerConfig "repoman/dump"}
+    </Location>
   '';
 
   
@@ -179,7 +218,7 @@ in
     
     <Location ${prefix}/repos-xml>
       ${reposConfig "repos-xml"}
-      SVNIndexXSLT "@staticPrefix@/xsl/svnindex.xsl"
+      SVNIndexXSLT "${prefix}/xsl/svnindex.xsl"
     </Location>
 
     ${viewvcConfig}

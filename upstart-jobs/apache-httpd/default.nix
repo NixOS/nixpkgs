@@ -9,8 +9,17 @@ let
   httpd = pkgs.apacheHttpd;
 
 
+  serverInfo = {
+    # Canonical name must not include a trailing slash.
+    canonicalName =
+      "http://" +
+      cfg.hostName +
+      (if cfg.httpPort != 80 then ":${toString cfg.httpPort}" else "");
+  };
+
+
   subservices = [
-    (import ./subversion.nix {inherit config pkgs;})
+    (import ./subversion.nix {inherit config pkgs serverInfo;})
   ];
 
 
@@ -74,7 +83,7 @@ let
 
     SSLSessionCache dbm:${cfg.stateDir}/ssl_scache
 
-    SSLMutex  file:${cfg.stateDir}/ssl_mutex
+    SSLMutex file:${cfg.stateDir}/ssl_mutex
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
@@ -145,7 +154,7 @@ let
 
     ServerAdmin ${cfg.adminAddr}
 
-    ServerName ${cfg.hostName}:${toString cfg.httpPort}
+    ServerName ${serverInfo.canonicalName}
 
     PidFile ${cfg.stateDir}/httpd.pid
 

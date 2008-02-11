@@ -1,12 +1,12 @@
-{library, utillinux, swapDevices}:
+{lib, utillinux, swapDevices}:
 
 let
 
   devicesByPath =
-    map (x: x.device) (library.filter (x: x ? device) swapDevices);
+    map (x: x.device) (lib.filter (x: x ? device) swapDevices);
     
   devicesByLabel =
-    map (x: x.label) (library.filter (x: x ? label) swapDevices);
+    map (x: x.label) (lib.filter (x: x ? label) swapDevices);
 
 in
 

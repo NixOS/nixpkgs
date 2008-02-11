@@ -62,7 +62,7 @@ let
 
     # Swapping.
     (import ../upstart-jobs/swap.nix {
-      inherit (pkgs) utillinux library;
+      inherit (pkgs) utillinux lib;
       swapDevices = config.swapDevices;
     })
 
@@ -301,7 +301,7 @@ let
           # syslog tty, except those for which a specific theme is
           # specified.
           defaultTTYs =
-            pkgs.library.filter (x: !(pkgs.library.elem x overridenTTYs)) requiredTTYs;
+            pkgs.lib.filter (x: !(pkgs.lib.elem x overridenTTYs)) requiredTTYs;
 
         in      
           (map (ttyNumber: {
