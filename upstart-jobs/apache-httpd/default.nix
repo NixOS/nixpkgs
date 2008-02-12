@@ -260,6 +260,8 @@ in
     }
   ];
 
+  extraPath = [httpd] ++ pkgs.lib.concatMap (svc: svc.extraPath) subservices;
+
   # Statically verify the syntactic correctness of the generated
   # httpd.conf.
   buildHook = ''
@@ -281,7 +283,7 @@ in
       # Get rid of old semaphores.  These tend to accumulate across
       # server restarts, eventually preventing it from restarting
       # succesfully.
-      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' wwwrun ' | cut -f2 -d ' '); do
+      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
         ${pkgs.utillinux}/bin/ipcrm -s $i
       done
     end script
@@ -291,7 +293,7 @@ in
       in pkgs.lib.concatStrings (map f (pkgs.lib.concatMap (svc: svc.globalEnvVars) subservices))
     }
 
-    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraPath) subservices)}
+    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) subservices)}
 
     ${pkgs.diffutils}/bin:${pkgs.gnused}/bin
 

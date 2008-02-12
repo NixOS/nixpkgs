@@ -7,9 +7,19 @@ let
   dbDir = "/tmp/svn/db";
   reposDir = "/tmp/svn/repos";
   backupsDir = "/tmp/svn/backup";
+  distsDir = "/tmp/svn/dist";
   tmpDir = "/tmp/svn/tmp";
+  logDir = "/tmp/svn/log";
   adminAddr = "eelco@cs.uu.nl";
   userCreationDomain = "10.0.0.0/8";
+  orgUrl = "http://www.cs.uu.nl/";
+  orgLogoUrl = "${prefix}/UU_merk.gif";
+  orgName = "Utrecht University";
+  postCommitHook = "/var/run/current-system/sw/bin/svn-server-post-commit-hook";
+  autoVersioning = true;
+  notificationSender = "root@buildfarm.st.ewi.tudelft.nl";
+  fsType = "fsfs";
+  smtpHost = "mail.st.ewi.tudelft.nl";
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
@@ -21,6 +31,40 @@ let
     compressionSupport = true;
     pythonBindings = true;
     httpd = pkgs.apacheHttpd;
+  };
+
+
+  # Build the maintenance scripts and commit hooks.
+  scripts = substituteInAll {
+    name = "svn-server-scripts";
+    src = pkgs.lib.cleanSource ../../../services/subversion/src/scripts;
+
+    # The variables to substitute:
+    
+    inherit reposDir dbDir logDir distsDir backupsDir tmpDir
+      adminAddr notificationSender userCreationDomain fsType
+      subversion orgUrl orgLogoUrl orgName smtpHost
+      postCommitHook;
+      
+    perl = "${pkgs.perl}/bin/perl";
+
+    sendmail = "${pkgs.ssmtp}/sbin/sendmail";
+    
+    urlPrefix = prefix;
+    
+    inherit (pkgs) libxslt enscript db4 coreutils bzip2;
+
+    inherit (serverInfo) canonicalName;
+    
+    # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
+    perlFlags = map (x: "-I${x}/lib/site_perl") [
+      pkgs.perlBerkeleyDB pkgs.perlEmailSend pkgs.perlEmailSimple
+      pkgs.perlModulePluggable pkgs.perlReturnValue pkgs.perlEmailAddress
+      pkgs.perlCryptPasswordMD5 pkgs.perlStringMkPasswd
+    ];
+
+    # Do a syntax check on the generated file.
+    postInstall = "$perl -c -T $out/cgi-bin/repoman.pl; $perl -c $out/bin/svn-server-create-user.pl";
   };
 
   
@@ -58,7 +102,7 @@ let
 
     DAV svn
     SVNParentPath ${reposDir}
-    #SVNAutoversioning @autoVersioning@
+    SVNAutoversioning ${if autoVersioning then "on" else "off"}
   '';
 
 
@@ -121,29 +165,27 @@ let
   '';
 
 
-  # Build Repoman.
-    
-  repoman = pkgs.substituteAll {
-    src = ../../../services/subversion/src/repoman/repoman.pl.in;
-    dir = "/";
-    name = "repoman.pl";
-    isExecutable = true;
-    perl = "${pkgs.perl}/bin/perl";
-    defaultPath = "";
-    urlPrefix = prefix;
-    orgUrl = "http://example.org/";
-    orgLogoUrl = "http://example.org/";
-    orgName = "Example Org";
-    inherit (serverInfo) canonicalName;
-    fsType = "fsfs";
-    inherit adminAddr reposDir backupsDir dbDir subversion userCreationDomain;
+  distConfig = ''
+    Alias ${prefix}/dist ${distsDir}
 
-    # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
-    perlFlags = "-I${pkgs.perlBerkeleyDB}/lib/site_perl -I${pkgs.perlEmailSend}/lib/site_perl -I${pkgs.perlEmailSimple}/lib/site_perl -I${pkgs.perlModulePluggable}/lib/site_perl -I${pkgs.perlReturnValue}/lib/site_perl -I${pkgs.perlEmailAddress}/lib/site_perl";
-  };
+    <Directory "${distsDir}">
+        AllowOverride None
+        Options Indexes FollowSymLinks
+        Order allow,deny
+        Allow from all
+        IndexOptions +SuppressDescription +NameWidth=*
+        IndexIgnore *.rev *.lock
+        IndexStyleSheet ${prefix}/style.css
+    </Directory>
+
+    <Location ${prefix}/dist>
+        ${viewerConfig "dist"}
+    </Location>
+  '';
+  
 
   repomanConfig = ''
-    ScriptAlias ${prefix}/repoman ${repoman}/repoman.pl
+    ScriptAlias ${prefix}/repoman ${scripts}/cgi-bin/repoman.pl
 
     <Location ${prefix}/repoman/listdetails>
         ${commonAuth}    
@@ -181,10 +223,53 @@ let
     </Location>
   '';
 
+
+  staticFiles = substituteInSome {
+    name = "svn-static-files";
+    src = pkgs.lib.cleanSource ../../../services/subversion/root;
+    urlPrefix = prefix;
+    files = ["xsl/svnindex.xsl"];
+  };
+
+  staticFilesConfig = ''
+    Alias ${prefix} ${staticFiles}
+    <Directory ${staticFiles}>
+        Order allow,deny
+        Allow from all
+        AllowOverride None
+        DirectoryIndex repoman
+    </Directory>
+  '';
+
   
-  # !!!
+  # !!! should be in Nixpkgs.
   writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
+    pkgs.runCommand name {inherit text;} ''ensureDir $out; echo -n "$text" > $out/$name'';
+
+  substituteInSome = args: pkgs.stdenv.mkDerivation ({
+    buildCommand = ''
+      buildCommand= # ugh, hack to prevent sed errors
+      ensureDir $out
+      cp -prd $src/* $out
+      chmod -R u+w $out
+      for i in $files; do
+        substituteAll $out/$i $out/$i
+      done
+    '';
+  } // args); # */
+    
+  substituteInAll = args: pkgs.stdenv.mkDerivation ({
+    buildCommand = ''
+      buildCommand= # ugh, hack to prevent sed errors
+      ensureDir $out
+      cp -prd $src/* $out
+      chmod -R u+w $out
+      find $out -type f -print | while read fn; do
+        substituteAll $fn $fn
+      done
+      eval "$postInstall"
+    '';
+  } // args); # */
     
 in
 
@@ -206,6 +291,8 @@ in
   ];
 
   extraConfig = ''
+
+    #RedirectPermanent ^${prefix}$ ${prefix}/repoman
   
     <AuthnProviderAlias dbm auth-against-db>
         AuthDBMType DB
@@ -226,6 +313,10 @@ in
     ${websvnConfig}
 
     ${repomanConfig}
+
+    ${distConfig}
+
+    ${staticFilesConfig}
         
   '';
 
@@ -243,10 +334,12 @@ in
     { name = "PYTHONPATH"; value = "${pkgs.mod_python}/lib/python2.4/site-packages"; }
   ];
 
-  extraPath = [
+  extraServerPath = [
     # Needed for ViewVC.
     "${pkgs.diffutils}/bin"
     "${pkgs.gnused}/bin"
   ];
+
+  extraPath = [scripts];
   
 }
