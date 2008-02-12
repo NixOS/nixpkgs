@@ -1731,6 +1731,10 @@ rec {
     inherit fetchurl stdenv m4;
   };
 
+  ccache = import ../development/tools/misc/ccache {
+    inherit fetchurl stdenv;
+  };
+
   ctags = import ../development/tools/misc/ctags {
     inherit fetchurl stdenv;
   };
