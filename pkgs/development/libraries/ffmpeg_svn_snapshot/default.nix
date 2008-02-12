@@ -2,10 +2,9 @@ args: with args;
 
 stdenv.mkDerivation {
   name = "ffmpeg-svn-2007-12-04";
-  src = fetchsvn {
-    url = svn://svn.mplayerhq.hu/ffmpeg/trunk ;
-    rev = "11164";
-    sha256 = "80d3b3311abaf8343b73c711f02d269e8c87991f2c3d0f08e32309d39ad6aa3b";
+  src = fetchurl {
+    url = http://nix.cs.uu.nl/dist/tarballs/ffmpeg-svn-r11901.tar.bz2;
+    sha256 = "0l5207gnfaz57pvlxpxyjphyz0mp9plnxzd0aghy0nz3hmqh4rs7";
   };
 
   propagatedBuildInputs = [ a52dec lame libtheora x11 zlib SDL];

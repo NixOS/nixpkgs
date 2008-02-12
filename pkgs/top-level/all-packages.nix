@@ -3419,9 +3419,11 @@ rec {
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
-  iptables = import ../os-specific/linux/iptables {
-    inherit fetchurl stdenv;
+  iptablesFun = lib.sumArgs (selectVersion ../os-specific/linux/iptables "1.4.0") {
+    inherit builderDefs kernelHeaders;
   };
+
+  iptables = iptablesFun null;
 
   ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
     inherit fetchurl stdenv;
