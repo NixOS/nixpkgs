@@ -3250,6 +3250,14 @@ rec {
     };
   };
 
+  perlStringMkPasswd = import ../development/perl-modules/generic perl {
+    name = "String-MkPasswd-0.02";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
+      sha256 = "0si4xfgf8c2pfag1cqbr9jbyvg3hak6wkmny56kn2qwa4ljp9bk6";
+    };
+  };
+
   perlTermReadKey = import ../development/perl-modules/generic perl {
     name = "TermReadKey-2.30";
     src = fetchurl {
