@@ -153,15 +153,16 @@ rec {
        substring (sub lenFileName lenExt) lenFileName fileName == ext;
 
   hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
-       
+
+         
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSource =
     let filter = name: type: let baseName = baseNameOf (toString name); in ! (
       # Filter out Subversion and CVS directories.
-      (type == "directory" && (name == ".svn" || name == "CVS")) ||
+      (type == "directory" && (baseName == ".svn" || baseName == "CVS")) ||
       # Filter out backup files.
-      (hasSuffix "~" name)
+      (hasSuffix "~" baseName)
     );
     in src: builtins.filterSource filter src;
 
