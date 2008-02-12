@@ -1,10 +1,11 @@
 args: with args;
 (stdenv.mkDerivation ({
-  name = "ImageMagick-6.3.7-9";
+  name = "ImageMagick-6.3.7-10";
 
   src = fetchurl {
-    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.7-9.tar.bz2;
-    sha256 = "1s38s78xvzm20ib22zypsb9vvzva0kbqjf0pf4c1q89jzg205pk0";
+    # Warning: Source tarballs seem to vanish very quickly from this site!
+    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.7-10.tar.bz2;
+    sha256 = "c00fb0d21baa292a55bb0e30ca30ffe2571e0d3df9e692da441aa81ff1cdde10";
   };
 
   configureFlags = " --with-dots --with-gs-font-dir="+ ghostscript +
@@ -17,6 +18,9 @@ args: with args;
 		 ++ (if args ? librsvg then [args.librsvg] else []);
 
   meta = {
+    description = ''ImageMagick(R) is a software suite to create, edit, and compose bitmap
+                    images.  It can read, convert and write images in a variety of
+		    formats (over 100).'';
     homepage = http://www.imagemagick.org;
   };
 } // (if args ? tetex then {
