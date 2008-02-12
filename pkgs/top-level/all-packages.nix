@@ -3120,6 +3120,14 @@ rec {
     inherit fetchurl perl;
   };
 
+  perlCryptPasswordMD5 = import ../development/perl-modules/generic perl {
+    name = "Crypt-PasswdMD5-1.3";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
+      sha256 = "13j0v6ihgx80q8jhyas4k48b64gnzf202qajyn097vj8v48khk54";
+    };
+  };
+
   perlDateManip = import ../development/perl-modules/generic perl {
     name = "DateManip-5.42a";
     src = fetchurl {
