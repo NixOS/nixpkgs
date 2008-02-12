@@ -1,8 +1,6 @@
 {stdenv, fetchurl, libogg, libvorbis, libao, pkgconfig, curl, glibc
 , speex, flac}:
 
-# FIXME: We'd need `libOggFLAC' too.
-
 stdenv.mkDerivation {
   name = "vorbis-tools-1.1.1";
   src = fetchurl {
@@ -10,13 +8,11 @@ stdenv.mkDerivation {
     sha256 = "617b4aa69e600c215b34fa3fd5764bc1d9d205d9d7d9fe7812bde7ec956fcaad";
   };
 
-  buildInputs = [ libogg libvorbis libao pkgconfig curl speex flac glibc ];
+  # FIXME: Vorbis-tools expects `libOggFLAC', but this library was
+  # merged with `libFLAC' as of FLAC 1.1.3.
+  buildInputs = [ libogg libvorbis libao pkgconfig curl speex glibc flac ];
 
-  configureFlagsArray = [
-    ("--with-curl=" + curl)
-    ("--with-curl-libraries=" + curl + "/lib")
-    ("--with-curl-includes=" + curl + "/include")
-  ];
+  patches = [ ./ogg123-curlopt-mute.patch ];
 
   meta = {
     description = ''A set of command-line tools to manipulate Ogg Vorbis
