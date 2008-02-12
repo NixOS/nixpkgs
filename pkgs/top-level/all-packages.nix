@@ -627,6 +627,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  lsh = import ../tools/networking/lsh {
+    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4;
+  };
+
   man = import ../tools/misc/man {
      inherit fetchurl stdenv groff less;
   };
@@ -2543,6 +2547,10 @@ rec {
   };
 
   libogg = import ../development/libraries/libogg {
+    inherit fetchurl stdenv;
+  };
+
+  liboop = import ../development/libraries/liboop {
     inherit fetchurl stdenv;
   };
 
