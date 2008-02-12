@@ -121,15 +121,11 @@ rec {
 
   useFromStdenv = hasIt: it: alternative: if hasIt then it else alternative;
 
-  lib = library;
-
-  library = import ../lib;
-   # TODO remove
-   # lib_unstable = import ../lib/default-unstable.nix;
+  lib = import ../lib;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
-  getConfig = attrPath: default: library.getAttr attrPath default config;
+  getConfig = attrPath: default: lib.getAttr attrPath default config;
 
   # Return user-choosen version of given package. If you define package as
   #
@@ -3130,6 +3126,10 @@ rec {
       url = http://nix.cs.uu.nl/dist/tarballs/DateManip-5.42a.tar.gz;
       md5 = "648386bbf46d021ae283811f75b07bdf";
     };
+  };
+
+  perlDBFile = import ../development/perl-modules/DB_File {
+    inherit fetchurl perl db4;
   };
 
   perlDigestSHA1 = import ../development/perl-modules/generic perl {
