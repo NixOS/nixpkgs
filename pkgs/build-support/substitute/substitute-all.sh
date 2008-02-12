@@ -1,5 +1,7 @@
 source $stdenv/setup
 
+eval "$preInstall"
+
 args=
 
 target=$out
@@ -13,3 +15,5 @@ substituteAll $src $target
 if test -n "$isExecutable"; then
     chmod +x $target
 fi
+
+eval "$postInstall"
