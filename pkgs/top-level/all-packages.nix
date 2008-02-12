@@ -1711,6 +1711,10 @@ rec {
     inherit fetchurl stdenv perl autoconf;
   };
 
+  automake110x = import ../development/tools/misc/automake/automake-1.10.x.nix {
+    inherit fetchurl stdenv perl autoconf;
+  };
+
   # commented out because it's using the new configuration style proposal which is unstable
   #avrdude = import ../development/tools/misc/avrdude {
   #  inherit lib fetchurl stdenv flex yacc;
