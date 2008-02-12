@@ -1659,6 +1659,10 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
+  guileLib = import ../development/guile-modules/guile-lib {
+    inherit fetchurl stdenv guile;
+  };
+
   windowssdk = import ../development/misc/windows-sdk {
     inherit fetchurl stdenv cabextract;
   };
