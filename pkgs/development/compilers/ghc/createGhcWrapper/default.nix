@@ -1,9 +1,15 @@
-args: with args;
+args: with args; with lib; with annotatedDerivations;
 
 stdenv.mkDerivation {
   inherit suffix name ghc ;
 
-  buildInputs = libraries ++ [ghcPkgUtil];
+  buildInputs = map delAnnotation (libraries ++ [ghcPkgUtil]);
+  #tags = if (installSourceAndTags == true) then
+  #        map sourceWithTagsDerivation ( uniqList { inputList = 
+  #            ( filterAnnotated ( concatLists (map uniqAnnotatedDeps libraries ) ) ) ; } )
+  #        else [];
+  tags = map (x : sourceWithTagsDerivation (x.sourceWithTags)) 
+          (uniqList { inputList=  filter annotatedWithSourceAndTagInfo libraries; } );
 
   phases="installPhase";
 
@@ -20,6 +26,13 @@ cat > \"\$out/bin/\$a$suffix\" << EOF
 GHC_PACKAGE_PATH=\${GHC_PACKAGE_PATH}\${g} \$ghc/bin/$app \"\\\$@\"
 EOF
       chmod +x \"\$out/bin/\$a$suffix\"
+    done
+
+    ensureDir \$out/{src,tags}
+    for i in \$tags; do
+      for path in src tags; do
+        ln -s \$i/\$path/* \$out/\$path
+      done
     done
 ";
 }

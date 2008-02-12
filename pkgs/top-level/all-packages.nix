@@ -123,6 +123,41 @@ rec {
 
   lib = import ../lib;
 
+  annotatedDerivations = (import ../lib/annotatedDerivations.nix) { inherit lib; };
+
+  # optional srcDir
+  annotatedWithSourceAndTagInfo = x : (x ? sourceWithTags);
+
+  # example arguments see annotatedGhcCabalDerivation
+  # tag command must create file named $TAG_FILE
+  sourceWithTagsDerivation = args: with args; 
+    let createTagFiles = (lib.maybeAttr "createTagFiles" [] args ); in
+  stdenv.mkDerivation {
+    phases = "unpackPhase buildPhase";
+    inherit (args) src name;
+    srcDir = (lib.maybeAttr "srcDir" "." args);
+    # using separate tag directory so that you don't have to glob that much files when starting your editor
+    # is this a good choice?
+    buildPhase = "
+      SRC_DEST=\$out/src/\$name
+      t=\$out/tags/\$name
+      ensureDir \$SRC_DEST \$t
+      cp -r \$srcDir \$SRC_DEST"
+      + lib.defineShList "sh_list_names" (lib.catAttrs "name" createTagFiles)
+      + lib.defineShList "sh_list_cmds" (lib.catAttrs "tagCmd" createTagFiles)
+      + "cd \$SRC_DEST
+      for a in `seq 0 \${#sh_list}`; do
+          TAG_FILE=\"\$SRC_DEST/\"\${sh_list_names[\$a]}
+          cmd=\"\${sh_list_cmds[\$a]}\"
+          echo running tag cmd \"\$cmd\" in `pwd`
+          eval \"\$cmd\";
+          ln -s \$TAG_FILE \"\$t/\"\${sh_list_names[\$a]}
+       done
+    ";
+  };
+  # example usage
+  testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).mtl.sourceWithTags;
+
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
   getConfig = attrPath: default: lib.getAttr attrPath default config;
@@ -1100,35 +1135,30 @@ rec {
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
   createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
         import ../development/compilers/ghc/createGhcWrapper {
-    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil;
+    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
+      annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
     stdenv = stdenvUsingSetupNew2;
+    installSourceAndTags = true;
   };
 
-  # args must contain src name buildInputs
-  # using this derivation .. my system is dying (> 2.5 g memory usage -> segfault ?)
-  # experimental !
-  ghc_cabal_derivation_X =
-    lib.sumArgs (
-        x : ( let localDefs =  (((builderDefs x) 
-                { debug = true; }) null # end sumArgs 
-                ); in with localDefs;
-        stdenv.mkDerivation rec {
-          inherit name propagatedBuildInputs;
-          builder = writeScript (name + "-builder")
-                  (textClosure localDefs [ cabalBuild ]);
-        }));
 
   # args must contain src name buildInputs
   # classic expression style.. seems to work fine
   # used now
-  ghc_cabal_derivation = args : null_ : with lib; with args;
-    stdenvUsingSetupNew2.mkDerivation {
-      inherit name propagatedBuildInputs src goSrcDir;
-      phases = "unpackPhase buildPhase";
+  #
+  # args must contain: src name buildInputs propagatedBuildInputs
+  # classic expression style.. seems to work fine
+  # used now
+  # goSrc contains source directory (containing the .cabal file)
+  ghcCabalDerivation = args : null_ : with lib; with args;
+    stdenvUsingSetupNew2.mkDerivation ({
+      goSrcDir = "cd ${srcDir}";
+      inherit name src propagatedBuildInputs;
+      phases = "unpackPhase patchPhase buildPhase";
       buildInputs = (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ];
+      # TODO remove echo line
       buildPhase ="
-        echo buildPhase is
           createEmptyPackageDatabaseAndSetupHook
           export GHC_PACKAGE_PATH
 
@@ -1149,8 +1179,31 @@ rec {
           rm \${PACKAGE_DB}.old
 
          ensureDir \"\$out/nix-support\"
+
          echo \"\$propagatedBuildInputs\" > \"\$out/nix-support/propagated-build-inputs\"
       ";
+  } // (subsetmap id args [ "patchPhase" ])); 
+
+  # creates annotated derivation (comments see above
+  annotatedGhcCabalDerivation = args : null_ : with lib; with args;
+  rec {
+    inherit name;
+
+    #aDeps = concatLists ( catAttrs ( subsetmap id args [ "buildInputs" "propagatedBuildInputs" ] ) );
+    aDeps = []; #TODO 
+
+    aDeriv = ghcCabalDerivation (args // (annotatedDerivations.delAnnotationsFromInputs args) ) null;
+
+   # annotation data
+
+    sourceWithTags = {
+     inherit src srcDir;
+     name = name + "-src-with-tags";
+     createTagFiles = [
+           { name = "${name}_haskell_tags";
+             tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+      ];
+    };
   };
 
   # this will change in the future 
@@ -1158,22 +1211,22 @@ rec {
   ghc68_extra_libs = ghc: rec {
       #   name (using lowercase letters everywhere because using installing packages having different capitalization is discouraged) - this way there is not that much to remember?
 
-      cabal_darcs_name = "cabal--darcs";
+      cabal_darcs_name = "cabal-darcs";
 
       # introducing p here to speed things up.
       # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
       # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
       pkgs = let x = ghc.all_libs // derivations; in {
           # ghc extra packages 
-          mtl     = { name="mtl-1.1.0.0";     goSrcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
-          parsec  = { name="parsec-2.1.0.0";  goSrcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
-          network = { name="network-2.1.0.0"; goSrcDir="libraries/network"; p_deps=[ x.base x.parsec x.haskell98 ];       src = ghc.extra_src; };
-          regex_base = { name="regex-base-0.72.0.1"; goSrcDir="libraries/regex-base"; p_deps=[ x.base x.array x.bytestring x.haskell98 ]; src = ghc.extra_src; };
-          regex_posix = { name="regex-posix-0.72.0.2"; goSrcDir="libraries/regex-posix"; p_deps=[ x.regex_base x.haskell98 ]; src = ghc.extra_src; };
-          regex_compat = { name="regex-compat-0.71.0.1"; goSrcDir="libraries/regex-compat"; p_deps=[ x.base x.regex_posix x.regex_base x.haskell98 ]; src = ghc.extra_src; };
-          stm = { name="stm-2.1.1.0"; goSrcDir="libraries/stm"; p_deps=[ x.base x.array ]; src = ghc.extra_src; };
-          hunit = { name="HUnit-1.2.0.0"; goSrcDir="libraries/HUnit"; p_deps=[ x.base ]; src = ghc.extra_src; };
-          quickcheck = { name="QuickCheck-1.1.0.0"; goSrcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
+          mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
+          parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
+          network = { name="network-2.1.0.0"; srcDir="libraries/network"; p_deps=[ x.base x.parsec x.haskell98 ];       src = ghc.extra_src; };
+          regex_base = { name="regex-base-0.72.0.1"; srcDir="libraries/regex-base"; p_deps=[ x.base x.array x.bytestring x.haskell98 ]; src = ghc.extra_src; };
+          regex_posix = { name="regex-posix-0.72.0.2"; srcDir="libraries/regex-posix"; p_deps=[ x.regex_base x.haskell98 ]; src = ghc.extra_src; };
+          regex_compat = { name="regex-compat-0.71.0.1"; srcDir="libraries/regex-compat"; p_deps=[ x.base x.regex_posix x.regex_base x.haskell98 ]; src = ghc.extra_src; };
+          stm = { name="stm-2.1.1.0"; srcDir="libraries/stm"; p_deps=[ x.base x.array ]; src = ghc.extra_src; };
+          hunit = { name="HUnit-1.2.0.0"; srcDir="libraries/HUnit"; p_deps=[ x.base ]; src = ghc.extra_src; };
+          quickcheck = { name="QuickCheck-1.1.0.0"; srcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
 
 
           # other pacakges  (hackage etc)
@@ -1202,7 +1255,11 @@ rec {
                        src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hslogger/1.0.4/hslogger-1.0.4.tar.gz";
                                         sha256 = "0kmz8xs1q41rg2xwk22fadyhxdg5mizhw0r4d74y43akkjwj96ar"; };
                  };
-
+          parsep = { name = "parsep-0.1"; p_deps = [ x.base x.mtl x.bytestring ];
+                         src = fetchurl { url = "http://twan.home.fmf.nl/parsep/parsep-0.1.tar.gz";
+                                        sha256 = "1y5pbs5mzaa21127cixsamahlbvmqzyhzpwh6x0nznsgmg2dpc9q"; };
+                         patchPhase = "pwd; sed -i 's/fps/bytestring/' *.cabal";
+                 };
 
         # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
@@ -1244,7 +1301,7 @@ rec {
                                        md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                      };
                     };
-        happs_darcs = { name="happs-darcs"; p_deps=[x.haxml x.parsec x.mtl
+        happs_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec x.mtl
                 x.network x.regex_compat x.hslogger x.happs_data_darcs
                   x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
                   x.template_haskell x.xhtml x.html x.bytestring x.random
@@ -1258,14 +1315,14 @@ rec {
                 };
       };
       toDerivation = attrs : with attrs;
-        ghc_cabal_derivation {
+      # result is { mtl = <deriv>;
+        annotatedGhcCabalDerivation ({
             inherit name src;
             propagatedBuildInputs = p_deps ++ (lib.optional (attrs.name != cabal_darcs_name) derivations.cabal_darcs );
-            goSrcDir = "cd ${if attrs ? goSrcDir then attrs.goSrcDir else "."}";
+            srcDir = if attrs ? srcDir then attrs.srcDir else ".";
             patches = if attrs ? patches then attrs.patches else [];
             # add cabal, take deps either from this list or from ghc.core_libs 
-        } null;
-      # result is { mtl = <deriv>;
+        }//( lib.subsetmap lib.id attrs [ "patchPhase" ] )) null;
       #             "mtl-1.." = <the same deriv>
       #           ...}
       # containing the derivations defined here and in ghc.all_libs
@@ -1276,7 +1333,7 @@ rec {
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
-  # So installing ghc libraries isn't done by nix-env -i package but by adding the lib to the libraries list below
+  # So installing ghc libraries isn't done by nix-env -i package but by adding
   # the lib to the libraries list below
   # Doesn't create that much useless symlinks (you seldomly want to read the
   # .hi and .o files, right?
@@ -1286,9 +1343,9 @@ rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
-      libraries = 
+      libraries = # map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" ];
         # core_libs  distributed with this ghc version
-        #(lib.flatten ghcsAndLibs.ghc68.core_libs)
+        #(lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
           map ( a : __getAttr a ghcsAndLibs.ghc68.all_libs ) [ 
             "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
             "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
