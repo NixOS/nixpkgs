@@ -1,0 +1,16 @@
+--- guile-1.8.3/libguile/guile-snarf.in	2008-02-12 10:32:48.000000000 +0100
++++ guile-1.8.3/libguile/guile-snarf.in	2008-02-12 11:01:53.000000000 +0100
+@@ -69,9 +69,12 @@ fi
+ 
+ # set vars and handler -- handle CPP override
+ cpp_ok_p=false
+-tempdir="/tmp/snarf.$$"
++
++if [ x"$TMPDIR" = x ]; then TMPDIR="/tmp" ; else : ; fi
++tempdir="$TMPDIR/guile-snarf.$$"
+ (umask 077 && mkdir $tempdir) || exit 1
+ temp="$tempdir/tmp"
++
+ if [ x"$CPP" = x ] ; then cpp="@CPP@" ; else cpp="$CPP" ; fi
+ 
+ trap "rm -rf $tempdir" 0 1 2 15

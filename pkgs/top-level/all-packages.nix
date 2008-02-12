@@ -1538,7 +1538,7 @@ rec {
   };
 
   guile = import ../development/interpreters/guile {
-    inherit fetchurl stdenv ncurses readline libtool gmp;
+    inherit fetchurl stdenv ncurses readline libtool gmp gawk makeWrapper;
   };
 
   kaffe =  import ../development/interpreters/kaffe {
