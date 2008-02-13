@@ -609,6 +609,13 @@ configureW() {
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
+    # Add --disable-dependency-tracking to speed up some builds.
+    if test -z "$dontAddDisableDepTrack"; then
+        if grep -q dependency-tracking $configureScript; then
+            configureFlags="--disable-dependency-tracking ${prefixKey:---prefix=}$prefix $configureFlags"
+        fi
+    fi
+
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
     $configureScript $configureFlags"${configureFlagsArray[@]}" || fail
 
