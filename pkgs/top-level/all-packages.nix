@@ -4705,18 +4705,9 @@ rec {
 
   firefoxWrapper = wrapFirefox firefox "";
 
-  firefox3b1 = lowPrio (import ../applications/networking/browsers/firefox3b1 {
+  firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-    	python curl coreutils;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-    #enableOfficialBranding = true;
-  });
-
-  firefox3b2 = lowPrio (import ../applications/networking/browsers/firefox3b1/3b2.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-    python curl coreutils dbus dbus_glib freetype fontconfig;
+      python curl coreutils dbus dbus_glib freetype fontconfig;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi libX11 libXrender libXft libXt;
@@ -4731,7 +4722,7 @@ rec {
     inherit (xlibs) libXi libX11 libXrender libXft libXt;
   });
 
-  firefox3b1Wrapper = lowPrio (wrapFirefox firefox3b1 "");
+  firefox3Wrapper = lowPrio (wrapFirefox firefox3 "");
   firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "");
  
   flacAlts = import ../applications/audio/flac {
