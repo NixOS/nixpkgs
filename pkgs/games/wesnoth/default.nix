@@ -1,13 +1,13 @@
 args: with args;
 stdenv.mkDerivation (rec {
   pname = "wesnoth";
-  version = "1.3.15";
+  version = "1.3.16";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://surfnet.dl.sourceforge.net/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "5c5c723bdef0b9872a20a4ee11365f050251baed375ee951db726bf82401766e";
+    sha256 = "b963fa5db93d7aebc886178f589d69a4b015803938b87ce996ff57f1643a385a";
   };
 
   buildInputs = [SDL SDL_image SDL_mixer SDL_net gettext zlib boost freetype];
