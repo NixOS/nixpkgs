@@ -4791,6 +4791,12 @@ rec {
     inherit fetchurl stdenv curl openssl zlib expat perl;
   };
 
+  gkrellm = import ../applications/misc/gkrellm {
+    inherit fetchurl stdenv gettext pkgconfig;
+    inherit (gtkLibs) glib gtk;
+    inherit (xlibs) libX11 libICE libSM;
+  };
+
   gnash = assert mesaSupported; import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer GStreamer
             libogg libxml2 libjpeg mesa libpng;
