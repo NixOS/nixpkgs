@@ -5337,6 +5337,10 @@ rec {
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
+  wordnet = import ../applications/misc/wordnet {
+    inherit stdenv fetchurl tcl tk x11 makeWrapper;
+  };
+
   wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv firefox nameSuffix;
     plugins = []
