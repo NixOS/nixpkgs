@@ -1,4 +1,6 @@
-{ ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib } : rec {
+{ ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib, annotatedDerivations, hasktags, ctags } : 
+with annotatedDerivations;
+rec {
   
   /* What's in here?
      Goal:  really pure GHC. This means put every library into its each package.conf
@@ -31,39 +33,9 @@
 
   */
 
-  # creates a nix package out of the single package.conf files created when after installing ghc (see nix_ghc_pkg_tool.hs)
-  packageByPackageDB = ghc : # ghc
-      name : 
-      packageconfpath : 
-      propagatedBuildInputs : 
-    stdenv.mkDerivation {
-    inherit name;
-    phases = "buildPhase fixupPhase";
-    buildInputs = [ ghcPkgUtil ];
-    propagatedBuildInputs = [ ghc ] ++ propagatedBuildInputs;
-    buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/${packageconfpath}\"";
-  };
-
-  # used to automatically get dependencies ( used for core_libs ) 
-  # TODO use kind of state and evaluate deps of a dep only once
-  resolveDeps = ghc : libs : 
-    let attrs = builtins.listToAttrs libs; in
-      rec {
-        # using undocumented feature that attribute can contain hyphens when using listToAttrs
-        # You should be able to get the attribute values using __getAttr
-        result = builtins.listToAttrs (map ( l : lib.nv l.name (
-                               packageByPackageDB ghc l.name 
-                                      ("lib/ghc-${ghc.version}/${l.name}.conf")
-                                      (map (n: builtins.getAttr n result) l.deps)
-                ) ) libs );
-      }.result;
-
-
-  
   #this only works for ghc-6.8 right now
   ghcAndLibraries = { version, src /* , core_libraries, extra_libraries  */
-                    , extra_src
-                    , alias_names }:
+                    , extra_src }:
                    recurseIntoAttrs ( rec {
     inherit src extra_src version;
 
@@ -113,41 +85,103 @@
       ";
     };
 
-    # Why this effort? If you want to use pretty-0.9 you can do this now without cabal choosing the 1.0 version hassle 
-    core_libs = resolveDeps ghc
-      [ { name = "Cabal-1.2.3.0"; deps = ["base-3.0.1.0" "pretty-1.0.0.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" "rts-1.0" "filepath-1.1.0.0"];} #
-        { name = "array-0.1.0.0"; deps = ["base-3.0.1.0"];}
-        { name = "base-3.0.1.0"; deps = ["rts-1.0"];} #
-        { name = "bytestring-0.9.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
-        { name = "containers-0.1.0.1"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
-        { name = "directory-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0"];}
-        { name = "filepath-1.1.0.0"; deps = [ "base-3.0.1.0" ];} #
-        { name = "ghc-${version}"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1" "hpc-0.5.0.0" "bytestring-0.9.0.1" "pretty-1.0.0.0" "packedstring-0.1.0.0" "template-haskell-2.2.0.0" "unix-2.3.0.0" "process-1.0.0.0" "readline-1.0.1.0" "Cabal-1.2.3.0" "random-1.0.0.0" "haskell98-1.0.1.0"];}
-        { name = "haskell98-1.0.1.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "random-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" "array-0.1.0.0"];}
-        { name = "hpc-0.5.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "array-0.1.0.0" "containers-0.1.0.1"]; }
-        { name = "old-locale-1.0.0.0"; deps = [ "base-3.0.1.0"];}
-        { name = "old-time-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" ];}
-        { name = "packedstring-0.1.0.0"; deps = [ "base-3.0.1.0" "array-0.1.0.0" ];}
-        { name = "pretty-1.0.0.0"; deps = [ "base-3.0.1.0" ];}
-        { name = "process-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0"];}
-        { name = "random-1.0.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0"];}
-        { name = "readline-1.0.1.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" "unix-2.3.0.0" "process-1.0.0.0" ];}
-        { name = "rts-1.0"; deps = [];} #
-        { name = "template-haskell-2.2.0.0"; deps = [ "base-3.0.1.0" "pretty-1.0.0.0" "array-0.1.0.0" "packedstring-0.1.0.0" "containers-0.1.0.1" ];}
+    core_libs = rec {
+        #   name (using lowercase letters everywhere because using installing packages having different capitalization is discouraged) - this way there is not that much to remember?
 
-        { name = "unix-2.3.0.0"; deps = [ "base-3.0.1.0" "old-locale-1.0.0.0" "old-time-1.0.0.0" "filepath-1.1.0.0" "directory-1.0.0.0" ];}
-      ];
+        cabal_darcs_name = "cabal-darcs";
 
+        # introducing p here to speed things up.
+        # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
+        # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
+        pkgs = let x = derivations; in {
+            # ghc extra packages 
+          cabal = { name = "cabal-1.2.3.0"; srcDir = "libraries/Cabal";
+                          deps = [x.base x.pretty x.old_locale x.old_time
+                            x.directory x.unix x.process x.array x.containers
+                            x.rts x.filepath ]; };
+          array = { name = "array-0.1.0.0"; srcDir = "libraries/array";
+                          deps = [x.base ]; };
+          base = { name = "base-3.0.1.0"; srcDir = "libraries/base";
+                          deps = [x.rts ]; };
+          bytestring = { name = "bytestring-0.9.0.1"; srcDir = "libraries/bytestring";
+                          deps = [ x.base x.array ];};
+          containers = { name = "containers-0.1.0.1"; srcDir = "libraries/containers";
+                          deps = [ x.base x.array ];};
+          directory = { name = "directory-1.0.0.0"; srcDir = "libraries/directory";
+                          deps = [ x.base x.old_locale x.old_time x.filepath ];};
+          filepath = { name = "filepath-1.1.0.0"; srcDir = "libraries/filepath";
+                          deps = [ x.base ];};
+          ghc = { name = "ghc-${version}"; srcDir = "libraries/Cabal";
+                          deps = [ x.base x.old_locale x.old_time x.filepath
+                            x.directory x.array x.containers x.hpc x.bytestring
+                            x.pretty x.packedstring x.template_haskell x.unix
+                            x.process x.readline x.cabal x.random x.haskell98 ]; };
+          haskell98 = { name = "haskell98-1.0.1.0"; srcDir = "libraries/haskell98";
+                          deps = [ x.base x.old_locale x.old_time x.filepath
+                            x.directory x.random x.unix x.process x.array]; };
+          hpc = { name = "hpc-0.5.0.0"; srcDir = "libraries/hpc";
+                          deps = [ x.base x.old_locale x.old_time x.filepath
+                            x.directory x.array x.containers ]; };
+          old_locale = { name = "old-locale-1.0.0.0"; srcDir = "libraries/old-locale";
+                          deps = [ x.base ]; };
+          old_time = { name = "old-time-1.0.0.0"; srcDir = "libraries/old-time";
+                          deps = [ x.base x.old_locale ];};
+          packedstring = { name = "packedstring-0.1.0.0"; srcDir = "libraries/packedstring";
+                          deps = [ x.base x.array ];};
+          pretty = { name = "pretty-1.0.0.0"; srcDir = "libraries/pretty";
+                          deps = [ x.base ];};
+          process = { name = "process-1.0.0.0"; srcDir = "libraries/process";
+                          deps = [ x.base x.old_locale x.old_time x.filepath
+                            x.directory x.unix ]; };
+          random = { name = "random-1.0.0.0"; srcDir = "libraries/random";
+                          deps = [ x.base x.old_locale x.old_time ]; };
+          readline = { name = "readline-1.0.1.0"; srcDir = "libraries/readline";
+                          deps = [ x.base x.old_locale x.old_time x.filepath
+                            x.directory x.unix x.process ];};
+          rts = rec { 
+                  name = "rts-1.0"; srcDir = "rts"; # TODO: Doesn't have .hs files so I should use ctags if creating tags at all
+                  deps = [];
+                  createTagFiles = [
+                      { name = "${name}_haskell_tags";
+                        tagCmd = "${toString ctags}/bin/ctags -R .;mv tags \$TAG_FILE"; }
+                    ];
+          };
+          template_haskell = { name = "template-haskell-2.2.0.0"; srcDir = "libraries/template-haskell";
+                          deps = [ x.base x.pretty x.array x.packedstring x.containers ];};
+          unix = { name = "unix-2.3.0.0"; srcDir = "libraries/unix";
+                          deps = [ x.base x.old_locale x.old_time x.filepath x.directory ];};
+        };
 
-    extra_libs = {}; # TODO ? at the moment outside of this package 
+        toDerivation = attrs : with attrs;
+              rec {
+                inherit name;
 
-    # contains core_libs { "base-3.0.1.0" = <derivation> ...
-    # and alias names      base = base-3.0.1.0
-    # (without version)  }
-    # to get a specific version  don't use set.xy-7 but (__getAttr "xy-7" set)
-    all_libs = let all = core_libs // extra_libs;
-        in all // ( builtins.listToAttrs ( lib.mapRecordFlatten (attr : v : lib.nv attr (__getAttr v all ) ) alias_names ) );
-  } );
+                #aDeps = concatLists ( catAttrs ( subsetmap id args [ "buildInputs" "propagatedBuildInputs" ] ) );
+                aDeps = deps;
+
+                # dummy derivation, only creates setup-hook for package database located in the ghc derivation 
+                aDeriv = stdenv.mkDerivation {
+                    inherit name;
+                    phases = "buildPhase fixupPhase";
+                    buildInputs = [ ghcPkgUtil ];
+                    propagatedBuildInputs = [ ghc ] ++ map delAnnotation  attrs.deps;
+                    buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/lib/ghc-${ghc.version}/${name}.conf\"";
+                };
+
+                sourceWithTags = {
+                  src = ghc.src;
+                  inherit srcDir;
+                  name = name + "-src-with-tags";
+                  createTagFiles = lib.maybeAttr "createTagFiles" [
+                      { name = "${name}_haskell_tags";
+                        tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; } 
+                    ] attrs;
+                };
+          };
+        derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
+                  ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
+    }.derivations;
+  });
 
   ghc68 = ghcAndLibraries rec {
     version = "6.8.2";
@@ -166,40 +200,5 @@
       #url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.20070912-src-extralibs.tar.bz2;
       #sha256 = "0py7d9nh3lkhjxr3yb3n9345d0hmzq79bi40al5rcr3sb84rnp9r";
     };
-
-    # to be able to use just array instead of array-0.1.0.0 (versions are likely to change, dependencies not that often)
-    alias_names = {
-      cabal = "Cabal-1.2.3.0";
-      array = "array-0.1.0.0";
-      base = "base-3.0.1.0";
-      bytestring = "bytestring-0.9.0.1";
-      containers = "containers-0.1.0.1";
-      directory = "directory-1.0.0.0";
-      filepath = "filepath-1.1.0.0";
-      haskell98 = "haskell98-1.0.1.0";
-      hpc = "hpc-0.5.0.0";
-      packedstring = "packedstring-0.1.0.0";
-      pretty = "pretty-1.0.0.0";
-      process = "process-1.0.0.0";
-      random = "random-1.0.0.0";
-      readline = "readline-1.0.1.0";
-      rts = "rts-1.0";
-      template = "template-haskell-2.2.0.0";
-      unix = "unix-2.3.0.0";
-      template_haskell = "template-haskell-2.2.0.0";
-      old_time = "old-time-1.0.0.0";
-      old_locale = "old-locale-1.0.0.0";
-    };
-
-    # this will change because of dependency hell :) 
-    #core_libraries = [ "Cabal" /* "Win32" */ "array" "base" "bytestring" "containers" 
-                       #"directory" "doc" "filepath" "haskell98" "hpc" "old-locale" "old-time"
-                       #"packedstring" "pretty" "process" "random" "readline" "stamp" 
-                       #"template-haskell" "unix" ];
-
-    #extra_libraries = [ "ALUT" "GLUT" "HGL" "HUnit" "ObjectIO" "OpenAL" "OpenGL" "QuickCheck" "X11" 
-                        #"arrows" "cgi" "fgl" "haskell-src" "html" "mtl" "network" "parallel" "parsec" 
-                        #"regex-base" "regex-compat" "regex-posix" "stm" "time" "xhtm" ];
-
   };
 }

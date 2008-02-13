@@ -1201,7 +1201,8 @@ rec {
      name = name + "-src-with-tags";
      createTagFiles = [
            { name = "${name}_haskell_tags";
-             tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+             # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+             tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
       ];
     };
   };
@@ -1301,7 +1302,7 @@ rec {
                                        md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                      };
                     };
-        happs_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec x.mtl
+        happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec x.mtl
                 x.network x.regex_compat x.hslogger x.happs_data_darcs
                   x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
                   x.template_haskell x.xhtml x.html x.bytestring x.random
@@ -1310,7 +1311,7 @@ rec {
                     };
         # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
         # is be added to buildInputs automatically
-        cabal_darcs = { name=cabal_darcs_name; p_deps = with ghc.all_libs; [base rts directory process pretty containers filepath];
+        cabal_darcs = { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
                   src = fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
                 };
       };
@@ -1323,9 +1324,6 @@ rec {
             patches = if attrs ? patches then attrs.patches else [];
             # add cabal, take deps either from this list or from ghc.core_libs 
         }//( lib.subsetmap lib.id attrs [ "patchPhase" ] )) null;
-      #             "mtl-1.." = <the same deriv>
-      #           ...}
-      # containing the derivations defined here and in ghc.all_libs
       derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
                 ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
     }.derivations;
@@ -1346,11 +1344,11 @@ rec {
       libraries = # map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" ];
         # core_libs  distributed with this ghc version
         #(lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
-          map ( a : __getAttr a ghcsAndLibs.ghc68.all_libs ) [ 
+          map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
             "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
             "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
             "old_time" "packedstring" "pretty" "process" "random" "readline" "rts"
-            "template" "unix" "template_haskell" ]
+            "template_haskell" "unix" "template_haskell" ]
         # some extra libs
 
            ++  (lib.flattenAttrs (ghc68_extra_libs ghcsAndLibs.ghc68) );
@@ -1867,6 +1865,12 @@ rec {
 
   happy = import ../development/tools/parsing/happy/happy-1.17.nix {
     inherit cabal perl;
+  };
+
+  hasktags = import ../development/tools/misc/hasktags {
+    inherit fetchurl;
+    stdenv = stdenvUsingSetupNew2;
+    ghc = ghcsAndLibs.ghc68.ghc;
   };
 
   help2man = import ../development/tools/misc/help2man {
