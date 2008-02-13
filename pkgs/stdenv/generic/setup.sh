@@ -2,11 +2,9 @@ set -e
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
-if [ -z ${system##*cygwin*} ]; then
-  PATH_DELIMITER=';'
-else
-  PATH_DELIMITER=':'
-fi
+
+# Helper functions that might be useful in setup hooks.
+
 
 addToSearchPathWithCustomDelimiter() {
     local delimiter=$1
@@ -28,6 +26,7 @@ addToSearchPath()
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
+
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
@@ -41,6 +40,7 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
+PATH_DELIMITER=':'
 if test -z "$shell"; then
     export shell=@shell@
 fi
@@ -234,20 +234,9 @@ stripDirs() {
     fi
 }
 
+
 ######################################################################
 # Textual substitution functions.
-
-
-# Some disgusting hackery to escape replacements in Sed substitutions.
-# We should really have a tool that replaces literal values by other
-# literal values, without any need for escaping.
-escapeSed() {
-    local s="$1"
-    # The `tr' hack is to escape newlines.  Sed handles newlines very
-    # badly, so we just replace newlines with the magic character 0xff
-    # (377 octal).  So don't use that character in replacements :-P
-    echo -n "$1" | tr '\012' '\377' | sed -e 's^\\^\\\\^g' -e 's^\xff^\\n^g' -e 's/\^/\\^/g' -e 's/&/\\&/g'
-}
 
 
 substitute() {
@@ -255,6 +244,7 @@ substitute() {
     local output="$2"
 
     local -a params=("$@")
+    local -a args=()
 
     local sedScript=$NIX_BUILD_TOP/.sedargs
     rm -f $sedScript
@@ -284,12 +274,14 @@ substitute() {
             n=$((n + 2))
         fi
 
-        replacement="$(escapeSed "$replacement")"
-
-        echo "s^$pattern^$replacement^g" >> $sedScript
+        if test ${#args[@]} != 0; then
+            args[${#args[@]}]="-a"
+        fi
+        args[${#args[@]}]="$pattern"
+        args[${#args[@]}]="$replacement"
     done
 
-    sed -f $sedScript < "$input" > "$output".tmp
+    replace -e -s "${args[@]}" < "$input" > "$output".tmp
     if test -x "$output"; then
         chmod +x "$output".tmp
     fi
@@ -537,7 +529,7 @@ unpackW() {
 
 
 unpackPhase() {
-    sourceRoot=. # don't change to user dir homeless shelter if custom unpackSource does'nt set sourceRoot
+    sourceRoot=. # don't change to user dir homeless shelter if custom unpackSource doesn't set sourceRoot
     header "unpacking sources"
     startLog "unpack"
     unpackW
@@ -751,28 +743,26 @@ fixupW() {
 
     eval "$preFixup"
 
-     forceShare=${forceShare:=man doc info}
-     if test -n "$forceShare"; then
-         for d in $forceShare; do
-             if test -d "$prefix/$d"; then
-                 if test -d "$prefix/share/$d"; then
-                     echo "Both $d/ and share/$d/ exists!"
-                 else
+    # Put man/doc/info under $out/share.
+    forceShare=${forceShare:=man doc info}
+    if test -n "$forceShare"; then
+        for d in $forceShare; do
+            if test -d "$prefix/$d"; then
+                if test -d "$prefix/share/$d"; then
+                    echo "Both $d/ and share/$d/ exists!"
+                else
                     echo Fixing location of $d/ subdirectory
-                     ensureDir $prefix/share
+                    ensureDir $prefix/share
                     if test -w $prefix/share; then
-                         mv -v $prefix/$d $prefix/share
-                         ln -sv share/$d $prefix
+                        mv -v $prefix/$d $prefix/share
+                        ln -sv share/$d $prefix
                     fi
-                 fi
-            else
-                echo "No $d/ subdirectory, skipping."
-             fi
-         done;
-     fi
+                fi
+            fi
+        done;
+    fi
 
-
-# TODO : strip _only_ ELF executables, and return || fail here...
+    # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
         echo "Stripping debuging symbols from files in"
         stripDirs "${stripDebugList:-lib}" -S

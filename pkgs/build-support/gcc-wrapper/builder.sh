@@ -50,14 +50,17 @@ fi
 doSubstitute() {
     local src=$1
     local dst=$2
-    substitute "$src" "$dst" \
-        --subst-var "out" \
-        --subst-var "shell" \
-        --subst-var "gcc" \
-        --subst-var "gccProg" \
-        --subst-var "binutils" \
-        --subst-var "libc" \
-        --subst-var-by "ld" "$ldPath/ld"
+    # Can't use substitute() here, because replace may not have been
+    # built yet (in the bootstrap).
+    sed \
+        -e "s^@out@^$out^" \
+        -e "s^@shell@^$shell^" \
+        -e "s^@gcc@^$gcc^" \
+        -e "s^@gccProg@^$gccProg^" \
+        -e "s^@binutils@^$binutils^" \
+        -e "s^@libc@^$libc^" \
+        -e "s^@ld@^$ldPath/ld^" \
+        < "$src" > "$dst" 
 }
 
 

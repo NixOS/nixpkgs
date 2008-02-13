@@ -11,4 +11,5 @@
   pkgs.gnumake
   pkgs.bash
   pkgs.patch
+  pkgs.replace
 ]

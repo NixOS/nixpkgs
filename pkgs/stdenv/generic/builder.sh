@@ -8,14 +8,17 @@ source $stdenv/setup
 
 mkdir $out
 
-substitute "$setup" "$out/setup" \
-    --subst-var preHook \
-    --subst-var postHook \
-    --subst-var initialPath \
-    --subst-var gcc \
-    --subst-var shell \
-    --subst-var-by param1 "$p1" \
-    --subst-var-by param2 "$p2" \
-    --subst-var-by param3 "$p3" \
-    --subst-var-by param4 "$p4" \
-    --subst-var-by param5 "$p5"
+# Can't use substitute() here, because replace may not have been
+# built yet (in the bootstrap).
+sed \
+    -e "s^@preHook@^$preHook^" \
+    -e "s^@postHook@^$postHook^" \
+    -e "s^@initialPath@^$initialPath^" \
+    -e "s^@gcc@^$gcc^" \
+    -e "s^@shell@^$shell^" \
+    -e "s^@param1@^$p1^" \
+    -e "s^@param2@^$p2^" \
+    -e "s^@param3@^$p3^" \
+    -e "s^@param4@^$p4^" \
+    -e "s^@param5@^$p5^" \
+    < "$setup" > "$out/setup"
