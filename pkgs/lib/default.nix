@@ -32,6 +32,7 @@ rec {
   pairMap = innerPairMap [];
 
   
+  
   # "Fold" a binary function `op' between successive elements of
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
@@ -90,6 +91,10 @@ rec {
       else if builtins ? hasAttr && builtins.hasAttr attr e
       then getAttr (tail attrPath) default (builtins.getAttr attr e)
       else default;
+
+  # shortcut for getAttr ["name"] default attrs
+  maybeAttr = name: default: attrs:
+    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
 
   # Filter a list using a predicate; that is, return a list containing
@@ -317,6 +322,18 @@ rec {
   debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
 
+  # this can help debug your code as well - designed to not produce thousands of lines
+  traceWhatis = x : __trace (whatis x) x;
+  whatis = x : 
+      if (__isAttrs x) then
+          if (x ? outPath) then "x is a derivation with name ${x.name}"
+          else "x is an attr set with attributes ${builtins.toString (__attrNames x)}"
+      else if (__isFunction x) then "x is a function"
+      else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
+      else if (x == true || x == false) then builtins.toString x
+      else "x is propably a string starting, starting characters: ${__substring 0 50 x}..";
+
+
   innerClosePropagation = ready: list: if list == [] then ready else
     if (head list) ? propagatedBuildInputs then 
       innerClosePropagation (ready ++ [(head list)]) 
@@ -325,11 +342,20 @@ rec {
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
+  stringToCharacters = s : let l = __stringLength s; in
+    if (__lessThan l 1) then [""] else  [(__substring 0 1 s)] ++ stringToCharacters (__substring 1 (__sub l 1) s);
+
+  # should this be implemented as primop ? Yes it should..
+  escapeShellArg = s :
+    let escapeChar = x : if ( x == "'" ) then "'\"'\"'" else x;
+    in "'" + concatStrings (map escapeChar (stringToCharacters s) ) +"'";
+
+  defineShList = name : list : "\n${name}=(${concatStringsSep " " (map escapeShellArg list)})\n";
+
   # calls a function (f attr value ) for each record item. returns a list
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
-  # TODO should be renamed to nv because niksnut has renamed the attribute attr to name
   nv = name : value : { inherit name value; };
   # attribute set containing one attribute
   nvs = name : value : listToAttrs [ (nv name value) ];
@@ -357,6 +383,12 @@ rec {
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
+
+  # pick attrs subset_attr_names and apply f 
+  subsetmap = f : attrs : subset_attr_names : 
+    listToAttrs (fold ( attr : r : if __hasAttr attr attrs
+          then r ++ [ (  nv attr ( f (__getAttr attr attrs) ) ) ] else r ) []
+      subset_attr_names );
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
 
