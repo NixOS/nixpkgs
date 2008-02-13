@@ -11,14 +11,14 @@ mkdir $out
 # Can't use substitute() here, because replace may not have been
 # built yet (in the bootstrap).
 sed \
-    -e "s^@preHook@^$preHook^" \
-    -e "s^@postHook@^$postHook^" \
-    -e "s^@initialPath@^$initialPath^" \
-    -e "s^@gcc@^$gcc^" \
-    -e "s^@shell@^$shell^" \
-    -e "s^@param1@^$p1^" \
-    -e "s^@param2@^$p2^" \
-    -e "s^@param3@^$p3^" \
-    -e "s^@param4@^$p4^" \
-    -e "s^@param5@^$p5^" \
+    -e "s^@preHook@^$preHook^g" \
+    -e "s^@postHook@^$postHook^g" \
+    -e "s^@initialPath@^$initialPath^g" \
+    -e "s^@gcc@^$gcc^g" \
+    -e "s^@shell@^$shell^g" \
+    -e "s^@param1@^$p1^g" \
+    -e "s^@param2@^$p2^g" \
+    -e "s^@param3@^$p3^g" \
+    -e "s^@param4@^$p4^g" \
+    -e "s^@param5@^$p5^g" \
     < "$setup" > "$out/setup"

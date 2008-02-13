@@ -53,13 +53,13 @@ doSubstitute() {
     # Can't use substitute() here, because replace may not have been
     # built yet (in the bootstrap).
     sed \
-        -e "s^@out@^$out^" \
-        -e "s^@shell@^$shell^" \
-        -e "s^@gcc@^$gcc^" \
-        -e "s^@gccProg@^$gccProg^" \
-        -e "s^@binutils@^$binutils^" \
-        -e "s^@libc@^$libc^" \
-        -e "s^@ld@^$ldPath/ld^" \
+        -e "s^@out@^$out^g" \
+        -e "s^@shell@^$shell^g" \
+        -e "s^@gcc@^$gcc^g" \
+        -e "s^@gccProg@^$gccProg^g" \
+        -e "s^@binutils@^$binutils^g" \
+        -e "s^@libc@^$libc^g" \
+        -e "s^@ld@^$ldPath/ld^g" \
         < "$src" > "$dst" 
 }
 
@@ -111,3 +111,11 @@ doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
 
 cp -p $utils $out/nix-support/utils.sh
+
+
+# Propagate the wrapped gcc so that if you install the wrapper, you get
+# tools like gcov, the manpages, etc. as well (including for binutils
+# and Glibc).
+if test -z "$nativeTools"; then
+    echo $gcc $binutils $libc > $out/nix-support/propagated-user-env-packages
+fi

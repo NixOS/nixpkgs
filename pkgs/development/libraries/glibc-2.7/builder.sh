@@ -14,7 +14,7 @@ preConfigure() {
     for i in configure io/ftwtest-sh; do
         # Can't use substituteInPlace here because replace hasn't been
         # built yet in the bootstrap.
-        sed -i "$i" -e "s^/bin/pwd^$(type -tP pwd)^"
+        sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
 
     # In the glibc 2.6/2.7 tarballs C-translit.h is a little bit older
