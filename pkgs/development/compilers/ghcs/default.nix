@@ -95,7 +95,7 @@ rec {
         # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
         pkgs = let x = derivations; in {
             # ghc extra packages 
-          cabal = { name = "cabal-1.2.3.0"; srcDir = "libraries/Cabal";
+          cabal = { name = "Cabal-1.2.3.0"; srcDir = "libraries/Cabal";
                           deps = [x.base x.pretty x.old_locale x.old_time
                             x.directory x.unix x.process x.array x.containers
                             x.rts x.filepath ]; };
