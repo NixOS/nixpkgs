@@ -2466,7 +2466,7 @@ rec {
     inherit fetchurl stdenv mysql libtool zlib unixODBC;
   };
 
-  ncurses = selectVersion ../development/libraries/ncurses "5.6" {
+  ncurses = lib.sumArgs (selectVersion ../development/libraries/ncurses "5.6") {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
   };
