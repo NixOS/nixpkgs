@@ -2770,10 +2770,12 @@ rec {
     inherit fetchurl stdenv mysql libtool zlib unixODBC;
   };
 
-  ncurses = import ../development/libraries/ncurses {
+  ncursesFun = lib.sumArgs (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
   };
+  
+  ncurses = ncursesFun null;
 
   ncursesDiet = import ../development/libraries/ncurses-diet {
     inherit fetchurl;
