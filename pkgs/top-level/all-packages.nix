@@ -1407,6 +1407,13 @@ rec {
       libraries = [];
     };
   */
+  
+  gwt = import ../development/compilers/gwt {
+    inherit stdenv fetchurl;
+    inherit (gtkLibs) glib gtk pango atk;
+    inherit (xlibs) libX11 libXt;
+    libstdcpp5 = gcc33.gcc;
+  };
 
   helium = import ../development/compilers/helium {
     inherit fetchurl stdenv;
