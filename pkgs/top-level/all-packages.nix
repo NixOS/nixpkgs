@@ -1129,7 +1129,7 @@ rec {
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
       inherit ghcboot fetchurl recurseIntoAttrs perl gnum4 gmp readline lib;
-      inherit ghcPkgUtil;
+      inherit ghcPkgUtil annotatedDerivations hasktags ctags;
       stdenv = stdenvUsingSetupNew2;
     });
 
@@ -1218,7 +1218,7 @@ rec {
       # introducing p here to speed things up.
       # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
       # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
-      pkgs = let x = ghc.all_libs // derivations; in {
+      pkgs = let x = ghc.core_libs // derivations; in {
           # ghc extra packages 
           mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
           parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
