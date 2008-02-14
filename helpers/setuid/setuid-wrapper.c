@@ -6,6 +6,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <assert.h>
+
+/* Make sure assertions are not compiled out.  */
+#undef NDEBUG
 
 extern char **environ;
 
@@ -14,24 +18,19 @@ static char * wrapperDir = WRAPPER_DIR;
 int main(int argc, char * * argv)
 {
     char self[PATH_MAX];
-    
+
     int len = readlink("/proc/self/exe", self, sizeof(self) - 1);
-    if (len == -1) abort();
+    assert (len > 0);
     self[len] = 0;
 
-    //printf("self = %s, ch = %c\n", self, self[strlen(wrapperDir)]);
-
-    
     /* Make sure that we are being executed from the right location,
        i.e., `wrapperDir'.  This is to prevent someone from
        creating hard link `X' from some other location, along with a
        false `X.real' file, to allow arbitrary programs from being
-       executed setuid. */
-    if ((strncmp(self, wrapperDir, sizeof(wrapperDir)) != 0) ||
-        (self[strlen(wrapperDir)] != '/'))
-        abort();
+       executed setuid.  */
+    assert ((strncmp(self, wrapperDir, sizeof(wrapperDir)) == 0) &&
+	    (self[strlen(wrapperDir)] == '/'));
 
-    
     /* Make *really* *really* sure that we were executed as `self',
        and not, say, as some other setuid program.  That is, our
        effective uid/gid should match the uid/gid of `self'. */
@@ -42,31 +41,28 @@ int main(int argc, char * * argv)
 
     //printf("%d %d\n", st.st_uid, st.st_gid);
     
-    if ((st.st_mode & S_ISUID) != 0 &&
-        st.st_uid != geteuid())
-        abort();
+    assert ((st.st_mode & S_ISUID) == 0 ||
+	    (st.st_uid == geteuid()));
 
-    if ((st.st_mode & S_ISGID) != 0 &&
-        st.st_gid != getegid())
-        abort();
+    assert ((st.st_mode & S_ISGID) == 0 ||
+	    st.st_gid == getegid());
 
     /* And, of course, we shouldn't be writable. */
-    if (st.st_mode & (S_IWGRP | S_IWOTH))
-        abort();
+    assert (!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
 
     /* Read the path of the real (wrapped) program from <self>.real. */
     char realFN[PATH_MAX + 10];
-    if (snprintf(realFN, sizeof(realFN), "%s.real", self) >= sizeof(realFN))
-        abort();
+    int realFNSize = snprintf (realFN, sizeof(realFN), "%s.real", self);
+    assert (realFNSize < sizeof(realFN));
 
     int fdSelf = open(realFN, O_RDONLY);
-    if (fdSelf == -1) abort();
+    assert (fdSelf != -1);
 
     char real[PATH_MAX];
     len = read(fdSelf, real, PATH_MAX);
-    if (len == -1) abort();
-    if (len == sizeof(real)) abort();
+    assert (len != -1);
+    assert (len < sizeof (real));
     real[len] = 0;
 
     close(fdSelf);
