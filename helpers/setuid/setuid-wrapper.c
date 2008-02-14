@@ -37,7 +37,7 @@ int main(int argc, char * * argv)
     //printf("%d %d\n", geteuid(), getegid());
 
     struct stat st;
-    if (lstat(self, &st) == -1) abort();
+    assert (lstat(self, &st) != -1);
 
     //printf("%d %d\n", st.st_uid, st.st_gid);
     
