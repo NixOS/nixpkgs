@@ -230,12 +230,10 @@ let
   };
 
   staticFilesConfig = ''
-    # !!! this breaks UserDir if urlPrefix == ""
-    Alias ${if urlPrefix == "" then "/" else urlPrefix} ${staticFiles}/
+    Alias ${urlPrefix}/svn-files ${staticFiles}/
     <Directory ${staticFiles}>
         Order allow,deny
         Allow from all
-        DirectoryIndex repoman
     </Directory>
   '';
 
@@ -291,7 +289,7 @@ in {
     
     <Location ${urlPrefix}/repos-xml>
       ${reposConfig "repos-xml"}
-      SVNIndexXSLT "${urlPrefix}/xsl/svnindex.xsl"
+      SVNIndexXSLT "${urlPrefix}/svn-files/xsl/svnindex.xsl"
     </Location>
 
     ${viewvcConfig}

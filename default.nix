@@ -17,6 +17,7 @@ in
     grubMenuBuilder
     initialRamdisk
     kernel
+    modulesTree
     nix
     system
     systemPath
