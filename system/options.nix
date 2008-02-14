@@ -1246,6 +1246,18 @@
         ";
       };
 
+      servedFiles = mkOption {
+        default = [];
+        example = [
+          { urlPath = "/foo/bar.png";
+            dir = "/home/eelco/some-file.png";
+          }
+        ];
+        description = "
+          This option provides a simple way to serve individual, static files.
+        ";
+      };
+
       # !!! this is a mis-nomer, should be "extraConfig" or something.
       extraDirectories = mkOption {
         default = "";
@@ -1280,6 +1292,7 @@
 
       subservices = {
 
+        # !!! remove this
         subversion = {
 
           enable = mkOption {

@@ -1,25 +1,20 @@
-{ config, pkgs, serverInfo
-}:
+{config, pkgs, serverInfo}:
 
 let
 
-  prefix = "/svn";
-  dbDir = "/tmp/svn/db";
-  reposDir = "/tmp/svn/repos";
-  backupsDir = "/tmp/svn/backup";
-  distsDir = "/tmp/svn/dist";
-  tmpDir = "/tmp/svn/tmp";
-  logDir = "/tmp/svn/log";
-  adminAddr = "eelco@cs.uu.nl";
-  userCreationDomain = "10.0.0.0/8";
-  orgUrl = "http://www.cs.uu.nl/";
-  orgLogoUrl = "${prefix}/UU_merk.gif";
-  orgName = "Utrecht University";
+  inherit (pkgs.lib) mkOption;
+
+  urlPrefix = config.urlPrefix;
+  dbDir = "${config.dataDir}/db";
+  reposDir = "${config.dataDir}/repos";
+  backupsDir = "${config.dataDir}/backup";
+  distsDir = "${config.dataDir}/dist";
+  tmpDir = "${config.dataDir}/tmp";
+  logDir = "${config.dataDir}/log";
   postCommitHook = "/var/run/current-system/sw/bin/svn-server-post-commit-hook";
-  autoVersioning = true;
-  notificationSender = "root@buildfarm.st.ewi.tudelft.nl";
   fsType = "fsfs";
-  smtpHost = "mail.st.ewi.tudelft.nl";
+  adminAddr = serverInfo.serverConfig.adminAddr;
+  
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
@@ -42,15 +37,15 @@ let
     # The variables to substitute:
     
     inherit reposDir dbDir logDir distsDir backupsDir tmpDir
-      adminAddr notificationSender userCreationDomain fsType
-      subversion orgUrl orgLogoUrl orgName smtpHost
-      postCommitHook;
+      urlPrefix adminAddr fsType subversion postCommitHook;
+    inherit (config) notificationSender userCreationDomain;
+    orgUrl = config.organisation.url;
+    orgLogoUrl = config.organisation.logo;
+    orgName = config.organisation.name;
       
     perl = "${pkgs.perl}/bin/perl";
 
     sendmail = "${pkgs.ssmtp}/sbin/sendmail";
-    
-    urlPrefix = prefix;
     
     inherit (pkgs) libxslt enscript db4 coreutils bzip2;
 
@@ -65,7 +60,8 @@ let
 
     # Do a syntax check on the generated file.
     postInstall = ''
-      $perl -c -T $out/cgi-bin/repoman.pl; $perl -c $out/bin/svn-server-create-user.pl
+      $perl -c -T $out/cgi-bin/repoman.pl
+      $perl -c $out/bin/svn-server-create-user.pl
     '';
   };
 
@@ -79,7 +75,9 @@ let
   commonAuth = ''
     AuthType Basic
     AuthName "Subversion repositories"
-    AuthBasicProvider auth-against-db
+    AuthBasicProvider dbm
+    AuthDBMType DB
+    AuthDBMUserFile ${dbDir}/svn-users
   '';
   
 
@@ -89,7 +87,7 @@ let
 
     AuthAllowNone on
 
-    AuthzRepoPrefix ${prefix}/${dirName}/
+    AuthzRepoPrefix ${urlPrefix}/${dirName}/
     AuthzRepoDBType DB
     AuthzRepoReaders ${dbDir}/svn-readers
     AuthzRepoWriters ${dbDir}/svn-writers
@@ -104,22 +102,21 @@ let
 
     DAV svn
     SVNParentPath ${reposDir}
-    SVNAutoversioning ${if autoVersioning then "on" else "off"}
+    SVNAutoversioning ${if config.autoVersioning then "on" else "off"}
   '';
 
 
   # Build ViewVC.
   viewvc = import ../../../services/subversion/src/viewvc {
     inherit (pkgs) fetchurl stdenv python enscript;
-    inherit reposDir adminAddr subversion;
-    urlPrefix = prefix;
+    inherit urlPrefix reposDir adminAddr subversion;
   };
 
 
   viewerConfig = dirName: ''
     ${commonAuth}
     AuthAllowNone on
-    AuthzRepoPrefix ${prefix}/${dirName}/
+    AuthzRepoPrefix ${urlPrefix}/${dirName}/
     AuthzRepoDBType DB
     AuthzRepoReaders ${dbDir}/svn-readers
     Require repo-reader
@@ -127,9 +124,9 @@ let
 
 
   viewvcConfig = ''
-    ScriptAlias ${prefix}/viewvc ${viewvc}/viewvc/bin/mod_python/viewvc.py
+    ScriptAlias ${urlPrefix}/viewvc ${viewvc}/viewvc/bin/mod_python/viewvc.py
 
-    <Location ${prefix}/viewvc>
+    <Location ${urlPrefix}/viewvc>
         AddHandler python-program .py
         # Note: we write \" instead of ' to work around a lexer bug in Nix 0.11.
         PythonPath "[\"${viewvc}/viewvc/bin/mod_python\", \"${subversion}/lib/python2.4/site-packages\"] + sys.path"
@@ -137,26 +134,25 @@ let
         ${viewerConfig "viewvc"}
     </Location>
 
-    Alias ${prefix}/viewvc-doc ${viewvc}/viewvc/templates/docroot
+    Alias ${urlPrefix}/viewvc-doc ${viewvc}/viewvc/templates/docroot
 
-    Redirect permanent ${prefix}/viewcvs ${serverInfo.canonicalName}/${prefix}/viewvc
+    Redirect permanent ${urlPrefix}/viewcvs ${serverInfo.canonicalName}/${urlPrefix}/viewvc
   '';
 
 
   # Build WebSVN.
   websvn = import ../../../services/subversion/src/websvn {
     inherit (pkgs) fetchurl stdenv writeText enscript gnused diffutils;
-    inherit reposDir subversion;
+    inherit urlPrefix reposDir subversion;
     cacheDir = tmpDir;
-    urlPrefix = prefix;
   };
 
   
   websvnConfig = ''
-    Alias ${prefix}/websvn ${websvn}/wsvn.php
-    Alias ${prefix}/templates ${websvn}/templates
+    Alias ${urlPrefix}/websvn ${websvn}/wsvn.php
+    Alias ${urlPrefix}/templates ${websvn}/templates
 
-    <Location ${prefix}/websvn>
+    <Location ${urlPrefix}/websvn>
         ${viewerConfig "websvn"}
     </Location>
 
@@ -168,7 +164,7 @@ let
 
 
   distConfig = ''
-    Alias ${prefix}/dist ${distsDir}
+    Alias ${urlPrefix}/dist ${distsDir}
 
     <Directory "${distsDir}">
         AllowOverride None
@@ -177,50 +173,50 @@ let
         Allow from all
         IndexOptions +SuppressDescription +NameWidth=*
         IndexIgnore *.rev *.lock
-        IndexStyleSheet ${prefix}/style.css
+        IndexStyleSheet ${urlPrefix}/style.css
     </Directory>
 
-    <Location ${prefix}/dist>
+    <Location ${urlPrefix}/dist>
         ${viewerConfig "dist"}
     </Location>
   '';
   
 
   repomanConfig = ''
-    ScriptAlias ${prefix}/repoman ${scripts}/cgi-bin/repoman.pl
+    ScriptAlias ${urlPrefix}/repoman ${scripts}/cgi-bin/repoman.pl
 
-    <Location ${prefix}/repoman/listdetails>
+    <Location ${urlPrefix}/repoman/listdetails>
         ${commonAuth}    
         Require valid-user
     </Location>
 
-    <Location ${prefix}/repoman/adduser>
+    <Location ${urlPrefix}/repoman/adduser>
         Order deny,allow
         Deny from all
         Allow from 127.0.0.1
-        Allow from ${userCreationDomain}
+        Allow from ${config.userCreationDomain}
     </Location>
 
-    <Location ${prefix}/repoman/edituser>
+    <Location ${urlPrefix}/repoman/edituser>
         ${commonAuth}    
         Require valid-user
     </Location>
 
-    <Location ${prefix}/repoman/create>
+    <Location ${urlPrefix}/repoman/create>
         ${commonAuth}    
         Require valid-user
         Order deny,allow
         Deny from all
         Allow from 127.0.0.1
-        Allow from ${userCreationDomain}
+        Allow from ${config.userCreationDomain}
     </Location>
 
-    <Location ${prefix}/repoman/update>
+    <Location ${urlPrefix}/repoman/update>
         ${commonAuth}    
         Require valid-user
     </Location>
 
-    <Location ${prefix}/repoman/dump>
+    <Location ${urlPrefix}/repoman/dump>
         ${viewerConfig "repoman/dump"}
     </Location>
   '';
@@ -229,25 +225,22 @@ let
   staticFiles = substituteInSome {
     name = "svn-static-files";
     src = pkgs.lib.cleanSource ../../../services/subversion/root;
-    urlPrefix = prefix;
     files = ["xsl/svnindex.xsl"];
+    inherit urlPrefix;
   };
 
   staticFilesConfig = ''
-    Alias ${prefix} ${staticFiles}
+    # !!! this breaks UserDir if urlPrefix == ""
+    Alias ${if urlPrefix == "" then "/" else urlPrefix} ${staticFiles}/
     <Directory ${staticFiles}>
         Order allow,deny
         Allow from all
-        AllowOverride None
         DirectoryIndex repoman
     </Directory>
   '';
 
   
   # !!! should be in Nixpkgs.
-  writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} ''ensureDir $out; echo -n "$text" > $out/$name'';
-
   substituteInSome = args: pkgs.stdenvUsingSetupNew2.mkDerivation ({
     buildCommand = ''
       ensureDir $out
@@ -270,10 +263,9 @@ let
       eval "$postInstall"
     '';
   } // args); # */
-    
-in
 
-{
+      
+in {
 
   extraModulesPre = [
     # Allow anonymous access to repositories that are world-readable
@@ -290,22 +282,16 @@ in
     { name = "dav_svn"; path = "${subversion}/modules/mod_dav_svn.so"; }
   ];
 
-  extraConfig = ''
-
-    #RedirectPermanent ^${prefix}$ ${prefix}/repoman
   
-    <AuthnProviderAlias dbm auth-against-db>
-        AuthDBMType DB
-        AuthDBMUserFile ${dbDir}/svn-users
-    </AuthnProviderAlias>
-
-    <Location ${prefix}/repos>
+  extraConfig = ''
+  
+    <Location ${urlPrefix}/repos>
       ${reposConfig "repos"}
     </Location>
     
-    <Location ${prefix}/repos-xml>
+    <Location ${urlPrefix}/repos-xml>
       ${reposConfig "repos-xml"}
-      SVNIndexXSLT "${prefix}/xsl/svnindex.xsl"
+      SVNIndexXSLT "${urlPrefix}/xsl/svnindex.xsl"
     </Location>
 
     ${viewvcConfig}
@@ -320,26 +306,104 @@ in
         
   '';
 
+  
   robotsEntries = ''
     User-agent: *
-    Disallow: ${prefix}/viewcvs/
-    Disallow: ${prefix}/viewvc/
-    Disallow: ${prefix}/websvn/
-    Disallow: ${prefix}/repos-xml/
+    Disallow: ${urlPrefix}/viewcvs/
+    Disallow: ${urlPrefix}/viewvc/
+    Disallow: ${urlPrefix}/websvn/
+    Disallow: ${urlPrefix}/repos-xml/
   '';
 
+  
   # mod_python's own Python modules must be in the initial Python
   # path, they cannot be set through the PythonPath directive.
   globalEnvVars = [
     { name = "PYTHONPATH"; value = "${pkgs.mod_python}/lib/python2.4/site-packages"; }
   ];
 
+  
   extraServerPath = [
     # Needed for ViewVC.
     "${pkgs.diffutils}/bin"
     "${pkgs.gnused}/bin"
   ];
 
+  
   extraPath = [scripts];
+  
+
+  options = {
+
+    urlPrefix = mkOption {
+      default = "/subversion";
+      description = "
+        The URL prefix under which the Subversion service appears.
+        Use the empty string to have it appear in the server root.
+      ";
+    };
+
+    notificationSender = mkOption {
+      default = "svn-server@example.org";
+      example = "svn-server@example.org";
+      description = "
+        The email address used in the Sender field of commit
+        notification messages sent by the Subversion subservice.
+      ";
+    };
+
+    userCreationDomain = mkOption {
+      default = "example.org"; 
+      example = "example.org";
+      description = "
+        The domain from which user creation is allowed.  A client can
+        only create a new user account if its IP address resolves to
+        this domain.
+      ";
+    };
+
+    autoVersioning = mkOption {
+      default = false;
+      description = "
+        Whether you want the Subversion subservice to support
+        auto-versioning, which enables Subversion repositories to be
+        mounted as read/writable file systems on operating systems that
+        support WebDAV.
+      ";
+    };
+
+    dataDir = mkOption {
+      default = "/no/such/path/exists";
+      description = "
+        Place to put SVN repository.
+      ";
+    };
+
+    organisation = {
+
+      name = mkOption {
+        default = null;
+        description = "
+          Name of the organization hosting the Subversion service.
+        ";
+      };
+
+      url = mkOption {
+        default = null;
+        description = "
+          URL of the website of the organization hosting the Subversion service.
+        ";
+      };
+
+      logo = mkOption {
+        default = null;
+        description = "
+          Logo the organization hosting the Subversion service.
+        ";
+      };
+
+    };
+
+  };  
   
 }

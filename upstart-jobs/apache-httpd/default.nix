@@ -15,10 +15,17 @@ let
       "http://" +
       cfg.hostName +
       (if cfg.httpPort != 80 then ":${toString cfg.httpPort}" else "");
+    serverConfig = cfg;
+    fullConfig = config; # machine config
   };
 
 
-  subservices = map (svc: svc {inherit config pkgs serverInfo;}) cfg.extraSubservices;
+  subservices =
+    let f = svc:
+      let config = pkgs.lib.addDefaultOptionValues res.options svc.config;
+          res = svc.function {inherit config pkgs serverInfo;};
+      in res;
+    in map f cfg.extraSubservices;
 
 
   # !!! should be in lib
@@ -174,6 +181,7 @@ let
     ${if cfg.enableUserDir then ''
     
       UserDir public_html
+      UserDir disabled root
       
       <Directory "/home/*/public_html">
           AllowOverride FileInfo AuthConfig Limit Indexes
@@ -224,6 +232,8 @@ let
         Allow from all
     </Directory>
 
+    ${robotsConf}
+    
     ${documentRootConf}
 
     ${
@@ -238,9 +248,14 @@ let
       in pkgs.lib.concatStrings (map makeDirConf cfg.servedDirs)
     }
 
-    ${pkgs.lib.concatStrings (map (svc: svc.extraConfig) subservices)}
+    ${
+      let makeFileConf = elem: ''
+            Alias ${elem.urlPath} ${elem.file}
+          '';
+      in pkgs.lib.concatStrings (map makeFileConf cfg.servedFiles)
+    }
 
-    ${robotsConf}
+    ${pkgs.lib.concatStrings (map (svc: svc.extraConfig) subservices)}
   '';
 
     
