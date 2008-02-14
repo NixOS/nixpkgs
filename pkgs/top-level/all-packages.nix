@@ -280,6 +280,7 @@ rec {
       else defaultStdenv;
 
   stdenvUsingSetupNew2 = overrideSetup stdenv ../stdenv/generic/setup-new-2.sh;
+  
 
   ### BUILD SUPPORT
 
@@ -4720,7 +4721,7 @@ rec {
     #enableOfficialBranding = true;
   });
 
-  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox3b1/binary.nix {
+  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
     	python curl coreutils freetype fontconfig;
     inherit (gtkLibs) gtk atk pango glib;
