@@ -1166,20 +1166,6 @@
         ";
       };
 
-      hostName = mkOption {
-        default = "localhost";
-        description = "
-          Canonical hostname for the server.
-        ";
-      };
-
-      httpPort = mkOption {
-        default = 80;
-        description = "
-          Port for unencrypted HTTP requests.
-        ";
-      };
-
       httpsPort = mkOption {
         default = 443;
         description = "
@@ -1233,6 +1219,24 @@
 	  default = [];
 	  description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
 	};
+      };
+
+      virtualHosts = mkOption {
+        default = [];
+        example = [
+          { hostName = "foo";
+            documentRoot = "/data/webroot-foo";
+          }
+          { hostName = "bar";
+            documentRoot = "/data/webroot-bar";
+          }
+        ];
+        description = ''
+          Specification of the virtual hosts served by Apache.  Each
+          element should be an attribute set specifying the
+          configuration of the virtual host.  The available options
+          are the non-global options permissible for the main host.
+        '';
       };
 
       subservices = {

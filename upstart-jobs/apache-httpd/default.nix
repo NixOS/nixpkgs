@@ -29,7 +29,9 @@ let
     in map f defs;
 
 
-  allSubservices = callSubservices (makeServerInfo cfg) cfg.extraSubservices;
+  mainSubservices = callSubservices (makeServerInfo cfg) cfg.extraSubservices;
+
+  allSubservices = mainSubservices;
 
 
   # !!! should be in lib
@@ -150,6 +152,9 @@ let
     '';
 
     robotsTxt = pkgs.writeText "robots.txt" ''
+      ${# If this is a vhost, the include the entries for the main server as well.
+        if isMainServer then ""
+        else concatMapStrings (svc: svc.robotsEntries) mainSubservices}
       ${concatMapStrings (svc: svc.robotsEntries) subservices}
     '';
 
@@ -275,11 +280,6 @@ let
     
     # Always enable virtual hosts; it doesn't seem to hurt.
     NameVirtualHost *:*
-
-    # Catch-all: since this is the first virtual host, any
-    # non-matching requests will use the main server configuration.
-    <VirtualHost *:*>
-    </VirtualHost>
 
     ${let
         perServerOptions = import ./per-server-options.nix {
