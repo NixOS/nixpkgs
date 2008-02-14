@@ -1522,6 +1522,10 @@ rec {
     inherit fetchurl stdenv m4;
   };
 
+  ccache = import ../development/tools/misc/ccache {
+    inherit fetchurl stdenv;
+  };
+
   ctags = import ../development/tools/misc/ctags {
     inherit fetchurl stdenv;
   };
@@ -4181,6 +4185,15 @@ rec {
   });
 
   firefoxWrapper = wrapFirefox firefox "";
+
+  firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python curl coreutils dbus dbus_glib freetype fontconfig;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit (xlibs) libXi libX11 libXrender libXft libXt;
+    #enableOfficialBranding = true;
+  });
 
   firefox3b1 = lowPrio (import ../applications/networking/browsers/firefox3b1 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
