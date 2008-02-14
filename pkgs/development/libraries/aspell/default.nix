@@ -10,15 +10,15 @@ stdenv.mkDerivation {
   
   buildInputs = [perl];
 
-  patches = [
-    # A patch that allows additional dictionary directories to be set
-    # specified through the environment variable
-    # ASPELL_EXTRA_DICT_DIRS (comma-separated).
-    ./dict-path.patch
-  ];
+  # Note: Users should define the `ASPELL_CONF' environment variable to
+  # `dict-dir $HOME/.nix-profile/lib/aspell/' so that they can access
+  # dictionaries installed in their profile.
+  #
+  # We can't use `$out/etc/aspell.conf' for that purpose since Aspell
+  # doesn't expand environment variables such as `$HOME'.
 
   meta = {
-    description = "A spell checker for many languages";
+    description = "GNU Aspell, A spell checker for many languages";
     homepage = http://aspell.net/;
     license = "LGPL";
   };
