@@ -64,7 +64,9 @@ let
     ];
 
     # Do a syntax check on the generated file.
-    postInstall = "$perl -c -T $out/cgi-bin/repoman.pl; $perl -c $out/bin/svn-server-create-user.pl";
+    postInstall = ''
+      $perl -c -T $out/cgi-bin/repoman.pl; $perl -c $out/bin/svn-server-create-user.pl
+    '';
   };
 
   
@@ -246,9 +248,8 @@ let
   writeTextInDir = name: text:
     pkgs.runCommand name {inherit text;} ''ensureDir $out; echo -n "$text" > $out/$name'';
 
-  substituteInSome = args: pkgs.stdenv.mkDerivation ({
+  substituteInSome = args: pkgs.stdenvUsingSetupNew2.mkDerivation ({
     buildCommand = ''
-      buildCommand= # ugh, hack to prevent sed errors
       ensureDir $out
       cp -prd $src/* $out
       chmod -R u+w $out
@@ -258,9 +259,8 @@ let
     '';
   } // args); # */
     
-  substituteInAll = args: pkgs.stdenv.mkDerivation ({
+  substituteInAll = args: pkgs.stdenvUsingSetupNew2.mkDerivation ({
     buildCommand = ''
-      buildCommand= # ugh, hack to prevent sed errors
       ensureDir $out
       cp -prd $src/* $out
       chmod -R u+w $out

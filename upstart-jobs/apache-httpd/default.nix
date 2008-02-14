@@ -18,11 +18,10 @@ let
   };
 
 
-  subservices = [
-    (import ./subversion.nix {inherit config pkgs serverInfo;})
-  ];
+  subservices = map (svc: svc {inherit config pkgs serverInfo;}) cfg.extraSubservices;
 
 
+  # !!! should be in lib
   writeTextInDir = name: text:
     pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
   
@@ -134,17 +133,12 @@ let
   '';
 
 
-  robotsTxt = writeTextInDir "robots.txt" ''
+  robotsTxt = pkgs.writeText "robots.txt" ''
     ${pkgs.lib.concatStrings (map (svc: svc.robotsEntries) subservices)}
   '';
   
   robotsConf = ''
-    Alias /robots.txt ${robotsTxt}/robots.txt
-
-    <Directory ${robotsTxt}>
-        Order allow,deny
-        Allow from all
-    </Directory>
+    Alias /robots.txt ${robotsTxt}
   '';
 
   
@@ -215,12 +209,19 @@ let
     ${if cfg.enableSSL then sslConf else ""}
 
     # Fascist default - deny access to everything.
-    # !!!
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-#        Order deny,allow
-#        Deny from all
+        Order deny,allow
+        Deny from all
+    </Directory>
+
+    # But do allow access to files in the store so that we don't have
+    # to generate <Directory> clauses for every generated file that we
+    # want to serve.
+    <Directory /nix/store>
+        Order allow,deny
+        Allow from all
     </Directory>
 
     ${documentRootConf}

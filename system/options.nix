@@ -1277,7 +1277,7 @@
 	  description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
 	};
       };
-      
+
       subservices = {
 
         subversion = {
@@ -1354,22 +1354,11 @@
 
       };
 
-      extraSubservices = {
-
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the extra subservices in the webserver.
-          ";
-        };
-
-        services = mkOption {
-          default = [];
-          description = "
-            Extra subservices to enable in the webserver.
-          ";
-        };
-
+      extraSubservices = mkOption {
+        default = [];
+        description = "
+          Extra subservices to enable in the webserver.
+        ";
       };
 
     };

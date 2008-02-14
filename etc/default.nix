@@ -162,7 +162,7 @@ import ../helpers/make-etc.nix {
     
   # Configuration file for fontconfig used to locate
   # (X11) client-rendered fonts.
-  ++ optional config.fonts.enableFontConfig { 
+  ++ optional config.fonts.enableFontConfig {
     source = pkgs.runCommand "fonts.conf"
       { 
         fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
