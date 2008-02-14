@@ -6,20 +6,42 @@ let
 
   urlPrefix = "/release";
   distDir = "/tmp/dist";
-  distConfDir = "/tmp/dist-conf";
+  distPasswords = "/tmp/dist-conf/upload_passwords";
+
+  directoriesConf = pkgs.writeText "directories.conf" ''
+    nix          ${distDir}/nix          nix-upload
+    nix-cache    ${distDir}/nix-cache    nix-upload stratego-upload autobundle-upload swe-upload meta-environment-upload hut-upload
+    test         ${distDir}/test         test-upload nix-upload
+    test-cache   ${distDir}/test-cache   test-upload nix-upload
+    stratego     ${distDir}/stratego     stratego-upload
+    autobundle   ${distDir}/autobundle   autobundle-upload
+    courses      ${distDir}/courses      swe-upload
+    meta-environment ${distDir}/meta-environment meta-environment-upload
+    hut          ${distDir}/hut          hut-upload
+  '';
+
+  uploaderIPs = [
+    "127.0.0.1"
+    "10.0.0.0/255.0.0.0"
+    "131.211.0.0/255.255.0.0" # *.cs.uu.nl
+    "130.145.0.0/255.255.0.0" # philips.com
+    "130.161.158.181" # TUD supervisor
+  ];
 
   staticFiles = substituteInAll {
-    name = "svn-server-scripts";
+    name = "dist-manager-files";
     src = pkgs.lib.cleanSource ../../../services/dist-manager/files;
 
     perl = "${pkgs.perl}/bin/perl";
 
     inherit (serverInfo) canonicalName;
 
-    inherit urlPrefix;
+    inherit urlPrefix directoriesConf;
 
-    defaultPath = ""; # !!!
-    
+    defaultPath = "${pkgs.coreutils}/bin:${pkgs.findutils}/bin";
+
+    saxon8 = pkgs.saxonb;
+
     # Do a syntax check on the generated file.
     postInstall = ''
       $perl -c $out/cgi-bin/create-dist.pl # !!! should use -T
@@ -45,28 +67,20 @@ in {
 
     Alias ${urlPrefix}/css ${staticFiles}/css
 
-
     ScriptAlias ${urlPrefix}/cgi-bin ${staticFiles}/cgi-bin
 
     <Directory ${staticFiles}/cgi-bin>
-        AllowOverride FileInfo AuthConfig Limit
-        Options MultiViews SymLinksIfOwnerMatch ExecCGI
+        Options SymLinksIfOwnerMatch ExecCGI
         SetHandler cgi-script
 
-        # !!! this shouldn't be here
         Order allow,deny
-        Allow from 131.211.0.0/255.255.0.0 # *.cs.uu.nl
-        Allow from 130.145.0.0/255.255.0.0 # philips.com
-        Allow from 130.161.158.181 # TUD supervisor
-        Allow from 192.168.1.0/24 # TUD builders
-        Allow from 127.0.0.1
+        ${pkgs.lib.concatMapStrings (ip: "Allow from ${ip}\n") uploaderIPs}
 
         Require valid-user
         AuthType Basic
         AuthName "Nix Upload"
-        AuthUserFile ${distConfDir}/upload_passwords
+        AuthUserFile ${distPasswords}
     </Directory>
-
 
     Alias ${urlPrefix} ${distDir}/
 
