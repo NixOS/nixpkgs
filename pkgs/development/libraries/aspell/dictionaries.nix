@@ -5,7 +5,7 @@ let
   /* Function to compile an Aspell dictionary.  Fortunately, they all
      build in the exact same way. */
   buildDict =
-    {shortName, fullName, src}:
+    {shortName, fullName, src, postInstall ? ""}:
 
     stdenv.mkDerivation {
       name = "aspell-dict-${shortName}";
@@ -17,6 +17,8 @@ let
       dontAddPrefix = true;
 
       preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
+
+      inherit postInstall;
 
       meta = {
         description = "Aspell dictionary for ${fullName}";
@@ -77,6 +79,10 @@ in {
       url = mirror://gnu/aspell/dict/nl/aspell-nl-0.50-2.tar.bz2;
       sha256 = "0ffb87yjsh211hllpc4b9khqqrblial4pzi1h9r3v465z1yhn3j4";
     };
+    # Emacs expects a language called "nederlands".
+    postInstall = ''
+      echo "add nl.rws" > $out/lib/aspell/nederlands.multi
+    '';
   };
     
   ru = buildDict {
