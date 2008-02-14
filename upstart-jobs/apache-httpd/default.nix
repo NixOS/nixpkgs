@@ -9,33 +9,31 @@ let
   httpd = pkgs.apacheHttpd;
 
 
-  serverInfo = {
+  makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
     canonicalName =
-      "http://" +
-      cfg.hostName +
+      "http://${cfg.hostName}" +
       (if cfg.httpPort != 80 then ":${toString cfg.httpPort}" else "");
     serverConfig = cfg;
     fullConfig = config; # machine config
   };
 
 
-  subservices =
+  callSubservices = serverInfo: defs:
     let f = svc:
       let config = pkgs.lib.addDefaultOptionValues res.options svc.config;
           res = svc.function {inherit config pkgs serverInfo;};
       in res;
-    in map f cfg.extraSubservices;
+    in map f defs;
+
+
+  allSubservices = callSubservices (makeServerInfo cfg) cfg.extraSubservices;
 
 
   # !!! should be in lib
   writeTextInDir = name: text:
     pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
   
-
-  documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
-    pkgs.runCommand "empty" {} "ensureDir $out";
-
 
   # Names of modules from ${httpd}/modules that we want to load.
   apacheModules = 
@@ -84,6 +82,7 @@ let
   '';
 
 
+  # !!! integrate with virtual hosting below
   sslConf = ''
     Listen ${toString cfg.httpsPort}
 
@@ -128,34 +127,71 @@ let
   '';
 
 
-  documentRootConf = ''
-    DocumentRoot "${documentRoot}"
+  perServerConf = isMainServer: cfg: let
 
-    <Directory "${documentRoot}">
-        Options Indexes FollowSymLinks
-        AllowOverride None
-        Order allow,deny
-        Allow from all
-    </Directory>
-  '';
+    serverInfo = makeServerInfo cfg;
 
+    subservices = callSubservices serverInfo cfg.extraSubservices;
 
-  robotsTxt = pkgs.writeText "robots.txt" ''
-    ${pkgs.lib.concatStrings (map (svc: svc.robotsEntries) subservices)}
-  '';
-  
-  robotsConf = ''
-    Alias /robots.txt ${robotsTxt}
+    documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
+      pkgs.runCommand "empty" {} "ensureDir $out";
+
+    documentRootConf = ''
+      DocumentRoot "${documentRoot}"
+
+      <Directory "${documentRoot}">
+          Options Indexes FollowSymLinks
+          AllowOverride None
+          Order allow,deny
+          Allow from all
+      </Directory>
+    '';
+
+    robotsTxt = pkgs.writeText "robots.txt" ''
+      ${concatMapStrings (svc: svc.robotsEntries) subservices}
+    '';
+
+    robotsConf = ''
+      Alias /robots.txt ${robotsTxt}
+    '';
+
+  in ''
+    ServerName ${serverInfo.canonicalName}
+
+    ${if isMainServer || cfg.adminAddr != "" then ''
+      ServerAdmin ${cfg.adminAddr}
+    '' else ""}
+
+    ${robotsConf}
+
+    ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
+
+    ${
+      let makeDirConf = elem: ''
+            Alias ${elem.urlPath} ${elem.dir}/
+            <Directory ${elem.dir}>
+                Order allow,deny
+                Allow from all
+                AllowOverride None
+            </Directory>
+          '';
+      in concatMapStrings makeDirConf cfg.servedDirs
+    }
+
+    ${
+      let makeFileConf = elem: ''
+            Alias ${elem.urlPath} ${elem.file}
+          '';
+      in concatMapStrings makeFileConf cfg.servedFiles
+    }
+
+    ${concatMapStrings (svc: svc.extraConfig) subservices}
   '';
 
   
   httpdConf = pkgs.writeText "httpd.conf" ''
   
     ServerRoot ${httpd}
-
-    ServerAdmin ${cfg.adminAddr}
-
-    ServerName ${serverInfo.canonicalName}
 
     PidFile ${cfg.stateDir}/httpd.pid
 
@@ -172,10 +208,10 @@ let
     ${let
         load = {name, path}: "LoadModule ${name}_module ${path}\n";
         allModules =
-          pkgs.lib.concatMap (svc: svc.extraModulesPre) subservices ++
+          pkgs.lib.concatMap (svc: svc.extraModulesPre) allSubservices ++
           map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          pkgs.lib.concatMap (svc: svc.extraModules) subservices;
-      in pkgs.lib.concatStrings (map load allModules)
+          pkgs.lib.concatMap (svc: svc.extraModules) allSubservices;
+      in concatMapStrings load allModules
     }
 
     ${if cfg.enableUserDir then ''
@@ -232,30 +268,32 @@ let
         Allow from all
     </Directory>
 
-    ${robotsConf}
+    # Generate directives for the main server.
+    ${perServerConf true cfg}
     
-    ${documentRootConf}
+    # Always enable virtual hosts; it doesn't seem to hurt.
+    NameVirtualHost *:*
 
-    ${
-      let makeDirConf = elem: ''
-            Alias ${elem.urlPath} ${elem.dir}/
-            <Directory ${elem.dir}>
-                Order allow,deny
-                Allow from all
-                AllowOverride None
-            </Directory>
+    # Catch-all: since this is the first virtual host, any
+    # non-matching requests will use the main server configuration.
+    <VirtualHost *:*>
+    </VirtualHost>
+
+    ${let
+        perServerOptions = import ./per-server-options.nix {
+          inherit (pkgs.lib) mkOption;
+          forMainServer = false;
+        };
+        makeVirtualHost = vhostIn:
+          let
+            # Fill in defaults for missing options.
+            vhost = pkgs.lib.addDefaultOptionValues perServerOptions vhostIn;
+          in ''
+            <VirtualHost *:*>
+                ${perServerConf false vhost}
+            </VirtualHost>
           '';
-      in pkgs.lib.concatStrings (map makeDirConf cfg.servedDirs)
-    }
-
-    ${
-      let makeFileConf = elem: ''
-            Alias ${elem.urlPath} ${elem.file}
-          '';
-      in pkgs.lib.concatStrings (map makeFileConf cfg.servedFiles)
-    }
-
-    ${pkgs.lib.concatStrings (map (svc: svc.extraConfig) subservices)}
+      in concatMapStrings makeVirtualHost cfg.virtualHosts}
   '';
 
     
@@ -276,7 +314,7 @@ in
     }
   ];
 
-  extraPath = [httpd] ++ pkgs.lib.concatMap (svc: svc.extraPath) subservices;
+  extraPath = [httpd] ++ pkgs.lib.concatMap (svc: svc.extraPath) allSubservices;
 
   # Statically verify the syntactic correctness of the generated
   # httpd.conf.
@@ -306,10 +344,10 @@ in
 
     ${
       let f = {name, value}: "env ${name}=${value}\n";
-      in pkgs.lib.concatStrings (map f (pkgs.lib.concatMap (svc: svc.globalEnvVars) subservices))
+      in pkgs.lib.concatStrings (map f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices))
     }
 
-    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) subservices)}
+    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
 
     ${pkgs.diffutils}/bin:${pkgs.gnused}/bin
 
