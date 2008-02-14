@@ -68,6 +68,8 @@ int main(int argc, char * * argv)
     if (len == -1) abort();
     if (len == sizeof(real)) abort();
     real[len] = 0;
+
+    close(fdSelf);
     
     //printf("real = %s, len = %d\n", real, len);
 
