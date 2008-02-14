@@ -56,7 +56,7 @@ rec {
   # Map and concatenate the result.
   concatMap = f: list: concatLists (map f list);
 
-  concatMapStrings = f: list: pkgs.lib.concatStrings (map f list);
+  concatMapStrings = f: list: concatStrings (map f list);
   
 
   # Place an element between each element of a list, e.g.,
