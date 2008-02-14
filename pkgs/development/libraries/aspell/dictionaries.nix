@@ -54,6 +54,15 @@ in {
     };
   };
     
+  eo = buildDict {
+    shortName = "eo-0.50-2";
+    fullName = "Esperanto";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/eo/aspell-eo-0.50-2.tar.bz2;
+      sha256 = "19vhdm599ng98nq8jxspgvanv5hwryp0qri1vx6zsjl0jx1acqbc";
+    };
+  };
+
   fr = buildDict {
     shortName = "fr-0.50-3";
     fullName = "French";
