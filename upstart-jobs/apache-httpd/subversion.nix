@@ -373,9 +373,9 @@ in {
     };
 
     dataDir = mkOption {
-      default = "/no/such/path/exists";
+      example = "/data/subversion";
       description = "
-        Place to put SVN repository.
+        Path to the directory that holds the repositories, user database, etc.
       ";
     };
 

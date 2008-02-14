@@ -3,31 +3,8 @@
 let
 
   inherit (pkgs.lib) mkOption;
-
-  urlPrefix = "/release";
-  distDir = "/tmp/dist";
-  distPasswords = "/tmp/dist-conf/upload_passwords";
-
-  directoriesConf = pkgs.writeText "directories.conf" ''
-    nix          ${distDir}/nix          nix-upload
-    nix-cache    ${distDir}/nix-cache    nix-upload stratego-upload autobundle-upload swe-upload meta-environment-upload hut-upload
-    test         ${distDir}/test         test-upload nix-upload
-    test-cache   ${distDir}/test-cache   test-upload nix-upload
-    stratego     ${distDir}/stratego     stratego-upload
-    autobundle   ${distDir}/autobundle   autobundle-upload
-    courses      ${distDir}/courses      swe-upload
-    meta-environment ${distDir}/meta-environment meta-environment-upload
-    hut          ${distDir}/hut          hut-upload
-  '';
-
-  uploaderIPs = [
-    "127.0.0.1"
-    "10.0.0.0/255.0.0.0"
-    "131.211.0.0/255.255.0.0" # *.cs.uu.nl
-    "130.145.0.0/255.255.0.0" # philips.com
-    "130.161.158.181" # TUD supervisor
-  ];
-
+  inherit (config) urlPrefix distDir;
+  
   staticFiles = substituteInAll {
     name = "dist-manager-files";
     src = pkgs.lib.cleanSource ../../../services/dist-manager/files;
@@ -36,7 +13,9 @@ let
 
     inherit (serverInfo) canonicalName;
 
-    inherit urlPrefix directoriesConf;
+    inherit urlPrefix;
+
+    directoriesConf = pkgs.writeText "directories.conf" config.directoriesConf;
 
     defaultPath = "${pkgs.coreutils}/bin:${pkgs.findutils}/bin";
 
@@ -74,12 +53,12 @@ in {
         SetHandler cgi-script
 
         Order allow,deny
-        ${pkgs.lib.concatMapStrings (ip: "Allow from ${ip}\n") uploaderIPs}
+        ${pkgs.lib.concatMapStrings (ip: "Allow from ${ip}\n") config.uploaderIPs}
 
         Require valid-user
         AuthType Basic
         AuthName "Nix Upload"
-        AuthUserFile ${distPasswords}
+        AuthUserFile ${config.distPasswords}
     </Directory>
 
     Alias ${urlPrefix} ${distDir}/
@@ -110,6 +89,46 @@ in {
   extraPath = [];
 
   options = {
+
+    urlPrefix = mkOption {
+      default = "/dist";
+      description = ''
+        The URL prefix under which the release pages appear.
+      '';
+    };
+
+    distDir = mkOption {
+      example = "/data/dist";
+      description = ''
+        Path to the top-level release directory.
+      '';
+    };
+
+    distPasswords = mkOption {
+      example = "/data/dist-passwords";
+      description = ''
+        Location of the password file for the uploading of releases.
+      '';
+    };
+
+    uploaderIPs = mkOption {
+      default = [];
+      example = ["127.0.0.1" "192.168.1.0/255.255.255.0"];
+      description = ''
+        IP address or address ranges of the machines that are allowed to upload releases.
+      '';
+    };
+
+    directoriesConf = mkOption {
+      example = ''
+        fnord /data/dist/fnord fnord-upload
+      '';
+      description = ''
+        The per-project release directories, with each line containing
+        the project name, the corresponding release directory, and the
+        users that can upload to that directory.
+      '';
+    };
 
   };  
 
