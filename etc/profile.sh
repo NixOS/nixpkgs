@@ -55,8 +55,10 @@ NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
 for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
     export INFOPATH=$i/info:$i/share/info:$INFOPATH
-    export ASPELL_EXTRA_DICT_DIRS="$i/lib/aspell${ASPELL_EXTRA_DICT_DIRS:+,}$ASPELL_EXTRA_DICT_DIRS"
 done
+
+# Search directory for Aspell dictionaries.
+export ASPELL_CONF="dict-dir $NIX_USER_PROFILE_DIR/profile/lib/aspell"
 
 export PATH=$HOME/bin:$PATH
 
