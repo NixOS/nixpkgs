@@ -8,6 +8,8 @@ let
 
   httpd = pkgs.apacheHttpd;
 
+  inherit (pkgs.lib) addDefaultOptionValues optional concatMap concatMapStrings;
+  
 
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
@@ -21,7 +23,7 @@ let
 
   callSubservices = serverInfo: defs:
     let f = svc:
-      let config = pkgs.lib.addDefaultOptionValues res.options svc.config;
+      let config = addDefaultOptionValues res.options svc.config;
           res = svc.function {inherit config pkgs serverInfo;};
       in res;
     in map f defs;
@@ -52,7 +54,7 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite"
-    ] ++ pkgs.lib.optional cfg.enableSSL "ssl_module";
+    ] ++ optional cfg.enableSSL "ssl_module";
     
 
   loggingConf = ''
@@ -208,9 +210,9 @@ let
     ${let
         load = {name, path}: "LoadModule ${name}_module ${path}\n";
         allModules =
-          pkgs.lib.concatMap (svc: svc.extraModulesPre) allSubservices ++
+          concatMap (svc: svc.extraModulesPre) allSubservices ++
           map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          pkgs.lib.concatMap (svc: svc.extraModules) allSubservices;
+          concatMap (svc: svc.extraModules) allSubservices;
       in concatMapStrings load allModules
     }
 
@@ -287,7 +289,7 @@ let
         makeVirtualHost = vhostIn:
           let
             # Fill in defaults for missing options.
-            vhost = pkgs.lib.addDefaultOptionValues perServerOptions vhostIn;
+            vhost = addDefaultOptionValues perServerOptions vhostIn;
           in ''
             <VirtualHost *:*>
                 ${perServerConf false vhost}
@@ -314,7 +316,7 @@ in
     }
   ];
 
-  extraPath = [httpd] ++ pkgs.lib.concatMap (svc: svc.extraPath) allSubservices;
+  extraPath = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
   # Statically verify the syntactic correctness of the generated
   # httpd.conf.
@@ -344,7 +346,7 @@ in
 
     ${
       let f = {name, value}: "env ${name}=${value}\n";
-      in pkgs.lib.concatStrings (map f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices))
+      in concatMapStrings f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices)
     }
 
     env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
