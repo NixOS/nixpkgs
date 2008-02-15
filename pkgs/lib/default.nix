@@ -55,6 +55,8 @@ rec {
   # Map and concatenate the result.
   concatMap = f: list: concatLists (map f list);
 
+  concatMapStrings = f: list: concatStrings (map f list);
+  
 
   # Place an element between each element of a list, e.g.,
   # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
@@ -90,6 +92,10 @@ rec {
       else if builtins ? hasAttr && builtins.hasAttr attr e
       then getAttr (tail attrPath) default (builtins.getAttr attr e)
       else default;
+
+  # shortcut for getAttr ["name"] default attrs
+  maybeAttr = name: default: attrs:
+    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
 
   # Filter a list using a predicate; that is, return a list containing
@@ -153,15 +159,16 @@ rec {
        substring (sub lenFileName lenExt) lenFileName fileName == ext;
 
   hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
-       
+
+         
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSource =
     let filter = name: type: let baseName = baseNameOf (toString name); in ! (
       # Filter out Subversion and CVS directories.
-      (type == "directory" && (name == ".svn" || name == "CVS")) ||
+      (type == "directory" && (baseName == ".svn" || baseName == "CVS")) ||
       # Filter out backup files.
-      (hasSuffix "~" name)
+      (hasSuffix "~" baseName)
     );
     in src: builtins.filterSource filter src;
 
@@ -316,6 +323,18 @@ rec {
   debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
 
+  # this can help debug your code as well - designed to not produce thousands of lines
+  traceWhatis = x : __trace (whatis x) x;
+  whatis = x : 
+      if (__isAttrs x) then
+          if (x ? outPath) then "x is a derivation with name ${x.name}"
+          else "x is an attr set with attributes ${builtins.toString (__attrNames x)}"
+      else if (__isFunction x) then "x is a function"
+      else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
+      else if (x == true || x == false) then builtins.toString x
+      else "x is propably a string starting, starting characters: ${__substring 0 50 x}..";
+
+
   innerClosePropagation = ready: list: if list == [] then ready else
     if (head list) ? propagatedBuildInputs then 
       innerClosePropagation (ready ++ [(head list)]) 
@@ -323,6 +342,16 @@ rec {
       innerClosePropagation (ready ++ [(head list)]) (tail list);
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
+
+  stringToCharacters = s : let l = __stringLength s; in
+    if (__lessThan l 1) then [""] else  [(__substring 0 1 s)] ++ stringToCharacters (__substring 1 (__sub l 1) s);
+
+  # should this be implemented as primop ? Yes it should..
+  escapeShellArg = s :
+    let escapeChar = x : if ( x == "'" ) then "'\"'\"'" else x;
+    in "'" + concatStrings (map escapeChar (stringToCharacters s) ) +"'";
+
+  defineShList = name : list : "\n${name}=(${concatStringsSep " " (map escapeShellArg list)})\n";
 
   # calls a function (f attr value ) for each record item. returns a list
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
@@ -356,6 +385,12 @@ rec {
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
+
+  # pick attrs subset_attr_names and apply f 
+  subsetmap = f : attrs : subset_attr_names : 
+    listToAttrs (fold ( attr : r : if __hasAttr attr attrs
+          then r ++ [ (  nv attr ( f (__getAttr attr attrs) ) ) ] else r ) []
+      subset_attr_names );
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
 
