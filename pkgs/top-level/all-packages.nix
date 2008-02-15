@@ -1861,6 +1861,10 @@ rec {
     inherit cabal;
   };
 
+  guileLint = import ../development/tools/guile/guile-lint {
+    inherit fetchurl stdenv guile;
+  };
+
   # happy = import ../development/tools/parsing/happy {
   #   inherit fetchurl stdenv perl ghc;
   # };
