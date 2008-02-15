@@ -1,10 +1,10 @@
 {stdenv, fetchurl, m4, perl}:
 
-stdenv.mkDerivation {
-  name = "libtool-1.5.22";
+stdenv.mkDerivation rec {
+  name = "libtool-1.5.26";
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/libtool/libtool-1.5.22.tar.gz;
-    md5 = "8e0ac9797b62ba4dcc8a2fb7936412b0";
+    url = "http://ftp.gnu.org/gnu/libtool/" + name + ".tar.gz";
+    sha256 = "029ggq5kri1gjn6nfqmgw4w920gyfzscjjxbsxxidal5zqsawd8w";
   };
   buildInputs = [m4 perl];
 }
