@@ -1648,6 +1648,7 @@ rec {
    inherit fetchurl flex bison apacheHttpd mysql; # gettext;
    inherit libxml2;
    inherit postgresql;
+   inherit zlib;
    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
   };
 

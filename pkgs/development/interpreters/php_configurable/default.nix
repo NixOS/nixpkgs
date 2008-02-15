@@ -411,6 +411,7 @@ args:
 
 # Extensions 
 
+          zlib          =     { cfgOption = "--with-zlib=${args.zlib}"; pass = "zlib"; };
 
           libxml2       =     { cfgOption = "--with-libxml-dir=\$libxml2";
                                 pass = { inherit (args) libxml2; }; 
@@ -459,7 +460,7 @@ args:
     };
 
   defaults = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
-  optionals = [ "libxml2" "gettext" "postgresql"];
+  optionals = [ "libxml2" "gettext" "postgresql" "zlib"];
 
   # Don't konw wether they should be default.. I use them - Marc
 
