@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, ghostscript}:
 
 stdenv.mkDerivation {
   name = "lout-3.36";
@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     sha256 = "b689cbe12074be8817c90070b162593fc9cc51f2f8868701833ff599b24fd4ad";
   };
 
+  buildInputs = [ ghostscript ];
   builder = ./builder.sh;
 
   meta = {

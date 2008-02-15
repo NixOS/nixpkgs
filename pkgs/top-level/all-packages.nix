@@ -656,7 +656,7 @@ rec {
   };
 
   lout = import ../tools/typesetting/lout {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ghostscript;
   };
 
   lzma = import ../tools/compression/lzma {
