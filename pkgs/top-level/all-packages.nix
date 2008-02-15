@@ -5777,6 +5777,10 @@ rec {
     inherit fetchurl stdenv x11 mesa;
   };
 
+  xlockmore = import ../misc/screensavers/xlockmore {
+    inherit fetchurl stdenv pam x11 freetype;
+  };
+
   saneBackends = import ../misc/sane-backends {
     inherit fetchurl stdenv libusb;
 	gt68xxFirmware = 
