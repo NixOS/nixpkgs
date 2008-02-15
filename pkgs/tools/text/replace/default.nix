@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   makeFlags = "TREE=\$(out)";
 
+  postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
+
   meta = {
     homepage = http://replace.richardlloyd.org.uk/;
     description = "A tool to replace verbatim strings";

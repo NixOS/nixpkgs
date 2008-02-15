@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   unpackCmd = "(mkdir cron && cd cron && sh $src)";
 
   preBuild = "
-    substituteInPlace Makefile --replace '-o root' '' --replace 111 755
+    substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
     makeFlags=\"DESTROOT=$out\"
   ";
 

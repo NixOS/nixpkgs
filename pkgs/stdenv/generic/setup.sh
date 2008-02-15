@@ -281,7 +281,7 @@ substitute() {
         args[${#args[@]}]="$replacement"
     done
 
-    replace -e -s "${args[@]}" < "$input" > "$output".tmp
+    replace-literal -e -s "${args[@]}" < "$input" > "$output".tmp
     if test -x "$output"; then
         chmod +x "$output".tmp
     fi
