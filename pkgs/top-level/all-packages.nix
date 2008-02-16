@@ -1826,6 +1826,10 @@ rec {
 
   flex = flex254a;
 
+  flex2534 = import ../development/tools/parsing/flex/flex-2.5.34.nix {
+    inherit fetchurl stdenv yacc m4;
+  };
+
   flex2533 = import ../development/tools/parsing/flex/flex-2.5.33.nix {
     inherit fetchurl stdenv yacc m4;
   };
