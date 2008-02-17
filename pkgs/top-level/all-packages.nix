@@ -5153,7 +5153,7 @@ rec {
 
   # = urxvt
   rxvt_unicode = import ../applications/misc/rxvt_unicode {
-    inherit lib fetchurl stdenv perl;
+    inherit lib fetchurl stdenv;
     inherit (xlibs) libXt libX11 libXft;
   };
 
