@@ -5263,6 +5263,10 @@ rec {
     inherit fetchurl stdenv alsaLib;
   };
 
+  tla = import ../applications/version-management/arch {
+    inherit fetchurl stdenv diffutils gnutar gnupatch which;
+  };
+
   unison = import ../applications/networking/sync/unison {
     inherit fetchurl stdenv ocaml lablgtk makeWrapper;
     inherit (xorg) xset fontschumachermisc;
