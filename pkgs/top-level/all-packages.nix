@@ -4457,6 +4457,11 @@ rec {
     inherit fetchurl stdenv python makeWrapper;
   };
 
+  bitlbee = import ../applications/networking/instant-messengers/bitlbee {
+    inherit fetchurl stdenv gnutls pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   # commented out because it's using the new configuration style proposal which is unstable
   #biew = import ../applications/misc/biew {
   #  inherit lib stdenv fetchurl ncurses;

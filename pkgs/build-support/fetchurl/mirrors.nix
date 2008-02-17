@@ -68,4 +68,13 @@ rec {
     http://www.wikifusion.info/nongnu/
   ];
 
+  # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .
+  bitlbee = [
+    http://get.bitlbee.org/
+    http://get.bitlbee.be/
+    http://get.us.bitlbee.org/
+    http://ftp.snt.utwente.nl/pub/software/bitlbee/
+    http://bitlbee.intergenia.de/
+  ];
+
 }
