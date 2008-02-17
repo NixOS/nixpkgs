@@ -1,10 +1,9 @@
 args: with args;
-(stdenv.mkDerivation ({
+(stdenv.mkDerivation (rec {
   name = "ImageMagick-6.3.7-10";
 
   src = fetchurl {
-    # Warning: Source tarballs seem to vanish very quickly from this site!
-    url = ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.3.7-10.tar.bz2;
+    url = "mirror://imagemagick/" + name + ".tar.bz2";
     sha256 = "c00fb0d21baa292a55bb0e30ca30ffe2571e0d3df9e692da441aa81ff1cdde10";
   };
 

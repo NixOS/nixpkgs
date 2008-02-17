@@ -77,4 +77,31 @@ rec {
     http://bitlbee.intergenia.de/
   ];
 
+  # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php .
+  imagemagick = [
+    ftp://gd.tuwien.ac.at/pub/graphics/ImageMagick/
+    ftp://ftp.carnet.hr/pub/misc/imagemagick/
+    ftp://ftp.fu-berlin.de/unix/X11/graphics/ImageMagick
+    http://imagemagick.linux-mirror.org/download
+    http://image_magick.veidrodis.com/image_magick/
+    http://imagemagick.oss-mirror.org/download
+    ftp://ftp.kddlabs.co.jp/graphics/ImageMagick/
+    ftp://ftp.u-aizu.ac.jp/pub/graphics/image/ImageMagick/imagemagick.org
+    ftp://zoffy.asahi-net.or.jp/pub/graphics/ImageMagick
+    ftp://ftp.nluug.nl/pub/ImageMagick
+    http://ftp.surfnet.nl/pub/ImageMagick/
+    ftp://sunsite.icm.edu.pl/packages/ImageMagick/
+    ftp://ftp.chg.ru/packages/ImageMagick
+    http://ftp.chg.ru/packages/ImageMagick
+    http://ftp.efair.ru/pub/software/graphics/ImageMagick/
+    ftp://ftp.efair.ru/pub/software/graphics/ImageMagick/
+    ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick
+    http://www.smudge-it.co.uk/pub/imagemagick/
+    ftp://www.rx-host.net/pub/graphics/ImageMagick
+    ftp://ftp.fifi.org/pub/ImageMagick/
+    ftp://ftp.imagemagick.org/pub/ImageMagick
+    ftp://ftp.imagemagick.net/pub/ImageMagick
+    http://imagemagick.site2nd.org/imagemagick
+  ];
+
 }
