@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 	};
 
 	buildInputs = [cmake];
-	propagatedBuildInputs = [qt];
+	propagatedBuildInputs = [qt stdenv.gcc.libc];
 	meta = {
 		description = "Qt bindings for telepathy";
 	};

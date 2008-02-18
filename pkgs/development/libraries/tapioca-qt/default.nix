@@ -1,5 +1,5 @@
 args: with args;
-let rev = "2031"; in
+let rev = "2066"; in
 stdenv.mkDerivation {
 	name = "tapioca-qt-r${rev}";
 	src = fetchsvn {
