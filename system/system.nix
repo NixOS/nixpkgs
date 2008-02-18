@@ -140,6 +140,7 @@ rec {
   modulesTree = pkgs.module_aggregation (
     [kernel]
     ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
+    ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
     ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007
