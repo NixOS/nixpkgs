@@ -177,8 +177,6 @@ let
   ++ optional config.services.postgresql.enable
     (import ../upstart-jobs/postgresql.nix {
       inherit config pkgs;
-      startDependency = if config.services.gw6c.enable then 
-        "gw6c" else "network-interfaces";
     })
 
   # EJabberd service
