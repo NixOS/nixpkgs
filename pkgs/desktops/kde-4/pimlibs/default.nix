@@ -1,13 +1,13 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdepimlibs-4.0.0";
+  name = "kdepimlibs-" + version;
   
   src = fetchurl {
-    url = "mirror://kde/stable/4.0.0/src/${name}.tar.bz2";
-	sha256 = "0vixx2vh7qgysnbzvykf20362p22jzvl8snpqaknay3v3b2k0br0";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "0naqx0dwpabnxx1w498lnnypj369z5k5djnhwawlnlb9xmd1r7sw";
   };
 
-  propagatedBuildInputs = [kdelibs boost gpgme cyrus_sasl openldap];
+  propagatedBuildInputs = [kde4.libs boost gpgme cyrus_sasl openldap];
   buildInputs = [cmake];
 }

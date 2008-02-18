@@ -1,13 +1,13 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdebase-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdebase-" + version;
 
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdebase-4.0.0.tar.bz2;
-    sha256 = "1419zijcrx6nk10nay3dbv0vi8525hzcqkm2fw8cvw11i4mk909q";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "1cdswhavhk6wjdxwpsmmvq1qqw2a5mdyvvxk9fnxn9fnic7q0603";
   };
 
-  propagatedBuildInputs = [kdepimlibs libusb];
+  propagatedBuildInputs = [kde4.pimlibs kde4.support.qimageblitz libusb];
   buildInputs = [cmake];
 }

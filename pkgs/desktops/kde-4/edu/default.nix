@@ -1,15 +1,15 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdeedu-4.0.0";
+  name = "kdeedu-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdeedu-4.0.0.tar.bz2;
-    sha256 = "1wjy1rm7aiib1lv61wx7mcbkbpkk6phcz1q6dy51x0hfrc3rdkg4";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "1j0swj38qdx0azm2dnx4l7if5dxak1pmcr90ynfjrcifkm68mm3k";
   };
 
-  propagatedBuildInputs = [kdepimlibs boost readline openbabel ocaml libusb
-  facile python indilib libnova];
+  propagatedBuildInputs = [kde4.pimlibs boost readline openbabel ocaml libusb
+  facile python indilib libnova kde4.support.eigen];
   buildInputs = [cmake];
   myCmakeFiles = ./myCmakeFiles;
   patchPhase = "

@@ -1,16 +1,15 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "kdebase-runtime-4.0.0";
+  name = "kdebase-runtime-" + version;
   
   src = fetchurl {
-    url = "mirror://kde/stable/4.0.0/src/${name}.tar.bz2";
-    sha256 = "0svsn9gzg3ka77j7z71fy502a09w9gp9jd2q2y1w07ahpdil5p7h";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "05f5z705483509i1z6z0kgj0226smhp4cpj733h29bvwa76yi3b4";
   };
 
-  propagatedBuildInputs = [kdepimlibs libusb xineLib samba];
+  propagatedBuildInputs = [kde4.pimlibs libusb xineLib samba];
   buildInputs = [cmake];
-  phononPatch = ./phonon.patch;
-  patchPhase = "fixCmakeDbusCalls; patch -p0 < ${phononPatch}";
+  patchPhase = "fixCmakeDbusCalls";
 }
 

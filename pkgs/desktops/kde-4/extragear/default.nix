@@ -1,17 +1,16 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "extragear-plasma-4.0.0";
+stdenv.mkDerivation rec {
+  name = "extragear-plasma-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/extragear/extragear-plasma-4.0.0.tar.bz2;
-    sha256 = "19gmvqkal11gg67gfmdivxbhwvggm2i6ad642984d97yicms7s9k";
+    url = "mirror://kde/stable/${version}/src/extragear/${name}.tar.bz2";
+    sha256 = "1pwvsmdb4z9av6bqh1yk23wgss1wc07rwq47gyxvvi54idpgirx9";
   };
 
-  buildInputs = [ kdeworkspace cmake ];
+  buildInputs = [ kde4.workspace cmake ];
   patchPhase = ''
-  sed -e 's@<Plasma@<KDE/Plasma@' -i ../applets/*/*.h
-  echo ${kdeworkspace}
-  fixCmakeDbusCalls ${kdeworkspace}
+    sed -e '/^#include/s@<Plasma@<KDE/Plasma@' -i ../applets/*/*.{h,cpp} 
+    fixCmakeDbusCalls ${kde4.workspace}
   '';
 }

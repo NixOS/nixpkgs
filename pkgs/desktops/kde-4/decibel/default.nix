@@ -1,11 +1,16 @@
 args: with args;
+let
+  rev = "773861";
+in
 stdenv.mkDerivation {
-	name = "decibel-0.5.0";
+	name = "decibel-r${rev}";
 
-	src = fetchurl {
-		url = http://decibel.kde.org/fileadmin/downloads/decibel/releases/decibel-0.5.0.tar.gz;
-		sha256 = "07visasid4mpzm0ba5j9qy0lxxb6451lvbr2gnc1vzfvjagffqz4";
+	src = fetchsvn {
+		url = svn://anonsvn.kde.org/home/kde/trunk/playground/pim/decibel;
+    sha256 = "073fksn5dl7vkkiwvl9s56n9ymnlxy27kbz1h1fryq6r8x924vjc";
+    inherit rev;
 	};
 
-	buildInputs = [kdelibs kdebase ];
+	propagatedBuildInputs = [ kde4.libs tapioca_qt ];
+  buildInputs = [cmake];
 }

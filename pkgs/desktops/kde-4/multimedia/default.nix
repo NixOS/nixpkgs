@@ -1,13 +1,13 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdemultimedia-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdemultimedia-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdemultimedia-4.0.0.tar.bz2;
-    sha256 = "14axr1x09k67vb3vaw4g9zg4mq7j14xn9d90kifwap7b76iljbi5";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "0njp8s4vmph6p0h740ynhfvnysmvin2ddpxwvxs9vzh7nd37izf0";
   };
 
-  propagatedBuildInputs = [kdeworkspace libogg flac cdparanoia lame libvorbis];
+  propagatedBuildInputs = [kde4.workspace libogg flac cdparanoia lame libvorbis];
   buildInputs = [cmake];
 }

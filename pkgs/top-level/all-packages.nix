@@ -5078,13 +5078,12 @@ rec {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
-	  cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell kerberos
+      cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell kerberos
       shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
-	  xineLib libgphoto2 djvulibre libogg lame libvorbis poppler readline
-	  saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
-	  openbabel ocaml facile stdenv jasper fam indilib libnova
-	  libarchive dbus;
-	flac = builtins.getAttr "1.1.2" flacAlts;
+      xineLib libgphoto2 djvulibre libogg lame libvorbis poppler readline
+      saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
+      openbabel ocaml facile stdenv jasper fam indilib libnova libxklavier
+      libarchive dbus jdk kde4 avahi tapioca_qt flac mysql libassuan libgpgerror;
 	cdparanoia = cdparanoiaIII;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto

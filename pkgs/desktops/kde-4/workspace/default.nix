@@ -1,15 +1,15 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdebase-workspace-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdebase-workspace-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdebase-workspace-4.0.0.tar.bz2;
-    sha256 = "08sgp7jaqljdxwsgr5lyyfd6w734yv24zswps1mchmhj01vz1fcg";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "0mnww5j7v381xf763gcfqp41klng40hb3283blnxcw2p5fp13b3k";
   };
 
-  propagatedBuildInputs = [kdelibs kdepimlibs stdenv.gcc.libc libusb
-  libpthreadstubs];
+  propagatedBuildInputs = [kde4.pimlibs kde4.support.qimageblitz stdenv.gcc.libc
+    libusb libpthreadstubs libxklavier];
   buildInputs = [cmake];
   patchPhase = "fixCmakeDbusCalls";
 }

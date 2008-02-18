@@ -1,13 +1,13 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdegames-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdegames-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdegames-4.0.0.tar.bz2;
-    sha256 = "09ilgi6l5sq4gavskyhfrv8ra3n3r6xdn8cdc7fm2fi3zah4innn";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "11am026l68dm3v8mxa1phsizsy73c999493dkqc2kpff2kvhbxvs";
   };
 
-  propagatedBuildInputs = [kdepimlibs];
+  propagatedBuildInputs = [kde4.pimlibs];
   buildInputs = [cmake];
 }

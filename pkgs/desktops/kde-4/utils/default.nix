@@ -1,14 +1,14 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdeutils-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdeutils-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdeutils-4.0.0.tar.bz2;
-    sha256 = "0ha31z79ikkbknhyklihzys0w4jfz4qx8jiyja0gwh428f7mxqj4";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "1zp6czjxpjvqb3z81k45bv4pqb9pj4snc35xx8bnish829fhnncy";
   };
 
-  propagatedBuildInputs = [kdeworkspace gmp libzip python libarchive];
+  propagatedBuildInputs = [kde4.workspace gmp libzip python libarchive];
   buildInputs = [cmake];
 # TODO : tpctl
   patchPhase="fixCmakeDbusCalls";

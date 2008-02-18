@@ -1,13 +1,13 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "kdetoys-4.0.0";
+stdenv.mkDerivation rec {
+  name = "kdetoys-" + version;
   
   src = fetchurl {
-    url = mirror://kde/stable/4.0.0/src/kdetoys-4.0.0.tar.bz2;
-    sha256 = "0j7kk4ripg2sw4m8ym96aiyi8rsfb4p7kqp9kmik850flqighhsk";
+    url = "mirror://kde/stable/${version}/src/${name}.tar.bz2";
+    sha256 = "0jvmjbnc79adgf7g70s1vz2lvwpl6fx2520lmzc6pnrvl0qhcs4i";
   };
 
-  propagatedBuildInputs = [kdeworkspace];
+  propagatedBuildInputs = [kde4.workspace];
   buildInputs = [cmake];
 }
