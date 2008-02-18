@@ -1,15 +1,28 @@
-{stdenv, fetchurl, ncurses, gettext}:
+args: with args;
+stdenv.mkDerivation (rec {
+  pname = "nano";
+  version = "2.0.7";
 
-stdenv.mkDerivation {
-  name = "nano-2.0.6";
+  name = "${pname}-${version}";
+
   src = fetchurl {
-    url = mirror://gnu/nano/nano-2.0.6.tar.gz;
-    sha256 = "0p2xfs4jzj7dvp208qdrxij7x8gbwxgnrdm7zafgpbbg1bvxh40d";
+    url = "mirror://gnu/nano/${name}.tar.gz";
+    sha256 = "5dc783c412c4d1ff463c450d2a2f9e1ea53a43d9ba1dda92bbf5182f60db532f";
   };
   buildInputs = [ncurses gettext];
-  configureFlags = "--enable-tiny";
+#  configureFlags = "--enable-tiny";
+  configureFlags = "
+    --disable-browser 
+    --disable-help 
+    --disable-justify 
+    --disable-mouse 
+    --disable-operatingdir
+    --disable-speller
+    --disable-tabcomp
+    --disable-wrapping
+  ";
 
   meta = {
     homepage = http://www.nano-editor.org;
   };
-}
+})
