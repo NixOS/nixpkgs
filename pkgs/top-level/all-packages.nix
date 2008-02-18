@@ -512,14 +512,11 @@ rec {
     inherit fetchurl stdenv;
   });
 
-  gnupg = import ../tools/security/gnupg {
-    inherit fetchurl stdenv readline;
-    ideaSupport = getConfig [ "gnupg" "idea" ] false; # enable for IDEA crypto support
-  };
-
-  gnupg2 = import ../tools/security/gnupg2 {
+  gnupg = selectVersion ../tools/security/gnupg "2.0.8" {
 	  inherit fetchurl stdenv readline openldap bzip2 zlib libgpgerror pth
 	    libgcrypt libassuan libksba libusb curl;
+    # enable for IDEA crypto support in  gnupg 1.4.x
+    ideaSupport = getConfig [ "gnupg" "idea" ] false;
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
@@ -2036,8 +2033,8 @@ rec {
   };
 
   gpgme = import ../development/libraries/gpgme {
-    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2;
-	inherit (gtkLibs) glib;
+    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg;
+    inherit (gtkLibs) glib;
   };
 
   # gnu scientific library

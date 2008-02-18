@@ -1,0 +1,25 @@
+
+This is required in order to support IDEA encrypted keys
+using gnupg-1.4.X. The raw key has two bytes which are part
+of the checksum but not part of the key.
+
+This will not get into upstream as upstream does not wish to support
+IDEA at all even for backward compatibility.
+
+Signed-off-by: Alon Bar-Lev <alonbl@gentoo.org>
+
+diff -urNp gnupg-2.0.4.org/g10/seckey-cert.c gnupg-2.0.4/g10/seckey-cert.c
+--- gnupg-2.0.4.org/g10/seckey-cert.c	2006-11-21 10:26:13.000000000 +0200
++++ gnupg-2.0.4/g10/seckey-cert.c	2007-06-22 18:08:48.000000000 +0300
+@@ -211,6 +211,11 @@ do_check( PKT_secret_key *sk, const char
+                 csum += checksum (buffer, ndata);
+                 gcry_mpi_release (sk->skey[i]);
+ 
++		if (sk->protect.algo==CIPHER_ALGO_IDEA) {
++			buffer[0] = 0;
++			buffer[1] = 0;
++		}
++
+ 		err = gcry_mpi_scan( &sk->skey[i], GCRYMPI_FMT_USG,
+ 				     buffer, ndata, &ndata );
+ 		xfree (buffer);
