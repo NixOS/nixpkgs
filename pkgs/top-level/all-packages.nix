@@ -1892,7 +1892,7 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
-  enchant = import ../development/libraries/enchant {
+  enchant = selectVersion ../development/libraries/enchant "1.3.0" {
 	  inherit fetchurl stdenv aspell pkgconfig;
 	  inherit (gnome) glib;
   };
