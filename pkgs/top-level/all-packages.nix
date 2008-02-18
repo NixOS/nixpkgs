@@ -3776,6 +3776,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  iwlwifi4965ucode = import ../os-specific/linux/firmware/iwlwifi-4965-ucode {
+    inherit fetchurl stdenv;
+  };
+
   kbd = import ../os-specific/linux/kbd {
     inherit fetchurl stdenv bison flex;
   };
