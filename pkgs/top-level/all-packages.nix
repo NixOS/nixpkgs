@@ -2164,8 +2164,8 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  libarchive = import ../development/libraries/libarchive {
-    inherit fetchurl stdenv zlib;
+  libarchive = selectVersion ../development/libraries/libarchive "2.4.12" {
+    inherit fetchurl stdenv zlib bzip2 e2fsprogs sharutils;
   };
 
   libassuan = import ../development/libraries/libassuan {
