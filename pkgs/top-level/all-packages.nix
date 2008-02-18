@@ -4822,6 +4822,15 @@ rec {
     ++ lib.optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
+  x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
+    inherit builderDefs openssl zlib libjpeg ;
+    inherit (xlibs) libXfixes fixesproto libXdamage damageproto 
+      libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
+      libXext xextproto inputproto recordproto;
+  };
+
+  x11vnc = x11vncFun null;
+
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
