@@ -3240,7 +3240,7 @@ rec {
   };
 
   mysql = import ../servers/sql/mysql5 {
-    inherit fetchurl stdenv ncurses zlib perl;
+    inherit fetchurl stdenv ncurses zlib perl openssl;
     ps = procps; /* !!! Linux only */
   };
 
