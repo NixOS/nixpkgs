@@ -55,7 +55,7 @@ let
       "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
-      "userdir" "alias" "rewrite"
+      "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ] ++ optional cfg.enableSSL "ssl_module";
     
 
@@ -193,6 +193,8 @@ let
     }
 
     ${concatMapStrings (svc: svc.extraConfig) subservices}
+
+    ${cfg.extraConfig}
   '';
 
   

@@ -61,15 +61,14 @@
     ";
   };
 
-  # !!! this is a mis-nomer, should be "extraConfig" or something.
-  extraDirectories = mkOption {
+  extraConfig = mkOption {
     default = "";
-    example = "
+    example = ''
       <Directory /home>
         Options FollowSymlinks
         AllowOverride All
       </Directory>
-    ";
+    '';
     description = "
       These lines go to httpd.conf verbatim. They will go after
       directories and directory aliases defined by default.
