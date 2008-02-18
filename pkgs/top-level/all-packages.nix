@@ -777,6 +777,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
+    inherit fetchurl stdenv;
+  };
+
   shebangfix = import ../tools/misc/shebangfix {
     inherit perl stdenv;
   };
