@@ -3857,7 +3857,7 @@ rec {
      inherit fetchurl stdenv;
   };
 
-  shared_mime_info = import ../data/misc/shared-mime-info {
+  shared_mime_info = selectVersion ../data/misc/shared-mime-info "0.23" {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext libxml2;
     inherit (gtkLibs) glib;
   };
