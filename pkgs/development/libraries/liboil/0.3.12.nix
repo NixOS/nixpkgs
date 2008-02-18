@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "liboil-" + version;
 
   src = fetchurl {
-    url = "${meta.homepage}/liboil/${name}.tar.gz";
+    url = "${meta.homepage}/download/${name}.tar.gz";
     sha256 = "0gdmly9sli1918pnb4ds1g38ipxikn651hdss86mp4qlfb8wvqlv";
   };
 
