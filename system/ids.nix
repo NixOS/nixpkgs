@@ -10,6 +10,7 @@
     nagios = 6;
     vsftpd = 7;
     ftp = 8;
+    bitlbee = 9;
     nixbld = 30000; # start of range of uids
     nobody = 65534;
   };

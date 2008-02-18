@@ -807,6 +807,34 @@
 
     };
 
+    bitlbee = {
+
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether the run the BitlBee IRC to other chat network gateway.
+          Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
+          networks via an IRC client.
+        '';
+      };
+
+      interface = mkOption {
+        default = "127.0.0.1";
+        description = ''
+          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
+          only clients on the local host can connect to it; if `0.0.0.0', clients
+          can access it from any network interface.
+        '';
+      };
+
+      portNumber = mkOption {
+        default = "6667";
+        description = ''
+          Number of the port BitlBee will be listening to.
+        '';
+      };
+
+    };
 
     xserver = {
 

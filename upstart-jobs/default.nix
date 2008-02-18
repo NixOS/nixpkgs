@@ -236,6 +236,12 @@ let
       inherit config pkgs;
     })
 
+  ++ optional config.services.bitlbee.enable
+    (import ../upstart-jobs/bitlbee.nix {
+      inherit (pkgs) bitlbee;
+      inherit (config.services.bitlbee) portNumber interface;
+    })
+
   # ALSA sound support.
   ++ optional config.sound.enable
     (import ../upstart-jobs/alsa.nix {
