@@ -2533,7 +2533,7 @@ rec {
     inherit fetchurl stdenv perl;
   };
 
-  ortp = import ../development/libraries/ortp {
+  ortp = selectVersion ../development/libraries/ortp "0.13.1" {
     inherit fetchurl stdenv;
   };
 
