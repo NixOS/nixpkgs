@@ -879,7 +879,7 @@ rec {
 
   wv = import ../tools/misc/wv {
     inherit fetchurl stdenv libpng zlib imagemagick
-	pkgconfig libgsf libxml2 bzip2;
+      pkgconfig libgsf libxml2 bzip2;
     inherit (gtkLibs) glib;
   };
 
@@ -4821,7 +4821,7 @@ rec {
     # RealPlayer is disabled by default for legal reasons.
     ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
     ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
-    ++ lib.optional (supportsJDK && jrePlugin ? mozillaPlugin) jrePlugin;
+    ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] true && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
   x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
