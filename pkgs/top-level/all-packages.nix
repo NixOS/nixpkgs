@@ -2398,6 +2398,12 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libxklavier = selectVersion ../development/libraries/libxklavier "3.4" {
+    inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2;
+    inherit (xorg) libX11 libICE libxkbfile;
+    inherit (gtkLibs) glib;
+  };
+
   libxml2 = import ../development/libraries/libxml2 {
     inherit fetchurl stdenv zlib python;
     pythonSupport = false;
