@@ -334,8 +334,10 @@ rec {
     inherit fetchurl stdenv zlib wxGTK;
   };
 
-  avahi = import ../development/libraries/avahi {
-    inherit stdenv fetchurl pkgconfig libdaemon dbus;
+  avahi = selectVersion ../development/libraries/avahi "0.6.22" {
+    inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser qt4
+      python expat;
+    inherit (gtkLibs) glib gtk;
   };
 
   axel = import ../tools/networking/axel {
