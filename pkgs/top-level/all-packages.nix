@@ -2278,6 +2278,10 @@ rec {
     inherit fetchurl stdenv pkgconfig libraw1394;
   };
 
+  libjingle = selectVersion ../development/libraries/libjingle "0.3.11" {
+    inherit fetchurl stdenv mediastreamer;
+  };
+
   libjpeg = import ../development/libraries/libjpeg {
     inherit fetchurl stdenv libtool;
   };
