@@ -165,6 +165,8 @@ let
   in ''
     ServerName ${serverInfo.canonicalName}
 
+    ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
+
     ${if isMainServer || cfg.adminAddr != "" then ''
       ServerAdmin ${cfg.adminAddr}
     '' else ""}

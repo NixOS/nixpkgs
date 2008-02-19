@@ -14,6 +14,14 @@
     ";
   };
 
+  serverAliases = mkOption {
+    default = [];
+    example = ["www.example.org" "www.example.org:8080" "example.org"];
+    description = "
+      Additional names of virtual hosts served by this virtual host configuration.
+    ";
+  };
+
   httpPort = mkOption {
     default = 80;
     description = "
