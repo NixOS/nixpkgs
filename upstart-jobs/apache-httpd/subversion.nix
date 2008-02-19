@@ -301,6 +301,12 @@ in {
     ${distConfig}
 
     ${staticFilesConfig}
+
+    ${if config.toplevelRedirect then ''
+        <Location />
+            DirectoryIndex repoman
+        </Location>
+      '' else ""}
         
   '';
 
@@ -338,6 +344,15 @@ in {
       description = "
         The URL prefix under which the Subversion service appears.
         Use the empty string to have it appear in the server root.
+      ";
+    };
+
+    toplevelRedirect = mkOption {
+      default = true;
+      description = "
+        Whether <varname>urlPrefix</varname> without any suffix
+        (except a slash) should redirect to
+        <varname>urlPrefix</varname><literal>/repoman</literal>.
       ";
     };
 
