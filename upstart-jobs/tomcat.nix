@@ -2,20 +2,22 @@ args: with args;
 
 let
 
-cfg = config.services.tomcat;
-tomcatService = import ../services/tomcat {
-	inherit (pkgs) stdenv jdk tomcat6 su;
-	inherit (cfg) baseDir user deployFrom;
-};
+  cfg = config.services.tomcat;
+
+  tomcatService = import ../services/tomcat {
+    inherit (pkgs) stdenv jdk tomcat6 su;
+    inherit (cfg) baseDir user deployFrom;
+  };
 
 in
+
 {
-	name = "tomcat";
-	job = "
-description \"Apache Tomcat server\"
+  name = "tomcat";
+  job = ''
+    description "Apache Tomcat server"
 
-stop on shutdown
+    stop on shutdown
 
-respawn ${tomcatService}/bin/control start
-	";
+    respawn ${tomcatService}/bin/control start
+  '';
 }
