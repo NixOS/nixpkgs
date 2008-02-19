@@ -87,6 +87,7 @@ in {
   globalEnvVars = [];
   extraServerPath = [];
   extraPath = [];
+  startupScript = null;
 
   options = {
 

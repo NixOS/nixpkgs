@@ -23,9 +23,24 @@ let
     # a virtual host.
     adminAddr = if cfg.adminAddr != "" then cfg.adminAddr else mainCfg.adminAddr;
 
-    serverConfig = cfg;
+    vhostConfig = cfg;
+    serverConfig = mainCfg;
     fullConfig = config; # machine config
   };
+
+
+  vhostOptions = import ./per-server-options.nix {
+    inherit (pkgs.lib) mkOption;
+    forMainServer = false;
+  };
+
+  vhosts = let
+    makeVirtualHost = cfgIn: 
+      let
+        # Fill in defaults for missing options.
+        cfg = addDefaultOptionValues vhostOptions cfgIn;
+      in cfg;
+    in map makeVirtualHost cfg.virtualHosts;
 
 
   callSubservices = serverInfo: defs:
@@ -36,9 +51,12 @@ let
     in map f defs;
 
 
-  mainSubservices = callSubservices (makeServerInfo cfg) cfg.extraSubservices;
+  # !!! callSubservices is expensive   
+  subservicesFor = cfg: callSubservices (makeServerInfo cfg) cfg.extraSubservices;
 
-  allSubservices = mainSubservices;
+  mainSubservices = subservicesFor mainCfg;
+
+  allSubservices = mainSubservices ++ pkgs.lib.concatMap subservicesFor vhosts;
 
 
   # !!! should be in lib
@@ -293,20 +311,12 @@ let
     NameVirtualHost *:*
 
     ${let
-        perServerOptions = import ./per-server-options.nix {
-          inherit (pkgs.lib) mkOption;
-          forMainServer = false;
-        };
-        makeVirtualHost = vhostIn:
-          let
-            # Fill in defaults for missing options.
-            vhost = addDefaultOptionValues perServerOptions vhostIn;
-          in ''
-            <VirtualHost *:*>
-                ${perServerConf false vhost}
-            </VirtualHost>
-          '';
-      in concatMapStrings makeVirtualHost cfg.virtualHosts}
+        makeVirtualHost = cfg: ''
+          <VirtualHost *:*>
+              ${perServerConf false cfg}
+          </VirtualHost>
+        '';
+      in concatMapStrings makeVirtualHost vhosts}
   '';
 
     
@@ -351,7 +361,13 @@ in
       # server restarts, eventually preventing it from restarting
       # succesfully.
       for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
-        ${pkgs.utillinux}/bin/ipcrm -s $i
+          ${pkgs.utillinux}/bin/ipcrm -s $i
+      done
+
+      # Run the startup hooks for the subservices.
+      for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
+          echo Running Apache startup hook $i...
+          $i
       done
     end script
 

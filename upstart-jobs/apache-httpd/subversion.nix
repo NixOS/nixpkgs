@@ -50,6 +50,8 @@ let
     inherit (pkgs) libxslt enscript db4 coreutils bzip2;
 
     inherit (serverInfo) canonicalName;
+
+    inherit (serverInfo.serverConfig) user group;    
     
     # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
     perlFlags = map (x: "-I${x}/lib/site_perl") [
@@ -335,6 +337,9 @@ in {
 
   
   extraPath = [scripts];
+
+
+  startupScript = "${scripts}/bin/svn-server-startup-hook.sh";
   
 
   options = {
