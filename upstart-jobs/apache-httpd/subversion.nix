@@ -13,7 +13,7 @@ let
   logDir = "${config.dataDir}/log";
   postCommitHook = "/var/run/current-system/sw/bin/svn-server-post-commit-hook";
   fsType = "fsfs";
-  adminAddr = serverInfo.serverConfig.adminAddr;
+  adminAddr = serverInfo.adminAddr;
   
 
 

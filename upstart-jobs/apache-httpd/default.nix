@@ -3,6 +3,8 @@
 let
 
   cfg = config.services.httpd;
+
+  mainCfg = cfg;
   
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
@@ -16,6 +18,11 @@ let
     canonicalName =
       "http://${cfg.hostName}" +
       (if cfg.httpPort != 80 then ":${toString cfg.httpPort}" else "");
+
+    # Admin address: inherit from the main server if not specified for
+    # a virtual host.
+    adminAddr = if cfg.adminAddr != "" then cfg.adminAddr else mainCfg.adminAddr;
+
     serverConfig = cfg;
     fullConfig = config; # machine config
   };
