@@ -1,7 +1,7 @@
-source "$stdenv/setup"
+source "$stdenv/setup" || exit 1
 
-unpackPhase &&						\
-cd bbdb-*.* &&						\
-./configure --prefix="$out"				\
-            --with-package-dir="$out/lib/site-emacs" &&	\
+unpackPhase &&							\
+cd bbdb-*.* &&							\
+./configure --prefix="$out"					\
+            --with-package-dir="$out/share/emacs/site-lisp" &&	\
 make && make install-pkg
