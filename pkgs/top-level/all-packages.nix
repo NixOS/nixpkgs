@@ -4320,6 +4320,9 @@ rec {
     inherit stdenv xlibs expat libdrm;
   };
 
+  zd1211fw = import ../os-specific/linux/firmware/zd1211 {
+    inherit stdenv fetchurl;
+  };
 
   ### DATA
 
