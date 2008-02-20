@@ -1,21 +1,31 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.4.1";
+  name = "git-1.5.4.2";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "17abc4de0cd46a15ecdd90dfb28edfbaafcd0f0ce7a081c1c4dfae9b2f5b217f";
+    sha256 = "089n3da06k19gzhacsqgaamgx5hy5r50r2b4a626s87w44mj78sn";
   };
 
-  buildInputs = [curl openssl zlib expat gettext];
+  buildInputs = [curl openssl zlib expat gettext emacs];
 
   makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
 
+  postInstall = ''
+    # Install Emacs mode.
+    echo "installing Emacs mode..."
+    make install -C contrib/emacs prefix="$out"
+
+    # XXX: There are other things under `contrib' that people might want to
+    # install.
+  '';
+
   meta = {
-	  license = "GPL2";
-	  homepage = http://git.or.cz;
-	  description = "A popular version control system designed to handle very
-	  large projects with speed and efficiency";
+    license = "GPLv2";
+    homepage = http://git.or.cz;
+    description = ''Git, a popular distributed version control system
+                    designed to handle very large projects with speed
+		    and efficiency.'';
   };
 }

@@ -4812,7 +4812,7 @@ rec {
   };
 
   git = import ../applications/version-management/git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext;
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext emacs;
   };
 
   gkrellm = import ../applications/misc/gkrellm {
