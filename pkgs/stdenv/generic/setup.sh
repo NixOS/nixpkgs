@@ -1,8 +1,4 @@
-set -e
-
-test -z $NIX_GCC && NIX_GCC=@gcc@
-
-
+######################################################################
 # Helper functions that might be useful in setup hooks.
 
 
@@ -27,6 +23,14 @@ addToSearchPath()
 }
 
 
+######################################################################
+# Initialisation.
+
+set -e
+
+test -z $NIX_GCC && NIX_GCC=@gcc@
+
+
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
@@ -34,7 +38,7 @@ for i in $NIX_GCC @initialPath@; do
 done
 
 if test "$NIX_DEBUG" = "1"; then
-    echo "Initial path: $PATH"
+    echo "initial path: $PATH"
 fi
 
 
@@ -213,7 +217,7 @@ fi
 
 PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
-    echo "Final path: $PATH"
+    echo "final path: $PATH"
 fi
 
 stripDirs() {
@@ -640,8 +644,13 @@ buildW() {
 
     eval "$preBuild"
 
+    if ! test -n "$makefile" -o -e "Makefile" -o -e "makefile"; then
+        echo "no Makefile or makefile, doing nothing"
+        return
+    fi
+
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-    make \
+    make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}" || fail
 
@@ -672,7 +681,7 @@ checkW() {
     fi
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
-    make \
+    make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
 }
@@ -716,7 +725,7 @@ installW() {
             installTargets=install
         fi
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-        make $installTargets \
+        make ${makefile:+-f $makefile} $installTargets \
             $makeFlags "${makeFlagsArray[@]}" \
             $installFlags "${installFlagsArray[@]}" || fail
     else
@@ -756,9 +765,9 @@ fixupW() {
         for d in $forceShare; do
             if test -d "$prefix/$d"; then
                 if test -d "$prefix/share/$d"; then
-                    echo "Both $d/ and share/$d/ exists!"
+                    echo "both $d/ and share/$d/ exists!"
                 else
-                    echo Fixing location of $d/ subdirectory
+                    echo "fixing location of $d/ subdirectory"
                     ensureDir $prefix/share
                     if test -w $prefix/share; then
                         mv -v $prefix/$d $prefix/share
@@ -771,10 +780,12 @@ fixupW() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-        echo "Stripping debuging symbols from files in"
-        stripDirs "${stripDebugList:-lib}" -S
-        echo "Stripping all symbols from files in"
-        stripDirs "${stripAllList:-bin sbin}" -s
+        stripDebugList=${stripDebugList:-lib}
+        echo "stripping debuging symbols from files in $stripDebugList"
+        stripDirs "$stripDebugList" -S
+        stripAllList=${stripAllList:-bin sbin}
+        echo "stripping all symbols from files in $stripAllList"
+        stripDirs "$stripAllList" -s
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
@@ -820,7 +831,7 @@ distW() {
     fi
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make $distFlags "${distFlagsArray[@]}" $distTarget || fail
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget || fail
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
