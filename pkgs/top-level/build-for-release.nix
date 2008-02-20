@@ -299,7 +299,6 @@ let {
   body = [
     i686LinuxPkgs
     x86_64LinuxPkgs
-    powerpcLinuxPkgs
     i686FreeBSDPkgs
     powerpcDarwinPkgs
     i686DarwinPkgs
