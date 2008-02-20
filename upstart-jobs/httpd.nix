@@ -17,7 +17,6 @@ let
   logDir = cfg.logDir;
   stateDir = cfg.stateDir;
   enableSSL = false;
-  extraDirectories = cfg.extraDirectories + extraConfig;
   applicationMappings = cfg.mod_jk.applicationMappings;
   
   startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
@@ -30,8 +29,9 @@ let
 
     inherit hostName httpPort httpsPort
       user group adminAddr logDir stateDir
-      extraDirectories applicationMappings;
+      applicationMappings;
     noUserDir = !cfg.enableUserDir;
+    extraDirectories = extraConfig + cfg.extraConfig;
     
     subServices =
     
@@ -72,11 +72,11 @@ let
         )
         )
       )
-      ++
+      /* ++
 
       (optional cfg.extraSubservices.enable
         (map (service : service webServer pkgs) cfg.extraSubservices.services)
-      );
+      ) */;
   };
   
 in
