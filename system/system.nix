@@ -254,7 +254,7 @@ rec {
     pkgs.wirelesstools
   ]
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
-  ++ pkgs.lib.optional config.networking.bitlbee.enable pkgs.bitlbee
+  ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ config.environment.extraPackages pkgs
