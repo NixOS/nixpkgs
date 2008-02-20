@@ -8,8 +8,9 @@ stdenv.mkDerivation {
     sha256 = "3fb1316e2ed74d47ca61187fada550e58797467bd9e8ad67343ed16da769f916";
   };
 
-  buildInputs = [emacs texinfo ctags];
+  patches = [ ./install-infodir.patch ];
 
+  buildInputs = [emacs texinfo ctags];
   builder = ./builder.sh;
 
   meta = {
