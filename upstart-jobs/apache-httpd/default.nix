@@ -196,6 +196,11 @@ let
       ServerAdmin ${cfg.adminAddr}
     '' else ""}
 
+    ${if !isMainServer && mainCfg.logPerVirtualHost then ''
+      ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
+      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} common
+    '' else ""}
+
     ${robotsConf}
 
     ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
