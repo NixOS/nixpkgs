@@ -60,12 +60,6 @@ done
 # Search directory for Aspell dictionaries.
 export ASPELL_CONF="dict-dir $NIX_USER_PROFILE_DIR/profile/lib/aspell"
 
-# Search path for Emacs Lisp code.
-export EMACSLOADPATH=""
-for i in $NIX_PROFILES; do
-    export EMACSLOADPATH="$i/share/emacs/site-lisp:$EMACSLOADPATH"
-done
-
 export PATH=$HOME/bin:$PATH
 
 
