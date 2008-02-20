@@ -21,6 +21,8 @@ let
 
     saxon8 = pkgs.saxonb;
 
+    logFile = "${serverInfo.serverConfig.logDir}/release";
+
     # Do a syntax check on the generated file.
     postInstall = ''
       $perl -c $out/cgi-bin/create-dist.pl # !!! should use -T
