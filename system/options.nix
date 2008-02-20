@@ -388,6 +388,14 @@
       ";
     };
 
+    enableZydasZD1211Firmware = mkOption {
+      default = false;
+      description = "
+        This option enables automatic loading of the firmware for the Zydas
+        ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip.
+      ";
+    };
+
     localCommands = mkOption {
       default = "";
       example = "text=anything; echo You can put $text here.";

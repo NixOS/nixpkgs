@@ -29,6 +29,7 @@ let
            pkgs.lib.optional config.networking.enableIntel2200BGFirmware pkgs.ipw2200fw
         ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
         ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi4965ucode
+        ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
 	++ config.services.udev.addFirmware;
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
