@@ -35,7 +35,8 @@ $pcMap{"mkfontscale"} = "mkfontscale";
 $pcMap{"mkfontdir"} = "mkfontdir";
 $pcMap{"bdftopcf"} = "bdftopcf";
 $pcMap{"libxslt"} = "libxslt";
-$pcMap{"gettext"} = "gettext";
+$pcMap{"dbus-1"} = "dbus";
+$pcMap{"hal"} = "hal";
 
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
@@ -56,6 +57,8 @@ $extraAttrs{"xf86inputevdev"} = "
     sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
     \";";
 
+$extraAttrs{"libXpm"} = "
+    patchPhase = \"sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in\";";
 
 my $downloadCache = "./download-cache";
 $ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
@@ -112,7 +115,7 @@ while (<>) {
     my $file;
     {
         local $/;
-        open FOO, "cd '$tmpDir'/* && cat configure.ac |";
+        open FOO, "cd '$tmpDir'/* && grep -v '^ *#' configure.ac |";
         $file = <FOO>;
         close FOO;
     }
@@ -184,7 +187,6 @@ while (<>) {
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gettext" if $pkg =~ /libXpm/;
     
     print "REQUIRES @requires => $pkg\n";
     $pkgRequires{$pkg} = \@requires;
@@ -200,10 +202,7 @@ open OUT, ">default2.nix";
 print OUT "";
 print OUT <<EOF;
 # This is a generated file.  Do not edit!
-{ stdenv, fetchurl, pkgconfig, freetype, fontconfig
-, libxslt, expat, libdrm, libpng, zlib, perl, mesa, mesaHeaders
-, xkeyboard_config, gettext
-}:
+args: with args;
 
 rec {
 

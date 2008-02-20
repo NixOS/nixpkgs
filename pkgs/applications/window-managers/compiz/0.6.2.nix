@@ -14,7 +14,7 @@ args : with args;
 		  propagatedBuildInputs = [
 		    libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
 		    libICE libSM startupnotification mesa GConf perl perlXMLParser libxslt
-		    dbus dbus_glib compositeproto fixesproto damageproto randrproto
+		    dbus.libs dbus_glib compositeproto fixesproto damageproto randrproto
 		    xineramaproto renderproto kbproto xextproto libXrender 
 		  ];
 		configureFlags = ["--enable-gtk" "--enable-fuse" 

@@ -1,8 +1,5 @@
 addPythonPath() {
-    local p=$1/lib/python2.5/site-packages
-    if test -d $p; then
-        export PYTHONPATH="${PYTHONPATH}${PYTHONPATH:+:}$p"
-    fi
+    addToSearchPathWithCustomDelimiter : PYTHONPATH /lib/python2.5/site-packages "" $1
 }
 
 toPythonPath() {

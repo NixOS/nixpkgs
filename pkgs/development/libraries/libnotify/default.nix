@@ -1,7 +1,4 @@
-{ stdenv, fetchurl
-, pkgconfig, dbus, dbus_glib
-, gtk, glib
-}:
+args: with args;
  
 stdenv.mkDerivation {
   name = "libnotify-0.4.4";
@@ -13,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig dbus dbus_glib gtk glib
+    pkgconfig dbus.libs dbus_glib gtk glib
   ];
 
   configureFlags="";

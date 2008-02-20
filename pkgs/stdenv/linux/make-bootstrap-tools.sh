@@ -24,7 +24,7 @@ nukeRefs() {
 # necessary for the absolute first stage of the bootstrap.
 cp $bash/bin/bash $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/bash
-cp $bzip2/bin/bunzip2 $out/in-nixpkgs
+cp $bzip2/bin/bzip2 $out/in-nixpkgs
 cp $coreutils/bin/cp $out/in-nixpkgs
 cp $gnutar/bin/tar $out/in-nixpkgs
 nukeRefs $out/in-nixpkgs/tar
@@ -51,8 +51,7 @@ cp $gawk/bin/gawk tools/bin
 ln -s gawk tools/bin/awk
 cp $gnutar/bin/* tools/bin
 cp $gzip/bin/gzip tools/bin
-ln -s gzip tools/bin/gunzip
-cp $bzip2/bin/bunzip2 tools/bin
+cp $bzip2/bin/bzip2 tools/bin
 cp $gnumake/bin/* tools/bin
 cp $patch/bin/* tools/bin
 cp $patchelf/bin/* tools/bin
@@ -62,6 +61,8 @@ nukeRefs tools/bin/sed
 nukeRefs tools/bin/gawk
 nukeRefs tools/bin/tar
 nukeRefs tools/bin/grep
+nukeRefs tools/bin/fgrep
+nukeRefs tools/bin/egrep
 nukeRefs tools/bin/patchelf
 nukeRefs tools/bin/make
 
@@ -87,7 +88,6 @@ cp -prd $gcc/libexec gcc
 chmod -R +w gcc
 nukeRefs gcc/libexec/gcc/*/*/cc1
 nukeRefs gcc/libexec/gcc/*/*/collect2
-rm -f gcc/lib/libmud* gcc/lib/libiberty* gcc/lib/libssp*
 if test -e gcc/lib/libgcc_s.so.1; then
     nukeRefs gcc/lib/libgcc_s.so.1
 fi
@@ -96,11 +96,15 @@ if test -e $gcc/lib64; then
     chmod -R +w gcc/lib64
     nukeRefs gcc/lib64/libgcc_s.so.1
 fi
+rm -f gcc/lib*/libmud* gcc/lib*/libiberty* gcc/lib*/libssp* gcc/lib*/libgomp*
 rm -rf gcc/lib/gcc/*/*/install-tools
 rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
-if test -e gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h; then
-    nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/4.1.1/include/bits/mathdef.h
+if test "$system" = "powerpc-linux"; then
+    nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/bits/mathdef.h
+    # Dangling symlink "sound", probably produced by fixinclude.
+    # Should investigate why it's there in the first place.
+    rm -f gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/sound
 fi
 
 
@@ -116,12 +120,20 @@ chmod -R +w glibc
 rm glibc/include/linux
 cp -prd $(readlink $glibc/include/linux) glibc/include
 rm glibc/include/asm
-ln -s $(readlink $(readlink $glibc/include/asm)) glibc/include/asm
+if test -L "$(readlink $glibc/include/asm)"; then
+    ln -s $(readlink $(readlink $glibc/include/asm)) glibc/include/asm
+else
+    cp -prd "$(readlink $glibc/include/asm)" glibc/include
+fi
 for i in glibc/include/asm-*; do
     target=$(readlink $i)
     rm $i
     cp -prd $target glibc/include
 done
+if test "$system" = "powerpc-linux"; then
+    # Hopefully we won't need these.
+    rm -f glibc/include/mtd glibc/include/rdma glibc/include/sound glibc/include/video
+fi
 
 
 # Strip executables even further.

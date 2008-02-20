@@ -240,10 +240,6 @@ let {
     ;    
   };
   
-  powerpcLinuxPkgs = {inherit (allPackages {system = "powerpc-linux";})
-    aterm
-  ;};
-  
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     aterm
     autoconf

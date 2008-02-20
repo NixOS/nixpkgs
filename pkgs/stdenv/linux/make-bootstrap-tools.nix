@@ -1,6 +1,8 @@
+{system ? builtins.currentSystem}:
+
 let
 
-  pkgs = import ../../top-level/all-packages.nix {};
+  pkgs = import ../../top-level/all-packages.nix {inherit system;};
 
   
   # Have to do removeAttrs to prevent all-packages from copying
@@ -37,22 +39,23 @@ let
 
     gnutar =
       # Tar seems to be broken on dietlibc on x86_64.
-      if pkgs.stdenv.system != "x86_64-linux"
+      if system != "x86_64-linux"
       then pkgsDiet.gnutar151 # 1.16 is broken
       else pkgsStatic.gnutar;
 
     gawk = 
       # Dietlibc only provides sufficient math functions (fmod, sin,
       # cos, etc.) on i686.  On other platforms, use Glibc.
-      if pkgs.stdenv.system == "i686-linux"
+      if system == "i686-linux"
       then pkgsDiet.gawk
       else pkgsStatic.gawk;
       
-    gcc = import ../../development/compilers/gcc-4.1 {
+    gcc = import ../../development/compilers/gcc-4.2 {
       inherit (pkgs) fetchurl stdenv;
       noSysDirs = true;
       langCC = false;
       staticCompiler = true;
+      profiledCompiler = true;
     };
   
     curl = pkgsDiet.realCurl;

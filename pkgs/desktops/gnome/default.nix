@@ -1,12 +1,6 @@
 # todo audiofile is also part of the gnome platform. Move it to this collection?
 
-{ stdenv, fetchurl, pkgconfig, audiofile
-, flex, bison, popt, perl, zlib, libxml2, libxslt
-, perlXMLParser, docbook_xml_dtd_42, docbook_xml_dtd_412
-, gettext, x11, libtiff, libjpeg
-, libpng, gtkLibs, xlibs, bzip2, libcm, python, dbus_glib, ncurses
-, which, libxml2Python, iconnamingutils
-}:
+args: with args;
 
 assert dbus_glib.glib == gtkLibs.glib;
 
@@ -57,7 +51,7 @@ rec {
 
   gnomevfs = import ./gnome-vfs.nix {
     inherit fetchurl stdenv gnome pkgconfig perl libxml2 popt
-      perlXMLParser gettext bzip2 dbus_glib;
+      perlXMLParser gettext bzip2 dbus_glib openssl hal samba fam;
     input = platform.gnomevfs;
   };
 

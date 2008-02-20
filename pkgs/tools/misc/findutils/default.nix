@@ -1,10 +1,10 @@
 {stdenv, fetchurl, coreutils}:
 
 stdenv.mkDerivation {
-  name = "findutils-4.2.30";
+  name = "findutils-4.2.32";
   src = fetchurl {
-    url = mirror://gnu/findutils/findutils-4.2.30.tar.gz;
-    sha256 = "1x1s0h1gf4hxh6xi6vq336sz8zsh4hvnsslc7607z41l82xrqjrl";
+    url = mirror://gnu/findutils/findutils-4.2.32.tar.gz;
+    sha256 = "05sj0154kl4mbqg7dcabiaa16snjv2ppfwwhcvl2zyn2yc28igc7";
   };
   buildInputs = [coreutils];
 
@@ -12,4 +12,9 @@ stdenv.mkDerivation {
     # Note: the dietlibc patch is just to get findutils to compile.
     # The locate command probably won't work though.
     ++ stdenv.lib.optional (stdenv ? isDietLibC) ./dietlibc-hack.patch;
+
+  meta = {
+    homepage = http://www.gnu.org/software/findutils/;
+    description = "The basic directory searching utilities of the GNU operating system";
+  };
 }

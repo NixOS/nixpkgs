@@ -1,14 +1,14 @@
-args: with args;
+{stdenv, fetchurl, unicodeSupport ? false, cplusplusSupport ? true}:
 
-stdenv.mkDerivation ({
-  name = "pcre-7.1";
+stdenv.mkDerivation {
+  name = "pcre-7.4";
   src = fetchurl {
-    url = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-7.1.tar.bz2;
-    sha256 = "0rpkcw07jas3fw6ava3ni5zcrmbncwa8xlsa0lzq6z2iph5510li";
+    url = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-7.4.tar.bz2;
+    sha256 = "1rdks2h5f3p2d71c4jnxaic1c9gmgsfky80djnafcdbdrhzkiyx5";
   };
+  configureFlags =
+    (if unicodeSupport then
+      "--enable-unicode-properties --enable-shared --disable-static"
+    else "") +
+    (if !cplusplusSupport then "--disable-cpp" else "");
 }
-// (if unicodeSupport then
-{
-  configureFlags = "--enable-unicode-properties --enable-shared --disable-static";
-}
-else {}))

@@ -120,26 +120,6 @@ diff -rc gcc-4.2.0-orig/gcc/gcc.c gcc-4.2.0/gcc/gcc.c
   static const char *md_exec_prefix = MD_EXEC_PREFIX;
   
   static const char *md_startfile_prefix = MD_STARTFILE_PREFIX;
-diff -rc gcc-4.2.0-orig/ltcf-cxx.sh gcc-4.2.0/ltcf-cxx.sh
-*** gcc-4.2.0-orig/ltcf-cxx.sh	2005-07-16 04:30:53.000000000 +0200
---- gcc-4.2.0/ltcf-cxx.sh	2007-05-20 17:16:44.000000000 +0200
-***************
-*** 989,995 ****
-    # the conftest object file.
-    pre_test_object_deps_done=no
-  
-!   for p in `eval $output_verbose_link_cmd`; do
-  
-      case $p in
-  
---- 989,995 ----
-    # the conftest object file.
-    pre_test_object_deps_done=no
-  
-!   for p in `true`; do
-  
-      case $p in
-  
 diff -rc gcc-4.2.0-orig/ltconfig gcc-4.2.0/ltconfig
 *** gcc-4.2.0-orig/ltconfig	2007-02-14 18:08:35.000000000 +0100
 --- gcc-4.2.0/ltconfig	2007-05-20 22:16:24.000000000 +0200

@@ -1,9 +1,15 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gawk-3.1.5";
+  name = "gawk-3.1.6";
+  
   src = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/gawk/gawk-3.1.5.tar.bz2;
-    md5 = "5703f72d0eea1d463f735aad8222655f";
+    url = mirror://gnu/gawk/gawk-3.1.6.tar.bz2;
+    sha256 = "0v6ba4hxfiiy3bny5japd3zmzxlh8vdkmswk96yngd6i1dddsgsi";
+  };
+
+  meta = {
+    homepage = http://www.gnu.org/software/gawk/;
+    description = "GNU implementation of the AWK programming language";
   };
 }

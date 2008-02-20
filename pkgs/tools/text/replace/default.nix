@@ -1,4 +1,5 @@
 {stdenv, fetchurl}:
+
 stdenv.mkDerivation {
   name = "replace-2.24";
 
@@ -7,14 +8,12 @@ stdenv.mkDerivation {
     sha256 = "1c2nkxx83vmlh1v3ib6r2xqh121gdb1rharwsimcb2h0xwc558dm";
   };
 
-  buildInputs = [];
-  makeFlags = " TREE=\$(out) ";
+  makeFlags = "TREE=\$(out)";
 
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
   meta = {
-    description = "
-	Replace verbatim strings. Sed is not fit to do it. Replace is.
-";
+    homepage = http://replace.richardlloyd.org.uk/;
+    description = "A tool to replace verbatim strings";
   };
 }

@@ -34,4 +34,10 @@ stdenv.mkDerivation {
     #./x86_64-stat64.patch
 
   ];
+
+  meta = {
+    homepage = http://www.fefe.de/dietlibc/;
+    description = "A small implementation of the C library";
+    license = "GPL";
+  };
 }

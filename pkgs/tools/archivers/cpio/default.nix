@@ -1,10 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "cpio-2.7";
+  name = "cpio-2.9";
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/cpio/cpio-2.7.tar.bz2;
-    md5 = "69ad6cb3d288aafe5f969f68d9fd0fb7";
+    url = mirror://gnu/cpio/cpio-2.9.tar.bz2;
+    sha256 = "01s7f9hg8kgpis96j99hgkiqgdy53pm7qi7bhm3fzx58jfk5z6mv";
   };
-  patches = [./symlink.patch ./gnulib-futimens.patch];
 }

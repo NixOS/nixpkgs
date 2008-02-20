@@ -6,9 +6,10 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
     sha256 = "1qmbnd9xgg7vahlfywd8sfd9yqhx8jdyczz3cshfsd4qc76xhw78";
   };
-  inherit dbus glib;
-  buildInputs = [pkgconfig gettext glib expat];
-  propagatedBuildInputs = [dbus];
+  buildInputs = [pkgconfig expat gettext];
+  propagatedBuildInputs = [dbus.libs glib];
+  configureFlags = "--enable-shared --disable-static";
+  passthru = { inherit dbus glib; };
 
   meta = {
 	  homepage = http://dbus.freedesktop.org;

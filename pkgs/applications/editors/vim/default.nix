@@ -55,6 +55,8 @@ args.stdenv.mkDerivation {
   preBuild="touch src/auto/link.sed";
   configureFlags = args.lib.condConcat "" configFlags check;
 
+  NIX_LDFLAGS = "-lpthread -lutil";
+
   meta = {
     description = "The most popular clone of the VI editor";
     homepage = http://www.vim.org;

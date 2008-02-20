@@ -188,10 +188,10 @@ rec {
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
   optional = cond: elem: if cond then [elem] else [];
 
-  
+
   # Return a list or an empty list, dependening on a boolean value.
   optionals = cond: elems: if cond then elems else [];
-  
+
 
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:

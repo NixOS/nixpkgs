@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.cert.dfn.de/pub/tools/crypt/gcrypt/gnupg/gnupg-1.4.8.tar.bz2;
-    sha1 = "4b63267358e5c70f05b48e27d6877bad2636cabd";
+    sha256 = "0v009vqpa4l9zwhcaaagz5sx65fjp8g0alsf8kac5s5gvrs2b78i";
   };
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {

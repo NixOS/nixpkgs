@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "7fc7faafccfdf22dea7ac1de6629dcb55ec63d84fcb57a14559309cf284fa94f";
   };
   buildInputs = [
-    pkgconfig compiz perl perlXMLParser GConf dbus gtk
+    pkgconfig compiz perl perlXMLParser GConf dbus.libs gtk
   ];
   preBuild = "
     makeFlagsArray=(moduledir=$out/lib/compiz)

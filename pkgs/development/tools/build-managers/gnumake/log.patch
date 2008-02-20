@@ -1,6 +1,6 @@
-diff -rc make-orig/job.c make-3.81/job.c
-*** make-orig/job.c	2006-03-20 04:03:04.000000000 +0100
---- make-3.81/job.c	2006-06-21 17:31:52.000000000 +0200
+diff -rc make-3.81-orig/job.c make-3.81/job.c
+*** make-3.81-orig/job.c	2006-03-20 04:03:04.000000000 +0100
+--- make-3.81/job.c	2008-02-20 17:41:25.000000000 +0100
 ***************
 *** 1083,1089 ****
        appear.  */
@@ -18,9 +18,9 @@ diff -rc make-orig/job.c make-3.81/job.c
   
     /* Tell update_goal_chain that a command has been started on behalf of
        this target.  It is important that this happens here and not in
-diff -rc make-orig/main.c make-3.81/main.c
-*** make-orig/main.c	2006-03-20 03:36:37.000000000 +0100
---- make-3.81/main.c	2006-06-21 17:48:43.000000000 +0200
+diff -rc make-3.81-orig/main.c make-3.81/main.c
+*** make-3.81-orig/main.c	2006-03-20 03:36:37.000000000 +0100
+--- make-3.81/main.c	2008-02-20 17:41:25.000000000 +0100
 ***************
 *** 886,891 ****
 --- 886,900 ----
@@ -83,9 +83,9 @@ diff -rc make-orig/main.c make-3.81/main.c
 + 
 + int logNestingStdout = 0;
 + int logNestingStderr = 0;
-diff -rc make-orig/make.h make-3.81/make.h
-*** make-orig/make.h	2006-02-16 00:54:43.000000000 +0100
---- make-3.81/make.h	2006-06-21 17:39:35.000000000 +0200
+diff -rc make-3.81-orig/make.h make-3.81/make.h
+*** make-3.81-orig/make.h	2006-02-16 00:54:43.000000000 +0100
+--- make-3.81/make.h	2008-02-20 17:41:25.000000000 +0100
 ***************
 *** 609,611 ****
 --- 609,613 ----
@@ -94,15 +94,16 @@ diff -rc make-orig/make.h make-3.81/make.h
   
 + extern int logNestingStdout;
 + extern int logNestingStderr;
-diff -rc make-orig/remake.c make-3.81/remake.c
-*** make-orig/remake.c	2006-03-20 03:36:37.000000000 +0100
---- make-3.81/remake.c	2006-06-21 17:31:52.000000000 +0200
+diff -rc make-3.81-orig/remake.c make-3.81/remake.c
+*** make-3.81-orig/remake.c	2006-03-20 03:36:37.000000000 +0100
+--- make-3.81/remake.c	2008-02-20 17:44:01.000000000 +0100
 ***************
 *** 1120,1126 ****
---- 1120,1130 ----
+--- 1120,1131 ----
         /* The normal case: start some commands.  */
         if (!touch_flag || file->cmds->any_recurse)
   	{
++           log_working_directory (1);
 +           fprintf(stderr, "\e[pbuilding %s\n", file->name);
 +           logNestingStderr++;
   	  execute_file_commands (file);

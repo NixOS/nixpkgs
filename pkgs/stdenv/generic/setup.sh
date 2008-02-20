@@ -1,3 +1,31 @@
+######################################################################
+# Helper functions that might be useful in setup hooks.
+
+
+addToSearchPathWithCustomDelimiter() {
+    local delimiter=$1
+    local varName=$2
+    local needDir=$3
+    local addDir=${4:-$needDir}
+    local prefix=$5
+    if [ -d $prefix$needDir ]; then
+        if [ -z ${!varName} ]; then
+            eval export ${varName}=${prefix}$addDir
+        else
+            eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
+        fi
+    fi
+}
+
+addToSearchPath()
+{
+    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+}
+
+
+######################################################################
+# Initialisation.
+
 set -e
 
 test -z $NIX_GCC && NIX_GCC=@gcc@
@@ -10,12 +38,13 @@ for i in $NIX_GCC @initialPath@; do
 done
 
 if test "$NIX_DEBUG" = "1"; then
-    echo "Initial path: $PATH"
+    echo "initial path: $PATH"
 fi
 
 
 # Execute the pre-hook.
 export SHELL=@shell@
+PATH_DELIMITER=':'
 if test -z "$shell"; then
     export shell=@shell@
 fi
@@ -24,9 +53,8 @@ param2=@param2@
 param3=@param3@
 param4=@param4@
 param5=@param5@
-if test -n "@preHook@"; then
-    source @preHook@
-fi
+if test -n "@preHook@"; then source @preHook@; fi
+eval "$preHook"
 
 
 # Check that the pre-hook initialised SHELL.
@@ -39,7 +67,7 @@ if test -f $NIX_GCC/nix-support/setup-hook; then
     source $NIX_GCC/nix-support/setup-hook
 fi
 
-    
+
 # Ensure that the given directories exists.
 ensureDir() {
     local dir
@@ -48,6 +76,17 @@ ensureDir() {
     done
 }
 
+installBin() {
+  ensureDir $out/bin
+  cp "$@" $out/bin
+}
+
+assertEnvExists(){
+  if test -z "${!1}"; then
+      msg=${2:-error: assertion failed: env var $1 is required}
+      echo $msg >&2; exit 1
+  fi
+}
 
 # Called when some build action fails.  If $succeedOnFailure is set,
 # create the file `$out/nix-support/failed' to signal failure, and
@@ -80,13 +119,13 @@ findInputs()
             return 0
             ;;
     esac
-    
+
     pkgs="$pkgs $pkg "
 
     if test -f $pkg/nix-support/setup-hook; then
         source $pkg/nix-support/setup-hook
     fi
-    
+
     if test -f $pkg/nix-support/propagated-build-inputs; then
         for i in $(cat $pkg/nix-support/propagated-build-inputs); do
             findInputs $i
@@ -141,20 +180,15 @@ if test -z "$NIX_STRIP_DEBUG"; then
 fi
 
 
-# Do we know where the store is?  This is required for purity checking.
-if test -z "$NIX_STORE"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_STORE variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_STORE \
+    "Error: you have an old version of Nix that does not set the
+     NIX_STORE variable. This is required for purity checking.
+     Please upgrade."
 
-
-# We also need to know the root of the build directory for purity checking.
-if test -z "$NIX_BUILD_TOP"; then
-    echo "Error: you have an old version of Nix that does not set the" \
-        "NIX_BUILD_TOP variable.  Please upgrade." >&2
-    exit 1
-fi
+assertEnvExists NIX_BUILD_TOP \
+    "Error: you have an old version of Nix that does not set the
+     NIX_BUILD_TOP variable. This is required for purity checking.
+     Please upgrade."
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -175,15 +209,33 @@ if test "$useTempPrefix" = "1"; then
 fi
 
 
-# Execute the post-hook.
-if test -n "@postHook@"; then
-    source @postHook@
-fi
-
 PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
-    echo "Final path: $PATH"
+    echo "final path: $PATH"
 fi
+
+
+######################################################################
+# Misc. helper functions.
+
+
+stripDirs() {
+    local dirs="$1"
+    local stripFlags="$2"
+    local dirsNew=
+
+    for d in ${dirs}; do
+        if test -d "$prefix/$d"; then
+            dirsNew="${dirsNew} $prefix/$d "
+        fi
+    done
+    dirs=${dirsNew}
+
+    if test -n "${dirs}"; then
+        echo $dirs
+        find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+    fi
+}
 
 
 ######################################################################
@@ -195,40 +247,44 @@ substitute() {
     local output="$2"
 
     local -a params=("$@")
+    local -a args=()
 
     local sedScript=$NIX_BUILD_TOP/.sedargs
     rm -f $sedScript
     touch $sedScript
 
     local n p pattern replacement varName
-    
+
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
         if test "$p" = "--replace"; then
-            pattern=${params[$((n + 1))]}
-            replacement=${params[$((n + 2))]}
+            pattern="${params[$((n + 1))]}"
+            replacement="${params[$((n + 2))]}"
             n=$((n + 2))
-            echo "s^$pattern^$replacement^g" >> $sedScript
-            sedArgs=("${sedArgs[@]}" "-e" )
         fi
 
         if test "$p" = "--subst-var"; then
-            varName=${params[$((n + 1))]}
+            varName="${params[$((n + 1))]}"
+            pattern="@$varName@"
+            replacement="${!varName}"
             n=$((n + 1))
-            echo "s^@${varName}@^${!varName}^g" >> $sedScript
         fi
 
         if test "$p" = "--subst-var-by"; then
-            varName=${params[$((n + 1))]}
-            replacement=${params[$((n + 2))]}
+            pattern="@${params[$((n + 1))]}@"
+            replacement="${params[$((n + 2))]}"
             n=$((n + 2))
-            echo "s^@${varName}@^$replacement^g" >> $sedScript
         fi
 
+        if test ${#args[@]} != 0; then
+            args[${#args[@]}]="-a"
+        fi
+        args[${#args[@]}]="$pattern"
+        args[${#args[@]}]="$replacement"
     done
 
-    sed -f $sedScript < "$input" > "$output".tmp
+    replace-literal -e -s "${args[@]}" < "$input" > "$output".tmp
     if test -x "$output"; then
         chmod +x "$output".tmp
     fi
@@ -246,7 +302,7 @@ substituteInPlace() {
 substituteAll() {
     local input="$1"
     local output="$2"
-    
+
     # Select all environment variables that start with a lowercase character.
     for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
         if test "$NIX_DEBUG" = "1"; then
@@ -256,7 +312,7 @@ substituteAll() {
     done
 
     substitute "$input" "$output" $args
-}  
+}
 
 
 ######################################################################
@@ -366,20 +422,20 @@ stripHash() {
 
 
 unpackFile() {
-    local file=$1
+    local file="$1"
     local cmd
 
     header "unpacking source archive $file" 3
 
-    case $file in
+    case "$file" in
         *.tar)
             tar xvf $file || fail
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gunzip < $file | tar xvf - || fail
+            gzip -d < $file | tar xvf - || fail
             ;;
         *.tar.bz2 | *.tbz2)
-            bunzip2 < $file | tar xvf - || fail
+            bzip2 -d < $file | tar xvf - || fail
             ;;
         *.zip)
             unzip $file || fail
@@ -405,7 +461,7 @@ unpackFile() {
 }
 
 
-unpackW() {
+unpackPhase() {
     if test -n "$unpackPhase"; then
         eval "$unpackPhase"
         return
@@ -475,21 +531,14 @@ unpackW() {
 }
 
 
-unpackPhase() {
-    header "unpacking sources"
-    startLog "unpack"
-    unpackW
-    stopLog
-    stopNest
-}
-
-
-patchW() {
+patchPhase() {
     if test -n "$patchPhase"; then
         eval "$patchPhase"
         return
     fi
 
+    if test -z "$patchPhase" -a -z "$patches"; then return; fi
+    
     if test -z "$patchFlags"; then
         patchFlags="-p1"
     fi
@@ -499,25 +548,15 @@ patchW() {
         local uncompress=cat
         case $i in
             *.gz)
-                uncompress=gunzip
+                uncompress="gzip -d"
                 ;;
             *.bz2)
-                uncompress=bunzip2
+                uncompress="bzip2 -d"
                 ;;
         esac
         $uncompress < $i | patch $patchFlags || fail
         stopNest
     done
-}
-
-
-patchPhase() {
-    if test -z "$patchPhase" -a -z "$patches"; then return; fi
-    header "patching sources"
-    startLog "patch"
-    patchW
-    stopLog
-    stopNest
 }
 
 
@@ -527,7 +566,7 @@ fixLibtool() {
 }
 
 
-configureW() {
+configurePhase() {
     if test -n "$configurePhase"; then
         eval "$configurePhase"
         return
@@ -551,7 +590,14 @@ configureW() {
     fi
 
     if test -z "$dontAddPrefix"; then
-        configureFlags="--prefix=$prefix $configureFlags"
+        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+    fi
+
+    # Add --disable-dependency-tracking to speed up some builds.
+    if test -z "$dontAddDisableDepTrack"; then
+        if grep -q dependency-tracking $configureScript; then
+            configureFlags="--disable-dependency-tracking ${prefixKey:---prefix=}$prefix $configureFlags"
+        fi
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
@@ -561,25 +607,21 @@ configureW() {
 }
 
 
-configurePhase() {
-    header "configuring"
-    startLog "configure"
-    configureW
-    stopLog
-    stopNest
-}
-
-
-buildW() {
+buildPhase() {
     if test -n "$buildPhase"; then
         eval "$buildPhase"
         return
     fi
 
     eval "$preBuild"
-    
+
+    if ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
+        echo "no Makefile, doing nothing"
+        return
+    fi
+
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-    make \
+    make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}" || fail
 
@@ -587,19 +629,7 @@ buildW() {
 }
 
 
-buildPhase() {
-    if test "$dontBuild" = 1; then
-        return
-    fi
-    header "building"
-    startLog "build"
-    buildW
-    stopLog
-    stopNest
-}
-
-
-checkW() {
+checkPhase() {
     if test -n "$checkPhase"; then
         eval "$checkPhase"
         return
@@ -610,21 +640,9 @@ checkW() {
     fi
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
-    make \
+    make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
-}
-
-
-checkPhase() {
-    if test "$doCheck" != 1; then
-        return
-    fi
-    header "checking"
-    startLog "check"
-    checkW
-    stopLog
-    stopNest
 }
 
 
@@ -639,7 +657,7 @@ patchELF() {
 }
 
 
-installW() {
+installPhase() {
     if test -n "$installPhase"; then
         eval "$installPhase"
         return
@@ -654,7 +672,7 @@ installW() {
             installTargets=install
         fi
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-        make $installTargets \
+        make ${makefile:+-f $makefile} $installTargets \
             $makeFlags "${makeFlagsArray[@]}" \
             $installFlags "${installFlagsArray[@]}" || fail
     else
@@ -665,22 +683,10 @@ installW() {
 }
 
 
-installPhase() {
-    if test "$dontInstall" = 1; then
-        return
-    fi
-    header "installing"
-    startLog "install"
-    installW
-    stopLog
-    stopNest
-}
-
-
 # The fixup phase performs generic, package-independent, Nix-related
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
-fixupW() {
+fixupPhase() {
     if test -n "$fixupPhase"; then
         eval "$fixupPhase"
         return
@@ -688,9 +694,33 @@ fixupW() {
 
     eval "$preFixup"
 
-    if test -z "$dontStrip" -a "$NIX_STRIP_DEBUG" = 1; then
-        find "$prefix" -name "*.a" -exec echo stripping {} \; \
-            -exec strip -S {} \; || fail
+    # Put man/doc/info under $out/share.
+    forceShare=${forceShare:=man doc info}
+    if test -n "$forceShare"; then
+        for d in $forceShare; do
+            if test -d "$prefix/$d"; then
+                if test -d "$prefix/share/$d"; then
+                    echo "both $d/ and share/$d/ exists!"
+                else
+                    echo "fixing location of $d/ subdirectory"
+                    ensureDir $prefix/share
+                    if test -w $prefix/share; then
+                        mv -v $prefix/$d $prefix/share
+                        ln -sv share/$d $prefix
+                    fi
+                fi
+            fi
+        done;
+    fi
+
+    # TODO: strip _only_ ELF executables, and return || fail here...
+    if test -z "$dontStrip"; then
+        stripDebugList=${stripDebugList:-lib}
+        echo "stripping debuging symbols from files in $stripDebugList"
+        stripDirs "$stripDebugList" -S
+        stripAllList=${stripAllList:-bin sbin}
+        echo "stripping all symbols from files in $stripAllList"
+        stripDirs "$stripAllList" -s
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
@@ -702,36 +732,29 @@ fixupW() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
+    if test -n "$setupHook"; then
+        ensureDir "$out/nix-support"
+        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+    fi
+
     eval "$postFixup"
 }
 
 
-fixupPhase() {
-    if test "$dontFixup" = 1; then
-        return
-    fi
-    header "post-installation fixup"
-    startLog "fixup"
-    fixupW
-    stopLog
-    stopNest
-}
-
-
-distW() {
+distPhase() {
     if test -n "$distPhase"; then
         eval "$distPhase"
         return
     fi
 
     eval "$preDist"
-    
+
     if test -z "$distTarget"; then
         distTarget="dist"
     fi
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make $distFlags "${distFlagsArray[@]}" $distTarget || fail
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget || fail
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
@@ -749,15 +772,18 @@ distW() {
 }
 
 
-distPhase() {
-    if test "$doDist" != 1; then
-        return
-    fi
-    header "creating distribution"
-    startLog "dist"
-    distW
-    stopLog
-    stopNest
+showPhaseHeader() {
+    local phase="$1"
+    case $phase in
+        unpackPhase) header "unpacking sources";;
+        patchPhase) header "patching sources";;
+        configurePhase) header "configuring";;
+        buildPhase) header "building";;
+        checkPhase) header "running tests";;
+        installPhase) header "installing";;
+        fixupPhase) header "post-installation fixup";;
+        *) header "$phase";;
+    esac
 }
 
 
@@ -769,21 +795,41 @@ genericBuild() {
         return
     fi
 
-    unpackPhase
-    cd $sourceRoot
-
     if test -z "$phases"; then
-        phases="patchPhase configurePhase buildPhase checkPhase \
-            installPhase fixupPhase distPhase";
+        phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
+            installPhase fixupPhase distPhase $extraPhases";
     fi
 
-    for i in $phases; do
+    for curPhase in $phases; do
+        if test "$curPhase" = buildPhase -a -n "$dontBuild"; then continue; fi
+        if test "$curPhase" = checkPhase -a -z "$doCheck"; then continue; fi
+        if test "$curPhase" = installPhase -a -n "$dontInstall"; then continue; fi
+        if test "$curPhase" = fixupPhase -a -n "$dontFixup"; then continue; fi
+        if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
+        
+        showPhaseHeader "$curPhase"
+        startLog "$curPhase"
         dumpVars
-        eval "$i"
+        
+        # Evaluate the variable named $curPhase if it exists, otherwise the
+        # function named $curPhase.
+        eval "${!curPhase:-$curPhase}"
+
+        if test "$curPhase" = unpackPhase; then
+            cd "${sourceRoot:-.}"
+        fi
+        
+        stopLog
+        stopNest
     done
-    
+
     stopNest
 }
+
+
+# Execute the post-hook.
+if test -n "@postHook@"; then source @postHook@; fi
+eval "$postHook"
 
 
 dumpVars

@@ -27,7 +27,7 @@ rec {
     inherit system;
     name = "curl";
     builder = bootstrapTools.bash;
-    inherit (bootstrapTools) bunzip2 cp curl;
+    inherit (bootstrapTools) bzip2 cp curl;
     args = [ ./scripts/unpack-curl.sh ];
   };
 
@@ -45,7 +45,7 @@ rec {
   downloadAndUnpack = pkgname: {url, sha1}: derivation {
     name = pkgname;
     builder = bootstrapTools.bash;
-    inherit (bootstrapTools) bunzip2 tar cp;
+    inherit (bootstrapTools) bzip2 tar cp;
     args = [ ./scripts/unpack.sh ];
     tarball = download {inherit url sha1 pkgname;};
     inherit system;

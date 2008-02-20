@@ -13,13 +13,14 @@ args : with args;
 	in with localDefs;
 let 
 	preBuild = FullDepEntry ("
+		sed -e '1i#define INT_MAX __INT_MAX__' -i *.c *.cpp
 		sed -e 's@/usr/local@'\$out'@g' -i Makefile.m4 Makefile
 	") [minInit doUnpack];
 in
 stdenv.mkDerivation rec {
 	name = "dvd+rw-tools-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [preBuild doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [preBuild addInputs (doDump "0") doMakeInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 	DVD+RW tools.

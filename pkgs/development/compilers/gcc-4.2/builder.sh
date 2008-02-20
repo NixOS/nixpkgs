@@ -40,6 +40,7 @@ if test "$noSysDirs" = "1"; then
     done
 
     makeFlagsArray=( \
+        "${makeFlagsArray[@]}" \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         LIMITS_H_TEST=true \
@@ -68,18 +69,30 @@ postInstall() {
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
+    rm -rf $out/lib/gcc/*/*/install-tools
 
     # Get rid of some "fixed" header files
     rm -rf $out/lib/gcc/*/*/include/root
+
+    # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
+    for i in $out/bin/*-gcc*; do
+        if cmp -s $out/bin/gcc $i; then
+            ln -sfn gcc $i
+        fi
+    done
+
+    for i in $out/bin/*-c++* $out/bin/*-g++*; do
+        if cmp -s $out/bin/g++ $i; then
+            ln -sfn g++ $i
+        fi
+    done
 }
 
 
-if test -z "$staticCompiler"; then
-    if test -z "$profiledCompiler"; then
-        buildFlags="bootstrap $buildFlags"
-    else    
-        buildFlags="profiledbootstrap $buildFlags"
-    fi
+if test -z "$profiledCompiler"; then
+    buildFlags="bootstrap $buildFlags"
+else    
+    buildFlags="profiledbootstrap $buildFlags"
 fi
 
 genericBuild

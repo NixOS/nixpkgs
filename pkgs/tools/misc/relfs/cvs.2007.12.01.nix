@@ -1,7 +1,7 @@
 args : with args;
 	let localDefs = builderDefs {
 	src = /* put a fetchurl here */
-	fetchcvs {
+	if args ? src then args.src else fetchcvs {
 		url = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";
 		module = "relfs";
 		date = "2007-12-01";

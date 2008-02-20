@@ -1,10 +1,17 @@
 {stdenv, fetchurl, pcre}:
 
 stdenv.mkDerivation {
-  name = "gnugrep-2.5.1a";
+  name = "gnugrep-2.5.3";
+  
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/grep/grep-2.5.1a.tar.bz2;
-    md5 = "52202fe462770fa6be1bb667bd6cf30c";
+    url = http://nix.cs.uu.nl/dist/tarballs/grep-2.5.3-with-info.tar.bz2;
+    sha256 = "0rg9dipksqzbg8v1xalib1n3xkkycc5r1l2gb9cxy1cz3cjip5l8";
   };
+  
   buildInputs = [pcre];
+
+  meta = {
+    homepage = http://www.gnu.org/software/grep/;
+    description = "GNU implementation of the Unix grep command";
+  };
 }

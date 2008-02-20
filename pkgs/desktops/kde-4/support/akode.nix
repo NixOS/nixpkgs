@@ -2,12 +2,6 @@ args: with args;
 
 stdenv.mkDerivation {
   name = "akode-2.0.0dev";
-  
-  src = fetchsvn {
-    url = svn://anonsvn.kde.org/home/kde/trunk/kdesupport/akode;
-	rev = 732646;
-	md5 = "6629ffedc42c020d2e8645910a4efdf5";
-  };
-
+  src = svnSrc "akode" "0xkzv386wvh16njjv8z84mg3czp7j7n60lwhwns5fwqhx1s30h5y";
   buildInputs = [ cmake qt openssl gettext cyrus_sasl alsaLib ];
 }
