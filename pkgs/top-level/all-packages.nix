@@ -3816,7 +3816,8 @@ rec {
     modules = [];
   };
 
-  kernel = kernel_2_6_23;
+  # kernel = kernel_2_6_23;
+  kernel = kernel_2_6_21_ck;
 
   systemKernel = (if (getConfig ["kernel" "version"] "2.6.21") == "2.6.22" then
 	kernel_2_6_22 else if (getConfig ["kernel" "version"] "2.6.21") == "2.6.23" then
@@ -5817,6 +5818,16 @@ rec {
 	saneBackends;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11;
+  };
+
+  # State Nix
+  snix = import ../tools/package-management/snix {
+    inherit fetchurl stdenv perl curl bzip2 openssl;
+    aterm = aterm242fixes;
+    db4 = db45;
+
+    inherit ext3cowtools e3cfsprogs rsync;
+    ext3cow_kernel = kernel;
   };
 
   synaptics = import ../misc/synaptics {
