@@ -53,9 +53,8 @@ param2=@param2@
 param3=@param3@
 param4=@param4@
 param5=@param5@
-if test -n "@preHook@"; then
-    source @preHook@
-fi
+if test -n "@preHook@"; then source @preHook@; fi
+eval "$preHook"
 
 
 # Check that the pre-hook initialised SHELL.
@@ -210,15 +209,15 @@ if test "$useTempPrefix" = "1"; then
 fi
 
 
-# Execute the post-hook.
-if test -n "@postHook@"; then
-    source @postHook@
-fi
-
 PATH=$_PATH${_PATH:+:}$PATH
 if test "$NIX_DEBUG" = "1"; then
     echo "final path: $PATH"
 fi
+
+
+######################################################################
+# Misc. helper functions.
+
 
 stripDirs() {
     local dirs="$1"
@@ -423,12 +422,12 @@ stripHash() {
 
 
 unpackFile() {
-    local file=$1
+    local file="$1"
     local cmd
 
     header "unpacking source archive $file" 3
 
-    case $file in
+    case "$file" in
         *.tar)
             tar xvf $file || fail
             ;;
@@ -462,7 +461,7 @@ unpackFile() {
 }
 
 
-unpackW() {
+unpackPhase() {
     if test -n "$unpackPhase"; then
         eval "$unpackPhase"
         return
@@ -532,23 +531,14 @@ unpackW() {
 }
 
 
-unpackPhase() {
-    sourceRoot=. # don't change to user dir homeless shelter if custom unpackSource doesn't set sourceRoot
-    header "unpacking sources"
-    startLog "unpack"
-    unpackW
-    stopLog
-    stopNest
-    cd $sourceRoot
-}
-
-
-patchW() {
+patchPhase() {
     if test -n "$patchPhase"; then
         eval "$patchPhase"
         return
     fi
 
+    if test -z "$patchPhase" -a -z "$patches"; then return; fi
+    
     if test -z "$patchFlags"; then
         patchFlags="-p1"
     fi
@@ -570,23 +560,13 @@ patchW() {
 }
 
 
-patchPhase() {
-    if test -z "$patchPhase" -a -z "$patches"; then return; fi
-    header "patching sources"
-    startLog "patch"
-    patchW
-    stopLog
-    stopNest
-}
-
-
 fixLibtool() {
     sed 's^eval sys_lib_.*search_path=.*^^' < $1 > $1.tmp
     mv $1.tmp $1
 }
 
 
-configureW() {
+configurePhase() {
     if test -n "$configurePhase"; then
         eval "$configurePhase"
         return
@@ -627,16 +607,7 @@ configureW() {
 }
 
 
-configurePhase() {
-    header "configuring"
-    startLog "configure"
-    configureW
-    stopLog
-    stopNest
-}
-
-
-buildW() {
+buildPhase() {
     if test -n "$buildPhase"; then
         eval "$buildPhase"
         return
@@ -644,8 +615,8 @@ buildW() {
 
     eval "$preBuild"
 
-    if ! test -n "$makefile" -o -e "Makefile" -o -e "makefile"; then
-        echo "no Makefile or makefile, doing nothing"
+    if ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
+        echo "no Makefile, doing nothing"
         return
     fi
 
@@ -658,19 +629,7 @@ buildW() {
 }
 
 
-buildPhase() {
-    if test "$dontBuild" = 1; then
-        return
-    fi
-    header "building"
-    startLog "build"
-    buildW
-    stopLog
-    stopNest
-}
-
-
-checkW() {
+checkPhase() {
     if test -n "$checkPhase"; then
         eval "$checkPhase"
         return
@@ -687,18 +646,6 @@ checkW() {
 }
 
 
-checkPhase() {
-    if test "$doCheck" != 1; then
-        return
-    fi
-    header "checking"
-    startLog "check"
-    checkW
-    stopLog
-    stopNest
-}
-
-
 patchELF() {
     # Patch all ELF executables and shared libraries.
     header "patching ELF executables and libraries"
@@ -710,7 +657,7 @@ patchELF() {
 }
 
 
-installW() {
+installPhase() {
     if test -n "$installPhase"; then
         eval "$installPhase"
         return
@@ -736,22 +683,10 @@ installW() {
 }
 
 
-installPhase() {
-    if test "$dontInstall" = 1; then
-        return
-    fi
-    header "installing"
-    startLog "install"
-    installW
-    stopLog
-    stopNest
-}
-
-
 # The fixup phase performs generic, package-independent, Nix-related
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
-fixupW() {
+fixupPhase() {
     if test -n "$fixupPhase"; then
         eval "$fixupPhase"
         return
@@ -806,19 +741,7 @@ fixupW() {
 }
 
 
-fixupPhase() {
-    if test "$dontFixup" = 1; then
-        return
-    fi
-    header "post-installation fixup"
-    startLog "fixup"
-    fixupW
-    stopLog
-    stopNest
-}
-
-
-distW() {
+distPhase() {
     if test -n "$distPhase"; then
         eval "$distPhase"
         return
@@ -849,15 +772,18 @@ distW() {
 }
 
 
-distPhase() {
-    if test "$doDist" != 1; then
-        return
-    fi
-    header "creating distribution"
-    startLog "dist"
-    distW
-    stopLog
-    stopNest
+showPhaseHeader() {
+    local phase="$1"
+    case $phase in
+        unpackPhase) header "unpacking sources";;
+        patchPhase) header "patching sources";;
+        configurePhase) header "configuring";;
+        buildPhase) header "building";;
+        checkPhase) header "running tests";;
+        installPhase) header "installing";;
+        fixupPhase) header "post-installation fixup";;
+        *) header "$phase";;
+    esac
 }
 
 
@@ -871,16 +797,39 @@ genericBuild() {
 
     if test -z "$phases"; then
         phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
-            installPhase fixupPhase distPhase";
+            installPhase fixupPhase distPhase $extraPhases";
     fi
 
-    for i in $phases; do
+    for curPhase in $phases; do
+        if test "$curPhase" = buildPhase -a -n "$dontBuild"; then continue; fi
+        if test "$curPhase" = checkPhase -a -z "$doCheck"; then continue; fi
+        if test "$curPhase" = installPhase -a -n "$dontInstall"; then continue; fi
+        if test "$curPhase" = fixupPhase -a -n "$dontFixup"; then continue; fi
+        if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
+        
+        showPhaseHeader "$curPhase"
+        startLog "$curPhase"
         dumpVars
-        eval "$i"
+        
+        # Evaluate the variable named $curPhase if it exists, otherwise the
+        # function named $curPhase.
+        eval "${!curPhase:-$curPhase}"
+
+        if test "$curPhase" = unpackPhase; then
+            cd "${sourceRoot:-.}"
+        fi
+        
+        stopLog
+        stopNest
     done
 
     stopNest
 }
+
+
+# Execute the post-hook.
+if test -n "@postHook@"; then source @postHook@; fi
+eval "$postHook"
 
 
 dumpVars
