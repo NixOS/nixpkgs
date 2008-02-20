@@ -9,3 +9,7 @@ cd webapp
 ant
 ensureDir $out/webapps
 cp ../dist/axis2.war $out/webapps
+cd $out/webapps
+mkdir axis2
+cd axis2
+unzip ../axis2.war
