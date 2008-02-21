@@ -1114,7 +1114,7 @@ rec {
   });
 
   # This new ghc stuff is under heavy development and will change ! 
-  # =========  =======================================================
+  # ===============================================================
 
   # usage: see ghcPkgUtil.sh
   # depreceated -> use functions defined in builderDefs
@@ -3177,7 +3177,7 @@ rec {
   perlCGISession = import ../development/perl-modules/generic perl {
     name = "CGI-Session-3.95";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SH/SHERZODR/CGI-Session-3.95.tar.gz;
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/CGI-Session-3.95.tar.gz;
       md5 = "fe9e46496c7c711c54ca13209ded500b";
     };
   };
@@ -3189,7 +3189,7 @@ rec {
   perlCryptPasswordMD5 = import ../development/perl-modules/generic perl {
     name = "Crypt-PasswdMD5-1.3";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
+      url = mirror://cpan/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
       sha256 = "13j0v6ihgx80q8jhyas4k48b64gnzf202qajyn097vj8v48khk54";
     };
   };
@@ -3209,7 +3209,7 @@ rec {
   perlDigestSHA1 = import ../development/perl-modules/generic perl {
     name = "Digest-SHA1-2.11";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
+      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
       md5 = "2449bfe21d6589c96eebf94dae24df6b";
     };
   };
@@ -3217,7 +3217,7 @@ rec {
   perlEmailAddress = import ../development/perl-modules/generic perl {
     name = "Email-Address-1.888";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Address-1.888.tar.gz;
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.888.tar.gz;
       sha256 = "0c6b8djnmiy0niskrvywd6867xd1qmn241ffdwj957dkqdakq9yx";
     };
   };
@@ -3225,7 +3225,7 @@ rec {
   perlEmailSend = import ../development/perl-modules/generic perl {
     name = "Email-Send-2.185";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Send-2.185.tar.gz;
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Send-2.185.tar.gz;
       sha256 = "0pbgnnbmv6z3zzqaiq1sdcv5d26ijhw4p8k8kp6ac7arvldblamz";
     };
     propagatedBuildInputs = [perlEmailSimple perlEmailAddress perlModulePluggable perlReturnValue];
@@ -3234,7 +3234,7 @@ rec {
   perlEmailSimple = import ../development/perl-modules/generic perl {
     name = "Email-Simple-2.003";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Email-Simple-2.003.tar.gz;
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.003.tar.gz;
       sha256 = "0h8873pidhkqy7415s5sx8z614d0haxiknbjwrn65icrr2m0b8g6";
     };
   };
@@ -3242,7 +3242,7 @@ rec {
   perlHTMLParser = import ../development/perl-modules/generic perl {
     name = "HTML-Parser-3.56";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/HTML-Parser-3.56.tar.gz;
+      url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.56.tar.gz;
       sha256 = "0x1h42r54aq4yqpwi7mla4jzia9c5ysyqh8ir2nav833f9jm6g2h";
     };
     propagatedBuildInputs = [perlHTMLTagset];
@@ -3251,7 +3251,7 @@ rec {
   perlHTMLTagset = import ../development/perl-modules/generic perl {
     name = "HTML-Tagset-3.10";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/P/PE/PETDANCE/HTML-Tagset-3.10.tar.gz;
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.10.tar.gz;
       sha256 = "05k292qy7jzjlmmybis8nncpnwwa4jfkm7q3gq6866ydxrzds9xh";
     };
   };
@@ -3275,7 +3275,7 @@ rec {
   perlLWP = import ../development/perl-modules/generic perl {
     name = "libwww-perl-5.808";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/libwww-perl-5.808.tar.gz;
+      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.808.tar.gz;
       sha256 = "1r5rslx68yplyd07bvjahjjrrqb56bhgg6gwdr9c16mv2s57gq12";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
@@ -3284,7 +3284,7 @@ rec {
   perlModulePluggable = import ../development/perl-modules/generic perl {
     name = "Module-Pluggable-3.5";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SI/SIMONW/Module-Pluggable-3.5.tar.gz;
+      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-3.5.tar.gz;
       sha256 = "08rywi79pqn2c8zr17fmd18lpj5hm8lxd1j4v2k002ni8vhl43nv";
     };
     patches = [
@@ -3295,7 +3295,7 @@ rec {
   perlReturnValue = import ../development/perl-modules/generic perl {
     name = "Return-Value-1.302";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Return-Value-1.302.tar.gz;
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Return-Value-1.302.tar.gz;
       sha256 = "0hf5rmfap49jh8dnggdpvapy5r4awgx5hdc3acc9ff0vfqav8azm";
     };
   };
@@ -3303,7 +3303,7 @@ rec {
   perlStringMkPasswd = import ../development/perl-modules/generic perl {
     name = "String-MkPasswd-0.02";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
+      url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
       sha256 = "0si4xfgf8c2pfag1cqbr9jbyvg3hak6wkmny56kn2qwa4ljp9bk6";
     };
   };
@@ -3319,7 +3319,7 @@ rec {
   perlURI = import ../development/perl-modules/generic perl {
     name = "URI-1.35";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/URI-1.35.tar.gz;
+      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.35.tar.gz;
       md5 = "1a933b1114c41a25587ee59ba8376f7c";
     };
   };
@@ -3327,7 +3327,7 @@ rec {
   perlXMLDOM = import ../development/perl-modules/generic perl {
     name = "XML-DOM-1.44";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
+      url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
       sha256 = "1r0ampc88ni3sjpzr583k86076qg399arfm9xirv3cw49k3k5bzn";
     };
 #    buildInputs = [libxml2];
@@ -3369,7 +3369,7 @@ rec {
   perlXMLRegExp = import ../development/perl-modules/generic perl {
     name = "XML-RegExp-0.03";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/T/TJ/TJMATHER/XML-RegExp-0.03.tar.gz;
+      url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-RegExp-0.03.tar.gz;
       sha256 = "1gkarylvdk3mddmchcwvzq09gpvx5z26nybp38dg7mjixm5bs226";
     };
   };
@@ -3404,7 +3404,7 @@ rec {
   perlXMLWriter = import ../development/perl-modules/generic perl {
     name = "XML-Writer-0.602";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
+      url = mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
       sha256 = "0kdi022jcn9mwqsxy2fiwl2cjlid4x13r038jvi426fhjknl11nl";
     };
   };

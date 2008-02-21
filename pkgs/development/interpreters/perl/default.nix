@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.funet.fi/pub/CPAN/src/perl-5.8.8.tar.bz2;
+    url = mirror://cpan/src/perl-5.8.8.tar.bz2;
     sha256 = "1j8vzc6lva49mwdxkzhvm78dkxyprqs4n4057amqvsh4kh6i92l1";
   };
 

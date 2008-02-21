@@ -1,4 +1,5 @@
 rec {
+
   # Content-addressable Nix mirrors.
   hashedMirrors = [
     http://nix.cs.uu.nl/dist/tarballs
@@ -102,6 +103,14 @@ rec {
     ftp://ftp.imagemagick.org/pub/ImageMagick
     ftp://ftp.imagemagick.net/pub/ImageMagick
     http://imagemagick.site2nd.org/imagemagick
+  ];
+
+  # CPAN mirrors.
+  cpan = [
+    http://ftp.gwdg.de/pub/languages/perl/CPAN/
+    ftp://download.xs4all.nl/pub/mirror/CPAN/
+    ftp://ftp.nl.uu.net/pub/CPAN/
+    http://ftp.funet.fi/pub/CPAN/
   ];
 
 }
