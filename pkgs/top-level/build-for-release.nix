@@ -120,7 +120,7 @@ let {
     nss_ldap
     ntp    
     nxml
-    openoffice
+    #openoffice
     openssh
     openssl
     pam_console
