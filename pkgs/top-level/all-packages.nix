@@ -1112,7 +1112,6 @@ rec {
 
   gcc42 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
-    texinfo = texinfo49;
     profiledCompiler = true;
   }));
 
