@@ -1,7 +1,8 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
-,gmp ? null , mpfr ? null
+, gmp ? null , mpfr ? null
+, texinfo ? null
 }:
 
 assert langC;
@@ -24,6 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [] 
 	++ (if gmp != null then [gmp] else [])
 	++ (if mpfr != null then [mpfr] else [])
+	++ (if texinfo != null then [texinfo] else [])
 	;
 
   configureFlags = "

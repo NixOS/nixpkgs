@@ -4,6 +4,7 @@
 , staticCompiler ? false
 , gmp ? null
 , mpfr ? null
+, texinfo ? null
 }:
 
 assert langC || langF77;
@@ -66,5 +67,6 @@ stdenv.mkDerivation ({
 // (if gmp != null || mpfr != null then {
   buildInputs = []
     ++ (if gmp != null then [gmp] else [])
-    ++ (if mpfr != null then [mpfr] else []);
+    ++ (if mpfr != null then [mpfr] else [])
+    ++ (if texinfo != null then [texinfo] else []);
 } else {}))

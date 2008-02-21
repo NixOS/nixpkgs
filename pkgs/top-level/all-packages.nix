@@ -1094,13 +1094,20 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   });
 
+  # XXX: GCC 4.2 (and possibly others) misdetects `makeinfo' when
+  # using Texinfo >= 4.10, just because it uses a stupid regexp that
+  # expects a single digit after the dot.  As a workaround, we feed
+  # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
+
   gcc40 = wrapGCC (import ../development/compilers/gcc-4.0 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = true;
   });
 
   gcc41 = useFromStdenv (stdenv ? gcc) stdenv.gcc (wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = false;
   }));
 
@@ -1108,6 +1115,7 @@ rec {
 
   gcc42 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = true;
   }));
 
@@ -1989,6 +1997,10 @@ rec {
     pythonSupport = false;
     javaSupport = true;
   }));
+
+  texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
+    inherit fetchurl stdenv ncurses;
+  };
 
   texinfo = import ../development/tools/misc/texinfo {
     inherit fetchurl stdenv ncurses;

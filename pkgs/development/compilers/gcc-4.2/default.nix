@@ -2,6 +2,7 @@
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
 , staticCompiler ? false
+, texinfo ? null
 }:
 
 assert langC;
@@ -31,6 +32,9 @@ stdenv.mkDerivation {
     ++ optional noSysDirs [./no-sys-dirs.patch];
     
   inherit noSysDirs profiledCompiler staticCompiler;
+
+  buildInputs = []
+    ++ optional (texinfo != null) [texinfo];
 
   configureFlags = "
     --disable-multilib
