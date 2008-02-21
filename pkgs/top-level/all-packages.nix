@@ -3654,6 +3654,10 @@ rec {
   };
   */
 
+  acpi = import ../os-specific/linux/acpi {
+    inherit fetchurl stdenv;
+  };
+
   acpitool = import ../os-specific/linux/acpitool {
     inherit fetchurl stdenv;
   };
