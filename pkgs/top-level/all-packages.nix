@@ -5760,17 +5760,16 @@ rec {
     db4 = db45;
   };
 
-  nixCustomFun = src: preConfigure: configureFlags :
-  (import ../tools/package-management/nix/custom.nix {
-    inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
+  nixCustomFun = src: preConfigure: configureFlags:
+    import ../tools/package-management/nix/custom.nix {
+      inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
         autoconf libtool configureFlags;
-    bison = bison23;
-    flex = flex2533;
-    aterm = aterm242fixes;
-    db4 = db45;
-    inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
-
-  });
+      bison = bison23;
+      flex = flex2533;
+      aterm = aterm242fixes;
+      db4 = db45;
+      inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
+    };
 
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig;
