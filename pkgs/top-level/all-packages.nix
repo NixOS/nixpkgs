@@ -1093,18 +1093,26 @@ rec {
     inherit fetchurl stdenv noSysDirs;
   });
 
+  # XXX: GCC 4.2 (and possibly others) misdetects `makeinfo' when
+  # using Texinfo >= 4.10, just because it uses a stupid regexp that
+  # expects a single digit after the dot.  As a workaround, we feed
+  # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
+
   gcc40 = wrapGCC (import ../development/compilers/gcc-4.0 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = true;
   });
 
   gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = false;
   });
 
   gcc42 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
+    texinfo = texinfo49;
     profiledCompiler = true;
   }));
 
@@ -1975,6 +1983,10 @@ rec {
     javaSupport = true;
   }));
 
+  texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
+    inherit fetchurl stdenv ncurses;
+  };
+
   texinfo = import ../development/tools/misc/texinfo {
     inherit fetchurl stdenv ncurses;
   };
@@ -2736,6 +2748,10 @@ rec {
 
   msilbc = selectVersion ../development/libraries/msilbc "2.0.0" {
     inherit fetchurl stdenv ilbc mediastreamer pkgconfig;
+  };
+
+  mpich2 = import ../development/libraries/mpich2 {
+    inherit fetchurl stdenv python;
   };
 
   mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
@@ -5700,17 +5716,16 @@ rec {
     db4 = db45;
   };
 
-  nixCustomFun = src: preConfigure: configureFlags :
-  (import ../tools/package-management/nix/custom.nix {
-    inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
+  nixCustomFun = src: preConfigure: configureFlags:
+    import ../tools/package-management/nix/custom.nix {
+      inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
         autoconf libtool configureFlags;
-    bison = bison23;
-    flex = flex2533;
-    aterm = aterm242fixes;
-    db4 = db45;
-    inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
-
-  });
+      bison = bison23;
+      flex = flex2533;
+      aterm = aterm242fixes;
+      db4 = db45;
+      inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
+    };
 
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig;
