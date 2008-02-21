@@ -622,6 +622,10 @@ rec {
     version = "0.3rc1";
   } null;*/
 
+  inetutils = import ../tools/networking/inetutils {
+    inherit fetchurl stdenv;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
