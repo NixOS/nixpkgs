@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pcre}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "gnugrep-2.5.3";
   
   src = fetchurl {
@@ -14,4 +14,8 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/grep/;
     description = "GNU implementation of the Unix grep command";
   };
-}
+} // (if stdenv.system == "i686-darwin" then {
+  preBuild = ''
+    makeFlagsArray=(mkdir_p="mkdir -p")
+  '';
+} else {}))
