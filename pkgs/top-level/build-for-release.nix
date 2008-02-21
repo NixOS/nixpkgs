@@ -275,7 +275,7 @@ let {
     nxml
     #php
     subversion
-    tetex
+    #tetex
     unzip
   ;};
 
