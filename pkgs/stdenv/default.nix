@@ -46,7 +46,7 @@ rec {
 
   # The Nix build environment.
   stdenvNix = (import ./nix) (rec {
-    stdenv = if system == "i686-darwin" then stdenvDarwin else stdenvNative; # !!! hack
+    stdenv = if system == "i686-darwin" then stdenvPowerpcDarwin else stdenvNative; # !!! hack
     pkgs = allPackages {
       inherit system;
       bootStdenv = removeAttrs stdenv ["gcc"]; # Hack
@@ -59,9 +59,9 @@ rec {
   stdenvLinux = (import ./linux {inherit system allPackages;}).stdenvLinux;
 
     
-  # Darwin (Mac OS X) standard environment.  Very simple for now
+  # powerpc-darwin (Mac OS X) standard environment.  Very simple for now
   # (essentially it's just the native environment).
-  stdenvDarwin = (import ./darwin) {
+  stdenvPowerpcDarwin = (import ./powerpc-darwin) {
     stdenv = stdenvInitial;
     inherit genericStdenv gccWrapper;
   };
@@ -97,7 +97,7 @@ rec {
     if stdenvType == "i686-freebsd" then stdenvFreeBSD else
     if stdenvType == "i686-cygwin" then stdenvCygwin else
     if stdenvType == "i686-mingw" then stdenvMinGW else
-    if stdenvType == "powerpc-darwin" then stdenvDarwin else
+    if stdenvType == "powerpc-darwin" then stdenvPowerpcDarwin else
     if stdenvType == "i686-darwin" then stdenvNix else
     stdenvNative;
 }
