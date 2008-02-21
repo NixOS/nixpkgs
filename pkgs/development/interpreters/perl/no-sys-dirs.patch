@@ -1,8 +1,8 @@
-diff -rc perl-orig/Configure perl-5.8.6/Configure
-*** perl-orig/Configure	2004-09-10 08:25:52.000000000 +0200
---- perl-5.8.6/Configure	2005-03-10 12:53:28.000000000 +0100
+diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
+*** perl-5.10.0-orig/Configure	2007-12-18 11:47:07.000000000 +0100
+--- perl-5.10.0/Configure	2008-02-21 17:00:40.000000000 +0100
 ***************
-*** 86,100 ****
+*** 104,118 ****
   fi
   
   : Proper PATH setting
@@ -18,7 +18,7 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   
   for p in $paths
   do
---- 86,92 ----
+--- 104,110 ----
   fi
   
   : Proper PATH setting
@@ -27,25 +27,7 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   for p in $paths
   do
 ***************
-*** 1221,1228 ****
-  archname=''
-  : Possible local include directories to search.
-  : Set locincpth to "" in a hint file to defeat local include searches.
-! locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
-! locincpth="$locincpth /opt/gnu/include /usr/GNU/include /opt/GNU/include"
-  :
-  : no include file wanted by default
-  inclwanted=''
---- 1213,1219 ----
-  archname=''
-  : Possible local include directories to search.
-  : Set locincpth to "" in a hint file to defeat local include searches.
-! locincpth=""
-  :
-  : no include file wanted by default
-  inclwanted=''
-***************
-*** 1230,1245 ****
+*** 1271,1287 ****
   groupstype=''
   libnames=''
   : change the next line if compiling for Xenix/286 on Xenix/386
@@ -59,10 +41,11 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
 ! glibpth="$glibpth /usr/ccs/lib /usr/ucblib /usr/local/lib"
 ! test -f /usr/shlib/libc.so && glibpth="/usr/shlib $glibpth"
 ! test -f /shlib/libc.so     && glibpth="/shlib $glibpth"
+! test -d /usr/lib64         && glibpth="$glibpth /lib64 /usr/lib64 /usr/local/lib64"
   
   : Private path used by Configure to find libraries.  Its value
   : is prepended to libpth. This variable takes care of special
---- 1221,1232 ----
+--- 1263,1274 ----
   groupstype=''
   libnames=''
   : change the next line if compiling for Xenix/286 on Xenix/386
@@ -71,12 +54,30 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
 ! loclibpth=""
   
   : general looking path for locating libraries
-! glibpth="$xlibpth"
+! glibpth=""
   
   : Private path used by Configure to find libraries.  Its value
   : is prepended to libpth. This variable takes care of special
 ***************
-*** 1270,1277 ****
+*** 1302,1309 ****
+  
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
+! locincpth="$locincpth /opt/gnu/include /usr/GNU/include /opt/GNU/include"
+  :
+  : no include file wanted by default
+  inclwanted=''
+--- 1289,1295 ----
+  
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth=""
+  :
+  : no include file wanted by default
+  inclwanted=''
+***************
+*** 1331,1338 ****
   libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
   : We probably want to search /usr/shlib before most other libraries.
   : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
@@ -85,9 +86,9 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   : Do not use vfork unless overridden by a hint file.
   usevfork=false
   
---- 1257,1262 ----
+--- 1317,1322 ----
 ***************
-*** 2267,2273 ****
+*** 2340,2346 ****
   zip
   "
   pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -95,9 +96,9 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   for file in $loclist; do
   	eval xxx=\$$file
   	case "$xxx" in
---- 2252,2257 ----
+--- 2324,2329 ----
 ***************
-*** 7910,7922 ****
+*** 8155,8167 ****
   echo " "
   case "$sysman" in
   '') 
@@ -111,7 +112,7 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   	;;
   esac
   if $test -d "$sysman"; then
---- 7894,7901 ----
+--- 8138,8145 ----
   echo " "
   case "$sysman" in
   '') 
@@ -121,7 +122,7 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   esac
   if $test -d "$sysman"; then
 ***************
-*** 17949,17957 ****
+*** 19005,19013 ****
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -131,7 +132,7 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
---- 17928,17937 ----
+--- 18983,18992 ----
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -142,23 +143,27 @@ diff -rc perl-orig/Configure perl-5.8.6/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
-diff -rc perl-orig/ext/Errno/Errno_pm.PL perl-5.8.6/ext/Errno/Errno_pm.PL
-*** perl-orig/ext/Errno/Errno_pm.PL	2004-11-01 15:31:59.000000000 +0100
---- perl-5.8.6/ext/Errno/Errno_pm.PL	2005-03-10 12:52:31.000000000 +0100
+diff -rc perl-5.10.0-orig/ext/Errno/Errno_pm.PL perl-5.10.0/ext/Errno/Errno_pm.PL
+*** perl-5.10.0-orig/ext/Errno/Errno_pm.PL	2007-12-18 11:47:07.000000000 +0100
+--- perl-5.10.0/ext/Errno/Errno_pm.PL	2008-02-21 17:00:02.000000000 +0100
 ***************
-*** 105,111 ****
-  	# Watch out for cross compiling for EPOC (usually done on linux)
-  	$file{'/usr/local/epocemx/epocsdk/include/libc/sys/errno.h'} = 1;
-      } elsif ($^O eq 'linux' &&
-! 	     $Config{gccversion} ne '' # might be using, say, Intel's icc
-  	     ) {
+*** 140,150 ****
+  	if ($dep =~ /(\S+errno\.h)/) {
+  	     $file{$1} = 1;
+  	}
+!     } elsif ($^O eq 'linux' &&
+! 	      $Config{gccversion} ne '' && 
+! 	      $Config{gccversion} !~ /intel/i
+! 	      # might be using, say, Intel's icc
+! 	     ) {
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
---- 105,111 ----
-  	# Watch out for cross compiling for EPOC (usually done on linux)
-  	$file{'/usr/local/epocemx/epocsdk/include/libc/sys/errno.h'} = 1;
-      } elsif ($^O eq 'linux' &&
-! 	     $Config{gccversion} eq '' # might be using, say, Intel's icc
-  	     ) {
+  	my $linux_errno_h = -e '/usr/include/errno.h' ?
+--- 140,146 ----
+  	if ($dep =~ /(\S+errno\.h)/) {
+  	     $file{$1} = 1;
+  	}
+!     } elsif (0) {
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
+  	my $linux_errno_h = -e '/usr/include/errno.h' ?

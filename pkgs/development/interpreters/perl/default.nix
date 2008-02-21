@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "perl-5.8.8";
+  name = "perl-5.10.0";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://cpan/src/perl-5.8.8.tar.bz2;
-    sha256 = "1j8vzc6lva49mwdxkzhvm78dkxyprqs4n4057amqvsh4kh6i92l1";
+    url = mirror://cpan/src/perl-5.10.0.tar.gz;
+    sha256 = "0bivbz15x02m02gqs6hs77cgjr2msfrhnvp5xqk359jg6w6llill";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
     # Patch to make Perl 5.8.8 build with GCC 4.2.  Taken from
     # http://www.nntp.perl.org/group/perl.perl5.porters/2006/11/msg117738.html
-    ./gcc-4.2.patch
+    #   ./gcc-4.2.patch
   ];
 
   setupHook = ./setup-hook.sh;
