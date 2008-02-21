@@ -878,7 +878,7 @@ rec {
   };
 
   vpnc = import ../tools/networking/vpnc {
-    inherit fetchurl stdenv libgcrypt perl;
+    inherit fetchurl stdenv libgcrypt perl which nettools makeWrapper;
   };
 
   testdisk = import ../tools/misc/testdisk {
