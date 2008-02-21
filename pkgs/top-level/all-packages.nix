@@ -2788,6 +2788,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  mpich2 = import ../development/libraries/mpich2 {
+    inherit fetchurl stdenv python;
+  };
+
   mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
     inherit fetchurl stdenv mysql libtool zlib unixODBC;
   };
