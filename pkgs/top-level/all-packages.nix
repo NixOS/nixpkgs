@@ -3257,6 +3257,12 @@ rec {
     inherit fetchurl stdenv openssh;
   };
 
+  openfireFun = lib.sumArgs (selectVersion ../servers/xmpp/openfire "3.4.5") {
+    inherit builderDefs jre;
+  };
+
+  openfire = openfireFun null;
+
   postgresql = selectVersion ../servers/sql/postgresql "8.3.0" {
     inherit fetchurl stdenv readline ncurses zlib;
   };

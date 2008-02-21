@@ -615,7 +615,7 @@ buildPhase() {
 
     eval "$preBuild"
 
-    if ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
+    if test -z "$makeFlags" ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
         echo "no Makefile, doing nothing"
         return
     fi
