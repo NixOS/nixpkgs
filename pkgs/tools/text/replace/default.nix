@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "replace-2.24";
 
   src = fetchurl {
@@ -16,4 +16,4 @@ stdenv.mkDerivation {
     homepage = http://replace.richardlloyd.org.uk/;
     description = "A tool to replace verbatim strings";
   };
-}
+} // (if stdenv.system == "i686-darwin" then {patches = [./malloc.patch];} else {}))
