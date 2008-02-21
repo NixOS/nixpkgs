@@ -1,11 +1,11 @@
 {stdenv, fetchurl, kernel}:
 
-stdenv.mkDerivation {
-  name = "iwlwifi-1.2.23";
+stdenv.mkDerivation rec {
+  name = "iwlwifi-1.2.25";
 
   src = fetchurl {
-    url = http://www.intellinuxwireless.org/iwlwifi/downloads/iwlwifi-1.2.23.tgz;
-    sha256 = "0a4szjgg5b2jj4ax85lakqa951ph6pw5wpwlrw3mnmvcda5ayiip";
+    url = "http://www.intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    sha256 = "09fjy0swcyd77fdp8x2825wj5cd73hwbzl8mz9sy2ha21p1qwq1d";
   };
 
   preBuild = ''
@@ -33,5 +33,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Intel Wireless WiFi Link drivers for Linux";
     homepage = http://www.intellinuxwireless.org/;
+    license = "GPLv2";
   };
 }
