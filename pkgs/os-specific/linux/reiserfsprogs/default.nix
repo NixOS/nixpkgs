@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1gv8gr0l5l2j52540y2wj9c9h7fn0r3vabykf95748ydmr9jr1n0";
   };
 
+  patches = [./headers-fix.patch];
+
   meta = {
     homepage = http://www.namesys.com/;
     description = "Reiserfs utilities";
