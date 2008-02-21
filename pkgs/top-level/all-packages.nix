@@ -3654,6 +3654,10 @@ rec {
   };
   */
 
+  acpitool = import ../os-specific/linux/acpitool {
+    inherit fetchurl stdenv;
+  };
+
   alsaLib = import ../os-specific/linux/alsa/library {
     inherit fetchurl stdenv;
   };
