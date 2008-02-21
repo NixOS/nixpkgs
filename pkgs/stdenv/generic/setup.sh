@@ -232,7 +232,7 @@ stripDirs() {
     dirs=${dirsNew}
 
     if test -n "${dirs}"; then
-        echo $dirs
+        echo "stripping (with flags $stripFlags) in $dirs"
         find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
     fi
 }
@@ -715,12 +715,15 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-        stripDebugList=${stripDebugList:-lib}
-        echo "stripping debuging symbols from files in $stripDebugList"
-        stripDirs "$stripDebugList" -S
-        stripAllList=${stripAllList:-bin sbin}
-        echo "stripping all symbols from files in $stripAllList"
-        stripDirs "$stripAllList" -s
+        stripDebugList=${stripDebugList:-lib bin sbin}
+        if test -n "$stripDebugList"; then
+            stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
+        fi
+        
+        stripAllList=${stripAllList:-}
+        if test -n "$stripAllList"; then
+            stripDirs "$stripAllList" "${stripAllFlags:--s}"
+        fi
     fi
 
     if test "$havePatchELF" = 1 -a -z "$dontPatchELF"; then
