@@ -454,10 +454,9 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
-  dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools)
+  dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools "2.11deb")
   {
     inherit builderDefs;
-    version = "2.11deb";
   };
 
   dosfstools = dosfstoolsFun null;
@@ -2259,7 +2258,7 @@ rec {
     # python / ruby support
   };
 
-  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.16.x") {
+  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.17") {
     inherit fetchurl stdenv;
   };
 
@@ -2300,6 +2299,16 @@ rec {
   #GMP ex-satellite, so better keep it near gmp
   mpfr = import ../development/libraries/mpfr {
     inherit fetchurl stdenv gmp;
+  };
+
+  gst_all = import ../development/libraries/gstreamer {
+    inherit lib selectVersion stdenv fetchurl perl bison flex pkgconfig libxml2
+      python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
+      libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
+      dbus libavc1394 ladspaH taglib;
+    inherit (xorg) libX11 libXv libXext;
+    inherit (gtkLibs) glib pango gtk;
+    inherit (gnome) gnomevfs;
   };
 
   gnet = import ../development/libraries/gnet {
@@ -2594,6 +2603,14 @@ rec {
   libogg = import ../development/libraries/libogg {
     inherit fetchurl stdenv;
   };
+
+  liboilFun = lib.sumArgs
+    (selectVersion ../development/libraries/liboil "0.3.12") {
+    inherit fetchurl stdenv pkgconfig;
+  };
+
+  liboil = liboilFun null;
+
 
   liboop = import ../development/libraries/liboop {
     inherit fetchurl stdenv;
@@ -3617,9 +3634,15 @@ rec {
   };
   */
 
-  alsaLib = import ../os-specific/linux/alsa/library {
-    inherit fetchurl stdenv;
+  alsaFun = lib.sumArgs (selectVersion ../os-specific/linux/alsa "1.0.16") {
+    inherit fetchurl stdenv ncurses gettext;
   };
+
+  alsa = alsaFun null;
+
+  alsaLib = alsa.alsaLib;
+
+  alsaUtils = alsa.alsaUtils;
 
   atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "r3122") {
     inherit fetchurl stdenv builderDefs;
@@ -3635,10 +3658,6 @@ rec {
 
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
-  };
-
-  alsaUtils = import ../os-specific/linux/alsa/utils {
-    inherit fetchurl stdenv alsaLib ncurses gettext;
   };
 
   cramfsswap = import ../os-specific/linux/cramfsswap {
@@ -3738,9 +3757,11 @@ rec {
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
-  iptables = import ../os-specific/linux/iptables {
-    inherit fetchurl stdenv;
+  iptablesFun = lib.sumArgs (selectVersion ../os-specific/linux/iptables "1.4.0") {
+    inherit builderDefs kernelHeaders;
   };
+
+  iptables = iptablesFun null;
 
   ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
     inherit fetchurl stdenv;
@@ -4480,6 +4501,8 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  cdparanoia = cdparanoiaIII;
+
   cdparanoiaIII = import ../applications/audio/cdparanoia {
     inherit fetchurl stdenv;
   };
@@ -4680,7 +4703,7 @@ rec {
   fbpanel = fbpanelFun null;
 
   fetchmail = import ../applications/misc/fetchmail {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl openssl python procmail;
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
@@ -4757,7 +4780,9 @@ rec {
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss gtkspell GStreamer aspell gettext ncurses;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
+      gtkspell aspell gettext ncurses;
+    GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
     inherit (xlibs) libXScrnSaver;
@@ -4791,8 +4816,8 @@ rec {
   };
 
   gnash = assert mesaSupported; import ../applications/video/gnash {
-    inherit fetchurl stdenv SDL SDL_mixer GStreamer
-            libogg libxml2 libjpeg mesa libpng;
+    inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng;
+    GStreamer = gst_all.gstreamer;
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
@@ -4809,11 +4834,6 @@ rec {
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
-  };
-
-  GStreamer = import ../applications/audio/GStreamer {
-    inherit fetchurl stdenv perl bison flex pkgconfig libxml2;
-    inherit (gtkLibs) glib;
   };
 
   gv = import ../applications/misc/gv {
@@ -5122,7 +5142,7 @@ rec {
 
   # = urxvt
   rxvt_unicode = import ../applications/misc/rxvt_unicode {
-    inherit lib fetchurl stdenv;
+    inherit lib fetchurl stdenv perl;
     inherit (xlibs) libXt libX11 libXft;
   };
 
@@ -5345,6 +5365,15 @@ rec {
     ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] true && jrePlugin ? mozillaPlugin) jrePlugin;
   };
 
+  x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
+    inherit builderDefs openssl zlib libjpeg ;
+    inherit (xlibs) libXfixes fixesproto libXdamage damageproto 
+      libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
+      libXext xextproto inputproto recordproto;
+  };
+
+  x11vnc = x11vncFun null;
+
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
@@ -5407,8 +5436,8 @@ rec {
   } null;
 
   xterm = import ../applications/misc/xterm {
-    inherit fetchurl stdenv ncurses;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+    inherit fetchurl stdenv ncurses freetype pkgconfig;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft luit;
   };
 
   xlaunch = import ../tools/X11/xlaunch {

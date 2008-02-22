@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     md5 = "b6593abe1089d6aab1551c105c9300e3";
   };
   configureFlags="--with-shared --includedir=\${out}/include"+(if unicode then  " --enable-widec " else " ") +" --without-debug";
+  preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
   postInstall= if unicode then "
     chmod -v 644 $out/lib/libncurses++w.a
     for lib in curses ncurses form panel menu; do
