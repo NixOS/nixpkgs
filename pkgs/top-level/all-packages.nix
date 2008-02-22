@@ -4919,7 +4919,8 @@ rec {
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig gtkmm
-      glibmm libsigcxx lcms boost gettext;
+      glibmm libsigcxx lcms boost gettext
+      python pyxml makeWrapper;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXft;
   };
