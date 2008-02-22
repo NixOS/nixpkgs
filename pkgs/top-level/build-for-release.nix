@@ -243,7 +243,7 @@ let {
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
     aterm
     autoconf
-    automake19x
+    #automake19x
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
@@ -262,7 +262,7 @@ let {
     apacheHttpd
     aterm
     autoconf
-    automake19x
+    #automake19x
     bison23
     docbook5
     docbook_xml_dtd_42
