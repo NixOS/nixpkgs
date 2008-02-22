@@ -1,4 +1,4 @@
-let {
+let
 
   allPackages = import ./all-packages.nix;
 
@@ -62,7 +62,6 @@ let {
     gcc42
     gdb
     ghc
-    ghc68
     ghostscript
     gimp
     gnugrep
@@ -296,12 +295,11 @@ let {
     ncurses
   ;};
 
-  body = [
-    i686LinuxPkgs
-    x86_64LinuxPkgs
-    i686FreeBSDPkgs
-    powerpcDarwinPkgs
-    i686DarwinPkgs
-    cygwinPkgs
-  ];
-}
+in [
+  i686LinuxPkgs
+  x86_64LinuxPkgs
+  i686FreeBSDPkgs
+  powerpcDarwinPkgs
+  i686DarwinPkgs
+  cygwinPkgs
+]

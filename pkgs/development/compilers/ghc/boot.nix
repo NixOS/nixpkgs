@@ -31,6 +31,10 @@ stdenv.mkDerivation {
         --set-rpath \"${readline}/lib:${ncurses}/lib:${gmp}/lib\" {} \\;
   " else "";
 
+  # Stripping combined with patchelf breaks the executables (they die
+  # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
+  dontStrip = true;
+
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
