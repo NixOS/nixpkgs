@@ -4739,7 +4739,7 @@ rec {
   fbpanel = fbpanelFun {version="4.12";} null;
 
   fetchmail = import ../applications/misc/fetchmail {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl zlib openssl;
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
