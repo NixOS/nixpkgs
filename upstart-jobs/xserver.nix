@@ -12,7 +12,7 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
   gnome = pkgs.gnome;
-  stdenv = pkgs.stdenvNewSetupScript;
+  stdenv = pkgs.stdenv;
 
   # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;

@@ -2,7 +2,7 @@
 let
 	cfg = config.services.ircdHybrid;
 	ircdService = import ../services/ircd-hybrid {
-		stdenv = pkgs.stdenvNewSetupScript;
+		stdenv = pkgs.stdenv;
 		inherit (pkgs) ircdHybrid coreutils 
 			su iproute gnugrep procps;
 		serverName = cfg.serverName;

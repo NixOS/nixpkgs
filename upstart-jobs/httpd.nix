@@ -23,7 +23,7 @@ let
   
   webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
-    stdenv = pkgs.stdenvNewSetupScript;
+    stdenv = pkgs.stdenv;
     php = if cfg.mod_php then pkgs.php else null;
     tomcat_connectors = if cfg.mod_jk.enable then pkgs.tomcat_connectors else null;
 
