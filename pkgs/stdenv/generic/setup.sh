@@ -249,10 +249,6 @@ substitute() {
     local -a params=("$@")
     local -a args=()
 
-    local sedScript=$NIX_BUILD_TOP/.sedargs
-    rm -f $sedScript
-    touch $sedScript
-
     local n p pattern replacement varName
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
@@ -284,7 +280,7 @@ substitute() {
         args[${#args[@]}]="$replacement"
     done
 
-    replace-literal -e -s "${args[@]}" < "$input" > "$output".tmp
+    replace-literal -e -s -- "${args[@]}" < "$input" > "$output".tmp
     if test -x "$output"; then
         chmod +x "$output".tmp
     fi

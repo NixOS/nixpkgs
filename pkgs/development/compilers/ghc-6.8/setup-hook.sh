@@ -4,7 +4,7 @@ mkdir -p $ghc_support
 
 # Create isolated package config
 packages_db=$ghc_support/package.conf
-cp $ghc/lib/ghc-*/package.conf $packages_db
+cp @out@/lib/ghc-*/package.conf $packages_db
 chmod +w $packages_db
 
 # Generate wrappers for GHC that use the isolated package config

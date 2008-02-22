@@ -3792,7 +3792,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.8.nix {
+  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.16.nix {
     inherit fetchurl stdenv;
   };
 
