@@ -1416,8 +1416,7 @@ rec {
   };
 
   helium = import ../development/compilers/helium {
-    inherit fetchurl stdenv;
-    ghc = ghc661;
+    inherit fetchurl stdenv ghc;
   };
 
   javafront = import ../development/compilers/java-front {
@@ -3172,8 +3171,7 @@ rec {
   };
 
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip wxGTK;
-    ghc = ghc661;
+    inherit stdenv fetchurl unzip wxGTK ghc;
   };
 
   # wxHaskell68 = lowPrio (appendToName "ghc68" (import ../development/libraries/haskell/wxHaskell {
@@ -4609,14 +4607,12 @@ rec {
   };
   
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv zlib ncurses curl;
-    ghc = ghc661;
+    inherit fetchurl stdenv zlib ncurses curl ghc;
   };
 
   # some speed bottle necks are resolved in this version I think .. perhaps you like to try it? 
   darcs_2_pre = import ../applications/version-management/darcs_2_pre.nix {
-    inherit fetchurl stdenv zlib ncurses curl;
-    ghc = ghc661;
+    inherit fetchurl stdenv zlib ncurses curl ghc;
   };
 
   dia = import ../applications/graphics/dia {

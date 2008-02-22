@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
-  postInstall = if stdenv.isDarwin then "
+  postInstall = (if stdenv.isDarwin then ''
 
     ensureDir $out/frameworks/GMP.framework/Versions/A
     ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
@@ -50,11 +50,20 @@ stdenv.mkDerivation {
     mv $out/bin $out/bin-orig
     mkdir $out/bin
     for i in $(cd $out/bin-orig && ls); do
-        echo \"#! $SHELL -e\" >> $out/bin/$i
-        echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
+        echo "#! $SHELL -e" >> $out/bin/$i
+        echo "DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \"\$@\"" >> $out/bin/$i
         chmod +x $out/bin/$i
     done
 
-  " else "";
+  '' else "") + ''
+
+    # Hack for Perl 5.10 compatibility ($* no longer works).
+    substituteInPlace $out/lib/*/ghc-asm --replace 'local($*) = 1;' '
+      BEGIN {
+        require overload; overload::constant( qr => sub { "(?m:$_[1])" } );
+      }
+    '
+  
+  '';
 
 }
