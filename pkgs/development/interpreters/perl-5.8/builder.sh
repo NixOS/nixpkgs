@@ -6,7 +6,7 @@ if test "$NIX_ENFORCE_PURITY" = "1"; then
 fi
 
 configureScript=./Configure
-configureFlags="-de -Dcc=gcc -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3 -Uinstallusrbinperl $extraflags"
+configureFlags="-de -Dcc=gcc -Dprefix=$out -Uinstallusrbinperl $extraflags"
 dontAddPrefix=1
 
 preBuild=preBuild
