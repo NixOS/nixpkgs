@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0azvl43niqkq94drx52p6dvp70r38f25fqw181ywmvqn80dbb3c9";
   };
 
-  unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=lsof_*; ";
+  unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
   preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
   configurePhase = "./Configure -n linux;";
   installPhase = " mkdir -p $out/bin $out/man/man8; cp lsof.8 $out/man/man8/; cp lsof $out/bin";

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1578i6j3kq7g5f55gy1nksl4q0lxssdk39ilrgqjc20gb6k5j7j3";
   };
 
-  setSourceRoot = "sourceRoot=tspc*";
+  setSourceRoot = "sourceRoot=$(echo tspc*/)";
 
   preBuild = "sed -e 's@/dev/net/tun@/dev/tun@' -i platform/linux/tsp_tun.c;
 	sed -e 's@/sbin/@/var/run/current-system/sw/sbin/@' -i template/linux.sh";
