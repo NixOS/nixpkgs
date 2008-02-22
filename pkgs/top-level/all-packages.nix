@@ -3506,6 +3506,10 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
+  pyxml = import ../development/python-modules/pyxml {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
   wxPython = wxPython26;
 
   wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
