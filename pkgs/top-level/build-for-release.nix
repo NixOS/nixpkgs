@@ -140,7 +140,7 @@ let {
     pwdutils
     python
     qt3
-    quake3demo
+    #quake3demo
     readline
     reiserfsprogs
     rogue
