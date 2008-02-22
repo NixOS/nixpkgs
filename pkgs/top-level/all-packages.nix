@@ -4844,7 +4844,8 @@ rec {
   };
 
   git = import ../applications/version-management/git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext emacs;
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext;
+    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
   };
 
   gkrellm = import ../applications/misc/gkrellm {
