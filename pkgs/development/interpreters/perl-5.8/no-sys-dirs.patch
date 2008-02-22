@@ -1,0 +1,169 @@
+diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
+*** perl-5.10.0-orig/Configure	2007-12-18 11:47:07.000000000 +0100
+--- perl-5.10.0/Configure	2008-02-21 17:00:40.000000000 +0100
+***************
+*** 104,118 ****
+  fi
+  
+  : Proper PATH setting
+! paths='/bin /usr/bin /usr/local/bin /usr/ucb /usr/local /usr/lbin'
+! paths="$paths /opt/bin /opt/local/bin /opt/local /opt/lbin"
+! paths="$paths /usr/5bin /etc /usr/gnu/bin /usr/new /usr/new/bin /usr/nbin"
+! paths="$paths /opt/gnu/bin /opt/new /opt/new/bin /opt/nbin"
+! paths="$paths /sys5.3/bin /sys5.3/usr/bin /bsd4.3/bin /bsd4.3/usr/ucb"
+! paths="$paths /bsd4.3/usr/bin /usr/bsd /bsd43/bin /opt/ansic/bin /usr/ccs/bin"
+! paths="$paths /etc /usr/lib /usr/ucblib /lib /usr/ccs/lib"
+! paths="$paths /sbin /usr/sbin /usr/libexec"
+! paths="$paths /system/gnu_library/bin"
+  
+  for p in $paths
+  do
+--- 104,110 ----
+  fi
+  
+  : Proper PATH setting
+! paths=''
+  
+  for p in $paths
+  do
+***************
+*** 1271,1287 ****
+  groupstype=''
+  libnames=''
+  : change the next line if compiling for Xenix/286 on Xenix/386
+! xlibpth='/usr/lib/386 /lib/386'
+  : Possible local library directories to search.
+! loclibpth="/usr/local/lib /opt/local/lib /usr/gnu/lib"
+! loclibpth="$loclibpth /opt/gnu/lib /usr/GNU/lib /opt/GNU/lib"
+  
+  : general looking path for locating libraries
+! glibpth="/lib /usr/lib $xlibpth"
+! glibpth="$glibpth /usr/ccs/lib /usr/ucblib /usr/local/lib"
+! test -f /usr/shlib/libc.so && glibpth="/usr/shlib $glibpth"
+! test -f /shlib/libc.so     && glibpth="/shlib $glibpth"
+! test -d /usr/lib64         && glibpth="$glibpth /lib64 /usr/lib64 /usr/local/lib64"
+  
+  : Private path used by Configure to find libraries.  Its value
+  : is prepended to libpth. This variable takes care of special
+--- 1263,1274 ----
+  groupstype=''
+  libnames=''
+  : change the next line if compiling for Xenix/286 on Xenix/386
+! xlibpth=''
+  : Possible local library directories to search.
+! loclibpth=""
+  
+  : general looking path for locating libraries
+! glibpth=""
+  
+  : Private path used by Configure to find libraries.  Its value
+  : is prepended to libpth. This variable takes care of special
+***************
+*** 1302,1309 ****
+  
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
+! locincpth="$locincpth /opt/gnu/include /usr/GNU/include /opt/GNU/include"
+  :
+  : no include file wanted by default
+  inclwanted=''
+--- 1289,1295 ----
+  
+  : Possible local include directories to search.
+  : Set locincpth to "" in a hint file to defeat local include searches.
+! locincpth=""
+  :
+  : no include file wanted by default
+  inclwanted=''
+***************
+*** 1331,1338 ****
+  libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
+  : We probably want to search /usr/shlib before most other libraries.
+  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
+- glibpth=`echo " $glibpth " | sed -e 's! /usr/shlib ! !'`
+- glibpth="/usr/shlib $glibpth"
+  : Do not use vfork unless overridden by a hint file.
+  usevfork=false
+  
+--- 1317,1322 ----
+***************
+*** 2340,2346 ****
+  zip
+  "
+  pth=`echo $PATH | sed -e "s/$p_/ /g"`
+- pth="$pth /lib /usr/lib"
+  for file in $loclist; do
+  	eval xxx=\$$file
+  	case "$xxx" in
+--- 2324,2329 ----
+***************
+*** 8155,8167 ****
+  echo " "
+  case "$sysman" in
+  '') 
+! 	syspath='/usr/share/man/man1 /usr/man/man1'
+! 	syspath="$syspath /usr/man/mann /usr/man/manl /usr/man/local/man1"
+! 	syspath="$syspath /usr/man/u_man/man1"
+! 	syspath="$syspath /usr/catman/u_man/man1 /usr/man/l_man/man1"
+! 	syspath="$syspath /usr/local/man/u_man/man1 /usr/local/man/l_man/man1"
+! 	syspath="$syspath /usr/man/man.L /local/man/man1 /usr/local/man/man1"
+! 	sysman=`./loc . /usr/man/man1 $syspath`
+  	;;
+  esac
+  if $test -d "$sysman"; then
+--- 8138,8145 ----
+  echo " "
+  case "$sysman" in
+  '') 
+! 	syspath=''
+! 	sysman=''
+  	;;
+  esac
+  if $test -d "$sysman"; then
+***************
+*** 19005,19013 ****
+  case "$full_ar" in
+  '') full_ar=$ar ;;
+  esac
+  
+  : Store the full pathname to the sed program for use in the C program
+! full_sed=$sed
+  
+  : see what type gids are declared as in the kernel
+  echo " "
+--- 18983,18992 ----
+  case "$full_ar" in
+  '') full_ar=$ar ;;
+  esac
++ full_ar=ar
+  
+  : Store the full pathname to the sed program for use in the C program
+! full_sed=sed
+  
+  : see what type gids are declared as in the kernel
+  echo " "
+diff -rc perl-5.10.0-orig/ext/Errno/Errno_pm.PL perl-5.10.0/ext/Errno/Errno_pm.PL
+*** perl-5.10.0-orig/ext/Errno/Errno_pm.PL	2007-12-18 11:47:07.000000000 +0100
+--- perl-5.10.0/ext/Errno/Errno_pm.PL	2008-02-21 17:00:02.000000000 +0100
+***************
+*** 140,150 ****
+  	if ($dep =~ /(\S+errno\.h)/) {
+  	     $file{$1} = 1;
+  	}
+!     } elsif ($^O eq 'linux' &&
+! 	      $Config{gccversion} ne '' && 
+! 	      $Config{gccversion} !~ /intel/i
+! 	      # might be using, say, Intel's icc
+! 	     ) {
+  	# Some Linuxes have weird errno.hs which generate
+  	# no #file or #line directives
+  	my $linux_errno_h = -e '/usr/include/errno.h' ?
+--- 140,146 ----
+  	if ($dep =~ /(\S+errno\.h)/) {
+  	     $file{$1} = 1;
+  	}
+!     } elsif (0) {
+  	# Some Linuxes have weird errno.hs which generate
+  	# no #file or #line directives
+  	my $linux_errno_h = -e '/usr/include/errno.h' ?

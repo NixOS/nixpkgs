@@ -1396,8 +1396,9 @@ rec {
   };
 
   ghcboot = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot.nix {
-    inherit fetchurl stdenv perl ncurses gmp;
+    inherit fetchurl stdenv ncurses gmp;
     readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    perl = perl58;
   }));
 
   /*
@@ -1625,6 +1626,10 @@ rec {
 
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
+  perl58 = import ../development/interpreters/perl-5.8 {
+    inherit fetchurl stdenv;
+  };
+
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
     inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
@@ -1666,7 +1671,7 @@ rec {
 
   Qi = QiFun null;
 
-  realPerl = import ../development/interpreters/perl {
+  realPerl = import ../development/interpreters/perl-5.10 {
     inherit fetchurl stdenv;
   };
 
