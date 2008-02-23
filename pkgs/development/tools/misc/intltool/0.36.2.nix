@@ -13,7 +13,9 @@ args : with args;
 stdenv.mkDerivation rec {
 	name = "intltool-0.36.2";
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doConfigure doMakeInstall doPropagate doForceShare]);
+		(textClosure localDefs [minInit addInputs doUnpack 
+			(doDump "1") doConfigure doMakeInstall 
+			doPropagate doForceShare]);
 	inherit propagatedBuildInputs;
 	meta = {
 		description = "

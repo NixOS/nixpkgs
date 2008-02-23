@@ -75,11 +75,7 @@ args: with args; with stringsWithDeps; with lib;
 		set -e
 		NIX_GCC=${stdenv.gcc}
 		export SHELL=${stdenv.shell}
-		# Set up the initial path.
-		PATH=
-		for i in \$NIX_GCC ${toString stdenv.initialPath}; do
-		    PATH=\$PATH\${PATH:+:}\$i/bin
-		done
+		PATH_DELIMITER=':'
 	" + (if ((stdenv ? preHook) && (stdenv.preHook != null) && 
 			((toString stdenv.preHook) != "")) then 
 		"
@@ -89,6 +85,13 @@ args: with args; with stringsWithDeps; with lib;
 		param4=${stdenv.param4}
 		param5=${stdenv.param5}
 		source ${stdenv.preHook}
+	" + 	
+		"
+		# Set up the initial path.
+		PATH=
+		for i in \$NIX_GCC ${toString stdenv.initialPath}; do
+		    PATH=\$PATH\${PATH:+\"\${PATH_DELIMITER}\"}\$i/bin
+		done
 
 		export TZ=UTC
 
@@ -137,12 +140,12 @@ args: with args; with stringsWithDeps; with lib;
 		" else "")
 		+(if addSbinPath then "
 		    if test -d \$1/sbin; then
-			export _PATH=\$_PATH\${_PATH:+:}\$1/sbin
+			export _PATH=\$_PATH\${_PATH:+\"\${PATH_DELIMITER}\"}\$1/sbin
 		    fi
 		" else "")
 		+"
 		    if test -d \$1/bin; then
-			export _PATH=\$_PATH\${_PATH:+:}\$1/bin
+			export _PATH=\$_PATH\${_PATH:+\"\${PATH_DELIMITER}\"}\$1/bin
 		    fi
 
 		    for i in \"\${envHooks[@]}\"; do
@@ -160,7 +163,7 @@ args: with args; with stringsWithDeps; with lib;
 		    export NIX_LDFLAGS=\"-rpath \$out/lib \$NIX_LDFLAGS\"
 		fi
 
-		PATH=\$_PATH\${_PATH:+:}\$PATH
+		PATH=\$_PATH\${_PATH:+\"\${PATH_DELIMITER}\"}\$PATH
 	") ["minInit"];
 	
 	defEnsureDir = FullDepEntry ("
@@ -339,7 +342,7 @@ args: with args; with stringsWithDeps; with lib;
           "\n  cat >> $out/nix-support/setup-hook << EOF" +
           "\n    " +
           "\n    echo \$GHC_PACKAGE_PATH | grep -l $pkgdb &> /dev/null || \" "+
-          "\n      export GHC_PACKAGE_PATH=\$GHC_PACKAGE_PATH\${GHC_PACKAGE_PATH:+$PATH_DELIMITER}$pkgdb;" +
+          "\n      export GHC_PACKAGE_PATH=\$GHC_PACKAGE_PATH\${GHC_PACKAGE_PATH:+\"\${PATH_DELIMITER}\"}$pkgdb;" +
           "\nEOF" +
           "\n}");
 
