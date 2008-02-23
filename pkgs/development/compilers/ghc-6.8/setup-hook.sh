@@ -13,7 +13,7 @@ makeWrapper() {
   wrapper="$ghc_support/$wrapperName"
   shift #the other arguments are passed to the source app
   echo '#!'"$SHELL" > "$wrapper"
-  echo "exec \"@ghc@/bin/$wrapperName\" $@" '"$@"' > "$wrapper"
+  echo "exec \"@out@/bin/$wrapperName\" $@" '"$@"' > "$wrapper"
   chmod +x "$wrapper"
 }
 
