@@ -659,6 +659,10 @@ rec {
     inherit fetchurl stdenv ghc tetex polytable;
   };
 
+  libtorrent = import ../tools/networking/p2p/libtorrent {
+    inherit fetchurl stdenv pkgconfig openssl libsigcxx;
+  };
+
   lout = import ../tools/typesetting/lout {
     inherit fetchurl stdenv ghostscript;
   };
@@ -812,6 +816,10 @@ rec {
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
+  };
+
+  rtorrent = import ../tools/networking/p2p/rtorrent {
+    inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
   };
 
   sablotron = import ../tools/text/xml/sablotron {
