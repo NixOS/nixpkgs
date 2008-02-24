@@ -34,7 +34,7 @@ let
     cpio
     cron
     cups
-    darcs
+    #darcs
     db4
     dhcp
     dietlibc
