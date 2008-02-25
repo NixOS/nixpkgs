@@ -3072,6 +3072,10 @@ rec {
     inherit stdenv fetchurl unzip;
   };
 
+  gwtwidgets = import ../development/libraries/java/gwt-widgets {
+    inherit stdenv fetchurl;
+  };
+
   jakartabcel = import ../development/libraries/java/jakarta-bcel {
     regexp = jakartaregexp;
     inherit fetchurl stdenv;
