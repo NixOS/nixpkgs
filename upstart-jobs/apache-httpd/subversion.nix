@@ -247,6 +247,7 @@ let
       cp -prd $src/* $out
       chmod -R u+w $out
       for i in $files; do
+        args=
         substituteAll $out/$i $out/$i
       done
     '';
@@ -258,6 +259,7 @@ let
       cp -prd $src/* $out
       chmod -R u+w $out
       find $out -type f -print | while read fn; do
+        args=
         substituteAll $fn $fn
       done
       eval "$postInstall"
