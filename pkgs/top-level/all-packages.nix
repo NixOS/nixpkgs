@@ -1832,6 +1832,10 @@ rec {
     inherit fetchurl stdenv rpm;
   };
 
+  findbugs = import ../development/tools/analysis/findbugs {
+    inherit fetchurl stdenv;
+  };
+
   flex = flex254a;
 
   flex2534 = import ../development/tools/parsing/flex/flex-2.5.34.nix {
