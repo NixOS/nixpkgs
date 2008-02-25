@@ -307,7 +307,7 @@ in {
     ${staticFilesConfig}
 
     ${if config.toplevelRedirect then ''
-        <Location />
+        <Location ${urlPrefix}/>
             DirectoryIndex repoman
         </Location>
       '' else ""}
