@@ -2497,8 +2497,7 @@ rec {
   };
 
   libdbiDrivers = libdbiDriversFun {
-    mysql = mysql5;
-    inherit sqlite;
+    inherit sqlite mysql;
   } null;
 
   libdv = import ../development/libraries/libdv {
@@ -3549,7 +3548,7 @@ rec {
     inherit fetchurl stdenv apacheHttpd jdk;
   };
 
-  mysql = import ../servers/sql/mysql {
+  mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
   };
@@ -3558,6 +3557,8 @@ rec {
     inherit fetchurl stdenv ncurses zlib perl openssl;
     ps = procps; /* !!! Linux only */
   };
+
+  mysql = mysql5;
 
   mysql_jdbc = import ../servers/sql/mysql/jdbc {
     inherit fetchurl stdenv ant;
