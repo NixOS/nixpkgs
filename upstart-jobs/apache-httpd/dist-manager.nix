@@ -30,7 +30,7 @@ let
   };
 
   # !!! cut&paste
-  substituteInAll = args: pkgs.stdenvUsingSetupNew2.mkDerivation ({
+  substituteInAll = args: pkgs.stdenv.mkDerivation ({
     buildCommand = ''
       ensureDir $out
       cp -prd $src/* $out
