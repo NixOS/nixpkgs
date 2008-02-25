@@ -6,6 +6,10 @@ stdenv.mkDerivation {
     sha256 = "5612f9af367f641e0efd084f44fcf1889669e711dbd8c60f6b7953e494d1b09b";
   };
 
+  buildInputs = [ openssl ];
+
+  configureFlags = "--with-ssl=${openssl}";
+
   patches = [ ./security-fix.patch ];
 
   meta = {

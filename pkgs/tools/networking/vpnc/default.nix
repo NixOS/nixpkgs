@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libgcrypt, perl}:
+args: with args;
 
 stdenv.mkDerivation {
   name = "vpnc-0.5.1";
@@ -9,11 +9,25 @@ stdenv.mkDerivation {
 
   patches = [ ./makefile.patch ];
 
-  buildInputs = [libgcrypt perl];
+  # The `etc/vpnc/vpnc-script' script relies on `which' and on
+  # `ifconfig' as found in net-tools (not GNU Inetutils).
+  propagatedBuildInputs = [which nettools];
+
+  buildInputs = [libgcrypt perl makeWrapper];
+
   builder = ./builder.sh;
 
+  postInstall = ''
+    for i in $out/{bin,sbin}/*
+    do
+      wrapProgram $i --prefix PATH :  \
+        "${which}/bin:${nettools}/bin:${nettools}/sbin"
+    done
+  '';
+
   meta = {
-    description = "VPNC, a virtual private network (VPN) client for Cisco's VPN concentrators";
+    description = ''VPNC, a virtual private network (VPN) client
+                    for Cisco's VPN concentrators.'';
     homepage = http://www.unix-ag.uni-kl.de/~massar/vpnc/;
     license = "GPL";
   };

@@ -623,6 +623,10 @@ rec {
     flex = flex2533;
   };*/
 
+  inetutils = import ../tools/networking/inetutils {
+    inherit fetchurl stdenv;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
@@ -654,6 +658,10 @@ rec {
 
   lhs2tex = import ../tools/typesetting/lhs2tex {
     inherit fetchurl stdenv ghc tetex polytable;
+  };
+
+  libtorrent = import ../tools/networking/p2p/libtorrent {
+    inherit fetchurl stdenv pkgconfig openssl libsigcxx;
   };
 
   lout = import ../tools/typesetting/lout {
@@ -807,6 +815,10 @@ rec {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
   };
 
+  rtorrent = import ../tools/networking/p2p/rtorrent {
+    inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
@@ -872,7 +884,7 @@ rec {
   };
 
   vpnc = import ../tools/networking/vpnc {
-    inherit fetchurl stdenv libgcrypt perl;
+    inherit fetchurl stdenv libgcrypt perl which nettools makeWrapper;
   };
 
   testdisk = import ../tools/misc/testdisk {
@@ -3482,6 +3494,10 @@ rec {
     inherit (gtkLibs) glib gtk;
   };
 
+  pyxml = import ../development/python-modules/pyxml {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
   wxPython = wxPython26;
 
   wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
@@ -3637,6 +3653,14 @@ rec {
    inherit fetchurl stdenv kernelHeaders tcp_wrapper;
   };
   */
+
+  acpi = import ../os-specific/linux/acpi {
+    inherit fetchurl stdenv;
+  };
+
+  acpitool = import ../os-specific/linux/acpitool {
+    inherit fetchurl stdenv;
+  };
 
   alsaFun = lib.sumArgs (selectVersion ../os-specific/linux/alsa "1.0.16") {
     inherit fetchurl stdenv ncurses gettext;
@@ -4705,7 +4729,7 @@ rec {
   fbpanel = fbpanelFun null;
 
   fetchmail = import ../applications/misc/fetchmail {
-    inherit stdenv fetchurl openssl python procmail;
+    inherit stdenv fetchurl openssl;
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
@@ -4808,7 +4832,8 @@ rec {
   };
 
   git = import ../applications/version-management/git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext emacs;
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext;
+    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
   };
 
   gkrellm = import ../applications/misc/gkrellm {
@@ -4878,7 +4903,8 @@ rec {
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig
-      libsigcxx lcms boost gettext cairomm;
+      libsigcxx lcms boost gettext cairomm
+      python pyxml makeWrapper;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
   };
