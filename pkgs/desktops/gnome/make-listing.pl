@@ -3,7 +3,7 @@
 use strict;
 
 # Example use:
-# ./make-listing.sh \
+# ./make-listing.pl \
 #   http://ftp.gnome.org/pub/GNOME/platform/2.10/2.10.1/sources/ \
 #   http://ftp.gnome.org/pub/GNOME/platform/2.10/2.10.1/sources/MD5SUMS-for-bz2
 
@@ -11,7 +11,7 @@ my $baseURL = shift;
 my $md5URL = shift;
 
 print <<EOF
-# Note: this file was generated automatically by make-listing.sh!
+# Note: this file was generated automatically by make-listing.pl!
 
 {fetchurl} : {
 EOF
