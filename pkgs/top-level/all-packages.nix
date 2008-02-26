@@ -3572,6 +3572,10 @@ rec {
     inherit fetchurl stdenv unzip;
   };
 
+  jetty61 = import ../servers/http/jetty/6.1 {
+    inherit fetchurl stdenv unzip;
+  };
+
   mod_python = import ../servers/http/apache-modules/mod_python {
     inherit fetchurl stdenv apacheHttpd python;
   };
