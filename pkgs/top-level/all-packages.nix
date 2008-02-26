@@ -3144,6 +3144,10 @@ rec {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  smack = import ../development/libraries/java/smack {
+    inherit stdenv fetchurl;
+  };
+
   swt = import ../development/libraries/java/swt {
     inherit stdenv fetchurl unzip jdk pkgconfig;
     inherit (gtkLibs) gtk;
