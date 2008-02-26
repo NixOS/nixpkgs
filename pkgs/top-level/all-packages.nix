@@ -1918,7 +1918,7 @@ rec {
     qt = qt3;
   };
 
-  lcov = import ../development/tools/misc/lcov {
+  lcov = import ../development/tools/analysis/lcov {
     inherit fetchurl stdenv perl;
   };
 
@@ -2021,7 +2021,7 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  valgrind = import ../development/tools/misc/valgrind {
+  valgrind = import ../development/tools/analysis/valgrind {
     inherit fetchurl stdenv;
   };
 
