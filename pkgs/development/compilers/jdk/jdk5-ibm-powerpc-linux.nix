@@ -1,5 +1,5 @@
 { swingSupport ? true
-, stdenv, fetchurl, unzip, libX11 ? null, libXext ? null
+, stdenv, fetchurl, unzip, makeWrapper, libX11 ? null, libXext ? null
 }:
 
 assert stdenv.system == "powerpc-linux";
