@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , unzip
+, makeWrapper
 , xlibs ? null
 , installjdk ? true
 , pluginSupport ? true
@@ -51,7 +52,7 @@ assert pluginSupport -> libstdcpp5 != null;
     else
       abort "jdk requires i686-linux or x86_64 linux";
 
-  buildInputs = [unzip];
+  buildInputs = [unzip makeWrapper];
   libraries =
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
 
@@ -60,7 +61,6 @@ assert pluginSupport -> libstdcpp5 != null;
   # necessary for javaws and mozilla plugin
   if pluginSupport then
     {
-      makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
       libPath = [libstdcpp5];
       inherit libstdcpp5;
     }

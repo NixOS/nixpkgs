@@ -17,4 +17,9 @@ stdenv.mkDerivation {
     cp -prd bin lib plugin doc $out/
     rm $out/bin/*.bat
   '';
+
+  meta = {
+    description = "A static analysis tool to find bugs in Java programs automatically";
+    homepage = http://findbugs.sourceforge.net/;
+  };
 }

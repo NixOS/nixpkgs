@@ -32,10 +32,12 @@ for i in $libraries; do
 done
 
 if test -z "$installjdk"; then
-  rpath=$rpath${rpath:+:}$out/lib/$architecture/jli
+  jrePath=$out
 else
-  rpath=$rpath${rpath:+:}$out/jre/lib/$architecture/jli
+  jrePath=$out/jre
 fi
+
+rpath=$rpath${rpath:+:}$jrePath/lib/$architecture/jli
 
 # set all the dynamic linkers
 find $out -type f -perm +100 \
@@ -52,15 +54,11 @@ function mozillaExtraLibPath() {
 if test -z "$pluginSupport"; then
   rm $out/bin/javaws
 else
-  source $makeWrapper
-
-  mv $out/bin/javaws $out/bin/javaws.bin
-  makeWrapper "$out/bin/javaws.bin" "$out/bin/javaws" \
+  wrapProgram "$out/bin/javaws" \
     --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
 
-  mozillaExtraLibPath "$out/jre/plugin/i386/ns7"
-  mozillaExtraLibPath "$out/plugin/i386/ns7"
+  mozillaExtraLibPath "$jrePath/plugin/i386/ns7"
 fi
 
 # Workaround for assertions in xlib, see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6532373.
-substituteInPlace $out/jre/lib/i386/xawt/libmawt.so --replace XINERAMA FAKEEXTN
+substituteInPlace $jrePath/lib/i386/xawt/libmawt.so --replace XINERAMA FAKEEXTN

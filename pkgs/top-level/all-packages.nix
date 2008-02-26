@@ -1471,7 +1471,7 @@ rec {
   jdkdistro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
-      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport;
+      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper;
       libstdcpp5 = gcc33.gcc;
     });
 
