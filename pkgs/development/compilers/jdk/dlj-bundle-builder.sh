@@ -61,3 +61,6 @@ else
   mozillaExtraLibPath "$out/jre/plugin/i386/ns7"
   mozillaExtraLibPath "$out/plugin/i386/ns7"
 fi
+
+# Workaround for assertions in xlib, see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6532373.
+substituteInPlace $out/jre/lib/i386/xawt/libmawt.so --replace XINERAMA FAKEEXTN
