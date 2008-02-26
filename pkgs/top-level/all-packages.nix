@@ -3076,6 +3076,10 @@ rec {
     inherit stdenv fetchurl unzip;
   };
 
+  gwtdragdrop = import ../development/libraries/java/gwt-dragdrop {
+    inherit stdenv fetchurl;
+  };
+
   gwtwidgets = import ../development/libraries/java/gwt-widgets {
     inherit stdenv fetchurl;
   };
