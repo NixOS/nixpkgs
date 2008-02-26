@@ -1832,6 +1832,10 @@ rec {
     inherit fetchurl stdenv rpm;
   };
 
+  emma = import ../development/tools/analysis/emma {
+    inherit fetchurl stdenv unzip;
+  };
+
   findbugs = import ../development/tools/analysis/findbugs {
     inherit fetchurl stdenv;
   };
