@@ -52,7 +52,7 @@ function mozillaExtraLibPath() {
 }
 
 if test -z "$pluginSupport"; then
-  rm $out/bin/javaws
+  rm -f $out/bin/javaws
 else
   wrapProgram "$out/bin/javaws" \
     --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
@@ -61,4 +61,4 @@ else
 fi
 
 # Workaround for assertions in xlib, see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6532373.
-substituteInPlace $jrePath/lib/i386/xawt/libmawt.so --replace XINERAMA FAKEEXTN
+substituteInPlace $jrePath/lib/*/xawt/libmawt.so --replace XINERAMA FAKEEXTN
