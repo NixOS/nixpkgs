@@ -477,6 +477,10 @@ rec {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
 
+  expect = import ../tools/misc/expect {
+    inherit fetchurl stdenv tcl;
+  };
+
   file = import ../tools/misc/file {
     inherit fetchurl stdenv;
   };
