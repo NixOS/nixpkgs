@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   inherit jre;
 
-  phases="buildPhase installPhase";
+  phases="unpackPhase buildPhase installPhase";
 
   buildPhase="ant dist";
 # LIBXCB_ALLOW_SLOPPY_LOCK=true :
