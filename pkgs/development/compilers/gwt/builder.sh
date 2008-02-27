@@ -14,10 +14,9 @@ cat > $out/bin/gwt-compile <<EOF
 #!/bin/sh
 
 export LD_LIBRARY_PATH=$libPath
-export APPDIR=\`dirname \$0\`
 export LIBXCB_ALLOW_SLOPPY_LOCK=1 # Workaround for bug in Java AWT implementation
 
-java  -cp "\$APPDIR/src:\$APPDIR/bin:$out/$name/gwt-user.jar:$out/$name/gwt-dev-linux.jar" com.google.gwt.dev.GWTCompiler -out "\$APPDIR/www" $@
+java  -cp "\$CLASSPATH:$out/$name/gwt-user.jar:$out/$name/gwt-dev-linux.jar" com.google.gwt.dev.GWTCompiler \$@
 EOF
 chmod 755 $out/bin/gwt-compile
 
@@ -25,9 +24,8 @@ cat > $out/bin/gwt-shell <<EOF
 #!/bin/sh
 
 export LD_LIBRARY_PATH=$libPath
-export APPDIR=\`dirname \$0\`
 export LIBXCB_ALLOW_SLOPPY_LOCK=1 # Workaround for bug in Java AWT implementation
 
-java  -cp "\$APPDIR/src:\$APPDIR/bin:$out/$name/gwt-user.jar:$out/$name/gwt-dev-linux.jar" com.google.gwt.dev.GWTShell -out "\$APPDIR/www" $@
+java  -cp "\$CLASSPATH:$out/$name/gwt-user.jar:$out/$name/gwt-dev-linux.jar" com.google.gwt.dev.GWTShell \$@
 EOF
 chmod 755 $out/bin/gwt-shell
