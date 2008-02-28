@@ -54,6 +54,9 @@ in
 		[pkgs.kernel]
 	);
 
+	extraInitrdKernelModules = 
+		import ./moduleList.nix;
+
 	packages = pkgs : [
 		pkgs.irssi
 		pkgs.ltrace
