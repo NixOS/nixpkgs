@@ -52,11 +52,13 @@ if test -z "$finalPath"; then
 
     # Perform the checkout.
     if test -z "$tag"; then
-        rtag="-DNOW"
+        args=(-D "now")
+    elif test "$USE_DATE" = "1"; then
+        args=(-D "$tag")
     else
-        rtag="-r $tag"
+        args=(-r "$tag")
     fi
-    (cd "$tmpPath" && cvs -f -z7 -d $cvsRoot export $rtag -d cvs-export $module >&2)
+    (cd "$tmpPath" && cvs -f -z0 -d $cvsRoot export "${args[*]}" -d cvs-export $module >&2)
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
