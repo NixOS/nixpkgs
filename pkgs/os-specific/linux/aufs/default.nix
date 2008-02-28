@@ -16,7 +16,6 @@ stdenv.mkDerivation {
     kernelSource=$(echo $(pwd)/linux-*)
     cp -prd $kernelBuild/* $kernelSource
   
-    substituteInPlace fs/aufs/Makefile
     make KDIR=$kernelSource -f local.mk
   '';
 

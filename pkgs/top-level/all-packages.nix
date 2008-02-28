@@ -5147,9 +5147,8 @@ rec {
     python = builtins.getAttr "2.5" python_alts;
   };
 
-  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu "0.9.0") {
+  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu "0.9.1") {
     inherit fetchurl;
-    stdenv = overrideGCC stdenv gcc34;
     builderDefs = builderDefs {
       stdenv = (overrideGCC stdenv gcc34)//{gcc=gcc34;};
     };
