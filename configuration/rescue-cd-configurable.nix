@@ -374,6 +374,10 @@ rec {
           source = nixpkgsTarball;
           target = "/install/nixpkgs.tar.bz2";
         }
+        { 
+          source = pkgs.writeText "label" "";
+          target = "/${configuration.boot.rootLabel}";
+        }
       ]
       ++
       (lib.optional includeMemtest 
