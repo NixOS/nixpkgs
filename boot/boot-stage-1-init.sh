@@ -70,7 +70,8 @@ if test -n "$(cat /sys/power/tuxonice/resume)"; then
     echo 0 > /sys/power/tuxonice/user_interface/enabled
     echo 1 > /sys/power/tuxonice/do_resume || echo "Failed to resume..."
 fi
-
+    echo 1 > /sys/power/resume || echo "Failed to resume..."
+    echo shutdown >/sys/power/disk
 
 # Create device nodes in /dev.
 mknod -m 0666 /dev/null c 1 3

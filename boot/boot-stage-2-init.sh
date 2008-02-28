@@ -108,7 +108,10 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @bootLocal@
 
-resumeDevice="$(cat /sys/power/tuxonice/resume)"
+resumeDevice="$(cat /proc/cmdline)"
+resumeDevice="${resumeDevice##* resume=}"
+resumeDevice="${resumeDevice%% *}"
+echo "$resumeDevice"
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
 fi
