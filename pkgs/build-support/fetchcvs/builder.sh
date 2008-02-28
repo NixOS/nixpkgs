@@ -6,18 +6,17 @@ source $stdenv/setup
 # should work (but didn't - got no response on #cvs)
 # See als man Page for those options
 
-ensureDir $out export
-set -x
+ensureDir export
 if [ -n "$tag" ]; then
-  tag="-r $tag"
+    tag="-r $tag"
 else
-  if [ -n "$date" ]; then
-    tag="-D $date"
-  else
-    tag="-D NOW"
-  fi
+    if [ -n "$date" ]; then
+        tag="-D $date"
+    else
+        tag="-D NOW"
+    fi
 fi
-cd export; cvs -f -d "$url" export $tag "$module"
-mv */* $out
+(cd export && cvs -f -z0 -d "$cvsRoot" export $tag "$module")
+mv export/* $out
 
 stopNest

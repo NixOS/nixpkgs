@@ -1,89 +1,80 @@
 #! /bin/sh -e
 
-url=$1
+cvsRoot=$1
 module=$2
 tag=$3
-hash=$4
+expHash=$4
 
-if test -z "$url"; then
-    echo "syntax: nix-prefetch-cvs URL MODULE [TAG [HASH]]" >&2
+hashType=$NIX_HASH_ALGO
+if test -z "$hashType"; then
+    hashType=sha256
+fi
+
+if test -z "$cvsRoot"; then
+    echo "syntax: nix-prefetch-cvs CVSROOT MODULE [TAG [HASH]]" >&2
     exit 1
 elif test -z "$module"; then
-    echo "syntax: nix-prefetch-cvs URL MODULE [TAG [HASH]]" >&2
+    echo "syntax: nix-prefetch-cvs CVSROOT MODULE [TAG [HASH]]" >&2
     exit 1
 fi
 
-# Use a restrictive umask to ensure that the output in the Nix store
-# is not group- or world-writable.  Nix 0.10 complains about this.
-umask 0022
 
-# Determine the hash, unless it was given.
-if test -z "$hash"; then
+mkTempDir() {
+    tmpPath=$(mktemp -d -t nix-prefetch-cvs-XXXXXXXX)
+    trap removeTempDir EXIT SIGINT SIGQUIT
+}
 
-    # !!! hacky; we should have a way to query the location of the store.
-    if storeDir=$(which nix-store); then
-        storeDir=$(dirname $(dirname "$storeDir"))/store
-    else
-        storeDir=/nix/store
+removeTempDir() {
+    if test -n "$tmpPath"; then
+        rm -rf "$tmpPath" || true
     fi
+}
 
-    # !!! race? should be relatively safe, `svn export' barfs if $tmpPath exists.
-    cvsPath="cvs-checkout-tmp-$$"
-    tmpPath1=$storeDir/$cvsPath
 
-    # Test whether we have write permission in the store.  If not,
-    # fetch to /tmp and don't copy to the store.  This is a hack to
-    # make this script at least work somewhat in setuid installations.
-    if ! touch $tmpPath1 2> /dev/null; then
-        echo "(cannot write to the store, result won't be cached)" >&2
-        dummyMode=1
-        tmpPath1=/tmp/nix-prefetch-cvs-$$ # !!! security?
+# If the hash was given, a file with that hash may already be in the
+# store.
+if test -n "$expHash"; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" cvs-export)
+    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+        finalPath=
     fi
-    rm -f $tmpPath1
+    hash=$expHash
+fi
+
+
+# If we don't know the hash or a path with that hash doesn't exist,
+# download the file and add it to the store.
+if test -z "$finalPath"; then
+
+    mkTempDir
+    tmpFile=$tmpPath/cvs-export
+    #mkdir $tmpPath
 
     # Perform the checkout.
     if test -z "$tag"; then
-      rtag="-DNOW"
+        rtag="-DNOW"
     else
-      rtag="-r $tag"
+        rtag="-r $tag"
     fi
-    # CVS has a problem with absolute paths, so cd into the nix store
-    current=$(pwd)
-    cd $storeDir
-    cvs -f -d $url export $rtag -d $cvsPath $module >&2
-    # Change back to the original directory
-    cd $current
+    (cd "$tmpPath" && cvs -f -z7 -d $cvsRoot export $rtag -d cvs-export $module >&2)
 
     # Compute the hash.
-    hash=$(nix-hash $tmpPath1)
-    echo "hash is $hash" >&2
+    hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+    if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
 
-    # Rename it so that the fetchcvs builder can find it.
-    if test "$dummyMode" != 1; then
-        tmpPath2=$storeDir/cvs-checkout-tmp-$hash
-        test -e $tmpPath2 || mv $tmpPath1 $tmpPath2 # !!! race
+    # Add the downloaded file to the Nix store.
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+
+    if test -n "$expHash" -a "$expHash" != "$hash"; then
+        echo "hash mismatch for CVS root \`$cvsRoot'"
+        exit 1
     fi
 fi
 
-# Create a Nix expression that does a fetchcvs.
-nixExpr=$(dirname $0)/../../top-level/all-packages.nix
-storeExpr=$( \
-  echo "(import $nixExpr {}).fetchcvs {url=\"$url\"; module=\"$module\"; tag=\"$tag\"; md5=\"$hash\";}" \
-  | nix-instantiate -)
+if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
 
-# Realise it.
-finalPath=$(nix-store -r $storeExpr)
-
-echo "path is $finalPath" >&2
-
-if test -n "$tmpPath1" -o -n "$tmpPath2"; then
-    rm -rf $tmpPath1 $tmpPath2 || true
-fi
-
-echo "debug hash is $hash" >&2
 echo $hash
 
 if test -n "$PRINT_PATH"; then
-    echo "debug path is $finalPath" >&2
     echo $finalPath
 fi

@@ -9,9 +9,9 @@ stdenv.mkDerivation {
   # Nix <= 0.7 compatibility.
   /*id = if sha256 == "" then md5 else sha256;*/
 
-  outputHashAlgo = if sha256=="" then "md5" else "sha256";
+  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 =="" then md5 else sha256;
+  outputHash = if sha256 == "" then md5 else sha256;
   
   inherit url rev sshSupport openssh;
 }

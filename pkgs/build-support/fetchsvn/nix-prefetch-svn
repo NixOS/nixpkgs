@@ -16,10 +16,6 @@ fi
 
 test -n "$rev" || rev="HEAD"
 
-# Use a restrictive umask to ensure that the output in the Nix store
-# is not group- or world-writable.  Nix 0.10 complains about this.
-umask 0022
-
 
 # If the hash was given, a file with that hash may already be in the
 # store.

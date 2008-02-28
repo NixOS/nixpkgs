@@ -297,7 +297,7 @@ rec {
   };
   
   fetchcvs = import ../build-support/fetchcvs {
-    inherit stdenv cvs nix;
+    inherit stdenv cvs;
   };
 
   fetchdarcs = import ../build-support/fetchdarcs {
