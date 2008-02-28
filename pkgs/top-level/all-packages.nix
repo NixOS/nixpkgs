@@ -4912,7 +4912,7 @@ rec {
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
-  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.3.8-5" ) {
+  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.3.9-0" ) {
     inherit stdenv fetchurl libtool; 
   };
 
