@@ -4131,7 +4131,7 @@ rec {
   };
 
   libcap = import ../os-specific/linux/libcap {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv attr;
   };
 
   libnscd = import ../os-specific/linux/libnscd {
