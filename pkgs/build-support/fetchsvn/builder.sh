@@ -12,10 +12,4 @@ fi
 # hash of the output matters.
 echo 'p' | svn export -r "$rev" "$url" $out
 
-actual=$(nix-hash $out --type "$outputHashAlgo")
-if test "$actual" != "$outputHash"; then
-    echo "hash is $actual, expected $outputHash" >&2
-    exit 1
-fi
-
 stopNest

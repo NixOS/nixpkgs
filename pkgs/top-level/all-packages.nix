@@ -305,7 +305,7 @@ rec {
   };
 
   fetchsvn = import ../build-support/fetchsvn {
-    inherit stdenv subversion nix openssh;
+    inherit stdenv subversion openssh;
     sshSupport = true;
   };
 

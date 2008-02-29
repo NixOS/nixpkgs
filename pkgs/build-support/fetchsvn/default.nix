@@ -1,13 +1,10 @@
-{stdenv, subversion, nix, sshSupport ? false, openssh ? null}: 
+{stdenv, subversion, sshSupport ? false, openssh ? null}: 
 {url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
 
 stdenv.mkDerivation {
   name = "svn-export";
   builder = ./builder.sh;
-  buildInputs = [subversion nix];
-
-  # Nix <= 0.7 compatibility.
-  /*id = if sha256 == "" then md5 else sha256;*/
+  buildInputs = [subversion];
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
