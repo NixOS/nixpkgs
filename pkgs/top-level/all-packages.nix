@@ -396,6 +396,11 @@ rec {
     inherit fetchurl stdenv python wxPython26;
   };
 
+  bogofilter = import ../tools/misc/bogofilter {
+    inherit fetchurl stdenv flex;
+    bdb = db4;
+  };
+
   bsdiff = import ../tools/compression/bsdiff {
     inherit fetchurl stdenv;
   };
