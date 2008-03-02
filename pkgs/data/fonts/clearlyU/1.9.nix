@@ -1,0 +1,30 @@
+args : with args; with builderDefs {src="";} null;
+	let localDefs = builderDefs (rec {
+		src = /* put a fetchurl here */
+		fetchurl {
+			url = http://crl.nmsu.edu/~mleisher/cu/cu12-1.9.tar.gz;
+			sha256 = "0256h6f3ky529jc39hh0nvkngy48a0x3gss2z81g5ddi1qzfw0pn";
+		};
+		buildInputs = [mkfontdir mkfontscale];
+		configureFlags = [];
+		doInstall = FullDepEntry (''
+			tar xf ${src}
+			ensureDir $out/share/fonts/
+			cp *.bdf $out/share/fonts
+			cd $out/share/fonts
+			mkfontdir 
+			mkfontscale
+		'') ["minInit" "defEnsureDir" "addInputs"];
+	}) null; /* null is a terminator for sumArgs */
+	in with localDefs;
+stdenv.mkDerivation rec {
+	name = "clearlyU-12-"+version;
+	builder = writeScript (name + "-builder")
+		(textClosure localDefs 
+			[doInstall doForceShare doPropagate]);
+	meta = {
+		description = "
+		A Unicode font.
+";
+	};
+}
