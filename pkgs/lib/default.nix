@@ -333,7 +333,7 @@ rec {
       else if (__isFunction x) then "x is a function"
       else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
       else if (x == true || x == false) then builtins.toString x
-      else "x is propably a string starting, starting characters: ${__substring 0 50 x}..";
+      else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
 
 
   innerClosePropagation = ready: list: if list == [] then ready else
