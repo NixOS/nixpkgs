@@ -1394,7 +1394,7 @@ rec {
   };
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
-    inherit fetchurl stdenv readline perl gmp ncurses;
+    inherit fetchurl stdenv readline perl58 gmp ncurses;
     m4 = gnum4;
     ghc = ghcboot;
   };
@@ -4665,7 +4665,8 @@ rec {
   };
   
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv zlib ncurses curl ghc;
+    inherit fetchurl stdenv zlib ncurses curl;
+    ghc = ghc661;    
   };
 
   # some speed bottle necks are resolved in this version I think .. perhaps you like to try it? 

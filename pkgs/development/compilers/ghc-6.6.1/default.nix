@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
+{stdenv, fetchurl, readline, ghc, perl58, m4, gmp, ncurses}:
 
 stdenv.mkDerivation (rec {
   name = "ghc-6.6.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation (rec {
     }
   ];
 
-  buildInputs = [ghc readline perl m4 gmp];
+  buildInputs = [ghc readline perl58 m4 gmp];
 
   setupHook = ./setup-hook.sh;
 
@@ -38,6 +38,8 @@ stdenv.mkDerivation (rec {
   preConfigure = ''
     # still requires a hack for ncurses
     sed -i "s|^\(library-dirs.*$\)|\1 \"${ncurses}/lib\"|" libraries/readline/package.conf.in
+    # fix for gcc 4.2
+    echo "SplitObjs=NO" >> mk/build.mk
   '';
 
   inherit (stdenv) gcc;
