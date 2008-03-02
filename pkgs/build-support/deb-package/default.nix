@@ -1,11 +1,17 @@
 args : with args;	
 	let 
        	localDefs = with (builderDefs {src="";} null);
-	 builderDefs {
+	let 
+	  checkFlag = flag : lib.getAttr [flag] false args;
+	in
+	  builderDefs {
 		inherit src;
+		inherit checkFlag;
 		buildInputs = [];
 		configureFlags = [];
-		makeFlags =  [];
+		makeFlags = if (checkFlag "omitConfigure") 
+		then [" PREFIX=$out "]
+		else [];
 		patch = null;
 		meta = {};
 		doInstall = if args ? Install then 
@@ -23,6 +29,14 @@ args : with args;
 		  sed -e 's/-o root//' -i Makefile Makefile.in Makefile.new || true;
 		  sed -e 's/-g root//' -i Makefile Makefile.in Makefile.new || true;
 		''
+		+(if (checkFlag "omitFilePatches") then "" else 
+		''
+		  if test -d debian/patches; then 
+		    for i in debian/patches/*; do 
+		      patch -Np0 -i $i; 
+		    done;
+		  fi;
+		'')
 		+ (if args ? extraReplacements then 
 		  args.extraReplacements 
 		else ""))["minInit" "doUnpack"];
@@ -32,7 +46,8 @@ stdenv.mkDerivation rec {
 	name = localDefs.name + "deb";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs ([debPatch] ++ 
-		(lib.optional (! (args ? omitConfigure)) "doConfigure")
+		(lib.optional (! (checkFlag "omitConfigure")) "doConfigure")
 		++ [doInstall doForceShare]));
 	inherit meta;
+	inherit src;
 }
