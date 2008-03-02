@@ -11,10 +11,16 @@ args : with args;
 		makeFlags = [''KERNELPATH=${kernel}/lib/modules/*/build'' ''DESTDIR=$out''];
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
+let
+postInstall = FullDepEntry (''
+	ln -s $out/usr/local/bin $out/bin
+'') [minInit doMakeInstall];
+in
 stdenv.mkDerivation rec {
 	name = "atheros-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doMakeInstall postInstall
+			doForceShare doPropagate]);
 	meta = {
 		description = "
 		Atheros WiFi driver.

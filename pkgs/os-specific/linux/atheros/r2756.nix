@@ -23,11 +23,15 @@ doPatch = FullDepEntry (if patchAR2425x86 !="" then ''
 	patch -Np1 -i ${patchAR2425x86}
 	cd ..
 '' else "") [minInit doUnpack];
+postInstall = FullDepEntry (''
+	ln -s $out/usr/local/bin $out/bin
+'') [minInit doMakeInstall];
 in
 stdenv.mkDerivation rec {
 	name = "atheros-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doPatch doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs [doPatch doMakeInstall 
+			postInstall doForceShare doPropagate]);
 	meta = {
 		description = "
 		Atheros WiFi driver.
