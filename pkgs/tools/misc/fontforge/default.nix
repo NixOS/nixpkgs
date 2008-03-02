@@ -1,5 +1,7 @@
 { stdenv, fetchurl, gettext, freetype, zlib
 , libungif, libpng, libjpeg, libtiff, libxml2
+, libX11 ? null , lib , xproto ? null
+, libXt ? null
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +16,14 @@ stdenv.mkDerivation {
     unpackFile ${freetype.src}
     freetypeSrcPath=$(echo `pwd`/freetype-*)
     configureFlags=\"$configureFlags --with-freetype-src=$freetypeSrcPath\"
-  ";
+  "
+  + (if libX11!=null then ''
+    configureFlags="$configureFlags --with-gui=gdraw";
+  '' else "");
 
-  buildInputs = [gettext freetype zlib libungif libpng libjpeg libtiff libxml2];
+  buildInputs = [gettext freetype zlib libungif libpng libjpeg libtiff libxml2]
+  ++ (lib.optional (libX11!=null) libX11)
+  ++ (lib.optional (xproto!=null) xproto)
+  ++ (lib.optional (libXt!=null) libXt)
+  ;
 }

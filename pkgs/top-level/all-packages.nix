@@ -522,10 +522,15 @@ rec {
 	  inherit fetchurl stdenv;
   };
 
-  fontforge = import ../tools/misc/fontforge {
+  fontforgeFun = lib.sumArgs (import ../tools/misc/fontforge) {
     inherit fetchurl stdenv gettext freetype zlib
-      libungif libpng libjpeg libtiff libxml2;
+      libungif libpng libjpeg libtiff libxml2 lib;
   };
+
+  fontforge = fontforgeFun null;
+  fontforgeX = fontforgeFun {
+    inherit (xlibs) libX11 xproto libXt;
+  } null;
 
   gawk = useFromStdenv "gawk"
     (import ../tools/text/gawk {
@@ -4456,6 +4461,13 @@ rec {
   docbook5_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook5 {
     inherit fetchurl stdenv;
   };
+
+  junicodeFun = lib.sumArgs  (selectVersion ../data/fonts/junicode "0.6.15") {
+    inherit builderDefs fontforge unzip;
+    inherit (xorg) mkfontdir mkfontscale;
+  };
+
+  junicode = junicodeFun null;
 
   freefont_ttf = import ../data/fonts/freefont-ttf {
     inherit fetchurl stdenv;
