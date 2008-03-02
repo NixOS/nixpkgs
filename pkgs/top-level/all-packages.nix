@@ -4761,6 +4761,14 @@ rec {
  
   dvdplusrwtools = dvdplusrwtoolsFun null;
 
+  # building eclipise from source 
+  # experimental tested on x86_64-linux only
+  eclipse_classic_src = import ../applications/editors/eclipse/eclipse_classic.nix {
+      inherit fetchurl stdenv makeWrapper jdk unzip ant;
+      inherit (gtkLibs) gtk glib;
+      inherit (xlibs) libXtst;
+  };
+
   eclipse = plugins:
     import ../applications/editors/eclipse {
       inherit fetchurl stdenv makeWrapper jdk;
