@@ -2,7 +2,7 @@ args : with args; with builderDefs {src="";} null;
 	let localDefs = builderDefs rec {
 		src = "";/* put a fetchurl here */
 
-		buildInputs = [mkfontdir mkfontscale];
+		buildInputs = [mkfontdir mkfontscale ttmkfdir];
 		configureFlags = [];
 		fontDirs = import ./fonts.nix {inherit pkgs config;};
 		installPhase = FullDepEntry ("
@@ -30,6 +30,13 @@ args : with args; with builderDefs {src="";} null;
 		rm fonts.alias
 		mkfontdir
 		mkfontscale
+		mv fonts.scale fonts.scale.old
+		mv fonts.dir fonts.dir.old
+		ttmkfdir
+		cat fonts.scale.old >> fonts.scale
+		cat fonts.dir.old >> fonts.dir
+		rm fonts.dir.old
+		rm fonts.scale.old
 		cat \$( find ${fontalias}/ -name fonts.alias) >fonts.alias
 	") ["minInit" "addInputs"];
 	} null; /* null is a terminator for sumArgs */

@@ -184,7 +184,7 @@ rec {
   # Font aggregation
   fontDir = import ./fontdir.nix {
     inherit config pkgs ;
-    inherit (pkgs) builderDefs ;
+    inherit (pkgs) builderDefs ttmkfdir;
     inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
   };
 
