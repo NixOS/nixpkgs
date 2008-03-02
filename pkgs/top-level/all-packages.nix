@@ -296,6 +296,13 @@ rec {
     inherit stdenv perl;
   };
   
+  debPackage = {
+    debBuild = lib.sumArgs (import ../build-support/deb-package) {
+      inherit builderDefs;
+    };
+    inherit fetchurl stdenv;
+  };
+
   fetchcvs = import ../build-support/fetchcvs {
     inherit stdenv cvs;
   };
@@ -917,6 +924,15 @@ rec {
     inherit fetchurl stdenv libpng libjpeg zlib;
     inherit (xlibs) imake;
   };
+
+  ttmkfdirFun = import ../tools/misc/ttmkfdir {
+    inherit debPackage freetype fontconfig libunwind
+      libtool;
+    bison = bison23;
+    flex = flex2534;
+  };
+
+  ttmkfdir = ttmkfdirFun null;
 
   units = import ../tools/misc/units {
     inherit fetchurl stdenv;
@@ -3391,6 +3407,10 @@ rec {
     };
   };
 
+  perlFontTTF = import ../development/perl-modules/Font-TTF {
+    inherit fetchurl perl;
+  };
+
   perlURI = import ../development/perl-modules/generic perl {
     name = "URI-1.35";
     src = fetchurl {
@@ -4395,6 +4415,18 @@ rec {
     inherit (xorg) mkfontdir mkfontscale;
   });
 
+  clearlyUFun = lib.sumArgs (selectVersion ../data/fonts/clearlyU "1.9") {
+    inherit builderDefs;
+    inherit (xorg) mkfontdir mkfontscale;
+  };
+
+  clearlyU = clearlyUFun null;
+
+  dejavu_fonts = import ../data/fonts/dejavu-fonts {
+    inherit fetchurl stdenv fontforge perl perlFontTTF
+      fontconfig;
+  };
+
   docbook5 = import ../data/sgml+xml/schemas/docbook-5.0 {
     inherit fetchurl stdenv;
   };
@@ -4429,8 +4461,16 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  liberation_ttf = import ../data/fonts/redhat-liberation-fonts {
+    inherit fetchurl stdenv;
+  };
+
   manpages = import ../data/documentation/man-pages {
      inherit fetchurl stdenv;
+  };
+
+  mph_2b_damase = import ../data/fonts/mph-2b-damase {
+    inherit fetchurl stdenv unzip;
   };
 
   shared_mime_info = selectVersion ../data/misc/shared-mime-info "0.23" {
@@ -4450,9 +4490,22 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  unifontFun = import ../data/fonts/unifont {
+    inherit debPackage perl;
+    inherit (xorg) mkfontdir mkfontscale bdftopcf fontutil;
+  };
+
+  unifont = unifontFun null;
+
   vistafonts = import ../data/fonts/vista-fonts {
     inherit fetchurl stdenv cabextract;
   };
+
+  wqy_zenheiFun = lib.sumArgs (selectVersion ../data/fonts/wqy_zenhei "0.4.23-1") {
+    inherit builderDefs;
+  };
+
+  wqy_zenhei = wqy_zenheiFun null;
 
   xkeyboard_configFun = lib.sumArgs (selectVersion ../data/misc/xkeyboard-config "1.2") {
     inherit fetchurl stdenv perl perlXMLParser gettext;
