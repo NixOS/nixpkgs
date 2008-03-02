@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz configuration backend (GConf).
 ";
+		inherit src;
 	};
 }

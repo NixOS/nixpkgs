@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz configuration - Python part.
 ";
+		inherit src;
 	};
 }

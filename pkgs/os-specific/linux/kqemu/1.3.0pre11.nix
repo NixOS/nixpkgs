@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Kernel module for Qemu acceleration
 ";
+		inherit src;
 	};
 }

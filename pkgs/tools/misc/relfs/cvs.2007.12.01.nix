@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Relational FS over FUSE.
 ";
+		inherit src;
 	};
-	inherit src;
 }

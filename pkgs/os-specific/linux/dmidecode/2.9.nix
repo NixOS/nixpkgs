@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Tool to decode Desktop Management Interface and SBIOS data.
 ";
+		inherit src;
 	};
 }

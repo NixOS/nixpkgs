@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Qi - next generation on top of Common Lisp.
 ";
+		inherit src;
 	};
 }

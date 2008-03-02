@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz Launch Manager
 ";
+		inherit src;
 	};
 }

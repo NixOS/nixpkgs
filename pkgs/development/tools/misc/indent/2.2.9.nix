@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
 		description = "
 	GNU Indent - a source text formatter.
 ";
+		inherit src;
 	};
 }

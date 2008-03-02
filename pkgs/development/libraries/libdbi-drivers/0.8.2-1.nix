@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
 		description = "
 	DB independent interface to DB; DB drivers (mysql only for now).
 ";
+		inherit src;
 	};
 }

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
         Dosfstools - utilities for vfat file system.
 ";
 	homepage = "http://sixpak.org/dosfstools/dosfstools-2.8vb2.tar.gz";
+        inherit src;
     };
-    inherit src;
 }

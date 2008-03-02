@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
 		description = "
 	The X screensaver daemon. Run xscreensaver-demo to configure.
 ";
+		inherit src;
 	};
 }

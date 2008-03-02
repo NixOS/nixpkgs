@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Virtual Box is just software for running virtual machines. 
 ";
+		inherit src;
 	};
 }

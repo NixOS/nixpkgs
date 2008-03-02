@@ -31,5 +31,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Audacity sound editor.";
     homepage = http://audacity.sourceforge.net;
+    inherit src;
   };
 }

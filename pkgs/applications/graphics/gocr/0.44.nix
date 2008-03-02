@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 		GPL Optical Character Recognition
 ";
+		inherit src;
 	};
 }

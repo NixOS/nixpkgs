@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Just a wrapper to create fonts.dir and fonts.scale .
 ";
+		inherit src;
 	};
 }

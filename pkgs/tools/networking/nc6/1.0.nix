@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       nc6 - one more netcat, IPv6 support included.
     ";
     homepage = "http://www.deepspace6.net/projects/netcat6.html";
+    inherit src;
   };
 }
 

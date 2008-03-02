@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
 		description = "
 		QEmu processor emulator.
 ";
+		inherit src;
 	};
 }

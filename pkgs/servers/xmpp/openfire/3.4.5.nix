@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "
     XMPP server in Java.
 ";
+		inherit src;
   };
 }

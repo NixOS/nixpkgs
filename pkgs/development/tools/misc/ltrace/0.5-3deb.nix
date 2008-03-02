@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Library call tracer.
 ";
+		inherit src;
 	};
 }

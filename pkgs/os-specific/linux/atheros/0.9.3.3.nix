@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Atheros WiFi driver.
 ";
+		inherit src;
 	};
 }

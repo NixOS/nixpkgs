@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "Snd sound editor.";
     homepage = http://ccrma.stanford.edu/software/snd;
+		inherit src;
 	};
 }

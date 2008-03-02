@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 		description = "
 	${(abort "Specify description")}
 ";
+		inherit src;
 	};
 }

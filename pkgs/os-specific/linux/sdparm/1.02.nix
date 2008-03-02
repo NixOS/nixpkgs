@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	SCSI parameters utility.
 ";
+		inherit src;
 	};
 }

@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
 		description = "
 		A Unicode font.
 ";
+		inherit src;
 	};
 }

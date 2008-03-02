@@ -24,5 +24,6 @@ stdenv.mkDerivation {
 		description = "
 	LADSPA format audio plugins.
 ";
+		inherit src;
 	};
 }

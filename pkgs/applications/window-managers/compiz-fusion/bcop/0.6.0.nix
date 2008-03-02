@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz BCOP.
 ";
+		inherit src;
 	};
 }

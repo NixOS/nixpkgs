@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Internalization tool for XML.
 ";
+		inherit src;
 	};
 }

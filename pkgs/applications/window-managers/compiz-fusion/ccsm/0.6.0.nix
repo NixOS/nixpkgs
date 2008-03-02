@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz Settings Manager
 ";
+		inherit src;
 	};
 }

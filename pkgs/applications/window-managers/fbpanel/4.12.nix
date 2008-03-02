@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Just a desktop panel.	
 ";
+		inherit src;
 	};
 }

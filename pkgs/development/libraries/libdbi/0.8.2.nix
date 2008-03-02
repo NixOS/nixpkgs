@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	DB independent interface to DB.	
 ";
+		inherit src;
 	};
 }

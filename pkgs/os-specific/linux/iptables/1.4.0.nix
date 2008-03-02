@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "
      IPtables Linux firewall.
 ";
+	inherit src;
   };
 }

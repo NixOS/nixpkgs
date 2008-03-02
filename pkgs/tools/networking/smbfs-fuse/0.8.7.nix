@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Samba mounted via FUSE.
 ";
+	  inherit src;
 	};
 }

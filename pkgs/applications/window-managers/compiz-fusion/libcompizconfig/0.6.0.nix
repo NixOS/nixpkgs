@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Compiz configuration backend library.
 ";
+		inherit src;
 	};
 }

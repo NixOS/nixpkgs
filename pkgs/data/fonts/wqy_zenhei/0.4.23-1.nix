@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 		description = "
 		A (mainly) Chinese Unicode font.
 ";
+		inherit src;
 	};
 }
 

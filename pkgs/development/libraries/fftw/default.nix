@@ -17,5 +17,6 @@ stdenv.mkDerivation {
 		description = "
 	Fastest Fourier Transform in the West library.
 ";
+		inherit src;
 	};
 }

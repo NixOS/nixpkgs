@@ -44,5 +44,6 @@ rec {
 		description = "
 	Compiz window manager
 ";
+		inherit src;
 	};
 }

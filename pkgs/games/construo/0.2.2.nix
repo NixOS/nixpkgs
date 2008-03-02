@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Construo masses and springs simulation.
 ";
+		inherit src;
 	};
 }

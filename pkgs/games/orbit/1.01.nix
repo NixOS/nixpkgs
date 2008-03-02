@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 		description = "
 		Orbit space flight simulator.
 ";
+		inherit src;
 	};
 }
 

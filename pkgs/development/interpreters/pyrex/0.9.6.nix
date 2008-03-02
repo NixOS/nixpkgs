@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Python package compiler or something like that.	
 ";
+		inherit src;
 	};
 }

@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
 		built separately from kernel. Later mentioned directories in 
 		moduleSources have higher priority.
 ";
+		inherit src;
 	};
 }

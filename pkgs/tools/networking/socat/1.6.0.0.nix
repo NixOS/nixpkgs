@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
 	'netcat++' (extended design, new implementation)
 ";
         homepage = "http://www.dest-unreach.org/socat/";
+	inherit src;
     };
 }

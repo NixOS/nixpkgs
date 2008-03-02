@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Libextractor - extracts metadata from files.
 ";
+		inherit src;
 	};
 }

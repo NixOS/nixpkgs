@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Extra Compiz Fusion plugins.
 ";
+		inherit src;
 	};
 }

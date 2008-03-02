@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     description = "
 	Falling Sand Game - a cellular automata engine tuned towards the likes of Falling Sand.
 ";
+		inherit src;
   };
 }

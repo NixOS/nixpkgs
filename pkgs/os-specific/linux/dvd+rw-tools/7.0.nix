@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
 		description = "
 	DVD+RW tools.
 ";
+		inherit src;
 	};
 }

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 		description = "
 	Recursive rectangle map of disk usage.	
 ";
+		inherit src;
 	};
 }
