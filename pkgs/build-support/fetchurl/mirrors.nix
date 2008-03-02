@@ -113,4 +113,12 @@ rec {
     http://ftp.funet.fi/pub/CPAN/
   ];
 
+  # Debian
+  debian = [
+    ftp://ftp.de.debian.org/debian/pool/
+    ftp://ftp.nl.debian.org/debian/pool/
+    ftp://ftp.ru.debian.org/debian/pool/
+    ftp://ftp.debian.org/debian/pool/
+  ];
+
 }
