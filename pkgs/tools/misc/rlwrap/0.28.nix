@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 		description = "
 		Readline wrapper for console programs.
 ";
+		inherit src;
 	};
 }

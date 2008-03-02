@@ -30,4 +30,5 @@ stdenv.mkDerivation rec {
 ";
 	homepage = "http://sixpak.org/dosfstools/dosfstools-2.8vb2.tar.gz";
     };
+    inherit src;
 }
