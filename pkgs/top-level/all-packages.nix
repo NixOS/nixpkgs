@@ -4411,7 +4411,7 @@ rec {
   };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
-    inherit fetchurl stdenv builderDefs paths;
+    inherit fetchurl stdenv builderDefs paths ttmkfdir;
     inherit (xorg) mkfontdir mkfontscale;
   });
 
@@ -4488,6 +4488,10 @@ rec {
 
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
     inherit fetchurl stdenv;
+  };
+
+  ucsFonts = import ../data/fonts/ucs-fonts {
+    inherit fetchurl stdenv wrapFonts;
   };
 
   unifontFun = import ../data/fonts/unifont {

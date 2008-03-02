@@ -1,7 +1,7 @@
 args : with args;
 	let localDefs = builderDefs {
 		src =""; /* put a fetchurl here */
-		buildInputs = [mkfontdir mkfontscale];
+		buildInputs = [mkfontdir mkfontscale ttmkfdir];
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
@@ -14,6 +14,12 @@ let
 		done
 		mkfontdir 
 		mkfontscale
+		mv fonts.scale fonts.scale.old
+		mv fonts.dir fonts.dir.old
+		ttmkfdir
+		cat fonts.dir.old >> fonts.dir
+		cat fonts.scale.old >> fonts.scale
+		rm fonts.dir.old fonts.scale.old
 	") [minInit addInputs defEnsureDir] ;
 in
 stdenv.mkDerivation rec {
