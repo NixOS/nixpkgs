@@ -29,6 +29,7 @@ in
     nixosHardwareScan
     nixosInstall
     nixosRebuild
+    nixosGenSeccureKeys
     ;    
     
   nixFallback = system.nix;
