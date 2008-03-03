@@ -2129,8 +2129,8 @@ root        ALL=(ALL) SETENV: ALL
     };
 
     checkConfigurationOptions = mkOption {
-      default = false;
-      example = true;
+      default = true;
+      example = false;
       description = "
         If all configuration options must be checked. Non-existing options fail build.
       ";

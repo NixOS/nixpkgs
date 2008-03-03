@@ -208,6 +208,7 @@ rec {
     nixosTools.nixosRebuild
     nixosTools.nixosCheckout
     nixosTools.nixosHardwareScan
+    nixosTools.nixosGenSeccureKeys
     setuidWrapper
   ]
   ++ pkgs.lib.optionals (!config.environment.cleanStart) [
@@ -242,6 +243,7 @@ rec {
     pkgs.pwdutils
     pkgs.reiserfsprogs
     pkgs.rsync
+    pkgs.seccureUser
     pkgs.strace
     pkgs.su
     pkgs.sysklogd
