@@ -403,6 +403,12 @@ rec {
     inherit fetchurl stdenv python wxPython26;
   };
 
+  bmrsaFun = lib.sumArgs (selectVersion ../tools/security/bmrsa "11") {
+    inherit builderDefs unzip;
+  };
+
+  bmrsa = bmrsaFun null;
+
   bogofilter = import ../tools/misc/bogofilter {
     inherit fetchurl stdenv flex;
     bdb = db4;
@@ -848,6 +854,12 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  seccureFun = lib.sumArgs (selectVersion ../tools/security/seccure "0.3") {
+    inherit builderDefs libgcrypt;
+  };
+
+  seccure = seccureFun null;
+
   sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
     inherit fetchurl stdenv;
   };
@@ -891,6 +903,12 @@ rec {
     inherit fetchurl stdenv openssl;
     tlsSupport = true;
   };
+
+  ssssFun = lib.sumArgs (selectVersion ../tools/security/ssss "0.5") {
+    inherit builderDefs gmp;
+  };
+
+  ssss = ssssFun null;
 
   su = import ../tools/misc/su {
     inherit fetchurl stdenv pam;

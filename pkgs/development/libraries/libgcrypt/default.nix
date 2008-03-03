@@ -10,5 +10,5 @@ stdenv.mkDerivation {
     sha256 = "0ip0bjhnn12lvb050j91x64wfhmpk7xlc3p93mxi9g2qczg413nz";
   };
 
-  buildInputs = [libgpgerror];
+  propagatedBuildInputs = [libgpgerror];
 }
