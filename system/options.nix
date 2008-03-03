@@ -1744,6 +1744,20 @@
       };
     };
 
+    openfire = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to enable OpenFire XMPP server.
+	";
+      };
+      usePostgreSQL = mkOption {
+        default = true;
+	description = "
+	  Whether you use PostgreSQL service for your storage back-end.
+	";
+      };
+    };
 
   };
 

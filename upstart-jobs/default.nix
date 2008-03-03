@@ -187,6 +187,12 @@ let
       inherit config pkgs;
     })  
 
+  # OpenFire XMPP server
+  ++ optional config.services.openfire.enable
+    (import ../upstart-jobs/openfire.nix {
+      inherit config pkgs;
+    })
+
   # JBoss service
   ++ optional config.services.jboss.enable
     (import ../upstart-jobs/jboss.nix {
