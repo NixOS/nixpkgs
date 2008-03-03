@@ -12,6 +12,8 @@ let
     aspell
     aspellDicts
     aterm
+    audacious
+    audacious_plugins
     autoconf
     automake19x
     bash
@@ -20,9 +22,6 @@ let
     binutils
     bison23
     bittorrent
-    bmp
-    bmp_plugin_musepack
-    bmp_plugin_wma
     bsdiff
     bzip2
     cabextract

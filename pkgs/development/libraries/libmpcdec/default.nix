@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libmpcdec-1.2.2";
+  name = "libmpcdec-1.2.6";
   src = fetchurl {
-    url = http://files2.musepack.net/source/libmpcdec-1.2.2.tar.bz2;
-    md5 = "f14e07285b9b102a806649074c1d779b";
+    url = http://files.musepack.net/source/libmpcdec-1.2.6.tar.bz2;
+    md5 = "7f7a060e83b4278acf4b77d7a7b9d2c0";
   };
 }

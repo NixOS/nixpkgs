@@ -2634,10 +2634,18 @@ rec {
   }));
 
   libksba = import ../development/libraries/libksba {
-	  inherit fetchurl stdenv libgpgerror;
+    inherit fetchurl stdenv libgpgerror;
   };
 
   libmad = import ../development/libraries/libmad {
+    inherit fetchurl stdenv;
+  };
+
+  libmcs = import ../development/libraries/libmcs {
+    inherit fetchurl stdenv pkgconfig libmowgli;
+  };
+
+  libmowgli = import ../development/libraries/libmowgli {
     inherit fetchurl stdenv;
   };
 
@@ -2650,7 +2658,7 @@ rec {
   };
 
   libnova = import ../development/libraries/libnova {
-	  inherit fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   libogg = import ../development/libraries/libogg {
@@ -2663,7 +2671,6 @@ rec {
   };
 
   liboil = liboilFun null;
-
 
   liboop = import ../development/libraries/liboop {
     inherit fetchurl stdenv;
@@ -2788,7 +2795,7 @@ rec {
 	  inherit fetchurl stdenv;
   };
 
-#failed to build
+  # failed to build
   mediastreamerFun = lib.sumArgs (selectVersion
       ../development/libraries/mediastreamer "2.2.0-cvs20080207") {
     inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
@@ -4562,6 +4569,17 @@ rec {
   amsn = import ../applications/networking/instant-messengers/amsn {
     inherit fetchurl stdenv which tcl tk x11;
     libstdcpp = gcc33.gcc;
+  };
+
+  audacious = import ../applications/audio/audacious/player.nix {
+    inherit fetchurl stdenv pkgconfig libmowgli libmcs gettext xlibs dbus_glib;
+    inherit (gnome) libglade;
+    inherit (gtkLibs) glib gtk;
+  };
+
+  audacious_plugins = import ../applications/audio/audacious/plugins.nix {
+    inherit fetchurl stdenv pkgconfig audacious dbus_glib gettext
+      libmad xlibs alsaLib taglib libmpcdec libogg libvorbis;
   };
 
   audacity = import ../applications/audio/audacity {
