@@ -57,3 +57,7 @@ svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk services
 # Add a few required symlink.
 ln -sfn ../services nixos${CHECKOUT_SUFFIX}/services
 ln -sfn ../nixpkgs${CHECKOUT_SUFFIX}/pkgs nixos${CHECKOUT_SUFFIX}/pkgs
+
+REVISION=$(svn info nixpkgs${CHECKOUT_SUFFIX} | egrep '^Revision: ');
+REVISION=${REVISION#Revision: };
+echo "\"$REVISION\"" > version.nix

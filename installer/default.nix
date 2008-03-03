@@ -31,6 +31,11 @@ in
     src = ./nixos-rebuild.sh;
   };
 
+  nixosGenSeccureKeys = makeProg {
+    name = "nixos-gen-seccure-keys";
+    src = ./nixos-gen-seccure-keys.sh;
+  };
+
   nixosCheckout = makeProg {
     name = "nixos-checkout";
     src = ./nixos-checkout.sh;
