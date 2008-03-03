@@ -4,7 +4,7 @@ args : with args; with builderDefs {src="";} null;
 
 		buildInputs = [];
 		configureFlags = [];
-	}) null; /* null is a terminator for sumArgs */
+	}) args null; /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "${abort "Specify name"}-"+version;

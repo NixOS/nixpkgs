@@ -9,7 +9,7 @@ args : with args; let localDefs = builderDefs (args // rec {
 		/* List consisiting of an even number of strings; "key" "value" */
 		configFlags = [
 		];
-	}) null; /* null is a terminator for sumArgs */
+	}) args null; /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "${(abort "Specify name")}"+version;

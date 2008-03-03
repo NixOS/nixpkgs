@@ -860,6 +860,13 @@ rec {
 
   seccure = seccureFun null;
 
+  # seccure will override it (it is root-only, but
+  # more secure because of memory locking), but this 
+  # can be added to default system
+  seccureUser = lowPrio (seccureFun {
+    makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
+  } null);
+
   sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
     inherit fetchurl stdenv;
   };

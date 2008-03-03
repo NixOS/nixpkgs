@@ -12,7 +12,7 @@ args : with args; with builderDefs {src="";} null;
 			sed -e s@/usr/@$out/@g -i Makefile
 			ensureDir $out/bin $out/share/man/man1
 		'') ["minInit" "doUnpack" "defEnsureDir"];
-	}) null; /* null is a terminator for sumArgs */
+	}) args null; /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "seccure-"+version;
