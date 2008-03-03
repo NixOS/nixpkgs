@@ -14,11 +14,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "python-2.5.1";
+  name = "python-2.5.2";
   
   src = fetchurl {
-    url = http://www.python.org/ftp/python/2.5.1/Python-2.5.1.tar.bz2;
-    sha256 = "0rz1279q0i5f69jvwn6i0vlxmhxgcfykxnr80zmx4micw3fd9dfh";
+    url = http://www.python.org/ftp/python/2.5.2/Python-2.5.2.tar.bz2;
+    sha256 = "0gh8bvs56vdv8qmlfmiwyczjpldj0y3zbzd0zyhyjfd0c8m0xy7j";
   };
 
   patches = [
