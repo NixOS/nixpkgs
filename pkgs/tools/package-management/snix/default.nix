@@ -1,7 +1,10 @@
 { stdenv, fetchurl, aterm, db4, perl, curl, bzip2, openssl ? null
 
 , ext3cowtools, e3cfsprogs, rsync
-#, libtool, docbook5, docbook5-xsl, flex, bison
+, libtool, automake, autoconf
+, flex, bison
+
+, docbook5, docbook5_xsl, libxslt, docbook_xml_dtd_43, w3m
 
 , ext3cow_kernel
 
@@ -11,14 +14,19 @@
 }:
 
 stdenv.mkDerivation {
-  name = "snix-0.12rev9419";
+  name = "snix-0.12rev10946";
   
   src = fetchurl {
-    url = http://www.denbreejen.net/public/nix/snix-0.12rev9419.tar.gz;
-    sha256 = "fe7c06a8c41f6c9c94898a5fd690ed76da397012ea4c624adac9029b23c88a1c";
+    url = http://www.denbreejen.net/public/nix/snix-20080304-rev10948.tar.gz;
+    sha256 = "6973f080be8a32f1fc9b109f7f180b2bbd4e9e246721de9247378e49c6a70ef4";
   };
   
-  buildInputs = [perl curl openssl rsync];
+  buildInputs = [perl curl openssl rsync libtool automake autoconf flex bison
+                 docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m ];
+
+  preConfigure = "
+    ./bootstrap.sh
+  ";
 
   configureFlags = "
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
