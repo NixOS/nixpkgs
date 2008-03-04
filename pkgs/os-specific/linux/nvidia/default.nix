@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   inherit versionNumber kernel;
 
+  dontStrip = true;
+
   libPath = [
     gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib 
     xlibs.libXext xlibs.libX11 xlibs.libXv
