@@ -1,5 +1,9 @@
 Some conventions:
 
+* Directories / file names: lowercase, and use dashes between words,
+  no camel case.  I.e., all-packages.nix, not all allPackages.nix or
+  AllPackages.nix.
+
 * Don't use TABs.  Everybody has different TAB settings so it's asking
   for trouble.
 

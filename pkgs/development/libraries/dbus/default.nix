@@ -1,12 +1,18 @@
 args: with args;
+
 let
-  version = "1.0.2";
+
+  version = "1.1.20";
+  
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1jn652zb81mczsx4rdcwrrzj3lfhx9d107zjfnasc4l5yljl204a";
+    sha256 = "0zhl6cxlwfm9hsl7vm8ycif39805zsa1z8f0qnbfh54jmwccl7vg";
   };
+  
   configureFlags = "--disable-static --localstatedir=/var --with-session-socket-dir=/tmp";
+  
 in rec {
+
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
     buildInputs = [pkgconfig expat];
@@ -33,10 +39,11 @@ in rec {
     '';
   };
 
-# I'm too lazy to separate daemon and libs now.
+  # I'm too lazy to separate daemon and libs now.
   daemon = libs;
   
   # FIXME TODO
   # After merger it will be better to correct upstart-job instead.
   outPath = daemon.outPath;
+  
 }

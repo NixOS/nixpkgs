@@ -2239,9 +2239,10 @@ rec {
 
   dbus = import ../development/libraries/dbus {
     inherit fetchurl stdenv pkgconfig expat;
-	  inherit (xlibs) libX11 libICE libSM;
-    useX11 = getConfig [ "dbus" "tools" "useX11" ]
-      (getConfig [ "services" "xserver" "enable" ] false);
+    inherit (xlibs) libX11 libICE libSM;
+    useX11 = true; # !!! `false' doesn't build
+    #useX11 = getConfig ["dbus" "tools" "useX11"]
+    #  (getConfig ["services" "xserver" "enable"] false);
   };
 
   dbus_glib = import ../development/libraries/dbus-glib {
