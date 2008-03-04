@@ -1186,6 +1186,11 @@ rec {
     profiledCompiler = true;
   });
 
+  gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
+    inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
+    texinfo = texinfo49;
+  });
+
   # This new ghc stuff is under heavy development and will change ! 
   # ===============================================================
 
@@ -1649,6 +1654,17 @@ rec {
   wrapGCC = baseGCC: wrapGCCWithGlibc baseGCC glibc;
 
   wrapGCCWithGlibc = baseGCC: glibc: import ../build-support/gcc-wrapper {
+    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
+    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
+    gcc = baseGCC;
+    libc = glibc;
+    inherit stdenv binutils;
+  };
+
+
+  # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
+  # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
+  wrapGCCUPC = baseGCC: import ../build-support/gcc-upc-wrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     gcc = baseGCC;
