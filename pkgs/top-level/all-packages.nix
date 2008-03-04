@@ -5987,8 +5987,13 @@ rec {
   # State Nix
   snix = import ../tools/package-management/snix {
     inherit fetchurl stdenv perl curl bzip2 openssl;
+    inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
+
     aterm = aterm242fixes;
     db4 = db45;
+
+    bison = bison23;
+    flex = flex2533;
 
     inherit ext3cowtools e3cfsprogs rsync;
     ext3cow_kernel = kernel;
