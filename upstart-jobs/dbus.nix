@@ -33,7 +33,7 @@ in
     }
   ];
   
-  extraPath = [dbus];
+  extraPath = [dbus.daemon dbus.tools];
   
   job = "
 description \"D-Bus system message bus daemon\"
@@ -47,7 +47,7 @@ start script
     chown messagebus ${homeDir}
 
     mkdir -m 0755 -p /var/lib/dbus
-    ${dbus}/bin/dbus-uuidgen --ensure
+    ${dbus.tools}/bin/dbus-uuidgen --ensure
 
 end script
 
