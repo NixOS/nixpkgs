@@ -11,6 +11,8 @@ let
 		server = cfg.server;
 		keepAlive = cfg.keepAlive;
 		everPing = cfg.everPing;
+
+		seccureKeys = config.security.seccureKeys;
 	};
 in
 {

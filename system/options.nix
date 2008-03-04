@@ -1891,6 +1891,22 @@
       ";
     };
 
+    seccureKeys = {
+      public = mkOption {
+        default = /var/elliptic-keys/public;
+	description = "
+	  Public key. Make it path argument, so it is copied into store and
+	  hashed.
+	";
+      };
+      private = mkOption {
+        default = "/var/elliptic-keys/private";
+	description = "
+	  Private key. Make it string argument, so it is not copied into store.
+	";
+      };
+    };
+
     sudo = {
 
       enable = mkOption {
