@@ -17,7 +17,9 @@ let
 
     directoriesConf = pkgs.writeText "directories.conf" config.directoriesConf;
 
-    defaultPath = "${pkgs.coreutils}/bin:${pkgs.findutils}/bin";
+    defaultPath = "${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnutar}/bin";
+
+    inherit (pkgs) gnutar bzip2;
 
     saxon8 = pkgs.saxonb;
 
@@ -36,6 +38,7 @@ let
       cp -prd $src/* $out
       chmod -R u+w $out
       find $out -type f -print | while read fn; do
+        args=
         substituteAll $fn $fn
       done
       eval "$postInstall"
