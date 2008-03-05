@@ -700,7 +700,7 @@ rec {
   };
 
   lsh = import ../tools/networking/lsh {
-    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4;
+    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
   };
 
   man = import ../tools/misc/man {
