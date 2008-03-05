@@ -2569,6 +2569,14 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  libcddb = import ../development/libraries/libcddb {
+    inherit fetchurl stdenv;
+  };
+
+  libcdio = import ../development/libraries/libcdio {
+    inherit fetchurl stdenv libcddb pkgconfig ncurses;
+  };
+
   libcm = assert mesaSupported; import ../development/libraries/libcm {
     inherit fetchurl stdenv pkgconfig xlibs mesa;
     inherit (gtkLibs) glib;
