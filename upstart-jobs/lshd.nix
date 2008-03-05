@@ -1,0 +1,53 @@
+{lsh, xauth, lib, nssModulesPath, lshdConfig}:
+
+with builtins;
+with lib;
+
+{
+  name = "lshd";
+  
+  job = with lshdConfig; ''
+description "GNU lshd SSH2 daemon"
+
+start on network-interfaces/started
+stop on network-interfaces/stop
+
+env LD_LIBRARY_PATH=${nssModulesPath}
+
+start script
+    test -d /etc/lsh || mkdir -m 0755 -p /etc/lsh
+    test -d /var/spool/lsh || mkdir -m 0755 -p /var/spool/lsh
+
+    if ! test -f /var/spool/lsh/yarrow-seed-file
+    then
+        ${lsh}/bin/lsh-make-seed -o /var/spool/lsh/yarrow-seed-file
+    fi
+
+    if ! test -f "${hostKey}"
+    then
+        ${lsh}/bin/lsh-keygen --server | \
+	${lsh}/bin/lsh-writekey --server -o "${hostKey}"
+    fi
+end script
+
+respawn ${lsh}/sbin/lshd --daemonic \
+   -p ${toString portNumber} \
+   ${if interfaces == [] then ""
+     else (concatStrings (map (i: "--interface=\"${i}\"")
+                              interfaces))} \
+   -h "${hostKey}" \
+   ${if !syslog then "--no-syslog" else ""} \
+   ${if !passwordAuthentication then "--no-password" else ""} \
+   ${if !publicKeyAuthentication then "--no-publickey" else ""} \
+   ${if rootLogin then "--root-login" else ""} \
+   ${if loginShell != null then "--login-shell=\"${loginShell}\"" else "" } \
+   ${if srpKeyExchange then "--srp-keyexchange" else "" } \
+   ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
+   ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \
+   --subsystems=${concatStringsSep ","
+                                   (map (pair: (head pair) + "=" +
+                                               (head (tail pair)))
+				        subsystems)}
+'';
+  
+}

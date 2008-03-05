@@ -139,6 +139,16 @@ let
       allowSFTP = config.services.sshd.allowSFTP;
     })
 
+  # GNU lshd SSH2 deamon.
+  ++ optional config.services.lshd.enable
+    (import ../upstart-jobs/lshd.nix {
+      inherit (pkgs) lib;
+      inherit (pkgs) lsh;
+      inherit (pkgs.xorg) xauth;
+      inherit nssModulesPath;
+      lshdConfig = config.services.lshd;
+    })
+
   # NTP daemon.
   ++ optional config.services.ntp.enable
     (import ../upstart-jobs/ntpd.nix {
