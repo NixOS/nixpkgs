@@ -13,12 +13,13 @@
   pkgs.xorg.fontbhttf
   pkgs.xorg.fontbhlucidatypewriter100dpi
   pkgs.ttf_bitstream_vera
-  pkgs.corefonts
   pkgs.freefont_ttf
   pkgs.xorg.fontbh100dpi
   pkgs.xorg.fontmiscmisc
   pkgs.xorg.fontcursormisc
 ]
+
+++ (pkgs.lib.optional (config.fonts.enableCoreFonts) pkgs.corefonts)
 
 ++ pkgs.lib.optional (config.fonts.enableGhostscriptFonts) "${pkgs.ghostscript}/share/ghostscript/fonts"
 

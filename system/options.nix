@@ -2050,6 +2050,13 @@ root        ALL=(ALL) SETENV: ALL
       ";
     };
 
+    enableCoreFonts = mkOption {
+      default = true;
+      description = "
+        Whether to include MS Core Fonts (redistributable, but only verbatim).
+      ";
+    };
+
   };
 
 
