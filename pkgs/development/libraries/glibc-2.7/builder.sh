@@ -7,6 +7,9 @@ source $stdenv/setup
 # Explicitly tell glibc to use our pwd, not /bin/pwd.
 export PWD_P=$(type -tP pwd)
 
+# Needed to install share/zoneinfo/zone.tab.
+export BASH_SHELL=$SHELL
+
 
 preConfigure=preConfigure
 preConfigure() {
