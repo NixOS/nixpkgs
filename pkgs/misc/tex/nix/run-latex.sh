@@ -37,7 +37,10 @@ showError() {
 runLaTeX() {
     if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
     runNeeded=
-    if grep -q "LaTeX Warning: Label(s) may have changed." "$tmpFile"; then
+    if fgrep -q \
+        -e "LaTeX Warning: Label(s) may have changed." \
+        -e "Rerun to get citations correct." \
+        "$tmpFile"; then
         runNeeded=1
     fi
 }
