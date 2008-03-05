@@ -34,8 +34,8 @@ in rec {
     makeFlags = "DBUS_DAEMONDIR=${daemon}/bin";
 
     patchPhase = ''
+      substituteInPlace tools/Makefile.in --replace 'test -z "$(localstatelibdir)"' true
       sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
-      sed -i '/mkdir.*localstate/d' tools/Makefile.in
     '';
   };
 
