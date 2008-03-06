@@ -386,11 +386,19 @@ rec {
     inherit fetchurl stdenv zlib wxGTK;
   };
 
-  avahi = selectVersion ../development/libraries/avahi "0.6.22" {
-    inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser qt4
-      python expat;
-    inherit (gtkLibs) glib gtk;
-  };
+  avahi =
+    # XXX: Versions prior to 0.6.22 did not support Qt4, so enabling
+    # Qt4 should not be permitted when using a version of Avahi older
+    # than 0.6.22, hence the default to `false'.
+    let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
+    in
+      selectVersion ../development/libraries/avahi "0.6.22" {
+	inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser
+	  expat lib;
+	inherit (gtkLibs) glib gtk;
+	inherit qt4Support;
+	qt4 = if qt4Support then qt4 else null;
+      };
 
   axel = import ../tools/networking/axel {
     inherit fetchurl stdenv;
