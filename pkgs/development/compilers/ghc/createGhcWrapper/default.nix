@@ -1,11 +1,15 @@
-args: with args; with lib;
+args: with args; with lib; with annotatedDerivations;
 
 stdenv.mkDerivation {
-  inherit suffix name ghc readline ncurses;
+  inherit suffix name ghc ;
 
-  buildInputs = (libraries ++ [ghcPkgUtil]);
-  tags = map (x :  sourceWithTagsDerivation ((lib.traceWhatis x).passthru.sourceWithTags)) 
-          (uniqList { inputList= filter annotatedWithSourceAndTagInfo libraries; } );
+  buildInputs = map delAnnotation (libraries ++ [ghcPkgUtil]);
+  #tags = if (installSourceAndTags == true) then
+  #        map sourceWithTagsDerivation ( uniqList { inputList = 
+  #            ( filterAnnotated ( concatLists (map uniqAnnotatedDeps libraries ) ) ) ; } )
+  #        else [];
+  tags = map (x : sourceWithTagsDerivation (x.sourceWithTags)) 
+          (uniqList { inputList=  filter annotatedWithSourceAndTagInfo libraries; } );
 
   phases="installPhase";
 
@@ -19,15 +23,16 @@ stdenv.mkDerivation {
       app=$(ls -al $ghc/bin/$a | sed -n 's%.*-> \\(.*\\)%\\1%p');
 cat > \"\$out/bin/\$a$suffix\" << EOF
 #!`type -f sh | gawk '{ print $3; }'`
-export LIBRARY_PATH=\$readline/lib:\$ncurses/lib
 GHC_PACKAGE_PATH=\${GHC_PACKAGE_PATH}\${g} \$ghc/bin/$app \"\\\$@\"
 EOF
       chmod +x \"\$out/bin/\$a$suffix\"
     done
 
-    ensureDir \$out/src
+    ensureDir \$out/{src,tags}
     for i in \$tags; do
-        ln -s \$i/src/* \$out/src
+      for path in src tags; do
+        ln -s \$i/\$path/* \$out/\$path
+      done
     done
 ";
 }

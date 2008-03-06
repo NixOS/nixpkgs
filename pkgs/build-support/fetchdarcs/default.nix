@@ -1,10 +1,9 @@
-{stdenv, darcs, nix}: {url, tag ? null, md5, partial ? true}:
+{stdenv, darcs, nix}: {url, tag ? null, md5}:
 
 stdenv.mkDerivation {
   name = "fetchdarcs";
   builder = ./builder.sh;
   buildInputs = [darcs nix];
-  partial = if partial then "--partial" else "";
 
   # Nix <= 0.7 compatibility.
   id = md5;

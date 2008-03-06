@@ -1,4 +1,5 @@
-{ ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib, hasktags, ctags } : 
+{ ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib, annotatedDerivations, hasktags, ctags } : 
+with annotatedDerivations;
 rec {
   
   /* What's in here?
@@ -110,7 +111,7 @@ rec {
                           deps = [ x.base x.old_locale x.old_time x.filepath ];};
           filepath = { name = "filepath-1.1.0.0"; srcDir = "libraries/filepath";
                           deps = [ x.base ];};
-          ghc = { name = "ghc-${version}"; srcDir = "compiler";
+          ghc = { name = "ghc-${version}"; srcDir = "libraries/Cabal";
                           deps = [ x.base x.old_locale x.old_time x.filepath
                             x.directory x.array x.containers x.hpc x.bytestring
                             x.pretty x.packedstring x.template_haskell x.unix
@@ -141,7 +142,7 @@ rec {
                   name = "rts-1.0"; srcDir = "rts"; # TODO: Doesn't have .hs files so I should use ctags if creating tags at all
                   deps = [];
                   createTagFiles = [
-                      { name = "${name}_haskell";
+                      { name = "${name}_haskell_tags";
                         tagCmd = "${toString ctags}/bin/ctags -R .;mv tags \$TAG_FILE"; }
                     ];
           };
@@ -152,24 +153,30 @@ rec {
         };
 
         toDerivation = attrs : with attrs;
+              rec {
+                inherit name;
 
-                stdenv.mkDerivation {
-                    inherit (attrs) name;
+                #aDeps = concatLists ( catAttrs ( subsetmap id args [ "buildInputs" "propagatedBuildInputs" ] ) );
+                aDeps = deps;
+
+                # dummy derivation, only creates setup-hook for package database located in the ghc derivation 
+                aDeriv = stdenv.mkDerivation {
+                    inherit name;
                     phases = "buildPhase fixupPhase";
                     buildInputs = [ ghcPkgUtil ];
-                    propagatedBuildInputs = [ ghc ] ++ attrs.deps;
-                    buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/lib/ghc-${ghc.version}/${attrs.name}.conf\"";
-                    passthru = {
-                      sourceWithTags = {
-                        src = ghc.src;
-                        inherit srcDir;
-                        name = attrs.name + "-src-with-tags";
-                        createTagFiles = lib.maybeAttr "createTagFiles" [
-                            { name = "${attrs.name}_haskell";
-                              tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; } 
-                          ] attrs;
-                      };
-                    };
+                    propagatedBuildInputs = [ ghc ] ++ map delAnnotation  attrs.deps;
+                    buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/lib/ghc-${ghc.version}/${name}.conf\"";
+                };
+
+                sourceWithTags = {
+                  src = ghc.src;
+                  inherit srcDir;
+                  name = name + "-src-with-tags";
+                  createTagFiles = lib.maybeAttr "createTagFiles" [
+                      { name = "${name}_haskell_tags";
+                        tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; } 
+                    ] attrs;
+                };
           };
         derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
                   ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
