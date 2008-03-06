@@ -1,13 +1,13 @@
-{
-  builderDefs
-}:
-let makeDictdDBFreedict = _src: _name:
+{ builderDefs }:
+
+let makeDictdDB = _src: _name: _subdir: 
 with builderDefs {src="";} null;
 	let localDefs = builderDefs (rec {
 		src=_src;
 		doInstall = FullDepEntry (''
 			ensureDir $out/share/dictd
-			tar xf  ${src} -C $out/share/dictd
+			tar xf  ${src}
+			cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd 
 		'') ["minInit" "addInputs" "defEnsureDir"];
 
 		buildInputs = [];
@@ -26,8 +26,13 @@ stdenv.mkDerivation rec {
 		inherit src;
 	};
 };
+# Probably a bug in some FreeDict release files, but easier to trivially
+# work around than report. Not that it can cause any other problems..
+makeDictdDBFreedict = _src: _name: makeDictdDB _src _name "{.,bin}";
 fetchurl = (builderDefs {src="";} null).fetchurl;
+
 in 
+
 {
 	nld2eng = makeDictdDBFreedict (fetchurl {
 		url = http://prdownloads.sourceforge.net/freedict/nld-eng.tar.gz;
@@ -37,24 +42,21 @@ in
 		url = http://downloads.sourceforge.net/freedict/eng-nld.tar.gz;
 		sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
 	}) "eng-nld";
-}
-/*	fetchurl {
+	eng2rus = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-rus.tar.gz;
 		sha256 = "15409ivhww1wsfjr05083pv6mg10bak8v5pg1wkiqybk7ck61rry";
-	};
-	fetchurl {
-		url = http://downloads.sourceforge.net/freedict/rus-eng.tar.gz;
-		sha256 = "";
-	};
-	fetchurl {
+	}) "eng-rus";
+	fra2eng = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/fra-eng.tar.gz;
 		sha256 = "0sdd88s2zs5whiwdf3hd0s4pzzv75sdsccsrm1wxc87l3hjm85z3";
-	};
-	fetchurl {
+	}) "fra-eng";
+	eng2fra = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-fra.tar.gz;
 		sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
-	};
-	fetchurl {
+	}) "eng-fra";
+	mueller_eng2rus = makeDictdDB (fetchurl {
 		url = http://downloads.sourceforge.net/mueller-dict/mueller-dict-3.1.tar.gz;
 		sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
-	};*/
+	}) "mueller-eng-rus" "mueller-dict-*/dict";
+	
+}
