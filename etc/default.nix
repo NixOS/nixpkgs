@@ -226,6 +226,7 @@ import ../helpers/make-etc.nix {
       "passwd"
       "shadow"
       "sshd"
+      "lshd"
       "useradd"
       "chsh"
       "xlock"
