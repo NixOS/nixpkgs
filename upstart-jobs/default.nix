@@ -157,6 +157,13 @@ let
       servers = config.services.ntp.servers;
     })
 
+  # Avahi daemon.
+  ++ optional config.services.avahi.enable
+    (import ../upstart-jobs/avahi-daemon.nix {
+      inherit (pkgs) avahi writeText lib;
+      config = config.services.avahi;
+    })
+
   # X server.
   ++ optional config.services.xserver.enable
     (import ../upstart-jobs/xserver.nix {

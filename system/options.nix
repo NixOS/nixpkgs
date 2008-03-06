@@ -914,12 +914,57 @@
 
     };
 
+    avahi = {
+
+      enable = mkOption {
+        default = false;
+	description = ''
+	  Whether to run the Avahi daemon, which allows Avahi clients
+	  to use Avahi's service discovery facilities and also allows
+	  the local machine to advertise its presence and services
+	  (through the mDNS responder implemented by `avahi-daemon').
+	'';
+      };
+
+      hostName = mkOption {
+        default = "nixos";  # XXX: Would be nice to use `networking.hostName'.
+	description = ''Host name advertised on the LAN.'';
+      };
+
+      browseDomains = mkOption {
+        default = [ "0pointer.de" "zeroconf.org" ];
+	description = ''
+	  List of non-local DNS domains to be browsed.
+	'';
+      };
+
+      ipv4 = mkOption {
+        default = true;
+	description = ''Whether to use IPv4'';
+      };
+
+      ipv6 = mkOption {
+        default = false;
+	description = ''Whether to use IPv6'';
+      };
+
+      wideArea = mkOption {
+        default = true;
+	description = ''Whether to enable wide-area service discovery.'';
+      };
+
+      publishing = mkOption {
+        default = true;
+	description = ''Whether to allow publishing.'';
+      };
+    };
+
     bitlbee = {
 
       enable = mkOption {
         default = false;
         description = ''
-          Whether the run the BitlBee IRC to other chat network gateway.
+          Whether to run the BitlBee IRC to other chat network gateway.
           Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
           networks via an IRC client.
         '';

@@ -11,6 +11,8 @@
     vsftpd = 7;
     ftp = 8;
     bitlbee = 9;
+    avahi = 10;
+
     nixbld = 30000; # start of range of uids
     nobody = 65534;
   };
@@ -21,7 +23,9 @@
     haldaemon = 5;
     vsftpd = 7;
     ftp = 8;
+    avahi = 10;
     audio = 17;
+
     users = 100;
     nixbld = 30000;
     nogroup = 65534;
