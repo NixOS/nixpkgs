@@ -3706,6 +3706,18 @@ rec {
     db4Support = true;
   };
 
+  dictFun = lib.sumArgs (selectVersion ../servers/dict "1.9.15") {
+    inherit builderDefs which; 
+    flex=flex2534; 
+    bison=bison23;
+  };
+
+  dict = dictFun null;
+
+  dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
+    inherit builderDefs;
+  });
+
   dovecot = import ../servers/mail/dovecot {
     inherit fetchurl stdenv ;
   };
