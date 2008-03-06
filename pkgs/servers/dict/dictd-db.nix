@@ -38,7 +38,7 @@ in
 		sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
 	}) "eng-nld";
 }
-	fetchurl {
+/*	fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-rus.tar.gz;
 		sha256 = "15409ivhww1wsfjr05083pv6mg10bak8v5pg1wkiqybk7ck61rry";
 	};
@@ -57,4 +57,4 @@ in
 	fetchurl {
 		url = http://downloads.sourceforge.net/mueller-dict/mueller-dict-3.1.tar.gz;
 		sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
-	};
+	};*/
