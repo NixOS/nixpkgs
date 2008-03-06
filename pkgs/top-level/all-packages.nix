@@ -1684,6 +1684,12 @@ rec {
     inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
   };
 
+  swiPrologFun = lib.sumArgs (selectVersion ../development/compilers/swi-prolog "5.6.51") {
+    inherit fetchurl stdenv;
+  };
+
+  swiProlog = swiPrologFun null;
+
   transformers = import ../development/compilers/transformers {
     inherit fetchurl pkgconfig sdf;
     aterm = aterm23x;
