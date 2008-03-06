@@ -2,7 +2,7 @@
 
 let 
 
-  versionNumber = "169.09";
+  versionNumber = "169.12";
 
 in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}-pkg1.run";
-    sha256 = "1m3k2jyxi3xxpm6890y0d97jisnxiyyay59ss2r9abyvpkv3by8i";
+    sha256 = "0bxxjp30bysqaviqjq05vmrhp17w3qn94iwwwj074qmi710zffyy";
   };
 
   #xenPatch = ./nvidia-2.6.24-xen.patch;
