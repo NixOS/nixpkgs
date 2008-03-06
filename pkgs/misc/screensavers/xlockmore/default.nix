@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   # Don't try to install `xlock' setuid.  Instead, the user should add
   # it to `security.extraSetuidPrograms'.
   configureFlags = 
-    "--disable-setuid " + "--enable-pam " +
+    "--disable-setuid --enable-pam --enable-bad-pam " +
     "--enable-appdefaultdir=$out/lib/X11/app-defaults";
 
   meta = {
