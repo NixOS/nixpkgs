@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "hal-0.5.9";
+  name = "hal-0.5.10";
   
   src = fetchurl {
-    url = http://people.freedesktop.org/~david/dist/hal-0.5.9.tar.gz;
-    sha256 = "178cm30kshwvs0kf5d3l9cn4hyhfv5h6c6q0qnl0jxhynvpgin35";
+    url = http://hal.freedesktop.org/releases/hal-0.5.10.tar.gz;
+    sha256 = "0k6bgavkry7sl1wwpwfpk15r52b75gfql2qgyijaqaxg826a2was";
   };
   
   buildInputs = [
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     --localstatedir=/var
     --with-eject=${eject}/bin/eject
   ";
+
+  propagatedBuildInputs = [libusb];
 
   preBuild = "
     substituteInPlace hald/linux/coldplug.c --replace /usr/bin/udevinfo ${udev}/bin/udevinfo

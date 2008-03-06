@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
    
 stdenv.mkDerivation {
-  name = "libvolume_id-0.75.0";
+  name = "libvolume_id-0.81.0";
    
   src = fetchurl {
-    url = http://www.marcuscom.com/downloads/libvolume_id-0.75.0.tar.bz2;
-    sha256 = "1n1ji2jz45ncvyv529nz8xwcz058z9z98970v9h2wwwg8ra2a1sl";
+    url = http://www.marcuscom.com/downloads/libvolume_id-0.81.0.tar.bz2;
+    sha256 = "1dpmp1kb40kb1jxj6flpi37wy789wf91dm4bax6jspd1jdc6hsrg";
   };
 
   preBuild = "
