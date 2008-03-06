@@ -3920,7 +3920,7 @@ rec {
   };
 
   e2fsprogsDiet = lowPrio (appendToName "diet" (import ../os-specific/linux/e2fsprogs {
-    inherit fetchurl gettext;
+    inherit fetchurl;
     stdenv = useDietLibC stdenv;
   }));
 
