@@ -16,8 +16,6 @@ let
     disable-publishing=${if publishing then "no" else "yes"}
   '';
 
-  avahiUid = (import ../system/ids.nix).uids.avahi;
-
 in
 
 {
@@ -28,6 +26,12 @@ in
       uid = (import ../system/ids.nix).uids.avahi;
       description = "`avahi-daemon' privilege separation user";
       home = "/var/empty";
+    }
+  ];
+
+  groups = [
+    { name = "avahi";
+      gid = (import ../system/ids.nix).gids.avahi;
     }
   ];
 

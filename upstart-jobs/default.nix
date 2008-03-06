@@ -277,7 +277,8 @@ let
     (import ../upstart-jobs/dbus.nix {
       inherit (pkgs) stdenv dbus;
       dbusServices =
-        pkgs.lib.optional (config.services.hal.enable) pkgs.hal;
+        pkgs.lib.optional (config.services.hal.enable) pkgs.hal ++
+	pkgs.lib.optional (config.services.avahi.enable) pkgs.avahi;
     })
 
   # HAL daemon.
