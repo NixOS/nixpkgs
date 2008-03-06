@@ -12,6 +12,8 @@ configureFlags="\
   --without-x11 \
   --without-xdvik \
   --without-oxdvik \
+  --without-texinfo \
+  --without-texi2html \
   --with-system-zlib \
   --with-system-pnglib \
   --with-system-ncurses \
