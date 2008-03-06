@@ -228,6 +228,7 @@ import ../helpers/make-etc.nix {
       "sshd"
       "useradd"
       "chsh"
+      "xlock"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
