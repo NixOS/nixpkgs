@@ -124,8 +124,6 @@ rec {
 
   lib = import ../lib;
 
-  annotatedDerivations = (import ../lib/annotatedDerivations.nix) { inherit lib; };
-
   # optional srcDir
   annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags);
 
