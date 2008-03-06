@@ -127,36 +127,46 @@ rec {
   annotatedDerivations = (import ../lib/annotatedDerivations.nix) { inherit lib; };
 
   # optional srcDir
-  annotatedWithSourceAndTagInfo = x : (x ? sourceWithTags);
+  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags);
 
-  # example arguments see annotatedGhcCabalDerivation
+  # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
   # tag command must create file named $TAG_FILE
-  sourceWithTagsDerivation = args: with args; 
-    let createTagFiles = (lib.maybeAttr "createTagFiles" [] args ); in
-  stdenv.mkDerivation {
+  sourceWithTagsDerivation = {name, src, srcDir ? ".", tagSuffix ? "_tags", createTagFiles ? []} :  
+    stdenv.mkDerivation {
     phases = "unpackPhase buildPhase";
-    inherit (args) src name;
-    srcDir = (lib.maybeAttr "srcDir" "." args);
+    inherit src srcDir tagSuffix;
+    name = "${name}-source-with-tags";
     # using separate tag directory so that you don't have to glob that much files when starting your editor
     # is this a good choice?
     buildPhase = "
       SRC_DEST=\$out/src/\$name
-      t=\$out/tags/\$name
-      ensureDir \$SRC_DEST \$t
+      ensureDir \$SRC_DEST
       cp -r \$srcDir \$SRC_DEST"
       + lib.defineShList "sh_list_names" (lib.catAttrs "name" createTagFiles)
       + lib.defineShList "sh_list_cmds" (lib.catAttrs "tagCmd" createTagFiles)
       + "cd \$SRC_DEST
       for a in `seq 0 \${#sh_list}`; do
-          TAG_FILE=\"\$SRC_DEST/\"\${sh_list_names[\$a]}
+          TAG_FILE=\"\$SRC_DEST/\"\${sh_list_names[\$a]}\$tagSuffix
           cmd=\"\${sh_list_cmds[\$a]}\"
           echo running tag cmd \"\$cmd\" in `pwd`
           eval \"\$cmd\";
-          ln -s \$TAG_FILE \"\$t/\"\${sh_list_names[\$a]}
        done
     ";
   };
   # example usage
+  testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).happs_server_darcs.sourceWithTags;
+
+  addCTaggingInfo = deriv :
+    deriv // { 
+      passthru = {
+        sourceWithTags = {
+         inherit (deriv) src;
+         name = "${deriv.name}-source-ctags";
+         createTagFiles = [
+               { inherit  (deriv) name;
+                 tagCmd = "${toString ctags}/bin/ctags --sort=yes -o \$TAG_FILE -R ."; }
+          ];
+        };
   testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).mtl.sourceWithTags;
 
   # Return an attribute from the Nixpkgs configuration file, or
@@ -234,7 +244,7 @@ rec {
     let co = lib.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
       args.stdenv.mkDerivation ( 
       {
-        inherit (co) configureFlags buildInputs /*flags*/;
+        inherit (co) configureFlags buildInputs propagatedBuildInputs /*flags*/;
       } // extraAttrs co  // co.pass // co.flags_prefixed );
   
 
@@ -309,6 +319,13 @@ rec {
 
   fetchdarcs = import ../build-support/fetchdarcs {
     inherit stdenv darcs nix;
+  };
+
+  # only temporarely  / don't know yet wether it's save to switch
+  # but I have trouble getting HAppS repos
+  fetchdarcs_2pre = import ../build-support/fetchdarcs {
+    inherit stdenv nix;
+    darcs = darcs_2_pre;
   };
 
   fetchsvn = import ../build-support/fetchsvn {
@@ -1103,6 +1120,12 @@ rec {
     inherit fetchurl stdenv gawk;
   };
 
+  flapjax = import ../development/compilers/flapjax {
+    inherit fetchurl stdenv;
+    ghc = ghcsAndLibs.ghc68.ghc;
+    libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
+  };
+
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
     nativeTools = false;
@@ -1200,18 +1223,21 @@ rec {
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
-  ghcsAndLibs = 
+  ghcsAndLibs =
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
       inherit ghcboot fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
-      inherit ghcPkgUtil annotatedDerivations hasktags ctags;
+      inherit ghcPkgUtil hasktags ctags;
     });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
   createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
         import ../development/compilers/ghc/createGhcWrapper {
-    inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
-      annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
+    inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
+      lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo 
+      readline ncurses stdenv;
+    #inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
+    #  annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
     installSourceAndTags = true;
   };
 
@@ -1224,10 +1250,10 @@ rec {
   # classic expression style.. seems to work fine
   # used now
   # goSrc contains source directory (containing the .cabal file)
-  ghcCabalDerivation = args : null_ : with lib; with args;
+  ghcCabalDerivation = args : with args;
     stdenv.mkDerivation ({
       goSrcDir = "cd ${srcDir}";
-      inherit name src propagatedBuildInputs;
+      inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
       buildInputs = (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ];
@@ -1256,28 +1282,21 @@ rec {
 
          echo \"\$propagatedBuildInputs\" > \"\$out/nix-support/propagated-build-inputs\"
       ";
-  } // (subsetmap id args [ "patchPhase" ])); 
+  } // ( if args ? pass then args.pass else {} ) ); 
 
-  # creates annotated derivation (comments see above
-  annotatedGhcCabalDerivation = args : null_ : with lib; with args;
-  rec {
-    inherit name;
-
-    #aDeps = concatLists ( catAttrs ( subsetmap id args [ "buildInputs" "propagatedBuildInputs" ] ) );
-    aDeps = []; #TODO 
-
-    aDeriv = ghcCabalDerivation (args // (annotatedDerivations.delAnnotationsFromInputs args) ) null;
-
-   # annotation data
-
-    sourceWithTags = {
-     inherit src srcDir;
-     name = name + "-src-with-tags";
-     createTagFiles = [
-           { name = "${name}_haskell_tags";
-             # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-             tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-      ];
+  # creates annotated derivation (comments see above)
+  addHasktagsTaggingInfo = deriv : deriv // {
+      passthru = {
+        sourceWithTags = {
+         inherit (deriv) src;
+         srcDir = if deriv ? srcDir then deriv.srcDir else ".";
+         name = deriv.name + "-src-with-tags";
+         createTagFiles = [
+               { name = "${deriv.name}_haskell";
+                 # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+                 tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+          ];
+       };
     };
   };
 
@@ -1309,6 +1328,33 @@ rec {
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/binary/0.4.1/binary-0.4.1.tar.gz";
                                         sha256 = "0jg5i1k5fz0xp1piaaf5bzhagqvfl3i73hlpdmgs4gc40r1q4x5v"; };
                  };
+          # using different name to not clash with postgresql
+          postgresql_bindings = rec { name = "PostgreSQL-0.2"; p_deps = [x.base x.mtl postgresql x.haskell98];
+                          src = fetchurl { url = "http://hackage.haskell.org/packages/archive/PostgreSQL/0.2/PostgreSQL-0.2.tar.gz";
+                                       sha256 = "0p5q3yc8ymgzzlc600h4mb9w86ncrgjdbpqfi49b2jqvkcx5bwrr"; };
+                          pass = {
+                             inherit postgresql;
+                             patchPhase = "echo 'extensions: MultiParamTypeClasses ForeignFunctionInterface EmptyDataDecls GeneralizedNewtypeDeriving FlexibleInstances UndecidableInstances' >> PostgreSQL.cabal
+                                           echo \"extra-lib-dirs: \$postgresql/lib\" >> PostgreSQL.cabal
+                                           echo \"extra-libraries: pq\" >> PostgreSQL.cabal
+                                          ";
+
+                          };
+                };
+          #wash = rec { name = "WashNGo-2.12"; p_deps = [x.base x.mtl x.haskell98 ];
+          #                src = fetchurl { url = "http://www.informatik.uni-freiburg.de/~thiemann/WASH/WashNGo-2.12.tgz";
+          #                             sha256 = "1dyc2062jpl3xdlm0n7xkz620h060g2i5ghnb32cn95brcj9fgrz"; };
+          #           patches = ../misc/WASHNGo_Patch_ghc682;
+          #      };
+
+          #hsql = rec { name = "hsql-1.7"; p_deps = [x.base x.mtl x.haskell98  x.old_time ];
+          #               src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hsql/1.7/hsql-1.7.tar.gz";
+          #                            sha256 = "0j2lkvg5c0x5gf2sy7zmmgrda0c3l73i9d6hyka2f15d5n1rfjc9"; };
+          #             patchPhase = "echo \"extra-lib-dirs: \$postgresql/lib\" >> *.cabal
+          #                           echo 'build-depends: old-locale, old-time' >> *.cabal";
+          #     };
+
+
           # 1.13 is stable. There are more recent non stable versions
           haxml = rec { name = "HaXml-1.13.3"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 ];
                        src = fetchurl { url = "http://www.haskell.org/HaXml/${name}.tar.gz";
@@ -1333,33 +1379,40 @@ rec {
           parsep = { name = "parsep-0.1"; p_deps = [ x.base x.mtl x.bytestring ];
                          src = fetchurl { url = "http://twan.home.fmf.nl/parsep/parsep-0.1.tar.gz";
                                         sha256 = "1y5pbs5mzaa21127cixsamahlbvmqzyhzpwh6x0nznsgmg2dpc9q"; };
-                         patchPhase = "pwd; sed -i 's/fps/bytestring/' *.cabal";
+                         pass = { patchPhase = "pwd; sed -i 's/fps/bytestring/' *.cabal"; };
                  };
+          time = { name = "time-1.1.2.0"; p_deps = [ x.base x.old_locale ];
+                         src = fetchurl { url = "http://hackage.haskell.org/packages/archive/time/1.1.2.0/time-1.1.2.0.tar.gz";
+                                        sha256 = "0zm4qqczwbqzy2pk7wz5p1virgylwyzd9zxp0406s5zvp35gvl89"; };
+                  };
+
 
         # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
-                   src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
+                  src = bleeding_edge_source "http_darcs";
+                   #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
                  };
           syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
-                   src = fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                   src =
+                    # fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                     bleeding_edge_source "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
                  };
 
-        happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty ];
-                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
+        happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty x.binary ];
+                    src = bleeding_edge_source "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
                     };
         happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
-                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                    src = bleeding_edge_source "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
                     };
+      
         happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
                       x.mtl x.network x.stm x.template_haskell x.hslogger
                         x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
                         x.random x.old_time x.old_locale x.unix x.directory x.binary ];
-                      src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
-                                         md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
-                                       };
-                    };
-        happs_plugins_darcs = { name="HAppS-plugins-darcs"; p_deps=[ x.base x.mtl x.hslogger x.happs_util_darcs x.happs_data_darcs x.happs_state_darcs ];
-                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                      src = bleeding_edge_source "happs_state";
+                      #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
+                      #                   md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
+                      #                 };
                     };
         # there is no .cabal yet 
         #happs_smtp_darcs = { name="HAppS-smtp-darcs"; p_deps=[];
@@ -1369,35 +1422,40 @@ rec {
         happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
                           x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
                           x.template_haskell x.syb_with_class_darcs x.containers ];
-                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
+                    src = bleeding_edge_source "happs_ixset";
+                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
                                        #md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                        #tag = "0.9.2";
                                         # no tag
-                                       md5 = "fa6b24517f09aa16e972f087430967fd"; 
-                                     };
+                                       #md5 = "fa6b24517f09aa16e972f087430967fd"; 
+                                     #};
                     };
         happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec x.mtl
                 x.network x.regex_compat x.hslogger x.happs_data_darcs
                   x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
                   x.template_haskell x.xhtml x.html x.bytestring x.random
                   x.containers x.old_time x.old_locale x.directory x.unix];
-                    src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
+                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
+                    src = bleeding_edge_source "happs_server_darcs";
                     };
         # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
         # is be added to buildInputs automatically
-        cabal_darcs = { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
-                  src = fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
-                };
+        cabal_darcs = 
+        { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
+                  src = bleeding_edge_source "cabal";
+          #fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
+        };
       };
       toDerivation = attrs : with attrs;
       # result is { mtl = <deriv>;
-        annotatedGhcCabalDerivation ({
-            inherit name src;
+        addHasktagsTaggingInfo (ghcCabalDerivation {
+            inherit (attrs) name src;
             propagatedBuildInputs = p_deps ++ (lib.optional (attrs.name != cabal_darcs_name) derivations.cabal_darcs );
             srcDir = if attrs ? srcDir then attrs.srcDir else ".";
             patches = if attrs ? patches then attrs.patches else [];
             # add cabal, take deps either from this list or from ghc.core_libs 
-        }//( lib.subsetmap lib.id attrs [ "patchPhase" ] )) null;
+            pass = if attrs ? pass then attrs.pass else {};
+        });
       derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
                 ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
     }.derivations;
@@ -1415,14 +1473,14 @@ rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
-      libraries = # map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" ];
+      libraries = map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" ]
         # core_libs  distributed with this ghc version
         #(lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
-          map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
-            "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
-            "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
-            "old_time" "packedstring" "pretty" "process" "random" "readline" "rts"
-            "template_haskell" "unix" "template_haskell" ]
+          #map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
+          #  "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
+          #  "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
+          #  "old_time" "packedstring" "pretty" "process" "random" "readline" "rts"
+          #  "template_haskell" "unix" "template_haskell" ];
         # some extra libs
 
            ++  (lib.flattenAttrs (ghc68_extra_libs ghcsAndLibs.ghc68) );
@@ -1795,6 +1853,17 @@ rec {
     inherit stdenv fetchurl atermjava toolbuslib aterm yacc flex;
   };
   */
+
+  bleeding_edge_repos = import ../development/misc/bleeding_edge_repos;
+  # name must be foudn in bleeding_edge_repos attr set 
+  bleeding_edge_source = name : (
+    let targz = nixRepositoryManager.repoDir+"/dist/${name}.tar.gz"; in
+    if builtins.pathExists targz
+    then targz
+    else let attr = __getAttr name bleeding_edge_repos;
+         in if (attr.type == "darcs")
+           then fetchdarcs_2pre { inherit (attr) url md5; }
+           else throw "TODO");
 
   ecj = import ../development/eclipse/ecj {
     inherit fetchurl stdenv unzip jre ant;
@@ -5937,6 +6006,12 @@ rec {
     db4 = db45;
   };
 
+  nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
+    inherit fetchurl stdenv bleeding_edge_repos lib writeText;
+    ghc = ghcsAndLibs.ghc68.ghc;
+    fetchdarcs = fetchdarcs_2pre;
+  };
+
   nixStatic = import ../tools/package-management/nix-static {
     inherit fetchurl stdenv perl curl autoconf automake libtool;
     aterm = aterm242fixes;
@@ -6079,5 +6154,38 @@ rec {
     inherit (xlibs) libX11;
   };
 
+  # idea: provide environment so that you can use let nix assemble all dependencies
+  # while keeping the same source base when developping 
+  # experimental
+  my_environment = args:  stdenv.mkDerivation ( 
+    { userCmds =""; } // {
+    phases = "buildPhase";
+    buildPhase = "
+      ensureDir \$out/bin
+      name=${args.name}
+      o=\$out/bin/$name
+      echo -e \"#!/bin/sh --login\\n\" >> \$o
+      export | grep -v HOME= | grep -v PATH= >> \$o 
+      echo \"export PATH=\$PATH:\\\$PATH entering $name\" >> \$o
+      echo \"echo entering $name\" >> \$o
+      echo \"$userCmds\" >> \$o
+      echo \"/bin/sh\" >> $o
+      echo \"echo leaving $name\" >> \$o
+      chmod +x $o
+    ";
+  } //args);
+
+  # example for nix itself adding glibc tag file to an env var.
+  # experimental
+  env_nix = my_environment rec {
+   buildInputs = [perl curl bzip2 aterm242fixes db4] 
+          ++ map (x : sourceWithTagsDerivation ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) [ glibc ];
+   db4 = db44;
+   aterm = aterm242fixes;
+   name = "env_nix";
+   userCmds = ". ~/.bashrc
+    PS1='\033]2;\h:\u:\w\007\\nenv ${name} \[\033[1;32m\][\u@\h: \w ]$\[\033[0m\] '
+     ";
+  };
 
 }
