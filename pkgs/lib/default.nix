@@ -23,6 +23,15 @@ rec {
 	else (innerSumArgs f (x // y)));
   sumArgs = f : innerSumArgs f {};
 
+  # Advanced sumArgs version. Hm, twice as slow, I'm afraid.
+  # composedArgs id (x:x//{a="b";}) (x:x//{b=x.a + "c";}) null;
+  # {a="b" ; b="bc";};
+  innerComposedArgs = f : x : y : (if y==null then (f x)
+  	else (if (builtins.isAttrs y) then 
+		(innerComposedArgs f (x//y))
+	else (innerComposedArgs f (y x))));
+  composedArgs = f: innerComposedArgs f {};
+
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
   # result: ["ab" "cd"]
   innerPairMap = acc: f: l: 

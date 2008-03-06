@@ -3,6 +3,9 @@
 , stdenv, fetchurl, x11, freetype, freefont_ttf, zlib
 , alsa ? null, libX11, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
+, cdparanoia ? null, cddaSupport ? true
+, extraBuildInputs ? []
+, extraConfigureFlags ? ""
 }:
 
 assert alsaSupport -> alsa != null;
@@ -12,6 +15,7 @@ assert cacaSupport -> libcaca != null;
 assert xineramaSupport -> libXinerama != null;
 assert randrSupport -> libXrandr != null;
 assert dvdnavSupport -> libdvdnav != null;
+assert cddaSupport -> cdparanoia != null;
 
 let
 
@@ -38,7 +42,10 @@ stdenv.mkDerivation {
     (if xineramaSupport then libXinerama else null)
     (if randrSupport then libXrandr else null)
     (if dvdnavSupport then libdvdnav else null)
-  ];
+    (if cddaSupport then cdparanoia else null)
+  ]
+  ++ extraBuildInputs
+  ;
 
   configureFlags = "
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
@@ -48,7 +55,9 @@ stdenv.mkDerivation {
     --enable-runtime-cpudetection
     --enable-x11 --with-extraincdir=${libX11}/include
     --disable-xanim
-  ";
+  "
+  + extraConfigureFlags
+  ;
 
   NIX_LDFLAGS = "-lX11 -lXext "  # !!! hack, necessary to get libX11/Xext in the RPATH
     + (if dvdnavSupport then "-ldvdnav" else "");
@@ -66,6 +75,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = "GPL";
+    homepage = "http://mplayerhq.hu";
+    license = "GPL";
   };
 }

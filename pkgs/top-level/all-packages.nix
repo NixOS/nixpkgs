@@ -5259,8 +5259,9 @@ rec {
     inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
 
-  MPlayer = import ../applications/video/MPlayer {
-    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav;
+  MPlayerFun = lib.composedArgs (import ../applications/video/MPlayer) {
+    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
+      cdparanoia;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -5268,7 +5269,10 @@ rec {
     cacaSupport = true;
     xineramaSupport = true;
     randrSupport = true;
+    cddaSupport = true;
   };
+
+  MPlayer = MPlayerFun null;
 
  # commented out because it's using the new configuration style proposal which is unstable
  # should be the same as the nix expression above except support for esound :)
