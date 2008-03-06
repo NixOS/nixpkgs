@@ -1126,11 +1126,12 @@ rec {
     inherit fetchurl stdenv gawk;
   };
 
-  flapjax = import ../development/compilers/flapjax {
-    inherit fetchurl stdenv;
-    ghc = ghcsAndLibs.ghc68.ghc;
-    libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
-  };
+  # commented out till I've implemented putting bleeding edge source somewhere
+  #flapjax = import ../development/compilers/flapjax {
+    #inherit fetchurl stdenv;
+    #ghc = ghcsAndLibs.ghc68.ghc;
+    #libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
+  #};
 
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
@@ -1237,8 +1238,8 @@ rec {
     });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
-  createGhcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
-        import ../development/compilers/ghc/createGhcWrapper {
+  ghcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
+        import ../development/compilers/ghc/ghc-wrapper {
     inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
       lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo 
       readline ncurses stdenv;
@@ -1395,27 +1396,27 @@ rec {
 
         # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
-                  src = bleeding_edge_source "http_darcs";
+                  src = dgeSourcee "http_darcs";
                    #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
                  };
           syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
                    src =
                     # fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
-                     bleeding_edge_source "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                     dgeSourcee "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
                  };
 
         happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty x.binary ];
-                    src = bleeding_edge_source "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
+                    src = dgeSourcee "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
                     };
         happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
-                    src = bleeding_edge_source "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                    src = dgeSourcee "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
                     };
       
         happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
                       x.mtl x.network x.stm x.template_haskell x.hslogger
                         x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
                         x.random x.old_time x.old_locale x.unix x.directory x.binary ];
-                      src = bleeding_edge_source "happs_state";
+                      src = dgeSourcee "happs_state";
                       #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
                       #                   md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
                       #                 };
@@ -1428,7 +1429,7 @@ rec {
         happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
                           x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
                           x.template_haskell x.syb_with_class_darcs x.containers ];
-                    src = bleeding_edge_source "happs_ixset";
+                    src = dgeSourcee "happs_ixset";
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
                                        #md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                        #tag = "0.9.2";
@@ -1442,13 +1443,13 @@ rec {
                   x.template_haskell x.xhtml x.html x.bytestring x.random
                   x.containers x.old_time x.old_locale x.directory x.unix];
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
-                    src = bleeding_edge_source "happs_server_darcs";
+                    src = dgeSourcee "happs_server_darcs";
                     };
         # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
         # is be added to buildInputs automatically
         cabal_darcs = 
         { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
-                  src = bleeding_edge_source "cabal";
+                  src = dgeSourcee "cabal";
           #fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
         };
       };
@@ -1475,7 +1476,7 @@ rec {
   # .hi and .o files, right?
   ghcLibraryWrapper68 = 
     let ghc = ghcsAndLibs.ghc68.ghc; in
-    createGhcWrapper rec {
+    ghcWrapper rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
@@ -1860,13 +1861,13 @@ rec {
   };
   */
 
-  bleeding_edge_repos = import ../development/misc/bleeding_edge_repos;
-  # name must be foudn in bleeding_edge_repos attr set 
-  bleeding_edge_source = name : (
+  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos;
+  # name must be foudn in bleedingEdgeRepos attr set 
+  dgeSourcee = name : (
     let targz = nixRepositoryManager.repoDir+"/dist/${name}.tar.gz"; in
     if builtins.pathExists targz
     then targz
-    else let attr = __getAttr name bleeding_edge_repos;
+    else let attr = __getAttr name bleedingEdgeRepos;
          in if (attr.type == "darcs")
            then fetchdarcs_2pre { inherit (attr) url md5; }
            else throw "TODO");
@@ -6029,7 +6030,7 @@ rec {
   };
 
   nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
-    inherit fetchurl stdenv bleeding_edge_repos lib writeText;
+    inherit fetchurl stdenv bleedingEdgeRepos lib writeText;
     ghc = ghcsAndLibs.ghc68.ghc;
     fetchdarcs = fetchdarcs_2pre;
   };
