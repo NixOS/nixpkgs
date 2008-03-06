@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "e2fsprogs-1.40.7";
@@ -10,7 +10,6 @@ stdenv.mkDerivation {
     if stdenv ? isDietLibC
     then ""
     else "--enable-elf-shlibs";
-  #buildInputs = [gettext];
   preInstall = "installFlagsArray=('LN=ln -s')";
   #postInstall = "make install-libs";
   NIX_CFLAGS_COMPILE =

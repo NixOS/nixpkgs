@@ -3908,7 +3908,7 @@ rec {
   };
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs {
-    inherit fetchurl stdenv gettext;
+    inherit fetchurl stdenv;
   };
 
   e2fsprogsDiet = lowPrio (appendToName "diet" (import ../os-specific/linux/e2fsprogs {
