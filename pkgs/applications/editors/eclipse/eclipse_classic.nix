@@ -1,3 +1,7 @@
+# Note, if you want to install plugins using the update manager you should
+# copy the store path to a local directory and chown -R $USER yourcopy
+# Then start your local copy
+
 args: with args;
 let arch = if stdenv.system == "x86_64-linux" then "x86_64"
             else if stdenv.system == "i686-linux" then "x86"
@@ -38,7 +42,10 @@ args.stdenv.mkDerivation rec {
     makeWrapper \$out/eclipse/eclipse \$out/bin/eclipse \\
         --prefix PATH \":\" \"\$jdk/bin\" \\
         --prefix LD_LIBRARY_PATH \":\" \"\$rpath\"
+    sed -e 's=exec.*=exec \$(dirname $0)/../eclipse/eclipse=' -i \$out/bin/eclipse
   ";
+  # using dirname so that eclipse still runs after copying the whole store
+  # directory somewhere else (so that you can use the update manager
 
   src = args.fetchurl {
     #url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops/S-3.4M5-200802071530/eclipse-sourceBuild-srcIncluded-3.4M5.zip;
