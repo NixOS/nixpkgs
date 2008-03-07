@@ -2426,13 +2426,20 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs210;
+  gtkLibs = recurseIntoAttrs gtkLibs212;
 
   gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
   gtkLibs210 = import ../development/libraries/gtk-libs/2.10 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng cairo libsigcxx cairomm;
+    inherit (xlibs) libXinerama libXrandr;
+    xineramaSupport = true;
+  };
+
+  gtkLibs212 = import ../development/libraries/gtk-libs/2.12 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng cairo libsigcxx cairomm;
     inherit (xlibs) libXinerama libXrandr;

@@ -3,12 +3,22 @@
 assert freetype != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "fontconfig-2.4.2";
-  builder = ./builder.sh;
+  name = "fontconfig-2.5.0";
+  
   src = fetchurl {
-    url = http://fontconfig.org/release/fontconfig-2.4.2.tar.gz;
-    sha256 = "0qqk6hqh8ardqlgzdgj0zjn6a61z4j6ba9x3xs8pp0c2650xd8v3";
+    url = http://fontconfig.org/release/fontconfig-2.5.0.tar.gz;
+    sha256 = "1zhfvxgslgpnlz13ksiq90jgl0747n81c1nkg5klksxp9kdvmiil";
   };
+  
   buildInputs = [freetype];
   propagatedBuildInputs = [expat]; # !!! shouldn't be necessary, but otherwise pango breaks
+
+  preConfigure = ''
+    configureFlags="--with-confdir=$out/etc/fonts --disable-docs --with-default-fonts="
+  '';
+
+  meta = {
+    description = "A library for font customization and configuration";
+    homepage = http://fontconfig.org/;
+  };  
 }
