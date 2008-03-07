@@ -15,14 +15,7 @@ let
 			(x: '' "${x.filename}" '')
 			dictlist; 
 	databases = lib.concatStrings (map (x : 
-		"
-			database ${x.name} {
-				data ${x.filename}.dict.dz
-				index ${x.filename}.index
-				index_word ${x.filename}.word
-				index_suffix ${x.filename}.suffix
-			}
-		") dictlist);
+		"${x.name}	${x.filename}\n") dictlist);
 	allow = lib.concatStrings (map (x: "allow ${x}\n") allowList);
 	deny = lib.concatStrings (map (x: "deny ${x}\n") denyList);
 	accessSection = "
@@ -34,34 +27,45 @@ let
 	installPhase = ''  
   	ensureDir $out/share/dictd
 	cd $out/share/dictd
+	echo "${databases}" >databases.names 
+	echo "${accessSection}" > dictd.conf
 	for j in ${toString link_arguments}; do 
+		name="$(egrep '	'"$j"\$ databases.names)"
+		name=''${name%	$j}
 		if test -d "$j"; then
 			if test -d "$j"/share/dictd ; then
 				echo "Got store path $j"
 				j="$j"/share/dictd 
 			fi
 			echo "Directory reference: $j"
-			i=$(ls "$j"/*.index)
+			i=$(ls "$j""/"*.index)
 			i="''${i%.index}";
 		else
 			i="$j";
 		fi
 		echo "Basename is $i"
+		locale=$(cat "$(dirname "$i")"/locale)
+		base="$(basename "$i")"
+		echo "Locale is $locale"
+		export LC_ALL=$locale 
+		export LANG=$locale 
 		if test -e "$i".dict.dz; then
 			ln -s "$i".dict.dz
 		else
 			cp "$i".dict .
-			dictzip "$(basename "$i")".dict
+			dictzip "$base".dict
 		fi
 		ln -s "$i".index .
-		locale=$(cat "$(dirname "$i")"/locale)
-		LC_ALL=$locale dictfmt_index2word < "$(basename "$i")".index > "$(basename "$i")".word || true
-		LC_ALL=$locale dictfmt_index2suffix < "$(basename "$i")".index > "$(basename "$i")".suffix || true
+		dictfmt_index2word --locale $locale < "$base".index > "$base".word || true
+		dictfmt_index2suffix --locale $locale < "$base".index > "$base".suffix || true
+
+		echo "database $name {" >> dictd.conf
+		echo "  data $out/share/dictd/$base.dict.dz" >> dictd.conf
+		echo "  index $out/share/dictd/$base.index" >> dictd.conf
+		echo "  index_word $out/share/dictd/$base.word" >> dictd.conf
+		echo "  index_suffix $out/share/dictd/$base.suffix" >> dictd.conf
+		echo "}" >> dictd.conf
 	done
-	echo "${accessSection}" > dictd.conf
-	cat <<EOF >> dictd.conf
-${databases}
-EOF
   	'';
 
 in

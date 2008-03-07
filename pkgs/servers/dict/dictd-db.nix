@@ -36,7 +36,7 @@ fetchurl = (builderDefs {src="";} null).fetchurl;
 
 in 
 
-{
+rec {
 	nld2eng = makeDictdDBFreedict (fetchurl {
 		url = http://prdownloads.sourceforge.net/freedict/nld-eng.tar.gz;
 		sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
@@ -57,9 +57,38 @@ in
 		url = http://downloads.sourceforge.net/freedict/eng-fra.tar.gz;
 		sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
 	}) "eng-fra" "en_UK";
-	mueller_eng2rus = makeDictdDB (fetchurl {
+	mueller_eng2rus_pkg = makeDictdDB (fetchurl {
 		url = http://downloads.sourceforge.net/mueller-dict/mueller-dict-3.1.tar.gz;
 		sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
 	}) "mueller-eng-rus" "mueller-dict-*/dict" "en_UK";
-	
+	mueller_enru_abbr = {
+		outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-abbrev";
+		name = "mueller-abbr";
+		dbName = "mueller-abbr";
+		locale = "en_UK";
+	};
+	mueller_enru_base = {
+		outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-base";
+		name = "mueller-base";
+		dbName = "mueller-base";
+		locale = "en_UK";
+	};
+	mueller_enru_dict = {
+		outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-dict";
+		name = "mueller-dict";
+		dbName = "mueller-dict";
+		locale = "en_UK";
+	};
+	mueller_enru_geo = {
+		outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-geo";
+		name = "mueller-geo";
+		dbName = "mueller-geo";
+		locale = "en_UK";
+	};
+	mueller_enru_names = {
+		outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-names";
+		name = "mueller-names";
+		dbName = "mueller-names";
+		locale = "en_UK";
+	};
 }
