@@ -2,7 +2,7 @@ args : with args;
 	let localDefs = builderDefs {
 		src = 
 	fetchurl {
-		url = ftp://ccrma-ftp.stanford.edu/pub/Lisp/snd-9.4.tar.gz;
+		url = http://downloads.sourceforge.net/snd/snd-9.4.tar.gz;
 		sha256 = "0zqgfnkvkqxby1k74mwba1r4pb520glcsz5jjmpzm9m41nqnghmm";
 	};
 
