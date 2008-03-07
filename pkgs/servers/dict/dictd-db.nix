@@ -1,6 +1,6 @@
 { builderDefs }:
 
-let makeDictdDB = _src: _name: _subdir: 
+let makeDictdDB = _src: _name: _subdir: _locale:
 with builderDefs {src="";} null;
 	let localDefs = builderDefs (rec {
 		src=_src;
@@ -8,6 +8,7 @@ with builderDefs {src="";} null;
 			ensureDir $out/share/dictd
 			tar xf  ${src}
 			cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd 
+			echo "${_locale}" >$out/share/dictd/locale
 		'') ["minInit" "addInputs" "defEnsureDir"];
 
 		buildInputs = [];
@@ -16,6 +17,8 @@ with builderDefs {src="";} null;
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "dictd-db-${_name}";
+	locale = _locale;
+	dbName = _name;
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
 };
 # Probably a bug in some FreeDict release files, but easier to trivially
 # work around than report. Not that it can cause any other problems..
-makeDictdDBFreedict = _src: _name: makeDictdDB _src _name "{.,bin}";
+makeDictdDBFreedict = _src: _name: _locale: makeDictdDB _src _name "{.,bin}" _locale;
 fetchurl = (builderDefs {src="";} null).fetchurl;
 
 in 
@@ -37,26 +40,26 @@ in
 	nld2eng = makeDictdDBFreedict (fetchurl {
 		url = http://prdownloads.sourceforge.net/freedict/nld-eng.tar.gz;
 		sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
-	}) "nld-eng";
+	}) "nld-eng" "nl_NL";
 	eng2nld =  makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-nld.tar.gz;
 		sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
-	}) "eng-nld";
+	}) "eng-nld" "en_UK";
 	eng2rus = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-rus.tar.gz;
 		sha256 = "15409ivhww1wsfjr05083pv6mg10bak8v5pg1wkiqybk7ck61rry";
-	}) "eng-rus";
+	}) "eng-rus" "en_UK";
 	fra2eng = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/fra-eng.tar.gz;
 		sha256 = "0sdd88s2zs5whiwdf3hd0s4pzzv75sdsccsrm1wxc87l3hjm85z3";
-	}) "fra-eng";
+	}) "fra-eng" "fr_FR";
 	eng2fra = makeDictdDBFreedict (fetchurl {
 		url = http://downloads.sourceforge.net/freedict/eng-fra.tar.gz;
 		sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
-	}) "eng-fra";
+	}) "eng-fra" "en_UK";
 	mueller_eng2rus = makeDictdDB (fetchurl {
 		url = http://downloads.sourceforge.net/mueller-dict/mueller-dict-3.1.tar.gz;
 		sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
-	}) "mueller-eng-rus" "mueller-dict-*/dict";
+	}) "mueller-eng-rus" "mueller-dict-*/dict" "en_UK";
 	
 }
