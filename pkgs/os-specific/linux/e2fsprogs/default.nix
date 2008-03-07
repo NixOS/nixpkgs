@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     then ""
     else "--enable-elf-shlibs";
   preInstall = "installFlagsArray=('LN=ln -s')";
-  #postInstall = "make install-libs";
+  postInstall = "make install-libs";
   NIX_CFLAGS_COMPILE =
     if stdenv ? isDietLibC then
       "-UHAVE_SYS_PRCTL_H " +
