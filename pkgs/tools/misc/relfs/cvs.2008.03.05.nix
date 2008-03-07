@@ -1,11 +1,12 @@
+
 args : with args;
 	let localDefs = builderDefs {
 	src = /* put a fetchurl here */
 	if args ? src then args.src else fetchcvs {
 		cvsRoot = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";
 		module = "relfs";
-		date = "2007-12-01";
-		sha256 = "39d97d0aa16b8bc953b2ef5f6308e9f9eda300c1de8a7acb6f8c8e5897c0c7b5";
+		date = "2008-03-05";
+		sha256 = "949f8eff7e74ff2666cccf8a1efbfcce8d54bc41bec6ad6db8c029de7ca832a3";
 	};
 		
 		buildInputs = [ocaml fuse postgresql pcre

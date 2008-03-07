@@ -836,7 +836,7 @@ rec {
     zlibSupport = !stdenv ? isDietLibC;
   };
 
-  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2007.12.01") {
+  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs e2fsprogs pkgconfig;
     inherit (gnome) gnomevfs GConf;
@@ -3732,6 +3732,10 @@ rec {
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
     inherit builderDefs;
   });
+
+  dictDBCollector = import ../servers/dict/dictd-db-collector.nix {
+    inherit stdenv lib dict;
+  };
 
   dovecot = import ../servers/mail/dovecot {
     inherit fetchurl stdenv ;
