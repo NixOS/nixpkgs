@@ -855,6 +855,14 @@ rec {
   };
   */
 
+  rsnapshot = import ../tools/backup/rsnapshot {
+    inherit fetchurl stdenv perl openssh rsync;
+
+    # For the `logger' command, we can use either `utillinux' or
+    # GNU Inetutils.  The latter is more portable.
+    logger = inetutils;
+  };
+
   rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap "0.28") {
     inherit builderDefs readline;
   };
