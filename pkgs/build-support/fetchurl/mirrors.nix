@@ -113,12 +113,18 @@ rec {
     http://ftp.funet.fi/pub/CPAN/
   ];
 
-  # Debian
+  # Debian.
   debian = [
     ftp://ftp.de.debian.org/debian/pool/
     ftp://ftp.nl.debian.org/debian/pool/
     ftp://ftp.ru.debian.org/debian/pool/
     ftp://ftp.debian.org/debian/pool/
+  ];
+
+  # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
+  gnome = [
+    # This one redirects to some mirror closeby, so it should be all you need.
+    http://download.gnome.org/
   ];
 
 }
