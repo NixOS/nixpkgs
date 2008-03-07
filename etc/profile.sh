@@ -91,6 +91,9 @@ alias ls="ls --color=tty"
 alias ll="ls -l"
 alias which="type -p"
 
+# Help `rpcgen' find `cpp', assuming it's installed in the user's environment.
+alias rpcgen="rpcgen -Y $HOME/.nix-profile/bin"
+
 
 # Read system-wide modifications.
 if test -f /etc/profile.local; then
