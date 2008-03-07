@@ -25,6 +25,11 @@ postInstall() {
     # from the dietlibc asm to the kernel-headers asm.
     ln -s $kernelHeaders/include/asm/* $out/include/asm/ || true
 
+    # Make asm-x86_64 etc. available.
+    for i in $kernelHeaders/include/asm-*; do
+        ln -s $i $out/include/
+    done
+
     # Idem for include/linux.
     ln -s $kernelHeaders/include/linux/* $out/include/linux/ || true
 }
