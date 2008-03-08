@@ -152,7 +152,7 @@ rec {
     ";
   };
   # example usage
-  testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
+  #testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
 
   addCTaggingInfo = deriv :
     deriv // { 
@@ -1476,6 +1476,8 @@ rec {
     }.derivations;
 
 
+   /* commented to not make the buildfarm fail. You need to install nixRepositoryManager and run it..
+
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding
@@ -1508,6 +1510,7 @@ rec {
         # some additional libs
       inherit ghc;
   };
+  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
