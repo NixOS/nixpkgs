@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "rsync-2.6.9";
+  name = "rsync-3.0.0";
   src = fetchurl {
-    url = http://rsync.samba.org/ftp/rsync/rsync-2.6.9.tar.gz;
-    sha256 = "1y9kwsyxfgcv2kzlh6bnm95mdwcz30wrmihb61rhx2fdpq0p6hya";
+    url = http://rsync.samba.org/ftp/rsync/src/rsync-3.0.0.tar.gz;
+    sha256 = "0sd11rb5cpa5a2dl3h7cn1q4nmdkc07hf9vr3yvrkqwxpfspss8p";
   };
 }
