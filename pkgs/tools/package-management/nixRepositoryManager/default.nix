@@ -1,34 +1,41 @@
+/*
+   repos for config file taken from all-pacakges.bleedingEdgeFetchInfo
+
+    nix-repository-manager --update <name> (for your local use only)
+
+  if you want to publish repos ask for the password (marco-oweber@gmx.de)
+      echo '{ bleedingEdgeFetchInfo = "${your_nix_pkgs_location}/pkgs/misc/bleeding-edge-fetch-info"; }' >> .nixpkgs/config.nix  
+    reinstall nix-repository-manager to recreate config
+      nix-repository-manager --publish <name> (to save on server
+*/
+
+
 args: with args; with lib;
 let 
-  repoDir = builtins.getEnv "HOME" + "/managed_repos";
   toConfigLine = name : set : 
     "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${__getAttr a set}\")" ) (__attrNames set)))+"]";
-  config = writeText "nix_repository_manager_config"
-        (repoDir+"\n" +
-        concatStringsSep "\n" (mapRecordFlatten toConfigLine bleeding_edge_repos));
+  nixPublishDir = getConfig [ "bleedingEdgeRepos" "bleedingEdgeFetchInfo"] "/tmp/bleeding-edge-fetch-info";
+  config = writeText "nix-repository-manager_config"
+        (bleedingEdgeRepos.managedRepoDir+"\n" +
+         nixPublishDir+"\n" +
+        concatStringsSep "\n" (mapRecordFlatten toConfigLine (bleedingEdgeRepos.repos)));
 
 in
 args.stdenv.mkDerivation {
 
-  inherit repoDir; # amend repoDir so that you know which one to take when installing bleeding edge packages 
+  name = "nix-repository-manager";
 
-  name = "nix_repository_manager";
+  src = bleedingEdgeRepos.sourceByName "nix_repository_manager";
 
-  #src = args.fetchdarcs {
-  #  url = http://mawercer.de/~marc/repos/nix_repository_manager;
-  #  md5 = "b33ba7a5b756eda00a79ba34505ea7ee";
-  #};
-  source = /pr/haskell/nix_repository_manager/nix_repository_manager.hs;
-
-  phases = "buildPhase";
+  phases = "unpackPhase buildPhase";
 
   buildPhase = "
-    s=\$out/share/nix_repository_manager
+    s=\$out/share/nix-repository-manager
     ensureDir \$out/bin \$s
-    #ghc --make nix_repository_manager.hs -o \$s/nix_repository_manager
-    ghc --make \$source -o \$s/nix_repository_manager
-    b=\$out/bin/nix_repository_manager
-    echo -e \"#!/bin/sh\\n\$s/nix_repository_manager --config ${config} \\\$@\" > \$b
+    #ghc --make nix-repository-manager.hs -o \$s/nix-repository-manager
+    ghc --make nix-repository-manager.hs -o \$s/nix-repository-manager
+    b=\$out/bin/nix-repository-manager
+    echo -e \"#!/bin/sh\\n\$s/nix-repository-manager --config ${config} \\\$@\" > \$b
     chmod +x \$b
   ";
 
@@ -36,7 +43,7 @@ args.stdenv.mkDerivation {
 
   meta = { 
       description = "makes it easy to keep some packages up to date";
-      homepage = http://mawercer.de/repos/nix_repository_manager;
-      license = "do with it what you want";
+      homepage = http://mawercer.de/repos/nix-repository-manager;
+      license = "GPL";
   };
 }

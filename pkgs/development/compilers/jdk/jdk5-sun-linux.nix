@@ -10,13 +10,14 @@
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
+let name = "jdk-1_5_0_15"; in
 stdenv.mkDerivation {
-  name = "jdk-1.5.0_14";
-  filename = "jdk-1_5_0_14";
-  dirname = "jdk1.5.0_14";
+  inherit name;
+  filename = "jdk-1_5_0_15";
+  dirname = "jdk1.5.0_15";
   builder = ./builder.sh;
-  pathname = if stdenv.system == "x86_64-linux" then "/tmp/jdk-1_5_0_14-linux-amd64.bin" else "/tmp/jdk-1_5_0_14-linux-i586.bin";
-  md5 = if stdenv.system == "x86_64-linux" then "9dc74d939dd42988280f2c22ab9521bf" else "32df8f2be09c3a0f39da1b3869164b55";
+  pathname = if stdenv.system == "x86_64-linux" then "/tmp/${name}-linux-amd64.bin" else "/tmp/${name}-linux-i586.bin";
+  md5 = if stdenv.system == "x86_64-linux" then "8c560eda470a50926b9e8dab2c806a25" else "6f45ac598a2f6ff73a2429d6a0da2624";
   
   stdenv = stdenv;
   inherit unzip;

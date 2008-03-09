@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   inherit suffix name ghc readline ncurses;
 
   buildInputs = (libraries ++ [ghcPkgUtil]);
-  tags = map (x :  sourceWithTagsDerivation ((lib.traceWhatis x).passthru.sourceWithTags)) 
+  tags = map (x :  sourceWithTagsDerivation (x.passthru.sourceWithTags)) 
           (uniqList { inputList= filter annotatedWithSourceAndTagInfo libraries; } );
 
   phases="installPhase";

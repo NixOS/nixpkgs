@@ -1134,12 +1134,11 @@ rec {
     inherit fetchurl stdenv gawk;
   };
 
-  # commented out till I've implemented putting bleeding edge source somewhere
-  #flapjax = import ../development/compilers/flapjax {
-    #inherit fetchurl stdenv;
-    #ghc = ghcsAndLibs.ghc68.ghc;
-    #libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
-  #};
+  flapjax = import ../development/compilers/flapjax {
+    inherit fetchurl stdenv;
+    ghc = ghcsAndLibs.ghc68.ghc;
+    libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
+  };
 
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
@@ -1325,7 +1324,9 @@ rec {
       # introducing p here to speed things up.
       # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
       # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
-      pkgs = let x = ghc.core_libs // derivations; in {
+      pkgs = let x = ghc.core_libs // derivations;
+                 inherit (bleedingEdgeRepos) sourceByName;
+             in {
           # ghc extra packages 
           mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
           parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
@@ -1404,27 +1405,27 @@ rec {
 
         # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
-                  src = dgeSourcee "http_darcs";
+                  src = sourceByName "http_darcs";
                    #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
                  };
           syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
                    src =
                     # fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
-                     dgeSourcee "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                     sourceByName "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
                  };
 
         happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty x.binary ];
-                    src = dgeSourcee "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
+                    src = sourceByName "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
                     };
         happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
-                    src = dgeSourcee "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                    src = sourceByName "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
                     };
       
         happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
                       x.mtl x.network x.stm x.template_haskell x.hslogger
                         x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
                         x.random x.old_time x.old_locale x.unix x.directory x.binary ];
-                      src = dgeSourcee "happs_state";
+                      src = sourceByName "happs_state";
                       #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
                       #                   md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
                       #                 };
@@ -1437,7 +1438,7 @@ rec {
         happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
                           x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
                           x.template_haskell x.syb_with_class_darcs x.containers ];
-                    src = dgeSourcee "happs_ixset";
+                    src = sourceByName "happs_ixset";
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
                                        #md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                        #tag = "0.9.2";
@@ -1451,13 +1452,13 @@ rec {
                   x.template_haskell x.xhtml x.html x.bytestring x.random
                   x.containers x.old_time x.old_locale x.directory x.unix];
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
-                    src = dgeSourcee "happs_server_darcs";
+                    src = sourceByName "happs_server_darcs";
                     };
         # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
         # is be added to buildInputs automatically
         cabal_darcs = 
         { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
-                  src = dgeSourcee "cabal";
+                  src = sourceByName "cabal";
           #fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
         };
       };
@@ -1476,8 +1477,6 @@ rec {
     }.derivations;
 
 
-   /* commented to not make the buildfarm fail. You need to install nixRepositoryManager and run it..
-
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
   # So installing ghc libraries isn't done by nix-env -i package but by adding
@@ -1490,27 +1489,16 @@ rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
-      libraries = map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" ]
+      libraries = 
         # core_libs  distributed with this ghc version
-        #(lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
-          #map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ 
-          #  "cabal" "array" "base" "bytestring" "containers" "containers" "directory"
-          #  "filepath" "ghc-${ghc.version}" "haskell98" "hpc" "old_locale" "old_time"
-          #  "old_time" "packedstring" "pretty" "process" "random" "readline" "rts"
-          #  "template_haskell" "unix" "template_haskell" ];
-        # some extra libs
+        (lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
+        # (map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ "cabal" "mtl" "base"  ]
 
+        # some extra libs
            ++  (lib.flattenAttrs (ghc68_extra_libs ghcsAndLibs.ghc68) );
-        # or specify the ones you want to install using this list (possible values see attributes in ghc68_extra_libs
-           #++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) )
-           #[ "mtl" "parsec" "cabal_darcs" "haxml" "network" "regex_base"
-           #"regex_compat" "regex_posix" "stm" "hunit" "quickcheck" "crypto"
-           #"hslogger" "http_darcs" "syb_with_class_darcs"
-           #];
-        # some additional libs
+        # ++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
       inherit ghc;
   };
-  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
@@ -1878,16 +1866,9 @@ rec {
   };
   */
 
-  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos;
-  # name must be foudn in bleedingEdgeRepos attr set 
-  dgeSourcee = name : (
-    let targz = nixRepositoryManager.repoDir+"/dist/${name}.tar.gz"; in
-    if builtins.pathExists targz
-    then targz
-    else let attr = __getAttr name bleedingEdgeRepos;
-         in if (attr.type == "darcs")
-           then fetchdarcs_2pre { inherit (attr) url md5; }
-           else throw "TODO");
+  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos { 
+    inherit getConfig fetchdarcs_2pre fetchurl; 
+  };
 
   ecj = import ../development/eclipse/ecj {
     inherit fetchurl stdenv unzip jre ant;
@@ -6051,7 +6032,7 @@ rec {
   };
 
   nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
-    inherit fetchurl stdenv bleedingEdgeRepos lib writeText;
+    inherit fetchurl stdenv bleedingEdgeRepos lib writeText getConfig;
     ghc = ghcsAndLibs.ghc68.ghc;
     fetchdarcs = fetchdarcs_2pre;
   };
@@ -6198,38 +6179,6 @@ rec {
     inherit (xlibs) libX11;
   };
 
-  # idea: provide environment so that you can use let nix assemble all dependencies
-  # while keeping the same source base when developping 
-  # experimental
-  my_environment = args:  stdenv.mkDerivation ( 
-    { userCmds =""; } // {
-    phases = "buildPhase";
-    buildPhase = "
-      ensureDir \$out/bin
-      name=${args.name}
-      o=\$out/bin/$name
-      echo -e \"#!/bin/sh --login\\n\" >> \$o
-      export | grep -v HOME= | grep -v PATH= >> \$o 
-      echo \"export PATH=\$PATH:\\\$PATH entering $name\" >> \$o
-      echo \"echo entering $name\" >> \$o
-      echo \"$userCmds\" >> \$o
-      echo \"/bin/sh\" >> $o
-      echo \"echo leaving $name\" >> \$o
-      chmod +x $o
-    ";
-  } //args);
-
-  # example for nix itself adding glibc tag file to an env var.
-  # experimental
-  env_nix = my_environment rec {
-   buildInputs = [perl curl bzip2 aterm242fixes db4] 
-          ++ map (x : sourceWithTagsDerivation ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) [ glibc ];
-   db4 = db44;
-   aterm = aterm242fixes;
-   name = "env_nix";
-   userCmds = ". ~/.bashrc
-    PS1='\033]2;\h:\u:\w\007\\nenv ${name} \[\033[1;32m\][\u@\h: \w ]$\[\033[0m\] '
-     ";
-  };
+  #my_env = import ../misc/my_env;
 
 }
