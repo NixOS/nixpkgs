@@ -1,159 +1,6 @@
-diff -ruN linux-2.6.20.3/fs/Kconfig linux-2.6.20.3-ext3cow/fs/Kconfig
---- linux-2.6.20.3/fs/Kconfig	2007-03-13 14:27:08.000000000 -0400
-+++ linux-2.6.20.3-ext3cow/fs/Kconfig	2007-04-07 14:23:46.000000000 -0400
-@@ -136,6 +136,77 @@
- 	  If you are not using a security module that requires using
- 	  extended attributes for file security labels, say N.
- 
-+
-+
-+config EXT3COW_FS
-+	tristate "Ext3cow journalling and versioning file system support"
-+	select JBD
-+	help
-+	  This is the journalling version of the Second extended file system
-+	  (often called ext3), the de facto standard Linux file system
-+	  (method to organize files on a storage device) for hard disks.
-+
-+	  The journalling code included in this driver means you do not have
-+	  to run e2fsck (file system checker) on your file systems after a
-+	  crash.  The journal keeps track of any changes that were being made
-+	  at the time the system crashed, and can ensure that your file system
-+	  is consistent without the need for a lengthy check.
-+
-+	  Other than adding the journal to the file system, the on-disk format
-+	  of ext3 is identical to ext2.  It is possible to freely switch
-+	  between using the ext3 driver and the ext2 driver, as long as the
-+	  file system has been cleanly unmounted, or e2fsck is run on the file
-+	  system.
-+
-+	  To add a journal on an existing ext2 file system or change the
-+	  behavior of ext3 file systems, you can use the tune2fs utility ("man
-+	  tune2fs").  To modify attributes of files and directories on ext3
-+	  file systems, use chattr ("man chattr").  You need to be using
-+	  e2fsprogs version 1.20 or later in order to create ext3 journals
-+	  (available at <http://sourceforge.net/projects/e2fsprogs/>).
-+
-+	  To compile this file system support as a module, choose M here: the
-+	  module will be called ext3.
-+
-+config EXT3COW_FS_XATTR
-+	bool "Ext3cow extended attributes"
-+	depends on EXT3COW_FS
-+	default y
-+	help
-+	  Extended attributes are name:value pairs associated with inodes by
-+	  the kernel or by users (see the attr(5) manual page, or visit
-+	  <http://acl.bestbits.at/> for details).
-+
-+	  If unsure, say N.
-+
-+	  You need this for POSIX ACL support on ext3cow.
-+
-+config EXT3COW_FS_POSIX_ACL
-+	bool "Ext3cow POSIX Access Control Lists"
-+	depends on EXT3COW_FS_XATTR
-+	select FS_POSIX_ACL
-+	help
-+	  Posix Access Control Lists (ACLs) support permissions for users and
-+	  groups beyond the owner/group/world scheme.
-+
-+	  To learn more about Access Control Lists, visit the Posix ACLs for
-+	  Linux website <http://acl.bestbits.at/>.
-+
-+	  If you don't know what Access Control Lists are, say N
-+
-+config EXT3COW_FS_SECURITY
-+	bool "Ext3cow Security Labels"
-+	depends on EXT3COW_FS_XATTR
-+	help
-+	  Security labels support alternative access control models
-+	  implemented by security modules like SELinux.  This option
-+	  enables an extended attribute handler for file security
-+	  labels in the ext3cow filesystem.
-+
-+	  If you are not using a security module that requires using
-+	  extended attributes for file security labels, say N.
-+
-+
- config EXT4DEV_FS
- 	tristate "Ext4dev/ext4 extended fs support development (EXPERIMENTAL)"
- 	depends on EXPERIMENTAL
-@@ -205,23 +276,23 @@
- 	tristate
- 	help
- 	  This is a generic journalling layer for block devices.  It is
--	  currently used by the ext3 and OCFS2 file systems, but it could
-+	  currently used by the ext3, ext3cow and OCFS2 file systems, but it could
- 	  also be used to add journal support to other file systems or block
- 	  devices such as RAID or LVM.
- 
--	  If you are using the ext3 or OCFS2 file systems, you need to
-+	  If you are using the ext3, ext3cow or OCFS2 file systems, you need to
- 	  say Y here. If you are not using ext3 OCFS2 then you will probably
- 	  want to say N.
- 
- 	  To compile this device as a module, choose M here: the module will be
--	  called jbd.  If you are compiling ext3 or OCFS2 into the kernel,
-+	  called jbd.  If you are compiling ext3, ext3cow or OCFS2 into the kernel,
- 	  you cannot compile this code as a module.
- 
- config JBD_DEBUG
- 	bool "JBD (ext3) debugging support"
- 	depends on JBD
- 	help
--	  If you are using the ext3 journaled file system (or potentially any
-+	  If you are using the ext3 or ext3cow journaled file system (or potentially any
- 	  other file system/device using JBD), this option allows you to
- 	  enable debugging output while the system is running, in order to
- 	  help track down any problems you are having.  By default the
-@@ -266,11 +337,12 @@
- 	  "echo 0 > /proc/sys/fs/jbd2-debug".
- 
- config FS_MBCACHE
--# Meta block cache for Extended Attributes (ext2/ext3/ext4)
-+# Meta block cache for Extended Attributes (ext2/ext3(cow)/ext4)
- 	tristate
--	depends on EXT2_FS_XATTR || EXT3_FS_XATTR || EXT4DEV_FS_XATTR
--	default y if EXT2_FS=y || EXT3_FS=y || EXT4DEV_FS=y
--	default m if EXT2_FS=m || EXT3_FS=m || EXT4DEV_FS=m
-+	depends on EXT2_FS_XATTR || EXT3_FS_XATTR || EXT3COW_FS_XATTR || EXT4DEV_FS_XATTR
-+	default y if EXT2_FS=y || EXT3_FS=y || EXT3COW_FS=y || EXT4DEV_FS=y
-+	default m if EXT2_FS=m || EXT3_FS=m || EXT3COW_FS=m || EXT4DEV_FS=m
-+
- 
- config REISERFS_FS
- 	tristate "Reiserfs support"
-diff -ruN linux-2.6.20.3/fs/Makefile linux-2.6.20.3-ext3cow/fs/Makefile
---- linux-2.6.20.3/fs/Makefile	2007-03-13 14:27:08.000000000 -0400
-+++ linux-2.6.20.3-ext3cow/fs/Makefile	2007-04-07 14:23:46.000000000 -0400
-@@ -63,6 +63,7 @@
- # Do not add any filesystems before this line
- obj-$(CONFIG_REISERFS_FS)	+= reiserfs/
- obj-$(CONFIG_EXT3_FS)		+= ext3/ # Before ext2 so root fs can be ext3
-+obj-$(CONFIG_EXT3COW_FS)		+= ext3cow/ # Before ext2 so root fs can be ext3
- obj-$(CONFIG_EXT4DEV_FS)	+= ext4/ # Before ext2 so root fs can be ext4dev
- obj-$(CONFIG_JBD)		+= jbd/
- obj-$(CONFIG_JBD2)		+= jbd2/
-diff -ruN linux-2.6.20.3/fs/ext3cow/Makefile linux-2.6.20.3-ext3cow/fs/ext3cow/Makefile
---- linux-2.6.20.3/fs/ext3cow/Makefile	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/Makefile	2007-04-07 14:23:50.000000000 -0400
-@@ -0,0 +1,12 @@
-+#
-+# Makefile for the linux ext3cow-filesystem routines.
-+#
-+
-+obj-$(CONFIG_EXT3COW_FS) += ext3cow.o
-+
-+ext3cow-y	:= balloc.o bitmap.o dir.o file.o fsync.o ialloc.o inode.o \
-+	   ioctl.o namei.o super.o symlink.o hash.o resize.o ext3cow_jbd.o
-+
-+ext3cow-$(CONFIG_EXT3COW_FS_XATTR)	 += xattr.o xattr_user.o xattr_trusted.o
-+ext3cow-$(CONFIG_EXT3COW_FS_POSIX_ACL) += acl.o
-+ext3cow-$(CONFIG_EXT3COW_FS_SECURITY)	 += xattr_security.o
 diff -ruN linux-2.6.20.3/fs/ext3cow/acl.c linux-2.6.20.3-ext3cow/fs/ext3cow/acl.c
 --- linux-2.6.20.3/fs/ext3cow/acl.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/acl.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/acl.c	2008-03-09 11:14:49.000000000 -0400
 @@ -0,0 +1,551 @@
 +/*
 + * linux/fs/ext3cow/acl.c
@@ -708,7 +555,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/acl.c linux-2.6.20.3-ext3cow/fs/ext3cow/acl.
 +};
 diff -ruN linux-2.6.20.3/fs/ext3cow/acl.h linux-2.6.20.3-ext3cow/fs/ext3cow/acl.h
 --- linux-2.6.20.3/fs/ext3cow/acl.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/acl.h	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/acl.h	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,81 @@
 +/*
 +  File: fs/ext3cow/acl.h
@@ -793,7 +640,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/acl.h linux-2.6.20.3-ext3cow/fs/ext3cow/acl.
 +
 diff -ruN linux-2.6.20.3/fs/ext3cow/balloc.c linux-2.6.20.3-ext3cow/fs/ext3cow/balloc.c
 --- linux-2.6.20.3/fs/ext3cow/balloc.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/balloc.c	2007-04-14 11:40:48.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/balloc.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,1823 @@
 +/*
 + *  linux/fs/ext3cow/balloc.c
@@ -2620,7 +2467,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/balloc.c linux-2.6.20.3-ext3cow/fs/ext3cow/b
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/bitmap.c linux-2.6.20.3-ext3cow/fs/ext3cow/bitmap.c
 --- linux-2.6.20.3/fs/ext3cow/bitmap.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/bitmap.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/bitmap.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,32 @@
 +/*
 + *  linux/fs/ext3/bitmap.c
@@ -2654,9 +2501,26 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/bitmap.c linux-2.6.20.3-ext3cow/fs/ext3cow/b
 +
 +#endif  /*  EXT3COWFS_DEBUG  */
 +
+diff -ruN linux-2.6.20.3/fs/ext3cow/CHANGELOG linux-2.6.20.3-ext3cow/fs/ext3cow/CHANGELOG
+--- linux-2.6.20.3/fs/ext3cow/CHANGELOG	1969-12-31 19:00:00.000000000 -0500
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/CHANGELOG	2008-03-09 11:27:12.000000000 -0400
+@@ -0,0 +1,12 @@
++3-9-08
++- Fixed a bug that resulted in the first block in a newly allocated indirect block to be allocated over and over again.
++- Fixed a bug that resulted in COW bitmaps not to be reset after truncate.
++- Bug e2fsprogs that caused aborting journal fixed.
++
++6-20-97
++- Finished the rollback code for inode chains in case of error.
++
++6-18-07
++- Added support for 32-bit uid's and gid's back in again
++- Took out support for block fragmentation
++- Hopefully fixed the non-sticking uid/gid bug.
+\ No newline at end of file
 diff -ruN linux-2.6.20.3/fs/ext3cow/dir.c linux-2.6.20.3-ext3cow/fs/ext3cow/dir.c
 --- linux-2.6.20.3/fs/ext3cow/dir.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/dir.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/dir.c	2008-03-09 11:14:49.000000000 -0400
 @@ -0,0 +1,732 @@
 +/*
 + *  linux/fs/ext3cow/dir.c
@@ -2769,7 +2633,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/dir.c linux-2.6.20.3-ext3cow/fs/ext3cow/dir.
 +		 * of recovering data when there's a bad sector
 +		 */
 +    if (!bh) {
-+      ext3cow_error (sb, "ext3cow_readdir",
++      ext3cow_error (sb, "ext3cow_versions",
 +                     "directory #%lu contains a hole at offset %lu",
 +                     dir->i_ino, (unsigned long)filp->f_pos);
 +      /* corrupt size?  Maybe no more blocks to read */
@@ -2808,7 +2672,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/dir.c linux-2.6.20.3-ext3cow/fs/ext3cow/dir.
 +    while (!error && filp->f_pos < dir->i_size 
 +           && offset < sb->s_blocksize) {
 +      de = (struct ext3cow_dir_entry_2 *) (bh->b_data + offset);
-+      if (!ext3cow_check_dir_entry ("ext3cow_readdir", dir, de,
++      if (!ext3cow_check_dir_entry ("ext3cow_readversions", dir, de,
 +                                    bh, offset)) {
 +				/* On error, skip the f_pos to the
 +           next block. */
@@ -3392,7 +3256,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/dir.c linux-2.6.20.3-ext3cow/fs/ext3cow/dir.
 +#endif
 diff -ruN linux-2.6.20.3/fs/ext3cow/ext3cow_jbd.c linux-2.6.20.3-ext3cow/fs/ext3cow/ext3cow_jbd.c
 --- linux-2.6.20.3/fs/ext3cow/ext3cow_jbd.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/ext3cow_jbd.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/ext3cow_jbd.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,59 @@
 +/*
 + * Interface between ext3cow and JBD
@@ -3455,7 +3319,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/ext3cow_jbd.c linux-2.6.20.3-ext3cow/fs/ext3
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/file.c linux-2.6.20.3-ext3cow/fs/ext3cow/file.c
 --- linux-2.6.20.3/fs/ext3cow/file.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/file.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/file.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,147 @@
 +/*
 + *  linux/fs/ext3cow/file.c
@@ -3606,7 +3470,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/file.c linux-2.6.20.3-ext3cow/fs/ext3cow/fil
 +
 diff -ruN linux-2.6.20.3/fs/ext3cow/fsync.c linux-2.6.20.3-ext3cow/fs/ext3cow/fsync.c
 --- linux-2.6.20.3/fs/ext3cow/fsync.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/fsync.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/fsync.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,88 @@
 +/*
 + *  linux/fs/ext3cow/fsync.c
@@ -3698,7 +3562,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/fsync.c linux-2.6.20.3-ext3cow/fs/ext3cow/fs
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/hash.c linux-2.6.20.3-ext3cow/fs/ext3cow/hash.c
 --- linux-2.6.20.3/fs/ext3cow/hash.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/hash.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/hash.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,152 @@
 +/*
 + *  linux/fs/ext3cow/hash.c
@@ -3854,8 +3718,8 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/hash.c linux-2.6.20.3-ext3cow/fs/ext3cow/has
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/ialloc.c linux-2.6.20.3-ext3cow/fs/ext3cow/ialloc.c
 --- linux-2.6.20.3/fs/ext3cow/ialloc.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/ialloc.c	2007-04-07 14:23:50.000000000 -0400
-@@ -0,0 +1,763 @@
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/ialloc.c	2008-03-09 11:14:48.000000000 -0400
+@@ -0,0 +1,764 @@
 +/*
 + *  linux/fs/ext3cow/ialloc.c
 + *
@@ -4436,9 +4300,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/ialloc.c linux-2.6.20.3-ext3cow/fs/ext3cow/i
 +	if (!S_ISDIR(mode))
 +		ei->i_flags &= ~EXT3COW_DIRSYNC_FL;
 +#ifdef EXT3COW_FRAGMENTS
-+	ei->i_faddr = 0;
-+	ei->i_frag_no = 0;
-+	ei->i_frag_size = 0;
++  /* Taken out for versioning -znjp */
++	//ei->i_faddr = 0;
++	//ei->i_frag_no = 0;
++	//ei->i_frag_size = 0;
 +#endif
 +	ei->i_file_acl = 0;
 +	ei->i_dir_acl = 0;
@@ -4621,8 +4486,8 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/ialloc.c linux-2.6.20.3-ext3cow/fs/ext3cow/i
 +
 diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/inode.c
 --- linux-2.6.20.3/fs/ext3cow/inode.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/inode.c	2007-04-17 11:34:02.000000000 -0400
-@@ -0,0 +1,3474 @@
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/inode.c	2008-03-09 11:14:48.000000000 -0400
+@@ -0,0 +1,3502 @@
 +/*
 + *  linux/fs/ext3cow/inode.c
 + *
@@ -5012,25 +4877,28 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +{
 +	struct super_block *sb = inode->i_sb;
 +	Indirect *p = chain;
-+	struct buffer_head *bh;
-+  u32* bitmap_w;
++	struct buffer_head *bh = NULL;
++  u32 *bitmap_w = NULL;
 +  int ptrs = EXT3COW_ADDR_PER_BLOCK(inode->i_sb);
 +  int nbitsperword = (sizeof(u32) * 8);
 +
 +	*err = 0;
 +  *cow = 0;
++
++
 +	/* i_data is not going away, no lock needed */
 +	add_chain (chain, NULL, EXT3COW_I(inode)->i_data + *offsets);
 +	if (!p->key){
 +    /* Set the bitmap on allocation - znjp */
-+    if(create)
++    if(create){
 +      EXT3COW_I(inode)->i_cow_bitmap |= (1UL << *offsets);
++    }
 +		goto no_block;
 +  }
 +
-+  /* Are we COWing any direct blocks? -znjp */
++  /* Are we writing and COWing any direct blocks? -znjp */
 +  if(create && !(EXT3COW_I(inode)->i_cow_bitmap & (1UL << *offsets))){    
-+    printk(KERN_INFO "COWing direct block\n");
++    //printk(KERN_INFO "COWing direct block\n");
 +    *(p->p) = 0;
 +    p->key = 0;
 +    /* Set the bitamp when COWing -znjp */
@@ -5040,6 +4908,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +  }
 +
 +	while (--depth) {
++
 +		bh = sb_bread(sb, le32_to_cpu(p->key));
 +		if (!bh)
 +			goto failure;
@@ -5049,23 +4918,23 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +			goto changed;
 +		add_chain(++p, bh, (__le32*)bh->b_data + *++offsets);
 +		/* Reader: end */
-+    /* Find correct bitamp word */
++    /* Find correct bitmap word */
 +    bitmap_w = (u32*)bh->b_data + ptrs + (*offsets/nbitsperword);
 +		if (!p->key){
 +      /* Set the bitmap when allocating -znjp */
-+      if(create)
-+       *bitmap_w = (u32)*bitmap_w | (u32)(1UL << (int)(*offsets%nbitsperword));
++      if(create){
++       *bitmap_w |= (u32)(1UL << (int)(*offsets%nbitsperword));
++      }
 +			goto no_block;
 +    }
 +
 +    /* Are we COWing any indirect blocks? -znjp */
-+    if(create && !((1UL << (int)(*offsets%nbitsperword)) & 
-+         le32_to_cpu((u32)*bitmap_w))){
-+      printk(KERN_INFO "COWing indirect block\n");
++    if(create && !(*bitmap_w & (1UL << (int)(*offsets%nbitsperword)))){
++      //printk(KERN_INFO "COWing indirect block\n");
 +      *(p->p) = 0;
 +      p->key = 0;
 +      /* Set the bitmap -znjp */
-+      *bitmap_w = (u32)*bitmap_w | (u32)(1UL << (int)(*offsets%nbitsperword));
++      *bitmap_w |= (u32)(1UL << (int)(*offsets%nbitsperword));
 +      *cow = 1;
 +      goto no_block;
 +    }
@@ -5297,6 +5166,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +	ext3cow_fsblk_t new_blocks[4];
 +	ext3cow_fsblk_t current_block;
 +
++  u32 *bitmap_w = NULL;
++  int ptrs = EXT3COW_ADDR_PER_BLOCK(inode->i_sb);
++  int nbitsperword = (sizeof(u32) * 8);
++
 +	num = ext3cow_alloc_blocks(handle, inode, goal, indirect_blks,
 +				*blks, new_blocks, &err);
 +	if (err)
@@ -5306,6 +5179,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +	/*
 +	 * metadata blocks and data blocks are allocated.
 +	 */
++
 +	for (n = 1; n <= indirect_blks;  n++) {
 +		/*
 +		 * Get buffer_head for parent block, zero it out
@@ -5324,6 +5198,13 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +		}
 +
 +		memset(bh->b_data, 0, blocksize);
++    /* Mark the cow bitmap for each new indirect block allocated.
++     * We had to put this here, because get_branch was insufficient
++     * when allocating an indirect block. -znjp
++     */
++    bitmap_w = (u32*)bh->b_data + ptrs + (offsets[n]/nbitsperword);
++    *bitmap_w |= (u32)(1UL << (int)(offsets[n]%nbitsperword));
++
 +		branch[n].p = (__le32 *) bh->b_data + offsets[n];
 +		branch[n].key = cpu_to_le32(new_blocks[n]);
 +		*branch[n].p = branch[n].key;
@@ -6902,6 +6783,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +				continue;
 +			}
 +      /* Only free the branches that have been newly allocated - znjp */
++      /* Also, set the bits back to 0 in the bitmap -znjp */
 +      cur = 0;
 +      count = 0;
 +      bitmap_word = (u32*)bh->b_data + addr_per_block;
@@ -6924,6 +6806,8 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +              first_block = (u32*)bh->b_data + cur;
 +              count = 1;
 +            }
++            /* Set the bit in the bitmap back to 0 */
++            *bitmap_word ^= (1UL << i);
 +          }
 +        }
 +        (u32*)bitmap_word++;
@@ -7135,6 +7019,9 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +
 +    /* We only want to remove blocks that were allocated in this
 +     * epoch, i.e., have 1 bit in the bitmap. -znjp */
++    /* If we're going to truncate a block, we should its
++     * corresponding bit in the bitmap back to 0, meaning,
++     * it needs to be allocated - znjp */ 
 +    for(b = offsets[0]; b < EXT3COW_NDIR_BLOCKS; b++){
 +      if(EXT3COW_I(inode)->i_cow_bitmap & (1UL << b)){
 +        if(count == 0){
@@ -7148,6 +7035,8 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +          block_to_free = b;
 +          count = 1;
 +        }
++        /* Turn off the bit in the bitmap */
++        EXT3COW_I(inode)->i_cow_bitmap ^= (1UL << b);
 +      }
 +    }
 +    if(count > 0)
@@ -7198,6 +7087,8 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +       ext3cow_free_branches(handle, inode, NULL, &nr, &nr+1, 1);
 +       i_data[EXT3COW_IND_BLOCK] = 0;
 +     }
++     /* And set bitmap back to 0 */
++     EXT3COW_I(inode)->i_cow_bitmap ^= (1UL << EXT3COW_IND_BLOCK);
 +   }
 +	case EXT3COW_IND_BLOCK:
 +   if(EXT3COW_I(inode)->i_cow_bitmap & (1UL << EXT3COW_DIND_BLOCK)){
@@ -7206,6 +7097,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +       ext3cow_free_branches(handle, inode, NULL, &nr, &nr+1, 2);
 +       i_data[EXT3COW_DIND_BLOCK] = 0;
 +     }
++     EXT3COW_I(inode)->i_cow_bitmap ^= (1UL << EXT3COW_DIND_BLOCK);
 +   }
 +	case EXT3COW_DIND_BLOCK:
 +   if(EXT3COW_I(inode)->i_cow_bitmap & (1UL << EXT3COW_TIND_BLOCK)){
@@ -7214,6 +7106,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +       ext3cow_free_branches(handle, inode, NULL, &nr, &nr+1, 3);
 +       i_data[EXT3COW_TIND_BLOCK] = 0;
 +     }
++     EXT3COW_I(inode)->i_cow_bitmap ^= (1UL << EXT3COW_TIND_BLOCK);
 +   }
 +	case EXT3COW_TIND_BLOCK:
 +		;
@@ -7450,12 +7343,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +	inode->i_mode = le16_to_cpu(raw_inode->i_mode);
 +	inode->i_uid = (uid_t)le16_to_cpu(raw_inode->i_uid_low);
 +	inode->i_gid = (gid_t)le16_to_cpu(raw_inode->i_gid_low);
-+  /* Taken out for versioning -znjp
 +	if(!(test_opt (inode->i_sb, NO_UID32))) {
 +		inode->i_uid |= le16_to_cpu(raw_inode->i_uid_high) << 16;
 +		inode->i_gid |= le16_to_cpu(raw_inode->i_gid_high) << 16;
 +	}
-+  */
 +	inode->i_nlink = le16_to_cpu(raw_inode->i_links_count);
 +	inode->i_size = le32_to_cpu(raw_inode->i_size);
 +	inode->i_atime.tv_sec = le32_to_cpu(raw_inode->i_atime);
@@ -7491,9 +7382,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +  ei->i_next_inode   = le32_to_cpu(raw_inode->i_nxt_inode);
 +  
 +#ifdef EXT3COW_FRAGMENTS
-+	ei->i_faddr = le32_to_cpu(raw_inode->i_faddr);
-+	ei->i_frag_no = raw_inode->i_frag;
-+	ei->i_frag_size = raw_inode->i_fsize;
++  /* Taken out for versioning -znjp */
++	//ei->i_faddr = le32_to_cpu(raw_inode->i_faddr);
++	//ei->i_frag_no = raw_inode->i_frag;
++	//ei->i_frag_size = raw_inode->i_fsize;
 +#endif
 +	ei->i_file_acl = le32_to_cpu(raw_inode->i_file_acl);
 +	if (!S_ISREG(inode->i_mode)) {
@@ -7593,15 +7485,15 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +
 +	raw_inode->i_mode = cpu_to_le16(inode->i_mode);
 +
-+  /* Taken out for versioning  -znjp
++
 +	if(!(test_opt(inode->i_sb, NO_UID32))) {
 +		raw_inode->i_uid_low = cpu_to_le16(low_16_bits(inode->i_uid));
 +		raw_inode->i_gid_low = cpu_to_le16(low_16_bits(inode->i_gid));
-+*
-+ * Fix up interoperability with old kernels. Otherwise, old inodes get
-+ * re-used with the upper 16 bits of the uid/gid intact
-+ *
-+
++    
++    /* Fix up interoperability with old kernels. Otherwise, old inodes get
++     * re-used with the upper 16 bits of the uid/gid intact
++     */
++    
 +		if(!ei->i_dtime) {
 +			raw_inode->i_uid_high =
 +				cpu_to_le16(high_16_bits(inode->i_uid));
@@ -7620,7 +7512,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +		raw_inode->i_uid_high = 0;
 +		raw_inode->i_gid_high = 0;
 +	}
-+  */
++ 
 +	raw_inode->i_links_count = cpu_to_le16(inode->i_nlink);
 +	raw_inode->i_size = cpu_to_le32(ei->i_disksize);
 +	raw_inode->i_atime = cpu_to_le32(inode->i_atime.tv_sec);
@@ -7635,9 +7527,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +  raw_inode->i_nxt_inode   = cpu_to_le32(EXT3COW_I(inode)->i_next_inode);
 +
 +#ifdef EXT3COW_FRAGMENTS
-+	raw_inode->i_faddr = cpu_to_le32(ei->i_faddr);
-+	raw_inode->i_frag = ei->i_frag_no;
-+	raw_inode->i_fsize = ei->i_frag_size;
++  /* Taken out for versioning -znjp */
++	//raw_inode->i_faddr = cpu_to_le32(ei->i_faddr);
++	//raw_inode->i_frag = ei->i_frag_no;
++	//raw_inode->i_fsize = ei->i_frag_size;
 +#endif
 +	raw_inode->i_file_acl = cpu_to_le32(ei->i_file_acl);
 +	if (!S_ISREG(inode->i_mode)) {
@@ -8099,7 +7992,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/inode.c linux-2.6.20.3-ext3cow/fs/ext3cow/in
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/ioctl.c linux-2.6.20.3-ext3cow/fs/ext3cow/ioctl.c
 --- linux-2.6.20.3/fs/ext3cow/ioctl.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/ioctl.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/ioctl.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,312 @@
 +/*
 + * linux/fs/ext3cow/ioctl.c
@@ -8413,10 +8306,26 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/ioctl.c linux-2.6.20.3-ext3cow/fs/ext3cow/io
 +	return ret;
 +}
 +#endif
+diff -ruN linux-2.6.20.3/fs/ext3cow/Makefile linux-2.6.20.3-ext3cow/fs/ext3cow/Makefile
+--- linux-2.6.20.3/fs/ext3cow/Makefile	1969-12-31 19:00:00.000000000 -0500
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/Makefile	2008-03-09 11:14:49.000000000 -0400
+@@ -0,0 +1,12 @@
++#
++# Makefile for the linux ext3cow-filesystem routines.
++#
++
++obj-$(CONFIG_EXT3COW_FS) += ext3cow.o
++
++ext3cow-y	:= balloc.o bitmap.o dir.o file.o fsync.o ialloc.o inode.o \
++	   ioctl.o namei.o super.o symlink.o hash.o resize.o ext3cow_jbd.o
++
++ext3cow-$(CONFIG_EXT3COW_FS_XATTR)	 += xattr.o xattr_user.o xattr_trusted.o
++ext3cow-$(CONFIG_EXT3COW_FS_POSIX_ACL) += acl.o
++ext3cow-$(CONFIG_EXT3COW_FS_SECURITY)	 += xattr_security.o
 diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/namei.c
 --- linux-2.6.20.3/fs/ext3cow/namei.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/namei.c	2007-04-16 22:44:05.000000000 -0400
-@@ -0,0 +1,2960 @@
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/namei.c	2008-03-09 11:14:48.000000000 -0400
+@@ -0,0 +1,2979 @@
 +/*
 + *  linux/fs/ext3cow/namei.c
 + *
@@ -9988,7 +9897,6 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +
 +  if(EXT3COW_S_EPOCHNUMBER(sb) > EXT3COW_I_EPOCHNUMBER(dir)){   
 +    if(ext3cow_dup_inode(dentry->d_parent->d_parent->d_inode, dir))
-+      //if(ext3cow_dup_inode(NULL, dir))
 +      return -1;
 +  }
 +
@@ -10197,7 +10105,6 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +      
 +      if(EXT3COW_S_EPOCHNUMBER(dir->i_sb) > EXT3COW_I_EPOCHNUMBER(dir)){
 +        if(ext3cow_dup_inode(dentry->d_parent->d_parent->d_inode, dir))
-+          //if(ext3cow_dup_inode(NULL, dir))
 +          return -1;
 +      }
 +
@@ -11074,11 +10981,6 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +    fake_inode->i_uid  = inode->i_uid;
 +    fake_inode->i_gid  = inode->i_gid;
 +
-+    /* uid_high and gid_high code would go here -znjp 
-+       fake_inode->i_uid_high = inode->i_uid_high;
-+       fake_inode->i_gid_high = inode->i_gid_high;
-+    */
-+
 +    atomic_set(&fake_inode->i_count, 1);
 +
 +    fake_inode->i_nlink         = inode->i_nlink;
@@ -11097,9 +10999,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +    fake_inode->i_blocks  = inode->i_blocks;
 +    fake_ini->i_flags     = ini->i_flags;
 +#ifdef EXT3COW_FRAGMENTS
-+    fake_ini->i_faddr     = ini->i_faddr;
-+    fake_ini->i_frag_no   = ini->i_frag_no;
-+    fake_ini->i_frag_size = ini->i_frag_size;
++    /* Taken out for versioning -znjp */
++    //fake_ini->i_faddr     = ini->i_faddr;
++    //fake_ini->i_frag_no   = ini->i_frag_no;
++    //fake_ini->i_frag_size = ini->i_frag_size;
 +#endif
 +    fake_ini->i_file_acl = ini->i_file_acl;
 +    if (!S_ISREG(fake_inode->i_mode)) {
@@ -11229,11 +11132,6 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +    cow_inode->i_mode = inode->i_mode;
 +    cow_inode->i_uid  = inode->i_uid;
 +    cow_inode->i_gid  = inode->i_gid;
-+    
-+    /* uid_high and gid_high code would go here -znjp 
-+       cow_inode->i_uid_high = inode->i_uid_high;
-+       cow_inode->i_gid_high = inode->i_gid_high;
-+    */
 +
 +    cow_inode->i_nlink         = inode->i_nlink;
 +    cow_inode->i_size          = inode->i_size;
@@ -11251,9 +11149,10 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +    cow_inode->i_blocks  = inode->i_blocks;
 +    cow_ini->i_flags     = ini->i_flags;
 +#ifdef EXT3COW_FRAGMENTS
-+    cow_ini->i_faddr     = ini->i_faddr;
-+    cow_ini->i_frag_no   = ini->i_frag_no;
-+    cow_ini->i_frag_size = ini->i_frag_size;
++    /* Taken out for versioning -znjp */
++    //cow_ini->i_faddr     = ini->i_faddr;
++    //cow_ini->i_frag_no   = ini->i_frag_no;
++    //cow_ini->i_frag_size = ini->i_frag_size;
 +#endif
 +    cow_ini->i_file_acl = ini->i_file_acl;
 +    if (!S_ISREG(cow_inode->i_mode)) {
@@ -11334,14 +11233,43 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 + * be used for removing versions.  */
 +int ext3cow_reclaim_dup_inode(struct inode *dir, struct inode *inode)
 +{
-+  //  handle_t *handle = NULL;
++  handle_t *handle = NULL;
++  int err = 0;
++  struct inode *old_inode = NULL;
++  struct inode *parent = dir;
++
++  if(!parent)
++    parent = inode;
 +
 +  if(is_bad_inode(inode))
-+    goto no_delete;
++    return -1;
++  
++  handle = ext3cow_journal_start(parent, 
++                                 EXT3COW_DELETE_TRANS_BLOCKS(parent->i_sb));
++  if(IS_ERR(handle))
++    return PTR_ERR(handle);
 +
++  if(IS_DIRSYNC(parent))
++    handle->h_sync = 1;
++
++  old_inode = iget(parent->i_sb, EXT3COW_I_NEXT_INODE(inode));
++  err = PTR_ERR(old_inode);
++  if (!IS_ERR(old_inode)){
++
++    EXT3COW_I(inode)->i_epoch_number = EXT3COW_I_EPOCHNUMBER(old_inode);
++    EXT3COW_I(inode)->i_cow_bitmap   = EXT3COW_I(old_inode)->i_cow_bitmap;
++    EXT3COW_I(inode)->i_next_inode   = EXT3COW_I(old_inode)->i_next_inode;
++    old_inode->i_nlink = 0;
++
++    iput(old_inode);
++    ext3cow_mark_inode_dirty(handle, inode);
++  }else
++    ext3cow_error(inode->i_sb, "ext3cow_reclaim_dup_inode", 
++                  "Couldn't remove dup'd inode.");
++  
++  ext3cow_journal_stop(handle);
++  
 +  return 0;
-+ no_delete:
-+  return -1;
 +}
 +
 +/*
@@ -11379,7 +11307,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.c linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +};
 diff -ruN linux-2.6.20.3/fs/ext3cow/namei.h linux-2.6.20.3-ext3cow/fs/ext3cow/namei.h
 --- linux-2.6.20.3/fs/ext3cow/namei.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/namei.h	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/namei.h	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,8 @@
 +/*  linux/fs/ext3cow/namei.h
 + *
@@ -11391,7 +11319,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/namei.h linux-2.6.20.3-ext3cow/fs/ext3cow/na
 +extern struct dentry *ext3cow_get_parent(struct dentry *child);
 diff -ruN linux-2.6.20.3/fs/ext3cow/resize.c linux-2.6.20.3-ext3cow/fs/ext3cow/resize.c
 --- linux-2.6.20.3/fs/ext3cow/resize.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/resize.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/resize.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,1042 @@
 +/*
 + *  linux/fs/ext3cow/resize.c
@@ -12437,7 +12365,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/resize.c linux-2.6.20.3-ext3cow/fs/ext3cow/r
 +} /* ext3cow_group_extend */
 diff -ruN linux-2.6.20.3/fs/ext3cow/super.c linux-2.6.20.3-ext3cow/fs/ext3cow/super.c
 --- linux-2.6.20.3/fs/ext3cow/super.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/super.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/super.c	2008-03-09 11:14:49.000000000 -0400
 @@ -0,0 +1,2808 @@
 +/*
 + *  linux/fs/ext3cow/super.c
@@ -15249,7 +15177,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/super.c linux-2.6.20.3-ext3cow/fs/ext3cow/su
 +module_exit(exit_ext3cow_fs)
 diff -ruN linux-2.6.20.3/fs/ext3cow/symlink.c linux-2.6.20.3-ext3cow/fs/ext3cow/symlink.c
 --- linux-2.6.20.3/fs/ext3cow/symlink.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/symlink.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/symlink.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,54 @@
 +/*
 + *  linux/fs/ext3cow/symlink.c
@@ -15307,7 +15235,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/symlink.c linux-2.6.20.3-ext3cow/fs/ext3cow/
 +};
 diff -ruN linux-2.6.20.3/fs/ext3cow/xattr.c linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.c
 --- linux-2.6.20.3/fs/ext3cow/xattr.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.c	2008-03-09 11:14:49.000000000 -0400
 @@ -0,0 +1,1314 @@
 +/*
 + * linux/fs/ext3cow/xattr.c
@@ -16625,7 +16553,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/xattr.c linux-2.6.20.3-ext3cow/fs/ext3cow/xa
 +}
 diff -ruN linux-2.6.20.3/fs/ext3cow/xattr.h linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.h
 --- linux-2.6.20.3/fs/ext3cow/xattr.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.h	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr.h	2008-03-09 11:14:49.000000000 -0400
 @@ -0,0 +1,145 @@
 +/*
 +  File: fs/ext3cow/xattr.h
@@ -16774,7 +16702,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/xattr.h linux-2.6.20.3-ext3cow/fs/ext3cow/xa
 +#endif
 diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_security.c linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_security.c
 --- linux-2.6.20.3/fs/ext3cow/xattr_security.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_security.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_security.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,77 @@
 +/*
 + * linux/fs/ext3cow/xattr_security.c
@@ -16855,7 +16783,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_security.c linux-2.6.20.3-ext3cow/fs/e
 +};
 diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_trusted.c linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_trusted.c
 --- linux-2.6.20.3/fs/ext3cow/xattr_trusted.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_trusted.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_trusted.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,62 @@
 +/*
 + * linux/fs/ext3cow/xattr_trusted.c
@@ -16921,7 +16849,7 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_trusted.c linux-2.6.20.3-ext3cow/fs/ex
 +};
 diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_user.c linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_user.c
 --- linux-2.6.20.3/fs/ext3cow/xattr_user.c	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_user.c	2007-04-07 14:23:50.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/ext3cow/xattr_user.c	2008-03-09 11:14:48.000000000 -0400
 @@ -0,0 +1,64 @@
 +/*
 + * linux/fs/ext3cow/xattr_user.c
@@ -16987,10 +16915,147 @@ diff -ruN linux-2.6.20.3/fs/ext3cow/xattr_user.c linux-2.6.20.3-ext3cow/fs/ext3c
 +	.get	= ext3cow_xattr_user_get,
 +	.set	= ext3cow_xattr_user_set,
 +};
+diff -ruN linux-2.6.20.3/fs/Kconfig linux-2.6.20.3-ext3cow/fs/Kconfig
+--- linux-2.6.20.3/fs/Kconfig	2007-03-13 14:27:08.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/Kconfig	2008-03-09 11:14:25.000000000 -0400
+@@ -136,6 +136,77 @@
+ 	  If you are not using a security module that requires using
+ 	  extended attributes for file security labels, say N.
+ 
++
++
++config EXT3COW_FS
++	tristate "Ext3cow journalling and versioning file system support"
++	select JBD
++	help
++	  This is the journalling version of the Second extended file system
++	  (often called ext3), the de facto standard Linux file system
++	  (method to organize files on a storage device) for hard disks.
++
++	  The journalling code included in this driver means you do not have
++	  to run e2fsck (file system checker) on your file systems after a
++	  crash.  The journal keeps track of any changes that were being made
++	  at the time the system crashed, and can ensure that your file system
++	  is consistent without the need for a lengthy check.
++
++	  Other than adding the journal to the file system, the on-disk format
++	  of ext3 is identical to ext2.  It is possible to freely switch
++	  between using the ext3 driver and the ext2 driver, as long as the
++	  file system has been cleanly unmounted, or e2fsck is run on the file
++	  system.
++
++	  To add a journal on an existing ext2 file system or change the
++	  behavior of ext3 file systems, you can use the tune2fs utility ("man
++	  tune2fs").  To modify attributes of files and directories on ext3
++	  file systems, use chattr ("man chattr").  You need to be using
++	  e2fsprogs version 1.20 or later in order to create ext3 journals
++	  (available at <http://sourceforge.net/projects/e2fsprogs/>).
++
++	  To compile this file system support as a module, choose M here: the
++	  module will be called ext3.
++
++config EXT3COW_FS_XATTR
++	bool "Ext3cow extended attributes"
++	depends on EXT3COW_FS
++	default y
++	help
++	  Extended attributes are name:value pairs associated with inodes by
++	  the kernel or by users (see the attr(5) manual page, or visit
++	  <http://acl.bestbits.at/> for details).
++
++	  If unsure, say N.
++
++	  You need this for POSIX ACL support on ext3cow.
++
++config EXT3COW_FS_POSIX_ACL
++	bool "Ext3cow POSIX Access Control Lists"
++	depends on EXT3COW_FS_XATTR
++	select FS_POSIX_ACL
++	help
++	  Posix Access Control Lists (ACLs) support permissions for users and
++	  groups beyond the owner/group/world scheme.
++
++	  To learn more about Access Control Lists, visit the Posix ACLs for
++	  Linux website <http://acl.bestbits.at/>.
++
++	  If you don't know what Access Control Lists are, say N
++
++config EXT3COW_FS_SECURITY
++	bool "Ext3cow Security Labels"
++	depends on EXT3COW_FS_XATTR
++	help
++	  Security labels support alternative access control models
++	  implemented by security modules like SELinux.  This option
++	  enables an extended attribute handler for file security
++	  labels in the ext3cow filesystem.
++
++	  If you are not using a security module that requires using
++	  extended attributes for file security labels, say N.
++
++
+ config EXT4DEV_FS
+ 	tristate "Ext4dev/ext4 extended fs support development (EXPERIMENTAL)"
+ 	depends on EXPERIMENTAL
+@@ -205,23 +276,23 @@
+ 	tristate
+ 	help
+ 	  This is a generic journalling layer for block devices.  It is
+-	  currently used by the ext3 and OCFS2 file systems, but it could
++	  currently used by the ext3, ext3cow and OCFS2 file systems, but it could
+ 	  also be used to add journal support to other file systems or block
+ 	  devices such as RAID or LVM.
+ 
+-	  If you are using the ext3 or OCFS2 file systems, you need to
++	  If you are using the ext3, ext3cow or OCFS2 file systems, you need to
+ 	  say Y here. If you are not using ext3 OCFS2 then you will probably
+ 	  want to say N.
+ 
+ 	  To compile this device as a module, choose M here: the module will be
+-	  called jbd.  If you are compiling ext3 or OCFS2 into the kernel,
++	  called jbd.  If you are compiling ext3, ext3cow or OCFS2 into the kernel,
+ 	  you cannot compile this code as a module.
+ 
+ config JBD_DEBUG
+ 	bool "JBD (ext3) debugging support"
+ 	depends on JBD
+ 	help
+-	  If you are using the ext3 journaled file system (or potentially any
++	  If you are using the ext3 or ext3cow journaled file system (or potentially any
+ 	  other file system/device using JBD), this option allows you to
+ 	  enable debugging output while the system is running, in order to
+ 	  help track down any problems you are having.  By default the
+@@ -266,11 +337,12 @@
+ 	  "echo 0 > /proc/sys/fs/jbd2-debug".
+ 
+ config FS_MBCACHE
+-# Meta block cache for Extended Attributes (ext2/ext3/ext4)
++# Meta block cache for Extended Attributes (ext2/ext3(cow)/ext4)
+ 	tristate
+-	depends on EXT2_FS_XATTR || EXT3_FS_XATTR || EXT4DEV_FS_XATTR
+-	default y if EXT2_FS=y || EXT3_FS=y || EXT4DEV_FS=y
+-	default m if EXT2_FS=m || EXT3_FS=m || EXT4DEV_FS=m
++	depends on EXT2_FS_XATTR || EXT3_FS_XATTR || EXT3COW_FS_XATTR || EXT4DEV_FS_XATTR
++	default y if EXT2_FS=y || EXT3_FS=y || EXT3COW_FS=y || EXT4DEV_FS=y
++	default m if EXT2_FS=m || EXT3_FS=m || EXT3COW_FS=m || EXT4DEV_FS=m
++
+ 
+ config REISERFS_FS
+ 	tristate "Reiserfs support"
+diff -ruN linux-2.6.20.3/fs/Makefile linux-2.6.20.3-ext3cow/fs/Makefile
+--- linux-2.6.20.3/fs/Makefile	2007-03-13 14:27:08.000000000 -0400
++++ linux-2.6.20.3-ext3cow/fs/Makefile	2008-03-09 11:14:54.000000000 -0400
+@@ -63,6 +63,7 @@
+ # Do not add any filesystems before this line
+ obj-$(CONFIG_REISERFS_FS)	+= reiserfs/
+ obj-$(CONFIG_EXT3_FS)		+= ext3/ # Before ext2 so root fs can be ext3
++obj-$(CONFIG_EXT3COW_FS)		+= ext3cow/ # Before ext2 so root fs can be ext3
+ obj-$(CONFIG_EXT4DEV_FS)	+= ext4/ # Before ext2 so root fs can be ext4dev
+ obj-$(CONFIG_JBD)		+= jbd/
+ obj-$(CONFIG_JBD2)		+= jbd2/
 diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs.h linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs.h
 --- linux-2.6.20.3/include/linux/ext3cow_fs.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs.h	2007-04-07 15:30:04.000000000 -0400
-@@ -0,0 +1,947 @@
++++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs.h	2008-03-09 11:10:57.000000000 -0400
+@@ -0,0 +1,948 @@
 +/*
 + *  linux/include/linux/ext3cow_fs.h
 + *
@@ -17020,6 +17085,7 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs.h linux-2.6.20.3-ext3cow/inclu
 + * Define EXT3COWFS_DEBUG to produce debug messages
 + */
 +#undef EXT3COWFS_DEBUG
++
 +
 +/*
 + * Define EXT3COW_RESERVATION to reserve data blocks for expanding files
@@ -17314,11 +17380,11 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs.h linux-2.6.20.3-ext3cow/inclu
 +	__le32	i_faddr;	/* Fragment address */
 +	union {
 +		struct {
-+			__u8	l_i_frag;	/* Fragment number */
-+			__u8	l_i_fsize;	/* Fragment size */
-+			__u16	i_pad1;
-+			//__le16	l_i_uid_high;	/* these 2 fields    */
-+			//__le16	l_i_gid_high;	/* were reserved2[0] */
++			//__u8	l_i_frag;	/* Fragment number */
++			//__u8	l_i_fsize;	/* Fragment size */
++			//__u16	i_pad1;
++			__le16	l_i_uid_high;	/* these 2 fields    */
++			__le16	l_i_gid_high;	/* were reserved2[0] */
 +			//__u32	l_i_reserved2;
 +      /* Epoch number for versioning -znjp */
 +      __le32 l_i_epoch_number;
@@ -17349,13 +17415,13 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs.h linux-2.6.20.3-ext3cow/inclu
 +/* For versioning -znjp */
 +//#define i_reserved1	osd1.linux1.l_i_reserved1
 +#define i_cowbitmap osd1.linux1.l_i_direct_cow_bitmap
-+#define i_frag		osd2.linux2.l_i_frag
-+#define i_fsize		osd2.linux2.l_i_fsize
++//#define i_frag		osd2.linux2.l_i_frag
++//#define i_fsize		osd2.linux2.l_i_fsize
 +#define i_uid_low	i_uid
 +#define i_gid_low	i_gid
 +/* For versioning -znjp */
-+//#define i_uid_high	osd2.linux2.l_i_uid_high
-+//#define i_gid_high	osd2.linux2.l_i_gid_high
++#define i_uid_high	osd2.linux2.l_i_uid_high
++#define i_gid_high	osd2.linux2.l_i_gid_high
 +//#define i_reserved2	osd2.linux2.l_i_reserved2
 +#define i_epch_number osd2.linux2.l_i_epoch_number
 +#define i_nxt_inode osd2.linux2.l_i_next_inode
@@ -17940,7 +18006,7 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs.h linux-2.6.20.3-ext3cow/inclu
 +#endif	/* _LINUX_EXT3COW_FS_H */
 diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs_i.h linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_i.h
 --- linux-2.6.20.3/include/linux/ext3cow_fs_i.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_i.h	2007-03-24 15:22:06.000000000 -0400
++++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_i.h	2008-03-09 11:10:55.000000000 -0400
 @@ -0,0 +1,152 @@
 +/*
 + *  linux/include/linux/ext3cow_fs_i.h
@@ -18096,7 +18162,7 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs_i.h linux-2.6.20.3-ext3cow/inc
 +#endif	/* _LINUX_EXT3COW_FS_I */
 diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs_sb.h linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_sb.h
 --- linux-2.6.20.3/include/linux/ext3cow_fs_sb.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_sb.h	2007-03-24 15:22:35.000000000 -0400
++++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_fs_sb.h	2008-03-09 11:10:57.000000000 -0400
 @@ -0,0 +1,86 @@
 +/*
 + *  linux/include/linux/ext3cow_fs_sb.h
@@ -18186,7 +18252,7 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_fs_sb.h linux-2.6.20.3-ext3cow/in
 +#endif	/* _LINUX_EXT3COW_FS_SB */
 diff -ruN linux-2.6.20.3/include/linux/ext3cow_jbd.h linux-2.6.20.3-ext3cow/include/linux/ext3cow_jbd.h
 --- linux-2.6.20.3/include/linux/ext3cow_jbd.h	1969-12-31 19:00:00.000000000 -0500
-+++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_jbd.h	2007-03-24 13:58:07.000000000 -0400
++++ linux-2.6.20.3-ext3cow/include/linux/ext3cow_jbd.h	2008-03-09 11:10:56.000000000 -0400
 @@ -0,0 +1,226 @@
 +/*
 + * linux/include/linux/ext3cow_jbd.h
@@ -18416,7 +18482,7 @@ diff -ruN linux-2.6.20.3/include/linux/ext3cow_jbd.h linux-2.6.20.3-ext3cow/incl
 +#endif	/* _LINUX_EXT3COW_JBD_H */
 diff -ruN linux-2.6.20.3/include/linux/magic.h linux-2.6.20.3-ext3cow/include/linux/magic.h
 --- linux-2.6.20.3/include/linux/magic.h	2007-03-13 14:27:08.000000000 -0400
-+++ linux-2.6.20.3-ext3cow/include/linux/magic.h	2007-03-24 14:06:39.000000000 -0400
++++ linux-2.6.20.3-ext3cow/include/linux/magic.h	2008-03-09 11:10:57.000000000 -0400
 @@ -9,6 +9,7 @@
  #define EFS_SUPER_MAGIC		0x414A53
  #define EXT2_SUPER_MAGIC	0xEF53

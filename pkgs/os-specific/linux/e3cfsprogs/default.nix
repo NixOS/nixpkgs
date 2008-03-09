@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   patches = [ ./e3cfsprogs-1.39_bin_links.patch ./e3cfsprogs-1.39_etc.patch ];
 
   src = fetchurl {
-    url = http://www.ext3cow.com/Download_files/e3cfsprogs-1.39.tgz;
-    sha256 = "26f535007a497d91c85d337ac67d62d42e3c8fde2ee02c5cb6b6e3e884a5d58f";
+    url = http://ext3cow.com/e3cfsprogs/e3cfsprogs-1.39.tgz;
+    sha256 = "8dd3de546aeb1ae42fb05409aeb724a145fe9aa1dbe1115441c2297c9d48cf31";
   };
 
   configureFlags =
