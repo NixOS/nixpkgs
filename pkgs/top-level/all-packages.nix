@@ -5112,10 +5112,9 @@ rec {
 
   gnash = assert mesaSupported; import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
-            boost freetype agg dbus curl pkgconfig lib;
+            boost freetype agg dbus curl pkgconfig x11 lib;
     inherit (gtkLibs) glib gtk;
     GStreamer = gst_all.gstreamer;
-    inherit (xlibs) libX11 libXext libXi libXmu;
   };
 
   gocrFun = lib.sumArgs (selectVersion ../applications/graphics/gocr "0.44") {

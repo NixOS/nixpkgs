@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, libX11, libXext, libXi, libXmu
+{ stdenv, fetchurl
 , SDL, SDL_mixer, GStreamer
 , libogg, libxml2, libjpeg, mesa, libpng
 , boost, freetype, agg, dbus, curl, pkgconfig
-, glib, gtk
+, glib, gtk, x11
 , lib}:
 
 stdenv.mkDerivation rec {
@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   # XXX: KDE is supported as well so we could make it available optionally.
-  buildInputs = [libX11 libXext libXi libXmu SDL SDL_mixer GStreamer
+  buildInputs = [x11 SDL SDL_mixer GStreamer
                  libogg libxml2 libjpeg mesa libpng boost freetype agg
 		 dbus curl pkgconfig glib gtk];
   inherit SDL_mixer SDL;
+
+  # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
+  NIX_LDFLAGS="-lX11 -lXext";
 
   preInstall = ''ensureDir $out/plugins'';
   postInstall = ''make install-plugins'';
