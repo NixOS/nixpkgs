@@ -5657,12 +5657,17 @@ rec {
 
   wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv firefox nameSuffix;
-    plugins = []
-    ++ lib.optional (system == "i686-linux") flashplayer
-    # RealPlayer is disabled by default for legal reasons.
-    ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
-    ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
-    ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] true && jrePlugin ? mozillaPlugin) jrePlugin;
+    plugins =
+      let enableAdobeFlash = ((getConfig [ "firefox" "enableAdobeFlash" ] false)
+			      && (system == "i686-linux"));
+      in
+       ([]
+	++ lib.optional (!enableAdobeFlash) gnash
+	++ lib.optional (enableAdobeFlash)  flashplayer
+	# RealPlayer is disabled by default for legal reasons.
+	++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
+	++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
+	++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] true && jrePlugin ? mozillaPlugin) jrePlugin);
   };
 
   x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
