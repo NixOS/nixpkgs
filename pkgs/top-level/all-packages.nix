@@ -1409,7 +1409,7 @@ rec {
 
         # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
-                  src = sourceByName "http_darcs";
+                  src = sourceByName "http";
                    #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
                  };
           syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
@@ -1456,7 +1456,7 @@ rec {
                   x.template_haskell x.xhtml x.html x.bytestring x.random
                   x.containers x.old_time x.old_locale x.directory x.unix];
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
-                    src = sourceByName "happs_server_darcs";
+                    src = sourceByName "happs_server";
                     };
         # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
         # is be added to buildInputs automatically
