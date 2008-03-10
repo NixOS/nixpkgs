@@ -88,6 +88,7 @@ let
       Option "XkbOptions" "${cfg.xkbOptions}"
     '';
 
+    xkbModel = cfg.xkbModel;
     layout = cfg.layout;
 
     corePointer = if cfg.isSynaptics then "Touchpad[0]" else "Mouse[0]";

@@ -1143,6 +1143,14 @@
         ";
       };
 
+      xkbModel = mkOption {
+        default = "pc104";
+        example = "presario";
+        description = "
+          Keyboard model.
+        ";
+      };
+
       xkbOptions = mkOption {
         default = "";
         example = "grp:caps_toggle, grp_led:scroll";
