@@ -5453,7 +5453,7 @@ rec {
 
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
-    inherit glibc alsaLib freetype fontconfig libsigcxx gcc41;
+    inherit glibc alsaLib freetype fontconfig libsigcxx gcc;
     inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor 
                     libXinerama libXext libX11;
   };

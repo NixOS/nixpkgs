@@ -1,18 +1,36 @@
 args: with args;
-stdenv.mkDerivation {
+stdenv.mkDerivation ( rec {
+  pname = "skype";
+  version = "1.4.0.118";
   name = "skype-1.4";
 
   src = fetchurl {
     url = http://www.skype.com/go/getskype-linux-static;
-    sha256 = "0k71byzaipmw8lb92aad4qyh9rk0fnn3za74v1h268h09gkkd8mz";
-    name = "skype_static-1.4.0.99.tar.bz2";
+    sha256 = "1293f54811a36b2a1b83c56a4ad2844e58c753fe39b61422fac66b001d0f9e0c";
+    name = "${pname}_static-${version}.tar.bz2";
   };
 
-  buildInputs = [alsaLib glibc libSM libICE libXi libXrender libXrandr libXfixes 
-      libXcursor libXinerama freetype fontconfig libXext libX11 
-    fontconfig libXinerama libsigcxx gcc41.gcc ];
+  buildInputs = [
+    alsaLib 
+    glibc 
+    gcc.gcc
+    libSM 
+    libICE 
+    libXi 
+    libXrender 
+    libXrandr 
+    libXfixes 
+    libXcursor 
+    libXinerama 
+    freetype 
+    fontconfig 
+    libXext 
+    libX11 
+    fontconfig 
+    libsigcxx 
+  ];
 
-  phases = "installPhase";
+  phases = "unpackPhase installPhase";
   installPhase ="
 
     ensureDir \$out/{opt/skype/,bin};
@@ -41,4 +59,4 @@ done
       homepage = http://www.skype.com;
       license = "skype-eula";
   };
-}
+})
