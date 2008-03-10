@@ -412,6 +412,10 @@ rec {
     inherit fetchurl stdenv flex;
   };
 
+  asciidoc = import ../tools/typesetting/asciidoc {
+    inherit fetchurl stdenv python;
+  };
+
   bibtextools = import ../tools/typesetting/bibtex-tools {
     inherit fetchurl stdenv aterm tetex hevea sdf strategoxt;
   };
