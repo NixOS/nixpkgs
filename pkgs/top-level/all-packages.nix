@@ -2192,11 +2192,10 @@ rec {
     inherit stdenv fetchurl autoconf libtool gettext attr;
   };
 
-  /*
   agg = import ../development/libraries/agg {
-    inherit fetchurl stdenv autoconf automake libtool pkgconfig;
+    inherit fetchurl stdenv autoconf automake libtool pkgconfig
+            freetype SDL;
   };
-  */
 
   apr = import ../development/libraries/apr {
     inherit fetchurl stdenv;
@@ -5112,7 +5111,9 @@ rec {
   };
 
   gnash = assert mesaSupported; import ../applications/video/gnash {
-    inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng;
+    inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
+            boost freetype agg dbus curl pkgconfig lib;
+    inherit (gtkLibs) glib gtk;
     GStreamer = gst_all.gstreamer;
     inherit (xlibs) libX11 libXext libXi libXmu;
   };
