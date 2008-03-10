@@ -5,12 +5,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "0gdmly9sli1918pnb4ds1g38ipxikn651hdss86mp4qlfb8wvqlv";
+    sha256 = "0cndfz98zca40qc1d2waq1dkfx32yscbllbvlnlhjp4cjlkyh9qg";
   };
 
   configureFlags = "--enable-shared --disable-static";
 
-  buildInputs = [pkgconfig];
+  buildInputs = [pkgconfig glib];
 
   meta = {
     homepage = http://liboil.freedesktop.org;

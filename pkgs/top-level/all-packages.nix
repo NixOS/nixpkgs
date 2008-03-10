@@ -2793,8 +2793,9 @@ rec {
   };
 
   liboilFun = lib.sumArgs
-    (selectVersion ../development/libraries/liboil "0.3.12") {
+    (selectVersion ../development/libraries/liboil "0.3.13") {
     inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) glib;
   };
 
   liboil = liboilFun null;
@@ -3098,6 +3099,10 @@ rec {
 
   rte = import ../development/libraries/rte {
     inherit fetchurl stdenv;
+  };
+
+  schroedinger = import ../development/libraries/schroedinger {
+    inherit fetchurl stdenv liboil pkgconfig;
   };
 
   SDL = import ../development/libraries/SDL {
