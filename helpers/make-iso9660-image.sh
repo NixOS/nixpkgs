@@ -57,12 +57,12 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     fi
 done
 
-cat pathlist
+cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
 # !!! -f is a quick hack.
 ensureDir $out/iso
 genisoimage -r -J -o $out/iso/$isoName $bootFlags \
-    -hide-rr-moved -graft-points -path-list pathlist
+    -hide-rr-moved -graft-points -path-list pathlist.safer
 
 ensureDir $out/nix-support
 echo $system > $out/nix-support/system

@@ -98,21 +98,16 @@ in
 		pkgs.libtool
 		pkgs.gnupg
 		pkgs.openssl
-		pkgs.units
 		pkgs.gnumake
 		pkgs.manpages
 		pkgs.cabextract
 		pkgs.upstartJobControl
 		pkgs.fpc
-		pkgs.python
 		pkgs.perl
 		pkgs.lftp
 		pkgs.wget
-		pkgs.guile
 		pkgs.utillinuxCurses
-		pkgs.emacs
 		pkgs.iproute
-		pkgs.MPlayer
 		pkgs.diffutils
 		pkgs.pciutils
 		pkgs.lsof
@@ -125,9 +120,6 @@ in
 		pkgs.wirelesstools
 		pkgs.usbutils
 		pkgs.dmidecode
-		pkgs.sdparm
-		pkgs.hdparm
-		pkgs.hddtemp
 		(theKernel pkgs)
 		pkgs.sshfsFuse
 		pkgs.ratpoison
@@ -159,38 +151,15 @@ in
 		pkgs.mssys
 		pkgs.testdisk
 		pkgs.gdb
-
-		/*
-		pkgs.elinks
-		pkgs.clisp
-		pkgs.djvulibre
-		pkgs.imagemagick
-		*/
-
-		/*
 		pkgs.pidgin
 		pkgs.pidginotr
 		pkgs.gdmap
-		pkgs.sox
-		pkgs.timidity
-		pkgs.xscreensaver
 		pkgs.thunderbird
-		pkgs.graphviz
-		pkgs.tetex
-		pkgs.pidginlatex
-		pkgs.openoffice
 		pkgs.wv
-		pkgs.maxima
-		pkgs.jre
-		pkgs.wine
-		pkgs.qemu
-		pkgs.qemuImage
-		pkgs.wireshark
-		pkgs.gimp
-		pkgs.audacity
 		pkgs.tightvnc
 		pkgs.bittornado
-		*/
+		pkgs.wireshark
+		pkgs.smbfsFuse
 	];
 
 	configList = configuration : [
