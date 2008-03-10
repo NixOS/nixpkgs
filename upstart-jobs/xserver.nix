@@ -285,6 +285,8 @@ let
     default_xserver ${xorg.xorgserver}/bin/X
     xserver_arguments ${toString xserverArgs}
     login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
+    halt_cmd ${pkgs.upstart}/sbin/shutdown -h now
+    reboot_cmd ${pkgs.upstart}/sbin/shutdown -r now
   '';
 
 
