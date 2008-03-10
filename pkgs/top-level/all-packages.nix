@@ -1458,8 +1458,8 @@ rec {
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
                     src = sourceByName "happs_server";
                     };
-        # we need recent version of cabal (because only this supports --pkg-config propably) Thu Feb  7 14:54:07 CET 2008
-        # is be added to buildInputs automatically
+        # we need recent version of cabal (because only this supports --pkg-config properly) Thu Feb  7 14:54:07 CET 2008
+        # cabal_darcs is added to propagatedBuildInputs automatically below
         cabal_darcs = 
         { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
                   src = sourceByName "cabal";
