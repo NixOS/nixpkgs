@@ -503,6 +503,11 @@ rec {
       inherit fetchurl stdenv coreutils;
     });
 
+  docbook2x = import ../tools/typesetting/docbook2x {
+    inherit fetchurl stdenv perl perlXMLSAX
+            gnused groff libxml2 libxslt makeWrapper;
+  };
+
   dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools "2.11deb")
   {
     inherit builderDefs;
