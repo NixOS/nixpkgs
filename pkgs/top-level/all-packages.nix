@@ -231,6 +231,10 @@ rec {
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
+  # documentation see examples in lib at end of file or read some use cases
+  # within this file
+  # Before spending much time on investigating how this works just ask me
+  # - Marc Weber (#irc or marco-oweber@gmx.de)
   mkDerivationByConfiguration = 
     assert builtins ? isAttrs;
     { flagConfig ? {}, optionals ? [], defaults ? []
