@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python }:
+{ fetchurl, stdenv, python, bash }:
 
 stdenv.mkDerivation rec {
   name = "asciidoc-8.2.5";
@@ -9,10 +9,12 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     cat "asciidoc.py" | \
-      sed -e 's,^#!/usr/bin/env python,#!${python}/bin/python,g' \
+      sed -e "s,^#!/usr/bin/env python,#!${python}/bin/python,g ;
+              s,^CONF_DIR = .*$,CONF_DIR = \"$out/etc/asciidoc\",g" \
       > ,,tmp && mv ,,tmp asciidoc.py && chmod +x asciidoc.py
     cat "a2x" | \
-      sed -e 's,^#!/usr/bin/env bash,#!${stdenv.shell},g' \
+      sed -e "s,^#!/usr/bin/env bash,#!${bash},g ;
+              s,^CONF_DIR=.*$,CONF_DIR=\"$out/etc/asciidoc\",g" \
       > ,,tmp && mv ,,tmp a2x && chmod +x a2x
 
     cat "install.sh" | \

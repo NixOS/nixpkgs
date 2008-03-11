@@ -417,7 +417,7 @@ rec {
   };
 
   asciidoc = import ../tools/typesetting/asciidoc {
-    inherit fetchurl stdenv python;
+    inherit fetchurl stdenv bash python;
   };
 
   bibtextools = import ../tools/typesetting/bibtex-tools {
