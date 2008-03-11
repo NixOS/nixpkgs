@@ -10,6 +10,11 @@ stdenv.mkDerivation {
     sha256 = "016h5pf59fyz7skzsaprii2mdpxpb8hfnnr1w475qcfyy6ccr9r0";
   };
 
+  patches = [
+    # Allow setting the path to Samba through $QEMU_SMBD_COMMAND.
+    ./smbd-path.patch
+  ];
+
   configureFlags = "--with-patched-kernel --kerneldir=${kernelHeaders}";
 
   # e2fsprogs is needed for libuuid.
