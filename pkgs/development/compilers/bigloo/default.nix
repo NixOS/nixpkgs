@@ -1,6 +1,7 @@
 args:
 ( args.mkDerivationByConfiguration {
     flagConfig = {
+      mandatory = { buildInputs = "gnumake"; };
     /*
 Bigloo compiler:
    --native=yes|no [default yes]
@@ -104,21 +105,16 @@ Configuration settings:
     }; 
 
     extraAttrs = co : rec {
-      name = "bigloo3.0d-alpha05Feb08"; # Thanks to Manuel Serrano for fixing the mv trouble 
+      # Thanks to Manuel Serrano for giving me support
+      name = "bigloo3.0d-alpha21Feb08";
 
       # take care, modifying generated C-Code (altering string and length of string) 
-      preConfigure = 
-        "sed -i -e 's=/bin/rm -f \", 14=rm -f \", 9=' "
-         + " -e 's=/bin/mv \", 11=mv \", 6=' "
-         + "comptime/Cc/cc.c\n"
-      + "sed -i -e 's=/bin/rm=rm=' "
-           + " -e 's=/bin/mv=mv=' "
-         + "configure  gc/install-gc-*";
-
       src = args.fetchurl {
-        url = "ftp://ftp-sop.inria.fr/mimosa/fp/Bigloo/${name}.tar.gz";
-        sha256 = "03rknb1nl3z2f86k6iazbrapmli2m8lcs21lqrri8ys8s72dm33w";
+       url = "ftp://ftp-sop.inria.fr/mimosa/fp/Bigloo/${name}.tar.gz";
+       sha256 = "1l1qzkia7ah2l8ziig1743h1h41hs1ia8pnip9cjnf87j533yjn9";
       };
+
+      postUnpack = "sed -e 's=/bin/mv/=mv=g' -e 's=/bin/rm=rm=g' -i */configure";
 
     meta = { 
       description = "scheme -> C / Java compiler (.net experimental)";
