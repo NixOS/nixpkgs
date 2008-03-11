@@ -1,4 +1,6 @@
-args: with args;
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs
+, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
+, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "git-1.5.4.2";
@@ -9,12 +11,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [curl openssl zlib expat gettext]
-    ++ (if emacs != null then [emacs] else []);
+    ++ (if emacs != null then [emacs] else [])
+    ++ # documentation tools
+       [ asciidoc texinfo xmlto docbook2x
+         docbook_xsl docbook_xml_dtd_42 libxslt ];
 
   makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
 
   postInstall =
-    if emacs != null then
+   (if emacs != null then
 	 ''# Install Emacs mode.
 	   echo "installing Emacs mode..."
 	   make install -C contrib/emacs prefix="$out"
@@ -23,7 +28,10 @@ stdenv.mkDerivation rec {
 	   # install. ''
        else
          ''echo "NOT installing Emacs mode.  Set \`git.useEmacs' to \`true' in your"
-	   echo "\`~/.nixpkgs/config.nix' file to change it."'';
+	   echo "\`~/.nixpkgs/config.nix' file to change it."'')
+   + ''# Install man pages and Info manual
+       make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
+         -C Documentation'';
 
   meta = {
     license = "GPLv2";
