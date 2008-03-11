@@ -1522,9 +1522,8 @@ rec {
     inherit fetchurl stdenv flex bison mkDerivationByConfiguration bigloo lib curl;
     # optional features
     # all features pcre, fcgi xml mysql, sqlite3, (not implemented: odbc gtk gtk2)
-    flags = ["pcre" "fcgi" "xml" "mysql"];
-    inherit mysql;
-    inherit libxml2;
+    flags = ["pcre" "xml" "mysql"];
+    inherit mysql libxml2 fcgi;
   };
 
   strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
