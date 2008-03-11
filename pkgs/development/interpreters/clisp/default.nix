@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   inherit libsigsegv gettext coreutils;
   buildInputs = [libsigsegv gettext ncurses readline libX11 libXau
 	libXt pcre zlib];
-  
+ 
+  # First, replace port 9090 (rather low, can be used)
+  # with 64237 (much higher, IANA private area, not
+  # anything rememberable).
   patchPhase = ''
+  sed -e 's@9090@64237@g' -i tests/socket.tst
   sed -i 's@/bin/pwd@${coreutils}&@' src/clisp-link.in
   find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
