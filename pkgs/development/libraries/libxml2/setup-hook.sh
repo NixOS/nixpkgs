@@ -1,9 +1,11 @@
 addXMLCatalogs () {
-    if test -d $1/xml/dtd; then
-        for i in $(find $1/xml/dtd -name catalog.xml); do
-            export XML_CATALOG_FILES="$XML_CATALOG_FILES $i"
-        done
-    fi
+    for kind in dtd xsl; do
+	if test -d $1/xml/$kind; then
+            for i in $(find $1/xml/$kind -name catalog.xml); do
+		export XML_CATALOG_FILES="$XML_CATALOG_FILES $i"
+            done
+	fi
+    done
 }
 
 if test -z "$libxmlHookDone"; then
