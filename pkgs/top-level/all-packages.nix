@@ -1055,7 +1055,7 @@ rec {
   xmlto = import ../tools/typesetting/xmlto {
     inherit fetchurl stdenv flex libxml2 libxslt
             docbook_xml_dtd_42 docbook_xsl
-            bash getopt mktemp findutils makeWrapper;
+            glibc bash getopt mktemp findutils makeWrapper;
   };
 
   xmltv = import ../tools/misc/xmltv {

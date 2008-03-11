@@ -1,6 +1,6 @@
 { fetchurl, stdenv, flex, libxml2, libxslt
 , docbook_xml_dtd_42, docbook_xsl
-, bash, getopt, mktemp, findutils
+, glibc, bash, getopt, mktemp, findutils
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -12,15 +12,15 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace "xmlto.in" \
-      --replace "/bin/bash" "${stdenv.bash}/bin/bash"
+      --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace "xmlto.in" \
-      --replace "/usr/bin/locale" "${stdenv.glibc}/bin/locale"
+      --replace "/usr/bin/locale" "${glibc}/bin/locale"
   '';
 
   configureFlags = ''
     --with-mktemp=${mktemp}/bin/mktemp
     --with-find=${findutils}/bin/find
-    --with-bash=${stdenv.bash}/bin/bash
+    --with-bash=${bash}/bin/bash
     --with-getopt=${getopt}/bin/getopt
   '';
 
