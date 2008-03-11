@@ -1337,9 +1337,8 @@ rec {
   ghc68_extra_libs = (import ../misc/ghc68_extra_libs ) {
     # lib like stuff
     inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation;
-
     # used (non haskell) libraries (ffi etc)
-    inherit postgresql;
+    inherit postgresql sqlite wxGTK;
   };
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
