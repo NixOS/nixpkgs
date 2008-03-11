@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  preBuild = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext"
+  '';
+
   # XXX: KDE is supported as well so we could make it available optionally.
   buildInputs = [x11 SDL SDL_mixer GStreamer
                  libogg libxml2 libjpeg mesa libpng boost freetype agg
