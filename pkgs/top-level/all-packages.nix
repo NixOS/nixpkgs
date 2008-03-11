@@ -1052,6 +1052,12 @@ rec {
     inherit pangoxsl;
   };
 
+  xmlto = import ../tools/typesetting/xmlto {
+    inherit fetchurl stdenv flex libxml2 libxslt
+            docbook_xml_dtd_42 docbook_xsl
+            bash getopt mktemp findutils makeWrapper;
+  };
+
   xmltv = import ../tools/misc/xmltv {
     inherit fetchurl perl perlTermReadKey perlXMLTwig perlXMLWriter
       perlDateManip perlHTMLTree perlHTMLParser perlHTMLTagset
