@@ -55,6 +55,19 @@ rec {
         #                           echo 'build-depends: old-locale, old-time' >> *.cabal";
         #     };
 
+          takusen = rec { name = "takusen-0.8"; p_deps = [ x.base x.mtl x.haskell98 x.time postgresql sqlite ];
+                          src =  sourceByName "takusen";
+                          pass = {
+                             inherit postgresql sqlite;
+                             patch = ./takusen_setup_patch;
+                            # no ODBC, Oracle support in nix
+                             patchPhase = "patch -p1 Setup.hs < \$patch
+                                           sed -e '/ODBC/d' -i Takusen.cabal
+                                           sed -e '/Oracle/d' -i Takusen.cabal
+                                           sed -e \"s=pg_path=\$postgresql=\" -e \"s=sqlite_path=\$sqlite=\" -i Setup.hs
+                                           ";
+                          };
+                };
 
         # 1.13 is stable. There are more recent non stable versions
         haxml = rec { name = "HaXml-1.13.3"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 ];

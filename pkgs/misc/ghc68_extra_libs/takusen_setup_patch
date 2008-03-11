@@ -1,0 +1,51 @@
+--- orig/Setup.hs	2008-03-11 16:35:54.000000000 +0100
++++ mod/Setup.hs	2008-03-11 16:45:16.000000000 +0100
+@@ -1,3 +1,4 @@
++-- packages:HAppS-Server,mtl,HAppS-Data,HAppS-State,mtl,process,filepath,Cabal,directory
+ -- #!/usr/bin/env runhaskell 
+ 
+ {-# OPTIONS -cpp #-}
+@@ -8,12 +9,13 @@
+ import Control.Exception (bracket)
+ import Control.Monad (when)
+ import Data.List (isPrefixOf, unionBy)
++import Distribution.PackageDescription.Parse (writeHookedBuildInfo)
+ import Distribution.PackageDescription
+   ( PackageDescription(..), Library(..), BuildInfo(..), HookedBuildInfo
+-  , emptyHookedBuildInfo, writeHookedBuildInfo, emptyBuildInfo, hasLibs
++  , emptyHookedBuildInfo, emptyBuildInfo, hasLibs
+   )
+ import Distribution.Simple.Setup -- ( --Flag, fromFlag, toFlag
+-  ( ConfigFlags(..), BuildFlags(..)
++  ( fromFlag, Flag(..),  ConfigFlags(..), BuildFlags(..)
+   , InstallFlags(..), HaddockFlags(..)
+   , CopyFlags(..)
+   , RegisterFlags(..), emptyRegisterFlags
+@@ -78,11 +80,16 @@
+     preConf args flags = do
+       try (removeFile "takusen.buildinfo")
+       return emptyHookedBuildInfo
++    conf libName path = (Just emptyBuildInfo {
++            extraLibs = [libName]
++          , extraLibDirs = [ path ++ "/lib" ]
++          , includeDirs = [ path ++  "/include" ]
++          })
+     postConf :: Args -> ConfigFlags -> PackageDescription -> LocalBuildInfo -> IO ()
+     postConf args flags _ localbuildinfo = do
+       let verbose = (configVerbose flags)
+-      sqliteBI <- configSqlite3 verbose
+-      pgBI <- configPG verbose
++      let sqliteBI = conf "sqlite3" "sqlite_path"
++      let pgBI = conf "pq" "pg_path"
+       oraBI <- configOracle verbose
+       odbcBI <- configOdbc verbose
+       let bis = [sqliteBI, pgBI, oraBI, odbcBI]
+@@ -99,7 +106,7 @@
+ defaultInstallHook :: PackageDescription -> LocalBuildInfo
+                    -> UserHooks -> InstallFlags -> IO ()
+ defaultInstallHook pkg_descr localbuildinfo _ (InstallFlags uInstFlag verbosity) = do
+-  install pkg_descr localbuildinfo (CopyFlags NoCopyDest verbosity)
++  install pkg_descr localbuildinfo (CopyFlags (Flag NoCopyDest) verbosity)
+   when (hasLibs pkg_descr) $
+       register pkg_descr localbuildinfo
+            emptyRegisterFlags{ regPackageDB=uInstFlag, regVerbose=verbosity }
