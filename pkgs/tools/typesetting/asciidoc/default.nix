@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       sed -e 's,^#!/usr/bin/env python,#!${python}/bin/python,g' \
       > ,,tmp && mv ,,tmp asciidoc.py && chmod +x asciidoc.py
     cat "a2x" | \
-      sed -e 's,^#!/usr/bin/env bash,#!${stdenv.bash}/bin/bash,g' \
+      sed -e 's,^#!/usr/bin/env bash,#!${stdenv.shell},g' \
       > ,,tmp && mv ,,tmp a2x && chmod +x a2x
 
     cat "install.sh" | \
