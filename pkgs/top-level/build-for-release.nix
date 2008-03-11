@@ -93,6 +93,7 @@ let
     kernel
     klibc
     ktorrent
+    kvm
     less
     lhs2tex
     libtool
@@ -186,7 +187,6 @@ let
     xineUI
     xkeyboard_config
     xmltv
-    xmms
     xorg_sys_opengl
     xsel
     xterm
