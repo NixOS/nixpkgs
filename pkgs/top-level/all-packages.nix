@@ -4971,6 +4971,7 @@ rec {
 
   git = import ../applications/version-management/git {
     inherit fetchurl stdenv curl openssl zlib expat perl gettext
+            asciidoc texinfo xmlto docbook2x
 	    docbook_xsl docbook_xml_dtd_42 libxslt;
     emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
   };
