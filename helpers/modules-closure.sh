@@ -16,22 +16,21 @@ for module in $rootModules; do
     echo "root module: $module"
     deps=$(modprobe --config /dev/null --set-version "$version" --show-depends "$module" \
         | sed 's/^insmod //')
-    for i in $deps; do echo $i; done
+    #for i in $deps; do echo $i; done
     closure="$closure $deps"
 done
-
-# Remove duplicates.
-closure=$(for i in $closure; do echo $i; done | sort | uniq)
 
 echo "closure:"
 ensureDir $out
 for module in $closure; do
-    echo $module
     target=$(echo $module | sed "s^$kernel^$out^")
+    if test -e "$target"; then continue; fi
+    echo $module
     mkdir -p $(dirname $target)
     cp $module $target
     grep "^$module" $kernel/lib/modules/$version/modules.dep \
         | sed "s^$kernel^$out^g" \
         >> $out/lib/modules/$version/modules.dep
+    echo $target >> $out/insmod-list
 done
 
