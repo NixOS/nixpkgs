@@ -8,6 +8,7 @@ let
   optional = pkgs.lib.optional;
 
     
+  documentRoot = cfg.documentRoot;
   hostName = cfg.hostName;
   httpPort = cfg.httpPort;
   httpsPort = cfg.httpsPort;
@@ -27,7 +28,7 @@ let
     php = if cfg.mod_php then pkgs.php else null;
     tomcat_connectors = if cfg.mod_jk.enable then pkgs.tomcat_connectors else null;
 
-    inherit hostName httpPort httpsPort
+    inherit documentRoot hostName httpPort httpsPort
       user group adminAddr logDir stateDir
       applicationMappings;
     noUserDir = !cfg.enableUserDir;
