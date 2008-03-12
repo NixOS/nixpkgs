@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# A nice prompt.
+PROMPT_COLOR="1;31m"
+let $UID && PROMPT_COLOR="1;32m"
+PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
+if test "x$TERM" == "xxterm"; then
+    PS1="\033]2;\h:\u:\w\007$PS1"
+fi
+
+# Some aliases.
+alias ls="ls --color=tty"
+alias ll="ls -l"
+alias which="type -p"
+
+# Help `rpcgen' find `cpp', assuming it's installed in the user's environment.
+alias rpcgen="rpcgen -Y $HOME/.nix-profile/bin"
