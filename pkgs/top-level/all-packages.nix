@@ -504,7 +504,8 @@ rec {
     });
 
   docbook2x = import ../tools/typesetting/docbook2x {
-    inherit fetchurl stdenv perl perlXMLSAX
+    inherit fetchurl stdenv texinfo perl
+            perlXMLSAX perlXMLParser perlXMLNamespaceSupport
             gnused groff libxml2 libxslt makeWrapper;
   };
 

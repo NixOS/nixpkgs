@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, perl, perlXMLSAX
+{ fetchurl, stdenv, texinfo, perl
+, perlXMLSAX, perlXMLParser, perlXMLNamespaceSupport
 , groff, libxml2, libxslt, gnused
 , makeWrapper }:
 
@@ -9,16 +10,33 @@ stdenv.mkDerivation rec {
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
   };
 
-  buildInputs = [ perl groff libxml2 libxslt makeWrapper ];
-  propagatedBuildInputs = [ perlXMLSAX ];
+  # This patch makes sure that `docbook2texi --to-stdout' actually
+  # writes its output to stdout instead of creating a file.
+  patches = [ ./db2x_texixml-to-stdout.patch ];
+
+  buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
+                  perlXMLSAX perlXMLParser perlXMLNamespaceSupport ];
+
+  postConfigure = ''
+    # Broken substitution is used for `perl/config.pl', which leaves literal
+    # `$prefix' in it.
+    substituteInPlace "perl/config.pl"       \
+      --replace '${"\$" + "{prefix}"}' "$out"
+  '';
 
   postInstall = ''
-    perl_programs="db2x_manxml db2x_texixml db2x_xsltproc
-                   docbook2man docbook2texi";
-    for i in $perl_programs
+    perlPrograms="db2x_manxml db2x_texixml db2x_xsltproc
+                  docbook2man docbook2texi";
+    for i in $perlPrograms
     do
-      wrapProgram $out/bin/$i --prefix PERL5LIB : \
-        "${perlXMLSAX}/lib/site_perl"
+      # XXX: We work around the fact that `wrapProgram' doesn't support
+      # spaces below by inserting escaped backslashes.
+      wrapProgram $out/bin/$i --prefix PERL5LIB :			\
+        "${perlXMLSAX}/lib/site_perl:${perlXMLParser}/lib/site_perl"	\
+	--prefix PERL5LIB :						\
+	"${perlXMLNamespaceSupport}/lib/site_perl"			\
+	--prefix XML_CATALOG_FILES "\ "					\
+	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml"
     done
 
     wrapProgram $out/bin/sgml2xml-isoent --prefix PATH : \
