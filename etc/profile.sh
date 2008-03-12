@@ -11,15 +11,6 @@ export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share
 export LOCATE_PATH=/var/cache/locatedb
 
 
-# A nice prompt.
-PROMPT_COLOR="1;31m"
-let $UID && PROMPT_COLOR="1;32m"
-PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]$\[\033[0m\] "
-if test "x$TERM" == "xxterm"; then
-    PS1="\033]2;\h:\u:\w\007$PS1"
-fi
-
-
 # Set up secure multi-user builds: non-root users build through the
 # Nix daemon.
 if test "$USER" != root; then
@@ -85,15 +76,9 @@ if test ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr; then
     fi
 fi
 
+# Include bashrc settings
 
-# Some aliases.
-alias ls="ls --color=tty"
-alias ll="ls -l"
-alias which="type -p"
-
-# Help `rpcgen' find `cpp', assuming it's installed in the user's environment.
-alias rpcgen="rpcgen -Y $HOME/.nix-profile/bin"
-
+source /etc/bashrc
 
 # Read system-wide modifications.
 if test -f /etc/profile.local; then

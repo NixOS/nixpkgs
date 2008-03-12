@@ -32,7 +32,6 @@ import ../helpers/make-etc.nix {
   inherit (pkgs) stdenv;
 
   configFiles = [
-
     { # TCP/UDP port assignments.
       source = pkgs.iana_etc + "/etc/services";
       target = "services";
@@ -104,7 +103,12 @@ import ../helpers/make-etc.nix {
       target = "dhclient-exit-hooks";
     }
 
-    { # Script executed when the shell starts.
+    { # Script executed when the shell starts as a non-login shell (system-wide version).
+      source = ./bashrc;
+      target = "bashrc";      
+    }
+
+    { # Script executed when the shell starts as a login shell.
       source = pkgs.substituteAll {
         src = ./profile.sh;
         inherit systemPath wrapperDir modulesTree;
@@ -133,6 +137,11 @@ import ../helpers/make-etc.nix {
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
 
+    { # Script executed when the shell starts as a non-login shell (user version).
+      source = ./skel/bashrc;
+      target = "skel/.bashrc";      
+    }    
+
     { # SSH configuration.  Slight duplication of the sshd_config
       # generation in the sshd service.
       source = pkgs.writeText "ssh_config" ''
@@ -145,7 +154,6 @@ import ../helpers/make-etc.nix {
       '';
       target = "ssh/ssh_config";
     }
-
   ]
 
   # Configuration for ssmtp.
