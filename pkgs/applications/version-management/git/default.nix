@@ -3,12 +3,14 @@
 , libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.4.2";
+  name = "git-1.5.4.4";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "089n3da06k19gzhacsqgaamgx5hy5r50r2b4a626s87w44mj78sn";
+    sha256 = "16dcmkj7dfmr1cy28hi0ipc2qx7dy3knnb77w5bn78hwdfd2dcv9";
   };
+
+  patches = [ ./docbook2texi.patch ];
 
   buildInputs = [curl openssl zlib expat gettext]
     ++ (if emacs != null then [emacs] else [])
