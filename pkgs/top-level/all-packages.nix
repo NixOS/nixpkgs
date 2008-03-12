@@ -5384,6 +5384,7 @@ rec {
     compressionSupport = getConfig ["subversion" "compressionSupport"] true;
     httpd = apacheHttpd;
   };
+  subversion14svnmerge = svnmergeFun subversion14;
 
   subversionWithJava = import ../applications/version-management/subversion-1.2.x {
     inherit fetchurl stdenv openssl db4 expat jdk;
@@ -5393,6 +5394,10 @@ rec {
     sslSupport = true;
     httpd = apacheHttpd;
     javahlBindings = true;
+  };
+
+  svnmergeFun = subversion : (import ../applications/version-management/subversion-1.4.x/svnmerge.nix ) {
+    inherit subversion stdenv shebangfix python;
   };
 
   sylpheed = import ../applications/networking/mailreaders/sylpheed {
