@@ -5847,6 +5847,10 @@ rec {
     inherit fetchurl stdenv SDL;
   };
 
+  dpkg = import ../tools/package-management/dpkg {
+    inherit fetchurl stdenv perl zlib bzip2;
+  };
+  
   generator = import ../misc/emulators/generator {
     inherit fetchurl stdenv SDL nasm zlib bzip2 libjpeg;
     inherit (gtkLibs1x) gtk;
