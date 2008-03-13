@@ -159,7 +159,7 @@ rec {
     ";
   };
   # example usage
-  #testSourceWithTags = sourceWithTagsDerivation (ghc68_extra_libs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
+  #testSourceWithTags = sourceWithTagsDerivation (ghc68extraLibs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
 
   addCTaggingInfo = deriv :
     deriv // { 
@@ -1169,7 +1169,7 @@ rec {
   flapjax = import ../development/compilers/flapjax {
     inherit fetchurl stdenv;
     ghc = ghcsAndLibs.ghc68.ghc;
-    libs = with (ghc68_extra_libs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
+    libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
   };
 
   g77 = import ../build-support/gcc-wrapper {
@@ -1348,7 +1348,7 @@ rec {
   };
 
   # this may change in the future 
-  ghc68_extra_libs = (import ../misc/ghc68_extra_libs ) {
+  ghc68extraLibs = (import ../misc/ghc68extraLibs ) {
     # lib like stuff
     inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip;
     # used (non haskell) libraries (ffi etc)
@@ -1374,8 +1374,8 @@ rec {
         # (map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ "cabal" "mtl" "base"  ]
 
         # some extra libs
-           ++  (lib.flattenAttrs (ghc68_extra_libs ghcsAndLibs.ghc68) );
-        # ++ map ( a : __getAttr a (ghc68_extra_libs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
+           ++  (lib.flattenAttrs (ghc68extraLibs ghcsAndLibs.ghc68) );
+        # ++ map ( a : __getAttr a (ghc68extraLibs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
       inherit ghc;
   };
 

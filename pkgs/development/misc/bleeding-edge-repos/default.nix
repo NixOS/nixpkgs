@@ -45,6 +45,9 @@ args:
       happs_plugins =  { type="darcs"; url=http://happs.org/repos/HAppS-Plugins; groups="happs"; };
       happs_ixset =  { type="darcs"; url=http://happs.org/repos/HAppS-IxSet; groups="happs"; };
       happs_server =  { type="darcs"; url=http://happs.org/repos/HAppS-HTTP; groups="happs"; };
+      takusen = { type="darcs"; url=http://darcs.haskell.org/takusen/; };
+      cabal = { type="darcs"; url=http://darcs.haskell.org/cabal; };
+
 
       # git repositories 
       hypertable =  { type="git"; url="git://scm.hypertable.org/pub/repos/hypertable.git"; groups=""; };
