@@ -4768,6 +4768,10 @@ rec {
     inherit fetchurl stdenv nano;
   };
 
+  cvsps = import ../applications/version-management/cvsps {
+    inherit fetchurl stdenv cvs zlib;
+  };
+
   cvs2svn = import ../applications/version-management/cvs2svn {
     inherit fetchurl stdenv python makeWrapper;
   };
