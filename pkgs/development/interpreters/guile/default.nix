@@ -1,4 +1,5 @@
-args: with args; 
+{ fetchurl, stdenv, libtool, readline, gmp
+, gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "guile-1.8.4";
@@ -7,12 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "1cz1d4n6vzw0lfsvplsiarwqk675f12j596dzfv0h5r9cljpc0ya";
   };
 
+  patches = [ ./test-tmpdir.patch ];
+
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [readline libtool gmp gawk];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   '';
+
+  doCheck = true;
 
   setupHook = ./setup-hook.sh;
 
