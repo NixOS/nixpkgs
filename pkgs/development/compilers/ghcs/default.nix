@@ -158,7 +158,7 @@ rec {
                     buildInputs = [ ghcPkgUtil ];
                     propagatedBuildInputs = [ ghc ] ++ attrs.deps;
                     buildPhase = "setupHookRegisteringPackageDatabase \"${ghc}/lib/ghc-${ghc.version}/${attrs.name}.conf\"";
-                    passthru = {
+                    meta = {
                       sourceWithTags = {
                         src = ghc.src;
                         inherit srcDir;

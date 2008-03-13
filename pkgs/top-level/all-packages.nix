@@ -125,7 +125,13 @@ rec {
   lib = import ../lib;
 
   # optional srcDir
-  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags);
+  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags 
+                                      || x ? meta && x.meta ? sourceWithTags );
+  # hack because passthru doesn't work the way I'd expect. Don't have time to spend on this right now
+  # passthru2 is not special and will be there in any case (but will force recompilation :(
+  sourceWithTagsFromDerivation = x : if (x ? passthru && x.passthru ? sourceWithTags ) then x.passthru.sourceWithTags
+                                     else if (x ? meta && x.meta ? sourceWithTags ) then x.meta.sourceWithTags
+                                       else null;
 
   # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
   # tag command must create file named $TAG_FILE
@@ -134,6 +140,7 @@ rec {
     phases = "unpackPhase buildPhase";
     inherit src srcDir tagSuffix;
     name = "${name}-source-with-tags";
+    buildInputs = [ unzip ];
     # using separate tag directory so that you don't have to glob that much files when starting your editor
     # is this a good choice?
     buildPhase = "
@@ -1270,6 +1277,7 @@ rec {
     inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
       lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo 
       readline ncurses stdenv;
+    inherit sourceWithTagsFromDerivation;
     #inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
     #  annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
     installSourceAndTags = true;
@@ -1337,9 +1345,10 @@ rec {
   # this may change in the future 
   ghc68_extra_libs = (import ../misc/ghc68_extra_libs ) {
     # lib like stuff
-    inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation;
+    inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip;
     # used (non haskell) libraries (ffi etc)
-    inherit postgresql sqlite wxGTK;
+    inherit postgresql sqlite gtkLibs gnome;
+    wxGTK = wxGTK28;
   };
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
