@@ -4765,7 +4765,7 @@ rec {
   };
 
   cvs = import ../applications/version-management/cvs {
-    inherit fetchurl stdenv vim;
+    inherit fetchurl stdenv nano;
   };
 
   cvs2svn = import ../applications/version-management/cvs2svn {
