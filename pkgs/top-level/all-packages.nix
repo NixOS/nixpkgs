@@ -1157,6 +1157,11 @@ rec {
       };
   };
 
+  # Essential Haskell Compiler -- nix expression is work in progress
+  ehc = import ../development/compilers/ehc {
+    inherit fetchsvn stdenv coreutils m4 ghc uulib uuagc;
+  };
+
   fpc = import ../development/compilers/fpc {
     inherit fetchurl stdenv gawk;
   };
