@@ -121,7 +121,6 @@ rec {
     ftp://ftp.debian.org/debian/
   ];
 
-
   # Ubuntu.
   ubuntu = [
     http://nl.archive.ubuntu.com/ubuntu/
