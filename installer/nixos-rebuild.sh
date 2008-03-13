@@ -24,13 +24,14 @@ if test -z "$action"; then showSyntax; fi
 
 # Allow the location of NixOS sources and the system configuration
 # file to be overridden.
-if test -z "$NIXOS"; then NIXOS=/etc/nixos/nixos; fi
-if test -z "$NIXOS_CONFIG"; then NIXOS_CONFIG=/etc/nixos/configuration.nix; fi
+NIXOS=${NIXOS:-/etc/nixos/nixos}
+NIXPKGS=${NIXPKG:-/etc/nixos/nixpkgs}
+NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
-if test -z "$NIXOS_NO_PULL"; then
+if test "${NIXOS_PULL:-1}" != 0; then
     manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 
@@ -44,10 +45,12 @@ fi
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if ! nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp; then
-    nix-build /etc/nixos/nixpkgs -A nixUnstable -o $HOME/nix-tmp
+if test "${NIXOS_BUILD_NIX:-1}" != 0; then
+    if ! nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp; then
+        nix-build $NIXPKGS -A nixUnstable -o $HOME/nix-tmp
+    fi
+    PATH=$HOME/nix-tmp/bin:$PATH
 fi
-PATH=$HOME/nix-tmp/bin:$PATH
 
 
 # Either upgrade the configuration in the system profile (for "switch"
