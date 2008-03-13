@@ -1606,6 +1606,10 @@ rec {
     inherit stdenv binutils;
   };
 
+  # prolog
+  yap = import ../development/compilers/yap {
+    inherit fetchurl stdenv;
+  };
 
   ### DEVELOPMENT / INTERPRETERS
 
