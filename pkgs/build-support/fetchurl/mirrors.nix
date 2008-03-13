@@ -113,12 +113,20 @@ rec {
     http://ftp.funet.fi/pub/CPAN/
   ];
 
-  # Debian
+  # Debian.
   debian = [
-    ftp://ftp.de.debian.org/debian/pool/
-    ftp://ftp.nl.debian.org/debian/pool/
-    ftp://ftp.ru.debian.org/debian/pool/
-    ftp://ftp.debian.org/debian/pool/
+    ftp://ftp.de.debian.org/debian/
+    ftp://ftp.nl.debian.org/debian/
+    ftp://ftp.ru.debian.org/debian/
+    ftp://ftp.debian.org/debian/
+  ];
+
+
+  # Ubuntu.
+  ubuntu = [
+    http://nl.archive.ubuntu.com/ubuntu/
+    http://de.archive.ubuntu.com/ubuntu/
+    http://archive.ubuntu.com/ubuntu/
   ];
 
 }

@@ -1,11 +1,11 @@
 args: with args; with debPackage;
 debBuild ({
   src = fetchurl {
-    url = mirror://debian/main/u/unifont/unifont_1.0.orig.tar.gz;
+    url = mirror://debian/pool/main/u/unifont/unifont_1.0.orig.tar.gz;
     sha256 = "0bg8d6c7w51n5409g0n7vqk3aagbzb5aird5r02vw0yz7w6i729l";
   };
   patch = fetchurl {
-    url = mirror://debian/main/u/unifont/unifont_1.0-4.diff.gz;
+    url = mirror://debian/pool/main/u/unifont/unifont_1.0-4.diff.gz;
     sha256 = "08j0rrf7hc05izchmsx9f9hg7vnyqdvbmba4b9jl8wfhvd1b09fd";
   };
   name = "unifont-1.0-4";
