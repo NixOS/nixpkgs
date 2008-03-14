@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1x2ajz5z6zbyv80g2b2fwylxiz7bdm71z0i98zasfjf87wkx4ryn";
   };
 
-  configureFlags = "--without-dselect"; #  --with-admindir=/var/lib/dpkg
+  configureFlags = "--without-dselect --with-admindir=/var/lib/dpkg";
 
   preConfigure = ''
     # Can't use substitute pending resolution of NIXPKGS-89.
@@ -21,6 +21,9 @@ stdenv.mkDerivation {
     touch $TMPDIR/dpkg
     chmod +x $TMPDIR/dpkg
     PATH=$TMPDIR:$PATH
+
+    substituteInPlace src/Makefile.in --replace "install-data-local:" "disabled:"
+    substituteInPlace dpkg-split/Makefile.in --replace "install-data-local:" "disabled:"
   '';
 
   buildInputs = [perl zlib bzip2];
