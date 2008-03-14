@@ -4165,7 +4165,11 @@ rec {
 
   klibc = import ../os-specific/linux/klibc {
     inherit fetchurl stdenv perl bison mktemp;
-	kernel = systemKernel;
+    kernel = systemKernel;
+  };
+
+  klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
+    inherit stdenv klibc;
   };
 
   kvm = kvm57;
