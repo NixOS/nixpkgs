@@ -63,6 +63,7 @@ int main(int argc, char * * argv)
     len = read(fdSelf, real, PATH_MAX);
     assert (len != -1);
     assert (len < sizeof (real));
+    assert (len > 0);
     real[len] = 0;
 
     close(fdSelf);
