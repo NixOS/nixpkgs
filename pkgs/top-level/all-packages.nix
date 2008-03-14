@@ -502,7 +502,8 @@ rec {
   };
 
   dhcp = import ../tools/networking/dhcp {
-    inherit fetchurl stdenv groff nettools coreutils iputils gnused bash;
+    inherit fetchurl stdenv groff nettools coreutils iputils gnused
+            bash makeWrapper;
   };
 
   diffutils = useFromStdenv "diffutils"
