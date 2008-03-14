@@ -1,8 +1,13 @@
 { writeText, openssh, glibc, xauth
 , nssModulesPath
-, forwardX11, allowSFTP
+, forwardX11, allowSFTP, permitRootLogin
 }:
 
+assert permitRootLogin == "yes" ||
+       permitRootLogin == "without-password" ||
+       permitRootLogin == "forced-commands-only" ||
+       permitRootLogin == "no";
+       
 let
 
   sshdConfig = writeText "sshd_config" ''
@@ -20,6 +25,8 @@ let
       Subsystem sftp ${openssh}/libexec/sftp-server
     " else "
     "}
+    
+    PermitRootLogin ${permitRootLogin}
     
   '';
 

@@ -797,6 +797,15 @@
         ";
       };
 
+      permitRootLogin = mkOption {
+        default = "yes";
+	description = "
+	  Whether the root user can login using ssh. Valid options
+	  are <command>yes</command>, <command>without-password</command>,
+	  <command>forced-commands-only</command> or
+	  <command>no</command>
+	";
+      };
     };
 
     lshd = {

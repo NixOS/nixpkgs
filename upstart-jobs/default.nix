@@ -137,6 +137,7 @@ let
       inherit nssModulesPath;
       forwardX11 = config.services.sshd.forwardX11;
       allowSFTP = config.services.sshd.allowSFTP;
+      permitRootLogin = config.services.sshd.permitRootLogin;
     })
 
   # GNU lshd SSH2 deamon.
