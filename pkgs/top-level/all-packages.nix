@@ -3656,14 +3656,15 @@ rec {
     inherit fetchurl stdenv apacheHttpd jdk;
   };
 
-  portmap = import ../servers/portmap {
-    inherit fetchurl stdenv lib tcpWrapper;
+  # This function is typically called by the NixOS Upstart job to specify the
+  # right UID/GID for `portmap'.
+  makePortmap = { daemonUser ? false, daemonGID ? false, daemonUID ? false }:
+    (import ../servers/portmap {
+       inherit fetchurl stdenv lib tcpWrapper
+               daemonUser daemonGID daemonUID;
+     });
 
-    # This settings should typically be defined by NixOS Upstart job.
-    daemonUser = false;
-    daemonGID = false;
-    daemonUID = false;
-  };
+  portmap = (makePortmap);
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;

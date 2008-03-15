@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   makeFlags =
    lib.concatStringsSep " "
-     (lib.optional daemonUser "RPCUSER=\"${daemonUser}\""
-      ++ lib.optional daemonUID "DAEMON_UID=${daemonUID}"
-      ++ lib.optional daemonGID "DAEMON_GID=${daemonGID}");
+     (lib.optional (daemonUser != false) "RPCUSER=\"${daemonUser}\""
+      ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
+      ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}");
 
   buildInputs = [ tcpWrapper ];
 
