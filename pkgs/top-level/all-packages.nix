@@ -4372,12 +4372,10 @@ rec {
     withoutInitTools = true;
   };
 
-  /*
-  # needed for nfs utils
-  tcp_wrapper = import ../os-specific/linux/tcp-wrapper {
-    inherit fetchurl stdenv kernelHeaders gnused;
+  # FIXME: `tcp-wrapper' is actually not OS-specific.
+  tcpWrapper = import ../os-specific/linux/tcp-wrapper {
+    inherit fetchurl stdenv;
   };
-  */
 
   udev = import ../os-specific/linux/udev {
     inherit fetchurl stdenv;
