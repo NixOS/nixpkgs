@@ -26,6 +26,9 @@ cp safe_finger tcpd tcpdchk tcpdmatch try-from "$out/sbin" &&	\
 ensureDir "$out/lib" &&						\
 cp lib*.a "$out/lib" &&						\
 								\
+ensureDir "$out/include" &&					\
+cp *.h "$out/include" && 					\
+								\
 ensureDir "$out/man" &&						\
 for i in 3 5 8;							\
 do								\
