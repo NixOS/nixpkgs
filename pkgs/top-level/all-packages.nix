@@ -4582,6 +4582,11 @@ rec {
     inherit (xlibs) libX11 libXext;
   };
 
+  aangifte2007 = import ../applications/taxes/aangifte-2007 {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext libSM;
+  };
+
   abiword = import ../applications/office/abiword {
     inherit fetchurl stdenv pkgconfig fribidi libpng popt;
     inherit (gtkLibs) gtk;
