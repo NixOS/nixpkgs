@@ -12,6 +12,7 @@ stdenv.mkDerivation {
   inherit libX11 libXext libSM;
 
   dontStrip = true;
+  dontPatchELF = true;
 
   meta = {
     description = "Elektronische aangifte IB 2007";
