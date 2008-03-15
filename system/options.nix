@@ -923,6 +923,18 @@
 
     };
 
+    portmap = {
+
+      enable = mkOption {
+        default = false;
+	description = ''
+	  Whether to enable `portmap', an ONC RPC directory service
+	  notably used by NFS and NIS, and which can be queried
+	  using the rpcinfo(1) command.
+	'';
+      };
+    };
+
     avahi = {
 
       enable = mkOption {

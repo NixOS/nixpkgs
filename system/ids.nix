@@ -12,6 +12,7 @@
     ftp = 8;
     bitlbee = 9;
     avahi = 10;
+    portmap = 11;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -24,6 +25,7 @@
     vsftpd = 7;
     ftp = 8;
     avahi = 10;
+    portmap = 11;
     audio = 17;
 
     users = 100;

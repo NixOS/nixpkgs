@@ -158,6 +158,12 @@ let
       servers = config.services.ntp.servers;
     })
 
+  # portmap daemon.
+  ++ optional config.services.portmap.enable
+    (import ../upstart-jobs/portmap.nix {
+      inherit (pkgs) makePortmap;
+     })
+
   # Avahi daemon.
   ++ optional config.services.avahi.enable
     (import ../upstart-jobs/avahi-daemon.nix {
