@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
-, libxslt }:
+, libxslt, tcl, tk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "git-1.5.4.4";
@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
     ++ (if emacs != null then [emacs] else [])
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_42 libxslt ];
+         docbook_xsl docbook_xml_dtd_42 libxslt ]
+    ++ # Tcl/Tk, for `gitk'
+       [ tcl tk makeWrapper ];
 
   makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
 
@@ -30,10 +32,16 @@ stdenv.mkDerivation rec {
 	   # install. ''
        else
          ''echo "NOT installing Emacs mode.  Set \`git.useEmacs' to \`true' in your"
-	   echo "\`~/.nixpkgs/config.nix' file to change it."'')
+	   echo "\`~/.nixpkgs/config.nix' file to change it." '')
    + ''# Install man pages and Info manual
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
-         -C Documentation'';
+         -C Documentation ''
+
+   + ''# Wrap `gitk'
+       wrapProgram $out/bin/gitk			\
+                   --set TK_LIBRARY "${tk}/lib/tk8.4"	\
+                   --prefix PATH : "${tk}/bin" '';
+
 
   meta = {
     license = "GPLv2";
