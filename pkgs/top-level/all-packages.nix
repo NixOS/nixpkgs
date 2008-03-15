@@ -3656,6 +3656,15 @@ rec {
     inherit fetchurl stdenv apacheHttpd jdk;
   };
 
+  portmap = import ../servers/portmap {
+    inherit fetchurl stdenv lib tcpWrapper;
+
+    # This settings should typically be defined by NixOS Upstart job.
+    daemonUser = false;
+    daemonGID = false;
+    daemonUID = false;
+  };
+
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
