@@ -1,3 +1,3 @@
  args: with args; fetchurl { 
   url = http://mawercer.de/~nix/repos/nix_repository_manager.tar.gz;
-  sha256 = "f85846540a88f0c168ab6632a6bcba20fa4a41e263f7183c354e8e913b2c7938";}
+  sha256 = "6422ef73ea0efceed6ee8e0c6349826813a921ef6f15f68eacc11a3cf1304b37";}
