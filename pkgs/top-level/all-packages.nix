@@ -5105,6 +5105,14 @@ rec {
     #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
 
+  /*kiwixBuilderFun = lib.sumArgs (import ../applications/misc/kiwixbuilder) {
+    inherit builderDefs;
+    inherit (gnome) glib;
+    zlib = zlibStatic;
+  };
+
+  kiwixBuilder = kiwixBuilderFun null;*/
+
   kuickshow = import ../applications/graphics/kuickshow {
     inherit fetchurl stdenv kdelibs arts libpng libjpeg libtiff libungif imlib expat perl;
     inherit (xlibs) libX11 libXext libSM;
@@ -5122,6 +5130,15 @@ rec {
   ladspaPlugins = import ../applications/audio/ladspa-plugins {
     inherit fetchurl stdenv builderDefs stringsWithDeps fftw ladspaH pkgconfig;
   };
+
+  ldcppFun = lib.sumArgs (selectVersion ../applications/networking/p2p/ldcpp "1.0.1") {
+    inherit builderDefs scons pkgconfig bzip2 openssl;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libglade;
+    inherit (xlibs) libX11;
+  };
+
+  ldcpp = ldcppFun null;
 
   links = import ../applications/networking/browsers/links {
     inherit fetchurl stdenv;
