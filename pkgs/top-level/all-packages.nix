@@ -5437,7 +5437,7 @@ rec {
 
   # linux only by now 
   synergy = import ../applications/misc/synergy {
-    inherit fetchcvs stdenv x11;
+    inherit bleedingEdgeRepos stdenv x11;
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
