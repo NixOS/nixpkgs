@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "firefox-3.0-beta-3";
 
   src = fetchurl {
-    url = ftp://ftp.mozilla.org/pub/firefox/releases/3.0b3/source/firefox-3.0b3-source.tar.bz2;
-    sha1 = "142f28a41077e77d61423a5ca6585a45737ff999";
+    url = ftp://ftp.mozilla.org/pub/firefox/releases/3.0b4/source/firefox-3.0b4-source.tar.bz2;
+    sha256 = "1x6ms2fsncg2mc6w8d0003k4fk3zq47y8df0vyix6h6k0zrccb4n";
   };
 
   buildInputs = [
@@ -61,4 +61,5 @@ stdenv.mkDerivation {
 
   passthru = {inherit gtk;};
 }
+
 

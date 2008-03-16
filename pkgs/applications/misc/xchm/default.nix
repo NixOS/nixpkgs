@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "xchm-1.9";
   src = fetchurl {
-    url = mirror://sourceforge/xchm/xchm-1.9.tar.gz;
-    md5 = "12e1faf49447c743c5c936636cd8a172";
+    url = mirror://sourceforge/xchm/xchm-1.14.tar.gz;
+    sha256 = "0gx8h8iabfrawx86f3im36favwl18afwx6z7w9gkjamihcm1an1w";
   };
   buildInputs = [wxGTK chmlib];
 
