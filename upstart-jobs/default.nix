@@ -26,8 +26,8 @@ let
     services = getAttr [ "servicesProposal" ] {} config;
     nameToJobs = name : (
       (
-      let p = ./newProposal + "/${name}.nix";
-          p2 = ./newProposal + "/${name}/default.nix";
+      let p = ./new-proposal + "/${name}.nix";
+          p2 = ./new-proposal + "/${name}/default.nix";
           thisConfig = getAttr [ name ] {} services;
           path = [name];
           args = confgiV : {
