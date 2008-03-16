@@ -543,6 +543,14 @@
     ";
   };
 
+  servicesProposal = {
+    # see upstart-jobs/default.nix 
+    # the option declarations can be found in the upstart-jobs/newProposal/*.nix files
+    # one way to include the declarations here is adding kind of glob "*.nix"
+    # file function to builtins to get all jobs
+    # then the checking in upstart-jobs/default.nix can be removed again (together with passing arg optionDeclarations)
+  };
+
 
   services = {
 
@@ -1356,6 +1364,13 @@
         default = false;
         description = "
           Whether to use the new-style Apache configuration.
+        ";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          These configuration lines will be passed verbatim to the apache config
         ";
       };
 

@@ -170,7 +170,7 @@ rec {
               
   # The services (Upstart) configuration for the system.
   upstartJobs = import ../upstart-jobs/default.nix {
-    inherit config pkgs nix modprobe nssModulesPath nixEnvVars;
+    inherit config pkgs nix modprobe nssModulesPath nixEnvVars optionDeclarations;
   };
 
 

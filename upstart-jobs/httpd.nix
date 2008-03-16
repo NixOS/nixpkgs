@@ -32,7 +32,7 @@ let
       user group adminAddr logDir stateDir
       applicationMappings;
     noUserDir = !cfg.enableUserDir;
-    extraDirectories = extraConfig + cfg.extraConfig;
+    extraDirectories = extraConfig + "\n" + cfg.extraConfig;
     
     subServices =
     
