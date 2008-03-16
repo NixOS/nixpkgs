@@ -28,11 +28,11 @@ let build = FullDepEntry ("
 		dropdb relfs_\$1 ; 
 		rm -rf /tmp/relfs-\$1-tmp;  
 		mkdir /tmp/relfs-\$1-tmp;  
-		USER=\$1 relfs -f -s /tmp/relfs-raskin-tmp  & 
+		USER=\$1 relfs -f -s /tmp/relfs-\$1-tmp  & 
 		sleep 1 && 
 		kill -15 \${!};
 		rm -rf /tmp/relfs-\$1-tmp ; 
-		psql -d relfs_\$1 <<< \"ALTER DATABASE relfs_raskin OWNER TO raskin; 
+		psql -d relfs_\$1 <<< \"ALTER DATABASE relfs_\$1 OWNER TO \$1; 
 			ALTER TABLE obj OWNER TO \$1; 
 			ALTER TABLE obj_mimetype OWNER TO \$1; 
 			ALTER TABLE membership OWNER TO \$1;\"' > \$out/bin/relfs_grant;
