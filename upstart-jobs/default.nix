@@ -19,13 +19,13 @@ let
   # options is the same format as options.nix, but only contains documentation for this job
   # TODO check validation
   newProposalJobs =
-  __trace (pkgs.lib.whatis config) ( 
+  (
   let
     inherit (pkgs.lib) getAttr; 
     inherit (builtins) attrNames pathExists map;
-    services = pkgs.lib.traceWhatis ( getAttr [ "servicesProposal" ] {} config);
+    services = getAttr [ "servicesProposal" ] {} config;
     nameToJobs = name : (
-      __trace ("name : ${name}") (
+      (
       let p = ./newProposal + "/${name}.nix";
           p2 = ./newProposal + "/${name}/default.nix";
           thisConfig = getAttr [ name ] {} services;
