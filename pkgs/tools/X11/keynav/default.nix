@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   buildInputs = [libX11 xextproto libXtst imake libXi libXext];
 
+  NIX_LDFLAGS=" -lXext ";
+
   installPhase = "
 	mkdir -p \$out/bin \$out/share/keynav/doc;
 	cp keynav \$out/bin; cp keynavrc \$out/share/keynav/doc
