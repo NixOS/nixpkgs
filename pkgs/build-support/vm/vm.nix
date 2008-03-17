@@ -176,7 +176,7 @@ rec {
 
     PATH=${coreutils}/bin:${kvm}/bin
 
-    diskImage=/dev/null
+    diskImage=''${diskImage:-/dev/null}
 
     eval "$preVM"
 
@@ -201,8 +201,52 @@ rec {
     exit $(cat in-vm-exit)
   '';
 
-  
-  # Modify the given derivation to perform it in a virtual machine.
+
+  createEmptyImage = {size, fullName}: ''
+    mkdir $out
+    diskImage=$out/image
+    qemu-img create -f qcow $diskImage "${toString size}M"
+
+    mkdir $out/nix-support
+    echo ${fullName} > $out/nix-support/full-name
+  '';
+
+
+  createRootFS = ''
+    mkdir /mnt
+    ${e2fsprogs}/sbin/mke2fs -F /dev/sda
+    ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
+
+    if test -e /mnt/.debug; then
+      exec ${bash}/bin/sh
+    fi
+    touch /mnt/.debug
+
+    mkdir /mnt/proc /mnt/dev /mnt/sys /mnt/bin
+  '';
+
+
+  /* Run a derivation in a Linux virtual machine (using Qemu/KVM).  By
+     default, there is no disk image; the root filesystem is a tmpfs,
+     and /nix/store is shared with the host (via the CIFS protocol to
+     a Samba instance automatically started by Qemu).  Thus, any pure
+     Nix derivation should run unmodified, e.g. the call
+
+       runInLinuxVM patchelf
+
+     will build the derivation `patchelf' inside a VM.  The attribute
+     `preVM' can optionally contain a shell command to be evaluated
+     *before* the VM is started (i.e., on the host).  The attribute
+     `memSize' specifies the memory size of the VM in megabytes,
+     defaulting to 256.  The attribute `diskImage' can optionally
+     specify a file system image to be attached to /dev/sda.  (Note
+     that currently we expect the image to contain a filesystem, not a
+     full disk image with a partition table etc.)
+
+     If the build fails and Nix is run with the `-K' option, a script
+     `run-vm' will be left behind in the temporary build directory
+     that allows you to boot into the VM and debug it interactively. */
+     
   runInLinuxVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
     builder = "${bash}/bin/sh";
     args = ["-e" vmRunCommand];
@@ -211,28 +255,50 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
-  
-  test = runInLinuxVM patchelf;
+
+  /* Like runInLinuxVM, but run the build not using the stdenv from
+     the Nix store, but using the tools provided by /bin, /usr/bin
+     etc. from the specified filesystem image, which typically is a
+     filesystem containing a non-NixOS Linux distribution. */
+     
+  runInLinuxImage = attrs: runInLinuxVM (attrs // {
+    mountDisk = true;
+
+    /* Mount `image' as the root FS, but use a temporary copy-on-write
+       image since we don't want to (and can't) write to `image'. */
+    preVM = ''
+      diskImage=$(pwd)/image
+      origImage=${attrs.diskImage}
+      if test -d "$origImage"; then origImage="$origImage/image"; fi
+      qemu-img create -b "$origImage" -f qcow $diskImage
+    '';
+
+    /* Inside the VM, run the stdenv setup script normally, but at the
+       very end set $PATH and $SHELL to the `native' paths for the
+       distribution inside the VM. */
+    postHook = ''
+      PATH=/usr/bin:/bin:/usr/sbin:/sbin
+      SHELL=/bin/sh
+    '';
+
+    /* Don't run Nix-specific build steps like patchelf. */
+    fixupPhase = "true";
+  });
 
 
+  /* Create a filesystem image of the specified size and fill it with
+     a set of RPM packages. */
+    
   fillDiskWithRPMs =
     {size ? 1024, rpms, name, fullName, postInstall ? null}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall rpms;
 
-      preVM = ''
-        mkdir $out
-        diskImage=$out/image
-        qemu-img create -f qcow $diskImage "${toString size}M"
-      '';
+      preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
-        mkdir /mnt
-        ${e2fsprogs}/sbin/mke2fs -F /dev/sda
-        ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
-
-        mkdir /mnt/proc /mnt/dev /mnt/sys
+        ${createRootFS}
 
         echo "initialising RPM DB..."
         rpm="${rpm}/bin/rpm --root /mnt --dbpath /var/lib/rpm"
@@ -254,21 +320,16 @@ rec {
         echo "running post-install script..."
         eval "$postInstall"
         
+        rm /mnt/.debug
+        
         ${klibcShrunk}/bin/umount /mnt
       '';
     });
 
 
-  test2 = fillDiskWithRPMs {
-    size = 1024;
-    name = "testY";
-    fullName = "Test Image";
-    rpms = import ./rpm/fedora-3-packages.nix {inherit fetchurl;};
-  };
-
-
-  # Generates a script that can be used to run an interactive session
-  # in the given image.
+  /* Generate a script that can be used to run an interactive session
+     in the given image. */
+     
   makeImageTestScript = image: writeScript "image-test" ''
     #! ${bash}/bin/sh
     if test -z "$1"; then
@@ -287,39 +348,36 @@ rec {
     ${qemuCommand}
   '';
 
-  test3 = makeImageTestScript test2;
 
-
-  buildRPM = runInLinuxVM (stdenv.mkDerivation {
-    name = "rpm-test";
+  /* Build RPM packages from the tarball `src' in the Linux
+     distribution installed in the filesystem `diskImage'.  The
+     tarball must contain an RPM specfile. */
   
-    mountDisk = true;
+  buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation (attrs // {
+    phases = "buildPhase installPhase";
   
-    preVM = ''
-      diskImage=$(pwd)/image
-      qemu-img create -b ${test2}/image -f qcow $diskImage
-    '';
-
-    src = patchelf.src;
-
-    buildCommand = ''
-      PATH=/usr/bin:/bin:/usr/sbin:/sbin
-
-      echo ${patchelf.src}
-
+    buildPhase = ''
+      # Hacky: RPM looks for <basename>.spec inside the tarball, so
+      # strip off the hash.
       stripHash "$src"
       srcName="$strippedName"
       ln -s "$src" "$srcName"
 
       rpmbuild -vv -ta "$srcName"
+    '';
 
+    installPhase = ''
       ensureDir $out/rpms
       find /usr/src -name "*.rpm" -exec cp {} $out/rpms \;
     '';
-  });
+  }));
 
 
-  # !!! should probably merge this with fillDiskWithRPMs.
+  /* Create a filesystem image of the specified size and fill it with
+     a set of Debian packages.  `debs' must be a list of list of
+     .deb files, namely, the Debian packages grouped together into
+     strongly connected components.  See deb/deb-closure.nix. */
+
   fillDiskWithDebs =
     {size ? 1024, debs, name, fullName, postInstall ? null}:
     
@@ -328,23 +386,10 @@ rec {
 
       debs = (lib.intersperse "|" debs);
 
-      preVM = ''
-        mkdir $out
-        diskImage=$out/image
-        qemu-img create -f qcow $diskImage "${toString size}M"
-      '';
+      preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
-        mkdir /mnt
-        ${e2fsprogs}/sbin/mke2fs -F /dev/sda
-        ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
-
-        if test -e /mnt/.debug; then
-          exec ${bash}/bin/sh
-        fi
-        touch /mnt/.debug
-
-        mkdir /mnt/proc /mnt/dev /mnt/sys /mnt/bin
+        ${createRootFS}
 
         echo "initialising Debian DB..."
         PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin
@@ -404,47 +449,6 @@ rec {
         ${klibcShrunk}/bin/umount /mnt
       '';
     });
-
-
-  test4 = fillDiskWithDebs {
-    size = 256;
-    name = "deb-test";
-    fullName = "Ubuntu Test Image";
-    debs = import ./deb/ubuntu-7.10-gutsy-i386.nix {inherit fetchurl;};
-  };
-
-  test5 = makeImageTestScript test4;
-
-  
-  test6 = runInLinuxVM (stdenv.mkDerivation {
-    name = "deb-compile";
-
-    mountDisk = true;
-  
-    preVM = ''
-      diskImage=$(pwd)/image
-      qemu-img create -b ${test7}/image -f qcow $diskImage
-    '';
-
-    src = nixUnstable.src;
-
-    postHook = ''
-      PATH=/usr/bin:/bin:/usr/sbin:/sbin
-      SHELL=/bin/sh
-    '';
-
-    fixupPhase = "true";
-
-    memSize = 512;
-  });
-  
-
-  test7 = fillDiskWithDebs {
-    size = 256;
-    name = "deb-test";
-    fullName = "Debian Test Image";
-    debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};
-  };
 
 
 }
