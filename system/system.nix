@@ -125,7 +125,8 @@ rec {
 
   # NSS modules.  Hacky!
   nssModules =
-    if config.users.ldap.enable then [pkgs.nss_ldap] else [];
+       pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap
+    ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns;
 
   nssModulesPath = pkgs.lib.concatStrings (pkgs.lib.intersperse ":" 
     (map (mod: mod + "/lib") nssModules));
@@ -175,7 +176,7 @@ rec {
   # The static parts of /etc.
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
-      defaultShell nixEnvVars modulesTree;
+      defaultShell nixEnvVars modulesTree nssModulesPath;
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
@@ -255,6 +256,8 @@ rec {
   ]
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
   ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
+  ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
+  ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ config.environment.extraPackages pkgs

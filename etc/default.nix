@@ -1,5 +1,5 @@
 { config, pkgs, upstartJobs, systemPath, wrapperDir
-, defaultShell, extraEtc, nixEnvVars, modulesTree
+, defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath
 }:
 
 let 
@@ -56,7 +56,9 @@ import ../helpers/make-etc.nix {
     }
 
     { # Name Service Switch configuration file.  Required by the C library.
-      source = ./nsswitch.conf;
+      source = if config.services.avahi.nssmdns
+               then (assert config.services.avahi.enable; ./nsswitch-mdns.conf)
+	       else ./nsswitch.conf;
       target = "nsswitch.conf";
     }
 
@@ -116,7 +118,7 @@ import ../helpers/make-etc.nix {
     { # Script executed when the shell starts as a login shell.
       source = pkgs.substituteAll {
         src = ./profile.sh;
-        inherit systemPath wrapperDir modulesTree;
+        inherit systemPath wrapperDir modulesTree nssModulesPath;
         inherit (pkgs) glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;

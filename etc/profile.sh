@@ -1,4 +1,5 @@
 export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
+export LD_LIBRARY_PATH=@nssModulesPath@
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export PAGER="less -R"
