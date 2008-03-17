@@ -48,5 +48,5 @@ stdenv.mkDerivation {
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
   exportBuildReferencesGraph =
     map (x: [("closure-build-" + baseNameOf x.object) x.object]) buildStoreContents;
-  pathsFromGraph = ./paths-from-graph.pl;
+  pathsFromGraph = ../../nixpkgs/pkgs/build-support/kernel/paths-from-graph.pl;
 }

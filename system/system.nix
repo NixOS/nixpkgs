@@ -41,8 +41,7 @@ rec {
 
 
   # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = import ../helpers/modules-closure.nix {
-    inherit (pkgs) stdenv module_init_tools;
+  modulesClosure = pkgs.makeModulesClosure {
     inherit rootModules;
     kernel = modulesTree;
   };
@@ -60,9 +59,9 @@ rec {
       lvm2 = if config.boot.initrd.lvm then pkgs.lvm2Static else null;
       allowedReferences = []; # prevent accidents like glibc being included in the initrd
     }
-    "
+    ''
       ensureDir $out/bin
-      if test -n \"$devicemapper\"; then
+      if test -n "$devicemapper"; then
         cp $devicemapper/sbin/dmsetup.static $out/bin/dmsetup
         cp $lvm2/sbin/lvm.static $out/bin/lvm
       fi
@@ -70,7 +69,7 @@ rec {
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
       cp $udev/sbin/udevd $udev/sbin/udevtrigger $udev/sbin/udevsettle $out/bin
       nuke-refs $out/bin/*
-    ";
+    '';
   
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -95,17 +94,16 @@ rec {
 
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
-  initialRamdisk = import ../boot/make-initrd.nix {
-    inherit (pkgs) perl stdenv cpio;
+  initialRamdisk = pkgs.makeInitrd {
     contents = [
       { object = bootStage1;
         symlink = "/init";
       }
     ] ++ (if config.boot.initrd.enableSplashScreen then [
-      { object = pkgs.runCommand "splashutils" {} "
+      { object = pkgs.runCommand "splashutils" {} ''
           ensureDir $out/bin
           cp ${pkgs.splashutils}/bin/splash_helper $out/bin
-        ";
+        '';
         suffix = "/bin/splash_helper";
         symlink = "/sbin/splash_helper";
       }
