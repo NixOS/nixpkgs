@@ -3942,11 +3942,6 @@ rec {
     cross = "sparc-linux";
   };
 
-  kernelscripts = import ../os-specific/linux/kernelscripts {
-    inherit stdenv module_init_tools kernel;
-    modules = [];
-  };
-
   kernel = kernel_2_6_23;
 
   systemKernel =
