@@ -42,6 +42,11 @@ import ../helpers/make-etc.nix {
       target = "protocols";
     }
 
+    { # RPC program numbers.
+      source = pkgs.glibc + "/etc/rpc";
+      target = "rpc";
+    }
+
     { # Hostname-to-IP mappings.
       source = pkgs.substituteAll {
         src = ./hosts;
