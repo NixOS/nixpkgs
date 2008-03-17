@@ -5,8 +5,7 @@ rec {
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    #rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ata_piix" "sd_mod"];
-    rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ide_disk" "ide_generic"];
+    rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ata_piix" "sd_mod"];
   };
 
   
@@ -84,7 +83,7 @@ rec {
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
-      mount -t ext2 /dev/hda /fs
+      mount -t ext2 /dev/sda /fs
     fi
     
     mkdir -p /fs/hostfs
@@ -230,8 +229,8 @@ rec {
 
       buildCommand = ''
         mkdir /mnt
-        ${e2fsprogs}/sbin/mke2fs -F /dev/hda
-        ${klibcShrunk}/bin/mount -t ext2 /dev/hda /mnt
+        ${e2fsprogs}/sbin/mke2fs -F /dev/sda
+        ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
 
         mkdir /mnt/proc /mnt/dev /mnt/sys
 
@@ -262,7 +261,7 @@ rec {
 
   test2 = fillDiskWithRPMs {
     size = 1024;
-    name = "test";
+    name = "testY";
     fullName = "Test Image";
     rpms = import ./rpm/fedora-3-packages.nix {inherit fetchurl;};
   };
@@ -337,8 +336,8 @@ rec {
 
       buildCommand = ''
         mkdir /mnt
-        ${e2fsprogs}/sbin/mke2fs -F /dev/hda
-        ${klibcShrunk}/bin/mount -t ext2 /dev/hda /mnt
+        ${e2fsprogs}/sbin/mke2fs -F /dev/sda
+        ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
 
         if test -e /mnt/.debug; then
           exec ${bash}/bin/sh
