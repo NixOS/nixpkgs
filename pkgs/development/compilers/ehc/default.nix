@@ -1,34 +1,60 @@
-{stdenv, coreutils, fetchsvn, m4, ghc, uulib, uuagc}:
+{stdenv, coreutils, fetchsvn, m4, libtool, ghc, uulib, uuagc, llvm}:
 
 stdenv.mkDerivation (rec {
-  name = "ehc-svn-1033";
+  name = "ehc-svn-1036";
   homepage = "http://www.cs.uu.nl/wiki/Ehc/WebHome/";
 
   src = fetchsvn {
           url = https://svn.cs.uu.nl:12443/repos/EHC/trunk/EHC;
-          rev = "1033";
-          sha256 = "bee6271b81bb1781b086b3c102c6a8205df6d7fca073f2492817717a2553e7af";
+          rev = "1037";
+          sha256 = "b2388cfadeb26ce716ff355fbdd73ba2e30219c5b423fbd609355b420300644c";
   };
 
-  buildInputs = [coreutils m4 ghc uulib uuagc];
+  buildInputs = [coreutils m4 ghc libtool uulib uuagc llvm];
 
   preConfigure = ''
     find src -name files\*.mk -exec sed -i -- "s/--user//g" '{}' \;
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk
+    echo "RTS_GCC_CC_OPTS := -std=gnu99" >> mk/shared.mk.in
   '';
 
-  buildFlags = "100/ehc";
+  buildFlags = "100/ehc 100/ehclib";
 
   installPhase = ''
-    mkdir -p $out/bin
     cd bin
+
+    # install executables
+    echo "installing executables..."
+    mkdir -p $out/bin-ehc
     for i in *; do
       if [[ -d $i ]]; then
-        cp $i/ehc $out/bin/ehc-$i
+        cp $i/ehc $out/bin-ehc/ehc-$i
       fi;
     done
-    mkdir -p $out/lib/ehc
-    exit 1
+
+    # install runtime support
+    cp -r ../install/* $out
+
+    # install prelude
+    echo "installing prelude..."
+    mkdir -p $out/lib-ehc
+    for i in *; do
+      if [[ -d ../build/$i/ehclib/ehcbase ]]; then
+        mkdir -p $out/lib-ehc/$i
+        cp -r ../build/$i/ehclib/ehcbase $out/lib-ehc/$i
+      fi;
+    done
+
+    # generate wrappers
+    echo "generating wrappers..."
+    mkdir -p $out/bin
+    for in in *; do
+      if [[ -d $i ]]; then
+        echo '#!'"$SHELL" > $out/bin/ehc-$i
+        echo "exec \"$out/bin-ehc/ehc-$i\" -P $out/lib-ehc/$i/ehcbase" '"$@"' >> $out/bin/ehc-$i
+        chmod 751 $out/bin/ehc-$i
+      fi;
+    done
   '';
 
   meta = {
