@@ -1703,18 +1703,25 @@ rec {
     flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
   };
 
-  python = getVersion "python" python_alts;
+  python = python24;
 
-  python_alts = import ../development/interpreters/python {
+  python24 = import ../development/interpreters/python/2.4 {
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  pyrexFun = lib.sumArgs (selectVersion ../development/interpreters/pyrex "0.9.6") {
-    inherit fetchurl stdenv stringsWithDeps lib builderDefs;
-    python = builtins.getAttr "2.5" python_alts;
+  python25 = import ../development/interpreters/python/2.5 {
+    inherit fetchurl stdenv zlib bzip2;
   };
 
-  pyrex = pyrexFun null;
+  pyrex = pyrex095;
+
+  pyrex095 = import ../development/interpreters/pyrex/0.9.5.nix {
+    inherit fetchurl stdenv stringsWithDeps lib builderDefs python;
+  };
+
+  pyrex096 = import ../development/interpreters/pyrex/0.9.6.nix {
+    inherit fetchurl stdenv stringsWithDeps lib builderDefs python;
+  };
 
   QiFun = lib.sumArgs (selectVersion ../development/compilers/qi "9.1") {
     inherit clisp stdenv fetchurl builderDefs unzip;
@@ -4684,7 +4691,7 @@ rec {
     inherit stdenv cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib /* smpeg sdl */;
     inherit (xlibs) inputproto libXi;
-    python = builtins.getAttr "2.5" python_alts;
+    python = python25;
     freealut = freealut_soft;
     openal = openalSoft;
     openexr = openexr_1_4_0;
@@ -5334,7 +5341,7 @@ rec {
 
   pythonmagick = import ../applications/graphics/PythonMagick {
     inherit fetchurl stdenv pkgconfig imagemagick boost;
-    python = builtins.getAttr "2.5" python_alts;
+    python = python25;
   };
 
   qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu "0.9.1") {
@@ -5682,6 +5689,12 @@ rec {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
+  };
+
+  xpra = import ../tools/X11/xpra {
+    inherit stdenv fetchurl pkgconfig python pygtk xlibs makeWrapper;
+    inherit (gtkLibs) gtk;
+    pyrex = pyrex095;
   };
 
   xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver "5.04") {
