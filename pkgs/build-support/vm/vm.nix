@@ -1,37 +1,12 @@
-with import ../../nixpkgs {};
+with import ../../.. {};
 
 rec {
 
-  stdenvLinuxStuff = import ../../nixpkgs/pkgs/stdenv/linux {
-    system = stdenv.system;
-    allPackages = import ../../nixpkgs/pkgs/top-level/all-packages.nix;
-  };
 
-  
-  modulesClosure = import ../../nixos/helpers/modules-closure.nix {
-    inherit stdenv module_init_tools kernel;
+  modulesClosure = makeModulesClosure {
+    inherit kernel;
     #rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ata_piix" "sd_mod"];
     rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ide_disk" "ide_generic"];
-  };
-
-  
-  klibcShrunk = stdenv.mkDerivation {
-    name = "${klibc.name}";
-    buildCommand = ''
-      ensureDir $out/lib
-      cp -prd ${klibc}/lib/klibc/bin $out/
-      cp -p ${klibc}/lib/*.so $out/lib/
-      chmod +w $out/*
-      old=$(echo ${klibc}/lib/klibc-*.so)
-      new=$(echo $out/lib/klibc-*.so)
-      for i in $out/bin/*; do
-        echo $i
-        sed "s^$old^$new^" -i $i
-        # !!! use patchelf
-        #patchelf --set-rpath /foo/bar $i
-      done
-    ''; # */
-    allowedReferences = ["out"];
   };
 
   
@@ -54,7 +29,7 @@ rec {
 
   
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${stdenvLinuxStuff.bootstrapTools.bash} -e
+    #! ${klibcShrunk}/bin/sh.shared -e
     echo START
 
     export PATH=${klibcShrunk}/bin:${mountCifs}/bin
@@ -66,8 +41,8 @@ rec {
 
     for o in $(cat /proc/cmdline); do
       case $o in
-        useTmpRoot=1)
-          useTmpRoot=1
+        mountDisk=1)
+          mountDisk=1
           ;;
         command=*)
           set -- $(IFS==; echo $o)
@@ -106,7 +81,7 @@ rec {
 
     mkdir /fs
 
-    if test -n "$useTmpRoot"; then
+    if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
       mount -t ext2 /dev/hda /fs
@@ -145,8 +120,7 @@ rec {
   '';
 
   
-  initrd = import ../../nixos/boot/make-initrd.nix {
-    inherit stdenv perl cpio;
+  initrd = makeInitrd {
     contents = [
       { object = stage1Init;
         symlink = "/init";
@@ -193,7 +167,7 @@ rec {
       -smb / -hda $diskImage \
       -kernel ${kernel}/vmlinuz \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out useTmpRoot=$useTmpRoot" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
 
@@ -248,8 +222,6 @@ rec {
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall rpms;
 
-      useTmpRoot = true;
-    
       preVM = ''
         mkdir $out
         diskImage=$out/image
@@ -292,7 +264,7 @@ rec {
     size = 1024;
     name = "test";
     fullName = "Test Image";
-    rpms = import ../rpm/fedora-3-packages.nix {inherit fetchurl;};
+    rpms = import ./rpm/fedora-3-packages.nix {inherit fetchurl;};
   };
 
 
@@ -321,6 +293,8 @@ rec {
 
   buildRPM = runInLinuxVM (stdenv.mkDerivation {
     name = "rpm-test";
+  
+    mountDisk = true;
   
     preVM = ''
       diskImage=$(pwd)/image
@@ -355,8 +329,6 @@ rec {
 
       debs = (lib.intersperse "|" debs);
 
-      useTmpRoot = true;
-    
       preVM = ''
         mkdir $out
         diskImage=$out/image
@@ -447,6 +419,8 @@ rec {
   
   test6 = runInLinuxVM (stdenv.mkDerivation {
     name = "deb-compile";
+
+    mountDisk = true;
   
     preVM = ''
       diskImage=$(pwd)/image
@@ -473,5 +447,5 @@ rec {
     debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};
   };
 
-  
+
 }

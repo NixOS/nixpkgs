@@ -354,12 +354,20 @@ rec {
       inherit stdenv curl;
     });
 
+  makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
+    inherit stdenv perl cpio contents;
+  };
+
   makeSetupHook = script: runCommand "hook" {} ''
     ensureDir $out/nix-support
     cp ${script} $out/nix-support/setup-hook
   '';
 
   makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
+
+  makeModulesClosure = {kernel, rootModules}: import ../build-support/kernel/modules-closure.nix {
+    inherit stdenv module_init_tools kernel rootModules;
+  };
 
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
