@@ -814,6 +814,10 @@ rec {
     inherit fetchurl stdenv libcap;
   };
 
+  nssmdns = import ../tools/networking/nss-mdns {
+    inherit fetchurl stdenv avahi;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = true;
