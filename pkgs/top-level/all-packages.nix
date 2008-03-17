@@ -5613,6 +5613,13 @@ rec {
 
   x11vnc = x11vncFun null;
 
+  x2vncFun = lib.sumArgs (selectVersion ../tools/X11/x2vnc "1.7.2") {
+    inherit builderDefs;
+    inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
+  };
+
+  x2vnc = x2vncFun null;
+
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
