@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace "src/Makefile.in"						\
       --replace 'AVAHI_SOCKET=\"$(localstatedir)/run/avahi-daemon/socket\"'	\
-                'AVAHI_SOCKET=\"${avahi}/run/avahi-daemon/socket\"'
+                'AVAHI_SOCKET=\"${avahi}/var/run/avahi-daemon/socket\"'
   '';
 
   meta = {
