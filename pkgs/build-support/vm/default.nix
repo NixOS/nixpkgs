@@ -1,4 +1,6 @@
-with import ../../.. {};
+{pkgs}:
+
+with pkgs;
 
 rec {
 
@@ -279,7 +281,10 @@ rec {
     postHook = ''
       PATH=/usr/bin:/bin:/usr/sbin:/sbin
       SHELL=/bin/sh
+      eval "$origPostHook"
     '';
+
+    origPostHook = if attrs ? postHook then attrs.postHook else "";
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
@@ -354,8 +359,14 @@ rec {
      tarball must contain an RPM specfile. */
   
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation (attrs // {
-    phases = "buildPhase installPhase";
+    phases = "sysInfoPhase buildPhase installPhase";
   
+    sysInfoPhase = ''
+      header "base RPMs"
+      rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
+      stopNest
+    '';
+    
     buildPhase = ''
       # Hacky: RPM looks for <basename>.spec inside the tarball, so
       # strip off the hash.

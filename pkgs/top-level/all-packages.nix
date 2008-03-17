@@ -29,7 +29,7 @@
 }:
 
 
-rec {
+let pkgs = rec {
 
 
   ### Symbolic names.
@@ -391,6 +391,10 @@ rec {
 
   nukeReferences = import ../build-support/nuke-references/default.nix {
     inherit stdenv;
+  };
+
+  vmTools = import ../build-support/vm/default.nix {
+    inherit pkgs;
   };
   
 
@@ -6160,4 +6164,4 @@ rec {
 
   #my_env = import ../misc/my_env;
 
-}
+}; in pkgs

@@ -1,5 +1,5 @@
 with import ../../.. {};
-with import ./vm.nix;
+with vmTools;
 
 rec {
 
@@ -50,6 +50,10 @@ rec {
     src = nixUnstable.src;
     diskImage = debianImage;
     memSize = 512;
+    phases = "sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase fixupPhase distPhase";
+    sysInfoPhase = ''
+      dpkg-query --list
+    '';
   });
   
 
