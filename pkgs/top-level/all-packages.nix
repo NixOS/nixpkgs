@@ -1490,7 +1490,7 @@ rec {
   };
 
   llvm = import ../development/compilers/llvm {
-    inherit fetchurl stdenv gcc texinfo flex bison perl gnum4 autoconf automake libtool;
+    inherit fetchurl stdenv gcc flex perl libtool;
   };
 
   mono = import ../development/compilers/mono {
