@@ -135,6 +135,15 @@ mkdir -p $wrapperDir
 for i in @setuidPrograms@; do
     program=$(type -tp $i)
     cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
+
+    if [ -z "$program" ]
+    then
+	# XXX: It would be preferable to detect this problem before
+	# `activate-configuration' is invoked.
+	echo "WARNING: No executable named \`$i' was found" >&2
+	echo "WARNING: but \`$i' was specified as a setuid program." >&2
+    fi
+
     echo -n $program > $wrapperDir/$i.real
     chown root.root $wrapperDir/$i
     chmod 4755 $wrapperDir/$i
