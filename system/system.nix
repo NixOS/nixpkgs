@@ -284,7 +284,7 @@ rec {
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
-  activateConfiguration = pkgs.substituteAll {
+  activateConfiguration = pkgs.substituteAll rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
 
@@ -298,10 +298,19 @@ rec {
     inherit (usersGroups) createUsersGroups usersList groupsList;
 
     path = [
-      pkgs.coreutils pkgs.gnugrep pkgs.findutils
-      pkgs.glibc # needed for getent
-      pkgs.pwdutils
-    ];
+        pkgs.coreutils pkgs.gnugrep pkgs.findutils
+        pkgs.glibc # needed for getent
+        pkgs.pwdutils
+      ]
+
+      # XXX: Hack to recognize common setuid programs.
+      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xlock") setuidPrograms)
+                           pkgs.xlockmore
+      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xscreensaver")
+                                         setuidPrograms)
+                           pkgs.xscreensaver
+      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xlaunch") setuidPrograms)
+                           pkgs.xlaunch;
 
     bash = pkgs.bashInteractive;
   };
