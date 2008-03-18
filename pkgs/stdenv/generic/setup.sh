@@ -645,10 +645,12 @@ checkPhase() {
 patchELF() {
     # Patch all ELF executables and shared libraries.
     header "patching ELF executables and libraries"
-    find "$prefix" \( \
-        \( -type f -a -name "*.so*" \) -o \
-        \( -type f -a -perm +0100 \) \
-        \) -print -exec patchelf --shrink-rpath {} \;
+    if test -e "$prefix"; then
+        find "$prefix" \( \
+            \( -type f -a -name "*.so*" \) -o \
+            \( -type f -a -perm +0100 \) \
+            \) -print -exec patchelf --shrink-rpath {} \;
+    fi
     stopNest
 }
 
