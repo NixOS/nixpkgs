@@ -20,7 +20,7 @@ while (<LIST>) {
         print NEW "baseURL $baseURL\n";
     } 
     
-    elsif (/^\s*(\S+)(\s+([a-f0-9]+))?\s*$/) {
+    elsif (/^\s*(\S+)(\s+([a-z0-9]+))?\s*$/) {
         my $pkgName = $1;
         my $url = "$baseURL/$pkgName";
         my $hash = $3;
@@ -30,7 +30,11 @@ while (<LIST>) {
             chomp $hash;
         }
         print NEW "$pkgName $hash\n";
-        print EXPR "  (fetchurl {url=$url; md5=\"$hash\";})\n";
+        if (length $hash == 32) {
+            print EXPR "  (fetchurl {url=$url; md5=\"$hash\";})\n";
+        } else {
+            print EXPR "  (fetchurl {url=$url; sha256=\"$hash\";})\n";
+        }
     }
 
     else {

@@ -295,10 +295,10 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 1024, rpms, name, fullName, postInstall ? null}:
+    {size ? 1024, rpms, name, fullName, preInstall ? "", postInstall ? ""}:
     
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name postInstall rpms;
+      inherit name preInstall postInstall rpms;
 
       preVM = createEmptyImage {inherit size fullName;};
 
@@ -309,24 +309,29 @@ rec {
         rpm="${rpm}/bin/rpm --root /mnt --dbpath /var/lib/rpm"
         $rpm --initdb
 
+        echo "unpacking RPMs..."
+        for i in $rpms; do
+            echo "$i..."
+            ${rpm}/bin/rpm2cpio "$i" | (cd /mnt && ${cpio}/bin/cpio -i --make-directories)
+        done
+
+        eval "$preInstall"
+
+        # Make the Nix store available in /mnt, because that's where the RPMs live.
+        mkdir -p /mnt/nix/store
+        ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/nix/store
+        
         echo "installing RPMs..."
-        $rpm --noscripts --notriggers --nodeps -iv $rpms
-
-        # Get rid of the Berkeley DB environment so that older RPM versions
-        # (using older versions of BDB) will still work.
-        rm -f /mnt/var/lib/rpm/__db.*
-
-        if test -e /mnt/bin/rpm; then
-          chroot /mnt /bin/rpm --rebuilddb
-        fi
-
-        chroot /mnt /sbin/ldconfig
+        chroot=$(type -tP chroot)
+        PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
+          rpm -iv $rpms
 
         echo "running post-install script..."
         eval "$postInstall"
         
         rm /mnt/.debug
         
+        ${klibcShrunk}/bin/umount /mnt/nix/store
         ${klibcShrunk}/bin/umount /mnt
       '';
     });
@@ -350,6 +355,7 @@ rec {
     export origBuilder=
     export origArgs=
     export > $TMPDIR/saved-env
+    mountDisk=1
     ${qemuCommand}
   '';
 
@@ -369,6 +375,9 @@ rec {
     
     buildPhase = ''
       eval "$preBuild"
+
+      #echo "root:x:0:0:System administrator:/root:/bin/sh" >> /etc/passwd
+      #echo "root:!:0:" >> /etc/group
     
       # Hacky: RPM looks for <basename>.spec inside the tarball, so
       # strip off the hash.
@@ -488,6 +497,19 @@ rec {
       fullName = "SUSE Linux 9.0 (i386)";
       size = 768;
       rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
+      # Urgh.  The /etc/group entries are installed by aaa_base (or
+      # something) but due to dependency ordering, that package isn't
+      # installed yet by the time some other packages refer to these
+      # entries.
+      preInstall = ''
+        echo 'bin:x:1:daemon' >> /mnt/etc/group
+        echo 'tty:x:5:' >> /mnt/etc/group
+        echo 'disk:x:6:' >> /mnt/etc/group
+        echo 'lp:x:7:' >> /mnt/etc/group
+        echo 'uucp:x:14:' >> /mnt/etc/group
+        echo 'audio:x:17:' >> /mnt/etc/group
+        echo 'video:x:33:' >> /mnt/etc/group
+      '';
     };
     
     fedora2i386 = fillDiskWithRPMs {
