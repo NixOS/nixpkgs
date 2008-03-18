@@ -305,10 +305,8 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        echo "initialising RPM DB..."
-        rpm="${rpm}/bin/rpm --root /mnt --dbpath /var/lib/rpm"
-        $rpm --initdb
-
+        chroot=$(type -tP chroot)
+        
         echo "unpacking RPMs..."
         for i in $rpms; do
             echo "$i..."
@@ -317,12 +315,15 @@ rec {
 
         eval "$preInstall"
 
+        echo "initialising RPM DB..."
+        PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
+          rpm --initdb
+
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
         ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/nix/store
         
         echo "installing RPMs..."
-        chroot=$(type -tP chroot)
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm -iv $rpms
 
@@ -364,8 +365,10 @@ rec {
      distribution installed in the filesystem `diskImage'.  The
      tarball must contain an RPM specfile. */
   
-  buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation (attrs // {
+  buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
     phases = "sysInfoPhase buildPhase installPhase";
+
+    outDir = "rpms/${attrs.diskImage.name}";
   
     sysInfoPhase = ''
       header "base RPMs"
@@ -388,16 +391,16 @@ rec {
     '';
 
     installPhase = ''
-      ensureDir $out/rpms
-      find /usr/src -name "*.rpm" -exec cp {} $out/rpms \;
+      ensureDir $out/$outDir
+      find /usr/src -name "*.rpm" -exec cp {} $out/$outDir \;
 
-      for i in $out/rpms/*.rpm; do
+      for i in $out/$outDir/*.rpm; do
         header "Generated RPM/SRPM: $i"
         rpm -qip $i
         stopNest
       done
-    '';
-  }));
+    ''; # */
+  } // attrs));
 
 
   /* Create a filesystem image of the specified size and fill it with
@@ -483,14 +486,14 @@ rec {
   diskImages = {
 
     redhat9i386 = fillDiskWithRPMs {
-      name = "redhat-9-i386-image";
+      name = "redhat-9-i386";
       fullName = "Red Hat Linux 9 (i386)";
       size = 768;
       rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
     };
     
     suse90i386 = fillDiskWithRPMs {
-      name = "suse-9.0-i386-image";
+      name = "suse-9.0-i386";
       fullName = "SUSE Linux 9.0 (i386)";
       size = 768;
       rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
@@ -510,35 +513,35 @@ rec {
     };
     
     fedora2i386 = fillDiskWithRPMs {
-      name = "fedora-core-2-i386-image";
+      name = "fedora-core-2-i386";
       fullName = "Fedora Core 2 (i386)";
       size = 768;
       rpms = import ./rpm/fedora-2-i386.nix {inherit fetchurl;};
     };
     
     fedora3i386 = fillDiskWithRPMs {
-      name = "fedora-core-3-i386-image";
+      name = "fedora-core-3-i386";
       fullName = "Fedora Core 3 (i386)";
       size = 768;
       rpms = import ./rpm/fedora-3-i386.nix {inherit fetchurl;};
     };
     
     fedora5i386 = fillDiskWithRPMs {
-      name = "fedora-core-5-i386-image";
+      name = "fedora-core-5-i386";
       fullName = "Fedora Core 5 (i386)";
       size = 768;
       rpms = import ./rpm/fedora-5-i386.nix {inherit fetchurl;};
     };
     
     ubuntu710i386 = fillDiskWithDebs {
-      name = "ubuntu-7.10-gutsy-i386-image";
+      name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
       size = 512;
       debs = import ./deb/ubuntu-7.10-gutsy-i386.nix {inherit fetchurl;};
     };
 
     debian40r3i386 = fillDiskWithDebs {
-      name = "debian-4.0r3-etch-i386-image";
+      name = "debian-4.0r3-etch-i386";
       fullName = "Debian 4.0r3 Etch (i386)";
       size = 512;
       debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};

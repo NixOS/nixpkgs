@@ -41,7 +41,6 @@
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/gcc-c++-4.1.0-3.i386.rpm; md5="982ec6e1c45d9540183bf19fd2070666";})
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/gdbm-1.8.0-26.2.i386.rpm; md5="e4746da0a6faeb645feb800e05fea932";})
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/glib-1.2.10-18.2.2.i386.rpm; md5="df4d5de569ea817e9397d3490c78cf42";})
-  (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/glib-1.2.10-18.2.2.i386.rpm; md5="df4d5de569ea817e9397d3490c78cf42";})
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/glib2-2.10.1-1.i386.rpm; md5="0bf35e951dc4499ecc20b64b7bc84dc7";})
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/glibc-2.4-4.i686.rpm; md5="a4a9695595d2a6c79eda24aea045e1a6";})
   (fetchurl {url=ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS/glibc-common-2.4-4.i386.rpm; md5="0a252ee07fcd7051f1176ea886465666";})
