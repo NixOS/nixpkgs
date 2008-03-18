@@ -463,6 +463,8 @@ unpackPhase() {
         return
     fi
 
+    eval "$preUnpack"
+    
     if test -z "$srcs"; then
         if test -z "$src"; then
             echo 'variable $src or $srcs should point to the source'
@@ -533,6 +535,8 @@ patchPhase() {
         return
     fi
 
+    eval "$prePatch"
+    
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
     if test -z "$patchFlags"; then
@@ -553,6 +557,8 @@ patchPhase() {
         $uncompress < $i | patch $patchFlags || fail
         stopNest
     done
+
+    eval "$postPatch"
 }
 
 
@@ -631,6 +637,8 @@ checkPhase() {
         return
     fi
 
+    eval "$preCheck"
+
     if test -z "$checkTarget"; then
         checkTarget="check"
     fi
@@ -639,6 +647,8 @@ checkPhase() {
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
+
+    eval "$postCheck"
 }
 
 
