@@ -1007,7 +1007,7 @@ let pkgs = rec {
 
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg perl;
-    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth rgb;
+    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
   };
 
   time = import ../tools/misc/time {

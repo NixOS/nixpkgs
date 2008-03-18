@@ -1,5 +1,4 @@
-# hint: don't forget to start xfs font server (configuration.nix)
-{stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth, rgb}:
+{stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth}:
 
 stdenv.mkDerivation {
   name = "tightvnc-1.3.9";
@@ -11,5 +10,5 @@ stdenv.mkDerivation {
     sha256 = "0nij6kyzwxf7nblwd6riwqhzh8b8xwdffpj379zi5y9mcmiwmalr";
   };
   buildInputs = [x11 zlib libjpeg imake gccmakedep libXmu libXaw libXpm libXp
-  	xauth rgb];
+  	xauth];
 }
