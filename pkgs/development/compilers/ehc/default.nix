@@ -1,13 +1,13 @@
 {stdenv, coreutils, fetchsvn, m4, libtool, ghc, uulib, uuagc, llvm}:
 
 stdenv.mkDerivation (rec {
-  name = "ehc-svn-1036";
+  name = "ehc-svn-1042";
   homepage = "http://www.cs.uu.nl/wiki/Ehc/WebHome/";
 
   src = fetchsvn {
           url = https://svn.cs.uu.nl:12443/repos/EHC/trunk/EHC;
-          rev = "1037";
-          sha256 = "b2388cfadeb26ce716ff355fbdd73ba2e30219c5b423fbd609355b420300644c";
+          rev = "1042";
+          sha256 = "7a9e5d1d57825caa4664686d9a5c0d9b5ebb870095817d77bb7b97869718ed5b";
   };
 
   buildInputs = [coreutils m4 ghc libtool uulib uuagc llvm];
@@ -48,10 +48,10 @@ stdenv.mkDerivation (rec {
     # generate wrappers
     echo "generating wrappers..."
     mkdir -p $out/bin
-    for in in *; do
+    for i in *; do
       if [[ -d $i ]]; then
         echo '#!'"$SHELL" > $out/bin/ehc-$i
-        echo "exec \"$out/bin-ehc/ehc-$i\" -P $out/lib-ehc/$i/ehcbase" '"$@"' >> $out/bin/ehc-$i
+        echo "exec \"$out/bin-ehc/ehc-$i\" --use-inplace=0 -P $out/lib-ehc/$i/ehcbase" '"$@"' >> $out/bin/ehc-$i
         chmod 751 $out/bin/ehc-$i
       fi;
     done
