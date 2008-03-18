@@ -8,47 +8,23 @@ rec {
   buildPatchelfInVM = runInLinuxVM patchelf;
 
 
-  rpmImage = fillDiskWithRPMs {
-    name = "fedora-image";
-    fullName = "Fedora Core 3";
-    size = 1024;
-    rpms = import ./rpm/fedora-3-packages.nix {inherit fetchurl;};
-  };
-
-
-  testRPMImage = makeImageTestScript rpmImage;
+  testRPMImage = makeImageTestScript diskImages.fedora5i386;
 
 
   buildPatchelfRPM = buildRPM {
     name = "patchelf-rpm";
     src = patchelf.src;
-    diskImage = rpmImage;
+    diskImage = diskImages.fedora5i386;
   };
 
   
-  ubuntuImage = fillDiskWithDebs {
-    name = "ubuntu-image";
-    fullName = "Ubuntu 7.10 Gutsy";
-    size = 256;
-    debs = import ./deb/ubuntu-7.10-gutsy-i386.nix {inherit fetchurl;};
-  };
-  
-
-  debianImage = fillDiskWithDebs {
-    name = "debian-image";
-    fullName = "Debian 4.0r3 Etch";
-    size = 256;
-    debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};
-  };
-
-
-  testUbuntuImage = makeImageTestScript ubuntuImage;
+  testUbuntuImage = makeImageTestScript diskImages.ubuntu710i386;
 
   
   buildInDebian = runInLinuxImage (stdenv.mkDerivation {
     name = "deb-compile";
     src = nixUnstable.src;
-    diskImage = debianImage;
+    diskImage = diskImages.debian40r3i386;
     memSize = 512;
     phases = "sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase fixupPhase distPhase";
     sysInfoPhase = ''
