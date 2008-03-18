@@ -376,9 +376,6 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      #echo "root:x:0:0:System administrator:/root:/bin/sh" >> /etc/passwd
-      #echo "root:!:0:" >> /etc/group
-    
       # Hacky: RPM looks for <basename>.spec inside the tarball, so
       # strip off the hash.
       stripHash "$src"
