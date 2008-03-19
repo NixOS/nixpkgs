@@ -25,7 +25,7 @@ if test -z "$action"; then showSyntax; fi
 # Allow the location of NixOS sources and the system configuration
 # file to be overridden.
 NIXOS=${NIXOS:-/etc/nixos/nixos}
-NIXPKGS=${NIXPKGS:-/etc/nixos/nixpkgs}
+NIXPKGS=${NIXPKGS:-$NIXOS/pkgs}
 NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 
