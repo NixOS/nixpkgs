@@ -4,11 +4,13 @@
 stdenv.mkDerivation rec {
   name = "guile-1.8.4";
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/guile/" + name + ".tar.gz";
+    url = "mirror://gnu/guile/" + name + ".tar.gz";
     sha256 = "1cz1d4n6vzw0lfsvplsiarwqk675f12j596dzfv0h5r9cljpc0ya";
   };
 
-  patches = [ ./test-tmpdir.patch ];
+  patches = [ ./test-tmpdir.patch
+              ./srcprop-no-deadlock.patch
+              ./popen-zombie.patch ];
 
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [readline libtool gmp gawk];
@@ -17,10 +19,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   '';
 
-  # FIXME: It seems that we hit a deadlock sometimes when running the
-  # test suite, typically somewhere between `time.test' and
-  # `unit.test'.  To be continued...
-  doCheck = false;
+  doCheck = true;
 
   setupHook = ./setup-hook.sh;
 
