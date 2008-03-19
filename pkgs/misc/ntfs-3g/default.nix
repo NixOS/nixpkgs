@@ -1,11 +1,16 @@
 args: with args;
 stdenv.mkDerivation rec {
-  name = "ntfs-3g-1.1104";
+  pname = "ntfs-3g";
+  version = "1.2310";
+  name = "${pname}-${version}";
+
   src = fetchurl {
     url = "${meta.homepage}/${name}.tgz";
-    sha256 = "1m96c3vxm051lpy3kyik9s0m390rj6ngm11xmahfhw61794jzbyp";
+    sha256 = "3394bd1c9d0f3640803dc65ebbb42ee945db47e06f1a2b84ad257bad5e3c10f3";
   };
+
   buildInputs = [fuse pkgconfig];
+
   preConfigure="sed -e 's:/sbin:@sbindir@:' -i src/Makefile.in";
   configureFlags="--enable-shared --disable-static --disable-ldconfig --exec-prefix=\${prefix}";
 
