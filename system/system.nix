@@ -302,16 +302,7 @@ rec {
         pkgs.coreutils pkgs.gnugrep pkgs.findutils
         pkgs.glibc # needed for getent
         pkgs.pwdutils
-      ]
-
-      # XXX: Hack to recognize common setuid programs.
-      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xlock") setuidPrograms)
-                           pkgs.xlockmore
-      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xscreensaver")
-                                         setuidPrograms)
-                           pkgs.xscreensaver
-      ++ pkgs.lib.optional (pkgs.lib.any (x: x == "xlaunch") setuidPrograms)
-                           pkgs.xlaunch;
+      ];
 
     bash = pkgs.bashInteractive;
   };

@@ -129,6 +129,12 @@ ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
 
 # Make a few setuid programs work.
 PATH=@systemPath@/bin:@systemPath@/sbin:$PATH
+save_PATH="$PATH"
+
+# Add the default profile to the search path for setuid executables.
+PATH="/nix/var/nix/profiles/default/sbin:$PATH"
+PATH="/nix/var/nix/profiles/default/bin:$PATH"
+
 wrapperDir=@wrapperDir@
 if test -d $wrapperDir; then rm -f $wrapperDir/*; fi
 mkdir -p $wrapperDir
@@ -149,6 +155,7 @@ for i in @setuidPrograms@; do
     chmod 4755 $wrapperDir/$i
 done
 
+PATH="$save_PATH"
 
 # Set the host name.  Don't clear it if it's not configured in the
 # NixOS configuration, since it may have been set by dhclient in the
