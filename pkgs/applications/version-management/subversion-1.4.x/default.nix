@@ -16,8 +16,11 @@ assert javahlBindings -> jdk != null;
 assert sslSupport -> neon.sslSupport;
 assert compressionSupport -> neon.compressionSupport;
 
-stdenv.mkDerivation {
-  name = "subversion-1.4.6";
+stdenv.mkDerivation rec {
+
+  version = "1.4.6"; # attribute version is used within svnmerge as well
+
+  name = "subversion-${version}";
 
   builder = ./builder.sh;
   src = fetchurl {

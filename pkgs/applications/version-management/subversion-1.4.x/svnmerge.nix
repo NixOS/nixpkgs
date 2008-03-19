@@ -1,6 +1,6 @@
 {subversion, stdenv, python, shebangfix }:
 stdenv.mkDerivation {
-  name = "${subversion.name}-svnmerge";
+  name = "svnmerge-${subversion.version}";
 
   src = subversion.src;
 
