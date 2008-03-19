@@ -235,6 +235,10 @@ rec {
     default 0
     timeout 10
     splashimage /boot/background.xpm.gz
+
+    title Boot from hard disk
+      root (hd0)
+      chainloader +1
     
     title NixOS Installer / Rescue
       kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
