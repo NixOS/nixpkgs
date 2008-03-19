@@ -6045,7 +6045,7 @@ let pkgs = rec {
     };
 
   ntfs3g = import ../misc/ntfs-3g {
-    inherit fetchurl stdenv fuse pkgconfig;
+    inherit fetchurl stdenv fuse pkgconfig utillinux;
   };
 
   ntfsprogs = import ../misc/ntfsprogs {
