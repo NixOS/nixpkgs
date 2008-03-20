@@ -44,8 +44,8 @@ if test "$action" = "switch" -o "$action" = "test"; then
     stopJob() {
         local job=$1
         initctl stop "$job"
-        while ! initctl list 2>&1 | grep -q "initctl: $job (stop)"; do
-            echo "waiting for $job..."
+        while ! initctl status "$job" 2>&1 | grep -q "(stop) waiting"; do
+            echo "waiting for $job to stop..."
             sleep 1
         done
     }
