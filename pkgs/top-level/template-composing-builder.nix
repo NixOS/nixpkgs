@@ -1,18 +1,15 @@
-args : with args; with builderDefs null;
-	let localDefs = builderDefs (rec {
-		src = /* put a fetchurl here */
+args : with args; 
+rec {
+  src = /* Here a fetchurl expression goes */;
 
-		buildInputs = [];
-		configureFlags = [];
-	}) args null; /* null is a terminator for sumArgs */
-	in with localDefs;
-stdenv.mkDerivation rec {
-	name = "${abort "Specify name"}-"+version;
-	builder = writeScript (name + "-builder")
-		(textClosure localDefs 
-			[(abort "Specify phases - defined here or in builderDefs") doForceShare doPropagate]);
-	meta = {
-		description = "${abort "Write a description"}";
-		inherit src;
-	};
+  buildInputs = [];
+  configureFlags = [];
+
+  /* doConfigure should be specified separately */
+  phaseNames = ["doMakeInstall"];
+      
+  name = "${abort "Specify name"}" + version;
+  meta = {
+    description = "${abort "Specify description"}";
+  };
 }
