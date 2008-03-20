@@ -23,11 +23,9 @@ args : with args; with builderDefs {src="";} null;
 			sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
 			sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
 			sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . ) 
-			NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${stdenv.glibc}/include"
 			NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
 			echo NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/unicode"
 			NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
-			NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${stdenv.glibc}/include"
 			./configure --prefix=$out \
 				--with-x11 \
 				--with-system-zlib \
