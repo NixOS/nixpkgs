@@ -6,11 +6,11 @@ let
 
   ntpUser = "ntp";
 
-  config = writeText "ntp.conf" "
+  config = writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
     ${toString (map (server: "server " + server + "\n") servers)}
-  ";
+  '';
 
   ntpFlags = "-c ${config} -u ${ntpUser}:nogroup -i ${stateDir}";
 
@@ -27,26 +27,26 @@ in
     }
   ];
   
-  job = "
-description \"NTP daemon\"
+  job = ''
+    description "NTP daemon"
 
-start on ip-up
-stop on ip-down
-stop on shutdown
+    start on ip-up
+    stop on ip-down
+    stop on shutdown
 
-start script
+    start script
 
-    mkdir -m 0755 -p ${stateDir}
-    chown ${ntpUser} ${stateDir}
+        mkdir -m 0755 -p ${stateDir}
+        chown ${ntpUser} ${stateDir}
 
-    # Needed to run ntpd as an unprivileged user.
-    ${modprobe}/sbin/modprobe capability || true
+        # Needed to run ntpd as an unprivileged user.
+        ${modprobe}/sbin/modprobe capability || true
 
-    ${ntp}/bin/ntpd -q -g ${ntpFlags}
-    
-end script
+        ${ntp}/bin/ntpd -q -g ${ntpFlags}
 
-respawn ${ntp}/bin/ntpd -n ${ntpFlags}
-  ";
+    end script
+
+    respawn ${ntp}/bin/ntpd -n ${ntpFlags}
+  '';
   
 }
