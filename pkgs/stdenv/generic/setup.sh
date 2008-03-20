@@ -808,8 +808,10 @@ genericBuild() {
     fi
 
     if test -z "$phases"; then
-        phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
-            installPhase fixupPhase distPhase $extraPhases";
+        phases="$prePhases unpackPhase patchPhase $preConfigurePhases \
+            configurePhase $preBuildPhases buildPhase checkPhase \
+            $preInstallPhases installPhase fixupPhase \
+            $preDistPhases distPhase $postPhases";
     fi
 
     for curPhase in $phases; do
