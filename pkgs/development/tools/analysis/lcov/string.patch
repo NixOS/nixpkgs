@@ -1,0 +1,10 @@
+--- a/bin/geninfo	2007/10/04 08:18:07	1.32
++++ b/bin/geninfo	2007/11/01 16:29:39	1.33
+@@ -1478,6 +1478,7 @@
+ 					}
+ 					next;
+ 				}
++				last if ($length == 0);
+ 				($blocks, $string) =
+ 					read_gcno_string(*INPUT, $endianness);
+ 				if (defined($string))
