@@ -3,6 +3,8 @@ args: with args; with stringsWithDeps; with lib;
 {
 	inherit writeScript; 
 
+	src = getAttr ["src"] "" args;
+
 	addSbinPath = getAttr ["addSbinPath"] false args;
 
 	forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
@@ -384,5 +386,19 @@ args: with args; with stringsWithDeps; with lib;
               -i register.sh
           GHC_PACKAGE_PATH=\$PACKAGE_DB ./register.sh
         " ["defCreateEmptyPackageDatabaseAndSetupHook" "defCabalSetupCmd"];
+
+	phaseNames = args.phaseNames ++ 
+	  ["doForceShare" "doPropagate"];
+
+	builderDefsPackage = bd: func: args: (
+	let localDefs = bd (func ((bd null) // args)) args null; in
+
+	stdenv.mkDerivation (rec {
+	  inherit (localDefs) name;
+	  builder = writeScript (name + "-builder")
+	    (textClosure localDefs localDefs.phaseNames);
+	  meta = localDefs.meta // {inherit src;};
+	})
+	);
 
 }) // args

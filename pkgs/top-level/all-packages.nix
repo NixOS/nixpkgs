@@ -270,6 +270,9 @@ let pkgs = rec {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
+  builderDefsPackage = expr: lib.sumArgs 
+    (((builderDefs null).builderDefsPackage builderDefs) expr);
+
   stringsWithDeps = import ../lib/strings-with-deps.nix {
     inherit stdenv lib;
   };
@@ -6076,11 +6079,13 @@ let pkgs = rec {
     inherit fetchurl stdenv tetex lazylist;
   };
 
-  psiFun = lib.sumArgs (selectVersion ../applications/networking/instant-messengers/psi "0.11") {
-    inherit builderDefs zlib aspell sox openssl;
-    inherit (xlibs) xproto libX11 libSM libICE;
-    qt = qt4;
-  };
+  psiFun = builderDefsPackage 
+    (selectVersion ../applications/networking/instant-messengers/psi "0.11") 
+    {
+      inherit builderDefs zlib aspell sox openssl;
+      inherit (xlibs) xproto libX11 libSM libICE;
+      qt = qt4;
+    };
 
   psi = psiFun null;
 
@@ -6146,7 +6151,7 @@ let pkgs = rec {
     inherit stdenv perl tetex graphviz ghostscript;
   };
 
-  texLiveFun = lib.sumArgs (import ../misc/tex/texlive) {
+  texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
       gd t1lib freetype icu perl;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm

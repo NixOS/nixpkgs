@@ -1,4 +1,4 @@
-args : with args; with builderDefs {src="";} null;
+args : with args; with builderDefs null;
 	let localDefs = builderDefs (rec {
 		src = /* put a fetchurl here */
 
@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[(abort "Specify phases - defined here or in builderDefs") doForceShare doPropagate]);
 	meta = {
-		description = "
-		${abort "Write a description"}
-";
+		description = "${abort "Write a description"}";
 		inherit src;
 	};
 }

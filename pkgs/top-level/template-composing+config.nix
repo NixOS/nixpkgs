@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [(abort "Check phases") doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	${(abort "Specify description")}
-";
+		description = "${(abort "Specify description")}";
 		inherit src;
 	};
 }
