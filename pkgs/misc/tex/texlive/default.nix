@@ -14,6 +14,11 @@ rec {
     url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2007.orig.tar.gz;
     sha256 = "0cmd9ryd57rzzg7g2gm3qn4ijakkacy810h5zncqd39p3i1yn6nx";
   };
+
+  cmSuperSrc = fetchurl {
+    url = ftp://195.178.192.118/debian/pool/main/c/cm-super/cm-super_0.3.3.orig.tar.gz;
+    sha256 = "1lxvnhqds2zi6ssz66r1b7s6p855lab7cgp0hdg247zkacbjxcfg";
+  };
   
   setupHook = ./setup-hook.sh;
 
@@ -29,13 +34,22 @@ rec {
     sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
     sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . ) 
-    sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
-
-    updmap --syncwithtrees
 
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
+
+  doInstallCMSuper = FullDepEntry (''
+    tar xf ${cmSuperSrc}
+    ensureDir $out/share/texmf/fonts/type1/public/cm-super
+    cp cm-super-*/pfb/*.pfb $out/share/texmf/fonts/type1/public/cm-super
+    ensureDir $out/share/texmf/dvips/cm-super
+    cp cm-super-*/dvips/*.{map,enc}  $out/share/texmf/dvips/cm-super
+    cp cm-super-*/dvips/*.enc  $out/share/texmf/fonts/enc
+    cp cm-super-*/dvips/*.map  $out/share/texmf/fonts/map
+    ensureDir $out/share/texmf/dvipdfm/config
+    cp cm-super-*/dvipdfm/*.map  $out/share/texmf/dvipdfm/config
+  '') ["minInit" "defEnsureDir" "doPreConfigure"];
 
   doPostInstall = FullDepEntry(''
     mv $out/bin $out/libexec
@@ -47,11 +61,18 @@ rec {
     texmf_var=$(mktemp -d /var/tmp/texmf-varXXXXXXXX)
     mv $out/share/texmf-var/* $texmf_var/ 
     chmod -R a+rwX $texmf_var
-    rm -r $out/share/texmf-var
-    rm -r /var/tmp/texmf-var
+    rm -r $out/share/texmf-var || true
+    rm -r /var/tmp/texmf-var || true
     ln -sfT $texmf_var $out/share/texmf-var
     ln -sfT $texmf_var /var/tmp/texmf-var
     ln -s $out/share/texmf $out/share/texmf-config
+    
+    sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
+
+    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
+
+    HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
+    
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
 
@@ -69,11 +90,11 @@ rec {
   ];
 
   phaseNames = ["doPreConfigure" "doConfigure" 
-    "doMakeInstall" "doPostInstall"];
+    "doInstallCMSuper" "doMakeInstall" "doPostInstall"];
 
   name = "texlive-core-2007";
   meta = {
     description = "A TeX distribution";
-    srcs = [texmfSrc langTexmfSrc];
+    srcs = [texmfSrc langTexmfSrc cmSuperSrc];
   };
 }
