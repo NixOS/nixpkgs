@@ -7,7 +7,7 @@ assert db4Support -> db4 != null;
 assert expat != null && perl != null;
 
 stdenv.mkDerivation {
-  name = "apache-httpd-2.2.8x";
+  name = "apache-httpd-2.2.8";
 
   src = fetchurl {
     url = http://archive.apache.org/dist/httpd/httpd-2.2.8.tar.bz2;
