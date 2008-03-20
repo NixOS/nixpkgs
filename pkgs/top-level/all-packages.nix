@@ -1896,6 +1896,10 @@ let pkgs = rec {
 
   flex = flex254a;
 
+  flex2535 = import ../development/tools/parsing/flex/flex-2.5.35.nix {
+    inherit fetchurl stdenv yacc m4;
+  };
+
   flex2534 = import ../development/tools/parsing/flex/flex-2.5.34.nix {
     inherit fetchurl stdenv yacc m4;
   };
@@ -5689,6 +5693,13 @@ let pkgs = rec {
     inherit (xlibs) xmessage;
   };
 
+  xneur = import ../applications/misc/xneur {
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell; 
+    GStreamer=gst_all.gstreamer;
+    inherit (xlibs) libX11;
+    inherit (gtkLibs) glib;
+  }; 
+
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
@@ -6065,6 +6076,14 @@ let pkgs = rec {
     inherit fetchurl stdenv tetex lazylist;
   };
 
+  psiFun = lib.sumArgs (selectVersion ../applications/networking/instant-messengers/psi "0.11") {
+    inherit builderDefs zlib aspell sox openssl;
+    inherit (xlibs) xproto libX11 libSM libICE;
+    qt = qt4;
+  };
+
+  psi = psiFun null;
+
   putty = import ../applications/networking/remote/putty {
     inherit stdenv fetchurl ncurses;
     inherit (gtkLibs1x) gtk;
@@ -6126,6 +6145,18 @@ let pkgs = rec {
   texFunctions = import ../misc/tex/nix {
     inherit stdenv perl tetex graphviz ghostscript;
   };
+
+  texLiveFun = lib.sumArgs (import ../misc/tex/texlive) {
+    inherit builderDefs zlib bzip2 ncurses libpng ed
+      gd t1lib freetype icu perl;
+    inherit (xlibs) libXaw libX11 xproto libXt libXpm
+      libXmu libXext xextproto libSM libICE;
+    flex = flex2535;
+    bison = bison23;
+    ghostscript = ghostscriptX;
+  };
+
+  texLive = texLiveFun null;
 
   toolbuslib = import ../development/libraries/toolbuslib {
     inherit stdenv fetchurl aterm;
