@@ -1371,7 +1371,7 @@ let pkgs = rec {
     inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip;
     # used (non haskell) libraries (ffi etc)
     inherit postgresql sqlite gtkLibs gnome;
-    wxGTK = wxGTK28;
+    wxGTK = wxGTK26;
   };
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}

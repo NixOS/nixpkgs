@@ -10,11 +10,14 @@ rec {
       # It merges derivations (defined below) and additional inputs. I hope that using as few nix functions as possible results in greates speed?
       # unfortunately with x; won't work because it forces nix to evaluate all attributes of x which would lead to infinite recursion
       pkgs = let x = ghc.core_libs // derivations;
+                 wxVersion = "0.10.3";
+                 wxSrc = fetchurl { url = "mirror://sourceforge/wxhaskell/wxhaskell-src-${wxVersion}.tar.gz";
+                                   sha256 = "0sjk7kzrlj0p6d6ijnw35s9qdyryb7kzvkrj0jhf12rhvjnvd5y0"; };
                  inherit (bleedingEdgeRepos) sourceByName;
              in {
           # ghc extra packages 
           mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
-          parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ];       src = ghc.extra_src; };
+          parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ]; src = ghc.extra_src; };
           network = { name="network-2.1.0.0"; srcDir="libraries/network"; p_deps=[ x.base x.parsec x.haskell98 ];       src = ghc.extra_src; };
           regex_base = { name="regex-base-0.72.0.1"; srcDir="libraries/regex-base"; p_deps=[ x.base x.array x.bytestring x.haskell98 ]; src = ghc.extra_src; };
           regex_posix = { name="regex-posix-0.72.0.2"; srcDir="libraries/regex-posix"; p_deps=[ x.regex_base x.haskell98 ]; src = ghc.extra_src; };
@@ -25,6 +28,8 @@ rec {
 
 
           # other pacakges  (hackage etc)
+          parsec3  = { name="parsec-3.0.0";  p_deps=[ x.base x.mtl x.bytestring ];  src = fetchurl { url = "http://hackage.haskell.org/packages/archive/parsec/3.0.0/parsec-3.0.0.tar.gz"; sha256 = "0fqryy09y8h7z0hlayg5gpavghgwa0g3bldynwl17ks8l87ykj7a"; }; };
+
           binary = rec { name = "binary-0.4.1"; p_deps = [ x.base x.bytestring x.containers x.array ];
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/binary/0.4.1/binary-0.4.1.tar.gz";
                                         sha256 = "0jg5i1k5fz0xp1piaaf5bzhagqvfl3i73hlpdmgs4gc40r1q4x5v"; };
@@ -123,26 +128,41 @@ rec {
                               ";
                           };
                         };
-          #wxhaskell = rec { name = "wxhaskel-0.9.4-1"; p_deps = [ x.haskell98 x.mtl x.bytestring pkgconfig wxGTK ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
-          #                src = fetchurl {
-          #                  url = "http://prdownloads.sourceforge.net/wxhaskell/wxhaskell-src-0.9.4-1.zip";
-          #                  sha256 = "0x6mjly7fxkxgzcl9znhzhik4h88rc56zl8diw5ihf48dcvby8wl"; };
-          #                pass = {
-          #                  buildInputs = [ unzip ];
-          #                  buildPhase = "
-          #                    createEmptyPackageDatabaseAndSetupHook
-          #                    export GHC_PACKAGE_PATH
-          #                    ./configure --prefix=\$out --package-conf=\$PACKAGE_DB
-          #                    make
-          #                    ensureDir \$out
-          #                    make install
-          #                    ";
-          #                };
-          #              };
+          hspread = { name = "hspread-0.3"; p_deps = [ x.base x.bytestring x.network x.binary ];
+                          src = fetchurl {
+                            url = http://hackage.haskell.org/packages/archive/hspread/0.3/hspread-0.3.tar.gz;
+                            sha256 = "0lwq7v7p6akykcsz6inkg99h3z7ab1gs5nkjjlgsbyqbwvimmf5n"; };
+                          pass = {
+                          };
+          };
+
+          wxcore = rec {
+                         
+                        name = "wxhaskel-${wxVersion}"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
+                        src = wxSrc;
+                        pass = {
+                          buildInputs = [ unzip ];
+                          buildPhase = "
+                            createEmptyPackageDatabaseAndSetupHook
+                            export GHC_PACKAGE_PATH
+                            sed -e 's/which/type -p/g' configure
+                            ./configure --prefix=\$out --package-conf=\$PACKAGE_DB
+                            make
+                            ensureDir \$out
+                            make install
+                            ";
+                        };
+                      };
+
+          wx = { name="wx-${wxVersion}"; src =wxSrc; srcDir="wx"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec x.wxcore pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
+                pass = { patchPhase = "pwd; cp {,wx/}license.txt"; };
+            };
+                  
+
 
           /*
           askelldb-hsql-postgresql-0.10.tar.gz
-######################################################################## 100.0%
+          ######################################################################## 100.0%
           hash is 00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
           path is /nix/store/9n86rzpn0c4zyb7wpilpfcpkfnq68fch-haskelldb-hsql-postgresql-0.10.tar.gz
           00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
