@@ -29,10 +29,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''portmap is a part of the ONC RPC software collection
-                    implementing remote procedure calls (RPCs) between
-		    computer programs.  It is widely used by NFS and NIS,
-		    among others.'';
+    description = "ONC RPC portmapper";
+    longDescription = ''
+      Portmap is part of the ONC RPC software collection implementing
+      remote procedure calls (RPCs) between computer programs.  It is
+      widely used by NFS and NIS, among others.
+    '';
+
     homepage = http://neil.brown.name/portmap/;
     license = "BSD";
   };

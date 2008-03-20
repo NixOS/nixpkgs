@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [gperf guile gmp zlib liboop gnum4 pam];
 
   meta = {
-    description = "GNU lsh, a GPL'd implementation of the SSH protocol.";
+    description = "GNU lsh, a GPL'd implementation of the SSH protocol";
     homepage = http://www.lysator.liu.se/~nisse/lsh/;
     license = "GPL";
   };

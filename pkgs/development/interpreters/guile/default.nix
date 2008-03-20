@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = ''GNU Guile is an interpreter for the Scheme
-                    programming language, packaged as a library that
-		    can be embedded into programs to make them extensible.'';
+    description = "GNU Guile, an embeddable Scheme interpreter";
+    longDescription = ''
+      GNU Guile is an interpreter for the Scheme programming language,
+      packaged as a library that can be embedded into programs to make
+      them extensible.  It supports many SRFIs.
+    '';
+
     homepage = http://www.gnu.org/software/guile/;
     license = "LGPL";
   };

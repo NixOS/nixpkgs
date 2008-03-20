@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Avahi is a system which facilitates service discovery
-                    on a local network.  It is an implementation of the
-		    mDNS (for "Multicast DNS") and DNS-SD (for "DNS-Based
-		    Service Discovery") protocols.'';
+    description = "Avahi, an mDNS/DNS-SD implementation";
+    longDescription = ''
+      Avahi is a system which facilitates service discovery on a local
+      network.  It is an implementation of the mDNS (for "Multicast
+      DNS") and DNS-SD (for "DNS-Based Service Discovery")
+      protocols.
+    '';
+
     homepage = http://avahi.org;
     license = "LGPLv2+";
   };

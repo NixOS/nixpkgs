@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''`nss-mdns' is a plugin for the GNU Name Service Switch
-                    (NSS) functionality of the GNU C Library (glibc) providing
-		    host name resolution via Multicast DNS (mDNS), effectively
-		    allowing name resolution by common Unix/Linux programs in
-		    the ad-hoc mDNS domain `.local'.'';
+    description = "The mDNS Name Service Switch (NSS) plug-in";
+    longDescription = ''
+      `nss-mdns' is a plugin for the GNU Name Service Switch (NSS)
+      functionality of the GNU C Library (glibc) providing host name
+      resolution via Multicast DNS (mDNS), effectively allowing name
+      resolution by common Unix/Linux programs in the ad-hoc mDNS
+      domain `.local'.
+    '';
+
     homepage = http://0pointer.de/lennart/projects/nss-mdns/;
     license = "LGPLv2+";
   };
