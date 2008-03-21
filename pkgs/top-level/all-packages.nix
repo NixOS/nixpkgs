@@ -1942,6 +1942,12 @@ let pkgs = rec {
     inherit cabal;
   };
 
+  hsc2hs = import ../development/tools/documentation/hs2hs {
+    inherit bleedingEdgeRepos stdenv;
+    ghc = ghcsAndLibs.ghc68.ghc;
+    libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ base directory process cabal_darcs ];
+  };
+
   guileLint = import ../development/tools/guile/guile-lint {
     inherit fetchurl stdenv guile;
   };
