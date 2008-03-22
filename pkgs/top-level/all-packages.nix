@@ -812,7 +812,8 @@ let pkgs = rec {
   };
 
   nmap = import ../tools/security/nmap {
-    inherit fetchurl stdenv libpcap pkgconfig;
+    inherit fetchurl stdenv libpcap pkgconfig openssl
+      python pygtk;
     inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
   };
