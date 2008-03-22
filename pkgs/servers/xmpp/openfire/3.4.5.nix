@@ -14,7 +14,7 @@ args : with args; with builderDefs {src="";} null;
       cp -r . $out
       rm -r $out/logs
       mv $out/conf $out/conf.inst
-      ln -s /var/logs/openfire $out/logs
+      ln -s /var/log/openfire $out/logs
       ln -s /etc/openfire $out/conf
     '') 
     ["minInit" "doUnpack" "addInputs"];
