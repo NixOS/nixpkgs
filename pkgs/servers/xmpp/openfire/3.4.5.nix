@@ -12,15 +12,19 @@ args : with args; with builderDefs {src="";} null;
     installPhase = FullDepEntry (''
       sed -e 's@\(common_jvm_locations\)=.*@\1${jre}@' -i bin/openfire
       cp -r . $out
+      rm -r $out/logs
+      mv $out/conf $out/conf.inst
+      ln -s /var/logs/openfire $out/logs
+      ln -s /etc/openfire $out/conf
     '') 
-    ["minInit" "doUnpack" "findInputs"];
+    ["minInit" "doUnpack" "addInputs"];
   }) null; /* null is a terminator for sumArgs */
   in with localDefs;
 stdenv.mkDerivation rec {
   name = "openfire-"+version;
   builder = writeScript (name + "-builder")
     (textClosure localDefs 
-      [ doForceShare doPropagate installPhase]);
+      [ installPhase doForceShare doPropagate]);
   meta = {
     description = "
     XMPP server in Java.
