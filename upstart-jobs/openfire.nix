@@ -22,6 +22,13 @@ with pkgs;
     script 
       export PATH=${jre}/bin:${openfire}/bin:${coreutils}/bin:${which}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
       export HOME=/tmp
+      mkdir /var/log/openfire || true 
+      mkdir /etc/openfire || true 
+      for i in ${openfire}/conf.inst/*; do
+          if ! test -f /etc/openfire/$(basename $i); then
+	      cp $i /etc/openfire/
+	  fi
+      done
       openfire start
     end script
   '';
