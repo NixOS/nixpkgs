@@ -32,6 +32,7 @@ mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
 
+
 # Process the kernel command line.
 stage2Init=@stage2Init@
 for o in $(cat /proc/cmdline); do
@@ -65,13 +66,17 @@ for i in @modules@; do
 done
 
 
-# Try to resume - all modules are loaded now
-if test -n "$(cat /sys/power/tuxonice/resume)"; then
-    echo 0 > /sys/power/tuxonice/user_interface/enabled
-    echo 1 > /sys/power/tuxonice/do_resume || echo "Failed to resume..."
+# Try to resume - all modules are loaded now.
+if test -e /sys/power/tuxonice/resume; then
+    if test -n "$(cat /sys/power/tuxonice/resume)"; then
+        echo 0 > /sys/power/tuxonice/user_interface/enabled
+        echo 1 > /sys/power/tuxonice/do_resume || echo "Failed to resume..."
+    fi
 fi
-    echo 1 > /sys/power/resume || echo "Failed to resume..."
-    echo shutdown >/sys/power/disk
+
+echo 1 > /sys/power/resume || echo "Failed to resume..."
+echo shutdown > /sys/power/disk
+
 
 # Create device nodes in /dev.
 mknod -m 0666 /dev/null c 1 3
