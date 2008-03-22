@@ -37,8 +37,9 @@ done
 
 # Remove dangling symlinks that point to /etc/static.  These are
 # configuration files that existed in a previous configuration but not
-# in the current one.
-for i in $(find /etc/ -type l); do
+# in the current one.  For efficiency, don't look under /etc/nixos
+# (where all the NixOS sources live).
+for i in $(find /etc/ \( -path /etc/nixos -prune \) -o -type l); do
     target=$(readlink "$i")
     if test "${target:0:${#staticEtc}}" = "$staticEtc" -a ! -e "$i"; then
         rm -f "$i"
