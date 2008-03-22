@@ -30,7 +30,6 @@ test -e /etc/fstab || touch /etc/fstab # to shut up mount
 mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
 cat /proc/mounts > /etc/mtab
-
 mkdir -m 0755 -p /etc/nixos
 
 
@@ -55,6 +54,10 @@ for o in $(cat /proc/cmdline); do
         systemConfig=*)
             set -- $(IFS==; echo $o)
             systemConfig=$2
+            ;;
+        resume=*)
+            set -- $(IFS==; echo $o)
+            resumeDevice=$2
             ;;
     esac
 done
@@ -90,6 +93,12 @@ mknod -m 0666 /dev/null c 1 3
 mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
 
 
+# Clear the resume device.
+if test -n "$resumeDevice"; then
+    mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
+fi
+
+
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 @activateConfiguration@ "$systemConfig"
@@ -108,13 +117,6 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @bootLocal@
 
-resumeDevice="$(cat /proc/cmdline)"
-resumeDevice="${resumeDevice##* resume=}"
-resumeDevice="${resumeDevice%% *}"
-echo "$resumeDevice"
-if test -n "$resumeDevice"; then
-    mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
-fi
 
 # Start Upstart's init.  We start it through the
 # /var/run/current-system symlink indirection so that we can upgrade
