@@ -18,19 +18,22 @@
 
   extraPath = [hal];
   
-  job = "
-description \"HAL daemon\"
+  job = ''
+    description "HAL daemon"
 
-start on dbus
-stop on shutdown
+    start on dbus
+    stop on shutdown
 
-start script
+    start script
 
-    mkdir -m 0755 -p /var/cache/hald
+        # !!! quick hack: wait until dbus has started
+        sleep 3
 
-end script
+        mkdir -m 0755 -p /var/cache/hald
 
-respawn ${hal}/sbin/hald --daemon=no --verbose=yes
-  ";
+    end script
+
+    respawn ${hal}/sbin/hald --daemon=no --verbose=yes
+  '';
   
 }

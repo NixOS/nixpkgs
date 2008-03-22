@@ -35,28 +35,28 @@ in
   
   extraPath = [dbus.daemon dbus.tools];
   
-  job = "
-description \"D-Bus system message bus daemon\"
+  job = ''
+    description "D-Bus system message bus daemon"
 
-start on startup
-stop on shutdown
+    start on startup
+    stop on shutdown
 
-start script
+    start script
 
-    mkdir -m 0755 -p ${homeDir}
-    chown messagebus ${homeDir}
+        mkdir -m 0755 -p ${homeDir}
+        chown messagebus ${homeDir}
 
-    mkdir -m 0755 -p /var/lib/dbus
-    ${dbus.tools}/bin/dbus-uuidgen --ensure
+        mkdir -m 0755 -p /var/lib/dbus
+        ${dbus.tools}/bin/dbus-uuidgen --ensure
 
-end script
+    end script
 
-respawn
+    respawn
 
-script
-    rm -f ${homeDir}/pid
-    exec ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
-end script
-  ";
+    script
+        rm -f ${homeDir}/pid
+        exec ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
+    end script
+  '';
   
 }
