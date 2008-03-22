@@ -15,11 +15,6 @@ rec {
     sha256 = "0cmd9ryd57rzzg7g2gm3qn4ijakkacy810h5zncqd39p3i1yn6nx";
   };
 
-  cmSuperSrc = fetchurl {
-    url = ftp://195.178.192.118/debian/pool/main/c/cm-super/cm-super_0.3.3.orig.tar.gz;
-    sha256 = "1lxvnhqds2zi6ssz66r1b7s6p855lab7cgp0hdg247zkacbjxcfg";
-  };
-  
   setupHook = ./setup-hook.sh;
 
   doPreConfigure = FullDepEntry (''
@@ -38,18 +33,6 @@ rec {
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
-
-  doInstallCMSuper = FullDepEntry (''
-    tar xf ${cmSuperSrc}
-    ensureDir $out/share/texmf/fonts/type1/public/cm-super
-    cp cm-super-*/pfb/*.pfb $out/share/texmf/fonts/type1/public/cm-super
-    ensureDir $out/share/texmf/dvips/cm-super
-    cp cm-super-*/dvips/*.{map,enc}  $out/share/texmf/dvips/cm-super
-    cp cm-super-*/dvips/*.enc  $out/share/texmf/fonts/enc
-    cp cm-super-*/dvips/*.map  $out/share/texmf/fonts/map
-    ensureDir $out/share/texmf/dvipdfm/config
-    cp cm-super-*/dvipdfm/*.map  $out/share/texmf/dvipdfm/config
-  '') ["minInit" "defEnsureDir" "doPreConfigure"];
 
   doPostInstall = FullDepEntry(''
     mv $out/bin $out/libexec
@@ -90,11 +73,11 @@ rec {
   ];
 
   phaseNames = ["doPreConfigure" "doConfigure" 
-    "doInstallCMSuper" "doMakeInstall" "doPostInstall"];
+    "doMakeInstall" "doPostInstall"];
 
   name = "texlive-core-2007";
   meta = {
     description = "A TeX distribution";
-    srcs = [texmfSrc langTexmfSrc cmSuperSrc];
+    srcs = [texmfSrc langTexmfSrc];
   };
 }

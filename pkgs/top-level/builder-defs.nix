@@ -389,16 +389,20 @@ args: with args; with stringsWithDeps; with lib;
 
 	phaseNames = args.phaseNames ++ 
 	  ["doForceShare" "doPropagate"];
+        
+	extraDerivationAttrs = lib.getAttr ["extraDerivationAttrs"] {} args;
 
 	builderDefsPackage = bd: func: args: (
 	let localDefs = bd (func ((bd null) // args)) args null; in
 
-	stdenv.mkDerivation (rec {
+	stdenv.mkDerivation ((rec {
 	  inherit (localDefs) name;
 	  builder = writeScript (name + "-builder")
 	    (textClosure localDefs localDefs.phaseNames);
 	  meta = localDefs.meta // {inherit src;};
-	})
+	}) // (if localDefs ? propagatedBuildInputs then {
+	  inherit (localDefs) propagatedBuildInputs;
+	} else {}) // extraDerivationAttrs)
 	);
 
 }) // args

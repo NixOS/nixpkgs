@@ -6167,7 +6167,42 @@ let pkgs = rec {
     ghostscript = ghostscriptX;
   };
 
+  /* Look in configurations/misc/raskin.nix for usage example (around revisions 
+  where TeXLive was added) 
+  
+  (texLiveAggregationFun {
+    paths = [texLive texLiveExtra texLiveCMSuper 
+      texLiveBeamer
+    ];
+  } null)
+  */
   texLive = texLiveFun null;
+  texLiveAggregationFun = builderDefsPackage (import ../misc/tex/texlive/aggregate.nix);
+
+  texLiveExtraFun = builderDefsPackage (import ../misc/tex/texlive/extra.nix) {
+    inherit texLive;
+  };
+  texLiveExtra = texLiveExtraFun null;
+
+  texLiveCMSuperFun = builderDefsPackage (import ../misc/tex/texlive/cm-super.nix) {
+    inherit texLive;
+  };
+  texLiveCMSuper = texLiveCMSuperFun null;
+
+  texLiveLatexXColorFun = builderDefsPackage (import ../misc/tex/texlive/xcolor.nix) {
+    inherit texLive;
+  };
+  texLiveLatexXColor = texLiveLatexXColorFun null;
+
+  texLivePGFFun = builderDefsPackage (import ../misc/tex/texlive/pgf.nix) {
+    inherit texLiveLatexXColor texLive;
+  };
+  texLivePGF = texLivePGFFun null;
+
+  texLiveBeamerFun = builderDefsPackage (import ../misc/tex/texlive/beamer.nix) {
+    inherit texLiveLatexXColor texLivePGF texLive;
+  };
+  texLiveBeamer = texLiveBeamerFun null;
 
   toolbuslib = import ../development/libraries/toolbuslib {
     inherit stdenv fetchurl aterm;
