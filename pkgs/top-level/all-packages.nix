@@ -813,7 +813,8 @@ let pkgs = rec {
 
   nmap = import ../tools/security/nmap {
     inherit fetchurl stdenv libpcap pkgconfig openssl
-      python pygtk;
+      python pygtk makeWrapper pygobject pycairo 
+      pysqlite;
     inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
   };
@@ -6222,9 +6223,11 @@ let pkgs = rec {
       pythonBindings = true; # Enable python bindings
     };
 
-    pysqlite = import ../development/libraries/pysqlite {
-      inherit stdenv fetchurl python sqlite;
-    };
+    inherit pysqlite;
+  };
+    
+  pysqlite = import ../development/libraries/pysqlite {
+    inherit stdenv fetchurl python sqlite;
   };
 
   wine = import ../misc/emulators/wine {
