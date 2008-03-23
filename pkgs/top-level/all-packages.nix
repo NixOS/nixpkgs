@@ -2823,7 +2823,6 @@ let pkgs = rec {
 
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
-    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   });
 
   libzip = import ../development/libraries/libzip {
@@ -5615,14 +5614,12 @@ let pkgs = rec {
     libixp = libixp03;
     inherit fetchurl /* fetchhg */ stdenv gawk;
     inherit (xlibs) libX11;
-    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
   wmiiSnap = import ../applications/window-managers/wmii {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
     inherit (xlibs) libX11;
-    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
   wordnet = import ../applications/misc/wordnet {
