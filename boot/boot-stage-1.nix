@@ -30,6 +30,9 @@
 , # The path of the stage 2 init to call once we've mounted the root
   # device.
   stage2Init ? "/init"
+
+, # Resume device. [major]:[minor]
+  resumeDevice ? "ignore-this"
 }:
 
 let
@@ -48,7 +51,7 @@ substituteAll {
   src = ./boot-stage-1-init.sh;
   isExecutable = true;
   inherit staticShell modules modulesDir;
-  inherit autoDetectRootDevice isLiveCD mountPoints devices fsTypes optionss;
+  inherit autoDetectRootDevice isLiveCD mountPoints devices fsTypes optionss resumeDevice;
   rootLabel = if autoDetectRootDevice then rootLabel else "";
   path = [
     staticTools

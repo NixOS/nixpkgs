@@ -74,7 +74,7 @@ if test -e /sys/power/tuxonice/resume; then
     fi
 fi
 
-echo 1 > /sys/power/resume || echo "Failed to resume..."
+echo "@resumeDevice@" > /sys/power/resume || echo "Failed to resume..."
 echo shutdown > /sys/power/disk
 
 

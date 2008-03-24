@@ -44,6 +44,7 @@ rec {
   modulesClosure = pkgs.makeModulesClosure {
     inherit rootModules;
     kernel = modulesTree;
+    allowMissing = config.boot.initrd.allowMissing;
   };
 
 
@@ -89,6 +90,7 @@ rec {
     modules = rootModules;
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
     staticTools = stdenvLinuxStuff.staticTools;
+    resumeDevice = config.boot.resumeDevice;
   };
   
 

@@ -66,6 +66,15 @@
       ";
     };
 
+    resumeDevice = mkOption {
+      default = "";
+      example = "0:0";
+      description = "
+        Device for manual resume attempt during boot. Looks like 
+	major:minor .
+      ";
+    };
+
     kernel = mkOption {
       default = pkgs: pkgs.kernel;
       description = "
@@ -196,6 +205,15 @@
           <option>boot.initrd.kernelModules</option>, so they take
           precedence.
         ";
+      };
+
+      allowMissing = mkOption {
+        default = false;
+	description = ''
+	  Allow some initrd components to be missing. Useful for
+	  custom kernel that are changed too often to track needed
+	  kernelModules.
+	'';
       };
 
       lvm = mkOption {
