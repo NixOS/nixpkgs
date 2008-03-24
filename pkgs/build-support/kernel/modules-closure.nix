@@ -3,11 +3,12 @@
 # the modules identified by `rootModules', plus their dependencies.
 # Also generate an appropriate modules.dep.
 
-{stdenv, kernel, rootModules, module_init_tools}:
+{stdenv, kernel, rootModules, module_init_tools, allowMissing ? false}:
 
 stdenv.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
   inherit kernel rootModules module_init_tools;
   allowedReferences = ["out"];
+  allowMissing = if allowMissing then "true" else "";
 }

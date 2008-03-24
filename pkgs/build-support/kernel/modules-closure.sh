@@ -15,7 +15,7 @@ closure=
 for module in $rootModules; do
     echo "root module: $module"
     deps=$(modprobe --config /dev/null --set-version "$version" --show-depends "$module" \
-        | sed 's/^insmod //')
+    | sed 's/^insmod //') || if test -z "allowMissing"; then exit 1; fi
     #for i in $deps; do echo $i; done
     closure="$closure $deps"
 done
