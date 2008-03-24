@@ -270,7 +270,7 @@ let pkgs = rec {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
-  builderDefsPackage = expr: lib.sumArgs 
+  builderDefsPackage = expr: lib.composedArgs 
     (((builderDefs null).builderDefsPackage builderDefs) expr);
 
   stringsWithDeps = import ../lib/strings-with-deps.nix {
@@ -368,9 +368,10 @@ let pkgs = rec {
 
   makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
-  makeModulesClosure = {kernel, rootModules}: import ../build-support/kernel/modules-closure.nix {
-    inherit stdenv module_init_tools kernel rootModules;
-  };
+  makeModulesClosure = {kernel, rootModules, allowMissing ? false}: 
+    import ../build-support/kernel/modules-closure.nix {
+      inherit stdenv module_init_tools kernel rootModules allowMissing;
+    };
 
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
@@ -4175,8 +4176,12 @@ let pkgs = rec {
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
-  kqemuFun = lib.sumArgs (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
-    inherit fetchurl stdenv builderDefs;
+  customKernel = lib.sumArgs (import ../os-specific/linux/kernel/linux.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools lib;
+  };
+
+  kqemuFun = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
+    inherit builderDefs;
   };
 
   # No finished expression is provided - pick your own kernel
