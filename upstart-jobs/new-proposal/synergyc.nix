@@ -24,7 +24,7 @@ description \"${name}\"
 start on network-interfaces/started
 stop on network-interfaces/stop
 
-exec ${pkgs.synergy}/bin/synergyc -f ${configV "adress"} ${configV "screenName"}
+exec ${pkgs.synergy}/bin/synergyc -f ${configV "screenName"} ${configV "address"}
   ";
   
 } ) ];
