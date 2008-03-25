@@ -5953,7 +5953,7 @@ let pkgs = rec {
   };
  
   auctex = import ../misc/tex/auctex {
-    inherit stdenv fetchurl emacs tetex;
+    inherit stdenv fetchurl emacs texLive;
   };
 
   busybox = import ../misc/busybox {
