@@ -5153,6 +5153,11 @@ let pkgs = rec {
     inherit stdenv fetchurl;
   };
 
+  jwm = import ../applications/window-managers/jwm {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXext libXinerama libXpm libXft;
+  };
+
   kino = import ../applications/video/kino {
     inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser 
       libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
