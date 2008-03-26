@@ -23,8 +23,8 @@ start script
     fi
 end script
 
-# FIXME: Eventually we want to use inetd instead of using `-D'.
-respawn ${bitlbee}/sbin/bitlbee -D -p ${portNumber} -i ${interface}
+# FIXME: Eventually we want to use inetd instead of using `-F'.
+respawn ${bitlbee}/sbin/bitlbee -F -p ${portNumber} -i ${interface}
   ";
   
 }
