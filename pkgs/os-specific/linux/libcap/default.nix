@@ -13,6 +13,6 @@ stdenv.mkDerivation {
   buildInputs = [attr];
 
   preBuild = ''
-    makeFlagsArray=(LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man)
+    makeFlagsArray=(LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man PAM_CAP=no)
   '';
 }
