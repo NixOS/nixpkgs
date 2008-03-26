@@ -2321,10 +2321,10 @@ root        ALL=(ALL) SETENV: ALL
   environment = {
 
     pathsToLink = mkOption {
-      default = ["/bin" "/sbin" "/share" "/man" "/info"];
+      default = ["/bin" "/sbin" "/lib" "/share" "/man" "/info"];
       example = ["/"];
       description = "
-        This allows to symlink more directories in /var/run/current-system/sw
+        Lists directories to be symlinked in `/var/run/current-system/sw'.
       ";
     };
 

@@ -259,12 +259,16 @@ rec {
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
   ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
   ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
-  ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ config.environment.extraPackages pkgs
-  ++ pkgs.lib.optional config.fonts.enableFontDir fontDir;
+  ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
 
+  # NSS modules need to be in `systemPath' so that (i) the builder
+  # chroot gets to seem them, and (ii) applications can benefit from
+  # changes in the list of NSS modules at run-time, without requiring
+  # a reboot.
+  ++ nssModules;
 
   # We don't want to put all of `startPath' and `path' in $PATH, since
   # then we get an embarrassingly long $PATH.  So use the user
@@ -273,7 +277,11 @@ rec {
   systemPath = pkgs.buildEnv {
     name = "system-path";
     paths = systemPathList;
+
+    # Note: We need `/lib' to be among `pathsToLink' for NSS modules
+    # to work.
     inherit (config.environment) pathsToLink;
+
     ignoreCollisions = true;
   };
 
