@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     mv ,,tmp guile-lint.in
   '';
 
+  doCheck = true;
+
   meta = {
     description = ''Guile-Lint checks syntax and semantics in a
                     Guile program or module.'';

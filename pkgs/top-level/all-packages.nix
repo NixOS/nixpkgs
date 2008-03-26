@@ -1795,7 +1795,7 @@ let pkgs = rec {
   };
 
   guileLib = import ../development/guile-modules/guile-lib {
-    inherit fetchurl stdenv guile;
+    inherit fetchurl stdenv guile texinfo;
   };
 
   windowssdk = import ../development/misc/windows-sdk {
