@@ -587,15 +587,16 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  fontforgeFun = lib.sumArgs (import ../tools/misc/fontforge) {
+  fontforge = import ../tools/misc/fontforge {
     inherit fetchurl stdenv gettext freetype zlib
       libungif libpng libjpeg libtiff libxml2 lib;
   };
 
-  fontforge = fontforgeFun null;
-  fontforgeX = fontforgeFun {
+  fontforgeX = import ../tools/misc/fontforge {
+    inherit fetchurl stdenv gettext freetype zlib
+      libungif libpng libjpeg libtiff libxml2 lib;
     inherit (xlibs) libX11 xproto libXt;
-  } null;
+  };
 
   gawk = useFromStdenv "gawk"
     (import ../tools/text/gawk {
