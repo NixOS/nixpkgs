@@ -21,6 +21,16 @@ stdenv.mkDerivation {
     libtool freetype bzip2 cups
   ];
 
+  # Prevent configure from looking for pkg-config and freetype-config
+  # in the wrong location (it looks in /usr/bin etc. *before* looking
+  # in $PATH).
+  preConfigure = ''
+    substituteInPlace configure \
+      --replace /usr/bin /no-such-path \
+      --replace /usr/local/bin /no-such-path \
+      --replace /opt/local/bin /no-such-path
+  '';
+
   configureFlags = "
     --without-arts 
     --with-ssl-dir=${openssl}

@@ -27,9 +27,23 @@ stdenv.mkDerivation {
     --with-extra-includes=${libjpeg}/include
   ";
 
+  # Prevent configure from looking for pkg-config and freetype-config
+  # in the wrong location (it looks in /usr/bin etc. *before* looking
+  # in $PATH).
+  preConfigure = ''
+    substituteInPlace configure \
+      --replace /usr/bin /no-such-path \
+      --replace /usr/local/bin /no-such-path \
+      --replace /opt/local/bin /no-such-path
+  '';
+
   # Quick hack to work around a faulty dependency in
   # konqueror/keditbookmarks/Makefile.am (${includedir} should be
   # ${kdelibs} or so).
-  preBuild = "ensureDir $out/include; ln -s ${kdelibs}/include/kbookmarknotifier.h $out/include/";
+  preBuild = ''
+    ensureDir $out/include
+    ln -s ${kdelibs}/include/kbookmarknotifier.h $out/include/
+  '';
+  
   postInstall = "rm $out/include/kbookmarknotifier.h";
 }
