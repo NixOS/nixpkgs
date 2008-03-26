@@ -1,17 +1,27 @@
 args: with args;
+
+let
+  bitlbeeUid = (import ../system/ids.nix).uids.bitlbee;
+in
 {
   name = "bitlbee";
 
   users = [
     { name = "bitlbee";
-      uid = (import ../system/ids.nix).uids.bitlbee;
+      uid = bitlbeeUid;
       description = "BitlBee user";
       home = "/var/empty";
     }
   ];
   
-  job = "
-description \"BitlBee IRC to other chat networks gateway\"
+  groups = [
+    { name = "bitlbee";
+      gid = (import ../system/ids.nix).gids.bitlbee;
+    }
+  ];
+
+  job = ''
+description "BitlBee IRC to other chat networks gateway"
 
 start on network-interfaces/started
 stop on network-interfaces/stop
@@ -23,8 +33,8 @@ start script
     fi
 end script
 
-# FIXME: Eventually we want to use inetd instead of using `-F'.
-respawn ${bitlbee}/sbin/bitlbee -F -p ${portNumber} -i ${interface}
-  ";
+respawn ${bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
+        -i ${interface} -u bitlbee
+  '';
   
 }

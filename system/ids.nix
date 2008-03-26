@@ -24,6 +24,7 @@
     haldaemon = 5;
     vsftpd = 7;
     ftp = 8;
+    bitlbee = 9;
     avahi = 10;
     portmap = 11;
     audio = 17;

@@ -1042,7 +1042,7 @@
       };
 
       portNumber = mkOption {
-        default = "6667";
+        default = 6667;
         description = ''
           Number of the port BitlBee will be listening to.
         '';
