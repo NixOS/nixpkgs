@@ -36,8 +36,8 @@ in
   ];
 
   job = ''
-    start on startup
-    stop on shutdown
+    start on network-interfaces/started
+    stop on network-interfaces/stop
     respawn
     script
       export PATH="${avahi}/bin:${avahi}/sbin:$PATH"
