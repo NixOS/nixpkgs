@@ -1,13 +1,12 @@
-diff -ruN pl233src/src/Makefile pl233src.new/src/Makefile
---- pl233src/src/Makefile	2006-06-02 17:31:46.000000000 +0200
-+++ pl233src.new/src/Makefile	2006-08-23 18:05:50.000000000 +0200
-@@ -190,7 +190,8 @@
+--- pl240src/src/Makefile	2008-01-15 21:05:14.000000000 +0100
++++ pl240src/src/Makefile	2008-03-26 23:51:53.000000000 +0100
+@@ -131,7 +131,7 @@ ZFLAG = -DWZ
  
  
- #### If you plan to do a "make install", where do you want the executable(s) to be moved to?
--BIN = /usr/local/bin
-+#BIN = /usr/local/bin
-+BIN = $(out)/bin
+ #### If you do a "make install", where do you want the executable(s) to be moved to?
+-INSTALLBIN = /usr/local/bin
++INSTALLBIN = $(out)/bin
  
  
- #### To set a hard-coded directory for prefabs files, uncomment & edit the following.. 
+ #### For LOCALE support (non-roman alphabets & collation), uncomment the following..
+
