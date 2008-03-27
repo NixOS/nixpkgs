@@ -488,14 +488,14 @@ rec {
     redhat9i386 = fillDiskWithRPMs {
       name = "redhat-9-i386";
       fullName = "Red Hat Linux 9 (i386)";
-      size = 768;
+      size = 1024;
       rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
     };
     
     suse90i386 = fillDiskWithRPMs {
       name = "suse-9.0-i386";
       fullName = "SUSE Linux 9.0 (i386)";
-      size = 768;
+      size = 1024;
       rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
       # Urgh.  The /etc/group entries are installed by aaa_base (or
       # something) but due to dependency ordering, that package isn't
@@ -515,35 +515,35 @@ rec {
     fedora2i386 = fillDiskWithRPMs {
       name = "fedora-core-2-i386";
       fullName = "Fedora Core 2 (i386)";
-      size = 768;
+      size = 1024;
       rpms = import ./rpm/fedora-2-i386.nix {inherit fetchurl;};
     };
     
     fedora3i386 = fillDiskWithRPMs {
       name = "fedora-core-3-i386";
       fullName = "Fedora Core 3 (i386)";
-      size = 768;
+      size = 1024;
       rpms = import ./rpm/fedora-3-i386.nix {inherit fetchurl;};
     };
     
     fedora5i386 = fillDiskWithRPMs {
       name = "fedora-core-5-i386";
       fullName = "Fedora Core 5 (i386)";
-      size = 768;
+      size = 1024;
       rpms = import ./rpm/fedora-5-i386.nix {inherit fetchurl;};
     };
     
     ubuntu710i386 = fillDiskWithDebs {
       name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
-      size = 512;
+      size = 1024;
       debs = import ./deb/ubuntu-7.10-gutsy-i386.nix {inherit fetchurl;};
     };
 
     debian40r3i386 = fillDiskWithDebs {
       name = "debian-4.0r3-etch-i386";
       fullName = "Debian 4.0r3 Etch (i386)";
-      size = 512;
+      size = 1024;
       debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};
     };
 
