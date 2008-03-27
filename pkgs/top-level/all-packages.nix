@@ -3960,6 +3960,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  jfsUtilsFun = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
+    inherit e2fsprogs;
+  };
+  jfsUtils = jfsUtilsFun null;
+
   kbd = import ../os-specific/linux/kbd {
     inherit fetchurl stdenv bison flex;
   };
@@ -4491,6 +4496,11 @@ let pkgs = rec {
   wpa_supplicant = import ../os-specific/linux/wpa_supplicant {
     inherit fetchurl stdenv openssl;
   };
+
+  xfsProgsFun = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
+    inherit libtool gettext e2fsprogs;
+  };
+  xfsProgs = xfsProgsFun null;
 
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
     inherit stdenv xlibs expat libdrm;
