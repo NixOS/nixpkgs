@@ -711,6 +711,10 @@ let pkgs = rec {
   };
   */
 
+  idutils = import ../tools/misc/idutils {
+    inherit fetchurl stdenv emacs;
+  };
+
   inetutils = import ../tools/networking/inetutils {
     inherit fetchurl stdenv;
   };
