@@ -38,6 +38,7 @@ stdenv.mkDerivation {
   };
   
   patches = map (p: p.patch) kernelPatches;
+  
   extraConfig = lib.concatStrings (map (p: "\n" + (if p ? extraConfig then p.extraConfig else "") + "\n") kernelPatches);
 
   config =
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "Platform ${stdenv.system} is not supported.";
 
-  makeFlags = if userModeLinux then "ARCH=um SHELL=bash" else "";
+  makeFlags = if userModeLinux then "ARCH=um SHELL=bash HAVE_AIO_ABI=" else "";
 
   inherit module_init_tools;
 
