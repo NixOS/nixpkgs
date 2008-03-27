@@ -4594,6 +4594,18 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  r3rs = import ../data/documentation/rnrs/r3rs.nix {
+    inherit fetchurl stdenv texinfo;
+  };
+
+  r4rs = import ../data/documentation/rnrs/r4rs.nix {
+    inherit fetchurl stdenv texinfo;
+  };
+
+  r5rs = import ../data/documentation/rnrs/r5rs.nix {
+    inherit fetchurl stdenv texinfo;
+  };
+
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
     inherit fetchurl stdenv;
   };
