@@ -5062,6 +5062,11 @@ let pkgs = rec {
     emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
   };
 
+  gitsvnwrapper = import ../applications/version-management/git/git-svn-wrapper.nix {
+    inherit subversion git stdenv;
+    perlLibs = [ perlLWP perlURI perlTermReadKey subversion ];
+  };
+
   gkrellm = import ../applications/misc/gkrellm {
     inherit fetchurl stdenv gettext pkgconfig;
     inherit (gtkLibs) glib gtk;
