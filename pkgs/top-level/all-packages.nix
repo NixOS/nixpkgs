@@ -5245,7 +5245,7 @@ let pkgs = rec {
   };
 
   lyx = import ../applications/misc/lyx {
-   inherit fetchurl stdenv tetex python;
+   inherit fetchurl stdenv texLive python;
    qt = qt4;
   };
 

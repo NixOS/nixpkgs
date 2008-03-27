@@ -1,14 +1,14 @@
 # I haven't put much effort into this expressions .. so some optional depencencies may be missing - Marc
-args:
-args.stdenv.mkDerivation {
-  name = "lyx-1.5.3";
+args: with args;
+stdenv.mkDerivation {
+  name = "lyx-1.5.4";
 
-  src = args.fetchurl {
-    url = http://lyx.cybermirror.org/stable/lyx-1.5.3.tar.bz2;
-    sha256 = "1q0xlhrvj87iw9rk9z2vfka4jw5pw7n5fsmmiyzram9y4hghavav";
+  src = fetchurl {
+    url = http://lyx.cybermirror.org/stable/lyx-1.5.4.tar.bz2;
+    sha256 = "6c8b9aafc287ee683b68ebb08166e660e27af9942a30291f14c18de39aca8f2b";
   };
 
-  buildInputs =(with args; [tetex qt python]);
+  buildInputs = [texLive qt python];
 
   meta = { 
       description = "WYSIWYM frontend for LaTeX, DocBook, etc.";
