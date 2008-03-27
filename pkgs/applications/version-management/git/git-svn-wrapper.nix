@@ -1,5 +1,5 @@
 args: with args;
-if (!args.subversion.perlBindings) then abort "svn perl bindings required to install gitsvnwrapper"
+if (!args.subversion.perlBindings) then throw "svn perl bindings required to install gitsvnwrapper"
 else args.stdenv.mkDerivation {
   inherit git perlLibs subversion;
   name = "git-svn-wrapper";
