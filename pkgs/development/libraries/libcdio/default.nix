@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcddb pkgconfig ncurses ];
 
+  doCheck = true;
+
   meta = {
     description = ''GNU libcdio is a library for OS-idependent CD-ROM and
                     CD image access.  It includes a library for working with

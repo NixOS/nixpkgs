@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ emacs ];
 
+  doCheck = true;
+
   meta = {
     description = "GNU Idutils, a text searching utility";
 
