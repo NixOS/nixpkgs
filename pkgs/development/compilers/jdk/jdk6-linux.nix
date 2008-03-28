@@ -15,18 +15,18 @@ assert pluginSupport -> libstdcpp5 != null;
 
 (stdenv.mkDerivation ({
   name =
-    if installjdk then "jdk-1.6.0_4" else "jre-1.6.0_4";
+    if installjdk then "jdk-1.6.0_5" else "jre-1.6.0_5";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u4-dlj-linux-i586.bin;
-        sha256 = "955186f497a50106cd1788fcaf032eedc560985826c8a6c3cb7ab43220cad23c";
+        url = http://download.java.net/dlj/binaries/jdk-6u5-dlj-linux-i586.bin;
+        sha256 = "b0f78f2e6baf88c1d7dc9334c6b86e621b2c9d629f5617f3f57a3bd7cbad0c99";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u4-dlj-linux-amd64.bin;
-        sha256 = "be0e21402a79c5b6cd6c96d34451bcc365619cd063930f3ca1c1abe2ee5dbf43";
+        url = http://download.java.net/dlj/binaries/jdk-6u5-dlj-linux-amd64.bin;
+        sha256 = "9a9b97ce5ac821f9a92541eb5e2353ddefd485eaa1b4f4de6b41fce8281831d4";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
@@ -53,8 +53,12 @@ assert pluginSupport -> libstdcpp5 != null;
       abort "jdk requires i686-linux or x86_64 linux";
 
   buildInputs = [unzip makeWrapper];
+  
+  /**
+   * libXt is only needed on amd64
+   */
   libraries =
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi] else []);
+    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
 
   inherit pluginSupport;
 } // (
@@ -65,7 +69,7 @@ assert pluginSupport -> libstdcpp5 != null;
       inherit libstdcpp5;
     }
   else
-    {}
+    { libPath =  [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt]; }
 ))
 //
   {
