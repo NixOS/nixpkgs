@@ -160,6 +160,31 @@ in
 		pkgs.bittornado
 		pkgs.wireshark
 		pkgs.smbfsFuse
+		pkgs.xfsProgs
+		pkgs.jfsUtils
+		pkgs.x11vnc
+		pkgs.lzma
+		pkgs.dict 
+		pkgs.apacheHttpd
+		pkgs.xneur
+		(with pkgs.aspellDicts; [en fr ru])
+		(pkgs.dictDBCollector {
+			dictlist = with pkgs.dictdDBs; map 
+			(x:{
+				name = x.dbName;
+				filename = x.outPath;
+				locale = x.locale;
+			})
+			[ 
+				eng2fra fra2eng eng2nld
+				nld2eng eng2rus
+				mueller_enru_abbr
+				mueller_enru_base
+				mueller_enru_dict
+				mueller_enru_geo
+				mueller_enru_names
+			];
+		})
 	];
 
 	configList = configuration : [
