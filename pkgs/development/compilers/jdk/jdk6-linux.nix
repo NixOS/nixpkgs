@@ -69,7 +69,7 @@ assert pluginSupport -> libstdcpp5 != null;
       inherit libstdcpp5;
     }
   else
-    { libPath =  [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt]; }
+    {}  
 ))
 //
   {
