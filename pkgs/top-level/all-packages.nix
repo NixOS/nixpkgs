@@ -3960,6 +3960,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  jfsrecFun = builderDefsPackage (selectVersion ../os-specific/linux/jfsrec "svn-7"){
+    inherit boost;
+  };
+  jfsrec = jfsrecFun null;
+
   jfsUtilsFun = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
     inherit e2fsprogs;
   };
