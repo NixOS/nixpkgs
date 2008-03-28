@@ -512,6 +512,9 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
+  ddrescueFun = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") ;
+  ddrescue = ddrescueFun null;
+ 
   dnsmasq = import ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it? 
     inherit fetchurl stdenv;
