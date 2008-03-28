@@ -26,6 +26,7 @@ in (isoFun {
     pkgs.mssys # for writing Microsoft boot sectors / MBRs
     pkgs.xfsProgs
     pkgs.jfsUtils
+    pkgs.ddrescue
   ];
 
 }).rescueCD

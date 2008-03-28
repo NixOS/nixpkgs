@@ -159,6 +159,9 @@ in
 		pkgs.mssys
 		pkgs.testdisk
 		pkgs.gdb
+		pkgs.xfsProgs
+		pkgs.jfsUtils
+		pkgs.ddrescue
 
 		/*
 		pkgs.elinks
