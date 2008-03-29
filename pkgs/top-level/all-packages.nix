@@ -6283,6 +6283,11 @@ let pkgs = rec {
       fontconfig fontforge libxml2 libxslt openssl;
   };
 
+  xosd = import ../misc/xosd {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXext libXt xextproto xproto;
+  };
+
   xsane = import ../misc/xsane {
     inherit fetchurl stdenv pkgconfig libusb
       saneBackends saneFrontends;
