@@ -3804,11 +3804,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  /*
   nfsUtils = import ../os-specific/linux/nfs-utils {
-   inherit fetchurl stdenv kernelHeaders tcp_wrapper;
+   inherit fetchurl stdenv tcpWrapper e2fsprogs;
   };
-  */
 
   acpi = import ../os-specific/linux/acpi {
     inherit fetchurl stdenv;

@@ -1,0 +1,11 @@
+--- nfs-utils-1.1.2/utils/mount/Makefile.in	2008-03-14 18:44:42.000000000 +0100
++++ nfs-utils-1.1.2/utils/mount/Makefile.in	2008-03-30 19:30:57.000000000 +0200
+@@ -219,7 +219,7 @@ psdir = @psdir@
+ 
+ # These binaries go in /sbin (not /usr/sbin), and that cannot be
+ # overriden at config time.
+-sbindir = /sbin
++sbindir = @prefix@/sbin
+ secure_statd = @secure_statd@
+ sharedstatedir = @sharedstatedir@
+ srcdir = @srcdir@
