@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
 , libxslt, tcl, tk, makeWrapper }:
 
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "16dcmkj7dfmr1cy28hi0ipc2qx7dy3knnb77w5bn78hwdfd2dcv9";
   };
 
-  patches = [ ./docbook2texi.patch ];
+  patches = [ ./pwd.patch ./docbook2texi.patch ];
 
-  buildInputs = [curl openssl zlib expat gettext]
+  buildInputs = [curl openssl zlib expat gettext cpio]
     ++ (if emacs != null then [emacs] else [])
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
@@ -40,14 +40,21 @@ stdenv.mkDerivation rec {
    + ''# Wrap `gitk'
        wrapProgram $out/bin/gitk			\
                    --set TK_LIBRARY "${tk}/lib/tk8.4"	\
-                   --prefix PATH : "${tk}/bin" '';
+                   --prefix PATH : "${tk}/bin" ''
 
+   + ''# Wrap `git-clone'
+       wrapProgram $out/bin/git-clone			\
+                   --prefix PATH : "${cpio}/bin" '';
 
   meta = {
     license = "GPLv2";
     homepage = http://git.or.cz;
-    description = ''Git, a popular distributed version control system
-                    designed to handle very large projects with speed
-		    and efficiency.'';
+    description = "Git, a popular distributed version control system";
+
+    longDescription = ''
+      Git, a popular distributed version control system designed to
+      handle very large projects with speed and efficiency.
+    '';
+
   };
 }
