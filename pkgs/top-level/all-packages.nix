@@ -4674,7 +4674,7 @@ let pkgs = rec {
   };
 
   abiword = import ../applications/office/abiword {
-    inherit fetchurl stdenv pkgconfig fribidi libpng popt;
+    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
   };
