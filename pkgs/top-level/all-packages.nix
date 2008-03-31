@@ -5427,6 +5427,10 @@ let pkgs = rec {
 
   qemuImage = qemuImageFun null;
 
+  quack = import ../applications/editors/emacs-modes/quack {
+    inherit fetchurl stdenv emacs;
+  };
+
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
