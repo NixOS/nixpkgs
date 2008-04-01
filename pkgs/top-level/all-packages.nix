@@ -3915,6 +3915,10 @@ let pkgs = rec {
   hdparm = import ../os-specific/linux/hdparm {
     inherit fetchurl stdenv;
   };
+
+  hibernate = import ../os-specific/linux/hibernate {
+    inherit fetchurl stdenv gawk;
+  };
  
   htop = import ../os-specific/linux/htop {
     inherit fetchurl stdenv ncurses;
