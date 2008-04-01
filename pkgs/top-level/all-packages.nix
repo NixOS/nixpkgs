@@ -413,6 +413,10 @@ let pkgs = rec {
     inherit fetchurl stdenv zlib wxGTK;
   };
 
+  at = import ../tools/system/at {
+    inherit fetchurl stdenv bison flex pam ssmtp;
+  };
+
   avahi =
     # XXX: Versions prior to 0.6.22 did not support Qt4, so enabling
     # Qt4 should not be permitted when using a version of Avahi older
