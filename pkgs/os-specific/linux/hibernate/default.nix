@@ -9,13 +9,25 @@ in
       sha256 = "1xpc2i16jczc3nhvxlkn6fb044srqrh528gnp92cwy4hxf2nzi1z";
     };
 
-    patches = [ ./install.patch ./gen-manpages.patch ];
+    patches = [ ./install.patch ./gen-manpages.patch ./hibernate.patch ];
 
     buildInputs = [ gawk ];
 
     installPhase = ''
       # FIXME: Storing config files under `$out/etc' is not very useful.
+
+      substituteInPlace "hibernate.sh" --replace \
+        'SWSUSP_D="/etc/hibernate"' "SWSUSP_D=\"$out/etc/hibernate\""
+
+      # Remove all references to `/bin' and `/sbin'.
+      for i in scriptlets.d/*
+      do
+        substituteInPlace "$i" --replace "/bin/" "" --replace "/sbin/" ""
+      done
+
       PREFIX="$out" CONFIG_PREFIX="$out" ./install.sh
+
+      ln -s "$out/share/hibernate/scriptlets.d" "$out/etc/hibernate"
     '';
 
     meta = {
