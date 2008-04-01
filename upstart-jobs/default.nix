@@ -75,7 +75,7 @@ let
     [
     # Syslogd.
     (import ../upstart-jobs/syslogd.nix {
-      inherit (pkgs) sysklogd;
+      inherit (pkgs) sysklogd writeText;
     })
 
     # The udev daemon creates devices nodes and runs programs when

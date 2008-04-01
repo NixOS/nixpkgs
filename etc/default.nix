@@ -62,11 +62,6 @@ import ../helpers/make-etc.nix {
       target = "nsswitch.conf";
     }
 
-    { # Configuration file for the system logging daemon.
-      source = ./syslog.conf;
-      target = "syslog.conf";
-    }
-
     { # Friendly greeting on the virtual consoles.
       source = pkgs.writeText "issue" ''
       
