@@ -167,6 +167,12 @@ let
 
   ])
 
+  # At daemon.
+  ++ optional config.services.atd.enable
+    (import ../upstart-jobs/atd.nix {
+      at = pkgs.at;
+     })
+
   # DHCP client.
   ++ optional config.networking.useDHCP
     (import ../upstart-jobs/dhclient.nix {

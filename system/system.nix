@@ -257,6 +257,7 @@ rec {
     pkgs.wirelesstools
   ]
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
+  ++ pkgs.lib.optional config.services.atd.enable pkgs.at
   ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
   ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
@@ -304,7 +305,8 @@ rec {
     setuidPrograms =
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
-      pkgs.lib.optional (config.security.sudo.enable) "sudo";
+      pkgs.lib.optional (config.security.sudo.enable) "sudo" ++
+      (if (config.services.atd.enable) then [ "at" "atq" "atrm" ] else []);
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 

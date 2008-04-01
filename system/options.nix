@@ -611,6 +611,15 @@
 
     };
 
+    atd = {
+
+      enable = mkOption {
+        default = true;
+	description = ''
+	  Whether to enable the `at' daemon, a command scheduler.
+	'';
+      };
+    };
 
     locate = {
 

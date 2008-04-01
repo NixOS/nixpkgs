@@ -13,6 +13,7 @@
     bitlbee = 9;
     avahi = 10;
     portmap = 11;
+    atd = 12;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -27,6 +28,8 @@
     bitlbee = 9;
     avahi = 10;
     portmap = 11;
+    atd = 12;
+
     audio = 17;
 
     users = 100;

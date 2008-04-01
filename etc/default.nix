@@ -233,6 +233,7 @@ import ../helpers/make-etc.nix {
       }
     )
     [
+      "atd"
       "login"
       "slim"
       "su"
