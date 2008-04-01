@@ -411,6 +411,7 @@ args:
 
 # Extensions 
 
+          curl          =     { cfgOption = [ "--with-curl=${args.curl}" "--with-curlwrappers"]; pass = "curl";};
           zlib          =     { cfgOption = "--with-zlib=${args.zlib}"; pass = "zlib"; };
 
           libxml2       =     { cfgOption = "--with-libxml-dir=\$libxml2";
@@ -491,18 +492,18 @@ args:
         ./configure --prefix=$out
         make
         ensureDir $out/lib; cp modules/xdebug.so $out/lib
-        cat >> $iniFile << EOF
-          zend_extension="$out/lib/xdebug.so"
-          zend_extension_ts="$out/lib/xdebug.so"
-          zend_extension_debug="$out/lib/xdebug.so"
-          xdebug.remote_enable=true
-          xdebug.remote_host=127.0.0.1
-          xdebug.remote_port=9000
-          xdebug.remote_handler=dbgp
-          xdebug.profiler_enable=0
-          xdebug.profiler_output_dir="/tmp/xdebug"
-          xdebug.remote_mode=req
-        EOF
+cat >> $iniFile << EOF
+  zend_extension="$out/lib/xdebug.so"
+  zend_extension_ts="$out/lib/xdebug.so"
+  zend_extension_debug="$out/lib/xdebug.so"
+  xdebug.remote_enable=true
+  xdebug.remote_host=127.0.0.1
+  xdebug.remote_port=9000
+  xdebug.remote_handler=dbgp
+  xdebug.profiler_enable=0
+  xdebug.profiler_output_dir="/tmp/xdebug"
+  xdebug.remote_mode=req
+EOF
       fi
     '';
 

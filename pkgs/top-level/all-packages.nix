@@ -1722,13 +1722,13 @@ let pkgs = rec {
     # optional features
     inherit fetchurl flex bison apacheHttpd mysql libxml2; # gettext;
     inherit zlib;
-    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" ];
+   flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl" ];
   };
 
   python = python24;
 
   python24 = import ../development/interpreters/python/2.4 {
-    inherit fetchurl stdenv zlib bzip2;
+  inherit fetchurl stdenv zlib bzip2;
   };
 
   python25 = import ../development/interpreters/python/2.5 {
