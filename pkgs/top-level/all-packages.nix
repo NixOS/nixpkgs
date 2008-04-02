@@ -345,6 +345,11 @@ let pkgs = rec {
     sshSupport = true;
   };
 
+  fetchsvnssh = import ../build-support/fetchsvnssh {
+    inherit stdenv subversion openssh expect;
+    sshSupport = true;
+  };
+
   # TODO do some testing
   fetchhg = import ../build-support/fetchhg {
     inherit stdenv mercurial nix;
