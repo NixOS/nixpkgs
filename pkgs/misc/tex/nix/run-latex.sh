@@ -88,6 +88,13 @@ fi
 
 
 if test "$runNeeded"; then
+    echo "PASS 4..."
+    runLaTeX
+    echo
+fi
+
+
+if test "$runNeeded"; then
     echo "Hm, still not done :-("
     echo
 fi
