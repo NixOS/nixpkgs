@@ -1178,7 +1178,7 @@ let pkgs = rec {
     };
 
   bigloo = import ../development/compilers/bigloo {
-    inherit fetchurl mkDerivationByConfiguration lib;
+    inherit fetchurl mkDerivationByConfiguration lib gnumake;
     stdenv = overrideGCC stdenv gcc34;
   };
 
