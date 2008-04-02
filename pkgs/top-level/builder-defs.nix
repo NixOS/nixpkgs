@@ -208,8 +208,10 @@ args: with args; with stringsWithDeps; with lib;
 		(if args ? goSrcDir then args.goSrcDir else "")
 	) ["minInit"];
 
+	configureCommand = getAttr ["configureCommand"] "./configure" args;
+
 	doConfigure = FullDepEntry ("
-		./configure --prefix=\"\$prefix\" ${toString configureFlags}
+		${configureCommand} --prefix=\"\$prefix\" ${toString configureFlags}
 	") ["minInit" "addInputs" "doUnpack"];
 
 	doAutotools = FullDepEntry ("

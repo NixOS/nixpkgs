@@ -1252,6 +1252,21 @@ let pkgs = rec {
     inherit stdenv;
   };
  
+  g77_42 = import ../build-support/gcc-wrapper {
+    name = "g77-4.2";
+    nativeTools = false;
+    nativeLibc = false;
+    gcc = import ../development/compilers/gcc-4.2/fortran.nix {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = true;
+      langCC = false;
+      langC = false;
+      inherit gmp mpfr;
+    };
+    inherit (stdenv.gcc) binutils libc;
+    inherit stdenv;
+  };
+ 
   gcc = gcc42;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
@@ -1524,6 +1539,15 @@ let pkgs = rec {
     inherit fetchurl stdenv gcc flex perl libtool;
   };
 
+  llvmGccFun = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
+    flex=flex2535;
+    bison=bison23;
+    inherit llvm perl mpfr gmp;
+    llvmSrc = llvm.src;
+  };
+
+  llvmGCC =llvmGccFun null;
+
   mono = import ../development/compilers/mono {
     inherit fetchurl stdenv bison pkgconfig;
     inherit (gtkLibs) glib;
@@ -1699,7 +1723,7 @@ let pkgs = rec {
 
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
-    g77 = g77_41;
+    g77 = g77_42;
   };
 
   perl = if !stdenv.isLinux then sysPerl else realPerl;
