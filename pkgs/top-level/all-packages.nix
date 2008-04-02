@@ -1183,8 +1183,7 @@ let pkgs = rec {
     };
 
   bigloo = import ../development/compilers/bigloo {
-    inherit fetchurl mkDerivationByConfiguration lib gnumake;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv;
   };
 
   dylan = import ../development/compilers/gwydion-dylan {
