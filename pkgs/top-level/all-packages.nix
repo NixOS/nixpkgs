@@ -1749,7 +1749,7 @@ let pkgs = rec {
     inherit stdenv mkDerivationByConfiguration autoconf automake lib;
     # optional features
     inherit fetchurl flex bison apacheHttpd mysql libxml2; # gettext;
-    inherit zlib;
+    inherit zlib curl;
    flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl" ];
   };
 
