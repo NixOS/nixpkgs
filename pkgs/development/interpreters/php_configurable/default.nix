@@ -411,7 +411,7 @@ args:
 
 # Extensions 
 
-          curl          =     { cfgOption = [ "--with-curl=${args.curl}" "--with-curlwrappers"]; pass = "curl";};
+          curl          =     { cfgOption = [ "--with-curl=${if args.curl != null then args.curl else throw "curl support in PHP not supported on this platform"}" "--with-curlwrappers"]; pass = "curl";};
           zlib          =     { cfgOption = "--with-zlib=${args.zlib}"; pass = "zlib"; };
 
           libxml2       =     { cfgOption = "--with-libxml-dir=\$libxml2";
