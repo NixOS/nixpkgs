@@ -2390,6 +2390,16 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
+  gegl = import ../development/libraries/gegl {
+    inherit fetchurl stdenv libpng pkgconfig babl;
+    # optional gtk+
+    glib = glib214;
+    openexr = openexr_1_6_1;
+    #  avocodec avformat librsvg
+    inherit cairo libjpeg librsvg;
+    inherit (gtkLibs) pango;
+  };
+
   geos = import ../development/libraries/geos {
     inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
     use_svn = stdenv.system == "x86_64-linux";
