@@ -2217,6 +2217,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  babl = import ../development/libraries/babl {
+    inherit fetchurl stdenv;
+  };
+
   beecrypt = import ../development/libraries/beecrypt {
     inherit fetchurl stdenv m4;
   };
