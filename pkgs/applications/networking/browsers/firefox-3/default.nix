@@ -4,8 +4,9 @@ stdenv.mkDerivation {
   name = "firefox-3.0-beta-3";
 
   src = fetchurl {
-    url = ftp://ftp.mozilla.org/pub/firefox/releases/3.0b4/source/firefox-3.0b4-source.tar.bz2;
-    sha256 = "1x6ms2fsncg2mc6w8d0003k4fk3zq47y8df0vyix6h6k0zrccb4n";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0b5/source/firefox-3.0b5-source.tar.bz2;
+    #url = ftp://ftp.mozilla.org/pub/firefox/releases/3.0b4/source/firefox-3.0b5-source.tar.bz2;
+    sha256 = "4b742e2efb4e662b4ef6c66a072bdaa081ebfbd7c4ac8e572f52527a5d16fcaf";
   };
 
   buildInputs = [
