@@ -17,8 +17,9 @@ stdenv.mkDerivation {
   #  substituteInPlace exp_inter.c --replace tcl.h tclInt.h
   #'';
 
-  coreutils = stdenv.coreutils;
-  patchPhase = '' sed -i "s@/bin/stty@$coreutils/bin/stty@" configure '';
+  patchPhase = ''
+    substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
+  '';
   
   configureFlags = "--with-tcl=${tcl}/lib --with-tclinclude=${tcl}/include";
 
