@@ -2421,6 +2421,12 @@ let pkgs = rec {
     inherit (xlibs) libXmu libXi;
   };
 
+  # don't know wether this newer version breaks anything..
+  # not replacing the existing one.
+  glib214 = import ../development/libraries/glib {
+    inherit fetchurl stdenv pkgconfig gettext;
+  };
+
   glibc = useFromStdenv "glibc"
     (import ../development/libraries/glibc-2.7 {
       inherit fetchurl stdenv kernelHeaders;
