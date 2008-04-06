@@ -7,6 +7,11 @@ stdenv.mkDerivation rec {
     sha256 = "0nh7q7zcmagx0i63h6fqqkkq9i55k77myvb8h6jn2f266f5iklwi";
   };
 
+  # Patches from Debian's `cvsps-2.1-4'.
+  patches = [ ./01_ignoretrunk.dpatch
+              ./02_dynamicbufferalloc.dpatch
+	      ./03_diffoptstypo.dpatch ];
+
   buildInputs = [ cvs zlib ];
 
   installPhase = "make install prefix=$out";
