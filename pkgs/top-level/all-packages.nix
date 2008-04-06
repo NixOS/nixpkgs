@@ -2390,6 +2390,10 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
+  gdbm = import ../development/libraries/gdbm {
+    inherit fetchurl stdenv;
+  };
+
   gegl = import ../development/libraries/gegl {
     inherit fetchurl stdenv libpng pkgconfig babl;
     # optional gtk+
