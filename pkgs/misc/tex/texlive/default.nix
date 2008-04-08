@@ -1,8 +1,8 @@
 args : with args; 
 rec {
   src = fetchurl { 
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2007.orig.tar.gz;
-    sha256 = "1fz5lqbigdrdg0pmaynissd7wn59p2yj9f203nl93dcpffrapxjv";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2007.dfsg.1.orig.tar.gz;
+    sha256 = "17wdn9vl4pa897046jpzxl6bl2ppr7swwb8x0jafwvbcnmywndag";
   };
   
   texmfSrc = fetchurl { 
@@ -81,3 +81,4 @@ rec {
     srcs = [texmfSrc langTexmfSrc];
   };
 }
+

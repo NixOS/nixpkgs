@@ -2,7 +2,7 @@ args: with args;
 rec {
   name = "texlive-latex-xcolor-2007";
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/l/latex-xcolor/latex-xcolor_2.11.orig.tar.gz;
+    url = mirror://debian/pool/main/l/latex-xcolor/latex-xcolor_2.11.orig.tar.gz;
     sha256 = "0z78xfn5iq5ncg82sd6v2qrxs8p9hs3m4agaz90p4db5dvk2w0mn";
   };
 
