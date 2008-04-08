@@ -13,6 +13,8 @@ let
 		everPing = cfg.everPing;
 
 		seccureKeys = config.security.seccureKeys;
+
+		waitPingableBroker = cfg.waitPingableBroker;
 	};
 in
 {

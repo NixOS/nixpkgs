@@ -1742,6 +1742,14 @@
         ";
       };
 
+      waitPingableBroker = mkOption {
+        default = true;
+	example = false;
+	description = "
+	  Whether to wait until tunnel broker returns ICMP echo.
+	";
+      };
+
     };
 
 
