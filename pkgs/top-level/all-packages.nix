@@ -1200,7 +1200,7 @@ let pkgs = rec {
   };
 
   fpc = import ../development/compilers/fpc {
-    inherit fetchurl stdenv gawk;
+    inherit fetchurl stdenv gawk system;
   };
 
   flapjax = import ../development/compilers/flapjax {
@@ -1534,6 +1534,13 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  lazarusFun = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
+    inherit fpc makeWrapper;
+    inherit (gtkLibs1x) gtk glib gdkpixbuf;
+    inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
+  };
+  lazarus = lazarusFun null;
+
   llvm = import ../development/compilers/llvm {
     inherit fetchurl stdenv gcc flex perl libtool;
   };
@@ -1541,8 +1548,7 @@ let pkgs = rec {
   llvmGccFun = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
     flex=flex2535;
     bison=bison23;
-    inherit llvm perl mpfr gmp;
-    llvmSrc = llvm.src;
+    inherit llvm perl libtool;
   };
 
   llvmGCC =llvmGccFun null;
