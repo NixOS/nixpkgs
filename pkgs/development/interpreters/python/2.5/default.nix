@@ -1,6 +1,8 @@
-{stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2}:
+{stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2,
+ gdbmSupport ? true, gdbm ? null}:
 
 assert zlibSupport -> zlib != null;
+assert gdbmSupport -> gdbm != null;
 
 with stdenv.lib;
 
@@ -8,8 +10,9 @@ let
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [bzip2] ++ 
-    optional zlibSupport zlib;
+    [bzip2]
+    ++ optional zlibSupport zlib
+    ++ optional gdbmSupport gdbm;
 
 in
 

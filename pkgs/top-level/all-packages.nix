@@ -1760,7 +1760,7 @@ let pkgs = rec {
   };
 
   python25 = import ../development/interpreters/python/2.5 {
-    inherit fetchurl stdenv zlib bzip2;
+    inherit fetchurl stdenv zlib bzip2 gdbm;
   };
 
   pyrex = pyrex095;
