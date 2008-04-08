@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   buildInputs = [startFPC gawk];
 
+  preConfigure = (if system == "i686-linux" || system == "x86_64-linux" then ''
+  	sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
+  '' else "");
+
   installFlags = "INSTALL_PREFIX=\${out}";
   postInstall = "ln -fs $out/lib/fpc/*/ppc386 $out/bin;
 	mkdir -p $out/lib/fpc/etc/ ;
