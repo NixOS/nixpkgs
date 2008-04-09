@@ -2001,6 +2001,11 @@ let pkgs = rec {
     inherit fetchurl stdenv guile;
   };
 
+  gwrap = import ../development/tools/guile/g-wrap {
+    inherit fetchurl stdenv guile libffi pkgconfig guileLib;
+    inherit (gtkLibs) glib;
+  };
+
   /*
   happy = import ../development/tools/parsing/happy {
     inherit fetchurl stdenv perl ghc;
