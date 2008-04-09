@@ -2709,6 +2709,10 @@ let pkgs = rec {
 
   libextractor = libextractorFun null;
 
+  libffi = import ../development/libraries/libffi {
+    inherit fetchurl stdenv;
+  };
+
   libgcrypt = import ../development/libraries/libgcrypt {
     inherit fetchurl stdenv libgpgerror;
   };
