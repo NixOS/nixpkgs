@@ -19,14 +19,6 @@ stdenv.mkDerivation rec {
     then
 	rm -f "$out/share/guile/site/srfi/srfi-35.scm"
     fi
-
-    # Make modules available under `/lib/site-guile' to comply with Guile's
-    # setup-hook.
-    mkdir -p "$out/lib/site-guile"
-    for f in "$out/share/guile/site"/*
-    do
-      ln -s "$f" "$out/lib/site-guile/"
-    done
   '';
 
   doCheck = true;
