@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self : {
   pname = "uuagc";
-  version = "0.9.5";
+  version = "0.9.6";
   name = self.fname;
-  sha256 = "01babb063390448f127b897b10eb47a07fe0593b7fc8a5ab51826ad65a5e4526";
+  sha256 = "10e148bdf052e9a80e52c54a94314df9d1772e68416e5dfac289c47fd1ba8558";
   extraBuildInputs = [uulib];
   meta = {
     description = "Attribute Grammar System of Universiteit Utrecht";
