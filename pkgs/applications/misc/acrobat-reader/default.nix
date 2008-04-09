@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   inherit fastStart;
   
   meta = {
-    description = "Adobe Reader, a viewer for PDF documents"
+    description = "Adobe Reader, a viewer for PDF documents";
     homepage = http://www.adobe.com/products/reader;
   };
 }
