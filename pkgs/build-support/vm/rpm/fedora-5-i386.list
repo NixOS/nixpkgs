@@ -1,4 +1,4 @@
-baseURL ftp://ftp.tudelft.nl/pub/Linux/download.fedora.redhat.com/linux/core/5/i386/os/Fedora/RPMS
+baseURL mirror://fedora/linux/core/5/i386/os/Fedora/RPMS
 autoconf-2.59-7.noarch.rpm c9653f1bad4b29f793cbeb335e028db3
 automake-1.9.6-2.noarch.rpm ed2d15b56789fc720a2d7cac2d69a582
 audit-libs-1.1.5-1.i386.rpm 26a607ef7756292e762240698b286a3d

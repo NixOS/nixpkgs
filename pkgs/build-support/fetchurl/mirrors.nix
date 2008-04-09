@@ -24,7 +24,7 @@ rec {
 
   # GNU.
   gnu = [
-    ftp://ftp.nluug.nl/pub/gnu/
+    http://ftp.nluug.nl/pub/gnu/
     http://mirrors.kernel.org/gnu/
     http://ftp.gnu.org/pub/gnu/
   ];
@@ -89,7 +89,7 @@ rec {
     ftp://ftp.kddlabs.co.jp/graphics/ImageMagick/
     ftp://ftp.u-aizu.ac.jp/pub/graphics/image/ImageMagick/imagemagick.org
     ftp://zoffy.asahi-net.or.jp/pub/graphics/ImageMagick
-    ftp://ftp.nluug.nl/pub/ImageMagick
+    http://ftp.nluug.nl/pub/ImageMagick
     http://ftp.surfnet.nl/pub/ImageMagick/
     ftp://sunsite.icm.edu.pl/packages/ImageMagick/
     ftp://ftp.chg.ru/packages/ImageMagick
@@ -126,6 +126,13 @@ rec {
     http://nl.archive.ubuntu.com/ubuntu/
     http://de.archive.ubuntu.com/ubuntu/
     http://archive.ubuntu.com/ubuntu/
+  ];
+
+  # Fedora (please only full mirrors that carry old Fedora distributions as well).
+  fedora = [
+    http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
+    http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
+    http://download.fedora.redhat.com/pub/fedora/
   ];
 
 }
