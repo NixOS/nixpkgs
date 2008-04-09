@@ -366,9 +366,15 @@ rec {
      tarball must contain an RPM specfile. */
   
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    phases = "sysInfoPhase buildPhase installPhase";
+    phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
 
     outDir = "rpms/${attrs.diskImage.name}";
+
+    prepareImagePhase = ''
+      for rpm in $extraRPMs; do
+        rpm -iv $rpm
+      done
+    '';
   
     sysInfoPhase = ''
       header "base RPMs"
