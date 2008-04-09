@@ -2482,9 +2482,13 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
-  gnutls = import ../development/libraries/gnutls {
-    inherit fetchurl stdenv libgcrypt zlib lzo;
-  };
+  gnutls = import ../development/libraries/gnutls
+    (let guileBindings = getConfig ["gnutls" "guile"] false;
+     in {
+	 inherit fetchurl stdenv libgcrypt zlib lzo;
+	 inherit guileBindings;
+	 guile = (if guileBindings then guile else null);
+       });
 
   gpgme = import ../development/libraries/gpgme {
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2;

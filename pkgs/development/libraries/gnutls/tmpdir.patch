@@ -1,0 +1,28 @@
+We disable these tests because OpenCDK's `cdk_stream_tmp_from_mem ()'
+stupidly uses `tempfile ()', which does not honor $TMPDIR, leading to
+build failures in chroots.  See also:
+
+  http://thread.gmane.org/gmane.comp.encryption.gpg.gnutls.devel/2693
+
+
+--- gnutls-2.3.4/tests/openpgp/Makefile.in	2008-03-19 13:46:02.000000000 +0100
++++ gnutls-2.3.4/tests/openpgp/Makefile.in	2008-04-08 23:21:34.000000000 +0200
+@@ -52,7 +52,7 @@ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+ target_triplet = @target@
+-@ENABLE_OPENPGP_TRUE@TESTS = keyring$(EXEEXT)
++@ENABLE_OPENPGP_TRUE@TESTS =
+ @ENABLE_OPENPGP_TRUE@check_PROGRAMS = keyring$(EXEEXT)
+ subdir = tests/openpgp
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+
+--- gnutls-2.3.4/guile/tests/Makefile.in	2008-03-19 13:46:00.000000000 +0100
++++ gnutls-2.3.4/guile/tests/Makefile.in	2008-04-08 23:30:15.000000000 +0200
+@@ -524,7 +524,6 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ TESTS = anonymous-auth.scm session-record-port.scm		\
+         pkcs-import-export.scm					\
+-	openpgp-keys.scm openpgp-keyring.scm openpgp-auth.scm	\
+         srp-base64.scm errors.scm				\
+ 	x509-certificates.scm x509-auth.scm
