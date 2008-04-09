@@ -8,7 +8,7 @@ rec {
   buildPatchelfInVM = runInLinuxVM patchelf;
 
 
-  testRPMImage = makeImageTestScript diskImages.suse90i386;
+  testRPMImage = makeImageTestScript diskImages.fedora8i386;
 
 
   buildPatchelfRPM = buildRPM {

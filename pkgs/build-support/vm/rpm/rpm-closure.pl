@@ -13,13 +13,16 @@ print STDERR "file contains $xml->{packages} packages\n";
 
 my %provides;
 foreach my $pkgName (keys %{$pkgs}) {
-    #print STDERR "looking at $pkgName\n";
+    print STDERR "looking at $pkgName\n";
     my $pkg = $pkgs->{$pkgName};
-    my $provides = $pkg->{format}->{'rpm:provides'}->{'rpm:entry'} or die;
-    foreach my $req (keys %{$provides}) {
-        #print STDERR "  provides $req\n";
-        #die "multiple provides for $req" if defined $provides{$req};
-        $provides{$req} = $pkgName;
+    print STDERR keys %{$pkg->{format}->{'rpm:provides'}}, "\n";
+    if (defined $pkg->{format}->{'rpm:provides'}) {
+        my $provides = $pkg->{format}->{'rpm:provides'}->{'rpm:entry'};
+        foreach my $req (keys %{$provides}) {
+            #print STDERR "  provides $req\n";
+            #die "multiple provides for $req" if defined $provides{$req};
+            $provides{$req} = $pkgName;
+        }
     }
     if (defined $pkg->{format}->{file}) {
         foreach my $file (@{$pkg->{format}->{file}}) {

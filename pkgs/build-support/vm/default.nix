@@ -377,7 +377,9 @@ rec {
     '';
   
     sysInfoPhase = ''
-      header "base RPMs"
+      if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
+      if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
+      header "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
       stopNest
     '';
@@ -550,6 +552,36 @@ rec {
 
   diskImageFuns = {
 
+    fedora2i386 = args: makeImageFromRPMDist ({
+      name = "fedora-core-2-i386";
+      fullName = "Fedora Core 2 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/core/2/i386/os/repodata/primary.xml.gz;
+        sha256 = "1nq1k2k0nzkii737cka301f0vbd2ix2wsfvi6bblpi748q6h2w4k";
+      };
+      urlPrefix = mirror://fedora/linux/core/2/i386/os;
+    } // args);
+    
+    fedora3i386 = args: makeImageFromRPMDist ({
+      name = "fedora-core-3-i386";
+      fullName = "Fedora Core 3 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/core/3/i386/os/repodata/primary.xml.gz;
+        sha256 = "13znspn4g1bkjkk47393k9chswgzl6nx1n0q6h2wrw52c7d9nw9i";
+      };
+      urlPrefix = mirror://fedora/linux/core/3/i386/os;
+    } // args);
+    
+    fedora5i386 = args: makeImageFromRPMDist ({
+      name = "fedora-core-5-i386";
+      fullName = "Fedora Core 5 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/core/5/i386/os/repodata/primary.xml.gz;
+        sha256 = "0lfk4mzrpiyls8h7k9ckc3vgywbmg05zsr4ag6qakgnv9gljijig";
+      };
+      urlPrefix = mirror://fedora/linux/core/5/i386/os;
+    } // args);
+    
     fedora7i386 = args: makeImageFromRPMDist ({
       name = "fedora-7-i386";
       fullName = "Fedora 7 (i386)";
@@ -669,27 +701,9 @@ rec {
       '';
     };
     
-    fedora2i386 = fillDiskWithRPMs {
-      name = "fedora-core-2-i386";
-      fullName = "Fedora Core 2 (i386)";
-      size = 1024;
-      rpms = import ./rpm/fedora-2-i386.nix {inherit fetchurl;};
-    };
-    
-    fedora3i386 = fillDiskWithRPMs {
-      name = "fedora-core-3-i386";
-      fullName = "Fedora Core 3 (i386)";
-      size = 1024;
-      rpms = import ./rpm/fedora-3-i386.nix {inherit fetchurl;};
-    };
-    
-    fedora5i386 = fillDiskWithRPMs {
-      name = "fedora-core-5-i386";
-      fullName = "Fedora Core 5 (i386)";
-      size = 1024;
-      rpms = import ./rpm/fedora-5-i386.nix {inherit fetchurl;};
-    };
-    
+    fedora2i386 = diskImageFuns.fedora2i386 { packages = commonFedoraPackages; };
+    fedora3i386 = diskImageFuns.fedora3i386 { packages = commonFedoraPackages; };
+    fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages; };
     fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
     
