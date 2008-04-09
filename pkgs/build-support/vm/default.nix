@@ -487,6 +487,157 @@ rec {
     });
 
 
+  /* Generate a Nix expression containing fetchurl calls for the
+     closure of a set of top-level RPM packages from the
+     `primary.xml.gz' file of a Fedora or OpenSUSE distribution. */
+     
+  rpmClosureGenerator =
+    {name, packagesList, urlPrefix, packages}:
+    
+    runCommand "${name}.nix" {buildInputs = [perl perlXMLSimple];} ''
+      gunzip < ${packagesList} > ./packages.xml
+      perl -w ${rpm/rpm-closure.pl} \
+        ./packages.xml ${urlPrefix} ${toString packages} > $out
+    '';
+
+
+  /* Helper function that combines rpmClosureGenerator and
+     fillDiskWithRPMs to generate a disk image from a set of package
+     names. */
+     
+  makeImageFromRPMDist =
+    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? ""}:
+
+    fillDiskWithRPMs {
+      inherit name fullName size postInstall;
+      rpms = import (rpmClosureGenerator {
+        inherit name packagesList urlPrefix packages;
+      }) {inherit fetchurl;};
+    };
+
+
+  /* Like `rpmClosureGenerator', but now for Debian/Ubuntu releases
+     (i.e. generate a closure from a Packages.bz2 file). */
+
+  debClosureGenerator =
+    {name, packagesList, urlPrefix, packages}:
+    
+    runCommand "${name}.nix" {} ''
+      bunzip2 < ${packagesList} > ./Packages
+      ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
+        ./Packages ${urlPrefix} ${toString packages} > $out
+    '';
+  
+
+  /* Helper function that combines debClosureGenerator and
+     fillDiskWithDebs to generate a disk image from a set of package
+     names. */
+     
+  makeImageFromDebDist =
+    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? ""}:
+
+    fillDiskWithDebs {
+      inherit name fullName size postInstall;
+      debs = import (debClosureGenerator {
+        inherit name packagesList urlPrefix packages;
+      }) {inherit fetchurl;};
+    };
+
+
+  /* A bunch of functions that build disk images of various Linux
+     distributions, given a set of top-level package names to be
+     installed in the image. */
+
+  diskImageFuns = {
+
+    fedora7i386 = args: makeImageFromRPMDist ({
+      name = "fedora-7-i386";
+      fullName = "Fedora 7 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/7/Fedora/i386/os/repodata/primary.xml.gz;
+        sha256 = "0zq7ifirj45wry7b2qkm12qhzzazal3hn610h5kwbrfr2xavs882";
+      };
+      urlPrefix = mirror://fedora/linux/releases/7/Fedora/i386/os;
+    } // args);
+    
+    fedora8i386 = args: makeImageFromRPMDist ({
+      name = "fedora-8-i386";
+      fullName = "Fedora 8 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/8/Fedora/i386/os/repodata/primary.xml.gz;
+        sha256 = "0vr9345rrk0vhs4pc9cjp8npdkqz0xqyirv84vhyfn533m9ws36f";
+      };
+      urlPrefix = mirror://fedora/linux/releases/8/Fedora/i386/os;
+    } // args);
+
+    ubuntu710i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-7.10-gutsy-i386";
+      fullName = "Ubuntu 7.10 Gutsy (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/gutsy/main/binary-i386/Packages.bz2;
+        sha1 = "8b52ee3d417700e2b2ee951517fa25a8792cabfd";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+        
+    debian40r3i386 = args: makeImageFromDebDist ({
+      name = "debian-4.0r3-etch-i386";
+      fullName = "Debian 4.0r3 Etch (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
+        sha256 = "7a8f2777315d71fd7321d1076b3bf5f76afe179fe66c2ce8e1ff4baed6424340";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+        
+  };
+
+
+  /* Common packages for Fedora images. */
+  commonFedoraPackages = [
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "fedora-release"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkgconfig"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+
+  /* Common packages for Debian/Ubuntu images. */
+  commonDebianPackages = [
+    "base-passwd"
+    "dpkg"
+    "libc6-dev"
+    "perl"
+    "sysvinit"
+    "bash"
+    "gzip"
+    "bzip2"
+    "tar"
+    "grep"
+    "findutils"
+    "g++"
+    "make"
+    "curl"
+    "patch"
+    "diff"
+  ];
+
+
   /* A bunch of disk images. */
 
   diskImages = {
@@ -539,27 +690,13 @@ rec {
       rpms = import ./rpm/fedora-5-i386.nix {inherit fetchurl;};
     };
     
-    fedora8i386 = fillDiskWithRPMs {
-      name = "fedora-8-i386";
-      fullName = "Fedora 8 (i386)";
-      size = 1024;
-      rpms = import (import ./rpm/rpm-closure.nix).rpmsFedora8i386 {inherit fetchurl;};
-    };
+    fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
+    fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
     
-    ubuntu710i386 = fillDiskWithDebs {
-      name = "ubuntu-7.10-gutsy-i386";
-      fullName = "Ubuntu 7.10 Gutsy (i386)";
-      size = 1024;
-      debs = import (import ./deb/deb-closure.nix).ubuntu710i386Debs {inherit fetchurl;};
-    };
-
-    debian40r3i386 = fillDiskWithDebs {
-      name = "debian-4.0r3-etch-i386";
-      fullName = "Debian 4.0r3 Etch (i386)";
-      size = 1024;
-      debs = import (import ./deb/deb-closure.nix).debian40r3i386Debs {inherit fetchurl;};
-    };
+    ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
+    debian40r3i386 = diskImageFuns.debian40r3i386 { packages = commonDebianPackages; };
 
   };
+
 
 }
