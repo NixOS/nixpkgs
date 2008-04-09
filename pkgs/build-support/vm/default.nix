@@ -539,6 +539,13 @@ rec {
       rpms = import ./rpm/fedora-5-i386.nix {inherit fetchurl;};
     };
     
+    fedora8i386 = fillDiskWithRPMs {
+      name = "fedora-8-i386";
+      fullName = "Fedora 8 (i386)";
+      size = 1024;
+      rpms = import (import ./rpm/rpm-closure.nix).rpmsFedora8i386 {inherit fetchurl;};
+    };
+    
     ubuntu710i386 = fillDiskWithDebs {
       name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
