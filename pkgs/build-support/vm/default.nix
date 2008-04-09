@@ -550,14 +550,14 @@ rec {
       name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
       size = 1024;
-      debs = import ./deb/ubuntu-7.10-gutsy-i386.nix {inherit fetchurl;};
+      debs = import (import ./deb/deb-closure.nix).ubuntu710i386Debs {inherit fetchurl;};
     };
 
     debian40r3i386 = fillDiskWithDebs {
       name = "debian-4.0r3-etch-i386";
       fullName = "Debian 4.0r3 Etch (i386)";
       size = 1024;
-      debs = import ./deb/debian-4.0r3-etch-i386.nix {inherit fetchurl;};
+      debs = import (import ./deb/deb-closure.nix).debian40r3i386Debs {inherit fetchurl;};
     };
 
   };
