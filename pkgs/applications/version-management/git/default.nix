@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
                    --set TK_LIBRARY "${tk}/lib/tk8.4"	\
                    --prefix PATH : "${tk}/bin" ''
 
+   + ''# Wrap `git-gui'
+       wrapProgram $out/bin/git-gui			\
+                   --set TK_LIBRARY "${tk}/lib/tk8.4"	\
+                   --prefix PATH : "${tk}/bin" ''
+
    + ''# Wrap `git-clone'
        wrapProgram $out/bin/git-clone			\
                    --prefix PATH : "${cpio}/bin" '';
