@@ -23,6 +23,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  rp9codecs = (import ./rp9codecs) {
+    inherit stdenv fetchurl;
+  };
+
 in
 
 stdenv.mkDerivation {
@@ -51,7 +55,7 @@ stdenv.mkDerivation {
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav" else ""}
     --win32codecsdir=${win32codecs}
-    --realcodecsdir=${win32codecs}
+    --realcodecsdir=${rp9codecs}
     --enable-runtime-cpudetection
     --enable-x11 --with-extraincdir=${libX11}/include
     --disable-xanim
