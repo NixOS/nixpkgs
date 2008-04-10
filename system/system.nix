@@ -234,6 +234,7 @@ rec {
     pkgs.mdadm
     pkgs.module_init_tools
     pkgs.nano
+    pkgs.ncurses
     pkgs.netcat
     pkgs.nettools
     pkgs.ntp
