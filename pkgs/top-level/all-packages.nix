@@ -5958,6 +5958,11 @@ let pkgs = rec {
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
   };
 
+  openttd = import ../games/openttd {
+    inherit fetchurl stdenv SDL libpng;
+    zlib = zlibStatic;
+  };
+
   quake3demo = import ../games/quake3/wrapper {
     name = "quake3-demo";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
