@@ -58,6 +58,7 @@ assert pluginSupport -> libstdcpp5 != null;
    * libXt is only needed on amd64
    */
   libraries =
+    [stdenv.gcc.libc] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
 
   inherit pluginSupport;
