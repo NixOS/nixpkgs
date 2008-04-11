@@ -1,4 +1,8 @@
-{stdenv, fetchurl, ncurses, readline}:
+{stdenv, fetchurl, ncurses, readline
+  , lib
+  , zlib ? null
+  , openssl ? null
+}:
 
 stdenv.mkDerivation {
   name = "ruby-1.8.6";
@@ -7,5 +11,8 @@ stdenv.mkDerivation {
     md5 = "23d2494aa94e7ae1ecbbb8c5e1507683";
   };
 
-  buildInputs = [ncurses readline];
+  buildInputs = [ncurses readline]
+    ++(lib.optional (zlib != null) zlib)
+    ++(lib.optional (openssl != null) openssl)
+  ;
 }
