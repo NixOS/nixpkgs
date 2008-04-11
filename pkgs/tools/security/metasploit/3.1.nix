@@ -13,12 +13,11 @@ rec {
     ensureDir $out/bin
 
     cp -r * $out/share/msf
-    ln -s $out/share/msf/msf* $out/bin
 
-    sed -e 's@#!/usr/bin/env ruby@#! ${ruby}/bin/ruby@' -i $out/bin/msf*
+    sed -e 's@#!/usr/bin/env ruby@#! ${ruby}/bin/ruby@' -i $out/share/msf/msf*
 
-    for i in $out/bin/*; do
-        wrapProgram $i --prefix RUBYLIB : $out/share/msf/lib
+    for i in $out/share/msf/msf*; do
+        makeWrapper $i $out/bin/$(basename $i) --prefix RUBYLIB : $out/share/msf/lib
     done
   '') ["minInit" "defEnsureDir" "doUnpack" "addInputs"];
 
