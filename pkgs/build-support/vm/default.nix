@@ -295,7 +295,7 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 1024, rpms, name, fullName, preInstall ? "", postInstall ? ""}:
+    {size ? 1024, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
@@ -325,7 +325,7 @@ rec {
         
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-          rpm -iv $rpms
+          rpm -iv ${if runScripts then "" else "--noscripts"} $rpms
 
         echo "running post-install script..."
         eval "$postInstall"
@@ -508,10 +508,11 @@ rec {
      names. */
      
   makeImageFromRPMDist =
-    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? "", archs ? ["noarch" "i386"]}:
+    { name, fullName, size ? 1024, urlPrefix, packagesList, packages
+    , postInstall ? "", archs ? ["noarch" "i386"], runScripts ? true}:
 
     fillDiskWithRPMs {
-      inherit name fullName size postInstall;
+      inherit name fullName size postInstall runScripts;
       rpms = import (rpmClosureGenerator {
         inherit name packagesList urlPrefix packages archs;
       }) {inherit fetchurl;};
@@ -560,6 +561,7 @@ rec {
         sha256 = "1nq1k2k0nzkii737cka301f0vbd2ix2wsfvi6bblpi748q6h2w4k";
       };
       urlPrefix = mirror://fedora/linux/core/2/i386/os;
+      runScripts = false;
     } // args);
     
     fedora3i386 = args: makeImageFromRPMDist ({
@@ -570,6 +572,8 @@ rec {
         sha256 = "13znspn4g1bkjkk47393k9chswgzl6nx1n0q6h2wrw52c7d9nw9i";
       };
       urlPrefix = mirror://fedora/linux/core/3/i386/os;
+      archs = ["noarch" "i386" "i586"];
+      runScripts = false;
     } // args);
     
     fedora5i386 = args: makeImageFromRPMDist ({
