@@ -1635,6 +1635,10 @@ let pkgs = rec {
     inherit mysql libxml2 fcgi;
   };
 
+  scala = import ../development/compilers/scala {
+    inherit stdenv fetchurl;
+  };
+
   strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
     inherit stdenv fetchurl pkgconfig aterm;
   };
