@@ -807,6 +807,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  msfFun = builderDefsPackage (selectVersion ../tools/security/metasploit "3.1") {
+    inherit ruby makeWrapper;
+  };
+  msf = msfFun null;
+
   mssys = import ../tools/misc/mssys {
     inherit fetchurl stdenv gettext;
   };
@@ -1804,8 +1809,13 @@ let pkgs = rec {
   };
 
   ruby = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses;
+    inherit fetchurl stdenv readline ncurses zlib lib openssl;
   };
+
+  rubygemsFun = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+    inherit ruby makeWrapper;
+  };
+  rubygems = rubygemsFun null;
 
   spidermonkey = import ../development/interpreters/spidermonkey {
     inherit fetchurl stdenv readline;
@@ -3927,6 +3937,14 @@ let pkgs = rec {
     inherit fetchurl stdenv kernel;
   };
 
+  blcrFun = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
+    inherit perl;
+  };
+
+  blcrFunCurrent = kernel : (blcrFun {
+    inherit kernel;
+  } null);
+
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
   };
@@ -4903,12 +4921,13 @@ let pkgs = rec {
     version = "0.6.2";
   };
 
-  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.6.2") {
+  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.7.4") {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
-      damageproto randrproto xineramaproto renderproto kbproto;
+      damageproto randrproto xineramaproto renderproto kbproto xproto libX11 
+      libxcb;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnome libgnomeui metacity
@@ -4925,7 +4944,7 @@ let pkgs = rec {
   } null;
 
   compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
-    version = getConfig ["compizFusion" "version"] "0.6.0";
+    version = getConfig ["compizFusion" "version"] "0.7.4";
     inherit compiz;
     inherit stringsWithDeps lib builderDefs;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
@@ -5356,6 +5375,11 @@ let pkgs = rec {
     inherit fetchurl stdenv python makeWrapper;
   };
 
+  minicomFun = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
+    inherit ncurses;
+  };
+  minicom = minicomFun null;
+
   monodevelop = import ../applications/editors/monodevelop {
     inherit fetchurl stdenv file mono gtksourceviewsharp
             gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
@@ -5683,6 +5707,10 @@ let pkgs = rec {
     inherit fetchurl stdenv ocaml lablgtk makeWrapper;
     inherit (xorg) xset fontschumachermisc;
   };
+
+  uucpFun = builderDefsPackage (selectVersion ../tools/misc/uucp "1.07") {
+  };
+  uucp = uucpFun null;
 
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
