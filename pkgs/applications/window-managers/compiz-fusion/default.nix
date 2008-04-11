@@ -11,4 +11,5 @@ rec
 	pluginsMain = selectVersion ./main (args //{inherit bcop ;});
 	pluginsExtra = selectVersion ./extra (args //{inherit bcop pluginsMain;});
 	compizManager = selectVersion ./compiz-manager (args // {inherit bcop ccsm;});
+	ccsmSimple = selectVersion ./ccsm-simple (args // {inherit libcompizconfig bcop compizConfigPython configBackendGConf;});
 }
