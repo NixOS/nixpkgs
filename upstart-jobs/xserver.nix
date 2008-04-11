@@ -10,7 +10,7 @@ let
 
   # Abbreviations.
   cfg = config.services.xserver;
-  xorg = pkgs.xorg;
+  xorg = cfg.packageFun pkgs;
   gnome = pkgs.gnome;
   stdenv = pkgs.stdenv;
 
@@ -155,6 +155,12 @@ let
       fi
 	
       if [ "${toString videoDriver}" = i810 ]; then
+        export extensions='
+          Option "Composite" "Enable"
+        ';
+      fi;
+
+      if [ "${toString videoDriver}" = ati ]; then
         export extensions='
           Option "Composite" "Enable"
         ';

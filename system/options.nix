@@ -1315,6 +1315,14 @@
         ";
       };
 
+      packageFun = mkOption {
+        default = pkgs: pkgs.xorg;
+	description = "
+	  Alternative X.org package to use. For 
+	  example, you can replace individual drivers.
+	";
+      };
+
     };
 
     ejabberd = {
