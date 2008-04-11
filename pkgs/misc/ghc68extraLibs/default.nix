@@ -1,4 +1,6 @@
 # contains libraries and maybe applications in the future. That's why I'm putting it into misc. Feel free to move it somewhere else
+
+# TODO use nix names (regexCompat instead of regex_compat)
 args : ghc: with args;
 
 rec {
@@ -12,13 +14,13 @@ rec {
       pkgs = let x = ghc.core_libs // derivations;
                  wxVersion = "0.10.3";
                  wxSrc = fetchurl { url = "mirror://sourceforge/wxhaskell/wxhaskell-src-${wxVersion}.tar.gz";
-                                   sha256 = "0sjk7kzrlj0p6d6ijnw35s9qdyryb7kzvkrj0jhf12rhvjnvd5y0"; };
+                                   sha256 = "2a9b70b92c96ef1aa3eaa3426e224c0994c24bfdaccbf2b673edef65ba3cffce"; };
                  inherit (bleedingEdgeRepos) sourceByName;
              in {
           # ghc extra packages 
           mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
           parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ]; src = ghc.extra_src; };
-          network = { name="network-2.1.0.0"; srcDir="libraries/network"; p_deps=[ x.base x.parsec x.haskell98 ];       src = ghc.extra_src; };
+          network = { name="network-2.1.0.0"; srcDir="libraries/network"; p_deps=[ x.base x.parsec3 x.haskell98 ];       src = ghc.extra_src; };
           regex_base = { name="regex-base-0.72.0.1"; srcDir="libraries/regex-base"; p_deps=[ x.base x.array x.bytestring x.haskell98 ]; src = ghc.extra_src; };
           regex_posix = { name="regex-posix-0.72.0.2"; srcDir="libraries/regex-posix"; p_deps=[ x.regex_base x.haskell98 ]; src = ghc.extra_src; };
           regex_compat = { name="regex-compat-0.71.0.1"; srcDir="libraries/regex-compat"; p_deps=[ x.base x.regex_posix x.regex_base x.haskell98 ]; src = ghc.extra_src; };
@@ -28,6 +30,7 @@ rec {
 
 
           # other pacakges  (hackage etc)
+          timeout = { name="timeout-0.1.2"; src = fetchurl{ url = http://hackage.haskell.org/packages/archive/control-timeout/0.1.2/control-timeout-0.1.2.tar.gz; sha256 = "1g1x6c4dafckwcw48v83f3nm2sxv8kynwv8ib236ay913ycgayvg";}; p_deps = [ x.base x.time x.stm ]; };
           parsec3  = { name="parsec-3.0.0";  p_deps=[ x.base x.mtl x.bytestring ];  src = fetchurl { url = "http://hackage.haskell.org/packages/archive/parsec/3.0.0/parsec-3.0.0.tar.gz"; sha256 = "0fqryy09y8h7z0hlayg5gpavghgwa0g3bldynwl17ks8l87ykj7a"; }; };
 
           binary = rec { name = "binary-0.4.1"; p_deps = [ x.base x.bytestring x.containers x.array ];
@@ -62,7 +65,15 @@ rec {
                                     ForeignFunctionInterface, TypeSynonymInstances, CPP, ExistentialQuantification, GeneralizedNewtypeDeriving, PatternSignatures, ScopedTypeVariables, Rank2Types, DeriveDataTypeable \" >> hsql.cabal
                                     "; };
               };
-
+            hsqlMysql = { name = "hsql-mysql-1.7"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hsql-mysql/1.7/hsql-mysql-1.7.tar.gz"; sha256 ="1df25bf9wb6mbwr1jsbaby9xgwsx27z0qzvhz9x1vd2p4i8m9yq8"; }; p_deps = [ x.base x.hsql x.old_time ];
+                        pass = { buildInputs = [ mysql zlib ];
+                                 patchPhase = "
+                                  echo \"extra-lib-dirs: ${zlib}/lib\" >> hsql-mysql.cabal
+                                  unset patchPhase; patchPhase
+                                 ";
+                                 patches = ./hsql-mysql-patch;
+                               };
+                      };
           #hsql_postgresql = rec { name = "hsql-postgresql-1.7"; p_deps = [ x.base x.mtl x.haskell98  x.old_time x.hsql postgresql ];
           #              src = fetchurl { url = "";
           #                           sha256 = "180c8acp4p9hsl5h8ryhhli9mlqcmcfjqaxzr7sa074gpzq29vfc"; };
@@ -89,6 +100,7 @@ rec {
           hdbc = rec { name = "hdbc-1.1.4.0"; p_deps = [ x.base x.mtl x.haskell98 x.time x.bytestring postgresql sqlite ];
                           src = fetchurl {
                             url = http://software.complete.org/hdbc/static/download_area/1.1.4.0/hdbc_1.1.4.0.tar.gz;
+
                             sha256 = "677e789094e3790be2462331b6c0f97b4ac1d65c8eb98cf7d8b83d5f3f9fbd39";
                           };
                           pass = {
@@ -102,7 +114,7 @@ rec {
                              #              ";
                           };
                 };
-          hdbc_postgresql = { name = "hdbc-postgresql"; p_deps = [ x.hdbc x.parsec postgresql ];
+          hdbc_postgresql = { name = "hdbc-postgresql"; p_deps = [ x.hdbc x.parsec3 postgresql ];
                               src = fetchurl {
                                 url = http://hackage.haskell.org/packages/archive/HDBC-postgresql/1.1.4.0/HDBC-postgresql-1.1.4.0.tar.gz;
                                 sha256 = "1b9lxj55jvvq76ll8dr4kfb6aj7r0baj4gh8wkhgwc1kd41sx7h3"; };
@@ -138,7 +150,7 @@ rec {
 
           wxcore = rec {
                          
-                        name = "wxhaskel-${wxVersion}"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
+                        name = "wxhaskel-${wxVersion}"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec3 pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
                         src = wxSrc;
                         pass = {
                           buildInputs = [ unzip ];
@@ -154,14 +166,36 @@ rec {
                         };
                       };
 
-          wx = { name="wx-${wxVersion}"; src =wxSrc; srcDir="wx"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec x.wxcore pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
+          wx = { name="wx-${wxVersion}"; src =wxSrc; srcDir="wx"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec3 x.wxcore pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
+                #  TODO rempove pwd
                 pass = { patchPhase = "pwd; cp {,wx/}license.txt"; };
             };
                   
+          typecompose = { name="TypeCompose-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/TypeCompose/0.5/TypeCompose-0.5.tar.gz; sha256 = "0mzjvwjixkp0jxfzxjw1pq8k1sm61sb5y96fk07xm91nn4sgpaqj"; }; p_deps = [ x.base ]; };
+          reactive = { name="reactive-0.5"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/reactive/0.5/reactive-0.5.tar.gz; sha256 = "1giv5p2nks4rw683bkmnjmdanpx8mgqi6dzj099cjbk93jag9581"; }; p_deps = [ x.base x.typecompose ]; };
+          phooey = { name="phooey-2.0"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/phooey/2.0/phooey-2.0.tar.gz; sha256 = "1bb6cn2vk7b57gaxh863ymidb4l7ldiwcnpif790rd4bq44fwfvf"; }; p_deps = [ x.base x.typecompose x.reactive x.wx x.wxcore ]; };
 
+          # depreceated (This is the deprecated Data.FiniteMap library, often useful to get old code to build when you are too lazy to update it.)
+          finitemap = { name="finitemap-0.1"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/FiniteMap/0.1/FiniteMap-0.1.tar.gz; sha256 = "1kf638h5gsc8fklhaw2jiad1r0ssgj8zkfmzywp85lrx5z529gky"; }; p_deps = [ x.base x.haskell98 ]; };
+
+          parallel = { name = "parallel-1.0.0.0"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/parallel/1.0.0.0/parallel-1.0.0.0.tar.gz; sha256 = "0f6g724zpdqhjcfv064yknrdx4rjaaj71bfx57c8ywizifcwxp4h"; }; p_deps = [x.base]; };
+
+          httpSimple = { name = "HTTP-Simple-0.1"; src = fetchurl { url =  http://hackage.haskell.org/packages/archive/HTTP-Simple/0.1/HTTP-Simple-0.1.tar.gz; sha256 = "0mbszgx8x02wry2h8jhdc51ryi7dwbi396y5h4k6p0bva8yp5bd0"; }; p_deps = [x.base x.network x.http_darcs]; };
+
+          deeparrow = { name = "DeepArrow-0.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/DeepArrow/0.2/DeepArrow-0.2.tar.gz; sha256 = "1rm55nryg2z4r5919da2cc3nq08cg0g9gf59qfzl50lfccq8x2wd"; }; p_deps = [ x.base x.mtl x.typecompose x.haskellSrc ]; };
+          tv = { name = "TV-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/TV/0.4/TV-0.4.tar.gz; sha256 = "0hracvx6pydmqfkx9n906k0463b0qaxskis91kir63ivf91zwndp"; }; p_deps = [ x.base  x.typecompose x.deeparrow]; };
+          guitv = { name = "GuiTV-0.4"; src = fetchurl { url = http://darcs.haskell.org/packages/GuiTV/dist/GuiTV-0.4.tar.gz; sha256 = "15mndbxm83q0d8ci3vj51zwrmzl0f5i5yqv0caw05vlzfsr4ib5i";}; p_deps = [ x.base x.deeparrow x.typecompose x.phooey x.tv ]; }; 
+
+          haskellSrc = { name = "haskell-src-1.0.1.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/haskell-src/1.0.1.1/haskell-src-1.0.1.1.tar.gz"; sha256 = "06kilrf7y5h6dxj57kwymr20zvdsq6zhchwn4wky12mrmzjxyj01"; }; p_deps = [ x.haskell98 x.base x.pretty x.array ]; 
+                      pass = { buildInputs = (with executables; [ happy alex ] ); };
+                      };
+          haskellSrcExt = { name = "haskell-src-exts-0.3.3.tar.gz"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskell-src-exts/0.3.3/haskell-src-exts-0.3.3.tar.gz"; sha256 = "0g9ibjj1k5k3mqfx5mp8pqr0zx53pp9dkf52r8cdv18bl8xhzbpx"; }; p_deps = [ x.base x.base x.array x.pretty ]; 
+                      pass = { buildInputs = (with executables; [ happy alex ] ); };
+                    };
 
           /*
-          askelldb-hsql-postgresql-0.10.tar.gz
+
+          haskelldb-hsql-postgresql-0.10.tar.gz
           ######################################################################## 100.0%
           hash is 00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
           path is /nix/store/9n86rzpn0c4zyb7wpilpfcpkfnq68fch-haskelldb-hsql-postgresql-0.10.tar.gz
@@ -199,7 +233,7 @@ rec {
                          src = fetchurl { url = "http://hackage.haskell.org/packages/archive/time/1.1.2.0/time-1.1.2.0.tar.gz";
                                         sha256 = "0zm4qqczwbqzy2pk7wz5p1virgylwyzd9zxp0406s5zvp35gvl89"; };
                   };
-          rjson = { name = "RJson-0.3.3"; p_deps = [ x.base x.mtl x.parsec x.bytestring x.iconv x.array x.containers x.syb_with_class_darcs ];
+          rjson = { name = "RJson-0.3.3"; p_deps = [ x.base x.mtl x.parsec3 x.bytestring x.iconv x.array x.containers x.syb_with_class_darcs ];
                         src = fetchurl { url = http://hackage.haskell.org/packages/archive/RJson/0.3.3/RJson-0.3.3.tar.gz;
                                         sha256 = "0va1rbgjb8m3rij02318a31bi9gmy3zwyx5z12164c7iwafnd5v2"; };
                   };
@@ -208,8 +242,30 @@ rec {
                                         sha256 = "1snqzz7hi2qa83m5v3098rsldb485kz2jggd335qhvjahcp4bj1p"; };
                   };
 
+          utf8string = { name = "utf8-string-0.3"; p_deps = [ x.base x.bytestring ];
+                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/utf8-string/0.3/utf8-string-0.3.tar.gz;
+                                        sha256 = "11mln2r0ym4y12zxizn6n40xbgsi6q4n6n810rcg94bv35gqgcby"; };
+                  };
+          x11 = { name = "x11-1.4.1"; p_deps = [ x.base x.haskell98 x.bytestring ] ++ (with xlibs; [ libX11 libXext ]);
+                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11/1.4.1/X11-1.4.1.tar.gz;
+                                        sha256 = "0yczl1m7g3lggcxh56fy2br13kbk4c5vrkcc4w76ys0m2ia3h475"; };
+                  };
+          x11extras = { name = "X11-extras-0.4"; p_deps = [ x.base x.bytestring x.x11 xlibs.libXinerama ];
+                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-extras/0.4/X11-extras-0.4.tar.gz;
+                                        sha256 = "1cpjr09gddcjd0wqwvaankv1zj7fyc6hbfdvar63f51g3vvw627a"; };
+                  };
+          /*
+          x11xft = { name = "xft-0.2"; p_deps = [ x.base x.bytestring x.haskell98 x.x11 x.utf8string x.bytestring xlibs.libXft freetype];
+                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-xft/0.2/X11-xft-0.2.tar.gz;
+                                        sha256 = "1ahvpkgh5mr6v8gisv1sc9s4075hqh85cpqcqh1ylr6lkf7dz31w"; };
+                         pass = { 
+                            inherit freetype;
+                            patchPhase = "sed -i \"s=include-dirs:.*=include-dirs: $freetype/include=\" *.cabal"; };
+                  };
+          */
+
         # HAPPS - Libraries
-          http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec];
+          http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec3];
                   src = sourceByName "http";
                    #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
                  };
@@ -229,7 +285,7 @@ rec {
         happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
                       x.mtl x.network x.stm x.template_haskell x.hslogger
                         x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
-                        x.random x.old_time x.old_locale x.unix x.directory x.binary ];
+                        x.random x.old_time x.old_locale x.unix x.directory x.binary x.hspread ];
                       src = sourceByName "happs_state";
                       #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
                       #                   md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
@@ -255,7 +311,7 @@ rec {
                                        #md5 = "fa6b24517f09aa16e972f087430967fd"; 
                                      #};
                     };
-        happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec x.mtl
+        happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec3 x.mtl
                 x.network x.regex_compat x.hslogger x.happs_data_darcs
                   x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
                   x.template_haskell x.xhtml x.html x.bytestring x.random
@@ -263,12 +319,10 @@ rec {
                     #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
                     src = sourceByName "happs_server";
                     };
-        # we need recent version of cabal (because only this supports --pkg-config properly) Thu Feb  7 14:54:07 CET 2008
-        # cabal_darcs is added to propagatedBuildInputs automatically below
+        # using darcs with minimal patch applied to support $GHC_PACKAGE_PATH
         cabal_darcs = 
         { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
                   src = sourceByName "cabal";
-          #fetchdarcs { url = "http://darcs.haskell.org/cabal"; md5 = "8b0bc3c7f2676ce642f98b1568794cd6"; };
         };
       };
       #srcs_only = let x = pkgs; in map (y : y.src ) [ x.happs_util_darcs x.happs_data_darcs x.syb_with_class_darcs x.http_darcs 

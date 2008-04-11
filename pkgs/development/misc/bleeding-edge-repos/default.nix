@@ -44,7 +44,7 @@ args:
       happs_state =  { type="darcs"; url=http://happs.org/repos/HAppS-State; groups="happs"; };
       happs_plugins =  { type="darcs"; url=http://happs.org/repos/HAppS-Plugins; groups="happs"; };
       happs_ixset =  { type="darcs"; url=http://happs.org/repos/HAppS-IxSet; groups="happs"; };
-      happs_server =  { type="darcs"; url=http://happs.org/repos/HAppS-HTTP; groups="happs"; };
+      happs_server =  { type="darcs"; url=http://happs.org/repos/HAppS-Server; groups="happs"; };
       takusen = { type="darcs"; url=http://darcs.haskell.org/takusen/; };
       cabal = { type="darcs"; url=http://darcs.haskell.org/cabal; };
 

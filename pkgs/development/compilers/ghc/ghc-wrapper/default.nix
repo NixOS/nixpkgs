@@ -4,12 +4,15 @@ stdenv.mkDerivation {
   inherit suffix name ghc readline ncurses;
 
   buildInputs = (libraries ++ [ghcPkgUtil]);
-  tags = map (x :  sourceWithTagsDerivation (sourceWithTagsFromDerivation x)) 
-          (uniqList { inputList= filter annotatedWithSourceAndTagInfo libraries; } );
+  tags = if installSourceAndTags then
+          map (x :  sourceWithTagsDerivation (sourceWithTagsFromDerivation x)) 
+          ( uniqList { inputList= filter annotatedWithSourceAndTagInfo libraries; } )
+        else [];
 
   phases="installPhase";
 
   installPhase="
+    set -e
     ensureDir \$out/bin
     if test -n \"\$ghcPackagedLibs\"; then
        g=:\$(echo \$ghc/lib/ghc-*/package.conf)
@@ -28,6 +31,21 @@ EOF
     ensureDir \$out/src
     for i in \$tags; do
         ln -s \$i/src/* \$out/src
+    done
+
+    ensureDir \$out/bin
+    for i in `echo $GHC_PACKAGE_PATH | sed 's/:/ /g'`; do
+      o=\${i/lib*/}
+      o=\${i/nix-support*/}
+      for j in `find \${o}bin/ -type f 2>/dev/null` `find \${o}usr/local/bin/ -type f 2>/dev/null`; do
+        b=`basename \$j`
+        if [ \$b == sh ]; then continue; fi
+        if [ \$b == bash ]; then continue; fi
+        if [ \$b == bashbug ]; then continue; fi
+        if [ \$b == bashbug ]; then continue; fi
+        if [ -e \$out/bin/\$b ]; then continue; fi
+        ln -s \$j \$out/bin/;
+      done
     done
 ";
 }

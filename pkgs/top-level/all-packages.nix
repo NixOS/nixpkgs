@@ -1337,7 +1337,7 @@ let pkgs = rec {
     inherit sourceWithTagsFromDerivation;
     #inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
     #  annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
-    installSourceAndTags = true;
+    installSourceAndTags = getConfig ["haskell" "ghcWrapper" "installSourceAndTags"] false;
   };
 
 
@@ -1350,12 +1350,12 @@ let pkgs = rec {
   # used now
   # goSrc contains source directory (containing the .cabal file)
   ghcCabalDerivation = args : with args;
-    stdenv.mkDerivation ({
+    let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
+                    ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);
+    in stdenv.mkDerivation ({
       goSrcDir = "cd ${srcDir}";
       inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
-      buildInputs = (if (args ? buildInputs) then args.buildInputs else [])
-                    ++ [ ghcPkgUtil ];
       # TODO remove echo line
       buildPhase ="
           createEmptyPackageDatabaseAndSetupHook
@@ -1365,9 +1365,7 @@ let pkgs = rec {
           ghc --make Setup.*hs -o setup
           CABAL_SETUP=./setup
 
-          nix_ghc_pkg_tool join local-pkg-db
-
-          \$CABAL_SETUP configure --package-db=local-pkg-db
+          \$CABAL_SETUP configure --by-env=\$PACKAGE_DB
           \$CABAL_SETUP build
           \$CABAL_SETUP copy --destdir=\$out
           \$CABAL_SETUP register --gen-script
@@ -1381,7 +1379,14 @@ let pkgs = rec {
 
          echo \"\$propagatedBuildInputs\" > \"\$out/nix-support/propagated-build-inputs\"
       ";
-  } // ( if args ? pass then args.pass else {} ) ); 
+  } // ( if args ? pass then (args.pass) else {} ) // { inherit buildInputs; } );
+
+
+  ghcCabalExecutableFun = (import ../development/compilers/ghc/ghc-wrapper/ghc-cabal-executable-fun.nix){ 
+    inherit ghc68extraLibs ghcsAndLibs stdenv lib;
+    # extra packages from this top level file:
+    inherit perl;
+  };
 
   # creates annotated derivation (comments see above)
   addHasktagsTaggingInfo = deriv : deriv // {
@@ -1402,11 +1407,20 @@ let pkgs = rec {
   # this may change in the future 
   ghc68extraLibs = (import ../misc/ghc68extraLibs ) {
     # lib like stuff
-    inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip;
+    inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip zlib;
     # used (non haskell) libraries (ffi etc)
-    inherit postgresql sqlite gtkLibs gnome;
+    inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype;
+
+    executables = ghc68executables;
     wxGTK = wxGTK26;
   };
+
+  # Executables compiled by this ghc68 - I'm too lazy to add them all as additional file in here
+  ghc68executables = recurseIntoAttrs (import ../misc/ghc68executables {
+    inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib;
+    inherit X11;
+    inherit (xlibs) xmessage;
+  });
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
