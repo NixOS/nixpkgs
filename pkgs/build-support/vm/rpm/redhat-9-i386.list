@@ -1,4 +1,4 @@
-baseURL ftp://ftp.chl.chalmers.se/pub/redhat/linux/9/en/os/i386/RedHat/RPMS/
+baseURL ftp://fr.rpmfind.net/linux/redhat/9/en/os/i386/RedHat/RPMS
 autoconf-2.57-3.noarch.rpm cea6ded7bd395468a41e9b6380cf5c46
 automake-1.6.3-5.noarch.rpm 9a518459499504faa786b63bd88374d1
 basesystem-8.0-2.noarch.rpm 64bc91a544ed3b175e617df2b6683eec
