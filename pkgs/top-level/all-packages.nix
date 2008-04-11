@@ -807,6 +807,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  mpage = import ../tools/text/mpage {
+    inherit fetchurl stdenv;
+  };
+
   msfFun = builderDefsPackage (selectVersion ../tools/security/metasploit "3.1") {
     inherit ruby makeWrapper;
   };
