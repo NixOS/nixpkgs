@@ -1,22 +1,9 @@
-args: with args;
+args:
 
-stdenv.mkDerivation rec {
-  name = "scala-2.7.0-final";
+if args.stdenv.system == "i686-linux" || args.stdenv.system == "x86_64-linux" then
+  (import ./jdk6-linux.nix) args
+else if args.stdenv.system == "powerpc-linux" then
+  (import ./jdk5-ibm-powerpc-linux.nix) (removeAttrs args ["libstdcpp5" "pluginSupport" "xlibs" "installjdk"])
+else
+  abort "the JDK is not supported on this platform"
 
-  src = fetchurl {
-    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.tar.bz2";
-    sha256 = "17b9711bfddac611e907659cab4cb51f4114b886bbee243274d774b691dae248";
-  };
-
-  installPhase = ''
-    mkdir -p $out
-    mv * $out
-    rm -f $out/bin/*.bat
-  '';
-
-  phases = "unpackPhase installPhase";
-
-  meta = {
-    description = "Scala is a general purpose programming language";
-  };
-}
