@@ -3655,10 +3655,10 @@ let pkgs = rec {
   };
 
   perlXMLSimple = import ../development/perl-modules/generic perl {
-    name = "XML-Simple-2.14";
+    name = "XML-Simple-2.18";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-Simple-2.14.tar.gz;
-      md5 = "f321058271815de28d214c8efb9091f9";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.18.tar.gz;
+      sha256 = "09k8fvc9m5nd5rqq00rwm3m0wx7iwd6vx0vc947y58ydi30nfjd5";
     };
     propagatedBuildInputs = [perlXMLParser];
   };
