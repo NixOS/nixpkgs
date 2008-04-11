@@ -491,12 +491,12 @@ rec {
 
   /* Generate a Nix expression containing fetchurl calls for the
      closure of a set of top-level RPM packages from the
-     `primary.xml.gz' file of a Fedora or OpenSUSE distribution. */
+     `primary.xml.gz' file of a Fedora or openSUSE distribution. */
      
   rpmClosureGenerator =
-    {name, packagesList, urlPrefix, packages}:
+    {name, packagesList, urlPrefix, packages, archs ? []}:
     
-    runCommand "${name}.nix" {buildInputs = [perl perlXMLSimple];} ''
+    runCommand "${name}.nix" {buildInputs = [perl perlXMLSimple]; inherit archs;} ''
       gunzip < ${packagesList} > ./packages.xml
       perl -w ${rpm/rpm-closure.pl} \
         ./packages.xml ${urlPrefix} ${toString packages} > $out
@@ -508,12 +508,12 @@ rec {
      names. */
      
   makeImageFromRPMDist =
-    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? ""}:
+    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? "", archs ? ["noarch" "i386"]}:
 
     fillDiskWithRPMs {
       inherit name fullName size postInstall;
       rpms = import (rpmClosureGenerator {
-        inherit name packagesList urlPrefix packages;
+        inherit name packagesList urlPrefix packages archs;
       }) {inherit fetchurl;};
     };
 
@@ -602,6 +602,17 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/8/Fedora/i386/os;
     } // args);
 
+    opensuse103i386 = args: makeImageFromRPMDist ({
+      name = "opensuse-10.3-i586";
+      fullName = "openSUSE 10.3 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/distribution/10.3/repo/oss/suse/repodata/primary.xml.gz;
+        sha256 = "0zb5kxsb755nqq9i8jdclmanacyf551ncx6a011v9jqphsvyfvd7";
+      };
+      urlPrefix = mirror://opensuse/distribution/10.3/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+    } // args);
+
     ubuntu710i386 = args: makeImageFromDebDist ({
       name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
@@ -644,6 +655,29 @@ rec {
     "pkgconfig"
     "rpm"
     "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+
+  /* Common packages for openSUSE images. */
+  commonOpenSUSEPackages = [
+    "aaa_base"
+    "autoconf"
+    "automake"
+    "bzip2"
+    "curl"
+    "devs"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkg-config"
+    "rpm"
     "tar"
     "unzip"
   ];
@@ -706,6 +740,7 @@ rec {
     fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages; };
     fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
+    opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
     debian40r3i386 = diskImageFuns.debian40r3i386 { packages = commonDebianPackages; };

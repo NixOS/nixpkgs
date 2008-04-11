@@ -128,11 +128,19 @@ rec {
     http://archive.ubuntu.com/ubuntu/
   ];
 
-  # Fedora (please only full mirrors that carry old Fedora distributions as well).
+  # Fedora (please only add full mirrors that carry old Fedora distributions as well).
   fedora = [
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
     http://download.fedora.redhat.com/pub/fedora/
+  ];
+
+  # openSUSE.
+  opensuse = [
+    http://opensuse.hro.nl/opensuse/
+    http://ftp.funet.fi/pub/linux/mirrors/opensuse/
+    http://ftp5.gwdg.de/pub/opensuse/
+    http://ftp.opensuse.org/pub/opensuse/
   ];
 
 }
