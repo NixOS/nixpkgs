@@ -1362,7 +1362,7 @@ let pkgs = rec {
     let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);
     in stdenv.mkDerivation ({
-      goSrcDir = "cd ${srcDir}";
+      srcDir = if (args ? srcDir) then args.srcDir else ".";
       inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
       # TODO remove echo line
@@ -1370,7 +1370,7 @@ let pkgs = rec {
           createEmptyPackageDatabaseAndSetupHook
           export GHC_PACKAGE_PATH
 
-          \$goSrcDir
+          cd \$srcDir
           ghc --make Setup.*hs -o setup
           CABAL_SETUP=./setup
 
