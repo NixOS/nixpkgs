@@ -3,11 +3,11 @@
 , libxslt, tcl, tk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.4.4";
+  name = "git-1.5.5";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "16dcmkj7dfmr1cy28hi0ipc2qx7dy3knnb77w5bn78hwdfd2dcv9";
+    sha256 = "0pp6hfxkcwzb415wkkn713pqsv7cv06y90s53dyhsicqqn83hj17";
   };
 
   patches = [ ./pwd.patch ./docbook2texi.patch ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_42 libxslt ]
-    ++ # Tcl/Tk, for `gitk'
+    ++ # Tcl/Tk, for `gitk' and `git-gui'
        [ tcl tk makeWrapper ];
 
   makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
@@ -37,15 +37,13 @@ stdenv.mkDerivation rec {
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
-   + ''# Wrap `gitk'
-       wrapProgram $out/bin/gitk			\
-                   --set TK_LIBRARY "${tk}/lib/tk8.4"	\
-                   --prefix PATH : "${tk}/bin" ''
-
-   + ''# Wrap `git-gui'
-       wrapProgram $out/bin/git-gui			\
-                   --set TK_LIBRARY "${tk}/lib/tk8.4"	\
-                   --prefix PATH : "${tk}/bin" ''
+   + ''# Wrap `gitk' and `git-gui'
+       for prog in gitk git-gui
+       do
+	 wrapProgram "$out/bin/$prog"			\
+		     --set TK_LIBRARY "${tk}/lib/tk8.4"	\
+		     --prefix PATH : "${tk}/bin"
+       done ''
 
    + ''# Wrap `git-clone'
        wrapProgram $out/bin/git-clone			\
