@@ -1464,6 +1464,22 @@
         ";
       };
 
+      sslServerCert = mkOption {
+        default = "";
+	example = /var/host.cert;
+	description = "
+	  Path to server SSL certificate.
+	";
+      };
+
+      sslServerKey = mkOption {
+        default = "";
+	example = /var/host.key;
+	description = "
+	  Path to server SSL certificate key.
+	";
+      };
+
       logDir = mkOption {
         default = "/var/log/httpd";
         description = "

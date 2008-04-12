@@ -58,6 +58,8 @@ let
 
   allSubservices = mainSubservices ++ pkgs.lib.concatMap subservicesFor vhosts;
 
+  sslServerCert = cfg.sslServerCert;
+  sslServerKey = cfg.sslServerKey;
 
   # !!! should be in lib
   writeTextInDir = name: text:
@@ -81,7 +83,7 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ] ++ optional cfg.enableSSL "ssl_module";
+    ] ++ optional cfg.enableSSL "ssl";
     
 
   loggingConf = ''
@@ -128,8 +130,8 @@ let
 
         SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
 
-        SSLCertificateFile @sslServerCert@
-        SSLCertificateKeyFile @sslServerKey@
+        SSLCertificateFile ${sslServerCert}
+        SSLCertificateKeyFile ${sslServerKey}
 
         #   MSIE compatability.
         SetEnvIf User-Agent ".*MSIE.*" \
