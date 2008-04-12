@@ -38,6 +38,7 @@ lib.mapAttrs ( name_dummy : a : ghcCabalExecutableFun (a // { libsFun = x : (a.l
       patchPhase = '' sed -e "s/buildVerbose flags/fromFlag (buildVerbose flags)/g" -e "s/BuildFlags(..)/BuildFlags(..), fromFlag/g" -i Setup.lhs '';
     };
   };
+  /*
   xmonad = {
     name = "xmonad-darcs";
     libsFun = x : [x.base x.mtl x.unix x.x11 x.x11extras xmessage  ];
@@ -53,4 +54,5 @@ lib.mapAttrs ( name_dummy : a : ghcCabalExecutableFun (a // { libsFun = x : (a.l
         NIX_LDFLAGS = "-lz";
     };
   };
+  */
 }
