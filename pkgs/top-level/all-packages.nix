@@ -5108,7 +5108,7 @@ let pkgs = rec {
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
-    inherit fetchurl stdenv perl pkgconfig libpcap;
+    inherit fetchurl stdenv perl pkgconfig libpcap flex bison;
     inherit (gtkLibs) gtk;
   };
 
