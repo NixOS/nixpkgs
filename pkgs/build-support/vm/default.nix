@@ -371,9 +371,9 @@ rec {
     outDir = "rpms/${attrs.diskImage.name}";
 
     prepareImagePhase = ''
-      for rpm in $extraRPMs; do
-        rpm -iv $rpm
-      done
+      if test -n $extraRPMs; then
+        rpm -iv $extraRPMs
+      fi
     '';
   
     sysInfoPhase = ''
