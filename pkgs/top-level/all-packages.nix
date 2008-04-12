@@ -5878,7 +5878,7 @@ let pkgs = rec {
   };
 
   xmonad = import ../applications/window-managers/xmonad {
-    inherit stdenv fetchurl ghc X11;
+    inherit cabal X11;
     inherit (xlibs) xmessage;
   };
 
