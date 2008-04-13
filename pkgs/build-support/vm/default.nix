@@ -676,6 +676,7 @@ rec {
     "findutils"
     "gawk"
     "gcc-c++"
+    "getopt"
     "gzip"
     "make"
     "patch"
