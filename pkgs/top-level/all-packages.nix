@@ -4457,9 +4457,10 @@ let pkgs = rec {
     inherit stdenv fetchurl kernel xlibs gtkLibs;
   };
 
-  gw6c = import ../os-specific/linux/gw6c {
-    inherit fetchurl stdenv nettools openssl procps;
+  gw6cFun = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
+    inherit fetchurl stdenv nettools openssl procps iproute;
   };
+  gw6c = gw6cFun null;
 
   nss_ldap = import ../os-specific/linux/nss_ldap {
     inherit fetchurl stdenv openldap;
