@@ -45,8 +45,11 @@ let
 
   callSubservices = serverInfo: defs:
     let f = svc:
-      let config = addDefaultOptionValues res.options svc.config;
-          res = svc.function {inherit config pkgs serverInfo;};
+      let 
+        svcFunction = if svc ? function then 
+          svc.function else (import ( ./noDir/.. + ("/" + svc.serviceName + ".nix")));
+        config = addDefaultOptionValues res.options svc.config;
+        res = svcFunction {inherit config pkgs serverInfo;};
       in res;
     in map f defs;
 
