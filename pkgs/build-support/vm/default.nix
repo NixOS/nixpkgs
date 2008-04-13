@@ -684,6 +684,7 @@ rec {
     "rpm"
     "tar"
     "unzip"
+    "util-linux"
   ];
 
 
