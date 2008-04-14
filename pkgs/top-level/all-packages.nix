@@ -1959,6 +1959,10 @@ let pkgs = rec {
     inherit fetchurl stdenv replace;
   };
 
+  dejagnu = import ../development/tools/misc/dejagnu {
+    inherit fetchurl stdenv expect makeWrapper;
+  };
+
   elfutilsFun = lib.sumArgs 
     (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
