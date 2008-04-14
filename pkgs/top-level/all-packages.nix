@@ -5887,6 +5887,10 @@ let pkgs = rec {
     inherit (xlibs) xmessage;
   };
 
+  xmonadContrib = import ../applications/window-managers/xmonad/xmonad-contrib.nix {
+    inherit cabal xmonad X11;
+  };
+
   xneur = import ../applications/misc/xneur {
     inherit fetchurl stdenv pkgconfig pcre libxml2 aspell; 
     GStreamer=gst_all.gstreamer;
