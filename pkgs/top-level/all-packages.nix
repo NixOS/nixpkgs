@@ -335,9 +335,9 @@ let pkgs = rec {
 
   # only temporarely  / don't know yet wether it's save to switch
   # but I have trouble getting HAppS repos
-  fetchdarcs_2pre = import ../build-support/fetchdarcs {
+  fetchdarcs2 = import ../build-support/fetchdarcs {
     inherit stdenv nix;
-    darcs = darcs_2_pre;
+    darcs = darcs2;
   };
 
   fetchsvn = import ../build-support/fetchsvn {
@@ -1860,7 +1860,7 @@ let pkgs = rec {
   */
 
   bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos { 
-    inherit getConfig fetchdarcs_2pre fetchurl; 
+    inherit getConfig fetchdarcs2 fetchurl; 
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -5013,7 +5013,7 @@ let pkgs = rec {
   };
 
   # some speed bottle necks are resolved in this version I think .. perhaps you like to try it? 
-  darcs_2_pre = import ../applications/version-management/darcs_2_pre.nix {
+  darcs2 = import ../applications/version-management/darcs/darcs-2.nix {
     inherit fetchurl stdenv zlib ncurses curl ghc;
   };
 
@@ -6227,7 +6227,7 @@ let pkgs = rec {
   nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
     inherit fetchurl stdenv bleedingEdgeRepos lib writeText getConfig;
     ghc = ghcsAndLibs.ghc68.ghc;
-    fetchdarcs = fetchdarcs_2pre;
+    fetchdarcs = fetchdarcs2;
   };
 
   nixStatic = import ../tools/package-management/nix-static {

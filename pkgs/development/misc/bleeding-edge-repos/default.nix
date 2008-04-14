@@ -25,7 +25,7 @@ args:
          else builtins.trace "warning, no bleeding edge source info (${fetchUrlInfoFile}) found for ${name}, hash will propably be wrong"
                (let attr = __getAttr name repos;
                  in if (attr.type == "darcs")
-                   then fetchdarcs_2pre { inherit (attr) url md5; }
+                   then fetchdarcs2 { inherit (attr) url md5; }
                    else throw "TODO") );
 
   repos = {
