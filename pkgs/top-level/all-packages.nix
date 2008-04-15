@@ -5882,6 +5882,10 @@ let pkgs = rec {
     stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
   };
 
+  xmobar = import ../applications/misc/xmobar {
+    inherit cabal X11;
+  };
+
   xmonad = import ../applications/window-managers/xmonad {
     inherit cabal X11;
     inherit (xlibs) xmessage;
