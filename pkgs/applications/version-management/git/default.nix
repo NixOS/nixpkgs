@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_42 libxslt ]
-    ++ # Tcl/Tk, for `gitk' and `git-gui'
+    ++ # Tcl/Tk
        [ tcl tk makeWrapper ];
 
   makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
-   + ''# Wrap `gitk' and `git-gui'
-       for prog in gitk git-gui
+   + ''# Wrap Tcl/Tk programs
+       for prog in gitk git-gui git-citool
        do
 	 wrapProgram "$out/bin/$prog"			\
 		     --set TK_LIBRARY "${tk}/lib/tk8.4"	\
