@@ -37,7 +37,7 @@ EOF
     for i in `echo $GHC_PACKAGE_PATH | sed 's/:/ /g'`; do
       o=\${i/lib*/}
       o=\${i/nix-support*/}
-      for j in `find \${o}bin/ -type f 2>/dev/null` `find \${o}usr/local/bin/ -type f 2>/dev/null`; do
+      for j in \$ghc/bin/* `find \${o}bin/ -type f 2>/dev/null` `find \${o}usr/local/bin/ -type f 2>/dev/null`; do
         b=`basename \$j`
         if [ \$b == sh ]; then continue; fi
         if [ \$b == bash ]; then continue; fi
