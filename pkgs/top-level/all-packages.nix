@@ -6127,6 +6127,13 @@ let pkgs = rec {
   };
   
 
+  ### SCIENCE/BIOLOGY
+
+  clustalw2 = import ../applications/science/biology/clustalw2 {
+    inherit fetchurl stdenv;
+  };
+
+
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
