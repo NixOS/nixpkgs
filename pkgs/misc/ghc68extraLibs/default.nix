@@ -27,10 +27,12 @@ rec {
           stm = { name="stm-2.1.1.0"; srcDir="libraries/stm"; p_deps=[ x.base x.array ]; src = ghc.extra_src; };
           hunit = { name="HUnit-1.2.0.0"; srcDir="libraries/HUnit"; p_deps=[ x.base ]; src = ghc.extra_src; };
           quickcheck = { name="QuickCheck-1.1.0.0"; srcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
-          polyparse = { name = "polyparse-2.3"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/polyparse/1.1/polyparse-1.1.tar.gz; sha256 = "0mrrk3hhfrn68xn5y4jfg4ba0pa08bj05l007862vrxyyb4bksl7"; }; p_deps = [ x.base x.haskell98 ]; };
+          tagsoup = { name = "tagsoup-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/tagsoup/0.4/tagsoup-0.4.tar.gz; sha256 = "0rdy303qaw63la1fhw1z8h6k8cs33f71955pwlzxyx0n45g58hc7";};  p_deps = [ x.base x.mtl x.network ]; };
+          hxt = { name = "hxt-7.5"; src =fetchurl { url = http://hackage.haskell.org/packages/archive/hxt/7.5/hxt-7.5.tar.gz; sha256 ="00q6m90a4qm4d5cg1x9r6b7f0rszcf2y7ifzs9mvy9kmzfl5ga7n"; };  p_deps = [x.base x.haskell98 x.http_darcs x.hunit x.network x.parsec x.tagsoup ]; };
 
 
           # other pacakges  (hackage etc)
+          polyparse = { name = "polyparse-2.3"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/polyparse/1.1/polyparse-1.1.tar.gz; sha256 = "0mrrk3hhfrn68xn5y4jfg4ba0pa08bj05l007862vrxyyb4bksl7"; }; p_deps = [ x.base x.haskell98 ]; };
           timeout = { name="timeout-0.1.2"; src = fetchurl{ url = http://hackage.haskell.org/packages/archive/control-timeout/0.1.2/control-timeout-0.1.2.tar.gz; sha256 = "1g1x6c4dafckwcw48v83f3nm2sxv8kynwv8ib236ay913ycgayvg";}; p_deps = [ x.base x.time x.stm ]; };
           parsec3  = { name="parsec-3.0.0";  p_deps=[ x.base x.mtl x.bytestring ];  src = fetchurl { url = "http://hackage.haskell.org/packages/archive/parsec/3.0.0/parsec-3.0.0.tar.gz"; sha256 = "0fqryy09y8h7z0hlayg5gpavghgwa0g3bldynwl17ks8l87ykj7a"; }; };
 
@@ -57,22 +59,13 @@ rec {
           #           patches = ../misc/WASHNGo_Patch_ghc682;
           #      };
 
-          hsql = rec { name = "hsql-1.7"; p_deps = [x.base x.mtl x.haskell98  x.old_time ];
-                        src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hsql/1.7/hsql-1.7.tar.gz";
-                                     sha256 = "0j2lkvg5c0x5gf2sy7zmmgrda0c3l73i9d6hyka2f15d5n1rfjc9"; };
-                      pass = { patchPhase = "
-                                    sed -e 's=build-depends:.*=build-depends: base, old-locale, old-time=' -i hsql.cabal
-                                    echo \"extensions: 
-                                    ForeignFunctionInterface, TypeSynonymInstances, CPP, ExistentialQuantification, GeneralizedNewtypeDeriving, PatternSignatures, ScopedTypeVariables, Rank2Types, DeriveDataTypeable \" >> hsql.cabal
-                                    "; };
+          hsqlDarcs = rec { name = "hsql-darcs"; p_deps = [x.base x.mtl x.haskell98  x.old_time x.old_locale x.time ];
+                        src = sourceByName "pg_hsql";
+                      pass = {  srcDir = "HSQL"; };
               };
-            hsqlMysql = { name = "hsql-mysql-1.7"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hsql-mysql/1.7/hsql-mysql-1.7.tar.gz"; sha256 ="1df25bf9wb6mbwr1jsbaby9xgwsx27z0qzvhz9x1vd2p4i8m9yq8"; }; p_deps = [ x.base x.hsql x.old_time ];
+          hsqlMysqlDarcs = { name = "hsql-mysql-darcs"; srcDir = "MySQL"; src = sourceByName "pg_hsql"; p_deps = [ x.base x.hsqlDarcs x.old_time ];
                         pass = { buildInputs = [ mysql zlib ];
-                                 patchPhase = "
-                                  echo \"extra-lib-dirs: ${zlib}/lib\" >> hsql-mysql.cabal
-                                  unset patchPhase; patchPhase
-                                 ";
-                                 patches = ./hsql-mysql-patch;
+                                 patchPhase = "echo      \"  extra-lib-dirs: ${zlib}/lib\" >> MySQL/hsql-mysql.cabal";
                                };
                       };
           #hsql_postgresql = rec { name = "hsql-postgresql-1.7"; p_deps = [ x.base x.mtl x.haskell98  x.old_time x.hsql postgresql ];
