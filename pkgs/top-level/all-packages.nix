@@ -4457,6 +4457,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  numactl = import ../os-specific/linux/numactl {
+    inherit fetchurl stdenv;
+  };
+
   nvidiaDrivers = import ../os-specific/linux/nvidia {
     inherit stdenv fetchurl kernel xlibs gtkLibs;
   };
