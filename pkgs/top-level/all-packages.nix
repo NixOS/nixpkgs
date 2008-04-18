@@ -5583,6 +5583,10 @@ let pkgs = rec {
     libstdcpp5 = gcc33.gcc;
   };
 
+  remember = import ../applications/editors/emacs-modes/remember {
+    inherit fetchurl stdenv texinfo emacs bbdb;
+  };
+
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv;
   };
