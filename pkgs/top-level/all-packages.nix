@@ -5198,11 +5198,12 @@ let pkgs = rec {
     inherit (xlibs) libXScrnSaver;
   };
 
-  pidginlatex = import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
-    inherit fetchurl stdenv tetex pkgconfig ghostscript pidgin;
+  pidginlatexFun = lib.sumArgs (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
+    inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
   };
+  pidginlatex = pidginlatexFun null;
 
   pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
     inherit fetchurl stdenv libotr pidgin;

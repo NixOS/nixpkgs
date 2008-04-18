@@ -1,5 +1,5 @@
 {stdenv, fetchurl, pidgin, imagemagick, ghostscript,
-	pkgconfig, glib, gtk, tetex}:
+	pkgconfig, glib, gtk, texLive}:
 stdenv.mkDerivation {
   name = "pidgin-latex";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   preBuild = "
   	sed -e '/^PREFIX/d' -i Makefile ; 
-	sed -e 's@/usr/bin/latex@${tetex}/bin/pdflatex@g' -i pidgin-latex.h
+	sed -e 's@/usr/bin/latex@${texLive}/bin/pdflatex@g' -i pidgin-latex.h
 	sed -e 's@/usr/bin/convert@${imagemagick}/bin/convert@g' -i pidgin-latex.h
 	sed -e 's@.*convert_path.*@const gchar *convert = CONVERT_PATH;@'
 	sed -e 's@.*latex_path.*@const gchar *convert = LATEX_PATH;@'
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   postInstall = "mkdir -p \${out}/share/pidgin-latex; 
 	ln -s \${out}/lib/pidgin/pidgin-latex.so \${out}/share/pidgin-latex/";
 
-  buildInputs = [pidgin imagemagick ghostscript pkgconfig glib gtk tetex];
+  buildInputs = [pidgin imagemagick ghostscript pkgconfig glib gtk texLive];
 
   meta = {
     description = "
