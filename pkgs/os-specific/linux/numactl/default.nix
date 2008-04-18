@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sed -i "Makefile" -es"|^ *prefix *:=.*$|prefix := $out|g"
   '';
 
+  preInstall = ''
+    # The `install' rule expects this directory to be available.
+    ensureDir "$out/share/man/man5"
+  '';
+
   meta = {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     license = [ "LGPLv2.1" # library
