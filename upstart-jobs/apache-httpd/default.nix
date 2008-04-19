@@ -118,14 +118,14 @@ let
 
   # !!! integrate with virtual hosting below
   sslConf = ''
-    Listen ${toString cfg.httpsPort}
-
     SSLSessionCache dbm:${cfg.stateDir}/ssl_scache
 
     SSLMutex file:${cfg.stateDir}/ssl_mutex
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
+
+    NameVirtualHost *:${toString cfg.httpsPort}
 
     <VirtualHost _default_:${toString cfg.httpsPort}>
 
@@ -246,7 +246,20 @@ let
         MaxRequestsPerChild  0
     </IfModule>
 
-    Listen ${toString cfg.httpPort}
+    ${let
+        ports = pkgs.lib.uniqList {  
+	  inputList=(concatMap (localCfg: 
+	    (pkgs.lib.optional localCfg.enableHttp localCfg.httpPort) 
+	    ++
+	    (pkgs.lib.optional localCfg.enableHttps localCfg.httpsPort) 
+	  ) vhosts)
+	  ++
+	  (pkgs.lib.optional cfg.enableSSL cfg.httpsPort)
+	  ++
+	  [cfg.httpPort];
+	};
+	in concatMapStrings (port: "Listen ${toString port}\n") ports
+    }
 
     User ${cfg.user}
     Group ${cfg.group}
@@ -318,14 +331,23 @@ let
     ${perServerConf true cfg}
     
     # Always enable virtual hosts; it doesn't seem to hurt.
-    NameVirtualHost *:*
+    NameVirtualHost *:${toString cfg.httpPort}
 
     ${let
-        makeVirtualHost = cfg: ''
-          <VirtualHost *:*>
-              ${perServerConf false cfg}
+        makeVirtualHost = localCfg: (if localCfg.enableHttp then ''
+          <VirtualHost *:${toString localCfg.httpPort}>
+              ${perServerConf false localCfg}
           </VirtualHost>
-        '';
+        '' else "") + ( if localCfg.enableHttps then ''
+          <VirtualHost *:${toString localCfg.httpsPort}>
+	      SSLEngine on
+
+              SSLCertificateFile ${sslServerCert}
+              SSLCertificateKeyFile ${sslServerKey}
+
+              ${perServerConf false localCfg}
+          </VirtualHost>
+	'' else "");
       in concatMapStrings makeVirtualHost vhosts}
   '';
 

@@ -29,6 +29,27 @@
     ";
   };
 
+  httpsPort = mkOption {
+    default = 443;
+    description = "
+      Port for encrypted HTTPS requests.
+    ";
+  };
+
+  enableHttp = mkOption {
+    default = true;
+    description = "
+      Whether to listen on unencrypted HTTP.
+    ";
+  };
+
+  enableHttps = mkOption {
+    default = false;
+    description = "
+      Whether to listen on encrypted HTTPS.
+    ";
+  };
+
   adminAddr = mkOption ({
     example = "admin@example.org";
     description = "
