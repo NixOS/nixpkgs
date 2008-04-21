@@ -294,6 +294,8 @@ let
     login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
     halt_cmd ${pkgs.upstart}/sbin/shutdown -h now
     reboot_cmd ${pkgs.upstart}/sbin/shutdown -r now
+    ${if cfg.slim.defaultUser != "" then "default_user " + cfg.slim.defaultUser else ""}
+    ${if cfg.slim.hideCursor then "hidecursor true" else ""}
   '';
 
 

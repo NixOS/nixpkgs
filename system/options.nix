@@ -1182,6 +1182,23 @@
           ";
         };
 
+        defaultUser = mkOption {
+          default = "";
+          example = "login";
+          description = "
+            The default user to load. If you put a username here you
+            get it automatically loaded into the username field, and
+            the focus is placed on the password.
+          ";
+        };
+
+        hideCursor = mkOption {
+          default = false;
+          example = true;
+          description = "
+            Hide the mouse cursor on the login screen.
+          ";
+        };
       };
 
       isClone = mkOption {
