@@ -5345,6 +5345,12 @@ let pkgs = rec {
 
   kiwixBuilder = kiwixBuilderFun null;*/
 
+  konversation = import ../applications/networking/irc/konversation {
+    inherit fetchurl stdenv perl arts kdelibs zlib libpng libjpeg expat;
+    inherit (xlibs) libX11 libXt libXext;
+    qt = qt3;
+  };
+
   kuickshow = import ../applications/graphics/kuickshow {
     inherit fetchurl stdenv kdelibs arts libpng libjpeg libtiff libungif imlib expat perl;
     inherit (xlibs) libX11 libXext libSM;
