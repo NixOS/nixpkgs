@@ -5337,6 +5337,12 @@ let pkgs = rec {
     #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
 
+  kile = import ../applications/editors/kile {
+    inherit stdenv fetchurl perl arts kdelibs zlib libpng libjpeg freetype expat;
+    inherit (xlibs) libX11 libXt libXext;
+    qt = qt3;
+  };
+
   /*kiwixBuilderFun = lib.sumArgs (import ../applications/misc/kiwixbuilder) {
     inherit builderDefs;
     inherit (gnome) glib;
