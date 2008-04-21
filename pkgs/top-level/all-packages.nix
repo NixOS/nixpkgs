@@ -2499,6 +2499,10 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
+  gmm = import ../development/libraries/gmm {
+    inherit fetchurl stdenv;
+  }; 
+
   gmp = import ../development/libraries/gmp {
     inherit fetchurl stdenv m4;
   };
