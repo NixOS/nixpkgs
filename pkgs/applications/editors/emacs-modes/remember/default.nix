@@ -1,16 +1,22 @@
 { fetchurl, stdenv, texinfo, emacs, bbdb }:
 
 stdenv.mkDerivation rec {
+  # Note: Remember is part of GNU Emacs 23.
   name = "remember-2.0";
+
   src = fetchurl {
     url = "http://download.gna.org/remember-el/${name}.tar.gz";
     sha256 = "04bp071xjbb6mbspjpwcza0krgx2827v6rfxbsdcpn0qcjgad9wm";
   };
 
-  buildInputs = [ emacs texinfo ];
+  # FIXME: It also has a (soft) dependency on Planner and Bibl-mode.
+  buildInputs = [ emacs bbdb texinfo ];
 
   patchPhase = ''
-    sed -i "Makefile.defs" -"es|^PREFIX *=.*$|PREFIX = $out|g"
+    sed -i "Makefile.defs" \
+         -e"s|^ *PREFIX *=.*$|PREFIX = $out|g ;
+	    s|^ *ELISPDIR *=.*$|ELISPDIR = $out/share/emacs/site-lisp|g ;
+	    s|^ *EMACS *=.*$|EMACS = emacs -L \"${bbdb}/share/emacs/site-lisp\"|g"
   '';
 
   meta = {
