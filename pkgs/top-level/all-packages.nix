@@ -4833,7 +4833,8 @@ let pkgs = rec {
 
   audacious_plugins = import ../applications/audio/audacious/plugins.nix {
     inherit fetchurl stdenv pkgconfig audacious dbus_glib gettext
-      libmad xlibs alsaLib taglib libmpcdec libogg libvorbis;
+      libmad xlibs alsaLib taglib libmpcdec libogg libvorbis
+      libcdio libcddb;
   };
 
   audacity = import ../applications/audio/audacity {
