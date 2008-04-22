@@ -18,7 +18,7 @@ stdenv.mkDerivation ( rec {
   buildInputs = [ emacs texLive ];
 
   configureFlags = [
-    "--with-lispdir=\${out}/emacs/site-lisp"
+    "--with-lispdir=\${out}/share/emacs/site-lisp"
     "--disable-preview"
   ];
 })
