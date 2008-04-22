@@ -1,10 +1,10 @@
 {stdenv, fetchurl, coreutils}:
 
 stdenv.mkDerivation {
-  name = "findutils-4.2.32";
+  name = "findutils-4.2.33";
   src = fetchurl {
-    url = mirror://gnu/findutils/findutils-4.2.32.tar.gz;
-    sha256 = "05sj0154kl4mbqg7dcabiaa16snjv2ppfwwhcvl2zyn2yc28igc7";
+    url = mirror://gnu/findutils/findutils-4.2.33.tar.gz;
+    sha256 = "0y0gmdc55kknf5438c1da5xsvpch3v800r79rgz5rv6fb90djg41";
   };
   buildInputs = [coreutils];
 
