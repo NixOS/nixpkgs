@@ -4288,6 +4288,38 @@ let pkgs = rec {
     ];
   };
 
+  kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      /*
+      { # resume with resume=swap:/dev/xx
+        name = "tux on ice"; # (swsusp2)
+        patch = fetchurl {
+          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc5-for-2.6.23.14.patch.bz2";
+          sha256 = "187190rxbn9x1c6bwv59mwy1zhff8nn5ad58cfiz23wa5wrk4mif";
+        };
+        extraConfig = "
+          CONFIG_SUSPEND2=y
+          CONFIG_SUSPEND2_FILE=y
+          CONFIG_SUSPEND2_SWAP=y
+          CONFIG_CRYPTO_LZF=y
+        ";
+      }
+      */
+      { name = "fbcondecor-0.9.4-2.6.25-rc6";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
+          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
+        };
+        extraConfig = "CONFIG_FB_CON_DECOR=y";
+      }
+    ];
+    extraConfig =
+      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
+      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
+      [(getConfig ["kernel" "addConfig"] "")];
+  };
+
   kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
