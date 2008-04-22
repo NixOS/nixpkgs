@@ -42,7 +42,7 @@ args.stdenv.mkDerivation rec {
     makeWrapper \$out/eclipse/eclipse \$out/bin/eclipse \\
         --prefix PATH \":\" \"\$jdk/bin\" \\
         --prefix LD_LIBRARY_PATH \":\" \"\$rpath\"
-    sed -e 's=exec.*=exec \$(dirname $0)/../eclipse/eclipse=' -i \$out/bin/eclipse
+    sed -e 's=exec.*=exec \$(dirname $0)/../eclipse/eclipse $@=' -i \$out/bin/eclipse
   ";
   # using dirname so that eclipse still runs after copying the whole store
   # directory somewhere else (so that you can use the update manager
