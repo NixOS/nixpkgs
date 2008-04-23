@@ -2191,6 +2191,7 @@ rec {
 
   cairo = import ../development/libraries/cairo {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
+    inherit (xlibs) pixman;
   };
 
   cairomm = import ../development/libraries/cairomm {

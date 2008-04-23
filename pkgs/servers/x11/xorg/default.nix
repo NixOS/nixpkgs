@@ -1155,14 +1155,14 @@ rec {
   }) // {inherit libX11 libXext libXmu libXt ;};
     
   pixman = (stdenv.mkDerivation {
-    name = "pixman-0.9.6";
+    name = "pixman-0.10.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/pixman-0.9.6.tar.bz2;
-      sha256 = "0nrksqwkaq1kczzkpqw1nvxc0b2d89d81gzb4j43hz6n729xn165";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/pixman-0.10.0.tar.bz2;
+      sha256 = "1r6il420j7ws9xbk6y3nn8zb7mc76rk1npz5763qp525n94iz11b";
     };
-    buildInputs = [pkgconfig libX11 ];
-  }) // {inherit libX11 ;};
+    buildInputs = [pkgconfig ];
+  }) // {inherit ;};
     
   printproto = (stdenv.mkDerivation {
     name = "printproto-1.0.3";
@@ -1741,11 +1741,11 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-evdev-1.1.2.tar.bz2;
       sha256 = "15avwy8isbqagzcdj20ngqajl22k40pssfx7vjirhrqyyq19fiwb";
     };
+    buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
     preBuild = "
     sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
     ";
-    buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
-  }) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
+  }) // {inherit inputproto kbproto xorgserver xproto ;};
     
   xf86inputfpit = (stdenv.mkDerivation {
     name = "xf86-input-fpit-1.1.0";
@@ -1984,8 +1984,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-ati-6.6.3.tar.bz2;
       sha256 = "102p6nz1jvd3pgbl83a4zi99smydqr6il61r33l0lqmi3yg452nh";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
-  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videochips = (stdenv.mkDerivation {
     name = "xf86-video-chips-1.1.1";
@@ -2214,8 +2214,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sis-0.9.3.tar.bz2;
       sha256 = "1xin2hcjjwj2810h7kxhkmqq841plbsvk0swmjl9py7z2vxyi3l9";
     };
-    buildInputs = [pkgconfig fontsproto glproto mesaHeaders libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto glproto mesaHeaders libdrm randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto glproto libdrm mesaHeaders randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto glproto libdrm mesaHeaders randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosisusb = (stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.8.1";
@@ -2224,8 +2224,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-sisusb-0.8.1.tar.bz2;
       sha256 = "1js5vf5xjxpi0nb0bpjc1glbx2l0fq1wqmnlwayn6cp3nfdbg5hm";
     };
-    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto glproto mesaHeaders randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto glproto mesaHeaders randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videosunbw2 = (stdenv.mkDerivation {
     name = "xf86-video-sunbw2-1.1.0";
@@ -2714,8 +2714,8 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-server-1.4.tar.bz2;
       sha256 = "1hpbq0bl1jkq84gvksp0xzbbrwwgl0wz2wakf11p2hld6bgl5cai";
     };
-    buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto dbus.libs libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; 
-  }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
+    buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; 
+  }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.2";
