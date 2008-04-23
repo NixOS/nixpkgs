@@ -747,6 +747,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  keychain = import ../tools/misc/keychain {
+    inherit fetchurl stdenv;
+  };
+
   ktorrent = import ../tools/networking/p2p/ktorrent {
     inherit fetchurl stdenv pkgconfig kdelibs
       xlibs zlib libpng libjpeg perl gmp;
