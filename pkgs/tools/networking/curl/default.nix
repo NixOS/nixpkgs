@@ -4,20 +4,25 @@ assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation {
-  name = "curl-7.17.1";
+  name = "curl-7.18.1";
+  
   src = fetchurl {
-    url = http://curl.haxx.se/download/curl-7.17.1.tar.bz2;
-    sha256 = "0yz50r75jhfr2ya6wqi6n90bn4ij30299pjglmlckzq6jp28wrkz";
+    url = http://curl.haxx.se/download/curl-7.18.1.tar.bz2;
+    sha256 = "0v5fpr4bsdlg262nsgrijlfhp3vgr1ypir1rrkmhxcsnpv4frw6c";
   };
+  
   buildInputs =
     stdenv.lib.optional zlibSupport zlib ++
     stdenv.lib.optional sslSupport openssl;
-  configureFlags = "
+    
+  configureFlags = ''
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
-  ";
+  '';
+  
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
+  
   inherit sslSupport openssl;
 
   patches = [
@@ -30,4 +35,9 @@ stdenv.mkDerivation {
        considered non-transient so it won't retry. */
     ./connect-timeout.patch
   ];
+
+  meta = {
+    description = "A command line tool for transferring files with URL syntax";
+    homepage = http://curl.haxx.se/;
+  };
 }
