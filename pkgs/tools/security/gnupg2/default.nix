@@ -1,4 +1,8 @@
-args: with args;
+# remmeber to
+# echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf
+# and install pinentry as well
+
+args: with args
 stdenv.mkDerivation {
   name = "gnupg-2.0.8";
   src = fetchurl {
