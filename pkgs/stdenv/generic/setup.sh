@@ -1,3 +1,44 @@
+exitHandler() {
+    exitCode=$?
+    set +e
+
+    closeNest
+
+    if test -n "$showBuildStats"; then
+        times > $NIX_BUILD_TOP/.times
+        local -a times=($(cat $NIX_BUILD_TOP/.times))
+        # Print the following statistics:
+        # - user time for the shell
+        # - system time for the shell
+        # - user time for all child processes
+        # - system time for all child processes
+        echo "build time elapsed: " ${times[*]}
+    fi
+    
+    if test $exitCode != 0; then
+        eval "$failureHook"
+    
+        # If the builder had a non-zero exit code and
+        # $succeedOnFailure is set, create the file
+        # `$out/nix-support/failed' to signal failure, and exit
+        # normally.  Otherwise, return the original exit code.
+        if test -n "$succeedOnFailure"; then
+            echo "build failed with exit code $exitCode (ignored)"
+            ensureDir "$out/nix-support"
+            echo -n $exitCode > "$out/nix-support/failed"
+            exit 0
+        fi
+        
+    else
+        eval "$exitHook"
+    fi
+    
+    exit $exitCode
+}
+
+trap "exitHandler" EXIT
+
+
 ######################################################################
 # Helper functions that might be useful in setup hooks.
 
@@ -17,8 +58,7 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-addToSearchPath()
-{
+addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
@@ -88,20 +128,6 @@ assertEnvExists(){
   fi
 }
 
-# Called when some build action fails.  If $succeedOnFailure is set,
-# create the file `$out/nix-support/failed' to signal failure, and
-# exit normally.  Otherwise, exit with failure.
-fail() {
-    exitCode=$?
-    if test "$succeedOnFailure" = 1; then
-        ensureDir "$out/nix-support"
-        touch "$out/nix-support/failed"
-        exit 0
-    else
-        exit $?
-    fi
-}
-
 
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
@@ -110,8 +136,7 @@ eval "$addInputsHook"
 
 
 # Recursively find all build inputs.
-findInputs()
-{
+findInputs() {
     local pkg=$1
 
     case $pkgs in
@@ -144,13 +169,12 @@ done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
-addToEnv()
-{
+addToEnv() {
     local pkg=$1
 
     if test "$ignoreFailedInputs" != "1" -a -e $1/nix-support/failed; then
         echo "failed input $1" >&2
-        fail
+        exit 1
     fi
 
     if test -d $1/bin; then
@@ -341,8 +365,6 @@ closeNest() {
     done
 }
 
-trap "closeNest" EXIT
-
 
 # This function is useful for debugging broken Nix builds.  It dumps
 # all environment variables to a file `env-vars' in the build
@@ -426,21 +448,21 @@ unpackFile() {
 
     case "$file" in
         *.tar)
-            tar xvf $file || fail
+            tar xvf $file
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $file | tar xvf - || fail
+            gzip -d < $file | tar xvf -
             ;;
         *.tar.bz2 | *.tbz2)
-            bzip2 -d < $file | tar xvf - || fail
+            bzip2 -d < $file | tar xvf -
             ;;
         *.zip)
-            unzip $file || fail
+            unzip $file
             ;;
         *)
             if test -d "$file"; then
                 stripHash $file
-                cp -prvd $file $strippedName || fail
+                cp -prvd $file $strippedName
             else
                 if test -n "$findUnpacker"; then
                     $findUnpacker $1;
@@ -449,7 +471,7 @@ unpackFile() {
                     echo "source archive $file has unknown type"
                     exit 1
                 fi
-                eval "$unpackCmd" || fail
+                eval "$unpackCmd"
             fi
             ;;
     esac
@@ -555,7 +577,7 @@ patchPhase() {
                 uncompress="bzip2 -d"
                 ;;
         esac
-        $uncompress < $i | patch $patchFlags || fail
+        $uncompress < $i | patch $patchFlags
         stopNest
     done
 
@@ -604,7 +626,7 @@ configurePhase() {
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags"${configureFlagsArray[@]}" || fail
+    $configureScript $configureFlags"${configureFlagsArray[@]}"
 
     eval "$postConfigure"
 }
@@ -626,7 +648,7 @@ buildPhase() {
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $buildFlags "${buildFlagsArray[@]}" || fail
+        $buildFlags "${buildFlagsArray[@]}"
 
     eval "$postBuild"
 }
@@ -647,7 +669,7 @@ checkPhase() {
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
+        $checkFlags "${checkFlagsArray[@]}" $checkTarget
 
     eval "$postCheck"
 }
@@ -683,7 +705,7 @@ installPhase() {
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
         make ${makefile:+-f $makefile} $installTargets \
             $makeFlags "${makeFlagsArray[@]}" \
-            $installFlags "${installFlagsArray[@]}" || fail
+            $installFlags "${installFlagsArray[@]}"
     else
         eval "$installCommand"
     fi
@@ -766,7 +788,7 @@ distPhase() {
     fi
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget || fail
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
