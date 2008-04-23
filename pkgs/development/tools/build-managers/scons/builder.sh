@@ -1,13 +1,11 @@
 source $stdenv/setup
 
-buildPhase=myBuildPhase
-myBuildPhase() {
+buildPhase() {
     true
 }
 
-installPhase=myInstallPhase
-myInstallPhase() {
-    python setup.py install --prefix=$out || fail
+installPhase() {
+    python setup.py install --prefix=$out
 }
 
 genericBuild

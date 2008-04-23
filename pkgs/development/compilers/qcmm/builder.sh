@@ -19,13 +19,11 @@ installPhase() {
   find $out/man -type f -exec gzip -9 {} \;
 
   find $out -name \*.a -exec echo stripping {} \; \
-            -exec strip -S {} \; || fail
+            -exec strip -S {} \;
 
   patchELF $out
 }
 
-buildPhase=buildPhase
-installPhase=installPhase
 checkPhase="mk $MKFLAGS test.opt"
 
 genericBuild

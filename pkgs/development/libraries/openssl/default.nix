@@ -1,4 +1,6 @@
-{stdenv, fetchurl, perl}: stdenv.mkDerivation {
+{stdenv, fetchurl, perl}:
+
+stdenv.mkDerivation {
   name = "openssl-0.9.8g";
   builder = ./builder.sh;
   src = fetchurl {

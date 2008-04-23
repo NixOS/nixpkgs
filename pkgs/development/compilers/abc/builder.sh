@@ -1,12 +1,12 @@
 source $stdenv/setup
 
-tar zxvf $src || fail
+tar zxvf $src
 
-cd abc-*  || fail
+cd abc-*
 
 for p in $patches; do
   echo "applying patch $p"
-  patch -p1 < $p || fail
+  patch -p1 < $p
 done
 
 cat > ant.settings <<EOF

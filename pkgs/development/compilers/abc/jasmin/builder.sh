@@ -1,7 +1,7 @@
 source $stdenv/setup
 
-tar zxvf $src  || fail
-cd jasmin-*  || fail
+tar zxvf $src
+cd jasmin-*
 
 sed -e 's/<javac/<javac source="1.4"/' build.xml > build-tmp.xml
 mv build-tmp.xml build.xml
@@ -18,7 +18,7 @@ jasmin.version=foo
 build.compiler=javac1.4
 EOF
 
-ant jasmin-jar || fail
+ant jasmin-jar
 
-ensureDir $out/jars/ || fail
-mv lib/jasminclasses-foo.jar $out/jars/jasmin.jar || fail
+ensureDir $out/jars/
+mv lib/jasminclasses-foo.jar $out/jars/jasmin.jar
