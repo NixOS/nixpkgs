@@ -3957,7 +3957,7 @@ let pkgs = rec {
 
   alsaUtils = alsa.alsaUtils;
 
-  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "r3122") {
+  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "0.9.4") {
     inherit fetchurl stdenv builderDefs;
   };
 
@@ -5257,6 +5257,14 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk;
   };
   pidginlatex = pidginlatexFun null;
+
+  pidginlatexSFFun = builderDefsPackage 
+    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix) 
+    {
+      inherit pkgconfig pidgin texLive imagemagick which;
+      inherit (gtkLibs) glib gtk;
+    };
+  pidginlatexSF = pidginlatexSFFun null;
 
   pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
     inherit fetchurl stdenv libotr pidgin;

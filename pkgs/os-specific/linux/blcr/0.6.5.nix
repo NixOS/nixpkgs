@@ -12,8 +12,13 @@ rec {
     "--with-system-map=${kernel}/System.map"
   ];
 
+  preConfigure = FullDepEntry (''
+    sed -e 's/FASTCALL//' -i configure configure.ac
+    sed -e 's/int (attach_pid/void (attach_pid/' -i configure configure.ac
+  '')["doUnpack" "minInit"];
+
   /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
       
   name = "blcr-" + version;
   meta = {

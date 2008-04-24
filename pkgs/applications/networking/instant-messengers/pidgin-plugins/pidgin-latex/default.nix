@@ -16,6 +16,7 @@ stdenv.mkDerivation {
 	sed -e 's@.*convert_path.*@const gchar *convert = CONVERT_PATH;@'
 	sed -e 's@.*latex_path.*@const gchar *convert = LATEX_PATH;@'
 	sed -e 's/%s.dvi/%s.pdf/' -i pidgin-latex.c
+	sed -e 's/latex_system\(.*\)FALSE/latex_system\1TRUE/' -i pidgin-latex.c
   ";
 
   makeFlags="PREFIX=\$(out)";
