@@ -22,31 +22,38 @@
     ";
   };
 
-  httpPort = mkOption {
-    default = 80;
+  port = mkOption {
+    default = 0;
     description = "
-      Port for unencrypted HTTP requests.
+      Port for the server.  0 means use the default port: 80 for http
+      and 443 for https (i.e. when enableSSL is set).
     ";
   };
 
-  httpsPort = mkOption {
-    default = 443;
-    description = "
-      Port for encrypted HTTPS requests.
-    ";
-  };
-
-  enableHttp = mkOption {
-    default = true;
-    description = "
-      Whether to listen on unencrypted HTTP.
-    ";
-  };
-
-  enableHttps = mkOption {
+  enableSSL = mkOption {
     default = false;
     description = "
-      Whether to listen on encrypted HTTPS.
+      Whether to enable SSL (https) support.
+    ";
+  };
+
+  # Note: sslServerCert and sslServerKey can be left empty, but this
+  # only makes sense for virtual hosts (they will inherit from the
+  # main server).
+  
+  sslServerCert = mkOption {
+    default = ""; 
+    example = "/var/host.cert";
+    description = "
+      Path to server SSL certificate.
+    ";
+  };
+
+  sslServerKey = mkOption {
+    default = "";
+    example = "/var/host.key";
+    description = "
+      Path to server SSL certificate key.
     ";
   };
 
@@ -108,6 +115,23 @@
     default = [];
     description = "
       Extra subservices to enable in the webserver.
+    ";
+  };
+
+  enableUserDir = mkOption {
+    default = false;
+    description = "
+      Whether to enable serving <filename>~/public_html</filename> as
+      <literal>/~<replaceable>username</replaceable></literal>.
+    ";
+  };
+
+  globalRedirect = mkOption {
+    default = "";
+    example = http://newserver.example.org/;
+    description = "
+      If set, all requests for this host are redirected permanently to
+      the given URL.
     ";
   };
 

@@ -1467,36 +1467,6 @@
         ";
       };
 
-      httpsPort = mkOption {
-        default = 443;
-        description = "
-          Port for encrypted HTTP requests.
-        ";
-      };
-
-      enableSSL = mkOption {
-        default = false;
-        description = "
-          Whether to enable SSL (https) support.
-        ";
-      };
-
-      sslServerCert = mkOption {
-        default = "";
-	example = /var/host.cert;
-	description = "
-	  Path to server SSL certificate.
-	";
-      };
-
-      sslServerKey = mkOption {
-        default = "";
-	example = /var/host.key;
-	description = "
-	  Path to server SSL certificate key.
-	";
-      };
-
       logDir = mkOption {
         default = "/var/log/httpd";
         description = "
@@ -1510,14 +1480,6 @@
           Directory for Apache's transient runtime state (such as PID
           files).  It is created automatically.  Note that the default,
           <filename>/var/run/httpd</filename>, is deleted at boot time.
-        ";
-      };
-
-      enableUserDir = mkOption {
-        default = false;
-        description = "
-          Whether to enable serving <filename>~/public_html</filename> as
-          <literal>/~<replaceable>username</replaceable></literal>.
         ";
       };
 

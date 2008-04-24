@@ -2,22 +2,24 @@
 
 let
 
-  cfg = config.services.httpd;
-
-  mainCfg = cfg;
+  mainCfg = config.services.httpd;
   
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
   httpd = pkgs.apacheHttpd;
 
   inherit (pkgs.lib) addDefaultOptionValues optional concatMap concatMapStrings;
+
+
+  getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
   
 
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
     canonicalName =
-      "http://${cfg.hostName}" +
-      (if cfg.httpPort != 80 then ":${toString cfg.httpPort}" else "");
+      (if cfg.enableSSL then "https" else "http") + "://" +
+      cfg.hostName +
+      (if getPort cfg != (if cfg.enableSSL then 443 else 80) then ":${toString getPort cfg}" else "");
 
     # Admin address: inherit from the main server if not specified for
     # a virtual host.
@@ -40,14 +42,18 @@ let
         # Fill in defaults for missing options.
         cfg = addDefaultOptionValues vhostOptions cfgIn;
       in cfg;
-    in map makeVirtualHost cfg.virtualHosts;
+    in map makeVirtualHost mainCfg.virtualHosts;
 
+
+  allHosts = [mainCfg] ++ vhosts;
+    
 
   callSubservices = serverInfo: defs:
     let f = svc:
       let 
-        svcFunction = if svc ? function then 
-          svc.function else (import ( ./noDir/.. + ("/" + svc.serviceName + ".nix")));
+        svcFunction =
+          if svc ? function then svc.function
+          else import (./noDir/.. + ("/" + svc.serviceName + ".nix"));
         config = addDefaultOptionValues res.options svc.config;
         res = svcFunction {inherit config pkgs serverInfo;};
       in res;
@@ -61,12 +67,13 @@ let
 
   allSubservices = mainSubservices ++ pkgs.lib.concatMap subservicesFor vhosts;
 
-  sslServerCert = cfg.sslServerCert;
-  sslServerKey = cfg.sslServerKey;
 
   # !!! should be in lib
   writeTextInDir = name: text:
     pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
+
+
+  enableSSL = pkgs.lib.any (vhost: vhost.enableSSL) allHosts;
   
 
   # Names of modules from ${httpd}/modules that we want to load.
@@ -86,11 +93,11 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ] ++ optional cfg.enableSSL "ssl";
+    ] ++ optional enableSSL "ssl";
     
 
   loggingConf = ''
-    ErrorLog ${cfg.logDir}/error_log
+    ErrorLog ${mainCfg.logDir}/error_log
 
     LogLevel notice
 
@@ -99,7 +106,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${cfg.logDir}/access_log common
+    CustomLog ${mainCfg.logDir}/access_log common
   '';
 
 
@@ -116,32 +123,13 @@ let
   '';
 
 
-  # !!! integrate with virtual hosting below
   sslConf = ''
-    SSLSessionCache dbm:${cfg.stateDir}/ssl_scache
+    SSLSessionCache dbm:${mainCfg.stateDir}/ssl_scache
 
-    SSLMutex file:${cfg.stateDir}/ssl_mutex
+    SSLMutex file:${mainCfg.stateDir}/ssl_mutex
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
-
-    NameVirtualHost *:${toString cfg.httpsPort}
-
-    <VirtualHost _default_:${toString cfg.httpsPort}>
-
-        SSLEngine on
-
-        SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
-
-        SSLCertificateFile ${sslServerCert}
-        SSLCertificateKeyFile ${sslServerKey}
-
-        #   MSIE compatability.
-        SetEnvIf User-Agent ".*MSIE.*" \
-                 nokeepalive ssl-unclean-shutdown \
-                 downgrade-1.0 force-response-1.0
-
-    </VirtualHost>
   '';
 
 
@@ -197,6 +185,18 @@ let
 
     ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
 
+    ${if cfg.sslServerCert != "" then ''
+      SSLCertificateFile ${cfg.sslServerCert}
+      SSLCertificateKeyFile ${cfg.sslServerKey}
+    '' else ""}
+    
+    ${if cfg.enableSSL then ''
+      SSLEngine on
+    '' else if enableSSL then /* i.e., SSL is enabled for some host, but not this one */
+    ''
+      SSLEngine off
+    '' else ""}
+
     ${if isMainServer || cfg.adminAddr != "" then ''
       ServerAdmin ${cfg.adminAddr}
     '' else ""}
@@ -209,69 +209,6 @@ let
     ${robotsConf}
 
     ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
-
-    ${
-      let makeDirConf = elem: ''
-            Alias ${elem.urlPath} ${elem.dir}/
-            <Directory ${elem.dir}>
-                Order allow,deny
-                Allow from all
-                AllowOverride None
-            </Directory>
-          '';
-      in concatMapStrings makeDirConf cfg.servedDirs
-    }
-
-    ${
-      let makeFileConf = elem: ''
-            Alias ${elem.urlPath} ${elem.file}
-          '';
-      in concatMapStrings makeFileConf cfg.servedFiles
-    }
-
-    ${concatMapStrings (svc: svc.extraConfig) subservices}
-
-    ${cfg.extraConfig}
-  '';
-
-  
-  httpdConf = pkgs.writeText "httpd.conf" ''
-  
-    ServerRoot ${httpd}
-
-    PidFile ${cfg.stateDir}/httpd.pid
-
-    <IfModule prefork.c>
-        MaxClients           150
-        MaxRequestsPerChild  0
-    </IfModule>
-
-    ${let
-        ports = pkgs.lib.uniqList {  
-	  inputList=(concatMap (localCfg: 
-	    (pkgs.lib.optional localCfg.enableHttp localCfg.httpPort) 
-	    ++
-	    (pkgs.lib.optional localCfg.enableHttps localCfg.httpsPort) 
-	  ) vhosts)
-	  ++
-	  (pkgs.lib.optional cfg.enableSSL cfg.httpsPort)
-	  ++
-	  [cfg.httpPort];
-	};
-	in concatMapStrings (port: "Listen ${toString port}\n") ports
-    }
-
-    User ${cfg.user}
-    Group ${cfg.group}
-
-    ${let
-        load = {name, path}: "LoadModule ${name}_module ${path}\n";
-        allModules =
-          concatMap (svc: svc.extraModulesPre) allSubservices ++
-          map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          concatMap (svc: svc.extraModules) allSubservices;
-      in concatMapStrings load allModules
-    }
 
     ${if cfg.enableUserDir then ''
     
@@ -293,6 +230,65 @@ let
       
     '' else ""}
 
+    ${if cfg.globalRedirect != "" then ''
+      RedirectPermanent / ${cfg.globalRedirect}
+    '' else ""}
+
+    ${
+      let makeFileConf = elem: ''
+            Alias ${elem.urlPath} ${elem.file}
+          '';
+      in concatMapStrings makeFileConf cfg.servedFiles
+    }
+
+    ${
+      let makeDirConf = elem: ''
+            Alias ${elem.urlPath} ${elem.dir}/
+            <Directory ${elem.dir}>
+                Options +Indexes
+                Order allow,deny
+                Allow from all
+                AllowOverride All
+            </Directory>
+          '';
+      in concatMapStrings makeDirConf cfg.servedDirs
+    }
+
+    ${concatMapStrings (svc: svc.extraConfig) subservices}
+
+    ${cfg.extraConfig}
+  '';
+
+  
+  httpdConf = pkgs.writeText "httpd.conf" ''
+  
+    ServerRoot ${httpd}
+
+    PidFile ${mainCfg.stateDir}/httpd.pid
+
+    <IfModule prefork.c>
+        MaxClients           150
+        MaxRequestsPerChild  0
+    </IfModule>
+
+    ${let
+        ports = map getPort allHosts;
+        uniquePorts = pkgs.lib.uniqList {inputList = ports;};
+      in concatMapStrings (port: "Listen ${toString port}\n") uniquePorts
+    }
+
+    User ${mainCfg.user}
+    Group ${mainCfg.group}
+
+    ${let
+        load = {name, path}: "LoadModule ${name}_module ${path}\n";
+        allModules =
+          concatMap (svc: svc.extraModulesPre) allSubservices ++
+          map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
+          concatMap (svc: svc.extraModules) allSubservices;
+      in concatMapStrings load allModules
+    }
+
     AddHandler type-map var
 
     <Files ~ "^\.ht">
@@ -309,7 +305,7 @@ let
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
     
-    ${if cfg.enableSSL then sslConf else ""}
+    ${if enableSSL then sslConf else ""}
 
     # Fascist default - deny access to everything.
     <Directory />
@@ -328,27 +324,20 @@ let
     </Directory>
 
     # Generate directives for the main server.
-    ${perServerConf true cfg}
+    ${perServerConf true mainCfg}
     
     # Always enable virtual hosts; it doesn't seem to hurt.
-    NameVirtualHost *:${toString cfg.httpPort}
+    NameVirtualHost *:80
+    NameVirtualHost *:443
 
     ${let
-        makeVirtualHost = localCfg: (if localCfg.enableHttp then ''
-          <VirtualHost *:${toString localCfg.httpPort}>
-              ${perServerConf false localCfg}
+        makeVirtualHost = vhost: ''
+          <VirtualHost *:${toString (getPort vhost)}>
+              ${perServerConf false vhost}
           </VirtualHost>
-        '' else "") + ( if localCfg.enableHttps then ''
-          <VirtualHost *:${toString localCfg.httpsPort}>
-	      SSLEngine on
-
-              SSLCertificateFile ${sslServerCert}
-              SSLCertificateKeyFile ${sslServerKey}
-
-              ${perServerConf false localCfg}
-          </VirtualHost>
-	'' else "");
-      in concatMapStrings makeVirtualHost vhosts}
+        '';
+      in concatMapStrings makeVirtualHost vhosts
+    }
   '';
 
     
@@ -359,24 +348,26 @@ in
   name = "httpd";
   
   users = [
-    { name = cfg.user;
+    { name = mainCfg.user;
       description = "Apache httpd user";
     }
   ];
 
   groups = [
-    { name = cfg.group;
+    { name = mainCfg.group;
     }
   ];
 
   extraPath = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
   # Statically verify the syntactic correctness of the generated
-  # httpd.conf.
+  # httpd.conf.  !!! this is impure!  It doesn't just check for
+  # syntax, but also whether the Apache user/group exist, whether SSL
+  # keys exist, etc.
   buildHook = ''
     echo
     echo '=== Checking the generated Apache configuration file ==='
-    ${httpd}/bin/httpd -f ${httpdConf} -t
+    ${httpd}/bin/httpd -f ${httpdConf} -t || true
   '';
 
   job = ''
@@ -386,13 +377,13 @@ in
     stop on shutdown
 
     start script
-      mkdir -m 0700 -p ${cfg.stateDir}
-      mkdir -m 0700 -p ${cfg.logDir}
+      mkdir -m 0700 -p ${mainCfg.stateDir}
+      mkdir -m 0700 -p ${mainCfg.logDir}
 
       # Get rid of old semaphores.  These tend to accumulate across
       # server restarts, eventually preventing it from restarting
       # succesfully.
-      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
+      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
           ${pkgs.utillinux}/bin/ipcrm -s $i
       done
 
@@ -409,8 +400,6 @@ in
     }
 
     env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
-
-    ${pkgs.diffutils}/bin:${pkgs.gnused}/bin
 
     respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
   '';
