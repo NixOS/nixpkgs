@@ -19,7 +19,7 @@ let
     canonicalName =
       (if cfg.enableSSL then "https" else "http") + "://" +
       cfg.hostName +
-      (if getPort cfg != (if cfg.enableSSL then 443 else 80) then ":${toString getPort cfg}" else "");
+      (if getPort cfg != (if cfg.enableSSL then 443 else 80) then ":${toString (getPort cfg)}" else "");
 
     # Admin address: inherit from the main server if not specified for
     # a virtual host.
@@ -327,8 +327,11 @@ let
     ${perServerConf true mainCfg}
     
     # Always enable virtual hosts; it doesn't seem to hurt.
-    NameVirtualHost *:80
-    NameVirtualHost *:443
+    ${let
+        ports = map getPort allHosts;
+        uniquePorts = pkgs.lib.uniqList {inputList = ports;};
+      in concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts
+    }
 
     ${let
         makeVirtualHost = vhost: ''
