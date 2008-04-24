@@ -161,7 +161,8 @@ import ../helpers/make-etc.nix {
   # Configuration for ssmtp.
   ++ optional config.networking.defaultMailServer.directDelivery { 
     source = let cfg = config.networking.defaultMailServer; in pkgs.writeText "ssmtp.conf" ''
-      mailhub=${cfg.hostName}
+      MailHub=${cfg.hostName}
+      FromLineOverride=YES
       ${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
       UseTLS=${if cfg.useTLS then "YES" else "NO"}
       UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
