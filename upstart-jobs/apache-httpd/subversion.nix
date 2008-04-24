@@ -11,7 +11,8 @@ let
   distsDir = "${config.dataDir}/dist";
   tmpDir = "${config.dataDir}/tmp";
   logDir = "${config.dataDir}/log";
-  postCommitHook = "/var/run/current-system/sw/bin/svn-server-post-commit-hook";
+  idString = if config.id == "" then "" else "${config.id}-";
+  postCommitHook = "/var/run/current-system/sw/bin/svn-server-${idString}post-commit-hook";
   fsType = "fsfs";
   adminAddr = serverInfo.adminAddr;
   
@@ -64,6 +65,11 @@ let
     postInstall = ''
       $perl -c -T $out/cgi-bin/repoman.pl
       $perl -c $out/bin/svn-server-create-user.pl
+      if test -n "${config.id}"; then
+        for i in $(cd $out/bin && echo *); do
+          mv "$out/bin/$i" "$out/bin/$(echo $i | sed s^svn-server-^svn-server-${config.id}-^)"
+        done
+      fi
     '';
   };
 
@@ -341,10 +347,22 @@ in {
   extraPath = [scripts];
 
 
-  startupScript = "${scripts}/bin/svn-server-startup-hook.sh";
+  startupScript = "${scripts}/bin/svn-server-${idString}startup-hook.sh";
   
 
   options = {
+
+    id = mkOption {
+      default = "";
+      example = "test";
+      description = "
+        A unique identifier necessary to keep multiple Subversion server
+        instances on the same machine apart.  This is used to
+        disambiguate the administrative scripts, which get names like
+        svn-server-<id>-delete-repo.pl.  In particular it keeps
+        the post-commit hooks of different instances apart.
+      ";
+    };
 
     urlPrefix = mkOption {
       default = "/subversion";
