@@ -551,10 +551,6 @@ let pkgs = rec {
 
   dosfstools = dosfstoolsFun null;
 
-  ed = import ../tools/text/ed {
-    inherit fetchurl stdenv;
-  };
-
   enscript = import ../tools/text/enscript {
     inherit fetchurl stdenv;
   };
@@ -5118,6 +5114,10 @@ let pkgs = rec {
   eclipsesdk = eclipse [];
 
   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
+
+  ed = import ../applications/editors/ed {
+    inherit fetchurl stdenv;
+  };
 
   elinks = import ../applications/networking/browsers/elinks {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
