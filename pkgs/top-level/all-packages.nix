@@ -5242,34 +5242,6 @@ let pkgs = rec {
     gtksharp = gtksharp1;
   };
 
-  pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
-      gtkspell aspell gettext ncurses;
-    GStreamer = gst_all.gstreamer;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) startupnotification;
-    inherit (xlibs) libXScrnSaver;
-  };
-
-  pidginlatexFun = lib.sumArgs (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
-    inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
-    imagemagick = imagemagickBig;
-    inherit (gtkLibs) glib gtk;
-  };
-  pidginlatex = pidginlatexFun null;
-
-  pidginlatexSFFun = builderDefsPackage 
-    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix) 
-    {
-      inherit pkgconfig pidgin texLive imagemagick which;
-      inherit (gtkLibs) glib gtk;
-    };
-  pidginlatexSF = pidginlatexSFFun null;
-
-  pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
-    inherit fetchurl stdenv libotr pidgin;
-  };
-
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser
@@ -5597,6 +5569,34 @@ let pkgs = rec {
     inherit fetchurl stdenv pkgconfig perl pcre gmime gettext;
     inherit (gtkLibs) gtk;
     spellChecking = false;
+  };
+
+  pidgin = import ../applications/networking/instant-messengers/pidgin {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
+      gtkspell aspell gettext ncurses;
+    GStreamer = gst_all.gstreamer;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) startupnotification;
+    inherit (xlibs) libXScrnSaver;
+  };
+
+  pidginlatexFun = lib.sumArgs (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
+    inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
+    imagemagick = imagemagickBig;
+    inherit (gtkLibs) glib gtk;
+  };
+  pidginlatex = pidginlatexFun null;
+
+  pidginlatexSFFun = builderDefsPackage 
+    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix) 
+    {
+      inherit pkgconfig pidgin texLive imagemagick which;
+      inherit (gtkLibs) glib gtk;
+    };
+  pidginlatexSF = pidginlatexSFFun null;
+
+  pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
+    inherit fetchurl stdenv libotr pidgin;
   };
 
   pinfo = import ../applications/misc/pinfo {
