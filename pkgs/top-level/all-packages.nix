@@ -882,6 +882,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  pinentry = import ../tools/misc/pinentry {
+    inherit fetchurl stdenv pkgconfig x11;
+    inherit (gnome) glib gtk;
+  };
+
   ploticus = import ../tools/graphics/ploticus {
     inherit fetchurl stdenv zlib libpng;
     inherit (xlibs) libX11;
