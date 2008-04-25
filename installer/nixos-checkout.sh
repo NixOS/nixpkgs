@@ -50,9 +50,9 @@ if test -e services -a ! -e services/.svn; then
 fi
 
 # Check out the NixOS and Nixpkgs sources.
-svn co https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk nixos${CHECKOUT_SUFFIX}
-svn co https://svn.cs.uu.nl:12443/repos/trace/nixpkgs/${CHECKOUT_BRANCH:-trunk} nixpkgs${CHECKOUT_SUFFIX}
-svn co https://svn.cs.uu.nl:12443/repos/trace/services/trunk services
+svn co https://svn.nixos.org/repos/nix/nixos/trunk nixos${CHECKOUT_SUFFIX}
+svn co https://svn.nixos.org/repos/nix/nixpkgs/${CHECKOUT_BRANCH:-trunk} nixpkgs${CHECKOUT_SUFFIX}
+svn co https://svn.nixos.org/repos/nix/services/trunk services
 
 # Add a few required symlink.
 ln -sfn ../services nixos${CHECKOUT_SUFFIX}/services
