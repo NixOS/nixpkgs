@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GNU ed, an implementation of the standard Unix stream editor";
+    description = "GNU ed, an implementation of the standard Unix editor";
 
     longDescription = ''
       GNU ed is a line-oriented text editor.  It is used to create,
