@@ -1,10 +1,10 @@
 args: with args;
 
 (stdenv.mkDerivation rec {
-  name = "xine-lib-1.1.9.1";
+  name = "xine-lib-1.1.12";
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.bz2";
-    sha256 = "1rz4k2a9pny2ksqb5diw1ci8ijihpcm0mi8qxp5p7nasgzgqcj82";
+    sha256 = "49088635c29a38527bd8590139691951783c5c1c7fdb691a8a3a9954097d4dd0";
   };
   buildInputs = [ x11 pkgconfig libXv libXinerama alsaLib mesa aalib SDL
   libvorbis libtheora speex ];
