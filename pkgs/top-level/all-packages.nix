@@ -4770,6 +4770,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  lmodernFun = builderDefsPackage (selectVersion ../data/fonts/lmodern "1.010") {
+  };
+  lmodern = lmodernFun null;
+
   manpages = import ../data/documentation/man-pages {
      inherit fetchurl stdenv;
   };
