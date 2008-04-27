@@ -285,7 +285,8 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices ++
           map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          concatMap (svc: svc.extraModules) allSubservices;
+          concatMap (svc: svc.extraModules) allSubservices ++
+          (pkgs.lib.getAttr ["extraModules"] (x:[]) mainCfg) pkgs;
       in concatMapStrings load allModules
     }
 

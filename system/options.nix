@@ -1441,6 +1441,15 @@
         ";
       };
 
+      extraModules = mkOption {
+        default = pkgs : [];
+        description = ''
+          used to add additional modules
+          Example for PHP:
+          pkgs : [ { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so" } ]
+        '';
+      };
+
       logPerVirtualHost = mkOption {
         default = false;
         description = "
