@@ -60,7 +60,7 @@ rec {
           #      };
 
           hsqlDarcs = rec { name = "hsql-darcs"; p_deps = [x.base x.mtl x.haskell98  x.old_time x.old_locale x.time ];
-                        src = sourceByName "pg_hsql";
+                        src = sourceByName "hsql";
                       pass = {  srcDir = "HSQL"; };
               };
           hsqlMysqlDarcs = { name = "hsql-mysql-darcs"; srcDir = "MySQL"; src = sourceByName "pg_hsql"; p_deps = [ x.base x.hsqlDarcs x.old_time ];
