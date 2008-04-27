@@ -201,6 +201,7 @@ rec {
   # Return a list or an empty list, dependening on a boolean value.
   optionals = cond: elems: if cond then elems else [];
 
+  optionalString = cond: string: if cond then string else "";
 
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
