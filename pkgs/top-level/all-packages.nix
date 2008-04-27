@@ -1974,6 +1974,10 @@ let pkgs = rec {
     inherit fetchurl stdenv replace;
   };
 
+  cproto = import ../development/tools/misc/cproto {
+    inherit fetchurl stdenv flex bison;
+  };
+
   dejagnu = import ../development/tools/misc/dejagnu {
     inherit fetchurl stdenv expect makeWrapper;
   };
