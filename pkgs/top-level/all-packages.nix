@@ -1218,14 +1218,6 @@ let pkgs = rec {
     inherit fetchurl stdenv gawk system;
   };
 
-  /*
-  flapjax = import ../development/compilers/flapjax {
-    inherit fetchurl stdenv;
-    ghc = ghcsAndLibs.ghc68.ghc;
-    libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ mtl parsec random ];
-  };
-  */
-
   g77 = import ../build-support/gcc-wrapper {
     name = "g77";
     nativeTools = false;
@@ -1342,7 +1334,12 @@ let pkgs = rec {
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
       inherit ghcboot fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
-      inherit ghcPkgUtil hasktags ctags;
+      inherit ghcPkgUtil hasktags ctags autoconf automake getConfig;
+      inherit (bleedingEdgeRepos) sourceByName;
+
+      # needed for install darcs ghc version
+      happy = ghc68executables.happy;
+      alex = ghc68executables.alex;
     });
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
@@ -1365,7 +1362,7 @@ let pkgs = rec {
   # args must contain: src name buildInputs propagatedBuildInputs
   # classic expression style.. seems to work fine
   # used now
-  # goSrc contains source directory (containing the .cabal file)
+  # srcDir contains source directory (containing the .cabal file)
   ghcCabalDerivation = args : with args;
     let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);
@@ -1373,6 +1370,7 @@ let pkgs = rec {
       srcDir = if (args ? srcDir) then args.srcDir else ".";
       inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
+      profiling = if getConfig [ "ghc68" "profiling" ] false then "-p" else "";
       # TODO remove echo line
       buildPhase ="
           createEmptyPackageDatabaseAndSetupHook
@@ -1382,7 +1380,7 @@ let pkgs = rec {
           ghc --make Setup.*hs -o setup
           CABAL_SETUP=./setup
 
-          \$CABAL_SETUP configure --by-env=\$PACKAGE_DB
+          \$CABAL_SETUP configure --by-env=\$PACKAGE_DB \$profiling
           \$CABAL_SETUP build
           \$CABAL_SETUP copy --destdir=\$out
           \$CABAL_SETUP register --gen-script
@@ -1399,13 +1397,11 @@ let pkgs = rec {
   } // ( if args ? pass then (args.pass) else {} ) // { inherit buildInputs; } );
 
 
-  /*
   ghcCabalExecutableFun = (import ../development/compilers/ghc/ghc-wrapper/ghc-cabal-executable-fun.nix){ 
     inherit ghc68extraLibs ghcsAndLibs stdenv lib;
     # extra packages from this top level file:
     inherit perl;
   };
-  */
 
   # creates annotated derivation (comments see above)
   addHasktagsTaggingInfo = deriv : deriv // {
@@ -1423,27 +1419,24 @@ let pkgs = rec {
     };
   };
 
-  # this may change in the future
-  /*
+  # this may change in the future 
   ghc68extraLibs = (import ../misc/ghc68extraLibs ) {
     # lib like stuff
     inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip zlib;
     # used (non haskell) libraries (ffi etc)
-    inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype;
+    inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype getConfig libpng;
 
     executables = ghc68executables;
     wxGTK = wxGTK26;
   };
-  */
+
 
   # Executables compiled by this ghc68 - I'm too lazy to add them all as additional file in here
-  /*
   ghc68executables = recurseIntoAttrs (import ../misc/ghc68executables {
     inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib;
     inherit X11;
     inherit (xlibs) xmessage;
   });
-  */
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
@@ -1451,7 +1444,6 @@ let pkgs = rec {
   # the lib to the libraries list below
   # Doesn't create that much useless symlinks (you seldomly want to read the
   # .hi and .o files, right?
-  /*
   ghcLibraryWrapper68 = 
     let ghc = ghcsAndLibs.ghc68.ghc; in
     ghcWrapper rec {
@@ -1468,7 +1460,6 @@ let pkgs = rec {
         # ++ map ( a : __getAttr a (ghc68extraLibs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
       inherit ghc;
   };
-  */
 
   # ghc66boot = import ../development/compilers/ghc-6.6-boot {
   #  inherit fetchurl stdenv perl readline;
@@ -2047,13 +2038,11 @@ let pkgs = rec {
     inherit cabal;
   };
 
-  /*
   hsc2hs = import ../development/tools/misc/hsc2hs {
     inherit bleedingEdgeRepos stdenv;
     ghc = ghcsAndLibs.ghc68.ghc;
     libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ base directory process cabal_darcs ];
   };
-  */
 
   guileLint = import ../development/tools/guile/guile-lint {
     inherit fetchurl stdenv guile;
