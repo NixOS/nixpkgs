@@ -51,6 +51,8 @@ rec {
     ln -s $out/share/texmf $out/share/texmf-config
     
     sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
+    sed -e 's@^#!env ruby@#! ${ruby}/bin/ruby@' -i $out/libexec/*/*
+    sed -e 's@^#!env perl@#! ${perl}/bin/perl@' -i $out/libexec/*/*
 
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
 
@@ -63,6 +65,7 @@ rec {
     zlib bzip2 ncurses libpng flex bison libX11 libICE
     xproto freetype t1lib gd libXaw icu ghostscript ed 
     libXt libXpm libXmu libXext xextproto perl libSM 
+    ruby
   ];
 
   configureFlags = [ "--with-x11" "--with-system-zlib" 
