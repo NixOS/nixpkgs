@@ -905,10 +905,11 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext;
   };
 
-  realCurl = import ../tools/networking/curl {
+  realCurlFun = lib.sumArgs (import ../tools/networking/curl) {
     inherit fetchurl stdenv zlib;
     zlibSupport = !stdenv ? isDietLibC;
   };
+  realCurl = realCurlFun null;
 
   relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
@@ -4774,6 +4775,14 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  libertineFun = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7") {
+    inherit fontforge;
+  };
+  libertine = libertineFun null;
+  libertineBinFun = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7.bin") {
+  };
+  libertineBin = libertineBinFun null;
+
   lmodernFun = builderDefsPackage (selectVersion ../data/fonts/lmodern "1.010") {
   };
   lmodern = lmodernFun null;
@@ -6459,7 +6468,7 @@ let pkgs = rec {
 
   texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl;
+      gd t1lib freetype icu perl ruby;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     flex = flex2535;
@@ -6478,6 +6487,11 @@ let pkgs = rec {
   */
   texLive = texLiveFun null;
   texLiveAggregationFun = builderDefsPackage (import ../misc/tex/texlive/aggregate.nix);
+
+  texLiveContextFun = builderDefsPackage (import ../misc/tex/texlive/context.nix) {
+    inherit texLive;
+  };
+  texLiveContext = texLiveContextFun null;
 
   texLiveExtraFun = builderDefsPackage (import ../misc/tex/texlive/extra.nix) {
     inherit texLive;

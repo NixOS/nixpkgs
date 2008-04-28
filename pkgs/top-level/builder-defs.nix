@@ -407,4 +407,35 @@ args: with args; with stringsWithDeps; with lib;
 	} else {}) // extraDerivationAttrs)
 	);
 
+   generateFontsFromSFD = noDepEntry(''
+   	for i in *.sfd; do
+		${args.fontforge}/bin/fontforge -c \
+			'Open($1); 
+			Reencode("unicode");
+			 ${optionalString (getAttr ["createTTF"] true args) ''Generate($1:r + ".ttf");''}
+			 ${optionalString (getAttr ["createOTF"] true args) ''Generate($1:r + ".otf");''}
+			 Reencode("TeX-Base-Encoding");
+			 ${optionalString (getAttr ["createAFM"] true args) ''Generate($1:r + ".afm");''}
+			 ${optionalString (getAttr ["createPFM"] true args) ''Generate($1:r + ".pfm");''}
+			 ${optionalString (getAttr ["createPFB"] true args) ''Generate($1:r + ".pfb");''}
+			 ${optionalString (getAttr ["createMAP"] true args) ''Generate($1:r + ".map");''}
+			 ${optionalString (getAttr ["createENC"] true args) ''Generate($1:r + ".enc");''}
+			' $i; 
+	done
+   '');
+
+   installFonts = FullDepEntry (''
+   	ensureDir $out/share/fonts/truetype/public/${args.name}
+   	ensureDir $out/share/fonts/opentype/public/${args.name}
+   	ensureDir $out/share/fonts/type1/public/${args.name}
+   	ensureDir $out/share/texmf/fonts/enc/${args.name}
+   	ensureDir $out/share/texmf/fonts/map/${args.name}
+
+	cp *.ttf $out/share/fonts/truetype/public/${args.name} || echo No TrueType fonts
+	cp *.otf $out/share/fonts/opentype/public/${args.name} || echo No OpenType fonts
+   	cp *.{pfm,afm,pfb} $out/share/fonts/type1/public/${args.name} || echo No Type1 Fonts
+   	cp *.enc $out/share/texmf/fonts/enc/${args.name} || echo No fontenc data
+   	cp *.map $out/share/texmf/fonts/map/${args.name} || echo No fontmap data
+   '') ["minInit" "defEnsureDir"];
+
 }) // args
