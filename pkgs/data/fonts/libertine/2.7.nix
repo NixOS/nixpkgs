@@ -12,6 +12,9 @@ rec {
   phaseNames = ["doUnpack" "generateFontsFromSFD" "installFonts"];
       
   createTTF=false;
+  extraFontForgeCommands = ''
+    ScaleToEm(1000);
+  '';
 
   name = "linux-libertine-" + version;
   meta = {

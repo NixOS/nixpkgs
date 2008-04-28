@@ -410,8 +410,9 @@ args: with args; with stringsWithDeps; with lib;
    generateFontsFromSFD = noDepEntry(''
    	for i in *.sfd; do
 		${args.fontforge}/bin/fontforge -c \
-			'Open($1); 
-			Reencode("unicode");
+			'Open($1);
+			${optionalString (args ? extraFontForgeCommands) args.extraFontForgeCommands
+			}Reencode("unicode");
 			 ${optionalString (getAttr ["createTTF"] true args) ''Generate($1:r + ".ttf");''}
 			 ${optionalString (getAttr ["createOTF"] true args) ''Generate($1:r + ".otf");''}
 			 Reencode("TeX-Base-Encoding");
