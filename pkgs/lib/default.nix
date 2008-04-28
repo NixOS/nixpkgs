@@ -396,6 +396,25 @@ rec {
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
   mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a : b : (toList a) ++ (toList b) );
 
+  # merges attributes using //, if a name exisits in both attributes
+  # an error will be triggered unless its listed in mergeLists
+  # so you can mergeAttrsNoOverride { buildInputs = [a]; } { buildInputs = [a]; } {} to get
+  # { buildInputs = [a b]; }
+  # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
+  # in these cases the first buildPhase will override the second one
+  mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
+                           overrideSnd ? [ "buildPhase" ]
+                         } : attrs1 : attrs2 :
+    fold (n: set : 
+        setAttr set n ( if (__hasAttr n set) 
+            then # merge 
+              if elem n mergeLists # attribute contains list, merge them by concatenating
+                then (__getAttr n attrs2) ++ (__getAttr n attrs1)
+              else if elem n overrideSnd
+                then __getAttr n attrs1
+              else throw "error mergeAttrsNoOverride, attribute ${n} given in both attributes - no merge func defined"
+            else __getAttr n attrs2 # add attribute not existing in attr1
+           )) attrs1 (__attrNames attrs2);
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];

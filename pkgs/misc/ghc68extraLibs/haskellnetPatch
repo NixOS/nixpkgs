@@ -1,0 +1,66 @@
+diff -rN -U3 old-pg_haskellnet/HaskellNet/Auth.hs new-pg_haskellnet/HaskellNet/Auth.hs
+--- old-pg_haskellnet/HaskellNet/Auth.hs	2008-04-22 19:21:58.000000000 +0200
++++ new-pg_haskellnet/HaskellNet/Auth.hs	2008-04-22 19:21:58.000000000 +0200
+@@ -21,6 +21,7 @@
+ import Data.List
+ import Data.Bits
+ import Data.Array
++import Data.Maybe
+ 
+ type UserName = String
+ type Password = String
+@@ -41,7 +42,7 @@
+ b64Encode = map (toEnum.fromEnum) . B64.encode . map (toEnum.fromEnum)
+ 
+ b64Decode :: String -> String
+-b64Decode = map (toEnum.fromEnum) . B64.decode . map (toEnum.fromEnum)
++b64Decode = map (toEnum.fromEnum) . fromJust . B64.decode . map (toEnum.fromEnum)
+ 
+ showOctet :: [Octet] -> String
+ showOctet = concat . map hexChars
+diff -rN -U3 old-pg_haskellnet/haskellnet.cabal new-pg_haskellnet/haskellnet.cabal
+--- old-pg_haskellnet/haskellnet.cabal	2008-04-22 19:21:58.000000000 +0200
++++ new-pg_haskellnet/haskellnet.cabal	2008-04-22 19:21:58.000000000 +0200
+@@ -3,7 +3,7 @@
+ Author:         Jun Mukai
+ License:        BSD3
+ Category:       Network
+-Build-Depends:  base, haskell98, network, Crypto, mtl, parsec, time, HaXml
++Build-Depends:  base, haskell98, network, Crypto, mtl, parsec, time, HaXml, bytestring, pretty, array, dataenc, containers, old-locale, old-time
+ Synopsis:       network related libraries such as HTTP, POP3, SMTP
+ Exposed-modules:
+    Text.IMAPParsers,
+diff -rN -U3 old-pg_haskellnet/Text/Atom.hs new-pg_haskellnet/Text/Atom.hs
+--- old-pg_haskellnet/Text/Atom.hs	2008-04-22 19:21:58.000000000 +0200
++++ new-pg_haskellnet/Text/Atom.hs	2008-04-22 19:21:58.000000000 +0200
+@@ -38,7 +38,8 @@
+ import Data.Map (findWithDefault, insert, Map)
+ import qualified Data.Map as M
+ import Data.Monoid (Sum(..))
+-import Data.Time.LocalTime (LocalTime(..), TimeOfDay(..), ZonedTime(..), TimeZone(..), formatTime, minutesToTimeZone, utc)
++import Data.Time.Format (formatTime)
++import Data.Time.LocalTime (LocalTime(..), TimeOfDay(..), ZonedTime(..), TimeZone(..), minutesToTimeZone, utc)
+ import System.Locale (defaultTimeLocale)
+ import Data.Time.Calendar
+ import Text.XML.HaXml hiding (version)
+@@ -55,7 +56,7 @@
+ b64Encode :: String -> String
+ b64Encode = map e2e . B64.encode . map e2e
+ b64Decode :: String -> String
+-b64Decode = map e2e . B64.decode . map e2e
++b64Decode = map e2e . fromJust . B64.decode . map e2e
+ 
+ atomEscaper = mkXmlEscaper [('<', "lt"), ('>', "gt"), ('&', "amp"), ('"', "quot")] (`elem` "<>\"")
+ xEscape :: [Content] -> [Content]
+diff -rN -U3 old-pg_haskellnet/Text/RSS.hs new-pg_haskellnet/Text/RSS.hs
+--- old-pg_haskellnet/Text/RSS.hs	2008-04-22 19:21:58.000000000 +0200
++++ new-pg_haskellnet/Text/RSS.hs	2008-04-22 19:21:58.000000000 +0200
+@@ -26,6 +26,7 @@
+ import Data.Record
+ import Data.List (isPrefixOf)
+ import Data.Maybe
++import Data.Time.Format (formatTime)
+ import Data.Time.Calendar (fromGregorian)
+ import Data.Time.LocalTime
+ import System.Locale (defaultTimeLocale)
+

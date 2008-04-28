@@ -1,4 +1,5 @@
-{ ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib, hasktags, ctags } : 
+  { ghcPkgUtil, gnum4, perl, ghcboot, stdenv, fetchurl, recurseIntoAttrs, gmp, readline, lib, hasktags, ctags
+    , sourceByName, autoconf, happy, alex ,automake, getConfig} : 
 rec {
   
   /* What's in here?
@@ -33,11 +34,11 @@ rec {
 
   #this only works for ghc-6.8 right now
   ghcAndLibraries = { version, src /* , core_libraries, extra_libraries  */
-                    , extra_src }:
+                    , extra_src, pass ? {} }:
                    recurseIntoAttrs ( rec {
     inherit src extra_src version;
 
-    ghc = stdenv.mkDerivation {
+    ghc = stdenv.mkDerivation ( lib.mergeAttrsNoOverride {} pass {
       name = "ghc-"+version;
       inherit src ghcboot gmp version;
 
@@ -61,6 +62,7 @@ rec {
 
       # now read the main package.conf and create a single package db file for each of them
       # Also create setup hook.
+      makeFlags = getConfig ["ghc" "makeFlags" ] "";
 
       #  note : I don't know yet wether it's a good idea to have RUNGHC.. It's faster
       # but you can't pass packages, can you?
@@ -81,7 +83,7 @@ rec {
         echo \"RUNHGHC=\$RUNHGHC\" >> \$sh
         
       ";
-    };
+    });
 
     core_libs = rec {
         #   name (using lowercase letters everywhere because using installing packages having different capitalization is discouraged) - this way there is not that much to remember?
@@ -186,6 +188,8 @@ rec {
       #sha256 = "1b1gvi7hc7sc0fkh29qvzzd5lgnlvdv3ayiak4mkfnzkahvmq85s";
     };
 
+    pass = { patches = ./patch; };
+
     extra_src = fetchurl {
       url = "http://www.haskell.org/ghc/dist/stable/dist/ghc-${version}-src-extralibs.tar.bz2";
       sha256 = "044mpbzpkbxcnqhjnrnmjs00mr85057d123rrlz2vch795lxbkcn";
@@ -193,4 +197,65 @@ rec {
       #sha256 = "0py7d9nh3lkhjxr3yb3n9345d0hmzq79bi40al5rcr3sb84rnp9r";
     };
   };
+
+  # this works. commented out because I haven't uploaded all the bleeding edge source dist files.
+  #[> darcs version of ghc which is updated occasionally by Marc Weber 
+  #ghc68darcs = ghcAndLibraries rec {
+  #  version = "6.9";
+
+  #  pass = { buildInputs = [ happy alex]; 
+  #           patches =  ./patch;
+  #           patchPhase = "
+  #             unset patchPhase; patchPhase
+  #             pwd
+  #             sed 's/GhcWithJavaGen=NO/GhcWithJavaGen=YES/g' -i mk/config.mk.in
+  #             ";
+  #  };
+  #  [> each library is usually added using darcs-all get 
+  #  [> so I assemble and prepare the sources here
+  #  src = stdenv.mkDerivation {
+  #    name = "ghc-darcs-src-dist";
+  #    buildInputs = [autoconf automake];
+  #    core_libs = map (x : sourceByName "ghc_core_${x}") ["array" "base" "bytestring" "Cabal" "containers" "directory" "editline" "filepath" "ghc_prim" "haskell98" "hpc" "integer_gmp" "old_locale" "old_time" "packedstring" "pretty" "process" "random" "template_haskell" "unix" "Win32" ];
+  #    ghc = sourceByName "ghc";
+  #    phases = "buildPhase";
+  #    buildPhase = "
+  #      echo unpacking ghc
+  #      tar xfz \$ghc &> /dev/null
+  #      cd nix_repsoitory_manager_tmp_dir/libraries
+  #      for i in \$core_libs; do
+  #        echo 'unpacking core_lib :' \$i
+  #        tar  xfz \$i &> /dev/null
+  #        n=`basename \$i`
+  #        n=\${n/ghc_core_/}
+  #        if [ -f nix_repsoitory_manager_tmp_dir/*.ac ]; then
+  #          cd nix_repsoitory_manager_tmp_dir
+  #          echo   =======================================================
+  #          echo \$n
+  #          autoreconf
+  #          cd ..
+  #        fi
+  #        mv nix_repsoitory_manager_tmp_dir \${n/.tar.gz/}
+  #      done
+  #      mv ghc_prim ghc-prim
+  #      for i in integer-gmp old-locale old-time template-haskell; do
+  #        mv \${i/-/_} $i
+  #      done
+  #      mkdir \$out
+  #      cd ..
+  #      autoreconf
+  #      sh boot
+  #      cd ..
+  #      mv nix*/* \$out/
+  #    ";
+  #  };
+
+  #  [> TODO this is copied.. use dev versions as well here
+  #  extra_src = fetchurl {
+  #    url = "http://www.haskell.org/ghc/dist/stable/dist/ghc-${version}-src-extralibs.tar.bz2";
+  #    sha256 = "044mpbzpkbxcnqhjnrnmjs00mr85057d123rrlz2vch795lxbkcn";
+  #    [>url = http://www.haskell.org/ghc/dist/stable/dist/ghc-6.8.20070912-src-extralibs.tar.bz2;
+  #    [>sha256 = "0py7d9nh3lkhjxr3yb3n9345d0hmzq79bi40al5rcr3sb84rnp9r";
+  #  };
+  #};
 }

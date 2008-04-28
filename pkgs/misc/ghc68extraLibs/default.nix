@@ -29,10 +29,27 @@ rec {
           quickcheck = { name="QuickCheck-1.1.0.0"; srcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
           tagsoup = { name = "tagsoup-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/tagsoup/0.4/tagsoup-0.4.tar.gz; sha256 = "0rdy303qaw63la1fhw1z8h6k8cs33f71955pwlzxyx0n45g58hc7";};  p_deps = [ x.base x.mtl x.network ]; };
           hxt = { name = "hxt-7.5"; src =fetchurl { url = http://hackage.haskell.org/packages/archive/hxt/7.5/hxt-7.5.tar.gz; sha256 ="00q6m90a4qm4d5cg1x9r6b7f0rszcf2y7ifzs9mvy9kmzfl5ga7n"; };  p_deps = [x.base x.haskell98 x.http_darcs x.hunit x.network x.parsec x.tagsoup ]; };
-
-
+          haskellnet = { name = "HaskellNet-0.2"; src = sourceByName "haskellnet"; p_deps = [ x.base x.haskell98 x.network x.crypto x.mtl x.parsec x.time x.haxml x.bytestring x.pretty x.array x.dataenc x.containers x.old_locale x.old_time ]; 
+             pass = { 
+               patchPhase = "
+                 patch -p1 < \$patch
+                 sed -i 's/mtl/mtl, bytestring, pretty, array, dataenc, containers, old-locale, old-time/' *.cabal
+                 "; 
+               patch= ./haskellnetPatch ; 
+             };
+          };
+          dataenc = { name = "dataenc-0.10.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/dataenc/0.10.2/dataenc-0.10.2.tar.gz; sha256="1kl087994ajbwy65f24qjnz6wchlhmk5vkdw1506zzfbi5fr6x7r"; }; p_deps = [ x.base ]; };
           # other pacakges  (hackage etc)
           polyparse = { name = "polyparse-2.3"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/polyparse/1.1/polyparse-1.1.tar.gz; sha256 = "0mrrk3hhfrn68xn5y4jfg4ba0pa08bj05l007862vrxyyb4bksl7"; }; p_deps = [ x.base x.haskell98 ]; };
+          hsHaruPDF = { name = "HsHaruPDF-0.0.0"; src = fetchurl{url= "http://hackage.haskell.org/packages/archive/HsHaruPDF/0.0.0/HsHaruPDF-0.0.0.tar.gz"; sha256="1yifhxk1m3z2i7gaxgwlmk6cv2spbpx8fny4sn59ybca8wd9z7ps";}; p_deps = [ x.base x.haskell98 ]; 
+                        pass = { buildInputs = [ mysql zlib libpng ]; 
+                          patchPhase = "
+                            sed 's/include-dirs:.*/include-dirs: haru/'  -i HsHaruPDF.cabal
+                            sed 's=extra-lib-dirs:.*=extra-lib-dirs: ${libpng}/lib ${zlib}/lib=' -i HsHaruPDF.cabal
+                            ";
+                        };
+          };
+          # hint = { name="hint-0.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hint/0.1/hint-0.1.tar.gz"; sha256 = "1adydl2la4lxxl6zz24lm4vbdrsi4bkpppzxhpkkmzsjhhkpf2f9"; }; p_deps = [ x.base x.ghc x.haskellSrc x.mtl ]; };
           timeout = { name="timeout-0.1.2"; src = fetchurl{ url = http://hackage.haskell.org/packages/archive/control-timeout/0.1.2/control-timeout-0.1.2.tar.gz; sha256 = "1g1x6c4dafckwcw48v83f3nm2sxv8kynwv8ib236ay913ycgayvg";}; p_deps = [ x.base x.time x.stm ]; };
           parsec3  = { name="parsec-3.0.0";  p_deps=[ x.base x.mtl x.bytestring ];  src = fetchurl { url = "http://hackage.haskell.org/packages/archive/parsec/3.0.0/parsec-3.0.0.tar.gz"; sha256 = "0fqryy09y8h7z0hlayg5gpavghgwa0g3bldynwl17ks8l87ykj7a"; }; };
 
@@ -63,7 +80,7 @@ rec {
                         src = sourceByName "hsql";
                       pass = {  srcDir = "HSQL"; };
               };
-          hsqlMysqlDarcs = { name = "hsql-mysql-darcs"; srcDir = "MySQL"; src = sourceByName "pg_hsql"; p_deps = [ x.base x.hsqlDarcs x.old_time ];
+          hsqlMysqlDarcs = { name = "hsql-mysql-darcs"; srcDir = "MySQL"; src = sourceByName "hsql"; p_deps = [ x.base x.hsqlDarcs x.old_time ];
                         pass = { buildInputs = [ mysql zlib ];
                                  patchPhase = "echo      \"  extra-lib-dirs: ${zlib}/lib\" >> MySQL/hsql-mysql.cabal";
                                };
@@ -147,12 +164,13 @@ rec {
                         name = "wxhaskel-${wxVersion}"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec3 pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
                         src = wxSrc;
                         pass = {
+                          profiling = if getConfig [ "ghc68" "profiling" ] false then "--hcprof" else "";
                           buildInputs = [ unzip ];
                           buildPhase = "
                             createEmptyPackageDatabaseAndSetupHook
                             export GHC_PACKAGE_PATH
                             sed -e 's/which/type -p/g' configure
-                            ./configure --prefix=\$out --package-conf=\$PACKAGE_DB
+                            ./configure --prefix=\$out --package-conf=\$PACKAGE_DB \$profiling
                             make
                             ensureDir \$out
                             make install
@@ -187,8 +205,22 @@ rec {
                       pass = { buildInputs = (with executables; [ happy alex ] ); };
                     };
 
-          /*
+          # haskelldb 
+          haskelldb = { name = "haskelldb-0.10"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskelldb/0.10/haskelldb-0.10.tar.gz"; sha256 = "1i4kgsgajr9cijg0a2c04rn1zqwiasfvdbvs8c5qm49vkbdzm7l5"; }; p_deps = [ x.base x.haskell98 x.mtl x.pretty x.old_time x.directory x.old_locale]; 
+                    pass = { patchPhase = "sed -i 's/mtl/mtl, pretty, old-time, directory, old-locale/' haskelldb.cabal
+                                            echo 'ghc-options: -O2 -fglasgow-exts -fallow-undecidable-instances' >> haskelldb.cabal"; };
+          };
+            #hsql drivers
 
+          haskelldbHsql = { name= "haskelldb-hsql--0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql/0.10/haskelldb-hsql-0.10.tar.gz; sha256 = "0s3bjm080hzw23zjxr4412m81v408ll9y6gqb2yyw30n886ixzgh"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldb x.old_time x.old_locale ]; 
+                    pass = { patchPhase = "sed -i 's/mtl/mtl, pretty, old-time, directory, old-locale/' haskelldb-hsql.cabal
+                                            echo 'ghc-options: -O2 -fglasgow-exts -fallow-undecidable-instances' >> haskelldb-hsql.cabal"; };
+                    };
+          haskelldbHsqlMysql = { name= "haskelldb-hsql-mysql-0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql-mysql/0.10/haskelldb-hsql-mysql-0.10.tar.gz; sha256 = "0nfgq0xn45rhwxr8jvawviqfhgvhqr56l7ki1d72605y34dfx7rw"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldbHsql x.hsqlMysqlDarcs x.haskelldb ]; 
+          };
+
+
+          /*
           haskelldb-hsql-postgresql-0.10.tar.gz
           ######################################################################## 100.0%
           hash is 00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
