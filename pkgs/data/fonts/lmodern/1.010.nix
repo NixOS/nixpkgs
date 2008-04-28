@@ -13,8 +13,10 @@ rec {
 
   doCopy = FullDepEntry(''
     ensureDir $out/share/texmf/
+    ensureDir $out/share/fonts/
 
     cp -r ./* $out/share/texmf/
+    cp -r fonts/{opentype,type1} $out/share/fonts/
   '') ["minInit" "defEnsureDir" "doUnpack"];
 
   name = "lmodern-" + version;
