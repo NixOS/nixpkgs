@@ -8,7 +8,7 @@
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.12pre10553";
+  nixpkgsRel = "nixpkgs-0.12pre11712-4lrp7j8x";
 
 
   configuration = {
@@ -162,7 +162,7 @@ rec {
     };
     
     installer = {
-      nixpkgsURL = http://nix.cs.uu.nl/dist/nix/ + nixpkgsRel;
+      nixpkgsURL = http://nixos.org/releases/nixpkgs/ + nixpkgsRel;
     };
 
     security = {
@@ -225,8 +225,8 @@ rec {
 
   # Get a recent copy of Nixpkgs.
   nixpkgsTarball = pkgs.fetchurl {
-    url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
-    md5 = "a6f1cd8486b7d588ecc7d98f5baf6a73";
+    url = configuration.installer.nixpkgsURL + "/nixexprs.tar.bz2";
+    sha256 = "af5983ce0ac4bb5ad7786905d20fe4ae6bd4c43f6c831baa42bf15f09535dba4";
   };
 
 
