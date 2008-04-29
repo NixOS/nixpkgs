@@ -162,7 +162,7 @@ rec {
   '';
 
 
-  qemuCommand = ''
+  qemuCommandLinux = ''
     QEMU_SMBD_COMMAND=${samba}/sbin/smbd qemu-system-x86_64 \
       -nographic -no-reboot \
       -smb / -hda $diskImage \
@@ -173,7 +173,7 @@ rec {
   '';
 
   
-  vmRunCommand = writeText "vm-run" ''
+  vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
     PATH=${coreutils}/bin:${kvm}/bin
@@ -200,6 +200,8 @@ rec {
       exit 1
     fi
     
+    eval "$postVM"
+
     exit $(cat in-vm-exit)
   '';
 
@@ -251,10 +253,59 @@ rec {
      
   runInLinuxVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
     builder = "${bash}/bin/sh";
-    args = ["-e" vmRunCommand];
+    args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
     origBuilder = attrs.builder;
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
+  });
+
+
+  qemuCommandGeneric = ''
+    QEMU_SMBD_COMMAND=${samba}/sbin/smbd qemu-system-x86_64 \
+      -nographic -no-reboot \
+      -smb $(pwd) -hda $diskImage \
+      $QEMU_OPTS
+  '';
+
+  
+  /* Run a command in a x86 virtual machine image containing an
+     arbitrary OS.  The VM should be configured to do the following:
+
+     - Write log output to the serial port.
+
+     - Mount //10.0.2.4/qemu via SMB.
+
+     - Execute the command "cmd" on the SMB share.  It can access the
+       original derivation attributes in "saved-env" on the share.
+
+     - Produce output under "out" on the SMB share.
+
+     - Write an exit code to "in-vm-exit" on the SMB share ("0"
+       meaning success).
+
+     - Reboot to shutdown the machine (because Qemu doesn't seem
+       capable of a APM/ACPI VM shutdown).
+  */
+  runInGenericVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
+    system = "i686-linux";
+    builder = "${bash}/bin/sh";
+    args = ["-e" (vmRunCommand qemuCommandGeneric)];
+    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
+
+    preVM = ''
+      diskImage=$(pwd)/image
+      origImage=${attrs.diskImage}
+      if test -d "$origImage"; then origImage="$origImage/image"; fi
+      qemu-img create -b "$origImage" -f qcow $diskImage
+
+      echo "$buildCommand" > cmd
+
+      eval "$postPreVM"
+    '';
+
+    postVM = ''
+      cp -prvd out $out
+    '';
   });
 
 
@@ -357,7 +408,7 @@ rec {
     export origArgs=
     export > $TMPDIR/saved-env
     mountDisk=1
-    ${qemuCommand}
+    ${qemuCommandLinux}
   '';
 
 
