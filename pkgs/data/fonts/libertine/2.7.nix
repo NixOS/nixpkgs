@@ -11,7 +11,6 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doUnpack" "generateFontsFromSFD" "installFonts"];
       
-  createTTF=false;
   extraFontForgeCommands = ''
     ScaleToEm(1000);
   '';
