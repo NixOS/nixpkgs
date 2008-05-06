@@ -514,7 +514,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  curl = if stdenv ? curl then stdenv.curl else (assert false; null);
+  curl = if stdenv ? curl then (lowPrio (stdenv.curl)) else (assert false; null);
 
   curlftpfs = import ../tools/networking/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib;
@@ -1517,6 +1517,11 @@ let pkgs = rec {
     inherit fetchurl stdenv ghc;
   };
 
+  ikarusFun = builderDefsPackage (selectVersion ../development/compilers/ikarus "0.0.3") {
+    inherit gmp;
+  };
+  ikarus = ikarusFun null;
+
   javafront = import ../development/compilers/java-front {
     inherit stdenv fetchurl pkgconfig;
     sdf = sdf24;
@@ -1799,9 +1804,10 @@ let pkgs = rec {
   inherit fetchurl stdenv zlib bzip2;
   };
 
-  python25 = import ../development/interpreters/python/2.5 {
+  python25Fun = lib.sumArgs (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
+  python25 = python25Fun null;
 
   pyrex = pyrex095;
 
@@ -6351,10 +6357,10 @@ let pkgs = rec {
     db4 = db45;
   };
 
-  nixCustomFun = src: preConfigure: configureFlags:
+  nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
-        autoconf libtool configureFlags;
+        autoconf libtool configureFlags enableScripts lib;
       bison = bison23;
       flex = flex2533;
       aterm = aterm242fixes;
