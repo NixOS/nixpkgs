@@ -10,6 +10,8 @@
 , docbook5_xsl ? null, libxslt ? null
 , docbook5 ? null, docbook_xml_dtd_43 ? null 
 , configureFlags ? []
+, lib
+, enableScripts ? []
 }:
 
 stdenv.mkDerivation {
@@ -30,7 +32,12 @@ stdenv.mkDerivation {
   	++ (if w3m != null then [w3m] else [])
   ;
 
-  inherit preConfigure;
+  preConfigure = 
+  (lib.concatMapStrings (script: ''sed -e '/bin_SCRIPTS/a${script} \\' -i scripts/Makefile.am
+  '') enableScripts)
+  + preConfigure
+  + "\n./bootstrap.sh"
+  ;
 
   configureFlags = ["
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
