@@ -98,10 +98,22 @@ in {
 
   '';
 
+  robotsEntries = ''
+    User-agent: *
+    Disallow: /rdiff/
+    Disallow: /rename/
+    Disallow: /edit/
+    Disallow: /bin/
+    Disallow: /oops/
+    Disallow: /view/
+    Disallow: /search/
+    Disallow: /attach/
+    Disallow: /pt/bin/
+  '';
+
   # !!! should not be needed
   extraModulesPre = [];
   extraModules = [];
-  robotsEntries = "";
   globalEnvVars = [];
   extraServerPath = [];
   extraPath = [];
