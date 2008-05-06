@@ -1,5 +1,7 @@
 {stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2,
- gdbmSupport ? true, gdbm ? null}:
+ gdbmSupport ? true, gdbm ? null
+ , sqlite ? null
+ }:
 
 assert zlibSupport -> zlib != null;
 assert gdbmSupport -> gdbm != null;
@@ -12,7 +14,9 @@ let
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [bzip2]
     ++ optional zlibSupport zlib
-    ++ optional gdbmSupport gdbm;
+    ++ optional gdbmSupport gdbm
+    ++ optional (sqlite != null) sqlite
+    ;
 
 in
 
