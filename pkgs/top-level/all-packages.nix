@@ -514,7 +514,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  curl = if stdenv ? curl then (lowPrio (stdenv.curl)) else (assert false; null);
+  curl = if stdenv ? curl then (stdenv.curl) else (assert false; null);
 
   curlftpfs = import ../tools/networking/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib;
