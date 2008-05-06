@@ -6,12 +6,14 @@ args:
     }; 
 
     extraAttrs = co : {
-      name = "squid-2.6-stable";
+      name = "squid-3.0-stable5";
 
       src = args.fetchurl {
-        url = http://www.squid-cache.org/Versions/v2/2.6/squid-2.6.STABLE16.tar.bz2;
-        sha256 = "1iv21a4cl74bqzrk07l0lbzlq3n9qpd0r31fgsjv2dsabj46qc4y";
+        url = http://www.squid-cache.org/Versions/v3/3.0/squid-3.0.STABLE5.tar.bz2;
+        sha256 = "1m4ccpjw30q9vwsycmgg9dmhly0mpznvxrch6f7dxgfzpjp26l7w";
       };
+
+      configureFlags = ["--enable-ipv6"];
 
       meta = { 
         description = "http-proxy";
