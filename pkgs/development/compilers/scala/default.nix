@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "scala-2.7.0-final";
+  name = "scala-2.7.1";
 
   src = fetchurl {
-    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.tar.bz2";
-    sha256 = "17b9711bfddac611e907659cab4cb51f4114b886bbee243274d774b691dae248";
+    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.final.tar.gz";
+    sha256 = "3cad113ed7b84f4f009897f6066bee28459e63a1cf1a6d5d56f10f4d1f9819ec";
   };
 
   installPhase = ''
