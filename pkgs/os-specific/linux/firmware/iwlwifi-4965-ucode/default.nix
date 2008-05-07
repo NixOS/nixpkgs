@@ -10,7 +10,15 @@ stdenv.mkDerivation rec {
   
   buildPhase = "true";
 
-  installPhase = "ensureDir $out; chmod -x *; cp * $out";
+  installPhase = ''
+    ensureDir "$out"
+    chmod -x *
+    cp * "$out"
+
+    # The driver expects the `-1' in the file name.
+    cd "$out"
+    ln -s iwlwifi-4965.ucode iwlwifi-4965-1.ucode
+  '';
   
   meta = {
     description = "Firmware for the Intel 4965ABG wireless card";
