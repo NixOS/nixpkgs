@@ -270,7 +270,9 @@ let pkgs = rec {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
-  builderDefsPackage = expr: lib.composedArgs 
+  composedArgsAndFun = f : lib.composedArgs (arg : (f arg)//{meta={function=(composedArgsAndFun f) arg;};});
+
+  builderDefsPackage = expr: composedArgsAndFun 
     (((builderDefs null).builderDefsPackage builderDefs) expr);
 
   stringsWithDeps = import ../lib/strings-with-deps.nix {
@@ -991,11 +993,9 @@ let pkgs = rec {
 
   smbfsFuse = smbfsFuseFun null;
 
-  socatFun = lib.sumArgs (selectVersion ../tools/networking/socat "1.6.0.0") {
-    inherit builderDefs openssl;
-  };
-
-  socat = socatFun null;
+  socat = builderDefsPackage (selectVersion ../tools/networking/socat "1.6.0.1") {
+    inherit openssl;
+  } null;
 
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
@@ -5791,6 +5791,10 @@ let pkgs = rec {
     inherit bleedingEdgeRepos stdenv x11;
     inherit (xlibs) xextproto libXtst inputproto;
   };
+
+  tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.31") {
+    python = python25;
+  } null;
 
   /* does'nt work yet i686-linux only (32bit version)
   teamspeak_client = import ../applications/networking/instant-messengers/teamspeak/client.nix {
