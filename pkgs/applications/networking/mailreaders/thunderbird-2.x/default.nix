@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "thunderbird-2.0.0.12";
+  name = "thunderbird-2.0.0.14";
 
   builder = ./builder.sh;
   src = fetchurl {
