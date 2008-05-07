@@ -1833,6 +1833,11 @@ let pkgs = rec {
     inherit fetchurl stdenv readline ncurses zlib lib openssl;
   };
 
+  rLang = import ../development/interpreters/r-lang {
+    inherit fetchurl stdenv readline perl g77_42 libpng zlib;
+		inherit (xorg) libX11 libXt;
+  };
+
   rubygemsFun = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
