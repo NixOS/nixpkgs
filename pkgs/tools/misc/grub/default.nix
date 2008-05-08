@@ -5,7 +5,7 @@ if stdenv.system == "x86_64-linux" then
 else
 
 stdenv.mkDerivation {
-  name = "grub-0.97";
+  name = "grub-0.97-patch-1.7";
   
   src = fetchurl {
     url = ftp://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
@@ -14,10 +14,11 @@ stdenv.mkDerivation {
 
   # Lots of patches from Gentoo, in particular splash screen support
   # (not the fancy SUSE gfxmenu stuff though).  Also a fix for boot
-  # failures on systems with more than 2 GiB RAM.
+  # failures on systems with more than 2 GiB RAM, and for booting from
+  # ext3 filesystems with 256-byte inodes. 
   gentooPatches = fetchurl {
-    url = mirror://gentoo/distfiles/grub-0.97-patches-1.4.tar.bz2;
-    sha256 = "1nki5q1b61ahxcmnw6mq7b8ghcysri4lj7q6dx8iqixrvrpxj399";
+    url = mirror://gentoo/distfiles/grub-0.97-patches-1.7.tar.bz2;
+    sha256 = "12akcbp1a31pxzsxm01scgir0fqkk8qqqwhs44vzgs2chzzigyvd";
   };
 
   # Autoconf/automake required for the splashimage patch.
