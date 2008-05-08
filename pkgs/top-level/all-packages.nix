@@ -4494,9 +4494,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  module_aggregation = moduleSources:  
+  aggregateModules = modules:  
     import ../os-specific/linux/module-init-tools/aggregator.nix {
-      inherit fetchurl stdenv module_init_tools moduleSources builderDefs;
+      inherit stdenv module_init_tools modules;
     };
 
   modutils = import ../os-specific/linux/modutils {
