@@ -90,7 +90,8 @@ let
     kcachegrind
     kdebase
     keen4
-    kernel
+    kernel_2_6_23
+    kernel_2_6_25
     klibc
     ktorrent
     kvm
@@ -231,7 +232,8 @@ let
     gcc
     hello
     iwlwifi
-    kernel
+    kernel_2_6_23
+    kernel_2_6_25
     libtool
     nixUnstable
     subversion
