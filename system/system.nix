@@ -40,6 +40,21 @@ rec {
     config.boot.initrd.kernelModules;
 
 
+  # Tree of kernel modules.  This includes the kernel, plus modules
+  # built outside of the kernel.  We have to combine these into a
+  # single tree of symlinks because modprobe only supports one
+  # directory.
+  modulesTree = pkgs.aggregateModules (
+    [kernel]
+    ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
+    ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi
+    # !!! this should be declared by the xserver Upstart job.
+    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
+    ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007
+    ++ config.boot.extraModulePackages
+  );
+
+  
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     inherit rootModules;
@@ -70,7 +85,7 @@ rec {
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
       cp $udev/sbin/udevd $udev/sbin/udevtrigger $udev/sbin/udevsettle $out/bin
       nuke-refs $out/bin/*
-    '';
+    ''; # */
   
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -134,21 +149,6 @@ rec {
     (map (mod: mod + "/lib") nssModules));
 
 
-  # Tree of kernel modules.  This includes the kernel, plus modules
-  # built outside of the kernel.  We have to combine these into a
-  # single tree of symlinks because modprobe only supports one
-  # directory.
-  modulesTree = pkgs.module_aggregation (
-    [kernel]
-    ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
-    ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi
-    # !!! this should be declared by the xserver Upstart job.
-    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
-    ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007
-    ++ config.boot.extraModulePackages
-  );
-
-  
   # Wrapper around modprobe to set the path to the modules.
   modprobe = pkgs.substituteAll {
     dir = "sbin";
