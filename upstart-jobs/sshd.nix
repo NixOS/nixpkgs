@@ -11,7 +11,9 @@ assert permitRootLogin == "yes" ||
 let
 
   sshdConfig = writeText "sshd_config" ''
-  
+
+    Protocol 2
+    
     UsePAM yes
     
     ${if forwardX11 then "
@@ -45,23 +47,23 @@ in
     }
   ];
   
-  job = "
-description \"SSH server\"
+  job = ''
+    description "SSH server"
 
-start on network-interfaces/started
-stop on network-interfaces/stop
+    start on network-interfaces/started
+    stop on network-interfaces/stop
 
-env LD_LIBRARY_PATH=${nssModulesPath}
+    env LD_LIBRARY_PATH=${nssModulesPath}
 
-start script
-    mkdir -m 0755 -p /etc/ssh
+    start script
+        mkdir -m 0755 -p /etc/ssh
 
-    if ! test -f /etc/ssh/ssh_host_dsa_key; then
-        ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ''
-    fi
-end script
+        if ! test -f /etc/ssh/ssh_host_dsa_key; then
+            ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
+        fi
+    end script
 
-respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}
-  ";
+    respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}
+  '';
   
 }
