@@ -17,7 +17,7 @@ in
 	includeBuildDeps = true;
 
 	kernel = pkgs: (
-		pkgs.module_aggregation 
+		pkgs.aggregateModules 
 		[pkgs.kernel]
 	);
 

@@ -20,7 +20,7 @@ let
   };
 
   theKernel = pkgs: let baseKernel=pkgs.kernel; 
-	in (pkgs.module_aggregation 
+	in (pkgs.aggregateModules 
     		[
 		baseKernel
 		(pkgs.kqemuFunCurrent baseKernel)
@@ -50,7 +50,7 @@ in
 		"user" "guest" "nix"];
 
 	kernel = pkgs: (
-		pkgs.module_aggregation 
+		pkgs.aggregateModules 
 		[pkgs.kernel]
 	);
 	extraInitrdKernelModules = 
