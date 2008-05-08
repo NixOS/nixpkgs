@@ -3,7 +3,10 @@
 let
 
   syslogConf = writeText "syslog.conf" ''
-    *.*                           /dev/tty10
+    kern.warning;*.err;authpriv.none /dev/tty10
+
+    # Send emergency messages to all users.
+    *.emerg                       *
 
     # "local1" is used for dhcpd messages.
     local1.*                     -/var/log/dhcpd
@@ -20,7 +23,10 @@ in
 
 {
   name = "syslogd";
+  
   job = ''
+    description "Syslog daemon"
+  
     start on udev
     stop on shutdown
 

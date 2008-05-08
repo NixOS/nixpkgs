@@ -79,6 +79,12 @@ let
       inherit config;
     })
 
+    # Klogd.
+    (import ../upstart-jobs/klogd.nix {
+      inherit (pkgs) sysklogd writeText;
+      inherit config;
+    })
+
     # The udev daemon creates devices nodes and runs programs when
     # hardware events occur.
     (import ../upstart-jobs/udev.nix {
