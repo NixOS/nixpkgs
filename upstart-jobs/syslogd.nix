@@ -1,24 +1,31 @@
-{sysklogd, writeText}:
+{sysklogd, writeText, config}:
 
 let
 
   syslogConf = writeText "syslog.conf" ''
-    *.*                /dev/tty10
+    *.*                           /dev/tty10
 
-    *.=warning;*.=err -/var/log/warn
-    *.crit             /var/log/warn
+    # "local1" is used for dhcpd messages.
+    local1.*                     -/var/log/dhcpd
 
+    mail.*                       -/var/log/mail
 
-    *.*               -/var/log/messages
+    *.=warning;*.=err            -/var/log/warn
+    *.crit                        /var/log/warn
+
+    *.*;mail.none;local1.none    -/var/log/messages
   '';
 
 in
 
 {
   name = "syslogd";
-  job = "
+  job = ''
     start on udev
     stop on shutdown
+
+    env TZ=${config.time.timeZone}
+    
     respawn ${sysklogd}/sbin/syslogd -n -f ${syslogConf}
-  ";
+  '';
 }

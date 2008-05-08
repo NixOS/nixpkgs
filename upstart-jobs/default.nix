@@ -71,11 +71,12 @@ let
   in pkgs.lib.concatLists ( map nameToJobs (attrNames services)));
     
   jobs = map makeJob
-    ( newProposalJobs ++ 
-    [
+    (newProposalJobs ++ [
+    
     # Syslogd.
     (import ../upstart-jobs/syslogd.nix {
       inherit (pkgs) sysklogd writeText;
+      inherit config;
     })
 
     # The udev daemon creates devices nodes and runs programs when
