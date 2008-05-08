@@ -11,6 +11,10 @@ makeFlagsArray=(CLIENT_PATH='\"FAKE_PATH=/nothing\"' \
 
 configurePhase=configurePhase
 configurePhase() {
+    # Patch the header that contains absolute paths to the tools.
+    sed -i "includes/dhcpd.h" \
+	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+
     ./configure
 }
 
