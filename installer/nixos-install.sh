@@ -61,24 +61,29 @@ mount --bind /sys $mountPoint/sys
 
 # Grub needs a mtab. Make a proper one..
 chroot $mountPoint \
-    /nix/var/nix/profiles/system/sw/bin/cat /proc/mounts > /etc/mtab 
-
+    /nix/var/nix/profiles/system/sw/bin/cat /proc/mounts > /etc/mtab
+    
 echo "/etc/mtab: "
 cat /mnt/etc/mtab 
 
 # That could spoil mtab with litter.
 mount --rbind / $mountPoint/mnt
 
-cleanup() {
-    # !!! don't umount anything we didn't mount ourselves
-    for i in $(grep -F "$mountPoint" /proc/mounts \
+umountUnder() {
+    local dir="$1"
+    for i in $(grep -F " $dir" /proc/mounts \
         | @perl@/bin/perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
         | sort -r);
     do
-        if test "$i" != "$mountPoint" -a "$i" != / -a -e "$i"; then
-            umount $i || true
-        fi
+	umount $i || true
     done
+}
+
+cleanup() {
+    umountUnder $mountPoint/mnt
+    umountUnder $mountPoint/dev
+    umountUnder $mountPoint/proc
+    umountUnder $mountPoint/sys
 }
 
 trap "cleanup" EXIT
