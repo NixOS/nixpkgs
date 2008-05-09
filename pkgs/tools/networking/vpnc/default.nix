@@ -15,7 +15,13 @@ stdenv.mkDerivation {
 
   buildInputs = [libgcrypt perl makeWrapper];
 
-  builder = ./builder.sh;
+  preConfigure = ''
+    substituteInPlace "config.c" \
+      --replace "/etc/vpnc/vpnc-script" "$out/etc/vpnc/vpnc-script"
+
+    substituteInPlace "pcf2vpnc" \
+      --replace "/usr/bin/perl" "${perl}/bin/perl"
+  '';
 
   postInstall = ''
     for i in $out/{bin,sbin}/*
@@ -27,8 +33,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''VPNC, a virtual private network (VPN) client
-                    for Cisco's VPN concentrators.'';
+                    for Cisco's VPN concentrators'';
     homepage = http://www.unix-ag.uni-kl.de/~massar/vpnc/;
-    license = "GPL";
+    license = "GPLv2+";
   };
 }
