@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   
   propagatedBuildInputs = [
     x11 glib atk pango libtiff libjpeg libpng cairo libXrandr
-  ] ++ stdenv.lib.optional xineramaSupport [libXinerama];
+  ] ++ stdenv.lib.optional xineramaSupport libXinerama;
     
   passthru = { inherit libtiff libjpeg libpng; };
 
