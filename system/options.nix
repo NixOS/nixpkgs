@@ -168,20 +168,27 @@
           "sata_uli"
           "ata_piix"
           "pata_marvell"
+          
           # Standard SCSI stuff.
           "sd_mod"
           "sr_mod"
+          
           # Standard IDE stuff.
           "ide_cd"
           "ide_disk"
           "ide_generic"
+          
           # Filesystems.
           "ext3"
+          
           # Support USB keyboards, in case the boot fails and we only have
           # a USB keyboard.
           "ehci_hcd"
           "ohci_hcd"
           "usbhid"
+
+          # LVM.
+          "dm_mod"
         ];
         description = "
           The set of kernel modules in the initial ramdisk used during the
