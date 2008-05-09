@@ -58,15 +58,6 @@ mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mn
 mount --bind /dev $mountPoint/dev
 mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
-
-# Grub needs a mtab. Make a proper one..
-chroot $mountPoint \
-    /nix/var/nix/profiles/system/sw/bin/cat /proc/mounts > /etc/mtab
-    
-echo "/etc/mtab: "
-cat /mnt/etc/mtab 
-
-# That could spoil mtab with litter.
 mount --rbind / $mountPoint/mnt
 
 umountUnder() {
@@ -191,9 +182,14 @@ if test -e /etc/nixos/services; then
 fi
 
 
+# Grub needs an mtab.
+ln -sfn /proc/mounts $mountPoint/etc/mtab
+
+
 # Mark the target as a NixOS installation, otherwise
 # switch-to-configuration will chicken out.
 touch $mountPoint/etc/NIXOS
+
 
 # Switch to the new system configuration.  This will install Grub with
 # a menu default pointing at the kernel/initrd/etc of the new
