@@ -134,7 +134,7 @@
 
     extraModulePackages = mkOption {
       default = [];
-      example = [pkgs.aufs pkgs.nvidiaDrivers];
+      # !!! example = [pkgs.aufs pkgs.nvidiaDrivers];
       description = ''
         A list of additional packages supplying kernel modules.
       '';
@@ -217,7 +217,7 @@
       };
 
       lvm = mkOption {
-        default = false;
+        default = true;
         description = "
           Whether to include lvm in the initial ramdisk. You should use this option
           if your ROOT device is on lvm volume.
