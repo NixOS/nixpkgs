@@ -48,12 +48,26 @@ fi
 NIXOS=$(readlink -f "$NIXOS")
 
 
+# Enable networking in the chroot.
+mkdir -m 0755 -p $mountPoint/etc
+touch /etc/resolv.conf 
+cp /etc/resolv.conf $mountPoint/etc/
+
 # Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
-mount --rbind / $mountPoint/mnt
 mount --bind /dev $mountPoint/dev
 mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
+
+# Grub needs a mtab. Make a proper one..
+chroot $mountPoint \
+    /nix/var/nix/profiles/system/sw/bin/cat /proc/mounts > /etc/mtab 
+
+echo "/etc/mtab: "
+cat /mnt/etc/mtab 
+
+# That could spoil mtab with litter.
+mount --rbind / $mountPoint/mnt
 
 cleanup() {
     # !!! don't umount anything we didn't mount ourselves
@@ -114,11 +128,6 @@ mkdir -m 0755 -p $mountPoint/bin
 ln -sf @shell@ $mountPoint/bin/sh
 
 
-# Enable networking in the chroot.
-mkdir -m 0755 -p $mountPoint/etc
-cp /etc/resolv.conf $mountPoint/etc/
-
-
 # Pull the manifest on the CD so that everything in the Nix store on
 # the CD can be copied directly.
 echo "registering substitutes to speed up builds..."
@@ -161,23 +170,25 @@ if test -e $targetNixpkgs; then
     mv $targetNixpkgs $targetNixpkgs.backup-$backupTimestamp
 fi
 
+targetServices=$mountPoint/etc/nixos/services
+if test -e $targetServices; then
+    mv $targetServices $targetServices.backup-$backupTimestamp
+fi
+
 
 # Copy the NixOS/Nixpkgs sources to the target.
 cp -prd $NIXOS $targetNixos
 if test -e /etc/nixos/nixpkgs; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi
-
-
-# Grub needs a mtab.
-rootDevice=$(df $mountPoint | grep '^/' | sed 's^ .*^^')
-echo "$rootDevice / somefs rw 0 0" > $mountPoint/etc/mtab
+if test -e /etc/nixos/services; then
+    cp -prd /etc/nixos/services $targetServices
+fi
 
 
 # Mark the target as a NixOS installation, otherwise
 # switch-to-configuration will chicken out.
 touch $mountPoint/etc/NIXOS
-
 
 # Switch to the new system configuration.  This will install Grub with
 # a menu default pointing at the kernel/initrd/etc of the new

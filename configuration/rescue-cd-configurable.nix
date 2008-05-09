@@ -147,8 +147,12 @@ rec {
             mkdir -p /etc/nixos/nixos
             tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
             tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos
+	    tar xjf /install/nixos-services.tar.bz2 -C /etc/nixos
             mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs || true
+            mv /etc/nixos/*-nixpkgs /etc/nixos/nixpkgs || true
+            mv /etc/nixos/*-services /etc/nixos/services || true
             ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
+            ln -sfn ../services /etc/nixos/services
             chown -R root.root /etc/nixos
             touch /etc/resolv.conf
             end script
@@ -301,7 +305,7 @@ rec {
  
   makeNixPkgsTarball = tarName: input: ((pkgs.runCommand "tarball-nixpkgs" {inherit tarName;} ''
   ensureDir $out
-    (cd ${input}/.. && tar cvfj $out/${tarName} nixpkgs \
+    (cd ${input}/.. && tar cvfj $out/${tarName} $(basename ${input}) \
         --exclude '*~' \
         --exclude 'result')
   '')+"/${tarName}");
@@ -322,8 +326,9 @@ rec {
   nixpkgsTarball = if networkNixpkgs != "" then pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
     md5 = "6a793b877e2a4fa79827515902e1dfd8";
-  } else makeNixPkgsTarball "nixpkgs.tar.bz2" "/etc/nixos/nixpkgs";
- 
+  } else makeNixPkgsTarball "nixpkgs.tar.bz2" ("" + ./../../nixpkgs);
+
+  nixosServicesTarball = makeNixPkgsTarball "nixos-services.tar.bz2" ("" + ./../../services);
  
   # The configuration file for Grub.
   grubCfg = pkgs.writeText "menu.lst" (''
@@ -373,6 +378,10 @@ rec {
         {
           source = nixpkgsTarball;
           target = "/install/nixpkgs.tar.bz2";
+        }
+        {
+          source = nixosServicesTarball;
+          target = "/install/nixos-services.tar.bz2";
         }
         { 
           source = pkgs.writeText "label" "";
