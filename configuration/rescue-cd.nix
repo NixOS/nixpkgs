@@ -8,7 +8,7 @@
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.12pre11779-p80g4123";
+  nixpkgsRel = "nixpkgs-0.12pre11791-xl06i469";
 
 
   configuration = {
@@ -226,7 +226,7 @@ rec {
   # Get a recent copy of Nixpkgs.
   nixpkgsTarball = pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/nixexprs.tar.bz2";
-    sha256 = "008e8a5c44b30b8aae8c5c776547a2d9f62778fd06ad625ed1efe1367d456fda";
+    sha256 = "267c45134eee9a8a93812589e5bd45333c5061a8047b41f3bf27ed76a1461750";
   };
 
 
