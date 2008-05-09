@@ -16,7 +16,7 @@ fi
 
 # Obtain Subversion.
 if test -z "$(type -tp svn)"; then
-    #nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
+    #nix-channel --add http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable
     #nix-channel --update
     nix-env -i subversion
 fi

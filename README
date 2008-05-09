@@ -2,4 +2,4 @@
 
 NixOS is a Linux distribution based on the purely functional package
 management system Nix.  More information can be found at
-http://nix.cs.uu.nl/nixos and in the manual in doc/manual.
+http://nixos.org/nixos and in the manual in doc/manual.

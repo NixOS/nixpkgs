@@ -11,14 +11,14 @@
 <title>Building the installation CD</title>
 
 <para>Instead of building an installation CD, you could just download
-one from <link xlink:href="http://nix.cs.uu.nl/nixos/"/>.  If you want
+one from <link xlink:href="http://nixos.org/nixos/"/>.  If you want
 (or need) to build it yourself:
 
 <orderedlist>
 
   <listitem><para>Make sure that you have a <emphasis>very</emphasis>
   recent pre-release version of Nix installed (<link
-  xlink:href="http://nix.cs.uu.nl/dist/nix/nix-unstable-latest/"/>).
+  xlink:href="http://nixos.org/releases/nix/nix-unstable/"/>).
   The NixOS Nix expressions frequently use bleeding-edge features.  If
   you get any kind of expression evaluation error, try to upgrade your
   Nix.</para></listitem>
@@ -29,18 +29,18 @@ one from <link xlink:href="http://nix.cs.uu.nl/nixos/"/>.  If you want
   channel to speed up building, i.e.,
 
 <screen>
-$ nix-channel --add http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable
+$ nix-channel --add http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable
 $ nix-channel --update</screen>
 
   </para></listitem>
 
   <listitem><para>Check out NixOS from <link
-  xlink:href="https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk"/> as
+  xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixos</literal>.</para></listitem>
 
   <listitem><para>If you don’t already have Nixpkgs checkout, Check
   out Nixpkgs from <link
-  xlink:href="https://svn.cs.uu.nl:12443/repos/trace/nixos/trunk"/> as
+  xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
 
   <listitem><para>In the directory <literal>nixos</literal>, make a
@@ -174,7 +174,7 @@ $ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix</screen>
 
     <para>More examples of NixOS configurations for some actual
     machines can be found at <link
-    xlink:href="https://svn.cs.uu.nl:12443/repos/trace/configurations/trunk/"/>.</para>
+    xlink:href="https://svn.nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
     <note><para>It is very important that you specify in the option
     <option>boot.initrd.extraKernelModules</option> all kernel modules

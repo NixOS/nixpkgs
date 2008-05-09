@@ -2014,7 +2014,7 @@
 
     nixpkgsURL = mkOption {
       default = "";
-      example = http://nix.cs.uu.nl/dist/nix/nixpkgs-0.11pre7577;
+      example = http://nixos.org/releases/nix/nixpkgs-0.11pre7577;
       description = "
         URL of the Nixpkgs distribution to use when building the
         installation CD.
@@ -2022,10 +2022,10 @@
     };
 
     manifests = mkOption {
-      default = [http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable/MANIFEST];
+      default = [http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST];
       example =
-        [ http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-unstable/MANIFEST
-          http://nix.cs.uu.nl/dist/nix/channels-v3/nixpkgs-stable/MANIFEST
+        [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
+          http://nixos.org/releases/nixpkgs/channels/nixpkgs-stable/MANIFEST
         ];
       description = "
         URLs of manifests to be downloaded when you run
