@@ -2,15 +2,13 @@
 , gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "guile-1.8.4";
+  name = "guile-1.8.5";
   src = fetchurl {
     url = "mirror://gnu/guile/" + name + ".tar.gz";
-    sha256 = "1cz1d4n6vzw0lfsvplsiarwqk675f12j596dzfv0h5r9cljpc0ya";
+    sha256 = "12b215bbqqkanapwh4dp3lnkg7k239dqiawfcdrb1zjz8hnkvxp2";
   };
 
-  patches = [ ./test-tmpdir.patch
-              ./srcprop-no-deadlock.patch
-              ./popen-zombie.patch ];
+  patches = [ ./popen-zombie.patch ];
 
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [readline libtool gmp gawk];
@@ -32,6 +30,6 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/guile/;
-    license = "LGPL";
+    license = "LGPLv2+";
   };
 }
