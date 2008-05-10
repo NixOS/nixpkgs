@@ -557,9 +557,14 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  eprover = import ../tools/misc/eProver {
-    inherit fetchurl stdenv which tetex;
-  };
+  eprover = composedArgsAndFun (import ../tools/misc/eProver) {
+    inherit fetchurl stdenv which;
+    texLive = texLiveAggregationFun {
+      paths = [
+        texLive texLiveExtra
+      ];
+    } null;
+  } null;
 
   exif = import ../tools/graphics/exif {
     inherit fetchurl stdenv pkgconfig libexif popt;
