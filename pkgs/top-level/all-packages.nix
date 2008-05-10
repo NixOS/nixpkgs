@@ -3133,17 +3133,13 @@ let pkgs = rec {
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
 
-  qt4 = getVersion "qt4" qt4_alts;
-  
-  qt4_alts = import ../development/libraries/qt-4 {
+  qt4 = import ../development/libraries/qt-4 {
     inherit fetchurl stdenv fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
     fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
     libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
     inputproto fixesproto libXfixes;
     inherit (gnome) glib;
-    openglSupport = mesaSupported;
-    mysqlSupport = true;
   };
 
   readline = readline5;
