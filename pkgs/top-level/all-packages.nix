@@ -805,6 +805,13 @@ let pkgs = rec {
     inherit (xlibs) libX11;
   };
 
+  mdbtools = builderDefsPackage (selectVersion ../tools/misc/mdbtools "0.6-pre1") {
+    inherit readline pkgconfig;
+    inherit (gtkLibs) glib;
+    bison = bison23;
+    flex = flex2535;
+  } null;
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
