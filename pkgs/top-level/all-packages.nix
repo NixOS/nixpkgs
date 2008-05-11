@@ -2850,6 +2850,10 @@ let pkgs = rec {
     inherit fetchurl stdenv pkgconfig libmowgli;
   };
 
+  libmicrohttpd = import ../development/libraries/libmicrohttpd {
+    inherit fetchurl stdenv curl;
+  };
+
   libmowgli = import ../development/libraries/libmowgli {
     inherit fetchurl stdenv;
   };
