@@ -708,7 +708,7 @@ let pkgs = rec {
       inherit fetchurl stdenv;
     });
 
-  hddtemp = import ../tools/hddtemp {
+  hddtemp = import ../tools/misc/hddtemp {
     inherit fetchurl stdenv;
   };
 
