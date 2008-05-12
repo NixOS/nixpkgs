@@ -24,6 +24,20 @@
    */
   ,configList ? (configuration : [])
   ,aufs ? true
+
+  /*
+  	Address/netmask to be always added, whatever 
+	network-interfaces configure is kept
+  */
+  ,addIP ? ""
+  ,netmask ? "255.255.255.0"
+  /* To select interface to bind address to */
+  ,ifName ? "eth0"
+
+  /* 
+  	list of: {source, target}
+  */
+  ,additionalFiles ? []
 }:
 let
   ttyCount = lib.fold builtins.add 0 [
@@ -204,6 +218,21 @@ rec {
             end script
           '';
         }
+      )
+
+      ++
+
+      (lib.optional (addIP != "")
+        {
+	  name = "add-IP-adress";
+	  job = ''
+	    start on network-interfaces/started
+	    script
+	      ${pkgs.nettools}/sbin/ifconfig ${ifName} add ${addIP} up
+	      ${pkgs.nettools}/sbin/ifconfig ${ifName}:0 netmask ${netmask} up 
+	    end script
+	  '';
+	}
       )
       ;
        
@@ -395,6 +424,8 @@ rec {
           target = "boot/memtest.bin";
         }
       )
+      ++
+      additionalFiles
       ;
     };
   
