@@ -41,6 +41,24 @@ rec {
           dataenc = { name = "dataenc-0.10.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/dataenc/0.10.2/dataenc-0.10.2.tar.gz; sha256="1kl087994ajbwy65f24qjnz6wchlhmk5vkdw1506zzfbi5fr6x7r"; }; p_deps = [ x.base ]; };
           # other pacakges  (hackage etc)
           polyparse = { name = "polyparse-2.3"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/polyparse/1.1/polyparse-1.1.tar.gz; sha256 = "0mrrk3hhfrn68xn5y4jfg4ba0pa08bj05l007862vrxyyb4bksl7"; }; p_deps = [ x.base x.haskell98 ]; };
+          /*
+bash: HaXml: command not found
+marc@nixos: ~ ]$ nix-prefetch-url http://hackage.haskell.org/packages/archive/hexpat/0.2/hexpat-0.2.tar.gz
+######################################################################## 100.0%
+hash is 05pcrh1czs6s3d7wv3ygiwf40ilmkiiygb86m1as2w2vwk9mqm6q
+path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
+05pcrh1czs6s3d7wv3ygiwf40ilmkiiygb86m1as2w2vwk9mqm6q
+
+
+*/
+
+
+          # hint = { name="hint-0.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hint/0.1/hint-0.1.tar.gz"; sha256 = "1adydl2la4lxxl6zz24lm4vbdrsi4bkpppzxhpkkmzsjhhkpf2f9"; }; p_deps = [ x.base x.ghc x.haskellSrc x.mtl ]; };
+          pcreLight = { name="pcre-light-0.3.1"; src= fetchurl { url = http://hackage.haskell.org/packages/archive/pcre-light/0.3.1/pcre-light-0.3.1.tar.gz; sha256 = "1h0qhfvqjcx59zkqhvsy7vw23l4444czg2z7b2lndy6cmkqc719m"; }; p_deps = [x.base x.bytestring pcre x.haskell98 ]; 
+            pass = { patchPhase = "                      
+                  echo \"    extra-lib-dirs: ${pcre}/lib\" >> pcre-light.cabal
+                  ";
+          }; };
           hsHaruPDF = { name = "HsHaruPDF-0.0.0"; src = fetchurl{url= "http://hackage.haskell.org/packages/archive/HsHaruPDF/0.0.0/HsHaruPDF-0.0.0.tar.gz"; sha256="1yifhxk1m3z2i7gaxgwlmk6cv2spbpx8fny4sn59ybca8wd9z7ps";}; p_deps = [ x.base x.haskell98 ]; 
                         pass = { buildInputs = [ mysql zlib libpng ]; 
                           patchPhase = "
@@ -57,6 +75,7 @@ rec {
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/binary/0.4.1/binary-0.4.1.tar.gz";
                                         sha256 = "0jg5i1k5fz0xp1piaaf5bzhagqvfl3i73hlpdmgs4gc40r1q4x5v"; };
                  };
+          hlist = { name="HList-0.1"; src = fetchurl { url="http://hackage.haskell.org/packages/archive/HList/0.1/HList-0.1.tar.gz"; sha256 = "1gv80qrnf71fzgb2ywaybkfvida0pwkd4a53vhmc0yg214yin4kh"; }; p_deps = [ ]; };
           # using different name to not clash with postgresql
           postgresql_bindings = rec { name = "PostgreSQL-0.2"; p_deps = [x.base x.mtl postgresql x.haskell98];
                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/PostgreSQL/0.2/PostgreSQL-0.2.tar.gz";
@@ -70,19 +89,50 @@ rec {
 
                           };
                 };
-          #wash = rec { name = "WashNGo-2.12"; p_deps = [x.base x.mtl x.haskell98 ];
-          #                src = fetchurl { url = "http://www.informatik.uni-freiburg.de/~thiemann/WASH/WashNGo-2.12.tgz";
-          #                             sha256 = "1dyc2062jpl3xdlm0n7xkz620h060g2i5ghnb32cn95brcj9fgrz"; };
-          #           patches = ../misc/WASHNGo_Patch_ghc682;
-          #      };
+          zlib = rec { name = "zlib-0.4.0.4"; p_deps = [ x.base x.bytestring x.haskell98 ];
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/zlib/0.4.0.4/zlib-0.4.0.4.tar.gz";
+                                        sha256 = "14hzqpzqs3rcwx6qpgybrcz33yrzb5y4p0bdsilhdgl15594ibad"; };
+                    pass = {
+                      patchPhase = ''
+                        echo      "  extra-lib-dirs: ${zlib}/lib" >> zlib.cabal
+                        echo      "  include-dirs: ${zlib}/include" >> zlib.cabal'';
+               }; };
+          bzlib = rec { name = "bzlib-0.4.0.3"; p_deps = [ x.base x.bytestring x.haskell98 ];
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/bzlib/0.4.0.3/bzlib-0.4.0.3.tar.gz";
+                                        sha256 = "0mdhqds2d4lx75yy39bvbvmvkb81xl1mhgbjwi4299j7isrrgmb4"; };
+                    pass = {
+                      patchPhase = ''
+                        echo   "  extra-lib-dirs: ${bzip2}/lib
+                          include-dirs: ${bzip2}/include" >> bzlib.cabal '';
+               }; };
+          wash = rec { name = "WashNGo-2.12"; p_deps = [x.base x.mtl x.haskell98 x.regex_compat x.parsec x.containers ];
+                         src = fetchurl { url = "http://www.informatik.uni-freiburg.de/~thiemann/WASH/WashNGo-2.12.tgz";
+                                      sha256 = "1dyc2062jpl3xdlm0n7xkz620h060g2i5ghnb32cn95brcj9fgrz"; };
+                      useLocalPkgDB = true;
+                  pass = {
+                    patches = ./WASHNGo_Patch_ghc682;
+                  };
+               };
 
+          #hsql = rec { name = "hsql-1.7"; p_deps = [x.base x.mtl x.haskell98  x.old_time ];
+                        #src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hsql/1.7/hsql-1.7.tar.gz";
+                                     #sha256 = "0j2lkvg5c0x5gf2sy7zmmgrda0c3l73i9d6hyka2f15d5n1rfjc9"; };
+                      #pass = { patchPhase = "
+                                    #sed -e 's=build-depends:.*=build-depends: base, old-locale, old-time=' -i hsql.cabal
+                                    #echo \"extensions: 
+                                    #ForeignFunctionInterface, TypeSynonymInstances, CPP, ExistentialQuantification, GeneralizedNewtypeDeriving, PatternSignatures, ScopedTypeVariables, Rank2Types, DeriveDataTypeable \" >> hsql.cabal
+                                    #"; };
+              #};
+          # supports new time library
           hsqlDarcs = rec { name = "hsql-darcs"; p_deps = [x.base x.mtl x.haskell98  x.old_time x.old_locale x.time ];
                         src = sourceByName "hsql";
                       pass = {  srcDir = "HSQL"; };
               };
           hsqlMysqlDarcs = { name = "hsql-mysql-darcs"; srcDir = "MySQL"; src = sourceByName "hsql"; p_deps = [ x.base x.hsqlDarcs x.old_time ];
                         pass = { buildInputs = [ mysql zlib ];
-                                 patchPhase = "echo      \"  extra-lib-dirs: ${zlib}/lib\" >> MySQL/hsql-mysql.cabal";
+                                 patchPhase = "echo      \"  extra-lib-dirs: ${zlib}/lib\" >> MySQL/hsql-mysql.cabal
+                                           sed -e \"s=configVerbose=configVerbosity=\" -e \"s=sqlite_path=\$sqlite=\" -i MySQL/Setup.lhs
+                                             ";
                                };
                       };
           #hsql_postgresql = rec { name = "hsql-postgresql-1.7"; p_deps = [ x.base x.mtl x.haskell98  x.old_time x.hsql postgresql ];
@@ -105,6 +155,8 @@ rec {
                                            sed -e '/ODBC/d' -i Takusen.cabal
                                            sed -e '/Oracle/d' -i Takusen.cabal
                                            sed -e \"s=pg_path=\$postgresql=\" -e \"s=sqlite_path=\$sqlite=\" -i Setup.hs
+                                           sed -e \"s=configVerbose=configVerbosity=\" -e \"s=sqlite_path=\$sqlite=\" -i Setup.hs
+                                           sed -e \"s=regVerbose=regVerbosity=\" -e \"s=sqlite_path=\$sqlite=\" -i Setup.hs
                                            ";
                           };
                 };
@@ -136,7 +188,7 @@ rec {
                               };
           };
 
-          gtk2hs = rec { name = "gtk2hs-0.9.12.1"; p_deps = [ x.haskell98 x.mtl x.bytestring pkgconfig ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]); 
+          gtk2hs = rec { name = "gtk2hs-0.9.12.1"; p_deps = [ x.haskell98 x.mtl x.bytestring pkgconfig ] ++ (with gtkLibs; [ glib pango gtk gnome.glib gnome.gtksourceview]); 
                           src = fetchurl {
                             url = "http://downloads.sourceforge.net/gtk2hs/${name}.tar.gz";
                             sha256 = "110z6v9gzhg6nzlz5gs8aafmipbva6rc50b8z1jgq0k2g25hfy22"; };
@@ -221,6 +273,7 @@ rec {
 
 
           /*
+
           haskelldb-hsql-postgresql-0.10.tar.gz
           ######################################################################## 100.0%
           hash is 00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
@@ -349,14 +402,16 @@ rec {
         cabal_darcs = 
         { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
                   src = sourceByName "cabal";
+          pass = { dummy = 1; };
         };
-      };
+      } // (getConfig [ "ghc68CustomLibs" ] ( args: x : {} ) ) args x;
       #srcs_only = let x = pkgs; in map (y : y.src ) [ x.happs_util_darcs x.happs_data_darcs x.syb_with_class_darcs x.http_darcs 
       #          x.happs_server_darcs x.happs_ixset_darcs x.happs_plugins_darcs x.happs_server_darcs ];
       toDerivation = attrs : with attrs;
       # result is { mtl = <deriv>;
         addHasktagsTaggingInfo (ghcCabalDerivation {
             inherit (attrs) name src;
+            useLocalPkgDB = attrs ? useLocalPkgDB;
             propagatedBuildInputs = p_deps ++ (lib.optional (attrs.name != cabal_darcs_name) derivations.cabal_darcs );
             srcDir = if attrs ? srcDir then attrs.srcDir else ".";
             # add cabal, take deps either from this list or from ghc.core_libs 

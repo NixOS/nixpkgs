@@ -4,7 +4,7 @@ args.stdenv.mkDerivation {
 
   src = args.fetchurl {
     url = http://mawercer.de/hasktags.hs;
-    sha256 = "af43a7fb1280aeec06ad3cfe6a7a01cf69b96f6dcd736e228b7532b79e6e51c5";
+    sha256 = "9694256922899221a547f0ece57b192ba86761b42acb208424a011d55c51b603";
   };
 
   buildInputs =(with args; [ghc]);
