@@ -1378,11 +1378,18 @@ let pkgs = rec {
   ghcCabalDerivation = args : with args;
     let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);
+        configure = if (args ? useLocalPkgDB) 
+                      then "nix_ghc_pkg_tool join localDb\n" +
+                            "\$CABAL_SETUP configure --package-db=localDb \$profiling \$cabalFlags"
+                      else "\$CABAL_SETUP configure --by-env=\$PACKAGE_DB \$profiling \$cabalFlags";
     in stdenv.mkDerivation ({
       srcDir = if (args ? srcDir) then args.srcDir else ".";
       inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
       profiling = if getConfig [ "ghc68" "profiling" ] false then "-p" else "";
+      cabalFlags = map lib.escapeShellArg 
+                      (getConfig [ "cabal" "flags" ] []
+                       ++ (if args ? cabalFlags then args.cabalFlags else []) );
       # TODO remove echo line
       buildPhase ="
           createEmptyPackageDatabaseAndSetupHook
@@ -1392,7 +1399,7 @@ let pkgs = rec {
           ghc --make Setup.*hs -o setup
           CABAL_SETUP=./setup
 
-          \$CABAL_SETUP configure --by-env=\$PACKAGE_DB \$profiling
+          " + configure +"
           \$CABAL_SETUP build
           \$CABAL_SETUP copy --destdir=\$out
           \$CABAL_SETUP register --gen-script
@@ -1424,19 +1431,19 @@ let pkgs = rec {
          name = deriv.name + "-src-with-tags";
          createTagFiles = [
                { name = "${deriv.name}_haskell";
-                 # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-                 tagCmd = "${toString hasktags}/bin/hasktags-modified --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+                 # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+                 tagCmd = "${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
           ];
        };
     };
   };
 
-  # this may change in the future 
+  # this may change in the future
   ghc68extraLibs = (import ../misc/ghc68extraLibs ) {
     # lib like stuff
     inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip zlib;
     # used (non haskell) libraries (ffi etc)
-    inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype getConfig libpng;
+    inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype getConfig libpng bzip2 pcre;
 
     executables = ghc68executables;
     wxGTK = wxGTK26;
@@ -1445,9 +1452,10 @@ let pkgs = rec {
 
   # Executables compiled by this ghc68 - I'm too lazy to add them all as additional file in here
   ghc68executables = recurseIntoAttrs (import ../misc/ghc68executables {
-    inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib;
+    inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib getConfig;
     inherit X11;
     inherit (xlibs) xmessage;
+    inherit pkgs; # passing pkgs to add the possibility for the user to add his own executables. pkgs is passed. 
   });
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
