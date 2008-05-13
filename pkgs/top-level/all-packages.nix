@@ -5554,7 +5554,7 @@ let pkgs = rec {
   */
 
   mutt = import ../applications/networking/mailreaders/mutt {
-    inherit fetchurl stdenv ncurses which openssl;
+    inherit fetchurl stdenv ncurses which openssl gdbm;
   };
 
   msmtp = import ../applications/networking/msmtp {
