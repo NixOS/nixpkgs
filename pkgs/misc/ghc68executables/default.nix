@@ -55,11 +55,11 @@ executables = lib.mapAttrs ( name_dummy : a : ghcCabalExecutableFun (a // { libs
     libsFun = x: [ x.base x.haskell98 x.template_haskell ];
     src = fetchurl { url = http://hackage.haskell.org/packages/archive/HXQ/0.7/HXQ-0.7.tar.gz; sha256 = "0zwar8fykks1n86zm0alkdx4yg903hkdr66wffsji6fhhpkzcmrh";};
   };
-  leksah = {
-    name="leksah-darcs";
-    libsFun = x: [ x.base x.filepath x.parsec x.mtl x.process x.old_time x.containers x.pretty x.directory x.gtk2hs x.binary x.bytestring ];
-    src = sourceByName "leksah";
-  };
+  #leksah = {
+    #name="leksah-darcs";
+    #libsFun = x: [ x.base x.filepath x.parsec x.mtl x.process x.old_time x.containers x.pretty x.directory x.gtk2hs x.binary x.bytestring x.cabal_darcs x.ghc ];
+    #src = sourceByName "leksah";
+  #};
   #hsffig = 
   #  let version = "0.1.2-08-29-2007"; in
   #  rec {
