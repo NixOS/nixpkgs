@@ -18,6 +18,14 @@ stdenv.mkDerivation {
   # or openEXR is broken. I think OpenEXR should use include "" isntead of <> to
   # include files beeing in the same directory
   buildPhase = "
+cat >> user-config.py << EOF
+WITH_BF_OPENAL = 'true'
+WITH_BF_GAMEENGINE='true'
+WITH_BF_BULLET = 'true'
+WITH_BF_INTERNATIONAL = 'true'
+WITH_BF_OPENEXR = 'true'
+EOF
+
     sed -i -e \"s=##### END SETUP ##########=env['CPPFLAGS'].append(os.getenv('CPPFLAGS').split(':'))\\n##### END SETUP ##########=\" SConstruct\n"
     + " CPPFLAGS=-I$openexr/include/OpenEXR"
     + " scons PREFIX=\$out/nix-support"
