@@ -536,6 +536,10 @@ let pkgs = rec {
             bash makeWrapper;
   };
 
+  diffstat = import ../tools/text/diffstat {
+    inherit fetchurl stdenv;
+  };
+
   diffutils = useFromStdenv "diffutils"
     (import ../tools/text/diffutils {
       inherit fetchurl stdenv coreutils;
