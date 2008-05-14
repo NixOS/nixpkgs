@@ -738,6 +738,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  iodine = import ../tools/networking/iodine {
+    inherit stdenv fetchurl zlib nettools;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
