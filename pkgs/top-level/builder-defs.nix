@@ -17,6 +17,9 @@ args: with args; with stringsWithDeps; with lib;
 		else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
 		else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
 
+		# Mostly for manually specified directories..
+		else if (hasSuffixHack "/" s) then "dir"
+
 		# Last block - for single files!! It should be always after .tar.*
 		else if (hasSuffixHack ".bz2" s) then "plain-bz2"
 
@@ -192,6 +195,10 @@ args: with args; with stringsWithDeps; with lib;
 		cd \"$( unzip -lqq '${s}' | tail -1 | 
 			sed -e 's@^\\(\\s\\+[-0-9:]\\+\\)\\{3,3\\}\\s\\+\\([^/]\\+\\)/.*@\\2@' )\"
 	" else if (archiveType s) == "cvs-dir" then "
+		cp -r '${s}' .
+		cd \$(basename ${s})
+		chmod u+rwX -R .
+	" else if (archiveType s) == "dir" then "
 		cp -r '${s}' .
 		cd \$(basename ${s})
 		chmod u+rwX -R .

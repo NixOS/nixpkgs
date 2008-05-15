@@ -3933,6 +3933,10 @@ let pkgs = rec {
     inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
   };
 
+  squidHead = import ../servers/squid/3.head.nix {
+    inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
+  };
+
   tomcat5 = import ../servers/http/tomcat {
     inherit fetchurl stdenv jdk;
   };
@@ -5291,6 +5295,15 @@ let pkgs = rec {
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
+
+  funpidgin = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/funpidgin "2.4.1") {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
+      gtkspell aspell gettext ncurses;
+    GStreamer = gst_all.gstreamer;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) startupnotification;
+    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto;
+  } null;
 
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
