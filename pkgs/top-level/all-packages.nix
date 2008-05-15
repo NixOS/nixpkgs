@@ -5374,7 +5374,7 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
-  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.3.9-0" ) {
+  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.4.1-1" ) {
     inherit stdenv fetchurl libtool; 
   };
 
