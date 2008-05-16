@@ -6529,6 +6529,9 @@ let pkgs = rec {
       texLiveBeamer
     ];
   } null)
+
+  You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
+  Just installing a few packages doesn't work.
   */
   texLive = texLiveFun null;
   texLiveAggregationFun = builderDefsPackage (import ../misc/tex/texlive/aggregate.nix);
