@@ -11,6 +11,7 @@ rec {
     , compressBlanksInIndex ? true
     , packages ? []
     , searchRelativeTo ? dirOf (toString rootFile) # !!! duplication
+    , copySources ? false
     }:
 
     assert generatePDF -> !generatePS;
@@ -22,7 +23,7 @@ rec {
       copyIncludes = ./copy-includes.pl;
       
       inherit rootFile generatePDF generatePS extraFiles
-        compressBlanksInIndex;
+        compressBlanksInIndex copySources;
 
       includes = import (findLaTeXIncludes {inherit rootFile searchRelativeTo;});
       

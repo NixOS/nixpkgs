@@ -2,6 +2,9 @@ source $stdenv/setup
 
 ensureDir $out
 
+mkdir root
+cd root
+
 startDir=$(perl $copyIncludes $includes)
 cd $startDir
 
@@ -46,6 +49,11 @@ runLaTeX() {
 }
 
 echo
+
+
+if test -n "$copySources"; then
+    cp -prd $TMPDIR/root $out/tex-srcs
+fi
 
 
 echo "PASS 1..."
