@@ -5374,21 +5374,17 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
-  imagemagickFun = lib.sumArgs (selectVersion ../applications/graphics/ImageMagick "6.4.1-1" ) {
-    inherit stdenv fetchurl libtool; 
+  imagemagick = import ../applications/graphics/ImageMagick {
+    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
+      libjpeg libpng libtiff libxml2 zlib libtool;
+    inherit (xlibs) libX11;
   };
 
-  imagemagick = imagemagickFun {
-    inherit bzip2 freetype graphviz ghostscript libjpeg libpng libtiff 
-      libxml2 zlib;
+  imagemagickBig = import ../applications/graphics/ImageMagick {
+    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
+      libjpeg libpng libtiff libxml2 zlib tetex librsvg libtool;
     inherit (xlibs) libX11;
-  } null;
-
-  imagemagickBig = imagemagickFun {
-    inherit bzip2 freetype graphviz ghostscript libjpeg libpng libtiff 
-      libxml2 zlib tetex librsvg;
-    inherit (xlibs) libX11;
-  } null;
+  };
 
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
@@ -6508,7 +6504,7 @@ let pkgs = rec {
   */
 
   texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript;
+    inherit stdenv perl tetex graphviz ghostscript imagemagick;
   };
 
   texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {

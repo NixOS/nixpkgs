@@ -1,5 +1,7 @@
 args: with args;
 
+let version = "6.4.1-1"; in
+
 stdenv.mkDerivation (rec {
   name = "ImageMagick-${version}";
 
@@ -8,7 +10,7 @@ stdenv.mkDerivation (rec {
       "ftp://ftp.imagemagick.org/pub/ImageMagick/${name}.tar.bz2"
       "http://ftp.surfnet.nl/pub/ImageMagick/${name}.tar.bz2"
     ];
-    sha256 = "0ynn8gxixjb16xhg60hp2sbfymh03y5qxxgffwlchciiylw9dlvd";
+    sha256 = "0a8defbfa867bb5e969f898d9a3b65a8c4f6952cb71411b40f005dd0a183644e";
   };
 
   configureFlags = ''

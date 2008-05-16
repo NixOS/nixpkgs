@@ -95,15 +95,15 @@ rec {
 
     pkgs.stdenv.mkDerivation {
       inherit name preamble body;
-      buildCommand = "
+      buildCommand = ''
         touch $out
-        echo '\\documentclass{article}' >> $out
-        echo '\\pagestyle{empty}' >> $out
-        if test -n \"$preamble\"; then cat $preamble >> $out; fi
-        echo '\\begin{document}' >> $out
+        echo '\documentclass{article}' >> $out
+        echo '\pagestyle{empty}' >> $out
+        if test -n "$preamble"; then cat $preamble >> $out; fi
+        echo '\begin{document}' >> $out
         cat $body >> $out
-        echo '\\end{document}' >> $out
-      ";
+        echo '\end{document}' >> $out
+      '';
     };
 
 
@@ -116,8 +116,10 @@ rec {
     pkgs.stdenv.mkDerivation {
       name = "png";
       inherit postscript;
+
+      buildInputs = [pkgs.imagemagick pkgs.ghostscript];
       
-      buildCommand = "
+      buildCommand = ''
         if test -d $postscript; then
           input=$(ls $postscript/*.ps)
         else
@@ -125,19 +127,17 @@ rec {
           ln -s $postscript $input
         fi
 
-        # !!! Quick hack: no ImageMagick in Nixpkgs yet!
-        export PATH=/usr/bin:$PATH
         ensureDir $out
-        convert -units PixelsPerInch \\
-          -density 300 \\
-          -trim \\
-          -matte \\
-          -transparent '#ffffff' \\
-          -type PaletteMatte \\
-          +repage \\
-          $input \\
-          \"$out/$(basename $input .ps).png\"
-      ";
+        convert -units PixelsPerInch \
+          -density 300 \
+          -trim \
+          -matte \
+          -transparent '#ffffff' \
+          -type PaletteMatte \
+          +repage \
+          $input \
+          "$out/$(basename $input .ps).png"
+      ''; # */
     };
 
 
@@ -162,5 +162,21 @@ rec {
     };
 
 
-      
+  # Convert a piece of TeX code to a PDF.
+  simpleTeXToPDF =
+    { preamble ? null
+    , body
+    , name ? baseNameOf (toString body)
+    , packages ? []
+    }:
+
+    runLaTeX {
+      rootFile = wrapSimpleTeX {
+        inherit body preamble;
+      };
+      inherit packages;
+      searchRelativeTo = dirOf (toString body);
+    };
+
+
 }
