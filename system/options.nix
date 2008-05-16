@@ -1216,19 +1216,26 @@
         ";
       };
 
-      isSynaptics = mkOption {
-        default = false;
-        example = true;
-        description = "
-          Whether to replace mouse with touchpad.
-        ";
-      };
-
-      devSynaptics = mkOption {
-        default = "/dev/input/event0";
-        description = "
-          Event device for Synaptics touchpad.
-        ";
+      synaptics = {
+        enable = mkOption {
+          default = false;
+          example = true;
+          description = "
+            Whether to replace mouse with touchpad.
+          ";
+        };
+	dev = mkOption {
+          default = "/dev/input/event0";
+          description = "
+            Event device for Synaptics touchpad.
+          ";
+        };
+	minSpeed = mkOption {
+	  default = "0.06";
+	};
+	maxSpeed = mkOption {
+	  default = "0.12";
+	};
       };
 
       layout = mkOption {

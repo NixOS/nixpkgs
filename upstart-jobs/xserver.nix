@@ -49,7 +49,7 @@ let
     ++ optional (videoDriver == "intel") xorg.xf86videointel
     ++ optional (videoDriver == "nv") xorg.xf86videonv
     ++ optional (videoDriver == "ati") xorg.xf86videoati
-    ++ (optional cfg.isSynaptics ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
+    ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
 
   configFile = stdenv.mkDerivation {
@@ -58,11 +58,11 @@ let
     inherit fontDirectories videoDriver resolutions;
     isClone = if cfg.isClone then "on" else "off";
 
-    synapticsInputDevice = if cfg.isSynaptics then ''
+    synapticsInputDevice = if cfg.synaptics.enable then ''
       Section "InputDevice"
         Identifier "Touchpad[0]"
         Driver "synaptics"
-        Option "Device" "${cfg.devSynaptics}"
+        Option "Device" "${cfg.synaptics.dev}"
         Option "Protocol" "PS/2"
         Option "LeftEdge" "1700"
         Option "RightEdge" "5300"
@@ -73,8 +73,8 @@ let
         Option "MaxTapTime" "180"
         Option "MaxTapMove" "220"
         Option "VertScrollDelta" "100"
-        Option "MinSpeed" "0.06"
-        Option "MaxSpeed" "0.12"
+        Option "MinSpeed" "${cfg.synaptics.minSpeed}"
+        Option "MaxSpeed" "${cfg.synaptics.maxSpeed}"
         Option "AccelFactor" "0.0010"
         Option "SHMConfig" "on"
         Option "Repeater" "/dev/input/mice"
@@ -91,7 +91,7 @@ let
     xkbModel = cfg.xkbModel;
     layout = cfg.layout;
 
-    corePointer = if cfg.isSynaptics then "Touchpad[0]" else "Mouse[0]";
+    corePointer = if cfg.synaptics.enable then "Touchpad[0]" else "Mouse[0]";
 
     internalAGPGART =
       if cfg.useInternalAGPGART == "yes" then
