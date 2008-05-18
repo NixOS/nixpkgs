@@ -396,8 +396,16 @@ args: with args; with stringsWithDeps; with lib;
           GHC_PACKAGE_PATH=\$PACKAGE_DB ./register.sh
         " ["defCreateEmptyPackageDatabaseAndSetupHook" "defCabalSetupCmd"];
 
-	phaseNames = args.phaseNames ++ 
-	  ["doForceShare" "doPropagate"];
+	realPhaseNames = args.phaseNames ++ 
+	  ["doForceShare" "doPropagate"]
+	  ++
+	  (optional (getAttr ["alwaysFail"] false args) "doFail")
+	  ;
+
+	doFail = noDepEntry "
+	  echo 'Failing to keep builddir (and to invalidate result).'
+	  a() { return 127; } ; a ;
+	";
         
 	extraDerivationAttrs = lib.getAttr ["extraDerivationAttrs"] {} args;
 
@@ -407,7 +415,7 @@ args: with args; with stringsWithDeps; with lib;
 	stdenv.mkDerivation ((rec {
 	  inherit (localDefs) name;
 	  builder = writeScript (name + "-builder")
-	    (textClosure localDefs localDefs.phaseNames);
+	    (textClosure localDefs localDefs.realPhaseNames);
 	  meta = localDefs.meta // {inherit src;};
 	}) // (if localDefs ? propagatedBuildInputs then {
 	  inherit (localDefs) propagatedBuildInputs;
