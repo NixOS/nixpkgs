@@ -5302,7 +5302,7 @@ let pkgs = rec {
     GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
-    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto;
+    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
   } null;
 
   gimp = import ../applications/graphics/gimp {

@@ -9,7 +9,7 @@ rec {
     GStreamer startupnotification
     libxml2 openssl nss
     libXScrnSaver ncurses scrnsaverproto 
-    libX11 xproto];
+    libX11 xproto kbproto];
 
   propagatedBuildInputs = [
     pkgconfig gtk perl perlXMLParser gettext
