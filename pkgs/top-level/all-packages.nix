@@ -4807,13 +4807,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  libertineFun = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7") {
+  libertine = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7") {
     inherit fontforge;
-  };
-  libertine = libertineFun null;
-  libertineBinFun = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7.bin") {
-  };
-  libertineBin = libertineBinFun null;
+  } null;
+  libertineBin = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7.bin") {
+  } null;
 
   lmodernFun = builderDefsPackage (selectVersion ../data/fonts/lmodern "1.010") {
   };
