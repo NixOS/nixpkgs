@@ -2115,7 +2115,7 @@ rec {
   };
 
   acl = import ../development/libraries/acl {
-    inherit stdenv fetchurl autoconf libtool gettext attr;
+    inherit stdenv fetchurl gettext attr libtool;
   };
 
   /*
@@ -2166,7 +2166,7 @@ rec {
   };
 
   attr = import ../development/libraries/attr {
-    inherit stdenv fetchurl autoconf libtool gettext;
+    inherit stdenv fetchurl libtool gettext;
   };
 
   audiofile = import ../development/libraries/audiofile {
