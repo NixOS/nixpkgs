@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
-, libxslt, tcl, tk, makeWrapper }:
+, libxslt, tcl, tk, makeWrapper, svnSupport, subversion, perlLibs }:
 
 stdenv.mkDerivation rec {
   name = "git-1.5.5";
@@ -33,6 +33,18 @@ stdenv.mkDerivation rec {
        else
          ''echo "NOT installing Emacs mode.  Set \`git.useEmacs' to \`true' in your"
 	   echo "\`~/.nixpkgs/config.nix' file to change it." '')
+   + (if svnSupport then
+
+      ''# wrap git-svn
+        gitperllib=$out/lib/site_perl
+        for i in ${builtins.toString perlLibs}; do
+          gitperllib=$gitperllib:$i/lib/site_perl
+        done
+	wrapProgram "$out/bin/git-svn"			\
+		     --set GITPERLLIB "$gitperllib"    \
+		     --prefix PATH : "${subversion}/bin" ''
+       else ''# rm git-svn
+       rm $out/bin/git-svn '' )
    + ''# Install man pages and Info manual
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''

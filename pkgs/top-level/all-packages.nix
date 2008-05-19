@@ -5315,12 +5315,13 @@ let pkgs = rec {
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_42 libxslt
       cpio tcl tk makeWrapper;
-    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
-  };
 
-  gitsvnwrapper = import ../applications/version-management/git/git-svn-wrapper.nix {
-    inherit subversion git stdenv;
+    # for git-svn support:
+    svnSupport = getConfig [ "git" "svnSupport" ] false;
+    inherit subversion ;
     perlLibs = [ perlLWP perlURI perlTermReadKey subversion ];
+
+    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
   };
 
   gkrellm = import ../applications/misc/gkrellm {
