@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation {
   name = "coreutils-6.11";
@@ -12,4 +12,6 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
   };
+
+  buildInputs = stdenv.lib.optional aclSupport acl;
 }

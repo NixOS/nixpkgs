@@ -440,7 +440,8 @@ rec {
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
     {
-      inherit fetchurl stdenv;
+      inherit fetchurl stdenv acl;
+      aclSupport = stdenv.isLinux;
     });
 
   cpio = import ../tools/archivers/cpio {
@@ -2114,9 +2115,10 @@ rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  acl = import ../development/libraries/acl {
-    inherit stdenv fetchurl gettext attr libtool;
-  };
+  acl = useFromStdenv "acl"
+    (import ../development/libraries/acl {
+      inherit stdenv fetchurl gettext attr libtool;
+    });
 
   /*
   agg = import ../development/libraries/agg {
@@ -2165,9 +2167,10 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  attr = import ../development/libraries/attr {
-    inherit stdenv fetchurl libtool gettext;
-  };
+  attr = useFromStdenv "acl"
+    (import ../development/libraries/attr {
+      inherit stdenv fetchurl libtool gettext;
+    });
 
   audiofile = import ../development/libraries/audiofile {
     inherit fetchurl stdenv;

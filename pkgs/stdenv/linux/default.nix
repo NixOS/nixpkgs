@@ -4,7 +4,8 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 
-{system, allPackages}:
+# The function defaults are for easy testing.
+{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix}:
 
 rec {
 
@@ -98,7 +99,7 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {gcc, staticGlibc, extraAttrs ? {}}:
+    {gcc, staticGlibc, extraAttrs ? {}, extraPath ? []}:
     
     import ../generic {
       name = "stdenv-linux-boot";
@@ -106,9 +107,7 @@ rec {
       preHook = ./scripts/prehook.sh;
       stdenv = stdenvInitial;
       shell = bootstrapTools.bash;
-      initialPath = [
-        staticTools
-      ];
+      initialPath = [staticTools] ++ extraPath;
       inherit gcc extraAttrs;
     };
 
@@ -153,6 +152,14 @@ rec {
     bootStdenv = stdenvLinuxBoot2;
   };
 
+
+  # Ugh, some packages in stdenvLinuxBoot3Pkgs need "sh", so create a
+  # package that contains just a symlink to bash.
+  shSymlink = stdenvLinuxBoot2Pkgs.runCommand "sh-symlink" {} ''
+    ensureDir $out/bin
+    ln -s $shell $out/bin/sh
+  '';
+
   
   # 6) Construct a third stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
@@ -165,6 +172,7 @@ rec {
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
     };
     extraAttrs = {inherit curl;};
+    extraPath = [stdenvLinuxBoot2Pkgs.replace shSymlink];
   };
 
   
@@ -178,7 +186,7 @@ rec {
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
   #    Binutils built above, and adds in dynamically linked versions
   #    of all other tools.
-  stdenvLinux = (import ../generic) {
+  stdenvLinux = import ../generic {
     name = "stdenv-linux";
     preHook = ./scripts/prehook.sh;
     initialPath = [
@@ -202,7 +210,8 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
       inherit (stdenvLinuxBoot3Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
-        gnumake gnused gnutar gnugrep patch patchelf;
+        gnumake gnused gnutar gnugrep patch patchelf
+        attr acl;
     };
   };
 
