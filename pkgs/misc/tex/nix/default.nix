@@ -130,7 +130,7 @@ rec {
 
         ensureDir $out
         convert -units PixelsPerInch \
-          -density 300 \
+          -density 600 \
           -trim \
           -matte \
           -transparent '#ffffff' \
