@@ -1,18 +1,20 @@
 {stdenv, fetchurl, openldap}:
    
 stdenv.mkDerivation {
-  name = "nss_ldap-254";
+  name = "nss_ldap-260";
    
   src = fetchurl {
-    url = http://www.padl.com/download/nss_ldap-254.tar.gz;
-    md5 = "00475b790d3aff3ccd40a1ab4520965e";
+    url = http://www.padl.com/download/nss_ldap-260.tar.gz;
+    sha256 = "0kn022js39mqmy7g5ba911q46223vk7vcf51x28rbl86lp32zv4v";
   };
 
-  preInstall = "
+  preInstall = ''
     installFlagsArray=(INST_UID=$(id -u) INST_GID=$(id -g) LIBC_VERS=2.5 NSS_VERS=2)
-    substituteInPlace Makefile --replace '/usr$(libdir)' $TMPDIR
+    substituteInPlace Makefile \
+      --replace '/usr$(libdir)' $TMPDIR \
+      --replace 'install-data-local:' 'install-data-local-disabled:'
     ensureDir $out/etc
-  ";
+  '';
 
   buildInputs = [openldap];
 }
