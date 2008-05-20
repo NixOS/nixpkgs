@@ -2167,7 +2167,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  attr = useFromStdenv "acl"
+  attr = useFromStdenv "attr"
     (import ../development/libraries/attr {
       inherit stdenv fetchurl libtool gettext;
     });
