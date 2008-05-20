@@ -1232,11 +1232,11 @@
         };
 	minSpeed = mkOption {
 	  default = "0.06";
-          description = "TODO";
+          description = "Cursor speed factor for precision finger motion";
 	};
 	maxSpeed = mkOption {
 	  default = "0.12";
-          description = "TODO";
+          description = "Cursor speed factor for highest-speed finger motion";
 	};
       };
 
