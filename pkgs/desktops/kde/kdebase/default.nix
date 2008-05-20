@@ -5,7 +5,7 @@
 let version = "3.5.7"; in
 
 stdenv.mkDerivation {
-  name = "kdebase-3.5.7";
+  name = "kdebase-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdebase-${version}.tar.bz2";
@@ -21,15 +21,18 @@ stdenv.mkDerivation {
     xlibs.scrnsaverproto xlibs.libXScrnSaver
   ];
 
-  configureFlags = "
+  configureFlags = ''
     --without-arts 
     --with-ssl-dir=${openssl}
     --with-extra-includes=${libjpeg}/include
-  ";
+  '';
 
   # Quick hack to work around a faulty dependency in
   # konqueror/keditbookmarks/Makefile.am (${includedir} should be
   # ${kdelibs} or so).
-  preBuild = "ensureDir $out/include; ln -s ${kdelibs}/include/kbookmarknotifier.h $out/include/";
+  preBuild = ''
+    ensureDir $out/include
+    ln -s ${kdelibs}/include/kbookmarknotifier.h $out/include/
+  '';
   postInstall = "rm $out/include/kbookmarknotifier.h";
 }
