@@ -576,8 +576,8 @@ rec {
   };
 
   gnupg2 = import ../tools/security/gnupg2 {
-	  inherit fetchurl stdenv readline openldap bzip2 zlib libgpgerror pth
-	    libgcrypt libassuan libksba libusb curl;
+    inherit fetchurl stdenv readline openldap bzip2 zlib libgpgerror pth
+      libgcrypt libassuan libksba libusb curl;
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
@@ -2172,10 +2172,6 @@ rec {
       inherit stdenv fetchurl libtool gettext;
     });
 
-  audiofile = import ../development/libraries/audiofile {
-    inherit fetchurl stdenv;
-  };
-
   axis = import ../development/libraries/axis {
     inherit fetchurl stdenv;
   };
@@ -2417,12 +2413,12 @@ rec {
   };
 
   gnutls = import ../development/libraries/gnutls {
-	  inherit fetchurl stdenv libgcrypt zlib lzo;
+    inherit fetchurl stdenv libgcrypt zlib lzo;
   };
 
   gpgme = import ../development/libraries/gpgme {
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2;
-	inherit (gtkLibs) glib;
+    inherit (gtkLibs) glib;
   };
 
   # gnu scientific library
@@ -2764,6 +2760,10 @@ rec {
   };
 
   libsndfile = import ../development/libraries/libsndfile {
+    inherit fetchurl stdenv;
+  };
+
+  libtasn1 = import ../development/libraries/libtasn1 {
     inherit fetchurl stdenv;
   };
 
@@ -4181,13 +4181,7 @@ rec {
     inherit (gtkLibs) glib gtk pango;
   };
 
-  librsvg = import ../development/libraries/librsvg {
-    inherit fetchurl stdenv;
-    inherit libxml2 pkgconfig cairo fontconfig freetype;
-    inherit (gtkLibs) glib pango gtk;
-    #gtkLibs = gtkLibs210;          #need gtk+
-    libart = gnome.libart_lgpl;
-  };
+  librsvg = gnome.librsvg;
 
   libsepol = import ../os-specific/linux/libsepol {
     inherit fetchurl stdenv;
@@ -5804,12 +5798,13 @@ rec {
 
 
   gnome = recurseIntoAttrs (import ../desktops/gnome {
-    inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt zlib libxml2 libxslt
-            perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
-            gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
-            libcm python dbus_glib ncurses which libxml2Python
-            iconnamingutils openssl hal samba fam;
+    inherit
+      fetchurl stdenv pkgconfig
+      flex bison popt zlib libxml2 libxslt
+      perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
+      gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
+      libcm python dbus_glib ncurses which libxml2Python
+      iconnamingutils openssl hal samba fam libgcrypt libtasn1;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {
