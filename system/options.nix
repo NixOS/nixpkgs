@@ -1232,9 +1232,11 @@
         };
 	minSpeed = mkOption {
 	  default = "0.06";
+          description = "TODO";
 	};
 	maxSpeed = mkOption {
 	  default = "0.12";
+          description = "TODO";
 	};
       };
 
