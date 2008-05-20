@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "libcap-2.07";
+  name = "libcap-2.09";
   
   src = fetchurl {
-    url = mirror://kernel/linux/libs/security/linux-privs/kernel-2.6/libcap-2.07.tar.gz;
-    sha256 = "1zz8nyqzb15lf31akwyzzfdhyhf9xvl9rqih90m9kypmcmc4yz5q";
+    url = mirror://kernel/linux/libs/security/linux-privs/kernel-2.6/libcap-2.09.tar.bz2;
+    sha256 = "0sq15y8yfm7knf6jhqcycb9wz52n3r1sriii66xk0djvd4hw69jr";
   };
   
   buildInputs = [attr];
