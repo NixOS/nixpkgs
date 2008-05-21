@@ -368,6 +368,8 @@ rec {
 
         echo "initialising RPM DB..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
+          ldconfig -v || true
+        PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm --initdb
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
@@ -657,6 +659,16 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/8/Fedora/i386/os;
     } // args);
 
+    fedora9i386 = args: makeImageFromRPMDist ({
+      name = "fedora-9-i386";
+      fullName = "Fedora 9 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/9/Fedora/i386/os/repodata/primary.xml.gz;
+        sha256 = "18780xgyag5acx79warcpvzlfkm0mni8xawl6jjvgxg9n3lp6zg0";
+      };
+      urlPrefix = mirror://fedora/linux/releases/9/Fedora/i386/os;
+    } // args);
+
     opensuse103i386 = args: makeImageFromRPMDist ({
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -796,6 +808,7 @@ rec {
     fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages; };
     fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
+    fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages; };
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
