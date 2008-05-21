@@ -131,10 +131,17 @@ rec {
     propagatedBuildInputs = [libxml2 libart_lgpl];
   };
 
-  libgnomeprintui = import ./libgnomeprintui.nix {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
-    inherit gtk libgnomeprint libgnomecanvas gnomeicontheme;
-    input = desktop.libgnomeprintui;
+  libgnomeprintui = stdenv.mkDerivation {
+    inherit (desktop.libgnomeprintui) name src;
+
+    buildInputs = [
+      perl perlXMLParser pkgconfig gtk libgnomecanvas gnomeicontheme
+      gettext
+    ];
+
+    propagatedBuildInputs = [
+      libgnomeprint
+    ];
   };
 
   gtkhtml = import ./gtkhtml.nix {
