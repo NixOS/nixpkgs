@@ -1,15 +1,21 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "aufs-20080128";
-  
+  name = "aufs-20080508";
+
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/aufs-20080128.tar.bz2;
-    sha256 = "0732zp6wfss09x9d6n0a3v65rifn739m9nffi5d3952vglg4va6l";
+    url = http://nixos.org/tarballs/aufs-20080508.tar.bz2;
+    sha256 = "1b7y6klk2fc6hf8w2la4k3yvxdvjibsnhv7d6mb12a7h13msjci6";
   };
 
-  buildPhase = ''
+  patches = [
+    (fetchurl {
+      url = http://www.mail-archive.com/aufs-users@lists.sourceforge.net/msg01091/04_sec_perm.dpatch;
+      sha256 = "0b51dpks4d5qgysrakv2c1v076d9hc8ln2cbh012zi75b45gn4ir";
+    })
+  ];
 
+  buildPhase = ''
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
     kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/source)
     tar xvfj ${kernel.src}

@@ -4355,6 +4355,9 @@ let pkgs = rec {
         };
         extraConfig = "CONFIG_FB_CON_DECOR=y";
       }
+      { name = "sec_perm-2.6.24";
+        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+      }
     ];
     extraConfig =
       lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
