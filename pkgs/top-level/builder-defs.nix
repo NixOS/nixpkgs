@@ -13,6 +13,7 @@ args: with args; with stringsWithDeps; with lib;
 		(if hasSuffixHack ".tar" s then "tar"
 		else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
 		else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) then "tbz2"
+		else if (hasSuffixHack ".tar.lzma" s) then "tar.lzma"
 		else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
 		else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
 		else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
@@ -190,6 +191,9 @@ args: with args; with stringsWithDeps; with lib;
 	" else if (archiveType s) == "tbz2" then "
 		tar xvjf '${s}'
 		cd \"\$(tar tjf '${s}' | head -1 | sed -e 's@/.*@@' )\"
+	" else if (archiveType s) == "tar.lzma" then "
+		unlzma -d -c <'${s}' | tar xv
+		cd \"\$(unlzma -d -c <'${s}' | tar t | head -1 | sed -e 's@/.*@@' )\"
 	" else if (archiveType s) == "zip" then "
 		unzip '${s}'
 		cd \"$( unzip -lqq '${s}' | tail -1 | 

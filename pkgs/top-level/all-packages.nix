@@ -4078,6 +4078,12 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  gpm = builderDefsPackage (selectVersion ../servers/gpm "1.20.3pre6") {
+    inherit lzma ncurses;
+    bison = bison23;
+    flex = flex2535;
+  } null;
+
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libvolume_id perl perlXMLParser
