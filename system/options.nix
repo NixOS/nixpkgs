@@ -75,13 +75,20 @@
       ";
     };
 
-    kernel = mkOption {
-      default = pkgs: pkgs.kernel;
+    kernelPackages = mkOption {
+      default = pkgs: pkgs.kernelPackages;
+      example = pkgs: pkgs.kernelPackages_2_6_25;
       description = "
-        Function that takes package collection and returns kernel 
-        package. Do not collect old generations after changing it
-        until you get to boot successfully. In principle, you can 
-        specify a kernel that will build, but not boot.
+        This option allows you to override the Linux kernel used by
+        NixOS.  Since things like external kernel module packages are
+        tied to the kernel you're using, it also overrides those.
+        This option is a function that takes Nixpkgs as an argument
+        (as a convenience), and returns an attribute set containing at
+        the very least an attribute <varname>kernel</varname>.
+        Additional attributes may be needed depending on your
+        configuration.  For instance, if you use the NVIDIA X driver,
+        then it also needs to contain an attribute
+        <varname>nvidiaDrivers</varname>.
       ";
     };
 

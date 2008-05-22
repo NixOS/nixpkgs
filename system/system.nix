@@ -33,11 +33,14 @@ rec {
 
   nix = config.environment.nix pkgs;
 
-  kernel = config.boot.kernel pkgs;
+  kernelPackages = config.boot.kernelPackages pkgs;
+
+  kernel = kernelPackages.kernel;
 
   rootModules = 
     config.boot.initrd.extraKernelModules ++
     config.boot.initrd.kernelModules;
+
 
 
   # Tree of kernel modules.  This includes the kernel, plus modules
@@ -46,11 +49,10 @@ rec {
   # directory.
   modulesTree = pkgs.aggregateModules (
     [kernel]
-    ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi
-    ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi
+    ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
-    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") pkgs.nvidiaDrivers
-    ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007
+    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
+    ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
     ++ config.boot.extraModulePackages
   );
 
@@ -116,21 +118,24 @@ rec {
       { object = bootStage1;
         symlink = "/init";
       }
-    ] ++ (if config.boot.initrd.enableSplashScreen then [
-      { object = pkgs.runCommand "splashutils" {} ''
-          ensureDir $out/bin
-          cp ${pkgs.splashutils}/bin/splash_helper $out/bin
-        '';
-        suffix = "/bin/splash_helper";
-        symlink = "/sbin/splash_helper";
-      }
-      { object = import ../helpers/unpack-theme.nix {
-          inherit (pkgs) stdenv;
-          theme = config.services.ttyBackgrounds.defaultTheme;
-        };
-        symlink = "/etc/splash";
-      }
-    ] else []);
+    ] ++
+      pkgs.lib.optionals
+        (config.boot.initrd.enableSplashScreen && kernelPackages.kernel.features ? fbSplash)
+        [
+          { object = pkgs.runCommand "splashutils" {} ''
+              ensureDir $out/bin
+              cp ${kernelPackages.splashutils}/bin/splash_helper $out/bin
+            '';
+            suffix = "/bin/splash_helper";
+            symlink = "/sbin/splash_helper";
+          }
+          { object = import ../helpers/unpack-theme.nix {
+              inherit (pkgs) stdenv;
+              theme = config.services.ttyBackgrounds.defaultTheme;
+            };
+            symlink = "/etc/splash";
+          }
+        ];
   };
 
 
@@ -171,7 +176,8 @@ rec {
               
   # The services (Upstart) configuration for the system.
   upstartJobs = import ../upstart-jobs/default.nix {
-    inherit config pkgs nix modprobe nssModulesPath nixEnvVars optionDeclarations;
+    inherit config pkgs nix modprobe nssModulesPath nixEnvVars
+      optionDeclarations kernelPackages;
   };
 
 

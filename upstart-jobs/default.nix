@@ -1,4 +1,4 @@
-{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations}:
+{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations, kernelPackages}:
 
 let 
 
@@ -391,9 +391,10 @@ let
   )
 
   # Transparent TTY backgrounds.
-  ++ optional config.services.ttyBackgrounds.enable
+  ++ optional (config.services.ttyBackgrounds.enable && kernelPackages.kernel.features ? fbSplash)
     (import ../upstart-jobs/tty-backgrounds.nix {
-      inherit (pkgs) stdenv splashutils;
+      inherit (pkgs) stdenv;
+      inherit (kernelPackages) splashutils;
       
       backgrounds =
       

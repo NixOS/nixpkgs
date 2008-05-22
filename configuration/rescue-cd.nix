@@ -19,7 +19,9 @@ rec {
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
-      extraModulePackages = [pkgs.aufs];
+      extraModulePackages = [system.kernelPackages.aufs];
+      
+      #kernelPackages = pkgs: pkgs.kernelPackages_2_6_25;
       
       initrd = {
         extraKernelModules = [
@@ -263,7 +265,7 @@ rec {
       { source = grubCfg;
         target = "boot/grub/menu.lst";
       }
-      { source = pkgs.kernel + "/vmlinuz";
+      { source = system.kernel + "/vmlinuz";
         target = "boot/vmlinuz";
       }
       { source = system.initialRamdisk + "/initrd";
