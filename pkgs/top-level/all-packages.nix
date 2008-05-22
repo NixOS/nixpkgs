@@ -3999,14 +3999,6 @@ let pkgs = rec {
 
   alsaUtils = alsa.alsaUtils;
 
-  atherosFun = lib.sumArgs (selectVersion ../os-specific/linux/atheros "0.9.4") {
-    inherit fetchurl stdenv builderDefs;
-  };
-
-  atherosFunCurrent = kernel: atherosFun {
-    inherit kernel;
-  } null;
-
   blcrFun = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
   };
@@ -4411,6 +4403,10 @@ let pkgs = rec {
       inherit fetchurl stdenv kernel;
     };
 
+    atheros = composedArgsAndFun (selectVersion ../os-specific/linux/atheros "0.9.4") {
+      inherit fetchurl stdenv builderDefs kernel;
+    } null;
+
     nvidiaDrivers = import ../os-specific/linux/nvidia {
       inherit stdenv fetchurl kernel xlibs gtkLibs;
     };
@@ -4418,6 +4414,10 @@ let pkgs = rec {
     wis_go7007 = import ../os-specific/linux/wis-go7007 {
       inherit fetchurl stdenv kernel ncurses fxload;
     };
+
+    kqemu = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
+      inherit kernel;
+    } null;
 
     # Actually, klibc builds fine with the static kernelHeaders, but
     # splashutils expects a klibc with patched headers...
@@ -4473,13 +4473,6 @@ let pkgs = rec {
   customKernel = lib.sumArgs (import ../os-specific/linux/kernel/linux.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools lib;
   };
-
-  kqemuFun = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
-    inherit builderDefs;
-  };
-
-  # No finished expression is provided - pick your own kernel
-  kqemuFunCurrent = kernel: kqemuFun {inherit kernel;};
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;

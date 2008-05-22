@@ -29,6 +29,8 @@
 , # A list of additional statements to be appended to the
   # configuration file.
   extraConfig ? []
+
+, features ? []
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -42,6 +44,12 @@ in
 stdenv.mkDerivation {
   name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
   builder = ./builder-custom.sh;
+
+  passthru = {
+    inherit version;
+    # Combine the `features' attribute sets of all the kernel patches.
+    features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
+  };
   
   inherit src;
   preConfigure = preConfigure;
