@@ -3291,6 +3291,10 @@ let pkgs = rec {
 
   wxGTK28 = wxGTK28deps null;
 
+  x264 = import ../development/libraries/x264 {
+    inherit fetchurl stdenv;
+  };
+
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
     flex = flex2533;
