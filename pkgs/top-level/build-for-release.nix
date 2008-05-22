@@ -78,7 +78,6 @@ let
     iana_etc
     iputils
     irssi
-    iwlwifi
     jakartaregexp
     jdkPlugin
     jetty
@@ -90,9 +89,6 @@ let
     kcachegrind
     kdebase
     keen4
-    kernel_2_6_23
-    kernel_2_6_25
-    klibc
     ktorrent
     kvm
     less
@@ -150,7 +146,6 @@ let
     sdf
     slim
     spidermonkey
-    splashutils
     ssmtp
     strace
     strategoxt
@@ -220,6 +215,13 @@ let
     gnomeutils
     metacity
     ;
+  inherit ((allPackages {system = "i686-linux";}).kernelPackages_2_6_23)
+    iwlwifi
+    kernel
+    klibc
+    splashutils
+    ;
+    kernelNew = ((allPackages {system = "i686-linux";}).kernelPackages_2_6_25).kernel;
   };
 
   x86_64LinuxPkgs = {inherit (allPackages {system = "x86_64-linux";})
@@ -231,13 +233,14 @@ let
     bison23
     gcc
     hello
-    iwlwifi
-    kernel_2_6_23
-    kernel_2_6_25
     libtool
     nixUnstable
     subversion
     ;    
+  inherit ((allPackages {system = "i686-linux";}).kernelPackages_2_6_23)
+    iwlwifi
+    kernel
+    ;
   };
   
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
