@@ -53,7 +53,7 @@ rec {
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
     ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-    ++ config.boot.extraModulePackages
+    ++ (config.boot.extraModulePackages pkgs)
   );
 
   

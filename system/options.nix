@@ -140,8 +140,8 @@
     };
 
     extraModulePackages = mkOption {
-      default = [];
-      # !!! example = [pkgs.aufs pkgs.nvidiaDrivers];
+      default = pkgs: [];
+      # !!! example = pkgs: [pkgs.aufs pkgs.nvidiaDrivers];
       description = ''
         A list of additional packages supplying kernel modules.
       '';

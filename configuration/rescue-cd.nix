@@ -19,7 +19,7 @@ rec {
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
-      extraModulePackages = [system.kernelPackages.aufs];
+      extraModulePackages = pkgs: [system.kernelPackages.aufs];
       
       #kernelPackages = pkgs: pkgs.kernelPackages_2_6_25;
       
