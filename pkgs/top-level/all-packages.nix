@@ -4007,10 +4007,6 @@ let pkgs = rec {
     inherit kernel;
   } null;
 
-  aufs = import ../os-specific/linux/aufs {
-    inherit fetchurl stdenv kernel;
-  };
-
   blcrFun = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
   };
@@ -4059,11 +4055,6 @@ let pkgs = rec {
 
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
-  };
-
-  ext3cowtools = import ../os-specific/linux/ext3cow-tools {
-    inherit stdenv fetchurl;
-    kernel_ext3cowpatched = kernel;
   };
 
   eject = import ../os-specific/linux/eject {
@@ -4140,10 +4131,6 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  iwlwifi = import ../os-specific/linux/iwlwifi {
-    inherit fetchurl stdenv kernel;
-  };
-
   iwlwifi3945ucode = import ../os-specific/linux/firmware/iwlwifi-3945-ucode {
     inherit fetchurl stdenv;
   };
@@ -4191,12 +4178,12 @@ let pkgs = rec {
     cross = "sparc-linux";
   };
 
-  kernel = kernel_2_6_23;
-
+  /*
   systemKernel =
     if getConfig ["kernel" "version"] "2.6.21" == "2.6.22" then kernel_2_6_22 else
     if getConfig ["kernel" "version"] "2.6.21" == "2.6.23" then kernel_2_6_23 else
     kernel;
+  */
 
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -4343,30 +4330,17 @@ let pkgs = rec {
   kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
-      /*
-      { # resume with resume=swap:/dev/xx
-        name = "tux on ice"; # (swsusp2)
-        patch = fetchurl {
-          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc5-for-2.6.23.14.patch.bz2";
-          sha256 = "187190rxbn9x1c6bwv59mwy1zhff8nn5ad58cfiz23wa5wrk4mif";
-        };
-        extraConfig = "
-          CONFIG_SUSPEND2=y
-          CONFIG_SUSPEND2_FILE=y
-          CONFIG_SUSPEND2_SWAP=y
-          CONFIG_CRYPTO_LZF=y
-        ";
-      }
-      */
       { name = "fbcondecor-0.9.4-2.6.25-rc6";
         patch = fetchurl {
           url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
           sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
         };
         extraConfig = "CONFIG_FB_CON_DECOR=y";
+        features = { fbConDecor = true; };
       }
       { name = "sec_perm-2.6.24";
         patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+        features = { secPermPatch = true; };
       }
     ];
     extraConfig =
@@ -4399,6 +4373,7 @@ let pkgs = rec {
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
+        features = { fbSplash = true; };
       }
       /* !!! Not needed anymore for the NixOS LiveCD - we have AUFS. */
       { name = "unionfs-2.2.2";
@@ -4418,6 +4393,83 @@ let pkgs = rec {
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
+  /* Kernel modules are inherently tied to a specific kernel.  So
+     rather than provide specific instances of those packages for a
+     specific kernel, we have a function that builds those packages
+     for a specific kernel.  This function can then be called for
+     whatever kernel you're using. */
+  
+  kernelPackagesFor = kernel: rec {
+
+    inherit kernel;
+
+    aufs = import ../os-specific/linux/aufs {
+      inherit fetchurl stdenv kernel;
+    };
+
+    iwlwifi = import ../os-specific/linux/iwlwifi {
+      inherit fetchurl stdenv kernel;
+    };
+
+    nvidiaDrivers = import ../os-specific/linux/nvidia {
+      inherit stdenv fetchurl kernel xlibs gtkLibs;
+    };
+
+    wis_go7007 = import ../os-specific/linux/wis-go7007 {
+      inherit fetchurl stdenv kernel ncurses fxload;
+    };
+
+    # Actually, klibc builds fine with the static kernelHeaders, but
+    # splashutils expects a klibc with patched headers...
+    klibc = import ../os-specific/linux/klibc {
+      inherit fetchurl stdenv perl bison mktemp kernel;
+    };
+
+    klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
+      inherit stdenv klibc;
+    };
+
+    splashutils = import ../os-specific/linux/splashutils {
+      inherit fetchurl stdenv klibc;
+      zlib = zlibStatic;
+      libjpeg = libjpegStatic;
+    };
+
+    ext3cowtools = import ../os-specific/linux/ext3cow-tools {
+      inherit stdenv fetchurl;
+      kernel_ext3cowpatched = kernel;
+    };
+
+    ov511 = import ../os-specific/linux/ov511 {
+      inherit fetchurl kernel;
+      stdenv = overrideGCC stdenv gcc34;
+    };
+
+    # State Nix
+    snix = import ../tools/package-management/snix {
+      inherit fetchurl stdenv perl curl bzip2 openssl;
+      inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
+
+      aterm = aterm242fixes;
+      db4 = db45;
+
+      bison = bison23;
+      flex = flex2533;
+
+      inherit ext3cowtools e3cfsprogs rsync;
+      ext3cow_kernel = kernel;
+    };
+
+  };
+
+  # Build the kernel modules for the some of the kernels.
+  kernelPackages_2_6_23 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_23);
+  kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
+
+  # The current default kernel / kernel modules.
+  kernelPackages = kernelPackages_2_6_23;
+  #kernel = kernelPackages.kernel;
+
   customKernel = lib.sumArgs (import ../os-specific/linux/kernel/linux.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools lib;
   };
@@ -4427,9 +4479,7 @@ let pkgs = rec {
   };
 
   # No finished expression is provided - pick your own kernel
-  kqemuFunCurrent = theKernel: (kqemuFun { 
-    kernel = theKernel;
-  } null);
+  kqemuFunCurrent = kernel: kqemuFun {inherit kernel;};
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
@@ -4458,15 +4508,6 @@ let pkgs = rec {
 
   libsmbios = import ../os-specific/linux/libsmbios {
     inherit fetchurl stdenv libxml2;
-  };
-
-  klibc = import ../os-specific/linux/klibc {
-    inherit fetchurl stdenv perl bison mktemp;
-    kernel = systemKernel;
-  };
-
-  klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
-    inherit stdenv klibc;
   };
 
   kvm = kvm57;
@@ -4564,10 +4605,6 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  nvidiaDrivers = import ../os-specific/linux/nvidia {
-    inherit stdenv fetchurl kernel xlibs gtkLibs;
-  };
-
   gw6cFun = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
@@ -4575,11 +4612,6 @@ let pkgs = rec {
 
   nss_ldap = import ../os-specific/linux/nss_ldap {
     inherit fetchurl stdenv openldap;
-  };
-
-  ov511 = import ../os-specific/linux/ov511 {
-    inherit fetchurl kernel;
-    stdenv = overrideGCC stdenv gcc34;
   };
 
   pam = import ../os-specific/linux/pam {
@@ -4641,12 +4673,6 @@ let pkgs = rec {
  
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
-  };
-
-  splashutils = import ../os-specific/linux/splashutils {
-    inherit fetchurl stdenv klibc;
-    zlib = zlibStatic;
-    libjpeg = libjpegStatic;
   };
 
   squashfsTools = import ../os-specific/linux/squashfs {
@@ -4724,10 +4750,6 @@ let pkgs = rec {
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
     inherit fetchurl stdenv;
-  };
-
-  wis_go7007 = import ../os-specific/linux/wis-go7007 {
-    inherit fetchurl stdenv kernel ncurses fxload;
   };
 
   wpa_supplicant = import ../os-specific/linux/wpa_supplicant {
@@ -6402,11 +6424,13 @@ let pkgs = rec {
     fetchdarcs = fetchdarcs2;
   };
 
+  /*
   nixStatic = import ../tools/package-management/nix-static {
     inherit fetchurl stdenv perl curl autoconf automake libtool;
     aterm = aterm242fixes;
     bdb = db4;
   };
+  */
 
   # The bleeding edge.
   nixUnstable = import ../tools/package-management/nix/unstable.nix {
@@ -6479,21 +6503,6 @@ let pkgs = rec {
     inherit fetchurl stdenv pkgconfig libusb saneBackends;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11;
-  };
-
-  # State Nix
-  snix = import ../tools/package-management/snix {
-    inherit fetchurl stdenv perl curl bzip2 openssl;
-    inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
-
-    aterm = aterm242fixes;
-    db4 = db45;
-
-    bison = bison23;
-    flex = flex2533;
-
-    inherit ext3cowtools e3cfsprogs rsync;
-    ext3cow_kernel = kernel;
   };
 
   synaptics = import ../misc/synaptics {

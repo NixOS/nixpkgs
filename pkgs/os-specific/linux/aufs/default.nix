@@ -1,7 +1,7 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "aufs-20080508";
+  name = "aufs-20080508-${kernel.version}";
 
   src = fetchurl {
     url = http://nixos.org/tarballs/aufs-20080508.tar.bz2;

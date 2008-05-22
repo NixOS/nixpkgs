@@ -1,7 +1,7 @@
 {stdenv, klibc}:
 
 stdenv.mkDerivation {
-  name = "${klibc.name}";
+  name = "${klibc.name}-shrunk";
   buildCommand = ''
     ensureDir $out/lib
     cp -prd ${klibc}/lib/klibc/bin $out/

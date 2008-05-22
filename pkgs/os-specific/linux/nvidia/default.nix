@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nvidiaDrivers-" + versionNumber;
+  name = "nvidiaDrivers-${versionNumber}-${kernel.version}";
   builder = ./builder.sh;
   
   src = fetchurl {

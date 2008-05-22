@@ -1,10 +1,12 @@
 {stdenv, fetchurl, kernel}:
 
+let version = "1.2.25"; in
+
 stdenv.mkDerivation rec {
-  name = "iwlwifi-1.2.25";
+  name = "iwlwifi-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://www.intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://www.intellinuxwireless.org/iwlwifi/downloads/iwlwifi-${version}.tgz";
     sha256 = "09fjy0swcyd77fdp8x2825wj5cd73hwbzl8mz9sy2ha21p1qwq1d";
   };
 

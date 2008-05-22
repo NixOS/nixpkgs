@@ -34,6 +34,13 @@ in
 
 stdenv.mkDerivation {
   name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
+
+  passthru = {
+    inherit version;
+    # Combine the `features' attribute sets of all the kernel patches.
+    features = lib.fold (x: y: (if x ? features then x.features else {}) // y) {} kernelPatches;
+  };
+  
   builder = ./builder.sh;
   
   src = fetchurl {

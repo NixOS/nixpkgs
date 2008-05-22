@@ -26,14 +26,25 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
 
-  lib = import ../../../lib;
+  lib = stdenv.lib;
 
   version = "2.6.25.4";
+
+  baseFeatures = {
+    iwlwifi = true;
+  };
 
 in
 
 stdenv.mkDerivation {
   name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
+
+  passthru = {
+    inherit version;
+    # Combine the `features' attribute sets of all the kernel patches.
+    features = lib.fold (x: y: (if x ? features then x.features else {}) // y) baseFeatures kernelPatches;
+  };
+  
   builder = ./builder.sh;
   
   src = fetchurl {

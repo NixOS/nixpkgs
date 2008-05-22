@@ -1,7 +1,7 @@
 {stdenv, fetchurl, kernel, ncurses, fxload}:
 
 stdenv.mkDerivation {
-  name = "wis-go7007-0.9.8";
+  name = "wis-go7007-0.9.8-${kernel.version}";
 
   src = fetchurl {
     url = http://gentoo.osuosl.org/distfiles/wis-go7007-linux-0.9.8.tar.bz2;
