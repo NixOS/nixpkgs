@@ -5323,25 +5323,19 @@ let pkgs = rec {
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 
-  git =
-    let svnSupport = getConfig [ "git" "svnSupport" ] false;
-    in
-      import ../applications/version-management/git {
-	inherit fetchurl stdenv curl openssl zlib expat perl gettext
-	  asciidoc texinfo xmlto docbook2x
-	  docbook_xsl docbook_xml_dtd_42 libxslt
-	  cpio tcl tk makeWrapper;
+  git = import ../applications/version-management/git {
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext
+      asciidoc texinfo xmlto docbook2x
+      docbook_xsl docbook_xml_dtd_42 libxslt
+      cpio tcl tk makeWrapper;
 
-	# `git-svn' support
-	inherit svnSupport;
-	subversion = (if svnSupport then subversion else null) ;
-	perlLibs = (if svnSupport
-		    then [ perlLWP perlURI perlTermReadKey subversion ]
-		    else []);
+    # for git-svn support:
+    svnSupport = getConfig [ "git" "svnSupport" ] false;
+    inherit subversion ;
+    perlLibs = [ perlLWP perlURI perlTermReadKey subversion ];
 
-	# Emacs support
-	emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
-      };
+    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
+  };
 
   gkrellm = import ../applications/misc/gkrellm {
     inherit fetchurl stdenv gettext pkgconfig;
