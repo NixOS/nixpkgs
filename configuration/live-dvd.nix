@@ -16,11 +16,6 @@ in
 	includeStdenv = true;
 	includeBuildDeps = true;
 
-	kernel = pkgs: (
-		pkgs.aggregateModules 
-		[pkgs.kernel]
-	);
-
 	packages = pkgs : [
 		pkgs.irssi
 		pkgs.elinks

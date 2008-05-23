@@ -12,7 +12,8 @@
   ,includeMemtest ? true
   ,includeStdenv ? true
   ,includeBuildDeps ? false
-  ,kernel ? (pkgs : pkgs.kernel)
+  ,kernelPackages ? (pkgs : pkgs.kernelPackages)
+  ,extraModulePackages ? (pkgs : [])
   ,addUsers ? []
   ,extraInitrdKernelModules ? []
   ,bootKernelModules ? []
@@ -127,16 +128,16 @@ rec {
       extraTTYs = [] 
         ++ (lib.optional manualEnabled 7) 
         ++ (lib.optional rogueEnabled 8);
-      inherit kernel;
+      inherit kernelPackages;
       initrd = {
       extraKernelModules = extraInitrdKernelModules
       ++ (if aufs then ["aufs"] else [])
       ;
       };
       kernelModules = bootKernelModules;
-      extraModulePackages = []
-      ++(if aufs then [pkgs.aufs] else [])
-      ;
+      extraModulePackages = pkgs: ((extraModulePackages pkgs)
+      ++(if aufs then [(kernelPackages pkgs).aufs] else [])
+      );
     };
     
     services = {

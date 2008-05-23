@@ -19,19 +19,6 @@ let
 	tty = "9";
   };
 
-  theKernel = pkgs: let baseKernel=pkgs.kernel; 
-	in (pkgs.aggregateModules 
-    		[
-		baseKernel
-		(pkgs.kqemuFunCurrent baseKernel)
-		(pkgs.atherosFun {
-			kernel = baseKernel;
-			version = "r2756";
-			pci001c_rev01 = true;
-		} null)
-		]);
-
-
 in 
 (isoFun {
 	inherit platform;
@@ -49,10 +36,7 @@ in
 	addUsers = ["nixos" "livecd" "livedvd" 
 		"user" "guest" "nix"];
 
-	kernel = pkgs: (
-		pkgs.aggregateModules 
-		[pkgs.kernel]
-	);
+	extraModulePackages = pkgs: [pkgs.kernelPackages.kqemu];
 	extraInitrdKernelModules = 
 		import ./moduleList.nix;
 

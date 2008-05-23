@@ -19,21 +19,8 @@ let
 	tty = "9";
   };
 
-  theKernel = pkgs: let baseKernel=pkgs.kernel; 
-	in (pkgs.aggregateModules 
-    		[
-		baseKernel
-		(pkgs.kqemuFunCurrent baseKernel)
-		(pkgs.atherosFun {
-			kernel = baseKernel;
-			version = "r2756";
-			pci001c_rev01 = true;
-		} null)
-		]);
-
-
 in 
-(isoFun {
+(isoFun (rec {
 	inherit platform;
 	lib = (import ../pkgs/lib);
 
@@ -48,12 +35,7 @@ in
 	includeBuildDeps = true;
 	addUsers = ["nixos" "livecd" "livedvd" 
 		"user" "guest" "nix"];
-
-	kernel = pkgs: (
-		pkgs.aggregateModules 
-		[pkgs.kernel]
-	);
-
+	
 	extraInitrdKernelModules = 
 		import ./moduleList.nix;
 
@@ -120,7 +102,6 @@ in
 		pkgs.wirelesstools
 		pkgs.usbutils
 		pkgs.dmidecode
-		(theKernel pkgs)
 		pkgs.sshfsFuse
 		pkgs.ratpoison
 		pkgs.xorg.twm
@@ -229,4 +210,4 @@ in
                 });
         }
 	];
-}).rescueCD
+})).rescueCD

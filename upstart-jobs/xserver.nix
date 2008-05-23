@@ -36,7 +36,7 @@ let
 
     
   modules = 
-    optional (videoDriver == "nvidia") pkgs.nvidiaDrivers #make sure it first loads the nvidia libs
+    optional (videoDriver == "nvidia") nvidiaDrivers #make sure it first loads the nvidia libs
     ++ [
       xorg.xorgserver
       xorg.xf86inputkeyboard
@@ -313,6 +313,7 @@ let
       };
     in if cfg.slim.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;       
 
+    nvidiaDrivers = (config.boot.kernelPackages pkgs).nvidiaDrivers;
 
 in
 
@@ -351,7 +352,7 @@ rec {
     xorg.xset # used by startkde, non-essential
   ]
   ++ optional (videoDriver == "nvidia") [
-    pkgs.nvidiaDrivers
+    nvidiaDrivers
   ];
 
 
@@ -375,7 +376,7 @@ rec {
       rm -f /var/run/opengl-driver
       ${if videoDriver == "nvidia"        
         then ''
-          ln -sf ${pkgs.nvidiaDrivers} /var/run/opengl-driver
+          ln -sf ${nvidiaDrivers} /var/run/opengl-driver
         ''
 	else if cfg.driSupport
         then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
@@ -392,7 +393,7 @@ rec {
     env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
 
     ${if videoDriver == "nvidia" 
-      then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${pkgs.nvidiaDrivers}/lib" 
+      then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${nvidiaDrivers}/lib" 
       else ""
     }
 

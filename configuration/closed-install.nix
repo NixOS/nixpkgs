@@ -25,11 +25,6 @@ in
 	addIP = "10.0.253.251";
 	netmask = "255.255.0.0";
 
-	kernel = pkgs: (
-		pkgs.aggregateModules 
-		[pkgs.kernel]
-	);
-
 	packages = pkgs : [
 		pkgs.patch
 		pkgs.irssi
