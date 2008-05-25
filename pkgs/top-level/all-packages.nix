@@ -5659,7 +5659,7 @@ let pkgs = rec {
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
-      gtkspell aspell gettext ncurses;
+      gtkspell aspell gettext ncurses avahi dbus dbus_glib;
     GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;

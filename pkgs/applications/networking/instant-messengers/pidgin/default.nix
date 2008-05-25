@@ -13,14 +13,14 @@
 { stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
   GStreamer, startupnotification, gettext,
   perl, perlXMLParser, libxml2, openssl, nss,
-  libXScrnSaver, ncurses
+  libXScrnSaver, ncurses, avahi, dbus, dbus_glib
 } :
 
 stdenv.mkDerivation {
-  name = "pidgin-2.4.1";
+  name = "pidgin-2.4.2";
   src = fetchurl {
-    url = mirror://sourceforge/pidgin/pidgin-2.4.1.tar.bz2;
-    sha256 = "1iskn8b9igl4rdb0r8vg81x4x50bj4q2lchk7r2ygs36f8j6dym4";
+    url = mirror://sourceforge/pidgin/pidgin-2.4.2.tar.bz2;
+    sha256 = "0pyih0kxa85imxjjjd15lchc7gfqazn72hvpwy1h1666hf48f29z";
   };
 
   inherit nss ncurses;
@@ -29,13 +29,14 @@ stdenv.mkDerivation {
     GStreamer startupnotification
     libxml2 openssl nss
     libXScrnSaver ncurses
+    avahi dbus dbus_glib
   ];
 
   propagatedBuildInputs = [
     pkgconfig gtk perl perlXMLParser gettext
   ];
 
-  configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include";
+  configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl";
   meta = {
     description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
     homepage = http://pidgin.im;
