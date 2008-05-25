@@ -245,6 +245,16 @@ args: with args; with stringsWithDeps; with lib;
 		python setup.py install --prefix=\"\$prefix\" 
 		") ["minInit" "addInputs" "doUnpack"];
 
+	doPythonConfigure = FullDepEntry ('' 
+	  pythonVersion=$(toPythonPath "$prefix")
+	  pythonVersion=''${pythonVersion#*/lib/python}
+	  pythonVersion=''${pythonVersion%%/site-packages}
+	  ${if args ? extraPythonConfigureCommand then 
+	    args.extraPythonConfigureCommand 
+	  else ""}
+	  python configure.py -b "$prefix/bin" -d "$(toPythonPath "$prefix")" -v "$prefix/share/sip" ${toString configureFlags}
+	'') ["minInit" "addInputs" "doUnpack"]; 
+
 	doMakeInstall = FullDepEntry ("
 		make ${toString (getAttr ["makeFlags"] "" args)} "+
 			"${toString (getAttr ["installFlags"] "" args)} install") ["doMake"];
@@ -288,6 +298,12 @@ args: with args; with stringsWithDeps; with lib;
 		echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
 
 	doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
+
+	makeManyWrappers = wildcard : wrapperFlags : FullDepEntry (''
+	  for i in ${wildcard}; do
+	    wrapProgram "$i" ${wrapperFlags}
+	  done
+	'') ["minInit" "addInputs" "defEnsureDir"];
 
 	doPropagate = FullDepEntry ("
 		ensureDir \$out/nix-support

@@ -2238,6 +2238,15 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  xxdiff = builderDefsPackage (selectVersion ../development/tools/misc/xxdiff "3.2") {
+    bison = bison23;
+    flex = flex2535;
+    qt = qt3;
+    python = python25;
+    inherit pkgconfig makeWrapper;
+    inherit (xlibs) libXext libX11;
+  } null;
+
   yacc = bison;
 
 
@@ -3788,6 +3797,18 @@ let pkgs = rec {
     inherit fetchurl stdenv python pkgconfig pygobject pycairo;
     inherit (gtkLibs) glib gtk;
   };
+
+  pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
+    python=python25;
+  } null;
+
+  pyqt = builderDefsPackage (selectVersion ../development/python-modules/pyqt "4.3.3") {
+    inherit pkgconfig pythonSip;
+    python = python25;
+    inherit (xlibs) libX11 libXext;
+    inherit (gtkLibs) glib;
+    qt = qt4;
+  } null;
 
   pyxml = import ../development/python-modules/pyxml {
     inherit fetchurl stdenv python makeWrapper;
