@@ -1497,20 +1497,17 @@ let pkgs = rec {
   ghc = ghc68;
 
   ghc68 = import ../development/compilers/ghc-6.8 {
-    inherit fetchurl stdenv readline perl gmp ncurses;
-    m4 = gnum4;
+    inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
   };
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
-    inherit fetchurl stdenv readline perl58 gmp ncurses;
-    m4 = gnum4;
+    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
     ghc = ghcboot;
   };
 
   ghc66 = import ../development/compilers/ghc-6.6 {
-    inherit fetchurl stdenv readline perl gmp ncurses;
-    m4 = gnum4;
+    inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
   };
 
@@ -6467,6 +6464,14 @@ let pkgs = rec {
     aterm = aterm242fixes;
     db4 = db45;
   };
+
+  # The really bleeding edge.
+  nixNoBDB = lowPrio (nixCustomFun
+    (fetchurl {
+      url = http://nixos.org/releases/nix-no-bdb/nix-0.12pre11675-jvhinhlm/nix-0.12pre11675.tar.bz2;
+      sha256 = "1c20dd159f0f7ffb7105745426b64097f833b265604e14ff77f94da2d145d44b";
+    })
+    "" [] "");
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
