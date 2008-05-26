@@ -33,16 +33,20 @@ stdenv.mkDerivation {
   ;
 
   preConfigure = 
-  (lib.concatMapStrings (script: ''sed -e '/bin_SCRIPTS/a${script} \\' -i scripts/Makefile.am
-  '') enableScripts)
-  + preConfigure
-  + "\n./bootstrap.sh"
-  ;
+    (lib.concatMapStrings (script:
+      ''
+        sed -e '/bin_SCRIPTS/a${script} \\' -i scripts/Makefile.am
+      ''
+    ) enableScripts)
+    + preConfigure
+    + "\n./bootstrap.sh";
 
-  configureFlags = ["
+  configureFlags = ''
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
     --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
-    --disable-init-state"] ++ configureFlags ;
+    --disable-init-state
+    ${configureFlags}
+  '';
 
   meta = {
     description = "The Nix Deployment System";
