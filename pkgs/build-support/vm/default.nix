@@ -5,6 +5,9 @@ with pkgs;
 rec {
 
 
+  inherit (kernelPackages) kernel klibcShrunk;
+
+
   modulesClosure = makeModulesClosure {
     inherit kernel;
     rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ata_piix" "sd_mod"];
