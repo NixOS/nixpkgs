@@ -1835,7 +1835,10 @@ let pkgs = rec {
   python25Fun = lib.sumArgs (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
-  python25 = python25Fun null;
+  python25 = python25Fun {
+    db4 = if getConfig ["python" "db4Support"] false then db4 else null;
+    sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
+  } null;
 
   pyrex = pyrex095;
 
@@ -5139,6 +5142,11 @@ let pkgs = rec {
   bbdb = import ../applications/editors/emacs-modes/bbdb {
     inherit fetchurl stdenv emacs texinfo ctags;
   };
+
+  codeville = builderDefsPackage (selectVersion ../applications/version-management/codeville "0.8.0") {
+    python = python25;
+    inherit makeWrapper;
+  } null;
 
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;

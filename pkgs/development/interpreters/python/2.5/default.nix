@@ -1,6 +1,7 @@
 {stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2,
  gdbmSupport ? true, gdbm ? null
  , sqlite ? null
+ , db4 ? null
  }:
 
 assert zlibSupport -> zlib != null;
@@ -16,6 +17,7 @@ let
     ++ optional zlibSupport zlib
     ++ optional gdbmSupport gdbm
     ++ optional (sqlite != null) sqlite
+    ++ optional (db4 != null) db4
     ;
 
 in
@@ -54,6 +56,8 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit zlibSupport;
+    sqliteSupport = sqlite != null;
+    db4Support = db4 != null;
     libPrefix = "python2.5";
   };
 }
