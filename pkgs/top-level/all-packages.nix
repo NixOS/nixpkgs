@@ -1838,6 +1838,7 @@ let pkgs = rec {
   python25 = python25Fun {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
     sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
+    readline = if getConfig ["python" "readlineSupport"] false then readline else null;
   } null;
 
   pyrex = pyrex095;
@@ -5004,8 +5005,13 @@ let pkgs = rec {
   };
 
   bazaar = import ../applications/version-management/bazaar {
-    inherit fetchurl stdenv python makeWrapper;
+    inherit fetchurl stdenv makeWrapper;
+    python = python25;
   };
+
+  bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
+    inherit bazaar;
+  } null;
 
   bitlbee = import ../applications/networking/instant-messengers/bitlbee {
     inherit fetchurl stdenv gnutls pkgconfig;

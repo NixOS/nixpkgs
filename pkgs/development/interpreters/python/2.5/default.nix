@@ -2,6 +2,7 @@
  gdbmSupport ? true, gdbm ? null
  , sqlite ? null
  , db4 ? null
+ , readline ? null
  }:
 
 assert zlibSupport -> zlib != null;
@@ -18,6 +19,7 @@ let
     ++ optional gdbmSupport gdbm
     ++ optional (sqlite != null) sqlite
     ++ optional (db4 != null) db4
+    ++ optional (readline != null) readline
     ;
 
 in
@@ -46,7 +48,9 @@ stdenv.mkDerivation {
     for i in /usr /sw /opt /pkg; do 
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-  ";
+  " + (if readline != null then ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"
+  '' else "");
   
   postInstall = "
     ensureDir $out/nix-support
@@ -58,6 +62,7 @@ stdenv.mkDerivation {
     inherit zlibSupport;
     sqliteSupport = sqlite != null;
     db4Support = db4 != null;
+    readlineSupport = readline != null;
     libPrefix = "python2.5";
   };
 }

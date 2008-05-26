@@ -474,4 +474,9 @@ args: with args; with stringsWithDeps; with lib;
    	cp *.map $out/share/texmf/fonts/map/${args.name} || echo No fontmap data
    '') ["minInit" "defEnsureDir"];
 
+   simplyShare = shareName: FullDepEntry (''
+     ensureDir $out/share
+     cp -r . $out/share/${shareName}
+   '') ["doUnpack" "defEnsureDir"];
+
 }) // args

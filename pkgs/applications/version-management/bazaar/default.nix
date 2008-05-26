@@ -15,6 +15,11 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/bzr --prefix PYTHONPATH : "$(toPythonPath $out)"
   '';
 
+  passthru = {
+    # If someone wants to assert python features..
+    inherit python;
+  };
+
   meta = {
     homepage = http://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
