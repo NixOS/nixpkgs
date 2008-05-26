@@ -4952,6 +4952,11 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext libSM;
   };
 
+  abcde = import ../applications/audio/abcde {
+    inherit fetchurl stdenv libcdio cddiscid wget bash vorbisTools
+            makeWrapper;
+  };
+
   abiword = import ../applications/office/abiword {
     inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv;
     inherit (gtkLibs) gtk;
