@@ -5056,6 +5056,10 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  cddiscid = import ../applications/audio/cd-discid {
+    inherit fetchurl stdenv;
+  };
+
   cdparanoia = cdparanoiaIII;
 
   cdparanoiaIII = import ../applications/audio/cdparanoia {
