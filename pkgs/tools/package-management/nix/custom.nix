@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
     --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
     --disable-init-state
-    ${configureFlags}
+    ${toString configureFlags}
   '';
 
   meta = {
