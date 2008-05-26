@@ -3,6 +3,7 @@
  , sqlite ? null
  , db4 ? null
  , readline ? null
+ , openssl ? null
  }:
 
 assert zlibSupport -> zlib != null;
@@ -20,6 +21,7 @@ let
     ++ optional (sqlite != null) sqlite
     ++ optional (db4 != null) db4
     ++ optional (readline != null) readline
+    ++ optional (openssl != null) openssl
     ;
 
 in
@@ -63,6 +65,7 @@ stdenv.mkDerivation {
     sqliteSupport = sqlite != null;
     db4Support = db4 != null;
     readlineSupport = readline != null;
+    opensslSupport = openssl != null;
     libPrefix = "python2.5";
   };
 }
