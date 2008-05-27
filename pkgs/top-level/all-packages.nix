@@ -5742,6 +5742,11 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses readline;
   };
 
+  pqiv = import ../applications/graphics/pqiv {
+    inherit fetchurl stdenv getopt which pkgconfig;
+    inherit (gtkLibs) gtk;
+  };
+
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = import ../applications/misc/procmail {
