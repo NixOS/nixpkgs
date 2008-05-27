@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl, zlib, bzip2}:
 
 stdenv.mkDerivation {
-  name = "dpkg-1.14.16.6";
+  name = "dpkg-1.14.19";
   
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.14.16.6.tar.gz;
-    sha256 = "1x2ajz5z6zbyv80g2b2fwylxiz7bdm71z0i98zasfjf87wkx4ryn";
+    url = http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.14.19.tar.gz;
+    sha256 = "11qm7kg7y472g2nki2gjdlk9xgrzblag7lcwsmdzx7jv4r1yk1sj";
   };
 
   configureFlags = "--without-dselect --with-admindir=/var/lib/dpkg";
