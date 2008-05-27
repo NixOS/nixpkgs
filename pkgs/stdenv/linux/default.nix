@@ -99,8 +99,13 @@ rec {
   # the bootstrap.
   stdenvBootFun =
     {gcc, staticGlibc, extraAttrs ? {}}:
-    
-    import ../generic {
+
+    let
+      fetchurlBoot = import ../../build-support/fetchurl {
+        stdenv = stdenvInitial;
+        inherit curl;
+      };
+    in import ../generic {
       name = "stdenv-linux-boot";
       param1 = if staticGlibc then "static" else "dynamic";
       preHook = ./scripts/prehook.sh;
@@ -109,7 +114,9 @@ rec {
       initialPath = [
         staticTools
       ];
-      inherit gcc extraAttrs;
+      inherit fetchurlBoot;
+      extraAttrs = extraAttrs // {fetchurl = fetchurlBoot;};
+      inherit gcc;
     };
 
 
@@ -120,7 +127,6 @@ rec {
     # Use the statically linked, downloaded glibc/gcc/binutils.
     gcc = wrapGCC {libc = staticGlibc; binutils = staticBinutils;};
     staticGlibc = true;
-    extraAttrs = {inherit curl;};
   };
   
 
@@ -143,7 +149,7 @@ rec {
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
     staticGlibc = false;
     gcc = wrapGCC {binutils = staticBinutils; libc = stdenvLinuxGlibc;};
-    extraAttrs = {inherit curl; glibc = stdenvLinuxGlibc;};
+    extraAttrs = {glibc = stdenvLinuxGlibc;};
   }) ["gcc" "binutils"];
 
   
@@ -164,7 +170,6 @@ rec {
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
     };
-    extraAttrs = {inherit curl;};
   };
 
   
@@ -197,8 +202,9 @@ rec {
 
     shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     
+    fetchurlBoot = stdenvLinuxBoot3.fetchurlBoot;
+    
     extraAttrs = {
-      curl = stdenvLinuxBoot3Pkgs.realCurl;
       inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
       inherit (stdenvLinuxBoot3Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk

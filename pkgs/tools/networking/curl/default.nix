@@ -18,7 +18,14 @@ stdenv.mkDerivation {
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
-  inherit sslSupport openssl;
+
+  passthru = {
+    inherit sslSupport openssl;
+  };
+
+  preConfigure = ''
+    substituteInPlace configure --replace /usr/bin /no-such-path
+  '';
 
   patches = [
     /* Fixes broken retry support when a timeout is used.  The

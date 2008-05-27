@@ -1,6 +1,7 @@
 { stdenv, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
+, fetchurlBoot
 }:
 
 let {
@@ -70,6 +71,8 @@ let {
         # For convenience, bring in the library functions in lib/ so
         # packages don't have to do that themselves.
         lib = import ../../lib;
+
+        inherit fetchurlBoot;
 
       }
 

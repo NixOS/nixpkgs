@@ -247,6 +247,7 @@ let
     aterm
     autoconf
     #automake19x
+    curl
     docbook5
     docbook_xml_dtd_42
     docbook_xml_dtd_43
@@ -256,7 +257,6 @@ let
     libxml2
     libxslt
     nxml
-    realCurl
     subversion
     unzip
   ;};

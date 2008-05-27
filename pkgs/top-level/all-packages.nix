@@ -357,12 +357,21 @@ let pkgs = rec {
     inherit stdenv mercurial nix;
   };
 
-  # Allow the stdenv to determine fetchurl, to cater for strange
-  # requirements.
+  # `fetchurl' downloads a file from the network.  The `useFromStdenv'
+  # is there to allow stdenv to determine fetchurl.  Used during the
+  # stdenv-linux bootstrap phases to prevent lots of different curls
+  # from being built.
   fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
       inherit stdenv curl;
     });
+
+  # fetchurlBoot is used for curl and its dependencies in order to
+  # prevent a cyclic dependency (curl depends on curl.tar.bz2,
+  # curl.tar.bz2 depends on fetchurl, fetchurl depends on curl).  It
+  # uses the curl from the previous bootstrap phase (e.g. a statically
+  # linked curl in the case of stdenv-linux).
+  fetchurlBoot = stdenv.fetchurlBoot;
 
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents;
@@ -516,7 +525,12 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  curl = if stdenv ? curl then (stdenv.curl) else (assert false; null);
+  curl = import ../tools/networking/curl {
+    fetchurl = fetchurlBoot;
+    inherit stdenv zlib openssl;
+    zlibSupport = !stdenv ? isDietLibC;
+    sslSupport = !stdenv ? isDietLibC;
+  };
 
   curlftpfs = import ../tools/networking/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib;
@@ -926,12 +940,6 @@ let pkgs = rec {
     inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
     inherit (xlibs) libX11 libXext;
   };
-
-  realCurlFun = lib.sumArgs (import ../tools/networking/curl) {
-    inherit fetchurl stdenv zlib;
-    zlibSupport = !stdenv ? isDietLibC;
-  };
-  realCurl = realCurlFun null;
 
   relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
@@ -1856,7 +1864,8 @@ let pkgs = rec {
   Qi = QiFun null;
 
   realPerl = import ../development/interpreters/perl-5.10 {
-    inherit fetchurl stdenv;
+    fetchurl = fetchurlBoot;
+    inherit stdenv;
   };
 
   ruby = import ../development/interpreters/ruby {
@@ -3129,7 +3138,8 @@ let pkgs = rec {
   };
 
   openssl = import ../development/libraries/openssl {
-    inherit fetchurl stdenv perl;
+    fetchurl = fetchurlBoot;
+    inherit stdenv perl;
   };
 
   ortp = selectVersion ../development/libraries/ortp "0.13.1" {
@@ -3328,7 +3338,8 @@ let pkgs = rec {
   };
 
   zlib = import ../development/libraries/zlib {
-    inherit fetchurl stdenv;
+    fetchurl = fetchurlBoot;
+    inherit stdenv;
   };
 
   zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {

@@ -28,7 +28,7 @@ let
 
     inherit (pkgsDiet)
       coreutils diffutils gnugrep
-      gzip bzip2 gnumake bash patch binutils;
+      gzip bzip2 gnumake bash patch binutils curl;
 
     findutils = pkgsDiet.findutils4227; # 4.2.28 is broken
       
@@ -58,8 +58,6 @@ let
       profiledCompiler = true;
     };
   
-    curl = pkgsDiet.realCurl;
-
     glibc = pkgs.glibc;
 
     # The result should not contain any references (store paths) so

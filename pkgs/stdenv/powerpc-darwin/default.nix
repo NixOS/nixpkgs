@@ -17,7 +17,8 @@ genericStdenv {
 
   shell = "/bin/sh";
 
-  extraAttrs = {
+  fetchurlBoot = import ../../build-support/fetchurl {
+    inherit stdenv;
     # Curl should be in /usr/bin or so.
     curl = null;
   };
