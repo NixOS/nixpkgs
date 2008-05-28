@@ -700,7 +700,7 @@ rec {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
         sha256 = "7a8f2777315d71fd7321d1076b3bf5f76afe179fe66c2ce8e1ff4baed6424340";
       };
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = mirror://debian;
     } // args);
         
   };
