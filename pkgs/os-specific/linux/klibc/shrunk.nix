@@ -1,7 +1,11 @@
 {stdenv, klibc}:
 
 stdenv.mkDerivation {
-  name = "${klibc.name}-shrunk";
+  # !!! For now, the name has to be exactly as long as the original
+  # name due to the sed hackery below.  Once patchelf 0.4 is in the
+  # tree, we can do this properly.
+  #name = "${klibc.name}-shrunk";
+  name = "${klibc.name}";
   buildCommand = ''
     ensureDir $out/lib
     cp -prd ${klibc}/lib/klibc/bin $out/
@@ -13,7 +17,7 @@ stdenv.mkDerivation {
       echo $i
       sed "s^$old^$new^" -i $i
       # !!! use patchelf
-      #patchelf --set-rpath /foo/bar $i
+      #patchelf --set-interpreter $new $i
     done
   ''; # */
   allowedReferences = ["out"];
