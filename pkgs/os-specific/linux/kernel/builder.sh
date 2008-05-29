@@ -57,13 +57,19 @@ installPhase() {
 
     ensureDir $out
 
+    # New kernel versions have a combined tree for i386 and x86_64.
+    archDir=$arch
+    if test -e arch/x86 -a \( "$arch" = i386 -o "$arch" = x86_64 \); then
+        archDir=x86
+    fi
+
     # Copy the bzImage and System.map.
     cp System.map $out
     if test "$arch" = um; then
         ensureDir $out/bin
         cp linux $out/bin
     else
-        cp arch/$arch/boot/bzImage $out/vmlinuz
+        cp arch/$archDir/boot/bzImage $out/vmlinuz
     fi
 
     # Install the modules in $out/lib/modules with matching paths
@@ -105,10 +111,10 @@ installPhase() {
         rm -rf $out/lib/modules/$version/build/include
 
         # copy architecture dependent files
-        cp -a arch/$arch/scripts $out/lib/modules/$version/build || true
-        cp -a arch/$arch/*lds $out/lib/modules/$version/build || true
-        cp -a arch/$arch/Makefile.cpu $out/lib/modules/$version/build/arch/$arch || true
-        cp -a --parents arch/$arch/kernel/asm-offsets.s $out/lib/modules/$version/build/arch/$arch/kernel || true
+        cp -a arch/$archDir/scripts $out/lib/modules/$version/build/ || true
+        cp -a arch/$archDir/*lds $out/lib/modules/$version/build/ || true
+        cp -a arch/$archDir/Makefile*.cpu $out/lib/modules/$version/build/arch/$archDir/ || true
+        cp -a --parents arch/$archDir/kernel/asm-offsets.s $out/lib/modules/$version/build/arch/$archDir/kernel/ || true
 
         # copy scripts
         rm -f scripts/*.o
