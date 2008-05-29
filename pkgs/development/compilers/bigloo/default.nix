@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 	-i comptime/Cc/cc.c
   '';
 
+  checkTarget = "test";
+
   meta = { 
     description = "Bigloo, an efficient Scheme compiler";
 

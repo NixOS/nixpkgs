@@ -1684,6 +1684,11 @@ let pkgs = rec {
     inherit stdenv fetchurl;
   };
 
+  stalin = import ../development/compilers/stalin {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11;
+  };
+
   strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
     inherit stdenv fetchurl pkgconfig aterm;
   };
