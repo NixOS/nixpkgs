@@ -5935,6 +5935,18 @@ let pkgs = rec {
   };
   */
 
+  taskJuggler = import ../applications/misc/taskjuggler {
+    inherit stdenv fetchurl;
+    inherit zlib libpng perl expat;
+    qt = qt3;
+
+    inherit (xlibs) libX11 libXext libSM libICE;
+
+    # KDE support is not working yet.
+    inherit kdelibs kdebase;
+    withKde = pkgs.getConfig ["taskJuggler" "kde"] false;
+  };
+
   thunderbird = import ../applications/networking/mailreaders/thunderbird-2.x {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
