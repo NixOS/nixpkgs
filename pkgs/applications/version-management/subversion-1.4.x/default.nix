@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
   inherit httpServer pythonBindings javahlBindings perlBindings;
   patches = [ ./subversion-respect_CPPFLAGS_in_perl_bindings.patch ];
 
+  passthru = {
+    inherit perlBindings pythonBindings;
+    python = if ( swig != null ) && (swig ? python) then 
+        swig.python 
+      else null;
+  };
+
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.tigris.org/;
