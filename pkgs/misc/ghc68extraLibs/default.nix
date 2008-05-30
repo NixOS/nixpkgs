@@ -89,6 +89,16 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
 
                           };
                 };
+          unixCompat ={ name = "unix-compat-0.1.2.1"; src = fetchurl { url=http://hackage.haskell.org/packages/archive/unix-compat/0.1.2.1/unix-compat-0.1.2.1.tar.gz; sha256 = "119fiazjr83xm4nk394v7lmsvhkic5k78pzcvv70j7zp83hjccsm"; }; p_deps = [ x.base x.directory x.old_time x.haskell98 ]; };
+          tar = rec { name = "tar-0.1.1.1"; p_deps = [ x.base x.bytestring x.haskell98 x.binary x.unixCompat ];
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/tar/0.1.1.1/tar-0.1.1.1.tar.gz";
+                                        sha256 = "08ns56xxw6519q0f7fqdznhcwx5dj2rc531mivxdyja6lmmjcfcb"; };
+                    #pass = {
+                      #patchPhase = ''
+                        #echo      "  extra-lib-dirs: ${zlib}/lib" >> zlib.cabal
+                        #echo      "  include-dirs: ${zlib}/include" >> zlib.cabal'';
+               #}; 
+          };
           zlib = rec { name = "zlib-0.4.0.4"; p_deps = [ x.base x.bytestring x.haskell98 ];
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/zlib/0.4.0.4/zlib-0.4.0.4.tar.gz";
                                         sha256 = "14hzqpzqs3rcwx6qpgybrcz33yrzb5y4p0bdsilhdgl15594ibad"; };
@@ -281,6 +291,10 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
           00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
           */
 
+
+          getOptions = rec { name = "GetOptions"; p_deps = [ x.haskell98 x.base x.mtl ];
+                       src = sourceByName "getOptions";
+                 };
 
           # 1.13 is stable. There are more recent non stable versions
           haxml = rec { name = "HaXml-1.13.3"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 ];
