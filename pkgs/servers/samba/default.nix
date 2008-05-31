@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.0.28a";
+  name = "samba-3.0.30";
 
   src = fetchurl {
-    url = http://us3.samba.org/samba/ftp/stable/samba-3.0.28a.tar.gz;
-    sha256 = "1pnrh4qlapsqgdrzq4v5vxv622wcxghi5cp0n4f87c8pc2rfrjcx";
+    url = http://www.samba.org/samba/ftp/stable/samba-3.0.30.tar.gz;
+    sha256 = "0lzs53424fblg9g6z3nsan3dxi3bnn5h4zs31ji2bavai4xrsy51";
   };
 
   buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam];

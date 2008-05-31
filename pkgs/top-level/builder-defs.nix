@@ -305,6 +305,12 @@ args: with args; with stringsWithDeps; with lib;
 	  done
 	'') ["minInit" "addInputs" "defEnsureDir"];
 
+	wrapBinContentsPython = (makeManyWrappers 
+	  ''$out/bin/*'' 
+	  (''--prefix PYTHONPATH : $(toPythonPath $out)'' +
+	  ''''${PYTHONPATH:+ --prefix PYTHONPATH : $PYTHONPATH}'')
+	);
+
 	doPropagate = FullDepEntry ("
 		ensureDir \$out/nix-support
 		echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs

@@ -5,11 +5,11 @@ rec {
     sha256 = "1apzd6mfmhgmxffzgzwsr17gnyqj6bycn783l9105cihsfcv9v3j";
   };
 
-  buildInputs = [python];
+  buildInputs = [python makeWrapper];
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["installPythonPackage"];
+  phaseNames = ["installPythonPackage" "wrapBinContentsPython"];
       
   name = "tailor-" + version;
   meta = {

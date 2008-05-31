@@ -4138,6 +4138,15 @@ let pkgs = rec {
     propagatedBuildInputs = [];
   };
 
+  perlYAML = import ../development/perl-modules/generic perl {
+    name = "YAML-0.66";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/I/IN/INGY/YAML-0.66.tar.gz;
+      sha256 = "1pcjf6y3l88ypa52mkk349jglabm53mhxda4p5awc1jl67lx3ngw";
+    };
+    propagatedBuildInputs = [];
+  };
+
   perlYAMLSyck = import ../development/perl-modules/generic perl {
     name = "YAML-Syck-1.04";
     src = fetchurl {
@@ -6298,6 +6307,7 @@ let pkgs = rec {
 
   tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.31") {
     python = python25;
+    inherit makeWrapper;
   } null;
 
   /* does'nt work yet i686-linux only (32bit version)
