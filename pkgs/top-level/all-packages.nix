@@ -856,6 +856,10 @@ let pkgs = rec {
     inherit fetchurl stdenv gettext;
   };
 
+  mysql2pgsql = import ../tools/misc/mysql2pgsql {
+    inherit fetchurl stdenv perl shebangfix;
+  };
+
   nc6Fun = lib.sumArgs (selectVersion ../tools/networking/nc6 "1.0") {
     inherit builderDefs;
   };
