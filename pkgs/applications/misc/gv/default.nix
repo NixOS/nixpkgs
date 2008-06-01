@@ -1,20 +1,22 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX }:
 
-stdenv.mkDerivation {
-  name = "gv-3.6.1";
+stdenv.mkDerivation rec {
+  name = "gv-3.6.4";
 
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/gv/gv-3.6.3.tar.gz;
-    sha256 = "9486c25675719e986cbd77b48204025e825c46258b6750deeb64b3940685a033";
+    url = "mirror://gnu/gv/${name}.tar.gz";
+    sha256 = "09v87h0fmpg7wid6b7wwcbl28x9m1wmn465hvpxs95wmn7nw98c2";
   };
 
   buildInputs = [ Xaw3d ghostscriptX ];
   
   postConfigure = [ "sed 's|\\<gs\\>|${ghostscriptX}/bin/gs|g' -i src/*.am src/*.ad" ];
 
-  inherit ghostscriptX;
+  doCheck = true;
 
   meta = {
-    homepage = http://wwwthep.physik.uni-mainz.de/~plass/gv;
+    homepage = http://www.gnu.org/software/gv/;
+    description = "GNU gv, a PostScript/PDF document viewer";
+    license = "GPLv2+";
   };
 }
