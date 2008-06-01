@@ -4211,6 +4211,10 @@ let pkgs = rec {
     qt = qt4;
   } null;
 
+  pyx = import ../development/python-modules/pyx {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
   pyxml = import ../development/python-modules/pyxml {
     inherit fetchurl stdenv python makeWrapper;
   };
