@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     --with-kde-support=${if withKde then "yes" else "no"}
   ";
 
+  preInstall = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp Contrib/emacs/taskjug.el $out/share/emacs/site-lisp/
+  '';
+
   installFlags =
     # kde_locale is not defined when installing without kde.
     if withKde then "" else "kde_locale=\${out}/share/locale";
