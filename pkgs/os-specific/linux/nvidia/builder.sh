@@ -8,11 +8,6 @@ unpackFile() {
 }
 
 
-patchPhase() {
-    (cd usr/src/nv && patch -p3 < $patch)
-}
-
-
 buildPhase=myBuildPhase
 myBuildPhase() {
     echo "Building linux driver against kernel: " $kernel;
