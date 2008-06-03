@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0yllx5a2f5bx18gqz74aikr27zxwpblswn65lqvm9rbzswlq5w2s";
   };
 
+  patches = [ ./callgrind_annotate.patch ];
+
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
   buildInputs = [ perl gdb ];
