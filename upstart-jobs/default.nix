@@ -365,6 +365,12 @@ let
       inherit (pkgs) stdenv hal;
     })
 
+  ++ optional config.services.gpm.enable 
+    (import ../upstart-jobs/gpm.nix {
+      inherit (pkgs) gpm;
+      gpmConfig = config.services.gpm;
+    })
+
   # Nagios system/network monitoring daemon.
   ++ optional config.services.nagios.enable
     (import ../upstart-jobs/nagios {

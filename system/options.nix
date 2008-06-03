@@ -2024,6 +2024,21 @@
       };
     };
 
+    gpm = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to enable general purpose mouse daemon.
+	";
+      };
+      protocol = mkOption {
+        default = "ps/2";
+	description = "
+	  Mouse protocol to use.
+	";
+      };
+    };
+
   };
 
   installer = {
