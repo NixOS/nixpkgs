@@ -4830,7 +4830,7 @@ let pkgs = rec {
     };
 
     atheros = composedArgsAndFun (selectVersion ../os-specific/linux/atheros "0.9.4") {
-      inherit fetchurl stdenv builderDefs kernel;
+      inherit fetchurl stdenv builderDefs kernel lib;
     } null;
 
     nvidiaDrivers = import ../os-specific/linux/nvidia {
