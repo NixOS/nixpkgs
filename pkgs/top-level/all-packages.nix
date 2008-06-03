@@ -2255,7 +2255,7 @@ let pkgs = rec {
   };
 
   valgrind = import ../development/tools/analysis/valgrind {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv perl gdb;
   };
 
   xxdiff = builderDefsPackage (selectVersion ../development/tools/misc/xxdiff "3.2") {
