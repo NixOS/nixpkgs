@@ -10,8 +10,8 @@ let
     
   documentRoot = cfg.documentRoot;
   hostName = cfg.hostName;
-  httpPort = cfg.httpPort;
-  httpsPort = cfg.httpsPort;
+  httpPort = cfg.port;
+  httpsPort = 443;
   user = cfg.user;
   group = cfg.group;
   adminAddr = cfg.adminAddr;
