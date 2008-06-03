@@ -4389,6 +4389,16 @@ let pkgs = rec {
       xkeyboard_config dbus hal;
   });
 
+  zabbixAgent = import ../servers/monitoring/zabbix {
+    inherit fetchurl stdenv;
+    enableServer = false;
+  };
+
+  zabbixServer = import ../servers/monitoring/zabbix {
+    inherit fetchurl stdenv postgresql curl;
+    enableServer = true;
+  };
+
 
   ### OS-SPECIFIC
 
