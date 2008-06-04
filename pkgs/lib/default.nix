@@ -72,6 +72,8 @@ rec {
   concatStringsSep = separator: list:
     concatStrings (intersperse separator list);
 
+  makeLibraryPath = paths: concatStringsSep ":" (map (path: path + "/lib") paths);
+
 
   # Flatten the argument into a single list; that is, nested lists are
   # spliced into the top-level lists.  E.g., `flatten [1 [2 [3] 4] 5]
