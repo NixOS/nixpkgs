@@ -8,8 +8,7 @@ unpackFile() {
 }
 
 
-buildPhase=myBuildPhase
-myBuildPhase() {
+buildPhase() {
     echo "Building linux driver against kernel: " $kernel;
 
     cd usr/src/nv/
@@ -28,8 +27,7 @@ myBuildPhase() {
 }
 
 
-installPhase=myInstallPhase
-myInstallPhase() {
+installPhase() {
 
     # Install the kernel module.
     ensureDir $out/lib/modules/$kernelVersion/misc
@@ -58,15 +56,15 @@ myInstallPhase() {
     # Install the programs.
     ensureDir $out/bin
 
-    fullPath=$out/lib
-    for i in $libPath; do
-	fullPath=$fullPath:$i/lib
-    done
+    patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*.*
+    patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*.*
+    patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*.*
+    patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*.*
 
     for i in nvidia-settings nvidia-xconfig; do
 	cp usr/bin/$i $out/bin/$i
 	patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-	    --set-rpath $fullPath $out/bin/$i
+	    --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
     done
     
     # Header files etc.

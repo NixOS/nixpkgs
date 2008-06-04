@@ -558,7 +558,6 @@ rec {
 
   glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
-    inherit (xlibs) libXext;
   };
 
   gnugrep = useFromStdenv "gnugrep"
@@ -4288,7 +4287,7 @@ rec {
   };
 
   nvidiaDrivers = import ../os-specific/linux/nvidia {
-    inherit stdenv fetchurl kernel xlibs gtkLibs;
+    inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
   };
 
   gw6c = import ../os-specific/linux/gw6c {
