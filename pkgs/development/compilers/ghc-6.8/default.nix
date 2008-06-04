@@ -15,6 +15,9 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ghc readline perl m4 gmp];
 
+  # The setup hook is executed by other packages building with ghc.
+  # It then looks for package configurations that are available and
+  # build a package database on the fly.
   setupHook = ./setup-hook.sh;
 
   meta = {
@@ -23,8 +26,8 @@ stdenv.mkDerivation (rec {
 
   configureFlags=[
     "--with-gmp-libraries=${gmp}/lib"
-    "--with-readline-libraries=${readline}/lib"
     "--with-gmp-includes=${gmp}/include"
+    "--with-readline-libraries=${readline}/lib"
     "--with-gcc=${gcc}/bin/gcc"
   ];
 

@@ -1,6 +1,6 @@
 # Support dir for isolating GHC
 ghc_support=$TMPDIR/ghc-6.8-nix-support
-mkdir -p $ghc_support
+ensureDir $ghc_support
 
 # Create isolated package config
 packages_db=$ghc_support/package.conf
