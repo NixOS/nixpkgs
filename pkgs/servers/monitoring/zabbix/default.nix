@@ -17,6 +17,15 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optionals enableServer [postgresql curl];
 
+  postInstall = if enableServer then ''
+    ensureDir $out/share/zabbix
+    cp -prvd frontends/php $out/share/zabbix/php
+    ensureDir $out/share/zabbix/db/data
+    cp -prvd create/data/*.sql $out/share/zabbix/db/data
+    ensureDir $out/share/zabbix/db/schema
+    cp -prvd create/schema/*.sql $out/share/zabbix/db/schema
+  '' else ""; # */
+
   meta = {
     description = "An enterprise-class open source distributed monitoring solution";
     homepage = http://www.zabbix.com/;
