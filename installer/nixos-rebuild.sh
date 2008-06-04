@@ -29,6 +29,17 @@ NIXPKGS=${NIXPKGS:-$NIXOS/pkgs}
 NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 
+# If the Nix daemon is running, then use it.  This allows us to use
+# the latest Nix from Nixpkgs (below) for expression evaluation, while
+# still using the old Nix (via the daemon) for actual store access.
+# This matters if the new Nix in Nixpkgs has a schema change.  It
+# would upgrade the schema, which should only happen once we actually
+# switch to the new configuration.
+if initctl status nix-daemonn 2>&1 | grep -q ' running'; then
+    export NIX_REMOTE=${NIX_REMOTE:-daemon}
+fi
+
+
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
 if test "${NIXOS_PULL:-1}" != 0; then
