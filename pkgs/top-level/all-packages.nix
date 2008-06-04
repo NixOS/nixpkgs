@@ -1513,6 +1513,11 @@ let pkgs = rec {
     ghc = ghcboot;
   };
 
+  ghc683snapshot = import ../development/compilers/ghc-6.8/snapshot.nix {
+    inherit fetchurl stdenv readline perl gmp ncurses m4;
+    ghc = ghcboot;
+  };
+
   ghc661 = import ../development/compilers/ghc-6.6.1 {
     inherit fetchurl stdenv readline perl58 gmp ncurses m4;
     ghc = ghcboot;
