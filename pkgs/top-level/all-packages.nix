@@ -6789,6 +6789,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  ### SCIENCE/LOGIC
+
+  coq = import ../applications/science/logic/coq {
+    inherit fetchurl stdenv ocaml ncurses;
+  };
 
   ### MISC
 
