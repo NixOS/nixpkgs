@@ -5892,7 +5892,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
-  jedit = import ../applications/jedit {
+  jedit = import ../applications/editors/jedit {
     inherit fetchurl stdenv ant;
   };
 
