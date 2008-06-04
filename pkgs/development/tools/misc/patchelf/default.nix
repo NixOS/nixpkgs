@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "patchelf-0.4pre11957";
+  name = "patchelf-0.4";
   
   src = fetchurl {
-    url = http://nixos.org/releases/patchelf/patchelf-0.4pre11957-lngvn112/patchelf-0.4pre11957.tar.bz2;
-    sha256 = "3e9a72f17cfddcc0fbb6e2433aea7147d54c5c986c8cb3fce0dd985936efa7f3";
+    url = http://nixos.org/releases/patchelf/patchelf-0.4/patchelf-0.4.tar.bz2;
+    sha256 = "65c455b62fc52292e2488f05f46e7e38c46fdcf69c002750f5887145284c4f85";
   };
 
   meta = {
