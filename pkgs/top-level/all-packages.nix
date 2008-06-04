@@ -2183,6 +2183,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  oprofile = import ../development/tools/profiling/oprofile {
+    inherit fetchurl stdenv binutils popt;
+    inherit makeWrapper gawk which gnugrep;
+  };
+
   patchelf = useFromStdenv "patchelf"
     (import ../development/tools/misc/patchelf {
       inherit fetchurl stdenv;

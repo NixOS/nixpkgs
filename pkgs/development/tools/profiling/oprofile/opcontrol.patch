@@ -1,0 +1,16 @@
+--- oprofile-0.9.3/utils/opcontrol	2007-07-16 20:22:17.000000000 +0200
++++ oprofile-0.9.3/utils/opcontrol	2008-06-04 23:05:20.000000000 +0200
+@@ -1647,12 +1647,10 @@ check_version()
+ 
+ # determine the location of opcontrol and related programs
+ if test -z "$OPDIR"; then
+-	BINDIR="/usr/bin"
+-	OPCONTROL=`$BINDIR/which $0`
+-	OPDIR=`$BINDIR/dirname $OPCONTROL`
++	OPCONTROL=`which $0`
++	OPDIR=`dirname $OPCONTROL`
+ fi
+ 
+-PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
+ 
+ check_options_early $@
