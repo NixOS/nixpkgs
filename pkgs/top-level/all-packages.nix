@@ -6188,15 +6188,10 @@ let pkgs = rec {
     python = python25;
   };
 
-  qemuFun = lib.sumArgs (selectVersion ../applications/virtualization/qemu "0.9.1") {
-    inherit fetchurl;
-    builderDefs = builderDefs {
-      stdenv = (overrideGCC stdenv gcc34)//{gcc=gcc34;};
-    };
-    inherit SDL zlib which;
+  qemu = import ../applications/virtualization/qemu/0.9.1.nix {
+    inherit fetchurl SDL zlib which;
+    stdenv = overrideGCC stdenv gcc34;
   };
-
-  qemu = qemuFun null;
 
   qemuImageFun = lib.sumArgs 
     (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
