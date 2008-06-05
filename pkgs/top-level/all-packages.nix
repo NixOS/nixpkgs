@@ -6803,6 +6803,15 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  emboss = import ../applications/science/biology/emboss {
+    inherit fetchurl stdenv readline perl libpng zlib;
+		inherit (xorg) libX11 libXt;
+  };
+
+  mrbayes = import ../applications/science/biology/mrbayes {
+    inherit fetchurl stdenv readline;
+  };
+
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
