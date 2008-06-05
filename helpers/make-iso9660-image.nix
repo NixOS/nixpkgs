@@ -1,4 +1,4 @@
-{ stdenv, perl, cdrkit
+{ stdenv, perl, cdrkit, nixpkgsPath
 
   # The file name of the resulting ISO image.
 , isoName ? "cd.iso"
@@ -51,5 +51,5 @@ stdenv.mkDerivation {
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
   exportBuildReferencesGraph =
     map (x: [("closure-build-" + baseNameOf x.object) x.object]) buildStoreContents;
-  pathsFromGraph = ../pkgs/build-support/kernel/paths-from-graph.pl;
+  pathsFromGraph = "${nixpkgsPath}/pkgs/build-support/kernel/paths-from-graph.pl";
 }

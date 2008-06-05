@@ -1,6 +1,7 @@
 { platform ? __currentSystem
 , stage2Init ? ""
 , configuration
+, nixpkgsPath ? ../../nixpkgs
 }:
 
 rec {
@@ -12,21 +13,21 @@ rec {
   optionDeclarations = import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;};
     
 
-  pkgs = import ../pkgs/top-level/all-packages.nix {system = platform;};
+  pkgs = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;};
 
-  pkgsDiet = import ../pkgs/top-level/all-packages.nix {
+  pkgsDiet = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
     system = platform;
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
-  pkgsStatic = import ../pkgs/top-level/all-packages.nix {
+  pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
     system = platform;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
   };
 
-  stdenvLinuxStuff = import ../pkgs/stdenv/linux {
+  stdenvLinuxStuff = import "${nixpkgsPath}/pkgs/stdenv/linux" {
     system = pkgs.stdenv.system;
-    allPackages = import ../pkgs/top-level/all-packages.nix;
+    allPackages = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix";
   };
 
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
@@ -141,7 +142,7 @@ rec {
 
   # NixOS installation/updating tools.
   nixosTools = import ../installer {
-    inherit pkgs config nix;
+    inherit pkgs config nix nixpkgsPath;
   };
 
 

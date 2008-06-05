@@ -4,14 +4,12 @@
     then builtins.readFile ../relname
     else "nixos-${builtins.readFile ../VERSION}"
 , compressImage ? false
+, nixpkgsPath ? ../../nixpkgs
 }:
 
 rec {
 
   
-  nixpkgsRel = "nixpkgs-0.12pre11791-xl06i469";
-
-
   configuration = {
   
     boot = {
@@ -101,9 +99,7 @@ rec {
 
               mkdir -p /etc/nixos/nixos
               tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
-              tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos
-              mv /etc/nixos/nixpkgs-* /etc/nixos/nixpkgs
-              ln -sfn ../nixpkgs/pkgs /etc/nixos/nixos/pkgs
+              tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
               chown -R root.root /etc/nixos
             end script
           ";
@@ -165,7 +161,7 @@ rec {
     };
     
     installer = {
-      nixpkgsURL = http://nixos.org/releases/nixpkgs/ + nixpkgsRel;
+      nixpkgsURL = http://nixos.org/releases/nixpkgs/unstable;
     };
 
     security = {
@@ -189,7 +185,7 @@ rec {
 
 
   system = import ../system/system.nix {
-    inherit configuration platform;
+    inherit configuration platform nixpkgsPath;
     stage2Init = "/init";
   };
 
@@ -201,7 +197,7 @@ rec {
   # 0.11 (you won't get the manual).
   manual =
     if builtins ? unsafeDiscardStringContext
-    then "${import ../doc/manual}/manual.html"
+    then "${import ../doc/manual {inherit nixpkgsPath;}}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
 
 
@@ -218,19 +214,16 @@ rec {
   
   # Put the current directory in a tarball (making sure to filter
   # out crap like the .svn directories).
-  nixosTarball =
-    let filter = name: type:
-      let base = baseNameOf (toString name);
-      in base != ".svn" && base != "result";
-    in
-      makeTarball "nixos.tar.bz2" (builtins.filterSource filter ./..);
+  nixosTarball =makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./..);
+
+  svnFilter = name: type:
+    let base = baseNameOf (toString name);
+    in base != ".svn" && base != "result";
 
 
-  # Get a recent copy of Nixpkgs.
-  nixpkgsTarball = pkgs.fetchurl {
-    url = configuration.installer.nixpkgsURL + "/nixexprs.tar.bz2";
-    sha256 = "267c45134eee9a8a93812589e5bd45333c5061a8047b41f3bf27ed76a1461750";
-  };
+  # Put Nixpkgs in a tarball
+  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2"
+    (builtins.filterSource svnFilter nixpkgsPath);
 
 
   # The configuration file for Grub.
@@ -255,6 +248,7 @@ rec {
   # Create an ISO image containing the Grub boot loader, the kernel,
   # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
+    inherit nixpkgsPath;
     inherit (pkgs) stdenv perl cdrkit;
     isoName = "${relName}-${platform}.iso";
 
@@ -281,7 +275,7 @@ rec {
       { source = nixosTarball + "/" + nixosTarball.tarName;
         target = "/install/" + nixosTarball.tarName;
       }
-      { source = nixpkgsTarball;
+      { source = nixpkgsTarball + "/nixpkgs.tar.bz2";
         target = "/install/nixpkgs.tar.bz2";
       }
       { source = pkgs.writeText "label" "";

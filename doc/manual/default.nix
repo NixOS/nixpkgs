@@ -1,6 +1,8 @@
+{nixpkgsPath ? ../../../nixpkgs}:
+
 let
 
-  pkgs = import ../../pkgs/top-level/all-packages.nix {};
+  pkgs = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {};
 
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList ""
