@@ -3,6 +3,7 @@
     if builtins.pathExists ../relname
     then builtins.readFile ../relname
     else "nixos-${builtins.readFile ../VERSION}"
+, compressImage ? false
 }:
 
 rec {
@@ -304,6 +305,8 @@ rec {
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
+
+    inherit compressImage;
   };
 
 

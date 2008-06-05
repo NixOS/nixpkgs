@@ -59,10 +59,15 @@ done
 
 cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
-# !!! -f is a quick hack.
+
 ensureDir $out/iso
-genisoimage -r -J -o $out/iso/$isoName $bootFlags \
-    -hide-rr-moved -graft-points -path-list pathlist.safer
+genCommand="genisoimage -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer"
+if test -z "$compressImage"; then
+    $genCommand -o $out/iso/$isoName
+else
+    $genCommand | bzip2 > $out/iso/$isoName.bz2
+fi
+    
 
 ensureDir $out/nix-support
 echo $system > $out/nix-support/system

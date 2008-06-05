@@ -25,6 +25,9 @@
   # The path (in the ISO file system) of the boot image.
 , bootImage ? ""
 
+, # Whether to compress the resulting ISO image with bzip2.
+  compressImage ? false
+
 }:
 
 assert bootable -> bootImage != "";
@@ -33,7 +36,7 @@ stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl cdrkit];
-  inherit isoName bootable bootImage;
+  inherit isoName bootable bootImage compressImage;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
