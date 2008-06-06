@@ -6813,6 +6813,10 @@ let pkgs = rec {
     inherit fetchurl stdenv readline;
   };
 
+  paml = import ../applications/science/biology/paml {
+    inherit fetchurl stdenv;
+  };
+
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
