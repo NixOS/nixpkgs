@@ -17,7 +17,7 @@ let
 
     PidFile = ${pidFile}
 
-    StartAgents = 1
+    StartAgents = 5
   '';
 
 in
