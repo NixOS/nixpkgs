@@ -101,7 +101,7 @@ let pkgs = rec {
         };
       });
       isDietLibC = true;
-    };
+    } // {inherit fetchurl;};
 
   # Return a modified stdenv that tries to build statically linked
   # binaries.
@@ -114,7 +114,7 @@ let pkgs = rec {
           + " --disable-shared"; # brrr...
       });
       isStatic = true;
-    };
+    } // {inherit fetchurl;};
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
