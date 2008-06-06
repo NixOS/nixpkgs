@@ -4,7 +4,6 @@ let
 in 
 (isoFun {
 	inherit platform;
-	lib = (import ../pkgs/lib);
 
 	networkNixpkgs = "";
 	manualEnabled = true;

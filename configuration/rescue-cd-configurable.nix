@@ -1,5 +1,5 @@
 {
-   lib
+   lib ? null
   ,platform ? __currentSystem
   ,networkNixpkgs ? ""
   ,nixpkgsMd5 ? ""
@@ -39,8 +39,15 @@
   	list of: {source, target}
   */
   ,additionalFiles ? []
+  ,compressImage ? false
+  ,nixpkgsPath ? ../../nixpkgs
 }:
+let 
+  realLib = if lib != null then lib else (import (nixpkgsPath+"/pkgs/lib"));
+in
 let
+  lib = realLib;
+
   ttyCount = lib.fold builtins.add 0 [
     (if rogueEnabled then 1 else 0)
     (if manualEnabled then 1 else 0)
@@ -49,7 +56,7 @@ let
   systemPackBuilder = {suffix, configuration} : 
   { 
     system = (import ../system/system.nix) {
-      inherit configuration platform; /* To refactor later - x86+x86_64 DVD */
+      inherit configuration platform nixpkgsPath; /* To refactor later - x86+x86_64 DVD */
       stage2Init = "/init"+suffix;
     };
     inherit suffix configuration;
@@ -319,7 +326,7 @@ rec {
   # The NixOS manual, with a backward compatibility hack for Nix <=
   # 0.11 (you won't get the manual).
   manual = if builtins ? unsafeDiscardStringContext
-    then "${import ../doc/manual}/manual.html"
+    then "${import ../doc/manual {inherit nixpkgsPath;}}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
  
  
@@ -356,7 +363,7 @@ rec {
   nixpkgsTarball = if networkNixpkgs != "" then pkgs.fetchurl {
     url = configuration.installer.nixpkgsURL + "/" + nixpkgsRel + ".tar.bz2";
     md5 = "6a793b877e2a4fa79827515902e1dfd8";
-  } else makeNixPkgsTarball "nixpkgs.tar.bz2" ("" + ./../../nixpkgs);
+  } else makeNixPkgsTarball "nixpkgs.tar.bz2" ("" + nixpkgsPath);
 
   nixosServicesTarball = makeNixPkgsTarball "nixos-services.tar.bz2" ("" + ./../../services);
  
@@ -379,6 +386,7 @@ rec {
   # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit;
+    inherit compressImage nixpkgsPath;
     isoName = "nixos-${platform}.iso";
   
     # Single files to be copied to fixed locations on the CD.
