@@ -113,6 +113,7 @@ let pkgs = rec {
           (if args ? configureFlags then args.configureFlags else "")
           + " --disable-shared"; # brrr...
       });
+      isStatic = true;
     };
 
   # Applying this to an attribute set will cause nix-env to look
@@ -528,8 +529,8 @@ let pkgs = rec {
   curl = import ../tools/networking/curl {
     fetchurl = fetchurlBoot;
     inherit stdenv zlib openssl;
-    zlibSupport = !stdenv ? isDietLibC;
-    sslSupport = !stdenv ? isDietLibC;
+    zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
+    sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
   };
 
   curlftpfs = import ../tools/networking/curlftpfs {
