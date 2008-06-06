@@ -1831,30 +1831,27 @@ let pkgs = rec {
       if stdenv.isDarwin then null else unixODBC;
   };
 
-  # FIXME somehow somewhen: We need to recompile php if the ini file changes because the only way to
-  # tell the apache module where to look for this file is using a compile time flag ;-(
-  # perhaps this can be done setting php_value in apache don't have time to investigate any further ?
-  # This expression is a quick hack now. But perhaps it helps you adding the configuration flags you need?
-  php = php_unstable;
-
-  # compiling without xdebug is currenlty broken (should be easy to fix though 
-  php_unstable = (import ../development/interpreters/php_configurable) {
-    inherit stdenv mkDerivationByConfiguration autoconf automake lib;
-    # optional features
-    inherit fetchurl flex bison apacheHttpd mysql libxml2; # gettext;
-    inherit zlib curl;
-   flags = [ "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl" ];
+  php = import ../development/interpreters/php_configurable {
+    inherit
+      stdenv fetchurl lib mkDerivationByConfiguration autoconf automake
+      flex bison apacheHttpd mysql libxml2 # gettext
+      zlib curl gd postgresql;
+    flags = [
+      "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl"
+      "postgresql" "bcmath" "gd"
+    ];
   };
 
   python = python24;
 
   python24 = import ../development/interpreters/python/2.4 {
-  inherit fetchurl stdenv zlib bzip2;
+    inherit fetchurl stdenv zlib bzip2;
   };
 
   python25Fun = lib.sumArgs (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
+  
   python25 = python25Fun {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
     sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
