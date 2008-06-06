@@ -2194,6 +2194,10 @@ let pkgs = rec {
       inherit fetchurl stdenv;
     });
 
+  pmccabe = import ../development/tools/misc/pmccabe {
+    inherit fetchurl stdenv;
+  };
+
   /**
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
    * of glib and pkgconfig itself on MinGW.
