@@ -14,6 +14,7 @@
     avahi = 10;
     portmap = 11;
     atd = 12;
+    zabbix = 13;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;

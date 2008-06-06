@@ -245,7 +245,7 @@ let
   # X server.
   ++ optional config.services.xserver.enable
     (import ../upstart-jobs/xserver.nix {
-      inherit config pkgs;
+      inherit config pkgs kernelPackages;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
     })
 
@@ -374,6 +374,18 @@ let
   # Nagios system/network monitoring daemon.
   ++ optional config.services.nagios.enable
     (import ../upstart-jobs/nagios {
+      inherit config pkgs;
+    })
+
+  # Zabbix agent daemon.
+  ++ optional config.services.zabbixAgent.enable
+    (import ../upstart-jobs/zabbix-agent.nix {
+      inherit config pkgs;
+    })
+
+  # Zabbix server daemon.
+  ++ optional config.services.zabbixServer.enable
+    (import ../upstart-jobs/zabbix-server.nix {
       inherit config pkgs;
     })
 

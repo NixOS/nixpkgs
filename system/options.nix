@@ -1918,6 +1918,7 @@
 
     };
 
+    
     mysql = {
       enable = mkOption {
         default = false;
@@ -1952,6 +1953,7 @@
       };
     };
 
+    
     postgresql = {
       enable = mkOption {
         default = false;
@@ -2009,6 +2011,7 @@
       };
     };
 
+    
     openfire = {
       enable = mkOption {
         default = false;
@@ -2024,6 +2027,7 @@
       };
     };
 
+    
     gpm = {
       enable = mkOption {
         default = false;
@@ -2038,6 +2042,28 @@
 	";
       };
     };
+
+
+    zabbixAgent = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to run the Zabbix monitoring agent on this machine.
+          It will send monitoring data to a Zabbix server.
+	";
+      };
+    };
+    
+
+    zabbixServer = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to run the Zabbix server on this machine.
+	";
+      };
+    };
+    
 
   };
 
