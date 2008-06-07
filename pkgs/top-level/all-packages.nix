@@ -2246,6 +2246,12 @@ let pkgs = rec {
     javaSupport = true;
   }));
 
+  sysprof = import ../development/tools/profiling/sysprof {
+    kernel = kernel_2_6_23; # FIXME: Allow the choice of a kernel
+    inherit fetchurl stdenv binutils pkgconfig;
+    inherit (gnome) gtk glib pango libglade;
+  };
+
   texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
     inherit fetchurl stdenv ncurses;
   };
