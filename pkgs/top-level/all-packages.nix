@@ -6814,7 +6814,7 @@ let pkgs = rec {
     inherit fetchurl stdenv readline;
   };
 
-  ncbi_tools = import ../development/libraries/science/biology/ncbi-tools {
+  ncbi_tools = import ../applications/science/biology/ncbi-tools {
     inherit fetchurl stdenv cpio;
   };
 
