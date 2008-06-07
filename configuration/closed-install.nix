@@ -1,4 +1,7 @@
-{platform ? __currentSystem} : 
+{
+	platform ? __currentSystem
+	,hostConnectPort ? "3737"
+} : 
 let 
   isoFun = import ./rescue-cd-configurable.nix;
 in 
@@ -33,6 +36,7 @@ in
 		pkgs.wpa_supplicant
 		pkgs.emacs
 		pkgs.vimHugeX
+		pkgs.socat
 	];
 
 	/* 
@@ -46,6 +50,19 @@ in
 		{
 			source = /var/certs/ssh/id_livedvd.pub;
 			target = "/root/.ssh/authorized_keys";
+		}
+	];
+
+	additionalJobs = [
+		{
+			name = "Socat-ssh-proxy";
+			job = ''
+				start on sshd/started
+				script
+					sleep 5
+					/var/run/current-system/sw/bin/socat tcp:10.0.2.2:${hostConnectPort} tcp:127.0.0.1:22
+				end script
+			'';
 		}
 	];
 }).rescueCD

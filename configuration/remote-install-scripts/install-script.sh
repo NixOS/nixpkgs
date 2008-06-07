@@ -39,15 +39,45 @@ cat > /mnt/etc/nixos/configuration.nix <<EOF
     sshd = {
       enable = true;
     };
+
+    extraJobs = [
+      {
+        name = "Host-call-back";
+        job = ''
+          start on network-interfaces/started
+          script
+            while ! /var/run/current-system/sw/sbin/ifconfig eth0 | 
+                /var/run/current-system/sw/bin/grep "inet addr:" &>/dev/null; do
+                    sleep 1;
+            done
+            echo -e "Installation finished\nOK" | /var/run/current-system/sw/bin/socat stdio tcp:10.0.2.2:4424 | {
+                read;
+                if [ "\\\$REPLY" = "reboot" ] ; then 
+                        /var/run/current-system/sw/sbin/start ctrl-alt-delete;
+                fi;
+            }
+          end script
+        '';
+      }
+    ];
   };
 
   fonts = { 
     enableFontConfig = false; 
   };
 
+  environment = {
+    extraPackages = pkgs: [
+      pkgs.socat
+    ];
+  };
 }
 
 EOF
 
 nixos-install
+
+echo Installation finished
+
+start ctrl-alt-delete
 

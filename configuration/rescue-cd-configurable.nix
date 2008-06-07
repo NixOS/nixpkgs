@@ -41,6 +41,7 @@
   ,additionalFiles ? []
   ,compressImage ? false
   ,nixpkgsPath ? ../../nixpkgs
+  ,additionalJobs ? []
 }:
 let 
   realLib = if lib != null then lib else (import (nixpkgsPath+"/pkgs/lib"));
@@ -182,6 +183,8 @@ rec {
         }
       ] 
         
+      ++ additionalJobs
+
       ++ 
         
       (lib.optional manualEnabled 
