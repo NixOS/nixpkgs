@@ -2,6 +2,8 @@
 
 let
 
+  cfg = config.services.zabbixAgent;
+
   stateDir = "/var/run/zabbix";
 
   logDir = "/var/log/zabbix";
@@ -9,7 +11,7 @@ let
   pidFile = "${stateDir}/zabbix_agentd.pid";
 
   configFile = pkgs.writeText "zabbix_agentd.conf" ''
-    Server = 127.0.0.1
+    Server = ${cfg.server}
 
     LogFile = ${logDir}/zabbix_agentd
   

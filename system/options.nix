@@ -2045,6 +2045,7 @@
 
 
     zabbixAgent = {
+
       enable = mkOption {
         default = false;
 	description = "
@@ -2052,6 +2053,14 @@
           It will send monitoring data to a Zabbix server.
 	";
       };
+
+      server = mkOption {
+        default = "127.0.0.1";
+        description = ''
+          The IP address or hostname of the Zabbix server to connect to.
+        '';
+      };
+
     };
     
 
