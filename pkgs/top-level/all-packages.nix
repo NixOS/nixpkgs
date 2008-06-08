@@ -3051,10 +3051,6 @@ let pkgs = rec {
     inherit fetchurl stdenv libxml2;
   };
 
-  libixp03 = import ../development/libraries/libixp/libixp-0.3.nix {
-    inherit fetchurl stdenv;
-  };
-
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
@@ -6480,7 +6476,7 @@ let pkgs = rec {
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it... 
   wmiimenu = import ../applications/window-managers/wmii31 {
-    libixp = libixp03;
+    libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
     inherit (xlibs) libX11;
   };
@@ -6488,7 +6484,8 @@ let pkgs = rec {
   wmiiSnap = import ../applications/window-managers/wmii {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11;
+    inherit (xlibs) libX11 xextproto libXt libXext;
+    includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
   wordnet = import ../applications/misc/wordnet {
