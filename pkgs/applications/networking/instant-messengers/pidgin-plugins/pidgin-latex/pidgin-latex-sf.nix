@@ -12,17 +12,27 @@ rec {
   ];
 
   preBuild = FullDepEntry (''
-    ensureDir $out/lib
     ensureDir $out/bin
-    ensureDir $out/share/pidgin/pidgin-latex
     ln -s $(which convert) $out/bin
-    ln -s $(which latex) $out/bin
+    ln -s $(which xelatex) $out/bin
     ln -s $(which dvips) $out/bin
-    ln -s ../../../lib/LaTeX.so  $out/share/pidgin/pidgin-latex 
-  '') ["minInit" "addInputs" "defEnsureDir"];
+
+    sed -e 's/-Wl,-soname//' -i Makefile
+    sed -e 's/\(PATH("\)latex/\1xelatex/' -i LaTeX.c
+    sed -e 's/|| execute(cmddvips, dvipsopts, 10) //' -i LaTeX.c
+    sed -e 's/  strcat([*]file_ps, "[.]ps");/  strcat(*file_ps, ".pdf");/' -i LaTeX.c
+    sed -e 's/\([*]convertopts\[5\]=[{]"\)\(\\"",\)/\1 -trim \2/' -i LaTeX.c
+    sed -e 's/\(#define HEADER ".*\)12pt\(.*\)"/\116pt\2\\\\usepackage{fontspec}\\\\usepackage{xunicode}"/' -i LaTeX.h
+  '') ["minInit" "addInputs" "defEnsureDir" "doUnpack"];
+
+  postInstall = FullDepEntry (''
+    ensureDir $out/lib
+    ensureDir $out/share/pidgin-latex
+    ln -s ../../lib/pidgin/LaTeX.so  $out/share/pidgin-latex 
+  '') ["minInit" "defEnsureDir" "doMakeInstall"];
 
   /* doConfigure should be specified separately */
-  phaseNames = [ "preBuild" "doMakeInstall"];
+  phaseNames = [ "preBuild" "doMakeInstall" "postInstall"];
       
   name = "pidgin-latex-1.2.1";
   meta = {
