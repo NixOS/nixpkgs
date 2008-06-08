@@ -2757,6 +2757,10 @@ let pkgs = rec {
     inherit (xlibs) libXp libXau;
   };
 
+  lib3ds = import ../development/libraries/lib3ds {
+    inherit fetchurl stdenv unzip;
+  }; 
+
   libaal = import ../development/libraries/libaal {
     inherit fetchurl stdenv;
   };
@@ -2865,6 +2869,11 @@ let pkgs = rec {
 
   libgphoto2 = import ../development/libraries/libgphoto2 {
     inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
+  };
+
+  libQGLViewer = import ../development/libraries/libqglviewer {
+    inherit fetchurl stdenv;
+    inherit qt4;
   };
 
   libsamplerate = import ../development/libraries/libsamplerate {
@@ -6867,7 +6876,15 @@ let pkgs = rec {
   dpkg = import ../tools/package-management/dpkg {
     inherit fetchurl stdenv perl zlib bzip2;
   };
-  
+
+  freestyle = import ../misc/freestyle {
+    inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
+    inherit (xlibs) libXi;
+    #stdenv = overrideGCC stdenv gcc41;
+    inherit stdenv;
+    python = python25;
+  };
+
   generator = import ../misc/emulators/generator {
     inherit fetchurl stdenv SDL nasm zlib bzip2 libjpeg;
     inherit (gtkLibs1x) gtk;
