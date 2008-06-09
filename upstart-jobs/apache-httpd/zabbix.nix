@@ -20,6 +20,13 @@ in
 
 {
 
+  extraModules = [
+    { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
+  ];
+
+  # !!! should also declare PHP options that Zabbix needs like the
+  # timezone and timeout.
+  
   extraConfig = ''
     Alias ${config.urlPrefix}/ ${zabbixPHP}/
     
@@ -34,6 +41,9 @@ in
     mkdir -p ${config.stateDir}
     chown -R ${serverInfo.serverConfig.user} ${config.stateDir}
   '';
+
+  # The frontend needs "ps" to find out whether zabbix_server is running.
+  extraServerPath = ["${pkgs.procps}/bin"];
 
   options = {
 
