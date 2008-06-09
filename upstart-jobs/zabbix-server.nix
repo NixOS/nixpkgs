@@ -13,8 +13,6 @@ let
   configFile = pkgs.writeText "zabbix_server.conf" ''
     LogFile = ${logDir}/zabbix_server
   
-    DebugLevel = 4
-
     PidFile = ${pidFile}
 
     DBName = zabbix

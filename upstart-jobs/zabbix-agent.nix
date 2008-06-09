@@ -15,8 +15,6 @@ let
 
     LogFile = ${logDir}/zabbix_agentd
   
-    DebugLevel = 4
-
     PidFile = ${pidFile}
 
     StartAgents = 5
