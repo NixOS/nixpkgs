@@ -111,15 +111,4 @@ in {
     Disallow: /pt/bin/
   '';
 
-  # !!! should not be needed
-  extraModulesPre = [];
-  extraModules = [];
-  globalEnvVars = [];
-  extraServerPath = [];
-  extraPath = [];
-  startupScript = null;
-
-  options = {
-  };  
-
 }

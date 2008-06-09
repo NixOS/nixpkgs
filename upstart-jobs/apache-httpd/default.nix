@@ -55,7 +55,18 @@ let
           if svc ? function then svc.function
           else import (./noDir/.. + ("/" + svc.serviceName + ".nix"));
         config = addDefaultOptionValues res.options svc.config;
-        res = svcFunction {inherit config pkgs serverInfo;};
+        defaults = {
+          extraConfig = "";
+          extraModules = [];
+          extraModulesPre = [];
+          extraPath = [];
+          extraServerPath = [];
+          globalEnvVars = [];
+          robotsEntries = "";
+          startupScript = "";
+          options = {};
+        };
+        res = defaults // svcFunction {inherit config pkgs serverInfo;};
       in res;
     in map f defs;
 
