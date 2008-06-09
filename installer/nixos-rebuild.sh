@@ -35,7 +35,7 @@ NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 # This matters if the new Nix in Nixpkgs has a schema change.  It
 # would upgrade the schema, which should only happen once we actually
 # switch to the new configuration.
-if initctl status nix-daemonn 2>&1 | grep -q ' running'; then
+if initctl status nix-daemon 2>&1 | grep -q ' running'; then
     export NIX_REMOTE=${NIX_REMOTE:-daemon}
 fi
 
