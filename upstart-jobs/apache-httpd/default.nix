@@ -54,7 +54,8 @@ let
         svcFunction =
           if svc ? function then svc.function
           else import (./noDir/.. + ("/" + svc.serviceName + ".nix"));
-        config = addDefaultOptionValues res.options svc.config;
+        config = addDefaultOptionValues res.options
+          (if svc ? config then svc.config else svc);
         defaults = {
           extraConfig = "";
           extraModules = [];
