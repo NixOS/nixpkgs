@@ -409,7 +409,7 @@ let
   )
 
   # Transparent TTY backgrounds.
-  ++ optional (config.services.ttyBackgrounds.enable && kernelPackages.kernel.features ? fbSplash)
+  ++ optional (config.services.ttyBackgrounds.enable && kernelPackages.splashutils != null)
     (import ../upstart-jobs/tty-backgrounds.nix {
       inherit (pkgs) stdenv;
       inherit (kernelPackages) splashutils;

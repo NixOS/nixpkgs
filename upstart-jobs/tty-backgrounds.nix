@@ -21,39 +21,38 @@ rec {
     }
   ];
 
-  job = "
-start on hardware-scan
+  job = ''
+    start on hardware-scan
 
-start script
+    start script
 
-    # Critical: tell the kernel where to find splash_helper.  It calls
-    # this program every time we switch between consoles.
-    echo ${splashutils}/bin/splash_helper > /proc/sys/kernel/fbsplash
+	# Critical: tell the kernel where to find splash_helper.  It calls
+	# this program every time we switch between consoles.
+	echo ${splashutils}/${splashutils.helperName} > ${splashutils.helperProcFile}
 
-    # For each console...
-    for tty in ${toString (map (x: x.tty) backgrounds)}; do
-        # Make sure that the console exists.
-        echo -n '' > /dev/tty$tty 
+	# For each console...
+	for tty in ${toString (map (x: x.tty) backgrounds)}; do
+	    # Make sure that the console exists.
+	    echo -n "" > /dev/tty$tty 
 
-	# Set the theme as determined by tty-backgrounds-combine.sh
-        # above.
-        theme=$(readlink ${themesUnpacked}/$tty)
-        ${splashutils}/bin/splash_util --tty $tty -c setcfg -t $theme || true
-        ${splashutils}/bin/splash_util --tty $tty -c setpic -t $theme || true
-        ${splashutils}/bin/splash_util --tty $tty -c on || true
-    done
+	    # Set the theme as determined by tty-backgrounds-combine.sh
+	    # above.
+	    theme=$(readlink ${themesUnpacked}/$tty)
+	    ${splashutils}/${splashutils.controlName} --tty $tty -c setcfg -t $theme || true
+	    ${splashutils}/${splashutils.controlName} --tty $tty -c setpic -t $theme || true
+	    ${splashutils}/${splashutils.controlName} --tty $tty -c on || true
+	done
 
-end script
+    end script
 
-respawn sleep 10000 # !!! Hack
+    respawn sleep 10000 # !!! Hack
 
-stop script
-    # Disable the theme on each console.
-    for tty in ${toString (map (x: x.tty) backgrounds)}; do
-        ${splashutils}/bin/splash_util --tty $tty -c off || true
-    done
-end script
-
-  ";
+    stop script
+	# Disable the theme on each console.
+	for tty in ${toString (map (x: x.tty) backgrounds)}; do
+	    ${splashutils}/${splashutils.controlName} --tty $tty -c off || true
+	done
+    end script
+  '';
   
 }

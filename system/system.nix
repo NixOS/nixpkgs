@@ -121,14 +121,15 @@ rec {
       }
     ] ++
       pkgs.lib.optionals
-        (config.boot.initrd.enableSplashScreen && kernelPackages.kernel.features ? fbSplash)
+        (config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null)
         [
-          { object = pkgs.runCommand "splashutils" {} ''
+          { object = pkgs.runCommand "splashutils" {allowedReferences = []; buildInputs = [pkgs.nukeReferences];} ''
               ensureDir $out/bin
-              cp ${kernelPackages.splashutils}/bin/splash_helper $out/bin
+              cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
+              nuke-refs $out/bin/*
             '';
             suffix = "/bin/splash_helper";
-            symlink = "/sbin/splash_helper";
+            symlink = "/${kernelPackages.splashutils.helperName}";
           }
           { object = import ../helpers/unpack-theme.nix {
               inherit (pkgs) stdenv;
