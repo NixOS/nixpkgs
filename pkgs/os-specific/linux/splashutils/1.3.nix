@@ -26,4 +26,10 @@ stdenv.mkDerivation {
   #makeFlags = "QUIET=false;
 
   installPhase = "ensureDir $out/bin; cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin";
+
+  passthru = {
+    helperName = "bin/splash_helper";
+    controlName = "bin/splash_util";
+    helperProcFile = "/proc/sys/kernel/fbsplash";
+  };
 }

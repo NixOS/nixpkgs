@@ -4896,7 +4896,18 @@ let pkgs = rec {
       inherit stdenv klibc;
     };
 
-    splashutils = import ../os-specific/linux/splashutils {
+    splashutils = 
+      if kernel.features ? fbSplash then splashutils_13 else
+      if kernel.features ? fbConDecor then splashutils_15 else
+      null;
+
+    splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
+      inherit fetchurl stdenv klibc;
+      zlib = zlibStatic;
+      libjpeg = libjpegStatic;
+    };
+
+    splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
       inherit fetchurl stdenv klibc;
       zlib = zlibStatic;
       libjpeg = libjpegStatic;
