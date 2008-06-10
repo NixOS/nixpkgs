@@ -33,7 +33,7 @@
 
     end script
 
-    respawn ${hal}/sbin/hald --daemon=no --verbose=yes
+    respawn ${hal}/sbin/hald --daemon=no
   '';
   
 }
