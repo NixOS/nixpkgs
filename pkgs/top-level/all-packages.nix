@@ -3113,10 +3113,6 @@ let pkgs = rec {
     inherit fetchurl stdenv python;
   };
 
-  mysqlConnectorODBC = import ../development/libraries/mysql-connector-odbc {
-    inherit fetchurl stdenv mysql libtool zlib unixODBC;
-  };
-
   ncursesFun = lib.sumArgs (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
@@ -3331,6 +3327,11 @@ let pkgs = rec {
   unixODBC = import ../development/libraries/unixODBC {
     inherit fetchurl stdenv;
   };
+
+  unixODBCDrivers = recurseIntoAttrs (import ../development/libraries/unixODBCDrivers {
+    inherit fetchurl stdenv unixODBC glibc libtool openssl zlib;
+    inherit postgresql mysql;
+  });
 
   wxGTK = wxGTK26;
 
