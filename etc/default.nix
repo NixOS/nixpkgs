@@ -258,7 +258,14 @@ import ../helpers/make-etc.nix {
     target = "nix.machines";
   }
     
+  # unixODBC drivers (this solution is not perfect.. Because the user has to
+  # ask the admin to add a driver.. but it's an easy solution which works)
+  ++ (let inis = config.environment.unixODBCDrivers pkgs;
+      in optional ((pkgs.lib.traceWhatis inis) != [] ) {
+        source = pkgs.writeText "odbcinst.ini" (pkgs.lib.concatStringsSep "\n" inis);
+        target = "odbcinst.ini";
+      })
+
   # Additional /etc files declared by Upstart jobs.
   ++ extraEtc;
-  
 }

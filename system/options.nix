@@ -2473,6 +2473,13 @@ root        ALL=(ALL) SETENV: ALL
         If all configuration options must be checked. Non-existing options fail build.
       ";
     };
+
+    unixODBCDrivers = mkOption {
+      default = pkgs : [];
+      example = "pkgs : map (x : x.ini) (with pkgs.unixODBCDrivers; [ mysql psql psqlng ] )";
+      description = "specifies unix odbc drivers to be registered at /etc/odbcinst.ini";
+    };
+
   };
   
   nesting = {
