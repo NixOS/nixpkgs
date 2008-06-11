@@ -74,6 +74,7 @@ test -z $NIX_GCC && NIX_GCC=@gcc@
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
+    if test "$i" = /; then i=; fi
     PATH=$PATH${PATH:+:}$i/bin
 done
 
@@ -586,8 +587,7 @@ patchPhase() {
 
 
 fixLibtool() {
-    sed 's^eval sys_lib_.*search_path=.*^^' < $1 > $1.tmp
-    mv $1.tmp $1
+    sed -i -e 's^eval sys_lib_.*search_path=.*^^' "$1"
 }
 
 
@@ -702,7 +702,7 @@ patchShebangs() {
             local newPath=$(type -P $(basename $oldPath) || true)
             if test -n "$newPath" -a "$newPath" != "$oldPath"; then
                 echo "$f: interpreter changed from $oldPath to $newPath"
-                sed -i "1 s,$oldPath,$newPath," "$f"
+                sed -i -e "1 s,$oldPath,$newPath," "$f"
             fi
         fi
     done
