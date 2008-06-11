@@ -1644,6 +1644,11 @@ let pkgs = rec {
     inherit stdenv fetchurl boost zlib;
   };
 
+  monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
+    inherit ocaml lablgtk graphviz pkgconfig;
+    inherit (gnome) gtk libgnomecanvas glib;
+  } null;
+
   nasm = import ../development/compilers/nasm {
     inherit fetchurl stdenv;
   };
@@ -2746,6 +2751,7 @@ let pkgs = rec {
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
     inherit (gtkLibs) gtk;
+    inherit (gnome) libgnomecanvas;
   };
 
   lcms = import ../development/libraries/lcms {
