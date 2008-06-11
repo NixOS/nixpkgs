@@ -1,11 +1,13 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "docbook5-5.0-pre-cr1";
+  name = "docbook5-5.0";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.docbook.org/xml/5.0CR1/docbook-5.0CR1.tar.gz;
-    sha256 = "15bbnydspiry7k7fwl2gdjb53nyw2vg6xwpn3d40f03mcf0bkw11";
+    url = http://www.docbook.org/xml/5.0/docbook-5.0.zip;
+    sha256 = "13i04dkd709f0p5f2413sf2y9321pfi4y85ynf8wih6ryphnbk9x";
   };
+
+  buildInputs = [unzip];
 }

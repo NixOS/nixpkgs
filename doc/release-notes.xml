@@ -7,7 +7,30 @@
 
 <section><title>Release 0.12 (TBA)</title>
 
-<para>…</para>
+<para>This release has the following improvements:
+
+<itemizedlist>
+
+  <listitem><para>TODO: simplified and expanded stdenv hook
+  handling.</para></listitem>
+
+  <listitem><para>Important updates:
+
+    <itemizedlist>
+
+      <listitem><para>Glibc 2.7.</para></listitem>
+      
+      <listitem><para>GCC 4.2.4.</para></listitem>
+
+      <listitem><para>Linux 2.6.25.</para></listitem>
+
+    </itemizedlist>
+
+  </para></listitem>
+
+</itemizedlist>
+
+</para>
 
 </section>
   

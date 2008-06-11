@@ -5281,7 +5281,7 @@ let pkgs = rec {
   };
 
   docbook5 = import ../data/sgml+xml/schemas/docbook-5.0 {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv unzip;
   };
 
   docbook_xml_dtd_412 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix {
