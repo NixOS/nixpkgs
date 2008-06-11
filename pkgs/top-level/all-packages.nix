@@ -5851,14 +5851,10 @@ let pkgs = rec {
     inherit fetchurl stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_42 libxslt
-      cpio tcl tk makeWrapper;
-
-    # for git-svn support:
-    svnSupport = getConfig [ "git" "svnSupport" ] false;
-    inherit subversion ;
-    perlLibs = [ perlLWP perlURI perlTermReadKey subversion ];
-
-    emacs = if (getConfig ["git" "useEmacs"] true) then emacs else null;
+      cpio tcl tk makeWrapper subversion;
+    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
+    guiSupport = getConfig ["git" "guiSupport"] false;
+    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
   };
 
   gkrellm = import ../applications/misc/gkrellm {

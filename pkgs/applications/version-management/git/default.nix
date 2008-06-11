@@ -1,7 +1,9 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, emacs, cpio
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
 , libxslt, tcl, tk, makeWrapper
-, svnSupport, subversion, perlLibs }:
+, svnSupport, subversion, perlLibs
+, guiSupport
+}:
 
 # `git-svn' support requires Subversion and various Perl libraries.
 # FIXME: We should make sure Subversion comes with its Perl bindings.
@@ -18,28 +20,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./pwd.patch ./docbook2texi.patch ];
 
-  buildInputs = [curl openssl zlib expat gettext cpio]
-    ++ (if emacs != null then [emacs] else [])
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_42 libxslt ]
-    ++ # Tcl/Tk
-       [ tcl tk makeWrapper ];
+    ++ stdenv.lib.optionals guiSupport [tcl tk];
 
-  makeFlags="prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
+  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
 
   postInstall =
-   (if emacs != null then
-	 ''# Install Emacs mode.
-	   echo "installing Emacs mode..."
-	   make install -C contrib/emacs prefix="$out"
-
-	   # XXX: There are other things under `contrib' that people might want to
-	   # install. ''
-       else
-         ''echo "NOT installing Emacs mode.  Set \`git.useEmacs' to \`true' in your"
-	   echo "\`~/.nixpkgs/config.nix' file to change it." '')
-
+    ''
+      # Install Emacs mode.
+      echo "installing Emacs mode..."
+      ensureDir $out/share/emacs/site-lisp
+      cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
+    '' # */
+    
    + (if svnSupport then
 
       ''# wrap git-svn
@@ -47,9 +43,9 @@ stdenv.mkDerivation rec {
         for i in ${builtins.toString perlLibs}; do
           gitperllib=$gitperllib:$i/lib/site_perl
         done
-	wrapProgram "$out/bin/git-svn"			\
-		     --set GITPERLLIB "$gitperllib"    	\
-		     --prefix PATH : "${subversion}/bin" ''
+        wrapProgram "$out/bin/git-svn"                  \
+                     --set GITPERLLIB "$gitperllib"     \
+                     --prefix PATH : "${subversion}/bin" ''
        else ''
        echo "NOT installing \`git-svn' since \`svnSupport' is false."
        rm $out/bin/git-svn '')
@@ -58,16 +54,18 @@ stdenv.mkDerivation rec {
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
-   + ''# Wrap Tcl/Tk programs
+   + (if guiSupport then ''
+       # Wrap Tcl/Tk programs
        for prog in gitk git-gui git-citool
        do
-	 wrapProgram "$out/bin/$prog"			\
-		     --set TK_LIBRARY "${tk}/lib/tk8.4"	\
-		     --prefix PATH : "${tk}/bin"
-       done ''
+         wrapProgram "$out/bin/$prog"                   \
+                     --set TK_LIBRARY "${tk}/lib/tk8.4" \
+                     --prefix PATH : "${tk}/bin"
+       done
+     '' else "")
 
    + ''# Wrap `git-clone'
-       wrapProgram $out/bin/git-clone			\
+       wrapProgram $out/bin/git-clone                   \
                    --prefix PATH : "${cpio}/bin" '';
 
   meta = {
