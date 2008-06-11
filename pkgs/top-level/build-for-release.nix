@@ -222,12 +222,16 @@ let
   };
 
   x86_64LinuxPkgs = {inherit (allPackages {system = "x86_64-linux";})
+    MPlayer
+    MPlayerPlugin
     aterm242fixes
     autoconf
     automake19x
     bash
     binutils
     bison23
+    emacs
+    firefoxWrapper
     gcc
     hello
     iwlwifi
@@ -235,7 +239,11 @@ let
     libtool
     nixUnstable
     subversion
+    pan
     ;    
+  inherit ((allPackages {system = "i686-linux";}).xorg)
+    xorgserver
+    ;
   };
   
   i686FreeBSDPkgs = {inherit (allPackages {system = "i686-freebsd";})
