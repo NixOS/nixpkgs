@@ -4306,6 +4306,10 @@ let pkgs = rec {
     db4Support = true;
   };
 
+  bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
+    inherit openssl libtool;
+  } null;
+
   dictFun = lib.sumArgs (selectVersion ../servers/dict "1.9.15") {
     inherit builderDefs which; 
     flex=flex2534; 
