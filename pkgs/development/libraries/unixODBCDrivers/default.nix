@@ -77,4 +77,27 @@ args : with args;
       "CPReuse         = \n" +
       "FileUsage       = 3\n ";
  };
+ sqlite = rec {
+    deriv = stdenv.mkDerivation {
+      name = "sqlite-connector-odbc-3.51.12";
+      src = fetchurl {
+        url = http://www.ch-werner.de/sqliteodbc/sqliteodbc-0.70.tar.gz;
+        sha256 = "0ysyqdqkxqcqxrxgi15cbrzia9z6yalim5c88faad85bwanx4db8";
+      };
+      configureFlags = "--with-sqlite3=${sqlite} --with-odbc=${unixODBC}";
+      postInstall = ''mkdir lib; mv $out/* lib; mv lib $out'';
+      buildInputs = [libtool zlib sqlite];
+      meta = { 
+        description = "sqlite odbc connector, install using configuration.nix";
+        homepage = http://www.ch-werner.de/sqliteodbc/html/index.html;
+        license = "BSD";
+      };
+    };
+    ini =
+      "[SQLite]\n" +
+      "Description     = SQLite ODBC Driver\n" +
+      "Driver          = ${deriv}/lib/libsqlite3odbc.so\n" +
+      "Setup           = ${deriv}/lib/libsqlite3odbc.so\n" +
+      "Threading       = 2\n";
+ };
 }
