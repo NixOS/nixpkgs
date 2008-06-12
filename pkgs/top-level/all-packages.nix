@@ -503,7 +503,8 @@ let pkgs = rec {
   };
 
   cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
-    inherit python makeWrapper;
+    inherit makeWrapper;
+    python = python25;
   } null;
 
   chkrootkit = import ../tools/security/chkrootkit {
@@ -738,6 +739,10 @@ let pkgs = rec {
   hevea = import ../tools/typesetting/hevea {
     inherit fetchurl stdenv ocaml;
   };
+
+  highlight = builderDefsPackage (selectVersion ../tools/text/highlight "2.6.10") {
+    inherit getopt;
+  } null;
 
   /*
   hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
@@ -1651,6 +1656,13 @@ let pkgs = rec {
   monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
     inherit ocaml lablgtk graphviz pkgconfig;
     inherit (gnome) gtk libgnomecanvas glib;
+  } null;
+
+  viewMtn = builderDefsPackage (selectVersion ../applications/version-management/viewmtn "0.10")
+  {
+    inherit monotone flup cheetahTemplate highlight ctags 
+      makeWrapper graphviz which;
+    python = python25;
   } null;
 
   nasm = import ../development/compilers/nasm {
@@ -4202,6 +4214,13 @@ let pkgs = rec {
     inherit fetchurl stdenv python db4;
   };
 
+  flup = builderDefsPackage (selectVersion ../development/python-modules/flup "r2311") 
+  (let python=python25; in 
+  {
+    inherit python;
+    setuptools = setuptools.meta.function {inherit python;} null;
+  }) null;
+
   pil = import ../development/python-modules/pil {
     inherit fetchurl stdenv python zlib libtiff libjpeg freetype;
   };
@@ -4252,6 +4271,10 @@ let pkgs = rec {
   pyxml = import ../development/python-modules/pyxml {
     inherit fetchurl stdenv python makeWrapper;
   };
+
+  setuptools = builderDefsPackage (selectVersion ../development/python-modules/setuptools "0.6c8") {
+    python = python25;
+  } null;
 
   wxPython = wxPython26;
 

@@ -307,9 +307,14 @@ args: with args; with stringsWithDeps; with lib;
 
 	wrapBinContentsPython = (makeManyWrappers 
 	  ''$out/bin/*'' 
-	  (''--prefix PYTHONPATH : $(toPythonPath $out)'' +
-	  ''''${PYTHONPATH:+ --prefix PYTHONPATH : $PYTHONPATH}'')
+	  pythonWrapperArguments
 	);
+
+	pythonWrapperArguments = 
+	  (''--prefix PYTHONPATH : $(toPythonPath $out)'' +
+	  ''''${PYTHONPATH:+ --prefix PYTHONPATH : $PYTHONPATH}'');
+
+	preservePathWrapperArguments = ''''${PATH:+ --prefix PATH : $PATH }'';
 
 	doPropagate = FullDepEntry ("
 		ensureDir \$out/nix-support
@@ -507,4 +512,8 @@ args: with args; with stringsWithDeps; with lib;
      patchShebangFun;
    '') ["minInit"];
 
+   createPythonInstallationTarget = FullDepEntry (''
+     ensureDir $(toPythonPath $out)
+     export PYTHONPATH=$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath $out)
+   '') ["minInit" "addInputs" "defEnsureDir"];
 }) // args
