@@ -16,7 +16,7 @@ NEWS_OPTS = \
  --stringparam section.autolabel.max.depth 0 \
  --stringparam header.rule 0
 
-all: NEWS.html NEWS.txt
+all: NEWS.html NEWS.txt manual.html
 
 NEWS.html: release-notes.xml
 	$(XSLTPROC) --nonet --xinclude --output $@ $(NEWS_OPTS) \
@@ -28,3 +28,10 @@ NEWS.txt: release-notes.xml
 	  $(docbookxsl)/html/docbook.xsl -
 	LANG=en_US w3m -dump $@.tmp.html > $@
 	rm $@.tmp.html
+
+manual.html: *.xml
+	$(XSLTPROC) --nonet --xinclude --output manual.html \
+	  $(docbookxsl)/html/docbook.xsl manual.xml
+
+manual.pdf: *.xml
+	dblatex manual.xml
