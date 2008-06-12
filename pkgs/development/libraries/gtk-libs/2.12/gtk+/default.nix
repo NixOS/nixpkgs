@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "gtk+-2.12.9";
+  name = "gtk+-2.12.10";
   
   src = fetchurl {
-    url = mirror://gnome/sources/gtk+/2.12/gtk+-2.12.9.tar.bz2;
-    md5 = "33499772fdc3bea569c6d5673e5831b4";
+    url = mirror://gnome/sources/gtk+/2.12/gtk+-2.12.10.tar.bz2;
+    md5 = "5fcbdd2254eedb6b9ae828afc01d9eaa";
   };
   
   buildInputs = [pkgconfig perl];

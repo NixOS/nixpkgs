@@ -1,11 +1,11 @@
 {stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation {
-  name = "coreutils-6.11";
+  name = "coreutils-6.12";
   
   src = fetchurl {
-    url = mirror://gnu/coreutils/coreutils-6.11.tar.gz;
-    sha256 = "1klb7bm461nm02161wn25ivnbq2d09lidi4sdicdv4md38lpd6gb";
+    url = mirror://gnu/coreutils/coreutils-6.12.tar.gz;
+    sha256 = "12pi7i2mxff5jab48pqpwlz2pi0j6sp9p7bgrcl663iiw81zglj9";
   };
 
   meta = {

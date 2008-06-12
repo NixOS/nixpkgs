@@ -3,11 +3,11 @@
 assert freetype != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "fontconfig-2.5.0";
+  name = "fontconfig-2.6.0";
   
   src = fetchurl {
-    url = http://fontconfig.org/release/fontconfig-2.5.0.tar.gz;
-    sha256 = "1zhfvxgslgpnlz13ksiq90jgl0747n81c1nkg5klksxp9kdvmiil";
+    url = http://fontconfig.org/release/fontconfig-2.6.0.tar.gz;
+    sha256 = "19fqr2vh7rzpqfh2lnkymh7q5pxn9r4w2z35lh36crp5l3m3k9m9";
   };
   
   buildInputs = [freetype];
