@@ -485,4 +485,26 @@ args: with args; with stringsWithDeps; with lib;
      cp -r . $out/share/${shareName}
    '') ["doUnpack" "defEnsureDir"];
 
+   doPatchShebangs = dir: FullDepEntry (''
+     patchShebangFun() {
+     # Rewrite all script interpreter file names (`#! /path') under the
+     # specified  directory tree to paths found in $PATH.  E.g.,
+     # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
+     # Interpreters that are already in the store are left untouched.
+         header "patching script interpreter paths"
+         local f
+         for f in $(find "${dir}" -type f -perm +0100); do
+             local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
+             if test -n "$oldPath" -a "''${oldPath:0:''${#NIX_STORE}}" != "$NIX_STORE"; then
+                 local newPath=$(type -P $(basename $oldPath) || true)
+                 if test -n "$newPath" -a "$newPath" != "$oldPath"; then
+                     echo "$f: interpreter changed from $oldPath to $newPath"
+                     sed -i "1 s,$oldPath,$newPath," "$f"
+                 fi
+             fi
+         done
+     }
+     patchShebangFun;
+   '') ["minInit"];
+
 }) // args

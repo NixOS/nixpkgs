@@ -14,15 +14,13 @@ rec {
 
     cp -r * $out/share/msf
 
-    sed -e 's@#!/usr/bin/env ruby@#! ${ruby}/bin/ruby@' -i $out/share/msf/msf*
-
     for i in $out/share/msf/msf*; do
         makeWrapper $i $out/bin/$(basename $i) --prefix RUBYLIB : $out/share/msf/lib
     done
   '') ["minInit" "defEnsureDir" "doUnpack" "addInputs"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doInstall"];
+  phaseNames = ["doInstall" (doPatchShebangs "$out/share/msf")];
       
   name = "metasploit-framework" + version;
   meta = {
