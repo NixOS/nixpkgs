@@ -491,7 +491,7 @@ args: with args; with stringsWithDeps; with lib;
      # specified  directory tree to paths found in $PATH.  E.g.,
      # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
      # Interpreters that are already in the store are left untouched.
-         header "patching script interpreter paths"
+         echo "patching script interpreter paths"
          local f
          for f in $(find "${dir}" -type f -perm +0100); do
              local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
