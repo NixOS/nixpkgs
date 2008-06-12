@@ -502,6 +502,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
+    inherit python makeWrapper;
+  } null;
+
   chkrootkit = import ../tools/security/chkrootkit {
     inherit fetchurl stdenv;
   };
