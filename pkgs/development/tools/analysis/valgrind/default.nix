@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gdb }:
 
 stdenv.mkDerivation {
-  name = "valgrind-3.3.0";
+  name = "valgrind-3.3.1";
 
   src = fetchurl {
-    url = http://valgrind.org/downloads/valgrind-3.3.0.tar.bz2;
-    sha256 = "0yllx5a2f5bx18gqz74aikr27zxwpblswn65lqvm9rbzswlq5w2s";
+    url = http://valgrind.org/downloads/valgrind-3.3.1.tar.bz2;
+    sha256 = "1ymai2xr3c7132vzkngrshlcsrs1qagfd4vwccr96ixx2pcb9dwm";
   };
 
   patches = [ ./callgrind_annotate.patch ];
