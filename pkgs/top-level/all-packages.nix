@@ -4362,6 +4362,11 @@ let pkgs = rec {
     inherit fetchurl stdenv apacheHttpd python;
   };
 
+  postfix = import ../servers/mail/postfix {
+    inherit fetchurl stdenv db4;
+    glibc = stdenv.glibc;
+  };
+
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
     inherit fetchurl stdenv apacheHttpd jdk;
   };
