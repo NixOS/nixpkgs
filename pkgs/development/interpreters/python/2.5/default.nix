@@ -1,10 +1,10 @@
-{stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2,
- gdbmSupport ? true, gdbm ? null
- , sqlite ? null
- , db4 ? null
- , readline ? null
- , openssl ? null
- }:
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
+, gdbmSupport ? true, gdbm ? null
+, sqlite ? null
+, db4 ? null
+, readline ? null
+, openssl ? null
+}:
 
 assert zlibSupport -> zlib != null;
 assert gdbmSupport -> gdbm != null;

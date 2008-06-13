@@ -3346,7 +3346,7 @@ let pkgs = rec {
 
   unixODBCDrivers = recurseIntoAttrs (import ../development/libraries/unixODBCDrivers {
     inherit fetchurl stdenv unixODBC glibc libtool openssl zlib;
-    inherit postgresql mysql;
+    inherit postgresql mysql sqlite;
   });
 
   wxGTK = wxGTK26;
