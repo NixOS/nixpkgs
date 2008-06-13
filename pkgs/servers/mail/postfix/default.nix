@@ -1,5 +1,7 @@
 {stdenv, fetchurl, db4, glibc}:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation {
   name = "postfix-2.2.11";
   src = fetchurl {
