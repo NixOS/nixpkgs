@@ -520,7 +520,8 @@ let pkgs = rec {
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
     {
-      inherit fetchurl stdenv;
+      inherit fetchurl stdenv acl;
+      aclSupport = stdenv.isLinux;
     });
 
   cpio = import ../tools/archivers/cpio {
@@ -655,7 +656,6 @@ let pkgs = rec {
 
   glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
-    inherit (xlibs) libXext;
   };
 
   gnugrep = useFromStdenv "gnugrep"
@@ -2320,9 +2320,10 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  acl = import ../development/libraries/acl {
-    inherit stdenv fetchurl autoconf libtool gettext attr;
-  };
+  acl = useFromStdenv "acl"
+    (import ../development/libraries/acl {
+      inherit stdenv fetchurl gettext attr libtool;
+    });
 
   agg = import ../development/libraries/agg {
     inherit fetchurl stdenv autoconf automake libtool pkgconfig
@@ -2370,13 +2371,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  attr = import ../development/libraries/attr {
-    inherit stdenv fetchurl autoconf libtool gettext;
-  };
-
-  audiofile = import ../development/libraries/audiofile {
-    inherit fetchurl stdenv;
-  };
+  attr = useFromStdenv "attr"
+    (import ../development/libraries/attr {
+      inherit stdenv fetchurl libtool gettext;
+    });
 
   axis = import ../development/libraries/axis {
     inherit fetchurl stdenv;
@@ -2400,6 +2398,7 @@ let pkgs = rec {
 
   cairo = import ../development/libraries/cairo {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
+    inherit (xlibs) pixman;
   };
 
   cairomm = import ../development/libraries/cairomm {
@@ -2645,17 +2644,14 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
-  gnutls = import ../development/libraries/gnutls
-    (let guileBindings = getConfig ["gnutls" "guile"] false;
-     in {
-	 inherit fetchurl stdenv libgcrypt zlib lzo;
-	 inherit guileBindings;
-	 guile = (if guileBindings then guile else null);
-       });
+  gnutls = import ../development/libraries/gnutls {
+    inherit fetchurl stdenv libgcrypt zlib lzo guile;
+    guileBindings = getConfig ["gnutls" "guile"] false;
+  };
 
   gpgme = import ../development/libraries/gpgme {
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2;
-  inherit (gtkLibs) glib;
+    inherit (gtkLibs) glib;
   };
 
   # gnu scientific library
@@ -2663,13 +2659,20 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs210;
+  gtkLibs = recurseIntoAttrs gtkLibs212;
 
   gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
   };
 
   gtkLibs210 = import ../development/libraries/gtk-libs/2.10 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11
+            libtiff libjpeg libpng cairo libsigcxx cairomm;
+    inherit (xlibs) libXinerama libXrandr;
+    xineramaSupport = true;
+  };
+
+  gtkLibs212 = import ../development/libraries/gtk-libs/2.12 {
     inherit fetchurl stdenv pkgconfig gettext perl x11
             libtiff libjpeg libpng cairo libsigcxx cairomm;
     inherit (xlibs) libXinerama libXrandr;
@@ -3007,6 +3010,10 @@ let pkgs = rec {
   };
 
   libsndfile = import ../development/libraries/libsndfile {
+    inherit fetchurl stdenv;
+  };
+
+  libtasn1 = import ../development/libraries/libtasn1 {
     inherit fetchurl stdenv;
   };
 
@@ -5008,13 +5015,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk pango;
   };
 
-  librsvg = import ../development/libraries/librsvg {
-    inherit fetchurl stdenv;
-    inherit libxml2 pkgconfig cairo fontconfig freetype;
-    inherit (gtkLibs) glib pango gtk;
-    #gtkLibs = gtkLibs210;          #need gtk+
-    libart = gnome.libart_lgpl;
-  };
+  librsvg = gnome.librsvg;
 
   libsepol = import ../os-specific/linux/libsepol {
     inherit fetchurl stdenv;
@@ -6812,12 +6813,13 @@ let pkgs = rec {
 
 
   gnome = recurseIntoAttrs (import ../desktops/gnome {
-    inherit fetchurl stdenv pkgconfig audiofile
-            flex bison popt zlib libxml2 libxslt
-            perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
-            gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
-            libcm python dbus_glib ncurses which libxml2Python
-            iconnamingutils openssl hal samba fam;
+    inherit
+      fetchurl stdenv pkgconfig
+      flex bison popt zlib libxml2 libxslt
+      perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
+      gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
+      libcm python dbus_glib ncurses which libxml2Python
+      iconnamingutils openssl hal samba fam libgcrypt libtasn1;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {

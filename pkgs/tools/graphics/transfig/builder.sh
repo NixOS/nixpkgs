@@ -4,7 +4,7 @@ patchPhase=patchPhase
 patchPhase() {
     for i in $patches; do
         header "applying patch $i" 3
-        patch -p0 < $i || fail
+        patch -p0 < $i
         stopNest
     done
 

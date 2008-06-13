@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel, xlibs, gtkLibs}:
+{stdenv, fetchurl, kernel, xlibs, gtkLibs, zlib}:
 
 let 
 
@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nvidiaDrivers-${versionNumber}-${kernel.version}";
+  name = "nvidia-x11-${versionNumber}-${kernel.version}";
   
   builder = ./builder.sh;
   
@@ -30,8 +30,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  libPath = [
-    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib 
-    xlibs.libXext xlibs.libX11 xlibs.libXv
+  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11];
+
+  cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
+
+  programPath = stdenv.lib.makeLibraryPath [
+    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv
   ];
 }

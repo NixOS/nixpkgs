@@ -16,6 +16,31 @@ stdenv.mkDerivation {
 
   inherit (stdenv) is64bit;
 
+  patches = [
+    /* Fix for NIXPKGS-79: when doing host name lookups, when
+       nsswitch.conf contains a line like
+       
+         hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4
+
+       don't return an error when mdns4_minimal can't be found.  This
+       is a bug in Glibc: when a service can't be found, NSS should
+       continue to the next service unless "UNAVAIL=return" is set.
+       ("NOTFOUND=return" refers to the service returning a NOTFOUND
+       error, not the service itself not being found.)  The reason is
+       that the "status" variable (while initialised to UNAVAIL) is
+       outside of the loop that iterates over the services, the
+       "files" service sets status to NOTFOUND.  So when the call to
+       find "mdns4_minimal" fails, "status" will still be NOTFOUND,
+       and it will return instead of continuing to "dns".  Thus, the
+       line
+       
+         hosts: mdns4_minimal [NOTFOUND=return] dns mdns4
+
+       does work because "status" will contain UNAVAIL after the
+       failure to find mdns4_minimal. */
+    ./nss-skip-unavail.patch
+  ];
+
   # `--with-tls --without-__thread' enables support for TLS but causes
   # it not to be used.  Required if we don't want to barf on 2.4
   # kernels.  Or something.

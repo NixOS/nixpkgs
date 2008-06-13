@@ -3,14 +3,14 @@
 , freetype, bzip2, cups
 }:
 
-let version = "3.5.7"; in
+let version = "3.5.9"; in
 
 stdenv.mkDerivation {
   name = "kdelibs-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdelibs-${version}.tar.bz2";
-    md5 = "50ed644f2ec91963570fe2b155652957";
+    md5 = "55e5f00874933d1a7ba7c95e369a205e";
   };
 
   passthru = {inherit openssl libX11 libjpeg qt;};
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
       --replace /opt/local/bin /no-such-path
   '';
 
-  configureFlags = "
+  configureFlags = ''
     --without-arts 
     --with-ssl-dir=${openssl}
     --with-extra-includes=${libjpeg}/include
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib
-  ";
+  '';
 }

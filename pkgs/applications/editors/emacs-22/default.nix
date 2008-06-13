@@ -13,19 +13,26 @@ assert xpmSupport -> libXpm != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 
 stdenv.mkDerivation {
-  name = "emacs-22.1";
+  name = "emacs-22.2";
 
   builder = ./builder.sh;
+  
   src = fetchurl {
-    url = mirror://gnu/emacs/emacs-22.1.tar.gz;
-    sha256 = "1l1y3il98pq3cz464p244wz2d3nga5lq8fkw5pwp5r97f7pkpi0y";
+    url = mirror://gnu/emacs/emacs-22.2.tar.gz;
+    md5 = "d6ee586b8752351334ebf072904c4d51";
   };
-  patches = [./crt.patch ./makefile-pwd.patch];
-  buildInputs = [
-    ncurses x11
-    (if xawSupport then if xaw3dSupport then Xaw3d else libXaw else null)
-    (if xpmSupport then libXpm else null)
-  ] ++ (if gtkGUI then [pkgconfig gtk] else []);
+  
+  buildInputs = [ncurses x11]
+    ++ stdenv.lib.optional xawSupport (if xaw3dSupport then Xaw3d else libXaw)
+    ++ stdenv.lib.optional xpmSupport libXpm
+    ++ stdenv.lib.optionals gtkGUI [pkgconfig gtk];
+  
   configureFlags =
-    if gtkGUI then ["--with-x-toolkit=gtk"] else [];
+    stdenv.lib.optional gtkGUI "--with-x-toolkit=gtk";
+
+  meta = {
+    description = "Emacs, *the* text editor";
+    homepage = http://www.gnu.org/software/emacs/;
+    license = "GPL";
+  };
 }

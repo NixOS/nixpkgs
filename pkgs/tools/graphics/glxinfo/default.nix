@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, mesa, libXext}:
+{stdenv, fetchurl, x11, mesa}:
 
 stdenv.mkDerivation {
   name = "glxinfo-6.5.2";
@@ -19,11 +19,5 @@ stdenv.mkDerivation {
   installPhase = "
     ensureDir $out/bin
     cp glxinfo glxgears $out/bin
-  ";
-
-  postFixup = "
-    for i in $out/bin/*; do
-      patchelf --set-rpath /var/run/opengl-driver/lib:${libXext}/lib:$(patchelf --print-rpath $i) $i
-    done
   ";
 }

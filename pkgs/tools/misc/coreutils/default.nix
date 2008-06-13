@@ -1,15 +1,17 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation {
-  name = "coreutils-6.10";
+  name = "coreutils-6.12";
   
   src = fetchurl {
-    url = mirror://gnu/coreutils/coreutils-6.10.tar.gz;
-    sha256 = "0zpbxfl16sq45s53fxw43i9i8lrdcc845714c1j5f84zi13ka08x";
+    url = mirror://gnu/coreutils/coreutils-6.12.tar.gz;
+    sha256 = "12pi7i2mxff5jab48pqpwlz2pi0j6sp9p7bgrcl663iiw81zglj9";
   };
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
   };
+
+  buildInputs = stdenv.lib.optional aclSupport acl;
 }

@@ -11,8 +11,8 @@ echo $LD_LIBRARY_PATH
 
 buildPhase=myBuilder
 myBuilder() {
-    qmake mythtv.pro || fail
-    make || fail
+    qmake mythtv.pro
+    make
 }
 
 

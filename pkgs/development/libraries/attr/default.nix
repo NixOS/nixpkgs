@@ -1,14 +1,16 @@
-{stdenv, fetchurl, autoconf, libtool, gettext}:
+{stdenv, fetchurl, libtool, gettext}:
 
 stdenv.mkDerivation {
-  name = "attr-2.4.32";
+  name = "attr-2.4.41";
 
-  builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://oss.sgi.com/projects/xfs/download/download/cmd_tars/attr_2.4.32-1.tar.gz;
-    md5 = "092739e9b944815aecc1f5d8379d5ea5";
+    url = ftp://oss.sgi.com/projects/xfs/cmd_tars/attr_2.4.41-1.tar.gz;
+    sha256 = "0dc286g8vr402aca6wg945sdm92bys8a142vrkwx6bkjz4bwz6gp";
   };
 
-  buildInputs = [autoconf libtool gettext];
-  patches = [./attr-2.4.32.patch ./attr-2.4.32-makefile.patch];
+  buildInputs = [libtool gettext];
+  
+  configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
+  
+  installTargets = "install install-lib install-dev";
 }

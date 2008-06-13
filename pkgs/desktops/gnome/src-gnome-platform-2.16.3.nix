@@ -114,10 +114,10 @@
     };
   };
   libglade = {
-    name = "libglade-2.6.0";
+    name = "libglade-2.6.2";
     src = fetchurl {
-      url = http://ftp.gnome.org/pub/GNOME/platform/2.16/2.16.3/sources/libglade-2.6.0.tar.bz2;
-      md5 = "81d7b2b64871ce23a5fae1e5da0b1f6e";
+      url = http://ftp.acc.umu.se/pub/GNOME/sources/libglade/2.6/libglade-2.6.2.tar.bz2;
+      md5 = "da4f9d1c6cd1337f6ef5e2db768d8557";
     };
   };
   libgnome = {

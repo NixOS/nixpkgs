@@ -5,7 +5,7 @@ unzip ${src} || true
 
 # set the dynamic linker of unpack200, necessary for construct script
 echo "patching unpack200"
-patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath "" */bin/unpack200 || fail
+patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath "" */bin/unpack200
 
 echo "constructing JDK and JRE installations"
 if test -z "$installjdk"; then

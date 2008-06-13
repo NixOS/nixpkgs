@@ -14,6 +14,14 @@ stdenv.mkDerivation {
     sha1 = "dc0bf586145b9d617039f49101874fbc76a9dc18";
   };
 
+  patches = [
+    # Patch to build Pan on recent glibs.
+    (fetchurl {
+      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/net-nntp/pan/files/pan-0.132-glib-compat.patch?rev=1.1";
+      sha256 = "0bmgnc3l1pz763xns8057qbsjirc0njr8dn34fhy4ig9yk4kp9k7";
+    })
+  ];
+
   buildInputs = [
     pkgconfig gtk perl pcre gmime gettext
     (if spellChecking then gtkspell else null)

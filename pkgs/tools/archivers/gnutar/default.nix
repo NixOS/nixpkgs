@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnutar-1.19";
+  name = "gnutar-1.20";
   
   src = fetchurl {
-    url = mirror://gnu/tar/tar-1.19.tar.bz2;
-    sha256 = "1d4wh27wlgryz3ld6gp6fn56knh7dmny93bmgixy07kvlxnx9466";
+    url = mirror://gnu/tar/tar-1.20.tar.bz2;
+    sha256 = "1swx3whm2vh0qzq8v04vgwk5zds6zlznk52xwivj7p2szcxg72xy";
   };
   
   patches = [./implausible.patch];

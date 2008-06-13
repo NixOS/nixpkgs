@@ -143,4 +143,10 @@ rec {
     http://ftp.opensuse.org/pub/opensuse/
   ];
 
+  # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
+  gnome = [
+    # This one redirects to some mirror closeby, so it should be all you need.
+    http://download.gnome.org/
+  ];
+
 }

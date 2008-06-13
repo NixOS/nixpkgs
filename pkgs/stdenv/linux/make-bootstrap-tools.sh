@@ -102,10 +102,10 @@ rm -rf gcc/lib/gcc/*/*/include/root
 rm -rf gcc/lib/gcc/*/*/include/linux
 if test "$system" = "powerpc-linux"; then
     nukeRefs gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/bits/mathdef.h
-    # Dangling symlink "sound", probably produced by fixinclude.
-    # Should investigate why it's there in the first place.
-    rm -f gcc/lib/gcc/powerpc-unknown-linux-gnu/*/include/sound
 fi
+# Dangling symlink "sound", probably produced by fixinclude.
+# Should investigate why it's there in the first place.
+rm -f gcc/lib/gcc/*/*/include/sound
 
 
 # Create the glibc tarball.
@@ -130,10 +130,8 @@ for i in glibc/include/asm-*; do
     rm $i
     cp -prd $target glibc/include
 done
-if test "$system" = "powerpc-linux"; then
-    # Hopefully we won't need these.
-    rm -f glibc/include/mtd glibc/include/rdma glibc/include/sound glibc/include/video
-fi
+# Hopefully we won't need these.
+rm -f glibc/include/mtd glibc/include/rdma glibc/include/sound glibc/include/video
 
 
 # Strip executables even further.

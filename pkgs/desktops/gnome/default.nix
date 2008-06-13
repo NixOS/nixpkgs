@@ -1,5 +1,3 @@
-# todo audiofile is also part of the gnome platform. Move it to this collection?
-
 args: with args;
 
 assert dbus_glib.glib == gtkLibs.glib;
@@ -10,7 +8,7 @@ rec {
 
   # Platform
 
-  platform = import ./src-gnome-platform-2.16.3.nix {
+  platform = import ./src-gnome-platform-2.22.1.nix {
     inherit fetchurl;
   };
 
@@ -22,9 +20,13 @@ rec {
 
   gtk = gtkLibs.gtk;
 
-  esound = import ./esound.nix {
-    inherit fetchurl stdenv audiofile;
-    input = platform.esound;
+  audiofile = stdenv.mkDerivation {
+    inherit (platform.audiofile) name src;
+  };
+
+  esound = stdenv.mkDerivation {
+    inherit (platform.esound) name src;
+    propagatedBuildInputs = [pkgconfig audiofile];
   };
 
   libIDL = import ./libIDL.nix {
@@ -39,9 +41,10 @@ rec {
     input = platform.ORBit2;
   };
 
-  GConf = import ./GConf.nix {
-    inherit fetchurl stdenv pkgconfig perl glib gtk libxml2 ORBit2 popt;
-    input = platform.GConf;
+  GConf = stdenv.mkDerivation {
+    inherit (platform.GConf) name src;
+    buildInputs = [pkgconfig perl glib gtk libxml2 popt gettext perlXMLParser];
+    propagatedBuildInputs = [ORBit2];
   };
 
   gnomemimedata = import ./gnome-mime-data.nix {
@@ -49,16 +52,20 @@ rec {
     input = platform.gnomemimedata;
   };
 
-  gnomevfs = import ./gnome-vfs.nix {
-    inherit fetchurl stdenv gnome pkgconfig perl libxml2 popt
-      perlXMLParser gettext bzip2 dbus_glib openssl hal samba fam;
-    input = platform.gnomevfs;
+  gnomevfs = stdenv.mkDerivation {
+    inherit (platform.gnomevfs) name src;
+    buildInputs = [
+      pkgconfig perl glib libxml2 libbonobo
+      gnomemimedata popt perlXMLParser gettext bzip2
+      dbus_glib hal openssl samba fam
+    ];
+    propagatedBuildInputs = [GConf];
+    patches = [./no-kerberos.patch];
   };
 
-  gail = import ./gail.nix {
-    inherit fetchurl stdenv pkgconfig;
-    inherit gtk atk libgnomecanvas;
-    input = platform.gail;
+  gail = stdenv.mkDerivation {
+    inherit (platform.gail) name src;
+    buildInputs = [pkgconfig atk gtk];
   };
 
   libgnome = import ./libgnome.nix {
@@ -77,10 +84,10 @@ rec {
     input = platform.libglade;
   };
 
-  libgnomecanvas = import ./libgnomecanvas.nix {
-    inherit fetchurl stdenv pkgconfig gtk libglade;
-    libart = libart_lgpl;
-    input = platform.libgnomecanvas;
+  libgnomecanvas = stdenv.mkDerivation {
+    inherit (platform.libgnomecanvas) name src;
+    buildInputs = [pkgconfig libglade perl perlXMLParser gail gettext];
+    propagatedBuildInputs = [gtk libart_lgpl];
   };
 
   libbonobo = import ./libbonobo.nix {
@@ -109,22 +116,32 @@ rec {
 
   # Desktop
 
-  desktop = import ./src-gnome-desktop-2.16.3.nix {
+  desktop = import ./src-gnome-desktop-2.22.1.nix {
     inherit fetchurl;
   };
 
-  libgnomeprint = import ./libgnomeprint.nix {
-    inherit fetchurl stdenv libxml2 perl perlXMLParser pkgconfig popt
-         bison flex;
-    inherit glib pango;
-    libart = libart_lgpl;
-    input = desktop.libgnomeprint;
+  libgnomeprint = stdenv.mkDerivation {
+    inherit (desktop.libgnomeprint) name src;
+
+    buildInputs = [
+      perl perlXMLParser pkgconfig popt libxml2
+      glib pango bison flex gettext
+    ];
+
+    propagatedBuildInputs = [libxml2 libart_lgpl];
   };
 
-  libgnomeprintui = import ./libgnomeprintui.nix {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
-    inherit gtk libgnomeprint libgnomecanvas gnomeicontheme;
-    input = desktop.libgnomeprintui;
+  libgnomeprintui = stdenv.mkDerivation {
+    inherit (desktop.libgnomeprintui) name src;
+
+    buildInputs = [
+      perl perlXMLParser pkgconfig gtk libgnomecanvas gnomeicontheme
+      gettext
+    ];
+
+    propagatedBuildInputs = [
+      libgnomeprint
+    ];
   };
 
   gtkhtml = import ./gtkhtml.nix {
@@ -141,9 +158,10 @@ rec {
     input = desktop.gnomeicontheme;
   };
 
-  gnomekeyring = import ./gnome-keyring.nix {
-    inherit fetchurl stdenv pkgconfig glib gtk perl perlXMLParser gettext;
-    input = desktop.gnomekeyring;
+  gnomekeyring = stdenv.mkDerivation {
+    inherit (desktop.gnomekeyring) name src;
+    buildInputs = [pkgconfig gtk glib perl perlXMLParser gettext GConf libgcrypt libtasn1];
+    CFLAGS = "-DENABLE_NLS=0";
   };
 
   gtksourceview = import ./gtksourceview.nix {
@@ -156,7 +174,15 @@ rec {
   scrollkeeper = import ./scrollkeeper.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser
             libxml2 libxslt docbook_xml_dtd_42;
-    input = desktop.scrollkeeper;
+    # Scrollkeeper has disappeared from recent Gnome releases, but
+    # it's still being used.
+    input = {
+      name = "scrollkeeper-0.3.14";
+      src = fetchurl {
+        url = http://ftp.gnome.org/pub/GNOME/desktop/2.16/2.16.3/sources/scrollkeeper-0.3.14.tar.bz2;
+        md5 = "b175e582a6cec3e50a9de73a5bb7455a";
+      };
+    };
   };
 
   gnomedesktop = import ./gnome-desktop.nix {
@@ -176,11 +202,27 @@ rec {
     input = desktop.gnomemenus;
   };
 
-  gnomepanel = import ./gnome-panel.nix {
-    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser libjpeg
-      libpng dbus_glib gettext libxslt;
-    inherit (xlibs) libXmu libXau;
-    input = desktop.gnomepanel;
+  librsvg = stdenv.mkDerivation {
+    inherit (desktop.librsvg) name src;
+    buildInputs = [libxml2 libart_lgpl pkgconfig glib pkgconfig pango gtk];
+  };
+
+  libgweather = stdenv.mkDerivation {
+    inherit (desktop.libgweather) name src;
+    buildInputs = [gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs];
+  };
+
+  gnomepanel = stdenv.mkDerivation {
+    inherit (desktop.gnomepanel) name src;
+
+    buildInputs = [
+      pkgconfig perl perlXMLParser gtk glib ORBit2 libgnome libgnomeui
+      gnomedesktop libglade libwnck libjpeg libpng scrollkeeper
+      xlibs.libXmu xlibs.libXau dbus_glib gnomemenus gnomedocutils
+      gettext libxslt librsvg libgweather which
+    ];
+
+    configureFlags = "--disable-scrollkeeper";
   };
 
   libsoup = import ./libsoup.nix {
@@ -190,7 +232,15 @@ rec {
   
   startupnotification = import ./startup-notification.nix {
     inherit stdenv fetchurl pkgconfig x11;
-    input = desktop.startupnotification;
+    # Strangely, startup-notificatio has disappeared from Gnome
+    # releases, but it's still used. 
+    input = {
+      name = "startup-notification-0.8";
+      src = fetchurl {
+        url = http://ftp.gnome.org/pub/GNOME/desktop/2.16/2.16.3/sources/startup-notification-0.8.tar.bz2;
+        md5 = "d9b2e9fba18843314ae42334ceb4336d";
+      };
+    };
   };
 
   metacity = import ./metacity.nix {
@@ -220,10 +270,17 @@ rec {
     input = desktop.vte;
   };
   
-  gnometerminal = import ./gnome-terminal.nix {
-    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
-      gettext which python libxml2Python libxslt;
-    input = desktop.gnometerminal;
+  gnometerminal = stdenv.mkDerivation {
+    inherit (desktop.gnometerminal) name src;
+
+    buildInputs = [
+      pkgconfig perl perlXMLParser gtk GConf libglade
+      libgnomeui startupnotification gnomevfs vte
+      gnomedocutils gettext which scrollkeeper
+      python libxml2Python libxslt
+    ];
+
+    configureFlags = "--disable-scrollkeeper";
   };
 
   libgtop = import ./libgtop.nix {

@@ -1,14 +1,16 @@
-args: with args;
+{stdenv, fetchurl, gettext, attr, libtool}:
 
 stdenv.mkDerivation {
-  name = "acl-2.2.45";
+  name = "acl-2.2.47";
 
-  builder = ./builder.sh;
-  src = 
-	fetchurl {
-		url = ftp://oss.sgi.com/projects/xfs/cmd_tars/acl_2.2.45-1.tar.gz;
-		sha256 = "1bb2k5br494yk863w27k1h8gkdkq4kzakvajhj844hl1cixhhf1a";
-	};
-  buildInputs = [autoconf libtool gettext attr];
-  patches = [ ./acl-2.2.45-patch ];
+  src = fetchurl {
+    url = ftp://oss.sgi.com/projects/xfs/cmd_tars/acl_2.2.47-1.tar.gz;
+    sha256 = "1j39g62fki0iyji9s62slgwdfskpkqy7rmjlqcnmsvsnxbxhc294";
+  };
+  
+  buildInputs = [gettext attr libtool];
+
+  configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
+
+  installTargets = "install install-lib install-dev";
 }

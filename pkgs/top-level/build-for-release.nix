@@ -26,7 +26,7 @@ let
     bzip2
     cabextract
     cdrkit
-    chatzilla
+    #chatzilla
     cksfv
     #compiz
     coreutils
@@ -225,21 +225,29 @@ let
   };
 
   x86_64LinuxPkgs = {inherit (allPackages {system = "x86_64-linux";})
+    MPlayer
+    MPlayerPlugin
     aterm242fixes
     autoconf
     automake19x
     bash
     binutils
     bison23
+    emacs
+    firefoxWrapper
     gcc
     hello
     libtool
     nixUnstable
     subversion
+    pan
     ;    
   inherit ((allPackages {system = "i686-linux";}).kernelPackages_2_6_23)
     iwlwifi
     kernel
+    ;
+  inherit ((allPackages {system = "i686-linux";}).xorg)
+    xorgserver
     ;
   };
   
@@ -305,5 +313,5 @@ in [
   #i686FreeBSDPkgs
   #powerpcDarwinPkgs
   i686DarwinPkgs
-  cygwinPkgs
+  #cygwinPkgs
 ]

@@ -1,7 +1,7 @@
 source $stdenv/setup
 
-tar zxvf $src  || fail
-cd soot-*  || fail
+tar zxvf $src
+cd soot-*
 
 export NIX_ANT_OPTS="$ANT_OPTS -Xmx200m"
 
@@ -13,7 +13,7 @@ release.loc=lib
 javaapi.url=http://java.sun.com/j2se/1.4.2/docs/api/
 EOF
 
-ant classesjar || fail
+ant classesjar
 
-ensureDir $out/jars/ || fail
-mv lib/sootclasses-foo.jar $out/jars/soot.jar || fail
+ensureDir $out/jars/
+mv lib/sootclasses-foo.jar $out/jars/soot.jar

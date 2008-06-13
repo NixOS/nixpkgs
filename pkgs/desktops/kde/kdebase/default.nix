@@ -5,7 +5,7 @@
 let version = "3.5.7"; in
 
 stdenv.mkDerivation {
-  name = "kdebase-3.5.7";
+  name = "kdebase-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdebase-${version}.tar.bz2";
@@ -21,11 +21,11 @@ stdenv.mkDerivation {
     xlibs.scrnsaverproto xlibs.libXScrnSaver
   ];
 
-  configureFlags = "
+  configureFlags = ''
     --without-arts 
     --with-ssl-dir=${openssl}
     --with-extra-includes=${libjpeg}/include
-  ";
+  '';
 
   # Prevent configure from looking for pkg-config and freetype-config
   # in the wrong location (it looks in /usr/bin etc. *before* looking

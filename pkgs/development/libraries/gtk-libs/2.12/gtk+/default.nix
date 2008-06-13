@@ -1,13 +1,23 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "gtk+-2.12.9";
+  name = "gtk+-2.12.10";
+  
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gtk/v2.12/gtk+-2.12.9.tar.bz2;
-    sha256 = "1j0fil4rzvkrlq3mwpb5mpwks1h5sk580qq54l69y99incgvznav";
+    url = mirror://gnome/sources/gtk+/2.12/gtk+-2.12.10.tar.bz2;
+    md5 = "5fcbdd2254eedb6b9ae828afc01d9eaa";
   };
-  buildInputs = [ pkgconfig perl ];
-  propagatedBuildInputs = [x11 glib atk pango libtiff libjpeg libpng cairo
-    libXrandr (if xineramaSupport then libXinerama else null)];
+  
+  buildInputs = [pkgconfig perl];
+  
+  propagatedBuildInputs = [
+    x11 glib atk pango libtiff libjpeg libpng cairo libXrandr
+  ] ++ stdenv.lib.optional xineramaSupport libXinerama;
+    
   passthru = { inherit libtiff libjpeg libpng; };
+
+  meta = {
+    description = "A multi-platform toolkit for creating graphical user interfaces";
+    homepage = http://www.gtk.org/;
+  };
 }

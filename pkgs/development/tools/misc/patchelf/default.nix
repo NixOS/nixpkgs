@@ -1,14 +1,15 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "patchelf-0.3";
+  name = "patchelf-0.4";
+  
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/patchelf-0.3/patchelf-0.3.tar.bz2;
-    md5 = "20d77052ae559c60e6c5efb6ea95af9b";
+    url = http://nixos.org/releases/patchelf/patchelf-0.4/patchelf-0.4.tar.bz2;
+    sha256 = "65c455b62fc52292e2488f05f46e7e38c46fdcf69c002750f5887145284c4f85";
   };
 
   meta = {
-    homepage = "http://nix.cs.uu.nl/patchelf.html";
+    homepage = http://nixos.org/patchelf.html;
     license = "GPL";
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
   };

@@ -1,3 +1,44 @@
+exitHandler() {
+    exitCode=$?
+    set +e
+
+    closeNest
+
+    if test -n "$showBuildStats"; then
+        times > $NIX_BUILD_TOP/.times
+        local -a times=($(cat $NIX_BUILD_TOP/.times))
+        # Print the following statistics:
+        # - user time for the shell
+        # - system time for the shell
+        # - user time for all child processes
+        # - system time for all child processes
+        echo "build time elapsed: " ${times[*]}
+    fi
+    
+    if test $exitCode != 0; then
+        eval "$failureHook"
+    
+        # If the builder had a non-zero exit code and
+        # $succeedOnFailure is set, create the file
+        # `$out/nix-support/failed' to signal failure, and exit
+        # normally.  Otherwise, return the original exit code.
+        if test -n "$succeedOnFailure"; then
+            echo "build failed with exit code $exitCode (ignored)"
+            ensureDir "$out/nix-support"
+            echo -n $exitCode > "$out/nix-support/failed"
+            exit 0
+        fi
+        
+    else
+        eval "$exitHook"
+    fi
+    
+    exit $exitCode
+}
+
+trap "exitHandler" EXIT
+
+
 ######################################################################
 # Helper functions that might be useful in setup hooks.
 
@@ -17,8 +58,7 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-addToSearchPath()
-{
+addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
@@ -34,6 +74,7 @@ test -z $NIX_GCC && NIX_GCC=@gcc@
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
+    if test "$i" = /; then i=; fi
     PATH=$PATH${PATH:+:}$i/bin
 done
 
@@ -88,20 +129,6 @@ assertEnvExists(){
   fi
 }
 
-# Called when some build action fails.  If $succeedOnFailure is set,
-# create the file `$out/nix-support/failed' to signal failure, and
-# exit normally.  Otherwise, exit with failure.
-fail() {
-    exitCode=$?
-    if test "$succeedOnFailure" = 1; then
-        ensureDir "$out/nix-support"
-        touch "$out/nix-support/failed"
-        exit 0
-    else
-        exit $?
-    fi
-}
-
 
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
@@ -110,8 +137,7 @@ eval "$addInputsHook"
 
 
 # Recursively find all build inputs.
-findInputs()
-{
+findInputs() {
     local pkg=$1
 
     case $pkgs in
@@ -144,13 +170,12 @@ done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
-addToEnv()
-{
+addToEnv() {
     local pkg=$1
 
     if test "$ignoreFailedInputs" != "1" -a -e $1/nix-support/failed; then
         echo "failed input $1" >&2
-        fail
+        exit 1
     fi
 
     if test -d $1/bin; then
@@ -232,8 +257,9 @@ stripDirs() {
     dirs=${dirsNew}
 
     if test -n "${dirs}"; then
-        echo "stripping (with flags $stripFlags) in $dirs"
+        header "stripping (with flags $stripFlags) in $dirs"
         find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+        stopNest
     fi
 }
 
@@ -340,8 +366,6 @@ closeNest() {
     done
 }
 
-trap "closeNest" EXIT
-
 
 # This function is useful for debugging broken Nix builds.  It dumps
 # all environment variables to a file `env-vars' in the build
@@ -425,21 +449,21 @@ unpackFile() {
 
     case "$file" in
         *.tar)
-            tar xvf $file || fail
+            tar xvf $file
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $file | tar xvf - || fail
+            gzip -d < $file | tar xvf -
             ;;
         *.tar.bz2 | *.tbz2)
-            bzip2 -d < $file | tar xvf - || fail
+            bzip2 -d < $file | tar xvf -
             ;;
         *.zip)
-            unzip $file || fail
+            unzip $file
             ;;
         *)
             if test -d "$file"; then
                 stripHash $file
-                cp -prvd $file $strippedName || fail
+                cp -prvd $file $strippedName
             else
                 if test -n "$findUnpacker"; then
                     $findUnpacker $1;
@@ -448,7 +472,7 @@ unpackFile() {
                     echo "source archive $file has unknown type"
                     exit 1
                 fi
-                eval "$unpackCmd" || fail
+                eval "$unpackCmd"
             fi
             ;;
     esac
@@ -463,6 +487,8 @@ unpackPhase() {
         return
     fi
 
+    eval "$preUnpack"
+    
     if test -z "$srcs"; then
         if test -z "$src"; then
             echo 'variable $src or $srcs should point to the source'
@@ -533,6 +559,8 @@ patchPhase() {
         return
     fi
 
+    eval "$prePatch"
+    
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
     if test -z "$patchFlags"; then
@@ -550,15 +578,16 @@ patchPhase() {
                 uncompress="bzip2 -d"
                 ;;
         esac
-        $uncompress < $i | patch $patchFlags || fail
+        $uncompress < $i | patch $patchFlags
         stopNest
     done
+
+    eval "$postPatch"
 }
 
 
 fixLibtool() {
-    sed 's^eval sys_lib_.*search_path=.*^^' < $1 > $1.tmp
-    mv $1.tmp $1
+    sed -i -e 's^eval sys_lib_.*search_path=.*^^' "$1"
 }
 
 
@@ -592,12 +621,12 @@ configurePhase() {
     # Add --disable-dependency-tracking to speed up some builds.
     if test -z "$dontAddDisableDepTrack"; then
         if grep -q dependency-tracking $configureScript; then
-            configureFlags="--disable-dependency-tracking ${prefixKey:---prefix=}$prefix $configureFlags"
+            configureFlags="--disable-dependency-tracking $configureFlags"
         fi
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags"${configureFlagsArray[@]}" || fail
+    $configureScript $configureFlags"${configureFlagsArray[@]}"
 
     eval "$postConfigure"
 }
@@ -619,7 +648,7 @@ buildPhase() {
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $buildFlags "${buildFlagsArray[@]}" || fail
+        $buildFlags "${buildFlagsArray[@]}"
 
     eval "$postBuild"
 }
@@ -631,6 +660,8 @@ checkPhase() {
         return
     fi
 
+    eval "$preCheck"
+
     if test -z "$checkTarget"; then
         checkTarget="check"
     fi
@@ -638,17 +669,43 @@ checkPhase() {
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" $checkTarget || fail
+        $checkFlags "${checkFlagsArray[@]}" $checkTarget
+
+    eval "$postCheck"
 }
 
 
 patchELF() {
     # Patch all ELF executables and shared libraries.
     header "patching ELF executables and libraries"
-    find "$prefix" \( \
-        \( -type f -a -name "*.so*" \) -o \
-        \( -type f -a -perm +0100 \) \
-        \) -print -exec patchelf --shrink-rpath {} \;
+    if test -e "$prefix"; then
+        find "$prefix" \( \
+            \( -type f -a -name "*.so*" \) -o \
+            \( -type f -a -perm +0100 \) \
+            \) -print -exec patchelf --shrink-rpath {} \;
+    fi
+    stopNest
+}
+
+
+patchShebangs() {
+    # Rewrite all script interpreter file names (`#! /path') under the
+    # specified  directory tree to paths found in $PATH.  E.g.,
+    # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
+    # Interpreters that are already in the store are left untouched.
+    header "patching script interpreter paths"
+    local dir="$1"
+    local f
+    for f in $(find "$dir" -type f -perm +0100); do
+        local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
+        if test -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE"; then
+            local newPath=$(type -P $(basename $oldPath) || true)
+            if test -n "$newPath" -a "$newPath" != "$oldPath"; then
+                echo "$f: interpreter changed from $oldPath to $newPath"
+                sed -i -e "1 s,$oldPath,$newPath," "$f"
+            fi
+        fi
+    done
     stopNest
 }
 
@@ -670,7 +727,7 @@ installPhase() {
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
         make ${makefile:+-f $makefile} $installTargets \
             $makeFlags "${makeFlagsArray[@]}" \
-            $installFlags "${installFlagsArray[@]}" || fail
+            $installFlags "${installFlagsArray[@]}"
     else
         eval "$installCommand"
     fi
@@ -726,6 +783,10 @@ fixupPhase() {
         patchELF "$prefix"
     fi
 
+    if test -z "$dontPatchShebangs"; then
+        patchShebangs "$prefix"
+    fi
+
     if test -n "$propagatedBuildInputs"; then
         ensureDir "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
@@ -753,7 +814,7 @@ distPhase() {
     fi
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget || fail
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
@@ -795,8 +856,10 @@ genericBuild() {
     fi
 
     if test -z "$phases"; then
-        phases="unpackPhase patchPhase configurePhase buildPhase checkPhase \
-            installPhase fixupPhase distPhase $extraPhases";
+        phases="$prePhases unpackPhase patchPhase $preConfigurePhases \
+            configurePhase $preBuildPhases buildPhase checkPhase \
+            $preInstallPhases installPhase fixupPhase \
+            $preDistPhases distPhase $postPhases";
     fi
 
     for curPhase in $phases; do

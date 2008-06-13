@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [zlib lzo libgcrypt]
-    ++ (if guileBindings then [guile] else []);
+    ++ stdenv.optional guileBindings guile;
 
   doCheck = true;
   
