@@ -4925,7 +4925,7 @@ let pkgs = rec {
     } null;
 
     nvidiaDrivers = import ../os-specific/linux/nvidia {
-      inherit stdenv fetchurl kernel xlibs gtkLibs;
+      inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
     };
 
     wis_go7007 = import ../os-specific/linux/wis-go7007 {
