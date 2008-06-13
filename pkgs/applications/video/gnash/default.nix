@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   name = "gnash-0.8.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnash/0.8.2/${name}.tar.bz2";
-    sha256 = "1akbs0wkgiawrjwwgp5w0cqn0qn3fcnfv40scjlrvdqrcqgfg0ac";
+    url = http://getgnash.org/packages/releases/gnash-0.8.3.tar.bz2;
+    sha256 = "16n32774sd5q4nkd95v2m8r2yfa9fk30jnq1iicarq3j8i2xh7xg";
   };
 
   builder = ./builder.sh;
