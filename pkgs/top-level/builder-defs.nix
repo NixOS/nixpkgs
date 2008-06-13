@@ -8,6 +8,9 @@ args: with args; with stringsWithDeps; with lib;
 	addSbinPath = getAttr ["addSbinPath"] false args;
 
 	forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
+	forceCopy = ["COPYING" "LICENSE" "DISTRIBUTION" "LEGAL" 
+	  "README" "AUTHORS" "ChangeLog" "CHANGES"] ++ 
+	  (optional (getAttr ["forceCopyDoc"] true args) "doc"); 
 
 	archiveType = s: 
 		(if hasSuffixHack ".tar" s then "tar"
@@ -269,6 +272,15 @@ args: with args; with stringsWithDeps; with lib;
 		done;
 	") ["minInit" "defEnsureDir"];
 
+	doForceCopy = FullDepEntry (''
+		name=$(basename $out)
+		name=''${name#*-}
+		ensureDir "$prefix/share/$name"
+		for f in ${toString forceCopy}; do
+			cp -r "$f" "$prefix/share/$name/$f" || true
+		done;
+	'') ["minInit" "defEnsureDir"];
+
 	doDump = n: noDepEntry "echo Dump number ${n}; set";
 
 	patchFlags = if args ? patchFlags then args.patchFlags else "-p1";
@@ -428,7 +440,7 @@ args: with args; with stringsWithDeps; with lib;
         " ["defCreateEmptyPackageDatabaseAndSetupHook" "defCabalSetupCmd"];
 
 	realPhaseNames = args.phaseNames ++ 
-	  ["doForceShare" "doPropagate"]
+	  ["doForceShare" "doPropagate" "doForceCopy"]
 	  ++
 	  (optional (getAttr ["alwaysFail"] false args) "doFail")
 	  ;
