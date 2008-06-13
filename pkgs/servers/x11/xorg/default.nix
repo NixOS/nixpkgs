@@ -2718,11 +2718,11 @@ rec {
   }) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation {
-    name = "xorg-server-1.4";
+    name = "xorg-server-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xorg-server-1.4.tar.bz2;
-      sha256 = "1hpbq0bl1jkq84gvksp0xzbbrwwgl0wz2wakf11p2hld6bgl5cai";
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/xserver/xorg-server-1.4.2.tar.bz2;
+      sha256 = "0v9izyj2ksk062wafrfc61sydf4nwzx7mj3701q24n199kn6d742";
     };
     buildInputs = [pkgconfig pixman renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ]; mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; 
   }) // {inherit pixman renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype glproto hal inputproto kbproto libdrm mkfontdir mkfontscale perl printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libxkbui libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXxf86misc libXxf86vm zlib ;};
