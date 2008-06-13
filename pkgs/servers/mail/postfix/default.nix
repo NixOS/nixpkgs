@@ -7,6 +7,27 @@ stdenv.mkDerivation {
     sha256 = "04hxpyd3h1f48fnppjwqqxbil13bcwidzpfkra2pgm7h42d9blq7";
   };
 
+  installTargets = ["non-interactive-package"];
+  installFlags = [" install_root=$out "];
+  preInstall = "sed -e '/^PATH=/d' -i postfix-install";
+  postInstall = ''
+    ensureDir $out
+    mv ut/$out/* $out/
+  '';
+
+  preBuild = ''
+    export daemon_directory=$out/libexec/postfix
+    export command_directory=$out/sbin
+    export queue_directory=/var/spool/postfix
+    export sendmail_path=$out/bin/sendmail
+    export mailq_path=$out/bin/mailq
+    export newaliases_path=$out/bin/newaliases
+    export html_directory=$out/share/postfix/doc/html
+    export manpage_directory=$out/share/man
+    export sample_directory=$out/share/postfix/doc/samples
+    export readme_directory=$out/share/postfix/doc
+  '';
+
   buildinputs = [db4];
   patches = [./postfix-2.2.9-db.patch ./postfix-2.2.9-lib.patch];
   inherit glibc;
