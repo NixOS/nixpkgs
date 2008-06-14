@@ -6,14 +6,12 @@
 , xlibs ? null
 , installjdk ? true
 , pluginSupport ? true
-, libstdcpp5 ? null
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert swingSupport -> xlibs != null;
-assert pluginSupport -> libstdcpp5 != null;
 
-(stdenv.mkDerivation ({
+stdenv.mkDerivation ({
   name =
     if installjdk then "jdk-1.6.0_6" else "jre-1.6.0_6";
 
@@ -61,22 +59,10 @@ assert pluginSupport -> libstdcpp5 != null;
     [stdenv.gcc.libc] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
 
-  inherit pluginSupport;
-} // (
-  # necessary for javaws and mozilla plugin
-  if pluginSupport then
-    {
-      libPath = [libstdcpp5];
-      inherit libstdcpp5;
-    }
-  else
-    {}  
-))
-//
-  {
-    inherit swingSupport pluginSupport;
-  }
-// 
+  inherit swingSupport pluginSupport;
+  inherit (xlibs) libX11;
+
+} // 
   /**
    * The mozilla plugin is not available in the amd64 distribution (?)
    */

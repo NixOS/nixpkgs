@@ -1614,7 +1614,6 @@ let pkgs = rec {
     assert supportsJDK;
     (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
       inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper;
-      libstdcpp5 = gcc33.gcc;
     });
 
   jikes = import ../development/compilers/jikes {
@@ -6544,7 +6543,7 @@ let pkgs = rec {
   };
 
   wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
-    inherit stdenv firefox nameSuffix;
+    inherit stdenv firefox nameSuffix makeWrapper;
     plugins =
       let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] false
             && system == "i686-linux";

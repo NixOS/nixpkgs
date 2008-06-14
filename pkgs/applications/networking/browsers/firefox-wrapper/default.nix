@@ -1,14 +1,15 @@
-args: with args;
+{stdenv, firefox, nameSuffix ? "", makeWrapper, plugins}:
 
 stdenv.mkDerivation {
   name = firefox.name + "-with-plugins";
 
-  builder = ./builder.sh;
-  makeWrapper = ../../../../build-support/make-wrapper/make-wrapper.sh;
+  buildInputs = [makeWrapper];
 
-  inherit firefox;
-
-  nameSuffix = (if args ? nameSuffix then args.nameSuffix else "");
+  buildCommand = ''
+    makeWrapper "${firefox}/bin/firefox" "$out/bin/firefox${nameSuffix}" \
+        --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
+        --suffix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
+  '';
 
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.

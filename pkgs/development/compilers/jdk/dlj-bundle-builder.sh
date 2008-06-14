@@ -44,20 +44,10 @@ find $out -type f -perm +100 \
     -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
     --set-rpath "$rpath" {} \;
 
-function mozillaExtraLibPath() {
-  p=$1
-  if test -e "$p"; then
-    echo "$libstdcpp5/lib" > $p/extra-library-path
-  fi
-}
+find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
 if test -z "$pluginSupport"; then
-  rm -f $out/bin/javaws
-else
-  wrapProgram "$out/bin/javaws" \
-    --suffix-each LD_LIBRARY_PATH ':' "$(addSuffix /lib $libPath)"
-
-  mozillaExtraLibPath "$jrePath/plugin/i386/ns7"
+    rm -f $out/bin/javaws
 fi
 
 # Workaround for assertions in xlib, see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6532373.
