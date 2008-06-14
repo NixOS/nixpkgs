@@ -6758,9 +6758,9 @@ let pkgs = rec {
   };
 
   quake3demo = import ../games/quake3/wrapper {
-    name = "quake3-demo";
+    name = "quake3-demo-${quake3game.name}";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
-    inherit fetchurl stdenv mesa;
+    inherit fetchurl stdenv mesa makeWrapper;
     game = quake3game;
     paks = [quake3demodata];
   };
@@ -7078,7 +7078,7 @@ let pkgs = rec {
   };
 
   rssglx = import ../misc/screensavers/rss-glx {
-    inherit fetchurl stdenv x11 mesa;
+    inherit fetchurl stdenv x11 mesa pkgconfig imagemagick libtiff bzip2;
   };
 
   xlockmore = import ../misc/screensavers/xlockmore {
@@ -7116,7 +7116,7 @@ let pkgs = rec {
   */
 
   texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript imagemagick;
+    inherit stdenv perl tetex graphviz ghostscript;
   };
 
   texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {

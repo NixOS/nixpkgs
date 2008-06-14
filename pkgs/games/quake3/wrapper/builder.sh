@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-
 ensureDir $out/baseq3
 for i in $paks; do
     if test -d "$paks/baseq3"; then
@@ -8,20 +7,9 @@ for i in $paks; do
     fi
 done
 
-
-ensureDir $out/bin
-
-cat >$out/bin/quake3 <<EOF
-#! $SHELL -e
-
-mesa=$mesa
-
-$(cat $mesaSwitch)
-
-exec $game/ioquake3.i386 \
-    +set fs_basepath $out \
-    +set r_allowSoftwareGL 1 \
-    "\$@"
-EOF
-
-chmod +x $out/bin/quake3
+# We add Mesa to the end of $LD_LIBRARY_PATH to provide fallback
+# software rendering.  GCC is needed so that libgcc_s.so can be found
+# when Mesa is used.
+makeWrapper $game/ioquake3.i386 $out/bin/quake3 \
+    --suffix-each LD_LIBRARY_PATH ':' "$mesa/lib $gcc/lib" \
+    --add-flags "+set fs_basepath $out +set r_allowSoftwareGL 1"

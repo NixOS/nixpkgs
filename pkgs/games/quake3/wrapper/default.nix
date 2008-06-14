@@ -1,11 +1,14 @@
-{stdenv, fetchurl, game, paks, mesa, name, description}:
+{stdenv, fetchurl, game, paks, mesa, name, description, makeWrapper}:
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
-  inherit game paks mesa name;
-  
-  mesaSwitch = ../../../build-support/opengl/mesa-switch.sh;
 
+  buildInputs = [makeWrapper];
+  
+  inherit game paks mesa name;
+
+  gcc = stdenv.gcc.gcc;
+  
   meta = {
     inherit description;
   };

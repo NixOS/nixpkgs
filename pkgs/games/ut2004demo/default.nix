@@ -18,7 +18,6 @@ let {
     builder = ./make-wrapper.sh;
     inherit raw mesa;
     inherit (xlibs) libX11 libXext;
-    mesaSwitch = ../../build-support/opengl/mesa-switch.sh;
   };
 
 }
