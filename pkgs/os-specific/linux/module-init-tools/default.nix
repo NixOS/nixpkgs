@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "module-init-tools-3.2.2";
   src = fetchurl {
     url = mirror://kernel/linux/utils/kernel/module-init-tools/module-init-tools-3.2.2.tar.bz2;
@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   patches = [./module-dir.patch];
   postInstall = "rm $out/sbin/insmod.static"; # don't need it
-}
+} // (if stdenv ? isDietLibC then {
+  # We don't want bash (and therefore glibc) in the closure of the
+  # output, since we want to put this in a initrd.
+  dontPatchShebangs = true;
+} else {}))
