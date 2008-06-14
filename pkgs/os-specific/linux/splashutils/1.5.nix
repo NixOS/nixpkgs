@@ -10,12 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [klibc zlib libjpeg];
   
-  dontAddPrefix = 1;
-
   configureFlags = "--without-ttf --without-png --without-gpm --with-themedir=/etc/splash";
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-essential-prefix=$out --with-libdir=/"
+    configureFlags="$configureFlags --with-essential-prefix=$out"
     substituteInPlace src/common.h \
       --replace 'FBSPLASH_DIR"/sys"' '"/sys"' \
       --replace 'FBSPLASH_DIR"/proc"' '"/proc"'
