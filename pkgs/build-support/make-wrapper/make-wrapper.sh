@@ -2,6 +2,7 @@ makeWrapper() {
     local original=$1
     local wrapper=$2
     local params varName value command separator n fileNames
+    local flagsBefore flags
 
     ensureDir "$(dirname $wrapper)"
 
@@ -57,9 +58,15 @@ makeWrapper() {
                 echo "export $varName=\$$varName\${$varName:+$separator}$(cat $fileName)" >> $wrapper
             done
         fi
+
+        if test "$p" = "--add-flags"; then
+            flags=${params[$((n + 1))]}
+            n=$((n + 1))
+            flagsBefore="$flagsBefore $flags"
+        fi
     done
 
-    echo "exec \"$original\" \"\$@\"" >> $wrapper
+    echo "exec \"$original\" $flagsBefore \"\$@\"" >> $wrapper
     
     chmod +x $wrapper
 }
