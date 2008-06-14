@@ -9,8 +9,8 @@
 {stdenv, xlibs, expat, libdrm}:
 
 stdenv.mkDerivation {
-  name = "xorg-sys-opengl-2";
+  name = "xorg-sys-opengl-3";
   builder = ./builder.sh;
-  neededLibs = [xlibs.libXxf86vm xlibs.libXext expat libdrm];
+  neededLibs = [xlibs.libXxf86vm xlibs.libXext expat libdrm stdenv.gcc.gcc];
 }
 
