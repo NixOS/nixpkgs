@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     mv $out/usr/sbin/* $out/sbin/
     mv $out/usr/share $out/
     rm -r $out/usr
+
+    patchShebangs $out/sbin
   '';
 
   # should we use unstable? 
@@ -24,7 +26,7 @@ stdenv.mkDerivation {
     sha256 = "00622nxa3q9n8v7qdz274d0nzz9r13lx77xi27s5bnk0mkila03q";
   };
 
-  buildInputs =[kernel];
+  buildInputs =[kernel perl];
 
   # this is a patch against svn head, not stable version
   patches = [./prefix.patch];
