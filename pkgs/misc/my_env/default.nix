@@ -14,22 +14,31 @@
     PS1='\033]2;\h:\u:\w\007\\nenv ${name} \[\033[1;32m\][\u@\h: \w ]$\[\033[0m\] '
      ";
   };
+Put this into your .bashrc
+loadEnv(){
+  . "${HOME}/.nix-profile/dev-envs/${1}"
+}
 */
 
-args:  stdenv.mkDerivation ( 
-  { userCmds =""; } // {
+args: args.stdenv.mkDerivation ( 
+  { extraCmds =""; } // {
   phases = "buildPhase";
-  buildPhase = "
-    ensureDir \$out/bin
+  buildPhase = ''
     name=${args.name}
-    o=\$out/bin/$name
-    echo -e \"#!/bin/sh --login\\n\" >> \$o
-    export | grep -v HOME= | grep -v PATH= >> \$o 
-    echo \"export PATH=\$PATH:\\\$PATH entering $name\" >> \$o
-    echo \"echo entering $name\" >> \$o
-    echo \"$userCmds\" >> \$o
-    echo \"/bin/sh\" >> $o
-    echo \"echo leaving $name\" >> \$o
+    o=$out/dev-envs/$name
+    ensureDir `dirname $o`
+    echo "
+    OLDPATH=\$PATH " >> $o
+    export | grep -v HOME= | grep -v PATH= | grep -v PWD= | grep -v TEMP= | grep -v TMP= >> $o 
+    echo "
+    PATH=$PATH:$OLDPATH
+    for i in \$buildInputs; do
+      export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$i/lib
+    done
+    export PATH=\$PATH:\$OLDPATH
+    $extraCmds
+    echo env $name loaded
+    " >> $o
     chmod +x $o
-  ";
-} //args);
+  '';
+} // args // { name = "${args.name}-env"; } )

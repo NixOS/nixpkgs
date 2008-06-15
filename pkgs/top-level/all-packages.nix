@@ -125,56 +125,6 @@ let pkgs = rec {
 
   lib = import ../lib;
 
-  # optional srcDir
-  annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags 
-                                      || x ? meta && x.meta ? sourceWithTags );
-  # hack because passthru doesn't work the way I'd expect. Don't have time to spend on this right now
-  # passthru2 is not special and will be there in any case (but will force recompilation :(
-  sourceWithTagsFromDerivation = x : if (x ? passthru && x.passthru ? sourceWithTags ) then x.passthru.sourceWithTags
-                                     else if (x ? meta && x.meta ? sourceWithTags ) then x.meta.sourceWithTags
-                                       else null;
-
-  # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
-  # tag command must create file named $TAG_FILE
-  sourceWithTagsDerivation = {name, src, srcDir ? ".", tagSuffix ? "_tags", createTagFiles ? []} :  
-    stdenv.mkDerivation {
-    phases = "unpackPhase buildPhase";
-    inherit src srcDir tagSuffix;
-    name = "${name}-source-with-tags";
-    buildInputs = [ unzip ];
-    # using separate tag directory so that you don't have to glob that much files when starting your editor
-    # is this a good choice?
-    buildPhase = "
-      SRC_DEST=\$out/src/\$name
-      ensureDir \$SRC_DEST
-      cp -r \$srcDir \$SRC_DEST"
-      + lib.defineShList "sh_list_names" (lib.catAttrs "name" createTagFiles)
-      + lib.defineShList "sh_list_cmds" (lib.catAttrs "tagCmd" createTagFiles)
-      + "cd \$SRC_DEST
-      for a in `seq 0 \${#sh_list}`; do
-          TAG_FILE=\"\$SRC_DEST/\"\${sh_list_names[\$a]}\$tagSuffix
-          cmd=\"\${sh_list_cmds[\$a]}\"
-          echo running tag cmd \"\$cmd\" in `pwd`
-          eval \"\$cmd\";
-       done
-    ";
-  };
-  # example usage
-  #testSourceWithTags = sourceWithTagsDerivation (ghc68extraLibs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
-
-  addCTaggingInfo = deriv :
-    deriv // { 
-      passthru = {
-        sourceWithTags = {
-         inherit (deriv) src;
-         name = "${deriv.name}-source-ctags";
-         createTagFiles = [
-               { inherit  (deriv) name;
-                 tagCmd = "${toString ctags}/bin/ctags --sort=yes -o \$TAG_FILE -R ."; }
-          ];
-        };
-  }; };
-
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
   getConfig = attrPath: default: lib.getAttr attrPath default config;
@@ -1388,9 +1338,9 @@ let pkgs = rec {
   ghcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
         import ../development/compilers/ghc/ghc-wrapper {
     inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
-      lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo 
+      lib 
       readline ncurses stdenv;
-    inherit sourceWithTagsFromDerivation;
+    inherit (sourceAndTags) sourceWithTagsDerivation annotatedWithSourceAndTagInfo sourceWithTagsFromDerivation;
     #inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
     #  annotatedDerivations lib sourceWithTagsDerivation annotatedWithSourceAndTagInfo;
     installSourceAndTags = getConfig ["haskell" "ghcWrapper" "installSourceAndTags"] false;
@@ -1452,26 +1402,11 @@ let pkgs = rec {
     inherit perl;
   };
 
-  # creates annotated derivation (comments see above)
-  addHasktagsTaggingInfo = deriv : deriv // {
-      passthru = {
-        sourceWithTags = {
-         inherit (deriv) src;
-         srcDir = if deriv ? srcDir then deriv.srcDir else ".";
-         name = deriv.name + "-src-with-tags";
-         createTagFiles = [
-               { name = "${deriv.name}_haskell";
-                 # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-                 tagCmd = "${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-          ];
-       };
-    };
-  };
-
   # this may change in the future
   ghc68extraLibs = (import ../misc/ghc68extraLibs ) {
     # lib like stuff
-    inherit bleedingEdgeRepos fetchurl lib addHasktagsTaggingInfo ghcCabalDerivation pkgconfig unzip zlib;
+    inherit (sourceAndTags) addHasktagsTaggingInfo;
+    inherit bleedingEdgeRepos fetchurl lib ghcCabalDerivation pkgconfig unzip zlib;
     # used (non haskell) libraries (ffi etc)
     inherit postgresql mysql sqlite gtkLibs gnome xlibs freetype getConfig libpng bzip2 pcre;
 
@@ -7096,6 +7031,10 @@ let pkgs = rec {
     inherit (xlibs) libX11;
   };
 
+  sourceAndTags = import ../misc/source-and-tags {
+    inherit pkgs stdenv unzip lib ctags hasktags;
+  };
+
   synaptics = import ../misc/synaptics {
     inherit fetchurl stdenv pkgconfig;
     inherit (xlibs) libX11 libXi libXext pixman xf86inputevdev;
@@ -7216,6 +7155,8 @@ let pkgs = rec {
     inherit (xlibs) libX11;
   };
 
-  #my_env = import ../misc/my_env;
+  myEnvFun = import ../misc/my_env;
+
+  devEnvs = recurseIntoAttrs ( ( getConfig ["devEnvs"] (x : {}) ) pkgs );
 
 }; in pkgs
