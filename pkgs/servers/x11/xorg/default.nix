@@ -1741,7 +1741,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-input-evdev-1.1.2.tar.bz2;
       sha256 = "15avwy8isbqagzcdj20ngqajl22k40pssfx7vjirhrqyyq19fiwb";
     };
-    buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
+    buildInputs = [pkgconfig inputproto kbproto xorgserver xproto xrandr randrproto];
     preBuild = "
     sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
     ";
