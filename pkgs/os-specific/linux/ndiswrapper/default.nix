@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1b9nqkk7gv6gffzj9b8mjy5myxf2afwpyr2n5wbfsylf15dvvvjr";
   };
 
-  buildInputs =[kernelHeaders kernel];
+  buildInputs =[kernel];
 
   # this is a patch against svn head, not stable version
   patches = [./prefix.patch];
