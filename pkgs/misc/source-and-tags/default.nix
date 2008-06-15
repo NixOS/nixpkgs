@@ -32,7 +32,8 @@ args: with args; {
           eval \"\$cmd\";
           TAG_FILES=\"\$TAG_FILES\${TAG_FILES:+:}\$TAG_FILE\"
        done
-       echo \"TAG_FILES=\\\"\\\$TAG_FILES\\\${TAG_FILES:+:}$TAG_FILES\\\"\" >> $out/nix-support
+       ensureDir $out/nix-support
+       echo \"TAG_FILES=\\\"\\\$TAG_FILES\\\${TAG_FILES:+:}$TAG_FILES\\\"\" >> $out/nix-support/setup-hook
     ";
   };
   # example usage

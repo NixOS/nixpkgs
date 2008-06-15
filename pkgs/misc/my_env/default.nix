@@ -2,28 +2,43 @@
 # experimental
 
 /*
-  # example for nix itself adding glibc tag file to an env var.
-  # experimental
-  env_nix = my_environment rec {
-   buildInputs = [perl curl bzip2 aterm242fixes db4] 
-          ++ map (x : sourceWithTagsDerivation ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) [ glibc ];
-   db4 = db44;
-   aterm = aterm242fixes;
-   name = "env_nix";
-   userCmds = ". ~/.bashrc
-    PS1='\033]2;\h:\u:\w\007\\nenv ${name} \[\033[1;32m\][\u@\h: \w ]$\[\033[0m\] '
-     ";
+  # example: 
+  # add postgresql to environment and create ctags (tagfiles can be extracted from TAG_FILES)
+  # add this to your ~/.nixpkgs/config.nix
+
+ devEnvs = pkgs : with pkgs; with sourceAndTags;
+  let simple = { name, buildInputs ? [], cTags ? [] }:
+          pkgs.myEnvFun {
+            inherit name stdenv;
+          buildInputs = buildInputs 
+                ++ map (x : sourceWithTagsDerivation ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) cTags;
+          extraCmds = ". ~/.bashrc; cd $PWD
+            # configure should find them
+            export LDFLAGS=$NIX_LDFLAGS
+            export CFLAGS=$NIX_CFLAGS_COMPILE
+            ";
+          preBuild = "export TAG_FILES";
+        };
+  in {
+    postgresql = simple {
+     name = "postgresql";
+     buildInputs = [postgresql];
+     cTags = [postgresql ];
+    };
   };
-Put this into your .bashrc
-loadEnv(){
-  . "${HOME}/.nix-profile/dev-envs/${1}"
-}
+
+  Put this into your .bashrc
+    loadEnv(){ . "${HOME}/.nix-profile/dev-envs/${1}" }
+  then install and 
+    $ loadEnv postgresql
+
 */
 
 args: args.stdenv.mkDerivation ( 
   { extraCmds =""; } // {
   phases = "buildPhase";
-  buildPhase = ''
+  buildPhase = '' 
+    eval "$preBuild"
     name=${args.name}
     o=$out/dev-envs/$name
     ensureDir `dirname $o`
@@ -39,6 +54,5 @@ args: args.stdenv.mkDerivation (
     $extraCmds
     echo env $name loaded
     " >> $o
-    chmod +x $o
   '';
 } // args // { name = "${args.name}-env"; } )
