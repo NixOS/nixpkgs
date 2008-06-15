@@ -1,64 +1,52 @@
-diff --git a/ndiswrapper/driver/Makefile b/ndiswrapper/driver/Makefile
-index b0c2a9d..8907a05 100644
---- a/ndiswrapper/driver/Makefile
-+++ b/ndiswrapper/driver/Makefile
-@@ -119,6 +119,10 @@ ifdef WRAP_PREEMPT
- MOD_CFLAGS += -DWRAP_PREEMPT
+diff -r -u ndiswrapper-1.53/driver/loader.c ndiswrapper-1.53/driver/loader.c
+--- ndiswrapper-1.53/driver/loader.c	2008-05-28 06:54:08.000000000 +0400
++++ ndiswrapper-1.53/driver/loader.c	2008-06-15 17:05:07.000000000 +0400
+@@ -100,7 +100,7 @@
+ 			EXIT1(return NULL);
+ 		}
+ 		INIT_COMPLETION(loader_complete);
+-		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env, 1);
++		ret = call_usermodehelper(USERMOD_HELPER, argv, env, 1);
+ 		if (ret) {
+ 			up(&loader_mutex);
+ 			ERROR("couldn't load driver %s; check system log "
+@@ -262,7 +262,7 @@
+ 			EXIT1(return NULL);
+ 		}
+ 		INIT_COMPLETION(loader_complete);
+-		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env, 1);
++		ret = call_usermodehelper(USERMOD_HELPER, argv, env, 1);
+ 		if (ret) {
+ 			up(&loader_mutex);
+ 			ERROR("couldn't load file %s/%s; check system log "
+@@ -698,7 +698,7 @@
+ 			EXIT1(return NULL);
+ 		}
+ 		INIT_COMPLETION(loader_complete);
+-		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env, 1);
++		ret = call_usermodehelper(USERMOD_HELPER, argv, env, 1);
+ 		if (ret) {
+ 			up(&loader_mutex);
+ 			TRACE1("couldn't load device %04x:%04x; check system "
+diff -r -u ndiswrapper-1.53/driver/Makefile ndiswrapper-1.53/driver/Makefile
+--- ndiswrapper-1.53/driver/Makefile	2008-05-28 06:54:08.000000000 +0400
++++ ndiswrapper-1.53/driver/Makefile	2008-06-15 17:03:31.000000000 +0400
+@@ -95,6 +95,10 @@
+ EXTRA_CFLAGS += -DWRAP_PREEMPT
  endif
  
 +ifdef DIST_DESTDIR
-+MOD_CFLAGS += -DPREFIX=\"$(DIST_DESTDIR)\"
++EXTRA_CFLAGS += -DPREFIX=\"$(DIST_DESTDIR)\"
 +endif
 +
- .PHONY: prereq_check gen_exports clean dist_clean install stack_check
+ OBJS = crt.o hal.o iw_ndis.o loader.o ndis.o ntoskernel.o ntoskernel_io.o \
+ 	pe_linker.o pnp.o proc.o rtl.o wrapmem.o wrapndis.o wrapper.o
  
- all : prereq_check win2lin_stubs.h gen_exports compat.h default stack_check
-@@ -355,7 +359,7 @@ install: prereq_check win2lin_stubs.h gen_exports compat.h default stack_check
- 	echo $(INST_DIR)
- 	mkdir -p $(INST_DIR)
- 	install -m 0644 $(MODULE) $(INST_DIR)
--	-@/bin/rm -rf $(SRC_DIR)/.tmp_versions
-+	-@rm -rf $(SRC_DIR)/.tmp_versions
- ifndef DIST_DESTDIR
- 	-/sbin/depmod -a $(KVERS) -b $(DESTDIR)
- endif
-diff --git a/ndiswrapper/driver/loader.c b/ndiswrapper/driver/loader.c
-index 930606f..9a8e9f0 100644
---- a/ndiswrapper/driver/loader.c
-+++ b/ndiswrapper/driver/loader.c
-@@ -106,7 +106,7 @@ struct wrap_driver *load_wrap_driver(struct wrap_device *wd)
- 			EXIT1(return NULL);
- 		}
- 		INIT_COMPLETION(loader_complete);
--		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env
-+		ret = call_usermodehelper(USERMOD_HELPER, argv, env
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
- 					  , 1
- #endif
-@@ -272,7 +272,7 @@ struct wrap_bin_file *get_bin_file(char *bin_file_name)
- 			EXIT1(return NULL);
- 		}
- 		INIT_COMPLETION(loader_complete);
--		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env
-+		ret = call_usermodehelper(USERMOD_HELPER, argv, env
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
- 					  , 1
- #endif
-@@ -711,7 +711,7 @@ struct wrap_device *load_wrap_device(struct load_device *load_device)
- 			EXIT1(return NULL);
- 		}
- 		INIT_COMPLETION(loader_complete);
--		ret = call_usermodehelper("/sbin/loadndisdriver", argv, env
-+		ret = call_usermodehelper(USERMOD_HELPER, argv, env
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
- 					  , 1
- #endif
-diff --git a/ndiswrapper/driver/ndiswrapper.h b/ndiswrapper/driver/ndiswrapper.h
-index 4a78dc6..c11a074 100644
---- a/ndiswrapper/driver/ndiswrapper.h
-+++ b/ndiswrapper/driver/ndiswrapper.h
+diff -r -u ndiswrapper-1.53/driver/ndiswrapper.h ndiswrapper-1.53/driver/ndiswrapper.h
+--- ndiswrapper-1.53/driver/ndiswrapper.h	2008-05-28 06:54:08.000000000 +0400
++++ ndiswrapper-1.53/driver/ndiswrapper.h	2008-06-15 17:06:37.000000000 +0400
 @@ -19,8 +19,17 @@
- #define DRIVER_VERSION "1.50"
+ #define DRIVER_VERSION "1.53"
  #define UTILS_VERSION "1.9"
  
 +#ifndef PREFIX

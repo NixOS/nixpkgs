@@ -1,18 +1,22 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "ndiswrapper-1.49-stable";
+  name = "ndiswrapper-1.53-stable";
 
   # need at least .config and include 
   inherit kernel;
 
   buildPhase = "
-    make KBUILD=\$kernel/lib/modules/*/build;
+    echo make KBUILD=$(echo \$kernel/lib/modules/*/build);
+    echo -n $kernel/lib/modules/*/build > kbuild_path
+    make KBUILD=$(echo \$kernel/lib/modules/*/build);
   ";
+
+  installPhase = "make install KBUILD=$(cat kbuild_path) DESTDIR=$out";
 
   # should we use unstable? 
   src = args.fetchurl {
-    url = http://kent.dl.sourceforge.net/sourceforge/ndiswrapper/ndiswrapper-1.49.tar.gz;
-    sha256 = "1b9nqkk7gv6gffzj9b8mjy5myxf2afwpyr2n5wbfsylf15dvvvjr";
+    url = http://downloads.sourceforge.net/ndiswrapper/ndiswrapper-1.53.tar.gz;
+    sha256 = "00622nxa3q9n8v7qdz274d0nzz9r13lx77xi27s5bnk0mkila03q";
   };
 
   buildInputs =[kernel];
