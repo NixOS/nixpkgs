@@ -11,7 +11,12 @@ stdenv.mkDerivation {
     make KBUILD=$(echo \$kernel/lib/modules/*/build);
   ";
 
-  installPhase = "make install KBUILD=$(cat kbuild_path) DESTDIR=$out";
+  installPhase = ''
+    make install KBUILD=$(cat kbuild_path) DESTDIR=$out
+    mv $out/usr/sbin/* $out/sbin/
+    mv $out/usr/share $out/
+    rm -r $out/usr
+  '';
 
   # should we use unstable? 
   src = args.fetchurl {
