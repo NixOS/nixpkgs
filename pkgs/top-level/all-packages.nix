@@ -4907,7 +4907,7 @@ let pkgs = rec {
     */
     ndiswrapper = import ../os-specific/linux/ndiswrapper {
       inherit fetchurl stdenv;
-      inherit kernel;
+      inherit kernel perl;
     };
 
     ov511 = import ../os-specific/linux/ov511 {
