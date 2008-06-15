@@ -4967,6 +4967,14 @@ let pkgs = rec {
       kernel_ext3cowpatched = kernel;
     };
 
+    /* compiles but has to be integrated into the kernel somehow
+      Let's have it uncommented and finish it..
+    */
+    ndiswrapper = import ../os-specific/linux/ndiswrapper {
+      inherit fetchurl stdenv;
+      inherit kernel;
+    };
+
     ov511 = import ../os-specific/linux/ov511 {
       inherit fetchurl kernel;
       stdenv = overrideGCC stdenv gcc34;
@@ -5109,13 +5117,6 @@ let pkgs = rec {
     inherit fetchurl bison flex;
     stdenv = overrideGCC stdenv gcc34;
   };
-
-  /* compiles but has to be integrated into the kernel somehow
-  ndiswrapper = import ../os-specific/linux/ndiswrapper {
-    inherit fetchurl stdenv;
-    inherit kernel;
-  };
-  */
 
   nettools = import ../os-specific/linux/net-tools {
     inherit fetchurl stdenv;
