@@ -99,6 +99,7 @@ rec {
 
               mkdir -p /etc/nixos/nixos
               tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
+              mkdir -p /etc/nixos/nixpkgs
               tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
               chown -R root.root /etc/nixos
             end script
