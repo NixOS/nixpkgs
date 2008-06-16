@@ -6481,7 +6481,7 @@ let pkgs = rec {
   wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv firefox nameSuffix makeWrapper;
     plugins =
-      let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] false
+      let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] true
             && system == "i686-linux";
       in
        ([]
@@ -6490,7 +6490,7 @@ let pkgs = rec {
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
         ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
-        ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] true && jrePlugin ? mozillaPlugin) jrePlugin
+        ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };
 

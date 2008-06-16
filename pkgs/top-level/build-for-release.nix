@@ -53,7 +53,7 @@ let
     feh
     file
     findutils
-    firefoxWrapper
+    firefox
     flex2533
     gawk
     gcc
@@ -234,7 +234,7 @@ let
     binutils
     bison23
     emacs
-    firefoxWrapper
+    firefox
     gcc
     hello
     libtool
