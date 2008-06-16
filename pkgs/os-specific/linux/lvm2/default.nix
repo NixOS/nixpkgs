@@ -1,10 +1,10 @@
 {stdenv, fetchurl, devicemapper, static ? false}:
 
 stdenv.mkDerivation {
-  name = "lvm2-2.02.28";
+  name = "lvm2-2.02.38";
   src = fetchurl {
-    url = ftp://sources.redhat.com/pub/lvm2/LVM2.2.02.28.tgz;
-    sha256 = "1sxchdz31mz57gm25jjphawhx2c8zmyw3mvifkxhnza27q97p39d";
+    url = ftp://sources.redhat.com/pub/lvm2/LVM2.2.02.38.tgz;
+    sha256 = "13nx6iqgga3ric51b36p15cxzhmh83s7spb2559iz3s24x4s0845";
   };
   buildInputs = [devicemapper];
   configureFlags = if static then "--enable-static_link" else "";
