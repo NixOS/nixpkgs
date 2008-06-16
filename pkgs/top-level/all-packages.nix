@@ -6272,7 +6272,7 @@ let pkgs = rec {
   sndFun = lib.sumArgs (import ../applications/audio/snd) {
     inherit fetchurl stdenv builderDefs stringsWithDeps lib;
     inherit pkgconfig gmp gettext;
-    inherit (xlibs) libXpm;
+    inherit (xlibs) libXpm libX11;
     inherit (gtkLibs) gtk glib;
   };
 
