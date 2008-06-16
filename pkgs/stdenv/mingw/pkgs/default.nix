@@ -135,6 +135,11 @@ rec {
         };
     };
 
+  replace = {stdenv, fetchurl} :
+    import ../../../tools/text/replace {
+      inherit fetchurl stdenv;
+    };
+
   /*
   pkgs.coreutils
   pkgs.findutils
