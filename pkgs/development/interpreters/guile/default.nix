@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   '';
 
+  preBuild = ''
+    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  '';
+
   doCheck = true;
 
   setupHook = ./setup-hook.sh;
