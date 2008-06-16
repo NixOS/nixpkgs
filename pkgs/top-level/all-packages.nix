@@ -593,8 +593,9 @@ let pkgs = rec {
       inherit fetchurl stdenv;
     });
 
-  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap "0.7.5") {
-    inherit stdenv fetchurl builderDefs pkgconfig libxml2 intltool;
+  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap "0.8.1") {
+    inherit stdenv fetchurl builderDefs pkgconfig libxml2 intltool
+      gettext;
     inherit (gtkLibs) gtk;
   };
 
@@ -1932,9 +1933,14 @@ let pkgs = rec {
   };
 
   autoconf = autoconf261;
+  autoconfLatest = autoconf262;
 
   autoconf261 = import ../development/tools/misc/autoconf {
     inherit fetchurl stdenv perl m4;
+  };
+
+  autoconf262 = import ../development/tools/misc/autoconf/2.62.nix {
+    inherit fetchurl stdenv perl m4 lzma;
   };
 
   automake = automake19x;
@@ -5501,6 +5507,18 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses;
   };
 
+  carrier = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/carrier "2.4.2") {
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
+      gtkspell aspell gettext ncurses avahi dbus dbus_glib python
+      libtool automake;
+    GStreamer = gst_all.gstreamer;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) startupnotification GConf ;
+    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
+    autoconf = autoconfLatest;
+  } null;
+  funpidgin = carrier;
+
   cddiscid = import ../applications/audio/cd-discid {
     inherit fetchurl stdenv;
   };
@@ -5803,15 +5821,6 @@ let pkgs = rec {
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
-
-  funpidgin = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/funpidgin "2.4.1") {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
-      gtkspell aspell gettext ncurses;
-    GStreamer = gst_all.gstreamer;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) startupnotification;
-    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
-  } null;
 
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
@@ -6580,7 +6589,7 @@ let pkgs = rec {
     pyrex = pyrex095;
   };
 
-  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver "5.04") {
+  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver "5.05") {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
