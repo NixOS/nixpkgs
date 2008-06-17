@@ -1,19 +1,27 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
+, libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
+, freetype, fontconfig
+
+, # If you want the resulting program to call itself "Firefox" instead
+  # of "Deer Park", enable this option.  However, those binaries may
+  # not be distributed without permission from the Mozilla Foundation,
+  # see http://www.mozilla.org/foundation/trademarks/.
+  enableOfficialBranding ? false
+    
+}:
 
 stdenv.mkDerivation {
-  name = "firefox-3.0-beta-3";
+  name = "firefox-3.0";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0rc2/source/firefox-3.0rc2-source.tar.bz2;
-    #url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0b5/source/firefox-3.0b5-source.tar.bz2;
-    #url = ftp://ftp.mozilla.org/pub/firefox/releases/3.0b4/source/firefox-3.0b5-source.tar.bz2;
-    sha256 = "13g1ipnjxq4ssfj6f6pdp9rjdadb5sydfsgx6a5pqvxhzch5nq6i";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0/source/firefox-3.0-source.tar.bz2;
+    sha256 = "1l1wp3w8zck55fr3spzfzzmgh326vifixa2cdiq3hf4wflf3yr36";
   };
 
   buildInputs = [
-    pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
-    python curl coreutils dbus dbus_glib pango freetype fontconfig 
-    libX11 libXrender libXft libXt
+    pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+    python dbus dbus_glib pango freetype fontconfig
+    xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
   ];
 
   configureFlags = [
@@ -23,8 +31,11 @@ stdenv.mkDerivation {
     "--enable-strip"
     "--with-system-jpeg"
     "--with-system-zlib"
-    #"--with-system-png" <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-    #"--enable-system-cairo" <-- disabled for now because Firefox needs a alpha version of Cairo
+    "--with-system-bz2"
+    # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
+    "--enable-system-cairo" # <-- disabled for now because Firefox needs a alpha version of Cairo
+    #"--enable-system-sqlite" # <-- this seems to be discouraged
+    "--disable-crashreporter"
   ];
 
   postInstall = ''

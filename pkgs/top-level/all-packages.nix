@@ -4975,24 +4975,6 @@ let pkgs = rec {
 
   kvm = kvm57;
 
-  kvm12 = import ../os-specific/linux/kvm/12.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib;
-    stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
-  };
-
-  kvm17 = import ../os-specific/linux/kvm/17.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib;
-    stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = kernelHeaders_2_6_21;
-  };
-
-  kvm49 = import ../os-specific/linux/kvm/49.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib;
-    stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = kernelHeaders_2_6_23;
-  };
-
   kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
     stdenv = overrideGCC stdenv gcc34;
@@ -5000,6 +4982,12 @@ let pkgs = rec {
   };
 
   kvm69 = import ../os-specific/linux/kvm/69.nix {
+    inherit fetchurl zlib e2fsprogs SDL alsaLib pkgconfig rsync;
+    stdenv = overrideGCC stdenv gcc34;
+    kernelHeaders = kernelHeaders_2_6_26;
+  };
+
+  kvm70 = import ../os-specific/linux/kvm/70.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     stdenv = overrideGCC stdenv gcc34;
     kernelHeaders = kernelHeaders_2_6_26;
@@ -5770,10 +5758,9 @@ let pkgs = rec {
 
   firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python curl coreutils dbus dbus_glib freetype fontconfig;
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-    inherit (xlibs) libXi libX11 libXrender libXft libXt;
     #enableOfficialBranding = true;
   });
 
