@@ -5758,7 +5758,7 @@ let pkgs = rec {
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
 
-  firefox = lowPrio (import ../applications/networking/browsers/firefox {
+  firefox = lowPrio (import ../applications/networking/browsers/firefox-2 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
