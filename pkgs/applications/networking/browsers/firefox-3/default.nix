@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0/source/firefox-3.0-source.tar.bz2;
-    sha1 = "86e0588f633cc63c741c677cb60b736f129f5836";
+    sha1 = "2e21652b9cad2a6ac8f048f50e9e053c19760d4b";
   };
 
   buildInputs = [
