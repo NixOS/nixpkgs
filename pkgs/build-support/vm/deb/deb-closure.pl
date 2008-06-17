@@ -1,6 +1,7 @@
 use strict;
 use Dpkg::Cdata;
 use Dpkg::Deps;
+use File::Basename;
 
 my $packagesFile = shift @ARGV;
 my $urlPrefix = shift @ARGV;
@@ -136,10 +137,15 @@ foreach my $pkgName (@order) {
 
     print "  [\n\n" if $newComponent;
     $newComponent = 0;
+
+    my $origName = basename $cdata->{Filename};
+    my $cleanedName = $origName;
+    $cleanedName =~ s/~//g;
     
     print "    (fetchurl {\n";
     print "      url = $urlPrefix/$cdata->{Filename};\n";
     print "      sha256 = \"$cdata->{SHA256}\";\n";
+    print "      name = \"$cleanedName\";\n" if $cleanedName ne $origName;
     print "    })\n";
     print "\n";
 
