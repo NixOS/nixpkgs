@@ -1,0 +1,240 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-overvie">
+
+<title>Quick Start to Adding a Package</title>
+
+<para>To add a package to Nixpkgs:
+
+<orderedlist>
+
+  <listitem>
+    <para>Checkout the Nixpkgs source tree:
+
+<screen>
+$ svn checkout https://svn.nixos.org/repos/nix/nixpkgs/trunk nixpkgs
+$ cd nixpkgs</screen>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Find a good place in the Nixpkgs tree to add the Nix
+    expression for your package.  For instance, a library package
+    typically goes into
+    <filename>pkgs/development/libraries/<replaceable>pkgname</replaceable></filename>,
+    while a web browser goes into
+    <filename>pkgs/applications/networking/browsers/<replaceable>pkgname</replaceable></filename>.
+    See Section XXX for some hints on the tree organisation.  Create a
+    directory for your package, e.g.
+
+<screen>
+$ svn mkdir pkgs/development/libraries/libfoo</screen>
+  
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>In the package directory, create a Nix expression — a piece
+    of code that describes how to build the package.  In this case, it
+    should be a <emphasis>function</emphasis> that is called with the
+    package dependencies as arguments, and returns a build of the
+    package in the Nix store.  The expression should usually be called
+    <filename>default.nix</filename>.
+
+<screen>
+$ emacs pkgs/development/libraries/libfoo/default.nix
+$ svn add pkgs/development/libraries/libfoo/default.nix</screen>
+
+    </para>
+
+    <para>You can have a look at the existing Nix expressions under
+    <filename>pkgs/</filename> to see how it’s done.  Here are some
+    good ones:
+
+      <itemizedlist>
+
+        <listitem>
+          <para>GNU cpio: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/tools/archivers/cpio/default.nix"><filename>pkgs/tools/archivers/cpio/default.nix</filename></link>.
+          The simplest possible package.  The generic builder in
+          <varname>stdenv</varname> does everything for you.  It has
+          no dependencies beyond <varname>stdenv</varname>.</para>
+        </listitem>
+
+        <listitem>
+          <para>GNU Hello: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/hello/ex-2/default.nix"><filename>pkgs/applications/misc/hello/ex-2/default.nix</filename></link>.
+          Also trivial, but it specifies some <varname>meta</varname>
+          attributes which is good practice.</para>
+        </listitem>
+
+        <listitem>
+          <para>GNU Multiple Precision arithmetic library (GMP): <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/development/libraries/gmp/default.nix"><filename>pkgs/development/libraries/gmp/default.nix</filename></link>.
+          Also done by the generic builder, but has a dependency on
+          <varname>m4</varname>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pan, a GTK-based newsreader: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/newsreaders/pan/default.nix"><filename>pkgs/applications/networking/newsreaders/pan/default.nix</filename></link>.
+          Has an optional dependency on <varname>gtkspell</varname>,
+          which is only built if <varname>spellCheck</varname> is
+          <literal>true</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Apache HTTPD: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/servers/http/apache-httpd/default.nix"><filename>pkgs/servers/http/apache-httpd/default.nix</filename></link>.
+          A bunch of optional features, variable substitutions in the
+          configure flags, a post-install hook, and miscellaneous
+          hackery.</para>
+        </listitem>
+
+        <listitem>
+          <para>BitTorrent (wxPython-based): <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/tools/networking/p2p/bittorrent/default.nix"><filename>pkgs/tools/networking/p2p/bittorrent/default.nix</filename></link>.
+          Uses an external <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/tools/networking/p2p/bittorrent/builder.sh">build
+          script</link>, which can be useful if you have lots of code
+          that you don’t want cluttering up the Nix expression.  But
+          external builders are mostly obsolete.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Firefox: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/browsers/firefox-3/default.nix"><filename>pkgs/applications/networking/browsers/firefox-3/default.nix</filename></link>.
+          Lots of dependencies.</para>
+        </listitem>
+
+        <listitem>
+          <para>JDiskReport, a Java utility: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/tools/misc/jdiskreport/default.nix"><filename>pkgs/tools/misc/jdiskreport/default.nix</filename></link>
+          (and the <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/tools/misc/jdiskreport/builder.sh">builder</link>).
+          Nixpkgs doesn’t have a decent <varname>stdenv</varname> for
+          Java yet so this is pretty ad-hoc.</para>
+        </listitem>
+
+        <listitem>
+          <para>XML::Simple, a Perl module: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
+          (search for the <varname>perlXMLSimple</varname>
+          attribute).  Most Perl modules are so simple to build that
+          they are defined directly in
+          <filename>all-packages.nix</filename>, no need to make a
+          separate file for them.</para>
+        </listitem>
+
+        <listitem>
+          <para>Adobe Reader: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/acrobat-reader/default.nix"><filename>pkgs/applications/misc/acrobat-reader/default.nix</filename></link>.
+          Shows how binary-only packages can be supported.  In
+          particular the <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/acrobat-reader/builder.sh">builder</link>
+          uses <command>patchelf</command> to set the RUNPATH and ELF
+          interpreter of the executables so that the right libraries
+          are found at runtime.</para>
+        </listitem>
+
+      </itemizedlist>
+
+    </para>
+
+    <para>Some notes:
+
+      <itemizedlist>
+
+        <listitem>
+          <para>All <varname>meta</varname> attributes are optional,
+          but it’s still a good idea to provide at least the
+          <varname>description</varname> and
+          <varname>homepage</varname>.</para>
+        </listitem>
+
+        <listitem>
+          <para>You can use <command>nix-prefetch-url</command>
+          <replaceable>url</replaceable> to get the SHA-256 hash of
+          source distributions.</para>
+        </listitem>
+
+        <listitem>
+          <para>A list of schemes for <literal>mirror://</literal>
+          URLs can be found in <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/build-support/fetchurl/mirrors.nix"><filename>pkgs/build-support/fetchurl/mirrors.nix</filename></link>.</para>
+        </listitem>
+
+      </itemizedlist>
+
+    </para>
+
+    <para>The exact syntax and semantics of the Nix expression
+    language, including the built-in function, are described in the
+    Nix manual in the <link
+    xlink:href="http://nixos.org/releases/nix/unstable/manual/#chap-writing-nix-expressions">chapter
+    on writing Nix expressions</link>.</para>
+    
+  </listitem>
+
+  <listitem>
+    <para>Add a call to the function defined in the previous step to
+    <link
+    xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
+    with some descriptive name for the variable,
+    e.g. <varname>libfoo</varname>.
+
+    <screen>
+$ emacs pkgs/top-level/all-packages.nix</screen>
+      
+    </para>
+
+    <para>The attributes in that file are sorted by category (like
+    “Development / Libraries”) that more-or-less correspond to the
+    directory structure of Nixpkgs, and then by attribute name.</para>
+  </listitem>
+
+  <listitem>
+    <para>Test whether the package builds:
+
+    <screen>
+$ nix-build -A libfoo</screen>
+
+    where <varname>libfoo</varname> should be the variable name
+    defined in the previous step.  You may want to add the flag
+    <option>-K</option> to keep the temporary build directory in case
+    something fails.  If the build succeeds, a symlink
+    <filename>./result</filename> to the package in the Nix store is
+    created.</para>
+  </listitem>
+
+  <listitem>
+    <para>If you want to install the package into your profile
+    (optional), do
+
+    <screen>
+$ nix-env -f . -iA libfoo</screen>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Optionally commit the new package (<command>svn
+    ci</command>) or send a patch to
+    <literal>nix-dev@cs.uu.nl</literal>.</para>
+  </listitem>
+
+  <listitem>
+    <para>If you want the TU Delft build farm to build binaries of the
+    package and make them available in the <link
+    xlink:href="http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/"><literal>nixpkgs</literal>
+    channel</link>, add it to <link
+    xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/build-for-release.nix"><filename>pkgs/top-level/build-for-release.nix</filename></link>.</para>
+  </listitem>
+
+</orderedlist>
+
+</para>
+
+</chapter>

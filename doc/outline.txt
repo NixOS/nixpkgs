@@ -170,3 +170,7 @@
     - fetchcvs
 
     - fetchdarcs
+
+
+- Appendix: Nixpkgs config options
+

@@ -3,8 +3,7 @@
 , perl, pcre, gmime, gettext
 }:
 
-assert spellChecking -> gtkspell != null /* !!! && gtk == gtkspell.gtk */;
-# !!! assert gtk.glib == gnet.glib;
+assert spellChecking -> gtkspell != null;
 
 stdenv.mkDerivation {
   name = "pan-0.132";
@@ -22,14 +21,11 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [
-    pkgconfig gtk perl pcre gmime gettext
-    (if spellChecking then gtkspell else null)
-  ];
-
-  inherit spellChecking stdenv;
+  buildInputs = [pkgconfig gtk perl pcre gmime gettext]
+    ++ stdenv.lib.optional spellChecking gtkspell;
 
   meta = {
     description = "A GTK+-based Usenet newsreader good at both text and binaries";
+    homepage = http://pan.rebelbase.com/;
   };
 }

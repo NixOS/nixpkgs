@@ -1,19 +1,19 @@
 source $stdenv/setup
 
+
 # Workaround for:
 #  File "...-python-2.4.4/lib/python2.4/posixpath.py", line 62, in join
 #    elif path == '' or path.endswith('/'):
 # AttributeError: 'NoneType' object has no attribute 'endswith'
 export HOME=$TMP
 
-buildPhase=buildPhase
+
 buildPhase() {
     #substituteInPlace BitTorrent/GUI_wx/__init__.py --replace "'2.6'" "'2.8'"
     python setup.py build
 }
 
 
-installPhase=installPhase
 installPhase() {
     python setup.py install --prefix=$out
 
@@ -23,5 +23,6 @@ installPhase() {
             --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH"
     done
 }
+
 
 genericBuild

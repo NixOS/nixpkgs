@@ -5862,8 +5862,8 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  hello = import ../applications/misc/hello/ex-1 {
-    inherit fetchurl stdenv perl;
+  hello = import ../applications/misc/hello/ex-2 {
+    inherit fetchurl stdenv;
   };
 
   i810switch = import ../applications/misc/i810 {

@@ -7,6 +7,7 @@ assert gui -> wxPython != null;
 
 stdenv.mkDerivation {
   name = "bittorrent-5.2.0";
+  
   builder = ./builder.sh;
   
   src = fetchurl {
