@@ -1,10 +1,17 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "sqlite-3.3.13";
+  name = "sqlite-3.5.9";
+
+  # Note: don't use the "amalgamation" source release, since it
+  # doesn't install sqlite3.pc.
   src = fetchurl {
-    url = http://www.sqlite.org/sqlite-3.3.13.tar.gz;
-    sha256 = "0p32asxkb38g6mbb2p7hdk09bnrrqn67dgnvgqx7pvwi5vcl80ck";
+    url = http://www.sqlite.org/sqlite-3.5.9.tar.gz;
+    sha256 = "0731zj0fnivhfc74wc3yh0p9gn7fpjgy3g79haarciqkdf8k3lvx";
   };
-  configureFlags = "--enable-threadsafe --disable-tcl";
+  
+  meta = {
+    homepage = http://www.sqlite.org/;
+    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
+  };
 }
