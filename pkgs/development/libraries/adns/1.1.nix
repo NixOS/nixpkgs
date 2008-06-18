@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, version, static }:
+{ stdenv, fetchurl, version ? "1.1", static }:
 
 assert version == "1.1";
 
