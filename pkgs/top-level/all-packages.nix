@@ -2190,7 +2190,7 @@ let pkgs = rec {
     inherit fetchurl stdenv unzip;
   };
 
-  scons = import ../development/tools/build-managers/scons {
+  scons = selectVersion ../development/tools/build-managers/scons "0.98.5" {
     inherit fetchurl stdenv python;
   };
 
