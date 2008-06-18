@@ -691,6 +691,12 @@ let pkgs = rec {
       inherit (gnome) libsoup;
     };
 
+  gupnptools = import ../tools/networking/gupnp-tools {
+      inherit fetchurl stdenv gssdp gupnp pkgconfig libxml2 e2fsprogs;
+      inherit (gtkLibs) gtk glib;
+      inherit (gnome) libsoup libglade gnomeicontheme;
+  };
+
   gzip = useFromStdenv "gzip"
     (import ../tools/compression/gzip {
       inherit fetchurl stdenv;
