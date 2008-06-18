@@ -674,10 +674,22 @@ let pkgs = rec {
         inherit fetchurl stdenv autoconf automake;
       };
 
+  gssdp = import ../development/libraries/gssdp {
+      inherit fetchurl stdenv pkgconfig libxml2;
+      inherit (gtkLibs) glib;
+      inherit (gnome) libsoup;
+    };
+
   gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
     inherit fetchurl stdenv pkgconfig libxml2;
     inherit (gtkLibs) glib gtk;
   };
+
+  gupnp = import ../development/libraries/gupnp {
+      inherit fetchurl stdenv pkgconfig libxml2 gssdp e2fsprogs;
+      inherit (gtkLibs) glib;
+      inherit (gnome) libsoup;
+    };
 
   gzip = useFromStdenv "gzip"
     (import ../tools/compression/gzip {
