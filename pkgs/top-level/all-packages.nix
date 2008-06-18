@@ -3,7 +3,7 @@
    them with appropriate arguments.  The result is a set of all the
    packages in the Nix Packages collection for some particular
    platform. */
-   
+
 
 { # The system (e.g., `i686-linux') for which to build the packages.
   system ? __currentSystem
@@ -82,13 +82,13 @@ let pkgs = rec {
 
         # libcompat.a contains some commonly used functions.
         NIX_LDFLAGS = "-lcompat";
-        
+
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
           (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
           + " -Os -s -D_BSD_SOURCE=1";
-        
+
         configureFlags =
           (if args ? configureFlags then args.configureFlags else "")
           + " --disable-shared"; # brrr...
@@ -128,6 +128,9 @@ let pkgs = rec {
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
   getConfig = attrPath: default: lib.getAttr attrPath default config;
+
+  # Return the first available value in the order: pkg.val, val, or default.
+  getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
 
   # Return user-choosen version of given package. If you define package as
   #
@@ -193,7 +196,7 @@ let pkgs = rec {
   # within this file
   # Before spending much time on investigating how this works just ask me
   # - Marc Weber (#irc or marco-oweber@gmx.de)
-  mkDerivationByConfiguration = 
+  mkDerivationByConfiguration =
     assert builtins ? isAttrs;
     { flagConfig ? {}, optionals ? [], defaults ? []
     , extraAttrs, collectExtraPhaseActions ? []
@@ -202,16 +205,16 @@ let pkgs = rec {
     if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
     else
     let co = lib.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
-      args.stdenv.mkDerivation ( 
+      args.stdenv.mkDerivation (
       {
         inherit (co) configureFlags buildInputs propagatedBuildInputs /*flags*/;
       } // extraAttrs co  // co.pass // co.flags_prefixed );
-  
+
 
   # Check absence of non-used options
-  checker = x: flag: opts: config: 
-    (if flag then let result=( 
-      (import ../build-support/checker) 
+  checker = x: flag: opts: config:
+    (if flag then let result=(
+      (import ../build-support/checker)
       opts config); in
       (if (result=="") then x else
       abort ("Unknown option specified: " + result))
@@ -223,7 +226,7 @@ let pkgs = rec {
 
   composedArgsAndFun = f : lib.composedArgs (arg : (f arg)//{meta={function=(composedArgsAndFun f) arg;};});
 
-  builderDefsPackage = expr: composedArgsAndFun 
+  builderDefsPackage = expr: composedArgsAndFun
     (((builderDefs null).builderDefsPackage builderDefs) expr);
 
   stringsWithDeps = import ../lib/strings-with-deps.nix {
@@ -242,8 +245,8 @@ let pkgs = rec {
           getConfig [ (baseNameOf (toString dir)) "version" ] defVersion;
     in
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
-        
-        
+
+
   ### STANDARD ENVIRONMENT
 
 
@@ -271,7 +274,7 @@ let pkgs = rec {
   buildEnv = import ../build-support/buildenv {
     inherit stdenv perl;
   };
-  
+
   debPackage = {
     debBuild = lib.sumArgs (import ../build-support/deb-package) {
       inherit builderDefs;
@@ -336,7 +339,7 @@ let pkgs = rec {
 
   makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
-  makeModulesClosure = {kernel, rootModules, allowMissing ? false}: 
+  makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
       inherit stdenv module_init_tools kernel rootModules allowMissing;
     };
@@ -354,9 +357,9 @@ let pkgs = rec {
   writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
 
   writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
- 
+
   writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
- 
+
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
   };
@@ -368,7 +371,7 @@ let pkgs = rec {
   vmTools = import ../build-support/vm/default.nix {
     inherit pkgs;
   };
-  
+
 
   ### TOOLS
 
@@ -497,9 +500,9 @@ let pkgs = rec {
 
   ddrescueFun = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") ;
   ddrescue = ddrescueFun null;
- 
+
   dnsmasq = import ../tools/networking/dnsmasq {
-    # TODO i18n can be installed as well, implement it? 
+    # TODO i18n can be installed as well, implement it?
     inherit fetchurl stdenv;
   };
 
@@ -669,7 +672,7 @@ let pkgs = rec {
   grub =
     if system == "x86_64-linux" then
       (import ./all-packages.nix {system = "i686-linux";}).grub
-    else 
+    else
       import ../tools/misc/grub {
         inherit fetchurl stdenv autoconf automake;
       };
@@ -860,7 +863,7 @@ let pkgs = rec {
 
   nmap = import ../tools/security/nmap {
     inherit fetchurl stdenv libpcap pkgconfig openssl
-      python pygtk makeWrapper pygobject pycairo 
+      python pygtk makeWrapper pygobject pycairo
       pysqlite;
     inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
@@ -981,7 +984,7 @@ let pkgs = rec {
   seccure = seccureFun null;
 
   # seccure will override it (it is root-only, but
-  # more secure because of memory locking), but this 
+  # more secure because of memory locking), but this
   # can be added to default system
   seccureUser = lowPrio (seccureFun {
     makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
@@ -1196,7 +1199,7 @@ let pkgs = rec {
   abc =
     abcPatchable [];
 
-  abcPatchable = patches : 
+  abcPatchable = patches :
     import ../development/compilers/abc/default.nix {
       inherit stdenv fetchurl patches jre apacheAnt;
       javaCup = import ../development/libraries/java/cup {
@@ -1256,7 +1259,7 @@ let pkgs = rec {
     inherit (stdenv.gcc) binutils libc;
     inherit stdenv;
   };
- 
+
   g77_41 = import ../build-support/gcc-wrapper {
     name = "g77-4.1";
     nativeTools = false;
@@ -1271,7 +1274,7 @@ let pkgs = rec {
     inherit (stdenv.gcc) binutils libc;
     inherit stdenv;
   };
- 
+
   g77_42 = import ../build-support/gcc-wrapper {
     name = "g77-4.2";
     nativeTools = false;
@@ -1286,7 +1289,7 @@ let pkgs = rec {
     inherit (stdenv.gcc) binutils libc;
     inherit stdenv;
   };
- 
+
   gcc = gcc42;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
@@ -1333,12 +1336,12 @@ let pkgs = rec {
     texinfo = texinfo49;
   });
 
-  # This new ghc stuff is under heavy development and will change ! 
+  # This new ghc stuff is under heavy development and will change !
   # ===============================================================
 
   # usage: see ghcPkgUtil.sh
   # depreceated -> use functions defined in builderDefs
-  ghcPkgUtil = runCommand "ghcPkgUtil-internal" 
+  ghcPkgUtil = runCommand "ghcPkgUtil-internal"
      { ghcPkgUtil = ../development/libraries/haskell/generic/ghcPkgUtil.sh; }
      "mkdir -p $out/nix-support; cp $ghcPkgUtil \$out/nix-support/setup-hook;";
 
@@ -1358,7 +1361,7 @@ let pkgs = rec {
   ghcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
         import ../development/compilers/ghc/ghc-wrapper {
     inherit ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
-      lib 
+      lib
       readline ncurses stdenv;
     inherit (sourceAndTags) sourceWithTagsDerivation annotatedWithSourceAndTagInfo sourceWithTagsFromDerivation;
     #inherit stdenv ghcPackagedLibs ghc name suffix libraries ghcPkgUtil
@@ -1378,7 +1381,7 @@ let pkgs = rec {
   ghcCabalDerivation = args : with args;
     let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);
-        configure = if (args ? useLocalPkgDB) 
+        configure = if (args ? useLocalPkgDB)
                       then "nix_ghc_pkg_tool join localDb\n" +
                             "\$CABAL_SETUP configure --package-db=localDb \$profiling \$cabalFlags"
                       else "\$CABAL_SETUP configure --by-env=\$PACKAGE_DB \$profiling \$cabalFlags";
@@ -1387,7 +1390,7 @@ let pkgs = rec {
       inherit (args) name src propagatedBuildInputs;
       phases = "unpackPhase patchPhase buildPhase";
       profiling = if getConfig [ "ghc68" "profiling" ] false then "-p" else "";
-      cabalFlags = map lib.escapeShellArg 
+      cabalFlags = map lib.escapeShellArg
                       (getConfig [ "cabal" "flags" ] []
                        ++ (if args ? cabalFlags then args.cabalFlags else []) );
       # TODO remove echo line
@@ -1416,7 +1419,7 @@ let pkgs = rec {
   } // ( if args ? pass then (args.pass) else {} ) // { inherit buildInputs; } );
 
 
-  ghcCabalExecutableFun = (import ../development/compilers/ghc/ghc-wrapper/ghc-cabal-executable-fun.nix){ 
+  ghcCabalExecutableFun = (import ../development/compilers/ghc/ghc-wrapper/ghc-cabal-executable-fun.nix){
     inherit ghc68extraLibs ghcsAndLibs stdenv lib;
     # extra packages from this top level file:
     inherit perl;
@@ -1440,7 +1443,7 @@ let pkgs = rec {
     inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib getConfig;
     inherit X11;
     inherit (xlibs) xmessage;
-    inherit pkgs; # passing pkgs to add the possibility for the user to add his own executables. pkgs is passed. 
+    inherit pkgs; # passing pkgs to add the possibility for the user to add his own executables. pkgs is passed.
   });
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
@@ -1449,13 +1452,13 @@ let pkgs = rec {
   # the lib to the libraries list below
   # Doesn't create that much useless symlinks (you seldomly want to read the
   # .hi and .o files, right?
-  ghcLibraryWrapper68 = 
+  ghcLibraryWrapper68 =
     let ghc = ghcsAndLibs.ghc68.ghc; in
     ghcWrapper rec {
       ghcPackagedLibs = true;
       name = "ghc${ghc.version}_wrapper";
       suffix = "${ghc.version}wrapper";
-      libraries = 
+      libraries =
         # core_libs  distributed with this ghc version
         (lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
         # (map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ "cabal" "mtl" "base"  ]
@@ -1512,7 +1515,7 @@ let pkgs = rec {
       libraries = [];
     };
   */
-  
+
   gwt = import ../development/compilers/gwt {
     inherit stdenv fetchurl;
     inherit (gtkLibs) glib gtk pango atk;
@@ -1553,7 +1556,7 @@ let pkgs = rec {
     import ../development/compilers/jdk/default-5.nix {
       inherit fetchurl stdenv unzip;
     };
-  
+
   jdk       = jdkdistro true  false;
   jre       = jdkdistro false false;
 
@@ -1614,7 +1617,7 @@ let pkgs = rec {
 
   viewMtn = builderDefsPackage (selectVersion ../applications/version-management/viewmtn "0.10")
   {
-    inherit monotone flup cheetahTemplate highlight ctags 
+    inherit monotone flup cheetahTemplate highlight ctags
       makeWrapper graphviz which;
     python = python25;
   } null;
@@ -1705,7 +1708,7 @@ let pkgs = rec {
     aterm = aterm23x;
 
     stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-    
+
     strategoxt = import ../development/compilers/strategoxt/strategoxt-0.14.nix {
       inherit fetchurl pkgconfig sdf;
       aterm = aterm23x;
@@ -1756,12 +1759,12 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  
+
   ### DEVELOPMENT / INTERPRETERS
 
 
   clisp = import ../development/interpreters/clisp {
-    inherit fetchurl stdenv libsigsegv gettext 
+    inherit fetchurl stdenv libsigsegv gettext
       readline ncurses coreutils pcre zlib;
     inherit (xlibs) libX11 libXau libXt;
   };
@@ -1824,7 +1827,7 @@ let pkgs = rec {
   python25Fun = lib.sumArgs (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
-  
+
   python25 = python25Fun {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
     sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
@@ -1901,8 +1904,8 @@ let pkgs = rec {
   };
   */
 
-  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos { 
-    inherit getConfig fetchdarcs2 fetchurl; 
+  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos {
+    inherit getConfig fetchdarcs2 fetchurl;
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -2014,7 +2017,7 @@ let pkgs = rec {
     inherit fetchurl stdenv expect makeWrapper;
   };
 
-  elfutilsFun = lib.sumArgs 
+  elfutilsFun = lib.sumArgs
     (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
     };
@@ -2282,6 +2285,11 @@ let pkgs = rec {
       inherit stdenv fetchurl gettext attr libtool;
     });
 
+  adns = selectVersion ../development/libraries/adns "1.4" {
+    inherit stdenv fetchurl;
+    static = getPkgConfig "adns" "static" (stdenv ? isStatic || stdenv ? isDietLibC);
+  };
+
   agg = import ../development/libraries/agg {
     inherit fetchurl stdenv autoconf automake libtool pkgconfig
             freetype SDL;
@@ -2529,7 +2537,7 @@ let pkgs = rec {
     inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
     use_svn = stdenv.system == "x86_64-linux";
     python = python;
-    # optional features:  
+    # optional features:
     # python / ruby support
   };
 
@@ -2575,7 +2583,7 @@ let pkgs = rec {
 
   gmm = import ../development/libraries/gmm {
     inherit fetchurl stdenv;
-  }; 
+  };
 
   gmp = import ../development/libraries/gmp {
     inherit fetchurl stdenv m4;
@@ -2644,15 +2652,15 @@ let pkgs = rec {
 
   gtksharp1 = import ../development/libraries/gtk-sharp-1 {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
-    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
-              libgnomecanvas libgnomeui libgnomeprint 
+    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf;
   };
 
   gtksharp2 = import ../development/libraries/gtk-sharp-2 {
     inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
-    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml 
-              libgnomecanvas libgnomeui libgnomeprint 
+    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf gnomepanel;
   };
 
@@ -2741,7 +2749,7 @@ let pkgs = rec {
 
   lib3ds = import ../development/libraries/lib3ds {
     inherit fetchurl stdenv unzip;
-  }; 
+  };
 
   libaal = import ../development/libraries/libaal {
     inherit fetchurl stdenv;
@@ -3003,7 +3011,7 @@ let pkgs = rec {
   };
 
   libwmf = import ../development/libraries/libwmf {
-    inherit fetchurl stdenv pkgconfig imagemagick 
+    inherit fetchurl stdenv pkgconfig imagemagick
       zlib libpng freetype libjpeg libxml2;
     inherit (gtkLibs) glib;
   };
@@ -3071,7 +3079,7 @@ let pkgs = rec {
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux";
-  
+
   mesa = assert mesaSupported; import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig x11 xlibs libdrm;
   };
@@ -3097,7 +3105,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
   };
-  
+
   ncurses = ncursesFun null;
 
   ncursesDiet = import ../development/libraries/ncurses-diet {
@@ -3140,7 +3148,7 @@ let pkgs = rec {
           # optional features:
           inherit ctl;
   };
-  
+
   # This older version is needed by blender (it complains about missing half.h )
   openexr_1_4_0 = import ../development/libraries/openexr {
     inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
@@ -3474,7 +3482,7 @@ let pkgs = rec {
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
   binary = import ../development/libraries/haskell/binary {
-    inherit cabal; 
+    inherit cabal;
   };
 
   # cabal is a utility function to build cabal-based
@@ -3483,7 +3491,7 @@ let pkgs = rec {
     inherit stdenv fetchurl;
     ghc = ghc68;
   };
-  
+
   cabal = cabal68;
 
   Crypto = import ../development/libraries/haskell/Crypto {
@@ -3540,7 +3548,7 @@ let pkgs = rec {
     inherit cabal zlib;
   };
 
-  
+
   ### DEVELOPMENT / PERL MODULES
 
 
@@ -4178,8 +4186,8 @@ let pkgs = rec {
     inherit fetchurl stdenv python db4;
   };
 
-  flup = builderDefsPackage (selectVersion ../development/python-modules/flup "r2311") 
-  (let python=python25; in 
+  flup = builderDefsPackage (selectVersion ../development/python-modules/flup "r2311")
+  (let python=python25; in
   {
     inherit python;
     setuptools = setuptools.meta.function {inherit python;} null;
@@ -4202,7 +4210,7 @@ let pkgs = rec {
   };
 
   pygame = import ../development/python-modules/pygame {
-    inherit fetchurl stdenv python pkgconfig SDL SDL_image 
+    inherit fetchurl stdenv python pkgconfig SDL SDL_image
   SDL_ttf;
   };
 
@@ -4275,8 +4283,8 @@ let pkgs = rec {
   } null;
 
   dictFun = lib.sumArgs (selectVersion ../servers/dict "1.9.15") {
-    inherit builderDefs which; 
-    flex=flex2534; 
+    inherit builderDefs which;
+    flex=flex2534;
     bison=bison23;
   };
 
@@ -4406,7 +4414,7 @@ let pkgs = rec {
   };
 
   axis2 = import ../servers/http/tomcat/axis2 {
-    inherit fetchurl stdenv jdk apacheAnt unzip;  
+    inherit fetchurl stdenv jdk apacheAnt unzip;
   };
 
   vsftpd = import ../servers/ftp/vsftpd {
@@ -4551,7 +4559,7 @@ let pkgs = rec {
   hibernate = import ../os-specific/linux/hibernate {
     inherit fetchurl stdenv gawk;
   };
- 
+
   htop = import ../os-specific/linux/htop {
     inherit fetchurl stdenv ncurses;
   };
@@ -4681,17 +4689,17 @@ let pkgs = rec {
     kernelPatches = [
       { name = "ext3cow";
         patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
-        extraConfig =  
+        extraConfig =
           "CONFIG_EXT3COW_FS=m\n" +
           "CONFIG_EXT3COW_FS_XATTR=y\n" +
           "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
           "CONFIG_EXT3COW_FS_SECURITY=y\n";
       }
-      /* Commented out because only acer users have need for it.. 
+      /* Commented out because only acer users have need for it..
          It takes quite a while to create the patch when unpacking the kernel sources only for that task
       { name = "acerhk";
         patch = kernel_module_acerhk + "/acerhk-patch.tar.bz2" ;
-        extraConfig =  
+        extraConfig =
   "CONFIG_ACERHK=m\n";
       }
       */
@@ -4864,7 +4872,7 @@ let pkgs = rec {
      specific kernel, we have a function that builds those packages
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
-  
+
   kernelPackagesFor = kernel: rec {
 
     inherit kernel;
@@ -4903,7 +4911,7 @@ let pkgs = rec {
       inherit stdenv klibc;
     };
 
-    splashutils = 
+    splashutils =
       if kernel.features ? fbSplash then splashutils_13 else
       if kernel.features ? fbConDecor then splashutils_15 else
       null;
@@ -5054,7 +5062,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  aggregateModules = modules:  
+  aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
       inherit stdenv module_init_tools modules;
     };
@@ -5137,7 +5145,7 @@ let pkgs = rec {
   };
 
   sdparm = sdparmFun null;
- 
+
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
   };
@@ -5441,7 +5449,7 @@ let pkgs = rec {
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv libogg libvorbis libsndfile libmad 
+    inherit fetchurl stdenv libogg libvorbis libsndfile libmad
       pkgconfig gettext;
     inherit (gtkLibs) gtk glib;
     wxGTK = wxGTK28deps;
@@ -5542,7 +5550,7 @@ let pkgs = rec {
     inherit fetchurl stdenv cmake libcap zlib;
   };
 
-  chatzilla = 
+  chatzilla =
     xulrunnerWrapper {
       launcher = "chatzilla";
       application = import ../applications/networking/irc/chatzilla {
@@ -5562,8 +5570,8 @@ let pkgs = rec {
     gnomegtk = gnome.gtk;
     inherit librsvg fuse;
   };
- 
-  compiz_062 = compizFun { 
+
+  compiz_062 = compizFun {
     version = "0.6.2";
   };
 
@@ -5572,7 +5580,7 @@ let pkgs = rec {
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
-      damageproto randrproto xineramaproto renderproto kbproto xproto libX11 
+      damageproto randrproto xineramaproto renderproto kbproto xproto libX11
       libxcb;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
@@ -5608,7 +5616,7 @@ let pkgs = rec {
     inherit pygtk pycairo getopt libjpeg glxinfo;
     inherit (xorg) xvinfo xdpyinfo;
   };
-  
+
   compizExtra = import ../applications/window-managers/compiz/extra.nix {
     inherit fetchurl stdenv pkgconfig compiz perl perlXMLParser dbus;
     inherit (gnome) GConf;
@@ -5644,20 +5652,20 @@ let pkgs = rec {
     inherit fetchurl stdenv pkgconfig openssl boost;
     inherit (gtkLibs) gtk glib;
   };
-  
+
   darcs = import ../applications/version-management/darcs {
     inherit fetchurl stdenv zlib ncurses curl;
-    ghc = ghc661;    
+    ghc = ghc661;
   };
 
-  # some speed bottle necks are resolved in this version I think .. perhaps you like to try it? 
+  # some speed bottle necks are resolved in this version I think .. perhaps you like to try it?
   darcs2 = import ../applications/version-management/darcs/darcs-2.nix {
     inherit fetchurl stdenv zlib ncurses curl ghc;
   };
 
   dia = import ../applications/graphics/dia {
-    inherit stdenv fetchurl pkgconfig perl perlXMLParser 
-      libxml2 gettext python libxml2Python docbook5 docbook_xsl 
+    inherit stdenv fetchurl pkgconfig perl perlXMLParser
+      libxml2 gettext python libxml2Python docbook5 docbook_xsl
       libxslt;
     inherit (gtkLibs) gtk glib;
   };
@@ -5677,10 +5685,10 @@ let pkgs = rec {
   dvdplusrwtoolsFun = lib.sumArgs (selectVersion ../os-specific/linux/dvd+rw-tools "7.0") {
     inherit fetchurl stdenv builderDefs cdrkit m4;
   };
- 
+
   dvdplusrwtools = dvdplusrwtoolsFun null;
 
-  # building eclipise from source 
+  # building eclipise from source
   # experimental tested on x86_64-linux only
   eclipse_classic_src = import ../applications/editors/eclipse/eclipse_classic.nix {
     inherit fetchurl stdenv makeWrapper jdk unzip ant;
@@ -5791,7 +5799,7 @@ let pkgs = rec {
 
   firefox3Wrapper = lowPrio (wrapFirefox firefox3 "");
   firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "");
- 
+
   flacAlts = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
@@ -5874,7 +5882,7 @@ let pkgs = rec {
   gv = import ../applications/misc/gv {
     inherit fetchurl stdenv Xaw3d ghostscriptX;
   };
- 
+
   haskellMode = import ../applications/editors/emacs-modes/haskell {
     inherit fetchurl stdenv;
   };
@@ -5886,7 +5894,7 @@ let pkgs = rec {
   i810switch = import ../applications/misc/i810 {
     inherit fetchurl stdenv pciutils;
   };
-  
+
   icewm = import ../applications/window-managers/icewm {
     inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
@@ -5937,7 +5945,7 @@ let pkgs = rec {
   };
 
   kino = import ../applications/video/kino {
-    inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser 
+    inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
       libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
     inherit libsamplerate ffmpeg;
     inherit (gnome) libglade gtk glib;
@@ -6164,8 +6172,8 @@ let pkgs = rec {
   };
   pidginlatex = pidginlatexFun null;
 
-  pidginlatexSFFun = builderDefsPackage 
-    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix) 
+  pidginlatexSFFun = builderDefsPackage
+    (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
     {
       inherit pkgconfig pidgin texLive imagemagick which;
       inherit (gtkLibs) glib gtk;
@@ -6205,7 +6213,7 @@ let pkgs = rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
-  qemuImageFun = lib.sumArgs 
+  qemuImageFun = lib.sumArgs
     (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
     inherit builderDefs fetchurl stdenv;
   };
@@ -6264,7 +6272,7 @@ let pkgs = rec {
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
     inherit glibc alsaLib freetype fontconfig libsigcxx gcc;
-    inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor 
+    inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor
                     libXinerama libXext libX11;
   };
 
@@ -6286,7 +6294,7 @@ let pkgs = rec {
 
   sox = import ../applications/misc/audio/sox {
     inherit fetchurl stdenv lib mkDerivationByConfiguration;
-    # optional features 
+    # optional features
     inherit alsaLib; # libao
     inherit libsndfile libogg flac libmad lame libsamplerate;
     # Using the default nix ffmpeg I get this error when linking
@@ -6295,7 +6303,7 @@ let pkgs = rec {
     # That's why I'v added ffmpeg_svn
     ffmpeg = ffmpeg_svn;
   };
-  
+
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
     inherit fetchurl stdenv;
   };
@@ -6322,7 +6330,7 @@ let pkgs = rec {
     compressionSupport = getConfig ["subversion" "compressionSupport"] true;
     httpd = apacheHttpd;
   };
-  
+
   subversion14svnmerge = svnmergeFun subversion14;
 
   subversionWithJava = import ../applications/version-management/subversion-1.2.x {
@@ -6348,7 +6356,7 @@ let pkgs = rec {
     gpgSupport = true;
   };
 
-  # linux only by now 
+  # linux only by now
   synergy = import ../applications/misc/synergy {
     inherit bleedingEdgeRepos stdenv x11;
     inherit (xlibs) xextproto libXtst inputproto;
@@ -6437,7 +6445,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
-    # python 
+    # python
     # TODO mzschemeinterp perlinterp
     inherit python /*x11*/;
 
@@ -6446,7 +6454,7 @@ let pkgs = rec {
   };
 
   /*virtualboxFun = lib.sumArgs (selectVersion ../applications/virtualization/virtualbox "1.5.2") {
-    inherit stdenv fetchurl builderDefs bridge_utils umlutilities kernelHeaders 
+    inherit stdenv fetchurl builderDefs bridge_utils umlutilities kernelHeaders
       wine jre libxslt SDL qt3 openssl zlib;
     inherit (xorg) libXcursor;
     inherit (gnome) libIDL;
@@ -6473,7 +6481,7 @@ let pkgs = rec {
     inherit (gtkLibs1x) gdkpixbuf;
   };
 
-  # I'm keen on wmiimenu only  >wmii-3.5 no longer has it... 
+  # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
@@ -6509,7 +6517,7 @@ let pkgs = rec {
 
   x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
     inherit builderDefs openssl zlib libjpeg ;
-    inherit (xlibs) libXfixes fixesproto libXdamage damageproto 
+    inherit (xlibs) libXfixes fixesproto libXdamage damageproto
       libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
       libXext xextproto inputproto recordproto;
   };
@@ -6575,11 +6583,11 @@ let pkgs = rec {
   };
 
   xneur = import ../applications/misc/xneur {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell; 
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell;
     GStreamer=gst_all.gstreamer;
     inherit (xlibs) libX11;
     inherit (gtkLibs) glib;
-  }; 
+  };
 
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
@@ -6617,7 +6625,7 @@ let pkgs = rec {
 
   xmacro = import ../tools/X11/xmacro {
     inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXi 
+    inherit (xlibs) libX11 libXi
   libXtst xextproto inputproto;
   };
 
@@ -6634,7 +6642,7 @@ let pkgs = rec {
     inherit (xlibs) libXmu libXext;
   };
 
-  # doesn't compile yet - in case someone else want's to continue .. 
+  # doesn't compile yet - in case someone else want's to continue ..
   /*
   qgis_svn = import ../applications/misc/qgis_svn {
     inherit mkDerivationByConfiguration fetchsvn stdenv flex lib
@@ -6652,7 +6660,7 @@ let pkgs = rec {
   */
 
   zapping = import ../applications/video/zapping {
-    inherit fetchurl stdenv pkgconfig perl python 
+    inherit fetchurl stdenv pkgconfig perl python
             gettext zvbi libjpeg libpng x11
             rte perlXMLParser;
     inherit (gnome) scrollkeeper libgnomeui libglade esound;
@@ -6686,7 +6694,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk;
     wxGTK = wxGTK28deps {unicode = false;};
   };
-  
+
   fsgAltBuild = import ../games/fsg/alt-builder.nix {
     inherit stdenv fetchurl;
     wxGTK = wxGTK28deps {unicode = false;};
@@ -6739,7 +6747,7 @@ let pkgs = rec {
   spaceOrbit = spaceOrbitFun null;
 
   /*tpm = import ../games/thePenguinMachine {
-    inherit stdenv fetchurl pil pygame SDL; 
+    inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
   };*/
 
@@ -6778,7 +6786,7 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXt libXext;
     qt = qt3;
   };
-  
+
   kde4 = recurseIntoAttrs (import ../desktops/kde-4 {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
@@ -6809,7 +6817,7 @@ let pkgs = rec {
       kdelibs openssl bzip2 fontconfig;
     qt = qt3;
   };
-  
+
 
   ### SCIENCE/BIOLOGY
 
@@ -6849,7 +6857,7 @@ let pkgs = rec {
   ataripp = import ../misc/emulators/atari++ {
     inherit fetchurl stdenv x11 SDL;
   };
- 
+
   auctex = import ../misc/tex/auctex {
     inherit stdenv fetchurl emacs texLive;
   };
@@ -6908,15 +6916,15 @@ let pkgs = rec {
   # using the new configuration style proposal which is unstable
   /*
   jackaudio = import ../misc/jackaudio {
-    inherit mkDerivationByConfiguration 
+    inherit mkDerivationByConfiguration
            ncurses lib stdenv fetchurl;
     flags = [ "posix_shm" "timestamps"];
   };
   */
- 
+
   keynav = import ../tools/X11/keynav {
     inherit stdenv fetchurl;
-    inherit (xlibs) libX11 xextproto libXtst 
+    inherit (xlibs) libX11 xextproto libXtst
     imake libXi libXext;
   };
 
@@ -6980,7 +6988,7 @@ let pkgs = rec {
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
-      inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake 
+      inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
         autoconf libtool configureFlags enableScripts lib;
       bison = bison23;
       flex = flex2533;
@@ -7010,8 +7018,8 @@ let pkgs = rec {
     inherit fetchurl stdenv tetex lazylist;
   };
 
-  psiFun = builderDefsPackage 
-    (selectVersion ../applications/networking/instant-messengers/psi "0.11") 
+  psiFun = builderDefsPackage
+    (selectVersion ../applications/networking/instant-messengers/psi "0.11")
     {
       inherit builderDefs zlib aspell sox openssl;
       inherit (xlibs) xproto libX11 libSM libICE;
@@ -7081,11 +7089,11 @@ let pkgs = rec {
     ghostscript = ghostscriptX;
   };
 
-  /* Look in configurations/misc/raskin.nix for usage example (around revisions 
-  where TeXLive was added) 
-  
+  /* Look in configurations/misc/raskin.nix for usage example (around revisions
+  where TeXLive was added)
+
   (texLiveAggregationFun {
-    paths = [texLive texLiveExtra texLiveCMSuper 
+    paths = [texLive texLiveExtra texLiveCMSuper
       texLiveBeamer
     ];
   } null)
@@ -7145,7 +7153,7 @@ let pkgs = rec {
 
     inherit pysqlite;
   };
-    
+
   pysqlite = import ../development/libraries/pysqlite {
     inherit stdenv fetchurl python sqlite;
   };
