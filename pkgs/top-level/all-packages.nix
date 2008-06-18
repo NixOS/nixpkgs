@@ -247,11 +247,12 @@ let pkgs = rec {
   ### STANDARD ENVIRONMENT
 
 
-  defaultStdenv =
-    (import ../stdenv {
-      inherit system stdenvType;
-      allPackages = import ./all-packages.nix;
-    }).stdenv;
+  allStdenvs = import ../stdenv {
+    inherit system stdenvType;
+    allPackages = import ./all-packages.nix;
+  };
+
+  defaultStdenv = allStdenvs.stdenv;
 
   stdenv =
     if bootStdenv != null then bootStdenv else
@@ -1713,16 +1714,14 @@ let pkgs = rec {
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  wrapGCC = baseGCC: wrapGCCWithGlibc baseGCC glibc;
-
-  wrapGCCWithGlibc = baseGCC: glibc: import ../build-support/gcc-wrapper {
+  wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
+    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
     gcc = baseGCC;
     libc = glibc;
     inherit stdenv binutils;
   };
-
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.

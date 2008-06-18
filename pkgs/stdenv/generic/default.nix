@@ -1,7 +1,7 @@
 { stdenv, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
-, fetchurlBoot
+, fetchurlBoot, forceFetchurlBoot
 }:
 
 let {
@@ -80,7 +80,9 @@ let {
       # "lift" packages like curl from the final stdenv for Linux to
       # all-packages.nix for that platform (meaning that it has a line
       # like curl = if stdenv ? curl then stdenv.curl else ...).
-      // extraAttrs;
+      // extraAttrs
+
+      // (if forceFetchurlBoot then {fetchurl = fetchurlBoot;} else {});
 
   }.result;
 

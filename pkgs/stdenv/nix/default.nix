@@ -22,8 +22,6 @@ import ../generic {
 
   shell = pkgs.bash + "/bin/sh";
 
-  fetchurlBoot = import ../../build-support/fetchurl {
-    inherit stdenv;
-    curl = pkgs.curl;
-  };
+  fetchurlBoot = stdenv.fetchurlBoot;
+  forceFetchurlBoot = false;
 }

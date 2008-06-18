@@ -114,7 +114,7 @@ rec {
       shell = bootstrapTools.bash;
       initialPath = [staticTools] ++ extraPath;
       inherit fetchurlBoot;
-      extraAttrs = extraAttrs // {fetchurl = fetchurlBoot;};
+      forceFetchurlBoot = true;
       inherit gcc;
     };
 
@@ -211,6 +211,7 @@ rec {
     shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     
     fetchurlBoot = stdenvLinuxBoot3.fetchurlBoot;
+    forceFetchurlBoot = false;
     
     extraAttrs = {
       inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;

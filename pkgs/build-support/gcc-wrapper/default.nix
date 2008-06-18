@@ -21,7 +21,10 @@ stdenv.mkDerivation {
   utils = ./utils.sh;
   addFlags = ./add-flags;
   
-  inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
+  inherit nativeTools nativeLibc nativePrefix gcc;
+  libc = if nativeLibc then null else libc;
+  binutils = if nativeTools then null else binutils;
+  
   name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;

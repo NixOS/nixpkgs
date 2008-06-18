@@ -1,1 +1,0 @@
-export NIX_ENFORCE_PURITY=
