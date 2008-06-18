@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "e2fsprogs-1.40.8";
+  name = "e2fsprogs-1.40.11";
   src = fetchurl {
-    url = mirror://sourceforge/e2fsprogs/e2fsprogs-1.40.8.tar.gz;
-    sha256 = "1bgfi1b7zl60lbc8b0bcqv9rk886jcwwq091n08in4msnpw71prq";
+    url = mirror://sourceforge/e2fsprogs/e2fsprogs-1.40.11.tar.gz;
+    sha256 = "0yw97irzwrra09wijjn8ig5j2fkyqwxl3hqyspsm3cmk2cshrsry";
   };
   configureFlags =
     if stdenv ? isDietLibC
