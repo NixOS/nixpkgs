@@ -1,24 +1,27 @@
 { stdenv, fetchurl, pkgconfig, x11, xlibs, zlib, libpng, libjpeg, perl
-, qt, kdelibs, openssl, bzip2, fontconfig
+, qt, kdelibs, openssl, bzip2, fontconfig, pam, hal, dbus, glib
 }:
 
-let version = "3.5.7"; in
+# Note: the glib dependency is needed for nspluginviewer.
+
+let version = "3.5.9"; in
 
 stdenv.mkDerivation {
   name = "kdebase-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdebase-${version}.tar.bz2";
-    md5 = "b421e01b3ee712549ee967f58ed24de0";
+    md5 = "c8c35389a238aa1b73e68ef5298eadf8";
   };
 
   buildInputs = [
-    pkgconfig x11 zlib libpng libjpeg perl
-    qt kdelibs openssl bzip2 fontconfig
+    pkgconfig x11 zlib libpng libjpeg perl qt kdelibs openssl bzip2
+    fontconfig pam hal dbus glib
     xlibs.libXrandr xlibs.libXinerama xlibs.libXau xlibs.libXdmcp
     xlibs.libXcursor xlibs.libfontenc xlibs.imake xlibs.bdftopcf
     xlibs.libxkbfile xlibs.xf86miscproto xlibs.libXxf86misc
     xlibs.scrnsaverproto xlibs.libXScrnSaver
+    xlibs.libXcomposite xlibs.libXfixes
   ];
 
   configureFlags = ''
@@ -46,4 +49,7 @@ stdenv.mkDerivation {
   '';
   
   postInstall = "rm $out/include/kbookmarknotifier.h";
+
+  # Work around some inexplicable build failure starting in kdebase 3.5.9.
+  LDFLAGS = "-L${kdelibs}/lib";
 }

@@ -6784,10 +6784,9 @@ let pkgs = rec {
 
   kdelibs = import ../desktops/kde/kdelibs {
     inherit
-      fetchurl stdenv zlib perl openssl pcre pkgconfig
+      fetchurl stdenv xlibs zlib perl openssl pcre pkgconfig
       libjpeg libpng libtiff libxml2 libxslt libtool
-      expat freetype bzip2 cups;
-    inherit (xlibs) libX11 libXt libXext;
+      expat freetype bzip2 cups attr acl;
     qt = qt3;
   };
 
@@ -6818,7 +6817,8 @@ let pkgs = rec {
   kdebase = import ../desktops/kde/kdebase {
     inherit
       fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
-      kdelibs openssl bzip2 fontconfig;
+      kdelibs openssl bzip2 fontconfig pam hal dbus;
+    inherit (gtkLibs) glib;
     qt = qt3;
   };
 

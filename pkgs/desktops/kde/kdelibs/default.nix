@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, zlib, perl, qt, openssl, pcre
+{ stdenv, fetchurl, xlibs, zlib, perl, qt, openssl, pcre
 , pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
-, freetype, bzip2, cups
+, freetype, bzip2, cups, attr, acl
 }:
 
 let version = "3.5.9"; in
@@ -13,13 +13,15 @@ stdenv.mkDerivation {
     md5 = "55e5f00874933d1a7ba7c95e369a205e";
   };
 
-  passthru = {inherit openssl libX11 libjpeg qt;};
+  passthru = {inherit openssl libjpeg qt; inherit (xlibs) libX11;};
   
   buildInputs = [
-    libX11 libXt libXext zlib perl qt openssl pcre 
-    pkgconfig libjpeg libpng libtiff libxml2 libxslt expat
-    libtool freetype bzip2 cups
+    zlib perl qt openssl pcre pkgconfig libjpeg libpng libtiff libxml2
+    libxslt expat libtool freetype bzip2 cups
+    xlibs.libX11 xlibs.libXt xlibs.libXext xlibs.libXrender xlibs.libXft
   ];
+
+  propagatedBuildInputs = [attr acl];
 
   # Prevent configure from looking for pkg-config and freetype-config
   # in the wrong location (it looks in /usr/bin etc. *before* looking
@@ -35,7 +37,7 @@ stdenv.mkDerivation {
     --without-arts 
     --with-ssl-dir=${openssl}
     --with-extra-includes=${libjpeg}/include
-    --x-includes=${libX11}/include
-    --x-libraries=${libX11}/lib
+    --x-includes=${xlibs.libX11}/include
+    --x-libraries=${xlibs.libX11}/lib
   '';
 }
