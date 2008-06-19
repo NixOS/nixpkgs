@@ -1,0 +1,59 @@
+{ bdbSupport ? false # build support for Berkeley DB repositories
+, httpServer ? false # build Apache DAV module
+, httpSupport ? false # client must support http
+, sslSupport ? false # client must support https
+, compressionSupport ? false # client must support http compression
+, pythonBindings ? false
+, perlBindings ? false
+, javahlBindings ? false
+, stdenv, fetchurl, apr, aprutil, neon, zlib
+, httpd ? null, expat, swig ? null, jdk ? null
+}:
+
+assert bdbSupport -> aprutil.bdbSupport;
+assert httpServer -> httpd != null && httpd.expat == expat;
+assert pythonBindings -> swig != null && swig.pythonSupport;
+assert javahlBindings -> jdk != null;
+assert sslSupport -> neon.sslSupport;
+assert compressionSupport -> neon.compressionSupport;
+
+stdenv.mkDerivation rec {
+
+  version = "1.5.0";
+
+  name = "subversion-${version}";
+
+  #builder = ./builder.sh;
+  
+  src = fetchurl {
+    url = http://subversion.tigris.org/downloads/subversion-1.5.0.tar.bz2;
+    sha1 = "1236a32521b4d8c02261cdc567f6a33d9623f51f";
+  };
+
+  buildInputs = [zlib apr aprutil]
+    ++ stdenv.lib.optional httpSupport neon;
+
+  configureFlags = ''
+    --disable-static
+    --disable-keychain
+    ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
+    ${if httpServer then
+        "--with-apxs=${httpd}/bin/apxs --with-apr=${httpd} --with-apr-util=${httpd}"
+      else
+        "--without-apxs"}
+    ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
+    ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
+    --disable-neon-version-check
+  '';
+
+  passthru = {
+    inherit perlBindings pythonBindings;
+    python = if swig != null && swig ? python then swig.python else null;
+  };
+
+  meta = {
+    description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+    homepage = http://subversion.tigris.org/;
+  };
+}
+

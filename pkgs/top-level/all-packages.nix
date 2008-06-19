@@ -3113,7 +3113,15 @@ let pkgs = rec {
     stdenv = useDietLibC stdenv;
   };
 
-  neon = import ../development/libraries/neon {
+  neon = neon026;
+
+  neon026 = import ../development/libraries/neon/0.26.nix {
+    inherit fetchurl stdenv libxml2 zlib openssl;
+    compressionSupport = true;
+    sslSupport = true;
+  };
+
+  neon028 = import ../development/libraries/neon/0.28.nix {
     inherit fetchurl stdenv libxml2 zlib openssl;
     compressionSupport = true;
     sslSupport = true;
@@ -6311,7 +6319,8 @@ let pkgs = rec {
   subversion = subversion14;
 
   subversion14 = import ../applications/version-management/subversion-1.4.x {
-    inherit fetchurl stdenv apr aprutil neon expat swig zlib jdk;
+    inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
+    neon = neon026;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
     sslSupport = getConfig ["subversion" "sslSupport"] true;
@@ -6323,6 +6332,20 @@ let pkgs = rec {
   };
 
   subversion14svnmerge = svnmergeFun subversion14;
+
+  subversion15 = import ../applications/version-management/subversion-1.5.x {
+    inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
+    neon = neon028;
+    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
+    httpServer = getConfig ["subversion" "httpServer"] false;
+    httpSupport = getConfig ["subversion" "httpSupport"] true;
+    sslSupport = getConfig ["subversion" "sslSupport"] true;
+    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
+    perlBindings = getConfig ["subversion" "perlBindings"] false;
+    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
+    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
+    httpd = apacheHttpd;
+  };
 
   svk = perlSVK;
 
