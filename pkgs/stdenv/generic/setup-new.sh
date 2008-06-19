@@ -553,10 +553,6 @@ patchPhase() {
     
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
-    if test -z "$patchFlags"; then
-        patchFlags="-p1"
-    fi
-
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -568,7 +564,7 @@ patchPhase() {
                 uncompress="bzip2 -d"
                 ;;
         esac
-        $uncompress < $i | patch $patchFlags
+        $uncompress < $i | patch ${patchFlags:--p1}
         stopNest
     done
 
@@ -637,14 +633,10 @@ buildPhase() {
 checkPhase() {
     eval "$preCheck"
 
-    if test -z "$checkTarget"; then
-        checkTarget="check"
-    fi
-
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" $checkTarget
+        $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     eval "$postCheck"
 }
@@ -691,9 +683,7 @@ installPhase() {
     ensureDir "$prefix"
 
     if test -z "$installCommand"; then
-        if test -z "$installTargets"; then
-            installTargets=install
-        fi
+        installTargets=${installTargets:-install}
         echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
         make ${makefile:+-f $makefile} $installTargets \
             $makeFlags "${makeFlagsArray[@]}" \
@@ -769,23 +759,15 @@ fixupPhase() {
 distPhase() {
     eval "$preDist"
 
-    if test -z "$distTarget"; then
-        distTarget="dist"
-    fi
-
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
 
-        if test -z "$tarballs"; then
-            tarballs="*.tar.gz"
-        fi
-
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
-        cp -pvd $tarballs $out/tarballs
+        cp -pvd ${tarballs:-*.tar.gz} $out/tarballs
     fi
 
     eval "$postDist"
