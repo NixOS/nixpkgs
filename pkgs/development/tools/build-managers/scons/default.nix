@@ -22,5 +22,5 @@ stdenv.mkDerivation {
   };
   buildPhase = "true";
   installPhase = "python setup.py install --prefix=$out";
-  buildInputs = [python];
+  propagatedBuildInputs = [python];
 }
