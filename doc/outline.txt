@@ -43,6 +43,8 @@
 
   - Stdenv bootstrap; how to update the Linux bootstrap binaries
 
+  - Specific platform notes (Linux, Native, Cygwin, Mingw)
+
 
 - Support for specific languages
 

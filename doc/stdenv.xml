@@ -4,7 +4,359 @@
 
 <title>The Standard Environment</title>
 
+
+<para>The standard build environment in the Nix Packages collection
+provides a environment for building Unix packages that does a lot of
+common build tasks automatically.  In fact, for Unix packages that use
+the standard <literal>./configure; make; make install</literal> build
+interface, you don’t need to write a build script at all; the standard
+environment does everything automatically.  If
+<literal>stdenv</literal> doesn’t do what you need automatically, you
+can easily customise or override the various build phases.</para>
+
+
+<section><title>Using <literal>stdenv</literal></title>
+
+<para>To build a package with the standard environment, you use the
+function <varname>stdenv.mkDerivation</varname>, instead of the
+primitive built-in function <varname>derivation</varname>, e.g.
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  src = fetchurl {
+    url = http://example.org/libfoo-1.2.3.tar.bz2;
+    md5 = "e1ec107956b6ddcb0b8b0679367e9ac9";
+  };
+}</programlisting>
+
+(<varname>stdenv</varname> needs to be in scope, so if you write this
+in a separate Nix expression from
+<filename>pkgs/all-packages.nix</filename>, you need to pass it as a
+function argument.)  Specifying a <varname>name</varname> and a
+<varname>src</varname> is the absolute minimum you need to do.  Many
+packages have dependencies that are not provided in the standard
+environment.  It’s usually sufficient to specify those dependencies in
+the <varname>buildInputs</varname> attribute:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  ...
+  buildInputs = [libbar perl ncurses];
+}</programlisting>
+
+This attribute ensures that the <filename>bin</filename>
+subdirectories of these packages appear in the <envar>PATH</envar>
+environment variable during the build, that their
+<filename>include</filename> subdirectories are searched by the C
+compiler, and so on.  (See <xref linkend="ssec-setup-hooks"/> for
+details.)</para>
+
+<para>Often it is necessary to override or modify some aspect of the
+build.  To make this easier, the standard environment breaks the
+package build into a number of <emphasis>phases</emphasis>, all of
+which can be overriden or modified individually: unpacking the
+sources, applying patches, configuring, building, and installing.
+(There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
+For instance, a package that doesn’t supply a makefile but instead has
+to be compiled “manually” could be handled like this:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "fnord-4.5";
+  ...
+  buildPhase = ''
+    gcc foo.c -o foo
+  '';
+  installPhase = ''
+    ensureDir $out/bin
+    cp foo $out/bin
+  '';
+}</programlisting>
+
+(Note the use of <literal>''</literal>-style string literals, which
+are very convenient for large multi-line script fragments because they
+don’t need escaping of <literal>"</literal> and <literal>\</literal>,
+and because indentation is intelligently removed.)</para>
+
+<para>There are many other attributes to customise the build.  These
+are listed in <xref linkend="ssec-stdenv-attributes"/>.</para>
+
+<para>While the standard environment provides a generic builder, you
+can still supply your own build script:
+
+<programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  ...
+  builder = ./builder.sh;
+}</programlisting>
+
+where the builder can do anything it wants, but typically starts with
+
+<programlisting>
+source $stdenv/setup
+</programlisting>
+
+to let <literal>stdenv</literal> set up the environment (e.g., process
+the <varname>buildInputs</varname>).  If you want, you can still use
+<literal>stdenv</literal>’s generic builder:
+
+<programlisting>
+source $stdenv/setup
+
+buildPhase() {
+  echo "... this is my custom build phase ..."
+  gcc foo.c -o foo
+}
+
+installPhase() {
+  ensureDir $out/bin
+  cp foo $out/bin
+}
+
+genericBuild
+</programlisting>
+
+</para>
+
+</section>
+
+
+<section><title>Tools provided by <literal>stdenv</literal></title>
+
+<para>The standard environment provides the following packages:
+
+<itemizedlist>
+
+  <listitem><para>The GNU C Compiler, configured with C and C++
+  support.</para></listitem>
+
+  <listitem><para>GNU coreutils (contains a few dozen standard Unix
+  commands).</para></listitem>
+
+  <listitem><para>GNU findutils (contains
+  <command>find</command>).</para></listitem>
+
+  <listitem><para>GNU diffutils (contains <command>diff</command>,
+  <command>cmp</command>).</para></listitem>
+
+  <listitem><para>GNU <command>sed</command>.</para></listitem>
+
+  <listitem><para>GNU <command>grep</command>.</para></listitem>
+
+  <listitem><para>GNU <command>awk</command>.</para></listitem>
+
+  <listitem><para>GNU <command>tar</command>.</para></listitem>
+
+  <listitem><para><command>gzip</command> and
+  <command>bzip2</command>.</para></listitem>
+
+  <listitem><para>GNU Make.  It has been patched to provide
+  <quote>nested</quote> output that can be fed into the
+  <command>nix-log2xml</command> command and
+  <command>log2html</command> stylesheet to create a structured,
+  readable output of the build steps performed by
+  Make.</para></listitem>
+
+  <listitem><para>Bash.  This is the shell used for all builders in
+  the Nix Packages collection.  Not using <command>/bin/sh</command>
+  removes a large source of portability problems.</para></listitem>
+
+  <listitem><para>The <command>patch</command>
+  command.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>On Linux, <literal>stdenv</literal> also includes the
+<command>patchelf</command> utility.</para>
+
+</section>
+
+
+<section xml:id="ssec-stdenv-phases"><title>Build phases</title>
+
+<para>The generic builder has a number of <emphasis>phases</emphasis>.
+Each phase can be overriden in its entirety either by setting the
+environment variable
+<varname><replaceable>name</replaceable>Phase</varname> to a string
+containing some shell commands to be executed, or by redefining the
+shell function
+<varname><replaceable>name</replaceable>Phase</varname>.  The former
+is convenient to override a phase from the derivation, while the
+latter is convenient from a build script.</para>
+
+<para>The phases are:
+
+<itemizedlist>
+
+  <listitem>
+
+    <para><function>unpackPhase</function> unpacks the source files
+    listed in the <envar>src</envar> environment variable to the
+    current directory.  It supports <filename>tar</filename> files,
+    optionally compressed with <command>gzip</command> or
+    <command>bzip2</command>; Zip files (but note that the
+    <command>unzip</command> command is not a part of the standard
+    environment; you should add it as a build input yourself); and
+    unpacked source trees (i.e., directories; they are copied
+    verbatim).  You can add support for other file types by setting
+    the <varname>findUnpacker</varname> hook.  This hook should set
+    the variable <varname>unpackCmd</varname> to contain the command
+    to be executed to unpack the file.</para>
+
+    <para>After running <function>unpackPhase</function>, the generic
+    builder changes the current directory to the directory created by
+    unpacking the sources.  If there are multiple source directories,
+    you should set <varname>sourceRoot</varname> to the name of the
+    intended directory.</para>
+
+    <para>It also calls the hook <varname>postUnpack</varname> after
+    unpacking.</para>
+
+  </listitem>
+
+  <listitem><para><function>patchPhase</function> calls the
+  <command>patch</command> command with the <option>-p1</option>
+  option (overridable via <envar>patchFlags</envar>) for each patch
+  file listed in the <envar>patches</envar>
+  variable.</para></listitem>
+
+  <listitem>
+
+    <para><function>configurePhase</function> runs the script called
+    <filename>configure</filename> in the current directory with a
+    <option>--prefix</option> set to the output path.  You can add
+    additional flags through the <varname>configureFlags</varname>
+    variable.  If <filename>configure</filename> does not exist,
+    nothing happens.</para>
+
+    <para>Before and after running <filename>configure</filename>, the
+    hooks <varname>preConfigure</varname> and
+    <varname>postConfigure</varname> are called, respectively.</para>
+
+  </listitem>
+
+  <listitem>
+
+    <para><function>buildPhase</function> calls
+    <command>make</command>.  You can set flags for
+    <command>make</command> through the <varname>makeFlags</varname>
+    variable.</para>
+
+    <para>Before and after running <command>make</command>, the hooks
+    <varname>preBuild</varname> and <varname>postBuild</varname> are
+    called, respectively.</para>
+    
+  </listitem>
+
+  <listitem><para><function>checkPhase</function> calls <command>make
+  check</command>, but only if the <varname>doCheck</varname> variable
+  is set to <literal>1</literal>.  Additional flags can be set through
+  the <varname>checkFlags</varname> variable.</para></listitem>
+
+  <listitem>
+
+    <para><function>installPhase</function> calls <command>make
+    install</command>.  Additional flags can be set through the
+    <varname>installFlags</varname> variable.</para>
+
+    <para>Before and after running <command>make install</command>,
+    the hooks <varname>preInstall</varname> and
+    <varname>postInstall</varname> are called, respectively.</para>
+
+  </listitem>
+
+  <listitem>
+    <para><function>fixupPhase</function> cleans up the
+    installed files in various ways:
+    
+    <itemizedlist>
+      
+      <listitem><para>It moves the <filename>man/</filename>,
+      <filename>doc/</filename> and <filename>info/</filename>
+      subdirectories of <envar>$out</envar> to
+      <filename>share/</filename>.</para></listitem>
+      
+      <listitem><para>It strips libraries and executables of debug
+      information.</para></listitem>
+
+      <listitem><para>On Linux, it applies the
+      <command>patchelf</command> command to ELF executables and
+      libraries to remove unused directories from the
+      <literal>RPATH</literal> in order to prevent unnecessary
+      dependencies.</para></listitem>
+
+      <listitem><para>It rewrites the interpreter paths of shell
+      scripts to paths found in <envar>PATH</envar>.  E.g.,
+      <filename>/usr/bin/perl</filename> will be rewritten to
+      <filename>/nix/store/<replaceable>some-perl</replaceable>/bin/perl</filename>
+      found in <envar>PATH</envar>.</para></listitem>
+
+    </itemizedlist>
+
+    </para>
+  </listitem>
+
+  <listitem>
+
+    <para><function>distPhase</function> calls <command>make
+    dist</command>, but only if the <varname>doDist</varname> variable
+    is set to <literal>1</literal>.  Additional flags can be set
+    through the <varname>distFlags</varname> variable.  The resulting
+    tarball is copied to the <filename>/tarballs</filename>
+    subdirectory of the output path.</para>
+
+    <para>Before and after running <command>make dist</command>, the
+    hooks <varname>preDist</varname> and <varname>postDist</varname>
+    are called, respectively.</para>
+    
+  </listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>You can change the order in which phases are executed, or add
+new phases, by setting the <varname>phases</varname> variable.  The
+default is <literal>patchPhase configurePhase buildPhase checkPhase
+installPhase distPhase</literal>.</para>
+
+</section>
+
+
+<section xml:id="ssec-stdenv-attributes"><title>Attributes</title>
+
 <para></para>
+
+</section>
+
+
+<section xml:id="ssec-setup-hooks"><title>Package setup hooks</title>
+
+<para></para>
+
+</section>
+
+
+<section><title>Purity in Nixpkgs</title>
+
+<para>[measures taken to prevent dependencies on packages outside the
+store, and what you can do to prevent them]</para>
+
+<para>GCC doesn't search in locations such as
+<filename>/usr/include</filename>.  In fact, attempts to add such
+directories through the <option>-I</option> flag are filtered out.
+Likewise, the linker (from GNU binutils) doesn't search in standard
+locations such as <filename>/usr/lib</filename>.  Programs built on
+Linux are linked against a GNU C Library that likewise doesn't search
+in the default system locations.</para>
+
+</section>
+
 
 </chapter>
 
