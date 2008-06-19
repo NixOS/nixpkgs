@@ -7143,19 +7143,8 @@ let pkgs = rec {
   };
 
   trac = import ../misc/trac {
-    inherit stdenv fetchurl python clearsilver makeWrapper sqlite;
-
-    subversion = import ../applications/version-management/subversion-1.3.x {
-      inherit fetchurl stdenv openssl db4 expat jdk swig zlib;
-      localServer = true;
-      httpServer = false;
-      sslSupport = true;
-      compressionSupport = true;
-      httpd = apacheHttpd;
-      pythonBindings = true; # Enable python bindings
-    };
-
-    inherit pysqlite;
+    inherit stdenv fetchurl python clearsilver makeWrapper
+      sqlite subversion pysqlite;
   };
 
   pysqlite = import ../development/libraries/pysqlite {
