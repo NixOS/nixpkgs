@@ -1,5 +1,16 @@
 {stdenv, fetchurl, kernel, ncurses, fxload}:
 
+let
+
+  # A patch to fix A/V sync, and to allow video to be played
+  # (e.g. using MPlayer) while the AVI is being recorded.
+  gorecordAV = fetchurl {
+    url = http://colabti.org/convertx/patch-av-aviheader.diff;
+    sha256 = "04qk58qigzwfdnn3mr3pg28qx4r89nlzdhgkvfipz36bsny23r50";
+  };
+
+in   
+
 stdenv.mkDerivation {
   name = "wis-go7007-0.9.8-${kernel.version}";
 
@@ -21,9 +32,16 @@ stdenv.mkDerivation {
     { url = http://home.comcast.net/~bender647/go7007/wis-go7007-2.6.24-no_algo_control.diff;
       sha256 = "1a7jkcsnzagir3wpsj60pjrr9wgfaqq21jlmq6s0qg9hqg4nzbvf";
     }
+  ] ++ [
+    # http://nikosapi.org/wiki/index.php/WIS_Go7007_Linux_driver#wis-streamer_fails_to_find_the_ALSA_audio_node_and_emulated_OSS_device_node
+    ./alsa.patch
   ];
 
   buildInputs = [ncurses];
+
+  postPatch = ''
+    (cd apps && patch < ${gorecordAV}) || false
+  '';
 
   preBuild = ''
     # Urgh, we need the complete kernel sources for some header
