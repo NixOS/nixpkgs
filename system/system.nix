@@ -314,8 +314,9 @@ rec {
     setuidPrograms =
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
-      pkgs.lib.optional (config.security.sudo.enable) "sudo" ++
-      (if (config.services.atd.enable) then [ "at" "atq" "atrm" ] else []);
+      pkgs.lib.optional config.security.sudo.enable "sudo" ++
+      pkgs.lib.optionals config.services.atd.enable ["at" "atq" "atrm"] ++
+      pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass";
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 
