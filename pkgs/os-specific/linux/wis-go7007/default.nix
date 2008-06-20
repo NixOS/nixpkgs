@@ -12,17 +12,16 @@ stdenv.mkDerivation {
     { url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/wis-go7007-0.9.8-kernel-2.6.17.diff?rev=1.1";
       sha256 = "0cizbg82fdl5byhvpkdx64qa02xcahdyddi2l2jn95sxab28a5yg";
     }
-    # (replaced by ./wis-go7007-0.9.8-fix-udev.patch below, which includes an entry for PCI device 093b:a104)
-    #{ url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/wis-go7007-0.9.8-fix-udev.diff?rev=1.2";
-    #  sha256 = "1985lcb7gh5zsf3lm0b43zd6q0cb9q4z376n9q060bh99yw6m0w1";
-    #}
+    { url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/wis-go7007-0.9.8-fix-udev.diff?rev=1.2";
+      sha256 = "1985lcb7gh5zsf3lm0b43zd6q0cb9q4z376n9q060bh99yw6m0w1";
+    }
     { url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/snd.patch?rev=1.1";
       sha256 = "0a6dz1l16pz1fk77s3awxh635cacbivfcfnd1carbx5jp2gq3jna";
     }
     { url = http://home.comcast.net/~bender647/go7007/wis-go7007-2.6.24-no_algo_control.diff;
       sha256 = "1a7jkcsnzagir3wpsj60pjrr9wgfaqq21jlmq6s0qg9hqg4nzbvf";
     }
-  ] ++ [./wis-go7007-0.9.8-fix-udev.patch];
+  ];
 
   buildInputs = [ncurses];
 
