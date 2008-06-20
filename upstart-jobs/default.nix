@@ -95,10 +95,11 @@ let
         ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
         ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi4965ucode
         ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
+        ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
 	++ config.services.udev.addFirmware;
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
-        ++ pkgs.lib.optional config.hardware.enableGo7007 pkgs.wis_go7007;
+        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007;
       sndMode = config.services.udev.sndMode;
     })
       
