@@ -1,4 +1,5 @@
 args : with args; 
+let version = lib.getAttr ["version"] "" args; in
 rec {
   src = /* Here a fetchurl expression goes */;
 

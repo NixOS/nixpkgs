@@ -384,6 +384,9 @@ let pkgs = rec {
     inherit fetchurl stdenv zlib wxGTK;
   };
 
+  aria = builderDefsPackage (import ../tools/networking/aria) {
+  } null;
+
   at = import ../tools/system/at {
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
