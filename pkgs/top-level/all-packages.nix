@@ -612,6 +612,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  gifsicle = import ../tools/graphics/gifscile {
+    inherit fetchurl stdenv;
+    inherit (xlibs) xproto libXt libX11;
+  };
+
   glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
   };
