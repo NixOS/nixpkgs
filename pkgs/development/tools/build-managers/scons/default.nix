@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/scons/scons-${version}.tar.gz";
     sha256 = "${versionHash}";
   };
-  buildPhase = "true";
-  installPhase = "python setup.py install --prefix=$out";
   propagatedBuildInputs = [python];
+  buildPhase = "true";
+  installPhase = "python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) --hardlink-scons -O1";
 }
