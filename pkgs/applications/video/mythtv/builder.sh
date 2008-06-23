@@ -9,8 +9,7 @@ done
 echo $LD_LIBRARY_PATH
 
 
-buildPhase=myBuilder
-myBuilder() {
+buildPhase() {
     qmake mythtv.pro
     make
 }

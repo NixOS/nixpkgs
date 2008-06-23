@@ -3224,6 +3224,14 @@ let pkgs = rec {
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
 
+  qt3mysql = import ../development/libraries/qt-3 {
+    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor;
+    openglSupport = mesaSupported;
+    mysqlSupport = true;
+  };
+
   qt4 = import ../development/libraries/qt-4 {
     inherit fetchurl stdenv fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
     fontconfig freetype pkgconfig libtiff;
@@ -6121,8 +6129,8 @@ let pkgs = rec {
   };
 
   mythtv = import ../applications/video/mythtv {
-    inherit fetchurl stdenv which qt3 x11 lame zlib mesa;
-    inherit (xlibs) libX11 libXinerama libXv libXxf86vm libXrandr libXmu;
+    inherit fetchurl stdenv which x11 xlibs lame zlib mesa freetype perl;
+    qt3 = qt3mysql;
   };
 
   nano = import ../applications/editors/nano {

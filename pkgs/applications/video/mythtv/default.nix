@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, which, qt3, x11
-, libX11, libXinerama, libXv, libXxf86vm, libXrandr, libXmu
+{ stdenv, fetchurl, which, qt3, x11, xlibs
 , lame, zlib, mesa
+, freetype, perl
 }:
 
 assert qt3.mysqlSupport;
 
 stdenv.mkDerivation {
-  name = "mythtv-0.20";
+  name = "mythtv-0.21";
 
   builder = ./builder.sh;
+  
   src = fetchurl {
-    url = http://ftp.osuosl.org/pub/mythtv/mythtv-0.20.tar.bz2;
-    md5 = "52bec1e0fadf7d24d6dcac3f773ddf74";
+    url = http://ftp.osuosl.org/pub/mythtv/mythtv-0.21.tar.bz2;
+    sha256 = "1r654fvklpsf6h9iqckb8fhd7abgs71lx6xh352xgz9yzjl7ia1k";
   };
 
-  configureFlags = "--disable-joystick-menu --x11-path=/no-such-path --dvb-path=/no-such-path";
+  #configureFlags = "--x11-path=/no-such-path --dvb-path=/no-such-path";
+
+  configureFlags = ''
+    --disable-joystick-menu --disable-dvb
+  '';
 
   buildInputs = [
-    which qt3 x11
-    libX11 libXinerama libXv libXxf86vm libXrandr libXmu
-    lame zlib mesa
+    freetype qt3 lame zlib x11 mesa perl
+    xlibs.libXv xlibs.libXrandr xlibs.libXvMC xlibs.libXmu
   ];
   
   patches = [
