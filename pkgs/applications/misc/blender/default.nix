@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "blender-2.45";
+  name = "blender-2.46";
 
   src = fetchurl {
-    url = http://download.blender.org/source/blender-2.45.tar.gz;
-    sha256 = "1bi7j1fcvrpb96sjpcbm4sldf359sgskfhv7a8pgcxj0bnhp47wj";
+    url = http://download.blender.org/source/blender-2.46.tar.gz;
+    sha256 = "1l95lcrp5snmvzabw46qpnkxmqls3fc24b2qjkghfasvaq7km7rr";
   };
 
   phases="unpackPhase buildPhase";
