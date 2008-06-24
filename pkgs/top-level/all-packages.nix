@@ -6996,15 +6996,11 @@ let pkgs = rec {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
+    supportOldDBs = false;
   };
 
-  # The really bleeding edge.
-  nixNoBDB = lowPrio (nixCustomFun
-    (fetchurl {
-      url = http://nixos.org/releases/nix-no-bdb/nix-0.12pre11675-jvhinhlm/nix-0.12pre11675.tar.bz2;
-      sha256 = "1c20dd159f0f7ffb7105745426b64097f833b265604e14ff77f94da2d145d44b";
-    })
-    "" [] "");
+  # !!! remove in a few weeks, obsolete
+  nixNoBDB = nixUnstable;
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {

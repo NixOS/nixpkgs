@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "nix-0.11";
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/nix/nix-0.11/nix-0.11.tar.bz2;
+    url = http://nixos.org/releases/nix/nix-0.11/nix-0.11.tar.bz2;
     md5 = "890c25ac0005ff466683869efc288b67";
   };
   
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The Nix Deployment System";
-    homepage = http://nix.cs.uu.nl/;
+    homepage = http://nixos.org/;
     license = "LGPL";
   };
 }
