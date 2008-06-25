@@ -15,6 +15,9 @@ stdenv.mkDerivation {
       url = "http://www.rocklinux.net/sources/package/stf/exult/exult-gcc4.patch";
       sha256 = "1jlikxcpsi3yfchan3jbyi66fcyr18m7kfmsa946lwh3kzckszm7";
     })
+
+    # From http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/games-engines/exult/files/exult-1.2-64bits.patch?rev=1.1
+    ./64bits.patch
   ];
 
   buildInputs = [SDL SDL_mixer zlib libpng unzip];
