@@ -3,7 +3,7 @@ source $stdenv/setup
 
 # Hack - MythTV's configure searches LD_LIBRARY_PATH for its
 # dependencies.
-for i in $buildInputs; do
+for i in $pkgs; do
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH${LD_LIBRARY_PATH:+:}$i/lib
 done
 echo $LD_LIBRARY_PATH

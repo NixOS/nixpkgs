@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, qt3, x11, xlibs
-, lame, zlib, mesa
+, lame, zlib, mesa, alsaLib
 , freetype, perl
 }:
 
@@ -22,8 +22,9 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    freetype qt3 lame zlib x11 mesa perl
-    xlibs.libXv xlibs.libXrandr xlibs.libXvMC xlibs.libXmu
+    freetype qt3 lame zlib x11 mesa perl alsaLib
+    xlibs.libX11 xlibs.libXv xlibs.libXrandr xlibs.libXvMC xlibs.libXmu
+    xlibs.libXinerama xlibs.libXxf86vm xlibs.libXmu
   ];
   
   patches = [

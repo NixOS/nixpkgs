@@ -6128,7 +6128,7 @@ let pkgs = rec {
   };
 
   mythtv = import ../applications/video/mythtv {
-    inherit fetchurl stdenv which x11 xlibs lame zlib mesa freetype perl;
+    inherit fetchurl stdenv which x11 xlibs lame zlib mesa freetype perl alsaLib;
     qt3 = qt3mysql;
   };
 
