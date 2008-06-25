@@ -1933,7 +1933,7 @@
       };
       
       user = mkOption {
-        default = "nobody";
+        default = "mysql";
 	description = "User account under which MySQL runs";
       };
       
@@ -1947,8 +1947,8 @@
 	description = "Location of the MySQL error logfile";
       };
       
-      pidFile = mkOption {
-        default = "/var/mysql/mysql.pid";
+      pidDir = mkOption {
+        default = "/var/run/mysql";
 	description = "Location of the file which stores the PID of the MySQL server";
       };
     };
