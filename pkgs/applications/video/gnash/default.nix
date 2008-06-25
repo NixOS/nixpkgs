@@ -5,11 +5,12 @@
 , glib, gtk, x11
 , lib}:
 
+let version = "0.8.3"; in
 stdenv.mkDerivation rec {
-  name = "gnash-0.8.2";
+  name = "gnash-${version}";
 
   src = fetchurl {
-    url = http://getgnash.org/packages/releases/gnash-0.8.3.tar.bz2;
+    url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
     sha256 = "16n32774sd5q4nkd95v2m8r2yfa9fk30jnq1iicarq3j8i2xh7xg";
   };
 
@@ -22,6 +23,12 @@ stdenv.mkDerivation rec {
                                            (buildInputs ++ [stdenv.glibc]))}
     do
       echo -n "$lib " >> macros/libslist
+    done
+
+    # Make sure to honor $TMPDIR, for chroot builds.
+    for file in configure gui/Makefile.in Makefile.in
+    do
+      sed -i "$file" -es'|/tmp/|$TMPDIR/|g'
     done
   '';
 
