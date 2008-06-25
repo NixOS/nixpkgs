@@ -2,24 +2,21 @@ let
 
   allPackages = import ./all-packages.nix;
 
-  i686LinuxPkgs = {
-    inherit (allPackages {system = "i686-linux";})
+  # Packages that we want to build on i686-linux and x86_64-linux.
+  commonLinuxPkgs = system: let pkgs = allPackages {inherit system;}; in {
+    inherit (pkgs)
       MPlayer
       MPlayerPlugin
       alsaUtils
-      apacheAnt
       apacheHttpd
-      aspectj
       aspell
       aspellDicts
-      aterm
       audacious
       audacious_plugins
       autoconf
       automake19x
       bash
       bashInteractive
-      batik
       binutils
       bison23
       bittorrent
@@ -45,8 +42,6 @@ let
       docbook_xml_dtd_43
       docbook_xsl
       e2fsprogs
-      ecj
-      eclipsesdk
       emacs
       emacsUnicode
       enscript
@@ -59,7 +54,6 @@ let
       gawk
       gcc
       gcc34
-      gcc42
       gdb
       ghc
       ghostscript
@@ -72,24 +66,16 @@ let
       gnutar
       gqview
       graphviz
-      grub
       gzip
       hal
       hello
       iana_etc
       iputils
       irssi
-      jakartaregexp
-      jdkPlugin
-      jetty
-      jikes
-      jing_tools
-      jrePlugin
       jwhois
       kbd
       kcachegrind
       kdebase
-      keen4
       ktorrent
       kvm
       less
@@ -107,7 +93,6 @@ let
       mktemp
       mod_python
       module_init_tools
-      mono
       mysql
       #mythtv
       nano
@@ -132,7 +117,6 @@ let
       pidgin
       pkgconfig
       postgresql
-      postgresql_jdbc
       procps
       pwdutils
       python
@@ -144,20 +128,16 @@ let
       rsync
       ruby
       screen
-      sdf
       slim
       spidermonkey
       ssmtp
       strace
-      strategoxt
-      strategoxtUtils
       su
       subversion
       sudo
       swig
       sylpheed 
       sysklogd
-      syslinux
       sysvinit
       sysvtools
       tetex
@@ -166,7 +146,6 @@ let
       tightvnc
       time
       udev
-      uml
       unzip
       upstart
       utillinux
@@ -184,13 +163,12 @@ let
       xineUI
       xkeyboard_config
       xmltv
-      xorg_sys_opengl
       xsel
       xterm
       zdelta
       zip
       ;
-    inherit ((allPackages {system = "i686-linux";}).xorg)
+    inherit (pkgs.xorg)
       fontbh100dpi
       fontbhlucidatypewriter100dpi
       fontbhttf
@@ -209,23 +187,50 @@ let
       xrdb
       xset
       ;
-    inherit ((allPackages {system = "i686-linux";}).gnome)
+    inherit (pkgs.gnome)
       gconfeditor
       gnomepanel
       gnometerminal
       gnomeutils
       metacity
       ;
-    inherit ((allPackages {system = "i686-linux";}).kernelPackages_2_6_23)
+    inherit (pkgs.kernelPackages_2_6_23)
       iwlwifi
       kernel
       klibc
       splashutils
       ;
-    kernelNew = ((allPackages {system = "i686-linux";}).kernelPackages_2_6_25).kernel;
+    kernelNew = pkgs.kernelPackages_2_6_25.kernel;
+  };    
+
+  i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
+    inherit (allPackages {system = "i686-linux";})
+      aterm
+      apacheAnt
+      aspectj
+      batik
+      ecj
+      eclipsesdk
+      grub
+      jakartaregexp
+      jdkPlugin
+      jetty
+      jikes
+      jing_tools
+      jrePlugin
+      keen4
+      mono
+      postgresql_jdbc
+      sdf
+      strategoxt
+      strategoxtUtils
+      syslinux
+      uml
+      xorg_sys_opengl
+      ;
   };
 
-  x86_64LinuxPkgs = {
+  x86_64LinuxPkgs = commonLinuxPkgs "x86_64-linux" // {
     inherit (allPackages {system = "x86_64-linux";})
       MPlayer
       MPlayerPlugin
