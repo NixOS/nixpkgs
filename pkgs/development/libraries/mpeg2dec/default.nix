@@ -1,9 +1,17 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "mpeg2dec-20050802";
+  name = "mpeg2dec-0.4.1";
+  
   src = fetchurl {
-    url = ftp://ftp.u-strasbg.fr/pub/videolan/vlc/0.8.4a/contrib/mpeg2dec-20050802.tar.gz;
-    md5 = "79b3559a9354085fcebb1460dd93d237";
+    url = http://libmpeg2.sourceforge.net/files/mpeg2dec-0.4.1.tar.gz;
+    sha256 = "1vny7rg0p2rmic71hli2l2612i5yaw8vy0wsnm5nvhwfiw37cjn7";
+  };
+
+  configureFlags = "--enable-shared --disable-static";
+
+  meta = {
+    homepage = http://libmpeg2.sourceforge.net/;
+    description = "A free library for decoding mpeg-2 and mpeg-1 video streams";
   };
 }

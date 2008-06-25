@@ -114,7 +114,6 @@ let
       pciutils
       perl
       php
-      pidgin
       pkgconfig
       postgresql
       procps
@@ -154,7 +153,6 @@ let
       vlc
       w3m
       wget
-      wine
       wirelesstools
       wxHaskell
       x11_ssh_askpass
@@ -205,9 +203,9 @@ let
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
     inherit (allPackages {system = "i686-linux";})
-      aterm
       apacheAnt
       aspectj
+      aterm
       batik
       ecj
       eclipsesdk
@@ -220,12 +218,14 @@ let
       jrePlugin
       keen4
       mono
+      pidgin
       postgresql_jdbc
       sdf
       strategoxt
       strategoxtUtils
       syslinux
       uml
+      wine
       xorg_sys_opengl
       ;
   };
@@ -265,10 +265,10 @@ let
       #automake19x
       curl
       docbook5
+      docbook5_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_43
       docbook_xsl
-      docbook5_xsl
       libtool
       libxml2
       libxslt

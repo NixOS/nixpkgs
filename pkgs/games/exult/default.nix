@@ -9,6 +9,14 @@ stdenv.mkDerivation {
     md5 = "0fc88dee74a91724d25373ba0a8670ba";
   };
 
+  # Patches for building on x86_64 and gcc 4.x.
+  patches = [
+    (fetchurl {
+      url = "http://www.rocklinux.net/sources/package/stf/exult/exult-gcc4.patch";
+      sha256 = "1jlikxcpsi3yfchan3jbyi66fcyr18m7kfmsa946lwh3kzckszm7";
+    })
+  ];
+
   buildInputs = [SDL SDL_mixer zlib libpng unzip];
   
   NIX_CFLAGS_COMPILE = "-I${SDL_mixer}/include/SDL";
@@ -24,9 +32,10 @@ stdenv.mkDerivation {
       url = mirror://sourceforge/exult/U7MusicOGG_2of2.zip;
       md5 = "cdae5956d7c52f35e90317913a660123";
     })
-  ];    
+  ];
 
   meta = {
+    homepage = http://exult.sourceforge.net/;
     description = "A reimplementation of the Ultima VII game engine";
   };
 }

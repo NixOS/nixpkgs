@@ -895,8 +895,7 @@ let pkgs = rec {
   };
 
   par2cmdline = import ../tools/networking/par2cmdline {
-    inherit fetchurl;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv;
   };
 
   parted = import ../tools/misc/parted {
@@ -6484,10 +6483,11 @@ let pkgs = rec {
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl x11 wxGTK
-            zlib mpeg2dec a52dec libmad ffmpeg
+            zlib mpeg2dec a52dec libmad
             libdvdread libdvdnav libdvdcss;
     inherit (xlibs) libXv;
     alsa = alsaLib;
+    ffmpeg = ffmpeg_svn;
   };
 
   vorbisTools = import ../applications/audio/vorbis-tools {
@@ -6705,8 +6705,7 @@ let pkgs = rec {
   } null;
 
   exult = import ../games/exult {
-    inherit fetchurl SDL SDL_mixer zlib libpng unzip;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip;
   };
 
   fsg = import ../games/fsg {

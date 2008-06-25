@@ -8,11 +8,11 @@ assert libdvdread.libdvdcss == libdvdcss;
 assert xvSupport -> libXv != null;
 
 stdenv.mkDerivation {
-  name = "vlc-0.8.6d";
+  name = "vlc-0.8.6h";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.8.6d/vlc-0.8.6d.tar.bz2;
-    sha256 = "019jw9cp7fbmhbmlbwvjgpamxwx0rdajyxab2sbmh4n6v04fl266";
+    url = http://download.videolan.org/pub/videolan/vlc/0.8.6h/vlc-0.8.6h.tar.bz2;
+    sha256 = "08bj6ndxj0f7jdsif43535qyavpy13wni93z7c2790i2d748gvah";
   };
 
   buildInputs = [
@@ -20,8 +20,7 @@ stdenv.mkDerivation {
     zlib mpeg2dec a52dec libmad ffmpeg alsa
     libdvdread # <- for "simple" DVD playback
     libdvdnav libdvdcss # <- for DVD playback with menus
-    (if xvSupport then libXv else null)
-  ];
+  ] ++ stdenv.lib.optional xvSupport libXv;
 
   # Ensure that libdvdcss will be found without having to set LD_LIBRARY_PATH.
   NIX_LDFLAGS = "-ldvdcss";
