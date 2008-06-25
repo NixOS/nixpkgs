@@ -6996,7 +6996,7 @@ let pkgs = rec {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
-    supportOldDBs = false;
+    supportOldDBs = true;
   };
 
   # !!! remove in a few weeks, obsolete
