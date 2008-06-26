@@ -1333,7 +1333,7 @@ let pkgs = rec {
     profiledCompiler = true;
   }));
 
-  gcc43 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.3 {
+  gcc43 = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) (import ../development/compilers/gcc-4.3 {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
   }));
@@ -1747,7 +1747,7 @@ let pkgs = rec {
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  wrapGCC = baseGCC: import ../build-support/gcc-wrapper {
+  wrapGCCWith = gccWrapper: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
@@ -1755,6 +1755,8 @@ let pkgs = rec {
     libc = glibc;
     inherit stdenv binutils;
   };
+
+  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper);
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
