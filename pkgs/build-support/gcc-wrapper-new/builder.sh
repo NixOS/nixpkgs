@@ -40,7 +40,9 @@ else
     # Glibc headers, since they appear *before* the libstdc++ headers.
     # So we add them here using -isystem.  Note that `add-flags' adds
     # the libc flags before the gcc flags.
-    gccCFlags="$gccCFlags -isystem $(echo $gcc/include/c++/*.*)"
+    if test -e $gcc/include/c++/*.*; then
+        gccCFlags="$gccCFlags -isystem $(echo $gcc/include/c++/*.*)"
+    fi
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
     # $gcc/lib64 (even though it does actually search there...)..
