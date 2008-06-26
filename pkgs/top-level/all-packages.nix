@@ -1333,6 +1333,11 @@ let pkgs = rec {
     profiledCompiler = true;
   }));
 
+  gcc43 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.3 {
+    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
+    profiledCompiler = false;
+  }));
+
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
