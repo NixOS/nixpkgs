@@ -5974,6 +5974,10 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext libXinerama libXpm libXft;
   };
 
+  k3b = import ../applications/misc/k3b {
+    inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
+  };
+
   kino = import ../applications/video/kino {
     inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
       libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
