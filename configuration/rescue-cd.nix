@@ -208,14 +208,13 @@ rec {
   makeTarball = tarName: input: pkgs.runCommand "tarball" {inherit tarName;} "
     ensureDir $out
     (cd ${input} && tar cvfj $out/${tarName} . \\
-      --exclude '*~' \\
-      --exclude 'pkgs' --exclude 'result')
+      --exclude '*~' --exclude 'result')
   ";
 
   
   # Put the current directory in a tarball (making sure to filter
   # out crap like the .svn directories).
-  nixosTarball =makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./..);
+  nixosTarball = makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./..);
 
   svnFilter = name: type:
     let base = baseNameOf (toString name);
