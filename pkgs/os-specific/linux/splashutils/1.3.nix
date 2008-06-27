@@ -25,10 +25,15 @@ stdenv.mkDerivation {
   # doesn't work when the build user doesn't own stdout). 
   #makeFlags = "QUIET=false;
 
-  installPhase = "ensureDir $out/bin; cp objs/splash_helper objs/splash_util objs/splash_util.static $out/bin";
+  installPhase = ''
+    ensureDir $out/bin
+    cp objs/splash_util objs/splash_util.static $out/bin
+    ensureDir $out/sbin
+    cp objs/splash_helper $out/sbin
+  '';
 
   passthru = {
-    helperName = "bin/splash_helper";
+    helperName = "sbin/splash_helper";
     controlName = "bin/splash_util";
     helperProcFile = "/proc/sys/kernel/fbsplash";
   };
