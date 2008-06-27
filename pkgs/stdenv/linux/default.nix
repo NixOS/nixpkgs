@@ -115,7 +115,7 @@ rec {
       initialPath = [staticTools] ++ extraPath;
       inherit fetchurlBoot;
       forceFetchurlBoot = true;
-      inherit gcc;
+      inherit gcc extraAttrs;
     };
 
 
