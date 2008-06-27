@@ -5,6 +5,7 @@
 , texinfo ? null
 , gmp, mpfr
 , bison ? null, flex ? null
+, enableMultilib ? false
 }:
 
 assert langC;
@@ -43,6 +44,7 @@ stdenv.mkDerivation {
     ++ optionals langTreelang [bison flex];
 
   configureFlags = "
+    ${if enableMultilib then "" else "--disable-multilib"}
     --disable-libstdcxx-pch
     --with-system-zlib
     --enable-languages=${
@@ -60,8 +62,8 @@ stdenv.mkDerivation {
   NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 
   inherit gmp mpfr;
-
-  passthru = { inherit langC langCC langFortran langTreelang; };
+  
+  passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";

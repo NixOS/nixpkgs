@@ -1333,10 +1333,16 @@ let pkgs = rec {
     profiledCompiler = true;
   }));
 
-  gcc43 = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) (import ../development/compilers/gcc-4.3 {
+  gcc43 = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) glibc (import ../development/compilers/gcc-4.3 {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
-    #langFortran = true;
+  }));
+
+  gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) glibc_multi (import ../development/compilers/gcc-4.3 {
+    stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc42);
+    inherit fetchurl texinfo gmp mpfr noSysDirs;
+    profiledCompiler = false;
+    enableMultilib = true;
   }));
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
@@ -1748,7 +1754,7 @@ let pkgs = rec {
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  wrapGCCWith = gccWrapper: baseGCC: gccWrapper {
+  wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
@@ -1757,7 +1763,7 @@ let pkgs = rec {
     inherit stdenv binutils;
   };
 
-  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper);
+  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
@@ -2590,6 +2596,28 @@ let pkgs = rec {
       inherit fetchurl stdenv kernelHeaders;
       #installLocales = false;
     });
+
+  glibc_multi =
+    assert system == "x86_64-linux";
+    runCommand "${glibc.name}-multi"
+      { glibc64 = glibc;
+        glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
+      }
+      ''
+        ensureDir $out
+        ln -s $glibc64/* $out/
+        
+        rm $out/lib $out/lib64
+        ensureDir $out/lib
+        ln -s $glibc64/lib/* $out/lib
+        ln -s $glibc32/lib $out/lib/32
+        ln -s lib $out/lib64
+
+        rm $out/include
+        cp -rs $glibc32/include $out
+        chmod -R u+w $out/include
+        cp -rsf $glibc64/include $out
+      ''; # */
 
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib;
