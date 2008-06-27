@@ -1336,6 +1336,7 @@ let pkgs = rec {
   gcc43 = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) (import ../development/compilers/gcc-4.3 {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
+    #langFortran = true;
   }));
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {

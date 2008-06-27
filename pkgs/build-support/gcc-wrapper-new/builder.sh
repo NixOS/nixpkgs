@@ -75,7 +75,7 @@ doSubstitute() {
 }
 
 
-# Make wrapper scripts around gcc, g++, and g77.  Also make symlinks
+# Make wrapper scripts around gcc, g++, and gfortran.  Also make symlinks
 # cc, c++, and f77.
 mkGccWrapper() {
     local dst=$1
@@ -97,8 +97,11 @@ ln -s gcc $out/bin/cc
 mkGccWrapper $out/bin/g++ $gccPath/g++
 ln -s g++ $out/bin/c++
 
-mkGccWrapper $out/bin/g77 $gccPath/g77
-ln -s g77 $out/bin/f77
+if test -e $gccPath/gfortran; then
+    mkGccWrapper $out/bin/gfortran $gccPath/gfortran
+    ln -s gfortran $out/bin/g77
+    ln -s gfortran $out/bin/f77
+fi
 
 
 # Create a symlink to as (the assembler).  This is useful when a

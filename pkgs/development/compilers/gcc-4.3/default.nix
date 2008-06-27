@@ -1,12 +1,14 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langF77 ? false
+, langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , texinfo ? null
 , gmp, mpfr
+, bison ? null, flex ? null
 }:
 
 assert langC;
+assert langTreelang -> bison != null && flex != null;
 
 with import ../../../lib;
 
@@ -25,28 +27,30 @@ stdenv.mkDerivation {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-g++-${version}.tar.bz2";
       sha256 = "0r74s60hylr8xrnb2j3x0dmf3cnxxg609g4h07r6ida8vk33bd25";
     }) ++
-    optional langF77 (fetchurl {
+    optional langFortran (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-fortran-${version}.tar.bz2";
       sha256 = "1fl76sajlz1ihnsmqsbs3i8g0h77w9hm35pwb1s2w6p4h5xy5dnb";
     });
     
   patches =
     [./pass-cxxcpp.patch]
-    ++ optional noSysDirs [./no-sys-dirs.patch];
+    ++ optional noSysDirs ./no-sys-dirs.patch
+    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
     
   inherit noSysDirs profiledCompiler staticCompiler;
 
-  buildInputs = [texinfo gmp mpfr];
+  buildInputs = [texinfo gmp mpfr]
+    ++ optionals langTreelang [bison flex];
 
   configureFlags = "
-    --disable-multilib
     --disable-libstdcxx-pch
     --with-system-zlib
     --enable-languages=${
       concatStrings (intersperse ","
-        (  optional langC   "c"
-        ++ optional langCC  "c++"
-        ++ optional langF77 "f77"
+        (  optional langC        "c"
+        ++ optional langCC       "c++"
+        ++ optional langFortran  "fortran"
+        ++ optional langTreelang "treelang"
         )
       )
     }
@@ -56,9 +60,8 @@ stdenv.mkDerivation {
   NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 
   inherit gmp mpfr;
-  #X_CFLAGS = "-I${gmp}/include -I${mpfr}/include -L${gmp}/lib -L${mpfr}/lib";
 
-  passthru = { inherit langC langCC langF77; };
+  passthru = { inherit langC langCC langFortran langTreelang; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";
