@@ -6884,6 +6884,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
+    inherit (gnome) libglade gtk;
+    inherit libxml2 guile perl intltool libtool pkgconfig;
+  } null;
+
   emboss = import ../applications/science/biology/emboss {
     inherit fetchurl stdenv readline perl libpng zlib;
 		inherit (xorg) libX11 libXt;
