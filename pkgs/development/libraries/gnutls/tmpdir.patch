@@ -5,6 +5,27 @@ build failures in chroots.  See also:
   http://thread.gmane.org/gmane.comp.encryption.gpg.gnutls.devel/2693
 
 
+--- gnutls-2.4.0/tests/Makefile.in	2008-06-18 17:02:36.000000000 +0200
++++ gnutls-2.4.0/tests/Makefile.in	2008-06-28 20:00:10.000000000 +0200
+@@ -56,7 +56,7 @@ host_triplet = @host@
+ @HAVE_FORK_TRUE@am__append_2 = x509self x509signself x509dn anonself pskself dhepskself	\
+ @HAVE_FORK_TRUE@	tlsia resume netconf-psk
+ 
+-@ENABLE_OPENPGP_TRUE@@HAVE_FORK_TRUE@am__append_3 = openpgpself 
++@ENABLE_OPENPGP_TRUE@@HAVE_FORK_TRUE@am__append_3 =
+ @ENABLE_OPRFI_TRUE@am__append_4 = oprfi
+ check_PROGRAMS = $(am__EXEEXT_4)
+ TESTS = $(am__EXEEXT_4)
+@@ -151,7 +151,7 @@ libutils_la_OBJECTS = $(am_libutils_la_O
+ @HAVE_FORK_TRUE@	tlsia$(EXEEXT) resume$(EXEEXT) \
+ @HAVE_FORK_TRUE@	netconf-psk$(EXEEXT)
+ @ENABLE_OPENPGP_TRUE@@HAVE_FORK_TRUE@am__EXEEXT_2 =  \
+-@ENABLE_OPENPGP_TRUE@@HAVE_FORK_TRUE@	openpgpself$(EXEEXT)
++@ENABLE_OPENPGP_TRUE@@HAVE_FORK_TRUE@
+ @ENABLE_OPRFI_TRUE@am__EXEEXT_3 = oprfi$(EXEEXT)
+ am__EXEEXT_4 = simple$(EXEEXT) openssl$(EXEEXT) gc$(EXEEXT) \
+ 	set_pkcs12_cred$(EXEEXT) certder$(EXEEXT) \
+
 --- gnutls-2.4.0/tests/openpgp/Makefile.in	2008-06-18 17:02:37.000000000 +0200
 +++ gnutls-2.4.0/tests/openpgp/Makefile.in	2008-06-27 20:07:00.000000000 +0200
 @@ -51,7 +51,7 @@ PRE_UNINSTALL = :
