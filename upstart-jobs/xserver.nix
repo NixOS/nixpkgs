@@ -49,6 +49,7 @@ let
     ++ optional (videoDriver == "intel") xorg.xf86videointel
     ++ optional (videoDriver == "nv") xorg.xf86videonv
     ++ optional (videoDriver == "ati") xorg.xf86videoati
+    ++ optional (videoDriver == "radeonhd") xorg.xf86videoradeonhd
     ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
 
@@ -161,6 +162,12 @@ let
       fi;
 
       if [ "${toString videoDriver}" = ati ]; then
+        export extensions='
+          Option "Composite" "Enable"
+        ';
+      fi;
+
+      if [ "${toString videoDriver}" = radeonhd ]; then
         export extensions='
           Option "Composite" "Enable"
         ';
