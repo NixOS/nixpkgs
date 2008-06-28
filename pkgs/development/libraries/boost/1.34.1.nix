@@ -1,4 +1,6 @@
-{stdenv, fetchurl, icu, zlib, bzip2, python}:
+{stdenv, fetchurl, icu, zlib, bzip2, python, version}:
+
+assert version == "1.34.1";
 
 stdenv.mkDerivation {
   name = "boost-1.34.1";

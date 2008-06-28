@@ -2378,7 +2378,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  boost = import ../development/libraries/boost {
+  boost = selectVersion ../development/libraries/boost "1.35.0" {
     inherit fetchurl stdenv icu zlib bzip2 python;
   };
 
@@ -2606,7 +2606,7 @@ let pkgs = rec {
       ''
         ensureDir $out
         ln -s $glibc64/* $out/
-        
+
         rm $out/lib $out/lib64
         ensureDir $out/lib
         ln -s $glibc64/lib/* $out/lib
