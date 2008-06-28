@@ -1,17 +1,7 @@
---- git-1.5.4.4/git-clone.sh	2008-03-09 11:18:13.000000000 +0100
-+++ git-1.5.4.4/git-clone.sh	2008-03-30 23:43:35.000000000 +0200
-@@ -40,7 +40,7 @@ eval "$(echo "$OPTIONS_SPEC" | git rev-p
- 
- get_repo_base() {
- 	(
--		cd "`/bin/pwd`" &&
-+		cd "`pwd`" &&
- 		cd "$1" || cd "$1.git" &&
- 		{
- 			cd .git
---- git-1.5.4.4/git-submodule.sh	2008-03-09 11:18:13.000000000 +0100
-+++ git-1.5.4.4/git-submodule.sh	2008-03-31 00:01:03.000000000 +0200
-@@ -28,7 +28,7 @@ say()
+diff -ubr git-1.5.6.1-orig/git-submodule.sh git-1.5.6.1/git-submodule.sh
+--- git-1.5.6.1-orig/git-submodule.sh	2008-06-28 16:28:54.000000000 +0200
++++ git-1.5.6.1/git-submodule.sh	2008-06-28 16:29:55.000000000 +0200
+@@ -30,7 +30,7 @@
  # NEEDSWORK: identical function exists in get_repo_base in clone.sh
  get_repo_base() {
  	(

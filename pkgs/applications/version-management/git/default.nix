@@ -11,11 +11,11 @@ assert svnSupport -> (subversion != null && perlLibs != []);
 
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.5";
+  name = "git-1.5.6.1";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "0pp6hfxkcwzb415wkkn713pqsv7cv06y90s53dyhsicqqn83hj17";
+    sha256 = "11k5d986y9clmb2lywkdv1g1gybz38irmcp4rx8l4jfmk7l62sh7";
   };
 
   patches = [ ./pwd.patch ./docbook2texi.patch ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       ensureDir $out/share/emacs/site-lisp
       cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
     '' # */
-    
+
    + (if svnSupport then
 
       ''# wrap git-svn
