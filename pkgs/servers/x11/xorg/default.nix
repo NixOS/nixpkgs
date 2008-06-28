@@ -1997,6 +1997,16 @@ rec {
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
     
+  xf86videoati_690 = (stdenv.mkDerivation {
+    name = "xf86-video-ati-6.9.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xorg.freedesktop.org/archive/individual/driver/xf86-video-ati-6.9.0.tar.bz2;
+      sha256 = "1hnp2da1asj6ql4a1i2j20mffix255sx08ixv0nijv1qdj8x2b38";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
+    
   xf86videochips = (stdenv.mkDerivation {
     name = "xf86-video-chips-1.1.1";
     builder = ./builder.sh;
@@ -2166,6 +2176,16 @@ rec {
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto randrproto renderproto videoproto xextproto xorgserver xproto ;};
+
+  xf86videoradeonhd = (stdenv.mkDerivation {
+    name = "xf86-video-radeonhd-1.2.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/driver/xf86-video-radeonhd-1.2.1.tar.bz2;
+      sha256 = "125ki9wan5zf1vpn0mv5w95f9fp7l1paks34bhb4alsff76yh1if";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto glproto mesaHeaders];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
     
   xf86videorendition = (stdenv.mkDerivation {
     name = "xf86-video-rendition-4.1.3";
