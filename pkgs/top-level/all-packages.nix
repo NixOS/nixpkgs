@@ -267,6 +267,15 @@ let pkgs = rec {
         }
       else defaultStdenv;
 
+  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
+  # it uses GCC compiled with multilib support; on i686-linux, it's
+  # just the plain stdenv.
+  stdenv_32bit =
+    if system == "x86_64-linux" then
+      overrideGCC stdenv gcc43multi
+    else
+      stdenv;
+
 
   ### BUILD SUPPORT
 
@@ -677,19 +686,16 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  grub =
-    if system == "x86_64-linux" then
-      (import ./all-packages.nix {system = "i686-linux";}).grub
-    else
-      import ../tools/misc/grub {
-        inherit fetchurl stdenv autoconf automake;
-      };
+  grub = import ../tools/misc/grub {
+    inherit fetchurl autoconf automake;
+    stdenv = stdenv_32bit;
+  };
 
   gssdp = import ../development/libraries/gssdp {
-      inherit fetchurl stdenv pkgconfig libxml2;
-      inherit (gtkLibs) glib;
-      inherit (gnome) libsoup;
-    };
+    inherit fetchurl stdenv pkgconfig libxml2;
+    inherit (gtkLibs) glib;
+    inherit (gnome) libsoup;
+  };
 
   gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
     inherit fetchurl stdenv pkgconfig libxml2;
@@ -697,15 +703,15 @@ let pkgs = rec {
   };
 
   gupnp = import ../development/libraries/gupnp {
-      inherit fetchurl stdenv pkgconfig libxml2 gssdp e2fsprogs;
-      inherit (gtkLibs) glib;
-      inherit (gnome) libsoup;
-    };
+    inherit fetchurl stdenv pkgconfig libxml2 gssdp e2fsprogs;
+    inherit (gtkLibs) glib;
+    inherit (gnome) libsoup;
+  };
 
   gupnptools = import ../tools/networking/gupnp-tools {
-      inherit fetchurl stdenv gssdp gupnp pkgconfig libxml2 e2fsprogs;
-      inherit (gtkLibs) gtk glib;
-      inherit (gnome) libsoup libglade gnomeicontheme;
+    inherit fetchurl stdenv gssdp gupnp pkgconfig libxml2 e2fsprogs;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) libsoup libglade gnomeicontheme;
   };
 
   gzip = useFromStdenv "gzip"
@@ -2346,7 +2352,8 @@ let pkgs = rec {
   });
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
-    inherit fetchurl stdenv;
+    inherit fetchurl;
+    stdenv = overrideGCC stdenv gcc43multi;
   };
 
   aterm23x = import ../development/libraries/aterm/2.3.nix {

@@ -54,6 +54,7 @@ let
       gawk
       gcc
       gcc34
+      gcc43
       gdb
       ghc
       ghostscript
@@ -66,6 +67,7 @@ let
       gnutar
       gqview
       graphviz
+      grub
       gzip
       hal
       hello
@@ -209,7 +211,6 @@ let
       batik
       ecj
       eclipsesdk
-      grub
       jakartaregexp
       jdkPlugin
       jetty
@@ -243,6 +244,7 @@ let
       emacs
       firefox
       gcc
+      gcc43multi
       hello
       libtool
       nixUnstable

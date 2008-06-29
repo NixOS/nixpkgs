@@ -9,6 +9,10 @@ if test -z "$nativeLibc"; then
     dynamicLinker="$libc/lib/$dynamicLinker"
     echo $dynamicLinker > $out/nix-support/dynamic-linker
 
+    if test -e $libc/lib/32/ld-linux.so.2; then
+        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+    fi
+
     # The "-B$libc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  (This is only an issue when using an `impure'
