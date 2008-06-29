@@ -3380,6 +3380,17 @@ let pkgs = rec {
     inherit postgresql mysql sqlite;
   });
 
+  webkit = builderDefsPackage (import ../development/libraries/webkit) {
+    inherit (gtkLibs) gtk atk pango; 
+    inherit freetype fontconfig gettext gperf curl 
+      libjpeg libtiff libpng libxml2 libxslt sqlite 
+      icu cairo perl intltool automake libtool 
+      pkgconfig;
+    autoconf = autoconfLatest;
+    flex = flex2535;
+    bison = bison23;
+  } null;
+
   wxGTK = wxGTK26;
 
   wxGTK26 = import ../development/libraries/wxGTK-2.6 {
