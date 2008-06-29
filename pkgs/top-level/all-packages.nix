@@ -2352,8 +2352,7 @@ let pkgs = rec {
   });
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
-    inherit fetchurl;
-    stdenv = overrideGCC stdenv gcc43multi;
+    inherit fetchurl stdenv;
   };
 
   aterm23x = import ../development/libraries/aterm/2.3.nix {
