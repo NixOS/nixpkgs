@@ -11,7 +11,10 @@ stdenv.mkDerivation {
   # "DESTDIR=/" is a hack to prevent "make install" from trying to
   # mess with /dev.
   preBuild = ''
-    makeFlagsArray=(etcdir=$out/etc sbindir=$out/sbin usrbindir=$out/bin usrsbindir=$out/sbin mandir=$out/share/man INSTALL='install -c' DESTDIR=/)
+    makeFlagsArray=(prefix=$out usrbindir=$out/bin usrsbindir=$out/sbin usrlibdir=$out/lib \
+      mandir=$out/share/man includedir=$out/include \
+      EXTRAS="extras/ata_id extras/cdrom_id extras/edd_id extras/floppy extras/path_id extras/scsi_id extras/usb_id extras/volume_id"
+      INSTALL='install -c' DESTDIR=/)
   '';
 
   preInstall = ''
