@@ -68,6 +68,23 @@ let
 
     setgid_group = ${setgidGroup}
   '')
+  + optionalString (cfg.sslCert != "") (''
+
+    smtp_tls_CAfile = ${cfg.sslCACert}
+    smtp_tls_cert_file = ${cfg.sslCert}
+    smtp_tls_key_file = ${cfg.sslKey}
+
+    smtp_use_tls = yes
+
+    smtpd_tls_CAfile = ${cfg.sslCACert}
+    smtpd_tls_cert_file = ${cfg.sslCert}
+    smtpd_tls_key_file = ${cfg.sslKey}
+
+    smtpd_use_tls = yes 
+
+    recipientDelimiter = ${cfg.recipientDelimiter}
+
+  '')
   ;
 
   aliases = 
@@ -121,10 +138,10 @@ in
           ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
         fi
           
-	${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/postfix 
-	${pkgs.coreutils}/bin/chown -R ${user}:${setgidGroup} /var/postfix/queue 
+	${pkgs.coreutils}/bin/chown -R ${user}.${group} /var/postfix 
+	${pkgs.coreutils}/bin/chown -R ${user}.${setgidGroup} /var/postfix/queue 
 	${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue 
-	${pkgs.coreutils}/bin/chown -R root:root /var/spool/mail
+	${pkgs.coreutils}/bin/chown -R root.root /var/spool/mail
 	${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
         
 	ln -sf ${pkgs.postfix}/share/postfix/conf/* /var/postfix/conf

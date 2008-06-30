@@ -2189,6 +2189,63 @@
 	  Additional entries to put verbatim into aliases file.
 	";
       };
+
+      sslCert = mkOption {
+        default = "";
+	description = "
+	  SSL certificate to use.
+	";
+      };
+      sslCACert = mkOption {
+        default = "";
+	description = "
+	  SSL certificate of CA.
+	";
+      };
+      sslKey = mkOption {
+        default = "";
+	description ="
+	  SSL key to use.
+	";
+      };
+
+      recipientDelimiter = mkOption {
+        default = "";
+	example = "+";
+	description = "
+          Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
+	";
+      };
+
+    };
+
+    dovecot = {
+      enable = mkOption {
+        default = false;
+	description = "Whether to enable dovecot POP3/IMAP server.";
+      };
+
+      user = mkOption {
+        default = "dovecot";
+	description = "dovecot user name";
+      };
+      group = mkOption {
+        default = "dovecot";
+	description = "dovecot group name";
+      };
+
+      sslServerCert = mkOption {
+        default = "";
+	description = "Server certificate";
+      };
+      sslCACert = mkOption {
+        default = "";
+	description = "CA certificate used by server certificate";
+      };
+      sslServerKey = mkOption {
+        default = "";
+	description = "Server key";
+      };
     };
 
   };

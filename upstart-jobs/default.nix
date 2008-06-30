@@ -396,6 +396,12 @@ let
       inherit config pkgs;
     })
 
+  # Dovecot POP3/IMAP server.
+  ++ optional config.services.dovecot.enable
+    (import ../upstart-jobs/dovecot.nix {
+      inherit config pkgs;
+    })
+
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {
