@@ -141,7 +141,7 @@ in
 	${pkgs.coreutils}/bin/chown -R ${user}.${group} /var/postfix 
 	${pkgs.coreutils}/bin/chown -R ${user}.${setgidGroup} /var/postfix/queue 
 	${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue 
-	${pkgs.coreutils}/bin/chown -R root.root /var/spool/mail
+	${pkgs.coreutils}/bin/chown root.root /var/spool/mail
 	${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
         
 	ln -sf ${pkgs.postfix}/share/postfix/conf/* /var/postfix/conf
