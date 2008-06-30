@@ -328,6 +328,21 @@ rec {
       ];
 
     bash = pkgs.bashInteractive;
+
+    adjustSetuidOwner = pkgs.lib.concatStrings (map 
+      (_entry:let entry = {
+        owner = "nobody";
+	group = "nogroup";
+	setuid = false;
+	setgid = false;
+      } //_entry; in
+      ''
+        chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
+	chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
+	chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program} 
+
+      '') 
+      config.security.setuidOwners);
   };
 
 

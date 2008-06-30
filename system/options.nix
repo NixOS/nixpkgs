@@ -339,6 +339,14 @@
       ";
     };
 
+    nativeIPv6 = mkOption {
+      default = false;
+      description = "
+        Whether to use IPv6 even though gw6c is not used. For example, 
+	for Postfix.
+      ";
+    };
+
     extraHosts = mkOption {
       default = "";
       example = "192.168.0.1 lanlocalhost";
@@ -2072,7 +2080,116 @@
 	";
       };
     };
-    
+   
+    postfix = {
+      enable = mkOption {
+        default = false;
+	description ="
+	  Whether to run the Postfix mail server.
+	";
+      };
+      user = mkOption {
+        default = "postfix";
+	description = "
+	  How to call postfix user (must be used only for postfix).
+	";
+      };
+      group = mkOption {
+        default = "postfix";
+	description = "
+	  How to call postfix group (must be used only for postfix).
+	";
+      };
+      setgidGroup = mkOption {
+        default = "postdrop";
+	description = "
+	  How to call postfix setgid group (for postdrop). Should 
+	  be uniquely used group.
+	";
+      };
+      networks = mkOption {
+        default = null;
+	example = ["192.168.0.1/24"];
+	description = "
+	  Net masks for trusted - allowed to relay mail to third parties - 
+	  hosts. Leave empty to use mynetworks_style configuration or use 
+	  default (localhost-only).
+	";
+      };
+      networksStyle = mkOption {
+        default = "";
+	description = "
+	  Name of standard way of trusted network specification to use,
+	  leave blank if you specify it explicitly or if you want to use 
+	  default (localhost-only).
+	";
+      };
+      hostname = mkOption {
+        default = "";
+	description ="
+	  Hostname to use. Leave blank to use just the hostname of machine.
+	  It should be FQDN.
+	";
+      };
+      domain = mkOption {
+        default = "";
+	description ="
+	  Domain to use. Leave blank to use hostname minus first component.
+	";
+      };
+      origin = mkOption {
+        default = "";
+	description ="
+	  Origin to use in outgoing e-mail. Leave blank to use hostname.
+	";
+      };
+      destination = mkOption {
+        default = null;
+        example = ["localhost"];
+        description = "
+	  Full (!) list of domains we deliver locally. Leave blank for 
+	  acceptable Postfix default.
+	";
+      };
+      relayDomains = mkOption {
+        default = null;
+	example = ["localdomain"];
+	description = "
+	  List of domains we agree to relay to. Default is the same as 
+	  destination.
+	";
+      };
+      relayHost = mkOption {
+        default = "";
+	description = "
+	  Mail relay for outbound mail.
+	";
+      };
+      lookupMX = mkOption {
+        default = false;
+	description = "
+	  Whether relay specified is just domain whose MX must be used.
+	";
+      };
+      postmasterAlias = mkOption {
+        default = "root";
+	description = "
+	  Who should receive postmaster e-mail.
+	";
+      };
+      rootAlias = mkOption {
+        default = "";
+	description = "
+	  Who should receive root e-mail. Blank for no redirection.
+	";
+      };
+      extraAliases = mkOption {
+        default = "";
+	description = "
+	  Additional entries to put verbatim into aliases file.
+	";
+      };
+    };
 
   };
 
@@ -2204,6 +2321,23 @@
         This option lists additional programs that must be made setuid
         root.
       ";
+    };
+
+    setuidOwners = mkOption {
+      default = [];
+      example = [{
+        program = "sendmail";
+	owner = "nodody";
+	group = "postdrop";
+	setuid = false;
+	setgid = true;
+      }];
+      description = ''
+        List of non-trivial setuid programs, like Postfix sendmail. Default 
+	should probably be nobody:nogroup:false:false - if you are bothering
+	doing anything with a setuid program, "root.root u+s g-s" is not what
+	you are aiming at..
+      '';
     };
 
     seccureKeys = {

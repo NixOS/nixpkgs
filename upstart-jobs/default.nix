@@ -389,6 +389,12 @@ let
     (import ../upstart-jobs/zabbix-server.nix {
       inherit config pkgs;
     })
+  
+  # Postfix mail server.
+  ++ optional config.services.postfix.enable
+    (import ../upstart-jobs/postfix.nix {
+      inherit config pkgs;
+    })
 
   # Handles the reboot/halt events.
   ++ (map

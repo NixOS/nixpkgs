@@ -156,6 +156,8 @@ for i in @setuidPrograms@; do
     chmod 4755 $wrapperDir/$i
 done
 
+@adjustSetuidOwner@ 
+
 PATH="$save_PATH"
 
 # Set the host name.  Don't clear it if it's not configured in the

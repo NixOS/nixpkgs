@@ -15,6 +15,7 @@
     portmap = 11;
     atd = 12;
     zabbix = 13;
+    postfix = 14;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -30,6 +31,8 @@
     avahi = 10;
     portmap = 11;
     atd = 12;
+    postfix = 13;
+    postdrop = 14;
 
     audio = 17;
 
