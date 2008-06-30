@@ -4375,7 +4375,7 @@ let pkgs = rec {
   };
 
   dovecot = import ../servers/mail/dovecot {
-    inherit fetchurl stdenv ;
+    inherit fetchurl stdenv openssl pam;
   };
 
   ejabberd = import ../servers/xmpp/ejabberd {
@@ -4411,7 +4411,7 @@ let pkgs = rec {
   };
 
   postfix = import ../servers/mail/postfix {
-    inherit fetchurl stdenv db4;
+    inherit fetchurl stdenv db4 openssl cyrus_sasl;
     glibc = stdenv.glibc;
   };
 
