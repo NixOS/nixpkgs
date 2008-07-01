@@ -2248,6 +2248,42 @@
       };
     };
 
+    bind = {
+      enable = mkOption {
+        default = false;
+	description = "
+	  Whether to enable BIND domain name server.
+	";
+      };
+      cacheNetworks = mkOption {
+        default = ["127.0.0.0/24"];
+	description = "
+	  What networks are allowed to use us as a resolver.
+	";
+      };
+      blockedNetworks = mkOption {
+        default = [];
+	description = "
+	  What networks are just blocked.
+	";
+      };
+      zones = mkOption {
+        default = [];
+	description = "
+	  List of zones we claim authority over.
+	    master=false means slave server; slaves means addresses 
+	   who may request zone transfer.
+	";
+	example = [{
+	  name = "example.com";
+	  master = false;
+	  file = "/var/dns/example.com";
+	  masters = ["192.168.0.1"];
+	  slaves = [];
+	}];
+      };
+    };
+
   };
 
   installer = {
