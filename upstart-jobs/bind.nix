@@ -10,6 +10,8 @@ let
     acl badnetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
     options {
+      listen-on {any;};
+      listen-on-v6 {any;};
       allow-query { cachenetworks; };
       blackhole { badnetworks; };
       forward first;
@@ -39,6 +41,7 @@ let
 	       };
 	     ''
 	  }
+	  allow-query { any; };
 	};
       ''
     )
