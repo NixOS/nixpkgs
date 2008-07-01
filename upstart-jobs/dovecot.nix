@@ -42,6 +42,8 @@ let
     auth_verbose = yes
 
     pop3_uidl_format = %08Xv%08Xu
+
+    log_path = /var/log/dovecot.log
   ''
   ;
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
