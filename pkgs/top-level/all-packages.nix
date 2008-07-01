@@ -4369,6 +4369,9 @@ let pkgs = rec {
   dovecot = import ../servers/mail/dovecot {
     inherit fetchurl stdenv openssl pam;
   };
+  dovecot_1_1_1 = import ../servers/mail/dovecot/1.1.1.nix {
+    inherit fetchurl stdenv openssl pam;
+  };
 
   ejabberd = import ../servers/xmpp/ejabberd {
     inherit fetchurl stdenv expat erlang zlib openssl;
