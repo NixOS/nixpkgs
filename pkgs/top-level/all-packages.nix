@@ -2084,6 +2084,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  gnum4_1411 = import ../development/tools/misc/gnum4/1.4.11.nix {
+    inherit fetchurl stdenv;
+  };
+
   gnumake = useFromStdenv "gnumake"
     (import ../development/tools/build-managers/gnumake {
       inherit fetchurl stdenv;
