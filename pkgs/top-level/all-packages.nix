@@ -1979,14 +1979,7 @@ let pkgs = rec {
     name = "ant-" + j2sdk14x.name;
   };
 
-  autoconf = autoconf261;
-  autoconfLatest = autoconf262;
-
-  autoconf261 = import ../development/tools/misc/autoconf {
-    inherit fetchurl stdenv perl m4;
-  };
-
-  autoconf262 = import ../development/tools/misc/autoconf/2.62.nix {
+  autoconf = import ../development/tools/misc/autoconf {
     inherit fetchurl stdenv perl m4 lzma;
   };
 
@@ -3391,8 +3384,7 @@ let pkgs = rec {
     inherit freetype fontconfig gettext gperf curl 
       libjpeg libtiff libpng libxml2 libxslt sqlite 
       icu cairo perl intltool automake libtool 
-      pkgconfig;
-    autoconf = autoconfLatest;
+      pkgconfig autoconf;
     flex = flex2535;
     bison = bison23;
   } null;
@@ -5599,12 +5591,11 @@ let pkgs = rec {
   carrier = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/carrier "2.4.2") {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
-      libtool automake;
+      libtool automake autoconf;
     GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) startupnotification GConf ;
     inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
-    autoconf = autoconfLatest;
   } null;
   funpidgin = carrier;
 
