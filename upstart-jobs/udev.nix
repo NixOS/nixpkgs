@@ -70,13 +70,13 @@ in
 	# been loaded into the kernel (or for which support is built into
 	# the kernel).
 	if ! test -e ${devicesCreated}; then
-	    ${udev}/sbin/udevtrigger
-	    ${udev}/sbin/udevsettle # wait for udev to finish
+	    ${udev}/sbin/udevadm trigger
+	    ${udev}/sbin/udevadm settle # wait for udev to finish
 	    touch ${devicesCreated}
 	fi
 
 	# Kill udev, let Upstart restart and monitor it.  (This is nasty,
-	# but we have to run udevtrigger first.  Maybe we can use
+	# but we have to run `udevadm trigger' first.  Maybe we can use
 	# Upstart's `binary' keyword, but it isn't implemented yet.)
 	if ! ${procps}/bin/pkill -u root "^udevd$"; then
 	    echo "couldn't stop udevd"

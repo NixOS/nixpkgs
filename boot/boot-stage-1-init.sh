@@ -83,8 +83,8 @@ mknod -m 0666 /dev/null c 1 3
 export UDEV_CONFIG_FILE=/udev.conf
 echo 'udev_rules="/no-rules"' > $UDEV_CONFIG_FILE
 udevd --daemon
-udevtrigger
-udevsettle
+udevadm trigger
+udevadm settle
 
 if type -p dmsetup > /dev/null; then
   echo "dmsetup found, starting device mapper and lvm"
@@ -116,7 +116,7 @@ mountFS() {
     fi
 
     if test -n "$mustCheck"; then
-        FSTAB_FILE="/etc/mtab" fsck -C -a "$device"
+        FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
         fsckResult=$?
 
         if test $(($fsckResult | 2)) = $fsckResult; then

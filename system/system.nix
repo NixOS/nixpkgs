@@ -86,7 +86,7 @@ rec {
       fi
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
-      cp $udev/sbin/udevd $udev/sbin/udevtrigger $udev/sbin/udevsettle $out/bin
+      cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
       nuke-refs $out/bin/*
     ''; # */
   
