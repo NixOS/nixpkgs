@@ -3095,6 +3095,10 @@ let pkgs = rec {
     inherit fetchurl stdenv zlib;
   };
 
+  lightning = import ../development/libraries/lightning {
+    inherit fetchurl stdenv;
+  };
+
   log4cxx = import ../development/libraries/log4cxx {
     inherit fetchurl stdenv automake autoconf libtool cppunit libxml2 boost;
   };
