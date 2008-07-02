@@ -1,12 +1,32 @@
 {stdenv, fetchurl, perl, autoconf}:
 
-stdenv.mkDerivation {
-  name = "automake-1.10";
+stdenv.mkDerivation rec {
+  name = "automake-1.10.1";
+
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
+
   src = fetchurl {
-    url = mirror://gnu/automake/automake-1.10.tar.bz2;
-    md5 = "0e2e0f757f9e1e89b66033905860fded";
+    url = "mirror://gnu/automake/${name}.tar.bz2";
+    sha256 = "1v155av3vdsgj9fil66cw2g4vrqanvgn33kwv35xs3ibcyck8smj";
   };
+
+  patches = [ ./test-broken-make.patch ];
+
   buildInputs = [perl autoconf];
+
+  doCheck = true;
+
+  meta = {
+    homepage = http://www.gnu.org/software/automake/;
+    description = "GNU Automake, a GNU standard-compliant makefile generator";
+
+    longDescription = ''
+      GNU Automake is a tool for automatically generating
+      `Makefile.in' files compliant with the GNU Coding
+      Standards.  Automake requires the use of Autoconf.
+    '';
+
+    license = "GPLv2+";
+  };
 }

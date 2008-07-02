@@ -1,0 +1,16 @@
+The version of GNU Make in Nixpkgs is "broken" in the sense that it
+produces additional output, making `AM_MAKE_INCLUDE' (tested by `make.test')
+fail.  Thus, we just disable `make.test' for now.
+
+See http://article.gmane.org/gmane.comp.sysutils.automake.bugs/4234 .
+
+--- automake-1.10/tests/Makefile.in	2006-10-15 19:25:25.000000000 +0200
++++ automake-1.10/tests/Makefile.in	2008-07-02 16:40:35.000000000 +0200
+@@ -482,7 +482,6 @@ ltdeps.test \
+ ltlibobjs.test \
+ ltlibsrc.test \
+ maintclean.test \
+-make.test \
+ makej.test \
+ makevars.test \
+ man.test \
