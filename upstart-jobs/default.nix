@@ -88,6 +88,7 @@ let
     # The udev daemon creates devices nodes and runs programs when
     # hardware events occur.
     (import ../upstart-jobs/udev.nix {
+      inherit modprobe;
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
       firmwareDirs =
@@ -113,13 +114,6 @@ let
     (import ../upstart-jobs/swraid.nix {
       inherit modprobe;
       inherit (pkgs) mdadm;
-    })
-      
-    # Hardware scan; loads modules for PCI devices.
-    (import ../upstart-jobs/hardware-scan.nix {
-      inherit modprobe;
-      doHardwareScan = config.boot.hardwareScan;
-      kernelModules = config.boot.kernelModules;
     })
       
     # Mount file systems.

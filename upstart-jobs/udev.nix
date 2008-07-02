@@ -1,4 +1,4 @@
-{ stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs
+{ stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs, modprobe
 , extraUdevPkgs ? []
 , sndMode ? "0600"
 }:
@@ -44,9 +44,9 @@ let
       ensureDir $out
       ln -s ${nixRules} $out/${nixRules.name}
       shopt -s nullglob
-      cp ${udev}/etc/udev/rules.d/50-udev-default.rules $out/
-      cp ${udev}/etc/udev/rules.d/60-persistent-storage.rules $out/
-      cp ${udev}/etc/udev/rules.d/95-udev-late.rules $out/
+      cp ${udev}/etc/udev/rules.d/*.rules $out/
+      substituteInPlace $out/80-drivers.rules \
+        --replace /sbin/modprobe ${modprobe}/sbin/modprobe
       for i in ${toString extraUdevPkgs}; do
         for j in $i/etc/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)

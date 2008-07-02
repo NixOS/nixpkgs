@@ -22,7 +22,7 @@ rec {
   ];
 
   job = ''
-    start on hardware-scan
+    start on udev
 
     start script
 
