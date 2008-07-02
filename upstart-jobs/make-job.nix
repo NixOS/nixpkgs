@@ -33,4 +33,6 @@
   
   # Allow jobs to declare groups that should be created.
   groups = if job ? groups then job.groups else [];
+
+  passthru = if job ? passthru then job.passthru else {};
 }
