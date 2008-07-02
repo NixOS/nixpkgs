@@ -5,30 +5,54 @@
 
 let
 
+  firmwareLoader = substituteAll {
+    src = ./udev-firmware-loader.sh;
+    path = "${stdenv.coreutils}/bin";
+    isExecutable = true;
+    inherit firmwareDirs;
+  };
+    
+  nixRules = writeText "10-nix.rules" ''
+  
+    # Miscellaneous devices.
+    KERNEL=="sonypi",               MODE="0666"
+    KERNEL=="kvm",                  MODE="0666"
+    KERNEL=="kqemu",		    NAME="%k", MODE="0666"
+
+    # Create a symlink for the CD-ROM device.
+    #KERNEL=="hd[a-z]", BUS=="ide", SYSFS{removable}=="1", SYSFS{device/media}=="cdrom", SYMLINK+="cdrom cdrom-%k"
+    #KERNEL=="sr[0-9]", BUS=="scsi", SYMLINK+="cdrom cdrom-%k"
+
+    # ALSA sound devices.
+    KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="timer",                NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="seq",                  NAME="snd/%k", MODE="${sndMode}"
+
+    # Firmware loading.
+    SUBSYSTEM=="firmware",          ACTION=="add", RUN+="${firmwareLoader}"
+    
+  '';
+  
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
-    src = cleanSource ./udev-rules;
-    firmwareLoader = substituteAll {
-      src = ./udev-firmware-loader.sh;
-      path = "${stdenv.coreutils}/bin";
-      isExecutable = true;
-      inherit firmwareDirs;
-    };
-    inherit sndMode;
-    buildCommand = "
-      buildCommand= # urgh
+    #src = cleanSource ./udev-rules;
+    buildCommand = ''
       ensureDir $out
-      for i in $src/*; do
-        substituteAll $i $out/$(basename $i)
-      done
+      ln -s ${nixRules} $out/${nixRules.name}
       shopt -s nullglob
+      cp ${udev}/etc/udev/rules.d/50-udev-default.rules $out/
+      cp ${udev}/etc/udev/rules.d/60-persistent-storage.rules $out/
+      cp ${udev}/etc/udev/rules.d/95-udev-late.rules $out/
       for i in ${toString extraUdevPkgs}; do
         for j in $i/etc/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)
         done
       done
-    ";
+    ''; # */
   };
 
   # The udev configuration file
@@ -92,4 +116,5 @@ in
     respawn ${udev}/sbin/udevd
   '';
 
+  passthru = {inherit udevRules;};
 }

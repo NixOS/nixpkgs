@@ -41,6 +41,7 @@ let
       xorg.xorgserver
       xorg.xf86inputkeyboard
       xorg.xf86inputmouse
+      xorg.xf86videov4l
     ] 
     ++ optional (videoDriver == "vesa") xorg.xf86videovesa
     ++ optional (videoDriver == "vga") xorg.xf86videovga
