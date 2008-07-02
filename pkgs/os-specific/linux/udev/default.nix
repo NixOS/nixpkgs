@@ -15,6 +15,8 @@ stdenv.mkDerivation {
       mandir=$out/share/man includedir=$out/include \
       EXTRAS="extras/ata_id extras/cdrom_id extras/edd_id extras/floppy extras/path_id extras/scsi_id extras/usb_id extras/volume_id"
       INSTALL='install -c' DESTDIR=/)
+      
+    substituteInPlace udev_rules.c --replace /lib/udev $out/lib/udev
   '';
 
   preInstall = ''
