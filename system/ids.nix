@@ -25,7 +25,10 @@
   gids = {
     root = 0;
     wheel = 1;
+    kmem = 2;
+    tty = 3;
     haldaemon = 5;
+    disk = 6;
     vsftpd = 7;
     ftp = 8;
     bitlbee = 9;
@@ -35,8 +38,10 @@
     postfix = 13;
     postdrop = 14;
     dovecot = 15;
-
     audio = 17;
+    floppy = 18;
+    uucp = 19;
+    lp = 20;
 
     users = 100;
     nixbld = 30000;

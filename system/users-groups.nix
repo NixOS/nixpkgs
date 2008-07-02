@@ -62,6 +62,24 @@ rec {
           { name = "wheel";
             gid = ids.gids.wheel;
           }
+          { name = "disk";
+            gid = ids.gids.disk;
+          }
+          { name = "kmem";
+            gid = ids.gids.kmem;
+          }
+          { name = "tty";
+            gid = ids.gids.tty;
+          }
+          { name = "floppy";
+            gid = ids.gids.floppy;
+          }
+          { name = "uucp";
+            gid = ids.gids.uucp;
+          }
+          { name = "lp";
+            gid = ids.gids.lp;
+          }
           { name = "nogroup";
             gid = ids.gids.nogroup;
           }
