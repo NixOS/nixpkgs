@@ -2,9 +2,11 @@
 
 tmpDir=/tmp/event.d
 
-rm -rf $tmpDir
+mkdir -p /tmp/event.d
 
-cp -prd $(readlink -f /etc/event.d) /tmp/event.d
+if test "$(readlink -f /etc/event.d)" != /tmp/event.d; then 
+    cp -prd "$(readlink -f /etc/event.d)"/* /tmp/event.d/
+fi
 
 for i in $*; do
     echo "building job $i..."
