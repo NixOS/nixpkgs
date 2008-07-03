@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
+      notSupported(){
+        echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
+        chmod +x $1
+      }
+
       # Install Emacs mode.
       echo "installing Emacs mode..."
       ensureDir $out/share/emacs/site-lisp
@@ -46,9 +51,9 @@ stdenv.mkDerivation rec {
         wrapProgram "$out/bin/git-svn"                  \
                      --set GITPERLLIB "$gitperllib"     \
                      --prefix PATH : "${subversion}/bin" ''
-       else ''
-       echo "NOT installing \`git-svn' since \`svnSupport' is false."
-       rm $out/bin/git-svn '')
+       else '' # replace git-svn by notification script
+        notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
+       '')
 
    + ''# Install man pages and Info manual
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
@@ -62,7 +67,13 @@ stdenv.mkDerivation rec {
                      --set TK_LIBRARY "${tk}/lib/tk8.4" \
                      --prefix PATH : "${tk}/bin"
        done
-     '' else "")
+     '' else ''
+      # don not wrap Tcl/Tk, replace them by notification scripts
+       for prog in gitk git-gui git-citool
+       do
+         notSupported "$out/bin/$prog" "reinstall with config git = { guiSupport = true } set"
+       done
+     '')
 
    + ''# Wrap `git-clone'
        wrapProgram $out/bin/git-clone                   \
