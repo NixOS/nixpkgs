@@ -1,9 +1,11 @@
 { stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs, modprobe
 , extraUdevPkgs ? []
-, sndMode ? "0600"
+, config
 }:
 
 let
+
+  cfg = config.services.udev;
 
   firmwareLoader = substituteAll {
     src = ./udev-firmware-loader.sh;
@@ -24,12 +26,12 @@ let
     #KERNEL=="sr[0-9]", BUS=="scsi", SYMLINK+="cdrom cdrom-%k"
 
     # ALSA sound devices.
-    KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="${sndMode}"
-    KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="${sndMode}"
-    KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k", MODE="${sndMode}"
-    KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="${sndMode}"
-    KERNEL=="timer",                NAME="snd/%k", MODE="${sndMode}"
-    KERNEL=="seq",                  NAME="snd/%k", MODE="${sndMode}"
+    KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="${cfg.sndMode}"
+    KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="${cfg.sndMode}"
+    KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k", MODE="${cfg.sndMode}"
+    KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="${cfg.sndMode}"
+    KERNEL=="timer",                NAME="snd/%k", MODE="${cfg.sndMode}"
+    KERNEL=="seq",                  NAME="snd/%k", MODE="${cfg.sndMode}"
 
     # Firmware loading.
     SUBSYSTEM=="firmware",          ACTION=="add", RUN+="${firmwareLoader}"
@@ -86,6 +88,13 @@ in
 
 	# Get rid of possible old udev processes.
 	${procps}/bin/pkill -u root "^udevd$" || true
+
+        # Do the loading of additional stage 2 kernel modules.
+        # Maybe this isn't the best place...
+        for i in ${toString config.boot.kernelModules}; do
+            echo "Loading kernel module $i..."
+            ${modprobe}/sbin/modprobe $i || true
+        done
 
 	# Start udev.
 	${udev}/sbin/udevd --daemon

@@ -88,7 +88,7 @@ let
     # The udev daemon creates devices nodes and runs programs when
     # hardware events occur.
     (import ../upstart-jobs/udev.nix {
-      inherit modprobe;
+      inherit modprobe config;
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
       firmwareDirs =
@@ -101,7 +101,6 @@ let
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
         ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007;
-      sndMode = config.services.udev.sndMode;
     })
       
     # Makes LVM logical volumes available. 
