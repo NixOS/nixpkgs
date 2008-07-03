@@ -58,9 +58,9 @@ rec {
     pkgs.stdenv.mkDerivation {
       name = "pdf";
       builder = ./dot2pdf.sh;
-      inherit dotGraph;
+      inherit dotGraph fontsConf;
       buildInputs = [
-        pkgs.perl pkgs.tetex pkgs.graphviz pkgs.ghostscript
+        pkgs.perl pkgs.tetex pkgs.graphviz
       ];
     };
   
@@ -180,4 +180,13 @@ rec {
     };
 
 
+  # Some tools (like dot) need a fontconfig configuration file.
+  # This should be extended to allow the called to add additional
+  # fonts.
+  fontsConf = pkgs.makeFontsConf {
+    fontDirectories = [
+      "${pkgs.ghostscript}/share/ghostscript/fonts"
+    ];
+  };
+  
 }

@@ -678,8 +678,10 @@ let pkgs = rec {
   };
 
   graphviz = import ../tools/graphics/graphviz {
-    inherit fetchurl stdenv libpng libjpeg expat x11 yacc libtool;
+    inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
+      libtool fontconfig gd;
     inherit (xlibs) libXaw;
+    inherit (gtkLibs) pango;
   };
 
   groff = import ../tools/text/groff {
@@ -2519,6 +2521,11 @@ let pkgs = rec {
   fontconfig = import ../development/libraries/fontconfig {
     inherit fetchurl stdenv freetype expat;
   };
+
+  makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
+    import ../development/libraries/fontconfig/make-fonts-conf.nix {
+      inherit runCommand libxslt fontconfig fontDirectories;
+    };
 
   freealut = import ../development/libraries/freealut {
     inherit fetchurl stdenv openal;
@@ -7155,7 +7162,7 @@ let pkgs = rec {
   */
 
   texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript;
+    inherit stdenv perl tetex graphviz ghostscript makeFontsConf;
   };
 
   texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {

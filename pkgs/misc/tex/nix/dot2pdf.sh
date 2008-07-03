@@ -6,8 +6,8 @@ dot2pdf() {
     sourceFile=$1
     targetName=$out/$(basename $(stripHash $sourceFile; echo $strippedName) .dot).pdf
     echo "converting $sourceFile to $targetName..."
-    dot -Tps $sourceFile > tmp.ps
-    perl $(type -tp epstopdf) --outfile $targetName tmp.ps
+    export FONTCONFIG_FILE=$fontsConf
+    dot -Tpdf $sourceFile > $targetName
 }
 
 for i in $dotGraph; do

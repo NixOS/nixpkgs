@@ -1,16 +1,19 @@
-{stdenv, fetchurl, x11, libpng, libjpeg, expat, libXaw, yacc, libtool}:
+{ stdenv, fetchurl, pkgconfig, x11, libpng, libjpeg, expat, libXaw
+, yacc, libtool, fontconfig, pango, gd
+}:
 
 assert libpng != null && libjpeg != null && expat != null;
 
 stdenv.mkDerivation {
-  name = "graphviz-2.16.1";
+  name = "graphviz-2.20.2";
 
   src = fetchurl {
-    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.16.1.tar.gz;
-    sha256 = "1lan1hyar0xbqvnkcmlcvv02g8zfpk94gk04y4sik5irpa2s3h9j";
+    url = http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.20.2.tar.gz;
+    sha256 = "13mw0mhr4n14c5q7a6c44cvggl5hiqbx53ynr53s67rldvzcilgm";
   };
 
-  buildInputs = [x11 libpng libjpeg expat libXaw yacc libtool];
+  buildInputs = [pkgconfig x11 libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
+  
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
       "--with-pnglibdir=${libpng}/lib"
