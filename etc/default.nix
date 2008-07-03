@@ -174,17 +174,9 @@ import ../helpers/make-etc.nix {
   # Configuration file for fontconfig used to locate
   # (X11) client-rendered fonts.
   ++ optional config.fonts.enableFontConfig {
-    source = pkgs.runCommand "fonts.conf"
-      { 
-        fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
-        buildInputs = [pkgs.libxslt];
-        inherit (pkgs) fontconfig;
-      }
-      "xsltproc --stringparam fontDirectories \"$fontDirectories\" \\
-          --stringparam fontconfig \"$fontconfig\" \\
-          ${./fonts/make-fonts-conf.xsl} $fontconfig/etc/fonts/fonts.conf \\
-          > $out
-      ";
+    source = pkgs.makeFontsConf {
+      fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
+    };
     target = "fonts/fonts.conf";
   }
 
