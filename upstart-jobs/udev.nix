@@ -47,8 +47,16 @@ let
       ln -s ${nixRules} $out/${nixRules.name}
       shopt -s nullglob
       cp ${udev}/etc/udev/rules.d/*.rules $out/
-      substituteInPlace $out/80-drivers.rules \
-        --replace /sbin/modprobe ${modprobe}/sbin/modprobe
+      ${if config.boot.hardwareScan then
+        ''
+          substituteInPlace $out/80-drivers.rules \
+            --replace /sbin/modprobe ${modprobe}/sbin/modprobe
+	''
+	else
+	''
+	  rm $out/80-drivers.rules
+	''
+      }
       for i in ${toString extraUdevPkgs}; do
         for j in $i/etc/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)
