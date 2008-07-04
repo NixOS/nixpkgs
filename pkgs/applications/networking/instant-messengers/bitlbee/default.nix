@@ -1,10 +1,10 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "bitlbee-1.2";
+  name = "bitlbee-1.2.1";
   src = fetchurl {
     url = "mirror://bitlbee/src/" + name + ".tar.gz";
-    sha256 = "ff69fa43445c833a34ea64c23178383e3abe98f2ec7e791ea0cf3913e4090bb8";
+    sha256 = "01ld349f5k89lk6j7xn4sdbbf1577kp845vmnj3sfaza9s1fhm26";
   };
 
   buildInputs = [ gnutls glib pkgconfig ];
