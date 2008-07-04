@@ -6447,7 +6447,7 @@ let pkgs = rec {
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
-  tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.31") {
+  tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.35") {
     python = python25;
     inherit makeWrapper;
   } null;
