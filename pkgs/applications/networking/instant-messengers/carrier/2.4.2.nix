@@ -1,4 +1,9 @@
 args : with args; 
+/*
+  arguments: all buildInputs
+  optional: purple2Source: purple-2 source - place to copy libpurple from 
+    (to use a fresher pidgin build)
+*/
 rec {
   src = fetchurl {
     url = http://downloads.sourceforge.net/funpidgin/carrier-2.4.2.tar.bz2;
@@ -26,8 +31,18 @@ rec {
     export echo=echo
   '') [];
 
+  postInstall = if (lib.getAttr ["purple2Source"] null args) != null then 
+    FullDepEntry (''
+      ensureDir $out/lib/purple-2
+      cp ${args.purple2Source}/lib/purple-2/* $out/lib/purple-2/
+    '') ["minInit" "defEnsureDir"]
+  else
+    noDepEntry "";
+
   /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
+  phaseNames = ["doConfigure" "preBuild" "doMakeInstall"]
+    ++ (lib.optional (postInstall.text != "") "postInstall")
+  ;
       
   name = "carrier-" + version;
   meta = {
