@@ -141,7 +141,9 @@ let
       sysklogd
       sysvinit
       sysvtools
-      tetex
+      #tetex
+      texLive
+      texLiveExtra
       texinfo
       thunderbird
       tightvnc
