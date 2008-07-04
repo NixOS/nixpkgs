@@ -219,6 +219,7 @@ let
       jrePlugin
       keen4
       mono
+      openoffice
       pidgin
       postgresql_jdbc
       sdf
