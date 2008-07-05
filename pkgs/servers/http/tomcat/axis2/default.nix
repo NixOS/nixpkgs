@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
 
-  name = "axis2-1.3";
+  name = "axis2-1.4";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.hippo.nl/ws/axis2/1_3/axis2-1.3-bin.zip;
-    md5 = "ab2bc77452288ebf80d861270734a83e";
+    url = http://apache.hippo.nl/ws/axis2/1_4/axis2-1.4-bin.zip;
+    md5 = "5fa104137aec522675aeaa2e6414dc40";
   };
 
   inherit apacheAnt jdk unzip;
