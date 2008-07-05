@@ -17,6 +17,7 @@
     zabbix = 13;
     postfix = 14;
     dovecot = 15;
+    tomcat = 16;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -42,7 +43,8 @@
     floppy = 18;
     uucp = 19;
     lp = 20;
-
+    tomcat = 21;
+    
     users = 100;
     nixbld = 30000;
     nogroup = 65534;

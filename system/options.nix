@@ -1446,7 +1446,7 @@
       };
       
       user = mkOption {
-        default = "nobody";
+        default = "tomcat";
 	description = "User account under which Apache Tomcat runs.";
       };      
       
