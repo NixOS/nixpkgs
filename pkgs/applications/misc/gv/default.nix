@@ -1,11 +1,11 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX }:
 
 stdenv.mkDerivation rec {
-  name = "gv-3.6.4";
+  name = "gv-3.6.5";
 
   src = fetchurl {
     url = "mirror://gnu/gv/${name}.tar.gz";
-    sha256 = "09v87h0fmpg7wid6b7wwcbl28x9m1wmn465hvpxs95wmn7nw98c2";
+    sha256 = "0wxxq695psb57n3kaj6swlczkwf9p79zdmn1dxrj4isyyr0gxm7d";
   };
 
   buildInputs = [ Xaw3d ghostscriptX ];
