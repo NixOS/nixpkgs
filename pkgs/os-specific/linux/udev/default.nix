@@ -1,13 +1,18 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "udev-124";
+stdenv.mkDerivation rec {
+  # unfortunately 124 does not build with dietlibc on x64
+  version = if ( stdenv.system == "x86_64-linux") then "118" else "124";
+  name = "udev-${version}";
 
-  src = fetchurl {
+  src = if version == "124" then
+ fetchurl {
     url = mirror://kernel/linux/utils/kernel/hotplug/udev-124.tar.bz2;
     sha256 = "0hjmg82ivczm76kg9gm7x0sfji69bwwjbbfycfcdpnfrc13935x4";
+  } else fetchurl {
+    url = mirror://kernel/linux/utils/kernel/hotplug/udev-118.tar.bz2;
+    sha256 = "1i488wqm7i6nz6gidbkxkb47hr427ika48i8imwrvvnpg1kzhska";
   };
-
   # "DESTDIR=/" is a hack to prevent "make install" from trying to
   # mess with /dev.
   preBuild = ''
