@@ -5332,6 +5332,8 @@ let pkgs = rec {
 
   ### DATA
 
+  arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
+  } null;
 
   bakoma_ttf = import ../data/fonts/bakoma-ttf {
     inherit fetchurl stdenv;
