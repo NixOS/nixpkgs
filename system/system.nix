@@ -371,7 +371,7 @@ rec {
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    inherit (config.boot) copyKernels extraGrubEntries
+    inherit (config.boot) copyKernels extraGrubEntries extraGrubEntriesBeforeNixos
       grubSplashImage bootMount configurationLimit;
   };
 

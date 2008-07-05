@@ -275,6 +275,13 @@
       ";
     };
 
+    extraGrubEntriesBeforeNixos = mkOption {
+      default = false;
+      description = "
+	Wheter extraGrubEntries are put before the Nixos-default option
+      ";
+    };
+
     grubSplashImage = mkOption {
       default = pkgs.fetchurl {
         url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;

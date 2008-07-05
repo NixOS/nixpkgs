@@ -113,19 +113,22 @@ if test -n "@copyKernels@"; then
     mkdir -p /boot/kernels
 fi
 
+# Additional entries specified verbatim by the configuration.
+extraGrubEntries=$(cat >> $tmp <<EOF
+@extraGrubEntries@
+EOF)
 
-if test -n "$tmp"; then
-    addEntry "NixOS - Default" $default ""
+if test -n "@extraGrubEntriesBeforeNixos@"; then 
+  $extraGrubEntries
 fi
 
+if test -n "$tmp"; then
+   addEntry "NixOS - Default" $default ""
+fi
 
-# Additional entries specified verbatim by the configuration.
-cat >> $tmp <<EOF
-
-@extraGrubEntries@
-
-EOF
-
+if test -n "@extraGrubEntriesBeforeNixos@"; then 
+  $extraGrubEntries
+fi
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
