@@ -7089,6 +7089,10 @@ let pkgs = rec {
     inherit stdenv fetchsvn openssl dbus autoconf automake pkgconfig dbus_glib;
   };
   
+  DisnixService = import ../tools/package-management/disnix/DisnixService {
+    inherit stdenv fetchsvn apacheAnt jdk axis2;
+  };
+  
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig utillinux;
   };
