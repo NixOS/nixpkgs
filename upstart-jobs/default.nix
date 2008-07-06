@@ -350,7 +350,9 @@ let
       inherit (pkgs) stdenv dbus;
       dbusServices =
         pkgs.lib.optional (config.services.hal.enable) pkgs.hal ++
-	pkgs.lib.optional (config.services.avahi.enable) pkgs.avahi;
+	pkgs.lib.optional (config.services.avahi.enable) pkgs.avahi ++
+	pkgs.lib.optional (config.services.disnix.enable) pkgs.disnix
+	;
     })
 
   # HAL daemon.
@@ -398,6 +400,12 @@ let
   # ISC BIND domain name server.
   ++ optional config.services.bind.enable
     (import ../upstart-jobs/bind.nix {
+      inherit config pkgs;
+    })
+
+  # Disnix server
+  ++ optional config.services.disnix.enable
+    (import ../upstart-jobs/disnix.nix {
       inherit config pkgs;
     })
 
