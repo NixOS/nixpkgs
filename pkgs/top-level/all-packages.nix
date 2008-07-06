@@ -7085,6 +7085,10 @@ let pkgs = rec {
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
     };
 
+  disnix = import ../tools/package-management/disnix {
+    inherit stdenv fetchsvn openssl dbus autoconf automake pkgconfig dbus_glib;
+  };
+  
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig utillinux;
   };

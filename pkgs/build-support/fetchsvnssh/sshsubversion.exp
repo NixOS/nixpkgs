@@ -14,8 +14,8 @@ match_max 100000
 expect "*continue connecting*" { send -- "yes\r"; expect "*?assword:*"; send -- "$password\r" } \
        "*?assword:*" { send -- "$password\r" }
 
-expect "*?assword:*"
-send -- "$password\r"
+#expect "*?assword:*"
+#send -- "$password\r"
 
 # Send blank line
 send -- "\r"
