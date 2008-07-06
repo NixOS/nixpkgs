@@ -1,18 +1,14 @@
 {stdenv, fetchurl}:
+if (stdenv.system != "x86_64-linux") then
 
-stdenv.mkDerivation rec {
-  # unfortunately 124 does not build with dietlibc on x64
-  version = if ( stdenv.system == "x86_64-linux") then "118" else "124";
-  name = "udev-${version}";
+stdenv.mkDerivation {
+  name = "udev-124";
 
-  src = if version == "124" then
- fetchurl {
+  src = fetchurl {
     url = mirror://kernel/linux/utils/kernel/hotplug/udev-124.tar.bz2;
     sha256 = "0hjmg82ivczm76kg9gm7x0sfji69bwwjbbfycfcdpnfrc13935x4";
-  } else fetchurl {
-    url = mirror://kernel/linux/utils/kernel/hotplug/udev-118.tar.bz2;
-    sha256 = "1i488wqm7i6nz6gidbkxkb47hr427ika48i8imwrvvnpg1kzhska";
   };
+
   # "DESTDIR=/" is a hack to prevent "make install" from trying to
   # mess with /dev.
   preBuild = ''
@@ -22,6 +18,33 @@ stdenv.mkDerivation rec {
       INSTALL='install -c' DESTDIR=/)
       
     substituteInPlace udev_rules.c --replace /lib/udev $out/lib/udev
+  '';
+
+  preInstall = ''
+    installFlagsArray=(udevdir=$TMPDIR/dummy)
+  '';
+
+  meta = {
+    homepage = http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html;
+    description = "Udev manages the /dev filesystem";
+  };
+}
+else
+# for now svn revision 10849 because this works fine with current dietlibc
+# this should be fixed (maybe using klibc) or by patching udev somewhen
+
+stdenv.mkDerivation {
+  name = "udev-118";
+
+  src = fetchurl {
+    url = mirror://kernel/linux/utils/kernel/hotplug/udev-118.tar.bz2;
+    sha256 = "1i488wqm7i6nz6gidbkxkb47hr427ika48i8imwrvvnpg1kzhska";
+  };
+
+  # "DESTDIR=/" is a hack to prevent "make install" from trying to
+  # mess with /dev.
+  preBuild = ''
+    makeFlagsArray=(etcdir=$out/etc sbindir=$out/sbin usrbindir=$out/bin usrsbindir=$out/sbin mandir=$out/share/man INSTALL='install -c' DESTDIR=/)
   '';
 
   preInstall = ''
