@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , SDL, SDL_mixer, GStreamer
-, libogg, libxml2, libjpeg, mesa, libpng
+, libogg, libxml2, libjpeg, mesa, libpng, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig
 , glib, gtk, x11
 , lib}:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
 
   # XXX: KDE is supported as well so we could make it available optionally.
-  buildInputs = [x11 SDL SDL_mixer GStreamer
+  buildInputs = [x11 SDL SDL_mixer GStreamer libtool
                  libogg libxml2 libjpeg mesa libpng boost freetype agg
 		 dbus curl pkgconfig glib gtk];
   inherit SDL_mixer SDL;

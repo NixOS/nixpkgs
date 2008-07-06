@@ -5946,7 +5946,7 @@ let pkgs = rec {
 
   gnash = assert mesaSupported; import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
-            boost freetype agg dbus curl pkgconfig x11 lib;
+            boost freetype agg dbus curl pkgconfig x11 libtool lib;
     inherit (gtkLibs) glib gtk;
     GStreamer = gst_all.gstreamer;
   };
