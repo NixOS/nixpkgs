@@ -33,6 +33,7 @@ in
 	if ! test -d ${cfg.baseDir}
 	then    
     	    mkdir -p ${cfg.baseDir}/webapps
+	    mkdir -p ${cfg.baseDir}/shared
 	    cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
 	fi
 	
@@ -61,9 +62,18 @@ in
 	do
 	    chmod -v 644 $i
 	done
+
+	# Deploy all shared libraries
+	
+	if ! test "${cfg.sharedLibFrom}" = ""
+	then
+	    rm -f ${cfg.baseDir}/shared/lib
+	    ln -s ${cfg.sharedLibFrom} ${cfg.baseDir}/shared/lib
+	fi
+
     end script
     
-    respawn ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.tomcat6}/bin/startup.sh; sleep 1d'
+    respawn ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1d'
     
     stop script
 	echo "Stopping tomcat..."

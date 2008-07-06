@@ -1459,6 +1459,16 @@
         default = "";
 	description = "Location where webapplications are stored. Leave empty to use the baseDir.";
       };
+      
+      javaOpts = mkOption {
+        default = "";
+	description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
+      };
+      
+      sharedLibFrom = mkOption {
+        default = "";
+	description ="Location where shared libraries are stored. Leave empty to use the baseDir.";
+      };
     };
 
     disnix = {
