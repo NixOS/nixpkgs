@@ -59,6 +59,7 @@ let
       ghc
       ghostscript
       gimp
+      gnash
       gnugrep
       gnum4
       gnumake
