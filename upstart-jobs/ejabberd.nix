@@ -4,19 +4,30 @@ let
 
 cfg = config.services.ejabberd;
 
-ejabberdService = import ../services/ejabberd {
-        inherit (cfg) user;
-	inherit (pkgs) stdenv erlang ejabberd su;
-};
-
 in
 {
-	name = "ejabberd";
-	job = "
-description \"EJabberd server\"
+    name = "ejabberd";
+	
+    job = ''
+      description "EJabberd server"
 
-stop on shutdown
-
-respawn ${ejabberdService}/bin/control start
-	";
+      start on network-interface/started
+      stop on network-interfaces/stop
+    
+      start script
+	    # Initialise state data
+	    mkdir -p ${cfg.logsDir}
+	    
+	    if ! test -d ${cfg.spoolDir}
+	    then
+		cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
+	    fi
+      end script
+      
+      respawn ${pkgs.bash}/bin/sh -c 'export PATH=$PATH:${pkgs.ejabberd}/sbin; cd ~; ejabberdctl --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start; sleep 1d'
+      
+      stop script
+          ${pkgs.ejabberd}/sbin/ejabberdctl stop
+      end script
+    '';
 }

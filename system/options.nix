@@ -1385,10 +1385,15 @@
         default = false;
 	description = "Whether to enable ejabberd server";
       };
+            
+      spoolDir = mkOption {
+        default = "/var/lib/ejabberd";
+	description = "Location of the spooldir of ejabberd";
+      };
       
-      user = mkOption {
-        default = "nobody";
-	description = "User account under which ejabberd runs.";
+      logsDir = mkOption {
+        default = "/var/log/ejabberd";
+	description = "Location of the logfile directory of ejabberd";
       };
     };
 
