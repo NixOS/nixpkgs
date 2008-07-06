@@ -1461,8 +1461,15 @@
       };
     };
 
+    disnix = {
+      enable = mkOption {
+        default = false;
+	description = "Whether to enable Disnix";
+      };
+    };
+    
     httpd = {
-
+    
       enable = mkOption {
         default = false;
         description = "
