@@ -3438,6 +3438,12 @@ let pkgs = rec {
     inherit (xlibs) libXv libXinerama;
   };
 
+  xautolock = import ../misc/screensavers/xautolock {
+    inherit fetchurl stdenv x11;
+    inherit (xorg) imake;
+    inherit (xlibs) libXScrnSaver scrnsaverproto;
+  };
+
   xlibsWrapper = import ../development/libraries/xlibs-wrapper {
     inherit stdenv;
     packages = [
