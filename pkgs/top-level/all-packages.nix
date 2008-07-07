@@ -2614,6 +2614,11 @@ let pkgs = rec {
       #installLocales = false;
     });
 
+  glibcUnstable = lowPrio (import ../development/libraries/glibc-2.8 {
+      inherit fetchurl stdenv kernelHeaders;
+      installLocales = getPkgConfig "glibc" "locales" false;
+    });
+
   glibc_multi =
     assert system == "x86_64-linux";
     runCommand "${glibc.name}-multi"
