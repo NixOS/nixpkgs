@@ -14,4 +14,5 @@ stdenv.mkDerivation rec {
     sha256 = "0qmgd1cjny5aciljpvn2bczgdvlpgd2f7wzafda24zj4mzqnppsq";
   };
   buildInputs = [qt libXext libX11];
+  configureFlags = "CXXFLAGS=-O3";
 }
