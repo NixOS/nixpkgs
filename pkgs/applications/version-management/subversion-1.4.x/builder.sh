@@ -32,6 +32,8 @@ postInstall() {
             -link http://java.sun.com/j2se/1.4.2/docs/api/ \
             subversion/bindings/java/javahl/src/org/tigris/subversion/javahl/*.java
     fi
+    ensureDir $out/share/emacs/site-lisp
+    cp contrib/client-side/psvn/psvn.el contrib/client-side/vc-svn.el $out/share/emacs/site-lisp/
 }
 postInstall=postInstall
 

@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   name = "subversion-${version}";
 
   #builder = ./builder.sh;
-  
+
   src = fetchurl {
     url = http://subversion.tigris.org/downloads/subversion-1.5.0.tar.bz2;
-    sha1 = "1236a32521b4d8c02261cdc567f6a33d9623f51f";
+    sha256 = "1cwnsi38qjn4wdkyg4hy843dnh18djag60ks2zq9zrjwmhmrnpkm";
   };
 
   buildInputs = [zlib apr aprutil]
@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     --disable-neon-version-check
+  '';
+
+  postInstall = ''
+    ensureDir $out/share/emacs/site-lisp
+    cp contrib/client-side/emacs/*.el $out/share/emacs/site-lisp/
   '';
 
   passthru = {
