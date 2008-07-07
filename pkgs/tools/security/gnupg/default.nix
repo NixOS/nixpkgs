@@ -2,16 +2,16 @@
   # Support for the IDEA cipher (used by the old PGP) should only be
   # enabled if it is legal for you to do so.
   ideaSupport ? false
-  
+
 , stdenv, fetchurl, readline
 }:
 
 stdenv.mkDerivation {
-  name = "gnupg-1.4.8";
+  name = "gnupg-1.4.9";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.cert.dfn.de/pub/tools/crypt/gcrypt/gnupg/gnupg-1.4.8.tar.bz2;
-    sha256 = "0v009vqpa4l9zwhcaaagz5sx65fjp8g0alsf8kac5s5gvrs2b78i";
+    url = ftp://ftp.cert.dfn.de/pub/tools/crypt/gcrypt/gnupg/gnupg-1.4.9.tar.bz2;
+    sha256 = "1p86mdgij3llnkx8dvvjl19abgq86gdn6m4r6bc4xvgfjg6sp99w";
   };
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
