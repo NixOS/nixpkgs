@@ -895,7 +895,7 @@ let pkgs = rec {
 
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
-    pamSupport = true;
+    pamSupport = getPkgConfig "openssh" "pam" true;
   };
 
   p7zip = import ../tools/archivers/p7zip {
@@ -3395,10 +3395,10 @@ let pkgs = rec {
   });
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    inherit (gtkLibs) gtk atk pango; 
-    inherit freetype fontconfig gettext gperf curl 
-      libjpeg libtiff libpng libxml2 libxslt sqlite 
-      icu cairo perl intltool automake libtool 
+    inherit (gtkLibs) gtk atk pango;
+    inherit freetype fontconfig gettext gperf curl
+      libjpeg libtiff libpng libxml2 libxslt sqlite
+      icu cairo perl intltool automake libtool
       pkgconfig autoconf;
     flex = flex2535;
     bison = bison23;
@@ -7100,11 +7100,11 @@ let pkgs = rec {
   disnix = import ../tools/package-management/disnix {
     inherit stdenv fetchsvn openssl dbus autoconf automake pkgconfig dbus_glib;
   };
-  
+
   DisnixService = import ../tools/package-management/disnix/DisnixService {
     inherit stdenv fetchsvn apacheAnt jdk axis2;
   };
-  
+
   ntfs3g = import ../misc/ntfs-3g {
     inherit fetchurl stdenv fuse pkgconfig utillinux;
   };
