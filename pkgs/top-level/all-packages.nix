@@ -641,7 +641,7 @@ let pkgs = rec {
 
   gnupg = import ../tools/security/gnupg {
     inherit fetchurl stdenv readline;
-    ideaSupport = true; # enable for IDEA crypto support
+    ideaSupport = getPkgConfig "gnupg" "idea" false; # enable for IDEA crypto support
   };
 
   gnupg2 = import ../tools/security/gnupg2 {
