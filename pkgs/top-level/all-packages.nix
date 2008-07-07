@@ -5977,7 +5977,7 @@ let pkgs = rec {
   };
 
   haskellMode = import ../applications/editors/emacs-modes/haskell {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv emacs;
   };
 
   hello = import ../applications/misc/hello/ex-2 {
