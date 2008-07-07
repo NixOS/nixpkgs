@@ -3,7 +3,7 @@ args : with args;
 	let localDefs = builderDefs {
 		src = /* put a fetchurl here */
 		fetchurl {
-			url = http://fabrice.bellard.free.fr/qemu/linux-0.2.img.bz2;
+			url = [ http://fabrice.bellard.free.fr/qemu/linux-0.2.img.bz2 http://bellard.org/qemu/linux-0.2.img.bz2];
 			sha256 = "08xlwy1908chpc4fsqy2v13zi25dapk0ybrd43fj95v67kdj5hj1";
 		};
 		buildInputs = [];

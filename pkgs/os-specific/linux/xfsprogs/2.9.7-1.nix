@@ -1,7 +1,7 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs_2.9.7-1.tar.gz;
+    url = [ ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs_2.9.7-1.tar.gz http://ftp.lfs-matrix.org/pub/blfs/svn/x/xfsprogs_2.9.7-1.tar.gz ];
     sha256 = "0g4pr1rv4lgc7vab18wiwrcr6jq40fs1krb2vfkgh779p7gf3il7";
   };
 
