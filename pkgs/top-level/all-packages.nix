@@ -1122,6 +1122,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  wdfs = import ../tools/networking/wdfs {
+    inherit stdenv fetchurl neon fuse pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   wgetFun = lib.sumArgs (selectVersion ../tools/networking/wget "1.11") {
     inherit fetchurl stdenv gettext;
   };
