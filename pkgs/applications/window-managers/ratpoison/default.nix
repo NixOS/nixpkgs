@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "15y3hi4dc7f98mhhpms22ahmh8lbzhyqli878z3fgrix4z7vr4fz";
   };
 
+  patches = [ ./fix-rpws.patch ];
+
   buildInputs = [libX11 inputproto libXt
 	 libXpm libXft fontconfig libXtst
 	xextproto readline];
