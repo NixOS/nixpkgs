@@ -5938,6 +5938,12 @@ let pkgs = rec {
     perlLibs = [perlLWP perlURI perlTermReadKey subversion];
   };
 
+  qgit = import ../applications/version-management/qgit {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libXext libX11;
+    qt = qt3;
+  };
+
   gkrellm = import ../applications/misc/gkrellm {
     inherit fetchurl stdenv gettext pkgconfig;
     inherit (gtkLibs) glib gtk;
