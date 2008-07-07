@@ -1,0 +1,11 @@
+--- pdsh-2.16/src/common/hostlist.h	2008-01-29 18:35:48.000000000 +0100
++++ pdsh-2.16-patched/src/common/hostlist.h	2008-07-07 21:14:12.000000000 +0200
+@@ -29,6 +29,8 @@
+ #ifndef _HOSTLIST_H
+ #define _HOSTLIST_H
+ 
++#include <sys/types.h>
++
+ /* Notes:
+  *
+  * If WITH_LSD_FATAL_ERROR_FUNC is defined, the linker will expect to

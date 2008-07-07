@@ -920,6 +920,13 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  pdsh = import ../tools/networking/pdsh {
+    inherit fetchurl stdenv perl;
+    readline = if getPkgConfig "pdsh" "readline" true then readline else null;
+    ssh = if getPkgConfig "pdsh" "ssh" true then openssh else null;
+    pam = if getPkgConfig "pdsh" "pam" true then pam else null;
+  };
+
   pinentry = import ../tools/misc/pinentry {
     inherit fetchurl stdenv pkgconfig x11;
     inherit (gnome) glib gtk;
