@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "redhat-liberation";
   src = fetchurl {
     url = https://www.redhat.com/f/fonts/liberation-fonts.tar.gz;
-    sha256 = "13zzyqyi3mf676aj3fg9122asyykpx94mk689r1p2ab1axyg4k0p";
+    sha256 = "5749c27f3deb5da323961e86efed1306fc072bea9065790d0047ad61471be6a5";
   };
   installPhase = ''
     ensureDir $out/share/fonts/truetype
