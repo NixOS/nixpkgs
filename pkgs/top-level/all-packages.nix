@@ -7206,7 +7206,8 @@ let pkgs = rec {
 
   texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl ruby;
+      gd t1lib freetype icu perl ruby expat curl
+      libjpeg;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     flex = flex2535;
