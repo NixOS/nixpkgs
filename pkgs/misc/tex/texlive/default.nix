@@ -41,13 +41,6 @@ rec {
         echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
         chmod a+x $out/bin/$(basename $i)
     done
-    texmf_var=$(mktemp -d /var/tmp/texmf-varXXXXXXXX)
-    mv $out/share/texmf-var/* $texmf_var/ 
-    chmod -R a+rwX $texmf_var
-    rm -r $out/share/texmf-var || true
-    rm -r /var/tmp/texmf-var || true
-    ln -sfT $texmf_var $out/share/texmf-var
-    ln -sfT $texmf_var /var/tmp/texmf-var
     ln -s $out/share/texmf $out/share/texmf-config
     
     sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
@@ -65,7 +58,7 @@ rec {
     zlib bzip2 ncurses libpng flex bison libX11 libICE
     xproto freetype t1lib gd libXaw icu ghostscript ed 
     libXt libXpm libXmu libXext xextproto perl libSM 
-    ruby
+    ruby expat curl libjpeg
   ];
 
   configureFlags = [ "--with-x11" "--with-system-zlib" 
@@ -75,7 +68,8 @@ rec {
     "--enable-ipc" "--with-mktexfmt"
   ];
 
-  phaseNames = ["doPreConfigure" "doConfigure" 
+  phaseNames = ["addInputs" (doDump "0") "doPreConfigure" "doConfigure" 
+    (doDump "1")
     "doMakeInstall" "doPostInstall"];
 
   name = "texlive-core-2007";
