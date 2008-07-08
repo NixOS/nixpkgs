@@ -1,8 +1,5 @@
 args : with args;	let 
-        patch = fetchurl {
-          url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5-3.diff.gz;
-          sha256 = "0rin25si7117wld5bc7vf3d73c5k9ph3zach7cbg9h9vvz376c26";
-        };
+        patch = ./ltrace_0.5-3.diff.gz;
 	localDefs = with (builderDefs {src="";} null);
 	 builderDefs {
 		src = /* put a fetchurl here */
