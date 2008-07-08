@@ -22,7 +22,7 @@ preConfigure() {
 postConfigure=postConfigure
 postConfigure() {
     cd ..
-    for i in LinuxX86Env.Set LinuxX86Env.Set.sh; do
+    for i in LinuxX86*Env.Set; do
 	substituteInPlace $i --replace /usr /no-such-path
     done
     substituteInPlace solenv/inc/libs.mk \
@@ -33,7 +33,7 @@ postConfigure() {
 
 buildPhase=buildPhase
 buildPhase() {
-    source LinuxX86Env.Set.sh
+    source LinuxX86*Env.Set.sh
     ./bootstrap
     dmake # wait a few hours...
 }
