@@ -37,11 +37,11 @@ respawn ${lsh}/sbin/lshd --daemonic \
                               interfaces))} \
    -h "${hostKey}" \
    ${if !syslog then "--no-syslog" else ""} \
-   ${if !passwordAuthentication then "--no-password" else ""} \
-   ${if !publicKeyAuthentication then "--no-publickey" else ""} \
-   ${if rootLogin then "--root-login" else ""} \
+   ${if passwordAuthentication then "--password" else "--no-password" } \
+   ${if publicKeyAuthentication then "--publickey" else "--no-publickey" } \
+   ${if rootLogin then "--root-login" else "--no-root-login" } \
    ${if loginShell != null then "--login-shell=\"${loginShell}\"" else "" } \
-   ${if srpKeyExchange then "--srp-keyexchange" else "" } \
+   ${if srpKeyExchange then "--srp-keyexchange" else "--no-srp-keyexchange" } \
    ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
    ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \
    --subsystems=${concatStringsSep ","
