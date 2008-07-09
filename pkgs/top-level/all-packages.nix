@@ -6428,6 +6428,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+
+  stgit = import ../applications/version-management/stgit {
+    inherit fetchurl stdenv python git;
+  };
+
   subversion = subversion14;
 
   subversion14 = import ../applications/version-management/subversion-1.4.x {
