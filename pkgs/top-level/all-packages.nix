@@ -2102,10 +2102,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  gnumake = useFromStdenv "gnumake"
-    (import ../development/tools/build-managers/gnumake {
-      inherit fetchurl stdenv;
-    });
+  gnumake = import ../development/tools/build-managers/gnumake {
+    inherit fetchurl stdenv;
+    log2xmlSupport = getConfig [ "gnuMake" "log2xmlSupport" ] true;
+  };
 
   gnumake380 = import ../development/tools/build-managers/gnumake-3.80 {
     inherit fetchurl stdenv;
