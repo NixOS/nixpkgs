@@ -2051,6 +2051,11 @@ let pkgs = rec {
     inherit fetchurl stdenv expect makeWrapper;
   };
 
+  ddd = import ../development/tools/misc/ddd {
+    inherit fetchurl stdenv lesstif ncurses;
+		inherit (xlibs) libX11 libXt;
+  };
+
   elfutilsFun = lib.sumArgs
     (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
