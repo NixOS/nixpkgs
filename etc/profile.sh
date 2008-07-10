@@ -1,7 +1,7 @@
 export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
 if test -n "@nssModulesPath@"; then
-    LD_LIBRARY_PATH=@nssModulesPath@$:$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=@nssModulesPath@:$LD_LIBRARY_PATH
 fi
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
