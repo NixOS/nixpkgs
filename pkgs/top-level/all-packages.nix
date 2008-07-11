@@ -2252,6 +2252,10 @@ let pkgs = rec {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  splint = import ../development/tools/analysis/splint {
+    inherit fetchurl stdenv flex;
+  };
+
   strace = import ../development/tools/misc/strace {
     inherit fetchurl stdenv;
   };
