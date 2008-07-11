@@ -2467,7 +2467,13 @@
         default = /var/elliptic-keys/public;
 	description = "
 	  Public key. Make it path argument, so it is copied into store and
-	  hashed.
+	  hashed. 
+
+	  The key is used to encrypt Gateway 6 configuration in store, as it
+	  contains a password for external service. Unfortunately, 
+	  derivation file should be protected by other means. For example, 
+	  nix-http-export.cgi will happily export any non-derivation path,
+	  but not a derivation.
 	";
       };
       private = mkOption {
