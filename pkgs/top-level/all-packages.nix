@@ -426,6 +426,10 @@ let pkgs = rec {
     inherit fetchurl stdenv flex;
   };
 
+  bfr = import ../tools/misc/bfr {
+    inherit fetchurl stdenv perl;
+  };
+
   asciidoc = import ../tools/typesetting/asciidoc {
     inherit fetchurl stdenv bash python;
   };
