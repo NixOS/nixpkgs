@@ -6823,6 +6823,12 @@ let pkgs = rec {
     inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip;
   };
 
+  exultSnapshot = lowPrio (import ../games/exult/snapshot.nix {
+    inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip
+      autoconf automake libtool flex;
+    bison = bison23;
+  });
+
   fsg = import ../games/fsg {
     inherit stdenv fetchurl pkgconfig;
     inherit (gtkLibs) glib gtk;
