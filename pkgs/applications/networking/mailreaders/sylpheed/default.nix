@@ -9,11 +9,11 @@ assert sslSupport -> openssl != null;
 assert gpgSupport -> gpgme != null;
 
 stdenv.mkDerivation {
-  name = "sylpheed-2.4.8";
+  name = "sylpheed-2.5.0";
 
   src = fetchurl {
-    url = http://sylpheed.sraoss.jp/sylpheed/v2.4/sylpheed-2.4.8.tar.bz2;
-    sha256 = "0r4bfkyz39pj02rzn38ss10dhhhv93z1azlbbwdgbkjii3k760fc";
+    url = http://sylpheed.sraoss.jp/sylpheed/v2.5/sylpheed-2.5.0.tar.bz2;
+    sha256 = "0qc7sgcb23x16y6qhyrbv3hphqkmk5s9nr6xfxv5rqi6272qv2ni";
   };
 
   buildInputs = [
