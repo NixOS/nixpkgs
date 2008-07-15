@@ -1834,6 +1834,10 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses readline;
   };
 
+  maude = import ../development/interpreters/maude {
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
+  };
+
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
     g77 = g77_42;
@@ -2410,6 +2414,10 @@ let pkgs = rec {
 
   boost = selectVersion ../development/libraries/boost "1.35.0" {
     inherit fetchurl stdenv icu zlib bzip2 python;
+  };
+
+  buddy = import ../development/libraries/buddy {
+    inherit fetchurl stdenv;
   };
 
   cairo = import ../development/libraries/cairo {
@@ -3393,6 +3401,10 @@ let pkgs = rec {
   tapioca_qt = import ../development/libraries/tapioca-qt {
     inherit fetchsvn stdenv cmake telepathy_qt;
     qt = qt4;
+  };
+
+  tecla = import ../development/libraries/tecla {
+    inherit fetchurl stdenv;
   };
 
   telepathy_gabble = import ../development/libraries/telepathy-gabble {
