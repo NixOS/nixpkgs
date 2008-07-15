@@ -6160,6 +6160,10 @@ let pkgs = rec {
    qt = qt4;
   };
 
+  maudeMode = import ../applications/editors/emacs-modes/maude {
+    inherit fetchurl stdenv emacs;
+  };
+
   maxima = import ../applications/misc/maxima {
     inherit fetchurl stdenv clisp;
   };
