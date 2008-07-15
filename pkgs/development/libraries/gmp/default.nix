@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4}:
+{stdenv, fetchurl, m4, cxx ? true}:
 
 stdenv.mkDerivation {
   name = "gmp-4.2.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [m4];
-
+  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
   doCheck = true;
 
   meta = {
