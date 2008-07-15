@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl, pkgconfig, gtk, libpcap, flex, bison}:
 
 stdenv.mkDerivation {
-  name = "wireshark-1.0.0";
+  name = "wireshark-1.0.2";
   src = fetchurl {
-    url = http://www.wireshark.org/download/src/all-versions/wireshark-1.0.0.tar.bz2;
-    sha256 = "1l4zrmxf3i2i8a5f953pbbpy1c44d1q3r79hbzq7q9x78vhi6ixm";
+    url = http://www.wireshark.org/download/src/wireshark-1.0.2.tar.gz;
+    sha256 = "0lv5agsb6ivqz2271yyiq5lsq7xvr35cxzikciq82rn7v8bj0qc9";
   };
   buildInputs = [perl pkgconfig gtk libpcap flex bison];
 }
