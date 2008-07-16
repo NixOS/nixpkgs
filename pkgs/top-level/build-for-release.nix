@@ -66,6 +66,8 @@ let
       gnupatch
       gnused
       gnutar
+      gnutls
+      guile
       gqview
       graphviz
       grub
