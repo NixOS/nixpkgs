@@ -10,4 +10,3 @@ password sufficient     @pam_unix2@/lib/security/pam_unix2.so nullok
 
 @isLDAPEnabled@  session  optional       @pam_ldap@/lib/security/pam_ldap.so 
 session  required       @pam_unix2@/lib/security/pam_unix2.so
-session  optional       pam_env.so envfile=@envConf@

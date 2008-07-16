@@ -11,12 +11,6 @@ let
   # !!! ugh, these files shouldn't be created here.
     
     
-  envConf = pkgs.writeText "environment" ''
-    PATH=${systemPath}/bin:${systemPath}/sbin:${pkgs.openssh}/bin
-    NIX_REMOTE=daemon
-  '' /* ${pkgs.openssh}/bin is a hack to get remote scp to work */;
-
-
   pamConsoleHandlers = pkgs.writeText "console.handlers" ''
     console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
     ${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
@@ -25,6 +19,7 @@ let
 
   pamConsolePerms = ./security/console.perms;
 
+  
 in
 
     
@@ -106,19 +101,19 @@ import ../helpers/make-etc.nix {
     }
 
     { # Script executed when the shell starts as a non-login shell (system-wide version).
-      source = ./bashrc;
-      target = "bashrc";      
-    }
-
-    { # Script executed when the shell starts as a login shell.
       source = pkgs.substituteAll {
-        src = ./profile.sh;
+        src = ./bashrc.sh;
         inherit systemPath wrapperDir modulesTree nssModulesPath;
         inherit (pkgs) glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
         inherit nixEnvVars;
       };
+      target = "bashrc";      
+    }
+
+    { # Script executed when the shell starts as a login shell.
+      source = ./profile.sh;
       target = "profile";
     }
 
@@ -214,7 +209,7 @@ import ../helpers/make-etc.nix {
             then pkgs.pam_ldap
             else "/no-such-path";
           inherit (pkgs.xorg) xauth;
-          inherit envConf pamConsoleHandlers;
+          inherit pamConsoleHandlers;
           isLDAPEnabled = if isLDAPEnabled then "" else "#";
         };
         target = "pam.d/" + program;

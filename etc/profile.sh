@@ -1,35 +1,12 @@
-export PATH=@wrapperDir@:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
-export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
-if test -n "@nssModulesPath@"; then
-    LD_LIBRARY_PATH=@nssModulesPath@:$LD_LIBRARY_PATH
-fi
-export MODULE_DIR=@modulesTree@/lib/modules
-export NIXPKGS_CONFIG=/nix/etc/config.nix
-export PAGER="less -R"
-export TZ=@timeZone@
-export TZDIR=@glibc@/share/zoneinfo
-export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-export LANG=@defaultLocale@
-export EDITOR=nano
-export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
-export LOCATE_PATH=/var/cache/locatedb
+# This file is executed by all login shells.  Don't ask what a login
+# shell is, nobody knows.  Most global environment variables should go
+# in /etc/bashrc, which is by default included by non-login shells,
+# but which we include here as well.
 
-
-# Set up secure multi-user builds: non-root users build through the
-# Nix daemon.
-if test "$USER" != root; then
-    export NIX_REMOTE=daemon
-else
-    export NIX_REMOTE=
-fi
-
-
-# Set up the environment variables for running Nix.
-@nixEnvVars@
+source /etc/bashrc
 
 
 # Set up the per-user profile.
-NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
 if test "$(stat --printf '%u' $NIX_USER_PROFILE_DIR)" != "$(id -u)"; then
     echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR" >&2
@@ -44,20 +21,6 @@ if ! test -L $HOME/.nix-profile; then
         ln -s /nix/var/nix/profiles/default $HOME/.nix-profile
     fi
 fi
-
-NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
-
-for i in $NIX_PROFILES; do # !!! reverse
-    export PATH=$i/bin:$i/sbin:$PATH
-    export INFOPATH=$i/info:$i/share/info:$INFOPATH
-    export PKG_CONFIG_PATH="$i/lib/pkgconfig:$PKG_CONFIG_PATH"
-    export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
-done
-
-# Search directory for Aspell dictionaries.
-export ASPELL_CONF="dict-dir $NIX_USER_PROFILE_DIR/profile/lib/aspell"
-
-export PATH=$HOME/bin:$PATH
 
 
 # Create the per-user garbage collector roots directory.
@@ -80,9 +43,6 @@ if test ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr; then
     fi
 fi
 
-# Include bashrc settings
-
-source /etc/bashrc
 
 # Read system-wide modifications.
 if test -f /etc/profile.local; then
