@@ -1208,7 +1208,7 @@ let pkgs = rec {
     }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses texinfo;
     bison = bison23;
     interactive = true;
   });

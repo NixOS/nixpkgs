@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bison, interactive ? false, ncurses ? null}:
+{stdenv, fetchurl, bison, interactive ? false, ncurses ? null, texinfo ? null}:
 
 assert interactive -> ncurses != null;
 
@@ -17,8 +17,10 @@ stdenv.mkDerivation {
     ./winsize.patch
   ];
 
-  # !!! only needed for bash-3.2 (because of bash32-001.patch)
-  buildInputs = [bison] ++ stdenv.lib.optional interactive ncurses;
+  # !!! Bison is only needed for bash-3.2 (because of bash32-001.patch)
+  buildInputs = [bison]
+    ++ stdenv.lib.optional (texinfo != null) texinfo
+    ++ stdenv.lib.optional interactive ncurses;
 
   meta = {
     homepage = http://www.gnu.org/software/bash/;
