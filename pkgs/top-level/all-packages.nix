@@ -1867,6 +1867,14 @@ let pkgs = rec {
     ];
   };
 
+  pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
+    inherit cairo fontconfig freetype libjpeg libpng openssl 
+      perl mesa zlib which;
+    inherit (xorg) libX11 libXaw libXft libXrender libICE xproto 
+      renderproto pixman libSM libxcb libXext xextproto libXmu 
+      libXt;
+  } null;
+
   python = python24;
 
   python24 = import ../development/interpreters/python/2.4 {
