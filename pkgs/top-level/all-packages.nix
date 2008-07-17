@@ -3291,8 +3291,10 @@ let pkgs = rec {
   };
 
   poppler = import ../development/libraries/poppler {
-    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg;
+    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
+      pkgconfig;
     inherit (gtkLibs) glib gtk;
+    qt4Support = getConfig [ "poppler" "qt4Support" ] false;
   };
 
   popt = import ../development/libraries/popt {
