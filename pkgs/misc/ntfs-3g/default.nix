@@ -1,12 +1,12 @@
 args: with args;
 stdenv.mkDerivation rec {
   pname = "ntfs-3g";
-  version = "1.2531";
+  version = "1.2712";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tgz";
-    sha256 = "e5d834f0be7efdedc36e45808554dafcb53f70b2fa2d511df5b9ae23e6807bbe";
+    sha256 = "01rdx3mzp12pbi3q9l279z78w155fh5axaksxmm3xl9m9ljy4c9j";
   };
 
   buildInputs = [fuse pkgconfig utillinux];
