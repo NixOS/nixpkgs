@@ -2969,6 +2969,11 @@ let pkgs = rec {
     inherit fetchurl stdenv mkDerivationByConfiguration pkgconfig lib;
   };
 
+  libspectre = import ../development/libraries/libspectre {
+    inherit fetchurl stdenv;
+    ghostscript = ghostscriptX;
+  };
+
   libgsf = import ../development/libraries/libgsf {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2 python;
     inherit (gnome) glib gnomevfs libbonobo;
