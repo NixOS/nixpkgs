@@ -2,8 +2,7 @@
 
 stdenv.mkDerivation {
   name = "scons-${version}";
-  meta =
-  {
+  meta = {
     homepage = "http://scons.org/";
     description = "An improved, cross-platform substitute for Make";
     longDescription =
@@ -15,8 +14,7 @@ stdenv.mkDerivation {
        software.
     '';
   };
-  src = fetchurl
-  {
+  src = fetchurl {
     url = "mirror://sourceforge/scons/scons-${version}.tar.gz";
     sha256 = "${versionHash}";
   };

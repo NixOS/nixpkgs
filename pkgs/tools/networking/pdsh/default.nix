@@ -1,16 +1,13 @@
 {stdenv, fetchurl, perl, readline, ssh, pam}:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   name = "pdsh-2.16";
-  meta =
-  {
+  meta = {
     homepage = "https://computing.llnl.gov/linux/pdsh.html";
     description = "A high-performance, parallel remote shell utility.";
     license = "GPLv2";
   };
-  src = fetchurl
-  {
+  src = fetchurl {
     url = "mirror://sourceforge/pdsh/${name}.tar.bz2";
     sha256 = "8891cd3b175d3075f7c71fa4ee2b077306117ada5dd8c0966caaa3b74eca3a3e";
   };
