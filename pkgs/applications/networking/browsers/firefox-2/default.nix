@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-2.0.0.14";
+  name = "firefox-2.0.0.16";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/2.0.0.14/source/firefox-2.0.0.14-source.tar.bz2;
-    sha256 = "af045b58ab560bb6535e5f63a1027dccab98ca123a1b161ddd4cc52fa505a901";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/2.0.0.16/source/firefox-2.0.0.16-source.tar.bz2;
+    sha1 = "ae1d451ce85a5515b37d73d2c4b7cb1377206d86";
   };
 
   buildInputs = [

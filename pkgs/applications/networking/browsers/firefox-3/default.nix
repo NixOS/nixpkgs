@@ -11,11 +11,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-3.0";
+  name = "firefox-3.0.1";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0/source/firefox-3.0-source.tar.bz2;
-    sha1 = "2e21652b9cad2a6ac8f048f50e9e053c19760d4b";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.1/source/firefox-3.0.1-source.tar.bz2;
+    sha1 = "ba3bb0b02404cf1abfb6189b156b2f4eb02e8975";
   };
 
   buildInputs = [
