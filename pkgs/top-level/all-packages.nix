@@ -1838,6 +1838,10 @@ let pkgs = rec {
     inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
   };
 
+  maudeUnstable = import ../development/interpreters/maude/unstable.nix {
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
+  };
+
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
     g77 = g77_42;
@@ -1868,10 +1872,10 @@ let pkgs = rec {
   };
 
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
-    inherit cairo fontconfig freetype libjpeg libpng openssl 
+    inherit cairo fontconfig freetype libjpeg libpng openssl
       perl mesa zlib which;
-    inherit (xorg) libX11 libXaw libXft libXrender libICE xproto 
-      renderproto pixman libSM libxcb libXext xextproto libXmu 
+    inherit (xorg) libX11 libXaw libXft libXrender libICE xproto
+      renderproto pixman libSM libxcb libXext xextproto libXmu
       libXt;
   } null;
 
