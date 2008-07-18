@@ -1838,9 +1838,9 @@ let pkgs = rec {
     inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
   };
 
-  maudeUnstable = import ../development/interpreters/maude/unstable.nix {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
-  };
+  maudeUnstable = lowPrio (import ../development/interpreters/maude/unstable.nix {
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv;
+  });
 
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
