@@ -49,7 +49,8 @@ let
       feh
       file
       findutils
-      firefox
+      firefox2
+      firefox3
       flex2533
       gawk
       gcc
