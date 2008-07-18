@@ -5495,7 +5495,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  poppler_data = import ../data/misc/poppler-data {
+  popplerData = import ../data/misc/poppler-data {
     inherit fetchurl stdenv;
   };
 
