@@ -6,6 +6,7 @@ assert x11Support -> x11 != null;
 
 stdenv.mkDerivation rec {
   name = "ghostscript-8.62.0";
+  
   builder = ./builder.sh;
   
   src = fetchurl {
@@ -25,14 +26,15 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [
-    libjpeg libpng zlib
-    (if x11Support then x11 else null)
-  ];
+  buildInputs = [libjpeg libpng zlib]
+    ++ stdenv.lib.optional x11Support x11;
 
   configureFlags = "
+    --disable-static
     ${if x11Support then "--with-x" else "--without-x"}
   ";
+
+  NIX_CFLAGS_COMPILE = "-fpic";
 
   patches = [
 

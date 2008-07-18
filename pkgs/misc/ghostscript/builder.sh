@@ -6,7 +6,6 @@ preConfigure() {
     rm -rf ijs/ltmain.sh
 }
 
-installPhase=installPhase
 installPhase() {
     make install install-so install-data install-doc install-man
 }
