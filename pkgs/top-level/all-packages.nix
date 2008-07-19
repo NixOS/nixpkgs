@@ -1106,6 +1106,13 @@ let pkgs = rec {
     inherit (xlibs) imake;
   };
 
+  truecrypt = import ../applications/misc/truecrypt {
+    inherit fetchurl stdenv pkgconfig fuse;
+    inherit (gtkLibs) gtk;
+    inherit (xorg) libSM;
+    glibc = stdenv.gcc.libc;
+  };
+
   ttmkfdirFun = import ../tools/misc/ttmkfdir {
     inherit debPackage freetype fontconfig libunwind libtool;
     bison = bison23;
