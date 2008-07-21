@@ -1,15 +1,15 @@
 {stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
 
 stdenv.mkDerivation (rec {
-  name = "ghc-6.8.2.20080602";
+  name = "ghc-6.9.20080615";
   homepage = "http://www.haskell.org/ghc";
 
   src = map fetchurl [
-    { url    = "${homepage}/dist/stable/dist/${name}-src.tar.bz2";
-      sha256 = "06374d2a65671a21b4ce44a84333cedf4a5f5e0adbb837e8985c6b46b5de4249";
+    { url    = "${homepage}/dist/current/dist/${name}-src.tar.bz2";
+      sha256 = "705a43506a4e4c2449c26eb5179c810dbeab7eda519c222670e67313eae167c1";
     }
-    { url    = "${homepage}/dist/stable/dist/${name}-src-extralibs.tar.bz2";
-      sha256 = "0dfea592d6be5838fa7db85a65b7d38b97451b829afe3b03a790350a9591b470";
+    { url    = "${homepage}/dist/current/dist/${name}-src-extralibs.tar.bz2";
+      sha256 = "39c573e57346069d80adff61cea239d382f66c43201948e4cee4305bb58eca88";
     }
   ];
 
@@ -31,10 +31,15 @@ stdenv.mkDerivation (rec {
     "--with-gcc=${gcc}/bin/gcc"
   ];
 
-  preConfigure = "
-    # still requires a hack for ncurses
-    sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
-  ";
+  # preConfigure = "
+  #   # still requires a hack for ncurses
+  #   sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
+  # ";
+
+  preConfigure = ''
+    # should not be present in a clean distribution
+    rm utils/pwd/pwd
+  '';
 
   inherit (stdenv) gcc;
   inherit readline gmp ncurses;

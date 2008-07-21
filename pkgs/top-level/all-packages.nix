@@ -1528,16 +1528,21 @@ let pkgs = rec {
   #  m4 = gnum4;
   #};
 
-  ghc = ghc68;
+  ghc = ghc683;
 
-  ghc68 = import ../development/compilers/ghc-6.8 {
+  ghc682 = import ../development/compilers/ghc-6.8/ghc-6.8.2.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
   };
 
-  ghc683snapshot = import ../development/compilers/ghc-6.8/snapshot.nix {
+  ghc683 = import ../development/compilers/ghc-6.8/ghc-6.8.3.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
+  };
+
+  ghc69snapshot = import ../development/compilers/ghc-6.8/head.nix {
+    inherit fetchurl stdenv readline perl gmp ncurses m4;
+    ghc = ghc683;
   };
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
@@ -3648,12 +3653,19 @@ let pkgs = rec {
 
   # cabal is a utility function to build cabal-based
   # Haskell packages
-  cabal68 = import ../development/libraries/haskell/cabal/cabal.nix {
+  cabal682 = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit stdenv fetchurl;
-    ghc = ghc68;
+    ghc = ghc682;
   };
 
-  cabal = cabal68;
+  # cabal is a utility function to build cabal-based
+  # Haskell packages
+  cabal683 = import ../development/libraries/haskell/cabal/cabal.nix {
+    inherit stdenv fetchurl;
+    ghc = ghc683;
+  };
+
+  cabal = cabal683;
 
   Crypto = import ../development/libraries/haskell/Crypto {
     inherit cabal;
