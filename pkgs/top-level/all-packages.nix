@@ -1538,6 +1538,7 @@ let pkgs = rec {
   ghc683 = import ../development/compilers/ghc-6.8/ghc-6.8.3.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
+    haddock = haddockboot;
   };
 
   ghc69snapshot = import ../development/compilers/ghc-6.8/head.nix {
@@ -2156,8 +2157,20 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  haddock = import ../development/tools/documentation/haddock {
+  # used to bootstrap ghc with
+  haddockboot = lowPrio (appendToName "boot" (import ../development/tools/documentation/haddock/boot.nix {
+    inherit gmp;
+    cabal = cabalboot;
+  }));
+
+  # old version of haddock, still more stable than 2.0
+  haddock09 = import ../development/tools/documentation/haddock/haddock-0.9.nix {
     inherit cabal;
+  };
+
+  # does not compile with ghc-6.8.3
+  haddock210 = import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
+    cabal = cabal682;
   };
 
   hsc2hs = import ../development/tools/misc/hsc2hs {
@@ -3658,11 +3671,14 @@ let pkgs = rec {
     ghc = ghc682;
   };
 
-  # cabal is a utility function to build cabal-based
-  # Haskell packages
   cabal683 = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit stdenv fetchurl;
     ghc = ghc683;
+  };
+
+  cabalboot = import ../development/libraries/haskell/cabal/cabal.nix {
+    inherit stdenv fetchurl;
+    ghc = ghcboot;
   };
 
   cabal = cabal683;
