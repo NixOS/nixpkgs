@@ -10,4 +10,5 @@ mkdir $out/lib
 mkdir $out/lib/uml
 make BIN_DIR=$out/bin LIB_DIR=$out/lib/uml
 make BIN_DIR=$out/bin LIB_DIR=$out/lib/uml install
+ln -s $out/lib/uml/port-helper $out/bin/port-helper
 [ -n $tunctl ] && [ -f $out/bin/tunctl ] || fail_no_tunctl
