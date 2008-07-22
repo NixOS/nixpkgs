@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
+{stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses, haddock}:
 
 stdenv.mkDerivation (rec {
   name = "ghc-6.8.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
     }
   ];
 
-  buildInputs = [ghc readline perl m4 gmp];
+  buildInputs = [ghc readline perl m4 gmp haddock];
 
   # The setup hook is executed by other packages building with ghc.
   # It then looks for package configurations that are available and
@@ -31,10 +31,14 @@ stdenv.mkDerivation (rec {
     "--with-gcc=${gcc}/bin/gcc"
   ];
 
-  preConfigure = "
+  preConfigure = ''
     # still requires a hack for ncurses
-    sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
-  ";
+    sed -i "s|^\(ld-options.*$\)|\1 -L${ncurses}/lib|" libraries/readline/readline.buildinfo.in
+    # build haddock docs
+    echo "HADDOCK_DOCS = YES" >> mk/build.mk
+  '';
+
+  installTargets = ["install" "install-docs"];
 
   inherit (stdenv) gcc;
   inherit readline gmp ncurses;
