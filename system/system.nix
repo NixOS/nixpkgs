@@ -101,7 +101,7 @@ rec {
     fileSystems =
       pkgs.lib.filter
         (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
-        (config.fileSystems);
+        config.fileSystems;
     rootLabel = config.boot.rootLabel;
     inherit stage2Init;
     modulesDir = modulesClosure;
