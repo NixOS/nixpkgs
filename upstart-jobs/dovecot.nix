@@ -49,8 +49,8 @@ let
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
 
   pamdFile = pkgs.writeText "dovecot.pam" ''
-    auth	include	common
-    account	include common
+    auth        include common
+    account     include common
   '';
 
 in

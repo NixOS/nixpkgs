@@ -19,7 +19,7 @@ let
     # Miscellaneous devices.
     KERNEL=="sonypi",               MODE="0666"
     KERNEL=="kvm",                  MODE="0666"
-    KERNEL=="kqemu",		    NAME="%k", MODE="0666"
+    KERNEL=="kqemu",                NAME="%k", MODE="0666"
 
     # Create a symlink for the CD-ROM device.
     #KERNEL=="hd[a-z]", BUS=="ide", SYSFS{removable}=="1", SYSFS{device/media}=="cdrom", SYMLINK+="cdrom cdrom-%k"
@@ -51,11 +51,11 @@ let
         ''
           substituteInPlace $out/80-drivers.rules \
             --replace /sbin/modprobe ${modprobe}/sbin/modprobe
-	''
-	else
-	''
-	  rm $out/80-drivers.rules
-	''
+        ''
+        else
+        ''
+          rm $out/80-drivers.rules
+        ''
       }
       for i in ${toString extraUdevPkgs}; do
         for j in $i/etc/udev/rules.d/*; do
@@ -92,10 +92,10 @@ in
     env UDEV_CONFIG_FILE=${conf}
 
     start script
-	echo "" > /proc/sys/kernel/hotplug
+        echo "" > /proc/sys/kernel/hotplug
 
-	# Get rid of possible old udev processes.
-	${procps}/bin/pkill -u root "^udevd$" || true
+        # Get rid of possible old udev processes.
+        ${procps}/bin/pkill -u root "^udevd$" || true
 
         # Do the loading of additional stage 2 kernel modules.
         # Maybe this isn't the best place...
@@ -104,30 +104,30 @@ in
             ${modprobe}/sbin/modprobe $i || true
         done
 
-	# Start udev.
-	${udev}/sbin/udevd --daemon
+        # Start udev.
+        ${udev}/sbin/udevd --daemon
 
-	# Let udev create device nodes for all modules that have already
-	# been loaded into the kernel (or for which support is built into
-	# the kernel).
-	if ! test -e ${devicesCreated}; then
-	    ${udev}/sbin/udevadm trigger
-	    ${udev}/sbin/udevadm settle # wait for udev to finish
-	    touch ${devicesCreated}
-	fi
+        # Let udev create device nodes for all modules that have already
+        # been loaded into the kernel (or for which support is built into
+        # the kernel).
+        if ! test -e ${devicesCreated}; then
+            ${udev}/sbin/udevadm trigger
+            ${udev}/sbin/udevadm settle # wait for udev to finish
+            touch ${devicesCreated}
+        fi
 
-	# Kill udev, let Upstart restart and monitor it.  (This is nasty,
-	# but we have to run `udevadm trigger' first.  Maybe we can use
-	# Upstart's `binary' keyword, but it isn't implemented yet.)
-	if ! ${procps}/bin/pkill -u root "^udevd$"; then
-	    echo "couldn't stop udevd"
-	fi
+        # Kill udev, let Upstart restart and monitor it.  (This is nasty,
+        # but we have to run `udevadm trigger' first.  Maybe we can use
+        # Upstart's `binary' keyword, but it isn't implemented yet.)
+        if ! ${procps}/bin/pkill -u root "^udevd$"; then
+            echo "couldn't stop udevd"
+        fi
 
-	while ${procps}/bin/pgrep -u root "^udevd$"; do
-	    sleep 1
-	done
+        while ${procps}/bin/pgrep -u root "^udevd$"; do
+            sleep 1
+        done
 
-	initctl emit new-devices
+        initctl emit new-devices
     end script
 
     respawn ${udev}/sbin/udevd

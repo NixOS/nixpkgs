@@ -71,7 +71,7 @@
       example = "0:0";
       description = "
         Device for manual resume attempt during boot. Looks like 
-	major:minor .
+        major:minor .
       ";
     };
 
@@ -223,11 +223,11 @@
 
       allowMissing = mkOption {
         default = false;
-	description = ''
-	  Allow some initrd components to be missing. Useful for
-	  custom kernel that are changed too often to track needed
-	  kernelModules.
-	'';
+        description = ''
+          Allow some initrd components to be missing. Useful for
+          custom kernel that are changed too often to track needed
+          kernelModules.
+        '';
       };
 
       lvm = mkOption {
@@ -278,7 +278,7 @@
     extraGrubEntriesBeforeNixos = mkOption {
       default = false;
       description = "
-	Wheter extraGrubEntries are put before the Nixos-default option
+        Wheter extraGrubEntries are put before the Nixos-default option
       ";
     };
 
@@ -314,7 +314,7 @@
       example = 120;
       description = "
         Maximum of configurations in boot menu. GRUB has problems when
-	there are too many entries.
+        there are too many entries.
       ";
     };
 
@@ -350,7 +350,7 @@
       default = false;
       description = "
         Whether to use IPv6 even though gw6c is not used. For example, 
-	for Postfix.
+        for Postfix.
       ";
     };
 
@@ -644,9 +644,9 @@
 
       enable = mkOption {
         default = true;
-	description = ''
-	  Whether to enable the `at' daemon, a command scheduler.
-	'';
+        description = ''
+          Whether to enable the `at' daemon, a command scheduler.
+        '';
       };
     };
 
@@ -863,12 +863,12 @@
 
       permitRootLogin = mkOption {
         default = "yes";
-	description = "
-	  Whether the root user can login using ssh. Valid options
-	  are <command>yes</command>, <command>without-password</command>,
-	  <command>forced-commands-only</command> or
-	  <command>no</command>
-	";
+        description = "
+          Whether the root user can login using ssh. Valid options
+          are <command>yes</command>, <command>without-password</command>,
+          <command>forced-commands-only</command> or
+          <command>no</command>
+        ";
       };
     };
 
@@ -876,91 +876,91 @@
 
       enable = mkOption {
         default = false;
-	description = ''
-	  Whether to enable the GNU lshd SSH2 daemon, which allows
+        description = ''
+          Whether to enable the GNU lshd SSH2 daemon, which allows
           secure remote login.
-	'';
+        '';
       };
 
       portNumber = mkOption {
         default = 22;
-	description = ''
-	  The port on which to listen for connections.
-	'';
+        description = ''
+          The port on which to listen for connections.
+        '';
       };
 
       interfaces = mkOption {
         default = [];
-	description = ''
-	  List of network interfaces where listening for connections.
+        description = ''
+          List of network interfaces where listening for connections.
           When providing the empty list, `[]', lshd listens on all
           network interfaces.
-	'';
-	example = [ "localhost" "1.2.3.4:443" ];
+        '';
+        example = [ "localhost" "1.2.3.4:443" ];
       };
 
       hostKey = mkOption {
         default = "/etc/lsh/host-key";
-	description = ''
-	  Path to the server's private key.  Note that this key must
+        description = ''
+          Path to the server's private key.  Note that this key must
           have been created, e.g., using "lsh-keygen --server |
           lsh-writekey --server", so that you can run lshd.
-	'';
+        '';
       };
 
       syslog = mkOption {
         default = true;
-	description = ''Whether to enable syslog output.'';
+        description = ''Whether to enable syslog output.'';
       };
 
       passwordAuthentication = mkOption {
         default = true;
-	description = ''Whether to enable password authentication.'';
+        description = ''Whether to enable password authentication.'';
       };
 
       publicKeyAuthentication = mkOption {
         default = true;
-	description = ''Whether to enable public key authentication.'';
+        description = ''Whether to enable public key authentication.'';
       };
 
       rootLogin = mkOption {
         default = false;
-	description = ''Whether to enable remote root login.'';
+        description = ''Whether to enable remote root login.'';
       };
 
       loginShell = mkOption {
         default = null;
-	description = ''
-	  If non-null, override the default login shell with the
-	  specified value.
-	'';
-	example = "/nix/store/xyz-bash-10.0/bin/bash10";
+        description = ''
+          If non-null, override the default login shell with the
+          specified value.
+        '';
+        example = "/nix/store/xyz-bash-10.0/bin/bash10";
       };
 
       srpKeyExchange = mkOption {
         default = false;
-	description = ''
-	  Whether to enable SRP key exchange and user authentication.
-	'';
+        description = ''
+          Whether to enable SRP key exchange and user authentication.
+        '';
       };
 
       tcpForwarding = mkOption {
         default = true;
-	description = ''Whether to enable TCP/IP forwarding.'';
+        description = ''Whether to enable TCP/IP forwarding.'';
       };
 
       x11Forwarding = mkOption {
         default = true;
-	description = ''Whether to enable X11 forwarding.'';
+        description = ''Whether to enable X11 forwarding.'';
       };
 
       subsystems = mkOption {
         default = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
-	description = ''
-	  List of subsystem-path pairs, where the head of the pair
+        description = ''
+          List of subsystem-path pairs, where the head of the pair
           denotes the subsystem name, and the tail denotes the path to
           an executable implementing it.
-	'';
+        '';
       };
     };
 
@@ -991,11 +991,11 @@
 
       enable = mkOption {
         default = false;
-	description = ''
-	  Whether to enable `portmap', an ONC RPC directory service
-	  notably used by NFS and NIS, and which can be queried
-	  using the rpcinfo(1) command.
-	'';
+        description = ''
+          Whether to enable `portmap', an ONC RPC directory service
+          notably used by NFS and NIS, and which can be queried
+          using the rpcinfo(1) command.
+        '';
       };
     };
 
@@ -1003,59 +1003,59 @@
 
       enable = mkOption {
         default = false;
-	description = ''
-	  Whether to run the Avahi daemon, which allows Avahi clients
-	  to use Avahi's service discovery facilities and also allows
-	  the local machine to advertise its presence and services
-	  (through the mDNS responder implemented by `avahi-daemon').
-	'';
+        description = ''
+          Whether to run the Avahi daemon, which allows Avahi clients
+          to use Avahi's service discovery facilities and also allows
+          the local machine to advertise its presence and services
+          (through the mDNS responder implemented by `avahi-daemon').
+        '';
       };
 
       hostName = mkOption {
         default = "nixos";  # XXX: Would be nice to use `networking.hostName'.
-	description = ''Host name advertised on the LAN.'';
+        description = ''Host name advertised on the LAN.'';
       };
 
       browseDomains = mkOption {
         default = [ "0pointer.de" "zeroconf.org" ];
-	description = ''
-	  List of non-local DNS domains to be browsed.
-	'';
+        description = ''
+          List of non-local DNS domains to be browsed.
+        '';
       };
 
       ipv4 = mkOption {
         default = true;
-	description = ''Whether to use IPv4'';
+        description = ''Whether to use IPv4'';
       };
 
       ipv6 = mkOption {
         default = false;
-	description = ''Whether to use IPv6'';
+        description = ''Whether to use IPv6'';
       };
 
       wideArea = mkOption {
         default = true;
-	description = ''Whether to enable wide-area service discovery.'';
+        description = ''Whether to enable wide-area service discovery.'';
       };
 
       publishing = mkOption {
         default = true;
-	description = ''Whether to allow publishing.'';
+        description = ''Whether to allow publishing.'';
       };
 
       nssmdns = mkOption {
         default = false;
-	description = ''
-	  Whether to enable the mDNS NSS (Name Service Switch) plug-in.
-	  Enabling it allows applications to resolve names in the `.local'
-	  domain by transparently querying the Avahi daemon.
+        description = ''
+          Whether to enable the mDNS NSS (Name Service Switch) plug-in.
+          Enabling it allows applications to resolve names in the `.local'
+          domain by transparently querying the Avahi daemon.
 
-	  Warning: Currently, enabling this option breaks DNS lookups after
-	  a `nixos-rebuild'.  This is because `/etc/nsswitch.conf' is
-	  updated to use `nss-mdns' but `libnss_mdns' is not in
-	  applications' `LD_LIBRARY_PATH'.  The next time `/etc/profile' is
-	  sourced, it will set up an appropriate `LD_LIBRARY_PATH', though.
-	'';
+          Warning: Currently, enabling this option breaks DNS lookups after
+          a `nixos-rebuild'.  This is because `/etc/nsswitch.conf' is
+          updated to use `nss-mdns' but `libnss_mdns' is not in
+          applications' `LD_LIBRARY_PATH'.  The next time `/etc/profile' is
+          sourced, it will set up an appropriate `LD_LIBRARY_PATH', though.
+        '';
       };
     };
 
@@ -1099,18 +1099,18 @@
 
       autorun = mkOption {
         default = true;
-	description = "
-	  Switch to false to create upstart-job and configuration, 
-	  but not run it automatically
-	";
+        description = "
+          Switch to false to create upstart-job and configuration, 
+          but not run it automatically
+        ";
       };
 
       exportConfiguration = mkOption {
         default = false;
-	description = "
-	  Create /etc/X11/xorg.conf and a file with environment
-	  variables
-	";
+        description = "
+          Create /etc/X11/xorg.conf and a file with environment
+          variables
+        ";
       };
 
       tcpEnable = mkOption {
@@ -1246,20 +1246,20 @@
             Whether to replace mouse with touchpad.
           ";
         };
-	dev = mkOption {
+        dev = mkOption {
           default = "/dev/input/event0";
           description = "
             Event device for Synaptics touchpad.
           ";
         };
-	minSpeed = mkOption {
-	  default = "0.06";
+        minSpeed = mkOption {
+          default = "0.06";
           description = "Cursor speed factor for precision finger motion";
-	};
-	maxSpeed = mkOption {
-	  default = "0.12";
+        };
+        maxSpeed = mkOption {
+          default = "0.12";
           description = "Cursor speed factor for highest-speed finger motion";
-	};
+        };
       };
 
       layout = mkOption {
@@ -1348,10 +1348,10 @@
       
       useXFS = mkOption {
         default = false;
-	example = "unix/:7100";
-	description = "
-	  Way to access the X Font Server to use.
-	";
+        example = "unix/:7100";
+        description = "
+          Way to access the X Font Server to use.
+        ";
       };
 
       tty = mkOption {
@@ -1372,10 +1372,10 @@
 
       packageFun = mkOption {
         default = pkgs: pkgs.xorg;
-	description = "
-	  Alternative X.org package to use. For 
-	  example, you can replace individual drivers.
-	";
+        description = "
+          Alternative X.org package to use. For 
+          example, you can replace individual drivers.
+        ";
       };
 
     };
@@ -1383,39 +1383,39 @@
     ejabberd = {
       enable = mkOption {
         default = false;
-	description = "Whether to enable ejabberd server";
+        description = "Whether to enable ejabberd server";
       };
             
       spoolDir = mkOption {
         default = "/var/lib/ejabberd";
-	description = "Location of the spooldir of ejabberd";
+        description = "Location of the spooldir of ejabberd";
       };
       
       logsDir = mkOption {
         default = "/var/log/ejabberd";
-	description = "Location of the logfile directory of ejabberd";
+        description = "Location of the logfile directory of ejabberd";
       };
     };
 
     jboss = {
       enable = mkOption {
         default = false;
-	description = "Whether to enable jboss";
+        description = "Whether to enable jboss";
       };
 
       tempDir = mkOption {
         default = "/tmp";
-	description = "Location where JBoss stores its temp files";
+        description = "Location where JBoss stores its temp files";
       };
       
       logDir = mkOption {
         default = "/var/log/jboss";
-	description = "Location of the logfile directory of JBoss";
+        description = "Location of the logfile directory of JBoss";
       };
       
       serverDir = mkOption {
         description = "Location of the server instance files";
-	default = "/var/jboss/server";
+        default = "/var/jboss/server";
       };
       
       deployDir = mkOption {
@@ -1425,56 +1425,56 @@
       
       libUrl = mkOption {
         default = "file:///nix/var/nix/profiles/default/server/default/lib";
-	description = "Location where the shared library JARs are stored";
+        description = "Location where the shared library JARs are stored";
       };
       
       user = mkOption {
         default = "nobody";
-	description = "User account under which jboss runs.";
+        description = "User account under which jboss runs.";
       };
       
       useJK = mkOption {
         default = false;
-	description = "Whether to use to connector to the Apache HTTP server";
+        description = "Whether to use to connector to the Apache HTTP server";
       };
     };
 
     tomcat = {
       enable = mkOption {
         default = false;
-	description = "Whether to enable Apache Tomcat";
+        description = "Whether to enable Apache Tomcat";
       };
       
       baseDir = mkOption {
         default = "/var/tomcat";
-	description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
       };
       
       user = mkOption {
         default = "tomcat";
-	description = "User account under which Apache Tomcat runs.";
+        description = "User account under which Apache Tomcat runs.";
       };      
       
       deployFrom = mkOption {
         default = "";
-	description = "Location where webapplications are stored. Leave empty to use the baseDir.";
+        description = "Location where webapplications are stored. Leave empty to use the baseDir.";
       };
       
       javaOpts = mkOption {
         default = "";
-	description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
+        description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
       
       sharedLibFrom = mkOption {
         default = "";
-	description ="Location where shared libraries are stored. Leave empty to use the baseDir.";
+        description ="Location where shared libraries are stored. Leave empty to use the baseDir.";
       };
     };
 
     disnix = {
       enable = mkOption {
         default = false;
-	description = "Whether to enable Disnix";
+        description = "Whether to enable Disnix";
       };
     };
     
@@ -1560,13 +1560,13 @@
       mod_jk = {
         enable = mkOption {
           default = false;
-	  description = "Whether to enable the Apache Tomcat connector.";
+          description = "Whether to enable the Apache Tomcat connector.";
         };
-	
-	applicationMappings = mkOption {
-	  default = [];
-	  description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
-	};
+        
+        applicationMappings = mkOption {
+          default = [];
+          description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
+        };
       };
 
       virtualHosts = mkOption {
@@ -1609,7 +1609,7 @@
           };
 
           userCreationDomain = mkOption {
-	    default = "example.org"; 
+            default = "example.org"; 
             example = "example.org";
             description = "
               The domain from which user creation is allowed.  A client can
@@ -1627,13 +1627,13 @@
               support WebDAV.
             ";
           };
-	  
-	  dataDir = mkOption {
-	    default = "/no/such/path/exists";
-	    description = "
-	      Place to put SVN repository.
-	    ";
-	  };
+          
+          dataDir = mkOption {
+            default = "/no/such/path/exists";
+            description = "
+              Place to put SVN repository.
+            ";
+          };
 
           organization = {
 
@@ -1673,16 +1673,16 @@
     vsftpd = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to enable the vsftpd FTP server.
-	";
+        description = "
+          Whether to enable the vsftpd FTP server.
+        ";
       };
       
       anonymousUser = mkOption {
         default = false;
-	description = "
-	  Whether to enable the anonymous FTP user.
-	";
+        description = "
+          Whether to enable the anonymous FTP user.
+        ";
       };
     };
     
@@ -1737,12 +1737,12 @@
       
       sndMode = mkOption {
         default = "0600";
-	example = "0666";
-	description = "
-	  Permissions for /dev/snd/*, in case you have multiple 
-	  logged in users or if the devices belong to root for 
-	  some reason.
-	";
+        example = "0666";
+        description = "
+          Permissions for /dev/snd/*, in case you have multiple 
+          logged in users or if the devices belong to root for 
+          some reason.
+        ";
       };
     };
 
@@ -1770,10 +1770,10 @@
 
       autorun = mkOption {
         default = true;
-	description = "
-	  Switch to false to create upstart-job and configuration, 
-	  but not run it automatically
-	";
+        description = "
+          Switch to false to create upstart-job and configuration, 
+          but not run it automatically
+        ";
       };
 
       username = mkOption {
@@ -1816,10 +1816,10 @@
 
       waitPingableBroker = mkOption {
         default = true;
-	example = false;
-	description = "
-	  Whether to wait until tunnel broker returns ICMP echo.
-	";
+        example = false;
+        description = "
+          Whether to wait until tunnel broker returns ICMP echo.
+        ";
       };
 
     };
@@ -1959,34 +1959,34 @@
     mysql = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to enable the MySQL server.
-	";
+        description = "
+          Whether to enable the MySQL server.
+        ";
       };
       
       port = mkOption {
         default = "3306";
-	description = "Port of MySQL"; 
+        description = "Port of MySQL"; 
       };
       
       user = mkOption {
         default = "mysql";
-	description = "User account under which MySQL runs";
+        description = "User account under which MySQL runs";
       };
       
       dataDir = mkOption {
         default = "/var/mysql";
-	description = "Location where MySQL stores its table files";
+        description = "Location where MySQL stores its table files";
       };
       
       logError = mkOption {
         default = "/var/log/mysql_err.log";
-	description = "Location of the MySQL error logfile";
+        description = "Location of the MySQL error logfile";
       };
       
       pidDir = mkOption {
         default = "/var/run/mysql";
-	description = "Location of the file which stores the PID of the MySQL server";
+        description = "Location of the file which stores the PID of the MySQL server";
       };
     };
 
@@ -1994,34 +1994,34 @@
     postgresql = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to run PostgreSQL.
-	";
+        description = "
+          Whether to run PostgreSQL.
+        ";
       };
       port = mkOption {
         default = "5432";
-	description = "
-	  Port for PostgreSQL.
-	";
+        description = "
+          Port for PostgreSQL.
+        ";
       };
       logDir = mkOption {
         default = "/var/log/postgresql";
-	description = "
-	  Log directory for PostgreSQL.
-	";
+        description = "
+          Log directory for PostgreSQL.
+        ";
       };
       dataDir = mkOption {
         default = "/var/db/postgresql";
-	description = "
-	  Data directory for PostgreSQL.
-	";
+        description = "
+          Data directory for PostgreSQL.
+        ";
       };
       subServices = mkOption {
         default = [];
-	description = "
-	  Subservices list. As it is already implememnted, 
-	  here is an interface...
-	";
+        description = "
+          Subservices list. As it is already implememnted, 
+          here is an interface...
+        ";
       };
       authentication = mkOption {
         default = ''
@@ -2030,21 +2030,21 @@
           host  all all 127.0.0.1/32 md5
           host  all all ::1/128      md5
         '';
-	description = "
-	  Hosts (except localhost), who you allow to connect.
-	";
+        description = "
+          Hosts (except localhost), who you allow to connect.
+        ";
       };
       allowedHosts = mkOption {
         default = [];
-	description = "
-	  Hosts (except localhost), who you allow to connect.
-	";
+        description = "
+          Hosts (except localhost), who you allow to connect.
+        ";
       };
       authMethod = mkOption {
         default = " ident sameuser ";
-	description = "
-	  How to authorize users. 
-	  Note: ident needs absolute trust to all allowed client hosts.";
+        description = "
+          How to authorize users. 
+          Note: ident needs absolute trust to all allowed client hosts.";
       };
     };
 
@@ -2052,15 +2052,15 @@
     openfire = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to enable OpenFire XMPP server.
-	";
+        description = "
+          Whether to enable OpenFire XMPP server.
+        ";
       };
       usePostgreSQL = mkOption {
         default = true;
-	description = "
-	  Whether you use PostgreSQL service for your storage back-end.
-	";
+        description = "
+          Whether you use PostgreSQL service for your storage back-end.
+        ";
       };
     };
 
@@ -2068,15 +2068,15 @@
     gpm = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to enable general purpose mouse daemon.
-	";
+        description = "
+          Whether to enable general purpose mouse daemon.
+        ";
       };
       protocol = mkOption {
         default = "ps/2";
-	description = "
-	  Mouse protocol to use.
-	";
+        description = "
+          Mouse protocol to use.
+        ";
       };
     };
 
@@ -2085,10 +2085,10 @@
 
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to run the Zabbix monitoring agent on this machine.
+        description = "
+          Whether to run the Zabbix monitoring agent on this machine.
           It will send monitoring data to a Zabbix server.
-	";
+        ";
       };
 
       server = mkOption {
@@ -2104,146 +2104,146 @@
     zabbixServer = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to run the Zabbix server on this machine.
-	";
+        description = "
+          Whether to run the Zabbix server on this machine.
+        ";
       };
     };
    
     postfix = {
       enable = mkOption {
         default = false;
-	description ="
-	  Whether to run the Postfix mail server.
-	";
+        description ="
+          Whether to run the Postfix mail server.
+        ";
       };
       user = mkOption {
         default = "postfix";
-	description = "
-	  How to call postfix user (must be used only for postfix).
-	";
+        description = "
+          How to call postfix user (must be used only for postfix).
+        ";
       };
       group = mkOption {
         default = "postfix";
-	description = "
-	  How to call postfix group (must be used only for postfix).
-	";
+        description = "
+          How to call postfix group (must be used only for postfix).
+        ";
       };
       setgidGroup = mkOption {
         default = "postdrop";
-	description = "
-	  How to call postfix setgid group (for postdrop). Should 
-	  be uniquely used group.
-	";
+        description = "
+          How to call postfix setgid group (for postdrop). Should 
+          be uniquely used group.
+        ";
       };
       networks = mkOption {
         default = null;
-	example = ["192.168.0.1/24"];
-	description = "
-	  Net masks for trusted - allowed to relay mail to third parties - 
-	  hosts. Leave empty to use mynetworks_style configuration or use 
-	  default (localhost-only).
-	";
+        example = ["192.168.0.1/24"];
+        description = "
+          Net masks for trusted - allowed to relay mail to third parties - 
+          hosts. Leave empty to use mynetworks_style configuration or use 
+          default (localhost-only).
+        ";
       };
       networksStyle = mkOption {
         default = "";
-	description = "
-	  Name of standard way of trusted network specification to use,
-	  leave blank if you specify it explicitly or if you want to use 
-	  default (localhost-only).
-	";
+        description = "
+          Name of standard way of trusted network specification to use,
+          leave blank if you specify it explicitly or if you want to use 
+          default (localhost-only).
+        ";
       };
       hostname = mkOption {
         default = "";
-	description ="
-	  Hostname to use. Leave blank to use just the hostname of machine.
-	  It should be FQDN.
-	";
+        description ="
+          Hostname to use. Leave blank to use just the hostname of machine.
+          It should be FQDN.
+        ";
       };
       domain = mkOption {
         default = "";
-	description ="
-	  Domain to use. Leave blank to use hostname minus first component.
-	";
+        description ="
+          Domain to use. Leave blank to use hostname minus first component.
+        ";
       };
       origin = mkOption {
         default = "";
-	description ="
-	  Origin to use in outgoing e-mail. Leave blank to use hostname.
-	";
+        description ="
+          Origin to use in outgoing e-mail. Leave blank to use hostname.
+        ";
       };
       destination = mkOption {
         default = null;
         example = ["localhost"];
         description = "
-	  Full (!) list of domains we deliver locally. Leave blank for 
-	  acceptable Postfix default.
-	";
+          Full (!) list of domains we deliver locally. Leave blank for 
+          acceptable Postfix default.
+        ";
       };
       relayDomains = mkOption {
         default = null;
-	example = ["localdomain"];
-	description = "
-	  List of domains we agree to relay to. Default is the same as 
-	  destination.
-	";
+        example = ["localdomain"];
+        description = "
+          List of domains we agree to relay to. Default is the same as 
+          destination.
+        ";
       };
       relayHost = mkOption {
         default = "";
-	description = "
-	  Mail relay for outbound mail.
-	";
+        description = "
+          Mail relay for outbound mail.
+        ";
       };
       lookupMX = mkOption {
         default = false;
-	description = "
-	  Whether relay specified is just domain whose MX must be used.
-	";
+        description = "
+          Whether relay specified is just domain whose MX must be used.
+        ";
       };
       postmasterAlias = mkOption {
         default = "root";
-	description = "
-	  Who should receive postmaster e-mail.
-	";
+        description = "
+          Who should receive postmaster e-mail.
+        ";
       };
       rootAlias = mkOption {
         default = "";
-	description = "
-	  Who should receive root e-mail. Blank for no redirection.
-	";
+        description = "
+          Who should receive root e-mail. Blank for no redirection.
+        ";
       };
       extraAliases = mkOption {
         default = "";
-	description = "
-	  Additional entries to put verbatim into aliases file.
-	";
+        description = "
+          Additional entries to put verbatim into aliases file.
+        ";
       };
 
       sslCert = mkOption {
         default = "";
-	description = "
-	  SSL certificate to use.
-	";
+        description = "
+          SSL certificate to use.
+        ";
       };
       sslCACert = mkOption {
         default = "";
-	description = "
-	  SSL certificate of CA.
-	";
+        description = "
+          SSL certificate of CA.
+        ";
       };
       sslKey = mkOption {
         default = "";
-	description ="
-	  SSL key to use.
-	";
+        description ="
+          SSL key to use.
+        ";
       };
 
       recipientDelimiter = mkOption {
         default = "";
-	example = "+";
-	description = "
+        example = "+";
+        description = "
           Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
-	";
+        ";
       };
 
     };
@@ -2251,65 +2251,65 @@
     dovecot = {
       enable = mkOption {
         default = false;
-	description = "Whether to enable dovecot POP3/IMAP server.";
+        description = "Whether to enable dovecot POP3/IMAP server.";
       };
 
       user = mkOption {
         default = "dovecot";
-	description = "dovecot user name";
+        description = "dovecot user name";
       };
       group = mkOption {
         default = "dovecot";
-	description = "dovecot group name";
+        description = "dovecot group name";
       };
 
       sslServerCert = mkOption {
         default = "";
-	description = "Server certificate";
+        description = "Server certificate";
       };
       sslCACert = mkOption {
         default = "";
-	description = "CA certificate used by server certificate";
+        description = "CA certificate used by server certificate";
       };
       sslServerKey = mkOption {
         default = "";
-	description = "Server key";
+        description = "Server key";
       };
     };
 
     bind = {
       enable = mkOption {
         default = false;
-	description = "
-	  Whether to enable BIND domain name server.
-	";
+        description = "
+          Whether to enable BIND domain name server.
+        ";
       };
       cacheNetworks = mkOption {
         default = ["127.0.0.0/24"];
-	description = "
-	  What networks are allowed to use us as a resolver.
-	";
+        description = "
+          What networks are allowed to use us as a resolver.
+        ";
       };
       blockedNetworks = mkOption {
         default = [];
-	description = "
-	  What networks are just blocked.
-	";
+        description = "
+          What networks are just blocked.
+        ";
       };
       zones = mkOption {
         default = [];
-	description = "
-	  List of zones we claim authority over.
-	    master=false means slave server; slaves means addresses 
-	   who may request zone transfer.
-	";
-	example = [{
-	  name = "example.com";
-	  master = false;
-	  file = "/var/dns/example.com";
-	  masters = ["192.168.0.1"];
-	  slaves = [];
-	}];
+        description = "
+          List of zones we claim authority over.
+            master=false means slave server; slaves means addresses 
+           who may request zone transfer.
+        ";
+        example = [{
+          name = "example.com";
+          master = false;
+          file = "/var/dns/example.com";
+          masters = ["192.168.0.1"];
+          slaves = [];
+        }];
       };
     };
 
@@ -2449,38 +2449,38 @@
       default = [];
       example = [{
         program = "sendmail";
-	owner = "nodody";
-	group = "postdrop";
-	setuid = false;
-	setgid = true;
+        owner = "nodody";
+        group = "postdrop";
+        setuid = false;
+        setgid = true;
       }];
       description = ''
         List of non-trivial setuid programs, like Postfix sendmail. Default 
-	should probably be nobody:nogroup:false:false - if you are bothering
-	doing anything with a setuid program, "root.root u+s g-s" is not what
-	you are aiming at..
+        should probably be nobody:nogroup:false:false - if you are bothering
+        doing anything with a setuid program, "root.root u+s g-s" is not what
+        you are aiming at..
       '';
     };
 
     seccureKeys = {
       public = mkOption {
         default = /var/elliptic-keys/public;
-	description = "
-	  Public key. Make it path argument, so it is copied into store and
-	  hashed. 
+        description = "
+          Public key. Make it path argument, so it is copied into store and
+          hashed. 
 
-	  The key is used to encrypt Gateway 6 configuration in store, as it
-	  contains a password for external service. Unfortunately, 
-	  derivation file should be protected by other means. For example, 
-	  nix-http-export.cgi will happily export any non-derivation path,
-	  but not a derivation.
-	";
+          The key is used to encrypt Gateway 6 configuration in store, as it
+          contains a password for external service. Unfortunately, 
+          derivation file should be protected by other means. For example, 
+          nix-http-export.cgi will happily export any non-derivation path,
+          but not a derivation.
+        ";
       };
       private = mkOption {
         default = "/var/elliptic-keys/private";
-	description = "
-	  Private key. Make it string argument, so it is not copied into store.
-	";
+        description = "
+          Private key. Make it string argument, so it is not copied into store.
+        ";
       };
     };
 
@@ -2530,7 +2530,7 @@ root        ALL=(ALL) SETENV: ALL
           createHome = true;
           group = "users";
           extraGroups = ["wheel"];
-	  shell = "/bin/sh";
+          shell = "/bin/sh";
         }
       ];
       description = "
@@ -2697,10 +2697,10 @@ root        ALL=(ALL) SETENV: ALL
       example = true;
       description = "
         There are some times when you want really small system for specific 
-	purpose and do not want default package list. Setting 
-	<varname>cleanStart</varname> to <literal>true</literal> allows you 
-	to create a system with empty path - only extraPackages will be 
-	included.
+        purpose and do not want default package list. Setting 
+        <varname>cleanStart</varname> to <literal>true</literal> allows you 
+        to create a system with empty path - only extraPackages will be 
+        included.
       ";
     };
 

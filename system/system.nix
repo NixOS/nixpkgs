@@ -192,7 +192,7 @@ rec {
 
   # Font aggregation
   fontDir = import ./fontdir.nix {
-    inherit config pkgs ;
+    inherit config pkgs;
     inherit (pkgs) builderDefs ttmkfdir;
     inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
   };
@@ -330,17 +330,16 @@ rec {
     bash = pkgs.bashInteractive;
 
     adjustSetuidOwner = pkgs.lib.concatStrings (map 
-      (_entry:let entry = {
+      (_entry: let entry = {
         owner = "nobody";
-	group = "nogroup";
-	setuid = false;
-	setgid = false;
+        group = "nogroup";
+        setuid = false;
+        setgid = false;
       } //_entry; in
       ''
         chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
-	chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
-	chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program} 
-
+        chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
+        chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program} 
       '') 
       config.security.setuidOwners);
   };
@@ -411,7 +410,7 @@ rec {
       config.nesting.children; 
     configurationName = config.boot.configurationName;
   }) (pkgs.lib.getAttr ["environment" "checkConfigurationOptions"] 
-  	optionDeclarations.environment.checkConfigurationOptions.default
-	configuration) 
-		optionDeclarations configuration ;
+        optionDeclarations.environment.checkConfigurationOptions.default
+        configuration) 
+      optionDeclarations configuration;
 }

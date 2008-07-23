@@ -26,23 +26,23 @@ let
     (_entry:let entry={master=true;slaves=[];masters=[];}//_entry; in
       ''
         zone "${entry.name}" {
-	  type ${if entry.master then "master" else "slave"};
-	  file "${entry.file}";
-	  ${ if entry.master then
-	     ''
-	       allow-transfer {
-	         ${concatMapStrings (ip: ip+";\n") entry.slaves}
-	       };
-	     ''
-	     else
-	     ''
-	       masters {
-	         ${concatMapStrings (ip: ip+";\n") entry.masters}
-	       };
-	     ''
-	  }
-	  allow-query { any; };
-	};
+          type ${if entry.master then "master" else "slave"};
+          file "${entry.file}";
+          ${ if entry.master then
+             ''
+               allow-transfer {
+                 ${concatMapStrings (ip: ip+";\n") entry.slaves}
+               };
+             ''
+             else
+             ''
+               masters {
+                 ${concatMapStrings (ip: ip+";\n") entry.masters}
+               };
+             ''
+          }
+          allow-query { any; };
+        };
       ''
     )
     cfg.zones

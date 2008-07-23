@@ -28,56 +28,56 @@ in
     stop on network-interfaces/stop
     
     start script
-	# Create initial state data
-	
-	if ! test -d ${cfg.baseDir}
-	then    
-    	    mkdir -p ${cfg.baseDir}/webapps
-	    mkdir -p ${cfg.baseDir}/shared
-	    cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
-	fi
-	
-	# Deploy all webapplications
-	
-	if ! test "${cfg.deployFrom}" = ""
-	then
-	    rm -rf ${cfg.baseDir}/webapps
-	    mkdir -p ${cfg.baseDir}/webapps
-	    for i in ${cfg.deployFrom}/*
-	    do
-		cp -rL $i ${cfg.baseDir}/webapps
-	    done
-	fi
-	
-	# Fix permissions
-	
-	chown -R ${cfg.user} ${cfg.baseDir}
-	
-	for i in `find ${cfg.baseDir} -type d`
-	do
-	    chmod -v 755 $i
-	done
-	
-	for i in `find ${cfg.baseDir} -type f`
-	do
-	    chmod -v 644 $i
-	done
+        # Create initial state data
+        
+        if ! test -d ${cfg.baseDir}
+        then    
+            mkdir -p ${cfg.baseDir}/webapps
+            mkdir -p ${cfg.baseDir}/shared
+            cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
+        fi
+        
+        # Deploy all webapplications
+        
+        if ! test "${cfg.deployFrom}" = ""
+        then
+            rm -rf ${cfg.baseDir}/webapps
+            mkdir -p ${cfg.baseDir}/webapps
+            for i in ${cfg.deployFrom}/*
+            do
+                cp -rL $i ${cfg.baseDir}/webapps
+            done
+        fi
+        
+        # Fix permissions
+        
+        chown -R ${cfg.user} ${cfg.baseDir}
+        
+        for i in `find ${cfg.baseDir} -type d`
+        do
+            chmod -v 755 $i
+        done
+        
+        for i in `find ${cfg.baseDir} -type f`
+        do
+            chmod -v 644 $i
+        done
 
-	# Deploy all shared libraries
-	
-	if ! test "${cfg.sharedLibFrom}" = ""
-	then
-	    rm -f ${cfg.baseDir}/shared/lib
-	    ln -s ${cfg.sharedLibFrom} ${cfg.baseDir}/shared/lib
-	fi
+        # Deploy all shared libraries
+        
+        if ! test "${cfg.sharedLibFrom}" = ""
+        then
+            rm -f ${cfg.baseDir}/shared/lib
+            ln -s ${cfg.sharedLibFrom} ${cfg.baseDir}/shared/lib
+        fi
 
     end script
     
     respawn ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1d'
     
     stop script
-	echo "Stopping tomcat..."
-	CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${pkgs.tomcat6}/bin/shutdown.sh
+        echo "Stopping tomcat..."
+        CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${pkgs.tomcat6}/bin/shutdown.sh
     end script
   '';
 }

@@ -97,7 +97,7 @@ let
         ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi4965ucode
         ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
         ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
-	++ config.services.udev.addFirmware;
+        ++ config.services.udev.addFirmware;
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
         ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007;
@@ -349,10 +349,10 @@ let
     (import ../upstart-jobs/dbus.nix {
       inherit (pkgs) stdenv dbus;
       dbusServices =
-        pkgs.lib.optional (config.services.hal.enable) pkgs.hal ++
-	pkgs.lib.optional (config.services.avahi.enable) pkgs.avahi ++
-	pkgs.lib.optional (config.services.disnix.enable) pkgs.disnix
-	;
+        pkgs.lib.optional config.services.hal.enable pkgs.hal ++
+        pkgs.lib.optional config.services.avahi.enable pkgs.avahi ++
+        pkgs.lib.optional config.services.disnix.enable pkgs.disnix
+        ;
     })
 
   # HAL daemon.

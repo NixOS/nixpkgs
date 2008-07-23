@@ -26,7 +26,7 @@ start script
     if ! test -f "${hostKey}"
     then
         ${lsh}/bin/lsh-keygen --server | \
-	${lsh}/bin/lsh-writekey --server -o "${hostKey}"
+        ${lsh}/bin/lsh-writekey --server -o "${hostKey}"
     fi
 end script
 
@@ -47,7 +47,7 @@ respawn ${lsh}/sbin/lshd --daemonic \
    --subsystems=${concatStringsSep ","
                                    (map (pair: (head pair) + "=" +
                                                (head (tail pair)))
-				        subsystems)}
+                                        subsystems)}
 '';
   
 }

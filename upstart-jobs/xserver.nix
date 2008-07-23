@@ -98,7 +98,7 @@ let
       if cfg.useInternalAGPGART == "yes" then
         ''  Option "UseInternalAGPGART" "yes"''
       else if cfg.useInternalAGPGART == "no" then
-	''  Option "UseInternalAGPGART" "no"''
+        ''  Option "UseInternalAGPGART" "no"''
       else "";
 
     extraDeviceConfig = cfg.extraDeviceConfig; 
@@ -141,7 +141,7 @@ let
         export screen='
           Option "AddARGBGLXVisuals" "true"
           Option "DisableGLXRootClipping" "true"
-	  Option "RandRRotation" "on"
+          Option "RandRRotation" "on"
         '
         
         export device='
@@ -154,7 +154,7 @@ let
           Option "Composite" "Enable"
         '
       fi
-	
+        
       if [ "${toString videoDriver}" = i810 ]; then
         export extensions='
           Option "Composite" "Enable"
@@ -385,7 +385,7 @@ rec {
         then ''
           ln -sf ${kernelPackages.nvidiaDrivers} /var/run/opengl-driver
         ''
-	else if cfg.driSupport
+        else if cfg.driSupport
         then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
         else ""
        }

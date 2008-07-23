@@ -36,7 +36,7 @@ in
     
     start script
         if ! test -e ${cfg.dataDir}; then
-    	    mkdir -m 0700 -p ${cfg.dataDir}
+            mkdir -m 0700 -p ${cfg.dataDir}
             chown -R postgres ${cfg.dataDir}
             ${run} -c '${postgresql}/bin/initdb -D ${cfg.dataDir} -U root'
         fi

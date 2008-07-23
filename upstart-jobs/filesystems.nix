@@ -50,7 +50,7 @@ script
 
             isPseudo=
             if test \"$fsType\" = \"nfs\" || test \"$fsType\" = \"tmpfs\" ||
-	      test \"$fsType\" = \"ext3cow\"; then isPseudo=1; fi
+              test \"$fsType\" = \"ext3cow\"; then isPseudo=1; fi
 
             if ! test -n \"$isLabel\" -o -n \"$isPseudo\" -o -e \"$device\"; then
                 echo \"skipping $device, doesn't exist (yet)\"

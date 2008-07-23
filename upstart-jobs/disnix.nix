@@ -7,12 +7,12 @@ cfg = config.services.disnix;
 in
 {
     name = "disnix";
-	
+        
     job = ''
       description "Disnix server"
 
       start on dbus
-      stop on shutdown	
+      stop on shutdown  
           
       start script
         # !!! quick hack: wait until dbus has started

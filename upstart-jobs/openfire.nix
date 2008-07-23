@@ -26,8 +26,8 @@ with pkgs;
       mkdir /etc/openfire || true 
       for i in ${openfire}/conf.inst/*; do
           if ! test -f /etc/openfire/$(basename $i); then
-	      cp $i /etc/openfire/
-	  fi
+              cp $i /etc/openfire/
+          fi
       done
       openfire start
     end script
