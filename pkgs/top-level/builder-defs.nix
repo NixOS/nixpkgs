@@ -453,8 +453,8 @@ args: with args; with stringsWithDeps; with lib;
         ";
 
         doMakeCheck = FullDepEntry (''
-	  make check
-	'') ["minInit"];
+          make check
+        '') ["minInit"];
 
         extraDerivationAttrs = lib.getAttr ["extraDerivationAttrs"] {} args;
 

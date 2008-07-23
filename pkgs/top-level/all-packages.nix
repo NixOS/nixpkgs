@@ -1940,7 +1940,7 @@ let pkgs = rec {
 
   rLang = import ../development/interpreters/r-lang {
     inherit fetchurl stdenv readline perl g77_42 libpng zlib;
-		inherit (xorg) libX11 libXt;
+    inherit (xorg) libX11 libXt;
   };
 
   rubygemsFun = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
@@ -2090,7 +2090,7 @@ let pkgs = rec {
 
   ddd = import ../development/tools/misc/ddd {
     inherit fetchurl stdenv lesstif ncurses;
-		inherit (xlibs) libX11 libXt;
+    inherit (xlibs) libX11 libXt;
   };
 
   elfutilsFun = lib.sumArgs
@@ -7044,7 +7044,7 @@ let pkgs = rec {
 
   emboss = import ../applications/science/biology/emboss {
     inherit fetchurl stdenv readline perl libpng zlib;
-		inherit (xorg) libX11 libXt;
+    inherit (xorg) libX11 libXt;
   };
 
   mrbayes = import ../applications/science/biology/mrbayes {
