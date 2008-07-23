@@ -114,20 +114,19 @@ if test -n "@copyKernels@"; then
 fi
 
 # Additional entries specified verbatim by the configuration.
-extraGrubEntries=$(cat >> $tmp <<EOF
+extraGrubEntries=$(cat <<EOF
 @extraGrubEntries@
-EOF)
+EOF
+)
 
 if test -n "@extraGrubEntriesBeforeNixos@"; then 
-  $extraGrubEntries
+    echo "$extraGrubEntries" >> $tmp
 fi
 
-if test -n "$tmp"; then
-   addEntry "NixOS - Default" $default ""
-fi
+addEntry "NixOS - Default" $default ""
 
-if test -n "@extraGrubEntriesBeforeNixos@"; then 
-  $extraGrubEntries
+if test -z "@extraGrubEntriesBeforeNixos@"; then 
+    echo "$extraGrubEntries" >> $tmp
 fi
 
 # Add all generations of the system profile to the menu, in reverse
