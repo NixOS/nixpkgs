@@ -168,11 +168,22 @@ rec {
 
   # Environment variables for running Nix.
   nixEnvVars =
-    "export NIX_CONF_DIR=/nix/etc/nix\n" +
+    ''
+      export NIX_CONF_DIR=/nix/etc/nix
+
+      # Enable the copy-from-other-stores substituter, which allows builds
+      # to be sped up by copying build results from remote Nix stores.  To
+      # do this, mount the remote file system on a subdirectory of
+      # /var/run/nix/remote-stores.
+      export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
+      
+    '' + # */
     (if config.nix.distributedBuilds then
-      "export NIX_BUILD_HOOK=${nix}/libexec/nix/build-remote.pl\n" +
-      "export NIX_REMOTE_SYSTEMS=/etc/nix.machines\n" +
-      "export NIX_CURRENT_LOAD=/var/run/nix/current-load\n"
+      ''
+        export NIX_BUILD_HOOK=${nix}/libexec/nix/build-remote.pl
+        export NIX_REMOTE_SYSTEMS=/etc/nix.machines
+        export NIX_CURRENT_LOAD=/var/run/nix/current-load
+      ''
     else "");
 
               

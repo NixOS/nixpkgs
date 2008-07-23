@@ -6,6 +6,7 @@ if test -n "@nssModulesPath@"; then
 fi
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
+export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
 export TZ=@timeZone@
 export TZDIR=@glibc@/share/zoneinfo
