@@ -7037,10 +7037,6 @@ let pkgs = rec {
 
   ### SCIENCE/BIOLOGY
 
-  clustalw2 = import ../applications/science/biology/clustalw2 {
-    inherit fetchurl stdenv;
-  };
-
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
     inherit libxml2 guile perl intltool libtool pkgconfig;
