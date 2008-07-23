@@ -337,6 +337,11 @@ let pkgs = rec {
   # linked curl in the case of stdenv-linux).
   fetchurlBoot = stdenv.fetchurlBoot;
 
+  resolveMirrorURLs = {url}: fetchurl {
+    showURLs = true;
+    inherit url;
+  };
+
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents;
   };

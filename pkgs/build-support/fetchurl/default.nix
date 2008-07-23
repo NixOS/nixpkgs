@@ -20,12 +20,16 @@
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
+
+, # If set, don't download the file, but write a list of all possible
+  # URLs (resulting from resolving mirror:// URLs) to $out.
+  showURLs ? false
 }:
 
 assert urls != [] -> url == "";
 assert url != "" -> urls == [];
 
-assert (outputHash != "" && outputHashAlgo != "")
+assert showURLs || (outputHash != "" && outputHashAlgo != "")
     || md5 != "" || sha1 != "" || sha256 != "";
 
 let
@@ -45,7 +49,8 @@ in
 
 stdenv.mkDerivation ({
   name =
-    if name != "" then name
+    if showURLs then "urls"
+    else if name != "" then name
     else baseNameOf (toString (builtins.head urls_));
   builder = ./builder.sh;
   buildInputs = [curl];
@@ -76,6 +81,8 @@ stdenv.mkDerivation ({
     # command-line.
     "NIX_HASHED_MIRRORS"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
+
+  inherit showURLs;
 }
 
 # Pass the mirror locations to the builder.

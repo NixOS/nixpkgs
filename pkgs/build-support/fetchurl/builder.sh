@@ -1,6 +1,9 @@
 source $stdenv/setup
 
-header "downloading file $name with $outputHashAlgo hash $outputHash..."
+if test -n "$showURLs"; then
+    header "downloading file $name with $outputHashAlgo hash $outputHash..."
+fi
+
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
@@ -96,6 +99,12 @@ for url in $urls; do
     fi
 done
 urls="$urls2"
+
+
+if test -n "$showURLs"; then
+    echo "$urls" > $out
+    exit 0
+fi
 
 
 if test -n "$preferHashedMirrors"; then
