@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "man-pages-2.74";
+  name = "man-pages-3.05";
   
   src = fetchurl {
-    url = ftp://ftp.win.tue.nl/pub/linux-local/manpages/man-pages-2.74.tar.gz;
-    sha256 = "1k6hf6va29gnf2c9kpwd6w555gp1vimf73ac2ij2j7dqx64hy7s7";
+    url = mirror://kernel/linux/docs/man-pages/man-pages-3.05.tar.bz2;
+    sha256 = "08c48w41qjmv37g0fqcr1ky2y2mfnxqn55jxay079qrj5vxraink";
   };
 
   preBuild = "
