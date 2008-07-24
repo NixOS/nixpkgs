@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
-  version = "1.5.0";
+  version = "1.6.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "5ead17c3d29cb1028aeca485ee7a8c65694c1b02a1b7014c3da920b265a438aa";
+    sha256 = "0y890s5rv47ipcijcrmcy9988br22ipr4c1ppb88pjhlism6w0im";
   };
 
   buildInputs = [openssl libX11];
