@@ -5879,12 +5879,9 @@ let pkgs = rec {
     inherit fetchurl stdenv qt4 djvulibre;
   };
 
-  /* TODO: rename to be able to set version */
-  dvdplusrwtoolsFun = lib.sumArgs (selectVersion ../os-specific/linux/dvd+rw-tools "7.0") {
-    inherit fetchurl stdenv builderDefs cdrkit m4;
+  dvdplusrwtools = import ../os-specific/linux/dvd+rw-tools {
+    inherit fetchurl stdenv cdrkit m4;
   };
-
-  dvdplusrwtools = dvdplusrwtoolsFun null;
 
   # building eclipise from source
   # experimental tested on x86_64-linux only
