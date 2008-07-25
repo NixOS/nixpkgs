@@ -2428,7 +2428,10 @@
   security = {
 
     setuidPrograms = mkOption {
-      default = ["passwd" "su" "crontab" "ping" "ping6"];
+      default = [
+        "passwd" "su" "crontab" "ping" "ping6"
+        "fusermount" "wodim" "cdrdao"
+      ];
       description = "
         Only the programs listed here will be made setuid root (through
         a wrapper program).  It's better to set
