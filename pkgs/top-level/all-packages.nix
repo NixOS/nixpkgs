@@ -1558,10 +1558,10 @@ let pkgs = rec {
     haddock = haddockboot;
   };
 
-  ghc69snapshot = import ../development/compilers/ghc-6.8/head.nix {
+  ghc69snapshot = lowPrio (import ../development/compilers/ghc-6.8/head.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghc683;
-  };
+  });
 
   ghc661 = import ../development/compilers/ghc-6.6.1 {
     inherit fetchurl stdenv readline perl58 gmp ncurses m4;
