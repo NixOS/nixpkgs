@@ -1,14 +1,14 @@
-{stdenv, fetchurl, cmake, libcap, zlib}:
+{stdenv, fetchurl, cmake, libcap, zlib, bzip2}:
 
 stdenv.mkDerivation {
-  name = "cdrkit-1.1.6";
+  name = "cdrkit-1.1.8";
 
   src = fetchurl {
-    url = http://cdrkit.org/releases/cdrkit-1.1.6.tar.gz;
-    sha256 = "0xb1zqq4s3ylfyzb09s1gpxqr5prhrnpsyycb585ds5p51ymx54r";
+    url = http://cdrkit.org/releases/cdrkit-1.1.8.tar.gz;
+    sha256 = "0dzj89swc5h9jr6rr9y6cq6742gc1sdfaivz8r26yfmv5ajx104x";
   };
 
-  buildInputs = [cmake libcap zlib];
+  buildInputs = [cmake libcap zlib bzip2];
 
   makeFlags = "PREFIX=\$(out)";
 

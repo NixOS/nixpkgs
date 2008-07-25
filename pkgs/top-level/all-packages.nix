@@ -5745,7 +5745,7 @@ let pkgs = rec {
   };
 
   cdrkit = import ../applications/misc/cdrkit {
-    inherit fetchurl stdenv cmake libcap zlib;
+    inherit fetchurl stdenv cmake libcap zlib bzip2;
   };
 
   chatzilla =
