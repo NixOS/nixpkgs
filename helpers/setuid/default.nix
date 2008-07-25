@@ -2,7 +2,9 @@
 
 stdenv.mkDerivation {
   name = "setuid-wrapper";
-  builder = ./builder.sh;
-  setuidWrapper = ./setuid-wrapper.c;
-  inherit wrapperDir;
+  buildCommand = ''
+    ensureDir $out/bin
+    gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
+    strip -s $out/bin/setuid-wrapper
+  '';
 }
