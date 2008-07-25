@@ -5363,6 +5363,14 @@ let pkgs = rec {
     inherit fetchurl stdenv zlib;
   };
 
+  sysfsutils = import ../os-specific/linux/sysfsutils {
+    inherit fetchurl stdenv;
+  };
+
+  # Provided with sysfsutils.
+  libsysfs = sysfsutils;
+  systool = sysfsutils;
+
   sysklogd = import ../os-specific/linux/sysklogd {
     inherit fetchurl stdenv;
   };
