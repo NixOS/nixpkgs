@@ -477,6 +477,14 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  cdrdao = import ../tools/cd-dvd/cdrdao {
+    inherit fetchurl stdenv;
+  };
+
+  cdrkit = import ../tools/cd-dvd/cdrkit {
+    inherit fetchurl stdenv cmake libcap zlib bzip2;
+  };
+
   cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
     inherit makeWrapper;
     python = python25;
@@ -552,6 +560,10 @@ let pkgs = rec {
   };
 
   dosfstools = dosfstoolsFun null;
+
+  dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
+    inherit fetchurl stdenv cdrkit m4;
+  };
 
   enscript = import ../tools/text/enscript {
     inherit fetchurl stdenv;
@@ -5744,10 +5756,6 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  cdrkit = import ../applications/misc/cdrkit {
-    inherit fetchurl stdenv cmake libcap zlib bzip2;
-  };
-
   chatzilla =
     xulrunnerWrapper {
       launcher = "chatzilla";
@@ -5877,10 +5885,6 @@ let pkgs = rec {
 
   djview4 = import ../applications/graphics/djview {
     inherit fetchurl stdenv qt4 djvulibre;
-  };
-
-  dvdplusrwtools = import ../os-specific/linux/dvd+rw-tools {
-    inherit fetchurl stdenv cdrkit m4;
   };
 
   # building eclipise from source
