@@ -69,6 +69,7 @@ touch /var/run/utmp # must exist
 chmod 644 /var/run/utmp
 
 mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
+mkdir -m 0700 -p /var/run/nix/remote-stores
 
 mkdir -m 0755 -p /var/log
 
@@ -141,19 +142,17 @@ if test -d $wrapperDir; then rm -f $wrapperDir/*; fi
 mkdir -p $wrapperDir
 for i in @setuidPrograms@; do
     program=$(type -tp $i)
-    cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
-
-    if [ -z "$program" ]
-    then
+    if test -z "$program"; then
 	# XXX: It would be preferable to detect this problem before
 	# `activate-configuration' is invoked.
 	echo "WARNING: No executable named \`$i' was found" >&2
 	echo "WARNING: but \`$i' was specified as a setuid program." >&2
+    else
+        cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
+        echo -n "$program" > $wrapperDir/$i.real
+        chown root.root $wrapperDir/$i
+        chmod 4755 $wrapperDir/$i
     fi
-
-    echo -n $program > $wrapperDir/$i.real
-    chown root.root $wrapperDir/$i
-    chmod 4755 $wrapperDir/$i
 done
 
 @adjustSetuidOwner@ 
