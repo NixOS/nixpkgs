@@ -5324,6 +5324,14 @@ let pkgs = rec {
     inherit stdenv fetchurl pam libxcrypt;
   };
 
+  pcmciaUtils = (import ../os-specific/linux/pcmciautils) {
+    inherit stdenv fetchurl udev yacc flex;
+    inherit sysfsutils module_init_tools;
+
+    firmware = getConfig ["pcmciaUtils" "firmware"] null;
+    config = getConfig ["pcmciaUtils" "config"] null;
+  };
+
   powertop = import ../os-specific/linux/powertop {
     inherit fetchurl stdenv ncurses;
   };
