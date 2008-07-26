@@ -5415,8 +5415,8 @@ let pkgs = rec {
   };
 
   umlutilities = import ../os-specific/linux/uml-utilities {
-    inherit fetchurl kernelHeaders stdenv;
-    tunctl = true;
+    inherit fetchurl kernelHeaders stdenv readline lib;
+    tunctl = true; mconsole = true;
   };
 
   upstart = import ../os-specific/linux/upstart {

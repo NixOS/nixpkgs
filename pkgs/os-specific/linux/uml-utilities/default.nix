@@ -1,8 +1,9 @@
-{stdenv, fetchurl, kernelHeaders , tunctl ? false}:
+{lib, stdenv, fetchurl, kernelHeaders , readline, tunctl ? false, mconsole ? false}:
 
 stdenv.mkDerivation {
-  inherit tunctl;
-  buildInputs = if tunctl then kernelHeaders else null;
+  inherit tunctl mconsole;
+  buildInputs = lib.optional tunctl kernelHeaders
+            ++ lib.optional mconsole readline;
   name = "uml-utilities-20040114";
   builder = ./builder.sh;
   src = fetchurl {
