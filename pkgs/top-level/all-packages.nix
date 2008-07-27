@@ -5959,6 +5959,14 @@ let pkgs = rec {
     xftSupport = true;
   };
 
+  evince = import ../applications/misc/evince {
+    inherit fetchurl stdenv perl perlXMLParser gettext
+      pkgconfig poppler libspectre djvulibre libxslt
+      dbus dbus_glib shared_mime_info makeWrapper;
+    inherit (gnome) gnomedocutils gnomeicontheme libgnome
+      libgnomeui libglade glib gtk scrollkeeper;
+  };
+
   exrdisplay = import ../applications/graphics/exrdisplay {
     inherit fetchurl stdenv pkgconfig mesa which openexr_ctl;
     fltk = fltk20;
