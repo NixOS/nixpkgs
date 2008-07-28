@@ -138,7 +138,8 @@ let
       ssmtp
       strace
       su
-      subversion
+      subversion14
+      subversion15
       sudo
       swig
       sylpheed 

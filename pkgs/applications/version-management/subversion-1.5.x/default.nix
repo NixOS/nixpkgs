@@ -19,15 +19,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.5.0";
+  version = "1.5.1";
 
   name = "subversion-${version}";
 
-  #builder = ./builder.sh;
-
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.5.0.tar.bz2;
-    sha256 = "1cwnsi38qjn4wdkyg4hy843dnh18djag60ks2zq9zrjwmhmrnpkm";
+    url = http://subversion.tigris.org/downloads/subversion-1.5.1.tar.bz2;
+    sha256 = "1jxkrx4rvqrj03hl36h4hnkdvjfldshr5n6wkb3rc3m14jygma6s";
   };
 
   buildInputs = [zlib apr aprutil]
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ensureDir $out/share/emacs/site-lisp
     cp contrib/client-side/emacs/*.el $out/share/emacs/site-lisp/
-  '';
+  ''; # */
 
   passthru = {
     inherit perlBindings pythonBindings;
