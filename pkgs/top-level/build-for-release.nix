@@ -45,6 +45,7 @@ let
       emacs
       emacsUnicode
       enscript
+      evince
       exult
       feh
       file
