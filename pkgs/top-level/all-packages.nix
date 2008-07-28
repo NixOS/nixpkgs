@@ -6004,7 +6004,7 @@ let pkgs = rec {
     #enableOfficialBranding = true;
   });
 
-  firefoxWrapper = wrapFirefox firefox "";
+  firefoxWrapper = wrapFirefox firefox "firefox" "";
 
   firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
@@ -6022,8 +6022,8 @@ let pkgs = rec {
     inherit (xlibs) libXi libX11 libXrender libXft libXt;
   });
 
-  firefox3Wrapper = lowPrio (wrapFirefox firefox3 "");
-  firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "");
+  firefox3Wrapper = lowPrio (wrapFirefox firefox3 "firefox" "");
+  firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "firefox" "");
 
   flacAlts = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
@@ -6133,7 +6133,7 @@ let pkgs = rec {
     inherit (gnome) libIDL;
   });
 
-  icecatWrapper = wrapFirefox icecat3 "";
+  icecatWrapper = wrapFirefox icecat3 "icecat" "";
 
   icewm = import ../applications/window-managers/icewm {
     inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
@@ -6751,9 +6751,8 @@ let pkgs = rec {
     inherit stdenv fetchurl tcl tk x11 makeWrapper;
   };
 
-  wrapFirefox = browser: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
-    inherit stdenv nameSuffix makeWrapper;
-    firefox = browser;
+  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
+    inherit stdenv nameSuffix makeWrapper browser browserName;
     plugins =
       let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] true
             && system == "i686-linux";

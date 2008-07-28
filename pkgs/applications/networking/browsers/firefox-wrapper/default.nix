@@ -1,12 +1,19 @@
-{stdenv, firefox, nameSuffix ? "", makeWrapper, plugins}:
+{stdenv, browser, browserName ? "firefox", nameSuffix ? "", makeWrapper, plugins}:
 
 stdenv.mkDerivation {
-  name = firefox.name + "-with-plugins";
+  name = browser.name + "-with-plugins";
 
   buildInputs = [makeWrapper];
 
   buildCommand = ''
-    makeWrapper "${firefox}/bin/firefox" "$out/bin/firefox${nameSuffix}" \
+    if [ ! -x "${browser}/bin/${browserName}" ]
+    then
+        echo "cannot find executable file \`${browser}/bin/${browserName}'"
+        exit 1
+    fi
+
+    makeWrapper "${browser}/bin/${browserName}" \
+        "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
   '';
@@ -17,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description =
-      firefox.meta.description
+      browser.meta.description
       + " (with plugins: "
       + (let lib = import ../../../../lib;
         in lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins)))
