@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lzma, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
+, gnomevfs, libgnomeui
 , freetype, fontconfig }:
 
 let version = "3.0.1-g1"; in
@@ -13,6 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     lzma
+    libgnomeui gnomevfs
     pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
     python dbus dbus_glib pango freetype fontconfig
     xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt

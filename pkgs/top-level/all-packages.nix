@@ -6129,8 +6129,7 @@ let pkgs = rec {
   icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
     inherit fetchurl stdenv lzma pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
+    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
   });
 
   icecatWrapper = wrapFirefox icecat3 "icecat" "";
