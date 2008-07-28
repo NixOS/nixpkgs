@@ -2047,6 +2047,10 @@ let pkgs = rec {
     name = "ant-" + j2sdk14x.name;
   };
 
+  autobuild = import ../development/tools/misc/autobuild {
+    inherit fetchurl stdenv makeWrapper perl openssh rsync;
+  };
+
   autoconf = import ../development/tools/misc/autoconf {
     inherit fetchurl stdenv perl m4 lzma;
   };
