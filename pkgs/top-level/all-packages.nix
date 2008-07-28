@@ -6126,6 +6126,15 @@ let pkgs = rec {
     inherit fetchurl stdenv pciutils;
   };
 
+  icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
+    inherit fetchurl stdenv lzma pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  });
+
+  icecatWrapper = wrapFirefox icecat3 "";
+
   icewm = import ../applications/window-managers/icewm {
     inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
@@ -6321,11 +6330,13 @@ let pkgs = rec {
   };
   */
 
-  MPlayerPlugin = import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
-    inherit fetchurl stdenv pkgconfig firefox gettext;
-    inherit (xlibs) libXpm;
-    # !!! should depend on MPlayer
-  };
+  MPlayerPlugin = browser:
+    import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
+      firefox = browser;
+      inherit fetchurl stdenv pkgconfig gettext;
+      inherit (xlibs) libXpm;
+      # !!! should depend on MPlayer
+    };
 
   # commented out because it's using the new configuration style proposal which is unstable
   /*
@@ -6740,8 +6751,9 @@ let pkgs = rec {
     inherit stdenv fetchurl tcl tk x11 makeWrapper;
   };
 
-  wrapFirefox = firefox: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
-    inherit stdenv firefox nameSuffix makeWrapper;
+  wrapFirefox = browser: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
+    inherit stdenv nameSuffix makeWrapper;
+    firefox = browser;
     plugins =
       let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] true
             && system == "i686-linux";
@@ -6751,7 +6763,7 @@ let pkgs = rec {
         ++ lib.optional (enableAdobeFlash)  flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
-        ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) MPlayerPlugin
+        ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) (MPlayerPlugin browser)
         ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };
