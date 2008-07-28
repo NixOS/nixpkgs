@@ -4,13 +4,13 @@
 # are the include files so that we can access the plugin API (I
 # think).
 
-stdenv.mkDerivation {
-  name = "mplayerplug-in-3.50";
+stdenv.mkDerivation rec {
+  name = "mplayerplug-in-3.55";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/mplayerplug-in/mplayerplug-in-3.50.tar.gz;
-    sha256 = "00jcbwl3wa6s4784c3wrz718f6jj1zkdfjbp7d2nhiafxrjqwsq4";
+    url = "mirror://sourceforge/mplayerplug-in/${name}.tar.gz";
+    sha256 = "0zkvqrzibrbljiccvz3rhbmgifxadlrfjylqpz48jnjx9kggynms";
   };
 
   buildInputs = [pkgconfig firefox (firefox.gtk) libXpm gettext];
