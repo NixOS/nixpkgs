@@ -2533,6 +2533,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  cryptopp = import ../development/libraries/crypto++ {
+    inherit fetchurl stdenv unzip;
+  };
+
   cyrus_sasl = import ../development/libraries/cyrus-sasl {
     inherit fetchurl stdenv openssl db4 gettext;
   };
