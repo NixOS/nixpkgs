@@ -395,7 +395,8 @@ let pkgs = rec {
   };
 
   amule = import ../tools/networking/p2p/amule {
-    inherit fetchurl stdenv zlib wxGTK;
+    inherit fetchurl stdenv zlib perl cryptopp gettext;
+    wxGTK = wxGTK28;
   };
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
