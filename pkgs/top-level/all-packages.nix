@@ -6209,7 +6209,7 @@ let pkgs = rec {
 
   kile = import ../applications/editors/kile {
     inherit stdenv fetchurl perl arts kdelibs zlib libpng libjpeg freetype expat;
-    inherit (xlibs) libX11 libXt libXext libXrender;
+    inherit (xlibs) libX11 libXt libXext libXrender libXft;
     qt = qt3;
   };
 
@@ -7264,7 +7264,7 @@ let pkgs = rec {
   };
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
-    inherit stdenv fetchsvn apacheAnt jdk axis2;
+    inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
   };
 
   ntfs3g = import ../misc/ntfs-3g {
