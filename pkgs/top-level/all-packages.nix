@@ -6209,7 +6209,7 @@ let pkgs = rec {
 
   kile = import ../applications/editors/kile {
     inherit stdenv fetchurl perl arts kdelibs zlib libpng libjpeg freetype expat;
-    inherit (xlibs) libX11 libXt libXext;
+    inherit (xlibs) libX11 libXt libXext libXrender;
     qt = qt3;
   };
 
