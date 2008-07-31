@@ -14,17 +14,19 @@ let
     inherit firmwareDirs;
   };
     
-  nixRules = writeText "10-nix.rules" ''
+  nixRules = writeText "90-nix.rules" ''
   
     # Miscellaneous devices.
     KERNEL=="sonypi",               MODE="0666"
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                NAME="%k", MODE="0666"
 
-    # Create a symlink for the CD-ROM device.
-    #KERNEL=="hd[a-z]", BUS=="ide", SYSFS{removable}=="1", SYSFS{device/media}=="cdrom", SYMLINK+="cdrom cdrom-%k"
-    #KERNEL=="sr[0-9]", BUS=="scsi", SYMLINK+="cdrom cdrom-%k"
-
+    # Create symlinks for CD/DVD devices.
+    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM}=="?*", SYMLINK+="cdrom cdrom-%k"
+    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_CD_RW}=="?*", SYMLINK+="cdrw cdrw-%k"
+    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_DVD}=="?*", SYMLINK+="dvd dvd-%k"
+    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_DVD_RW}=="?*", SYMLINK+="dvdrw dvdrw-%k"
+    
     # ALSA sound devices.
     KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="${cfg.sndMode}"
     KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="${cfg.sndMode}"
@@ -46,7 +48,8 @@ let
       ensureDir $out
       ln -s ${nixRules} $out/${nixRules.name}
       shopt -s nullglob
-      cp ${udev}/etc/udev/rules.d/*.rules $out/
+      cp ${udev}/*/udev/rules.d/*.rules $out/
+      
       ${if config.boot.hardwareScan then
         ''
           substituteInPlace $out/80-drivers.rules \
@@ -58,7 +61,7 @@ let
         ''
       }
       for i in ${toString extraUdevPkgs}; do
-        for j in $i/etc/udev/rules.d/*; do
+        for j in $i/*/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)
         done
       done
