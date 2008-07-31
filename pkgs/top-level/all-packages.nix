@@ -1560,7 +1560,7 @@ let pkgs = rec {
   };
 
   ghc69snapshot = lowPrio (import ../development/compilers/ghc-6.8/head.nix {
-    inherit fetchurl stdenv readline perl gmp ncurses m4;
+    inherit fetchurl stdenv readline perl gmp ncurses m4 happy alex haskellEditline;
     ghc = ghc683;
   });
 
@@ -2571,6 +2571,10 @@ let pkgs = rec {
 
   directfb = import ../development/libraries/directfb {
     inherit fetchurl stdenv perl;
+  };
+
+  editline = import ../development/libraries/editline {
+    inherit fetchurl stdenv ncurses;
   };
 
   enchant = selectVersion ../development/libraries/enchant "1.3.0" {
@@ -3716,6 +3720,10 @@ let pkgs = rec {
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit pkgconfig stdenv fetchurl cairo ghc;
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
+  };
+
+  haskellEditline = import ../development/libraries/haskell/editline {
+    inherit cabal editline;
   };
 
   HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
