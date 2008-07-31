@@ -1,12 +1,13 @@
 {stdenv, fetchurl}:
-if (stdenv.system != "x86_64-linux") then
+
+if stdenv.system != "x86_64-linux" || !stdenv.isDietLibC then
 
 stdenv.mkDerivation {
-  name = "udev-124";
+  name = "udev-125";
 
   src = fetchurl {
-    url = mirror://kernel/linux/utils/kernel/hotplug/udev-124.tar.bz2;
-    sha256 = "0hjmg82ivczm76kg9gm7x0sfji69bwwjbbfycfcdpnfrc13935x4";
+    url = mirror://kernel/linux/utils/kernel/hotplug/udev-125.tar.bz2;
+    sha256 = "1w75c6vaqw8587djd8g380h1jrbj7fx9441bvvy4gj9jz21r00ks";
   };
 
   # "DESTDIR=/" is a hack to prevent "make install" from trying to
@@ -29,7 +30,9 @@ stdenv.mkDerivation {
     description = "Udev manages the /dev filesystem";
   };
 }
+
 else
+
 # for now svn revision 10849 because this works fine with current dietlibc
 # this should be fixed (maybe using klibc) or by patching udev somewhen
 
