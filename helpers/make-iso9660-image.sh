@@ -61,7 +61,7 @@ cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
 
 ensureDir $out/iso
-genCommand="genisoimage -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer"
+genCommand="genisoimage -iso-level 4 -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer"
 if test -z "$compressImage"; then
     $genCommand -o $out/iso/$isoName
 else
