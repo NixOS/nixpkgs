@@ -1,10 +1,10 @@
 args : with args; 
 rec {
+  version = "1.2.0";
   src = fetchurl {
-    url = http://rubyforge.org/frs/download.php/35283/rubygems-1.1.1.tgz;
-    sha256 = "1qb4crmx1dihmk1am93ly437480jvp7lh4pbiwy5ir19hqnfh71b";
+    url = "http://rubyforge.org/frs/download.php/38646/rubygems-${version}.tgz";
+    sha256 = "0b9ppgs9av4z344s13wp40ki72prxyz3q0hmsf5swx7xhl54bbr8";
   };
-  version = "1.1.1";
 
   buildInputs = [ruby makeWrapper];
   configureFlags = [];
@@ -19,6 +19,6 @@ rec {
       
   name = "rubygems-" + version;
   meta = {
-    description = "Ruby package collection";
+    description = "Ruby gems package collection";
   };
 }
