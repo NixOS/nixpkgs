@@ -374,6 +374,8 @@ let pkgs = rec {
 
   writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
 
+  symlinkJoin = name: paths: runCommand name {inherit paths;} "mkdir -p $out; for i in $paths; do ${xorg.lndir}/bin/lndir $i $out; done";
+
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
   };
@@ -6030,6 +6032,19 @@ let pkgs = rec {
     inherit (gnome) libIDL;
     #enableOfficialBranding = true;
   });
+
+  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    #enableOfficialBranding = true;
+  });
+
+  firefox3Xul=(symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) //
+  {
+    inherit (firefox) gtk;
+  };
 
   firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
