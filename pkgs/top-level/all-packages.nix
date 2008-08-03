@@ -4606,7 +4606,7 @@ let pkgs = rec {
     inherit fetchurl stdenv openssh;
   };
 
-  openfireFun = lib.sumArgs (selectVersion ../servers/xmpp/openfire "3.4.5") {
+  openfireFun = lib.sumArgs (selectVersion ../servers/xmpp/openfire "3.5.2") {
     inherit builderDefs jre;
   };
 
