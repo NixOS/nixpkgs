@@ -44,6 +44,7 @@ let
       e2fsprogs
       emacs
       emacsUnicode
+      emboss
       enscript
       evince
       exult
@@ -103,6 +104,7 @@ let
       mysql
       #mythtv
       nano
+      ncbi-tools
       netcat
       nix
       nixUnstable
