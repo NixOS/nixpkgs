@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-if stdenv.system != "x86_64-linux" || !stdenv.isDietLibC then
+if stdenv.system != "x86_64-linux" || ! (stdenv ? isDietLibC) || !stdenv.isDietLibC then
 
 stdenv.mkDerivation {
   name = "udev-125";
