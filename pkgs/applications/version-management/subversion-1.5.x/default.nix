@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [zlib apr aprutil]
     ++ stdenv.lib.optional httpSupport neon;
 
+  inherit perlBindings; # set a flag (see git expression)
+
   configureFlags = ''
     --disable-static
     --disable-keychain

@@ -3,41 +3,47 @@
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
+, sourceByName
+, autoconf
 }:
 
 # `git-svn' support requires Subversion and various Perl libraries.
+# FIXME: We should make sure Subversion comes with its Perl bindings.
 assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBindings);
 
+assert svnSupport -> subversion.perlBindings;
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.6.2";
+  name = "git-git";
 
-  src = fetchurl {
-    url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "0bq4rwa9kfn5z1daszb1qvqjzy1hk3ir392bpikhmsqp9hi5yc0j";
-  };
+  src = sourceByName "git";
 
-  patches = [ ./pwd.patch ./docbook2texi.patch ];
+  patches = [  ./glob-path.patch ./docbook2texi.patch ];
+  # maybe this introduces unneccessary dependencies ?
+  patchPhase = "
+    unset patchPhase; patchPhase;
+    sed -i 's=/usr/bin/perl=$perl/bin/perl=g' `find -type f`
+    sed -i 's=/bin/pwd=pwd=g' `find -type f`
+  ";
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
+  inherit perl;
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper autoconf]
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_42 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
+  preConfigure = "autoconf";
+  makeFlags = "install install-doc prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
 
   postInstall =
     ''
-      notSupported(){
-        echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
-        chmod +x $1
-      }
-
       # Install Emacs mode.
       echo "installing Emacs mode..."
       ensureDir $out/share/emacs/site-lisp
       cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
+
+      wrapArgs=
     '' # */
 
    + (if svnSupport then
@@ -47,12 +53,10 @@ stdenv.mkDerivation rec {
         for i in ${builtins.toString perlLibs}; do
           gitperllib=$gitperllib:$i/lib/site_perl
         done
-        wrapProgram "$out/bin/git-svn"                  \
-                     --set GITPERLLIB "$gitperllib"     \
-                     --prefix PATH : "${subversion}/bin" ''
-       else '' # replace git-svn by notification script
-        notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
-       '')
+#cp git-svn "$out/bin"
+        wrapArgs="$wrapArgs --set GITPERLLIB $gitperllib"
+        wrapArgs="$wrapArgs --prefix PATH : ${subversion}/bin"
+       '' else "")
 
    + ''# Install man pages and Info manual
        make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
@@ -60,23 +64,17 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in gitk git-gui git-citool
-       do
-         wrapProgram "$out/bin/$prog"                   \
-                     --set TK_LIBRARY "${tk}/lib/tk8.4" \
-                     --prefix PATH : "${tk}/bin"
-       done
-     '' else ''
-      # don not wrap Tcl/Tk, replace them by notification scripts
-       for prog in gitk git-gui git-citool
-       do
-         notSupported "$out/bin/$prog" "reinstall with config git = { guiSupport = true } set"
-       done
-     '')
+         wrapArgs="$wrapArgs --set TK_LIBRARY ${tk}/lib/tk8.4"
+         wrapArgs="$wrapArgs --prefix PATH : ${tk}/bin"
+     '' else "")
 
    + ''# Wrap `git-clone'
-       wrapProgram $out/bin/git-clone                   \
-                   --prefix PATH : "${cpio}/bin" '';
+       wrapArgs="$wrapArgs --prefix PATH : ${cpio}/bin"
+
+       for b in $out/bin/{git,gitk}; do
+         [ -f "$b" ] && eval "wrapProgram $b $wrapArgs"
+       done
+     '';
 
   meta = {
     license = "GPLv2";

@@ -6108,6 +6108,17 @@ let pkgs = rec {
     perlLibs = [perlLWP perlURI perlTermReadKey subversion];
   };
 
+  gitGit = import ../applications/version-management/git/git-git.nix {
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext
+      asciidoc texinfo xmlto docbook2x
+      docbook_xsl docbook_xml_dtd_42 libxslt
+      cpio tcl tk makeWrapper subversion autoconf;
+    inherit (bleedingEdgeRepos) sourceByName;
+    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
+    guiSupport = getConfig ["git" "guiSupport"] false;
+    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
+  };
+
   qgit = import ../applications/version-management/qgit {
     inherit fetchurl stdenv;
     inherit (xlibs) libXext libX11;
