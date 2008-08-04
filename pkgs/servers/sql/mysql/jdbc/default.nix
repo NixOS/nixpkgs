@@ -1,12 +1,12 @@
 {stdenv, fetchurl, ant}:
 
 stdenv.mkDerivation {
-  name = "mysql-connector-java-3.1.12";
+  name = "mysql-connector-java-5.1.6";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://mysql.proserve.nl/Downloads/Connector-J/mysql-connector-java-3.1.12.tar.gz;
-    md5 = "c8c15443dfa9541545aad02d744a077b";
+    url = http://mirror.hostfuss.com/mysql/Downloads/Connector-J/mysql-connector-java-5.1.6.tar.gz;
+    md5 = "84641aa4ddc138fc400366021f05cec5";
   };
 
   buildInputs = [ant];
