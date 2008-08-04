@@ -4641,6 +4641,10 @@ let pkgs = rec {
     inherit fetchurl stdenv jdk;
   };
 
+  tomcat_mysql_jdbc = import ../servers/http/tomcat/jdbc/mysql {
+    inherit stdenv tomcat6 mysql_jdbc;
+  };
+
   axis2 = import ../servers/http/tomcat/axis2 {
     inherit fetchurl stdenv jdk apacheAnt unzip;
   };
