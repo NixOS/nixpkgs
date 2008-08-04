@@ -105,7 +105,7 @@ let
       mysql
       #mythtv
       nano
-      ncbi-tools
+      ncbi_tools
       netcat
       nix
       nixUnstable
