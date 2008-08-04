@@ -2,15 +2,9 @@
 
 stdenv.mkDerivation rec {
   name = "libtool-1.5.26";
-  
   src = fetchurl {
-    url = "mirror://gnu/libtool/${name}.tar.gz";
+    url = "mirror://gnu/libtool/" + name + ".tar.gz";
     sha256 = "029ggq5kri1gjn6nfqmgw4w920gyfzscjjxbsxxidal5zqsawd8w";
   };
-  
   buildInputs = [m4 perl];
-
-  # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
-  # "fixed" path in generated files!
-  dontPatchShebangs = true;
 }

@@ -9,4 +9,8 @@ stdenv.mkDerivation {
     md5 = "571fd0b0598eb2a27dcf68adcfddfacb";
   };
   buildInputs = [perl autoconf];
+
+  # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
+  # "fixed" path in generated files!
+  dontPatchShebangs = true;
 }

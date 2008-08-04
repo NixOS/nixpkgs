@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
+  # "fixed" path in generated files!
+  dontPatchShebangs = true;
+  
   meta = {
     homepage = http://www.gnu.org/software/automake/;
     description = "GNU Automake, a GNU standard-compliant makefile generator";

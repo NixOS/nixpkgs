@@ -2259,6 +2259,10 @@ let pkgs = rec {
     inherit fetchurl stdenv perl m4;
   };
 
+  libtoolOld = lowPrio (import ../development/tools/misc/libtool/old.nix {
+    inherit fetchurl stdenv perl m4;
+  });
+
   lsof = import ../development/tools/misc/lsof {
     inherit fetchurl stdenv;
   };
@@ -2402,7 +2406,8 @@ let pkgs = rec {
 
   acl = useFromStdenv "acl"
     (import ../development/libraries/acl {
-      inherit stdenv fetchurl gettext attr libtool;
+      inherit stdenv fetchurl gettext attr;
+      libtool = libtoolOld;
     });
 
   adns = selectVersion ../development/libraries/adns "1.4" {
@@ -2458,7 +2463,8 @@ let pkgs = rec {
 
   attr = useFromStdenv "attr"
     (import ../development/libraries/attr {
-      inherit stdenv fetchurl libtool gettext;
+      inherit stdenv fetchurl gettext;
+      libtool = libtoolOld;
     });
 
   axis = import ../development/libraries/axis {
