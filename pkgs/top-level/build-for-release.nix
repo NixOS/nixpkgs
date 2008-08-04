@@ -15,6 +15,7 @@ let
       audacious_plugins
       autoconf
       automake19x
+      automake110x
       bash
       bashInteractive
       binutils
@@ -244,31 +245,9 @@ let
 
   x86_64LinuxPkgs = commonLinuxPkgs "x86_64-linux" // {
     inherit (allPackages {system = "x86_64-linux";})
-      MPlayer
-      MPlayerPlugin
       aterm242fixes
-      autoconf
-      automake19x
-      bash
-      binutils
-      bison23
-      emacs
-      firefox
-      gcc
       gcc43multi
-      hello
-      libtool
-      nixUnstable
-      subversion
-      pan
       ;    
-    inherit ((allPackages {system = "i686-linux";}).kernelPackages_2_6_23)
-      iwlwifi
-      kernel
-      ;
-    inherit ((allPackages {system = "i686-linux";}).xorg)
-      xorgserver
-      ;
   };
   
   i686FreeBSDPkgs = {
@@ -319,6 +298,7 @@ let
       aterm
       autoconf
       automake19x
+      automake110x
       libtool
       libxml2
       libxslt
