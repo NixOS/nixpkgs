@@ -317,7 +317,8 @@ let
   ++ optional config.services.vsftpd.enable
     (import ../upstart-jobs/vsftpd.nix {
       inherit (pkgs) vsftpd;
-      inherit (config.services.vsftpd) anonymousUser;
+      inherit (config.services.vsftpd) anonymousUser 
+        writeEnable anonymousUploadEnable anonymousMkdirEnable;
     })
 
   # X Font Server

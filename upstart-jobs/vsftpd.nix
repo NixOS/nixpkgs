@@ -1,4 +1,6 @@
-{ vsftpd, anonymousUser }:
+{ vsftpd, anonymousUser
+, anonymousUploadEnable, anonymousMkdirEnable, writeEnable
+}:
 
 {
   name = "vsftpd";
@@ -40,6 +42,27 @@ start script
 "anonymous_enable=YES"
     else
 "anonymous_enable=NO") +
+(if writeEnable then 
+"
+write_enable=YES"
+else
+"
+write_enable=NO"
+) +
+(if anonymousUploadEnable then 
+"
+anon_upload_enable=YES"
+else
+"
+anon_upload_enable=NO"
+) +
+(if anonymousMkdirEnable then 
+"
+anon_mkdir_write_enable=YES"
+else
+"
+anon_mkdir_write_enable=NO"
+) +
 "
 background=NO
 listen=YES

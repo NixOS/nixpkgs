@@ -1684,6 +1684,27 @@
           Whether to enable the anonymous FTP user.
         ";
       };
+
+      writeEnable = mkOption {
+        default = false;
+	description = "
+	  Whether any write activity is permitted to users.
+	";
+      };
+
+      anonymousUploadEnable = mkOption {
+        default = false;
+	description = "
+	  Whether any uploads are permitted to anonymous users.
+	";
+      };
+
+      anonymousMkdirEnable = mkOption {
+        default = false;
+	description = "
+	  Whether mkdir is permitted to anonymous users.
+	";
+      };
     };
     
     printing = {
