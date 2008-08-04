@@ -5,13 +5,14 @@ showSyntax() {
     # !!! more or less cut&paste from
     # system/switch-to-configuration.sh (which we call, of course).
     cat <<EOF
-Usage: $0 [switch|boot|test|build]
+Usage: $0 [switch|boot|test|build|dry-run]
 
-switch: make the configuration the boot default and activate now
-boot:   make the configuration the boot default
-test:   activate the configuration, but don't make it the boot default
-build:  build the configuration, but don't make it the default or
-        activate it
+switch:  make the configuration the boot default and activate now
+boot:    make the configuration the boot default
+test:    activate the configuration, but don't make it the boot default
+build:   build the configuration, but don't make it the default or
+         activate it
+dry-run: just show what store paths would be built/downloaded
 EOF
     exit 1
 }
@@ -19,16 +20,12 @@ EOF
 
 # Parse the command line.
 extraBuildFlags=
-dryRun=
 action=
 
 for i in "$@"; do
     if test "$i" = "--help"; then
         showSyntax
-    elif test "$i" = "--dry-run"; then
-        extraBuildFlags="$extraBuildFlags --dry-run"
-        dryRun=1
-    elif test "$i" = "switch" -o "$i" = "boot" -o "$i" = "test" -o "$i" = "build"; then
+    elif test "$i" = switch -o "$i" = boot -o "$i" = test -o "$i" = build -o "$i" = dry-run; then
         action="$i"
     else
         echo "$0: unknown option \`$i'"
@@ -38,7 +35,9 @@ done
 
 if test -z "$action"; then showSyntax; fi
 
-if test -n "$dryRun"; then action=build; fi
+if test "$action" = dry-run; then
+    extraBuildFlags="$extraBuildFlags --dry-run"
+fi
 
 
 # Allow the location of NixOS sources and the system configuration
@@ -86,10 +85,10 @@ fi
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
-if test "$action" = "switch" -o "$action" = "boot"; then
+if test "$action" = switch -o "$action" = boot; then
     nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
     pathToConfig=/nix/var/nix/profiles/system
-elif test "$action" = "test" -o "$action" = "build"; then
+elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
     nix-build $NIXOS -A system -K -k $extraBuildFlags
     pathToConfig=./result
 else
@@ -99,7 +98,7 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if test "$action" = "switch" -o "$action" = "boot" -o "$action" = "test"; then
+if test "$action" = switch -o "$action" = boot -o "$action" = test; then
     $pathToConfig/bin/switch-to-configuration "$action"
 fi
 
