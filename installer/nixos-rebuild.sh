@@ -1,9 +1,6 @@
 #! @shell@ -e
 
 
-# What are we supposed to do?
-action="$1"
-
 showSyntax() {
     # !!! more or less cut&paste from
     # system/switch-to-configuration.sh (which we call, of course).
@@ -19,7 +16,29 @@ EOF
     exit 1
 }
 
+
+# Parse the command line.
+extraBuildFlags=
+dryRun=
+action=
+
+for i in "$@"; do
+    if test "$i" = "--help"; then
+        showSyntax
+    elif test "$i" = "--dry-run"; then
+        extraBuildFlags="$extraBuildFlags --dry-run"
+        dryRun=1
+    elif test "$i" = "switch" -o "$i" = "boot" -o "$i" = "test" -o "$i" = "build"; then
+        action="$i"
+    else
+        echo "$0: unknown option \`$i'"
+        exit 1
+    fi
+done
+
 if test -z "$action"; then showSyntax; fi
+
+if test -n "$dryRun"; then action=build; fi
 
 
 # Allow the location of NixOS sources and the system configuration
@@ -68,10 +87,10 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if test "$action" = "switch" -o "$action" = "boot"; then
-    nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system
+    nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
     pathToConfig=/nix/var/nix/profiles/system
 elif test "$action" = "test" -o "$action" = "build"; then
-    nix-build $NIXOS -A system -K -k
+    nix-build $NIXOS -A system -K -k $extraBuildFlags
     pathToConfig=./result
 else
     showSyntax
