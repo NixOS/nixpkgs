@@ -133,7 +133,7 @@ let
       #quake3demo
       readline
       reiserfsprogs
-      r-lang
+      rLang
       rogue
       rsync
       ruby
