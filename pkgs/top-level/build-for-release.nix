@@ -15,7 +15,6 @@ let
       audacious_plugins
       autoconf
       automake19x
-      automake110x
       bash
       bashInteractive
       binutils
@@ -45,7 +44,6 @@ let
       e2fsprogs
       emacs
       emacsUnicode
-      emboss
       enscript
       evince
       expect
@@ -107,7 +105,6 @@ let
       mysql
       #mythtv
       nano
-      ncbi_tools
       netcat
       nix
       nixUnstable
@@ -222,6 +219,7 @@ let
       apacheAnt
       aspectj
       aterm
+      automake110x
       batik
       ecj
       eclipsesdk
