@@ -287,11 +287,54 @@ rec {
 			checker
 	else condConcat
 		name (tail (tail list)) checker;
+
+  # Merge sets of attributes and use the function f to merge
+  # attributes values.
+  zip = f: sets:
+    builtins.listToAttrs (map (name: {
+      inherit name;
+      value =
+        f name
+          (map (__getAttr name)
+            (filter (__hasAttr name) sets));
+    }) (concatMap builtins.attrNames sets));
+
+  # divide a list in two depending on the evaluation of a predicate.
+  partition = pred:
+    fold (h: t:
+      if pred h
+      then { right = [h] ++ t.right; wrong = t.wrong; }
+      else { right = t.right; wrong = [h] ++ t.wrong; }
+    ) { right = []; wrong = []; };
+
+  # Take a function and evaluate it with its own returned value.
+  finalReference = f:
+    (rec { result = f result; }).result;
+
+  # flatten a list of sets returned by 'f'.
+  # f      : function to evaluate each set.
+  # attr   : name of the attribute which contains more values.
+  # default: result if 'x' is empty.
+  # x      : list of values that have to be processed.
+  uniqFlattenAttr = f: attr: default: x:
+    if x == []
+    then default
+    else let h = f (head x); t = tail x; in
+      if elem h default
+      then uniqFlattenAttr f attr default t
+      else uniqFlattenAttr f attr (default ++ [h]) (toList (getAttr [attr] [] h) ++ t)
+    ;
+
   /* Options. */
-  
+
   mkOption = attrs: attrs // {_type = "option";};
 
   typeOf = x: if x ? _type then x._type else "";
+
+  isOption = attrs:
+     __isAttrs attrs
+  && attrs ? _type
+  && attrs._type == "option";
 
   addDefaultOptionValues = defs: opts: opts //
     builtins.listToAttrs (map (defName:
@@ -315,7 +358,67 @@ rec {
             else addDefaultOptionValues defValue {};
       }
     ) (builtins.attrNames defs));
-  
+
+  mergeDefaultOption = name: list:
+    if list != [] && tail list == [] then head list
+    else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
+    else if all __isList list then concatLists list
+    else if all __isAttrs list then mergeAttrs list
+    else throw "Default merge method does not work on '${name}'.";
+
+  mergeEnableOption = name: fold logicalOR false;
+
+  mergeListOption = name: list:
+    if all __isList list then list
+    else throw "${name}: Expect a list.";
+
+  # Merge sets of options and bindings.
+  # noOption: function to call if no option is declared.
+  mergeOptionSets = noOption: path: opts:
+    if all __isAttrs opts then
+      zip (attr: opts:
+        let
+          name = if path == "" then attr else path + "." + attr;
+          defaultOpt = { merge = mergeDefaultOption; };
+          test = partition isOption opts;
+        in
+          if test.right == [] then mergeOptionSets noOption name test.wrong
+          else if tail test.right != [] then throw "Multiple options for '${name}'."
+          else if test.wrong == [] then (head test.right).default
+          else (defaultOpt // head test.right).merge name test.wrong
+      ) opts
+   else noOption path opts;
+
+  # Keep all option declarations and add an attribute "name" inside
+  # each option which contains the path that has to be followed to
+  # access it.
+  filterOptionSets = path: opts:
+    if all __isAttrs opts then
+      zip (attr: opts:
+        let
+          name = if path == "" then attr else path + "." + attr;
+          test = partition isOption opts;
+        in
+          if test.right == []
+          then filterOptionSets name test.wrong
+          else map (x: x // { inherit name; }) test.right
+      ) opts
+    else {};
+
+  # Evaluate a list of option sets that would be merged with the
+  # function "merge" which expects two arguments.  The attribute named
+  # "require" is used to imports option declarations and bindings.
+  finalReferenceOptionSets = merge: pkgs: opts:
+    let optionSet = final: configFun:
+      if __isFunction configFun then configFun pkgs final
+      else configFun; # backward compatibility.
+    in
+      finalReference (final: merge ""
+        (map (x: removeAttrs x ["require"])
+          (uniqFlattenAttr (optionSet final) "require" [] (toList opts))
+        )
+      );
+
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
       [({
