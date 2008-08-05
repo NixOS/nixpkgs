@@ -57,6 +57,7 @@ let
       flex2533
       gawk
       gcc
+      gcc33
       gcc34
       gcc43
       gdb
