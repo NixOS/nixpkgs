@@ -48,6 +48,7 @@ let
       emboss
       enscript
       evince
+      expect
       exult
       feh
       file
