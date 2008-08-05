@@ -14,7 +14,7 @@ assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBin
 assert svnSupport -> subversion.perlBindings;
 
 stdenv.mkDerivation rec {
-  name = "git-git";
+  name = "git-git-with-glob-patch";
 
   src = sourceByName "git";
 
