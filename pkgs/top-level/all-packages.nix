@@ -5304,6 +5304,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  mount_cifs = import ../os-specific/linux/mount-cifs {
+    inherit fetchurl stdenv;
+  };
+
   aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
       inherit stdenv module_init_tools modules;
