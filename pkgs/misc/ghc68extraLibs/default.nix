@@ -43,6 +43,8 @@ rec {
           quickcheck = { name="QuickCheck-1.1.0.0"; srcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
           tagsoup = { name = "tagsoup-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/tagsoup/0.4/tagsoup-0.4.tar.gz; sha256 = "0rdy303qaw63la1fhw1z8h6k8cs33f71955pwlzxyx0n45g58hc7";};  p_deps = [ x.base x.mtl x.network ]; };
           hxt = { name = "hxt-7.5"; src =fetchurl { url = http://hackage.haskell.org/packages/archive/hxt/7.5/hxt-7.5.tar.gz; sha256 ="00q6m90a4qm4d5cg1x9r6b7f0rszcf2y7ifzs9mvy9kmzfl5ga7n"; };  p_deps = [x.base x.haskell98 x.http_darcs x.hunit x.network x.parsec x.tagsoup ]; };
+          storableVector = { name = "storablevector-0.1.2.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/storablevector/0.1.2.2/storablevector-0.1.2.2.tar.gz; sha256="1gf2a40mv8xxppdmg9l3svshww4sg0wwdqlwjl95nhacm0f6yrhb"; }; p_deps = [ x.base x.bytestring x.mtl x.quickcheck x.random ]; };
+          storableVectorDarcs = { name = "storablevector-darcs"; src = sourceByName "storableVector"; p_deps = [ x.base x.bytestring x.mtl x.quickcheck x.random ]; };
           haskellnet = { name = "HaskellNet-0.2"; src = sourceByName "haskellnet"; p_deps = [ x.base x.haskell98 x.network x.crypto x.mtl x.parsec x.time x.haxml x.bytestring x.pretty x.array x.dataenc x.containers x.old_locale x.old_time ];
              pass = {
                patchPhase = "

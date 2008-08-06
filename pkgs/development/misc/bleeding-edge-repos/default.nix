@@ -54,6 +54,7 @@ args:
       takusen = { type="darcs"; url=http://darcs.haskell.org/takusen/; };
       cabal = { type="darcs"; url=http://darcs.haskell.org/cabal; };
       haxml = { type="darcs"; url=http://www.cs.york.ac.uk/fp/darcs/HaXml; groups = "pg_haskell"; };
+      storableVector = { type="darcs"; url=http://darcs.haskell.org/storablevector/; groups = "haskell"; };
 
 
       # git repositories 

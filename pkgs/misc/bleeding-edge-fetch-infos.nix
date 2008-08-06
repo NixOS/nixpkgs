@@ -142,4 +142,8 @@
     url = http://mawercer.de/~nix/repos/haskell_src_exts.tar.gz;
     sha256 = "6cb2214ee3a62083325c907e47979b5fdf6809ce0ef2cd400fba0219b3f42090";
   };
+  storableVector = args: with args; fetchurl {
+    url = http://mawercer.de/~nix/repos/storableVector.tar.gz;
+    sha256 = "ce7ac7973e12ff92ceb371b95fc74430c7870f0fc27ae02fad4792b1643653b6";
+  };
 }
