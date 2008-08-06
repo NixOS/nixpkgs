@@ -364,13 +364,16 @@ rec {
     else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all __isList list then concatLists list
     else if all __isAttrs list then mergeAttrs list
-    else throw "Default merge method does not work on '${name}'.";
+    else abort "${name}: Cannot merge values.";
 
-  mergeEnableOption = name: fold logicalOR false;
+  mergeEnableOption = name: list:
+    if all (x: true == x || false == x) list
+    then fold logicalOR false list
+    else abort "${name}: Expect a boolean value.";
 
   mergeListOption = name: list:
-    if all __isList list then list
-    else throw "${name}: Expect a list.";
+    if all __isList list then concatLists list
+    else abort "${name}: Expect a list.";
 
   # Merge sets of options and bindings.
   # noOption: function to call if no option is declared.
