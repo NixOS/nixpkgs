@@ -3,7 +3,7 @@ args: with args;
 stdenv.mkDerivation {
   name="jwm-2.0.1";
   src = fetchurl {
-     url = http://24.254.249.181:8080/joewing.net/programs/jwm/releases/jwm-2.0.1.tar.bz2;
+     url = http://www.joewing.net/programs/jwm/releases/jwm-2.0.1.tar.bz2;
      sha256 = "1ix5y00cmg3cyazl0adzgv49140zxaf2dpngyg1dyy4ma6ysdmnw";
   };
 
