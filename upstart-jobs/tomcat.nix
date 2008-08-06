@@ -38,6 +38,15 @@ in
             cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
         fi
         
+	# Deploy context.xml
+	
+	if test "${cfg.contextXML}" = ""
+	then
+	    cp ${pkgs.tomcat6}/conf/context.xml.default ${cfg.baseDir}/conf/context.xml
+	else
+	    cp ${cfg.contextXML} ${cfg.baseDir}/conf/context.xml
+	fi
+		
         # Deploy all webapplications
         
         if ! test "${cfg.deployFrom}" = ""

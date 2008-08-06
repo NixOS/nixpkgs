@@ -1467,12 +1467,17 @@
       
       sharedLibFrom = mkOption {
         default = "";
-        description ="Location where shared libraries are stored. Leave empty to use the baseDir.";
+        description = "Location where shared libraries are stored. Leave empty to use the baseDir.";
       };
       
       commonLibFrom = mkOption {
         default = "";
-        description ="Location where common libraries are stored. Leave empty to use the baseDir.";
+        description = "Location where common libraries are stored. Leave empty to use the baseDir.";
+      };
+      
+      contextXML = mkOption {
+        default = "";
+	description = "Location of the context.xml to use. Leave empty to use the default.";
       };
     };
 
