@@ -5,13 +5,23 @@
 }:
 
 rec {
+  configComponents = [
+    configuration
+    optionDeclarations
+  ];
+
+  noOption = name: values:
+    abort "${name}: Used without option declaration.";
 
   # Make a configuration object from which we can retrieve option
   # values.
-  config = pkgs.lib.addDefaultOptionValues optionDeclarations configuration;
+  config =
+    pkgs.lib.finalReferenceOptionSets
+      (pkgs.lib.mergeOptionSets noOption)
+      pkgs configComponents;
 
-  optionDeclarations = import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;};
-    
+  optionDeclarations =
+    import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;};
 
   pkgs = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;};
 
@@ -438,8 +448,6 @@ rec {
         configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
       config.nesting.children; 
     configurationName = config.boot.configurationName;
-  }) (pkgs.lib.getAttr ["environment" "checkConfigurationOptions"] 
-        optionDeclarations.environment.checkConfigurationOptions.default
-        configuration) 
-      optionDeclarations configuration;
+  }) config.environment.checkConfigurationOptions
+     optionDeclarations config;
 }
