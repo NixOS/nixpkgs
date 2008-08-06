@@ -53,4 +53,15 @@
  Extensions: ForeignFunctionInterface
  Exposed-Modules:
          WASH.CGI.AbstractSelector
+--- a/Setup.lhs
++++ b/Setup.lhs
+@@ -5,7 +5,7 @@ arch-tag: Main setup script
+ > import Distribution.Simple.Configure
+ > import Distribution.Simple.LocalBuildInfo
+ > import Distribution.Simple.Program
+-> import Distribution.Setup
++> import Distribution.Simple.Setup
+ > import Distribution.Text
+ > import Distribution.Verbosity
+ > import Distribution.PackageDescription
 

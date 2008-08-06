@@ -1452,6 +1452,10 @@ let pkgs = rec {
   # classic expression style.. seems to work fine
   # used now
   # srcDir contains source directory (containing the .cabal file)
+  # TODO: set --bindir=/usr/local or such (executables are installed to
+  # /usr/local/bin which is not added to path when building other packages
+  # hsp needs trhsx from hsx
+  # TODO add eval "$preBuild" phase
   ghcCabalDerivation = args : with args;
     let buildInputs =  (if (args ? buildInputs) then args.buildInputs else [])
                     ++ [ ghcPkgUtil ] ++ ( if args ? pass && args.pass ? buildInputs then args.pass.buildInputs else []);

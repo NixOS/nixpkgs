@@ -1,0 +1,13 @@
+diff --git a/happs-hsp.cabal b/happs-hsp.cabal
+index 9669b43..d41c7ac 100644
+--- a/happs-hsp.cabal
++++ b/happs-hsp.cabal
+@@ -1,7 +1,7 @@
+ Name:		happs-hsp
+ Version:	0.1
+ Build-Type:	Simple
+-Build-Depends:	base, mtl, bytestring, plugins, HAppS-Server, hsp
++Build-Depends:	base, mtl, bytestring, plugins, HAppS-Server, hsp, containers, RJson, directory, hinotify, filepath
+ LICENSE:	BSD3
+ Hs-Source-Dirs: src
+ 
