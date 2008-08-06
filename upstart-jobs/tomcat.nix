@@ -34,6 +34,7 @@ in
         then    
             mkdir -p ${cfg.baseDir}/webapps
             mkdir -p ${cfg.baseDir}/shared
+	    mkdir -p ${cfg.baseDir}/lib
             cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
         fi
         
@@ -48,7 +49,7 @@ in
                 cp -rL $i ${cfg.baseDir}/webapps
             done
         fi
-        
+	
         # Fix permissions
         
         chown -R ${cfg.user} ${cfg.baseDir}
@@ -62,6 +63,22 @@ in
         do
             chmod -v 644 $i
         done
+
+	# Deploy all common libraries
+		
+	rm -rf ${cfg.baseDir}/lib/*
+	
+	if test "${cfg.commonLibFrom}" = ""
+	then
+	    commonLibFrom="${pkgs.tomcat6}/lib";
+	else
+	    commonLibFrom="${cfg.commonLibFrom}";
+	fi
+	
+	for i in $commonLibFrom/*.jar
+	do
+	    ln -s $i ${cfg.baseDir}/lib
+	done
 
         # Deploy all shared libraries
         
