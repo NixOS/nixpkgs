@@ -145,6 +145,8 @@
       description = ''
         A list of additional packages supplying kernel modules.
       '';
+      merge = name: list:
+        pkgsArg: pkgs.lib.concatMap (f: f pkgsArg) list;
     };
 
     kernelModules = mkOption {
@@ -1764,6 +1766,15 @@
           a package, or have an interactive process of extraction
           and cannot be redistributed.
         ";
+        merge = pkgs.lib.mergeListOption;
+      };
+
+      addUdevPkgs = mkOption {
+        default = [];
+        description = "
+          List of packages containing udev rules.
+        ";
+        merge = pkgs.lib.mergeListOption;
       };
       
       sndMode = mkOption {
@@ -2752,6 +2763,8 @@ root        ALL=(ALL) SETENV: ALL
         packages.  The function will be called with the Nix Packages
         collection as its argument for convenience.
       ";
+      merge = name: list:
+        pkgsArg: pkgs.lib.concatMap (f: f pkgsArg) list;
     };
 
     nix = mkOption {

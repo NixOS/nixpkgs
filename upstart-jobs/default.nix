@@ -100,7 +100,8 @@ let
         ++ config.services.udev.addFirmware;
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
-        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007;
+        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
+        ++ config.services.udev.addUdevPkgs;
     })
       
     # Makes LVM logical volumes available. 
