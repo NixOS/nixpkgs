@@ -7,7 +7,7 @@
 rec {
   configComponents = [
     configuration
-    optionDeclarations
+    (import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;})
   ];
 
   noOption = name: values:
@@ -21,7 +21,10 @@ rec {
       pkgs configComponents;
 
   optionDeclarations =
-    import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;};
+    pkgs.lib.finalOptionSetsFun
+      pkgs.lib.filterOptionSets
+      pkgs configComponents
+      config;
 
   pkgs = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;};
 
