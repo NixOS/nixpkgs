@@ -399,25 +399,27 @@ rec {
           name = if path == "" then attr else path + "." + attr;
           test = partition isOption opts;
         in
-          if test.right == []
-          then filterOptionSets name test.wrong
-          else map (x: x // { inherit name; }) test.right
+          if test.right == [] then filterOptionSets name test.wrong
+          else if tail test.right != [] then  throw "Multiple options for '${name}'."
+          else { inherit name; } // (head test.right)
       ) opts
     else {};
 
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
-  finalReferenceOptionSets = merge: pkgs: opts:
+  finalOptionSetsFun = merge: pkgs: opts:
     let optionSet = final: configFun:
       if __isFunction configFun then configFun pkgs final
       else configFun; # backward compatibility.
     in
-      finalReference (final: merge ""
+      final: merge ""
         (map (x: removeAttrs x ["require"])
           (uniqFlattenAttr (optionSet final) "require" [] (toList opts))
-        )
-      );
+        );
+
+  finalReferenceOptionSets = merge: pkgs: opts:
+    finalReference (finalOptionSetsFun merge pkgs opts);
 
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
