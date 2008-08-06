@@ -7276,7 +7276,7 @@ let pkgs = rec {
   };
 
   nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
-    inherit fetchurl stdenv bleedingEdgeRepos lib writeText getConfig;
+    inherit fetchurl stdenv bleedingEdgeRepos lib writeText;
     ghc = ghcsAndLibs.ghc68.ghc;
     fetchdarcs = fetchdarcs2;
   };

@@ -14,10 +14,8 @@ args: with args; with lib;
 let 
   toConfigLine = name : set : 
     "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${__getAttr a set}\")" ) (__attrNames set)))+"]";
-  nixPublishDir = getConfig [ "bleedingEdgeRepos" "bleedingEdgeFetchInfo"] "/tmp/bleeding-edge-fetch-info";
   config = writeText "nix-repository-manager_config"
         (bleedingEdgeRepos.managedRepoDir+"\n" +
-         nixPublishDir+"\n" +
         concatStringsSep "\n" (mapRecordFlatten toConfigLine (bleedingEdgeRepos.repos)));
 
 in
@@ -46,4 +44,5 @@ args.stdenv.mkDerivation {
       homepage = http://mawercer.de/repos/nix-repository-manager;
       license = "GPL";
   };
+  dummy=1;
 }

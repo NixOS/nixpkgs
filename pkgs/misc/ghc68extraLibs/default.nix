@@ -1,4 +1,18 @@
-# contains libraries and maybe applications in the future. That's why I'm putting it into misc. Feel free to move it somewhere else
+/* hackish collection of ghc packages
+   this will be replaced in the future
+
+   A library is defined by this attribute set:
+   <attr name> = {
+     name =
+     src =
+     p_deps = [ x.<attr name> x.<attr name> ] # x = recursive list of packages defined here and the core packages shipping with ghc
+     srcDir = <subDir of source> # optional
+     pass = {
+      # stuff passed to the builder as is (used for patches most of the time
+     };
+    }
+*/
+
 
 # TODO use nix names (regexCompat instead of regex_compat)
 args : ghc: with args;
@@ -17,7 +31,7 @@ rec {
                                    sha256 = "2a9b70b92c96ef1aa3eaa3426e224c0994c24bfdaccbf2b673edef65ba3cffce"; };
                  inherit (bleedingEdgeRepos) sourceByName;
              in {
-          # ghc extra packages 
+          # ghc extra packages
           mtl     = { name="mtl-1.1.0.0";     srcDir="libraries/mtl";    p_deps=[ x.base ]; src = ghc.extra_src; };
           parsec  = { name="parsec-2.1.0.0";  srcDir="libraries/parsec"; p_deps=[ x.base ]; src = ghc.extra_src; };
           network = { name="network-2.1.0.0"; srcDir="libraries/network"; p_deps=[ x.base x.parsec3 x.haskell98 ];       src = ghc.extra_src; };
@@ -29,33 +43,22 @@ rec {
           quickcheck = { name="QuickCheck-1.1.0.0"; srcDir="libraries/QuickCheck"; p_deps=[x.base x.random]; src = ghc.extra_src; };
           tagsoup = { name = "tagsoup-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/tagsoup/0.4/tagsoup-0.4.tar.gz; sha256 = "0rdy303qaw63la1fhw1z8h6k8cs33f71955pwlzxyx0n45g58hc7";};  p_deps = [ x.base x.mtl x.network ]; };
           hxt = { name = "hxt-7.5"; src =fetchurl { url = http://hackage.haskell.org/packages/archive/hxt/7.5/hxt-7.5.tar.gz; sha256 ="00q6m90a4qm4d5cg1x9r6b7f0rszcf2y7ifzs9mvy9kmzfl5ga7n"; };  p_deps = [x.base x.haskell98 x.http_darcs x.hunit x.network x.parsec x.tagsoup ]; };
-          haskellnet = { name = "HaskellNet-0.2"; src = sourceByName "haskellnet"; p_deps = [ x.base x.haskell98 x.network x.crypto x.mtl x.parsec x.time x.haxml x.bytestring x.pretty x.array x.dataenc x.containers x.old_locale x.old_time ]; 
-             pass = { 
+          haskellnet = { name = "HaskellNet-0.2"; src = sourceByName "haskellnet"; p_deps = [ x.base x.haskell98 x.network x.crypto x.mtl x.parsec x.time x.haxml x.bytestring x.pretty x.array x.dataenc x.containers x.old_locale x.old_time ];
+             pass = {
                patchPhase = "
                  patch -p1 < \$patch
                  sed -i 's/mtl/mtl, bytestring, pretty, array, dataenc, containers, old-locale, old-time/' *.cabal
-                 "; 
-               patch= ./haskellnetPatch ; 
+                 ";
+               patch= ./haskellnetPatch ;
              };
           };
           dataenc = { name = "dataenc-0.10.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/dataenc/0.10.2/dataenc-0.10.2.tar.gz; sha256="1kl087994ajbwy65f24qjnz6wchlhmk5vkdw1506zzfbi5fr6x7r"; }; p_deps = [ x.base ]; };
           # other pacakges  (hackage etc)
           polyparse = { name = "polyparse-2.3"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/polyparse/1.1/polyparse-1.1.tar.gz; sha256 = "0mrrk3hhfrn68xn5y4jfg4ba0pa08bj05l007862vrxyyb4bksl7"; }; p_deps = [ x.base x.haskell98 ]; };
-          /*
-bash: HaXml: command not found
-marc@nixos: ~ ]$ nix-prefetch-url http://hackage.haskell.org/packages/archive/hexpat/0.2/hexpat-0.2.tar.gz
-######################################################################## 100.0%
-hash is 05pcrh1czs6s3d7wv3ygiwf40ilmkiiygb86m1as2w2vwk9mqm6q
-path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
-05pcrh1czs6s3d7wv3ygiwf40ilmkiiygb86m1as2w2vwk9mqm6q
-
-
-*/
-
           # plugins doesn't compile with recent cabal
           # plugins = { name="plugins-1.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/plugins/1.2/plugins-1.2.tar.gz; sha256 = "1v2b3p3d2d3ab8zlzad4i6yy3zmarvkd09r71yc237xx66s7i9s5"; }; p_deps = [ x.array x.base x.cabal_darcs x.containers x.directory x.ghc x.haskellSrc x.process x.random ]; };
-          plugins_darcs = { name="plugins-darcs"; src = sourceByName "plugins"; p_deps = [ x.array x.base x.cabal_darcs x.containers x.directory x.ghc x.haskellSrc x.process x.random ]; 
-              pass = { patches = ./plugins-darcs-patches; };
+          plugins_darcs = { name="plugins-darcs"; src = sourceByName "plugins"; p_deps = [ x.array x.base x.cabal_darcs x.containers x.directory x.ghc x.haskellSrc x.process x.random ];
+              pass = { patches = ./plugins-darcs.patch; };
           };
           hinotify = { name="hinitofy-0.2"; src = fetchurl{ url = http://hackage.haskell.org/packages/archive/hinotify/0.2/hinotify-0.2.tar.gz; sha256 = "1x9mnlqy8lsq3qy9d559kxwqlj32smr9an76nf5i4hj67vicw1al"; };  p_deps = [ x.base x.containers x.directory x.unix ]; };
           harp = { name="harp-0.2.1"; src = fetchurl{ url = http://hackage.haskell.org/packages/archive/harp/0.2.1/harp-0.2.1.tar.gz; sha256 = "865e8c229e1ff89297b4348be95d93c10e373b63b7910da1e6b3330b48b96b87"; };  p_deps = [x.base]; };
@@ -64,13 +67,13 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
           # haskell_src_exts_metaquote = { name = "haskell_src_exts_metaquote-darcs"; src = sourceByName "haskell_src_exts_metaquote"; p_deps = [ x.base x.mtl x.containers x.array x.pretty x.binary x.packaged_string ]; };
 
           # hint = { name="hint-0.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hint/0.1/hint-0.1.tar.gz"; sha256 = "1adydl2la4lxxl6zz24lm4vbdrsi4bkpppzxhpkkmzsjhhkpf2f9"; }; p_deps = [ x.base x.ghc x.haskellSrc x.mtl ]; };
-          pcreLight = { name="pcre-light-0.3.1"; src= fetchurl { url = http://hackage.haskell.org/packages/archive/pcre-light/0.3.1/pcre-light-0.3.1.tar.gz; sha256 = "1h0qhfvqjcx59zkqhvsy7vw23l4444czg2z7b2lndy6cmkqc719m"; }; p_deps = [x.base x.bytestring pcre x.haskell98 ]; 
-            pass = { patchPhase = "                      
+          pcreLight = { name="pcre-light-0.3.1"; src= fetchurl { url = http://hackage.haskell.org/packages/archive/pcre-light/0.3.1/pcre-light-0.3.1.tar.gz; sha256 = "1h0qhfvqjcx59zkqhvsy7vw23l4444czg2z7b2lndy6cmkqc719m"; }; p_deps = [x.base x.bytestring pcre x.haskell98 ];
+            pass = { patchPhase = "
                   echo \"    extra-lib-dirs: ${pcre}/lib\" >> pcre-light.cabal
                   ";
           }; };
-          hsHaruPDF = { name = "HsHaruPDF-0.0.0"; src = fetchurl{url= "http://hackage.haskell.org/packages/archive/HsHaruPDF/0.0.0/HsHaruPDF-0.0.0.tar.gz"; sha256="1yifhxk1m3z2i7gaxgwlmk6cv2spbpx8fny4sn59ybca8wd9z7ps";}; p_deps = [ x.base x.haskell98 ]; 
-                        pass = { buildInputs = [ mysql zlib libpng ]; 
+          hsHaruPDF = { name = "HsHaruPDF-0.0.0"; src = fetchurl{url= "http://hackage.haskell.org/packages/archive/HsHaruPDF/0.0.0/HsHaruPDF-0.0.0.tar.gz"; sha256="1yifhxk1m3z2i7gaxgwlmk6cv2spbpx8fny4sn59ybca8wd9z7ps";}; p_deps = [ x.base x.haskell98 ];
+                        pass = { buildInputs = [ mysql zlib libpng ];
                           patchPhase = "
                             sed 's/include-dirs:.*/include-dirs: haru/'  -i HsHaruPDF.cabal
                             sed 's=extra-lib-dirs:.*=extra-lib-dirs: ${libpng}/lib ${zlib}/lib=' -i HsHaruPDF.cabal
@@ -104,11 +107,6 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
           tar = rec { name = "tar-0.1.1.1"; p_deps = [ x.base x.bytestring x.haskell98 x.binary x.unixCompat ];
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/tar/0.1.1.1/tar-0.1.1.1.tar.gz";
                                         sha256 = "08ns56xxw6519q0f7fqdznhcwx5dj2rc531mivxdyja6lmmjcfcb"; };
-                    #pass = {
-                      #patchPhase = ''
-                        #echo      "  extra-lib-dirs: ${zlib}/lib" >> zlib.cabal
-                        #echo      "  include-dirs: ${zlib}/include" >> zlib.cabal'';
-               #}; 
           };
           zlib = rec { name = "zlib-0.4.0.4"; p_deps = [ x.base x.bytestring x.haskell98 ];
                            src = fetchurl { url = "http://hackage.haskell.org/packages/archive/zlib/0.4.0.4/zlib-0.4.0.4.tar.gz";
@@ -140,7 +138,7 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
                                      #sha256 = "0j2lkvg5c0x5gf2sy7zmmgrda0c3l73i9d6hyka2f15d5n1rfjc9"; };
                       #pass = { patchPhase = "
                                     #sed -e 's=build-depends:.*=build-depends: base, old-locale, old-time=' -i hsql.cabal
-                                    #echo \"extensions: 
+                                    #echo \"extensions:
                                     #ForeignFunctionInterface, TypeSynonymInstances, CPP, ExistentialQuantification, GeneralizedNewtypeDeriving, PatternSignatures, ScopedTypeVariables, Rank2Types, DeriveDataTypeable \" >> hsql.cabal
                                     #"; };
               #};
@@ -161,7 +159,7 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
           #                           sha256 = "180c8acp4p9hsl5h8ryhhli9mlqcmcfjqaxzr7sa074gpzq29vfc"; };
           #            pass = { patchPhase = "
           #                          sed -e 's=build-depends:.*=build-depends: base, old-locale, old-time=' -i hsql.cabal
-          #                          echo \"extensions: 
+          #                          echo \"extensions:
           #                          ForeignFunctionInterface, TypeSynonymInstances, CPP, ExistentialQuantification, GeneralizedNewtypeDeriving, PatternSignatures, ScopedTypeVariables, Rank2Types, DeriveDataTypeable \" >> hsql.cabal
           #                          "; };
           #    };
@@ -209,7 +207,7 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
                               };
           };
 
-          gtk2hs = rec { name = "gtk2hs-0.9.12.1"; p_deps = [ x.haskell98 x.mtl x.bytestring pkgconfig ] ++ (with gtkLibs; [ glib pango gtk gnome.glib gnome.gtksourceview]); 
+          gtk2hs = rec { name = "gtk2hs-0.9.12.1"; p_deps = [ x.haskell98 x.mtl x.bytestring pkgconfig ] ++ (with gtkLibs; [ glib pango gtk gnome.glib gnome.gtksourceview]);
                           src = fetchurl {
                             url = "http://downloads.sourceforge.net/gtk2hs/${name}.tar.gz";
                             sha256 = "110z6v9gzhg6nzlz5gs8aafmipbva6rc50b8z1jgq0k2g25hfy22"; };
@@ -233,7 +231,7 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
           };
 
           wxcore = rec {
-                         
+
                         name = "wxhaskel-${wxVersion}"; p_deps = [ x.haskell98 x.mtl x.bytestring x.parsec3 pkgconfig wxGTK  ] ++ (with gtkLibs; [ glib pango gtk gnome.glib]);
                         src = wxSrc;
                         pass = {
@@ -255,7 +253,7 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
                 #  TODO rempove pwd
                 pass = { patchPhase = "pwd; cp {,wx/}license.txt"; };
             };
-                  
+
           typecompose = { name="TypeCompose-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/TypeCompose/0.5/TypeCompose-0.5.tar.gz; sha256 = "0mzjvwjixkp0jxfzxjw1pq8k1sm61sb5y96fk07xm91nn4sgpaqj"; }; p_deps = [ x.base ]; };
           reactive = { name="reactive-0.5"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/reactive/0.5/reactive-0.5.tar.gz; sha256 = "1giv5p2nks4rw683bkmnjmdanpx8mgqi6dzj099cjbk93jag9581"; }; p_deps = [ x.base x.typecompose ]; };
           phooey = { name="phooey-2.0"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/phooey/2.0/phooey-2.0.tar.gz; sha256 = "1bb6cn2vk7b57gaxh863ymidb4l7ldiwcnpif790rd4bq44fwfvf"; }; p_deps = [ x.base x.typecompose x.reactive x.wx x.wxcore ]; };
@@ -269,193 +267,172 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
 
           deeparrow = { name = "DeepArrow-0.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/DeepArrow/0.2/DeepArrow-0.2.tar.gz; sha256 = "1rm55nryg2z4r5919da2cc3nq08cg0g9gf59qfzl50lfccq8x2wd"; }; p_deps = [ x.base x.mtl x.typecompose x.haskellSrc ]; };
           tv = { name = "TV-0.4"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/TV/0.4/TV-0.4.tar.gz; sha256 = "0hracvx6pydmqfkx9n906k0463b0qaxskis91kir63ivf91zwndp"; }; p_deps = [ x.base  x.typecompose x.deeparrow]; };
-          guitv = { name = "GuiTV-0.4"; src = fetchurl { url = http://darcs.haskell.org/packages/GuiTV/dist/GuiTV-0.4.tar.gz; sha256 = "15mndbxm83q0d8ci3vj51zwrmzl0f5i5yqv0caw05vlzfsr4ib5i";}; p_deps = [ x.base x.deeparrow x.typecompose x.phooey x.tv ]; }; 
+          guitv = { name = "GuiTV-0.4"; src = fetchurl { url = http://darcs.haskell.org/packages/GuiTV/dist/GuiTV-0.4.tar.gz; sha256 = "15mndbxm83q0d8ci3vj51zwrmzl0f5i5yqv0caw05vlzfsr4ib5i";}; p_deps = [ x.base x.deeparrow x.typecompose x.phooey x.tv ]; };
 
-          haskellSrc = { name = "haskell-src-1.0.1.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/haskell-src/1.0.1.1/haskell-src-1.0.1.1.tar.gz"; sha256 = "06kilrf7y5h6dxj57kwymr20zvdsq6zhchwn4wky12mrmzjxyj01"; }; p_deps = [ x.haskell98 x.base x.pretty x.array ]; 
+          haskellSrc = { name = "haskell-src-1.0.1.1"; src = fetchurl { url = "http://hackage.haskell.org/packages/archive/haskell-src/1.0.1.1/haskell-src-1.0.1.1.tar.gz"; sha256 = "06kilrf7y5h6dxj57kwymr20zvdsq6zhchwn4wky12mrmzjxyj01"; }; p_deps = [ x.haskell98 x.base x.pretty x.array ];
                       pass = { buildInputs = (with executables; [ happy alex ] ); };
                       };
-          haskellSrcExt = { name = "haskell-src-exts-0.3.3.tar.gz"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskell-src-exts/0.3.3/haskell-src-exts-0.3.3.tar.gz"; sha256 = "0g9ibjj1k5k3mqfx5mp8pqr0zx53pp9dkf52r8cdv18bl8xhzbpx"; }; p_deps = [ x.base x.base x.array x.pretty ]; 
+          haskellSrcExt = { name = "haskell-src-exts-0.3.3.tar.gz"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskell-src-exts/0.3.3/haskell-src-exts-0.3.3.tar.gz"; sha256 = "0g9ibjj1k5k3mqfx5mp8pqr0zx53pp9dkf52r8cdv18bl8xhzbpx"; }; p_deps = [ x.base x.base x.array x.pretty ];
                       pass = { buildInputs = (with executables; [ happy alex ] ); };
                     };
-          haskellSrcExtDarcs = { name = "haskell-src-exts-darcs"; src = sourceByName "haskell_src_exts"; p_deps = [ x.base x.base x.array x.pretty ]; 
+          haskellSrcExtDarcs = { name = "haskell-src-exts-darcs"; src = sourceByName "haskell_src_exts"; p_deps = [ x.base x.base x.array x.pretty ];
                       pass = { buildInputs = (with executables; [ happy alex ] ); };
                     };
 
-          # haskelldb 
-          haskelldb = { name = "haskelldb-0.10"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskelldb/0.10/haskelldb-0.10.tar.gz"; sha256 = "1i4kgsgajr9cijg0a2c04rn1zqwiasfvdbvs8c5qm49vkbdzm7l5"; }; p_deps = [ x.base x.haskell98 x.mtl x.pretty x.old_time x.directory x.old_locale]; 
+          # haskelldb
+          haskelldb = { name = "haskelldb-0.10"; src = fetchurl  { url = "http://hackage.haskell.org/packages/archive/haskelldb/0.10/haskelldb-0.10.tar.gz"; sha256 = "1i4kgsgajr9cijg0a2c04rn1zqwiasfvdbvs8c5qm49vkbdzm7l5"; }; p_deps = [ x.base x.haskell98 x.mtl x.pretty x.old_time x.directory x.old_locale];
                     pass = { patchPhase = "sed -i 's/mtl/mtl, pretty, old-time, directory, old-locale/' haskelldb.cabal
                                             echo 'ghc-options: -O2 -fglasgow-exts -fallow-undecidable-instances' >> haskelldb.cabal"; };
           };
-            #hsql drivers
-
-          haskelldbHsql = { name= "haskelldb-hsql--0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql/0.10/haskelldb-hsql-0.10.tar.gz; sha256 = "0s3bjm080hzw23zjxr4412m81v408ll9y6gqb2yyw30n886ixzgh"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldb x.old_time x.old_locale ]; 
-                    pass = { patchPhase = "sed -i 's/mtl/mtl, pretty, old-time, directory, old-locale/' haskelldb-hsql.cabal
-                                            echo 'ghc-options: -O2 -fglasgow-exts -fallow-undecidable-instances' >> haskelldb-hsql.cabal"; };
-                    };
-          haskelldbHsqlMysql = { name= "haskelldb-hsql-mysql-0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql-mysql/0.10/haskelldb-hsql-mysql-0.10.tar.gz; sha256 = "0nfgq0xn45rhwxr8jvawviqfhgvhqr56l7ki1d72605y34dfx7rw"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldbHsql x.hsqlMysqlDarcs x.haskelldb ]; 
-          };
-
-
-          /*
-
-          haskelldb-hsql-postgresql-0.10.tar.gz
-          ######################################################################## 100.0%
-          hash is 00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
-          path is /nix/store/9n86rzpn0c4zyb7wpilpfcpkfnq68fch-haskelldb-hsql-postgresql-0.10.tar.gz
-          00nva5hhaknm5via4c1p2wj7ibyn6q874f0c3izjb9dk7rivfvgv
-          */
-
+          #hsql drivers
+          haskelldbHsql = { name= "haskelldb-hsql--0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql/0.10/haskelldb-hsql-0.10.tar.gz; sha256 = "0s3bjm080hzw23zjxr4412m81v408ll9y6gqb2yyw30n886ixzgh"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldb x.old_time x.old_locale ];
+                        pass = { patchPhase = "sed -i 's/mtl/mtl, pretty, old-time, directory, old-locale/' haskelldb-hsql.cabal
+                                                echo 'ghc-options: -O2 -fglasgow-exts -fallow-undecidable-instances' >> haskelldb-hsql.cabal"; };
+                        };
+          haskelldbHsqlMysql = { name= "haskelldb-hsql-mysql-0.10"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/haskelldb-hsql-mysql/0.10/haskelldb-hsql-mysql-0.10.tar.gz; sha256 = "0nfgq0xn45rhwxr8jvawviqfhgvhqr56l7ki1d72605y34dfx7rw"; }; p_deps = [ x.base x.haskell98 x.mtl x.hsqlDarcs x.haskelldbHsql x.hsqlMysqlDarcs x.haskelldb ]; };
 
           getOptions = rec { name = "GetOptions"; p_deps = [ x.haskell98 x.base x.mtl ];
-                       src = sourceByName "getOptions";
-                 };
+                           src = sourceByName "getOptions";
+                     };
 
           # 1.13 is stable. There are more recent non stable versions
           haxml = rec { name = "HaXml-1.13.3"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 ];
-                       src = fetchurl { url = "http://www.haskell.org/HaXml/${name}.tar.gz";
-                                        sha256 = "08d9wy0rg9m66dd10x0zvkl74l25vxdakz7xp3j88s2gd31jp1v0"; };
-                 };
+                           src = fetchurl { url = "http://www.haskell.org/HaXml/${name}.tar.gz";
+                                            sha256 = "08d9wy0rg9m66dd10x0zvkl74l25vxdakz7xp3j88s2gd31jp1v0"; };
+                     };
           haxml_darcs = { name = "HaXml-darcs"; p_deps = [ x.base x.rts x.directory x.process x.pretty x.containers x.filepath x.haskell98 x.polyparse x.bytestring ];
-                       src = sourceByName "haxml";
-                 };
+                           src = sourceByName "haxml";
+                     };
           xhtml = rec { name = "xhtml-3000.0.2.2"; p_deps = [ x.base ];
-                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/xhtml/3000.0.2.2/xhtml-3000.0.2.2.tar.gz";
-                                        sha256 = "112mbq26ksh7r22y09h0xvm347kba3p4ns12vj5498fqqj333878"; };
-                 };
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/xhtml/3000.0.2.2/xhtml-3000.0.2.2.tar.gz";
+                                            sha256 = "112mbq26ksh7r22y09h0xvm347kba3p4ns12vj5498fqqj333878"; };
+                     };
           html = rec { name = "html-1.0.1.1"; p_deps = [ x.base ];
-                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/html/1.0.1.1/html-1.0.1.1.tar.gz";
-                                        sha256 = "10fayfm18p83zlkr9ikxlqgnzxg1ckdqaqvz6wp1xj95fy3p6yl1"; };
-                 };
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/html/1.0.1.1/html-1.0.1.1.tar.gz";
+                                            sha256 = "10fayfm18p83zlkr9ikxlqgnzxg1ckdqaqvz6wp1xj95fy3p6yl1"; };
+                     };
           crypto = rec { name = "crypto-4.1.0"; p_deps = [ x.base x.array x.pretty x.quickcheck x.random x.hunit ];
-                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/Crypto/4.1.0/Crypto-4.1.0.tar.gz";
-                                        sha256 = "13rbpbn6p1da6qa9m6f7dmkzdkmpnx6jiyyndzaz99nzqlrwi109"; };
-                 };
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/Crypto/4.1.0/Crypto-4.1.0.tar.gz";
+                                            sha256 = "13rbpbn6p1da6qa9m6f7dmkzdkmpnx6jiyyndzaz99nzqlrwi109"; };
+                     };
           hslogger = rec { name = "hslogger-1.0.4"; p_deps = [ x.containers x.directory x.mtl x.network x.process];
-                       src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hslogger/1.0.4/hslogger-1.0.4.tar.gz";
-                                        sha256 = "0kmz8xs1q41rg2xwk22fadyhxdg5mizhw0r4d74y43akkjwj96ar"; };
-                 };
+                           src = fetchurl { url = "http://hackage.haskell.org/packages/archive/hslogger/1.0.4/hslogger-1.0.4.tar.gz";
+                                            sha256 = "0kmz8xs1q41rg2xwk22fadyhxdg5mizhw0r4d74y43akkjwj96ar"; };
+                     };
           parsep = { name = "parsep-0.1"; p_deps = [ x.base x.mtl x.bytestring ];
-                         src = fetchurl { url = "http://twan.home.fmf.nl/parsep/parsep-0.1.tar.gz";
-                                        sha256 = "1y5pbs5mzaa21127cixsamahlbvmqzyhzpwh6x0nznsgmg2dpc9q"; };
-                         pass = { patchPhase = "sed -i 's/fps/bytestring/' *.cabal"; };
-                 };
+                             src = fetchurl { url = "http://twan.home.fmf.nl/parsep/parsep-0.1.tar.gz";
+                                            sha256 = "1y5pbs5mzaa21127cixsamahlbvmqzyhzpwh6x0nznsgmg2dpc9q"; };
+                             pass = { patchPhase = "sed -i 's/fps/bytestring/' *.cabal"; };
+                     };
           time = { name = "time-1.1.2.0"; p_deps = [ x.base x.old_locale ];
-                         src = fetchurl { url = "http://hackage.haskell.org/packages/archive/time/1.1.2.0/time-1.1.2.0.tar.gz";
-                                        sha256 = "0zm4qqczwbqzy2pk7wz5p1virgylwyzd9zxp0406s5zvp35gvl89"; };
-                  };
+                             src = fetchurl { url = "http://hackage.haskell.org/packages/archive/time/1.1.2.0/time-1.1.2.0.tar.gz";
+                                            sha256 = "0zm4qqczwbqzy2pk7wz5p1virgylwyzd9zxp0406s5zvp35gvl89"; };
+                      };
           rjson = { name = "RJson-0.3.3"; p_deps = [ x.base x.mtl x.parsec3 x.bytestring x.iconv x.array x.containers x.syb_with_class_darcs ];
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/RJson/0.3.3/RJson-0.3.3.tar.gz;
-                                        sha256 = "0va1rbgjb8m3rij02318a31bi9gmy3zwyx5z12164c7iwafnd5v2"; };
-                  };
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/RJson/0.3.3/RJson-0.3.3.tar.gz;
+                                            sha256 = "0va1rbgjb8m3rij02318a31bi9gmy3zwyx5z12164c7iwafnd5v2"; };
+                      };
           iconv = { name = "iconv-0.4"; p_deps = [ x.base x.bytestring ];
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/iconv/0.4/iconv-0.4.tar.gz;
-                                        sha256 = "1snqzz7hi2qa83m5v3098rsldb485kz2jggd335qhvjahcp4bj1p"; };
-                  };
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/iconv/0.4/iconv-0.4.tar.gz;
+                                            sha256 = "1snqzz7hi2qa83m5v3098rsldb485kz2jggd335qhvjahcp4bj1p"; };
+                      };
 
           utf8string = { name = "utf8-string-0.3"; p_deps = [ x.base x.bytestring ];
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/utf8-string/0.3/utf8-string-0.3.tar.gz;
-                                        sha256 = "11mln2r0ym4y12zxizn6n40xbgsi6q4n6n810rcg94bv35gqgcby"; };
-                  };
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/utf8-string/0.3/utf8-string-0.3.tar.gz;
+                                            sha256 = "11mln2r0ym4y12zxizn6n40xbgsi6q4n6n810rcg94bv35gqgcby"; };
+                      };
           x11 = { name = "x11-1.4.1"; p_deps = [ x.base x.haskell98 x.bytestring ] ++ (with xlibs; [ libX11 libXext ]);
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11/1.4.1/X11-1.4.1.tar.gz;
-                                        sha256 = "0yczl1m7g3lggcxh56fy2br13kbk4c5vrkcc4w76ys0m2ia3h475"; };
-                  };
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11/1.4.1/X11-1.4.1.tar.gz;
+                                            sha256 = "0yczl1m7g3lggcxh56fy2br13kbk4c5vrkcc4w76ys0m2ia3h475"; };
+                      };
           x11extras = { name = "X11-extras-0.4"; p_deps = [ x.base x.bytestring x.x11 xlibs.libXinerama ];
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-extras/0.4/X11-extras-0.4.tar.gz;
-                                        sha256 = "1cpjr09gddcjd0wqwvaankv1zj7fyc6hbfdvar63f51g3vvw627a"; };
-                  };
-          /*
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-extras/0.4/X11-extras-0.4.tar.gz;
+                                            sha256 = "1cpjr09gddcjd0wqwvaankv1zj7fyc6hbfdvar63f51g3vvw627a"; };
+                      };
+              /*
           x11xft = { name = "xft-0.2"; p_deps = [ x.base x.bytestring x.haskell98 x.x11 x.utf8string x.bytestring xlibs.libXft freetype];
-                        src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-xft/0.2/X11-xft-0.2.tar.gz;
-                                        sha256 = "1ahvpkgh5mr6v8gisv1sc9s4075hqh85cpqcqh1ylr6lkf7dz31w"; };
-                         pass = { 
-                            inherit freetype;
-                            patchPhase = "sed -i \"s=include-dirs:.*=include-dirs: $freetype/include=\" *.cabal"; };
-                  };
-          */
+                            src = fetchurl { url = http://hackage.haskell.org/packages/archive/X11-xft/0.2/X11-xft-0.2.tar.gz;
+                                            sha256 = "1ahvpkgh5mr6v8gisv1sc9s4075hqh85cpqcqh1ylr6lkf7dz31w"; };
+                             pass = {
+                                inherit freetype;
+                                patchPhase = "sed -i \"s=include-dirs:.*=include-dirs: $freetype/include=\" *.cabal"; };
+                      };
+              */
 
-        # HAPPS - Libraries
+          # HAPPS - Libraries
           http_darcs = { name="http-darcs"; p_deps = [x.network x.parsec3];
-                  src = sourceByName "http";
-                   #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
-                 };
+                      src = sourceByName "http";
+                       #src = fetchdarcs { url = "http://darcs.haskell.org/http/"; md5 = "4475f858cf94f4551b77963d08d7257c"; };
+                     };
           syb_with_class_darcs = { name="syb-with-class-darcs"; p_deps = [x.template_haskell x.bytestring ];
-                   src =
-                    # fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
-                     sourceByName "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
-                 };
+                       src =
+                        # fetchdarcs { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                         sourceByName "syb_with_class"; # { url = "http://happs.org/HAppS/syb-with-class"; md5 = "b42336907f7bfef8bea73bc36282d6ac"; };
+                     };
 
-        happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty x.binary ];
-                    src = sourceByName "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
-                    };
-        happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
-                    src = sourceByName "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
-                    };
-      
-        happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
-                      x.mtl x.network x.stm x.template_haskell x.hslogger
-                        x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
-                        x.random x.old_time x.old_locale x.unix x.directory x.binary x.hspread ];
-                      src = sourceByName "happs_state";
-                      #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State"; 
-                      #                   md5 = "956e5c293b60f4a98148fedc5fa38acc"; 
-                      #                 };
-                    };
+          happs_data_darcs = { name="HAppS-Data-darcs"; p_deps=[ x.base x.mtl x.template_haskell x.syb_with_class_darcs x.haxml x.happs_util_darcs x.regex_compat x.bytestring x.pretty x.binary ];
+                        src = sourceByName "happs_data"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Data"; md5 = "10c505dd687e9dc999cb187090af9ba7"; };
+                        };
+          happs_util_darcs = { name="HAppS-Util-darcs"; p_deps=[ x.base x.mtl x.hslogger x.template_haskell x.array x.bytestring x.old_time x.process x.directory ];
+                        src = sourceByName "happs_util"; # fetchdarcs { url = "http://happs.org/repos/HAppS-Util"; md5 = "693cb79017e522031c307ee5e59fc250"; };
+                        };
+
+          happs_state_darcs = { name="HAppS-State-darcs"; p_deps=[ x.base x.haxml
+                          x.mtl x.network x.stm x.template_haskell x.hslogger
+                            x.happs_util_darcs x.happs_data_darcs x.bytestring x.containers
+                            x.random x.old_time x.old_locale x.unix x.directory x.binary x.hspread ];
+                          src = sourceByName "happs_state";
+                          #src = fetchdarcs { url = "http://happs.org/repos/HAppS-State";
+                          #                   md5 = "956e5c293b60f4a98148fedc5fa38acc";
+                          #                 };
+                        };
 
 
-      happs_hsp_darcs = { name="happs-hsp-darcs"; src=sourceByName "happs_hsp"; p_deps=[x.base x.mtl x.bytestring x.plugins_darcs x.happs_server_darcs x.hsp_darcs x.containers x.rjson x.directory x.hinotify x.filepath]; 
-        pass = { patches = ./hsp-darcs-patch; };
-      };
-      happs_hsp_template_darcs = { name="happs-hsp-template-darcs"; src=sourceByName "happs_hsp_template"; p_deps=[ x.base x.bytestring x.filepath x.directory x.mtl x.containers x.network x.hinotify x.plugins_darcs x.rjson x.happs_server_darcs x.hsp_darcs]; };
-      hsp_darcs = { name="hsp-darcs"; src=sourceByName "hsp"; p_deps=[x.base x.mtl x.harp x.hsx x.hjscript_darcs]; 
-            pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
+          happs_hsp_darcs = { name="happs-hsp-darcs"; src=sourceByName "happs_hsp"; p_deps=[x.base x.mtl x.bytestring x.plugins_darcs x.happs_server_darcs x.hsp_darcs x.containers x.rjson x.directory x.hinotify x.filepath];
+            pass = { patches = ./hsp-darcs.patch; };
+          };
+          happs_hsp_template_darcs = { name="happs-hsp-template-darcs"; src=sourceByName "happs_hsp_template"; p_deps=[ x.base x.bytestring x.filepath x.directory x.mtl x.containers x.network x.hinotify x.plugins_darcs x.rjson x.happs_server_darcs x.hsp_darcs]; };
+          hsp_darcs = { name="hsp-darcs"; src=sourceByName "hsp"; p_deps=[x.base x.mtl x.harp x.hsx x.hjscript_darcs];
+                pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
+                };
+          #hsp_xml_darcs = { name="hsp-xml-darcs"; src=sourceByName "hsp_xml"; p_deps=[x.base x.haskell98 x.hsp_darcs x.hsx x.mtl x.harp x.haxml_darcs];
+          #      pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
+          #  };
+          hspCgi_darcs = { name="hsp-cgi-darcs"; src=sourceByName "hspCgi"; p_deps=[x.base x.hsp_darcs x.network x.containers x.harp];
+                pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
             };
-      #hsp_xml_darcs = { name="hsp-xml-darcs"; src=sourceByName "hsp_xml"; p_deps=[x.base x.haskell98 x.hsp_darcs x.hsx x.mtl x.harp x.haxml_darcs];
-      #      pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
-      #  };
-      hspCgi_darcs = { name="hsp-cgi-darcs"; src=sourceByName "hspCgi"; p_deps=[x.base x.hsp_darcs x.network x.containers x.harp]; 
-            pass = { inherit (x) hsx; postUnpack=''PATH=$PATH:$hsx/usr/local/bin''; };
-        };
-      hjscript_darcs = { name="hjscript-darcs"; src=sourceByName "hjscript"; p_deps=[x.base x.hjavascript_darcs x.mtl x.hsx]; };
-      hjquery_darcs = { name="hjquery-darcs"; src=sourceByName "hjquery"; p_deps=[x.base x.hjscript_darcs ]; };
-      hjavascript_darcs = { name="darcs"; src=sourceByName "hjavascript"; p_deps=[x.base x.pretty]; };
+          hjscript_darcs = { name="hjscript-darcs"; src=sourceByName "hjscript"; p_deps=[x.base x.hjavascript_darcs x.mtl x.hsx]; };
+          hjquery_darcs = { name="hjquery-darcs"; src=sourceByName "hjquery"; p_deps=[x.base x.hjscript_darcs ]; };
+          hjavascript_darcs = { name="darcs"; src=sourceByName "hjavascript"; p_deps=[x.base x.pretty]; };
 
-       #happs_plugins_darcs = { name="HAppS-plugins-darcs"; p_deps=[ x.base x.mtl x.hslogger x.happs_util_darcs x.happs_data_darcs x.happs_state_darcs x.containers ];
-                   #src = bleedingEdgeRepos.sourceByName "happs_plugins";
-                   #};
-        # there is no .cabal yet 
-        #happs_smtp_darcs = { name="HAppS-smtp-darcs"; p_deps=[];
-                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-smtp"; md5 = "5316917e271ea1ed8ad261080bcb47db"; };
-                    #};
+           #happs_plugins_darcs = { name="HAppS-plugins-darcs"; p_deps=[ x.base x.mtl x.hslogger x.happs_util_darcs x.happs_data_darcs x.happs_state_darcs x.containers ];
+                       #src = bleedingEdgeRepos.sourceByName "happs_plugins";
+                       #};
+            # there is no .cabal yet
+            #happs_smtp_darcs = { name="HAppS-smtp-darcs"; p_deps=[];
+                        #src = fetchdarcs { url = "http://happs.org/repos/HAppS-smtp"; md5 = "5316917e271ea1ed8ad261080bcb47db"; };
+                        #};
 
-        happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
-                          x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
-                          x.template_haskell x.syb_with_class_darcs x.containers ];
-                    src = sourceByName "happs_ixset";
-                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-IxSet"; 
-                                       #md5 = "fa6b24517f09aa16e972f087430967fd"; 
-                                       #tag = "0.9.2";
-                                        # no tag
-                                       #md5 = "fa6b24517f09aa16e972f087430967fd"; 
-                                     #};
-                    };
-        happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec3 x.mtl
-                x.network x.regex_compat x.hslogger x.happs_data_darcs
-                  x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
-                  x.template_haskell x.xhtml x.html x.bytestring x.random
-                  x.containers x.old_time x.old_locale x.directory x.unix];
-                    #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
-                    src = sourceByName "happs_server";
-                    };
-        # using darcs with minimal patch applied to support $GHC_PACKAGE_PATH
-        cabal_darcs = 
-        { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
-                  src = sourceByName "cabal";
-          pass = { dummy = 2; };
-        };
+          happs_ixset_darcs = { name="HAppS-IxSet-darcs"; p_deps=[ x.base x.mtl
+                              x.hslogger x.happs_util_darcs x.happs_state_darcs x.happs_data_darcs
+                              x.template_haskell x.syb_with_class_darcs x.containers ];
+                        src = sourceByName "happs_ixset";
+                        };
+          happs_server_darcs = { name="HAppS-Server-darcs"; p_deps=[x.haxml x.parsec3 x.mtl
+                    x.network x.regex_compat x.hslogger x.happs_data_darcs
+                      x.happs_util_darcs x.happs_state_darcs x.happs_ixset_darcs x.http_darcs
+                      x.template_haskell x.xhtml x.html x.bytestring x.random
+                      x.containers x.old_time x.old_locale x.directory x.unix];
+                        #src = fetchdarcs { url = "http://happs.org/repos/HAppS-HTTP"; md5 = "e1bb17eb30a39d30b8c34dffbf80edc2"; };
+                        src = sourceByName "happs_server";
+                        };
+            # using darcs with minimal patch applied to support $GHC_PACKAGE_PATH
+           cabal_darcs =
+            { name=cabal_darcs_name; p_deps = with ghc.core_libs; [base rts directory process pretty containers filepath];
+                      src = sourceByName "cabal";
+              pass = { dummy = 2; };
+            };
       } // (getConfig [ "ghc68CustomLibs" ] ( args: x : {} ) ) args x;
-      #srcs_only = let x = pkgs; in map (y : y.src ) [ x.happs_util_darcs x.happs_data_darcs x.syb_with_class_darcs x.http_darcs 
-      #          x.happs_server_darcs x.happs_ixset_darcs x.happs_plugins_darcs x.happs_server_darcs ];
       toDerivation = attrs : with attrs;
       # result is { mtl = <deriv>;
         addHasktagsTaggingInfo (ghcCabalDerivation {
@@ -463,9 +440,9 @@ path is /nix/store/ikrbg8w0xxnbnggbvld5af2ib1bdpcfn-hexpat-0.2.tar.gz
             useLocalPkgDB = attrs ? useLocalPkgDB;
             propagatedBuildInputs = p_deps ++ (lib.optional (attrs.name != cabal_darcs_name) derivations.cabal_darcs );
             srcDir = if attrs ? srcDir then attrs.srcDir else ".";
-            # add cabal, take deps either from this list or from ghc.core_libs 
+            # add cabal, take deps either from this list or from ghc.core_libs
             pass = if attrs ? pass then attrs.pass else {};
         });
-      derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
+      derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten
                 ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
     }.derivations
