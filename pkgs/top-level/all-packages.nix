@@ -645,6 +645,12 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  gftp = import ../tools/networking/gftp {
+    inherit lib fetchurl stdenv;
+    inherit readline ncurses gettext openssl pkgconfig;
+    inherit (gtkLibs) glib gtk;
+  };
+
   gifsicle = import ../tools/graphics/gifscile {
     inherit fetchurl stdenv;
     inherit (xlibs) xproto libXt libX11;
@@ -2094,6 +2100,10 @@ let pkgs = rec {
 
   bison23 = import ../development/tools/parsing/bison/bison-2.3.nix {
     inherit fetchurl stdenv m4;
+  };
+
+  byacc = import ../development/tools/parsing/byacc {
+    inherit fetchurl stdenv;
   };
 
   ccache = import ../development/tools/misc/ccache {
@@ -5940,6 +5950,11 @@ let pkgs = rec {
     inherit fetchurl stdenv qt4 djvulibre;
   };
 
+  dmenu = import ../applications/misc/dmenu {
+    inherit lib fetchurl stdenv;
+    inherit (xlibs) libX11 libXinerama;
+  };
+
   # building eclipise from source
   # experimental tested on x86_64-linux only
   eclipse_classic_src = import ../applications/editors/eclipse/eclipse_classic.nix {
@@ -7023,6 +7038,12 @@ let pkgs = rec {
 
   gemrb = import ../games/gemrb {
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
+  };
+
+  micropolis = import ../games/micropolis {
+    inherit lib fetchurl stdenv;
+    inherit (xlibs) libX11 libXpm libXext xextproto;
+    inherit byacc bash;
   };
 
   openttd = import ../games/openttd {
