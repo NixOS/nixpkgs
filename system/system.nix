@@ -218,11 +218,29 @@ rec {
   };
 
 
+  # A patched `mount' command that looks in a directory in the Nix
+  # store instead of in /sbin for mount helpers (like mount.ntfs-3g or
+  # mount.cifs).
+  mount = import "${nixpkgsPath}/pkgs/os-specific/linux/util-linux" {
+    inherit (pkgs) fetchurl stdenv;
+    buildMountOnly = true;
+    mountHelpers = pkgs.buildEnv {
+      name = "mount-helpers";
+      paths = [
+        pkgs.ntfs3g
+        pkgs.mount_cifs
+      ];
+      pathsToLink = "/sbin";
+    } + "/sbin";
+  };
+  
+
   # The packages you want in the boot environment.
   systemPathList = [
     # Better leave them here - they are small, needed,
     # and hard to refer from anywhere outside.
     modprobe # must take precedence over module_init_tools
+    mount # must take precedence over util-linux
     nix
     nixosTools.nixosInstall
     nixosTools.nixosRebuild
