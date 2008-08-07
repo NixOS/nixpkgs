@@ -11,9 +11,11 @@ args.stdenv.mkDerivation {
 
   buildPhase = "true";
   
-  installPhase = "
+  installPhase = ''
     python ./setup.py install --prefix=$out
-  ";
+      d="$out/etc/bash_completion.d"
+      ensureDir $d; ln -s "$out/share/stgit/contrib/stgit-completion.bash" "$d"
+  '';
 
   meta = { 
       description = "quilt for git (stacking patches)";

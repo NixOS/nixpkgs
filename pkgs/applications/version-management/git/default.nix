@@ -76,7 +76,12 @@ stdenv.mkDerivation rec {
 
    + ''# Wrap `git-clone'
        wrapProgram $out/bin/git-clone                   \
-                   --prefix PATH : "${cpio}/bin" '';
+                   --prefix PATH : "${cpio}/bin" ''
+                   
+   + ''# install bash completion script
+      d="$out/etc/bash_completion.d"
+      ensureDir $d; cp contrib/completion/git-completion.bash "$d"
+     '';
 
   meta = {
     license = "GPLv2";

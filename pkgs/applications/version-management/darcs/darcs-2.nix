@@ -13,4 +13,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Patch-based version management system";
   };
+
+  patches = ./bash-completion.patch; # I didn't have "have"
 }

@@ -74,6 +74,11 @@ stdenv.mkDerivation rec {
        for b in $out/bin/{git,gitk}; do
          [ -f "$b" ] && eval "wrapProgram $b $wrapArgs"
        done
+     ''
+
+   + ''# install bash completion script
+      d="$out/etc/bash_completion.d"
+      ensureDir $d; cp contrib/completion/git-completion.bash "$d"
      '';
 
   meta = {
