@@ -1,11 +1,11 @@
 {stdenv, fetchurl, enableServer ? false, postgresql ? null, curl ? null}:
 
 stdenv.mkDerivation {
-  name = "zabbix-1.4.5";
+  name = "zabbix-1.4.6";
 
   src = fetchurl {
-    url = mirror://sourceforge/zabbix/zabbix-1.4.5.tar.gz;
-    sha256 = "1ha82q6rp49rgdfmni73y60kqjy00mfr2bp10mb0gnb0k4v9ppmb";
+    url = mirror://sourceforge/zabbix/zabbix-1.4.6.tar.gz;
+    sha256 = "19xczaiprn820jnq9lhixdhd3d6ffkjk80l98lwxzrz2zc2s06n9";
   };
 
   configureFlags = "--enable-agent " +
