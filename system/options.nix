@@ -653,10 +653,10 @@
 
       allowEveryone = mkOption {
         default = false;
-	description = ''
-	  Whether to make /var/spool/at{jobs,spool} writeable 
-	  by everyone (and sticky).
-	'';
+        description = ''
+          Whether to make /var/spool/at{jobs,spool} writeable 
+          by everyone (and sticky).
+        '';
       };
     };
 
@@ -1487,7 +1487,7 @@
       
       contextXML = mkOption {
         default = "";
-	description = "Location of the context.xml to use. Leave empty to use the default.";
+        description = "Location of the context.xml to use. Leave empty to use the default.";
       };
     };
 
@@ -1707,23 +1707,23 @@
 
       writeEnable = mkOption {
         default = false;
-	description = "
-	  Whether any write activity is permitted to users.
-	";
+        description = "
+          Whether any write activity is permitted to users.
+        ";
       };
 
       anonymousUploadEnable = mkOption {
         default = false;
-	description = "
-	  Whether any uploads are permitted to anonymous users.
-	";
+        description = "
+          Whether any uploads are permitted to anonymous users.
+        ";
       };
 
       anonymousMkdirEnable = mkOption {
         default = false;
-	description = "
-	  Whether mkdir is permitted to anonymous users.
-	";
+        description = "
+          Whether mkdir is permitted to anonymous users.
+        ";
       };
     };
     
