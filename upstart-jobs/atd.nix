@@ -1,4 +1,4 @@
-{ at }:
+{ at, config }:
 
 let uid = (import ../system/ids.nix).uids.atd;
     gid = (import ../system/ids.nix).gids.atd;
@@ -44,6 +44,7 @@ start script
      fi
    done
    chmod 1770 "$spooldir" "$jobdir"
+   ${if config.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
    if [ ! -f "$etcdir"/at.deny ]
    then
        touch "$etcdir"/at.deny && \

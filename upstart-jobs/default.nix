@@ -173,6 +173,7 @@ let
   ++ optional config.services.atd.enable
     (import ../upstart-jobs/atd.nix {
       at = pkgs.at;
+      config = config.services.atd;
      })
 
   # DHCP client.

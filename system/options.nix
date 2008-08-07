@@ -650,6 +650,14 @@
           Whether to enable the `at' daemon, a command scheduler.
         '';
       };
+
+      allowEveryone = mkOption {
+        default = false;
+	description = ''
+	  Whether to make /var/spool/at{jobs,spool} writeable 
+	  by everyone (and sticky).
+	'';
+      };
     };
 
     locate = {
