@@ -11,7 +11,7 @@ assert langC || langF77;
 
 with import ../../../lib;
 
-let version = "4.2.3"; in
+let version = "4.2.4"; in
 
 stdenv.mkDerivation {
   name = "gcc-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src =
     optional /*langC*/ true (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "04y84s46wzy4h44hpacf7vyla7b5zfc1qvdq3myvrhp82cp0bv4r";
+      sha256 = "cfc9e7e14966097d24d510cfd905515e8f7464ab5379a50698ae3d88e1f7a532";
     }) ++
     optional langCC (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-g++-${version}.tar.bz2";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     }) ++
     optional langF77 (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "1l3ww6qymrkcfqlssb41a5fdnh6w2hqk0v2ijx56jgjbdnzawyp0";
+      sha256 = "6fc2056cd62921b2859381749710af765a46877bd46f9fe5ef6fab0671c47e04";
     });
     
   patches =

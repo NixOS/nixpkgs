@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, perl, g77_42, libX11, libpng, libXt, zlib}:
+{stdenv, fetchurl, readline, perl, gfortran, libX11, libpng, libXt, zlib}:
 
 stdenv.mkDerivation {
   name = "r-lang-2.7.0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "17ql1j5d9rfpxs04j9v9qyxiysc9nh6yr43lgfdamayzjpia5jqm";
   };
 
-  buildInputs = [readline perl g77_42 libpng libX11 libXt zlib];
+  buildInputs = [readline perl gfortran libpng libX11 libXt zlib];
 
 	meta = {
 		description = "R is a language and environment for statistical computing and graphics";

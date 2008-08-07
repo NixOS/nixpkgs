@@ -1358,6 +1358,21 @@ let pkgs = rec {
     inherit stdenv;
   };
 
+  gfortran = import ../build-support/gcc-wrapper {
+    name = "gfortran";
+    nativeTools = false;
+    nativeLibc = false;
+    gcc = import ../development/compilers/gcc-4.2/fortran.nix {
+      inherit fetchurl stdenv noSysDirs;
+      langF77 = true;
+      langCC = false;
+      langC = false;
+      inherit gmp mpfr;
+    };
+    inherit (stdenv.gcc) binutils libc;
+    inherit stdenv;
+  };
+
   gcc = gcc42;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
@@ -1969,7 +1984,7 @@ let pkgs = rec {
   };
 
   rLang = import ../development/interpreters/r-lang {
-    inherit fetchurl stdenv readline perl g77_42 libpng zlib;
+    inherit fetchurl stdenv readline perl gfortran libpng zlib;
     inherit (xorg) libX11 libXt;
   };
 
