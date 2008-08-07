@@ -2,7 +2,7 @@
 
 let 
 
-  versionNumber = "173.14.05";
+  versionNumber = "173.14.12";
 
 in
 
@@ -15,16 +15,14 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}-pkg1.run";
-       sha256 = "14r3zddrppd0zxq76dd08dlj4qqncr7fj9cnrny4f0b5d0qgrd3f";
+        sha256 = "0a4i4a7vk0j7z52d2pg92f8wnlabd4r6v19qxdrr8nhgm0imjh78";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-pkg2.run";
-       sha256 = "0dmgn5a0432zkhgh0d5xs2h0sq5di2iaqybrj5f1vb2ghayams1y";
+        sha256 = "01hyyb5s7xc7108gy9cr7zkrfccfnpzqpipfygx9fikxyjb1vmig";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
-
-  #xenPatch = ./nvidia-2.6.24-xen.patch;
 
   inherit versionNumber kernel;
 
@@ -37,4 +35,9 @@ stdenv.mkDerivation {
   programPath = stdenv.lib.makeLibraryPath [
     gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv
   ];
+
+  meta = {
+    homepage = http://www.nvidia.com/object/unix.html;
+    description = "X.org driver and kernel module for NVIDIA graphics cards";
+  };
 }

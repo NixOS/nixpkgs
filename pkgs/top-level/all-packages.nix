@@ -5254,6 +5254,7 @@ let pkgs = rec {
   # Build the kernel modules for the some of the kernels.
   kernelPackages_2_6_23 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_23);
   kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
+  kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_23;
