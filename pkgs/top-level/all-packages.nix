@@ -7200,6 +7200,11 @@ let pkgs = rec {
     inherit libxml2 guile perl intltool libtool pkgconfig;
   } null;
 
+
+  biolib = import ../development/libraries/science/biology/biolib {
+    inherit fetchurl stdenv readline perl cmake rLang zlib;
+  };
+
   emboss = import ../applications/science/biology/emboss {
     inherit fetchurl stdenv readline perl libpng zlib;
     inherit (xorg) libX11 libXt;

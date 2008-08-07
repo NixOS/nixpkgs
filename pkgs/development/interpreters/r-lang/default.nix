@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [readline perl gfortran libpng libX11 libXt zlib];
+  configureFlags = ["--enable-R-shlib"] ;
 
 	meta = {
 		description = "R is a language and environment for statistical computing and graphics";
@@ -16,3 +17,5 @@ stdenv.mkDerivation {
     homepage    = http://www.r-project.org/;
   };
 }
+
+
