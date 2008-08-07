@@ -17,3 +17,10 @@ For each platform (i686, x86-64, uml):
   won't work).  If it is, investigate why (there's probably another
   option that forces it to be on) and fix it.
 - Copy .config over the new config file (e.g. config-2.6.21-i686-smp).
+
+
+- To do `make menuconfig':
+
+  $ nix-env -i ncurses
+  $ export NIX_CFLAGS_LINK=-lncurses
+  $ make menuconfig ARCH=<arch>
