@@ -461,6 +461,8 @@ rec {
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
+    
+    volumeID = "NIXOS_INSTALLATION_CD";
   };
  
 }
