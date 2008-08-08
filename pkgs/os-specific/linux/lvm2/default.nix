@@ -1,4 +1,4 @@
-{stdenv, fetchurl, devicemapper, static ? false}:
+{stdenv, fetchurl, devicemapper}:
 
 stdenv.mkDerivation {
   name = "lvm2-2.02.38";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "13nx6iqgga3ric51b36p15cxzhmh83s7spb2559iz3s24x4s0845";
   };
   buildInputs = [devicemapper];
-  configureFlags = if static then "--enable-static_link" else "";
+  configureFlags = if stdenv ? isStatic then "--enable-static_link" else "";
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
 }

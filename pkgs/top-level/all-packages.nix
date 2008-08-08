@@ -103,6 +103,34 @@ let pkgs = rec {
       isDietLibC = true;
     } // {inherit fetchurl;};
 
+  # Return a modified stdenv that uses klibc to create small
+  # statically linked binaries.
+  useKlibc = stdenv: klibc: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = "-static";
+
+        # These are added *after* the command-line flags, so we'll
+        # always optimise for size.
+        NIX_CFLAGS_COMPILE =
+          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
+          + " -Os -s";
+
+        configureFlags =
+          (if args ? configureFlags then args.configureFlags else "")
+          + " --disable-shared"; # brrr...
+
+        NIX_GCC = runCommand "klibc-wrapper" {} ''
+          ensureDir $out/bin
+          ln -s ${klibc}/bin/klcc $out/bin/gcc
+          ln -s ${klibc}/bin/klcc $out/bin/cc
+          ensureDir $out/nix-support
+          echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
+        '';
+      });
+      isKlibc = true;
+      isStatic = true;
+    } // {inherit fetchurl;};
+
   # Return a modified stdenv that tries to build statically linked
   # binaries.
   makeStaticBinaries = stdenv: stdenv //
@@ -4760,11 +4788,6 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  devicemapperStatic = lowPrio (appendToName "static" (import ../os-specific/linux/device-mapper {
-    inherit fetchurl stdenv;
-    static = true;
-  }));
-
   dmidecodeFun = lib.sumArgs (selectVersion ../os-specific/linux/dmidecode "2.9") {
     inherit fetchurl stdenv builderDefs;
   };
@@ -4780,11 +4803,6 @@ let pkgs = rec {
   e2fsprogs = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl stdenv;
   };
-
-  e2fsprogsDiet = lowPrio (appendToName "diet" (import ../os-specific/linux/e2fsprogs {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  }));
 
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
@@ -5320,12 +5338,6 @@ let pkgs = rec {
   lvm2 = import ../os-specific/linux/lvm2 {
     inherit fetchurl stdenv devicemapper;
   };
-
-  lvm2Static = lowPrio (appendToName "static" (import ../os-specific/linux/lvm2 {
-    inherit fetchurl stdenv;
-    static = true;
-    devicemapper = devicemapperStatic;
-  }));
 
   mdadm = import ../os-specific/linux/mdadm {
     inherit fetchurl stdenv groff;
