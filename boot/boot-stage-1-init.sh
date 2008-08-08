@@ -155,10 +155,6 @@ mountFS() {
 # Try to find and mount the root device.
 mkdir /mnt-root
 
-echo "mounting the root device.... (fix: sleeping 5 seconds to wait for upcoming usb drivers)"
-sleep 5
-
-# Hard-coded root device(s).
 mountPoints=(@mountPoints@)
 devices=(@devices@)
 fsTypes=(@fsTypes@)
@@ -181,6 +177,22 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
             device=/mnt-root$device
             ;;
     esac
+
+    # USB storage devices tend to appear with some delay.  It would be
+    # great if we had a way to synchronously wait for them, but
+    # alas...  So just wait for a few seconds for the device to
+    # appear.  If it doesn't appear, try to mount it anyway (and
+    # probably fail).  This is a fallback for non-device "devices"
+    # that we don't properly recognise (like NFS mounts).
+    if ! test -e $device; then
+        echo -n "waiting for device $device to appear..."
+        for ((try = 0; try < 10; try++)); do
+            sleep 1
+            if test -e $device; then break; fi
+            echo -n "."
+        done
+        echo
+    fi
 
     echo "mounting $device on $mountPoint..."
 
