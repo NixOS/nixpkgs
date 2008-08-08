@@ -8,6 +8,16 @@ fail() {
 }
 
 
+# Poor man's `basename'.
+basename() {
+    local s="$1"
+    set -- $(IFS=/; echo $s)
+    local res
+    while test $# != 0; do res=$1; shift; done
+    echo $res
+}
+
+
 # Print a greeting.
 echo
 echo "<<< NixOS Stage 1 >>>"
@@ -34,7 +44,7 @@ mount -t sysfs none /sys
 
 
 # Process the kernel command line.
-stage2Init=
+stage2Init=/init
 for o in $(cat /proc/cmdline); do
     case $o in
         init=*)
@@ -59,10 +69,9 @@ done
 
 
 # Load some kernel modules.
-export MODULE_DIR=@modulesDir@/lib/modules/
-for i in @modules@; do
-    echo "trying to load $i..."
-    modprobe $i
+for i in $(cat @modulesClosure@/insmod-list); do
+    echo "loading module $(basename $i)..."
+    insmod $i
 done
 
 
@@ -84,8 +93,8 @@ echo shutdown > /sys/power/disk
 
 # Create device nodes in /dev.
 export UDEV_CONFIG_FILE=/udev.conf
-echo 'udev_rules="/no-rules"' > $UDEV_CONFIG_FILE
-echo -n > /no-rules
+echo 'udev_rules="/rules"' > $UDEV_CONFIG_FILE
+mkdir /rules
 udevd --daemon
 udevadm trigger
 udevadm settle

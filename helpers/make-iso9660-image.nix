@@ -1,7 +1,7 @@
 { stdenv, perl, cdrkit, nixpkgsPath
 
-  # The file name of the resulting ISO image.
-, isoName ? "cd.iso"
+, # The file name of the resulting ISO image.
+  isoName ? "cd.iso"
 
 , # The files and directories to be placed in the ISO file system.
   # This is a list of attribute sets {source, target} where `source'
@@ -16,17 +16,19 @@
   # to `source' that will be added to the CD.
   storeContents ? []
 
-, 
-  buildStoreContents ? []
+, buildStoreContents ? []
 
-  # Whether this should be an El-Torito bootable CD.
-, bootable ? false
+, # Whether this should be an El-Torito bootable CD.
+  bootable ? false
 
-  # The path (in the ISO file system) of the boot image.
-, bootImage ? ""
+, # The path (in the ISO file system) of the boot image.
+  bootImage ? ""
 
 , # Whether to compress the resulting ISO image with bzip2.
   compressImage ? false
+
+, # The volume ID.
+  volumeID ? ""
 
 }:
 
@@ -36,7 +38,8 @@ stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl cdrkit];
-  inherit isoName bootable bootImage compressImage;
+  
+  inherit isoName bootable bootImage compressImage volumeID;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;

@@ -107,8 +107,7 @@ rec {
   # mounting the root FS).
   bootStage1 = import ../boot/boot-stage-1.nix {
     inherit (pkgs) substituteAll;
-    inherit (pkgsDiet) module_init_tools;
-    inherit extraUtils;
+    inherit extraUtils modulesClosure;
     inherit (kernelPackages) klibcShrunk;
     inherit (config.boot) autoDetectRootDevice isLiveCD;
     fileSystems =
@@ -116,8 +115,6 @@ rec {
         (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
         config.fileSystems;
     rootLabel = config.boot.rootLabel;
-    modulesDir = modulesClosure;
-    modules = rootModules;
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
     resumeDevice = config.boot.resumeDevice;
   };

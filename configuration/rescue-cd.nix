@@ -300,6 +300,8 @@ rec {
     bootImage = "boot/grub/stage2_eltorito";
 
     inherit compressImage;
+
+    volumeID = "NIXOS_INSTALLATION_CD";
   };
 
 

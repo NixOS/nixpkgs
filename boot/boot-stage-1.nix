@@ -5,7 +5,7 @@
 # is supposed to be put into an initial RAM disk (initrd).
 
 { substituteAll, staticShell, klibcShrunk
-, module_init_tools, extraUtils, modules, modulesDir
+, extraUtils, modulesClosure
 
 , # Whether to find root device automatically using its label.
   autoDetectRootDevice
@@ -48,7 +48,7 @@ substituteAll {
   
   isExecutable = true;
   
-  inherit staticShell modules modulesDir;
+  inherit staticShell modulesClosure;
   
   inherit autoDetectRootDevice isLiveCD mountPoints devices fsTypes optionss resumeDevice;
   
@@ -56,7 +56,6 @@ substituteAll {
   
   path = [
     extraUtils
-    module_init_tools
     klibcShrunk
   ];
 }
