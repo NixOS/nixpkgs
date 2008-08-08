@@ -1901,7 +1901,8 @@ let pkgs = rec {
   clisp = import ../development/interpreters/clisp {
     inherit fetchurl stdenv libsigsegv gettext
       readline ncurses coreutils pcre zlib;
-    inherit (xlibs) libX11 libXau libXt;
+    inherit (xlibs) libX11 libXau libXt xproto 
+      libXpm libXext xextproto;
   };
 
   erlang = selectVersion ../development/interpreters/erlang "R12B-1" {

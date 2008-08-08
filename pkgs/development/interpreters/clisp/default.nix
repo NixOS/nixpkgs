@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   inherit libsigsegv gettext coreutils;
   buildInputs = [libsigsegv gettext ncurses readline libX11 libXau
-	libXt pcre zlib];
+	libXt pcre zlib libXpm xproto libXext xextproto];
  
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
