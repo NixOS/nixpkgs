@@ -109,18 +109,16 @@ rec {
     
     inherit modulesClosure udevConf;
     
-    inherit (config.boot) autoDetectRootDevice isLiveCD resumeDevice;
+    inherit (config.boot) isLiveCD resumeDevice;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =
-      if !config.boot.autoDetectRootDevice && fileSystems == []
+      if fileSystems == []
       then abort "You must specify the fileSystems option!"
       else map (fs: fs.mountPoint) fileSystems;
-    devices = map (fs: if fs ? device then fs.device else "LABEL=" + fs.label) fileSystems;
+    devices = map (fs: if fs ? device then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
     fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
     optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
-
-    rootLabel = if config.boot.autoDetectRootDevice then config.boot.rootLabel else "";
 
     path = [
       # `extraUtils' comes first because it overrides the `mount'

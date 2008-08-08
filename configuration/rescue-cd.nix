@@ -9,14 +9,14 @@
 
 rec {
 
+
+  cdLabel = "NIXOS_INSTALLATION_CD";
+
   
   configuration = {
   
     boot = {
-      autoDetectRootDevice = true;
       isLiveCD = true;
-      # The label used to identify the installation CD.
-      rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
       extraModulePackages = [system.kernelPackages.aufs];
       
@@ -68,6 +68,12 @@ rec {
         ];
       };
     };
+
+    fileSystems = [
+      { mountPoint = "/";
+        label = cdLabel;
+      }
+    ];
 
     networking = {
       enableIntel3945ABGFirmware = true;
@@ -277,9 +283,6 @@ rec {
       { source = nixpkgsTarball + "/nixpkgs.tar.bz2";
         target = "/install/nixpkgs.tar.bz2";
       }
-      { source = pkgs.writeText "label" "";
-        target = "/${configuration.boot.rootLabel}";
-      }
     ];
 
     # Closures to be copied to the Nix store on the CD.
@@ -301,7 +304,7 @@ rec {
 
     inherit compressImage;
 
-    volumeID = "NIXOS_INSTALLATION_CD";
+    volumeID = cdLabel;
   };
 
 

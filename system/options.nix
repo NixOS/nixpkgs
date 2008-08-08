@@ -46,15 +46,6 @@ in
   
   boot = {
 
-    autoDetectRootDevice = mkOption {
-      default = false;
-      description = "
-        Whether to find the root device automatically by searching for a
-        device with the right label.  If this option is off, then a root
-        file system must be specified using <option>fileSystems</option>.
-      ";
-    };
-
     isLiveCD = mkOption {
       default = false;
       description = "
@@ -62,16 +53,6 @@ in
         a ramdisk will be mounted on top of it using unionfs to
         provide a writable root.  This is used for the NixOS
         Live-CD/DVD.
-      ";
-    };
-
-    rootLabel = mkOption {
-      description = "
-        When auto-detecting the root device (see
-        <option>boot.autoDetectRootDevice</option>), this option
-        specifies the label of the root device.  Right now, this is
-        merely a file name that should exist in the root directory of
-        the file system.  It is used to find the boot CD-ROM.
       ";
     };
 
@@ -588,8 +569,7 @@ in
     ];
     description = "
       The file systems to be mounted.  It must include an entry for
-      the root directory (<literal>mountPoint = \"/\"</literal>) if
-      <literal>boot.autoDetectRootDevice</literal> is not set.  Each
+      the root directory (<literal>mountPoint = \"/\"</literal>).  Each
       entry in the list is an attribute set with the following fields:
       <literal>mountPoint</literal>, <literal>device</literal>,
       <literal>fsType</literal> (a file system type recognised by

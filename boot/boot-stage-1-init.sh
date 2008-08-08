@@ -158,74 +158,34 @@ mkdir /mnt-root
 echo "mounting the root device.... (fix: sleeping 5 seconds to wait for upcoming usb drivers)"
 sleep 5
 
-if test -n "@autoDetectRootDevice@"; then
+# Hard-coded root device(s).
+mountPoints=(@mountPoints@)
+devices=(@devices@)
+fsTypes=(@fsTypes@)
+optionss=(@optionss@)
 
-    # Look for the root device by label.
-    echo "probing for the NixOS installation CD..."
+for ((n = 0; n < ${#mountPoints[*]}; n++)); do
+    mountPoint=${mountPoints[$n]}
+    device=${devices[$n]}
+    fsType=${fsTypes[$n]}
+    options=${optionss[$n]}
 
-    for i in /sys/block/*; do
-        if test "$(cat $i/removable)" = "1"; then
+    # !!! Really quick hack to support bind mounts, i.e., where the
+    # "device" should be taken relative to /mnt-root, not /.  Assume
+    # that every device that start with / but doesn't start with /dev
+    # or LABEL= is a bind mount.
+    case $device in
+        /dev/*)
+            ;;
+        /*)
+            device=/mnt-root$device
+            ;;
+    esac
 
-            echo "  in $i..."
+    echo "mounting $device on $mountPoint..."
 
-            set -- $(IFS=: ; echo $(cat $i/dev))
-            major="$1"
-            minor="$2"
-
-            # Create a device node for this device.
-            nuke /dev/tmpdev # don't have `rm' in klibc
-            mknod /dev/tmpdev b "$major" "$minor"
-
-            if mount -o ro -t iso9660 /dev/tmpdev /mnt-root; then
-                if test -e "/mnt-root/@rootLabel@"; then
-                    found=1
-                    break
-                fi
-                umount /mnt-root
-            fi
-        
-        fi
-    done
-
-    if test -z "$found"; then
-        echo "CD not found!"
-        fail
-    fi
-
-else
-
-    # Hard-coded root device(s).
-    mountPoints=(@mountPoints@)
-    devices=(@devices@)
-    fsTypes=(@fsTypes@)
-    optionss=(@optionss@)
-
-    for ((n = 0; n < ${#mountPoints[*]}; n++)); do
-        mountPoint=${mountPoints[$n]}
-        device=${devices[$n]}
-        fsType=${fsTypes[$n]}
-        options=${optionss[$n]}
-
-        # !!! Really quick hack to support bind mounts, i.e., where
-        # the "device" should be taken relative to /mnt-root, not /.
-        # Assume that every device that start with / but doesn't
-        # start with /dev or LABEL= is a bind mount.
-        case $device in
-            /dev/*)
-                ;;
-            LABEL=*)
-                ;;
-            /*)
-                device=/mnt-root$device
-                ;;
-        esac
-
-        echo "mounting $device on $mountPoint..."
-
-        mountFS "$device" "$mountPoint" "$options" "$fsType"
-    done
-    
-fi
+    mountFS "$device" "$mountPoint" "$options" "$fsType"
+done
 
 
 # If this is a live-CD/DVD, then union-mount a tmpfs on top of the
