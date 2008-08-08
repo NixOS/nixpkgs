@@ -5296,8 +5296,7 @@ let pkgs = rec {
   };
 
   kvm72 = import ../os-specific/linux/kvm/72.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    stdenv = overrideGCC stdenv gcc34;
+    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
   };
 
