@@ -18,9 +18,9 @@ rec {
       # The label used to identify the installation CD.
       rootLabel = "NIXOS";
       extraTTYs = [7 8]; # manual, rogue
-      extraModulePackages = pkgs: [system.kernelPackages.aufs];
+      extraModulePackages = [system.kernelPackages.aufs];
       
-      kernelPackages = pkgs: pkgs.kernelPackages_2_6_25;
+      kernelPackages = pkgs.kernelPackages_2_6_25;
       
       initrd = {
         extraKernelModules = [
@@ -172,7 +172,7 @@ rec {
     };
  
     environment = {
-      extraPackages = pkgs: [
+      extraPackages = [
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway

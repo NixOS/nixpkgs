@@ -16,7 +16,7 @@ let
   # backward here means that expression could either be a value or a
   # function which expects to have a pkgs argument.
   optionalPkgs = name: x:
-    if __isFunction x
+    if builtins.isFunction x
     then obsolete "notation" (name: x pkgs) name
     else x;
 
