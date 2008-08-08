@@ -7077,6 +7077,12 @@ let pkgs = rec {
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
   };
 
+  lincity = builderDefsPackage (import ../games/lincity) {
+    inherit (xlibs) libX11 libXext xextproto 
+      libICE libSM xproto;
+    inherit libpng zlib;
+  } null;
+
   micropolis = import ../games/micropolis {
     inherit lib fetchurl stdenv;
     inherit (xlibs) libX11 libXpm libXext xextproto;
