@@ -94,6 +94,7 @@ let
       lvm2
       lynx
       man
+      mc
       mdadm
       mesa
       mingetty
@@ -222,6 +223,7 @@ let
       batik
       ecj
       eclipsesdk
+      ejabberd
       gcc33
       jakartaregexp
       jdkPlugin
