@@ -2,6 +2,28 @@ pkgs: config:
 
 let
   inherit (pkgs.lib) mkOption;
+  inherit (builtins) head tail;
+
+  # temporary modifications.
+  # backward here means that expression could either be a value or a
+  # function which expects to have a pkgs argument.  Old merges are
+  # currently used while removing pkgs arguments.
+  optionalPkgs = x:
+    if __isFunction x then x pkgs else x;
+
+  backwardPkgsFunListOldMerge = name: list: ignorePkgs:
+    backwardPkgsFunListNewMerge name list;
+
+  backwardPkgsFunListNewMerge = name: list:
+    pkgs.lib.concatMap optionalPkgs list;
+
+  backwardPkgsFunOldMerge = name: list: ignorePkgs:
+    backwardPkgsFunNewMerge name list;
+
+  backwardPkgsFunNewMerge = name: list:
+    if list != [] && tail list == []
+    then optionalPkgs (head list)
+    else abort "${name}: Defined at least twice.";
 in
 
 {
@@ -82,6 +104,7 @@ in
     kernelPackages = mkOption {
       default = pkgs: pkgs.kernelPackages;
       example = pkgs: pkgs.kernelPackages_2_6_25;
+      merge = backwardPkgsFunOldMerge;
       description = "
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
@@ -149,8 +172,7 @@ in
       description = ''
         A list of additional packages supplying kernel modules.
       '';
-      merge = name: list:
-        pkgsArg: pkgs.lib.concatMap (f: f pkgsArg) list;
+      merge = backwardPkgsFunListOldMerge;
     };
 
     kernelModules = mkOption {
@@ -1386,6 +1408,7 @@ in
 
       packageFun = mkOption {
         default = pkgs: pkgs.xorg;
+        merge = backwardPkgsFunOldMerge;
         description = "
           Alternative X.org package to use. For 
           example, you can replace individual drivers.
@@ -2679,6 +2702,7 @@ root        ALL=(ALL) SETENV: ALL
 
     extraFonts = mkOption {
       default = pkgs: [];
+      merge = backwardPkgsFunListOldMerge;
       description = "
           Function, returning list of additional fonts.
       ";
@@ -2764,6 +2788,7 @@ root        ALL=(ALL) SETENV: ALL
     extraPackages = mkOption {
       default = pkgs: [];
       example = pkgs: [pkgs.firefox pkgs.thunderbird];
+      merge = backwardPkgsFunListOldMerge;
       description = "
         This option allows you to add additional packages to the system
         path.  These packages are automatically available to all users,
@@ -2775,13 +2800,12 @@ root        ALL=(ALL) SETENV: ALL
         packages.  The function will be called with the Nix Packages
         collection as its argument for convenience.
       ";
-      merge = name: list:
-        pkgsArg: pkgs.lib.concatMap (f: f pkgsArg) list;
     };
 
     nix = mkOption {
       default = pkgs: pkgs.nixUnstable;
       example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
+      merge = backwardPkgsFunOldMerge;
       description = "
         Use non-default Nix easily. Be careful, though, not to break everything.
       ";
