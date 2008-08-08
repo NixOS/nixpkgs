@@ -10,14 +10,22 @@ stdenv.mkDerivation {
 
   # "DESTDIR=/" is a hack to prevent "make install" from trying to
   # mess with /dev.
-  preBuild = ''
-    makeFlagsArray=(prefix=$out usrbindir=$out/bin usrsbindir=$out/sbin usrlibdir=$out/lib \
-      mandir=$out/share/man includedir=$out/include \
-      EXTRAS="extras/ata_id extras/edd_id extras/floppy extras/path_id extras/scsi_id extras/usb_id ${if stdenv ? isKlibc then "" else "extras/cdrom_id extras/volume_id"}"
-      INSTALL='install -c' DESTDIR=/)
+  preBuild =
+    ''
+      makeFlagsArray=(prefix=$out usrbindir=$out/bin usrsbindir=$out/sbin usrlibdir=$out/lib \
+        mandir=$out/share/man includedir=$out/include \
+        EXTRAS="extras/volume_id extras/ata_id extras/edd_id extras/floppy extras/path_id extras/scsi_id extras/usb_id ${if stdenv ? isKlibc then "" else "extras/cdrom_id"}"
+        INSTALL='install -c' DESTDIR=/ \
+        ${if stdenv ? isStatic then "USE_STATIC=true SHLIB= VOLUME_ID_STATIC=true" else ""})
       
-    substituteInPlace udev_rules.c --replace /lib/udev $out/lib/udev
-  '';
+      substituteInPlace udev_rules.c --replace /lib/udev $out/lib/udev
+  ''
+
+  + (if stdenv ? isStatic then
+    ''
+      # `make install' would cause the shared library to be installed, which we don't build.
+      substituteInPlace extras/volume_id/lib/Makefile  --replace 'install:' 'disabled:'
+    '' else "");
 
   preInstall = ''
     installFlagsArray=(udevdir=$TMPDIR/dummy)
