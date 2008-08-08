@@ -13,6 +13,11 @@ rec {
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
+  pkgsKlibc = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
+    system = pkgs.stdenv.system;
+    bootStdenv = pkgs.useKlibc pkgs.stdenv kernelPackages.klibc;
+  };
+
   pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
     system = pkgs.stdenv.system;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
@@ -40,10 +45,10 @@ rec {
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
       inherit (pkgsStatic) utillinux;
-      inherit (pkgsDiet) udev;
-      e2fsprogs = pkgs.e2fsprogsDiet;
-      devicemapper = if config.boot.initrd.lvm then pkgs.devicemapperStatic else null;
-      lvm2 = if config.boot.initrd.lvm then pkgs.lvm2Static else null;
+      inherit (pkgsKlibc) udev;
+      e2fsprogs = pkgsDiet.e2fsprogs;
+      devicemapper = if config.boot.initrd.lvm then pkgsStatic.devicemapper else null;
+      lvm2 = if config.boot.initrd.lvm then pkgsStatic.lvm2 else null;
       allowedReferences = []; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -92,6 +97,9 @@ rec {
     rootLabel = if config.boot.autoDetectRootDevice then config.boot.rootLabel else "";
 
     path = [
+      # `extraUtils' comes first because it overrides the `mount'
+      # command provided by klibc (which isn't capable of
+      # auto-detecting FS types).
       extraUtils
       kernelPackages.klibcShrunk
     ];

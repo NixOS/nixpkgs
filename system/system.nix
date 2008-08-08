@@ -4,6 +4,7 @@
 }:
 
 rec {
+
   configComponents = [
     configuration
     (import ./options.nix)
@@ -118,6 +119,7 @@ rec {
     extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
   };
 
+  
   # Font aggregation
   fontDir = import ./fontdir.nix {
     inherit config pkgs;
@@ -125,6 +127,7 @@ rec {
     inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
   };
 
+  
   # The wrapper setuid programs (since we can't have setuid programs
   # in the Nix store).
   wrapperDir = "/var/setuid-wrappers";
@@ -227,6 +230,7 @@ rec {
   # a reboot.
   ++ nssModules;
 
+  
   # We don't want to put all of `startPath' and `path' in $PATH, since
   # then we get an embarrassingly long $PATH.  So use the user
   # environment builder to make a directory with symlinks to those
@@ -358,4 +362,5 @@ rec {
     configurationName = config.boot.configurationName;
   }) config.environment.checkConfigurationOptions
      optionDeclarations config;
+
 }
