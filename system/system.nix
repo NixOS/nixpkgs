@@ -6,7 +6,7 @@
 rec {
   configComponents = [
     configuration
-    (import ./options.nix {inherit pkgs; inherit (pkgs.lib) mkOption;})
+    (import ./options.nix)
   ];
 
   noOption = name: values:

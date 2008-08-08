@@ -1,4 +1,8 @@
-{pkgs, mkOption}:
+pkgs: config:
+
+let
+  inherit (pkgs.lib) mkOption;
+in
 
 {
 
