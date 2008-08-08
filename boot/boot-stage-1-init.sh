@@ -92,9 +92,7 @@ echo shutdown > /sys/power/disk
 
 
 # Create device nodes in /dev.
-export UDEV_CONFIG_FILE=/udev.conf
-echo 'udev_rules="/rules"' > $UDEV_CONFIG_FILE
-mkdir /rules
+export UDEV_CONFIG_FILE=@udevConf@
 udevd --daemon
 udevadm trigger
 udevadm settle
@@ -240,6 +238,10 @@ if test -n "@isLiveCD@"; then
     mount -t aufs -o dirs=/mnt-tmpfs=rw:$targetRoot=ro none /mnt-union
     targetRoot=/mnt-union
 fi
+
+
+# Stop udevd.
+kill $(minips -C udevd -o pid=)
 
 
 if test -n "$debug1mounts"; then fail; fi

@@ -39,13 +39,16 @@ rec {
   };
 
 
+  udev = pkgsKlibc.udev;
+
+    
   # Some additional utilities needed in stage 1, notably mount.  We
   # don't want to bring in all of util-linux, so we just copy what we
   # need.
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
       inherit (pkgsStatic) utillinux;
-      inherit (pkgsKlibc) udev;
+      inherit udev;
       e2fsprogs = pkgsDiet.e2fsprogs;
       devicemapper = if config.boot.initrd.lvm then pkgsStatic.devicemapper else null;
       lvm2 = if config.boot.initrd.lvm then pkgsStatic.lvm2 else null;
@@ -60,6 +63,7 @@ rec {
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
       cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
       cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
+      cp $udev/lib/udev/*_id $out/bin
       nuke-refs $out/bin/*
     ''; # */
   
@@ -71,7 +75,29 @@ rec {
     (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
     config.fileSystems;
 
-    
+
+  udevRules = pkgs.stdenv.mkDerivation {
+    name = "udev-rules";
+    buildCommand = ''
+      ensureDir $out
+      cp ${udev}/*/udev/rules.d/60-persistent-storage.rules $out/
+      substituteInPlace $out/60-persistent-storage.rules \
+        --replace ata_id ${extraUtils}/bin/ata_id \
+        --replace usb_id ${extraUtils}/bin/usb_id \
+        --replace scsi_id ${extraUtils}/bin/scsi_id \
+        --replace path_id ${extraUtils}/bin/path_id \
+        --replace vol_id ${extraUtils}/bin/vol_id
+    ''; # */
+  };
+
+  
+  # The udev configuration file for in the initrd.
+  udevConf = pkgs.writeText "udev-initrd.conf" ''
+    udev_rules="${udevRules}"
+    #udev_log="debug"
+  '';
+  
+
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = pkgs.substituteAll {
@@ -81,7 +107,7 @@ rec {
 
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
     
-    inherit modulesClosure;
+    inherit modulesClosure udevConf;
     
     inherit (config.boot) autoDetectRootDevice isLiveCD resumeDevice;
 

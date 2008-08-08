@@ -68,7 +68,7 @@ let
     ''; # */
   };
 
-  # The udev configuration file
+  # The udev configuration file.
   conf = writeText "udev.conf" ''
     udev_rules="${udevRules}"
     #udev_log="debug"
