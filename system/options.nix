@@ -4,19 +4,30 @@ let
   inherit (pkgs.lib) mkOption;
   inherit (builtins) head tail;
 
+  obsolete = what: f: name:
+    if builtins ? trace then
+      builtins.trace "${name}: Obsolete ${what}." f name
+    else f name;
+
+  obsoleteMerge =
+    obsolete "option" pkgs.lib.mergeDefaultOption;
+
   # temporary modifications.
   # backward here means that expression could either be a value or a
   # function which expects to have a pkgs argument.
-  optionalPkgs = x:
-    if __isFunction x then x pkgs else x;
+  optionalPkgs = name: x:
+    if __isFunction x
+    then obsolete "notation" (name: x pkgs) name
+    else x;
 
   backwardPkgsFunListMerge = name: list:
-    pkgs.lib.concatMap optionalPkgs list;
+    pkgs.lib.concatMap (optionalPkgs name) list;
 
   backwardPkgsFunMerge = name: list:
     if list != [] && tail list == []
-    then optionalPkgs (head list)
+    then optionalPkgs name (head list)
     else abort "${name}: Defined at least twice.";
+
 in
 
 {
@@ -347,6 +358,7 @@ in
 
     enableGo7007 = mkOption {
       default = false;
+      merge = obsoleteMerge;
       description = ''
         Enable this option to get support for the WIS GO7007SB
         multi-format video encoder, which is used in a number of
@@ -431,6 +443,7 @@ in
 
     enableIntel2200BGFirmware = mkOption {
       default = false;
+      merge = obsoleteMerge;
       description = "
         Turn on this option if you want firmware for the Intel
         PRO/Wireless 2200BG to be loaded automatically.  This is
@@ -442,6 +455,7 @@ in
 
     enableIntel3945ABGFirmware = mkOption {
       default = false;
+      merge = obsoleteMerge;
       description = "
         This option enables automatic loading of the firmware for the Intel
         PRO/Wireless 3945ABG.
@@ -450,6 +464,7 @@ in
 
     enableIntel4965AGNFirmware = mkOption {
       default = false;
+      merge = obsoleteMerge;
       description = "
         This option enables automatic loading of the firmware for the Intel
         PRO/Wireless 4965AGN.
@@ -458,6 +473,7 @@ in
 
     enableZydasZD1211Firmware = mkOption {
       default = false;
+      merge = obsoleteMerge;
       description = "
         This option enables automatic loading of the firmware for the Zydas
         ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip.
