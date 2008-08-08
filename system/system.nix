@@ -29,9 +29,9 @@ rec {
 
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 
-  nix = config.environment.nix pkgs;
+  nix = config.environment.nix;
 
-  kernelPackages = config.boot.kernelPackages pkgs;
+  kernelPackages = config.boot.kernelPackages;
 
   kernel = kernelPackages.kernel;
 
@@ -46,7 +46,7 @@ rec {
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
     ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-    ++ config.boot.extraModulePackages pkgs
+    ++ config.boot.extraModulePackages
   );
 
 
@@ -217,7 +217,7 @@ rec {
   ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
-  ++ config.environment.extraPackages pkgs
+  ++ config.environment.extraPackages
   ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
   ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
 

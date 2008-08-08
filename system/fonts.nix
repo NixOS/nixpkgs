@@ -23,4 +23,4 @@
 
 ++ pkgs.lib.optional (config.fonts.enableGhostscriptFonts) "${pkgs.ghostscript}/share/ghostscript/fonts"
 
-++ ((config.fonts.extraFonts) pkgs)
+++ config.fonts.extraFonts

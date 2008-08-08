@@ -6,21 +6,14 @@ let
 
   # temporary modifications.
   # backward here means that expression could either be a value or a
-  # function which expects to have a pkgs argument.  Old merges are
-  # currently used while removing pkgs arguments.
+  # function which expects to have a pkgs argument.
   optionalPkgs = x:
     if __isFunction x then x pkgs else x;
 
-  backwardPkgsFunListOldMerge = name: list: ignorePkgs:
-    backwardPkgsFunListNewMerge name list;
-
-  backwardPkgsFunListNewMerge = name: list:
+  backwardPkgsFunListMerge = name: list:
     pkgs.lib.concatMap optionalPkgs list;
 
-  backwardPkgsFunOldMerge = name: list: ignorePkgs:
-    backwardPkgsFunNewMerge name list;
-
-  backwardPkgsFunNewMerge = name: list:
+  backwardPkgsFunMerge = name: list:
     if list != [] && tail list == []
     then optionalPkgs (head list)
     else abort "${name}: Defined at least twice.";
@@ -102,9 +95,9 @@ in
     };
 
     kernelPackages = mkOption {
-      default = pkgs: pkgs.kernelPackages;
-      example = pkgs: pkgs.kernelPackages_2_6_25;
-      merge = backwardPkgsFunOldMerge;
+      default = pkgs.kernelPackages;
+      example = pkgs.kernelPackages_2_6_25;
+      merge = backwardPkgsFunMerge;
       description = "
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
@@ -167,12 +160,12 @@ in
     };
 
     extraModulePackages = mkOption {
-      default = pkgs: [];
-      # !!! example = pkgs: [pkgs.aufs pkgs.nvidiaDrivers];
+      default = [];
+      # !!! example = [pkgs.aufs pkgs.nvidiaDrivers];
       description = ''
         A list of additional packages supplying kernel modules.
       '';
-      merge = backwardPkgsFunListOldMerge;
+      merge = backwardPkgsFunListMerge;
     };
 
     kernelModules = mkOption {
@@ -1407,8 +1400,8 @@ in
       };
 
       packageFun = mkOption {
-        default = pkgs: pkgs.xorg;
-        merge = backwardPkgsFunOldMerge;
+        default = pkgs.xorg;
+        merge = backwardPkgsFunMerge;
         description = "
           Alternative X.org package to use. For 
           example, you can replace individual drivers.
@@ -2701,10 +2694,10 @@ root        ALL=(ALL) SETENV: ALL
     };
 
     extraFonts = mkOption {
-      default = pkgs: [];
-      merge = backwardPkgsFunListOldMerge;
+      default = [];
+      merge = backwardPkgsFunListMerge;
       description = "
-          Function, returning list of additional fonts.
+        Function, returning list of additional fonts.
       ";
     };
 
@@ -2786,9 +2779,9 @@ root        ALL=(ALL) SETENV: ALL
     };
 
     extraPackages = mkOption {
-      default = pkgs: [];
-      example = pkgs: [pkgs.firefox pkgs.thunderbird];
-      merge = backwardPkgsFunListOldMerge;
+      default = [];
+      example = [pkgs.firefox pkgs.thunderbird];
+      merge = backwardPkgsFunListMerge;
       description = "
         This option allows you to add additional packages to the system
         path.  These packages are automatically available to all users,
@@ -2803,9 +2796,9 @@ root        ALL=(ALL) SETENV: ALL
     };
 
     nix = mkOption {
-      default = pkgs: pkgs.nixUnstable;
-      example = pkgs: pkgs.nixCustomFun /root/nix.tar.gz;
-      merge = backwardPkgsFunOldMerge;
+      default = pkgs.nixUnstable;
+      example = pkgs.nixCustomFun /root/nix.tar.gz;
+      merge = backwardPkgsFunMerge;
       description = "
         Use non-default Nix easily. Be careful, though, not to break everything.
       ";
