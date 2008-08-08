@@ -9,6 +9,7 @@ let
   idList = import ../system/ids.nix;
 
   optionalString = pkgs.lib.optionalString;
+  concatStringsSep = pkgs.lib.concatStringsSep;
   mainCf = 
   ''
     queue_directory = /var/postfix/queue
@@ -25,7 +26,7 @@ let
   +
   (if cfg.networks!=null then
     (''
-      mynetworks = ${toString cfg.networks}
+      mynetworks = ${concatStringsSep ", " cfg.networks}
     '') 
   else if (cfg.networksStyle != "") then
     (''
@@ -47,10 +48,10 @@ let
     myorigin = ${cfg.origin}
   '')
   + optionalString (cfg.destination != null) (''
-    mydestination = ${toString cfg.destination}
+    mydestination = ${concatStringsSep ", " cfg.destination}
   '')
   + optionalString (cfg.relayDomains != null) (''
-    relay_domains = ${toString cfg.relayDomains}
+    relay_domains = ${concatStringsSep ", " cfg.relayDomains}
   '')
   + ''
     local_recipient_maps = 
