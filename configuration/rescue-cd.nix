@@ -20,7 +20,7 @@ rec {
       extraTTYs = [7 8]; # manual, rogue
       extraModulePackages = pkgs: [system.kernelPackages.aufs];
       
-      #kernelPackages = pkgs: pkgs.kernelPackages_2_6_25;
+      kernelPackages = pkgs: pkgs.kernelPackages_2_6_25;
       
       initrd = {
         extraKernelModules = [
@@ -187,7 +187,6 @@ rec {
 
   system = import ../system/system.nix {
     inherit configuration platform nixpkgsPath;
-    stage2Init = "/init";
   };
 
 
@@ -237,7 +236,7 @@ rec {
       chainloader +1
     
     title NixOS Installer / Rescue
-      kernel /boot/vmlinuz ${toString system.config.boot.kernelParams}
+      kernel /boot/vmlinuz init=/init ${toString system.config.boot.kernelParams}
       initrd /boot/initrd
 
     title Memtest86+

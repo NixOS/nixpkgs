@@ -26,7 +26,7 @@ done
 
 # Mount special file systems.
 mkdir -p /etc # to shut up mount
-touch /etc/fstab # idem
+echo -n > /etc/fstab # idem
 mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
@@ -34,7 +34,7 @@ mount -t sysfs none /sys
 
 
 # Process the kernel command line.
-stage2Init=@stage2Init@
+stage2Init=
 for o in $(cat /proc/cmdline); do
     case $o in
         init=*)
@@ -66,6 +66,10 @@ for i in @modules@; do
 done
 
 
+# Create /dev/null.
+mknod /dev/null c 1 3
+
+
 # Try to resume - all modules are loaded now.
 if test -e /sys/power/tuxonice/resume; then
     if test -n "$(cat /sys/power/tuxonice/resume)"; then
@@ -74,14 +78,14 @@ if test -e /sys/power/tuxonice/resume; then
     fi
 fi
 
-echo "@resumeDevice@" > /sys/power/resume || echo "Failed to resume..."
+echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "Failed to resume..."
 echo shutdown > /sys/power/disk
 
 
 # Create device nodes in /dev.
-mknod -m 0666 /dev/null c 1 3
 export UDEV_CONFIG_FILE=/udev.conf
 echo 'udev_rules="/no-rules"' > $UDEV_CONFIG_FILE
+echo -n > /no-rules
 udevd --daemon
 udevadm trigger
 udevadm settle
@@ -122,8 +126,7 @@ mountFS() {
         if test $(($fsckResult | 2)) = $fsckResult; then
             echo "fsck finished, rebooting..."
             sleep 3
-            # reboot -f -d !!! don't have reboot yet
-            fail
+            reboot
         fi
 
         if test $(($fsckResult | 4)) = $fsckResult; then
@@ -138,13 +141,12 @@ mountFS() {
     fi
 
     # Mount read-writable.
-    mount -n -t "$fsType" -o "$options" "$device" /mnt/root$mountPoint || fail
+    mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint || fail
 }
 
 
 # Try to find and mount the root device.
-mkdir /mnt
-mkdir /mnt/root
+mkdir /mnt-root
 
 echo "mounting the root device.... (fix: sleeping 5 seconds to wait for upcoming usb drivers)"
 sleep 5
@@ -157,22 +159,22 @@ if test -n "@autoDetectRootDevice@"; then
     for i in /sys/block/*; do
         if test "$(cat $i/removable)" = "1"; then
 
-            echo "  in $(basename $i)..."
+            echo "  in $i..."
 
             set -- $(IFS=: ; echo $(cat $i/dev))
             major="$1"
             minor="$2"
 
             # Create a device node for this device.
-            rm -f /dev/tmpdev
+            nuke /dev/tmpdev # don't have `rm' in klibc
             mknod /dev/tmpdev b "$major" "$minor"
 
-            if mount -n -o ro -t iso9660 /dev/tmpdev /mnt/root; then
-                if test -e "/mnt/root/@rootLabel@"; then
+            if mount -o ro -t iso9660 /dev/tmpdev /mnt-root; then
+                if test -e "/mnt-root/@rootLabel@"; then
                     found=1
                     break
                 fi
-                umount /mnt/root
+                umount /mnt-root
             fi
         
         fi
@@ -198,7 +200,7 @@ else
         options=${optionss[$n]}
 
         # !!! Really quick hack to support bind mounts, i.e., where
-        # the "device" should be taken relative to /mnt/root, not /.
+        # the "device" should be taken relative to /mnt-root, not /.
         # Assume that every device that start with / but doesn't
         # start with /dev or LABEL= is a bind mount.
         case $device in
@@ -207,7 +209,7 @@ else
             LABEL=*)
                 ;;
             /*)
-                device=/mnt/root$device
+                device=/mnt-root$device
                 ;;
         esac
 
@@ -221,30 +223,30 @@ fi
 
 # If this is a live-CD/DVD, then union-mount a tmpfs on top of the
 # original root.
-targetRoot=/mnt/root
+targetRoot=/mnt-root
 if test -n "@isLiveCD@"; then
-    mkdir /mnt/tmpfs
-    mount -n -t tmpfs -o "mode=755" none /mnt/tmpfs
-    mkdir /mnt/union
-    mount -t aufs -o dirs=/mnt/tmpfs=rw:$targetRoot=ro none /mnt/union
-    targetRoot=/mnt/union
+    mkdir /mnt-tmpfs
+    mount -t tmpfs -o "mode=755" none /mnt-tmpfs
+    mkdir /mnt-union
+    mount -t aufs -o dirs=/mnt-tmpfs=rw:$targetRoot=ro none /mnt-union
+    targetRoot=/mnt-union
 fi
 
 
 if test -n "$debug1mounts"; then fail; fi
 
 
-# Start stage 2.
-# !!! Note: we can't use pivot_root here (the kernel gods have
-# decreed), but we could use run-init from klibc, which deletes all
-# files in the initramfs, remounts the target root on /, and chroots.
-cd "$targetRoot"
-mount --move . /
-umount /proc # cleanup
-umount /sys
+# `run-init' needs a /dev/console on the target FS.
+if ! test -e $targetRoot/dev/console; then
+    mkdir -p $targetRoot/dev
+    mknod $targetRoot/dev/console c 5 1
+fi
 
+
+# Start stage 2.  `run-init' deletes all files in the ramfs on the
+# current /.
 if test -z "$stage2Init"; then fail; fi
-
-exec chroot . $stage2Init
-
+umount /sys
+umount /proc
+exec run-init "$targetRoot" "$stage2Init"
 fail

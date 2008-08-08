@@ -1,5 +1,4 @@
 { platform ? __currentSystem
-, stage2Init ? ""
 , configuration
 , nixpkgsPath ? ../../nixpkgs
 }:
@@ -110,17 +109,16 @@ rec {
     inherit (pkgs) substituteAll;
     inherit (pkgsDiet) module_init_tools;
     inherit extraUtils;
+    inherit (kernelPackages) klibcShrunk;
     inherit (config.boot) autoDetectRootDevice isLiveCD;
     fileSystems =
       pkgs.lib.filter
         (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
         config.fileSystems;
     rootLabel = config.boot.rootLabel;
-    inherit stage2Init;
     modulesDir = modulesClosure;
     modules = rootModules;
     staticShell = stdenvLinuxStuff.bootstrapTools.bash;
-    staticTools = stdenvLinuxStuff.staticTools;
     resumeDevice = config.boot.resumeDevice;
   };
   
@@ -446,8 +444,9 @@ rec {
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
+    # !!! wtf does this do???
     children = map (x: ((import ./system.nix) 
-      {inherit platform stage2Init; 
+      { inherit platform; 
         configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
       config.nesting.children; 
     configurationName = config.boot.configurationName;

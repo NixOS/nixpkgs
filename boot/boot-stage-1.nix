@@ -4,7 +4,7 @@
 # the second boot stage.  The closure of the result of this expression
 # is supposed to be put into an initial RAM disk (initrd).
 
-{ substituteAll, staticShell, staticTools
+{ substituteAll, staticShell, klibcShrunk
 , module_init_tools, extraUtils, modules, modulesDir
 
 , # Whether to find root device automatically using its label.
@@ -27,10 +27,6 @@
   # through a unionfs.
   isLiveCD
 
-, # The path of the stage 2 init to call once we've mounted the root
-  # device.
-  stage2Init ? "/init"
-
 , # Resume device. [major]:[minor]
   resumeDevice ? "ignore-this"
 }:
@@ -49,18 +45,18 @@ if !autoDetectRootDevice && mountPoints == [] then abort "You must specify the f
 
 substituteAll {
   src = ./boot-stage-1-init.sh;
+  
   isExecutable = true;
+  
   inherit staticShell modules modulesDir;
+  
   inherit autoDetectRootDevice isLiveCD mountPoints devices fsTypes optionss resumeDevice;
+  
   rootLabel = if autoDetectRootDevice then rootLabel else "";
+  
   path = [
-    staticTools
-    module_init_tools
     extraUtils
+    module_init_tools
+    klibcShrunk
   ];
-
-  # We only want the path of the stage 2 init, we don't want it as a
-  # dependency (since then it the stage 2 init would end up in the
-  # initrd).
-  stage2Init = toString stage2Init; # !!! doesn't work
 }
