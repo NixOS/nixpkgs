@@ -4900,7 +4900,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26-rc5.nix {
+  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26.2.nix {
     inherit fetchurl stdenv;
   };
 
@@ -5295,13 +5295,7 @@ let pkgs = rec {
     kernelHeaders = kernelHeaders_2_6_23;
   };
 
-  kvm69 = import ../os-specific/linux/kvm/69.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = kernelHeaders_2_6_26;
-  };
-
-  kvm70 = import ../os-specific/linux/kvm/70.nix {
+  kvm72 = import ../os-specific/linux/kvm/72.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     stdenv = overrideGCC stdenv gcc34;
     kernelHeaders = kernelHeaders_2_6_26;

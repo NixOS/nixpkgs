@@ -3,13 +3,13 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "linux-headers-2.6.26-pre-rc5";
+  name = "linux-headers-2.6.26.2";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v2.6/testing/linux-2.6.26-rc5.tar.bz2";
-    sha256 = "0mxhxiivm2dyca2shxnr3689x8f3l2vlmqdl80fm6lmq1b3j7k75";
+    url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.26.2.tar.bz2";
+    sha256 = "0xrkv6wk5l4qhza35a76cd00a7g9xv3ymw7znwskig2kmqswnp1m";
   };
 
   platform = 
