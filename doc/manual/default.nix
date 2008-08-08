@@ -6,7 +6,7 @@ let
 
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList ""
-      (import ../../system/options.nix {pkgs = pkgs; mkOption = pkgs.lib.mkOption;}))));
+      (import ../../system/system.nix {inherit nixpkgsPath; configuration = {};}).optionDeclarations)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${options} 
