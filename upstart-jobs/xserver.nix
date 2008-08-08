@@ -10,7 +10,7 @@ let
 
   # Abbreviations.
   cfg = config.services.xserver;
-  xorg = cfg.packageFun;
+  xorg = cfg.package;
   gnome = pkgs.gnome;
   stdenv = pkgs.stdenv;
 

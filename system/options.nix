@@ -1417,7 +1417,12 @@ in
 
       packageFun = mkOption {
         default = pkgs.xorg;
-        merge = backwardPkgsFunMerge;
+        merge = obsolete "option" backwardPkgsFunMerge;
+        description = "Obsolete: use 'package' instead.";
+      };
+
+      package = mkOption {
+        default = config.services.xserver.packageFun; # pkgs.xorg;
         description = "
           Alternative X.org package to use. For 
           example, you can replace individual drivers.
