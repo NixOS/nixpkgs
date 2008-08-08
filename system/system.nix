@@ -27,21 +27,6 @@ rec {
 
   pkgs = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;};
 
-  pkgsDiet = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
-    system = platform;
-    bootStdenv = pkgs.useDietLibC pkgs.stdenv;
-  };
-
-  pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
-    system = platform;
-    bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
-  };
-
-  stdenvLinuxStuff = import "${nixpkgsPath}/pkgs/stdenv/linux" {
-    system = pkgs.stdenv.system;
-    allPackages = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix";
-  };
-
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 
   nix = config.environment.nix pkgs;
@@ -49,11 +34,6 @@ rec {
   kernelPackages = config.boot.kernelPackages pkgs;
 
   kernel = kernelPackages.kernel;
-
-  rootModules = 
-    config.boot.initrd.extraKernelModules ++
-    config.boot.initrd.kernelModules;
-
 
 
   # Tree of kernel modules.  This includes the kernel, plus modules
@@ -69,84 +49,13 @@ rec {
     ++ config.boot.extraModulePackages pkgs
   );
 
-  
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    inherit rootModules;
-    kernel = modulesTree;
-    allowMissing = config.boot.initrd.allowMissing;
+
+  # The initial ramdisk.
+  initialRamdiskStuff = import ../boot/boot-stage-1.nix {
+    inherit pkgs config nixpkgsPath kernelPackages modulesTree;
   };
 
-
-  # Some additional utilities needed in stage 1, notably mount.  We
-  # don't want to bring in all of util-linux, so we just copy what we
-  # need.
-  extraUtils = pkgs.runCommand "extra-utils"
-    { buildInputs = [pkgs.nukeReferences];
-      inherit (pkgsStatic) utillinux;
-      inherit (pkgsDiet) udev;
-      e2fsprogs = pkgs.e2fsprogsDiet;
-      devicemapper = if config.boot.initrd.lvm then pkgs.devicemapperStatic else null;
-      lvm2 = if config.boot.initrd.lvm then pkgs.lvm2Static else null;
-      allowedReferences = []; # prevent accidents like glibc being included in the initrd
-    }
-    ''
-      ensureDir $out/bin
-      if test -n "$devicemapper"; then
-        cp $devicemapper/sbin/dmsetup.static $out/bin/dmsetup
-        cp $lvm2/sbin/lvm.static $out/bin/lvm
-      fi
-      cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
-      cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
-      cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
-      nuke-refs $out/bin/*
-    ''; # */
-  
-
-  # The init script of boot stage 1 (loading kernel modules for
-  # mounting the root FS).
-  bootStage1 = import ../boot/boot-stage-1.nix {
-    inherit (pkgs) substituteAll;
-    inherit extraUtils modulesClosure;
-    inherit (kernelPackages) klibcShrunk;
-    inherit (config.boot) autoDetectRootDevice isLiveCD;
-    fileSystems =
-      pkgs.lib.filter
-        (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
-        config.fileSystems;
-    rootLabel = config.boot.rootLabel;
-    staticShell = stdenvLinuxStuff.bootstrapTools.bash;
-    resumeDevice = config.boot.resumeDevice;
-  };
-  
-
-  # The closure of the init script of boot stage 1 is what we put in
-  # the initial RAM disk.
-  initialRamdisk = pkgs.makeInitrd {
-    contents = [
-      { object = bootStage1;
-        symlink = "/init";
-      }
-    ] ++
-      pkgs.lib.optionals
-        (config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null)
-        [
-          { object = pkgs.runCommand "splashutils" {allowedReferences = []; buildInputs = [pkgs.nukeReferences];} ''
-              ensureDir $out/bin
-              cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
-              nuke-refs $out/bin/*
-            '';
-            suffix = "/bin/splash_helper";
-            symlink = "/${kernelPackages.splashutils.helperName}";
-          } # */
-          { object = import ../helpers/unpack-theme.nix {
-              inherit (pkgs) stdenv;
-              theme = config.services.ttyBackgrounds.defaultTheme;
-            };
-            symlink = "/etc/splash";
-          }
-        ];
-  };
+  initialRamdisk = initialRamdiskStuff.initialRamdisk;
 
 
   # NixOS installation/updating tools.
