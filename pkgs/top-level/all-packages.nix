@@ -6681,6 +6681,10 @@ let pkgs = rec {
     inherit fetchurl stdenv python git;
   };
 
+  stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
+    inherit clisp texinfo;
+  } null;
+
   subversion = subversion14;
 
   subversion14 = import ../applications/version-management/subversion-1.4.x {

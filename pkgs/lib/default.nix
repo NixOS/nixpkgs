@@ -494,6 +494,9 @@ rec {
 
   mergeAttrs = fold ( x : y : x // y) {};
 
+  attrVals = nameList : attrSet :
+    map (x: builtins.getAttr x attrSet) nameList;
+
   # Using f = a : b = b the result is similar to //
   # merge attributes with custom function handling the case that the attribute
   # exists in both sets
