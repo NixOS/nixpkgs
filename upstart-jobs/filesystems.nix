@@ -1,4 +1,4 @@
-{utillinux, e2fsprogs, fileSystems}:
+{utillinux, e2fsprogs, fileSystems, mount}:
 
 let
 
@@ -61,7 +61,7 @@ script
             # remount to change the options but nothing else.
             if cat /proc/mounts | grep -F -q \" $mountPoint \"; then
                 echo \"remounting $device on $mountPoint\"
-                ${utillinux}/bin/mount -t \"$fsType\" \\
+                ${mount}/bin/mount -t \"$fsType\" \\
                     -o remount,\"$options\" \\
                     \"$device\" \"$mountPoint\" || true
                 continue
@@ -84,7 +84,7 @@ script
 
                 if test \"$prevMountPoint\" = \"$mountPoint\"; then
                     echo \"remounting $device on $mountPoint\"
-                    ${utillinux}/bin/mount -t \"$fsType\" \\
+                    ${mount}/bin/mount -t \"$fsType\" \\
                         -o remount,\"$options\" \\
                         \"$device\" \"$mountPoint\" || true
                     continue
@@ -92,7 +92,7 @@ script
 
                 if test -n \"$prevMountPoint\"; then
                     echo \"unmount $device from $prevMountPoint\"
-                    ${utillinux}/bin/umount \"$prevMountPoint\" || true
+                    ${mount}/bin/umount \"$prevMountPoint\" || true
                 fi
 
             fi
@@ -106,7 +106,7 @@ script
 
             if test \"\$autocreate\" = 1; then mkdir -p \"\$mountPoint\"; fi
 
-            if ${utillinux}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
+            if ${mount}/bin/mount -t \"$fsType\" -o \"$options\" \"$device\" \"$mountPoint\"; then
                 newDevices=1
             fi
         

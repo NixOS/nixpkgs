@@ -1,4 +1,4 @@
-{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations, kernelPackages}:
+{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations, kernelPackages, mount}:
 
 let 
 
@@ -118,6 +118,7 @@ let
       
     # Mount file systems.
     (import ../upstart-jobs/filesystems.nix {
+      inherit mount;
       inherit (pkgs) utillinux e2fsprogs;
       fileSystems = config.fileSystems;
     })
