@@ -5210,9 +5210,9 @@ let pkgs = rec {
 
     # Actually, klibc builds fine with the static kernelHeaders, but
     # splashutils expects a klibc with patched headers...
-    klibc = import ../os-specific/linux/klibc {
+    klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
       inherit fetchurl stdenv perl bison mktemp kernel;
-    };
+    } null;
 
     klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
       inherit stdenv klibc;
