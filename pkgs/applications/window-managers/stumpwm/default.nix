@@ -26,11 +26,26 @@ rec {
     ensureDir $out/bin 
     ensureDir $out/share/stumpwm/doc
     ensureDir $out/share/info 
+    ensureDir $out/share/stumpwm/lisp
 
     cp stumpwm $out/bin
     cp sample-stumpwmrc.lisp  $out/share/stumpwm/doc
     cp stumpwm.info $out/share/info
-  '') ["minInit" "defEnsureDir" "addInputs" "doMake"];
+
+    cp -r {.,cl-ppcre}/*.{lisp,fas,lib,asd} contrib $out/share/stumpwm/lisp
+    cd $out/share/stumpwm/lisp
+    cat << EOF >init-stumpwm.lisp
+      (require "asdf") 
+      (asdf:operate 'asdf:load-op :cl-ppcre) 
+      (asdf:operate 'asdf:load-op :stumpwm)
+    EOF
+    clisp -K full -i init-stumpwm.lisp
+    cat << EOF >init-stumpwm.lisp
+      (require "asdf") 
+      (asdf:operate 'asdf:load-source-op :cl-ppcre) 
+      (asdf:operate 'asdf:load-source-op :stumpwm)
+    EOF
+    '') ["minInit" "defEnsureDir" "addInputs" "doMake"];
 
   /* doConfigure should be specified separately */
   phaseNames = ["envVars" "doConfigure" "doMake" "installation"];
