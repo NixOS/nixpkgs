@@ -2506,8 +2506,8 @@ in
         "fusermount" "wodim" "cdrdao"
       ];
       description = "
-        Only the programs listed here will be made setuid root (through
-        a wrapper program).  It's better to set
+        Only the programs from system path listed her will be made setuid root
+        (through a wrapper program).  It's better to set
         <option>security.extraSetuidPrograms</option>.
       ";
     };
@@ -2531,7 +2531,7 @@ in
         setgid = true;
       }];
       description = ''
-        List of non-trivial setuid programs, like Postfix sendmail. Default 
+        List of non-trivial setuid programs from ssystem path, like Postfix sendmail. Default 
         should probably be nobody:nogroup:false:false - if you are bothering
         doing anything with a setuid program, "root.root u+s g-s" is not what
         you are aiming at..
