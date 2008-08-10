@@ -40,11 +40,11 @@ let
 in
 	assert args.lib.checkReqs args defList reqsList;
 args.stdenv.mkDerivation {
-  name = args.lib.condConcat "vim-7.1" nameSuffixes check;
+  name = args.lib.condConcat "vim-7.2" nameSuffixes check;
  
   src = args.fetchurl {
-    url = ftp://ftp.nluug.nl/pub/editors/vim/unix/vim-7.1.tar.bz2;
-    sha256 = "0w6gy49gdbw7hby5rjkjpa7cdvc0z5iajsm4j1h8108rvfam22kz";
+    url = ftp://ftp.vim.org/pub/vim/unix/vim-7.2.tar.bz2;
+    sha256 = "076ydlfcmlnldjzarahg58vflawn083y90is6sz2j4klg9mj2iim";
   };
  
   inherit (args) ncurses;
