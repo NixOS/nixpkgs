@@ -2531,7 +2531,7 @@ in
         setgid = true;
       }];
       description = ''
-        List of non-trivial setuid programs from ssystem path, like Postfix sendmail. Default 
+        List of non-trivial setuid programs from system path, like Postfix sendmail. Default 
         should probably be nobody:nogroup:false:false - if you are bothering
         doing anything with a setuid program, "root.root u+s g-s" is not what
         you are aiming at..
