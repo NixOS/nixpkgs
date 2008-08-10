@@ -29,6 +29,7 @@ mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
+[ -s /etc/mtab ] && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
 cat /proc/mounts > /etc/mtab
 mkdir -m 0755 -p /etc/nixos
 
@@ -70,7 +71,7 @@ mkdir -m 0755 -p /dev
 mount -t tmpfs -o "mode=0755" none /dev
 mkdir -m 0755 -p /dev/pts
 mount -t devpts none /dev/pts
-mount -t usbfs none /proc/bus/usb
+[ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # uml doesn't have usb by default
 mkdir -m 01777 -p /tmp 
 mkdir -m 0755 -p /var
 mkdir -m 0755 -p /nix/var
