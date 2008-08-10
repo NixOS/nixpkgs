@@ -623,6 +623,16 @@ in
 
     extraJobs = mkOption {
       default = [];
+      example = [
+           { name = "test-job";
+             job = ''
+               description "nc"
+               start on started network-interfaces
+               respawn
+               env PATH=/var/run/current-system/sw/bin
+               exec sh -c "echo "hello world" | ${pkgs.netcat}/bin/nc -l -p 9000
+               '';
+           } ];
       description = "
         Additional Upstart jobs.
       ";
