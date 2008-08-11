@@ -205,14 +205,19 @@ let
       gnomeutils
       metacity
       ;
-    inherit (pkgs.kernelPackages_2_6_23)
+    kernelPackages_2_6_23 = kernelPackagesSubset pkgs.kernelPackages_2_6_23;
+    kernelPackages_2_6_25 = kernelPackagesSubset pkgs.kernelPackages_2_6_25;
+    kernelPackages_2_6_26 = kernelPackagesSubset pkgs.kernelPackages_2_6_26;
+  };
+
+  kernelPackagesSubset = kernelPackages: {
+    inherit (kernelPackages)
       iwlwifi
       kernel
       klibc
       splashutils
       ;
-    kernelNew = pkgs.kernelPackages_2_6_25.kernel;
-  };    
+  };
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
     inherit (allPackages {system = "i686-linux";})
