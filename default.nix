@@ -10,12 +10,9 @@ in
 
 { inherit (system)
     activateConfiguration
-    bootStage1
     bootStage2
     etc
-    extraUtils
     grubMenuBuilder
-    initialRamdisk
     kernel
     modulesTree
     nix
@@ -30,7 +27,14 @@ in
     nixosInstall
     nixosRebuild
     nixosGenSeccureKeys
-    ;    
+    ;
+
+  inherit (system.initialRamdiskStuff)
+    bootStage1
+    extraUtils
+    initialRamdisk
+    modulesClosure
+    ;
     
   nixFallback = system.nix;
 
