@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     ''
       makeFlagsArray=(prefix=$out usrbindir=$out/bin usrsbindir=$out/sbin usrlibdir=$out/lib \
         mandir=$out/share/man includedir=$out/include \
-        EXTRAS="extras/volume_id extras/ata_id extras/edd_id extras/floppy extras/path_id extras/scsi_id extras/usb_id ${if stdenv ? isKlibc then "" else "extras/cdrom_id"}"
+        EXTRAS="extras/volume_id extras/ata_id extras/edd_id extras/floppy extras/path_id ${if stdenv ? isKlibc then "" else "extras/scsi_id"} extras/usb_id ${if stdenv ? isKlibc then "" else "extras/cdrom_id"}"
         INSTALL='install -c' DESTDIR=/ \
         ${if stdenv ? isStatic then "USE_STATIC=true SHLIB= VOLUME_ID_STATIC=true" else ""})
       
