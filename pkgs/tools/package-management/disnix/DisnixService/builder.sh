@@ -30,5 +30,5 @@ do
     sed -i -e "s|AXIS2_LIBDIR=|AXIS2_LIBDIR=$axis2/share/java/axis2|" $i
     shebangfix $i
 done
-cp disnix-soap-* DisnixClient.jar jargs.jar $out/bin
+cp disnix-soap-* DisnixClient.jar jargs.jar *.nix $out/bin
 chmod 755 $out/bin/disnix-soap-*
