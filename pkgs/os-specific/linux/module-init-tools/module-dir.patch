@@ -1,31 +1,18 @@
-diff -rc module-init-tools-3.2.2/depmod.c module-init-tools-3.2.2.new/depmod.c
-*** module-init-tools-3.2.2/depmod.c	2005-11-21 03:45:15.000000000 +0100
---- module-init-tools-3.2.2.new/depmod.c	2006-07-27 16:50:35.000000000 +0200
+diff -rc module-init-tools-3.4-orig/depmod.c module-init-tools-3.4/depmod.c
+*** module-init-tools-3.4-orig/depmod.c	2007-10-07 23:51:46.000000000 +0200
+--- module-init-tools-3.4/depmod.c	2008-08-11 12:03:14.000000000 +0200
 ***************
-*** 25,34 ****
-  
-  #include "testing.h"
-  
-- #ifndef MODULE_DIR
-- #define MODULE_DIR "/lib/modules/"
-- #endif
-- 
-  static int verbose;
-  static unsigned int skipchars;
-  
---- 25,30 ----
-***************
-*** 756,761 ****
---- 752,758 ----
+*** 1066,1071 ****
+--- 1066,1072 ----
   		*system_map = NULL;
   	struct module *list = NULL;
   	int i;
-+ 	char *module_dir;
-  
-  	/* Don't print out any errors just yet, we might want to exec
-             backwards compat version. */
++  	char *module_dir;
+  	const char *config = NULL;
+  	struct module_search *search = NULL;
+  	struct module_overrides *overrides = NULL;
 ***************
-*** 834,843 ****
+*** 1148,1157 ****
   	if (optind == argc)
   		all = 1;
   
@@ -36,7 +23,7 @@ diff -rc module-init-tools-3.2.2/depmod.c module-init-tools-3.2.2.new/depmod.c
   
   	if (maybe_all) {
   		if (!doing_stdout && !depfile_out_of_date(dirname))
---- 831,844 ----
+--- 1149,1162 ----
   	if (optind == argc)
   		all = 1;
   
@@ -51,9 +38,11 @@ diff -rc module-init-tools-3.2.2/depmod.c module-init-tools-3.2.2.new/depmod.c
   
   	if (maybe_all) {
   		if (!doing_stdout && !depfile_out_of_date(dirname))
-diff -rc module-init-tools-3.2.2/modinfo.c module-init-tools-3.2.2.new/modinfo.c
-*** module-init-tools-3.2.2/modinfo.c	2005-01-18 04:25:23.000000000 +0100
---- module-init-tools-3.2.2.new/modinfo.c	2006-07-27 16:51:38.000000000 +0200
+Only in module-init-tools-3.4/: depmod.c~
+Only in module-init-tools-3.4/: depmod.c.rej
+diff -rc module-init-tools-3.4-orig/modinfo.c module-init-tools-3.4/modinfo.c
+*** module-init-tools-3.4-orig/modinfo.c	2007-10-07 23:51:46.000000000 +0200
+--- module-init-tools-3.4/modinfo.c	2008-08-11 12:07:55.000000000 +0200
 ***************
 *** 18,27 ****
   #define streq(a,b) (strcmp((a),(b)) == 0)
@@ -68,8 +57,8 @@ diff -rc module-init-tools-3.2.2/modinfo.c module-init-tools-3.2.2.new/modinfo.c
   
 --- 18,23 ----
 ***************
-*** 277,282 ****
---- 273,279 ----
+*** 278,283 ****
+--- 274,280 ----
   	char *data;
   	struct utsname buf;
   	char *depname, *p;
@@ -78,33 +67,41 @@ diff -rc module-init-tools-3.2.2/modinfo.c module-init-tools-3.2.2.new/modinfo.c
   	data = grab_file(name, size);
   	if (data) {
 ***************
-*** 289,297 ****
+*** 290,301 ****
   		return NULL;
   	}
   
   	/* Search for it in modules.dep. */
-  	uname(&buf);
-! 	asprintf(&depname, "%s/%s/modules.dep", MODULE_DIR, buf.release);
+  	if (kernel) {
+! 		asprintf(&depname, "%s/%s/modules.dep", MODULE_DIR, kernel);
+  	} else {
+  		uname(&buf);
+! 		asprintf(&depname, "%s/%s/modules.dep", MODULE_DIR,
+  			 buf.release);
+  	}
   	data = grab_file(depname, size);
-  	if (!data) {
-  		fprintf(stderr, "modinfo: could not open %s\n", depname);
---- 286,298 ----
+--- 287,302 ----
   		return NULL;
   	}
   
-+         if((module_dir = getenv("MODULE_DIR")) == NULL) {
-+                 module_dir = "/lib/modules";
-+         }
-+ 
++ 	if((module_dir = getenv("MODULE_DIR")) == NULL) {
++ 		module_dir = "/lib/modules";
++ 	}
++  
   	/* Search for it in modules.dep. */
-  	uname(&buf);
-! 	asprintf(&depname, "%s/%s/modules.dep", module_dir, buf.release);
+  	if (kernel) {
+! 		asprintf(&depname, "%s/%s/modules.dep", module_dir, kernel);
+  	} else {
+  		uname(&buf);
+! 		asprintf(&depname, "%s/%s/modules.dep", module_dir,
+  			 buf.release);
+  	}
   	data = grab_file(depname, size);
-  	if (!data) {
-  		fprintf(stderr, "modinfo: could not open %s\n", depname);
-diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe.c
-*** module-init-tools-3.2.2/modprobe.c	2005-12-02 00:42:09.000000000 +0100
---- module-init-tools-3.2.2.new/modprobe.c	2006-07-27 16:51:58.000000000 +0200
+Only in module-init-tools-3.4/: modinfo.c~
+Only in module-init-tools-3.4/: modinfo.c.rej
+diff -rc module-init-tools-3.4-orig/modprobe.c module-init-tools-3.4/modprobe.c
+*** module-init-tools-3.4-orig/modprobe.c	2007-10-07 23:57:23.000000000 +0200
+--- module-init-tools-3.4/modprobe.c	2008-08-11 12:06:54.000000000 +0200
 ***************
 *** 55,64 ****
   	char filename[0];
@@ -119,17 +116,17 @@ diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe
   /* Do we use syslog or stderr for messages? */
 --- 55,60 ----
 ***************
-*** 1416,1421 ****
---- 1412,1418 ----
+*** 1433,1438 ****
+--- 1429,1435 ----
   	char *newname = NULL;
   	char *aliasfilename, *symfilename;
   	errfn_t error = fatal;
-+ 	char *module_dir = NULL;
++  	char *module_dir = NULL;
+  	int flags = O_NONBLOCK|O_EXCL;
   
   	/* Prepend options from environment. */
-  	argv = merge_args(getenv("MODPROBE_OPTIONS"), argv, &argc);
 ***************
-*** 1538,1545 ****
+*** 1559,1566 ****
   	if (argc < optind + 1 && !dump_only && !list_only && !remove)
   		print_usage(argv[0]);
   
@@ -138,7 +135,7 @@ diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe
   	aliasfilename = NOFAIL(malloc(strlen(dirname)
   				      + sizeof("/modules.alias")));
   	sprintf(aliasfilename, "%s/modules.alias", dirname);
---- 1535,1546 ----
+--- 1556,1567 ----
   	if (argc < optind + 1 && !dump_only && !list_only && !remove)
   		print_usage(argv[0]);
   
@@ -151,3 +148,5 @@ diff -rc module-init-tools-3.2.2/modprobe.c module-init-tools-3.2.2.new/modprobe
   	aliasfilename = NOFAIL(malloc(strlen(dirname)
   				      + sizeof("/modules.alias")));
   	sprintf(aliasfilename, "%s/modules.alias", dirname);
+Only in module-init-tools-3.4/: modprobe.c~
+Only in module-init-tools-3.4/: modprobe.c.rej
