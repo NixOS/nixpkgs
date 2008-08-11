@@ -1508,6 +1508,11 @@ in
         description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
       
+      catalinaOpts = mkOption {
+        default = "";
+        description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
+      };
+      
       sharedLibFrom = mkOption {
         default = "";
         description = "Location where shared libraries are stored. Leave empty to use the baseDir.";
