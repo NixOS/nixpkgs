@@ -174,6 +174,7 @@ let
       xineUI
       xkeyboard_config
       xmltv
+      xpdf
       xsel
       xterm
       zdelta
