@@ -4,8 +4,8 @@ stdenv.mkDerivation {
     name = "DisnixService-0.1";
     src = fetchsvn {
 	url = https://svn.nixos.org/repos/nix/disnix/DisnixService/trunk;
-	md5 = "a39b65b7f56f94534e0b7e2ca318b4d2";
-	rev = 12594;
+	md5 = "01adbf0e50c66e03e19534151ae35ec7";
+	rev = 12601;
     };
     
     buildInputs = [ jdk apacheAnt axis2 shebangfix ];
