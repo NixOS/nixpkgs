@@ -206,18 +206,28 @@ let
       gnomeutils
       metacity
       ;
-    kernelPackages_2_6_23 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_23;
-    kernelPackages_2_6_25 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_25;
-    kernelPackages_2_6_26 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_26;
-  };
-
-  kernelPackagesSubset = pkgs: kernelPackages: pkgs.recurseIntoAttrs {
-    inherit (kernelPackages)
-      iwlwifi
-      kernel
-      klibc
-      splashutils
-      ;
+    kernelPackages_2_6_23 = {
+      inherit (pkgs.kernelPackages_2_6_23)
+        iwlwifi
+        kernel
+        klibc
+        splashutils
+        ;
+    };
+    kernelPackages_2_6_25 = {
+      inherit (pkgs.kernelPackages_2_6_25)
+        kernel
+        klibc
+        splashutils
+        ;
+    };
+    kernelPackages_2_6_26 = {
+      inherit (pkgs.kernelPackages_2_6_26)
+        kernel
+        klibc
+        splashutils
+        ;
+    };
   };
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
