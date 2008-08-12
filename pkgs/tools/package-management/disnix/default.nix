@@ -4,8 +4,8 @@ stdenv.mkDerivation {
     name = "disnix-0.1";
     src = fetchsvn {
 	url = https://svn.nixos.org/repos/nix/disnix/disnix/trunk;
-	md5 = "f961fc6337151b89839eabedd0bc7d13";
-	rev = 12332;
+	md5 = "7b342fa667740b089e4a51bba62312e6";
+	rev = 12590;
     };
     
     preConfigure = "./bootstrap";
