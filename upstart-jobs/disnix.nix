@@ -19,6 +19,6 @@ in
         sleep 3
       end script
       
-      respawn ${pkgs.bash}/bin/sh -c 'export PATH=/var/run/current-system/sw/bin:$PATH; export HOME=/root; ${pkgs.disnix}/bin/disnix-service'
+      respawn ${pkgs.bash}/bin/sh -c 'export PATH=/var/run/current-system/sw/bin:$PATH; export HOME=/root; export DISNIX_ACTIVATE=${cfg.activateHook}; export DISNIX_DEACTIVATE_HOOK=${cfg.deactivateHook}; ${pkgs.disnix}/bin/disnix-service'
     '';
 }

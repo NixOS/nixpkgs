@@ -1534,6 +1534,16 @@ in
         default = false;
         description = "Whether to enable Disnix";
       };
+      
+      activateHook = mkOption {
+        default = "";
+        description = "Custom script or executable that activates services through Disnix";
+      };
+
+      deactivateHook = mkOption {
+        default = "";
+        description = "Custom script or executable that deactivates services through Disnix";
+      };      
     };
     
     httpd = {
