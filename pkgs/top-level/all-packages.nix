@@ -529,6 +529,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  convertlit = import ../tools/text/convertlit { 
+    inherit fetchurl stdenv unzip libtommath;
+ };
+
   coreutils = useFromStdenv "coreutils"
     ((if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
@@ -3221,6 +3225,10 @@ let pkgs = rec {
 
   libtiff = import ../development/libraries/libtiff {
     inherit fetchurl stdenv zlib libjpeg;
+  };
+
+  libtommath = import ../development/libraries/libtommath {
+    inherit fetchurl stdenv libtool;
   };
 
   giflib = import ../development/libraries/giflib {
