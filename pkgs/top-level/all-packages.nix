@@ -4513,10 +4513,6 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk;
   };
 
-  pyimaging = import ../development/python-modules/imaging {
-    inherit fetchurl stdenv python libjpeg zlib freetype;
-  };
-
   pyopengl = import ../development/python-modules/pyopengl {
     inherit fetchurl stdenv setuptools mesa freeglut pil;
     python = python25;

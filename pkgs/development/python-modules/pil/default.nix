@@ -1,28 +1,41 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "python-imaging-1.1.6";
+{ fetchurl, stdenv, python
+, libjpeg, zlib, freetype }:
 
-  src = fetchurl {
-    url = http://effbot.org/downloads/Imaging-1.1.6.tar.gz;
-    sha256 = "141zidl3s9v4vfi3nsbg42iq1lc2a932gprqr1kij5hrnn53bmvx";
-  };
+let version = "1.1.6";
+in
+  stdenv.mkDerivation {
+    name = "python-imaging-${version}";
+    src = fetchurl {
+      url = "http://effbot.org/downloads/Imaging-${version}.tar.gz";
+      sha256 = "141zidl3s9v4vfi3nsbg42iq1lc2a932gprqr1kij5hrnn53bmvx";
+    };
 
-  buildInputs = [python zlib libtiff libjpeg freetype];
- 
-  configurePhase = "
-		sed -e 's@FREETYPE_ROOT = None@FREETYPE_ROOT = libinclude(\"${freetype}\")@' -i setup.py
-		sed -e 's@JPEG_ROOT = None@JPEG_ROOT = libinclude(\"${libjpeg}\")@' -i setup.py
-		sed -e 's@TIFF_ROOT = None@TIFF_ROOT = libinclude(\"${libtiff}\")@' -i setup.py
-		sed -e 's@ZLIB_ROOT = None@ZLIB_ROOT = libinclude(\"${zlib}\")@' -i setup.py
-	";
+    buildInputs = [ python libjpeg zlib freetype ];
 
-  buildPhase = "true";
-	
-  installPhase = "yes Y | python setup.py install --prefix=\${out}";
+    doCheck = true;
 
-  meta = {
-    description = "
-	Python Imaging library.
-";
-  };
-}
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${zlib}")|g ;'
+    '';
+
+    buildPhase   = "python setup.py build_ext -i";
+    checkPhase   = "python selftest.py";
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      homepage = http://www.pythonware.com/products/pil/;
+      description = "The Python Imaging Library (PIL)";
+
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+
+      license = "http://www.pythonware.com/products/pil/license.htm";
+    };
+  }
