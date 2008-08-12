@@ -4483,7 +4483,7 @@ let pkgs = rec {
   }) null;
 
   pil = import ../development/python-modules/pil {
-    inherit fetchurl stdenv python zlib libtiff libjpeg freetype;
+    inherit fetchurl stdenv python zlib libjpeg freetype;
   };
 
   psyco = import ../development/python-modules/psyco {
