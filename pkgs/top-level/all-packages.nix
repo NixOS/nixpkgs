@@ -4513,6 +4513,10 @@ let pkgs = rec {
     inherit (gtkLibs) glib gtk;
   };
 
+  pyimaging = import ../development/python-modules/imaging {
+    inherit fetchurl stdenv python libjpeg zlib freetype;
+  };
+
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
     python=python25;
   } null;
