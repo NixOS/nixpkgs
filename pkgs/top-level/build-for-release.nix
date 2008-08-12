@@ -206,7 +206,7 @@ let
       gnomeutils
       metacity
       ;
-    kernelPackages_2_6_23 = {
+    kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_23)
         iwlwifi
         kernel
@@ -214,14 +214,14 @@ let
         splashutils
         ;
     };
-    kernelPackages_2_6_25 = {
+    kernelPackages_2_6_25 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_25)
         kernel
         klibc
         splashutils
         ;
     };
-    kernelPackages_2_6_26 = {
+    kernelPackages_2_6_26 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_26)
         kernel
         klibc
