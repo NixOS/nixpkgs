@@ -4517,6 +4517,11 @@ let pkgs = rec {
     inherit fetchurl stdenv python libjpeg zlib freetype;
   };
 
+  pyopengl = import ../development/python-modules/pyopengl {
+    inherit fetchurl stdenv setuptools mesa freeglut pil;
+    python = python25;
+  };
+
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
     python=python25;
   } null;
