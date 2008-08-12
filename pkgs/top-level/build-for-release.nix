@@ -205,12 +205,12 @@ let
       gnomeutils
       metacity
       ;
-    kernelPackages_2_6_23 = kernelPackagesSubset pkgs.kernelPackages_2_6_23;
-    kernelPackages_2_6_25 = kernelPackagesSubset pkgs.kernelPackages_2_6_25;
-    kernelPackages_2_6_26 = kernelPackagesSubset pkgs.kernelPackages_2_6_26;
+    kernelPackages_2_6_23 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_23;
+    kernelPackages_2_6_25 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_25;
+    kernelPackages_2_6_26 = kernelPackagesSubset pkgs pkgs.kernelPackages_2_6_26;
   };
 
-  kernelPackagesSubset = kernelPackages: {
+  kernelPackagesSubset = pkgs: kernelPackages: pkgs.recurseIntoAttrs {
     inherit (kernelPackages)
       iwlwifi
       kernel
