@@ -6319,6 +6319,14 @@ let pkgs = rec {
     inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
   };
 
+  keyjnote = import ../applications/office/keyjnote {
+    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib;
+    python = python25;
+
+    # XXX These are the PyOpenGL dependencies, which we need here.
+    inherit setuptools mesa freeglut;
+  };
+
   kino = import ../applications/video/kino {
     inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
       libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
