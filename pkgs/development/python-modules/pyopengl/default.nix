@@ -11,7 +11,8 @@ in
     };
 
     # Note: We need `ctypes', available in Python 2.5+.
-    buildInputs = [ python setuptools mesa freeglut pil ];
+    buildInputs = [ python ];
+    propagatedBuildInputs = [ setuptools mesa freeglut pil ];
 
     configurePhase = "ensureDir $out/lib/python2.5/site-packages";
     buildPhase     = "python setup.py build";
