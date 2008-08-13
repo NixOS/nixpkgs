@@ -225,7 +225,7 @@ let
       inherit (pkgs.kernelPackages_2_6_26)
         kernel
         klibc
-        splashutils
+#        splashutils
         ;
     };
   };
