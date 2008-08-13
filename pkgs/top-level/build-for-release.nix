@@ -218,7 +218,7 @@ let
       inherit (pkgs.kernelPackages_2_6_25)
         kernel
         klibc
-        splashutils
+#        splashutils
         ;
     };
     kernelPackages_2_6_26 = pkgs.recurseIntoAttrs {
