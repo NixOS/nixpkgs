@@ -32,6 +32,13 @@ rec {
 	else (innerComposedArgs f (y x))));
   composedArgs = f: innerComposedArgs f {};
 
+  sumTwoArgs = f: x: y: (f (x // y));
+  composedArgsAndFun = f : x : (f x) // {
+    meta = {
+      function = composedArgsAndFun (sumTwoArgs f x);
+    };
+  };
+
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
   # result: ["ab" "cd"]
   innerPairMap = acc: f: l: 

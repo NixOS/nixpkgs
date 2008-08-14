@@ -7,7 +7,7 @@ args : with args;
 		};
 
 		buildInputs = [libX11 zlib xproto]
-		++ (if args ? mesa then [mesa freeglut] else [])
+		++ (if args ? mesa then [args.mesa args.freeglut] else [])
 		;
 		configureFlags = [""];
 	} null; /* null is a terminator for sumArgs */

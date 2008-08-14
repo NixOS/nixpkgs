@@ -252,7 +252,7 @@ let pkgs = rec {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
-  composedArgsAndFun = f : lib.composedArgs (arg : (f arg)//{meta={function=(composedArgsAndFun f) arg;};});
+  composedArgsAndFun = lib.composedArgsAndFun;
 
   builderDefsPackage = expr: composedArgsAndFun
     (((builderDefs null).builderDefsPackage builderDefs) expr);
@@ -313,7 +313,7 @@ let pkgs = rec {
   };
 
   debPackage = {
-    debBuild = lib.sumArgs (import ../build-support/deb-package) {
+    debBuild = lib.sumTwoArgs(import ../build-support/deb-package) {
       inherit builderDefs;
     };
     inherit fetchurl stdenv;
@@ -430,7 +430,7 @@ let pkgs = rec {
   };
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
-  } null;
+  };
 
   at = import ../tools/system/at {
     inherit fetchurl stdenv bison flex pam ssmtp;
@@ -484,11 +484,9 @@ let pkgs = rec {
     inherit fetchurl stdenv python wxPython26;
   };
 
-  bmrsaFun = lib.sumArgs (selectVersion ../tools/security/bmrsa "11") {
+  bmrsa = composedArgsAndFun (selectVersion ../tools/security/bmrsa "11") {
     inherit builderDefs unzip;
   };
-
-  bmrsa = bmrsaFun null;
 
   bogofilter = import ../tools/misc/bogofilter {
     inherit fetchurl stdenv flex;
@@ -519,7 +517,7 @@ let pkgs = rec {
   cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
     inherit makeWrapper;
     python = python25;
-  } null;
+  };
 
   chkrootkit = import ../tools/security/chkrootkit {
     inherit fetchurl stdenv;
@@ -562,8 +560,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
-  ddrescueFun = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") ;
-  ddrescue = ddrescueFun null;
+  ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
   dnsmasq = import ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it?
@@ -590,11 +587,9 @@ let pkgs = rec {
             gnused groff libxml2 libxslt makeWrapper;
   };
 
-  dosfstoolsFun = lib.sumArgs (selectVersion ../tools/misc/dosfstools "2.11deb") {
+  dosfstools = composedArgsAndFun (selectVersion ../tools/misc/dosfstools "2.11deb") {
     inherit builderDefs;
   };
-
-  dosfstools = dosfstoolsFun null;
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
@@ -610,8 +605,8 @@ let pkgs = rec {
       paths = [
         texLive texLiveExtra
       ];
-    } null;
-  } null;
+    };
+  };
 
   exif = import ../tools/graphics/exif {
     inherit fetchurl stdenv pkgconfig libexif popt;
@@ -665,13 +660,11 @@ let pkgs = rec {
       inherit fetchurl stdenv;
     });
 
-  gdmapFun = lib.sumArgs (selectVersion ../tools/system/gdmap "0.8.1") {
+  gdmap = composedArgsAndFun (selectVersion ../tools/system/gdmap "0.8.1") {
     inherit stdenv fetchurl builderDefs pkgconfig libxml2 intltool
       gettext;
     inherit (gtkLibs) gtk;
   };
-
-  gdmap = gdmapFun null;
 
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
@@ -793,7 +786,7 @@ let pkgs = rec {
 
   highlight = builderDefsPackage (selectVersion ../tools/text/highlight "2.6.10") {
     inherit getopt;
-  } null;
+  };
 
   /*
   hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
@@ -893,7 +886,7 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
     bison = bison23;
     flex = flex2535;
-  } null;
+  };
 
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
@@ -908,10 +901,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  msfFun = builderDefsPackage (selectVersion ../tools/security/metasploit "3.1") {
+  msf = builderDefsPackage (selectVersion ../tools/security/metasploit "3.1") {
     inherit ruby makeWrapper;
   };
-  msf = msfFun null;
 
   mssys = import ../tools/misc/mssys {
     inherit fetchurl stdenv gettext;
@@ -921,11 +913,9 @@ let pkgs = rec {
     inherit fetchurl stdenv perl shebangfix;
   };
 
-  nc6Fun = lib.sumArgs (selectVersion ../tools/networking/nc6 "1.0") {
+  nc6 = composedArgsAndFun (selectVersion ../tools/networking/nc6 "1.0") {
     inherit builderDefs;
   };
-
-  nc6 = nc6Fun null;
 
   ncat = import ../tools/networking/ncat {
     inherit fetchurl stdenv openssl;
@@ -1016,13 +1006,11 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext;
   };
 
-  relfsFun = lib.sumArgs (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
+  relfs = composedArgsAndFun (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs e2fsprogs pkgconfig;
     inherit (gnome) gnomevfs GConf;
   };
-
-  relfs = relfsFun null;
 
   replace = import ../tools/text/replace {
     inherit fetchurl stdenv;
@@ -1043,11 +1031,9 @@ let pkgs = rec {
     logger = inetutils;
   };
 
-  rlwrapFun = lib.sumArgs (selectVersion ../tools/misc/rlwrap "0.28") {
+  rlwrap = composedArgsAndFun (selectVersion ../tools/misc/rlwrap "0.28") {
     inherit builderDefs readline;
   };
-
-  rlwrap = rlwrapFun null;
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
@@ -1065,18 +1051,16 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  seccureFun = lib.sumArgs (selectVersion ../tools/security/seccure "0.3") {
+  seccure = composedArgsAndFun (selectVersion ../tools/security/seccure "0.3") {
     inherit builderDefs libgcrypt;
   };
-
-  seccure = seccureFun null;
 
   # seccure will override it (it is root-only, but
   # more secure because of memory locking), but this
   # can be added to default system
-  seccureUser = lowPrio (seccureFun {
+  seccureUser = lowPrio (seccure.meta.function {
     makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
-  } null);
+  });
 
   sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
     inherit fetchurl stdenv;
@@ -1090,15 +1074,13 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  smbfsFuseFun = lib.sumArgs (selectVersion ../tools/networking/smbfs-fuse "0.8.7") {
+  smbfsFuse = composedArgsAndFun (selectVersion ../tools/networking/smbfs-fuse "0.8.7") {
     inherit builderDefs samba fuse;
   };
 
-  smbfsFuse = smbfsFuseFun null;
-
   socat = builderDefsPackage (selectVersion ../tools/networking/socat "1.6.0.1") {
     inherit openssl;
-  } null;
+  };
 
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam;
@@ -1120,11 +1102,9 @@ let pkgs = rec {
     tlsSupport = true;
   };
 
-  ssssFun = lib.sumArgs (selectVersion ../tools/security/ssss "0.5") {
+  ssss = composedArgsAndFun (selectVersion ../tools/security/ssss "0.5") {
     inherit builderDefs gmp;
   };
-
-  ssss = ssssFun null;
 
   su = import ../tools/misc/su {
     inherit fetchurl stdenv pam;
@@ -1171,13 +1151,11 @@ let pkgs = rec {
     glibc = stdenv.gcc.libc;
   };
 
-  ttmkfdirFun = import ../tools/misc/ttmkfdir {
+  ttmkfdir = import ../tools/misc/ttmkfdir {
     inherit debPackage freetype fontconfig libunwind libtool;
     bison = bison23;
     flex = flex2534;
   };
-
-  ttmkfdir = ttmkfdirFun null;
 
   units = import ../tools/misc/units {
     inherit fetchurl stdenv;
@@ -1200,11 +1178,9 @@ let pkgs = rec {
     inherit (gtkLibs) glib;
   };
 
-  wgetFun = lib.sumArgs (selectVersion ../tools/networking/wget "1.11") {
+  wget = composedArgsAndFun (selectVersion ../tools/networking/wget "1.11") {
     inherit fetchurl stdenv gettext;
   };
-
-  wget = wgetFun null;
 
   which = import ../tools/system/which {
     inherit fetchurl stdenv readline;
@@ -1286,11 +1262,9 @@ let pkgs = rec {
     inherit fetchurl stdenv ncurses;
   };
 
-  zshFun = lib.sumArgs (selectVersion ../shells/zsh "4.3.5") {
+  zsh = composedArgsAndFun (selectVersion ../shells/zsh "4.3.5") {
     inherit fetchurl stdenv ncurses coreutils;
   };
-
-  zsh = zshFun null;
 
 
   ### DEVELOPMENT / COMPILERS
@@ -1664,10 +1638,9 @@ let pkgs = rec {
     inherit fetchurl stdenv ghc;
   };
 
-  ikarusFun = builderDefsPackage (selectVersion ../development/compilers/ikarus "0.0.3") {
+  ikarus = builderDefsPackage (selectVersion ../development/compilers/ikarus "0.0.3") {
     inherit gmp;
   };
-  ikarus = ikarusFun null;
 
   javafront = import ../development/compilers/java-front {
     inherit stdenv fetchurl pkgconfig;
@@ -1715,24 +1688,21 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  lazarusFun = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
+  lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit fpc makeWrapper;
     inherit (gtkLibs1x) gtk glib gdkpixbuf;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
   };
-  lazarus = lazarusFun null;
 
   llvm = import ../development/compilers/llvm {
     inherit fetchurl stdenv gcc flex perl libtool;
   };
 
-  llvmGccFun = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
+  llvmGCC = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
     flex=flex2535;
     bison=bison23;
     inherit llvm perl libtool;
   };
-
-  llvmGCC =llvmGccFun null;
 
   mono = import ../development/compilers/mono {
     inherit fetchurl stdenv bison pkgconfig;
@@ -1750,14 +1720,14 @@ let pkgs = rec {
   monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
     inherit ocaml lablgtk graphviz pkgconfig;
     inherit (gnome) gtk libgnomecanvas glib;
-  } null;
+  };
 
   viewMtn = builderDefsPackage (selectVersion ../applications/version-management/viewmtn "0.10")
   {
     inherit monotone flup cheetahTemplate highlight ctags
       makeWrapper graphviz which;
     python = python25;
-  } null;
+  };
 
   nasm = import ../development/compilers/nasm {
     inherit fetchurl stdenv;
@@ -1834,11 +1804,9 @@ let pkgs = rec {
     inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
   };
 
-  swiPrologFun = lib.sumArgs (selectVersion ../development/compilers/swi-prolog "5.6.51") {
+  swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
     inherit fetchurl stdenv;
   };
-
-  swiProlog = swiPrologFun null;
 
   transformers = import ../development/compilers/transformers {
     inherit fetchurl pkgconfig sdf;
@@ -1972,7 +1940,7 @@ let pkgs = rec {
     inherit (xorg) libX11 libXaw libXft libXrender libICE xproto
       renderproto pixman libSM libxcb libXext xextproto libXmu
       libXt;
-  } null;
+  };
 
   python = python24;
 
@@ -1980,16 +1948,16 @@ let pkgs = rec {
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  python25Fun = lib.sumArgs (import ../development/interpreters/python/2.5) {
+  python25base = composedArgsAndFun (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
 
-  python25 = python25Fun {
+  python25 = python25base.meta.function {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
     sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] false then readline else null;
     openssl = if getConfig ["python" "opensslSupport"] false then openssl else null;
-  } null;
+  };
 
   pyrex = pyrex095;
 
@@ -2001,11 +1969,9 @@ let pkgs = rec {
     inherit fetchurl stdenv stringsWithDeps lib builderDefs python;
   };
 
-  QiFun = lib.sumArgs (selectVersion ../development/compilers/qi "9.1") {
+  Qi = composedArgsAndFun (selectVersion ../development/compilers/qi "9.1") {
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
-
-  Qi = QiFun null;
 
   realPerl = import ../development/interpreters/perl-5.10 {
     fetchurl = fetchurlBoot;
@@ -2021,10 +1987,9 @@ let pkgs = rec {
     inherit (xorg) libX11 libXt;
   };
 
-  rubygemsFun = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
-  rubygems = rubygemsFun null;
 
   spidermonkey = import ../development/interpreters/spidermonkey {
     inherit fetchurl stdenv readline;
@@ -2179,12 +2144,10 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXt;
   };
 
-  elfutilsFun = lib.sumArgs
+  elfutils = composedArgsAndFun
     (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
     };
-
-  elfutils = elfutilsFun null;
 
   epm = import ../development/tools/misc/epm {
     inherit fetchurl stdenv rpm;
@@ -2297,11 +2260,9 @@ let pkgs = rec {
     inherit fetchurl stdenv perl perlXMLSimple;
   };
 
-  indentFun = lib.sumArgs (selectVersion ../development/tools/misc/indent "2.2.9") {
+  indent = composedArgsAndFun (selectVersion ../development/tools/misc/indent "2.2.9") {
     inherit fetchurl stdenv builderDefs;
   };
-
-  indent = indentFun null;
 
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
@@ -2329,12 +2290,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  ltraceFun = lib.sumArgs (selectVersion ../development/tools/misc/ltrace "0.5-3deb") {
+  ltrace = composedArgsAndFun (selectVersion ../development/tools/misc/ltrace "0.5-3deb") {
     inherit fetchurl stdenv builderDefs stringsWithDeps lib;
-    elfutils = elfutilsFun {version = "0.127";} null;
+    elfutils = elfutils.meta.function {version = "0.127";};
   };
-
-  ltrace = ltraceFun null;
 
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
@@ -2450,7 +2409,7 @@ let pkgs = rec {
     python = python25;
     inherit pkgconfig makeWrapper;
     inherit (xlibs) libXext libX11;
-  } null;
+  };
 
   yacc = bison;
 
@@ -2746,11 +2705,9 @@ let pkgs = rec {
     # python / ruby support
   };
 
-  gettextFun = lib.sumArgs (selectVersion ../development/libraries/gettext "0.17") {
+  gettext = composedArgsAndFun (selectVersion ../development/libraries/gettext "0.17") {
     inherit fetchurl stdenv;
   };
-
-  gettext = gettextFun null;
 
   gd = import ../development/libraries/gd {
     inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
@@ -2952,12 +2909,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  intltoolFun = lib.sumArgs (selectVersion ../development/tools/misc/intltool "0.36.2") {
+  intltool = composedArgsAndFun (selectVersion ../development/tools/misc/intltool "0.36.2") {
     inherit fetchurl stdenv lib builderDefs stringsWithDeps
       perl perlXMLParser;
   };
-
-  intltool = intltoolFun null;
 
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip libjpeg freeglut mesa;
@@ -3028,19 +2983,19 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  libdbiFun = lib.sumArgs (selectVersion ../development/libraries/libdbi "0.8.2") {
+  libdbi = composedArgsAndFun (selectVersion ../development/libraries/libdbi "0.8.2") {
     inherit stdenv fetchurl builderDefs;
   };
 
-  libdbi = libdbiFun null;
+  libdbiDriversBase = composedArgsAndFun 
+    (selectVersion ../development/libraries/libdbi-drivers "0.8.2-1") 
+    {
+      inherit stdenv fetchurl builderDefs libdbi;
+    };
 
-  libdbiDriversFun = lib.sumArgs (selectVersion ../development/libraries/libdbi-drivers "0.8.2-1") {
-    inherit stdenv fetchurl builderDefs libdbi;
-  };
-
-  libdbiDrivers = libdbiDriversFun {
+  libdbiDrivers = libdbiDriversBase.meta.function {
     inherit sqlite mysql;
-  } null;
+  };
 
   libdv = import ../development/libraries/libdv {
     inherit fetchurl stdenv lib mkDerivationByConfiguration;
@@ -3070,12 +3025,10 @@ let pkgs = rec {
     inherit fetchurl stdenv gettext;
   };
 
-  libextractorFun = lib.sumArgs (selectVersion ../development/libraries/libextractor "0.5.18")
+  libextractor = composedArgsAndFun (selectVersion ../development/libraries/libextractor "0.5.18")
   {
     inherit fetchurl stdenv builderDefs zlib;
   };
-
-  libextractor = libextractorFun null;
 
   libffi = import ../development/libraries/libffi {
     inherit fetchurl stdenv;
@@ -3173,13 +3126,11 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  liboilFun = lib.sumArgs
+  liboil = composedArgsAndFun 
     (selectVersion ../development/libraries/liboil "0.3.13") {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
   };
-
-  liboil = liboilFun null;
 
   liboop = import ../development/libraries/liboop {
     inherit fetchurl stdenv;
@@ -3312,14 +3263,12 @@ let pkgs = rec {
   };
 
   # failed to build
-  mediastreamerFun = lib.sumArgs (selectVersion
+  mediastreamer = composedArgsAndFun (selectVersion
       ../development/libraries/mediastreamer "2.2.0-cvs20080207") {
     inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
       ortp;
     ffmpeg = ffmpeg_svn;
   };
-
-  mediastreamer = mediastreamerFun null;
 
   mesaSupported =
     system == "i686-linux" ||
@@ -3346,12 +3295,10 @@ let pkgs = rec {
     inherit fetchurl stdenv python;
   };
 
-  ncursesFun = lib.sumArgs (import ../development/libraries/ncurses) {
+  ncurses = composedArgsAndFun (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
   };
-
-  ncurses = ncursesFun null;
 
   ncursesDiet = import ../development/libraries/ncurses-diet {
     inherit fetchurl;
@@ -3573,11 +3520,9 @@ let pkgs = rec {
     qt = qt4;
   };
 
-  tkFun = lib.sumArgs (selectVersion ../development/libraries/tk "8.4.16") {
+  tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.4.16") {
     inherit fetchurl stdenv tcl x11;
   };
-
-  tk = tkFun null;
 
   unixODBC = import ../development/libraries/unixODBC {
     inherit fetchurl stdenv;
@@ -3596,7 +3541,7 @@ let pkgs = rec {
       pkgconfig autoconf;
     flex = flex2535;
     bison = bison23;
-  } null;
+  };
 
   wxGTK = wxGTK26;
 
@@ -4487,8 +4432,8 @@ let pkgs = rec {
   (let python=python25; in
   {
     inherit python;
-    setuptools = setuptools.meta.function {inherit python;} null;
-  }) null;
+    setuptools = setuptools.meta.function {inherit python;};
+  });
 
   pil = import ../development/python-modules/pil {
     inherit fetchurl stdenv python zlib libjpeg freetype;
@@ -4528,7 +4473,7 @@ let pkgs = rec {
 
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
     python=python25;
-  } null;
+  };
 
   pyqt = builderDefsPackage (selectVersion ../development/python-modules/pyqt "4.3.3") {
     inherit pkgconfig pythonSip;
@@ -4536,7 +4481,7 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext;
     inherit (gtkLibs) glib;
     qt = qt4;
-  } null;
+  };
 
   pyx = import ../development/python-modules/pyx {
     inherit fetchurl stdenv python makeWrapper;
@@ -4548,7 +4493,7 @@ let pkgs = rec {
 
   setuptools = builderDefsPackage (selectVersion ../development/python-modules/setuptools "0.6c8") {
     python = python25;
-  } null;
+  };
 
   wxPython = wxPython26;
 
@@ -4582,15 +4527,13 @@ let pkgs = rec {
 
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
     inherit openssl libtool;
-  } null;
+  };
 
-  dictFun = lib.sumArgs (selectVersion ../servers/dict "1.9.15") {
+  dict = composedArgsAndFun (selectVersion ../servers/dict "1.9.15") {
     inherit builderDefs which;
     flex=flex2534;
     bison=bison23;
   };
-
-  dict = dictFun null;
 
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
     inherit builderDefs;
@@ -4683,11 +4626,9 @@ let pkgs = rec {
     inherit fetchurl stdenv openssh;
   };
 
-  openfireFun = lib.sumArgs (selectVersion ../servers/xmpp/openfire "3.5.2") {
+  openfire = composedArgsAndFun (selectVersion ../servers/xmpp/openfire "3.5.2") {
     inherit builderDefs jre;
   };
-
-  openfire = openfireFun null;
 
   postgresql = selectVersion ../servers/sql/postgresql "8.3.0" {
     inherit fetchurl stdenv readline ncurses zlib;
@@ -4772,23 +4713,21 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  alsaFun = lib.sumArgs (selectVersion ../os-specific/linux/alsa "1.0.16") {
+  alsa = composedArgsAndFun (selectVersion ../os-specific/linux/alsa "1.0.16") {
     inherit fetchurl stdenv ncurses gettext;
   };
-
-  alsa = alsaFun null;
 
   alsaLib = alsa.alsaLib;
 
   alsaUtils = alsa.alsaUtils;
 
-  blcrFun = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
+  blcr = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
   };
 
-  blcrFunCurrent = kernel : (blcrFun {
+  blcrCurrent = kernel : (blcr.meta.function {
     inherit kernel;
-  } null);
+  });
 
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
@@ -4802,11 +4741,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  dmidecodeFun = lib.sumArgs (selectVersion ../os-specific/linux/dmidecode "2.9") {
+  dmidecode = composedArgsAndFun (selectVersion ../os-specific/linux/dmidecode "2.9") {
     inherit fetchurl stdenv builderDefs;
   };
-
-  dmidecode = dmidecodeFun null;
 
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
@@ -4842,7 +4779,7 @@ let pkgs = rec {
     inherit lzma ncurses;
     bison = bison23;
     flex = flex2535;
-  } null;
+  };
 
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
@@ -4886,11 +4823,9 @@ let pkgs = rec {
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
-  iptablesFun = lib.sumArgs (selectVersion ../os-specific/linux/iptables "1.4.0") {
+  iptables = composedArgsAndFun (selectVersion ../os-specific/linux/iptables "1.4.0") {
     inherit builderDefs kernelHeaders;
   };
-
-  iptables = iptablesFun null;
 
   ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
     inherit fetchurl stdenv;
@@ -4904,15 +4839,13 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  jfsrecFun = builderDefsPackage (selectVersion ../os-specific/linux/jfsrec "svn-7"){
+  jfsrec = builderDefsPackage (selectVersion ../os-specific/linux/jfsrec "svn-7"){
     inherit boost;
   };
-  jfsrec = jfsrecFun null;
 
-  jfsUtilsFun = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
+  jfsUtils = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
     inherit e2fsprogs;
   };
-  jfsUtils = jfsUtilsFun null;
 
   kbd = import ../os-specific/linux/kbd {
     inherit fetchurl stdenv bison flex;
@@ -5207,7 +5140,7 @@ let pkgs = rec {
 
     atheros = composedArgsAndFun (selectVersion ../os-specific/linux/atheros "0.9.4") {
       inherit fetchurl stdenv builderDefs kernel lib;
-    } null;
+    };
 
     nvidiaDrivers = import ../os-specific/linux/nvidia {
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
@@ -5219,13 +5152,13 @@ let pkgs = rec {
 
     kqemu = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
       inherit kernel;
-    } null;
+    };
 
     # Actually, klibc builds fine with the static kernelHeaders, but
     # splashutils expects a klibc with patched headers...
     klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
       inherit fetchurl stdenv perl bison mktemp kernel;
-    } null;
+    };
 
     klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
       inherit stdenv klibc;
@@ -5292,9 +5225,9 @@ let pkgs = rec {
   kernelPackages = kernelPackages_2_6_23;
   #kernel = kernelPackages.kernel;
 
-  customKernel = lib.sumArgs (import ../os-specific/linux/kernel/linux.nix) {
+  customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/linux.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools lib;
-  };
+  });
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
@@ -5392,10 +5325,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  gw6cFun = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
+  gw6c = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
-  gw6c = gw6cFun null;
 
   nss_ldap = import ../os-specific/linux/nss_ldap {
     inherit fetchurl stdenv openldap;
@@ -5460,11 +5392,9 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  sdparmFun = lib.sumArgs (selectVersion ../os-specific/linux/sdparm "1.02") {
+  sdparm = composedArgsAndFun (selectVersion ../os-specific/linux/sdparm "1.02") {
     inherit fetchurl stdenv builderDefs;
   };
-
-  sdparm = sdparmFun null;
 
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
@@ -5559,10 +5489,9 @@ let pkgs = rec {
     inherit fetchurl stdenv openssl;
   };
 
-  xfsProgsFun = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
+  xfsProgs = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
     inherit libtool gettext e2fsprogs;
   };
-  xfsProgs = xfsProgsFun null;
 
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
     inherit stdenv xlibs expat libdrm;
@@ -5575,7 +5504,7 @@ let pkgs = rec {
   ### DATA
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
-  } null;
+  };
 
   bakoma_ttf = import ../data/fonts/bakoma-ttf {
     inherit fetchurl stdenv;
@@ -5590,12 +5519,10 @@ let pkgs = rec {
     inherit (xorg) mkfontdir mkfontscale;
   });
 
-  clearlyUFun = lib.sumArgs (selectVersion ../data/fonts/clearlyU "1.9") {
+  clearlyU = composedArgsAndFun (selectVersion ../data/fonts/clearlyU "1.9") {
     inherit builderDefs;
     inherit (xorg) mkfontdir mkfontscale;
   };
-
-  clearlyU = clearlyUFun null;
 
   dejavu_fonts = import ../data/fonts/dejavu-fonts {
     inherit fetchurl stdenv fontforge perl perlFontTTF
@@ -5632,12 +5559,10 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  junicodeFun = lib.sumArgs  (selectVersion ../data/fonts/junicode "0.6.15") {
+  junicode = composedArgsAndFun (selectVersion ../data/fonts/junicode "0.6.15") {
     inherit builderDefs fontforge unzip;
     inherit (xorg) mkfontdir mkfontscale;
   };
-
-  junicode = junicodeFun null;
 
   freefont_ttf = import ../data/fonts/freefont-ttf {
     inherit fetchurl stdenv;
@@ -5649,13 +5574,12 @@ let pkgs = rec {
 
   libertine = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7") {
     inherit fontforge;
-  } null;
-  libertineBin = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7.bin") {
-  } null;
-
-  lmodernFun = builderDefsPackage (selectVersion ../data/fonts/lmodern "1.010") {
   };
-  lmodern = lmodernFun null;
+  libertineBin = builderDefsPackage (selectVersion ../data/fonts/libertine "2.7.bin") {
+  };
+
+  lmodern = builderDefsPackage (selectVersion ../data/fonts/lmodern "1.010") {
+  };
 
   manpages = import ../data/documentation/man-pages {
      inherit fetchurl stdenv;
@@ -5698,29 +5622,23 @@ let pkgs = rec {
     inherit fetchurl stdenv wrapFonts;
   };
 
-  unifontFun = import ../data/fonts/unifont {
+  unifont = import ../data/fonts/unifont {
     inherit debPackage perl;
     inherit (xorg) mkfontdir mkfontscale bdftopcf fontutil;
   };
-
-  unifont = unifontFun null;
 
   vistafonts = import ../data/fonts/vista-fonts {
     inherit fetchurl stdenv cabextract;
   };
 
-  wqy_zenheiFun = lib.sumArgs (selectVersion ../data/fonts/wqy_zenhei "0.4.23-1") {
+  wqy_zenhei = composedArgsAndFun (selectVersion ../data/fonts/wqy_zenhei "0.4.23-1") {
     inherit builderDefs;
   };
 
-  wqy_zenhei = wqy_zenheiFun null;
-
-  xkeyboard_configFun = lib.sumArgs (selectVersion ../data/misc/xkeyboard-config "1.2") {
+  xkeyboard_config = composedArgsAndFun (selectVersion ../data/misc/xkeyboard-config "1.2") {
     inherit fetchurl stdenv perl perlXMLParser gettext;
     inherit (xlibs) xkbcomp;
   };
-
-  xkeyboard_config = xkeyboard_configFun null;
 
 
   ### APPLICATIONS
@@ -5803,7 +5721,7 @@ let pkgs = rec {
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
     inherit bazaar;
-  } null;
+  };
 
   bitlbee = import ../applications/networking/instant-messengers/bitlbee {
     inherit fetchurl stdenv gnutls pkgconfig;
@@ -5858,7 +5776,7 @@ let pkgs = rec {
     inherit (gtkLibs) gtk glib;
     inherit (gnome) startupnotification GConf ;
     inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
-  } null;
+  };
   funpidgin = carrier;
 
   cddiscid = import ../applications/audio/cd-discid {
@@ -5896,11 +5814,11 @@ let pkgs = rec {
     inherit librsvg fuse;
   };
 
-  compiz_062 = compizFun {
+  compiz_062 = compiz.meta.function {
     version = "0.6.2";
   };
 
-  compizFun = lib.sumArgs (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.7.4") {
+  compizBase = composedArgsAndFun (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.7.4") {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
@@ -5918,9 +5836,9 @@ let pkgs = rec {
     inherit dbus dbus_glib;
   };
 
-  compiz = compizFun {
+  compiz = compizBase.meta.function {
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
-  } null;
+  };
 
   compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
     version = getConfig ["compizFusion" "version"] "0.7.4";
@@ -5955,7 +5873,7 @@ let pkgs = rec {
   codeville = builderDefsPackage (selectVersion ../applications/version-management/codeville "0.8.0") {
     python = python25;
     inherit makeWrapper;
-  } null;
+  };
 
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
@@ -6081,13 +5999,11 @@ let pkgs = rec {
     openexr = openexr_1_6_1;
   };
 
-  fbpanelFun = lib.sumArgs (selectVersion ../applications/window-managers/fbpanel "4.12") {
+  fbpanel = composedArgsAndFun (selectVersion ../applications/window-managers/fbpanel "4.12") {
     inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11 libXmu libXpm;
   };
-
-  fbpanel = fbpanelFun null;
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
@@ -6227,11 +6143,9 @@ let pkgs = rec {
     GStreamer = gst_all.gstreamer;
   };
 
-  gocrFun = lib.sumArgs (selectVersion ../applications/graphics/gocr "0.44") {
+  gocr = composedArgsAndFun (selectVersion ../applications/graphics/gocr "0.44") {
     inherit builderDefs fetchurl stdenv;
   };
-
-  gocr = gocrFun null;
 
   gphoto2 = import ../applications/misc/gphoto2 {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
@@ -6376,14 +6290,12 @@ let pkgs = rec {
     inherit fetchurl stdenv builderDefs stringsWithDeps fftw ladspaH pkgconfig;
   };
 
-  ldcppFun = lib.sumArgs (selectVersion ../applications/networking/p2p/ldcpp "1.0.1") {
+  ldcpp = composedArgsAndFun (selectVersion ../applications/networking/p2p/ldcpp "1.0.1") {
     inherit builderDefs scons pkgconfig bzip2 openssl;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
     inherit (xlibs) libX11;
   };
-
-  ldcpp = ldcppFun null;
 
   links = import ../applications/networking/browsers/links {
     inherit fetchurl stdenv;
@@ -6410,10 +6322,9 @@ let pkgs = rec {
     inherit fetchurl stdenv python makeWrapper;
   };
 
-  minicomFun = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
+  minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
     inherit ncurses;
   };
-  minicom = minicomFun null;
 
   monodevelop = import ../applications/editors/monodevelop {
     inherit fetchurl stdenv file mono gtksourceviewsharp
@@ -6439,7 +6350,7 @@ let pkgs = rec {
     inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
 
-  MPlayerFun = lib.composedArgs (import ../applications/video/MPlayer) {
+  MPlayer = lib.composedArgsAndFun (import ../applications/video/MPlayer) {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
       cdparanoia;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
@@ -6451,8 +6362,6 @@ let pkgs = rec {
     randrSupport = true;
     cddaSupport = true;
   };
-
-  MPlayer = MPlayerFun null;
 
   # commented out because it's using the new configuration style proposal which is unstable
   # should be the same as the nix expression above except support for esound :)
@@ -6554,20 +6463,17 @@ let pkgs = rec {
     inherit (xlibs) libXScrnSaver;
   };
 
-  pidginlatexFun = lib.sumArgs (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
+  pidginlatex = composedArgsAndFun (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
     inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
   };
-  pidginlatex = pidginlatexFun null;
-
-  pidginlatexSFFun = builderDefsPackage
+  pidginlatexSF = builderDefsPackage
     (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
     {
       inherit pkgconfig pidgin texLive imagemagick which;
       inherit (gtkLibs) glib gtk;
     };
-  pidginlatexSF = pidginlatexSFFun null;
 
   pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
     inherit fetchurl stdenv libotr pidgin;
@@ -6602,12 +6508,10 @@ let pkgs = rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
-  qemuImageFun = lib.sumArgs
+  qemuImage = composedArgsAndFun 
     (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
     inherit builderDefs fetchurl stdenv;
   };
-
-  qemuImage = qemuImageFun null;
 
   quack = import ../applications/editors/emacs-modes/quack {
     inherit fetchurl stdenv emacs;
@@ -6670,16 +6574,16 @@ let pkgs = rec {
     inherit (xlibs) libXmu;
   };
 
-  sndFun = lib.sumArgs (import ../applications/audio/snd) {
+  sndBase =  composedArgsAndFun (import ../applications/audio/snd) {
     inherit fetchurl stdenv builderDefs stringsWithDeps lib;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
     inherit (gtkLibs) gtk glib;
   };
 
-  snd = sndFun {
+  snd = sndBase.meta.function {
     inherit guile mesa libtool;
-  } null;
+  };
 
   sox = import ../applications/misc/audio/sox {
     inherit fetchurl stdenv lib mkDerivationByConfiguration;
@@ -6704,7 +6608,7 @@ let pkgs = rec {
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit clisp texinfo;
-  } null;
+  };
 
   subversion = subversion14;
 
@@ -6759,7 +6663,7 @@ let pkgs = rec {
   tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.35") {
     python = python25;
     inherit makeWrapper;
-  } null;
+  };
 
   /* does'nt work yet i686-linux only (32bit version)
   teamspeak_client = import ../applications/networking/instant-messengers/teamspeak/client.nix {
@@ -6801,9 +6705,8 @@ let pkgs = rec {
     inherit (xorg) xset fontschumachermisc;
   };
 
-  uucpFun = builderDefsPackage (selectVersion ../tools/misc/uucp "1.07") {
+  uucp = builderDefsPackage (selectVersion ../tools/misc/uucp "1.07") {
   };
-  uucp = uucpFun null;
 
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
@@ -6910,21 +6813,17 @@ let pkgs = rec {
        );
   };
 
-  x11vncFun = lib.sumArgs (selectVersion ../tools/X11/x11vnc "0.9.3") {
+  x11vnc =  composedArgsAndFun (selectVersion ../tools/X11/x11vnc "0.9.3") {
     inherit builderDefs openssl zlib libjpeg ;
     inherit (xlibs) libXfixes fixesproto libXdamage damageproto
       libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
       libXext xextproto inputproto recordproto;
   };
 
-  x11vnc = x11vncFun null;
-
-  x2vncFun = lib.sumArgs (selectVersion ../tools/X11/x2vnc "1.7.2") {
+  x2vnc =  composedArgsAndFun (selectVersion ../tools/X11/x2vnc "1.7.2") {
     inherit builderDefs;
     inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
   };
-
-  x2vnc = x2vncFun null;
 
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
@@ -6996,17 +6895,17 @@ let pkgs = rec {
     pyrex = pyrex095;
   };
 
-  xscreensaverFun = lib.sumArgs (selectVersion ../applications/graphics/xscreensaver "5.05") {
+  xscreensaverBase =  composedArgsAndFun (selectVersion ../applications/graphics/xscreensaver "5.05") {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
 
-  xscreensaver = xscreensaverFun {
+  xscreensaver = xscreensaverBase.meta.function {
     flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
     inherit mesa libxml2 libjpeg;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
-  } null;
+  };
 
   xterm = import ../applications/misc/xterm {
     inherit fetchurl stdenv ncurses freetype pkgconfig;
@@ -7035,7 +6934,7 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXtst xextproto libXext 
       inputproto libXi xproto recordproto;
     inherit pkgconfig;
-  } null;
+  };
 
   xvidcap = import ../applications/video/xvidcap {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig;
@@ -7076,15 +6975,15 @@ let pkgs = rec {
 
   ### GAMES
 
-  construoFun = lib.sumArgs (selectVersion ../games/construo "0.2.2") {
+  construoBase =  composedArgsAndFun (selectVersion ../games/construo "0.2.2") {
     inherit stdenv fetchurl builderDefs
       zlib;
     inherit (xlibs) libX11 xproto;
   };
 
-  construo = construoFun {
+  construo = construoBase.meta.function {
     inherit mesa freeglut;
-  } null;
+  };
 
   exult = import ../games/exult {
     inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip;
@@ -7119,7 +7018,7 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXext xextproto 
       libICE libSM xproto;
     inherit libpng zlib;
-  } null;
+  };
 
   micropolis = import ../games/micropolis {
     inherit lib fetchurl stdenv;
@@ -7157,13 +7056,11 @@ let pkgs = rec {
   };
 
   # You still can override by passing more arguments.
-  spaceOrbitFun = lib.sumArgs (selectVersion ../games/orbit "1.01") {
+  spaceOrbit =  composedArgsAndFun (selectVersion ../games/orbit "1.01") {
     inherit fetchurl stdenv builderDefs mesa freeglut;
     inherit (gnome) esound;
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
   };
-
-  spaceOrbit = spaceOrbitFun null;
 
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL;
@@ -7243,7 +7140,7 @@ let pkgs = rec {
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
     inherit libxml2 guile perl intltool libtool pkgconfig;
-  } null;
+  };
 
 
   biolib = import ../development/libraries/science/biology/biolib {
@@ -7447,15 +7344,13 @@ let pkgs = rec {
     inherit fetchurl stdenv tetex lazylist;
   };
 
-  psiFun = builderDefsPackage
+  psi = builderDefsPackage
     (selectVersion ../applications/networking/instant-messengers/psi "0.11")
     {
       inherit builderDefs zlib aspell sox openssl;
       inherit (xlibs) xproto libX11 libSM libICE;
       qt = qt4;
     };
-
-  psi = psiFun null;
 
   putty = import ../applications/networking/remote/putty {
     inherit stdenv fetchurl ncurses;
@@ -7508,7 +7403,7 @@ let pkgs = rec {
     inherit stdenv perl tetex graphviz ghostscript makeFontsConf;
   };
 
-  texLiveFun = builderDefsPackage (import ../misc/tex/texlive) {
+  texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
       gd t1lib freetype icu perl ruby expat curl
       libjpeg;
@@ -7526,43 +7421,37 @@ let pkgs = rec {
     paths = [texLive texLiveExtra texLiveCMSuper
       texLiveBeamer
     ];
-  } null)
+  })
 
   You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
   Just installing a few packages doesn't work.
   */
-  texLive = texLiveFun null;
-  texLiveAggregationFun = builderDefsPackage (import ../misc/tex/texlive/aggregate.nix);
+  texLiveAggregationFun = 
+    (builderDefsPackage (import ../misc/tex/texlive/aggregate.nix));
 
-  texLiveContextFun = builderDefsPackage (import ../misc/tex/texlive/context.nix) {
+  texLiveContext = builderDefsPackage (import ../misc/tex/texlive/context.nix) {
     inherit texLive;
   };
-  texLiveContext = texLiveContextFun null;
 
-  texLiveExtraFun = builderDefsPackage (import ../misc/tex/texlive/extra.nix) {
+  texLiveExtra = builderDefsPackage (import ../misc/tex/texlive/extra.nix) {
     inherit texLive;
   };
-  texLiveExtra = texLiveExtraFun null;
 
-  texLiveCMSuperFun = builderDefsPackage (import ../misc/tex/texlive/cm-super.nix) {
+  texLiveCMSuper = builderDefsPackage (import ../misc/tex/texlive/cm-super.nix) {
     inherit texLive;
   };
-  texLiveCMSuper = texLiveCMSuperFun null;
 
-  texLiveLatexXColorFun = builderDefsPackage (import ../misc/tex/texlive/xcolor.nix) {
+  texLiveLatexXColor = builderDefsPackage (import ../misc/tex/texlive/xcolor.nix) {
     inherit texLive;
   };
-  texLiveLatexXColor = texLiveLatexXColorFun null;
 
-  texLivePGFFun = builderDefsPackage (import ../misc/tex/texlive/pgf.nix) {
+  texLivePGF = builderDefsPackage (import ../misc/tex/texlive/pgf.nix) {
     inherit texLiveLatexXColor texLive;
   };
-  texLivePGF = texLivePGFFun null;
 
-  texLiveBeamerFun = builderDefsPackage (import ../misc/tex/texlive/beamer.nix) {
+  texLiveBeamer = builderDefsPackage (import ../misc/tex/texlive/beamer.nix) {
     inherit texLiveLatexXColor texLivePGF texLive;
   };
-  texLiveBeamer = texLiveBeamerFun null;
 
   toolbuslib = import ../development/libraries/toolbuslib {
     inherit stdenv fetchurl aterm;
