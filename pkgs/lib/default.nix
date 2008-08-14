@@ -32,7 +32,11 @@ rec {
 	else (innerComposedArgs f (y x))));
   composedArgs = f: innerComposedArgs f {};
 
-  sumTwoArgs = f: x: y: (f (x // y));
+  sumTwoArgs = f: x: y: 
+    if builtins.isAttrs y then 
+      (f (x // y)) 
+    else 
+      (f (y x));
   composedArgsAndFun = f : x : (f x) // {
     meta = {
       function = composedArgsAndFun (sumTwoArgs f x);
