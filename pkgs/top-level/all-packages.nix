@@ -7030,6 +7030,13 @@ let pkgs = rec {
     inherit (xorg) xauth;
   };
 
+  xnee = builderDefsPackage (import ../tools/X11/xnee) {
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libX11 libXtst xextproto libXext 
+      inputproto libXi xproto recordproto;
+    inherit pkgconfig;
+  } null;
+
   xvidcap = import ../applications/video/xvidcap {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig;
     inherit (gtkLibs) gtk;
