@@ -6524,7 +6524,7 @@ let pkgs = rec {
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
       getopt file neon cairo which icu boost jdk ant hsqldb
-      cups;
+      cups openssl;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     bison = bison23;

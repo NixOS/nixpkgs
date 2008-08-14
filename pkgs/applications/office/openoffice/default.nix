@@ -3,27 +3,19 @@
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi, cups
-, libXinerama
+, libXinerama, openssl
 }:
 
+let version = "2.4.1"; in
 stdenv.mkDerivation rec {
-  name = "openoffice.org-2.3.1";
+  name = "openoffice.org-${version}";
   builder = ./builder.sh;
 
   src =
-    #if (stdenv.system == "i686-linux") then
-      #fetchurl {
-        # stable 2.3.0 is failing - got the tip on the mailinglist to have look
-        # at http://www.openoffice.org/issues/show_bug.cgi?id=74751
-        # now I'm trying snapshot because it should already have this patch
-        #url = http://ftp.ussg.iu.edu/openoffice/contrib/rc/2.3.1rc1/OOo_2.3.1rc1_src_core.tar.bz2;
-        #name = "OOo_2.3.1_src_core.tar.bz2";
-        #sha256 = "";
-    #} else 
     fetchurl {
-      url = http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=core&version=2.3.1;
-      name = "OOo_2.3.1_src_core.tar.bz2";
-      md5 = "9555a2d5fae9a25c788cc732921ef57a";
+      url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=core&version=${version}";
+      name = "OOo_${version}_src_core.tar.bz2";
+      sha256 = "1405l6xb1qy6l43n9nli8hhay917nyr8a69agj483aaiskrpdxdb";
     };
 
   configureFlags = "
@@ -68,7 +60,7 @@ stdenv.mkDerivation rec {
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
-    cups libXinerama
+    cups libXinerama openssl
   ];
 
   inherit icu fontconfig libjpeg jdk cups;
