@@ -1,4 +1,5 @@
 args : with args; 
+assert args ? kernel;
 rec {
   src = fetchurl {
     url = http://ftg.lbl.gov/CheckpointRestart/downloads/blcr-0.6.5.tar.gz ;
@@ -7,9 +8,9 @@ rec {
 
   buildInputs = [perl];
   configureFlags = [ 
-    "--with-linux=$(ls -d ${kernel}/lib/modules/*/build)" 
-    "--with-kmod-dir=$out/lib/modules/$(cd ${kernel}/lib/modules; ls -d 2.6.*)" 
-    "--with-system-map=${kernel}/System.map"
+    "--with-linux=$(ls -d ${args.kernel}/lib/modules/*/build)" 
+    "--with-kmod-dir=$out/lib/modules/$(cd ${args.kernel}/lib/modules; ls -d 2.6.*)" 
+    "--with-system-map=${args.kernel}/System.map"
   ];
 
   preConfigure = FullDepEntry (''

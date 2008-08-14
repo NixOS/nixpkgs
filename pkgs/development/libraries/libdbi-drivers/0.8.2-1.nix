@@ -17,13 +17,13 @@ args : with args;
 		]
 		++ (if args ? mysql then [
 			" --with-mysql "
-			" --with-mysql-incdir=${mysql}/include/mysql " 
-			" --with-mysql-libdir=${mysql}/lib/mysql " 
+			" --with-mysql-incdir=${args.mysql}/include/mysql " 
+			" --with-mysql-libdir=${args.mysql}/lib/mysql " 
 		] else [])
 		++ (if args ? sqlite then [
 			" --with-sqlite "
-			" --with-sqlite-incdir=${sqlite}/include/sqlite " 
-			" --with-sqlite-libdir=${sqlite}/lib/sqlite " 
+			" --with-sqlite-incdir=${args.sqlite}/include/sqlite " 
+			" --with-sqlite-libdir=${args.sqlite}/lib/sqlite " 
 		] else [])
 		;
 	} null; /* null is a terminator for sumArgs */
