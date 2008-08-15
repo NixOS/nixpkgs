@@ -259,7 +259,7 @@ rec {
 
     # Single files to be copied to fixed locations on the CD.
     contents = [
-      { source = "${pkgs.grub}/lib/grub/i386-pc/stage2_eltorito";
+      { source = "${pkgs.grub}/lib/grub/${if platform == "i686-linux" then "i386-pc" else "x86_64-unknown"}/stage2_eltorito";
         target = "boot/grub/stage2_eltorito";
       }
       { source = grubCfg;
