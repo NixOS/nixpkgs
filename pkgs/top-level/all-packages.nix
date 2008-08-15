@@ -5166,7 +5166,7 @@ let pkgs = rec {
 
     splashutils =
       if kernel.features ? fbSplash then splashutils_13 else
-      if kernel.features ? fbConDecor then splashutils_15 else
+      if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
       null;
 
     splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
