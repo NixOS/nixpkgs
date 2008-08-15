@@ -1,12 +1,17 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, enableStatic ? true}:
 
 stdenv.mkDerivation {
-  name = "device-mapper-1.02.26";
+  name = "device-mapper-1.02.27";
+  
   src = fetchurl {
-    url = ftp://sources.redhat.com/pub/dm/device-mapper.1.02.26.tgz;
-    sha256 = "0x905frw06s6k5p1rlc2hbgaphgalinarbdg82664sri0qmbkrfv";
+    url = ftp://sources.redhat.com/pub/dm/device-mapper.1.02.27.tgz;
+    sha256 = "1z4dldjjxfinwvg39x4m2cm5rcsbxs833g3phm34f5a2lwh7i6v6";
   };
-  configureFlags = if stdenv ? isStatic then "--enable-static_link" else "";
+
+  inherit enableStatic;
+  
+  configureFlags = if enableStatic then "--enable-static_link" else "";
+
   # To prevent make install from failing.
   installFlags = "OWNER= GROUP=";
 }
