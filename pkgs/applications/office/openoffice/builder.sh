@@ -71,8 +71,6 @@ installPhase() {
     # Do the actual installation into $out.
     (cd $SRC_ROOT/instsetoo_native/util && perl -w $SOLARENV/bin/make_installer.pl \
 	-f openoffice.lst -l en-US -p OpenOffice \
-	-packagelist ../inc_openoffice/unix/packagelist.txt \
-	-addpackagelist ../inc_openoffice/unix/packagelist_language.txt \
 	-buildid $BUILD -simple $ooFiles)
 
     ensureDir $out/bin
