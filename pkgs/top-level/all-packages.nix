@@ -4823,8 +4823,8 @@ let pkgs = rec {
     kernelHeaders = stdenv.gcc.libc.kernelHeaders;
   };
 
-  iptables = composedArgsAndFun (selectVersion ../os-specific/linux/iptables "1.4.0") {
-    inherit builderDefs kernelHeaders;
+  iptables = import ../os-specific/linux/iptables {
+    inherit fetchurl stdenv;
   };
 
   ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
