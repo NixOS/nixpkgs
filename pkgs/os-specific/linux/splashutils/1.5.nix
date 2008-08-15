@@ -1,11 +1,11 @@
 {stdenv, fetchurl, klibc, zlib, libjpeg}:
 
 stdenv.mkDerivation {
-  name = "splashutils-1.5.4.1";
+  name = "splashutils-1.5.4.2";
 
   src = fetchurl {
-    url = http://download.berlios.de/fbsplash/splashutils-1.5.4.1.tar.bz2;
-    sha256 = "0pwv9l6a042hhcwpi4kqdzjg7d1mrlix0fvgqqzqh93mc54z9lf7";
+    url = http://download.berlios.de/fbsplash/splashutils-1.5.4.2.tar.bz2;
+    sha256 = "1d28p2wlmgm2cf2dbsxzmgma8gq9nwza43binp2hsscajjy5s9h5";
   };
 
   buildInputs = [klibc zlib libjpeg];
