@@ -50,8 +50,14 @@ rec {
       inherit (pkgsStatic) utillinux;
       inherit udev;
       e2fsprogs = pkgsDiet.e2fsprogs;
-      devicemapper = if config.boot.initrd.lvm then pkgsStatic.devicemapper else null;
-      lvm2 = if config.boot.initrd.lvm then pkgsStatic.lvm2 else null;
+      devicemapper =
+        if config.boot.initrd.lvm
+        then assert pkgs.devicemapper.enableStatic; pkgs.devicemapper
+        else null;
+      lvm2 =
+        if config.boot.initrd.lvm
+        then assert pkgs.lvm2.enableStatic; pkgs.lvm2
+        else null;
       allowedReferences = []; # prevent accidents like glibc being included in the initrd
     }
     ''
