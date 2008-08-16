@@ -1,11 +1,36 @@
 #! @staticShell@
 
-fail() {
-    # If starting stage 2 failed, start an interactive shell.
-    echo "Stage 2 failed, starting emergency shell..."
-    echo "(Stage 1 init script is $stage2Init)"
-    exec @staticShell@
+targetRoot=/mnt/root
+dialog(){
+    timeout=15
+    echo
+    echo "Press within $timeout seconds:"
+    echo "  f) to switch finally to an interactive shell having pid 1"
+    echo "     (you'll need this to start stage2 / upstart)"
+    echo "  i) to launch an intercative shell"
+    echo "  *) to continue immediately (ignoring the failing command)"
+    read -t $timeout reply
+    case $reply in
+      f) exec @staticShell@;;
+      i) echo
+         echo "Quit interactive shell with exit status of"
+         echo " 0        : to continue"
+         echo " non zero : to get this dialog again (eg to switch to interactive shell with pid 1"
+        @staticShell@ || fail
+      ;;
+      *) echo continuing ignoring error;;
+    esac
 }
+
+fail(){
+    # If starting stage 2 failed, start an interactive shell.
+    echo "error while running Stage 1"
+    echo "Stage 1 should mount the root partition containing the nix store on \`$targetRoot'";
+    echo
+    dialog
+}
+trap 'fail' ERR;
+
 
 
 # Poor man's `basename'.
@@ -232,4 +257,9 @@ if test -z "$stage2Init"; then fail; fi
 umount /sys
 umount /proc
 exec run-init "$targetRoot" "$stage2Init"
-fail
+
+echo
+echo $1 failed running "$stage2Init"
+echo "It's your last chance to fix things manually without rebooting"
+echo "finally switching to interactive shell pid 1"
+export $stage2Init; exec @staticShell@
