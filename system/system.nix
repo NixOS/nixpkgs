@@ -267,7 +267,8 @@ rec {
       config.security.extraSetuidPrograms ++
       pkgs.lib.optional config.security.sudo.enable "sudo" ++
       pkgs.lib.optionals config.services.atd.enable ["at" "atq" "atrm"] ++
-      pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass";
+      pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass" ++
+      map ( x : x.program ) config.security.setuidOwners;
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
 
