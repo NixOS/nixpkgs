@@ -404,6 +404,10 @@ let pkgs = rec {
 
   symlinkJoin = name: paths: runCommand name {inherit paths;} "mkdir -p $out; for i in $paths; do ${xorg.lndir}/bin/lndir $i $out; done";
 
+  # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
+  linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
+    (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
+
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
   };
