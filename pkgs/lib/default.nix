@@ -490,8 +490,8 @@ rec {
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # maps a function on each attr value
-  # f = name : attrValue : ..
-  mapAttrs = f : r : listToAttrs ( mapRecordFlatten (n : a : nv n ( f n a ) )  r);
+  # f = attr : value : ..
+  mapAttrs = f : r : listToAttrs ( mapRecordFlatten (a : v : nv n ( f a v ) )  r);
 
   # to be used with listToAttrs (_a_ttribute _v_alue)
   nv = name : value : { inherit name value; };
