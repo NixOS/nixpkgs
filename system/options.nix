@@ -2424,6 +2424,52 @@ in
       ";
     };
 
+    repos = {
+      nixos = mkOption {
+        default = [ { type  = "svn"; }  ];
+        example = [ { type = "svn"; url = "https://svn.nixos.org/repos/nix/nixos/branches/stdenv-updates"; target = "/etc/nixos/nixos-stdenv-updates"; }
+                    { type = "git"; initialize = ''git clone git://mawercer.de/nixos $target''; update = "git pull origin"; target = "/etc/nixos/nixos-git"; }
+                  ];
+        description = "The nixos repository from which the system will be build. 
+                       nixos-checkout will update all defined repositories,
+                       nixos-rebuild will use the the first item which has
+                       the attribute default = true falling back to the
+                       first item. the type defines the repository tool added
+                       to the path. It also defines a \"valid\" repository.
+                       If the target directory already exists and it's not
+                       valid it will be moved to the backup location
+                       <filename>\${dir}-date</filename>.
+                       For svn the default target and repositories are
+                       <filename>/etc/nixos/nixos</filename> and
+                       <filename>https://svn.nixos.org/repos/nix/nixos/trunk</filename>.
+                       For git repositories update is called after
+                       initialization when the repo is initialized.
+                       The initialize code is run from working directory
+                       dirname \$target and should create the directory
+                       <filename>\$target<filename>. (<command>git clone url nixos/nixpkgs/services</command> should do)
+                       ";
+      };
+
+      nixpkgs = mkOption {
+        default = [ { type  = "svn"; }  ];
+        description = "same as <option>repos.nixos</option>";
+      };
+
+      services = mkOption {
+        default = [ { type  = "svn"; } ];
+        description = "same as <option>repos.nixos</option>";
+      };
+    };
+
+    repoTypes = mkOption {
+        default = {
+          svn = { valid = "[ -d .svn ]"; env = [ pkgs.coreutils pkgs.subversion ]; };
+          git = { valid = "[ -d .git ]"; env = [ pkgs.coreutils pkgs.git pkgs.gnused /*  FIXME: use full path to sed in nix-pull */ ]; };
+        };
+        description = "defines PATH environment and when directory is considered beeing a valid repository.
+              If it's not it's moved to a backup directory";
+    };
+
     manifests = mkOption {
       default = [http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST];
       example =

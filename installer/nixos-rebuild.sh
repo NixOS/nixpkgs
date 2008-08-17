@@ -42,8 +42,8 @@ fi
 
 # Allow the location of NixOS sources and the system configuration
 # file to be overridden.
-NIXOS=${NIXOS:-/etc/nixos/nixos}
-NIXPKGS=${NIXPKGS:-$NIXOS/pkgs}
+NIXOS=${NIXOS:-@defaultNIXOS@}
+NIXPKGS=${NIXPKGS:-@defaultNIXPKGS@}
 NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 
