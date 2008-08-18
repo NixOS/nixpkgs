@@ -3,11 +3,13 @@
 args:
 args.mkDerivationByConfiguration {
     flagConfig = {
-    mandatory = { buildInputs = [ ];};
+    mandatory = { buildInputs = [ "pkgconfig" ];};
+
+    # FIXME: tidy up
 
     # static[=PKGS] =     { cfgOption = "--enable-static[=PKGS]"; };                  #build static libraries [default=no]
     # shared[=PKGS] =     { cfgOption = "--enable-shared[=PKGS]"; };                  #build shared libraries [default=yes]
-    posix_shm =         { cfgOption = "--enable-posix-shm"; };                      #use POSIX shm API
+    posix_shm =         { cfgOption = "--enable-posix-shm"; };                        #use POSIX shm API
     # altivec seems to be for mac only ?
     #  altivec =           { cfgOption = "--enable-altivec"; };                        #enable Altivec support (default=auto)
 
@@ -16,15 +18,15 @@ args.mkDerivationByConfiguration {
     # optimization_by_cpu = { cfgOption = "--enable-optimization-by-cpu"; };          [>use processor capabilities to determine optimization flags
 
     # I think the default is ok
-    # mmx =               { cfgOption = "--enable-mmx"; };                            #enable MMX support (default=auto)
-    sse =               { cfgOption = "--enable-sse"; };                            #enable SSE support (default=auto)
-    dynsimd =           { cfgOption = "--enable-dynsimd"; };                        #enable dynamic SIMD selection (default=no)
-    optimize =          { cfgOption = "--enable-optimize"; };                       #ask the compiler for its best optimizations
-    resize =            { cfgOption = "--enable-resize"; };                         #enable buffer resizing feature
-    ensure_mlock =      { cfgOption = "--enable-ensure-mlock"; };                   #fail if unable to lock memory
-    debug =             { cfgOption = "--enable-debug"; };                          #enable debugging messages in jackd and libjack
-    timestamps =        { cfgOption = "--enable-timestamps"; };                     #allow clients to use the JACK timestamp API
-    preemption_check =  { cfgOption = "--enable-preemption-check"; };               #
+    # mmx =               { cfgOption = "--enable-mmx"; };                           #enable MMX support (default=auto)
+    #sse =               { cfgOption = "--enable-sse"; };                            #enable SSE support (default=auto)
+    #dynsimd =           { cfgOption = "--enable-dynsimd"; };                        #enable dynamic SIMD selection (default=no)
+    #optimize =          { cfgOption = "--enable-optimize"; };                       #ask the compiler for its best optimizations
+    #resize =            { cfgOption = "--enable-resize"; };                         #enable buffer resizing feature
+    #ensure_mlock =      { cfgOption = "--enable-ensure-mlock"; };                   #fail if unable to lock memory
+    #debug =             { cfgOption = "--enable-debug"; };                          #enable debugging messages in jackd and libjack
+    timestamps =        { cfgOption = "--enable-timestamps"; };                      # allow clients to use the JACK timestamp API
+    #preemption_check =  { cfgOption = "--enable-preemption-check"; };               #
 
     capabilities =      { cfgOption = "--enable-capabilities"; };                   #use libcap to gain realtime scheduling priviledges
     no_oldtrans =       { cfgOption = "--disable-oldtrans"; };                      #remove old transport interfaces
@@ -33,6 +35,7 @@ args.mkDerivationByConfiguration {
     no_coreaudio =      { cfgOption = "--disable-coreaudio"; };                     #ignore CoreAudio driver
     no_oss =            { cfgOption = "--disable-oss"; };                           #ignore OSS driver
     no_freebob =        { cfgOption = "--disable-freebob"; };                       #ignore FreeBob driver
+    alsa =              { cfgOption = "--enable-alsa"; buildInputs="alsaLib"; };        #enable ALSA driver
     no_alsa =           { cfgOption = "--disable-alsa"; };                          #ignore ALSA driver
 
     }; 
@@ -41,8 +44,8 @@ args.mkDerivationByConfiguration {
       name = "jack-0.103.0";
 
       src = args.fetchurl {
-        url = "http://prdownloads.sourceforge.net/jackit/jack-audio-connection-kit-0.103.0.tar.gz";
-        sha256 = "0pr3vxsfignvc9kls52zvyxhl7mwan0nhnlvcz3s3r3ydmlzvnd5";
+        url = "mirror://sourceforge/jackit/jack-audio-connection-kit-0.109.2.tar.gz";
+        sha256 = "1m5z8dzalqspsa63pkcgyns0cvh0kqwhb9g1ivcwvnz0bc7ag9r7";
       };
 
       meta = { 

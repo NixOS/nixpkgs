@@ -7249,13 +7249,11 @@ let pkgs = rec {
   */
 
   # using the new configuration style proposal which is unstable
-  /*
   jackaudio = import ../misc/jackaudio {
     inherit mkDerivationByConfiguration
-           ncurses lib stdenv fetchurl;
-    flags = [ "posix_shm" "timestamps"];
+           ncurses lib stdenv fetchurl alsaLib pkgconfig;
+    flags = [ "posix_shm" "timestamps" "alsa"];
   };
-  */
 
   keynav = import ../tools/X11/keynav {
     inherit stdenv fetchurl;
