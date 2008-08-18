@@ -5727,6 +5727,15 @@ let pkgs = rec {
     inherit bazaar;
   };
 
+  beast = import ../applications/audio/beast {
+# stdenv = overrideGCC stdenv gcc34;
+    inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis python libxml2 bash perl gettext;
+    inherit (bleedingEdgeRepos) sourceByName;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) libgnomecanvas libart_lgpl;
+    inherit automake autoconf;
+  };
+
   bitlbee = import ../applications/networking/instant-messengers/bitlbee {
     inherit fetchurl stdenv gnutls pkgconfig;
     inherit (gtkLibs) glib;
