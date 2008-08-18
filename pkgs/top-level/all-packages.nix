@@ -6593,14 +6593,14 @@ let pkgs = rec {
   };
 
   sndBase =  composedArgsAndFun (import ../applications/audio/snd) {
-    inherit fetchurl stdenv builderDefs stringsWithDeps lib;
+    inherit fetchurl stdenv builderDefs stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
     inherit (gtkLibs) gtk glib;
   };
 
   snd = sndBase.meta.function {
-    inherit guile mesa libtool;
+    inherit guile mesa libtool jackaudio alsaLib;
   };
 
   sox = import ../applications/misc/audio/sox {

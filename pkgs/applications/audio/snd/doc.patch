@@ -1,0 +1,62 @@
+diff --git a/index.scm b/index.scm
+index 2148a58..713939c 100644
+--- a/index.scm
++++ b/index.scm
+@@ -18,24 +18,7 @@ and if one is found, and the Snd documentation can be found, calls (html-program
+ 	    (lambda (n)
+ 	      ;; look for doc on current dir, then html dir, then global dir
+ 	      ;; snd.html is what we'll search for
+-	      (let ((dir (if (file-exists? "snd.html") 
+-			     (getcwd)
+-			     (if (and (string? (html-dir))
+-				      (file-exists? (string-append (html-dir) "/snd.html")))
+-				 (html-dir)
+-				 (if (file-exists? "/usr/share/doc/snd-9/snd.html")
+-				     "/usr/share/doc/snd-9"
+-				     (if (file-exists? "/usr/local/share/doc/snd-9/snd.html")
+-					 "/usr/local/share/doc/snd-9"
+-					 (if (file-exists? "/usr/doc/snd-9/snd.html")
+-					     "/usr/doc/snd-9"
+-					     (if (file-exists? "/usr/share/doc/snd-8/snd.html")
+-						 "/usr/share/doc/snd-8"
+-						 (if (file-exists? "/usr/local/share/doc/snd-8/snd.html")
+-						     "/usr/local/share/doc/snd-8"
+-						     (if (file-exists? "/usr/doc/snd-8/snd.html")
+-							 "/usr/doc/snd-8"
+-							 #f))))))))))
++	      (let (dir "HTML-DIR")
+ 		(if dir
+ 		    (if (or (string=? (html-program) "netscape")
+ 			    (string=? (html-program) "mozilla")
+diff --git a/snd-help.c b/snd-help.c
+index a6557e0..a40a02e 100644
+--- a/snd-help.c
++++ b/snd-help.c
+@@ -3554,26 +3554,7 @@ static char *doc_files[DOC_DIRECTORIES] = {
+   
+ static char *html_directory(void)
+ {
+-  int i;
+-  if (mus_file_probe("snd.html"))
+-    return(mus_getcwd());
+-  if (html_dir(ss))
+-    {
+-      bool happy;
+-      char *hd = NULL;
+-      hd = (char *)CALLOC(snd_strlen(html_dir(ss)) + 16, sizeof(char));
+-      sprintf(hd, html_dir(ss), "/snd.html");
+-      happy = mus_file_probe(hd);
+-      FREE(hd);
+-      if (happy) return(copy_string(html_dir(ss)));
+-    }
+-#ifdef MUS_DEFAULT_DOC_DIR
+-  if (mus_file_probe(MUS_DEFAULT_DOC_DIR "/snd.html"))
+-    return(copy_string(MUS_DEFAULT_DOC_DIR "/snd.html"));
+-#endif
+-  for (i = 0; i < DOC_DIRECTORIES; i++)
+-    if (mus_file_probe(doc_files[i])) return(copy_string(doc_directories[i]));
+-  return(NULL);
++  return (copy_string ("HTML-DIR"));
+ }
+ 
+ 
