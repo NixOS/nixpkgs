@@ -1438,6 +1438,16 @@ in
         default = "/var/log/ejabberd";
         description = "Location of the logfile directory of ejabberd";
       };
+      
+      confDir = mkOption {
+        default = "/var/ejabberd";
+	description = "Location of the config directory of ejabberd";
+      };
+      
+      virtualHosts = mkOption {
+        default = "\"localhost\"";
+        description = "Virtualhosts that ejabberd should host. Hostnames are surrounded with doublequotes and separated by commas";
+      };
     };
 
     jboss = {
