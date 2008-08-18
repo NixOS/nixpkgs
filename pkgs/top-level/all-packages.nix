@@ -6143,6 +6143,11 @@ let pkgs = rec {
     qt = qt3;
   };
 
+  qjackctl = import ../applications/audio/qjackctl {
+    inherit fetchurl stdenv alsaLib jackaudio;
+    qt4 = qt4;
+  };
+
   gkrellm = import ../applications/misc/gkrellm {
     inherit fetchurl stdenv gettext pkgconfig;
     inherit (gtkLibs) glib gtk;
