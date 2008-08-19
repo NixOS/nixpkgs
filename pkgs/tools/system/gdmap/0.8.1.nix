@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 		    url = http://downloads.sourceforge.net/gdmap/gdmap-0.8.1.tar.gz;
@@ -8,7 +8,7 @@ args : with args;
 
 		buildInputs = [gtk pkgconfig libxml2 intltool gettext];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "gdmap"+version;

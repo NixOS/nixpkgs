@@ -1,5 +1,5 @@
 args: with args;
-	let localDefs = builderDefs { 
+	let localDefs = builderDefs.meta.function { 
 	  src = 
 		fetchurl {
 			url = mirror://sourceforge/audacity/audacity-src-1.3.3.tar.gz;
@@ -8,7 +8,7 @@ args: with args;
 
   	buildInputs =[(wxGTK null) libogg libvorbis libsndfile libmad pkgconfig gtk 
 		gettext glib];
-	} null;
+	};
 	in with localDefs;
 let 
 	postInstall = FullDepEntry ("

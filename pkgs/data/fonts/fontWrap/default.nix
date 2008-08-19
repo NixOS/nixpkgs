@@ -1,9 +1,9 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src =""; /* put a fetchurl here */
 		buildInputs = [mkfontdir mkfontscale ttmkfdir];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let
 	doInstall = FullDepEntry ("

@@ -2,7 +2,7 @@ args: with args;
 
 let
 
-  localDefs = builderDefs {
+  localDefs = builderDefs.meta.function {
 
     src = fetchurl {
       url = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-0.9.5.1.1.tar.gz;
@@ -11,7 +11,7 @@ let
 
     buildInputs = [python];
 
-  } null; /* null is a terminator for sumArgs */
+  }; 
 
 in with localDefs;
         

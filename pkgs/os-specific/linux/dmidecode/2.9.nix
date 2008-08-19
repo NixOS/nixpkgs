@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://download.savannah.gnu.org/releases/dmidecode/dmidecode-2.9.tar.bz2;
@@ -9,7 +9,7 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 		makeFlags = "prefix=\$out";
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "dmidecode-"+version;

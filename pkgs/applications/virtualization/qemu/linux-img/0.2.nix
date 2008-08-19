@@ -1,6 +1,6 @@
 
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = [ http://fabrice.bellard.free.fr/qemu/linux-0.2.img.bz2 http://bellard.org/qemu/linux-0.2.img.bz2];
@@ -8,7 +8,7 @@ args : with args;
 		};
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let 
 doCopy = FullDepEntry ("

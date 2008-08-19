@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://crl.nmsu.edu/~mleisher/cu/cu12-1.9.tar.gz;
@@ -15,7 +15,7 @@ args : with args; with builderDefs {src="";} null;
 			mkfontdir 
 			mkfontscale
 		'') ["minInit" "defEnsureDir" "addInputs"];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "clearlyU-12-"+version;

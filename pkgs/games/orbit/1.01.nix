@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			sha256 = "1kx69f9jqnfzwjh47cl1df8p8hn3bnp6bznxnb6c4wx32ijn5gri";
@@ -27,7 +27,7 @@ $out/dump/orbit "\$@"
 EOF
                         chmod a+x $out/bin/space-orbit
 		'') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
-	} null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "space-orbit-"+version;

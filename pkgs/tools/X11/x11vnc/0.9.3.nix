@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-  let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+  let localDefs = builderDefs.meta.function (rec {
     src = /* put a fetchurl here */
     fetchurl {
       url = mirror://sourceforge/libvncserver/x11vnc-0.9.3.tar.gz;
@@ -10,7 +10,7 @@ args : with args; with builderDefs {src="";} null;
       zlib libX11 xproto libjpeg libXtst libXinerama xineramaproto
       libXrandr randrproto libXext xextproto inputproto recordproto];
     configureFlags = [];
-  }) null; /* null is a terminator for sumArgs */
+  });
   in with localDefs;
 stdenv.mkDerivation rec {
   name = "x11vnc-"+version;

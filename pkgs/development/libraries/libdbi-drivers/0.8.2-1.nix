@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 			fetchurl {
 				url = mirror://sourceforge/libdbi-drivers/libdbi-drivers-0.8.2-1.tar.gz;
@@ -26,7 +26,7 @@ args : with args;
 			" --with-sqlite-libdir=${args.sqlite}/lib/sqlite " 
 		] else [])
 		;
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "libdbi"+version;

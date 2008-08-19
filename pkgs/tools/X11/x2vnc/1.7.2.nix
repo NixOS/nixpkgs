@@ -1,6 +1,6 @@
 
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs.meta.function {src="";};
+	let localDefs = builderDefs.meta.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://fredrik.hubbe.net/x2vnc/x2vnc-1.7.2.tar.gz;
@@ -12,7 +12,7 @@ args : with args; with builderDefs {src="";} null;
 			ensureDir $out
 		'') ["defEnsureDir"];
 		configureFlags = [];
-	}) args null; /* null is a terminator for sumArgs */
+	}) // args); /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "x2vnc-"+version;

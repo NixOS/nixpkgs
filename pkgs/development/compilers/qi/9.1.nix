@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.lambdassociates.org/Download/Qi9.1.zip;
@@ -7,7 +7,7 @@ args : with args;
 		};
 		buildInputs = [ unzip clisp];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let 
 	shell=stdenv.shell;

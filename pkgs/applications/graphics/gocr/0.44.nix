@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 fetchurl {
 		url = http://prdownloads.sourceforge.net/jocr/gocr-0.44.tar.gz;
@@ -8,7 +8,7 @@ fetchurl {
 
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "gocr";

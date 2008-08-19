@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+let localDefs = builderDefs.meta.function (rec {
     src = /* put a fetchurl here */
     fetchurl {
       url = ftp://ftp.deepspace6.net/pub/ds6/sources/nc6/nc6-1.0.tar.bz2;
@@ -8,7 +8,7 @@ let localDefs = builderDefs (rec {
 
     buildInputs = [];
     configureFlags = [];
-    }) null; /* null is a terminator for sumArgs */
+    });
 in with localDefs;
 stdenv.mkDerivation rec {
   name = "nc6-"+version;

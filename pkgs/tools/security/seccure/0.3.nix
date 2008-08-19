@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://freshmeat.net/redir/seccure/65485/url_tgz/seccure-0.3.tar.gz;
@@ -12,7 +12,7 @@ args : with args; with builderDefs {src="";} null;
 			sed -e s@/usr/@$out/@g -i Makefile
 			ensureDir $out/bin $out/share/man/man1
 		'') ["minInit" "doUnpack" "defEnsureDir"];
-	}) args null; /* null is a terminator for sumArgs */
+	}) // args);
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "seccure-"+version;

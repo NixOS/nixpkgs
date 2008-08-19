@@ -6,10 +6,10 @@ let
 		sha256 = "1b908csn85ng9sz5s5d1mqk711cmawain2z8px2ajngihdrynb67";
 	};
 in
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		buildInputs = [];
 		inherit src;
-	} null;
+	};
 	in with localDefs;
 let
 	copyFile = FullDepEntry ("

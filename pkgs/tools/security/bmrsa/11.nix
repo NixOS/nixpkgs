@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://prdownloads.sourceforge.net/sourceforge/bmrsa/bmrsa11.zip;
@@ -16,7 +16,7 @@ args : with args; with builderDefs {src="";} null;
 			ensureDir $out/bin
 			echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
 		'') ["minInit" "addInputs" "defEnsureDir"];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "bmrsa-"+version;

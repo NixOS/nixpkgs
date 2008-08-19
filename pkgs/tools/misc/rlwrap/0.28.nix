@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = ftp://ftp.chg.ru/mirrors/ftp.freebsd.org/pub/FreeBSD/ports/distfiles/rlwrap-0.28.tar.gz;
@@ -8,7 +8,7 @@ args : with args; with builderDefs {src="";} null;
 
 		buildInputs = [readline ];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "rlwrap-"+version;

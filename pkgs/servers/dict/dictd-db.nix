@@ -1,8 +1,8 @@
 { builderDefs }:
 
 let makeDictdDB = _src: _name: _subdir: _locale:
-with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src=_src;
 		doInstall = FullDepEntry (''
 			ensureDir $out/share/dictd
@@ -13,7 +13,7 @@ with builderDefs {src="";} null;
 
 		buildInputs = [];
 		configureFlags = [];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "dictd-db-${_name}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 # Probably a bug in some FreeDict release files, but easier to trivially
 # work around than report. Not that it can cause any other problems..
 makeDictdDBFreedict = _src: _name: _locale: makeDictdDB _src _name "{.,bin}" _locale;
-fetchurl = (builderDefs {src="";} null).fetchurl;
+fetchurl = builderDefs.fetchurl;
 
 in 
 

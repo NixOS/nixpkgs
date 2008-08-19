@@ -1,6 +1,6 @@
 
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 	src = /* put a fetchurl here */
 	if args ? src then args.src else fetchcvs {
 		cvsRoot = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";
@@ -12,7 +12,7 @@ args : with args;
 		buildInputs = [ocaml fuse postgresql pcre
 			e2fsprogs gnomevfs pkgconfig GConf];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let build = FullDepEntry ("
 	cd deps 

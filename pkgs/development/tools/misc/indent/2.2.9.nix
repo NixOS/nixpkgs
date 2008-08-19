@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = ftp://ftp.gnu.org/gnu/indent/indent-2.2.9.tar.gz;
@@ -8,7 +8,7 @@ args : with args;
 
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let 
 	preBuild = FullDepEntry ("

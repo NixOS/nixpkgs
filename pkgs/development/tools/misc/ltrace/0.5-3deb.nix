@@ -1,7 +1,7 @@
 args : with args;	let 
         patch = ./ltrace_0.5-3.diff.gz;
-	localDefs = with (builderDefs {src="";} null);
-	 builderDefs {
+	localDefs = with builderDefs;
+	 builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5.orig.tar.gz;
@@ -17,7 +17,7 @@ args : with args;	let
 		  gunzip < ${patch} | patch -Np1
 		  sed -e s@-Werror@@ -i Makefile.in
 		'')["minInit" "doUnpack"];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let
 	preConfigure = FullDepEntry ("

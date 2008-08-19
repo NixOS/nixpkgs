@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://ftp.gnome.org/pub/gnome/sources/intltool/0.36/intltool-0.36.2.tar.bz2;
@@ -8,7 +8,7 @@ args : with args;
 
 		propagatedBuildInputs = [perl perlXMLParser];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "intltool-0.36.2";

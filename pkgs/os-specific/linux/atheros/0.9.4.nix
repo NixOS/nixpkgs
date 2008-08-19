@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 		  url = http://downloads.sourceforge.net/madwifi/madwifi-0.9.4.tar.gz;
@@ -9,7 +9,7 @@ args : with args;
 		buildInputs = [];
 		configureFlags = [];
 		makeFlags = [''KERNELPATH=${kernel}/lib/modules/*/build'' ''DESTDIR=$out''];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let 
 postInstall = FullDepEntry (''

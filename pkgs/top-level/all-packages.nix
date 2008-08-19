@@ -248,14 +248,13 @@ let pkgs = rec {
       abort ("Unknown option specified: " + result))
     else x);
 
-  builderDefs = lib.sumArgs (import ./builder-defs.nix) {
+  builderDefs = composedArgsAndFun (import ./builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
   composedArgsAndFun = lib.composedArgsAndFun;
 
-  builderDefsPackage = expr: composedArgsAndFun
-    (((builderDefs null).builderDefsPackage builderDefs) expr);
+  builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
 
   stringsWithDeps = import ../lib/strings-with-deps.nix {
     inherit stdenv lib;
@@ -2547,6 +2546,9 @@ let pkgs = rec {
     inherit fetchurl stdenv python;
   };
 
+  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
+  };
+ 
   cluceneCore = (import ../development/libraries/clucene-core) {
     inherit fetchurl stdenv;
   };
@@ -6592,8 +6594,8 @@ let pkgs = rec {
     inherit (xlibs) libXmu;
   };
 
-  sndBase =  composedArgsAndFun (import ../applications/audio/snd) {
-    inherit fetchurl stdenv builderDefs stringsWithDeps lib fftw;
+  sndBase =  builderDefsPackage (import ../applications/audio/snd) {
+    inherit fetchurl stdenv stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
     inherit (gtkLibs) gtk glib;

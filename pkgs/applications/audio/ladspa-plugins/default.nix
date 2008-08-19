@@ -1,5 +1,5 @@
 args: with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = 
 		fetchurl {
 			url = http://plugin.org.uk/releases/0.4.15/swh-plugins-0.4.15.tar.gz;
@@ -7,7 +7,7 @@ args: with args;
 		};
 		buildInputs = [fftw ladspaH pkgconfig];
 		configureFlags = [];
-	} null;
+	};
 	in with localDefs;
 let
 	postInstall = FullDepEntry ("

@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 			fetchurl {
 				url = mirror://sourceforge/libdbi/libdbi-0.8.2.tar.gz;
@@ -8,7 +8,7 @@ args : with args;
 
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "libdbi"+version;

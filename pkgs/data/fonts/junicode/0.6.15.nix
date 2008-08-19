@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 		  url = http://prdownloads.sourceforge.net/junicode/junicode-0.6.15.zip;
@@ -13,7 +13,7 @@ args : with args; with builderDefs {src="";} null;
 			ensureDir $out/share/fonts/junicode-ttf
 			cp *.ttf $out/share/fonts/junicode-ttf
 		'') ["minInit" "addInputs" "defEnsureDir"];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "junicode-"+version;

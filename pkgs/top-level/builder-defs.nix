@@ -458,8 +458,11 @@ args: with args; with stringsWithDeps; with lib;
 
         extraDerivationAttrs = lib.getAttr ["extraDerivationAttrs"] {} args;
 
-        builderDefsPackage = bd: func: args: (
-        let localDefs = bd (func ((bd null) // args)) args null; in
+        # for overrides..
+	builderDefsArgs = args;
+
+        innerBuilderDefsPackage = bd: func: args: (
+        let localDefs = bd.meta.function ((func (bd // args)) // args); in
 
         stdenv.mkDerivation ((rec {
           inherit (localDefs) name;
@@ -470,6 +473,9 @@ args: with args; with stringsWithDeps; with lib;
           inherit (localDefs) propagatedBuildInputs;
         } else {}) // extraDerivationAttrs)
         );
+
+	builderDefsPackage = bd: func: args: (composedArgsAndFun 
+	  (innerBuilderDefsPackage bd func) ((func (bd // args)) // args));
 
    generateFontsFromSFD = noDepEntry(''
            for i in *.sfd; do

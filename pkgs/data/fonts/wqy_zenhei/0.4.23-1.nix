@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://prdownloads.sourceforge.net/wqy/wqy-zenhei-0.4.23-1.tar.gz;
@@ -12,7 +12,7 @@ args : with args; with builderDefs {src="";} null;
 			ensureDir $out/share/fonts
 			cp *.ttf $out/share/fonts
 		'') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "wqy-zenhei-"+version;

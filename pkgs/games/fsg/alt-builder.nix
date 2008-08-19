@@ -1,12 +1,12 @@
 args: with args; 
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
   		buildInputs =[(wxGTK null)];
 		  src = 
 			fetchurl {
 				url = http://www.piettes.com/fallingsandgame/fsg-src-4.4.tar.gz;
 				sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
 			};
-	} null;
+	};
 	in with localDefs;
 let 
 	preBuild = FullDepEntry "

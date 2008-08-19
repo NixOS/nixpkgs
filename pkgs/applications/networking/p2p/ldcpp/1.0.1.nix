@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://download2.berlios.de/linuxdcpp/linuxdcpp-1.0.1.tar.bz2;
@@ -15,7 +15,7 @@ args : with args; with builderDefs {src="";} null;
 			scons PREFIX=$out 
 			scons PREFIX=$out install
 		'') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
-	}) args null; /* null is a terminator for sumArgs */
+	}) //  args);
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "ldcpp-"+version;

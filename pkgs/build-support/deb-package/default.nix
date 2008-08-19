@@ -1,10 +1,10 @@
 args : with args;	
 	let 
-       	localDefs = with (builderDefs {src="";} null);
+       	localDefs = with (builderDefs.meta.function {src="";});
 	let 
 	  checkFlag = flag : lib.getAttr [flag] false args;
 	in
-	  builderDefs {
+	  builderDefs.meta.function ({
 		inherit src;
 		inherit checkFlag;
 		buildInputs = [];
@@ -40,7 +40,7 @@ args : with args;
 		+ (if args ? extraReplacements then 
 		  args.extraReplacements 
 		else ""))["minInit" "doUnpack"];
-	} args null; /* null is a terminator for sumArgs */
+	}  // args);
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = localDefs.name + "deb";

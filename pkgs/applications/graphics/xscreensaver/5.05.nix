@@ -1,4 +1,4 @@
-args : with args; let localDefs = builderDefs (args // {
+args : with args; let localDefs = builderDefs.meta.function (args // {
 		src = /* put a fetchurl here */
 		fetchurl {
 		    url = http://www.jwz.org/xscreensaver/xscreensaver-5.05.tar.gz;
@@ -19,7 +19,7 @@ args : with args; let localDefs = builderDefs (args // {
 			"true" (" --with-x-app-defaults=\$out/share/xscreensaver/app-defaults "+
 				" --with-hackdir=\$out/share/xscreensaver-hacks ")
 		];
-	}) null; /* null is a terminator for sumArgs */
+	});
 	in with localDefs;
 let 
 	preConfigure = FullDepEntry ("

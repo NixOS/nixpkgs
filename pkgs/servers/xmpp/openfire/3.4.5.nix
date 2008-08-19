@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-  let localDefs = builderDefs (rec {
+args : with args; with builderDefs;
+  let localDefs = builderDefs.meta.function (rec {
     src = /* put a fetchurl here */
     fetchurl {
       url = http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_3_4_5.tar.gz;
@@ -18,7 +18,7 @@ args : with args; with builderDefs {src="";} null;
       ln -s /etc/openfire $out/conf
     '') 
     ["minInit" "doUnpack" "addInputs"];
-  }) null; /* null is a terminator for sumArgs */
+  });
   in with localDefs;
 stdenv.mkDerivation rec {
   name = "openfire-"+version;

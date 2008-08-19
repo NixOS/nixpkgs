@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/compiz/0.6.2/compiz-0.6.2.tar.bz2;
@@ -21,7 +21,7 @@ args : with args;
 			"--enable-annotate" "--enable-librsvg"] ++ 
 			(if args ? extraConfigureFlags then args.extraConfigureFlags else []);
 		patches = [ ./glx-patch-0.6.2.patch ];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let
 	postAll = FullDepEntry ("

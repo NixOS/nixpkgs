@@ -1,10 +1,10 @@
-args : with args; with builderDefs {src="";} null;
+args : with args; with builderDefs;
     let patch = 
         fetchurl {
           url = http://ftp.de.debian.org/debian/pool/main/d/dosfstools/dosfstools_2.11-2.3.diff.gz;
           sha256 = "0bzjhpgg4ih6c76ax8byis9vxgkr2c7bbbshqrkfq8j7ar48n5ld";
         };	
-      localDefs = builderDefs (rec {
+      localDefs = builderDefs.meta.function (rec {
         src = /* put a fetchurl here */
           fetchurl {
             url = http://ftp.de.debian.org/debian/pool/main/d/dosfstools/dosfstools_2.11.orig.tar.gz;
@@ -17,7 +17,7 @@ args : with args; with builderDefs {src="";} null;
         buildInputs = [];
         configureFlags = [];
 	makeFlags = " PREFIX=$out ";
-    }) null; /* null is a terminator for sumArgs */
+    });
     in with localDefs;
 stdenv.mkDerivation rec {
     name = "dosfstools-"+version;

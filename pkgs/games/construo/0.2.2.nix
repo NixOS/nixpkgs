@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://savannah.nongnu.org/download/construo/construo-0.2.2.tar.gz;
@@ -10,7 +10,7 @@ args : with args;
 		++ (if args ? mesa then [args.mesa args.freeglut] else [])
 		;
 		configureFlags = [""];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 let 
 preConfigure = FullDepEntry ("

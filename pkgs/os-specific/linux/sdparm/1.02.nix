@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs {
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://sg.torque.net/sg/p/sdparm-1.02.tgz;
@@ -8,7 +8,7 @@ args : with args;
 
 		buildInputs = [];
 		configureFlags = [];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "sdparm-"+version;

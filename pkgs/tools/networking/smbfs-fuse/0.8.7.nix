@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-	let localDefs = builderDefs {
+args : with args; with builderDefs;
+	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.ricardis.tudelft.nl/~vincent/fusesmb/download/fusesmb-0.8.7.tar.gz;
@@ -14,7 +14,7 @@ args : with args; with builderDefs {src="";} null;
 		ln -fs ${samba}/lib/libsmbclient.so $out/lib/libsmbclient.so.0
 		'')
 		[ "minInit" "defEnsureDir" "doMakeInstall"];
-	} null; /* null is a terminator for sumArgs */
+	};
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "smbfs-fuse-"+version;
