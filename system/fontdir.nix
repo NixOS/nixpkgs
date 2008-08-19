@@ -1,5 +1,5 @@
-args : with args; with builderDefs {src="";} null;
-  let localDefs = builderDefs rec {
+args : with args; with builderDefs;
+  let localDefs = builderDefs.meta.function rec {
     src = "";/* put a fetchurl here */
 
     buildInputs = [mkfontdir mkfontscale ttmkfdir];
@@ -39,7 +39,7 @@ args : with args; with builderDefs {src="";} null;
     rm fonts.scale.old
     cat \$( find ${fontalias}/ -name fonts.alias) >fonts.alias
   ") ["minInit" "addInputs"];
-  } null; /* null is a terminator for sumArgs */
+  };
   in with localDefs;
 stdenv.mkDerivation rec {
   name = "X11-fonts";
