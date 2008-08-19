@@ -115,9 +115,9 @@
     url = http://mawercer.de/~nix/repos/mkcabal.tar.gz;
     sha256 = "9f231756c36b46d29516ed327a320837194799a76de4833dc6a5c88e5ccd1658";
   };
-  nix_repository_manager = args: with args; fetchurl {
+  nix_repository_manager = args: with args; fetchurl { # Tue Aug 19 13:26:08 UTC 2008
     url = http://mawercer.de/~nix/repos/nix_repository_manager.tar.gz;
-    sha256 = "449065f8411c5628b9fe88445601558dfd9a5f87b1703df9465838ef0afb9d34";
+    sha256 = "8eb43825b7336af95544626c558920a809d043d7417da294d36166df526e57ca";
   };
   plugins = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/plugins.tar.gz;

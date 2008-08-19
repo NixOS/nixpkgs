@@ -29,15 +29,14 @@ in
 
   pass = {
     buildPhase = ''
+    cp ${pkgs.getConfig ["nixRepositoryManager" "sourcefile"] "nix-repository-manager.hs"} source.hs
     s=$out/share/nix-repository-manager
     ensureDir $out/bin $s
-    cp /pr/haskell/nix_repository_manager/nix-repository-manager.hs .
-    ghc --make nix-repository-manager.hs -o $s/nix-repository-manager
+    ghc --make source.hs -o $s/nix-repository-manager
     b=$out/bin/nix-repository-manager
     echo -e "#!/bin/sh\n$s/nix-repository-manager ${config} \$@" > $b
     chmod +x $b
     '';
-    d=1; # dummy var to force rebuilding (local develepoment)
   };
 
   meta = { 
