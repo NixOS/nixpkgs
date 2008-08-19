@@ -17,6 +17,15 @@ stdenv.mkDerivation {
   configureFlags =
     if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];
 
+  postInstall = ''
+    for i in $out/lib/valgrind/*.supp; do
+      substituteInPlace $i \
+        --replace 'obj:/lib' 'obj:*/lib' \
+        --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
+        --replace 'obj:/usr/lib' 'obj:*/lib'
+    done
+  '';
+
   meta = {
     homepage = http://www.valgrind.org/;
     description = "Valgrind, a debugging and profiling tool suite";
