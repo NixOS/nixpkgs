@@ -10,39 +10,39 @@
 */
 
 
-args: with args; with lib;
+args: with args; with args.lib;
 let 
   toConfigLine = name : set : 
     "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${__getAttr a set}\")" ) (__attrNames set)))+"]";
-  config = writeText "nix-repository-manager_config"
+  config = pkgs.writeText "nix-repository-manager_config"
         (bleedingEdgeRepos.managedRepoDir+"\n" +
         concatStringsSep "\n" (mapRecordFlatten toConfigLine (bleedingEdgeRepos.repos)));
 
 in
-args.stdenv.mkDerivation {
 
+{
   name = "nix-repository-manager";
+
+  libsFun = x : [x.base x.time x.old_locale x.mtl];
 
   src = bleedingEdgeRepos.sourceByName "nix_repository_manager";
 
-  phases = "unpackPhase buildPhase";
-
-  buildPhase = "
-    s=\$out/share/nix-repository-manager
-    ensureDir \$out/bin \$s
-    #ghc --make nix-repository-manager.hs -o \$s/nix-repository-manager
-    ghc --make nix-repository-manager.hs -o \$s/nix-repository-manager
-    b=\$out/bin/nix-repository-manager
-    echo -e \"#!/bin/sh\\n\$s/nix-repository-manager --config ${config} \\\$@\" > \$b
-    chmod +x \$b
-  ";
-
-  buildInputs = [ghc];
+  pass = {
+    buildPhase = ''
+    s=$out/share/nix-repository-manager
+    ensureDir $out/bin $s
+    cp /pr/haskell/nix_repository_manager/nix-repository-manager.hs .
+    ghc --make nix-repository-manager.hs -o $s/nix-repository-manager
+    b=$out/bin/nix-repository-manager
+    echo -e "#!/bin/sh\n$s/nix-repository-manager ${config} \$@" > $b
+    chmod +x $b
+    '';
+    d=1; # dummy var to force rebuilding (local develepoment)
+  };
 
   meta = { 
       description = "makes it easy to keep some packages up to date";
       homepage = http://mawercer.de/repos/nix-repository-manager;
       license = "GPL";
   };
-  dummy=1;
 }

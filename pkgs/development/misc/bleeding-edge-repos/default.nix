@@ -21,7 +21,12 @@ args:
          then (__getAttr name fetchInfos) { inherit fetchurl; }
          else throw "warning, no bleeding edge source attribute found in bleeding-edge-fetch-infos.nix with name ${name}";
 
-  repos = {
+  repos = 
+      let kde4support = builtins.listToAttrs (map (n: lib.nv ("kdesupport_"+n) { type = "svn"; url = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/${n}"; groups="kdesupport"; })
+                          [ "akode" "eigen" "gmm" "qca" "qimageblitz" "soprano" "strigi" "taglib" 
+                          "automoc" "akonadi" "cpptoxml" "decibel" "emerge" "phonon" "tapioca_qt" "telepathy_qt"]); in
+      # in trunk but not yet supported by nix: akonadi/ automoc/ cpptoxml/ decibel/ emerge/ kdewin-installer/ kdewin32/ phonon/ tapioca-qt/ telepathy-qt/
+    {
     # each repository has 
     # a type, url and maybe a tag
     # you can add groups names to update some repositories at once
@@ -56,8 +61,10 @@ args:
       haxml = { type="darcs"; url=http://www.cs.york.ac.uk/fp/darcs/HaXml; groups = "pg_haskell"; };
       storableVector = { type="darcs"; url=http://darcs.haskell.org/storablevector/; groups = "haskell"; };
 
+      kdepimlibs = { type="svn"; url="svn://anonsvn.kde.org/home/kde/trunk/KDE/kdepimlibs"; groups = "kde"; };
+      kdebase = { type="svn"; url="svn://anonsvn.kde.org/home/kde/trunk/KDE/kdebase"; groups = "kde"; };
 
       # git repositories 
       hypertable =  { type="git"; url="git://scm.hypertable.org/pub/repos/hypertable.git"; groups=""; };
-    } // getConfig [ "bleedingEdgeRepos" "repos" ] {};
+    } // kde4support // getConfig [ "bleedingEdgeRepos" "repos" ] {};
 }

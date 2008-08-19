@@ -3,6 +3,10 @@ let inherit (bleedingEdgeRepos)  sourceByName;
 # map ghcCabalExecutableFun and add cabal dependency to all 
 executables = lib.mapAttrs ( name_dummy : a : ghcCabalExecutableFun (a // { libsFun = x : (a.libsFun x) ++ [x.cabal_darcs]; } ) )
 ({
+  nixRepositoryManager = import ./nix-repository-manager.nix {
+    inherit (args) lib pkgs;
+    inherit bleedingEdgeRepos;
+  };
   happy = {
     name = "happy-1.17";
     libsFun = x : [x.base x.directory x.haskell98 x.mtl];

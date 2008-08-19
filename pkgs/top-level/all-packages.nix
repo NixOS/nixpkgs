@@ -2029,7 +2029,7 @@ let pkgs = rec {
   */
 
   bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos {
-    inherit getConfig fetchdarcs2 fetchurl;
+    inherit getConfig fetchdarcs2 fetchurl lib;
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -7295,12 +7295,6 @@ let pkgs = rec {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
-  };
-
-  nixRepositoryManager = import ../tools/package-management/nixRepositoryManager {
-    inherit fetchurl stdenv bleedingEdgeRepos lib writeText;
-    ghc = ghcsAndLibs.ghc68.ghc;
-    fetchdarcs = fetchdarcs2;
   };
 
   /*

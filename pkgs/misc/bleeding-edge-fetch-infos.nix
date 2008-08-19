@@ -1,4 +1,9 @@
-{ cabal = args: with args; fetchurl {
+{ # Warning, this file is updated automatically by nix-repository-manager
+  # which will add or replace exsiting attribute sets only
+  # new items will be added before the last line, 4 lines will be removed when
+  # replacing always, matched by "name ="
+
+  cabal = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/cabal.tar.gz;
     sha256 = "33bdbe8f0c213dcc28da88a2775f81f72e89209806e26b412699220c3db206ec";
   };
@@ -145,5 +150,69 @@
   storableVector = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/storableVector.tar.gz;
     sha256 = "ce7ac7973e12ff92ceb371b95fc74430c7870f0fc27ae02fad4792b1643653b6";
+  };
+  kdesupport_akode = args: with args; fetchurl { # Wed Aug 13 15:09:07 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_akode.tar.gz;
+    sha256 = "9fb2a363c3331fe67cc3bddcc430df30f8f1b9869ec7673fb97ecb18313ef710";
+  };
+  kdesupport_eigen = args: with args; fetchurl { # Wed Aug 13 15:28:37 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_eigen.tar.gz;
+    sha256 = "25854580e5fcb222e6463cf02802e5160ca0e037d9f86bee4b5edf22d8161607";
+  };
+  kdesupport_gmm = args: with args; fetchurl { # Wed Aug 13 15:09:46 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_gmm.tar.gz;
+    sha256 = "70faafe70e0eac747f6ffa47cebd537c6bda7509739d634a0c49cb85bc797668";
+  };
+  kdesupport_qca = args: with args; fetchurl { # Wed Aug 13 15:10:38 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_qca.tar.gz;
+    sha256 = "ca0d8c0ffdec7b81a3d3574e8d16fd423f8a42a9793ecd8d2997671a48c8d62b";
+  };
+  kdesupport_qimageblitz = args: with args; fetchurl { # Wed Aug 13 14:55:54 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_qimageblitz.tar.gz;
+    sha256 = "25e31db3fdd73f97dda82a071031b766ecbacf583924ed1d8af7418bf408204d";
+  };
+  kdesupport_soprano = args: with args; fetchurl { # Wed Aug 13 14:59:54 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_soprano.tar.gz;
+    sha256 = "4a3a6ff41d29b7efb1fe9b80db232579f76cc683b18a95f45d6f2bda9bb25800";
+  };
+  kdesupport_strigi = args: with args; fetchurl { # Wed Aug 13 15:00:49 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_strigi.tar.gz;
+    sha256 = "77ff3345a49ffdcc57f3fca48c20b751967a18db9d0ee3922dca7c20ff2f400f";
+  };
+  kdesupport_taglib = args: with args; fetchurl { # Wed Aug 13 15:01:45 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_taglib.tar.gz;
+    sha256 = "ae6c92e2ed40bec330f764d7549e7d200477ba1e3126dba41539225b3a9ad13a";
+  };
+  kdesupport_akonadi = args: with args; fetchurl { # Wed Aug 13 15:11:30 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_akonadi.tar.gz;
+    sha256 = "a845ed8e82e9545de9ac2a086e510d0ad81efccd068a677a928c25f5f6481ece";
+  };
+  kdesupport_automoc = args: with args; fetchurl { # Wed Aug 13 15:28:25 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_automoc.tar.gz;
+    sha256 = "b40161ec6dd1ef040a488a6926bd75d54b0230025b03df9fde8fd2207882aae7";
+  };
+  kdesupport_cpptoxml = args: with args; fetchurl { # Wed Aug 13 15:11:49 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_cpptoxml.tar.gz;
+    sha256 = "8c4909dc0f57a337d07d3d3d365baeecd021f41705a2998ba6d3ff8d992b6a09";
+  };
+  kdesupport_decibel = args: with args; fetchurl { # Wed Aug 13 15:12:09 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_decibel.tar.gz;
+    sha256 = "76f98fb2f020ec5ba2f8017c54e0db392a8f660e1d9ddb20f6125f5feab1caff";
+  };
+  kdesupport_emerge = args: with args; fetchurl { # Wed Aug 13 15:12:30 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_emerge.tar.gz;
+    sha256 = "acfce47b2cbb3b7af864ec8dd7df664d2cb8b4cbf6484e91adc912562422bfa6";
+  };
+  kdesupport_phonon = args: with args; fetchurl { # Wed Aug 13 15:13:48 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_phonon.tar.gz;
+    sha256 = "36e8fc19ab376991cd820143994900c976b5a3d4905923eee56d8b153083bdd2";
+  };
+  kdesupport_tapioca_qt = args: with args; fetchurl { # Wed Aug 13 15:13:50 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_tapioca_qt.tar.gz;
+    sha256 = "9d313cdd685c6532b6052adc63a51a89a10aae5c5648d71e93e3d4eed8af8c0f";
+  };
+  kdesupport_telepathy_qt = args: with args; fetchurl { # Wed Aug 13 15:13:52 UTC 2008
+    url = http://mawercer.de/~nix/repos/kdesupport_telepathy_qt.tar.gz;
+    sha256 = "022599182ff629662bbd01acdea6ead9aec64b3e73e8da3eb58ef857803035f2";
   };
 }
