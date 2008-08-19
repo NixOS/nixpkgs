@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [pkgconfig];
   propagatedBuildInputs = [ bdb openssl libxslt perl mysql postgresql sqlite
-    curl pcre];
+    curl pcre libxml2];
   configureFlags = "--disable-static --with-threads --with-bdb=${bdb}";
   patchPhase="sed -e 1s@/usr@${perl}@ -i utils/touch-mtime.pl";
 }
