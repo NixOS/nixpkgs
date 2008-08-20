@@ -32,20 +32,21 @@ rec {
 	else (innerComposedArgs f (y x))));
   composedArgs = f: innerComposedArgs f {};
 
-  defaultMerge = x : y: if builtins.isAttrs y then
-    x // y
+  defaultMergeArg = x : y: if builtins.isAttrs y then
+    y
   else 
-    y x;
+    (y x);
+  defaultMerge = x: y: x // (defaultMergeArg x y);
   sumTwoArgs = f: x: y: 
     f (defaultMerge x y);
   foldArgs = merger: f: init: x: 
-    let arg=(merger init (defaultMerge init x)); in
+    let arg=(merger init (defaultMergeArg init x)); in
       (f arg) // {
         meta = {
 	  function = foldArgs merger f arg;
 	};
       };
-  composedArgsAndFun = f: foldArgs (x: y: y) f {};
+  composedArgsAndFun = f: foldArgs defaultMerge f {};
 
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
   # result: ["ab" "cd"]
