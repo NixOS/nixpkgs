@@ -461,6 +461,7 @@ rec {
 
   # this can help debug your code as well - designed to not produce thousands of lines
   traceWhatis = x : __trace (whatis x) x;
+  traceMarked = str: x: __trace (str + (whatis x)) x;
   whatis = x : 
       if (__isAttrs x) then
           if (x ? outPath) then "x is a derivation with name ${x.name}"
