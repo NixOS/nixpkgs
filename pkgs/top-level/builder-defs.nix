@@ -130,7 +130,7 @@ args: with args; with stringsWithDeps; with lib;
                 }
 
                 pkgs=\"\"
-                for i in \$NIX_GCC ${toString buildInputs}; do
+                for i in \$NIX_GCC ${toString realBuildInputs}; do
                     findInputs \$i
                 done
 
@@ -362,7 +362,7 @@ args: with args; with stringsWithDeps; with lib;
         autoConfigureFlags = condConcat "" configFlags check;
         autoMakeFlags = condConcat "" buildFlags check;
         useConfig = getAttr ["useConfig"] false args;
-        buildInputs = 
+        realBuildInputs = 
                 lib.closePropagation ((if useConfig then 
                         autoBuildInputs else 
                         getAttr ["buildInputs"] [] args)++
@@ -461,8 +461,8 @@ args: with args; with stringsWithDeps; with lib;
         # for overrides..
 	builderDefsArgs = args;
 
-        innerBuilderDefsPackage = bd: func: args: (
-        let localDefs = bd.meta.function ((func (bd // args)) // args); in
+        innerBuilderDefsPackage = bd: args: (
+        let localDefs = bd.meta.function args; in
 
         stdenv.mkDerivation ((rec {
           inherit (localDefs) name;
@@ -474,12 +474,15 @@ args: with args; with stringsWithDeps; with lib;
         } else {}) // extraDerivationAttrs)
         );
 
-	builderDefsPackage = bd: func: args: (composedArgsAndFun 
-	  (innerBuilderDefsPackage bd func) ((func (bd // args)) // args));
+	builderDefsPackage = bd: func:
+	  foldArgs 
+	    (x: y: ((func (bd // x // y)) // y))
+            (innerBuilderDefsPackage bd)
+	    {};
 
-   generateFontsFromSFD = noDepEntry(''
+   generateFontsFromSFD = FullDepEntry (''
            for i in *.sfd; do
-                ${args.fontforge}/bin/fontforge -c \
+                fontforge -c \
                         'Open($1);
                         ${optionalString (args ? extraFontForgeCommands) args.extraFontForgeCommands
                         }Reencode("unicode");
@@ -493,7 +496,7 @@ args: with args; with stringsWithDeps; with lib;
                          ${optionalString (getAttr ["createENC"] true args) ''Generate($1:r + ".enc");''}
                         ' $i; 
         done
-   '');
+   '') ["minInit" "addInputs" "doUnpack"];
 
    installFonts = FullDepEntry (''
            ensureDir $out/share/fonts/truetype/public/${args.name}
