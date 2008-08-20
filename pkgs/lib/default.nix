@@ -45,7 +45,7 @@ rec {
 	  function = foldArgs merger f arg;
 	};
       };
-  composedArgsAndFun = f: foldArgs (x: y: y) {} f;
+  composedArgsAndFun = f: foldArgs (x: y: y) f {};
 
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
   # result: ["ab" "cd"]
