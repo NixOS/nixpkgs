@@ -465,6 +465,7 @@ rec {
       else if (x == []) then "x is an empty list"
       else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
       else if (x == true || x == false) then builtins.toString x
+      else if (x == null) then "x is null"
       else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
 
 
