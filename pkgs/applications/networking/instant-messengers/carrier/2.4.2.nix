@@ -4,6 +4,9 @@ args : with args;
   optional: purple2Source: purple-2 source - place to copy libpurple from 
     (to use a fresher pidgin build)
 */
+let 
+  externalPurple2 = (lib.getAttr ["purple2Source"] null args) != null; 
+in
 rec {
   src = fetchurl {
     url = http://downloads.sourceforge.net/funpidgin/carrier-2.4.2.tar.bz2;
@@ -31,17 +34,9 @@ rec {
     export echo=echo
   '') [];
 
-  postInstall = if (lib.getAttr ["purple2Source"] null args) != null then 
-    FullDepEntry (''
-      ensureDir $out/lib/purple-2
-      cp ${args.purple2Source}/lib/purple-2/* $out/lib/purple-2/
-    '') ["minInit" "defEnsureDir"]
-  else
-    noDepEntry "";
-
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "preBuild" "doMakeInstall"]
-    ++ (lib.optional (postInstall.text != "") "postInstall")
+    ++ (lib.optional externalPurple2 "postInstall")
   ;
       
   name = "carrier-" + version;
@@ -49,5 +44,11 @@ rec {
     description = "Carrier - PidginIM GUI fork with user-friendly development model";
     homepage = http://funpidgin.sf.net; 
   };
-}
+} // (if externalPurple2 then {
+  postInstall = FullDepEntry (''
+      ensureDir $out/lib/purple-2
+      cp ${args.purple2Source}/lib/purple-2/* $out/lib/purple-2/
+    '') ["minInit" "defEnsureDir"]; }
+  else {})
+
 
