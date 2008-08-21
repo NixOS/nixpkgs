@@ -5944,6 +5944,11 @@ let pkgs = rec {
     inherit (xlibs) libX11 libXinerama;
   };
 
+  dwm = import ../applications/window-managers/dwm {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 libXinerama;
+  }; 
+
   # building eclipise from source
   # experimental tested on x86_64-linux only
   eclipse_classic_src = import ../applications/editors/eclipse/eclipse_classic.nix {
