@@ -6000,6 +6000,11 @@ let pkgs = rec {
     xftSupport = true;
   };
 
+  emms = import ../applications/editors/emacs-modes/emms {
+    inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
+      alsaUtils;
+  };
+
   evince = import ../applications/misc/evince {
     inherit fetchurl stdenv perl perlXMLParser gettext
       pkgconfig poppler libspectre djvulibre libxslt
