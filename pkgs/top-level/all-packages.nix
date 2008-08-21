@@ -1142,8 +1142,16 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
+  tm = import ../tools/system/tm {
+    inherit fetchurl stdenv;
+  };
+
   trang = import ../tools/text/xml/trang {
     inherit fetchurl stdenv unzip jre;
+  };
+
+  ts = import ../tools/system/ts {
+    inherit fetchurl stdenv;
   };
 
   transfig = import ../tools/graphics/transfig {
