@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
         -e "s|\"emms-print-metadata\"|\"$out/bin/emms-print-metadata\"|g"
     sed -i "emms-volume-amixer.el" \
         -e 's|"amixer"|"${alsaUtils}/bin/amixer"|g'
+
+    # Use the libtag info back-end for MP3s since we're building it.
+    sed -i "emms-setup.el" \
+        -e 's|emms-info-mp3info|emms-info-libtag|g'
   '';
 
   postInstall = ''
