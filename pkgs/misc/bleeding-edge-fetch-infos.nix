@@ -139,9 +139,9 @@
     url = http://mawercer.de/~nix/repos/upstart.tar.gz;
     sha256 = "3243857ce4e0cd0d6fe28dbdcaa294b5590befed79b54a306b40cb5c65b381db";
   };
-  haxml = args: with args; fetchurl {
+  haxml = args: with args; fetchurl { # Wed Aug 20 23:33:52 UTC 2008
     url = http://mawercer.de/~nix/repos/haxml.tar.gz;
-    sha256 = "916bc2c4f3d24c0d99ac771f503a6c5eb96d98b656274ab358c7383c606d27f0";
+    sha256 = "71ab127d11c06781fa62e76eda12fe979227c89e767961740222ab2f3a912cbe";
   };
   haskell_src_exts = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/haskell_src_exts.tar.gz;
