@@ -7,6 +7,28 @@ executables = lib.mapAttrs ( name_dummy : a : ghcCabalExecutableFun (a // { libs
     inherit (args) lib pkgs;
     inherit bleedingEdgeRepos;
   };
+
+  hasktags = {
+    # calling it hasktags-modified to not clash with the one distributed with ghc
+    name = "hasktags-modified";
+    src = args.fetchurl {
+      url = http://mawercer.de/~nix/hasktags.hs;
+      sha256 = "9d1be56133f468f5a2302d8531742eba710ad89d5a271308453b44cc9f47e94a";
+    };
+    libsFun = x : [x.base x.directory x.haskell98 x.mtl];
+    pass = {
+      phases = "buildPhase";
+      buildPhase = "
+        ensureDir \$out/bin; cp $src hasktags.hs
+        ghc --make hasktags.hs -o \$out/bin/hasktags-modified
+      ";
+    };
+    meta = {
+        # this package can be removed again when somone comitts my changes into the distribution
+        description = "Marc's modified hasktags";
+    };
+  };
+
   happy = {
     name = "happy-1.17";
     libsFun = x : [x.base x.directory x.haskell98 x.mtl];

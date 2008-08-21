@@ -1457,7 +1457,8 @@ let pkgs = rec {
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
       inherit ghcboot fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
-      inherit ghcPkgUtil hasktags ctags autoconf automake getConfig;
+      inherit ghcPkgUtil ctags autoconf automake getConfig;
+      inherit (ghc68executables) hasktags;
       inherit (bleedingEdgeRepos) sourceByName;
 
       # needed for install darcs ghc version
@@ -2252,11 +2253,6 @@ let pkgs = rec {
 
   happy = import ../development/tools/parsing/happy/happy-1.17.nix {
     inherit cabal perl;
-  };
-
-  hasktags = import ../development/tools/misc/hasktags {
-    inherit fetchurl stdenv;
-    ghc = ghcsAndLibs.ghc68.ghc;
   };
 
   help2man = import ../development/tools/misc/help2man {
@@ -7398,7 +7394,8 @@ let pkgs = rec {
   };
 
   sourceAndTags = import ../misc/source-and-tags {
-    inherit pkgs stdenv unzip lib ctags hasktags;
+    inherit pkgs stdenv unzip lib ctags;
+    inherit (ghc68executables) hasktags;
   };
 
   synaptics = import ../misc/synaptics {
