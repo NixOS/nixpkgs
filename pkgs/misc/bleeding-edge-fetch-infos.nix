@@ -3,9 +3,9 @@
   # new items will be added before the last line, 4 lines will be removed when
   # replacing always, matched by "name ="
 
-  cabal = args: with args; fetchurl {
+  cabal = args: with args; fetchurl { # Thu Aug 21 09:07:56 UTC 2008
     url = http://mawercer.de/~nix/repos/cabal.tar.gz;
-    sha256 = "33bdbe8f0c213dcc28da88a2775f81f72e89209806e26b412699220c3db206ec";
+    sha256 = "2c370636ef30593325b1c01eed37eb0e993923acb6387724d97a5eed51b00887";
   };
   getOptions = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/getOptions.tar.gz;
@@ -99,9 +99,9 @@
     url = http://mawercer.de/~nix/repos/hsutils.tar.gz;
     sha256 = "6d1cc9881fb2684016e52d3ab8e6666c5396da168eb298c3a549294668f6aa52";
   };
-  http = args: with args; fetchurl {
+  http = args: with args; fetchurl { # Thu Aug 21 09:04:57 UTC 2008
     url = http://mawercer.de/~nix/repos/http.tar.gz;
-    sha256 = "3e463fa090c6a7ddb06e88b592b1788a216db7eaf9384850b6d462217ba5be62";
+    sha256 = "3166d17951bd5a052c059e161cd3f44afdb2b6a329c49b645f9cfdccda416d37";
   };
   hypertable = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/hypertable.tar.gz;
