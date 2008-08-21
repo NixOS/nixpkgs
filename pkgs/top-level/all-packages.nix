@@ -7195,6 +7195,12 @@ let pkgs = rec {
     inherit fetchurl stdenv ocaml ncurses;
   };
 
+  ### SCIENCE / ELECTRONICS
+
+  ngspice = import ../applications/science/electronics/ngspice {
+    inherit fetchurl stdenv readline;
+  };
+
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
