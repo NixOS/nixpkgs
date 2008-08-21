@@ -1073,6 +1073,10 @@ let pkgs = rec {
     inherit stdenv perl;
   };
 
+  slsnif = import ../tools/misc/slsnif {
+    inherit fetchurl stdenv;
+  };
+
   smartmontools = import ../tools/system/smartmontools {
     inherit fetchurl stdenv;
   };
