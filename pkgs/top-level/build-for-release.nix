@@ -44,6 +44,7 @@ let
       e2fsprogs
       emacs
       emacsUnicode
+      emms
       enscript
       evince
       expect
@@ -102,6 +103,7 @@ let
       mktemp
       mod_python
       module_init_tools
+      mpg321
       mysql
       #mythtv
       nano
@@ -164,6 +166,7 @@ let
       valgrind
       vim
       vlc
+      vorbisTools
       w3m
       wget
       wirelesstools
