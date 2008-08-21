@@ -29,6 +29,9 @@ stdenv.mkDerivation {
     { url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/snd.patch?rev=1.1";
       sha256 = "0a6dz1l16pz1fk77s3awxh635cacbivfcfnd1carbx5jp2gq3jna";
     }
+    { url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/media-tv/wis-go7007/files/wis-go7007-2.6.26-nopage.diff?rev=1.1";
+      sha256 = "18ks6dm9nnliab9ncgxx5nhw528vhwg83byps8wjsbadd3wzwym3";
+    }
     { url = http://home.comcast.net/~bender647/go7007/wis-go7007-2.6.24-no_algo_control.diff;
       sha256 = "1a7jkcsnzagir3wpsj60pjrr9wgfaqq21jlmq6s0qg9hqg4nzbvf";
     }
