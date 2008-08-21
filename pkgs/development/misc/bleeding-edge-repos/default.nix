@@ -15,7 +15,7 @@ args:
   sourceByName = name :
     let localTarGZ = managedRepoDir+"/dist/${name}.tar.gz"; 
         fetchInfos = import ../../../misc/bleeding-edge-fetch-infos.nix; in
-    if pathExists localTarGZ
+    if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false ) && pathExists localTarGZ
     then localTarGZ
     else if __hasAttr name fetchInfos
          then (__getAttr name fetchInfos) { inherit fetchurl; }
