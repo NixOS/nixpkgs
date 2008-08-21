@@ -7504,6 +7504,6 @@ let pkgs = rec {
 
   myEnvFun = import ../misc/my_env;
 
-  devEnvs = recurseIntoAttrs ( ( getConfig ["devEnvs"] (x : {}) ) pkgs );
+  myPackages = recurseIntoAttrs ( ( getConfig ["myPackages"] (x : {}) ) pkgs );
 
 }; in pkgs
