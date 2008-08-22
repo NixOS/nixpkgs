@@ -10,14 +10,14 @@ assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBin
 
 
 stdenv.mkDerivation rec {
-  name = "git-1.5.6.2";
+  name = "git-1.6.0";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "0bq4rwa9kfn5z1daszb1qvqjzy1hk3ir392bpikhmsqp9hi5yc0j";
+    sha256 = "1w22f5vnmw6r0k67ssrjca2n9jj2bimgvca9v7jz8nf0h381rmxq";
   };
 
-  patches = [ ./pwd.patch ./docbook2texi.patch ];
+  patches = [ ./docbook2texi.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
+
+  # FIXME: "make check" requires Sparse; the Makefile must be tweaked
+  # so that `SPARSE_FLAGS' corresponds to the current architecture...
+  #doCheck = true;
 
   postInstall =
     ''
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
         for i in ${builtins.toString perlLibs}; do
           gitperllib=$gitperllib:$i/lib/site_perl
         done
-        wrapProgram "$out/bin/git-svn"                  \
+        wrapProgram "$out/libexec/git-core/git-svn"     \
                      --set GITPERLLIB "$gitperllib"     \
                      --prefix PATH : "${subversion}/bin" ''
        else '' # replace git-svn by notification script
@@ -60,24 +64,21 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in gitk git-gui git-citool
+       for prog in bin/gitk libexec/git-core/git-gui
        do
-         wrapProgram "$out/bin/$prog"                   \
+         wrapProgram "$out/$prog"                       \
                      --set TK_LIBRARY "${tk}/lib/tk8.4" \
                      --prefix PATH : "${tk}/bin"
        done
      '' else ''
-      # don not wrap Tcl/Tk, replace them by notification scripts
-       for prog in gitk git-gui git-citool
+      # Don't wrap Tcl/Tk, replace them by notification scripts
+       for prog in bin/gitk libexec/git-core/git-gui
        do
-         notSupported "$out/bin/$prog" "reinstall with config git = { guiSupport = true } set"
+         notSupported "$out/$prog" \
+                      "reinstall with config \`git = { guiSupport = true; }' set"
        done
      '')
 
-   + ''# Wrap `git-clone'
-       wrapProgram $out/bin/git-clone                   \
-                   --prefix PATH : "${cpio}/bin" ''
-                   
    + ''# install bash completion script
       d="$out/etc/bash_completion.d"
       ensureDir $d; cp contrib/completion/git-completion.bash "$d"
