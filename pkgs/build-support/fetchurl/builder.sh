@@ -1,5 +1,7 @@
 source $stdenv/setup
 
+source $mirrorsFile
+
 if test -n "$showURLs"; then
     header "downloading file $name with $outputHashAlgo hash $outputHash..."
 fi

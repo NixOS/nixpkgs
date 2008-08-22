@@ -3,6 +3,30 @@
 
 {stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
 
+let
+
+  mirrors = import ./mirrors.nix;
+
+  # Write the list of mirrors to a file that we can reuse between
+  # fetchurl instantiations, instead of passing the mirrors to
+  # fetchurl instantiations via environment variables.  This makes the
+  # resulting store derivations (.drv files) much smaller, which in
+  # turn makes nix-env/nix-instantiate faster.
+  mirrorsFile =
+    stdenv.mkDerivation ({
+      name = "mirrors-list";
+      builder = ./write-mirror-list.sh;
+    } // mirrors);
+
+  # Names of the master sites that are mirrored (i.e., "sourceforge",
+  # "gnu", etc.).
+  sites =
+    if builtins ? attrNames
+    then builtins.attrNames mirrors
+    else [] /* backwards compatibility */;
+
+in
+      
 { # URL to fetch.
   url ? ""
 
@@ -36,23 +60,16 @@ let
 
   urls_ = if urls != [] then urls else [url];
 
-  mirrors = import ./mirrors.nix;
-
-  # Names of the master sites that are mirrored (i.e., "sourceforge",
-  # "gnu", etc.).
-  sites =
-    if builtins ? attrNames
-    then builtins.attrNames mirrors
-    else [] /* backwards compatibility */;
-  
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
     else baseNameOf (toString (builtins.head urls_));
+    
   builder = ./builder.sh;
+  
   buildInputs = [curl];
 
   urls = urls_;
@@ -82,10 +99,5 @@ stdenv.mkDerivation ({
     "NIX_HASHED_MIRRORS"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
-  inherit showURLs;
+  inherit showURLs mirrorsFile;
 }
-
-# Pass the mirror locations to the builder.
-// mirrors
-
-)
