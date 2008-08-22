@@ -31,7 +31,7 @@
 
 let pkgs = rec {
 
-
+  
   ### Symbolic names.
 
 
@@ -5274,7 +5274,7 @@ let pkgs = rec {
     kernelHeaders = kernelHeaders_2_6_23;
   };
 
-  kvm72 = import ../os-specific/linux/kvm/72.nix {
+  kvm73 = import ../os-specific/linux/kvm/73.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
   };
