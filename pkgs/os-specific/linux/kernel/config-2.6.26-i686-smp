@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Linux kernel version: 2.6.26.2
-# Thu Aug  7 16:21:47 2008
+# Linux kernel version: 2.6.26.3
+# Fri Aug 22 12:48:11 2008
 #
 # CONFIG_64BIT is not set
 CONFIG_X86_32=y
@@ -2383,6 +2383,7 @@ CONFIG_DEVPORT=y
 CONFIG_I2C=m
 CONFIG_I2C_BOARDINFO=y
 CONFIG_I2C_CHARDEV=m
+CONFIG_I2C_HELPER_AUTO=y
 CONFIG_I2C_ALGOBIT=m
 CONFIG_I2C_ALGOPCA=m
 

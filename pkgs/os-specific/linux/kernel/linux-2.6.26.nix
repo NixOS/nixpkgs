@@ -61,9 +61,9 @@ stdenv.mkDerivation {
 
   config =
     if kernelConfig != null then kernelConfig else
-    if userModeLinux then ./config-2.6.25-uml else
-    if stdenv.system == "i686-linux" then ./config-2.6.25-i686-smp else
-    if stdenv.system == "x86_64-linux" then ./config-2.6.25-x86_64-smp else
+    if userModeLinux then ./config-2.6.26-uml else
+    if stdenv.system == "i686-linux" then ./config-2.6.26-i686-smp else
+    if stdenv.system == "x86_64-linux" then ./config-2.6.26-x86_64-smp else
     abort "No kernel configuration for your platform!";
   
   buildInputs = [perl mktemp];
