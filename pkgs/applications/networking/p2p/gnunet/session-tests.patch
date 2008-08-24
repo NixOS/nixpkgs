@@ -1,0 +1,17 @@
+Allow session tests to locate and run `gnunetd'.
+
+diff --git a/src/applications/session/Makefile.in b/src/applications/session/Makefile.in
+index b2717f9..3478aa8 100644
+--- a/src/applications/session/Makefile.in
++++ b/src/applications/session/Makefile.in
+@@ -352,6 +352,10 @@ libgnunetmodule_session_la_LDFLAGS = \
+   -export-dynamic -avoid-version -module
+ 
+ @HAVE_MHD_TRUE@httptest = sessiontest_http sessiontest_nat_http
++
++# Allow `gnunetd' to be located and executed.
++TESTS_ENVIRONMENT = PATH="$(top_builddir)/src/server:$$PATH" LTDL_LIBRARY_PATH="$(top_builddir)/src/applications/identity"
++
+ TESTS = $(check_PROGRAMS)
+ sessiontest_tcp_SOURCES = \
+   sessiontest.c 

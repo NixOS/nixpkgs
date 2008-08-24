@@ -6185,6 +6185,14 @@ let pkgs = rec {
     GStreamer = gst_all.gstreamer;
   };
 
+  gnunet = import ../applications/networking/p2p/gnunet {
+    inherit fetchurl stdenv libextractor libmicrohttpd libgcrypt
+      gmp curl libtool guile adns sqlite gettext zlib pkgconfig
+      libxml2 ncurses findutils;
+    inherit (gnome) gtk libglade;
+    gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
+  };
+
   gocr = composedArgsAndFun (selectVersion ../applications/graphics/gocr "0.44") {
     inherit builderDefs fetchurl stdenv;
   };

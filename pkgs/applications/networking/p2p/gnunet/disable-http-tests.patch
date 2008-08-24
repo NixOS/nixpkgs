@@ -1,0 +1,17 @@
+Disable HTTP tests as they seem to deadlock when building in a chroot on NixOS.
+
+diff --git a/src/transports/Makefile.in b/src/transports/Makefile.in
+index b0b76a2..30a0bb5 100644
+--- a/src/transports/Makefile.in
++++ b/src/transports/Makefile.in
+@@ -38,8 +38,8 @@ PRE_UNINSTALL = :
+ POST_UNINSTALL = :
+ host_triplet = @host@
+ check_PROGRAMS = test_udp$(EXEEXT) test_tcp$(EXEEXT) \
+-	test_http$(EXEEXT) testrepeat_udp$(EXEEXT) \
+-	testrepeat_tcp$(EXEEXT) testrepeat_http$(EXEEXT)
++	testrepeat_udp$(EXEEXT) \
++	testrepeat_tcp$(EXEEXT)
+ subdir = src/transports
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

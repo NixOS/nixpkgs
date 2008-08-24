@@ -1,0 +1,19 @@
+That test tries to load `libgnunetmodule_transport' but cannot locate it
+out of the box.
+
+diff --git a/src/applications/identity/Makefile.in b/src/applications/identity/Makefile.in
+index 0bc5efc..5341f41 100644
+--- a/src/applications/identity/Makefile.in
++++ b/src/applications/identity/Makefile.in
+@@ -337,6 +337,11 @@ libgnunetidentity_api_la_LIBADD = \
+   $(top_builddir)/src/util/libgnunetutil.la 
+ 
+ TESTS = $(check_PROGRAMS)
++
++# Allow `libgnunetmodule_transport' et al. to be located
++# by `GNUNET_CORE_p2p_init ()'.
++TESTS_ENVIRONMENT = LTDL_LIBRARY_PATH="$(top_builddir)/src/applications/transport:$(top_builddir)/src/transports:$(top_builddir)/src/transports/upnp:$(top_builddir)/src/applications/stats"
++
+ identitytest_SOURCES = \
+  identitytest.c 
+ 
