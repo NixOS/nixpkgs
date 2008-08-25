@@ -2519,8 +2519,8 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  boost = selectVersion ../development/libraries/boost "1.35.0" {
-    inherit fetchurl stdenv icu zlib bzip2 python;
+  boost = selectVersion ../development/libraries/boost "1.36.0" {
+    inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
   buddy = import ../development/libraries/buddy {
