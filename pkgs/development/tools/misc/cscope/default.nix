@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i "contrib/xcscope/cscope-indexer" \
-        -"es|^PATH=.*$|PATH=\"$out/bin:$PATH\"|g"
+        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
     sed -i "contrib/xcscope/xcscope.el" \
         -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
   '';
