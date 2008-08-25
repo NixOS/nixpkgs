@@ -530,7 +530,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  convertlit = import ../tools/text/convertlit { 
+  convertlit = import ../tools/text/convertlit {
     inherit fetchurl stdenv unzip libtommath;
  };
 
@@ -794,9 +794,8 @@ let pkgs = rec {
   /*
   hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
     inherit builderDefs stdenv fetchurl libdbi libdbiDrivers fuse
-      pkgconfig perl gettext dbus dbus_glib pcre libscd;
+      pkgconfig perl gettext dbus dbus_glib pcre libscd bison;
     inherit (gtkLibs) glib;
-    bison = bison23;
     flex = flex2533;
   };
   */
@@ -885,9 +884,8 @@ let pkgs = rec {
   };
 
   mdbtools = builderDefsPackage (selectVersion ../tools/misc/mdbtools "0.6-pre1") {
-    inherit readline pkgconfig;
+    inherit readline pkgconfig bison;
     inherit (gtkLibs) glib;
-    bison = bison23;
     flex = flex2535;
   };
 
@@ -1167,8 +1165,7 @@ let pkgs = rec {
   };
 
   ttmkfdir = import ../tools/misc/ttmkfdir {
-    inherit debPackage freetype fontconfig libunwind libtool;
-    bison = bison23;
+    inherit debPackage freetype fontconfig libunwind libtool bison;
     flex = flex2534;
   };
 
@@ -1263,13 +1260,11 @@ let pkgs = rec {
 
   bash = lowPrio (useFromStdenv "bash"
     (import ../shells/bash {
-      inherit fetchurl stdenv;
-      bison = bison23;
+      inherit fetchurl stdenv bison;
     }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash/new.nix {
-    inherit fetchurl stdenv ncurses texinfo;
-    bison = bison23;
+    inherit fetchurl stdenv ncurses texinfo bison;
     interactive = true;
   });
 
@@ -1716,8 +1711,7 @@ let pkgs = rec {
 
   llvmGCC = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
     flex=flex2535;
-    bison=bison23;
-    inherit llvm perl libtool;
+    inherit llvm perl libtool bison;
   };
 
   mono = import ../development/compilers/mono {
@@ -1889,7 +1883,7 @@ let pkgs = rec {
   clisp = import ../development/interpreters/clisp {
     inherit fetchurl stdenv libsigsegv gettext
       readline ncurses coreutils pcre zlib;
-    inherit (xlibs) libX11 libXau libXt xproto 
+    inherit (xlibs) libX11 libXau libXt xproto
       libXpm libXext xextproto;
   };
 
@@ -2121,7 +2115,7 @@ let pkgs = rec {
       inherit fetchurl stdenv noSysDirs;
     });
 
-  bison = bison1875;
+  bison = bison23;
 
   bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {
     inherit fetchurl stdenv m4;
@@ -2418,11 +2412,10 @@ let pkgs = rec {
   };
 
   xxdiff = builderDefsPackage (selectVersion ../development/tools/misc/xxdiff "3.2") {
-    bison = bison23;
     flex = flex2535;
     qt = qt3;
     python = python25;
-    inherit pkgconfig makeWrapper;
+    inherit pkgconfig makeWrapper bison;
     inherit (xlibs) libXext libX11;
   };
 
@@ -2560,7 +2553,7 @@ let pkgs = rec {
 
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
- 
+
   cluceneCore = (import ../development/libraries/clucene-core) {
     inherit fetchurl stdenv;
   };
@@ -3005,8 +2998,8 @@ let pkgs = rec {
     inherit stdenv fetchurl builderDefs;
   };
 
-  libdbiDriversBase = composedArgsAndFun 
-    (selectVersion ../development/libraries/libdbi-drivers "0.8.2-1") 
+  libdbiDriversBase = composedArgsAndFun
+    (selectVersion ../development/libraries/libdbi-drivers "0.8.2-1")
     {
       inherit stdenv fetchurl builderDefs libdbi;
     };
@@ -3144,7 +3137,7 @@ let pkgs = rec {
     inherit fetchurl stdenv;
   };
 
-  liboil = composedArgsAndFun 
+  liboil = composedArgsAndFun
     (selectVersion ../development/libraries/liboil "0.3.13") {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
@@ -3556,9 +3549,8 @@ let pkgs = rec {
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
-      pkgconfig autoconf;
+      pkgconfig autoconf bison;
     flex = flex2535;
-    bison = bison23;
   };
 
   wxGTK = wxGTK26;
@@ -4548,9 +4540,8 @@ let pkgs = rec {
   };
 
   dict = composedArgsAndFun (selectVersion ../servers/dict "1.9.15") {
-    inherit builderDefs which;
+    inherit builderDefs which bison;
     flex=flex2534;
-    bison=bison23;
   };
 
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
@@ -4794,8 +4785,7 @@ let pkgs = rec {
   };
 
   gpm = builderDefsPackage (selectVersion ../servers/gpm "1.20.3pre6") {
-    inherit lzma ncurses;
-    bison = bison23;
+    inherit lzma ncurses bison;
     flex = flex2535;
   };
 
@@ -5219,13 +5209,12 @@ let pkgs = rec {
 
     # State Nix
     snix = import ../tools/package-management/snix {
-      inherit fetchurl stdenv perl curl bzip2 openssl;
+      inherit fetchurl stdenv perl curl bzip2 openssl bison;
       inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
 
       aterm = aterm242fixes;
       db4 = db45;
 
-      bison = bison23;
       flex = flex2533;
 
       inherit ext3cowtools e3cfsprogs rsync;
@@ -6483,10 +6472,9 @@ let pkgs = rec {
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
       getopt file neon cairo which icu boost jdk ant hsqldb
-      cups openssl;
+      cups openssl bison;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
-    bison = bison23;
   };
 
   opera = import ../applications/networking/browsers/opera {
@@ -6558,7 +6546,7 @@ let pkgs = rec {
     stdenv = overrideGCC stdenv gcc34;
   };
 
-  qemuImage = composedArgsAndFun 
+  qemuImage = composedArgsAndFun
     (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
     inherit builderDefs fetchurl stdenv;
   };
@@ -6981,7 +6969,7 @@ let pkgs = rec {
 
   xnee = builderDefsPackage (import ../tools/X11/xnee) {
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libX11 libXtst xextproto libXext 
+    inherit (xlibs) libX11 libXtst xextproto libXext
       inputproto libXi xproto recordproto;
     inherit pkgconfig;
   };
@@ -6998,12 +6986,11 @@ let pkgs = rec {
   qgis_svn = import ../applications/misc/qgis_svn {
     inherit mkDerivationByConfiguration fetchsvn stdenv flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
-            gsl libpng zlib
+            gsl libpng zlib bison
             sqlite glibc fontconfig freetype / * use libc from stdenv ? - to lazy now - Marc * /;
     inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
     inherit (xorg) libICE;
     qt = qt4;
-    bison = bison23;
 
     # optional features
     # grass = "not yet supported" # cmake -D WITH_GRASS=TRUE  and GRASS_PREFX=..
@@ -7041,8 +7028,7 @@ let pkgs = rec {
 
   exultSnapshot = lowPrio (import ../games/exult/snapshot.nix {
     inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip
-      autoconf automake libtool flex;
-    bison = bison23;
+      autoconf automake libtool flex bison;
   });
 
   fsg = import ../games/fsg {
@@ -7065,7 +7051,7 @@ let pkgs = rec {
   };
 
   lincity = builderDefsPackage (import ../games/lincity) {
-    inherit (xlibs) libX11 libXext xextproto 
+    inherit (xlibs) libX11 libXext xextproto
       libICE libSM xproto;
     inherit libpng zlib;
   };
@@ -7169,10 +7155,9 @@ let pkgs = rec {
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
       libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-      libxkbfile libXinerama;
+      libxkbfile libXinerama bison;
     inherit (gtkLibs) glib;
     qt = qt4;
-    bison = bison23;
     openexr = openexr_1_6_1 ;
   });
 
@@ -7355,8 +7340,7 @@ let pkgs = rec {
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib;
-      bison = bison23;
+        autoconf libtool configureFlags enableScripts lib bison;
       flex = flex2533;
       aterm = aterm242fixes;
       db4 = db45;
@@ -7457,9 +7441,8 @@ let pkgs = rec {
       gd t1lib freetype icu perl ruby expat curl
       libjpeg;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
-      libXmu libXext xextproto libSM libICE;
+      libXmu libXext xextproto libSM libICE bison;
     flex = flex2535;
-    bison = bison23;
     ghostscript = ghostscriptX;
   };
 
@@ -7475,7 +7458,7 @@ let pkgs = rec {
   You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
   Just installing a few packages doesn't work.
   */
-  texLiveAggregationFun = 
+  texLiveAggregationFun =
     (builderDefsPackage (import ../misc/tex/texlive/aggregate.nix));
 
   texLiveContext = builderDefsPackage (import ../misc/tex/texlive/context.nix) {
