@@ -29,6 +29,7 @@ rec {
     ensureDir $out/share/stumpwm/lisp
 
     cp stumpwm $out/bin
+    cp contrib/stumpish $out/bin || true
     cp sample-stumpwmrc.lisp  $out/share/stumpwm/doc
     cp stumpwm.info $out/share/info
 

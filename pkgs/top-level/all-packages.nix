@@ -7151,7 +7151,7 @@ let pkgs = rec {
       xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
       saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
       openbabel ocaml facile stdenv jasper fam indilib libnova
-      libarchive dbus;
+      libarchive dbus bison;
     #flac = builtins.getAttr "1.1.2" flacAlts;
     cdparanoia = cdparanoiaIII;
     inherit (xlibs)
@@ -7159,7 +7159,7 @@ let pkgs = rec {
       xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
       libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-      libxkbfile libXinerama bison;
+      libxkbfile libXinerama;
     inherit (gtkLibs) glib;
     qt = qt4;
     openexr = openexr_1_6_1 ;
