@@ -2145,6 +2145,10 @@ let pkgs = rec {
     inherit fetchurl stdenv flex bison;
   };
 
+  cscope = import ../development/tools/misc/cscope {
+    inherit fetchurl stdenv ncurses pkgconfig emacs;
+  };
+
   dejagnu = import ../development/tools/misc/dejagnu {
     inherit fetchurl stdenv expect makeWrapper;
   };
