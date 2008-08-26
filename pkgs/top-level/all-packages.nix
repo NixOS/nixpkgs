@@ -29,7 +29,53 @@
 }:
 
 
-let pkgs = rec {
+let
+
+  lib = import ../lib;
+
+  # The contents of the configuration file found at $NIXPKGS_CONFIG or
+  # $HOME/.nixpkgs/config.nix.
+  config =
+    let {
+      toPath = builtins.toPath;
+      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
+      pathExists = name:
+        builtins ? pathExists && builtins.pathExists (toPath name);
+
+      configFile = getEnv "NIXPKGS_CONFIG";
+      homeDir = getEnv "HOME";
+      configFile2 = homeDir + "/.nixpkgs/config.nix";
+
+      body =
+        if configFile != "" && pathExists configFile
+        then import (toPath configFile)
+        else if homeDir != "" && pathExists configFile2
+        then import (toPath configFile2)
+        else {};
+    };
+
+  # Return an attribute from the Nixpkgs configuration file, or
+  # a default value if the attribute doesn't exist.
+  getConfig = attrPath: default: lib.getAttr attrPath default config;
+
+
+  # Allow packages to be overriden globally via the `packageOverrides'
+  # configuration option, which must be a function that takes `pkgs'
+  # as an argument and returns a set of new or overriden packages.
+  # `__overrides' is a magic attribute that causes the attributes in
+  # its value to be added to the surrounding `rec'.
+  __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgs;
+
+
+  # The package compositions.  Yes, this isn't properly indented.
+  pkgs = rec {
+
+
+  inherit __overrides;
+
+
+  # For convenience, allow callers to get the path to Nixpkgs.
+  path = ./..;
 
   
   ### Symbolic names.
@@ -47,6 +93,8 @@ let pkgs = rec {
   ### Helper functions.
 
 
+  inherit lib config getConfig;
+  
   # Override the compiler in stdenv for specific packages.
   overrideGCC = stdenv: gcc: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
@@ -151,12 +199,6 @@ let pkgs = rec {
   useFromStdenv = it : alternative : if (builtins.hasAttr it stdenv) then
     (builtins.getAttr it stdenv) else alternative;
 
-  lib = import ../lib;
-
-  # Return an attribute from the Nixpkgs configuration file, or
-  # a default value if the attribute doesn't exist.
-  getConfig = attrPath: default: lib.getAttr attrPath default config;
-
   # Return the first available value in the order: pkg.val, val, or default.
   getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
 
@@ -182,27 +224,6 @@ let pkgs = rec {
   useVersion = name: f: f {
     version = getConfig [ "environment" "versions" name ];
   };
-
-  # The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
-  config =
-    let {
-      toPath = builtins.toPath;
-      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
-      pathExists = name:
-        builtins ? pathExists && builtins.pathExists (toPath name);
-
-      configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
-
-      body =
-        if configFile != "" && pathExists configFile
-        then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2
-        then import (toPath configFile2)
-        else {};
-    };
 
   # Change the symbolic name of a package for presentation purposes
   # (i.e., so that nix-env users can tell them apart).
@@ -7537,7 +7558,5 @@ let pkgs = rec {
   };
 
   myEnvFun = import ../misc/my_env;
-
-  myPackages = recurseIntoAttrs ( ( getConfig ["myPackages"] (x : {}) ) pkgs );
 
 }; in pkgs
