@@ -166,7 +166,7 @@ rec {
 
 
   qemuCommandLinux = ''
-    QEMU_SMBD_COMMAND=${samba}/sbin/smbd qemu-system-x86_64 \
+    qemu-system-x86_64 \
       -nographic -no-reboot \
       -smb / -hda $diskImage \
       -kernel ${kernel}/vmlinuz \
@@ -179,7 +179,7 @@ rec {
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
-    PATH=${coreutils}/bin:${kvm}/bin
+    PATH=${coreutils}/bin:${kvm}/bin:${samba}/sbin
 
     diskImage=''${diskImage:-/dev/null}
 
@@ -264,7 +264,7 @@ rec {
 
 
   qemuCommandGeneric = ''
-    QEMU_SMBD_COMMAND=${samba}/sbin/smbd qemu-system-x86_64 \
+    qemu-system-x86_64 \
       -nographic -no-reboot \
       -smb $(pwd) -hda $diskImage \
       $QEMU_OPTS
