@@ -16,14 +16,15 @@ set -x
 
 echo "Installation starting.." > report
 
-nix-build -o socat /etc/nixos/nixpkgs -A socat 
-nix-build -o qemu /etc/nixos/nixpkgs -A qemu 
+nix-build -o socat /etc/nixos/nixpkgs -A socat || { echo "Failed to build socat" >&2 ;  exit 2; };
+nix-build -o qemu /etc/nixos/nixpkgs -A qemu || { echo "Failed to build qemu" >&2 ;  exit 2; };
 
 echo "reboot" | ./socat/bin/socat tcp-listen:4424 stdio >> report &  
 
 if ( ! [ -d dvd/iso ] ) || ( [ -z "$USE_LEFTOVER_DVD" ] ); then
     rm dvd
-    nix-build -o dvd /etc/nixos/nixos/configuration/closed-install.nix
+    nix-build -o dvd /etc/nixos/nixos/configuration/closed-install.nix || 
+      { echo "Failed to build LiveDVD" >&2 ;  exit 2; };
 fi;
 
 if ( ! [ -f install-test.img ] ) || ( [ -z "$JUST_BOOT" ] ); then

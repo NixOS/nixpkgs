@@ -42,6 +42,8 @@
   ,compressImage ? false
   ,nixpkgsPath ? ../../nixpkgs
   ,additionalJobs ? []
+  ,intel3945FWEnable ? false
+  ,cdLabel ? "NIXOS_INSTALLATION_CD"
 }:
 let 
   realLib = if lib != null then lib else (import (nixpkgsPath+"/pkgs/lib"));
@@ -58,7 +60,6 @@ let
   { 
     system = (import ../system/system.nix) {
       inherit configuration platform nixpkgsPath; /* To refactor later - x86+x86_64 DVD */
-      stage2Init = "/init"+suffix;
     };
     inherit suffix configuration;
   };
@@ -125,25 +126,26 @@ let
 in
 
 rec {
+
+  inherit cdLabel;
+
   nixpkgsRel = "nixpkgs" + (if networkNixpkgs != "" then "-" + networkNixpkgs else "");
  
-  configuration = let preConfiguration ={
+  configuration = pkgs: final_configuration: let preConfiguration ={
     boot = {
       isLiveCD = true;
-      autoDetectRootDevice = true;
       # The label used to identify the installation CD.
-      rootLabel = "NIXOS";
       extraTTYs = [] 
         ++ (lib.optional manualEnabled 7) 
         ++ (lib.optional rogueEnabled 8);
-      inherit kernelPackages;
+      kernelPackages = kernelPackages pkgs;
       initrd = {
       extraKernelModules = extraInitrdKernelModules
       ++ (if aufs then ["aufs"] else [])
       ;
       };
       kernelModules = bootKernelModules;
-      extraModulePackages = pkgs: ((extraModulePackages pkgs)
+      extraModulePackages = ((extraModulePackages pkgs)
       ++(if aufs then [(kernelPackages pkgs).aufs] else [])
       );
     };
@@ -301,7 +303,7 @@ rec {
     };
     
     environment = {
-      extraPackages = if cleanStart then pkgs:[] else pkgs: [
+      extraPackages = if cleanStart then [] else [
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
@@ -314,6 +316,16 @@ rec {
       extraUsers = map userEntry addUsers;
     };
     
+    fileSystems = [
+      { mountPoint = "/";
+        label = cdLabel;
+      }
+    ];
+    
+    networking = {
+      enableIntel3945ABGFirmware = intel3945FWEnable;
+    };
+
   }; in preConfiguration // (arbitraryOverrides preConfiguration);
  
   configurations = [{
@@ -425,10 +437,6 @@ rec {
           source = nixosServicesTarball;
           target = "/install/nixos-services.tar.bz2";
         }
-        { 
-          source = pkgs.writeText "label" "";
-          target = "/${configuration.boot.rootLabel}";
-        }
       ]
       ++
       (lib.optional includeMemtest 
@@ -463,7 +471,7 @@ rec {
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
     
-    volumeID = "NIXOS_INSTALLATION_CD";
+    volumeID = cdLabel;
   };
  
 }
