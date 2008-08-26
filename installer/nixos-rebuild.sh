@@ -1,5 +1,10 @@
 #! @shell@ -e
 
+# Allow the location of NixOS sources and the system configuration
+# file to be overridden.
+NIXOS=${NIXOS:-@defaultNIXOS@}
+NIXPKGS=${NIXPKGS:-@defaultNIXPKGS@}
+NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 showSyntax() {
     # !!! more or less cut&paste from
@@ -13,6 +18,13 @@ test:    activate the configuration, but don't make it the boot default
 build:   build the configuration, but don't make it the default or
          activate it
 dry-run: just show what store paths would be built/downloaded
+
+by env overridable settings:
+NIXOS=${NIXOS}
+NIXPKGS=${NIXPKGS}
+NIXOS_CONFIG=${NIXOS_CONFIG}
+"
+
 EOF
     exit 1
 }
@@ -38,13 +50,6 @@ if test -z "$action"; then showSyntax; fi
 if test "$action" = dry-run; then
     extraBuildFlags="$extraBuildFlags --dry-run"
 fi
-
-
-# Allow the location of NixOS sources and the system configuration
-# file to be overridden.
-NIXOS=${NIXOS:-@defaultNIXOS@}
-NIXPKGS=${NIXPKGS:-@defaultNIXPKGS@}
-NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 
 
 # If the Nix daemon is running, then use it.  This allows us to use
