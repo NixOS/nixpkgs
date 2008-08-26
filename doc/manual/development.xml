@@ -81,4 +81,23 @@ $ ./result/bin/nixos-install</screen>
 </section>
 
 
+<section>
+
+<title>Testing the <literal>initrd</literal></title>
+
+<para>A quick way to test whether the kernel and the initial ramdisk
+boot correctly is to use QEMU’s <option>-kernel</option> and
+<option>-initrd</option> options:
+
+<screen>
+$ nix-build /etc/nixos/nixos -A initialRamdisk -o initrd
+$ nix-build /etc/nixos/nixos -A kernel -o kernel
+$ qemu-system-x86_64 -kernel ./kernel/vmlinuz -initrd ./initrd/initrd -hda /dev/null
+</screen>
+
+</para>
+
+</section>
+
+
 </chapter>
