@@ -63,12 +63,20 @@ let
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
   # `__overrides' is a magic attribute that causes the attributes in
-  # its value to be added to the surrounding `rec'.
-  __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgs;
+  # its value to be added to the surrounding `rec'.  The
+  # `packageOverrides' function is called with the *original*
+  # (un-overriden) set of packages, allowing packageOverrides
+  # attributes to refer to the original attributes (e.g. "foo =
+  # ... pkgs.foo ...").
+  __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig;
 
+  pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
+  pkgsOverriden = pkgsFun __overrides; # the overriden, final packages
+  pkgs = pkgsOverriden;
+  
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgs = rec {
+  pkgsFun = __overrides: rec {
 
 
   inherit __overrides;
@@ -294,7 +302,11 @@ let
     in
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
 
+  makeOverridable = f: origArgs: f origArgs //
+    { function = newArgsFun: makeOverridable f (origArgs // (newArgsFun origArgs));
+    };
 
+    
   ### STANDARD ENVIRONMENT
 
 
@@ -6691,7 +6703,7 @@ let
 
   subversion = subversion14;
 
-  subversion14 = import ../applications/version-management/subversion-1.4.x {
+  subversion14 = makeOverridable (import ../applications/version-management/subversion-1.4.x) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon026;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
