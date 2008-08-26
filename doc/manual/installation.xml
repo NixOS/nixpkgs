@@ -147,10 +147,10 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
     activated.  The configuration is specified in a Nix expression and
     must be stored <emphasis>on the target file system</emphasis> in
     <filename>/mnt/etc/nixos/configuration.nix</filename>.  See
-    <filename>/etc/nixos/nixos/configuration/examples</filename> for
+    <filename>/etc/nixos/nixos/doc/config-examples</filename> for
     example machine configurations.  You can copy and edit one of
     those (e.g., copy
-    <filename>/etc/nixos/nixos/configuration/examples/basic.nix</filename>
+    <filename>/etc/nixos/nixos/doc/config-examples/basic.nix</filename>
     to <filename>/mnt/etc/nixos/configuration.nix</filename>).  See
     <xref linkend="ch-options"/> for a list of the available
     configuration options.  The text editors <command>nano</command>
