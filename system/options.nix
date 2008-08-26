@@ -2440,11 +2440,11 @@ in
         example = [ { type = "svn"; url = "https://svn.nixos.org/repos/nix/nixos/branches/stdenv-updates"; target = "/etc/nixos/nixos-stdenv-updates"; }
                     { type = "git"; initialize = ''git clone git://mawercer.de/nixos $target''; update = "git pull origin"; target = "/etc/nixos/nixos-git"; }
                   ];
-        description = "The nixos repository from which the system will be build. 
-                       nixos-checkout will update all defined repositories,
-                       nixos-rebuild will use the the first item which has
+        description = "The NixOS repository from which the system will be build. 
+                       nixos-checkout will update all working copies of the given repositories,
+                       nixos-rebuild will use the first item which has
                        the attribute default = true falling back to the
-                       first item. the type defines the repository tool added
+                       first item. The type defines the repository tool added
                        to the path. It also defines a \"valid\" repository.
                        If the target directory already exists and it's not
                        valid it will be moved to the backup location
@@ -2457,6 +2457,7 @@ in
                        The initialize code is run from working directory
                        dirname \$target and should create the directory
                        <filename>\$target<filename>. (<command>git clone url nixos/nixpkgs/services</command> should do)
+                       For the executables beeing used see <option>repoTypes</option>
                        ";
       };
 
