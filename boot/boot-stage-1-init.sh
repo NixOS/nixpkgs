@@ -1,33 +1,39 @@
 #! @staticShell@
 
 targetRoot=/mnt/root
-dialog(){
+
+
+errorDialog() {
     timeout=15
     echo
     echo "Press within $timeout seconds:"
-    echo "  f) to switch finally to an interactive shell having pid 1"
-    echo "     (you'll need this to start stage2 / upstart)"
-    echo "  i) to launch an intercative shell"
+    echo "  i) to launch an interactive shell"
+    echo "  f) to start an interactive shell having pid 1"
+    echo "     (needed if you want to start Stage 2 manually)"
     echo "  *) to continue immediately (ignoring the failing command)"
     read -t $timeout reply
     case $reply in
-      f) exec @staticShell@;;
-      i) echo
-         echo "Quit interactive shell with exit status of"
-         echo " 0        : to continue"
-         echo " non zero : to get this dialog again (eg to switch to interactive shell with pid 1"
-        @staticShell@ || fail
-      ;;
-      *) echo continuing ignoring error;;
+        f)
+            exec @staticShell@;;
+        i)
+            echo
+            echo "Quit interactive shell with exit status of"
+            echo "  0        : to continue"
+            echo "  non-zero : to get this dialog again"
+            @staticShell@ || fail
+            ;;
+        *)
+            echo continuing ignoring error;;
     esac
 }
 
-fail(){
+
+fail() {
     # If starting stage 2 failed, start an interactive shell.
     echo "error while running Stage 1"
     echo "Stage 1 should mount the root partition containing the nix store on \`$targetRoot'";
     echo
-    dialog
+    errorDialog
 }
 trap 'fail' ERR;
 
