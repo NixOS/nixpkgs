@@ -3755,6 +3755,18 @@ let pkgs = rec {
     inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
   };
 
+  haxr = import ../development/libraries/haskell/haxr {
+    inherit cabal HaXml HTTP;
+  };
+
+  haxr_th = import ../development/libraries/haskell/haxr-th {
+    inherit cabal haxr HaXml HTTP;
+  };
+
+  HaXml = import ../development/libraries/haskell/HaXml {
+    inherit cabal;
+  };
+
   haskellEditline = import ../development/libraries/haskell/editline {
     inherit cabal editline;
   };
@@ -3769,6 +3781,10 @@ let pkgs = rec {
 
   HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
     inherit cabal HDBC sqlite;
+  };
+
+  HTTP = import ../development/libraries/haskell/HTTP {
+    inherit cabal;
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {
