@@ -186,6 +186,9 @@ let
     inherit (pkgs.xorg)
       fontbh100dpi
       fontbhlucidatypewriter100dpi
+      fontbhlucidatypewriter75dpi
+      fontadobe100dpi
+      fontadobe75dpi
       fontbhttf
       fontcursormisc
       fontmiscmisc
