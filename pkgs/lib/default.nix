@@ -324,8 +324,10 @@ rec {
     ) { right = []; wrong = []; };
 
   # Take a function and evaluate it with its own returned value.
-  finalReference = f:
+  fix = f:
     (rec { result = f result; }).result;
+
+  finalReference = fix; # bad name
 
   # flatten a list of sets returned by 'f'.
   # f      : function to evaluate each set.
@@ -427,7 +429,7 @@ rec {
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
-  finalOptionSetsFun = merge: pkgs: opts:
+  fixOptionSetsFun = merge: pkgs: opts:
     let optionSet = final: configFun:
       if __isFunction configFun then configFun pkgs final
       else configFun; # backward compatibility.
@@ -437,8 +439,11 @@ rec {
           (uniqFlattenAttr (optionSet final) "require" [] (toList opts))
         );
 
-  finalReferenceOptionSets = merge: pkgs: opts:
-    finalReference (finalOptionSetsFun merge pkgs opts);
+  fixOptionSets = merge: pkgs: opts:
+    fix (fixOptionSetsFun merge pkgs opts);
+
+  finalOptionSetsFun = fixOptionSetsFun;
+  finalReferenceOptionSets = fixOptionSets;
 
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
