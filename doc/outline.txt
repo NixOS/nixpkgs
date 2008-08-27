@@ -1,23 +1,3 @@
-- Intro
-
-  - Goal of this manual
-
-
-- Quick start to adding a package
-
-  (Some of this can be copied/moved from the Nix manual)
-
-  - Hello example
-    - Nix expr
-    - Update all-packages.nix
-    - How to test
-    - How to debug failing builds    
-
-  - Subversion example
-
-  - Some X example?
-
-
 - The standard environment
 
   (Some of this can be moved from the Nix manual)

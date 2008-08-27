@@ -1,0 +1,191 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-introduction">
+
+<title>Package Notes</title>
+
+<para>This chapter contains information about how to use and maintain
+the Nix expressions for a number of specific packages, such as the
+Linux kernel or X.org.</para>
+
+
+<!--============================================================-->
+
+<section>
+
+<title>Linux kernel</title>
+
+<para>The Nix expressions to build the Linux kernel are in <link
+xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/os-specific/linux/kernel"><filename>pkgs/os-specific/linux/kernel</filename></link>.</para>
+
+<para>The function that builds the kernel has an argument
+<varname>kernelPatches</varname> which should be a list of
+<literal>{name, patch, extraConfig}</literal> attribute sets, where
+<varname>name</varname> is the name of the patch (which is included in
+the kernel’s <varname>meta.description</varname> attribute),
+<varname>patch</varname> is the patch itself (possibly compressed),
+and <varname>extraConfig</varname> (optional) is a string specifying
+extra options to be concatenated to the kernel configuration file
+(<filename>.config</filename>).</para>
+
+<para>The kernel derivation exports an attribute
+<varname>features</varname> specifying whether optional functionality
+is or isn’t enabled.  This is used in NixOS to implement
+kernel-specific behaviour.  For instance, if the kernel has the
+<varname>iwlwifi</varname> feature (i.e. has built-in support for
+Intel wireless chipsets), then NixOS doesn’t have to build the
+external <varname>iwlwifi</varname> package:
+
+<programlisting>
+modulesTree = [kernel]
+  ++ pkgs.lib.optional (!kernel.features ? iwlwifi) kernelPackages.iwlwifi
+  ++ ...;
+</programlisting>
+
+</para>
+
+<para>How to add a new (major) version of the Linux kernel to Nixpkgs:
+
+<orderedlist>
+
+  <listitem>
+    <para>Copy (<command>svn cp</command>) the old Nix expression
+    (e.g. <filename>linux-2.6.21.nix</filename>) to the new one
+    (e.g. <filename>linux-2.6.22.nix</filename>) and update it.</para>
+  </listitem>
+
+  <listitem>
+    <para>Add the new kernel to <filename>all-packages.nix</filename>
+    (e.g., create an attribute
+    <varname>kernel_2_6_22</varname>).</para>
+  </listitem>
+
+  <listitem>
+    <para>Now we’re going to update the kernel configuration.  First
+    unpack the kernel.  Then for each supported platform
+    (<literal>i686</literal>, <literal>x86_64</literal>,
+    <literal>uml</literal>) do the following:
+
+      <orderedlist>
+
+        <listitem>
+          <para>Make an <command>svn copy</command> from the old
+          config (e.g. <filename>config-2.6.21-i686-smp</filename>) to
+          the new one
+          (e.g. <filename>config-2.6.22-i686-smp</filename>).</para>
+        </listitem>
+
+        <listitem>
+          <para>Copy the config file for this platform
+          (e.g. <filename>config-2.6.22-i686-smp</filename>) to
+          <filename>.config</filename> in the kernel source tree.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Run <literal>make oldconfig
+          ARCH=<replaceable>{i386,x86_64,um}</replaceable></literal>
+          and answer all questions.  (For the uml configuration, also
+          add <literal>SHELL=bash</literal>.)  Make sure to keep the
+          configuration consistent between platforms (i.e. don’t
+          enable some feature on <literal>i686</literal> and disable
+          it on <literal>x86_64</literal>).
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>If needed you can also run <literal>make
+          menuconfig</literal>:
+
+            <screen>
+$ nix-env -i ncurses
+$ export NIX_CFLAGS_LINK=-lncurses
+$ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
+          
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Make sure that
+          <literal>CONFIG_FB_TILEBLITTING</literal> is <emphasis>not
+          set</emphasis> (otherwise <command>fbsplash</command> won't
+          work).  This option has a tendency to be enabled as a
+          side-effect of other options.  If it is, investigate why
+          (there's probably another option that forces it to be on)
+          and fix it.</para>
+        </listitem>
+
+        <listitem>
+          <para>Copy <filename>.config</filename> over the new config
+          file (e.g. <filename>config-2.6.22-i686-smp</filename>).</para>
+        </listitem>
+
+      </orderedlist>
+    
+    </para>
+    
+  </listitem>
+
+  <listitem>
+    <para>Test building the kernel: <literal>nix-build -A
+    kernel_2_6_22</literal>.  If it compiles, ship it!  For extra
+    credit, try booting NixOS with it.</para>
+  </listitem>
+
+  <listitem>
+    <para>It may be that the new kernel requires updating the external
+    kernel modules and kernel-dependent packages listed in the
+    <varname>kernelPackagesFor</varname> function in
+    <filename>all-packages.nix</filename> (such as the NVIDIA drivers,
+    AUFS, splashutils, etc.).  If the updated packages aren’t
+    backwards compatible with older kernels, you need to keep the
+    older versions and use some conditionals.  For example, new
+    kernels require splashutils 1.5 while old kernel require 1.3, so
+    <varname>kernelPackagesFor</varname> says:
+
+      <programlisting>
+splashutils =
+  if kernel.features ? fbSplash then splashutils_13 else
+  if kernel.features ? fbConDecor then splashutils_15 else
+  null;
+
+splashutils_13 = ...;
+splashutils_15 = ...;</programlisting>
+
+    </para>
+  </listitem>
+
+</orderedlist>
+
+</para>
+
+</section>
+
+
+<!--============================================================-->
+
+<section>
+  <title>X.org</title>
+  <para>* Expression is auto-generated</para>
+  <para>* How to update</para>
+</section>
+
+
+<!--============================================================-->
+
+<section>
+  <title>Gnome</title>
+  <para>* Expression is auto-generated</para>
+  <para>* How to update</para>
+</section>
+
+
+<!--============================================================-->
+
+<section>
+  <title>GCC</title>
+  <para>…</para>
+</section>
+
+
+</chapter>
