@@ -1,6 +1,7 @@
 {
 	platform ? __currentSystem
 	,hostConnectPort ? "3737"
+	,sshPubKey ? /var/certs/ssh/id_livedvd.pub
 } : 
 let 
   isoFun = import ./rescue-cd-configurable.nix;
@@ -48,7 +49,7 @@ in
 	*/
 	additionalFiles = [
 		{
-			source = /var/certs/ssh/id_livedvd.pub;
+			source = sshPubKey;
 			target = "/root/.ssh/authorized_keys";
 		}
 	];
