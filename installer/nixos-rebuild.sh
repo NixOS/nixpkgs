@@ -19,10 +19,11 @@ build:   build the configuration, but don't make it the default or
          activate it
 dry-run: just show what store paths would be built/downloaded
 
-by env overridable settings:
-NIXOS=${NIXOS}
-NIXPKGS=${NIXPKGS}
-NIXOS_CONFIG=${NIXOS_CONFIG}
+Environment variables affecting nixos-rebuild:
+
+  Path to NixOS:         NIXOS=${NIXOS}
+  Path to Nixpkgs:       NIXPKGS=${NIXPKGS}
+  Path to configuration: NIXOS_CONFIG=${NIXOS_CONFIG}
 "
 
 EOF

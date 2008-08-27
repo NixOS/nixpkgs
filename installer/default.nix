@@ -8,7 +8,7 @@ let
   });
 
 
-  nixosCheckout = (import ./nixosCheckout.nix){ 
+  nixosCheckout = (import ./nixos-checkout.nix) {
     inherit pkgs config makeProg;
   };
 
