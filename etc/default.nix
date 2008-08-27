@@ -128,7 +128,7 @@ import ../helpers/make-etc.nix {
         build-users-group = nixbld
         build-max-jobs = ${toString (config.nix.maxJobs)}
         build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-        build-chroot-dirs = /dev /proc /bin /etc
+        build-chroot-dirs = /dev /proc /bin
         ${config.nix.extraOptions}
       '';
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
