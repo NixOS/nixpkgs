@@ -23,7 +23,8 @@ echo "reboot" | ./socat/bin/socat tcp-listen:4424 stdio >> report &
 
 if ( ! [ -d dvd/iso ] ) || ( [ -z "$USE_LEFTOVER_DVD" ] ); then
     rm dvd
-    nix-build -o dvd /etc/nixos/nixos/configuration/closed-install.nix || 
+    # unset NIXPKGS_CONFIG to reduce host -> image configuration leak
+    NIXPKGS_CONFIG= nix-build -o dvd /etc/nixos/nixos/configuration/closed-install.nix || 
       { echo "Failed to build LiveDVD" >&2 ;  exit 2; };
 fi;
 
