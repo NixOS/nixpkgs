@@ -131,6 +131,7 @@ let
       pwdutils
       python
       qt3
+      qt4
       #quake3demo
       readline
       reiserfsprogs
