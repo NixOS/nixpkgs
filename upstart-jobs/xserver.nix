@@ -69,7 +69,7 @@ let
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
-    inherit fontDirectories videoDriver resolutions;
+    inherit fontsForXServer videoDriver resolutions;
     isClone = if cfg.isClone then "on" else "off";
 
     synapticsInputDevice = if cfg.synaptics.enable then ''
@@ -128,7 +128,7 @@ let
       buildCommand= # urgh, don't substitute this
 
       export fontPaths=
-      for i in $fontDirectories; do
+      for i in $fontsForXServer; do
         if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
           for j in $(find $i -name fonts.dir); do
             fontPaths="''${fontPaths}FontPath \"$(dirname $j)\"''\n"
