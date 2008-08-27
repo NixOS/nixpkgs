@@ -53,6 +53,19 @@ let
     ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
 
+  fontsForXServer =
+    fontDirectories ++
+    # We don't want these fonts in fonts.conf, because then modern,
+    # fontconfig-based applications will get horrible bitmapped
+    # Helvetica fonts.  It's better to get a substitution (like Nimbus
+    # Sans) than that horror.  But we do need the Adobe fonts for some
+    # old non-fontconfig applications.  (Possibly this could be done
+    # better using a fontconfig rule.)
+    [ pkgs.xorg.fontadobe100dpi
+      pkgs.xorg.fontadobe75dpi
+    ];
+    
+
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;

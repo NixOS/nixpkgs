@@ -13,8 +13,6 @@
   pkgs.xorg.fontbhttf
   pkgs.xorg.fontbhlucidatypewriter100dpi
   pkgs.xorg.fontbhlucidatypewriter75dpi
-  pkgs.xorg.fontadobe100dpi
-  pkgs.xorg.fontadobe75dpi
   pkgs.ttf_bitstream_vera
   pkgs.freefont_ttf
   pkgs.xorg.fontbh100dpi
