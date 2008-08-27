@@ -454,7 +454,9 @@ rec {
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
       [({
-	inherit (attrs) description;
+	#inherit (attrs) description;
+        description = if attrs ? description then attrs.description else 
+          throw ("No description ${toString l}");
       }
       //(if attrs ? example then {inherit(attrs) example;} else {} )
       //(if attrs ? default then {inherit(attrs) default;} else {} )
