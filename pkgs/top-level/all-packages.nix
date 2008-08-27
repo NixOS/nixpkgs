@@ -584,7 +584,8 @@ let
   };
 
   cron = import ../tools/system/cron {
-    inherit fetchurl stdenv;
+    inherit fetchurl;
+    stdenv = stdenvNew;
   };
 
   curl = import ../tools/networking/curl {

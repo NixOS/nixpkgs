@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     md5 = "5e1be9dbde66295821ac7899f2e1f561";
   };
 
-  unpackCmd = "(mkdir cron && cd cron && sh $src)";
+  unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
   preBuild = "
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755

@@ -442,34 +442,31 @@ stripHash() {
 
 
 unpackFile() {
-    local file="$1"
+    curSrc="$1"
     local cmd
 
-    header "unpacking source archive $file" 3
+    header "unpacking source archive $curSrc" 3
 
-    case "$file" in
+    case "$curSrc" in
         *.tar)
-            tar xvf $file
+            tar xvf $curSrc
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $file | tar xvf -
+            gzip -d < $curSrc | tar xvf -
             ;;
         *.tar.bz2 | *.tbz2)
-            bzip2 -d < $file | tar xvf -
+            bzip2 -d < $curSrc | tar xvf -
             ;;
         *.zip)
-            unzip $file
+            unzip $curSrc
             ;;
         *)
-            if test -d "$file"; then
-                stripHash $file
-                cp -prvd $file $strippedName
+            if test -d "$curSrc"; then
+                stripHash $curSrc
+                cp -prvd $curSrc $strippedName
             else
-                if test -n "$findUnpacker"; then
-                    $findUnpacker $1;
-                fi
                 if test -z "$unpackCmd"; then
-                    echo "source archive $file has unknown type"
+                    echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
                 eval "$unpackCmd"
