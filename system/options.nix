@@ -2914,4 +2914,7 @@ root        ALL=(ALL) SETENV: ALL
     };
   };
 
+  require = [
+    (import ../upstart-jobs/pcmcia.nix)
+  ];
 }
