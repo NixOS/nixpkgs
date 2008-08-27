@@ -430,13 +430,19 @@ rec {
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
   fixOptionSetsFun = merge: pkgs: opts:
-    let optionSet = final: configFun:
-      if __isFunction configFun then configFun pkgs final
-      else configFun; # backward compatibility.
+    let optionSet = config: configFun:
+      if __isFunction configFun then
+        let result = configFun { inherit pkgs config; }; in
+      # {pkgs, config, ...}: {..}
+        if builtins.isAttrs result then result
+      # pkgs: config: {..}
+        else configFun pkgs config
+      # {..}
+      else configFun;
     in
-      final: merge ""
+      config: merge ""
         (map (x: removeAttrs x ["require"])
-          (uniqFlattenAttr (optionSet final) "require" [] (toList opts))
+          (uniqFlattenAttr (optionSet config) "require" [] (toList opts))
         );
 
   fixOptionSets = merge: pkgs: opts:
