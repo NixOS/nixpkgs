@@ -566,8 +566,9 @@ let
   };
 
   convertlit = import ../tools/text/convertlit {
-    inherit fetchurl stdenv unzip libtommath;
- };
+    inherit fetchurl unzip libtommath;
+    stdenv = stdenvNew;
+  };
 
   coreutils = useFromStdenv "coreutils"
     ((if stdenv ? isDietLibC

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [unzip libtommath];
 
-  setSourceRoot = "sourceRoot=.";
+  sourceRoot = ".";
 
   buildPhase = ''
     cd lib
