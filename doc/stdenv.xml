@@ -177,7 +177,7 @@ genericBuild
 </section>
 
 
-<section xml:id="ssec-stdenv-phases"><title>Build phases</title>
+<section xml:id="ssec-stdenv-phases"><title>Phases</title>
 
 <para>The generic builder has a number of <emphasis>phases</emphasis>.
 Each phase can be overriden in its entirety either by setting the
@@ -189,141 +189,403 @@ shell function
 is convenient to override a phase from the derivation, while the
 latter is convenient from a build script.</para>
 
-<para>The phases are:
 
+<section><title>Controlling phases</title>
+
+<para>There are a number of variables that control what phases are
+executed and in what order:
+
+<variablelist>
+  <title>Variables affecting phase control</title>
+
+  <varlistentry>
+    <term><varname>phases</varname></term>
+    <listitem>
+      <para>Specifies the phases.  You can change the order in which
+      phases are executed, or add new phases, by setting this
+      variable.  If it’s not set, the default value is used, which is
+      <literal>$prePhases unpackPhase patchPhase $preConfigurePhases
+      configurePhase $preBuildPhases buildPhase checkPhase
+      $preInstallPhases installPhase fixupPhase $preDistPhases
+      distPhase $postPhases</literal>.
+      </para>
+      
+      <para>Usually, if you just want to add a few phases, it’s more
+      convenient to set one of the variables below (such as
+      <varname>preInstallPhases</varname>), as you then don’t specify
+      all the normal phases.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prePhases</varname></term>
+    <listitem>
+      <para>Additional phases executed before any of the default phases.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preConfigurePhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the configure phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preBuildPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the build phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preInstallPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the install phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preDistPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the distribution phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed after any of the default
+      phases.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+</section>
+
+
+<section><title>The unpack phase</title>
+
+<para>The unpack phase is responsible for unpacking the source code of
+the package.  The default implementation of
+<function>unpackPhase</function> unpacks the source files listed in
+the <envar>src</envar> environment variable to the current directory.
+It supports the following files by default:
+
+<variablelist>
+
+  <varlistentry>
+    <term>Tar files</term>
+    <listitem><para>These can optionally be compressed using
+    <command>gzip</command> (<filename>.tar.gz</filename>,
+    <filename>.tgz</filename> or <filename>.tar.Z</filename>) or
+    <command>bzip2</command> (<filename>.tar.bz2</filename> or
+    <filename>.tbz2</filename>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Zip files</term>
+    <listitem><para>Zip files are unpacked using
+    <command>unzip</command>.  However, <command>unzip</command> is
+    not in the standard environment, so you should add it to
+    <varname>buildInputs</varname> yourself.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Directories in the Nix store</term>
+    <listitem><para>These are simply copied to the current directory.
+    The hash part of the file name is stripped,
+    e.g. <filename>/nix/store/1wydxgby13cz...-my-sources</filename>
+    would be copied to
+    <filename>my-sources</filename>.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+Additional file types can be supported by setting the
+<varname>unpackCmd</varname> variable (see below).</para>
+
+<para></para>
+
+<variablelist>
+  <title>Variables controlling the unpack phase</title>
+
+  <varlistentry>
+    <term><varname>srcs</varname> / <varname>src</varname></term>
+    <listitem><para>The list of source files or directories to be
+    unpacked or copied.  One of these must be set.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>sourceRoot</varname></term>
+    <listitem><para>After running <function>unpackPhase</function>,
+    the generic builder changes the current directory to the directory
+    created by unpacking the sources.  If there are multiple source
+    directories, you should set <varname>sourceRoot</varname> to the
+    name of the intended directory.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>setSourceRoot</varname></term>
+    <listitem><para>Alternatively to setting
+    <varname>sourceRoot</varname>, you can set
+    <varname>setSourceRoot</varname> to a shell command to be
+    evaluated by the unpack phase after the sources have been
+    unpacked.  This command must set
+    <varname>sourceRoot</varname>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preUnpack</varname></term>
+    <listitem><para>Hook executed at the start of the unpack
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postUnpack</varname></term>
+    <listitem><para>Hook executed at the end of the unpack
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontMakeSourcesWritable</varname></term>
+    <listitem><para>If set to <literal>1</literal>, the unpacked
+    sources are <emphasis>not</emphasis> made
+    writable.  By default, they are made writable to prevent problems
+    with read-only sources.  For example, copied store directories
+    would be read-only without this.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>unpackCmd</varname></term>
+    <listitem><para>The unpack phase evaluates the string
+    <literal>$unpackCmd</literal> for any unrecognised file.  The path
+    to the current source file is contained in the
+    <varname>curSrc</varname> variable.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
+
+
+<section><title>The patch phase</title>
+
+<para>The patch phase applies the list of patches defined in the
+<varname>patches</varname> variable.</para>
+
+<variablelist>
+  <title>Variables controlling the patch phase</title>
+
+  <varlistentry>
+    <term><varname>patches</varname></term>
+    <listitem><para>The list of patches.  They must be in the format
+    accepted by the <command>patch</command> command, and may
+    optionally be compressed using <command>gzip</command>
+    (<filename>.gz</filename>) or <command>bzip2</command>
+    (<filename>.bz2</filename>).</para></listitem>
+  </varlistentry>  
+
+  <varlistentry>
+    <term><varname>patchFlags</varname></term>
+    <listitem><para>Flags to be passed to <command>patch</command>.
+    If not set, the argument <option>-p1</option> is used, which
+    causes the leading directory component to be stripped from the
+    file names in each patch.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prePatch</varname></term>
+    <listitem><para>Hook executed at the start of the patch
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postPatch</varname></term>
+    <listitem><para>Hook executed at the end of the patch
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
+
+
+<section><title>The configure phase</title>
+
+<para>The configure phase prepares the source tree for building.  The
+default <function>unpackPhase</function> runs
+<filename>./configure</filename> (typically an Autoconf-generated
+script) if it exists.</para>
+
+<variablelist>
+  <title>Variables controlling the configure phase</title>
+
+  <varlistentry>
+    <term><varname>configureScript</varname></term>
+    <listitem><para>The name of the configure script.  It defaults to
+    <filename>./configure</filename> if it exists; otherwise, the
+    configure phase is skipped.  This can actually be a command (like
+    <literal>perl ./Configure.pl</literal>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configureFlags</varname></term>
+    <listitem><para>Additional arguments passed to the configure
+    script.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configureFlagsArray</varname></term>
+    <listitem><para>A shell array containing additional arguments
+    passed to the configure script.  You must use this instead of
+    <varname>configureFlags</varname> if the arguments contain
+    spaces.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontAddPrefix</varname></term>
+    <listitem><para>By default, the flag
+    <literal>--prefix=$prefix</literal> is added to the configure
+    flags.  If this is undesirable, set this variable to a non-empty
+    value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>prefix</varname></term>
+    <listitem><para>The prefix under which the package must be
+    installed, passed via the <option>--prefix</option> option to the
+    configure script.  It defaults to
+    <option>$out</option>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontAddDisableDepTrack</varname></term>
+    <listitem><para>By default, the flag
+    <literal>--disable-dependency-tracking</literal> is added to the
+    configure flags to speed up Automake-based builds.  If this is
+    undesirable, set this variable to a non-empty
+    value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontFixLibtool</varname></term>
+    <listitem><para>By default, the configure phase applies some
+    special hackery to all files called <filename>ltmain.sh</filename>
+    before running the configure script in order to improve the purity
+    of Libtool-based packages<footnote><para>It clears the
+    <varname>sys_lib_<replaceable>*</replaceable>search_path</varname>
+    variables in the Libtool script to prevent Libtool from using
+    libraries in <filename>/usr/lib</filename> and
+    such.</para></footnote>.  If this is undesirable, set this
+    variable to a non-empty value.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preConfigure</varname></term>
+    <listitem><para>Hook executed at the start of the configure
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postConfigure</varname></term>
+    <listitem><para>Hook executed at the end of the configure
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+</section>
+
+
+<section><title>The build phase</title>
+
+<para><function>buildPhase</function> calls <command>make</command>.
+You can set flags for <command>make</command> through the
+<varname>makeFlags</varname> variable.</para>
+
+<para>Before and after running <command>make</command>, the hooks
+<varname>preBuild</varname> and <varname>postBuild</varname> are
+called, respectively.</para>
+
+</section>
+
+
+<section><title>The check phase</title>
+
+<para><function>checkPhase</function> calls <command>make
+check</command>, but only if the <varname>doCheck</varname> variable
+is set to <literal>1</literal>.  Additional flags can be set through
+the <varname>checkFlags</varname> variable.</para>
+  
+</section>
+
+
+<section><title>The install phase</title>
+
+<para><function>installPhase</function> calls <command>make
+install</command>.  Additional flags can be set through the
+<varname>installFlags</varname> variable.</para>
+
+<para>Before and after running <command>make install</command>, the
+hooks <varname>preInstall</varname> and <varname>postInstall</varname>
+are called, respectively.</para>
+
+</section>
+
+
+<section><title>The fixup phase</title>
+
+<para><function>fixupPhase</function> cleans up the installed files in
+various ways:
+    
 <itemizedlist>
-
-  <listitem>
-
-    <para><function>unpackPhase</function> unpacks the source files
-    listed in the <envar>src</envar> environment variable to the
-    current directory.  It supports <filename>tar</filename> files,
-    optionally compressed with <command>gzip</command> or
-    <command>bzip2</command>; Zip files (but note that the
-    <command>unzip</command> command is not a part of the standard
-    environment; you should add it as a build input yourself); and
-    unpacked source trees (i.e., directories; they are copied
-    verbatim).  You can add support for other file types by setting
-    the <varname>findUnpacker</varname> hook.  This hook should set
-    the variable <varname>unpackCmd</varname> to contain the command
-    to be executed to unpack the file.</para>
-
-    <para>After running <function>unpackPhase</function>, the generic
-    builder changes the current directory to the directory created by
-    unpacking the sources.  If there are multiple source directories,
-    you should set <varname>sourceRoot</varname> to the name of the
-    intended directory.</para>
-
-    <para>It also calls the hook <varname>postUnpack</varname> after
-    unpacking.</para>
-
-  </listitem>
-
-  <listitem><para><function>patchPhase</function> calls the
-  <command>patch</command> command with the <option>-p1</option>
-  option (overridable via <envar>patchFlags</envar>) for each patch
-  file listed in the <envar>patches</envar>
-  variable.</para></listitem>
-
-  <listitem>
-
-    <para><function>configurePhase</function> runs the script called
-    <filename>configure</filename> in the current directory with a
-    <option>--prefix</option> set to the output path.  You can add
-    additional flags through the <varname>configureFlags</varname>
-    variable.  If <filename>configure</filename> does not exist,
-    nothing happens.</para>
-
-    <para>Before and after running <filename>configure</filename>, the
-    hooks <varname>preConfigure</varname> and
-    <varname>postConfigure</varname> are called, respectively.</para>
-
-  </listitem>
-
-  <listitem>
-
-    <para><function>buildPhase</function> calls
-    <command>make</command>.  You can set flags for
-    <command>make</command> through the <varname>makeFlags</varname>
-    variable.</para>
-
-    <para>Before and after running <command>make</command>, the hooks
-    <varname>preBuild</varname> and <varname>postBuild</varname> are
-    called, respectively.</para>
-    
-  </listitem>
-
-  <listitem><para><function>checkPhase</function> calls <command>make
-  check</command>, but only if the <varname>doCheck</varname> variable
-  is set to <literal>1</literal>.  Additional flags can be set through
-  the <varname>checkFlags</varname> variable.</para></listitem>
-
-  <listitem>
-
-    <para><function>installPhase</function> calls <command>make
-    install</command>.  Additional flags can be set through the
-    <varname>installFlags</varname> variable.</para>
-
-    <para>Before and after running <command>make install</command>,
-    the hooks <varname>preInstall</varname> and
-    <varname>postInstall</varname> are called, respectively.</para>
-
-  </listitem>
-
-  <listitem>
-    <para><function>fixupPhase</function> cleans up the
-    installed files in various ways:
-    
-    <itemizedlist>
       
-      <listitem><para>It moves the <filename>man/</filename>,
-      <filename>doc/</filename> and <filename>info/</filename>
-      subdirectories of <envar>$out</envar> to
-      <filename>share/</filename>.</para></listitem>
+  <listitem><para>It moves the <filename>man/</filename>,
+  <filename>doc/</filename> and <filename>info/</filename>
+  subdirectories of <envar>$out</envar> to
+  <filename>share/</filename>.</para></listitem>
       
-      <listitem><para>It strips libraries and executables of debug
-      information.</para></listitem>
+  <listitem><para>It strips libraries and executables of debug
+  information.</para></listitem>
 
-      <listitem><para>On Linux, it applies the
-      <command>patchelf</command> command to ELF executables and
-      libraries to remove unused directories from the
-      <literal>RPATH</literal> in order to prevent unnecessary
-      dependencies.</para></listitem>
+  <listitem><para>On Linux, it applies the <command>patchelf</command>
+  command to ELF executables and libraries to remove unused
+  directories from the <literal>RPATH</literal> in order to prevent
+  unnecessary dependencies.</para></listitem>
 
-      <listitem><para>It rewrites the interpreter paths of shell
-      scripts to paths found in <envar>PATH</envar>.  E.g.,
-      <filename>/usr/bin/perl</filename> will be rewritten to
-      <filename>/nix/store/<replaceable>some-perl</replaceable>/bin/perl</filename>
-      found in <envar>PATH</envar>.</para></listitem>
-
-    </itemizedlist>
-
-    </para>
-  </listitem>
-
-  <listitem>
-
-    <para><function>distPhase</function> calls <command>make
-    dist</command>, but only if the <varname>doDist</varname> variable
-    is set to <literal>1</literal>.  Additional flags can be set
-    through the <varname>distFlags</varname> variable.  The resulting
-    tarball is copied to the <filename>/tarballs</filename>
-    subdirectory of the output path.</para>
-
-    <para>Before and after running <command>make dist</command>, the
-    hooks <varname>preDist</varname> and <varname>postDist</varname>
-    are called, respectively.</para>
-    
-  </listitem>
+  <listitem><para>It rewrites the interpreter paths of shell scripts
+  to paths found in <envar>PATH</envar>.  E.g.,
+  <filename>/usr/bin/perl</filename> will be rewritten to
+  <filename>/nix/store/<replaceable>some-perl</replaceable>/bin/perl</filename>
+  found in <envar>PATH</envar>.</para></listitem>
 
 </itemizedlist>
 
 </para>
 
-<para>You can change the order in which phases are executed, or add
-new phases, by setting the <varname>phases</varname> variable.  The
-default is <literal>patchPhase configurePhase buildPhase checkPhase
-installPhase distPhase</literal>.</para>
+</section>
+
+
+<section><title>The distribution phase</title>
+
+<para><function>distPhase</function> calls <command>make
+dist</command>, but only if the <varname>doDist</varname> variable is
+set to <literal>1</literal>.  Additional flags can be set through the
+<varname>distFlags</varname> variable.  The resulting tarball is
+copied to the <filename>/tarballs</filename> subdirectory of the
+output path.</para>
+
+<para>Before and after running <command>make dist</command>, the hooks
+<varname>preDist</varname> and <varname>postDist</varname> are called,
+respectively.</para>
+
+</section>
+
 
 </section>
 
