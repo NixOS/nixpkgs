@@ -538,7 +538,7 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if test "dontMakeSourcesWritable" != 1; then
-        chmod -R +w $sourceRoot
+        chmod -R u+w $sourceRoot
     fi
 
     eval "$postUnpack"
