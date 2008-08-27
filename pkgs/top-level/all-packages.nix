@@ -130,6 +130,8 @@ let
   #   };
   overrideSetup = stdenv: setup: stdenv.regenerate setup;
 
+  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
+
   # Return a modified stdenv that uses dietlibc to create small
   # statically linked binaries.
   useDietLibC = stdenv: stdenv //

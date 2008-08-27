@@ -1,21 +1,17 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "rogue-5.4.2";
+  name = "rogue-5.4.4";
+  
   src = fetchurl {
-    url = http://rogue.rogueforge.net/files/rogue5.4/rogue5.4.2-src.tar.gz;
-    md5 = "bd656cb017a579eba835a0ee445a0a32";
+    url = http://rogue.rogueforge.net/files/rogue5.4/rogue5.4.4-src.tar.gz;
+    sha256 = "18g81274d0f7sr04p7h7irz0d53j6kd9j1y3zbka1gcqq0gscdvx";
   };
-  setSourceRoot = "sourceRoot=.";
+  
   buildInputs = [ncurses];
-  preBuild = "
-    ln -s ${ncurses}/include ncurses
-    substituteInPlace Makefile --replace curses ncurses
-  ";
-  installPhase = "
-    ensureDir $out/bin
-    cp rogue54 $out/bin
-    ln -s rogue54 $out/bin/rogue
-  ";
-  NIX_CFLAGS_COMPILE = "-I.";
+  
+  meta = {
+    homepage = http://rogue.rogueforge.net/rogue-5-4/;
+    description = "The final version of the original Rogue game developed for the UNIX operating system";
+  };
 }
