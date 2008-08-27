@@ -26,7 +26,7 @@ let
 
         config = mkOption {
           default = null;
-          decription = ''
+          description = ''
             Path to the configuration file which map the memory, irq
             and ports used by the PCMCIA hardware.
           '';
