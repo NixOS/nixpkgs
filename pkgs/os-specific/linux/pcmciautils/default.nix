@@ -3,6 +3,7 @@
 , sysfsutils, module_init_tools, udev
 , firmware # Special pcmcia cards.
 , config   # Special hardware (map memory & port & irq)
+, lib      # used to generate postInstall script.
 }:
 
 # FIXME: should add an option to choose between hotplug and udev.
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i "
-      s,/sbin/modprobe,$module_init_tools/sbin/modprobe,;
+      s,/sbin/modprobe,${module_init_tools}&,;
       s,/lib/udev/,$out/sbin/,;
     " udev/* # fix-color */
     sed -i "
@@ -26,18 +27,21 @@ stdenv.mkDerivation rec {
       s,/etc/pcmcia,$out&,;
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
-  + (if firmware == null then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
+  + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
   + (if config == null then "" else ''
-    ln -sf ${config}/config.opts ./config/config.opts'')
+    ln -sf ${config} ./config/config.opts'')
   ;
 
   makeFlags = "LEX=flex";
   installFlags = ''INSTALL=install DESTDIR=''${out}'';
-  postInstall = 
-    (if firmware == null then "" else ''
-    ensureDir $out/lib
-    ln -s ${firmware} $out/lib/firmware'')
-    ;
+  postInstall =
+    lib.concatMapStrings (path: ''
+      for f in : $(find ${path} -type f); do
+        test "$f" == ":" && continue;
+        ensureDir $(dirname $out/lib/firmware/$\{f#${path}});
+        ln -s $f $out/lib/firmware/$\{f#${path}};
+      done;
+    '') firmware;
 
   meta = {
     homepage = http://kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html;

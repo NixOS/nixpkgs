@@ -5419,12 +5419,13 @@ let
     inherit stdenv fetchurl pam libxcrypt;
   };
 
-  pcmciaUtils = (import ../os-specific/linux/pcmciautils) {
+  pcmciaUtils = composedArgsAndFun (import ../os-specific/linux/pcmciautils) {
     inherit stdenv fetchurl udev yacc flex;
     inherit sysfsutils module_init_tools;
 
-    firmware = getConfig ["pcmciaUtils" "firmware"] null;
+    firmware = getConfig ["pcmciaUtils" "firmware"] [];
     config = getConfig ["pcmciaUtils" "config"] null;
+    inherit lib;
   };
 
   powertop = import ../os-specific/linux/powertop {
