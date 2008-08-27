@@ -511,7 +511,7 @@ unpackPhase() {
     # Find the source directory.
     if test -n "$setSourceRoot"; then
         eval "$setSourceRoot"
-    else
+    elif test -z "$sourceRoot"; then
         sourceRoot=
         for i in *; do
             if test -d "$i"; then
