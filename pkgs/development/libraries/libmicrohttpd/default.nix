@@ -1,12 +1,27 @@
 {stdenv, fetchurl, curl}:
 
-stdenv.mkDerivation {
-  name = "libmicrohttpd-0.3.0";
+stdenv.mkDerivation rec {
+  name = "libmicrohttpd-0.3.1";
 
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/libmicrohttpd/libmicrohttpd-0.3.0.tar.gz;
-    sha256 = "1m3c9akpdx2lg7klqxv5vbwjr9vwfx5k0aqn8zmf6rpdgk5c3bii";
+    url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
+    sha256 = "1zv8a7lwypwbwzam5jvr35wvxb13chyh0ir18k82nzm9q5s3v3n3";
   };
 
-  buildInputs = [curl];
+  buildInputs = [ curl ];
+
+  doCheck = true;
+
+  meta = {
+    description = "GNU libmicrohttpd, an embeddable HTTP server library";
+
+    longDescription = ''
+      GNU libmicrohttpd is a small C library that is supposed to make
+      it easy to run an HTTP server as part of another application.
+    '';
+
+    license = "LGPLv2+";
+
+    homepage = http://www.gnu.org/software/libmicrohttpd/;
+  };
 }
