@@ -5,12 +5,12 @@ with pkgs;
 rec {
 
 
-  inherit (kernelPackages) kernel klibcShrunk;
+  inherit (kernelPackages_2_6_26) kernel klibcShrunk;
 
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    rootModules = ["cifs" "ne2k_pci" "nls_utf8" "ata_piix" "sd_mod"];
+    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
   };
 
   
@@ -78,8 +78,7 @@ rec {
     mknod /dev/null c 1 3
     mknod /dev/zero c 1 5
     mknod /dev/tty  c 5 0
-    mknod /dev/sda  b 8 0
-    mknod /dev/hda  b 3 0
+    mknod /dev/vda  b 253 0
     
     ipconfig 10.0.2.15:::::eth0:none
 
@@ -88,7 +87,7 @@ rec {
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
-      mount -t ext2 /dev/sda /fs
+      mount -t ext2 /dev/vda /fs
     fi
     
     mkdir -p /fs/hostfs
@@ -168,7 +167,8 @@ rec {
   qemuCommandLinux = ''
     qemu-system-x86_64 \
       -nographic -no-reboot \
-      -smb / -hda $diskImage \
+      -net nic,model=virtio -net user -smb / \
+      -drive file=$diskImage,if=virtio,boot=on \
       -kernel ${kernel}/vmlinuz \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
@@ -221,8 +221,8 @@ rec {
 
   createRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mke2fs -F /dev/sda
-    ${klibcShrunk}/bin/mount -t ext2 /dev/sda /mnt
+    ${e2fsprogs}/sbin/mke2fs -F /dev/vda
+    ${klibcShrunk}/bin/mount -t ext2 /dev/vda /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh

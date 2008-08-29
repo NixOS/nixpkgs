@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
    
 stdenv.mkDerivation {
-  name = "kvm-73";
+  name = "kvm-74";
    
   src = fetchurl {
-    url = mirror://sourceforge/kvm/kvm-73.tar.gz;
-    sha256 = "1bpdwvnb027zj1q3q9fpsbka2f84nzirihh31dzxprm0p89hlpnd";
+    url = mirror://sourceforge/kvm/kvm-74.tar.gz;
+    sha256 = "0gnd5r9wb8mar3jh8gv46vdm3qkbgiwzkim5ki67kx3ca71g0m24";
   };
 
   patches = [
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     ./smbd-path.patch
     # The makefile copies stuff from the kernel directory and then
     # tries to modify the copy, but it must be made writable first.
-    ./readonly-kernel.patch
+    ./readonly-kernel-r2.patch
   ];
 
   configureFlags = "--with-patched-kernel --kerneldir=${kernelHeaders}";

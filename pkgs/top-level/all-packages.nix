@@ -5346,7 +5346,7 @@ let
     inherit fetchurl stdenv libxml2;
   };
 
-  kvm = kvm57;
+  kvm = kvm74;
 
   kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
@@ -5354,7 +5354,7 @@ let
     kernelHeaders = kernelHeaders_2_6_23;
   };
 
-  kvm73 = import ../os-specific/linux/kvm/73.nix {
+  kvm74 = import ../os-specific/linux/kvm/74.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
   };
