@@ -1,14 +1,16 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "aterm-2.5";
+  name = "aterm-2.7";
 
   src = fetchurl {
-    url = http://buildfarm.st.ewi.tudelft.nl/releases/meta-environment/aterm-2.5pre21238-l2q7rg38/aterm-2.5.tar.gz;
-    md5 = "33ddcb1a229baf406ad1f603eb1d5995";
+    url = http://homepages.cwi.nl/~daybuild/releases//aterm-2.7.tar.gz;
+    sha256 = "0zhs0rncn4iankr70kbms64dwxm9i0956gs02dbw7ylx4mln8ynn";
   };
 
-  doCheck = true;
+  #doCheck = true;
+
+  CFLAGS = "-O0";
 
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;

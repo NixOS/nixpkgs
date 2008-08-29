@@ -1857,13 +1857,13 @@ let
 
   transformers = import ../development/compilers/transformers {
     inherit fetchurl pkgconfig sdf;
-    aterm = aterm23x;
+    aterm = aterm23;
 
     stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
 
     strategoxt = import ../development/compilers/strategoxt/strategoxt-0.14.nix {
       inherit fetchurl pkgconfig sdf;
-      aterm = aterm23x;
+      aterm = aterm23;
       stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
     };
 
@@ -2515,7 +2515,13 @@ let
     inherit fetchurl stdenv aspell which;
   });
 
-  aterm = lowPrio (import ../development/libraries/aterm {
+  aterm = aterm24;
+
+  aterm23 = import ../development/libraries/aterm/2.3.nix {
+    inherit fetchurl stdenv;
+  };
+
+  aterm24 = lowPrio (import ../development/libraries/aterm/2.4.nix {
     inherit fetchurl stdenv;
   });
 
@@ -2523,13 +2529,13 @@ let
     inherit fetchurl stdenv;
   };
 
-  aterm23x = import ../development/libraries/aterm/2.3.nix {
-    inherit fetchurl stdenv;
-  };
-
   aterm25 = import ../development/libraries/aterm/2.5.nix {
     inherit fetchurl stdenv;
   };
+
+  aterm27 = lowPrio (import ../development/libraries/aterm/2.7.nix {
+    inherit fetchurl stdenv;
+  });
 
   attr = useFromStdenv "attr"
     (import ../development/libraries/attr {
