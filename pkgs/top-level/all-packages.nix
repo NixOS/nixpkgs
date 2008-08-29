@@ -570,6 +570,10 @@ let
     stdenv = stdenvNew;
   };
 
+  unifdef = import ../development/tools/misc/unifdef {
+    inherit fetchurl stdenv;
+  };
+
   coreutils = useFromStdenv "coreutils"
     ((if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
@@ -2032,10 +2036,15 @@ let
   rLang = import ../development/interpreters/r-lang {
     inherit fetchurl stdenv readline perl gfortran libpng zlib;
     inherit (xorg) libX11 libXt;
+    withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
   rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
+  };
+
+  rq = import ../applications/networking/cluster/rq {
+    inherit fetchurl stdenv sqlite ruby;
   };
 
   spidermonkey = import ../development/interpreters/spidermonkey {
@@ -3543,7 +3552,7 @@ let
   };
 
   sqlite = import ../development/libraries/sqlite {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv readline;
   };
 
   t1lib = import ../development/libraries/t1lib {
@@ -4505,6 +4514,10 @@ let
   ### DEVELOPMENT / PYTHON MODULES
 
 
+  foursuite = import ../development/python-modules/4suite {
+    inherit fetchurl stdenv python;
+  };
+
   bsddb3 = import ../development/python-modules/bsddb3 {
     inherit fetchurl stdenv python db4;
   };
@@ -4596,6 +4609,9 @@ let
     inherit fetchurl stdenv python;
   };
 
+  zope = import ../development/python-modules/zope {
+    inherit fetchurl stdenv python;
+  };
 
   ### SERVERS
 
