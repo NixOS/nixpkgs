@@ -24,8 +24,6 @@ Environment variables affecting nixos-rebuild:
   Path to NixOS:         NIXOS=${NIXOS}
   Path to Nixpkgs:       NIXPKGS=${NIXPKGS}
   Path to configuration: NIXOS_CONFIG=${NIXOS_CONFIG}
-"
-
 EOF
     exit 1
 }
