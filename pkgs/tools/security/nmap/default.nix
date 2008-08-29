@@ -3,12 +3,12 @@
 , pycairo, pysqlite
 }:
   
-stdenv.mkDerivation {
-  name = "nmap-4.60";
+stdenv.mkDerivation (rec {
+  name = "nmap-4.68";
 
   src = fetchurl {
-    url = http://download.insecure.org/nmap/dist/nmap-4.60.tar.bz2;
-    sha256 = "1jhway86lmrnyzvwi24ama1vrz89f9nmln29vr92kb31aw2nl30w";
+    url = "http://nmap.org/dist/${name}.tar.bz2";
+    sha256 = "0qgirvkgp3ni0lc32l8m7qnlj2626g821x883irafzirilyvwrhq";
   };
 
   postInstall =''
@@ -18,4 +18,4 @@ stdenv.mkDerivation {
   buildInputs = [
     libpcap libX11 gtk pkgconfig openssl python pygtk makeWrapper pysqlite
   ];
-}
+})
