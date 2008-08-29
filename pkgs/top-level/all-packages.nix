@@ -3760,6 +3760,14 @@ let
 
   ### DEVELOPMENT / LIBRARIES / HASKELL
 
+  benchpress = import ../development/libraries/haskell/benchpress {
+    inherit cabal;
+  };
+
+  maybench = import ../development/libraries/haskell/maybench {
+    inherit cabal benchpress;
+  };
+
   binary = import ../development/libraries/haskell/binary {
     inherit cabal;
   };
