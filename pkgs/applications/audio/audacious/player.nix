@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "audacious-1.4.6";
+  name = "audacious-1.5.1";
   
   src = fetchurl {
-    url = http://distfiles.atheme.org/audacious-1.4.6.tbz2;
-    sha256 = "0n4za82xlh3nfvfk0hq81bmh0sx233gxq8xj68jzalmbijsnbs0l";
+    url = http://distfiles.atheme.org/audacious-1.5.1.tbz2;
+    sha256 = "1s32pdgx85qkrq15wwmvdw7wbcbxcf3nrhqxi6y72aijqm6fjwnz";
   };
 
   buildInputs = [pkgconfig libglade libmcs gettext dbus_glib];

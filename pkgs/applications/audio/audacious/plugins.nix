@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "audacious-plugins-1.4.5";
+  name = "audacious-plugins-1.5.1";
   
   src = fetchurl {
-    url = http://distfiles.atheme.org/audacious-plugins-1.4.5.tbz2;
-    sha256 = "145dn2x1rldwbaxnl19j7cw338fs9fwcn607r8gk01adfy3warxq";
+    url = http://distfiles.atheme.org/audacious-plugins-1.5.1.tbz2;
+    sha256 = "1ki5bd50g4vi4d0qzxynyrgaq2n4cwhbsxln9rwk8ppphvk9pawc";
   };
 
   buildInputs = [

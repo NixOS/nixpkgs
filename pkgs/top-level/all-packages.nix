@@ -3023,7 +3023,7 @@ let
   };
 
   libcdio = import ../development/libraries/libcdio {
-    inherit fetchurl stdenv libcddb pkgconfig ncurses;
+    inherit fetchurl stdenv libcddb pkgconfig ncurses help2man;
   };
 
   libcm = assert mesaSupported; import ../development/libraries/libcm {

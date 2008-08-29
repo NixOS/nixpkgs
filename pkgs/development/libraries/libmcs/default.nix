@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, libmowgli}:
 
 stdenv.mkDerivation {
-  name = "libmcs-0.7.0";
+  name = "libmcs-0.7.1";
   
   src = fetchurl {
-    url = http://distfiles.atheme.org/libmcs-0.7.0.tgz;
-    sha256 = "11qjrxxgk0yvqm668dyaj54kgijcnkaid8dld8lf4br2glmz2jy5";
+    url = http://distfiles.atheme.org/libmcs-0.7.1.tbz2;
+    sha256 = "16ckfdprqyb9jhhnhvyhw2rkwadq1z6l3a00fvix16sjzh8dgcz0";
   };
 
   buildInputs = [pkgconfig libmowgli];
