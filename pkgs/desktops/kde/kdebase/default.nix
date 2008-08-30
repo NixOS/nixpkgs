@@ -4,14 +4,14 @@
 
 # Note: the glib dependency is needed for nspluginviewer.
 
-let version = "3.5.9"; in
+let version = "3.5.10"; in
 
 stdenv.mkDerivation {
   name = "kdebase-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdebase-${version}.tar.bz2";
-    md5 = "c8c35389a238aa1b73e68ef5298eadf8";
+    sha256 = "0qbbw78b725kf35p5jx11zq0246zm15pyyhmlpkz4cn5527rvakp";
   };
 
   buildInputs = [

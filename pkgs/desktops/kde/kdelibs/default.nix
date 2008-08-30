@@ -3,14 +3,14 @@
 , freetype, bzip2, cups, attr, acl
 }:
 
-let version = "3.5.9"; in
+let version = "3.5.10"; in
 
 stdenv.mkDerivation {
   name = "kdelibs-${version}";
   
   src = fetchurl {
     url = "mirror://kde/stable/${version}/src/kdelibs-${version}.tar.bz2";
-    md5 = "55e5f00874933d1a7ba7c95e369a205e";
+    sha256 = "0wjw51r96h6rngbsrzndw890xggzvrakydsbaldlrvbh3jq9qzk1";
   };
 
   passthru = {inherit openssl libjpeg qt; inherit (xlibs) libX11;};
