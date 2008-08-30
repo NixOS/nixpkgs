@@ -26,10 +26,8 @@ in
     ] ++ (if gtkSupport then [ gtk libglade ] else []);
 
     patches = [
-      ./daemontest.patch ./tmpdir.patch
-      ./identity-test.patch ./session-tests.patch
+      ./tmpdir.patch
       ./disable-http-tests.patch
-      ./disable-broken-tests.patch
     ];
 
     preConfigure = ''
@@ -43,7 +41,12 @@ in
       done
     '';
 
+    # Tests have to be run xonce it's installed.
     # FIXME: Re-enable tests when they are less broken.
+    #postInstall = ''
+    #  GNUNET_PREFIX="$out" make check
+    #'';
+
     doCheck = false;
 
     meta = {
