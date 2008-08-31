@@ -1978,10 +1978,10 @@ let
     inherit
       stdenv fetchurl lib mkDerivationByConfiguration autoconf automake
       flex bison apacheHttpd mysql libxml2 # gettext
-      zlib curl gd postgresql;
+      zlib curl gd postgresql openssl pkgconfig;
     flags = [
       "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl"
-      "postgresql" "bcmath" "gd"
+      "postgresql" "bcmath" "gd" "sockets" "curl"
     ];
   };
 

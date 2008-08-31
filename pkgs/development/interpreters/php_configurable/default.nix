@@ -8,7 +8,7 @@ args:
 
 # much left to do here... 
 
-    mandatory = { buildInputs = ["flex" "bison"]; };
+    mandatory = { buildInputs = ["flex" "bison" "pkgconfig"]; };
 
     # SAPI modules:
     
@@ -74,6 +74,15 @@ args:
       buildInputs = ["gd"]; # <-- urgh, these strings are ugly
     };
 
+    sockets = {
+      cfgOption = "--enable-sockets";
+    };
+
+    openssl = {
+      cfgOption = "--with-openssl=${args.openssl}";
+      buildInputs = ["openssl"];
+    };
+
     /*
        Building xdebug withing php to be able to add the parameters to the ini file.. Ther should be a better way
       meta = { 
@@ -97,7 +106,7 @@ args:
 
   defaults = [ "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "bcmath" ];
   
-  optionals = [ "libxml2" "gettext" "postgresql" "zlib"];
+  optionals = [ "libxml2" "gettext" "postgresql" "zlib" "openssl" ];
 
   extraAttrs = co: {
     name = "php_configurable-${version}";

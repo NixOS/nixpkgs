@@ -45,6 +45,8 @@ rec {
           hxt = { name = "hxt-7.5"; src =fetchurl { url = http://hackage.haskell.org/packages/archive/hxt/7.5/hxt-7.5.tar.gz; sha256 ="00q6m90a4qm4d5cg1x9r6b7f0rszcf2y7ifzs9mvy9kmzfl5ga7n"; };  p_deps = [x.base x.haskell98 x.http_darcs x.hunit x.network x.parsec x.tagsoup ]; };
           storableVector = { name = "storablevector-0.1.2.2"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/storablevector/0.1.2.2/storablevector-0.1.2.2.tar.gz; sha256="1gf2a40mv8xxppdmg9l3svshww4sg0wwdqlwjl95nhacm0f6yrhb"; }; p_deps = [ x.base x.bytestring x.mtl x.quickcheck x.random ]; };
           storableVectorDarcs = { name = "storablevector-darcs"; src = sourceByName "storableVector"; p_deps = [ x.base x.bytestring x.mtl x.quickcheck x.random ]; };
+          typeInt = { name="type-int-0.4";  src = fetchurl { url = "/nix/store/cvnf71gxvk1lxnibigc2ang10hi4i5qi-type-int-0.4.tar.gz"; sha256="0h64cx2zpijaaxnzhal2m311q33drvynjbmxavh7z5b8fmaqmnws"; }; p_deps = [ x.base x.template_haskell ]; };
+          typeLevel = {name="type-level-0.2.1"; src = fetchurl { url = http://hackage.haskell.org/packages/archive/type-level/0.2.1/type-level-0.2.1.tar.gz; sha256 = "077g6i9v1wvsk1narnxp9m0svlkz9lpf0adalhlw2m7268rpr148"; }; p_deps = [ x.base x.template_haskell ]; };
           haskellnet = { name = "HaskellNet-0.2"; src = sourceByName "haskellnet"; p_deps = [ x.base x.haskell98 x.network x.crypto x.mtl x.parsec x.time x.haxml x.bytestring x.pretty x.array x.dataenc x.containers x.old_locale x.old_time ];
              pass = {
                patchPhase = "
