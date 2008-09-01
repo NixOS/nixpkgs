@@ -149,4 +149,12 @@ rec {
     http://download.gnome.org/
   ];
 
+  # Tcpdump (see http://www.tcpdump.org/mirrors.html).
+  tcpdump = [
+    ftp://ftp.wiretapped.net/pub/security/packet-capture/tcpdump.org/
+    ftp://mirror.aarnet.edu.au/pub/tcpdump/
+    ftp://gd.tuwien.ac.at/infosys/security/tcpdump.org/
+    ftp://ftp.gwdg.de/pub/misc/tcpdump/
+  ];
+
 }
