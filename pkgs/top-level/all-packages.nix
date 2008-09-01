@@ -2171,6 +2171,10 @@ let
     inherit fetchurl stdenv m4;
   };
 
+  buildbot = import ../development/tools/build-managers/buildbot {
+    inherit fetchurl stdenv python twisted makeWrapper;
+  };
+
   byacc = import ../development/tools/parsing/byacc {
     inherit fetchurl stdenv;
   };
@@ -2386,8 +2390,8 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  scons = selectVersion ../development/tools/build-managers/scons "0.98.5" {
-    inherit fetchurl stdenv python;
+  scons = import ../development/tools/build-managers/scons {
+    inherit fetchurl stdenv python makeWrapper;
   };
 
   sdf = import ../development/tools/parsing/sdf {
