@@ -180,8 +180,13 @@ genericBuild
 <section xml:id="ssec-stdenv-phases"><title>Phases</title>
 
 <para>The generic builder has a number of <emphasis>phases</emphasis>.
-Each phase can be overriden in its entirety either by setting the
-environment variable
+Package builds are split into phases to make it easier to override
+specific parts of the build (e.g., unpacking the sources or installing
+the binaries).  Furthermore, it allows a nicer presentation of build
+logs in the Nix build farm.</para>
+
+<para>Each phase can be overriden in its entirety either by setting
+the environment variable
 <varname><replaceable>name</replaceable>Phase</varname> to a string
 containing some shell commands to be executed, or by redefining the
 shell function
@@ -504,7 +509,73 @@ script) if it exists.</para>
 
 <section><title>The build phase</title>
 
-<para><function>buildPhase</function> calls <command>make</command>.
+<para>The build phase is responsible for actually building the package
+(e.g. compiling it).  The default <function>buildPhase</function>
+simply calls <command>make</command> if a file named
+<filename>Makefile</filename>, <filename>makefile</filename> or
+<filename>GNUmakefile</filename> exists in the current directory (or
+the <varname>makefile</varname> is explicitly set); otherwise it does
+nothing.</para>
+
+<variablelist>
+  <title>Variables controlling the build phase</title>
+
+  <varlistentry>
+    <term><varname>makefile</varname></term>
+    <listitem><para>The file name of the Makefile.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  These flags are also used by the default
+    install and check phase.  For setting make flags specific to the
+    build phase, use <varname>buildFlags</varname> (see
+    below).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlagsArray</varname></term>
+    <listitem><para>A shell array containing additional arguments
+    passed to <command>make</command>.  You must use this instead of
+    <varname>makeFlags</varname> if the arguments contain
+    spaces, e.g.
+
+<programlisting>
+makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+</programlisting>
+
+    Note that shell arrays cannot be passed through environment
+    variables, so you cannot set <varname>makeFlagsArray</varname> in
+    a derivation attribute (because those are passed through
+    environment variables): you have to define them in shell
+    code.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>buildFlags</varname> / <varname>buildFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the build
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preBuild</varname></term>
+    <listitem><para>Hook executed at the start of the build
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postBuild</varname></term>
+    <listitem><para>Hook executed at the end of the build
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+<para> 
 You can set flags for <command>make</command> through the
 <varname>makeFlags</varname> variable.</para>
 
@@ -517,32 +588,126 @@ called, respectively.</para>
 
 <section><title>The check phase</title>
 
-<para><function>checkPhase</function> calls <command>make
-check</command>, but only if the <varname>doCheck</varname> variable
-is set to <literal>1</literal>.  Additional flags can be set through
-the <varname>checkFlags</varname> variable.</para>
+<para>The check phase checks whether the package was built correctly
+by running its test suite.  The default
+<function>checkPhase</function> calls <command>make check</command>,
+but only if the <varname>doCheck</varname> variable is enabled.</para>
+
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>doCheck</varname></term>
+    <listitem><para>If set to a non-empty string, the check phase is
+    executed, otherwise it is skipped (default).  Thus you should set
+
+    <programlisting>
+doCheck = true;</programlisting>
+
+    in the derivation to enable checks.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname> /
+    <varname>makeFlagsArray</varname> /
+    <varname>makefile</varname></term>
+    <listitem><para>See the build phase for details.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>checkTarget</varname></term>
+    <listitem><para>The make target that runs the tests.  Defaults to
+    <literal>check</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>checkFlags</varname> / <varname>checkFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the check
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preCheck</varname></term>
+    <listitem><para>Hook executed at the start of the check
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postCheck</varname></term>
+    <listitem><para>Hook executed at the end of the check
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
   
 </section>
 
 
 <section><title>The install phase</title>
 
-<para><function>installPhase</function> calls <command>make
-install</command>.  Additional flags can be set through the
-<varname>installFlags</varname> variable.</para>
+<para>The install phase is responsible for installing the package in
+the Nix store under <envar>out</envar>.  The default
+<function>installPhase</function> creates the directory
+<literal>$out</literal> and calls <command>make
+install</command>.</para>
 
-<para>Before and after running <command>make install</command>, the
-hooks <varname>preInstall</varname> and <varname>postInstall</varname>
-are called, respectively.</para>
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>makeFlags</varname> /
+    <varname>makeFlagsArray</varname> /
+    <varname>makefile</varname></term>
+    <listitem><para>See the build phase for details.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>installTargets</varname></term>
+    <listitem><para>The make targets that perform the installation.
+    Defaults to <literal>install</literal>.  Example:
+
+<programlisting>
+installTargets = "install-bin install-doc";</programlisting>
+
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>installFlags</varname> / <varname>installFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.  Like <varname>makeFlags</varname> and
+    <varname>makeFlagsArray</varname>, but only used by the install
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preInstall</varname></term>
+    <listitem><para>Hook executed at the start of the install
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postInstall</varname></term>
+    <listitem><para>Hook executed at the end of the install
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
 
 </section>
 
 
 <section><title>The fixup phase</title>
 
-<para><function>fixupPhase</function> cleans up the installed files in
-various ways:
-    
+<para>The fixup phase performs some (Nix-specific) post-processing
+actions on the files installed under <filename>$out</filename> by the
+install phase.  The default <function>fixupPhase</function> does the
+following:
+
 <itemizedlist>
       
   <listitem><para>It moves the <filename>man/</filename>,
@@ -556,7 +721,7 @@ various ways:
   <listitem><para>On Linux, it applies the <command>patchelf</command>
   command to ELF executables and libraries to remove unused
   directories from the <literal>RPATH</literal> in order to prevent
-  unnecessary dependencies.</para></listitem>
+  unnecessary runtime dependencies.</para></listitem>
 
   <listitem><para>It rewrites the interpreter paths of shell scripts
   to paths found in <envar>PATH</envar>.  E.g.,
@@ -568,21 +733,139 @@ various ways:
 
 </para>
 
+<variablelist>
+  <title>Variables controlling the check phase</title>
+
+  <varlistentry>
+    <term><varname>dontStrip</varname></term>
+    <listitem><para>If set, libraries and executables are not
+    stripped.  By default, they are.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripAllList</varname></term>
+    <listitem><para>List of directories to search for libraries and
+    executables from which <emphasis>all</emphasis> symbols should be
+    stripped.  By default, it’s empty.  Stripping all symbols is
+    risky, since it may remove not just debug symbols but also ELF
+    information necessary for normal execution.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripAllFlags</varname></term>
+    <listitem><para>Flags passed to the <command>strip</command>
+    command applied to the files in the directories listed in
+    <varname>stripAllList</varname>.  Defaults to <option>-s</option>
+    (i.e. <option>--strip-all</option>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripDebugList</varname></term>
+    <listitem><para>List of directories to search for libraries and
+    executables from which only debugging-related symbols should be
+    stripped.  It defaults to <literal>lib bin
+    sbin</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>stripDebugFlags</varname></term>
+    <listitem><para>Flags passed to the <command>strip</command>
+    command applied to the files in the directories listed in
+    <varname>stripDebugList</varname>.  Defaults to
+    <option>-S</option>
+    (i.e. <option>--strip-debug</option>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontPatchELF</varname></term>
+    <listitem><para>If set, the <command>patchelf</command> command is
+    not used to remove unnecessary <literal>RPATH</literal> entries.
+    Only applies to Linux.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontPatchShebangs</varname></term>
+    <listitem><para>If set, scripts starting with
+    <literal>#!</literal> do not have their interpreter paths
+    rewritten to paths in the Nix store.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>forceShare</varname></term>
+    <listitem><para>The list of directories that must be moved from
+    <filename>$out</filename> to <filename>$out/share</filename>.
+    Defaults to <literal>man doc info</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preFixup</varname></term>
+    <listitem><para>Hook executed at the start of the fixup
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postFixup</varname></term>
+    <listitem><para>Hook executed at the end of the fixup
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
 </section>
 
 
 <section><title>The distribution phase</title>
 
-<para><function>distPhase</function> calls <command>make
-dist</command>, but only if the <varname>doDist</varname> variable is
-set to <literal>1</literal>.  Additional flags can be set through the
-<varname>distFlags</varname> variable.  The resulting tarball is
-copied to the <filename>/tarballs</filename> subdirectory of the
-output path.</para>
+<para>The distribution phase is intended to produce a source
+distribution of the package.  The default
+<function>distPhase</function> first calls <command>make
+dist</command>, then it copies the resulting source tarballs to
+<filename>$out/tarballs/</filename>.  This phase is only executed if
+the <varname>doDist</varname> is not set.</para>
 
-<para>Before and after running <command>make dist</command>, the hooks
-<varname>preDist</varname> and <varname>postDist</varname> are called,
-respectively.</para>
+<variablelist>
+  <title>Variables controlling the distribution phase</title>
+
+  <varlistentry>
+    <term><varname>distTarget</varname></term>
+    <listitem><para>The make target that produces the distribution.
+    Defaults to <literal>dist</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>distFlags</varname> / <varname>distFlagsArray</varname></term>
+    <listitem><para>Additional flags passed to
+    <command>make</command>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>tarballs</varname></term>
+    <listitem><para>The names of the source distribution files to be
+    copied to <filename>$out/tarballs/</filename>.  It can contain
+    shell wildcards.  The default is
+    <filename>*.tar.gz</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontCopyDist</varname></term>
+    <listitem><para>If set, no files are copied to
+    <filename>$out/tarballs/</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preDist</varname></term>
+    <listitem><para>Hook executed at the start of the distribution
+    phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>postDist</varname></term>
+    <listitem><para>Hook executed at the end of the distribution
+    phase.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
 
 </section>
 
