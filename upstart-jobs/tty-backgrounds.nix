@@ -28,7 +28,9 @@ rec {
 
         # Critical: tell the kernel where to find splash_helper.  It calls
         # this program every time we switch between consoles.
-        echo ${splashutils}/${splashutils.helperName} > ${splashutils.helperProcFile}
+        helperProcFile=${splashutils.helperProcFile}
+        if test -e /proc/sys/fbcondecor; then helperProcFile=/proc/sys/fbcondecor; fi
+        echo ${splashutils}/${splashutils.helperName} > $helperProcFile
 
         # For each console...
         for tty in ${toString (map (x: x.tty) backgrounds)}; do
