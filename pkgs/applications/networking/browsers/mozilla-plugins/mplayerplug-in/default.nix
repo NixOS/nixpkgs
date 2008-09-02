@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
   name = "mplayerplug-in-3.55";
 
   builder = ./builder.sh;
+  
   src = fetchurl {
     url = "mirror://sourceforge/mplayerplug-in/${name}.tar.gz";
     sha256 = "0zkvqrzibrbljiccvz3rhbmgifxadlrfjylqpz48jnjx9kggynms";

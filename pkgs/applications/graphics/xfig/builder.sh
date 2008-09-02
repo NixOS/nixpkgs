@@ -11,8 +11,7 @@ preBuild() {
     xmkmf
 }
 
-installCommand=myInstall
-myInstall() {
+installPhase() {
     make install.all $makeFlags
 
     wrapProgram $out/bin/xfig \

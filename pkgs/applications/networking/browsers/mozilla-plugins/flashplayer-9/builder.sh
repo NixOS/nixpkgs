@@ -1,7 +1,5 @@
 source $stdenv/setup
 
-buildPhase=true
-
 dontStrip=1
 dontPatchELF=1
 

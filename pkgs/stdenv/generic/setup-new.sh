@@ -679,15 +679,11 @@ installPhase() {
 
     ensureDir "$prefix"
 
-    if test -z "$installCommand"; then
-        installTargets=${installTargets:-install}
-        echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-        make ${makefile:+-f $makefile} $installTargets \
-            $makeFlags "${makeFlagsArray[@]}" \
-            $installFlags "${installFlagsArray[@]}"
-    else
-        eval "$installCommand"
-    fi
+    installTargets=${installTargets:-install}
+    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+    make ${makefile:+-f $makefile} $installTargets \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $installFlags "${installFlagsArray[@]}"
 
     eval "$postInstall"
 }
