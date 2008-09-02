@@ -3354,6 +3354,10 @@ let
     mesaSrc = mesa.src;
   };
 
+  ming = import ../development/libraries/ming {
+    inherit fetchurl stdenv flex bison freetype zlib libpng perl;
+  };
+
   mpeg2dec = import ../development/libraries/mpeg2dec {
     inherit fetchurl stdenv;
   };
