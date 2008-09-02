@@ -177,6 +177,54 @@ genericBuild
 </section>
 
 
+<section xml:id="ssec-stdenv-attributes"><title>Attributes</title>
+
+<variablelist>
+  <title>Variables affecting <literal>stdenv</literal>
+  initialisation</title>
+
+  <varlistentry>
+    <term><varname>NIX_DEBUG</varname></term>
+    <listitem><para>If set, <literal>stdenv</literal> will print some
+    debug information during the build.  In particular, the
+    <command>gcc</command> and <command>ld</command> wrapper scripts
+    will print out the complete command line passed to the wrapped
+    tools.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>buildInputs</varname></term>
+    <listitem><para>A list of dependencies used by
+    <literal>stdenv</literal> to set up the environment for the build.
+    For each dependency <replaceable>dir</replaceable>, the directory
+    <filename><replaceable>dir</replaceable>/bin</filename>, if it
+    exists, is added to the <envar>PATH</envar> environment variable.
+    Other environment variables are also set up via a pluggable
+    mechanism.  For instance, if <varname>buildInputs</varname>
+    contains Perl, then the <filename>lib/site_perl</filename>
+    subdirectory of each input is added to the <envar>PERL5LIB</envar>
+    environment variable.  See <xref linkend="ssec-setup-hooks"/> for
+    details.</para></listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><varname>propagatedBuildInputs</varname></term>
+    <listitem><para>Like <varname>buildInputs</varname>, but these
+    dependencies are <emphasis>propagated</emphasis>: that is, the
+    dependencies listed here are added to the
+    <varname>buildInputs</varname> of any package that uses
+    <emphasis>this</emphasis> package as a dependency.  So if package
+    Y has <literal>propagatedBuildInputs = [X]</literal>, and package
+    Z has <literal>buildInputs = [Y]</literal>, then package X will
+    appear in Z’s build environment automatically.</para></listitem>
+  </varlistentry>
+  
+
+</variablelist>
+
+</section>
+
+
 <section xml:id="ssec-stdenv-phases"><title>Phases</title>
 
 <para>The generic builder has a number of <emphasis>phases</emphasis>.
@@ -873,16 +921,86 @@ the <varname>doDist</varname> is not set.</para>
 </section>
 
 
-<section xml:id="ssec-stdenv-attributes"><title>Attributes</title>
-
-<para></para>
-
-</section>
-
-
 <section xml:id="ssec-setup-hooks"><title>Package setup hooks</title>
 
-<para></para>
+<para>The following packages provide a setup hook:
+
+<variablelist>
+
+  <varlistentry>
+    <term>GCC wrapper</term>
+    <listitem><para>Adds the <filename>include</filename> subdirectory
+    of each build input to the <envar>NIX_CFLAGS_COMPILE</envar>
+    environment variable, and the <filename>lib</filename> and
+    <filename>lib64</filename> subdirectories to
+    <envar>NIX_LDFLAGS</envar>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Perl</term>
+    <listitem><para>Adds the <filename>lib/site_perl</filename> subdirectory
+    of each build input to the <envar>PERL5LIB</envar>
+    environment variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Python</term>
+    <listitem><para>Adds the
+    <filename>lib/python2.5/site-packages</filename> subdirectory of
+    each build input to the <envar>PYTHONPATH</envar> environment
+    variable.</para>
+
+    <note><para>This should be generalised: the Python version
+    shouldn’t be hard-coded.</para></note></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>pkg-config</term>
+    <listitem><para>Adds the <filename>lib/pkgconfig</filename> and
+    <filename>share/pkgconfig</filename> subdirectories of each
+    build input to the <envar>PKG_CONFIG_PATH</envar> environment
+    variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Automake</term>
+    <listitem><para>Adds the <filename>share/aclocal</filename>
+    subdirectory of each build input to the <envar>ACLOCAL_PATH</envar>
+    environment variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>libxml2</term>
+    <listitem><para>Adds every file named
+    <filename>catalog.xml</filename> found under the
+    <filename>xml/dtd</filename> and <filename>xml/xsl</filename>
+    subdirectories of each build input to the
+    <envar>XML_CATALOG_FILES</envar> environment
+    variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>teTeX / TeX Live</term>
+    <listitem><para>Adds the <filename>share/texmf-nix</filename>
+    subdirectory of each build input to the <envar>TEXINPUTS</envar>
+    environment variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Qt</term>
+    <listitem><para>Sets the <envar>QTDIR</envar> environment variable
+    to Qt’s path.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>GHC</term>
+    <listitem><para>Creates a temporary package database and registers
+    every Haskell build input in it (TODO: how?).</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
 
 </section>
 
