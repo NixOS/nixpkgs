@@ -8,10 +8,9 @@ stdenv.mkDerivation {
     sha256 = "139b5abc49833832184c0a03ff6fc64c59ef102b420d2a5884ad78af5647414b";
   };
 
-  buildInputs = [m4 stdenv.gcc.libc ];
+  buildInputs = [m4];
   configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
   doCheck = true;
-  postBuild = "make check";  # Test the compiler for being correct
 
   meta = {
     description = "A free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating point numbers";
