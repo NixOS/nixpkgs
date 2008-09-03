@@ -2458,7 +2458,7 @@ let
   };
 
   gdb = import ../development/tools/misc/gdb {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses gmp mpfr texinfo;
   };
 
   valgrind = import ../development/tools/analysis/valgrind {
