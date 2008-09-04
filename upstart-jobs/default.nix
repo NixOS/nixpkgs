@@ -218,6 +218,13 @@ let
       lshdConfig = config.services.lshd;
     })
 
+  # GNUnet daemon.
+  ++ optional config.services.gnunet.enable
+    (import ../upstart-jobs/gnunet.nix {
+      inherit (pkgs) gnunet lib writeText;
+      gnunetConfig = config.services.gnunet;
+    })
+
   # NTP daemon.
   ++ optional config.services.ntp.enable
     (import ../upstart-jobs/ntpd.nix {

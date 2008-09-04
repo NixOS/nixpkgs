@@ -18,6 +18,7 @@
     postfix = 14;
     dovecot = 15;
     tomcat = 16;
+    gnunetd = 17;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
