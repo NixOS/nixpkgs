@@ -133,6 +133,7 @@ rec {
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
     http://download.fedora.redhat.com/pub/fedora/
+    http://archives.fedoraproject.org/pub/archive/fedora/
   ];
 
   # openSUSE.
