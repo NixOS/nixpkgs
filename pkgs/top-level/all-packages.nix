@@ -2059,16 +2059,10 @@ let
     inherit fetchurl stdenv;
   };
 
-  xulrunner = import ../development/interpreters/xulrunner {
-    inherit fetchurl stdenv pkgconfig perl zip;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-  };
-
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
-      inherit stdenv xulrunner application launcher;
+      inherit stdenv application launcher;
+      xulrunner = firefox3;
     };
 
 
@@ -6168,8 +6162,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3Xul=(symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) //
-  {
+  firefox3Xul = (symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) // {
     inherit (firefox) gtk;
   };
 
