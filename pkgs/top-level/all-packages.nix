@@ -6162,9 +6162,9 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3Xul = (symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) // {
+  firefox3Xul = lowPrio ((symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) // {
     inherit (firefox) gtk;
-  };
+  });
 
   firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
