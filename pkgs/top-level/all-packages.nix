@@ -2005,7 +2005,7 @@ let
 
   python25 = python25base.meta.function {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
-    sqlite = if getConfig ["python" "sqlite"] false then sqlite else null;
+    sqlite = if getConfig ["python" "sqliteSupport"] false then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] false then readline else null;
     openssl = if getConfig ["python" "opensslSupport"] false then openssl else null;
   };
