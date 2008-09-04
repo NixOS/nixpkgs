@@ -1,7 +1,8 @@
 { stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
 , zlib, gmp, curl, libtool, guile, adns, sqlite, pkgconfig
 , libxml2, ncurses, gettext, findutils
-, gtkSupport ? false, gtk ? null, libglade ? null }:
+, gtkSupport ? false, gtk ? null, libglade ? null
+, makeWrapper }:
 
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
@@ -23,6 +24,7 @@ in
       libextractor libmicrohttpd libgcrypt gmp curl libtool
       zlib guile adns sqlite libxml2 ncurses
       pkgconfig gettext findutils
+      makeWrapper
     ] ++ (if gtkSupport then [ gtk libglade ] else []);
 
     patches = [
@@ -48,6 +50,12 @@ in
     #'';
 
     doCheck = false;
+
+    # Help programs find the numerous modules that sit under `$out/lib/GNUnet'.
+    postInstall = ''
+      wrapProgram "$out/bin/gnunetd" \
+        --prefix LTDL_LIBRARY_PATH ":" "$out/lib/GNUnet"
+    '';
 
     meta = {
       description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";
