@@ -24,7 +24,7 @@ let
       bzip2
       cabextract
       cdrkit
-      #chatzilla
+      chatzilla
       cksfv
       #compiz
       coreutils

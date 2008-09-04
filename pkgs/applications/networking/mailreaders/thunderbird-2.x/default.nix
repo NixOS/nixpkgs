@@ -11,12 +11,13 @@
 }:
 
 stdenv.mkDerivation {
-  name = "thunderbird-2.0.0.14";
+  name = "thunderbird-2.0.0.16";
 
   builder = ./builder.sh;
+  
   src = fetchurl {
-    url = ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.14/source/thunderbird-2.0.0.14-source.tar.bz2;
-    sha256 = "0c4pg2fl83916923xvzn1nyhc1iz4nfn7034vnjchd27pq03zbny";
+    url = ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.16/source/thunderbird-2.0.0.16-source.tar.bz2;
+    sha1 = "30092e38d621c30af02653d3bf246d98d2533853";
   };
 
   buildInputs = [
