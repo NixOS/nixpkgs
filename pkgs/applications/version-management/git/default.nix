@@ -10,11 +10,11 @@ assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBin
 
 
 stdenv.mkDerivation rec {
-  name = "git-1.6.0";
+  name = "git-1.6.0.1";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "1w22f5vnmw6r0k67ssrjca2n9jj2bimgvca9v7jz8nf0h381rmxq";
+    sha256 = "1vpnq5gr6831kywpbwppmqyj7xnlxkzzim8mchy925d0bpmz9l0b";
   };
 
   patches = [ ./docbook2texi.patch ];
