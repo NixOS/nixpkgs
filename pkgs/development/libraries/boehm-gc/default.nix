@@ -1,11 +1,16 @@
 {stdenv, fetchurl}:
 
+let version = "7.1"; in
 stdenv.mkDerivation {
-  name = "boehm-gc-7.0";
+  name = "boehm-gc-${version}";
+
   src = fetchurl {
-    url = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.0.tar.gz;
-    sha256 = "0nqy0462ainp79fjmx5lgr89s2d433fggr3n9d1p09xq77lwc2nj";
+    url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-${version}.tar.gz";
+    sha256 = "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3";
   };
+
+  doCheck = true;
+
   meta = {
     description = "A garbage collector for C and C++";
     homepage = http://www.hpl.hp.com/personal/Hans_Boehm/gc/;
