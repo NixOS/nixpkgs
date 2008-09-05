@@ -1415,7 +1415,7 @@ let
     inherit stdenv;
   };
 
-  gfortran = import ../build-support/gcc-wrapper {
+  gfortran = import ../build-support/gcc-wrapper-new {
     name = "gfortran";
     nativeTools = false;
     nativeLibc = false;
