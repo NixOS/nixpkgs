@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     "--with-system-zlib"
     "--with-system-bz2"
     # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-    "--enable-system-cairo" # <-- disabled for now because IceCat needs a alpha version of Cairo
+    "--enable-system-cairo"
     #"--enable-system-sqlite" # <-- this seems to be discouraged
     "--disable-crashreporter"
   ];
