@@ -7298,6 +7298,20 @@ let
     inherit fetchurl stdenv readline;
   };
 
+  ### SCIENCE / MATH
+
+  scilab = (import ../applications/science/math/scilab) {
+    inherit stdenv fetchurl lib g77;
+    inherit (gtkLibs) gtk;
+    inherit ncurses Xaw3d tcl tk ocaml x11;
+
+    withXaw3d = false;
+    withTk = true;
+    withGtk = false;
+    withOCaml = true;
+    withX = true;
+  };
+
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
