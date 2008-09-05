@@ -6440,10 +6440,6 @@ let
     inherit fetchurl stdenv emacs;
   };
 
-  maxima = import ../applications/misc/maxima {
-    inherit fetchurl stdenv clisp;
-  };
-
   mercurial = import ../applications/version-management/mercurial {
     inherit fetchurl stdenv python makeWrapper;
   };
@@ -7299,6 +7295,10 @@ let
   };
 
   ### SCIENCE / MATH
+
+  maxima = import ../applications/science/math/maxima {
+    inherit fetchurl stdenv clisp;
+  };
 
   scilab = (import ../applications/science/math/scilab) {
     inherit stdenv fetchurl lib g77;
