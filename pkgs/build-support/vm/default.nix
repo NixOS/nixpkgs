@@ -165,7 +165,7 @@ rec {
 
 
   qemuCommandLinux = ''
-    qemu-system-x86_64 \
+    qemu-system-x86_64 -no-kvm-irqchip \
       -nographic -no-reboot \
       -net nic,model=virtio -net user -smb / \
       -drive file=$diskImage,if=virtio,boot=on \
