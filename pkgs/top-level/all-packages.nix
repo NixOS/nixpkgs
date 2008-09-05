@@ -1860,7 +1860,7 @@ let
   };
 
   transformers = import ../development/compilers/transformers {
-    inherit fetchurl pkgconfig sdf;
+    inherit fetchurl pkgconfig sdf stlport;
     aterm = aterm23;
 
     stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
@@ -1869,10 +1869,6 @@ let
       inherit fetchurl pkgconfig sdf;
       aterm = aterm23;
       stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-    };
-
-    stlport =  import ../development/libraries/stlport {
-      inherit fetchurl stdenv;
     };
   };
 
@@ -3549,6 +3545,10 @@ let
 
   sqlite = import ../development/libraries/sqlite {
     inherit fetchurl stdenv readline;
+  };
+
+  stlport =  import ../development/libraries/stlport {
+    inherit fetchurl stdenv;
   };
 
   t1lib = import ../development/libraries/t1lib {
