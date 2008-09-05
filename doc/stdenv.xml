@@ -846,6 +846,16 @@ following:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>setupHook</varname></term>
+    <listitem><para>A package can export a <link
+    linkend="ssec-setup-hooks">setup hook</link> by setting this
+    variable.  The setup hook, if defined, is copied to
+    <filename>$out/nix-support/setup-hook</filename>.  Environment
+    variables are then substituted in it using <function
+    linkend="fun-substituteAll">substituteAll</function>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>preFixup</varname></term>
     <listitem><para>Hook executed at the start of the fixup
     phase.</para></listitem>
@@ -917,6 +927,154 @@ the <varname>doDist</varname> is not set.</para>
 
 </section>
 
+
+</section>
+
+
+<section xml:id="ssec-stdenv-functions"><title>Shell functions</title>
+
+<para>The standard environment provides a number of useful
+functions.</para>
+
+<variablelist>
+
+  
+  <varlistentry xml:id='fun-ensureDir'>
+    <term><function>ensureDir</function> <replaceable>args</replaceable></term>
+    <listitem><para>Creates the specified directories, including all
+    necessary parent directories, if they do not already
+    exist.</para></listitem>
+  </varlistentry>
+  
+
+  <varlistentry xml:id='fun-substitute'>
+    <term><function>substitute</function>
+    <replaceable>infile</replaceable>
+    <replaceable>outfile</replaceable>
+    <replaceable>subs</replaceable></term>
+    
+    <listitem>
+      <para>Performs string substitution on the contents of
+      <replaceable>infile</replaceable>, writing the result to
+      <replaceable>outfile</replaceable>.  The substitutions in
+      <replaceable>subs</replaceable> are of the following form:
+
+        <variablelist>
+          <varlistentry>
+            <term><option>--replace</option>
+            <replaceable>s1</replaceable>
+            <replaceable>s2</replaceable></term>
+            <listitem><para>Replace every occurence of the string
+            <replaceable>s1</replaceable> by
+            <replaceable>s2</replaceable>.</para></listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><option>--subst-var</option>
+            <replaceable>varName</replaceable></term>
+            <listitem><para>Replace every occurence of
+            <literal>@<replaceable>varName</replaceable>@</literal> by
+            the contents of the environment variable
+            <replaceable>varName</replaceable>.  This is useful for
+            generating files from templates, using
+            <literal>@<replaceable>...</replaceable>@</literal> in the
+            template as placeholders.</para></listitem>
+          </varlistentry>
+          
+          <varlistentry>
+            <term><option>--subst-var-by</option>
+            <replaceable>varName</replaceable>
+            <replaceable>s</replaceable></term>
+            <listitem><para>Replace every occurence of
+            <literal>@<replaceable>varName</replaceable>@</literal> by
+            the string <replaceable>s</replaceable>.</para></listitem>
+          </varlistentry>
+          
+        </variablelist>
+
+      </para>
+
+      <para>Example:
+
+<programlisting>
+substitute ./foo.in ./foo.out \
+    --replace /usr/bin/bar $bar/bin/bar \
+    --replace "a string containing spaces" "some other text" \
+    --subst-var someVar
+</programlisting>
+
+      </para>
+
+      <para><function>substitute</function> is implemented using the
+      <command
+      xlink:href="http://replace.richardlloyd.org.uk/">replace</command>
+      command.  Unlike with the <command>sed</command> command, you
+      don’t have to worry about escaping special characters.  It
+      supports performing substitutions on binary files (such as
+      executables), though there you’ll probably want to make sure
+      that the replacement string is as long as the replaced
+      string.</para>
+
+    </listitem>
+  </varlistentry>
+  
+
+  <varlistentry xml:id='fun-substituteInPlace'>
+    <term><function>substituteInPlace</function>
+    <replaceable>file</replaceable>
+    <replaceable>subs</replaceable></term>
+    <listitem><para>Like <function>substitute</function>, but performs
+    the substitutions in place on the file
+    <replaceable>file</replaceable>.</para></listitem>
+  </varlistentry>
+
+  
+  <varlistentry xml:id='fun-substituteAll'>
+    <term><function>substituteAll</function>
+    <replaceable>infile</replaceable>
+    <replaceable>outfile</replaceable></term>
+    <listitem><para>Replaces every occurence of
+    <literal>@<replaceable>varName</replaceable>@</literal>, where
+    <replaceable>varName</replaceable> is any environment variable, in
+    <replaceable>infile</replaceable>, writing the result to
+    <replaceable>outfile</replaceable>.  For instance, if
+    <replaceable>infile</replaceable> has the contents
+
+<programlisting>
+#! @bash@/bin/sh
+PATH=@coreutils@/bin
+echo @foo@
+</programlisting>
+
+    and the environment contains
+    <literal>bash=/nix/store/bmwp0q28cf21...-bash-3.2-p39</literal>
+    and
+    <literal>coreutils=/nix/store/68afga4khv0w...-coreutils-6.12</literal>,
+    but does not contain the variable <varname>foo</varname>, then the
+    output will be
+
+<programlisting>
+#! /nix/store/bmwp0q28cf21...-bash-3.2-p39/bin/sh
+PATH=/nix/store/68afga4khv0w...-coreutils-6.12/bin
+echo @foo@
+</programlisting>
+
+    That is, no substitution is performed for undefined variables.</para></listitem>
+  </varlistentry>
+
+  
+  <varlistentry xml:id='fun-stripHash'>
+    <term><function>stripHash</function>
+    <replaceable>path</replaceable></term>
+    <listitem><para>Strips the directory and hash part of a store
+    path, and prints (on standard output) only the name part.  For
+    instance, <literal>stripHash
+    /nix/store/68afga4khv0w...-coreutils-6.12</literal> print
+    <literal>coreutils-6.12</literal>.</para></listitem>
+  </varlistentry>
+
+  
+</variablelist>
 
 </section>
 
