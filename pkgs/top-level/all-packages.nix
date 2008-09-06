@@ -1035,6 +1035,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  proxytunnel = import ../tools/misc/proxytunnel {
+    inherit fetchurl stdenv openssl;
+  };
+
   psmisc = import ../tools/misc/psmisc {
     inherit stdenv fetchurl ncurses;
   };
