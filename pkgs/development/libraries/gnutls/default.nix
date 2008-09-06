@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
     ./configure --prefix="$out" --enable-guile --with-guile-site-dir="$out/share/guile/site"
   '';
 
-  buildInputs = [zlib lzo libgcrypt]
+  buildInputs = [zlib lzo]
     ++ stdenv.lib.optional guileBindings guile;
+
+  propagatedBuildInputs = [libgcrypt];
 
   doCheck = true;
   
