@@ -12,8 +12,11 @@
  */
 { stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
   GStreamer, startupnotification, gettext,
-  perl, perlXMLParser, libxml2, openssl, nss,
+  perl, perlXMLParser, libxml2, nss,
   libXScrnSaver, ncurses, avahi, dbus, dbus_glib
+  , lib
+  , openssl ? null
+  , gnutls ? null
 } :
 
 stdenv.mkDerivation {
@@ -27,10 +30,15 @@ stdenv.mkDerivation {
   buildInputs = [
     gtkspell aspell
     GStreamer startupnotification
-    libxml2 openssl nss
+    libxml2] 
+  ++ (lib.optional (openssl != null) openssl)
+  ++ (lib.optional (gnutls != null) gnutls)
+  ++
+  [nss
     libXScrnSaver ncurses
     avahi dbus dbus_glib
-  ];
+  ]
+  ;
 
   propagatedBuildInputs = [
     pkgconfig gtk perl perlXMLParser gettext
