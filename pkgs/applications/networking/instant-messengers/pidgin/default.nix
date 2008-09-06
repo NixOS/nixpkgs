@@ -44,7 +44,9 @@ stdenv.mkDerivation {
     pkgconfig gtk perl perlXMLParser gettext
   ];
 
-  configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl";
+  configureFlags="--with-nspr-includes=${nss}/include/nspr --with-nspr-libs=${nss}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl"
+  + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
+  ;
   meta = {
     description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
     homepage = http://pidgin.im;
