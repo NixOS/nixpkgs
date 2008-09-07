@@ -6201,7 +6201,7 @@ let
   };
 
   freemind = import ../applications/misc/freemind {
-    inherit fetchurl stdenv ant;
+    inherit fetchurl stdenv ant coreutils gnugrep;
     jdk = jdk;
     jre = jdk;
   };
