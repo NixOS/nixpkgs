@@ -6448,6 +6448,13 @@ let
     inherit fetchurl stdenv python makeWrapper;
   };
 
+  midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
+    inherit imagemagick intltool python pkgconfig webkit libxml2 
+      which gettext makeWrapper;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) gtksourceview;
+  };
+
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
     inherit ncurses;
   };
