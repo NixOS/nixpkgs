@@ -1,10 +1,10 @@
 { platform ? __currentSystem
 , relName ?
-    if builtins.pathExists ../relname
-    then builtins.readFile ../relname
-    else "nixos-${builtins.readFile ../VERSION}"
+    if builtins.pathExists ../../relname
+    then builtins.readFile ../../relname
+    else "nixos-${builtins.readFile ../../VERSION}"
 , compressImage ? false
-, nixpkgsPath ? ../../nixpkgs
+, nixpkgsPath ? ../../../nixpkgs
 }:
 
 rec {
@@ -191,7 +191,7 @@ rec {
   };
 
 
-  system = import ../system/system.nix {
+  system = import ../../system/system.nix {
     inherit configuration platform nixpkgsPath;
   };
 
@@ -203,7 +203,7 @@ rec {
   # 0.11 (you won't get the manual).
   manual =
     if builtins ? unsafeDiscardStringContext
-    then "${import ../doc/manual {inherit nixpkgsPath;}}/manual.html"
+    then "${import ../../doc/manual {inherit nixpkgsPath;}}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
 
 
@@ -219,7 +219,7 @@ rec {
   
   # Put the current directory in a tarball (making sure to filter
   # out crap like the .svn directories).
-  nixosTarball = makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./..);
+  nixosTarball = makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./../..);
 
   svnFilter = name: type:
     let base = baseNameOf (toString name);
@@ -252,7 +252,7 @@ rec {
 
   # Create an ISO image containing the Grub boot loader, the kernel,
   # the initrd produced above, and the closure of the stage 2 init.
-  rescueCD = import ../helpers/make-iso9660-image.nix {
+  rescueCD = import ../../helpers/make-iso9660-image.nix {
     inherit nixpkgsPath;
     inherit (pkgs) stdenv perl cdrkit;
     isoName = "${relName}-${platform}.iso";
