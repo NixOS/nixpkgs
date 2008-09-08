@@ -44,6 +44,10 @@
   ,additionalJobs ? []
   ,intel3945FWEnable ? false
   ,cdLabel ? "NIXOS_INSTALLATION_CD"
+  ,relName ?
+    if builtins.pathExists ../../relname
+    then builtins.readFile ../../relname
+    else "nixos-${builtins.readFile ../../VERSION}"
 }:
 let 
   realLib = if lib != null then lib else (import (nixpkgsPath+"/pkgs/lib"));
@@ -58,7 +62,7 @@ let
  
   systemPackBuilder = {suffix, configuration} : 
   { 
-    system = (import ../system/system.nix) {
+    system = (import ../../system/system.nix) {
       inherit configuration platform nixpkgsPath; /* To refactor later - x86+x86_64 DVD */
     };
     inherit suffix configuration;
@@ -341,7 +345,7 @@ rec {
   # The NixOS manual, with a backward compatibility hack for Nix <=
   # 0.11 (you won't get the manual).
   manual = if builtins ? unsafeDiscardStringContext
-    then "${import ../doc/manual {inherit nixpkgsPath;}}/manual.html"
+    then "${import ../../doc/manual {inherit nixpkgsPath;}}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
  
  
@@ -371,7 +375,7 @@ rec {
     let base = baseNameOf (toString name);
     in base != ".svn" && base != "result";
     in
-    makeTarball "nixos.tar.bz2" (builtins.filterSource filter ./..);
+    makeTarball "nixos.tar.bz2" (builtins.filterSource filter ./../..);
  
  
   # Get a recent copy of Nixpkgs.
@@ -380,7 +384,7 @@ rec {
     md5 = "6a793b877e2a4fa79827515902e1dfd8";
   } else makeNixPkgsTarball "nixpkgs.tar.bz2" ("" + nixpkgsPath);
 
-  nixosServicesTarball = makeNixPkgsTarball "nixos-services.tar.bz2" ("" + ./../../services);
+  nixosServicesTarball = makeNixPkgsTarball "nixos-services.tar.bz2" ("" + ./../../../services);
  
   # The configuration file for Grub.
   grubCfg = pkgs.writeText "menu.lst" (''
@@ -399,10 +403,10 @@ rec {
  
   # Create an ISO image containing the Grub boot loader, the kernel,
   # the initrd produced above, and the closure of the stage 2 init.
-  rescueCD = import ../helpers/make-iso9660-image.nix {
+  rescueCD = import ../../helpers/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit;
     inherit compressImage nixpkgsPath;
-    isoName = "nixos-${platform}.iso";
+    isoName = "nixos-${relName}-${platform}.iso";
   
     # Single files to be copied to fixed locations on the CD.
     contents = lib.uniqList {
