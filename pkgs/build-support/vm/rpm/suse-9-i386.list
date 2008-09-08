@@ -1,4 +1,4 @@
-baseURL ftp://ftp.gwdg.de/pub/linux/suse/discontinued/i386/9.0/suse/i586
+baseURL mirror://oldsuse/9.0/suse/i586
 glibc-2.3.2-92.i586.rpm d5396400c92d4085e536b708ddce265c
 zlib-1.1.4-232.i586.rpm ba1a8342757071dfd7e52a2c69c86584
 readline-4.3-212.i586.rpm c18b059909f3debca772a8f5b7d3aee7
@@ -86,5 +86,5 @@ unzip-5.50-250.i586.rpm 423d68022a4e5e78aa2a88c1642471a7
 util-linux-2.11z-95.i586.rpm 2174767b2e2e6e4e3cdd8fc569dc3c6e
 XFree86-libs-4.3.0.1-29.i586.rpm 77b0e1d5974703b3fc6621d862b4b038
 zlib-devel-1.1.4-232.i586.rpm 7c60d8432793517236f64b0f79d7f20f
-baseURL ftp://ftp.gwdg.de/pub/linux/suse/discontinued/i386/9.0/suse/noarch
+baseURL mirror://oldsuse/9.0/suse/noarch
 suse-build-key-1.0-472.noarch.rpm 8e34a1af09d66b66ea353685f4a84dfc
