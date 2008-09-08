@@ -40,14 +40,16 @@
   */
   ,additionalFiles ? []
   ,compressImage ? false
-  ,nixpkgsPath ? ../../nixpkgs
+  ,nixpkgsPath ? ../../../nixpkgs
   ,additionalJobs ? []
-  ,intel3945FWEnable ? false
+  ,intel3945FWEnable ? true
+  ,intel4965FWEnable ? true
   ,cdLabel ? "NIXOS_INSTALLATION_CD"
   ,relName ?
     if builtins.pathExists ../../relname
     then builtins.readFile ../../relname
     else "nixos-${builtins.readFile ../../VERSION}"
+  ,nix ? pkgs: pkgs.nix
 }:
 let 
   realLib = if lib != null then lib else (import (nixpkgsPath+"/pkgs/lib"));
@@ -151,6 +153,7 @@ rec {
       kernelModules = bootKernelModules;
       extraModulePackages = ((extraModulePackages pkgs)
       ++(if aufs then [(kernelPackages pkgs).aufs] else [])
+      ++(pkgs.lib.optional intel3945FWEnable (kernelPackages pkgs).iwlwifi)
       );
     };
     
@@ -159,6 +162,13 @@ rec {
       sshd = { enable = sshdEnabled; };
       
       xserver = { enable = false; };
+
+      udev = {
+        addFirmware = []
+	  ++ (pkgs.lib.optional intel3945FWEnable pkgs.iwlwifi3945ucode)
+	  ++ (pkgs.lib.optional intel4965FWEnable pkgs.iwlwifi4965ucode)
+	  ;
+      };
    
       extraJobs = [
         # Unpack the NixOS/Nixpkgs sources to /etc/nixos.
@@ -314,6 +324,7 @@ rec {
       ] ++ (packages pkgs);
       checkConfigurationOptions = true;
       cleanStart = cleanStart;
+      nix = nix pkgs;
     };
   
     users = {
@@ -326,10 +337,6 @@ rec {
       }
     ];
     
-    networking = {
-      enableIntel3945ABGFirmware = intel3945FWEnable;
-    };
-
   }; in preConfiguration // (arbitraryOverrides preConfiguration);
  
   configurations = [{

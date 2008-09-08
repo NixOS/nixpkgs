@@ -66,4 +66,8 @@ in
 			'';
 		}
 	];
+        nix = pkgs: pkgs.nixCustomFun (pkgs.nixUnstable.src)
+          ""
+          ["nix-reduce-build" "nix-http-export.cgi"]
+          ["--with-docbook-xsl=\\\${pkgs.docbook5_xsl}/xml/xsl/docbook/"];
 }).rescueCD

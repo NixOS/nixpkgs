@@ -14,7 +14,7 @@ mkdir -p /mnt/etc/nixos
 
 cat > /mnt/etc/nixos/configuration.nix <<EOF
 
-{
+pkgs: full_configuration: {
   boot = {
     grubDevice = "/dev/sda";
     copyKernels = true;
@@ -67,9 +67,13 @@ cat > /mnt/etc/nixos/configuration.nix <<EOF
   };
 
   environment = {
-    extraPackages = pkgs: [
-      pkgs.socat
+    extraPackages = [
+      pkgs.socat (pkgs.lowPrio pkgs.nixUnstable)
     ];
+    nix = pkgs.nixCustomFun (pkgs.nixUnstable.src)
+      ""
+      ["nix-reduce-build" "nix-http-export.cgi"]
+      ["--with-docbook-xsl=\\\${pkgs.docbook5_xsl}/xml/xsl/docbook/"];
   };
 }
 

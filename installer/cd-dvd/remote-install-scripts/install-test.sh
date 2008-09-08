@@ -24,7 +24,7 @@ echo "reboot" | ./socat/bin/socat tcp-listen:4424 stdio >> report &
 if ( ! [ -d dvd/iso ] ) || ( [ -z "$USE_LEFTOVER_DVD" ] ); then
     rm dvd
     # unset NIXPKGS_CONFIG to reduce host -> image configuration leak
-    NIXPKGS_CONFIG= nix-build -o dvd /etc/nixos/nixos/configuration/closed-install.nix || 
+    NIXPKGS_CONFIG= nix-build -o dvd /etc/nixos/nixos/installer/cd-dvd/closed-install.nix || 
       { echo "Failed to build LiveDVD" >&2 ;  exit 2; };
 fi;
 
@@ -52,7 +52,7 @@ if ( ! [ -f install-test.img ] ) || ( [ -z "$JUST_BOOT" ] ); then
     ) | ssh -l root -i /var/certs/ssh/id_livedvd -o StrictHostKeyChecking=no 127.0.0.1 -p 4425
 fi;
 
-./qemu/bin/qemu --kernel-kqemu -m 512 install-test.img -no-reboot 
+./qemu/bin/qemu --kernel-kqemu -m 128 install-test.img -no-reboot 
 
 echo "Report contains: "
 cat report
