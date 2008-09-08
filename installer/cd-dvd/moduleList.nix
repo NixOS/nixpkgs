@@ -40,4 +40,7 @@
   
   # Needed for live-CD operation.
   "aufs"
+
+  # Virtio (QEMU, KVM etc.) support.
+  "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
 ]
