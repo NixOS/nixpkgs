@@ -101,6 +101,7 @@ mkdir -m 1777 -p \
 # Get the store paths to copy from the references graph.
 storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 
+
 # Copy Nix to the Nix store on the target device.
 echo "copying Nix to $mountPoint...."
 for i in $storePaths; do
@@ -124,15 +125,9 @@ mkdir -m 0755 -p $mountPoint/bin
 ln -sf @shell@ $mountPoint/bin/sh
 
 
-# Pull the manifest on the CD so that everything in the Nix store on
-# the CD can be copied directly.
-echo "registering substitutes to speed up builds..."
-rm -f $mountPoint/nix/var/nix/manifests/*
-if test -e /MANIFEST; then
-    chroot $mountPoint @nix@/bin/nix-pull file:///mnt/MANIFEST
-fi
-rm -f $mountPoint/tmp/inst-store
-ln -s /mnt/nix/store $mountPoint/tmp/inst-store
+# Make the build below copy paths from the CD if possible.  Note that
+# /mnt in the chroot is the root of the CD.
+export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
 
 
 # Do a nix-pull to speed up building.

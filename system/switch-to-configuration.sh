@@ -29,7 +29,7 @@ if test "$action" = "switch" -o "$action" = "boot"; then
             @grub@/sbin/grub-install "@grubDevice@" --no-floppy --recheck
         fi
     else
-        echo "Warning: don't know how to make this configuration bootable" 1>&2
+        echo "Warning: don't know how to make this configuration bootable; please set \`boot.grubDevice'." 1>&2
     fi
 fi
 
