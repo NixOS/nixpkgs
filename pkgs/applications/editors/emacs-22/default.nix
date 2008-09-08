@@ -12,14 +12,14 @@ assert xawSupport && xaw3dSupport -> Xaw3d != null;
 assert xpmSupport -> libXpm != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 
-stdenv.mkDerivation {
-  name = "emacs-22.2";
+stdenv.mkDerivation rec {
+  name = "emacs-22.3";
 
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = mirror://gnu/emacs/emacs-22.2.tar.gz;
-    md5 = "d6ee586b8752351334ebf072904c4d51";
+    url = "mirror://gnu/emacs/${name}.tar.gz";
+    sha256 = "05hd89bchcpwzcx5la0alcp0wb7xywvnf98dxrshrqlfvccvgnbv";
   };
   
   buildInputs = [ncurses x11]
@@ -31,8 +31,16 @@ stdenv.mkDerivation {
     stdenv.lib.optional gtkGUI "--with-x-toolkit=gtk";
 
   meta = {
-    description = "Emacs, *the* text editor";
+    description = "GNU Emacs, *the* text editor";
+
+    longDescription = ''
+      GNU Emacs is an extensible, customizable text editor—and more.
+      At its core is an interpreter for Emacs Lisp, a dialect of the
+      Lisp programming language with extensions to support text
+      editing.
+    '';
+
     homepage = http://www.gnu.org/software/emacs/;
-    license = "GPL";
+    license = "GPLv3+";
   };
 }
