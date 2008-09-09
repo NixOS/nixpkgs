@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zg5ggf8raydr939glq5mwssly84c6czy1hi5gf00wwdhak0256r";
   };
 
-  patches = [ ./tmpdir.patch ];
+  patches = [ ./tmpdir.patch ./fix-openssl-test.patch ];
 
   configurePhase = ''
     ./configure --prefix="$out" --enable-guile --with-guile-site-dir="$out/share/guile/site"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [libgcrypt];
 
-  doCheck = false; # disabled due to a bug between libgcrypt and gnutls
+  doCheck = true;
   
   meta = {
     description = "The GNU Transport Layer Security Library";
