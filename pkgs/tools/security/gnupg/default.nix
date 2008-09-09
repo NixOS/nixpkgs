@@ -6,13 +6,15 @@
 , stdenv, fetchurl, readline
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "gnupg-1.4.9";
   builder = ./builder.sh;
+
   src = fetchurl {
-    url = ftp://ftp.cert.dfn.de/pub/tools/crypt/gcrypt/gnupg/gnupg-1.4.9.tar.bz2;
+    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
     sha256 = "1p86mdgij3llnkx8dvvjl19abgq86gdn6m4r6bc4xvgfjg6sp99w";
   };
+
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
     url = http://nix.cs.uu.nl/dist/tarballs/idea.c.gz;

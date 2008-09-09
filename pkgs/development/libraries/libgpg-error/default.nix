@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libgpg-error-1.4";
   src = fetchurl {
-    url = ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.4.tar.gz;
+    url = "mirror://gnupg/libgpg-error/${name}.tar.gz";
     sha256 = "06fn9rshrm7r49fkjc17xg39nz37kyda2l13qqgzjg69zz2pxxpz";
   };
 }

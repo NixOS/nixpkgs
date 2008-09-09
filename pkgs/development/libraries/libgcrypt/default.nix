@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libgcrypt-1.4.2";
 
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/libgcrypt/${name}.tar.bz2";
+    url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
     sha256 = "1hsj26c68lffhz00mi5i70kc5mg9l0dxlf6g48ms4fvzdy218x5s";
   };
 

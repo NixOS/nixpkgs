@@ -29,6 +29,53 @@ rec {
     http://ftp.gnu.org/pub/gnu/
   ];
 
+  # GnuPG.
+  gnupg = [
+    ftp://gd.tuwien.ac.at/privacy/gnupg/
+    ftp://gnupg.x-zone.org/pub/gnupg/
+    ftp://ftp.gnupg.cz/pub/gcrypt/
+    ftp://sunsite.dk/pub/security/gcrypt/
+    http://gnupg.wildyou.net/
+    http://ftp.gnupg.zone-h.org/
+    ftp://ftp.jyu.fi/pub/crypt/gcrypt/
+    ftp://trumpetti.atm.tut.fi/gcrypt/
+    ftp://mirror.cict.fr/gnupg/
+    ftp://ftp.strasbourg.linuxfr.org/pub/gnupg/
+    ftp://ftp.cert.dfn.de/pub/tools/crypt/gcrypt/
+    ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/
+    ftp://ftp.freenet.de/pub/ftp.gnupg.org/gcrypt/
+    ftp://hal.csd.auth.gr/mirrors/gnupg/
+    ftp://igloo.linux.gr/pub/crypto/gnupg/
+    ftp://ftp.uoi.gr/mirror/gcrypt/
+    ftp://ftp.crysys.hu/pub/gnupg/
+    ftp://ftp.kfki.hu/pub/packages/security/gnupg/
+    ftp://ftp.hi.is/pub/mirrors/gnupg/
+    ftp://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/
+    ftp://ftp3.linux.it/pub/mirrors/gnupg/
+    ftp://ftp.linux.it/pub/mirrors/gnupg/
+    ftp://ftp.bit.nl/mirror/gnupg/
+    ftp://ftp.demon.nl/pub/mirrors/gnupg/
+    ftp://ftp.surfnet.nl/pub/security/gnupg/
+    ftp://sunsite.icm.edu.pl/pub/security/gnupg/
+    ftp://ftp.iasi.roedu.net/pub/mirrors/ftp.gnupg.org/
+    http://ftp.gnupg.tsuren.net/
+    http://www.mirror386.com/gnupg/
+    ftp://ftp.sunet.se/pub/security/gnupg/
+    ftp://mirror.switch.ch/mirror/gnupg/
+    ftp://ftp.mirrorservice.org/sites/ftp.gnupg.org/gcrypt
+
+    http://gnupg.unixmexico.org/ftp/
+    ftp://ftp.gnupg.ca/
+    http://gulus.usherbrooke.ca/pub/appl/GnuPG/
+    http://mirrors.rootmode.com/ftp.gnupg.org/
+
+    ftp://ftp.planetmirror.com/pub/gnupg/
+
+    ftp://pgp.iijlab.net/pub/pgp/gnupg/
+    ftp://ftp.ring.gr.jp/pub/net/gnupg/
+    ftp://gnupg.cdpa.nsysu.edu.tw/gnupg/
+  ];
+
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
     http://www.all.kernel.org/pub/
