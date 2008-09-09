@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [libgcrypt];
 
-  doCheck = true;
+  doCheck = false; # disabled due to a bug between libgcrypt and gnutls
   
   meta = {
     description = "The GNU Transport Layer Security Library";
