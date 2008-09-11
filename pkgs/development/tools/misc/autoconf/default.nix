@@ -1,11 +1,11 @@
 {stdenv, fetchurl, m4, perl, lzma}:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.62";
+  name = "autoconf-2.63";
   
   src = fetchurl {
     url = "mirror://gnu/autoconf/${name}.tar.lzma";
-    sha256 = "0wc70i36cjw5kszvp50d02w8fzh2yxnsa9la6chrf7csb0dnn4jn";
+    sha256 = "1k5lyxsq6781c02b4ism4ddpzkywysiv65pxaw61r5qipz2ab196";
   };
 
   buildInputs = [m4 perl lzma];
