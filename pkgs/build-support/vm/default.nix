@@ -673,6 +673,17 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/9/Fedora/i386/os;
     } // args);
 
+    fedora9x86_64 = args: makeImageFromRPMDist ({
+      name = "fedora-9-x86_64";
+      fullName = "Fedora 9 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/9/Fedora/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "0qcjigzbw29ahhkfjaw5pbpyl7mj9l349hikwv25jcnid1cbpmx7";
+      };
+      urlPrefix = mirror://fedora/linux/releases/9/Fedora/x86_64/os;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     opensuse103i386 = args: makeImageFromRPMDist ({
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -813,6 +824,7 @@ rec {
     fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
     fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages; };
+    fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages; };
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
