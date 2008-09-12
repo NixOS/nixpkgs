@@ -433,6 +433,7 @@ rec {
     '';
   
     sysInfoPhase = ''
+      echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
       header "installed RPM packages"
