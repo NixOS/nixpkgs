@@ -5229,6 +5229,11 @@ let
       inherit fetchurl stdenv kernel;
     };
 
+    exmap = import ../os-specific/linux/exmap {
+      inherit fetchurl stdenv kernel boost pcre pkgconfig;
+      inherit (gtkLibs) gtkmm;
+    };
+
     iwlwifi = import ../os-specific/linux/iwlwifi {
       inherit fetchurl stdenv kernel;
     };
