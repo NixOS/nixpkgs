@@ -584,6 +584,10 @@ rec {
     
     runCommand "${name}.nix" {} ''
       bunzip2 < ${packagesList} > ./Packages
+
+      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
+      substituteInPlace ./Packages --replace x86_64-linux-gnu x86-64-linux-gnu
+
       ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
@@ -705,16 +709,26 @@ rec {
       urlPrefix = mirror://ubuntu;
     } // args);
         
-    debian40r3i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r3-etch-i386";
-      fullName = "Debian 4.0r3 Etch (i386)";
+    debian40i386 = args: makeImageFromDebDist ({
+      name = "debian-4.0r4a-etch-i386";
+      fullName = "Debian 4.0r4a Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "7a8f2777315d71fd7321d1076b3bf5f76afe179fe66c2ce8e1ff4baed6424340";
+        sha256 = "ce963cc348f89ca50f65a8e32aa518c590e213c26c9ead48b0899f01f4456a4a";
       };
       urlPrefix = mirror://debian;
     } // args);
         
+    debian40x86_64 = args: makeImageFromDebDist ({
+      name = "debian-4.0r4a-etch-amd64";
+      fullName = "Debian 4.0r4a Etch (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
+        sha256 = "3403ebca73baeb68092e32d2c61a14eec4497702ef7281a7c1485abeb3d263f6";
+      };
+      urlPrefix = mirror://debian;
+    } // args);
+
   };
 
 
@@ -828,7 +842,8 @@ rec {
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
-    debian40r3i386 = diskImageFuns.debian40r3i386 { packages = commonDebianPackages; };
+    debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
+    debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
 
   };
 
