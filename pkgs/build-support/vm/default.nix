@@ -699,6 +699,10 @@ rec {
       archs = ["noarch" "i586"];
     } // args);
 
+    # Interestingly, the SHA-256 hashes provided by Ubuntu in
+    # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
+    # wrong, but the SHA-1 and MD5 hashes are correct.
+
     ubuntu710i386 = args: makeImageFromDebDist ({
       name = "ubuntu-7.10-gutsy-i386";
       fullName = "Ubuntu 7.10 Gutsy (i386)";
@@ -709,6 +713,26 @@ rec {
       urlPrefix = mirror://ubuntu;
     } // args);
         
+    ubuntu804i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.04-hardy-i386";
+      fullName = "Ubuntu 8.04 Hardy (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/hardy/main/binary-i386/Packages.bz2;
+        sha1 = "db74581ee75cb3bee2a8ae62364e97956c723259";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
+    ubuntu804x86_64 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.04-hardy-amd64";
+      fullName = "Ubuntu 8.04 Hardy (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/hardy/main/binary-amd64/Packages.bz2;
+        sha1 = "d1f1d2b3cc62533d6e4337f2696a5d27235d1f28";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
     debian40i386 = args: makeImageFromDebDist ({
       name = "debian-4.0r4a-etch-i386";
       fullName = "Debian 4.0r4a Etch (i386)";
@@ -842,6 +866,8 @@ rec {
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
+    ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
+    ubuntu804x86_64 = diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
 
