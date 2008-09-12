@@ -19,6 +19,7 @@ let
       bashInteractive
       binutils
       bison23
+      bitlbee
       bittorrent
       bsdiff
       bzip2
@@ -140,6 +141,7 @@ let
       rsync
       ruby
       screen
+      seccure
       slim
       spidermonkey
       ssmtp
