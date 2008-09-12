@@ -33,6 +33,9 @@ in
   ];
 
   job = ''
+    start on network-interfaces/started
+    stop on network-interfaces/stop
+
     description "Zabbix agent daemon"
 
     start script
