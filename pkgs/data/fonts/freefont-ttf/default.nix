@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "freefont-ttf-20080323";
+  name = "freefont-ttf-20080912";
   src = fetchurl {
     url = "mirror://gnu/freefont/${name}.tar.gz";
-    sha256 = "17wkasp5bgzw8n1dxpfcgj5zawfb743ff3cq24qh4brkyfrf2jkr";
+    sha256 = "1l6ip2xy4s4xacnz299y7afc4rhvnxb593nn8acxavmr623sh5ir";
   };
 
   installPhase = ''
