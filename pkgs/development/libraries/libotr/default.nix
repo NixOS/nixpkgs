@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libgcrypt}:
 
 stdenv.mkDerivation {
-  name = "libotr-3.1.0";
+  name = "libotr-3.2.0";
   src = fetchurl {
-    url = http://www.cypherpunks.ca/otr/libotr-3.1.0.tar.gz;
-    sha256 = "1x3y5nvqcg9a0lx630cvkjpwv7mmwxpy4pcjfm6fbiqylaxn05bj";
+    url = http://www.cypherpunks.ca/otr/libotr-3.2.0.tar.gz;
+    sha256 = "14v6idnqpp2vhgir9bzp1ay2gmhqsb8iavrkwmallakfwch9sfyq";
   };
 
   propagatedBuildInputs = [libgcrypt];

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libotr, pidgin} :
 
 stdenv.mkDerivation {
-  name = "pidgin-otr-3.1.0";
+  name = "pidgin-otr-3.2.0";
   src = fetchurl {
-    url = http://www.cypherpunks.ca/otr/pidgin-otr-3.1.0.tar.gz;
-    sha256 = "1l524qx5kh2gg68biazjyqiyz8qzxqwp07i0wzfaxgv33s9ni7s2";
+    url = http://www.cypherpunks.ca/otr/pidgin-otr-3.2.0.tar.gz;
+    sha256 = "1cp6s565sid657lvmm7jrwl9wnk4ywsl8d9sp4iba36r0s5qaw08";
   };
 
   meta = {
