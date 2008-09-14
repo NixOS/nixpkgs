@@ -5355,6 +5355,10 @@ let
     inherit fetchurl stdenv libxml2;
   };
 
+  lm_sensors = import ../os-specific/linux/lm_sensors {
+    inherit fetchurl stdenv bison flex perl;
+  };
+
   kvm = kvm74;
 
   kvm57 = import ../os-specific/linux/kvm/57.nix {
