@@ -1716,11 +1716,12 @@ in
       };
 
       extraModules = mkOption {
-        default = pkgs : [];
+        default = [];
+        example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
         description = ''
-          used to add additional modules
-          Example for PHP:
-          pkgs : [ { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so" } ]
+          Loads additional modules either beeing distributed with apache.
+          If the module is contained in a foreign package (such as php5_module)
+          kse an attrset as given in the example.
         '';
       };
 

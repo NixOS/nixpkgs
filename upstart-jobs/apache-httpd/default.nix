@@ -12,7 +12,10 @@ let
 
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
-  
+
+  extraModules = pkgs.lib.traceWhatis ( pkgs.lib.getAttr ["extraModules"] [] mainCfg;
+  extraForeignModules = pkgs.lib.filter builtins.isAttrs extraModules;
+  extraApachaModules = pkgs.lib.filter (x :! (builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
 
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
@@ -105,7 +108,7 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ] ++ optional enableSSL "ssl";
+    ] ++ optional enableSSL "ssl" ++ extraApachaModules;
     
 
   loggingConf = ''
@@ -297,8 +300,7 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices ++
           map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          concatMap (svc: svc.extraModules) allSubservices ++
-          (pkgs.lib.getAttr ["extraModules"] (x:[]) mainCfg) pkgs;
+          concatMap (svc: svc.extraModules) allSubservices ++ extraForeignModules;
       in concatMapStrings load allModules
     }
 
