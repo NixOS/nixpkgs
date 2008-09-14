@@ -160,9 +160,6 @@ findInputs() {
 }
 
 pkgs=""
-if test -n "$buildinputs"; then
-    buildInputs="$buildinputs" # compatibility
-fi
 for i in $buildInputs $propagatedBuildInputs; do
     findInputs $i
 done
