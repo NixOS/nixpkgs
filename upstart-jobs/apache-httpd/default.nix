@@ -13,7 +13,7 @@ let
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
-  extraModules = pkgs.lib.traceWhatis ( pkgs.lib.getAttr ["extraModules"] [] mainCfg;
+  extraModules = pkgs.lib.getAttr ["extraModules"] [] mainCfg;
   extraForeignModules = pkgs.lib.filter builtins.isAttrs extraModules;
   extraApachaModules = pkgs.lib.filter (x :! (builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
 
