@@ -9,6 +9,7 @@ let
   buildInputs = with args; [
     intltool python imagemagick gtk glib webkit libxml2 
     gtksourceview pkgconfig which gettext makeWrapper 
+    file
   ];
 in
 rec {

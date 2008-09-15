@@ -6459,7 +6459,7 @@ let
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2 
-      which gettext makeWrapper;
+      which gettext makeWrapper file;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) gtksourceview;
   };
