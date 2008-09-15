@@ -2,14 +2,19 @@
 , makeWrapper, gawk, which, gnugrep }:
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.3";
+  name = "oprofile-0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "1jxj8h11rwaviy5dz2ra7q41qfgdl1psc4470327pk5bblbap1jg";
+    sha256 = "1pna65lpdxzbg4lcmpvayw1ibinbizrzwpdp0cq7vfinj0am456b";
   };
 
-  patches = [ ./opcontrol.patch ];
+  patchPhase = ''
+    sed -i "utils/opcontrol" \
+        -e "s|OPCONTROL=.*$|OPCONTROL=\"$out/bin/opcontrol\"|g ;
+            s|OPDIR=.*$|OPDIR=\"$out/bin\"|g ;
+            s|^PATH=.*$||g"
+  '';
 
   # FIXME: Add optional Qt support.
   buildInputs = [ binutils popt makeWrapper gawk which gnugrep ];
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/opcontrol"					\
-       --prefix PATH : "${gawk}/bin:${which}/bin:${gnugrep}/bin"
+       --prefix PATH : "$out/bin:${gawk}/bin:${which}/bin:${gnugrep}/bin"
   '';
 
   meta = {
