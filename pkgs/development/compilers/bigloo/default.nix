@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo3.0c-4";
+  name = "bigloo3.1b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/mimosa/fp/Bigloo/${name}.tar.gz";
-    sha256 = "0avcdgfw7g4myqrhcdi3k46qv01p0rmvmpqz4qmim9ccdjrvcyq4";
+    sha256 = "1m7mrrrqm6668j6x834mclzc9am63wlf0knm4xiwrhv3zcky8vnv";
   };
 
   patchPhase = ''
@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
         -e 's=/tmp=$TMPDIR=g' -i configure autoconf/*		\
 	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
 	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
-	*/*/*/*/*/[Mm]akefile*					\
-	comptime/Cc/cc.scm
+	comptime/Cc/cc.scm gc/install-gc-*
 
     # Make sure we don't change string lengths in the generated
     # C files.
