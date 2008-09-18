@@ -349,7 +349,7 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 1024, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
+    {size ? 2048, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
@@ -474,7 +474,7 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    {size ? 1024, debs, name, fullName, postInstall ? null}:
+    {size ? 2048, debs, name, fullName, postInstall ? null}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
@@ -565,7 +565,7 @@ rec {
      names. */
      
   makeImageFromRPMDist =
-    { name, fullName, size ? 1024, urlPrefix, packagesList, packages
+    { name, fullName, size ? 2048, urlPrefix, packagesList, packages
     , postInstall ? "", archs ? ["noarch" "i386"], runScripts ? true}:
 
     fillDiskWithRPMs {
@@ -598,7 +598,7 @@ rec {
      names. */
      
   makeImageFromDebDist =
-    {name, fullName, size ? 1024, urlPrefix, packagesList, packages, postInstall ? ""}:
+    {name, fullName, size ? 2048, urlPrefix, packagesList, packages, postInstall ? ""}:
 
     fillDiskWithDebs {
       inherit name fullName size postInstall;
