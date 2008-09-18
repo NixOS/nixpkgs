@@ -2,14 +2,14 @@ args : with args;
 	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
-		url = http://releases.compiz-fusion.org/0.7.4/compiz/compiz-0.7.4.tar.bz2;
-		sha256 = "1ik2wlrc469l0l9j7yhfapcmwkshhva5b5sh5h4czg3bj5iivaf7";
+		url = http://xorg.freedesktop.org/archive/individual/app/compiz-0.7.8.tar.gz;
+		sha256 = "00v5br8vi9ycrzvgdsmdbv31kv1n9g88hxm0ax9yhy6cfsvm4vxl";
 	};
 		buildInputs = [
 			    pkgconfig gtk libwnck GConf libgnome 
 			    libgnomeui metacity gnomegtk glib pango libglade libgtkhtml 
 			    gtkhtml libgnomecanvas libgnomeprint libgnomeprintui gnomepanel 
-			    librsvg fuse 
+			    librsvg fuse gettext
 		];
 		  propagatedBuildInputs = [
 		    libpng libXcomposite libXfixes libXdamage libXrandr libXinerama
@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation 
 rec {
-	name = "compiz-"+version;
+	name = "compiz-0.7.8";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doPatch doConfigure doMakeInstall doPropagate 
 			doForceShare postAll]);
