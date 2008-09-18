@@ -5325,7 +5325,7 @@ let
   kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
 
   # The current default kernel / kernel modules.
-  kernelPackages = kernelPackages_2_6_23;
+  kernelPackages = kernelPackages_2_6_25;
   #kernel = kernelPackages.kernel;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/linux.nix) {
