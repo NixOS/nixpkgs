@@ -17,16 +17,26 @@ stdenv.mkDerivation {
     sha256 = "12akcbp1a31pxzsxm01scgir0fqkk8qqqwhs44vzgs2chzzigyvd";
   };
 
+  patches = [
+    # Properly handle the case of symlinks such as
+    # /dev/disk/by-label/bla.  The symlink resolution code in
+    # grub-install isn't smart enough.
+    ./symlink.patch
+  ];
+
   # Autoconf/automake required for the splashimage patch.
   buildInputs = [autoconf automake];
 
-  preConfigure = ''
+  prePatch = ''
     unpackFile $gentooPatches
     rm patch/400_all_grub-0.97-reiser4-20050808-gentoo.patch
     for i in patch/*.patch; do
       echo "applying patch $i"
       patch -p1 < $i || patch -p0 < $i
     done
+  '';
+
+  preConfigure = ''
     autoreconf
   '';
 }
