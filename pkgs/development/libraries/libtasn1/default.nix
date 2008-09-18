@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libtasn1-1.4";
+  name = "libtasn1-1.5";
   
   src = fetchurl {
-    url = mirror://gnu/gnutls/libtasn1-1.4.tar.gz;
-    sha256 = "15k14cl334cjdw6hbw3scdxm0pfv078kfq6bnz9ngyg4by1kgal4";
+    url = mirror://gnu/gnutls/libtasn1-1.5.tar.gz;
+    sha256 = "1p4m9in144ypk6ndqw46sfz0njx6wccp0zlxjvigxry8034zbn6s";
   };
 
   meta = {
