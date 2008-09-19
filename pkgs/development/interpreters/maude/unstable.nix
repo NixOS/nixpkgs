@@ -1,15 +1,15 @@
 { stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "maude-2.4-alpha-91";
+  name = "maude-2.4-alpha-91b";
   meta = {
     homepage = "http://maude.cs.uiuc.edu/";
     description = "Maude -- a high-level specification language";
     license = "GPLv2";
   };
   src = fetchurl {
-    url = "http://www.csl.sri.com/users/eker/Maude/Alpha91/Maude-2.4.tar.gz";
-    sha256 = "1gvfzp10inhvzk2xnv128nmh38vw6si7hg72bxis3l4h8f6ki7l0";
+    url = "http://www.csl.sri.com/users/eker/Maude/Alpha91b/Maude-2.4.tar.gz";
+    sha256 = "1g8r3ppghrnhg8hvjjbd3sdlqbxyz1n3i55wl23dyyjsaxacgzlh";
   };
   fullMaude = fetchurl {
     url = "http://www.lcc.uma.es/~duran/FullMaude/FM23j/full-maude.maude";
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [flex bison ncurses buddy tecla gmp libsigsegv];
   configurePhase = ''./configure --disable-dependency-tracking --prefix=$out TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
-  # test suite failure in: unification
-  doCheck = false;
+  doCheck = true;
   postInstall =
   ''
     ensureDir $out/share/maude
