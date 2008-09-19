@@ -4610,7 +4610,7 @@ let
   };
 
   zope = import ../development/python-modules/zope {
-    inherit fetchurl stdenv python;
+    inherit fetchurl stdenv python24;
   };
 
   ### SERVERS
