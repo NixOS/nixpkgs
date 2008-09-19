@@ -7304,6 +7304,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  pal2nal = import ../applications/science/biology/pal2nal {
+    inherit fetchurl stdenv perl paml;
+  };
+
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
