@@ -6943,16 +6943,16 @@ let
   wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv nameSuffix makeWrapper browser browserName;
     plugins =
-      let enableAdobeFlash = getConfig [ "firefox" "enableAdobeFlash" ] true
+      let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true
             && system == "i686-linux";
       in
        ([]
         ++ lib.optional (!enableAdobeFlash) gnash
         ++ lib.optional (enableAdobeFlash)  flashplayer
         # RealPlayer is disabled by default for legal reasons.
-        ++ lib.optional (system != "i686-linux" && getConfig ["firefox" "enableRealPlayer"] false) RealPlayer
-        ++ lib.optional (getConfig ["firefox" "enableMPlayer"] true) (MPlayerPlugin browser)
-        ++ lib.optional (supportsJDK && getConfig ["firefox" "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
+        ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
+        ++ lib.optional (getConfig [browserName "enableMPlayer"] true) (MPlayerPlugin browser)
+        ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };
 
