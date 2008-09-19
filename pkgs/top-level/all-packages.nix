@@ -4602,7 +4602,7 @@ let
   };
 
   twisted = import ../development/python-modules/twisted {
-    inherit fetchurl stdenv python ZopeInterface;
+    inherit fetchurl stdenv python ZopeInterface makeWrapper;
   };
 
   ZopeInterface = import ../development/python-modules/ZopeInterface {
