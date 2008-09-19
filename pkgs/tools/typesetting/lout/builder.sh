@@ -22,7 +22,8 @@ installDoc ()
       || return 1
     fi
     cp "doc/$doc/outfile.ps" "$out/doc/lout/$doc.ps" &&		\
-    ps2pdf "doc/$doc/outfile.ps" "$out/doc/lout/$doc.pdf"
+    ps2pdf -dPDFSETTINGS=/prepress -sPAPERSIZE=a4		\
+           "doc/$doc/outfile.ps" "$out/doc/lout/$doc.pdf"
   done
 
   return 0
