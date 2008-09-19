@@ -7,10 +7,10 @@ stdenv.mkDerivation {
     sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
   };
   buildInputs = [python];
+
   propagatedBuildInputs = [ZopeInterface makeWrapper];
-  buildPhase = "true";
-  installCommand =
-  ''
+
+  installPhase = ''
      python ./setup.py install --prefix=$out --install-lib=$(toPythonPath $out) -O1
      for n in $out/bin/*; do wrapProgram $n --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH:\$PYTHONPATH"; done
   '';
