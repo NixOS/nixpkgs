@@ -93,6 +93,7 @@ let
       libtool
       libxml2
       libxslt
+      lout
       lvm2
       lynx
       man
