@@ -40,4 +40,5 @@ cat makefile |									\
 mkdir -p "$out/bin" && mkdir -p "$out/lib"					\
 mkdir -p "$out/man" && mkdir -p "$out/doc/lout" &&				\
 make -f "$nixMakefile" install installman &&					\
-installDoc
+installDoc &&									\
+fixupPhase
