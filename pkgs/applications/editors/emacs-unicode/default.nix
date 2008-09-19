@@ -15,7 +15,7 @@ assert gtkGUI -> pkgconfig != null && gtk != null;
 assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 
 stdenv.mkDerivation {
-  name = "emacs-23.0.0.1-pre20070705";
+  name = "emacs-snapshot-23.0.0.1-pre20070705";
   
   builder = ./builder.sh;
   
