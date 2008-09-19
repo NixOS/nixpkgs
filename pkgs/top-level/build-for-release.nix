@@ -80,6 +80,7 @@ let
       hal
       hello
       iana_etc
+      inkscape
       iputils
       irssi
       jwhois
@@ -180,8 +181,10 @@ let
       xfig
       xineUI
       xkeyboard_config
+      xlockmore
       xmltv
       xpdf
+      xscreensaver
       xsel
       xterm
       zdelta
