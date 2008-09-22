@@ -2434,7 +2434,7 @@ let
   };
 
   texinfo = import ../development/tools/misc/texinfo {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses lzma;
   };
 
   uisp = import ../development/tools/misc/uisp {
