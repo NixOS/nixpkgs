@@ -1,16 +1,21 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, libgphoto2, libexif, popt, gettext
+, libjpeg, readline, libtool
+}:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2-2.4.0";
+  name = "gphoto2-2.4.2";
+  
   src = fetchurl {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "1rf4w5m35dsi8dkwwnh4wg70xivdi9j79f2dy3rq90p1v8sar9ca";
+    sha256 = "0wna84rli816d830hirdv3ficr3q16zs471l725rgsdvc4pqrvy9";
   };
-  buildInputs = [pkgconfig libgphoto2 libexif popt gettext];
-# There is a bug in 2.4.0 configure.ac (in their m4 macroses)
-  patchPhase = "sed -e 's@_tmp=true@_tmp=false@' -i configure configure.ac";
+  
+  buildInputs = [pkgconfig libgphoto2 libexif popt gettext libjpeg readline libtool];
+  
+  # There is a bug in 2.4.0 configure.ac (in their m4 macroses)
+  #patchPhase = "sed -e 's@_tmp=true@_tmp=false@' -i configure configure.ac";
 
   meta = {
-    homepage = http://www.gphoto.org;
+    homepage = http://www.gphoto.org/;
   };
 }

@@ -6288,7 +6288,8 @@ let
   };
 
   gphoto2 = import ../applications/misc/gphoto2 {
-    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt readline gettext;
+    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt gettext
+      libjpeg readline libtool;
   };
 
   gqview = import ../applications/graphics/gqview {
