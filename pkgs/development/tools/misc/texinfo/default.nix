@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "texinfo-4.13a";
 
   src = fetchurl {
-    url = "mirror://gnu/texinfo/texinfo-4.13.tar.lzma";
+    url = "mirror://gnu/texinfo/texinfo-4.13a.tar.lzma";
     sha256 = "1rf9ckpqwixj65bw469i634897xwlgkm5i9g2hv3avl6mv7b0a3d";
   };
 
