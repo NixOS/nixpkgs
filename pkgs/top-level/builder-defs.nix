@@ -287,7 +287,7 @@ args: with args; with stringsWithDeps; with lib;
 
         patches = getAttr ["patches"] [] args;
 
-        toPatchCommand = s: "cat ${toString s} | patch ${toString patchFlags}";
+        toPatchCommand = s: "cat ${s} | patch ${toString patchFlags}";
 
         doPatch = FullDepEntry (concatStringsSep ";"
                 (map toPatchCommand patches)
