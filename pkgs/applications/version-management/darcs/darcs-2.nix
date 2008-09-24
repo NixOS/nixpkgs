@@ -1,12 +1,12 @@
-{stdenv, fetchurl, ghc, zlib, ncurses, curl}:
+{stdenv, fetchurl, ghc, zlib, ncurses, curl, perl}:
 
 stdenv.mkDerivation {
-  name = "darcs-2.0.0";
+  name = "darcs-2.0.2";
   src = fetchurl {
-    url = http://darcs.net/darcs-2.0.0.tar.gz;
-    sha256 = "1admaglbf7i15x9pihncqj5iraqzcw801pf76f0pd2hbc2k0yx7x";
+    url = http://darcs.net/darcs-2.0.2.tar.gz;
+    sha256 = "17plbfwz2rvzbvr9b90z55lj51ilnq22hhr38hffila1gsxqfk0n";
   };
-  buildInputs = [ghc zlib ncurses curl];
+  buildInputs = [ghc zlib ncurses curl perl];
 
   NIX_LDFLAGS = "-lz";
 

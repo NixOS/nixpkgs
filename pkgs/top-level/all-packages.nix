@@ -6031,7 +6031,7 @@ let
 
   # some speed bottle necks are resolved in this version I think .. perhaps you like to try it?
   darcs2 = import ../applications/version-management/darcs/darcs-2.nix {
-    inherit fetchurl stdenv zlib ncurses curl ghc;
+    inherit fetchurl stdenv zlib ncurses curl ghc perl;
   };
 
   dia = import ../applications/graphics/dia {
