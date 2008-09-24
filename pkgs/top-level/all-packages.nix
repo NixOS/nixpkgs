@@ -7458,7 +7458,7 @@ let
     db4 = db45;
     supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/state";
+    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
