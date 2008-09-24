@@ -3543,6 +3543,12 @@ let
     inherit fetchurl stdenv pcre libpng;
   };
 
+  snack = import ../development/libraries/snack {
+    inherit fetchurl stdenv tcl tk pkgconfig x11;
+        # optional
+    inherit alsaLib vorbisTools python;
+  };
+
   speex = import ../development/libraries/speex {
     inherit fetchurl stdenv libogg;
   };
@@ -6135,6 +6141,10 @@ let
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
+  };
+
+  wavesurfer = import ../applications/misc/audio/wavesurfer {
+    inherit fetchurl stdenv tcl tk snack makeWrapper;
   };
 
   wireshark = import ../applications/networking/sniffers/wireshark {
