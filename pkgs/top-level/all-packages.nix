@@ -5864,8 +5864,8 @@ let
 
   blender = import ../applications/misc/blender {
     inherit stdenv cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
-      libjpeg libpng zlib /* smpeg sdl */;
-    inherit (xlibs) inputproto libXi python;
+      libjpeg libpng zlib /* smpeg sdl */ python;
+    inherit (xlibs) inputproto libXi;
     freealut = freealut_soft;
     openal = openalSoft;
     openexr = openexr_1_4_0;
