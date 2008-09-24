@@ -1,5 +1,5 @@
 args : with args; let localDefs = builderDefs.meta.function (args // rec {
-                version = lib.getAttr ["version"] args "5.07";
+                version = lib.getAttr ["version"] "5.07" args;
 		src = /* put a fetchurl here */
 		fetchurl {
 		    url = "http://www.jwz.org/xscreensaver/xscreensaver-${version}.tar.gz";
