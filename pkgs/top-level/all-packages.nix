@@ -553,8 +553,7 @@ let
   };
 
   cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
-    inherit makeWrapper;
-    python = python25;
+    inherit makeWrapper python;
   };
 
   chkrootkit = import ../tools/security/chkrootkit {
@@ -1780,8 +1779,7 @@ let
   viewMtn = builderDefsPackage (selectVersion ../applications/version-management/viewmtn "0.10")
   {
     inherit monotone flup cheetahTemplate highlight ctags
-      makeWrapper graphviz which;
-    python = python25;
+      makeWrapper graphviz which python;
   };
 
   nasm = import ../development/compilers/nasm {
@@ -1993,7 +1991,7 @@ let
       libXt;
   };
 
-  python = python24;
+  python = python25;
 
   python24 = import ../development/interpreters/python/2.4 {
     inherit fetchurl stdenv zlib bzip2;
@@ -2456,8 +2454,7 @@ let
   xxdiff = builderDefsPackage (selectVersion ../development/tools/misc/xxdiff "3.2") {
     flex = flex2535;
     qt = qt3;
-    python = python25;
-    inherit pkgconfig makeWrapper bison;
+    inherit pkgconfig makeWrapper bison python;
     inherit (xlibs) libXext libX11;
   };
 
@@ -4567,17 +4564,15 @@ let
   };
 
   pyopengl = import ../development/python-modules/pyopengl {
-    inherit fetchurl stdenv setuptools mesa freeglut pil;
-    python = python25;
+    inherit fetchurl stdenv setuptools mesa freeglut pil python;
   };
 
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
-    python=python25;
+    inherit python;
   };
 
   pyqt = builderDefsPackage (selectVersion ../development/python-modules/pyqt "4.3.3") {
-    inherit pkgconfig pythonSip;
-    python = python25;
+    inherit pkgconfig python pythonSip;
     inherit (xlibs) libX11 libXext;
     inherit (gtkLibs) glib;
     qt = qt4;
@@ -4592,7 +4587,7 @@ let
   };
 
   setuptools = builderDefsPackage (selectVersion ../development/python-modules/setuptools "0.6c8") {
-    python = python25;
+    inherit python;
   };
 
   wxPython = wxPython26;
@@ -5834,8 +5829,7 @@ let
   };
 
   bazaar = import ../applications/version-management/bazaar {
-    inherit fetchurl stdenv makeWrapper;
-    python = python25;
+    inherit fetchurl stdenv makeWrapper python;
   };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
@@ -5871,8 +5865,7 @@ let
   blender = import ../applications/misc/blender {
     inherit stdenv cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib /* smpeg sdl */;
-    inherit (xlibs) inputproto libXi;
-    python = python25;
+    inherit (xlibs) inputproto libXi python;
     freealut = freealut_soft;
     openal = openalSoft;
     openexr = openexr_1_4_0;
@@ -5999,8 +5992,7 @@ let
   };
 
   codeville = builderDefsPackage (selectVersion ../applications/version-management/codeville "0.8.0") {
-    python = python25;
-    inherit makeWrapper;
+    inherit makeWrapper python;
   };
 
   cua = import ../applications/editors/emacs-modes/cua {
@@ -6389,8 +6381,7 @@ let
   };
 
   keyjnote = import ../applications/office/keyjnote {
-    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib;
-    python = python25;
+    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
 
     # XXX These are the PyOpenGL dependencies, which we need here.
     inherit setuptools mesa freeglut;
@@ -6658,8 +6649,7 @@ let
   };
 
   pythonmagick = import ../applications/graphics/PythonMagick {
-    inherit fetchurl stdenv pkgconfig imagemagick boost;
-    python = python25;
+    inherit fetchurl stdenv pkgconfig imagemagick boost python;
   };
 
   qemu = import ../applications/virtualization/qemu/0.9.1.nix {
@@ -6814,8 +6804,7 @@ let
   };
 
   tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.35") {
-    python = python25;
-    inherit makeWrapper;
+    inherit makeWrapper python;
   };
 
   /* does'nt work yet i686-linux only (32bit version)
@@ -7386,8 +7375,7 @@ let
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
     inherit (xlibs) libXi;
     #stdenv = overrideGCC stdenv gcc41;
-    inherit stdenv;
-    python = python25;
+    inherit stdenv python;
   };
 
   generator = import ../misc/emulators/generator {
