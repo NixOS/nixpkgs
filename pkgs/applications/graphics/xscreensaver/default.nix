@@ -1,8 +1,9 @@
 args : with args; let localDefs = builderDefs.meta.function (args // {
+                version = lib.getAttr ["version"] args "5.07";
 		src = /* put a fetchurl here */
 		fetchurl {
-		    url = http://www.jwz.org/xscreensaver/xscreensaver-5.05.tar.gz;
-		    sha256 = "06l2vibjddszwpb9lflgflf0pn6rwpf609j2vdry3swh35pkcr1w";
+		    url = "http://www.jwz.org/xscreensaver/xscreensaver-${version}.tar.gz";
+		    sha256 = "1dmd9gwwqr4rnhxl71x1wn8j3xgijbpf6ydx42xzrzxi0x6afl4c";
 		};
 		useConfig = true;
 		reqsList = [
@@ -38,3 +39,4 @@ stdenv.mkDerivation rec {
 		inherit src;
 	};
 }
+
