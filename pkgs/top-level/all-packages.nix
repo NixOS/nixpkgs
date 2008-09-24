@@ -4681,6 +4681,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  lighttpd = import ../servers/http/lighttpd {
+    inherit fetchurl stdenv pcre libxml2 zlib attr bzip2;
+  };
+
   mod_python = import ../servers/http/apache-modules/mod_python {
     inherit fetchurl stdenv apacheHttpd python;
   };
