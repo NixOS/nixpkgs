@@ -6780,8 +6780,6 @@ let
     httpd = apacheHttpd;
   };
 
-  subversion14svnmerge = svnmergeFun subversion14;
-
   subversion15 = import ../applications/version-management/subversion-1.5.x {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon028;
@@ -6797,10 +6795,6 @@ let
   };
 
   svk = perlSVK;
-
-  svnmergeFun = subversion : (import ../applications/version-management/subversion-1.4.x/svnmerge.nix ) {
-    inherit subversion stdenv shebangfix python;
-  };
 
   sylpheed = import ../applications/networking/mailreaders/sylpheed {
     inherit fetchurl stdenv pkgconfig openssl gpgme;
