@@ -7037,7 +7037,7 @@ let
     pyrex = pyrex095;
   };
 
-  xscreensaverBase =  composedArgsAndFun (selectVersion ../applications/graphics/xscreensaver "5.05") {
+  xscreensaverBase =  composedArgsAndFun (import ../applications/graphics/xscreensaver) {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
