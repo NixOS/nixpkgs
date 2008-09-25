@@ -22,10 +22,16 @@ stdenv.mkDerivation {
 
   unpackCmd = "lzma -d < $src | tar xv";
 
+  patches = [ ./skip-gre-registration.patch ];
+
   configureFlags = [
     "--enable-application=browser"
+    "--enable-libxul"
+    "--disable-javaxpcom"
+
     "--enable-optimize"
     "--disable-debug"
+    "--disable-static"  # needed for `libxul'
     "--enable-strip"
     "--with-system-jpeg"
     "--with-system-zlib"
