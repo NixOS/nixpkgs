@@ -3,13 +3,13 @@
 , gnomevfs, libgnomeui
 , freetype, fontconfig }:
 
-let version = "3.0.1-g1"; in
+let version = "3.0.2-g1"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.lzma";
-    sha256 = "042znp8zi5m6ihvm8lz4f07x27yjjqbs20sgzb114wrh0xa2mwd0";
+    sha256 = "0xb2llv21s3sp3i94fryw3wshr92h0wij6bq3kkcnp6mgda2g07a";
   };
 
   buildInputs = [
