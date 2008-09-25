@@ -3590,7 +3590,7 @@ let
     qt = qt4;
   };
 
-  tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.4.16") {
+  tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.4.18") {
     inherit fetchurl stdenv tcl x11;
   };
 
