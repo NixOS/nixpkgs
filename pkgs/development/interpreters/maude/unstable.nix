@@ -1,15 +1,15 @@
 { stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "maude-2.4-alpha-91b";
+  name = "maude-2.4-alpha-91c";
   meta = {
     homepage = "http://maude.cs.uiuc.edu/";
     description = "Maude -- a high-level specification language";
     license = "GPLv2";
   };
   src = fetchurl {
-    url = "http://www.csl.sri.com/users/eker/Maude/Alpha91b/Maude-2.4.tar.gz";
-    sha256 = "1g8r3ppghrnhg8hvjjbd3sdlqbxyz1n3i55wl23dyyjsaxacgzlh";
+    url = "http://www.csl.sri.com/users/eker/Maude/Alpha91c/Maude-2.4.tar.gz";
+    sha256 = "0z25rrmg1b317xba2aqir5719js2ig3k20n1pvq3qvlzg51b6wp1";
   };
   fullMaude = fetchurl {
     url = "http://www.lcc.uma.es/~duran/FullMaude/FM23j/full-maude.maude";
