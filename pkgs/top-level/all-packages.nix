@@ -6095,20 +6095,20 @@ let
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
     inherit (xlibs) libXaw libXpm;
     inherit (gtkLibs) gtk;
-    xaw3dSupport = false;
-    gtkGUI = true;
+    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
+    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
   };
 
-  emacsUnicode = import ../applications/editors/emacs-unicode {
+  emacsUnicode = lowPrio (import ../applications/editors/emacs-unicode {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
       libpng libjpeg libungif libtiff;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
-    xawSupport = false;
-    xaw3dSupport = false;
-    gtkGUI = true;
-    xftSupport = true;
-  };
+    xawSupport = getPkgConfig "emacs" "xawSupport" false;
+    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
+    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
+    xftSupport = getPkgConfig "emacs" "xftSupport" true;
+  });
 
   emms = import ../applications/editors/emacs-modes/emms {
     inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
