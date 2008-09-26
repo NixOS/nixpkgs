@@ -353,6 +353,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  fetchbzr = import ../build-support/fetchbzr {
+    inherit stdenv bazaar;
+  };
+
   fetchcvs = import ../build-support/fetchcvs {
     inherit stdenv cvs;
   };
