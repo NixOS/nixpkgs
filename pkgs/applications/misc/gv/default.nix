@@ -1,16 +1,16 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX }:
 
 stdenv.mkDerivation rec {
-  name = "gv-3.6.5";
+  name = "gv-3.6.6";
 
   src = fetchurl {
     url = "mirror://gnu/gv/${name}.tar.gz";
-    sha256 = "0wxxq695psb57n3kaj6swlczkwf9p79zdmn1dxrj4isyyr0gxm7d";
+    sha256 = "08xnjg5nimrksn2fl18589ncb26vaabbypmvay8hh8psjsks5683";
   };
 
   buildInputs = [ Xaw3d ghostscriptX ];
   
-  postConfigure = [ "sed 's|\\<gs\\>|${ghostscriptX}/bin/gs|g' -i src/*.am src/*.ad" ];
+  postConfigure = [ "sed 's|\\<gs\\>|${ghostscriptX}/bin/gs|g' -i src/*.am" ];
 
   doCheck = true;
 
