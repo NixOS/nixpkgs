@@ -5854,6 +5854,12 @@ let
     inherit (gtkLibs) glib;
   };
 
+  bitlbeeOtr = import ../applications/networking/instant-messengers/bitlbee-otr {
+    inherit fetchbzr stdenv gnutls pkgconfig libotr
+      libxslt xmlto docbook_xsl docbook_xml_dtd_42 perl;
+    inherit (gtkLibs) glib;
+  };
+
   # commented out because it's using the new configuration style proposal which is unstable
   #biew = import ../applications/misc/biew {
   #  inherit lib stdenv fetchurl ncurses;
