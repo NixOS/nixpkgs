@@ -5855,7 +5855,7 @@ let
   };
 
   bitlbeeOtr = import ../applications/networking/instant-messengers/bitlbee-otr {
-    inherit fetchbzr stdenv gnutls pkgconfig libotr
+    inherit fetchbzr stdenv gnutls pkgconfig libotr libgcrypt
       libxslt xmlto docbook_xsl docbook_xml_dtd_42 perl;
     inherit (gtkLibs) glib;
   };

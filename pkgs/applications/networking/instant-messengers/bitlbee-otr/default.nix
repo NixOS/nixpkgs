@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, gnutls, glib, pkgconfig, libotr
+{ stdenv, fetchbzr, gnutls, glib, pkgconfig, libotr, libgcrypt
 , libxslt, xmlto, docbook_xsl, docbook_xml_dtd_42, perl }:
 
 let revision = "369"; in
@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    # Both OTR and GnuTLS depend on libgcrypt, but for some reason, `bitlbee'
+    # must be explicitly linked against it.
     sed -i "configure" -e "s|-f \$""{i}/lib/libotr.a|0 -eq 0|g ;
-                           s|otrprefix=\$""{i}|otrprefix=\"${libotr}\"|g";
+                           s|otrprefix=\$""{i}|otrprefix=\"${libotr}\"|g ;
+                           s|-lotr|-lotr -L${libgcrypt} -lgcrypt|g";
   '';
 
-  buildInputs = [ gnutls glib pkgconfig libotr
+  buildInputs = [ gnutls glib pkgconfig libotr libgcrypt
     libxslt xmlto docbook_xsl docbook_xml_dtd_42 perl
   ];
 
