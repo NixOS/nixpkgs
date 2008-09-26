@@ -1,5 +1,5 @@
 { fetchurl, stdenv, flex, libxml2, libxslt
-, docbook_xml_dtd_42, docbook_xsl
+, docbook_xml_dtd_42, docbook_xsl, w3m
 , glibc, bash, getopt, mktemp, findutils
 , makeWrapper }:
 
@@ -30,13 +30,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/xmlto --prefix PATH : "${libxslt}/bin:${libxml2}/bin"
+
+    # `w3m' is needed for HTML to text conversions.
+    substituteInPlace "$out/share/xmlto/format/docbook/txt" \
+      --replace "/usr/bin/w3m" "${w3m}/bin/w3m"
   '';
 
   meta = {
-    description = ''xmlto is a front-end to an XSL toolchain.  It chooses
-                    an appropriate stylesheet for the conversion you want
-		    and applies it using an external XSL-T processor.  It
-		    also performs any necessary post-processing.'';
+    description = "xmlto, a front-end to an XSL toolchain";
+
+    longDescription = ''
+      xmlto is a front-end to an XSL toolchain.  It chooses an
+      appropriate stylesheet for the conversion you want and applies
+      it using an external XSL-T processor.  It also performs any
+      necessary post-processing.
+    '';
+
     license = "GPLv2+";
     homepage = http://cyberelk.net/tim/software/xmlto/;
   };
