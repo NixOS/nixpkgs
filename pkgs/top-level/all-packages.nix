@@ -6598,8 +6598,8 @@ let
   };
 
   opera = import ../applications/networking/browsers/opera {
-    inherit fetchurl zlib glibc;
-    stdenv = overrideGCC stdenv gcc40;
+    inherit fetchurl zlib glibc stdenv;
+# stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
     qt = qt3;
     #33motif = lesstif;

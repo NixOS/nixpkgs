@@ -7,7 +7,9 @@ buildPhase() {
 
 installPhase=installPhase
 installPhase() {
-    sed -i 's=/bin/pwd=pwd=' opera install.sh 
+  set -x
+
+    sed -i 's=/bin/pwd=pwd=' install.sh 
     # Note: the "no" is because the install scripts asks whether we
     # want to install icons in some system-wide directories.
     echo no | ./install.sh --prefix=$out
@@ -23,12 +25,16 @@ installPhase() {
     gcc=$(cat $NIX_GCC/nix-support/orig-gcc)
     rpath="$rpath:$libstdcpp5/lib$suf"
     
-    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugin{wrapper,cleaner}; do
+    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner; do
+        [ -h "$i" ] && i=$(readline "$i")
+        echo "$i <<<<<<<<<<<<"
         patchelf \
             --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
             --set-rpath "$rpath" \
             "$i"
     done
+    # substitute pwd as late as possible so that the md5 checkusm check of opera passes
+    sed -i 's=/bin/pwd=pwd=' $out/bin/opera
 }
 
 genericBuild
