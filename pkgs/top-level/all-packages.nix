@@ -6335,7 +6335,18 @@ let
     inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
   });
 
-  icecatWrapper = wrapFirefox icecat3 "icecat" "";
+  icecatXulrunner3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
+    application = "xulrunner";
+    inherit fetchurl stdenv lzma pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs;
+    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+  });
+
+  icecat3Xul =
+    (symlinkJoin "icecat-3-with-xulrunner" [ icecat3 icecatXulrunner3 ])
+    // { inherit (icecat3) gtk meta; };
+
+  icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
 
   icewm = import ../applications/window-managers/icewm {
     inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;

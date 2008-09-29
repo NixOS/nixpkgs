@@ -1,7 +1,8 @@
 { stdenv, fetchurl, lzma, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , gnomevfs, libgnomeui
-, freetype, fontconfig }:
+, freetype, fontconfig
+, application ? "browser" }:
 
 let version = "3.0.2-g1"; in
 stdenv.mkDerivation {
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
   patches = [ ./skip-gre-registration.patch ];
 
   configureFlags = [
-    "--enable-application=browser"
+    "--enable-application=${application}"
     "--enable-libxul"
     "--disable-javaxpcom"
 
@@ -47,24 +48,35 @@ stdenv.mkDerivation {
 
     # Strip some more stuff
     strip -S $out/lib/*/* || true
-
-    # Fix some references to /bin paths in the IceCat shell script.
-    substituteInPlace $out/bin/icecat \
-        --replace /bin/pwd "$(type -tP pwd)" \
-        --replace /bin/ls "$(type -tP ls)"
     
     # This fixes starting IceCat when there already is a running
     # instance.  The `icecat' wrapper script actually expects to be
     # in the same directory as `run-mozilla.sh', apparently.
     libDir=$(cd $out/lib && ls -d icecat-[0-9]*)
     test -n "$libDir"
-    cd $out/bin
-    mv icecat ../lib/$libDir/
-    ln -s ../lib/$libDir/icecat .
 
-    # Register extensions etc.
-    echo "running icecat -register..."
-    (cd $out/lib/$libDir && LD_LIBRARY_PATH=. ./icecat-bin -register) || false
+    if [ -f "$out/bin/icecat" ]
+    then
+        # Fix references to /bin paths in the IceCat shell script.
+        substituteInPlace $out/bin/icecat		\
+            --replace /bin/pwd "$(type -tP pwd)"	\
+            --replace /bin/ls "$(type -tP ls)"
+
+        cd $out/bin
+        mv icecat ../lib/$libDir/
+        ln -s ../lib/$libDir/icecat .
+
+        # Register extensions etc.
+        echo "running \`icecat -register'..."
+        (cd $out/lib/$libDir && LD_LIBRARY_PATH=. ./icecat-bin -register) || false
+    fi
+
+    if [ -f "$out/lib/$libDir/xpidl" ]
+    then
+        # XulRunner's IDL compiler.
+        echo "linking \`xpidl'..."
+        ln -s "$out/lib/$libDir/xpidl" "$out/bin"
+    fi
 
     # Put the GNU IceCat icon in the right place.
     ensureDir $out/lib/$libDir/chrome/icons/default
