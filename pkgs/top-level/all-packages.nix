@@ -6537,9 +6537,9 @@ let
   };
   */
 
-  MPlayerPlugin = browser:
+  MPlayerPlugin = browser: browserName:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
-      firefox = browser;
+      inherit browser browserName;
       inherit fetchurl stdenv pkgconfig gettext;
       inherit (xlibs) libXpm;
       # !!! should depend on MPlayer
@@ -6960,7 +6960,7 @@ let
         ++ lib.optional (enableAdobeFlash)  flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
-        ++ lib.optional (getConfig [browserName "enableMPlayer"] true) (MPlayerPlugin browser)
+        ++ lib.optional (getConfig [browserName "enableMPlayer"] true) (MPlayerPlugin browser browserName)
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };

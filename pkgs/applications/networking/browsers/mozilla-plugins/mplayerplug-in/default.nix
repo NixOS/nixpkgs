@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, firefox, libXpm, gettext}:
+{stdenv, fetchurl, pkgconfig, browser, browserName, libXpm, gettext}:
 
 stdenv.mkDerivation rec {
   name = "mplayerplug-in-3.55";
@@ -8,7 +8,22 @@ stdenv.mkDerivation rec {
     sha256 = "0zkvqrzibrbljiccvz3rhbmgifxadlrfjylqpz48jnjx9kggynms";
   };
 
-  buildInputs = [pkgconfig firefox (firefox.gtk) libXpm gettext];
+  patches =
+    (if browserName == "icecat"  # FIXME: Should match Firefox 3 as well.
+     then [ ./icecat3-idldir.patch ]
+     else []);
+
+  postConfigure =
+    (if browserName == "icecat"  # FIXME: Should match Firefox 3 as well.
+     then ''
+       # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3
+       # and Mozilla Firefox 3.
+       # See, e.g., http://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .
+       rm -f Source/nsIScriptableMplayerPlugin.h
+     ''
+     else "");
+
+  buildInputs = [ pkgconfig browser (browser.gtk) libXpm gettext ];
   
   installPhase = ''
     ensureDir $out/lib/mozilla/plugins
@@ -22,5 +37,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A browser plugin that uses mplayer to play digital media from websites";
     homepage = http://mplayerplug-in.sourceforge.net/;
+    licenses = [ "GPLv2+" "LGPLv2+" "MPLv1+" ];
   };
 }
