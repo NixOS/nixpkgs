@@ -3051,6 +3051,15 @@ root        ALL=(ALL) SETENV: ALL
     };
   };
 
+  passthru = mkOption {
+    default = {};
+    description = "
+      Additional parameters. Ignored. When you want to be sure that 
+      /etc/nixos/nixos -A config.passthru.* is that same thing the 
+      system rebuild will use.
+    ";
+  };
+
   require = [
     (import ../upstart-jobs/pcmcia.nix)
   ];
