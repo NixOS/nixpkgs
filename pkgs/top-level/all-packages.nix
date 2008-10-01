@@ -446,6 +446,8 @@ let
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
     (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
+  srcOnly = args: (import ../build-support/src-only) ({inherit stdenv; } // args);
+
   substituteAll = import ../build-support/substitute/substitute-all.nix {
     inherit stdenv;
   };
