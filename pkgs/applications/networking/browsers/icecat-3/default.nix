@@ -43,6 +43,8 @@ stdenv.mkDerivation {
     "--disable-crashreporter"
   ];
 
+  preConfigure = ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"'';
+
   postInstall = ''
     export dontPatchELF=1;
 
