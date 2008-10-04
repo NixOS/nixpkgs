@@ -3260,6 +3260,13 @@ let
     inherit fetchurl stdenv;
   };
 
+  libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
+    inherit libtool libjpeg openssl zlib;
+    inherit (xlibs) xproto libX11 damageproto libXdamage 
+      libXext xextproto fixesproto libXfixes xineramaproto
+      libXinerama libXrandr randrproto libXtst;
+  };
+
   libvorbis = import ../development/libraries/libvorbis {
     inherit fetchurl stdenv libogg;
   };
@@ -7009,6 +7016,16 @@ let
   xchm = import ../applications/misc/xchm {
     inherit fetchurl stdenv wxGTK chmlib;
   };
+
+  /* Doesn't work yet
+  
+  xen = builderDefsPackage (import ../applications/virtualization/xen) {
+    inherit python e2fsprogs gnutls pkgconfig libjpeg
+      ncurses SDL libvncserver zlib;
+    texLive = if (getConfig ["xen" "texLive"] false) then texLive else null;
+    graphviz = if (getConfig ["xen" "graphviz"] false) then graphviz else null;
+    ghostscript = if (getConfig ["xen" "ghostscript"] false) then ghostscript else null;
+  }; */
 
   xfig = import ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;
