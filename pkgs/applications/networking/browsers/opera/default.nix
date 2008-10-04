@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
         #sha256 = "1wnc1s4r5gz73mxs8pgsi9a1msz7x8a8pb1ykb1xgdfn21h69p2p";
       } else throw "unsupported platform ${stdenv.system} (only i686-linux and x86_64 linux supported yet)";
 
+  dontStrip = 1;
   # operapluginwrapper seems to require libXt ?
   # Adding it makes startup faster and omits error messages (on x68)
   libPath =
