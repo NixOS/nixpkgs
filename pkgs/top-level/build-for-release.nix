@@ -80,6 +80,7 @@ let
       hal
       hello
       iana_etc
+      icecat3Xul
       inkscape
       iputils
       irssi
