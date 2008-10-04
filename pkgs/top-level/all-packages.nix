@@ -7139,6 +7139,10 @@ let
 
   ### GAMES
 
+  ballAndPaddle = import ../games/ball-and-paddle {
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_ttf guile gettext;
+  };
+
   construoBase =  composedArgsAndFun (selectVersion ../games/construo "0.2.2") {
     inherit stdenv fetchurl builderDefs
       zlib;
