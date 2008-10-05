@@ -4979,6 +4979,11 @@ let
 
   kernelHeaders = kernelHeaders_2_6_23;
 
+  kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
+    inherit fetchurl stdenv unifdef;
+  };
+
+
   kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.3.nix {
     inherit fetchurl stdenv;
   };
