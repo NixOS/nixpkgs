@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "gsl-1.9";
+  name = "gsl-1.11";
 
   src = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/gsl/gsl-1.9.tar.gz;
-    sha256 = "0l12js65c1qf3s7gmgay6gj5nbs6635py41dj8nk3hlp95wcdlgw";
+    url = ftp://ftp.gnu.org/gnu/gsl/gsl-1.11.tar.gz;
+    sha256 = "1c8ijbykgm6w8q0a1j3bfjdd9764fcw9v709bv7pqrgimq3ya4bn";
   };
 
   meta = { 
