@@ -7366,9 +7366,9 @@ let
     inherit fetchurl stdenv;
   };
 
-  slr = import ../applications/science/biology/slr {
+  /* slr = import ../applications/science/biology/slr {
     inherit fetchurl stdenv liblapack;
-  };
+  }; */
 
   pal2nal = import ../applications/science/biology/pal2nal {
     inherit fetchurl stdenv perl paml;
@@ -7380,9 +7380,9 @@ let
     inherit fetchurl stdenv gfortran;
   };
 
-  liblapack = import ../development/libraries/science/math/liblapack {
+  /* liblapack = import ../development/libraries/science/math/liblapack {
     inherit fetchurl stdenv gfortran;
-  };
+  }; */
 
   ### SCIENCE/LOGIC
 
