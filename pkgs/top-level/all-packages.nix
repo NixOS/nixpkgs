@@ -7340,9 +7340,11 @@ let
 
   arb = import ../applications/science/biology/arb {
     inherit fetchurl stdenv readline libpng zlib x11 lesstif freeglut perl;
-    inherit (xlibs) libXpm libXaw;
+    inherit (xlibs) libXpm libXaw libX11 libXext libXt;
     # motif = lesstif;
-    inherit mesa glew libtiff lynx rxp sablotron jdk;
+    inherit mesa glew libtiff lynx rxp sablotron jdk transfig;
+    # supporting tools
+    inherit gv xfig gnuplot;
   };
 
   biolib = import ../development/libraries/science/biology/biolib {

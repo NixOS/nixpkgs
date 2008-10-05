@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   patches = [ ./makefile.patch ];
 
-  buildInputs = [glew mesa libpng x11 libXpm lesstif lynx freeglut libtiff rxp sablotron libXaw perl jdk ];
+  buildInputs = [ glew mesa libpng libXpm lesstif lynx freeglut libtiff rxp sablotron libXaw perl jdk transfig libX11 libXext libXt gv xfig gnuplot ];
 
   unpackPhase = ''
     tar xzf $src
