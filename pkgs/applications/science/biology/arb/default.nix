@@ -27,19 +27,26 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    datadir=/nix/var/lib/arb
     ensureDir $out/lib
-    # link out shared location
-    ensureDir $datadir/lib/pts
-    chmod a+rwx $datadir/lib/pts
-    # cp -vau lib/pts $datadir/lib
+    shareddir=/nix/var/lib/arb
+    # link out writable shared location lib/pts
+    ensureDir $shareddir/lib/pts
+    cp -vau lib/pts $shareddir/lib
     rm -vrf lib/pts
-    ln -vs $datadir/lib/pts $out/lib/pts
-    # link out shared location
-    ensureDir $datadir/lib/nas
-    cp -vau lib/nas $datadir/lib
+    ln -vs $shareddir/lib/pts $out/lib/pts
+    chmod a+rw -R $shareddir/lib/pts
+    # link out writable shared location lib/nas/
+    ensureDir $shareddir/lib/nas
+    cp -vau lib/nas $shareddir/lib
     rm -vrf lib/nas
-    ln -vs $datadir/lib/nas $out/lib/nas
+    ln -vs $shareddir/lib/nas $out/lib/nas
+    chmod a+rw -R $shareddir/lib/nas
+    # link out shared lib/pixmaps (not sure about this, yet):
+    ensureDir $shareddir/lib/pixmaps
+    cp -vau lib/pixmaps $shareddir/lib
+    rm -vrf lib/pixmaps
+    ln -vs $shareddir/lib/pixmaps $out/lib/pixmaps
+    chmod a+rw -R $shareddir/lib/pixmaps
     # bulk copy
     cp -vau * $out
     # replace arb script
@@ -48,9 +55,10 @@ stdenv.mkDerivation {
 #!/bin/sh
 
 echo Starting Nix compiled arb from $out
-echo Shared databases are located in $datadir
+echo Shared databases are located in $shareddir
+# sometimes local profiles override these:
 export ARBHOME=$out
-export LD_LIBRARY=$ARBHOME/lib
+export LD_LIBRARY=$ARBHOME/lib   
 
 $out/bin/arb_ntree $*
 
@@ -60,9 +68,10 @@ ARB
 
   meta = {
     description     = "ARB software for sequence database handling and analysis";
-    longDescription = ''The ARB software is a graphically oriented package comprising various tools for sequence database handling and data analysis. A central database of processed (aligned) sequences and any type of additional data linked to the respective sequence entries is structured according to phylogeny or other user defined criteria''; 
+    longDescription = ''The ARB software is a graphically oriented package comprising various tools for sequence database handling and data analysis. A central database of processed (aligned) sequences and any type of additional data linked to the respective sequence entries is structured according to phylogeny or other user defined criteria. Note that this package includes its own older versions of clustal etc.''; 
     license     = "non-free";
-    pkgMaintainer = "Pjotr Prins";
+    pkgMaintainer = "http://BioLib.open-bio.org/";
     homepage    = http://www.arb-home.de/;
+    priority    = "10";   # because it includes binaries of clustal etc.
   };
 }
