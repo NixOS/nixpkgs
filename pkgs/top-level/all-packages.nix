@@ -4592,6 +4592,10 @@ let
     inherit fetchurl stdenv setuptools mesa freeglut pil python;
   };
 
+  pysqlite = import ../development/python-modules/pysqlite {
+    inherit stdenv fetchurl python sqlite;
+  };
+
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
     inherit python;
   };
@@ -7693,10 +7697,6 @@ let
   trac = import ../misc/trac {
     inherit stdenv fetchurl python clearsilver makeWrapper
       sqlite subversion pysqlite;
-  };
-
-  pysqlite = import ../development/libraries/pysqlite {
-    inherit stdenv fetchurl python sqlite;
   };
 
   wine = import ../misc/emulators/wine {
