@@ -80,7 +80,6 @@ let
       hal
       hello
       iana_etc
-      icecat3Xul
       inkscape
       iputils
       irssi
@@ -255,6 +254,7 @@ let
       eclipsesdk
       ejabberd
       gcc33
+      icecat3Xul
       jakartaregexp
       jdkPlugin
       jetty
