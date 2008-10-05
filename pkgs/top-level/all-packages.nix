@@ -1094,6 +1094,10 @@ let
     inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
   };
 
+  rxp = import ../tools/text/xml/rxp {
+    inherit fetchurl stdenv;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
@@ -2037,6 +2041,14 @@ let
     inherit fetchurl stdenv readline ncurses zlib lib openssl;
   };
 
+  rake = import ../development/ruby-modules/rake {
+    inherit fetchurl stdenv ruby ;
+  };
+
+  rubySqlite3 = import ../development/ruby-modules/sqlite3 {
+    inherit fetchurl stdenv ruby sqlite;
+  };
+
   rLang = import ../development/interpreters/r-lang {
     inherit fetchurl stdenv readline perl gfortran libpng zlib;
     inherit (xorg) libX11 libXt;
@@ -2048,7 +2060,7 @@ let
   };
 
   rq = import ../applications/networking/cluster/rq {
-    inherit fetchurl stdenv sqlite ruby;
+    inherit fetchurl stdenv sqlite ruby ;
   };
 
   spidermonkey = import ../development/interpreters/spidermonkey {
@@ -7317,14 +7329,21 @@ let
     qt = qt3;
   };
 
-
-  ### SCIENCE/BIOLOGY
+  ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
 
+  ### SCIENCE/BIOLOGY
+
+  arb = import ../applications/science/biology/arb {
+    inherit fetchurl stdenv readline libpng zlib x11 lesstif freeglut perl;
+    inherit (xlibs) libXpm libXaw;
+    # motif = lesstif;
+    inherit mesa glew libtiff lynx rxp sablotron jdk;
+  };
 
   biolib = import ../development/libraries/science/biology/biolib {
     inherit fetchurl stdenv readline perl cmake rLang zlib;
@@ -7347,8 +7366,22 @@ let
     inherit fetchurl stdenv;
   };
 
+  slr = import ../applications/science/biology/slr {
+    inherit fetchurl stdenv liblapack;
+  };
+
   pal2nal = import ../applications/science/biology/pal2nal {
     inherit fetchurl stdenv perl paml;
+  };
+
+  ### SCIENCE/MATH
+
+  atlas = import ../development/libraries/science/math/atlas {
+    inherit fetchurl stdenv gfortran;
+  };
+
+  liblapack = import ../development/libraries/science/math/liblapack {
+    inherit fetchurl stdenv gfortran;
   };
 
   ### SCIENCE/LOGIC
