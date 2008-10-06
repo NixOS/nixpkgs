@@ -4584,7 +4584,7 @@ let
 
   pygame = import ../development/python-modules/pygame {
     inherit fetchurl stdenv python pkgconfig SDL SDL_image
-      SDL_ttf numeric;
+      SDL_mixer SDL_ttf numeric;
   };
 
   pygobject = import ../development/python-modules/pygobject {
