@@ -6832,7 +6832,7 @@ let
     httpd = apacheHttpd;
   };
 
-  subversion15 = import ../applications/version-management/subversion-1.5.x {
+  subversion15 = makeOverridable (import ../applications/version-management/subversion-1.5.x) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon028;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;

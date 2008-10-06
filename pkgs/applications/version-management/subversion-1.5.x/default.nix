@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [zlib apr aprutil]
-    ++ stdenv.lib.optional httpSupport neon;
-
-  inherit perlBindings; # set a flag (see git expression)
+    ++ stdenv.lib.optional httpSupport neon
+    ++ stdenv.lib.optional pythonBindings swig.python
+    ++ stdenv.lib.optional perlBindings swig.perl
+    ;
 
   configureFlags = ''
     --disable-static
@@ -43,15 +44,30 @@ stdenv.mkDerivation rec {
     --disable-neon-version-check
   '';
 
+  preBuild = ''
+    makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
+  '';
+
   postInstall = ''
     ensureDir $out/share/emacs/site-lisp
     cp contrib/client-side/emacs/*.el $out/share/emacs/site-lisp/
+
+    if test "$pythonBindings"; then
+        make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+        make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+    fi
+    
+    if test "$perlBindings"; then
+        make swig-pl-lib
+        make install-swig-pl-lib
+        cd subversion/bindings/swig/perl/native
+        perl Makefile.PL PREFIX=$out
+        make install
+        cd -
+    fi
   ''; # */
 
-  passthru = {
-    inherit perlBindings pythonBindings;
-    python = if swig != null && swig ? python then swig.python else null;
-  };
+  inherit perlBindings pythonBindings;
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
