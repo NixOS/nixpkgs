@@ -4562,6 +4562,10 @@ let
     setuptools = setuptools.meta.function {inherit python;};
   });
 
+  numeric = import ../development/python-modules/numeric {
+    inherit fetchurl stdenv python;
+  };
+
   pil = import ../development/python-modules/pil {
     inherit fetchurl stdenv python zlib libjpeg freetype;
   };
