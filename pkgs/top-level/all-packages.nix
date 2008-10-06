@@ -4983,6 +4983,10 @@ let
 
   kernelHeaders = kernelHeaders_2_6_23;
 
+  kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
+    inherit fetchurl stdenv unifdef;
+  };
+
   kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.3.nix {
     inherit fetchurl stdenv;
   };
@@ -7344,9 +7348,9 @@ let
 
   arb = import ../applications/science/biology/arb {
     inherit fetchurl stdenv readline libpng zlib x11 lesstif freeglut perl;
-    inherit (xlibs) libXpm libXaw;
+    inherit (xlibs) libXpm libXaw libX11 libXext libXt;
     # motif = lesstif;
-    inherit mesa glew libtiff lynx rxp sablotron jdk;
+    inherit mesa glew libtiff lynx rxp sablotron jdk xfig transfig gv gnuplot;
   };
 
   biolib = import ../development/libraries/science/biology/biolib {
