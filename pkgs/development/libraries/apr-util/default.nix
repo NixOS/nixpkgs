@@ -5,11 +5,11 @@
 assert bdbSupport -> db4 != null;
 
 stdenv.mkDerivation {
-  name = "apr-util-1.2.12";
+  name = "apr-util-1.3.4";
   
   src = fetchurl {
-    url = http://archive.apache.org/dist/apr/apr-util-1.2.12.tar.bz2;
-    sha256 = "152xwaxikp22acz7ypqsvlyjxhak6p40805wwbw7hcg1gyg2scyl";
+    url = mirror://apache/apr/apr-util-1.3.4.tar.bz2;
+    sha256 = "1kin1yh42sk7hw81x3aynjf2g0k07n6707426c2mi6fh6lr0lys4";
   };
   
   configureFlags = ''

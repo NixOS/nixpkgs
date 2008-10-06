@@ -4648,9 +4648,8 @@ let
 
 
   apacheHttpd = import ../servers/http/apache-httpd {
-    inherit fetchurl stdenv perl openssl db4 expat zlib;
+    inherit fetchurl stdenv perl openssl zlib apr aprutil pcre;
     sslSupport = true;
-    db4Support = true;
   };
 
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {

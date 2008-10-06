@@ -10,7 +10,7 @@
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
-assert httpServer -> httpd != null && httpd.expat == expat;
+assert httpServer -> httpd != null && httpd.apr == apr && httpd.aprutil == aprutil;
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javahlBindings -> jdk != null;
 assert sslSupport -> neon.sslSupport;
@@ -30,32 +30,28 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [expat zlib]
-    ++ (if pythonBindings then [swig.python] else [])
-    ++ (if perlBindings then [swig.perl] else [])
-	;
+    ++ stdenv.lib.optional pythonBindings swig.python
+    ++ stdenv.lib.optional perlBindings swig.perl
+    ;
 
-  configureFlags = "
+  configureFlags = ''
     --without-gdbm --disable-static
     --with-apr=${apr} -with-apr-util=${aprutil} --with-neon=${neon}
     --disable-keychain
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-    ${if httpServer then
-        "--with-apxs=${httpd}/bin/apxs --with-apr=${httpd} --with-apr-util=${httpd}"
-      else
-        "--without-apxs"}
-    ${if (pythonBindings || perlBindings) then "--with-swig=${swig}" else "--without-swig"}
+    ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
+    ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     --disable-neon-version-check
-  ";
+  '';
 
   inherit httpServer pythonBindings javahlBindings perlBindings;
+  
   patches = [ ./subversion-respect_CPPFLAGS_in_perl_bindings.patch ];
 
   passthru = {
     inherit perlBindings pythonBindings;
-    python = if ( swig != null ) && (swig ? python) then 
-        swig.python 
-      else null;
+    python = if swig != null && swig ? python then swig.python else null;
   };
 
   meta = {

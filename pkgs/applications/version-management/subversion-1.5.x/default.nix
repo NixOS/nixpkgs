@@ -11,7 +11,7 @@
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
-assert httpServer -> httpd != null && httpd.expat == expat;
+assert httpServer -> httpd != null && httpd.apr == apr && httpd.aprutil == aprutil;
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javahlBindings -> jdk != null;
 assert sslSupport -> neon.sslSupport;
@@ -37,10 +37,7 @@ stdenv.mkDerivation rec {
     --disable-static
     --disable-keychain
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-    ${if httpServer then
-        "--with-apxs=${httpd}/bin/apxs --with-apr=${httpd} --with-apr-util=${httpd}"
-      else
-        "--without-apxs"}
+    ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     --disable-neon-version-check
