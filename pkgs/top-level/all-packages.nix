@@ -3008,6 +3008,11 @@ let
     inherit (xlibs) libXp libXau;
   };
 
+  lesstif93 = import ../development/libraries/lesstif-0.93 {
+    inherit fetchurl stdenv x11;
+    inherit (xlibs) libXp libXau;
+  };
+
   lib3ds = import ../development/libraries/lib3ds {
     inherit fetchurl stdenv unzip;
   };
@@ -7346,10 +7351,10 @@ let
   ### SCIENCE/BIOLOGY
 
   arb = import ../applications/science/biology/arb {
-    inherit fetchurl stdenv readline libpng zlib x11 lesstif freeglut perl;
+    inherit fetchurl stdenv readline libpng zlib x11 lesstif93 freeglut perl;
     inherit (xlibs) libXpm libXaw libX11 libXext libXt;
-    # motif = lesstif;
     inherit mesa glew libtiff lynx rxp sablotron jdk xfig transfig gv gnuplot;
+    lesstif = lesstif93;
   };
 
   biolib = import ../development/libraries/science/biology/biolib {

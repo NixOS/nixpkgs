@@ -1,0 +1,11 @@
+diff -r 97ac365bfcd6 lesstif-0.93.94/lib/Xm-2.1/Xpm.c
+--- lesstif-0.93.94/lib/Xm-2.1/Xpm.c	Mon Oct 06 15:52:50 2008 +0200
++++ lesstif-0.93.94/lib/Xm-2.1/Xpm.c	Mon Oct 06 15:53:16 2008 +0200
+@@ -54,6 +54,7 @@
+ #include <io.h>
+ #endif
+ 
++#include <stdint.h>
+ #include <X11/Intrinsic.h> /* Avoid re-definition of Pixel-type */
+ 
+ #include <Xm/XpmP.h>
