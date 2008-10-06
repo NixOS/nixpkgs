@@ -213,4 +213,11 @@ rec {
     ftp://ftp.gwdg.de/pub/misc/tcpdump/
   ];
 
+  # X.org.
+  xorg = [
+    http://xorg.freedesktop.org/releases/
+    http://ftp.gwdg.de/pub/x11/x.org/pub/
+    http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
+  ];
+
 }
