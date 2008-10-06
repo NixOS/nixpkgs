@@ -220,4 +220,12 @@ rec {
     http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
   ];
 
+  # Apache mirrors.
+  apache = [
+    http://apache.cs.uu.nl/dist/
+    http://www.eu.apache.org/dist/
+    http://www.apache.org/dist/
+    http://archive.apache.org/dist/ # fallback for old releases
+  ];
+
 }

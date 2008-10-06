@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "apache-httpd-2.2.9";
 
   src = fetchurl {
-    url = http://archive.apache.org/dist/httpd/httpd-2.2.9.tar.bz2;
+    url = mirror://apache/httpd/httpd-2.2.9.tar.bz2;
     md5 = "3afa8137dc1999be695a20b62fdf032b";
   };
 
