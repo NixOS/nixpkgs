@@ -19,15 +19,13 @@ let
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
-  subversion = import ../../../nixpkgs/pkgs/applications/version-management/subversion-1.4.x {
-    inherit (pkgs) fetchurl stdenv apr aprutil neon expat swig zlib;
+  subversion = pkgs.subversion15.function (origArgs: {
     bdbSupport = true;
     httpServer = true;
     sslSupport = true;
     compressionSupport = true;
     pythonBindings = true;
-    httpd = pkgs.apacheHttpd;
-  };
+  });
 
 
   # Build the maintenance scripts and commit hooks.
