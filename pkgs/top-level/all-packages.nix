@@ -7188,6 +7188,10 @@ let
     inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_ttf guile gettext;
   };
 
+  castleCombat = import ../games/castle-combat {
+    inherit fetchurl stdenv python pygame twisted lib numeric makeWrapper;
+  };
+
   construoBase =  composedArgsAndFun (selectVersion ../games/construo "0.2.2") {
     inherit stdenv fetchurl builderDefs
       zlib;
