@@ -1,10 +1,12 @@
 let
 
-  configFileName =
-    let env = builtins.getEnv "NIXOS_CONFIG"; in
-    if env == "" then /etc/nixos/configuration.nix else env;
+  fromEnv = name : default :
+    let env = builtins.getEnv name; in
+    if env == "" then default else env;
+  configuration = import (fromEnv "NIXOS_CONFIG" /etc/nixos/configuration.nix);
+  nixpkgsPath   =         fromEnv "NIXPKGS"      /etc/nixos/nixpkgs;
 
-  system = import system/system.nix {configuration = import configFileName;};
+  system = import system/system.nix { inherit configuration nixpkgsPath; };
 
 in
 

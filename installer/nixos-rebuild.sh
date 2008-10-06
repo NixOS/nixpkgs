@@ -5,6 +5,7 @@
 NIXOS=${NIXOS:-@defaultNIXOS@}
 NIXPKGS=${NIXPKGS:-@defaultNIXPKGS@}
 NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
+export NIXPKGS # must be exported so that a non default location is passed to nixos/default.nix
 
 showSyntax() {
     # !!! more or less cut&paste from
