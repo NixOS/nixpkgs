@@ -19,11 +19,13 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description     = "Phylogenetic Analysis by Maximum Likelihood (PAML)";
+    description     = "SLR: Sitewise Likehood Ratio estimation of selection";
     longDescription = ''
 SLR is a program to detect sites in coding DNA that are unusually conserved and/or unusually variable (that is, evolving under purify or positive selection) by analysing the pattern of changes for an alignment of sequences on an evolutionary tree.     
 '';
     license     = "GPL3";
     homepage    = http://www.ebi.ac.uk/goldman/SLR/;
+    pkgMaintainer = http://biolib.open-bio.org/;
+
   };
 }
