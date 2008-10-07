@@ -13,7 +13,7 @@ assert langTreelang -> bison != null && flex != null;
 
 with import ../../../lib;
 
-let version = "4.3.1"; in
+let version = "4.3.2"; in
 
 stdenv.mkDerivation {
   name = "gcc-${version}";
@@ -22,15 +22,15 @@ stdenv.mkDerivation {
   src =
     optional /*langC*/ true (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "18spk152j1vqa9bzhi93i7cgrmf7gncv0h1lm1mxxgn1ahrnnw67";
+      sha256 = "0np7cbqdaajarwwlkvq7d2ifkld1lsh0cfsaqcx9dsvqklkyg1q6";
     }) ++
     optional langCC (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "0r74s60hylr8xrnb2j3x0dmf3cnxxg609g4h07r6ida8vk33bd25";
+      sha256 = "105vhmq111l5zyzxdanhhv5lgvl4pr6pq9xj6jb5g5x3bk4jnki5";
     }) ++
     optional langFortran (fetchurl {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "1fl76sajlz1ihnsmqsbs3i8g0h77w9hm35pwb1s2w6p4h5xy5dnb";
+      sha256 = "1kk3d2n68va5wxpi77cadn4s5b7s39qg1dqyrfppq1nrqwb77acl";
     });
     
   patches =
