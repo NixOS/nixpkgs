@@ -2806,16 +2806,17 @@ let
     inherit fetchurl stdenv pkgconfig gettext;
   };
 
-  glibc = useFromStdenv "glibc"
-    (import ../development/libraries/glibc-2.7 {
-      inherit fetchurl stdenv kernelHeaders;
-      #installLocales = false;
-    });
+  glibc = useFromStdenv "glibc" glibc28;
 
-  glibcUnstable = lowPrio (import ../development/libraries/glibc-2.8 {
-      inherit fetchurl stdenv kernelHeaders;
-      installLocales = getPkgConfig "glibc" "locales" false;
-    });
+  glibc27 = import ../development/libraries/glibc-2.7 {
+    inherit fetchurl stdenv kernelHeaders;
+    #installLocales = false;
+  };
+
+  glibc28 = import ../development/libraries/glibc-2.8 {
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
 
   glibc_multi =
     assert system == "x86_64-linux";

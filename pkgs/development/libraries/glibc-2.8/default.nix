@@ -3,14 +3,14 @@
 , profilingLibraries ? false
 }:
 
-stdenv.mkDerivation rec
-{
-  name = "glibc-2.8-20080707";
+stdenv.mkDerivation rec {
+  name = "glibc-2.8-20081006";
+  
   builder = ./builder.sh;
-  src = fetchurl
-  {
+  
+  src = fetchurl {
     url = "ftp://sources.redhat.com/pub/glibc/snapshots/${name}.tar.bz2";
-    sha256 = "e317b854807f52cd539ed9b6bf8b1c2977e650e27e90baa787444bd3b74f5e72";
+    sha256 = "e32021c14f0bda55b6a5d2a98ac878a03b2c6f78a1ab4a11f0386a51eda1d58e";
   };
 
   inherit kernelHeaders installLocales;
@@ -45,9 +45,11 @@ stdenv.mkDerivation rec
   # `--with-tls --without-__thread' enables support for TLS but causes
   # it not to be used.  Required if we don't want to barf on 2.4
   # kernels.  Or something.
-  configureFlags="--enable-add-ons
+  configureFlags = ''
+    --enable-add-ons
     --with-headers=${kernelHeaders}/include
-    ${if profilingLibraries then "--enable-profile" else "--disable-profile"}";
+    ${if profilingLibraries then "--enable-profile" else "--disable-profile"}
+  '';
 
   # Workaround for this bug:
   #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
@@ -55,4 +57,9 @@ stdenv.mkDerivation rec
   # preprocessor symbol `__i686' will be defined to `1'.  This causes
   # the symbol __i686.get_pc_thunk.dx to be mangled.
   NIX_CFLAGS_COMPILE = "-U__i686";
+
+  meta = {
+    homepage = http://www.gnu.org/software/libc/;
+    description = "The GNU C Library";
+  };
 }
