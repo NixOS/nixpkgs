@@ -8,11 +8,13 @@ stdenv.mkDerivation {
     sha256 = "12pi7i2mxff5jab48pqpwlz2pi0j6sp9p7bgrcl663iiw81zglj9";
   };
 
+  buildInputs = stdenv.lib.optional aclSupport acl;
+  
+  # Support older Linux kernels.
+  patches = [ ./setting-time-backward-compatibility.patch ];
+  
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
   };
-
-  buildInputs = stdenv.lib.optional aclSupport acl;
-  # Older kernels: patches = ./setting-time-backward-compatibility.patch;
 }
