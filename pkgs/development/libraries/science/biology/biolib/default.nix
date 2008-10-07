@@ -17,6 +17,5 @@ written in C/C++ and makes them available for major Bio* languages: BioPerl,
 BioRuby, BioPython'';
     license     = "GPL2";
     homepage    = http://biolib.open-bio.org/; 
-    pkgMaintainer = http://biolib.open-bio.org/;
   };
 }
