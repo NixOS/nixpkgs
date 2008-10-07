@@ -7361,7 +7361,7 @@ let
   arb = import ../applications/science/biology/arb {
     inherit fetchurl stdenv readline libpng zlib x11 lesstif93 freeglut perl;
     inherit (xlibs) libXpm libXaw libX11 libXext libXt;
-    inherit mesa glew libtiff lynx rxp sablotron jdk xfig transfig gv gnuplot;
+    inherit mesa glew libtiff lynx rxp sablotron jdk transfig gv gnuplot;
     lesstif = lesstif93;
   };
 
