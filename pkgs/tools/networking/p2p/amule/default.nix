@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, gettext }:
+{ fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "aMule-2.2.1";
@@ -8,13 +9,20 @@ stdenv.mkDerivation rec {
     sha256 = "0zcsyy6bm7ls1dpmfm0yskd2gj50ah2bvkm0v42826zwzj6sbxy9";
   };
 
-  buildInputs = [ zlib wxGTK perl cryptopp gettext ];
+  buildInputs = [ zlib wxGTK perl cryptopp libupnp gettext makeWrapper ];
 
   configureFlags = "--with-crypto-prefix=${cryptopp}";
 
   postConfigure = ''
     sed -i "src/libs/ec/file_generator.pl"     \
         -es'|/usr/bin/perl|${perl}/bin/perl|g'
+  '';
+
+  # aMule will try to `dlopen' libupnp and libixml, so help it
+  # find them.
+  postInstall = ''
+    wrapProgram "$out/bin/amule" \
+      --prefix LD_LIBRARY_PATH ":" "${libupnp}/lib"
   '';
 
   meta = {
