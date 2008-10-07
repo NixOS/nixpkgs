@@ -130,8 +130,6 @@ let
   #   };
   overrideSetup = stdenv: setup: stdenv.regenerate setup;
 
-  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
-
   # Return a modified stdenv that uses dietlibc to create small
   # statically linked binaries.
   useDietLibC = stdenv: stdenv //
@@ -571,8 +569,7 @@ let
   };
 
   convertlit = import ../tools/text/convertlit {
-    inherit fetchurl unzip libtommath;
-    stdenv = stdenvNew;
+    inherit fetchurl stdenv unzip libtommath;
   };
 
   unifdef = import ../development/tools/misc/unifdef {
@@ -593,8 +590,7 @@ let
   };
 
   cron = import ../tools/system/cron {
-    inherit fetchurl;
-    stdenv = stdenvNew;
+    inherit fetchurl stdenv;
   };
 
   curl = import ../tools/networking/curl {
@@ -1428,7 +1424,7 @@ let
     inherit stdenv;
   };
 
-  gfortran = import ../build-support/gcc-wrapper-new {
+  gfortran = import ../build-support/gcc-wrapper {
     name = "gfortran";
     nativeTools = false;
     nativeLibc = false;
@@ -1479,12 +1475,12 @@ let
     profiledCompiler = true;
   }));
 
-  gcc43 = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) glibc (import ../development/compilers/gcc-4.3 {
+  gcc43 = wrapGCC (import ../development/compilers/gcc-4.3 {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
   }));
 
-  gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper-new) glibc_multi (import ../development/compilers/gcc-4.3 {
+  gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (import ../development/compilers/gcc-4.3 {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc42);
     inherit fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;

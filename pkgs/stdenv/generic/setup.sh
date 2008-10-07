@@ -160,9 +160,6 @@ findInputs() {
 }
 
 pkgs=""
-if test -n "$buildinputs"; then
-    buildInputs="$buildinputs" # compatibility
-fi
 for i in $buildInputs $propagatedBuildInputs; do
     findInputs $i
 done
@@ -442,34 +439,31 @@ stripHash() {
 
 
 unpackFile() {
-    local file="$1"
+    curSrc="$1"
     local cmd
 
-    header "unpacking source archive $file" 3
+    header "unpacking source archive $curSrc" 3
 
-    case "$file" in
+    case "$curSrc" in
         *.tar)
-            tar xvf $file
+            tar xvf $curSrc
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $file | tar xvf -
+            gzip -d < $curSrc | tar xvf -
             ;;
         *.tar.bz2 | *.tbz2)
-            bzip2 -d < $file | tar xvf -
+            bzip2 -d < $curSrc | tar xvf -
             ;;
         *.zip)
-            unzip $file
+            unzip $curSrc
             ;;
         *)
-            if test -d "$file"; then
-                stripHash $file
-                cp -prvd $file $strippedName
+            if test -d "$curSrc"; then
+                stripHash $curSrc
+                cp -prvd $curSrc $strippedName
             else
-                if test -n "$findUnpacker"; then
-                    $findUnpacker $1;
-                fi
                 if test -z "$unpackCmd"; then
-                    echo "source archive $file has unknown type"
+                    echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
                 eval "$unpackCmd"
@@ -482,11 +476,6 @@ unpackFile() {
 
 
 unpackPhase() {
-    if test -n "$unpackPhase"; then
-        eval "$unpackPhase"
-        return
-    fi
-
     eval "$preUnpack"
     
     if test -z "$srcs"; then
@@ -516,7 +505,7 @@ unpackPhase() {
     # Find the source directory.
     if test -n "$setSourceRoot"; then
         eval "$setSourceRoot"
-    else
+    elif test -z "$sourceRoot"; then
         sourceRoot=
         for i in *; do
             if test -d "$i"; then
@@ -546,7 +535,7 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if test "dontMakeSourcesWritable" != 1; then
-        chmod -R +w $sourceRoot
+        chmod -R u+w $sourceRoot
     fi
 
     eval "$postUnpack"
@@ -554,19 +543,10 @@ unpackPhase() {
 
 
 patchPhase() {
-    if test -n "$patchPhase"; then
-        eval "$patchPhase"
-        return
-    fi
-
     eval "$prePatch"
     
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
-    if test -z "$patchFlags"; then
-        patchFlags="-p1"
-    fi
-
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -578,7 +558,7 @@ patchPhase() {
                 uncompress="bzip2 -d"
                 ;;
         esac
-        $uncompress < $i | patch $patchFlags
+        $uncompress < $i | patch ${patchFlags:--p1}
         stopNest
     done
 
@@ -592,11 +572,6 @@ fixLibtool() {
 
 
 configurePhase() {
-    if test -n "$configurePhase"; then
-        eval "$configurePhase"
-        return
-    fi
-
     eval "$preConfigure"
 
     if test -z "$configureScript"; then
@@ -633,11 +608,6 @@ configurePhase() {
 
 
 buildPhase() {
-    if test -n "$buildPhase"; then
-        eval "$buildPhase"
-        return
-    fi
-
     eval "$preBuild"
 
     if test -z "$makeFlags" && ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
@@ -655,21 +625,12 @@ buildPhase() {
 
 
 checkPhase() {
-    if test -n "$checkPhase"; then
-        eval "$checkPhase"
-        return
-    fi
-
     eval "$preCheck"
-
-    if test -z "$checkTarget"; then
-        checkTarget="check"
-    fi
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" $checkTarget
+        $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     eval "$postCheck"
 }
@@ -711,26 +672,15 @@ patchShebangs() {
 
 
 installPhase() {
-    if test -n "$installPhase"; then
-        eval "$installPhase"
-        return
-    fi
-
     eval "$preInstall"
 
     ensureDir "$prefix"
 
-    if test -z "$installCommand"; then
-        if test -z "$installTargets"; then
-            installTargets=install
-        fi
-        echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-        make ${makefile:+-f $makefile} $installTargets \
-            $makeFlags "${makeFlagsArray[@]}" \
-            $installFlags "${installFlagsArray[@]}"
-    else
-        eval "$installCommand"
-    fi
+    installTargets=${installTargets:-install}
+    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+    make ${makefile:+-f $makefile} $installTargets \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $installFlags "${installFlagsArray[@]}"
 
     eval "$postInstall"
 }
@@ -740,11 +690,6 @@ installPhase() {
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
 fixupPhase() {
-    if test -n "$fixupPhase"; then
-        eval "$fixupPhase"
-        return
-    fi
-
     eval "$preFixup"
 
     # Put man/doc/info under $out/share.
@@ -802,30 +747,17 @@ fixupPhase() {
 
 
 distPhase() {
-    if test -n "$distPhase"; then
-        eval "$distPhase"
-        return
-    fi
-
     eval "$preDist"
 
-    if test -z "$distTarget"; then
-        distTarget="dist"
-    fi
-
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
 
-        if test -z "$tarballs"; then
-            tarballs="*.tar.gz"
-        fi
-
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
-        cp -pvd $tarballs $out/tarballs
+        cp -pvd ${tarballs:-*.tar.gz} $out/tarballs
     fi
 
     eval "$postDist"
