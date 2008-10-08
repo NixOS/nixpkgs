@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     # XXX: Upstream URL is not versioned, which might eventually break this.
     url = "http://www.neilvandyke.org/quack/quack.el";
-    sha256 = "1j68azxbc54hdk3cw9q95qpz99wgj9xxgrzzwmydxh3zafy5faqs";
+    sha256 = "1xmpbdb064s3l3cv4agf03ir1g7xfzyvlqayr3yy5f8z3i6pf7mi";
   };
 
   buildInputs = [ emacs ];
