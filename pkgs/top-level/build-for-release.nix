@@ -64,6 +64,7 @@ let
       ghc
       ghostscript
       gimp
+      git
       gnash
       gnugrep
       gnum4
