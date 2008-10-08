@@ -163,6 +163,9 @@ rec {
   # Debian.
   debian = [
     ftp://ftp.de.debian.org/debian/
+    ftp://ftp.es.debian.org/debian/
+    ftp://ftp.fr.debian.org/debian/
+    ftp://ftp.it.debian.org/debian/
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
