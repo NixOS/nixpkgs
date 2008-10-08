@@ -7,6 +7,7 @@ let
     inherit (pkgs)
       MPlayer
       MPlayerPlugin
+      abcde
       alsaUtils
       apacheHttpd
       aspell
