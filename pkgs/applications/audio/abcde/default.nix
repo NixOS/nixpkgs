@@ -6,7 +6,7 @@ in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
-      url = "mirror://debian/pool/a/abcde/abcde_${version}.orig.tar.gz";
+      url = "mirror://debian/pool/main/a/abcde/abcde_${version}.orig.tar.gz";
       sha256 = "1wl4ygj1cf1d6g05gwwygsd5g83l039fzi011r30ma5lnm763lyb";
     };
 
