@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libupnp-1.3.1";
+  name = "libupnp-1.6.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/upnp/${name}.tar.gz";
-    sha256 = "0zbng3zk4br70l8snn765nf89pmkw7wdh8gf6vxmf9r2099nl3ad";
+    url = "mirror://sourceforge/pupnp/${name}.tar.bz2";
+    sha256 = "1cxvn0v8lcc5p70jc3j50a7rm12am6xr0l2fibi8075jqazcmmsq";
   };
 
   meta = {
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
 
     license = "BSD-style";
 
-    homepage = http://upnp.sourceforge.net/;
+    homepage = http://pupnp.sourceforge.net/;
   };
 }

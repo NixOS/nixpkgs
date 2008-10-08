@@ -3261,7 +3261,7 @@ let
     inherit fetchurl stdenv libtool;
   };
 
-  libupnp = import ../development/libraries/libupnp {
+  libupnp = import ../development/libraries/pupnp {
     inherit fetchurl stdenv;
   };
 
