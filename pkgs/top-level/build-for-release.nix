@@ -93,6 +93,7 @@ let
       ktorrent
       kvm
       less
+      lftp
       lhs2tex
       libtool
       libxml2
