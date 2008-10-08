@@ -7593,7 +7593,15 @@ let
     wxGTK = wxGTK28;
   };
 
-  pgf = import ../misc/tex/pgf {
+  pgf = pgf2;
+
+  # Keep the old PGF since some documents don't render properly with
+  # the new one.
+  pgf1 = import ../misc/tex/pgf/1.x.nix {
+    inherit fetchurl stdenv;
+  };
+
+  pgf2 = import ../misc/tex/pgf/2.x.nix {
     inherit fetchurl stdenv;
   };
 
