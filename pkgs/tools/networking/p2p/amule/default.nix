@@ -2,11 +2,11 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "aMule-2.2.1";
+  name = "aMule-2.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/amule/${name}.tar.bz2";
-    sha256 = "0zcsyy6bm7ls1dpmfm0yskd2gj50ah2bvkm0v42826zwzj6sbxy9";
+    sha256 = "0yrp3vk1gqfajgldfs4an5rd1l4i69icsrzcqmfxsny6qbcrv5hv";
   };
 
   buildInputs = [ zlib wxGTK perl cryptopp libupnp gettext makeWrapper ];
