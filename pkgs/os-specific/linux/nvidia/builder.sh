@@ -56,10 +56,10 @@ installPhase() {
     # Install the programs.
     ensureDir $out/bin
 
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*.*
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*.*
-    patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*.*
-    patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*.*
+    patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
+    patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*
+    patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
     for i in nvidia-settings nvidia-xconfig; do
 	cp usr/bin/$i $out/bin/$i
