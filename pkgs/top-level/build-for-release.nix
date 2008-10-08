@@ -79,6 +79,7 @@ let
       gqview
       graphviz
       grub
+      gv
       gzip
       hal
       hello
