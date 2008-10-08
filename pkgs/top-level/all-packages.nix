@@ -3354,7 +3354,7 @@ let
     system == "x86_64-linux";
 
   mesa = assert mesaSupported; import ../development/libraries/mesa {
-    inherit fetchurl stdenv pkgconfig x11 xlibs libdrm;
+    inherit fetchurl stdenv pkgconfig expat x11 xlibs libdrm;
   };
 
   mesaHeaders = import ../development/libraries/mesa/headers.nix {
@@ -4803,10 +4803,10 @@ let
     inherit fetchurl openssl stdenv libcap pam;
   };
 
-  xorg = recurseIntoAttrs (import ../servers/x11/xorg {
+  xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config dbus hal;
+      xkeyboard_config dbus hal python e2fsprogs openssl;
   });
 
   zabbixAgent = import ../servers/monitoring/zabbix {

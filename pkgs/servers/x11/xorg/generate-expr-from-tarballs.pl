@@ -2,10 +2,9 @@
 
 # Typical command to generate the list of tarballs:
 
-# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' > tarballs
-# manually added xcb tarballs from http://xcb.freedesktop.org/dist/
-# then run: perl ./generate-expr-from-tarballs.pl < tarballs
-
+# export i="mirror://xorg/X11R7.4/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.4.list
+# manually update extra.list
+# then run: cat tarballs-7.4.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
 
 use strict;
 
@@ -29,20 +28,23 @@ $pcMap{"libdrm"} = "libdrm";
 $pcMap{"libXaw"} = "libXaw";
 $pcMap{"zlib"} = "zlib";
 $pcMap{"perl"} = "perl";
+$pcMap{"python"} = "python";
 $pcMap{"mesa"} = "mesa";
-$pcMap{"mesaHeaders"} = "mesaHeaders";
 $pcMap{"mkfontscale"} = "mkfontscale";
 $pcMap{"mkfontdir"} = "mkfontdir";
 $pcMap{"bdftopcf"} = "bdftopcf";
 $pcMap{"libxslt"} = "libxslt";
 $pcMap{"dbus-1"} = "dbus";
 $pcMap{"hal"} = "hal";
+$pcMap{"uuid"} = "e2fsprogs";
+$pcMap{"gl"} = "mesa";
+$pcMap{"openssl"} = "openssl";
 
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 
 
-$extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; ";
+$extraAttrs{"xorgserver"} = " patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; ";
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
@@ -144,6 +146,10 @@ while (<>) {
         push @requires, "mkfontdir";
     }
 
+    if ($file =~ /AM_PATH_PYTHON/) {
+        push @requires, "python";
+    }
+
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
 	# Don't run fc-cache.
 	die if defined $extraAttrs{$pkg};
@@ -181,9 +187,8 @@ while (<>) {
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videosis/;
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videointel/;
+    push @requires, "glproto", "gl" if $pkg =~ /xf86videosis/;
+    push @requires, "glproto", "gl" if $pkg =~ /xf86videointel/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;

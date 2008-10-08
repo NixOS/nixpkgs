@@ -1,6 +1,6 @@
-diff -rc xorg-server-X11R7.2-1.2.0-orig/GL/glx/glxdri.c xorg-server-X11R7.2-1.2.0/GL/glx/glxdri.c
-*** xorg-server-X11R7.2-1.2.0-orig/GL/glx/glxdri.c	Tue Jan 23 04:13:14 2007
---- xorg-server-X11R7.2-1.2.0/GL/glx/glxdri.c	Tue Feb 27 00:15:38 2007
+diff -rc xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c xorg-server-X11R7.2-1.2.0/glx/glxdri.c
+*** xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c	Tue Jan 23 04:13:14 2007
+--- xorg-server-X11R7.2-1.2.0/glx/glxdri.c	Tue Feb 27 00:15:38 2007
 ***************
 *** 945,952 ****
   	goto handle_error;
@@ -23,4 +23,3 @@ diff -rc xorg-server-X11R7.2-1.2.0-orig/GL/glx/glxdri.c xorg-server-X11R7.2-1.2.
   
       screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
       if (screen->driver == NULL) {
-Only in xorg-server-X11R7.2-1.2.0/GL/glx: glxdri.c~
