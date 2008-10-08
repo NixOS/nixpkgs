@@ -73,6 +73,7 @@ let
       gnused
       gnutar
       gnutls
+      gphoto2
       guile
       gqview
       graphviz
