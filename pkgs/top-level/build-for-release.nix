@@ -204,7 +204,7 @@ let
       xauth
       xf86inputkeyboard
       xf86inputmouse
-      xf86videoi810
+      xf86videointel
       xf86videovesa
       xkbcomp
       xorgserver
