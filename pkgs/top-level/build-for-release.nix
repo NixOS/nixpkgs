@@ -164,6 +164,7 @@ let
       sysvtools
       #tetex
       texLive
+      texLiveBeamer
       texLiveExtra
       texinfo
       thunderbird
