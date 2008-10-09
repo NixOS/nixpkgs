@@ -1,4 +1,10 @@
-{stdenv, fetchurl, ghc, zlib, ncurses, curl}:
+{stdenv, fetchurl, ghc, zlib, ncurses, curl, getConfig}:
+
+# you really should consider using darcs2 and updating your darcs-1 repos ..
+# many performance improvements have been made if you use the darcs-2 or hashed format
+# (darcs-2 is default now when runnig darcs 2.1.0)
+# lookup darcs convert and make sure you understand the one way conversion..
+assert getConfig ["darcs" "IreallyWantDarcsOne"] false;
 
 stdenv.mkDerivation {
   name = "darcs-1.0.9";

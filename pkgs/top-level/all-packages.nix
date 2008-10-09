@@ -6069,7 +6069,7 @@ let
   };
 
   darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv zlib ncurses curl;
+    inherit fetchurl stdenv zlib ncurses curl getConfig;
     ghc = ghc661;
   };
 
