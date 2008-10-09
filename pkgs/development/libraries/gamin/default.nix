@@ -8,5 +8,5 @@ stdenv.mkDerivation rec {
 	};
 
 	buildInputs = [python pkgconfig glib];
-	configureFlags = "--enable-shared --disable-static --disable-debug";
+	configureFlags = "--enable-shared --disable-static --disable-debug --with-python=${python}";
 }
