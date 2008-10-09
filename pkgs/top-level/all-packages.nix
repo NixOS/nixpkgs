@@ -5410,7 +5410,7 @@ let
     inherit fetchurl stdenv bison flex perl;
   };
 
-  kvm = kvm74;
+  kvm = kvm76;
 
   kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
