@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
    
 stdenv.mkDerivation {
-  name = "kvm-74";
+  name = "kvm-76";
    
   src = fetchurl {
-    url = mirror://sourceforge/kvm/kvm-74.tar.gz;
-    sha256 = "0gnd5r9wb8mar3jh8gv46vdm3qkbgiwzkim5ki67kx3ca71g0m24";
+    url = mirror://sourceforge/kvm/kvm-76.tar.gz;
+    sha256 = "06gf2aic6n0b3fnd9vi0llyydr2w6qnx1k8imm710862xhncpssk";
   };
 
   patches = [

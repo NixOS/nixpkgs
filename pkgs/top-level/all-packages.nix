@@ -5418,7 +5418,7 @@ let
     kernelHeaders = kernelHeaders_2_6_23;
   };
 
-  kvm74 = import ../os-specific/linux/kvm/74.nix {
+  kvm76 = import ../os-specific/linux/kvm/76.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
   };
