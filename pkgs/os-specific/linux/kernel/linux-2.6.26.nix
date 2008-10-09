@@ -28,7 +28,7 @@ let
 
   lib = stdenv.lib;
 
-  version = "2.6.26.5";
+  version = "2.6.26.6";
 
   baseFeatures = {
     iwlwifi = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "16kp986767jxd9x4wxnnqnb1gkcv2ip3k234zbs7l6ikarafp0s8";
+    sha256 = "1r8wvkpy5391zqswgxr4zbbjk3va1jyca460dmz5nj6y9icl5jpl";
   };
   
   patches = map (p: p.patch) kernelPatches;
