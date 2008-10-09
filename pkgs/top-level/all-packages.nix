@@ -7746,6 +7746,9 @@ let
     inherit (xlibs) libX11;
   };
 
-  myEnvFun = import ../misc/my_env;
+  myEnvFun = import ../misc/my-env {
+    inherit substituteAll pkgs;
+    inherit (stdenv) mkDerivation;
+  };
 
 }; in pkgs
