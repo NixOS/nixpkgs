@@ -82,6 +82,9 @@ mkdir -m 0755 -p /home
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run
+echo -n "cleaning \`/tmp'..."
+rm -rf --one-file-system /tmp/*
+echo " done"
 
 if test -n "$safeMode"; then
     mkdir -m 0755 -p /var/run
