@@ -1971,9 +1971,10 @@ let
 
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
-  perl58 = import ../development/interpreters/perl-5.8 {
-    inherit fetchurl stdenv;
-  };
+  perl58 = if !stdenv.isLinux then sysPerl else 
+    import ../development/interpreters/perl-5.8 {
+      inherit fetchurl stdenv;
+    };
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
