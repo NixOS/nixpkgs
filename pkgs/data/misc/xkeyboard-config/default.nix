@@ -1,23 +1,22 @@
-{stdenv, fetchurl, perl, perlXMLParser, xkbcomp}:
+{stdenv, fetchurl, perl, perlXMLParser, xkbcomp, gettext, intltool}:
 
 stdenv.mkDerivation {
-  name = "xkeyboard-config-0.9";
+  name = "xkeyboard-config-1.4";
 
   src = fetchurl {
-    url = http://xlibs.freedesktop.org/xkbdesc/xkeyboard-config-0.9.tar.bz2;
-    sha256 = "0zbpprhlv8ggsvgnwqw8d4cx0ry86szm36ghigwb1sn46q0c915v";
+    url = http://xlibs.freedesktop.org/xkbdesc/xkeyboard-config-1.4.tar.bz2;
+    sha256 = "1qdhhc5ji8677dna9qj6kisgpfzhpjmaavdjzvvrv9chrxyqa6lj";
   };
 
-  buildInputs = [perl perlXMLParser xkbcomp];
+  buildInputs = [perl perlXMLParser xkbcomp gettext intltool];
 
   ICONV = "iconv";
 
-  preConfigure = "
-    configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86\"
-  ";
+  preConfigure = ''
+    configureFlags="--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86"
+  '';
 
   postInstall = ''
-  	rm ''${out}/etc/X11/xkb/compiled
-	cat ${./level3-deadkeys-us-intl} >> $out/etc/X11/xkb/symbols/us
+    cat ${./level3-deadkeys-us-intl} >> $out/etc/X11/xkb/symbols/us
   '';
 }

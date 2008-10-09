@@ -2976,10 +2976,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  intltool = composedArgsAndFun (selectVersion ../development/tools/misc/intltool "0.36.2") {
-    inherit fetchurl stdenv lib builderDefs stringsWithDeps
-      perl perlXMLParser;
-  };
+  intltool = gnome.intltool;
 
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip libjpeg freeglut mesa;
@@ -5783,8 +5780,8 @@ let
     inherit builderDefs;
   };
 
-  xkeyboard_config = composedArgsAndFun (selectVersion ../data/misc/xkeyboard-config "1.2") {
-    inherit fetchurl stdenv perl perlXMLParser gettext;
+  xkeyboard_config = import ../data/misc/xkeyboard-config {
+    inherit fetchurl stdenv perl perlXMLParser gettext intltool;
     inherit (xlibs) xkbcomp;
   };
 

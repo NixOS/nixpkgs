@@ -1934,7 +1934,7 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/xkbcomp-1.0.5.tar.bz2;
       sha256 = "1h809xl9kpx0r9ynvjfk7wy6rx8pgl1i14qh29r150wf73h06i10";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
+    buildInputs = [pkgconfig libX11 libxkbfile ]; NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\"/etc/X11/xkb\""; 
   }) // {inherit libX11 libxkbfile ;};
     
   xkbevd = (stdenv.mkDerivation {

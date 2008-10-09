@@ -62,6 +62,9 @@ $extraAttrs{"xf86inputevdev"} = "
 $extraAttrs{"libXpm"} = "
     patchPhase = \"sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in\";";
 
+$extraAttrs{"xkbcomp"} = " NIX_CFLAGS_COMPILE = \"-DDFLT_XKB_CONFIG_ROOT=\\\"/etc/X11/xkb\\\"\"; ";
+
+
 my $downloadCache = "./download-cache";
 $ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
@@ -202,7 +205,7 @@ while (<>) {
 
 print "\nWRITE OUT\n";
 
-open OUT, ">default2.nix";
+open OUT, ">default.nix";
 
 print OUT "";
 print OUT <<EOF;
