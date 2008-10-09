@@ -39,7 +39,13 @@ for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
     export INFOPATH=$i/info:$i/share/info:$INFOPATH
     export PKG_CONFIG_PATH="$i/lib/pkgconfig:$PKG_CONFIG_PATH"
-    export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
+
+    # Automake's `aclocal' bails out if it finds non-existent directories
+    # in its path.
+    if [ -d "$i/share/aclocal" ]
+    then
+	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
+    fi
 done
 
 
