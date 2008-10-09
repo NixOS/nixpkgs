@@ -47,11 +47,13 @@ stdenv.mkDerivation {
     ln -s ${readline}/lib/libreadline.dylib $out/frameworks/GNUreadline.framework/GNUreadline
     ln -s ${readline}/lib/libreadline.dylib $out/frameworks/GNUreadline.framework/Versions/A/GNUreadline
 
-    mv $out/bin $out/bin-orig
-    mkdir $out/bin
-    for i in $(cd $out/bin-orig && ls); do
+    mkdir $out/bin-orig
+    for i in $(cd $out/bin && ls *); do
+        mv $out/bin/$i $out/bin-orig/$i
         echo \"#! $SHELL -e\" >> $out/bin/$i
-        echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
+        extraFlag=
+        if test $i != ghc-pkg; then extraFlag=\"-framework-path $out/frameworks\"; fi
+        echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i $extraFlag \\\"\\$@\\\"\" >> $out/bin/$i
         chmod +x $out/bin/$i
     done
 
