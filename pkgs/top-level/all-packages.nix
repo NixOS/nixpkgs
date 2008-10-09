@@ -73,7 +73,7 @@ let
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
   pkgsOverriden = pkgsFun __overrides; # the overriden, final packages
   pkgs = pkgsOverriden;
-  
+
 
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: rec {
@@ -85,7 +85,7 @@ let
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ./..;
 
-  
+
   ### Symbolic names.
 
 
@@ -102,7 +102,7 @@ let
 
 
   inherit lib config getConfig;
-  
+
   # Override the compiler in stdenv for specific packages.
   overrideGCC = stdenv: gcc: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
@@ -308,7 +308,7 @@ let
     { function = newArgsFun: makeOverridable f (origArgs // (newArgsFun origArgs));
     };
 
-    
+
   ### STANDARD ENVIRONMENT
 
 
@@ -1961,7 +1961,7 @@ let
   };
 
   maudeUnstable = lowPrio (import ../development/interpreters/maude/unstable.nix {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv;
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv unzip;
   });
 
   octave = import ../development/interpreters/octave {
@@ -3283,7 +3283,7 @@ let
 
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
-    inherit (xlibs) xproto libX11 damageproto libXdamage 
+    inherit (xlibs) xproto libX11 damageproto libXdamage
       libXext xextproto fixesproto libXfixes xineramaproto
       libXinerama libXrandr randrproto libXtst;
   };
@@ -6103,7 +6103,7 @@ let
   dwm = import ../applications/window-managers/dwm {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXinerama;
-  }; 
+  };
 
   # building eclipise from source
   # experimental tested on x86_64-linux only
@@ -6527,7 +6527,7 @@ let
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
-    inherit imagemagick intltool python pkgconfig webkit libxml2 
+    inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) gtksourceview;
@@ -7050,7 +7050,7 @@ let
   };
 
   /* Doesn't work yet
-  
+
   xen = builderDefsPackage (import ../applications/virtualization/xen) {
     inherit python e2fsprogs gnutls pkgconfig libjpeg
       ncurses SDL libvncserver zlib;
