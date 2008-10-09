@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, gtk, libgtkhtml, freetype
 , fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl
-, perlXMLParser, python, pygtk, gettext, xlibs
+, perlXMLParser, python, pygtk, gettext, xlibs, intltool, babl, gegl
 }:
 
 stdenv.mkDerivation {
-  name = "gimp-2.4.7";
+  name = "gimp-2.6.1";
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gimp/v2.4/gimp-2.4.7.tar.bz2;
-    sha256 = "1j8904cy5sp021fz7ikh2dxm339a36ihns94qr9i1y7sb3qfx66k";
+    url = ftp://ftp.gtk.org/pub/gimp/v2.6/gimp-2.6.1.tar.bz2;
+    sha256 = "02lacx01marjc4kkpr4m2c1z1rj1sv6rg4wjyv06whjb5nh0qpq9";
   };
   
   buildInputs = [
     pkgconfig gtk libgtkhtml freetype fontconfig
     libart_lgpl libtiff libjpeg libpng libexif zlib perl
-    perlXMLParser python pygtk gettext
+    perlXMLParser python pygtk gettext intltool babl gegl
   ];
 
   configureFlags = [ "--disable-print" ];

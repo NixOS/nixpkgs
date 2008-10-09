@@ -2764,12 +2764,10 @@ let
 
   gegl = import ../development/libraries/gegl {
     inherit fetchurl stdenv libpng pkgconfig babl;
-    # optional gtk+
-    glib = glib214;
     openexr = openexr_1_6_1;
     #  avocodec avformat librsvg
     inherit cairo libjpeg librsvg;
-    inherit (gtkLibs) pango;
+    inherit (gtkLibs) pango glib gtk;
   };
 
   geos = import ../development/libraries/geos {
@@ -6284,7 +6282,7 @@ let
   gimp = import ../applications/graphics/gimp {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser
-      python pygtk gettext xlibs;
+      python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 
