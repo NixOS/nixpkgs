@@ -503,6 +503,16 @@ rec {
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   }) // {inherit mkfontdir mkfontscale ;};
     
+  gccmakedep = (stdenv.mkDerivation {
+    name = "gccmakedep-1.0.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/util/gccmakedep-1.0.2.tar.bz2;
+      sha256 = "04dfamx3fvkvqfgs6xy2a6yqbxjrj4777ylxp38g60hhbdl4jg86";
+    };
+    buildInputs = [pkgconfig ];
+  }) // {inherit ;};
+    
   glproto = (stdenv.mkDerivation {
     name = "glproto-1.4.9";
     builder = ./builder.sh;
@@ -640,8 +650,8 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/libXaw-1.0.4.tar.bz2;
       sha256 = "1yaslcpj6sd6s8gx2hv60gfjf515gggd8f2jv4zqbp5q9wcapx0i";
     };
-    buildInputs = [pkgconfig libX11 libXau libXext xextproto libXmu libXpm xproto libXt ];
-  }) // {inherit libX11 libXau libXext xextproto libXmu libXpm xproto libXt ;};
+    buildInputs = [pkgconfig libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
+  }) // {inherit libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
     
   libXcomposite = (stdenv.mkDerivation {
     name = "libXcomposite-0.4.0";
@@ -762,6 +772,16 @@ rec {
     };
     buildInputs = [pkgconfig libX11 libXext xextproto libXt ];
   }) // {inherit libX11 libXext xextproto libXt ;};
+    
+  libXp = (stdenv.mkDerivation {
+    name = "libXp-1.0.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXp-1.0.0.tar.bz2;
+      sha256 = "1blwrr5zhmwwy87j0svmhv3hc13acyn5j14n5rv0anz81iav2r3y";
+    };
+    buildInputs = [pkgconfig libX11 libXau libXext xextproto ];
+  }) // {inherit libX11 libXau libXext xextproto ;};
     
   libXpm = (stdenv.mkDerivation {
     name = "libXpm-3.5.7";
@@ -1221,8 +1241,8 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/xdpyinfo-1.0.3.tar.bz2;
       sha256 = "0qhr7r3q4hs7cjpxh8fjyjia35czbdxzrb7bwm3znkxxa63pd522";
     };
-    buildInputs = [pkgconfig libdmx libX11 libXext libXi libXinerama libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
-  }) // {inherit libdmx libX11 libXext libXi libXinerama libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
+    buildInputs = [pkgconfig libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
+  }) // {inherit libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
     
   xdriinfo = (stdenv.mkDerivation {
     name = "xdriinfo-1.0.2";
@@ -2104,8 +2124,8 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/xset-1.0.4.tar.bz2;
       sha256 = "1bdxs24pf7g73n55a967fr96f9i5ilci5nzh32wr5axy6sxp8gkc";
     };
-    buildInputs = [pkgconfig libX11 libXext libXfontcache libXmu libXxf86misc ];
-  }) // {inherit libX11 libXext libXfontcache libXmu libXxf86misc ;};
+    buildInputs = [pkgconfig libX11 libXext libXfontcache libXmu libXp libXxf86misc ];
+  }) // {inherit libX11 libXext libXfontcache libXmu libXp libXxf86misc ;};
     
   xsetmode = (stdenv.mkDerivation {
     name = "xsetmode-1.0.0";
