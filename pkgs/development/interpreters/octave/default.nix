@@ -1,7 +1,7 @@
 {stdenv, fetchurl, g77, readline, ncurses, perl, flex}:
 
 assert readline != null && ncurses != null && flex != null;
-assert g77.langF77;
+assert g77.langFortran;
 
 stdenv.mkDerivation {
   name = "octave-2.9.6";
