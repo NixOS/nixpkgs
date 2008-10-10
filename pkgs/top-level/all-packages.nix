@@ -4029,8 +4029,26 @@ let
     };
   };
 
+  perlDBDSQLite = import ../development/perl-modules/generic perl {
+    name = "DBD-SQLite-1.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSERGEANT/DBD-SQLite-1.14.tar.gz;
+      sha256 = "01qd5xfx702chg3bv2k727kfdp84zy5xh31y6njvivkp78vrs624";
+    };
+    propagatedBuildInputs = [perlDBI];
+    makeMakerFlags = "SQLITE_LOCATION=${sqlite}";
+  };
+
   perlDBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl perl db4;
+  };
+
+  perlDBI = import ../development/perl-modules/generic perl {
+    name = "DBI-1.607";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.607.tar.gz;
+      sha256 = "053ysk2a4njhzq5p59v5s6jzyi0yqr8l6wkswbvy4fyil3ka343h";
+    };
   };
 
   perlDigestSHA1 = import ../development/perl-modules/generic perl {
