@@ -1194,6 +1194,16 @@ rec {
     buildInputs = [pkgconfig libxcb ];
   }) // {inherit libxcb ;};
     
+  xclock = (stdenv.mkDerivation {
+    name = "xclock-1.0.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xclock-1.0.3.tar.bz2;
+      sha256 = "0zspx5jqp52wgp4c4d9qaxhp0b9p2fzx2ys4rza10apgx5x7gd8h";
+    };
+    buildInputs = [pkgconfig libXaw libX11 libXft libxkbfile libXrender libXt ];
+  }) // {inherit libXaw libX11 libXft libxkbfile libXrender libXt ;};
+    
   xcmiscproto = (stdenv.mkDerivation {
     name = "xcmiscproto-1.1.2";
     builder = ./builder.sh;
@@ -1273,6 +1283,16 @@ rec {
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
+    
+  xeyes = (stdenv.mkDerivation {
+    name = "xeyes-1.0.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xeyes-1.0.1.tar.bz2;
+      sha256 = "0ac0m9af193lxpyj11k2sp2xpmlhzzn3xrs6kdyy6c11fgl042ak";
+    };
+    buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
+  }) // {inherit libX11 libXext libXmu libXt ;};
     
   xf86bigfontproto = (stdenv.mkDerivation {
     name = "xf86bigfontproto-1.1.2";
@@ -2006,6 +2026,16 @@ rec {
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   }) // {inherit libX11 libXmu ;};
+    
+  xmessage = (stdenv.mkDerivation {
+    name = "xmessage-1.0.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xmessage-1.0.2.tar.bz2;
+      sha256 = "1hy3n227iyrm323hnrdld8knj9h82fz6s7x6bw899axcjdp03d02";
+    };
+    buildInputs = [pkgconfig libXaw libXt ];
+  }) // {inherit libXaw libXt ;};
     
   xmodmap = (stdenv.mkDerivation {
     name = "xmodmap-1.0.3";
