@@ -84,6 +84,7 @@ let
       hal
       hello
       iana_etc
+      imagemagick
       inkscape
       iputils
       irssi
