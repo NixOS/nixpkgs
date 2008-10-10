@@ -337,11 +337,13 @@ let
     inherit (allPackages {system = "i686-darwin";})
       aterm
       autoconf
-      automake19x
       automake110x
+      automake19x
+      ghc
       libtool
       libxml2
       libxslt
+      nixUnstable
       subversion
       ;
   };
