@@ -6,19 +6,30 @@
 
 let
 
-  optional = condition: x: if condition then [x] else [];
-
+  inherit (pkgs.lib) optional isInList getAttr;
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = cfg.package;
   gnome = pkgs.gnome;
   stdenv = pkgs.stdenv;
 
+  knownVideoDrivers = {
+    nvidia = { modulesFirst = [ kernelPackages.nvidiaDrivers ]; };  #make sure it first loads the nvidia libs
+    vesa =  { modules = [xorg.xf86videovesa]; };
+    vga =   { modules = [xorg.xf86videovga]; };
+    sis =   { modules = [xorg.xf86videosis]; };
+    i810 =  { modules = [xorg.xf86videoi810]; };
+    intel = { modules = [xorg.xf86videointel]; };
+    nv =    { modules = [xorg.xf86videonv]; };
+    ati =   { modules = [xorg.xf86videoati]; };
+  };
+
   # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
   sessionType = cfg.sessionType;
 
+  videoDriverModules = getAttr [ videoDriver ] (throw "unkown video driver : \"${videoDriver}\"") knownVideoDrivers;
 
   sessionCmd =
     if sessionType == "" then cfg.sessionStarter else
@@ -36,20 +47,14 @@ let
 
     
   modules = 
-    optional (videoDriver == "nvidia") kernelPackages.nvidiaDrivers #make sure it first loads the nvidia libs
+
+    getAttr ["modulesFirst"] [] videoDriverModules
     ++ [
       xorg.xorgserver
       xorg.xf86inputkeyboard
       xorg.xf86inputmouse
     ] 
-    ++ optional (videoDriver == "vesa") xorg.xf86videovesa
-    ++ optional (videoDriver == "vga") xorg.xf86videovga
-    ++ optional (videoDriver == "sis") xorg.xf86videosis
-    ++ optional (videoDriver == "i810") xorg.xf86videoi810
-    ++ optional (videoDriver == "intel") xorg.xf86videointel
-    ++ optional (videoDriver == "nv") xorg.xf86videonv
-    ++ optional (videoDriver == "ati") xorg.xf86videoati
-    ++ optional (videoDriver == "radeonhd") xorg.xf86videoradeonhd
+    ++ getAttr ["modules"] [] videoDriverModules
     ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
 
