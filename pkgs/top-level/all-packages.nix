@@ -3472,6 +3472,11 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  plib = import ../development/libraries/plib {
+    inherit fetchurl stdenv mesa freeglut SDL;
+    inherit (xlibs) libXi libSM libXmu libXext libX11;
+  };
+
   poppler = import ../development/libraries/poppler {
     inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
       pkgconfig;
