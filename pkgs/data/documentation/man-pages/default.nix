@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "man-pages-3.05";
+stdenv.mkDerivation rec {
+  name = "man-pages-3.11";
   
   src = fetchurl {
-    url = mirror://kernel/linux/docs/man-pages/man-pages-3.05.tar.bz2;
-    sha256 = "08c48w41qjmv37g0fqcr1ky2y2mfnxqn55jxay079qrj5vxraink";
+    url = "mirror://kernel/linux/docs/man-pages/${name}.tar.bz2";
+    sha256 = "1pl3jdp7vh6vl2drqdal3ggdc22icdgfkfbswh21k8jlcxf00dn8";
   };
 
   preBuild = "
@@ -14,6 +14,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Linux development manual pages";
-    homepage = ftp://ftp.win.tue.nl/pub/linux-local/manpages/;
+    homepage = http://kernel.org/pub/linux/docs/manpages/;
   };
 }
