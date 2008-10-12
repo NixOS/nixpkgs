@@ -7304,6 +7304,11 @@ let
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
   };
 
+  superTuxKart = import ../games/super-tux-kart {
+    inherit fetchurl stdenv plib SDL openal freealut mesa
+      libvorbis libogg gettext;
+  };
+
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
