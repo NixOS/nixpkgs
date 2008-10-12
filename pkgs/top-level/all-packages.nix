@@ -3417,7 +3417,7 @@ let
   };
 
   openal = import ../development/libraries/openal {
-    inherit fetchurl stdenv alsaLib autoconf automake libtool;
+    inherit fetchurl stdenv cmake alsaLib;
   };
 
   # added because I hope that it has been easier to compile on x86 (for blender)
