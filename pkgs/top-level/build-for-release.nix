@@ -158,6 +158,7 @@ let
       subversion14
       subversion15
       sudo
+      superTuxKart
       swig
       sylpheed 
       sysklogd
