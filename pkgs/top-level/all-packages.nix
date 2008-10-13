@@ -2264,6 +2264,12 @@ let
     log2xmlSupport = getConfig [ "gnuMake" "log2xmlSupport" ] true;
   };
 
+  # The modified version of GNU Make with support for `nix-log2xml'.
+  gnumakeNix = import ../development/tools/build-managers/gnumake {
+    inherit fetchurl stdenv;
+    log2xmlSupport = true;
+  };
+
   gnumake380 = import ../development/tools/build-managers/gnumake-3.80 {
     inherit fetchurl stdenv;
   };
