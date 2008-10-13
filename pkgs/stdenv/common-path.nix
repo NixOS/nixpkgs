@@ -8,7 +8,7 @@
   pkgs.gnutar
   pkgs.gzip
   pkgs.bzip2
-  pkgs.gnumake
+  pkgs.gnumakeNix
   pkgs.bash
   pkgs.patch
   pkgs.replace
