@@ -2813,7 +2813,7 @@ let
 
   glibc28 = import ../development/libraries/glibc-2.8 {
     inherit fetchurl stdenv kernelHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getPkgConfig "glibc" "locales" true;
   };
 
   glibc_multi =
