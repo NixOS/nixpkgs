@@ -1,9 +1,9 @@
 diff -rc pkg-config-0.23-orig/main.c pkg-config-0.23/main.c
 *** pkg-config-0.23-orig/main.c	2008-01-16 23:06:48.000000000 +0100
---- pkg-config-0.23/main.c	2008-10-13 14:41:42.000000000 +0200
+--- pkg-config-0.23/main.c	2008-10-14 13:04:04.000000000 +0200
 ***************
 *** 431,436 ****
---- 431,457 ----
+--- 431,454 ----
     else
       disable_private_libs();
   
@@ -19,11 +19,8 @@ diff -rc pkg-config-0.23-orig/main.c pkg-config-0.23/main.c
 +   else
 +     disable_requires();
 + 
-+   /* Only process Requires.private if cflags or static libs wanted */
-+   if (want_cflags ||
-+       want_I_cflags ||
-+       want_other_cflags ||
-+       want_static_lib_list)
++   /* Only process Requires.private if static libs wanted */
++   if (want_static_lib_list)
 +     enable_requires_private();
 +   else
 +     disable_requires_private();
