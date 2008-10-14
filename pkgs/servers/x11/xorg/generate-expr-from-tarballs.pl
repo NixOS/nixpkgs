@@ -21,25 +21,13 @@ my %pcMap;
 my %extraAttrs;
 
 
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "hal", "openssl", "gperf", "m4");
+$pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
-$pcMap{"fontconfig"} = "fontconfig";
 $pcMap{"libpng12"} = "libpng";
-$pcMap{"libdrm"} = "libdrm";
-$pcMap{"libXaw"} = "libXaw";
-$pcMap{"zlib"} = "zlib";
-$pcMap{"perl"} = "perl";
-$pcMap{"python"} = "python";
-$pcMap{"mesa"} = "mesa";
-$pcMap{"mkfontscale"} = "mkfontscale";
-$pcMap{"mkfontdir"} = "mkfontdir";
-$pcMap{"bdftopcf"} = "bdftopcf";
-$pcMap{"libxslt"} = "libxslt";
 $pcMap{"dbus-1"} = "dbus";
-$pcMap{"hal"} = "hal";
 $pcMap{"uuid"} = "e2fsprogs";
 $pcMap{"gl"} = "mesa";
-$pcMap{"openssl"} = "openssl";
-
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 
@@ -195,6 +183,7 @@ while (<>) {
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
     
     print "REQUIRES @requires => $pkg\n";
     $pkgRequires{$pkg} = \@requires;

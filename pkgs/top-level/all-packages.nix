@@ -2583,7 +2583,7 @@ let
 
   cairo = import ../development/libraries/cairo {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
-    inherit (xlibs) pixman;
+    inherit (xlibs) pixman libxcb xcbutil;
   };
 
   cairomm = import ../development/libraries/cairomm {
@@ -4809,7 +4809,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config dbus hal python e2fsprogs openssl;
+      xkeyboard_config dbus hal python e2fsprogs openssl gperf m4;
   });
 
   zabbixAgent = import ../servers/monitoring/zabbix {

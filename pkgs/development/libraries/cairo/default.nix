@@ -2,7 +2,7 @@
 , pdfSupport ? true
 , pngSupport ? true
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype
-, zlib, libpng, pixman
+, zlib, libpng, pixman, libxcb, xcbutil
 }:
 
 assert postscriptSupport -> zlib != null;
@@ -17,14 +17,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig x11 fontconfig freetype pixman
+    pkgconfig x11 fontconfig freetype pixman libxcb xcbutil
   ];
 
   propagatedBuildInputs =
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
-  configureFlags = ["--disable-static"] ++
+  configureFlags = ["--disable-static" "--enable-xcb"] ++
     stdenv.lib.optional pdfSupport "--enable-pdf";
 
   meta = {

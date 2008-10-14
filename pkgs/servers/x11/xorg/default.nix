@@ -650,8 +650,8 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/libXaw-1.0.4.tar.bz2;
       sha256 = "1yaslcpj6sd6s8gx2hv60gfjf515gggd8f2jv4zqbp5q9wcapx0i";
     };
-    buildInputs = [pkgconfig libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
-  }) // {inherit libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
+    buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
+  }) // {inherit printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
     
   libXcomposite = (stdenv.mkDerivation {
     name = "libXcomposite-0.4.0";
@@ -780,8 +780,8 @@ rec {
       url = mirror://xorg/individual/lib/libXp-1.0.0.tar.bz2;
       sha256 = "1blwrr5zhmwwy87j0svmhv3hc13acyn5j14n5rv0anz81iav2r3y";
     };
-    buildInputs = [pkgconfig libX11 libXau libXext xextproto ];
-  }) // {inherit libX11 libXau libXext xextproto ;};
+    buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto ];
+  }) // {inherit printproto libX11 libXau libXext xextproto ;};
     
   libXpm = (stdenv.mkDerivation {
     name = "libXpm-3.5.7";
@@ -1014,6 +1014,16 @@ rec {
     buildInputs = [pkgconfig perl ];
   }) // {inherit perl ;};
     
+  printproto = (stdenv.mkDerivation {
+    name = "printproto-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/proto/printproto-1.0.4.tar.bz2;
+      sha256 = "1gnkpz8iyl27gyjvy8rhm9v6g5qvz3632pn5djxks577i0qsjngh";
+    };
+    buildInputs = [pkgconfig ];
+  }) // {inherit ;};
+    
   randrproto = (stdenv.mkDerivation {
     name = "randrproto-1.2.1";
     builder = ./builder.sh;
@@ -1191,8 +1201,8 @@ rec {
       url = http://xcb.freedesktop.org/dist/xcb-util-0.3.0.tar.bz2;
       sha256 = "1aq82ymgvrr5hav62mjax8qar9qiszw0cj719wlznh251v0xynpq";
     };
-    buildInputs = [pkgconfig libxcb ];
-  }) // {inherit libxcb ;};
+    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+  }) // {inherit gperf m4 libxcb xproto ;};
     
   xclock = (stdenv.mkDerivation {
     name = "xclock-1.0.3";
@@ -2074,8 +2084,8 @@ rec {
       url = mirror://xorg/X11R7.4/src/everything/xorg-server-1.5.1.tar.bz2;
       sha256 = "08gbfdclx1cqlryxgqa54j2bcri0n816ldq4nyrabq5fzw5qhdig";
     };
-    buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ]; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; 
-  }) // {inherit renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ;};
+    buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ]; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; 
+  }) // {inherit renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.2";
