@@ -1,6 +1,6 @@
 args: 
   with args;
-  let inherit (builtins) pathExists; in
+  let inherit (builtins) pathExists hasAttr getAttr head; in
   rec {
   /*
     tries to get source in this order
@@ -13,13 +13,14 @@ args:
   managedRepoDir = getConfig [ "bleedingEdgeRepos" "managedRepoDir" ] (builtins.getEnv "HOME" + "/managed_repos");
 
   sourceByName = name :
-    let localTarGZ = managedRepoDir+"/dist/${name}.tar.gz"; 
+    let fetchinfo = if (hasAttr name fetchInfos) 
+          then (getAttr name fetchInfos) { inherit fetchurl; }
+          else throw "no bleeding edge source attribute found in bleeding-edge-fetch-infos.nix with name ${name}\n"
+                     "run NO_FETCH=1 nix-repository-manager <path to nixpkgs> --update <reponame> to add it automatically";
+        localTarGZ = managedRepoDir+"/dist/${ lib.dropPath (head fetchinfo.urls) }"; # hack, dropPath should be implemented as primop
         fetchInfos = import ../../../misc/bleeding-edge-fetch-infos.nix; in
-    if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false ) && pathExists localTarGZ
-    then localTarGZ
-    else if __hasAttr name fetchInfos
-         then (__getAttr name fetchInfos) { inherit fetchurl; }
-         else throw "warning, no bleeding edge source attribute found in bleeding-edge-fetch-infos.nix with name ${name}";
+    if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false )
+        then localTarGZ else fetchinfo;
 
   repos = 
       let kde4support = builtins.listToAttrs (map (n: lib.nv ("kdesupport_"+n) { type = "svn"; url = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/${n}"; groups="kdesupport"; })
@@ -63,6 +64,8 @@ args:
 
       kdepimlibs = { type="svn"; url="svn://anonsvn.kde.org/home/kde/trunk/KDE/kdepimlibs"; groups = "kde"; };
       kdebase = { type="svn"; url="svn://anonsvn.kde.org/home/kde/trunk/KDE/kdebase"; groups = "kde"; };
+
+      cinelerra =  { type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; };
 
       # git repositories 
       hypertable =  { type="git"; url="git://scm.hypertable.org/pub/repos/hypertable.git"; groups=""; };

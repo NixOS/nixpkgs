@@ -507,6 +507,16 @@ rec {
 
   defineShList = name : list : "\n${name}=(${concatStringsSep " " (map escapeShellArg list)})\n";
 
+  # this as well :-) arg: http://foo/bar/bz.ext returns bz.ext
+  dropPath = s : 
+      if s == "" then "" else
+      let takeTillSlash = left : c : s :
+          if left == 0 then s
+          else if (__substring left 1 s == "/") then
+                  (__substring (__add left 1) (__sub c 1) s)
+          else takeTillSlash (__sub left 1) (__add c 1) s; in
+      takeTillSlash (__sub (__stringLength s) 1) 1 s;
+
   # calls a function (f attr value ) for each record item. returns a list
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
