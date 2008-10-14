@@ -3,9 +3,8 @@
 stdenv.mkDerivation {
   name = "mjpegtools-1.6.2";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/mjpegtools-1.6.2.tar.gz;
-    md5 = "01c0120b0182de67f182ef99ad855daa" ;
+    url = mirror://sourceforge/mjpeg/mjpegtools-1.9.0rc3.tar.gz;
+    sha256 = "1xvgqzdb2rw6j4ss65k4hrzrbsl74p7k5l4qgf5dbfcw522kw7lb";
   };
   buildInputs = [libjpeg libX11];
-  patches = [./fix.patch];
 }
