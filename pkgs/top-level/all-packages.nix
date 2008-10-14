@@ -2714,6 +2714,11 @@ let
 
   fftw = import ../development/libraries/fftw {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
+    singlePrecision = false;
+  };
+  fftwSinglePrec = import ../development/libraries/fftw {
+    inherit fetchurl stdenv builderDefs stringsWithDeps;
+    singlePrecision = true;
   };
 
   fltk20 = (import ../development/libraries/fltk) {
