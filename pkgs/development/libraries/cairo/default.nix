@@ -19,13 +19,13 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig x11 fontconfig freetype pixman
   ];
-  
+
   propagatedBuildInputs =
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
-  configureFlags =
-    (if pdfSupport then ["--enable-pdf"] else []);
+  configureFlags = ["--disable-static"] ++
+    stdenv.lib.optional pdfSupport "--enable-pdf";
 
   meta = {
     description = "A 2D graphics library with support for multiple output devices";

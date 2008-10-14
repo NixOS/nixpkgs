@@ -12,11 +12,6 @@ stdenv.mkDerivation {
   
   propagatedBuildInputs = [x11 glib cairo libpng];
 
-  # The configure script doesn't seem to pick up the Cairo cflags.
-  preConfigure = ''
-    CAIRO_CFLAGS=$(pkg-config --cflags cairo --debug)
-  '';
-
   meta = {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
     homepage = http://www.pango.org/;
