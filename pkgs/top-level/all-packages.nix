@@ -2700,6 +2700,14 @@ let
     ocaml = builtins.getAttr "3.10.0" ocaml_alts;
   };
 
+  faac = import ../development/libraries/faac {
+    inherit fetchurl stdenv autoconf automake libtool;
+  };
+
+  faad2 = import ../development/libraries/faad2 {
+    inherit fetchurl stdenv autoconf automake libtool;
+  };
+
   fcgi = import ../development/libraries/fcgi {
       inherit fetchurl stdenv;
   };
