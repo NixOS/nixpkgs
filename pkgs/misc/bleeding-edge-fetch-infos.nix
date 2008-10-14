@@ -215,4 +215,8 @@
     url = http://mawercer.de/~nix/repos/kdesupport_telepathy_qt.tar.gz;
     sha256 = "022599182ff629662bbd01acdea6ead9aec64b3e73e8da3eb58ef857803035f2";
   };
+  cinelerra = args: with args; fetchurl { # Tue Oct 14 12:36:49 UTC 2008
+    url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz";
+    sha256 = "1e84ff59dcd7a3c80343eb9be302f822e510c95398fd1a6c8f2e4b163fd51e45";
+  };
 }

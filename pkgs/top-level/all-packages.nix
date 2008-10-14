@@ -6008,6 +6008,20 @@ let
       };
     };
 
+  cinelerra = import ../applications/video/cinelerra {
+    inherit fetchurl stdenv
+      automake autoconf libtool
+      a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
+      libvorbis libogg libjpeg libtiff freetype mjpegtools x264
+      gettext X11 faad2 faac libtheora libpng libdv perl nasm e2fsprogs
+      pkgconfig;
+      openexr = openexr_1_6_1;
+    fftw = fftwSinglePrec;
+    inherit (xorg) libXxf86vm libXv;
+    inherit (bleedingEdgeRepos) sourceByName;
+    inherit (gnome) esound;
+  };
+
   compiz_050 = assert mesaSupported; import ../applications/window-managers/compiz/0.5.0.nix {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
