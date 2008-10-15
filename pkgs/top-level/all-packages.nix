@@ -2002,17 +2002,20 @@ let
       libXt;
   };
 
-  python = python25;
+  python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
+  python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
+  pythonBase = python25Base;
+  pythonFull = python25Full;
 
   python24 = import ../development/interpreters/python/2.4 {
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  python25base = composedArgsAndFun (import ../development/interpreters/python/2.5) {
+  python25Base = composedArgsAndFun (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
 
-  python25 = python25base.meta.function {
+  python25Full = python25Base.meta.function {
     db4 = if getConfig ["python" "db4Support"] false then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] false then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] false then readline else null;
@@ -5909,7 +5912,8 @@ let
   };
 
   bazaar = import ../applications/version-management/bazaar {
-    inherit fetchurl stdenv makeWrapper python;
+    inherit fetchurl stdenv makeWrapper;
+    python = pythonFull;
   };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
@@ -6092,7 +6096,8 @@ let
   };
 
   codeville = builderDefsPackage (selectVersion ../applications/version-management/codeville "0.8.0") {
-    inherit makeWrapper python;
+    inherit makeWrapper;
+    python = pythonFull;
   };
 
   cua = import ../applications/editors/emacs-modes/cua {
