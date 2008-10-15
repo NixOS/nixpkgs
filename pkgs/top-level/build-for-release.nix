@@ -66,7 +66,7 @@ let
       ghostscript
       gimp
       git
-      gnash
+      # gnash
       gnugrep
       gnum4
       gnumake
