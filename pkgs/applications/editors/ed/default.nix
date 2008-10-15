@@ -1,11 +1,13 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.0";
+  name = "ed-1.1";
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.bz2";
-    sha256 = "0mwkbz6qy6hqbdk7hwl6271yjsm5nh1v70aynp51zncj0s0b2r7r";
+    sha256 = "0hikn102jywxy86599k0ys4h2r3lshlfihrpjr7dqaxch49pgb56";
   };
+
+  doCheck = true;
 
   meta = {
     description = "GNU ed, an implementation of the standard Unix editor";
