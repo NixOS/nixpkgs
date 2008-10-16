@@ -6881,7 +6881,7 @@ let
     inherit clisp texinfo;
   };
 
-  subversion = subversion14;
+  subversion = subversion15;
 
   subversion14 = makeOverridable (import ../applications/version-management/subversion-1.4.x) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
