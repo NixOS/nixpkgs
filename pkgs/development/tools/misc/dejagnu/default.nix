@@ -10,7 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expect makeWrapper ];
 
-  doCheck = true;
+  # FIXME: Enable when the /dev/pts problem is fixed.
+  doCheck = false;
+
+  # FIXME: The chroot /dev/pts is currently empty, which causes Expect
+  # to fail: http://www.linuxfromscratch.org//lfs/faq.html#no-ptys .
+  checkPhase = ''
+    # Provide `runtest' with a log name, otherwise it tries to run
+    # `whoami', which fails when in a chroot.
+    LOGNAME="nix-build-daemon" make check
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/runtest" \
