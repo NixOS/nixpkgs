@@ -8,6 +8,7 @@
 , javahlBindings ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib
 , httpd ? null, expat, swig ? null, jdk ? null
+, static ? false
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -35,8 +36,8 @@ stdenv.mkDerivation rec {
     ;
 
   configureFlags = ''
-    --disable-static
     --disable-keychain
+    ${if static then "--disable-shared --enable-all-static" else "--disable-static"}
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
         make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
         make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
     fi
-    
+
     if test "$perlBindings"; then
         make swig-pl-lib
         make install-swig-pl-lib
