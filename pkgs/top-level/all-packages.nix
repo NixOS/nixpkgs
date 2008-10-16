@@ -2442,6 +2442,10 @@ let
     javaSupport = false;
   };
 
+  swftools = import ../tools/video/swftools {
+    inherit fetchurl stdenv x264 zlib libjpeg freetype giflib;
+  };
+
   swigWithJava = lowPrio (appendToName "with-java" (import ../development/tools/misc/swig {
     inherit fetchurl stdenv jdk;
     perlSupport = false;
