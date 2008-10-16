@@ -10,11 +10,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expect makeWrapper ];
 
-  # FIXME: Enable when the /dev/pts problem is fixed.
+  # FIXME: Enable when the "spawn id" problem is fixed.
   doCheck = false;
 
-  # FIXME: The chroot /dev/pts is currently empty, which causes Expect
-  # to fail: http://www.linuxfromscratch.org//lfs/faq.html#no-ptys .
+  # Note: The test-suite *requires* /dev/pts among the
+  # `build-chroot-dirs' of the build daemon when building in a chroot.
+
+  # FIXME: The test-suite currently fails with this problem:
+  #   http://lists.gnu.org/archive/html/bug-dejagnu/2003-06/msg00002.html
+  #   http://thread.gmane.org/gmane.linux.distributions.nixos/1036
   checkPhase = ''
     # Provide `runtest' with a log name, otherwise it tries to run
     # `whoami', which fails when in a chroot.
