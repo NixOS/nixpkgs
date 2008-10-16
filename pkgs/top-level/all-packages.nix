@@ -1971,7 +1971,7 @@ let
 
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
-  perl58 = if !stdenv.isLinux then sysPerl else 
+  perl58 = if !stdenv.isLinux then sysPerl else
     import ../development/interpreters/perl-5.8 {
       inherit fetchurl stdenv;
     };
