@@ -6312,13 +6312,12 @@ let
 
   flashplayer = flashplayer9;
 
-  flashplayer7 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-7 {
-    inherit fetchurl stdenv zlib;
-    inherit (xlibs) libXmu;
-  };
-
   flashplayer9 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
     inherit fetchurl stdenv zlib alsaLib;
+  };
+
+  flashplayer10 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
+    inherit fetchurl stdenv zlib alsaLib curl;
   };
 
   flite = import ../applications/misc/flite {
