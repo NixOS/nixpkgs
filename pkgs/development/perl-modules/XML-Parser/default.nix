@@ -1,11 +1,10 @@
 {fetchurl, perl, expat}:
 
 import ../generic perl {
-  name = "XML-Parser-2.34";
+  name = "XML-Parser-2.36";
   src = fetchurl {
-    url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-Parser-2.34.tar.gz;
-    md5 = "84d9e0001fe01c14867256c3fe115899";
+    url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-Parser-2.36.tar.gz;
+    sha256 = "0gyp5qfbflhkin1zv8l6wlkjwfjvsf45a3py4vc6ni82fj32kmcz";
   };
-  perlPreHook = "makeMakerFlags=\"EXPATLIBPATH=$expat/lib EXPATINCPATH=$expat/include\"";
-  inherit expat;
+  makeMakerFlags = "EXPATLIBPATH=${expat}/lib EXPATINCPATH=${expat}/include";
 }

@@ -3948,7 +3948,7 @@ let
   perlAlgorithmAnnotate = import ../development/perl-modules/generic perl {
     name = "Algorithm-Annotate-0.10";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz;
       sha256 = "1y92k4nqkscfwpriv8q7c90rjfj85lvwq1k96niv2glk8d37dcf9";
     };
     propagatedBuildInputs = [];
@@ -3957,7 +3957,7 @@ let
   perlAlgorithmDiff = import ../development/perl-modules/generic perl {
     name = "Algorithm-Diff-1.15";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1901.zip;
+      url = mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1901.zip;
       sha256 = "0qk60fi49mpyvnfpjd2dzcmya8x3g5zfgb2hrnl7a5krn045g6i2";
     };
     propagatedBuildInputs = [];
@@ -3967,10 +3967,18 @@ let
   perlAppCLI = import ../development/perl-modules/generic perl {
     name = "App-CLI-0.07";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/App-CLI-0.07.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/App-CLI-0.07.tar.gz;
       sha256 = "000866qsm7jck3ini69b02sgbjwp6s297lsds002r7xk2wb6fqcz";
     };
     propagatedBuildInputs = [perlLocaleMaketextSimple];
+  };
+
+  perlAppConfig = import ../development/perl-modules/generic perl {
+    name = "AppConfig-1.66";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AB/ABW/AppConfig-1.66.tar.gz;
+      sha256 = "1p1vs9px20lrq9mdwpzp309a8r6rchibsdmxang4krk90pi2sh4b";
+    };
   };
 
   perlArchiveZip = import ../development/perl-modules/Archive-Zip {
@@ -3981,6 +3989,50 @@ let
     inherit fetchurl perl db4;
   };
 
+  perlCatalystActionRenderView = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Action-RenderView-0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Action-RenderView-0.08.tar.gz;
+      sha256 = "1qng995mzgpm1gwb315ynm3spajf0ypmh1ciivqks3r0aamq2ar0";
+    };
+    propagatedBuildInputs = [perlCatalystRuntime perlHTTPRequestAsCGI perlDataVisitor
+    ];
+  };
+
+  perlCatalystDevel = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Devel-1.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Devel-1.08.tar.gz;
+      sha256 = "1wc2ysmldxd5bczfy6ijd8pbaq18g3snrg0cjc8k48941k8dcqpc";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlCatalystActionRenderView perlPathClass
+      perlTemplateToolkit perlClassAccessor perlConfigGeneral
+      perlFileCopyRecursive perlParent
+    ];
+  };
+
+  perlCatalystManual = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Manual-5.7013";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Z/ZA/ZARQUON/Catalyst-Manual-5.7013.tar.gz;
+      sha256 = "17n9w7gd2mj8mkw8zv9as0ba3qzwn07js7xgd46avxpcscl2fpqx";
+    };
+  };
+
+  perlCatalystRuntime = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Runtime-5.7015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Runtime-5.7015.tar.gz;
+      sha256 = "039c6ipn87lf23y7r7zg0bnga31nqzklrf28p6nd0xkhs1wihfbg";
+    };
+    propagatedBuildInputs = [
+      perlLWP perlClassAccessor perlClassDataInheritable perlClassInspector
+      perlCGISimple perlDataDump perlFileModified perlHTTPBody perlHTTPRequestAsCGI
+      perlPathClass perlTextSimpleTable perlTreeSimple perlTreeSimpleVisitorFactory
+    ];
+  };
+
   perlCGISession = import ../development/perl-modules/generic perl {
     name = "CGI-Session-3.95";
     src = fetchurl {
@@ -3989,10 +4041,18 @@ let
     };
   };
 
+  perlCGISimple = import ../development/perl-modules/generic perl {
+    name = "CGI-Simple-1.106";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AN/ANDYA/CGI-Simple-1.106.tar.gz;
+      sha256 = "0r0wc2260jnnch7dv7f6ailjf5w8hpqm2w146flfcchcryfxjlpg";
+    };
+  };
+
   perlClassAccessor = import ../development/perl-modules/generic perl {
     name = "Class-Accessor-0.31";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/K/KA/KASEI/Class-Accessor-0.31.tar.gz;
+      url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.31.tar.gz;
       sha256 = "1a4v5qqdf9bipd6ba5n47mag0cmgwp97cid67i510aw96bcjrsiy";
     };
     propagatedBuildInputs = [];
@@ -4001,7 +4061,7 @@ let
   perlClassAutouse = import ../development/perl-modules/generic perl {
     name = "Class-Autouse-1.99_02";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AD/ADAMK/Class-Autouse-1.99_02.tar.gz;
+      url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Autouse-1.99_02.tar.gz;
       sha256 = "1jkhczx2flxrz154ps90fj9wcchkpmnp5sapwc0l92rpn7jpsf08";
     };
     propagatedBuildInputs = [];
@@ -4010,8 +4070,17 @@ let
   perlClassDataInheritable = import ../development/perl-modules/generic perl {
     name = "Class-Data-Inheritable-0.08";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz;
+      url = mirror://cpan/authors/id/T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz;
       sha256 = "0jpi38wy5xh6p1mg2cbyjjw76vgbccqp46685r27w8hmxb7gwrwr";
+    };
+    propagatedBuildInputs = [];
+  };
+
+  perlClassInspector = import ../development/perl-modules/generic perl {
+    name = "Class-Inspector-1.23";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Inspector-1.23.tar.gz;
+      sha256 = "0d15b5wls14gqcd6v2k4kbc0v0a1qfb794h49wfc4vwjk5gnpbw1";
     };
     propagatedBuildInputs = [];
   };
@@ -4020,13 +4089,20 @@ let
     inherit fetchurl perl;
   };
 
+  perlConfigGeneral = import ../development/perl-modules/generic perl {
+    name = "Config-General-2.40";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.40.tar.gz;
+      sha256 = "0wf6dpaanaiy0490dlgs3pi3xvvijs237x9izb00cnzggxcfmsnz";
+    };
+  };
+
   perlconstant = import ../development/perl-modules/generic perl {
     name = "constant-1.15";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SA/SAPER/constant-1.15.tar.gz;
+      url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.15.tar.gz;
       sha256 = "1ygz0hd1fd3q88r6dlw14kpyh06zjprksdci7qva6skxz3261636";
     };
-    propagatedBuildInputs = [];
   };
 
   perlCryptPasswordMD5 = import ../development/perl-modules/generic perl {
@@ -4037,20 +4113,40 @@ let
     };
   };
 
+  perlDataDump = import ../development/perl-modules/generic perl {
+    name = "Data-Dump-1.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.11.tar.gz;
+      sha256 = "0h5y40b6drgsf87nhwhqx1dprq70f98ibm03l9al4ndq7mrx97dd";
+    };
+  };
+
   perlDataHierarchy = import ../development/perl-modules/generic perl {
     name = "Data-Hierarchy-0.34";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/Data-Hierarchy-0.34.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/Data-Hierarchy-0.34.tar.gz;
       sha256 = "1vfrkygdaq0k7006i83jwavg9wgszfcyzbl9b7fp37z2acmyda5k";
     };
     propagatedBuildInputs = [perlTestException];
   };
-
-  perlDateManip = import ../development/perl-modules/generic perl {
-    name = "DateManip-5.42a";
+ 
+  perlDataVisitor = import ../development/perl-modules/generic perl {
+    name = "Data-Visitor-0.21";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/DateManip-5.42a.tar.gz;
-      md5 = "648386bbf46d021ae283811f75b07bdf";
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/Data-Visitor-0.21.tar.gz;
+      sha256 = "10cjh3rrqi4gwrmkpzilzmaqdrh71wr59035s6b4p2dzd117p931";
+    };
+    propagatedBuildInputs = [
+      perlTestMockObject perlMouse perlTaskWeaken perlTieUseOk perlTieToObject
+      perlNamespaceClean
+    ];
+  };
+
+ perlDateManip = import ../development/perl-modules/generic perl {
+    name = "DateManip-5.54";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-5.54.tar.gz;
+      sha256 = "0ap2jgqx7yvjsyph9zsvadsih41cj991j3jwgz5261sq7q74y7xn";
     };
   };
 
@@ -4112,7 +4208,7 @@ let
   perlEncode = import ../development/perl-modules/generic perl {
     name = "Encode-2.25";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/D/DA/DANKOGAI/Encode-2.25.tar.gz;
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.25.tar.gz;
       sha256 = "0prwmbg3xh1lqskianwrfrgasdfmz4kjm3qpdm27ay110jkk25ak";
     };
     propagatedBuildInputs = [];
@@ -4121,7 +4217,7 @@ let
   perlExtUtilsInstall = import ../development/perl-modules/generic perl {
     name = "ExtUtils-Install-1.50";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/Y/YV/YVES/ExtUtils-Install-1.50.tar.gz;
+      url = mirror://cpan/authors/id/Y/YV/YVES/ExtUtils-Install-1.50.tar.gz;
       sha256 = "18fr056fwnnhvgc646crx2p9mybf69mh5rkcphc7bbvahw9i61jy";
     };
     propagatedBuildInputs = [perlExtUtilsMakeMaker];
@@ -4130,7 +4226,7 @@ let
   perlExtUtilsMakeMaker = import ../development/perl-modules/generic perl {
     name = "ExtUtils-MakeMaker-6.44";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.44.tar.gz;
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.44.tar.gz;
       sha256 = "0zyypnlmmyp06qbfdpc14rp5rj63066mjammn6rlcqz2iil9mpcj";
     };
     propagatedBuildInputs = [];
@@ -4139,7 +4235,7 @@ let
   perlExtUtilsManifest = import ../development/perl-modules/generic perl {
     name = "ExtUtils-Manifest-1.53";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/R/RK/RKOBES/ExtUtils-Manifest-1.53.tar.gz;
+      url = mirror://cpan/authors/id/R/RK/RKOBES/ExtUtils-Manifest-1.53.tar.gz;
       sha256 = "0xgfzivw0dfy29ydfjkg0c9mvlhjvlhc54s0yvbb4sxb2mdvrfkp";
     };
     propagatedBuildInputs = [];
@@ -4148,16 +4244,32 @@ let
   perlFilechdir = import ../development/perl-modules/generic perl {
     name = "File-chdir-0.1002";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/D/DA/DAGOLDEN/File-chdir-0.1002.tar.gz;
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/File-chdir-0.1002.tar.gz;
       sha256 = "1fc2l754bxsizli3injm4wqf8dn03iq16rmfn62l99nxpibl5k6p";
     };
     propagatedBuildInputs = [];
   };
 
+  perlFileCopyRecursive = import ../development/perl-modules/generic perl {
+    name = "File-Copy-Recursive-0.37";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.37.tar.gz;
+      sha256 = "12j0s01zwm67g4bcgbs0k61jwz59q1lndrnxyywxsz3xd30ki8rr";
+    };
+  };
+
+  perlFileModified = import ../development/perl-modules/generic perl {
+    name = "File-Modified-0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/CORION/File-Modified-0.07.tar.gz;
+      sha256 = "11zkg171fa5vdbyrbfcay134hhgyf4yaincjxwspwznrfmkpi49h";
+    };
+  };
+
   perlFileTemp = import ../development/perl-modules/generic perl {
     name = "File-Temp-0.20";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/T/TJ/TJENNESS/File-Temp-0.20.tar.gz;
+      url = mirror://cpan/authors/id/T/TJ/TJENNESS/File-Temp-0.20.tar.gz;
       sha256 = "0n7lr7mpdvwgznw469qdpdmac627a26wp615dkpzanc452skad4v";
     };
     propagatedBuildInputs = [];
@@ -4166,7 +4278,7 @@ let
   perlFreezeThaw = import ../development/perl-modules/generic perl {
     name = "FreezeThaw-0.43";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
+      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
       sha256 = "1qamc5aggp35xk590a4hy660f2rhc2l7j65hbyxdya9yvg7z437l";
     };
     propagatedBuildInputs = [];
@@ -4190,17 +4302,34 @@ let
   };
 
   perlHTMLTree = import ../development/perl-modules/generic perl {
-    name = "HTML-Tree-3.18";
+    name = "HTML-Tree-3.23";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/HTML-Tree-3.18.tar.gz;
-      md5 = "6a9e4e565648c9772e7d8ec6d4392497";
+      url = mirror://cpan/authors/id/P/PE/PETEK/HTML-Tree-3.23.tar.gz;
+      sha256 = "1pn80f4g1wixs030f40b80wrj12kwfinwycrx3f10drg4v7ml5zm";
     };
+  };
+
+  perlHTTPBody = import ../development/perl-modules/generic perl {
+    name = "HTTP-Body-1.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AG/AGRUNDMA/HTTP-Body-1.04.tar.gz;
+      sha256 = "11qxfv2p2bzd5xnl0ypy8l3frssszwrxafipm1fm36sxay2v71js";
+    };
+  };
+
+  perlHTTPRequestAsCGI = import ../development/perl-modules/generic perl {
+    name = "HTTP-Request-AsCGI-0.5";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHANSEN/HTTP-Request-AsCGI-0.5.tar.gz;
+      sha256 = "164159iiyk0waqayplchkisxg2ldamx8iifrccx32p344714qcrh";
+    };
+    propagatedBuildInputs = [perlClassAccessor perlLWP];
   };
 
   perlI18NLangTags = import ../development/perl-modules/generic perl {
     name = "I18N-LangTags-0.35";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
+      url = mirror://cpan/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
       sha256 = "0idwfi7k8l44d9akpdj6ygdz3q8zxr690m18s7w23ms9d55bh3jy";
     };
     propagatedBuildInputs = [];
@@ -4209,7 +4338,7 @@ let
   perlIODigest = import ../development/perl-modules/generic perl {
     name = "IO-Digest-0.10";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/IO-Digest-0.10.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.10.tar.gz;
       sha256 = "1g6ilxqv2a7spf273v7k0721c6am7pwpjrin3h5zaqxfmd312nav";
     };
     propagatedBuildInputs = [perlPerlIOviadynamic];
@@ -4218,7 +4347,7 @@ let
   perlIOPager = import ../development/perl-modules/generic perl {
     name = "IO-Pager-0.06.tgz";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/J/JP/JPIERCE/IO-Pager-0.06.tgz;
+      url = mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-0.06.tgz;
       sha256 = "0r3af4gyjpy0f7bhs7hy5s7900w0yhbckb2dl3a1x5wpv7hcbkjb";
     };
     propagatedBuildInputs = [];
@@ -4227,24 +4356,24 @@ let
   perlListMoreUtils = import ../development/perl-modules/generic perl {
     name = "List-MoreUtils-0.22";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/V/VP/VPARSEVAL/List-MoreUtils-0.22.tar.gz;
+      url = mirror://cpan/authors/id/V/VP/VPARSEVAL/List-MoreUtils-0.22.tar.gz;
       sha256 = "1dv21xclh6r1cyy19r34xv2w6pc1jb5pwj7b2739m78xhlk8p55l";
     };
     propagatedBuildInputs = [];
   };
 
   perlLocaleGettext = import ../development/perl-modules/generic perl {
-    name = "LocaleGettext-1.04";
+    name = "LocaleGettext-1.05";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/gettext-1.04.tar.gz;
-      md5 = "578dd0c76f8673943be043435b0fbde4";
+      url = mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.05.tar.gz;
+      sha256 = "15262a00vx714szpx8p2z52wxkz46xp7acl72znwjydyq4ypydi7";
     };
   };
 
   perlLocaleMaketext = import ../development/perl-modules/generic perl {
     name = "Locale-Maketext-1.13";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/F/FE/FERREIRA/Locale-Maketext-1.13.tar.gz;
+      url = mirror://cpan/authors/id/F/FE/FERREIRA/Locale-Maketext-1.13.tar.gz;
       sha256 = "0qvrhcs1f28ix3v8hcd5xr4z9s7plz4g5a4q1cjp7bs0c3w2yl6z";
     };
     propagatedBuildInputs = [perlI18NLangTags];
@@ -4253,7 +4382,7 @@ let
   perlLocaleMaketextLexicon = import ../development/perl-modules/generic perl {
     name = "Locale-Maketext-Lexicon-0.66";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AU/AUDREYT/Locale-Maketext-Lexicon-0.66.tar.gz;
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Lexicon-0.66.tar.gz;
       sha256 = "1cd2kbcrlyjcmlr7m8kf94mm1hlr7hpv1r80a596f4ljk81f2nvd";
     };
     propagatedBuildInputs = [perlLocaleMaketext];
@@ -4262,17 +4391,17 @@ let
   perlLocaleMaketextSimple = import ../development/perl-modules/generic perl {
     name = "Locale-Maketext-Simple-0.18";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AU/AUDREYT/Locale-Maketext-Simple-0.18.tar.gz;
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Simple-0.18.tar.gz;
       sha256 = "14kx7vkxyfqndy90rzavrjp2346aidyc7x5dzzdj293qf8s4q6ig";
     };
     propagatedBuildInputs = [];
   };
 
   perlLWP = import ../development/perl-modules/generic perl {
-    name = "libwww-perl-5.808";
+    name = "libwww-perl-5.818";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.808.tar.gz;
-      sha256 = "1r5rslx68yplyd07bvjahjjrrqb56bhgg6gwdr9c16mv2s57gq12";
+      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.818.tar.gz;
+      sha256 = "0ciscfrldsgk7qxwdhvcdjrzpghz35i4w004rkhpkkbjqbyqyivc";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
   };
@@ -4280,25 +4409,49 @@ let
   perlModuleBuild = import ../development/perl-modules/generic perl {
     name = "Module-Build-0.2808";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz;
+      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz;
       sha256 = "1h8zpf4g2n8v47l9apmdqbdgcg039g70w75hpn84m37pmqkbnj8v";
     };
     propagatedBuildInputs = [perlExtUtilsInstall perlExtUtilsManifest perlTestHarness];
   };
 
+  perlMouse = import ../development/perl-modules/generic perl {
+    name = "Mouse-0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SARTAK/Mouse-0.09.tar.gz;
+      sha256 = "1akymbjim6w6i1q8h97izah26ndmcbnl1lwdsw9fa22hnhm0axg0";
+    };
+  };
+
+  perlNamespaceClean = import ../development/perl-modules/generic perl {
+    name = "namespace-clean-0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PH/PHAYLON/namespace-clean-0.08.tar.gz;
+      sha256 = "1jwc15zz1j6indqgz64l09ayg0db4gfaasq74x0vyi1yx3d9x2yx";
+    };
+    propagatedBuildInputs = [perlScopeGuard];
+  };
+
+  perlParent = import ../development/perl-modules/generic perl {
+    name = "parent-0.221";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.221.tar.gz;
+      sha256 = "17jhscpa5p5szh1173pd6wvh2m05an1l941zqq9jkw9bzgk12hm0";
+    };
+  };
+
   perlPathClass = import ../development/perl-modules/generic perl {
     name = "Path-Class-0.16";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/K/KW/KWILLIAMS/Path-Class-0.16.tar.gz;
+      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Path-Class-0.16.tar.gz;
       sha256 = "0zisxkj58jm84fwcssmdq8g6n37s33v5h7j28m12sbkqib0h76gc";
     };
-    propagatedBuildInputs = [];
   };
 
   perlPerlIOeol = import ../development/perl-modules/generic perl {
     name = "PerlIO-eol-0.14";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AU/AUDREYT/PerlIO-eol-0.14.tar.gz;
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/PerlIO-eol-0.14.tar.gz;
       sha256 = "1rwj0r075jfvvd0fnzgdqldc7qdb94wwsi21rs2l6yhcv0380fs2";
     };
     propagatedBuildInputs = [];
@@ -4307,7 +4460,7 @@ let
   perlPerlIOviadynamic = import ../development/perl-modules/generic perl {
     name = "PerlIO-via-dynamic-0.12";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/PerlIO-via-dynamic-0.12.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-dynamic-0.12.tar.gz;
       sha256 = "140hay9q8q9sz1fa2s57ijp5l2448fkcg7indgn6k4vc7yshmqz2";
     };
     propagatedBuildInputs = [];
@@ -4316,7 +4469,7 @@ let
   perlPerlIOviasymlink = import ../development/perl-modules/generic perl {
     name = "PerlIO-via-symlink-0.05";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/PerlIO-via-symlink-0.05.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-symlink-0.05.tar.gz;
       sha256 = "0lidddcaz9anddqrpqk4zwm550igv6amdhj86i2jjdka9b1x81s1";
     };
     propagatedBuildInputs = [];
@@ -4336,7 +4489,7 @@ let
   perlPodEscapes = import ../development/perl-modules/generic perl {
     name = "Pod-Escapes-1.04";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SB/SBURKE/Pod-Escapes-1.04.tar.gz;
+      url = mirror://cpan/authors/id/S/SB/SBURKE/Pod-Escapes-1.04.tar.gz;
       sha256 = "1wrg5dnsl785ygga7bp6qmakhjgh9n4g3jp2l85ab02r502cagig";
     };
     propagatedBuildInputs = [];
@@ -4345,7 +4498,7 @@ let
   perlPodSimple = import ../development/perl-modules/generic perl {
     name = "Pod-Simple-3.05";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AR/ARANDAL/Pod-Simple-3.05.tar.gz;
+      url = mirror://cpan/authors/id/A/AR/ARANDAL/Pod-Simple-3.05.tar.gz;
       sha256 = "1j0kqcvr9ykcqlkr797j1npkbggykb3p4w5ri73s8mi163lzxkqb";
     };
     propagatedBuildInputs = [perlconstant perlPodEscapes];
@@ -4359,6 +4512,14 @@ let
     };
   };
 
+  perlScopeGuard = import ../development/perl-modules/generic perl {
+    name = "Scope-Guard-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.03.tar.gz;
+      sha256 = "07x966fkqxlwnngxs7a2jrhabh8gzhjfpqq56n9gkwy7f340sayb";
+    };
+  };
+
   perlStringMkPasswd = import ../development/perl-modules/generic perl {
     name = "String-MkPasswd-0.02";
     src = fetchurl {
@@ -4367,10 +4528,18 @@ let
     };
   };
 
+  perlSubUplevel = import ../development/perl-modules/generic perl {
+    name = "Sub-Uplevel-0.2002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Sub-Uplevel-0.2002.tar.gz;
+      sha256 = "19b2b9xsw7lvvkcmmnhhv8ybxdkbnrky9nnqgjridr108ww9m5rh";
+    };
+  };
+
   perlSVK = import ../development/perl-modules/generic perl {
     name = "SVK-v2.0.2";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/SVK-v2.0.2.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/SVK-v2.0.2.tar.gz;
       sha256 = "0c4m2q7cvzwh9kk1nc1vd8lkxx2kss5nd4k20dpkal4c7735jns0";
     };
     propagatedBuildInputs = [perlAlgorithmDiff perlAlgorithmAnnotate perlAppCLI perlClassDataInheritable perlDataHierarchy perlEncode perlFileTemp perlIODigest perlListMoreUtils perlPathClass perlPerlIOeol perlPerlIOviadynamic perlPerlIOviasymlink perlPodEscapes perlPodSimple perlSVNMirror perlTimeHiRes perlUNIVERSALrequire perlURI perlYAMLSyck perlClassAutouse perlIOPager perlLocaleMaketextLexicon perlFreezeThaw];
@@ -4379,7 +4548,7 @@ let
   perlSVNMirror = import ../development/perl-modules/generic perl {
     name = "SVN-Mirror-0.73";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/SVN-Mirror-0.73.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/SVN-Mirror-0.73.tar.gz;
       sha256 = "1scjaq7qjz6jlsk1c2l5q15yxf0sqbydvf22mb2xzy1bzaln0x2c";
     };
     propagatedBuildInputs = [perlClassAccessor perlFilechdir subversion perlURI perlTermReadKey perlTimeDate perlSVNSimple];
@@ -4388,16 +4557,44 @@ let
   perlSVNSimple = import ../development/perl-modules/generic perl {
     name = "SVN-Simple-0.27";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/C/CL/CLKAO/SVN-Simple-0.27.tar.gz;
+      url = mirror://cpan/authors/id/C/CL/CLKAO/SVN-Simple-0.27.tar.gz;
       sha256 = "0p7p52ja6sf4j0w3b05i0bbqi5wiambckw2m5dsr63bbmlhv4a71";
     };
     propagatedBuildInputs = [subversion];
   };
 
+  perlTaskCatalystTutorial = import ../development/perl-modules/generic perl {
+    name = "Task-Catalyst-Tutorial";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JR/JROCKWAY/Task-Catalyst-Tutorial-0.03.tar.gz;
+      sha256 = "1f9nqg8h455s8dah482hf78i3h2bilji26i5m3lzr2cxws98lsak";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlCatalystManual perlDBI
+    ];
+  };
+
+  perlTaskWeaken = import ../development/perl-modules/generic perl {
+    name = "Task-Weaken-1.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AD/ADAMK/Task-Weaken-1.02.tar.gz;
+      sha256 = "10f9kd1lwbscmmjwgbfwa4kkp723mb463lkbmh29rlhbsl7kb5wz";
+    };
+  };
+
+  perlTemplateToolkit = import ../development/perl-modules/generic perl {
+    name = "Template-Toolkit-2.20";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.20.tar.gz;
+      sha256 = "13wbh06a76k4ag14lhszmpwv4hb8hlj1d9glizhp8izazl3xf1zg";
+    };
+    propagatedBuildInputs = [perlAppConfig];
+  };
+
   perlTermReadKey = import ../development/perl-modules/generic perl {
     name = "TermReadKey-2.30";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/TermReadKey-2.30.tar.gz;
+      url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.30.tar.gz;
       md5 = "f0ef2cea8acfbcc58d865c05b0c7e1ff";
     };
   };
@@ -4405,7 +4602,7 @@ let
   perlTestBuilderTester = import ../development/perl-modules/generic perl {
     name = "Test-Builder-Tester-1.01";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/M/MA/MARKF/Test-Builder-Tester-1.01.tar.gz;
+      url = mirror://cpan/authors/id/M/MA/MARKF/Test-Builder-Tester-1.01.tar.gz;
       sha256 = "0s785j4w7rfx5b6bwzflic04vynrcp4dci4p3n8w609zrdn43g32";
     };
     propagatedBuildInputs = [];
@@ -4414,34 +4611,67 @@ let
   perlTestException = import ../development/perl-modules/generic perl {
     name = "Test-Exception-0.27";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AD/ADIE/Test-Exception-0.27.tar.gz;
+      url = mirror://cpan/authors/id/A/AD/ADIE/Test-Exception-0.27.tar.gz;
       sha256 = "1s921j7yv2szywd1ffi6yz3ngrbq97f9dh38bvvajqnm29g1xb9j";
     };
-    propagatedBuildInputs = [perlTestBuilderTester perlTestHarness perlTestSimple];
+    propagatedBuildInputs = [perlTestBuilderTester perlTestHarness perlTestSimple perlSubUplevel];
   };
 
   perlTestHarness = import ../development/perl-modules/generic perl {
     name = "Test-Harness-3.10";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AN/ANDYA/Test-Harness-3.10.tar.gz;
+      url = mirror://cpan/authors/id/A/AN/ANDYA/Test-Harness-3.10.tar.gz;
       sha256 = "1qd217yzppj1vbjhny06v8niqhz85pam996ry6bzi08z0jidr2wh";
     };
-    propagatedBuildInputs = [];
+  };
+
+  perlTestMockObject = import ../development/perl-modules/generic perl {
+    name = "Test-MockObject-1.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.09.tar.gz;
+      sha256 = "1cz385x0jrkj84nmfs6qyzwwvv8m9v8r2isagfj1zxvhdw49wdyy";
+    };
+    propagatedBuildInputs = [perlTestException perlUNIVERSALisa perlUNIVERSALcan];
   };
 
   perlTestSimple = import ../development/perl-modules/generic perl {
-    name = "Test-Simple-0.80";
+    name = "Test-Simple-0.84";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/M/MS/MSCHWERN/Test-Simple-0.80.tar.gz;
-      sha256 = "15rzwi01q4lp5sl5n8rvghcvhfd4h4a9m86pnds16nv045irv4x0";
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/Test-Simple-0.84.tar.gz;
+      sha256 = "030j47q3p46jfk60dsh2d5m7ip4nqz0fl4inqr8hx8b8q0f00r4l";
     };
     propagatedBuildInputs = [perlTestHarness];
+  };
+
+  perlTextSimpleTable = import ../development/perl-modules/generic perl {
+    name = "Text-SimpleTable-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SR/SRI/Text-SimpleTable-0.05.tar.gz;
+      sha256 = "028pdfmr2gnaq8w3iar8kqvrpxcghnag8ls7h4227l9zbxd1k9p9";
+    };
+  };
+
+  perlTieUseOk = import ../development/perl-modules/generic perl {
+    name = "Test-use-ok-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.02.tar.gz;
+      sha256 = "11inaxiavb35k8zwxwbfbp9wcffvfqas7k9idy822grn2sz5gyig";
+    };
+  };
+
+  perlTieToObject = import ../development/perl-modules/generic perl {
+    name = "Tie-ToObject-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz;
+      sha256 = "1x1smn1kw383xc5h9wajxk9dlx92bgrbf7gk4abga57y6120s6m3";
+    };
+    propagatedBuildInputs = [perlTieUseOk];
   };
 
   perlTimeDate = import ../development/perl-modules/generic perl {
     name = "TimeDate-1.16";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/G/GB/GBARR/TimeDate-1.16.tar.gz;
+      url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-1.16.tar.gz;
       sha256 = "1cvcpaghn7dc14m9871sfw103g3m3a00m2mrl5iqb0mmh40yyhkr";
     };
     propagatedBuildInputs = [];
@@ -4450,23 +4680,57 @@ let
   perlTimeHiRes = import ../development/perl-modules/generic perl {
     name = "Time-HiRes-1.9715";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/J/JH/JHI/Time-HiRes-1.9715.tar.gz;
+      url = mirror://cpan/authors/id/J/JH/JHI/Time-HiRes-1.9715.tar.gz;
       sha256 = "0pgqrfkysy3mdcx5nd0x8c80lgqb7rkb3nrkii3vc576dcbpvw0i";
     };
     propagatedBuildInputs = [];
+  };
+
+  perlTreeSimple = import ../development/perl-modules/generic perl {
+    name = "Tree-Simple-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/ST/STEVAN/Tree-Simple-1.18.tar.gz;
+      sha256 = "0bb2hc8q5rwvz8a9n6f49kzx992cxczmrvq82d71757v087dzg6g";
+    };
+    propagatedBuildInputs = [perlTestException];
+  };
+
+  perlTreeSimpleVisitorFactory = import ../development/perl-modules/generic perl {
+    name = "Tree-Simple-VisitorFactory-0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/ST/STEVAN/Tree-Simple-VisitorFactory-0.10.tar.gz;
+      sha256 = "1ghcgnb3xvqjyh4h4aa37x98613aldnpj738z9b80p33bbfxq158";
+    };
+    propagatedBuildInputs = [perlTreeSimple];
+    buildInputs = [perlTestException];
   };
 
   perlFontTTF = import ../development/perl-modules/Font-TTF {
     inherit fetchurl perl;
   };
 
+  perlUNIVERSALcan = import ../development/perl-modules/generic perl {
+    name = "UNIVERSAL-can-1.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-can-1.12.tar.gz;
+      sha256 = "1abadbgcy11cmlmj9qf1v73ycic1qhysxv5xx81h8s4p81alialr";
+    };
+  };
+
+  perlUNIVERSALisa = import ../development/perl-modules/generic perl {
+    name = "UNIVERSAL-isa-1.00";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-isa-1.00_00.tar.gz;
+      sha256 = "04dj0z458k57l3phmq635bdmj3zzl2iy5dxp3yqaldc6g65wz0d0";
+    };
+  };
+
   perlUNIVERSALrequire = import ../development/perl-modules/generic perl {
     name = "UNIVERSAL-require-0.11";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
       sha256 = "1rh7i3gva4m96m31g6yfhlqcabszhghbb3k3qwxbgx3mkf5s6x6i";
     };
-    propagatedBuildInputs = [];
   };
 
   perlURI = import ../development/perl-modules/generic perl {
@@ -4488,10 +4752,10 @@ let
   };
 
   perlXMLLibXML = import ../development/perl-modules/generic perl {
-    name = "XML-LibXML-1.58";
+    name = "XML-LibXML-1.66";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-LibXML-1.58.tar.gz;
-      md5 = "4691fc436e5c0f22787f5b4a54fc56b0";
+      url = mirror://cpan/authors/id/P/PA/PAJAS/XML-LibXML-1.66.tar.gz;
+      sha256 = "1a0bdiv3px6igxnbbjq10064iahm8f5i310p4y05w6zn5d51awyl";
     };
     buildInputs = [libxml2];
     propagatedBuildInputs = [perlXMLLibXMLCommon perlXMLSAX];
@@ -4500,17 +4764,17 @@ let
   perlXMLLibXMLCommon = import ../development/perl-modules/generic perl {
     name = "XML-LibXML-Common-0.13";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-LibXML-Common-0.13.tar.gz;
+      url = mirror://cpan/authors/id/P/PH/PHISH/XML-LibXML-Common-0.13.tar.gz;
       md5 = "13b6d93f53375d15fd11922216249659";
     };
     buildInputs = [libxml2];
   };
 
   perlXMLNamespaceSupport = import ../development/perl-modules/generic perl {
-    name = "XML-NamespaceSupport-1.08";
+    name = "XML-NamespaceSupport-1.09";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-NamespaceSupport-1.08.tar.gz;
-      md5 = "81bd5ae772906d0579c10061ed735dc8";
+      url = mirror://cpan/authors/id/R/RB/RBERJON/XML-NamespaceSupport-1.09.tar.gz;
+      sha256 = "0ny2i4pf6j8ggfj1x02rm5zm9a37hfalgx9w9kxnk69xsixfwb51";
     };
     buildInputs = [];
   };
@@ -4528,10 +4792,10 @@ let
   };
 
   perlXMLSAX = import ../development/perl-modules/generic perl {
-    name = "XML-SAX-0.12";
+    name = "XML-SAX-0.96";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-SAX-0.12.tar.gz;
-      md5 = "bff58bd077a9693fc8cf32e2b95f571f";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-0.96.tar.gz;
+      sha256 = "024fbjgg6s87j0y3yik55plzf7d6qpn7slwd03glcb54mw9zdglv";
     };
     propagatedBuildInputs = [perlXMLNamespaceSupport];
   };
@@ -4546,10 +4810,10 @@ let
   };
 
   perlXMLTwig = import ../development/perl-modules/generic perl {
-    name = "XML-Twig-3.15";
+    name = "XML-Twig-3.32";
     src = fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/XML-Twig-3.15.tar.gz;
-      md5 = "b26886b8bd19761fff37b23e4964b499";
+      url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.32.tar.gz;
+      sha256 = "07zdsfzw9dlrx6ril9clf1jfif09vpf27rz66laja7mvih9izd1v";
     };
     propagatedBuildInputs = [perlXMLParser];
   };
@@ -4565,7 +4829,7 @@ let
   perlXSLoader = import ../development/perl-modules/generic perl {
     name = "XSLoader-0.08";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
+      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
       sha256 = "0mr4l3givrpyvz1kg0kap2ds8g0rza2cim9kbnjy8hi64igkixi5";
     };
     propagatedBuildInputs = [];
@@ -4574,7 +4838,7 @@ let
   perlYAML = import ../development/perl-modules/generic perl {
     name = "YAML-0.66";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/I/IN/INGY/YAML-0.66.tar.gz;
+      url = mirror://cpan/authors/id/I/IN/INGY/YAML-0.66.tar.gz;
       sha256 = "1pcjf6y3l88ypa52mkk349jglabm53mhxda4p5awc1jl67lx3ngw";
     };
     propagatedBuildInputs = [];
@@ -4583,7 +4847,7 @@ let
   perlYAMLSyck = import ../development/perl-modules/generic perl {
     name = "YAML-Syck-1.04";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/A/AU/AUDREYT/YAML-Syck-1.04.tar.gz;
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/YAML-Syck-1.04.tar.gz;
       sha256 = "180w77rxqwrfmd2jjmrd407bf8vnpry73941g5n61ippzic5x1v3";
     };
     propagatedBuildInputs = [];
