@@ -6888,7 +6888,8 @@ let
   };
 
   mercurial = import ../applications/version-management/mercurial {
-    inherit fetchurl stdenv python makeWrapper;
+    inherit fetchurl stdenv python makeWrapper getConfig tk;
+    guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
