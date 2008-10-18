@@ -3995,8 +3995,7 @@ let
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Action-RenderView-0.08.tar.gz;
       sha256 = "1qng995mzgpm1gwb315ynm3spajf0ypmh1ciivqks3r0aamq2ar0";
     };
-    propagatedBuildInputs = [perlCatalystRuntime perlHTTPRequestAsCGI perlDataVisitor
-    ];
+    propagatedBuildInputs = [perlCatalystRuntime perlHTTPRequestAsCGI perlDataVisitor];
   };
 
   perlCatalystDevel = import ../development/perl-modules/generic perl {
@@ -4006,9 +4005,10 @@ let
       sha256 = "1wc2ysmldxd5bczfy6ijd8pbaq18g3snrg0cjc8k48941k8dcqpc";
     };
     propagatedBuildInputs = [
-      perlCatalystRuntime perlCatalystActionRenderView perlPathClass
-      perlTemplateToolkit perlClassAccessor perlConfigGeneral
-      perlFileCopyRecursive perlParent
+      perlCatalystRuntime perlCatalystActionRenderView
+      perlCatalystPluginStaticSimple perlCatalystPluginConfigLoader
+      perlPathClass perlTemplateToolkit perlClassAccessor
+      perlConfigGeneral perlFileCopyRecursive perlParent
     ];
   };
 
@@ -4032,6 +4032,24 @@ let
       perlPathClass perlTextSimpleTable perlTreeSimple perlTreeSimpleVisitorFactory
     ];
   };
+
+  perlCatalystPluginStaticSimple = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Plugin-Static-Simple-0.20";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/A/AG/AGRUNDMA/Catalyst-Plugin-Static-Simple-0.20.tar.gz;
+      sha256 = "1qpicgfha81ykxzg4kjll2qw8b1rwzdgvj4s3q9s20zl86gmfr3p";
+    };
+    propagatedBuildInputs = [perlCatalystRuntime perlMIMETypes];
+ };
+
+  perlCatalystPluginConfigLoader = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Plugin-ConfigLoader-0.21";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/B/BR/BRICAS/Catalyst-Plugin-ConfigLoader-0.21.tar.gz;
+      sha256 = "1wv7j69ddwr8vrc6v4ipymdnv8mr9ak5jwiq0fia85bx9cv9f77j";
+    };
+    propagatedBuildInputs = [perlCatalystRuntime perlDataVisitor perlConfigAny];
+ };
 
   perlCGISession = import ../development/perl-modules/generic perl {
     name = "CGI-Session-3.95";
@@ -4087,6 +4105,14 @@ let
 
   perlCompressZlib = import ../development/perl-modules/Compress-Zlib {
     inherit fetchurl perl;
+  };
+
+  perlConfigAny = import ../development/perl-modules/generic perl {
+    name = "Config-Any-0.14";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/B/BR/BRICAS/Config-Any-0.14.tar.gz;
+      sha256 = "1vlr4w2m88figac5pblg6ppzrm11x2pm7r05n48s84cp4mizhim1";
+    };
   };
 
   perlConfigGeneral = import ../development/perl-modules/generic perl {
@@ -4359,7 +4385,6 @@ let
       url = mirror://cpan/authors/id/V/VP/VPARSEVAL/List-MoreUtils-0.22.tar.gz;
       sha256 = "1dv21xclh6r1cyy19r34xv2w6pc1jb5pwj7b2739m78xhlk8p55l";
     };
-    propagatedBuildInputs = [];
   };
 
   perlLocaleGettext = import ../development/perl-modules/generic perl {
@@ -4404,6 +4429,15 @@ let
       sha256 = "0ciscfrldsgk7qxwdhvcdjrzpghz35i4w004rkhpkkbjqbyqyivc";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
+  };
+
+  perlMIMETypes = import ../development/perl-modules/generic perl {
+    name = "MIME-Types-1.24";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/M/MA/MARKOV/MIME-Types-1.24.tar.gz;
+      sha256 = "1j89kjv9lipv6r3bq6dp0k9b8y1f8z9vrmhi7b8h7cs1yc8g7qz9";
+    };
+    propagatedBuildInputs = [perlTestPod];
   };
 
   perlModuleBuild = import ../development/perl-modules/generic perl {
@@ -4570,7 +4604,7 @@ let
       sha256 = "1f9nqg8h455s8dah482hf78i3h2bilji26i5m3lzr2cxws98lsak";
     };
     propagatedBuildInputs = [
-      perlCatalystRuntime perlCatalystManual perlDBI
+      perlCatalystRuntime perlCatalystManual perlCatalystDevel perlDBI
     ];
   };
 
@@ -4632,6 +4666,14 @@ let
       sha256 = "1cz385x0jrkj84nmfs6qyzwwvv8m9v8r2isagfj1zxvhdw49wdyy";
     };
     propagatedBuildInputs = [perlTestException perlUNIVERSALisa perlUNIVERSALcan];
+  };
+
+  perlTestPod = import ../development/perl-modules/generic perl {
+    name = "Test-Pod-1.26";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/P/PE/PETDANCE/Test-Pod-1.26.tar.gz;
+      sha256 = "025rviipiaa1rf0bp040jlwaxwvx48kdcjriaysvkjpyvilwvqd4";
+    };
   };
 
   perlTestSimple = import ../development/perl-modules/generic perl {
