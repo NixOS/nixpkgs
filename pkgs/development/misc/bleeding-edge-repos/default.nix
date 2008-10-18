@@ -37,6 +37,8 @@ args:
 
       plugins = { type = "darcs"; url="http://code.haskell.org/~dons/code/hs-plugins/"; groups="haskell"; };
 
+      hg2git = { type = "git"; url="git://repo.or.cz/hg2git.git"; };
+
       # darcs repositories haskell 
       http =  { type= "darcs"; url="http://darcs.haskell.org/http/"; groups="happs"; };
       syb_with_class =  { type="darcs"; url="http://happs.org/HAppS/syb-with-class"; groups="happs"; };

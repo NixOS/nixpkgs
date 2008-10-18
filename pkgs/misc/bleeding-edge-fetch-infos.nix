@@ -219,4 +219,8 @@
     url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz";
     sha256 = "1e84ff59dcd7a3c80343eb9be302f822e510c95398fd1a6c8f2e4b163fd51e45";
   };
+  hg2git = args: with args; fetchurl { # Sat Oct 18 21:02:44 UTC 2008
+    url = "http://mawercer.de/~nix/repos/hg2git-4c77e121b739d2aac8a23352503763343823f870.tar.gz";
+    sha256 = "22354d36937bf9e5d3e3dfc1a3ef9e3f2bc183b8e114a23958a2b10f83abc97e";
+  };
 }

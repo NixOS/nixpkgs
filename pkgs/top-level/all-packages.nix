@@ -833,6 +833,11 @@ let
     inherit fetchurl stdenv ocaml;
   };
 
+  hg2git = import ../tools/misc/hg2git {
+    inherit fetchurl stdenv mercurial coreutils git makeWrapper;
+    inherit (bleedingEdgeRepos) sourceByName;
+  };
+
   highlight = builderDefsPackage (selectVersion ../tools/text/highlight "2.6.10") {
     inherit getopt;
   };

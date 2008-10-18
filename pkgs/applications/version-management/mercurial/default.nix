@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0fj2aakband855684q76h7zl328iq8i6l81c2k64hy5m0if9hvgr";
   };
 
+  inherit python; # pass it so that the same version can be used in hg2git
+
   buildInputs = [ python makeWrapper ];
   makeFlags = "PREFIX=$(out)";
   postInstall = (if args.guiSupport then
