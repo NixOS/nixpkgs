@@ -20,5 +20,11 @@ rec {
   name = "rubygems-" + version;
   meta = {
     description = "Ruby gems package collection";
+    longDescription = ''
+      Example usage:
+      gem install -i .ruby-gems json
+      ruby -I ~/.ruby-gems/gems/json-1.1.3/lib your-script.rb
+      Probably there are better ways to handle this all. Go on and fix it.
+    '';
   };
 }
