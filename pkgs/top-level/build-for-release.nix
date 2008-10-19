@@ -16,6 +16,7 @@ let
       audacious_plugins
       autoconf
       automake19x
+      avahi
       bash
       bashInteractive
       binutils
