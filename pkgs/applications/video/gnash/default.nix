@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
 
-  doCheck = true;
+  #doCheck = true;
 
   preInstall = ''ensureDir $out/plugins'';
   postInstall = ''make install-plugins'';
