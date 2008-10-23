@@ -4094,10 +4094,10 @@ let
   };
 
   perlCatalystPluginAuthentication = import ../development/perl-modules/generic perl {
-    name = "Catalyst-Plugin-Authentication-0.10007";
+    name = "Catalyst-Plugin-Authentication-0.10006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JA/JAYK/Catalyst-Plugin-Authentication-0.10007.tar.gz;
-      sha256 = "1ar1k3ssvv8a6fmzsb3hkaxkrzrfcvxpa4npbaismwsf8va3nlhk";
+      url = mirror://cpan/authors/id/J/JA/JAYK/Catalyst-Plugin-Authentication-0.10006.tar.gz;
+      sha256 = "11x5d1l7p8z7q20fj79nlhwbmsab21m56rj5x20jkqfl91jx1l2s";
     };
     propagatedBuildInputs = [perlCatalystRuntime perlCatalystPluginSession];
   };
@@ -4115,16 +4115,24 @@ let
     ];
   };
 
+  perlCatalystPluginAuthenticationStoreDBIxClass = import ../development/perl-modules/generic perl {
+    name = "Catalyst-Authentication-Store-DBIx-Class-0.107";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/J/JA/JAYK/Catalyst-Authentication-Store-DBIx-Class-0.107.tar.gz;
+      sha256 = "1vlrl65wf2i65zm2svb1mvylcx5vdrvxr09y16az60kdwiqvam6n";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlCatalystPluginAuthentication perlCatalystModelDBICSchema
+    ];
+  };
+
   perlCatalystPluginAuthorizationACL = import ../development/perl-modules/generic perl {
     name = "Catalyst-Plugin-Authorization-ACL-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RK/RKITOVER/Catalyst-Plugin-Authorization-ACL-0.10.tar.gz;
       sha256 = "1y9pj0scpc4nd7m1xqy7yvjsffhfadzl0z5r4jjv2srndcv4xj1p";
     };
-    propagatedBuildInputs = [
-      perlCatalystRuntime perlClassThrowable #perlCatalystPluginAuthentication
-      #perlTestException perlSetObject perlUNIVERSALisa
-    ];
+    propagatedBuildInputs = [perlCatalystRuntime perlClassThrowable];
   };
 
   perlCatalystPluginAuthorizationRoles = import ../development/perl-modules/generic perl {
@@ -4443,6 +4451,15 @@ let
       perlSQLAbstractLimit perlClassC3 perlClassC3Componentised
       perlModuleFind perlDBDSQLite perlJSONAny
     ];
+  };
+
+  perlDBIxClassHTMLWidget = import ../development/perl-modules/generic perl {
+    name = "DBIx-Class-HTMLWidget";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/A/AN/ANDREMAR/DBIx-Class-HTMLWidget-0.16.tar.gz;
+      sha256 = "05zhniyzl31nq410ywhxm0vmvac53h7ax42hjs9mmpvf45ipahj1";
+    };
+    propagatedBuildInputs = [perlDBIxClass perlHTMLWidget];
   };
 
   perlDBIxClassSchemaLoader = import ../development/perl-modules/generic perl {
@@ -4917,6 +4934,7 @@ let
       sha256 = "08rywi79pqn2c8zr17fmd18lpj5hm8lxd1j4v2k002ni8vhl43nv";
     };
     patches = [
+      # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
       ../development/perl-modules/module-pluggable.patch
     ];
   };
@@ -5047,7 +5065,7 @@ let
       perlCatalystPluginSessionStoreFastMmap
       perlCatalystPluginStackTrace
       perlCatalystViewTT
-      perlDBIxClass
+      perlDBIxClass perlDBIxClassHTMLWidget
     ];
     preConfigure = ''
       substituteInPlace Makefile.PL --replace "'Catalyst::Manual' => 0," ""
