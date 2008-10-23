@@ -2227,6 +2227,12 @@ let
     inherit (xlibs) libX11 libXt;
   };
 
+  doxygen = import ../development/tools/documentation/doxygen {
+    inherit fetchurl stdenv graphviz perl flex bison gnumake;
+    inherit (xlibs) libX11 libXext;
+    qt = if getPkgConfig "doxygen" "qt3" true then qt3 else null;
+  };
+
   elfutils = composedArgsAndFun
     (selectVersion ../development/tools/misc/elfutils "0.131") {
       inherit fetchurl stdenv;
