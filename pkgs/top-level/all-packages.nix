@@ -3913,6 +3913,10 @@ let
     inherit cabal;
   };
 
+  monadlab = import ../development/libraries/haskell/monadlab {
+    inherit cabal;
+  };
+
   pcreLight = import ../development/libraries/haskell/pcre-light {
     inherit cabal pcre;
   };
@@ -4282,7 +4286,7 @@ let
       sha256 = "0578m3rplk41059rkkjy1009xrmrdivjnv8yxadwwdk1vzidc8n1";
     };
   };
-  
+
   perlClassDataInheritable = import ../development/perl-modules/generic perl {
     name = "Class-Data-Inheritable-0.08";
     src = fetchurl {
@@ -4359,7 +4363,7 @@ let
     };
     propagatedBuildInputs = [perlTestException];
   };
- 
+
   perlDataPage = import ../development/perl-modules/generic perl {
     name = "Data-Page-2.01";
     src = fetchurl {
@@ -5040,9 +5044,9 @@ let
       perlDBIxClass
     ];
     preConfigure = ''
-      substituteInPlace Makefile.PL --replace "'Catalyst::Manual' => 0," "" 
+      substituteInPlace Makefile.PL --replace "'Catalyst::Manual' => 0," ""
     '';
-  }; 
+  };
 
   perlTaskWeaken = import ../development/perl-modules/generic perl {
     name = "Task-Weaken-1.02";
