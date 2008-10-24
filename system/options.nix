@@ -1557,6 +1557,16 @@ in
         ";
       };
 
+      virtualScreen = mkOption {
+        default = null;
+	example = {
+	  x=2048;
+	  y=2048;
+	};
+	description = "
+	  Virtual screen size for Xrandr
+	";
+      };
     };
 
     ejabberd = {

@@ -18,11 +18,12 @@ let
 	windowManager = "twm";
 	tty = "9";
   };
+  pkgs
 
 in 
 (isoFun {
 	inherit platform;
-	lib = (import ../pkgs/lib);
+	lib = (import ../../pkgs/lib);
 
 	networkNixpkgs = "";
 	manualEnabled = true;

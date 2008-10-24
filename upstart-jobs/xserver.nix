@@ -125,6 +125,9 @@ let
     extraModules = cfg.extraModules; 
     serverLayoutOptions = cfg.serverLayoutOptions; 
     defaultDepth = cfg.defaultDepth; 
+    virtualScreen = if cfg.virtualScreen != null then 
+        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}" 
+      else "";
 
     xfs = if cfg.useXFS == false then "" else 
       ''FontPath "${toString cfg.useXFS}"'';
