@@ -1996,7 +1996,17 @@ rec {
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
-    
+
+  xf86videoati_68_192 = (stdenv.mkDerivation {
+    name = "xf86-video-ati-6.8.192";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xorg.freedesktop.org/archive/individual/driver/xf86-video-ati-6.8.192.tar.bz2;
+      sha256 = "1pcqp38ds6xq3vngrnacwlxw3ak4m2x0fgpibikxcvvvi8qdhqx5";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto mesaHeaders glproto;};
+
   xf86videoati_690 = (stdenv.mkDerivation {
     name = "xf86-video-ati-6.9.0";
     builder = ./builder.sh;
