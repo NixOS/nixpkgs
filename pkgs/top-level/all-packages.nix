@@ -5678,6 +5678,10 @@ let
       xkeyboard_config dbus hal;
   });
 
+  xorgReplacements = composedArgsAndFun (import ../servers/x11/xorg/replacements.nix) {
+    inherit fetchurl stdenv automake autoconf libtool xorg composedArgsAndFun;
+  };
+
   zabbixAgent = import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv;
     enableServer = false;
