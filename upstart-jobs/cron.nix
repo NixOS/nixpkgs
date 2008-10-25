@@ -20,7 +20,7 @@ let
   systemCronJobsFile = pkgs.writeText "system-crontab" ''
     SHELL=${pkgs.bash}/bin/sh
     PATH=${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnused}/bin:${pkgs.su}/bin
-    MAILTO=
+    MAILTO="${config.services.cron.mailto}"
     ${pkgs.lib.concatStrings (map (job: job + "\n") systemCronJobs)}
   '';
 

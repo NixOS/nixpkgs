@@ -654,6 +654,11 @@ in
 
     cron = {
 
+      mailto = mkOption {
+        default = "";
+        description = " The job output will be mailed to this email address. ";
+      };
+
       systemCronJobs = mkOption {
         default = [];
         example = [
@@ -663,7 +668,8 @@ in
         description = ''
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected
-          format.
+          format. If you want to get the results mailed you must setuid
+          sendmail. See <option>security.setuidOwners</option>
         '';
       };
 
