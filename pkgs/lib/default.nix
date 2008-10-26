@@ -347,12 +347,9 @@ rec {
 
   mkOption = attrs: attrs // {_type = "option";};
 
-  typeOf = x: if x ? _type then x._type else "";
+  typeOf = x: if (__isAttrs x && x ? _type) then x._type else "";
 
-  isOption = attrs:
-     __isAttrs attrs
-  && attrs ? _type
-  && attrs._type == "option";
+  isOption = attrs: (typeOf attrs) == "option";
 
   addDefaultOptionValues = defs: opts: opts //
     builtins.listToAttrs (map (defName:
