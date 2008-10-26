@@ -8,7 +8,6 @@ let arch = if stdenv.system == "x86_64-linux" then "x86_64"
             else throw "not supported system";
 in
 args.stdenv.mkDerivation rec {
-  #name = "eclipse-classic-3.4M5";
   name = "eclipse-classic-3.3.1.1";
 
   unpackPhase = "unzip \$src;     set -x ";
@@ -48,10 +47,7 @@ args.stdenv.mkDerivation rec {
   # directory somewhere else (so that you can use the update manager
 
   src = args.fetchurl {
-    #url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops/S-3.4M5-200802071530/eclipse-sourceBuild-srcIncluded-3.4M5.zip;
-    #sha256 = "1w6fbpwkys65whygc045556772asggj24x8assnaba6nl70z00az";
-
-    url = http://download.micromata.de/eclipse/eclipse/downloads/drops/R-3.3.1.1-200710231652/eclipse-sourceBuild-srcIncluded-3.3.1.1.zip;
+    url = http://mawercer.de/~nix/iyyx4hs1mgh1b1wa78j07pgq9k882m2k-eclipse-sourceBuild-srcIncluded-3.3.1.1.zip;
     sha256 = "0n56i7ml816f839704qlkgs5ahl0iqgwc80kjq7n7g5rl9a4vhp4";
   };
 }
