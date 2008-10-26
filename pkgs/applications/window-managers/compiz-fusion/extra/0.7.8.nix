@@ -2,11 +2,11 @@ args : with args;
 	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
-		url = http://releases.compiz-fusion.org/0.7.4/compiz-fusion-plugins-main-0.7.4.tar.bz2;
-		sha256 = "1dk8gb0ysij9ny51x9xgz595zbh6cm37hfbn1y738s471cjh7mp3";
+		url = http://releases.compiz-fusion.org/0.7.8/compiz-fusion-plugins-extra-0.7.8.tar.bz2;
+		sha256 ="0hdnabq1bxln5cf6k9532iszj5qbhwkyl3b5d1gwfr80i01qxzy9";
 	};
 		buildInputs = (import ../general-dependencies.nix args)++
-		[bcop libjpeg gettext];
+		[bcop libjpeg gettext pluginsMain];
 		configureFlags = [];
 	} ;
 	in with localDefs;
@@ -15,14 +15,17 @@ let
 		ensureDir \$out/share/compiz-plugins
 		ln -vsf \$out/lib/compiz \$out/share/compiz-plugins
 	") [minInit doMakeInstall defEnsureDir];
+	fixIncludes = FullDepEntry (''
+		export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pluginsMain}/include/compiz"
+	'') [minInit doUnpack];
 in
 stdenv.mkDerivation rec {
-	name = "compiz-fusion-plugins-main-"+version;
+	name = "compiz-fusion-plugins-extra-"+version;
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doConfigure doMakeInstall sharePlugins doForceShare]);
+		(textClosure localDefs [fixIncludes doConfigure doMakeInstall sharePlugins doForceShare]);
 	meta = {
 		description = "
-	Main Compiz Fusion plugins.
+	Extra Compiz Fusion plugins.
 ";
 		inherit src;
 	};

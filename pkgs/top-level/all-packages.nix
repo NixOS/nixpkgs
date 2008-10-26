@@ -6890,10 +6890,10 @@ let
   };
 
   compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
-    version = getConfig ["compizFusion" "version"] "0.7.4";
+    version = getConfig ["compizFusion" "version"] "0.7.8";
     inherit compiz;
     inherit stringsWithDeps lib builderDefs;
-    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt;
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt libxml2;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;

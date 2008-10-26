@@ -2,8 +2,8 @@ args : with args;
 	let localDefs = builderDefs.meta.function {
 		src = /* put a fetchurl here */
 	fetchurl {
-		url = http://releases.compiz-fusion.org/0.7.4/compiz-bcop-0.7.4.tar.bz2;
-		sha256 = "1dfkwac45p6bl64gn58jnj5h99w81mlqkzfn7jni96kgspvnipjf";
+		url = http://releases.compiz-fusion.org/0.7.8/compiz-bcop-0.7.8.tar.bz2;
+		sha256 ="1rs5r5b6rl39vlw68i8bwm5izs5dm666kygmg1c8dy2dab0xsnkq";
 	};
 		buildInputs = (import ../general-dependencies.nix args);
 		propagatedBuildInputs = [getopt libxslt];

@@ -228,6 +228,11 @@ args: with args; with stringsWithDeps; with lib;
                 ${configureCommand} --prefix=\"\$prefix\" ${toString configureFlags}
         ") ["minInit" "addInputs" "doUnpack"];
 
+	doIntltool = FullDepEntry ("
+		mkdir -p config
+		intltoolize --copy --force
+	") ["minInit" "addInputs" "doUnpack"];
+
         doAutotools = FullDepEntry ("
                 mkdir -p config
                 libtoolize --copy --force
