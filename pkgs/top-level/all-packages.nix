@@ -3236,7 +3236,7 @@ let
   };
 
   liboil = composedArgsAndFun
-    (selectVersion ../development/libraries/liboil "0.3.13") {
+    (selectVersion ../development/libraries/liboil "0.3.15") {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
   };
