@@ -381,69 +381,6 @@ args: with args; with stringsWithDeps; with lib;
         surroundWithCommands = x : before : after : {deps=x.deps; text = before + "\n" +
                 x.text + "\n" + after ;};
 
-
-        # some haskell stuff  - untested!
-        # --------------------------------------------------------
-        # creates a setup hook
-        # adding the package database 
-        # nix-support/package.conf to GHC_PACKAGE_PATH
-        # if not already contained
-        # using nix-support because user does'nt want to have it in it's
-        # nix-profile I think?
-        defSetupHookRegisteringPackageDatabase = noDepEntry (
-          "\nsetupHookRegisteringPackageDatabase(){" +
-          "\n  ensureDir $out/nix-support;" +
-          "\n  if test -n \"$1\"; then" +
-          "\n    local pkgdb=$1" +
-          "\n  else" +
-          "\n    local pkgdb=$out/nix-support/package.conf" +
-          "\n  fi" +
-          "\n  cat >> $out/nix-support/setup-hook << EOF" +
-          "\n    " +
-          "\n    echo \$GHC_PACKAGE_PATH | grep -l $pkgdb &> /dev/null || \" "+
-          "\n      export GHC_PACKAGE_PATH=\$GHC_PACKAGE_PATH\${GHC_PACKAGE_PATH:+\"\${PATH_DELIMITER}\"}$pkgdb;" +
-          "\nEOF" +
-          "\n}");
-
-        # Either rungghc or compile setup.hs 
-        # / which one is better ? runghc had some trouble with ghc-6.6.1
-        defCabalSetupCmd = noDepEntry "
-          CABAL_SETUP=\"runghc setup.hs\"
-        ";
-        
-        # create an empty package database in which the new library can be registered. 
-        defCreateEmptyPackageDatabaseAndSetupHook = FullDepEntry "
-          createEmptyPackageDatabaseAndSetupHook(){
-            ensureDir $out/nix-support;
-            PACKAGE_DB=$out/nix-support/package.conf;
-            echo '[]' > \"$PACKAGE_DB\";
-            setupHookRegisteringPackageDatabase
-        }" ["defSetupHookRegisteringPackageDatabase" "defEnsureDir"];
-
-        # Cabal does only support --user ($HOME/.ghc/** ) and --global (/nix/store/*-ghc/lib/...) 
-        # But we need kind of --custom=my-package-db
-        # by accident cabal does support using multiple databases passed by GHC_PACKAGE_PATH
-        # 
-        # Options:
-        # 1) create a local package db containing all dependencies
-        # 2) create a single db file for each package merging them using GHC_PACKAGE_PATH=db1:db2 
-        # (no trailing : which would mean add global and user db)
-        # I prefer 2) (Marc Weber) so the most convinient way is
-        # using ./setup copy to install
-        # and   ./setup register --gen-script to install to our local database 
-        # after replacing /usr/lib etc with our pure $out path
-        cabalBuild = FullDepEntry 
-          " createEmptyPackageDatabaseAndSetupHook
-          ghc --make setup.hs -o setup
-          \$CABAL_SETUP configure
-          \$CABAL_SETUP build
-          \$CABAL_SETUP copy --dest-dir=\$out
-          \$CABAL_SETUP register --gen-script
-          sed -e 's=/usr/local/lib=\$out=g' \\
-              -i register.sh
-          GHC_PACKAGE_PATH=\$PACKAGE_DB ./register.sh
-        " ["defCreateEmptyPackageDatabaseAndSetupHook" "defCabalSetupCmd"];
-
         realPhaseNames = args.phaseNames ++ 
           ["doForceShare" "doPropagate" "doForceCopy"]
           ++
