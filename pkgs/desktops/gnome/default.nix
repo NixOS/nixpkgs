@@ -295,6 +295,11 @@ rec {
     inherit (xlibs) libXmu;
     input = desktop.gnomeutils;
   };
+
+  gtkdoc = import ./gtkdoc.nix {
+    inherit (platform) gtkdoc;
+    inherit stdenv args;
+  };
   
 };
 
