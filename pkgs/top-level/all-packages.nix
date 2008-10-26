@@ -4800,10 +4800,10 @@ let
   };
 
   perlLWP = import ../development/perl-modules/generic perl {
-    name = "libwww-perl-5.818";
+    name = "libwww-perl-5.819";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.818.tar.gz;
-      sha256 = "0ciscfrldsgk7qxwdhvcdjrzpghz35i4w004rkhpkkbjqbyqyivc";
+      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.819.tar.gz;
+      sha256 = "6bc03e9e88213add8436fed020509a7126c6b79c330c3c115cb696fa3b5373ae";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
   };
