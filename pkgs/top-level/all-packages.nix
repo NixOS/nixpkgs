@@ -431,16 +431,24 @@ let
     inherit name buildCommand;
   } // env);
 
-  # Write a plain text file to the Nix store.  (The advantage over
-  # plain sources is that `text' can refer to the output paths of
-  # derivations, e.g., "... ${somePkg}/bin/foo ...".
-  writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
-
-  writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
-
-  writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
-
   symlinkJoin = name: paths: runCommand name {inherit paths;} "mkdir -p $out; for i in $paths; do ${xorg.lndir}/bin/lndir $i $out; done";
+
+  # single text file derivation
+  writeTextFile = { name, # the name of the derivation
+                    text,
+                    executable ? false, # run chmod +x ?
+                    destination ? ""    # relative path appended to $out eg "/bin/foo"
+                  } :
+    runCommand name {inherit text executable; } ''
+      n=$out${destination}
+      mkdir -p "$(dirname "$n")"
+      echo -n "$text" > "$n"
+      [ -n "$executable"] && chmod +x "$n"
+      '';
+  # the following write* functions are depreceated. You should use writeTextFile instead
+  writeText = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out";
+  writeScript = name: text: runCommand name {inherit text;} "echo -n \"$text\" > $out; chmod +x $out";
+  writeScriptBin = name: text: runCommand name {inherit text;} "mkdir -p \$out/bin; echo -n \"\$text\" > \$out/bin/\$name ; chmod +x \$out/bin/\$name";
 
   # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
