@@ -2758,6 +2758,7 @@ let
   fltk20 = (import ../development/libraries/fltk) {
     inherit mkDerivationByConfiguration x11 lib;
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    inherit (xlibs) inputproto libXi;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 

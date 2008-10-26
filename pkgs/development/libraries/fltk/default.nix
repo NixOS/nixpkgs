@@ -1,7 +1,7 @@
 args:
 ( args.mkDerivationByConfiguration {
     flagConfig = {
-      mandatory = { propagatedBuildInputs=["x11"]; 
+      mandatory = { propagatedBuildInputs=["x11" "inputproto" "libXi"]; 
                     blocks = ["cygwin" "quartz"]; }; # cgywin quartz and much more not yet tested
       cygwin = { cfgOption = "--enable-cygwin"; }; #         use the CygWin libraries default=no
       debug = { cfgOption = "--enable-debug"; }; #          turn on debugging default=no
@@ -20,13 +20,11 @@ args:
     }; 
 
     extraAttrs = co : {
-      name = "fltk-2.0.x-r5940";
+      name = "fltk-2.0.x-r6483";
 
     src = args.fetchurl {
-      #url = http://mirror.switch.ch/mirror/gentoo/distfiles/fltk-1.1.7-source.tar.bz2;
-      #sha256 = "855a97e35da823f205253b865758715872cd2c7720e4dcf134a3b6dc18bfb96a";
-      url = ftp://ftp.easysw.com/pub/fltk/snapshots/fltk-1.1.x-r5989.tar.bz2;
-      sha256 = "1zk5qh9133zd53hsn03bc4h6j4vjy61y92j4zxxw94z8y3jkc8yw";
+      url = ftp://ftp.easysw.com/pub/fltk/snapshots/fltk-2.0.x-r6483.tar.bz2;
+      sha256 = "1n8b53r5p0zb4sbvr6pj8aasls4zjwksv1sdc3r3pzb20fikp5jb";
     };
 
     meta = { 
