@@ -757,8 +757,11 @@ let
   };
 
   gnupg2 = import ../tools/security/gnupg2 {
-    inherit fetchurl stdenv readline openldap bzip2 zlib libgpgerror pth
-      libgcrypt libassuan libksba libusb curl;
+    inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib;
+    openldap = if getPkgConfig "gnupg" "ldap" true then openldap else null;
+    bzip2 = if getPkgConfig "gnupg" "bzip2" true then bzip2 else null;
+    libusb = if getPkgConfig "gnupg" "usb" true then libusb else null;
+    curl = if getPkgConfig "gnupg" "curl" true then curl else null;
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
