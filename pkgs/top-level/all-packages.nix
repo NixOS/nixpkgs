@@ -2315,9 +2315,9 @@ let
   };
 
   # does not compile with ghc-6.8.3
-  haddock210 = import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
+  haddock210 = lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
     cabal = cabal682;
-  };
+  });
 
   hsc2hs = import ../development/tools/misc/hsc2hs {
     inherit bleedingEdgeRepos stdenv;
@@ -6995,10 +6995,10 @@ let
 
   # put something like this into your ~/.nixpkgs/config.nix file
   #eclipse = {
-  # plugins = {eclipse, version, plugins } : let p = plugins; in 
+  # plugins = {eclipse, version, plugins } : let p = plugins; in
   #   [  p.pdt # PHP developement
   #      p.viPlugin # vim keybindings (see license)
-  #   ]; 
+  #   ];
   #};
   eclipseNew = (selectVersion ../applications/editors/eclipse-new "3.3.1.1" {
     # outdated, but 3.3.1.1 does already compile on nix, feel free to work 3.4
