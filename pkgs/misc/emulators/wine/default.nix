@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   name = "wine-1.1.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/wine/wine-1.1.2.tar.bz2;
-    sha256 = "1d136dmfnjmghm5hkmcfc635s3xgrhdwvrw0gr3gymwhzrxa1y8y";
+    url = mirror://sourceforge/wine/wine-1.1.7.tar.bz2;
+    sha256 = "1wj20pz638x27db1vpgf4m53wbdia95bp7dxi1zdqlfnp54da22w";
   };
 
   buildInputs = [
