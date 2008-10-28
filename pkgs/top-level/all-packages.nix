@@ -7109,6 +7109,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  fdupes = import ../tools/misc/fdupes {
+    inherit fetchurl stdenv;
+  };
+
   feh = import ../applications/graphics/feh {
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
