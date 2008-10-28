@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0b45b1x1g9i23mv68pjl008qm4lkbd62hka2bf2gkjd2n4nalc6v";
   };
 
+  patchPhase = ''
+    substituteInPlace "src/cflow.h"					\
+      --replace "/usr/bin/cpp"						\
+                "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/bin/cpp"
+  '';
+
   buildInputs = [ gettext emacs ];
 
   doCheck = true;
