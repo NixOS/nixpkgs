@@ -12,6 +12,7 @@ args : with args;
 		  url = http://people.freebsd.org/~sam/ath_hal-20080528.tgz;
 		  sha256 = "1a6glkd8n46876hl48ib08p81qwsvrk4153j4b9xrxgid6f8bar9";
 		};
+		injectionPatchFile = ./inj.patch;
 	};
 	in with localDefs;
 let
@@ -27,12 +28,15 @@ postInstall = FullDepEntry (''
 in
 stdenv.mkDerivation rec {
 	name = "atheros-"+version;
+	patches = lib.optional
+		(lib.getAttr ["injectionPatch"] false args)
+		injectionPatchFile;
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			((lib.optional 
 				(lib.getAttr ["freshHAL"] false args)
 				preBuild)
-			++ [doMakeInstall postInstall
+			++ [doPatch doMakeInstall postInstall
 			doForceShare doPropagate]));
 	meta = {
 		description = "
