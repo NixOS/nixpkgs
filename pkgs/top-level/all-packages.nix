@@ -2225,6 +2225,10 @@ let
     inherit fetchurl stdenv flex bison;
   };
 
+  cflow = import ../development/tools/misc/cflow {
+    inherit fetchurl stdenv gettext emacs;
+  };
+
   cscope = import ../development/tools/misc/cscope {
     inherit fetchurl stdenv ncurses pkgconfig emacs;
   };
