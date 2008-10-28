@@ -327,8 +327,6 @@ rec {
   fix = f:
     (rec { result = f result; }).result;
 
-  finalReference = fix; # bad name
-
   # flatten a list of sets returned by 'f'.
   # f      : function to evaluate each set.
   # attr   : name of the attribute which contains more values.
