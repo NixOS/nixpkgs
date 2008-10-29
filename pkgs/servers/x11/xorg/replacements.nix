@@ -1,6 +1,6 @@
-{stdenv, fetchurl, xorg, automake, autoconf, libtool, composedArgsAndFun, ...}:
+{stdenv, fetchurl, xorg, automake, autoconf, libtool, composedArgsAndFun}:
 {
-  xf86videoati = {src, suffix, ...}: 
+  xf86videoati = {src, suffix}: 
   composedArgsAndFun stdenv.mkDerivation {
       name = "xf86-video-ati-${suffix}";
       buildInputs = xorg.xf86videoati.buildInputs ++
