@@ -354,6 +354,7 @@ rec {
     xorg.xrandr
     xorg.xrdb
     xorg.setxkbmap
+    xorg.iceauth # required for KDE applications (it's called by dcopserver)
     pkgs.feh
   ]
   ++ optional (windowManager == "twm") [
@@ -376,7 +377,6 @@ rec {
   ++ optional (sessionType == "kde") [
     pkgs.kdelibs
     pkgs.kdebase
-    xorg.iceauth # absolutely required by dcopserver
     xorg.xset # used by startkde, non-essential
   ]
   ++ optional (videoDriver == "nvidia") [
