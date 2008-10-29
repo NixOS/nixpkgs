@@ -87,6 +87,12 @@ rm -rf /var/run
 #rm -rf --one-file-system /tmp/*
 #echo " done"
 
+# This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
+# -rf' on it isn't safe in general because it can contain bind mounts
+# to /nix/store and other places.  But after rebooting these are all
+# gone, of course.
+rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
+
 if test -n "$safeMode"; then
     mkdir -m 0755 -p /var/run
     touch /var/run/safemode

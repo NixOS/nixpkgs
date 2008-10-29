@@ -121,7 +121,8 @@ mkdir -m 0755 -p \
     /nix/var/nix/profiles \
     /nix/var/nix/db \
     /nix/var/log/nix/drvs \
-    /nix/var/nix/channel-cache
+    /nix/var/nix/channel-cache \
+    /nix/var/nix/chroots
 mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
 mkdir -m 1777 -p /nix/var/nix/profiles/per-user
 
