@@ -1,17 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "m4-1.4.11";
+  name = "m4-1.4.12";
   src = fetchurl {
     url = "mirror://gnu/m4/${name}.tar.bz2";
-    sha256 = "1bcakymxddxykg5vbll3d9xq17m5sa3r6cprf1k27x5k4mjnhz0b";
+    sha256 = "18qvi12843kvqkpcmrjxz1929s833q5d0jzm8hc965j663g1fll5";
   };
-
-  patches = [ ./SIGPIPE.patch ];
-
-  # XXX: Work around Gnulib bug.  See:
-  # http://thread.gmane.org/gmane.comp.gnu.m4.bugs/2478 .
-  configureFlags = "gl_cv_func_strtod_works=no";
 
   doCheck = true;
 
