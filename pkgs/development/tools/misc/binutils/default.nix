@@ -1,11 +1,11 @@
 {stdenv, fetchurl, noSysDirs}:
 
-stdenv.mkDerivation {
-  name = "binutils-2.18";
+stdenv.mkDerivation rec {
+  name = "binutils-2.19";
   
   src = fetchurl {
-    url = mirror://gnu/binutils/binutils-2.18.tar.bz2;
-    sha256 = "16zfc7llbjdn69bbdy7kqgg2xa67ypgj7z5qicgwzvghaaj36yj8";
+    url = "mirror://gnu/binutils/${name}.tar.bz2";
+    sha256 = "12jjvb9p9j59a46glxy15ff5h4i2s3izpx05gf8jmxibzh7s2bmx";
   };
 
   patches = [
@@ -27,7 +27,11 @@ stdenv.mkDerivation {
   configureFlags = "--disable-werror"; # needed for dietlibc build
 
   meta = {
-    description = "Tools for manipulating binaries (linker, assembler, etc.)";
+    description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
+
+    homepage = http://www.gnu.org/software/binutils/;
+
+    license = "GPLv3+";
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */
