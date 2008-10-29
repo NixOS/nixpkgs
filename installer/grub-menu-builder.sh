@@ -142,7 +142,8 @@ for generation in $(
     echo $generation
     link=/nix/var/nix/profiles/system-$generation-link
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
-    addEntry "NixOS - Configuration $generation ($date)" $link "$generation ($date)"
+    kernelVersion=$(cd $(dirname $(readlink -f $link/kernel))/lib/modules && echo *)
+    addEntry "NixOS - Configuration $generation ($date - $kernelVersion)" $link "$generation ($date)"
 done
 
 
