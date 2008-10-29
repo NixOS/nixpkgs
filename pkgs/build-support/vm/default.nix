@@ -450,7 +450,7 @@ rec {
       srcName="$strippedName"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
-      rpmbuild -vv -ta "$srcName" || fail
+      rpmbuild -vv -ta "$srcName"
 
       eval "$postBuild"
     '';
