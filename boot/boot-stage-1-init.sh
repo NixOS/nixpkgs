@@ -102,7 +102,7 @@ done
 # Load some kernel modules.
 for i in $(cat @modulesClosure@/insmod-list); do
     echo "loading module $(basename $i)..."
-    insmod $i
+    insmod $i || true
 done
 
 
