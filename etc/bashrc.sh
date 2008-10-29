@@ -46,6 +46,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     then
 	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
     fi
+    export PERL5LIB="$i/lib/site_perl:$PERL5LIB"
 done
 
 
