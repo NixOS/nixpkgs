@@ -10,7 +10,6 @@ rec {
   
   # SourceForge.
   sourceforge = [
-    http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
@@ -18,6 +17,7 @@ rec {
     http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
+    http://prdownloads.sourceforge.net/
   ];
 
   sf = sourceforge;
