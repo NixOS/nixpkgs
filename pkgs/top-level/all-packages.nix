@@ -7133,7 +7133,7 @@ let
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
 
-  firefox = firefox2;
+  firefox = firefox3;
 
   firefox2 = lowPrio (import ../applications/networking/browsers/firefox-2 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
@@ -7170,7 +7170,7 @@ let
     inherit (xlibs) libXi libX11 libXrender libXft libXt;
   });
 
-  firefox3Wrapper = lowPrio (wrapFirefox firefox3 "firefox" "");
+  firefox3Wrapper = wrapFirefox firefox3 "firefox" "";
   firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "firefox" "");
 
   flacAlts = import ../applications/audio/flac {
