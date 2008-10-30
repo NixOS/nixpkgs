@@ -2100,7 +2100,7 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = firefox3;
+      xulrunner = xulrunner3;
     };
 
 

@@ -2,8 +2,6 @@ source $stdenv/setup
 
 ensureDir $out/bin
 
-set -x
-
 wrapper="$out/bin/$launcher"
 
 if test -e $xulrunner/bin/xulrunner; then
