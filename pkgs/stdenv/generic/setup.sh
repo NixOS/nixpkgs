@@ -601,7 +601,7 @@ configurePhase() {
     fi
 
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags"${configureFlagsArray[@]}"
+    $configureScript $configureFlags "${configureFlagsArray[@]}"
 
     eval "$postConfigure"
 }
