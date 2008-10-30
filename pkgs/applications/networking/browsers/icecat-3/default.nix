@@ -103,7 +103,10 @@ stdenv.mkDerivation {
     licenses = [ "GPLv2+" "LGPLv2+" "MPLv1+" ];
   };
 
-  passthru = {inherit gtk;};
+  passthru = {
+    inherit gtk;
+    isFirefox3Like = true;
+  };
 }
 
 

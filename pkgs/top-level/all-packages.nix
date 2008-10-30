@@ -7144,11 +7144,12 @@ let
   firefoxWrapper = wrapFirefox firefox "firefox" "";
 
   firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs;
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
     #enableOfficialBranding = true;
+    xulrunner = xulrunner3;
   });
 
   xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner.nix {
@@ -7157,10 +7158,6 @@ let
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
     #enableOfficialBranding = true;
-  });
-
-  firefox3Xul = lowPrio ((symlinkJoin "firefox-3-with-xulrunner" [firefox3 xulrunner3]) // {
-    inherit (firefox) gtk;
   });
 
   firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
@@ -7180,7 +7177,7 @@ let
 
   flac = getVersion "flac" flacAlts;
 
-  flashplayer = flashplayer9;
+  flashplayer = flashplayer10;
 
   flashplayer9 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
     inherit fetchurl stdenv zlib alsaLib;
@@ -7519,9 +7516,9 @@ let
   };
   */
 
-  MPlayerPlugin = browser: browserName:
+  MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
-      inherit browser browserName;
+      inherit browser;
       inherit fetchurl stdenv pkgconfig gettext;
       inherit (xlibs) libXpm;
       # !!! should depend on MPlayer
@@ -7967,7 +7964,7 @@ let
         ++ lib.optional (enableAdobeFlash)  flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
-        ++ lib.optional (getConfig [browserName "enableMPlayer"] true) (MPlayerPlugin browser browserName)
+        ++ lib.optional (getConfig [browserName "enableMPlayer"] true) (MPlayerPlugin browser)
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };
