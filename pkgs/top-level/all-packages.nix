@@ -7135,6 +7135,8 @@ let
 
   firefox = firefox3;
 
+  firefoxWrapper = firefox3Wrapper;
+
   firefox2 = lowPrio (import ../applications/networking/browsers/firefox-2 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
@@ -7143,7 +7145,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefoxWrapper = wrapFirefox firefox "firefox" "";
+  firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
 
   firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
