@@ -1889,6 +1889,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  tinycc = import ../development/compilers/tinycc {
+    inherit fetchurl stdenv perl texinfo;
+  };
+
   transformers = import ../development/compilers/transformers {
     inherit fetchurl pkgconfig sdf stlport;
     aterm = aterm23;
