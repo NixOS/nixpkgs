@@ -173,6 +173,7 @@ let
       thunderbird
       tightvnc
       time
+      tinycc
       udev
       unzip
       upstart
