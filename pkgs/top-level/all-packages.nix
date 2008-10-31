@@ -444,7 +444,7 @@ let
       n=$out${destination}
       mkdir -p "$(dirname "$n")"
       echo -n "$text" > "$n"
-      [ -n "$executable"] && chmod +x "$n"
+      test -n "$executable" && chmod +x "$n"
     '';
     
   # Shorthands for `writeTextFile'.
@@ -6212,7 +6212,7 @@ let
       inherit fetchurl stdenv perl bison mktemp kernel;
     };
 
-    klibcShrunk = import ../os-specific/linux/klibc/shrunk.nix {
+    klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
       inherit stdenv klibc;
     };
 
