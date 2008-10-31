@@ -14,6 +14,15 @@ let version = "0.9.24"; in
     patchPhase = ''
       substituteInPlace "texi2pod.pl" \
         --replace "/usr/bin/perl" "${perl}/bin/perl"
+
+      # To produce executables, `tcc' needs to know where `crt*.o' are.
+      sed -i "tcc.c" \
+        -e's|define CONFIG_TCC_CRT_PREFIX.*$|define CONFIG_TCC_CRT_PREFIX "${stdenv.glibc}/lib"|g ;
+           s|tcc_add_library_path(s, "/usr/lib");|tcc_add_library_path(s, "${stdenv.glibc}/lib");|g'
+
+      # Tell it about the loader's location.
+      sed -i "tccelf.c" \
+        -e's|".*/ld-linux\([^"]\+\)"|"${stdenv.glibc}/lib/ld-linux\1"|g'
     '';
 
     postInstall = ''
