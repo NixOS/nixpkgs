@@ -444,7 +444,7 @@ let
       n=$out${destination}
       mkdir -p "$(dirname "$n")"
       echo -n "$text" > "$n"
-      test -n "$executable" && chmod +x "$n"
+      (test -n "$executable" && chmod +x "$n") || true
     '';
     
   # Shorthands for `writeTextFile'.
