@@ -2,8 +2,8 @@ args : with args;
 rec {
   name = "kqemu-"+version;
   src = fetchurl {
-    url = http://bellard.org/qemu/kqemu-1.3.0pre11.tar.gz;
-    sha256 = "03svg2x52ziglf9r9irf6ziiz8iwa731fk1mdskwdip5jxbyy6jl";
+    url = http://bellard.org/qemu/kqemu-1.4.0pre1.tar.gz;
+    sha256 = "14dlmawn3gia1j401ag5si5k1a1vav7jpv86rl37p1hwmr7fihxs";
   };
 
   buildInputs = [];
