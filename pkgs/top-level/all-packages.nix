@@ -2387,6 +2387,10 @@ let
     inherit fetchurl stdenv perl m4;
   };
 
+  libtool2 = import ../development/tools/misc/libtool/libtool2.nix {
+    inherit fetchurl stdenv lzma perl m4;
+  };
+
   libtoolOld = lowPrio (import ../development/tools/misc/libtool/old.nix {
     inherit fetchurl stdenv perl m4;
   });
