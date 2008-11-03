@@ -2207,6 +2207,10 @@ let
     inherit fetchurl stdenv m4;
   };
 
+  bison24 = import ../development/tools/parsing/bison/bison-2.4.nix {
+    inherit fetchurl stdenv m4;
+  };
+
   buildbot = import ../development/tools/build-managers/buildbot {
     inherit fetchurl stdenv python twisted makeWrapper;
   };
