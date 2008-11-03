@@ -173,7 +173,6 @@ let
       thunderbird
       tightvnc
       time
-      tinycc
       udev
       unzip
       upstart
@@ -280,6 +279,7 @@ let
       strategoxt
       strategoxtUtils
       syslinux
+      tinycc
       uml
       wine
       xorg_sys_opengl
