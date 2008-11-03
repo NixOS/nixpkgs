@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/bison/;
 
-    license = "GPLv3+";
+    license = "GPLv2+";
   };
 } // {
   glrSupport = true;
