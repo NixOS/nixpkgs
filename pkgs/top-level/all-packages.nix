@@ -8061,7 +8061,7 @@ let
   xneur = import ../applications/misc/xneur {
     inherit fetchurl stdenv pkgconfig pcre libxml2 aspell;
     GStreamer=gst_all.gstreamer;
-    inherit (xlibs) libX11;
+    inherit (xlibs) libX11 libXpm;
     inherit (gtkLibs) glib;
   };
 

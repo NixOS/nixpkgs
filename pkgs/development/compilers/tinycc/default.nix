@@ -1,5 +1,7 @@
 { stdenv, fetchurl, perl, texinfo }:
 
+assert stdenv ? glibc;
+
 let version = "0.9.24"; in
   stdenv.mkDerivation {
     name = "tinycc-${version}";
