@@ -21,6 +21,7 @@ let
       bashInteractive
       binutils
       bison23
+      bison24
       bitlbee
       bittorrent
       bsdiff
