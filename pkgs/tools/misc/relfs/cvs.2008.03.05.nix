@@ -1,6 +1,6 @@
 
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 	src = /* put a fetchurl here */
 	if args ? src then args.src else fetchcvs {
 		cvsRoot = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";

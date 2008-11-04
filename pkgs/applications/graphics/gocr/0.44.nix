@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 fetchurl {
 		url = http://prdownloads.sourceforge.net/jocr/gocr-0.44.tar.gz;

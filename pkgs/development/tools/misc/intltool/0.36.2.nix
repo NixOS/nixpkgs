@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://ftp.gnome.org/pub/gnome/sources/intltool/0.36/intltool-0.36.2.tar.bz2;

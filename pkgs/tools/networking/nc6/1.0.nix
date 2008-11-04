@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-let localDefs = builderDefs.meta.function (rec {
+let localDefs = builderDefs.passthru.function (rec {
     src = /* put a fetchurl here */
     fetchurl {
       url = ftp://ftp.deepspace6.net/pub/ds6/sources/nc6/nc6-1.0.tar.bz2;

@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = ftp://ftp.gnu.org/gnu/indent/indent-2.2.9.tar.gz;

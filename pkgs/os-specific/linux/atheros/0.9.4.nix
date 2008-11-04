@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 		  url = http://downloads.sourceforge.net/madwifi/madwifi-0.9.4.tar.gz;

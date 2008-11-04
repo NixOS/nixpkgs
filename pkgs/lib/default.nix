@@ -42,7 +42,7 @@ rec {
   foldArgs = merger: f: init: x: 
     let arg=(merger init (defaultMergeArg init x)); in
       (f arg) // {
-        meta = {
+        passthru = (getAttr ["passthru"] {} arg) // {
 	  function = foldArgs merger f arg;
 	};
       };

@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-        let localDefs = builderDefs.meta.function ((rec {
+        let localDefs = builderDefs.passthru.function ((rec {
                 src = /* put a fetchurl here */
                 fetchurl {
                         url = ftp://ftp.dict.org/pub/dict/dictd-1.9.15.tar.gz;

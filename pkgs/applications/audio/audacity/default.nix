@@ -1,5 +1,5 @@
 args: with args;
-	let localDefs = builderDefs.meta.function { 
+	let localDefs = builderDefs.passthru.function { 
 	  src = 
 		fetchurl {
 			url = mirror://sourceforge/audacity/audacity-src-1.3.3.tar.gz;

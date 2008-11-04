@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-  let localDefs = builderDefs.meta.function (rec {
+  let localDefs = builderDefs.passthru.function (rec {
     src = /* put a fetchurl here */
     fetchurl {
       url = mirror://sourceforge/libvncserver/x11vnc-0.9.3.tar.gz;

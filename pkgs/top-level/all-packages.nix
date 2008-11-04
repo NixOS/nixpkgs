@@ -1131,7 +1131,7 @@ let
   # seccure will override it (it is root-only, but
   # more secure because of memory locking), but this
   # can be added to default system
-  seccureUser = lowPrio (seccure.meta.function {
+  seccureUser = lowPrio (seccure.passthru.function {
     makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
   });
 
@@ -2037,7 +2037,7 @@ let
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
 
-  python25Full = python25Base.meta.function {
+  python25Full = python25Base.passthru.function {
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] true then readline else null;
@@ -2405,7 +2405,7 @@ let
 
   ltrace = composedArgsAndFun (selectVersion ../development/tools/misc/ltrace "0.5-3deb") {
     inherit fetchurl stdenv builderDefs stringsWithDeps lib;
-    elfutils = elfutils.meta.function {version = "0.127";};
+    elfutils = elfutils.passthru.function {version = "0.127";};
   };
 
   mk = import ../development/tools/build-managers/mk {
@@ -3132,7 +3132,7 @@ let
       inherit stdenv fetchurl builderDefs libdbi;
     };
 
-  libdbiDrivers = libdbiDriversBase.meta.function {
+  libdbiDrivers = libdbiDriversBase.passthru.function {
     inherit sqlite mysql;
   };
 
@@ -5451,7 +5451,7 @@ let
   (let python=python25; in
   {
     inherit python;
-    setuptools = setuptools.meta.function {inherit python;};
+    setuptools = setuptools.passthru.function {inherit python;};
   });
 
   numeric = import ../development/python-modules/numeric {
@@ -5760,7 +5760,7 @@ let
     inherit perl;
   };
 
-  blcrCurrent = kernel : (blcr.meta.function {
+  blcrCurrent = kernel : (blcr.passthru.function {
     inherit kernel;
   });
 
@@ -6915,7 +6915,7 @@ let
     inherit librsvg fuse;
   };
 
-  compiz_062 = compiz.meta.function {
+  compiz_062 = compiz.passthru.function {
     version = "0.6.2";
   };
 
@@ -6937,7 +6937,7 @@ let
     inherit dbus dbus_glib;
   };
 
-  compiz = compizBase.meta.function {
+  compiz = compizBase.passthru.function {
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   };
 
@@ -7735,7 +7735,7 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  snd = sndBase.meta.function {
+  snd = sndBase.passthru.function {
     inherit guile mesa libtool jackaudio alsaLib;
   };
 
@@ -8082,7 +8082,7 @@ let
     inherit (xlibs) libX11 libXmu;
   };
 
-  xscreensaver = xscreensaverBase.meta.function {
+  xscreensaver = xscreensaverBase.passthru.function {
     flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
     inherit mesa libxml2 libjpeg;
     inherit (gtkLibs) gtk;
@@ -8170,7 +8170,7 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
-  construo = construoBase.meta.function {
+  construo = construoBase.passthru.function {
     inherit mesa freeglut;
   };
 

@@ -1,7 +1,7 @@
 args : with args;	let 
         patch = ./ltrace_0.5-3.diff.gz;
 	localDefs = with builderDefs;
-	 builderDefs.meta.function {
+	 builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5.orig.tar.gz;

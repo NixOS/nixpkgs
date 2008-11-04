@@ -1,6 +1,6 @@
 
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = [ http://fabrice.bellard.free.fr/qemu/linux-0.2.img.bz2 http://bellard.org/qemu/linux-0.2.img.bz2];

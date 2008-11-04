@@ -1,4 +1,4 @@
-args : with args; let localDefs = builderDefs.meta.function (args // rec {
+args : with args; let localDefs = builderDefs.passthru.function (args // rec {
                 version = lib.getAttr ["version"] "5.07" args;
 		src = /* put a fetchurl here */
 		fetchurl {

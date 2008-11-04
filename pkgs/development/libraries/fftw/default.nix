@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function { 
+	let localDefs = builderDefs.passthru.function { 
 		src = 
 			fetchurl {
 				url = ftp://ftp.fftw.org/pub/fftw/fftw-3.1.2.tar.gz;

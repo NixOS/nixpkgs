@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = fetchurl {
 			url = http://snapshots.madwifi.org/madwifi-trunk/madwifi-trunk-r3837-20080802.tar.gz;
 			sha256 = "0yj6jxlygb5bdnysmn47dn4wi220ma310vd885a1pl7hp3ky216m";

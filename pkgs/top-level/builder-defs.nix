@@ -404,7 +404,7 @@ args: with args; with stringsWithDeps; with lib;
 	builderDefsArgs = args;
 
         innerBuilderDefsPackage = bd: args: (
-        let localDefs = bd.meta.function args; in
+        let localDefs = bd.passthru.function args; in
 
         stdenv.mkDerivation ((rec {
           inherit (localDefs) name;

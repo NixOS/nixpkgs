@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-	let localDefs = builderDefs.meta.function (rec {
+	let localDefs = builderDefs.passthru.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			sha256 = "1kx69f9jqnfzwjh47cl1df8p8hn3bnp6bznxnb6c4wx32ijn5gri";

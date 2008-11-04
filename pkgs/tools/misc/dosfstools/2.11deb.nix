@@ -4,7 +4,7 @@ args : with args; with builderDefs;
           url = http://ftp.de.debian.org/debian/pool/main/d/dosfstools/dosfstools_2.11-2.3.diff.gz;
           sha256 = "0bzjhpgg4ih6c76ax8byis9vxgkr2c7bbbshqrkfq8j7ar48n5ld";
         };	
-      localDefs = builderDefs.meta.function (rec {
+      localDefs = builderDefs.passthru.function (rec {
         src = /* put a fetchurl here */
           fetchurl {
             url = http://ftp.de.debian.org/debian/pool/main/d/dosfstools/dosfstools_2.11.orig.tar.gz;
