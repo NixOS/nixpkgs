@@ -602,7 +602,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  cron = import ../tools/system/cron {
+  cron = import ../tools/system/cron { # see also fcron
     inherit fetchurl;
     stdenv = stdenvNew;
   };
@@ -673,6 +673,10 @@ let
 
   expect = import ../tools/misc/expect {
     inherit fetchurl stdenv tcl;
+  };
+
+  fcron = import ../tools/system/fcron { # see also cron
+    inherit fetchurl stdenv perl;
   };
 
   file = import ../tools/misc/file {
