@@ -40,12 +40,24 @@ rec {
   sumTwoArgs = f: x: y: 
     f (defaultMerge x y);
   foldArgs = merger: f: init: x: 
-    let arg=(merger init (defaultMergeArg init x)); in
-      (f arg) // {
-        passthru = (getAttr ["passthru"] {} arg) // {
-	  function = foldArgs merger f arg;
-	};
-      };
+    let arg=(merger init (defaultMergeArg init x)); in  
+      # now add the function with composed args already applied to the final attrs
+    setAttrMerge "passthru" {} (f arg) ( x : x // { function = foldArgs merger f arg; } );
+ 
+  # rec { # an example of how composedArgsAndFun can be used
+  #  a  = composedArgsAndFun (x : x) { a = ["2"]; meta = { d = "bar";}; };
+  #  # meta.d will be lost ! It's your task to preserve it (eg using a merge function)
+  #  b  = a.passthru.function { a = [ "3" ]; meta = { d2 = "bar2";}; };
+  #  # instead of passing/ overriding values you can use a merge function:
+  #  c  = b.passthru.function ( x: { a = x.a  ++ ["4"]; }); # consider using (maybeAttr "a" [] x)
+  # }
+  # result:
+  # {
+  #   a = { a = ["2"];     meta = { d = "bar"; }; passthru = { function = .. }; };
+  #   b = { a = ["3"];     meta = { d2 = "bar2"; }; passthru = { function = .. }; };
+  #   c = { a = ["3" "4"]; meta = { d2 = "bar2"; }; passthru = { function = .. }; };
+  #   # c2 is equal to c
+  # }
   composedArgsAndFun = f: foldArgs defaultMerge f {};
 
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
@@ -525,6 +537,12 @@ rec {
   nvs = name : value : listToAttrs [ (nv name value) ];
   # adds / replaces an attribute of an attribute set
   setAttr = set : name : v : set // (nvs name v);
+
+  # setAttrMerge (similar to mergeAttrsWithFunc but only merges the values of a particular name)
+  # setAttrMerge "a" [] { a = [2];} (x : x ++ [3]) -> { a = [2 3]; } 
+  # setAttrMerge "a" [] {         } (x : x ++ [3]) -> { a = [  3]; }
+  setAttrMerge = name : default : attrs : f :
+    setAttr attrs name (f (maybeAttr name default attrs));
 
   # iterates over a list of attributes collecting the attribute attr if it exists
   catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
