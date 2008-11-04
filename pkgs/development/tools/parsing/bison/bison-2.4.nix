@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [m4];
 
-  doCheck = true;
+  #doCheck = true;
+  doCheck = false;
 
   meta = {
     description = "GNU Bison, a Yacc-compatible parser generator";
