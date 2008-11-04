@@ -44,7 +44,7 @@ let
     else if builtins.isAttrs arg then {}
     else null;
 
-  pcmciaUtils = pkgs.pcmciaUtils.meta.function {
+  pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
     inherit (config.hardware.pcmcia) firmware config;
   };
 in
