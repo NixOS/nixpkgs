@@ -7810,10 +7810,10 @@ let
     inherit fetchurl stdenv apr aprutil expat swig jdk;
     neon = import ../development/libraries/neon/0.28.nix {
         inherit fetchurl stdenv libxml2 zlib openssl;
-    	compressionSupport = true;
-	sslSupport = true;
-	static = true;
-	shared = false;
+        compressionSupport = true;
+        sslSupport = true;
+        static = true;
+        shared = false;
     };
     zlib = import ../development/libraries/zlib {
       inherit fetchurl stdenv;
