@@ -1074,6 +1074,15 @@ let
     inherit stdenv fetchurl;
   };
 
+  pystringtemplate = import ../tools/text/py-string-template {
+    inherit stdenv fetchurl python;
+    /* TODO: Some parts of this package depend on the ANTLR run-time library
+     *       for Python. We have a package for ANTLR3, too, but that one is
+     *       rather big and contains much more than we need. I guess this issue
+     *       calls for some clever refactoring.
+     */
+  };
+
   qtparted = import ../tools/misc/qtparted {
     inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
     inherit (xlibs) libX11 libXext;
