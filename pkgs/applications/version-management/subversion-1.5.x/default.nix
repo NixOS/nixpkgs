@@ -20,13 +20,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.5.3";
+  version = "1.5.4";
 
   name = "subversion-${version}";
 
   src = fetchurl {
-    url = http://subversion.tigris.org/downloads/subversion-1.5.3.tar.bz2;
-    sha256 = "1ilq6k9cwxsx9c7hbzpd09fwn9ffw1y6lwh1ka1z9mgynaxpzf37";
+    url = http://subversion.tigris.org/downloads/subversion-1.5.4.tar.bz2;
+    sha256 = "0h7v8ngbjmxbcwjxl4y7w6qygs0qc228jdpqf5s2i21rnmbn4jz2";
   };
 
   buildInputs = [zlib apr aprutil]
