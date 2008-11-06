@@ -6478,7 +6478,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  sdparm = composedArgsAndFun (selectVersion ../os-specific/linux/sdparm "1.02") {
+  sdparm = composedArgsAndFun (selectVersion ../os-specific/linux/sdparm "1.03") {
     inherit fetchurl stdenv builderDefs;
   };
 
