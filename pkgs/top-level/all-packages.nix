@@ -8444,7 +8444,7 @@ let
   };
 
   cups = import ../misc/cups {
-    inherit fetchurl stdenv zlib libjpeg libpng libtiff pam;
+    inherit fetchurl stdenv zlib libjpeg libpng libtiff pam openssl;
   };
 
   dblatex = import ../misc/tex/dblatex {
