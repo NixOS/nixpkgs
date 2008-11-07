@@ -146,8 +146,9 @@ for i in @setuidPrograms@; do
     if test -z "$program"; then
 	# XXX: It would be preferable to detect this problem before
 	# `activate-configuration' is invoked.
-	echo "WARNING: No executable named \`$i' was found" >&2
-	echo "WARNING: but \`$i' was specified as a setuid program." >&2
+	#echo "WARNING: No executable named \`$i' was found" >&2
+	#echo "WARNING: but \`$i' was specified as a setuid program." >&2
+        true
     else
         cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
         echo -n "$program" > $wrapperDir/$i.real
