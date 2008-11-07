@@ -19,6 +19,8 @@ ln -sfn /tmp/event.d /etc/event.d
 echo "restarting init..."
 kill -TERM 1 
 
+sleep 1
+
 for i in $*; do
     echo "restarting job $i..."
     initctl stop "$i"
