@@ -231,6 +231,7 @@ import ../helpers/make-etc.nix {
       "chsh"
       "xlock"
       "kde"
+      "cups"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
