@@ -1,11 +1,30 @@
-{ writeText, cups
-}:
+{config, pkgs}:
 
 let
 
   logDir = "/var/log/cups";
 
-  cupsdConfig = writeText "cupsd.conf" "
+
+  inherit (pkgs) cups;
+
+
+  # Here we can enable additional backends, filters, etc. that are not
+  # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
+  # we can't update ${cups}/lib/cups itself, we create a symlink tree
+  # here and add the additional programs.  The ServerBin directive in
+  # cupsd.conf tells cupsd to use this tree.
+  bindir = pkgs.runCommand "cups-progs" {} ''
+    ensureDir $out/lib/cups
+    ln -s ${cups}/lib/cups/* $out/lib/cups/
+    
+    rm $out/lib/cups/backend
+    ensureDir $out/lib/cups/backend
+    ln -s ${cups}/lib/cups/backend/* $out/lib/cups/backend/
+    ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+  ''; # */
+  
+
+  cupsdConfig = pkgs.writeText "cupsd.conf" ''
     LogLevel info
 
     SystemGroup root
@@ -14,6 +33,8 @@ let
     Listen /var/run/cups/cups.sock
 
     ServerRoot ${cups}/etc/cups
+
+    ServerBin ${bindir}/lib/cups
 
     AccessLog ${logDir}/access_log
     ErrorLog ${logDir}/access_log
@@ -65,7 +86,7 @@ let
         Order deny,allow
       </Limit>
     </Policy>
-  ";
+  '';
 
 in
 
@@ -76,19 +97,19 @@ in
     cups
   ];
   
-  job = "
-description \"CUPS daemon\"
+  job = ''
+    description "CUPS printing daemon"
 
-start on network-interfaces/started
-stop on network-interfaces/stop
+    start on network-interfaces/started
+    stop on network-interfaces/stop
 
-start script
-    mkdir -m 0755 -p ${logDir}
-    mkdir -m 0700 -p /var/cache/cups
-    mkdir -m 0700 -p /var/spool/cups
-end script
-    
-respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F
-  ";
+    start script
+        mkdir -m 0755 -p ${logDir}
+        mkdir -m 0700 -p /var/cache/cups
+        mkdir -m 0700 -p /var/spool/cups
+    end script
+
+    respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F
+  '';
   
 }

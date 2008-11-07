@@ -314,7 +314,7 @@ let
   # CUPS (printing) daemon.
   ++ optional config.services.printing.enable
     (import ../upstart-jobs/cupsd.nix {
-      inherit (pkgs) writeText cups;
+      inherit config pkgs;
     })
 
   # Gateway6
