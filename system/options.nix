@@ -31,7 +31,10 @@ let
 in
 
 {
-
+  require = [
+    # newtworking
+    (import ../upstart-jobs/dhclient.nix)
+  ]
 
   time = {
 
@@ -374,30 +377,6 @@ in
       description = ''
         Additional entries to be appended to <filename>/etc/hosts</filename>.
       '';
-    };
-
-    useDHCP = mkOption {
-      default = true;
-      description = "
-        Whether to use DHCP to obtain an IP adress and other
-        configuration for all network interfaces that are not manually
-        configured.
-      ";
-    };
-
-    interfaces = mkOption {
-      default = [];
-      example = [
-        { name = "eth0";
-          ipAddress = "131.211.84.78";
-          subnetMask = "255.255.255.128";
-        }
-      ];
-      description = "
-        The configuration for each network interface.  If
-        <option>networking.useDHCP</option> is true, then each interface
-        not listed here will be configured using DHCP.
-      ";
     };
 
     defaultGateway = mkOption {

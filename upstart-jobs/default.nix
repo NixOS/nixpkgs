@@ -177,13 +177,6 @@ let
       config = config.services.atd;
      })
 
-  # DHCP client.
-  ++ optional config.networking.useDHCP
-    (import ../upstart-jobs/dhclient.nix {
-      inherit (pkgs) nettools dhcp lib;
-      interfaces = config.networking.interfaces;
-    })
-
   # ifplugd daemon for monitoring Ethernet cables.
   ++ optional config.networking.interfaceMonitor.enable
     (import ../upstart-jobs/ifplugd.nix {

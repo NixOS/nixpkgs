@@ -1,21 +1,71 @@
-{dhcp, nettools, interfaces, lib}:
+{pkgs, config, ...}:
 
-let 
+###### interface
+let
+  inherit (pkgs.lib) mkOption
+    mergeEnableOption mergeListOption;
+
+  options = {
+    networking = {
+      useDHCP = mkOption {
+        default = true;
+        merge = mergeEnableOption;
+        description = "
+          Whether to use DHCP to obtain an IP adress and other
+          configuration for all network interfaces that are not manually
+          configured.
+        ";
+      };
+  
+      interfaces = mkOption {
+        default = [];
+        merge = mergeListOption;
+        example = [
+          { name = "eth0";
+            ipAddress = "131.211.84.78";
+            subnetMask = "255.255.255.128";
+          }
+        ];
+        description = "
+          The configuration for each network interface.  If
+          <option>networking.useDHCP</option> is true, then each interface
+          not listed here will be configured using DHCP.
+        ";
+      };
+    };
+  };
+in
+
+###### implementation
+let
+  ifEnable = arg:
+    if config.networking.useDHCP then arg
+    else if builtins.isList arg then []
+    else if builtins.isAttrs arg then {}
+    else null;
+
+  inherit (pkgs) nettools dhcp lib;
 
   # Don't start dhclient on explicitly configured interfaces.
   ignoredInterfaces = ["lo"] ++
     map (i: i.name) (lib.filter (i: i ? ipAddress) interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
-
 in
 
 {
-  name = "dhclient";
+  require = [
+    # (import ../upstart-jobs/default.nix)
+    options
+  ];
 
-  extraPath = [dhcp];
+  services = {
+    extraJobs = IfEnable [{
+      name = "dhclient";
+
+      extraPath = [dhcp];
   
-  job = "
+      job = "
 description \"DHCP client\"
 
 start on network-interfaces/started
@@ -45,6 +95,8 @@ script
 
     exec ${dhcp}/sbin/dhclient -d $interfaces -e \"PATH=$PATH\" -lf ${stateDir}/dhclient.leases
 end script
-  ";
-  
+      ";
+    }];
+  };
 }
+
