@@ -31,10 +31,6 @@ let
 in
 
 {
-  require = [
-    # newtworking
-    (import ../upstart-jobs/dhclient.nix)
-  ]
 
   time = {
 
@@ -3056,6 +3052,9 @@ root        ALL=(ALL) SETENV: ALL
   };
 
   require = [
+    # newtworking
+    (import ../upstart-jobs/dhclient.nix)
+    # hardware
     (import ../upstart-jobs/pcmcia.nix)
   ];
 }

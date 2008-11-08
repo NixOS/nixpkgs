@@ -1,4 +1,5 @@
-{pkgs, config, ...}:
+{pkgs, config #, ...
+}:
 
 ###### interface
 let
@@ -48,7 +49,7 @@ let
 
   # Don't start dhclient on explicitly configured interfaces.
   ignoredInterfaces = ["lo"] ++
-    map (i: i.name) (lib.filter (i: i ? ipAddress) interfaces);
+    map (i: i.name) (lib.filter (i: i ? ipAddress) config.networking.interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
 in
@@ -60,7 +61,7 @@ in
   ];
 
   services = {
-    extraJobs = IfEnable [{
+    extraJobs = ifEnable [{
       name = "dhclient";
 
       extraPath = [dhcp];
