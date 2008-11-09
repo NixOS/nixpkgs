@@ -626,29 +626,6 @@ in
     };
 
 
-    cron = {
-
-      mailto = mkOption {
-        default = "";
-        description = " The job output will be mailed to this email address. ";
-      };
-
-      systemCronJobs = mkOption {
-        default = [];
-        example = [
-          "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
-          "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
-        ];
-        description = ''
-          A list of Cron jobs to be appended to the system-wide
-          crontab.  See the manual page for crontab for the expected
-          format. If you want to get the results mailed you must setuid
-          sendmail. See <option>security.setuidOwners</option>
-        '';
-      };
-
-    };
-
     atd = {
 
       enable = mkOption {
@@ -3067,7 +3044,11 @@ root        ALL=(ALL) SETENV: ALL
   require = [
     # newtworking
     (import ../upstart-jobs/dhclient.nix)
+
     # hardware
     (import ../upstart-jobs/pcmcia.nix)
+
+    # services
+    (import ../upstart-jobs/cron.nix)
   ];
 }

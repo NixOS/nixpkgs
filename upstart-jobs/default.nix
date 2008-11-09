@@ -140,11 +140,6 @@ let
       inherit config pkgs nix nixEnvVars;
     })
 
-    # Cron daemon.
-    (import ../upstart-jobs/cron.nix {
-      inherit config pkgs;
-    })
-
     # Name service cache daemon.
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc;

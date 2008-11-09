@@ -176,7 +176,6 @@ rec {
     pkgs.bzip2
     pkgs.coreutils
     pkgs.cpio
-    pkgs.cron
     pkgs.curl
     pkgs.e2fsprogs
     pkgs.findutils

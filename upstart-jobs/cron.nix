@@ -1,7 +1,39 @@
 {pkgs, config}:
 
+###### interface
 let
+  inherit (pkgs.lib) mkOption;
 
+  options = {
+    services = {
+      cron = {
+
+        mailto = mkOption {
+          default = "";
+          description = " The job output will be mailed to this email address. ";
+        };
+
+        systemCronJobs = mkOption {
+          default = [];
+          example = [
+            "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
+            "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
+          ];
+          description = ''
+            A list of Cron jobs to be appended to the system-wide
+            crontab.  See the manual page for crontab for the expected
+            format. If you want to get the results mailed you must setuid
+            sendmail. See <option>security.setuidOwners</option>
+          '';
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
+let
   # !!! This should be defined somewhere else.
   locatedb = "/var/cache/locatedb";
   
@@ -25,27 +57,47 @@ let
   '';
 
 in
-  
+
 {
-  name = "cron";
-  
-  extraEtc = [
-    # The system-wide crontab.
-    { source = systemCronJobsFile;
-      target = "crontab";
-      mode = "0600"; # Cron requires this.
-    }
+  require = [
+    # (import ../upstart-jobs/default.nix) # config.services.extraJobs
+    # (import ?) # config.time.timeZone
+    # (import ?) # config.environment.etc
+    # (import ?) # config.environment.extraPackages
+    # (import ?) # config.environment.cleanStart
+    options
   ];
 
-  job = ''
-    description "Cron daemon"
+  environment = {
+    etc = [
+      # The system-wide crontab.
+      { source = systemCronJobsFile;
+        target = "crontab";
+        mode = "0600"; # Cron requires this.
+      }
+    ];
 
-    start on startup
-    stop on shutdown
+    extraPackages =
+      pkgs.lib.optional
+        (!config.environment.cleanStart)
+        pkgs.cron;
+  };
 
-    # Needed to interpret times in the local timezone.
-    env TZ=${config.time.timeZone}
+  services = {
+    extraJobs = [{
+      name = "cron";
 
-    respawn ${pkgs.cron}/sbin/cron -n
-  '';
+      job = ''
+        description "Cron daemon"
+
+        start on startup
+        stop on shutdown
+
+        # Needed to interpret times in the local timezone.
+        env TZ=${config.time.timeZone}
+
+        respawn ${pkgs.cron}/sbin/cron -n
+      '';
+    }];
+  };
 }
