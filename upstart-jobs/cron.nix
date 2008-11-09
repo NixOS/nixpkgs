@@ -34,20 +34,9 @@ in
 
 ###### implementation
 let
-  # !!! This should be defined somewhere else.
-  locatedb = "/var/cache/locatedb";
-  
-  updatedbCmd =
-    "${config.services.locate.period}  root  " +
-    "mkdir -m 0755 -p $(dirname ${locatedb}) && " +
-    "nice -n 19 ${pkgs.utillinux}/bin/ionice -c 3 " +
-    "updatedb --localuser=nobody --output=${locatedb} > /var/log/updatedb 2>&1";
-  
-
   # Put all the system cronjobs together.
   systemCronJobs =
-    config.services.cron.systemCronJobs ++
-    pkgs.lib.optional config.services.locate.enable updatedbCmd;
+    config.services.cron.systemCronJobs;
 
   systemCronJobsFile = pkgs.writeText "system-crontab" ''
     SHELL=${pkgs.bash}/bin/sh
