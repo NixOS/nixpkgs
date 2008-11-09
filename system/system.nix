@@ -116,7 +116,9 @@ rec {
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
       defaultShell nixEnvVars modulesTree nssModulesPath;
-    extraEtc = pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs);
+    extraEtc =
+       (pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs))
+    ++ config.environment.etc;
   };
 
   

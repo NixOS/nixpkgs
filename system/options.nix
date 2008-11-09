@@ -592,7 +592,6 @@ in
     # then the checking in upstart-jobs/default.nix can be removed again (together with passing arg optionDeclarations)
   };
 
-
   services = {
 
 
@@ -3005,6 +3004,20 @@ root        ALL=(ALL) SETENV: ALL
         of this option must be a function that returns a list of
         packages.  The function will be called with the Nix Packages
         collection as its argument for convenience.
+      ";
+    };
+
+    # should be moved to etc/default.nix
+    etc = mkOption {
+      default = [];
+      example = [
+        { source = "/nix/store/.../etc/dir/file.conf.example";
+          target = "dir/file.conf";
+          mode = "0440";
+        }
+      ];
+      description = "
+        List of files that have to be linked in /etc.
       ";
     };
 
