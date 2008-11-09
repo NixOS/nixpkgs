@@ -16,12 +16,12 @@ rec {
   # Make a configuration object from which we can retrieve option
   # values.
   config =
-    pkgs.lib.finalReferenceOptionSets
+    pkgs.lib.fixOptionSets
       (pkgs.lib.mergeOptionSets noOption)
       pkgs configComponents;
 
   optionDeclarations =
-    pkgs.lib.finalOptionSetsFun
+    pkgs.lib.fixOptionSetsFun
       pkgs.lib.filterOptionSets
       pkgs configComponents
       config;
