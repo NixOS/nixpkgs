@@ -47,6 +47,9 @@ for i in $NIX_PROFILES; do # !!! reverse
 	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
     fi
     export PERL5LIB="$i/lib/site_perl:$PERL5LIB"
+
+    # GStreamer.
+    export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10:$GST_PLUGIN_PATH"
 done
 
 
