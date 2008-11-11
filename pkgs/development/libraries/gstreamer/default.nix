@@ -10,4 +10,8 @@ rec {
   gstPluginsGoodFun = lib.sumArgs (selectVersion ./gst-plugins-good "0.10.6")
     args { inherit gstPluginsBase; };
   gstPluginsGood = gstPluginsGoodFun null;
+
+  gstFfmpeg = import ./gst-ffmpeg {
+    inherit fetchurl stdenv pkgconfig gstPluginsBase bzip2;
+  };
 }
