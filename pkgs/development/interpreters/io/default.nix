@@ -8,7 +8,7 @@ let
   buildInputs = with args; [
     zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut e2fsprogs libsamplerate pcre
+    freeglut e2fsprogs libsamplerate pcre libevent editline
   ];
 in
 rec {
@@ -30,7 +30,10 @@ rec {
   preBuild = FullDepEntry (''
     for i in $pkgs ${
         if args.stdenv ? glibc then args.stdenv.glibc else ""
+      } ${
+        if args ? libffi &&  args.libffi != null then "$(echo ${args.libffi}/lib/*/include/..)" else ""
       }; do
+        echo "Path: $i"
         sed -i build/AddonBuilder.io -e '/"\/sw"/asearchPrefixes append("'"$i"'"); '
     done
   '') ["minInit" "addInputs" "doUnpack"];

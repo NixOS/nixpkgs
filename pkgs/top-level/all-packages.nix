@@ -1982,7 +1982,7 @@ let
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
       libpng libtiff libjpeg readline libsndfile libxml2
-      freeglut e2fsprogs libsamplerate pcre;
+      freeglut e2fsprogs libsamplerate pcre libevent editline;
   };
 
   kaffe =  import ../development/interpreters/kaffe {
