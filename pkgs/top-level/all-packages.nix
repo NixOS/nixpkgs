@@ -1979,6 +1979,12 @@ let
     inherit fetchurl stdenv readline libtool gmp gawk makeWrapper;
   };
 
+  io = builderDefsPackage (import ../development/interpreters/io) {
+    inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
+      libpng libtiff libjpeg readline libsndfile libxml2
+      freeglut e2fsprogs libsamplerate pcre;
+  };
+
   kaffe =  import ../development/interpreters/kaffe {
     inherit fetchurl stdenv jikes alsaLib xlibs;
   };
