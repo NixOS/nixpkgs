@@ -7287,10 +7287,9 @@ let
   gnash = assert mesaSupported; import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
             boost freetype agg dbus curl pkgconfig x11 libtool lib libungif
-            gettext ming dejagnu python;
+            gettext makeWrapper ming dejagnu python;
     inherit (gtkLibs) glib gtk;
-    gstreamer = gst_all.gstreamer;
-    gstreamerPluginsBase = gst_all.gstPluginsBase;
+    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg;
   };
 
   gnunet = import ../applications/networking/p2p/gnunet {

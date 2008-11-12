@@ -1,9 +1,9 @@
 { stdenv, fetchurl
-, SDL, SDL_mixer, gstreamer, gstreamerPluginsBase
+, SDL, SDL_mixer, gstreamer, gstPluginsBase, gstFfmpeg
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
 , glib, gtk, x11, ming, dejagnu, python
-, lib}:
+, lib, makeWrapper }:
 
 let version = "0.8.4"; in
 stdenv.mkDerivation rec {
@@ -35,9 +35,10 @@ stdenv.mkDerivation rec {
 
   # XXX: KDE is supported as well so we could make it available optionally.
   buildInputs = [
-    gettext x11 SDL SDL_mixer gstreamer gstreamerPluginsBase libtool
+    gettext x11 SDL SDL_mixer gstreamer gstPluginsBase gstFfmpeg libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk
+    makeWrapper
 
     # For the test suite
     ming dejagnu python
@@ -51,7 +52,18 @@ stdenv.mkDerivation rec {
   #doCheck = true;
 
   preInstall = ''ensureDir $out/plugins'';
-  postInstall = ''make install-plugins'';
+  postInstall = ''
+    make install-plugins
+
+    # Wrap programs so the find the GStreamer plug-ins they need
+    # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
+    for prog in $out/bin/*
+    do
+      wrapProgram "$prog" --prefix                                              \
+        GST_PLUGIN_PATH ":"                                                     \
+        "${gstPluginsBase}/lib/gstreamer-0.10:${gstFfmpeg}/lib/gstreamer-0.10"
+    done
+  '';
 
   meta = {
     homepage = http://www.gnu.org/software/gnash/;
