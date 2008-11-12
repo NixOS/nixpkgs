@@ -391,6 +391,8 @@ rec {
         ${klibcShrunk}/bin/umount /mnt/nix/store
         ${klibcShrunk}/bin/umount /mnt
       '';
+
+      passthru = {inherit fullName;};
     });
 
 
@@ -543,6 +545,8 @@ rec {
         ${klibcShrunk}/bin/umount /mnt/dev
         ${klibcShrunk}/bin/umount /mnt
       '';
+
+      passthru = {inherit fullName;};
     });
 
 
