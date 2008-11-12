@@ -3,6 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
   FullDepEntry = args.FullDepEntry;
+  doPatchShebangs = args.doPatchShebangs;
 
   version = lib.getAttr ["version"] "2008.03.30" args; 
   buildInputs = with args; [
@@ -25,7 +26,8 @@ rec {
   makeFlags = ["INSTALL_PREFIX=$out"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["preBuild" "doMakeInstall"];
+  phaseNames = ["preBuild" "doMakeInstall" "postInstall" (doPatchShebangs "$out/share/io/samples") 
+    (doPatchShebangs "$out/lib/io")];
       
   preBuild = FullDepEntry (''
     for i in $pkgs ${
@@ -35,8 +37,16 @@ rec {
       }; do
         echo "Path: $i"
         sed -i build/AddonBuilder.io -e '/"\/sw"/asearchPrefixes append("'"$i"'"); '
+	sed -i addons/Flux/io/Flux.io -e 's@/usr/local/@'"$out/"'@g' 
     done
   '') ["minInit" "addInputs" "doUnpack"];
+
+  postInstall = FullDepEntry (''
+    ensureDir $out/share/io
+
+    ln -s $out/lib/io/addons $out/share/io
+    cp -r samples $out/share/io
+  '') ["minInit" "doUnpack" "defEnsureDir" "doMakeInstall"];
 
   name = "io-" + version;
   meta = {
