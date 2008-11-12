@@ -486,7 +486,6 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        echo "initialising Debian DB..."
         PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
@@ -507,6 +506,7 @@ rec {
         ${klibcShrunk}/bin/mount -o bind /dev /mnt/dev
         
         # Misc. files/directories assumed by various packages.
+        echo "initialising Dpkg DB..."
         touch /mnt/etc/shells
         touch /mnt/var/lib/dpkg/status
         touch /mnt/var/lib/dpkg/available
@@ -600,12 +600,15 @@ rec {
   makeImageFromDebDist =
     {name, fullName, size ? 2048, urlPrefix, packagesList, packages, postInstall ? ""}:
 
-    fillDiskWithDebs {
-      inherit name fullName size postInstall;
-      debs = import (debClosureGenerator {
+    let
+      expr = debClosureGenerator {
         inherit name packagesList urlPrefix packages;
-      }) {inherit fetchurl;};
-    };
+      };
+    in
+      (fillDiskWithDebs {
+        inherit name fullName size postInstall;
+        debs = import expr {inherit fetchurl;};
+      }) // {inherit expr;};
 
 
   /* A bunch of functions that build disk images of various Linux
@@ -701,7 +704,7 @@ rec {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
-    # wrong, but the SHA-1 and MD5 hashes are correct.
+    # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
 
     ubuntu710i386 = args: makeImageFromDebDist ({
       name = "ubuntu-7.10-gutsy-i386";
@@ -729,6 +732,26 @@ rec {
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/hardy/main/binary-amd64/Packages.bz2;
         sha1 = "d1f1d2b3cc62533d6e4337f2696a5d27235d1f28";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
+    ubuntu810i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-intrepid-i386";
+      fullName = "Ubuntu 8.10 Intrepid (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/intrepid/main/binary-i386/Packages.bz2;
+        sha256 = "70483d40a9e9b74598f2faede7df5d5103ee60055af7374f8db5c7e6017c4cf6";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
+    ubuntu810x86_64 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-intrepid-amd64";
+      fullName = "Ubuntu 8.10 Intrepid (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/intrepid/main/binary-amd64/Packages.bz2;
+        sha1 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
@@ -822,6 +845,7 @@ rec {
     "curl"
     "patch"
     "diff"
+    "locales"
   ];
 
 
@@ -868,6 +892,8 @@ rec {
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
     ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
     ubuntu804x86_64 = diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages; };
+    ubuntu810i386 = diskImageFuns.ubuntu810i386 { packages = commonDebianPackages; };
+    ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
 
