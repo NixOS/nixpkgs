@@ -7049,6 +7049,10 @@ let
     inherit (xlibs) libX11 libXinerama;
   };
 
+  dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
+    inherit libpng libtiff;
+  };
+
   dwm = import ../applications/window-managers/dwm {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXinerama;
