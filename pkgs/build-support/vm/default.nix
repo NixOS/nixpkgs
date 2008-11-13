@@ -458,6 +458,8 @@ rec {
     '';
 
     installPhase = ''
+      eval "$preInstall"
+    
       ensureDir $out/$outDir
       find /usr/src -name "*.rpm" -exec cp {} $out/$outDir \;
 
@@ -466,6 +468,8 @@ rec {
         rpm -qip $i
         stopNest
       done
+
+      eval "$postInstall"
     ''; # */
   } // attrs));
 
