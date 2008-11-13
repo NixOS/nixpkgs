@@ -446,7 +446,7 @@ let
       echo -n "$text" > "$n"
       (test -n "$executable" && chmod +x "$n") || true
     '';
-    
+
   # Shorthands for `writeTextFile'.
   writeText = name: text: writeTextFile {inherit name text;};
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
@@ -1998,12 +1998,8 @@ let
   };
 
   maude = import ../development/interpreters/maude {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp;
-  };
-
-  maudeUnstable = lowPrio (import ../development/interpreters/maude/unstable.nix {
     inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv unzip;
-  });
+  };
 
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
