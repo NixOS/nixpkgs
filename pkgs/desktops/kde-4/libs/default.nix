@@ -2,9 +2,9 @@ args: with args;
 
 stdenv.mkDerivation rec {
   name = "kdelibs-4.0.0";
-  
+
   src = fetchurl {
-    url = http://download.kde.org/stable/4.0.0/src/kdelibs-4.0.0.tar.bz2;
+    url = mirror://kde/stable/4.0.0/src/kdelibs-4.0.0.tar.bz2;
     md5 = "79d0f83ca81fc4a135663943340c0b8f";
   };
 
