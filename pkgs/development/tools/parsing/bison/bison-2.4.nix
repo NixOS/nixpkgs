@@ -10,8 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [m4];
 
-  #doCheck = true;
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "GNU Bison, a Yacc-compatible parser generator";
@@ -34,6 +33,6 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
   };
-} // {
-  glrSupport = true;
+
+  passthru = { glrSupport = true; };
 }

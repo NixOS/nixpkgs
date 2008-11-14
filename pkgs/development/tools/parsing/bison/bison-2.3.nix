@@ -31,6 +31,6 @@ stdenv.mkDerivation {
 
     license = "GPLv2+";
   };
-} // {
-  glrSupport = true;
+ 
+  passthru = { glrSupport = true; };
 }
