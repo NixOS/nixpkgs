@@ -40,6 +40,7 @@ rec {
     args = [ ./scripts/download.sh ];
     outputHashAlgo = "sha1";
     outputHash = sha1;
+    impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
   };
 
   # This function downloads and unpacks a file.
