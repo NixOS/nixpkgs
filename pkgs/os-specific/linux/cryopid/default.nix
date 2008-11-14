@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then src32
     else if stdenv.system == "x86_64-linux" then src64
-    else abort "unsupported platform for CryoPID";
+    else throw "unsupported platform for CryoPID";
 
   buildInputs = [zlibStatic];
 
