@@ -5783,6 +5783,10 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
+  cryopid = import ../os-specific/linux/cryopid {
+    inherit fetchurl stdenv zlibStatic;
+  };
+
   cramfsswap = import ../os-specific/linux/cramfsswap {
     inherit fetchurl stdenv zlib;
   };
