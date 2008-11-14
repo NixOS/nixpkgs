@@ -8,7 +8,7 @@ find "$1" -name "*.nix" | while read fn; do
 
         if url=$(echo "$line" | sed 's^url = \(.*\);^\1^'); then
 
-            if ! echo "$url" | grep -q -E "www.cs.uu.nl|nix.cs.uu.nl|.stratego-language.org|java.sun.com|ut2004|linuxq3a|RealPlayer|Adbe|belastingdienst|microsoft|armijn/.nix|sun.com|archive.eclipse.org"; then
+            if ! echo "$url" | grep -q -E "www.cs.uu.nl|nixos.org|.stratego-language.org|java.sun.com|ut2004|linuxq3a|RealPlayer|Adbe|belastingdienst|microsoft|armijn/.nix|sun.com|archive.eclipse.org"; then
                 base="$(basename "$url")"
                 newPath="$distDir/$base"
 

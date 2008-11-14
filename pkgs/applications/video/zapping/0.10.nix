@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/zapping-0.10cvs6.tar.bz2;
+    url = http://nixos.org/tarballs/zapping-0.10cvs6.tar.bz2;
     md5 = "6aa7614ac3fd5d39c89c2198598ad27b";
   };
 

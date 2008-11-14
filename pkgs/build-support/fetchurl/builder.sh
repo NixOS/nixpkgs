@@ -85,7 +85,7 @@ for url in $urls; do
             echo "warning: unknown mirror:// site \`$site'"
         else
             # Assume that SourceForge/GNU/kernel mirrors have better
-            # bandwidth than nix.cs.uu.nl.
+            # bandwidth than nixos.org.
             preferHashedMirrors=
 
             mirrors=${!varName}

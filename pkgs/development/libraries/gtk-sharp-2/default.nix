@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/gtk-sharp-1.9.2.tar.gz;
+    url = http://nixos.org/tarballs/gtk-sharp-1.9.2.tar.gz;
     md5 = "b7c5afab5f736ffa4011974302831363";
   };
 

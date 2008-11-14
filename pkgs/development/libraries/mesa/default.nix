@@ -23,11 +23,11 @@ stdenv.mkDerivation {
     md5 = "93e6ed7924ff069a4f883b4fce5349dc";
   };
 /*    (fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/MesaGLUT-6.4.tar.bz2;
+      url = http://nixos.org/tarballs/MesaGLUT-6.4.tar.bz2;
       md5 = "1a8c4d4fc699233f5fdb902b8753099e";
     })
     (fetchurl {
-      url = http://nix.cs.uu.nl/dist/tarballs/MesaDemos-6.4.tar.bz2;
+      url = http://nixos.org/tarballs/MesaDemos-6.4.tar.bz2;
       md5 = "1a8c4d4fc699233f5fdb902b8753099e";
     }) */
   

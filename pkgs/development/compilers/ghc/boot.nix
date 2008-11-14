@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://nix.cs.uu.nl/dist/tarballs/ghc-6.4.2-i386-unknown-linux.tar.bz2;
+        url = http://nixos.org/tarballs/ghc-6.4.2-i386-unknown-linux.tar.bz2;
         md5 = "092fe2e25dab22b926babe97cc77db1f";
       }
     else if stdenv.system == "x86_64-linux" then

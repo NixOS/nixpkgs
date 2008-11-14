@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "emacs-21.4a";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/emacs-21.4a.tar.gz;
+    url = http://nixos.org/tarballs/emacs-21.4a.tar.gz;
     md5 = "8f9d97cbd126121bd5d97e5e31168a87";
   };
   patches = [./crt.patch];

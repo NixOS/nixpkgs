@@ -3,7 +3,7 @@
 let
 
   usbids = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/usb.ids.20080115.bz2;
+    url = http://nixos.org/tarballs/usb.ids.20080115.bz2;
     sha256 = "0xymp8fpp9pnkj2i4ry8zpsvy18zw14sx03pnz316lpgwc6dx12n";
   };
 

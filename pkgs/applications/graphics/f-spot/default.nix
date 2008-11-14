@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
   
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/f-spot-0.0.10.tar.bz2;
+    url = http://nixos.org/tarballs/f-spot-0.0.10.tar.bz2;
     md5 = "19cc6e067ccc261b0502ff6189b79832";
   };
 

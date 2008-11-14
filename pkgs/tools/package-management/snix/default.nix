@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The SNix Deployment System (Nix extended to handle state)";
-    homepage = http://nix.cs.uu.nl/;
+    homepage = http://nixos.org/;
     license = "LGPL";
   };
 }

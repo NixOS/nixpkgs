@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [m4];
 
+  x = "z";
+
   doCheck = true;
 
   meta = {

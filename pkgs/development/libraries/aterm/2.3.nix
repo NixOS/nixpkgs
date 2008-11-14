@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   configureFlags = "--with-gcc";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/aterm-2.3.1.tar.gz;
+    url = http://nixos.org/tarballs/aterm-2.3.1.tar.gz;
     md5 = "5a2d70acc45a9d301e0dba12fcaf77e7";
   };
 
