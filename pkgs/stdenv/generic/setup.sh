@@ -517,7 +517,7 @@ unpackPhase() {
                             echo "unpacker produced multiple directories"
                             exit 1
                         fi
-                        sourceRoot=$i
+                        sourceRoot="$i"
                         ;;
                 esac
             fi
@@ -535,7 +535,7 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if test "dontMakeSourcesWritable" != 1; then
-        chmod -R u+w $sourceRoot
+        chmod -R u+w "$sourceRoot"
     fi
 
     eval "$postUnpack"
