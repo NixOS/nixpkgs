@@ -8540,14 +8540,6 @@ let
     db4 = db45;
   };
 
-  /*
-  nixStatic = import ../tools/package-management/nix-static {
-    inherit fetchurl stdenv perl curl autoconf automake libtool;
-    aterm = aterm242fixes;
-    bdb = db4;
-  };
-  */
-
   # The bleeding edge.
   nixUnstable = import ../tools/package-management/nix/unstable.nix {
     inherit fetchurl stdenv perl curl bzip2 openssl;
