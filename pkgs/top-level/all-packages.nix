@@ -2638,7 +2638,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  boost = selectVersion ../development/libraries/boost "1.36.0" {
+  boost = selectVersion ../development/libraries/boost "1.37.0" {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
