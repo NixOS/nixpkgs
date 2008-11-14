@@ -1998,7 +1998,7 @@ let
   };
 
   maude = import ../development/interpreters/maude {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv unzip;
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv makeWrapper;
   };
 
   octave = import ../development/interpreters/octave {

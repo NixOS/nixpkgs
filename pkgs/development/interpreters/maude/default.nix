@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmp, unzip }:
+{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmp, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "maude-2.4";
@@ -12,22 +12,21 @@ stdenv.mkDerivation rec {
     sha256 = "0bydkf8fd5v267bfak4mm5lmm3vvnr6ir1jr7gimgyzqygdk0in2";
   };
   fullMaude = fetchurl {
-    url = "http://www.lcc.uma.es/~duran/FullMaude/FM23l/full-maude.maude.zip";
-    sha256 = "08m54dskj2c6x00a5l5x1my88na4x8wmm048g0srsknhv5j91lf2";
+    url = "http://maude.cs.uiuc.edu/download/current/FM2.4/full-maude24.maude";
+    sha256 = "0fwpnp5a8vw7q3iczwlra9074is95a1087ikx0a0idy8p4drnl61";
   };
   docs = fetchurl {
     url = "http://mirror.switch.ch/mirror/gentoo/distfiles/maude-2.3.0-extras.tar.bz2";
     sha256 = "0kd5623k1wwj1rk4b6halrm3sdvd9kbiwg1hi2c3qim1nlfdgl0d";
   };
-  buildInputs = [flex bison unzip ncurses buddy tecla gmp libsigsegv];
-  configurePhase = ''./configure --disable-dependency-tracking --prefix=$out TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
+  buildInputs = [flex bison ncurses buddy tecla gmp libsigsegv makeWrapper];
+  configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
   doCheck = true;
   postInstall =
   ''
+    for n in $out/bin/*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     ensureDir $out/share/maude
-    cp src/Main/*.maude $out/share/maude/
-    unzip -aa ${fullMaude}
-    mv full-maude.maude $out/share/maude/full-maude.maude
+    cp ${fullMaude} $out/share/maude/full-maude.maude
 
     ensureDir $out/share/doc/maude
     tar xf ${docs}
