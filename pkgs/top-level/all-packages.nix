@@ -3133,6 +3133,11 @@ let
     inherit (gtkLibs) glib;
   };
 
+  libcv = builderDefsPackage (import ../development/libraries/libcv) {
+    inherit libtiff libjpeg libpng pkgconfig;
+    inherit (gtkLibs) gtk glib;
+  };
+
   libdaemon = import ../development/libraries/libdaemon {
     inherit fetchurl stdenv;
   };
@@ -7311,6 +7316,14 @@ let
   gphoto2 = import ../applications/misc/gphoto2 {
     inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt gettext
       libjpeg readline libtool;
+  };
+
+  qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
+    inherit libpng libcv;
+  };
+
+  qrencode = builderDefsPackage (import ../tools/graphics/qrencode) {
+    inherit libpng pkgconfig;
   };
 
   gqview = import ../applications/graphics/gqview {
