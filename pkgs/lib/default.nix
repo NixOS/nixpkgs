@@ -455,9 +455,6 @@ rec {
   fixOptionSets = merge: pkgs: opts:
     fix (fixOptionSetsFun merge pkgs opts);
 
-  finalOptionSetsFun = fixOptionSetsFun;
-  finalReferenceOptionSets = fixOptionSets;
-
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
       [({
