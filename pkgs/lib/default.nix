@@ -407,13 +407,13 @@ rec {
       zip (attr: opts:
         let
           name = if path == "" then attr else path + "." + attr;
-          defaultOpt = { merge = mergeDefaultOption; };
           test = partition isOption opts;
+          opt = ({ merge = mergeDefaultOption; apply = id; } // head test.right);
         in
           if test.right == [] then mergeOptionSets noOption name test.wrong
           else if tail test.right != [] then throw "Multiple options for '${name}'."
-          else if test.wrong == [] then (head test.right).default
-          else (defaultOpt // head test.right).merge name test.wrong
+          else if test.wrong == [] then opt.apply opt.default
+          else opt.apply (opt.merge name test.wrong)
       ) opts
    else noOption path opts;
 
