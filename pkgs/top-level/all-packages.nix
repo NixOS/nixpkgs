@@ -2638,9 +2638,10 @@ let
     inherit fetchurl stdenv;
   };
 
-  boost = selectVersion ../development/libraries/boost "1.37.0" {
+  boostVersionChoice = version: selectVersion ../development/libraries/boost version {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
+  boost = boostVersionChoice "1.37.0";
 
   buddy = import ../development/libraries/buddy {
     inherit fetchurl stdenv;
@@ -7621,8 +7622,9 @@ let
       perl perlArchiveZip perlCompressZlib zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2
       db4 sablotron curl libsndfile flex zip unzip libmspack
-      getopt file neon cairo which icu boost jdk ant hsqldb
+      getopt file neon cairo which icu jdk ant hsqldb
       cups openssl bison;
+    boost = boostVersionChoice "1.36.0";
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
   };
