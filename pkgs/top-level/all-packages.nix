@@ -6562,7 +6562,7 @@ let
     inherit fetchurl stdenv libusb;
   };
 
-  utillinux = import ../os-specific/linux/util-linux {
+  utillinux = composedArgsAndFun (import ../os-specific/linux/util-linux) {
     inherit fetchurl stdenv;
   };
 
