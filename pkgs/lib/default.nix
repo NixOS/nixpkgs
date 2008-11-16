@@ -391,14 +391,19 @@ rec {
     else if all __isAttrs list then mergeAttrs list
     else abort "${name}: Cannot merge values.";
 
-  mergeEnableOption = name: list:
-    if all (x: true == x || false == x) list
-    then fold logicalOR false list
-    else abort "${name}: Expect a boolean value.";
+  mergeTypedOption = typeName: predicate: merge: name: list:
+    if all predicate list then merge list
+    else abort "${name}: Expect a ${typeName}.";
 
-  mergeListOption = name: list:
-    if all __isList list then concatLists list
-    else abort "${name}: Expect a list.";
+  mergeEnableOption = mergeTypedOption "boolean"
+    (x: true == x || false == x) (fold logicalOR false);
+
+  mergeListOption = mergeTypedOption "list"
+    __isList concatLists;
+
+  mergeStringOption = mergeTypedOption "string"
+    (x: if builtins ? isString then builtins.isString x else x + "")
+    concatStrings;
 
   # Merge sets of options and bindings.
   # noOption: function to call if no option is declared.
