@@ -1688,23 +1688,6 @@ in
       };
     };
 
-    disnix = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Disnix";
-      };
-      
-      activateHook = mkOption {
-        default = "";
-        description = "Custom script or executable that activates services through Disnix";
-      };
-
-      deactivateHook = mkOption {
-        default = "";
-        description = "Custom script or executable that deactivates services through Disnix";
-      };      
-    };
-    
     httpd = {
     
       enable = mkOption {
@@ -3128,6 +3111,7 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/cron/locate.nix)
   ];

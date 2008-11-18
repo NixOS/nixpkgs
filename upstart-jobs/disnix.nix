@@ -1,11 +1,37 @@
-args: with args;
+# Disnix server
+{config, pkgs}:
 
+###### interface
 let
+  inherit (pkgs.lib) mkOption;
 
-cfg = config.services.disnix;
+  options = {
+    services = {
+      disnix = {
+        enable = mkOption {
+          default = false;
+          description = "Whether to enable Disnix";
+        };
+        
+        activateHook = mkOption {
+          default = "";
+          description = "Custom script or executable that activates services through Disnix";
+        };
 
+        deactivateHook = mkOption {
+          default = "";
+          description = "Custom script or executable that deactivates services through Disnix";
+        };
+      };
+    };
+  };
 in
-{
+
+###### implementation
+let
+  cfg = config.services.disnix;
+
+  job = {
     name = "disnix";
         
     job = ''
@@ -21,4 +47,16 @@ in
       
       respawn ${pkgs.bash}/bin/sh -c 'export PATH=/var/run/current-system/sw/bin:$PATH; export HOME=/root; export DISNIX_ACTIVATE_HOOK=${cfg.activateHook}; export DISNIX_DEACTIVATE_HOOK=${cfg.deactivateHook}; ${pkgs.disnix}/bin/disnix-service'
     '';
+  };
+in
+
+{
+  require = [
+    (import ../upstart-jobs/default.nix)
+    options
+  ];
+
+  services = {
+    extraJobs = pkgs.lib.optional cfg.enable job;
+  };
 }

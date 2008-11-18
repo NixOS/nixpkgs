@@ -448,12 +448,6 @@ let
       inherit config pkgs;
     })
 
-  # Disnix server
-  ++ optional config.services.disnix.enable
-    (import ../upstart-jobs/disnix.nix {
-      inherit config pkgs;
-    })
-
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {
