@@ -418,18 +418,6 @@ let
       inherit config pkgs;
     })
 
-  # Zabbix agent daemon.
-  ++ optional config.services.zabbixAgent.enable
-    (import ../upstart-jobs/zabbix-agent.nix {
-      inherit config pkgs;
-    })
-
-  # Zabbix server daemon.
-  ++ optional config.services.zabbixServer.enable
-    (import ../upstart-jobs/zabbix-server.nix {
-      inherit config pkgs;
-    })
-  
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {

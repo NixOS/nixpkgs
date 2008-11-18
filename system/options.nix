@@ -2320,37 +2320,8 @@ in
         ";
       };
     };
-
-
-    zabbixAgent = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to run the Zabbix monitoring agent on this machine.
-          It will send monitoring data to a Zabbix server.
-        ";
-      };
-
-      server = mkOption {
-        default = "127.0.0.1";
-        description = ''
-          The IP address or hostname of the Zabbix server to connect to.
-        '';
-      };
-
-    };
     
 
-    zabbixServer = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to run the Zabbix server on this machine.
-        ";
-      };
-    };
-   
     postfix = {
       enable = mkOption {
         default = false;
@@ -3111,6 +3082,8 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/zabbix-agent.nix)
+    (import ../upstart-jobs/zabbix-server.nix.nix)
     (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/cron/locate.nix)

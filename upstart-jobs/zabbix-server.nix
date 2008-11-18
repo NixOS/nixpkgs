@@ -1,5 +1,25 @@
+# Zabbix server daemon.
 {config, pkgs}:
 
+###### interface
+let
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+      zabbixServer = {
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to run the Zabbix server on this machine.
+          ";
+        };
+      };
+    };
+  };
+in
+
+###### implementation
 let
 
   stateDir = "/var/run/zabbix";
@@ -20,46 +40,62 @@ let
     DBUser = zabbix
   '';
 
+  user = {
+    name = "zabbix";
+    uid = (import ../system/ids.nix).uids.zabbix;
+    description = "Zabbix daemon user";
+  };
+
+  job = {
+    name = "zabbix-server";
+
+    job = ''
+      description "Zabbix server daemon"
+
+      start on postgresql/started
+      stop on shutdown
+
+      start script
+        mkdir -m 0755 -p ${stateDir} ${logDir} ${libDir}
+        chown zabbix ${stateDir} ${logDir} ${libDir}
+
+        if ! test -e "${libDir}/db-created"; then
+            ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
+            ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
+            cat ${pkgs.zabbixServer}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
+            cat ${pkgs.zabbixServer}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
+            cat ${pkgs.zabbixServer}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
+            touch "${libDir}/db-created"
+        fi
+        
+        export PATH=${pkgs.nettools}/bin:$PATH
+        ${pkgs.zabbixServer}/sbin/zabbix_server --config ${configFile}
+      end script
+
+      respawn sleep 100000
+      
+      stop script
+        while ${pkgs.procps}/bin/pkill -u zabbix zabbix_server; do true; done
+      end script
+    '';
+    
+  };
+
+  ifEnable = pkgs.lib.ifEnable config.services.zabbixServer.enable
 in
 
 {
-  name = "zabbix-server";
-  
-  users = [
-    { name = "zabbix";
-      uid = (import ../system/ids.nix).uids.zabbix;
-      description = "Zabbix daemon user";
-    }
+  require = [
+    (import ../upstart-jobs/default.nix)
+    # (import ../system/user.nix) # users = { .. }
+    options
   ];
 
-  job = ''
-    description "Zabbix server daemon"
+  services = {
+    extraJobs = ifEnable [job];
+  };
 
-    start on postgresql/started
-    stop on shutdown
-
-    start script
-      mkdir -m 0755 -p ${stateDir} ${logDir} ${libDir}
-      chown zabbix ${stateDir} ${logDir} ${libDir}
-
-      if ! test -e "${libDir}/db-created"; then
-          ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
-          ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
-          cat ${pkgs.zabbixServer}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
-          cat ${pkgs.zabbixServer}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
-          cat ${pkgs.zabbixServer}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
-          touch "${libDir}/db-created"
-      fi
-      
-      export PATH=${pkgs.nettools}/bin:$PATH
-      ${pkgs.zabbixServer}/sbin/zabbix_server --config ${configFile}
-    end script
-
-    respawn sleep 100000
-    
-    stop script
-      while ${pkgs.procps}/bin/pkill -u zabbix zabbix_server; do true; done
-    end script
-  '';
-  
+  users = {
+    extraUsers = ifEnable [user];
+  };
 }
