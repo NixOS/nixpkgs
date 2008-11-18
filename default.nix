@@ -42,13 +42,5 @@ in
 
   manifests = system.config.installer.manifests; # exported here because nixos-rebuild uses it
 
-  upstartJobsCombined = system.upstartJobs;
-
-  # Make it easier to build individual Upstart jobs (e.g., "nix-build
-  # /etc/nixos/nixos -A upstartJobs.xserver").  
-  upstartJobs = { recurseForDerivations = true; } //
-    builtins.listToAttrs (map (job:
-      { name = if job ? jobName then job.jobName else job.name; value = job; }
-    ) system.upstartJobs.jobs);
-
+  tests = system.config.tests;
 }

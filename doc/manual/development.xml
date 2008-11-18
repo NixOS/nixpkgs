@@ -51,7 +51,7 @@ where <replaceable>attr</replaceable> is an attribute in
     <listitem><para>An attribute set containing the Upstart jobs.  For
     instance, the <varname>sshd</varname> Upstart job can be built by
     doing <literal>nix-build /etc/nixos/nixos -A
-    upstartJobs.sshd</literal>.</para></listitem>
+    tests.upstartJobs.sshd</literal>.</para></listitem>
   </varlistentry>
 
 </variablelist>

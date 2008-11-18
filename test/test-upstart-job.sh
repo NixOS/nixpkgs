@@ -10,7 +10,7 @@ fi
 
 for i in $*; do
     echo "building job $i..."
-    nix-build /etc/nixos/nixos -A "upstartJobs.$i" -o $tmpDir/.result
+    nix-build /etc/nixos/nixos -A "tests.upstartJobs.$i" -o $tmpDir/.result
     ln -sfn $(readlink -f $tmpDir/.result)/etc/event.d/* /tmp/event.d/
 done
 

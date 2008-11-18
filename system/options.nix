@@ -332,6 +332,92 @@ in
 
   };
 
+  system = {
+    # NSS modules.  Hacky!
+    nssModules = mkOption {
+      internal = true;
+      default = [];
+      description = "
+        Search path for NSS (Name Service Switch) modules.  This allows
+        several DNS resolution methods to be specified via
+        <filename>/etc/nsswitch.conf</filename>.
+      ";
+      merge = pkgs.lib.mergeListOption;
+      apply = list:
+        let
+          list2 =
+             list
+          ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap
+          ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns;
+        in {
+          list = list2;
+          path = pkgs.lib.makeLibraryPath list2;
+        };
+    };
+
+    modulesTree = mkOption {
+      internal = true;
+      default = [];
+      description = "
+        Tree of kernel modules.  This includes the kernel, plus modules
+        built outside of the kernel.  Combine these into a single tree of
+        symlinks because modprobe only supports one directory.
+      ";
+      merge = pkgs.lib.mergeListOption;
+
+      # Convert the list of path to only one path.
+      apply = list: pkgs.aggregateModules (
+        let
+          kernelPackages = config.boot.kernelPackages;
+          kernel = kernelPackages.kernel;
+        in
+        [ kernel ]
+        ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
+        # !!! this should be declared by the xserver Upstart job.
+        ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
+        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
+        ++ config.boot.extraModulePackages
+        # should only keep this one, other have to be set by the option owners.
+        ++ list
+      );
+    };
+
+    sbin = {
+      modprobe = mkOption {
+        # should be moved in module-init-tools
+        internal = true;
+        default = pkgs.substituteAll {
+          dir = "sbin";
+          src = ./modprobe;
+          isExecutable = true;
+          inherit (pkgs) module_init_tools;
+          inherit (config.system) modulesTree;
+        };
+        description = "
+          Path to the modprobe binary used by the system.
+        ";
+      };
+
+      mount = mkOption {
+        internal = true;
+        default = pkgs.utillinux.passthru.function {
+          buildMountOnly = true;
+          mountHelpers = pkgs.buildEnv {
+            name = "mount-helpers";
+            paths = [
+              pkgs.ntfs3g
+              pkgs.mount_cifs
+            ];
+            pathsToLink = "/sbin";
+          } + "/sbin";
+        };
+        description = "
+          Install a special version of mount to search mount tools in
+          unusual path.
+        ";
+      };
+    };
+  };
 
   # Hm, this sounds like a catch-all...
   hardware = {
@@ -593,24 +679,6 @@ in
   };
 
   services = {
-
-
-    extraJobs = mkOption {
-      default = [];
-      example = [
-           { name = "test-job";
-             job = ''
-               description "nc"
-               start on started network-interfaces
-               respawn
-               env PATH=/var/run/current-system/sw/bin
-               exec sh -c "echo 'hello world' | ${pkgs.netcat}/bin/nc -l -p 9000"
-               '';
-           } ];
-      description = "
-        Additional Upstart jobs.
-      ";
-    };
 
   
     syslogd = {
@@ -2659,6 +2727,36 @@ in
       ";
     };
 
+    # Environment variables for running Nix.
+    envVars = mkOption {
+      internal = true;
+      default = "";
+      description = "
+        Define the environment variables used by nix to 
+      ";
+
+      merge = pkgs.lib.mergeStringOption;
+
+      # other option should be used to define the content instead of using
+      # the apply function.
+      apply = conf: ''
+        export NIX_CONF_DIR=/nix/etc/nix
+
+        # Enable the copy-from-other-stores substituter, which allows builds
+        # to be sped up by copying build results from remote Nix stores.  To
+        # do this, mount the remote file system on a subdirectory of
+        # /var/run/nix/remote-stores.
+        export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
+        
+      '' + # */
+      (if config.nix.distributedBuilds then
+        ''
+          export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
+          export NIX_REMOTE_SYSTEMS=/etc/nix.machines
+          export NIX_CURRENT_LOAD=/var/run/nix/current-load
+        ''
+      else "") + conf;
+    };
   };
 
 
@@ -3020,6 +3118,9 @@ root        ALL=(ALL) SETENV: ALL
   };
 
   require = [
+    # system
+    (import ../upstart-jobs/default.nix)
+
     # newtworking
     (import ../upstart-jobs/dhclient.nix)
 

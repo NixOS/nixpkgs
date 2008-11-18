@@ -1,4 +1,4 @@
-{pkgs, config, upstartJobs, defaultShell}:
+{pkgs, config, defaultShell}:
 
 let ids = import ./ids.nix; in
 
@@ -7,8 +7,6 @@ rec {
   # User accounts to be created/updated by NixOS.
   users =
     let
-      jobUsers = pkgs.lib.concatLists (map (job: job.users) upstartJobs.jobs);
-      
       defaultUsers =
         [
           { name = "root";
@@ -46,14 +44,12 @@ rec {
         }:
         { inherit name description uid group extraGroups home shell createHome; };
 
-    in map addAttrs (defaultUsers ++ jobUsers ++ nixBuildUsers ++ config.users.extraUsers);
+    in map addAttrs (defaultUsers ++ nixBuildUsers ++ config.users.extraUsers);
 
 
   # Groups to be created/updated by NixOS.
   groups =
     let
-      jobGroups = pkgs.lib.concatLists (map (job: job.groups) upstartJobs.jobs);
-
       defaultGroups = 
         [
           { name = "root";
@@ -95,7 +91,7 @@ rec {
         { name, gid ? "" }:
         { inherit name gid; };
 
-    in map addAttrs (defaultGroups ++ jobGroups ++ config.users.extraGroups);
+    in map addAttrs (defaultGroups ++ config.users.extraGroups);
 
 
   # Awful hackery necessary to pass the users/groups to the activation script.

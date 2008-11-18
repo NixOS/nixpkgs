@@ -49,7 +49,7 @@ in
 
 {
   require = [
-    # (import ../upstart-jobs/default.nix) # config.services.extraJobs
+    (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ?) # config.time.timeZone
     # (import ?) # config.environment.etc
     # (import ?) # config.environment.extraPackages

@@ -1,4 +1,4 @@
-{ config, pkgs, upstartJobs, systemPath, wrapperDir
+{ config, pkgs, systemPath, wrapperDir
 , defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath
 }:
 
@@ -71,11 +71,6 @@ import ../helpers/make-etc.nix {
       # You cannot login without it!
       source = ./login.defs;
       target = "login.defs";
-    }
-
-    { # The Upstart events defined above.
-      source = upstartJobs + "/etc/event.d";
-      target = "event.d";
     }
 
     { # Configuration for passwd and friends (e.g., hash algorithm

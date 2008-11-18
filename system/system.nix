@@ -36,19 +36,7 @@ rec {
 
   kernel = kernelPackages.kernel;
 
-
-  # Tree of kernel modules.  This includes the kernel, plus modules
-  # built outside of the kernel.  We have to combine these into a
-  # single tree of symlinks because modprobe only supports one
-  # directory.
-  modulesTree = pkgs.aggregateModules (
-    [kernel]
-    ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
-    # !!! this should be declared by the xserver Upstart job.
-    ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
-    ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-    ++ config.boot.extraModulePackages
-  );
+  modulesTree = config.system.modulesTree;
 
 
   # The initial ramdisk.
@@ -66,59 +54,24 @@ rec {
 
 
   # NSS modules.  Hacky!
-  nssModules =
-       pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap
-    ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns;
+  nssModules = config.system.nssModules.list;
 
-  nssModulesPath = pkgs.lib.concatStrings (pkgs.lib.intersperse ":" 
-    (map (mod: mod + "/lib") nssModules));
+  nssModulesPath = config.system.nssModules.path;
 
 
   # Wrapper around modprobe to set the path to the modules.
-  modprobe = pkgs.substituteAll {
-    dir = "sbin";
-    src = ./modprobe;
-    isExecutable = true;
-    inherit (pkgs) module_init_tools;
-    inherit modulesTree;
-  };
+  modprobe = config.system.sbin.modprobe;
 
 
   # Environment variables for running Nix.
-  nixEnvVars =
-    ''
-      export NIX_CONF_DIR=/nix/etc/nix
-
-      # Enable the copy-from-other-stores substituter, which allows builds
-      # to be sped up by copying build results from remote Nix stores.  To
-      # do this, mount the remote file system on a subdirectory of
-      # /var/run/nix/remote-stores.
-      export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
-      
-    '' + # */
-    (if config.nix.distributedBuilds then
-      ''
-        export NIX_BUILD_HOOK=${nix}/libexec/nix/build-remote.pl
-        export NIX_REMOTE_SYSTEMS=/etc/nix.machines
-        export NIX_CURRENT_LOAD=/var/run/nix/current-load
-      ''
-    else "");
+  nixEnvVars = config.nix.envVars;
 
               
-  # The services (Upstart) configuration for the system.
-  upstartJobs = import ../upstart-jobs/default.nix {
-    inherit config pkgs nix modprobe nssModulesPath nixEnvVars
-      optionDeclarations kernelPackages mount;
-  };
-
-
   # The static parts of /etc.
   etc = import ../etc/default.nix {
-    inherit config pkgs upstartJobs systemPath wrapperDir
+    inherit config pkgs systemPath wrapperDir
       defaultShell nixEnvVars modulesTree nssModulesPath;
-    extraEtc =
-       (pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs))
-    ++ config.environment.etc;
+    extraEtc = config.environment.etc;
   };
 
   
@@ -143,18 +96,7 @@ rec {
   # A patched `mount' command that looks in a directory in the Nix
   # store instead of in /sbin for mount helpers (like mount.ntfs-3g or
   # mount.cifs).
-  mount = import "${nixpkgsPath}/pkgs/os-specific/linux/util-linux" {
-    inherit (pkgs) fetchurl stdenv;
-    buildMountOnly = true;
-    mountHelpers = pkgs.buildEnv {
-      name = "mount-helpers";
-      paths = [
-        pkgs.ntfs3g
-        pkgs.mount_cifs
-      ];
-      pathsToLink = "/sbin";
-    } + "/sbin";
-  };
+  mount = config.system.sbin.mount;
   
 
   # The packages you want in the boot environment.
@@ -220,7 +162,6 @@ rec {
   ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
   ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
-  ++ pkgs.lib.concatLists (map (job: job.extraPath) upstartJobs.jobs)
   ++ config.environment.extraPackages
   ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
   ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
@@ -248,7 +189,7 @@ rec {
   };
 
 
-  usersGroups = import ./users-groups.nix { inherit pkgs config upstartJobs defaultShell; };
+  usersGroups = import ./users-groups.nix { inherit pkgs config defaultShell; };
 
 
   defaultShell = "/var/run/current-system/sw/bin/bash";

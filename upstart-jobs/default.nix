@@ -1,6 +1,54 @@
-{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations, kernelPackages, mount}:
+{config, pkgs}:
 
-let 
+###### interface
+let
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+      extraJobs = mkOption {
+        default = [];
+        example = [
+             { name = "test-job";
+               job = ''
+                 description "nc"
+                 start on started network-interfaces
+                 respawn
+                 env PATH=/var/run/current-system/sw/bin
+                 exec sh -c "echo 'hello world' | ${pkgs.netcat}/bin/nc -l -p 9000"
+                 '';
+             } ];
+        # should have some checks to everify the syntax
+        merge = pkgs.lib.mergeListOption;
+        description = "
+          Additional Upstart jobs.
+        ";
+      };
+    };
+
+    tests = {
+      upstartJobs = mkOption {
+        internal = true;
+        default = {};
+        description = "
+          Make it easier to build individual Upstart jobs. (e.g.,
+          <command>nix-build /etc/nixos/nixos -A
+          tests.upstartJobs.xserver</command>).
+        ";
+      };
+    };
+  };
+in
+
+###### implementation
+let
+  # should be moved to the corresponding jobs.
+  nix = config.environment.nix;
+  nixEnvVars = config.nix.envVars;
+  kernelPackages = config.boot.kernelPackages;
+  nssModulesPath = config.system.nssModules.path;
+  modprobe = config.system.sbin.modprobe;
+  mount = config.system.sbin.mount;
 
   makeJob = import ../upstart-jobs/make-job.nix {
     inherit (pkgs) runCommand;
@@ -58,9 +106,7 @@ let
                                 then let v = (__getAttr name thisConfig); in if opt ? apply then opt.apply v else v
                                 else if opt ? default then opt.default else abort "you need to specify the configuration option ${errorWhere name}"
                            else abort "unkown option ${errorWhere name}";
-          checkConfig = (pkgs.lib.getAttr ["environment" "checkConfigurationOptions"] 
-                  optionDeclarations.environment.checkConfigurationOptions.default
-                  config);
+          checkConfig = config.environment.checkConfigurationOptions;
       in # TODO: pass path to checker so it can show full path in the abort case
           pkgs.checker ( (jobFunc (args configV)).jobs )
                       checkConfig
@@ -464,8 +510,43 @@ let
   # For the built-in logd job.
   ++ [(makeJob { jobDrv = pkgs.upstart; })];
 
+
+  command = import ../upstart-jobs/gather.nix {
+    inherit (pkgs) runCommand;
+    inherit jobs;
+  };
   
-in import ../upstart-jobs/gather.nix {
-  inherit (pkgs) runCommand;
-  inherit jobs;
+in 
+
+{
+  require = [
+    options
+  ];
+
+  environment = {
+    etc = [{ # The Upstart events defined above.
+      source = command + "/etc/event.d";
+      target = "event.d";
+    }]
+    ++ pkgs.lib.concatLists (map (job: job.extraEtc) jobs);
+
+    extraPackages =
+      pkgs.lib.concatLists (map (job: job.extraPath) jobs);
+  };
+
+  users = {
+    extraUsers =
+      pkgs.lib.concatLists (map (job: job.users) jobs);
+
+    extraGroups =
+      pkgs.lib.concatLists (map (job: job.groups) jobs);
+  };
+
+  tests = {
+    # see test/test-upstart-job.sh
+    upstartJobs = { recurseForDerivations = true; } //
+      builtins.listToAttrs (map (job:
+        { name = if job ? jobName then job.jobName else job.name; value = job; }
+      ) jobs);
+  };
 }
