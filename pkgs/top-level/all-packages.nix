@@ -2933,15 +2933,17 @@ let
     inherit fetchurl stdenv gmp;
   };
 
-  gst_all = import ../development/libraries/gstreamer {
-    inherit lib selectVersion stdenv fetchurl perl bison flex pkgconfig libxml2
+  gst_all = recurseIntoAttrs (import ../development/libraries/gstreamer {
+    inherit lib selectVersion stdenv fetchurl perl bison pkgconfig libxml2
       python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
       libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
-      dbus libavc1394 ladspaH taglib bzip2;
+      dbus libavc1394 ladspaH taglib bzip2 which;
+    flex = flex2535;
     inherit (xorg) libX11 libXv libXext;
     inherit (gtkLibs) glib pango gtk;
-    inherit (gnome) gnomevfs;
-  };
+    inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
+             it is depreceated and didn't build on amd64 due to samba dependenccy */ gtkdoc;
+  });
 
   gnet = import ../development/libraries/gnet {
     inherit fetchurl stdenv pkgconfig;
