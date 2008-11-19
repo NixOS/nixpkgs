@@ -1715,6 +1715,11 @@ let
     perl = perl58;
   }));
 
+  ghcboot610 = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot610.nix {
+    inherit fetchurl stdenv ncurses gmp editline makeWrapper;
+    # readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    perl = perl58;
+  }));
   /*
   ghcWrapper = assert uulib.ghc == ghc;
     import ../development/compilers/ghc-wrapper {
