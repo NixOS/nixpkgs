@@ -6349,7 +6349,7 @@ let
     inherit fetchurl stdenv bison flex perl;
   };
 
-  kvm = kvm77;
+  kvm = kvm76;
 
   kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
@@ -6357,7 +6357,7 @@ let
     kernelHeaders = kernelHeaders_2_6_23;
   };
 
-  kvm77 = import ../os-specific/linux/kvm/77.nix {
+  kvm76 = import ../os-specific/linux/kvm/76.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
   };
