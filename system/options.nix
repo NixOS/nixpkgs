@@ -842,6 +842,13 @@ in
           <command>no</command>
         ";
       };
+
+      gatewayPorts = mkOption {
+        default = "no";
+        description = "
+           Specifies  whether  remote hosts are allowed to connect to ports forwarded for the client. See man sshd_conf.
+          ";
+        };
     };
 
     lshd = {

@@ -191,9 +191,7 @@ let
       inherit (pkgs) writeText openssh glibc;
       inherit (pkgs.xorg) xauth;
       inherit nssModulesPath;
-      forwardX11 = config.services.sshd.forwardX11;
-      allowSFTP = config.services.sshd.allowSFTP;
-      permitRootLogin = config.services.sshd.permitRootLogin;
+      inherit (config.services.sshd) forwardX11 allowSFTP permitRootLogin gatewayPorts;
     })
 
   # GNU lshd SSH2 deamon.

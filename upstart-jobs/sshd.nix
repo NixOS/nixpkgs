@@ -1,6 +1,6 @@
 { writeText, openssh, glibc, xauth
 , nssModulesPath
-, forwardX11, allowSFTP, permitRootLogin
+, forwardX11, allowSFTP, permitRootLogin, gatewayPorts
 }:
 
 assert permitRootLogin == "yes" ||
@@ -29,6 +29,7 @@ let
     "}
     
     PermitRootLogin ${permitRootLogin}
+    GatewayPorts ${gatewayPorts}
     
   '';
 
