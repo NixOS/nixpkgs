@@ -32,6 +32,10 @@ args.stdenv.mkDerivation {
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
 
+  # default location for pidfile, fifofile, fcronallow, fcrondenay..
+  # Then we don't need a wrapper to tell fcron where to find another configuration file
+  postInstall = '' sed -i "s@$out@@" $out/etc/fcron.conf '';
+
   meta = { 
       description="A command scheduler with extended capabilities over cron and anacron";
       homepage =  http://fcron.free.fr;
