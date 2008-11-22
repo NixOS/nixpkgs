@@ -16,10 +16,12 @@ args.stdenv.mkDerivation {
   configureFlags = [ "--with-sendmail=/var/setuid-wrappers/sendmail"
                     "--with-editor=/var/run/current-system/sw/bin/vi"
                     "--with-bootinstall=no"
+                    "--sysconfdir=/etc"
                     # fcron would have been default user/grp
                     "--with-username=root"
                     "--with-groupname=root"
                   ];
+  installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
   preConfigure = ''
     sed -i 's@/usr/bin/env perl@${args.perl}/bin/perl@g' configure
     # Don't let fcron create the group fcron, nix(os) should do this
@@ -31,10 +33,6 @@ args.stdenv.mkDerivation {
     # also don't use chown or chgrp for documentation (or whatever) when installing
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
-
-  # default location for pidfile, fifofile, fcronallow, fcrondenay..
-  # Then we don't need a wrapper to tell fcron where to find another configuration file
-  postInstall = '' sed -i "s@$out@@" $out/etc/fcron.conf '';
 
   meta = { 
       description="A command scheduler with extended capabilities over cron and anacron";
