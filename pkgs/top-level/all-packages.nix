@@ -1357,7 +1357,7 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  zsh = composedArgsAndFun (selectVersion ../shells/zsh "4.3.5") {
+  zsh = composedArgsAndFun (selectVersion ../shells/zsh "4.3.9") {
     inherit fetchurl stdenv ncurses coreutils;
   };
 
