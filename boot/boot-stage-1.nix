@@ -4,7 +4,12 @@
 # calls the init in the root file system to start the second boot
 # stage.
 
-{ pkgs, config, kernelPackages, modulesTree }:
+{pkgs, config}:
+
+let
+  kernelPackages = config.boot.kernelPackages;
+  modulesTree = config.system.modulesTree;
+in
 
 rec {
 

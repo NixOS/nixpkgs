@@ -1,6 +1,8 @@
-{pkgs, config, nix}:
+{pkgs, config}:
 
 let
+
+  nix = config.environment.nix;
 
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";

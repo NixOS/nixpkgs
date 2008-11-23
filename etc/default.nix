@@ -1,8 +1,12 @@
 { config, pkgs, systemPath, wrapperDir
-, defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath
+, defaultShell
 }:
 
 let 
+  extraEtc = config.environment.etc;
+  nixEnvVars = config.nix.envVars;
+  modulesTree = config.system.modulesTree;
+  nssModulesPath = config.system.nssModules.path;
 
 
   optional = pkgs.lib.optional;

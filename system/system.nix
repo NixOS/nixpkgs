@@ -41,7 +41,7 @@ rec {
 
   # The initial ramdisk.
   initialRamdiskStuff = import ../boot/boot-stage-1.nix {
-    inherit pkgs config kernelPackages modulesTree;
+    inherit pkgs config;
   };
 
   initialRamdisk = initialRamdiskStuff.initialRamdisk;
@@ -49,7 +49,7 @@ rec {
 
   # NixOS installation/updating tools.
   nixosTools = import ../installer {
-    inherit pkgs config nix;
+    inherit pkgs config;
   };
 
 
@@ -70,8 +70,7 @@ rec {
   # The static parts of /etc.
   etc = import ../etc/default.nix {
     inherit config pkgs systemPath wrapperDir
-      defaultShell nixEnvVars modulesTree nssModulesPath;
-    extraEtc = config.environment.etc;
+      defaultShell;
   };
 
   
