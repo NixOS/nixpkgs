@@ -233,6 +233,16 @@ rec {
 
   optionalString = cond: string: if cond then string else "";
 
+  # Return the second argument if the first one is true or the empty version
+  # of the second argument.
+  ifEnable = cond: val:
+    if cond then val
+    else if builtins.isList val then []
+    else if builtins.isAttrs val then {}
+    # else if builtins.isString val then ""
+    # else if builtins.isBoolean val then false
+    else null;
+
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
     if builtins.lessThan last first
