@@ -240,7 +240,7 @@ rec {
     else if builtins.isList val then []
     else if builtins.isAttrs val then {}
     # else if builtins.isString val then ""
-    # else if builtins.isBoolean val then false
+    else if (val == true || val == false) then false
     else null;
 
   # Return a list of integers from `first' up to and including `last'.
@@ -535,7 +535,7 @@ rec {
         rmRequireIf (optionSet config configFun);
     in
       config: merge "" (
-        uniqFlattenAttr (processConfig) "require" [] (toList opts)
+        uniqFlattenAttr (processConfig config) "require" [] (toList opts)
       );
 
   fixOptionSets = merge: pkgs: opts:
