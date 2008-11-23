@@ -81,7 +81,7 @@ let
     
   };
 
-  ifEnable = pkgs.lib.ifEnable config.services.zabbixServer.enable
+  ifEnable = pkgs.lib.ifEnable config.services.zabbixServer.enable;
 in
 
 {

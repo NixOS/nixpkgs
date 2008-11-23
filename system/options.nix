@@ -3083,7 +3083,7 @@ root        ALL=(ALL) SETENV: ALL
 
     # services
     (import ../upstart-jobs/zabbix-agent.nix)
-    (import ../upstart-jobs/zabbix-server.nix.nix)
+    (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/cron/locate.nix)
