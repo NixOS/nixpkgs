@@ -2781,18 +2781,6 @@ root        ALL=(ALL) SETENV: ALL
   };
 
 
-  sound = {
-
-    enable = mkOption {
-      default = true;
-      description = "
-        Whether to enable ALSA sound.
-      ";
-    };
-
-  };
-
-
   i18n = {
 
     defaultLocale = mkOption {
@@ -2943,5 +2931,8 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/cron/locate.nix)
+
+    # sound
+    (import ../upstart-jobs/alsa.nix)
   ];
 }

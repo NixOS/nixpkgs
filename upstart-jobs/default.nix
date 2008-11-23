@@ -374,13 +374,6 @@ let
       inherit (config.services.bitlbee) portNumber interface;
     })
 
-  # ALSA sound support.
-  ++ optional config.sound.enable
-    (import ../upstart-jobs/alsa.nix {
-      inherit modprobe;
-      inherit (pkgs) alsaUtils;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {
