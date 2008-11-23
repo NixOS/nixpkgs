@@ -406,12 +406,6 @@ let
       inherit (pkgs) stdenv hal;
     })
 
-  ++ optional config.services.gpm.enable 
-    (import ../upstart-jobs/gpm.nix {
-      inherit (pkgs) gpm;
-      gpmConfig = config.services.gpm;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {

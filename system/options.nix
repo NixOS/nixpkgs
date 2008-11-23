@@ -2259,22 +2259,6 @@ in
     };
 
     
-    gpm = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable general purpose mouse daemon.
-        ";
-      };
-      protocol = mkOption {
-        default = "ps/2";
-        description = "
-          Mouse protocol to use.
-        ";
-      };
-    };
-    
-
     postfix = {
       enable = mkOption {
         default = false;
@@ -3035,6 +3019,7 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/gpm.nix)
     (import ../upstart-jobs/nagios/default.nix)
     (import ../upstart-jobs/zabbix-agent.nix)
     (import ../upstart-jobs/zabbix-server.nix)
