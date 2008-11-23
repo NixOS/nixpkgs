@@ -1,6 +1,40 @@
-{stdenv, dbus, dbusServices ? []}:
+# D-Bus system-wide daemon.
+{pkgs, config}:
 
+###### interface
 let
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+      dbus = {
+
+        enable = mkOption {
+          default = true;
+          description = "
+            Whether to start the D-Bus message bus daemon.  It is required
+            by the HAL service.
+          ";
+          merge = pkgs.lib.mergeEnableOption;
+        };
+
+        services = mkOption {
+          default = [];
+          description = ".. fill me ..";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
+let
+  cfg = config.services.dbus;
+  ifEnable = pkgs.lib.ifEnable cfg.enable;
+  services = cfg.services;
+
+  inherit (pkgs) stdenv dbus;
 
   homeDir = "/var/run/dbus";
 
@@ -14,49 +48,66 @@ let
         --replace '<fork/>' ''
 
       ensureDir $out/system.d
-      for i in ${toString dbusServices}; do
+      for i in ${toString services}; do
         ln -s $i/etc/dbus-1/system.d/* $out/system.d/
       done
     ";
   };
 
+  user = {
+    name = "messagebus";
+    uid = (import ../system/ids.nix).uids.messagebus;
+    description = "D-Bus system message bus daemon user";
+    home = homeDir;
+  };
+
+  job = {
+    name = "dbus";
+  
+    job = ''
+      description "D-Bus system message bus daemon"
+
+      start on startup
+      stop on shutdown
+
+      start script
+
+          mkdir -m 0755 -p ${homeDir}
+          chown messagebus ${homeDir}
+
+          mkdir -m 0755 -p /var/lib/dbus
+          ${dbus.tools}/bin/dbus-uuidgen --ensure
+
+      end script
+
+      respawn
+
+      script
+          rm -f ${homeDir}/pid
+          exec ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
+      end script
+    '';
+  };
+
 in
 
 {
-  name = "dbus";
-  
-  users = [
-    { name = "messagebus";
-      uid = (import ../system/ids.nix).uids.messagebus;
-      description = "D-Bus system message bus daemon user";
-      home = homeDir;
-    }
+  require = [
+    (import ../upstart-jobs/default.nix) # config.services.extraJobs
+    # (import ../system/user.nix) # users.*
+    # (import ?) # config.environment.extraPackages
+    options
   ];
-  
-  extraPath = [dbus.daemon dbus.tools];
-  
-  job = ''
-    description "D-Bus system message bus daemon"
 
-    start on startup
-    stop on shutdown
+  environment = {
+    extraPackages = ifEnable [dbus.daemon dbus.tools];
+  };
 
-    start script
+  users = {
+    extraUsers = ifEnable [user];
+  };
 
-        mkdir -m 0755 -p ${homeDir}
-        chown messagebus ${homeDir}
-
-        mkdir -m 0755 -p /var/lib/dbus
-        ${dbus.tools}/bin/dbus-uuidgen --ensure
-
-    end script
-
-    respawn
-
-    script
-        rm -f ${homeDir}/pid
-        exec ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
-    end script
-  '';
-  
+  services = {
+    extraJobs = ifEnable [job];
+  };
 }

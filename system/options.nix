@@ -347,8 +347,7 @@ in
         let
           list2 =
              list
-          ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap
-          ++ pkgs.lib.optional config.services.avahi.nssmdns pkgs.nssmdns;
+          ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap;
         in {
           list = list2;
           path = pkgs.lib.makeLibraryPath list2;
@@ -1035,66 +1034,6 @@ in
           Whether to enable `portmap', an ONC RPC directory service
           notably used by NFS and NIS, and which can be queried
           using the rpcinfo(1) command.
-        '';
-      };
-    };
-
-    avahi = {
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the Avahi daemon, which allows Avahi clients
-          to use Avahi's service discovery facilities and also allows
-          the local machine to advertise its presence and services
-          (through the mDNS responder implemented by `avahi-daemon').
-        '';
-      };
-
-      hostName = mkOption {
-        default = "nixos";  # XXX: Would be nice to use `networking.hostName'.
-        description = ''Host name advertised on the LAN.'';
-      };
-
-      browseDomains = mkOption {
-        default = [ "0pointer.de" "zeroconf.org" ];
-        description = ''
-          List of non-local DNS domains to be browsed.
-        '';
-      };
-
-      ipv4 = mkOption {
-        default = true;
-        description = ''Whether to use IPv4'';
-      };
-
-      ipv6 = mkOption {
-        default = false;
-        description = ''Whether to use IPv6'';
-      };
-
-      wideArea = mkOption {
-        default = true;
-        description = ''Whether to enable wide-area service discovery.'';
-      };
-
-      publishing = mkOption {
-        default = true;
-        description = ''Whether to allow publishing.'';
-      };
-
-      nssmdns = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the mDNS NSS (Name Service Switch) plug-in.
-          Enabling it allows applications to resolve names in the `.local'
-          domain by transparently querying the Avahi daemon.
-
-          Warning: Currently, enabling this option breaks DNS lookups after
-          a `nixos-rebuild'.  This is because `/etc/nsswitch.conf' is
-          updated to use `nss-mdns' but `libnss_mdns' is not in
-          applications' `LD_LIBRARY_PATH'.  The next time `/etc/profile' is
-          sourced, it will set up an appropriate `LD_LIBRARY_PATH', though.
         '';
       };
     };
@@ -1924,19 +1863,6 @@ in
         default = false;
         description = "
           Whether to enable printing support through the CUPS daemon.
-        ";
-      };
-
-    };
-
-
-    dbus = {
-
-      enable = mkOption {
-        default = true;
-        description = "
-          Whether to start the D-Bus message bus daemon.  It is required
-          by the HAL service.
         ";
       };
 
@@ -3007,6 +2933,8 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/avahi-daemon.nix)
+    (import ../upstart-jobs/dbus.nix)
     (import ../upstart-jobs/hal.nix)
     (import ../upstart-jobs/gpm.nix)
     (import ../upstart-jobs/nagios/default.nix)

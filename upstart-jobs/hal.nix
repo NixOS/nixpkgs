@@ -66,7 +66,7 @@ in
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../system/user.nix) # users.*
     # (import ../upstart-jobs/udev.nix) # services.udev.*
-    # (import ../upstart-jobs/dbus.nix) # services.dbus.*
+    (import ../upstart-jobs/dbus.nix) # services.dbus.*
     # (import ?) # config.environment.extraPackages
     options
   ];
@@ -89,7 +89,7 @@ in
 
     dbus = {
       enable = cfg.enable;
-      # services = ifEnable [hal];
+      services = ifEnable [hal];
     };
   };
 }

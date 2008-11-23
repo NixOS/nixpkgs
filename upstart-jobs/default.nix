@@ -272,13 +272,6 @@ let
       inherit (pkgs) makePortmap;
      })
 
-  # Avahi daemon.
-  ++ optional config.services.avahi.enable
-    (import ../upstart-jobs/avahi-daemon.nix {
-      inherit (pkgs) avahi writeText lib;
-      config = config.services.avahi;
-    })
-
   # X server.
   ++ optional config.services.xserver.enable
     (import ../upstart-jobs/xserver.nix {
@@ -386,18 +379,6 @@ let
     (import ../upstart-jobs/alsa.nix {
       inherit modprobe;
       inherit (pkgs) alsaUtils;
-    })
-
-  # D-Bus system-wide daemon.
-  ++ optional config.services.dbus.enable
-    (import ../upstart-jobs/dbus.nix {
-      inherit (pkgs) stdenv dbus;
-      dbusServices =
-        # add config.services.dbus.services
-        pkgs.lib.optional config.services.hal.enable pkgs.hal ++
-        pkgs.lib.optional config.services.avahi.enable pkgs.avahi ++
-        pkgs.lib.optional config.services.disnix.enable pkgs.disnix
-        ;
     })
 
   # Postfix mail server.

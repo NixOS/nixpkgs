@@ -160,7 +160,6 @@ rec {
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
   ++ pkgs.lib.optional config.services.atd.enable pkgs.at
   ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
-  ++ pkgs.lib.optional config.services.avahi.enable pkgs.avahi
   ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
   ++ config.environment.extraPackages
   ++ pkgs.lib.optional config.fonts.enableFontDir fontDir

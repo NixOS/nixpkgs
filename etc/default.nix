@@ -50,13 +50,6 @@ import ../helpers/make-etc.nix {
       target = "hosts";
     }
 
-    { # Name Service Switch configuration file.  Required by the C library.
-      source = if config.services.avahi.nssmdns
-               then (assert config.services.avahi.enable; ./nsswitch-mdns.conf)
-               else ./nsswitch.conf;
-      target = "nsswitch.conf";
-    }
-
     { # Friendly greeting on the virtual consoles.
       source = pkgs.writeText "issue" ''
       
