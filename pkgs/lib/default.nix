@@ -357,11 +357,69 @@ rec {
   uniqFlattenAttr = f: attr: default: x:
     if x == []
     then default
-    else let h = f (head x); t = tail x; in
-      if elem h default
+    else
+      let h = f (head x); t = tail x;
+          v = removeAttrs h [attr]; n = getAttr [attr] [] h;
+      in
+      if elem v default
       then uniqFlattenAttr f attr default t
-      else uniqFlattenAttr f attr (default ++ [h]) (toList (getAttr [attr] [] h) ++ t)
+      else uniqFlattenAttr f attr (default ++ [v]) (toList n ++ t)
     ;
+
+  /* If. ThenElse. Always. */
+
+  # create "if" statement that can be dealyed on sets until a "then-else" or
+  # "always" set is reached.  When an always set is reached by 
+
+  isIf = attrs: (typeOf attrs) == "if";
+  mkIf = condition: thenelse:
+    if isIf thenelse then
+      mkIf (condition && thenelse.condition) thenelse.thenelse
+    else {
+      _type = "if";
+      inherit condition thenelse;
+    };
+
+
+  isThenElse = attrs: (typeOf attrs) == "then-else";
+  mkThenElse = attrs:
+    assert attrs ? thenPart && attrs ? elsePart;
+    attrs // { _type = "then-else"; };
+
+
+  isAlways = attrs: (typeOf attrs) == "always";
+  mkAlways = value: { inherit value; _type = "always"; };
+
+  pushIf = f: attrs:
+    if isIf attrs then pushIf f (
+      let val = attrs.thenelse; in
+      # evaluate the condition.
+      if isThenElse val then
+        if attrs.condition then
+          val.thenPart
+        else
+          val.elsePart
+      # ignore the condition.
+      else if isAlways val then
+        val.value
+      # otherwise
+      else
+        f attrs.condition val)
+    else
+      attrs;
+
+  # take care otherwise you will have to handle this by hand.
+  rmIf = pushIf (condition: val: val);
+
+  evalIf = pushIf (condition: val:
+    # guess: empty else part.
+    ifEnable condition val
+  );
+
+  delayIf = pushIf (condition: val:
+    # rewrite the condition on sub-attributes.
+    mapAttrs (name: mkIf condition) val
+  );
 
   /* Options. */
 
@@ -426,10 +484,10 @@ rec {
           test = partition isOption opts;
           opt = ({ merge = mergeDefaultOption; apply = id; } // head test.right);
         in
-          if test.right == [] then mergeOptionSets noOption name test.wrong
+          if test.right == [] then mergeOptionSets noOption name (map delayIf test.wrong)
           else if tail test.right != [] then throw "Multiple options for '${name}'."
           else if test.wrong == [] then opt.apply opt.default
-          else opt.apply (opt.merge name test.wrong)
+          else opt.apply (opt.merge name (map evalIf test.wrong))
       ) opts
    else noOption path opts;
 
@@ -443,7 +501,7 @@ rec {
           name = if path == "" then attr else path + "." + attr;
           test = partition isOption opts;
         in
-          if test.right == [] then filterOptionSets name test.wrong
+          if test.right == [] then filterOptionSets name (map delayIf test.wrong)
           else if tail test.right != [] then  throw "Multiple options for '${name}'."
           else { inherit name; } // (head test.right)
       ) opts
@@ -453,20 +511,32 @@ rec {
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
   fixOptionSetsFun = merge: pkgs: opts:
-    let optionSet = config: configFun:
-      if __isFunction configFun then
-        let result = configFun { inherit pkgs config; }; in
-      # {pkgs, config, ...}: {..}
-        if builtins.isAttrs result then result
-      # pkgs: config: {..}
-        else configFun pkgs config
-      # {..}
-      else configFun;
+    let
+      # ignore all conditions that are on require attributes.
+      rmRequireIf = conf:
+        let conf2 = delayIf conf; in
+        if conf2 ? require then
+          conf2 // { require = rmIf conf2.require; }
+        else
+          conf2;
+
+      # call configuration "files" with one of the existing convention.
+      optionSet = config: configFun:
+        if __isFunction configFun then
+          let result = configFun { inherit pkgs config; }; in
+        # {pkgs, config, ...}: {..}
+          if builtins.isAttrs result then result
+        # pkgs: config: {..}
+          else configFun pkgs config
+        # {..}
+        else configFun;
+
+      processConfig = config: configFun:
+        rmRequireIf (optionSet config configFun);
     in
-      config: merge ""
-        (map (x: removeAttrs x ["require"])
-          (uniqFlattenAttr (optionSet config) "require" [] (toList opts))
-        );
+      config: merge "" (
+        uniqFlattenAttr (processConfig) "require" [] (toList opts)
+      );
 
   fixOptionSets = merge: pkgs: opts:
     fix (fixOptionSetsFun merge pkgs opts);
