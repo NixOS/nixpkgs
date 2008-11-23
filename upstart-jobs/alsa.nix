@@ -22,7 +22,7 @@ in
 
 ###### implementation
 let
-  ifEnable = pkgs.lib.ifEnable config.sound.enable;
+  inherit (pkgs.lib) mkIf;
 
   # dangerous !
   modprobe = config.system.sbin.modprobe;
@@ -70,7 +70,7 @@ let
   };
 in
 
-{
+mkIf config.sound.enable {
   require = [
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../system/user.nix) # users.*
@@ -79,14 +79,14 @@ in
   ];
 
   environment = {
-    extraPackages = ifEnable [alsaUtils];
+    extraPackages = [alsaUtils];
   };
 
   users = {
-    extraGroups = ifEnable [group];
+    extraGroups = [group];
   };
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
   };
 }

@@ -31,8 +31,8 @@ in
 ###### implementation
 let
   cfg = config.services.dbus;
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
   services = cfg.services;
+  inherit (pkgs.lib) mkIf;
 
   inherit (pkgs) stdenv dbus;
 
@@ -91,7 +91,7 @@ let
 
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../system/user.nix) # users.*
@@ -100,14 +100,14 @@ in
   ];
 
   environment = {
-    extraPackages = ifEnable [dbus.daemon dbus.tools];
+    extraPackages = [dbus.daemon dbus.tools];
   };
 
   users = {
-    extraUsers = ifEnable [user];
+    extraUsers = [user];
   };
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
   };
 }

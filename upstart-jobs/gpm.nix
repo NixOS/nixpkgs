@@ -27,7 +27,7 @@ in
 ###### implementation
 let
   cfg = config.services.gpm;
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
+  inherit (pkgs.lib) mkIf;
 
   gpm = pkgs.gpm;
   gpmBin = "${gpm}/sbin/gpm";
@@ -45,7 +45,7 @@ let
   };
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # /etc/security/console.perms (should be generated ?)
@@ -53,6 +53,6 @@ in
   ];
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
   };
 }

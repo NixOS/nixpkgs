@@ -30,7 +30,7 @@ in
 ###### implementation
 let
   cfg = config.services.disnix;
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
+  inherit (pkgs.lib) mkIf;
 
   job = {
     name = "disnix";
@@ -51,7 +51,7 @@ let
   };
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../upstart-jobs/default.nix)
     (import ../upstart-jobs/dbus.nix) # services.dbus.*
@@ -59,11 +59,11 @@ in
   ];
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
 
     dbus = {
-      enable = cfg.enable;
-      services = ifEnable [pkgs.disnix];
+      enable = true;
+      services = [pkgs.disnix];
     };
   };
 }

@@ -73,7 +73,7 @@ in
 ###### implementation
 let
   cfg = config.services.avahi;
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
+  inherit (pkgs.lib) mkIf mkThenElse;
 
   inherit (pkgs) avahi writeText lib;
 
@@ -118,7 +118,7 @@ let
   };
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../system/?) # system.nssModules
@@ -131,34 +131,37 @@ in
   ];
 
   system = {
-    nssModules = ifEnable (pkgs.lib.optional
-      cfg.nssmdns pkgs.nssmdns
-    );
+    nssModules = pkgs.lib.optional cfg.nssmdns pkgs.nssmdns;
   };
 
   environment = {
-    extraPackages = ifEnable [avahi];
+    extraPackages = [avahi];
 
     # Name Service Switch configuration file.  Required by the C library.
-    etc = [{
-      source = if cfg.nssmdns
-               then (assert cfg.enable; ../etc/nsswitch-mdns.conf)
-               else ../etc/nsswitch.conf;
-      target = "nsswitch.conf";
-    }];
+    etc = mkIf cfg.nssmdns (mkThenElse {
+      thenPart = [{
+        source = ../etc/nsswitch-mdns.conf;
+        target = "nsswitch.conf";
+      }];
+
+      elsePart = [{
+        source = ../etc/nsswitch.conf;
+        target = "nsswitch.conf";
+      }];
+    });
   };
 
   users = {
-    extraUsers = ifEnable [user];
-    extraGroups = ifEnable [group];
+    extraUsers = [user];
+    extraGroups = [group];
   };
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
 
     dbus = {
-      enable = cfg.enable;
-      services = ifEnable [avahi];
+      enable = true;
+      services = [avahi];
     };
   };
 }

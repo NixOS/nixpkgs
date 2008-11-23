@@ -59,6 +59,7 @@ in
 ###### implementation
 let
   cfg = config.services.nagios;
+  inherit (pkgs.lib) mkIf mkThenElse;
 
   nagiosUser = "nagios";
   nagiosGroup = "nogroup";
@@ -170,11 +171,9 @@ let
       end script
     ";
   };
-
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../../system/user.nix) # users = { .. }
@@ -187,27 +186,27 @@ in
   environment = {
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
-    etc = ifEnable [
+    etc = [
       { source = nagiosCfgFile;
         target = "nagios.cfg";
       }
     ];
 
-    extraPackages = ifEnable [pkgs.nagios];
+    extraPackages = [pkgs.nagios];
   };
 
   users = {
-    extraUsers = ifEnable [user];
+    extraUsers = [user];
   };
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
 
-    httpd = {
-      extraConfig = # ifEnable does not handle strings yet.
-        if cfg.enable && cfg.enableWebInterface
-        then extraHttpdConfig
-        else "";
+    httpd = mkIf cfg.enableWebInterface {
+      extraConfig = mkThenElse {
+        thenPart = extraHttpdConfig;
+        elsePart = "";
+      };
     };
   };
 }

@@ -38,31 +38,32 @@ in
 
 ###### implementation
 let
-  ifEnable = arg:
-    if config.hardware.pcmcia.enable then arg
-    else if builtins.isList arg then []
-    else if builtins.isAttrs arg then {}
-    else null;
+  inherit (pkgs.lib) mkIf;
 
   pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
     inherit (config.hardware.pcmcia) firmware config;
   };
 in
 
-{
-  require = options;
+
+mkIf config.hardware.pcmcia.enable {
+  require = [
+    # (import ../upstart-jobs/udev.nix)
+    # (import ?) # config.environment.extraPackages
+    options
+  ];
 
   boot = {
-    kernelModules = ifEnable [ "pcmcia" ];
+    kernelModules = [ "pcmcia" ];
   };
 
   services = {
     udev = {
-      addUdevPkgs = ifEnable [ pcmciaUtils ];
+      addUdevPkgs = [ pcmciaUtils ];
     };
   };
 
   environment = {
-    extraPackages = ifEnable [ pcmciaUtils ];
+    extraPackages = [ pcmciaUtils ];
   };
 }

@@ -22,7 +22,7 @@ in
 ###### implementation
 let
   cfg = config.services.hal;
-  ifEnable = pkgs.lib.ifEnable cfg.enable;
+  inherit (pkgs.lib) mkIf;
 
   inherit (pkgs) hal;
 
@@ -61,7 +61,7 @@ let
   };
 in
 
-{
+mkIf cfg.enable {
   require = [
     (import ../upstart-jobs/default.nix) # config.services.extraJobs
     # (import ../system/user.nix) # users.*
@@ -72,24 +72,24 @@ in
   ];
 
   environment = {
-    extraPackages = ifEnable [hal];
+    extraPackages = [hal];
   };
 
   users = {
-    extraUsers = ifEnable [user];
-    extraGroups = ifEnable [group];
+    extraUsers = [user];
+    extraGroups = [group];
   };
 
   services = {
-    extraJobs = ifEnable [job];
+    extraJobs = [job];
 
     udev = {
-      addUdevPkgs = ifEnable [hal];
+      addUdevPkgs = [hal];
     };
 
     dbus = {
-      enable = cfg.enable;
-      services = ifEnable [hal];
+      enable = true;
+      services = [hal];
     };
   };
 }
