@@ -399,6 +399,7 @@ rec {
     else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all __isList list then concatLists list
     else if all __isAttrs list then mergeAttrs list
+    else if all (x: true == x || false == x) list then fold logicalOR false list
     else abort "${name}: Cannot merge values.";
 
   mergeTypedOption = typeName: predicate: merge: name: list:
