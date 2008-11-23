@@ -412,12 +412,6 @@ let
       gpmConfig = config.services.gpm;
     })
 
-  # Nagios system/network monitoring daemon.
-  ++ optional config.services.nagios.enable
-    (import ../upstart-jobs/nagios {
-      inherit config pkgs;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {

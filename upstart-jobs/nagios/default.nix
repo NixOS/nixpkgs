@@ -1,6 +1,64 @@
+# Nagios system/network monitoring daemon.
 {config, pkgs}:
 
+###### interface
 let
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+      nagios = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to use <link
+            xlink:href='http://www.nagios.org/'>Nagios</link> to monitor
+            your system or network.
+          ";
+        };
+
+        objectDefs = mkOption {
+          description = "
+            A list of Nagios object configuration files that must define
+            the hosts, host groups, services and contacts for the
+            network that you want Nagios to monitor.
+          ";
+        };
+
+        plugins = mkOption {
+          default = [pkgs.nagiosPluginsOfficial pkgs.ssmtp];
+          description = "
+            Packages to be added to the Nagios <envar>PATH</envar>.
+            Typically used to add plugins, but can be anything.
+          ";
+        };
+
+        enableWebInterface = mkOption {
+          default = false;
+          description = "
+            Whether to enable the Nagios web interface.  You should also
+            enable Apache (<option>services.httpd.enable</option>).
+          ";
+        };
+
+        urlPath = mkOption {
+          default = "/nagios";
+          description = "
+            The URL path under which the Nagios web interface appears.
+            That is, you can access the Nagios web interface through
+            <literal>http://<replaceable>server</replaceable>/<replaceable>urlPath</replaceable></literal>.
+          ";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
+let
+  cfg = config.services.nagios;
 
   nagiosUser = "nagios";
   nagiosGroup = "nogroup";
@@ -13,7 +71,7 @@ let
     ./host-templates.cfg
     ./service-templates.cfg
     ./commands.cfg
-  ] ++ config.services.nagios.objectDefs;
+  ] ++ cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
     "ensureDir $out; ln -s $nagiosObjectDefs $out/";
@@ -53,7 +111,7 @@ let
     url_html_path=/nagios
   ";
 
-  urlPath = config.services.nagios.urlPath;
+  urlPath = cfg.urlPath;
 
   extraHttpdConfig = "
     ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
@@ -75,57 +133,81 @@ let
       Allow from all
     </Directory>
   ";
+
+  user = {
+    name = nagiosUser;
+    uid = (import ../../system/ids.nix).uids.nagios;
+    description = "Nagios monitoring daemon";
+    home = nagiosState;
+  };
+
+  job = {
+    name = "nagios";
     
+    # Run `nagios -v' to check the validity of the configuration file so
+    # that a nixos-rebuild fails *before* we kill the running Nagios
+    # daemon.
+    buildHook = "${pkgs.nagios}/bin/nagios -v ${nagiosCfgFile}";
+
+    job = "
+      description \"Nagios monitoring daemon\"
+
+      start on network-interfaces/started
+      stop on network-interfaces/stop
+
+      start script
+        mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
+        chown ${nagiosUser} ${nagiosState} ${nagiosLogDir}
+      end script
+
+      respawn
+
+      script
+        for i in ${toString config.services.nagios.plugins}; do
+          export PATH=$i/bin:$i/sbin:$i/libexec:$PATH
+        done
+        exec ${pkgs.nagios}/bin/nagios ${nagiosCfgFile}
+      end script
+    ";
+  };
+
+  ifEnable = pkgs.lib.ifEnable cfg.enable;
 in
 
 {
-  name = "nagios";
-  
-  users = [
-    { name = nagiosUser;
-      uid = (import ../../system/ids.nix).uids.nagios;
-      description = "Nagios monitoring daemon";
-      home = nagiosState;
-    }
+  require = [
+    (import ../../upstart-jobs/default.nix) # config.services.extraJobs
+    # (import ../../system/user.nix) # users = { .. }
+    # (import ?) # config.environment.etc
+    # (import ?) # config.environment.extraPackages
+    # (import ../../upstart-jobs/httpd.nix) # config.services.httpd
+    options
   ];
 
-  extraPath = [pkgs.nagios];
+  environment = {
+    # This isn't needed, it's just so that the user can type "nagiostats
+    # -c /etc/nagios.cfg".
+    etc = ifEnable [
+      { source = nagiosCfgFile;
+        target = "nagios.cfg";
+      }
+    ];
 
-  # This isn't needed, it's just so that the user can type "nagiostats
-  # -c /etc/nagios.cfg".
-  extraEtc = [
-    { source = nagiosCfgFile;
-      target = "nagios.cfg";
-    }
-  ];
+    extraPackages = ifEnable [pkgs.nagios];
+  };
 
-  extraHttpdConfig =
-    if config.services.nagios.enableWebInterface then extraHttpdConfig else "";
-  
-  # Run `nagios -v' to check the validity of the configuration file so
-  # that a nixos-rebuild fails *before* we kill the running Nagios
-  # daemon.
-  buildHook = "${pkgs.nagios}/bin/nagios -v ${nagiosCfgFile}";
+  users = {
+    extraUsers = ifEnable [user];
+  };
 
-  job = "
-    description \"Nagios monitoring daemon\"
+  services = {
+    extraJobs = ifEnable [job];
 
-    start on network-interfaces/started
-    stop on network-interfaces/stop
-
-    start script
-      mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
-      chown ${nagiosUser} ${nagiosState} ${nagiosLogDir}
-    end script
-
-    respawn
-
-    script
-      for i in ${toString config.services.nagios.plugins}; do
-        export PATH=$i/bin:$i/sbin:$i/libexec:$PATH
-      done
-      exec ${pkgs.nagios}/bin/nagios ${nagiosCfgFile}
-    end script
-  ";
-  
+    httpd = {
+      extraConfig = # ifEnable does not handle strings yet.
+        if cfg.enable && cfg.enableWebInterface
+        then extraHttpdConfig
+        else "";
+    };
+  };
 }

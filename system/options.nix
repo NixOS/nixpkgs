@@ -2150,53 +2150,6 @@ in
     };
 
 
-    nagios = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to use <link
-          xlink:href='http://www.nagios.org/'>Nagios</link> to monitor
-          your system or network.
-        ";
-      };
-
-      objectDefs = mkOption {
-        description = "
-          A list of Nagios object configuration files that must define
-          the hosts, host groups, services and contacts for the
-          network that you want Nagios to monitor.
-        ";
-      };
-
-      plugins = mkOption {
-        default = [pkgs.nagiosPluginsOfficial pkgs.ssmtp];
-        description = "
-          Packages to be added to the Nagios <envar>PATH</envar>.
-          Typically used to add plugins, but can be anything.
-        ";
-      };
-
-      enableWebInterface = mkOption {
-        default = false;
-        description = "
-          Whether to enable the Nagios web interface.  You should also
-          enable Apache (<option>services.httpd.enable</option>).
-        ";
-      };
-
-      urlPath = mkOption {
-        default = "/nagios";
-        description = "
-          The URL path under which the Nagios web interface appears.
-          That is, you can access the Nagios web interface through
-          <literal>http://<replaceable>server</replaceable>/<replaceable>urlPath</replaceable></literal>.
-        ";
-      };
-
-    };
-
-    
     mysql = {
       enable = mkOption {
         default = false;
@@ -3082,6 +3035,7 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/nagios/default.nix)
     (import ../upstart-jobs/zabbix-agent.nix)
     (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)
