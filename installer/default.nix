@@ -1,4 +1,4 @@
-{pkgs, config, nix, nixpkgsPath}:
+{pkgs, config, nix}:
 
 let
 
@@ -25,7 +25,7 @@ in
     inherit nix;
     nixpkgsURL = config.installer.nixpkgsURL;
 
-    pathsFromGraph = "${nixpkgsPath}/pkgs/build-support/kernel/paths-from-graph.pl";
+    pathsFromGraph = "${pkgs.path}/build-support/kernel/paths-from-graph.pl";
 
     nixClosure = pkgs.runCommand "closure"
       {exportReferencesGraph = ["refs" nix];}

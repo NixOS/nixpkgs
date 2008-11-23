@@ -4,28 +4,28 @@
 # calls the init in the root file system to start the second boot
 # stage.
 
-{ pkgs, config, nixpkgsPath, kernelPackages, modulesTree }:
+{ pkgs, config, kernelPackages, modulesTree }:
 
 rec {
 
-  pkgsDiet = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
+  pkgsDiet = import "${pkgs.path}/top-level/all-packages.nix" {
     system = pkgs.stdenv.system;
     bootStdenv = pkgs.useDietLibC pkgs.stdenv;
   };
 
-  pkgsKlibc = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
+  pkgsKlibc = import "${pkgs.path}/top-level/all-packages.nix" {
     system = pkgs.stdenv.system;
     bootStdenv = pkgs.useKlibc pkgs.stdenv kernelPackages.klibc;
   };
 
-  pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
+  pkgsStatic = import "${pkgs.path}/top-level/all-packages.nix" {
     system = pkgs.stdenv.system;
     bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
   };
 
-  stdenvLinuxStuff = import "${nixpkgsPath}/pkgs/stdenv/linux" {
+  stdenvLinuxStuff = import "${pkgs.path}/stdenv/linux" {
     system = pkgs.stdenv.system;
-    allPackages = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix";
+    allPackages = import "${pkgs.path}/top-level/all-packages.nix";
   };
   
 

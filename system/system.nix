@@ -41,7 +41,7 @@ rec {
 
   # The initial ramdisk.
   initialRamdiskStuff = import ../boot/boot-stage-1.nix {
-    inherit pkgs config nixpkgsPath kernelPackages modulesTree;
+    inherit pkgs config kernelPackages modulesTree;
   };
 
   initialRamdisk = initialRamdiskStuff.initialRamdisk;
@@ -49,7 +49,7 @@ rec {
 
   # NixOS installation/updating tools.
   nixosTools = import ../installer {
-    inherit pkgs config nix nixpkgsPath;
+    inherit pkgs config nix;
   };
 
 
