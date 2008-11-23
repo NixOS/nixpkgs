@@ -1943,18 +1943,6 @@ in
     };
 
 
-    hal = {
-
-      enable = mkOption {
-        default = true;
-        description = "
-          Whether to start the HAL daemon.
-        ";
-      };
-
-    };
-
-
     udev = {
 
       addFirmware = mkOption {
@@ -3019,6 +3007,7 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/pcmcia.nix)
 
     # services
+    (import ../upstart-jobs/hal.nix)
     (import ../upstart-jobs/gpm.nix)
     (import ../upstart-jobs/nagios/default.nix)
     (import ../upstart-jobs/zabbix-agent.nix)

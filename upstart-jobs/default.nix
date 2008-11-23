@@ -145,8 +145,7 @@ let
         ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
         ++ config.services.udev.addFirmware;
       extraUdevPkgs =
-           pkgs.lib.optional config.services.hal.enable pkgs.hal
-        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
+           pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
         ++ config.services.udev.addUdevPkgs;
     })
       
@@ -394,16 +393,11 @@ let
     (import ../upstart-jobs/dbus.nix {
       inherit (pkgs) stdenv dbus;
       dbusServices =
+        # add config.services.dbus.services
         pkgs.lib.optional config.services.hal.enable pkgs.hal ++
         pkgs.lib.optional config.services.avahi.enable pkgs.avahi ++
         pkgs.lib.optional config.services.disnix.enable pkgs.disnix
         ;
-    })
-
-  # HAL daemon.
-  ++ optional config.services.hal.enable
-    (import ../upstart-jobs/hal.nix {
-      inherit (pkgs) stdenv hal;
     })
 
   # Postfix mail server.
