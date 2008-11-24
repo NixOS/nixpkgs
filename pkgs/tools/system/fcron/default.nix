@@ -34,6 +34,13 @@ args.stdenv.mkDerivation {
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
 
+  patchPhase = ''
+    # don't try to create /etc/fcron.{allow,deny,conf} 
+
+    sed -i -e 's@test -f $(DESTDIR)$(ETC)/fcron.conf @ # @' \
+           -e 's@if test ! -f $(DESTDIR)$(ETC)/fcron.allow@ # @' Makefile.in
+  '';
+
   meta = { 
       description="A command scheduler with extended capabilities over cron and anacron";
       homepage =  http://fcron.free.fr;
