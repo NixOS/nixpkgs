@@ -15,7 +15,7 @@ fi
 
 cat > $wrapper <<EOF
 #! $SHELL -e
-$runner $appfile "\$@"
+exec $runner $appfile "\$@"
 EOF
 
 chmod +x $wrapper
