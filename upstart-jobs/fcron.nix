@@ -59,6 +59,7 @@ let
   #systemCronJobs =
   #  config.services.cron.systemCronJobs;
   cfg = config.services.fcron;
+  ifEnabled = if cfg.enable then pkgs.lib.id else (x : []);
   queuelen = if cfg.queuelen == "" then "" else "-q ${toString cfg.queuelen}";
 
   # shell is set to /sh in config..
@@ -87,7 +88,7 @@ in
   ];
 
   environment = {
-    etc = [
+    etc = ifEnabled [
       (allowdeny "allow" (["root"] ++ cfg.allow))
       (allowdeny "deny" cfg.deny)
       # see man 5 fcron.conf
@@ -113,7 +114,7 @@ in
   };
 
   services = {
-    extraJobs = [{
+    extraJobs = ifEnabled [{
       name = "fcron";
 
       job = ''
