@@ -23,7 +23,7 @@ args.stdenv.mkDerivation {
                   ];
   installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
   preConfigure = ''
-    sed -i 's@/usr/bin/env perl@${args.perl}/bin/perl@g' configure
+    sed -i 's@/usr/bin/env perl@${args.perl}/bin/perl@g' configure script/*
     # Don't let fcron create the group fcron, nix(os) should do this
     sed -i '2s@.*@exit 0@' script/user-group
 
