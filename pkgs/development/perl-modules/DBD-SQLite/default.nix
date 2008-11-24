@@ -1,6 +1,6 @@
-{fetchurl, perl, perlDBI, sqlite}:
+{fetchurl, buildPerlPackage, perlDBI, sqlite}:
 
-import ../generic perl {
+buildPerlPackage {
   name = "DBD-SQLite-1.14";
   
   src = fetchurl {

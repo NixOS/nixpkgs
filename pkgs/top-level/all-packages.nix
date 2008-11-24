@@ -4017,8 +4017,9 @@ let
 
   ### DEVELOPMENT / PERL MODULES
 
+  buildPerlPackage = import ../development/perl-modules/generic perl;
 
-  perlAlgorithmAnnotate = import ../development/perl-modules/generic perl {
+  perlAlgorithmAnnotate = buildPerlPackage {
     name = "Algorithm-Annotate-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz;
@@ -4026,7 +4027,7 @@ let
     };
   };
 
-  perlAlgorithmDiff = import ../development/perl-modules/generic perl {
+  perlAlgorithmDiff = buildPerlPackage {
     name = "Algorithm-Diff-1.15";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1901.zip;
@@ -4035,7 +4036,7 @@ let
     buildInputs = [unzip];
   };
 
-  perlAppCLI = import ../development/perl-modules/generic perl {
+  perlAppCLI = buildPerlPackage {
     name = "App-CLI-0.07";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/App-CLI-0.07.tar.gz;
@@ -4044,7 +4045,7 @@ let
     propagatedBuildInputs = [perlLocaleMaketextSimple];
   };
 
-  perlAppConfig = import ../development/perl-modules/generic perl {
+  perlAppConfig = buildPerlPackage {
     name = "AppConfig-1.66";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AB/ABW/AppConfig-1.66.tar.gz;
@@ -4052,7 +4053,7 @@ let
     };
   };
 
-  perlArrayCompare = import ../development/perl-modules/generic perl {
+  perlArrayCompare = buildPerlPackage {
     name = "Array-Compare-1.16";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-1.16.tar.gz;
@@ -4060,15 +4061,19 @@ let
     };
   };
 
-  perlArchiveZip = import ../development/perl-modules/Archive-Zip {
-    inherit fetchurl perl;
+  perlArchiveZip = buildPerlPackage {
+    name = "Archive-Zip-1.16";
+    src = fetchurl {
+      url = http://nixos.org/tarballs/Archive-Zip-1.16.tar.gz;
+      md5 = "e28dff400d07b1659d659d8dde7071f1";
+    };
   };
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit fetchurl perl db4;
   };
 
-  perlBitVector = import ../development/perl-modules/generic perl {
+  perlBitVector = buildPerlPackage {
     name = "Bit-Vector-6.4";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-6.4.tar.gz;
@@ -4077,7 +4082,7 @@ let
     propagatedBuildInputs = [perlCarpClan];
   };
 
-  perlCacheFastMmap = import ../development/perl-modules/generic perl {
+  perlCacheFastMmap = buildPerlPackage {
     name = "Cache-FastMmap-1.28";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.28.tar.gz;
@@ -4085,7 +4090,7 @@ let
     };
   };
 
-  perlCarpClan = import ../development/perl-modules/generic perl {
+  perlCarpClan = buildPerlPackage {
     name = "Carp-Clan-6.00";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JJ/JJORE/Carp-Clan-6.00.tar.gz;
@@ -4094,7 +4099,7 @@ let
     propagatedBuildInputs = [perlTestException];
   };
 
-  perlCatalystActionRenderView = import ../development/perl-modules/generic perl {
+  perlCatalystActionRenderView = buildPerlPackage {
     name = "Catalyst-Action-RenderView-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Action-RenderView-0.08.tar.gz;
@@ -4103,7 +4108,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlHTTPRequestAsCGI perlDataVisitor];
   };
 
-  perlCatalystDevel = import ../development/perl-modules/generic perl {
+  perlCatalystDevel = buildPerlPackage {
     name = "Catalyst-Devel-1.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Devel-1.08.tar.gz;
@@ -4117,7 +4122,7 @@ let
     ];
   };
 
-  perlCatalystManual = import ../development/perl-modules/generic perl {
+  perlCatalystManual = buildPerlPackage {
     name = "Catalyst-Manual-5.7013";
     src = fetchurl {
       url = mirror://cpan/authors/id/Z/ZA/ZARQUON/Catalyst-Manual-5.7013.tar.gz;
@@ -4125,7 +4130,7 @@ let
     };
   };
 
-  perlCatalystModelDBICSchema = import ../development/perl-modules/generic perl {
+  perlCatalystModelDBICSchema = buildPerlPackage {
     name = "Catalyst-Model-DBIC-Schema-0.21";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BO/BOGDAN/Catalyst-Model-DBIC-Schema-0.21.tar.gz;
@@ -4138,7 +4143,7 @@ let
     ];
   };
 
-  perlCatalystRuntime = import ../development/perl-modules/generic perl {
+  perlCatalystRuntime = buildPerlPackage {
     name = "Catalyst-Runtime-5.7015";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Runtime-5.7015.tar.gz;
@@ -4151,7 +4156,7 @@ let
     ];
   };
 
-  perlCatalystPluginAuthentication = import ../development/perl-modules/generic perl {
+  perlCatalystPluginAuthentication = buildPerlPackage {
     name = "Catalyst-Plugin-Authentication-0.10006";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JA/JAYK/Catalyst-Plugin-Authentication-0.10006.tar.gz;
@@ -4160,7 +4165,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlCatalystPluginSession];
   };
 
-  perlCatalystPluginAuthenticationStoreDBIC = import ../development/perl-modules/generic perl {
+  perlCatalystPluginAuthenticationStoreDBIC = buildPerlPackage {
     name = "Catalyst-Plugin-Authentication-Store-DBIC-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSTROUT/Catalyst-Plugin-Authentication-Store-DBIC-0.11.tar.gz;
@@ -4173,7 +4178,7 @@ let
     ];
   };
 
-  perlCatalystPluginAuthenticationStoreDBIxClass = import ../development/perl-modules/generic perl {
+  perlCatalystPluginAuthenticationStoreDBIxClass = buildPerlPackage {
     name = "Catalyst-Authentication-Store-DBIx-Class-0.107";
     src = fetchurl {
       url = http://search.cpan.org/CPAN/authors/id/J/JA/JAYK/Catalyst-Authentication-Store-DBIx-Class-0.107.tar.gz;
@@ -4184,7 +4189,7 @@ let
     ];
   };
 
-  perlCatalystPluginAuthorizationACL = import ../development/perl-modules/generic perl {
+  perlCatalystPluginAuthorizationACL = buildPerlPackage {
     name = "Catalyst-Plugin-Authorization-ACL-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RK/RKITOVER/Catalyst-Plugin-Authorization-ACL-0.10.tar.gz;
@@ -4193,7 +4198,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlClassThrowable];
   };
 
-  perlCatalystPluginAuthorizationRoles = import ../development/perl-modules/generic perl {
+  perlCatalystPluginAuthorizationRoles = buildPerlPackage {
     name = "Catalyst-Plugin-Authorization-Roles-0.07";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BR/BRICAS/Catalyst-Plugin-Authorization-Roles-0.07.tar.gz;
@@ -4205,7 +4210,7 @@ let
     ];
   };
 
-  perlCatalystPluginConfigLoader = import ../development/perl-modules/generic perl {
+  perlCatalystPluginConfigLoader = buildPerlPackage {
     name = "Catalyst-Plugin-ConfigLoader-0.21";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BR/BRICAS/Catalyst-Plugin-ConfigLoader-0.21.tar.gz;
@@ -4214,7 +4219,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlDataVisitor perlConfigAny];
   };
 
-  perlCatalystPluginHTMLWidget = import ../development/perl-modules/generic perl {
+  perlCatalystPluginHTMLWidget = buildPerlPackage {
     name = "Catalyst-Plugin-HTML-Widget-1.1";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SR/SRI/Catalyst-Plugin-HTML-Widget-1.1.tar.gz;
@@ -4223,7 +4228,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlHTMLWidget];
   };
 
-  perlCatalystPluginSession = import ../development/perl-modules/generic perl {
+  perlCatalystPluginSession = buildPerlPackage {
     name = "Catalyst-Plugin-Session-0.19";
     src = fetchurl {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Catalyst-Plugin-Session-0.19.tar.gz;
@@ -4232,7 +4237,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlTestMockObject perlObjectSignature perlTestDeep];
   };
 
-  perlCatalystPluginSessionStateCookie = import ../development/perl-modules/generic perl {
+  perlCatalystPluginSessionStateCookie = buildPerlPackage {
     name = "Catalyst-Plugin-Session-State-Cookie-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Catalyst-Plugin-Session-State-Cookie-0.09.tar.gz;
@@ -4243,7 +4248,7 @@ let
     ];
   };
 
-  perlCatalystPluginSessionStoreFastMmap = import ../development/perl-modules/generic perl {
+  perlCatalystPluginSessionStoreFastMmap = buildPerlPackage {
     name = "Catalyst-Plugin-Session-State-Cookie-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/K/KA/KARMAN/Catalyst-Plugin-Session-Store-FastMmap-0.05.tar.gz;
@@ -4254,7 +4259,7 @@ let
     ];
   };
 
-  perlCatalystPluginStackTrace = import ../development/perl-modules/generic perl {
+  perlCatalystPluginStackTrace = buildPerlPackage {
     name = "Catalyst-Plugin-StackTrace-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSTROUT/Catalyst-Plugin-StackTrace-0.09.tar.gz;
@@ -4263,7 +4268,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlDevelStackTrace];
   };
 
-  perlCatalystPluginStaticSimple = import ../development/perl-modules/generic perl {
+  perlCatalystPluginStaticSimple = buildPerlPackage {
     name = "Catalyst-Plugin-Static-Simple-0.20";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AG/AGRUNDMA/Catalyst-Plugin-Static-Simple-0.20.tar.gz;
@@ -4272,7 +4277,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlMIMETypes];
   };
 
-  perlCatalystViewTT = import ../development/perl-modules/generic perl {
+  perlCatalystViewTT = buildPerlPackage {
     name = "Catalyst-View-TT-0.27";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-View-TT-0.27.tar.gz;
@@ -4284,7 +4289,7 @@ let
     ];
   };
 
-  perlCGISession = import ../development/perl-modules/generic perl {
+  perlCGISession = buildPerlPackage {
     name = "CGI-Session-3.95";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SH/SHERZODR/CGI-Session-3.95.tar.gz;
@@ -4292,7 +4297,7 @@ let
     };
   };
 
-  perlCGISimple = import ../development/perl-modules/generic perl {
+  perlCGISimple = buildPerlPackage {
     name = "CGI-Simple-1.106";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AN/ANDYA/CGI-Simple-1.106.tar.gz;
@@ -4300,7 +4305,7 @@ let
     };
   };
 
-  perlClassAccessor = import ../development/perl-modules/generic perl {
+  perlClassAccessor = buildPerlPackage {
     name = "Class-Accessor-0.31";
     src = fetchurl {
       url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.31.tar.gz;
@@ -4308,7 +4313,7 @@ let
     };
   };
 
-  perlClassAccessorChained = import ../development/perl-modules/generic perl {
+  perlClassAccessorChained = buildPerlPackage {
     name = "Class-Accessor-Chained-0.01";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-0.01.tar.gz;
@@ -4317,7 +4322,7 @@ let
     propagatedBuildInputs = [perlClassAccessor];
   };
 
-  perlClassAccessorGrouped = import ../development/perl-modules/generic perl {
+  perlClassAccessorGrouped = buildPerlPackage {
     name = "Class-Accessor-Grouped-0.08001";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLACO/Class-Accessor-Grouped-0.08001.tar.gz;
@@ -4326,7 +4331,7 @@ let
     propagatedBuildInputs = [perlClassInspector perlMROCompat];
   };
 
-  perlClassAutouse = import ../development/perl-modules/generic perl {
+  perlClassAutouse = buildPerlPackage {
     name = "Class-Autouse-1.99_02";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Autouse-1.99_02.tar.gz;
@@ -4334,7 +4339,7 @@ let
     };
   };
 
-  perlClassC3 = import ../development/perl-modules/generic perl {
+  perlClassC3 = buildPerlPackage {
     name = "Class-C3-0.19";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BL/BLBLACK/Class-C3-0.19.tar.gz;
@@ -4342,7 +4347,7 @@ let
     };
   };
 
-  perlClassC3Componentised = import ../development/perl-modules/generic perl {
+  perlClassC3Componentised = buildPerlPackage {
     name = "Class-C3-Componentised-1.0003";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AS/ASH/Class-C3-Componentised-1.0003.tar.gz;
@@ -4351,7 +4356,7 @@ let
     propagatedBuildInputs = [perlClassC3 perlClassInspector perlTestException];
   };
 
-  perlClassDataAccessor = import ../development/perl-modules/generic perl {
+  perlClassDataAccessor = buildPerlPackage {
     name = "Class-Data-Accessor-0.04004";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLACO/Class-Data-Accessor-0.04004.tar.gz;
@@ -4359,7 +4364,7 @@ let
     };
   };
 
-  perlClassDataInheritable = import ../development/perl-modules/generic perl {
+  perlClassDataInheritable = buildPerlPackage {
     name = "Class-Data-Inheritable-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz;
@@ -4367,7 +4372,7 @@ let
     };
   };
 
-  perlClassInspector = import ../development/perl-modules/generic perl {
+  perlClassInspector = buildPerlPackage {
     name = "Class-Inspector-1.23";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Inspector-1.23.tar.gz;
@@ -4375,7 +4380,7 @@ let
     };
   };
 
-  perlClassThrowable = import ../development/perl-modules/generic perl {
+  perlClassThrowable = buildPerlPackage {
     name = "Class-Throwable-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STEVAN/Class-Throwable-0.10.tar.gz;
@@ -4383,11 +4388,15 @@ let
     };
   };
 
-  perlCompressZlib = import ../development/perl-modules/Compress-Zlib {
-    inherit fetchurl perl;
+  perlCompressZlib = buildPerlPackage {
+    name = "Compress-Zlib-1.41";
+    src = fetchurl {
+      url = http://nixos.org/tarballs/Compress-Zlib-1.41.tar.gz;
+      md5 = "ac135b84a03e814734496777cf5e5722";
+    };
   };
 
-  perlConfigAny = import ../development/perl-modules/generic perl {
+  perlConfigAny = buildPerlPackage {
     name = "Config-Any-0.14";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BR/BRICAS/Config-Any-0.14.tar.gz;
@@ -4395,7 +4404,7 @@ let
     };
   };
 
-  perlConfigGeneral = import ../development/perl-modules/generic perl {
+  perlConfigGeneral = buildPerlPackage {
     name = "Config-General-2.40";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.40.tar.gz;
@@ -4403,7 +4412,7 @@ let
     };
   };
 
-  perlconstant = import ../development/perl-modules/generic perl {
+  perlconstant = buildPerlPackage {
     name = "constant-1.15";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.15.tar.gz;
@@ -4411,7 +4420,7 @@ let
     };
   };
 
-  perlCryptPasswordMD5 = import ../development/perl-modules/generic perl {
+  perlCryptPasswordMD5 = buildPerlPackage {
     name = "Crypt-PasswdMD5-1.3";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
@@ -4419,7 +4428,7 @@ let
     };
   };
 
-  perlDataDump = import ../development/perl-modules/generic perl {
+  perlDataDump = buildPerlPackage {
     name = "Data-Dump-1.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.11.tar.gz;
@@ -4427,7 +4436,7 @@ let
     };
   };
 
-  perlDataHierarchy = import ../development/perl-modules/generic perl {
+  perlDataHierarchy = buildPerlPackage {
     name = "Data-Hierarchy-0.34";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/Data-Hierarchy-0.34.tar.gz;
@@ -4436,7 +4445,7 @@ let
     propagatedBuildInputs = [perlTestException];
   };
 
-  perlDataPage = import ../development/perl-modules/generic perl {
+  perlDataPage = buildPerlPackage {
     name = "Data-Page-2.01";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LB/LBROCARD/Data-Page-2.01.tar.gz;
@@ -4445,7 +4454,7 @@ let
     propagatedBuildInputs = [perlTestException perlClassAccessorChained];
   };
 
-  perlDataVisitor = import ../development/perl-modules/generic perl {
+  perlDataVisitor = buildPerlPackage {
     name = "Data-Visitor-0.21";
     src = fetchurl {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Data-Visitor-0.21.tar.gz;
@@ -4457,7 +4466,7 @@ let
     ];
   };
 
-  perlDateCalc = import ../development/perl-modules/generic perl {
+  perlDateCalc = buildPerlPackage {
     name = "Date-Calc-5.4";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STBEY/Date-Calc-5.4.tar.gz;
@@ -4466,7 +4475,7 @@ let
     propagatedBuildInputs = [perlCarpClan perlBitVector];
   };
 
-  perlDateManip = import ../development/perl-modules/generic perl {
+  perlDateManip = buildPerlPackage {
     name = "DateManip-5.54";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-5.54.tar.gz;
@@ -4475,14 +4484,14 @@ let
   };
 
   perlDBDSQLite = import ../development/perl-modules/DBD-SQLite {
-    inherit fetchurl perl perlDBI sqlite;
+    inherit fetchurl buildPerlPackage perlDBI sqlite;
   };
 
   perlDBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl perl db4;
   };
 
-  perlDBI = import ../development/perl-modules/generic perl {
+  perlDBI = buildPerlPackage {
     name = "DBI-1.607";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.607.tar.gz;
@@ -4490,7 +4499,7 @@ let
     };
   };
 
-  perlDBIxClass = import ../development/perl-modules/generic perl {
+  perlDBIxClass = buildPerlPackage {
     name = "DBIx-Class-0.08099_04";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LS/LSAUNDERS/DBIx-Class-0.08099_04.tar.gz;
@@ -4505,7 +4514,7 @@ let
     ];
   };
 
-  perlDBIxClassHTMLWidget = import ../development/perl-modules/generic perl {
+  perlDBIxClassHTMLWidget = buildPerlPackage {
     name = "DBIx-Class-HTMLWidget";
     src = fetchurl {
       url = http://search.cpan.org/CPAN/authors/id/A/AN/ANDREMAR/DBIx-Class-HTMLWidget-0.16.tar.gz;
@@ -4514,7 +4523,7 @@ let
     propagatedBuildInputs = [perlDBIxClass perlHTMLWidget];
   };
 
-  perlDBIxClassSchemaLoader = import ../development/perl-modules/generic perl {
+  perlDBIxClassSchemaLoader = buildPerlPackage {
     name = "DBIx-Class-Schema-Loader-0.04005";
     src = fetchurl {
       url = mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-Schema-Loader-0.04005.tar.gz;
@@ -4527,7 +4536,7 @@ let
     ];
   };
 
-  perlDevelStackTrace = import ../development/perl-modules/generic perl {
+  perlDevelStackTrace = buildPerlPackage {
     name = "Devel-StackTrace-1.1902";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-1.1902.tar.gz;
@@ -4535,7 +4544,7 @@ let
     };
   };
 
-  perlDigestHMAC = import ../development/perl-modules/generic perl {
+  perlDigestHMAC = buildPerlPackage {
     name = "Digest-HMAC-1.01";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/Digest-HMAC-1.01.tar.gz;
@@ -4544,7 +4553,7 @@ let
     propagatedBuildInputs = [perlDigestSHA1];
   };
 
-  perlDigestSHA1 = import ../development/perl-modules/generic perl {
+  perlDigestSHA1 = buildPerlPackage {
     name = "Digest-SHA1-2.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
@@ -4552,7 +4561,7 @@ let
     };
   };
 
-  perlEmailAddress = import ../development/perl-modules/generic perl {
+  perlEmailAddress = buildPerlPackage {
     name = "Email-Address-1.888";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.888.tar.gz;
@@ -4560,7 +4569,7 @@ let
     };
   };
 
-  perlEmailSend = import ../development/perl-modules/generic perl {
+  perlEmailSend = buildPerlPackage {
     name = "Email-Send-2.185";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Send-2.185.tar.gz;
@@ -4569,7 +4578,7 @@ let
     propagatedBuildInputs = [perlEmailSimple perlEmailAddress perlModulePluggable perlReturnValue];
   };
 
-  perlEmailSimple = import ../development/perl-modules/generic perl {
+  perlEmailSimple = buildPerlPackage {
     name = "Email-Simple-2.003";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.003.tar.gz;
@@ -4577,7 +4586,7 @@ let
     };
   };
 
-  perlEmailValid = import ../development/perl-modules/generic perl {
+  perlEmailValid = buildPerlPackage {
     name = "Email-Valid-0.179";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-0.179.tar.gz;
@@ -4586,7 +4595,7 @@ let
     propagatedBuildInputs = [perlMailTools perlNetDNS];
   };
 
-  perlEncode = import ../development/perl-modules/generic perl {
+  perlEncode = buildPerlPackage {
     name = "Encode-2.25";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.25.tar.gz;
@@ -4595,7 +4604,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlExtUtilsInstall = import ../development/perl-modules/generic perl {
+  perlExtUtilsInstall = buildPerlPackage {
     name = "ExtUtils-Install-1.50";
     src = fetchurl {
       url = mirror://cpan/authors/id/Y/YV/YVES/ExtUtils-Install-1.50.tar.gz;
@@ -4604,7 +4613,7 @@ let
     propagatedBuildInputs = [perlExtUtilsMakeMaker];
   };
 
-  perlExtUtilsMakeMaker = import ../development/perl-modules/generic perl {
+  perlExtUtilsMakeMaker = buildPerlPackage {
     name = "ExtUtils-MakeMaker-6.44";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.44.tar.gz;
@@ -4613,7 +4622,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlExtUtilsManifest = import ../development/perl-modules/generic perl {
+  perlExtUtilsManifest = buildPerlPackage {
     name = "ExtUtils-Manifest-1.53";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RK/RKOBES/ExtUtils-Manifest-1.53.tar.gz;
@@ -4622,7 +4631,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlFilechdir = import ../development/perl-modules/generic perl {
+  perlFilechdir = buildPerlPackage {
     name = "File-chdir-0.1002";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAGOLDEN/File-chdir-0.1002.tar.gz;
@@ -4631,7 +4640,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlFileCopyRecursive = import ../development/perl-modules/generic perl {
+  perlFileCopyRecursive = buildPerlPackage {
     name = "File-Copy-Recursive-0.37";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.37.tar.gz;
@@ -4639,7 +4648,7 @@ let
     };
   };
 
-  perlFileModified = import ../development/perl-modules/generic perl {
+  perlFileModified = buildPerlPackage {
     name = "File-Modified-0.07";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CO/CORION/File-Modified-0.07.tar.gz;
@@ -4647,7 +4656,7 @@ let
     };
   };
 
-  perlFileTemp = import ../development/perl-modules/generic perl {
+  perlFileTemp = buildPerlPackage {
     name = "File-Temp-0.20";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TJ/TJENNESS/File-Temp-0.20.tar.gz;
@@ -4656,7 +4665,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlFreezeThaw = import ../development/perl-modules/generic perl {
+  perlFreezeThaw = buildPerlPackage {
     name = "FreezeThaw-0.43";
     src = fetchurl {
       url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
@@ -4665,7 +4674,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlHTMLParser = import ../development/perl-modules/generic perl {
+  perlHTMLParser = buildPerlPackage {
     name = "HTML-Parser-3.56";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.56.tar.gz;
@@ -4674,7 +4683,7 @@ let
     propagatedBuildInputs = [perlHTMLTagset];
   };
 
-  perlHTMLScrubber = import ../development/perl-modules/generic perl {
+  perlHTMLScrubber = buildPerlPackage {
     name = "HTML-Scrubber-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PO/PODMASTER/HTML-Scrubber-0.08.tar.gz;
@@ -4683,7 +4692,7 @@ let
     propagatedBuildInputs = [perlHTMLParser];
   };
 
-  perlHTMLTagset = import ../development/perl-modules/generic perl {
+  perlHTMLTagset = buildPerlPackage {
     name = "HTML-Tagset-3.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.10.tar.gz;
@@ -4691,7 +4700,7 @@ let
     };
   };
 
-  perlHTMLTree = import ../development/perl-modules/generic perl {
+  perlHTMLTree = buildPerlPackage {
     name = "HTML-Tree-3.23";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETEK/HTML-Tree-3.23.tar.gz;
@@ -4700,7 +4709,7 @@ let
     propagatedBuildInputs = [perlHTMLParser];
   };
 
-  perlHTMLWidget = import ../development/perl-modules/generic perl {
+  perlHTMLWidget = buildPerlPackage {
     name = "HTML-Widget-1.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CF/CFRANKS/HTML-Widget-1.11.tar.gz;
@@ -4713,7 +4722,7 @@ let
     ];
   };
 
-  perlHTTPBody = import ../development/perl-modules/generic perl {
+  perlHTTPBody = buildPerlPackage {
     name = "HTTP-Body-1.04";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AG/AGRUNDMA/HTTP-Body-1.04.tar.gz;
@@ -4721,7 +4730,7 @@ let
     };
   };
 
-  perlHTTPRequestAsCGI = import ../development/perl-modules/generic perl {
+  perlHTTPRequestAsCGI = buildPerlPackage {
     name = "HTTP-Request-AsCGI-0.5";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHANSEN/HTTP-Request-AsCGI-0.5.tar.gz;
@@ -4730,7 +4739,7 @@ let
     propagatedBuildInputs = [perlClassAccessor perlLWP];
   };
 
-  perlI18NLangTags = import ../development/perl-modules/generic perl {
+  perlI18NLangTags = buildPerlPackage {
     name = "I18N-LangTags-0.35";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
@@ -4739,7 +4748,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlIODigest = import ../development/perl-modules/generic perl {
+  perlIODigest = buildPerlPackage {
     name = "IO-Digest-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.10.tar.gz;
@@ -4748,7 +4757,7 @@ let
     propagatedBuildInputs = [perlPerlIOviadynamic];
   };
 
-  perlIOPager = import ../development/perl-modules/generic perl {
+  perlIOPager = buildPerlPackage {
     name = "IO-Pager-0.06.tgz";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-0.06.tgz;
@@ -4756,7 +4765,7 @@ let
     };
   };
 
-  perlJSON = import ../development/perl-modules/generic perl {
+  perlJSON = buildPerlPackage {
     name = "JSON-2.12";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.12.tar.gz;
@@ -4765,7 +4774,7 @@ let
     propagatedBuildInputs = [perlJSONXS];
   };
 
-  perlJSONAny = import ../development/perl-modules/generic perl {
+  perlJSONAny = buildPerlPackage {
     name = "JSON-Any-1.17";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RB/RBERJON/JSON-Any-1.17.tar.gz;
@@ -4774,7 +4783,7 @@ let
     propagatedBuildInputs = [perlJSON];
   };
 
-  perlJSONXS = import ../development/perl-modules/generic perl {
+  perlJSONXS = buildPerlPackage {
     name = "JSON-XS-2.23";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-2.23.tar.gz;
@@ -4782,7 +4791,7 @@ let
     };
   };
 
-  perlLinguaENInflect = import ../development/perl-modules/generic perl {
+  perlLinguaENInflect = buildPerlPackage {
     name = "Lingua-EN-Inflect-1.89";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DC/DCONWAY/Lingua-EN-Inflect-1.89.tar.gz;
@@ -4790,7 +4799,7 @@ let
     };
   };
 
-  perlLinguaENInflectNumber = import ../development/perl-modules/generic perl {
+  perlLinguaENInflectNumber = buildPerlPackage {
     name = "Lingua-EN-Inflect-Number-1.1";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SI/SIMON/Lingua-EN-Inflect-Number-1.1.tar.gz;
@@ -4799,7 +4808,7 @@ let
     propagatedBuildInputs = [perlLinguaENInflect];
   };
 
-  perlListMoreUtils = import ../development/perl-modules/generic perl {
+  perlListMoreUtils = buildPerlPackage {
     name = "List-MoreUtils-0.22";
     src = fetchurl {
       url = mirror://cpan/authors/id/V/VP/VPARSEVAL/List-MoreUtils-0.22.tar.gz;
@@ -4807,7 +4816,7 @@ let
     };
   };
 
-  perlLocaleGettext = import ../development/perl-modules/generic perl {
+  perlLocaleGettext = buildPerlPackage {
     name = "LocaleGettext-1.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.05.tar.gz;
@@ -4815,7 +4824,7 @@ let
     };
   };
 
-  perlLocaleMaketext = import ../development/perl-modules/generic perl {
+  perlLocaleMaketext = buildPerlPackage {
     name = "Locale-Maketext-1.13";
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FE/FERREIRA/Locale-Maketext-1.13.tar.gz;
@@ -4824,7 +4833,7 @@ let
     propagatedBuildInputs = [perlI18NLangTags];
   };
 
-  perlLocaleMaketextLexicon = import ../development/perl-modules/generic perl {
+  perlLocaleMaketextLexicon = buildPerlPackage {
     name = "Locale-Maketext-Lexicon-0.66";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Lexicon-0.66.tar.gz;
@@ -4833,7 +4842,7 @@ let
     propagatedBuildInputs = [perlLocaleMaketext];
   };
 
-  perlLocaleMaketextSimple = import ../development/perl-modules/generic perl {
+  perlLocaleMaketextSimple = buildPerlPackage {
     name = "Locale-Maketext-Simple-0.18";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Simple-0.18.tar.gz;
@@ -4842,7 +4851,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlLWP = import ../development/perl-modules/generic perl {
+  perlLWP = buildPerlPackage {
     name = "libwww-perl-5.819";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-5.819.tar.gz;
@@ -4851,7 +4860,7 @@ let
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
   };
 
-  perlMailTools = import ../development/perl-modules/generic perl {
+  perlMailTools = buildPerlPackage {
     name = "MailTools-2.04";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.04.tar.gz;
@@ -4860,7 +4869,7 @@ let
     propagatedBuildInputs = [perlTimeDate perlTestPod];
   };
 
-  perlMIMETypes = import ../development/perl-modules/generic perl {
+  perlMIMETypes = buildPerlPackage {
     name = "MIME-Types-1.24";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-1.24.tar.gz;
@@ -4869,7 +4878,7 @@ let
     propagatedBuildInputs = [perlTestPod];
   };
 
-  perlModuleBuild = import ../development/perl-modules/generic perl {
+  perlModuleBuild = buildPerlPackage {
     name = "Module-Build-0.2808";
     src = fetchurl {
       url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz;
@@ -4878,7 +4887,7 @@ let
     propagatedBuildInputs = [perlExtUtilsInstall perlExtUtilsManifest perlTestHarness];
   };
 
-  perlModuleFind = import ../development/perl-modules/generic perl {
+  perlModuleFind = buildPerlPackage {
     name = "Module-Find-0.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.06.tar.gz;
@@ -4886,7 +4895,7 @@ let
     };
   };
 
-  perlMouse = import ../development/perl-modules/generic perl {
+  perlMouse = buildPerlPackage {
     name = "Mouse-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SA/SARTAK/Mouse-0.09.tar.gz;
@@ -4894,7 +4903,7 @@ let
     };
   };
 
-  perlMROCompat = import ../development/perl-modules/generic perl {
+  perlMROCompat = buildPerlPackage {
     name = "MRO-Compat-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BL/BLBLACK/MRO-Compat-0.09.tar.gz;
@@ -4902,7 +4911,7 @@ let
     };
   };
 
-  perlNamespaceClean = import ../development/perl-modules/generic perl {
+  perlNamespaceClean = buildPerlPackage {
     name = "namespace-clean-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PH/PHAYLON/namespace-clean-0.08.tar.gz;
@@ -4911,7 +4920,7 @@ let
     propagatedBuildInputs = [perlScopeGuard];
   };
 
-  perlNetDNS = import ../development/perl-modules/generic perl {
+  perlNetDNS = buildPerlPackage {
     name = "Net-DNS-0.63";
     src = fetchurl {
       url = mirror://cpan/authors/id/O/OL/OLAF/Net-DNS-0.63.tar.gz;
@@ -4920,7 +4929,7 @@ let
     propagatedBuildInputs = [perlNetIP perlDigestHMAC];
   };
 
-  perlNetIP = import ../development/perl-modules/generic perl {
+  perlNetIP = buildPerlPackage {
     name = "Net-IP-1.25";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MANU/Net-IP-1.25.tar.gz;
@@ -4928,7 +4937,7 @@ let
     };
   };
 
-  perlObjectSignature = import ../development/perl-modules/generic perl {
+  perlObjectSignature = buildPerlPackage {
     name = "Object-Signature-1.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AD/ADAMK/Object-Signature-1.05.tar.gz;
@@ -4936,7 +4945,7 @@ let
     };
   };
 
-  perlParent = import ../development/perl-modules/generic perl {
+  perlParent = buildPerlPackage {
     name = "parent-0.221";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CO/CORION/parent-0.221.tar.gz;
@@ -4944,7 +4953,7 @@ let
     };
   };
 
-  perlPathClass = import ../development/perl-modules/generic perl {
+  perlPathClass = buildPerlPackage {
     name = "Path-Class-0.16";
     src = fetchurl {
       url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Path-Class-0.16.tar.gz;
@@ -4952,7 +4961,7 @@ let
     };
   };
 
-  perlPerlIOeol = import ../development/perl-modules/generic perl {
+  perlPerlIOeol = buildPerlPackage {
     name = "PerlIO-eol-0.14";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/PerlIO-eol-0.14.tar.gz;
@@ -4961,7 +4970,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlPerlIOviadynamic = import ../development/perl-modules/generic perl {
+  perlPerlIOviadynamic = buildPerlPackage {
     name = "PerlIO-via-dynamic-0.12";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-dynamic-0.12.tar.gz;
@@ -4970,7 +4979,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlPerlIOviasymlink = import ../development/perl-modules/generic perl {
+  perlPerlIOviasymlink = buildPerlPackage {
     name = "PerlIO-via-symlink-0.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-symlink-0.05.tar.gz;
@@ -4979,7 +4988,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlModulePluggable = import ../development/perl-modules/generic perl {
+  perlModulePluggable = buildPerlPackage {
     name = "Module-Pluggable-3.5";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-3.5.tar.gz;
@@ -4991,7 +5000,7 @@ let
     ];
   };
 
-  perlModulePluggableFast = import ../development/perl-modules/generic perl {
+  perlModulePluggableFast = buildPerlPackage {
     name = "Module-Pluggable-Fast-0.18";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SR/SRI/Module-Pluggable-Fast-0.18.tar.gz;
@@ -5000,7 +5009,7 @@ let
     propagatedBuildInputs = [perlUNIVERSALrequire];
   };
 
-  perlPodEscapes = import ../development/perl-modules/generic perl {
+  perlPodEscapes = buildPerlPackage {
     name = "Pod-Escapes-1.04";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SB/SBURKE/Pod-Escapes-1.04.tar.gz;
@@ -5008,7 +5017,7 @@ let
     };
   };
 
-  perlPodSimple = import ../development/perl-modules/generic perl {
+  perlPodSimple = buildPerlPackage {
     name = "Pod-Simple-3.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AR/ARANDAL/Pod-Simple-3.05.tar.gz;
@@ -5017,7 +5026,7 @@ let
     propagatedBuildInputs = [perlconstant perlPodEscapes];
   };
 
-  perlReturnValue = import ../development/perl-modules/generic perl {
+  perlReturnValue = buildPerlPackage {
     name = "Return-Value-1.302";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Return-Value-1.302.tar.gz;
@@ -5025,7 +5034,7 @@ let
     };
   };
 
-  perlScopeGuard = import ../development/perl-modules/generic perl {
+  perlScopeGuard = buildPerlPackage {
     name = "Scope-Guard-0.03";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.03.tar.gz;
@@ -5033,7 +5042,7 @@ let
     };
   };
 
-  perlSetObject = import ../development/perl-modules/generic perl {
+  perlSetObject = buildPerlPackage {
     name = "Set-Object-1.26";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SA/SAMV/Set-Object-1.26.tar.gz;
@@ -5041,7 +5050,7 @@ let
     };
   };
 
-  perlSQLAbstract = import ../development/perl-modules/generic perl {
+  perlSQLAbstract = buildPerlPackage {
     name = "SQL-Abstract-1.24";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Abstract-1.24.tar.gz;
@@ -5049,7 +5058,7 @@ let
     };
   };
 
-  perlSQLAbstractLimit = import ../development/perl-modules/generic perl {
+  perlSQLAbstractLimit = buildPerlPackage {
     name = "SQL-Abstract-Limit-0.12";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAVEBAIRD/SQL-Abstract-Limit-0.12.tar.gz;
@@ -5058,7 +5067,7 @@ let
     propagatedBuildInputs = [perlSQLAbstract perlTestException perlDBI];
   };
 
-  perlStringMkPasswd = import ../development/perl-modules/generic perl {
+  perlStringMkPasswd = buildPerlPackage {
     name = "String-MkPasswd-0.02";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
@@ -5066,7 +5075,7 @@ let
     };
   };
 
-  perlSubUplevel = import ../development/perl-modules/generic perl {
+  perlSubUplevel = buildPerlPackage {
     name = "Sub-Uplevel-0.2002";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Sub-Uplevel-0.2002.tar.gz;
@@ -5074,7 +5083,7 @@ let
     };
   };
 
-  perlSVK = import ../development/perl-modules/generic perl {
+  perlSVK = buildPerlPackage {
     name = "SVK-v2.0.2";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/SVK-v2.0.2.tar.gz;
@@ -5083,7 +5092,7 @@ let
     propagatedBuildInputs = [perlAlgorithmDiff perlAlgorithmAnnotate perlAppCLI perlClassDataInheritable perlDataHierarchy perlEncode perlFileTemp perlIODigest perlListMoreUtils perlPathClass perlPerlIOeol perlPerlIOviadynamic perlPerlIOviasymlink perlPodEscapes perlPodSimple perlSVNMirror perlTimeHiRes perlUNIVERSALrequire perlURI perlYAMLSyck perlClassAutouse perlIOPager perlLocaleMaketextLexicon perlFreezeThaw];
   };
 
-  perlSVNMirror = import ../development/perl-modules/generic perl {
+  perlSVNMirror = buildPerlPackage {
     name = "SVN-Mirror-0.73";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/SVN-Mirror-0.73.tar.gz;
@@ -5092,7 +5101,7 @@ let
     propagatedBuildInputs = [perlClassAccessor perlFilechdir subversion perlURI perlTermReadKey perlTimeDate perlSVNSimple];
   };
 
-  perlSVNSimple = import ../development/perl-modules/generic perl {
+  perlSVNSimple = buildPerlPackage {
     name = "SVN-Simple-0.27";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/SVN-Simple-0.27.tar.gz;
@@ -5101,7 +5110,7 @@ let
     propagatedBuildInputs = [subversion];
   };
 
-  perlTaskCatalystTutorial = import ../development/perl-modules/generic perl {
+  perlTaskCatalystTutorial = buildPerlPackage {
     name = "Task-Catalyst-Tutorial";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JR/JROCKWAY/Task-Catalyst-Tutorial-0.03.tar.gz;
@@ -5124,7 +5133,7 @@ let
     '';
   };
 
-  perlTaskWeaken = import ../development/perl-modules/generic perl {
+  perlTaskWeaken = buildPerlPackage {
     name = "Task-Weaken-1.02";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AD/ADAMK/Task-Weaken-1.02.tar.gz;
@@ -5132,7 +5141,7 @@ let
     };
   };
 
-  perlTemplateTimer = import ../development/perl-modules/generic perl {
+  perlTemplateTimer = buildPerlPackage {
     name = "Template-Timer-0.04";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/Template-Timer-0.04.tar.gz;
@@ -5141,7 +5150,7 @@ let
     propagatedBuildInputs = [perlTemplateToolkit];
   };
 
-  perlTemplateToolkit = import ../development/perl-modules/generic perl {
+  perlTemplateToolkit = buildPerlPackage {
     name = "Template-Toolkit-2.20";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.20.tar.gz;
@@ -5150,7 +5159,7 @@ let
     propagatedBuildInputs = [perlAppConfig];
   };
 
-  perlTermReadKey = import ../development/perl-modules/generic perl {
+  perlTermReadKey = buildPerlPackage {
     name = "TermReadKey-2.30";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.30.tar.gz;
@@ -5158,7 +5167,7 @@ let
     };
   };
 
-  perlTestDeep = import ../development/perl-modules/generic perl {
+  perlTestDeep = buildPerlPackage {
     name = "Test-Deep-0.103";
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FD/FDALY/Test-Deep-0.103.tar.gz;
@@ -5168,7 +5177,7 @@ let
     postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
-  perlTestException = import ../development/perl-modules/generic perl {
+  perlTestException = buildPerlPackage {
     name = "Test-Exception-0.27";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AD/ADIE/Test-Exception-0.27.tar.gz;
@@ -5177,7 +5186,7 @@ let
     propagatedBuildInputs = [perlTestHarness perlTestSimple perlSubUplevel];
   };
 
-  perlTestHarness = import ../development/perl-modules/generic perl {
+  perlTestHarness = buildPerlPackage {
     name = "Test-Harness-3.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AN/ANDYA/Test-Harness-3.10.tar.gz;
@@ -5185,7 +5194,7 @@ let
     };
   };
 
-  perlTestMockObject = import ../development/perl-modules/generic perl {
+  perlTestMockObject = buildPerlPackage {
     name = "Test-MockObject-1.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.09.tar.gz;
@@ -5194,7 +5203,7 @@ let
     propagatedBuildInputs = [perlTestException perlUNIVERSALisa perlUNIVERSALcan];
   };
 
-  perlTestNoWarnings = import ../development/perl-modules/generic perl {
+  perlTestNoWarnings = buildPerlPackage {
     name = "Test-NoWarnings-0.084";
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FD/FDALY/Test-NoWarnings-0.084.tar.gz;
@@ -5203,7 +5212,7 @@ let
     propagatedBuildInputs = [perlTestTester];
   };
 
-  perlTestPod = import ../development/perl-modules/generic perl {
+  perlTestPod = buildPerlPackage {
     name = "Test-Pod-1.26";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/Test-Pod-1.26.tar.gz;
@@ -5211,7 +5220,7 @@ let
     };
   };
 
-  perlTestSimple = import ../development/perl-modules/generic perl {
+  perlTestSimple = buildPerlPackage {
     name = "Test-Simple-0.84";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/Test-Simple-0.84.tar.gz;
@@ -5221,7 +5230,7 @@ let
     postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
-  perlTestTester = import ../development/perl-modules/generic perl {
+  perlTestTester = buildPerlPackage {
     name = "Test-Tester-0.107";
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.107.tar.gz;
@@ -5230,7 +5239,7 @@ let
     postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
-  perlTestWarn = import ../development/perl-modules/generic perl {
+  perlTestWarn = buildPerlPackage {
     name = "Test-Warn-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.11.tar.gz;
@@ -5239,7 +5248,7 @@ let
     propagatedBuildInputs = [perlTestSimple perlTestException perlArrayCompare perlTreeDAGNode];
   };
 
-  perlTextSimpleTable = import ../development/perl-modules/generic perl {
+  perlTextSimpleTable = buildPerlPackage {
     name = "Text-SimpleTable-0.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SR/SRI/Text-SimpleTable-0.05.tar.gz;
@@ -5247,7 +5256,7 @@ let
     };
   };
 
-  perlTieUseOk = import ../development/perl-modules/generic perl {
+  perlTieUseOk = buildPerlPackage {
     name = "Test-use-ok-0.02";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.02.tar.gz;
@@ -5255,7 +5264,7 @@ let
     };
   };
 
-  perlTieToObject = import ../development/perl-modules/generic perl {
+  perlTieToObject = buildPerlPackage {
     name = "Tie-ToObject-0.03";
     src = fetchurl {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz;
@@ -5264,7 +5273,7 @@ let
     propagatedBuildInputs = [perlTieUseOk];
   };
 
-  perlTimeDate = import ../development/perl-modules/generic perl {
+  perlTimeDate = buildPerlPackage {
     name = "TimeDate-1.16";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-1.16.tar.gz;
@@ -5273,7 +5282,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlTimeHiRes = import ../development/perl-modules/generic perl {
+  perlTimeHiRes = buildPerlPackage {
     name = "Time-HiRes-1.9715";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JH/JHI/Time-HiRes-1.9715.tar.gz;
@@ -5282,7 +5291,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlTreeDAGNode = import ../development/perl-modules/generic perl {
+  perlTreeDAGNode = buildPerlPackage {
     name = "Tree-DAG_Node-1.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CO/COGENT/Tree-DAG_Node-1.06.tar.gz;
@@ -5290,7 +5299,7 @@ let
     };
   };
 
-  perlTreeSimple = import ../development/perl-modules/generic perl {
+  perlTreeSimple = buildPerlPackage {
     name = "Tree-Simple-1.18";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STEVAN/Tree-Simple-1.18.tar.gz;
@@ -5299,7 +5308,7 @@ let
     propagatedBuildInputs = [perlTestException];
   };
 
-  perlTreeSimpleVisitorFactory = import ../development/perl-modules/generic perl {
+  perlTreeSimpleVisitorFactory = buildPerlPackage {
     name = "Tree-Simple-VisitorFactory-0.10";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STEVAN/Tree-Simple-VisitorFactory-0.10.tar.gz;
@@ -5309,11 +5318,15 @@ let
     buildInputs = [perlTestException];
   };
 
-  perlFontTTF = import ../development/perl-modules/Font-TTF {
-    inherit fetchurl perl;
+  perlFontTTF = buildPerlPackage {
+    name = "perl-Font-TTF-0.43";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-0.43.tar.gz;
+      sha256 = "0782mj5n5a2qbghvvr20x51llizly6q5smak98kzhgq9a7q3fg89";
+    };
   };
 
-  perlUNIVERSALcan = import ../development/perl-modules/generic perl {
+  perlUNIVERSALcan = buildPerlPackage {
     name = "UNIVERSAL-can-1.12";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-can-1.12.tar.gz;
@@ -5321,7 +5334,7 @@ let
     };
   };
 
-  perlUNIVERSALisa = import ../development/perl-modules/generic perl {
+  perlUNIVERSALisa = buildPerlPackage {
     name = "UNIVERSAL-isa-1.00";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-isa-1.00_00.tar.gz;
@@ -5329,7 +5342,7 @@ let
     };
   };
 
-  perlUNIVERSALrequire = import ../development/perl-modules/generic perl {
+  perlUNIVERSALrequire = buildPerlPackage {
     name = "UNIVERSAL-require-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
@@ -5337,7 +5350,7 @@ let
     };
   };
 
-  perlURI = import ../development/perl-modules/generic perl {
+  perlURI = buildPerlPackage {
     name = "URI-1.35";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.35.tar.gz;
@@ -5345,7 +5358,7 @@ let
     };
   };
 
-  perlXMLDOM = import ../development/perl-modules/generic perl {
+  perlXMLDOM = buildPerlPackage {
     name = "XML-DOM-1.44";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
@@ -5355,7 +5368,7 @@ let
     propagatedBuildInputs = [perlXMLRegExp perlXMLParser perlLWP];
   };
 
-  perlXMLLibXML = import ../development/perl-modules/generic perl {
+  perlXMLLibXML = buildPerlPackage {
     name = "XML-LibXML-1.66";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PA/PAJAS/XML-LibXML-1.66.tar.gz;
@@ -5365,7 +5378,7 @@ let
     propagatedBuildInputs = [perlXMLLibXMLCommon perlXMLSAX];
   };
 
-  perlXMLLibXMLCommon = import ../development/perl-modules/generic perl {
+  perlXMLLibXMLCommon = buildPerlPackage {
     name = "XML-LibXML-Common-0.13";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PH/PHISH/XML-LibXML-Common-0.13.tar.gz;
@@ -5374,7 +5387,7 @@ let
     buildInputs = [libxml2];
   };
 
-  perlXMLNamespaceSupport = import ../development/perl-modules/generic perl {
+  perlXMLNamespaceSupport = buildPerlPackage {
     name = "XML-NamespaceSupport-1.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RB/RBERJON/XML-NamespaceSupport-1.09.tar.gz;
@@ -5383,11 +5396,16 @@ let
     buildInputs = [];
   };
 
-  perlXMLParser = import ../development/perl-modules/XML-Parser {
-    inherit fetchurl perl expat;
+  perlXMLParser = buildPerlPackage {
+    name = "XML-Parser-2.36";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-Parser-2.36.tar.gz;
+      sha256 = "0gyp5qfbflhkin1zv8l6wlkjwfjvsf45a3py4vc6ni82fj32kmcz";
+    };
+    makeMakerFlags = "EXPATLIBPATH=${expat}/lib EXPATINCPATH=${expat}/include"; 
   };
 
-  perlXMLRegExp = import ../development/perl-modules/generic perl {
+  perlXMLRegExp = buildPerlPackage {
     name = "XML-RegExp-0.03";
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-RegExp-0.03.tar.gz;
@@ -5395,7 +5413,7 @@ let
     };
   };
 
-  perlXMLSAX = import ../development/perl-modules/generic perl {
+  perlXMLSAX = buildPerlPackage {
     name = "XML-SAX-0.96";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-0.96.tar.gz;
@@ -5404,7 +5422,7 @@ let
     propagatedBuildInputs = [perlXMLNamespaceSupport];
   };
 
-  perlXMLSimple = import ../development/perl-modules/generic perl {
+  perlXMLSimple = buildPerlPackage {
     name = "XML-Simple-2.18";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.18.tar.gz;
@@ -5413,7 +5431,7 @@ let
     propagatedBuildInputs = [perlXMLParser];
   };
 
-  perlXMLTwig = import ../development/perl-modules/generic perl {
+  perlXMLTwig = buildPerlPackage {
     name = "XML-Twig-3.32";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.32.tar.gz;
@@ -5422,7 +5440,7 @@ let
     propagatedBuildInputs = [perlXMLParser];
   };
 
-  perlXMLWriter = import ../development/perl-modules/generic perl {
+  perlXMLWriter = buildPerlPackage {
     name = "XML-Writer-0.602";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
@@ -5430,7 +5448,7 @@ let
     };
   };
 
-  perlXSLoader = import ../development/perl-modules/generic perl {
+  perlXSLoader = buildPerlPackage {
     name = "XSLoader-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
@@ -5439,7 +5457,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlYAML = import ../development/perl-modules/generic perl {
+  perlYAML = buildPerlPackage {
     name = "YAML-0.66";
     src = fetchurl {
       url = mirror://cpan/authors/id/I/IN/INGY/YAML-0.66.tar.gz;
@@ -5448,7 +5466,7 @@ let
     propagatedBuildInputs = [];
   };
 
-  perlYAMLSyck = import ../development/perl-modules/generic perl {
+  perlYAMLSyck = buildPerlPackage {
     name = "YAML-Syck-1.04";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/YAML-Syck-1.04.tar.gz;
