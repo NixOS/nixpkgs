@@ -6,7 +6,6 @@ let
   commonLinuxPkgs = system: let pkgs = allPackages {inherit system;}; in {
     inherit (pkgs)
       MPlayer
-      MPlayerPlugin
       abcde
       alsaUtils
       apacheHttpd
