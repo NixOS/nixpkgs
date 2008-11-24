@@ -470,6 +470,10 @@ let
     inherit pkgs;
   };
 
+  releaseTools = import ../build-support/release/default.nix {
+    inherit pkgs;
+  };
+
 
   ### TOOLS
 
