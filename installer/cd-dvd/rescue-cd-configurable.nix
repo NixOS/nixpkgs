@@ -153,7 +153,6 @@ rec {
       kernelModules = bootKernelModules;
       extraModulePackages = ((extraModulePackages pkgs)
       ++(if aufs then [(kernelPackages pkgs).aufs] else [])
-      ++(pkgs.lib.optional intel3945FWEnable (kernelPackages pkgs).iwlwifi)
       );
     };
     
