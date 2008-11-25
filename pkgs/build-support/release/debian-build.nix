@@ -1,7 +1,5 @@
 # This function compiles a source tarball in a virtual machine image
-# that contains a Debian-like (i.e. dpkg-based) OS.  Currently this is
-# just for portability testing: it doesn't produce any Debian
-# packages.
+# that contains a Debian-like (i.e. dpkg-based) OS.
 
 {vmTools, fetchurl}: args: with args;
 
@@ -73,7 +71,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     ''; # */
 
     meta = {
-      description = "Test build on ${args.diskImage.fullName} (${args.diskImage.name})";
+      description = "Build of a Deb package on ${args.diskImage.fullName} (${args.diskImage.name})";
     };
   }
 
