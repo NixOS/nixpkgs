@@ -863,6 +863,10 @@ rec {
     "patch"
     "diff"
     "locales"
+    # Needed by checkinstall:
+    "util-linux" 
+    "file"
+    "dpkg-dev"
   ];
 
 

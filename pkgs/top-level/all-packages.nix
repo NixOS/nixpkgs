@@ -572,6 +572,10 @@ let
     inherit fetchurl stdenv cmake libcap zlib bzip2;
   };
 
+  checkinstall = import ../tools/package-management/checkinstall {
+    inherit fetchurl stdenv gettext;
+  };
+
   cheetahTemplate = builderDefsPackage (selectVersion ../tools/text/cheetah-template "2.0.1") {
     inherit makeWrapper python;
   };
