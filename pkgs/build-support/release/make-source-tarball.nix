@@ -12,7 +12,7 @@ let
   versionSuffix =
     if officialRelease
     then ""
-    else if src ? rev then "-pre${toString src.rev}" else "";
+    else if src ? rev then "pre${toString src.rev}" else "";
 
 in
 
