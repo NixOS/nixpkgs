@@ -84,7 +84,7 @@ stdenv.mkDerivation (
 
 
     meta = {
-      description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build";
+      description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
     };
 
   }
