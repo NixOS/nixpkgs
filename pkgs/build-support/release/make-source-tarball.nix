@@ -89,6 +89,10 @@ stdenv.mkDerivation (
       for i in $out/tarballs/*; do
         echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
+
+      # Try to figure out the release name.
+      releaseName=$( (cd $out/tarballs && ls) | head -n 1 | sed -e 's^\.[a-z].*^^')
+      test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     ''; # */
 
     passthru = {inherit src;};
