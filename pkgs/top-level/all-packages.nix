@@ -4773,6 +4773,14 @@ let
     };
   };
 
+  perlIPCRun = buildPerlPackage {
+    name = "IPC-Run-0.80";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RS/RSOD/IPC-Run-0.80.tar.gz;
+      sha256 = "1lb0skp093ikkjg125l2f8lw7jzawmy4x7h1azgcs0d5miy8apj4";
+    };
+  };
+
   perlJSON = buildPerlPackage {
     name = "JSON-2.12";
     src = fetchurl {
