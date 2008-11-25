@@ -17,4 +17,10 @@ rec {
       doCoverageAnalysis = true;
     } // args);
 
+  rpmBuild = args: import ./rpm-build.nix vmTools args;
+
+  debBuild = args: import ./debian-build.nix vmTools (
+    { inherit stdenv;
+    } // args);
+
 }

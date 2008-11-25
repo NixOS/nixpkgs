@@ -233,6 +233,15 @@ rec {
   '';
 
 
+  modifyDerivation = f: attrs:
+    let attrsCleaned = removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"];
+        newDrv = derivation (attrsCleaned // (f attrs));
+    in newDrv //
+      { meta = if attrs ? meta then attrs.meta else {};
+        passthru = if attrs ? passthru then attrs.passthru else {};
+      };
+
+
   /* Run a derivation in a Linux virtual machine (using Qemu/KVM).  By
      default, there is no disk image; the root filesystem is a tmpfs,
      and /nix/store is shared with the host (via the CIFS protocol to
@@ -254,7 +263,7 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
      
-  runInLinuxVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
+  runInLinuxVM = modifyDerivation (attrs: {
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
@@ -289,7 +298,7 @@ rec {
      - Reboot to shutdown the machine (because Qemu doesn't seem
        capable of a APM/ACPI VM shutdown).
   */
-  runInGenericVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
+  runInGenericVM = modifyDerivation (attrs: {
     system = "i686-linux";
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandGeneric)];
