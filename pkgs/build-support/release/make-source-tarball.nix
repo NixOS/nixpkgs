@@ -2,7 +2,19 @@
 # checkout from a Subversion or CVS repository) into a source tarball
 # by running `autoreconf', `configure' and `make dist'.
 
-args: with args;
+{ officialRelease ? false
+, buildInputs ? []
+, src, stdenv, autoconf, automake, libtool
+, ...} @ args:
+
+let
+
+  versionSuffix =
+    if officialRelease
+    then ""
+    else if src ? rev then "-pre${toString src.rev}" else "";
+
+in
 
 stdenv.mkDerivation (
 
@@ -32,9 +44,7 @@ stdenv.mkDerivation (
   {
     src = src.path;
 
-    buildInputs =
-      stdenv.lib.optionals (args ? buildInputs) args.buildInputs ++
-      [autoconf automake];
+    buildInputs = buildInputs ++ [autoconf automake];
     
     postHook = ''
       ensureDir $out/nix-support
@@ -53,18 +63,10 @@ stdenv.mkDerivation (
 
     nextPostUnpack = if args ? postUnpack then args.postUnpack else "";
 
-    preConfigure = ''
-      # Some packages1 use the file `svn-revision' to construct the
-      # release name.
-      rev="${if src ? rev then toString src.rev else ""}"
-      if test -n "$rev"; then echo "$rev" > svn-revision; fi
-      eval "$nextPreConfigure"
-    '';
-
-    nextPreConfigure = if args ? preConfigure then args.preConfigure else "";
-
     # Autoconfiscate the sources.
     autoconfPhase = ''
+      export VERSION_SUFFIX=${versionSuffix}
+    
       eval "$preAutoconf"
     
       if test -f ./bootstrap; then ./bootstrap
