@@ -69,7 +69,7 @@ sub closePackage {
     
     my $pkg = $pkgs{$pkgName} or die "package $pkgName doesn't exist";
 
-    my $requires = $pkg->{format}->{'rpm:requires'}->{'rpm:entry'} or die;
+    my $requires = $pkg->{format}->{'rpm:requires'}->{'rpm:entry'} || [];
 
     my @deps = ();
     foreach my $req (@{$requires}) {
