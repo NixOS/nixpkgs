@@ -20,6 +20,8 @@ args.stdenv.mkDerivation {
                     # fcron would have been default user/grp
                     "--with-username=root"
                     "--with-groupname=root"
+                    # fcron must not try to verify that sendmail has already been installed int /var/setuid-wrappers/sendmail
+                    "--disable-checks"
                   ];
   installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
   preConfigure = ''
@@ -32,6 +34,7 @@ args.stdenv.mkDerivation {
 
     # also don't use chown or chgrp for documentation (or whatever) when installing
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
+
   '';
 
   patchPhase = ''
