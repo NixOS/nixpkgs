@@ -3074,7 +3074,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  intltool = composedArgsAndFun (selectVersion ../development/tools/misc/intltool "0.36.2") {
+  intltool = composedArgsAndFun (selectVersion ../development/tools/misc/intltool "0.40.5") {
     inherit fetchurl stdenv lib builderDefs stringsWithDeps
       perl perlXMLParser;
   };
