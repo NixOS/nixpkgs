@@ -97,7 +97,7 @@ stdenv.mkDerivation (
 
     passthru = {inherit src;};
 
-    meta = {
+    meta = (if args ? meta then args.meta else {}) // {
       description = "Build of a source distribution from a checkout";
     };
   

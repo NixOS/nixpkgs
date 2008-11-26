@@ -83,7 +83,7 @@ stdenv.mkDerivation (
     '' else "";
 
 
-    meta = {
+    meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
     };
 

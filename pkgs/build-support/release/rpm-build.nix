@@ -33,7 +33,7 @@ vmTools.buildRPM (
       done
     ''; # */
 
-    meta = {
+    meta = (if args ? meta then args.meta else {}) // {
       description = "Build of an RPM package on ${args.diskImage.fullName} (${args.diskImage.name})";
     };
   }
