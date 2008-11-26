@@ -44,7 +44,7 @@ stdenv.mkDerivation (
   {
     src = src.path;
 
-    buildInputs = buildInputs ++ [autoconf automake];
+    buildInputs = buildInputs ++ [autoconf automake libtool];
     
     postHook = ''
       ensureDir $out/nix-support
