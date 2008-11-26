@@ -5929,7 +5929,11 @@ let
     inherit fetchurl stdenv;
   };
 
-  iwlwifi4965ucode = import ../os-specific/linux/firmware/iwlwifi-4965-ucode {
+  iwlwifi4965ucodeV1 = import ../os-specific/linux/firmware/iwlwifi-4965-ucode {
+    inherit fetchurl stdenv;
+  };
+
+  iwlwifi4965ucodeV2 = import ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix {
     inherit fetchurl stdenv;
   };
 
@@ -6261,6 +6265,12 @@ let
     iwlwifi = import ../os-specific/linux/iwlwifi {
       inherit fetchurl stdenv kernel;
     };
+
+    iwlwifi4965ucode =
+      (if (builtins.compareVersions kernel.version "2.6.27" == 0)
+          || (builtins.compareVersions kernel.version "2.6.27" == 1)
+       then iwlwifi4965ucodeV2
+       else iwlwifi4965ucodeV1);
 
     atheros = composedArgsAndFun (selectVersion ../os-specific/linux/atheros "0.9.4") {
       inherit fetchurl stdenv builderDefs kernel lib;
@@ -7387,6 +7397,7 @@ let
     inherit fetchurl stdenv lzma pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs;
     inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    xulrunner = icecatXulrunner3;
   });
 
   icecatXulrunner3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
