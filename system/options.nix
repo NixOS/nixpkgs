@@ -3035,7 +3035,7 @@ root        ALL=(ALL) SETENV: ALL
 
     # services
     (import ../upstart-jobs/cron.nix)
-    #(import ../upstart-jobs/fcron.nix)
+    (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)
   ];
 }
