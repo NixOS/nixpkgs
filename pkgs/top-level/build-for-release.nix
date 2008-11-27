@@ -84,6 +84,7 @@ let
       gzip
       hal
       hello
+      host
       iana_etc
       imagemagick
       inkscape
