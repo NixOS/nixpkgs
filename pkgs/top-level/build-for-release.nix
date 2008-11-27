@@ -181,6 +181,7 @@ let
       vim
       vlc
       vorbisTools
+      vpnc
       w3m
       wget
       wirelesstools
