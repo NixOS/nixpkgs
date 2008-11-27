@@ -185,6 +185,7 @@ rec {
     pkgs.gnutar
     pkgs.grub
     pkgs.gzip
+    pkgs.host
     pkgs.iputils
     pkgs.less
     pkgs.lvm2
