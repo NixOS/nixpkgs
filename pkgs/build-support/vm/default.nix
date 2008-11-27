@@ -461,6 +461,14 @@ rec {
       srcName="$strippedName"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
+      export HOME=/tmp/home
+      mkdir $HOME
+
+      rpmout=/tmp/rpmout
+      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
+
+      echo "%_topdir $rpmout" >> $HOME/.rpmmacros
+      
       rpmbuild -vv -ta "$srcName"
 
       eval "$postBuild"
@@ -470,7 +478,7 @@ rec {
       eval "$preInstall"
     
       ensureDir $out/$outDir
-      find /usr/src -name "*.rpm" -exec cp {} $out/$outDir \;
+      find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
         header "Generated RPM/SRPM: $i"
