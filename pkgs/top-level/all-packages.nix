@@ -1217,7 +1217,8 @@ let
   };
 
   vpnc = import ../tools/networking/vpnc {
-    inherit fetchurl stdenv libgcrypt perl which nettools makeWrapper;
+    inherit fetchurl stdenv libgcrypt perl gawk
+      nettools makeWrapper;
   };
 
   testdisk = import ../tools/misc/testdisk {
