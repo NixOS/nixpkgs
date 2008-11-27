@@ -43,7 +43,8 @@ rec {
   # directory.
   modulesTree = pkgs.aggregateModules (
     [kernel]
-    ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
+    # Merged into mainline kernel
+    # ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
     # !!! this should be declared by the xserver Upstart job.
     ++ pkgs.lib.optional (config.services.xserver.enable && config.services.xserver.videoDriver == "nvidia") kernelPackages.nvidiaDrivers
     ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
