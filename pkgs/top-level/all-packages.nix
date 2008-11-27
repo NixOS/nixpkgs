@@ -867,6 +867,10 @@ let
     inherit getopt;
   };
 
+  host = import ../tools/networking/host {
+    inherit fetchurl stdenv;
+  };
+
   /*
   hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
     inherit builderDefs stdenv fetchurl libdbi libdbiDrivers fuse
