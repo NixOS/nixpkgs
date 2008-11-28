@@ -10,12 +10,12 @@ let version = "20000331"; in
     };
 
     preConfigure = ''
-      substituteInPlace "Makefile" \
-        --replace "/usr/local" "$out" \
-        --replace '-o $(OWNER) -g $(GROUP)' ""
-
+      makeFlagsArray=(DESTBIN=$out/bin DESTMAN=$out/share/man OWNER=$(id -u) GROUP=$(id -g))
       ensureDir "$out/bin"
+      ensureDir "$out/share/man"
     '';
+
+    installTargets = "install man";
 
     meta = {
       description = "`host', a DNS resolution utility";
