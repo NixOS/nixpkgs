@@ -12,7 +12,7 @@ let version = "20000331"; in
     preConfigure = ''
       makeFlagsArray=(DESTBIN=$out/bin DESTMAN=$out/share/man OWNER=$(id -u) GROUP=$(id -g))
       ensureDir "$out/bin"
-      ensureDir "$out/share/man"
+      ensureDir "$out/share/man/man1"
     '';
 
     installTargets = "install man";
