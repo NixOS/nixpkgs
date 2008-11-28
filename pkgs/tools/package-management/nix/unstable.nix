@@ -4,14 +4,14 @@
 , supportOldDBs ? true
 }:
 
-let version = "0.13pre13362"; in
+let version = "0.13pre13403"; in
 
 stdenv.mkDerivation {
   name = "nix-${version}";
   
   src = fetchurl {
-    url = "http://nixos.org/releases/nix/nix-${version}-s1rvr333/nix-${version}.tar.bz2";
-    sha256 = "cf80f5c98c61ec4e271c2a7bde1fb3d36318d1ae8c49fdf91818af150a5d0b47";
+    url = "http://nixos.org/releases/nix/nix-${version}-a84h5996/nix-${version}.tar.bz2";
+    sha256 = "81169cc6448fff2e1f72464fb537d6db0d386d303869346fea2433b04181cc7b";
   };
 
   buildInputs = [perl curl openssl];
