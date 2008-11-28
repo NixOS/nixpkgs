@@ -5178,6 +5178,10 @@ let
       sha256 = "13wbh06a76k4ag14lhszmpwv4hb8hlj1d9glizhp8izazl3xf1zg";
     };
     propagatedBuildInputs = [perlAppConfig];
+    patches = [
+      # Needed to make TT works properly on templates in the Nix store.
+      ../development/perl-modules/template-toolkit-nix-store.patch
+    ];
   };
 
   perlTermReadKey = buildPerlPackage {
