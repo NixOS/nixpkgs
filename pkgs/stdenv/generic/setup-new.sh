@@ -255,7 +255,7 @@ stripDirs() {
 
     if test -n "${dirs}"; then
         header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+        find $dirs -type f -print0 | xargs -0 -r strip $stripFlags || true
         stopNest
     fi
 }
@@ -713,7 +713,7 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-        stripDebugList=${stripDebugList:-lib bin sbin}
+        stripDebugList=${stripDebugList:-lib libexec bin sbin}
         if test -n "$stripDebugList"; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
