@@ -34,7 +34,8 @@ stdenv.mkDerivation (
 
     showBuildStats = true;
 
-    phases = "unpackPhase patchPhase autoconfPhase configurePhase buildPhase installPhase checkPhase distPhase";
+    preConfigurePhases = "autoconfPhase";
+    postPhases = "finalPhase";
   }
 
   # Then, the caller-supplied attributes.
@@ -84,7 +85,7 @@ stdenv.mkDerivation (
     # Cause distPhase to copy tar.bz2 in addition to tar.gz.
     tarballs = "*.tar.gz *.tar.bz2";
 
-    postDist = ''
+    finalPhase = ''
       shopt -s nullglob
       for i in $out/tarballs/*; do
         echo "file source-dist $i" >> $out/nix-support/hydra-build-products

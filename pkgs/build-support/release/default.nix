@@ -4,8 +4,10 @@ with pkgs;
 
 rec {
 
-  makeSourceTarball = args: import ./make-source-tarball.nix
-    ({inherit stdenv autoconf automake libtool;} // args);
+  makeSourceTarball = args: import ./make-source-tarball.nix (
+    { inherit autoconf automake libtool;
+      stdenv = stdenvNew;
+    } // args);
 
   nixBuild = args: import ./nix-build.nix (
     { inherit stdenv;
