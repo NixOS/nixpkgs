@@ -639,7 +639,8 @@ in
         default = false;
         description = ''
           Whether to make /var/spool/at{jobs,spool} writeable 
-          by everyone (and sticky).
+          by everyone (and sticky).  This is normally not needed since
+          the `at' commands are setuid/setgid `atd'.
         '';
       };
     };

@@ -48,7 +48,7 @@ start script
    if [ ! -f "$etcdir"/at.deny ]
    then
        touch "$etcdir"/at.deny && \
-       chown root:root "$etcdir"/at.deny && \
+       chown root:atd "$etcdir"/at.deny && \
        chmod 640 "$etcdir"/at.deny
    fi
    if [ ! -f "$jobdir"/.SEQ ]

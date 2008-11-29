@@ -302,7 +302,15 @@ rec {
         chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
         chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program} 
       '') 
-      config.security.setuidOwners);
+      (config.security.setuidOwners ++
+
+       # The `at' commands must be setuid `atd' so they can access the files
+       # under `/etc/at', etc.
+       (if config.services.atd.enable
+        then (map (program: { inherit program; owner = "atd"; group = "atd";
+                             setuid = true; setgid = true; })
+                  [ "at" "atq" "atrm" ])
+        else [])));
   };
 
 
