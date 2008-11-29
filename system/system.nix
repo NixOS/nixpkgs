@@ -186,7 +186,6 @@ rec {
     pkgs.gnutar
     pkgs.grub
     pkgs.gzip
-    pkgs.host
     pkgs.iputils
     pkgs.less
     pkgs.lvm2
@@ -231,7 +230,15 @@ rec {
   # chroot gets to seem them, and (ii) applications can benefit from
   # changes in the list of NSS modules at run-time, without requiring
   # a reboot.
-  ++ nssModules;
+  ++ nssModules
+
+  # These packages are nice fallbacks unless any of the more powerful 
+  # substitutes is present.
+  ++ [
+    # Use ISC BIND version of the host util if you don't mind installing BIND
+    pkgs.host
+  ]
+  ;
 
   
   # We don't want to put all of `startPath' and `path' in $PATH, since
