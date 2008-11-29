@@ -11,6 +11,7 @@ let
       apacheHttpd
       aspell
       aspellDicts
+      at
       audacious
       audacious_plugins
       autoconf
