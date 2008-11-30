@@ -2674,6 +2674,11 @@ let
     inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype;
   };
 
+  chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
+    inherit cmake freeglut mesa;
+    inherit (xlibs) libX11 xproto inputproto libXi libXmu;
+  };
+
   chmlib = import ../development/libraries/chmlib {
     inherit fetchurl stdenv;
   };
