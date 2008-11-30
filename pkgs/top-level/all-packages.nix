@@ -5678,6 +5678,10 @@ let
     inherit fetchurl stdenv apacheHttpd python;
   };
 
+  nginx = builderDefsPackage (import ../servers/http/nginx) {
+    inherit openssl pcre zlib libxml2 libxslt;
+  };
+
   postfix = import ../servers/mail/postfix {
     inherit fetchurl stdenv db4 openssl cyrus_sasl;
     glibc = stdenv.glibc;
