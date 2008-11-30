@@ -2,6 +2,9 @@ let
 
   allPackages = import ./all-packages.nix;
 
+  test = f: {system}: f (allPackages {inherit system;});
+  
+
   jobs = {
 
   
@@ -79,12 +82,19 @@ let
       };
 
 
-      inherit (allPackages {system = "i686-linux";})
-        bash
-        gcc
-        ;
-      hello = {system}: (allPackages {inherit system;}).hello;
-      pan = {system}: (allPackages {inherit system;}).pan;
+      # All the top-level packages that want to build in the build farm.
+      # !!! notation is kinda clumsy
+
+      MPlayer = test (pkgs: pkgs.MPlayer);
+      autoconf = test (pkgs: pkgs.autoconf);
+      bash = test (pkgs: pkgs.bash);
+      firefox3 = test (pkgs: pkgs.firefox3);
+      gcc = test (pkgs: pkgs.gcc);
+      hello = test (pkgs: pkgs.hello);
+      libtool = test (pkgs: pkgs.libtool);
+      pan = test (pkgs: pkgs.pan);
+      perl = test (pkgs: pkgs.perl);
+      python = test (pkgs: pkgs.python);
               
   };
 
