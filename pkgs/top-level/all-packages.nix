@@ -3523,6 +3523,9 @@ let
     inherit fetchurl stdenv perl zip;
   };
 
+  ode = builderDefsPackage (import ../development/libraries/ode) {
+  };
+
   openal = import ../development/libraries/openal {
     inherit fetchurl stdenv cmake alsaLib;
   };
@@ -6652,6 +6655,12 @@ let
 
   xfsProgs = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
     inherit libtool gettext e2fsprogs;
+  };
+
+  xmoto = builderDefsPackage (import ../games/xmoto) {
+    inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
+      freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
+      lua5 ode;
   };
 
   xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
