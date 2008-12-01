@@ -4,6 +4,10 @@
 , db4 ? null
 , readline ? null
 , openssl ? null
+, tk ? null
+, tcl ? null
+, libX11 ? null
+, xproto ? null
 }:
 
 assert zlibSupport -> zlib != null;
@@ -22,6 +26,10 @@ let
     ++ optional (db4 != null) db4
     ++ optional (readline != null) readline
     ++ optional (openssl != null) openssl
+    ++ optional (tk != null) tk
+    ++ optional (tcl != null) tcl
+    ++ optional (libX11 != null) libX11
+    ++ optional (xproto != null) xproto
     ;
 
 in
@@ -66,6 +74,7 @@ stdenv.mkDerivation {
     db4Support = db4 != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
+    tkSupport = (tk != null) && (tcl != null);
     libPrefix = "python2.5";
   };
 }

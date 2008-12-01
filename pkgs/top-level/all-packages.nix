@@ -2075,6 +2075,10 @@ let
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] true then readline else null;
     openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
+    tk = if getConfig ["python" "tkSupport"] true then tk else null;
+    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
+    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
+    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
   };
 
   pyrex = pyrex095;
