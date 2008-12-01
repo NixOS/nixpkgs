@@ -95,6 +95,8 @@ let
       pan = test (pkgs: pkgs.pan);
       perl = test (pkgs: pkgs.perl);
       python = test (pkgs: pkgs.python);
+      thunderbird = test (pkgs: pkgs.thunderbird);
+      wine = test (pkgs: pkgs.wine);
               
   };
 
