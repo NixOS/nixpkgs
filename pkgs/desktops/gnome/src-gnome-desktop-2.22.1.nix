@@ -193,9 +193,13 @@
   gnomeicontheme = {
     name = "gnome-icon-theme-2.22.0";
     src = fetchurl {
-      url = http://ftp.gnome.org/pub/GNOME/desktop/2.22/2.22.1/sources/gnome-icon-theme-2.22.0.tar.bz2;
-      md5 = "a4c03092da28ad53ed3867aef83f29d9";
+      url = http://ftp.gnome.org/pub/GNOME/desktop/2.25/2.25.1/sources/gnome-icon-theme-2.24.0.tar.bz2;
+      sha256 = "1ciid3p21n5m2ixdc7b6sqjvw68pzg1adxljrcy7snnnxbwqj7xp";
     };
+    #src = fetchurl {
+    #  url = http://ftp.gnome.org/pub/GNOME/desktop/2.22/2.22.1/sources/gnome-icon-theme-2.22.0.tar.bz2;
+    #  md5 = "a4c03092da28ad53ed3867aef83f29d9";
+    #};
   };
   gnomekeyring = {
     name = "gnome-keyring-2.22.1";

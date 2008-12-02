@@ -155,6 +155,7 @@ rec {
   gnomeicontheme = import ./gnome-icon-theme.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser
       iconnamingutils gettext;
+    inherit (args) intltool;
     input = desktop.gnomeicontheme;
   };
 
