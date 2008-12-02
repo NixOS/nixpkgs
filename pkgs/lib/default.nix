@@ -614,6 +614,7 @@ rec {
       takeTillSlash (__sub (__stringLength s) 1) 1 s;
 
   # calls a function (f attr value ) for each record item. returns a list
+  # should be renamed to mapAttrsFlatten
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # maps a function on each attr value
@@ -661,6 +662,7 @@ rec {
   # { buildInputs = [a b]; }
   # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
   # in these cases the first buildPhase will override the second one
+  # ! depreceated, use mergeAttrByFunc instead
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
                            overrideSnd ? [ "buildPhase" ]
                          } : attrs1 : attrs2 :
@@ -685,6 +687,7 @@ rec {
       subset_attr_names );
 
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
+# depreceated because it's too complicated. use prepareDerivationArgs instead
 
   # usage / example
   # flagConfig = {
