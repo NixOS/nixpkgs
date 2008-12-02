@@ -2979,7 +2979,7 @@ let
     inherit fetchurl stdenv m4;
   };
 
-  goocanvas = import ../developement/libraries/goocanvas {
+  goocanvas = import ../development/libraries/goocanvas {
     inherit fetchurl stdenv pkgconfig cairo;
     inherit (gnome) gtk glib;
   };
