@@ -81,8 +81,8 @@ rec {
 
     
   # Concatenate a list of lists.
-  concatLists =
-    fold (x: y: x ++ y) [];
+  concatList = x : y : x ++ y;
+  concatLists = fold concatList [];
 
 
   # Concatenate a list of strings.
@@ -636,7 +636,8 @@ rec {
   # iterates over a list of attributes collecting the attribute attr if it exists
   catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
 
-  mergeAttrs = fold ( x : y : x // y) {};
+  mergeAttr = x : y : x // y;
+  mergeAttrs = fold mergeAttr {};
 
   attrVals = nameList : attrSet :
     map (x: builtins.getAttr x attrSet) nameList;
