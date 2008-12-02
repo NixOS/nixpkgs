@@ -43,7 +43,24 @@ rec {
     let arg=(merger init (defaultMergeArg init x)); in  
       # now add the function with composed args already applied to the final attrs
     setAttrMerge "passthru" {} (f arg) ( x : x // { function = foldArgs merger f arg; } );
- 
+
+  # returns f x // { passthru.fun = y : f (merge x y); } while preserving other passthru names.
+  # example: let ex = applyAndFun (x : removeAttrs x ["fixed"])  (mergeOrApply mergeAttr) {name = 6;};
+  #              usage1 = ex.passthru.fun { name = 7; };    # result: { name = 7;}
+  #              usage2 = ex.passthru.fun (a: a // {name = __add a.name 1; }); # result: { a = 7; }
+  # fix usage:
+  #              usage3a = ex.passthru.fun (a: a // {name2 = a.fixed.toBePassed; }); # usage3a will fail because toBePassed is not yet given
+  #              usage3b usage3a.passthru.fun { toBePassed = "foo";}; # result { name = 7; name2 = "foo"; toBePassed = "foo"; fixed = <this attrs>; }
+  applyAndFun = f : merge : x : assert (__isAttrs x || __isFunction x);
+    let takeFix = if (__isFunction x) then x else (attr: merge attr x); in
+    setAttrMerge "passthru" {} (fix (fixed : f (takeFix {inherit fixed;})))
+      ( y : y //
+        {
+          fun = z : applyAndFun f merge (fixed: merge (takeFix fixed) z);
+          funMerge = z : applyAndFun f merge (fixed: let e = takeFix fixed; in e // merge e z);
+        } );
+  mergeOrApply = merge : x : y : if (__isFunction y) then  y x else merge x y;
+
   # rec { # an example of how composedArgsAndFun can be used
   #  a  = composedArgsAndFun (x : x) { a = ["2"]; meta = { d = "bar";}; };
   #  # meta.d will be lost ! It's your task to preserve it (eg using a merge function)
@@ -770,7 +787,7 @@ rec {
                   else throw "assertion of flag ${a} of derivation ${args.name} failed"
                ) args2.flags );
     in removeAttrs
-      (fold (mergeOrApply mergeAttrByFunc) {} ([args] ++ opts))
+      (mergeAttrsByFunc ([args] ++ opts))
       ["flags" "cfg" "mergeAttrBy" "fixed" ]; # fixed may be passed as fix argument or such
   # supportFlag functions for convinience
   sFlagEnable = { name, buildInputs ? [], propagatedBuildInputs ? [] } : {

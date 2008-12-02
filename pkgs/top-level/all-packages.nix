@@ -474,6 +474,20 @@ let
     inherit pkgs;
   };
 
+  # see new python derivations for example..
+  # You should be able to override anything you like easily
+  composableDerivation = {
+          # modify args before applying stdenv.mkDerivation, this should remove at least attrs removeAttrsBy
+        f ? lib.prepareDerivationArgs,
+        stdenv ? pkgs.stdenv,
+          # initial set of arguments to be passed to stdenv.mkDerivation passing prepareDerivationArgs by default
+        initial ? {},
+          # example func :  (x: x // { x.buildInputs ++ ["foo"] }), but see mergeAttrByFunc which does this for you
+        merge ? (lib.mergeOrApply lib.mergeAttrByFunc)
+      }: lib.applyAndFun
+            (args: stdenv.mkDerivation (f args))
+            merge
+            (merge { inherit (lib) mergeAttrBy; } initial);
 
   ### TOOLS
 
