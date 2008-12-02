@@ -96,6 +96,12 @@ rec {
     then nul
     else op (head list) (fold op nul (tail list));
 
+  # Haskell's fold
+  foldl = op: nul: list:
+    if list == []
+    then nul
+    else fold op (op nul (head list)) (tail list);
+
     
   # Concatenate a list of lists.
   concatList = x : y : x ++ y;
