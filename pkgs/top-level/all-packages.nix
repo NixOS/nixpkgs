@@ -2038,6 +2038,15 @@ let
     g77 = g77_42;
   };
 
+  # mercurial (hg) bleeding edge version
+  octaveHG = import ../development/interpreters/octave/hg.nix {
+    inherit fetchurl readline ncurses perl flex atlas getConfig glibc;
+    inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
+    stdenv = overrideGCC stdenv gcc40;
+    g77 = g77_42;
+    inherit (bleedingEdgeRepos) sourceByName;
+  };
+
   perl = if !stdenv.isLinux then sysPerl else realPerl;
 
   perl58 = if !stdenv.isLinux then sysPerl else

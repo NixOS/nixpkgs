@@ -223,4 +223,8 @@
     url = "http://mawercer.de/~nix/repos/hg2git-4c77e121b739d2aac8a23352503763343823f870.tar.gz";
     sha256 = "22354d36937bf9e5d3e3dfc1a3ef9e3f2bc183b8e114a23958a2b10f83abc97e";
   };
+ octave = args: with args; fetchurl { # Mon Dec  1 23:23:49 UTC 2008
+   url = "http://mawercer.de/~nix/repos/octave-03b414516dd8.tar.gz";
+   sha256 = "28ca0be1407954e746909241bda95c5bf0a04f611e73100c1e3967ddc249c519";
+ };
 }
