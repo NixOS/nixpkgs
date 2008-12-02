@@ -676,6 +676,45 @@ rec {
               else throw "error mergeAttrsNoOverride, attribute ${n} given in both attributes - no merge func defined"
             else __getAttr n attrs2 # add attribute not existing in attr1
            )) attrs1 (__attrNames attrs2);
+
+
+  # example usage:
+  # mergeAttrByFunc  {
+  #   inherit mergeAttrBy; # defined below
+  #   buildInputs = [ a b ];
+  # } {
+  #  buildInputs = [ c d ];
+  # };
+  # will result in
+  # { mergeAttrsBy = [...]; buildInputs = [ a b c d ]; }
+  # is used by prepareDerivationArgs and can be used when composing using
+  # foldArgs, composedArgsAndFun or applyAndFun. Example: composableDerivation in all-packages.nix
+  mergeAttrByFunc = x : y :
+    let
+          mergeAttrBy2 = { mergeAttrBy=mergeAttr; }
+                      // (maybeAttr "mergeAttrBy" {} x)
+                      // (maybeAttr "mergeAttrBy" {} y); in
+    mergeAttrs [
+      x y
+      (mapAttrs ( a : v : # merge special names using given functions
+          if (__hasAttr a x)
+             then if (__hasAttr a y)
+               then v (__getAttr a x) (__getAttr a y) # both have attr, use merge func
+               else (__getAttr a x) # only x has attr
+             else (__getAttr a y) # only y has attr)
+          ) (removeAttrs mergeAttrBy2
+                         # don't merge attrs which are neither in x nor y
+                         (filter (a : (! __hasAttr a x) && (! __hasAttr a y) )
+                                 (__attrNames mergeAttrBy2))
+            )
+      )
+    ];
+  mergeAttrsByFunc = fold mergeAttrByFunc {};
+  # sane defaults (same name as attr name so that inherit can be used)
+  mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
+    listToAttrs (map (n : nv n concatList) [ "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
+    // listToAttrs (map (n : nv n mergeAttr) [ "passthru" "meta" ]);
+
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
