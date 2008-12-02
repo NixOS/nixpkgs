@@ -577,6 +577,11 @@ rec {
       else if (x == false) then "x is boolean false"
       else if (x == null) then "x is null"
       else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
+  # trace the arguments passed to function and its result 
+  traceCall  = n : f : a : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
+  traceCall2 = n : f : a : b : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
+  traceCall3 = n : f : a : b : c : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+
 
 
   innerClosePropagation = ready: list: if list == [] then ready else
