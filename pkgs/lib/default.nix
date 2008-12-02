@@ -57,7 +57,7 @@ rec {
       ( y : y //
         {
           fun = z : applyAndFun f merge (fixed: merge (takeFix fixed) z);
-          funMerge = z : applyAndFun f merge (fixed: let e = takeFix fixed; in e // merge e z);
+          funMerge = z : applyAndFun f merge (fixed: let e = takeFix fixed; in merge e (merge e z));
         } );
   mergeOrApply = merge : x : y : if (__isFunction y) then  y x else merge x y;
 
@@ -732,11 +732,11 @@ rec {
             )
       )
     ];
-  mergeAttrsByFunc = fold mergeAttrByFunc {};
+  mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
     listToAttrs (map (n : nv n concatList) [ "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
-    // listToAttrs (map (n : nv n mergeAttr) [ "passthru" "meta" ]);
+    // listToAttrs (map (n : nv n mergeAttr) [ "passthru" "meta" "cfg" "flags" ]);
 
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
@@ -779,6 +779,8 @@ rec {
   # additional data from flags depending on config settings
   # It's used in composableDerivation in all-packages.nix. It's also used
   # heavily in the new python and libs implementation
+  #
+  # should we check for misspelled cfg options?
   prepareDerivationArgs = args:
     let args2 = { cfg = {}; flags = {}; } // args;
         flagName = name : "${name}Support";
@@ -793,7 +795,7 @@ rec {
                   else throw "assertion of flag ${a} of derivation ${args.name} failed"
                ) args2.flags );
     in removeAttrs
-      (mergeAttrsByFunc ([args] ++ opts))
+      (mergeAttrsByFuncDefaults ([args] ++ opts))
       ["flags" "cfg" "mergeAttrBy" "fixed" ]; # fixed may be passed as fix argument or such
   # supportFlag functions for convinience
   sFlagEnable = { name, buildInputs ? [], propagatedBuildInputs ? [] } : {

@@ -13,7 +13,7 @@
 +    env_nix_sites = os.environ.get("NIX_PYTHON_SITES", None)
 +    if env_nix_sites:
 +      for path in env_nix_sites.split(":"):
-+        if os.path.isdir(path):
++        
 +          NIX_SITE = os.path.join(path, "lib",
 +                                 "python" + sys.version[:3],
 +                                 "site-packages")

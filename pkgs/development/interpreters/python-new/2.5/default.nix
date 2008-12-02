@@ -8,11 +8,15 @@
 # containing a colon separated list of modules telling python where to look
 # for imports and also read the .pth files
 
+# TODO optimize py modules automatically (gentoo has a ebuild function called python_mod_optimize ?)
+
 p: # p = pkgs
 let 
   inherit (p) lib fetchurl stdenv getConfig;
+  # withName prevents  nix-env -qa \* from aborting (pythonLibStub is a derivation but hasn't a name)
+  withName = lib.mapAttrs (n : v : if (__isAttrs v && (!__hasAttr "name" v)) then null else v);
 in
-  lib.fix ( t : { # t = this attrs
+  withName ( lib.fix ( t : { # t = this attrs
 
     version = "2.5";
     versionAttr = "python25";
@@ -88,21 +92,22 @@ in
             ensureDir $out/nix-support
             echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
             # run check
-            [ -n "$pyCheck" ] \
-              && ( . $out/nix-support/setup-hook
+            if [ -n "$pyCheck" ]; then
+               ( . $out/nix-support/setup-hook
                    mkdir $TMP/new-test; cd $TMP/new-test
                    echo PYTHONPATH=$PYTHONPATH
                    echo NIX_PYTHON_SITES=$NIX_PYTHON_SITES
                    script="$(echo -e "import sys\nprint sys.path\npyCheck\nprint \"check ok\"")"
                    script="''${script/pyCheck/$pyCheck}"
                    echo "check script is"; echo "$script"
-                   echo "$script" | /var/run/current-system/sw/bin/strace -o $TMP/strace -f python || { ${ getConfig [t.versionAttr "debugCmd"] ":"} ; exit 1; }
-                   )'';
+                   echo "$script" | python || { ${ getConfig [t.versionAttr "debugCmd"] ":"} ; echo "pycheck failed"; exit 1; }
+               )
+             fi'';
           passthru = {
             libPython = t.version; # used to find all python libraries fitting this version (-> see name all below)
           };
           mergeAttrBy = {
-            postCheck = x : y : "${x}\n${y}";
+            pyCheck = x : y : "${x}\n${y}";
           };
       };
     };
@@ -173,37 +178,123 @@ in
     #  };
     #};
 
-  pygobject = t.pythonLibStub.passthru.fun {
-    name = "pygobject-2.15.4";
-    flags = { libffi = { buildInputs = [p.libffi];}; };
-    cfg = { libffi = true; };
-    buildInputs = [ p.pkgconfig p.gtkLibs.glib];
-    src = fetchurl {
-      url = "http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.15/pygobject-2.15.4.tar.bz2";
-      sha256 = "19vxczy01xyss2f5aqf93al3jzrxn50srgzkl4w7ivdz50rnjin7";
-    };
-    pyCheck = "import gobject";
-  };
+  # pyglib contains import reference to pygtk! So its best to install both at
+  # the same time. I don't want to patch this.
+  # You can install both into different store paths, however you won't be able
+  # to import gtk because after pygtk.require sys.path contains to 
+  # /nix/store/*-pygobject/**/gtk-2.0 (should be pygtk/**/gtk-2.0 instead)
 
+  # gnome python is added here as well because it is loaded after
+  # pygtk.require('2.0') as well. So the pygtk lib path is added to sys.path only.
+  # We could make extra derivations for that. But on the other hand that would require
+  # patching pygtk to another */gtk2.0 directory to sys.path for each NIX_PYTHON_SITES.
+  # If you install dozens of python packages this might be bloat.
+  # So  I think the overhead of installing these packages into the same store path should be prefered.
   pygtkBaseFun = (t.pythonLibStub.passthru.funMerge (a :
-    let inherit (a.fixed) glib gtk version; in {
-      name = "pygtk-${version}";
-      buildInputs = [p.pkgconfig glib gtk];
-      propagatedBuildInputs = [t.pygobject t.pycairo ];
-      flags = {
-        cairo = { buildInputs = [ p.cairo ]; }; # TODO add pyCheck
-        glade = { buildInputs = [ p.glade ]; }; # TODO add pyCheck
-      };
-      cfg = {
-        glade = true;
-        cairo = true;
+    let inherit (a.fixed) glib gtk; in lib.mergeAttrsByFuncDefaults [
+    {
+      unpackPhase = "true";
+      configurePhase = "true";
+      patchPhase = "true";
+      buildPhase = "true";
+      installPhase = ''
+        unset unpackPhase
+        unset configurePhase
+        unset buildPhase
+        unset installPhase
+        export G2CONF="--enable-gconf" # hack, should be specified somewhere else
+        for srcs in $pygobjectSrc $pygtkSrc $pySrcs; do
+          cd $TMP; mkdir "$(basename $srcs)"; cd "$(basename $srcs)"; unpackPhase
+          cd $sourceRoot
+          configurePhase; buildPhase; installPhase
+            addToEnv $out # pygtk has to know about pygobject
+            PATH=$out/bin:$PATH # gnome-python nees pygtk-codegen
+        done
+      '';
+      mergeAttrBy = {
+        phases = lib.concatList;
+        pySrcs = lib.concatList;
+        pyCheck = x : y : "${x}\n${y}";
       };
     }
-  )).passthru.fun;
+    # pygobject
+    {
+      flags = {
+        libffi = { buildInputs = [p.libffi];};
+      };
+      cfg = {
+        libffiSupport = true;
+      };
+      pyCheck = "import gobject";
+      passthru = {
+        pygobjectVersion = "2.15.4";
+      };
+      pygobjectSrc = fetchurl {
+        url = "http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.15/pygobject-2.15.4.tar.bz2";
+        sha256 = "19vxczy01xyss2f5aqf93al3jzrxn50srgzkl4w7ivdz50rnjin7";
+      };
+      buildInputs = [ p.glibc ]; # requires ld-config
+
+      propagatedBuildInputs = [ p.pkgconfig glib gtk ];
+    }
+    # pygtk
+    {
+      propagatedBuildInputs = [ t.pycairo ];
+      flags = {
+        cairo = {
+          propagatedBuildInputs = [ p.cairo ];
+          pyCheck = "import cairo";
+        }; # TODO add pyCheck
+        glade = {
+          propagatedBuildInputs = [ p.gnome.libglade ];
+          pyCheck = "from gtk import glade";
+        };
+      };
+      pyCheck = ''
+        import pygtk; pygtk.require('2.0')
+        import gtk
+        import gconf
+      '';
+      cfg = {
+        gladeSupport = true;
+        cairoSupport = true;
+      };
+    }
+    # gnome-python
+    {
+      name = "gnome-python-2.22.3";
+      buildInputs = [ p.pkgconfig  p.gnome.libgnome ];
+      propagatedBuildInputs = [ p.gnome.GConf ];
+      pySrcs = [(fetchurl {
+        url = http://ftp.gnome.org/pub/GNOME/sources/gnome-python/2.22/gnome-python-2.22.3.tar.bz2;
+        sha256 = "0ndm3cns9381mm6d8jxxfd931fk93nqfcszy38p1bz501bs3wxm1";
+      })];
+    }
+    # gnome-desktop or gnome-python-extras desktop containing egg.trayicon needed by istanbul
+    {
+      # name = "gnome-desktop-2.24.0";
+      buildInputs = [ p.pkgconfig ];
+      propagatedBuildInputs = [ p.gnome.GConf ];
+      pySrcs = [(fetchurl {
+        url = http://ftp.gnome.org/pub/GNOME/sources/gnome-python-desktop/2.24/gnome-python-desktop-2.24.0.tar.bz2;
+        sha256 = "16514gmv42ygjh5ggzsis697m73pgg7ydz11h487932kkzv4mmlg";
+      })];
+      pyCheck = "import egg.trayicon";
+    }
+    {
+      # name = "gnome-python-extras-2.13";
+      buildInputs = [ p.pkgconfig ];
+      propagatedBuildInputs = [ p.gnome.GConf ];
+      pySrcs = [(fetchurl {
+        url = http://ftp.gnome.org/pub/GNOME/sources/gnome-python-extras/2.13/gnome-python-extras-2.13.3.tar.gz;
+        sha256 = "0vj0289snagrnvbmrs1camwmrc93xgpw650iavj6mq7a3wqcra0b";
+      })];
+    }
+  ]));
 
   #pygtk213 = t.pygtkBaseFun {
   #  version = "2.13.0";
-  #  src = fetchurl {
+  #  pygtkSrc = fetchurl {
   #    url = http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.13/pygtk-2.13.0.tar.bz2;
   #    sha256 = "0644ll48hi8kwfng37b0k5qgb0fbiy298r7sxd4j7ag7lj4bgic0";
   #  };
@@ -214,9 +305,10 @@ in
   #  '';
   #};
 
-  pygtk212 = t.pygtkBaseFun {
+  pygtk212 = t.pygtkBaseFun.passthru.funMerge (a : {
     version = "2.12.1";
-    src = fetchurl {
+    name = "pygobject-${a.fixed.pygobjectVersion}-and-pygtk-${a.fixed.version}";
+    pygtkSrc = fetchurl { 
       url = http://ftp.acc.umu.se/pub/GNOME/sources/pygtk/2.12/pygtk-2.12.1.tar.bz2;
       sha256 = "0gg13xgr7y9sppw8bdys042928nc66czn74g60333c4my95ys021";
     };
@@ -225,8 +317,7 @@ in
       import pygtk; pygtk.require('2.0')
       import gtk
     '';
-    patches = [ ./pygtk-2.12.1-fix-amd64-from-gentoo.patch ];
-  };
+  });
 
   pycairo = t.pythonLibStub.passthru.fun {
     name = "pycairo-1.8.0";
@@ -245,21 +336,130 @@ in
       sha256 = "0yin36acr5ryfpmhlb4rlagabgxrjcmbpizwrc8csadmxzmigb86";
     };
     buildInputs =[ p.flex2535 p.pkgconfig];
+    flags = {
+      pluginsGood = { propagatedBuildInputs = [p.gst_all.gstPluginsGood]; };
+      ffmpeg = { propagatedBuildInputs = [p.gst_all.gstFfmpeg]; };
+    };
+    cfg = {
+      pluginsGoodSupport = true;
+      ffmpegSupport = true;
+    };
     propagatedBuildInputs = [
           t.pygtk212
           p.gst_all.gstreamer
           p.gst_all.gstPluginsBase
-          p.gst_all.gstPluginsGood
+          p.gst_all.gnonlin
         ];
+    # this check fails while building: It succeeds running as normal user
+    /*
+    Traceback (most recent call last):
+      File "<stdin>", line 5, in <module>
+      File "/nix/store/hnc51h035phlk68i1qmr5a8kc73dfvhp-gst-python-0.10.13/lib/python2.5/site-packages/gst-0.10/gst/__init__.py", line 170, in <module>
+        from _gst import *
+    RuntimeError: can't initialize module gst: Error re-scanning registry , child terminated by signal
+    */
     pyCheck = ''
-      import pygst
-      pygst.require('0.10')
-      import gst
+      #import pygst
+      #pygst.require('0.10')
+      #import gst
     '';
     meta = {
       description = "python gstreamer bindings";
       homepage = http://gstreamer.freedesktop.org/modules/gst-python.html;
       license = "GPLv2.1";
+    };
+  };
+
+  pygoocanvas = t.pythonLibStub.passthru.fun {
+    src = p.fetchurl {
+      url = http://download.berlios.de/pygoocanvas/pygoocanvas-0.10.0.tar.gz;
+      sha256 = "0pxznzdscbhvn8102vrqy3r1g6ss4sgs8wwy6y4c5g26rrp7l55d";
+    };
+    propagatedBuildInputs = [ t.pygtk212 ];
+    buildInputs = [ p.pkgconfig p.goocanvas ];
+    pyCheck = "import goocanvas";
+    name = "pygoocanvas-0.10.0";
+    meta = {
+      description = "";
+      homepage = http://developer.berlios.de/projects/pygoocanvas/;
+      license = "LGPL";
+    };
+  };
+
+#  zope = t.pythonLibStub.passthru.fun rec {
+#[> version = "3.3.1";
+#    version = "svn";
+#    name = "zope-${version}";
+#    [>src = p.blending.sourceByName "zope";
+#    src = "/home/marc/managed_repos/zope";
+
+#    [>fetchurl {
+#    [> Doh! Python version 2.4.3 before continuing. Versions
+#    [> 2.4.7 2.4.6 2.4.5 2.4.4 2.4.2 2.4.1 also work, but not as optimally.
+#    [>  url = "http://www.zope.org/Products/Zope3/${version}/Zope-${version}.tgz";
+#    [>  sha256 = "1qvvh384j7blzhwgfmd5kqvr5vzpv5khaj8ha46ln3hrwffrk2b1";
+#    [>};
+#    pyCheck = "";
+#  };
+
+  setuptools = t.pythonLibSetup.passthru.fun {
+    name = "setuptools-0.6c9";
+    postUnpack = ''
+      ensureDir $out/lib/python2.5/site-packages
+      export PYTHONPATH="$out/lib/python${t.version}/site-packages" # shut up installation script
+
+      # setuptools tries to write to the installation location, so ensure it exists
+      # and it requires PYTHONPATH to be set to that location (maybe its better to patch it. - I'm lazy)
+      ensureDir $out/nix-support
+      cat >> $out/nix-support/setup-hook << EOF
+      ensureDir \$out/lib/python${t.version}/site-packages
+      export PYTHONPATH="\$out/lib/python${t.version}/site-packages" # shut up installation script
+      EOF
+    '';
+    src = p.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c9.tar.gz";
+      md5 = "3864c01d9c719c8924c455714492295e";
+    };
+  };
+
+  zopeInterface = t.pythonLibSetup.passthru.fun rec {
+    version = "3.3.0";
+    name = "zope.interface-${version}";
+    buildInputs = [ t.setuptools ];
+    src = p.fetchurl {
+      url = "http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-${version}.tar.gz";
+      sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
+    };
+    pyCheck = "from zope.interface import Interface, Attribute";
+  };
+
+  dbusPython = t.pythonLibStub.passthru.fun rec {
+    version = "0.83.0";
+    name = "dbus-python-0.83.0";
+    buildInputs = [ p.pkgconfig ];
+    propagatedBuildInputs = [ p.dbus p.dbus_glib ];
+    src = fetchurl {
+      url = "http://dbus.freedesktop.org/releases/dbus-python/dbus-python-0.83.0.tar.gz";
+      sha256 = "14b1fwq9jyvg9qbbrmpk1264s9shm9n638hsgmkh9fn2lmd1vpc9";
+    };
+    pyCheck = "import dbus";
+    meta = { 
+      description = "";
+      homepage = http://freedesktop.org/wiki/Software/DBusBindings;
+      license = [ "GPLv2" "AFL-2.1" ];
+    };
+  };
+
+  pythonXlib = t.pythonLibSetup.passthru.fun {
+    name = "python-xlib-0.14";
+    src = fetchurl {
+      url = http://puzzle.dl.sourceforge.net/sourceforge/python-xlib/python-xlib-0.14.tar.gz;
+      sha256 = "1sv0447j0rx8cgs3jhjl695p5pv13ihglcjlrrz1kq05lsvb0wa7";
+    };
+    meta = {
+      description = "tries to be a fully functional X client library beeing entirely written in python";
+      license = [ "GPL" ];
+      homepage = http://python-xlib.sourceforge.net/;
     };
   };
 
@@ -270,10 +470,13 @@ in
       buildInputs = [p.makeWrapper];
       postPhases = ["wrapExecutables"];
       propagatedBuildInputs = [ t.pythonFull ]; # see [1]
+
+      # adding $out to NIX_PYTHON_SITES because some of those executables seem to come with extra libs
       wrapExecutables = ''
         for prog in $out/bin/*; do
-        wrapProgram "$prog"     \
-                     --set NIX_PYTHON_SITES "$NIX_PYTHON_SITES"
+        wrapProgram "$prog" \
+                     --set NIX_PYTHON_SITES "$NIX_PYTHON_SITES:$out" \
+                     --set PYTHONPATH "\$PYTHONPATH:$out"
         done
       '';
     };
@@ -285,7 +488,8 @@ in
       url = http://ftp.gnome.org/pub/GNOME/sources/pitivi/0.11/pitivi-0.11.2.tar.bz2;
       sha256 = "0d3bqgfp60qm5bf904k477bd8jhxizj1klv84wbxsz9vhjwx9zcl";
     };
-    buildInputs =[ t.pygtk212 t.gstPython p.intltool p.gettext p.makeWrapper p.gettext ];
+    buildInputs = [ t.pygtk212 t.gstPython t.pygoocanvas t.zopeInterface t.dbusPython
+      p.intltool p.gettext p.makeWrapper p.gettext ];
     # why do have to add gtk-2.0 explicitely?
     meta = {
         description = "A non-linear video editor using the GStreamer multimedia framework";
@@ -298,9 +502,33 @@ in
     '';
   };
 
-  all = lib.filter (x: 
+  istanbul = t.pythonExStub.passthru.fun {
+    name = "istanbul-0.2.2";
+    buildInputs = [ t.pygtk212 t.gstPython /*t.gnomePython (contained in gtk) t.gnomePythonExtras */ t.pythonXlib
+      p.perl p.perlXMLParser p.gettext];
+    # gstPython can't be imported when building (TODO).. so just run true instead of python
+    configurePhase = ''./configure --prefix=""''; # DESTDIR is set below
+    postUnpack = ''
+      sed -i 's/$PYTHON/true/' istanbul-0.2.2/configure
+      mkdir -p $out/bin
+      export DESTDIR="$out"
+      shopt -s nullglob
+    '';
+    src = fetchurl {
+      url = http://zaheer.merali.org/istanbul-0.2.2.tar.bz2;
+      sha256 = "1mdc82d0xs9pyavs616bz0ywq3zwy3h5y0ydjl6kvcgixii29aiv";
+    };
+    postInstall = "chmod a+x $out/bin/istanbul";
+    meta = {
+      description = "A non-linear video editor using the GStreamer multimedia framework";
+      homepage = http://live.gnome.org/Istanbul;
+      license = "LGPLv2";
+    };
+  };
+
+  all = lib.filter (x:
                    (__isAttrs x)
                 && ((lib.maybeAttr "libPython" false x) == t.version)
                 && (lib.maybeAttr "name" false x != false) # don't collect pythonLibStub etc
         ) (lib.flattenAttrs (removeAttrs t ["all"])); # nix is not yet lazy enough, so I've to remove all first
-})
+}))
