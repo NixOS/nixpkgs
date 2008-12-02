@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl, perlXMLSimple}:
 
 stdenv.mkDerivation {
-  name = "icon-naming-utils-0.8.2";
+  name = "icon-naming-utils-0.8.7";
   src = fetchurl {
-    url = http://tango-project.org/releases/icon-naming-utils-0.8.2.tar.gz;
-    sha256 = "0ml00nrnd7bkdm09wdj592axwg6v6lcb9yvazc540ls8by6kkzl7";
+    url = http://tango.freedesktop.org/releases/icon-naming-utils-0.8.7.tar.gz;
+    sha256 = "1lj0lffdg7fjfinhrn0vsq1kj010dxlxlix4jfc969j6l3k9rd0w";
   };
   buildInputs = [perl perlXMLSimple];
   postInstall = "
