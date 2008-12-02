@@ -2979,6 +2979,11 @@ let
     inherit fetchurl stdenv m4;
   };
 
+  goocanvas = import ../developement/libraries/goocanvas {
+    inherit fetchurl stdenv pkgconfig cairo;
+    inherit (gnome) gtk glib;
+  };
+
   #GMP ex-satellite, so better keep it near gmp
   mpfr = import ../development/libraries/mpfr {
     inherit fetchurl stdenv gmp;
