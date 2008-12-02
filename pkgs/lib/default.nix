@@ -725,6 +725,61 @@ rec {
           then r ++ [ (  nv attr ( f (__getAttr attr attrs) ) ) ] else r ) []
       subset_attr_names );
 
+  # prepareDerivationArgs tries to make writing configurable derivations easier
+  # example:
+  #  prepareDerivationArgs {
+  #    mergeAttrBy = {
+  #       myScript = x : y : x ++ "\n" ++ y;
+  #    };
+  #    cfg = {
+  #      readlineSupport = true;
+  #    };
+  #    flags = {
+  #      readline = {
+  #        set = {
+  #           configureFlags = [ "--with-compiler=${compiler}" ];
+  #           buildInputs = [ compiler ];
+  #           pass = { inherit compiler; READLINE=1; };
+  #           assertion = compiler.dllSupport;
+  #           myScript = "foo";
+  #        };
+  #        unset = { configureFlags = ["--without-compiler"]; };
+  #      };
+  #    };
+  #    src = ...
+  #    buildPhase = '' ... '';
+  #    name = ...
+  #    myScript = "bar";
+  #  };
+  # if you don't have need for unset you can omit the surrounding set = { .. } attr
+  # all attrs except flags cfg and mergeAttrBy will be merged with the
+  # additional data from flags depending on config settings
+  # It's used in composableDerivation in all-packages.nix. It's also used
+  # heavily in the new python and libs implementation
+  prepareDerivationArgs = args:
+    let args2 = { cfg = {}; flags = {}; } // args;
+        flagName = name : "${name}Support";
+        cfgWithDefaults = (listToAttrs (map (n : nv (flagName n) false) (attrNames args2.flags)))
+                          // args2.cfg;
+        opts = flattenAttrs (mapAttrs (a : v :
+                let v2 = if (v ? set || v ? unset) then v else { set = v; };
+                    n = if (__getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
+                    attr = maybeAttr n {} v2; in
+                if (maybeAttr "assertion" true attr)
+                  then attr
+                  else throw "assertion of flag ${a} of derivation ${args.name} failed"
+               ) args2.flags );
+    in removeAttrs
+      (fold (mergeOrApply mergeAttrByFunc) {} ([args] ++ opts))
+      ["flags" "cfg" "mergeAttrBy" "fixed" ]; # fixed may be passed as fix argument or such
+  # supportFlag functions for convinience
+  sFlagEnable = { name, buildInputs ? [], propagatedBuildInputs ? [] } : {
+      set = { configureFlags = "--enable-${name}"; inherit buildInputs; inherit propagatedBuildInputs; };
+      unset = { configureFlags = "--disable-${name}"; };
+    };
+
+
+
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
 # depreceated because it's too complicated. use prepareDerivationArgs instead
 
