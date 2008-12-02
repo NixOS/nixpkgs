@@ -14,4 +14,8 @@ rec {
   gstFfmpeg = import ./gst-ffmpeg {
     inherit fetchurl stdenv pkgconfig gstPluginsBase bzip2;
   };
+
+  gnonlin = import ./gnonlin {
+    inherit fetchurl stdenv pkgconfig gstreamer gstPluginsBase;
+  };
 }
