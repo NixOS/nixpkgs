@@ -1,9 +1,9 @@
 args: with args;
 let
-  version = "1.0.2";
+  version = "1.2.4";
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1jn652zb81mczsx4rdcwrrzj3lfhx9d107zjfnasc4l5yljl204a";
+    sha256 = "1f7v79ws34mh6j75fk6w4w9v441vffll0fwf5vk94mwa0bc28g5b";
   };
   configureFlags = "--disable-static --localstatedir=/var --with-session-socket-dir=/tmp";
 in rec {
