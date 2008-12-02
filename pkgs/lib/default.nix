@@ -566,10 +566,11 @@ rec {
   # this can help debug your code as well - designed to not produce thousands of lines
   traceWhatis = x : __trace (whatis x) x;
   traceMarked = str: x: __trace (str + (whatis x)) x;
-  whatis = x : 
+  attrNamesToStr = a : concatStringsSep "; " (map (x : "${x}=") (__attrNames a));
+  whatis = x :
       if (__isAttrs x) then
-          if (x ? outPath) then "x is a derivation with name ${x.name}"
-          else "x is an attr set with attributes ${builtins.toString (__attrNames x)}"
+          if (x ? outPath) then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
+          else "x is attr set { ${attrNamesToStr x} }"
       else if (__isFunction x) then "x is a function"
       else if (x == []) then "x is an empty list"
       else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
