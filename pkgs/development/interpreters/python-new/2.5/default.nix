@@ -262,7 +262,7 @@ in
     }
     # gnome-python
     {
-      name = "gnome-python-2.22.3";
+      #name = "gnome-python-2.22.3";
       buildInputs = [ p.pkgconfig  p.gnome.libgnome ];
       propagatedBuildInputs = [ p.gnome.GConf ];
       pySrcs = [(fetchurl {
