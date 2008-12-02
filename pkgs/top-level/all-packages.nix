@@ -7660,6 +7660,11 @@ let
   };
   */
 
+  multisync = import ../applications/misc/multisync {
+    inherit fetchurl stdenv autoconf automake libtool pkgconfig;
+    inherit (gnome) gtk glib ORBit2 libbonobo libgnomeui GConf;
+  };
+
   mutt = import ../applications/networking/mailreaders/mutt {
     inherit fetchurl stdenv ncurses which openssl gdbm;
   };
