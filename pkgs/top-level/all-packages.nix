@@ -918,6 +918,11 @@ let
     inherit fetchurl stdenv unzip jre;
   };
 
+  jnettop = import ../tools/networking/jnettop {
+    inherit fetchurl stdenv autoconf libpcap ncurses pkgconfig;
+    inherit (gnome) glib;
+  };
+
   jwhois = import ../tools/networking/jwhois {
     inherit fetchurl stdenv;
   };
