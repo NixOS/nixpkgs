@@ -9,7 +9,7 @@ let
 
   
     tarball =
-      { nixpkgs ? {path = ../../../nixpkgs-wc; rev = 1234;}
+      { nixpkgs ? {path = (allPackages {}).lib.cleanSource ../..; rev = 1234;}
       , officialRelease ? false
       }:
 
