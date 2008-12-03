@@ -372,27 +372,30 @@ rec {
   fix = f:
     (rec { result = f result; }).result;
 
-  # flatten a list of sets returned by 'f'.
-  # f      : function to evaluate each set.
-  # attr   : name of the attribute which contains more values.
+  # flatten a list of elements by following the properties of the elements.
+  # key    : return the key which correspond to the value.
+  # value  : return the value inserted in the returned list.
+  # next   : return the list of following elements.
+  # keys   : lists of keys already seen.
   # default: result if 'x' is empty.
   # x      : list of values that have to be processed.
-  uniqFlattenAttr = f: attr: default: x:
+  uniqFlatten = prop@{key, value, next, ...}: keys: default: x:
     if x == []
     then default
     else
-      let h = f (head x); t = tail x;
-          v = removeAttrs h [attr]; n = getAttr [attr] [] h;
+      let h = head x; t = tail x;
+          k = key h; v = value h; n = next h;
       in
-      if elem v default
-      then uniqFlattenAttr f attr default t
-      else uniqFlattenAttr f attr (default ++ [v]) (toList n ++ t)
+      if elem k keys
+      then uniqFlatten prop keys default t
+      else uniqFlatten prop (keys ++ [k]) (default ++ [v]) (n ++ t)
     ;
 
   /* If. ThenElse. Always. */
 
   # create "if" statement that can be dealyed on sets until a "then-else" or
-  # "always" set is reached.  When an always set is reached by 
+  # "always" set is reached.  When an always set is reached the condition
+  # is ignore.
 
   isIf = attrs: (typeOf attrs) == "if";
   mkIf = condition: thenelse:
@@ -556,10 +559,15 @@ rec {
 
       processConfig = config: configFun:
         rmRequireIf (optionSet config configFun);
-    in
-      config: merge "" (
-        uniqFlattenAttr (processConfig config) "require" [] (toList opts)
-      );
+
+      prop = config: rec {
+        key = id;
+        prepare = x: processConfig config x;
+        value = x: removeAttrs (prepare x) ["require"];
+        next = x: toList (getAttr ["require"] [] (prepare x));
+      };
+    in config:
+      merge "" (uniqFlatten (prop config) [] [] (toList opts));
 
   fixOptionSets = merge: pkgs: opts:
     fix (fixOptionSetsFun merge pkgs opts);
