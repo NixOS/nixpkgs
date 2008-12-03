@@ -10,7 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [kdelibs kdepimlibs kdeworkspace boost readline openbabel ocaml
   libusb facile python];
+
+  # !!! shouldn't include directories, since that can lead to inconsistent hashing
+  # between different machines/users due to .svn directories.  Either use filterSource
+  # or include the files separately.
   myCmakeFiles = ./myCmakeFiles;
+
   patchPhase = "
   cp ${myCmakeFiles}/* ../cmake/modules
   sed -e 's@+facile@\${LIBFACILE_INCLUDE_DIR}@' -i \\
