@@ -91,6 +91,7 @@ let
       inkscape
       iputils
       irssi
+      jnettop
       jwhois
       kbd
       kcachegrind
