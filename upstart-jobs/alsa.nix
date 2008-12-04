@@ -1,5 +1,5 @@
 # ALSA sound support.
-{pkgs, config}:
+{pkgs, config, ...}:
 
 ###### interface
 let

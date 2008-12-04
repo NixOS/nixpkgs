@@ -1,5 +1,5 @@
 # D-Bus system-wide daemon.
-{pkgs, config}:
+{pkgs, config, ...}:
 
 ###### interface
 let

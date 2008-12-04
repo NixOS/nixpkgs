@@ -1,5 +1,5 @@
 # Avahi daemon.
-{pkgs, config}:
+{pkgs, config, ...}:
 
 ###### interface
 let

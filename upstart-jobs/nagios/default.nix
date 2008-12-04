@@ -1,5 +1,5 @@
 # Nagios system/network monitoring daemon.
-{config, pkgs}:
+{config, pkgs, ...}:
 
 ###### interface
 let
