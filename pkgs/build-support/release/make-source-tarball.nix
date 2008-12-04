@@ -5,7 +5,7 @@
 { officialRelease ? false
 , buildInputs ? []
 , src, stdenv, autoconf, automake, libtool
-, ...} @ args:
+, ... } @ args:
 
 let
 

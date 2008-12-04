@@ -11,7 +11,6 @@ rec {
 
   nixBuild = args: import ./nix-build.nix (
     { inherit stdenv;
-      doCoverageAnalysis = false;
     } // args);
 
   coverageAnalysis = args: nixBuild (

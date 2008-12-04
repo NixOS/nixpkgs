@@ -5,7 +5,10 @@
 # it turns on GCC's coverage analysis feature.  It then runs `make
 # check' and produces a coverage analysis report using `lcov'.
 
-args: with args;
+{ doCoverageAnalysis ? false
+, lcovFilter ? []
+, src, stdenv
+, ... } @ args:
 
 stdenv.mkDerivation (
 
@@ -19,8 +22,6 @@ stdenv.mkDerivation (
     dontInstall = doCoverageAnalysis;
 
     showBuildStats = true;
-
-    lcovFilter = ["/nix/store/*"];
 
     # Hack - swap checkPhase and installPhase (otherwise Stratego barfs).
     phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""}";
@@ -82,6 +83,9 @@ stdenv.mkDerivation (
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
     '' else "";
 
+
+    lcovFilter = ["/nix/store/*"] ++ lcovFilter;
+    
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
