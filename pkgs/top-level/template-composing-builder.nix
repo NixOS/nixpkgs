@@ -1,10 +1,10 @@
-args :  
+a :  
 let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
+  lib = a.lib;
+  fetchurl = a.fetchurl;
 
-  version = lib.getAttr ["version"] "" args; 
-  buildInputs = with args; [
+  version = lib.getAttr ["version"] "" a; 
+  buildInputs = with a; [
     
   ];
 in
@@ -14,8 +14,8 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["doMakeInstall"];
+  /* doConfigure should be removed if not needed */
+  phaseNames = ["doConfigure" "doMakeInstall"];
       
   name = "${abort "Specify name"}-" + version;
   meta = {

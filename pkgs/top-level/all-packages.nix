@@ -556,8 +556,8 @@ let
     inherit fetchurl stdenv python wxPython26;
   };
 
-  bmrsa = composedArgsAndFun (selectVersion ../tools/security/bmrsa "11") {
-    inherit builderDefs unzip;
+  bmrsa = builderDefsPackage (selectVersion ../tools/security/bmrsa "11") {
+    inherit unzip;
   };
 
   bogofilter = import ../tools/misc/bogofilter {
