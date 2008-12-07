@@ -34,6 +34,8 @@ in
 
 ###### implementation
 let
+  inherit (config.services) jobsTags;
+
   # Put all the system cronjobs together.
   systemCronJobs =
     config.services.cron.systemCronJobs;
@@ -79,8 +81,8 @@ in
       job = ''
         description "Cron daemon"
 
-        start on startup
-        stop on shutdown
+        start on ${jobsTags.system.start}
+        stop on ${jobsTags.system.stop}
 
         # Needed to interpret times in the local timezone.
         env TZ=${config.time.timeZone}

@@ -2,7 +2,19 @@
 
 ###### interface
 let
-  inherit (pkgs.lib) mkOption;
+  inherit (pkgs.lib) mkOption mapAttrs getAttr fold
+    mergeListOption mergeTypedOption mergeAttrsWithFunc;
+
+  mergeTags = mergeTypedOption "jobs tag" (x: true)
+    (fold (mergeAttrsWithFunc (a: b:
+      if builtins.lessThan a.priority b.priority then b else a
+    )) { priority = 100; });
+
+  applyTags = mapAttrs (attrName: value:
+    let name = getAttr ["name"] attrName value; in {
+    start = getAttr ["start"] (name + "/started") value;
+    stop = getAttr ["stop"] (name + "/stop") value;
+  });
 
   options = {
     services = {
@@ -23,6 +35,22 @@ let
         description = "
           Additional Upstart jobs.
         ";
+      };
+
+      # this attribute must be computed before extraJobs.
+      jobsTags = mkOption {
+        default = {};
+        example = {
+          newtworkInterface = {
+            name = "gw6c";
+            priority = 5;
+          };
+        };
+        description = "
+          Allow jobs to overload jobs tags used by upstart jobs.
+        ";
+        merge = mergeTags;
+        apply = applyTags;
       };
     };
 
@@ -478,6 +506,16 @@ in
 
     extraGroups =
       pkgs.lib.concatLists (map (job: job.groups) jobs);
+  };
+
+  services = {
+    jobsTags = {
+      system = {
+        priority = 0;
+        start = "startup";
+        stop = "shutdown";
+      };
+    };
   };
 
   tests = {
