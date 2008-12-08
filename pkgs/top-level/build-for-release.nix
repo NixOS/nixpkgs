@@ -138,6 +138,7 @@ let
       pciutils
       perl
       php
+      pinentry
       pkgconfig
       postgresql
       procps
