@@ -168,6 +168,7 @@ let
       sysklogd
       sysvinit
       sysvtools
+      tcpdump
       #tetex
       texLive
       texLiveBeamer
