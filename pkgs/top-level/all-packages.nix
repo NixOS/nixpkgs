@@ -5926,6 +5926,10 @@ let
     inherit fetchurl stdenv gettext;
   };
 
+  fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
+    inherit fontconfig gpm freetype pkgconfig;
+  };
+
   fuse = import ../os-specific/linux/fuse {
     inherit fetchurl stdenv utillinux;
   };

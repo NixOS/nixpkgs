@@ -1,9 +1,8 @@
 a :  
 let 
-  lib = a.lib;
   fetchurl = a.fetchurl;
 
-  version = lib.getAttr ["version"] "" a; 
+  version = a.lib.getAttr ["version"] "" a; 
   buildInputs = with a; [
     
   ];
