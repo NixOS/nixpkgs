@@ -1,17 +1,26 @@
-args:
-args.stdenv.mkDerivation {
-  name = "pinentry-0.7.2";
+{ fetchurl, stdenv, glib, pkgconfig, gtk, ncurses }:
 
-  src = args.fetchurl {
-    url = http://gentoo.chem.wisc.edu/gentoo/distfiles/pinentry-0.7.2.tar.gz;
-    sha256 = "0s6n5n4bxg95rmwa3mw3r49dabf8yh6fkpfi8mbl7i85dgpibnzv";
+stdenv.mkDerivation rec {
+  name = "pinentry-0.7.5";
+
+  src = fetchurl {
+    url = "mirror://gnupg/pinentry/${name}.tar.gz";
+    sha256 = "cb269ac058793b2df343a12a65e3402abc4b68503e105b12e4ca903d8d8e3172";
   };
 
-  buildInputs =(with args; [glib pkgconfig x11 gtk]);
+  patches = [ ./duplicate-glib-defs.patch ];
+
+  buildInputs = [ glib pkgconfig gtk ncurses ];
 
   meta = { 
-      description = "input interface for passwords needed by  gnupg";
-      homepage = "don't know, gentoo lists http://www.gnupg.org/aegypten/";
-      license = "GPL2";
+    description = "GnuPG's interface to passphrase input";
+
+    longDescription = ''
+      Pinentry provides a console and a GTK+ GUI that allows users to
+      enter a passphrase when `gpg' or `gpg2' is run and needs it.
+    '';
+
+    homepage = http://gnupg.org/aegypten2/;
+    license = "GPLv2+";
   };
 }

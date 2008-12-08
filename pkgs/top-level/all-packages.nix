@@ -1084,7 +1084,7 @@ let
   };
 
   pinentry = import ../tools/misc/pinentry {
-    inherit fetchurl stdenv pkgconfig x11;
+    inherit fetchurl stdenv pkgconfig ncurses;
     inherit (gnome) glib gtk;
   };
 
