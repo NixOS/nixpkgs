@@ -255,7 +255,7 @@ stripDirs() {
 
     if test -n "${dirs}"; then
         header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 -r strip $stripFlags || true
+        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
 }
