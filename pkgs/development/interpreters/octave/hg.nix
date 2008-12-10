@@ -2,7 +2,7 @@
  bison, autoconf, automake, sourceByName, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive}:
 
 assert readline != null && ncurses != null && flex != null;
-assert g77.langF77;
+assert g77.langFortran;
 
 let commonBuildInputs = [g77 readline ncurses perl glibc]; in
 
