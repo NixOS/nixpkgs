@@ -2,7 +2,7 @@
 
 let makeDictdDB = _src: _name: _subdir: _locale:
 with builderDefs;
-	let localDefs = builderDefs.meta.function (rec {
+	let localDefs = builderDefs.passthru.function (rec {
 		src=_src;
 		doInstall = FullDepEntry (''
 			ensureDir $out/share/dictd

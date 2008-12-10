@@ -5,5 +5,5 @@ args: with args;
 [
 	libpng 
 	GConf mesa metacity librsvg dbus.libs dbus_glib gnomedesktop git autoconf automake
-	libtool libxslt libwnck intltool perl perlXMLParser compiz
+	libtool libxslt libwnck intltool perl perlXMLParser compiz pkgconfig libxml2
 ]

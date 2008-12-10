@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "linuxwacom-0.7.2";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/linuxwacom-0.7.2.tar.bz2;
+    url = http://nixos.org/tarballs/linuxwacom-0.7.2.tar.bz2;
     md5 = "3f6290101d5712a24097243ca9f092ed";
   };
   buildInputs = [libX11 libXi];

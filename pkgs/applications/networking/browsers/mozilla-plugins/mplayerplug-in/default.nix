@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, browser, browserName, libXpm, gettext}:
+{stdenv, fetchurl, pkgconfig, browser, libXpm, gettext}:
 
 stdenv.mkDerivation rec {
   name = "mplayerplug-in-3.55";
@@ -9,13 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    (if browserName == "icecat"  # FIXME: Should match Firefox 3 as well.
-     then [ ./icecat3-idldir.patch ]
-     else []);
+    stdenv.lib.optional (browser ? isFirefox3Like) ./icecat3-idldir.patch;
 
   postConfigure =
-    (if browserName == "icecat"  # FIXME: Should match Firefox 3 as well.
-     then ''
+    (if browser ? isFirefox3Like then ''
        # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3
        # and Mozilla Firefox 3.
        # See, e.g., http://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .

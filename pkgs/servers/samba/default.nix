@@ -1,16 +1,23 @@
-args: with args;
+{ stdenv, fetchurl, readline, pam, openldap, kerberos, popt
+, iniparser, libunwind, fam, acl
+}:
 
 stdenv.mkDerivation rec {
-  name = "samba-3.0.32";
+  name = "samba-3.2.4";
 
   src = fetchurl {
-    url = http://www.samba.org/samba/ftp/stable/samba-3.0.32.tar.gz;
-    sha256 = "1mpc1w68c4sgpg6n58b6dqv0kzks6rjd9rxym72wbc2yx3h50zwa";
+    url = http://us3.samba.org/samba/ftp/stable/samba-3.2.4.tar.gz;
+    sha256 = "1srypwpmfhw30kd7zdv7q2dpdjlzdwb28lc34z1dnls4wbpaapm8";
   };
 
-  buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam];
+  buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam acl];
 
   preConfigure = "cd source";
+
+  # Provide a dummy smb.conf to shut up programs like smbclient and smbspool.
+  postInstall = ''
+    touch $out/lib/smb.conf
+  '';
   
   configureFlags = ''
     --with-pam

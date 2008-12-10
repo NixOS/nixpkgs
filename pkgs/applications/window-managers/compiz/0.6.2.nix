@@ -1,5 +1,5 @@
 args : with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 	fetchurl {
 		url = http://releases.compiz-fusion.org/compiz/0.6.2/compiz-0.6.2.tar.bz2;

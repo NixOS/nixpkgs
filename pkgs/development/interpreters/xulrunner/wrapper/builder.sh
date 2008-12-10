@@ -2,8 +2,6 @@ source $stdenv/setup
 
 ensureDir $out/bin
 
-set -x
-
 wrapper="$out/bin/$launcher"
 
 if test -e $xulrunner/bin/xulrunner; then
@@ -17,7 +15,7 @@ fi
 
 cat > $wrapper <<EOF
 #! $SHELL -e
-$runner $appfile "\$@"
+exec $runner $appfile "\$@"
 EOF
 
 chmod +x $wrapper

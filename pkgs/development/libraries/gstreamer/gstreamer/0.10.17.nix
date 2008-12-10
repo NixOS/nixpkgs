@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--enable-shared --disable-static --enable-failing-tests
     --localstatedir=/var";
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://gstreamer.freedesktop.org;
   };

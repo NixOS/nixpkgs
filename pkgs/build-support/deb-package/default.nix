@@ -1,10 +1,10 @@
 args : with args;	
 	let 
-       	localDefs = with (builderDefs.meta.function {src="";});
+       	localDefs = with (builderDefs.passthru.function {src="";});
 	let 
 	  checkFlag = flag : lib.getAttr [flag] false args;
 	in
-	  builderDefs.meta.function ({
+	  builderDefs.passthru.function ({
 		inherit src;
 		inherit checkFlag;
 		buildInputs = [];

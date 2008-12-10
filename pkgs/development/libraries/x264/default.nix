@@ -8,6 +8,8 @@ args.stdenv.mkDerivation rec {
     sha256 = "07khxih1lmhvrzlaksqmaghbi8w2yyjrjcw867gi2y4z1h0ndhks";
   };
 
+  configureFlags= if args.stdenv.system == "x86_64-linux" then ["--enable-pic"] else [];
+
   buildInputs =(with args; []);
 
   meta = { 

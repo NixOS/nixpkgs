@@ -1,6 +1,6 @@
 
-args : with args; with builderDefs.meta.function {src="";};
-	let localDefs = builderDefs.meta.function ((rec {
+args : with args; with builderDefs.passthru.function {src="";};
+	let localDefs = builderDefs.passthru.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://fredrik.hubbe.net/x2vnc/x2vnc-1.7.2.tar.gz;

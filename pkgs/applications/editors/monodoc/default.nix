@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/monodoc-1.0.6.tar.gz;
+    url = http://nixos.org/tarballs/monodoc-1.0.6.tar.gz;
     md5 = "f2fc27e8e4717d90dc7efa2450625693";
   };
 

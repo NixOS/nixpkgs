@@ -11,4 +11,7 @@ stdenv.mkDerivation rec {
     homepage = http://libsigsegv.sf.net;
     description = "A library for handling page faults in user mode";
   };
+
+  configureFlags = "--enable-shared --disable-static";
+  doCheck = true;
 }

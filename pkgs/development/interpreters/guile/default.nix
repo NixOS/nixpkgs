@@ -2,10 +2,10 @@
 , gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "guile-1.8.5";
+  name = "guile-1.8.6";
   src = fetchurl {
     url = "mirror://gnu/guile/" + name + ".tar.gz";
-    sha256 = "12b215bbqqkanapwh4dp3lnkg7k239dqiawfcdrb1zjz8hnkvxp2";
+    sha256 = "11hxk8hyibbvjlk3zyf8vnl0xm0kvhmymj643inpbzw02i4zk8k9";
   };
 
   patches = [ ./popen-zombie.patch ];

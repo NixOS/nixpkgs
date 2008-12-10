@@ -9,12 +9,18 @@
   enableOfficialBranding ? false
 }:
 
+let
+
+  version = "1.9.0.4"; # this attribute is used by other packages
+
+in  
+
 stdenv.mkDerivation {
-  name = "xulrunner-1.9.0.1";
+  name = "xulrunner-${version}";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.1/source/firefox-3.0.1-source.tar.bz2;
-    sha1 = "ba3bb0b02404cf1abfb6189b156b2f4eb02e8975";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.4/source/firefox-3.0.4-source.tar.bz2;
+    sha1 = "16715b4af7ca2bad6baa8d450a3fd9cb375ad6d6";
   };
 
   buildInputs = [
@@ -75,7 +81,7 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.com/en-US/firefox/;
   };
 
-  passthru = {inherit gtk;};
+  passthru = { inherit gtk version; };
 }
 
 

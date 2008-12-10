@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     --x-libraries=${libX11}/lib";
 
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/arts-1.5.4.tar.bz2;
+    url = http://nixos.org/tarballs/arts-1.5.4.tar.bz2;
     md5 = "886ba4a13dc0da312d94c09f50c3ffe6";
   };
 

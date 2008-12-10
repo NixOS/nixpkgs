@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   patches = [ ./makefile.patch ];
 
-  buildInputs = [ glew mesa libpng libXpm lesstif lynx freeglut libtiff rxp sablotron libXaw perl jdk transfig libX11 libXext libXt gv xfig gnuplot ];
+  buildInputs = [ glew mesa libpng libXpm lesstif lynx freeglut libtiff rxp sablotron libXaw perl jdk transfig libX11 libXext libXt gv gnuplot ];
 
   unpackPhase = ''
     tar xzf $src
@@ -34,19 +34,19 @@ stdenv.mkDerivation {
     cp -vau lib/pts $shareddir/lib
     rm -vrf lib/pts
     ln -vs $shareddir/lib/pts $out/lib/pts
-    chmod a+rwx -R $shareddir/lib/pts
+    chmod a+rwx $shareddir/lib/pts
     # link out writable shared location lib/nas/
     ensureDir $shareddir/lib/nas
     cp -vau lib/nas $shareddir/lib
     rm -vrf lib/nas
     ln -vs $shareddir/lib/nas $out/lib/nas
-    chmod a+rwx -R $shareddir/lib/nas
+    chmod a+rwx $shareddir/lib/nas
     # link out shared lib/pixmaps (not sure about this, yet):
     ensureDir $shareddir/lib/pixmaps
     cp -vau lib/pixmaps $shareddir/lib
     rm -vrf lib/pixmaps
     ln -vs $shareddir/lib/pixmaps $out/lib/pixmaps
-    chmod a+rwx -R $shareddir/lib/pixmaps
+    chmod a+rwx $shareddir/lib/pixmaps
     # bulk copy
     cp -vau * $out
     # replace arb script

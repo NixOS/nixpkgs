@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://www.ricardis.tudelft.nl/~vincent/fusesmb/download/fusesmb-0.8.7.tar.gz;

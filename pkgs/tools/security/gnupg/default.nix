@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [readline];
   idea = if ideaSupport then fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/idea.c.gz;
+    url = http://nixos.org/tarballs/idea.c.gz;
     md5 = "9dc3bc086824a8c7a331f35e09a3e57f";
   } else null;
 

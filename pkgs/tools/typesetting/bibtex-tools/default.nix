@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "bibtex-tools-0.2pre13026";
   src = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/bibtex-tools-0.2pre13026.tar.gz;
+    url = http://nixos.org/tarballs/bibtex-tools-0.2pre13026.tar.gz;
     md5 = "2d8a5de7c53eb670307048eb3d14cdd6";
   };
   configureFlags = "

@@ -10,7 +10,6 @@ rec {
   
   # SourceForge.
   sourceforge = [
-    http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
@@ -18,6 +17,7 @@ rec {
     http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
+    http://prdownloads.sourceforge.net/
   ];
 
   sf = sourceforge;
@@ -163,6 +163,9 @@ rec {
   # Debian.
   debian = [
     ftp://ftp.de.debian.org/debian/
+    ftp://ftp.es.debian.org/debian/
+    ftp://ftp.fr.debian.org/debian/
+    ftp://ftp.it.debian.org/debian/
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/

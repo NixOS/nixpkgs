@@ -1,5 +1,5 @@
 args: with args;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = 
 		fetchurl {
 			url = http://plugin.org.uk/releases/0.4.15/swh-plugins-0.4.15.tar.gz;

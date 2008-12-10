@@ -215,4 +215,16 @@
     url = http://mawercer.de/~nix/repos/kdesupport_telepathy_qt.tar.gz;
     sha256 = "022599182ff629662bbd01acdea6ead9aec64b3e73e8da3eb58ef857803035f2";
   };
+  cinelerra = args: with args; fetchurl { # Tue Oct 14 12:36:49 UTC 2008
+    url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz";
+    sha256 = "1e84ff59dcd7a3c80343eb9be302f822e510c95398fd1a6c8f2e4b163fd51e45";
+  };
+  hg2git = args: with args; fetchurl { # Sat Oct 18 21:02:44 UTC 2008
+    url = "http://mawercer.de/~nix/repos/hg2git-4c77e121b739d2aac8a23352503763343823f870.tar.gz";
+    sha256 = "22354d36937bf9e5d3e3dfc1a3ef9e3f2bc183b8e114a23958a2b10f83abc97e";
+  };
+ octave = args: with args; fetchurl { # Mon Dec  1 23:23:49 UTC 2008
+   url = "http://mawercer.de/~nix/repos/octave-03b414516dd8.tar.gz";
+   sha256 = "28ca0be1407954e746909241bda95c5bf0a04f611e73100c1e3967ddc249c519";
+ };
 }

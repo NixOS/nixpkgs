@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
-, libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig
+, libjpeg, zlib, cairo, dbus, dbus_glib, bzip2
+, freetype, fontconfig, xulrunner
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Deer Park", enable this option.  However, those binaries may
@@ -11,18 +11,19 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-3.0.1";
+  name = "firefox-3.0.4";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.1/source/firefox-3.0.1-source.tar.bz2;
-    sha1 = "ba3bb0b02404cf1abfb6189b156b2f4eb02e8975";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.4/source/firefox-3.0.4-source.tar.bz2;
+    sha1 = "16715b4af7ca2bad6baa8d450a3fd9cb375ad6d6";
   };
 
   buildInputs = [
-    pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+    pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2
     python dbus dbus_glib pango freetype fontconfig
-    xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
   ];
+
+  propagatedBuildInputs = [xulrunner];
 
   configureFlags = [
     "--enable-application=browser"
@@ -36,35 +37,21 @@ stdenv.mkDerivation {
     "--enable-system-cairo"
     #"--enable-system-sqlite" # <-- this seems to be discouraged
     "--disable-crashreporter"
+    "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
   ];
 
   postInstall = ''
-    export dontPatchELF=1;
-
-    # Strip some more stuff
+    # Strip some more stuff.
     strip -S $out/lib/*/* || true
 
-    # Fix some references to /bin paths in the Firefox shell script.
-    substituteInPlace $out/bin/firefox \
-        --replace /bin/pwd "$(type -tP pwd)" \
-        --replace /bin/ls "$(type -tP ls)"
-    
-    # This fixes starting Firefox when there already is a running
-    # instance.  The `firefox' wrapper script actually expects to be
-    # in the same directory as `run-mozilla.sh', apparently.
     libDir=$(cd $out/lib && ls -d firefox-[0-9]*)
     test -n "$libDir"
-    cd $out/bin
-    mv firefox ../lib/$libDir/
-    ln -s ../lib/$libDir/firefox .
+    
+    ln -s ${xulrunner}/lib/xulrunner-${xulrunner.version} $out/lib/$libDir/xulrunner
 
-    # Register extensions etc.
+    # Register extensions etc. !!! is this needed anymore?
     echo "running firefox -register..."
-    (cd $out/lib/$libDir && LD_LIBRARY_PATH=. ./firefox-bin -register) || false
-
-    # Put the Firefox icon in the right place.
-    ensureDir $out/lib/$libDir/chrome/icons/default
-    ln -s ../../../icons/default.xpm  $out/lib/$libDir/chrome/icons/default/
+    $out/bin/firefox -register
   ''; # */
 
   meta = {
@@ -72,7 +59,10 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.com/en-US/firefox/;
   };
 
-  passthru = {inherit gtk;};
+  passthru = {
+    inherit gtk;
+    isFirefox3Like = true;
+  };
 }
 
 

@@ -2,7 +2,7 @@ args: with args;
 
 let
 
-  localDefs = builderDefs.meta.function {
+  localDefs = builderDefs.passthru.function {
 
     src = fetchurl {
       url = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-0.9.6.4.tar.gz;

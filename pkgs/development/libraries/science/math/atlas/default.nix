@@ -7,6 +7,11 @@ stdenv.mkDerivation {
     sha256 = "1avbfppzgiws3nvqr7isr5a5pfbk3g4gfgd89xhyiywixjj3f7c6";
   };
 
+  # configure outside of the source directory
+  preConfigure = '' mkdir build; cd build; configureScript=../configure; '';
+
+  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
+
   buildInputs = [gfortran];
 
   meta = {

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, cpio, zlib, bzip2, file, sqlite, beecrypt, neon, elfutils}:
 
 stdenv.mkDerivation {
-  name = "rpm-4.4.5";
+  name = "rpm-4.4.8";
 
   src = fetchurl {
     url = http://wraptastic.org/pub/rpm-4.4.x/rpm-4.4.8.tar.gz;

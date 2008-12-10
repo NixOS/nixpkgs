@@ -2,7 +2,7 @@
 
 let 
 
-  versionNumber = "173.14.12";
+  versionNumber = "177.80";
 
 in
 
@@ -15,12 +15,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}-pkg1.run";
-        sha256 = "0a4i4a7vk0j7z52d2pg92f8wnlabd4r6v19qxdrr8nhgm0imjh78";
+        sha256 = "1z6z4dzhl2zmnwywaxbn2nf7lf72whjn7ffasdkb9217d5099wh7";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-pkg2.run";
-        sha256 = "1jblrvpa69z98g39sgadb3xbdsbzlvps4h9w73211l83sppqq84s"; # was 01hyyb5s7xc7108gy9cr7zkrfccfnpzqpipfygx9fikxyjb1vmig
+        sha256 = "1kx1kpc5flbsy9h1ii8al8cwzmvlfg4ymr6hvqsanxcdarq1sz47";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 

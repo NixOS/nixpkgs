@@ -40,12 +40,41 @@ rec {
   sumTwoArgs = f: x: y: 
     f (defaultMerge x y);
   foldArgs = merger: f: init: x: 
-    let arg=(merger init (defaultMergeArg init x)); in
-      (f arg) // {
-        meta = {
-	  function = foldArgs merger f arg;
-	};
-      };
+    let arg=(merger init (defaultMergeArg init x)); in  
+      # now add the function with composed args already applied to the final attrs
+    setAttrMerge "passthru" {} (f arg) ( x : x // { function = foldArgs merger f arg; } );
+
+  # returns f x // { passthru.fun = y : f (merge x y); } while preserving other passthru names.
+  # example: let ex = applyAndFun (x : removeAttrs x ["fixed"])  (mergeOrApply mergeAttr) {name = 6;};
+  #              usage1 = ex.passthru.fun { name = 7; };    # result: { name = 7;}
+  #              usage2 = ex.passthru.fun (a: a // {name = __add a.name 1; }); # result: { a = 7; }
+  # fix usage:
+  #              usage3a = ex.passthru.fun (a: a // {name2 = a.fixed.toBePassed; }); # usage3a will fail because toBePassed is not yet given
+  #              usage3b usage3a.passthru.fun { toBePassed = "foo";}; # result { name = 7; name2 = "foo"; toBePassed = "foo"; fixed = <this attrs>; }
+  applyAndFun = f : merge : x : assert (__isAttrs x || __isFunction x);
+    let takeFix = if (__isFunction x) then x else (attr: merge attr x); in
+    setAttrMerge "passthru" {} (fix (fixed : f (takeFix {inherit fixed;})))
+      ( y : y //
+        {
+          fun = z : applyAndFun f merge (fixed: merge (takeFix fixed) z);
+          funMerge = z : applyAndFun f merge (fixed: let e = takeFix fixed; in merge e (merge e z));
+        } );
+  mergeOrApply = merge : x : y : if (__isFunction y) then  y x else merge x y;
+
+  # rec { # an example of how composedArgsAndFun can be used
+  #  a  = composedArgsAndFun (x : x) { a = ["2"]; meta = { d = "bar";}; };
+  #  # meta.d will be lost ! It's your task to preserve it (eg using a merge function)
+  #  b  = a.passthru.function { a = [ "3" ]; meta = { d2 = "bar2";}; };
+  #  # instead of passing/ overriding values you can use a merge function:
+  #  c  = b.passthru.function ( x: { a = x.a  ++ ["4"]; }); # consider using (maybeAttr "a" [] x)
+  # }
+  # result:
+  # {
+  #   a = { a = ["2"];     meta = { d = "bar"; }; passthru = { function = .. }; };
+  #   b = { a = ["3"];     meta = { d2 = "bar2"; }; passthru = { function = .. }; };
+  #   c = { a = ["3" "4"]; meta = { d2 = "bar2"; }; passthru = { function = .. }; };
+  #   # c2 is equal to c
+  # }
   composedArgsAndFun = f: foldArgs defaultMerge f {};
 
   # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
@@ -67,10 +96,16 @@ rec {
     then nul
     else op (head list) (fold op nul (tail list));
 
+  # Haskell's fold
+  foldl = op: nul: list:
+    if list == []
+    then nul
+    else fold op (op nul (head list)) (tail list);
+
     
   # Concatenate a list of lists.
-  concatLists =
-    fold (x: y: x ++ y) [];
+  concatList = x : y : x ++ y;
+  concatLists = fold concatList [];
 
 
   # Concatenate a list of strings.
@@ -221,6 +256,16 @@ rec {
 
   optionalString = cond: string: if cond then string else "";
 
+  # Return the second argument if the first one is true or the empty version
+  # of the second argument.
+  ifEnable = cond: val:
+    if cond then val
+    else if builtins.isList val then []
+    else if builtins.isAttrs val then {}
+    # else if builtins.isString val then ""
+    else if (val == true || val == false) then false
+    else null;
+
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
     if builtins.lessThan last first
@@ -327,32 +372,88 @@ rec {
   fix = f:
     (rec { result = f result; }).result;
 
-  finalReference = fix; # bad name
-
-  # flatten a list of sets returned by 'f'.
-  # f      : function to evaluate each set.
-  # attr   : name of the attribute which contains more values.
+  # flatten a list of elements by following the properties of the elements.
+  # key    : return the key which correspond to the value.
+  # value  : return the value inserted in the returned list.
+  # next   : return the list of following elements.
+  # keys   : lists of keys already seen.
   # default: result if 'x' is empty.
   # x      : list of values that have to be processed.
-  uniqFlattenAttr = f: attr: default: x:
+  uniqFlatten = prop@{key, value, next, ...}: keys: default: x:
     if x == []
     then default
-    else let h = f (head x); t = tail x; in
-      if elem h default
-      then uniqFlattenAttr f attr default t
-      else uniqFlattenAttr f attr (default ++ [h]) (toList (getAttr [attr] [] h) ++ t)
+    else
+      let h = head x; t = tail x;
+          k = key h; v = value h; n = next h;
+      in
+      if elem k keys
+      then uniqFlatten prop keys default t
+      else uniqFlatten prop (keys ++ [k]) (default ++ [v]) (n ++ t)
     ;
+
+  /* If. ThenElse. Always. */
+
+  # create "if" statement that can be dealyed on sets until a "then-else" or
+  # "always" set is reached.  When an always set is reached the condition
+  # is ignore.
+
+  isIf = attrs: (typeOf attrs) == "if";
+  mkIf = condition: thenelse:
+    if isIf thenelse then
+      mkIf (condition && thenelse.condition) thenelse.thenelse
+    else {
+      _type = "if";
+      inherit condition thenelse;
+    };
+
+
+  isThenElse = attrs: (typeOf attrs) == "then-else";
+  mkThenElse = attrs:
+    assert attrs ? thenPart && attrs ? elsePart;
+    attrs // { _type = "then-else"; };
+
+
+  isAlways = attrs: (typeOf attrs) == "always";
+  mkAlways = value: { inherit value; _type = "always"; };
+
+  pushIf = f: attrs:
+    if isIf attrs then pushIf f (
+      let val = attrs.thenelse; in
+      # evaluate the condition.
+      if isThenElse val then
+        if attrs.condition then
+          val.thenPart
+        else
+          val.elsePart
+      # ignore the condition.
+      else if isAlways val then
+        val.value
+      # otherwise
+      else
+        f attrs.condition val)
+    else
+      attrs;
+
+  # take care otherwise you will have to handle this by hand.
+  rmIf = pushIf (condition: val: val);
+
+  evalIf = pushIf (condition: val:
+    # guess: empty else part.
+    ifEnable condition val
+  );
+
+  delayIf = pushIf (condition: val:
+    # rewrite the condition on sub-attributes.
+    mapAttrs (name: mkIf condition) val
+  );
 
   /* Options. */
 
   mkOption = attrs: attrs // {_type = "option";};
 
-  typeOf = x: if x ? _type then x._type else "";
+  typeOf = x: if (__isAttrs x && x ? _type) then x._type else "";
 
-  isOption = attrs:
-     __isAttrs attrs
-  && attrs ? _type
-  && attrs._type == "option";
+  isOption = attrs: (typeOf attrs) == "option";
 
   addDefaultOptionValues = defs: opts: opts //
     builtins.listToAttrs (map (defName:
@@ -382,16 +483,22 @@ rec {
     else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all __isList list then concatLists list
     else if all __isAttrs list then mergeAttrs list
+    else if all (x: true == x || false == x) list then fold logicalOR false list
     else abort "${name}: Cannot merge values.";
 
-  mergeEnableOption = name: list:
-    if all (x: true == x || false == x) list
-    then fold logicalOR false list
-    else abort "${name}: Expect a boolean value.";
+  mergeTypedOption = typeName: predicate: merge: name: list:
+    if all predicate list then merge list
+    else abort "${name}: Expect a ${typeName}.";
 
-  mergeListOption = name: list:
-    if all __isList list then concatLists list
-    else abort "${name}: Expect a list.";
+  mergeEnableOption = mergeTypedOption "boolean"
+    (x: true == x || false == x) (fold logicalOR false);
+
+  mergeListOption = mergeTypedOption "list"
+    __isList concatLists;
+
+  mergeStringOption = mergeTypedOption "string"
+    (x: if builtins ? isString then builtins.isString x else x + "")
+    concatStrings;
 
   # Merge sets of options and bindings.
   # noOption: function to call if no option is declared.
@@ -400,13 +507,13 @@ rec {
       zip (attr: opts:
         let
           name = if path == "" then attr else path + "." + attr;
-          defaultOpt = { merge = mergeDefaultOption; };
           test = partition isOption opts;
+          opt = ({ merge = mergeDefaultOption; apply = id; } // head test.right);
         in
-          if test.right == [] then mergeOptionSets noOption name test.wrong
+          if test.right == [] then mergeOptionSets noOption name (map delayIf test.wrong)
           else if tail test.right != [] then throw "Multiple options for '${name}'."
-          else if test.wrong == [] then (head test.right).default
-          else (defaultOpt // head test.right).merge name test.wrong
+          else if test.wrong == [] then opt.apply opt.default
+          else opt.apply (opt.merge name (map evalIf test.wrong))
       ) opts
    else noOption path opts;
 
@@ -420,7 +527,7 @@ rec {
           name = if path == "" then attr else path + "." + attr;
           test = partition isOption opts;
         in
-          if test.right == [] then filterOptionSets name test.wrong
+          if test.right == [] then filterOptionSets name (map delayIf test.wrong)
           else if tail test.right != [] then  throw "Multiple options for '${name}'."
           else { inherit name; } // (head test.right)
       ) opts
@@ -430,26 +537,40 @@ rec {
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
   fixOptionSetsFun = merge: pkgs: opts:
-    let optionSet = config: configFun:
-      if __isFunction configFun then
-        let result = configFun { inherit pkgs config; }; in
-      # {pkgs, config, ...}: {..}
-        if builtins.isAttrs result then result
-      # pkgs: config: {..}
-        else configFun pkgs config
-      # {..}
-      else configFun;
-    in
-      config: merge ""
-        (map (x: removeAttrs x ["require"])
-          (uniqFlattenAttr (optionSet config) "require" [] (toList opts))
-        );
+    let
+      # ignore all conditions that are on require attributes.
+      rmRequireIf = conf:
+        let conf2 = delayIf conf; in
+        if conf2 ? require then
+          conf2 // { require = rmIf conf2.require; }
+        else
+          conf2;
+
+      # call configuration "files" with one of the existing convention.
+      optionSet = config: configFun:
+        if __isFunction configFun then
+          let result = configFun { inherit pkgs config; }; in
+        # {pkgs, config, ...}: {..}
+          if builtins.isAttrs result then result
+        # pkgs: config: {..}
+          else configFun pkgs config
+        # {..}
+        else configFun;
+
+      processConfig = config: configFun:
+        rmRequireIf (optionSet config configFun);
+
+      prop = config: rec {
+        key = id;
+        prepare = x: processConfig config x;
+        value = x: removeAttrs (prepare x) ["require"];
+        next = x: toList (getAttr ["require"] [] (prepare x));
+      };
+    in config:
+      merge "" (uniqFlatten (prop config) [] [] (toList opts));
 
   fixOptionSets = merge: pkgs: opts:
     fix (fixOptionSetsFun merge pkgs opts);
-
-  finalOptionSetsFun = fixOptionSetsFun;
-  finalReferenceOptionSets = fixOptionSets;
 
   optionAttrSetToDocList = (l: attrs:
     (if (getAttr ["_type"] "" attrs) == "option" then
@@ -476,10 +597,11 @@ rec {
   # this can help debug your code as well - designed to not produce thousands of lines
   traceWhatis = x : __trace (whatis x) x;
   traceMarked = str: x: __trace (str + (whatis x)) x;
-  whatis = x : 
+  attrNamesToStr = a : concatStringsSep "; " (map (x : "${x}=") (__attrNames a));
+  whatis = x :
       if (__isAttrs x) then
-          if (x ? outPath) then "x is a derivation with name ${x.name}"
-          else "x is an attr set with attributes ${builtins.toString (__attrNames x)}"
+          if (x ? outPath) then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
+          else "x is attr set { ${attrNamesToStr x} }"
       else if (__isFunction x) then "x is a function"
       else if (x == []) then "x is an empty list"
       else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
@@ -487,6 +609,11 @@ rec {
       else if (x == false) then "x is boolean false"
       else if (x == null) then "x is null"
       else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
+  # trace the arguments passed to function and its result 
+  traceCall  = n : f : a : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
+  traceCall2 = n : f : a : b : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
+  traceCall3 = n : f : a : b : c : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+
 
 
   innerClosePropagation = ready: list: if list == [] then ready else
@@ -507,7 +634,18 @@ rec {
 
   defineShList = name : list : "\n${name}=(${concatStringsSep " " (map escapeShellArg list)})\n";
 
+  # this as well :-) arg: http://foo/bar/bz.ext returns bz.ext
+  dropPath = s : 
+      if s == "" then "" else
+      let takeTillSlash = left : c : s :
+          if left == 0 then s
+          else if (__substring left 1 s == "/") then
+                  (__substring (__add left 1) (__sub c 1) s)
+          else takeTillSlash (__sub left 1) (__add c 1) s; in
+      takeTillSlash (__sub (__stringLength s) 1) 1 s;
+
   # calls a function (f attr value ) for each record item. returns a list
+  # should be renamed to mapAttrsFlatten
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
   # maps a function on each attr value
@@ -521,10 +659,17 @@ rec {
   # adds / replaces an attribute of an attribute set
   setAttr = set : name : v : set // (nvs name v);
 
+  # setAttrMerge (similar to mergeAttrsWithFunc but only merges the values of a particular name)
+  # setAttrMerge "a" [] { a = [2];} (x : x ++ [3]) -> { a = [2 3]; } 
+  # setAttrMerge "a" [] {         } (x : x ++ [3]) -> { a = [  3]; }
+  setAttrMerge = name : default : attrs : f :
+    setAttr attrs name (f (maybeAttr name default attrs));
+
   # iterates over a list of attributes collecting the attribute attr if it exists
   catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
 
-  mergeAttrs = fold ( x : y : x // y) {};
+  mergeAttr = x : y : x // y;
+  mergeAttrs = fold mergeAttr {};
 
   attrVals = nameList : attrSet :
     map (x: builtins.getAttr x attrSet) nameList;
@@ -548,6 +693,7 @@ rec {
   # { buildInputs = [a b]; }
   # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
   # in these cases the first buildPhase will override the second one
+  # ! depreceated, use mergeAttrByFunc instead
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
                            overrideSnd ? [ "buildPhase" ]
                          } : attrs1 : attrs2 :
@@ -561,6 +707,45 @@ rec {
               else throw "error mergeAttrsNoOverride, attribute ${n} given in both attributes - no merge func defined"
             else __getAttr n attrs2 # add attribute not existing in attr1
            )) attrs1 (__attrNames attrs2);
+
+
+  # example usage:
+  # mergeAttrByFunc  {
+  #   inherit mergeAttrBy; # defined below
+  #   buildInputs = [ a b ];
+  # } {
+  #  buildInputs = [ c d ];
+  # };
+  # will result in
+  # { mergeAttrsBy = [...]; buildInputs = [ a b c d ]; }
+  # is used by prepareDerivationArgs and can be used when composing using
+  # foldArgs, composedArgsAndFun or applyAndFun. Example: composableDerivation in all-packages.nix
+  mergeAttrByFunc = x : y :
+    let
+          mergeAttrBy2 = { mergeAttrBy=mergeAttr; }
+                      // (maybeAttr "mergeAttrBy" {} x)
+                      // (maybeAttr "mergeAttrBy" {} y); in
+    mergeAttrs [
+      x y
+      (mapAttrs ( a : v : # merge special names using given functions
+          if (__hasAttr a x)
+             then if (__hasAttr a y)
+               then v (__getAttr a x) (__getAttr a y) # both have attr, use merge func
+               else (__getAttr a x) # only x has attr
+             else (__getAttr a y) # only y has attr)
+          ) (removeAttrs mergeAttrBy2
+                         # don't merge attrs which are neither in x nor y
+                         (filter (a : (! __hasAttr a x) && (! __hasAttr a y) )
+                                 (__attrNames mergeAttrBy2))
+            )
+      )
+    ];
+  mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
+  # sane defaults (same name as attr name so that inherit can be used)
+  mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
+    listToAttrs (map (n : nv n concatList) [ "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
+    // listToAttrs (map (n : nv n mergeAttr) [ "passthru" "meta" "cfg" "flags" ]);
+
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
@@ -571,7 +756,65 @@ rec {
           then r ++ [ (  nv attr ( f (__getAttr attr attrs) ) ) ] else r ) []
       subset_attr_names );
 
+  # prepareDerivationArgs tries to make writing configurable derivations easier
+  # example:
+  #  prepareDerivationArgs {
+  #    mergeAttrBy = {
+  #       myScript = x : y : x ++ "\n" ++ y;
+  #    };
+  #    cfg = {
+  #      readlineSupport = true;
+  #    };
+  #    flags = {
+  #      readline = {
+  #        set = {
+  #           configureFlags = [ "--with-compiler=${compiler}" ];
+  #           buildInputs = [ compiler ];
+  #           pass = { inherit compiler; READLINE=1; };
+  #           assertion = compiler.dllSupport;
+  #           myScript = "foo";
+  #        };
+  #        unset = { configureFlags = ["--without-compiler"]; };
+  #      };
+  #    };
+  #    src = ...
+  #    buildPhase = '' ... '';
+  #    name = ...
+  #    myScript = "bar";
+  #  };
+  # if you don't have need for unset you can omit the surrounding set = { .. } attr
+  # all attrs except flags cfg and mergeAttrBy will be merged with the
+  # additional data from flags depending on config settings
+  # It's used in composableDerivation in all-packages.nix. It's also used
+  # heavily in the new python and libs implementation
+  #
+  # should we check for misspelled cfg options?
+  prepareDerivationArgs = args:
+    let args2 = { cfg = {}; flags = {}; } // args;
+        flagName = name : "${name}Support";
+        cfgWithDefaults = (listToAttrs (map (n : nv (flagName n) false) (attrNames args2.flags)))
+                          // args2.cfg;
+        opts = flattenAttrs (mapAttrs (a : v :
+                let v2 = if (v ? set || v ? unset) then v else { set = v; };
+                    n = if (__getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
+                    attr = maybeAttr n {} v2; in
+                if (maybeAttr "assertion" true attr)
+                  then attr
+                  else throw "assertion of flag ${a} of derivation ${args.name} failed"
+               ) args2.flags );
+    in removeAttrs
+      (mergeAttrsByFuncDefaults ([args] ++ opts))
+      ["flags" "cfg" "mergeAttrBy" "fixed" ]; # fixed may be passed as fix argument or such
+  # supportFlag functions for convinience
+  sFlagEnable = { name, buildInputs ? [], propagatedBuildInputs ? [] } : {
+      set = { configureFlags = "--enable-${name}"; inherit buildInputs; inherit propagatedBuildInputs; };
+      unset = { configureFlags = "--disable-${name}"; };
+    };
+
+
+
 # Marc 2nd proposal: (not everything has been tested in detail yet..)
+# depreceated because it's too complicated. use prepareDerivationArgs instead
 
   # usage / example
   # flagConfig = {

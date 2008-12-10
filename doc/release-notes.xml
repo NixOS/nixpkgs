@@ -139,12 +139,12 @@ fetchurl {
 
   <function>fetchurl</function> will first try to download this file
   from <link
-  xlink:href="http://nix.cs.uu.nl/dist/tarballs/sha1/eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082"/>.
+  xlink:href="http://nixos.org/tarballs/sha1/eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082"/>.
   If that file doesn’t exist, it will try the original URL.  In
   general, the “content-addressed” location is
   <replaceable>mirror</replaceable><literal>/</literal><replaceable>hash-type</replaceable><literal>/</literal><replaceable>hash</replaceable>.
   There is currently only one content-addressable mirror (<link
-  xlink:href="http://nix.cs.uu.nl/dist/tarballs"/>), but more can be
+  xlink:href="http://nixos.org/tarballs"/>), but more can be
   specified in the <varname>hashedMirrors</varname> attribute in
   <filename>pkgs/build-support/fetchurl/mirrors.nix</filename>, or by
   setting the <envar>NIX_HASHED_MIRRORS</envar> environment variable
@@ -239,7 +239,7 @@ export NIX_MIRRORS_sourceforge=http://osdn.dl.sourceforge.net/sourceforge/</prog
 <section><title>Release 0.10 (October 12, 2006)</title>
 
 <note><para>This release of Nixpkgs requires <link
-xlink:href='http://nix.cs.uu.nl/dist/nix/nix-0.10/'>Nix
+xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix
 0.10</link> or higher.</para></note>
 
 <para>This release has the following improvements:</para>
@@ -445,7 +445,7 @@ some of the more notable changes:</para>
 <itemizedlist>
 
   <listitem><para>Distribution files have been moved to <link
-  xlink:href="http://nix.cs.uu.nl/" />.</para></listitem>
+  xlink:href="http://nixos.org/" />.</para></listitem>
 
   <listitem><para>The C library on Linux, Glibc, has been updated to
   version 2.3.6.</para></listitem>

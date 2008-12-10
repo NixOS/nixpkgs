@@ -11,8 +11,11 @@ done
 IFS=$oldIFS
 echo "Perl flags: $perlFlags"
 
+oldPreConfigure="$preConfigure"
 preConfigure=preConfigure
 preConfigure() {
+
+    eval "$oldPreConfigure"
 
     find . | while read fn; do
         if test -f "$fn"; then

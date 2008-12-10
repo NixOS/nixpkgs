@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = ftp://ftp.chg.ru/mirrors/ftp.freebsd.org/pub/FreeBSD/ports/distfiles/rlwrap-0.28.tar.gz;

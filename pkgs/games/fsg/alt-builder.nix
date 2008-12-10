@@ -1,5 +1,5 @@
 args: with args; 
-	let localDefs = builderDefs.meta.function {
+	let localDefs = builderDefs.passthru.function {
   		buildInputs =[(wxGTK null)];
 		  src = 
 			fetchurl {

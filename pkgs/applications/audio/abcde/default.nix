@@ -6,14 +6,14 @@ in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
-      url = "mirror://debian/pool/a/abcde/abcde_${version}.orig.tar.gz";
+      url = "mirror://debian/pool/main/a/abcde/abcde_${version}.orig.tar.gz";
       sha256 = "1wl4ygj1cf1d6g05gwwygsd5g83l039fzi011r30ma5lnm763lyb";
     };
 
     # FIXME: This package does not support MP3 encoding (only Ogg),
     # nor `distmp3', `eject', etc.
 
-    patches = [ ./install.patch ];
+    patches = [ ./install.patch ./which.patch ./cd-paranoia.patch ];
 
     configurePhase = ''
       sed -i "s|^[[:blank:]]*prefix *=.*$|prefix = $out|g ;
@@ -23,7 +23,8 @@ in
 
       # We use `cd-paranoia' from GNU libcdio, which contains a hyphen
       # in its name, unlike Xiph's cdparanoia.
-      sed -i "s|^[[:blank:]]*CDPARANOIA=.*$|CDPARANOIA=cd-paranoia|g" \
+      sed -i "s|^[[:blank:]]*CDPARANOIA=.*$|CDPARANOIA=cd-paranoia|g ;
+              s|^[[:blank:]]*DEFAULT_CDROMREADERS=.*$|DEFAULT_CDROMREADERS=\"cd-paranoia cdda2wav\"|g" \
            "abcde"
 
       substituteInPlace "abcde"					\

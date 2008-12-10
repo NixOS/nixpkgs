@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "Firmware for the Intel 4965ABG wireless card";
+
+    longDescription = ''
+      This package provides version 2 of the Intel wireless card
+      firmware, for Linux up to 2.6.26.  It contains the
+      `iwlwifi-4965-1.ucode' file, which is loaded by the `iw4965'
+      driver found in recent kernels.
+    '';
+
     homepage = http://intellinuxwireless.org/;
   };
 }

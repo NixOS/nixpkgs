@@ -6,19 +6,22 @@ let
   commonLinuxPkgs = system: let pkgs = allPackages {inherit system;}; in {
     inherit (pkgs)
       MPlayer
-      MPlayerPlugin
+      abcde
       alsaUtils
       apacheHttpd
       aspell
       aspellDicts
+      at
       audacious
       audacious_plugins
       autoconf
       automake19x
+      avahi
       bash
       bashInteractive
       binutils
       bison23
+      bison24
       bitlbee
       bittorrent
       bsdiff
@@ -64,7 +67,8 @@ let
       ghc
       ghostscript
       gimp
-      gnash
+      git
+      /*gnash*/
       gnugrep
       gnum4
       gnumake
@@ -72,17 +76,22 @@ let
       gnused
       gnutar
       gnutls
+      gphoto2
       guile
       gqview
       graphviz
       grub
+      gv
       gzip
       hal
       hello
+      host
       iana_etc
+      imagemagick
       inkscape
       iputils
       irssi
+      jnettop
       jwhois
       kbd
       kcachegrind
@@ -90,6 +99,7 @@ let
       ktorrent
       kvm
       less
+      lftp
       lhs2tex
       libtool
       libxml2
@@ -128,6 +138,7 @@ let
       pciutils
       perl
       php
+      pinentry
       pkgconfig
       postgresql
       procps
@@ -152,13 +163,16 @@ let
       subversion14
       subversion15
       sudo
+      superTuxKart
       swig
       sylpheed 
       sysklogd
       sysvinit
       sysvtools
+      tcpdump
       #tetex
       texLive
+      texLiveBeamer
       texLiveExtra
       texinfo
       thunderbird
@@ -172,6 +186,7 @@ let
       vim
       vlc
       vorbisTools
+      vpnc
       w3m
       wget
       wirelesstools
@@ -241,6 +256,13 @@ let
 #        splashutils
         ;
     };
+    kernelPackages_2_6_27 = pkgs.recurseIntoAttrs {
+      inherit (pkgs.kernelPackages_2_6_27)
+        kernel
+        klibc
+#        splashutils
+        ;
+    };
   };
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
@@ -270,6 +292,7 @@ let
       strategoxt
       strategoxtUtils
       syslinux
+      tinycc
       uml
       wine
       xorg_sys_opengl
@@ -330,11 +353,13 @@ let
     inherit (allPackages {system = "i686-darwin";})
       aterm
       autoconf
-      automake19x
       automake110x
+      automake19x
+      ghc
       libtool
       libxml2
       libxslt
+      nixUnstable
       subversion
       ;
   };

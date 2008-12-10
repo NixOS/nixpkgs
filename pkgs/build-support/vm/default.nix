@@ -233,6 +233,15 @@ rec {
   '';
 
 
+  modifyDerivation = f: attrs:
+    let attrsCleaned = removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"];
+        newDrv = derivation (attrsCleaned // (f attrs));
+    in newDrv //
+      { meta = if attrs ? meta then attrs.meta else {};
+        passthru = if attrs ? passthru then attrs.passthru else {};
+      };
+
+
   /* Run a derivation in a Linux virtual machine (using Qemu/KVM).  By
      default, there is no disk image; the root filesystem is a tmpfs,
      and /nix/store is shared with the host (via the CIFS protocol to
@@ -254,7 +263,7 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
      
-  runInLinuxVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
+  runInLinuxVM = modifyDerivation (attrs: {
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
@@ -289,7 +298,7 @@ rec {
      - Reboot to shutdown the machine (because Qemu doesn't seem
        capable of a APM/ACPI VM shutdown).
   */
-  runInGenericVM = attrs: derivation (removeAttrs attrs ["meta" "passthru" "outPath" "drvPath"] // {
+  runInGenericVM = modifyDerivation (attrs: {
     system = "i686-linux";
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandGeneric)];
@@ -391,6 +400,8 @@ rec {
         ${klibcShrunk}/bin/umount /mnt/nix/store
         ${klibcShrunk}/bin/umount /mnt
       '';
+
+      passthru = {inherit fullName;};
     });
 
 
@@ -450,20 +461,32 @@ rec {
       srcName="$strippedName"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
-      rpmbuild -vv -ta "$srcName" || fail
+      export HOME=/tmp/home
+      mkdir $HOME
+
+      rpmout=/tmp/rpmout
+      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
+
+      echo "%_topdir $rpmout" >> $HOME/.rpmmacros
+      
+      rpmbuild -vv -ta "$srcName"
 
       eval "$postBuild"
     '';
 
     installPhase = ''
+      eval "$preInstall"
+    
       ensureDir $out/$outDir
-      find /usr/src -name "*.rpm" -exec cp {} $out/$outDir \;
+      find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
         header "Generated RPM/SRPM: $i"
         rpm -qip $i
         stopNest
       done
+
+      eval "$postInstall"
     ''; # */
   } // attrs));
 
@@ -486,7 +509,6 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        echo "initialising Debian DB..."
         PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
@@ -507,6 +529,7 @@ rec {
         ${klibcShrunk}/bin/mount -o bind /dev /mnt/dev
         
         # Misc. files/directories assumed by various packages.
+        echo "initialising Dpkg DB..."
         touch /mnt/etc/shells
         touch /mnt/var/lib/dpkg/status
         touch /mnt/var/lib/dpkg/available
@@ -543,6 +566,8 @@ rec {
         ${klibcShrunk}/bin/umount /mnt/dev
         ${klibcShrunk}/bin/umount /mnt
       '';
+
+      passthru = {inherit fullName;};
     });
 
 
@@ -600,12 +625,15 @@ rec {
   makeImageFromDebDist =
     {name, fullName, size ? 2048, urlPrefix, packagesList, packages, postInstall ? ""}:
 
-    fillDiskWithDebs {
-      inherit name fullName size postInstall;
-      debs = import (debClosureGenerator {
+    let
+      expr = debClosureGenerator {
         inherit name packagesList urlPrefix packages;
-      }) {inherit fetchurl;};
-    };
+      };
+    in
+      (fillDiskWithDebs {
+        inherit name fullName size postInstall;
+        debs = import expr {inherit fetchurl;};
+      }) // {inherit expr;};
 
 
   /* A bunch of functions that build disk images of various Linux
@@ -688,6 +716,27 @@ rec {
       archs = ["noarch" "x86_64"];
     } // args);
 
+    fedora10i386 = args: makeImageFromRPMDist ({
+      name = "fedora-10-i386";
+      fullName = "Fedora 10 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/10/Fedora/i386/os/repodata/primary.xml.gz;
+        sha256 = "15ha8pxzvlch707mpy06c7pkr2ra2vpd5b8x30qhydvx8fgcqcx9";
+      };
+      urlPrefix = mirror://fedora/linux/releases/10/Fedora/i386/os;
+    } // args);
+
+    fedora10x86_64 = args: makeImageFromRPMDist ({
+      name = "fedora-10-x86_64";
+      fullName = "Fedora 10 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/10/Fedora/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "1pmaav6mdaw13fq99wfggbsmhcix306cimijjxh35qi7yc3wbsz4";
+      };
+      urlPrefix = mirror://fedora/linux/releases/10/Fedora/x86_64/os;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     opensuse103i386 = args: makeImageFromRPMDist ({
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -701,7 +750,7 @@ rec {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
-    # wrong, but the SHA-1 and MD5 hashes are correct.
+    # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
 
     ubuntu710i386 = args: makeImageFromDebDist ({
       name = "ubuntu-7.10-gutsy-i386";
@@ -733,22 +782,42 @@ rec {
       urlPrefix = mirror://ubuntu;
     } // args);
          
+    ubuntu810i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-intrepid-i386";
+      fullName = "Ubuntu 8.10 Intrepid (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/intrepid/main/binary-i386/Packages.bz2;
+        sha256 = "70483d40a9e9b74598f2faede7df5d5103ee60055af7374f8db5c7e6017c4cf6";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
+    ubuntu810x86_64 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-intrepid-amd64";
+      fullName = "Ubuntu 8.10 Intrepid (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/intrepid/main/binary-amd64/Packages.bz2;
+        sha1 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+         
     debian40i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r4a-etch-i386";
-      fullName = "Debian 4.0r4a Etch (i386)";
+      name = "debian-4.0r5-etch-i386";
+      fullName = "Debian 4.0r5 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "ce963cc348f89ca50f65a8e32aa518c590e213c26c9ead48b0899f01f4456a4a";
+        sha256 = "37a5c17fd8d62b1d9a0264a702025a4381c1a8751e2550d101957d8fa724a6f4";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian40x86_64 = args: makeImageFromDebDist ({
-      name = "debian-4.0r4a-etch-amd64";
-      fullName = "Debian 4.0r4a Etch (amd64)";
+      name = "debian-4.0r5-etch-amd64";
+      fullName = "Debian 4.0r5 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
-        sha256 = "3403ebca73baeb68092e32d2c61a14eec4497702ef7281a7c1485abeb3d263f6";
+        sha256 = "244dc892f89f2f73ce8372cdf1f1d450b00c0e95196927ef7f99715f0d119d5b";
       };
       urlPrefix = mirror://debian;
     } // args);
@@ -822,6 +891,11 @@ rec {
     "curl"
     "patch"
     "diff"
+    "locales"
+    # Needed by checkinstall:
+    "util-linux" 
+    "file"
+    "dpkg-dev"
   ];
 
 
@@ -863,11 +937,15 @@ rec {
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
     fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages; };
     fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages; };
+    fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages; };
+    fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages; };
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
     ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
     ubuntu804x86_64 = diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages; };
+    ubuntu810i386 = diskImageFuns.ubuntu810i386 { packages = commonDebianPackages; };
+    ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
 

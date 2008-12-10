@@ -6,7 +6,7 @@ stdenv.mkDerivation ({
   src = fetchurl {
     urls = [
       http://download.oracle.com/berkeley-db/db-4.4.20.NC.tar.gz
-      http://nix.cs.uu.nl/dist/tarballs/db-4.4.20.NC.tar.gz
+      http://nixos.org/tarballs/db-4.4.20.NC.tar.gz
     ];
     md5 = "afd9243ea353bbaa04421488d3b37900";
   };

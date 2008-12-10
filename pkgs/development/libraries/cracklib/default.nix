@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0l9kar7h80kkvs394dyzbn02jkd8hzynh9kxyqrlacj1wp35rmah";
   };
   dicts = fetchurl {
-    url = http://nix.cs.uu.nl/dist/tarballs/cracklib-words.gz;
+    url = http://nixos.org/tarballs/cracklib-words.gz;
     md5 = "d18e670e5df560a8745e1b4dede8f84f";
   };
 }

@@ -13,4 +13,10 @@ stdenv.mkDerivation {
 
   # !!! don't know why this is necessary
   NIX_LDFLAGS = "-rpath ${libXext}/lib";
+
+  meta = { 
+    description = "screencast video catpuring tool";
+    homepage = http://xvidcap.sourceforge.net/;
+    license = "GPLv2";
+  };
 }

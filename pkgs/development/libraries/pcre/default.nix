@@ -1,10 +1,10 @@
 {stdenv, fetchurl, unicodeSupport ? false, cplusplusSupport ? true}:
 
 stdenv.mkDerivation {
-  name = "pcre-7.8";
+  name = "pcre-7.4";
   src = fetchurl {
-    url = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-7.8.tar.bz2;
-    sha256 = "1zsqk352mx2zklf9bgpg9d88ckfdssbbbiyslhrycfckw8m3qpvr";
+    url = mirror://sourceforge/pcre/pcre-7.4.tar.bz2;
+    sha256 = "1rdks2h5f3p2d71c4jnxaic1c9gmgsfky80djnafcdbdrhzkiyx5";
   };
   configureFlags = ''
     ${if unicodeSupport then "--enable-unicode-properties --enable-shared --disable-static" else ""}

@@ -1,5 +1,5 @@
 args : with args; with builderDefs;
-	let localDefs = builderDefs.meta.function ((rec {
+	let localDefs = builderDefs.passthru.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
 			url = http://download2.berlios.de/linuxdcpp/linuxdcpp-1.0.1.tar.bz2;
