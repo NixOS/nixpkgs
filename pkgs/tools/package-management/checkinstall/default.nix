@@ -17,6 +17,22 @@ stdenv.mkDerivation {
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
   '';
 
+  postInstall =
+    if stdenv.isLinux then
+      # Clear the RPATH, otherwise installwatch.so won't work properly
+      # as an LD_PRELOADed library on applications that load against a
+      # different Glibc.
+      ''
+         patchelf --set-rpath "" $out/lib/installwatch.so
+      ''
+    else "";
+
+  patches = [
+    # Necessary for building on x86_64, see
+    # http://checkinstall.izto.org/cklist/msg00256.html
+    ./readlink.patch
+  ];
+
   meta = {
     homepage = http://checkinstall.izto.org/;
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
