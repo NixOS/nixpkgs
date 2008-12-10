@@ -2945,14 +2945,14 @@ let
     inherit fetchurl stdenv pkgconfig gettext;
   };
 
-  glibc = useFromStdenv "glibc" glibc28;
+  glibc = useFromStdenv "glibc" glibc29;
 
   glibc27 = import ../development/libraries/glibc-2.7 {
     inherit fetchurl stdenv kernelHeaders;
     #installLocales = false;
   };
 
-  glibc28 = import ../development/libraries/glibc-2.8 {
+  glibc29 = import ../development/libraries/glibc-2.9 {
     inherit fetchurl stdenv kernelHeaders;
     installLocales = getPkgConfig "glibc" "locales" true;
   };
@@ -6023,19 +6023,15 @@ let
     inherit fetchurl stdenv unifdef;
   };
 
-  kernelHeaders_2_6_21 = import ../os-specific/linux/kernel-headers/2.6.21.3.nix {
-    inherit fetchurl stdenv;
-  };
-
   kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.16.nix {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_25 = import ../os-specific/linux/kernel-headers/2.6.25.4.nix {
+  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26.2.nix {
     inherit fetchurl stdenv;
   };
 
-  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26.2.nix {
+  kernelHeaders_2_6_27 = import ../os-specific/linux/kernel-headers/2.6.27.8.nix {
     inherit fetchurl stdenv;
   };
 

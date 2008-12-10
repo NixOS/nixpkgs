@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "glibc-2.8-20081006";
+  name = "glibc-2.9";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/glibc/snapshots/${name}.tar.bz2";
-    sha256 = "e32021c14f0bda55b6a5d2a98ac878a03b2c6f78a1ab4a11f0386a51eda1d58e";
+    url = http://nixos.org/tarballs/glibc-2.9-20081208.tar.bz2;
+    sha256 = "0zhxbgcsl97pf349m0lz8d5ljvvzrcqc23yf08d888xlk4ms8m3h";
   };
 
   inherit kernelHeaders installLocales;
