@@ -1,15 +1,20 @@
-sha256: args: with args;
+{ fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
+, expat, gettext, intltool, glib, gtk, qt4 ? null, lib
+, qt4Support ? false }:
 
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-" + version;
+  name = "avahi-0.6.24";
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    inherit sha256;
+    sha256 = "0l5rsi4s7az7cs9p4aqs77v7jrh95iiwwx0ivksmivc8c7a70016";
   };
 
-  buildInputs = [pkgconfig libdaemon dbus perl perlXMLParser glib expat]
+  buildInputs = [
+      pkgconfig libdaemon dbus perl perlXMLParser glib expat
+      gettext intltool
+    ]
     ++ lib.optional qt4Support qt4;
 
   configureFlags = ''
