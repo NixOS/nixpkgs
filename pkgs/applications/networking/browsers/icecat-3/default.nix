@@ -4,13 +4,13 @@
 , freetype, fontconfig
 , application ? "browser" }:
 
-let version = "3.0.3-g1"; in
+let version = "3.0.4-g1"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.lzma";
-    sha256 = "189rfgcsp98hd8ix8mc294xg0iw3qwmn2nyb2495hx84zli09n5m";
+    sha256 = "1hxjihzmwf2jch8vy42j0n3db5af96dyglafyy605fagaq5xnizc";
   };
 
   buildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    inherit gtk;
+    inherit gtk version;
     isFirefox3Like = true;
   };
 }
