@@ -8,11 +8,11 @@ assert stdenv.isLinux;
 let lib = import ../../../lib/default.nix; in
 
 stdenv.mkDerivation {
-  name = "wine-1.1.9";
+  name = "wine-1.1.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/wine/wine-1.1.9.tar.bz2;
-    sha256 = "1jhy7l5q1jri529n5070f4wjigbw4dr7d4jgdc10v6hxfmlp1mzy";
+    url = mirror://sourceforge/wine/wine-1.1.10.tar.bz2;
+    sha256 = "0saj7c2cmx720pdha04niz5c1jkym8zf5snjvdgxmwlizfjy2qr2";
   };
 
   buildInputs = [
