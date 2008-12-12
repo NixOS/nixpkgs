@@ -7486,7 +7486,7 @@ let
 
   icecat3Xul =
     (symlinkJoin "icecat-3-with-xulrunner" [ icecat3 icecatXulrunner3 ])
-    // { inherit (icecat3) gtk meta; };
+    // { inherit (icecat3) gtk isFirefox3Like meta; };
 
   icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
 
