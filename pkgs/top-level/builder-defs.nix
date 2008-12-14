@@ -410,7 +410,8 @@ args: with args; with stringsWithDeps; with lib;
           inherit (localDefs) name;
           builder = writeScript (name + "-builder")
             (textClosure localDefs localDefs.realPhaseNames);
-          meta = localDefs.meta // {inherit src;};
+          meta = localDefs.meta;
+	  passthru = localDefs.passthru // {inherit (localDefs) src; };
         }) // (if localDefs ? propagatedBuildInputs then {
           inherit (localDefs) propagatedBuildInputs;
         } else {}) // extraDerivationAttrs)
