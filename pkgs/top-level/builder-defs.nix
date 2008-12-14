@@ -391,7 +391,7 @@ args: with args; with stringsWithDeps; with lib;
           ensureDir "$out/share/doc/$name"
 	'' + (concatStringsSep ";"
                (map 
-	         (x: ''cp "${x}" "$out/share/doc/$name || true;"'') 
+	         (x: ''cp "${x}" "$out/share/doc/$name" || true;'') 
 		 (getAttr ["extraDoc"] [] args)))) ["minInit" "defEnsureDir" "doUnpack"];
 
         realPhaseNames = 
