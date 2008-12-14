@@ -9,7 +9,7 @@ args: with args; with stringsWithDeps; with lib;
 
         forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
         forceCopy = ["COPYING" "LICENSE" "DISTRIBUTION" "LEGAL" 
-          "README" "AUTHORS" "ChangeLog" "CHANGES"] ++ 
+          "README" "AUTHORS" "ChangeLog" "CHANGES" "LICENCE" "COPYRIGHT"] ++ 
           (optional (getAttr ["forceCopyDoc"] true args) "doc"); 
 
         archiveType = s: 
@@ -278,8 +278,8 @@ args: with args; with stringsWithDeps; with lib;
         ") ["minInit" "defEnsureDir"];
 
         doForceCopy = FullDepEntry (''
-                name=$(basename $out)
-                name=''${name#*-}
+                name="$(basename $out)"
+                name="''${name#*-}"
                 ensureDir "$prefix/share/$name"
                 for f in ${toString forceCopy}; do
                         cp -r "$f" "$prefix/share/$name/$f" || true
@@ -381,8 +381,27 @@ args: with args; with stringsWithDeps; with lib;
         surroundWithCommands = x : before : after : {deps=x.deps; text = before + "\n" +
                 x.text + "\n" + after ;};
 
-        realPhaseNames = args.phaseNames ++ 
+	createDirs = FullDepEntry (concatStringsSep ";"
+		(map (x: "ensureDir ${x}") (getAttr ["neededDirs"] [] args))
+	) ["minInit" "defEnsureDir"];
+
+	copyExtraDoc = FullDepEntry (''
+          name="$(basename $out)"
+          name="''${name#*-}"
+          ensureDir "$out/share/doc/$name"
+	'' + (concatStringsSep ";"
+               (map 
+	         (x: ''cp "${x}" "$out/share/doc/$name || true;"'') 
+		 (getAttr ["extraDoc"] [] args)))) ["minInit" "defEnsureDir" "doUnpack"];
+
+        realPhaseNames = 
+	  (optional ([] != getAttr ["neededDirs"] [] args) "createDirs")
+	  ++
+	  args.phaseNames 
+	  ++ 
           ["doForceShare" "doPropagate" "doForceCopy"]
+	  ++
+	  (optional ([] != getAttr ["extraDoc"] [] args) "copyExtraDoc")
           ++
           (optional (getAttr ["doCheck"] false args) "doMakeCheck")
           ++
