@@ -489,6 +489,22 @@ let
             merge
             (merge { inherit (lib) mergeAttrBy; } initial);
 
+  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+  writeReferencesToFile = path: runCommand "runtime-deps"
+    {
+      exportReferencesGraph = ["graph" path];
+    }
+    ''
+      touch $out
+      while read path; do
+        echo $path >> $out
+        read dummy
+        read nrRefs
+        for ((i = 0; i < nrRefs; i++)); do read ref; done
+      done < graph
+    '';
+
+            
   ### TOOLS
 
 
@@ -2785,8 +2801,6 @@ let
     inherit fetchurl stdenv pkgconfig expat;
     inherit (xlibs) libX11 libICE libSM;
     useX11 = true; # !!! `false' doesn't build
-    #useX11 = getConfig ["dbus" "tools" "useX11"]
-    #  (getConfig ["services" "xserver" "enable"] false);
   };
 
   dbus_glib = import ../development/libraries/dbus-glib {
