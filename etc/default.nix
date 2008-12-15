@@ -1,5 +1,5 @@
 { config, pkgs, upstartJobs, systemPath, wrapperDir
-, defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath
+, defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath, binsh
 }:
 
 let 
@@ -123,14 +123,27 @@ import ../helpers/make-etc.nix {
     }
 
     { # Nix configuration.
-      source = pkgs.writeText "nix.conf" ''
-        # WARNING: this file is generated.
-        build-users-group = nixbld
-        build-max-jobs = ${toString (config.nix.maxJobs)}
-        build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-        build-chroot-dirs = /dev /dev/pts /proc /bin
-        ${config.nix.extraOptions}
-      '';
+      source =
+        let
+          # Tricky: if we're using a chroot for builds, then we need
+          # /bin/sh in the chroot (our own compromise to purity).
+          # However, since /bin/sh is a symlink to some path in the
+          # Nix store, which furthermore has runtime dependencies on
+          # other paths in the store, we need the closure of /bin/sh
+          # in `build-chroot-dirs' - otherwise any builder that uses
+          # /bin/sh won't work.
+          refs = pkgs.writeReferencesToFile binsh;
+        in 
+          pkgs.runCommand "nix.conf" {} ''
+            cat > $out <<END
+            # WARNING: this file is generated.
+            build-users-group = nixbld
+            build-max-jobs = ${toString (config.nix.maxJobs)}
+            build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
+            build-chroot-dirs = $(echo $(cat ${refs}))
+            ${config.nix.extraOptions}
+            END
+          '';
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
 

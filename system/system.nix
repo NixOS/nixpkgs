@@ -116,7 +116,7 @@ rec {
   # The static parts of /etc.
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
-      defaultShell nixEnvVars modulesTree nssModulesPath;
+      defaultShell nixEnvVars modulesTree nssModulesPath binsh;
     extraEtc =
        (pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs))
     ++ config.environment.etc;
@@ -262,6 +262,10 @@ rec {
 
   defaultShell = "/var/run/current-system/sw/bin/bash";
 
+
+  # The shell that we want to use for /bin/sh.
+  binsh = pkgs.bashInteractive;
+
     
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
@@ -270,8 +274,10 @@ rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
 
-    inherit etc wrapperDir systemPath modprobe defaultShell kernel;
+    inherit etc wrapperDir systemPath modprobe defaultShell kernel binsh;
+    
     hostName = config.networking.hostName;
+    
     setuidPrograms =
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
@@ -287,8 +293,6 @@ rec {
         pkgs.glibc # needed for getent
         pkgs.pwdutils
       ];
-
-    bash = pkgs.bashInteractive;
 
     adjustSetuidOwner = pkgs.lib.concatStrings (map 
       (_entry: let entry = {

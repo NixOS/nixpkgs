@@ -50,7 +50,7 @@ done
 # Create the required /bin/sh symlink; otherwise lots of things
 # (notably the system() function) won't work.
 mkdir -m 0755 -p $mountPoint/bin
-ln -sfn @bash@/bin/sh $mountPoint/bin/sh
+ln -sfn @binsh@/bin/sh $mountPoint/bin/sh
 
 
 # Allow the kernel to find our wrapped modprobe (which searches in the
