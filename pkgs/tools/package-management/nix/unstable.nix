@@ -4,14 +4,12 @@
 , supportOldDBs ? true
 }:
 
-let version = "0.13pre13403"; in
-
 stdenv.mkDerivation {
-  name = "nix-${version}";
+  name = "nix-0.13pre13641";
   
   src = fetchurl {
-    url = "http://nixos.org/releases/nix/nix-${version}-a84h5996/nix-${version}.tar.bz2";
-    sha256 = "81169cc6448fff2e1f72464fb537d6db0d386d303869346fea2433b04181cc7b";
+    url = http://hydra.nixos.org/download/546/1/nix-0.13pre13641.tar.bz2;
+    sha256 = "83936327ed7cfa6e6a103764c3f43c780b2727ed804721200811ba999c31c7e1";
   };
 
   buildInputs = [perl curl openssl];
