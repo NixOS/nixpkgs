@@ -140,7 +140,7 @@ import ../helpers/make-etc.nix {
             build-users-group = nixbld
             build-max-jobs = ${toString (config.nix.maxJobs)}
             build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-            build-chroot-dirs = $(echo $(cat ${refs}))
+            build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $(cat ${refs}))
             ${config.nix.extraOptions}
             END
           '';
