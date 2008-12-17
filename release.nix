@@ -46,7 +46,7 @@ let
       , system ? "i686-linux"
       }:
 
-      with import nixpkgs.path {};
+      with import nixpkgs.path {inherit system;};
 
       let
 
@@ -58,7 +58,11 @@ let
 
       in
         # Declare the ISO as a build product so that it shows up in Hydra.
-        runCommand "nixos-iso" {}
+        runCommand "nixos-iso"
+          { meta = {
+              description = "NixOS installation CD ISO image for ${system}";
+            };
+          }
           ''
             ensureDir $out/nix-support
             echo "file iso" ${iso}/iso/*.iso* >> $out/nix-support/hydra-build-products
