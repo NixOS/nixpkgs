@@ -1026,6 +1026,10 @@ let
     inherit fetchurl stdenv perl shebangfix;
   };
 
+  namazu = import ../tools/text/namazu {
+    inherit fetchurl stdenv perl;
+  };
+
   nc6 = composedArgsAndFun (selectVersion ../tools/networking/nc6 "1.0") {
     inherit builderDefs;
   };
