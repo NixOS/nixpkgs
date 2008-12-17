@@ -46,12 +46,24 @@ let
       , system ? "i686-linux"
       }:
 
-      (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
-        platform = system;
-        compressImage = true;
-        nixpkgsPath = nixpkgs.path;
-      }).rescueCD;
+      with import nixpkgs.path {};
 
+      let
+
+        iso = (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
+          platform = system;
+          compressImage = true;
+          nixpkgsPath = nixpkgs.path;
+        }).rescueCD;
+
+      in
+        # Declare the ISO as a build product so that it shows up in Hydra.
+        runCommand "nixos-iso" {}
+          ''
+            ensureDir $out/nix-support
+            echo "file iso" ${iso}/iso/*.iso* >> $out/nix-support/hydra-build-products
+          ''; # */
+      
 
   };
   
