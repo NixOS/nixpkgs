@@ -77,6 +77,7 @@ let
       gnutar
       gnutls
       gphoto2
+      gsl
       guile
       gqview
       graphviz
