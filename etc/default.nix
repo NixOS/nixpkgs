@@ -135,12 +135,13 @@ import ../helpers/make-etc.nix {
           refs = pkgs.writeReferencesToFile binsh;
         in 
           pkgs.runCommand "nix.conf" {} ''
+            binshDeps=$(for i in $(cat ${refs}); do if test -d $i; then echo $i; fi; done)
             cat > $out <<END
             # WARNING: this file is generated.
             build-users-group = nixbld
             build-max-jobs = ${toString (config.nix.maxJobs)}
             build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-            build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $(cat ${refs}))
+            build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $binshDeps)
             ${config.nix.extraOptions}
             END
           '';
