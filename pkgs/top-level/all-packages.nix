@@ -5757,6 +5757,14 @@ let
     glibc = stdenv.glibc;
   };
 
+  pulseaudio = import ../servers/pulseaudio {
+    inherit fetchurl stdenv pkgconfig gnum4 libtool gdbm
+      dbus hal avahi liboil libsamplerate libsndfile speex
+      intltool gettext;
+    inherit (gtkLibs) glib;
+    gconf = gnome.GConf;
+  };
+
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
     inherit fetchurl stdenv apacheHttpd jdk;
   };
