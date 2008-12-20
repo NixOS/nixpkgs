@@ -100,6 +100,8 @@ let
         Option "TapButton1" "1"
         Option "TapButton2" "2"
         Option "TapButton3" "3"
+	Option "VertTwoFingerScroll" "${if cfg.synaptics.twoFingerScroll then "1" else "0"}"
+	Option "HorizTwoFingerScroll" "${if cfg.synaptics.twoFingerScroll then "1" else "0"}"
       EndSection
     '' else "";
 

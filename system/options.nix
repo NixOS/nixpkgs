@@ -1376,6 +1376,10 @@ in
           default = "0.12";
           description = "Cursor speed factor for highest-speed finger motion";
         };
+	twoFingerScroll = mkOption {
+	  default = false;
+	  description = "Whether to enable two-finger drag-scrolling";
+	};
       };
 
       layout = mkOption {
