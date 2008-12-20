@@ -120,7 +120,6 @@ let
       mpg321
       mysql
       #mythtv
-      namazu
       nano
       netcat
       nix
@@ -287,6 +286,7 @@ let
       jrePlugin
       keen4
       mono
+      namazu  # FIXME: The test suite fails on x86-64.
       openoffice
       pidgin
       postgresql_jdbc
