@@ -251,25 +251,6 @@ let
     meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
-  # documentation see examples in lib at end of file or read some use cases
-  # within this file
-  # Before spending much time on investigating how this works just ask me
-  # - Marc Weber (#irc or marco-oweber@gmx.de)
-  mkDerivationByConfiguration =
-    assert builtins ? isAttrs;
-    { flagConfig ? {}, optionals ? [], defaults ? []
-    , extraAttrs, collectExtraPhaseActions ? []
-    }:
-    args: with args.lib; with args;
-    if ( builtins.isAttrs extraAttrs ) then builtins.throw "the argument extraAttrs needs to be a function beeing passed co, but attribute set passed "
-    else
-    let co = lib.chooseOptionsByFlags { inherit args flagConfig optionals defaults collectExtraPhaseActions; }; in
-      args.stdenv.mkDerivation (
-      {
-        inherit (co) configureFlags buildInputs propagatedBuildInputs /*flags*/;
-      } // extraAttrs co  // co.pass // co.flags_prefixed );
-
-
   # Check absence of non-used options
   checker = x: flag: opts: config:
     (if flag then let result=(
@@ -474,20 +455,9 @@ let
     inherit pkgs;
   };
 
-  # see new python derivations for example..
-  # You should be able to override anything you like easily
-  composableDerivation = {
-          # modify args before applying stdenv.mkDerivation, this should remove at least attrs removeAttrsBy
-        f ? lib.prepareDerivationArgs,
-        stdenv ? pkgs.stdenv,
-          # initial set of arguments to be passed to stdenv.mkDerivation passing prepareDerivationArgs by default
-        initial ? {},
-          # example func :  (x: x // { x.buildInputs ++ ["foo"] }), but see mergeAttrByFunc which does this for you
-        merge ? (lib.mergeOrApply lib.mergeAttrByFunc)
-      }: lib.applyAndFun
-            (args: stdenv.mkDerivation (f args))
-            merge
-            (merge { inherit (lib) mergeAttrBy; } initial);
+  composableDerivation = (import ../lib/composable-derivation.nix) {
+    inherit pkgs lib;
+  };
 
   # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
   writeReferencesToFile = path: runCommand "runtime-deps"
@@ -1801,9 +1771,9 @@ let
 
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
-  #hugs = import ../development/compilers/hugs {
-    #inherit lib fetchurl stdenv;
-  #};
+  hugs = import ../development/compilers/hugs {
+    inherit lib fetchurl stdenv composableDerivation;
+  };
 
   j2sdk14x =
     assert system == "i686-linux";
@@ -1916,7 +1886,7 @@ let
   };
 
   roadsend = import ../development/compilers/roadsend {
-    inherit fetchurl stdenv flex bison mkDerivationByConfiguration bigloo lib curl;
+    inherit fetchurl stdenv flex bison bigloo lib curl composableDerivation;
     # optional features
     # all features pcre, fcgi xml mysql, sqlite3, (not implemented: odbc gtk gtk2)
     flags = ["pcre" "xml" "mysql"];
@@ -2085,13 +2055,9 @@ let
 
   php = import ../development/interpreters/php_configurable {
     inherit
-      stdenv fetchurl lib mkDerivationByConfiguration autoconf automake
+      stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2 # gettext
       zlib curl gd postgresql openssl pkgconfig;
-    flags = [
-      "xdebug" "mysql" "mysqli" "pdo_mysql" "libxml2" "apxs2" "curl"
-      "postgresql" "bcmath" "gd" "sockets" "curl"
-    ];
   };
 
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
@@ -2279,10 +2245,9 @@ let
     inherit fetchurl stdenv perl autoconf;
   };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  #avrdude = import ../development/tools/misc/avrdude {
-  #  inherit lib fetchurl stdenv flex yacc;
-  #};
+  avrdude = import ../development/tools/misc/avrdude {
+    inherit lib fetchurl stdenv flex yacc composableDerivation texLive;
+  };
 
   binutils = useFromStdenv "binutils"
     (import ../development/tools/misc/binutils {
@@ -2873,9 +2838,9 @@ let
   };
 
   fltk20 = (import ../development/libraries/fltk) {
-    inherit mkDerivationByConfiguration x11 lib;
+    inherit composableDerivation x11 lib pkgconfig freeglut;
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
-    inherit (xlibs) inputproto libXi;
+    inherit (xlibs) inputproto libXi libXinerama libXft;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
@@ -2928,11 +2893,9 @@ let
   };
 
   geos = import ../development/libraries/geos {
-    inherit fetchurl fetchsvn stdenv mkDerivationByConfiguration autoconf automake libtool swig which lib;
+    inherit fetchurl fetchsvn stdenv autoconf
+      automake libtool swig which lib composableDerivation python ruby;
     use_svn = stdenv.system == "x86_64-linux";
-    python = python;
-    # optional features:
-    # python / ruby support
   };
 
   gettext = composedArgsAndFun (selectVersion ../development/libraries/gettext "0.17") {
@@ -3245,7 +3208,7 @@ let
   };
 
   libdv = import ../development/libraries/libdv {
-    inherit fetchurl stdenv lib mkDerivationByConfiguration;
+    inherit fetchurl stdenv lib composableDerivation;
   };
 
   libdrm = import ../development/libraries/libdrm {
@@ -3299,7 +3262,7 @@ let
   };
 
   libsamplerate = import ../development/libraries/libsamplerate {
-    inherit fetchurl stdenv mkDerivationByConfiguration pkgconfig lib;
+    inherit fetchurl stdenv pkgconfig lib;
   };
 
   libspectre = import ../development/libraries/libspectre {
@@ -5822,11 +5785,7 @@ let
   };
 
   squid = import ../servers/squid {
-    inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
-  };
-
-  squidHead = import ../servers/squid/3.head.nix {
-    inherit fetchurl stdenv mkDerivationByConfiguration perl lib;
+    inherit fetchurl stdenv perl lib;
   };
 
   tomcat5 = import ../servers/http/tomcat {
@@ -7699,21 +7658,6 @@ let
     cddaSupport = true;
   };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  # should be the same as the nix expression above except support for esound :)
-  /*
-  MPlayer_new_config = import ../applications/video/MPlayer/newconfig.nix {
-    inherit fetchurl stdenv freetype x11 zlib freefont_ttf lib;
-    inherit (xlibs) libX11 xextproto;
-
-    # optional features
-    inherit alsaLib libtheora libcaca;
-    inherit (gnome) esound;
-    inherit (xlibs) libXv libXinerama;
-    inherit (xlibs) libXrandr; # FIXME does this option exist? I couldn't find it as configure option
-  };
-  */
-
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
@@ -7722,13 +7666,10 @@ let
       # !!! should depend on MPlayer
     };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  /*
   mrxvt = import ../applications/misc/mrxvt {
     inherit lib fetchurl stdenv;
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
   };
-  */
 
   multisync = import ../applications/misc/multisync {
     inherit fetchurl stdenv autoconf automake libtool pkgconfig;
@@ -7928,9 +7869,9 @@ let
   };
 
   sox = import ../applications/misc/audio/sox {
-    inherit fetchurl stdenv lib mkDerivationByConfiguration;
+    inherit fetchurl stdenv lib composableDerivation;
     # optional features
-    inherit alsaLib; # libao
+    inherit alsaLib libao;
     inherit libsndfile libogg flac libmad lame libsamplerate;
     # Using the default nix ffmpeg I get this error when linking
     # .libs/libsox_la-ffmpeg.o: In function `audio_decode_frame':
@@ -8096,7 +8037,7 @@ let
   };
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig mkDerivationByConfiguration lib;
+    inherit fetchurl stdenv ncurses pkgconfig composableDerivation lib;
     inherit (xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu;
     inherit (gtkLibs) glib gtk;
@@ -8314,12 +8255,11 @@ let
   };
 
   # doesn't compile yet - in case someone else want's to continue ..
-  /*
-  qgis_svn = import ../applications/misc/qgis_svn {
-    inherit mkDerivationByConfiguration fetchsvn stdenv flex lib
+  qgis =  composedArgsAndFun (selectVersion ../applications/misc/qgis "0.11.0") {
+    inherit composableDerivation fetchsvn stdenv flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
             gsl libpng zlib bison
-            sqlite glibc fontconfig freetype / * use libc from stdenv ? - to lazy now - Marc * /;
+            sqlite glibc fontconfig freetype /* use libc from stdenv ? - to lazy now - Marc */;
     inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
     inherit (xorg) libICE;
     qt = qt4;
@@ -8327,7 +8267,6 @@ let
     # optional features
     # grass = "not yet supported" # cmake -D WITH_GRASS=TRUE  and GRASS_PREFX=..
   };
-  */
 
   zapping = import ../applications/video/zapping {
     inherit fetchurl stdenv pkgconfig perl python
@@ -8656,17 +8595,14 @@ let
     x11Support = true;
   }));
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  /*
   gxemul = (import ../misc/gxemul) {
-    inherit lib stdenv fetchurl;
+    inherit lib stdenv fetchurl composableDerivation;
     inherit (xlibs) libX11;
   };
-  */
 
   # using the new configuration style proposal which is unstable
   jackaudio = import ../misc/jackaudio {
-    inherit mkDerivationByConfiguration
+    inherit composableDerivation
            ncurses lib stdenv fetchurl alsaLib pkgconfig;
     flags = [ "posix_shm" "timestamps" "alsa"];
   };

@@ -1,31 +1,33 @@
-args:
-let edf = args.lib.enableDisableFeature; in
-( args.mkDerivationByConfiguration {
-    flagConfig = {
-      mandatory = { buildInputs = ["bigloo" "curl"]; };
-    } // edf "pcre" "pcre" { } #support pcre extension [default=check]
-      // edf "fcgi" "fcgi" { pass = "fcgi"; } #support FastCGI web backend [default=check]
-      // edf "xml" "xml" { pass ="libxml2"; } #support xml extension [default=check]
-      // edf "mysql" "mysql" { pass = "mysql"; } #support mysql extension [default=check]
-      #// edf "sqlite3=[ARG]" "sqlite3=[ARG]" { } [>use SQLite 3 library [default=yes], optionally
-                                #specify the prefix for sqlite3 library
-      // edf "odbc" "odbc" { } #support ODBC extension [default=check]
-      // edf "gtk" "gtk" { } #support PHP-GTK extension [default=no]
-      // edf "gtk2" "gtk2" { }; #support PHP-GTK 2 extension [default=no]
+args: with args;
+let edf = composableDerivation.edf; in
+composableDerivation.composableDerivation {
+  initial = {
+    name = "roadsend-2.9.3";
+    buildInputs = [bigloo curl];
+    flags = edf { name = "pcre"; }
+         // edf { name = "fcgi"; enable = { inherit fcgi; }; }
+         // edf { name = "xml"; enable = { buildInputs = [ libxml2 ]; }; }
+         // edf { name = "mysql"; enable = { buildInputs = [ mysql ]; }; }
+         // edf { name = "odbc"; };
+         # // edf { name = "gtk"} }
+         # // edf { name = "gtk2", enable = { buildInputs = [ mysql ]; } }
+    cfg = {
+      pcreSupport = true;
+      fcgiSupport = true;
+      xmlSupport = true;
+      mysqlSupport = true;
+    };
+    src = args.fetchurl {
+      url = "http://code.roadsend.com/snaps/roadsend-php-20081210.tar.bz2";
+      sha256 = "0yhpiik0dyayd964wvn2k0cq7b1gihx1k3qx343r2l7lla4mapsx";
+    };
 
-    optionals = [ "libxml2" "gettext" "fcgi" ];
-    extraAttrs = co : {
-      name = "roadsend-2.9.3";
-
-      src = args.fetchurl {
-        url = "http://code.roadsend.com/snaps/roadsend-php-2.9.4.tar.bz2";
-        sha256 = "0nw7rvrrwkss5cp6ws0m3q63q1mcyy27s8yjhy7kn508db1rgl9x";
-      };
+#    http://code.roadsend.com/snaps/roadsend-php-testsuite-2.9.7.tar.bz2";
+#   sha256 = "0rf0g9r0prla7daq3aif24d7dx0j01i35hcm8h5bbg3gvpfim463";
 
     # tell pcc where to find the fastcgi library 
-      postInstall = " sed -e \"s=(ldflags fastcgi.*=(ldflags -l fastcgi -L \$fcgi)=\" -i \$out/etc/pcc.conf ";
-
-    meta = { 
+    postInstall = " sed -e \"s=(ldflags fastcgi.*=(ldflags -l fastcgi -L \$fcgi)=\" -i \$out/etc/pcc.conf ";
+    meta = {
       description = "roadsend PHP -> C compiler";
       homepage = http://www.roadsend.com;
       # you can choose one of the following licenses: 
@@ -33,4 +35,4 @@ let edf = args.lib.enableDisableFeature; in
       license = ["GPL2"];
     };
   };
-} ) args
+}
