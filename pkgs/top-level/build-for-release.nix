@@ -120,6 +120,7 @@ let
       mpg321
       mysql
       #mythtv
+      namazu
       nano
       netcat
       nix
