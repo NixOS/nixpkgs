@@ -803,7 +803,7 @@ rec {
                   else throw "assertion of flag ${a} of derivation ${args.name} failed"
                ) args2.flags );
     in removeAttrs
-      (mergeAttrsByFuncDefaults ([args] ++ opts))
+      (mergeAttrsByFuncDefaults ([args] ++ opts ++ [{ passthru = cfgWithDefaults; }]))
       ["flags" "cfg" "mergeAttrBy" "fixed" ]; # fixed may be passed as fix argument or such
 
 }
