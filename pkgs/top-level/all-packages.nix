@@ -5784,9 +5784,10 @@ let
   libunwind acl fam;
   };
 
-  squid = import ../servers/squid {
-    inherit fetchurl stdenv perl lib;
-  };
+  squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
+    inherit fetchurl stdenv perl lib composableDerivation;
+  });
+  squid = squids.squid3Beta; # has ipv6 support
 
   tomcat5 = import ../servers/http/tomcat {
     inherit fetchurl stdenv jdk;
