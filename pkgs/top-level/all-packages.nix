@@ -2583,6 +2583,10 @@ let
 
   yacc = bison;
 
+  yodl = import ../development/tools/misc/yodl {
+    inherit stdenv fetchurl perl;
+  };
+
 
   ### DEVELOPMENT / LIBRARIES
 
