@@ -1378,6 +1378,9 @@ let
 
   zsh = composedArgsAndFun (selectVersion ../shells/zsh "4.3.9") {
     inherit fetchurl stdenv ncurses coreutils;
+    # for CVS:
+    inherit (bleedingEdgeRepos) sourceByName;
+    inherit autoconf yodl;
   };
 
 
