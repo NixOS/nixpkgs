@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 	src = fetchurl {
 		urls = [ "http://www.h5l.org/dist/src/${name}.tar.gz"
                          "http://ftp.pdc.kth.se/pub/heimdal/src/${name}.tar.gz" ];
-		sha256 = "1h4x41lpv2abpv5l3yjd58pfzs0kkp5sbnih9iykhwd6sii1iig6";
+		sha256 = "1h4x41lpv2abpv5l3yjd58pfzs0kkp5sbnih9iykhwd6sii1iig5";
 	};
 
 	## ugly, X should be made an option
