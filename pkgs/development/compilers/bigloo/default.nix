@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo3.2a-beta18Dec08";
+  name = "bigloo3.1b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/mimosa/fp/Bigloo/${name}.tar.gz";
-    sha256 = "15987ac7dlq5j03rzymv9c2xsbhmsi1fflnw6f9yn1ghmvfzr21i";
+    sha256 = "1m7mrrrqm6668j6x834mclzc9am63wlf0knm4xiwrhv3zcky8vnv";
   };
 
   patchPhase = ''
