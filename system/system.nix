@@ -8,6 +8,7 @@ rec {
   configComponents = [
     configuration
     (import ./options.nix)
+    systemPathList
   ];
 
   noOption = name: values:
@@ -66,12 +67,9 @@ rec {
   # Environment variables for running Nix.
   nixEnvVars = config.nix.envVars;
 
-              
+
   # The static parts of /etc.
-  etc = import ../etc/default.nix {
-    inherit config pkgs systemPath wrapperDir
-      defaultShell;
-  };
+  etc = config.system.build.etc;
 
   
   # Font aggregation
@@ -84,7 +82,7 @@ rec {
   
   # The wrapper setuid programs (since we can't have setuid programs
   # in the Nix store).
-  wrapperDir = "/var/setuid-wrappers";
+  wrapperDir = config.system.wrapperDir;
   
   setuidWrapper = import ../helpers/setuid {
     inherit (pkgs) stdenv;
@@ -99,100 +97,97 @@ rec {
   
 
   # The packages you want in the boot environment.
-  systemPathList = [
-    # Better leave them here - they are small, needed,
-    # and hard to refer from anywhere outside.
-    modprobe # must take precedence over module_init_tools
-    mount # must take precedence over util-linux
-    nix
-    nixosTools.nixosInstall
-    nixosTools.nixosRebuild
-    nixosTools.nixosCheckout
-    nixosTools.nixosHardwareScan
-    nixosTools.nixosGenSeccureKeys
-    setuidWrapper
-  ]
-  ++ pkgs.lib.optionals (!config.environment.cleanStart) [
-    pkgs.bashInteractive # bash with ncurses support
-    pkgs.bzip2
-    pkgs.coreutils
-    pkgs.cpio
-    pkgs.curl
-    pkgs.e2fsprogs
-    pkgs.findutils
-    pkgs.glibc # for ldd, getent
-    pkgs.gnugrep
-    pkgs.gnused
-    pkgs.gnutar
-    pkgs.grub
-    pkgs.gzip
-    pkgs.iputils
-    pkgs.less
-    pkgs.lvm2
-    pkgs.man
-    pkgs.mdadm
-    pkgs.module_init_tools
-    pkgs.nano
-    pkgs.ncurses
-    pkgs.netcat
-    pkgs.nettools
-    pkgs.ntp
-    pkgs.openssh
-    pkgs.pciutils
-    pkgs.perl
-    pkgs.procps
-    pkgs.pwdutils
-    pkgs.reiserfsprogs
-    pkgs.rsync
-    pkgs.seccureUser
-    pkgs.strace
-    pkgs.su
-    pkgs.sysklogd
-    pkgs.sysvtools
-    pkgs.time
-    pkgs.udev
-    pkgs.upstart
-    pkgs.usbutils
-    pkgs.utillinux
-    pkgs.wirelesstools
-  ]
-  ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
-  ++ pkgs.lib.optional config.services.atd.enable pkgs.at
-  ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
-  ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
-  ++ config.environment.extraPackages
-  ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
-  ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
+  # This have to be split up.
+  systemPathList = {
+    system = {
+      overridePath = [
+        # Better leave them here - they are small, needed,
+        # and hard to refer from anywhere outside.
+        modprobe # must take precedence over module_init_tools
+        mount # must take precedence over util-linux
+        nix
+        nixosTools.nixosInstall
+        nixosTools.nixosRebuild
+        nixosTools.nixosCheckout
+        nixosTools.nixosHardwareScan
+        nixosTools.nixosGenSeccureKeys
+        setuidWrapper
+      ];
+      path =
+        pkgs.lib.optionals (!config.environment.cleanStart) [
+        pkgs.bashInteractive # bash with ncurses support
+        pkgs.bzip2
+        pkgs.coreutils
+        pkgs.cpio
+        pkgs.curl
+        pkgs.e2fsprogs
+        pkgs.findutils
+        pkgs.glibc # for ldd, getent
+        pkgs.gnugrep
+        pkgs.gnused
+        pkgs.gnutar
+        pkgs.grub
+        pkgs.gzip
+        pkgs.iputils
+        pkgs.less
+        pkgs.lvm2
+        pkgs.man
+        pkgs.mdadm
+        pkgs.module_init_tools
+        pkgs.nano
+        pkgs.ncurses
+        pkgs.netcat
+        pkgs.nettools
+        pkgs.ntp
+        pkgs.openssh
+        pkgs.pciutils
+        pkgs.perl
+        pkgs.procps
+        pkgs.pwdutils
+        pkgs.reiserfsprogs
+        pkgs.rsync
+        pkgs.seccureUser
+        pkgs.strace
+        pkgs.su
+        pkgs.sysklogd
+        pkgs.sysvtools
+        pkgs.time
+        pkgs.udev
+        pkgs.upstart
+        pkgs.usbutils
+        pkgs.utillinux
+        pkgs.wirelesstools
+      ]
+      ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
+      ++ pkgs.lib.optional config.services.atd.enable pkgs.at
+      ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
+      ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
+      ++ config.environment.extraPackages
+      ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
+      ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
 
-  # NSS modules need to be in `systemPath' so that (i) the builder
-  # chroot gets to seem them, and (ii) applications can benefit from
-  # changes in the list of NSS modules at run-time, without requiring
-  # a reboot.
-  ++ nssModules;
+      # NSS modules need to be in `systemPath' so that (i) the builder
+      # chroot gets to seem them, and (ii) applications can benefit from
+      # changes in the list of NSS modules at run-time, without requiring
+      # a reboot.
+      ++ nssModules;
+    };
+  };
 
-  
+
   # We don't want to put all of `startPath' and `path' in $PATH, since
   # then we get an embarrassingly long $PATH.  So use the user
   # environment builder to make a directory with symlinks to those
   # packages.
-  systemPath = pkgs.buildEnv {
-    name = "system-path";
-    paths = systemPathList;
-
-    # Note: We need `/lib' to be among `pathsToLink' for NSS modules
-    # to work.
-    inherit (config.environment) pathsToLink;
-
-    ignoreCollisions = true;
-  };
+  systemPath = config.system.path;
 
 
   usersGroups = import ./users-groups.nix { inherit pkgs config defaultShell; };
 
 
-  defaultShell = "/var/run/current-system/sw/bin/bash";
+  defaultShell = config.system.shell;
 
-    
+
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
@@ -203,7 +198,7 @@ rec {
 
     newActivationScript = config.system.activationScripts.script;
 
-    inherit etc wrapperDir systemPath modprobe defaultShell kernel;
+    inherit wrapperDir systemPath modprobe defaultShell kernel;
     hostName = config.networking.hostName;
     setuidPrograms =
       config.security.setuidPrograms ++

@@ -2853,20 +2853,6 @@ root        ALL=(ALL) SETENV: ALL
       ";
     };
 
-    # should be moved to etc/default.nix
-    etc = mkOption {
-      default = [];
-      example = [
-        { source = "/nix/store/.../etc/dir/file.conf.example";
-          target = "dir/file.conf";
-          mode = "0440";
-        }
-      ];
-      description = "
-        List of files that have to be linked in /etc.
-      ";
-    };
-
     nix = mkOption {
       default = pkgs.nixUnstable;
       example = pkgs.nixCustomFun /root/nix.tar.gz;
@@ -2915,6 +2901,9 @@ root        ALL=(ALL) SETENV: ALL
     (import ../system/system-options.nix)
     (import ../system/activate-configuration.nix)
     (import ../upstart-jobs/default.nix)
+
+    # environment
+    (import ../etc/default.nix)
 
     # newtworking
     (import ../upstart-jobs/dhclient.nix)

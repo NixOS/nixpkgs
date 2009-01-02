@@ -1,20 +1,42 @@
-{ config, pkgs, systemPath, wrapperDir
-, defaultShell
-}:
+# produce a script to generate /etc
+{config, pkgs, ...}:
 
-let 
-  extraEtc = config.environment.etc;
+###### interface
+let
+  inherit (pkgs.lib) mkOption;
+
+  option = {
+    environment = {
+      etc = mkOption {
+        default = [];
+        example = [
+          { source = "/nix/store/.../etc/dir/file.conf.example";
+            target = "dir/file.conf";
+            mode = "0440";
+          }
+        ];
+        description = "
+          List of files that have to be linked in /etc.
+        ";
+      };
+    };
+  };
+in
+
+###### implementation
+let
   nixEnvVars = config.nix.envVars;
   modulesTree = config.system.modulesTree;
   nssModulesPath = config.system.nssModules.path;
-
+  wrapperDir = config.system.wrapperDir;
+  systemPath = config.system.path;
 
   optional = pkgs.lib.optional;
 
 
   # !!! ugh, these files shouldn't be created here.
-    
-    
+
+
   pamConsoleHandlers = pkgs.writeText "console.handlers" ''
     console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
     ${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
@@ -23,13 +45,7 @@ let
 
   pamConsolePerms = ./security/console.perms;
 
-  
-in
-
-    
-import ../helpers/make-etc.nix {
-  inherit (pkgs) stdenv;
-
+  # These should be moved into the corresponding configuration files.
   configFiles = [
     { # TCP/UDP port assignments.
       source = pkgs.iana_etc + "/etc/services";
@@ -68,7 +84,7 @@ import ../helpers/make-etc.nix {
       # You cannot login without it!
       source = ./login.defs;
       target = "login.defs";
-    }
+    } 
 
     { # Configuration for passwd and friends (e.g., hash algorithm
       # for /etc/passwd).
@@ -79,7 +95,7 @@ import ../helpers/make-etc.nix {
     { # Configuration for useradd.
       source = pkgs.substituteAll {
         src = ./default/useradd;
-        inherit defaultShell;
+        defaultShell = config.system.shell;
       };
       target = "default/useradd";
     }
@@ -246,7 +262,82 @@ import ../helpers/make-etc.nix {
         source = pkgs.writeText "odbcinst.ini" (pkgs.lib.concatStringsSep "\n" inis);
         target = "odbcinst.ini";
       })
+  ;
+in
 
-  # Additional /etc files declared by Upstart jobs.
-  ++ extraEtc;
+let
+  inherit (pkgs.stringsWithDeps) noDepEntry FullDepEntry PackEntry;
+
+  activateLib = config.system.activationScripts.lib;
+
+  copyScript = {source, target, mode ? "644", own ? "root.root"}:
+    assert target != "nixos"; ''
+    source="${source}"
+    target="/etc/${target}"
+    mkdir -p $(dirname "$target")
+    test -e "$target" && rm -f "$target"
+    cp "$source" "$target"
+    chown ${own} "$target"
+    chmod ${mode} "$target"
+  '';
+
+  makeEtc = import ../helpers/make-etc.nix {
+    inherit (pkgs) stdenv;
+    configFiles = configFiles ++ config.environment.etc;
+  };
+in
+
+{
+  require = [
+    option
+
+    # config.system.build
+    (import ../system/system-options.nix)
+
+    # config.system.activationScripts
+    (import ../system/activate-configuration.nix)
+  ];
+
+  system = {
+    build = {
+      etc = makeEtc;
+    };
+
+    activationScripts = {
+      etc = FullDepEntry ''
+        # Set up the statically computed bits of /etc.
+        staticEtc=/etc/static
+        rm -f $staticEtc
+        ln -s ${makeEtc}/etc $staticEtc
+        for i in $(cd $staticEtc && find * -type l); do
+            mkdir -p /etc/$(dirname $i)
+            rm -f /etc/$i
+            if test -e "$staticEtc/$i.mode"; then
+                # Create a regular file in /etc.
+                cp $staticEtc/$i /etc/$i
+                chown 0.0 /etc/$i
+                chmod "$(cat "$staticEtc/$i.mode")" /etc/$i
+            else
+                # Create a symlink in /etc.
+                ln -s $staticEtc/$i /etc/$i
+            fi
+        done
+
+        # Remove dangling symlinks that point to /etc/static.  These are
+        # configuration files that existed in a previous configuration but not
+        # in the current one.  For efficiency, don't look under /etc/nixos
+        # (where all the NixOS sources live).
+        for i in $(find /etc/ \( -path /etc/nixos -prune \) -o -type l); do
+            target=$(readlink "$i")
+            if test "''${target:0:''${#staticEtc}}" = "$staticEtc" -a ! -e "$i"; then
+                rm -f "$i"
+            fi
+        done
+      '' [
+        activateLib.systemConfig
+        activateLib.defaultPath # path to cp, chmod, chown
+        activateLib.stdio
+      ];
+    };
+  };
 }
