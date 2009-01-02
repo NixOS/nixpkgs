@@ -182,9 +182,6 @@ rec {
   systemPath = config.system.path;
 
 
-  usersGroups = import ./users-groups.nix { inherit pkgs config defaultShell; };
-
-
   defaultShell = config.system.shell;
 
 
@@ -207,8 +204,6 @@ rec {
       pkgs.lib.optionals config.services.atd.enable ["at" "atq" "atrm"] ++
       pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass" ++
       map ( x : x.program ) config.security.setuidOwners;
-
-    inherit (usersGroups) createUsersGroups usersList groupsList;
 
     bash = pkgs.bashInteractive;
 

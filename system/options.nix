@@ -2663,36 +2663,6 @@ root        ALL=(ALL) SETENV: ALL
 
   users = {
 
-    extraUsers = mkOption {
-      default = [];
-      example = [
-        { name = "alice";
-          uid = 1234;
-          description = "Alice";
-          home = "/home/alice";
-          createHome = true;
-          group = "users";
-          extraGroups = ["wheel"];
-          shell = "/bin/sh";
-        }
-      ];
-      description = "
-        Additional user accounts to be created automatically by the system.
-      ";
-    };
-
-    extraGroups = mkOption {
-      default = [];
-      example = [
-        { name = "students";
-          gid = 1001;
-        }
-      ];
-      description = "
-        Additional groups to be created automatically by the system.
-      ";
-    };
-
     ldap = {
 
       enable = mkOption {
@@ -2904,6 +2874,9 @@ root        ALL=(ALL) SETENV: ALL
 
     # environment
     (import ../etc/default.nix)
+
+    # users
+    (import ../system/users-groups.nix)
 
     # newtworking
     (import ../upstart-jobs/dhclient.nix)

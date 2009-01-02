@@ -3,10 +3,6 @@
 source @newActivationScript@
 
 
-# Create system users and groups.
-@shell@ @createUsersGroups@ @usersList@ @groupsList@
-
-
 # Set up Nix.
 mkdir -p /nix/etc/nix
 ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
