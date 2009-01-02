@@ -2507,6 +2507,9 @@ in
   };
 
   require = [
+    # boot (is it the right place ?)
+    (import ../boot/boot-stage-2.nix)
+
     # system
     (import ../system/system-options.nix)
     (import ../system/activate-configuration.nix)

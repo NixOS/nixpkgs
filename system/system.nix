@@ -191,20 +191,7 @@ rec {
 
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.
-  bootStage2 = import ../boot/boot-stage-2.nix {
-    inherit (pkgs) substituteAll writeText coreutils 
-      utillinux udev upstart;
-    inherit kernel activateConfiguration;
-    inherit (config.boot) isLiveCD;
-    upstartPath = [
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-      pkgs.gnused
-      pkgs.upstart
-    ];
-    bootLocal = config.boot.localCommands;
-  };
+  bootStage2 = config.system.build.bootStage2;
 
 
   # Script to build the Grub menu containing the current and previous
