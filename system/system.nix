@@ -198,7 +198,6 @@ rec {
     setuidPrograms =
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
-      pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass" ++
       map ( x : x.program ) config.security.setuidOwners;
 
     bash = pkgs.bashInteractive;

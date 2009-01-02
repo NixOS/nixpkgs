@@ -1,12 +1,325 @@
-{ config, pkgs, kernelPackages
+{config, pkgs, ...}:
+# TODO: this file need some make-up (Nicolas Pierron)
 
-, # List of font directories.
-  fontDirectories
-}:
+let
+  kernelPackages = config.boot.kernelPackages;
+  # List of font directories.
+  fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
+
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+
+      xserver = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable the X server.
+          ";
+        };
+
+        autorun = mkOption {
+          default = true;
+          description = "
+            Switch to false to create upstart-job and configuration, 
+            but not run it automatically
+          ";
+        };
+
+        exportConfiguration = mkOption {
+          default = false;
+          description = "
+            Create /etc/X11/xorg.conf and a file with environment
+            variables
+          ";
+        };
+
+        tcpEnable = mkOption {
+          default = false;
+          description = "
+            Whether to enable TCP socket for the X server.
+          ";
+        };
+
+        resolutions = mkOption {
+          default = [{x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;}];
+          description = "
+            The screen resolutions for the X server.  The first element is the default resolution.
+          ";
+        };
+
+        videoDriver = mkOption {
+          default = "vesa";
+          example = "i810";
+          description = "
+            The name of the video driver for your graphics card.
+          ";
+        };
+
+        driSupport = mkOption {
+          default = false;
+          description = "
+            Whether to enable accelerated OpenGL rendering through the
+            Direct Rendering Interface (DRI).
+          ";
+        };
+
+        sessionType = mkOption {
+          default = "gnome";
+          example = "xterm";
+          description = "
+            The kind of session to start after login.  Current possibilies
+            are <literal>kde</literal> (which starts KDE),
+            <literal>gnome</literal> (which starts
+            <command>gnome-terminal</command>) and <literal>xterm</literal>
+            (which starts <command>xterm</command>).
+          ";
+        };
+
+        windowManager = mkOption {
+          default = "";
+          description = "
+            This option selects the window manager.  Available values are
+            <literal>twm</literal> (extremely primitive),
+            <literal>metacity</literal>, <literal>xmonad</literal>
+            and <literal>compiz</literal>.  If
+            left empty, the <option>sessionType</option> determines the
+            window manager, e.g., Metacity for Gnome, and
+            <command>kwm</command> for KDE.
+          ";
+        };
+
+        renderingFlag = mkOption {
+          default = "";
+          example = "--indirect-rendering";
+          description = "
+            Possibly pass --indierct-rendering to Compiz.
+          ";
+        };
+
+        sessionStarter = mkOption {
+          example = "${pkgs.xterm}/bin/xterm -ls";
+          description = "
+            The command executed after login and after the window manager
+            has been started.  Used if
+            <option>services.xserver.sessionType</option> is empty.
+          ";
+        };
+
+        startSSHAgent = mkOption {
+          default = true;
+          description = "
+            Whether to start the SSH agent when you log in.  The SSH agent
+            remembers private keys for you so that you don't have to type in
+            passphrases every time you make an SSH connection.  Use
+            <command>ssh-add</command> to add a key to the agent.
+          ";
+        };
+
+        slim = {
+
+          theme = mkOption {
+            default = null;
+            example = pkgs.fetchurl {
+              url = http://download.berlios.de/slim/slim-wave.tar.gz;
+              sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
+            };
+            description = "
+              The theme for the SLiM login manager.  If not specified, SLiM's
+              default theme is used.  See <link
+              xlink:href='http://slim.berlios.de/themes01.php'/> for a
+              collection of themes.
+            ";
+          };
+
+          defaultUser = mkOption {
+            default = "";
+            example = "login";
+            description = "
+              The default user to load. If you put a username here you
+              get it automatically loaded into the username field, and
+              the focus is placed on the password.
+            ";
+          };
+
+          hideCursor = mkOption {
+            default = false;
+            example = true;
+            description = "
+              Hide the mouse cursor on the login screen.
+            ";
+          };
+        };
+
+        isClone = mkOption {
+          default = true;
+          example = false;
+          description = "
+            Whether to enable the X server clone mode for dual-head.
+          ";
+        };
+
+        synaptics = {
+          enable = mkOption {
+            default = false;
+            example = true;
+            description = "
+              Whether to replace mouse with touchpad.
+            ";
+          };
+          dev = mkOption {
+            default = "/dev/input/event0";
+            description = "
+              Event device for Synaptics touchpad.
+            ";
+          };
+          minSpeed = mkOption {
+            default = "0.06";
+            description = "Cursor speed factor for precision finger motion";
+          };
+          maxSpeed = mkOption {
+            default = "0.12";
+            description = "Cursor speed factor for highest-speed finger motion";
+          };
+        };
+
+        layout = mkOption {
+          default = "us";
+          description = "
+            Keyboard layout.
+          ";
+        };
+
+        xkbModel = mkOption {
+          default = "pc104";
+          example = "presario";
+          description = "
+            Keyboard model.
+          ";
+        };
+
+        xkbOptions = mkOption {
+          default = "";
+          example = "grp:caps_toggle, grp_led:scroll";
+          description = "
+            X keyboard options; layout switching goes here.
+          ";
+        };
+
+        useInternalAGPGART = mkOption {
+          default = "";
+          example = "no";
+          description = "
+            Just the wrapper for an xorg.conf option.
+          ";
+        };
+
+        extraDeviceConfig = mkOption {
+          default = "";
+          example = "VideoRAM 131072";
+          description = "
+            Just anything to add into Device section.
+          ";
+        };
+
+        extraMonitorSettings = mkOption {
+          default = "";
+          example = "HorizSync 28-49";
+          description = "
+            Just anything to add into Monitor section.
+          ";
+        };
+
+        extraDisplaySettings = mkOption {
+          default = "";
+          example = "Virtual 2048 2048";
+          description = "
+            Just anything to add into Display subsection (located in Screen section).
+          ";
+        };
+   
+        extraModules = mkOption {
+          default = "";
+          example = "
+            SubSection \"extmod\"
+            EndSubsection
+          ";
+          description = "
+            Just anything to add into Modules section.
+          ";
+        };
+
+        serverLayoutOptions = mkOption {
+          default = "";
+          example = "
+            Option \"AIGLX\" \"true\"
+          ";
+          description = "
+            Just anything to add into Monitor section.
+          ";
+        };
+
+        defaultDepth = mkOption {
+          default = 24;
+          example = 8;
+          description = "
+            Default colour depth.
+          ";
+        };
+        
+        useXFS = mkOption {
+          default = false;
+          example = "unix/:7100";
+          description = "
+            Way to access the X Font Server to use.
+          ";
+        };
+
+        tty = mkOption {
+          default = 7;
+          example = 9;
+          description = "
+            Virtual console for the X server.
+          ";
+        };
+
+        display = mkOption {
+          default = 0;
+          example = 1;
+          description = "
+            Display number for the X server.
+          ";
+        };
+
+        package = mkOption {
+          default = pkgs.xorg;
+          description = "
+            Alternative X.org package to use. For 
+            example, you can replace individual drivers.
+          ";
+        };
+
+        virtualScreen = mkOption {
+          default = null;
+          example = {
+            x=2048;
+            y=2048;
+          };
+          description = "
+            Virtual screen size for Xrandr
+          ";
+        };
+      };
+
+    };
+  };
+in
 
 let
 
-  inherit (pkgs.lib) optional isInList getAttr;
+  inherit (pkgs.lib) optional isInList getAttr mkIf;
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = cfg.package;
@@ -234,7 +547,7 @@ let
       env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
       # !!! Hack: load the schemas for Metacity.
       GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-        --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas
+        --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas # */
       ${gnome.metacity}/bin/metacity &
     ''
 
@@ -245,7 +558,7 @@ let
     else if windowManager == "compiz" then ''
       # !!! Hack: load the schemas for Compiz.
       GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-        --makefile-install-rule ${pkgs.compiz}/etc/gconf/schemas/*.schemas
+        --makefile-install-rule ${pkgs.compiz}/etc/gconf/schemas/*.schemas # */
 
       # !!! Hack: turn on most Compiz modules.
       ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \
@@ -295,12 +608,12 @@ let
       # terminal of the kind indicated by sessionCmd.
       # !!! yes, this means that you 'log out' by killing the X server.
       while ${sessionCmd}; do
-        sleep 1  
+        sleep 1
       done
 
     ''}
     
-  ''; # */
+  '';
 
 
   xserverArgs = [
@@ -343,10 +656,9 @@ let
 
     nvidiaDrivers = (config.boot.kernelPackages pkgs).nvidiaDrivers;
 
-in
+  oldJob = rec {
+  # Warning the indentation is wrong since here in order to don't produce noise in diffs.
 
-
-rec {
   name = "xserver";
 
   
@@ -433,4 +745,54 @@ rec {
     exec ${pkgs.slim}/bin/slim
   '';
   
+};
+
+in
+
+mkIf cfg.enable {
+  require = [
+    options
+
+    # services.extraJobs
+    (import ../upstart-jobs/default.nix)
+
+    # environment.etc
+    (import ../etc/default.nix)
+
+    # boot.extraModulePackages
+    # security.extraSetuidPrograms
+    # environment.extraPackages
+  ];
+
+  boot = {
+    extraModulePackages = mkIf (cfg.videoDriver == "nvidia") [
+      kernelPackages.nvidiaDrivers
+    ];
+  };
+
+  security = {
+    extraSetuidPrograms = mkIf (cfg.sessionType == "kde") [
+      "kcheckpass"
+    ];
+  };
+
+  environment = {
+    etc = [
+      { source = ../etc/pam.d/kde;
+        target = "pam.d/kde";
+      }
+      { source = ../etc/pam.d/slim;
+        target = "pam.d/slim";
+      }
+    ] ++ oldJob.extraEtc;
+
+    extraPackages =
+      oldJob.extraPath;
+  };
+
+  services = {
+    extraJobs = [{
+      inherit (oldJob) name job;
+    }];
+  };
 }

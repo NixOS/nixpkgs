@@ -212,7 +212,6 @@ let
     )
     [
       "login"
-      "slim"
       "su"
       "other"
       "passwd"
@@ -223,7 +222,6 @@ let
       "useradd"
       "chsh"
       "xlock"
-      "kde"
       "cups"
       "common"
       "common-console" # shared stuff for interactive local sessions

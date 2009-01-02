@@ -275,13 +275,6 @@ let
       inherit (pkgs) makePortmap;
      })
 
-  # X server.
-  ++ optional config.services.xserver.enable
-    (import ../upstart-jobs/xserver.nix {
-      inherit config pkgs kernelPackages;
-      fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
-    })
-
   # Apache httpd.
   ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
     (import ../upstart-jobs/httpd.nix {
