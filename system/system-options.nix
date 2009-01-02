@@ -184,6 +184,35 @@ in
         activateLib.etc # for /etc
         # ?
       ];
+
+      nix = FullDepEntry ''
+        # Set up Nix.
+        mkdir -p /nix/etc/nix
+        ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
+        chown root.nixbld /nix/store
+        chmod 1775 /nix/store
+
+        # Nix initialisation.
+        mkdir -m 0755 -p \
+            /nix/var/nix/gcroots \
+            /nix/var/nix/temproots \
+            /nix/var/nix/manifests \
+            /nix/var/nix/userpool \
+            /nix/var/nix/profiles \
+            /nix/var/nix/db \
+            /nix/var/log/nix/drvs \
+            /nix/var/nix/channel-cache \
+            /nix/var/nix/chroots
+        mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
+        mkdir -m 1777 -p /nix/var/nix/profiles/per-user
+
+        ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+        ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
+      '' [
+        activateLib.defaultPath
+        activateLib.etc # /etc/nix.conf
+        activateLib.users # nixbld group
+      ];
     };
   };
 }
