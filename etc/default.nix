@@ -173,15 +173,6 @@ let
     '';
     target = "ssmtp/ssmtp.conf";
   }
-    
-  # Configuration file for fontconfig used to locate
-  # (X11) client-rendered fonts.
-  ++ optional config.fonts.enableFontConfig {
-    source = pkgs.makeFontsConf {
-      fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
-    };
-    target = "fonts/fonts.conf";
-  }
 
   # LDAP configuration.
   ++ optional config.users.ldap.enable {

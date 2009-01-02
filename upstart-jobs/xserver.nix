@@ -4,7 +4,7 @@
 let
   kernelPackages = config.boot.kernelPackages;
   # List of font directories.
-  fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
+  fontDirectories = config.fonts.fonts;
 
   inherit (pkgs.lib) mkOption;
 
@@ -758,6 +758,9 @@ mkIf cfg.enable {
 
     # environment.etc
     (import ../etc/default.nix)
+
+    # fonts.fonts
+    (import ../system/fonts.nix)
 
     # boot.extraModulePackages
     # security.extraSetuidPrograms

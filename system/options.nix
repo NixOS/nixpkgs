@@ -2271,56 +2271,6 @@ in
   };
 
 
-  fonts = {
-
-    enableFontConfig = mkOption { # !!! should be enableFontconfig
-      default = true;
-      description = "
-        If enabled, a Fontconfig configuration file will be built
-        pointing to a set of default fonts.  If you don't care about
-        running X11 applications or any other program that uses
-        Fontconfig, you can turn this option off and prevent a
-        dependency on all those fonts.
-      ";
-    };
-
-    enableGhostscriptFonts = mkOption {
-      default = false;
-      description = "
-        Whether to add the fonts provided by Ghostscript (such as
-        various URW fonts and the ``Base-14'' Postscript fonts) to the
-        list of system fonts, making them available to X11
-        applications.
-      ";
-    };
-
-    enableFontDir = mkOption {
-      default = false;
-      description = "
-        Whether to create a directory with links to all fonts in share - 
-        so user can configure vncserver script one time (I mean per-user 
-        vncserver, so global service is not a good solution).
-      ";
-    };
-
-    extraFonts = mkOption {
-      default = [];
-      merge = backwardPkgsFunListMerge;
-      description = "
-        Function, returning list of additional fonts.
-      ";
-    };
-
-    enableCoreFonts = mkOption {
-      default = true;
-      description = "
-        Whether to include MS Core Fonts (redistributable, but only verbatim).
-      ";
-    };
-
-  };
-
-
   i18n = {
 
     defaultLocale = mkOption {
@@ -2474,6 +2424,9 @@ in
     (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/cron/locate.nix)
+
+    # fonts
+    (import ../system/fonts.nix)
 
     # sound
     (import ../upstart-jobs/alsa.nix)

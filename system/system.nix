@@ -73,11 +73,7 @@ rec {
 
   
   # Font aggregation
-  fontDir = import ./fontdir.nix {
-    inherit config pkgs;
-    inherit (pkgs) builderDefs ttmkfdir;
-    inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
-  };
+  fontDir = config.system.build.x11Fonts;
 
   
   # The wrapper setuid programs (since we can't have setuid programs
