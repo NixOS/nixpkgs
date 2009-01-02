@@ -158,7 +158,6 @@ rec {
         pkgs.utillinux
         pkgs.wirelesstools
       ]
-      ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
       ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
       ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
       ++ config.environment.extraPackages
@@ -199,7 +198,6 @@ rec {
     setuidPrograms =
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
-      pkgs.lib.optional config.security.sudo.enable "sudo" ++
       pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass" ++
       map ( x : x.program ) config.security.setuidOwners;
 
