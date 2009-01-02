@@ -196,14 +196,7 @@ rec {
 
   # Script to build the Grub menu containing the current and previous
   # system configurations.
-  grubMenuBuilder = pkgs.substituteAll {
-    src = ../installer/grub-menu-builder.sh;
-    isExecutable = true;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    inherit (config.boot) copyKernels extraGrubEntries extraGrubEntriesBeforeNixos
-      grubSplashImage bootMount configurationLimit;
-  };
+  grubMenuBuilder = config.system.build.grubMenuBuilder;
 
 
   # Putting it all together.  This builds a store object containing
