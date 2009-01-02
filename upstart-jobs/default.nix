@@ -5,17 +5,6 @@ let
   inherit (pkgs.lib) mkOption mapAttrs getAttr fold
     mergeListOption mergeTypedOption mergeAttrsWithFunc;
 
-  mergeTags = mergeTypedOption "jobs tag" (x: true)
-    (fold (mergeAttrsWithFunc (a: b:
-      if builtins.lessThan a.priority b.priority then b else a
-    )) { priority = 100; });
-
-  applyTags = mapAttrs (attrName: value:
-    let name = getAttr ["name"] attrName value; in {
-    start = getAttr ["start"] (name + "/started") value;
-    stop = getAttr ["stop"] (name + "/stop") value;
-  });
-
   options = {
     services = {
       extraJobs = mkOption {
@@ -37,20 +26,13 @@ let
         ";
       };
 
-      # this attribute must be computed before extraJobs.
-      jobsTags = mkOption {
-        default = {};
-        example = {
-          newtworkInterface = {
-            name = "gw6c";
-            priority = 5;
-          };
+      tools = {
+        upstartJobs = mkOption {
+          default = {};
+          description = "
+            List of functions which can be used to create upstart-jobs.
+          ";
         };
-        description = "
-          Allow jobs to overload jobs tags used by upstart jobs.
-        ";
-        merge = mergeTags;
-        apply = applyTags;
       };
     };
 
@@ -471,22 +453,20 @@ let
     })
 
   # User-defined events.
-  ++ (map makeJob (config.services.extraJobs))
-
-  # For the built-in logd job.
-  ++ [(makeJob { jobDrv = pkgs.upstart; })];
+  ++ (map makeJob (config.services.extraJobs));
 
 
   command = import ../upstart-jobs/gather.nix {
     inherit (pkgs) runCommand;
     inherit jobs;
   };
-  
+
 in 
 
 {
   require = [
     options
+    (import ./lib/default.nix)
   ];
 
   environment = {
@@ -509,13 +489,10 @@ in
   };
 
   services = {
-    jobsTags = {
-      system = {
-        priority = 0;
-        start = "startup";
-        stop = "shutdown";
-      };
-    };
+    extraJobs = [
+      # For the built-in logd job.
+      { jobDrv = pkgs.upstart; }
+    ];
   };
 
   tests = {
