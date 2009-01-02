@@ -1,20 +1,6 @@
 #! @shell@
 
-systemConfig="$1"
-if test -z "$systemConfig"; then
-    systemConfig="/system" # for the installation CD
-fi
-
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin:$i/sbin; done
-
-
-# Needed by some programs.
-ln -sfn /proc/self/fd /dev/fd
-ln -sfn /proc/self/fd/0 /dev/stdin
-ln -sfn /proc/self/fd/1 /dev/stdout
-ln -sfn /proc/self/fd/2 /dev/stderr
-
+source @newActivationScript@
 
 # Set up the statically computed bits of /etc.
 staticEtc=/etc/static

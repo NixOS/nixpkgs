@@ -2912,6 +2912,8 @@ root        ALL=(ALL) SETENV: ALL
 
   require = [
     # system
+    (import ../system/system-options.nix)
+    (import ../system/activate-configuration.nix)
     (import ../upstart-jobs/default.nix)
 
     # newtworking

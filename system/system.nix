@@ -196,9 +196,12 @@ rec {
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
+  # DO NOT EXTEND THIS.  You should use the option system-option.nix
   activateConfiguration = pkgs.substituteAll rec {
     src = ./activate-configuration.sh;
     isExecutable = true;
+
+    newActivationScript = config.system.activationScripts.script;
 
     inherit etc wrapperDir systemPath modprobe defaultShell kernel;
     hostName = config.networking.hostName;
@@ -211,12 +214,6 @@ rec {
       map ( x : x.program ) config.security.setuidOwners;
 
     inherit (usersGroups) createUsersGroups usersList groupsList;
-
-    path = [
-        pkgs.coreutils pkgs.gnugrep pkgs.findutils
-        pkgs.glibc # needed for getent
-        pkgs.pwdutils
-      ];
 
     bash = pkgs.bashInteractive;
 
