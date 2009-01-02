@@ -224,7 +224,6 @@ let
       }
     )
     [
-      "atd"
       "login"
       "slim"
       "su"

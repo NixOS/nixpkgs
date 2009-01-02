@@ -693,25 +693,6 @@ in
     };
 
 
-    atd = {
-
-      enable = mkOption {
-        default = true;
-        description = ''
-          Whether to enable the `at' daemon, a command scheduler.
-        '';
-      };
-
-      allowEveryone = mkOption {
-        default = false;
-        description = ''
-          Whether to make /var/spool/at{jobs,spool} writeable 
-          by everyone (and sticky).
-        '';
-      };
-    };
-
-
     ttyBackgrounds = {
 
       enable = mkOption {
@@ -2886,6 +2867,7 @@ root        ALL=(ALL) SETENV: ALL
 
     # services
     (import ../upstart-jobs/avahi-daemon.nix)
+    (import ../upstart-jobs/atd.nix)
     (import ../upstart-jobs/dbus.nix)
     (import ../upstart-jobs/hal.nix)
     (import ../upstart-jobs/gpm.nix)

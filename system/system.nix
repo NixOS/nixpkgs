@@ -159,7 +159,6 @@ rec {
         pkgs.wirelesstools
       ]
       ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
-      ++ pkgs.lib.optional config.services.atd.enable pkgs.at
       ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
       ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
       ++ config.environment.extraPackages
@@ -201,7 +200,6 @@ rec {
       config.security.setuidPrograms ++
       config.security.extraSetuidPrograms ++
       pkgs.lib.optional config.security.sudo.enable "sudo" ++
-      pkgs.lib.optionals config.services.atd.enable ["at" "atq" "atrm"] ++
       pkgs.lib.optional (config.services.xserver.sessionType == "kde") "kcheckpass" ++
       map ( x : x.program ) config.security.setuidOwners;
 

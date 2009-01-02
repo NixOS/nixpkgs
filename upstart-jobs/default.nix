@@ -220,13 +220,6 @@ let
 
   ])
 
-  # At daemon.
-  ++ optional config.services.atd.enable
-    (import ../upstart-jobs/atd.nix {
-      at = pkgs.at;
-      config = config.services.atd;
-     })
-
   # ifplugd daemon for monitoring Ethernet cables.
   ++ optional config.networking.interfaceMonitor.enable
     (import ../upstart-jobs/ifplugd.nix {

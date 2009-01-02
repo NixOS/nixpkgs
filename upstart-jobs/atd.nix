@@ -1,24 +1,50 @@
-{ at, config }:
+{pkgs, config, ...}:
 
-let uid = (import ../system/ids.nix).uids.atd;
-    gid = (import ../system/ids.nix).gids.atd;
+###### interface
+let
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+    services = {
+      atd = {
+
+        enable = mkOption {
+          default = true;
+          description = ''
+            Whether to enable the `at' daemon, a command scheduler.
+          '';
+        };
+
+        allowEveryone = mkOption {
+          default = false;
+          description = ''
+            Whether to make /var/spool/at{jobs,spool} writeable 
+            by everyone (and sticky).
+          '';
+        };
+      };
+
+    };
+  };
 in
-{
-  name = "atd";
-  
-  users = [
-    { name = "atd";
-      inherit uid;
-      description = "atd user";
-      home = "/var/empty";
-    }
-  ];
 
-  groups = [
-    { name = "atd";
-      inherit gid;
-    }
-  ];
+###### implementation
+let
+  cfg = config.services.atd;
+  inherit (pkgs.lib) mkIf;
+  inherit (pkgs) at;
+
+  user = {
+    name = "atd";
+    uid = (import ../system/ids.nix).uids.atd;
+    description = "atd user";
+    home = "/var/empty";
+  };
+
+  group = {
+    name = "atd";
+    gid = (import ../system/ids.nix).gids.atd;
+  };
 
   job = ''
 description "at daemon (atd)"
@@ -44,7 +70,7 @@ start script
      fi
    done
    chmod 1770 "$spooldir" "$jobdir"
-   ${if config.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
+   ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
    if [ ! -f "$etcdir"/at.deny ]
    then
        touch "$etcdir"/at.deny && \
@@ -61,5 +87,49 @@ end script
 
 respawn ${at}/sbin/atd
 '';
-  
+in
+
+mkIf cfg.enable {
+  require = [
+    options
+
+    # config.services.extraJobs
+    (import ../upstart-jobs/default.nix)
+
+    # config.environment.etc
+    (import ../etc/default.nix)
+
+    # users.*
+    (import ../system/users-groups.nix)
+
+    # (import ?) # config.environment.extraPackages
+    # (import ?) # config.security.extraSetuidPrograms
+  ];
+
+  security = {
+    extraSetuidPrograms = [
+      "at" "atq" "atrm"
+    ];
+  };
+
+  environment = {
+    extraPackages = [ at ];
+
+    etc = [{
+      source = ../etc/pam.d/atd;
+      target = "pam.d/atd";
+    }];
+  };
+
+  users = {
+    extraUsers = [user];
+    extraGroups = [group];
+  };
+
+  services = {
+    extraJobs = [{
+      name = "atd";
+      inherit job;
+    }];
+  };
 }
