@@ -38,6 +38,8 @@ let
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/html/docbook.xsl \
         ./manual.xml
       cp ${./style.css} $out/style.css
+      ensureDir $out/nix-support
+      echo "doc manual $out" >> $out/nix-support/hydra-build-products
     '';
   };
 

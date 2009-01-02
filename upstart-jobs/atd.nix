@@ -19,7 +19,8 @@ let
           default = false;
           description = ''
             Whether to make /var/spool/at{jobs,spool} writeable 
-            by everyone (and sticky).
+            by everyone (and sticky).  This is normally not needed since
+            the `at' commands are setuid/setgid `atd'.
           '';
         };
       };
@@ -74,7 +75,7 @@ start script
    if [ ! -f "$etcdir"/at.deny ]
    then
        touch "$etcdir"/at.deny && \
-       chown root:root "$etcdir"/at.deny && \
+       chown root:atd "$etcdir"/at.deny && \
        chmod 640 "$etcdir"/at.deny
    fi
    if [ ! -f "$jobdir"/.SEQ ]
@@ -107,9 +108,13 @@ mkIf cfg.enable {
   ];
 
   security = {
-    extraSetuidPrograms = [
-      "at" "atq" "atrm"
-    ];
+    setuidOwners = map (program: {
+        inherit program;
+        owner = "atd";
+        group = "atd";
+        setuid = true;
+        setgid = true;
+      }) [ "at" "atq" "atrm" ];
   };
 
   environment = {

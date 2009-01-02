@@ -220,18 +220,12 @@ rec {
   ";
 
   
-  # Put the current directory in a tarball (making sure to filter
-  # out crap like the .svn directories).
-  nixosTarball = makeTarball "nixos.tar.bz2" (builtins.filterSource svnFilter ./../..);
-
-  svnFilter = name: type:
-    let base = baseNameOf (toString name);
-    in base != ".svn" && base != "result";
+  # Put the current directory in a tarball.
+  nixosTarball = makeTarball "nixos.tar.bz2" ../..;
 
 
-  # Put Nixpkgs in a tarball
-  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2"
-    (builtins.filterSource svnFilter nixpkgsPath);
+  # Put Nixpkgs in a tarball.
+  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" nixpkgsPath;
 
 
   # The configuration file for Grub.

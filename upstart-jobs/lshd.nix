@@ -31,6 +31,7 @@ start script
 end script
 
 respawn ${lsh}/sbin/lshd --daemonic \
+   --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
    -p ${toString portNumber} \
    ${if interfaces == [] then ""
      else (concatStrings (map (i: "--interface=\"${i}\"")
