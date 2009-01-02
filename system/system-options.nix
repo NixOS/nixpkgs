@@ -115,6 +115,75 @@ in
       '' [
         activateLib.defaultPath # path to ln
       ];
+
+      binsh = FullDepEntry ''
+        # Create the required /bin/sh symlink; otherwise lots of things
+        # (notably the system() function) won't work.
+        mkdir -m 0755 -p $mountPoint/bin
+        ln -sfn @bash@/bin/sh $mountPoint/bin/sh
+      '' [
+        activateLib.defaultPath # path to ln & mkdir
+        activateLib.stdio # ?
+      ];
+
+      modprobe = FullDepEntry ''
+        # Allow the kernel to find our wrapped modprobe (which searches in the
+        # right location in the Nix store for kernel modules).  We need this
+        # when the kernel (or some module) auto-loads a module.
+        # !!! maybe this should only happen at boot time, since we shouldn't
+        # use modules that don't match the running kernel.
+        echo @modprobe@/sbin/modprobe > /proc/sys/kernel/modprobe
+      '' [
+        # ?
+      ];
+
+      var = FullDepEntry ''
+        # Various log/runtime directories.
+        mkdir -m 0755 -p /var/run
+        mkdir -m 0755 -p /var/run/console # for pam_console
+
+        touch /var/run/utmp # must exist
+        chmod 644 /var/run/utmp
+
+        mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
+        mkdir -m 0700 -p /var/run/nix/remote-stores
+
+        mkdir -m 0755 -p /var/log
+
+        touch /var/log/wtmp # must exist
+        chmod 644 /var/log/wtmp
+
+        touch /var/log/lastlog
+        chmod 644 /var/log/lastlog
+
+        mkdir -m 1777 -p /var/tmp
+
+
+        # Empty, read-only home directory of many system accounts.
+        mkdir -m 0555 -p /var/empty
+      '' [
+        activateLib.defaultPath # path to mkdir & touch & chmod
+      ];
+
+      rootPasswd = FullDepEntry ''
+        # If there is no password file yet, create a root account with an
+        # empty password.
+        if ! test -e /etc/passwd; then
+            rootHome=/root
+            touch /etc/passwd; chmod 0644 /etc/passwd
+            touch /etc/group; chmod 0644 /etc/group
+            touch /etc/shadow; chmod 0600 /etc/shadow
+            # Can't use useradd, since it complains that it doesn't know us
+            # (bootstrap problem!).
+            echo "root:x:0:0:System administrator:$rootHome:@defaultShell@" >> /etc/passwd
+            echo "root::::::::" >> /etc/shadow
+            echo | passwd --stdin root
+        fi
+      '' [
+        activateLib.defaultPath # path to touch & passwd
+        activateLib.etc # for /etc
+        # ?
+      ];
     };
   };
 }
