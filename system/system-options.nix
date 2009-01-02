@@ -1,4 +1,5 @@
 # this file contains all extendable options originally defined in system.nix
+# TODO: split it to make it readable.
 {pkgs, config, ...}:
 
 ###### interface
@@ -73,6 +74,7 @@ in
 ###### implementation
 let
   inherit (pkgs.stringsWithDeps) noDepEntry FullDepEntry PackEntry;
+  inherit (pkgs.lib) mapRecordFlatten;
 
   activateLib = config.system.activationScripts.lib;
 in
@@ -120,7 +122,7 @@ in
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
         mkdir -m 0755 -p $mountPoint/bin
-        ln -sfn @bash@/bin/sh $mountPoint/bin/sh
+        ln -sfn ${pkgs.bash}/bin/sh $mountPoint/bin/sh
       '' [
         activateLib.defaultPath # path to ln & mkdir
         activateLib.stdio # ?
@@ -132,7 +134,7 @@ in
         # when the kernel (or some module) auto-loads a module.
         # !!! maybe this should only happen at boot time, since we shouldn't
         # use modules that don't match the running kernel.
-        echo @modprobe@/sbin/modprobe > /proc/sys/kernel/modprobe
+        echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
       '' [
         # ?
       ];
@@ -175,7 +177,7 @@ in
             touch /etc/shadow; chmod 0600 /etc/shadow
             # Can't use useradd, since it complains that it doesn't know us
             # (bootstrap problem!).
-            echo "root:x:0:0:System administrator:$rootHome:@defaultShell@" >> /etc/passwd
+            echo "root:x:0:0:System administrator:$rootHome:${config.system.shell}" >> /etc/passwd
             echo "root::::::::" >> /etc/shadow
             echo | passwd --stdin root
         fi
@@ -213,6 +215,101 @@ in
         activateLib.etc # /etc/nix.conf
         activateLib.users # nixbld group
       ];
+
+      path = FullDepEntry ''
+        PATH=${config.system.path}/bin:${config.system.path}/sbin:$PATH
+      '' [
+        activateLib.defaultPath
+      ];
+
+      setuid =
+        let
+          setuidPrograms = builtins.toString (
+            config.security.setuidPrograms ++
+            config.security.extraSetuidPrograms ++
+            map (x: x.program) config.security.setuidOwners
+          );
+
+          adjustSetuidOwner = pkgs.lib.concatStrings (map
+            (_entry: let entry = {
+              owner = "nobody";
+              group = "nogroup";
+              setuid = false;
+              setgid = false;
+            } //_entry; in
+            ''
+              chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
+              chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
+              chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program}
+            '')
+            config.security.setuidOwners);
+
+        in FullDepEntry ''
+        # Make a few setuid programs work.
+        save_PATH="$PATH"
+
+        # Add the default profile to the search path for setuid executables.
+        PATH="/nix/var/nix/profiles/default/sbin:$PATH"
+        PATH="/nix/var/nix/profiles/default/bin:$PATH"
+
+        wrapperDir=${config.system.wrapperDir}
+        if test -d $wrapperDir; then rm -f $wrapperDir/*; fi # */
+        mkdir -p $wrapperDir
+        for i in ${setuidPrograms}; do
+            program=$(type -tp $i)
+            if test -z "$program"; then
+        	# XXX: It would be preferable to detect this problem before
+        	# `activate-configuration' is invoked.
+        	#echo "WARNING: No executable named \`$i' was found" >&2
+        	#echo "WARNING: but \`$i' was specified as a setuid program." >&2
+                true
+            else
+                cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
+                echo -n "$program" > $wrapperDir/$i.real
+                chown root.root $wrapperDir/$i
+                chmod 4755 $wrapperDir/$i
+            fi
+        done
+
+        ${adjustSetuidOwner}
+
+        PATH="$save_PATH"
+      '' [
+        activateLib.path
+        activateLib.users
+      ];
+
+      hostname = FullDepEntry ''
+        # Set the host name.  Don't clear it if it's not configured in the
+        # NixOS configuration, since it may have been set by dhclient in the
+        # meantime.
+        ${if config.networking.hostName == "" then
+            ''hostname "${config.networking.hostName}"''
+        else ''
+            # dhclient won't do anything if the hostname isn't empty.
+            if test "$(hostname)" = "(none)"; then
+              hostname ""
+            fi
+        ''}
+      '' [
+        activateLib.path
+      ];
+
+      # The activation have to be done at the end.  Therefore, this entry
+      # depends on all scripts declared in the activation library.
+      activate = FullDepEntry ''
+        # Make this configuration the current configuration.
+        # The readlink is there to ensure that when $systemConfig = /system
+        # (which is a symlink to the store), /var/run/current-system is still
+        # used as a garbage collection root.
+        ln -sfn "$(readlink -f "$systemConfig")" /var/run/current-system
+
+        # Prevent the current configuration from being garbage-collected.
+        ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
+      '' (mapRecordFlatten (a: v: v)
+        # should be removed if this does not cause an infinite recursion.
+        (activateLib // { activate = { text = ""; deps = []; }; })
+      );
     };
   };
 }

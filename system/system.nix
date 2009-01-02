@@ -186,36 +186,7 @@ rec {
   # The script that activates the configuration, i.e., it sets up
   # /etc, accounts, etc.  It doesn't do anything that can only be done
   # at boot time (such as start `init').
-  # DO NOT EXTEND THIS.  You should use the option system-option.nix
-  activateConfiguration = pkgs.substituteAll rec {
-    src = ./activate-configuration.sh;
-    isExecutable = true;
-
-    newActivationScript = config.system.activationScripts.script;
-
-    inherit wrapperDir systemPath modprobe defaultShell kernel;
-    hostName = config.networking.hostName;
-    setuidPrograms =
-      config.security.setuidPrograms ++
-      config.security.extraSetuidPrograms ++
-      map ( x : x.program ) config.security.setuidOwners;
-
-    bash = pkgs.bashInteractive;
-
-    adjustSetuidOwner = pkgs.lib.concatStrings (map 
-      (_entry: let entry = {
-        owner = "nobody";
-        group = "nogroup";
-        setuid = false;
-        setgid = false;
-      } //_entry; in
-      ''
-        chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
-        chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
-        chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program} 
-      '') 
-      config.security.setuidOwners);
-  };
+  activateConfiguration = config.system.activationScripts.script;
 
 
   # The init script of boot stage 2, which is supposed to do

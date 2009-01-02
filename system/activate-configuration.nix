@@ -2,15 +2,26 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.stringsWithDeps) textClosureOverridable;
-  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten id;
+  inherit (pkgs.stringsWithDeps) textClosureOverridable noDepEntry;
+  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten mapAttrs;
 
   textClosure = steps:
-    textClosureOverridable steps
-    (["#!/bin/sh"] ++ (mapRecordFlatten (a: v: v) steps));
+    textClosureOverridable steps (
+       [(noDepEntry "#!/bin/sh")]
+    ++ (mapRecordFlatten (a: v: v) steps)
+    );
 
   aggregateScripts = name: steps:
     pkgs.writeScript name (textClosure steps);
+
+  addAttributeName = mapAttrs (a: v: {
+      text = ''
+        #### ${a} begin
+        ${v.text}
+        #### ${a} end
+      '';
+      inherit (v) deps;
+    });
 in
 
 {
@@ -34,7 +45,7 @@ in
         and so on).
       '';
       merge = mergeTypedOption "script" builtins.isAttrs mergeAttrs;
-      apply = lib: {
+      apply = set: let lib = addAttributeName set; in {
         inherit lib; # used to fetch dependencies.
         script = aggregateScripts "activationScript" lib;
       };
