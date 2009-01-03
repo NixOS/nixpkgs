@@ -2682,6 +2682,16 @@ in
       ";
     };
 
+    proxy = mkOption {
+        default = "";
+	description = "
+	  This option specifies the proxy to use for fetchurl. The real effect 
+	  is just exporting http_proxy, https_proxy and ftp_proxy with that
+	  value.
+	";
+	example = "http://127.0.0.1:3128";
+    };
+
   };
 
 

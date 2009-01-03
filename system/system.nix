@@ -103,7 +103,15 @@ rec {
         export NIX_REMOTE_SYSTEMS=/etc/nix.machines
         export NIX_CURRENT_LOAD=/var/run/nix/current-load
       ''
-    else "");
+    else "")
+    +
+    (if config.nix.proxy != "" then
+    ''
+        export http_proxy=${config.nix.proxy}
+        export https_proxy=${config.nix.proxy}
+        export ftp_proxy=${config.nix.proxy}
+    '' else "")
+    ;
 
               
   # The services (Upstart) configuration for the system.
