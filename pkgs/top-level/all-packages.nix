@@ -624,6 +624,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  dar = import ../tools/archivers/dar {
+    inherit fetchurl stdenv zlib bzip2 openssl;
+  };
+
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
   dnsmasq = import ../tools/networking/dnsmasq {
