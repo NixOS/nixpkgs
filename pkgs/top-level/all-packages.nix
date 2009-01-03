@@ -2234,6 +2234,10 @@ let
     inherit fetchurl stdenv perl m4 lzma;
   };
 
+  autoconf213 = import ../development/tools/misc/autoconf/2.13.nix {
+    inherit fetchurl stdenv perl m4 lzma;
+  };
+
   automake = automake19x;
 
   automake17x = import ../development/tools/misc/automake/automake-1.7.x.nix {
@@ -3639,6 +3643,10 @@ let
   };
 
   pth = import ../development/libraries/pth {
+    inherit fetchurl stdenv;
+  };
+
+  pthread_stubs = import ../development/libraries/pthread-stubs {
     inherit fetchurl stdenv;
   };
 
@@ -7318,6 +7326,27 @@ let
     #enableOfficialBranding = true;
   });
 
+  firefox3_1 = lowPrio (import ../applications/networking/browsers/firefox-3/3.1.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit (alsa) alsaLib;
+    #enableOfficialBranding = true;
+    xulrunner = xulrunner3_1;
+    autoconf = autoconf213;
+  });
+
+  xulrunner3_1 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.1.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit (alsa) alsaLib;
+    autoconf = autoconf213;
+    #enableOfficialBranding = true;
+  });
+
   firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python curl coreutils freetype fontconfig;
@@ -8376,6 +8405,12 @@ let
 
   scummvm = import ../games/scummvm {
     inherit fetchurl stdenv SDL zlib mpeg2dec;
+  };
+
+  sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
+    inherit (gtkLibs) gtk glib;
+    inherit pkgconfig;
+    inherit (xlibs) libX11;
   };
 
   # You still can override by passing more arguments.
