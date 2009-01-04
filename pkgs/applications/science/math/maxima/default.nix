@@ -1,12 +1,11 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "maxima-5.13.0";
+  name = "maxima-5.17.0";
 
-  src =	fetchurl {
-		name = "maxima-5.13.0.tar.gz";
-		url = mirror://sf/maxima/maxima-5.13.0.tar.gz;
-		sha256 = "11zidbbp4cbgsmdfyf9w0j7345ydka469ba0my7p73zqhnby09cn";
-	};
+  src = fetchurl {
+    url = "mirror://sourceforge/maxima/maxima-5.17.0.tar.gz";
+    sha256 = "1nzphlm4al0j8jcgalscdqfcgkbscl68qz2mkm8n8804mss32alj";
+  };
 
   buildInputs =[clisp];
 
