@@ -607,6 +607,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  cromfs = import ../tools/archivers/cromfs {
+    inherit fetchurl stdenv pkgconfig fuse perl;
+  };
+
   cron = import ../tools/system/cron { # see also fcron
     inherit fetchurl;
     stdenv = stdenvNew;
