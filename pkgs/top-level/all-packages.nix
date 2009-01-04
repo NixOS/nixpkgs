@@ -993,6 +993,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  mldonkey = import ../applications/networking/p2p/mldonkey {
+    inherit fetchurl stdenv ocaml zlib ncurses;
+  };
+
   mpage = import ../tools/text/mpage {
     inherit fetchurl stdenv;
   };
