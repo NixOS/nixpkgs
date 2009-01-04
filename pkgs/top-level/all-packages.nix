@@ -969,6 +969,11 @@ let
     inherit (xlibs) libX11;
   };
 
+  mcabber = import ../applications/networking/instant-messengers/mcabber {
+    inherit fetchurl stdenv openssl ncurses pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   mdbtools = builderDefsPackage (selectVersion ../tools/misc/mdbtools "0.6-pre1") {
     inherit readline pkgconfig bison;
     inherit (gtkLibs) glib;
