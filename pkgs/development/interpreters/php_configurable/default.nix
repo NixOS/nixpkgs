@@ -83,6 +83,10 @@ composableDerivation {
           buildInputs = ["openssl"];
         };
 
+        mbstring = {
+          configureFlags = ["--enable-mbstring"];
+        };
+
         /*
            Building xdebug withing php to be able to add the parameters to the ini file.. Ther should be a better way
           meta = {
@@ -115,6 +119,7 @@ composableDerivation {
       zlibSupport = true;
       opnesslSupport = true;
       xdebugSupport = true;
+      mbstringSupport = true;
     };
 
     configurePhase = ''
