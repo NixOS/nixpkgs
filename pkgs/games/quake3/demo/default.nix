@@ -1,4 +1,4 @@
-l{stdenv, fetchurl}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "quake3demo-1.11-6";
