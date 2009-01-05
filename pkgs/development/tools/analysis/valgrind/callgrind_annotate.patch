@@ -1,8 +1,0 @@
---- valgrind-3.3.0/callgrind/callgrind_annotate.in	2007-12-11 00:18:11.000000000 +0100
-+++ valgrind-3.3.0/callgrind/callgrind_annotate.in	2008-06-03 23:12:26.000000000 +0200
-@@ -1,4 +1,4 @@
--#! /usr/bin/perl -w
-+#! @PERL@ -w
- ##--------------------------------------------------------------------##
- ##--- The cache simulation framework: instrumentation, recording   ---##
- ##--- and results printing.                                        ---##
