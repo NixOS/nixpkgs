@@ -3651,10 +3651,6 @@ let
     inherit fetchurl stdenv gettext;
   };
 
-  popt110 = import ../development/libraries/popt/popt-1.10.6.nix {
-    inherit fetchurl stdenv gettext libtool autoconf automake;
-  };
-
   proj = import ../development/libraries/proj.4 {
     inherit fetchurl stdenv;
   };
@@ -6521,11 +6517,6 @@ let
 
   mingetty = import ../os-specific/linux/mingetty {
     inherit fetchurl stdenv;
-  };
-
-  mkinitrd = import ../os-specific/linux/mkinitrd {
-    inherit fetchurl stdenv;
-    popt = popt110;
   };
 
   module_init_tools = import ../os-specific/linux/module-init-tools {
