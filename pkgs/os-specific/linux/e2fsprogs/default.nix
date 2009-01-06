@@ -10,8 +10,12 @@ stdenv.mkDerivation {
   
   configureFlags =
     if stdenv ? isDietLibC
-    then ""
+    then "--with-diet-libc"
     else "--enable-elf-shlibs";
+
+  preBuild = if stdenv ? isDietLibC then ''
+    sed -e 's/-lpthread//' -i Makefile */Makefile */*/Makefile
+  '' else "";
     
   preInstall = "installFlagsArray=('LN=ln -s')";
   
@@ -21,6 +25,7 @@ stdenv.mkDerivation {
     if stdenv ? isDietLibC then
       "-UHAVE_SYS_PRCTL_H " +
       (if stdenv.system == "x86_64-linux" then "-DHAVE_LSEEK64_PROTOTYPE=1 -Dstat64=stat" else "")
+      + " -lcompat -lpthread "
     else "";
 
   meta = {
