@@ -27,33 +27,41 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl makeWrapper];
 
-  # On Linux, use patchelf to modify the executables so that they can
-  # find editline/gmp.
-  postUnpack = (if stdenv.isLinux then ''
-    find . -type f -perm +100 \
-        -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath "${editline}/lib:${ncurses}/lib:${gmp}/lib" {} \;
-    for prog in strip ranlib; do
-      find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
-    done
-  '' else "")
-  + ''
-    mkdir "$TMP/bin"
-    for i in strip; do
-      echo '#!/bin/sh' >> "$TMP/bin/$i"
-      chmod +x "$TMP/bin/$i"
-      PATH="$TMP/bin:$PATH"
-    done
-  ''
-  
-  ;
+  postUnpack =
+    # Strip is harmful, see also below. It's important that this happens
+    # first. The GHC Cabal build system makes use of strip by default and
+    # has hardcoded paths to /usr/bin/strip in many places. We replace
+    # those below, making them point to our dummy script.
+     ''
+      mkdir "$TMP/bin"
+      for i in strip; do
+        echo '#!/bin/sh' >> "$TMP/bin/$i"
+        chmod +x "$TMP/bin/$i"
+        PATH="$TMP/bin:$PATH"
+      done
+     '' +
+    # On Linux, use patchelf to modify the executables so that they can
+    # find editline/gmp.
+    (if stdenv.isLinux then ''
+      find . -type f -perm +100 \
+          -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+          --set-rpath "${editline}/lib:${ncurses}/lib:${gmp}/lib" {} \;
+      for prog in ld ar gcc strip ranlib; do
+        find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
+      done
+     '' else "");
 
   configurePhase = ''
     ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include
   '';
+
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
   dontStrip = true;
+
+  # No building is necessary, but calling make without flags ironically
+  # calls install-strip ...
+  buildPhase = ":";
 
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
@@ -78,9 +86,6 @@ stdenv.mkDerivation rec {
   " else "")
   +
   ''
-  # the installed ghc executable segfaults, maybe some stripping or such has been done somewhere?
-  # Just copy teh version from the $TMP dir over
-  cp ghc/dist-stage2/build/ghc/ghc $out/lib/ghc-${version}/ghc
   # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
   sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
 
