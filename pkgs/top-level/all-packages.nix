@@ -6698,6 +6698,10 @@ let
     stdenv = makeStaticBinaries stdenv;
   }));
 
+  utillinuxng = composedArgsAndFun (import ../os-specific/linux/util-linux-ng) {
+    inherit fetchurl stdenv e2fsprogs;
+  };
+
   wesnoth = import ../games/wesnoth {
     inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net gettext zlib boost freetype;
   };
