@@ -484,7 +484,7 @@ rec {
     else if all __isList list then concatLists list
     else if all __isAttrs list then mergeAttrs list
     else if all (x: true == x || false == x) list then fold logicalOR false list
-    else if all (x: x == toString x) list then concatStrings x
+    else if all (x: x == toString x) list then concatStrings list
     else abort "${name}: Cannot merge values.";
 
   mergeTypedOption = typeName: predicate: merge: name: list:
