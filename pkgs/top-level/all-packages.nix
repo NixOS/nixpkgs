@@ -6849,6 +6849,10 @@ let
     inherit fetchurl stdenv texinfo;
   };
 
+  themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
+    inherit fetchurl;
+  };
+
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
     inherit fetchurl stdenv;
   };
