@@ -3064,5 +3064,6 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)
     (import ../upstart-jobs/manual.nix)
+    (import ../upstart-jobs/rogue.nix)
   ];
 }
