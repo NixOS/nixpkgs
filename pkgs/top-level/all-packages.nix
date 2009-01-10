@@ -819,7 +819,7 @@ let
   };
 
   groff = import ../tools/text/groff {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ghostscript perl;
   };
 
   grub = import ../tools/misc/grub {
