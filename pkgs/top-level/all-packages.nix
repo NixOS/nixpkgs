@@ -8245,9 +8245,9 @@ let
   };
 
   xneur = import ../applications/misc/xneur {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell;
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd;
     GStreamer=gst_all.gstreamer;
-    inherit (xlibs) libX11 libXpm;
+    inherit (xlibs) libX11 libXpm libXt libXext;
     inherit (gtkLibs) glib;
   };
 
