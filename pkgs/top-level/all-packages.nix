@@ -8454,6 +8454,10 @@ let
     inherit fetchurl stdenv xlibs mesa;
   };
 
+  xsokoban = builderDefsPackage (import ../games/xsokoban) {
+    inherit (xlibs) libX11 xproto libXpm libXt;
+  };
+
   zoom = import ../games/zoom {
     inherit fetchurl stdenv perl expat freetype;
     inherit (xlibs) xlibs;
