@@ -120,6 +120,7 @@ composableDerivation {
       opnesslSupport = true;
       xdebugSupport = true;
       mbstringSupport = true;
+      gdSupport = true;
     };
 
     configurePhase = ''
