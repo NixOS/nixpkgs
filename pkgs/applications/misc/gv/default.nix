@@ -10,13 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ Xaw3d ghostscriptX ];
   
-  postConfigure = [ "sed 's|\\<gs\\>|${ghostscriptX}/bin/gs|g' -i src/*.am" ];
+  postConfigure = ''
+    sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i src/*.in
+    sed 's|"gs"|"${ghostscriptX}/bin/gs"|g' -i src/*.c
+  '';
 
   doCheck = true;
 
   meta = {
     homepage = http://www.gnu.org/software/gv/;
     description = "GNU gv, a PostScript/PDF document viewer";
-    license = "GPLv2+";
+    license = "GPLv3+";
   };
 }
