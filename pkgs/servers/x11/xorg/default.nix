@@ -2424,7 +2424,7 @@ rec {
       url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-via-0.2.2.tar.bz2;
       sha256 = "0qn89m1s50m4jajw95wcidarknyxn19h8696dbkgwy21cjpvs9jh";
     };
-    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC mesaHeaders glproto ];
   }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
     
   xf86videovmware = (stdenv.mkDerivation {

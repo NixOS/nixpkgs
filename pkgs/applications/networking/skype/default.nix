@@ -1,12 +1,12 @@
 args: with args;
 stdenv.mkDerivation ( rec {
   pname = "skype";
-  version = "1.4.0.118";
-  name = "skype-1.4";
+  version = "2.0.0.72";
+  name = "skype-2.0";
 
   src = fetchurl {
     url = http://www.skype.com/go/getskype-linux-static;
-    sha256 = "1293f54811a36b2a1b83c56a4ad2844e58c753fe39b61422fac66b001d0f9e0c";
+    sha256 = "2f37963e8f19c0ec5efd8631abe9633b6551f09dee024460c40fad10728bc580";
     name = "${pname}_static-${version}.tar.bz2";
   };
 
@@ -17,6 +17,8 @@ stdenv.mkDerivation ( rec {
     libSM 
     libICE 
     libXi 
+    libXv
+    libXScrnSaver
     libXrender 
     libXrandr 
     libXfixes 

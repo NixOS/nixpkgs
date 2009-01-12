@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     configureFlags=\"--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86\"
   ";
 
+  patches = [ ./eo.patch ];
+
   postInstall = ''
   	rm ''${out}/etc/X11/xkb/compiled || true;
 	cat ${./level3-deadkeys-us-intl} | sed -e 's/altgr-intl/altgr-intl-rich/g' >> $out/etc/X11/xkb/symbols/us

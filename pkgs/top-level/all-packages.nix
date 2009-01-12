@@ -561,6 +561,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ccrypt = import ../tools/security/ccrypt {
+    inherit fetchurl stdenv;
+  };
+
   cdrdao = import ../tools/cd-dvd/cdrdao {
     inherit fetchurl stdenv;
   };
@@ -1097,6 +1101,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  proxychains = import ../tools/networking/proxychains {
+    inherit fetchurl stdenv;
+  };
+
   proxytunnel = import ../tools/misc/proxytunnel {
     inherit fetchurl stdenv openssl;
   };
@@ -1279,10 +1287,8 @@ let
   };
 
   truecrypt = import ../applications/misc/truecrypt {
-    inherit fetchurl stdenv pkgconfig fuse;
-    inherit (gtkLibs) gtk;
-    inherit (xorg) libSM;
-    glibc = stdenv.gcc.libc;
+    inherit fetchurl stdenv pkgconfig fuse devicemapper;
+    wxGTK = wxGTK28;
   };
 
   ttmkfdir = import ../tools/misc/ttmkfdir {
@@ -2309,7 +2315,7 @@ let
   };
 
   cmake = import ../development/tools/build-managers/cmake {
-    inherit fetchurl stdenv replace;
+    inherit fetchurl stdenv replace ncurses;
   };
 
   cproto = import ../development/tools/misc/cproto {
@@ -2870,6 +2876,10 @@ let
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
     inherit (xlibs) inputproto libXi libXinerama libXft;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
+  };
+
+  freeimage = import ../development/libraries/freeimage {
+    inherit fetchurl stdenv unzip;
   };
 
   cfitsio = import ../development/libraries/cfitsio {
@@ -3803,6 +3813,10 @@ let
     inherit fetchurl stdenv unixODBC glibc libtool openssl zlib;
     inherit postgresql mysql sqlite;
   });
+
+  vxl = import ../development/libraries/vxl {
+   inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
+  };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
     inherit (gtkLibs) gtk atk pango;
@@ -5903,6 +5917,12 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
+  cpufrequtils = import ../os-specific/linux/cpufrequtils {
+    inherit fetchurl stdenv libtool gettext;
+    glibc = stdenv.gcc.libc;
+    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
+  };
+
   cryopid = import ../os-specific/linux/cryopid {
     inherit fetchurl stdenv zlibStatic;
   };
@@ -7806,7 +7826,7 @@ let
     inherit (xlibs) libX11 libSM libICE libXt libXext;
     qt = qt3;
     #33motif = lesstif;
-    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc).gcc;
+    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
@@ -7928,7 +7948,7 @@ let
     inherit fetchurl stdenv;
     inherit glibc alsaLib freetype fontconfig libsigcxx gcc;
     inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor
-                    libXinerama libXext libX11;
+                    libXinerama libXext libX11 libXv libXScrnSaver;
   };
 
   slim = import ../applications/display-managers/slim {
@@ -8796,7 +8816,7 @@ let
   };
 
   psi = builderDefsPackage
-    (selectVersion ../applications/networking/instant-messengers/psi "0.11")
+    (selectVersion ../applications/networking/instant-messengers/psi "0.12")
     {
       inherit builderDefs zlib aspell sox openssl;
       inherit (xlibs) xproto libX11 libSM libICE;
