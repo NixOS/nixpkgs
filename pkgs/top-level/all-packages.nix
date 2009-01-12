@@ -6326,6 +6326,27 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
+  kernel_2_6_28 = import ../os-specific/linux/kernel/linux-2.6.28.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "fbcondecor-0.9.5-2.6.28";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.5-2.6.28.patch;
+          sha256 = "105q2dwrwi863r7nhlrvljim37aqv67mjc3lgg529jzqgny3fjds";
+        };
+        extraConfig = "CONFIG_FB_CON_DECOR=y";
+        features = { fbConDecor = true; };
+      }
+      { name = "sec_perm-2.6.24";
+        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+        features = { secPermPatch = true; };
+      }
+    ];
+    extraConfig =
+      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
+      [(getConfig ["kernel" "addConfig"] "")];
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6441,6 +6462,7 @@ let
   kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
   kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
+  kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_25;
@@ -6817,7 +6839,7 @@ let
   };
 
   manpages = import ../data/documentation/man-pages {
-     inherit fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   mph_2b_damase = import ../data/fonts/mph-2b-damase {
