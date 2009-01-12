@@ -8251,6 +8251,13 @@ let
     inherit (gtkLibs) glib;
   };
 
+  xneur_0_8 = import ../applications/misc/xneur/0.8.nix {
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd;
+    GStreamer=gst_all.gstreamer;
+    inherit (xlibs) libX11 libXpm libXt libXext;
+    inherit (gtkLibs) glib;
+  };
+
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
