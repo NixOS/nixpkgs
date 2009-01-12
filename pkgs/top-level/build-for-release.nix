@@ -73,6 +73,7 @@ let
       gnum4
       gnumake
       gnupatch
+      gnupg2
       gnused
       gnutar
       gnutls
