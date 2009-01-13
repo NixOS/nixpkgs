@@ -31,18 +31,35 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    # Copy the graphics, sounds, etc.
     ensureDir "$out/share/${name}"
-    cp -rv data "$out/share/${name}"
+    cp -rv data other/icons "$out/share/${name}"
 
+    # Copy the executables (client, server, etc.).
     ensureDir "$out/bin"
-    cp -v teeworlds "$out/bin/.wrapped-teeworlds"
+    executables=""
+    for file in *
+    do
+      if [ -f "$file" ] && [ -x "$file" ]
+      then
+          executables="$file $executables"
+      fi
+    done
+    cp -v $executables "$out/bin"
 
-    cat > "$out/bin/teeworlds" <<EOF
+    # Make sure the programs are executed from the right directory so
+    # that they can access the graphics and sounds.
+    for program in $executables
+    do
+      mv -v "$out/bin/$program" "$out/bin/.wrapped-$program"
+      cat > "$out/bin/$program" <<EOF
 #!/bin/sh
-cd "$out/share/${name}" && exec "$out/bin/.wrapped-teeworlds"
+cd "$out/share/${name}" && exec "$out/bin/.wrapped-$program"
 EOF
-    chmod +x "$out/bin/teeworlds"
+      chmod -v +x "$out/bin/$program"
+    done
 
+    # Copy the documentation.
     ensureDir "$out/doc/${name}"
     cp -v *.txt "$out/doc/${name}"
   '';
