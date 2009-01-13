@@ -4476,6 +4476,15 @@ let
     };
   };
 
+  perlClassUnload = buildPerlPackage {
+    name = "Class-Unload-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IL/ILMARI/Class-Unload-0.05.tar.gz;
+      sha256 = "01b0j10nxbz37xnnzw3hgmpfgq09mc489kq2d8f5nswsrlk75001";
+    };
+    propagatedBuildInputs = [perlClassInspector];
+  };
+
   perlCompressZlib = buildPerlPackage {
     name = "Compress-Zlib-1.41";
     src = fetchurl {
@@ -4588,17 +4597,17 @@ let
   };
 
   perlDBIxClass = buildPerlPackage {
-    name = "DBIx-Class-0.08099_04";
+    name = "DBIx-Class-0.08099_05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LS/LSAUNDERS/DBIx-Class-0.08099_04.tar.gz;
-      sha256 = "0ik5bjsrlpz0sbwrrwiyjiga17rh9jb09gflqif5h59gq9y7kcyf";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08099_05.tar.gz;
+      sha256 = "143sp6walr9gmnk0caxidhnzciixawihkiwm7vf9clbdhhrn39zj";
     };
     propagatedBuildInputs = [
       perlTestNoWarnings perlTestException perlDBI perlScopeGuard
       perlPathClass perlClassInspector perlClassAccessorGrouped
       perlCarpClan perlTestWarn perlDataPage perlSQLAbstract
       perlSQLAbstractLimit perlClassC3 perlClassC3Componentised
-      perlModuleFind perlDBDSQLite perlJSONAny
+      perlModuleFind perlDBDSQLite perlJSONAny perlSubName
     ];
   };
 
@@ -4614,13 +4623,14 @@ let
   perlDBIxClassSchemaLoader = buildPerlPackage {
     name = "DBIx-Class-Schema-Loader-0.04005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-Schema-Loader-0.04005.tar.gz;
-      sha256 = "1adymxsh1q7y1d3x25mar1rz6nshag16h6bfzhwy0w50qd2vvx9l";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-Schema-Loader-0.04999_06.tar.gz;
+      sha256 = "169ydwjarq6qk48jdxcn5ks8rx9aksk9fnx07gl5mz7banw5cs6y";
     };
     propagatedBuildInputs = [
       perlDBI perlDBDSQLite perlDataDump perlUNIVERSALrequire
       perlClassAccessor perlClassDataAccessor perlClassC3 perlCarpClan
       perlClassInspector perlDBIxClass perlLinguaENInflectNumber
+      perlClassUnload
     ];
   };
 
@@ -5168,6 +5178,14 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
       sha256 = "0si4xfgf8c2pfag1cqbr9jbyvg3hak6wkmny56kn2qwa4ljp9bk6";
+    };
+  };
+
+  perlSubName = buildPerlPackage {
+    name = "Sub-Name-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/X/XM/XMATH/Sub-Name-0.04.tar.gz;
+      sha256 = "1nlin0ag2krpmiyapp3lzb6qw2yfqvqmx57iz5zwbhr4pyi46bhb";
     };
   };
 
