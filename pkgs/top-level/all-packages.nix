@@ -8521,6 +8521,11 @@ let
       libvorbis libogg gettext;
   };
 
+  teeworlds = import ../games/teeworlds {
+    inherit fetchurl stdenv unzip python alsaLib mesa;
+    inherit (xlibs) libX11;
+  };
+
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
