@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
        for prog in bin/gitk libexec/git-core/git-gui
        do
          notSupported "$out/$prog" \
-                      "reinstall with config \`git = { guiSupport = true; }' set"
+                      "reinstall with config git = { guiSupport = true; } set"
        done
      '')
 
