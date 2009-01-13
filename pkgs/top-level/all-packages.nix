@@ -6074,6 +6074,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  kernelHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
+    inherit fetchurl stdenv perl;
+  };
+
   kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "arm-linux";
@@ -6530,6 +6534,11 @@ let
   kvm76 = import ../os-specific/linux/kvm/76.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
     kernelHeaders = kernelHeaders_2_6_26;
+  };
+
+  kvm82 = import ../os-specific/linux/kvm/82.nix {
+    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
+    kernelHeaders = kernelHeaders_2_6_28;
   };
 
   libcap = import ../os-specific/linux/libcap {

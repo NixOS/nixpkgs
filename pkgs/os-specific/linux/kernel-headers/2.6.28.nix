@@ -1,15 +1,15 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, perl}:
 
 assert stdenv.isLinux;
 
-let version = "2.6.26.2"; in 
+let version = "2.6.28"; in 
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
   
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "0xrkv6wk5l4qhza35a76cd00a7g9xv3ymw7znwskig2kmqswnp1m";
+    sha256 = "1023nl992s4qmnwzbfz385azzpph58azi5rw4w0wwzzybv2rf3df";
   };
 
   platform = 
@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
     abort "don't know what the kernel include directory is called for this platform";
+
+  buildInputs = [perl];
 
   # !!! hacky
   fixupPhase = "ln -s $out/include/asm $out/include/asm-$platform";

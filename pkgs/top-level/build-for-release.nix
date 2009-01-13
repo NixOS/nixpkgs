@@ -150,9 +150,10 @@ let
       qt4
       #quake3demo
       readline
-      reiserfsprogs
       rLang
+      reiserfsprogs
       rogue
+      rpm
       rsync
       ruby
       screen
