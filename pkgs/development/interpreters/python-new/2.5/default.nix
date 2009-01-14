@@ -61,11 +61,16 @@ in
 
       buildPhase = ''
         ensureDir $out/bin
-        cat >> $out/bin/python << EOF
-        export NIX_PYTHON_SITES=\$NIX_PYTHON_SITES:$NIX_PYTHON_SITES
-        exec ${t.pythonFull}/bin/python "\$@"
+
+        for prog in python pydoc; do
+          echo ========= prog $prog
+          cat >> $out/bin/$prog << EOF
+          export NIX_PYTHON_SITES=\$NIX_PYTHON_SITES:$NIX_PYTHON_SITES
+          exec ${t.pythonFull}/bin/$prog "\$@"
         EOF
-        chmod +x $out/bin/python
+          echo chmod +x
+          chmod +x $out/bin/$prog
+        done
       '';
     };
 
