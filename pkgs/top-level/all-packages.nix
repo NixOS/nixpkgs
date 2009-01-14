@@ -7269,6 +7269,10 @@ let
     inherit libpng libtiff;
   };
 
+  dvdauthor = import ../applications/video/dvdauthor {
+    inherit fetchurl stdenv freetype libpng fribidi libxml2 libdvdread imagemagick;
+  };
+
   dwm = import ../applications/window-managers/dwm {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXinerama;
