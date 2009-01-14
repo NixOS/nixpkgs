@@ -1,16 +1,16 @@
-{ fetchurl, stdenv, unzip, python, alsaLib, libX11, mesa }:
+{ fetchurl, stdenv, python, alsaLib, libX11, mesa, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.4.3";
+  name = "teeworlds-0.5.0";
 
   src = fetchurl {
     url = "http://www.teeworlds.com/files/${name}-src.tar.gz";
-    sha256 = "1k141517wchhw2586m0kkvh65kadnlybpvzrxlb8b098jbg1hr1n";
+    sha256 = "1akns8852j208cy3q4ki0fgbbpp0wyjm5fhnma7qs5k60321305x";
   };
 
   # Note: Teeworlds requires Python 2.x to compile.  Python 3.0 will
   # not work.
-  buildInputs = [ unzip python alsaLib libX11 mesa ];
+  buildInputs = [ python alsaLib libX11 mesa SDL ];
 
   patchPhase = ''
     substituteInPlace "default.bam"                             \
@@ -19,15 +19,16 @@ stdenv.mkDerivation rec {
   '';
   configurePhase = ''
     # Fetch and build BAM, the home-made build system.
-    unzip ${fetchurl {
-        url = "http://teeworlds.com/files/bam.zip";
-        sha256 = "0dz9k906skgzc4l15ihlqb1d1hk0s2yajadbq5zs01gxi05xhy6v";
+    # FIXME: Move BAM outside of here.  See http://www.teeworlds.com/trac/bam .
+    tar xzvf ${fetchurl {
+        url = "http://teeworlds.com/trac/bam/browser/releases/bam-0.2.0.tar.gz?format=raw";
+        sha256 = "0n077iiidw7xsyna4y92pz5dwqaywps3w0v5c88dic27vz0xsv7g";
       }
     }
-    ( cd bam && ./make_unix.sh )
+    ( cd bam-* && ./make_unix.sh )
 
     # Build Teeworlds.
-    ./bam/src/bam release
+    ./bam-*/src/bam release
   '';
 
   installPhase = ''

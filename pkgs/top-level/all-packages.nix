@@ -8522,7 +8522,7 @@ let
   };
 
   teeworlds = import ../games/teeworlds {
-    inherit fetchurl stdenv unzip python alsaLib mesa;
+    inherit fetchurl stdenv python alsaLib mesa SDL;
     inherit (xlibs) libX11;
   };
 
