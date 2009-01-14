@@ -173,6 +173,7 @@ let
       sysvinit
       sysvtools
       tcpdump
+      teeworlds
       #tetex
       texLive
       texLiveBeamer
