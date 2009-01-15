@@ -6224,64 +6224,6 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
-  kernel_2_6_21_ck = import ../os-specific/linux/kernel/linux-2.6.21_ck.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "ext3cow";
-        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
-        extraConfig =
-        "CONFIG_EXT3COW_FS=m\n" +
-        "CONFIG_EXT3COW_FS_XATTR=y\n" +
-        "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
-        "CONFIG_EXT3COW_FS_SECURITY=y\n";
-      }
-      { name = "Con Kolivas Patch";
-        patch = ../os-specific/linux/kernel/patch-2.6.21-ck1;
-      }
-      { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
-      }
-      { name = "skas-2.6.20-v9-pre9";
-        patch = fetchurl {
-          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
-          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
-        };
-        extraConfig =
-          "CONFIG_PROC_MM=y\n" +
-          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
-      }
-      { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
-          sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-      }
-    ];
-  };
-
-  kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.4-2.6.25-rc6";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
-          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
-  };
-
   kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -6318,6 +6260,28 @@ let
           CONFIG_UNION_FS=m
           CONFIG_UNION_FS_XATTR=y
         '';
+      }
+    ];
+    extraConfig =
+      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
+      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
+      [(getConfig ["kernel" "addConfig"] "")];
+  };
+
+  kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "fbcondecor-0.9.4-2.6.25-rc6";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
+          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
+        };
+        extraConfig = "CONFIG_FB_CON_DECOR=y";
+        features = { fbConDecor = true; };
+      }
+      { name = "sec_perm-2.6.24";
+        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+        features = { secPermPatch = true; };
       }
     ];
     extraConfig =
@@ -6508,9 +6472,8 @@ let
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_25;
-  #kernel = kernelPackages.kernel;
 
-  customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/linux.nix) {
+  customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools lib;
   });
 
