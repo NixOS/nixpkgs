@@ -267,6 +267,13 @@ let
 #        splashutils
         ;
     };
+    kernelPackages_2_6_28 = pkgs.recurseIntoAttrs {
+      inherit (pkgs.kernelPackages_2_6_28)
+        kernel
+        klibc
+#        splashutils
+        ;
+    };
   };
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
