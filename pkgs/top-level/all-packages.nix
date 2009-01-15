@@ -6146,14 +6146,6 @@ let
   kernel_2_6_21 = import ../os-specific/linux/kernel/linux-2.6.21.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
-      { name = "ext3cow";
-        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
-        extraConfig =
-          "CONFIG_EXT3COW_FS=m\n" +
-          "CONFIG_EXT3COW_FS_XATTR=y\n" +
-          "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
-          "CONFIG_EXT3COW_FS_SECURITY=y\n";
-      }
       /* Commented out because only acer users have need for it..
          It takes quite a while to create the patch when unpacking the kernel sources only for that task
       { name = "acerhk";
@@ -6187,27 +6179,6 @@ let
   kernel_2_6_22 = import ../os-specific/linux/kernel/linux-2.6.22.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
-      /*
-      { name = "ext3cow";
-        patch = ../os-specific/linux/kernel/linux-2.6.20.3-ext3cow.patch;
-        extraConfig =
-        "CONFIG_EXT3COW_FS=m\n" +
-        "CONFIG_EXT3COW_FS_XATTR=y\n" +
-        "CONFIG_EXT3COW_FS_POSIX_ACL=y\n" +
-        "CONFIG_EXT3COW_FS_SECURITY=y\n";
-      }
-      */
-      /*
-      { name = "skas-2.6.20-v9-pre9";
-        patch = fetchurl {
-          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
-          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
-        };
-        extraConfig =
-          "CONFIG_PROC_MM=y\n" +
-          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
-      }
-      */
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
           url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
