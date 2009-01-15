@@ -128,7 +128,7 @@ installPhase() {
         if test -e arch/$archDir/include/asm; then
             cp -a arch/$archDir/include/asm $includeDir
         else
-            cp -a include/$archDir $includeDir
+            cp -a include/asm-$archDir $includeDir
         fi
     fi
 }
