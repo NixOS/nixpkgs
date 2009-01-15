@@ -97,7 +97,8 @@ let
         ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware kernelPackages.iwlwifi4965ucode
         ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
         ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
-        ++ config.services.udev.addFirmware;
+        ++ config.services.udev.addFirmware
+        ++ ["${kernelPackages.kernel}/lib/firmware"];
       extraUdevPkgs =
            pkgs.lib.optional config.services.hal.enable pkgs.hal
         ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
