@@ -3,11 +3,11 @@ args @ {stdenv, fetchurl, userModeLinux ? false, ...}:
 import ./generic.nix (
 
   rec {
-    version = "2.6.25.17";
+    version = "2.6.25.20";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "15jx163rryvvdy65wgfpws8l5cqrczfygsz6v5280i5glhy1dh77";
+      sha256 = "07knyjhvanvclk6xdwi07vfvsmiqciqaj26cn78ayiqqqr9d4f6y";
     };
 
     features = {
