@@ -96,7 +96,6 @@ rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
 
-        sleep 5
         (cd $out && tar cvfj $out/static-tools.tar.bz2 bin lib libexec include)
       ''; # */
 
@@ -177,7 +176,7 @@ rec {
 
         tar xvf ${hello.src}
         cd hello-*
-        ./configure --prefix=$out || cat config.log
+        ./configure --prefix=$out
         make
         make install
       ''; # */
