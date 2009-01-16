@@ -596,7 +596,7 @@ let
   };
 
   coreutils = useFromStdenv "coreutils"
-    ((if stdenv ? isDietLibC
+    (makeOverridable (if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
     {

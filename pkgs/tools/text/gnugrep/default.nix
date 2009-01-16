@@ -18,4 +18,6 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/grep/;
     description = "GNU implementation of the Unix grep command";
   };
+
+  passthru = {inherit pcre;};
 }
