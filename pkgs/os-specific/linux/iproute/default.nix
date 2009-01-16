@@ -1,16 +1,25 @@
+{fetchurl, stdenv, flex, bison, db4}:
 
-pkgs:
-pkgs.stdenv.mkDerivation {
-  name = "iproute-20070313";
+stdenv.mkDerivation {
+  name = "iproute-2.6.22-070710";
 
-  src = pkgs.fetchurl {
-    url = http://ftp.debian.org/debian/pool/main/i/iproute/iproute_20070313.orig.tar.gz;
-    sha256 = "1j7cmlr7p9xcg9ys8fhjnynwrp475rbkr2j2c5jqm1xzczw60f9v";
+  src = fetchurl {
+    url = http://developer.osdl.org/dev/iproute2/download/iproute2-2.6.22-070710.tar.gz;
+    sha256 = "3c6b48af9e655e4f0a34c7718e288960a1dc84a3ac7eb726e855adb45fbd953a";
   };
+ 
+  unpackPhase = ''
+      mkdir tmp; cd tmp
+      unpackFile "$src"
+  '';
 
-  preConfigure = "for script in $(find . -type f); do sed -e 's@#! /bin/bash@#! /bin/sh@' -i $script; done;";
+  patchPhase = ''
+    for script in $(find . -type f); do sed -e 's@#! /bin/bash@#! /bin/sh@' -i $script;
+    done;
+    sed -e s@/usr/lib@$out/lib@ -i tc/Makefile
+  '';
 
   makeFlags = " SBINDIR=\\$(out)/sbin CONFDIR=\\$(out)/etc DOCDIR=\\$(out)/doc MANDIR=\\$(out)/man ";
- 
-  buildInputs = [pkgs.bison pkgs.flex pkgs.db4];
+
+  buildInputs = [bison flex db4];
 }

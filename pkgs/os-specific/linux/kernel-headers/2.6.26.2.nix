@@ -2,13 +2,13 @@
 
 assert stdenv.isLinux;
 
+let version = "2.6.26.2"; in 
+
 stdenv.mkDerivation {
-  name = "linux-headers-2.6.26.2";
-  
-  builder = ./builder.sh;
+  name = "linux-headers-${version}";
   
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.26.2.tar.bz2";
+    url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
     sha256 = "0xrkv6wk5l4qhza35a76cd00a7g9xv3ymw7znwskig2kmqswnp1m";
   };
 
@@ -23,4 +23,20 @@ stdenv.mkDerivation {
 
   extraIncludeDirs =
     if stdenv.system == "powerpc-linux" then ["ppc"] else [];
+
+  patchPhase = ''
+    sed -i '/scsi/d' include/Kbuild
+  '';
+
+  buildPhase = ''
+    make mrproper headers_check
+  '';
+
+  installPhase = ''
+    make INSTALL_HDR_PATH=$out headers_install
+
+    # Some builds (e.g. KVM) want a kernel.release.
+    ensureDir $out/include/config
+    echo "${version}-default" > $out/include/config/kernel.release
+  '';
 }

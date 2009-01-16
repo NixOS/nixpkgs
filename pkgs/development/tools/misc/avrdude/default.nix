@@ -1,32 +1,32 @@
-args:
-with args.lib; with args;
-let
-  co = chooseOptionsByFlags {
-    inherit args;
-    flagDescr = {
-      mandatory ={ cfgOption = [ "--disable-dependency-tracking" ]; 
-                   buildInputs=["yacc" "flex"]; };
-      doc = { cfgOption = "--enable-doc"; buildInputs=["tetex"]; blocks=["doc" "because untested"]; }; #Enable building documents
-      no_parport = { cfgOption = "--disable-parport"; }; #Enable accessing parallel ports(default)
-    };
-    #defaultFlags = ["doc"];
-  };
+args: with args;
+let edf = composableDerivation.edf; in
+composableDerivation.composableDerivation {
+  initial = {
+    name="avrdude-5.4";
 
-in stdenv.mkDerivation {
-
-  # passing the flags in case a library using this want's to check them (*) .. 
-  inherit (co) /* flags */ buildInputs configureFlags;
-
-  src = fetchurl {
-      url = http://mirror.switch.ch/mirror/gentoo/distfiles/avrdude-5.4.tar.gz;
-      sha256 = "bee4148c51ec95999d803cb9f68f12ac2e9128b06f07afe307d38966c0833b30";
+    src = fetchurl {
+        url = http://mirror.switch.ch/mirror/gentoo/distfiles/avrdude-5.4.tar.gz;
+        sha256 = "bee4148c51ec95999d803cb9f68f12ac2e9128b06f07afe307d38966c0833b30";
     };
 
-  name="avrdude-5.4";
+    configureFlags = [ "--disable-dependency-tracking" ];
 
-  meta = {
-    license = "GPL-2";
-    description = "AVR Downloader/UploaDEr";
-    homepage = http://savannah.nongnu.org/projects/avrdude;
+    buildInputs = [yacc flex];
+
+    flags =
+           edf { name = "doc"; enable = { buildInputs = texLive;  configureFlags = ["--enable-doc"]; }; }
+        // edf { name = "parport"; }
+        ;
+
+    cfg = {
+      docSupport = false; # untested
+      parportSupport = true;
+    };
+
+    meta = {
+      license = "GPL-2";
+      description = "AVR Downloader/UploaDEr";
+      homepage = http://savannah.nongnu.org/projects/avrdude;
+    };
   };
 }

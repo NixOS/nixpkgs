@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iwlwifi-4965-ucode-4.44.17";
+  name = "iwlwifi-4965-ucode-228.57.1.21";
   
   src = fetchurl {
     url = "http://intellinuxwireless.org/iwlwifi/downloads/" + name + ".tgz";
-    sha256 = "1mfnxsp58jvh0njvwaxrkbiggbzr4jd0hk314hxfwyjpjdd2hj6w";
+    sha256 = "1rry0kpzszxk60h5gb94advzi009010xb332iyvfpaiwbj6aiyas";
   };
   
   buildPhase = "true";

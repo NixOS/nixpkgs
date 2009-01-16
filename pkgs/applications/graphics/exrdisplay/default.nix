@@ -1,6 +1,6 @@
 args: with args;
 
-assert fltk.flag_set_gl;
+assert fltk.glSupport;
 stdenv.mkDerivation {
 
   name ="openexr_viewers-1.0.1";

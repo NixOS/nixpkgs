@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, gmp, mpfr, texinfo }:
+{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "gdb-6.8";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "067qpnpgmz9jffi208q5c981xsyn8naq3rkp5ypg477lddcgvpzf";
   };
 
-  buildInputs = [ ncurses gmp mpfr texinfo ];
+  buildInputs = [ ncurses readline gmp mpfr texinfo ];
 
-  configureFlags = "--with-gmp=${gmp} --with-mpfr=${mpfr}";
+  configureFlags = "--with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline";
 
   postInstall = ''
     # Remove Info files already provided by Binutils and other packages.

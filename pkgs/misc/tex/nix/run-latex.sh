@@ -61,13 +61,18 @@ runLaTeX
 echo
 
 
-if grep -q '\\citation' $rootNameBase.aux; then
-    echo "RUNNING BIBTEX..."
-    bibtex --terse $rootNameBase
-    cp $rootNameBase.bbl $out
-    runNeeded=1
-    echo
-fi
+# Run bibtex to process all bibliographies.  There may be several when
+# we're using the multibib package.
+for auxFile in $(find . -name "*.aux"); do
+    if grep -q '\\citation' $auxFile; then
+        echo "RUNNING BIBTEX ON $auxFile..."
+        auxBase=$(basename $auxFile .aux)
+        bibtex --terse $auxBase
+        cp $auxBase.bbl $out
+        runNeeded=1
+        echo
+    fi
+done
 
 
 if test "$runNeeded"; then

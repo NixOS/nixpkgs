@@ -1,42 +1,38 @@
-args:
-( args.mkDerivationByConfiguration {
+args: with args;
+let inherit (args.composableDerivation) composableDerivation edf; in
+composableDerivation {
 
-    flagConfig = {
-      mandatory = { implies = "python"; 
-                    buildInputs = [ "which" ]; # which is needed for the autogen.sh
-                  };
+  initial = {
+
+    buildInputs = [ "which" ]; # which is needed for the autogen.sh
+
+    flags =
     # python and ruby untested 
-      python =            { cfgOption = "--enable-python"; #Enable build of python module
-                            buildInputs=["python"] ++ (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else []); 
-                          };
-      ruby =              { cfgOption = "--enable-ruby"; };  #Enable build of ruby module
-    }; 
+      edf { name = "python"; enable = { buildInputs = [ python ]; }; };
+      # (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else [])
+      # // edf { name = "ruby"; enable = { buildInputs = [ ruby ]; };}
 
-    extraAttrs = co : {
-      name = "geos-3.0.0rc4";
+    name = "geos-3.0.3";
 
-      src = if (args.use_svn) then
-        args.fetchsvn { 
-            url = http://svn.osgeo.org/geos/trunk; 
-            md5 = "b46f5ea517a337064006bab92f3090d4";
-        } else args.fetchurl {
-          url = http://geos.refractions.net/geos-3.0.0rc4.tar.bz2;
-          sha256 = "0pgwwv8q4p234r2jwdkaxcf68z2fwgmkc74c6dnmms2sdwkb5lbw";
-        };
+    src = fetchurl {
+        url = http://download.osgeo.org/geos/geos-3.0.3.tar.bz2;
+        sha256 = "1pxk20jcbyidp3bvip1vdf8wfw2wvh8pcn810qkf1y3zfnki0c7k";
+    };
 
-      configurePhase = "
-        [ -f configure ] || \\
-        LIBTOOLIZE=libtoolize ./autogen.sh
-        #{ automake --add-missing; autoconf; }
-        unset configurePhase; configurePhase
-        ";
+    # for development version. can be removed ?
+    #configurePhase = "
+    #  [ -f configure ] || \\
+    #  LIBTOOLIZE=libtoolize ./autogen.sh
+    #  [>{ automake --add-missing; autoconf; }
+    #  unset configurePhase; configurePhase
+    #";
 
-      meta = {
-          description = "C++ port of the Java Topology Suite (JTS)"
-            + "- all the OpenGIS \"Simple Features for SQL\" spatial predicate functions and spatial operators,"
-            + " as well as specific JTS topology functions such as IsValid";
-          homepage = http://geos.refractions.net/;
-          license = "GPL";
-      };
+    meta = {
+        description = "C++ port of the Java Topology Suite (JTS)"
+          + "- all the OpenGIS \"Simple Features for SQL\" spatial predicate functions and spatial operators,"
+          + " as well as specific JTS topology functions such as IsValid";
+        homepage = http://geos.refractions.net/;
+        license = "GPL";
+    };
   };
-} ) args
+}

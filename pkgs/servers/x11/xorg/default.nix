@@ -1877,6 +1877,26 @@ rec {
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
     
+  xf86videovga = (stdenv.mkDerivation {
+    name = "xf86-video-vga-4.1.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-vga-4.1.0.tar.bz2;
+      sha256 = "0havz5hv46qz3g6g0mq2568758apdapzy0yd5ny8qs06yz0g89fa";
+    };
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
+    
+  xf86videovia = (stdenv.mkDerivation {
+    name = "xf86-video-via-0.2.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.3/src/everything/xf86-video-via-0.2.2.tar.bz2;
+      sha256 = "0qn89m1s50m4jajw95wcidarknyxn19h8696dbkgwy21cjpvs9jh";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC mesaHeaders glproto ];
+  }) // {inherit fontsproto libdrm randrproto renderproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
+    
   xf86videovmware = (stdenv.mkDerivation {
     name = "xf86-video-vmware-10.16.5";
     builder = ./builder.sh;

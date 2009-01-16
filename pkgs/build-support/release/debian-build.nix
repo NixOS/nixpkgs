@@ -34,13 +34,6 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       fi
     ''; # */
 
-    extraDebs = [
-      (fetchurl {
-        url = http://checkinstall.izto.org/files/deb/checkinstall_1.6.1-1_i386.deb;
-        sha256 = "0c9wwk1m0w677gr37zd4lhvkskkcrwa0bk7csh7b3qy94pnab618";
-      })
-    ];
-
     installExtraDebsPhase = ''
       for i in $extraDebs; do
         dpkg --install $i    
@@ -56,7 +49,9 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     '';
 
     installCommand = ''
-      /usr/local/sbin/checkinstall -y -D make install
+      export LOGNAME=root
+    
+      ${checkinstall}/sbin/checkinstall -y -D make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;

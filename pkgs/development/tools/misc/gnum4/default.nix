@@ -1,9 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "m4-1.4.12";
+  name = "gnum4-1.4.12";
+
   src = fetchurl {
-    url = "mirror://gnu/m4/${name}.tar.bz2";
+    url = mirror://gnu/m4/m4-1.4.12.tar.bz2;
     sha256 = "18qvi12843kvqkpcmrjxz1929s833q5d0jzm8hc965j663g1fll5";
   };
 

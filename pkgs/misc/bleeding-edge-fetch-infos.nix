@@ -227,4 +227,8 @@
    url = "http://mawercer.de/~nix/repos/octave-03b414516dd8.tar.gz";
    sha256 = "28ca0be1407954e746909241bda95c5bf0a04f611e73100c1e3967ddc249c519";
  };
+  zsh = args: with args; fetchurl { # Sun Dec 21 12:50:24 UTC 2008
+    url = "http://mawercer.de/~nix/repos/zsh-2008-12-21_12-50-23.tar.gz";
+    sha256 = "9af16f89205759d7ade51268dbdfa02cec3db10b35dc7a56ffe8e1fde2074ae7";
+  };
 }

@@ -13,6 +13,7 @@
 p: # p = pkgs
 let 
   inherit (p) lib fetchurl stdenv getConfig;
+  inherit (p.composableDerivation) composableDerivation;
   # withName prevents  nix-env -qa \* from aborting (pythonLibStub is a derivation but hasn't a name)
   withName = lib.mapAttrs (n : v : if (__isAttrs v && (!__hasAttr "name" v)) then null else v);
 in
@@ -24,7 +25,8 @@ in
     # see pythonFull.
     pythonMinimal = ( (import ./python.nix) {
       name = "python-${t.version}";
-      inherit (p) fetchurl stdenv lib bzip2 ncurses composableDerivation;
+      inherit composableDerivation;
+      inherit (p) fetchurl stdenv lib bzip2 ncurses;
       inherit  (p) zlib sqlite db4 readline openssl gdbm;
     });
 
@@ -59,11 +61,16 @@ in
 
       buildPhase = ''
         ensureDir $out/bin
-        cat >> $out/bin/python << EOF
-        export NIX_PYTHON_SITES=\$NIX_PYTHON_SITES:$NIX_PYTHON_SITES
-        exec ${t.pythonFull}/bin/python "\$@"
+
+        for prog in python pydoc; do
+          echo ========= prog $prog
+          cat >> $out/bin/$prog << EOF
+          export NIX_PYTHON_SITES=\$NIX_PYTHON_SITES:$NIX_PYTHON_SITES
+          exec ${t.pythonFull}/bin/$prog "\$@"
         EOF
-        chmod +x $out/bin/python
+          echo chmod +x
+          chmod +x $out/bin/$prog
+        done
       '';
     };
 
@@ -72,7 +79,7 @@ in
     # lib to verify it works
     # You can define { python25 { debugCmd = "DISPLAY=:0.0 pathtoxterm"; }
     # in your config for easier debugging..
-    pythonLibStub = p.composableDerivation {
+    pythonLibStub = composableDerivation {
       initial = {
           propagatedBuildInputs = [ t.pythonFull ]; # see [1]
           postPhases = ["postAll"]; # using new name so that you dno't override this phase by accident
@@ -465,7 +472,7 @@ in
 
   ### python applications
 
-  pythonExStub = p.composableDerivation {
+  pythonExStub = composableDerivation {
     initial = {
       buildInputs = [p.makeWrapper];
       postPhases = ["wrapExecutables"];

@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doCopy doForceShare doPropagate]);
 	meta = {
-		description = "
-		${abort "Write a description"}
-";
+		description = "Qemu sample image.";
 		inherit src;
 	};
 }

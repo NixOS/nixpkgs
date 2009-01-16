@@ -73,10 +73,12 @@ let
       gnum4
       gnumake
       gnupatch
+      gnupg2
       gnused
       gnutar
       gnutls
       gphoto2
+      gsl
       guile
       gqview
       graphviz
@@ -148,9 +150,10 @@ let
       qt4
       #quake3demo
       readline
-      reiserfsprogs
       rLang
+      reiserfsprogs
       rogue
+      rpm
       rsync
       ruby
       screen
@@ -170,6 +173,7 @@ let
       sysvinit
       sysvtools
       tcpdump
+      teeworlds
       #tetex
       texLive
       texLiveBeamer
@@ -263,6 +267,13 @@ let
 #        splashutils
         ;
     };
+    kernelPackages_2_6_28 = pkgs.recurseIntoAttrs {
+      inherit (pkgs.kernelPackages_2_6_28)
+        kernel
+        klibc
+#        splashutils
+        ;
+    };
   };
 
   i686LinuxPkgs = commonLinuxPkgs "i686-linux" // {
@@ -285,6 +296,7 @@ let
       jrePlugin
       keen4
       mono
+      namazu  # FIXME: The test suite fails on x86-64.
       openoffice
       pidgin
       postgresql_jdbc

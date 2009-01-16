@@ -40,24 +40,38 @@ library, use the 'NOGUI' parameter:
    $ make NOGUI=1
 */
 
-{ fetchurl, stdenv, pkgconfig, fuse, gtk, libSM, glibc
+{ fetchurl, stdenv, pkgconfig, fuse, wxGTK, devicemapper
 }:
 
 stdenv.mkDerivation {
-  name = "trueCrypt-6.0a";
+  name = "trueCrypt-6.1a";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.sfr-fresh.com/unix/misc/TrueCrypt-6.0a-Source.tar.gz;
-    sha256 = "dea0ac2f1f6964d7e88f6751fa9f0a89d0dbfb957e9a557e8dee48492d0b4fac";
+    url = http://www.sfr-fresh.com/unix/misc/TrueCrypt-6.1a-Source.tar.gz;
+    sha256 = "a2bb8273edcb3c3d10d9819daac853f940033deb1f9726986311356bd5b88c4a";
   };
 
-  wxWidgets = fetchurl {
-    url = mirror://sourceforge/wxwindows/wxX11-2.8.8.tar.gz;
-    sha256 = "85e1a458fd9523c68b22af0a51eb507b792894e9ba58a560f9dbe7b6faa6f625";
+  pkcs11h = fetchurl {
+    url = ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/v2-20/pkcs11.h;
+    sha256 = "1563d877b6f8868b8eb8687358162bfb7f868104ed694beb35ae1c5cf1a58b9b";
   };
 
-  buildInputs = [pkgconfig fuse gtk libSM glibc];
-  #configureFlags =
-  #postInstall = "
+  pkcs11th = fetchurl {
+    url = ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/v2-20/pkcs11t.h;
+    sha256 = "8ce68616304684f92a7e267bcc8f486441e92a5cbdfcfd97e69ac9a0b436fb7b";
+  };
+
+  pkcs11fh = fetchurl {
+    url = ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/v2-20/pkcs11f.h;
+    sha256 = "5ae6a4f32ca737e02def3bf314c9842fb89be82bf00b6f4022a97d8d565522b8";
+  };
+
+  buildInputs = [pkgconfig fuse wxGTK devicemapper];
+
+  meta = {
+    description = "Free Open-Source filesystem on-the-fly encryption";
+    homepage = http://www.truecrypt.org/;
+    license = "TrueCrypt License Version 2.6";
+  };
 }

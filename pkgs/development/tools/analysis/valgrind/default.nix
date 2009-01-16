@@ -1,14 +1,12 @@
 { stdenv, fetchurl, perl, gdb }:
 
 stdenv.mkDerivation {
-  name = "valgrind-3.3.1";
+  name = "valgrind-3.4.0";
 
   src = fetchurl {
-    url = http://valgrind.org/downloads/valgrind-3.3.1.tar.bz2;
-    sha256 = "1ymai2xr3c7132vzkngrshlcsrs1qagfd4vwccr96ixx2pcb9dwm";
+    url = http://valgrind.org/downloads/valgrind-3.4.0.tar.bz2;
+    sha256 = "0x4zbwk9ml3kbjzwh887ahw0pdxcm5h9159qg9kwm7zgn7jlmsnm";
   };
-
-  patches = [ ./callgrind_annotate.patch ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.

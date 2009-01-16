@@ -1,16 +1,28 @@
-args: with args;
+{ fetchurl, stdenv, pth }:
+
 stdenv.mkDerivation rec {
-	name = "libassuan-1.0.4";
+  name = "libassuan-1.0.5";
 
-	src = fetchurl {
-		url = "ftp://ftp.gnupg.org/gcrypt/libassuan/${name}.tar.bz2";
-		sha256 = "1milkb5128nkgvfvfc9yi3qq8d1bvci7b3qmzfibmyh7qga6pwpw";
-	};
+  src = fetchurl {
+    url = "mirror://gnupg/libassuan/${name}.tar.bz2";
+    sha256 = "1xar8i5jmah75wa9my4x7vkc5b6nmzd2p6k9kmpdg9hsv04292y5";
+  };
 
-	propagatedBuildInputs = [pth];
+  propagatedBuildInputs = [ pth ];
 
-	meta = {
-		description = "Libassuan  is the IPC library used by some GnuPG related software";
-		homepage = http://www.gnupg.org;
-	};
+  doCheck = true;
+
+  meta = {
+    description = "Libassuan, the IPC library used by GnuPG and related software";
+
+    longDescription = ''
+      Libassuan is a small library implementing the so-called Assuan
+      protocol.  This protocol is used for IPC between most newer
+      GnuPG components.  Both, server and client side functions are
+      provided.
+    '';
+
+    homepage = http://gnupg.org;
+    license = "LGPLv2+";
+  };
 }

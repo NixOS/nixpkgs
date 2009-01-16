@@ -1,9 +1,34 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, ghostscript, perl }:
 
-stdenv.mkDerivation {
-  name = "groff-1.19.2";
+stdenv.mkDerivation rec {
+  name = "groff-1.20.1";
+
   src = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/groff/groff-1.19.2.tar.gz;
-    md5 = "f7c9cf2e4b9967d3af167d7c9fadaae4";
+    url = "mirror://gnu/groff/${name}.tar.gz";
+    sha256 = "01fq5i68p4s4fc6m8i90y5d28wk1x6zh2mkw85n0qqnb6n0qfidn";
+  };
+
+  buildInputs = [ ghostscript perl ];
+
+  doCheck = true;
+
+  meta = {
+    description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
+
+    longDescription = ''
+      groff is the GNU implementation of troff, a document formatting
+      system.  Included in this release are implementations of troff,
+      pic, eqn, tbl, grn, refer, -man, -mdoc, -mom, and -ms macros,
+      and drivers for PostScript, TeX dvi format, HP LaserJet 4
+      printers, Canon CAPSL printers, HTML and XHTML format (beta
+      status), and typewriter-like devices.  Also included is a
+      modified version of the Berkeley -me macros, the enhanced
+      version gxditview of the X11 xditview previewer, and an
+      implementation of the -mm macros.
+    '';
+
+    homepage = http://www.gnu.org/software/groff/;
+
+    license = "GPLv3+";
   };
 }

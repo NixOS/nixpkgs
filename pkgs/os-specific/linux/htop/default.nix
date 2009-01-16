@@ -1,14 +1,14 @@
-args: with args;
-stdenv.mkDerivation {
-	name = "htop-0.6.6";
-	src = fetchurl {
-		url = mirror://sourceforge/htop/htop-0.6.6.tar.gz;
-		sha256 = "1q2jlyxgvx7bj4z0vfvlpq1ap3ykzd9rp598fbpwjw68mwwyzqmj";
-	};
-	buildInputs = [ncurses];
+{fetchurl, stdenv, ncurses}:
 
-	meta = {
-		description = "An interactive process viewer for Linux";
-		homepage = http://htop.sourceforge.net;
-	};
+stdenv.mkDerivation rec {
+  name = "htop-0.8.1";
+  src = fetchurl {
+    url = "mirror://sourceforge/htop/${name}.tar.gz";
+    sha256 = "0a2x28ibz7bg18nnb75gdssxwys0xvzd760j1vnq5dx45wh2ibi5";
+  };
+  buildInputs = [ncurses];
+  meta = {
+    description = "An interactive process viewer for Linux";
+    homepage = "http://htop.sourceforge.net";
+  };
 }
