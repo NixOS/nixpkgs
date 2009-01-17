@@ -6445,7 +6445,7 @@ let
   kernelPackages = kernelPackages_2_6_25;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools lib;
+    inherit fetchurl stdenv perl mktemp module_init_tools;
   });
 
   libselinux = import ../os-specific/linux/libselinux {

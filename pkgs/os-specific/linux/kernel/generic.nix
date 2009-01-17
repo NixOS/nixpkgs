@@ -34,6 +34,8 @@
 , # A list of additional statements to be appended to the
   # configuration file.
   extraConfig ? []
+
+, preConfigure ? ""
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -54,6 +56,8 @@ stdenv.mkDerivation {
   };
   
   builder = ./builder.sh;
+
+  inherit preConfigure;
 
   inherit src config;
   
