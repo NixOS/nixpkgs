@@ -17,7 +17,10 @@ stdenv.mkDerivation
   configureFlags = if static then "--disable-dynamic" else "--enable-dynamic";
   CPPFLAGS = "-DNDEBUG";
   CFLAGS = "-O3";
-  doCheck = 1;
+
+  # FIXME: The test suite fails on NixOS in a chroot.  See
+  # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
+  doCheck = false;
 
   # adns doesn't understand the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
