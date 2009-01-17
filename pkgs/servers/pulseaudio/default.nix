@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = ''
-    --disable-solaris --disable-jack --disable-bluez --disable-polkit
+    --disable-solaris --disable-jack --disable-bluez --disable-polkit --localstatedir=/var
   '';
 
   meta = {
