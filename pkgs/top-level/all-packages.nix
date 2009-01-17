@@ -8679,8 +8679,10 @@ let
   };
 
   ghostscriptX = lowPrio (appendToName "with-X" (import ../misc/ghostscript {
-    inherit fetchurl stdenv libjpeg libpng zlib x11;
+    inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
+      fontconfig cups openssl;
     x11Support = true;
+    cupsSupport = true;
   }));
 
   gxemul = (import ../misc/gxemul) {
