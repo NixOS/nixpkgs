@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "splashutils-1.5.4.3";
 
   src = fetchurl {
-    url = http://download.berlios.de/fbsplash/splashutils-1.5.4.3.tar.bz2;
+    url = http://dev.gentoo.org/~spock/projects/splashutils/current/splashutils-1.5.4.3.tar.bz2;
     sha256 = "0vn0ifqp9a3bmprzx2yr82hgq8m2y5xv8qcifs2plz6p3lidagpg";
   };
 
