@@ -5781,7 +5781,7 @@ let
   };
 
   pulseaudio = import ../servers/pulseaudio {
-    inherit fetchurl stdenv pkgconfig gnum4 libtool gdbm adns
+    inherit fetchurl stdenv pkgconfig gnum4 libtool gdbm
       dbus hal avahi liboil libsamplerate libsndfile speex
       intltool gettext;
     inherit (gtkLibs) glib;

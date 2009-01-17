@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, hal, avahi
-, gconf, liboil, libX11, libICE, libSM, adns, intltool, gettext
+, gconf, liboil, libX11, libICE, libSM, intltool, gettext
 , libsamplerate, libsndfile, speex }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig gnum4 gdbm libtool glib dbus hal avahi gconf liboil adns
+    pkgconfig gnum4 gdbm libtool glib dbus hal avahi gconf liboil
     libsamplerate libsndfile speex
     libX11 libICE libSM
     intltool gettext
   ];
 
   configureFlags = ''
-    --disable-solaris --disable-jack --disable-bluez --disable-polkit --with-x --localstatedir=/var
+    --disable-solaris --disable-jack --disable-bluez --disable-polkit --with-x --enable-asyncdns --localstatedir=/var
   '';
 
   meta = {
