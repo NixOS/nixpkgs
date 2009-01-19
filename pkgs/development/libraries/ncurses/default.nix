@@ -8,29 +8,27 @@ stdenv.mkDerivation rec {
     sha256 = "1x4q6kma6zgg438llbgiac3kik7j2lln9v97jdffv3fyqyjxx6qa";
   };
   
-  configureFlags =
-    "--with-shared --includedir=\${out}/include" +
-    (if unicode then " --enable-widec " else " ") +
-    " --without-debug";
+  configureFlags = ''
+    --with-shared --includedir=''${out}/include --without-debug
+    ${if unicode then "--enable-widec" else ""}
+  '';
     
   preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
-
-  doCheck = true;
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = if unicode then "
+  postInstall = if unicode then ''
     chmod -v 644 $out/lib/libncurses++w.a
     for lib in curses ncurses form panel menu; do
-      if test -e $out/lib/lib\${lib}w.a; then
-        rm -vf $out/lib/lib\${lib}.so
-        echo \"INPUT(-l\${lib}w)\" > $out/lib/lib\${lib}.so
-        ln -svf lib\${lib}w.a $out/lib/lib\${lib}.a
-        ln -svf lib\${lib}w.so.5 $out/lib/lib\${lib}.so.5
+      if test -e $out/lib/lib''${lib}w.a; then
+        rm -vf $out/lib/lib$lib.so
+        echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
+        ln -svf lib''${lib}w.a $out/lib/lib$lib.a
+        ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
       fi
     done;
-  " else "";
+  '' else "";
 
   meta = {
     description = "GNU Ncurses, a free software emulation of curses in SVR4 and more";
