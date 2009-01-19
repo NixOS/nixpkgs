@@ -226,6 +226,7 @@ rec {
     pkgs.usbutils
     pkgs.utillinux
     pkgs.wirelesstools
+    (import ../helpers/info-wrapper.nix {inherit (pkgs) bash texinfo writeScriptBin;})
   ]
   ++ pkgs.lib.optional config.security.sudo.enable pkgs.sudo
   ++ pkgs.lib.optional config.services.atd.enable pkgs.at
