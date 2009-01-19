@@ -10,7 +10,7 @@ let
   # dietlibc.
   pkgsToRemove = 
     [ "binutils" "gcc" "coreutils" "findutils" "diffutils" "gnused" "gnugrep"
-      "gawk" "gnutar" "gzip" "bzip2" "gnumakeNix" "bash" "patch" "patchelf"
+      "gawk" "gnutar" "gzip" "bzip2" "gnumake" "bash" "patch" "patchelf"
     ];
 
   pkgsDiet = import ../../top-level/all-packages.nix {
@@ -28,7 +28,7 @@ let
 
     inherit (pkgsDiet)
       coreutils diffutils gnugrep
-      gzip bzip2 gnumakeNix bash patch binutils curl;
+      gzip bzip2 gnumake bash patch binutils curl;
 
     findutils = pkgsDiet.findutils4227; # 4.2.28 is broken
       

@@ -218,7 +218,7 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
       inherit (stdenvLinuxBoot3Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
-        gnumakeNix gnused gnutar gnugrep patch patchelf
+        gnumake gnused gnutar gnugrep patch patchelf
         attr acl;
     };
   };

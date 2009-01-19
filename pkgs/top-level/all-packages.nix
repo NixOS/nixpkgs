@@ -2386,16 +2386,10 @@ let
     inherit fetchurl stdenv;
   };
 
-  gnumake = import ../development/tools/build-managers/gnumake {
-    inherit fetchurl stdenv;
-    log2xmlSupport = getConfig [ "gnuMake" "log2xmlSupport" ] false;
-  };
-
-  # The modified version of GNU Make with support for `nix-log2xml'.
-  gnumakeNix = import ../development/tools/build-managers/gnumake {
-    inherit fetchurl stdenv;
-    log2xmlSupport = true;
-  };
+  gnumake = useFromStdenv "gnumake"
+    (import ../development/tools/build-managers/gnumake {
+      inherit fetchurl stdenv;
+    });
 
   gnumake380 = import ../development/tools/build-managers/gnumake-3.80 {
     inherit fetchurl stdenv;
