@@ -9,5 +9,14 @@ args: with args; stdenv.mkDerivation rec {
 
   inherit buildInputs propagatedBuildInputs;
 
-  meta = { homepage = http://www.alsa-project.org; };
+  meta = {
+    description = "ALSA, the Advanced Linux Sound Architecture (${aName})";
+
+    longDescription = ''
+      The Advanced Linux Sound Architecture (ALSA) provides audio and
+      MIDI functionality to the Linux-based operating system.
+    '';
+
+    homepage = http://www.alsa-project.org/;
+  };
 }
