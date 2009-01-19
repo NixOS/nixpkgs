@@ -10,6 +10,9 @@ rec {
     aclSupport = false;
   });
 
+
+  gcc = gcc43;
+
   
   build = 
 
@@ -38,6 +41,7 @@ rec {
         
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+        mv $out/include $out/include-glibc
         
         # Copy coreutils, bash, etc.
         cp ${coreutils_}/bin/* $out/bin
@@ -61,7 +65,7 @@ rec {
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
         
-        # Copy what we need of gcc.    
+        # Copy what we need of GCC.
         cp -d ${gcc.gcc}/bin/gcc $out/bin
         cp -d ${gcc.gcc}/bin/cpp $out/bin
         cp -d ${gcc.gcc}/bin/g++ $out/bin
@@ -69,11 +73,17 @@ rec {
         cp -d ${gcc.gcc}/lib/libstdc++.so* $out/lib
         cp -rd ${gcc.gcc}/lib/gcc $out/lib
         chmod -R u+w $out/lib
-        rm -f $out/lib/gcc/*/*/include/linux
-        rm -f $out/lib/gcc/*/*/include/sound
+        rm -f $out/lib/gcc/*/*/include*/linux
+        rm -f $out/lib/gcc/*/*/include*/sound
+        rm -rf $out/lib/gcc/*/*/include*/root
+        #rm -f $out/lib/gcc/*/*/*.a
         cp -rd ${gcc.gcc}/libexec/* $out/libexec
+        mkdir $out/include
         cp -rd ${gcc.gcc}/include/c++ $out/include
 
+        cp -d ${gmp}/lib/libgmp*.so* $out/lib
+        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
@@ -96,7 +106,8 @@ rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
 
-        (cd $out && tar cvfj $out/static-tools.tar.bz2 bin lib libexec include)
+        sync
+        (cd $out && tar cvfj $out/static-tools.tar.bz2 bin lib libexec include include-glibc)
       ''; # */
 
       # The result should not contain any references (store paths) so
@@ -160,18 +171,19 @@ rec {
 
         perl -e 'print 1 + 2, "\n";'
 
-        export CPP="cpp -B${unpack}"
-        export CC="gcc -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
-        export CXX="g++ -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
+        export CPP="cpp -idirafter ${unpack}/include-glibc -B${unpack}"
+        export CC="gcc -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
+        export CXX="g++ -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
         
         echo '#include <stdio.h>' >> foo.c
+        echo '#include <limits.h>' >> foo.c
         echo 'int main() { printf("Hello World\n"); return 0; }' >> foo.c
         $CC -o $out/bin/foo foo.c
         $out/bin/foo
 
         echo '#include <iostream>' >> bar.cc
         echo 'int main() { std::cout << "Hello World\n"; }' >> bar.cc
-        $CXX -o $out/bin/bar bar.cc
+        $CXX -v -o $out/bin/bar bar.cc
         $out/bin/bar
 
         tar xvf ${hello.src}
