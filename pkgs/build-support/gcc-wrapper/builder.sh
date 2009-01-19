@@ -17,7 +17,7 @@ if test -z "$nativeLibc"; then
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  (This is only an issue when using an `impure'
     # compiler/linker, i.e., one that searches /usr/lib and so on.)
-    echo "-B$libc/lib/ -isystem $libc/include" > $out/nix-support/libc-cflags
+    echo "-B$libc/lib/ -idirafter $libc/include" > $out/nix-support/libc-cflags
     
     echo "-L$libc/lib" > $out/nix-support/libc-ldflags
 
@@ -36,17 +36,6 @@ else
     fi
     gccLDFlags="$gccLDFlags -L$gcc/lib"
     echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
-
-    # Explicitly add the libstdc++ header files to the search path.
-    # G++ already finds them automatically, but it adds them to the
-    # very end of the header search path.  This means that
-    # #include_next constructs in the libstdc++ headers won't find the
-    # Glibc headers, since they appear *before* the libstdc++ headers.
-    # So we add them here using -isystem.  Note that `add-flags' adds
-    # the libc flags before the gcc flags.
-    if test -e $gcc/include/c++/*.*; then
-        gccCFlags="$gccCFlags -isystem $(echo $gcc/include/c++/*.*)"
-    fi
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
     # $gcc/lib64 (even though it does actually search there...)..
