@@ -5787,6 +5787,7 @@ let
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11 libICE libSM;
     gconf = gnome.GConf;
+    alsaLib = alsa_1_0_19.alsaLib;  # Needs ALSA >= 1.0.17.
   };
 
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
