@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gmp}:
 
 stdenv.mkDerivation {
-  name = "mpfr-2.3.1";
+  name = "mpfr-2.3.2";
 
   src = fetchurl {
-    url = http://www.mpfr.org/mpfr-current/mpfr-2.3.1.tar.bz2;
-    sha256 = "0c44va4plxfd9zm7aa24173im38svnb15lbxql5hvxbc9bgzjmyq";
+    url = http://www.mpfr.org/mpfr-current/mpfr-2.3.2.tar.bz2;
+    sha256 = "0k5s5whhz5njp4ybim8c7rcin5ba1s2apwijmg7bg0p1jv4piq0q";
   };
 
   buildInputs = [gmp];

@@ -1,15 +1,17 @@
 {stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation {
-  name = "gmp-4.2.3";
+  name = "gmp-4.2.4";
 
   src = fetchurl {
-    url = mirror://gnu/gmp/gmp-4.2.3.tar.bz2;
-    sha256 = "139b5abc49833832184c0a03ff6fc64c59ef102b420d2a5884ad78af5647414b";
+    url = mirror://gnu/gmp/gmp-4.2.4.tar.bz2;
+    sha256 = "0s73xzhwrfqcr1gmhsink1fhfzjlkyk70b1bdyrm76m6b3jv082l";
   };
 
   buildInputs = [m4];
+  
   configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
+  
   doCheck = true;
 
   meta = {
