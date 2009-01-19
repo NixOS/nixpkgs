@@ -237,6 +237,10 @@ if test "$NIX_DEBUG" = "1"; then
 fi
 
 
+# Make GNU Make produce nested output.
+export NIX_INDENT_MAKE=1
+
+
 ######################################################################
 # Misc. helper functions.
 
