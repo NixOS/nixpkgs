@@ -867,11 +867,6 @@ let
     inherit fetchurl stdenv ocaml;
   };
 
-  hg2git = import ../tools/misc/hg2git {
-    inherit fetchurl stdenv mercurial coreutils git makeWrapper;
-    inherit (bleedingEdgeRepos) sourceByName;
-  };
-
   highlight = builderDefsPackage (selectVersion ../tools/text/highlight "2.6.10") {
     inherit getopt;
   };
@@ -7440,32 +7435,10 @@ let
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 
-  git = import ../applications/version-management/git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
-      cpio tcl tk makeWrapper subversion;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
-  };
-
-  gitGit = import ../applications/version-management/git/git-git.nix {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
-      cpio tcl tk makeWrapper subversion autoconf;
-    inherit (bleedingEdgeRepos) sourceByName;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
-  };
-
-  qgit = import ../applications/version-management/qgit {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libXext libX11;
-    qt = qt3;
-  };
+  gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
+    inherit pkgs;
+  });
+  git = gitAndTools.git;
 
   qjackctl = import ../applications/audio/qjackctl {
     inherit fetchurl stdenv alsaLib jackaudio;
@@ -7963,10 +7936,6 @@ let
     inherit fetchurl stdenv;
   };
 
-
-  stgit = import ../applications/version-management/stgit {
-    inherit fetchurl stdenv python git;
-  };
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit clisp texinfo;
