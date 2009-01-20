@@ -3205,6 +3205,12 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  libcanberra = import ../development/libraries/libcanberra {
+    inherit fetchurl stdenv pkgconfig libtool alsaLib pulseaudio libvorbis;
+    inherit (gtkLibs) gtk;
+    gstreamer = gst_all.gstreamer;
+  };
+
   libcdaudio = import ../development/libraries/libcdaudio {
     inherit fetchurl stdenv;
   };
