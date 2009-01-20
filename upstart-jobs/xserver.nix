@@ -414,6 +414,8 @@ rec {
        }
 
       rm -f /var/log/slim.log
+
+      rm -f /tmp/.X0-lock
        
     end script
 
