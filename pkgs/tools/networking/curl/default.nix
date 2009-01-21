@@ -4,11 +4,11 @@ assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation {
-  name = "curl-7.18.1";
+  name = "curl-7.19.3";
   
   src = fetchurl {
-    url = http://curl.haxx.se/download/curl-7.18.1.tar.bz2;
-    sha256 = "0v5fpr4bsdlg262nsgrijlfhp3vgr1ypir1rrkmhxcsnpv4frw6c";
+    url = http://curl.haxx.se/download/curl-7.19.3.tar.bz2;
+    sha256 = "08ij168xflbhsypdliknmds095fw5x35d19hnf559yq0jpj0hmln";
   };
   
   buildInputs =

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation {
-  name = "openssl-0.9.8i";
+  name = "openssl-0.9.8j";
   
   src = fetchurl {
-    url = http://www.openssl.org/source/openssl-0.9.8i.tar.gz;
-    sha1 = "b2e029cfb68bf32eae997d60317a40945db5a65f";
+    url = http://www.openssl.org/source/openssl-0.9.8j.tar.gz;
+    sha1 = "f70f7127a26e951e8a0d854c0c9e6b4c24df78e4";
   };
   
   buildInputs = [perl];
