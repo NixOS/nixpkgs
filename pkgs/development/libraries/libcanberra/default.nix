@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk
+{ stdenv, fetchurl, pkgconfig, libtool, gtk, gthread
 , alsaLib, pulseaudio, gstreamer, libvorbis }:
 
 stdenv.mkDerivation rec {
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig libtool gtk alsaLib pulseaudio gstreamer libvorbis ];
+
+  configureFlags = "--disable-oss";
 
   meta = {
     description = "libcanberra, an implementation of the XDG Sound Theme and Name Specifications";
