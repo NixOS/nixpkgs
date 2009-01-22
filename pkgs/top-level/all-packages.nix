@@ -8481,6 +8481,10 @@ let
   ### DESKTOP ENVIRONMENTS
 
 
+  enlightenment = import ../desktops/enlightenment {
+    inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
+  };
+
   gnome = recurseIntoAttrs (import ../desktops/gnome {
     inherit
       fetchurl stdenv pkgconfig
