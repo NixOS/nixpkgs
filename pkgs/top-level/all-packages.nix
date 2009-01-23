@@ -803,10 +803,6 @@ let
       inherit fetchurl stdenv;
     });
 
-  gnutar151 = import ../tools/archivers/gnutar/1.15.1.nix {
-    inherit fetchurl stdenv;
-  };
-
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
       libtool fontconfig gd;
