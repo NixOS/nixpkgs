@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlibSupport ? false, zlib, sslSupport ? false, openssl ? null}:
+{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null}:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;

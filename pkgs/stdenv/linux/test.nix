@@ -13,7 +13,7 @@ rec {
 
   gcc = gcc43;
 
-  
+
   build = 
 
     stdenv.mkDerivation {
@@ -69,8 +69,8 @@ rec {
         cp -d ${gcc.gcc}/bin/gcc $out/bin
         cp -d ${gcc.gcc}/bin/cpp $out/bin
         cp -d ${gcc.gcc}/bin/g++ $out/bin
-        cp -d ${gcc.gcc}/lib/libgcc_s.so* $out/lib
-        cp -d ${gcc.gcc}/lib/libstdc++.so* $out/lib
+        cp -d ${gcc.gcc}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gcc.gcc}/lib*/libstdc++.so* $out/lib
         cp -rd ${gcc.gcc}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
@@ -89,9 +89,6 @@ rec {
           cp ${binutils}/bin/$i $out/bin
         done
 
-        # Copy perl.
-        cp ${perl}/bin/perl $out/bin
-        
         chmod -R u+w $out
         
         # Strip executables even further.
@@ -106,8 +103,7 @@ rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
 
-        sync
-        (cd $out && tar cvfj $out/static-tools.tar.bz2 bin lib libexec include include-glibc)
+        (cd $out && tar cvfj $out/bootstrap-tools.tar.bz2 bin lib libexec include include-glibc)
       ''; # */
 
       # The result should not contain any references (store paths) so
@@ -123,15 +119,15 @@ rec {
       name = "unpack";
 
       buildCommand = ''
-        tar xvfj ${build}/static-tools.tar.bz2
+        tar xvfj ${build}/bootstrap-tools.tar.bz2
         cp -prd . $out
         rm $out/env-vars
 
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             echo patching $i
             if ! test -L $i; then
-                LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux.so.2 \
-                    $out/bin/patchelf --set-interpreter $out/lib/ld-linux.so.2 --set-rpath $out/lib $i
+                LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
+                    $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib $i
             fi
         done
 
@@ -169,11 +165,11 @@ rec {
         grep --version
         gcc --version
 
-        perl -e 'print 1 + 2, "\n";'
+        ldlinux=$(echo ${unpack}/lib/ld-linux*.so.2)
 
         export CPP="cpp -idirafter ${unpack}/include-glibc -B${unpack}"
-        export CC="gcc -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
-        export CXX="g++ -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,${unpack}/lib/ld-linux.so.2 -Wl,-rpath,${unpack}/lib"
+        export CC="gcc -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
+        export CXX="g++ -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
         
         echo '#include <stdio.h>' >> foo.c
         echo '#include <limits.h>' >> foo.c
