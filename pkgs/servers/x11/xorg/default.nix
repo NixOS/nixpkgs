@@ -1154,14 +1154,14 @@ rec {
     buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
   }) // {inherit libX11 libXext libXmu libXt ;};
     
-  pixman = (stdenv.mkDerivation {
-    name = "pixman-0.10.0";
+  pixman = (stdenv.mkDerivation rec {
+    name = "pixman-0.13.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/pixman-0.10.0.tar.bz2;
-      sha256 = "1r6il420j7ws9xbk6y3nn8zb7mc76rk1npz5763qp525n94iz11b";
+      url = "http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/${name}.tar.bz2";
+      sha256 = "1p3wzgzaivl4f0vm6p628jav8v4hz8kdml50a3agxiq447frysvv";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [ perl pkgconfig ];
   }) // {inherit ;};
     
   printproto = (stdenv.mkDerivation {
