@@ -3681,6 +3681,15 @@ let
     inherit fetchurl stdenv;
   };
 
+  qt3gcc33 = import ../development/libraries/qt-3 {
+    stdenv = overrideGCC stdenv gcc33;
+    inherit fetchurl x11 zlib libjpeg libpng which mysql mesa;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor;
+    openglSupport = false;
+    mysqlSupport = false;
+  };
+
   qt3 = import ../development/libraries/qt-3 {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
@@ -7784,9 +7793,9 @@ let
     inherit fetchurl zlib glibc stdenv;
 # stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
-    qt = qt3;
+    qt = qt3gcc33;
     #33motif = lesstif;
-    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
+    libstdcpp5 = gcc33.gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
