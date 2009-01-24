@@ -2728,7 +2728,7 @@ let
   };
 
   cairomm = import ../development/libraries/cairomm {
-    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype;
+    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype libsigcxx;
   };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
