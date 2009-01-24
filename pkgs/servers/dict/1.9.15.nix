@@ -2,7 +2,7 @@ args : with args; with builderDefs;
         let localDefs = builderDefs.passthru.function ((rec {
                 src = /* put a fetchurl here */
                 fetchurl {
-                        url = ftp://ftp.dict.org/pub/dict/dictd-1.9.15.tar.gz;
+                        url = mirror://sourceforge/dict/dictd-1.9.15.tar.gz;
                         sha256 = "0p41yf72l0igmshz6vxy3hm51z25600vrnb9j2jpgws4c03fqnac";
                 };
 
