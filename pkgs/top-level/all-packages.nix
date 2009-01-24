@@ -565,6 +565,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  cdecl = import ../development/tools/cdecl {
+    inherit fetchurl stdenv yacc flex readline;
+  };
+
   cdrdao = import ../tools/cd-dvd/cdrdao {
     inherit fetchurl stdenv;
   };
