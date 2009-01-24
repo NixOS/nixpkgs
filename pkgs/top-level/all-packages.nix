@@ -3846,7 +3846,7 @@ let
   wxGTK28fun = lib.sumArgs (import ../development/libraries/wxGTK-2.8);
 
   wxGTK28deps = wxGTK28fun {
-    inherit fetchurl stdenv pkgconfig;
+    inherit fetchurl stdenv pkgconfig mesa;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
