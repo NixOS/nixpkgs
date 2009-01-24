@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig x11 fontconfig freetype pixman
+    pkgconfig x11 fontconfig pixman
   ];
   
   propagatedBuildInputs =
+    [ freetype ] ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
