@@ -581,6 +581,10 @@ let
       ${pkgs.xmonad}/bin/xmonad &
     ''
     
+    else if windowManager == "wmii" then ''
+      ${pkgs.wmiiSnap}/bin/wmii &
+    ''
+    
     else if windowManager == "none" then ''
       # The session starter will start the window manager.
     ''
