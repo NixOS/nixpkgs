@@ -157,4 +157,11 @@ in
     ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
     ++ config.boot.extraModulePackages;
   };
+
+  services = {
+    udev = {
+      # The Linux kernel >= 2.6.27 provides firmware
+      addFirmware = [ "${kernel}/lib/firmware" ];
+    };
+  };
 }
