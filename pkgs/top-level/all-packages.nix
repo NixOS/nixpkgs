@@ -494,10 +494,6 @@ let
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
 
-  iasl = import ../development/compilers/iasl {
-    inherit fetchurl stdenv bison flex;
-  };
-
   avahi =
     let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
     in
@@ -895,6 +891,10 @@ let
     flex = flex2533;
   };
   */
+
+  iasl = import ../development/compilers/iasl {
+    inherit fetchurl stdenv bison flex;
+  };
 
   idutils = import ../tools/misc/idutils {
     inherit fetchurl stdenv emacs;

@@ -13,5 +13,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Linux 8086 development environment";
+    homepage = http://www.debath.co.uk/;
   };
 }
