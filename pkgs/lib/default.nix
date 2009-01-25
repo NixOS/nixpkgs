@@ -477,7 +477,7 @@ rec {
       }
     ) (builtins.attrNames defs));
 
-  mergeDefaultOption = name: list:
+  mergeDefaultOption = list:
     if list != [] && tail list == [] then head list
     else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all __isList list then concatLists list
@@ -486,7 +486,7 @@ rec {
     else if all (x: x == toString x) list then concatStrings list
     else throw "Cannot merge values.";
 
-  mergeTypedOption = typeName: predicate: merge: name: list:
+  mergeTypedOption = typeName: predicate: merge: list:
     if all predicate list then merge list
     else throw "Expect a ${typeName}.";
 
@@ -500,7 +500,7 @@ rec {
     (x: if builtins ? isString then builtins.isString x else x + "")
     concatStrings;
 
-  mergeOneOption = name: list:
+  mergeOneOption = list:
     if list == [] then abort "This case should never happens."
     else if tail list != [] then throw "Multiple definitions. Only one is allowed for this option."
     else head list;
@@ -556,13 +556,24 @@ rec {
   # function of each option to get the result.
   mergeOptionSets = noOption: newMergeOptionSets; # ignore argument
   newMergeOptionSets =
+    let
+      # handle merge functions with & without name argument.
+      mergeWrapper = merge: name: values:
+        let
+          newMerge = merge values;
+          oldMerge = builtins.trace
+            "obsolete: Merge function of ${name} option has name argument."
+            (merge name values);
+        in
+          if __isFunction newMerge then oldMerge else newMerge;
+    in
     handleOptionSets {
       export = opt: values:
         opt.apply (
           if values == [] then
             if opt ? default then opt.default
             else throw "Not defined."
-          else opt.merge (opt.name) values
+          else mergeWrapper opt.merge opt.name values
         );
       notHandle = throw "Used without option declaration.";
     };
