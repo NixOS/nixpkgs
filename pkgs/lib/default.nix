@@ -556,25 +556,14 @@ rec {
   # function of each option to get the result.
   mergeOptionSets = noOption: newMergeOptionSets; # ignore argument
   newMergeOptionSets =
-    let
-      # handle merge functions with & without name argument.
-      mergeWrapper = merge: name: values:
-        let
-          newMerge = merge values;
-          oldMerge = builtins.trace
-            "obsolete: Merge function of ${name} option has name argument."
-            (merge name values);
-        in
-          if __isFunction newMerge then oldMerge else newMerge;
-    in
     handleOptionSets {
       export = opt: values:
         opt.apply (
           if values == [] then
             if opt ? default then opt.default
             else throw "Not defined."
-          else mergeWrapper opt.merge opt.name values
-        );
+          else opt.merge values
+        ));
       notHandle = throw "Used without option declaration.";
     };
 
