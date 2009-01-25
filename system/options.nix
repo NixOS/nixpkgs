@@ -1,33 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption;
-  inherit (builtins) head tail;
-
-  obsolete = what: f: name:
-    if builtins ? trace then
-      builtins.trace "${name}: Obsolete ${what}." f name
-    else f name;
-
-  obsoleteMerge =
-    obsolete "option" pkgs.lib.mergeDefaultOption;
-
-  # temporary modifications.
-  # backward here means that expression could either be a value or a
-  # function which expects to have a pkgs argument.
-  optionalPkgs = name: x:
-    if builtins.isFunction x
-    then obsolete "notation" (name: x pkgs) name
-    else x;
-
-  backwardPkgsFunListMerge = name: list:
-    pkgs.lib.concatMap (optionalPkgs name) list;
-
-  backwardPkgsFunMerge = name: list:
-    if list != [] && tail list == []
-    then optionalPkgs name (head list)
-    else abort "${name}: Defined at least twice.";
-
+  inherit (pkgs.lib) mkOption mergeOneOption;
 in
 
 {
@@ -2156,7 +2130,6 @@ in
     extraPackages = mkOption {
       default = [];
       example = [pkgs.firefox pkgs.thunderbird];
-      merge = backwardPkgsFunListMerge;
       description = "
         This option allows you to add additional packages to the system
         path.  These packages are automatically available to all users,
@@ -2173,7 +2146,7 @@ in
     nix = mkOption {
       default = pkgs.nixUnstable;
       example = pkgs.nixCustomFun /root/nix.tar.gz;
-      merge = backwardPkgsFunMerge;
+      merge = mergeOneOption;
       description = "
         Use non-default Nix easily. Be careful, though, not to break everything.
       ";
