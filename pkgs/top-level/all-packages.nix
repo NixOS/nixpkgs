@@ -642,6 +642,10 @@ let
 
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
+  dev86 = import ../development/compilers/dev86 {
+    inherit fetchurl stdenv;
+  };
+
   dnsmasq = import ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it?
     inherit fetchurl stdenv;
