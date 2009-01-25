@@ -563,7 +563,7 @@ rec {
             if opt ? default then opt.default
             else throw "Not defined."
           else opt.merge values
-        ));
+        );
       notHandle = throw "Used without option declaration.";
     };
 
