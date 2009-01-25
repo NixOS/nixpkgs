@@ -485,11 +485,11 @@ rec {
     else if all __isAttrs list then mergeAttrs list
     else if all (x: true == x || false == x) list then fold logicalOR false list
     else if all (x: x == toString x) list then concatStrings list
-    else abort "${name}: Cannot merge values.";
+    else throw "Cannot merge values.";
 
   mergeTypedOption = typeName: predicate: merge: name: list:
     if all predicate list then merge list
-    else abort "${name}: Expect a ${typeName}.";
+    else throw "Expect a ${typeName}.";
 
   mergeEnableOption = mergeTypedOption "boolean"
     (x: true == x || false == x) (fold logicalOR false);
@@ -501,38 +501,59 @@ rec {
     (x: if builtins ? isString then builtins.isString x else x + "")
     concatStrings;
 
-  # Merge sets of options and bindings.
-  # noOption: function to call if no option is declared.
-  mergeOptionSets = noOption: path: opts:
-    if all __isAttrs opts then
-      zip (attr: opts:
-        let
-          name = if path == "" then attr else path + "." + attr;
-          test = partition isOption opts;
-          opt = ({ merge = mergeDefaultOption; apply = id; } // head test.right);
-        in
-          if test.right == [] then mergeOptionSets noOption name (map delayIf test.wrong)
-          else if tail test.right != [] then throw "Multiple options for '${name}'."
-          else if test.wrong == [] then opt.apply opt.default
-          else opt.apply (opt.merge name (map evalIf test.wrong))
-      ) opts
-   else noOption path opts;
 
-  # Keep all option declarations and add an attribute "name" inside
-  # each option which contains the path that has to be followed to
-  # access it.
-  filterOptionSets = path: opts:
+  # Handle the traversal of option sets.  All sets inside 'opts' are zipped
+  # and options declaration and definition are separated.  If no option are
+  # declared at a specific depth, then the function recurse into the values.
+  # Other cases are handled by the optionHandler which contains two
+  # functions that are used to defined your goal.
+  # - export is a function which takes two arguments which are the option
+  # and the list of values.
+  # - notHandle is a function which takes the list of values are not handle
+  # by this function.
+  handleOptionSets = optionHandler@{export, notHandle, ...}: path: opts:
     if all __isAttrs opts then
       zip (attr: opts:
         let
           name = if path == "" then attr else path + "." + attr;
           test = partition isOption opts;
+          opt = {
+            inherit name;
+            merge = mergeDefaultOption;
+            apply = id;
+          } // (head test.right);
         in
-          if test.right == [] then filterOptionSets name (map delayIf test.wrong)
-          else if tail test.right != [] then  throw "Multiple options for '${name}'."
-          else { inherit name; } // (head test.right)
+          if test.right == [] then handleOptionSets optionHandler name (map delayIf test.wrong)
+          else addLocation "while evaluating the option ${name}:" (
+            if tail test.right != [] then throw "Multiple options."
+            else export opt (map evalIf test.wrong)
+          )
       ) opts
-    else {};
+   else addLocation "while evaluating ${path}:" (notHandle opts);
+
+  # Merge option sets and produce a set of values which is the merging of
+  # all options declare and defined.  If no values are defined for an
+  # option, then the default value is used otherwise it use the merge
+  # function of each option to get the result.
+  mergeOptionSets = noOption: newMergeOptionSets; # ignore argument
+  newMergeOptionSets =
+    handleOptionSets {
+      export = opt: values:
+        opt.apply (
+          if values == [] then
+            if opt ? default then opt.default
+            else throw "Not defined."
+          else opt.merge (opt.name) values
+        );
+      notHandle = throw "Used without option declaration.";
+    };
+
+  # Keep all option declarations.
+  filterOptionSets =
+    handleOptionSets {
+      export = opt: values: opt;
+      notHandle = {};
+    };
 
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
@@ -550,11 +571,11 @@ rec {
       # call configuration "files" with one of the existing convention.
       optionSet = config: configFun:
         if __isFunction configFun then
-          let result = configFun { inherit pkgs config; }; in
-        # {pkgs, config, ...}: {..}
+          let result = configFun { inherit pkgs config merge; }; in
+        # {pkgs, config, merge, ...}: {..}
           if builtins.isAttrs result then result
         # pkgs: config: {..}
-          else configFun pkgs config
+          else builtins.trace "obsolete:" (configFun {} {})
         # {..}
         else configFun;
 
@@ -591,6 +612,8 @@ rec {
   innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
 	innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};
+
+  addLocation = if builtins ? addLocation then builtins.addLocation else msg: val: val;
 
   debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
