@@ -1,5 +1,5 @@
 # Disnix server
-{config, pkgs}:
+{config, pkgs, ...}:
 
 ###### interface
 let
