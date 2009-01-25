@@ -56,8 +56,8 @@ in
           description = "
             Default desktop manager loaded if none have been chosen.
           ";
-          merge = name: list:
-            let defaultDM = mergeOneOption name list; in
+          merge = list:
+            let defaultDM = mergeOneOption list; in
             if any (w: w.name == defaultDM) cfg.session.list then
               defaultDM
             else

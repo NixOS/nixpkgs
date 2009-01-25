@@ -45,8 +45,8 @@ in
           description = "
             Default window manager loaded if none have been chosen.
           ";
-          merge = name: list:
-            let defaultWM = mergeOneOption name list; in
+          merge = list:
+            let defaultWM = mergeOneOption list; in
             if any (w: w.name == defaultWM) cfg.session then
               defaultWM
             else
