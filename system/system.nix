@@ -11,14 +11,11 @@ rec {
     systemPathList
   ];
 
-  noOption = name: values:
-    abort "${name}: Used without option declaration.";
-
   # Make a configuration object from which we can retrieve option
   # values.
   config =
     pkgs.lib.fixOptionSets
-      (pkgs.lib.mergeOptionSets noOption)
+      pkgs.lib.newMergeOptionSets
       pkgs configComponents;
 
   optionDeclarations =
