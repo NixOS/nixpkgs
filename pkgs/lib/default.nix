@@ -564,14 +564,14 @@ rec {
             else throw "Not defined."
           else opt.merge values
         );
-      notHandle = throw "Used without option declaration.";
+      notHandle = opts: throw "Used without option declaration.";
     };
 
   # Keep all option declarations.
   filterOptionSets =
     handleOptionSets {
       export = opt: values: opt;
-      notHandle = {};
+      notHandle = opts: {};
     };
 
   # Evaluate a list of option sets that would be merged with the
