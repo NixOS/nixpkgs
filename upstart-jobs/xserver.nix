@@ -586,7 +586,7 @@ let
     ''
 
     else abort ("unknown window manager " + windowManager)}
-
+    WMpid=$!
 
     ### Show a background image.
     # (but not if we're starting a full desktop environment that does it for us)
