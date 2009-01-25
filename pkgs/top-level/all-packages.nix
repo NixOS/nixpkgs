@@ -8941,6 +8941,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  yafc = import ../applications/networking/yafc {
+    inherit fetchurl stdenv readline openssh;
+  };
+
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
     inherit (stdenv) mkDerivation;
