@@ -155,7 +155,6 @@ rec {
       ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
       ++ config.environment.extraPackages
       ++ pkgs.lib.optional config.fonts.enableFontDir fontDir
-      ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
 
       # NSS modules need to be in `systemPath' so that (i) the builder
       # chroot gets to seem them, and (ii) applications can benefit from

@@ -209,21 +209,6 @@ in
     };
   };
 
-  # Hm, this sounds like a catch-all...
-  hardware = {
-
-    enableGo7007 = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = ''
-        Enable this option to get support for the WIS GO7007SB
-        multi-format video encoder, which is used in a number of
-        devices such as the Plextor ConvertX TV402U USB TV device.
-      '';
-    };
-  
-  };
-
 
   networking = {
 
@@ -272,45 +257,6 @@ in
       example = "home";
       description = "
         The domain.  It can be left empty if it is auto-detected through DHCP.
-      ";
-    };
-
-    enableIntel2200BGFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        Turn on this option if you want firmware for the Intel
-        PRO/Wireless 2200BG to be loaded automatically.  This is
-        required if you want to use this device.  Intel requires you to
-        accept the license for this firmware, see
-        <link xlink:href='http://ipw2200.sourceforge.net/firmware.php?fid=7'/>.
-      ";
-    };
-
-    enableIntel3945ABGFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Intel
-        PRO/Wireless 3945ABG.
-      ";
-    };
-
-    enableIntel4965AGNFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Intel
-        PRO/Wireless 4965AGN.
-      ";
-    };
-
-    enableZydasZD1211Firmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Zydas
-        ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip.
       ";
     };
 

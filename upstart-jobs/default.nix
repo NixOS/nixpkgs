@@ -147,16 +147,8 @@ let
       inherit modprobe config;
       inherit (pkgs) stdenv writeText substituteAll udev procps;
       inherit (pkgs.lib) cleanSource;
-      firmwareDirs =
-           pkgs.lib.optional config.networking.enableIntel2200BGFirmware pkgs.ipw2200fw
-        ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
-        ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware kernelPackages.iwlwifi4965ucode
-        ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
-        ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
-        ++ config.services.udev.addFirmware;
-      extraUdevPkgs =
-           pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-        ++ config.services.udev.addUdevPkgs;
+      firmwareDirs = config.services.udev.addFirmware;
+      extraUdevPkgs = config.services.udev.addUdevPkgs;
     })
       
     # Makes LVM logical volumes available. 

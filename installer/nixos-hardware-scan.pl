@@ -4,6 +4,7 @@ use File::Spec;
 use File::Basename;
 
 
+my @requireList = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 
@@ -56,8 +57,6 @@ push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 # modules are auto-detected so we don't need to list them here.
 # However, some are needed in the initrd to boot the system.
 
-my $enableIntel2200BGFirmware = "false";
-my $enableIntel3945ABGFirmware = "false";
 my $videoDriver = "vesa";
 
 sub pciCheck {
@@ -97,11 +96,13 @@ sub pciCheck {
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
-    $enableIntel2200BGFirmware = "true" if $vendor eq "0x8086" &&
+    push @requireList, "(import ./configurations/hardware/network/Intel2200BG.nix)" if
+        $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
 
-    $enableIntel3945ABGFirmware = "true" if $vendor eq "0x8086" &&
+    push @requireList, "(import ./configurations/hardware/network/Intel3945ABG.nix)" if
+        $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
 
@@ -197,14 +198,26 @@ sub toNixExpr {
     return $res;
 }
 
+sub multiLineList {
+    my $indent = shift;
+    my $res = "";
+    foreach my $s (@_) {
+        $res .= "\n$indent  $s";
+    }
+    $res .= "\nindent";
+    return $res;
+}
+
 my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
- 
+my $requireList = multiLineList("  ", removeDups @requireList);
 
 ## This is a generated file.  Do not modify!
 ## Make changes to /etc/nixos/configuration.nix instead.
 print <<EOF ;
 {
+  require = [$requireList];
+
   boot = {
     initrd = {
       extraKernelModules = [ $initrdKernelModules ];
@@ -216,12 +229,15 @@ print <<EOF ;
     maxJobs = $cpus;
   };
 
+  # list of file systems which can be mounted.
+  fileSystems = [
+  ];
+
+  # list of swap devices.
+  swapDevices = [
+  ];
+
   networking = {
-    enableIntel3945ABGFirmware = $enableIntel3945ABGFirmware;
-    
-    # Warning: setting this option to `true' requires acceptance of the
-    # firmware license, see http://ipw2200.sourceforge.net/firmware.php?fid=7.
-    enableIntel2200BGFirmware = $enableIntel2200BGFirmware;
   };
 
   services = {
@@ -229,7 +245,7 @@ print <<EOF ;
     xserver = {
       videoDriver = "$videoDriver";
     };
-      
+
   };
 }
 EOF

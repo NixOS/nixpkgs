@@ -9,7 +9,6 @@ let
       kernelPackages = mkOption {
         default = pkgs.kernelPackages;
         example = pkgs.kernelPackages_2_6_25;
-        merge = backwardPkgsFunMerge;
         description = "
           This option allows you to override the Linux kernel used by
           NixOS.  Since things like external kernel module packages are
@@ -57,7 +56,6 @@ let
         description = ''
           A list of additional packages supplying kernel modules.
         '';
-        merge = backwardPkgsFunListMerge;
       };
 
       kernelModules = mkOption {
@@ -148,14 +146,13 @@ in
 {
   require = [
     options
+
+    # udev
   ];
 
   system = {
     # include kernel modules.
-    modulesTree = [ kernel ]
-    # this line should be removed!
-    ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-    ++ config.boot.extraModulePackages;
+    modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
   };
 
   services = {
