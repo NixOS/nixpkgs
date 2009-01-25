@@ -373,22 +373,18 @@ rec {
     (rec { result = f result; }).result;
 
   # flatten a list of elements by following the properties of the elements.
-  # key    : return the key which correspond to the value.
-  # value  : return the value inserted in the returned list.
   # next   : return the list of following elements.
-  # keys   : lists of keys already seen.
+  # seen   : lists of elements already visited.
   # default: result if 'x' is empty.
   # x      : list of values that have to be processed.
-  uniqFlatten = prop@{key, value, next, ...}: keys: default: x:
+  uniqFlatten = next: seen: default: x:
     if x == []
     then default
     else
-      let h = head x; t = tail x;
-          k = key h; v = value h; n = next h;
-      in
-      if elem k keys
-      then uniqFlatten prop keys default t
-      else uniqFlatten prop (keys ++ [k]) (default ++ [v]) (n ++ t)
+      let h = head x; t = tail x; n = next h; in
+      if elem h seen
+      then uniqFlatten next seen default t
+      else uniqFlatten next (seen ++ [h]) (default ++ [h]) (n ++ t)
     ;
 
   /* If. ThenElse. Always. */
@@ -558,38 +554,52 @@ rec {
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
-  fixOptionSetsFun = merge: pkgs: opts:
+  #
+  # * cfg[0-9]: configuration
+  # * cfgSet[0-9]: configuration set
+  #
+  # merge: the function used to merge options sets.
+  # pkgs: is the set of packages available. (nixpkgs)
+  # opts: list of option sets or option set functions.
+  # config: result of this evaluation.
+  fixOptionSetsFun = merge: pkgs: opts: config:
     let
-      # ignore all conditions that are on require attributes.
-      rmRequireIf = conf:
-        let conf2 = delayIf conf; in
-        if conf2 ? require then
-          conf2 // { require = rmIf conf2.require; }
+      # remove possible mkIf to access the require attribute.
+      noImportConditions = cfgSet0:
+        let cfgSet1 = delayIf cfgSet0; in
+        if cfgSet1 ? require then
+          cfgSet1 // { require = rmIf cfgSet1.require; }
         else
-          conf2;
+          cfgSet1;
 
       # call configuration "files" with one of the existing convention.
-      optionSet = config: configFun:
-        if __isFunction configFun then
-          let result = configFun { inherit pkgs config merge; }; in
-        # {pkgs, config, merge, ...}: {..}
-          if builtins.isAttrs result then result
-        # pkgs: config: {..}
-          else builtins.trace "obsolete:" (configFun {} {})
-        # {..}
-        else configFun;
+      argumentHandler = cfg:
+        let
+          # {..}
+          cfg0 = cfg;
+          # {pkgs, config, ...}: {..}
+          cfg1 = cfg { inherit pkgs config merge; };
+          # pkgs: config: {..}
+          cfg2 = cfg {} {};
+        in
+        if __isFunction cfg0 then
+          if builtins.isAttrs cfg1 then cfg1
+          else builtins.trace "Use '{pkgs, config, ...}:'." cfg2
+        else cfg0;
 
-      processConfig = config: configFun:
-        rmRequireIf (optionSet config configFun);
+      preprocess = cfg0:
+        let cfg1 = argumentHandler cfg0;
+            cfg2 = noImportConditions cfg1;
+        in cfg2;
 
-      prop = config: rec {
-        key = id;
-        prepare = x: processConfig config x;
-        value = x: removeAttrs (prepare x) ["require"];
-        next = x: toList (getAttr ["require"] [] (prepare x));
-      };
-    in config:
-      merge "" (uniqFlatten (prop config) [] [] (toList opts));
+      getRequire = x: toList (getAttr ["require"] [] (preprocess x));
+      rmRequire = x: removeAttrs (preprocess x) ["require"];
+    in
+      merge "" (
+        map rmRequire (
+          uniqFlatten getRequire [] [] (toList opts)
+        )
+      );
 
   fixOptionSets = merge: pkgs: opts:
     fix (fixOptionSetsFun merge pkgs opts);
