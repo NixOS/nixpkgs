@@ -2246,7 +2246,7 @@ in
     (import ../upstart-jobs/hal.nix)
     (import ../upstart-jobs/gpm.nix)
     (import ../upstart-jobs/nagios/default.nix)
-    (import ../upstart-jobs/xserver.nix)
+    (import ../upstart-jobs/xserver/default.nix)
     (import ../upstart-jobs/zabbix-agent.nix)
     (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)
