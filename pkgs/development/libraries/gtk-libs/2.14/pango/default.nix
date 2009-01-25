@@ -1,21 +1,16 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "pango-1.20.5";
+  name = "pango-1.22.4";
   
   src = fetchurl {
-    url = "mirror://gnome/sources/pango/1.20/${name}.tar.bz2";
-    sha256 = "1cpsm32prbxwq7hhfpc2f6a1hhz61nnllpy9sqr4r8hqmm5skxc6";
+    url = "mirror://gnome/sources/pango/1.22/${name}.tar.bz2";
+    sha256 = "0d55x97c78rmcsls5g236xwwhjq1bvscrlxqligyzsv0hgnxfizz";
   };
   
   buildInputs = [pkgconfig];
   
   propagatedBuildInputs = [x11 glib cairo libpng];
-
-  # The configure script doesn't seem to pick up the Cairo cflags.
-  preConfigure = ''
-    CAIRO_CFLAGS=$(pkg-config --cflags cairo --debug)
-  '';
 
   meta = {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";

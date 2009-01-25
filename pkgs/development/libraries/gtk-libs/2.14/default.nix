@@ -1,25 +1,21 @@
 args: with args;
 
-# FIXME: Someone please upgrade the remaining libraries in `legacy'.
-let legacy = {
-     inherit ((import ../2.12) args) glibmm gtkmm;
-    };
-in
+rec {
 
-  rec {
+  glib = (import ./glib) args;
 
-    glib = (import ./glib) args;
+  atk = (import ./atk) (args // { inherit glib; });
 
-    atk = (import ./atk) (args // { inherit glib; });
+  pango = (import ./pango) (args // { inherit glib cairo; });
 
-    pango = (import ./pango) (args // { inherit glib; });
+  gtk = (import ./gtk+) (args // {
+    inherit glib atk pango;
+  });
 
-    gtk = (import ./gtk+) (args // {
-      inherit glib atk pango;
-    });
 
-  }
+  glibmm = (import ./glibmm) (args // { inherit glib; });
 
-  //
+  pangomm = (import ./pangomm) (args // { inherit pango glibmm cairomm; });
 
-  legacy
+  gtkmm = (import ./gtkmm) (args // { inherit gtk atk glibmm pangomm; });
+}
