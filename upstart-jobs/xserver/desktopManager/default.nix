@@ -1,8 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (builtins) head tail;
-  inherit (pkgs.lib) mkOption mkIf filter optionalString any;
+  inherit (pkgs.lib) mkOption mergeOneOption mkIf filter optionalString any;
   cfg = config.services.xserver.desktopManager;
 
   needBGCond = d: ! (d ? bgSupport && d.bgSupport);
@@ -58,10 +57,8 @@ in
             Default desktop manager loaded if none have been chosen.
           ";
           merge = name: list:
-            let defaultDM = head list; in
-            if tail list != [] then
-              throw "Only one default desktop manager is allowed."
-            else if any (w: w.name == defaultDM) cfg.session.list then
+            let defaultDM = mergeOneOption name list; in
+            if any (w: w.name == defaultDM) cfg.session.list then
               defaultDM
             else
               throw "Default desktop manager not found.";

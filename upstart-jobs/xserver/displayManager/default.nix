@@ -1,8 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (builtins) head tail;
-  inherit (pkgs.lib) mkOption optionals filter concatMap concatMapStrings;
+  inherit (pkgs.lib) mkOption mergeOneOption optionals filter concatMap concatMapStrings;
   cfg = config.services.xserver;
   xorg = cfg.package;
 
@@ -159,11 +158,7 @@ in
             the display manager start the xserver.
           ";
 
-          merge = name: list:
-            if tail list != [] then
-              throw "only one display manager is allowed."
-            else
-              head list;
+          merge = mergeOneOption;
         };
 
       };

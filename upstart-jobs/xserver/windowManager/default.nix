@@ -1,8 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (builtins) head tail;
-  inherit (pkgs.lib) mkOption any;
+  inherit (pkgs.lib) mkOption mergeOneOption any;
   cfg = config.services.xserver.windowManager;
 in
 
@@ -47,10 +46,8 @@ in
             Default window manager loaded if none have been chosen.
           ";
           merge = name: list:
-            let defaultWM = head list; in
-            if tail list != [] then
-              throw "Only one default window manager is allowed."
-            else if any (w: w.name == defaultWM) cfg.session then
+            let defaultWM = mergeOneOption name list; in
+            if any (w: w.name == defaultWM) cfg.session then
               defaultWM
             else
               throw "Default window manager not found.";
