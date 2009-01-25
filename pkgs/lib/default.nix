@@ -403,6 +403,10 @@ rec {
     };
 
 
+  isNotdef = attrs: (typeOf attrs) == "notdef";
+  mkNotdef = {_type = "notdef";};
+
+
   isThenElse = attrs: (typeOf attrs) == "then-else";
   mkThenElse = attrs:
     assert attrs ? thenPart && attrs ? elsePart;
@@ -434,8 +438,7 @@ rec {
   rmIf = pushIf (condition: val: val);
 
   evalIf = pushIf (condition: val:
-    # guess: empty else part.
-    ifEnable condition val
+    if condition then val else mkNotdef
   );
 
   delayIf = pushIf (condition: val:
@@ -511,18 +514,33 @@ rec {
     if all __isAttrs opts then
       zip (attr: opts:
         let
+          # Compute the path to reach the attribute.
           name = if path == "" then attr else path + "." + attr;
+
+          # Divide the definitions of the attribute "attr" between
+          # declaration (isOption) and definitions (!isOption).
           test = partition isOption opts;
+          decls = test.right; defs = test.wrong;
+
+          # Return the option declaration and add missing default
+          # attributes.
           opt = {
             inherit name;
             merge = mergeDefaultOption;
             apply = id;
-          } // (head test.right);
+          } // (head decls);
+
+          # Return the list of option sets.
+          optAttrs = map delayIf defs;
+
+          # return the list of option values.
+          # Remove undefined values that are coming from evalIf.
+          optValues = filter (x: !isNotdef x) (map evalIf defs);
         in
-          if test.right == [] then handleOptionSets optionHandler name (map delayIf test.wrong)
+          if decls == [] then handleOptionSets optionHandler name optAttrs
           else addLocation "while evaluating the option ${name}:" (
-            if tail test.right != [] then throw "Multiple options."
-            else export opt (map evalIf test.wrong)
+            if tail decls != [] then throw "Multiple options."
+            else export opt optValues
           )
       ) opts
    else addLocation "while evaluating ${path}:" (notHandle opts);
