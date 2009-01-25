@@ -500,6 +500,11 @@ rec {
     (x: if builtins ? isString then builtins.isString x else x + "")
     concatStrings;
 
+  mergeOneOption = name: list:
+    if list == [] then abort "This case should never happens."
+    else if tail list != [] then throw "Multiple definitions. Only one is allowed for this option."
+    else head list;
+
 
   # Handle the traversal of option sets.  All sets inside 'opts' are zipped
   # and options declaration and definition are separated.  If no option are
