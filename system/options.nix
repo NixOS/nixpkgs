@@ -4,10 +4,10 @@ let
   inherit (pkgs.lib) mkOption;
   inherit (builtins) head tail;
 
-  obsolete = what: f: name:
+  obsolete = what: f:
     if builtins ? trace then
-      builtins.trace "${name}: Obsolete ${what}." f name
-    else f name;
+      builtins.trace "Obsolete ${what}." f
+    else f;
 
   obsoleteMerge =
     obsolete "option" pkgs.lib.mergeDefaultOption;
@@ -15,18 +15,18 @@ let
   # temporary modifications.
   # backward here means that expression could either be a value or a
   # function which expects to have a pkgs argument.
-  optionalPkgs = name: x:
+  optionalPkgs = x:
     if builtins.isFunction x
-    then obsolete "notation" (name: x pkgs) name
+    then obsolete "notation" (x pkgs)
     else x;
 
-  backwardPkgsFunListMerge = name: list:
-    pkgs.lib.concatMap (optionalPkgs name) list;
+  backwardPkgsFunListMerge = list:
+    pkgs.lib.concatMap optionalPkgs list;
 
-  backwardPkgsFunMerge = name: list:
+  backwardPkgsFunMerge = list:
     if list != [] && tail list == []
-    then optionalPkgs name (head list)
-    else abort "${name}: Defined at least twice.";
+    then optionalPkgs (head list)
+    else abort "Defined at least twice.";
 
 in
 
