@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
   configureFlags =
     (if pdfSupport then ["--enable-pdf"] else []);
 
+  preConfigure = ''
+    # Work around broken `Requires.private' that prevents Freetype
+    # `-I' flags to be propagated.
+    sed -i "src/cairo.pc.in" \
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+  '';
+
   meta = {
     description = "A 2D graphics library with support for multiple output devices";
 
