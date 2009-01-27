@@ -543,12 +543,12 @@ rec {
           optValues = filter (x: !isNotdef x) (map evalIf defs);
         in
           if decls == [] then handleOptionSets optionHandler name optAttrs
-          else addLocation "while evaluating the option ${name}:" (
+          else addErrorContext "while evaluating the option ${name}:" (
             if tail decls != [] then throw "Multiple options."
             else export opt optValues
           )
       ) opts
-   else addLocation "while evaluating ${path}:" (notHandle opts);
+   else addErrorContext "while evaluating ${path}:" (notHandle opts);
 
   # Merge option sets and produce a set of values which is the merging of
   # all options declare and defined.  If no values are defined for an
@@ -646,7 +646,12 @@ rec {
 	innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
-  addLocation = if builtins ? addLocation then builtins.addLocation else msg: val: val;
+  # Wrapper aroung addErrorContext.  The builtin should not be used
+  # directly.
+  addErrorContext =
+    if builtins ? addErrorContext
+    then builtins.addErrorContext
+    else msg: val: val;
 
   debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
