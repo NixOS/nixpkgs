@@ -3,12 +3,21 @@
 assert interactive -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "bash-3.2-p39";
+  name = "bash-3.2.48";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/bash-3.2-p39.tar.bz2;
-    sha256 = "075qs6nfjql57y8ffg3f4glb3l5yl3xy5hny75x6kpwxkqlcxqfy";
+    url = mirror://gnu/bash/bash-3.2.48.tar.gz;
+    sha256 = "1i81scw3mnfjbmsn3cjfdancyx3d0rg8gd9hpdfng9j83dbdrs98";
   };
+
+  NIX_CFLAGS_COMPILE = ''
+    -DSYS_BASHRC="/etc/bashrc"
+    -DSYS_BASH_LOGOUT="/etc/bash_logout"
+    -DDEFAULT_PATH_VALUE="/no-such-path"
+    -DSTANDARD_UTILS_PATH="/no-such-path"
+    -DNON_INTERACTIVE_LOGIN_SHELLS
+    -DSSH_SOURCE_BASHRC
+  '';
 
   postInstall = "ln -s bash $out/bin/sh";
 

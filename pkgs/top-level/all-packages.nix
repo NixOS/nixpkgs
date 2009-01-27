@@ -1378,7 +1378,7 @@ let
       inherit fetchurl stdenv bison;
     }));
 
-  bashInteractive = appendToName "interactive" (import ../shells/bash/new.nix {
+  bashInteractive = appendToName "interactive" (import ../shells/bash {
     inherit fetchurl stdenv ncurses texinfo bison;
     interactive = true;
   });
