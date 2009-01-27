@@ -1,7 +1,7 @@
 {lib, pkgs} :
 let inherit (lib) nv nvs; in
 {
-  # see new python derivations for example:
+  # see for example:
   # - development/interpreters/php_configurable/default.nix
   # - .. search composableDerivation in all-packages.nix ..
   #
