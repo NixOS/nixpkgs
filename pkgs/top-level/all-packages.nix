@@ -3622,6 +3622,10 @@ let
     inherit fetchurl stdenv zlib libxml2;
   };
 
+  opencascade = import ../development/libraries/opencascade {
+    inherit fetchurl stdenv mesa qt4 tcl tk;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = import ../development/libraries/openexr_ctl {
     inherit fetchurl stdenv ilmbase ctl;
