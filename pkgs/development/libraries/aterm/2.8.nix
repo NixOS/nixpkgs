@@ -1,13 +1,18 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "aterm-2.7";
+  name = "aterm-2.8";
 
   src = fetchurl {
-    url = http://homepages.cwi.nl/~daybuild/releases//aterm-2.7.tar.gz;
-    sha256 = "0zhs0rncn4iankr70kbms64dwxm9i0956gs02dbw7ylx4mln8ynn";
+    url = http://www.meta-environment.org/releases/aterm-2.8.tar.gz;
+    sha256 = "1vq4qpmcww3n9v7bklgp7z1yqi9gmk6hcahqjqdzc5ksa089rdms";
   };
 
+  patches = [
+    # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
+    ./max-long.patch
+  ];
+  
   doCheck = true;
 
   meta = {

@@ -8,6 +8,11 @@ stdenv.mkDerivation {
     md5 = "33ddcb1a229baf406ad1f603eb1d5995";
   };
 
+  patches = [
+    # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
+    ./max-long.patch
+  ];
+  
   doCheck = true;
 
   meta = {

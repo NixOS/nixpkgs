@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation {
   name = "aterm-2.4.2-fixes-r2";
+  
   src = fetchurl {
     url = http://nixos.org/tarballs/aterm-2.4.2-fixes-r2.tar.bz2;
     sha256 = "1w3bxdpc2hz29li5ssmdcz3x0fn47r7g62ns0v8nazxwf40vff4j";
   };
+
+  patches = [
+    # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
+    ./max-long.patch
+  ];
+  
   doCheck = true;
+
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
