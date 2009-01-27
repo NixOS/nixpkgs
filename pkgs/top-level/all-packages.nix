@@ -2533,6 +2533,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  ragel = import ../development/tools/parsing/ragel {
+    inherit composableDerivation fetchurl transfig texLive;
+  };
+
   # couldn't find the source yet
   selenium_rc_binary = import ../development/tools/selenium/remote-control {
     inherit fetchurl stdenv unzip;
