@@ -1,11 +1,19 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "mingetty-1.07";
-  builder = ./builder.sh;
+  name = "mingetty-1.08";
+  
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/os/Linux/distr/debian/pool/main/m/mingetty/mingetty_1.07.orig.tar.gz;
-    md5 = "491dedf1ceff0e0f5f7bb9f55bf5213e";
+    url = mirror://sourceforge/mingetty/mingetty-1.08.tar.gz;
+    sha256 = "05yxrp44ky2kg6qknk1ih0kvwkgbn9fbz77r3vci7agslh5wjm8g";
   };
-  patches = [./makefile.patch];
+
+  preInstall = ''
+    ensureDir $out/sbin $out/share/man/man8
+    makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)
+  '';
+
+  meta = {
+    homepage = http://sourceforge.net/projects/mingetty;
+  };
 }
