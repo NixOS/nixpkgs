@@ -1,7 +1,10 @@
 {lib, pkgs} :
 let inherit (lib) nv nvs; in
 {
-  # see new python derivations for example..
+  # see new python derivations for example:
+  # - development/interpreters/php_configurable/default.nix
+  # - .. search composableDerivation in all-packages.nix ..
+  #
   # You should be able to override anything you like easily
   # grep the mailinglist by title "python proposal" (dec 08)
   # -> http://mail.cs.uu.nl/pipermail/nix-dev/2008-December/001571.html
