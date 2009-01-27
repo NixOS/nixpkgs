@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional aclSupport acl;
   
-  # Support older Linux kernels.
-  patches = [ ./setting-time-backward-compatibility.patch ];
-  
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
