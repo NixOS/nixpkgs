@@ -13,17 +13,17 @@
 { stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
   GStreamer, startupnotification, gettext,
   perl, perlXMLParser, libxml2, nss,
-  libXScrnSaver, ncurses, avahi, dbus, dbus_glib
+  libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool
   , lib
   , openssl ? null
   , gnutls ? null
 } :
 
 stdenv.mkDerivation {
-  name = "pidgin-2.5.2";
+  name = "pidgin-2.5.4";
   src = fetchurl {
-    url = mirror://sourceforge/pidgin/pidgin-2.5.2.tar.bz2;
-    sha256 = "1p39nvwy3c7wc97a6i88f6rrg5d3a6vv0wdard4vkfmva81l24r0";
+    url = mirror://sourceforge/pidgin/pidgin-2.5.4.tar.bz2;
+    sha256 = "0qqvv9x5p2yxmw57sj3hvc10vxpd9mqv61w1pk97qcwbggwvxgn6";
   };
 
   inherit nss ncurses;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   ++
   [nss
     libXScrnSaver ncurses
-    avahi dbus dbus_glib
+    avahi dbus dbus_glib intltool
   ]
   ;
 
