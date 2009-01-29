@@ -5795,8 +5795,8 @@ let
       intltool gettext;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11 libICE libSM;
+    inherit (alsa) alsaLib;    # Needs ALSA >= 1.0.17.
     gconf = gnome.GConf;
-    alsaLib = alsa_1_0_19.alsaLib;  # Needs ALSA >= 1.0.17.
   };
 
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
@@ -5926,20 +5926,13 @@ let
     inherit fetchurl stdenv;
   };
 
-  alsa = composedArgsAndFun (selectVersion ../os-specific/linux/alsa "1.0.16") {
+  alsa = import ../os-specific/linux/alsa/1.0.19.nix {
     inherit fetchurl stdenv ncurses gettext;
+    version = "1.0.19";
   };
 
   alsaLib = alsa.alsaLib;
   alsaUtils = alsa.alsaUtils;
-
-  # A newer ALSA.  Make it the default during the next `stdenv-updates' merge.
-  alsa_1_0_19 = import ../os-specific/linux/alsa/1.0.19.nix {
-    inherit fetchurl stdenv ncurses gettext;
-    version = "1.0.19";
-  };
-  alsaLib_1_0_19 = alsa_1_0_19.alsaLib;
-  alsaUtils_1_0_19 = alsa_1_0_19.alsaUtils;
 
   blcr = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
