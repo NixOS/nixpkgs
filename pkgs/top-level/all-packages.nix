@@ -6213,7 +6213,7 @@ let
           "# CONFIG_PROC_MM_DUMPABLE is not set\n";
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
+        patch = fetchurl { # !!! missing!
           url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
         };
@@ -6227,7 +6227,7 @@ let
     kernelPatches = [
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
+          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
@@ -6261,7 +6261,7 @@ let
       */
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
+          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
@@ -6415,16 +6415,6 @@ let
       inherit kernel;
     };
 
-    # Actually, klibc builds fine with the static kernelHeaders, but
-    # splashutils expects a klibc with patched headers...
-    klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
-      inherit fetchurl stdenv perl bison mktemp kernel;
-    };
-
-    klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
-      inherit stdenv klibc;
-    };
-
     splashutils =
       if kernel.features ? fbSplash then splashutils_13 else
       if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
@@ -6528,6 +6518,15 @@ let
 
   lm_sensors = import ../os-specific/linux/lm_sensors {
     inherit fetchurl stdenv bison flex perl;
+  };
+
+  klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
+    inherit fetchurl stdenv perl bison mktemp;
+    kernelHeaders = glibc.kernelHeaders;
+  };
+
+  klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
+    inherit stdenv klibc;
   };
 
   kvm = kvm76;
