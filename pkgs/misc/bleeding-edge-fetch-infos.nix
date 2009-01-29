@@ -15,9 +15,9 @@
     url = http://mawercer.de/~nix/repos/ghc_lambdavm.tar.gz;
     sha256 = "3d10e839b8226987383e870258ff38b56442ff254688f7c50983850676f992cb";
   };
-  git = args: with args; fetchurl {
-    url = http://mawercer.de/~nix/repos/git.tar.gz;
-    sha256 = "1f0df3da8d6c9425ab80bd9c623570b7a35e5a622fbf56b903e1bf82a01d4e5f";
+  git = args: with args; fetchurl { # Tue Jan 20 22:28:04 UTC 2009
+    url = "http://mawercer.de/~nix/repos/git-a227bce65f3fcdfbf28f109809b7e2e518b906f8.tar.gz";
+    sha256 = "7420a385718c7edec956fb0cba1a8a11d4b45edc833d7c06bf7c4764188ce180";
   };
   happs_data = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/happs_data.tar.gz;
@@ -219,9 +219,9 @@
     url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz";
     sha256 = "1e84ff59dcd7a3c80343eb9be302f822e510c95398fd1a6c8f2e4b163fd51e45";
   };
-  hg2git = args: with args; fetchurl { # Sat Oct 18 21:02:44 UTC 2008
-    url = "http://mawercer.de/~nix/repos/hg2git-4c77e121b739d2aac8a23352503763343823f870.tar.gz";
-    sha256 = "22354d36937bf9e5d3e3dfc1a3ef9e3f2bc183b8e114a23958a2b10f83abc97e";
+  hg2git = args: with args; fetchurl { # Tue Jan 20 22:49:27 UTC 2009
+    url = "http://mawercer.de/~nix/repos/hg2git-0fabb998a19c850cb8fcfcf72414b18070d94378.tar.gz";
+    sha256 = "ce7cd089681e6eee24f5bc9ab3b73f1e49d368b83a32d00695eadca00533ac5d";
   };
  octave = args: with args; fetchurl { # Mon Dec  1 23:23:49 UTC 2008
    url = "http://mawercer.de/~nix/repos/octave-03b414516dd8.tar.gz";
@@ -230,5 +230,13 @@
   zsh = args: with args; fetchurl { # Sun Dec 21 12:50:24 UTC 2008
     url = "http://mawercer.de/~nix/repos/zsh-2008-12-21_12-50-23.tar.gz";
     sha256 = "9af16f89205759d7ade51268dbdfa02cec3db10b35dc7a56ffe8e1fde2074ae7";
+  };
+  topGit = args: with args; fetchurl { # Tue Jan 20 21:29:50 UTC 2009
+    url = "http://mawercer.de/~nix/repos/topGit-5b823563a678fe46ddf768977ab9d00525945ec6.tar.gz";
+    sha256 = "e027311b2b058bab05a7175546854d61325bba591109e68c59209edc6939e5cb";
+  };
+  qgit = args: with args; fetchurl { # Tue Jan 20 21:35:00 UTC 2009
+    url = "http://mawercer.de/~nix/repos/qgit-b5dd5fd691e9423124cf356abe26e641bc33d159.tar.gz";
+    sha256 = "e04de308feb40716a6b02d1f69dc834f4fa859865b64e8f91beb6018fa953f96";
   };
 }

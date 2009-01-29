@@ -8,10 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0flrjqa68vnnn8lrhj86xpa6h2cyzrvjy6873v9id092f86ix1li";
   };
 
-  # Work around Python misdetection and set `PYTHON_LIBS' to
-  # "-L/nix/store/... -lpython2.4" instead of "/nix/store/.../libpython2.4.so".
-  # Changed to 2.5
-  patches = [ ./configure-python-libs.patch ];
+  patches = [ ./configure-python-libs.patch ./libpng-setjmp.patch ]; 
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from

@@ -1,14 +1,15 @@
 {stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses}:
 
 stdenv.mkDerivation (rec {
-  name = "ghc-6.8.2";
+  version = "6.8.2";
+  name = "ghc-${version}";
   homepage = "http://www.haskell.org/ghc";
 
   src = map fetchurl [
-    { url = "${homepage}/dist/stable/dist/${name}-src.tar.bz2";
-      md5 = "745c6b7d4370610244419cbfec4b2f84";
+    { url = "${homepage}/dist/${version}/${name}-src.tar.bz2";
+      sha256 = "2d10f973c35e8d7d9f62b53e26fef90177a9a15105cda4b917340ba7696a22d9";
     }
-    { url = "${homepage}/dist/stable/dist/${name}-src-extralibs.tar.bz2";
+    { url = "${homepage}/dist/${version}/${name}-src-extralibs.tar.bz2";
       md5 = "d199c50814188fb77355d41058b8613c";
     }
   ];

@@ -1004,15 +1004,15 @@ rec {
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   }) // {inherit libfontenc freetype xproto zlib ;};
     
-  pixman = (stdenv.mkDerivation {
-    name = "pixman-0.12.0";
+  pixman = (stdenv.mkDerivation rec {
+    name = "pixman-0.13.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/pixman-0.12.0.tar.bz2;
-      sha256 = "0a5j4lxlsn4sns2zcv9z32jh4mll7qv8yb5dyx1gphl258w58ax8";
+      url = "http://mirror.switch.ch/ftp/mirror/X11/pub/individual/lib/${name}.tar.bz2";
+      sha256 = "1p3wzgzaivl4f0vm6p628jav8v4hz8kdml50a3agxiq447frysvv";
     };
-    buildInputs = [pkgconfig perl ];
-  }) // {inherit perl ;};
+    buildInputs = [ perl pkgconfig ];
+  }) // {inherit ;};
     
   printproto = (stdenv.mkDerivation {
     name = "printproto-1.0.4";

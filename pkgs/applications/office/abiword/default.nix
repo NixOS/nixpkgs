@@ -4,10 +4,10 @@ enchant, wv
 }:
 
 stdenv.mkDerivation {
-  name = "abiword-2.6.4";
+  name = "abiword-2.6.6";
   src = fetchurl {
-    url = http://www.abisource.com/downloads/abiword/2.6.4/source/abiword-2.6.4.tar.gz;
-    sha256 = "1zp9p2dfrskn7r827ivvii2477ysxkvrsshk79hgw3xhd5mplbad";
+    url = http://www.abisource.org/downloads/abiword/2.6.6/source/abiword-2.6.6.tar.gz;
+    sha256 = "1cgi6l3wd82vgni4wcqasyl2rvxwffliyqgbwvzv0nn99wasg5gx";
   };
 
   buildInputs = [pkgconfig gtk libglade libgnomeprint libgnomeprintui

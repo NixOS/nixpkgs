@@ -14,11 +14,16 @@ assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBin
 assert svnSupport -> subversion.perlBindings;
 
 stdenv.mkDerivation rec {
+  # the glob patch adds the filter [touching paths (glob)] to gitk
+  # contact marco-oweber@gmx.de if you want to know more details
   name = "git-git-with-glob-patch";
 
   src = sourceByName "git";
 
-  patches = [  ./glob-path.patch ./docbook2texi.patch ];
+  patchePhase = ''
+    patch -p1 < ${./docbook2texi-2.patch}
+    sed -i 's/docbook2x-texi/docbook2texi/gc' Documentation/Makefile
+  '';
   # maybe this introduces unneccessary dependencies ?
   patchPhase = "
     unset patchPhase; patchPhase;

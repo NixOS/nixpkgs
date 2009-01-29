@@ -563,6 +563,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  cdecl = import ../development/tools/cdecl {
+    inherit fetchurl stdenv yacc flex readline;
+  };
+
   cdrdao = import ../tools/cd-dvd/cdrdao {
     inherit fetchurl stdenv;
   };
@@ -633,6 +637,10 @@ let
   };
 
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
+
+  dev86 = import ../development/compilers/dev86 {
+    inherit fetchurl stdenv;
+  };
 
   dnsmasq = import ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it?
@@ -855,11 +863,6 @@ let
     inherit fetchurl stdenv ocaml;
   };
 
-  hg2git = import ../tools/misc/hg2git {
-    inherit fetchurl stdenv mercurial coreutils git makeWrapper;
-    inherit (bleedingEdgeRepos) sourceByName;
-  };
-
   highlight = builderDefsPackage (selectVersion ../tools/text/highlight "2.6.10") {
     inherit getopt;
   };
@@ -876,6 +879,10 @@ let
     flex = flex2533;
   };
   */
+
+  iasl = import ../development/compilers/iasl {
+    inherit fetchurl stdenv bison flex;
+  };
 
   idutils = import ../tools/misc/idutils {
     inherit fetchurl stdenv emacs;
@@ -2508,6 +2515,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  ragel = import ../development/tools/parsing/ragel {
+    inherit composableDerivation fetchurl transfig texLive;
+  };
+
   # couldn't find the source yet
   selenium_rc_binary = import ../development/tools/selenium/remote-control {
     inherit fetchurl stdenv unzip;
@@ -2703,7 +2714,7 @@ let
   };
 
   cairomm = import ../development/libraries/cairomm {
-    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype;
+    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype libsigcxx;
   };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
@@ -3046,6 +3057,13 @@ let
     xineramaSupport = true;
   };
 
+  gtkLibs214 = import ../development/libraries/gtk-libs/2.14 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11 jasper
+            libtiff libjpeg libpng cairo libsigcxx cairomm;
+    inherit (xlibs) libXinerama libXrandr;
+    xineramaSupport = true;
+  };
+
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
     inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtk;
@@ -3175,6 +3193,12 @@ let
 
   libcaca = import ../development/libraries/libcaca {
     inherit fetchurl stdenv ncurses;
+  };
+
+  libcanberra = import ../development/libraries/libcanberra {
+    inherit fetchurl stdenv pkgconfig libtool alsaLib pulseaudio libvorbis;
+    inherit (gtkLibs214) gtk gthread;
+    gstreamer = gst_all.gstreamer;
   };
 
   libcdaudio = import ../development/libraries/libcdaudio {
@@ -3574,6 +3598,10 @@ let
     inherit fetchurl stdenv zlib libxml2;
   };
 
+  opencascade = import ../development/libraries/opencascade {
+    inherit fetchurl stdenv mesa qt4 tcl tk;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = import ../development/libraries/openexr_ctl {
     inherit fetchurl stdenv ilmbase ctl;
@@ -3643,6 +3671,15 @@ let
 
   pthread_stubs = import ../development/libraries/pthread-stubs {
     inherit fetchurl stdenv;
+  };
+
+  qt3gcc33 = import ../development/libraries/qt-3 {
+    stdenv = overrideGCC stdenv gcc33;
+    inherit fetchurl x11 zlib libjpeg libpng which mysql mesa;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor;
+    openglSupport = false;
+    mysqlSupport = false;
   };
 
   qt3 = import ../development/libraries/qt-3 {
@@ -3810,7 +3847,7 @@ let
   wxGTK28fun = lib.sumArgs (import ../development/libraries/wxGTK-2.8);
 
   wxGTK28deps = wxGTK28fun {
-    inherit fetchurl stdenv pkgconfig;
+    inherit fetchurl stdenv pkgconfig mesa;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
@@ -5757,7 +5794,9 @@ let
       dbus hal avahi liboil libsamplerate libsndfile speex
       intltool gettext;
     inherit (gtkLibs) glib;
+    inherit (xlibs) libX11 libICE libSM;
     gconf = gnome.GConf;
+    alsaLib = alsa_1_0_19.alsaLib;  # Needs ALSA >= 1.0.17.
   };
 
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
@@ -5892,8 +5931,15 @@ let
   };
 
   alsaLib = alsa.alsaLib;
-
   alsaUtils = alsa.alsaUtils;
+
+  # A newer ALSA.  Make it the default during the next `stdenv-updates' merge.
+  alsa_1_0_19 = import ../os-specific/linux/alsa/1.0.19.nix {
+    inherit fetchurl stdenv ncurses gettext;
+    version = "1.0.19";
+  };
+  alsaLib_1_0_19 = alsa_1_0_19.alsaLib;
+  alsaUtils_1_0_19 = alsa_1_0_19.alsaUtils;
 
   blcr = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
@@ -6135,7 +6181,7 @@ let
           "# CONFIG_PROC_MM_DUMPABLE is not set\n";
       }
       { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
+        patch = fetchurl { # !!! missing!
           url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
         };
@@ -6149,7 +6195,7 @@ let
     kernelPatches = [
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
+          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
@@ -6183,7 +6229,7 @@ let
       */
       { name = "fbsplash-0.9.2-r5-2.6.21";
         patch = fetchurl {
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.22/4200_fbsplash-0.9.2-r5.patch;
+          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
           sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
         };
         extraConfig = "CONFIG_FB_SPLASH=y";
@@ -6337,32 +6383,10 @@ let
       inherit kernel;
     };
 
-    # Actually, klibc builds fine with the static kernelHeaders, but
-    # splashutils expects a klibc with patched headers...
-    klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
-      inherit fetchurl stdenv perl bison mktemp kernel;
-    };
-
-    klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
-      inherit stdenv klibc;
-    };
-
     splashutils =
       if kernel.features ? fbSplash then splashutils_13 else
       if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
       null;
-
-    splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
-      inherit fetchurl stdenv klibc;
-      zlib = zlibStatic;
-      libjpeg = libjpegStatic;
-    };
-
-    splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
-      inherit fetchurl stdenv klibc;
-      zlib = zlibStatic;
-      libjpeg = libjpegStatic;
-    };
 
     ext3cowtools = import ../os-specific/linux/ext3cow-tools {
       inherit stdenv fetchurl;
@@ -6400,6 +6424,15 @@ let
       inherit fetchurl stdenv binutils pkgconfig kernel;
       inherit (gnome) gtk glib pango libglade;
     };
+
+    # Broken build, still. The install step fails, and I never tried to run that compiled.
+    virtualbox = import ../applications/virtualization/virtualbox/2.1.2.nix {
+      inherit stdenv fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
+          libcap libpng zlib kernel;
+      inherit (gtkLibs) glib;
+      inherit (xlibs) xproto libX11 libXext libXcursor;
+      inherit (gnome) libIDL;
+    };
   };
 
   # Build the kernel modules for the some of the kernels.
@@ -6413,7 +6446,7 @@ let
   kernelPackages = kernelPackages_2_6_25;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools lib;
+    inherit fetchurl stdenv perl mktemp module_init_tools;
   });
 
   libselinux = import ../os-specific/linux/libselinux {
@@ -6441,6 +6474,15 @@ let
 
   lm_sensors = import ../os-specific/linux/lm_sensors {
     inherit fetchurl stdenv bison flex perl;
+  };
+
+  klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
+    inherit fetchurl stdenv perl bison mktemp;
+    kernelHeaders = glibc.kernelHeaders;
+  };
+
+  klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
+    inherit stdenv klibc;
   };
 
   kvm = kvm76;
@@ -6590,6 +6632,18 @@ let
 
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
+  };
+
+  splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
+    inherit fetchurl stdenv klibc;
+    zlib = zlibStatic;
+    libjpeg = libjpegStatic;
+  };
+
+  splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
+    inherit fetchurl stdenv klibc;
+    zlib = zlibStatic;
+    libjpeg = libjpegStatic;
   };
 
   squashfsTools = import ../os-specific/linux/squashfs {
@@ -7393,32 +7447,10 @@ let
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
 
-  git = import ../applications/version-management/git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
-      cpio tcl tk makeWrapper subversion;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
-  };
-
-  gitGit = import ../applications/version-management/git/git-git.nix {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
-      cpio tcl tk makeWrapper subversion autoconf;
-    inherit (bleedingEdgeRepos) sourceByName;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
-  };
-
-  qgit = import ../applications/version-management/qgit {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libXext libX11;
-    qt = qt3;
-  };
+  gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
+    inherit pkgs;
+  });
+  git = gitAndTools.git;
 
   qjackctl = import ../applications/audio/qjackctl {
     inherit fetchurl stdenv alsaLib jackaudio;
@@ -7757,9 +7789,9 @@ let
     inherit fetchurl zlib glibc stdenv;
 # stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
-    qt = qt3;
+    qt = qt3gcc33;
     #33motif = lesstif;
-    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
+    libstdcpp5 = gcc33.gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
@@ -7770,7 +7802,7 @@ let
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss
-      gtkspell aspell gettext ncurses avahi dbus dbus_glib lib;
+      gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool;
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
     GStreamer = gst_all.gstreamer;
@@ -7916,10 +7948,6 @@ let
     inherit fetchurl stdenv;
   };
 
-
-  stgit = import ../applications/version-management/stgit {
-    inherit fetchurl stdenv python git;
-  };
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit clisp texinfo;
@@ -8458,6 +8486,10 @@ let
   ### DESKTOP ENVIRONMENTS
 
 
+  enlightenment = import ../desktops/enlightenment {
+    inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
+  };
+
   gnome = recurseIntoAttrs (import ../desktops/gnome {
     inherit
       fetchurl stdenv pkgconfig
@@ -8640,13 +8672,17 @@ let
   };
 
   ghostscript = import ../misc/ghostscript {
-    inherit fetchurl stdenv libjpeg libpng zlib x11;
+    inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
+      fontconfig cups openssl;
     x11Support = false;
+    cupsSupport = true;
   };
 
   ghostscriptX = lowPrio (appendToName "with-X" (import ../misc/ghostscript {
-    inherit fetchurl stdenv libjpeg libpng zlib x11;
+    inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
+      fontconfig cups openssl;
     x11Support = true;
+    cupsSupport = true;
   }));
 
   gxemul = (import ../misc/gxemul) {
@@ -8887,6 +8923,10 @@ let
       saneBackends saneFrontends;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11;
+  };
+
+  yafc = import ../applications/networking/yafc {
+    inherit fetchurl stdenv readline openssh;
   };
 
   myEnvFun = import ../misc/my-env {

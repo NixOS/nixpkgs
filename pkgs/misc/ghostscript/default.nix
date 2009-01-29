@@ -1,13 +1,17 @@
-{ stdenv, fetchurl, libjpeg, libpng, zlib
+{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
 , x11Support, x11 ? null
+, cupsSupport ? false, cups ? null
 }:
 
 assert x11Support -> x11 != null;
+assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
   name = "ghostscript-8.62.0";
   
   builder = ./builder.sh;
+
+  x = true;
   
   src = fetchurl {
     url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2"; 
@@ -26,8 +30,9 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [libjpeg libpng zlib]
-    ++ stdenv.lib.optional x11Support x11;
+  buildInputs = [libjpeg libpng libtiff zlib pkgconfig fontconfig openssl]
+    ++ stdenv.lib.optional x11Support x11
+    ++ stdenv.lib.optional cupsSupport cups;
 
   configureFlags = "
     --disable-static

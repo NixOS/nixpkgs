@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, hal, avahi
-, gconf, liboil, intltool, gettext
+, gconf, liboil, libX11, libICE, libSM, intltool, gettext, alsaLib
 , libsamplerate, libsndfile, speex }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +12,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gnum4 gdbm libtool glib dbus hal avahi gconf liboil
-    libsamplerate libsndfile speex
+    libsamplerate libsndfile speex alsaLib
+    libX11 libICE libSM
     intltool gettext
   ];
 
+  preConfigure = ''
+    # Disable the ConsoleKit module since we don't currently have that
+    # on NixOS.
+    sed -i "src/daemon/default.pa.in" \
+        -e 's/^\( *load-module \+module-console-kit\)/# \1/g'
+  '';
+
   configureFlags = ''
-    --disable-solaris --disable-jack --disable-bluez --disable-polkit
+    --disable-solaris --disable-jack --disable-bluez --disable-polkit --with-x --enable-asyncdns --localstatedir=/var
   '';
 
   meta = {

@@ -14,6 +14,17 @@ rec {
   gcc = gcc43;
 
 
+  curl = import ../../tools/networking/curl {
+    inherit fetchurl;
+    stdenv = makeStaticBinaries stdenv;
+    zlibSupport = false;
+    sslSupport = false;
+  };
+
+
+  foo = kernelPackages.klibc;
+
+
   build = 
 
     stdenv.mkDerivation {
