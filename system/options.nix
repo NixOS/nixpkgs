@@ -3066,5 +3066,6 @@ root        ALL=(ALL) SETENV: ALL
     (import ../upstart-jobs/manual.nix)
     (import ../upstart-jobs/rogue.nix)
     (import ../upstart-jobs/guest-users.nix)
+    (import ../upstart-jobs/pulseaudio.nix)
   ];
 }
