@@ -98,6 +98,7 @@ let
       kbd
       kcachegrind
       kdebase
+      klibc
       ktorrent
       kvm
       less
@@ -160,6 +161,8 @@ let
       seccure
       slim
       spidermonkey
+      splashutils_13
+      splashutils_15
       ssmtp
       strace
       su
@@ -242,36 +245,26 @@ let
       inherit (pkgs.kernelPackages_2_6_23)
         iwlwifi
         kernel
-        klibc
-        splashutils
         ;
     };
     kernelPackages_2_6_25 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_25)
         kernel
-        klibc
-#        splashutils
         ;
     };
     kernelPackages_2_6_26 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_26)
         kernel
-        klibc
-#        splashutils
         ;
     };
     kernelPackages_2_6_27 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_27)
         kernel
-        klibc
-#        splashutils
         ;
     };
     kernelPackages_2_6_28 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_28)
         kernel
-        klibc
-#        splashutils
         ;
     };
   };

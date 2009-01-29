@@ -6420,18 +6420,6 @@ let
       if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
       null;
 
-    splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
-      inherit fetchurl stdenv klibc;
-      zlib = zlibStatic;
-      libjpeg = libjpegStatic;
-    };
-
-    splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
-      inherit fetchurl stdenv klibc;
-      zlib = zlibStatic;
-      libjpeg = libjpegStatic;
-    };
-
     ext3cowtools = import ../os-specific/linux/ext3cow-tools {
       inherit stdenv fetchurl;
       kernel_ext3cowpatched = kernel;
@@ -6676,6 +6664,18 @@ let
 
   shadowutils = import ../os-specific/linux/shadow {
     inherit fetchurl stdenv;
+  };
+
+  splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
+    inherit fetchurl stdenv klibc;
+    zlib = zlibStatic;
+    libjpeg = libjpegStatic;
+  };
+
+  splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
+    inherit fetchurl stdenv klibc;
+    zlib = zlibStatic;
+    libjpeg = libjpegStatic;
   };
 
   squashfsTools = import ../os-specific/linux/squashfs {
