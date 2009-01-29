@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     # on NixOS.
     sed -i "src/daemon/default.pa.in" \
         -e 's/^\( *load-module \+module-console-kit\)/# \1/g'
+
+    # Change the `padsp' script so that it contains the full path to
+    # `libpulsedsp.so'.
+    sed -i "src/utils/padsp" \
+        -e "s|libpulsedsp\.so|$out/lib/libpulsedsp.so|g"
   '';
 
   configureFlags = ''
