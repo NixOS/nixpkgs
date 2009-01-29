@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     --disable-init-state
   '';
 
+  doCheck = true;
+
   meta = {
     description = "The Nix Deployment System";
     homepage = http://nixos.org/;
