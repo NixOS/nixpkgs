@@ -15,7 +15,7 @@ rec {
 
   pkgsKlibc = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
     system = pkgs.stdenv.system;
-    bootStdenv = pkgs.useKlibc pkgs.stdenv kernelPackages.klibc;
+    bootStdenv = pkgs.useKlibc pkgs.stdenv pkgs.klibc;
   };
 
   pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
@@ -131,7 +131,7 @@ rec {
       # command provided by klibc (which isn't capable of
       # auto-detecting FS types).
       extraUtils
-      kernelPackages.klibcShrunk
+      pkgs.klibcShrunk
     ];
   };
 
