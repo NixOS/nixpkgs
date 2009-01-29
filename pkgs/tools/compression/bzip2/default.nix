@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   sharedLibrary =
-    !stdenv.isDarwin && !(stdenv ? isDietLibC) && stdenv.system != "i686-cygwin";
+    !stdenv.isDarwin && !(stdenv ? isDietLibC) && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin";
     
   meta = {
     homepage = http://www.bzip.org;

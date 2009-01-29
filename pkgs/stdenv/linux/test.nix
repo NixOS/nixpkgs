@@ -14,15 +14,18 @@ rec {
   gcc = gcc43;
 
 
-  curl = import ../../tools/networking/curl {
+  curlDiet = import ../../tools/networking/curl {
     inherit fetchurl;
-    stdenv = makeStaticBinaries stdenv;
+    stdenv = useDietLibC stdenv;
     zlibSupport = false;
     sslSupport = false;
   };
 
 
-  foo = kernelPackages.klibc;
+  bzip2Diet = import ../../tools/compression/bzip2 {
+    inherit fetchurl;
+    stdenv = useDietLibC stdenv;
+  };
 
 
   build = 
@@ -30,7 +33,7 @@ rec {
     stdenv.mkDerivation {
       name = "build";
 
-      buildInputs = [nukeReferences];
+      buildInputs = [nukeReferences cpio];
 
       buildCommand = ''
         ensureDir $out/bin $out/lib $out/libexec
@@ -91,6 +94,9 @@ rec {
         cp -rd ${gcc.gcc}/libexec/* $out/libexec
         mkdir $out/include
         cp -rd ${gcc.gcc}/include/c++ $out/include
+        chmod -R u+w $out/include
+        rm -rf $out/include/c++/*/ext/pb_ds
+        rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmp}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
@@ -109,12 +115,28 @@ rec {
                 strip -s $i || true
             fi
         done
-        
+
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
 
-        (cd $out && tar cvfj $out/bootstrap-tools.tar.bz2 bin lib libexec include include-glibc)
+        mkdir $out/.pack
+        mv $out/* $out/.pack
+        mv $out/.pack $out/pack
+
+        mkdir $out/on-server
+        (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
+
+        mkdir $out/in-nixpkgs
+        cp ${klibc}/lib/klibc/bin.static/sh $out/in-nixpkgs
+        cp ${klibc}/lib/klibc/bin.static/cpio $out/in-nixpkgs
+        cp ${klibc}/lib/klibc/bin.static/mkdir $out/in-nixpkgs
+        cp ${curlDiet}/bin/curl $out/in-nixpkgs
+        cp ${bzip2Diet}/bin/bzip2 $out/in-nixpkgs
+        chmod u+w $out/in-nixpkgs/*
+        strip $out/in-nixpkgs/*
+        nuke-refs $out/in-nixpkgs/*
+        bzip2 $out/in-nixpkgs/curl
       ''; # */
 
       # The result should not contain any references (store paths) so
@@ -130,9 +152,8 @@ rec {
       name = "unpack";
 
       buildCommand = ''
-        tar xvfj ${build}/bootstrap-tools.tar.bz2
-        cp -prd . $out
-        rm $out/env-vars
+        ${build}/in-nixpkgs/mkdir $out
+        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -V -i)
 
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             echo patching $i
@@ -147,7 +168,7 @@ rec {
             cat $i | sed "s|/nix/store/e*-[^/]*/|$out/|g" > $i.tmp
             mv $i.tmp $i
         done
-      ''; # */
+      ''; # " */
 
       allowedReferences = ["out"];
     };
@@ -175,6 +196,8 @@ rec {
         awk --version
         grep --version
         gcc --version
+
+        ${build}/in-nixpkgs/sh -c 'echo Hello World'
 
         ldlinux=$(echo ${unpack}/lib/ld-linux*.so.2)
 
