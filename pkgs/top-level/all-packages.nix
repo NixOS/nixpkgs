@@ -8410,14 +8410,16 @@ let
   });
 
   fsg = import ../games/fsg {
-    inherit stdenv fetchurl pkgconfig;
+    inherit stdenv fetchurl pkgconfig mesa;
     inherit (gtkLibs) glib gtk;
+    inherit (xlibs) libX11 xproto;
     wxGTK = wxGTK28deps {unicode = false;};
   };
 
   fsgAltBuild = import ../games/fsg/alt-builder.nix {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl mesa;
     wxGTK = wxGTK28deps {unicode = false;};
+    inherit (xlibs) libX11 xproto;
     stringsWithDeps = import ../lib/strings-with-deps.nix {
       inherit stdenv lib;
     };
