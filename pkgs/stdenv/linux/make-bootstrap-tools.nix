@@ -131,6 +131,7 @@ rec {
         cp ${klibc}/lib/klibc/bin.static/sh $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/cpio $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/mkdir $out/in-nixpkgs
+        cp ${klibc}/lib/klibc/bin.static/ln $out/in-nixpkgs
         cp ${curlDiet}/bin/curl $out/in-nixpkgs
         cp ${bzip2Diet}/bin/bzip2 $out/in-nixpkgs
         chmod u+w $out/in-nixpkgs/*
