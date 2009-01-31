@@ -8430,6 +8430,10 @@ let
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
   };
 
+  gnuchess = builderDefsPackage (import ../games/gnuchess) {
+    flex = flex2535;
+  };
+
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
       libICE libSM xproto;
@@ -8501,6 +8505,12 @@ let
 
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
+  };
+
+  xboard = builderDefsPackage (import ../games/xboard) {
+    inherit (xlibs) libX11 xproto libXt libXaw libSM 
+      libICE libXmu libXext;
+    inherit gnuchess;
   };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
