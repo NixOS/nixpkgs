@@ -1,0 +1,17 @@
+diff --git a/src/osdep/linux.c b/src/osdep/linux.c
+index 9f3b1ef..ba7e584 100644
+--- a/src/osdep/linux.c
++++ b/src/osdep/linux.c
+@@ -235,7 +235,11 @@ static char * wiToolsPath(const char * tool)
+                 "/bin",
+                 "/usr/bin",
+                 "/usr/local/bin",
+-                "/tmp"
++                "/tmp",
++                "/var/run/current-system/sw/bin",
++                "/var/run/current-system/sw/sbin",
++                "/root/.nix-profile/bin",
++                "/root/.nix-profile/sbin"
+         };
+ 
+         nbelems = sizeof(paths) / sizeof(char *);

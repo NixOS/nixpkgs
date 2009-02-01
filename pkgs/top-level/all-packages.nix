@@ -482,6 +482,10 @@ let
     inherit fetchurl stdenv fuse;
   };
 
+  aircrackng = import ../tools/networking/aircrack-ng {
+    inherit fetchurl stdenv libpcap openssl zlib;
+  };
+
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
     wxGTK = wxGTK28;
