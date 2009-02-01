@@ -1,3 +1,17 @@
+# Run the named hook, either by calling the function with that name or
+# by evaluating the variable with that name.  This allows convenient
+# setting of hooks both from Nix expressions (as attributes /
+# environment variables) and from shell scripts (as functions). 
+runHook() {
+    local hookName="$1"
+    if test "$(type -t $hookName)" = function; then
+        $hookName
+    else
+        eval "${!hookName}"
+    fi
+}
+
+
 exitHandler() {
     exitCode=$?
     set +e
@@ -16,7 +30,7 @@ exitHandler() {
     fi
     
     if test $exitCode != 0; then
-        eval "$failureHook"
+        runHook failureHook
     
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
@@ -30,7 +44,7 @@ exitHandler() {
         fi
         
     else
-        eval "$exitHook"
+        runHook exitHook
     fi
     
     exit $exitCode
@@ -95,7 +109,7 @@ param3=@param3@
 param4=@param4@
 param5=@param5@
 if test -n "@preHook@"; then source @preHook@; fi
-eval "$preHook"
+runHook preHook
 
 
 # Check that the pre-hook initialised SHELL.
@@ -133,7 +147,7 @@ assertEnvExists(){
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
-eval "$addInputsHook"
+runHook addInputsHook
 
 
 # Recursively find all build inputs.
@@ -470,7 +484,7 @@ unpackFile() {
                     echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
-                eval "$unpackCmd"
+                runHook unpackCmd
             fi
             ;;
     esac
@@ -480,7 +494,7 @@ unpackFile() {
 
 
 unpackPhase() {
-    eval "$preUnpack"
+    runHook preUnpack
     
     if test -z "$srcs"; then
         if test -z "$src"; then
@@ -508,7 +522,7 @@ unpackPhase() {
 
     # Find the source directory.
     if test -n "$setSourceRoot"; then
-        eval "$setSourceRoot"
+        runHook setSourceRoot
     elif test -z "$sourceRoot"; then
         sourceRoot=
         for i in *; do
@@ -542,12 +556,12 @@ unpackPhase() {
         chmod -R u+w "$sourceRoot"
     fi
 
-    eval "$postUnpack"
+    runHook postUnpack
 }
 
 
 patchPhase() {
-    eval "$prePatch"
+    runHook prePatch
     
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
@@ -566,7 +580,7 @@ patchPhase() {
         stopNest
     done
 
-    eval "$postPatch"
+    runHook postPatch
 }
 
 
@@ -576,7 +590,7 @@ fixLibtool() {
 
 
 configurePhase() {
-    eval "$preConfigure"
+    runHook preConfigure
 
     if test -z "$configureScript"; then
         configureScript=./configure
@@ -607,12 +621,12 @@ configurePhase() {
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
     $configureScript $configureFlags "${configureFlagsArray[@]}"
 
-    eval "$postConfigure"
+    runHook postConfigure
 }
 
 
 buildPhase() {
-    eval "$preBuild"
+    runHook preBuild
 
     if test -z "$makeFlags" && ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
         echo "no Makefile, doing nothing"
@@ -624,19 +638,19 @@ buildPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}"
 
-    eval "$postBuild"
+    runHook postBuild
 }
 
 
 checkPhase() {
-    eval "$preCheck"
+    runHook preCheck
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
-    eval "$postCheck"
+    runHook postCheck
 }
 
 
@@ -676,7 +690,7 @@ patchShebangs() {
 
 
 installPhase() {
-    eval "$preInstall"
+    runHook preInstall
 
     ensureDir "$prefix"
 
@@ -686,7 +700,7 @@ installPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}"
 
-    eval "$postInstall"
+    runHook postInstall
 }
 
 
@@ -694,7 +708,7 @@ installPhase() {
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
 fixupPhase() {
-    eval "$preFixup"
+    runHook preFixup
 
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
@@ -746,12 +760,12 @@ fixupPhase() {
         substituteAll "$setupHook" "$out/nix-support/setup-hook"
     fi
 
-    eval "$postFixup"
+    runHook postFixup
 }
 
 
 distPhase() {
-    eval "$preDist"
+    runHook preDist
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
     make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
@@ -764,7 +778,7 @@ distPhase() {
         cp -pvd ${tarballs:-*.tar.gz} $out/tarballs
     fi
 
-    eval "$postDist"
+    runHook postDist
 }
 
 
@@ -827,7 +841,7 @@ genericBuild() {
 
 # Execute the post-hook.
 if test -n "@postHook@"; then source @postHook@; fi
-eval "$postHook"
+runHook postHook
 
 
 dumpVars
