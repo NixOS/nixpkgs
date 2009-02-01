@@ -9,13 +9,11 @@ configureScript=./Configure
 configureFlags="-de -Dcc=gcc -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3 -Uinstallusrbinperl $extraflags"
 dontAddPrefix=1
 
-preBuild=preBuild
 preBuild() {
     # Make Cwd work on NixOS (where we don't have a /bin/pwd).
     substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
 }
 
-postInstall=postInstall
 postInstall() {
     ensureDir "$out/nix-support"
     cp $setupHook $out/nix-support/setup-hook
