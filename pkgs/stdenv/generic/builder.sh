@@ -8,7 +8,11 @@ _postHook="$postHook"
 preHook=
 postHook=
 
-source $stdenv/setup
+export PATH=
+for i in $initialPath; do
+    if test "$i" = /; then i=; fi
+    PATH=$PATH${PATH:+:}$i/bin
+done
 
 mkdir $out
 

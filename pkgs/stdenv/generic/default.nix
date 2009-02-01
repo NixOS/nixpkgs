@@ -1,4 +1,4 @@
-{ stdenv, name, preHook ? null, postHook ? null, initialPath, gcc, shell
+{ system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
 , fetchurlBoot, forceFetchurlBoot
@@ -11,10 +11,12 @@ let {
     # The stdenv that we are producing.
     result =
 
-      stdenv.mkDerivation {
-        inherit name;
+      derivation {
+        inherit system name;
 
-        builder = ./builder.sh;
+        builder = shell;
+
+        args = ["-e" ./builder.sh];
 
         setup = setupScript;
 
