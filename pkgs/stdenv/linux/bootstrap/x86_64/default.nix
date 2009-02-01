@@ -1,27 +1,10 @@
+# Use the static tools for i686-linux.  They work on x86_64-linux
+# machines as well.
+(import ../i686) //
+
 {
-  bash = ./bash;
-  bzip2 = ./bzip2;
-  cp = ./cp;
-  curl = ./curl.bz2;
-  tar = ./tar.bz2;
-
-  binutilsURL = {
-    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r9803/binutils.tar.bz2;
-    sha1 = "9ac95e34c96c19cd0b925af46c97c9979becaaca";
+  bootstrapTools = {
+    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r13932/bootstrap-tools.cpio.bz2;
+    sha256 = "135lx2945cxf43g9n39dxcamw6f6n8qp5iqbh4xma575rf2bx5js";
   };
-
-  gccURL = {
-    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r9803/gcc.tar.bz2;
-    sha1 = "e8cb32425c8f55833ca081bd74668a029bdf1755";
-  };
-
-  glibcURL = {
-    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r9803/glibc.tar.bz2;
-    sha1 = "74b1698a4595ce4b4f43a33b3ceca1e4459e494e";
-  };
-
-  staticToolsURL = {
-    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r9803/static-tools.tar.bz2;
-    sha1 = "4da3af92c9bcd8fc43b31934d8429412e209741b";
-  };
-}
+} 

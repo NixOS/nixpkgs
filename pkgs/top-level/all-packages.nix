@@ -1514,7 +1514,7 @@ let
     inherit stdenv;
   };
 
-  gcc = gcc42;
+  gcc = gcc43;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -1545,15 +1545,15 @@ let
     profiledCompiler = false;
   });
 
-  gcc42 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.2 {
+  gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
     inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = true;
-  }));
-
-  gcc43 = wrapGCC (import ../development/compilers/gcc-4.3 {
-    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
   });
+
+  gcc43 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.3 {
+    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
+    profiledCompiler = true;
+  }));
 
   gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (import ../development/compilers/gcc-4.3 {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc42);
@@ -2993,6 +2993,7 @@ let
 
   gmp = import ../development/libraries/gmp {
     inherit fetchurl stdenv m4;
+    cxx = false;
   };
 
   goocanvas = import ../development/libraries/goocanvas {
@@ -6081,7 +6082,7 @@ let
     inherit fetchurl stdenv bison flex;
   };
 
-  kernelHeaders = kernelHeaders_2_6_23;
+  kernelHeaders = kernelHeaders_2_6_28;
 
   kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
     inherit fetchurl stdenv unifdef;
