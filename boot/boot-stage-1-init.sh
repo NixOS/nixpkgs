@@ -140,23 +140,68 @@ if test -n "$debug1devices"; then fail; fi
 
 # Return true if the machine is on AC power, or if we can't determine
 # whether it's on AC power.
-onACPower () {
+onACPower() {
     if test -d "/proc/acpi/battery"; then
-	if ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1; then
-	    if cat /proc/acpi/battery/BAT*/state	\
-	       | grep "^charging state"			\
-	       | grep -q "discharg" ; then
-		false
-	    else
-		true
-	    fi
-	else
-	    true
-	fi
+        if ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1; then
+            if cat /proc/acpi/battery/BAT*/state \
+                | grep "^charging state" \
+                | grep -q "discharg" ; then
+                false
+            else
+                true
+            fi
+        else
+            true
+        fi
     else
-	true
+        true
     fi
 }
+
+
+# Check the specified file system, if appropriate.
+checkFS() {
+    # Only check block devices.
+    if ! test -b "$device"; then return 0; fi
+
+    # For unclean ext3 file systems, fsck.ext3 should just replay the
+    # journal and exit, but in practice this takes *much* longer than
+    # letting the kernel recover the FS.  So, don't run fsck on
+    # journalling file systems.
+    eval $(fstype "$device")
+    if test "$FSTYPE" = ext3 -o "$FSTYPE" = ext4 -o "$FSTYPE" = reiserfs -o "$FSTYPE" = xfs -o "$FSTYPE" = jfs; then
+        return 0;
+    fi
+    
+    # Don't run `fsck' if the machine is on battery power.  !!! Is
+    # this a good idea?
+    if ! onACPower; then
+        echo "on battery power, so \`fsck' not run on \`$device'"
+        return 0
+    fi
+    
+    FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
+    fsckResult=$?
+
+    if test $(($fsckResult | 2)) = $fsckResult; then
+        echo "fsck finished, rebooting..."
+        sleep 3
+        reboot
+    fi
+
+    if test $(($fsckResult | 4)) = $fsckResult; then
+        echo "$device has unrepaired errors, please fix them manually."
+        fail
+    fi
+
+    if test $fsckResult -ge 8; then
+        echo "fsck on $device failed."
+        fail
+    fi
+
+    return 0
+}
+
 
 # Function for mounting a file system.
 mountFS() {
@@ -165,44 +210,8 @@ mountFS() {
     local options="$3"
     local fsType="$4"
 
-    # Check the root device, if .
-    mustCheck=
-    if test -b "$device"; then
-        mustCheck=1
-    else
-        case $device in
-            LABEL=*)
-                mustCheck=1
-                ;;
-        esac
-    fi
-
-    if test -n "$mustCheck"; then
-	if onACPower; then
-            FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
-            fsckResult=$?
-
-            if test $(($fsckResult | 2)) = $fsckResult; then
-		echo "fsck finished, rebooting..."
-		sleep 3
-		reboot
-            fi
-
-            if test $(($fsckResult | 4)) = $fsckResult; then
-		echo "$device has unrepaired errors, please fix them manually."
-		fail
-            fi
-
-            if test $fsckResult -ge 8; then
-		echo "fsck on $device failed."
-		fail
-            fi
-	else
-            # Don't run `fsck' if the machine is on battery power.
-	    echo "on battery power, so \`fsck' not run on \`$device'"
-	fi
-    fi
-
+    checkFS "$device"
+    
     # Mount read-writable.
     mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint || fail
 }
@@ -224,8 +233,8 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
 
     # !!! Really quick hack to support bind mounts, i.e., where the
     # "device" should be taken relative to /mnt-root, not /.  Assume
-    # that every device that start with / but doesn't start with /dev
-    # or LABEL= is a bind mount.
+    # that every device that starts with / but doesn't start with /dev
+    # is a bind mount.
     case $device in
         /dev/*)
             ;;
