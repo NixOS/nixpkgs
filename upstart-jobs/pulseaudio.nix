@@ -2,7 +2,7 @@
 
 ###### interface
 let
-  inherit (pkgs.lib) mkOption;
+  inherit (pkgs.lib) mkOption mkIf;
 
   uid = (import ../system/ids.nix).uids.pulseaudio;
   gid = (import ../system/ids.nix).gids.pulseaudio;
@@ -39,7 +39,7 @@ in
 # For some reason, PulseAudio wants UID == GID.
 assert uid == gid;
 
-{
+mkIf config.services.pulseaudio.enable {
   require = [
     options
   ];
