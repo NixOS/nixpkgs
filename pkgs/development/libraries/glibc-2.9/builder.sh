@@ -7,11 +7,12 @@ source $stdenv/setup
 # Explicitly tell glibc to use our pwd, not /bin/pwd.
 export PWD_P=$(type -tP pwd)
 
-# Needed to install share/zoneinfo/zone.tab.
-export BASH_SHELL=$SHELL
+# Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
+# prevent a retained dependency on the bootstrap tools in the
+# stdenv-linux bootstrap.
+export BASH_SHELL=/bin/sh
 
 
-preConfigure=preConfigure
 preConfigure() {
 
     for i in configure io/ftwtest-sh; do
@@ -34,7 +35,6 @@ preConfigure() {
 }
 
 
-postConfigure=postConfigure
 postConfigure() {
     # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
     # This has to be done *after* `configure' because it builds some
@@ -44,7 +44,6 @@ postConfigure() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales
