@@ -1108,6 +1108,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  /* WARNING: this version is unsuitable for using with a setuid wrapper */
+  ppp = builderDefsPackage (import ../tools/networking/ppp) {
+  };
+
   proxychains = import ../tools/networking/proxychains {
     inherit fetchurl stdenv;
   };
@@ -1165,6 +1169,10 @@ let
 
   rlwrap = composedArgsAndFun (selectVersion ../tools/misc/rlwrap "0.28") {
     inherit builderDefs readline;
+  };
+
+  rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
+    inherit ppp;
   };
 
   rpm = import ../tools/package-management/rpm {
