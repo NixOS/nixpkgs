@@ -937,6 +937,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  kismet = import ../applications/networking/sniffers/kismet {
+    inherit fetchurl stdenv libpcap ncurses expat;
+  };
+
   ktorrent = import ../tools/networking/p2p/ktorrent {
     inherit fetchurl stdenv pkgconfig kdelibs
       xlibs zlib libpng libjpeg perl gmp;
