@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4, cxx ? true }:
+{stdenv, fetchurl, m4, cxx ? true}:
 
 stdenv.mkDerivation {
   name = "gmp-4.2.4";
