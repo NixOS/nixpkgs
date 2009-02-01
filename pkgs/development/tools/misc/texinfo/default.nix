@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "lzma -d < $src | tar xv";
 
-  doCheck = true;
+  # Disabled because we don't have zdiff in the stdenv bootstrap.
+  #doCheck = true;
 
   meta = {
     description = "GNU Texinfo, the GNU documentation system";
