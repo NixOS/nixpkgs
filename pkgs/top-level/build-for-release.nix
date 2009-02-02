@@ -372,9 +372,15 @@ let
   cygwinPkgs = {
     inherit (allPackages {system = "i686-cygwin";})
       aterm
+      autoconf
+      automake110x
+      automake19x
       gnum4
-      readline
+      libtool
       ncurses
+      nixUnstable
+      readline
+      subversion
       ;
   };
 
@@ -384,5 +390,5 @@ in [
   #i686FreeBSDPkgs
   #powerpcDarwinPkgs
   i686DarwinPkgs
-  #cygwinPkgs
+  cygwinPkgs
 ]
