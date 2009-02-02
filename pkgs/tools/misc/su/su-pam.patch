@@ -1,6 +1,6 @@
-diff -rcN coreutils-6.7-orig/getdef.c coreutils-6.7/getdef.c
-*** coreutils-6.7-orig/getdef.c	Thu Jan  1 00:00:00 1970
---- coreutils-6.7/getdef.c	Tue Jan 16 22:18:41 2007
+diff -rcN coreutils-7.0-orig/src/getdef.c coreutils-7.0/src/getdef.c
+*** coreutils-7.0-orig/src/getdef.c	1970-01-01 01:00:00.000000000 +0100
+--- coreutils-7.0/src/getdef.c	2009-02-02 15:28:08.000000000 +0100
 ***************
 *** 0 ****
 --- 1,257 ----
@@ -261,9 +261,9 @@ diff -rcN coreutils-6.7-orig/getdef.c coreutils-6.7/getdef.c
 + }
 + 
 + #endif
-diff -rcN coreutils-6.7-orig/getdef.h coreutils-6.7/getdef.h
-*** coreutils-6.7-orig/getdef.h	Thu Jan  1 00:00:00 1970
---- coreutils-6.7/getdef.h	Tue Jan 16 22:18:41 2007
+diff -rcN coreutils-7.0-orig/src/getdef.h coreutils-7.0/src/getdef.h
+*** coreutils-7.0-orig/src/getdef.h	1970-01-01 01:00:00.000000000 +0100
+--- coreutils-7.0/src/getdef.h	2009-02-02 15:28:08.000000000 +0100
 ***************
 *** 0 ****
 --- 1,29 ----
@@ -296,310 +296,12 @@ diff -rcN coreutils-6.7-orig/getdef.h coreutils-6.7/getdef.h
 + extern void free_getdef_data (void);
 + 
 + #endif /* _GETDEF_H_ */
-diff -rcN coreutils-6.7-orig/src/getdef.c coreutils-6.7/src/getdef.c
-*** coreutils-6.7-orig/src/getdef.c	Thu Jan  1 00:00:00 1970
---- coreutils-6.7/src/getdef.c	Tue Jan 16 22:18:57 2007
+diff -rcN coreutils-7.0-orig/src/su.c coreutils-7.0/src/su.c
+*** coreutils-7.0-orig/src/su.c	2008-08-24 22:30:10.000000000 +0200
+--- coreutils-7.0/src/su.c	2009-02-02 15:31:08.000000000 +0100
 ***************
-*** 0 ****
---- 1,257 ----
-+ /* Copyright (C) 2003, 2004, 2005 Thorsten Kukuk
-+    Author: Thorsten Kukuk <kukuk@suse.de>
-+ 
-+    This program is free software; you can redistribute it and/or modify
-+    it under the terms of the GNU General Public License version 2 as
-+    published by the Free Software Foundation.
-+ 
-+    This program is distributed in the hope that it will be useful,
-+    but WITHOUT ANY WARRANTY; without even the implied warranty of
-+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+    GNU General Public License for more details.
-+ 
-+    You should have received a copy of the GNU General Public License
-+    along with this program; if not, write to the Free Software Foundation,
-+    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
-+ 
-+ #ifdef HAVE_CONFIG_H
-+ #include <config.h>
-+ #endif
-+ 
-+ #define _GNU_SOURCE
-+ 
-+ #include <errno.h>
-+ #include <ctype.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <limits.h>
-+ 
-+ #include "getdef.h"
-+ 
-+ struct item {
-+   char *name;         /* name of the option.  */
-+   char *value;        /* value of the option.  */
-+   struct item *next;  /* pointer to next option.  */
-+ };
-+ 
-+ static struct item *list = NULL;
-+ 
-+ void
-+ free_getdef_data (void)
-+ {
-+   struct item *ptr;
-+ 
-+   ptr = list;
-+   while (ptr != NULL)
-+     {
-+       struct item *tmp;
-+       tmp = ptr->next;
-+       free (ptr->name);
-+       free (ptr->value);
-+       free (ptr);
-+       ptr = tmp;
-+     }
-+ 
-+   list = NULL;
-+ }
-+ 
-+ /* Add a new entry to the list.  */
-+ static void
-+ store (const char *name, const char *value)
-+ {
-+   struct item *new = malloc (sizeof (struct item));
-+ 
-+   if (new == NULL)
-+     abort ();
-+ 
-+   if (name == NULL)
-+     abort ();
-+ 
-+   new->name = strdup (name);
-+   new->value = strdup (value?:"");
-+   new->next = list;
-+   list = new;
-+ }
-+ 
-+ /* search a special entry in the list and return the value.  */
-+ static const char *
-+ search (const char *name)
-+ {
-+   struct item *ptr;
-+ 
-+   ptr = list;
-+   while (ptr != NULL)
-+     {
-+       if (strcasecmp (name, ptr->name) == 0)
-+ 	return ptr->value;
-+       ptr = ptr->next;
-+     }
-+ 
-+   return NULL;
-+ }
-+ 
-+ /* Load the login.defs file (/etc/login.defs)  */
-+ static void
-+ load_defaults_internal (const char *filename)
-+ {
-+   FILE *fp;
-+   char *buf = NULL;
-+   size_t buflen = 0;
-+ 
-+   fp = fopen (filename, "r");
-+   if (NULL == fp)
-+     return;
-+ 
-+   while (!feof (fp))
-+     {
-+       char *tmp, *cp;
-+ #if defined(HAVE_GETLINE)
-+       ssize_t n = getline (&buf, &buflen, fp);
-+ #elif defined (HAVE_GETDELIM)
-+       ssize_t n = getdelim (&buf, &buflen, '\n', fp);
-+ #else
-+       ssize_t n;
-+ 
-+       if (buf == NULL)
-+         {
-+           buflen = 8096;
-+           buf = malloc (buflen);
-+         }
-+       buf[0] = '\0';
-+       fgets (buf, buflen - 1, fp);
-+       if (buf != NULL)
-+         n = strlen (buf);
-+       else
-+         n = 0;
-+ #endif /* HAVE_GETLINE / HAVE_GETDELIM */
-+       cp = buf;
-+ 
-+       if (n < 1)
-+         break;
-+ 
-+       tmp = strchr (cp, '#');  /* remove comments */
-+       if (tmp)
-+         *tmp = '\0';
-+       while (isspace ((int)*cp))    /* remove spaces and tabs */
-+         ++cp;
-+       if (*cp == '\0')        /* ignore empty lines */
-+         continue;
-+ 
-+       if (cp[strlen (cp) - 1] == '\n')
-+         cp[strlen (cp) - 1] = '\0';
-+ 
-+       tmp = strsep (&cp, " \t=");
-+       if (cp != NULL)
-+ 	while (isspace ((int)*cp) || *cp == '=')
-+ 	  ++cp;
-+ 
-+       store (tmp, cp);
-+     }
-+   fclose (fp);
-+ 
-+   if (buf)
-+     free (buf);
-+ }
-+ 
-+ static void
-+ load_defaults (void)
-+ {
-+   load_defaults_internal ("/etc/default/su");
-+   load_defaults_internal ("/etc/login.defs");
-+ }
-+ 
-+ int
-+ getdef_bool (const char *name, int dflt)
-+ {
-+   const char *val;
-+ 
-+   if (list == NULL)
-+     load_defaults ();
-+ 
-+   val = search (name);
-+ 
-+   if (val == NULL)
-+     return dflt;
-+ 
-+   return (strcasecmp (val, "yes") == 0);
-+ }
-+ 
-+ long
-+ getdef_num (const char *name, long dflt)
-+ {
-+   const char *val;
-+   char *cp;
-+   long retval;
-+ 
-+   if (list == NULL)
-+     load_defaults ();
-+ 
-+   val = search (name);
-+ 
-+   if (val == NULL)
-+     return dflt;
-+ 
-+   retval = strtol (val, &cp, 0);
-+   if (*cp != '\0' ||
-+       ((retval == LONG_MAX || retval == LONG_MIN) && errno == ERANGE))
-+     {
-+       fprintf (stderr,
-+ 	       "%s contains invalid numerical value: %s!\n",
-+ 	       name, val);
-+       retval = dflt;
-+     }
-+   return retval;
-+ }
-+ 
-+ unsigned long
-+ getdef_unum (const char *name, unsigned long dflt)
-+ {
-+   const char *val;
-+   char *cp;
-+   unsigned long retval;
-+ 
-+   if (list == NULL)
-+     load_defaults ();
-+ 
-+   val = search (name);
-+ 
-+   if (val == NULL)
-+     return dflt;
-+ 
-+   retval = strtoul (val, &cp, 0);
-+   if (*cp != '\0' || (retval == ULONG_MAX && errno == ERANGE))
-+     {
-+       fprintf (stderr,
-+ 	       "%s contains invalid numerical value: %s!\n",
-+ 	       name, val);
-+       retval = dflt;
-+     }
-+   return retval;
-+ }
-+ 
-+ const char *
-+ getdef_str (const char *name, const char *dflt)
-+ {
-+   const char *retval;
-+ 
-+   if (list == NULL)
-+     load_defaults ();
-+ 
-+   retval = search (name);
-+ 
-+   return retval ?: dflt;
-+ }
-+ 
-+ #if defined(TEST)
-+ 
-+ int
-+ main ()
-+ {
-+   printf ("CYPT=%s\n", getdef_str ("cRypt", "no"));
-+   printf ("LOG_UNKFAIL_ENAB=%s\n", getdef_str ("log_unkfail_enab",""));
-+   printf ("DOESNOTEXIST=%s\n", getdef_str ("DOESNOTEXIST","yes"));
-+   return 0;
-+ }
-+ 
-+ #endif
-diff -rcN coreutils-6.7-orig/src/getdef.h coreutils-6.7/src/getdef.h
-*** coreutils-6.7-orig/src/getdef.h	Thu Jan  1 00:00:00 1970
---- coreutils-6.7/src/getdef.h	Tue Jan 16 22:18:57 2007
-***************
-*** 0 ****
---- 1,29 ----
-+ /* Copyright (C) 2003, 2005 Thorsten Kukuk
-+    Author: Thorsten Kukuk <kukuk@suse.de>
-+ 
-+    This program is free software; you can redistribute it and/or modify
-+    it under the terms of the GNU General Public License version 2 as
-+    published by the Free Software Foundation.
-+ 
-+    This program is distributed in the hope that it will be useful,
-+    but WITHOUT ANY WARRANTY; without even the implied warranty of
-+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+    GNU General Public License for more details.
-+ 
-+    You should have received a copy of the GNU General Public License
-+    along with this program; if not, write to the Free Software Foundation,
-+    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
-+ 
-+ #ifndef _GETDEF_H_
-+ 
-+ #define _GETDEF_H_ 1
-+ 
-+ extern int getdef_bool (const char *name, int dflt);
-+ extern long getdef_num (const char *name, long dflt);
-+ extern unsigned long getdef_unum (const char *name, unsigned long dflt);
-+ extern const char *getdef_str (const char *name, const char *dflt);
-+ 
-+ /* Free all data allocated by getdef_* calls before.  */
-+ extern void free_getdef_data (void);
-+ 
-+ #endif /* _GETDEF_H_ */
-diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
-*** coreutils-6.7-orig/src/su.c	Sun Oct 22 16:54:15 2006
---- coreutils-6.7/src/su.c	Tue Jan 16 22:19:02 2007
-***************
-*** 38,43 ****
---- 38,49 ----
+*** 37,42 ****
+--- 37,48 ----
      restricts who can su to UID 0 accounts.  RMS considers that to
      be fascist.
   
@@ -613,8 +315,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
      -DSYSLOG_SUCCESS	Log successful su's (by default, to root) with syslog.
      -DSYSLOG_FAILURE	Log failed su's (by default, to root) with syslog.
 ***************
-*** 53,58 ****
---- 59,71 ----
+*** 52,57 ****
+--- 58,70 ----
   #include <sys/types.h>
   #include <pwd.h>
   #include <grp.h>
@@ -629,8 +331,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   /* Hide any system prototype for getusershell.
      This is necessary because some Cray systems have a conflicting
 ***************
-*** 66,71 ****
---- 79,87 ----
+*** 65,70 ****
+--- 78,86 ----
   
   #if HAVE_SYSLOG_H && HAVE_SYSLOG
   # include <syslog.h>
@@ -641,7 +343,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   # undef SYSLOG_SUCCESS
   # undef SYSLOG_FAILURE
 ***************
-*** 99,117 ****
+*** 98,116 ****
   # include <paths.h>
   #endif
   
@@ -661,7 +363,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   
   /* The shell to run if none is given in the user's passwd entry.  */
   #define DEFAULT_SHELL "/bin/sh"
---- 115,127 ----
+--- 114,126 ----
   # include <paths.h>
   #endif
   
@@ -676,8 +378,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   /* The shell to run if none is given in the user's passwd entry.  */
   #define DEFAULT_SHELL "/bin/sh"
 ***************
-*** 119,125 ****
---- 129,137 ----
+*** 118,124 ****
+--- 128,136 ----
   /* The user to become if none is specified.  */
   #define DEFAULT_USER "root"
   
@@ -688,8 +390,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   void endusershell ();
   void setusershell ();
 ***************
-*** 216,222 ****
---- 228,253 ----
+*** 212,218 ****
+--- 224,249 ----
   }
   #endif
   
@@ -717,7 +419,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
      false if not.  Return true without asking for a password if run by UID 0
      or if PW has an empty password.  */
 ***************
-*** 224,233 ****
+*** 220,229 ****
   static bool
   correct_password (const struct passwd *pw)
   {
@@ -728,7 +430,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   
     endspent ();
     if (sp)
---- 255,303 ----
+--- 251,299 ----
   static bool
   correct_password (const struct passwd *pw)
   {
@@ -779,8 +481,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
     endspent ();
     if (sp)
 ***************
-*** 248,253 ****
---- 318,324 ----
+*** 244,249 ****
+--- 314,320 ----
     encrypted = crypt (unencrypted, correct);
     memset (unencrypted, 0, strlen (unencrypted));
     return STREQ (encrypted, correct);
@@ -789,7 +491,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   
   /* Update `environ' for the new shell based on PW, with SHELL being
 ***************
-*** 272,279 ****
+*** 268,275 ****
         xsetenv ("USER", pw->pw_name);
         xsetenv ("LOGNAME", pw->pw_name);
         xsetenv ("PATH", (pw->pw_uid
@@ -798,7 +500,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
       }
     else
       {
---- 343,350 ----
+--- 339,346 ----
         xsetenv ("USER", pw->pw_name);
         xsetenv ("LOGNAME", pw->pw_name);
         xsetenv ("PATH", (pw->pw_uid
@@ -808,8 +510,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
     else
       {
 ***************
-*** 283,288 ****
---- 354,365 ----
+*** 279,284 ****
+--- 350,361 ----
   	{
   	  xsetenv ("HOME", pw->pw_dir);
   	  xsetenv ("SHELL", shell);
@@ -823,28 +525,28 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
   	    {
   	      xsetenv ("USER", pw->pw_name);
 ***************
-*** 303,314 ****
---- 380,414 ----
-      error (EXIT_FAIL, errno, _("cannot set groups"));
+*** 299,310 ****
+--- 376,410 ----
+      error (EXIT_FAILURE, errno, _("cannot set groups"));
     endgrent ();
   #endif
 + #ifdef USE_PAM
 +   retval = pam_setcred (pamh, PAM_ESTABLISH_CRED);
 +   if (retval != PAM_SUCCESS)
-+     error (EXIT_FAIL, 0, "%s", pam_strerror (pamh, retval));
++     error (EXIT_FAILURE, 0, "%s", pam_strerror (pamh, retval));
 + 
 +   retval = pam_open_session (pamh,0);
 +   if (retval != PAM_SUCCESS)
-+     {
-+        pam_setcred (pamh, PAM_DELETE_CRED);
-+        error (EXIT_FAIL, 0, "could not open session: %s",
-+               pam_strerror (pamh, retval));
-+     }
++   {
++     pam_setcred (pamh, PAM_DELETE_CRED);
++     error (EXIT_FAILURE, 0, "could not open session: %s",
++            pam_strerror (pamh, retval));
++   }
 + #endif /* USE_PAM */
     if (setgid (pw->pw_gid))
-      error (EXIT_FAIL, errno, _("cannot set group id"));
+      error (EXIT_FAILURE, errno, _("cannot set group id"));
     if (setuid (pw->pw_uid))
-      error (EXIT_FAIL, errno, _("cannot set user id"));
+      error (EXIT_FAILURE, errno, _("cannot set user id"));
   }
   
 + #ifdef USE_PAM
@@ -861,8 +563,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
      If COMMAND is nonzero, pass it to the shell with the -c option.
      Pass ADDITIONAL_ARGS to the shell as more arguments; there
 ***************
-*** 321,326 ****
---- 421,523 ----
+*** 317,322 ****
+--- 417,519 ----
     size_t n_args = 1 + fast_startup + 2 * !!command + n_additional_args + 1;
     char const **args = xnmalloc (n_args, sizeof *args);
     size_t argno = 1;
@@ -967,8 +669,8 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
     if (simulate_login)
       {
 ***************
-*** 339,344 ****
---- 536,546 ----
+*** 335,340 ****
+--- 532,542 ----
       args[argno++] = "-f";
     if (command)
       {
@@ -981,19 +683,19 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
         args[argno++] = command;
       }
 ***************
-*** 495,500 ****
---- 697,705 ----
+*** 491,496 ****
+--- 693,701 ----
   #ifdef SYSLOG_FAILURE
         log_su (pw, false);
   #endif
 + #ifdef USE_PAM
 +       sleep (getdef_num ("FAIL_DELAY", 1));
 + #endif
-        error (EXIT_FAIL, 0, _("incorrect password"));
+        error (EXIT_FAILURE, 0, _("incorrect password"));
       }
   #ifdef SYSLOG_SUCCESS
 ***************
-*** 516,524 ****
+*** 512,520 ****
         shell = NULL;
       }
     shell = xstrdup (shell ? shell : pw->pw_shell);
@@ -1003,7 +705,7 @@ diff -rcN coreutils-6.7-orig/src/su.c coreutils-6.7/src/su.c
     if (simulate_login && chdir (pw->pw_dir) != 0)
       error (0, errno, _("warning: cannot change directory to %s"), pw->pw_dir);
   
---- 721,732 ----
+--- 717,728 ----
         shell = NULL;
       }
     shell = xstrdup (shell ? shell : pw->pw_shell);
