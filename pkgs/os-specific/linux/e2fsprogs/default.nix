@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "e2fsprogs-1.41.3";
+  name = "e2fsprogs-1.41.4";
   
   src = fetchurl {
-    url = mirror://sourceforge/e2fsprogs/e2fsprogs-1.41.3.tar.gz;
-    sha256 = "0yldax5z1d1gfxpvzmr8y2z5zg5xhbi9pjjy4yw0q28dd2pfsxyf";
+    url = mirror://sourceforge/e2fsprogs/e2fsprogs-1.41.4.tar.gz;
+    sha256 = "1p10j04gwr286qc2pjpp72k38nqk2d2n7sslwhvxgb995gp0zh9c";
   };
   
   configureFlags =
