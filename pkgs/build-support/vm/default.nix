@@ -5,7 +5,7 @@ with pkgs;
 rec {
 
 
-  inherit (kernelPackages_2_6_26) kernel klibcShrunk;
+  inherit (kernelPackages_2_6_26) kernel;
 
 
   modulesClosure = makeModulesClosure {

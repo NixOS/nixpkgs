@@ -480,6 +480,14 @@ let
     inherit fetchurl stdenv fuse;
   };
 
+  # It builds, but it has paths pointing to the default profile,
+  # hardcoded to /nix/var/nix/profiles/default/bin. We need to
+  # know its dependencies for the executable paths and stop
+  # using the profiles, pointing directly to the store paths needed.
+  #aircrackng = import ../tools/networking/aircrack-ng {
+  #  inherit fetchurl stdenv libpcap openssl zlib;
+  #};
+
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
     wxGTK = wxGTK28;
@@ -921,6 +929,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  kismet = import ../applications/networking/sniffers/kismet {
+    inherit fetchurl stdenv libpcap ncurses expat;
+  };
+
   ktorrent = import ../tools/networking/p2p/ktorrent {
     inherit fetchurl stdenv pkgconfig kdelibs
       xlibs zlib libpng libjpeg perl gmp;
@@ -1096,6 +1108,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  /* WARNING: this version is unsuitable for using with a setuid wrapper */
+  ppp = builderDefsPackage (import ../tools/networking/ppp) {
+  };
+
   proxychains = import ../tools/networking/proxychains {
     inherit fetchurl stdenv;
   };
@@ -1153,6 +1169,10 @@ let
 
   rlwrap = composedArgsAndFun (selectVersion ../tools/misc/rlwrap "0.28") {
     inherit builderDefs readline;
+  };
+
+  rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
+    inherit ppp;
   };
 
   rpm = import ../tools/package-management/rpm {
@@ -1312,7 +1332,7 @@ let
     inherit (gtkLibs) glib;
   };
 
-  wget = composedArgsAndFun (selectVersion ../tools/networking/wget "1.11") {
+  wget = import ../tools/networking/wget {
     inherit fetchurl stdenv gettext;
   };
 
@@ -3038,7 +3058,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs212;
+  gtkLibs = recurseIntoAttrs gtkLibs214;
 
   gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
@@ -8372,14 +8392,16 @@ let
   });
 
   fsg = import ../games/fsg {
-    inherit stdenv fetchurl pkgconfig;
+    inherit stdenv fetchurl pkgconfig mesa;
     inherit (gtkLibs) glib gtk;
+    inherit (xlibs) libX11 xproto;
     wxGTK = wxGTK28deps {unicode = false;};
   };
 
   fsgAltBuild = import ../games/fsg/alt-builder.nix {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl mesa;
     wxGTK = wxGTK28deps {unicode = false;};
+    inherit (xlibs) libX11 xproto;
     stringsWithDeps = import ../lib/strings-with-deps.nix {
       inherit stdenv lib;
     };
@@ -8388,6 +8410,10 @@ let
 
   gemrb = import ../games/gemrb {
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
+  };
+
+  gnuchess = builderDefsPackage (import ../games/gnuchess) {
+    flex = flex2535;
   };
 
   lincity = builderDefsPackage (import ../games/lincity) {
@@ -8461,6 +8487,12 @@ let
 
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
+  };
+
+  xboard = builderDefsPackage (import ../games/xboard) {
+    inherit (xlibs) libX11 xproto libXt libXaw libSM 
+      libICE libXmu libXext;
+    inherit gnuchess;
   };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {

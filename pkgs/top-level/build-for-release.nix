@@ -162,7 +162,6 @@ let
       slim
       spidermonkey
       splashutils_13
-      splashutils_15
       ssmtp
       strace
       su
@@ -294,6 +293,7 @@ let
       pidgin
       postgresql_jdbc
       sdf
+      splashutils_15
       strategoxt
       strategoxtUtils
       syslinux

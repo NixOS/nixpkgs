@@ -15,7 +15,7 @@ rec {
 
   glibmm = (import ./glibmm) (args // { inherit glib; });
 
-  #pangomm = (import ./pangomm) (args // { inherit pango glibmm cairomm; });
+  pangomm = (import ./pangomm) (args // { inherit pango glibmm cairomm; });
 
-  #gtkmm = (import ./gtkmm) (args // { inherit gtk atk glibmm; });
+  gtkmm = (import ./gtkmm) (args // { inherit gtk atk glibmm; });
 }

@@ -1,12 +1,14 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langF77 ? false
 , profiledCompiler ? false
+, gmp ? null, mpfr ? null, bison ? null, flex ? null
 }:
 
 assert langC;
 assert stdenv.isDarwin;
+assert langF77 -> gmp != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "gcc-4.0.1-apple-5341";
   builder = ./builder.sh;
   src = fetchurl {
@@ -17,4 +19,4 @@ stdenv.mkDerivation {
     [./pass-cxxcpp.patch]
     ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
   inherit noSysDirs langC langCC langF77 profiledCompiler;
-}
+} // (if langF77 then {buildInputs = [gmp mpfr bison flex];} else {}))
