@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "18qvi12843kvqkpcmrjxz1929s833q5d0jzm8hc965j663g1fll5";
   };
 
-  doCheck = true;
+  doCheck = !stdenv ? isDarwin;
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;
