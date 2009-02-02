@@ -1,10 +1,11 @@
-args: with args;
+{stdenv, fetchurl, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "wget-" + version;
+  name = "wget-1.11.4";
+  
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.bz2";
-    sha256 = "0mhd3181zdp1fwirxw0km7502sfvjmm1ncska9w6s2drczf37aix";
+    sha256 = "1yr7w182n7lvkajvq07wnw65sw2vmxjkc3611kpc728vhvi54zwb";
   };
 
   buildInputs = [gettext];

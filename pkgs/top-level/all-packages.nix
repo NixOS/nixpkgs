@@ -1344,7 +1344,7 @@ let
     inherit (gtkLibs) glib;
   };
 
-  wget = composedArgsAndFun (selectVersion ../tools/networking/wget "1.11") {
+  wget = import ../tools/networking/wget {
     inherit fetchurl stdenv gettext;
   };
 
