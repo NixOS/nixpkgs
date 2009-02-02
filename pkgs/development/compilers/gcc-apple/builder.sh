@@ -60,7 +60,7 @@ preConfigure() {
         langs="$langs,c++"
     fi
     if test -n "$langF77"; then
-        langs="$langs,f77"
+        langs="$langs,f95"
     fi
 
     # Perform the build in a different directory.
