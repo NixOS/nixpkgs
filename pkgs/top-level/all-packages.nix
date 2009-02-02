@@ -3038,7 +3038,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs214;
+  gtkLibs = recurseIntoAttrs gtkLibs212;
 
   gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
     inherit fetchurl stdenv x11 libtiff libjpeg libpng;
