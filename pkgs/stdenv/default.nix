@@ -10,7 +10,7 @@
 # system, e.g., cygwin and mingw builds on i686-cygwin.  Most people
 # can ignore it.
 
-{system, stdenvType ? system, allPackages}:
+{system, stdenvType ? system, allPackages ? import ../..}:
 
 assert system != "i686-cygwin" -> system == stdenvType;
 
@@ -18,21 +18,14 @@ assert system != "i686-cygwin" -> system == stdenvType;
 rec {
 
 
-  # Trivial environment used for building other environments.
-  stdenvInitial = import ./initial {
-    name = "stdenv-initial";
-    inherit system;
-  };
-
-
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = import ./native {
-    inherit stdenvInitial;
-  };
+  stdenvNative = (import ./native {
+    inherit system allPackages;
+  }).stdenv;
 
   stdenvNativePkgs = allPackages {
     bootStdenv = stdenvNative;
@@ -41,10 +34,10 @@ rec {
 
 
   # The Nix build environment.
-  stdenvNix = import ./nix (rec {
+  stdenvNix = import ./nix {
     stdenv = stdenvNative;
     pkgs = stdenvNativePkgs;
-  });
+  };
 
 
   # Linux standard environment.

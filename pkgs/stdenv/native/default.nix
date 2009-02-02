@@ -1,10 +1,10 @@
-{stdenvInitial}:
+{system, allPackages ? import ../../..}:
 
-let
-
-  system = stdenvInitial.system;
+rec {
 
   shell = "/bin/bash";
+
+  path = ["/" "/usr" "/usr/local"];
 
 
   prehookBase = builtins.toFile "prehook-base.sh" ''
@@ -46,44 +46,53 @@ let
 
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).  
-  makeStdenv = {stdenvBoot, extraPath, forceFetchurlBoot}: import ../generic {
-    name = "stdenv-native";
+  makeStdenv =
+    {gcc, fetchurl, extraPath ? []}:
 
-    preHook =
-      if system == "i686-darwin" || system == "powerpc-darwin" then prehookDarwin else
-      if system == "i686-freebsd" then prehookFreeBSD else
-      prehookBase;
+    import ../generic {
+      name = "stdenv-native";
 
-    initialPath = extraPath ++ ["/" "/usr" "/usr/local"];
+      preHook =
+        if system == "i686-darwin" || system == "powerpc-darwin" then prehookDarwin else
+        if system == "i686-freebsd" then prehookFreeBSD else
+        prehookBase;
 
-    stdenv = stdenvBoot;
+      initialPath = extraPath ++ path;
 
-    gcc = import ../../build-support/gcc-wrapper {
-      name = "gcc-native";
-      nativeTools = true;
-      nativeLibc = true;
-      nativePrefix = "/usr";
-      stdenv = stdenvBoot;
+      fetchurlBoot = fetchurl;
+
+      inherit system shell gcc;
     };
 
-    inherit shell forceFetchurlBoot;
 
-    fetchurlBoot = import ../../build-support/fetchurl {
-      stdenv = stdenvBoot;
-      # Curl should be in /usr/bin or so.
-      curl = null;
-    };
+  stdenvBoot0 = makeStdenv {
+    gcc = "/no-such-path";
+    fetchurl = null;
+  };
+  
+
+  gcc = import ../../build-support/gcc-wrapper {
+    name = "gcc-native";
+    nativeTools = true;
+    nativeLibc = true;
+    nativePrefix = "/usr";
+    stdenv = stdenvBoot0;
   };
 
-
+    
+  fetchurl = import ../../build-support/fetchurl {
+    stdenv = stdenvBoot0;
+    # Curl should be in /usr/bin or so.
+    curl = null;
+  };
+  
+    
   # First build a stdenv based only on tools outside the store.
   stdenvBoot1 = makeStdenv {
-    stdenvBoot = stdenvInitial;
-    extraPath = [];
-    forceFetchurlBoot = true;
-  };
+    inherit gcc fetchurl;
+  } // {inherit fetchurl;};
 
-  stdenvBoot1Pkgs = import ../../.. {
+  stdenvBoot1Pkgs = allPackages {
     inherit system;
     bootStdenv = stdenvBoot1;
   };
@@ -93,9 +102,10 @@ let
   # most systems don't have, so we mustn't rely on the native
   # environment providing it).
   stdenvBoot2 = makeStdenv {
-    stdenvBoot = stdenvBoot1;
+    inherit gcc fetchurl;
     extraPath = [stdenvBoot1Pkgs.replace];
-    forceFetchurlBoot = false;
   };
 
-in stdenvBoot2
+
+  stdenv = stdenvBoot2;
+}

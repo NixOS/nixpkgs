@@ -22,6 +22,7 @@ rec {
   # 1) Create a standard environment by downloading pre-built binaries
   # of coreutils, GCC, etc.
 
+  
   # This function downloads a file.
   download = {url, sha256}: derivation {
     name = baseNameOf (toString url);
@@ -34,6 +35,7 @@ rec {
     impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
   };
 
+  
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = derivation {
     name = "bootstrap-tools";
@@ -77,8 +79,8 @@ rec {
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
-      forceFetchurlBoot = true;
-      inherit gcc extraAttrs;
+      inherit gcc;
+      extraAttrs = extraAttrs // {inherit fetchurl;};
     };
 
 
@@ -215,8 +217,7 @@ rec {
 
     shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
     
-    fetchurlBoot = stdenvLinuxBoot3.fetchurlBoot;
-    forceFetchurlBoot = false;
+    fetchurlBoot = fetchurl;
     
     extraAttrs = {
       inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
