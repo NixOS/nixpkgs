@@ -482,13 +482,9 @@ let
     inherit fetchurl stdenv fuse;
   };
 
-  # It builds, but it has paths pointing to the default profile,
-  # hardcoded to /nix/var/nix/profiles/default/bin. We need to
-  # know its dependencies for the executable paths and stop
-  # using the profiles, pointing directly to the store paths needed.
-  #aircrackng = import ../tools/networking/aircrack-ng {
-  #  inherit fetchurl stdenv libpcap openssl zlib;
-  #};
+  aircrackng = import ../tools/networking/aircrack-ng {
+    inherit fetchurl stdenv libpcap openssl zlib wirelesstools;
+  };
 
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
