@@ -256,6 +256,7 @@ rec {
 
   optionalString = cond: string: if cond then string else "";
 
+  
   # Return the second argument if the first one is true or the empty version
   # of the second argument.
   ifEnable = cond: val:
@@ -266,6 +267,7 @@ rec {
     else if (val == true || val == false) then false
     else null;
 
+    
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
     if builtins.lessThan last first
@@ -284,7 +286,7 @@ rec {
   logicalOR = x: y: x || y;
   logicalAND = x: y: x && y;
 
-  
+
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
