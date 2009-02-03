@@ -1,11 +1,11 @@
 {stdenv, fetchurl, noSysDirs}:
 
 stdenv.mkDerivation rec {
-  name = "binutils-2.19";
+  name = "binutils-2.19.1";
   
   src = fetchurl {
     url = "mirror://gnu/binutils/${name}.tar.bz2";
-    sha256 = "12jjvb9p9j59a46glxy15ff5h4i2s3izpx05gf8jmxibzh7s2bmx";
+    sha256 = "1xirhxwc94bk6hn2k6i5ly4knbcjsqgy2lp7kl1s5q5csys2b0iy";
   };
 
   patches = [
@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
+
+    longDescription = ''
+      The GNU Binutils are a collection of binary tools.  The main
+      ones are `ld' (the GNU linker) and `as' (the GNU assembler).
+      They also include the BFD (Binary File Descriptor) library,
+      `gprof', `nm', `strip', etc.
+    '';
 
     homepage = http://www.gnu.org/software/binutils/;
 
