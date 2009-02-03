@@ -7939,7 +7939,7 @@ let
   };
 
   rsync = import ../applications/networking/sync/rsync {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv acl;
   };
 
   rxvt = import ../applications/misc/rxvt {
