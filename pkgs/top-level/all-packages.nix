@@ -5806,8 +5806,7 @@ let
   };
 
   postfix = import ../servers/mail/postfix {
-    inherit fetchurl stdenv db4 openssl cyrus_sasl;
-    glibc = stdenv.glibc;
+    inherit fetchurl stdenv db4 openssl cyrus_sasl glibc;
   };
 
   pulseaudio = import ../servers/pulseaudio {

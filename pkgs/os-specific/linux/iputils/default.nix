@@ -1,6 +1,6 @@
 {stdenv, fetchurl, kernelHeaders, glibc}:
 
-assert stdenv.isLinux;
+assert stdenv.isLinux && stdenv.system != "powerpc-linux";
 
 stdenv.mkDerivation {
   name = "iputils-20020927";

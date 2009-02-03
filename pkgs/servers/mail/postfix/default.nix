@@ -1,22 +1,23 @@
-{stdenv, fetchurl, db4, glibc
-  , openssl
-  , cyrus_sasl
-}:
+{stdenv, fetchurl, db4, glibc, openssl, cyrus_sasl}:
 
-assert stdenv.isLinux;
+assert stdenv.isLinux && stdenv ? coreutils;
 
 stdenv.mkDerivation {
   name = "postfix-2.2.11";
+  
   src = fetchurl {
     url = ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/postfix-2.2.11.tar.gz;
     sha256 = "04hxpyd3h1f48fnppjwqqxbil13bcwidzpfkra2pgm7h42d9blq7";
   };
 
   installTargets = ["non-interactive-package"];
+  
   installFlags = [" install_root=$out "];
-  preInstall = "
+  
+  preInstall = ''
     sed -e '/^PATH=/d' -i postfix-install
-  ";
+  '';
+  
   postInstall = ''
     ensureDir $out
     mv ut/$out/* $out/
@@ -44,6 +45,8 @@ stdenv.mkDerivation {
   '';
 
   buildinputs = [db4 openssl cyrus_sasl];
+  
   patches = [./postfix-2.2.9-db.patch ./postfix-2.2.9-lib.patch];
+  
   inherit glibc;
 }
