@@ -11,12 +11,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "firefox-3.0.5";
+  name = "firefox-3.0.6";
 
   src = fetchurl {
     # Don't forget to update xulrunner.nix as well!
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.5/source/firefox-3.0.5-source.tar.bz2;
-    sha1 = "f934e073efaad3d4dde847c8491fa9529564d5d2";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.6/source/firefox-3.0.6-source.tar.bz2;
+    sha1 = "e2845c07b507308664f6f39086a050b2773382fb";
   };
 
   buildInputs = [
