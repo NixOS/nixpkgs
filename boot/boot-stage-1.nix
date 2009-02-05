@@ -8,26 +8,6 @@
 
 rec {
 
-  pkgsDiet = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
-    system = pkgs.stdenv.system;
-    bootStdenv = pkgs.useDietLibC pkgs.stdenv;
-  };
-
-  pkgsKlibc = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
-    system = pkgs.stdenv.system;
-    bootStdenv = pkgs.useKlibc pkgs.stdenv pkgs.klibc;
-  };
-
-  pkgsStatic = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {
-    system = pkgs.stdenv.system;
-    bootStdenv = pkgs.makeStaticBinaries pkgs.stdenv;
-  };
-
-  stdenvLinuxStuff = import "${nixpkgsPath}/pkgs/stdenv/linux" {
-    system = pkgs.stdenv.system;
-    allPackages = import "${nixpkgsPath}/pkgs/top-level/all-packages.nix";
-  };
-  
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
@@ -39,41 +19,82 @@ rec {
   };
 
 
-  udev = pkgsKlibc.udev;
-
-    
-  # Some additional utilities needed in stage 1, notably mount.  We
-  # don't want to bring in all of util-linux, so we just copy what we
-  # need.
+  # Some additional utilities needed in stage 1, like mount, lvm, fsck
+  # etc.  We don't want to bring in all of those packages, so we just
+  # copy what we need.  Instead of using statically linked binaries,
+  # we just copy what we need from Glibc and use patchelf to make it
+  # work.
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
-      inherit (pkgsStatic) utillinux;
-      inherit udev;
-      e2fsprogs = pkgsDiet.e2fsprogs;
-      devicemapper =
-        if config.boot.initrd.lvm
-        then assert pkgs.devicemapper.enableStatic; pkgs.devicemapper
-        else null;
-      lvm2 =
-        if config.boot.initrd.lvm
-        then assert pkgs.lvm2.enableStatic; pkgs.lvm2
-        else null;
-      allowedReferences = []; # prevent accidents like glibc being included in the initrd
+      devicemapper = if config.boot.initrd.lvm then pkgs.devicemapper else null;
+      lvm2 = if config.boot.initrd.lvm then pkgs.lvm2 else null;
+      allowedReferences = ["out"]; # prevent accidents like glibc being included in the initrd
     }
     ''
       ensureDir $out/bin
-      if test -n "$devicemapper"; then
-        cp $devicemapper/sbin/dmsetup.static $out/bin/dmsetup
-        cp $lvm2/sbin/lvm.static $out/bin/lvm
-      fi
-      cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
-      cp -pd $e2fsprogs/sbin/fsck $e2fsprogs/sbin/e2fsck $e2fsprogs/sbin/tune2fs $out/bin
+      ensureDir $out/lib
+      
+      # Copy what we need from Glibc.
+      cp -p ${pkgs.glibc}/lib/ld-linux*.so.2 $out/lib
+      cp -p ${pkgs.glibc}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.glibc}/lib/libpthread.so.* $out/lib
+      cp -p ${pkgs.glibc}/lib/librt.so.* $out/lib
+      cp -p ${pkgs.glibc}/lib/libdl.so.* $out/lib
+
+      # Copy some utillinux stuff.
+      cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount ${pkgs.utillinux}/sbin/pivot_root $out/bin
+
+      # Copy e2fsck and friends.      
+      cp ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
+      cp ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
+      cp ${pkgs.e2fsprogs}/sbin/fsck $out/bin
       ln -s e2fsck $out/bin/fsck.ext2
       ln -s e2fsck $out/bin/fsck.ext3
       ln -s e2fsck $out/bin/fsck.ext4
-      cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
-      cp $udev/lib/udev/*_id $out/bin
-      for i in $out/bin/*; do if ! test -L $i; then nuke-refs $i; fi; done
+
+      cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
+
+      # Copy devicemapper and lvm, if we need it.
+      if test -n "$devicemapper"; then
+        cp $devicemapper/sbin/dmsetup $out/bin/dmsetup
+        cp $devicemapper/lib/libdevmapper.so.*.* $out/lib
+        cp $lvm2/sbin/lvm $out/bin/lvm
+      fi
+
+      # Copy udev.
+      cp ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
+      cp ${pkgs.udev}/lib/udev/*_id $out/bin
+      cp ${pkgs.udev}/lib/libvolume_id.so.* $out/lib
+      
+      # Copy bash.
+      cp ${pkgs.bash}/bin/bash $out/bin
+      ln -s bash $out/bin/sh
+
+      # Run patchelf to make the programs refer to the copied libraries.
+      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
+
+      for i in $out/bin/*; do
+          if ! test -L $i; then
+              echo "patching $i..."
+              patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib $i || true
+          fi
+      done
+
+      # Make sure that the patchelf'ed binaries still work.
+      echo "testing patched programs..."
+      $out/bin/bash --version
+      export LD_LIBRARY_PATH=$out/lib
+      $out/bin/mount --version
+      $out/bin/umount --version
+      $out/bin/e2fsck -V
+      $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
+      $out/bin/fsck -N
+      $out/bin/udevadm --version
+      $out/bin/vol_id 2>&1 | grep "no device"
+      if test -n "$devicemapper"; then
+          $out/bin/dmsetup --version | grep "version:"
+          LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
+      fi
     ''; # */
   
 
@@ -89,7 +110,7 @@ rec {
     name = "udev-rules";
     buildCommand = ''
       ensureDir $out
-      cp ${udev}/*/udev/rules.d/60-persistent-storage.rules $out/
+      cp ${pkgs.udev}/*/udev/rules.d/60-persistent-storage.rules $out/
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ata_id ${extraUtils}/bin/ata_id \
         --replace usb_id ${extraUtils}/bin/usb_id \
@@ -112,11 +133,11 @@ rec {
   bootStage1 = pkgs.substituteAll {
     src = ./boot-stage-1-init.sh;
 
+    shell = "${extraUtils}/bin/bash";
+
     isExecutable = true;
 
-    staticShell = stdenvLinuxStuff.bootstrapTools.bash;
-    
-    inherit modulesClosure udevConf;
+    inherit modulesClosure udevConf extraUtils;
     
     inherit (config.boot) isLiveCD resumeDevice;
 
