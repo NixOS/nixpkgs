@@ -67,10 +67,13 @@ rec {
         cp $lvm2/sbin/lvm.static $out/bin/lvm
       fi
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
-      cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $e2fsprogs/sbin/tune2fs $out/bin
+      cp -pd $e2fsprogs/sbin/fsck $e2fsprogs/sbin/e2fsck $e2fsprogs/sbin/tune2fs $out/bin
+      ln -s e2fsck $out/bin/fsck.ext2
+      ln -s e2fsck $out/bin/fsck.ext3
+      ln -s e2fsck $out/bin/fsck.ext4
       cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
       cp $udev/lib/udev/*_id $out/bin
-      nuke-refs $out/bin/*
+      for i in $out/bin/*; do if ! test -L $i; then nuke-refs $i; fi; done
     ''; # */
   
 
