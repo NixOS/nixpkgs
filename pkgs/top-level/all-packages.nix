@@ -474,7 +474,7 @@ let
       done < graph
     '';
 
-            
+
   ### TOOLS
 
 
@@ -523,6 +523,11 @@ let
 
   bfr = import ../tools/misc/bfr {
     inherit fetchurl stdenv perl;
+  };
+
+  syslogng = import ../tools/misc/syslog-ng {
+    inherit fetchurl stdenv eventlog pkgconfig;
+    inherit (gtkLibs) glib;
   };
 
   asciidoc = import ../tools/typesetting/asciidoc {
@@ -2142,8 +2147,8 @@ let
   };
 
   # new python and lib proposal
-  # - adding a python lib to buildinputs should be enough 
-  #   (handles .pth files by patching site.py   
+  # - adding a python lib to buildinputs should be enough
+  #   (handles .pth files by patching site.py
   #    while introducing NIX_PYTHON_SITES describing list of modules)
   # - adding pyCheck = "import foo" test scripts to ensure libraries can be imported
   # - providing pythonWrapper so that you can run python and import the selected libraries
@@ -2860,6 +2865,10 @@ let
   };
 
   expat = import ../development/libraries/expat {
+    inherit fetchurl stdenv;
+  };
+
+  eventlog = import ../development/libraries/eventlog {
     inherit fetchurl stdenv;
   };
 
@@ -5573,7 +5582,7 @@ let
       url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-Parser-2.36.tar.gz;
       sha256 = "0gyp5qfbflhkin1zv8l6wlkjwfjvsf45a3py4vc6ni82fj32kmcz";
     };
-    makeMakerFlags = "EXPATLIBPATH=${expat}/lib EXPATINCPATH=${expat}/include"; 
+    makeMakerFlags = "EXPATLIBPATH=${expat}/lib EXPATINCPATH=${expat}/include";
   };
 
   perlXMLRegExp = buildPerlPackage {
@@ -8524,7 +8533,7 @@ let
   };
 
   xboard = builderDefsPackage (import ../games/xboard) {
-    inherit (xlibs) libX11 xproto libXt libXaw libSM 
+    inherit (xlibs) libX11 xproto libXt libXaw libSM
       libICE libXmu libXext;
     inherit gnuchess;
   };
