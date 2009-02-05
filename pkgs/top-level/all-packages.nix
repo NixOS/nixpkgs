@@ -2,7 +2,10 @@
    imports the functions that build the various packages, and calls
    them with appropriate arguments.  The result is a set of all the
    packages in the Nix Packages collection for some particular
-   platform. */
+   platform.
+
+   You want to get to know where to add a new package ?
+   Have a look at nixpkgs/maintainers/docs/classification.txt */
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
