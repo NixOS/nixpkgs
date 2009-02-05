@@ -56,6 +56,13 @@ stdenv.mkDerivation {
     sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf
   '';
 
+  # Remove the documentation: it takes up >= 130 MB, which is more
+  # than half of the installed size.  Ideally we should put this in a
+  # separate package (as well as the Qt Designer).
+  postInstall = ''
+    rm -rf $out/share/doc
+  '';
+
   meta = {
     homepage = http://www.qtsoftware.com/downloads/opensource/appdev/linux-x11-cpp;
     description = "A cross-platform application framework for C++";
