@@ -30,8 +30,9 @@ test -e /etc/fstab || touch /etc/fstab # to shut up mount
 mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
 [ -s /etc/mtab ] && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
+
+rm -f /etc/mtab
 cat /proc/mounts > /etc/mtab
-mkdir -m 0755 -p /etc/nixos
 
 
 # Process the kernel command line.
@@ -80,10 +81,12 @@ mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
+mkdir -m 0755 -p /etc/nixos
 
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run
+rm -rf /var/lock
 
 #echo -n "cleaning \`/tmp'..."
 #rm -rf --one-file-system /tmp/*
