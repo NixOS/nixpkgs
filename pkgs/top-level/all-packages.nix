@@ -7349,7 +7349,7 @@ let
 
   emacsUnicode = lowPrio (import ../applications/editors/emacs-unicode {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
-      libpng libjpeg libungif libtiff;
+      libpng libjpeg libungif libtiff texinfo;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
     xawSupport = getPkgConfig "emacs" "xawSupport" false;

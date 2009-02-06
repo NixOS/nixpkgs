@@ -12,7 +12,7 @@ preConfigure() {
             --replace /usr/lib/crtn.o $libc/lib/crtn.o
     done
     
-    for i in Makefile.in ./src/Makefile.in ./lib-src/Makefile.in ./leim/Makefile.in ./admin/unidata/Makefile; do
+    for i in Makefile.in ./src/Makefile.in ./lib-src/Makefile.in ./leim/Makefile.in; do
         substituteInPlace $i --replace /bin/pwd pwd
     done
 }
