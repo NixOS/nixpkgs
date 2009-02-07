@@ -7106,7 +7106,7 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  carrier = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/carrier "2.4.2") {
+  carrier = builderDefsPackage (selectVersion ../applications/networking/instant-messengers/carrier "2.5.0") {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
       libtool automake autoconf;
