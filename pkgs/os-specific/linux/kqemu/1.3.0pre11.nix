@@ -16,6 +16,7 @@ rec {
     sed -e '/kernel_path=/akernel_path=$out$kernel_path' -i install.sh
     sed -e '/depmod/d' -i install.sh
     cat install.sh
+    sed -e '/linux\/ioctl.h/a#include <linux\/sched.h>' -i kqemu-linux.c
   '') ["minInit" "doUnpack"];
 
   phaseNames = ["preConfigure" "doConfigure" "debugStep" "doMakeInstall"];
