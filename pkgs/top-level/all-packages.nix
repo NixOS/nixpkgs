@@ -8250,6 +8250,11 @@ let
     inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
   };
 
+  xaos = builderDefsPackage (import ../applications/graphics/xaos) {
+    inherit (xlibs) libXt libX11 libXext xextproto xproto;
+    inherit gsl aalib zlib libpng intltool gettext perl;
+  };
+
   xara = import ../applications/graphics/xara {
     inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
