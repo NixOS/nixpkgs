@@ -8635,6 +8635,12 @@ let
 
   ### SCIENCE/BIOLOGY
 
+  alliance = import ../applications/science/electronics/alliance {
+    inherit fetchurl stdenv bison flex;
+    inherit (xlibs) xproto libX11 libXt libXpm;
+    motif = lesstif;
+  };
+
   arb = import ../applications/science/biology/arb {
     inherit fetchurl stdenv readline libpng zlib x11 lesstif93 freeglut perl;
     inherit (xlibs) libXpm libXaw libX11 libXext libXt;
