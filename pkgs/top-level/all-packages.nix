@@ -683,7 +683,7 @@ let
             gnused groff libxml2 libxslt makeWrapper;
   };
 
-  dosfstools = composedArgsAndFun (selectVersion ../tools/misc/dosfstools "3.00deb") {
+  dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
     inherit builderDefs;
   };
 
