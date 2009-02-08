@@ -3879,7 +3879,7 @@ let
     inherit postgresql mysql sqlite;
   });
 
-  vtk = import /root/nix/vtk/default.nix {
+  vtk = import ../development/libraries/vtk {
     inherit stdenv fetchurl cmake mesa;
     inherit (xlibs) libX11 xproto libXt;
   };
