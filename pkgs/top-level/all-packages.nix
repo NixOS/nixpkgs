@@ -7770,6 +7770,11 @@ let
     inherit (xlibs) libXi;
   };
 
+  mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
+    inherit firefox; 
+    inherit (xlibs) libX11 xproto;
+  };
+
   mpg321 = import ../applications/audio/mpg321 {
     inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
