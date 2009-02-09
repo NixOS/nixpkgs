@@ -6,7 +6,7 @@ let
   attrsets = import ./attrsets.nix;
   sources = import ./sources.nix;
   options = import ./options.nix;
-  debug = import ./attrsets.nix;
+  debug = import ./debug.nix;
   misc = import ./misc.nix;
 
 in
