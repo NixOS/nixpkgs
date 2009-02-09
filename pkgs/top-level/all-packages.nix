@@ -2965,6 +2965,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  gav = import ../games/gav {
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net;
+  };
+
   gdbm = import ../development/libraries/gdbm {
     inherit fetchurl stdenv;
   };
