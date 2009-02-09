@@ -7240,6 +7240,11 @@ let
     python = pythonFull;
   };
 
+  comical = import ../applications/graphics/comical {
+    inherit stdenv fetchurl utillinux zlib;
+    inherit wxGTK;
+  };
+
   cua = import ../applications/editors/emacs-modes/cua {
     inherit fetchurl stdenv;
   };
