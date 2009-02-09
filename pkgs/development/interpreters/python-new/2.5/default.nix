@@ -124,7 +124,7 @@ in
       buildPhase = ''python setup.py $setupFlags build'';
       installPhase = ''python setup.py $setupFlags install --prefix=$out'';
       mergeAttrBy = {
-        setupFlags = lib.concatList;
+        setupFlags = lib.concat;
       };
     };
 
@@ -219,8 +219,8 @@ in
         done
       '';
       mergeAttrBy = {
-        phases = lib.concatList;
-        pySrcs = lib.concatList;
+        phases = lib.concat;
+        pySrcs = lib.concat;
         pyCheck = x : y : "${x}\n${y}";
       };
     }

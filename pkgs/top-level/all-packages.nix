@@ -5303,7 +5303,7 @@ let
   };
 
   perlTaskCatalystTutorial = buildPerlPackage {
-    name = "Task-Catalyst-Tutorial";
+    name = "Task-Catalyst-Tutorial-0.03";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JR/JROCKWAY/Task-Catalyst-Tutorial-0.03.tar.gz;
       sha256 = "1f9nqg8h455s8dah482hf78i3h2bilji26i5m3lzr2cxws98lsak";
@@ -7480,11 +7480,9 @@ let
   firefox3Wrapper = wrapFirefox firefox3 "firefox" "";
   firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "firefox" "");
 
-  flacAlts = import ../applications/audio/flac {
+  flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
-
-  flac = getVersion "flac" flacAlts;
 
   flashplayer = flashplayer10;
 
@@ -8618,7 +8616,6 @@ let
       saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
       openbabel ocaml facile stdenv jasper fam indilib libnova
       libarchive dbus bison;
-    #flac = builtins.getAttr "1.1.2" flacAlts;
     cdparanoia = cdparanoiaIII;
     inherit (xlibs)
       inputproto kbproto scrnsaverproto xextproto xf86miscproto

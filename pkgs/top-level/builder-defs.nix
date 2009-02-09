@@ -12,6 +12,8 @@ args: with args; with stringsWithDeps; with lib;
           "README" "AUTHORS" "ChangeLog" "CHANGES" "LICENCE" "COPYRIGHT"] ++ 
           (optional (getAttr ["forceCopyDoc"] true args) "doc"); 
 
+        hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
+        
         archiveType = s: 
                 (if hasSuffixHack ".tar" s then "tar"
                 else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
