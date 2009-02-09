@@ -7244,6 +7244,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
+    inherit cmake patchelf;
+    imagemagick=imagemagick;
+  };
+
   cvs = import ../applications/version-management/cvs {
     inherit fetchurl stdenv nano;
   };
