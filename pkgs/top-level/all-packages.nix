@@ -691,6 +691,10 @@ let
     inherit fetchurl stdenv cdrkit m4;
   };
 
+  eieio = import ../applications/editors/emacs-modes/eieio {
+    inherit fetchurl stdenv emacs;
+  };
+
   enscript = import ../tools/text/enscript {
     inherit fetchurl stdenv;
   };
