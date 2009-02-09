@@ -1226,6 +1226,10 @@ let
     makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
   });
 
+  semantic = import ../applications/editors/emacs-modes/semantic {
+    inherit fetchurl stdenv emacs eieio;
+  };
+
   sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
     inherit fetchurl stdenv;
   };
