@@ -29,7 +29,7 @@ rec {
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
       
   postInstall = a.FullDepEntry(''
-    patchelf --set-rpath $out/lib:${a.stdenv.gcc.gcc}/lib $out/bin/cuneiform
+    patchelf --set-rpath $out/lib${if a.stdenv.gcc.gcc != null then ":${a.stdenv.gcc.gcc}/lib" else ""} $out/bin/cuneiform
   '') ["minInit" "addInputs" "doMakeInstall"];
 
   name = "cuneiform-" + version;
