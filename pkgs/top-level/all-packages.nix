@@ -5905,6 +5905,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  acpid = import ../os-specific/linux/acpid {
+    inherit fetchurl stdenv;
+  };
+
   acpitool = import ../os-specific/linux/acpitool {
     inherit fetchurl stdenv;
   };
