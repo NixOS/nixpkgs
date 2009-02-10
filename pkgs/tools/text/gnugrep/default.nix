@@ -1,22 +1,29 @@
 {stdenv, fetchurl, pcre}:
 
+let version = "2.5.4"; in
 stdenv.mkDerivation {
-  name = "gnugrep-2.5.3";
+  name = "gnugrep-${version}";
   
   src = fetchurl {
-    url = http://nixos.org/tarballs/grep-2.5.3-with-info.tar.bz2;
-    sha256 = "0rg9dipksqzbg8v1xalib1n3xkkycc5r1l2gb9cxy1cz3cjip5l8";
+    url = "mirror://gnu/grep/grep-${version}.tar.bz2";
+    sha256 = "0800lj1ywf43x5jnjyga56araak0f601sd9k5q1vv3s5057cdgha";
   };
   
   buildInputs = [pcre];
 
-  preBuild = ''
-    makeFlagsArray=(mkdir_p="mkdir -p")
-  '';
-  
+  doCheck = true;
+
   meta = {
     homepage = http://www.gnu.org/software/grep/;
     description = "GNU implementation of the Unix grep command";
+
+    longDescription = ''
+      The grep command searches one or more input files for lines
+      containing a match to a specified pattern.  By default, grep
+      prints the matching lines.
+    '';
+
+    license = "GPLv3+";
   };
 
   passthru = {inherit pcre;};
