@@ -1,0 +1,200 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-meta">
+
+<title>Meta-attributes</title>
+
+<para>Nix packages can declare <emphasis>meta-attributes</emphasis>
+that contain information about a package such as a description, its
+homepage, its license, and so on.  For instance, the GNU Hello package
+has a <varname>meta</varname> declaration like this:
+
+<programlisting>
+meta = {
+  description = "A program that produces a familiar, friendly greeting";
+  longDescription = ''
+    GNU Hello is a program that prints "Hello, world!" when you run it.
+    It is fully customizable.
+  '';
+  homepage = http://www.gnu.org/software/hello/manual/;
+  license = "GPLv3+";
+};
+</programlisting>
+
+</para>
+
+<para>Meta-attributes are not passed to the builder of the package.
+Thus, a change to a meta-attribute doesn’t trigger a recompilation of
+the package.  The value of a meta-attribute must a string.</para>
+
+<para>The meta-attributes of a package can be queried from the
+command-line using <command>nix-env</command>:
+
+<screen>
+$ nix-env -qa hello --meta --xml
+&lt;?xml version='1.0' encoding='utf-8'?>
+&lt;items>
+  &lt;item attrPath="hello" name="hello-2.3" system="i686-linux">
+    &lt;meta name="description" value="A program that produces a familiar, friendly greeting" />
+    &lt;meta name="homepage" value="http://www.gnu.org/software/hello/manual/" />
+    &lt;meta name="license" value="GPLv3+" />
+    &lt;meta name="longDescription" value="GNU Hello is a program that prints &amp;quot;Hello, world!&amp;quot; when you run it.&amp;#xA;It is fully customizable.&amp;#xA;" />
+  &lt;/item>
+&lt;/items>
+</screen>
+
+<command>nix-env</command> knows about the
+<varname>description</varname> field specifically:
+
+<screen>
+$ nix-env -qa hello --description
+hello-2.3  A program that produces a familiar, friendly greeting
+</screen>
+
+</para>
+
+
+<section><title>Standard meta-attributes</title>
+
+<para>The following meta-attributes have a standard
+interpretation:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>description</varname></term>
+    <listitem><para>A short (one-line) description of the package.
+    Don’t include a period at the end.  This is shown by
+    <command>nix-env -q --description</command> and also on the
+    Nixpkgs release pages.  Example: <literal>"A program that produces
+    a familiar, friendly greeting"</literal></para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>longDescription</varname></term>
+    <listitem><para>An arbitrarily long description of the
+    package.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>homepage</varname></term>
+    <listitem><para>The package’s homepage.  Example:
+    <literal>http://www.gnu.org/software/hello/manual/</literal></para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>license</varname></term>
+    <listitem><para>The license for the package.  See below for the
+    allowed values.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>priority</varname></term>
+    <listitem><para>The <emphasis>priority</emphasis> of the package,
+    used by <command>nix-env</command> to resolve file name conflicts
+    between packages.  See the Nix manual page for
+    <command>nix-env</command> for details.  Example:
+    <literal>"10"</literal> (a low-priority
+    package).</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+
+</section>
+
+
+<section><title>Licenses</title>
+
+<note><para>This is just a first attempt at standardising the license
+attribute.</para></note>
+
+<para>The <varname>meta.license</varname> attribute must be one of the
+following:
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>GPL</varname></term>
+    <listitem><para>GNU General Public License; version not
+    specified.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>GPLv2</varname></term>
+    <listitem><para>GNU General Public License, version
+    2.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>GPLv2+</varname></term>
+    <listitem><para>GNU General Public License, version
+    2 or higher.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>GPLv3</varname></term>
+    <listitem><para>GNU General Public License, version
+    3.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>GPLv3+</varname></term>
+    <listitem><para>GNU General Public License, version
+    3 or higher.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>free</varname></term>
+    <listitem><para>Catch-all for free software licenses not listed
+    above.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>free-copyleft</varname></term>
+    <listitem><para>Catch-all for free, copyleft software licenses not
+    listed above.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>unfree-redistributable</varname></term>
+    <listitem><para>Unfree package that can be redistributed in binary
+    form.  That is, it’s legal to redistribute the
+    <emphasis>output</emphasis> of the derivation.  This means that
+    the package can be included in the Nixpkgs
+    channel.</para>
+
+    <para>Sometimes proprietary software can only be redistributed
+    unmodified.  Make sure the builder doesn’t actually modify the
+    original binaries; otherwise we’re breaking the license.  For
+    instance, the NVIDIA X11 drivers can be redistributed unmodified,
+    but our builder applies <command>patchelf</command> to make them
+    work.  Thus, its license is <varname>unfree</varname> and it
+    cannot be included in the Nixpkgs channel.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>unfree</varname></term>
+    <listitem><para>Unfree package that cannot be redistributed.  You
+    can build it yourself, but you cannot redistribute the output of
+    the derivation.  Thus it cannot be included in the Nixpkgs
+    channel.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>unfree-redistributable-firmware</varname></term>
+    <listitem><para>This package supplies unfree, redistributable
+    firmware.  This is a separate value from
+    <varname>unfree-redistributable</varname> because not everybody
+    cares whether firmware is free.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+  
+
+</section>
+  
+
+</chapter>
