@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doCmake" "doMakeInstall" "postInstall"];
 
-  libc = if a.stdenv ? glibc then a.stdenv.glibc else null;
+  libc = if a.stdenv ? glibc then a.stdenv.glibc else "";
 
   doCmake = a.FullDepEntry(''
     ensureDir $PWD/builddir
