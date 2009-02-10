@@ -342,6 +342,12 @@ let
       inherit (pkgs) alsaUtils;
     })
 
+  # ACPI daemon.
+  ++ optional true /* !!! need some option */
+    (import ../upstart-jobs/acpid.nix {
+      inherit config pkgs;
+    })
+
   # D-Bus system-wide daemon.
   ++ optional config.services.dbus.enable
     (import ../upstart-jobs/dbus.nix {
