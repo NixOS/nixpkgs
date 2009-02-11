@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_1_38_0.tar.bz2";
-    sha256 = "1bs3b11y66xkdqjl38xb20hipx0pjr0h72fj6755655j6b4kz37z";
+    sha256 = "0rk044s4m7l4sma6anml34vxcd9w0fzcy1cy7csbzynjyida9qry";
   };
   buildInputs = [icu expat zlib bzip2 python];
   preConfigure =
