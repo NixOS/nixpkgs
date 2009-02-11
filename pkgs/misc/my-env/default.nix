@@ -73,7 +73,7 @@ mkDerivation {
         source "$s"
       else
         setopt interactivecomments
-        # fix bash indirection 
+        # fix bash indirection
         # let's hope the bash arrays aren't used
         # substitute is using bash array, so skip it
         echo '
