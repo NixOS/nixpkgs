@@ -5,6 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
+      http://ftp.uni-bayreuth.de/packages/tools/lsof/lsof_4.81.tar.bz2
       ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.81.tar.bz2
       ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/OLD/lsof_4.81.tar.bz2
     ];
