@@ -2670,7 +2670,7 @@ let
   boostVersionChoice = version: selectVersion ../development/libraries/boost version {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
-  boost = boostVersionChoice "1.37.0";
+  boost = boostVersionChoice "1.38.0";
 
   buddy = import ../development/libraries/buddy {
     inherit fetchurl stdenv;
@@ -7705,7 +7705,7 @@ let
   };
 
   mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
-    inherit firefox; 
+    inherit firefox;
     inherit (xlibs) libX11 xproto;
   };
 
