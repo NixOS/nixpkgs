@@ -3631,19 +3631,19 @@ let
 
   openexr_1_6_1 = import ../development/libraries/openexr {
     inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
-          version = "1.6.1";
-          # optional features:
-          inherit ctl;
+    version = "1.6.1";
+    # optional features:
+    inherit ctl;
   };
 
   # This older version is needed by blender (it complains about missing half.h )
   openexr_1_4_0 = import ../development/libraries/openexr {
     inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
-          version = "1.4.0";
+    version = "1.4.0";
   };
 
   openldap = import ../development/libraries/openldap {
-    inherit fetchurl stdenv openssl cyrus_sasl db4;
+    inherit fetchurl stdenv openssl cyrus_sasl db4 groff;
   };
 
   openssl = import ../development/libraries/openssl {
