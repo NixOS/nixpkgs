@@ -3484,6 +3484,7 @@ let
 
   log4cxx = import ../development/libraries/log4cxx {
     inherit fetchurl stdenv automake autoconf libtool cppunit libxml2 boost;
+    inherit apr aprutil db45 expat;
   };
 
   loudmouth = import ../development/libraries/loudmouth {
