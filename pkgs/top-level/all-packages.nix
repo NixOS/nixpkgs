@@ -749,7 +749,8 @@ let
   };
 
   groff = import ../tools/text/groff {
-    inherit fetchurl stdenv ghostscript perl;
+    inherit fetchurl stdenv perl;
+    ghostscript = null;
   };
 
   grub = import ../tools/misc/grub {
