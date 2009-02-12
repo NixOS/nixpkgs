@@ -12,10 +12,10 @@ composableDerivation {
         sha256 = "11hxkb6r2550c4n13nwr0d8afvh30qjyr5c2hw16zgay43rb0kci";
       };
 
-      cfgOption = "--enable-gui=auto --with-features=${args.features}";
+      configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
 
       buildInputs = [ncurses pkgconfig]
-        ++ [ libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
+        ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
 
       # most interpreters aren't tested yet.. (see python for example how to do it)
       flags = {}
