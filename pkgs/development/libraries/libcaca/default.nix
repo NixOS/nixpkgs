@@ -1,18 +1,20 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "libcaca-0.99-beta13b";
+  name = "libcaca-0.99.beta16";
+  
   src = fetchurl {
-	  name = "${name}.tar.gz";
-    url = http://libcaca.zoy.org/attachment/wiki/libcaca/libcaca-0.99.beta13b.tar.gz?format=raw;
-    sha256 = "0xy8pcnljnj5la97bzbwwyzyqa7dr3v9cyw8gdjzdfgqywvac1vg";
+    url = "http://caca.zoy.org/raw-attachment/wiki/libcaca/${name}.tar.gz";
+    sha256 = "1k2anqc9jxvlyar6ximf9l55xzzhgwdbjbclpj64vg6lpqf96k6a";
   };
+  
   configureFlags = "--disable-x11 --disable-imlib2 --disable-doc";
+  
   propagatedBuildInputs = [ncurses];
 
-	meta = {
-	  homepage = http://libcaca.zoy.org/;
-		description = "A graphics library that outputs text instead of pixels.";
-	  license = "WTFPL"; # http://sam.zoy.org/wtfpl/
-	};
+  meta = {
+    homepage = http://libcaca.zoy.org/;
+    description = "A graphics library that outputs text instead of pixels";
+    license = "WTFPL"; # http://sam.zoy.org/wtfpl/
+  };
 }
