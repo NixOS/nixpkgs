@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libpcap, openssl, zlib}:
+{stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools}:
 
 stdenv.mkDerivation {
   name = "aircrack-ng-1.0-rc2";
@@ -10,9 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [libpcap openssl zlib];
 
-  patches = [ ./add-paths.patch ];
-
-  postPatch = "sed -e 's@^prefix.*@prefix = '$out@ -i common.mak";
+  patchPhase = ''
+    sed -e 's@^prefix.*@prefix = '$out@ -i common.mak
+    sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/osdep/linux.c
+    '';
 
   meta = {
     description = "Wireless encryption crackign tools";

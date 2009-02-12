@@ -12,10 +12,10 @@ composableDerivation {
         sha256 = "11hxkb6r2550c4n13nwr0d8afvh30qjyr5c2hw16zgay43rb0kci";
       };
 
-      cfgOption = "--enable-gui=auto --with-features=${args.features}";
+      configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
 
       buildInputs = [ncurses pkgconfig]
-        ++ [ libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
+        ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
 
       # most interpreters aren't tested yet.. (see python for example how to do it)
       flags = {}
@@ -23,10 +23,10 @@ composableDerivation {
         // edf { name = "xsmp"; } #Disable XSMP session management
         // edf { name = "xsmp_interact"; } #Disable XSMP interaction
         // edf { name = "mzscheme"; } #Include MzScheme interpreter.
-        // edf { name = "perl"; } #Include Perl interpreter.
+        // edf { name = "perl"; feat = "perlinterp"; enable = { buildInputs = [perl]; };} #Include Perl interpreter.
         // edf { name = "python"; feat = "pythoninterp"; enable = { buildInputs = [python]; }; } #Include Python interpreter.
-        // edf { name = "tcl"; } #Include Tcl interpreter.
-        // edf { name = "ruby"; } #Include Ruby interpreter.
+        // edf { name = "tcl"; enable = { buildInputs = [tcl]; }; } #Include Tcl interpreter.
+        // edf { name = "ruby"; feat = "rubyinterp"; enable = { buildInputs = [ruby]; };} #Include Ruby interpreter.
         // edf { name = "cscope"; } #Include cscope interface.
         // edf { name = "workshop"; } #Include Sun Visual Workshop support.
         // edf { name = "netbeans"; } #Disable NetBeans integration support.

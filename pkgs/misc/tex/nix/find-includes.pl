@@ -82,7 +82,7 @@ while (scalar @workset > 0) {
 	} elsif (/\\includegraphics(\[.*\])?\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";
-            addToWorkSetExts("$path/$fn2", ".pdf", ".png", ".ps");
+            addToWorkSetExts("$path/$fn2", ".pdf", ".png", ".ps", ".jpg");
 	} elsif (/\\pgfdeclareimage(\[.*\])?\{.*\}\{(.*)\}/) {
 	    my $fn2 = $2;
             die "absolute path! $fn2" if substr($fn2, 0, 1) eq "/";

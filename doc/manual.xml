@@ -31,6 +31,7 @@
   <xi:include href="introduction.xml" />
   <xi:include href="quick-start.xml" />
   <xi:include href="stdenv.xml" />
+  <xi:include href="meta.xml" />
 
 
   <!-- outline -->

@@ -2,14 +2,10 @@ source $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/site_perl"
 
-oldIFS=$IFS
-IFS=:
 perlFlags=
-for i in $PERL5LIB; do
+for i in $(IFS=:; echo $PERL5LIB); do
     perlFlags="$perlFlags -I$i"
 done
-IFS=$oldIFS
-echo "Perl flags: $perlFlags"
 
 oldPreConfigure="$preConfigure"
 preConfigure=preConfigure
@@ -41,6 +37,15 @@ postFixup() {
     # dependencies is to have them in the PERL5LIB variable).
     if test -e $out/nix-support/propagated-build-inputs; then
         ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+    fi
+
+    # Some (broken?) packages install in $out/lib/${perlVersion}
+    # instead of $out/lib/site_perl/${perlVersion}.  Try to fix that
+    # automatically.
+    if ! test -e $out/lib/site_perl; then
+        echo "fixing wrong Perl installation path..."
+        ensureDir $out/lib/site_perl
+        mv $out/lib/5.* $out/lib/site_perl
     fi
 }
 

@@ -69,7 +69,40 @@ mkDerivation {
       phases=
       # only do all the setup stuff in nix-support/*
       set +e
-      source "$s"
+      if [[ -z "\$ZSH_VERSION" ]]; then
+        source "$s"
+      else
+        setopt interactivecomments
+        # fix bash indirection
+        # let's hope the bash arrays aren't used
+        # substitute is using bash array, so skip it
+        echo '
+            setopt NO_BAD_PATTERN
+            setopt NO_BANG_HIST
+            setopt NO_BG_NICE
+            setopt NO_EQUALS
+            setopt NO_FUNCTION_ARGZERO
+            setopt GLOB_SUBST
+            setopt NO_HUP
+            setopt INTERACTIVE_COMMENTS
+            setopt KSH_ARRAYS
+            setopt NO_MULTIOS
+            setopt NO_NOMATCH
+            setopt RM_STAR_SILENT
+            setopt POSIX_BUILTINS
+            setopt SH_FILE_EXPANSION
+            setopt SH_GLOB
+            setopt SH_OPTION_LETTERS
+            setopt SH_WORD_SPLIT
+          ' >> "\$tmp/script"
+        sed -e 's/\''${!\([^}]*\)}/\''${(P)\1}/g' \
+            -e 's/[[]\*\]//' \
+            -e 's/substitute() {/ substitute() { return; /' \
+            -e 's@PATH=\$@PATH=${pkgs.coreutils}/bin@' \
+            "$s" >> "\$tmp/script"
+        echo "\$tmp/script";
+        source "\$tmp/script";
+      fi
       rm -fr "\$tmp"
       ${extraCmds}
       export PATH

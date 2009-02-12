@@ -24,9 +24,6 @@ stdenv.mkDerivation {
     installFlagsArray=(BUILDROOT=$out/destdir)
   '';
 
-  # !!! Ideally, we wouldn't have Samba as a dependency of CUPS.
-  # Rather, the backend directory should be treated as configuration
-  # data generated in some other Nix expression in NixOS.
   postInstall = ''
     mv $out/destdir/$out/* $out
     rm -rf $out/destdir
