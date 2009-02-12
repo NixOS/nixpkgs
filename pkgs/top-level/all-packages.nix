@@ -6337,7 +6337,6 @@ let
 
   alsa = import ../os-specific/linux/alsa/1.0.19.nix {
     inherit fetchurl stdenv ncurses gettext;
-    version = "1.0.19";
   };
 
   alsaLib = alsa.alsaLib;

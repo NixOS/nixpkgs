@@ -1,16 +1,21 @@
-{aName, sha256, buildInputs ? [], propagatedBuildInputs ? [] } :
-args: with args; stdenv.mkDerivation rec {
-  name = "alsa-" + aName + "-" + version;
+{ stdenv, fetchurl, pkgName, sha256, version
+, buildInputs ? [], propagatedBuildInputs ? []
+}:
+
+stdenv.mkDerivation rec {
+  name = "alsa-${pkgName}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.alsa-project.org/pub/" + aName + "/" + name + ".tar.bz2";
+    url = "ftp://ftp.alsa-project.org/pub/${pkgName}/${name}.tar.bz2";
     inherit sha256;
   };
 
   inherit buildInputs propagatedBuildInputs;
 
+  configureFlags = "--disable-xmlto";
+
   meta = {
-    description = "ALSA, the Advanced Linux Sound Architecture (${aName})";
+    description = "ALSA, the Advanced Linux Sound Architecture (${pkgName})";
 
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and
