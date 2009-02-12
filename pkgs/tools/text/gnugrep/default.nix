@@ -1,6 +1,7 @@
 {stdenv, fetchurl, pcre}:
 
 let version = "2.5.4"; in
+
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
   
@@ -12,6 +13,12 @@ stdenv.mkDerivation {
   buildInputs = [pcre];
 
   doCheck = true;
+
+  # On Mac OS X, force use of mkdir -p, since Grep's fallback
+  # (./install-sh) is broken.
+  preConfigure = ''
+    export MKDIR_P="mkdir -p"
+  '';
 
   meta = {
     homepage = http://www.gnu.org/software/grep/;
