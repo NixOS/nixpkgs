@@ -2,14 +2,10 @@ source $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/site_perl"
 
-oldIFS=$IFS
-IFS=:
 perlFlags=
-for i in $PERL5LIB; do
+for i in $(IFS=:; echo $PERL5LIB); do
     perlFlags="$perlFlags -I$i"
 done
-IFS=$oldIFS
-echo "Perl flags: $perlFlags"
 
 oldPreConfigure="$preConfigure"
 preConfigure=preConfigure
