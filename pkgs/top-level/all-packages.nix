@@ -8559,7 +8559,7 @@ let
     # optional features by passing
     # python
     # TODO mzschemeinterp perlinterp
-    inherit python /*x11*/;
+    inherit python perl tcl ruby /*x11*/;
 
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now

@@ -23,10 +23,10 @@ composableDerivation {
         // edf { name = "xsmp"; } #Disable XSMP session management
         // edf { name = "xsmp_interact"; } #Disable XSMP interaction
         // edf { name = "mzscheme"; } #Include MzScheme interpreter.
-        // edf { name = "perl"; } #Include Perl interpreter.
+        // edf { name = "perl"; feat = "perlinterp"; enable = { buildInputs = [perl]; };} #Include Perl interpreter.
         // edf { name = "python"; feat = "pythoninterp"; enable = { buildInputs = [python]; }; } #Include Python interpreter.
-        // edf { name = "tcl"; } #Include Tcl interpreter.
-        // edf { name = "ruby"; } #Include Ruby interpreter.
+        // edf { name = "tcl"; enable = { buildInputs = [tcl]; }; } #Include Tcl interpreter.
+        // edf { name = "ruby"; feat = "rubyinterp"; enable = { buildInputs = [ruby]; };} #Include Ruby interpreter.
         // edf { name = "cscope"; } #Include cscope interface.
         // edf { name = "workshop"; } #Include Sun Visual Workshop support.
         // edf { name = "netbeans"; } #Disable NetBeans integration support.
