@@ -4569,12 +4569,19 @@ let
     propagatedBuildInputs = [perlClassInspector];
   };
 
-  perlCompressZlib = buildPerlPackage {
-    name = "Compress-Zlib-1.41";
+  perlCompressRawZlib = import ../development/perl-modules/Compress-Raw-Zlib {
+    inherit fetchurl buildPerlPackage zlib;
+  };
+
+  perlCompressZlib = buildPerlPackage rec {
+    name = "Compress-Zlib-2.015";
     src = fetchurl {
-      url = http://nixos.org/tarballs/Compress-Zlib-1.41.tar.gz;
-      md5 = "ac135b84a03e814734496777cf5e5722";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "1k1i539fszhxay8yllh687sw06i68g8ikw51pvy1c84p3kg6yk4v";
     };
+    propagatedBuildInputs = [
+      perlCompressRawZlib perlIOCompressBase perlIOCompressGzip
+    ];
   };
 
   perlConfigAny = buildPerlPackage {
@@ -5098,6 +5105,23 @@ let
       url = mirror://cpan/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
       sha256 = "0idwfi7k8l44d9akpdj6ygdz3q8zxr690m18s7w23ms9d55bh3jy";
     };
+  };
+
+  perlIOCompressBase = buildPerlPackage rec {
+    name = "IO-Compress-Base-2.015";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "10njlwa50mhs5nqws5yidfmmb7hwmwc6x06gk2vnpyn82g3szgqd";
+    };
+  };
+
+  perlIOCompressGzip = buildPerlPackage rec {
+    name = "IO-Compress-Zlib-2.015";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "0sbnx6xdryaajwpssrfgm5b2zasa4ri8pihqwsx3rm5kmkgzy9cx";
+    };
+    propagatedBuildInputs = [perlIOCompressBase perlCompressRawZlib];
   };
 
   perlIODigest = buildPerlPackage {
@@ -5650,7 +5674,6 @@ let
       sha256 = "0cdl08k5v0wc9w20va5qw98ynlbs9ifwndgsix8qhi7h15sj8a5j";
     };
     propagatedBuildInputs = [perlTestTester perlTestNoWarnings];
-    postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
   perlTestException = buildPerlPackage {
@@ -5730,7 +5753,6 @@ let
       sha256 = "030j47q3p46jfk60dsh2d5m7ip4nqz0fl4inqr8hx8b8q0f00r4l";
     };
     propagatedBuildInputs = [perlTestHarness];
-    postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
   perlTestTester = buildPerlPackage {
@@ -5739,7 +5761,6 @@ let
       url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.107.tar.gz;
       sha256 = "0qgmsl6s6xm39211lywyzwrlz0gcmax7fb8zipybs9yxfmwcvyx2";
     };
-    postInstall = "ensureDir $out/lib/site_perl; mv $out/lib/5.* $out/lib/site_perl";
   };
 
   perlTestWarn = buildPerlPackage {

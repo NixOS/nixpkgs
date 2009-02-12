@@ -38,6 +38,15 @@ postFixup() {
     if test -e $out/nix-support/propagated-build-inputs; then
         ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
+
+    # Some (broken?) packages install in $out/lib/${perlVersion}
+    # instead of $out/lib/site_perl/${perlVersion}.  Try to fix that
+    # automatically.
+    if ! test -e $out/lib/site_perl; then
+        echo "fixing wrong Perl installation path..."
+        ensureDir $out/lib/site_perl
+        mv $out/lib/5.* $out/lib/site_perl
+    fi
 }
 
 if test -n "$perlPreHook"; then
