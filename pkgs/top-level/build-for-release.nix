@@ -140,6 +140,7 @@ let
       par2cmdline
       pciutils
       perl
+      perlTaskCatalystTutorial
       php
       pinentry
       pkgconfig
