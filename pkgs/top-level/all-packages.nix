@@ -4113,10 +4113,10 @@ let
     propagatedBuildInputs = [perlAlgorithmDiff];
   };
 
-  perlAlgorithmDiff = buildPerlPackage {
-    name = "Algorithm-Diff-1.15";
+  perlAlgorithmDiff = buildPerlPackage rec {
+    name = "Algorithm-Diff-1.1901";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1901.zip;
+      url = "mirror://cpan/authors/id/T/TY/TYEMQ/${name}.zip";
       sha256 = "0qk60fi49mpyvnfpjd2dzcmya8x3g5zfgb2hrnl7a5krn045g6i2";
     };
     buildInputs = [unzip];
