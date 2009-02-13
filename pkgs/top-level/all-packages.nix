@@ -481,10 +481,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  cgdb = import ../tools/misc/cgdb {
-    inherit fetchurl stdenv ncurses readline;
-  };
-
   ccrypt = import ../tools/security/ccrypt {
     inherit fetchurl stdenv;
   };
@@ -4084,12 +4080,13 @@ let
       url = mirror://cpan/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz;
       sha256 = "1y92k4nqkscfwpriv8q7c90rjfj85lvwq1k96niv2glk8d37dcf9";
     };
+    propagatedBuildInputs = [perlAlgorithmDiff];
   };
 
-  perlAlgorithmDiff = buildPerlPackage {
-    name = "Algorithm-Diff-1.15";
+  perlAlgorithmDiff = buildPerlPackage rec {
+    name = "Algorithm-Diff-1.1901";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1901.zip;
+      url = "mirror://cpan/authors/id/T/TY/TYEMQ/${name}.zip";
       sha256 = "0qk60fi49mpyvnfpjd2dzcmya8x3g5zfgb2hrnl7a5krn045g6i2";
     };
     buildInputs = [unzip];
@@ -4129,7 +4126,7 @@ let
   };
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
-    inherit fetchurl perl db4;
+    inherit buildPerlPackage fetchurl db4;
   };
 
   perlBitVector = buildPerlPackage {
@@ -8967,13 +8964,9 @@ let
     openexr = openexr_1_6_1 ;
   });
 
-  kde42 = import ../desktops/kde-4.2 {
-    inherit stdenv fetchurl cmake jdk;
-    inherit xlibs qt4 bzip2 libxml2 libxslt perl pcre exiv2 aspell;
-    inherit pthread_stubs gst_all xineLib fam log4cxx cluceneCore;
-    inherit redland avahi jasper shared_mime_info giflib;
+  kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
-  };
+  });
 
   kdebase = import ../desktops/kde/kdebase {
     inherit

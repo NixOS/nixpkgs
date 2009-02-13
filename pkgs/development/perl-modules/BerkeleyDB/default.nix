@@ -1,11 +1,11 @@
-{fetchurl, perl, db4}:
+{buildPerlPackage, fetchurl, db4}:
 
-import ../generic perl {
-  name = "BerkeleyDB-0.27";
+buildPerlPackage rec {
+  name = "BerkeleyDB-0.36";
   
   src = fetchurl {
-    url = http://nixos.org/tarballs/BerkeleyDB-0.27.tar.gz;
-    md5 = "43aa72c0c6941af0d656d749ad543e96";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+    sha256 = "07xf50riarb60l1h6m2dqmql8q5dij619712fsgw7ach04d8g3z1";
   };
 
   preConfigure = ''

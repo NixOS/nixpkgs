@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     -system-zlib -system-libpng -system-libjpeg -fast
     -qt-gif -confirm-license
     -opengl -xrender -xrandr -xinerama -xcursor -qt-sql-mysql
-    -qdbus -cups -glib -xfixes
+    -qdbus -cups -glib -xfixes -dbus-linked
     -fontconfig -I${freetype}/include/freetype2
   '';
 

@@ -81,7 +81,7 @@ xkb_symbols "altgr-intl" {
     key <AB02> { [	  x,	X,		oe,		OE		] };
     key <AB03> { [	  c,	C,		copyright,	cent		] };
     key <AB04> { [	  v,	V,		registered,	registered	] };
-    key <AB05> { [	  b,	B						] };
+    key <AB05> { [	  b,	B,		emdash,		endash		] };
     key <AB06> { [	  n,	N,		ntilde,		Ntilde		] };
     key <AB07> { [	  m,	M,		mu,		mu		] };
     key <AB08> { [    comma,	less,		ccedilla,	Ccedilla	] };
