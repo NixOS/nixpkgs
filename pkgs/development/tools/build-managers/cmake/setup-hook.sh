@@ -1,49 +1,46 @@
-addCMakeParamsInclude()
+addCMakeParams()
 {
     addToSearchPath CMAKE_INCLUDE_PATH /include "" $1
-}
-
-addCMakeParamsLibs()
-{
     addToSearchPath CMAKE_LIBRARY_PATH /lib "" $1
-}
-
-addCMakeModulePath()
-{
-    addToSearchPath CMAKE_MODULE_PATH /share/cmake-2.4/Modules "" $1
+    addToSearchPath CMAKE_MODULE_PATH /share/cmake-@majorVersion@/Modules "" $1
 }
 
 fixCmakeFiles()
 {
-    local replaceArgs;
-    echo "Fixing cmake files"
+    local replaceArgs
+    echo "fixing cmake files"
     replaceArgs="-e -f -L -T /usr /FOO"
-    replaceArgs="${replaceArgs}     -a NO_DEFAULT_PATH \"\" -a NO_SYSTEM_PATH \"\""
+    replaceArgs="$replaceArgs -a NO_DEFAULT_PATH \"\" -a NO_SYSTEM_PATH \"\""
     find $1 -type f -name "*.cmake" | xargs replace-literal ${replaceArgs}
 }
 
-cmakePostUnpack()
+cmakeConfigurePhase()
 {
-    sourceRoot=$sourceRoot/build
-    mkdir -v $sourceRoot
-    echo source root reset to $sourceRoot
-
-    if [ -z "$dontFixCmake" ]; then
+    eval "$preConfigure"
+    
+    if test -z "$dontFixCmake"; then
         fixCmakeFiles .
     fi
 
-    if [ -z "$configureScript" ]; then
-        configureScript="cmake .."
+    if test -z "$dontUseCmakeBuildDir"; then
+        mkdir -p build
+        cd build
+        cmakeDir=..
     fi
-    if [ -z "$dontAddPrefix" ]; then
-        dontAddPrefix=1
-        configureFlags="-DCMAKE_INSTALL_PREFIX=$out $configureFlags"
+
+    if test -z "$dontAddPrefix"; then
+        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
+
+    echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
+    
+    cmake ${cmakeDir:-.} $cmakeFlags ${cmakeFlagsArray[@]}
+    
+    eval "$postConfigure"
 }
 
+if test -z "$dontUseCmakeConfigure"; then
+    configurePhase=cmakeConfigurePhase
+fi
 
-if [ -z "$noCmakeTewaks" ]; then
-    postUnpack="cmakePostUnpack${postUnpack:+; }${postUnpack}"
-fi;
-
-envHooks=(${envHooks[@]} addCMakeParamsInclude addCMakeParamsLibs addCMakeModulePath)
+envHooks=(${envHooks[@]} addCMakeParams)
