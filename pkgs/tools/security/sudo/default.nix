@@ -1,11 +1,11 @@
 {stdenv, fetchurl, coreutils, pam}:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.6.9p17";
+  name = "sudo-1.7.0";
 
   src = fetchurl {
-    url = "http://www.sudo.ws/sudo/dist/${name}.tar.gz";
-    sha256 = "15j5qzwn1nl9fr6ss3b2fk803cin3w11081rgqmm8vscd3zx8b0y";
+    url = "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz";
+    sha256 = "0y0r74vvcn1q4c220ha0azs8d4kyjr3x3bl6ilxqp77khx1fjzaz";
   };
 
   # `--with-stow' allows /etc/sudoers to be a symlink.  Only it
