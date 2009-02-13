@@ -9007,13 +9007,9 @@ let
     openexr = openexr_1_6_1 ;
   });
 
-  kde42 = import ../desktops/kde-4.2 {
-    inherit stdenv fetchurl cmake jdk;
-    inherit xlibs qt4 bzip2 libxml2 libxslt perl pcre exiv2 aspell;
-    inherit pthread_stubs gst_all xineLib fam log4cxx cluceneCore;
-    inherit redland avahi jasper shared_mime_info giflib;
+  kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
-  };
+  });
 
   kdebase = import ../desktops/kde/kdebase {
     inherit
