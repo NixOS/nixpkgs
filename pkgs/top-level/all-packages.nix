@@ -483,10 +483,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  cgdb = import ../tools/misc/cgdb {
-    inherit fetchurl stdenv ncurses readline;
-  };
-
   ccrypt = import ../tools/security/ccrypt {
     inherit fetchurl stdenv;
   };
