@@ -3033,7 +3033,20 @@ root        ALL=(ALL) SETENV: ALL
     };
 
   };
+
+    
+  powerManagement = {
+    
+    enable = mkOption {
+      default = false;
+      description = "
+        Whether to enable power management.
+      ";
+    };
+
+  };
   
+
   nesting = {
     children = mkOption {
       default = [];
@@ -3043,6 +3056,7 @@ root        ALL=(ALL) SETENV: ALL
     };
   };
 
+  
   passthru = mkOption {
     default = {};
     description = "

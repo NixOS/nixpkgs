@@ -15,6 +15,9 @@ let
 
       event=button/lid.*
       action=${lidEventHandler} "%e"
+
+      event=ac_adapter.*
+      action=${acEventHandler} "%e"
     '';
 
   # Called when the power button is pressed.
@@ -23,7 +26,6 @@ let
       #! ${pkgs.bash}/bin/sh
       # Suspend to RAM.
       #echo mem > /sys/power/state
-      exit 0
     '';
 
   # Called when the laptop lid is opened/closed.
@@ -38,8 +40,18 @@ let
           sync
           echo mem > /sys/power/state
       fi
+    '';
 
-      exit 0
+  # Called when the AC power is connected or disconnected.
+  acEventHandler = pkgs.writeScript "ac-power.sh"
+    ''
+      #! ${pkgs.bash}/bin/sh
+
+      if grep -q "state:.*on-line" /proc/acpi/ac_adapter/AC/state; then
+         echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+      elif grep -q "state:.*off-line" /proc/acpi/ac_adapter/AC/state; then
+         echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+      fi
     '';
 
 in

@@ -343,7 +343,7 @@ let
     })
 
   # ACPI daemon.
-  ++ optional true /* !!! need some option */
+  ++ optional config.powerManagement.enable
     (import ../upstart-jobs/acpid.nix {
       inherit config pkgs;
     })
