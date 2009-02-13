@@ -4156,7 +4156,7 @@ let
   };
 
   perlBerkeleyDB = import ../development/perl-modules/BerkeleyDB {
-    inherit fetchurl perl db4;
+    inherit buildPerlPackage fetchurl db4;
   };
 
   perlBitVector = buildPerlPackage {
