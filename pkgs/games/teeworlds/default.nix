@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python, alsaLib, libX11, mesa, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.5.0";
+  name = "teeworlds-0.5.1";
 
   src = fetchurl {
     url = "http://www.teeworlds.com/files/${name}-src.tar.gz";
-    sha256 = "1akns8852j208cy3q4ki0fgbbpp0wyjm5fhnma7qs5k60321305x";
+    sha256 = "0y7yfb1n8rrcz8vcng9jch05sc5vl57nvjvd1x0mkm74ki1y6wpc";
   };
 
   # Note: Teeworlds requires Python 2.x to compile.  Python 3.0 will
