@@ -44,6 +44,7 @@ let
     if wm != "" then wm else
     if sessionType == "gnome" then "metacity" else
     if sessionType == "kde" then "none" /* started by startkde */ else
+    if sessionType == "kde4" then "none" /* started by startkde */ else
     "twm";
 
     
@@ -274,7 +275,7 @@ let
 
     ### Show a background image.
     # (but not if we're starting a full desktop environment that does it for us)
-    ${if sessionType != "kde" then ''
+    ${if sessionType != "kde" && sessionType != "kde4" then ''
     
       if test -e $HOME/.background-image; then
         ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
@@ -291,6 +292,14 @@ let
       export XDG_CONFIG_DIRS=${pkgs.kdebase}/etc/xdg:${pkgs.kdelibs}/etc/xdg
       export XDG_DATA_DIRS=${pkgs.kdebase}/share
       exec ${pkgs.kdebase}/bin/startkde
+
+    '' else if sessionType == "kde4" then ''
+
+      # Start KDE.
+      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kde42.kdelibs}:${pkgs.kde42.kdebase}:${pkgs.kde42.kdebase_runtime}:${pkgs.kde42.kdebase_workspace}
+      export XDG_CONFIG_DIRS=${pkgs.kde42.kdelibs}/etc/xdg:${pkgs.kde42.kdebase_runtime}/etc/xdg:${pkgs.kde42.kdebase_workspace}/etc/xdg
+      export XDG_DATA_DIRS=${pkgs.kde42.kdelibs}/share:${pkgs.kde42.kdebase}/share:${pkgs.kde42.kdebase_runtime}/share:${pkgs.kde42.kdebase_workspace}/share:${pkgs.shared_mime_info}/share
+      exec ${pkgs.kde42.kdebase_workspace}/bin/startkde
 
     '' else ''
 
@@ -382,13 +391,22 @@ rec {
     pkgs.kdebase
     xorg.xset # used by startkde, non-essential
   ]
+  ++ optional (sessionType == "kde4") [
+    xorg.xmessage # so that startkde can show error messages
+    pkgs.qt4 # needed for qdbus
+    pkgs.kde42.kdelibs
+    pkgs.kde42.kdebase
+    pkgs.kde42.kdebase_runtime
+    pkgs.kde42.kdebase_workspace
+    xorg.xset # used by startkde, non-essential
+  ]
   ++ optional (videoDriver == "nvidia") [
     kernelPackages.nvidiaDrivers
   ];
 
 
   extraEtc =
-    optional (sessionType == "kde")
+    optional (sessionType == "kde" || sessionType == "kde4")
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
       }
