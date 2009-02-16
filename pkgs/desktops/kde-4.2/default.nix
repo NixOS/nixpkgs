@@ -24,8 +24,33 @@ rec {
     inherit (pkgs) qt4 jdk cluceneCore redland;
   };
   
+  qimageblitz = import ./support/qimageblitz {
+    inherit (pkgs) stdenv fetchurl cmake qt4;
+  };
+  
 ### LIBS
   kdelibs = import ./libs (pkgs // {
     inherit automoc4 phonon strigi soprano;
   });
+  
+  kdebase_workspace = import ./base-workspace {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python;
+    inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs;
+    inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage;
+    inherit kdelibs;
+    inherit automoc4 phonon strigi soprano qimageblitz;
+  };
+  
+  kdebase = import ./base {
+    inherit (pkgs) stdenv fetchurl cmake perl qt4 pciutils libraw1394;
+    inherit kdelibs;
+    inherit automoc4 phonon strigi qimageblitz soprano;
+  };
+  
+  kdebase_runtime = import ./base-runtime {
+    inherit (pkgs) stdenv fetchurl cmake perl bzip2 qt4;
+    inherit (pkgs) xineLib alsaLib samba cluceneCore;
+    inherit kdelibs;
+    inherit automoc4 phonon strigi soprano;
+  };
 }
