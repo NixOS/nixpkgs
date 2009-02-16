@@ -4286,15 +4286,18 @@ let
   };
 
   perlCatalystRuntime = buildPerlPackage rec{
-    name = "Catalyst-Runtime-5.71000";
+    name = "Catalyst-Runtime-5.8000_06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
-      sha256 = "0j9kwp2ylah0qsvgv08lnv49dlykx94bivwngw3zwn3g9qfbq26c";
+      sha256 = "181fynr72q73xs78rk2hmlgqhx2n35ysv73rfd69780na1j3gkzf";
     };
     propagatedBuildInputs = [
       perlLWP perlClassAccessor perlClassDataInheritable perlClassInspector
       perlCGISimple perlDataDump perlFileModified perlHTTPBody perlHTTPRequestAsCGI
       perlPathClass perlTextSimpleTable perlTreeSimple perlTreeSimpleVisitorFactory
+      perlSubExporter perlMROCompat perlTestMockObject perlClassMOP perlMoose
+      perlNamespaceClean perlScopeUpper perlMooseXEmulateClassAccessorFast
+      perlClassC3 perlClassC3AdoptNEXT
     ];
   };
 
@@ -4490,6 +4493,15 @@ let
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
       sha256 = "1xmd77ghxgn4yjd25z25df0isaz3k3b685q151x0f3537kl8cln3";
     };
+  };
+
+  perlClassC3AdoptNEXT = buildPerlPackage rec {
+    name = "Class-C3-Adopt-NEXT-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
+      sha256 = "0jxwli7452nmdws437hv235b6p97rraz00mgxmf7dsx96ym4xm1y";
+    };
+    propagatedBuildInputs = [perlMROCompat perlTestException];
   };
 
   perlClassC3Componentised = buildPerlPackage {
@@ -5292,6 +5304,15 @@ let
     ];
   };
 
+  perlMooseXEmulateClassAccessorFast = buildPerlPackage rec {
+    name = "MooseX-Emulate-Class-Accessor-Fast-0.00800";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRODITI/${name}.tar.gz";
+      sha256 = "1z2sld2sw1mlwxwzxxanik3086cw14rdsx2wwnzrfy7prsnigcl2";
+    };
+    propagatedBuildInputs = [perlMoose perlNamespaceClean];
+  };
+
   perlMouse = buildPerlPackage {
     name = "Mouse-0.09";
     src = fetchurl {
@@ -5491,6 +5512,14 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.03.tar.gz;
       sha256 = "07x966fkqxlwnngxs7a2jrhabh8gzhjfpqq56n9gkwy7f340sayb";
+    };
+  };
+
+  perlScopeUpper = buildPerlPackage rec {
+    name = "Scope-Upper-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
+      sha256 = "1qaf310wbfpjb0lmg3fpmhbfnjxqw3j47rj0w0f0cy4bgihi8l43";
     };
   };
 
@@ -7287,8 +7316,8 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  shared_mime_info = selectVersion ../data/misc/shared-mime-info "0.23" {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext libxml2;
+  shared_mime_info = import ../data/misc/shared-mime-info {
+    inherit fetchurl stdenv pkgconfig gettext intltool libxml2;
     inherit (gtkLibs) glib;
   };
 
