@@ -2143,6 +2143,11 @@ let
 
   ### DEVELOPMENT / MISC
 
+  avrgcclibc = import ../development/misc/avr-gcc-with-avr-libc {
+    inherit fetchurl stdenv writeTextFile gnumake coreutils gnutar bzip2
+      gnugrep gnused gawk;
+    inherit gcc;
+  };
 
   /*
   toolbus = import ../development/interpreters/toolbus {
