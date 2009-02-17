@@ -29,10 +29,13 @@ rec {
   };
   
 ### LIBS
-  kdelibs = import ./libs (pkgs // {
+  kdelibs = import ./libs {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
+    inherit (pkgs) giflib jasper openexr aspell avahi shared_mime_info;
     inherit automoc4 phonon strigi soprano;
-  });
-  
+  };
+
+### BASE  
   kdebase_workspace = import ./base-workspace {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl python;
     inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs;
@@ -52,5 +55,12 @@ rec {
     inherit (pkgs) xineLib alsaLib samba cluceneCore;
     inherit kdelibs;
     inherit automoc4 phonon strigi soprano;
+  };
+
+### ADDITIONAL
+
+  kdegraphics = import ./graphics {
+    inherit (pkgs) stdenv fetchurl cmake;
+    inherit kdelibs;
   };
 }
