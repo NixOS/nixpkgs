@@ -2503,6 +2503,10 @@ let
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  sloccount = import ../development/tools/misc/sloccount {
+    inherit fetchurl stdenv perl;
+  };
+
   sparse = import ../development/tools/analysis/sparse {
     inherit fetchurl stdenv pkgconfig;
   };
