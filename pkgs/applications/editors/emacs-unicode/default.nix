@@ -3,9 +3,10 @@
 , xaw3dSupport ? false
 , gtkGUI ? false
 , xftSupport ? false
-, stdenv, fetchurl, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
+, stdenv, fetchcvs, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 , pkgconfig ? null, gtk ? null, libXft ? null
 , libpng, libjpeg, libungif, libtiff, texinfo
+, autoconf, automake
 }:
 
 assert xawSupport -> libXaw != null;
@@ -14,22 +15,23 @@ assert xaw3dSupport -> Xaw3d != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 
-let date = "20080228"; in
+let date = "2009-02-16"; in
 stdenv.mkDerivation {
   name = "emacs-snapshot-23-${date}";
   
   builder = ./builder.sh;
   
-  src = fetchurl {
-    url = "http://ppa.launchpad.net/avassalotti/ubuntu/pool/main/e/emacs-snapshot/emacs-snapshot_${date}.orig.tar.gz";
-    sha256 = "1cix1qjrynidvdyww3g8fm1wyggc82qjxbfbv3rx630szm1v6bm7";
+  src = fetchcvs {
+    inherit date;
+    cvsRoot = ":pserver:anonymous@cvs.savannah.gnu.org:/sources/emacs";
+    module = "emacs";
+    sha256 = "6ec63da94a199c5f95bf4a9aa578cf14b3d85800fd37b3562d9a446b144b0d47";
   };
 
-#  patches = [
-#    ./crt.patch
-#  ];
+  preConfigure = "autoreconf -vfi";
   
   buildInputs = [
+    autoconf automake
     ncurses x11 texinfo
     (if xawSupport then libXaw else null)
     (if xpmSupport then libXpm else null)
