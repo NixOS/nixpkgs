@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
   fullMaude = fetchurl {
     url = "http://maude.cs.uiuc.edu/download/current/FM2.4/full-maude24.maude";
-    sha256 = "0fwpnp5a8vw7q3iczwlra9074is95a1087ikx0a0idy8p4drnl61";
+    sha256 = "9e4ebdc717dc968d0b6c1179f360e60b3a39ea8cecc1a7fa49f2105bbddc48c4";
   };
   docs = fetchurl {
     url = "http://mirror.switch.ch/mirror/gentoo/distfiles/maude-2.3.0-extras.tar.bz2";
