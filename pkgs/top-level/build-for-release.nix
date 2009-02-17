@@ -241,12 +241,14 @@ let
       gnomeutils
       metacity
       ;
-    inherit (pkgs.kde42)
-      kdelibs
-      kdebase_workspace
-      kdebase
-      kdebase_runtime
-      ;
+    kde42 = {
+      inherit (pkgs.kde42)
+        kdelibs
+        kdebase_workspace
+        kdebase
+        kdebase_runtime
+        ;
+    };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_23)
         iwlwifi
