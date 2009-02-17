@@ -98,6 +98,10 @@ let
       kbd
       kcachegrind
       kdebase
+      kde42.kdelibs
+      kde42.kdebase_workspace
+      kde42.kdebase
+      kde42.kdebase_runtime
       klibc
       ktorrent
       kvm
