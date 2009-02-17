@@ -5917,12 +5917,19 @@ let
     };
   };
 
-  perlUNIVERSALisa = buildPerlPackage {
-    name = "UNIVERSAL-isa-1.00";
+  perlUNIVERSALisa = stdenv.mkDerivation rec {
+    name = "UNIVERSAL-isa-1.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-isa-1.00_00.tar.gz;
-      sha256 = "04dj0z458k57l3phmq635bdmj3zzl2iy5dxp3yqaldc6g65wz0d0";
+      url = "mirror://cpan/authors/id/C/CH/CHROMATIC/${name}.tar.gz";
+      sha256 = "0iksklmfhiaxg2rsw827n97k1mris6dg596rdwk2gmrwl0rsk0wz";
     };
+    # Urgh, this package doesn't have a Makefile.PL.
+    buildInputs = [perl];
+    configurePhase = "perl Build.PL --prefix=$out";
+    buildPhase = "perl ./Build";
+    doCheck = true;
+    checkPhase = "perl ./Build test";
+    installPhase = "perl ./Build install";
   };
 
   perlUNIVERSALrequire = buildPerlPackage {
