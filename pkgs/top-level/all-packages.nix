@@ -2281,10 +2281,9 @@ let
     qt = if getPkgConfig "doxygen" "qt3" true then qt3 else null;
   };
 
-  elfutils = composedArgsAndFun
-    (selectVersion ../development/tools/misc/elfutils "0.131") {
-      inherit fetchurl stdenv;
-    };
+  elfutils = import ../development/tools/misc/elfutils {
+    inherit fetchurl stdenv m4;
+  };
 
   epm = import ../development/tools/misc/epm {
     inherit fetchurl stdenv rpm;
@@ -2423,8 +2422,7 @@ let
   };
 
   ltrace = composedArgsAndFun (selectVersion ../development/tools/misc/ltrace "0.5-3deb") {
-    inherit fetchurl stdenv builderDefs stringsWithDeps lib;
-    elfutils = elfutils.passthru.function {version = "0.127";};
+    inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
   };
 
   mk = import ../development/tools/build-managers/mk {
