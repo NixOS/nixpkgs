@@ -242,10 +242,10 @@ let
       metacity
       ;
     inherit (pkgs.kde42)
-      kde42.kdelibs
-      kde42.kdebase_workspace
-      kde42.kdebase
-      kde42.kdebase_runtime
+      kdelibs
+      kdebase_workspace
+      kdebase
+      kdebase_runtime
       ;
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_23)
