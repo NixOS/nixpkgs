@@ -1,10 +1,15 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "cksfv-1.3";
-  builder = ./builder.sh;
+  name = "cksfv-1.3.13";
+  
   src = fetchurl {
-    url = http://www.fodder.org/cksfv/cksfv-1.3.tar.gz;
-    md5 = "e00cf6a80a566539eb6f3432f2282c38";
+    url = http://zakalwe.fi/~shd/foss/cksfv/files/cksfv-1.3.13.tar.bz2;
+    sha256 = "0d8lipfdwcs31qql3qhqvgd2c6jhdlfnhdsyw84kka781ay1pvhn";
+  };
+
+  meta = {
+    homepage = http://zakalwe.fi/~shd/foss/cksfv/;
+    description = "A tool for verifying files against a SFV checksum file";
   };
 }
