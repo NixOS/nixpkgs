@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
 	preConfigure = "sed -e '/jpeg_incdirs/s@/usr@${libjpeg}@' -i configure";
 
-  doCheck = true;
+#  doCheck = true;
 
   meta = {
     homepage = http://poppler.freedesktop.org/;

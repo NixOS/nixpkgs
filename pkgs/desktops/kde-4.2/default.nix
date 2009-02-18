@@ -28,6 +28,9 @@ rec {
     inherit (pkgs) stdenv fetchurl cmake qt4;
   };
   
+  qca2 = import ./support/qca2 {
+    inherit (pkgs) stdenv fetchurl which qt4;
+  };
 ### LIBS
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
@@ -60,7 +63,11 @@ rec {
 ### ADDITIONAL
 
   kdegraphics = import ./graphics {
-    inherit (pkgs) stdenv fetchurl cmake;
+    inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends gphoto2;
+    inherit (pkgs) libspectre djvulibre chmlib;
+    inherit (pkgs.xlibs) libXxf86vm;
+    poppler = pkgs.popplerQt4;
     inherit kdelibs;
+    inherit automoc4 phonon strigi qimageblitz soprano qca2;
   };
 }

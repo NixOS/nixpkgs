@@ -3649,6 +3649,13 @@ let
     qt4Support = getConfig [ "poppler" "qt4Support" ] false;
   };
 
+  popplerQt4 = import ../development/libraries/poppler {
+    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
+      pkgconfig;
+    inherit (gtkLibs) glib gtk;
+    qt4Support = true;
+  };
+
   popt = import ../development/libraries/popt {
     inherit fetchurl stdenv gettext;
   };
