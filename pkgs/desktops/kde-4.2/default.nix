@@ -70,4 +70,10 @@ rec {
     inherit kdelibs;
     inherit automoc4 phonon strigi qimageblitz soprano qca2;
   };
+  
+  kdemultimedia = import ./multimedia {
+    inherit (pkgs) stdenv fetchurl cmake perl qt4 alsaLib xineLib libvorbis flac taglib cdparanoia;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
 }
