@@ -69,13 +69,13 @@ rec {
 ### ADDITIONAL
 
   kdepimlibs = import ./pimlibs {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost cyrus_sasl gpgme pthread_stubs libical;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost cyrus_sasl gpgme libical openldap;
     inherit kdelibs;
     inherit automoc4 phonon akonadi;
   };
   
   kdeadmin = import ./admin {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit (pkgs) stdenv fetchurl cmake qt4 pkgconfig perl;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon;
   };
