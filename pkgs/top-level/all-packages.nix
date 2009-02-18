@@ -3281,6 +3281,10 @@ let
     inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
   };
 
+  libical = import ../development/libraries/libical {
+    inherit stdenv fetchurl perl;
+  };
+  
   libQGLViewer = import ../development/libraries/libqglviewer {
     inherit fetchurl stdenv;
     inherit qt4;

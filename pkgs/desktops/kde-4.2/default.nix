@@ -31,6 +31,12 @@ rec {
   qca2 = import ./support/qca2 {
     inherit (pkgs) stdenv fetchurl which qt4;
   };
+  
+  akonadi = import ./support/akonadi {
+    inherit (pkgs) stdenv fetchurl cmake qt4 shared_mime_info libxslt boost mysql;
+    inherit automoc4;
+  };
+  
 ### LIBS
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
@@ -62,6 +68,18 @@ rec {
 
 ### ADDITIONAL
 
+  kdepimlibs = import ./pimlibs {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost cyrus_sasl gpgme pthread_stubs libical;
+    inherit kdelibs;
+    inherit automoc4 phonon akonadi;
+  };
+  
+  kdeadmin = import ./admin {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon;
+  };
+  
   kdegraphics = import ./graphics {
     inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends gphoto2;
     inherit (pkgs) libspectre djvulibre chmlib;
