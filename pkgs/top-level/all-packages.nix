@@ -2149,6 +2149,10 @@ let
     inherit gcc;
   };
 
+  avr8burnomat = import ../development/misc/avr8-burn-omat {
+    inherit fetchurl stdenv unzip;
+  };
+
   /*
   toolbus = import ../development/interpreters/toolbus {
     inherit stdenv fetchurl atermjava toolbuslib aterm yacc flex;
