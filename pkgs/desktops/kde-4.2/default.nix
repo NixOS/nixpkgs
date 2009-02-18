@@ -72,8 +72,15 @@ rec {
   };
   
   kdemultimedia = import ./multimedia {
-    inherit (pkgs) stdenv fetchurl cmake perl qt4 alsaLib xineLib libvorbis flac taglib cdparanoia;
+    inherit (pkgs) stdenv fetchurl cmake perl qt4;
+    inherit (pkgs) alsaLib xineLib libvorbis flac taglib cdparanoia;
     inherit kdelibs;
     inherit automoc4 phonon;
+  };
+  
+  kdegames = import ./games {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit kdelibs;
+    inherit automoc4 phonon qca2;
   };
 }
