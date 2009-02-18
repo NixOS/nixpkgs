@@ -470,6 +470,34 @@ in
     };
   };
 
+  mechanize = t.pythonLibSetup.passthru.fun {
+    name = "mechanize-0.1.11";
+    buildInputs = [ t.setuptools ];
+    src = fetchurl {
+      url = http://wwwsearch.sourceforge.net/mechanize/src/mechanize-0.1.11.tar.gz;
+      sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
+    };
+    meta = {
+      description = "Stateful programmatic web browsing in Python, after Andy Lester's Perl module WWW::Mechanize";
+      homepage = http://wwwsearch.sourceforge.net/mechanize/;
+      license = ["BSD" "ZPL 2.1"];
+    };
+    pyCheck = "from mechanize import Browser";
+  };
+
+  pexpect = t.pythonLibSetup.passthru.fun {
+    name = "pexpect-2.3";
+    src = fetchurl {
+      url = mirror://sourceforge/pexpect/pexpect-2.3.tar.gz;
+      sha256 = "0x8bfjjqygriry1iyygm5048ykl5qpbpzqfp6i8dhkslm3ryf5fk";
+    };
+    meta = {
+      description = "tcl expect as python library";
+      homepage = http://www.noah.org/wiki/Pexpect;
+      license = "MIT";
+    };
+  };
+
   ### python applications
 
   pythonExStub = composableDerivation {
