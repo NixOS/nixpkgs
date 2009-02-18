@@ -247,6 +247,9 @@ let
         kdebase_workspace
         kdebase
         kdebase_runtime
+	kdegraphics
+	kdemultimedia
+	kdegames
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
