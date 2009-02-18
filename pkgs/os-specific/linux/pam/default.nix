@@ -1,12 +1,18 @@
 {stdenv, fetchurl, cracklib, flex}:
 
 stdenv.mkDerivation {
-  name = "linux-pam-0.99.6.3";
-  builder = ./builder.sh;
+  name = "linux-pam-1.0.3";
+
   src = fetchurl {
-    url = mirror://kernel/linux/libs/pam/pre/library/Linux-PAM-0.99.6.3.tar.bz2;
-    md5 = "4c2830ed55a41e795af6a482009a036c";
+    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.0.3.tar.bz2;
+    sha256 = "1xqj4ibnid5w3pi629vj7jiddf192kzm8rbm3vy90diqpl1k5h6n";
   };
-  buildInputs = [flex];
-  preConfigure = "configureFlags=\"--includedir=$out/include/security\"";
+
+  buildInputs = [flex cracklib];
+
+  CRACKLIB_DICTPATH = "${cracklib}/lib";
+
+  preConfigure = ''
+    configureFlags="$configureFlags --includedir=$out/include/security"
+  '';
 }
