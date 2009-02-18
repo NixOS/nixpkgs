@@ -20,9 +20,6 @@ stdenv.mkDerivation {
 
   buildInputs = [perl];
 
-  # !!! hacky
-  fixupPhase = "ln -s $out/include/asm $out/include/asm-$platform";
-
   extraIncludeDirs =
     if stdenv.system == "powerpc-linux" then ["ppc"] else [];
 
@@ -40,5 +37,13 @@ stdenv.mkDerivation {
     # Some builds (e.g. KVM) want a kernel.release.
     ensureDir $out/include/config
     echo "${version}-default" > $out/include/config/kernel.release
+  '';
+
+  # !!! hacky
+  fixupPhase = ''
+    ln -s asm $out/include/asm-$platform
+    if test "$platform" = "i386" -o "$platform" = "x86_64"; then
+      ln -s asm $out/include/asm-x86
+    fi  
   '';
 }

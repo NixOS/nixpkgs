@@ -2,12 +2,12 @@
    
 assert stdenv.isLinux;
    
-stdenv.mkDerivation {
-  name = "kvm-82";
+stdenv.mkDerivation rec {
+  name = "kvm-84";
    
   src = fetchurl {
-    url = mirror://sourceforge/kvm/kvm-82.tar.gz;
-    sha256 = "1fk58g8z9v7z42vy76zq0sq28slqf8zszzmh73vyxm07vfbc96zs";
+    url = "mirror://sourceforge/kvm/${name}.tar.gz";
+    sha256 = "13lqhy4lpxqby7qj3l1cdbj73c7jmvkq73bc5wchwn0l0dkjsjlk";
   };
 
   patches = [
