@@ -241,7 +241,7 @@ let
       gnomeutils
       metacity
       ;
-    kde42 = {
+    kde42 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kde42)
         kdelibs
         kdebase_workspace
