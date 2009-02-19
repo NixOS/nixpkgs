@@ -78,6 +78,7 @@ let
       gnutar
       gnutls
       gphoto2
+      gprolog
       gsl
       guile
       gqview
