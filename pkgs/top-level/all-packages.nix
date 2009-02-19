@@ -1722,6 +1722,10 @@ let
     };
   */
 
+  gprolog = import ../development/compilers/gprolog {
+    inherit fetchurl stdenv;
+  };
+
   gwt = import ../development/compilers/gwt {
     inherit stdenv fetchurl;
     inherit (gtkLibs) glib gtk pango atk;
