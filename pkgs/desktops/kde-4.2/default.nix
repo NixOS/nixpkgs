@@ -96,9 +96,28 @@ rec {
     inherit automoc4 phonon;
   };
   
+  kdenetwork = import ./network {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
+    inherit (pkgs) libidn;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon qca2 soprano qimageblitz;
+  };
+  
   kdegames = import ./games {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl;
     inherit kdelibs;
     inherit automoc4 phonon qca2;
+  };
+
+  kdetoys = import ./toys {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit kdelibs kdebase_workspace;
+    inherit automoc4 phonon;
+  };
+    
+  kdeutils = import ./utils {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python gmp libzip libarchive;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon qimageblitz;
   };
 }
