@@ -47,9 +47,9 @@ rec {
 ### BASE  
   kdebase_workspace = import ./base-workspace {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl python;
-    inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs;
+    inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs boost;
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage;
-    inherit kdelibs;
+    inherit kdelibs kdepimlibs;
     inherit automoc4 phonon strigi soprano qimageblitz;
   };
   
