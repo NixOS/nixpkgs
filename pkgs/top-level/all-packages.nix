@@ -2280,6 +2280,10 @@ let
     inherit fetchurl stdenv replace ncurses;
   };
 
+  cmakeUnstable = lowPrio (import ../development/tools/build-managers/cmake/2.6.3.nix {
+    inherit fetchurl stdenv replace ncurses;
+  });
+
   cproto = import ../development/tools/misc/cproto {
     inherit fetchurl stdenv flex bison;
   };
