@@ -148,12 +148,14 @@ rec {
               sha256 = "0sdykpziij1f3w4braq8r8nqg4lnsd7i7gi1k5d7c31m2q3b9a7r";
             };
           }
+          /* url is broken
           { tty = 8;
             theme = pkgs.fetchurl {
               url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
               md5 = "61969309d23c631e57b0a311102ef034";
             };
           }
+          */
         ];
       };
 
