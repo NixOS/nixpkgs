@@ -251,6 +251,7 @@ let
 	kdegraphics
 	kdemultimedia
 	kdegames
+	kdeadmin
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
