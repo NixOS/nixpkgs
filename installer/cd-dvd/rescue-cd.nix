@@ -190,6 +190,9 @@ rec {
         pkgs.gdb # for debugging Nix
         pkgs.testdisk # useful for repairing boot problems
         pkgs.mssys # for writing Microsoft boot sectors / MBRs
+
+        pkgs.sshfsFuse
+        pkgs.screen
       ];
     };
    
