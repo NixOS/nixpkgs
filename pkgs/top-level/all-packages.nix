@@ -4248,13 +4248,24 @@ let
     propagatedBuildInputs = [perlTestException];
   };
 
-  perlCatalystActionRenderView = buildPerlPackage {
-    name = "Catalyst-Action-RenderView-0.08";
+  perlCatalystActionRenderView = buildPerlPackage rec {
+    name = "Catalyst-Action-RenderView-0.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-Action-RenderView-0.08.tar.gz;
-      sha256 = "1qng995mzgpm1gwb315ynm3spajf0ypmh1ciivqks3r0aamq2ar0";
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
+      sha256 = "06bxbdfjgnwp8zz4mqq2x7n5ng02h94m27l610icsps7r9iwi8f9";
     };
     propagatedBuildInputs = [perlCatalystRuntime perlHTTPRequestAsCGI perlDataVisitor];
+  };
+
+  perlCatalystAuthenticationStoreDBIxClass = buildPerlPackage rec {
+    name = "Catalyst-Authentication-Store-DBIx-Class-0.1082";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JAYK/${name}.tar.gz";
+      sha256 = "1rh5jwqw3fb16ll5id8z0igpqdwr0czi0xbaa2igalxr53hh2cni";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlCatalystPluginAuthentication perlCatalystModelDBICSchema
+    ];
   };
 
   perlCatalystComponentInstancePerContext = buildPerlPackage rec {
@@ -4355,17 +4366,6 @@ let
     ];
   };
 
-  perlCatalystPluginAuthenticationStoreDBIxClass = buildPerlPackage {
-    name = "Catalyst-Authentication-Store-DBIx-Class-0.107";
-    src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/J/JA/JAYK/Catalyst-Authentication-Store-DBIx-Class-0.107.tar.gz;
-      sha256 = "1vlrl65wf2i65zm2svb1mvylcx5vdrvxr09y16az60kdwiqvam6n";
-    };
-    propagatedBuildInputs = [
-      perlCatalystRuntime perlCatalystPluginAuthentication perlCatalystModelDBICSchema
-    ];
-  };
-
   perlCatalystPluginAuthorizationACL = buildPerlPackage {
     name = "Catalyst-Plugin-Authorization-ACL-0.10";
     src = fetchurl {
@@ -4405,7 +4405,7 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlHTMLWidget];
   };
 
-  perlCatalystPluginSession = buildPerlPackage rec{
+  perlCatalystPluginSession = buildPerlPackage rec {
     name = "Catalyst-Plugin-Session-0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
@@ -4457,11 +4457,11 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlMIMETypes];
   };
 
-  perlCatalystViewTT = buildPerlPackage {
-    name = "Catalyst-View-TT-0.27";
+  perlCatalystViewTT = buildPerlPackage rec {
+    name = "Catalyst-View-TT-0.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Catalyst-View-TT-0.27.tar.gz;
-      sha256 = "03xs31y9m5nrmfzpfmlzlg3ivys1gg8nwd6fvwbg72a3z36brghd";
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
+      sha256 = "18chdzgv0fvq65kfp8am2f5cayxpzg355q7jin4xlzygbgh2a5vg";
     };
     propagatedBuildInputs = [
       perlCatalystRuntime perlTemplateToolkit perlClassAccessor
@@ -4528,12 +4528,12 @@ let
   };
 
   perlClassC3AdoptNEXT = buildPerlPackage rec {
-    name = "Class-C3-Adopt-NEXT-0.06";
+    name = "Class-C3-Adopt-NEXT-0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "0jxwli7452nmdws437hv235b6p97rraz00mgxmf7dsx96ym4xm1y";
+      sha256 = "1kxbdq10vicrbz3i6hvml3mma5x0r523gfdd649f9bvrsizb0jxj";
     };
-    propagatedBuildInputs = [perlMROCompat perlTestException];
+    propagatedBuildInputs = [perlMROCompat perlTestException perlListMoreUtils];
   };
 
   perlClassC3Componentised = buildPerlPackage {
@@ -5678,7 +5678,7 @@ let
       perlCatalystManual perlCatalystRuntime perlCatalystDevel
       perlCatalystPluginSession perlCatalystPluginAuthentication
       perlCatalystPluginAuthenticationStoreDBIC
-      perlCatalystPluginAuthenticationStoreDBIxClass
+      perlCatalystAuthenticationStoreDBIxClass
       perlCatalystPluginAuthorizationRoles
       perlCatalystPluginAuthorizationACL
       perlCatalystPluginHTMLWidget
