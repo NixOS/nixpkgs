@@ -37,6 +37,14 @@ rec {
     inherit automoc4;
   };
   
+  decibel = import ./support/decibel {
+    inherit (pkgs) stdenv fetchurl cmake qt4 tapioca_qt;
+  };
+  
+  eigen = import ./support/eigen {
+    inherit (pkgs) stdenv fetchurl cmake;    
+  };
+  
 ### LIBS
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
@@ -80,6 +88,19 @@ rec {
     inherit automoc4 phonon;
   };
   
+  kdeartwork = import ./artwork {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl xscreensaver;
+    inherit kdelibs kdebase_workspace;
+    inherit automoc4 phonon strigi eigen;
+  };
+  
+  kdeedu = import ./edu {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt openbabel boost;
+    inherit (pkgs) readline gmm gsl facile ocaml;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   kdegraphics = import ./graphics {
     inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends gphoto2;
     inherit (pkgs) libspectre djvulibre chmlib;
@@ -98,9 +119,16 @@ rec {
   
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
-    inherit (pkgs) libidn;
+    inherit (pkgs) libidn libvncserver;
+    inherit (pkgs.xlibs) libXtst;
     inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qca2 soprano qimageblitz;
+    inherit automoc4 phonon qca2 soprano qimageblitz decibel;
+  };
+  
+  kdepim = import ./pim {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost gpgme libassuan libgpgerror;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon akonadi strigi soprano;
   };
   
   kdegames = import ./games {
@@ -119,5 +147,19 @@ rec {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl python gmp libzip libarchive;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qimageblitz;
+  };
+  
+### DEVELOPMENT
+
+  kdesdk = import ./sdk {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost subversion;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon strigi;
+  };
+  
+  kdewebdev = import ./webdev {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon;
   };
 }

@@ -1,5 +1,7 @@
 {stdenv, fetchurl, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn,
- kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz}:
+ libvncserver,
+ libXtst,
+ kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, decibel}:
 
 stdenv.mkDerivation {
   name = "kdenetwork-4.2.0";
@@ -9,5 +11,7 @@ stdenv.mkDerivation {
   };
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
-                  kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz ];
+                  libvncserver
+		  libXtst
+                  kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz decibel ];
 }
