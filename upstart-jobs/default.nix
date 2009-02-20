@@ -363,6 +363,7 @@ let
   ++ optional config.services.hal.enable
     (import ../upstart-jobs/hal.nix {
       inherit (pkgs) stdenv hal;
+      inherit config;
     })
 
   ++ optional config.services.gpm.enable 
