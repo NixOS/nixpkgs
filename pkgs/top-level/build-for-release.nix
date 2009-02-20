@@ -255,6 +255,7 @@ let
 	kdeedu
 	kdeartwork
 	kdesdk
+	kdeutils
 	kdetoys
 	kdewebdev
         ;
