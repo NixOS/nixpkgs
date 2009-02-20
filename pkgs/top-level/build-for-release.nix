@@ -252,6 +252,10 @@ let
 	kdemultimedia
 	kdegames
 	kdeadmin
+	kdeedu
+	kdeartwork
+	kdesdk
+	kdewebdev
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
