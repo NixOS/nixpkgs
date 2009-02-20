@@ -2959,7 +2959,7 @@ root        ALL=(ALL) SETENV: ALL
   environment = {
 
     pathsToLink = mkOption {
-      default = ["/bin" "/sbin" "/lib" "/share" "/man" "/info"];
+      default = ["/bin" "/sbin" "/lib" "/share" "/man" "/info" "/etc"];
       example = ["/"];
       description = "
         Lists directories to be symlinked in `/var/run/current-system/sw'.

@@ -15,6 +15,9 @@ export LANG=@defaultLocale@
 export EDITOR=nano
 export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
 export LOCATE_PATH=/var/cache/locatedb
+export KDEDIRS=/var/run/current-system/sw
+export XDG_CONFIG_DIRS=/var/run/current-system/sw/etc/xdg
+export XDG_DATA_DIRS=/var/run/current-system/sw/share
 
 
 # Set up secure multi-user builds: non-root users build through the
@@ -41,7 +44,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export PKG_CONFIG_PATH="$i/lib/pkgconfig:$PKG_CONFIG_PATH"
 
     # Automake's `aclocal' bails out if it finds non-existent directories
-    # in its path.
+    # in its path.  !!! We should fix aclocal instead.
     if [ -d "$i/share/aclocal" ]
     then
 	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
@@ -50,6 +53,11 @@ for i in $NIX_PROFILES; do # !!! reverse
 
     # GStreamer.
     export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10:$GST_PLUGIN_PATH"
+
+    # KDE/Gnome stuff.
+    export KDEDIRS=$i:$KDEDIRS
+    export XDG_CONFIG_DIRS=$i/etc/xdg:$XDG_CONFIG_DIRS
+    export XDG_DATA_DIRS=$i/share:$XDG_DATA_DIRS
 done
 
 

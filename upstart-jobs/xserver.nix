@@ -296,9 +296,6 @@ let
     '' else if sessionType == "kde4" then ''
 
       # Start KDE.
-      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kde42.kdelibs}:${pkgs.kde42.kdebase}:${pkgs.kde42.kdebase_runtime}:${pkgs.kde42.kdebase_workspace}
-      export XDG_CONFIG_DIRS=${pkgs.kde42.kdelibs}/etc/xdg:${pkgs.kde42.kdebase_runtime}/etc/xdg:${pkgs.kde42.kdebase_workspace}/etc/xdg
-      export XDG_DATA_DIRS=${pkgs.kde42.kdelibs}/share:${pkgs.kde42.kdebase}/share:${pkgs.kde42.kdebase_runtime}/share:${pkgs.kde42.kdebase_workspace}/share:${pkgs.shared_mime_info}/share
       exec ${pkgs.kde42.kdebase_workspace}/bin/startkde
 
     '' else ''
@@ -398,6 +395,8 @@ rec {
     pkgs.kde42.kdebase
     pkgs.kde42.kdebase_runtime
     pkgs.kde42.kdebase_workspace
+    pkgs.kde42.kdegames
+    pkgs.shared_mime_info
     xorg.xset # used by startkde, non-essential
   ]
   ++ optional (videoDriver == "nvidia") [

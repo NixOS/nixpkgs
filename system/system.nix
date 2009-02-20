@@ -266,6 +266,15 @@ rec {
     inherit (config.environment) pathsToLink;
 
     ignoreCollisions = true;
+
+    postBuild =
+      if config.services.xserver.sessionType == "kde4" then
+        # Rebuild the MIME database.  Otherwise KDE won't be able to
+        # find many MIME types.
+        ''
+          ${pkgs.shared_mime_info}/bin/update-mime-database $out/share/mime
+        ''
+      else "";
   };
 
 
@@ -301,10 +310,10 @@ rec {
     inherit (usersGroups) createUsersGroups usersList groupsList;
 
     path = [
-        pkgs.coreutils pkgs.gnugrep pkgs.findutils
-        pkgs.glibc # needed for getent
-        pkgs.pwdutils
-      ];
+      pkgs.coreutils pkgs.gnugrep pkgs.findutils
+      pkgs.glibc # needed for getent
+      pkgs.pwdutils
+    ];
 
     adjustSetuidOwner = pkgs.lib.concatStrings (map 
       (_entry: let entry = {
