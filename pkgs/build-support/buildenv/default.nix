@@ -20,11 +20,13 @@
   # symlink (e.g., ["/bin"]).  Any file not inside any of the
   # directories in the list is not symlinked.
   pathsToLink ? ["/"]
+
+, # Shell command to run after building the symlink tree.
+  postBuild ? ""
 }:
 
 stdenv.mkDerivation {
-  inherit name manifest paths ignoreCollisions pathsToLink;
-  realBuilder = perl + "/bin/perl";
+  inherit name manifest paths ignoreCollisions pathsToLink postBuild;
+  realBuilder = "${perl}/bin/perl";
   args = ["-w" ./builder.pl];
 }
-
