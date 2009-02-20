@@ -3799,8 +3799,7 @@ let
   };
 
   tapioca_qt = import ../development/libraries/tapioca-qt {
-    inherit fetchsvn stdenv cmake telepathy_qt;
-    qt = qt4;
+    inherit stdenv fetchurl cmake qt4 telepathy_qt;
   };
 
   tecla = import ../development/libraries/tecla {
@@ -3817,8 +3816,7 @@ let
   };
 
   telepathy_qt = import ../development/libraries/telepathy-qt {
-    inherit fetchsvn stdenv cmake;
-    qt = qt4;
+    inherit stdenv fetchurl cmake qt4;
   };
 
   tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.4.18") {
