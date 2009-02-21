@@ -2810,6 +2810,13 @@ let
     inherit fetchurl stdenv;
   };
 
+  extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
+    inherit mesa tcl freeglut SDL SDL_mixer pkgconfig 
+    	libpng gettext intltool;
+    inherit (xlibs) libX11 xproto libXi inputproto
+    	libXmu libXext xextproto libXt libSM libICE;
+  };
+
   eventlog = import ../development/libraries/eventlog {
     inherit fetchurl stdenv;
   };
@@ -7188,6 +7195,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  /*tuxracer = builderDefsPackage (import ../games/tuxracer) {
+    inherit mesa tcl freeglut;
+    inherit (xlibs) libX11 xproto;
+  };*/
+
   udev = import ../os-specific/linux/udev {
     inherit fetchurl stdenv;
   };
@@ -7614,9 +7626,10 @@ let
     version = "0.6.2";
   };
 
-  compizBase = composedArgsAndFun (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.7.8") {
+  compizBase = composedArgsAndFun (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.8.0") {
     inherit lib builderDefs stringsWithDeps;
-    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext;
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext 
+      intltool;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
       damageproto randrproto xineramaproto renderproto kbproto xproto libX11
