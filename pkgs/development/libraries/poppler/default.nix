@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sed -e '/jpeg_incdirs/s@/usr@${libjpeg}@' -i configure";
 
-  doCheck = true;
+  # XXX: The Poppler/Qt4 test suite refers to non-existent PDF files
+  # such as `../../../test/unittestcases/UseNone.pdf'.
+  doCheck = !qt4Support;
 
   meta = {
     homepage = http://poppler.freedesktop.org/;
