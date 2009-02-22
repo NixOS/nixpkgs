@@ -9029,6 +9029,10 @@ let
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
 
+  zdoom = import ../games/zdoom {
+    inherit cmake stdenv fetchsvn SDL nasm p7zip zlib flac fmod libjpeg;
+  };
+
   zoom = import ../games/zoom {
     inherit fetchurl stdenv perl expat freetype;
     inherit (xlibs) xlibs;
