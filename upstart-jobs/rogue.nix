@@ -1,4 +1,4 @@
-{pkgs, config}: 
+{pkgs, config, ...}: 
 
 # Show rogue game on tty8
 # Originally used only by installation CD

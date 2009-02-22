@@ -1,4 +1,4 @@
-{pkgs, config}: 
+{pkgs, config, ...}: 
 
 # Show the NixOS manual on tty7
 # Originally used only by installation CD
