@@ -72,7 +72,7 @@ rec {
         cp $lvm2/sbin/lvm.static $out/bin/lvm
       fi
       cp $utillinux/bin/mount $utillinux/bin/umount $utillinux/sbin/pivot_root $out/bin
-      cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $out/bin
+      cp -p $e2fsprogs/sbin/fsck* $e2fsprogs/sbin/e2fsck $e2fsprogs/sbin/tune2fs $out/bin
       cp $udev/sbin/udevd $udev/sbin/udevadm $out/bin
       cp $udev/lib/udev/*_id $out/bin
       nuke-refs $out/bin/*
