@@ -73,12 +73,12 @@ JkAutoAlias /var/tomcat/webapps
 # All requests go to worker by default
 JkMount /* loadbalancer
 # Serve some static files using httpd
-JkUnMount /*.html loadbalancer
-JkUnMount /*.jpg  loadbalancer
-JkUnMount /*.gif  loadbalancer
-JkUnMount /*.css  loadbalancer
-JkUnMount /*.png  loadbalancer
-JkUnMount /*.js  loadbalancer
+#JkUnMount /*.html loadbalancer
+#JkUnMount /*.jpg  loadbalancer
+#JkUnMount /*.gif  loadbalancer
+#JkUnMount /*.css  loadbalancer
+#JkUnMount /*.png  loadbalancer
+#JkUnMount /*.js  loadbalancer
 
 # Add jkstatus for managing runtime data
 <Location /jkstatus/>
