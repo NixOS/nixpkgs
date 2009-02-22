@@ -46,7 +46,7 @@ let
 
       # !!! TODO: make sure that HAL starts after acpid,
       # otherwise hald-addon-acpi will grab /proc/acpi/event.
-      start on dbus
+      start on ${if config.powerManagement.enable then "acpid" else "dbus"}
       stop on shutdown
 
       start script
