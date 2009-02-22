@@ -1,6 +1,8 @@
-#! @staticShell@
+#! @shell@
 
 targetRoot=/mnt/root
+
+export LD_LIBRARY_PATH=@extraUtils@/lib
 
 
 errorDialog() {
@@ -14,13 +16,13 @@ errorDialog() {
     read -t $timeout reply
     case $reply in
         f)
-            exec @staticShell@;;
+            exec @shell@;;
         i)
             echo
             echo "Quit interactive shell with exit status of"
             echo "  0        : to continue"
             echo "  non-zero : to get this dialog again"
-            @staticShell@ || fail
+            @shell@ || fail
             ;;
         *)
             echo continuing ignoring error;;
@@ -299,7 +301,6 @@ umount /proc
 exec run-init "$targetRoot" "$stage2Init"
 
 echo
-echo $1 failed running "$stage2Init"
-echo "It's your last chance to fix things manually without rebooting"
-echo "finally switching to interactive shell pid 1"
-export $stage2Init; exec @staticShell@
+echo "$1: failed running $stage2Init"
+echo "Dropping into a root shell..."
+export $stage2Init; exec @shell@
