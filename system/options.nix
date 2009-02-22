@@ -2186,7 +2186,20 @@ in
     };
 
   };
+
+    
+  powerManagement = {
+    
+    enable = mkOption {
+      default = false;
+      description = "
+        Whether to enable power management.
+      ";
+    };
+
+  };
   
+
   nesting = {
     children = mkOption {
       default = [];
@@ -2196,6 +2209,7 @@ in
     };
   };
 
+  
   passthru = mkOption {
     default = {};
     description = "
