@@ -44,6 +44,8 @@ let
     job = ''
       description "HAL daemon"
 
+      # !!! TODO: make sure that HAL starts after acpid,
+      # otherwise hald-addon-acpi will grab /proc/acpi/event.
       start on dbus
       stop on shutdown
 
