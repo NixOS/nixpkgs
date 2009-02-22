@@ -1933,6 +1933,16 @@ in
         on the remote machine.
       ";
     };
+ 
+    proxy = mkOption {
+      default = "";
+      description = "
+        This option specifies the proxy to use for fetchurl. The real effect 
+        is just exporting http_proxy, https_proxy and ftp_proxy with that
+        value.
+      ";
+      example = "http://127.0.0.1:3128";
+    };
 
     # Environment variables for running Nix.
     envVars = mkOption {
@@ -1962,7 +1972,16 @@ in
           export NIX_REMOTE_SYSTEMS=/etc/nix.machines
           export NIX_CURRENT_LOAD=/var/run/nix/current-load
         ''
-      else "") + conf;
+      else "")
+      +
+      (if config.nix.proxy != "" then
+        ''
+          export http_proxy=${config.nix.proxy}
+          export https_proxy=${config.nix.proxy}
+          export ftp_proxy=${config.nix.proxy}
+        ''
+      else "")
+      + conf;
     };
   };
 
