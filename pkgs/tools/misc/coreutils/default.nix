@@ -1,13 +1,11 @@
 {stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-7.0";
+  name = "coreutils-7.1";
   
   src = fetchurl {
-    # Version 7.0 is marked as "beta", which is why it's on `alpha.gnu.org'.
-    # See http://lists.gnu.org/archive/html/bug-coreutils/2008-10/msg00064.html .
-    url = "ftp://alpha.gnu.org/gnu/coreutils/${name}.tar.gz";
-    sha256 = "00cwf8rqbj89ikv8fhdhv26dpc2ghzw1hn48pk1vg3nnmxj55nr7";
+    url = "mirror://gnu/coreutils/${name}.tar.gz";
+    sha256 = "019a7kccrdnim2xigwsgc8dhiw0hb1y9q4344qs5z24sl6gv2g41";
   };
 
   buildInputs = stdenv.lib.optional aclSupport acl;
