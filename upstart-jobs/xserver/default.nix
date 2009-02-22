@@ -545,7 +545,9 @@ mkIf cfg.enable {
            }
 
           ${cfg.displayManager.job.beforeScript}
-          
+
+          rm -f /tmp/.X0-lock
+
         end script
 
         ${cfg.displayManager.job.env}
