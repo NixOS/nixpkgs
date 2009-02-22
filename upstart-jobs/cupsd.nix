@@ -40,7 +40,10 @@ let
     Listen localhost:631
     Listen /var/run/cups/cups.sock
 
-    ServerRoot ${cups}/etc/cups
+    # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
+    # CUPS will write in the ServerRoot when e.g. adding new printers
+    # through the web interface.
+    ServerRoot /etc/cups
 
     ServerBin ${bindir}/lib/cups
 
@@ -101,11 +104,17 @@ in
 {
   name = "cupsd";
 
-  extraPath = [
-    cups
-  ];
+  extraPath = [cups];
 
-  
+  extraEtc = [
+    # CUPS expects the following files in its ServerRoot.
+    { source = "${cups}/etc/cups/mime.convs";
+      target = "cups/mime.convs";
+    }
+    { source = "${cups}/etc/cups/mime.types";
+      target = "cups/mime.types";
+    }
+  ];
   
   job = ''
     description "CUPS printing daemon"
