@@ -23,5 +23,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.fmod.org/;
     description = "Programming library and toolkit for the creation and playback of interactive audio";
+    license = "unfree";
   };
 }
