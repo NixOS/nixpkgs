@@ -1,4 +1,4 @@
-{config, pkgs}:
+{config, pkgs, modprobe}:
 
 let
 
@@ -16,16 +16,24 @@ let
   bindir = pkgs.runCommand "cups-progs" {} ''
     ensureDir $out/lib/cups
     ln -s ${cups}/lib/cups/* $out/lib/cups/
-    
+
+    # Provide support for printing via SMB.    
     rm $out/lib/cups/backend
     ensureDir $out/lib/cups/backend
     ln -s ${cups}/lib/cups/backend/* $out/lib/cups/backend/
     ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+
+    # Provide Ghostscript rasterisation, necessary for non-Postscript
+    # printers.
+    rm $out/lib/cups/filter
+    ensureDir $out/lib/cups/filter
+    ln -s ${cups}/lib/cups/filter/* $out/lib/cups/filter/
+    ln -s ${pkgs.ghostscript}/lib/cups/filter/* $out/lib/cups/filter/
   ''; # */
   
 
   cupsdConfig = pkgs.writeText "cupsd.conf" ''
-    LogLevel info
+    LogLevel debug
 
     SystemGroup root
 
@@ -96,6 +104,8 @@ in
   extraPath = [
     cups
   ];
+
+  
   
   job = ''
     description "CUPS printing daemon"
@@ -107,6 +117,9 @@ in
         mkdir -m 0755 -p ${logDir}
         mkdir -m 0700 -p /var/cache/cups
         mkdir -m 0700 -p /var/spool/cups
+
+        # Make USB printers show up.
+        ${modprobe}/sbin/modprobe usblp || true
     end script
 
     respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F

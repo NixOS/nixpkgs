@@ -326,7 +326,7 @@ let
   # CUPS (printing) daemon.
   ++ optional config.services.printing.enable
     (import ../upstart-jobs/cupsd.nix {
-      inherit config pkgs;
+      inherit config pkgs modprobe;
     })
 
   # Gateway6
