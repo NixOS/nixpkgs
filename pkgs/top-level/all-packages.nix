@@ -2863,6 +2863,10 @@ let
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
+  fmod = import ../development/libraries/fmod {
+    inherit stdenv fetchurl;
+  };
+
   freeimage = import ../development/libraries/freeimage {
     inherit fetchurl stdenv unzip;
   };
