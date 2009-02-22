@@ -34,7 +34,7 @@ in
       example = "0:0";
       description = "
         Device for manual resume attempt during boot. Looks like 
-        major:minor .
+        major:minor. ls -l /dev/SWAP_PARTION shows them.
       ";
     };
 
