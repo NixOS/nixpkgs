@@ -2246,6 +2246,7 @@ in
     (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)
     (import ../upstart-jobs/manual.nix)
+    (import ../upstart-jobs/rogue.nix)
 
     # fonts
     (import ../system/fonts.nix)
