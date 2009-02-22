@@ -360,6 +360,12 @@ let
       inherit (config.services.bitlbee) portNumber interface;
     })
 
+  # ACPI daemon.
+  ++ optional true /* !!! need some option */
+    (import ../upstart-jobs/acpid.nix {
+      inherit config pkgs;
+    })
+
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {
