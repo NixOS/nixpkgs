@@ -7711,7 +7711,7 @@ let
   };
 
   evince = import ../applications/misc/evince {
-    inherit fetchurl stdenv perl perlXMLParser gettext
+    inherit fetchurl stdenv perl perlXMLParser gettext intltool
       pkgconfig poppler libspectre djvulibre libxslt
       dbus dbus_glib shared_mime_info makeWrapper;
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
