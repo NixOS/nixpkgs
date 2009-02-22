@@ -297,6 +297,7 @@ let
     intel = { modules = [xorg.xf86videointel]; };
     nv =    { modules = [xorg.xf86videonv]; };
     ati =   { modules = [xorg.xf86videoati]; };
+    via =   { modules = [xorg.xf86videovia]; };
   };
 
   # Get a bunch of user settings.
