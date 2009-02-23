@@ -1,13 +1,13 @@
-{stdenv, fetchurl, bison, interactive ? false, ncurses ? null, texinfo ? null}:
+{stdenv, fetchurl, readline, interactive ? false, ncurses ? null, texinfo ? null}:
 
 assert interactive -> ncurses != null;
 
-stdenv.mkDerivation {
-  name = "bash-3.2.48";
+stdenv.mkDerivation rec {
+  name = "bash-4.0";
 
   src = fetchurl {
-    url = mirror://gnu/bash/bash-3.2.48.tar.gz;
-    sha256 = "1i81scw3mnfjbmsn3cjfdancyx3d0rg8gd9hpdfng9j83dbdrs98";
+    url = "mirror://gnu/bash/${name}.tar.gz";
+    sha256 = "0605ql0ih55gpi0vfvcm45likzjafa4wjnkxqwq51aa0ysad74wp";
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -26,15 +26,29 @@ stdenv.mkDerivation {
     ./winsize.patch
   ];
 
-  # !!! Bison is only needed for bash-3.2 (because of bash32-001.patch)
-  buildInputs = [bison]
+  buildInputs = []
     ++ stdenv.lib.optional (texinfo != null) texinfo
-    ++ stdenv.lib.optional interactive ncurses;
+    ++ stdenv.lib.optional interactive readline;
+
+  configureFlags = "--with-installed-readline";
 
   meta = {
     homepage = http://www.gnu.org/software/bash/;
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
         (if interactive then " (for interactive use)" else "");
+
+    longDescription = ''
+      Bash is the shell, or command language interpreter, that will
+      appear in the GNU operating system.  Bash is an sh-compatible
+      shell that incorporates useful features from the Korn shell
+      (ksh) and C shell (csh).  It is intended to conform to the IEEE
+      POSIX P1003.2/ISO 9945.2 Shell and Tools standard.  It offers
+      functional improvements over sh for both programming and
+      interactive use.  In addition, most sh scripts can be run by
+      Bash without modification.
+    '';
+
+    license = "GPLv3+";
   };
 }

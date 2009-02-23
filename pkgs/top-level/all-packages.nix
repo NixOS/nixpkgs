@@ -1325,7 +1325,7 @@ let
 
   bash = lowPrio (useFromStdenv "bash"
     (import ../shells/bash {
-      inherit fetchurl stdenv bison;
+      inherit fetchurl stdenv readline;
     }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash {
