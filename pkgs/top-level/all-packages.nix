@@ -3372,6 +3372,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libmsn = import ../development/libraries/libmsn {
+    inherit stdenv fetchurl cmake openssl;
+  };
+  
   libmspack = import ../development/libraries/libmspack {
     inherit fetchurl stdenv;
   };
