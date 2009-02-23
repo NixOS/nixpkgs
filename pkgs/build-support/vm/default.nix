@@ -803,21 +803,21 @@ rec {
     } // args);
          
     debian40i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r5-etch-i386";
-      fullName = "Debian 4.0r5 Etch (i386)";
+      name = "debian-4.0r7-etch-i386";
+      fullName = "Debian 4.0r7 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "37a5c17fd8d62b1d9a0264a702025a4381c1a8751e2550d101957d8fa724a6f4";
+        sha256 = "155c1d1b4ce54de6c8134ab0154c2a476ae40cc5899109f3f95fecd5e002c50d";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian40x86_64 = args: makeImageFromDebDist ({
-      name = "debian-4.0r5-etch-amd64";
-      fullName = "Debian 4.0r5 Etch (amd64)";
+      name = "debian-4.0r7-etch-amd64";
+      fullName = "Debian 4.0r7 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
-        sha256 = "244dc892f89f2f73ce8372cdf1f1d450b00c0e95196927ef7f99715f0d119d5b";
+        sha256 = "3ab73a45781651a78c824b4f281de91b1aa6974d63470f40525933d848183e44";
       };
       urlPrefix = mirror://debian;
     } // args);
