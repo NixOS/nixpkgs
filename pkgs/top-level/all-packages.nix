@@ -3658,7 +3658,7 @@ let
     inherit (gnome) glib;
   };
 
-  readline = readline5;
+  readline = readline6;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
     inherit fetchurl stdenv ncurses;
