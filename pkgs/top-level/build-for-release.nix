@@ -258,6 +258,8 @@ let
 	kdeutils
 	kdetoys
 	kdewebdev
+	kdenetwork
+	kdepim
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
