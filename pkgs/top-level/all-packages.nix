@@ -3668,6 +3668,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  readline6 = import ../development/libraries/readline/readline6.nix {
+    inherit fetchurl stdenv ncurses;
+  };
+
   # Also known as librdf, includes raptor and rasqal
   redland = import ../development/libraries/redland {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
