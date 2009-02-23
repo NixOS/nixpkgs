@@ -7824,7 +7824,7 @@ let
 
   emacsUnicode = lowPrio (import ../applications/editors/emacs-unicode {
     inherit fetchcvs stdenv ncurses pkgconfig x11 Xaw3d
-      libpng libjpeg libungif libtiff texinfo
+      libpng libjpeg libungif libtiff texinfo dbus
       autoconf automake;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
@@ -7832,6 +7832,7 @@ let
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
     xftSupport = getPkgConfig "emacs" "xftSupport" true;
+    dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
   });
 
   emms = import ../applications/editors/emacs-modes/emms {
