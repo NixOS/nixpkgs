@@ -38,11 +38,11 @@ rec {
   };
   
   decibel = import ./support/decibel {
-    inherit (pkgs) stdenv fetchurl cmake qt4 tapioca_qt;
+    inherit (pkgs) stdenv fetchurl cmake qt4 tapioca_qt telepathy_qt dbus;
   };
   
   eigen = import ./support/eigen {
-    inherit (pkgs) stdenv fetchurl cmake;    
+    inherit (pkgs) stdenv fetchurl cmake;
   };
   
 ### LIBS
@@ -119,16 +119,18 @@ rec {
   
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
-    inherit (pkgs) libidn libvncserver;
-    inherit (pkgs.xlibs) libXtst;
+    inherit (pkgs) libidn libvncserver tapioca_qt libmsn;
+    inherit (pkgs.xlibs) libXtst libXdamage;
     inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qca2 soprano qimageblitz decibel;
+    inherit automoc4 phonon qca2 soprano qimageblitz;
   };
   
   kdepim = import ./pim {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost gpgme libassuan libgpgerror;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
+    inherit (pkgs) shared_mime_info;
+    inherit (pkgs.xlibs) libXScrnSaver;
     inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon akonadi strigi soprano;
+    inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
   kdegames = import ./games {
