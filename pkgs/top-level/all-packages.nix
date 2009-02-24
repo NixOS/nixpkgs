@@ -9420,7 +9420,7 @@ let
   */
 
   texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript makeFontsConf;
+    inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick;
   };
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
