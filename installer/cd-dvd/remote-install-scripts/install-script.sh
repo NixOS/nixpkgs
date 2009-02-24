@@ -14,7 +14,7 @@ mkdir -p /mnt/etc/nixos
 
 cat > /mnt/etc/nixos/configuration.nix <<EOF
 
-pkgs: full_configuration: {
+{pkgs, config, ...}: {
   boot = {
     grubDevice = "/dev/sda";
     copyKernels = true;
