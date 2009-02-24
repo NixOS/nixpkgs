@@ -822,6 +822,26 @@ rec {
       urlPrefix = mirror://debian;
     } // args);
 
+    debian50i386 = args: makeImageFromDebDist ({
+      name = "debian-5.0-lenny-i386";
+      fullName = "Debian 5.0 Lenny (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
+        sha256 = "afbead64fb4820e50294686cd3ccdff91026b214aabec3f212f9001482001061";
+      };
+      urlPrefix = mirror://debian;
+    } // args);
+        
+    debian50x86_64 = args: makeImageFromDebDist ({
+      name = "debian-5.0-lenny-amd64";
+      fullName = "Debian 5.0 Lenny (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
+        sha256 = "73d74454d687dfbdfef1abbe4bd9c251119f38ab8d371a593aa271bfa227ed2b";
+      };
+      urlPrefix = mirror://debian;
+    } // args);
+
   };
 
 
@@ -896,6 +916,11 @@ rec {
     "util-linux" 
     "file"
     "dpkg-dev"
+    # Needed because it provides /etc/login.defs, whose absence causes
+    # the "passwd" post-installs script to fail.
+    "login"
+    # For shutting up some messages during some post-install scripts:
+    "mktemp"
   ];
 
 
@@ -948,6 +973,8 @@ rec {
     ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
+    debian50i386 = diskImageFuns.debian50i386 { packages = commonDebianPackages; };
+    debian50x86_64 = diskImageFuns.debian50x86_64 { packages = commonDebianPackages; };
 
   };
 
