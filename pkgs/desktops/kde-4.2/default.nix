@@ -133,6 +133,12 @@ rec {
     inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
+  kdeplasma_addons = import ./plasma-addons {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python shared_mime_info;
+    inherit kdelibs kdebase_workspace kdepimlibs kdegraphics;
+    inherit automoc4 phonon;
+  };
+  
   kdegames = import ./games {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl;
     inherit kdelibs;
