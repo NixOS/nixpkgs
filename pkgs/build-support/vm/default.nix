@@ -797,7 +797,7 @@ rec {
       fullName = "Ubuntu 8.10 Intrepid (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/intrepid/main/binary-amd64/Packages.bz2;
-        sha1 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
+        sha256 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
