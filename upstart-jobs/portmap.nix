@@ -21,6 +21,20 @@ let
           '';
         };
 
+        verbose = mkOption {
+          default = false;
+          description = ''
+            Whether to enable verbose output.
+          '';
+        };
+
+        chroot = mkOption {
+          default = "/var/empty";
+          description = ''
+            If non-empty, a path to change root to.
+          '';
+        };
+
       };
     };
   };
@@ -61,7 +75,11 @@ mkIf config.services.portmap.enable {
           start on network-interfaces/started
           stop on network-interfaces/stop
 
-          respawn ${portmap}/sbin/portmap
+          respawn ${portmap}/sbin/portmap \
+            ${if config.services.portmap.chroot == ""
+              then ""
+              else "-t \"${config.services.portmap.chroot}\""} \
+            ${if config.services.portmap.verbose then "-v" else ""}
         '';
     }];
   };
