@@ -8395,6 +8395,10 @@ let
     stdenv = overrideGCC stdenv gcc34;
   };
 
+  qemuSVN = import ../applications/virtualization/qemu/svn-6642.nix {
+    inherit fetchsvn SDL zlib which stdenv;
+  };
+
   qemuImage = composedArgsAndFun
     (selectVersion ../applications/virtualization/qemu/linux-img "0.2") {
     inherit builderDefs fetchurl stdenv;
