@@ -23,6 +23,7 @@ let
     nv =    { modules = [xorg.xf86videonv]; };
     ati =   { modules = [xorg.xf86videoati]; };
     via =   { modules = [xorg.xf86videovia]; };
+    cirrus = { modules = [xorg.xf86videocirrus]; };
   };
 
   # Get a bunch of user settings.
