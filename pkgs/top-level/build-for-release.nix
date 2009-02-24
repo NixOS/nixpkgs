@@ -260,6 +260,7 @@ let
 	kdewebdev
 	kdenetwork
 	kdepim
+	kdeplasma_addons
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
