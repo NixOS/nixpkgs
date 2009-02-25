@@ -1339,6 +1339,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  zile = import ../applications/editors/zile {
+    inherit fetchurl stdenv ncurses help2man;
+  };
+
   zip = import ../tools/archivers/zip {
     inherit fetchurl stdenv;
   };
