@@ -568,6 +568,11 @@ let
 
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
+  desktop_file_utils = import ../tools/misc/desktop-file-utils {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+  
   dev86 = import ../development/compilers/dev86 {
     inherit fetchurl stdenv;
   };
@@ -1196,6 +1201,10 @@ let
     inherit fetchurl stdenv pam;
   };
 
+  system_config_printer = import ../tools/misc/system-config-printer {
+    inherit stdenv fetchurl perl perlXMLParser autoconf automake intltool gettext desktop_file_utils;
+  };
+  
   tcpdump = import ../tools/networking/tcpdump {
     inherit fetchurl stdenv libpcap;
   };
@@ -6156,6 +6165,10 @@ let
     inherit fetchurl stdenv python gmp;
   };
 
+  pycups = import ../development/python-modules/pycups {
+    inherit stdenv fetchurl python cups;
+  };
+  
   pygame = import ../development/python-modules/pygame {
     inherit fetchurl stdenv python pkgconfig SDL SDL_image
       SDL_mixer SDL_ttf numeric;
@@ -6183,6 +6196,10 @@ let
     inherit python;
   };
 
+  sip = import ../development/python-modules/python-sip {
+    inherit stdenv fetchurl python;
+  };
+
   pyqt = builderDefsPackage (selectVersion ../development/python-modules/pyqt "4.3.3") {
     inherit pkgconfig python pythonSip;
     inherit (xlibs) libX11 libXext;
@@ -6190,6 +6207,10 @@ let
     qt = qt4;
   };
 
+  pyqt4 = import ../development/python-modules/pyqt {
+    inherit stdenv fetchurl python sip qt4;
+  };
+  
   pyx = import ../development/python-modules/pyx {
     inherit fetchurl stdenv python makeWrapper;
   };

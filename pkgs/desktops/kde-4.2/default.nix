@@ -159,6 +159,12 @@ rec {
   
 ### DEVELOPMENT
 
+  kdebindings = import ./bindings {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python sip pyqt4;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon;
+  };
+  
   kdesdk = import ./sdk {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost subversion;
     inherit kdelibs kdepimlibs;
