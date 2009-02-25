@@ -6553,7 +6553,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  gpm = builderDefsPackage (selectVersion ../servers/gpm "1.20.3pre6") {
+  gpm = builderDefsPackage (selectVersion ../servers/gpm "1.20.6") {
     inherit lzma ncurses bison;
     flex = flex2535;
   };

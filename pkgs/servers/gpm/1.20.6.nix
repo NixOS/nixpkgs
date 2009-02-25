@@ -1,8 +1,8 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = http://linux.schottelius.org/gpm/archives/releases-2008/gpm-1.20.3pre6.tar.lzma;
-    sha256 = "0sps9987w7daxfkbavzyi694n7ggf1wd5lh81nwka87m90q7rah7";
+    url = http://linux.schottelius.org/gpm/archives/gpm-1.20.6.tar.lzma;
+    sha256 = "13w61bh9nyjaa0n5a7qq1rvbqxjbxpqz5qmdmqqpqgrd2jlviar7";
   };
 
   buildInputs = [lzma flex bison ncurses];
