@@ -1,0 +1,10 @@
+diff --git a/libidu/id-lang.map b/libidu/id-lang.map
+index 7edb860..6dccd28 100644
+--- a/libidu/id-lang.map
++++ b/libidu/id-lang.map
+@@ -92,3 +92,5 @@ Makefile.*		make
+ 
+ *.gz			FILTER gzip -d <%s
+ *.Z			FILTER gzip -d <%s
++
++*.nix			text
