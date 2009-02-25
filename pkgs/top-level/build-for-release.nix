@@ -28,6 +28,7 @@ let
       bzip2
       cabextract
       cdrkit
+      cedet
       chatzilla
       cksfv
       #compiz
