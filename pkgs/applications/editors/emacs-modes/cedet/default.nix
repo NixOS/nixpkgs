@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ensureDir "$out/share/emacs/site-lisp"
-    cp -v */*.el */*.elc "$out/share/emacs/site-lisp"
+    cp -v */*.el */*/*.el */*.elc */*/*.elc "$out/share/emacs/site-lisp"
     chmod a-x "$out/share/emacs/site-lisp/"*
 
     ensureDir "$out/share/info"
