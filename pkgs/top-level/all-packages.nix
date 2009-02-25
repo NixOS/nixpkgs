@@ -499,6 +499,10 @@ let
     inherit fetchurl stdenv cmake libcap zlib bzip2;
   };
 
+  cedet = import ../applications/editors/emacs-modes/cedet {
+    inherit fetchurl stdenv emacs;
+  };
+
   checkinstall = import ../tools/package-management/checkinstall {
     inherit fetchurl stdenv gettext;
   };
