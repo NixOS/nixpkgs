@@ -1003,6 +1003,10 @@ let
     inherit fetchurl stdenv avahi;
   };
 
+  nylon = import ../tools/networking/nylon {
+    inherit fetchurl stdenv libevent;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
