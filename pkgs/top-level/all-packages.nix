@@ -979,6 +979,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  netpbm = import ../tools/graphics/netpbm {
+    inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2;
+  };
+
   netselect = import ../tools/networking/netselect {
     inherit fetchurl stdenv;
   };
@@ -1085,6 +1089,10 @@ let
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs e2fsprogs pkgconfig;
     inherit (gnome) gnomevfs GConf;
+  };
+
+  remind = import ../tools/misc/remind {
+    inherit fetchurl stdenv;
   };
 
   replace = import ../tools/text/replace {
