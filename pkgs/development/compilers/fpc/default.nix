@@ -3,11 +3,11 @@ if ((args ? startFPC) && (args.startFPC != null))
 	then 
 with args;
 stdenv.mkDerivation {
-  name = "fpc-2.2.0";
+  name = "fpc-2.2.2";
 
   src = fetchurl {
-		url = ftp://freepascal.stack.nl/pub/fpc/dist/source-2.2.0/fpcbuild-2.2.0.tar.gz;
-		sha256 = "0pvsdmimknkgy8jgdz9kd7w5bs9fy5ynrgswpk0ib6x0y26zxijm";
+		url = ftp://freepascal.stack.nl/pub/fpc/dist/source-2.2.2/fpcbuild-2.2.2.tar.gz;
+		sha256 = "0d73b119e029382052fc6615034c4b5ee3ec66fa6cc45648f1f07cfb2c1058f1";
 	};
 
   buildInputs = [startFPC gawk];
@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   preConfigure = (if system == "i686-linux" || system == "x86_64-linux" then ''
   	sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
   '' else "");
+
+  makeFlags = "NOGDB=1";
 
   installFlags = "INSTALL_PREFIX=\${out}";
   postInstall = "ln -fs $out/lib/fpc/*/ppc386 $out/bin;

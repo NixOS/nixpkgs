@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "fpc-2.0.4-binary";
+  name = "fpc-2.2.2-binary";
 
   src = fetchurl {
-		url = ftp://ftp.chg.ru/pub/lang/pascal/fpc/dist/i386-linux-2.0.4/fpc-2.0.4.i386-linux.tar;
-		sha256 = "0b2szv2anbf58h4i5mlph93afv9qdx6i0jqggba04d3anjbl9gfy";
+		url = ftp://ftp.chg.ru/pub/lang/pascal/fpc/dist/i386-linux-2.2.2/fpc-2.2.2.i386-linux.tar;
+		sha256 = "8c18f63b36a76eee673f96ca254c49c5a42bcf3e36279abe8774f961792449a5";
 	};
 
   builder = ./binary-builder.sh;
