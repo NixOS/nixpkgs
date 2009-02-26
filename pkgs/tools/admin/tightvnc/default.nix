@@ -1,5 +1,8 @@
 {stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth}:
 
+# if you have any trouble connecting to the tightvnc server try $ rm ~/.Xauthority
+# Dunno what happens here but it works.
+
 stdenv.mkDerivation {
   name = "tightvnc-1.3.9";
   builder = ./builder.sh;
