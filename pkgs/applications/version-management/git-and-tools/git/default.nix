@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q5jnix65zn58dhd9xc3sjpamli0lh1bnsz1b9riwwicgwssrk7q";
   };
 
-  patches = [ ./docbook2texi.patch ];
+  patches = [ ./docbook2texi.patch ./fill-paragraph.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
