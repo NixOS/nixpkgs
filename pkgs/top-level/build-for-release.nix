@@ -126,6 +126,7 @@ let
       #mythtv
       nano
       netcat
+      nfsUtils
       nix
       nixUnstable
       nss_ldap
@@ -146,6 +147,7 @@ let
       php
       pinentry
       pkgconfig
+      portmap
       postgresql
       procps
       pwdutils
