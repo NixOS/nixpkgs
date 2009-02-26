@@ -214,6 +214,7 @@ let
       xsel
       xterm
       zdelta
+      zile
       zip
       ;
     inherit (pkgs.xorg)
