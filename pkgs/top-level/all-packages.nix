@@ -572,7 +572,7 @@ let
     inherit stdenv fetchurl pkgconfig;
     inherit (gtkLibs) glib;
   };
-  
+
   dev86 = import ../development/compilers/dev86 {
     inherit fetchurl stdenv;
   };
@@ -1216,7 +1216,7 @@ let
   system_config_printer = import ../tools/misc/system-config-printer {
     inherit stdenv fetchurl perl perlXMLParser autoconf automake intltool gettext desktop_file_utils;
   };
-  
+
   tcpdump = import ../tools/networking/tcpdump {
     inherit fetchurl stdenv libpcap;
   };
@@ -2840,7 +2840,7 @@ let
   };
 
   extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
-    inherit mesa tcl freeglut SDL SDL_mixer pkgconfig 
+    inherit mesa tcl freeglut SDL SDL_mixer pkgconfig
     	libpng gettext intltool;
     inherit (xlibs) libX11 xproto libXi inputproto
     	libXmu libXext xextproto libXt libSM libICE;
@@ -3332,7 +3332,7 @@ let
   libical = import ../development/libraries/libical {
     inherit stdenv fetchurl perl;
   };
-  
+
   libQGLViewer = import ../development/libraries/libqglviewer {
     inherit fetchurl stdenv;
     inherit qt4;
@@ -3404,7 +3404,7 @@ let
   libmsn = import ../development/libraries/libmsn {
     inherit stdenv fetchurl cmake openssl;
   };
-  
+
   libmspack = import ../development/libraries/libmspack {
     inherit fetchurl stdenv;
   };
@@ -6184,7 +6184,7 @@ let
   pycups = import ../development/python-modules/pycups {
     inherit stdenv fetchurl python cups;
   };
-  
+
   pygame = import ../development/python-modules/pygame {
     inherit fetchurl stdenv python pkgconfig SDL SDL_image
       SDL_mixer SDL_ttf numeric;
@@ -6226,7 +6226,7 @@ let
   pyqt4 = import ../development/python-modules/pyqt {
     inherit stdenv fetchurl python sip qt4;
   };
-  
+
   pyx = import ../development/python-modules/pyx {
     inherit fetchurl stdenv python makeWrapper;
   };
@@ -7677,7 +7677,7 @@ let
 
   compizBase = composedArgsAndFun (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.8.0") {
     inherit lib builderDefs stringsWithDeps;
-    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext 
+    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
       intltool;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
@@ -9294,14 +9294,14 @@ let
     inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
       fontconfig cups openssl;
     x11Support = false;
-    cupsSupport = true;
+    cupsSupport = getPkgConfig "ghostscript" "cups" true;
   };
 
   ghostscriptX = lowPrio (appendToName "with-X" (import ../misc/ghostscript {
     inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
       fontconfig cups openssl;
     x11Support = true;
-    cupsSupport = true;
+    cupsSupport = getPkgConfig "ghostscript" "cups" true;
   }));
 
   gxemul = (import ../misc/gxemul) {
