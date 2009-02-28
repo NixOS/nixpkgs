@@ -251,6 +251,7 @@ import ../helpers/make-etc.nix {
       "xlock"
       "kde"
       "cups"
+      "ftp"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
