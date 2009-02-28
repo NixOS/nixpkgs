@@ -1,4 +1,4 @@
-{ vsftpd, anonymousUser
+{ vsftpd, anonymousUser, localUsers
 , anonymousUploadEnable, anonymousMkdirEnable, writeEnable
 }:
 
@@ -42,6 +42,13 @@ start script
 "anonymous_enable=YES"
     else
 "anonymous_enable=NO") +
+(if localUsers then 
+"
+local_enable=YES"
+else
+"
+local_enable=NO"
+) +
 (if writeEnable then 
 "
 write_enable=YES"
@@ -70,8 +77,16 @@ nopriv_user=vsftpd
 secure_chroot_dir=/var/ftp/empty
 EOF
 
+" + 
+    (if anonymousUser then 
+"
     mkdir -p /home/ftp &&
     chown -R ftp:ftp /home/ftp
+"
+    else "") +
+"
+    mkdir -p /var/ftp/empty &&
+    chown vsftpd /var/ftp/empty
 end script
 
 respawn ${vsftpd}/sbin/vsftpd /etc/vsftpd.conf

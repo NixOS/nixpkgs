@@ -1847,6 +1847,13 @@ in
         ";
       };
 
+      localUsers = mkOption {
+        default = false;
+        description = "
+          Whether to enable FTP for the local users.
+        ";
+      };
+
       writeEnable = mkOption {
         default = false;
         description = "
