@@ -7248,6 +7248,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  tunctl = import ../os-specific/linux/tunctl {
+    inherit stdenv fetchurl;
+  };
+
   /*tuxracer = builderDefsPackage (import ../games/tuxracer) {
     inherit mesa tcl freeglut;
     inherit (xlibs) libX11 xproto;
