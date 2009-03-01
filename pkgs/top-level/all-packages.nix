@@ -6519,6 +6519,10 @@ let
     inherit fetchurl stdenv zlibStatic;
   };
 
+  cryptsetup = import ../os-specific/linux/cryptsetup {
+    inherit stdenv fetchurl e2fsprogs popt devicemapper udev;
+  };
+
   cramfsswap = import ../os-specific/linux/cramfsswap {
     inherit fetchurl stdenv zlib;
   };
