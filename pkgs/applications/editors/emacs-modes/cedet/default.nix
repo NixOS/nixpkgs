@@ -1,17 +1,17 @@
 { fetchurl, stdenv, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "cedet-1.0pre4";
+  name = "cedet-1.0pre6";
 
   src = fetchurl {
     url = "mirror://sourceforge/cedet/${name}.tar.gz";
-    sha256 = "0r1cvik8drbx4if3a54xla7l31gcqwb44rqqgfqdvwg5wzcd5slv";
+    sha256 = "0pvd54rjlba12cxgqibm8v4i8x43r5c239z891lgcbafjvkzpdxb";
   };
 
   buildInputs = [ emacs ];
 
   # FIXME: EIEIO tests fail with:
-  # eieio-tests.el:474:1:Error: Symbol's value as variable is void: class-typep-var
+  # eieio-tests.el:521:1:Error: Symbol's value as variable is void: class-typep-var
   # See http://thread.gmane.org/gmane.emacs.eieio/72 .
   doCheck = false;
   checkPhase = ''
