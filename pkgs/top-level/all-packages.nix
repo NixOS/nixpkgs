@@ -1209,6 +1209,10 @@ let
     inherit builderDefs gmp;
   };
 
+  stunnel = import ../tools/networking/stunnel {
+    inherit fetchurl stdenv openssl;
+  };
+
   su = import ../tools/misc/su {
     inherit fetchurl stdenv pam;
   };
