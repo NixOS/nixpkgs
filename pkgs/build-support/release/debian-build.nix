@@ -19,7 +19,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
   // removeAttrs args ["vmTools"] //
 
   {
-    name = name + "-" + diskImage.name + "-" + src.version;
+    name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     src = if src ? outPath then src.outPath else src.path;
   
