@@ -217,8 +217,8 @@ rec {
 
   createEmptyImage = {size, fullName}: ''
     mkdir $out
-    diskImage=$out/image
-    qemu-img create -f qcow $diskImage "${toString size}M"
+    diskImage=$out/disk-image.qcow2
+    qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
     echo "${fullName}" > $out/nix-support/full-name
@@ -312,10 +312,10 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
 
     preVM = ''
-      diskImage=$(pwd)/image
+      diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
-      if test -d "$origImage"; then origImage="$origImage/image"; fi
-      qemu-img create -b "$origImage" -f qcow $diskImage
+      if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
+      qemu-img create -b "$origImage" -f qcow2 $diskImage
 
       echo "$buildCommand" > cmd
 
@@ -339,10 +339,10 @@ rec {
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
     preVM = ''
-      diskImage=$(pwd)/image
+      diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
-      if test -d "$origImage"; then origImage="$origImage/image"; fi
-      qemu-img create -b "$origImage" -f qcow $diskImage
+      if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
+      qemu-img create -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -423,7 +423,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      qemu-img create -b ${image}/image -f qcow "$diskImage"
+      qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
