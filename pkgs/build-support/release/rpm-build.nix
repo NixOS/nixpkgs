@@ -1,18 +1,19 @@
 # This function builds an RPM from a source tarball that contains a
 # RPM spec file (i.e., one that can be built using `rpmbuild -ta').
 
-vmTools: args: with args;
+{ name ? "rpm-build"
+, diskImage
+, src, vmTools
+, ... } @ args:
 
 vmTools.buildRPM (
 
-  {
-    name = "rpm-build";
-  }
-
-  // args //
+  removeAttrs args ["vmTools"] //
 
   {
-    src = src.path;
+    name = name + "-" + diskImage.name + "-" + src.version;
+
+    src = if src ? outPath then src.outPath else src.path;
 
     preBuild = ''
       ensureDir $out/nix-support
@@ -34,7 +35,7 @@ vmTools.buildRPM (
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of an RPM package on ${args.diskImage.fullName} (${args.diskImage.name})";
+      description = "Build of an RPM package on ${diskImage.fullName} (${diskImage.name})";
     };
   }
 

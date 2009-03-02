@@ -4,6 +4,8 @@
 
 { officialRelease ? false
 , buildInputs ? []
+, name ? "source-tarball"
+, version ? "0"
 , src, stdenv, autoconf, automake, libtool
 , ... } @ args:
 
@@ -20,8 +22,6 @@ stdenv.mkDerivation (
 
   # First, attributes that can be overriden by the caller (via args):
   {
-    name = "source-tarball";
-
     # By default, only configure and build a source distribution.
     # Some packages can only build a distribution after a general
     # `make' (or even `make install').
@@ -43,6 +43,8 @@ stdenv.mkDerivation (
 
   # And finally, our own stuff.
   {
+    name = name + "-" + version + versionSuffix;
+
     src = src.path;
 
     buildInputs = buildInputs ++ [autoconf automake libtool];
@@ -96,12 +98,14 @@ stdenv.mkDerivation (
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     ''; # */
 
-    passthru = {inherit src;};
+    passthru = {
+      inherit src;
+      version = version + versionSuffix;
+    };
 
     meta = (if args ? meta then args.meta else {}) // {
       description = "Build of a source distribution from a checkout";
     };
-  
   }
 
 )

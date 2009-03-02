@@ -1,13 +1,14 @@
 # This function compiles a source tarball in a virtual machine image
 # that contains a Debian-like (i.e. dpkg-based) OS.
 
-{vmTools, fetchurl}: args: with args;
+{ name ? "debian-build"
+, diskImage
+, src, stdenv, vmTools, checkinstall
+, ... } @ args:
 
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
-    name = "debian-build";
-
     doCheck = true;
 
     prefix = "/usr";
@@ -15,10 +16,12 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     phases = "installExtraDebsPhase sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase distPhase";
   }
 
-  // args //
+  // removeAttrs args ["vmTools"] //
 
   {
-    src = src.path;
+    name = name + "-" + diskImage.name + "-" + src.version;
+
+    src = if src ? outPath then src.outPath else src.path;
   
     # !!! cut&paste from rpm-build.nix
     postHook = ''
@@ -50,7 +53,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
 
     installCommand = ''
       export LOGNAME=root
-    
+
       ${checkinstall}/sbin/checkinstall -y -D make install
 
       ensureDir $out/debs
@@ -66,7 +69,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a Deb package on ${args.diskImage.fullName} (${args.diskImage.name})";
+      description = "Build of a Deb package on ${diskImage.fullName} (${diskImage.name})";
     };
   }
 

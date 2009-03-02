@@ -8,13 +8,12 @@
 { doCoverageAnalysis ? false
 , lcovFilter ? []
 , src, stdenv
+, name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , ... } @ args:
 
 stdenv.mkDerivation (
 
   {
-    name = "nix-build";
-
     # Also run a `make check'.
     doCheck = true;
 
@@ -24,13 +23,15 @@ stdenv.mkDerivation (
     showBuildStats = true;
 
     # Hack - swap checkPhase and installPhase (otherwise Stratego barfs).
-    phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""}";
+    phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""} finalPhase";
   }
 
   // args // 
 
   {
-    src = src.path;
+    name = name + "-" + src.version;
+  
+    src = if src ? outPath then src.outPath else src.path;
 
     postHook = ''
       ensureDir $out/nix-support
@@ -43,7 +44,7 @@ stdenv.mkDerivation (
       # If `src' is the result of a call to `makeSourceTarball', then it
       # has a subdirectory containing the actual tarball(s).  If there are
       # multiple tarballs, just pick the first one.
-      echo $src
+      origSrc=$src
       if test -d $src/tarballs; then
           src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
       fi
@@ -85,6 +86,16 @@ stdenv.mkDerivation (
 
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
+
+
+    finalPhase =
+      ''
+        # Propagate the release name of the source tarball.  This is
+        # to get nice package names in channels.
+        if test -e $origSrc/nix-support/hydra-release-name; then
+          cp $origSrc/nix-support/hydra-release-name $out/nix-support/hydra-release-name
+        fi
+      '';
     
 
     meta = (if args ? meta then args.meta else {}) // {
