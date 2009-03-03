@@ -10,20 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ emacs ];
 
-  # FIXME: EIEIO tests fail with:
-  # eieio-tests.el:521:1:Error: Symbol's value as variable is void: class-typep-var
-  # See http://thread.gmane.org/gmane.emacs.eieio/72 .
-  doCheck = false;
-  checkPhase = ''
-    for dir in *
-    do
-      if [ -f "$dir/Makefile" ] && grep -q "test:" "$dir/Makefile"
-      then
-        echo "testing \`$dir'..."
-        make test -C "$dir"
-      fi
-    done
-  '';
+  doCheck = true;
+  checkPhase = "make utest";
 
   installPhase = ''
     ensureDir "$out/share/emacs/site-lisp"
