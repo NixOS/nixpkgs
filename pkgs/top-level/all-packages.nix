@@ -1329,7 +1329,7 @@ let
     }));
 
   bashInteractive = appendToName "interactive" (import ../shells/bash {
-    inherit fetchurl stdenv ncurses texinfo bison;
+    inherit fetchurl stdenv readline;
     interactive = true;
   });
 
