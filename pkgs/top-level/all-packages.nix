@@ -4660,6 +4660,10 @@ let
     propagatedBuildInputs = [perlClassInspector];
   };
 
+  perlCompressRawBzip2 = import ../development/perl-modules/Compress-Raw-Bzip2 {
+    inherit fetchurl buildPerlPackage bzip2;
+  };
+
   perlCompressRawZlib = import ../development/perl-modules/Compress-Raw-Zlib {
     inherit fetchurl buildPerlPackage zlib;
   };
@@ -5204,6 +5208,15 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
       sha256 = "10njlwa50mhs5nqws5yidfmmb7hwmwc6x06gk2vnpyn82g3szgqd";
     };
+  };
+
+  perlIOCompressBzip2 = buildPerlPackage rec {
+    name = "IO-Compress-Bzip2-2.015";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
+      sha256 = "1kfksf2bslfkviry228p07m1ksnf06mh8gkmdpbrmlmxlbs2idnc";
+    };
+    propagatedBuildInputs = [perlIOCompressBase perlCompressRawBzip2];
   };
 
   perlIOCompressGzip = buildPerlPackage rec {
