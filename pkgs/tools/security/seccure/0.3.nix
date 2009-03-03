@@ -20,9 +20,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			["doPatch" doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		Elliptic Curve Cryptography. Zero-configuration.
-";
+		description = "Zero-configuration elliptic curve cryptography utility";
 		inherit src;
 	};
 }

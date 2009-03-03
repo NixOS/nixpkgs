@@ -16,8 +16,10 @@ stdenv.mkDerivation {
     ++ (if gtkGUI then [pkgconfig gtk] else []);
 
   meta = {
-    description = ''Aumix adjusts an audio mixer from X, the console,
-    		    a terminal, the command line or a script.'';
+    longDescription = ''
+      Aumix adjusts an audio mixer from X, the console, a terminal,
+      the command line or a script.
+    '';
     homepage = http://www.jpj.net/~trevor/aumix.html;
     license = "GPL";
   };

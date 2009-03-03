@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [preBuild preConfigure doConfigure doMakeInstall doForceShare]);
 	meta = {
-		description = "
-	Library call tracer.
-";
+		description = "Library call tracer";
 		inherit src;
 	};
 }

@@ -20,9 +20,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		A (mainly) Chinese Unicode font.
-";
+		description = "A (mainly) Chinese Unicode font";
 		inherit src;
 	};
 }

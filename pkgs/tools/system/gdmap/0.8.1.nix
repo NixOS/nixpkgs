@@ -11,13 +11,11 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "gdmap"+version;
+	name = "gdmap-"+version;
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	Recursive rectangle map of disk usage.	
-";
+		description = "Recursive rectangle map of disk usage";
 		inherit src;
 	};
 }

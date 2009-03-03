@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	SCSI parameters utility.
-";
+		description = "Utility for setting parameters of SCSI devices";
 		inherit src;
 	};
 }

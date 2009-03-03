@@ -22,9 +22,7 @@ stdenv.mkDerivation {
 	builder = writeScript "ladspa.h-builder"
 		(textClosure localDefs [copyFile]);
 	meta = {
-		description = "
-	LADSPA format audio plugins.
-";
+		description = "LADSPA format audio plugins";
 		inherit src;
 	};
 }

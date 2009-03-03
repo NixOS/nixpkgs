@@ -14,8 +14,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   meta = {
-    description = ''Quack: Enhanced Emacs Support for Editing and
-                    Running Scheme Code'';
+    description = "Enhanced Emacs support for editing and running Scheme code";
     homepage = http://www.neilvandyke.org/quack/;
     license = "GPLv2+";
   };

@@ -26,7 +26,7 @@ rec {
     ln -s $out/include/opencv/* $out/include
   '') ["doMakeInstall" "minInit"];
       
-  name = "libcv-" + version;
+  name = "libcv-0.9.7";
   meta = {
     description = "libcv - computer vision library";
   };

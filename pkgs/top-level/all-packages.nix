@@ -2884,6 +2884,7 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps;
     singlePrecision = false;
   };
+  
   fftwSinglePrec = import ../development/libraries/fftw {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
     singlePrecision = true;
@@ -3312,8 +3313,7 @@ let
     inherit fetchurl stdenv gettext;
   };
 
-  libextractor = composedArgsAndFun (selectVersion ../development/libraries/libextractor "0.5.18")
-  {
+  libextractor = composedArgsAndFun (selectVersion ../development/libraries/libextractor "0.5.18") {
     inherit fetchurl stdenv builderDefs zlib;
   };
 
@@ -8422,6 +8422,7 @@ let
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
   };
+  
   pidginlatexSF = builderDefsPackage
     (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
     {
@@ -8788,14 +8789,14 @@ let
        );
   };
 
-  x11vnc =  composedArgsAndFun (selectVersion ../tools/X11/x11vnc "0.9.3") {
+  x11vnc = composedArgsAndFun (selectVersion ../tools/X11/x11vnc "0.9.3") {
     inherit builderDefs openssl zlib libjpeg ;
     inherit (xlibs) libXfixes fixesproto libXdamage damageproto
       libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
       libXext xextproto inputproto recordproto;
   };
 
-  x2vnc =  composedArgsAndFun (selectVersion ../tools/X11/x2vnc "1.7.2") {
+  x2vnc = composedArgsAndFun (selectVersion ../tools/X11/x2vnc "1.7.2") {
     inherit builderDefs;
     inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
   };
@@ -8892,7 +8893,7 @@ let
     pyrex = pyrex095;
   };
 
-  xscreensaverBase =  composedArgsAndFun (import ../applications/graphics/xscreensaver) {
+  xscreensaverBase = composedArgsAndFun (import ../applications/graphics/xscreensaver) {
     inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
     inherit (xlibs) libX11 libXmu;
   };
@@ -8977,7 +8978,7 @@ let
     inherit fetchurl stdenv python pygame twisted lib numeric makeWrapper;
   };
 
-  construoBase =  composedArgsAndFun (selectVersion ../games/construo "0.2.2") {
+  construoBase = composedArgsAndFun (selectVersion ../games/construo "0.2.2") {
     inherit stdenv fetchurl builderDefs
       zlib;
     inherit (xlibs) libX11 xproto;
@@ -9069,7 +9070,7 @@ let
   };
 
   # You still can override by passing more arguments.
-  spaceOrbit =  composedArgsAndFun (selectVersion ../games/orbit "1.01") {
+  spaceOrbit = composedArgsAndFun (selectVersion ../games/orbit "1.01") {
     inherit fetchurl stdenv builderDefs mesa freeglut;
     inherit (gnome) esound;
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
@@ -9133,7 +9134,7 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto  docbook2x  docbook_xsl intltool;
+      xmlto docbook2x docbook_xsl intltool;
   });
 
   kdelibs = import ../desktops/kde/kdelibs {

@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		${name} dictionary for dictd.
-";
+		description = "${name} dictionary for dictd";
 		inherit src;
 	};
 };

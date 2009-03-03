@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
 			doPropagate doForceShare]);
 	inherit propagatedBuildInputs;
 	meta = {
-		description = "
-	Internalization tool for XML.
-";
+		description = "Internalization tool for XML";
 		inherit src;
 	};
 }

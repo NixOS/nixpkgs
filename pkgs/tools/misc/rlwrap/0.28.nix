@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		Readline wrapper for console programs.
-";
+		description = "Readline wrapper for console programs";
 		inherit src;
 	};
 }

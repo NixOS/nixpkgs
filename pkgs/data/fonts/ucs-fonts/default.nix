@@ -31,9 +31,7 @@ wrapFonts (stdenv.mkDerivation {
 	'';
 
 	meta = {
-		description = "
-			UCS-fonts - Unicode bitmap fonts.
-		";
+		description = "Unicode bitmap fonts";
 		src = [srcA srcB srcC];
 	};
 })

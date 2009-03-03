@@ -44,9 +44,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''docbook2X is a software package that converts DocBook
-                    documents into the traditional Unix man page format
-		    and the GNU Texinfo format.'';
+    longDescription = ''
+      docbook2X is a software package that converts DocBook documents
+      into the traditional Unix man page format and the GNU Texinfo
+      format.
+    '';
     license = "MIT-style";
     homepage = http://docbook2x.sourceforge.net/;
   };

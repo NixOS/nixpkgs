@@ -42,9 +42,7 @@ rec {
 			doForceShare postAll]);
 	inherit propagatedBuildInputs;
 	meta = {
-		description = "
-	Compiz window manager
-";
+		description = "Compiz window manager";
 		inherit src;
 	};
 }

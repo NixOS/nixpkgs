@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	Recursive rectangle map of disk usage.	
-";
+		description = "Recursive rectangle map of disk usage";
 		inherit src;
 	};
 }

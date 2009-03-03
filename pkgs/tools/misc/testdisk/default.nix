@@ -13,10 +13,10 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.cgsecurity.org/wiki/TestDisk;
     license = "GPL";
-    description = "
+    longDescription = ''
       TestDisk is a program for data recovery, primarily designed to
       help recover lost partitions and/or make non-booting disks
-      bootable again
-    ";
+      bootable again.
+    '';
   };
 }

@@ -18,11 +18,9 @@ stdenv.mkDerivation rec {
     (textClosure localDefs 
       [doConfigure doMakeInstall doForceShare doPropagate]);
   meta = {
-    description = "
-    X11 VNC - VNC server connected to real X11 screen.
-";
+    description = "A VNC server connected to a real X11 screen";
     homepage = "http://www.karlrunge.com/x11vnc/";
-		inherit src;
+    inherit src;
   };
 }
 

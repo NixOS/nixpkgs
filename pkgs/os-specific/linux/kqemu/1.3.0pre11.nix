@@ -33,6 +33,6 @@ rec {
   phaseNames = ["fixInc" "fixMemFunc" "preConfigure" "doConfigure" "debugStep" "doMakeInstall"];
 
   meta = {
-    description = " Kernel module for Qemu acceleration ";
+    description = "Kernel module for Qemu acceleration";
   }; 
 }

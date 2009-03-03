@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doScons doForceShare doPropagate]);
 	meta = {
-		description = "
-		Linux DC++ - Direct Connect client
-";
+		description = "Linux DC++ - Direct Connect client";
 		inherit src;
 	};
 }

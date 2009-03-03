@@ -13,8 +13,7 @@ stdenv.mkDerivation {
   configureFlags = "--with-zlib=${zlib}";
 
   meta = {
-    description = "A reimplementation of the Infinity Engine "
-      + " (used by Baldur's Gate, Icewind Dale, Planescape: Torment, etc.)";
+    description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
     homepage = http://gemrb.sourceforge.net/;
   };
 }

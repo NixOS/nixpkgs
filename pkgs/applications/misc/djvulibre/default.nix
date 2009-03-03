@@ -1,4 +1,5 @@
 args: with args;
+
 stdenv.mkDerivation {
   name = "djvulibre-3.5.19";
 
@@ -7,15 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0y6d9ka42llm7h64fc73s4wqcbxg31kallyfaarhkqsxyiaa3zsp";
   };
 
-  buildInputs = [qt libX11 libjpeg libtiff libpng ghostscript zlib libungif
-	x11 mesa];
+  buildInputs = [qt libX11 libjpeg libtiff libpng ghostscript zlib libungif x11 mesa];
 
   meta = {
-    description = "
-	DjVu libre - a library and a viewer for djvu format - compression for
-	scanned images.
-";
+    description = "A library and viewer for the DJVU file format for scanned images";
     homepage = http://djvu.sourceforge.net;
   };
 }
-

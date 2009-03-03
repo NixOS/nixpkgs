@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doConfigure doMakeInstall postInstall doForceShare doPropagate]);
-	meta = {
-		description = "
-		Samba mounted via FUSE.
-";
-	  inherit src;
-	};
+  meta = {
+   description = "Samba mounted via FUSE";
+   inherit src;
+  };
 }

@@ -29,13 +29,11 @@ let
 	") [minInit doUnpack];
 in
 stdenv.mkDerivation rec {
-	name = "xscreensaver-"+version;
+	name = "xscreensaver-5.07";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	The X screensaver daemon. Run xscreensaver-demo to configure.
-";
+		description = "A set of screensavers";
 		inherit src;
 	};
 }

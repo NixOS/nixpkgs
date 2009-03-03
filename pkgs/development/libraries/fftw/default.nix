@@ -17,9 +17,7 @@ stdenv.mkDerivation {
 	builder = writeScript "fftw-3.1.2-builder"
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare]);
 	meta = {
-		description = "
-	Fastest Fourier Transform in the West library.
-";
+		description = "Fastest Fourier Transform in the West library";
 		inherit src;
 	};
 }

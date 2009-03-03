@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		A Unicode font.
-";
+		description = "A Unicode font";
 		inherit src;
 	};
 }

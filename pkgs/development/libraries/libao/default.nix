@@ -10,9 +10,11 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig];
 
   meta = {
-    description = ''Libao is Xiph.org's cross-platform audio
-                    library that allows programs to output audio
-		    using a simple API on a wide variety of platforms.'';
+    longDescription = ''
+      Libao is Xiph.org's cross-platform audio library that allows
+      programs to output audio using a simple API on a wide variety of
+      platforms.
+    '';
     homepage = http://xiph.org/ao/;
     license = "GPL";
   };

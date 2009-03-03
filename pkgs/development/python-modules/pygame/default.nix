@@ -41,8 +41,6 @@ stdenv.mkDerivation {
   installPhase = "yes Y | python setup.py install --prefix=\${out} ";
 
   meta = {
-    description = "
-	Python library for games.
-";
+    description = "Python library for games";
   };
 }

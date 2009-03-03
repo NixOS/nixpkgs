@@ -1,4 +1,5 @@
 args: with args;
+
 stdenv.mkDerivation {
   name = "ircd-hybrid-7.2.2";
 
@@ -9,15 +10,12 @@ stdenv.mkDerivation {
 
   buildInputs = [openssl zlib];
 
-  configureFlags =  ["--with-nicklen=100" 
-	"--with-topiclen=360" 
-	("--enable-openssl=" + openssl)];
+  configureFlags =
+    "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${openssl}";
 
   preInstall = "mkdir -p \${out}/ ; ln -s /home/ircd \${out}/logs;";
 
   meta = {
-    description = "
-	An IPv6-capable IRC server.
-";
+    description = "An IPv6-capable IRC server";
   };
 }

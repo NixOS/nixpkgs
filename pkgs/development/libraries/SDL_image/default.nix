@@ -1,5 +1,6 @@
 args: with args;
-stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation rec {
   pname = "SDL_image";
   version = "1.2.6";
 
@@ -12,11 +13,9 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [SDL libpng libjpeg libtiff libungif libXpm];
 
-  postInstall = "ln -s \${out}/include/SDL/SDL_image.h \${out}/include/";
+  postInstall = "ln -s $out/include/SDL/SDL_image.h $out/include/";
 
   meta = {
-    description = "
-      SDL image library.
-";
+    description = "SDL image library";
   };
-})
+}

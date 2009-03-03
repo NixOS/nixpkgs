@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			["doPatch" doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		Shamir Secret Sharing Scheme
-";
+		description = "Shamir Secret Sharing Scheme";
 		inherit src;
 	};
 }

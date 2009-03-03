@@ -44,9 +44,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [build doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	Relational FS over FUSE.
-";
+		description = "A relational filesystem on top of FUSE";
 		inherit src;
 	};
 }

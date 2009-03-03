@@ -14,8 +14,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   meta = {
-    description = ''The Insidious Big Brother Database (BBDB), a
-                    contact management utility for Emacs.'';
+    description = "The Insidious Big Brother Database (BBDB), a contact management utility for Emacs";
     homepage = http://bbdb.sourceforge.net/;
     license = "GPL";
   };

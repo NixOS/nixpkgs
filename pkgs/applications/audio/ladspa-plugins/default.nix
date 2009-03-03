@@ -21,9 +21,7 @@ stdenv.mkDerivation {
 		(textClosure localDefs [doConfigure doMakeInstall 
 			postInstall doForceShare]);
 	meta = {
-		description = "
-	LADSPA format audio plugins.
-";
+		description = "LADSPA format audio plugins";
 		inherit src;
 	};
 }

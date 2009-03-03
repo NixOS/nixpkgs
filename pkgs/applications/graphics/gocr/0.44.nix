@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		GPL Optical Character Recognition
-";
+		description = "GPL Optical Character Recognition";
 		inherit src;
 	};
 }
