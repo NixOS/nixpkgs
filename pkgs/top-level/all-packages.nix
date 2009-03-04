@@ -7135,6 +7135,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  neverball = import ../games/neverball {
+    inherit stdenv fetchurl SDL mesa libpng libjpeg SDL_ttf libvorbis
+      gettext;
+  };
+
   numactl = import ../os-specific/linux/numactl {
     inherit fetchurl stdenv;
   };
