@@ -8776,8 +8776,7 @@ let
   wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
     inherit stdenv nameSuffix makeWrapper browser browserName;
     plugins =
-      let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true
-            && system == "i686-linux";
+      let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
       in
        ([]
         ++ lib.optional (!enableAdobeFlash) gnash
