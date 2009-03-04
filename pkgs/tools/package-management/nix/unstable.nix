@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nix-0.13pre0.13pre14314";
+  name = "nix-0.13pre14314";
   
   src = fetchurl {
     url = http://hydra.nixos.org/build/2513/download/1/nix-0.13pre14314.tar.bz2;
