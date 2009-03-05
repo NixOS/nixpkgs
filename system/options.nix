@@ -380,14 +380,6 @@ in
     ";
   };
 
-  servicesProposal = {
-    # see upstart-jobs/default.nix 
-    # the option declarations can be found in the upstart-jobs/newProposal/*.nix files
-    # one way to include the declarations here is adding kind of glob "*.nix"
-    # file function to builtins to get all jobs
-    # then the checking in upstart-jobs/default.nix can be removed again (together with passing arg optionDeclarations)
-  };
-
   services = {
 
   
