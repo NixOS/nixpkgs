@@ -46,6 +46,7 @@ let
       docbook_xml_dtd_42
       docbook_xml_dtd_43
       docbook_xsl
+      doxygen
       e2fsprogs
       emacs
       emacsUnicode
