@@ -11,7 +11,7 @@
 
 let
 
-  version = "1.9.0.6"; # this attribute is used by other packages
+  version = "1.9.0.7"; # this attribute is used by other packages
 
 in  
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   name = "xulrunner-${version}";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.6/source/firefox-3.0.6-source.tar.bz2;
-    sha1 = "e2845c07b507308664f6f39086a050b2773382fb";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.7/source/firefox-3.0.7-source.tar.bz2;
+    sha1 = "03c078d9c2d047d7cdc25f7823c6e647cb8d8f8b";
   };
 
   buildInputs = [
