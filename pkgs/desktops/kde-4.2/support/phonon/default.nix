@@ -7,7 +7,7 @@ automoc4}:
 stdenv.mkDerivation {
   name = "phonon-4.3.1";
   src = fetchurl {
-    url = mirror://kde/stable/phonon/4.3.1/phonon-4.3.1.tar.bz2;
+    url = mirror://kde/stable/4.2.1/src/phonon-4.3.1.tar.bz2;
     sha1 = "f7537e5280d0a4cc1348975daa7a7e45d833d45c";
   };
   buildInputs = [ cmake
