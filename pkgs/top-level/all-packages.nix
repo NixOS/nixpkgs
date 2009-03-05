@@ -2341,7 +2341,7 @@ let
   doxygen = import ../development/tools/documentation/doxygen {
     inherit fetchurl stdenv graphviz perl flex bison gnumake;
     inherit (xlibs) libX11 libXext;
-    qt = if getPkgConfig "doxygen" "qt3" true then qt3 else null;
+    qt = if getPkgConfig "doxygen" "qt4" true then qt4 else null;
   };
 
   elfutils = composedArgsAndFun
