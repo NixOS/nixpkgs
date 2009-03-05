@@ -2,10 +2,10 @@
  kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdesdk-4.2.0";
+  name = "kdesdk-4.2.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.0/src/kdesdk-4.2.0.tar.bz2;
-    md5 = "79d01b4f10f1ecc283f7860d2c7973e9";
+    url = mirror://kde/stable/4.2.1/src/kdesdk-4.2.1.tar.bz2;
+    sha1 = "dca74527bcf6e5925ec58a74196e683cc68a259a";
   };
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion

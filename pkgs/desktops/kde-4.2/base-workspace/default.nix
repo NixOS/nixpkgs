@@ -5,10 +5,10 @@
  automoc4, phonon, strigi, soprano, qimageblitz}:
 
 stdenv.mkDerivation {
-  name = "kdebase-workspace-4.2.0";
+  name = "kdebase-workspace-4.2.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.0/src/kdebase-workspace-4.2.0.tar.bz2;
-    md5 = "193e30b9ed0b55b0196289d9df43a904";
+    url = mirror://kde/stable/4.2.1/src/kdebase-workspace-4.2.1.tar.bz2;
+    sha1 = "412b8a6778d5c71a366c054b0136edae309bbef0";
   };
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake perl python qt4 kdelibs kdepimlibs pthread_stubs boost libusb stdenv.gcc.libc

@@ -2,10 +2,10 @@
  automoc4, phonon, strigi, qimageblitz, soprano}:
 
 stdenv.mkDerivation {
-  name = "kdebase-4.2.0";
+  name = "kdebase-4.2.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.0/src/kdebase-4.2.0.tar.bz2;
-    md5 = "da86a8ad624e86eda3a7509f39272060";
+    url = mirror://kde/stable/4.2.1/src/kdebase-4.2.1.tar.bz2;
+    sha1 = "c500024294a7621d176d26bdabdd138d18ec827d";
   };
   buildInputs = [ cmake perl qt4 kdelibs pciutils libraw1394
                   automoc4 phonon strigi qimageblitz soprano ];
