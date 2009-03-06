@@ -2,11 +2,11 @@ args: with args;
 let inherit (lib) optional prepareDerivationArgs concatStringsSep fix;  in
 
 composableDerivation {
-  f = args: let attr = lib.prepareDerivationArgs args; in stdenv.mkDerivation ( attr // {
+  mkDerivation = attr : stdenv.mkDerivation ( attr // {
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") attr.buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") attr.buildInputs);
     });
-  initial = {
+  } {
 
     postPhases = ["runCheck"];
 
@@ -65,5 +65,4 @@ composableDerivation {
       rm -rf $out/lib/python2.5/test
     ";
 
-  };
-}
+  }

@@ -33,7 +33,7 @@ in
     # python wiht all features enabled.
     # if you really need a stripped version we should add __overides
     # so that you can replace it the way it's done in all-packages.nix
-    pythonFull = t.pythonMinimal.passthru.fun {
+    pythonFull = t.pythonMinimal.merge {
      name = "python-${t.version}-full";
       cfg = {
         zlibSupport = true;
@@ -79,48 +79,46 @@ in
     # lib to verify it works
     # You can define { python25 { debugCmd = "DISPLAY=:0.0 pathtoxterm"; }
     # in your config for easier debugging..
-    pythonLibStub = composableDerivation {
-      initial = {
-          propagatedBuildInputs = [ t.pythonFull ]; # see [1]
-          postPhases = ["postAll"]; # using new name so that you dno't override this phase by accident
-          prePhases = ["defineValidatingEval"];
-          # ensure phases are run or a non zero exit status is caused (if there are any syntax errors such as eval "while")
-          defineValidatingEval = ''
-            eval(){
-              e="$(type eval | { read; while read line; do echo $line; done })"
-              unset eval;
-              local evalSucc="failure"
-              eval "evalSucc=ok;""$1"
-              eval "$e"
-              [ $evalSucc = "failure" ] && { echo "eval failed, snippet:"; echo "$1"; return 1; }
-            }
-          '';
-          postAll = ''
-            ensureDir $out/nix-support
-            echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
-            # run check
-            if [ -n "$pyCheck" ]; then
-               ( . $out/nix-support/setup-hook
-                   mkdir $TMP/new-test; cd $TMP/new-test
-                   echo PYTHONPATH=$PYTHONPATH
-                   echo NIX_PYTHON_SITES=$NIX_PYTHON_SITES
-                   script="$(echo -e "import sys\nprint sys.path\npyCheck\nprint \"check ok\"")"
-                   script="''${script/pyCheck/$pyCheck}"
-                   echo "check script is"; echo "$script"
-                   echo "$script" | python || { ${ getConfig [t.versionAttr "debugCmd"] ":"} ; echo "pycheck failed"; exit 1; }
-               )
-             fi'';
-          passthru = {
-            libPython = t.version; # used to find all python libraries fitting this version (-> see name all below)
-          };
-          mergeAttrBy = {
-            pyCheck = x : y : "${x}\n${y}";
-          };
-      };
+    pythonLibStub = composableDerivation {} {
+        propagatedBuildInputs = [ t.pythonFull ]; # see [1]
+        postPhases = ["postAll"]; # using new name so that you dno't override this phase by accident
+        prePhases = ["defineValidatingEval"];
+        # ensure phases are run or a non zero exit status is caused (if there are any syntax errors such as eval "while")
+        defineValidatingEval = ''
+          eval(){
+            e="$(type eval | { read; while read line; do echo $line; done })"
+            unset eval;
+            local evalSucc="failure"
+            eval "evalSucc=ok;""$1"
+            eval "$e"
+            [ $evalSucc = "failure" ] && { echo "eval failed, snippet:"; echo "$1"; return 1; }
+          }
+        '';
+        postAll = ''
+          ensureDir $out/nix-support
+          echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
+          # run check
+          if [ -n "$pyCheck" ]; then
+             ( . $out/nix-support/setup-hook
+                 mkdir $TMP/new-test; cd $TMP/new-test
+                 echo PYTHONPATH=$PYTHONPATH
+                 echo NIX_PYTHON_SITES=$NIX_PYTHON_SITES
+                 script="$(echo -e "import sys\nprint sys.path\npyCheck\nprint \"check ok\"")"
+                 script="''${script/pyCheck/$pyCheck}"
+                 echo "check script is"; echo "$script"
+                 echo "$script" | python || { ${ getConfig [t.versionAttr "debugCmd"] ":"} ; echo "pycheck failed"; exit 1; }
+             )
+           fi'';
+        passthru = {
+          libPython = t.version; # used to find all python libraries fitting this version (-> see name all below)
+        };
+        mergeAttrBy = {
+          pyCheck = x : y : "${x}\n${y}";
+        };
     };
 
     # same as pythonLibStub, but runs default python setup.py actions
-    pythonLibSetup = t.pythonLibStub.passthru.fun {
+    pythonLibSetup = t.pythonLibStub.merge {
       buildPhase = ''python setup.py $setupFlags build'';
       installPhase = ''python setup.py $setupFlags install --prefix=$out'';
       mergeAttrBy = {
@@ -130,7 +128,7 @@ in
 
     ### python libraries:
 
-    wxPythonBaseFun = (t.pythonLibSetup.passthru.funMerge (a :
+    wxPythonBaseFun = (t.pythonLibSetup.merge (a :
       let inherit (a.fixed) wxGTK version; in
         {
           buildInputs = [p.pkgconfig wxGTK (wxGTK.gtk)];
@@ -144,7 +142,7 @@ in
             license="wxWinLL-3";
           };
         }
-    )).passthru.fun;
+    )).merge;
 
     wxPython26 = t.wxPythonBaseFun {
       version = "2.6.3.3";
@@ -166,7 +164,7 @@ in
     #};
 
     # couldn't download source
-    #foursuite = pythonLibSetup.passthru.fun {
+    #foursuite = pythonLibSetup.merge {
     #  version = "1.0.2";
     #  name = "4suite-${version}";
     #  src = fetchurl {
@@ -175,7 +173,7 @@ in
     #  };
     #};
 
-    #bsddb3 = t.pythonLibSetup.passthru.fun {
+    #bsddb3 = t.pythonLibSetup.merge {
     #  version = "1.0.2";
     #  name = "bsddb3-4.5.0";
     #  setupFlags = ["--berkeley-db=${p.db4}"];
@@ -197,7 +195,7 @@ in
   # patching pygtk to another */gtk2.0 directory to sys.path for each NIX_PYTHON_SITES.
   # If you install dozens of python packages this might be bloat.
   # So  I think the overhead of installing these packages into the same store path should be prefered.
-  pygtkBaseFun = (t.pythonLibStub.passthru.funMerge (a :
+  pygtkBaseFun = (t.pythonLibStub.merge (a :
     let inherit (a.fixed) glib gtk; in lib.mergeAttrsByFuncDefaults [
     {
       unpackPhase = "true";
@@ -312,7 +310,7 @@ in
   #  '';
   #};
 
-  pygtk212 = t.pygtkBaseFun.passthru.funMerge (a : {
+  pygtk212 = t.pygtkBaseFun.merge (a : {
     version = "2.12.1";
     name = "pygobject-${a.fixed.pygobjectVersion}-and-pygtk-${a.fixed.version}";
     pygtkSrc = fetchurl { 
@@ -326,7 +324,7 @@ in
     '';
   });
 
-  pycairo = t.pythonLibStub.passthru.fun {
+  pycairo = t.pythonLibStub.merge {
     name = "pycairo-1.8.0";
     buildInputs = [ p.pkgconfig p.cairo p.x11 ];
     src = fetchurl {
@@ -336,7 +334,7 @@ in
     pyCheck = "import cairo";
   };
 
-  gstPython = t.pythonLibStub.passthru.fun {
+  gstPython = t.pythonLibStub.merge {
     name = "gst-python-0.10.13";
     src = fetchurl {
       url = http://gstreamer.freedesktop.org/src/gst-python/gst-python-0.10.13.tar.gz;
@@ -377,7 +375,7 @@ in
     };
   };
 
-  pygoocanvas = t.pythonLibStub.passthru.fun {
+  pygoocanvas = t.pythonLibStub.merge {
     src = p.fetchurl {
       url = http://download.berlios.de/pygoocanvas/pygoocanvas-0.10.0.tar.gz;
       sha256 = "0pxznzdscbhvn8102vrqy3r1g6ss4sgs8wwy6y4c5g26rrp7l55d";
@@ -393,7 +391,7 @@ in
     };
   };
 
-#  zope = t.pythonLibStub.passthru.fun rec {
+#  zope = t.pythonLibStub.merge rec {
 #[> version = "3.3.1";
 #    version = "svn";
 #    name = "zope-${version}";
@@ -409,7 +407,7 @@ in
 #    pyCheck = "";
 #  };
 
-  setuptools = t.pythonLibSetup.passthru.fun {
+  setuptools = t.pythonLibSetup.merge {
     name = "setuptools-0.6c9";
     postUnpack = ''
       ensureDir $out/lib/python2.5/site-packages
@@ -429,7 +427,7 @@ in
     };
   };
 
-  zopeInterface = t.pythonLibSetup.passthru.fun rec {
+  zopeInterface = t.pythonLibSetup.merge rec {
     version = "3.3.0";
     name = "zope.interface-${version}";
     buildInputs = [ t.setuptools ];
@@ -440,7 +438,7 @@ in
     pyCheck = "from zope.interface import Interface, Attribute";
   };
 
-  dbusPython = t.pythonLibStub.passthru.fun rec {
+  dbusPython = t.pythonLibStub.merge rec {
     version = "0.83.0";
     name = "dbus-python-0.83.0";
     buildInputs = [ p.pkgconfig ];
@@ -457,7 +455,7 @@ in
     };
   };
 
-  pythonXlib = t.pythonLibSetup.passthru.fun {
+  pythonXlib = t.pythonLibSetup.merge {
     name = "python-xlib-0.14";
     src = fetchurl {
       url = http://puzzle.dl.sourceforge.net/sourceforge/python-xlib/python-xlib-0.14.tar.gz;
@@ -470,7 +468,7 @@ in
     };
   };
 
-  mechanize = t.pythonLibSetup.passthru.fun {
+  mechanize = t.pythonLibSetup.merge {
     name = "mechanize-0.1.11";
     buildInputs = [ t.setuptools ];
     src = fetchurl {
@@ -485,7 +483,7 @@ in
     pyCheck = "from mechanize import Browser";
   };
 
-  pexpect = t.pythonLibSetup.passthru.fun {
+  pexpect = t.pythonLibSetup.merge {
     name = "pexpect-2.3";
     src = fetchurl {
       url = mirror://sourceforge/pexpect/pexpect-2.3.tar.gz;
@@ -500,24 +498,22 @@ in
 
   ### python applications
 
-  pythonExStub = composableDerivation {
-    initial = {
-      buildInputs = [p.makeWrapper];
-      postPhases = ["wrapExecutables"];
-      propagatedBuildInputs = [ t.pythonFull ]; # see [1]
+  pythonExStub = composableDerivation {} {
+    buildInputs = [p.makeWrapper];
+    postPhases = ["wrapExecutables"];
+    propagatedBuildInputs = [ t.pythonFull ]; # see [1]
 
-      # adding $out to NIX_PYTHON_SITES because some of those executables seem to come with extra libs
-      wrapExecutables = ''
-        for prog in $out/bin/*; do
-        wrapProgram "$prog" \
-                     --set NIX_PYTHON_SITES "$NIX_PYTHON_SITES:$out" \
-                     --set PYTHONPATH "\$PYTHONPATH:$out"
-        done
-      '';
-    };
+    # adding $out to NIX_PYTHON_SITES because some of those executables seem to come with extra libs
+    wrapExecutables = ''
+      for prog in $out/bin/*; do
+      wrapProgram "$prog" \
+                   --set NIX_PYTHON_SITES "$NIX_PYTHON_SITES:$out" \
+                   --set PYTHONPATH "\$PYTHONPATH:$out"
+      done
+    '';
   };
 
-  pitivi = t.pythonExStub.passthru.fun {
+  pitivi = t.pythonExStub.merge {
     name = "pitivi-0.11.2";
     src = fetchurl {
       url = http://ftp.gnome.org/pub/GNOME/sources/pitivi/0.11/pitivi-0.11.2.tar.bz2;
@@ -537,7 +533,7 @@ in
     '';
   };
 
-  istanbul = t.pythonExStub.passthru.fun {
+  istanbul = t.pythonExStub.merge {
     name = "istanbul-0.2.2";
     buildInputs = [ t.pygtk212 t.gstPython /*t.gnomePython (contained in gtk) t.gnomePythonExtras */ t.pythonXlib
       p.perl p.perlXMLParser p.gettext];
