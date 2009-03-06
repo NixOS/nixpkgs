@@ -1779,140 +1779,6 @@ in
   };
 
 
-  nix = {
-
-    maxJobs = mkOption {
-      default = 1;
-      example = 2;
-      description = "
-        This option defines the maximum number of jobs that Nix will try
-        to build in parallel.  The default is 1.  You should generally
-        set it to the number of CPUs in your system (e.g., 2 on a Athlon
-        64 X2).
-      ";
-    };
-
-    useChroot = mkOption {
-      default = false;
-      example = true;
-      description = "
-        If set, Nix will perform builds in a chroot-environment that it
-        will set up automatically for each build.  This prevents
-        impurities in builds by disallowing access to dependencies
-        outside of the Nix store.
-      ";
-    };
-
-    extraOptions = mkOption {
-      default = "";
-      example = "
-        gc-keep-outputs = true
-        gc-keep-derivations = true
-      ";
-      description = "
-        This option allows to append lines to nix.conf. 
-      ";
-    };
-
-    distributedBuilds = mkOption {
-      default = false;
-      description = "
-        Whether to distribute builds to the machines listed in
-        <option>nix.buildMachines</option>.
-      ";
-    };
-
-    buildMachines = mkOption {
-      example = [
-        { hostName = "voila.labs.cs.uu.nl";
-          sshUser = "nix";
-          sshKey = "/root/.ssh/id_buildfarm";
-          system = "powerpc-darwin";
-          maxJobs = 1;
-        }
-        { hostName = "linux64.example.org";
-          sshUser = "buildfarm";
-          sshKey = "/root/.ssh/id_buildfarm";
-          system = "x86_64-linux";
-          maxJobs = 2;
-        }
-      ];
-      description = "
-        This option lists the machines to be used if distributed
-        builds are enabled (see
-        <option>nix.distributedBuilds</option>).  Nix will perform
-        derivations on those machines via SSh by copying the inputs to
-        the Nix store on the remote machine, starting the build, then
-        copying the output back to the local Nix store.  Each element
-        of the list should be an attribute set containing the
-        machine's host name (<varname>hostname</varname>), the user
-        name to be used for the SSH connection
-        (<varname>sshUser</varname>), the Nix system type
-        (<varname>system</varname>, e.g.,
-        <literal>\"i686-linux\"</literal>), the maximum number of jobs
-        to be run in parallel on that machine
-        (<varname>maxJobs</varname>), and the path to the SSH private
-        key to be used to connect (<varname>sshKey</varname>).  The
-        SSH private key should not have a passphrase, and the
-        corresponding public key should be added to
-        <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
-        on the remote machine.
-      ";
-    };
- 
-    proxy = mkOption {
-      default = "";
-      description = "
-        This option specifies the proxy to use for fetchurl. The real effect 
-        is just exporting http_proxy, https_proxy and ftp_proxy with that
-        value.
-      ";
-      example = "http://127.0.0.1:3128";
-    };
-
-    # Environment variables for running Nix.
-    envVars = mkOption {
-      internal = true;
-      default = "";
-      description = "
-        Define the environment variables used by nix to 
-      ";
-
-      merge = pkgs.lib.mergeStringOption;
-
-      # other option should be used to define the content instead of using
-      # the apply function.
-      apply = conf: ''
-        export NIX_CONF_DIR=/nix/etc/nix
-
-        # Enable the copy-from-other-stores substituter, which allows builds
-        # to be sped up by copying build results from remote Nix stores.  To
-        # do this, mount the remote file system on a subdirectory of
-        # /var/run/nix/remote-stores.
-        export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
-        
-      '' + # */
-      (if config.nix.distributedBuilds then
-        ''
-          export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
-          export NIX_REMOTE_SYSTEMS=/etc/nix.machines
-          export NIX_CURRENT_LOAD=/var/run/nix/current-load
-        ''
-      else "")
-      +
-      (if config.nix.proxy != "" then
-        ''
-          export http_proxy=${config.nix.proxy}
-          export https_proxy=${config.nix.proxy}
-          export ftp_proxy=${config.nix.proxy}
-        ''
-      else "")
-      + conf;
-    };
-  };
-
-
-
   nesting = {
     children = mkOption {
       default = [];
@@ -1991,6 +1857,8 @@ in
     (import ../upstart-jobs/pulseaudio.nix)
     (import ../upstart-jobs/kbd.nix)
     (import ../upstart-jobs/gw6c.nix) # Gateway6
+
+    (import ../upstart-jobs/nix.nix) # nix options and daemon
 
 
     #users

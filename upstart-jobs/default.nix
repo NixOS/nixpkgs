@@ -124,11 +124,6 @@ let
       inherit (pkgs) nettools wirelesstools bash writeText;
     })
       
-    # Nix daemon - required for multi-user Nix.
-    (import ../upstart-jobs/nix-daemon.nix {
-      inherit config pkgs nix nixEnvVars;
-    })
-
     # Name service cache daemon.
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc;
