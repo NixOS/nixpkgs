@@ -425,6 +425,7 @@ in
     (import ../upstart-jobs/swap.nix)
     (import ../upstart-jobs/network-interfaces.nix)
     (import ../upstart-jobs/nscd.nix) # Name service cache daemon.
+    (import ../upstart-jobs/maintenance-shell.nix) # Handles the maintenance/stalled event (single-user shell).
 
     # security
     (import ../system/sudo.nix)

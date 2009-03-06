@@ -71,11 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Handles the maintenance/stalled event (single-user shell).
-    (import ../upstart-jobs/maintenance-shell.nix {
-      inherit (pkgs) bash;
-    })
-
     # Ctrl-alt-delete action.
     (import ../upstart-jobs/ctrl-alt-delete.nix)
 
