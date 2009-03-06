@@ -68,13 +68,7 @@ let
 
   requiredTTYs = config.requiredTTYs;
 
-  jobs = map makeJob
-    ([
-    
-    # Ctrl-alt-delete action.
-    (import ../upstart-jobs/ctrl-alt-delete.nix)
-
-  ])
+  jobs = map makeJob []
 
   # ifplugd daemon for monitoring Ethernet cables.
   ++ optional config.networking.interfaceMonitor.enable
