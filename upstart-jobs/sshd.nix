@@ -100,18 +100,20 @@ mkIf config.services.sshd.enable {
     options
   ];
 
+  users = {
+    extraUsers = [
+      { name = "sshd";
+        uid = (import ../system/ids.nix).uids.sshd;
+        description = "SSH privilege separation user";
+        home = "/var/empty";
+      }
+    ];
+  };
+
   services = {
     extraJobs = [{
       name = "sshd";
 
-      users = [
-        { name = "sshd";
-          uid = (import ../system/ids.nix).uids.sshd;
-          description = "SSH privilege separation user";
-          home = "/var/empty";
-        }
-      ];
-      
       job = ''
         description "SSH server"
 
