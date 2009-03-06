@@ -172,14 +172,6 @@ let
       inherit config pkgs modprobe;
     })
 
-  # VSFTPd server
-  ++ optional config.services.vsftpd.enable
-    (import ../upstart-jobs/vsftpd.nix {
-      inherit (pkgs) vsftpd;
-      inherit (config.services.vsftpd) anonymousUser 
-        writeEnable anonymousUploadEnable anonymousMkdirEnable;
-    })
-
   # X Font Server
   ++ optional config.services.xfs.enable
     (import ../upstart-jobs/xfs.nix {

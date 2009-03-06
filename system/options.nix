@@ -479,43 +479,6 @@ in
 
     };
 
-    vsftpd = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the vsftpd FTP server.
-        ";
-      };
-      
-      anonymousUser = mkOption {
-        default = false;
-        description = "
-          Whether to enable the anonymous FTP user.
-        ";
-      };
-
-      writeEnable = mkOption {
-        default = false;
-        description = "
-          Whether any write activity is permitted to users.
-        ";
-      };
-
-      anonymousUploadEnable = mkOption {
-        default = false;
-        description = "
-          Whether any uploads are permitted to anonymous users.
-        ";
-      };
-
-      anonymousMkdirEnable = mkOption {
-        default = false;
-        description = "
-          Whether mkdir is permitted to anonymous users.
-        ";
-      };
-    };
-    
     printing = {
 
       enable = mkOption {
@@ -1062,6 +1025,7 @@ in
     (import ../upstart-jobs/tomcat.nix) # untested, too lazy to get that jdk
     (import ../upstart-jobs/httpd.nix) # Apache httpd (probably this can be removed ?)
     (import ../upstart-jobs/apache-httpd) # Apache httpd (new style).
+    (import ../upstart-jobs/vsftpd.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
