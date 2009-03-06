@@ -141,13 +141,6 @@ let
       inherit config;
     })
 
-  # GNUnet daemon.
-  ++ optional config.services.gnunet.enable
-    (import ../upstart-jobs/gnunet.nix {
-      inherit (pkgs) gnunet lib writeText;
-      gnunetConfig = config.services.gnunet;
-    })
-
   # Apache httpd.
   ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
     (import ../upstart-jobs/httpd.nix {
