@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Name service cache daemon.
-    (import ../upstart-jobs/nscd.nix {
-      inherit (pkgs) glibc;
-      inherit nssModulesPath;
-    })
-
     # Handles the maintenance/stalled event (single-user shell).
     (import ../upstart-jobs/maintenance-shell.nix {
       inherit (pkgs) bash;

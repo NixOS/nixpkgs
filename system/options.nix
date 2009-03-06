@@ -424,7 +424,7 @@ in
 
     (import ../upstart-jobs/swap.nix)
     (import ../upstart-jobs/network-interfaces.nix)
-
+    (import ../upstart-jobs/nscd.nix) # Name service cache daemon.
 
     # security
     (import ../system/sudo.nix)
