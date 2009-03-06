@@ -479,22 +479,6 @@ in
 
     };
 
-    openfire = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable OpenFire XMPP server.
-        ";
-      };
-      usePostgreSQL = mkOption {
-        default = true;
-        description = "
-          Whether you use PostgreSQL service for your storage back-end.
-        ";
-      };
-    };
-
-    
     postfix = {
       enable = mkOption {
         default = false;
@@ -799,6 +783,7 @@ in
     (import ../upstart-jobs/xfs.nix)
     (import ../upstart-jobs/mysql.nix)
     (import ../upstart-jobs/postgresql.nix)
+    (import ../upstart-jobs/openfire.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

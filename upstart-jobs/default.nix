@@ -131,12 +131,6 @@ let
       inherit config;
     })
 
-  # OpenFire XMPP server
-  ++ optional config.services.openfire.enable
-    (import ../upstart-jobs/openfire.nix {
-      inherit config pkgs;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {
