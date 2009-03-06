@@ -12,14 +12,12 @@ let inherit (lib) nv nvs; in
   # TODO add newer example using new syntax (kernel derivation proposal -> mailinglist)
   composableDerivation = {
         mkDerivation ? pkgs.stdenv.mkDerivation,
-        # initial set of arguments to be passed to stdenv.mkDerivation passing prepareDerivationArgs by default
-        initial ? {},
 
         # list of functions to be applied before defaultOverridableDelayableArgs removes removeAttrs names
         # prepareDerivationArgs handles derivation configurations
-        # applyPreTidy ? [ lib.prepareDerivationArgs ],
-        applyPreTidy ? [],
+        applyPreTidy ? [ lib.prepareDerivationArgs ],
 
+        # consider adding addtional elements by derivation.merge { removeAttrs = ["elem"]; };
         removeAttrs ? ["cfg" "flags"]
 
       }: (lib.defaultOverridableDelayableArgs ( a: mkDerivation a) 

@@ -129,7 +129,7 @@ in
     ### python libraries:
 
     wxPythonBaseFun = (t.pythonLibSetup.merge (a :
-      let inherit (a.fixed) wxGTK version; in
+      let inherit (a.fixed.passthru) wxGTK;  inherit (a.fixed) version; in
         {
           buildInputs = [p.pkgconfig wxGTK (wxGTK.gtk)];
           setupFlags=["WXPORT=gtk2 NO_HEADERS=1 BUILD_GLCANVAS=0 BUILD_OGL=0 UNICODE=1"];
@@ -196,7 +196,7 @@ in
   # If you install dozens of python packages this might be bloat.
   # So  I think the overhead of installing these packages into the same store path should be prefered.
   pygtkBaseFun = (t.pythonLibStub.merge (a :
-    let inherit (a.fixed) glib gtk; in lib.mergeAttrsByFuncDefaults [
+    let inherit (a.fixed.passthru) glib gtk; in lib.mergeAttrsByFuncDefaults [
     {
       unpackPhase = "true";
       configurePhase = "true";
@@ -312,7 +312,7 @@ in
 
   pygtk212 = t.pygtkBaseFun.merge (a : {
     version = "2.12.1";
-    name = "pygobject-${a.fixed.pygobjectVersion}-and-pygtk-${a.fixed.version}";
+    name = "pygobject-${a.fixed.passthru.pygobjectVersion}-and-pygtk-${a.fixed.version}";
     pygtkSrc = fetchurl { 
       url = http://ftp.acc.umu.se/pub/GNOME/sources/pygtk/2.12/pygtk-2.12.1.tar.bz2;
       sha256 = "0gg13xgr7y9sppw8bdys042928nc66czn74g60333c4my95ys021";

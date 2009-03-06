@@ -8946,7 +8946,7 @@ let
   };
 
   # doesn't compile yet - in case someone else want's to continue ..
-  qgis =  composedArgsAndFun (selectVersion ../applications/misc/qgis "0.11.0") {
+  qgis =  (selectVersion ../applications/misc/qgis "0.11.0") {
     inherit composableDerivation fetchsvn stdenv flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
             gsl libpng zlib bison
