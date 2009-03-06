@@ -1764,6 +1764,7 @@ in
     (import ../upstart-jobs/gw6c.nix) # Gateway6
     (import ../upstart-jobs/syslogd.nix)
 
+    # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
     (import ../system/nixos-installer.nix)
 
