@@ -480,29 +480,6 @@ in
     };
 
 
-    ntp = {
-
-      enable = mkOption {
-        default = true;
-        description = "
-          Whether to synchronise your machine's time using the NTP
-          protocol.
-        ";
-      };
-
-      servers = mkOption {
-        default = [
-          "0.pool.ntp.org"
-          "1.pool.ntp.org"
-          "2.pool.ntp.org"
-        ];
-        description = "
-          The set of NTP servers from which to synchronise.
-        ";
-      };
-
-    };
-
     portmap = {
 
       enable = mkOption {
@@ -1565,6 +1542,7 @@ in
     (import ../upstart-jobs/dhcpd.nix)
     (import ../upstart-jobs/sshd.nix)
     (import ../upstart-jobs/lshd.nix) # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
+    (import ../upstart-jobs/ntpd.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

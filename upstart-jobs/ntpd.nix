@@ -1,52 +1,101 @@
-{ntp, modprobe, glibc, writeText, servers}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      ntp = {
+
+        enable = mkOption {
+          default = true;
+          description = "
+            Whether to synchronise your machine's time using the NTP
+            protocol.
+          ";
+        };
+
+        servers = mkOption {
+          default = [
+            "0.pool.ntp.org"
+            "1.pool.ntp.org"
+            "2.pool.ntp.org"
+          ];
+          description = "
+            The set of NTP servers from which to synchronise.
+          ";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
+
+  inherit (pkgs) writeText ntp;
 
   stateDir = "/var/lib/ntp";
 
   ntpUser = "ntp";
 
-  config = writeText "ntp.conf" ''
+  servers = config.services.ntp.servers;
+
+  modprobe = config.system.sbin.modprobe;
+
+  configFile = writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
     ${toString (map (server: "server " + server + "\n") servers)}
   '';
 
-  ntpFlags = "-c ${config} -u ${ntpUser}:nogroup -i ${stateDir}";
+  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup -i ${stateDir}";
 
 in
 
-{
-  name = "ntpd";
-  
-  users = [
-    { name = ntpUser;
-      uid = (import ../system/ids.nix).uids.ntp;
-      description = "NTP daemon user";
-      home = stateDir;
-    }
+
+mkIf config.services.ntp.enable {
+  require = [
+    options
   ];
-  
-  job = ''
-    description "NTP daemon"
 
-    start on ip-up
-    stop on ip-down
-    stop on shutdown
+  services = {
+    extraJobs = [{
 
-    start script
+      name = "ntpd";
+      
+      users = [
+        { name = ntpUser;
+          uid = (import ../system/ids.nix).uids.ntp;
+          description = "NTP daemon user";
+          home = stateDir;
+        }
+      ];
+      
+      job = ''
+        description "NTP daemon"
 
-        mkdir -m 0755 -p ${stateDir}
-        chown ${ntpUser} ${stateDir}
+        start on ip-up
+        stop on ip-down
+        stop on shutdown
 
-        # Needed to run ntpd as an unprivileged user.
-        ${modprobe}/sbin/modprobe capability || true
+        start script
 
-        ${ntp}/bin/ntpd -q -g ${ntpFlags}
+            mkdir -m 0755 -p ${stateDir}
+            chown ${ntpUser} ${stateDir}
 
-    end script
+            # Needed to run ntpd as an unprivileged user.
+            ${modprobe}/sbin/modprobe capability || true
 
-    respawn ${ntp}/bin/ntpd -n ${ntpFlags}
-  '';
-  
+            ${ntp}/bin/ntpd -q -g ${ntpFlags}
+
+        end script
+
+        respawn ${ntp}/bin/ntpd -n ${ntpFlags}
+      '';
+    }];
+  };
 }

@@ -148,14 +148,6 @@ let
       gnunetConfig = config.services.gnunet;
     })
 
-  # NTP daemon.
-  ++ optional config.services.ntp.enable
-    (import ../upstart-jobs/ntpd.nix {
-      inherit modprobe;
-      inherit (pkgs) ntp glibc writeText;
-      servers = config.services.ntp.servers;
-    })
-
   # portmap daemon.
   ++ optional config.services.portmap.enable
     (import ../upstart-jobs/portmap.nix {
