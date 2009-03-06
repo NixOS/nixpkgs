@@ -1,5 +1,22 @@
 {pkgs, config, ...}:
 
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    powerManagement = {
+
+      enable = mkOption {
+        default = false;
+        description = "Whether to enable power management (ACPI daemon)";
+      };
+    };
+  };
+in
+
+###### implementation
+
 let
 
   acpiConfDir = pkgs.runCommand "acpi-events" {}
@@ -17,9 +34,7 @@ let
         in pkgs.lib.concatMapStrings f events
       }
     '';
-
-  events = [powerEvent lidEvent acEvent];
-
+  
   # Called when the power button is pressed.
   powerEvent =
     { name = "power-button";
@@ -29,7 +44,7 @@ let
           #! ${pkgs.bash}/bin/sh
         '';
     };
-
+  
   # Called when the laptop lid is opened/closed.
   lidEvent = 
     { name = "lid";
@@ -47,7 +62,7 @@ let
           fi
         '';
     };
-
+  
   # Called when the AC power is connected or disconnected.
   acEvent =
     { name = "ac-power";
@@ -64,20 +79,27 @@ let
         '';
     };
 
+  events = [powerEvent lidEvent acEvent];
+
 in
 
-{
-  name = "acpid";
-  
-  extraPath = [pkgs.acpid];
-  
-  job = ''
-    description "ACPI daemon"
+mkIf config.powerManagement.enable {
+  require = [
+    options
+  ];
 
-    start on udev
-    stop on shutdown
+  services = {
+    extraJobs = [{
+      name = "acpid";
 
-    respawn ${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}
-  '';
-  
+      job = ''
+        description "ACPI daemon"
+
+        start on udev
+        stop on shutdown
+
+        respawn ${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}
+      '';
+    }];
+  };
 }

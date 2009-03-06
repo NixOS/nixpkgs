@@ -2180,18 +2180,6 @@ in
   };
 
     
-  powerManagement = {
-    
-    enable = mkOption {
-      default = false;
-      description = "
-        Whether to enable power management.
-      ";
-    };
-
-  };
-  
-
   nesting = {
     children = mkOption {
       default = [];
@@ -2221,6 +2209,8 @@ in
     (import ../system/system-options.nix)
     (import ../system/activate-configuration.nix)
     (import ../upstart-jobs/default.nix)
+
+    (import ../upstart-jobs/acpid.nix) # ACPI daemon
 
     # security
     (import ../system/sudo.nix)
