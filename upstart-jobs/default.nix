@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Swapping.
-    (import ../upstart-jobs/swap.nix {
-      inherit (pkgs) utillinux lib;
-      swapDevices = config.swapDevices;
-    })
-
     # Network interfaces.
     (import ../upstart-jobs/network-interfaces.nix {
       inherit modprobe config;

@@ -422,6 +422,8 @@ in
 
     (import ../upstart-jobs/filesystems.nix) # Mount file systems.
 
+    (import ../upstart-jobs/swap.nix)
+
 
     # security
     (import ../system/sudo.nix)
