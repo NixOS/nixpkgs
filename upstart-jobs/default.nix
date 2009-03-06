@@ -131,12 +131,6 @@ let
       inherit config;
     })
 
-  # ISC BIND domain name server.
-  ++ optional config.services.bind.enable
-    (import ../upstart-jobs/bind.nix {
-      inherit config pkgs;
-    })
-
   # Handles the reboot/halt events.
   ++ (map
     (event: makeJob (import ../upstart-jobs/halt.nix {
