@@ -131,12 +131,6 @@ let
       inherit config;
     })
 
-  # Postgres SQL server
-  ++ optional config.services.postgresql.enable
-    (import ../upstart-jobs/postgresql.nix {
-      inherit config pkgs;
-    })
-
   # OpenFire XMPP server
   ++ optional config.services.openfire.enable
     (import ../upstart-jobs/openfire.nix {
