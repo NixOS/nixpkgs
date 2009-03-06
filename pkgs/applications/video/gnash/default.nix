@@ -5,13 +5,13 @@
 , glib, gtk, x11, ming, dejagnu, python
 , lib, makeWrapper }:
 
-let version = "0.8.4"; in
+let version = "0.8.5"; in
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
-    sha256 = "094jky77ghdisq17z742cwn3g9ckm937p8h5jbji5rrdqbdlpzkg";
+    sha256 = "1cqhnbp99rb0n4x2bsz8wwh7vvc2kclxc1wmrl5vaapd9qhp5whn";
   };
 
   builder = ./builder.sh;
