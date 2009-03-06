@@ -131,12 +131,6 @@ let
       inherit config;
     })
 
-  # Postfix mail server.
-  ++ optional config.services.postfix.enable
-    (import ../upstart-jobs/postfix.nix {
-      inherit config pkgs;
-    })
-
   # Dovecot POP3/IMAP server.
   ++ optional config.services.dovecot.enable
     (import ../upstart-jobs/dovecot.nix {
