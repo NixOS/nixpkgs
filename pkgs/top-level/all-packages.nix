@@ -34,7 +34,7 @@
 
 let
 
-  lib = import ../lib;
+  lib = import ../lib; # see also libTests below
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
@@ -9583,4 +9583,5 @@ let
     inherit (stdenv) mkDerivation;
   };
 
+  libTests = import ../lib/tests.nix;
 }; in pkgs
