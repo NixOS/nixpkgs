@@ -383,19 +383,6 @@ in
   services = {
 
   
-    syslogd = {
-
-      tty = mkOption {
-        default = 10;
-        description = "
-          The tty device on which syslogd will print important log
-          messages.
-        ";
-      };
-    
-    };
-
-
     ttyBackgrounds = {
 
       enable = mkOption {
@@ -1775,6 +1762,7 @@ in
     (import ../upstart-jobs/pulseaudio.nix)
     (import ../upstart-jobs/kbd.nix)
     (import ../upstart-jobs/gw6c.nix) # Gateway6
+    (import ../upstart-jobs/syslogd.nix)
 
     (import ../upstart-jobs/nix.nix) # nix options and daemon
     (import ../system/nixos-installer.nix)

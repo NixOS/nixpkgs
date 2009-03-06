@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Syslogd.
-    (import ../upstart-jobs/syslogd.nix {
-      inherit (pkgs) sysklogd writeText;
-      inherit config;
-    })
-
     # Klogd.
     (import ../upstart-jobs/klogd.nix {
       inherit (pkgs) sysklogd writeText;
