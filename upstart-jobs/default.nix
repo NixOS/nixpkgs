@@ -141,21 +141,6 @@ let
       inherit config;
     })
 
-  # Apache httpd.
-  ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
-    (import ../upstart-jobs/httpd.nix {
-      inherit config pkgs;
-      inherit (pkgs) glibc;
-      extraConfig = pkgs.lib.concatStringsSep "\n"
-        (map (job: job.extraHttpdConfig) jobs);
-    })
-
-  # Apache httpd (new style).
-  ++ optional (config.services.httpd.enable && config.services.httpd.experimental)
-    (import ../upstart-jobs/apache-httpd {
-      inherit config pkgs;
-    })
-
   # MySQL server
   ++ optional config.services.mysql.enable
     (import ../upstart-jobs/mysql.nix {
