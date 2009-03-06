@@ -141,12 +141,6 @@ let
       inherit config;
     })
 
-  # DHCP server.
-  ++ optional config.services.dhcpd.enable
-    (import ../upstart-jobs/dhcpd.nix {
-      inherit pkgs config;
-    })
-
   # SSH daemon.
   ++ optional config.services.sshd.enable
     (import ../upstart-jobs/sshd.nix {
