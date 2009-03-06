@@ -476,15 +476,16 @@ in
     (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
     (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
     (import ../upstart-jobs/ircd-hybrid.nix) # TODO: doesn't compile on x86_64-linux, can't test
-    (import ../upstart-jobs/xfs.nix)
+    (import ../upstart-jobs/xfs.nix) # FIXME (assertion)
     (import ../upstart-jobs/mysql.nix)
     (import ../upstart-jobs/postgresql.nix)
-    (import ../upstart-jobs/openfire.nix)
+    (import ../upstart-jobs/openfire.nix) # FIXME (assertion)
     (import ../upstart-jobs/postfix.nix)
     (import ../upstart-jobs/dovecot.nix)
     (import ../upstart-jobs/bind.nix)
+
     (import ../upstart-jobs/mingetty.nix) # The terminals on ttyX.
-    (import ../upstart-jobs/tty-backgrounds.nix)
+    (import ../upstart-jobs/tty-backgrounds.nix) #FIXME (assertion)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
