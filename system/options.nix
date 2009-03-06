@@ -2171,12 +2171,6 @@ in
       ";
     };
 
-    unixODBCDrivers = mkOption {
-      default = pkgs : [];
-      example = "pkgs : map (x : x.ini) (with pkgs.unixODBCDrivers; [ mysql psql psqlng ] )";
-      description = "specifies unix odbc drivers to be registered at /etc/odbcinst.ini";
-    };
-
   };
 
     
@@ -2211,6 +2205,9 @@ in
     (import ../upstart-jobs/default.nix)
 
     (import ../upstart-jobs/acpid.nix) # ACPI daemon
+
+    (import ../system/unix-odbc-drivers.nix)
+
 
     # security
     (import ../system/sudo.nix)
