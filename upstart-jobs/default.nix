@@ -19,7 +19,7 @@ let
                  exec sh -c "echo 'hello world' | ${pkgs.netcat}/bin/nc -l -p 9000"
                  '';
              } ];
-        # should have some checks to everify the syntax
+        # should have some checks to verify the syntax
         merge = pkgs.lib.mergeListOption;
         description = "
           Additional Upstart jobs.
