@@ -262,12 +262,6 @@ let
       inherit config pkgs modprobe;
     })
 
-  # Gateway6
-  ++ optional config.services.gw6c.enable
-    (import ../upstart-jobs/gw6c.nix {
-      inherit config pkgs;
-    })
-
   # VSFTPd server
   ++ optional config.services.vsftpd.enable
     (import ../upstart-jobs/vsftpd.nix {
