@@ -140,16 +140,6 @@ let
     ["reboot" "halt" "system-halt" "power-off"]
   )
     
-  # The terminals on ttyX.
-  ++ (map 
-    (ttyNumber: makeJob (import ../upstart-jobs/mingetty.nix {
-        inherit (pkgs) mingetty;
-        inherit ttyNumber;
-        loginProgram = "${pkgs.pam_login}/bin/login";
-    }))
-    (config.services.mingetty.ttys)
-  )
-
   # Transparent TTY backgrounds.
   ++ optional (config.services.ttyBackgrounds.enable && kernelPackages.splashutils != null)
     (import ../upstart-jobs/tty-backgrounds.nix {
