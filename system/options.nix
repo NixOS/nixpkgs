@@ -479,41 +479,6 @@ in
 
     };
 
-    mysql = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the MySQL server.
-        ";
-      };
-      
-      port = mkOption {
-        default = "3306";
-        description = "Port of MySQL"; 
-      };
-      
-      user = mkOption {
-        default = "mysql";
-        description = "User account under which MySQL runs";
-      };
-      
-      dataDir = mkOption {
-        default = "/var/mysql";
-        description = "Location where MySQL stores its table files";
-      };
-      
-      logError = mkOption {
-        default = "/var/log/mysql_err.log";
-        description = "Location of the MySQL error logfile";
-      };
-      
-      pidDir = mkOption {
-        default = "/var/run/mysql";
-        description = "Location of the file which stores the PID of the MySQL server";
-      };
-    };
-
-    
     postgresql = {
       enable = mkOption {
         default = false;
@@ -890,6 +855,7 @@ in
     (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
     (import ../upstart-jobs/ircd-hybrid.nix) # TODO: doesn't compile on x86_64-linux, can't test
     (import ../upstart-jobs/xfs.nix)
+    (import ../upstart-jobs/mysql.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
