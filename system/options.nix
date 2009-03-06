@@ -416,6 +416,8 @@ in
 
     (import ../upstart-jobs/klogd.nix)
 
+    (import ../upstart-jobs/lvm.nix) # Makes LVM logical volumes available.
+
 
 
     # security

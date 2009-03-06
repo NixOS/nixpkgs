@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Makes LVM logical volumes available. 
-    (import ../upstart-jobs/lvm.nix {
-      inherit modprobe;
-      inherit (pkgs) lvm2 devicemapper;
-    })
-      
     # Activate software RAID arrays.
     (import ../upstart-jobs/swraid.nix {
       inherit modprobe;
