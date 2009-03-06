@@ -245,29 +245,6 @@ in
       ";
     };
 
-    interfaceMonitor = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          If <literal>true</literal>, monitor Ethernet interfaces for
-          cables being plugged in or unplugged.  When this occurs, the
-          <command>dhclient</command> service is restarted to
-          automatically obtain a new IP address.  This is useful for
-          roaming users (laptops).
-        ";
-      };
-
-      beep = mkOption {
-        default = false;
-        description = "
-          If <literal>true</literal>, beep when an Ethernet cable is
-          plugged in or unplugged.
-        ";
-      };
-
-    };
-
     defaultMailServer = {
 
       directDelivery = mkOption {
@@ -428,6 +405,7 @@ in
     (import ../upstart-jobs/maintenance-shell.nix) # Handles the maintenance/stalled event (single-user shell).
     (import ../upstart-jobs/ctrl-alt-delete.nix) # Ctrl-alt-delete action.
     (import ../upstart-jobs/halt.nix) # FIXME (assertion) # Handles the reboot/halt events.
+    (import ../upstart-jobs/ifplugd.nix) # ifplugd daemon for monitoring Ethernet cables.
 
 
     # security

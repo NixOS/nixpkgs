@@ -70,13 +70,6 @@ let
 
   jobs = map makeJob []
 
-  # ifplugd daemon for monitoring Ethernet cables.
-  ++ optional config.networking.interfaceMonitor.enable
-    (import ../upstart-jobs/ifplugd.nix {
-      inherit (pkgs) ifplugd writeScript bash;
-      inherit config;
-    })
-
   # User-defined events.
   ++ (map makeJob (config.services.extraJobs));
 
