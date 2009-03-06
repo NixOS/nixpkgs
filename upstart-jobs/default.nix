@@ -149,12 +149,6 @@ let
       inherit config pkgs;
     })
 
-  # X Font Server
-  ++ optional config.services.xfs.enable
-    (import ../upstart-jobs/xfs.nix {
-      inherit config pkgs;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {

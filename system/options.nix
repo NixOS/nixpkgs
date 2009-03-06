@@ -479,18 +479,6 @@ in
 
     };
 
-    xfs = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the X Font Server.
-        ";
-      };
-
-    };
-
-
     mysql = {
       enable = mkOption {
         default = false;
@@ -901,6 +889,7 @@ in
     (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
     (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
     (import ../upstart-jobs/ircd-hybrid.nix) # TODO: doesn't compile on x86_64-linux, can't test
+    (import ../upstart-jobs/xfs.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
