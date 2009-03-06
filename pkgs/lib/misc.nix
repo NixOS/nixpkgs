@@ -277,12 +277,6 @@ rec {
   setAttrMerge = name : default : attrs : f :
     setAttr attrs name (f (maybeAttr name default attrs));
 
-  # iterates over a list of attributes collecting the attribute attr if it exists
-  catAttrs = attr : l : fold ( s : l : if (hasAttr attr s) then [(builtins.getAttr attr s)] ++ l else l) [] l;
-
-  attrVals = nameList : attrSet :
-    map (x: builtins.getAttr x attrSet) nameList;
-
   # Using f = a : b = b the result is similar to //
   # merge attributes with custom function handling the case that the attribute
   # exists in both sets
