@@ -71,13 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Mount file systems.
-    (import ../upstart-jobs/filesystems.nix {
-      inherit mount;
-      inherit (pkgs) utillinux e2fsprogs;
-      fileSystems = config.fileSystems;
-    })
-
     # Swapping.
     (import ../upstart-jobs/swap.nix {
       inherit (pkgs) utillinux lib;

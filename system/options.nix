@@ -420,6 +420,8 @@ in
 
     (import ../upstart-jobs/swraid.nix) # Activate software RAID arrays.
 
+    (import ../upstart-jobs/filesystems.nix) # Mount file systems.
+
 
     # security
     (import ../system/sudo.nix)
