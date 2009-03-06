@@ -418,6 +418,7 @@ in
 
     (import ../upstart-jobs/lvm.nix) # Makes LVM logical volumes available.
 
+    (import ../upstart-jobs/swraid.nix) # Activate software RAID arrays.
 
 
     # security

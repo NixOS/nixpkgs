@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Activate software RAID arrays.
-    (import ../upstart-jobs/swraid.nix {
-      inherit modprobe;
-      inherit (pkgs) mdadm;
-    })
-      
     # Mount file systems.
     (import ../upstart-jobs/filesystems.nix {
       inherit mount;
