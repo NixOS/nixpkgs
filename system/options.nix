@@ -480,18 +480,6 @@ in
     };
 
 
-    portmap = {
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable `portmap', an ONC RPC directory service
-          notably used by NFS and NIS, and which can be queried
-          using the rpcinfo(1) command.
-        '';
-      };
-    };
-
     bitlbee = {
 
       enable = mkOption {
@@ -1543,6 +1531,7 @@ in
     (import ../upstart-jobs/sshd.nix)
     (import ../upstart-jobs/lshd.nix) # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
     (import ../upstart-jobs/ntpd.nix)
+    (import ../upstart-jobs/portmap.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

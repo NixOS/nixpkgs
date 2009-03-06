@@ -148,12 +148,6 @@ let
       gnunetConfig = config.services.gnunet;
     })
 
-  # portmap daemon.
-  ++ optional config.services.portmap.enable
-    (import ../upstart-jobs/portmap.nix {
-      inherit (pkgs) makePortmap;
-     })
-
   # Apache httpd.
   ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
     (import ../upstart-jobs/httpd.nix {
