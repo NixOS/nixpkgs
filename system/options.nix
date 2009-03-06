@@ -479,18 +479,6 @@ in
 
     };
 
-    samba = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the samba server. (to communicate with, and provide windows shares)
-        ";
-      };
-
-    };
-
-
     ircdHybrid = {
 
       enable = mkOption {
@@ -983,6 +971,7 @@ in
     (import ../upstart-jobs/vsftpd.nix)
     (import ../upstart-jobs/cupsd.nix) # CUPS printing daemon
     (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
+    (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

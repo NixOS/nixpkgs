@@ -1,4 +1,26 @@
-{pkgs, samba, glibc}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      samba = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable the samba server. (to communicate with, and provide windows shares)
+          ";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
   
@@ -7,52 +29,65 @@ let
  
   smbConfig = ./smb.conf ;
 
+  inherit (pkgs) samba;
+
 in
 
-{
-  name = "samba";
 
-  users = [
-    { name = user;
-      description = "Samba service user";
-      group = group;
-    }
-  ];
   
-  groups = [
-    { name = group;
-    }
+
+mkIf config.services.samba.enable {
+  require = [
+    options
   ];
-  
-  job = "
 
-description \"Samba Service\"
+  users = {
+    extraUsers = [
+      { name = user;
+        description = "Samba service user";
+        group = group;
+      }
+    ];
+    
+    extraGroups = [
+      { name = group;
+      }
+    ];
+  };
 
-start on network-interfaces/started
-stop on network-interfaces/stop
+  services = {
+    extraJobs = [{
+      name = "samba";
+      job = ''
 
-start script
+        description "Samba Service"
 
-  if ! test -d /home/smbd ; then 
-    mkdir -p /home/smbd
-    chown ${user} /home/smbd
-    chmod a+rwx /home/smbd
-  fi
+        start on network-interfaces/started
+        stop on network-interfaces/stop
 
-  if ! test -d /var/samba ; then
-    mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
-  fi
+        start script
 
-  ${samba}/sbin/nmbd -D  -s ${smbConfig} &
-  ${samba}/sbin/smbd -D  -s ${smbConfig} &
-  ${samba}/sbin/winbindd -B -s ${smbConfig} &
+          if ! test -d /home/smbd ; then 
+            mkdir -p /home/smbd
+            chown ${user} /home/smbd
+            chmod a+rwx /home/smbd
+          fi
 
-  ln -fs ${smbConfig} /var/samba/config
+          if ! test -d /var/samba ; then
+            mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
+          fi
 
-end script
+          ${samba}/sbin/nmbd -D  -s ${smbConfig} &
+          ${samba}/sbin/smbd -D  -s ${smbConfig} &
+          ${samba}/sbin/winbindd -B -s ${smbConfig} &
 
-respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd -B &
+          ln -fs ${smbConfig} /var/samba/config
 
-  ";
+        end script
 
+        respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd -B &
+
+      '';
+    }];
+  };
 }

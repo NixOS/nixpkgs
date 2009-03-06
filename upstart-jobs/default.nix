@@ -149,13 +149,6 @@ let
       inherit config pkgs;
     })
 
-  # Samba service.
-  ++ optional config.services.samba.enable
-    (import ../upstart-jobs/samba.nix {
-      inherit pkgs;
-      inherit (pkgs) glibc samba;
-    })
-
   # X Font Server
   ++ optional config.services.xfs.enable
     (import ../upstart-jobs/xfs.nix {
