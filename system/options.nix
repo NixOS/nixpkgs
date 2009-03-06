@@ -479,78 +479,6 @@ in
 
     };
 
-    ircdHybrid = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
-
-      serverName = mkOption {
-        default = "hades.arpa";
-        description = "
-          IRCD server name.
-        ";
-      };
-
-      sid = mkOption {
-        default = "0NL";
-        description = "
-          IRCD server unique ID in a net of servers.
-        ";
-      };
-
-      description = mkOption {
-        default = "Hybrid-7 IRC server.";
-        description = "
-          IRCD server description.
-        ";
-      };
-
-      rsaKey = mkOption {
-        default = null;
-        example = /root/certificates/irc.key;
-        description = "
-          IRCD server RSA key. 
-        ";
-      };
-
-      certificate = mkOption {
-        default = null;
-        example = /root/certificates/irc.pem;
-        description = "
-          IRCD server SSL certificate. There are some limitations - read manual.
-        ";
-      };
-
-      adminEmail = mkOption {
-        default = "<bit-bucket@example.com>";
-        example = "<name@domain.tld>";
-        description = "
-          IRCD server administrator e-mail. 
-        ";
-      };
-
-      extraIPs = mkOption {
-        default = [];
-        example = ["127.0.0.1"];
-        description = "
-          Extra IP's to bind.
-        ";
-      };
-
-      extraPort = mkOption {
-        default = "7117";
-        description = "
-          Extra port to avoid filtering.
-        ";
-      };
-
-    };
-
-
     xfs = {
 
       enable = mkOption {
@@ -972,6 +900,7 @@ in
     (import ../upstart-jobs/cupsd.nix) # CUPS printing daemon
     (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
     (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
+    (import ../upstart-jobs/ircd-hybrid.nix) # TODO: doesn't compile on x86_64-linux, can't test
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

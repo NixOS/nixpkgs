@@ -155,11 +155,6 @@ let
       inherit config pkgs;
     })
 
-  ++ optional config.services.ircdHybrid.enable
-    (import ../upstart-jobs/ircd-hybrid.nix {
-      inherit config pkgs;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {
