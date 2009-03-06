@@ -141,15 +141,6 @@ let
       inherit config;
     })
 
-  # SSH daemon.
-  ++ optional config.services.sshd.enable
-    (import ../upstart-jobs/sshd.nix {
-      inherit (pkgs) writeText openssh glibc;
-      inherit (pkgs.xorg) xauth;
-      inherit nssModulesPath;
-      inherit (config.services.sshd) forwardX11 allowSFTP permitRootLogin gatewayPorts;
-    })
-
   # GNU lshd SSH2 deamon.
   ++ optional config.services.lshd.enable
     (import ../upstart-jobs/lshd.nix {

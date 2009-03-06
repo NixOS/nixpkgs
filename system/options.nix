@@ -480,50 +480,6 @@ in
     };
 
 
-    sshd = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the Secure Shell daemon, which allows secure
-          remote logins.
-        ";
-      };
-
-      forwardX11 = mkOption {
-        default = true;
-        description = "
-          Whether to enable sshd to forward X11 connections.
-        ";
-      };
-
-      allowSFTP = mkOption {
-        default = true;
-        description = "
-          Whether to enable the SFTP subsystem in the SSH daemon.  This
-          enables the use of commands such as <command>sftp</command> and
-          <command>sshfs</command>.
-        ";
-      };
-
-      permitRootLogin = mkOption {
-        default = "yes";
-        description = "
-          Whether the root user can login using ssh. Valid options
-          are <command>yes</command>, <command>without-password</command>,
-          <command>forced-commands-only</command> or
-          <command>no</command>
-        ";
-      };
-
-      gatewayPorts = mkOption {
-        default = "no";
-        description = "
-           Specifies  whether  remote hosts are allowed to connect to ports forwarded for the client. See man sshd_conf.
-          ";
-        };
-    };
-
     lshd = {
 
       enable = mkOption {
@@ -1699,6 +1655,7 @@ in
     (import ../upstart-jobs/gw6c.nix) # Gateway6
     (import ../upstart-jobs/syslogd.nix)
     (import ../upstart-jobs/dhcpd.nix)
+    (import ../upstart-jobs/sshd.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
