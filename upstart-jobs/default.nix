@@ -141,16 +141,6 @@ let
       inherit config;
     })
 
-  # GNU lshd SSH2 deamon.
-  ++ optional config.services.lshd.enable
-    (import ../upstart-jobs/lshd.nix {
-      inherit (pkgs) lib;
-      inherit (pkgs) lsh;
-      inherit (pkgs.xorg) xauth;
-      inherit nssModulesPath;
-      lshdConfig = config.services.lshd;
-    })
-
   # GNUnet daemon.
   ++ optional config.services.gnunet.enable
     (import ../upstart-jobs/gnunet.nix {

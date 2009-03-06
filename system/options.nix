@@ -480,98 +480,6 @@ in
     };
 
 
-    lshd = {
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the GNU lshd SSH2 daemon, which allows
-          secure remote login.
-        '';
-      };
-
-      portNumber = mkOption {
-        default = 22;
-        description = ''
-          The port on which to listen for connections.
-        '';
-      };
-
-      interfaces = mkOption {
-        default = [];
-        description = ''
-          List of network interfaces where listening for connections.
-          When providing the empty list, `[]', lshd listens on all
-          network interfaces.
-        '';
-        example = [ "localhost" "1.2.3.4:443" ];
-      };
-
-      hostKey = mkOption {
-        default = "/etc/lsh/host-key";
-        description = ''
-          Path to the server's private key.  Note that this key must
-          have been created, e.g., using "lsh-keygen --server |
-          lsh-writekey --server", so that you can run lshd.
-        '';
-      };
-
-      syslog = mkOption {
-        default = true;
-        description = ''Whether to enable syslog output.'';
-      };
-
-      passwordAuthentication = mkOption {
-        default = true;
-        description = ''Whether to enable password authentication.'';
-      };
-
-      publicKeyAuthentication = mkOption {
-        default = true;
-        description = ''Whether to enable public key authentication.'';
-      };
-
-      rootLogin = mkOption {
-        default = false;
-        description = ''Whether to enable remote root login.'';
-      };
-
-      loginShell = mkOption {
-        default = null;
-        description = ''
-          If non-null, override the default login shell with the
-          specified value.
-        '';
-        example = "/nix/store/xyz-bash-10.0/bin/bash10";
-      };
-
-      srpKeyExchange = mkOption {
-        default = false;
-        description = ''
-          Whether to enable SRP key exchange and user authentication.
-        '';
-      };
-
-      tcpForwarding = mkOption {
-        default = true;
-        description = ''Whether to enable TCP/IP forwarding.'';
-      };
-
-      x11Forwarding = mkOption {
-        default = true;
-        description = ''Whether to enable X11 forwarding.'';
-      };
-
-      subsystems = mkOption {
-        default = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
-        description = ''
-          List of subsystem-path pairs, where the head of the pair
-          denotes the subsystem name, and the tail denotes the path to
-          an executable implementing it.
-        '';
-      };
-    };
-
     ntp = {
 
       enable = mkOption {
@@ -1656,6 +1564,7 @@ in
     (import ../upstart-jobs/syslogd.nix)
     (import ../upstart-jobs/dhcpd.nix)
     (import ../upstart-jobs/sshd.nix)
+    (import ../upstart-jobs/lshd.nix) # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
