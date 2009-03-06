@@ -480,33 +480,6 @@ in
     };
 
 
-    ejabberd = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable ejabberd server";
-      };
-            
-      spoolDir = mkOption {
-        default = "/var/lib/ejabberd";
-        description = "Location of the spooldir of ejabberd";
-      };
-      
-      logsDir = mkOption {
-        default = "/var/log/ejabberd";
-        description = "Location of the logfile directory of ejabberd";
-      };
-      
-      confDir = mkOption {
-        default = "/var/ejabberd";
-	description = "Location of the config directory of ejabberd";
-      };
-      
-      virtualHosts = mkOption {
-        default = "\"localhost\"";
-        description = "Virtualhosts that ejabberd should host. Hostnames are surrounded with doublequotes and separated by commas";
-      };
-    };
-
     jboss = {
       enable = mkOption {
         default = false;
@@ -1369,6 +1342,7 @@ in
     (import ../upstart-jobs/portmap.nix)
     (import ../upstart-jobs/bitlbee.nix)
     (import ../upstart-jobs/gnunet.nix)
+    (import ../upstart-jobs/ejabberd.nix) # untested, dosen't compile on x86_64-linux
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

@@ -168,12 +168,6 @@ let
       inherit config pkgs;
     })
 
-  # EJabberd service
-  ++ optional config.services.ejabberd.enable
-    (import ../upstart-jobs/ejabberd.nix {
-      inherit config pkgs;
-    })  
-
   # OpenFire XMPP server
   ++ optional config.services.openfire.enable
     (import ../upstart-jobs/openfire.nix {
