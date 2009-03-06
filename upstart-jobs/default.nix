@@ -166,12 +166,6 @@ let
       inherit (pkgs) glibc samba;
     })
 
-  # CUPS (printing) daemon.
-  ++ optional config.services.printing.enable
-    (import ../upstart-jobs/cupsd.nix {
-      inherit config pkgs modprobe;
-    })
-
   # X Font Server
   ++ optional config.services.xfs.enable
     (import ../upstart-jobs/xfs.nix {

@@ -479,18 +479,6 @@ in
 
     };
 
-    printing = {
-
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable printing support through the CUPS daemon.
-        ";
-      };
-
-    };
-
-
     udev = {
 
       addFirmware = mkOption {
@@ -1026,6 +1014,7 @@ in
     (import ../upstart-jobs/httpd.nix) # Apache httpd (probably this can be removed ?)
     (import ../upstart-jobs/apache-httpd) # Apache httpd (new style).
     (import ../upstart-jobs/vsftpd.nix)
+    (import ../upstart-jobs/cupsd.nix) # CUPS printing daemon
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
