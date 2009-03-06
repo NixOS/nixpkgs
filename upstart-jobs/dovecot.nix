@@ -1,4 +1,45 @@
-{config, pkgs}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      dovecot = {
+        enable = mkOption {
+          default = false;
+          description = "Whether to enable dovecot POP3/IMAP server.";
+        };
+
+        user = mkOption {
+          default = "dovecot";
+          description = "dovecot user name";
+        };
+        group = mkOption {
+          default = "dovecot";
+          description = "dovecot group name";
+        };
+
+        sslServerCert = mkOption {
+          default = "";
+          description = "Server certificate";
+        };
+        sslCACert = mkOption {
+          default = "";
+          description = "CA certificate used by server certificate";
+        };
+        sslServerKey = mkOption {
+          default = "";
+          description = "Server key";
+        };
+      };
+    };
+  };
+in
+
+###### implementation
+
 let 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
@@ -54,36 +95,51 @@ let
   '';
 
 in
-{
-  name = "dovecot";
-  users = [{
-    name = cfg.user;
-    uid = idList.uids.dovecot;
-    description = "Dovecot user";
-    group = cfg.group;
-  }];
-  groups = [{
-    name = cfg.group;
-    gid = idList.gids.dovecot;
-  }];
 
-  job = ''
-    description "Dovecot IMAP/POP3 server"
+mkIf config.services.dovecot.enable {
 
-    start on ${startingDependency}/started
-    stop on never
+  require = [
+    options
+  ];
 
-    start script
-      ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login 
-      ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
-    end script 
+  environment = {
+    etc = [{
+      source = pamdFile;
+      target = "pam.d/dovecot";
+    }];
+  };
 
-    respawn ${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}
-  '';
+  users = {
+    extraUsers = [{
+      name = cfg.user;
+      uid = idList.uids.dovecot;
+      description = "Dovecot user";
+      group = cfg.group;
+    }];
+    extraGroups = [{
+      name = cfg.group;
+      gid = idList.gids.dovecot;
+    }];
+  };
 
-  extraEtc = [{ 
-    source = pamdFile;
-    target = "pam.d/dovecot";
-  }];
+  services = {
+    extraJobs = [{
+      name = "dovecot";
+
+      job = ''
+        description "Dovecot IMAP/POP3 server"
+
+        start on ${startingDependency}/started
+        stop on never
+
+        start script
+          ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login 
+          ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
+        end script 
+
+        respawn ${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}
+      '';
+
+    }];
+  };
 }
-

@@ -479,35 +479,6 @@ in
 
     };
 
-    dovecot = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable dovecot POP3/IMAP server.";
-      };
-
-      user = mkOption {
-        default = "dovecot";
-        description = "dovecot user name";
-      };
-      group = mkOption {
-        default = "dovecot";
-        description = "dovecot group name";
-      };
-
-      sslServerCert = mkOption {
-        default = "";
-        description = "Server certificate";
-      };
-      sslCACert = mkOption {
-        default = "";
-        description = "CA certificate used by server certificate";
-      };
-      sslServerKey = mkOption {
-        default = "";
-        description = "Server key";
-      };
-    };
-
     bind = {
       enable = mkOption {
         default = false;
@@ -647,6 +618,7 @@ in
     (import ../upstart-jobs/postgresql.nix)
     (import ../upstart-jobs/openfire.nix)
     (import ../upstart-jobs/postfix.nix)
+    (import ../upstart-jobs/dovecot.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

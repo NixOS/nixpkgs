@@ -131,12 +131,6 @@ let
       inherit config;
     })
 
-  # Dovecot POP3/IMAP server.
-  ++ optional config.services.dovecot.enable
-    (import ../upstart-jobs/dovecot.nix {
-      inherit config pkgs;
-    })
-
   # ISC BIND domain name server.
   ++ optional config.services.bind.enable
     (import ../upstart-jobs/bind.nix {
