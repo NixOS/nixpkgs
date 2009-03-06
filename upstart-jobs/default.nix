@@ -231,12 +231,6 @@ let
       inherit config pkgs;
     })
 
-  ++ optional config.services.bitlbee.enable
-    (import ../upstart-jobs/bitlbee.nix {
-      inherit (pkgs) bitlbee;
-      inherit (config.services.bitlbee) portNumber interface;
-    })
-
   # Postfix mail server.
   ++ optional config.services.postfix.enable
     (import ../upstart-jobs/postfix.nix {

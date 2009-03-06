@@ -480,35 +480,6 @@ in
     };
 
 
-    bitlbee = {
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the BitlBee IRC to other chat network gateway.
-          Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
-          networks via an IRC client.
-        '';
-      };
-
-      interface = mkOption {
-        default = "127.0.0.1";
-        description = ''
-          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
-          can access it from any network interface.
-        '';
-      };
-
-      portNumber = mkOption {
-        default = 6667;
-        description = ''
-          Number of the port BitlBee will be listening to.
-        '';
-      };
-
-    };
-
     gnunet = {
     
       enable = mkOption {
@@ -1532,6 +1503,7 @@ in
     (import ../upstart-jobs/lshd.nix) # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
     (import ../upstart-jobs/ntpd.nix)
     (import ../upstart-jobs/portmap.nix)
+    (import ../upstart-jobs/bitlbee.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
