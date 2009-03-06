@@ -77,16 +77,6 @@ let
       inherit config;
     })
 
-    # The udev daemon creates devices nodes and runs programs when
-    # hardware events occur.
-    (import ../upstart-jobs/udev.nix {
-      inherit modprobe config;
-      inherit (pkgs) stdenv writeText substituteAll udev procps;
-      inherit (pkgs.lib) cleanSource;
-      firmwareDirs = config.services.udev.addFirmware;
-      extraUdevPkgs = config.services.udev.addUdevPkgs;
-    })
-      
     # Makes LVM logical volumes available. 
     (import ../upstart-jobs/lvm.nix {
       inherit modprobe;

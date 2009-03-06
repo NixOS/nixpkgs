@@ -479,39 +479,6 @@ in
 
     };
 
-    udev = {
-
-      addFirmware = mkOption {
-        default = [];
-        example = ["/mnt/big-storage/firmware/"];
-        description = "
-          To specify firmware that is not too spread to ensure 
-          a package, or have an interactive process of extraction
-          and cannot be redistributed.
-        ";
-        merge = pkgs.lib.mergeListOption;
-      };
-
-      addUdevPkgs = mkOption {
-        default = [];
-        description = "
-          List of packages containing udev rules.
-        ";
-        merge = pkgs.lib.mergeListOption;
-      };
-      
-      sndMode = mkOption {
-        default = "0600";
-        example = "0666";
-        description = "
-          Permissions for /dev/snd/*, in case you have multiple 
-          logged in users or if the devices belong to root for 
-          some reason.
-        ";
-      };
-    };
-
-
     samba = {
 
       enable = mkOption {
@@ -1015,6 +982,7 @@ in
     (import ../upstart-jobs/apache-httpd) # Apache httpd (new style).
     (import ../upstart-jobs/vsftpd.nix)
     (import ../upstart-jobs/cupsd.nix) # CUPS printing daemon
+    (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
