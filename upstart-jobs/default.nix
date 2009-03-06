@@ -66,10 +66,7 @@ let
 
   optional = cond: service: pkgs.lib.optional cond (makeJob service);
 
-  requiredTTYs =
-    config.services.mingetty.ttys
-    ++ config.boot.extraTTYs
-    ++ [config.services.syslogd.tty];
+  requiredTTYs = config.requiredTTYs;
 
   jobs = map makeJob
     ([
@@ -136,15 +133,6 @@ let
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc;
       inherit nssModulesPath;
-    })
-
-    # Console font and keyboard maps.
-    (import ../upstart-jobs/kbd.nix {
-      inherit (pkgs) glibc kbd gzip;
-      ttyNumbers = requiredTTYs;
-      defaultLocale = config.i18n.defaultLocale;
-      consoleFont = config.i18n.consoleFont;
-      consoleKeyMap = config.i18n.consoleKeyMap;
     })
 
     # Handles the maintenance/stalled event (single-user shell).
