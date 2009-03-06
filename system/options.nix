@@ -414,6 +414,9 @@ in
 
     (import ../system/unix-odbc-drivers.nix)
 
+    (import ../upstart-jobs/klogd.nix)
+
+
 
     # security
     (import ../system/sudo.nix)

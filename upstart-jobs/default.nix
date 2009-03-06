@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Klogd.
-    (import ../upstart-jobs/klogd.nix {
-      inherit (pkgs) sysklogd writeText;
-      inherit config;
-    })
-
     # Makes LVM logical volumes available. 
     (import ../upstart-jobs/lvm.nix {
       inherit modprobe;
