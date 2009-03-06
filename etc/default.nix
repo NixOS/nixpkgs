@@ -187,15 +187,6 @@ let
     target = "ssmtp/ssmtp.conf";
   }
 
-  # LDAP configuration.
-  ++ optional config.users.ldap.enable {
-    source = import ./ldap.conf.nix {
-      inherit (pkgs) writeText;
-      inherit config;
-    };
-    target = "ldap.conf";
-  }
-    
   # A bunch of PAM configuration files for various programs.
   ++ (map
     (program:
