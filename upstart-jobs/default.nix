@@ -140,37 +140,6 @@ let
     ["reboot" "halt" "system-halt" "power-off"]
   )
     
-  # Transparent TTY backgrounds.
-  ++ optional (config.services.ttyBackgrounds.enable && kernelPackages.splashutils != null)
-    (import ../upstart-jobs/tty-backgrounds.nix {
-      inherit (pkgs) stdenv;
-      inherit (kernelPackages) splashutils;
-      
-      backgrounds =
-      
-        let
-        
-          specificThemes =
-            config.services.ttyBackgrounds.defaultSpecificThemes
-            ++ config.services.ttyBackgrounds.specificThemes;
-            
-          overridenTTYs = map (x: x.tty) specificThemes;
-
-          # Use the default theme for all the mingetty ttys and for the
-          # syslog tty, except those for which a specific theme is
-          # specified.
-          defaultTTYs =
-            pkgs.lib.filter (x: !(pkgs.lib.elem x overridenTTYs)) requiredTTYs;
-
-        in      
-          (map (ttyNumber: {
-            tty = ttyNumber;
-            theme = config.services.ttyBackgrounds.defaultTheme;
-          }) defaultTTYs)
-          ++ specificThemes;
-          
-    })
-
   # User-defined events.
   ++ (map makeJob (config.services.extraJobs));
 

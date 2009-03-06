@@ -380,69 +380,6 @@ in
     ";
   };
 
-  services = {
-
-  
-    ttyBackgrounds = {
-
-      enable = mkOption {
-        default = true;
-        description = "
-          Whether to enable graphical backgrounds for the virtual consoles.
-        ";
-      };
-
-      defaultTheme = mkOption {
-        default = pkgs.fetchurl {
-          #url = http://www.bootsplash.de/files/themes/Theme-BabyTux.tar.bz2;
-          url = http://www.mirrorservice.org/sites/www.ibiblio.org/gentoo/distfiles/Theme-BabyTux.tar.bz2;
-          md5 = "a6d89d1c1cff3b6a08e2f526f2eab4e0";
-        };
-        description = "
-          The default theme for the virtual consoles.  Themes can be found
-          at <link xlink:href='http://www.bootsplash.de/' />.
-        ";
-      };
-
-      defaultSpecificThemes = mkOption {
-        default = [
-          /*
-          { tty = 6;
-            theme = pkgs.fetchurl { # Yeah!
-              url = http://www.bootsplash.de/files/themes/Theme-Pativo.tar.bz2;
-              md5 = "9e13beaaadf88d43a5293e7ab757d569";
-            };
-          }
-          */
-          { tty = 10;
-            theme = pkgs.fetchurl {
-              #url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
-              url = http://www.mirrorservice.org/sites/www.ibiblio.org/gentoo/distfiles/Theme-GNU.tar.bz2;
-              md5 = "61969309d23c631e57b0a311102ef034";
-            };
-          }
-        ];
-        description = "
-          This option sets specific themes for virtual consoles.  If you
-          just want to set themes for additional consoles, use
-          <option>services.ttyBackgrounds.specificThemes</option>.
-        ";
-      };
-
-      specificThemes = mkOption {
-        default = [
-        ];
-        description = "
-          This option allows you to set specific themes for virtual
-          consoles.
-        ";
-      };
-
-    };
-
-
-  };
-
   nesting = {
     children = mkOption {
       default = [];
@@ -547,6 +484,7 @@ in
     (import ../upstart-jobs/dovecot.nix)
     (import ../upstart-jobs/bind.nix)
     (import ../upstart-jobs/mingetty.nix) # The terminals on ttyX.
+    (import ../upstart-jobs/tty-backgrounds.nix)
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
