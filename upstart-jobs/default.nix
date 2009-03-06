@@ -174,12 +174,6 @@ let
       inherit config pkgs;
     })
 
-  # JBoss service
-  ++ optional config.services.jboss.enable
-    (import ../upstart-jobs/jboss.nix {
-      inherit config pkgs;
-    })  
-
   # Apache Tomcat service
   ++ optional config.services.tomcat.enable
     (import ../upstart-jobs/tomcat.nix {
