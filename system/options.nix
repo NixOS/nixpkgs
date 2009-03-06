@@ -423,6 +423,7 @@ in
     (import ../upstart-jobs/filesystems.nix) # Mount file systems.
 
     (import ../upstart-jobs/swap.nix)
+    (import ../upstart-jobs/network-interfaces.nix)
 
 
     # security

@@ -71,12 +71,6 @@ let
   jobs = map makeJob
     ([
     
-    # Network interfaces.
-    (import ../upstart-jobs/network-interfaces.nix {
-      inherit modprobe config;
-      inherit (pkgs) nettools wirelesstools bash writeText;
-    })
-      
     # Name service cache daemon.
     (import ../upstart-jobs/nscd.nix {
       inherit (pkgs) glibc;
