@@ -77,15 +77,6 @@ let
       inherit config;
     })
 
-  # Handles the reboot/halt events.
-  ++ (map
-    (event: makeJob (import ../upstart-jobs/halt.nix {
-      inherit (pkgs) bash utillinux;
-      inherit event;
-    }))
-    ["reboot" "halt" "system-halt" "power-off"]
-  )
-    
   # User-defined events.
   ++ (map makeJob (config.services.extraJobs));
 
