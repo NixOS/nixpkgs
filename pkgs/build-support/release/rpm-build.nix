@@ -13,8 +13,6 @@ vmTools.buildRPM (
   {
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
-    src = if src ? outPath then src.outPath else src.path;
-
     preBuild = ''
       ensureDir $out/nix-support
       cat "$diskImage"/nix-support/full-name > $out/nix-support/full-name

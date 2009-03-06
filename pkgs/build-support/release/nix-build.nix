@@ -31,8 +31,6 @@ stdenv.mkDerivation (
   {
     name = name + (if src ? version then "-" + src.version else "");
   
-    src = if src ? outPath then src.outPath else src.path;
-
     postHook = ''
       ensureDir $out/nix-support
       echo "$system" > $out/nix-support/system

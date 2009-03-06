@@ -21,8 +21,6 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
   {
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
-    src = if src ? outPath then src.outPath else src.path;
-  
     # !!! cut&paste from rpm-build.nix
     postHook = ''
       ensureDir $out/nix-support

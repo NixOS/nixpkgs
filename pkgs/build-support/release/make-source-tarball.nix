@@ -45,8 +45,6 @@ stdenv.mkDerivation (
   {
     name = name + "-" + version + versionSuffix;
 
-    src = src.path;
-
     buildInputs = buildInputs ++ [autoconf automake libtool];
     
     postHook = ''
@@ -68,6 +66,7 @@ stdenv.mkDerivation (
 
     # Autoconfiscate the sources.
     autoconfPhase = ''
+      export VERSION=${version}
       export VERSION_SUFFIX=${versionSuffix}
     
       eval "$preAutoconf"
