@@ -480,53 +480,6 @@ in
     };
 
 
-    tomcat = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Apache Tomcat";
-      };
-      
-      baseDir = mkOption {
-        default = "/var/tomcat";
-        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
-      };
-      
-      user = mkOption {
-        default = "tomcat";
-        description = "User account under which Apache Tomcat runs.";
-      };      
-      
-      deployFrom = mkOption {
-        default = "";
-        description = "Location where webapplications are stored. Leave empty to use the baseDir.";
-      };
-      
-      javaOpts = mkOption {
-        default = "";
-        description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
-      };
-      
-      catalinaOpts = mkOption {
-        default = "";
-        description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
-      };
-      
-      sharedLibFrom = mkOption {
-        default = "";
-        description = "Location where shared libraries are stored. Leave empty to use the baseDir.";
-      };
-      
-      commonLibFrom = mkOption {
-        default = "";
-        description = "Location where common libraries are stored. Leave empty to use the baseDir.";
-      };
-      
-      contextXML = mkOption {
-        default = "";
-        description = "Location of the context.xml to use. Leave empty to use the default.";
-      };
-    };
-
     httpd = {
     
       enable = mkOption {
@@ -1302,6 +1255,7 @@ in
     (import ../upstart-jobs/gnunet.nix)
     (import ../upstart-jobs/ejabberd.nix) # untested, dosen't compile on x86_64-linux
     (import ../upstart-jobs/jboss.nix)
+    (import ../upstart-jobs/tomcat.nix) # untested, too lazy to get that jdk
 
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon

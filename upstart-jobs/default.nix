@@ -174,12 +174,6 @@ let
       inherit config pkgs;
     })
 
-  # Apache Tomcat service
-  ++ optional config.services.tomcat.enable
-    (import ../upstart-jobs/tomcat.nix {
-      inherit config pkgs;
-    })
-
   # Samba service.
   ++ optional config.services.samba.enable
     (import ../upstart-jobs/samba.nix {
