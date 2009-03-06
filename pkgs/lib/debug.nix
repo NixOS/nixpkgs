@@ -1,3 +1,5 @@
+let lib = import ./default.nix; in
+
 rec {
 
 
@@ -10,6 +12,7 @@ rec {
     then builtins.addErrorContext
     else msg: val: val;
 
+  addErrorContextToAttrs = lib.mapAttrs (a : v : lib.addErrorContext "while evaluating ${a}" v);
 
 
 }

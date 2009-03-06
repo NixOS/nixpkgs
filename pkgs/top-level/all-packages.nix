@@ -9584,4 +9584,4 @@ let
   };
 
   libTests = import ../lib/tests.nix;
-}; in pkgs
+}; in lib.addErrorContextToAttrs pkgs
