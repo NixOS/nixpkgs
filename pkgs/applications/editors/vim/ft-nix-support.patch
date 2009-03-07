@@ -1,0 +1,66 @@
+diff --git a/runtime/filetype.vim b/runtime/filetype.vim
+index a8e6261..2b008fc 100644
+--- a/runtime/filetype.vim
++++ b/runtime/filetype.vim
+@@ -2258,6 +2258,9 @@ au BufNewFile,BufRead *.zsql			call s:SQL()
+ " Z80 assembler asz80
+ au BufNewFile,BufRead *.z8a			setf z8a
+ 
++" NIX
++au BufNewFile,BufRead *.nix		setf nix
++
+ augroup END
+ 
+ 
+@@ -2440,3 +2443,5 @@ endfunc
+ " Restore 'cpoptions'
+ let &cpo = s:cpo_save
+ unlet s:cpo_save
++
++
+diff --git a/runtime/syntax/nix.vim b/runtime/syntax/nix.vim
+new file mode 100644
+index 0000000..a2f9918
+--- /dev/null
++++ b/runtime/syntax/nix.vim
+@@ -0,0 +1,40 @@
++" Vim syntax file
++" Language:	nix
++" Maintainer:	Marc Weber <marco-oweber@gmx.de>
++"               Modify and commit if you feel that way
++" Last Change:	2007 Dec
++"
++" this syntax file can be still be enhanced very much..
++" Don't ask, do it :-)
++
++" Quit when a (custom) syntax file was already loaded
++if exists("b:current_syntax")
++  finish
++endif
++
++syn keyword	nixKeyword	let throw inherit import true false null with
++syn keyword	nixConditional	if else then
++syn keyword     nixBrace        ( ) { } =
++syn keyword     nixBuiltin         __currentSystem __currentTime __isFunction __getEnv __trace __toPath __pathExists 
++  \ __readFile __toXML __toFile __filterSource __attrNames __getAttr __hasAttr __isAttrs __listToAttrs __isList 
++  \ __head __tail __add __sub __lessThan __substring __stringLength
++
++syn match nixAttr "\w\+\ze\s*="
++syn match nixFuncArg "\zs\w\+\ze\s*:"
++syn region nixStringParam start=+\${+ end=+}+
++syn region nixMultiLineComment start=+/\*+ skip=+\\"+ end=+\*/+
++syn match  nixEndOfLineComment "#.*$"
++syn region nixStringIndented start=+''+ skip=+'''\|''${\|"+ end=+''+ contains=nixStringParam
++syn region nixString         start=+"+ skip=+\\"+ end=+"+ contains=nixStringParam
++
++hi def link nixKeyword       Keyword
++hi def link nixConditional   Conditional
++hi def link nixBrace         Special
++hi def link nixString        String
++hi def link nixStringIndented String
++hi def link nixBuiltin       Special
++hi def link nixStringParam   Macro
++hi def link nixMultiLineComment Comment
++hi def link nixEndOfLineComment Comment
++hi def link nixAttr        Identifier
++hi def link nixFuncArg     Identifier

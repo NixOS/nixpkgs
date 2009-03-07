@@ -4,7 +4,7 @@ args: with args;
 let inherit (args.composableDerivation) composableDerivation edf; in
 composableDerivation {} {
 
-    name = "vim_configurable-7.1";
+    name = "vim_configurable-7.2";
 
     src = args.fetchurl {
       url = ftp://ftp.vim.org/pub/vim/unix/vim-7.2.tar.bz2;
@@ -17,7 +17,11 @@ composableDerivation {} {
       ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
-    flags = {}
+    flags = {
+        ftNix = {
+          patches = [ ./ft-nix-support.patch ];
+        };
+      }
       // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
@@ -41,6 +45,7 @@ composableDerivation {} {
 
   cfg = {
     pythonSupport = true;
+    ftNixSupport = true; # add .nix filetype detection and minimal syntax highlighting support
   };
 
   #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gnome/gnome2/motif/athena/neXtaw/photon/carbon
