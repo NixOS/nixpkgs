@@ -198,7 +198,7 @@ in
             # coreutils and Perl) aren't visible.  Sigh.
             nixDeps = pkgs.writeReferencesToFile config.environment.nix;
           in 
-            pkgs.runCommand "nix.conf" {} ''
+            pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
               extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
               cat > $out <<END
               # WARNING: this file is generated.
@@ -206,7 +206,7 @@ in
               build-max-jobs = ${toString (config.nix.maxJobs)}
               build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
               build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths)
-              ${config.nix.extraOptions}
+              $extraOptions
               END
             '';
         target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
