@@ -14,11 +14,15 @@ let
 
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
+        
+        version = builtins.readFile ./VERSION;
+        
         src = nixosSrc;
+        
         inherit officialRelease;
 
         distPhase = ''
-          releaseName=nixos-$(cat $src/VERSION)$VERSION_SUFFIX
+          releaseName=nixos-$VERSION
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
           cp -prd . ../$releaseName
@@ -50,16 +54,18 @@ let
 
       let
 
+        version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
+
         iso = (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
           platform = system;
           compressImage = true;
           nixpkgsPath = nixpkgs.path;
-          relName = "nixos-${builtins.readFile ./VERSION}${if !officialRelease then "pre${toString nixosSrc.rev}" else ""}";
+          relName = "nixos-${version}";
         }).rescueCD;
 
       in
         # Declare the ISO as a build product so that it shows up in Hydra.
-        runCommand "nixos-iso"
+        runCommand "nixos-iso-${version}"
           { meta = {
               description = "NixOS installation CD ISO image for ${system}";
             };
