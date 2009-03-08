@@ -1,10 +1,16 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lcms-1.14";
+  name = "lcms-1.17";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/lcms-1.14.tar.gz;
-    md5 = "5a803460aeb10e762d97e11a37462a69";
+    url = http://www.littlecms.com/lcms-1.17.tar.gz;
+    sha256 = "10s5s6b6r5mhf0g6l431l6fwymhjzqrvm7g214h7fmh9ngdb9wsy";
+  };
+
+  meta = {
+    description = "Color management engine";
+    homepage = http://www.littlecms.com/;
+    license = "MIT";
   };
 }
