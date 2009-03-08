@@ -8673,6 +8673,21 @@ let
     #enableOfficialBranding = true;
   };
 
+  /*
+  Despaired. Looks like ThunderBird-on-Firefox's-Xulrunner is non-trivial
+
+  thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird-3.x {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 libpng alsaLib sqlite
+      patchelf;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    #enableOfficialBranding = true;
+    xulrunner = xulrunner3;
+    autoconf = autoconf213;
+  });*/
+
+
   timidity = import ../tools/misc/timidity {
     inherit fetchurl stdenv alsaLib;
   };

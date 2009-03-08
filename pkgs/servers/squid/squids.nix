@@ -24,8 +24,8 @@ rec {
   squid3Beta = squid30.merge {
     name = "squid-3.1-beta";
     src = args.fetchurl {
-      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.0.3.tar.bz2;
-      sha256 = "0khc4w9sbdwzxw8285z60ymz15q5qjy7b8yvvfnzfkihdacs735x";
+      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.0.6.tar.bz2;
+      sha256 = "0crkfd5kc677baq0v6kfnwh0rc7h2a1083yh0sccy7g02vd7z3q5";
     };
     configureFlags = ["--enable-ipv6"];
   };
