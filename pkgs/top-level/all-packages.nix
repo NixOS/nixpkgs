@@ -7192,7 +7192,7 @@ let
   };
 
   powertop = import ../os-specific/linux/powertop {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv ncurses gettext;
   };
 
   procps = import ../os-specific/linux/procps {
