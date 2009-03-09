@@ -1,5 +1,8 @@
-{stdenv, fetchurl, cmake, qt4, perl, python, sip, pyqt4,
- kdelibs, kdepimlibs, automoc4, phonon}:
+{stdenv, fetchurl, python, sip, pyqt4, zlib, libpng, freetype, fontconfig, qt4,
+ libSM, libXrender, libXrandr, libXfixes, libXinerama, libXcursor, libXext, kdelibs}:
+
+# This function will only build the pykde4 module. I don't need the other bindings and
+# some bindings are even broken.
 
 stdenv.mkDerivation {
   name = "kdebindings-4.2.1";
@@ -8,7 +11,6 @@ stdenv.mkDerivation {
     sha1 = "96353bb3269a7ca37ff31487a0fb7a9c25958963";
   };
   builder = ./builder.sh;
-  CMAKE_PREFIX_PATH=kdepimlibs;
-  buildInputs = [ cmake qt4 perl python sip pyqt4
-                  kdelibs kdepimlibs automoc4 phonon ];
+  buildInputs = [ python sip pyqt4 zlib libpng freetype fontconfig qt4
+                  libSM libXrender libXrandr libXfixes libXcursor libXinerama libXext kdelibs ];
 }

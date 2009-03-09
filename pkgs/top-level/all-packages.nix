@@ -6229,6 +6229,10 @@ let
     inherit python;
   };
 
+  rhpl = import ../development/python-modules/rhpl {
+    inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
+  };
+  
   sip = import ../development/python-modules/python-sip {
     inherit stdenv fetchurl python;
   };
