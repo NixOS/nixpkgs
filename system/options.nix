@@ -303,7 +303,7 @@ in
 
 
   fileSystems = mkOption {
-    default = [];
+    default = null;
     example = [
       { mountPoint = "/";
         device = "/dev/hda1";
