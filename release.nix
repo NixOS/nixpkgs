@@ -38,7 +38,7 @@ let
       , officialRelease ? false
       }:
 
-      import "${nixosSrc.path}/doc/manual" {
+      import "${nixosSrc}/doc/manual" {
         nixpkgsPath = nixpkgs.outPath;
       };
 
@@ -55,7 +55,7 @@ let
 
         version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
-        iso = (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
+        iso = (import "${nixosSrc}/installer/cd-dvd/rescue-cd.nix" {
           platform = system;
           compressImage = true;
           nixpkgsPath = nixpkgs.outPath;
