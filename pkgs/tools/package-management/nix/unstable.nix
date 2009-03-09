@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nix-0.13pre14314";
+  name = "nix-0.13pre14422";
   
   src = fetchurl {
-    url = http://hydra.nixos.org/build/2513/download/1/nix-0.13pre14314.tar.bz2;
-    sha256 = "17qhb77hpg1wcclky8d9m1zbn7w4mm2nvizsy5azz5sd7m6lq3sn";
+    url = http://hydra.nixos.org/build/2775/download/1/nix-0.13pre14422.tar.bz2;
+    sha256 = "29362caa3fece6eae9d06a14930bf04fba41801b79a0f43eefb2ecc719fab934";
   };
 
   buildInputs = [perl curl openssl];
@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     ${if supportOldDBs then "--with-bdb=${db4}" else "--disable-old-db-compat"}
     --disable-init-state
   '';
+
+  passthru = { inherit aterm; };
 
   meta = {
     description = "The Nix Deployment System";
