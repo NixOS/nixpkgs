@@ -102,7 +102,7 @@ rec {
   };
   
   kdegraphics = import ./graphics {
-    inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends gphoto2;
+    inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends libgphoto2;
     inherit (pkgs) libspectre djvulibre chmlib;
     inherit (pkgs.xlibs) libXxf86vm;
     poppler = pkgs.popplerQt4;
