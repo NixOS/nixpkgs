@@ -54,10 +54,10 @@ rec {
 
 ### BASE  
   kdebase_workspace = import ./base-workspace {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl python;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python sip pyqt4;
     inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs boost;
-    inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage;
-    inherit kdelibs kdepimlibs;
+    inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver;
+    inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon strigi soprano qimageblitz;
   };
   
@@ -152,8 +152,8 @@ rec {
   };
     
   kdeutils = import ./utils {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl python gmp libzip libarchive;
-    inherit kdelibs kdepimlibs;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl python gmp libzip libarchive sip pyqt4 pycups system_config_printer rhpl;
+    inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon qimageblitz;
   };
   
