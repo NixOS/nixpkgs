@@ -1,3 +1,5 @@
+{ nixpkgs ? ../nixpkgs-wc }:
+
 let 
 
 
@@ -5,12 +7,11 @@ let
 
 
     tarball =
-      { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       }:
 
-      with import nixpkgs.path {};
+      with import nixpkgs {};
 
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
@@ -34,23 +35,21 @@ let
 
     manual =
       { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
       , officialRelease ? false
       }:
 
       import "${nixosSrc.path}/doc/manual" {
-        nixpkgsPath = nixpkgs.path;
+        nixpkgsPath = nixpkgs.outPath;
       };
 
 
     iso = 
       { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
       , officialRelease ? false
       , system ? "i686-linux"
       }:
 
-      with import nixpkgs.path {inherit system;};
+      with import nixpkgs {inherit system;};
 
       let
 
@@ -59,7 +58,7 @@ let
         iso = (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
           platform = system;
           compressImage = true;
-          nixpkgsPath = nixpkgs.path;
+          nixpkgsPath = nixpkgs.outPath;
           relName = "nixos-${version}";
         }).rescueCD;
 
