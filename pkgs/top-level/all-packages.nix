@@ -1075,7 +1075,7 @@ let
     inherit stdenv fetchurl;
   };
 
-  pystringtemplate = import ../tools/text/py-string-template {
+  pystringtemplate = import ../development/python-modules/stringtemplate {
     inherit stdenv fetchurl python;
     /* TODO: Some parts of this package depend on the ANTLR run-time library
      *       for Python. We have a package for ANTLR3, too, but that one is
