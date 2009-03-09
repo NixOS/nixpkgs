@@ -120,7 +120,7 @@ rec {
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
     inherit (pkgs) libidn libvncserver tapioca_qt libmsn;
-    inherit (pkgs.xlibs) libXtst libXdamage;
+    inherit (pkgs.xlibs) libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qca2 soprano qimageblitz;
   };
