@@ -195,7 +195,8 @@ let
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
 
   makeOverridable = f: origArgs: f origArgs //
-    { function = newArgsFun: makeOverridable f (origArgs // (newArgsFun origArgs));
+    { override = newArgs:
+        makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
 
@@ -9401,7 +9402,7 @@ let
   };
 
   # The bleeding edge.
-  nixUnstable = import ../tools/package-management/nix/unstable.nix {
+  nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
