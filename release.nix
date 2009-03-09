@@ -34,7 +34,7 @@ let
 
 
     manual =
-      { nixosSrc ? {path = ./.; rev = 1234;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       }:
 
@@ -44,7 +44,7 @@ let
 
 
     iso = 
-      { nixosSrc ? {path = ./.; rev = 1234;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       , system ? "i686-linux"
       }:
