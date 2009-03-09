@@ -166,7 +166,7 @@ rec {
   };
   
   kdesdk = import ./sdk {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost subversion apr;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost subversion apr aprutil;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon strigi;
   };
