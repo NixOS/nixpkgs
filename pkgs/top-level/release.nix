@@ -51,5 +51,15 @@ in {
     kdegames = testOnLinux (pkgs: pkgs.kde42.kdegames);
     kdepim = testOnLinux (pkgs: pkgs.kde42.kdepim);
   };
+
+  kernelPackages_2_6_27 = {
+    aufs = testOnLinux (pkgs: pkgs.kernelPackages_2_6_27.aufs);
+    kernel = testOnLinux (pkgs: pkgs.kernelPackages_2_6_27.kernel);
+  };
+  
+  kernelPackages_2_6_28 = {
+    aufs = testOnLinux (pkgs: pkgs.kernelPackages_2_6_28.aufs);
+    kernel = testOnLinux (pkgs: pkgs.kernelPackages_2_6_28.kernel);
+  };
   
 }
