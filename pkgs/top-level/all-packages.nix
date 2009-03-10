@@ -9161,15 +9161,28 @@ let
       xmlto docbook2x docbook_xsl intltool;
   });
 
-  kdelibs = import ../desktops/kde/kdelibs {
-    inherit
-      fetchurl stdenv xlibs zlib perl openssl pcre pkgconfig
-      libjpeg libpng libtiff libxml2 libxslt libtool
-      expat freetype bzip2 cups attr acl;
-    qt = qt3;
+  kde3 = {
+
+    kdelibs = import ../desktops/kde-3/kdelibs {
+      inherit
+        fetchurl stdenv xlibs zlib perl openssl pcre pkgconfig
+        libjpeg libpng libtiff libxml2 libxslt libtool
+        expat freetype bzip2 cups attr acl;
+      qt = qt3;
+    };
+
+    kdebase = import ../desktops/kde-3/kdebase {
+      inherit
+        fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
+        kdelibs openssl bzip2 fontconfig pam hal dbus;
+      inherit (gtkLibs) glib;
+      qt = qt3;
+    };
+
   };
 
-  kde4 = recurseIntoAttrs (import ../desktops/kde-4 {
+  /*
+  kde4 = recurseIntoAttrs (import ../desktops/kde-4-old {
     inherit
       fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
       libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
@@ -9190,18 +9203,16 @@ let
     qt = qt4;
     openexr = openexr_1_6_1 ;
   });
+  */
+
+  kde4 = kde42;
 
   kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
   });
 
-  kdebase = import ../desktops/kde/kdebase {
-    inherit
-      fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
-      kdelibs openssl bzip2 fontconfig pam hal dbus;
-    inherit (gtkLibs) glib;
-    qt = qt3;
-  };
+  kdelibs = kde3.kdelibs;
+  kdebase = kde3.kdebase;
 
   ### SCIENCE/GEOMETRY
 
