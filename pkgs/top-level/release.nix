@@ -47,9 +47,23 @@ in {
   };
 
   kde42 = {
+    kdeadmin = testOnLinux (pkgs: pkgs.kde42.kdeadmin);
+    kdeartwork = testOnLinux (pkgs: pkgs.kde42.kdeartwork);
     kdebase = testOnLinux (pkgs: pkgs.kde42.kdebase);
+    kdebase_runtime = testOnLinux (pkgs: pkgs.kde42.kdebase_runtime);
+    kdebase_workspace = testOnLinux (pkgs: pkgs.kde42.kdebase_workspace);
+    kdeedu = testOnLinux (pkgs: pkgs.kde42.kdeedu);
     kdegames = testOnLinux (pkgs: pkgs.kde42.kdegames);
+    kdegraphics = testOnLinux (pkgs: pkgs.kde42.kdegraphics);
+    kdelibs = testOnLinux (pkgs: pkgs.kde42.kdebase);
+    kdemultimedia = testOnLinux (pkgs: pkgs.kde42.kdemultimedia);
+    kdenetwork = testOnLinux (pkgs: pkgs.kde42.kdenetwork);
     kdepim = testOnLinux (pkgs: pkgs.kde42.kdepim);
+    kdeplasma_addons = testOnLinux (pkgs: pkgs.kde42.kdeplasma_addons);
+    kdesdk = testOnLinux (pkgs: pkgs.kde42.kdesdk);
+    kdetoys = testOnLinux (pkgs: pkgs.kde42.kdetoys);
+    kdeutils = testOnLinux (pkgs: pkgs.kde42.kdeutils);
+    kdewebdev = testOnLinux (pkgs: pkgs.kde42.kdewebdev);
   };
 
   kernelPackages_2_6_27 = {
