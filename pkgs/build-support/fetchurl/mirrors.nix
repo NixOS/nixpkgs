@@ -92,7 +92,7 @@ rec {
 
   # Gentoo files.
   gentoo = [
-    http://www.ibiblio.org/pub/Linux/distributions/gentoo/
+    http://ftp.snt.utwente.nl/pub/os/linux/gentoo/
     http://distfiles.gentoo.org/
   ];
 
