@@ -4,7 +4,7 @@ let
 
   pkgs = allPackages {};
 
-  testOn = systems: f: {system}:
+  testOn = systems: f: {system ? builtins.currentSystem}:
     if pkgs.lib.elem system systems then f (allPackages {inherit system;}) else {};
         
   testOnLinux = testOn ["i686-linux" "x86_64-linux"];
@@ -55,7 +55,7 @@ in {
     kdeedu = testOnLinux (pkgs: pkgs.kde42.kdeedu);
     kdegames = testOnLinux (pkgs: pkgs.kde42.kdegames);
     kdegraphics = testOnLinux (pkgs: pkgs.kde42.kdegraphics);
-    kdelibs = testOnLinux (pkgs: pkgs.kde42.kdebase);
+    kdelibs = testOnLinux (pkgs: pkgs.kde42.kdelibs);
     kdemultimedia = testOnLinux (pkgs: pkgs.kde42.kdemultimedia);
     kdenetwork = testOnLinux (pkgs: pkgs.kde42.kdenetwork);
     kdepim = testOnLinux (pkgs: pkgs.kde42.kdepim);
