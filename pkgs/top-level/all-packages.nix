@@ -2861,7 +2861,7 @@ let
   };
 
   faad2 = import ../development/libraries/faad2 {
-    inherit fetchurl stdenv autoconf automake libtool;
+    inherit fetchurl stdenv;
   };
 
   fcgi = import ../development/libraries/fcgi {
@@ -2869,7 +2869,7 @@ let
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv faad2;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -8750,8 +8750,8 @@ let
   virtualbox = virtualboxFun null;*/
 
   vlc = import ../applications/video/vlc {
-    inherit fetchurl stdenv perl xlibs zlib mpeg2dec a52dec libmad
-      ffmpeg libdvdnav pkgconfig hal fribidi qt4;
+    inherit fetchurl stdenv perl xlibs zlib a52dec libmad
+      ffmpeg libdvdnav pkgconfig hal fribidi qt4 freefont_ttf;
     dbus = dbus.libs;
     alsa = alsaLib;
   };

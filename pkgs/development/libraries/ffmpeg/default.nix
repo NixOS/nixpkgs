@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, faad2}:
 
 stdenv.mkDerivation {
   name = "ffmpeg-0.5";
@@ -19,7 +19,10 @@ stdenv.mkDerivation {
     --enable-swscale
     --disable-ffserver
     --disable-ffplay
+    --enable-libfaad
   '';
+
+  buildInputs = [faad2];
 
   meta = {
     homepage = http://www.ffmpeg.org/;

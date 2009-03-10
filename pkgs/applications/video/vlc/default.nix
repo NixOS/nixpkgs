@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, xlibs, libdvdnav
-, zlib, mpeg2dec, a52dec, libmad, ffmpeg, alsa
-, pkgconfig, dbus, hal, fribidi, qt4
+, zlib, a52dec, libmad, ffmpeg, alsa
+, pkgconfig, dbus, hal, fribidi, qt4, freefont_ttf
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,13 @@ stdenv.mkDerivation {
     pkgconfig dbus hal fribidi qt4
   ];
 
-  configureFlags = "--enable-alsa --disable-glx --disable-remoteosd";
+  configureFlags = "--enable-alsa --disable-glx --disable-remoteosd --enable-faad";
+
+  preBuild = ''
+    substituteInPlace modules/misc/freetype.c --replace \
+      /usr/share/fonts/truetype/freefont/FreeSerifBold.ttf \
+      ${freefont_ttf}/share/fonts/truetype/FreeSerifBold.ttf
+  '';
 
   meta = {
     description = "Cross-platform media player and streaming server";
