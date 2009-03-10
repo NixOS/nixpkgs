@@ -45,5 +45,11 @@ in {
   xorg = {
     libX11 = testOnLinux (pkgs: pkgs.xorg.libX11);    
   };
+
+  kde42 = {
+    kdebase = testOnLinux (pkgs: pkgs.kde42.kdebase);
+    kdegames = testOnLinux (pkgs: pkgs.kde42.kdegames);
+    kdepim = testOnLinux (pkgs: pkgs.kde42.kdepim);
+  };
   
 }
