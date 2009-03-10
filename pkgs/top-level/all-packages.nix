@@ -2872,10 +2872,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  ffmpeg_svn = import ../development/libraries/ffmpeg_svn_snapshot {
-    inherit fetchurl stdenv;
-  };
-
   fftw = import ../development/libraries/fftw {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
     singlePrecision = false;
@@ -3294,7 +3290,7 @@ let
   };
 
   libdvdnav = import ../development/libraries/libdvdnav {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libdvdread;
   };
 
   libdvdread = import ../development/libraries/libdvdread {
@@ -3569,8 +3565,7 @@ let
   mediastreamer = composedArgsAndFun (selectVersion
       ../development/libraries/mediastreamer "2.2.0-cvs20080207") {
     inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
-      ortp;
-    ffmpeg = ffmpeg_svn;
+      ortp ffmpeg;
   };
 
   mesaSupported =
@@ -8320,7 +8315,7 @@ let
     inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
 
-  MPlayer = lib.composedArgsAndFun (import ../applications/video/MPlayer) {
+  MPlayer = import ../applications/video/MPlayer {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
       cdparanoia;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
@@ -8551,13 +8546,12 @@ let
   sox = import ../applications/misc/audio/sox {
     inherit fetchurl stdenv lib composableDerivation;
     # optional features
-    inherit alsaLib libao;
+    inherit alsaLib libao ffmpeg;
     inherit libsndfile libogg flac libmad lame libsamplerate;
     # Using the default nix ffmpeg I get this error when linking
     # .libs/libsox_la-ffmpeg.o: In function `audio_decode_frame':
     # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
     # That's why I'v added ffmpeg_svn
-    ffmpeg = ffmpeg_svn;
   };
 
   spoofax = import ../applications/editors/eclipse/plugins/spoofax {
@@ -8756,12 +8750,10 @@ let
   virtualbox = virtualboxFun null;*/
 
   vlc = import ../applications/video/vlc {
-    inherit fetchurl stdenv perl x11 wxGTK
-            zlib mpeg2dec a52dec libmad
-            libdvdread libdvdnav libdvdcss;
-    inherit (xlibs) libXv;
+    inherit fetchurl stdenv perl xlibs zlib mpeg2dec a52dec libmad
+      ffmpeg libdvdnav pkgconfig hal fribidi qt4;
+    dbus = dbus.libs;
     alsa = alsaLib;
-    ffmpeg = ffmpeg_svn;
   };
 
   vorbisTools = import ../applications/audio/vorbis-tools {
@@ -9209,6 +9201,7 @@ let
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
+  
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
@@ -9346,18 +9339,15 @@ let
     inherit (gtkLibs1x) gtk;
   };
 
-  ghostscript = import ../misc/ghostscript {
+  ghostscript = makeOverridable (import ../misc/ghostscript) {
     inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
       fontconfig cups openssl;
     x11Support = false;
     cupsSupport = getPkgConfig "ghostscript" "cups" true;
   };
 
-  ghostscriptX = lowPrio (appendToName "with-X" (import ../misc/ghostscript {
-    inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
-      fontconfig cups openssl;
+  ghostscriptX = lowPrio (appendToName "with-X" (ghostscript.override {
     x11Support = true;
-    cupsSupport = getPkgConfig "ghostscript" "cups" true;
   }));
 
   gxemul = (import ../misc/gxemul) {

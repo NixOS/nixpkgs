@@ -1,11 +1,28 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "ffmpeg-20051126";
+  name = "ffmpeg-0.5";
+  
   src = fetchurl {
-    url = http://downloads.videolan.org/pub/videolan/vlc/0.8.4a/contrib/ffmpeg-20051126.tar.bz2;
-    md5 = "f9e50bf9ee1dd248a276bf9bd4d606e0";
+    url = http://www.ffmpeg.org/releases/ffmpeg-0.5.tar.bz2;
+    sha1 = "f930971bc0ac3d11a4ffbb1af439425c24f6f5b1";
   };
-  # !!! Hm, what are the legal consequences of --enable-gpl?
-  configureFlags = "--enable-shared --enable-pp --enable-shared-pp --enable-gpl --disable-ffserver --disable-ffplay";
+  
+  # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
+  # the resulting library is GPL'ed, so it can only be used in GPL'ed
+  # applications.
+  configureFlags = ''
+    --enable-shared
+    --disable-static
+    --enable-gpl
+    --enable-postproc
+    --enable-swscale
+    --disable-ffserver
+    --disable-ffplay
+  '';
+
+  meta = {
+    homepage = http://www.ffmpeg.org/;
+    description = "A complete, cross-platform solution to record, convert and stream audio and video";
+  };
 }

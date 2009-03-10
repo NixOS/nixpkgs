@@ -1,9 +1,25 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, libdvdread}:
 
 stdenv.mkDerivation {
-  name = "libdvdnav-20050211";
+  name = "libdvdnav-4.1.3";
+  
   src = fetchurl {
-    url = http://downloads.videolan.org/pub/videolan/vlc/0.8.4a/contrib/libdvdnav-20050211.tar.bz2;
-    md5 = "e1b1d45c8fdaf6a2dce3078bd3d7047d";
+    url = http://www2.mplayerhq.hu/MPlayer/releases/dvdnav/libdvdnav-4.1.3.tar.bz2;
+    sha1 = "d1b95eb8a7caee1fa7580a1abad84d6cb3cad046";
   };
+
+  buildInputs = [libdvdread];
+
+  configureScript = "./configure2"; # wtf?
+
+  preConfigure = ''
+    ensureDir $out
+  '';
+
+  meta = {
+    homepage = http://www.mplayerhq.hu/;
+    description = "A library that implements DVD navigation features such as DVD menus";
+  };
+
+  passthru = { inherit libdvdread; };
 }
