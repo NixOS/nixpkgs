@@ -8750,7 +8750,7 @@ let
   virtualbox = virtualboxFun null;*/
 
   vlc = import ../applications/video/vlc {
-    inherit fetchurl stdenv perl xlibs zlib a52dec libmad
+    inherit fetchurl stdenv perl xlibs zlib a52dec libmad faad2
       ffmpeg libdvdnav pkgconfig hal fribidi qt4 freefont_ttf;
     dbus = dbus.libs;
     alsa = alsaLib;

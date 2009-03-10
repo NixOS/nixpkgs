@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, xlibs, libdvdnav
-, zlib, a52dec, libmad, ffmpeg, alsa
+, zlib, a52dec, libmad, faad2, ffmpeg, alsa
 , pkgconfig, dbus, hal, fribidi, qt4, freefont_ttf
 }:
 
@@ -12,9 +12,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    perl xlibs.xlibs xlibs.libXv zlib a52dec libmad ffmpeg alsa
-    libdvdnav libdvdnav.libdvdread
-    pkgconfig dbus hal fribidi qt4
+    perl xlibs.xlibs xlibs.libXv zlib a52dec libmad faad2 ffmpeg
+    alsa libdvdnav libdvdnav.libdvdread pkgconfig dbus hal fribidi qt4
   ];
 
   configureFlags = "--enable-alsa --disable-glx --disable-remoteosd --enable-faad";
