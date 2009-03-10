@@ -23,7 +23,7 @@ args:
         then localTarGZ else fetchinfo;
 
   repos = 
-      let kde4support = builtins.listToAttrs (map (n: lib.nv ("kdesupport_"+n) { type = "svn"; url = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/${n}"; groups="kdesupport"; })
+      let kde4support = builtins.listToAttrs (map (n: lib.nameValuePair ("kdesupport_"+n) { type = "svn"; url = "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/${n}"; groups="kdesupport"; })
                           [ "akode" "eigen" "gmm" "qca" "qimageblitz" "soprano" "strigi" "taglib" 
                           "automoc" "akonadi" "cpptoxml" "decibel" "emerge" "phonon" "tapioca_qt" "telepathy_qt"]); in
       # in trunk but not yet supported by nix: akonadi/ automoc/ cpptoxml/ decibel/ emerge/ kdewin-installer/ kdewin32/ phonon/ tapioca-qt/ telepathy-qt/

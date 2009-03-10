@@ -173,7 +173,7 @@ rec {
                     };
           };
         derivations = with lib; builtins.listToAttrs (lib.concatLists ( lib.mapRecordFlatten 
-                  ( n : attrs : let d = (toDerivation attrs); in [ (nv n d) (nv attrs.name d) ] ) pkgs ) );
+                  ( n : attrs : let d = (toDerivation attrs); in [ (nameValuePair n d) (nameValuePair attrs.name d) ] ) pkgs ) );
     }.derivations;
   });
 
