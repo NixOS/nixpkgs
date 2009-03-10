@@ -1077,12 +1077,7 @@ let
   };
 
   pystringtemplate = import ../development/python-modules/stringtemplate {
-    inherit stdenv fetchurl python;
-    /* TODO: Some parts of this package depend on the ANTLR run-time library
-     *       for Python. We have a package for ANTLR3, too, but that one is
-     *       rather big and contains much more than we need. I guess this issue
-     *       calls for some clever refactoring.
-     */
+    inherit stdenv fetchurl python antlr;
   };
 
   qtparted = import ../tools/misc/qtparted {
@@ -2226,7 +2221,7 @@ let
   };
 
   antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
-    inherit fetchurl stdenv jre;
+    inherit fetchurl stdenv jdk python;
   };
 
   antlr3 = import ../development/tools/parsing/antlr {
@@ -2885,7 +2880,7 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps;
     singlePrecision = false;
   };
-  
+
   fftwSinglePrec = import ../development/libraries/fftw {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
     singlePrecision = true;
@@ -6233,7 +6228,7 @@ let
   rhpl = import ../development/python-modules/rhpl {
     inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
   };
-  
+
   sip = import ../development/python-modules/python-sip {
     inherit stdenv fetchurl python;
   };
@@ -8432,7 +8427,7 @@ let
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
   };
-  
+
   pidginlatexSF = builderDefsPackage
     (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
     {

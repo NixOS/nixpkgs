@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python}:
+{stdenv, fetchurl, python, antlr}:
 
 stdenv.mkDerivation rec {
   name = "PyStringTemplate-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "http://www.stringtemplate.org/download/${name}.tar.gz";
     sha256 = "0lbib0l8c1q7i1j610rwcdagymr1idahrql4dkgnm5rzyg2vk3ml";
   };
-  propagatedBuildInputs = [python];
+  propagatedBuildInputs = [python antlr];
   buildPhase = "true";
   installPhase = "python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) -O1";
 }
