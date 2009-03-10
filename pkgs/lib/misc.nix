@@ -236,14 +236,8 @@ rec {
   # should be renamed to mapAttrsFlatten
   mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
 
-  # maps a function on each attr value
-  # f = attr : value : ..
-  mapAttrs = f : r : listToAttrs ( mapRecordFlatten (a : v : nv a ( f a v ) )  r);
-
-  # to be used with listToAttrs (_a_ttribute _v_alue)
-  nv = name : value : { inherit name value; };
   # attribute set containing one attribute
-  nvs = name : value : listToAttrs [ (nv name value) ];
+  nvs = name : value : listToAttrs [ (nameValuePair name value) ];
   # adds / replaces an attribute of an attribute set
   setAttr = set : name : v : set // (nvs name v);
 
@@ -322,8 +316,8 @@ rec {
   mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
-    listToAttrs (map (n : nv n lib.concat) [ "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
-    // listToAttrs (map (n : nv n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ]);
+    listToAttrs (map (n : nameValuePair n lib.concat) [ "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
+    // listToAttrs (map (n : nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ]);
 
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
@@ -332,7 +326,7 @@ rec {
   # pick attrs subset_attr_names and apply f 
   subsetmap = f : attrs : subset_attr_names : 
     listToAttrs (fold ( attr : r : if __hasAttr attr attrs
-          then r ++ [ (  nv attr ( f (__getAttr attr attrs) ) ) ] else r ) []
+          then r ++ [ ( nameValuePair attr ( f (__getAttr attr attrs) ) ) ] else r ) []
       subset_attr_names );
 
   # prepareDerivationArgs tries to make writing configurable derivations easier
@@ -372,7 +366,7 @@ rec {
   prepareDerivationArgs = args:
     let args2 = { cfg = {}; flags = {}; } // args;
         flagName = name : "${name}Support";
-        cfgWithDefaults = (listToAttrs (map (n : nv (flagName n) false) (attrNames args2.flags)))
+        cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
         opts = flattenAttrs (mapAttrs (a : v :
                 let v2 = if (v ? set || v ? unset) then v else { set = v; };
