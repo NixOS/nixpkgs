@@ -2769,6 +2769,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  ConsoleKit = import ../development/libraries/ConsoleKit {
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib;
+    inherit (gtkLibs) glib;
+    inherit (xlibs) libX11;
+  };
+  
   coredumper = import ../development/libraries/coredumper {
     inherit fetchurl stdenv;
   };
