@@ -4354,6 +4354,11 @@ let
       perlCookieXS perlHTTPHeaderParserXS
     ];
     buildInputs = [perlTestPod perlTestPodCoverage];
+    patches = [
+      # Fix chunked transfers (they were missing the final CR/LF at
+      # the end, which makes curl barf).
+      ../development/perl-modules/catalyst-fix-chunked-encoding.patch
+    ];
   };
 
   perlCatalystManual = buildPerlPackage rec {
