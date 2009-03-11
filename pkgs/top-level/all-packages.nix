@@ -4343,6 +4343,19 @@ let
     ];
   };
 
+  perlCatalystEngineHTTPPrefork = buildPerlPackage rec {
+    name = "Catalyst-Engine-HTTP-Prefork-0.50";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
+      sha256 = "1p8mnxqaxd6sxyy9q4f0h5gy4mcnvb3y93y49ziq6kmcvy6yw2p7";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlHTTPBody perlNetServer
+      perlCookieXS perlHTTPHeaderParserXS
+    ];
+    buildInputs = [perlTestPod perlTestPodCoverage];
+  };
+
   perlCatalystManual = buildPerlPackage rec {
     name = "Catalyst-Manual-5.7016";
     src = fetchurl {
@@ -4504,6 +4517,14 @@ let
       perlCatalystRuntime perlTemplateToolkit perlClassAccessor
       perlPathClass perlTemplateTimer
     ];
+  };
+
+  perlCGICookieXS = buildPerlPackage rec {
+    name = "CGI-Cookie-XS-0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGENT/${name}.tar.gz";
+      sha256 = "1jrd3f11sz17117nvssrrf6r80fr412615n5ffspbsap4n816bnn";
+    };
   };
 
   perlCGISession = buildPerlPackage {
@@ -4692,6 +4713,17 @@ let
       url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.15.tar.gz;
       sha256 = "1ygz0hd1fd3q88r6dlw14kpyh06zjprksdci7qva6skxz3261636";
     };
+  };
+
+  perlCookieXS = buildPerlPackage rec {
+    name = "Cookie-XS-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGENT/${name}.tar.gz";
+      sha256 = "1616rcn2qn1cwiv3rxb8mq5fmwxpj4gya1lxxxq2w952h03p3fd3";
+    };
+    propagatedBuildInputs = [
+      perlTestMore perlCGICookieXS
+    ];
   };
 
   perlCryptCBC = buildPerlPackage rec {
@@ -5157,6 +5189,14 @@ let
     propagatedBuildInputs = [perlLWP perlYAML];
   };
 
+  perlHTTPHeaderParserXS = buildPerlPackage rec {
+    name = "HTTP-HeaderParser-XS-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKSMITH/${name}.tar.gz";
+      sha256 = "1vs6sw431nnlnbdy6jii9vqlz30ndlfwdpdgm8a1m6fqngzhzq59";
+    };
+  };
+
   perlHTTPRequestAsCGI = buildPerlPackage {
     name = "HTTP-Request-AsCGI-0.5";
     src = fetchurl {
@@ -5436,6 +5476,15 @@ let
       url = mirror://cpan/authors/id/M/MA/MANU/Net-IP-1.25.tar.gz;
       sha256 = "1iv0ka6d8kp9iana6zn51sxbcmz2h3mbn6cd8pald36q5whf5mjc";
     };
+  };
+
+  perlNetServer = buildPerlPackage rec {
+    name = "Net-Server-0.97";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RH/RHANDOM/${name}.tar.gz";
+      sha256 = "13vhv13w06g6h6iqx440q1h6hwj0kpjdxcc3fl9crkwg5glygg2f";
+    };
+    doCheck = false; # seems to hang waiting for connections
   };
 
   perlObjectSignature = buildPerlPackage {
