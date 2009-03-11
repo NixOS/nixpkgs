@@ -7,7 +7,9 @@ let
   ntpUser = "ntp";
 
   config = writeText "ntp.conf" ''
-    driftfile ${stateDir}/ntp.drift
+    # Keep the drift file in ${stateDir}/ntp.drift.  However, since we
+    # chroot to ${stateDir}, we have to specify it as /ntp.drift.
+    driftfile /ntp.drift
 
     ${toString (map (server: "server " + server + "\n") servers)}
   '';
