@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-static --with-readline-inc=-I${readline}/include";
 
+  postInstall = ''
+    gcc -L$out/lib -I$out/include tool/genfkey.c -lsqlite3 -o $out/bin/genfkey
+  '';
+
   meta = {
     homepage = http://www.sqlite.org/;
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
