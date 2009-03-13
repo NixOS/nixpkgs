@@ -4906,10 +4906,10 @@ let
   };
 
   perlDBIxClass = buildPerlPackage rec {
-    name = "DBIx-Class-0.08011";
+    name = "DBIx-Class-0.08012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "0bdp2hqbxdn0xzjja0wcynwvq36z2vwz7yx5w34s82g59pmf5dbx";
+      sha256 = "02m5bg1zq1w1w2s3vnnjh46spn6d8xzj6b00vmlyfmf9hmrsdsxj";
     };
     propagatedBuildInputs = [
       perlTestNoWarnings perlTestException perlDBI perlScopeGuard
@@ -4919,7 +4919,6 @@ let
       perlModuleFind perlDBDSQLite perlJSONAny perlSubName
     ];
     buildInputs = [perlTestPod perlTestPodCoverage];
-    doCheck = false; /* it says "8 subtests UNEXPECTEDLY SUCCEEDED" */
   };
 
   perlDBIxClassHTMLWidget = buildPerlPackage rec {
@@ -5673,12 +5672,15 @@ let
     };
   };
 
-  perlSQLAbstract = buildPerlPackage {
-    name = "SQL-Abstract-1.24";
+  perlSQLAbstract = buildPerlPackage rec {
+    name = "SQL-Abstract-1.50";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Abstract-1.24.tar.gz;
-      sha256 = "0vnpnca9cahnk0zgzqkngcwyzjqnckar0jwp3vyhj9hcaylirnvg";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
+      sha256 = "0nyc16ynks4xqa442vycs8wy9xbs0q63wm4iik8ar1axr53lyyqb";
     };
+    propagatedBuildInputs = [
+      perlTestDeep perlTestException perlTestWarn
+    ];    
   };
 
   perlSQLAbstractLimit = buildPerlPackage rec {
@@ -5779,10 +5781,10 @@ let
   };
 
   perlTaskCatalystTutorial = buildPerlPackage rec {
-    name = "Task-Catalyst-Tutorial-0.05";
+    name = "Task-Catalyst-Tutorial-0.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
-      sha256 = "0mqn64bspz1rq6m62yvy1gvmm0swz8xfhh8rg2p024v7g2qcyiy8";
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
+      sha256 = "07nn8a30n3qylpnf7s4ma6w462g31pywwikib117hr2mc7cv5cbm";
     };
     propagatedBuildInputs = [
       perlCatalystManual perlCatalystRuntime perlCatalystDevel
