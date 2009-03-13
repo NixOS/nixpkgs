@@ -76,4 +76,6 @@ in {
     libX11 = linux;
   };
 
+  openoffice = linux;
+
 }
