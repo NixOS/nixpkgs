@@ -90,7 +90,7 @@ in {
     kdebase_runtime = linux;
     kdebase_workspace = linux;
     kdeedu = linux;
-v    kdegames = linux;
+    kdegames = linux;
     kdegraphics = linux;
     kdelibs = linux;
     kdemultimedia = linux;
