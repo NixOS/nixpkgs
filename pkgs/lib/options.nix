@@ -482,12 +482,12 @@ rec {
           # evaluate the condition.
           if isThenElse p then
             if condition then
-              foldProperty (a: p.thenPart) id content
+              copyProperties content p.thenPart
             else
-              foldProperty (a: p.elsePart) id content
+              copyProperties content p.elsePart
           # ignore the condition.
           else if isAlways p then
-            foldProperty (a: p.value) id content
+            copyProperties content p.value
           # otherwise (isIf)
           else
             evalIf content (condition && p.condition) (tail list);
