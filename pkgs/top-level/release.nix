@@ -29,6 +29,7 @@ in {
 
   MPlayer = linux;
   apacheHttpd = linux;
+  at = linux;
   autoconf = all;
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
@@ -58,6 +59,7 @@ in {
   inetutils = linux;
   libsmbios = linux;
   libtool = all;
+  lsh = linux;
   maxima = all;
   mercurial = all;
   monotone = all;
@@ -68,6 +70,7 @@ in {
   pan = linux;
   perl = all;
   pltScheme = linux;
+  portmap = linux;
   postgresql = all;
   python = all;
   ruby = all;
@@ -79,6 +82,7 @@ in {
   vlc = linux;
   webkit = all;
   wine = ["i686-linux"];
+  zile = linux;
 
   gtkLibs = {
     gtk = linux;
