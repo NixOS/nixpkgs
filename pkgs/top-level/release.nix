@@ -30,17 +30,43 @@ in {
   apacheHttpd = linux;
   autoconf = all;
   bash = all;
+  bazaar = all;
+  boost = all;
+  eprover = linux;
   firefox3 = linux;
   gcc = all;
+  gdb = all;
+  git = all;
+  gnuplot = all;
+  gnuplotX = linux;
+  graphviz = all;
   hello = all;
   libsmbios = linux;
   libtool = all;
+  maxima = all;
+  mercurial = all;
+  monotone = all;
+  mysql = all;
+  octave = all;
+  openoffice = linux;
   pan = linux;
   perl = all;
+  pltScheme = linux;
+  postgresql = all;
   python = all;
+  ruby = all;
+  qt3 = all;
+  qt4 = all;
+  subversion = linux;
   thunderbird = linux;
+  vimHugeX = all;
   vlc = linux;
+  webkit = all;
   wine = ["i686-linux"];
+
+  gtkLibs = {
+    gtk = linux;
+  };
 
   kde42 = {
     kdeadmin = linux;
@@ -75,7 +101,5 @@ in {
   xorg = {
     libX11 = linux;
   };
-
-  openoffice = linux;
 
 }
