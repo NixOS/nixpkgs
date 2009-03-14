@@ -30,7 +30,7 @@ in {
   MPlayer = linux;
   apacheHttpd = linux;
   autoconf = all;
-  avahi = all;
+  avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
   bazaar = all;
   bitlbee = all;
