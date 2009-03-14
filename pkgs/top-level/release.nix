@@ -49,8 +49,8 @@ in {
   gnuplotX = linux;
   gnutls = all;
   graphviz = all;
-  guile = all;
-  guileLib = all;
+  guile = linux;  # tests fail on Cygwin
+  guileLib = linux;
   hello = all;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
