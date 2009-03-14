@@ -19,6 +19,7 @@ let
   /* Common platform groups on which to test packages. */
   all = ["i686-linux" "x86_64-linux" "i686-darwin" "i686-cygwin"];
   linux = ["i686-linux" "x86_64-linux"];
+  allBut = (platform: pkgs.lib.filter (x: platform != x) all);
 
 in {
 
