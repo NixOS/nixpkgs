@@ -1,9 +1,9 @@
 args: with args; stdenv.mkDerivation {
-  name = "wmii-20070516";
+  name = "wmii-20071116";
 
   src = fetchurl {
-    url = http://www.suckless.org/download/wmii-3.6.tar.gz;
-    sha256 = "05mj651yv02rvkpqqkgwp8307nrrqpcwfv5k8186kx2yiiw9pws6";
+    url = http://code.suckless.org/dl/wmii/wmii-3.6.tar.gz;
+    sha256 = "46f39b788c5ef4695040b36cc7d9c539db0306bafc4d8cefdc5980ed4331b216";
   };
 
   buildInputs = [ libX11 libixp xextproto libXt libXext ];

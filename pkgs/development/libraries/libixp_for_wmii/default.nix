@@ -14,7 +14,13 @@ stdenv.mkDerivation {
      cp -r lib \$out
   ";
   src = fetchurl {
-    url = http://www.suckless.org/download/libixp-0.4.tar.gz;
+    url = http://code.suckless.org/dl/libs/libixp-0.4.tar.gz;
     sha256 = "0b44p9wvmzxpyf2xd86rxyr49bmfh9cd5hj3d234gkvynvgph60p";
+  };
+
+  meta = {
+    homepage = http://libs.suckless.org/libixp;
+    description = "stand-alone client/server 9P library";
+    license = "MIT / LPL";
   };
 }
