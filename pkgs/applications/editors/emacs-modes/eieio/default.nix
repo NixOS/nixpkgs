@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     description = "EIEIO: Enhanced Implementation of Emacs Interpreted Objects";
 
     longDescription = ''
+      This package is now part of CEDET, please upgrade.
+
       EIEIO is a package which implements a CLOS subset for Emacs.  It
       includes examples which can draw simple tree graphs, and bar
       charts.

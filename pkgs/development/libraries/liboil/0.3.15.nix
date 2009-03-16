@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://liboil.freedesktop.org;
-    description = "Liboil is a library of simple functions that are optimized
-    for various CPUs.";
+    description = "A library of simple functions that are optimized for various CPUs";
   };
 }

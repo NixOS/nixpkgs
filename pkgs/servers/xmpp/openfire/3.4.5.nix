@@ -26,9 +26,7 @@ stdenv.mkDerivation rec {
     (textClosure localDefs 
       [ installPhase doForceShare doPropagate]);
   meta = {
-    description = "
-    XMPP server in Java.
-";
-		inherit src;
+    description = "XMPP server in Java";
+    inherit src;
   };
 }

@@ -9,14 +9,11 @@ stdenv.mkDerivation {
 
   buildInputs = [libX11 libXext libXinerama libXpm libXft];
 
-
   postInstall = ''
     sed -i -e s/rxvt/xterm/g $out/etc/system.jwmrc
     sed -i -e "s/.*Swallow.*\|.*xload.*//" $out/etc/system.jwmrc'';
 
-
   meta = {
-  description = "JWM is a window manager for X11 window system. It is written in C and uses only Xlib at a minimum.";
+    description = "A window manager for X11 that requires only Xlib";
   };
-
 }

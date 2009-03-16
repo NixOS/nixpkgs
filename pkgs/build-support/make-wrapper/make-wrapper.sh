@@ -66,7 +66,7 @@ makeWrapper() {
         fi
     done
 
-    echo "exec \"$original\" $flagsBefore \"\$@\"" >> $wrapper
+    echo "exec -a $(basename "$wrapper") \"$original\" $flagsBefore \"\$@\"" >> $wrapper
     
     chmod +x $wrapper
 }

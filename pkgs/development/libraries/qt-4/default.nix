@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   # than half of the installed size.  Ideally we should put this in a
   # separate package (as well as the Qt Designer).
   postInstall = ''
-    rm -rf $out/share/doc
+    rm -rf $out/doc
   '';
 
   meta = {

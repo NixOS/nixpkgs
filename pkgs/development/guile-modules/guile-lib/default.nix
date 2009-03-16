@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = ''Guile-Library, a collection of useful Guile
-                    Scheme modules'';
+    description = "Guile-Library, a collection of useful Guile Scheme modules";
     homepage = http://home.gna.org/guile-lib/;
     license = "GPL";
   };

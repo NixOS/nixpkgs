@@ -93,7 +93,6 @@ rec {
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
   kde = [
-    http://ftp.scarlet.be/pub/kde/
     http://ftp.gwdg.de/pub/x11/kde/
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
@@ -101,7 +100,7 @@ rec {
 
   # Gentoo files.
   gentoo = [
-    http://www.ibiblio.org/pub/Linux/distributions/gentoo/
+    http://ftp.snt.utwente.nl/pub/os/linux/gentoo/
     http://distfiles.gentoo.org/
   ];
 

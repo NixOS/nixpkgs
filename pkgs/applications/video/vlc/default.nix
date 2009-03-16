@@ -1,31 +1,28 @@
-{ xvSupport ? true
-, stdenv, fetchurl, perl, x11, libXv, wxGTK
-, libdvdread, libdvdnav, libdvdcss
-, zlib, mpeg2dec, a52dec, libmad, ffmpeg, alsa
+{ stdenv, fetchurl, perl, xlibs, libdvdnav
+, zlib, a52dec, libmad, faad2, ffmpeg, alsa
+, pkgconfig, dbus, hal, fribidi, qt4, freefont_ttf
 }:
 
-assert libdvdread.libdvdcss == libdvdcss;
-assert xvSupport -> libXv != null;
-
 stdenv.mkDerivation {
-  name = "vlc-0.8.6h";
+  name = "vlc-0.9.8a";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.8.6h/vlc-0.8.6h.tar.bz2;
-    sha256 = "08bj6ndxj0f7jdsif43535qyavpy13wni93z7c2790i2d748gvah";
+    url = http://download.videolan.org/pub/videolan/vlc/0.9.8a/vlc-0.9.8a.tar.bz2;
+    sha256 = "0kw2d7yh8rzb61j1q2cvnjinj1wxc9a7smxl7ckw1vwh6y02jz0r";
   };
 
   buildInputs = [
-    perl x11 wxGTK 
-    zlib mpeg2dec a52dec libmad ffmpeg alsa
-    libdvdread # <- for "simple" DVD playback
-    libdvdnav libdvdcss # <- for DVD playback with menus
-  ] ++ stdenv.lib.optional xvSupport libXv;
+    perl xlibs.xlibs xlibs.libXv zlib a52dec libmad faad2 ffmpeg
+    alsa libdvdnav libdvdnav.libdvdread pkgconfig dbus hal fribidi qt4
+  ];
 
-  # Ensure that libdvdcss will be found without having to set LD_LIBRARY_PATH.
-  NIX_LDFLAGS = "-ldvdcss";
+  configureFlags = "--enable-alsa --disable-glx --disable-remoteosd --enable-faad";
 
-  configureFlags = "--enable-alsa";
+  preBuild = ''
+    substituteInPlace modules/misc/freetype.c --replace \
+      /usr/share/fonts/truetype/freefont/FreeSerifBold.ttf \
+      ${freefont_ttf}/share/fonts/truetype/FreeSerifBold.ttf
+  '';
 
   meta = {
     description = "Cross-platform media player and streaming server";

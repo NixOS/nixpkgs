@@ -44,9 +44,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''AsciiDoc is a text-based document generation system.
-                    AsciiDoc input files can be translated to HTML and
-		    DocBook markups'';
+    longDescription = ''
+      AsciiDoc is a text-based document generation system.  AsciiDoc
+      input files can be translated to HTML and DocBook markups.
+    '';
     homepage = http://www.methods.co.nz/asciidoc/;
     license = "GPLv2+";
   };

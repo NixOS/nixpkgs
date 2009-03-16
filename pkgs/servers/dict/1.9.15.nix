@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
                 (textClosure localDefs 
                         [doConfigure doMakeInstall doForceShare doPropagate]);
         meta = {
-                description = "
-                Dict protocol server and client.
-";
+                description = "Dict protocol server and client";
                 inherit src;
         };
 }

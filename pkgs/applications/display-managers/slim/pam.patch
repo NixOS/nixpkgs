@@ -1,369 +1,89 @@
-diff -rc slim-1.2.6-orig/app.cpp slim-1.2.6/app.cpp
-*** slim-1.2.6-orig/app.cpp	2006-09-15 23:00:37.000000000 +0200
---- slim-1.2.6/app.cpp	2007-06-05 12:45:58.000000000 +0200
+diff -rc slim-1.3.1-orig/app.cpp slim-1.3.1/app.cpp
+*** slim-1.3.1-orig/app.cpp	2008-09-26 02:54:15.000000000 +0200
+--- slim-1.3.1/app.cpp	2009-02-17 19:50:06.000000000 +0100
 ***************
-*** 25,30 ****
---- 25,68 ----
-  #include "app.h"
-  #include "numlock.h"
-  
-+ #ifdef USE_PAM
-+ #include <security/pam_appl.h>
-+ #include <security/pam_misc.h>
-+ #include <string>
-+ 
-+ pam_handle_t* pamh;
-+ char const* PAM_service = "slim"; // <----- Change this, if the patch gets accepted upstream
-+ string password;
-+ 
-+ int conv(int num_msg, const struct pam_message **msg,
-+          struct pam_response **resp, void *appdata_ptr){
-+     *resp = (struct pam_response *) calloc(num_msg, sizeof(struct pam_response));
-+     for (int i=0; i<num_msg; i++){
-+         resp[i]->resp_retcode=0;
-+         switch(msg[i]->msg_style){
-+             case PAM_PROMPT_ECHO_ON:
-+                 // We assume PAM is asking for the username
-+ 				// As we should have given that already, this should never happen
-+ 				cerr << APPNAME << ": PAM send an unexpected PAM_PROMPT_ECHO_ON" << endl;
-+ 				cerr << APPNAME << ": " << msg[i]->msg << endl;
-+                 break;
-+ 
-+             case PAM_PROMPT_ECHO_OFF:
-+                 // We assume PAM is asking for the password
-+                 resp[i]->resp=x_strdup(password.c_str());
-+                 break;
-+ 
-+             case PAM_ERROR_MSG:
-+             case PAM_TEXT_INFO:
-+                 // We simply right these to the log
-+                 // TODO: Maybe we should simply ignore them
-+                 cerr << APPNAME << ": " << msg[i]->msg << endl;
-+                 break;
-+         }
-+     }
-+     return PAM_SUCCESS;
-+ }
-+ #endif
-  
-  extern App* LoginApp;
-  
+*** 41,48 ****
+      Panel* panel = *static_cast<Panel**>(appdata_ptr);
+      int result = PAM_SUCCESS;
+      for (int i=0; i<num_msg; i++){
+!         resp[i]->resp=0;
+!         resp[i]->resp_retcode=0;
+          switch(msg[i]->msg_style){
+              case PAM_PROMPT_ECHO_ON:
+                  // We assume PAM is asking for the username
+--- 41,48 ----
+      Panel* panel = *static_cast<Panel**>(appdata_ptr);
+      int result = PAM_SUCCESS;
+      for (int i=0; i<num_msg; i++){
+!         (*resp)[i].resp=0;
+!         (*resp)[i].resp_retcode=0;
+          switch(msg[i]->msg_style){
+              case PAM_PROMPT_ECHO_ON:
+                  // We assume PAM is asking for the username
 ***************
-*** 133,138 ****
---- 171,209 ----
-          }
+*** 51,63 ****
+                      case Panel::Suspend:
+                      case Panel::Halt:
+                      case Panel::Reboot:
+!                         resp[i]->resp=strdup("root");
+                          break;
+  
+                      case Panel::Console:
+                      case Panel::Exit:
+                      case Panel::Login:
+!                         resp[i]->resp=strdup(panel->GetName().c_str());
+                          break;
+                  }
+                  break;
+--- 51,63 ----
+                      case Panel::Suspend:
+                      case Panel::Halt:
+                      case Panel::Reboot:
+!                         (*resp)[i].resp=strdup("root");
+                          break;
+  
+                      case Panel::Console:
+                      case Panel::Exit:
+                      case Panel::Login:
+!                         (*resp)[i].resp=strdup(panel->GetName().c_str());
+                          break;
+                  }
+                  break;
+***************
+*** 73,79 ****
+  
+                      default:
+                          panel->EventHandler(Panel::Get_Passwd);
+!                         resp[i]->resp=strdup(panel->GetPasswd().c_str());
+                          break;
+                  }
+                  break;
+--- 73,79 ----
+  
+                      default:
+                          panel->EventHandler(Panel::Get_Passwd);
+!                         (*resp)[i].resp=strdup(panel->GetPasswd().c_str());
+                          break;
+                  }
+                  break;
+***************
+*** 89,97 ****
       }
-  
-+ #ifdef USE_PAM
-+     int last_result;
-+     struct pam_conv pam_conversation = {
-+         conv,
-+         NULL
-+     };
-+ 
-+     // Start the PAM session
-+     if ((last_result=pam_start(PAM_service, NULL, &pam_conversation, &pamh))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+         exit(ERR_EXIT);
-+     }
-+ 
-+     // Setup some PAM items
-+     if ((last_result=pam_set_item(pamh, PAM_TTY, DisplayName))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+ 	pam_end(pamh, last_result);
-+         exit(ERR_EXIT);
-+     }
-+     char* pam_ruser = "root\0"; // <---- We already checked for this in the constructor
-+     if ((last_result=pam_set_item(pamh, PAM_RUSER, pam_ruser))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+ 	pam_end(pamh, last_result);
-+         exit(ERR_EXIT);
-+     }
-+     char* pam_rhost = "localhost\0"; // <---- This might not entirely correct
-+     if ((last_result=pam_set_item(pamh, PAM_RHOST, pam_rhost))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+ 	pam_end(pamh, last_result);
-+         exit(ERR_EXIT);
-+     }
-+ #endif
-+ 
-      bool loaded = false;
-      while (!loaded) {
-          themedir =  themebase + themeName;
-***************
-*** 313,318 ****
---- 384,421 ----
-      struct passwd *pw;
-      pid_t pid;
-  
-+ #ifdef USE_PAM
-+      int last_result;
-+      switch ((last_result=pam_setcred(pamh, PAM_ESTABLISH_CRED | PAM_SILENT))){
-+         case PAM_SUCCESS:
-+             // Credentials was established successfully
-+             break;
-+ 
-+         case PAM_CRED_ERR:
-+         case PAM_CRED_EXPIRED:
-+         case PAM_CRED_UNAVAIL:
-+         case PAM_USER_UNKNOWN:
-+             // Credentials couldn't be established
-+             cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+             return;
-+ 
-+         case PAM_BUF_ERR:
-+         case PAM_SYSTEM_ERR:
-+         default:
-+             // System error -> bail out!
-+             last_result=pam_setcred(pamh, PAM_DELETE_CRED);
-+             pam_end(pamh, last_result);
-+             exit(ERR_EXIT);
-+     }
-+ 
-+     if ((last_result=pam_open_session(pamh, PAM_SILENT))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+     	pam_setcred(pamh, PAM_DELETE_CRED);
-+ 	// TODO: Do we need more serious actions?
-+         return;
-+     }
-+ #endif
-+ 
-      pw = LoginPanel->GetInput()->GetPasswdStruct();
-      if(pw == 0)
-          return;
-***************
-*** 320,325 ****
---- 423,433 ----
-      // Create new process
-      pid = fork();
-      if(pid == 0) {
-+ #ifdef USE_PAM
-+         // Close the child's copy of the PAM-handle
-+         pam_end(pamh, PAM_SUCCESS | PAM_DATA_SILENT);
-+ #endif
-+ 
-          // Login process starts here
-          SwitchUser Su(pw, cfg, DisplayName);
-          string session = LoginPanel->getSession();
-***************
-*** 355,361 ****
-          }
+      if (result!=PAM_SUCCESS){
+          for (int i=0; i<num_msg; i++){
+!             if (resp[i]->resp==0) continue;
+!             free(resp[i]->resp);
+!             resp[i]->resp=0;
+          };
+          free(*resp);
+          *resp=0;
+--- 89,97 ----
       }
-  
-!     // Close all clients
-      KillAllClients(False);
-      KillAllClients(True);
-  
---- 463,477 ----
-          }
-      }
-  
-! #ifdef USE_PAM
-!     if ((last_result=pam_close_session(pamh, PAM_SILENT))!=PAM_SUCCESS){
-!         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-!     	last_result=pam_setcred(pamh, PAM_DELETE_CRED);	
-! 	// TODO: Do we need more serious actions?
-!     }
-! #endif
-! 
-! // Close all clients
-      KillAllClients(False);
-      KillAllClients(True);
-  
-***************
-*** 382,387 ****
---- 498,510 ----
-      // Stop alarm clock
-      alarm(0);
-  
-+ #ifdef USE_PAM
-+     int last_result;
-+     if ((last_result=pam_end(pamh, PAM_SUCCESS))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+     }
-+ #endif
-+ 
-      // Write message
-      LoginPanel->Message((char*)cfg->getOption("reboot_msg").c_str());
-      sleep(3);
-***************
-*** 398,403 ****
---- 521,533 ----
-      // Stop alarm clock
-      alarm(0);
-  
-+ #ifdef USE_PAM
-+     int last_result;
-+     if ((last_result=pam_end(pamh, PAM_SUCCESS))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+     }
-+ #endif
-+ 
-      // Write message
-      LoginPanel->Message((char*)cfg->getOption("shutdown_msg").c_str());
-      sleep(3);
-***************
-*** 433,438 ****
---- 563,575 ----
-  
-  
-  void App::Exit() {
-+ #ifdef USE_PAM
-+     int last_result;
-+     if ((last_result=pam_end(pamh, PAM_SUCCESS))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+     }
-+ #endif
-+ 
-      if (testing) {
-          char* testmsg = "This is a test message :-)";
-          LoginPanel->Message(testmsg);
-***************
-*** 453,458 ****
---- 590,602 ----
-  }
-  
-  void App::RestartServer() {
-+ #ifdef USE_PAM
-+     int last_result;
-+     if ((last_result=pam_end(pamh, PAM_SUCCESS))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+     }
-+ #endif
-+ 
-          StopServer(); 
-          RemoveLock();
-          Run();
-Only in slim-1.2.6/: app.cpp~
-diff -rc slim-1.2.6-orig/input.cpp slim-1.2.6/input.cpp
-*** slim-1.2.6-orig/input.cpp	2006-09-15 23:00:37.000000000 +0200
---- slim-1.2.6/input.cpp	2007-06-05 12:45:58.000000000 +0200
-***************
-*** 12,17 ****
---- 12,25 ----
-  #include "input.h"
-  #include <cstdlib>
-  
-+ #ifdef USE_PAM
-+ #include <security/pam_appl.h>
-+ #include <string>
-+ 
-+ extern pam_handle_t* pamh;
-+ extern string password;
-+ #endif
-+ 
-  Input::Input(Cfg* c) {
-      NameBuffer[0] = '\0';
-      PasswdBuffer[0] = '\0';
-***************
-*** 100,106 ****
---- 108,126 ----
-  
-  
-  struct passwd* Input::GetPasswdStruct() {
-+ #ifdef USE_PAM
-+     int last_result;
-+     char* username=NULL;
-+ 
-+     if ((last_result=pam_get_item(pamh, PAM_USER, (const void**)&username))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+         pam_end(pamh, last_result);
-+         exit(ERR_EXIT);
-+     }
-+     struct passwd* pw = getpwnam(username);
-+ #else
-      struct passwd* pw = getpwnam(NameBuffer);
-+ #endif
-      endpwent();
-      if (pw->pw_shell[0] == '\0') {
-          setusershell();
-***************
-*** 183,188 ****
---- 203,240 ----
-  }
-  
-  int Input::Correct() {
-+ #ifdef USE_PAM
-+     int last_result;
-+ 
-+     // Store the password in global variables accessible
-+     // by the PAM-conversation function
-+     password=PasswdBuffer;
-+ 
-+ 	// Set the username in PAM
-+     if ((last_result=pam_set_item(pamh, PAM_USER, NameBuffer))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+         pam_end(pamh, last_result);
-+         exit(ERR_EXIT);
-+     }    
-+ 
-+     // Authenticate the user
-+     if ((last_result=pam_authenticate(pamh, PAM_DISALLOW_NULL_AUTHTOK))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+         if (last_result==PAM_ABORT){
-+             pam_end(pamh, last_result);
-+             exit(ERR_EXIT);
-+         }
-+ 	return 0;
-+     }
-+ 
-+     // Check the health of the account
-+     if ((last_result=pam_acct_mgmt(pamh, PAM_SILENT))!=PAM_SUCCESS){
-+         cerr << APPNAME << ": " << pam_strerror(pamh, last_result) << endl;
-+ 	return 0;
-+     }
-+ 
-+     return 1;
-+ #else
-      char *unencrypted, *encrypted, *correct;
-      struct passwd *pw;
-  
-***************
-*** 197,203 ****
-      if(sp)
-  	correct = sp->sp_pwdp;
-      else
-! #endif
-  	correct = pw->pw_passwd;
-  
-      if(correct == 0 || correct[0] == '\0')
---- 249,255 ----
-      if(sp)
-  	correct = sp->sp_pwdp;
-      else
-! #endif        /* HAVE_SHADOW */
-  	correct = pw->pw_passwd;
-  
-      if(correct == 0 || correct[0] == '\0')
-***************
-*** 207,212 ****
---- 259,265 ----
-      encrypted = crypt(unencrypted, correct);
-      memset(unencrypted, 0, strlen (unencrypted));
-      return (strcmp(encrypted, correct) == 0);
-+ #endif        /* USE_PAM */
-  }
-  
-  
-diff -rc slim-1.2.6-orig/Makefile slim-1.2.6/Makefile
-*** slim-1.2.6-orig/Makefile	2006-09-15 23:00:37.000000000 +0200
---- slim-1.2.6/Makefile	2007-06-05 12:45:58.000000000 +0200
-***************
-*** 6,13 ****
-  CXX=/usr/bin/g++
-  CC=/usr/bin/gcc
-  CFLAGS=-I. -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/freetype2/config -I/usr/include/libpng12 -I/usr/include
-! LDFLAGS=-L/usr/X11R6/lib -lXft -lX11 -lfreetype -lXrender -lfontconfig -lpng12 -lz -lm -lcrypt -lXmu -lpng -ljpeg
-! CUSTOM=-DHAVE_SHADOW
-  PREFIX=/usr
-  CFGDIR=/etc
-  MANDIR=/usr/man
---- 6,13 ----
-  CXX=/usr/bin/g++
-  CC=/usr/bin/gcc
-  CFLAGS=-I. -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/freetype2/config -I/usr/include/libpng12 -I/usr/include
-! LDFLAGS=-L/usr/X11R6/lib -lXft -lX11 -lfreetype -lXrender -lfontconfig -lpng12 -lz -lm -lcrypt -lXmu -lpng -ljpeg -lpam
-! CUSTOM=-DHAVE_SHADOW -DUSE_PAM
-  PREFIX=/usr
-  CFGDIR=/etc
-  MANDIR=/usr/man
+      if (result!=PAM_SUCCESS){
+          for (int i=0; i<num_msg; i++){
+!             if ((*resp)[i].resp==0) continue;
+!             free((*resp)[i].resp);
+!             (*resp)[i].resp=0;
+          };
+          free(*resp);
+          *resp=0;

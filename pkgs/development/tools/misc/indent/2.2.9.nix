@@ -22,9 +22,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure preBuild doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	GNU Indent - a source text formatter.
-";
+		description = "GNU Indent - a source text formatter";
 		inherit src;
 	};
 }

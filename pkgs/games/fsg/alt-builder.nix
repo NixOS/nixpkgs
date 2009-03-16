@@ -28,9 +28,7 @@ stdenv.mkDerivation {
 		(textClosure localDefs [doUnpack addInputs preBuild doMake installPhase doForceShare]);
 
   meta = {
-    description = "
-	Falling Sand Game - a cellular automata engine tuned towards the likes of Falling Sand.
-";
-		inherit src;
+    description = "Falling Sand Game - a cellular automata engine tuned towards the likes of Falling Sand";
+    inherit src;
   };
 }

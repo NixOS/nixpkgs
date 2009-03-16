@@ -18,10 +18,21 @@ rec {
     cat install.sh
     sed -e '/linux\/ioctl.h/a#include <linux\/sched.h>' -i kqemu-linux.c
   '') ["minInit" "doUnpack"];
-
-  phaseNames = ["preConfigure" "doConfigure" "debugStep" "doMakeInstall"];
+  fixInc = {
+    text = ''
+      sed -e '/#include/i#include <linux/sched.h>' -i kqemu-linux.c
+    '';
+    deps = ["minInit" "doUnpack"];
+  };
+  fixMemFunc = {
+    text=''
+      sed -e 's/memset/mymemset/g; s/memcpy/mymemcpy/g; s/void [*]my/static void *my/g' -i common/kernel.c
+    '';
+    deps = ["minInit" "doUnpack"];
+  };
+  phaseNames = ["fixInc" "fixMemFunc" "preConfigure" "doConfigure" "debugStep" "doMakeInstall"];
 
   meta = {
-    description = " Kernel module for Qemu acceleration ";
+    description = "Kernel module for Qemu acceleration";
   }; 
 }

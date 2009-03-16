@@ -31,6 +31,15 @@ rec {
     allowedReferences = []; # prevent accidents like glibc being included in the initrd
   };
 
+
+  createDeviceNodes = dev:
+    ''
+      mknod ${dev}/null c 1 3
+      mknod ${dev}/zero c 1 5
+      mknod ${dev}/tty  c 5 0
+      mknod ${dev}/vda  b 253 0
+    '';
+
   
   stage1Init = writeScript "vm-run-stage1" ''
     #! ${klibcShrunk}/bin/sh.shared -e
@@ -75,10 +84,7 @@ rec {
     done
 
     mount -t tmpfs none /dev
-    mknod /dev/null c 1 3
-    mknod /dev/zero c 1 5
-    mknod /dev/tty  c 5 0
-    mknod /dev/vda  b 253 0
+    ${createDeviceNodes "/dev"}
     
     ipconfig 10.0.2.15:::::eth0:none
 
@@ -211,8 +217,8 @@ rec {
 
   createEmptyImage = {size, fullName}: ''
     mkdir $out
-    diskImage=$out/image
-    qemu-img create -f qcow $diskImage "${toString size}M"
+    diskImage=$out/disk-image.qcow2
+    qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
     echo "${fullName}" > $out/nix-support/full-name
@@ -230,6 +236,7 @@ rec {
     touch /mnt/.debug
 
     mkdir /mnt/proc /mnt/dev /mnt/sys /mnt/bin
+    ${createDeviceNodes "/mnt/dev"}
   '';
 
 
@@ -305,10 +312,10 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
 
     preVM = ''
-      diskImage=$(pwd)/image
+      diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
-      if test -d "$origImage"; then origImage="$origImage/image"; fi
-      qemu-img create -b "$origImage" -f qcow $diskImage
+      if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
+      qemu-img create -b "$origImage" -f qcow2 $diskImage
 
       echo "$buildCommand" > cmd
 
@@ -332,10 +339,10 @@ rec {
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
     preVM = ''
-      diskImage=$(pwd)/image
+      diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
-      if test -d "$origImage"; then origImage="$origImage/image"; fi
-      qemu-img create -b "$origImage" -f qcow $diskImage
+      if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
+      qemu-img create -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -416,7 +423,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      qemu-img create -b ${image}/image -f qcow "$diskImage"
+      qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
@@ -748,6 +755,28 @@ rec {
       archs = ["noarch" "i586"];
     } // args);
 
+    opensuse110i386 = args: makeImageFromRPMDist ({
+      name = "opensuse-11.0-i586";
+      fullName = "openSUSE 11.0 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/distribution/11.0/repo/oss/suse/repodata/primary.xml.gz;
+        sha256 = "13rv855aj8p3h1zpsji5xa1wpkhgq94gcxzvg05l2b68b15q3mwn";
+      };
+      urlPrefix = mirror://opensuse/distribution/11.0/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+    } // args);
+
+    opensuse110x86_64 = args: makeImageFromRPMDist ({
+      name = "opensuse-11.0-x86_64";
+      fullName = "openSUSE 11.0 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/distribution/11.0/repo/oss/suse/repodata/primary.xml.gz;
+        sha256 = "13rv855aj8p3h1zpsji5xa1wpkhgq94gcxzvg05l2b68b15q3mwn";
+      };
+      urlPrefix = mirror://opensuse/distribution/11.0/repo/oss/suse/;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
     # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
@@ -797,27 +826,47 @@ rec {
       fullName = "Ubuntu 8.10 Intrepid (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/intrepid/main/binary-amd64/Packages.bz2;
-        sha1 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
+        sha256 = "01b2f3842cbdd5834446ddf91691bcf60f59a726dcefa23fb5b93fdc8ea7e27f";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
          
     debian40i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r5-etch-i386";
-      fullName = "Debian 4.0r5 Etch (i386)";
+      name = "debian-4.0r7-etch-i386";
+      fullName = "Debian 4.0r7 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "37a5c17fd8d62b1d9a0264a702025a4381c1a8751e2550d101957d8fa724a6f4";
+        sha256 = "155c1d1b4ce54de6c8134ab0154c2a476ae40cc5899109f3f95fecd5e002c50d";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian40x86_64 = args: makeImageFromDebDist ({
-      name = "debian-4.0r5-etch-amd64";
-      fullName = "Debian 4.0r5 Etch (amd64)";
+      name = "debian-4.0r7-etch-amd64";
+      fullName = "Debian 4.0r7 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
-        sha256 = "244dc892f89f2f73ce8372cdf1f1d450b00c0e95196927ef7f99715f0d119d5b";
+        sha256 = "3ab73a45781651a78c824b4f281de91b1aa6974d63470f40525933d848183e44";
+      };
+      urlPrefix = mirror://debian;
+    } // args);
+
+    debian50i386 = args: makeImageFromDebDist ({
+      name = "debian-5.0-lenny-i386";
+      fullName = "Debian 5.0 Lenny (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
+        sha256 = "afbead64fb4820e50294686cd3ccdff91026b214aabec3f212f9001482001061";
+      };
+      urlPrefix = mirror://debian;
+    } // args);
+        
+    debian50x86_64 = args: makeImageFromDebDist ({
+      name = "debian-5.0-lenny-amd64";
+      fullName = "Debian 5.0 Lenny (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
+        sha256 = "73d74454d687dfbdfef1abbe4bd9c251119f38ab8d371a593aa271bfa227ed2b";
       };
       urlPrefix = mirror://debian;
     } // args);
@@ -856,7 +905,6 @@ rec {
     "automake"
     "bzip2"
     "curl"
-    "devs"
     "diffutils"
     "findutils"
     "gawk"
@@ -896,6 +944,11 @@ rec {
     "util-linux" 
     "file"
     "dpkg-dev"
+    # Needed because it provides /etc/login.defs, whose absence causes
+    # the "passwd" post-installs script to fail.
+    "login"
+    # For shutting up some messages during some post-install scripts:
+    "mktemp"
   ];
 
 
@@ -939,7 +992,9 @@ rec {
     fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages; };
     fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages; };
     fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages; };
-    opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages; };
+    opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"]; };
+    opensuse110i386 = diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages; };
+    opensuse110x86_64 = diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
     ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
@@ -948,6 +1003,8 @@ rec {
     ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
+    debian50i386 = diskImageFuns.debian50i386 { packages = commonDebianPackages; };
+    debian50x86_64 = diskImageFuns.debian50x86_64 { packages = commonDebianPackages; };
 
   };
 

@@ -35,9 +35,7 @@ stdenv.mkDerivation rec {
 			++ [doMakeInstall postInstall
 			doForceShare doPropagate]));
 	meta = {
-		description = "
-		Atheros WiFi driver.
-";
+		description = "Atheros WiFi driver";
 		inherit src;
 	};
 }

@@ -1,5 +1,6 @@
 args: with args;
-stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation rec {
   pname = "wesnoth";
   version = "1.4.1";
 
@@ -15,8 +16,6 @@ stdenv.mkDerivation (rec {
   configureFlags = "--with-preferences-dir=.${name} --program-suffix=-${version} --with-datadir-name=${name} --with-boost=${boost}/include --disable-python";
 
   meta = {
-    description = "
-      The Battle for Wesnoth  is a free, turn-based strategy game with a fantasy theme.
-";
+    description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
   };
-})
+}

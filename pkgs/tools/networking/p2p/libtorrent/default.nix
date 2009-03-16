@@ -13,8 +13,6 @@ stdenv.mkDerivation ( rec {
   buildInputs = [ pkgconfig openssl libsigcxx ];
   
   meta = {
-    description = "
-      LibTorrent is a BitTorrent library written in C++ for *nix, with a focus on high performance and good code.
-    ";
+    description = "A BitTorrent library written in C++ for *nix, with a focus on high performance and good code";
   };
 })

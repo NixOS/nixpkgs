@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [ doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		Tool to decode Desktop Management Interface and SBIOS data.
-";
+		description = "Tool to decode Desktop Management Interface and SBIOS data";
 		inherit src;
 	};
 }

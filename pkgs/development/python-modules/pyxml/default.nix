@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''The PyXML package is a collection of libraries to process
-                    XML with Python.'';
+    description = "A collection of libraries to process XML with Python";
     homepage = http://pyxml.sourceforge.net/;
   };
 }

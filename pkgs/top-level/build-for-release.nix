@@ -28,6 +28,7 @@ let
       bzip2
       cabextract
       cdrkit
+      cedet
       chatzilla
       cksfv
       #compiz
@@ -45,6 +46,7 @@ let
       docbook_xml_dtd_42
       docbook_xml_dtd_43
       docbook_xsl
+      doxygen
       e2fsprogs
       emacs
       emacsUnicode
@@ -78,6 +80,7 @@ let
       gnutar
       gnutls
       gphoto2
+      gprolog
       gsl
       guile
       gqview
@@ -124,6 +127,7 @@ let
       #mythtv
       nano
       netcat
+      nfsUtils
       nix
       nixUnstable
       nss_ldap
@@ -140,9 +144,11 @@ let
       par2cmdline
       pciutils
       perl
+      perlTaskCatalystTutorial
       php
       pinentry
       pkgconfig
+      portmap
       postgresql
       procps
       pwdutils
@@ -209,6 +215,7 @@ let
       xsel
       xterm
       zdelta
+      zile
       zip
       ;
     inherit (pkgs.xorg)
@@ -240,6 +247,27 @@ let
       gnomeutils
       metacity
       ;
+    kde42 = pkgs.recurseIntoAttrs {
+      inherit (pkgs.kde42)
+        kdelibs
+        kdebase_workspace
+        kdebase
+        kdebase_runtime
+	kdegraphics
+	kdemultimedia
+	kdegames
+	kdeadmin
+	kdeedu
+	kdeartwork
+	kdesdk
+	kdeutils
+	kdetoys
+	kdewebdev
+	kdenetwork
+	kdepim
+	kdeplasma_addons
+        ;
+    };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {
       inherit (pkgs.kernelPackages_2_6_23)
         iwlwifi

@@ -17,11 +17,12 @@ stdenv.mkDerivation rec {
   installPhase = "make install prefix=$out";
 
   meta = {
-    description = ''CVSps is a program for generating `patchset' information
-                    from a CVS repository.  A patchset in this case is
-		    defined as a set of changes made to a collection of
-		    files, and all committed at the same time (using a single
-		    "cvs commit" command).'';
+    longDescription = ''
+      CVSps is a program for generating `patchset' information from a
+      CVS repository.  A patchset in this case is defined as a set of
+      changes made to a collection of files, and all committed at the
+      same time (using a single "cvs commit" command).
+    '';
     homepage = http://www.cobite.com/cvsps/;
     license = "GPLv2";
   };

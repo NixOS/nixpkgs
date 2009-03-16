@@ -11,13 +11,11 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "libextractor"+version;
+	name = "libextractor-"+version;
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	Libextractor - extracts metadata from files.
-";
+		description = "A tool to extract metadata from files";
 		inherit src;
 	};
 }

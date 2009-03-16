@@ -1,38 +1,36 @@
 args: with args;
 let edf = composableDerivation.edf; in
 rec {
-  squid30 = composableDerivation.composableDerivation {
-    initial = {
-      name = "squid-3.0-stable5";
+  squid30 = composableDerivation.composableDerivation {} {
+    name = "squid-3.0-stable5";
 
-      buildInputs = [perl];
+    buildInputs = [perl];
 
-      src = args.fetchurl {
-        url = http://www.squid-cache.org/Versions/v3/3.0/squid-3.0.STABLE5.tar.bz2;
-        sha256 = "1m4ccpjw30q9vwsycmgg9dmhly0mpznvxrch6f7dxgfzpjp26l7w";
-      };
-
-      configureFlags = ["--enable-ipv6"];
-
-      meta = {
-        description = "http-proxy";
-        homepage = "http://www.squid-cache.org";
-        license = "GPL2";
-      };
-
+    src = args.fetchurl {
+      url = http://www.squid-cache.org/Versions/v3/3.0/squid-3.0.STABLE5.tar.bz2;
+      sha256 = "1m4ccpjw30q9vwsycmgg9dmhly0mpznvxrch6f7dxgfzpjp26l7w";
     };
+
+    configureFlags = ["--enable-ipv6"];
+
+    meta = {
+      description = "http-proxy";
+      homepage = "http://www.squid-cache.org";
+      license = "GPL2";
+    };
+
   };
 
-  squid3Beta = squid30.passthru.funMerge {
+  squid3Beta = squid30.merge {
     name = "squid-3.1-beta";
     src = args.fetchurl {
-      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.0.3.tar.bz2;
-      sha256 = "0khc4w9sbdwzxw8285z60ymz15q5qjy7b8yvvfnzfkihdacs735x";
+      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.0.6.tar.bz2;
+      sha256 = "0crkfd5kc677baq0v6kfnwh0rc7h2a1083yh0sccy7g02vd7z3q5";
     };
     configureFlags = ["--enable-ipv6"];
   };
 
-  squid3Head = squid3Beta.passthru.funMerge {
+  squid3Head = squid3Beta.merge {
     name = "squid-3.1-HEAD";
     src = args.fetchurl {
       url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.0.3-20081221.tar.bz2;

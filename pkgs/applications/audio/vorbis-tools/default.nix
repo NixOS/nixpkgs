@@ -15,9 +15,10 @@ stdenv.mkDerivation {
   patches = [ ./ogg123-curlopt-mute.patch ];
 
   meta = {
-    description = ''A set of command-line tools to manipulate Ogg Vorbis
-                    audio files, notably the `ogg123' player and the
-		    `oggenc' encoder.'';
+    longDescription = ''
+      A set of command-line tools to manipulate Ogg Vorbis audio
+      files, notably the `ogg123' player and the `oggenc' encoder.
+    '';
     homepage = http://xiph.org/vorbis/;
     license = "GPLv2";
   };

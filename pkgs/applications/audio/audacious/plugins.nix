@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-L${audacious}/lib/audacious"; # needed because we override pluginlibdir
 
+  # `--enable-amidiplug' is to prevent configure from looking in /proc/asound.
+  configureFlags = "--enable-amidiplug";
+  
   meta = {
     description = "Plugins for the Audacious media player";
     homepage = http://audacious-media-player.org/;

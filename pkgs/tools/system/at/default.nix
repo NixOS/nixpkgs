@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.10.1.tar.gz;
-    sha256 = "188j6v0hq9avd9v7mhc8gdyg4wycc7lqviw4idwn0jjvwkky5428";
+    url = mirror://debian/pool/main/a/at/at_3.1.10.2.tar.gz;
+    sha256 = "03v96zil1xs15px26xmhxsfn7wx84a3zwpnwmp69hn5s911api1m";
   };
 
   patches = [ ./install.patch ];

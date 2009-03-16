@@ -1,5 +1,6 @@
 args: with args;
-stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation rec {
   pname = "SDL_net";
   version = "1.2.7";
 
@@ -12,11 +13,9 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [SDL];
 
-  postInstall = "ln -s \${out}/include/SDL/SDL_net.h \${out}/include/";
+  postInstall = "ln -s $out/include/SDL/SDL_net.h $out/include/";
 
   meta = {
-    description = "
-      SDL networking library.
-";
+    description = "SDL networking library";
   };
-})
+}

@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://bogofilter.sourceforge.net/;
-    description = ''Bogofilter is a mail filter that classifies mail
-                    as spam or ham (non-spam) by a statistical analysis of
-		    the message's header and content (body).  The program is
-		    able to learn from the user's classifications and
-		    corrections.  It is based on a Bayesian filter.'';
+    longDescription = ''
+      Bogofilter is a mail filter that classifies mail as spam or ham
+      (non-spam) by a statistical analysis of the message's header and
+      content (body).  The program is able to learn from the user's
+      classifications and corrections.  It is based on a Bayesian
+      filter.
+    '';
     license = "GPLv2";
   };
 }

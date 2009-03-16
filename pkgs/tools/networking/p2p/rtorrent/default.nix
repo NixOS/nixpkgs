@@ -13,8 +13,6 @@ stdenv.mkDerivation ( rec {
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
   
   meta = {
-    description = "
-      rtorrent is a ncurses client for libtorrent and is ideal for use with screen or dtach.
-    ";
+    description = "An ncurses client for libtorrent, ideal for use with screen or dtach";
   };
 })

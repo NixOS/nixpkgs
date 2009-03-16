@@ -63,6 +63,24 @@ rec {
     };
   };
 
+  tig = stdenv.mkDerivation {
+    name = "tig-0.14.1";
+    src = fetchurl {
+      url = "http://jonas.nitro.dk/tig/releases/tig-0.14.1.tar.gz";
+      sha256 = "1a8mi1pv36v67n31vs95gcibkifnqq5s1x69lz1cz0218yv9s73r";
+    };
+    buildInputs = [ncurses asciidoc xmlto docbook_xsl];
+    installPhase = ''
+      make install
+      make install-doc
+    '';
+    meta = {
+      description = "console git repository browser that additionally can act as a pager for output from various git commands";
+      homepage = http://jonas.nitro.dk/tig/;
+      license = "GPLv2";
+    };
+  };
+
   hg2git = import ./hg2git {
     inherit fetchurl stdenv mercurial coreutils git makeWrapper;
     inherit (bleedingEdgeRepos) sourceByName;

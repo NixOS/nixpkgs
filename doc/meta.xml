@@ -64,10 +64,18 @@ interpretation:</para>
   <varlistentry>
     <term><varname>description</varname></term>
     <listitem><para>A short (one-line) description of the package.
-    Don’t include a period at the end.  This is shown by
-    <command>nix-env -q --description</command> and also on the
-    Nixpkgs release pages.  Example: <literal>"A program that produces
-    a familiar, friendly greeting"</literal></para></listitem>
+    This is shown by <command>nix-env -q --description</command> and
+    also on the Nixpkgs release pages.</para>
+
+    <para>Don’t include a period at the end.  Don’t include newline
+    characters.  Capitalise the first character.  For brevity, don’t
+    repeat the name of package — just describe what it does.</para>
+
+    <para>Wrong: <literal>"libpng is a library that allows you to decode PNG images."</literal></para>
+
+    <para>Right: <literal>"A library for decoding PNG images"</literal></para>
+
+    </listitem>
   </varlistentry>
 
   <varlistentry>

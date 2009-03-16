@@ -1,11 +1,11 @@
 {stdenv, fetchurl, coreutils, pam}:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.6.9p17";
+  name = "sudo-1.7.0";
 
   src = fetchurl {
-    url = "http://www.sudo.ws/sudo/dist/${name}.tar.gz";
-    sha256 = "15j5qzwn1nl9fr6ss3b2fk803cin3w11081rgqmm8vscd3zx8b0y";
+    url = "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz";
+    sha256 = "0y0r74vvcn1q4c220ha0azs8d4kyjr3x3bl6ilxqp77khx1fjzaz";
   };
 
   # `--with-stow' allows /etc/sudoers to be a symlink.  Only it
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   postConfigure = "
     sed -e '/_PATH_MV/d; /_PATH_VI/d' -i config.h
+    echo '#define _PATH_SUDO_LOGFILE \"/var/log/sudo.log\"' >> config.h
+    echo '#define _PATH_SUDO_TIMEDIR \"/var/run/sudo\"' >> config.h
     echo '#define _PATH_MV \"/var/run/current-system/sw/bin/mv\"' >> config.h
     echo '#define _PATH_VI \"/var/run/current-system/sw/bin/nano\"' >> config.h
     echo '#define EDITOR _PATH_VI' >>config.h

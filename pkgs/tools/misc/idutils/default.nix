@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [ ./nix-mapping.patch ];
+
   meta = {
     description = "GNU Idutils, a text searching utility";
 

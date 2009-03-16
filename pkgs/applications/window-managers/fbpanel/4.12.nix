@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	Just a desktop panel.	
-";
+		description = "Just a desktop panel";
 		inherit src;
 	};
 }

@@ -15,6 +15,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://sourceforge.net/projects/mad/;
-    description = "MAD, a high-quality, fixed-point, MPEG audio decoder supporting MPEG-1 and MPEG-2.";
+    description = "A high-quality, fixed-point MPEG audio decoder supporting MPEG-1 and MPEG-2";
   };
 }

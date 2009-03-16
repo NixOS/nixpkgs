@@ -124,12 +124,10 @@ installPhase() {
         # copy include files
         includeDir=$out/lib/modules/$version/build/include
         mkdir -p $includeDir
-        (cd include && cp -a acpi config linux math-emu media net pcmcia rxrpc scsi sound video asm-generic $includeDir)
-        if test -e arch/$archDir/include/asm; then
-            cp -a arch/$archDir/include/asm $includeDir
-        else
-            cp -a include/asm-$archDir $includeDir/asm
-        fi
+        (cd include && cp -a acpi config linux math-emu media net pcmcia rxrpc scsi sound video asm-generic asm asm-$archDir $includeDir)
+	(cd arch/$archDir/include && cp -a * $includeDir || true)
+	(cd arch/$archDir/include && cp -a asm/* $includeDir/asm/ || true)
+	(cd arch/$archDir/include/asm/mach-generic && cp -a * $includeDir/ || true)
     fi
 }
 

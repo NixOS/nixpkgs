@@ -20,9 +20,7 @@ stdenv.mkDerivation rec {
 		(textClosure localDefs 
 			[doConfigure doCreatePrefix doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-		x2vnc - program to control remote VNC server.
-";
+		description = "A program to control a remote VNC server";
 		inherit src;
 	};
 }

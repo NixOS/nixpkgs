@@ -81,5 +81,7 @@ rec {
           else takeTillSlash (__sub left 1) (__add c 1) s; in
       takeTillSlash (__sub (__stringLength s) 1) 1 s;
 
-  
+  # Compares strings not requiring context equality
+  # Obviously, a workaround but works on all Nix versions
+  eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
 }

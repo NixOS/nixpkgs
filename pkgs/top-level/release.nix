@@ -2,102 +2,150 @@ let
 
   allPackages = import ./all-packages.nix;
 
-  test = f: {system}: f (allPackages {inherit system;});
-  
+  pkgs = allPackages {};
 
-  jobs = {
+  /* Perform a job on the given set of platforms.  The function `f' is
+     called by Hydra for each platform, and should return some job
+     to build on that platform.  `f' is passed the Nixpkgs collection
+     for the platform in question. */
+  testOn = systems: f: {system ? builtins.currentSystem}:
+    if pkgs.lib.elem system systems then f (allPackages {inherit system;}) else {};
 
-  
-    tarball =
-      { nixpkgs ? {path = (allPackages {}).lib.cleanSource ../..; rev = 1234;}
-      , officialRelease ? false
-      }:
+  /* Map an attribute of the form `foo = [platforms...]'  to `testOn
+     [platforms...] (pkgs: pkgs.foo)'. */
+  mapTestOn = pkgs.lib.mapAttrsRecursive
+    (path: value: testOn value (pkgs: pkgs.lib.getAttrFromPath path pkgs));
 
-      with import nixpkgs.path {};
+  /* Common platform groups on which to test packages. */
+  all = ["i686-linux" "x86_64-linux" "i686-darwin" "i686-cygwin"];
+  linux = ["i686-linux" "x86_64-linux"];
+  allBut = (platform: pkgs.lib.filter (x: platform != x) all);
 
-      releaseTools.makeSourceTarball {
-        name = "nixpkgs-tarball";
-        src = nixpkgs;
-        inherit officialRelease;
+in {
 
-        buildInputs = [
-          lzma
-          libxml2 # Needed for the release notes.
-          libxslt
-          w3m
-          nixUnstable # Needed to check whether the expressions are valid.
-        ];
-    
-        configurePhase = ''
-          eval "$preConfigure"
-          releaseName=nixpkgs-$(cat $src/VERSION)$VERSION_SUFFIX
-          echo "release name is $releaseName"
-          echo $releaseName > relname
-        '';
+  tarball = import ./make-tarball.nix;
 
-        dontBuild = false;
-                
-        buildPhase = ''
-          echo "building docs..."
-          (cd doc && make docbookxsl=${docbook5_xsl}/xml/xsl/docbook) || false
-          ln -s doc/NEWS.txt NEWS
-        '';
- 
-        doCheck = true;
+} // mapTestOn {
 
-        checkPhase = ''
-          # Check that we can fully evaluate build-for-release.nix.
-          header "checking pkgs/top-level/build-for-release.nix"
-          nix-env --readonly-mode -f pkgs/top-level/build-for-release.nix \
-              -qa \* --drv-path --system-filter \* --system
-          stopNest
+  MPlayer = linux;
+  apacheHttpd = linux;
+  at = linux;
+  autoconf = all;
+  avahi = allBut "i686-cygwin";  # Cygwin builds fail
+  bash = all;
+  bazaar = all;
+  bitlbee = linux;
+  boost = all;
+  cdrkit = linux;
+  cedet = all;
+  emacs22 = all;
+  emacsUnicode = all;
+  emms = all;
+  eprover = linux;
+  evince = all;
+  firefox3 = linux;
+  gcc = all;
+  gdb = all;
+  ghostscript = all;
+  ghostscriptX = all;
+  git = all;
+  gnuplot = all;
+  gnuplotX = linux;
+  gnutls = all;
+  graphviz = all;
+  guile = linux;  # tests fail on Cygwin
+  guileLib = linux;
+  hello = all;
+  icecat3Xul = [ "i686-linux" ];
+  idutils = all;
+  imagemagick = all;
+  inetutils = linux;
+  inkscape = linux;
+  jnettop = linux;
+  kernel_2_6_28 = linux;
+  libsmbios = linux;
+  libtool = all;
+  lout = linux;
+  lsh = linux;
+  manpages = all;
+  maxima = all;
+  mercurial = all;
+  mesa = linux;
+  monotone = all;
+  mysql = all;
+  nano = all;
+  nssmdns = linux;
+  ntfs3g = linux;
+  octave = all;
+  openoffice = linux;
+  openssh = all;
+  pan = linux;
+  perl = all;
+  pidgin = all;
+  pltScheme = linux;
+  pmccabe = all;
+  portmap = linux;
+  postgresql = all;
+  python = all;
+  pythonFull = linux;
+  rubber = all;
+  ruby = all;
+  qt3 = all;
+  qt4 = all;
+  rsync = all;
+  sloccount = all;
+  strace = linux;
+  subversion = linux;
+  tcpdump = linux;
+  texinfo = all;
+  texLive = linux;
+  thunderbird = linux;
+  vimHugeX = all;
+  vlc = linux;
+  webkit = all;
+  wine = ["i686-linux"];
+  wirelesstools = linux;
+  xlockmore = linux;
+  xpdf = linux;
+  zile = linux;
 
-          # Check that all-packages.nix evaluates on a number of platforms.
-          for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd powerpc-darwin i686-darwin; do
-              header "checking pkgs/top-level/all-packages.nix on $platform"
-              nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
-                  --argstr system "$platform" \
-                  -qa \* --drv-path --system-filter \* --system
-              stopNest
-          done
-        '';
-
-        distPhase = ''
-          ensureDir $out/tarballs
-          mkdir ../$releaseName
-          cp -prd . ../$releaseName
-          (cd .. && tar cfa $out/tarballs/$releaseName.tar.bz2 $releaseName) || false
-          (cd .. && tar cfa $out/tarballs/$releaseName.tar.lzma $releaseName) || false
-
-          ensureDir $out/release-notes
-          cp doc/NEWS.html $out/release-notes/index.html
-          cp doc/style.css $out/release-notes/
-          echo "doc release-notes $out/release-notes" >> $out/nix-support/hydra-build-products
-
-          ensureDir $out/manual
-          cp doc/manual.html $out/manual/index.html
-          cp doc/style.css $out/manual/
-          echo "doc manual $out/manual" >> $out/nix-support/hydra-build-products
-        '';
-      };
-
-
-      # All the top-level packages that want to build in the build farm.
-      # !!! notation is kinda clumsy
-
-      MPlayer = test (pkgs: pkgs.MPlayer);
-      autoconf = test (pkgs: pkgs.autoconf);
-      bash = test (pkgs: pkgs.bash);
-      firefox3 = test (pkgs: pkgs.firefox3);
-      gcc = test (pkgs: pkgs.gcc);
-      hello = test (pkgs: pkgs.hello);
-      libtool = test (pkgs: pkgs.libtool);
-      pan = test (pkgs: pkgs.pan);
-      perl = test (pkgs: pkgs.perl);
-      python = test (pkgs: pkgs.python);
-      thunderbird = test (pkgs: pkgs.thunderbird);
-      wine = test (pkgs: pkgs.wine);
-              
+  gtkLibs = {
+    gtk = linux;
   };
 
-in jobs
+  kde42 = {
+    kdeadmin = linux;
+    kdeartwork = linux;
+    kdebase = linux;
+    kdebase_runtime = linux;
+    kdebase_workspace = linux;
+    kdeedu = linux;
+    kdegames = linux;
+    kdegraphics = linux;
+    kdelibs = linux;
+    kdemultimedia = linux;
+    kdenetwork = linux;
+    kdepim = linux;
+    kdeplasma_addons = linux;
+    kdesdk = linux;
+    kdetoys = linux;
+    kdeutils = linux;
+    kdewebdev = linux;
+  };
+
+  kernelPackages_2_6_27 = {
+    aufs = linux;
+    kernel = linux;
+  };
+  
+  kernelPackages_2_6_28 = {
+    aufs = linux;
+    kernel = linux;
+  };
+  
+  xorg = {
+    libX11 = linux;
+    xorgserver = linux;
+  };
+
+}

@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     description = "Semantic, infrastructure for parser based text analysis in Emacs";
 
     longDescription = ''
+      This package is now part of CEDET, please upgrade.
+
       Semantic is an infrastructure for parser based text analysis in
       Emacs.  It is a lexer, parser-generator, and parser.  It is
       written in Emacs Lisp and is customized to the way Emacs thinks

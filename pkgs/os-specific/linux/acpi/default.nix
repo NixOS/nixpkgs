@@ -9,10 +9,12 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = ''Linux ACPI client is a small command-line
-                    program that attempts to replicate the functionality of
-		    the "old" `apm' command on ACPI systems.  It includes
-		    battery and thermal information.'';
+    longDescription = ''
+      Linux ACPI client is a small command-line
+      program that attempts to replicate the functionality of
+      the "old" `apm' command on ACPI systems.  It includes
+      battery and thermal information.
+    '';
     homepage = http://grahame.angrygoats.net/acpi.shtml;
     license = "GPLv2+";
   };

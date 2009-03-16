@@ -2,10 +2,10 @@
 , guileLib }:
 
 stdenv.mkDerivation rec {
-  name = "g-wrap-1.9.11";
+  name = "g-wrap-1.9.12";
   src = fetchurl {
     url = "mirror://savannah/g-wrap/${name}.tar.gz";
-    sha256 = "1j8zchilsr0dziyr21az4x3xxyr4d3jc8nybag9rp6pjj8k49adn";
+    sha256 = "1bkca6vj92phgk46n1qid6naxgx58kk4p1y29pap6177j81s7cc6";
   };
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's

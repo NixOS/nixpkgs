@@ -52,8 +52,10 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.intrepid.com/upc.html;
     license = "GPL/LGPL";
-    description = ''A GCC-based compiler for the Unified Parallel C (UPC)
-                    language, a distributed shared memory aware variant of
-		    C (see http://upc.gwu.edu/).'';
+    longDscription = ''
+      A GCC-based compiler for the Unified Parallel C (UPC) language,
+      a distributed shared memory aware variant of C (see
+      http://upc.gwu.edu/).
+    '';
   };
 }

@@ -1,16 +1,22 @@
 {stdenv, fetchurl, readline}:
 
-stdenv.mkDerivation {
-  name = "sqlite-3.6.3";
+stdenv.mkDerivation rec {
+  name = "sqlite-3.6.10";
 
   # Note: don't use the "amalgamation" source release, since it
   # doesn't install sqlite3.pc.
   src = fetchurl {
-    url = http://www.sqlite.org/sqlite-3.6.3.tar.gz;
-    sha256 = "0kd9dpbrjp05159qsqwrm00h6a2cqjxqwpi33b6i5q8mr1bzkz1i";
+    url = "http://www.sqlite.org/${name}.tar.gz";
+    sha256 = "00dabyjg0530ng52b8lq6hwb6h181wl27ix5l7ayib0am8sdnmr1";
   };
 
   buildInputs = [readline];
+
+  configureFlags = "--disable-static --with-readline-inc=-I${readline}/include";
+
+  postInstall = ''
+    gcc -L$out/lib -I$out/include tool/genfkey.c -lsqlite3 -o $out/bin/genfkey
+  '';
 
   meta = {
     homepage = http://www.sqlite.org/;

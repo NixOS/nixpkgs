@@ -1,5 +1,6 @@
 args: with args;
-stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation rec {
   pname = "SDL_mixer";
   version = "1.2.8";
 
@@ -14,11 +15,9 @@ stdenv.mkDerivation (rec {
 
   configureFlags = "--disable-music-ogg-shared";
 
-  postInstall = "ln -s \${out}/include/SDL/SDL_mixer.h \${out}/include/";
+  postInstall = "ln -s $out/include/SDL/SDL_mixer.h $out/include/";
 
   meta = {
-    description = "
-      SDL multi-channel audio mixer library.
-";
+    description = "SDL multi-channel audio mixer library";
   };
-})
+}

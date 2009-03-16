@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.2.0";
+  name = "poppler-data-0.2.1";
 
   src = fetchurl {
     url = "http://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "0cpa1krpd6xjbn1nv825z5p8v4cfcypdri4bhzvn2dnjy997x9k8";
+    sha256 = "0q56l5v89pnpkm1kqmwb1sx2zcx89q6bxz2hq2cpkq5f8kgvl3c9";
   };
 
   installFlags = "prefix=\${out}";

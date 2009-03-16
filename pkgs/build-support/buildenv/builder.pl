@@ -165,3 +165,7 @@ my $manifest = $ENV{"manifest"};
 if ($manifest ne "") {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }
+
+
+system("eval \"\$postBuild\"") == 0
+    or die "post-build hook failed";

@@ -17,10 +17,12 @@ rec {
       doCoverageAnalysis = true;
     } // args);
 
-  rpmBuild = args: import ./rpm-build.nix vmTools args;
+  rpmBuild = args: import ./rpm-build.nix (
+    { inherit vmTools;
+    } // args);
 
-  debBuild = args: import ./debian-build.nix {inherit vmTools fetchurl;} (
-    { inherit stdenv checkinstall;
+  debBuild = args: import ./debian-build.nix (
+    { inherit stdenv vmTools checkinstall;
     } // args);
 
 }

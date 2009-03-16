@@ -14,8 +14,7 @@ stdenv.mkDerivation {
   patches = [./ploticus-install.patch];
 
   meta = {
-    description = ''Ploticus, a non-interactive software package for
-                    producing plots and charts'';
+    description = "A non-interactive software package for producing plots and charts";
 
     longDescription = ''Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from

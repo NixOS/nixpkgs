@@ -29,13 +29,11 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "libdbi"+version;
+	name = "libdbi-"+version;
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {
-		description = "
-	DB independent interface to DB; DB drivers (mysql only for now).
-";
+		description = "DB independent interface to DB; DB drivers (mysql only for now)";
 		inherit src;
 	};
 }
