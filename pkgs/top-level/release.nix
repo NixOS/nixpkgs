@@ -34,7 +34,7 @@ in {
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
   bazaar = all;
-  bitlbee = all;
+  bitlbee = linux;
   boost = all;
   cdrkit = linux;
   cedet = all;
@@ -58,28 +58,35 @@ in {
   hello = all;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
+  imagemagick = all;
   inetutils = linux;
+  inkscape = linux;
   jnettop = linux;
+  kernel_2_6_28 = linux;
   libsmbios = linux;
   libtool = all;
   lsh = linux;
   manpages = all;
   maxima = all;
   mercurial = all;
+  mesa = linux;
   monotone = all;
   mysql = all;
   nano = all;
   nssmdns = linux;
+  ntfs3g = linux;
   octave = all;
   openoffice = linux;
   openssh = all;
   pan = linux;
   perl = all;
+  pidgin = all;
   pltScheme = linux;
   pmccabe = all;
   portmap = linux;
   postgresql = all;
   python = all;
+  pythonFull = linux;
   ruby = all;
   qt3 = all;
   qt4 = all;
@@ -134,6 +141,7 @@ in {
   
   xorg = {
     libX11 = linux;
+    xorgserver = linux;
   };
 
 }
