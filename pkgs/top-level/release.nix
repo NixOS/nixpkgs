@@ -65,6 +65,7 @@ in {
   kernel_2_6_28 = linux;
   libsmbios = linux;
   libtool = all;
+  lout = linux;
   lsh = linux;
   manpages = all;
   maxima = all;
@@ -87,6 +88,7 @@ in {
   postgresql = all;
   python = all;
   pythonFull = linux;
+  rubber = all;
   ruby = all;
   qt3 = all;
   qt4 = all;
@@ -95,6 +97,8 @@ in {
   strace = linux;
   subversion = linux;
   tcpdump = linux;
+  texinfo = all;
+  texLive = linux;
   thunderbird = linux;
   vimHugeX = all;
   vlc = linux;
