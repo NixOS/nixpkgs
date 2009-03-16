@@ -4522,6 +4522,18 @@ let
     propagatedBuildInputs = [perlCatalystRuntime perlMIMETypes];
   };
 
+  perlCatalystViewDownload = buildPerlPackage rec {
+    name = "Catalyst-View-Download-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAUDEON/${name}.tar.gz";
+      sha256 = "1d5ck28db6vbks7cwkj1qh0glhxskl3vymksv3izfzbk6xnjrabi";
+    };
+    propagatedBuildInputs = [
+      perlCatalystRuntime perlTestWWWMechanizeCatalyst perlTestUseOk
+      perlTextCSV
+    ];
+  };
+
   perlCatalystViewTT = buildPerlPackage rec {
     name = "Catalyst-View-TT-0.28";
     src = fetchurl {
@@ -4808,7 +4820,7 @@ let
       sha256 = "10cjh3rrqi4gwrmkpzilzmaqdrh71wr59035s6b4p2dzd117p931";
     };
     propagatedBuildInputs = [
-      perlTestMockObject perlMouse perlTaskWeaken perlTieUseOk perlTieToObject
+      perlTestMockObject perlMouse perlTaskWeaken perlTestUseOk perlTieToObject
       perlNamespaceClean
     ];
   };
@@ -5941,6 +5953,14 @@ let
     };
   };
 
+  perlTestUseOk = buildPerlPackage rec {
+    name = "Test-use-ok-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AU/AUDREYT/${name}.tar.gz";
+      sha256 = "11inaxiavb35k8zwxwbfbp9wcffvfqas7k9idy822grn2sz5gyig";
+    };
+  };
+
   perlTestWarn = buildPerlPackage {
     name = "Test-Warn-0.11";
     src = fetchurl {
@@ -5977,19 +5997,19 @@ let
     doCheck = false;
   };
 
+  perlTextCSV = buildPerlPackage rec {
+    name = "Text-CSV-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
+      sha256 = "0vb0093v3kk7iczb46zzdg7myfyjldwrk8wbk7ibk56gvj350f7c";
+    };
+  };
+
   perlTextSimpleTable = buildPerlPackage {
     name = "Text-SimpleTable-0.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SR/SRI/Text-SimpleTable-0.05.tar.gz;
       sha256 = "028pdfmr2gnaq8w3iar8kqvrpxcghnag8ls7h4227l9zbxd1k9p9";
-    };
-  };
-
-  perlTieUseOk = buildPerlPackage {
-    name = "Test-use-ok-0.02";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.02.tar.gz;
-      sha256 = "11inaxiavb35k8zwxwbfbp9wcffvfqas7k9idy822grn2sz5gyig";
     };
   };
 
@@ -5999,7 +6019,7 @@ let
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz;
       sha256 = "1x1smn1kw383xc5h9wajxk9dlx92bgrbf7gk4abga57y6120s6m3";
     };
-    propagatedBuildInputs = [perlTieUseOk];
+    propagatedBuildInputs = [perlTestUseOk];
   };
 
   perlTimeDate = buildPerlPackage {
