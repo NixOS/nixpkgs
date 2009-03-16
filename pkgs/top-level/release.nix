@@ -27,6 +27,12 @@ in {
 
 } // mapTestOn {
 
+  glibc = linux;
+  hello = all;
+  pan = linux;
+  stdenv = all;
+
+/*
   MPlayer = linux;
   apacheHttpd = linux;
   at = linux;
@@ -147,5 +153,6 @@ in {
     libX11 = linux;
     xorgserver = linux;
   };
+*/
 
 }
