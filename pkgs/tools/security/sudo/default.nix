@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   postConfigure = "
     sed -e '/_PATH_MV/d; /_PATH_VI/d' -i config.h
+    echo '#define _PATH_SUDO_LOGFILE \"/var/log/sudo.log\"' >> config.h
+    echo '#define _PATH_SUDO_TIMEDIR \"/var/run/sudo\"' >> config.h
     echo '#define _PATH_MV \"/var/run/current-system/sw/bin/mv\"' >> config.h
     echo '#define _PATH_VI \"/var/run/current-system/sw/bin/nano\"' >> config.h
     echo '#define EDITOR _PATH_VI' >>config.h
