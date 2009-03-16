@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gnutar-1.22";
   
   src = fetchurl {
-    url = "mirror://gnu/tar/${name}.tar.bz2";
+    url = "mirror://gnu/tar/tar-1.22.tar.bz2";
     sha256 = "0kdaadflxa6wznbbrp0xlxk9926hrr4yg7wr6m98ygvs35zvdvrw";
   };
   
