@@ -9,8 +9,6 @@ stdenv.mkDerivation {
     sha256 = "0bivbz15x02m02gqs6hs77cgjr2msfrhnvp5xqk359jg6w6llill";
   };
 
-  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
-
   patches = [
     # This patch does the following:
     # 1) Do use the PATH environment variable to find the `pwd' command.

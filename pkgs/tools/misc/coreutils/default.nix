@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "coreutils-6.12";
   
   src = fetchurl {
-    url = mirror://gnu/coreutils/coreutils-7.1.tar.gz;
-    sha256 = "019a7kccrdnim2xigwsgc8dhiw0hb1y9q4344qs5z24sl6gv2g41";
+    url = mirror://gnu/coreutils/coreutils-6.12.tar.gz;
+    sha256 = "12pi7i2mxff5jab48pqpwlz2pi0j6sp9p7bgrcl663iiw81zglj9";
   };
 
   meta = {
