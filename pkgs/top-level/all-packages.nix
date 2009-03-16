@@ -1130,6 +1130,10 @@ let
     inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
   };
 
+  rubber = import ../tools/typesetting/rubber {
+    inherit fetchurl stdenv python texinfo;
+  };
+
   rxp = import ../tools/text/xml/rxp {
     inherit fetchurl stdenv;
   };
