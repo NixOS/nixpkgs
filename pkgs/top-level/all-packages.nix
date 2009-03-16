@@ -844,6 +844,10 @@ let
     inherit stdenv fetchurl zlib nettools;
   };
 
+  iperf = import ../tools/networking/iperf {
+    inherit fetchurl stdenv;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
