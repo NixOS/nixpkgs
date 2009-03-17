@@ -94,7 +94,7 @@ in {
   qt4 = linux;
   rsync = linux;
   sloccount = allBut "i686-cygwin";
-  sqlite3 = allBut "i686-cygwin";
+  sqlite = allBut "i686-cygwin";
   strace = linux;
   subversion = linux;
   tcpdump = linux;
