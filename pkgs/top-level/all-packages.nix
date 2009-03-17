@@ -902,6 +902,10 @@ let
     inherit fetchurl stdenv ghostscript;
   };
 
+  lrzip = import ../tools/compression/lrzip {
+    inherit fetchurl stdenv zlib lzo bzip2 nasm;
+  };
+
   lzma = import ../tools/compression/lzma {
     inherit fetchurl stdenv;
   };
@@ -1140,6 +1144,10 @@ let
 
   rxp = import ../tools/text/xml/rxp {
     inherit fetchurl stdenv;
+  };
+
+  rzip = import ../tools/compression/rzip {
+    inherit fetchurl stdenv bzip2;
   };
 
   sablotron = import ../tools/text/xml/sablotron {
