@@ -968,6 +968,34 @@ let
     inherit fetchurl stdenv gettext;
   };
 
+  multitran = recurseIntoAttrs (let
+      inherit fetchurl stdenv help2man;
+    in rec {
+      multitrandata = import ../tools/text/multitran/data {
+        inherit fetchurl stdenv;
+      };
+
+      libbtree = import ../tools/text/multitran/libbtree {
+        inherit fetchurl stdenv;
+      };
+
+      libmtsupport = import ../tools/text/multitran/libmtsupport {
+        inherit fetchurl stdenv;
+      };
+
+      libfacet = import ../tools/text/multitran/libfacet {
+        inherit fetchurl stdenv libmtsupport;
+      };
+
+      libmtquery = import ../tools/text/multitran/libmtquery {
+        inherit fetchurl stdenv libmtsupport libfacet libbtree multitrandata;
+      };
+
+      mtutils = import ../tools/text/multitran/mtutils {
+        inherit fetchurl stdenv libmtsupport libfacet libbtree libmtquery help2man;
+      };
+    });
+
   mysql2pgsql = import ../tools/misc/mysql2pgsql {
     inherit fetchurl stdenv perl shebangfix;
   };
