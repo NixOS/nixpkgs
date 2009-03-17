@@ -1229,6 +1229,11 @@ let
     inherit fetchurl stdenv libpcap;
   };
 
+  tcng = import ../tools/networking/tcng {
+    inherit fetchurl stdenv iproute bison flex db4 perl;
+    kernel = kernel_2_6_28;
+  };
+
   telnet = import ../tools/networking/telnet {
     inherit fetchurl stdenv ncurses;
   };
