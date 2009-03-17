@@ -2239,7 +2239,7 @@ let
     inherit cabal perl;
   };
 
-  antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
+  antlr = import ../development/tools/parsing/antlr/2.7.7.nix {
     inherit fetchurl stdenv jdk python;
   };
 
