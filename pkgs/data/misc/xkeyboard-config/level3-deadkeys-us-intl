@@ -70,7 +70,7 @@ xkb_symbols "altgr-intl" {
     key <AC03> { [	  d,	D,		eth,		ETH		] };
     key <AC04> { [	  f,	F						] };
     key <AC05> { [	  g,	G						] };
-    key <AC06> { [	  h,	H						] };
+    key <AC06> { [	  h,	H,		hyphen,		nobreakspace	] };
     key <AC07> { [	  j,	J,		idiaeresis,	Idiaeresis	] };
     key <AC08> { [	  k,	K						] };
     key <AC09> { [	  l,	L,		oslash,		Ooblique	] };
@@ -83,7 +83,7 @@ xkb_symbols "altgr-intl" {
     key <AB04> { [	  v,	V,		registered,	registered	] };
     key <AB05> { [	  b,	B,		emdash,		endash		] };
     key <AB06> { [	  n,	N,		ntilde,		Ntilde		] };
-    key <AB07> { [	  m,	M,		mu,		mu		] };
+    key <AB07> { [	  m,	M,		mu,		plusminus	] };
     key <AB08> { [    comma,	less,		ccedilla,	Ccedilla	] };
     key <AB09> { [   period,	greater,	dead_abovedot,	dead_caron	] };
     key <AB10> { [    slash,	question,	questiondown,	dead_hook	] };
