@@ -1381,6 +1381,12 @@ let
     interactive = true;
   });
 
+  bash4 = appendToName "interactive" (import ../shells/bash/4.0.nix {
+    inherit fetchurl stdenv ncurses texinfo bison;
+    readline = readline6;
+    interactive = true;
+  });
+
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
   };
@@ -2782,7 +2788,7 @@ let
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
-  
+
   coredumper = import ../development/libraries/coredumper {
     inherit fetchurl stdenv;
   };
@@ -3778,6 +3784,10 @@ let
   };
 
   readline5 = import ../development/libraries/readline/readline5.nix {
+    inherit fetchurl stdenv ncurses;
+  };
+
+  readline6 = import ../development/libraries/readline/6.0.nix {
     inherit fetchurl stdenv ncurses;
   };
 
@@ -5700,7 +5710,7 @@ let
     };
     propagatedBuildInputs = [
       perlTestDeep perlTestException perlTestWarn
-    ];    
+    ];
   };
 
   perlSQLAbstractLimit = buildPerlPackage rec {
@@ -9291,7 +9301,7 @@ let
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
-  
+
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
