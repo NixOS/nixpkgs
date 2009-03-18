@@ -11,12 +11,10 @@
 
 , # In addition to `contents', the closure of the store paths listed
   # in `packages' are also placed in the Nix store of the CD.  This is
-  # a list of attribute sets {source, target} where `source' if a
-  # store path whose closure will be copied, and `target' is a symlink
-  # to `source' that will be added to the CD.
+  # a list of attribute sets {object, symlink} where `object' if a
+  # store path whose closure will be copied, and `symlink' is a
+  # symlink to `object' that will be added to the CD.
   storeContents ? []
-
-, buildStoreContents ? []
 
 , # Whether this should be an El-Torito bootable CD.
   bootable ? false
@@ -52,7 +50,5 @@ stdenv.mkDerivation {
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
-  exportBuildReferencesGraph =
-    map (x: [("closure-build-" + baseNameOf x.object) x.object]) buildStoreContents;
   pathsFromGraph = "${nixpkgsPath}/pkgs/build-support/kernel/paths-from-graph.pl";
 }

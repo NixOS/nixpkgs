@@ -461,22 +461,17 @@ rec {
     };
   
     # Closures to be copied to the Nix store on the CD.
-    storeContents = lib.uniqListExt {
-      inputList= lib.concatLists 
-        (map systemPackInstallClosures systemPacks);
-      getter = x : x.object.drvPath;
-      compare = lib.eqStrings;
-    };
-  
-    buildStoreContents = lib.uniqList 
-    {
-      inputList=([]
-      ++
-      (if includeBuildDeps then lib.concatLists 
-        (map systemPackInstallBuildClosure systemPacks)
-      else [])
-      );
-    };
+    storeContents =
+      lib.uniqListExt {
+        inputList = lib.concatLists 
+          (map systemPackInstallClosures systemPacks);
+        getter = x: x.object.drvPath;
+        compare = lib.eqStrings;
+      }
+      ++ lib.uniqList {
+        inputList = lib.optionals includeBuildDeps
+          (lib.concatLists (map systemPackInstallBuildClosure systemPacks));
+      };
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
