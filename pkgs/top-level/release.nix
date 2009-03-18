@@ -36,6 +36,7 @@ in {
   bazaar = linux; # first let sqlite3 work on darwin
   bitlbee = linux; 
   boost = all;
+  castleCombat = linux;
   cdrkit = linux;
   cedet = linux;
   emacs22 = all;
@@ -97,7 +98,9 @@ in {
   sqlite = allBut "i686-cygwin";
   strace = linux;
   subversion = linux;
+  superTuxKart = linux;
   tcpdump = linux;
+  teeworlds = linux;
   texinfo = all;
   texLive = linux;
   thunderbird = linux;
