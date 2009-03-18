@@ -89,11 +89,6 @@ xkb_symbols "altgr-intl" {
     key <AB10> { [    slash,	question,	questiondown,	dead_hook	] };
     key <BKSL> { [backslash,	bar,		notsign,	brokenbar	] };
 
-    key   <UP> {	[  Up, Up, uparrow,uparrow	]	};
-    key <LEFT> {	[  Left, Left, leftarrow, leftarrow]	};
-    key <DOWN> {	[  Down, Down, downarrow, downarrow]	};
-    key <RGHT> {	[  Right, Right, rightarrow,rightarrow]	};
-
     // Let's have free choice
     //include "level3(ralt_switch)"
 };
