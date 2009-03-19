@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "aterm-2.8";
 
   src = fetchurl {
-    url = http://homepages.cwi.nl/~daybuild/releases/aterm-2.8.tar.gz;
-    sha256 = "00diz70cg4mprl4yx8lcibya0fkkskx5azyw03bhbbrnnlz9c53r";
+    url = http://www.meta-environment.org/releases/aterm-2.8.tar.gz;
+    sha256 = "1vq4qpmcww3n9v7bklgp7z1yqi9gmk6hcahqjqdzc5ksa089rdms";
   };
 
   patches = [
