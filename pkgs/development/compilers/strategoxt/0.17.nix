@@ -56,9 +56,11 @@ rec {
       sha256 = "93d2919cfbda41a96a944f71ae57704ad1f0efcc0c1084b501a4536f82e25387";
     };
 
-    buildInputs = [pkgconfig aterm strategoxt];
+    buildInputs = [pkgconfig aterm sdf strategoxt];
 
-    configureFlags = "--disable-static";
+    # !!! The explicit `--with-strategoxt' is necessary; otherwise we
+    # get an XTC registration that refers to "/share/strategoxt/XTC".
+    configureFlags = "--disable-static --enable-xtc --with-strategoxt=${strategoxt}";
 
     meta = {
       homepage = http://strategoxt.org/Stratego/JavaFront;
