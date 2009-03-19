@@ -35,16 +35,22 @@ in {
 /*
   MPlayer = linux;
   apacheHttpd = linux;
+ */
   at = linux;
   autoconf = all;
+/*
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
+ */
   bash = all;
+/*
   bazaar = all;
   bitlbee = linux;
   boost = all;
   cdrkit = linux;
   cedet = all;
+ */
   emacs22 = all;
+/*
   emacsUnicode = all;
   emms = all;
   eprover = linux;
@@ -68,7 +74,9 @@ in {
   inetutils = linux;
   inkscape = linux;
   jnettop = linux;
+ */
   kernel_2_6_28 = linux;
+/*
   libsmbios = linux;
   libtool = all;
   lout = linux;
