@@ -60,6 +60,7 @@ in {
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
   imagemagick = allBut "i686-cygwin";
+  impressive = linux;
   inetutils = linux;
   inkscape = linux;
   jnettop = linux;
