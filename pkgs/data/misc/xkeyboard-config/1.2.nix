@@ -20,5 +20,6 @@ stdenv.mkDerivation {
   postInstall = ''
   	rm ''${out}/etc/X11/xkb/compiled || true;
 	cat ${./level3-deadkeys-us-intl} | sed -e 's/altgr-intl/altgr-intl-rich/g' >> $out/etc/X11/xkb/symbols/us
+	sed -e '/xkb_symbols "polytonic"/,/^partial /d' -i $out/etc/X11/xkb/symbols/gr
   '';
 }
