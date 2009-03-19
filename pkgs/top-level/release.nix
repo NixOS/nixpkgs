@@ -50,12 +50,12 @@ in {
   cedet = all;
  */
   emacs22 = all;
-/*
   emacsUnicode = all;
   emms = all;
   eprover = linux;
   */
   evince = all;
+/*
   firefox3 = linux;
   gcc = all;
   gdb = all;
@@ -82,12 +82,12 @@ in {
   jnettop = linux;
  */
   kernel_2_6_28 = linux;
-/*
   libsmbios = linux;
   libtool = all;
   lout = linux;
   lsh = linux;
   manpages = all;
+/*
   maxima = all;
   mercurial = all;
   mesa = linux;
@@ -171,10 +171,10 @@ in {
     kernel = linux;
   };
   
+*/
   xorg = {
     libX11 = linux;
     xorgserver = linux;
   };
-*/
 
 }
