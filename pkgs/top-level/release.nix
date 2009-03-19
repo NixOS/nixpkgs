@@ -53,7 +53,6 @@ in {
   emacsUnicode = all;
   emms = all;
   eprover = linux;
-  */
   evince = all;
 /*
   firefox3 = linux;
