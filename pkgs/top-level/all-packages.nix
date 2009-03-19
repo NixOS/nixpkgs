@@ -1967,7 +1967,7 @@ let
   };
 
   strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt;
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
   };
 
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {

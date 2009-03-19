@@ -1,4 +1,4 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk}:
 
 rec {
 
@@ -44,6 +44,44 @@ rec {
     meta = {
       homepage = http://strategoxt.org/;
       meta = "A language and toolset for program transformation";
+    };
+  };
+
+
+  javafront = stdenv.mkDerivation rec {
+    name = "java-front-0.9pre1823618236";
+
+    src = fetchurl {
+      url = "http://releases.strategoxt.org/java-front/${name}-frb8zh7m/java-front-0.9pre18236.tar.gz";
+      sha256 = "93d2919cfbda41a96a944f71ae57704ad1f0efcc0c1084b501a4536f82e25387";
+    };
+
+    buildInputs = [pkgconfig aterm strategoxt];
+
+    configureFlags = "--disable-static";
+
+    meta = {
+      homepage = http://strategoxt.org/Stratego/JavaFront;
+      meta = "Tools for generating or transforming Java code";
+    };
+  };
+
+
+  dryad = stdenv.mkDerivation rec {
+    name = "dryad-0.2pre1835518355";
+
+    src = fetchurl {
+      url = "http://releases.strategoxt.org/dryad/${name}-zbqfh1rm/dryad-0.2pre18355.tar.gz";
+      sha256 = "2c27b7f82f87ffc27b75969acc365560651275d348b3b5cbb530276d20ae83ab";
+    };
+
+    buildInputs = [jdk pkgconfig aterm sdf strategoxt javafront];
+
+    configureFlags = "--disable-static";
+
+    meta = {
+      homepage = http://strategoxt.org/Stratego/TheDryad;
+      meta = "A collection of tools for developing transformation systems for Java source and bytecode";
     };
   };
 
