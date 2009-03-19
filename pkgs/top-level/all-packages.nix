@@ -7944,7 +7944,9 @@ let
   };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
-    inherit libpng libtiff;
+    inherit libpng libtiff libjpeg imagemagick librsvg 
+      pkgconfig bzip2 zlib;
+    inherit (xlibs) libX11;
   };
 
   dvdauthor = import ../applications/video/dvdauthor {
