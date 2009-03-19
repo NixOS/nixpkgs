@@ -449,7 +449,8 @@ let
   };
 
   bibtextools = import ../tools/typesetting/bibtex-tools {
-    inherit fetchurl stdenv aterm tetex hevea sdf strategoxt;
+    inherit fetchurl stdenv aterm tetex hevea;
+    inherit (strategoPackages016) strategoxt sdf;
   };
 
   bittorrent = import ../tools/networking/p2p/bittorrent {
@@ -1825,13 +1826,6 @@ let
     inherit gmp;
   };
 
-  javafront = import ../development/compilers/java-front {
-    inherit stdenv fetchurl pkgconfig;
-    sdf = sdf24;
-    aterm = aterm25;
-    strategoxt = strategoxt017;
-  };
-
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
   hugs = import ../development/compilers/hugs {
@@ -1965,25 +1959,15 @@ let
     inherit (xlibs) libX11;
   };
 
-  strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
-    inherit stdenv fetchurl pkgconfig aterm;
-  };
+  strategoPackages = strategoPackages017;
 
-  strategoxt = strategoxt017;
-
-  strategoxt016 = import ../development/compilers/strategoxt/0.16.nix {
-    inherit fetchurl pkgconfig sdf aterm;
+  strategoPackages016 = import ../development/compilers/strategoxt/0.16.nix {
+    inherit fetchurl pkgconfig aterm getopt;
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  strategoxt017 = import ../development/compilers/strategoxt/0.17.nix {
-    inherit fetchurl stdenv pkgconfig;
-    sdf = sdf24;
-    aterm = aterm25;
-  };
-
-  strategoxtUtils = import ../development/compilers/strategoxt/utils {
-    inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
+  strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
+    inherit fetchurl stdenv pkgconfig aterm getopt;
   };
 
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
@@ -1999,10 +1983,8 @@ let
   };
 
   webdsl = import ../development/compilers/webdsl {
-    inherit stdenv fetchurl pkgconfig javafront;
-    aterm = aterm25;
-    sdf = sdf24;
-    strategoxt = strategoxt017;
+    inherit stdenv fetchurl pkgconfig;
+    strategoPackages = strategoPackages017;
   };
 
   win32hello = import ../development/compilers/visual-c++/test {
@@ -2577,21 +2559,6 @@ let
     inherit fetchurl stdenv python makeWrapper;
   };
 
-  sdf = import ../development/tools/parsing/sdf {
-    inherit fetchurl aterm getopt pkgconfig;
-    # Note: sdf2-bundle currently requires GNU make 3.80; remove
-    # explicit dependency when this is fixed.
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
-  sdf24 = import ../development/tools/parsing/sdf/sdf2-bundle-2.4.nix {
-    inherit fetchurl getopt pkgconfig;
-    aterm = aterm25;
-    # Note: sdf2-bundle currently requires GNU make 3.80; remove
-    # explicit dependency when this is fixed.
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   sloccount = import ../development/tools/misc/sloccount {
     inherit fetchurl stdenv perl;
   };
@@ -2716,7 +2683,7 @@ let
     inherit fetchurl stdenv aspell which;
   });
 
-  aterm = aterm28;
+  aterm = aterm25;
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
