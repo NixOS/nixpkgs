@@ -2716,15 +2716,7 @@ let
     inherit fetchurl stdenv aspell which;
   });
 
-  aterm = aterm24;
-
-  aterm23 = import ../development/libraries/aterm/2.3.nix {
-    inherit fetchurl stdenv;
-  };
-
-  aterm24 = lowPrio (import ../development/libraries/aterm/2.4.nix {
-    inherit fetchurl stdenv;
-  });
+  aterm = aterm28;
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
@@ -2734,9 +2726,9 @@ let
     inherit fetchurl stdenv;
   };
 
-  aterm27 = lowPrio (import ../development/libraries/aterm/2.7.nix {
+  aterm28 = import ../development/libraries/aterm/2.8.nix {
     inherit fetchurl stdenv;
-  });
+  };
 
   attr = useFromStdenv "attr"
     (import ../development/libraries/attr {
