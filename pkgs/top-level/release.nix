@@ -72,6 +72,7 @@ in {
   maxima = linux;
   mercurial = allBut "i686-cygwin";
   mesa = linux;
+  mono = linux;
   monotone = linux;
   mysql = linux;
   nano = allBut "i686-cygwin";
