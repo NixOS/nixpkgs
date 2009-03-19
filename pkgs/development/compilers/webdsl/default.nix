@@ -1,14 +1,20 @@
-{stdenv, fetchurl, aterm, sdf, strategoxt, pkgconfig, javafront}:
+{stdenv, fetchurl, pkgconfig, strategoPackages}:
 
-stdenv.mkDerivation {
-  name = "webdsl-8.2pre1006";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  name = "webdsl-8.8pre25482548";
 
   src = fetchurl {
-    url = http://buildfarm.st.ewi.tudelft.nl/releases/strategoxt/webdsl-8.2pre1006-c8h623yn/webdsl-8.2.tar.gz;
-    md5 = "07c2471c961acc6467c55594e49da7c1";
+    url = "http://releases.strategoxt.org/webdsl/${name}-chm695sm/webdsl-8.8pre2548.tar.gz";
+    sha256 = "cc4bcc9ef98d35e96b9874d48e061c5bc18cb26300a031becc227a1cd5a1deac";
   };
 
-  inherit aterm sdf strategoxt javafront;
-  buildInputs = [pkgconfig aterm sdf strategoxt javafront];
+  buildInputs = [
+    pkgconfig strategoPackages.aterm strategoPackages.sdf
+    strategoPackages.strategoxt strategoPackages.javafront
+  ];
+
+  meta = {
+    homepage = http://webdsl.org/;
+    description = "A domain-specific language for developing dynamic web applications with a rich data model";
+  };
 }

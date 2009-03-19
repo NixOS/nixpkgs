@@ -1983,8 +1983,7 @@ let
   };
 
   webdsl = import ../development/compilers/webdsl {
-    inherit stdenv fetchurl pkgconfig;
-    strategoPackages = strategoPackages017;
+    inherit stdenv fetchurl pkgconfig strategoPackages;
   };
 
   win32hello = import ../development/compilers/visual-c++/test {
