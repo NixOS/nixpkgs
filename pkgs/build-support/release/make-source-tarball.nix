@@ -49,6 +49,7 @@ stdenv.mkDerivation (
     
     postHook = ''
       ensureDir $out/nix-support
+      shopt -s nullglob
     '';  
 
     postUnpack = ''
@@ -87,7 +88,6 @@ stdenv.mkDerivation (
     tarballs = "*.tar.gz *.tar.bz2";
 
     finalPhase = ''
-      shopt -s nullglob
       for i in $out/tarballs/*; do
         echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
