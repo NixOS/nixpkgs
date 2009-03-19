@@ -1969,16 +1969,17 @@ let
     inherit stdenv fetchurl pkgconfig aterm;
   };
 
-  strategoxt = import ../development/compilers/strategoxt {
+  strategoxt = strategoxt017;
+
+  strategoxt016 = import ../development/compilers/strategoxt/0.16.nix {
     inherit fetchurl pkgconfig sdf aterm;
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  strategoxt017 = import ../development/compilers/strategoxt/strategoxt-0.17.nix {
-    inherit fetchurl pkgconfig;
+  strategoxt017 = import ../development/compilers/strategoxt/0.17.nix {
+    inherit fetchurl stdenv pkgconfig;
     sdf = sdf24;
     aterm = aterm25;
-    stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
   strategoxtUtils = import ../development/compilers/strategoxt/utils {
@@ -1991,19 +1992,6 @@ let
 
   tinycc = import ../development/compilers/tinycc {
     inherit fetchurl stdenv perl texinfo;
-  };
-
-  transformers = import ../development/compilers/transformers {
-    inherit fetchurl pkgconfig sdf stlport;
-    aterm = aterm23;
-
-    stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-
-    strategoxt = import ../development/compilers/strategoxt/strategoxt-0.14.nix {
-      inherit fetchurl pkgconfig sdf;
-      aterm = aterm23;
-      stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-    };
   };
 
   visualcpp = import ../development/compilers/visual-c++ {
