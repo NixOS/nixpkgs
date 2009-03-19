@@ -54,23 +54,29 @@ in {
   emacsUnicode = all;
   emms = all;
   eprover = linux;
+  */
   evince = all;
   firefox3 = linux;
   gcc = all;
   gdb = all;
-  ghostscript = all;
-  ghostscriptX = all;
+  ghostscript = linux;
+  ghostscriptX = linux;
   git = all;
+  /*
   gnuplot = all;
   gnuplotX = linux;
   gnutls = all;
+  */
   graphviz = all;
+  /*
   guile = linux;  # tests fail on Cygwin
   guileLib = linux;
   hello = all;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
-  imagemagick = all;
+  */
+  imagemagick = linux;
+  /*
   inetutils = linux;
   inkscape = linux;
   jnettop = linux;
@@ -91,8 +97,10 @@ in {
   nssmdns = linux;
   ntfs3g = linux;
   octave = all;
+  */
   openoffice = linux;
-  openssh = all;
+  openssh = linux;
+  /*
   pan = linux;
   perl = all;
   pidgin = all;
@@ -104,20 +112,26 @@ in {
   pythonFull = linux;
   rubber = all;
   ruby = all;
-  qt3 = all;
-  qt4 = all;
+  */
+  qt3 = linux;
+  qt4 = linux;
+  /*
   rsync = all;
   sloccount = all;
   strace = linux;
   subversion = linux;
   tcpdump = linux;
   texinfo = all;
+  */
   texLive = linux;
   thunderbird = linux;
   vimHugeX = all;
+  /*
   vlc = linux;
+  */
   webkit = all;
   wine = ["i686-linux"];
+  /*
   wirelesstools = linux;
   xlockmore = linux;
   xpdf = linux;
