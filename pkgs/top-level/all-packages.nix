@@ -8243,6 +8243,14 @@ let
     inherit (xlibs) libX11;
   };
 
+  # Impressive, formerly known as "KeyJNote".
+  impressive = import ../applications/office/impressive {
+    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
+
+    # XXX These are the PyOpenGL dependencies, which we need here.
+    inherit setuptools mesa freeglut;
+  };
+
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig
@@ -8277,13 +8285,6 @@ let
 
   k3b = import ../applications/misc/k3b {
     inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
-  };
-
-  keyjnote = import ../applications/office/keyjnote {
-    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
-
-    # XXX These are the PyOpenGL dependencies, which we need here.
-    inherit setuptools mesa freeglut;
   };
 
   kino = import ../applications/video/kino {
