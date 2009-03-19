@@ -69,6 +69,11 @@ stdenv.mkDerivation (
     autoconfPhase = ''
       export VERSION=${version}
       export VERSION_SUFFIX=${versionSuffix}
+
+      # `svn-revision' is set for backwards compatibility with the old
+      # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
+      # update it eventually.)
+      echo ${versionSuffix} | sed -e s/pre// > svn-revision
     
       eval "$preAutoconf"
     
