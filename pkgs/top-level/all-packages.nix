@@ -9713,11 +9713,18 @@ let
       sqlite subversion pysqlite;
   };
 
-  wine = import ../misc/emulators/wine {
-    inherit fetchurl stdenv flex bison mesa ncurses
-      libpng libjpeg alsaLib lcms xlibs freetype
-      fontconfig fontforge libxml2 libxslt openssl;
-  };
+  wine =
+    if system == "x86_64-linux" then
+      # Can't build this in 64-bit; use a 32-bit build instead.
+      (import ./all-packages.nix {system = "i686-linux";}).wine
+      # some hackery to make nix-env show this package on x86_64...
+      // {system = "x86_64-linux";}
+    else
+      import ../misc/emulators/wine {
+        inherit fetchurl stdenv flex bison mesa ncurses
+          libpng libjpeg alsaLib lcms xlibs freetype
+          fontconfig fontforge libxml2 libxslt openssl;
+      };
 
   xosd = import ../misc/xosd {
     inherit fetchurl stdenv;
