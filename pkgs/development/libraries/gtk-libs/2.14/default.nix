@@ -12,7 +12,6 @@ rec {
     inherit glib atk pango;
   });
 
-
   glibmm = (import ./glibmm) (args // { inherit glib; });
 
   pangomm = (import ./pangomm) (args // { inherit pango glibmm cairomm; });

@@ -447,7 +447,8 @@ let
   };
 
   bibtextools = import ../tools/typesetting/bibtex-tools {
-    inherit fetchurl stdenv aterm tetex hevea sdf strategoxt;
+    inherit fetchurl stdenv aterm tetex hevea;
+    inherit (strategoPackages016) strategoxt sdf;
   };
 
   bittorrent = import ../tools/networking/p2p/bittorrent {
@@ -833,6 +834,10 @@ let
     inherit stdenv fetchurl zlib nettools;
   };
 
+  iperf = import ../tools/networking/iperf {
+    inherit fetchurl stdenv;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
@@ -885,6 +890,10 @@ let
 
   lout = import ../tools/typesetting/lout {
     inherit fetchurl stdenv ghostscript;
+  };
+
+  lrzip = import ../tools/compression/lrzip {
+    inherit fetchurl stdenv zlib lzo bzip2 nasm;
   };
 
   lzma = import ../tools/compression/lzma {
@@ -948,6 +957,34 @@ let
   mssys = import ../tools/misc/mssys {
     inherit fetchurl stdenv gettext;
   };
+
+  multitran = recurseIntoAttrs (let
+      inherit fetchurl stdenv help2man;
+    in rec {
+      multitrandata = import ../tools/text/multitran/data {
+        inherit fetchurl stdenv;
+      };
+
+      libbtree = import ../tools/text/multitran/libbtree {
+        inherit fetchurl stdenv;
+      };
+
+      libmtsupport = import ../tools/text/multitran/libmtsupport {
+        inherit fetchurl stdenv;
+      };
+
+      libfacet = import ../tools/text/multitran/libfacet {
+        inherit fetchurl stdenv libmtsupport;
+      };
+
+      libmtquery = import ../tools/text/multitran/libmtquery {
+        inherit fetchurl stdenv libmtsupport libfacet libbtree multitrandata;
+      };
+
+      mtutils = import ../tools/text/multitran/mtutils {
+        inherit fetchurl stdenv libmtsupport libfacet libbtree libmtquery help2man;
+      };
+    });
 
   mysql2pgsql = import ../tools/misc/mysql2pgsql {
     inherit fetchurl stdenv perl shebangfix;
@@ -1127,6 +1164,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  rzip = import ../tools/compression/rzip {
+    inherit fetchurl stdenv bzip2;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
@@ -1212,6 +1253,11 @@ let
 
   tcpdump = import ../tools/networking/tcpdump {
     inherit fetchurl stdenv libpcap;
+  };
+
+  tcng = import ../tools/networking/tcng {
+    inherit fetchurl stdenv iproute bison flex db4 perl;
+    kernel = kernel_2_6_28;
   };
 
   telnet = import ../tools/networking/telnet {
@@ -1363,6 +1409,12 @@ let
 
   bashInteractive = appendToName "interactive" (import ../shells/bash {
     inherit fetchurl stdenv readline;
+    interactive = true;
+  });
+
+  bash4 = appendToName "interactive" (import ../shells/bash/4.0.nix {
+    inherit fetchurl stdenv ncurses texinfo bison;
+    readline = readline6;
     interactive = true;
   });
 
@@ -1763,13 +1815,6 @@ let
     inherit gmp;
   };
 
-  javafront = import ../development/compilers/java-front {
-    inherit stdenv fetchurl pkgconfig;
-    sdf = sdf24;
-    aterm = aterm25;
-    strategoxt = strategoxt017;
-  };
-
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
   hugs = import ../development/compilers/hugs {
@@ -1903,24 +1948,15 @@ let
     inherit (xlibs) libX11;
   };
 
-  strategoLibraries = import ../development/compilers/strategoxt/libraries/stratego-libraries-0.17pre.nix {
-    inherit stdenv fetchurl pkgconfig aterm;
-  };
+  strategoPackages = strategoPackages017;
 
-  strategoxt = import ../development/compilers/strategoxt {
-    inherit fetchurl pkgconfig sdf aterm;
+  strategoPackages016 = import ../development/compilers/strategoxt/0.16.nix {
+    inherit fetchurl pkgconfig aterm getopt;
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  strategoxt017 = import ../development/compilers/strategoxt/strategoxt-0.17.nix {
-    inherit fetchurl pkgconfig;
-    sdf = sdf24;
-    aterm = aterm25;
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
-  strategoxtUtils = import ../development/compilers/strategoxt/utils {
-    inherit fetchurl pkgconfig stdenv aterm sdf strategoxt;
+  strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
   };
 
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
@@ -1931,26 +1967,12 @@ let
     inherit fetchurl stdenv perl texinfo;
   };
 
-  transformers = import ../development/compilers/transformers {
-    inherit fetchurl pkgconfig sdf stlport aterm;
-
-    stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-
-    strategoxt = import ../development/compilers/strategoxt/strategoxt-0.14.nix {
-      inherit fetchurl pkgconfig sdf aterm;
-      stdenv = overrideGCC (overrideInStdenv stdenv [gnumake380]) gcc34;
-    };
-  };
-
   visualcpp = import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
   };
 
   webdsl = import ../development/compilers/webdsl {
-    inherit stdenv fetchurl pkgconfig javafront;
-    aterm = aterm25;
-    sdf = sdf24;
-    strategoxt = strategoxt017;
+    inherit stdenv fetchurl pkgconfig strategoPackages;
   };
 
   win32hello = import ../development/compilers/visual-c++/test {
@@ -2211,7 +2233,7 @@ let
     inherit cabal perl;
   };
 
-  antlr = import ../development/tools/parsing/antlr/antlr-2.7.6.nix {
+  antlr = import ../development/tools/parsing/antlr/2.7.7.nix {
     inherit fetchurl stdenv jdk python;
   };
 
@@ -2519,21 +2541,6 @@ let
     inherit fetchurl stdenv python makeWrapper;
   };
 
-  sdf = import ../development/tools/parsing/sdf {
-    inherit fetchurl aterm getopt pkgconfig;
-    # Note: sdf2-bundle currently requires GNU make 3.80; remove
-    # explicit dependency when this is fixed.
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
-  sdf24 = import ../development/tools/parsing/sdf/sdf2-bundle-2.4.nix {
-    inherit fetchurl getopt pkgconfig;
-    aterm = aterm25;
-    # Note: sdf2-bundle currently requires GNU make 3.80; remove
-    # explicit dependency when this is fixed.
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
   sloccount = import ../development/tools/misc/sloccount {
     inherit fetchurl stdenv perl;
   };
@@ -2658,15 +2665,15 @@ let
     inherit fetchurl stdenv aspell which;
   });
 
-  aterm = aterm242fixes;
+  aterm = aterm25;
 
-  aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
-    inherit fetchurl stdenv;
-  };
-
-  aterm25 = lowPrio (import ../development/libraries/aterm/2.5.nix {
+  aterm242fixes = lowPrio (import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
   });
+
+  aterm25 = import ../development/libraries/aterm/2.5.nix {
+    inherit fetchurl stdenv;
+  };
 
   aterm28 = lowPrio (import ../development/libraries/aterm/2.8.nix {
     inherit fetchurl stdenv;
@@ -2751,7 +2758,7 @@ let
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
-  
+
   coredumper = import ../development/libraries/coredumper {
     inherit fetchurl stdenv;
   };
@@ -3161,8 +3168,7 @@ let
   intltool = gnome.intltool;
 
   jasper = import ../development/libraries/jasper {
-    inherit fetchurl stdenv unzip libjpeg freeglut mesa;
-    inherit (xlibs) xproto libX11 libICE libXmu libXi libXext libXt;
+    inherit fetchurl stdenv unzip xlibs libjpeg;
   };
 
   lablgtk = import ../development/libraries/lablgtk {
@@ -5672,7 +5678,7 @@ let
     };
     propagatedBuildInputs = [
       perlTestDeep perlTestException perlTestWarn
-    ];    
+    ];
   };
 
   perlSQLAbstractLimit = buildPerlPackage rec {
@@ -6428,15 +6434,9 @@ let
     inherit fetchurl stdenv apacheHttpd jdk;
   };
 
-  # This function is typically called by the NixOS Upstart job to specify the
-  # right UID/GID for `portmap'.
-  makePortmap = { daemonUser ? false, daemonGID ? false, daemonUID ? false }:
-    (import ../servers/portmap {
-       inherit fetchurl stdenv lib tcpWrapper
-               daemonUser daemonGID daemonUID;
-     });
-
-  portmap = (makePortmap);
+  portmap = makeOverridable (import ../servers/portmap) {
+    inherit fetchurl stdenv lib tcpWrapper;
+  };
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
@@ -7872,7 +7872,9 @@ let
   };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
-    inherit libpng libtiff;
+    inherit libpng libtiff libjpeg imagemagick librsvg 
+      pkgconfig bzip2 zlib;
+    inherit (xlibs) libX11;
   };
 
   dvdauthor = import ../applications/video/dvdauthor {
@@ -8203,6 +8205,14 @@ let
     inherit (xlibs) libX11;
   };
 
+  # Impressive, formerly known as "KeyJNote".
+  impressive = import ../applications/office/impressive {
+    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
+
+    # XXX These are the PyOpenGL dependencies, which we need here.
+    inherit setuptools mesa freeglut;
+  };
+
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
       popt libxml2 libxslt libpng boehmgc fontconfig
@@ -8237,13 +8247,6 @@ let
 
   k3b = import ../applications/misc/k3b {
     inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
-  };
-
-  keyjnote = import ../applications/office/keyjnote {
-    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
-
-    # XXX These are the PyOpenGL dependencies, which we need here.
-    inherit setuptools mesa freeglut;
   };
 
   kino = import ../applications/video/kino {
@@ -9250,7 +9253,7 @@ let
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
-  
+
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
@@ -9621,11 +9624,18 @@ let
       sqlite subversion pysqlite;
   };
 
-  wine = import ../misc/emulators/wine {
-    inherit fetchurl stdenv flex bison mesa ncurses
-      libpng libjpeg alsaLib lcms xlibs freetype
-      fontconfig fontforge libxml2 libxslt openssl;
-  };
+  wine =
+    if system == "x86_64-linux" then
+      # Can't build this in 64-bit; use a 32-bit build instead.
+      (import ./all-packages.nix {system = "i686-linux";}).wine
+      # some hackery to make nix-env show this package on x86_64...
+      // {system = "x86_64-linux";}
+    else
+      import ../misc/emulators/wine {
+        inherit fetchurl stdenv flex bison mesa ncurses
+          libpng libjpeg alsaLib lcms xlibs freetype
+          fontconfig fontforge libxml2 libxslt openssl;
+      };
 
   xosd = import ../misc/xosd {
     inherit fetchurl stdenv;

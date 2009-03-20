@@ -49,6 +49,7 @@ stdenv.mkDerivation (
     
     postHook = ''
       ensureDir $out/nix-support
+      shopt -s nullglob
     '';  
 
     postUnpack = ''
@@ -68,6 +69,11 @@ stdenv.mkDerivation (
     autoconfPhase = ''
       export VERSION=${version}
       export VERSION_SUFFIX=${versionSuffix}
+
+      # `svn-revision' is set for backwards compatibility with the old
+      # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
+      # update it eventually.)
+      echo ${versionSuffix} | sed -e s/pre// > svn-revision
     
       eval "$preAutoconf"
     
@@ -87,7 +93,6 @@ stdenv.mkDerivation (
     tarballs = "*.tar.gz *.tar.bz2";
 
     finalPhase = ''
-      shopt -s nullglob
       for i in $out/tarballs/*; do
         echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
