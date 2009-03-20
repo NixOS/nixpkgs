@@ -320,10 +320,7 @@ let
       openoffice
       pidgin
       postgresql_jdbc
-      sdf
       splashutils_15
-      strategoxt
-      strategoxtUtils
       syslinux
       tinycc
       uml
