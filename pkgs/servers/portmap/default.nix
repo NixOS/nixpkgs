@@ -1,10 +1,11 @@
 { fetchurl, stdenv, lib, tcpWrapper
-, daemonUser, daemonUID, daemonGID }:
+, daemonUser ? false, daemonUID ? false, daemonGID ? false }:
 
 assert daemonUser -> (!daemonUID && !daemonGID);
 
 stdenv.mkDerivation rec {
   name = "portmap-6.0";
+  
   src = fetchurl {
     url = "http://neil.brown.name/portmap/${name}.tgz";
     sha256 = "1pj13ll4mbfwjwpn3fbg03qq9im6v2i8fcpa3ffp4viykz9j1j02";
