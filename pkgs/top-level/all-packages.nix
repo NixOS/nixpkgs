@@ -6462,7 +6462,7 @@ let
                daemonUser daemonGID daemonUID;
      });
 
-  portmap = (makePortmap);
+  portmap = makePortmap {};
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
