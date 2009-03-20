@@ -3186,8 +3186,7 @@ let
   };
 
   jasper = import ../development/libraries/jasper {
-    inherit fetchurl stdenv unzip libjpeg freeglut mesa;
-    inherit (xlibs) xproto libX11 libICE libXmu libXi libXext libXt;
+    inherit fetchurl stdenv unzip xlibs libjpeg;
   };
 
   lablgtk = import ../development/libraries/lablgtk {
