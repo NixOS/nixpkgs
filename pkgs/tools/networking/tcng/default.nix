@@ -3,6 +3,11 @@ args: with args;
 # tcc can even compile kernel modules for speed reason.
 # that would be a nice use case to test!
 
+# something is still wrong. The output can't be pasred sometimes
+# Eg it contains continue/pass,drop/pass, drop/drop. I've replaced
+# them by ok, drop, drop using sed. I'm not sure wether this is the correct way
+# Man pages are missing as well. So use the link at the bottom
+
 let version = "10b"; in
 
 args.stdenv.mkDerivation {
@@ -30,15 +35,17 @@ args.stdenv.mkDerivation {
     IPROUTESRC=$(echo iproute*)
     for script in $(find . -type f); do sed -e 's@#![ ]*/bin/bash@#! /bin/sh@' -i $script; done
     find . -type f | xargs sed -i 's@/usr/bin/perl@${perl}/bin/perl@g'
+    find . -type f | xargs sed -i 's@/lib/cpp@cpp@g'
   '';
 
 
   # gentoo ebulid says tcsim doesn't compile with 2.6 headers..
-  # DATADIR can stillb e overridden by env TOPDIR=...
+  # DATADIR can still be overridden by env TOPDIR=...
+  # Don't know whats it for except including the default .tc files
   configurePhase=''
     cat >> config << EOF
     YACC="yacc"
-    DATA_DIR="/tmp/tcng/where_is_this_used"
+    DATA_DIR="$out/lib/tcng"
     EOF
     ./configure \
     --kernel ${kernel}/lib/modules/2.6.28.6-default/build \
@@ -56,10 +63,12 @@ args.stdenv.mkDerivation {
     make;
   '';
 
+  # manually copy tcc and include files.. see comment above
   installPhase = ''
-    ensureDir $out{,/sbin}
+    ensureDir $out{,/sbin,/lib/tcng/include}
     make DESTDIR=$out install
     cp tcc/tcc $out/sbin
+    cp tcc/*.tc $out/lib/tcng/include
   '';
 
   buildInputs =(with args; [bison flex db4 perl]);
@@ -71,6 +80,7 @@ args.stdenv.mkDerivation {
       longDescription = ''
         useful links: http://linux-ip.net/articles/Traffic-Control-HOWTO,
         http://blog.edseek.com/~jasonb/articles/traffic_shaping/
+        tcng language: http://linux-ip.net/gl/tcng/node9.html tcng language
       '';
   };
 }
