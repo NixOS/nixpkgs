@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gimp-2.6.5";
+  name = "gimp-2.6.6";
   
   src = fetchurl {
-    url = ftp://ftp.gtk.org/pub/gimp/v2.6/gimp-2.6.5.tar.bz2;
-    sha256 = "08g5rc383ijcdfqr9ybrn6qazxqqfq0pndknsgh25z19bhghh2b2";
+    url = ftp://ftp.gtk.org/pub/gimp/v2.6/gimp-2.6.6.tar.bz2;
+    sha256 = "0l875y4krqxxappnbw08s44bp3njjjriwyl8br5wmx25a3x63hjk";
   };
   
   buildInputs = [
