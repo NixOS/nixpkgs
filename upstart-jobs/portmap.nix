@@ -3,7 +3,6 @@
 ###### interface
 let
   inherit (pkgs.lib) mkOption mkIf;
-  inherit (pkgs) makePortmap;
 
   uid = (import ../system/ids.nix).uids.portmap;
   gid = (import ../system/ids.nix).gids.portmap;
@@ -68,7 +67,7 @@ mkIf config.services.portmap.enable {
       name = "portmap";
 
       job =
-        let portmap = makePortmap { daemonUID = uid; daemonGID = gid; };
+        let portmap = pkgs.portmap.override { daemonUID = uid; daemonGID = gid; };
         in ''
           description "ONC RPC portmap"
 
