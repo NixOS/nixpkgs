@@ -3353,7 +3353,8 @@ let
   };
 
   libjpeg = import ../development/libraries/libjpeg {
-    inherit fetchurl stdenv libtool;
+    inherit fetchurl stdenv;
+    libtool = libtool_1_5;
   };
 
   libjpegStatic = lowPrio (appendToName "static" (import ../development/libraries/libjpeg-static {
