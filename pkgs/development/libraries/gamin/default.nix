@@ -8,5 +8,9 @@ stdenv.mkDerivation rec {
 	};
 
 	buildInputs = [python pkgconfig glib];
-	configureFlags = "--enable-shared --disable-static --disable-debug --with-python=${python}";
+
+        # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
+        # <sys/socket.h> with Glibc 2.9.
+	configureFlags = "--enable-shared --disable-static --disable-debug"
+          + " --with-python=${python} CPPFLAGS=-D_GNU_SOURCE";
 }
