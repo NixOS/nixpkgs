@@ -39,6 +39,8 @@ in {
   castleCombat = linux;
   cdrkit = linux;
   cedet = linux;
+  compiz = linux;
+  compizFusion = linux;
   emacs22 = all;
   emacsUnicode = all;
   emms = linux;
