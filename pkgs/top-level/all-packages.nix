@@ -2477,11 +2477,11 @@ let
     inherit fetchurl stdenv perl;
   };
 
-  libtool = import ../development/tools/misc/libtool {
+  libtool_1_5 = import ../development/tools/misc/libtool {
     inherit fetchurl stdenv perl m4;
   };
 
-  libtool2 = import ../development/tools/misc/libtool/libtool2.nix {
+  libtool = import ../development/tools/misc/libtool/libtool2.nix {
     inherit fetchurl stdenv lzma perl m4;
   };
 
