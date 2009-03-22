@@ -1,0 +1,3 @@
+#list users here that can (not) connect to vsftpd (only needed when userlistenable=true)
+
+raidbackup
