@@ -51,6 +51,7 @@ in {
   gdb = all;
   ghostscript = linux;
   ghostscriptX = linux;
+  gimp = linux;
   git = linux;
   gnuplot = allBut "i686-cygwin";
   gnuplotX = linux;
