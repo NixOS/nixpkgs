@@ -1279,6 +1279,14 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  ucl = import ../development/libraries/ucl {
+    inherit fetchurl stdenv;
+  };
+
+  upx = import ../tools/compression/upx {
+    inherit fetchurl stdenv ucl zlib;
+  };
+
   vpnc = import ../tools/networking/vpnc {
     inherit fetchurl stdenv libgcrypt perl gawk
       nettools makeWrapper;
