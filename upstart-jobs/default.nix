@@ -309,7 +309,8 @@ let
     (import ../upstart-jobs/vsftpd.nix {
       inherit (pkgs) vsftpd;
       inherit (config.services.vsftpd) anonymousUser localUsers
-        writeEnable anonymousUploadEnable anonymousMkdirEnable;
+        writeEnable anonymousUploadEnable anonymousMkdirEnable
+        chrootlocaluser userlistenable userlistdeny;
     })
 
   # X Font Server

@@ -1,5 +1,6 @@
 { vsftpd, anonymousUser, localUsers
 , anonymousUploadEnable, anonymousMkdirEnable, writeEnable
+, chrootlocaluser, userlistenable, userlistdeny
 }:
 
 {
@@ -69,6 +70,27 @@ anon_mkdir_write_enable=YES"
 else
 "
 anon_mkdir_write_enable=NO"
+) +
+(if chrootlocaluser then
+"
+chroot_local_user=YES"
+else
+"
+chroot_local_user=NO"
+) +
+(if userlistenable then
+"
+userlist_enable=YES"
+else
+"
+userlist_enable=NO"
+) +
+(if userlistdeny then
+"
+userlist_deny=YES"
+else
+"
+userlist_deny=NO"
 ) +
 "
 background=NO
