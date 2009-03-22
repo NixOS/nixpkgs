@@ -1874,6 +1874,28 @@ in
           Whether mkdir is permitted to anonymous users.
         ";
       };
+
+      chrootlocaluser = mkOption {
+        default = false;
+        description = "
+          Whether u can like out of ur home dir.
+        ";
+      };
+
+      userlistenable  = mkOption {
+        default = false;
+        description = "
+          Whether users are included.
+        ";
+      };
+
+      userlistdeny  = mkOption {
+        default = false;
+        description = "
+          Whether users are excluded.
+        ";
+      };
+
     };
     
     printing = {
