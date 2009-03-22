@@ -1109,6 +1109,10 @@ let
     inherit stdenv fetchurl ncurses;
   };
 
+  pv = import ../tools/misc/pv {
+    inherit fetchurl stdenv;
+  };
+
   pwgen = import ../tools/security/pwgen {
     inherit stdenv fetchurl;
   };
