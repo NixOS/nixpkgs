@@ -1076,6 +1076,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  pdflrf = import ../tools/graphics/pdflrf {
+    inherit fetchurl stdenv expat freetype fontconfig;
+    libstdcpp5 = gcc33.gcc;
+  };
+
   pdsh = import ../tools/networking/pdsh {
     inherit fetchurl stdenv perl;
     readline = if getPkgConfig "pdsh" "readline" true then readline else null;
