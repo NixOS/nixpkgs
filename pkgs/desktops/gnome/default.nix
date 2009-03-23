@@ -110,7 +110,6 @@ rec {
 
   intltool = import ./intltool.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser;
-    input = platform.intltool;
   };
 
 
