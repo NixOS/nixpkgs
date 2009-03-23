@@ -3929,6 +3929,10 @@ let
 
   wxGTK28 = wxGTK28deps null;
 
+  wtk = import ../development/libraries/wtk {
+    inherit fetchurl stdenv unzip xlibs;
+  };
+
   x264 = import ../development/libraries/x264 {
     inherit fetchurl stdenv;
   };
