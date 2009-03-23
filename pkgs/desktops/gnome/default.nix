@@ -64,7 +64,11 @@ rec {
   };
 
   gail = stdenv.mkDerivation {
-    inherit (platform.gail) name src;
+    name = "gail-1.22.3";
+    src = fetchurl {
+      url = "http://ftp.gnome.org/pub/GNOME/sources/gail/1.22/gail-1.22.3.tar.bz2";
+      sha256 = "1s4s0ndjh42i8x2mchz0xm3qcp942vkmz0jsq7ig1d3y4wlk1w03";
+    };
     buildInputs = [pkgconfig atk gtk];
   };
 
