@@ -60,12 +60,12 @@ in {
   gdb = all;
   ghostscript = linux;
   ghostscriptX = linux;
+  */
   git = all;
-  /*
+  gnome = linux;
   gnuplot = all;
   gnuplotX = linux;
   gnutls = all;
-  */
   graphviz = all;
   /*
   guile = linux;  # tests fail on Cygwin
