@@ -43,7 +43,11 @@ rec {
 
   GConf = stdenv.mkDerivation {
     inherit (platform.GConf) name src;
-    buildInputs = [pkgconfig perl glib gtk libxml2 popt gettext perlXMLParser];
+    buildInputs = [
+      pkgconfig perl glib gtk libxml2
+      dbus dbus_glib
+      popt gettext perlXMLParser intltool
+    ];
     propagatedBuildInputs = [ORBit2];
   };
 
@@ -90,7 +94,10 @@ rec {
 
   libgnomecanvas = stdenv.mkDerivation {
     inherit (platform.libgnomecanvas) name src;
-    buildInputs = [pkgconfig libglade perl perlXMLParser gail gettext];
+    buildInputs = [
+      pkgconfig libglade perl perlXMLParser gail
+      gettext intltool
+    ];
     propagatedBuildInputs = [gtk libart_lgpl];
   };
 
@@ -108,7 +115,7 @@ rec {
 
   libgnomeui = import ./libgnomeui.nix {
     inherit fetchurl stdenv gnome pkgconfig perl perlXMLParser
-      libjpeg esound gettext;
+      libjpeg esound gettext intltool;
     input = platform.libgnomeui;
   };
 
