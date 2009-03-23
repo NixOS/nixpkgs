@@ -8,7 +8,7 @@ rec {
 
   # Platform
 
-  platform = import ./src-gnome-platform-2.22.1.nix {
+  platform = import ./src-gnome-platform-2.26.0.nix {
     inherit fetchurl;
   };
 
