@@ -78,7 +78,7 @@ rec {
 
   libgnome = import ./libgnome.nix {
     inherit fetchurl stdenv gnome pkgconfig perl perlXMLParser
-      popt zlib esound gettext;
+      popt zlib esound gettext intltool;
     input = platform.libgnome;
   };
 
@@ -102,7 +102,9 @@ rec {
   };
 
   libbonobo = import ./libbonobo.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser ORBit2 libxml2 popt flex gettext;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser ORBit2
+      dbus dbus_glib libxml2 popt flex
+      gettext intltool;
     yacc = bison;
     input = platform.libbonobo;
   };
