@@ -60,7 +60,7 @@ rec {
     inherit (platform.gnomevfs) name src;
     buildInputs = [
       pkgconfig perl glib libxml2 libbonobo
-      gnomemimedata popt perlXMLParser gettext bzip2
+      gnomemimedata popt perlXMLParser gettext intltool bzip2
       dbus_glib hal openssl samba fam
     ];
     propagatedBuildInputs = [GConf];
