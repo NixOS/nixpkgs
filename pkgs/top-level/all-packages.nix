@@ -1412,12 +1412,6 @@ let
     interactive = true;
   });
 
-  bash4 = appendToName "interactive" (import ../shells/bash/4.0.nix {
-    inherit fetchurl stdenv ncurses texinfo bison;
-    readline = readline6;
-    interactive = true;
-  });
-
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
   };
