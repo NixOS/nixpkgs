@@ -1088,6 +1088,11 @@ let
     inherit (gnome) glib gtk;
   };
 
+  plan9port = import ../tools/system/plan9port {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 xproto libXt xextproto;
+  };
+
   ploticus = import ../tools/graphics/ploticus {
     inherit fetchurl stdenv zlib libpng;
     inherit (xlibs) libX11;
