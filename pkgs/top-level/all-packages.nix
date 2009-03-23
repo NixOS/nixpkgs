@@ -7485,7 +7485,8 @@ let
   };
 
   shared_mime_info = import ../data/misc/shared-mime-info {
-    inherit fetchurl stdenv pkgconfig gettext intltool libxml2;
+    inherit fetchurl stdenv pkgconfig gettext
+      intltool perl perlXMLParser libxml2;
     inherit (gtkLibs) glib;
   };
 
