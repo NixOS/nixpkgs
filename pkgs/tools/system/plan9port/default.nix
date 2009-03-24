@@ -6,8 +6,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    #url = http://swtch.com/plan9port/plan9port-20090318.tgz;
-    url = file:///tmp/plan9port-20090318.tgz;
+    url = http://swtch.com/plan9port/plan9port-20090318.tgz;
     sha256 = "1idb2l1s5j34sa1dj1wwnvj97z5z7cy73qjafrxf2bbda26axzqj";
   };
 
