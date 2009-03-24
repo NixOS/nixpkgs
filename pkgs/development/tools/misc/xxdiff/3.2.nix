@@ -30,7 +30,7 @@ rec {
     cd ..
   '') ["minInit" "doMake" "defEnsureDir" "addInputs"];
       
-  name = "xxdiff" + version;
+  name = "xxdiff-" + version;
   meta = {
     description = "Interactive merge tool";
   };
