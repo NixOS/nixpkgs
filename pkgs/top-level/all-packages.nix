@@ -7614,6 +7614,11 @@ let
     inherit (xlibs) libX11 libXext libSM;
   };
 
+  aangifte2008 = import ../applications/taxes/aangifte-2008 {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext libSM;
+  };
+
   abcde = import ../applications/audio/abcde {
     inherit fetchurl stdenv libcdio cddiscid wget bash vorbisTools
             makeWrapper;
