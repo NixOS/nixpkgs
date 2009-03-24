@@ -7929,7 +7929,7 @@ let
   };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
-    inherit libpng libtiff libjpeg imagemagick librsvg 
+    inherit libpng libtiff libjpeg imagemagick librsvg
       pkgconfig bzip2 zlib;
     inherit (xlibs) libX11;
   };
@@ -8687,7 +8687,7 @@ let
     httpd = apacheHttpd;
   };
 
-  subversion15 = makeOverridable (import ../applications/version-management/subversion-1.5.x) {
+  subversion15 = makeOverridable (import ../applications/version-management/subversion/1.5.nix) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon028;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
@@ -8701,7 +8701,21 @@ let
     httpd = apacheHttpd;
   };
 
-  subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion-1.5.x {
+  subversion16 = makeOverridable (import ../applications/version-management/subversion/1.6.nix) {
+    inherit fetchurl stdenv apr aprutil expat swig zlib jdk sqlite;
+    neon = neon028;
+    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
+    httpServer = getConfig ["subversion" "httpServer"] false;
+    httpSupport = getConfig ["subversion" "httpSupport"] true;
+    sslSupport = getConfig ["subversion" "sslSupport"] true;
+    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
+    perlBindings = getConfig ["subversion" "perlBindings"] false;
+    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
+    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
+    httpd = apacheHttpd;
+  };
+
+  subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion/1.6.nix {
     inherit fetchurl stdenv apr aprutil expat swig jdk;
     neon = import ../development/libraries/neon/0.28.nix {
         inherit fetchurl stdenv libxml2 zlib openssl;
@@ -8712,6 +8726,10 @@ let
     };
     zlib = import ../development/libraries/zlib {
       inherit fetchurl stdenv;
+      static = true;
+    };
+      sqlite = import ../development/libraries/sqlite {
+      inherit fetchurl stdenv readline;
       static = true;
     };
     bdbSupport = true;
