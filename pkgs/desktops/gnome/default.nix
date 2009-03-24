@@ -128,7 +128,7 @@ rec {
 
   # Desktop
 
-  desktop = import ./src-gnome-desktop-2.22.1.nix {
+  desktop = import ./src-gnome-desktop-2.26.0.nix {
     inherit fetchurl;
   };
 
