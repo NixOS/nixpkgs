@@ -111,7 +111,7 @@ rec {
 
   libbonoboui = import ./libbonoboui.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 libglade
-            libgnome libgnomecanvas gettext;
+            libgnome libgnomecanvas gettext intltool;
     input = platform.libbonoboui;
   };
 
