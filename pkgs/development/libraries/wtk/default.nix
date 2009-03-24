@@ -17,5 +17,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://java.sun.com/products/sjwtoolkit/download.html;
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
+    license = "unfree";
   };
 }
