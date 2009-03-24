@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-2.13.16";
+  name = "unison-2.27.57";
   src = fetchurl {
-    url = "http://www.seas.upenn.edu/~bcpierce/unison//download/releases/stable/${name}.tar.gz";
-    sha256 = "808400a933aeb67654edc770822cd186d1b2adc92e7cb5836996c71c69ffe656";
+    url = "http://www.seas.upenn.edu/~bcpierce/unison//download/releases/stable/unison-2.27.57.tar.gz";
+    sha256 = "49299ec14216a8467b2c6ba148f8145bec31fa787433f9ce3851c2d62f0035ae";
   };
 
   buildInputs = [ocaml makeWrapper];
