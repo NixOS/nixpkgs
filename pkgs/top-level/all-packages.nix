@@ -8674,19 +8674,6 @@ let
 
   subversion = subversion15;
 
-  subversion14 = makeOverridable (import ../applications/version-management/subversion-1.4.x) {
-    inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
-    neon = neon026;
-    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
-    httpServer = getConfig ["subversion" "httpServer"] false;
-    sslSupport = getConfig ["subversion" "sslSupport"] true;
-    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
-    perlBindings = getConfig ["subversion" "perlBindings"] false;
-    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
-    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
-    httpd = apacheHttpd;
-  };
-
   subversion15 = makeOverridable (import ../applications/version-management/subversion/1.5.nix) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon028;
