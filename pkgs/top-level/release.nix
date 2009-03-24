@@ -62,7 +62,6 @@ in {
   ghostscriptX = linux;
   */
   git = all;
-  gnome = linux;
   gnuplot = all;
   gnuplotX = linux;
   gnutls = all;
