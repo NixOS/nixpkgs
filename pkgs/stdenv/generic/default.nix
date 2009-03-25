@@ -30,6 +30,10 @@ let {
       }
 
       // {
+
+        meta = {
+          description = "The default build environment for Unix packages in Nixpkgs";
+        };
     
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.

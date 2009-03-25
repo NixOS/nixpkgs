@@ -34,9 +34,14 @@ stdenv.mkDerivation {
   langFortran = if nativeTools then false else gcc ? langFortran;
   shell = if shell == "" then stdenv.shell else shell;
   
-  meta = if gcc != null && (gcc ? meta) then removeAttrs gcc.meta ["priority"] else
-    { description = "System C compiler wrapper";
-    };
+  meta =
+    if gcc != null && (gcc ? meta) then
+      removeAttrs gcc.meta ["priority"] //
+      { description = gcc.meta.description + " (wrapper script)";
+      }
+    else
+      { description = "System C compiler (wrapper script)";
+      };
 
   # The dynamic linker has different names on different Linux platforms.
   dynamicLinker =
