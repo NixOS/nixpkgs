@@ -6658,6 +6658,8 @@ let
     inherit fetchurl stdenv;
   };
 
+  libuuid = e2fsprogs;
+
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
   };
@@ -9544,7 +9546,7 @@ let
   };
 
   ntfsprogs = import ../misc/ntfsprogs {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libuuid;
   };
 
   pgadmin = import ../applications/misc/pgadmin {
