@@ -1914,7 +1914,9 @@ let
   };
 
   monotone = import ../applications/version-management/monotone {
-    inherit stdenv fetchurl boost zlib;
+    inherit stdenv fetchurl boost zlib botan libidn pcre
+      sqlite; 
+    lua = lua5;
   };
 
   monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
@@ -2746,6 +2748,10 @@ let
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
   boost = boostVersionChoice "1.38.0";
+
+  botan = builderDefsPackage (import ../development/libraries/botan) {
+    inherit perl;
+  };
 
   buddy = import ../development/libraries/buddy {
     inherit fetchurl stdenv;

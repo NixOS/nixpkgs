@@ -1,10 +1,17 @@
-{stdenv, fetchurl, boost, zlib}:
+{stdenv, fetchurl, boost, zlib, botan, libidn,
+  lua, pcre, sqlite}:
 
-stdenv.mkDerivation {
-  name = "monotone-0.42";
+let 
+  version = "0.43";
+in stdenv.mkDerivation {
+  name = "monotone-${version}";
   src = fetchurl {
-    url = http://monotone.ca/downloads/0.42/monotone-0.42.tar.gz;
-    sha256 = "0i6srfx0ps8hlgdbn0y7iy9gi33a7vpiwdm5rhxjxgvhn5j9svdr";
+    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.gz";
+    sha256 = "1vfvvk4flv6n7x1nrizjpwpsfhf3dv3b60h7cs4ysgvzb76s41mz";
   };
-  buildInputs = [boost zlib];
+  buildInputs = [boost zlib botan libidn lua pcre sqlite];
+  preConfigure = ''
+    export sqlite_LIBS=-lsqlite3
+    export NIX_LDFLAGS="$NIX_LDFLAGS -ldl"
+  '';
 }
