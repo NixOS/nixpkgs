@@ -1,14 +1,14 @@
-{ stdenv, gtkdoc, pkgconfig, gnomedocutils, perl
-, libxml2, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412
-, libxslt }:
+{ stdenv, gtkdoc, pkgconfig, gnomedocutils, perl, python
+, libxml2, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_43
+, libxslt, scrollkeeper }:
 
 stdenv.mkDerivation {
   inherit (gtkdoc) name src;
 
-  inherit docbook_xml_dtd_412;
-  buildInputs = [ pkgconfig perl gnomedocutils
-    libxml2
-    xmlto  docbook2x  docbook_xsl docbook_xml_dtd_412 libxslt ];
+  inherit docbook_xml_dtd_43;
+  buildInputs = [ pkgconfig perl python gnomedocutils
+    libxml2 scrollkeeper
+    xmlto  docbook2x  docbook_xsl docbook_xml_dtd_43 libxslt ];
 
 
   # maybe there is a better way to pass the needed dtd and xsl files
@@ -20,9 +20,10 @@ stdenv.mkDerivation {
     <!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
     <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
       <nextCatalog  catalog="${docbook_xsl}/xml/xsl/docbook/catalog.xml" />
-      <nextCatalog  catalog="${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml" />
+      <nextCatalog  catalog="${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml" />
     </catalog>
     EOF
-    configureFlags="--with-xml-catalog=$out/nix-support/catalog.xml"
+
+    configureFlags="--with-xml-catalog=$out/nix-support/catalog.xml --disable-scrollkeeper";
   '';
 }

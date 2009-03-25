@@ -9177,6 +9177,7 @@ let
       fetchurl stdenv pkgconfig
       flex bison popt zlib libxml2 libxslt
       perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
+      docbook_xml_dtd_43
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1

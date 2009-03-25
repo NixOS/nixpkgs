@@ -319,8 +319,9 @@ rec {
 
   gtkdoc = import ./gtkdoc.nix {
     inherit (platform) gtkdoc;
-    inherit stdenv pkgconfig gnomedocutils perl libxml2
-      xmlto docbook2x docbook_xsl docbook_xml_dtd_412 libxslt;
+    inherit stdenv pkgconfig gnomedocutils perl python libxml2
+      xmlto docbook2x docbook_xsl docbook_xml_dtd_43 libxslt
+      scrollkeeper;
   };
   
 };
