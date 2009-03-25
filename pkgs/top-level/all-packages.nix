@@ -1179,6 +1179,11 @@ let
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
   };
 
+  rrdtool = import ../tools/misc/rrdtool {
+    inherit stdenv fetchurl gettext perl pkgconfig libxml2 cairo;
+    inherit (gtkLibs) pango;
+  };
+
   rtorrent = import ../tools/networking/p2p/rtorrent {
     inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
   };
