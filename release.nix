@@ -23,7 +23,7 @@ let
         inherit officialRelease;
 
         distPhase = ''
-          releaseName=nixos-$VERSION
+          releaseName=nixos-$VERSION$VERSION_SUFFIX
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
           cp -prd . ../$releaseName
