@@ -1,6 +1,6 @@
-{stdenv, fetchurl, readline, interactive ? false, ncurses ? null, texinfo ? null}:
+{stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null}:
 
-assert interactive -> ncurses != null;
+assert interactive -> readline != null;
 
 stdenv.mkDerivation rec {
   name = "bash-4.0";
