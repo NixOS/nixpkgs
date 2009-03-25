@@ -4,7 +4,7 @@
 # calls the init in the root file system to start the second boot
 # stage.
 
-{ pkgs, config, nixpkgsPath, kernelPackages, modulesTree }:
+{ pkgs, config, kernelPackages, modulesTree }:
 
 rec {
 

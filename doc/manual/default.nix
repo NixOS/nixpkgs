@@ -1,14 +1,12 @@
-{nixpkgsPath ? ../../../nixpkgs, nixpkgs ? null}:
+{nixpkgs ? ../../../nixpkgs}:
 
 let
 
-  pkgs = if nixpkgs == null then 
-    import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {}
-  else nixpkgs;
+  pkgs = import nixpkgs {};
 
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList ""
-      (import ../../system/system.nix {inherit nixpkgsPath; configuration = {};}).optionDeclarations)));
+      (import ../../system/system.nix {inherit nixpkgs; configuration = {};}).optionDeclarations)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${options} 

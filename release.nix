@@ -39,7 +39,7 @@ let
       }:
 
       import "${nixosSrc}/doc/manual" {
-        nixpkgsPath = nixpkgs.outPath;
+        inherit nixpkgs;
       };
 
 
@@ -58,8 +58,8 @@ let
         iso = (import "${nixosSrc}/installer/cd-dvd/rescue-cd.nix" {
           platform = system;
           compressImage = true;
-          nixpkgsPath = nixpkgs.outPath;
           relName = "nixos-${version}";
+          inherit nixpkgs;
         }).rescueCD;
 
       in

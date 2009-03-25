@@ -1,7 +1,6 @@
 { platform ? __currentSystem
 , configuration
-, nixpkgsPath ? ../../nixpkgs
-, nixpkgs ? null
+, nixpkgs ? ../../nixpkgs
 }:
 
 rec {
@@ -27,9 +26,7 @@ rec {
       pkgs configComponents
       config;
 
-  pkgs = if nixpkgs == null then 
-    import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;}
-  else nixpkgs;
+  pkgs = import nixpkgs {system = platform;};
 
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 
@@ -57,7 +54,7 @@ rec {
 
   # The initial ramdisk.
   initialRamdiskStuff = import ../boot/boot-stage-1.nix {
-    inherit pkgs config nixpkgsPath kernelPackages modulesTree;
+    inherit pkgs config kernelPackages modulesTree;
   };
 
   initialRamdisk = initialRamdiskStuff.initialRamdisk;
@@ -65,7 +62,7 @@ rec {
 
   # NixOS installation/updating tools.
   nixosTools = import ../installer {
-    inherit pkgs config nix nixpkgsPath;
+    inherit pkgs config nix;
   };
 
 
@@ -155,7 +152,7 @@ rec {
   # A patched `mount' command that looks in a directory in the Nix
   # store instead of in /sbin for mount helpers (like mount.ntfs-3g or
   # mount.cifs).
-  mount = import "${nixpkgsPath}/pkgs/os-specific/linux/util-linux" {
+  mount = import "${nixpkgs}/pkgs/os-specific/linux/util-linux" {
     inherit (pkgs) fetchurl stdenv;
     buildMountOnly = true;
     mountHelpers = pkgs.buildEnv {
