@@ -175,7 +175,7 @@ rec {
     inherit (desktop.gnomekeyring) name src;
     buildInputs = [
       pkgconfig gtk glib perl perlXMLParser gettext intltool
-      GConf libgcrypt libtasn1
+      GConf libgcrypt libtasn1 dbus dbus_glib python
     ];
     CFLAGS = "-DENABLE_NLS=0";
   };
