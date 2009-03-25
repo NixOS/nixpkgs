@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.tar.bz2;
-    sha256 = "17ajw12jfs721igsr6ny3wxz9j1nm618iplc82wyzins5gn52gdy";
+    sha256 = "0pj879vbwbik8xkgnxy2ll32ljq3bgqjsqapqasq9rkfbkl90a34";
   };
 
   buildInputs = [gmp];
