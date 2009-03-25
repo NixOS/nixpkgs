@@ -92,6 +92,11 @@ rec {
     input = platform.libglade;
   };
 
+  libglademm = import ./libglademm.nix {
+    inherit fetchurl stdenv pkgconfig libglade;
+    inherit (gtkLibs) gtkmm;
+  };
+
   libgnomecanvas = stdenv.mkDerivation {
     inherit (platform.libgnomecanvas) name src;
     buildInputs = [
