@@ -1,10 +1,12 @@
-{ stdenv, gtkdoc, args }: with args;
+{ stdenv, gtkdoc, pkgconfig, gnomedocutils, perl
+, libxml2, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412
+, libxslt }:
 
 stdenv.mkDerivation {
   inherit (gtkdoc) name src;
 
   inherit docbook_xml_dtd_412;
-  buildInputs = [ perl 
+  buildInputs = [ pkgconfig perl gnomedocutils
     libxml2
     xmlto  docbook2x  docbook_xsl docbook_xml_dtd_412 libxslt ];
 
