@@ -1465,7 +1465,7 @@ let
   };
 
   g77 = import ../build-support/gcc-wrapper {
-    name = "g77";
+    name = "g77-wrapper";
     nativeTools = false;
     nativeLibc = false;
     gcc = import ../development/compilers/gcc-3.3 {
@@ -1478,7 +1478,7 @@ let
   };
 
   g77_40 = import ../build-support/gcc-wrapper {
-    name = "g77-4.0";
+    name = "g77-wrapper";
     nativeTools = false;
     nativeLibc = false;
     gcc = import ../development/compilers/gcc-4.0 {
@@ -1492,7 +1492,7 @@ let
   };
 
   g77_41 = import ../build-support/gcc-wrapper {
-    name = "g77-4.1";
+    name = "g77-wrapper";
     nativeTools = false;
     nativeLibc = false;
     gcc = import ../development/compilers/gcc-4.1 {
@@ -1506,23 +1506,8 @@ let
     inherit stdenv;
   };
 
-  g77_42 = import ../build-support/gcc-wrapper {
-    name = "g77-4.2";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-4.2/fortran.nix {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = true;
-      langCC = false;
-      langC = false;
-      inherit gmp mpfr;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-
   gfortran = import ../build-support/gcc-wrapper {
-    name = "gfortran";
+    name = "gfortran-wrapper";
     nativeTools = false;
     nativeLibc = false;
     gcc = import ../development/compilers/gcc-4.2/fortran.nix {
@@ -1899,7 +1884,7 @@ let
 
   /*
   gcj = import ../build-support/gcc-wrapper/default2.nix {
-    name = "gcj";
+    name = "gcj-wrapper";
     nativeTools = false;
     nativeLibc = false;
     gcc = import ../development/compilers/gcc-4.0 {
@@ -2042,7 +2027,7 @@ let
 
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl readline ncurses perl flex;
-    g77 = g77_42;
+    g77 = gfortran;
   };
 
   # mercurial (hg) bleeding edge version
@@ -2050,7 +2035,7 @@ let
     inherit fetchurl readline ncurses perl flex atlas getConfig glibc;
     inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
     stdenv = overrideGCC stdenv gcc40;
-    g77 = g77_42;
+    g77 = gfortran;
     inherit (bleedingEdgeRepos) sourceByName;
   };
 

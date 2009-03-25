@@ -16,6 +16,14 @@ rec {
     else abort "unsupported platform for the pure Linux stdenv";
 
 
+  commonPreHook =
+    ''
+      export NIX_ENFORCE_PURITY=1
+      havePatchELF=1
+      ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
+    '';
+
+
   # The bootstrap process proceeds in several steps.
 
   
@@ -70,11 +78,10 @@ rec {
       preHook = builtins.toFile "prehook.sh"
         ''
           export LD_LIBRARY_PATH=$param1/lib
-          export NIX_ENFORCE_PURITY=1
-          havePatchELF=1
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
+          ${commonPreHook}
         '';
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
@@ -172,7 +179,7 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
-      name = gcc.name;
+      name = "gcc-wrapper";
     };
     inherit fetchurl;
   };
@@ -196,11 +203,7 @@ rec {
     
     inherit system;
     
-    preHook = builtins.toFile "prehook.sh"
-      ''
-        export NIX_ENFORCE_PURITY=1
-        havePatchELF=1
-      '';
+    preHook = builtins.toFile "prehook.sh" commonPreHook;
     
     initialPath = [
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
@@ -211,11 +214,11 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
-      shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
-      name = gcc.name;
+      shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
+      name = "gcc-wrapper";
     };
 
-    shell = stdenvLinuxBoot3Pkgs.bash + "/bin/sh";
+    shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
     
     fetchurlBoot = fetchurl;
     

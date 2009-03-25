@@ -206,6 +206,9 @@ done
 # Add the output as an rpath.
 if test "$NIX_NO_SELF_RPATH" != "1"; then
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+    if test -n "$NIX_LIB64_IN_SELF_RPATH"; then
+        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
+    fi
 fi
 
 
@@ -731,7 +734,7 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-        stripDebugList=${stripDebugList:-lib libexec bin sbin}
+        stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
         if test -n "$stripDebugList"; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
