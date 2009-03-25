@@ -14,27 +14,27 @@ rec {
 
   addErrorContextToAttrs = lib.mapAttrs (a : v : lib.addErrorContext "while evaluating ${a}" v);
 
-  debugVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
-  debugXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
+  traceVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
+  traceXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
 
   # this can help debug your code as well - designed to not produce thousands of lines
-  traceWhatis = x : __trace (whatis x) x;
-  traceMarked = str: x: __trace (str + (whatis x)) x;
+  traceShowVal = x : __trace (showVal x) x;
+  traceShowValMarked = str: x: __trace (str + showVal x) x;
   attrNamesToStr = a : lib.concatStringsSep "; " (map (x : "${x}=") (__attrNames a));
-  whatis = x :
-      if (__isAttrs x) then
-          if (x ? outPath) then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
+  showVal = x :
+      if __isAttrs x then
+          if x ? outPath then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
           else "x is attr set { ${attrNamesToStr x} }"
-      else if (__isFunction x) then "x is a function"
-      else if (x == []) then "x is an empty list"
-      else if (__isList x) then "x is a list, first item is : ${whatis (__head x)}"
-      else if (x == true) then "x is boolean true"
-      else if (x == false) then "x is boolean false"
-      else if (x == null) then "x is null"
+      else if __isFunction x then "x is a function"
+      else if x == [] then "x is an empty list"
+      else if __isList x then "x is a list, first item is : ${showVal (__head x)}"
+      else if x == true then "x is boolean true"
+      else if x == false then "x is boolean false"
+      else if x == null then "x is null"
       else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
   # trace the arguments passed to function and its result 
-  traceCall  = n : f : a : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
-  traceCall2 = n : f : a : b : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
-  traceCall3 = n : f : a : b : c : let t = n2 : x : traceMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+  traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
+  traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
+  traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
 }
