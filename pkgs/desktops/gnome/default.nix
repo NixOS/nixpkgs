@@ -173,7 +173,10 @@ rec {
 
   gnomekeyring = stdenv.mkDerivation {
     inherit (desktop.gnomekeyring) name src;
-    buildInputs = [pkgconfig gtk glib perl perlXMLParser gettext GConf libgcrypt libtasn1];
+    buildInputs = [
+      pkgconfig gtk glib perl perlXMLParser gettext intltool
+      GConf libgcrypt libtasn1
+    ];
     CFLAGS = "-DENABLE_NLS=0";
   };
 
