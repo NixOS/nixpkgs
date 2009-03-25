@@ -49,12 +49,19 @@ let
       homeDir = getEnv "HOME";
       configFile2 = homeDir + "/.nixpkgs/config.nix";
 
-      body =
+      configExpr =
         if configFile != "" && pathExists configFile
         then import (toPath configFile)
         else if homeDir != "" && pathExists configFile2
         then import (toPath configFile2)
         else {};
+
+      # allow both:
+      # { /* the config */ } and
+      # { pkgsOrig, pkgs, ... } : { /* the config */ }
+      body = if builtins.isFunction configExpr
+        then configExpr { inherit pkgs pkgsOrig; }
+        else configExpr;
     };
 
   # Return an attribute from the Nixpkgs configuration file, or
