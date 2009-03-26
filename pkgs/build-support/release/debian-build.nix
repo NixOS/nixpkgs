@@ -13,7 +13,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
 
     prefix = "/usr";
 
-    phases = "installExtraDebsPhase sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase distPhase";
+    prePhases = "installExtraDebsPhase sysInfoPhase";
   }
 
   // removeAttrs args ["vmTools"] //

@@ -94,7 +94,7 @@ stdenv.mkDerivation (
 
     finalPhase = ''
       for i in $out/tarballs/*; do
-        echo "file source-dist $i" >> $out/nix-support/hydra-build-products
+          echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
 
       # Try to figure out the release name.

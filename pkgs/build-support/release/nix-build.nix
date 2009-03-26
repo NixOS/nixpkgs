@@ -47,15 +47,6 @@ stdenv.mkDerivation (
           src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
       fi
 
-      # Hack to compress log files.  Prevents (by pointer hiding!)
-      # unnecessary dependencies.
-      startLogWrite() {
-          # Use process substitution to send the FIFO output to both
-          # stdout and bzip2.
-          bash -c "tee >(bzip2 > \"$1\".bz2) < \"$2\"" &
-          logWriterPid=$!
-      }
-
       # Set GCC flags for coverage analysis, if desired.
       if test -n "${toString doCoverageAnalysis}"; then
           export NIX_CFLAGS_COMPILE="-O0 -fprofile-arcs -ftest-coverage $NIX_CFLAGS_COMPILE"
