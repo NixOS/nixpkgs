@@ -329,6 +329,10 @@ in {
     kdewebdev = linux;
   };
 
+  kernelPackages_2_6_26 = {
+    kernel = linux;
+  };
+  
   kernelPackages_2_6_27 = {
     # aufs = linux; # kernel seems to be too old for that package 
     kernel = linux;
