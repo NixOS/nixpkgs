@@ -3,7 +3,7 @@
 , libgnome, libgnomeui, scrollkeeper, libxslt
 , libglade, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
-, makeWrapper }:
+, makeWrapper, which }:
 
 stdenv.mkDerivation rec {
   name = "evince-2.26.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libxslt  # for `xsltproc'
     dbus dbus_glib
     poppler libspectre djvulibre
-    makeWrapper
+    makeWrapper which
   ];
 
   configureFlags = "--with-libgnome --enable-dbus --enable-pixbuf "
