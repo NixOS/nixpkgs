@@ -60,7 +60,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       shopt -s nullglob
       for i in $out/debs/*.deb; do
         header "Generated DEB package: $i"
-        dpkg-deb --info $i
+        dpkg-deb --info "$i"
+        pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
+        dpkg -i "$i"
+        dpkg -r "$pkgName"
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done
