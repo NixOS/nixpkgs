@@ -1086,6 +1086,7 @@ let
   pdsh = import ../tools/networking/pdsh {
     inherit fetchurl stdenv perl;
     readline = if getPkgConfig "pdsh" "readline" true then readline else null;
+    rsh = getPkgConfig "pdsh" "rsh" true;
     ssh = if getPkgConfig "pdsh" "ssh" true then openssh else null;
     pam = if getPkgConfig "pdsh" "pam" true then pam else null;
   };
