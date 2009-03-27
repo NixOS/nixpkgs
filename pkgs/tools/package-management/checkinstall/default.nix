@@ -1,5 +1,7 @@
 {stdenv, fetchurl, gettext}:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation {
   name = "checkinstall-1.6.2pre20081116";
 
@@ -29,14 +31,12 @@ stdenv.mkDerivation {
   '';
 
   postInstall =
-    if stdenv.isLinux then
-      # Clear the RPATH, otherwise installwatch.so won't work properly
-      # as an LD_PRELOADed library on applications that load against a
-      # different Glibc.
-      ''
-         patchelf --set-rpath "" $out/lib/installwatch.so
-      ''
-    else "";
+    # Clear the RPATH, otherwise installwatch.so won't work properly
+    # as an LD_PRELOADed library on applications that load against a
+    # different Glibc.
+    ''
+       patchelf --set-rpath "" $out/lib/installwatch.so
+    '';
 
   meta = {
     homepage = http://checkinstall.izto.org/;
