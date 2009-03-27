@@ -52,7 +52,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     installCommand = ''
       export LOGNAME=root
 
-      ${checkinstall}/sbin/checkinstall -y -D make install
+      ${checkinstall}/sbin/checkinstall --nodoc -y -D make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
