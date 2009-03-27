@@ -8525,9 +8525,9 @@ let
     inherit fetchurl zlib glibc stdenv;
 # stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
-    qt = qt3gcc33;
     #33motif = lesstif;
-    libstdcpp5 = gcc33.gcc;
+    qt = if (stdenv.system == "i686-linux") then qt3gcc33 else qt3;
+    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
