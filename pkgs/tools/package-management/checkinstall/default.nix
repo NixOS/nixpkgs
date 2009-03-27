@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gettext}:
 
 stdenv.mkDerivation {
-  name = "checkinstall-1.6.1";
+  name = "checkinstall-1.6.2pre20081116";
 
   src = fetchurl {
-    url = http://checkinstall.izto.org/files/source/checkinstall-1.6.1.tgz;
-    sha256 = "0p6gbbnk4hjwkmv8dr7c4v5wpdnanczavi7yiiivvf45zyfl8lil";
+    url = http://nixos.org/tarballs/checkinstall-1.6.2pre20081116.tar.bz2;
+    sha256 = "0k8i551rcn2g0jxskq2sgy4m85irdf5zsl2q4w9b7npgnybkzsmb";
   };
 
   buildInputs = [gettext];
@@ -15,6 +15,9 @@ stdenv.mkDerivation {
 
     substituteInPlace checkinstall --replace /usr/local/lib/checkinstall $out/lib/checkinstall
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
+
+    substituteInPlace installwatch/create-localdecls \
+      --replace /usr/include/unistd.h ${stdenv.glibc}/include/unistd.h
   '';
 
   postInstall =
@@ -26,12 +29,6 @@ stdenv.mkDerivation {
          patchelf --set-rpath "" $out/lib/installwatch.so
       ''
     else "";
-
-  patches = [
-    # Necessary for building on x86_64, see
-    # http://checkinstall.izto.org/cklist/msg00256.html
-    ./readlink.patch
-  ];
 
   meta = {
     homepage = http://checkinstall.izto.org/;
