@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     # the package.)
     ./empty-dirs.patch
 
-    # Implement the getxattr(), lgetxattr() and __open64_2()
-    # functions.  Needed for doing builds on Ubuntu 8.10.
-    ./syscalls.patch
+    # Implement the getxattr(), lgetxattr(), __open_2() and
+    # __open64_2() functions.  Needed for doing builds on Ubuntu 8.10.
+    ./missing-functions.patch
   ];
 
   buildInputs = [gettext];

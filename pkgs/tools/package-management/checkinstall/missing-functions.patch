@@ -1,6 +1,6 @@
 diff -rc checkinstall-orig/installwatch/installwatch.c checkinstall/installwatch/installwatch.c
 *** checkinstall-orig/installwatch/installwatch.c	2009-03-12 13:40:24.000000000 +0100
---- checkinstall/installwatch/installwatch.c	2009-03-27 18:38:58.000000000 +0100
+--- checkinstall/installwatch/installwatch.c	2009-03-27 22:42:19.000000000 +0100
 ***************
 *** 110,115 ****
 --- 110,117 ----
@@ -118,19 +118,43 @@ diff -rc checkinstall-orig/installwatch/installwatch.c checkinstall/installwatch
   int creat64(const char *pathname, __mode_t mode) {
 ***************
 *** 3663,3668 ****
---- 3751,3767 ----
+--- 3751,3791 ----
   	return result;
   }
   
++ int __open_2(const char *pathname, int flags, ...) {
++ 	va_list ap;
++ 	mode_t mode;
++         
++ #if DEBUG
++ 	debug(2,"__open_2(%s,%d,mode)\n",pathname,flags);
++ #endif
++ 
++ 	va_start(ap, flags);
++ 	mode = va_arg(ap, mode_t);
++ 	va_end(ap);
++         
++         /* The open() function in Glibc 2.9 is an always-inline
++            function that may call __open_2(), so it's important that
++            we handle it.  I don't know what __open_2() is supposed to
++            do, but redirecting it to open() seems to work fine.  */
++         
++         return open(pathname,flags,mode);
++ }
++ 
 + int __open64_2(const char *pathname, int flags, ...) {
++ 	va_list ap;
++ 	mode_t mode;
++         
 + #if DEBUG
 + 	debug(2,"__open64_2(%s,%d,mode)\n",pathname,flags);
 + #endif
-+         /* The open() function in Glibc 2.9 is an always-inline
-+            function that may call __open64_2, so it's important that
-+            we handle it.  I don't know what __open64_2 is supposed to
-+            do, but redirecting it to open64 seems to work fine.  */
-+         return open64(pathname,flags);
++ 
++ 	va_start(ap, flags);
++ 	mode = va_arg(ap, mode_t);
++ 	va_end(ap);
++         
++         return open64(pathname,flags,mode);
 + }
 + 
   struct dirent64 *readdir64(DIR *dir) {
