@@ -16,6 +16,10 @@ stdenv.mkDerivation {
     # /var/lib/mystuff', then /var/lib/mystuff should be included in
     # the package.)
     ./empty-dirs.patch
+
+    # Implement the getxattr(), lgetxattr() and __open64_2()
+    # functions.  Needed for doing builds on Ubuntu 8.10.
+    ./syscalls.patch
   ];
 
   buildInputs = [gettext];
