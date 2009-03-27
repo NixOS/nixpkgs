@@ -8,6 +8,14 @@ stdenv.mkDerivation {
     sha256 = "0k8i551rcn2g0jxskq2sgy4m85irdf5zsl2q4w9b7npgnybkzsmb";
   };
 
+  patches = [
+    # Include empty directories created by the installation script in
+    # generated packages.  (E.g., if a `make install' does `mkdir
+    # /var/lib/mystuff', then /var/lib/mystuff should be included in
+    # the package.)
+    ./empty-dirs.patch
+  ];
+
   buildInputs = [gettext];
 
   preBuild = ''
