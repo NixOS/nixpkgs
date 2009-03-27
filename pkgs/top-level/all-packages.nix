@@ -2582,8 +2582,9 @@ let
   };
 
   # couldn't find the source yet
-  selenium_rc_binary = import ../development/tools/selenium/remote-control {
+  seleniumRCBin = import ../development/tools/selenium/remote-control {
     inherit fetchurl stdenv unzip;
+    jre = jdk;
   };
 
   scons = import ../development/tools/build-managers/scons {
