@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "lzo-2.02";
+  name = "lzo-2.03";
   
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "1i9g9bdrmyn6546rnck3kkh8nssfaw75m2rxir4sn7bwvnsfryx2";
+    sha256 = "8b1b0da8f757b9ac318e1c15a0eac8bdb56ca902a2dd25beda06c0f265f22591";
   };
   
   configureFlags = "--enable-shared --disable-static";
@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A data compresion library suitable for real-time data de-/compression";
     homepage = http://www.oberhumer.com/opensource/lzo;
+    license = "GPLv2+";
   };
 }

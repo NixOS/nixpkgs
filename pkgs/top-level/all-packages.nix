@@ -914,12 +914,16 @@ let
     inherit fetchurl stdenv zlib lzo bzip2 nasm;
   };
 
+  lsh = import ../tools/networking/lsh {
+    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
+  };
+
   lzma = import ../tools/compression/lzma {
     inherit fetchurl stdenv;
   };
 
-  lsh = import ../tools/networking/lsh {
-    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
+  lzop = import ../tools/compression/lzop {
+    inherit fetchurl stdenv lzo;
   };
 
   man = import ../tools/misc/man {
