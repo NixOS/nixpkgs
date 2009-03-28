@@ -8183,6 +8183,11 @@ let
   });
   git = gitAndTools.git;
 
+  qcad = import ../applications/misc/qcad {
+    inherit fetchurl stdenv qt3 libpng;
+    inherit (xlibs) libXext libX11;
+  };
+
   qjackctl = import ../applications/audio/qjackctl {
     inherit fetchurl stdenv alsaLib jackaudio;
     qt4 = qt4;
