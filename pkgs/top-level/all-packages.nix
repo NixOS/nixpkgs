@@ -7262,7 +7262,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  gw6c = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
+  gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
 

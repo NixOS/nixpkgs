@@ -1,9 +1,10 @@
 args : with args; 
+let version = "6.0"; in
 rec {
   src = fetchurl {
-    url = http://go6.net/4105/file.asp?file_id=150;
-    sha256 = "07svw71wad1kwip7vnsdwcvlhhknqlx8v8kmdnrw11f6xg76w2ln";
-    name = "gateway6-client-5.1.tar.gz";
+    url = http://go6.net/4105/file.asp?file_id=158;
+    sha256 = "0cnxqyw8rdr0sii77n2pv97f0c00dx6ykvnb3mf2acyrarh04nq8";
+    name = "gateway6-client-${version}.tar.gz";
   };
 
   buildInputs = [nettools openssl procps];
@@ -14,7 +15,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["preBuild" "doMakeInstall"];
 
-  goSrcDir = "cd ../tspc-advanced";
+  goSrcDir = "cd tspc-advanced";
 
   preBuild = FullDepEntry (''
     sed -e 's@/dev/net/tun@/dev/tun@' -i platform/linux/tsp_tun.c;
