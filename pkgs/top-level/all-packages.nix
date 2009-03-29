@@ -1087,6 +1087,10 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  pdf2djvu = import ../tools/typesetting/pdf2djvu {
+    inherit fetchurl stdenv pkgconfig djvulibre poppler fontconfig libjpeg;
+  };
+
   pdfjam = import ../tools/typesetting/pdfjam {
     inherit fetchurl stdenv;
   };
