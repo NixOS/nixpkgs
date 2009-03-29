@@ -5,7 +5,12 @@ let
   user = "smbguest";
   group = "smbguest";
  
-  smbConfig = ./smb.conf ;
+  #smbConfig = ./smb.conf ;
+
+  smbConfig = pkgs.substituteAll {
+    src = ./smb.conf;
+    inherit samba;
+  };
 
 in
 
@@ -45,13 +50,13 @@ start script
 
   ${samba}/sbin/nmbd -D  -s ${smbConfig} &
   ${samba}/sbin/smbd -D  -s ${smbConfig} &
-  ${samba}/sbin/winbindd -B -s ${smbConfig} &
+  ${samba}/sbin/winbindd -s ${smbConfig} &
 
   ln -fs ${smbConfig} /var/samba/config
 
 end script
 
-respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd -B &
+respawn ${samba}/sbin/nmbd -D -s ${smbConfig} &; ${samba}/sbin/smbd -D -s ${smbConfig} &; ${samba}/sbin/winbindd &
 
   ";
 

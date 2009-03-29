@@ -249,6 +249,7 @@ import ../helpers/make-etc.nix {
       "useradd"
       "chsh"
       "xlock"
+      "samba"
       "kde"
       "cups"
       "ftp"
