@@ -811,6 +811,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  halibut = import ../tools/typesetting/halibut {
+    inherit fetchurl stdenv perl;
+  };
+
   hddtemp = import ../tools/misc/hddtemp {
     inherit fetchurl stdenv;
   };
