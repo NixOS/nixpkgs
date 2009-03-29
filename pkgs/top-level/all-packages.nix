@@ -7308,10 +7308,6 @@ let
     inherit stdenv fetchurl pam libxcrypt;
   };
 
-  pam_smbpass = import ../os-specific/linux/pam_smbpass {
-    inherit stdenv fetchurl pam libxcrypt;
-  };
-
   pcmciaUtils = composedArgsAndFun (import ../os-specific/linux/pcmciautils) {
     inherit stdenv fetchurl udev yacc flex;
     inherit sysfsutils module_init_tools;
