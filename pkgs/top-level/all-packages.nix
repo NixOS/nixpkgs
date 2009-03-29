@@ -8072,6 +8072,12 @@ let
     inherit stdenv fetchurl openssl;
   };
 
+  gwenview = import ../applications/graphics/gwenview {
+    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
+    inherit (kde3) kdelibs;
+    inherit (xlibs) libXt libXext;
+  };
+
   wavesurfer = import ../applications/misc/audio/wavesurfer {
     inherit fetchurl stdenv tcl tk snack makeWrapper;
   };
