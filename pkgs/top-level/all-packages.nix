@@ -9532,7 +9532,7 @@ let
   # don't have time for the source build right now
   # maven2
   mvn_bin = import ../misc/maven/maven-2.nix {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv unzip;
   };
 
   nix = import ../tools/package-management/nix {
