@@ -4,6 +4,16 @@ let
 
   pkgs = allPackages {};
 
+  /* Set the Hydra scheduling priority for a job.  The default
+     priority (100) should be used for most jobs.  A different
+     priority should only be used for a few particularly interesting
+     jobs (in terms of giving feedback to developers), such as stdenv.
+  */
+  prio = level: job: toJob job // { schedulingPriority = level; };
+
+  toJob = x: if builtins.isAttrs x then x else
+    { type = "job"; systems = x; schedulingPriority = 100; };
+
   /* Perform a job on the given set of platforms.  The function `f' is
      called by Hydra for each platform, and should return some job
      to build on that platform.  `f' is passed the Nixpkgs collection
@@ -13,8 +23,15 @@ let
 
   /* Map an attribute of the form `foo = [platforms...]'  to `testOn
      [platforms...] (pkgs: pkgs.foo)'. */
-  mapTestOn = pkgs.lib.mapAttrsRecursive
-    (path: value: testOn value (pkgs: pkgs.lib.getAttrFromPath path pkgs));
+  mapTestOn = pkgs.lib.mapAttrsRecursiveCond
+    (as: !(as ? type && as.type == "job"))
+    (path: value:
+      let
+        job = toJob value;
+        getPkg = pkgs:
+          pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
+          (pkgs.lib.getAttrFromPath path pkgs);
+      in testOn job.systems getPkg);
 
   /* Common platform groups on which to test packages. */
   linux = ["i686-linux" "x86_64-linux"];
@@ -93,7 +110,7 @@ in {
   file = all;
   findutils = all;
   firefox2 = linux;
-  firefox3 = linux;
+  firefox3 = prio 150 linux;
   flex = all;
   flex2535 = all;
   gawk = all;
@@ -228,6 +245,7 @@ in {
   splashutils_15 = linux;
   sqlite = allBut "i686-cygwin";
   ssmtp = linux;
+  stdenv = prio 175 all;
   strace = linux;
   su = linux;
   subversion = all;
