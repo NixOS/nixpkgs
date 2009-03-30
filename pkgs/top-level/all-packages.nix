@@ -2456,11 +2456,13 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  libtool = libtool_2;
+
   libtool_1_5 = import ../development/tools/misc/libtool {
     inherit fetchurl stdenv perl m4;
   };
 
-  libtool = import ../development/tools/misc/libtool/libtool2.nix {
+  libtool_2 = import ../development/tools/misc/libtool/libtool2.nix {
     inherit fetchurl stdenv lzma perl m4;
   };
 
@@ -7183,7 +7185,8 @@ let
   };
 
   pam_console = import ../os-specific/linux/pam_console {
-    inherit stdenv fetchurl pam autoconf automake libtool pkgconfig bison;
+    inherit stdenv fetchurl pam autoconf automake pkgconfig bison;
+    libtool = libtool_1_5;
     flex = if stdenv.system == "i686-linux" then flex else flex2533;
     inherit (gtkLibs) glib;
   };
