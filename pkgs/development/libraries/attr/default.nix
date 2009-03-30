@@ -1,13 +1,12 @@
 {stdenv, fetchurl, libtool, gettext}:
 
 stdenv.mkDerivation {
-  name = "attr-2.4.41";
+  name = "attr-2.4.43";
 
   src = fetchurl {
-    # The file cannot be downloaded from sgi.com.
-    #url = ftp://oss.sgi.com/projects/xfs/cmd_tars/attr_2.4.41-1.tar.gz;
-    url = "http://gentoo.chem.wisc.edu/gentoo/distfiles/attr_2.4.41-1.tar.gz";
-    sha256 = "0dc286g8vr402aca6wg945sdm92bys8a142vrkwx6bkjz4bwz6gp";
+    # The SGI site throws away old versions, so don't use it.
+    url = mirror://gentoo/distfiles/attr_2.4.43-1.tar.gz;
+    sha256 = "1gy5zspj8ynxv6q29r24d18cfvq06zirg1pxcdg27bg2ncrv4n6k";
   };
 
   buildInputs = [libtool gettext];
@@ -15,4 +14,9 @@ stdenv.mkDerivation {
   configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
+
+  meta = {
+    homepage = ftp://oss.sgi.com/projects/xfs/cmd_tars/;
+    description = "Library and tools for manipulating extended attributes";
+  };
 }

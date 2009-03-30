@@ -2466,10 +2466,6 @@ let
     inherit fetchurl stdenv lzma perl m4;
   };
 
-  libtoolOld = lowPrio (import ../development/tools/misc/libtool/old.nix {
-    inherit fetchurl stdenv perl m4;
-  });
-
   lsof = import ../development/tools/misc/lsof {
     inherit fetchurl stdenv;
   };
@@ -2608,8 +2604,7 @@ let
 
   acl = useFromStdenv "acl"
     (import ../development/libraries/acl {
-      inherit stdenv fetchurl gettext attr;
-      libtool = libtoolOld;
+      inherit stdenv fetchurl gettext attr libtool;
     });
 
   adns = selectVersion ../development/libraries/adns "1.4" {
@@ -2663,8 +2658,7 @@ let
 
   attr = useFromStdenv "attr"
     (import ../development/libraries/attr {
-      inherit stdenv fetchurl gettext;
-      libtool = libtoolOld;
+      inherit stdenv fetchurl gettext libtool;
     });
 
   axis = import ../development/libraries/axis {
