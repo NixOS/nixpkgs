@@ -480,6 +480,8 @@ in
     (import ../upstart-jobs/mingetty.nix) # The terminals on ttyX.
     (import ../upstart-jobs/tty-backgrounds.nix) #FIXME (assertion)
 
+    (import ../upstart-jobs/synergy.nix)
+
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
     (import ../system/nixos-installer.nix)
