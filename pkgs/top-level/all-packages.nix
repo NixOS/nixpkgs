@@ -113,8 +113,7 @@ let
 
   inherit lib config getConfig;
 
-  addAttrsToDerivation = extraAttrs: stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
+  inherit (lib) lowPrio appendToName;
 
   stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
 
@@ -149,22 +148,6 @@ let
   # Warning: syntax for configuration.nix changed too
   useVersion = name: f: f {
     version = getConfig [ "environment" "versions" name ];
-  };
-
-  # Change the symbolic name of a package for presentation purposes
-  # (i.e., so that nix-env users can tell them apart).
-  setName = name: drv: drv // {inherit name;};
-
-  updateName = updater: drv: drv // {name = updater (drv.name);};
-
-  # !!! the suffix should really be appended *before* the version, at
-  # least most of the time.
-  appendToName = suffix: updateName (name: "${name}-${suffix}");
-
-  # Decrease the priority of the package, i.e., other
-  # versions/variants will be preferred.
-  lowPrio = drv: drv // {
-    meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
   # Check absence of non-used options
