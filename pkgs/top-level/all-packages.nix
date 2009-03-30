@@ -7065,7 +7065,7 @@ let
       inherit fetchurl stdenv builderDefs kernel lib;
     };
 
-    nvidiaDrivers = import ../os-specific/linux/nvidia {
+    nvidia_x11 = import ../os-specific/linux/nvidia-x11 {
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
     };
 
