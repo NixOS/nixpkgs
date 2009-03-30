@@ -127,9 +127,9 @@
     url = http://mawercer.de/~nix/repos/syb_with_class.tar.gz;
     sha256 = "f67c979bb980e69856f26f89b9bdcb5cf962e4db0b1fb859f53928c2d6b45f5b";
   };
-  synergy = args: with args; fetchurl {
-    url = http://mawercer.de/~nix/repos/synergy.tar.gz;
-    sha256 = "c86dde2f10e7071d823cff542ea6c98a7e29a45e4909034edbd7605caa775a47";
+  synergy = args: with args; fetchurl { # Mon Mar 30 10:08:36 CEST 2009
+    url = "http://mawercer.de/~nix/repos/synergy-F_10-08-35.tar.gz";
+    sha256 = "764b88b69f342017094380f62099f4a0dfdcddb6a289abb6b646f7ac2f37d675";
   };
   takusen = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/takusen.tar.gz;
