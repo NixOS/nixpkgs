@@ -7997,7 +7997,7 @@ let
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
-      inherit fetchurl stdenv makeWrapper jdk;
+      inherit fetchurl stdenv jdk;
       inherit (gtkLibs) gtk glib;
       inherit (xlibs) libXtst;
       inherit plugins;
