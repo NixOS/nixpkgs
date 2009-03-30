@@ -4,8 +4,7 @@ stdenv.mkDerivation rec {
   name = "std-man-pages-4.2.2";
   
   src = fetchurl {
-    # We could use a list of mirrors for gcc.gnu.org
-    url = ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/libstdc++/doxygen/libstdc++-man-4.2.2.tar.bz2;
+    url = mirror://gcc/libstdc++/doxygen/libstdc++-man-4.2.2.tar.bz2;
     sha256 = "1572a5hlrj50gk03aardlrhhila0yjlvhqszl424297ga4g95mk2";
   };
 

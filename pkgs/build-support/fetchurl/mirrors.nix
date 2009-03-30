@@ -29,6 +29,14 @@ rec {
     http://ftp.gnu.org/pub/gnu/
   ];
 
+  # GCC.
+  gcc = [
+    ftp://ftp.nluug.nl/mirror/languages/gcc/
+    ftp://ftp.fu-berlin.de/unix/languages/gcc/
+    ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/
+    ftp://gcc.gnu.org/pub/gcc/
+  ];
+
   # GnuPG.
   gnupg = [
     ftp://gd.tuwien.ac.at/privacy/gnupg/
