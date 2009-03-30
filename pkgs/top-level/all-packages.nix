@@ -8545,6 +8545,10 @@ let
     spellChecking = false;
   };
 
+  paraview = import ../applications/graphics/paraview {
+    inherit fetchurl stdenv cmake qt4;
+  };
+
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool;
