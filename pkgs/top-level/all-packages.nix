@@ -7579,6 +7579,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  stdmanpages = import ../data/documentation/std-man-pages {
+    inherit fetchurl stdenv;
+  };
+
   iana_etc = import ../data/misc/iana-etc {
     inherit fetchurl stdenv;
   };
