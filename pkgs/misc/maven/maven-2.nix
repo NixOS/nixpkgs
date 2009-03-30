@@ -1,6 +1,6 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "maven-2.0.8-bin";
+  name = "maven-2.1.0-bin";
 
   src = fetchurl {
     # TODO mirrors 
