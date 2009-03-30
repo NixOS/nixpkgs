@@ -7691,11 +7691,9 @@ let
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv libogg libvorbis libsndfile libmad
-      pkgconfig gettext;
+    inherit fetchurl stdenv gettext pkgconfig zlib;
     inherit (gtkLibs) gtk glib;
-    wxGTK = wxGTK28deps;
-    inherit builderDefs stringsWithDeps;
+    wxGTK = wxGTK28;
   };
 
   aumix = import ../applications/audio/aumix {
