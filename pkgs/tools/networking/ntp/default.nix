@@ -2,12 +2,12 @@
 
 assert stdenv.isLinux -> libcap != null;
  
-stdenv.mkDerivation {
-  name = "ntp-4.2.4p5";
+stdenv.mkDerivation rec {
+  name = "ntp-4.2.4p6";
   
   src = fetchurl {
-    url = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.4p5.tar.gz;
-    sha256 = "066x8gm55cziyc86ciwdq68y2xqfbbqqh8417nkwd1jmrihfmjvl";
+    url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
+    sha256 = "0rqhcmb9rjdl0hkvxyabnmlrzgvvw2f16k7mi9b4qskwgh340xk4";
   };
   
   configureFlags = ''
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
   '';
   
-  buildInputs = if stdenv.isLinux then [libcap] else [];
+  buildInputs = stdenv.lib.optional stdenv.isLinux libcap;
 
   meta = {
     homepage = http://www.ntp.org/;
