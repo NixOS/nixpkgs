@@ -63,7 +63,7 @@ rec {
         cp $lvm2/sbin/lvm $out/bin/lvm
       fi
 
-      # Add RAID mdadm tool
+      # Add RAID mdadm tool.
       cp ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
 
       # Copy udev.
@@ -100,6 +100,8 @@ rec {
           $out/bin/dmsetup --version | grep "version:"
           LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
       fi
+      $out/bin/reiserfsck -V
+      $out/bin/mdadm --version
     ''; # */
   
 
