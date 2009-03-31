@@ -152,8 +152,7 @@ rec {
   # A patched `mount' command that looks in a directory in the Nix
   # store instead of in /sbin for mount helpers (like mount.ntfs-3g or
   # mount.cifs).
-  mount = import "${nixpkgs}/pkgs/os-specific/linux/util-linux" {
-    inherit (pkgs) fetchurl stdenv;
+  mount = pkgs.utillinuxng.override {
     buildMountOnly = true;
     mountHelpers = pkgs.buildEnv {
       name = "mount-helpers";
