@@ -7418,25 +7418,16 @@ let
     inherit fetchurl stdenv libusb;
   };
 
-  utillinux = composedArgsAndFun (import ../os-specific/linux/util-linux) {
-    inherit fetchurl stdenv;
-  };
+  utillinux = utillinuxng;
 
-  utillinuxCurses = import ../os-specific/linux/util-linux {
-    inherit fetchurl stdenv ncurses;
-  };
+  utillinuxCurses = utillinuxngCurses;
 
-  utillinuxStatic = lowPrio (appendToName "static" (import ../os-specific/linux/util-linux {
-    inherit fetchurl;
-    stdenv = makeStaticBinaries stdenv;
-  }));
-
-  utillinuxng = composedArgsAndFun (import ../os-specific/linux/util-linux-ng) {
+  utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
     inherit fetchurl stdenv e2fsprogs;
   };
 
-  utillinuxngCurses = composedArgsAndFun (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv e2fsprogs ncurses;
+  utillinuxngCurses = utillinuxng.override {
+    inherit ncurses;
   };
 
   wesnoth = import ../games/wesnoth {
