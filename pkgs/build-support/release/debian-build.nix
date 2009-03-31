@@ -13,7 +13,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
 
     prefix = "/usr";
 
-    phases = "installExtraDebsPhase sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase distPhase";
+    prePhases = "installExtraDebsPhase sysInfoPhase";
   }
 
   // removeAttrs args ["vmTools"] //
@@ -52,7 +52,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     installCommand = ''
       export LOGNAME=root
 
-      ${checkinstall}/sbin/checkinstall -y -D make install
+      ${checkinstall}/sbin/checkinstall --nodoc -y -D make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
@@ -60,7 +60,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       shopt -s nullglob
       for i in $out/debs/*.deb; do
         header "Generated DEB package: $i"
-        dpkg-deb --info $i
+        dpkg-deb --info "$i"
+        pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
+        dpkg -i "$i"
+        dpkg -r "$pkgName"
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done

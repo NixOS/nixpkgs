@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   name = "samba-3.2.7";
 
   src = fetchurl {
-    url = http://us3.samba.org/samba/ftp/stable/samba-3.2.7.tar.gz;
-    sha256 = "18q4q1ay9dsk3djl1s2ibj51n8c111y05h5dsc2ssl2wg32vhasg";
+    url = http://us3.samba.org/samba/ftp/stable/samba-3.3.2.tar.gz;
+    sha256 = "1b4fa9fbe7ccced6cca449c4b0b9fba65ffd2ad63b1f0bf2507e943281461477";
   };
 
   buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam acl];

@@ -171,8 +171,8 @@ let
       ssmtp
       strace
       su
-      subversion14
       subversion15
+      subversion16
       sudo
       superTuxKart
       swig

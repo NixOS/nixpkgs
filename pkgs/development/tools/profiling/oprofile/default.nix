@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # FIXME: Add optional Qt support.
   buildInputs = [ binutils popt makeWrapper gawk which gnugrep ];
 
-  configureFlags = "--with-kernel-support";
+  configureFlags = "--with-kernel-support --disable-shared";
 
   postInstall = ''
     wrapProgram "$out/bin/opcontrol"					\

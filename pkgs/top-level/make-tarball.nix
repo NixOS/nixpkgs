@@ -39,6 +39,12 @@ releaseTools.makeSourceTarball {
   doCheck = true;
 
   checkPhase = ''
+    # Run the regression tests in `lib'.
+    if test "$(nix-instantiate --eval-only --strict tests.nix)" != "List([])"; then
+        echo "regression tests for `lib' failed"
+        exit 1
+    fi
+  
     # Check that we can fully evaluate build-for-release.nix.
     header "checking pkgs/top-level/build-for-release.nix"
     nix-env --readonly-mode -f pkgs/top-level/build-for-release.nix \

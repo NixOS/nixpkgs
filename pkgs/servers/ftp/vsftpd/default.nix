@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [ ./fix.patch ] ;
-  preConfigure = ''sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h'';
-  buildInputs = [ openssl libcap pam ];
+  preConfigure = ''sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h;
+                   sed -i "s@/etc/vsftpd.user_list@$out/vsftpd.user_list@" vsftpd.conf.5 tunables.c'';
+
+  configFile = ./vsftpd.user_list;
+  postInstall = "cp ${./vsftpd.user_list} $out/vsftpd.user_list";
+
+  buildInputs = [ openssl libcap pam configFile ];
 }

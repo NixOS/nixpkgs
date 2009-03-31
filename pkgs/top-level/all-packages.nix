@@ -49,12 +49,19 @@ let
       homeDir = getEnv "HOME";
       configFile2 = homeDir + "/.nixpkgs/config.nix";
 
-      body =
+      configExpr =
         if configFile != "" && pathExists configFile
         then import (toPath configFile)
         else if homeDir != "" && pathExists configFile2
         then import (toPath configFile2)
         else {};
+
+      # allow both:
+      # { /* the config */ } and
+      # { pkgsOrig, pkgs, ... } : { /* the config */ }
+      body = if builtins.isFunction configExpr
+        then configExpr { inherit pkgs pkgsOrig; }
+        else configExpr;
     };
 
   # Return an attribute from the Nixpkgs configuration file, or
@@ -106,8 +113,7 @@ let
 
   inherit lib config getConfig;
 
-  addAttrsToDerivation = extraAttrs: stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
+  inherit (lib) lowPrio appendToName;
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
@@ -140,22 +146,6 @@ let
   # Warning: syntax for configuration.nix changed too
   useVersion = name: f: f {
     version = getConfig [ "environment" "versions" name ];
-  };
-
-  # Change the symbolic name of a package for presentation purposes
-  # (i.e., so that nix-env users can tell them apart).
-  setName = name: drv: drv // {inherit name;};
-
-  updateName = updater: drv: drv // {name = updater (drv.name);};
-
-  # !!! the suffix should really be appended *before* the version, at
-  # least most of the time.
-  appendToName = suffix: updateName (name: "${name}-${suffix}");
-
-  # Decrease the priority of the package, i.e., other
-  # versions/variants will be preferred.
-  lowPrio = drv: drv // {
-    meta = (if drv ? meta then drv.meta else {}) // {priority = "10";};
   };
 
   # Check absence of non-used options
@@ -793,6 +783,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  halibut = import ../tools/typesetting/halibut {
+    inherit fetchurl stdenv perl;
+  };
+
   hddtemp = import ../tools/misc/hddtemp {
     inherit fetchurl stdenv;
   };
@@ -896,12 +890,16 @@ let
     inherit fetchurl stdenv zlib lzo bzip2 nasm;
   };
 
+  lsh = import ../tools/networking/lsh {
+    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
+  };
+
   lzma = import ../tools/compression/lzma {
     inherit fetchurl stdenv;
   };
 
-  lsh = import ../tools/networking/lsh {
-    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
+  lzop = import ../tools/compression/lzop {
+    inherit fetchurl stdenv lzo;
   };
 
   man = import ../tools/misc/man {
@@ -1061,6 +1059,10 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  pdf2djvu = import ../tools/typesetting/pdf2djvu {
+    inherit fetchurl stdenv pkgconfig djvulibre poppler fontconfig libjpeg;
+  };
+
   pdfjam = import ../tools/typesetting/pdfjam {
     inherit fetchurl stdenv;
   };
@@ -1068,6 +1070,7 @@ let
   pdsh = import ../tools/networking/pdsh {
     inherit fetchurl stdenv perl;
     readline = if getPkgConfig "pdsh" "readline" true then readline else null;
+    rsh = getPkgConfig "pdsh" "rsh" true;
     ssh = if getPkgConfig "pdsh" "ssh" true then openssh else null;
     pam = if getPkgConfig "pdsh" "pam" true then pam else null;
   };
@@ -1075,6 +1078,11 @@ let
   pinentry = import ../tools/misc/pinentry {
     inherit fetchurl stdenv pkgconfig ncurses;
     inherit (gnome) glib gtk;
+  };
+
+  plan9port = import ../tools/system/plan9port {
+    inherit fetchurl stdenv;
+    inherit (xlibs) libX11 xproto libXt xextproto;
   };
 
   ploticus = import ../tools/graphics/ploticus {
@@ -1096,6 +1104,10 @@ let
 
   psmisc = import ../tools/misc/psmisc {
     inherit stdenv fetchurl ncurses;
+  };
+
+  pv = import ../tools/misc/pv {
+    inherit fetchurl stdenv;
   };
 
   pwgen = import ../tools/security/pwgen {
@@ -1150,6 +1162,11 @@ let
 
   rpm = import ../tools/package-management/rpm {
     inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
+  };
+
+  rrdtool = import ../tools/misc/rrdtool {
+    inherit stdenv fetchurl gettext perl pkgconfig libxml2 cairo;
+    inherit (gtkLibs) pango;
   };
 
   rtorrent = import ../tools/networking/p2p/rtorrent {
@@ -1262,6 +1279,14 @@ let
 
   telnet = import ../tools/networking/telnet {
     inherit fetchurl stdenv ncurses;
+  };
+
+  ucl = import ../development/libraries/ucl {
+    inherit fetchurl stdenv;
+  };
+
+  upx = import ../tools/compression/upx {
+    inherit fetchurl stdenv ucl zlib;
   };
 
   vpnc = import ../tools/networking/vpnc {
@@ -1858,7 +1883,9 @@ let
   };
 
   monotone = import ../applications/version-management/monotone {
-    inherit stdenv fetchurl boost zlib;
+    inherit stdenv fetchurl boost zlib botan libidn pcre
+      sqlite; 
+    lua = lua5;
   };
 
   monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
@@ -2510,8 +2537,9 @@ let
   };
 
   # couldn't find the source yet
-  selenium_rc_binary = import ../development/tools/selenium/remote-control {
+  seleniumRCBin = import ../development/tools/selenium/remote-control {
     inherit fetchurl stdenv unzip;
+    jre = jdk;
   };
 
   scons = import ../development/tools/build-managers/scons {
@@ -2681,6 +2709,10 @@ let
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
   boost = boostVersionChoice "1.38.0";
+
+  botan = builderDefsPackage (import ../development/libraries/botan) {
+    inherit perl;
+  };
 
   buddy = import ../development/libraries/buddy {
     inherit fetchurl stdenv;
@@ -3876,6 +3908,10 @@ let
   };
 
   wxGTK28 = wxGTK28deps null;
+
+  wtk = import ../development/libraries/wtk {
+    inherit fetchurl stdenv unzip xlibs;
+  };
 
   x264 = import ../development/libraries/x264 {
     inherit fetchurl stdenv;
@@ -6588,6 +6624,8 @@ let
     inherit fetchurl stdenv;
   };
 
+  libuuid = e2fsprogs;
+
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
   };
@@ -6974,7 +7012,7 @@ let
       inherit fetchurl stdenv builderDefs kernel lib;
     };
 
-    nvidiaDrivers = import ../os-specific/linux/nvidia {
+    nvidia_x11 = import ../os-specific/linux/nvidia-x11 {
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
     };
 
@@ -7166,7 +7204,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  gw6c = builderDefsPackage (selectVersion ../os-specific/linux/gw6c "5.1") {
+  gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
 
@@ -7328,25 +7366,16 @@ let
     inherit fetchurl stdenv libusb;
   };
 
-  utillinux = composedArgsAndFun (import ../os-specific/linux/util-linux) {
-    inherit fetchurl stdenv;
-  };
+  utillinux = utillinuxng;
 
-  utillinuxCurses = import ../os-specific/linux/util-linux {
-    inherit fetchurl stdenv ncurses;
-  };
+  utillinuxCurses = utillinuxngCurses;
 
-  utillinuxStatic = lowPrio (appendToName "static" (import ../os-specific/linux/util-linux {
-    inherit fetchurl;
-    stdenv = makeStaticBinaries stdenv;
-  }));
-
-  utillinuxng = composedArgsAndFun (import ../os-specific/linux/util-linux-ng) {
+  utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
     inherit fetchurl stdenv e2fsprogs;
   };
 
-  utillinuxngCurses = composedArgsAndFun (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv e2fsprogs ncurses;
+  utillinuxngCurses = utillinuxng.override {
+    inherit ncurses;
   };
 
   wesnoth = import ../games/wesnoth {
@@ -7473,6 +7502,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  stdmanpages = import ../data/documentation/std-man-pages {
+    inherit fetchurl stdenv;
+  };
+
   iana_etc = import ../data/misc/iana-etc {
     inherit fetchurl stdenv;
   };
@@ -7542,6 +7575,11 @@ let
     inherit (xlibs) libX11 libXext libSM;
   };
 
+  aangifte2008 = import ../applications/taxes/aangifte-2008 {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11 libXext libSM;
+  };
+
   abcde = import ../applications/audio/abcde {
     inherit fetchurl stdenv libcdio cddiscid wget bash vorbisTools
             makeWrapper;
@@ -7580,11 +7618,9 @@ let
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv libogg libvorbis libsndfile libmad
-      pkgconfig gettext;
+    inherit fetchurl stdenv gettext pkgconfig zlib;
     inherit (gtkLibs) gtk glib;
-    wxGTK = wxGTK28deps;
-    inherit builderDefs stringsWithDeps;
+    wxGTK = wxGTK28;
   };
 
   aumix = import ../applications/audio/aumix {
@@ -7852,7 +7888,7 @@ let
   };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
-    inherit libpng libtiff libjpeg imagemagick librsvg 
+    inherit libpng libtiff libjpeg imagemagick librsvg
       pkgconfig bzip2 zlib;
     inherit (xlibs) libX11;
   };
@@ -7884,7 +7920,7 @@ let
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
-      inherit fetchurl stdenv makeWrapper jdk;
+      inherit fetchurl stdenv jdk;
       inherit (gtkLibs) gtk glib;
       inherit (xlibs) libXtst;
       inherit plugins;
@@ -7959,6 +7995,12 @@ let
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
+  };
+
+  gwenview = import ../applications/graphics/gwenview {
+    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
+    inherit (kde3) kdelibs;
+    inherit (xlibs) libXt libXext;
   };
 
   wavesurfer = import ../applications/misc/audio/wavesurfer {
@@ -8083,6 +8125,11 @@ let
     inherit pkgs;
   });
   git = gitAndTools.git;
+
+  qcad = import ../applications/misc/qcad {
+    inherit fetchurl stdenv qt3 libpng;
+    inherit (xlibs) libXext libX11;
+  };
 
   qjackctl = import ../applications/audio/qjackctl {
     inherit fetchurl stdenv alsaLib jackaudio;
@@ -8427,15 +8474,19 @@ let
     inherit fetchurl zlib glibc stdenv;
 # stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
-    qt = qt3gcc33;
     #33motif = lesstif;
-    libstdcpp5 = gcc33.gcc;
+    qt = if (stdenv.system == "i686-linux") then qt3gcc33 else qt3;
+    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
     inherit fetchurl stdenv pkgconfig perl pcre gmime gettext;
     inherit (gtkLibs) gtk;
     spellChecking = false;
+  };
+
+  paraview = import ../applications/graphics/paraview {
+    inherit fetchurl stdenv cmake qt4;
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
@@ -8597,20 +8648,7 @@ let
 
   subversion = subversion15;
 
-  subversion14 = makeOverridable (import ../applications/version-management/subversion-1.4.x) {
-    inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
-    neon = neon026;
-    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
-    httpServer = getConfig ["subversion" "httpServer"] false;
-    sslSupport = getConfig ["subversion" "sslSupport"] true;
-    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
-    perlBindings = getConfig ["subversion" "perlBindings"] false;
-    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
-    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
-    httpd = apacheHttpd;
-  };
-
-  subversion15 = makeOverridable (import ../applications/version-management/subversion-1.5.x) {
+  subversion15 = makeOverridable (import ../applications/version-management/subversion/1.5.nix) {
     inherit fetchurl stdenv apr aprutil expat swig zlib jdk;
     neon = neon028;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
@@ -8624,7 +8662,21 @@ let
     httpd = apacheHttpd;
   };
 
-  subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion-1.5.x {
+  subversion16 = makeOverridable (import ../applications/version-management/subversion/1.6.nix) {
+    inherit fetchurl stdenv apr aprutil expat swig zlib jdk sqlite;
+    neon = neon028;
+    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
+    httpServer = getConfig ["subversion" "httpServer"] false;
+    httpSupport = getConfig ["subversion" "httpSupport"] true;
+    sslSupport = getConfig ["subversion" "sslSupport"] true;
+    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
+    perlBindings = getConfig ["subversion" "perlBindings"] false;
+    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
+    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
+    httpd = apacheHttpd;
+  };
+
+  subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion/1.6.nix {
     inherit fetchurl stdenv apr aprutil expat swig jdk;
     neon = import ../development/libraries/neon/0.28.nix {
         inherit fetchurl stdenv libxml2 zlib openssl;
@@ -8635,6 +8687,10 @@ let
     };
     zlib = import ../development/libraries/zlib {
       inherit fetchurl stdenv;
+      static = true;
+    };
+      sqlite = import ../development/libraries/sqlite {
+      inherit fetchurl stdenv readline;
       static = true;
     };
     bdbSupport = true;
@@ -9242,6 +9298,7 @@ let
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
 
+  
   ### SCIENCE/BIOLOGY
 
   alliance = import ../applications/science/electronics/alliance {
@@ -9286,6 +9343,7 @@ let
     inherit fetchurl stdenv perl paml;
   };
 
+  
   ### SCIENCE/MATH
 
   atlas = import ../development/libraries/science/math/atlas {
@@ -9296,18 +9354,21 @@ let
     inherit fetchurl stdenv gfortran;
   }; */
 
+  
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
     inherit fetchurl stdenv ocaml ncurses;
   };
 
+  
   ### SCIENCE / ELECTRONICS
 
   ngspice = import ../applications/science/electronics/ngspice {
     inherit fetchurl stdenv readline;
   };
 
+  
   ### SCIENCE / MATH
 
   maxima = import ../applications/science/math/maxima {
@@ -9326,6 +9387,7 @@ let
     withX = true;
   };
 
+  
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
@@ -9421,7 +9483,7 @@ let
   # don't have time for the source build right now
   # maven2
   mvn_bin = import ../misc/maven/maven-2.nix {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv unzip;
   };
 
   nix = import ../tools/package-management/nix {
@@ -9463,7 +9525,7 @@ let
   };
 
   ntfsprogs = import ../misc/ntfsprogs {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libuuid;
   };
 
   pgadmin = import ../applications/misc/pgadmin {
@@ -9639,5 +9701,5 @@ let
     inherit (stdenv) mkDerivation;
   };
 
-  libTests = import ../lib/tests.nix;
+  
 }; in pkgs

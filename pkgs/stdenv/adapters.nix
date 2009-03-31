@@ -107,5 +107,18 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
-      
+
+  /* Modify a stdenv so that the specified attributes are added to
+     every derivation returned by its mkDerivation function.
+
+     Example:
+       stdenvNoOptimise =
+         addAttrsToDerivation
+           { NIX_CFLAGS_COMPILE = "-O0"; }
+           stdenv;
+  */
+  addAttrsToDerivation = extraAttrs: stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
+
+
 }

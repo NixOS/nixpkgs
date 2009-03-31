@@ -17,7 +17,8 @@ args: with args; with stringsWithDeps; with lib;
         archiveType = s: 
                 (if hasSuffixHack ".tar" s then "tar"
                 else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
-                else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) then "tbz2"
+                else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) || 
+			(hasSuffixHack ".tbz" s) then "tbz2"
                 else if (hasSuffixHack ".tar.lzma" s) then "tar.lzma"
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"

@@ -15,9 +15,16 @@ find $out \( -type f -a -perm +0100 \) \
     --set-rpath "$rpath" {} \;
 
 # Make a wrapper script so that the proper JDK is found.
-makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
-    --prefix PATH ":" "$jdk/bin" \
-    --prefix LD_LIBRARY_PATH ":" "$rpath"
+# don't use makeWrapper in order to change the last line.
+
+ensureDir $out/bin
+cat >> $out/bin/eclipse << EOF
+#! /bin/sh -e
+export PATH=${jdk}/bin\${PATH:+:}\$PATH
+export LD_LIBRARY_PATH=$rpath\${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH
+exec \$(dirname $0)/../eclipse/eclipse $@
+EOF
+chmod +x $out/bin/eclipse
 
 ensureDir plugin-working-dir
 workingdir="$(pwd)/plugin-working-dir"

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}:
+{stdenv, fetchurl, readline, static ? false}:
 
 stdenv.mkDerivation rec {
   name = "sqlite-3.6.10";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [readline];
 
-  configureFlags = "--disable-static --with-readline-inc=-I${readline}/include";
+  configureFlags = ''
+    ${if static then "--disable-shared --enable-static" else "--disable-static"}
+    --with-readline-inc=-I${readline}/include
+  '';
 
   postInstall = ''
     gcc -L$out/lib -I$out/include tool/genfkey.c -lsqlite3 -o $out/bin/genfkey

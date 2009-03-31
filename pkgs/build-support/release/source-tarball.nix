@@ -94,7 +94,7 @@ stdenv.mkDerivation (
 
     finalPhase = ''
       for i in $out/tarballs/*; do
-        echo "file source-dist $i" >> $out/nix-support/hydra-build-products
+          echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
 
       # Try to figure out the release name.
@@ -109,6 +109,10 @@ stdenv.mkDerivation (
 
     meta = (if args ? meta then args.meta else {}) // {
       description = "Build of a source distribution from a checkout";
+
+      # Tarball builds are generally important, so give them a high
+      # default priority.
+      schedulingPriority = "200";
     };
   }
 

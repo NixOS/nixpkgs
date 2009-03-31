@@ -79,24 +79,49 @@ rec {
     
 
   /* Like `mapAttrs', except that it recursively applies itself to
-     values that attribute sets.  Also, the first argument is a *list*
-     of the names of the containing attributes.
+     attribute sets.  Also, the first argument of the argument
+     function is a *list* of the names of the containing attributes.
+
+     Type:
+       mapAttrsRecursive ::
+         ([String] -> a -> b) -> AttrSet -> AttrSet
 
      Example:
        mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
          { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
        => { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
   */
-  mapAttrsRecursive =
+  mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
+
+  
+  /* Like `mapAttrsRecursive', but it takes an additional predicate
+     function that tells it whether to recursive into an attribute
+     set.  If it returns false, `mapAttrsRecursiveCond' does not
+     recurse, but does apply the map function.  It is returns true, it
+     does recurse, and does not apply the map function.
+
+     Type:
+       mapAttrsRecursiveCond ::
+         (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+
+     Example:
+       # To prevent recursing into derivations (which are attribute
+       # sets with the attribute "type" equal to "derivation"):
+       mapAttrsRecursiveCond
+         (as: !(as ? "type" && as.type == "derivation"))
+         (x: ... do something ...)
+         attrs
+     */
+  mapAttrsRecursiveCond = cond: f: set:
     let
-      recurse = path: f: set:
+      recurse = path: set:
         let
           g =
             name: value:
-            if isAttrs value
-              then recurse (path ++ [name]) f value
+            if isAttrs value && cond value
+              then recurse (path ++ [name]) value
               else f (path ++ [name]) value;
         in mapAttrs g set;
-    in recurse [];
+    in recurse [] set;
   
 }

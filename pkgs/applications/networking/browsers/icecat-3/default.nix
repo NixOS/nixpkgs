@@ -4,13 +4,13 @@
 , freetype, fontconfig
 , application ? "browser" }:
 
-let version = "3.0.6-g1"; in
+let version = "3.0.7-g1"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
-    sha256 = "0lcxvlviwgaj9w6ywn0656a2y3qdxdlw0mf5f9ljdd9jpw4fxjih";
+    sha256 = "1xfv643prj22gy9g3sbzq13d8pv1yvzr2xi4z91r802x9rrm6grm";
   };
 
   buildInputs = [

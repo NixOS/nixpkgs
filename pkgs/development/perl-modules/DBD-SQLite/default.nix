@@ -16,4 +16,8 @@ buildPerlPackage {
     # Prevent segfaults in case of timeouts.
     ./reset.patch
   ];
+
+  # Disabled because the tests can randomly fail due to timeouts
+  # (e.g. "database is locked(5) at dbdimp.c line 402 at t/07busy.t").
+  doCheck = false;
 }
