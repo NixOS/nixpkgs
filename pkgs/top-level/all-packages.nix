@@ -9348,6 +9348,7 @@ let
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
 
+  
   ### SCIENCE/BIOLOGY
 
   alliance = import ../applications/science/electronics/alliance {
@@ -9392,6 +9393,7 @@ let
     inherit fetchurl stdenv perl paml;
   };
 
+  
   ### SCIENCE/MATH
 
   atlas = import ../development/libraries/science/math/atlas {
@@ -9402,18 +9404,21 @@ let
     inherit fetchurl stdenv gfortran;
   }; */
 
+  
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
     inherit fetchurl stdenv ocaml ncurses;
   };
 
+  
   ### SCIENCE / ELECTRONICS
 
   ngspice = import ../applications/science/electronics/ngspice {
     inherit fetchurl stdenv readline;
   };
 
+  
   ### SCIENCE / MATH
 
   maxima = import ../applications/science/math/maxima {
@@ -9432,6 +9437,7 @@ let
     withX = true;
   };
 
+  
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
@@ -9745,5 +9751,5 @@ let
     inherit (stdenv) mkDerivation;
   };
 
-  libTests = import ../lib/tests.nix;
+  
 }; in pkgs

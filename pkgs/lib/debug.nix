@@ -14,9 +14,11 @@ rec {
 
   addErrorContextToAttrs = lib.mapAttrs (a : v : lib.addErrorContext "while evaluating ${a}" v);
 
+  
   traceVal = if builtins ? trace then x: (builtins.trace x x) else x: x;
   traceXMLVal = if builtins ? trace then x: (builtins.trace (builtins.toXML x) x) else x: x;
 
+  
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x : __trace (showVal x) x;
   traceShowValMarked = str: x: __trace (str + showVal x) x;
@@ -37,4 +39,17 @@ rec {
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
   traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
+
+  /* Evaluate a set of tests.  A test is an attribute set {expr,
+     expected}, denoting an expression and its expected result.  The
+     result is a list of failed tests, each represented as {name,
+     expected, actual}, denoting the attribute name of the failing
+     test and its expected and actual results.  Used for regression
+     testing of the functions in lib; see tests.nix for an example.
+  */
+  runTests = tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
+    if ! lib.eqStrict test.expr test.expected
+      then [ { inherit name; expected = test.expected; result = test.expr; } ]
+      else [] ) tests));
+  
 }
