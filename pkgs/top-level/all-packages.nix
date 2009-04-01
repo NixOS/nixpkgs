@@ -6410,6 +6410,10 @@ let
     inherit openssl libtool;
   };
 
+  dico = import ../servers/dico {
+    inherit fetchurl stdenv libtool gettext zlib readline guile python;
+  };
+
   dict = composedArgsAndFun (selectVersion ../servers/dict "1.9.15") {
     inherit builderDefs which bison;
     flex=flex2534;
