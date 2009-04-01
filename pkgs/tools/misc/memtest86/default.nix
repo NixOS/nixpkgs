@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "memtest86+-1.70";
+  name = "memtest86+-2.11";
   
   src = fetchurl {
-    url = http://www.memtest.org/download/1.70/memtest86+-1.70.tar.gz;
-    sha256 = "1swj4hc764qwb3j80kvvb4qg5maq9dp8pxzy9jkk187jf92j8vfw";
+    url = http://www.memtest.org/download/2.11/memtest86+-2.11.tar.gz;
+    sha256 = "03kcw6f62na3s08ybhnafn4s1pqs0z5lxl103xwxx77345r6m1s3";
   };
 
   preBuild = ''
@@ -23,4 +23,9 @@ stdenv.mkDerivation {
     ensureDir $out
     cp memtest.bin $out/
   '';
+
+  meta = {
+    homepage = http://www.memtest.org/;
+    description = "A tool to detect memory errors";
+  };
 }
