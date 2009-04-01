@@ -22,9 +22,20 @@ let
         addUdevPkgs = mkOption {
           default = [];
           description = "
-            List of packages containing udev rules.
+            List of packages containing udev rules. All files found in $out/*/udev/rules.d/*.rules will be recognized
           ";
           merge = pkgs.lib.mergeListOption;
+        };
+
+        extraRules = mkOption {
+          default = "";
+          example = ''
+            KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
+          '';
+          description = "
+            Add custom rules. They'll be written into file 10-local.rules.
+            Thus they are read before all other rules.
+          ";
         };
         
         sndMode = mkOption {
@@ -58,7 +69,13 @@ let
   };
 
   firmwareDirs = config.services.udev.addFirmware;
-  extraUdevPkgs = config.services.udev.addUdevPkgs;
+  extraUdevPkgs = config.services.udev.addUdevPkgs
+    ++ pkgs.lib.optional (cfg.extraRules != "")
+      (pkgs.writeTextFile {
+        name = "extra-udev-rules";
+        text = cfg.extraRules;
+        destination = "/custom/udev/rules.d/10-local.rules";
+        });
 
   modprobe = config.system.sbin.modprobe;
     
