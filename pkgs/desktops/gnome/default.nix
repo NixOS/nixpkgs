@@ -142,7 +142,7 @@ rec {
 
     buildInputs = [
       perl perlXMLParser pkgconfig popt libxml2
-      glib pango bison flex gettext
+      glib pango bison flex gettext intltool
     ];
 
     propagatedBuildInputs = [libxml2 libart_lgpl];
@@ -206,21 +206,30 @@ rec {
     };
   };
 
-  gnomedesktop = import ./gnome-desktop.nix {
-    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser
-      libjpeg gettext which python libxml2Python libxslt;
-    input = desktop.gnomedesktop;
+  gnomedesktop = stdenv.mkDerivation {
+    inherit (desktop.gnomedesktop) name src;
+
+    # !!! should get rid of libxml2Python, see gnomedocutils
+  
+    buildInputs = [
+      pkgconfig perl perlXMLParser gtk glib libgnomeui
+      scrollkeeper libjpeg gnomedocutils gettext which
+      python libxml2Python libxslt intltool
+    ];
+
+    configureFlags = "--disable-scrollkeeper";
   };
 
-  libwnck = import ./libwnck.nix {
-    inherit fetchurl stdenv pkgconfig gtk perl perlXMLParser gettext;
-    input = desktop.libwnck;
+  libwnck = stdenv.mkDerivation {
+    inherit (desktop.libwnck) name src;
+    buildInputs = [pkgconfig gtk perl perlXMLParser gettext intltool];
   };
 
-  gnomemenus = import ./gnome-menus.nix {
-    inherit fetchurl stdenv pkgconfig gnome perl perlXMLParser
-      python gettext;
-    input = desktop.gnomemenus;
+  gnomemenus = stdenv.mkDerivation {
+    inherit (desktop.gnomemenus) name src;
+    buildInputs = [
+      pkgconfig perl perlXMLParser glib python gettext intltool
+    ];
   };
 
   librsvg = stdenv.mkDerivation {
@@ -230,7 +239,7 @@ rec {
 
   libgweather = stdenv.mkDerivation {
     inherit (desktop.libgweather) name src;
-    buildInputs = [gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs];
+    buildInputs = [gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs intltool];
   };
 
   gnomepanel = stdenv.mkDerivation {
@@ -266,7 +275,7 @@ rec {
 
   metacity = import ./metacity.nix {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser glib gtk
-      GConf startupnotification gettext libcm;
+      GConf startupnotification gettext libcm intltool;
     inherit (xlibs) libXinerama libXrandr libXcursor
       libXcomposite libXfixes libXdamage;
     enableCompositor = true;
@@ -285,10 +294,14 @@ rec {
     input = desktop.gconfeditor;
   };
 
-  vte = import ./vte.nix {
-    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser ncurses
-      python gettext;
-    input = desktop.vte;
+  vte = stdenv.mkDerivation {
+    inherit (desktop.vte) name src;
+  
+    buildInputs = [
+      pkgconfig perl perlXMLParser gnome.glib gnome.gtk python gettext intltool
+    ];
+  
+    propagatedBuildInputs = [ncurses];
   };
   
   gnometerminal = stdenv.mkDerivation {
