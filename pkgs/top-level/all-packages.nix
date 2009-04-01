@@ -2803,7 +2803,7 @@ let
   };
 
   ConsoleKit = import ../development/libraries/ConsoleKit {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib;
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
