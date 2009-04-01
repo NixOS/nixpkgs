@@ -89,6 +89,7 @@ in {
   cups = linux;
   db4 = all;
   dhcp = linux;
+  dico = linux;
   dietlibc = linux;
   diffutils = all;
   docbook5 = all;
