@@ -6637,6 +6637,10 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
+  btrfsProgs = builderDefsPackage (import ../os-specific/linux/btrfsprogs) {
+    inherit e2fsprogs zlib acl;
+  };
+
   cpufrequtils = import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
     glibc = stdenv.gcc.libc;
