@@ -3208,7 +3208,7 @@ let
   };
 
   libao = import ../development/libraries/libao {
-    inherit stdenv fetchurl pkgconfig;
+    inherit stdenv fetchurl pkgconfig pulseaudio;
   };
 
   libarchive = selectVersion ../development/libraries/libarchive "2.4.12" {
