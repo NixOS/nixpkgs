@@ -1967,7 +1967,17 @@ in
       };
     };
 
-
+    consolekit = {
+    
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to start the ConsoleKit daemon.
+        ";
+      };
+          
+    };
+    
     samba = {
 
       enable = mkOption {

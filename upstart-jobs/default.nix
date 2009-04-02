@@ -350,6 +350,7 @@ let
       dbusServices =
         pkgs.lib.optional config.services.hal.enable pkgs.hal ++
         pkgs.lib.optional config.services.avahi.enable pkgs.avahi ++
+	pkgs.lib.optional config.services.consolekit.enable pkgs.ConsoleKit ++
         pkgs.lib.optional config.services.disnix.enable pkgs.disnix
         ;
     })
@@ -382,6 +383,12 @@ let
   # Zabbix server daemon.
   ++ optional config.services.zabbixServer.enable
     (import ../upstart-jobs/zabbix-server.nix {
+      inherit config pkgs;
+    })
+  
+  # ConsoleKit daemon.
+  ++ optional config.services.consolekit.enable
+    (import ../upstart-jobs/consolekit.nix {
       inherit config pkgs;
     })
   
