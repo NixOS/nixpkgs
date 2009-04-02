@@ -6435,13 +6435,17 @@ let
   };
 
   pulseaudio = import ../servers/pulseaudio {
-    inherit fetchurl stdenv pkgconfig gnum4 libtool gdbm
+    inherit fetchurl stdenv pkgconfig gnum4 gdbm
       dbus hal avahi liboil libsamplerate libsndfile speex
       intltool gettext;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11 libICE libSM;
     inherit (alsa) alsaLib;    # Needs ALSA >= 1.0.17.
     gconf = gnome.GConf;
+
+    # Work around Libtool 1.5 interaction with Ltdl 2.x
+    # ("undefined reference to lt__PROGRAM__LTX_preloaded_symbols").
+    libtool = libtool_1_5;
   };
 
   tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
