@@ -16,8 +16,11 @@ stdenv.mkDerivation {
         touch gnu/stubs-32.h
     fi
   '';
-  
-  NIX_CFLAGS_COMPILE = "-I.";
+
+  # Override the default optimisation setting (`-Os') to prevent lots
+  # of spurious errors.  See
+  # https://bugs.launchpad.net/fedora/+source/memtest86+/+bug/246412.
+  NIX_CFLAGS_COMPILE = "-O1 -I.";
   
   installPhase = ''
     ensureDir $out
