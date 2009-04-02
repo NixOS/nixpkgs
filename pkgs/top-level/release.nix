@@ -360,6 +360,13 @@ in {
     aufs = linux;
     kernel = linux;
   };
+
+  strategoPackages = {
+    sdf = all;
+    strategoxt = all;
+    javafront = all;
+    dryad = all;
+  };
   
   xorg = {
     fontadobe100dpi = linux;
