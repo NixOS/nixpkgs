@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
   configureFlags = "--enable-shared --disable-static";
-  patches = stdenv.lib.optional stdenv.isDarwin ./shobj-darwin.patch;
 
   meta = {
     description = "GNU Readline, a library for interactive line editing";
