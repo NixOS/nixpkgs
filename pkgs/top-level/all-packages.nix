@@ -7556,6 +7556,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  pthreadmanpages = lowPrio (import ../data/documentation/pthread-man-pages {
+    inherit fetchurl stdenv perl;
+  });
+
   shared_mime_info = import ../data/misc/shared-mime-info {
     inherit fetchurl stdenv pkgconfig gettext intltool libxml2;
     inherit (gtkLibs) glib;
