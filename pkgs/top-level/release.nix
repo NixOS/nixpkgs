@@ -373,6 +373,7 @@ in {
     fontmiscmisc = linux;
     iceauth = linux;
     libX11 = linux;
+    lndir = all;
     setxkbmap = linux;
     xauth = linux;
     xf86inputkeyboard = linux;
