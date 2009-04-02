@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
-  name = "gnum4-1.4.12";
+stdenv.mkDerivation {
+  name = "gnum4-1.4.13";
 
   src = fetchurl {
-    url = mirror://gnu/m4/m4-1.4.12.tar.bz2;
-    sha256 = "18qvi12843kvqkpcmrjxz1929s833q5d0jzm8hc965j663g1fll5";
+    url = mirror://gnu/m4/m4-1.4.13.tar.bz2;
+    sha256 = "01pcrajrk2rqhxbrij3j07ywyxlq7ih43a8pzvhdlxhlwfazxipw";
   };
 
   doCheck = !stdenv.isDarwin;
