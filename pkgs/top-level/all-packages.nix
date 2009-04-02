@@ -1588,7 +1588,7 @@ let
   }));
 
   gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (import ../development/compilers/gcc-4.3 {
-    stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc42);
+    stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
     inherit fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
     enableMultilib = true;
