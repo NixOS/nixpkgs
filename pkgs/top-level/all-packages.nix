@@ -2921,6 +2921,13 @@ let
     singlePrecision = true;
   };
 
+  fltk11 = (import ../development/libraries/fltk/fltk11.nix) {
+    inherit composableDerivation x11 lib pkgconfig freeglut;
+    inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    inherit (xlibs) inputproto libXi libXinerama libXft;
+    flags = [ "useNixLibs" "threads" "shared" "gl" ];
+  };
+
   fltk20 = (import ../development/libraries/fltk) {
     inherit composableDerivation x11 lib pkgconfig freeglut;
     inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
@@ -7879,6 +7886,17 @@ let
 
   bbdb = import ../applications/editors/emacs-modes/bbdb {
     inherit fetchurl stdenv emacs texinfo ctags;
+  };
+
+  cinepaint = import ../applications/graphics/cinepaint {
+    inherit stdenv fetchurl pkgconfig freetype fontconfig lcms flex libtiff
+      libjpeg libpng libexif zlib perl mesa perlXMLParser python pygtk gettext
+      intltool babl gegl;
+    inherit (xlibs) makedepend libX11 xf86vidmodeproto xineramaproto libXmu
+      libXext libXpm libXxf86vm;
+    inherit (gtkLibs) gtk glib;
+    openexr = openexr_1_6_1;
+    fltk = fltk11;
   };
 
   codeville = builderDefsPackage (selectVersion ../applications/version-management/codeville "0.8.0") {
