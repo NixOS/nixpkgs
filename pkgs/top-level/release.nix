@@ -225,6 +225,7 @@ in {
   portmap = linux;
   postgresql = all;
   procps = linux;
+  pthreadmanpages = all;
   python = allBut "i686-cygwin";
   pythonFull = linux;
   qt3 = allBut "i686-cygwin";
