@@ -1,7 +1,7 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "qt-4.4.3";
+  name = "qt-4.5.0";
   
   src = fetchurl {
     url = ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.5.0.tar.bz2;
