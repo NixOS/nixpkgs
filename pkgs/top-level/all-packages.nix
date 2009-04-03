@@ -8491,7 +8491,7 @@ let
 
   pavucontrol = import ../applications/audio/pavucontrol {
     inherit fetchurl stdenv pkgconfig pulseaudio libsigcxx
-      libcanberra gettext;
+      libcanberra intltool gettext;
     inherit (gtkLibs) gtkmm;
     inherit (gnome) libglademm;
   };

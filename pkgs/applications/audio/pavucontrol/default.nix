@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, pulseaudio, gtkmm, libsigcxx
-, libglademm, libcanberra, gettext }:
+, libglademm, libcanberra, intltool, gettext }:
 
 stdenv.mkDerivation rec {
   name = "pavucontrol-0.9.7";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a1v06hbl1j78ryqy5aiccg6w5hf1yzday2b9h31kx7vr42ir1w0";
   };
 
-  buildInputs = [ pkgconfig pulseaudio gtkmm libsigcxx libglademm libcanberra gettext ];
+  buildInputs = [ pkgconfig pulseaudio gtkmm libsigcxx libglademm libcanberra
+    intltool gettext ];
 
   configureFlags = "--disable-lynx";
 
