@@ -88,6 +88,16 @@ in
         # Needed to interpret times in the local timezone.
         env TZ=${config.time.timeZone}
 
+        start script
+            mkdir -m 710 -p /var/cron
+
+            # By default, allow all users to create a crontab.  This
+            # is denoted by the existence of an empty cron.deny file.
+            if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
+                touch /var/cron/cron.deny
+            fi
+        end script
+
         respawn ${pkgs.cron}/sbin/cron -n
       '';
     }];
