@@ -14,11 +14,6 @@ in
       start on dbus
       stop on shutdown  
           
-      start script
-        # !!! quick hack: wait until dbus has started
-        sleep 3
-      end script
-      
       respawn ${pkgs.ConsoleKit}/sbin/console-kit-daemon
     '';
 }

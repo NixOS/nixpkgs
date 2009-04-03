@@ -28,9 +28,6 @@
 
     start script
 
-        # !!! quick hack: wait until dbus has started
-        sleep 3
-
         mkdir -m 0755 -p /var/cache/hald
 
     end script
