@@ -936,6 +936,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  mcron = import ../tools/system/mcron {
+    inherit fetchurl stdenv guile which ed;
+  };
+
   mdbtools = builderDefsPackage (selectVersion ../tools/misc/mdbtools "0.6-pre1") {
     inherit readline pkgconfig bison;
     inherit (gtkLibs) glib;
