@@ -40,7 +40,7 @@ releaseTools.makeSourceTarball {
 
   checkPhase = ''
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval-only --strict tests.nix)"
+    res="$(nix-instantiate --eval-only --strict pkgs/lib/tests.nix)"
     if test "$res" != "List([])"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
