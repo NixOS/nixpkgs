@@ -8489,6 +8489,13 @@ let
     spellChecking = false;
   };
 
+  pavucontrol = import ../applications/audio/pavucontrol {
+    inherit fetchurl stdenv pkgconfig pulseaudio libsigcxx
+      libcanberra gettext;
+    inherit (gtkLibs) gtkmm;
+    inherit (gnome) libglademm;
+  };
+
   paraview = import ../applications/graphics/paraview {
     inherit fetchurl stdenv cmake qt4;
   };
