@@ -212,6 +212,7 @@ in {
   pam_unix2 = linux;
   pan = gtkSupported;
   par2cmdline = all;
+  pavucontrol = linux;
   pciutils = linux;
   perl = all;
   perlTaskCatalystTutorial = linux;
