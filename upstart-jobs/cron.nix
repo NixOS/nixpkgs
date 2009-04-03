@@ -25,8 +25,9 @@ let
             format. If you want to get the results mailed you must setuid
             sendmail. See <option>security.setuidOwners</option>
 
-            If you neither create /etc/cron.deny nor /etc/cron.allow only root
-            will be allowed to have its own crontab file.
+            If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
+            will is allowed to have its own crontab file. The /var/cron/cron.deny file
+            is created automatically for you. So every user can use a crontab.
           '';
         };
 
