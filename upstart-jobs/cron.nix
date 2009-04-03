@@ -24,6 +24,9 @@ let
             crontab.  See the manual page for crontab for the expected
             format. If you want to get the results mailed you must setuid
             sendmail. See <option>security.setuidOwners</option>
+
+            If you neither create /etc/cron.deny nor /etc/cron.allow only root
+            will be allowed to have its own crontab file.
           '';
         };
 
