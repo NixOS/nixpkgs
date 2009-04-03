@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig pulseaudio gtkmm libsigcxx libglademm libcanberra gettext ];
 
+  configureFlags = "--disable-lynx";
+
   meta = {
     description = "PulseAudio Volume Control";
 
