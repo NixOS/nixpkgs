@@ -181,6 +181,7 @@ in {
   manpages = linux;
   maxima = linux;
   mc = all;
+  mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
   mesa = linux;
