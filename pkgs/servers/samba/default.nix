@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     --with-pam
     --with-smbmount
     --with-aio-support
+    --with-pam_smbpass
     ${if (stdenv.gcc.libc != null) then "--with-libiconv=${stdenv.gcc.libc}" else ""}
   '';
 }
