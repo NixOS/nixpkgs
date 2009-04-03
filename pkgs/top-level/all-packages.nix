@@ -1997,6 +1997,10 @@ let
     inherit fetchurl stdenv pkgconfig aterm getopt jdk;
   };
 
+  metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
+    inherit fetchurl stdenv ;
+  }; 
+
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
     inherit fetchurl stdenv;
   };
