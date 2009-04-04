@@ -2005,6 +2005,10 @@ let
     inherit fetchurl stdenv ;
   }; 
 
+  metaBuildEnvTrunk = import ../development/compilers/meta-environment/meta-build-env/trunk.nix {
+    inherit fetchurl stdenv ;
+  }; 
+
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
     inherit fetchurl stdenv;
   };
