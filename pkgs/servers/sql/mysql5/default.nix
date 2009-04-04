@@ -11,7 +11,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ps ncurses zlib perl openssl];
-  postInstall = "ln -s mysqld_safe $out/bin/mysqld";
+  
+  configureFlags = "--enable-thread-safe-client --disable-static --with-openssl=${openssl} --with-berkeley-db";
 
-  configureFlags = "--enable-thread-safe-client --with-embedded-server --disable-static --with-openssl=${openssl} --with-berkeley-db";
+  postInstall =
+    ''
+      ln -s mysqld_safe $out/bin/mysqld
+      rm -rf $out/mysql-test $out/sql-bench $out/share/info
+    '';
+
+  meta = {
+    homepage = http://www.mysql.com/;
+    description = "The world's most popular open source database";
+  };
 }
