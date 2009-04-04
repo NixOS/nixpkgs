@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "samba-3.2.7";
+  name = "samba-3.3.3";
 
   src = fetchurl {
-    url = http://us3.samba.org/samba/ftp/stable/samba-3.3.2.tar.gz;
-    sha256 = "1b4fa9fbe7ccced6cca449c4b0b9fba65ffd2ad63b1f0bf2507e943281461477";
+    url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
+    sha256 = "08x3ng7ls5c1a95v7djx362i55wdlmnvarpr7rhng5bb55s9n5qn";
   };
 
   buildInputs = [readline pam openldap kerberos popt iniparser libunwind fam acl];
@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
   
   configureFlags = ''
     --with-pam
-    --with-smbmount
+    --with-cifsmount
     --with-aio-support
     --with-pam_smbpass
-    ${if (stdenv.gcc.libc != null) then "--with-libiconv=${stdenv.gcc.libc}" else ""}
+    --disable-swat
+    --enable-shared-libs
+    ${if stdenv.gcc.libc != null then "--with-libiconv=${stdenv.gcc.libc}" else ""}
   '';
 }
