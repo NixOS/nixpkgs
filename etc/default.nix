@@ -1,5 +1,6 @@
 { config, pkgs, upstartJobs, systemPath, wrapperDir
 , defaultShell, extraEtc, nixEnvVars, modulesTree, nssModulesPath, binsh
+, kdePackages
 }:
 
 let 
@@ -19,7 +20,7 @@ let
 
   pamConsolePerms = ./security/console.perms;
 
-  
+
 in
 
     
@@ -108,6 +109,11 @@ import ../helpers/make-etc.nix {
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
         inherit nixEnvVars;
+        # !!! in the modular NixOS these should be declared by the KDE
+        # component.
+        kdeDirs = pkgs.lib.concatStringsSep ":" kdePackages;
+        xdgConfigDirs = pkgs.lib.makeSearchPath "etc/xdg" kdePackages;
+        xdgDataDirs = pkgs.lib.makeSearchPath "share" kdePackages;
       };
       target = "bashrc";      
     }

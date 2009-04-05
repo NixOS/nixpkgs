@@ -1,4 +1,4 @@
-{ config, pkgs, kernelPackages
+{ config, pkgs, kernelPackages, kdePackages
 
 , # List of font directories.
   fontDirectories
@@ -7,6 +7,7 @@
 let
 
   inherit (pkgs.lib) optional isInList getAttr;
+  
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = cfg.package;
@@ -15,14 +16,14 @@ let
 
   knownVideoDrivers = {
     nvidia = { modulesFirst = [ kernelPackages.nvidia_x11 ]; };  #make sure it first loads the nvidia libs
-    vesa =  { modules = [xorg.xf86videovesa]; };
-    vga =   { modules = [xorg.xf86videovga]; };
-    sis =   { modules = [xorg.xf86videosis]; };
-    i810 =  { modules = [xorg.xf86videoi810]; };
-    intel = { modules = [xorg.xf86videointel]; };
-    nv =    { modules = [xorg.xf86videonv]; };
-    ati =   { modules = [xorg.xf86videoati]; };
-    via =   { modules = [xorg.xf86videovia]; };
+    vesa =   { modules = [xorg.xf86videovesa]; };
+    vga =    { modules = [xorg.xf86videovga]; };
+    sis =    { modules = [xorg.xf86videosis]; };
+    i810 =   { modules = [xorg.xf86videoi810]; };
+    intel =  { modules = [xorg.xf86videointel]; };
+    nv =     { modules = [xorg.xf86videonv]; };
+    ati =    { modules = [xorg.xf86videoati]; };
+    via =    { modules = [xorg.xf86videovia]; };
     cirrus = { modules = [xorg.xf86videocirrus]; };
   };
 
@@ -289,9 +290,6 @@ let
     ${if sessionType == "kde" then ''
 
       # Start KDE.
-      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kdebase}:${pkgs.kdelibs}
-      export XDG_CONFIG_DIRS=${pkgs.kdebase}/etc/xdg:${pkgs.kdelibs}/etc/xdg
-      export XDG_DATA_DIRS=${pkgs.kdebase}/share
       exec ${pkgs.kdebase}/bin/startkde
 
     '' else if sessionType == "kde4" then ''
@@ -384,24 +382,17 @@ rec {
     gnome.gconfeditor
   ]
   ++ optional (sessionType == "kde") [
-    pkgs.kdelibs
-    pkgs.kdebase
     xorg.xset # used by startkde, non-essential
   ]
   ++ optional (sessionType == "kde4") [
     xorg.xmessage # so that startkde can show error messages
     pkgs.qt4 # needed for qdbus
-    pkgs.kde42.kdelibs
-    pkgs.kde42.kdebase
-    pkgs.kde42.kdebase_runtime
-    pkgs.kde42.kdebase_workspace
-    pkgs.kde42.kdegames
-    pkgs.shared_mime_info
     xorg.xset # used by startkde, non-essential
   ]
   ++ optional (videoDriver == "nvidia") [
     kernelPackages.nvidia_x11
-  ];
+  ]
+  ++ kdePackages;
 
 
   extraEtc =

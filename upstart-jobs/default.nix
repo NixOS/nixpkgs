@@ -1,4 +1,6 @@
-{config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations, kernelPackages, mount}:
+{ config, pkgs, nix, modprobe, nssModulesPath, nixEnvVars, optionDeclarations
+, kernelPackages, mount, kdePackages
+}:
 
 let 
 
@@ -230,7 +232,7 @@ let
   # X server.
   ++ optional config.services.xserver.enable
     (import ../upstart-jobs/xserver.nix {
-      inherit config pkgs kernelPackages;
+      inherit config pkgs kernelPackages kdePackages;
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
     })
 

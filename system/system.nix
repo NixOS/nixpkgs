@@ -117,14 +117,15 @@ rec {
   # The services (Upstart) configuration for the system.
   upstartJobs = import ../upstart-jobs/default.nix {
     inherit config pkgs nix modprobe nssModulesPath nixEnvVars
-      optionDeclarations kernelPackages mount;
+      optionDeclarations kernelPackages mount kdePackages;
   };
 
 
   # The static parts of /etc.
   etc = import ../etc/default.nix {
     inherit config pkgs upstartJobs systemPath wrapperDir
-      defaultShell nixEnvVars modulesTree nssModulesPath binsh;
+      defaultShell nixEnvVars modulesTree nssModulesPath binsh
+      kdePackages;
     extraEtc =
        (pkgs.lib.concatLists (map (job: job.extraEtc) upstartJobs.jobs))
     ++ config.environment.etc;
@@ -262,16 +263,24 @@ rec {
     inherit (config.environment) pathsToLink;
 
     ignoreCollisions = true;
-
-    postBuild =
-      if config.services.xserver.sessionType == "kde4" then
-        # Rebuild the MIME database.  Otherwise KDE won't be able to
-        # find many MIME types.
-        ''
-          ${pkgs.shared_mime_info}/bin/update-mime-database $out/share/mime
-        ''
-      else "";
   };
+
+
+  # The list of packages that need to appear in KDEDIRS,
+  # XDG_CONFIG_DIRS and XDG_DATA_DIRS.
+  # !!! This should be defined somewhere else.  
+  kdePackages = 
+    pkgs.lib.optionals (config.services.xserver.sessionType == "kde4")
+      [ pkgs.kde42.kdelibs
+        pkgs.kde42.kdebase
+        pkgs.kde42.kdebase_runtime
+        pkgs.kde42.kdebase_workspace
+        pkgs.shared_mime_info
+      ]
+    ++ pkgs.lib.optionals (config.services.xserver.sessionType == "kde")
+      [ pkgs.kdebase
+        pkgs.kdelibs
+      ];
 
 
   usersGroups = import ./users-groups.nix { inherit pkgs config upstartJobs defaultShell; };
