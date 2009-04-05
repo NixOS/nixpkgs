@@ -2271,18 +2271,18 @@ let
     inherit fetchurl stdenv perl m4 lzma;
   };
 
-  automake = automake19x;
+  automake = automake110x;
 
   automake17x = import ../development/tools/misc/automake/automake-1.7.x.nix {
-    inherit fetchurl stdenv perl autoconf;
+    inherit fetchurl stdenv perl autoconf makeWrapper;
   };
 
   automake19x = import ../development/tools/misc/automake/automake-1.9.x.nix {
-    inherit fetchurl stdenv perl autoconf;
+    inherit fetchurl stdenv perl autoconf makeWrapper;
   };
 
   automake110x = import ../development/tools/misc/automake/automake-1.10.x.nix {
-    inherit fetchurl stdenv perl autoconf;
+    inherit fetchurl stdenv perl autoconf makeWrapper;
   };
 
   avrdude = import ../development/tools/misc/avrdude {

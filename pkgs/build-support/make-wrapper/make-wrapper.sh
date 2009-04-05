@@ -66,7 +66,9 @@ makeWrapper() {
         fi
     done
 
-    echo "exec \"$original\" $flagsBefore \"\$@\"" >> $wrapper
+    # Note: extraFlagsArray is an array containing additional flags
+    # that may be set by --run actions.
+    echo exec "$original" $flagsBefore '"${extraFlagsArray[@]}"' '"$@"' >> $wrapper
     
     chmod +x $wrapper
 }
@@ -90,7 +92,7 @@ filterExisting() {
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
 wrapProgram() {
     local prog="$1"
-    local hidden="$(dirname "$prog")/.wrapped-$(basename "$prog")"
+    local hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
     mv $prog $hidden
     makeWrapper $hidden $prog "$@"
 }
