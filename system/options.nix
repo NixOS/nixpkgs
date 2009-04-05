@@ -3083,6 +3083,22 @@ root        ALL=(ALL) SETENV: ALL
     };
   };
 
+
+  kde = {
+
+    extraPackages = mkOption {
+      default = [];
+      merge = backwardPkgsFunListMerge;
+      description = ''
+        Additional KDE packages to be used when
+        <option>services.xserver.sessionType</option> is
+        <literal>"kde"</literal> or <literal>"kde4"</literal>.
+        By default, you only get the KDE base packages.
+      '';
+    };
+  
+  };
+
   
   passthru = mkOption {
     default = {};
@@ -3093,6 +3109,7 @@ root        ALL=(ALL) SETENV: ALL
     ";
   };
 
+  
   require = [
     # newtworking
     (import ../upstart-jobs/dhclient.nix)

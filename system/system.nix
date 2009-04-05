@@ -280,7 +280,8 @@ rec {
     ++ pkgs.lib.optionals (config.services.xserver.sessionType == "kde")
       [ pkgs.kdebase
         pkgs.kdelibs
-      ];
+      ]
+    ++ config.kde.extraPackages;
 
 
   usersGroups = import ./users-groups.nix { inherit pkgs config upstartJobs defaultShell; };
