@@ -606,6 +606,10 @@ let
     inherit fetchurl stdenv emacs;
   };
 
+  enblendenfuse = import ../tools/graphics/enblend-enfuse {
+    inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
+  };
+
   enscript = import ../tools/text/enscript {
     inherit fetchurl stdenv;
   };
@@ -3586,6 +3590,10 @@ let
     inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2;
     inherit (xorg) libX11 libICE libxkbfile;
     inherit (gtkLibs) glib;
+  };
+
+  libxmi = import ../development/libraries/libxmi {
+    inherit fetchurl stdenv;
   };
 
   libxml2 = import ../development/libraries/libxml2 {
@@ -8282,6 +8290,12 @@ let
 
   hello = import ../applications/misc/hello/ex-2 {
     inherit fetchurl stdenv;
+  };
+
+  hugin = import ../applications/graphics/hugin {
+    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig exiv2 gettext ilmbase;
+    wxGTK = wxGTK28;
+    openexr = openexr_1_6_1;
   };
 
   i810switch = import ../applications/misc/i810 {
