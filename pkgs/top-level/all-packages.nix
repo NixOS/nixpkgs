@@ -8577,6 +8577,10 @@ let
     spellChecking = false;
   };
 
+  panotools = import ../applications/graphics/panotools {
+    inherit stdenv fetchsvn libpng libjpeg libtiff automake libtool autoconf;
+  };
+
   paraview = import ../applications/graphics/paraview {
     inherit fetchurl stdenv cmake qt4;
   };
