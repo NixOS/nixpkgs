@@ -22,6 +22,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://qtpfsgui.sourceforge.net/;
     description = "GUI frontend for some pfstools";
-    license = "GPL";
+    license = "GPLv2";
   };
 }

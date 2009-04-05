@@ -18,6 +18,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://panotools.sourceforge.net/;
     description = "Panorama Tools";
-    license = "GPL";
+    license = "LGPL";
   };
 }
