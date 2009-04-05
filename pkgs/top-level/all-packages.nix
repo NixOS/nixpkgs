@@ -1090,6 +1090,13 @@ let
     pam = if getPkgConfig "pdsh" "pam" true then pam else null;
   };
 
+  pfstools = import ../tools/graphics/pfstools {
+    inherit fetchurl stdenv imagemagick libjpeg libtiff mesa freeglut bzip2 libpng expat;
+    openexr = openexr_1_6_1;
+    qt = qt3;
+    inherit (xlibs) libX11;
+  };
+
   pinentry = import ../tools/misc/pinentry {
     inherit fetchurl stdenv pkgconfig ncurses;
     inherit (gnome) glib gtk;
@@ -8641,6 +8648,11 @@ let
 
   quack = import ../applications/editors/emacs-modes/quack {
     inherit fetchurl stdenv emacs;
+  };
+
+  qtpfsgui = import ../applications/graphics/qtpfsgui {
+    inherit fetchurl stdenv exiv2 libtiff fftw qt4 ilmbase;
+    openexr = openexr_1_6_1;
   };
 
   ratpoison = import ../applications/window-managers/ratpoison {
