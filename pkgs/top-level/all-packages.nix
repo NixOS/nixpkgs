@@ -1521,6 +1521,10 @@ let
     inherit fetchsvn stdenv coreutils m4 libtool ghc uulib uuagc llvm;
   };
 
+  adobeFlexSDK33 = import ../development/compilers/adobe-flex-sdk {
+    inherit fetchurl stdenv unzip jre;
+  };
+
   fpc = import ../development/compilers/fpc {
     inherit fetchurl stdenv gawk system;
   };
