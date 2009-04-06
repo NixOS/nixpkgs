@@ -25,6 +25,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://hugin.sourceforge.net/;
     description = "Panoramic imaging toolchain";
-    license = "GPLv2";
+    license = "GPLv2+";
   };
 }
