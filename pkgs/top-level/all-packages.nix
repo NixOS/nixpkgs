@@ -1056,6 +1056,10 @@ let
     pamSupport = getPkgConfig "openssh" "pam" true;
   };
 
+  openvpn = import ../tools/networking/openvpn {
+    inherit fetchurl stdenv iproute lzo openssl;
+  };
+
   p7zip = import ../tools/archivers/p7zip {
     inherit fetchurl stdenv;
   };
