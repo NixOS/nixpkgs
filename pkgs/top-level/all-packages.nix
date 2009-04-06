@@ -3601,7 +3601,7 @@ let
   };
 
   libxmi = import ../development/libraries/libxmi {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libtool;
   };
 
   libxml2 = import ../development/libraries/libxml2 {
