@@ -6,6 +6,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = https://panotools.svn.sourceforge.net/svnroot/panotools/trunk/libpano;
     rev = 955;
+    sha256 = "e896c21caa098d33f33f33f134a8c9a725686c2470fe3cd08b76cd7934a56034";
   };
 
   configurePhase = ''
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://panotools.sourceforge.net/;
-    description = "Panorama Tools";
+    description = "Free software suite for authoring and displaying virtual reality panoramas";
     license = "LGPL";
   };
 }
