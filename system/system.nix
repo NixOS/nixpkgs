@@ -160,6 +160,7 @@ rec {
       paths = [
         pkgs.ntfs3g
         pkgs.mount_cifs
+        pkgs.nfsUtils
       ];
       pathsToLink = "/sbin";
     } + "/sbin";
