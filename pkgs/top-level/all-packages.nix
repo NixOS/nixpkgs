@@ -558,6 +558,10 @@ let
     inherit fetchurl stdenv zlib bzip2 openssl;
   };
 
+  dcraw = import ../tools/graphics/dcraw {
+    inherit fetchurl stdenv gettext libjpeg lcms;
+  };
+
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
   desktop_file_utils = import ../tools/misc/desktop-file-utils {
