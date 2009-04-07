@@ -7728,6 +7728,10 @@ let
     gtkGUI = false;
   };
 
+  autopanosiftc = import ../applications/graphics/autopanosiftc {
+    inherit fetchurl stdenv cmake libpng libtiff libjpeg panotools libxml2;
+  };
+
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
   };
