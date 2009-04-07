@@ -1191,6 +1191,15 @@ in
       };
     };
 
+    kdm = {
+      
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to enable the KDE display manager.
+        ";        
+      };
+    };
 
     xserver = {
 

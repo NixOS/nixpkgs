@@ -236,6 +236,12 @@ let
       fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
     })
 
+  ++ optional config.services.kdm.enable
+    (import ../upstart-jobs/kdm.nix {
+      inherit config pkgs kernelPackages;
+      fontDirectories = import ../system/fonts.nix {inherit pkgs config;};
+    })
+
   # Apache httpd.
   ++ optional (config.services.httpd.enable && !config.services.httpd.experimental)
     (import ../upstart-jobs/httpd.nix {
