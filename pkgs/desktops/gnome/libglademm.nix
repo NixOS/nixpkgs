@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1hrbg9l5qb7w0xvr7013qamkckyj0fqc426c851l69zpmhakqm1q";
   };
 
-  buildInputs = [ pkgconfig libglade gtkmm ];
+  buildInputs = [ pkgconfig ];
+
+  # `libglade' must be propagated so that `pkg-config libglademm
+  # --libs' (or `--cflags') works.
+  propagatedBuildInputs = [ libglade gtkmm ];
 
   meta = {
     description = "C++ interface to the libglade graphical user interface library";
