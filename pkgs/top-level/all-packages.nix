@@ -5624,6 +5624,14 @@ let
     };
   };
 
+  perlPerl5lib = buildPerlPackage rec {
+    name = "perl5lib-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NO/NOBULL/${name}.tar.gz";
+      sha256 = "1b6fgs8wy2a7ff8rr1qdvdghhvlpr1pv760k4i2c8lq1hhjnkf94";
+    };
+  };
+
   perlPerlIOeol = buildPerlPackage {
     name = "PerlIO-eol-0.14";
     src = fetchurl {
@@ -6179,6 +6187,21 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
       sha256 = "0amwbss2gz00fkdfnfixf1afmqal1246xhmj27g5c0ny7ahcid0j";
+    };
+  };
+
+  perlW3CLinkChecker = buildPerlPackage rec {
+    name = "W3C-LinkChecker-4.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SC/SCOP/${name}.tar.gz";
+      sha256 = "0j2zlg57g0y9hqy8n35x5rfkpm7rnfjlwny5g0zaxwrl62ndkbm9";
+    };
+    propagatedBuildInputs = [
+      perlLWP perlConfigGeneral perlNetIP perlTermReadKey perlPerl5lib
+    ];
+    meta = {
+      homepage = http://validator.w3.org/checklink;
+      description = "A tool to check links and anchors in Web pages or full Web sites";
     };
   };
 
