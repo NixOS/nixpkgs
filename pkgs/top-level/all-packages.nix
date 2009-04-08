@@ -8252,6 +8252,11 @@ let
     jre = jdk;
   };
 
+  freepv = import ../applications/graphics/freepv {
+    inherit fetchurl stdenv mesa freeglut libjpeg zlib cmake libxml2 libpng;
+    inherit (xlibs) libX11 libXxf86vm;
+  };
+
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
