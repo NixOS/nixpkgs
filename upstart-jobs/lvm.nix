@@ -1,30 +1,41 @@
-{modprobe, lvm2, devicemapper}:
+{pkgs, config, ...}:
+
+###### implementation
+
+let
+  modprobe = config.system.sbin.modprobe;
+
+in
+
 
 {
-  name = "lvm";
-  
-  job = "
-start on udev
-#start on new-devices
 
-script
+  services = {
+    extraJobs = [{
+      name = "lvm";
+      
+      job = ''
+        start on udev
+        #start on new-devices
 
-    # Load the device mapper.
-    ${modprobe}/sbin/modprobe dm_mod || true
+        script
 
-    ${devicemapper}/sbin/dmsetup mknodes
-    # Scan for block devices that might contain LVM physical volumes
-    # and volume groups.
-    ${lvm2}/sbin/vgscan --mknodes
+            # Load the device mapper.
+            ${modprobe}/sbin/modprobe dm_mod || true
 
-    # Make all logical volumes on all volume groups available, i.e.,
-    # make them appear in /dev.
-    ${lvm2}/sbin/vgchange --available y
+            ${pkgs.devicemapper}/sbin/dmsetup mknodes
+            # Scan for block devices that might contain LVM physical volumes
+            # and volume groups.
+            ${pkgs.lvm2}/sbin/vgscan --mknodes
 
-    initctl emit new-devices
-    
-end script
+            # Make all logical volumes on all volume groups available, i.e.,
+            # make them appear in /dev.
+            ${pkgs.lvm2}/sbin/vgchange --available y
 
-  ";
-
+            initctl emit new-devices
+            
+        end script
+      '';
+    }];
+  };
 }

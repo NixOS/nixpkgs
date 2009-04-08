@@ -1,6 +1,209 @@
-{config, pkgs}:
+{pkgs, config, ...}:
 
+###### interface
 let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      httpd = {
+      
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable the Apache httpd server.
+          ";
+        };
+
+        experimental = mkOption {
+          default = false;
+          description = "
+            Whether to use the new-style Apache configuration.
+          ";
+        };
+
+        extraConfig = mkOption {
+          default = "";
+          description = "
+            These configuration lines will be passed verbatim to the apache config
+          ";
+        };
+
+        extraModules = mkOption {
+          default = [];
+          example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+          description = ''
+            Specifies additional Apache modules.  These can be specified
+            as a string in the case of modules distributed with Apache,
+            or as an attribute set specifying the
+            <varname>name</varname> and <varname>path</varname> of the
+            module.
+          '';
+        };
+
+        logPerVirtualHost = mkOption {
+          default = false;
+          description = "
+            If enabled, each virtual host gets its own
+            <filename>access_log</filename> and
+            <filename>error_log</filename>, namely suffixed by the
+            <option>hostName</option> of the virtual host.
+          ";
+        };
+
+        user = mkOption {
+          default = "wwwrun";
+          description = "
+            User account under which httpd runs.  The account is created
+            automatically if it doesn't exist.
+          ";
+        };
+
+        group = mkOption {
+          default = "wwwrun";
+          description = "
+            Group under which httpd runs.  The account is created
+            automatically if it doesn't exist.
+          ";
+        };
+
+        logDir = mkOption {
+          default = "/var/log/httpd";
+          description = "
+            Directory for Apache's log files.  It is created automatically.
+          ";
+        };
+
+        stateDir = mkOption {
+          default = "/var/run/httpd";
+          description = "
+            Directory for Apache's transient runtime state (such as PID
+            files).  It is created automatically.  Note that the default,
+            <filename>/var/run/httpd</filename>, is deleted at boot time.
+          ";
+        };
+
+        mod_php = mkOption {
+          default = false;
+          description = "Whether to enable the PHP module.";
+        };
+
+        mod_jk = {
+          enable = mkOption {
+            default = false;
+            description = "Whether to enable the Apache Tomcat connector.";
+          };
+          
+          applicationMappings = mkOption {
+            default = [];
+            description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
+          };
+        };
+
+        virtualHosts = mkOption {
+          default = [];
+          example = [
+            { hostName = "foo";
+              documentRoot = "/data/webroot-foo";
+            }
+            { hostName = "bar";
+              documentRoot = "/data/webroot-bar";
+            }
+          ];
+          description = ''
+            Specification of the virtual hosts served by Apache.  Each
+            element should be an attribute set specifying the
+            configuration of the virtual host.  The available options
+            are the non-global options permissible for the main host.
+          '';
+        };
+
+        subservices = {
+
+          # !!! remove this
+          subversion = {
+
+            enable = mkOption {
+              default = false;
+              description = "
+                Whether to enable the Subversion subservice in the webserver.
+              ";
+            };
+
+            notificationSender = mkOption {
+              default = "svn-server@example.org";
+              example = "svn-server@example.org";
+              description = "
+                The email address used in the Sender field of commit
+                notification messages sent by the Subversion subservice.
+              ";
+            };
+
+            userCreationDomain = mkOption {
+              default = "example.org"; 
+              example = "example.org";
+              description = "
+                The domain from which user creation is allowed.  A client can
+                only create a new user account if its IP address resolves to
+                this domain.
+              ";
+            };
+
+            autoVersioning = mkOption {
+              default = false;
+              description = "
+                Whether you want the Subversion subservice to support
+                auto-versioning, which enables Subversion repositories to be
+                mounted as read/writable file systems on operating systems that
+                support WebDAV.
+              ";
+            };
+            
+            dataDir = mkOption {
+              default = "/no/such/path/exists";
+              description = "
+                Place to put SVN repository.
+              ";
+            };
+
+            organization = {
+
+              name = mkOption {
+                default = null;
+                description = "
+                  Name of the organization hosting the Subversion service.
+                ";
+              };
+
+              url = mkOption {
+                default = null;
+                description = "
+                  URL of the website of the organization hosting the Subversion service.
+                ";
+              };
+
+              logo = mkOption {
+                default = null;
+                description = "
+                  Logo the organization hosting the Subversion service.
+                ";
+              };
+
+            };
+
+          };
+
+        };
+      } // # Include the options shared between the main server and virtual hosts.
+          (import ../../upstart-jobs/apache-httpd/per-server-options.nix {
+           inherit mkOption;
+           forMainServer = true;
+        });
+    };
+  };
+
+
+###### implementation
 
   mainCfg = config.services.httpd;
   
@@ -361,65 +564,75 @@ let
     
 in
 
-{
 
-  name = "httpd";
-  
-  users = [
-    { name = mainCfg.user;
-      description = "Apache httpd user";
-    }
+mkIf (config.services.httpd.enable && config.services.httpd.experimental) {
+  require = [
+    options
   ];
 
-  groups = [
-    { name = mainCfg.group;
-    }
-  ];
+  users = {
+    extraUsers = [
+      { name = mainCfg.user;
+        description = "Apache httpd user";
+      }
+    ];
+    extraGroups = [
+      { name = mainCfg.group;
+      }
+    ];
+  };
 
-  extraPath = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
+  services = {
+    extraJobs = [{
+      name = "httpd";
 
-  # Statically verify the syntactic correctness of the generated
-  # httpd.conf.  !!! this is impure!  It doesn't just check for
-  # syntax, but also whether the Apache user/group exist, whether SSL
-  # keys exist, etc.
-  buildHook = ''
-    echo
-    echo '=== Checking the generated Apache configuration file ==='
-    ${httpd}/bin/httpd -f ${httpdConf} -t || true
-  '';
+      extraPath = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
-  job = ''
-    description "Apache HTTPD"
+      # Statically verify the syntactic correctness of the generated
+      # httpd.conf.  !!! this is impure!  It doesn't just check for
+      # syntax, but also whether the Apache user/group exist, whether SSL
+      # keys exist, etc.
+      buildHook = ''
+        echo
+        echo '=== Checking the generated Apache configuration file ==='
+        ${httpd}/bin/httpd -f ${httpdConf} -t || true
+      '';
 
-    start on ${startingDependency}/started
-    stop on shutdown
+      job = ''
+        description "Apache HTTPD"
 
-    start script
-      mkdir -m 0700 -p ${mainCfg.stateDir}
-      mkdir -m 0700 -p ${mainCfg.logDir}
+        start on ${startingDependency}/started
+        stop on shutdown
 
-      # Get rid of old semaphores.  These tend to accumulate across
-      # server restarts, eventually preventing it from restarting
-      # succesfully.
-      for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
-          ${pkgs.utillinux}/bin/ipcrm -s $i
-      done
+        start script
+          mkdir -m 0700 -p ${mainCfg.stateDir}
+          mkdir -m 0700 -p ${mainCfg.logDir}
 
-      # Run the startup hooks for the subservices.
-      for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
-          echo Running Apache startup hook $i...
-          $i
-      done
-    end script
+          # Get rid of old semaphores.  These tend to accumulate across
+          # server restarts, eventually preventing it from restarting
+          # succesfully.
+          for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
+              ${pkgs.utillinux}/bin/ipcrm -s $i
+          done
 
-    ${
-      let f = {name, value}: "env ${name}=${value}\n";
-      in concatMapStrings f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices)
-    }
+          # Run the startup hooks for the subservices.
+          for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
+              echo Running Apache startup hook $i...
+              $i
+          done
+        end script
 
-    env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
+        ${
+          let f = {name, value}: "env ${name}=${value}\n";
+          in concatMapStrings f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices)
+        }
 
-    respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
-  '';
+        env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
 
+        respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
+      '';
+
+    }];
+  };
 }
+

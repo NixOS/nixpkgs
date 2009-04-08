@@ -1,12 +1,20 @@
-{
-  name = "ctrl-alt-delete";
-  
-  job = "
-on ctrlaltdel
+{pkgs, config, ...}:
 
-script
-    shutdown -r now 'Ctrl-Alt-Delete pressed'
-end script
-  ";
-  
+###### implementation
+
+{
+
+  services = {
+    extraJobs = [{
+      name = "ctrl-alt-delete";
+      
+      job = ''
+        on ctrlaltdel
+        
+        script
+            shutdown -r now 'Ctrl-Alt-Delete pressed'
+        end script
+       '';
+    }];
+  };
 }

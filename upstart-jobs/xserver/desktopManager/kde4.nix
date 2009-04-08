@@ -2,7 +2,7 @@
 
 let
   inherit (pkgs.lib) mkOption mkIf;
-  cfg = config.services.xserver.desktopManager.kde;
+  cfg = config.services.xserver.desktopManager.kde4;
   xorg = config.services.xserver.package;
 
   options = { services = { xserver = { desktopManager = {

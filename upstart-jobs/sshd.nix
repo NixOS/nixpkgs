@@ -1,14 +1,66 @@
-{ writeText, openssh, glibc, xauth
-, nssModulesPath
-, forwardX11, allowSFTP, permitRootLogin, gatewayPorts
-}:
+{pkgs, config, ...}:
 
-assert permitRootLogin == "yes" ||
-       permitRootLogin == "without-password" ||
-       permitRootLogin == "forced-commands-only" ||
-       permitRootLogin == "no";
-       
+###### interface
 let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      sshd = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable the Secure Shell daemon, which allows secure
+            remote logins.
+          ";
+        };
+
+        forwardX11 = mkOption {
+          default = true;
+          description = "
+            Whether to enable sshd to forward X11 connections.
+          ";
+        };
+
+        allowSFTP = mkOption {
+          default = true;
+          description = "
+            Whether to enable the SFTP subsystem in the SSH daemon.  This
+            enables the use of commands such as <command>sftp</command> and
+            <command>sshfs</command>.
+          ";
+        };
+
+        permitRootLogin = mkOption {
+          default = "yes";
+          description = "
+            Whether the root user can login using ssh. Valid options
+            are <command>yes</command>, <command>without-password</command>,
+            <command>forced-commands-only</command> or
+            <command>no</command>
+          ";
+        };
+
+        gatewayPorts = mkOption {
+          default = "no";
+          description = "
+             Specifies  whether  remote hosts are allowed to connect to ports forwarded for the client. See man sshd_conf.
+            ";
+          };
+      };
+    };
+  };
+
+###### implementation
+
+  inherit (pkgs) writeText openssh;
+
+  cfg = (config.services.sshd);
+
+  nssModules = config.system.nssModules.list;
+
+  nssModulesPath = config.system.nssModules.path;
 
   sshdConfig = writeText "sshd_config" ''
 
@@ -16,55 +68,70 @@ let
     
     UsePAM yes
     
-    ${if forwardX11 then "
+    ${if cfg.forwardX11 then "
       X11Forwarding yes
-      XAuthLocation ${xauth}/bin/xauth
+      XAuthLocation ${pkgs.xlibs.xauth}/bin/xauth
     " else "
       X11Forwarding no
     "}
 
-    ${if allowSFTP then "
+    ${if cfg.allowSFTP then "
       Subsystem sftp ${openssh}/libexec/sftp-server
     " else "
     "}
     
-    PermitRootLogin ${permitRootLogin}
-    GatewayPorts ${gatewayPorts}
+    PermitRootLogin ${cfg.permitRootLogin}
+    GatewayPorts ${cfg.gatewayPorts}
     
   '';
 
   sshdUid = (import ../system/ids.nix).uids.sshd;
 
+  assertion = cfg.permitRootLogin == "yes" ||
+       cfg.permitRootLogin == "without-password" ||
+       cfg.permitRootLogin == "forced-commands-only" ||
+       cfg.permitRootLogin == "no";
+
 in
 
-{
-  name = "sshd";
 
-  users = [
-    { name = "sshd";
-      uid = (import ../system/ids.nix).uids.sshd;
-      description = "SSH privilege separation user";
-      home = "/var/empty";
-    }
+mkIf config.services.sshd.enable {
+  require = [
+    options
   ];
-  
-  job = ''
-    description "SSH server"
 
-    start on network-interfaces/started
-    stop on network-interfaces/stop
+  users = {
+    extraUsers = [
+      { name = "sshd";
+        uid = (import ../system/ids.nix).uids.sshd;
+        description = "SSH privilege separation user";
+        home = "/var/empty";
+      }
+    ];
+  };
 
-    env LD_LIBRARY_PATH=${nssModulesPath}
+  services = {
+    extraJobs = [{
+      name = "sshd";
 
-    start script
-        mkdir -m 0755 -p /etc/ssh
+      job = ''
+        description "SSH server"
 
-        if ! test -f /etc/ssh/ssh_host_dsa_key; then
-            ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
-        fi
-    end script
+        start on network-interfaces/started
+        stop on network-interfaces/stop
 
-    respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}
-  '';
-  
+        env LD_LIBRARY_PATH=${nssModulesPath}
+
+        start script
+            mkdir -m 0755 -p /etc/ssh
+
+            if ! test -f /etc/ssh/ssh_host_dsa_key; then
+                ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
+            fi
+        end script
+
+        respawn ${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}
+      '';
+    }];
+  };
 }

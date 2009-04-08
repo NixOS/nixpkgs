@@ -1,4 +1,79 @@
-{pkgs, config}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      dhcpd = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable the DHCP server.
+          ";
+        };
+
+        extraConfig = mkOption {
+          default = "";
+          example = "
+            option subnet-mask 255.255.255.0;
+            option broadcast-address 192.168.1.255;
+            option routers 192.168.1.5;
+            option domain-name-servers 130.161.158.4, 130.161.33.17, 130.161.180.1;
+            option domain-name \"example.org\";
+            subnet 192.168.1.0 netmask 255.255.255.0 {
+              range 192.168.1.100 192.168.1.200;
+            }
+          ";
+          description = "
+            Extra text to be appended to the DHCP server configuration
+            file.  Currently, you almost certainly need to specify
+            something here, such as the options specifying the subnet
+            mask, DNS servers, etc.
+          ";
+        };
+
+        configFile = mkOption {
+          default = null;
+          description = "
+            The path of the DHCP server configuration file.  If no file
+            is specified, a file is generated using the other options.
+          ";
+        };
+
+        interfaces = mkOption {
+          default = ["eth0"];
+          description = "
+            The interfaces on which the DHCP server should listen.
+          ";
+        };
+
+        machines = mkOption {
+          default = [];
+          example = [
+            { hostName = "foo";
+              ethernetAddress = "00:16:76:9a:32:1d";
+              ipAddress = "192.168.1.10";
+            }
+            { hostName = "bar";
+              ethernetAddress = "00:19:d1:1d:c4:9a";
+              ipAddress = "192.168.1.11";
+            }
+          ];
+          description = "
+            A list mapping ethernet addresses to IP addresses for the
+            DHCP server.
+          ";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
 
@@ -25,26 +100,34 @@ let
 
 in
   
-{
-  name = "dhcpd";
-  
-  job = ''
-    description "DHCP server"
 
-    start on network-interfaces/started
-    stop on network-interfaces/stop
+mkIf config.services.dhcpd.enable {
+  require = [
+    options
+  ];
 
-    script
+  services = {
+    extraJobs = [{
+      name = "dhcpd";
+      
+      job = ''
+        description "DHCP server"
 
-        mkdir -m 755 -p ${stateDir}
+        start on network-interfaces/started
+        stop on network-interfaces/stop
 
-        touch ${stateDir}/dhcpd.leases
+        script
 
-        exec ${pkgs.dhcp}/sbin/dhcpd -f -cf ${configFile} \
-            -lf ${stateDir}/dhcpd.leases \
-            ${toString cfg.interfaces}
+            mkdir -m 755 -p ${stateDir}
 
-    end script
-  '';
-  
+            touch ${stateDir}/dhcpd.leases
+
+            exec ${pkgs.dhcp}/sbin/dhcpd -f -cf ${configFile} \
+                -lf ${stateDir}/dhcpd.leases \
+                ${toString cfg.interfaces}
+
+        end script
+      '';
+    }];
+  };
 }

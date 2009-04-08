@@ -1,8 +1,32 @@
-{sysklogd, writeText, config}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+
+      syslogd = {
+
+        tty = mkOption {
+          default = 10;
+          description = "
+            The tty device on which syslogd will print important log
+            messages.
+          ";
+        };
+      
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
 
-  syslogConf = writeText "syslog.conf" ''
+  syslogConf = pkgs.writeText "syslog.conf" ''
     kern.warning;*.err;authpriv.none /dev/tty10
 
     # Send emergency messages to all users.
@@ -22,16 +46,24 @@ let
 in
 
 {
-  name = "syslogd";
-  
-  job = ''
-    description "Syslog daemon"
-  
-    start on udev
-    stop on shutdown
+  require = [
+    options
+  ];
 
-    env TZ=${config.time.timeZone}
-    
-    respawn ${sysklogd}/sbin/syslogd -n -f ${syslogConf}
-  '';
+  services = {
+    extraJobs = [{
+        name = "syslogd";
+        
+        job = ''
+          description "Syslog daemon"
+        
+          start on udev
+          stop on shutdown
+
+          env TZ=${config.time.timeZone}
+          
+          respawn ${pkgs.sysklogd}/sbin/syslogd -n -f ${syslogConf}
+        '';
+    }];
+  };
 }

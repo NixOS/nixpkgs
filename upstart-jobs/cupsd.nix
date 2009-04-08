@@ -1,4 +1,26 @@
-{config, pkgs, modprobe}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      printing = {
+
+        enable = mkOption {
+          default = false;
+          description = "
+            Whether to enable printing support through the CUPS daemon.
+          ";
+        };
+
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
 
@@ -6,6 +28,8 @@ let
 
 
   inherit (pkgs) cups;
+
+  modprobe = config.system.sbin.modprobe;
 
 
   # Here we can enable additional backends, filters, etc. that are not
@@ -101,37 +125,45 @@ let
 
 in
 
-{
-  name = "cupsd";
 
-  extraPath = [cups];
-
-  extraEtc = [
-    # CUPS expects the following files in its ServerRoot.
-    { source = "${cups}/etc/cups/mime.convs";
-      target = "cups/mime.convs";
-    }
-    { source = "${cups}/etc/cups/mime.types";
-      target = "cups/mime.types";
-    }
+mkIf config.services.pulseaudio.enable {
+  require = [
+    options
   ];
-  
-  job = ''
-    description "CUPS printing daemon"
 
-    start on network-interfaces/started
-    stop on network-interfaces/stop
+  services = {
+    extraJobs = [{
+      name = "cupsd";
 
-    start script
-        mkdir -m 0755 -p ${logDir}
-        mkdir -m 0700 -p /var/cache/cups
-        mkdir -m 0700 -p /var/spool/cups
+      extraPath = [cups];
 
-        # Make USB printers show up.
-        ${modprobe}/sbin/modprobe usblp || true
-    end script
+      extraEtc = [
+        # CUPS expects the following files in its ServerRoot.
+        { source = "${cups}/etc/cups/mime.convs";
+          target = "cups/mime.convs";
+        }
+        { source = "${cups}/etc/cups/mime.types";
+          target = "cups/mime.types";
+        }
+      ];
+      
+      job = ''
+        description "CUPS printing daemon"
 
-    respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F
-  '';
-  
+        start on network-interfaces/started
+        stop on network-interfaces/stop
+
+        start script
+            mkdir -m 0755 -p ${logDir}
+            mkdir -m 0700 -p /var/cache/cups
+            mkdir -m 0700 -p /var/spool/cups
+
+            # Make USB printers show up.
+            ${modprobe}/sbin/modprobe usblp || true
+        end script
+
+        respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F
+      '';
+    }];
+  };
 }

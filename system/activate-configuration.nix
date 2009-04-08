@@ -3,7 +3,8 @@
 
 let
   inherit (pkgs.stringsWithDeps) textClosureOverridable noDepEntry;
-  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten mapAttrs;
+  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten
+    mapAttrs addErrorContext fold;
 
   textClosure = steps:
     textClosureOverridable steps (
@@ -44,8 +45,9 @@ in
         Activate the new configuration (i.e., update /etc, make accounts,
         and so on).
       '';
-      merge = mergeTypedOption "script" builtins.isAttrs mergeAttrs;
-      apply = set: let lib = addAttributeName set; in {
+      merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
+      apply = set:
+        let lib = addAttributeName set; in {
         inherit lib; # used to fetch dependencies.
         script = aggregateScripts "activationScript" lib;
       };

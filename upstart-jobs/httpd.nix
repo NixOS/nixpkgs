@@ -1,4 +1,14 @@
-{config, pkgs, glibc, extraConfig}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  # options have been moved to the apache-httpd/default.nix file 
+
+in
+
+###### implementation
 
 let
 
@@ -21,6 +31,11 @@ let
   applicationMappings = cfg.mod_jk.applicationMappings;
   
   startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
+
+
+  extraConfig = pkgs.lib.concatStringsSep "\n"
+      (pkgs.lib.catAttrs "extraHttpdConfig" config.services.extraJobs);
+
   
   webServer = import ../../services/apache-httpd {
     inherit (pkgs) apacheHttpd coreutils;
@@ -32,6 +47,7 @@ let
       user group adminAddr logDir stateDir
       applicationMappings;
     noUserDir = !cfg.enableUserDir;
+
     extraDirectories = extraConfig + "\n" + cfg.extraConfig;
     
     subServices =
@@ -72,41 +88,47 @@ let
           )
         )
         )
-      )
-      /* ++
-
-      (optional cfg.extraSubservices.enable
-        (map (service : service webServer pkgs) cfg.extraSubservices.services)
-      ) */;
+      );
   };
   
 in
 
-{
-  name = "httpd";
-  
-  users = [
-    { name = user;
-      description = "Apache httpd user";
-    }
+mkIf (config.services.httpd.enable && !config.services.httpd.experimental) {
+
+  require = [
+    # options have been moved to the apache-httpd/default.nix file 
   ];
 
-  groups = [
-    { name = group;
-    }
-  ];
+  users = {
+    extraUsers = [
+      { name = user;
+        description = "Apache httpd user";
+      }
+    ];
+
+    extraGroups = [
+      { name = group;
+      }
+    ];
+  };
+
+  services = {
+    extraJobs = [{
+      name = "httpd";
+      
+      job = ''
+        description \"Apache HTTPD\"
+
+        start on ${startingDependency}/started
+        stop on ${startingDependency}/stop
+
+        start script
+            ${webServer}/bin/control prepare    
+        end script
+
+        respawn ${webServer}/bin/control run
+      '';
   
-  job = "
-description \"Apache HTTPD\"
-
-start on ${startingDependency}/started
-stop on ${startingDependency}/stop
-
-start script
-    ${webServer}/bin/control prepare    
-end script
-
-respawn ${webServer}/bin/control run
-  ";
-  
+    }];
+  };
 }

@@ -1,11 +1,54 @@
-{ stdenv, writeText, substituteAll, cleanSource, udev, procps, firmwareDirs, modprobe
-, extraUdevPkgs ? []
-, config
-}:
+{pkgs, config, ...}:
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption mkIf;
+
+  options = {
+    services = {
+      udev = {
+
+        addFirmware = mkOption {
+          default = [];
+          example = ["/mnt/big-storage/firmware/"];
+          description = "
+            To specify firmware that is not too spread to ensure 
+            a package, or have an interactive process of extraction
+            and cannot be redistributed.
+          ";
+          merge = pkgs.lib.mergeListOption;
+        };
+
+        addUdevPkgs = mkOption {
+          default = [];
+          description = "
+            List of packages containing udev rules.
+          ";
+          merge = pkgs.lib.mergeListOption;
+        };
+        
+        sndMode = mkOption {
+          default = "0600";
+          example = "0666";
+          description = "
+            Permissions for /dev/snd/*, in case you have multiple 
+            logged in users or if the devices belong to root for 
+            some reason.
+          ";
+        };
+      };
+    };
+  };
+in
+
+###### implementation
 
 let
 
+  inherit (pkgs) substituteAll stdenv writeText udev procps;
+
   cfg = config.services.udev;
+
 
   firmwareLoader = substituteAll {
     src = ./udev-firmware-loader.sh;
@@ -13,6 +56,11 @@ let
     isExecutable = true;
     inherit firmwareDirs;
   };
+
+  firmwareDirs = config.services.udev.addFirmware;
+  extraUdevPkgs = config.services.udev.addUdevPkgs;
+
+  modprobe = config.system.sbin.modprobe;
     
   nixRules = writeText "90-nix.rules" ''
   
@@ -86,55 +134,64 @@ let
 in
 
 {
-  name = "udev";
-  
-  job = ''
-    start on startup
-    stop on shutdown
 
-    env UDEV_CONFIG_FILE=${conf}
+  require = [
+    options
+  ];
 
-    start script
-        echo "" > /proc/sys/kernel/hotplug
+  services = {
+    extraJobs = [{
+      name = "udev";
+      
+      job = ''
+        start on startup
+        stop on shutdown
 
-        # Get rid of possible old udev processes.
-        ${procps}/bin/pkill -u root "^udevd$" || true
+        env UDEV_CONFIG_FILE=${conf}
 
-        # Do the loading of additional stage 2 kernel modules.
-        # Maybe this isn't the best place...
-        for i in ${toString config.boot.kernelModules}; do
-            echo "Loading kernel module $i..."
-            ${modprobe}/sbin/modprobe $i || true
-        done
+        start script
+            echo "" > /proc/sys/kernel/hotplug
 
-        # Start udev.
-        ${udev}/sbin/udevd --daemon
+            # Get rid of possible old udev processes.
+            ${procps}/bin/pkill -u root "^udevd$" || true
 
-        # Let udev create device nodes for all modules that have already
-        # been loaded into the kernel (or for which support is built into
-        # the kernel).
-        if ! test -e ${devicesCreated}; then
-            ${udev}/sbin/udevadm trigger
-            ${udev}/sbin/udevadm settle # wait for udev to finish
-            touch ${devicesCreated}
-        fi
+            # Do the loading of additional stage 2 kernel modules.
+            # Maybe this isn't the best place...
+            for i in ${toString config.boot.kernelModules}; do
+                echo "Loading kernel module $i..."
+                ${modprobe}/sbin/modprobe $i || true
+            done
 
-        # Kill udev, let Upstart restart and monitor it.  (This is nasty,
-        # but we have to run `udevadm trigger' first.  Maybe we can use
-        # Upstart's `binary' keyword, but it isn't implemented yet.)
-        if ! ${procps}/bin/pkill -u root "^udevd$"; then
-            echo "couldn't stop udevd"
-        fi
+            # Start udev.
+            ${udev}/sbin/udevd --daemon
 
-        while ${procps}/bin/pgrep -u root "^udevd$"; do
-            sleep 1
-        done
+            # Let udev create device nodes for all modules that have already
+            # been loaded into the kernel (or for which support is built into
+            # the kernel).
+            if ! test -e ${devicesCreated}; then
+                ${udev}/sbin/udevadm trigger
+                ${udev}/sbin/udevadm settle # wait for udev to finish
+                touch ${devicesCreated}
+            fi
 
-        initctl emit new-devices
-    end script
+            # Kill udev, let Upstart restart and monitor it.  (This is nasty,
+            # but we have to run `udevadm trigger' first.  Maybe we can use
+            # Upstart's `binary' keyword, but it isn't implemented yet.)
+            if ! ${procps}/bin/pkill -u root "^udevd$"; then
+                echo "couldn't stop udevd"
+            fi
 
-    respawn ${udev}/sbin/udevd
-  '';
+            while ${procps}/bin/pgrep -u root "^udevd$"; do
+                sleep 1
+            done
 
-  passthru = {inherit udevRules;};
+            initctl emit new-devices
+        end script
+
+        respawn ${udev}/sbin/udevd
+      '';
+
+      passthru = {inherit udevRules;};
+    }];
+  };
 }
