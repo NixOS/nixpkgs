@@ -164,7 +164,7 @@ in
 
       mount = mkOption {
         internal = true;
-        default = pkgs.utillinux.passthru.function {
+        default = pkgs.utillinuxng.override {
           buildMountOnly = true;
           mountHelpers = pkgs.buildEnv {
             name = "mount-helpers";

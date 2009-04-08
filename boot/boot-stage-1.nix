@@ -53,9 +53,11 @@ rec {
       cp ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
       cp ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
       cp ${pkgs.e2fsprogs}/sbin/fsck $out/bin
+      cp ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
       ln -s e2fsck $out/bin/fsck.ext2
       ln -s e2fsck $out/bin/fsck.ext3
       ln -s e2fsck $out/bin/fsck.ext4
+      ln -s reiserfsck $out/bin/fsck.reiserfs
 
       cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
 
@@ -65,6 +67,9 @@ rec {
         cp $devicemapper/lib/libdevmapper.so.*.* $out/lib
         cp $lvm2/sbin/lvm $out/bin/lvm
       fi
+
+      # Add RAID mdadm tool.
+      cp ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
 
       # Copy udev.
       cp ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
@@ -100,6 +105,8 @@ rec {
           $out/bin/dmsetup --version | grep "version:"
           LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
       fi
+      $out/bin/reiserfsck -V
+      $out/bin/mdadm --version
     ''; # */
   
 

@@ -190,6 +190,7 @@ let
       "useradd"
       "chsh"
       "xlock"
+      "samba"
       "cups"
       "ftp"
       "common"

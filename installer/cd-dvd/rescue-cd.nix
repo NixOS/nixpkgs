@@ -4,7 +4,7 @@
     then builtins.readFile ../../relname
     else "nixos-${builtins.readFile ../../VERSION}"
 , compressImage ? false
-, nixpkgsPath ? ../../../nixpkgs
+, nixpkgs ? ../../../nixpkgs
 }:
 
 rec {
@@ -190,7 +190,7 @@ rec {
         pkgs.gdb # for debugging Nix
         pkgs.testdisk # useful for repairing boot problems
         pkgs.mssys # for writing Microsoft boot sectors / MBRs
-
+        pkgs.ntfsprogs # for resizing NTFS partitions
         pkgs.sshfsFuse
         pkgs.screen
       ];
@@ -200,7 +200,7 @@ rec {
 
 
   system = import ../../system/system.nix {
-    inherit configuration platform nixpkgsPath;
+    inherit configuration platform nixpkgs;
   };
 
 
@@ -211,7 +211,7 @@ rec {
   # 0.11 (you won't get the manual).
   manual =
     if builtins ? unsafeDiscardStringContext
-    then "${import ../../doc/manual {inherit nixpkgsPath;}}/manual.html"
+    then "${import ../../doc/manual {inherit nixpkgs;}}/manual.html"
     else pkgs.writeText "dummy-manual" "Manual not included in this build!";
 
 
@@ -230,7 +230,7 @@ rec {
 
 
   # Put Nixpkgs in a tarball.
-  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" nixpkgsPath;
+  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" nixpkgs;
 
 
   # The configuration file for Grub.
@@ -255,7 +255,7 @@ rec {
   # Create an ISO image containing the Grub boot loader, the kernel,
   # the initrd produced above, and the closure of the stage 2 init.
   rescueCD = import ../../helpers/make-iso9660-image.nix {
-    inherit nixpkgsPath;
+    inherit nixpkgs;
     inherit (pkgs) stdenv perl cdrkit;
     isoName = "${relName}-${platform}.iso";
 

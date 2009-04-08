@@ -70,7 +70,7 @@ mkIf config.services.portmap.enable {
       
 
       job =
-        let portmap = pkgs.makePortmap { daemonUID = uid; daemonGID = gid; };
+        let portmap = pkgs.portmap.override { daemonUID = uid; daemonGID = gid; };
         in
           ''
           description "ONC RPC portmap"

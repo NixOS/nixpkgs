@@ -48,6 +48,27 @@ let
             Whether mkdir is permitted to anonymous users.
           ";
         };
+
+        chrootlocalUser = mkOption {
+          default = false;
+          description = "
+            Whether u can like out of ur home dir.
+          ";
+        };
+  
+        userlistEnable  = mkOption {
+          default = false;
+          description = "
+            Whether users are included.
+          ";
+        };
+  
+        userlistDeny  = mkOption {
+          default = false;
+          description = "
+            Whether users are excluded.
+          ";
+        };
       };
     };
   };
@@ -57,7 +78,8 @@ in
 
 let 
 
-  inherit (config.services.vsftpd) anonymousUser localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable;
+  inherit (config.services.vsftpd) anonymousUser localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable
+    chrootlocalUser userlistEnable userlistDeny;
   inherit (pkgs) vsftpd;
 
   yesNoOption = p : name :
@@ -110,6 +132,9 @@ mkIf config.services.vsftpd.enable {
         ${yesNoOption writeEnable "write_enable"}
         ${yesNoOption anonymousUploadEnable "anon_upload_enable"}
         ${yesNoOption anonymousMkdirEnable "anon_mkdir_write_enable"}
+        ${yesNoOption chrootlocalUser "chroot_local_user"}
+        ${yesNoOption userlistEnable "userlist_enable"}
+        ${yesNoOption userlistDeny "userlist_deny"}
         background=NO
         listen=YES
         nopriv_user=vsftpd

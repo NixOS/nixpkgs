@@ -1,7 +1,6 @@
 { platform ? __currentSystem
 , configuration
-, nixpkgsPath ? ../../nixpkgs
-, nixpkgs ? null
+, nixpkgs ? ../../nixpkgs
 }:
 
 rec {
@@ -25,9 +24,7 @@ rec {
       pkgs configComponents
       config;
 
-  pkgs = if nixpkgs == null then 
-    import "${nixpkgsPath}/pkgs/top-level/all-packages.nix" {system = platform;}
-  else nixpkgs;
+  pkgs = import nixpkgs {system = platform;};
 
   manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
 

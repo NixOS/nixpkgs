@@ -19,7 +19,7 @@ let
           Additional attributes may be needed depending on your
           configuration.  For instance, if you use the NVIDIA X driver,
           then it also needs to contain an attribute
-          <varname>nvidiaDrivers</varname>.
+          <varname>nvidia_x11</varname>.
         ";
       };
 
@@ -52,7 +52,7 @@ let
 
       extraModulePackages = mkOption {
         default = [];
-        # !!! example = [pkgs.aufs pkgs.nvidiaDrivers];
+        # !!! example = [pkgs.aufs pkgs.nvidia_x11];
         description = ''
           A list of additional packages supplying kernel modules.
         '';

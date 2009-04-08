@@ -1,3 +1,5 @@
+{ nixpkgs ? ../nixpkgs-wc }:
+
 let 
 
 
@@ -5,12 +7,11 @@ let
 
 
     tarball =
-      { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       }:
 
-      with import nixpkgs.path {};
+      with import nixpkgs {};
 
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
@@ -22,7 +23,7 @@ let
         inherit officialRelease;
 
         distPhase = ''
-          releaseName=nixos-$VERSION
+          releaseName=nixos-$VERSION$VERSION_SUFFIX
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
           cp -prd . ../$releaseName
@@ -33,34 +34,32 @@ let
 
 
     manual =
-      { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       }:
 
-      import "${nixosSrc.path}/doc/manual" {
-        nixpkgsPath = nixpkgs.path;
+      import "${nixosSrc}/doc/manual" {
+        inherit nixpkgs;
       };
 
 
     iso = 
-      { nixosSrc ? {path = ./.; rev = 1234;}
-      , nixpkgs ? {path = ../nixpkgs-wc;}
+      { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
       , system ? "i686-linux"
       }:
 
-      with import nixpkgs.path {inherit system;};
+      with import nixpkgs {inherit system;};
 
       let
 
         version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
-        iso = (import "${nixosSrc.path}/installer/cd-dvd/rescue-cd.nix" {
+        iso = (import "${nixosSrc}/installer/cd-dvd/rescue-cd.nix" {
           platform = system;
           compressImage = true;
-          nixpkgsPath = nixpkgs.path;
           relName = "nixos-${version}";
+          inherit nixpkgs;
         }).rescueCD;
 
       in

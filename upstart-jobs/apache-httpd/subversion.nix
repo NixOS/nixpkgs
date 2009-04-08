@@ -19,7 +19,7 @@ let
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
-  subversion = pkgs.subversion15.function (origArgs: {
+  subversion = pkgs.subversion15.override (origArgs: {
     bdbSupport = true;
     httpServer = true;
     sslSupport = true;

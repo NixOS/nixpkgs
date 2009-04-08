@@ -289,7 +289,7 @@ let
   stdenv = pkgs.stdenv;
 
   knownVideoDrivers = {
-    nvidia = { modulesFirst = [ kernelPackages.nvidiaDrivers ]; };  #make sure it first loads the nvidia libs
+    nvidia = { modulesFirst = [ kernelPackages.nvidia_x11 ]; };  #make sure it first loads the nvidia libs
     vesa =  { modules = [xorg.xf86videovesa]; };
     vga =   { modules = [xorg.xf86videovga]; };
     sis =   { modules = [xorg.xf86videosis]; };
@@ -462,7 +462,6 @@ let
   };
 
 
-  nvidiaDrivers = (config.boot.kernelPackages pkgs).nvidiaDrivers;
 
 in
 
@@ -491,7 +490,7 @@ mkIf cfg.enable {
 
   boot = {
     extraModulePackages = mkIf (cfg.videoDriver == "nvidia") [
-      kernelPackages.nvidiaDrivers
+      kernelPackages.nvidia_x11
     ];
   };
 
@@ -509,7 +508,7 @@ mkIf cfg.enable {
       xorg.iceauth # required for KDE applications (it's called by dcopserver)
     ]
     ++ optional (videoDriver == "nvidia") [
-      kernelPackages.nvidiaDrivers
+      kernelPackages.nvidia_x11
     ];
   };
 
@@ -539,7 +538,7 @@ mkIf cfg.enable {
           rm -f /var/run/opengl-driver
           ${if videoDriver == "nvidia"
             then ''
-              ln -sf ${kernelPackages.nvidiaDrivers} /var/run/opengl-driver
+              ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
             ''
             else if cfg.driSupport
             then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
@@ -557,7 +556,7 @@ mkIf cfg.enable {
         env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
 
         ${if videoDriver == "nvidia" 
-          then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidiaDrivers}/lib"
+          then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib"
           else ""
         }
 
