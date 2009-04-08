@@ -1,4 +1,4 @@
-args: with args;
+{stdenv, fetchurl, ps, ncurses, zlib, perl, openssl}:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ps ncurses zlib perl openssl];
   
-  configureFlags = "--enable-thread-safe-client --disable-static --with-openssl=${openssl} --with-berkeley-db";
+  configureFlags = "--enable-thread-safe-client --disable-static --with-openssl=${openssl} --with-berkeley-db --with-embedded-server";
 
   postInstall =
     ''
