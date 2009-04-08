@@ -4848,6 +4848,15 @@ let
     };
   };
 
+  perlCryptSSLeay = buildPerlPackage rec {
+    name = "Crypt-SSLeay-0.57";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DL/DLAND/${name}.tar.gz";
+      sha256 = "1f0i5y99ly39vf86jpzwqz8mkz1460vryv85jgqmfx007p781s0l";
+    };
+    makeMakerFlags = "--lib=${openssl}/lib";
+  };
+
   perlDataDump = buildPerlPackage {
     name = "Data-Dump-1.11";
     src = fetchurl {
@@ -5468,10 +5477,10 @@ let
   };
 
   perlLWP = buildPerlPackage rec {
-    name = "libwww-perl-5.823";
+    name = "libwww-perl-5.825";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "1pz65p02dcy1yf4l1zhhwjmnh6fvf8q71nsmhjpc5lydsf35h1ql";
+      sha256 = "1wb7br1n86571xz19l20cc5ysy1lx3rhvlk02g5517919z3jxvhw";
     };
     propagatedBuildInputs = [perlURI perlHTMLParser perlHTMLTagset];
   };
@@ -6198,6 +6207,7 @@ let
     };
     propagatedBuildInputs = [
       perlLWP perlConfigGeneral perlNetIP perlTermReadKey perlPerl5lib
+      perlCryptSSLeay
     ];
     meta = {
       homepage = http://validator.w3.org/checklink;
