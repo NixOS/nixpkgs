@@ -1,10 +1,10 @@
 {stdenv, fetchurl, g77, readline, ncurses, perl, flex,
- bison, autoconf, automake, sourceByName, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive}:
+ bison, autoconf, automake, sourceByName, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive, qhull, libX11}:
 
 assert readline != null && ncurses != null && flex != null;
 assert g77.langF77;
 
-let commonBuildInputs = [g77 readline ncurses perl glibc]; in
+let commonBuildInputs = [g77 readline ncurses perl glibc qhull libX11 texinfo]; in
 
 stdenv.mkDerivation ({
   NIX_LDFLAGS = "-lpthread";
@@ -26,7 +26,7 @@ stdenv.mkDerivation ({
         ./autogen.sh
         export HOME=$TMP
         '';
-    buildInputs = commonBuildInputs ++ [ flex bison autoconf automake gperf gnuplot texinfo texLive ]
+    buildInputs = commonBuildInputs ++ [ flex bison autoconf automake gperf gnuplot texLive ]
                   ++ lib.optionals (getConfig ["octave" "atlas"] true) [ python atlas ];
     # it does build, but documentation doesn't.. So just remove that directory
     # from the buildfile
@@ -38,10 +38,10 @@ stdenv.mkDerivation ({
       make
     '';
   } else {
-    name = "octave-3.1.51";
+    name = "octave-3.1.55";
     src =  fetchurl {
-      url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-3.1.51.tar.bz2;
-      sha256 = "0v0khhpmydyimvdl2rswfd0jrcqa9rhd3cyi60zhqv2hi0bhmkh8";
+      url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-3.1.55.tar.bz2;
+      sha256 = "1lm4v85kdic4n5yxwzrdb0v6dc6nw06ljgx1q8hfkmi146kpg7s6";
     };
     buildInputs = commonBuildInputs ++ [ flex bison autoconf automake python ]
                   ++ lib.optionals (getConfig ["octave" "atlas"] true) [ python atlas ];

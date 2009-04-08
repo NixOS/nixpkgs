@@ -1152,6 +1152,10 @@ let
     inherit stdenv fetchurl python antlr;
   };
 
+  qhull = import ../development/libraries/qhull {
+    inherit stdenv fetchurl;
+  };
+
   qtparted = import ../tools/misc/qtparted {
     inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
     inherit (xlibs) libX11 libXext;
@@ -2116,15 +2120,17 @@ let
   };
 
   octave = import ../development/interpreters/octave {
-    inherit stdenv fetchurl readline ncurses perl flex;
+    inherit stdenv fetchurl readline ncurses perl flex qhull texinfo;
     g77 = g77_42;
   };
 
   # mercurial (hg) bleeding edge version
   octaveHG = import ../development/interpreters/octave/hg.nix {
-    inherit fetchurl readline ncurses perl flex atlas getConfig glibc;
+    inherit fetchurl readline ncurses perl flex atlas getConfig glibc qhull;
     inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
-    stdenv = overrideGCC stdenv gcc40;
+    inherit stdenv;
+    inherit (xlibs) libX11;
+    #stdenv = overrideGCC stdenv gcc40;
     g77 = g77_42;
     inherit (bleedingEdgeRepos) sourceByName;
   };
