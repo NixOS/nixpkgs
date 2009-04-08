@@ -1,4 +1,4 @@
-{config, pkgs}:
+{config, pkgs, modprobe}:
 
 let
 
@@ -16,23 +16,34 @@ let
   bindir = pkgs.runCommand "cups-progs" {} ''
     ensureDir $out/lib/cups
     ln -s ${cups}/lib/cups/* $out/lib/cups/
-    
+
+    # Provide support for printing via SMB.    
     rm $out/lib/cups/backend
     ensureDir $out/lib/cups/backend
     ln -s ${cups}/lib/cups/backend/* $out/lib/cups/backend/
     ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+
+    # Provide Ghostscript rasterisation, necessary for non-Postscript
+    # printers.
+    rm $out/lib/cups/filter
+    ensureDir $out/lib/cups/filter
+    ln -s ${cups}/lib/cups/filter/* $out/lib/cups/filter/
+    ln -s ${pkgs.ghostscript}/lib/cups/filter/* $out/lib/cups/filter/
   ''; # */
   
 
   cupsdConfig = pkgs.writeText "cupsd.conf" ''
-    LogLevel info
+    LogLevel debug
 
     SystemGroup root
 
     Listen localhost:631
     Listen /var/run/cups/cups.sock
 
-    ServerRoot ${cups}/etc/cups
+    # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
+    # CUPS will write in the ServerRoot when e.g. adding new printers
+    # through the web interface.
+    ServerRoot /etc/cups
 
     ServerBin ${bindir}/lib/cups
 
@@ -93,8 +104,16 @@ in
 {
   name = "cupsd";
 
-  extraPath = [
-    cups
+  extraPath = [cups];
+
+  extraEtc = [
+    # CUPS expects the following files in its ServerRoot.
+    { source = "${cups}/etc/cups/mime.convs";
+      target = "cups/mime.convs";
+    }
+    { source = "${cups}/etc/cups/mime.types";
+      target = "cups/mime.types";
+    }
   ];
   
   job = ''
@@ -107,6 +126,9 @@ in
         mkdir -m 0755 -p ${logDir}
         mkdir -m 0700 -p /var/cache/cups
         mkdir -m 0700 -p /var/spool/cups
+
+        # Make USB printers show up.
+        ${modprobe}/sbin/modprobe usblp || true
     end script
 
     respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F

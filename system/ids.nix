@@ -19,6 +19,7 @@
     dovecot = 15;
     tomcat = 16;
     gnunetd = 17;
+    pulseaudio = 22; # must match `pulseaudio' GID
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -45,6 +46,7 @@
     uucp = 19;
     lp = 20;
     tomcat = 21;
+    pulseaudio = 22; # must match `pulseaudio' UID
     
     users = 100;
     nixbld = 30000;

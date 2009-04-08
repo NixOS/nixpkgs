@@ -326,7 +326,7 @@ let
   # CUPS (printing) daemon.
   ++ optional config.services.printing.enable
     (import ../upstart-jobs/cupsd.nix {
-      inherit config pkgs;
+      inherit config pkgs modprobe;
     })
 
   # Gateway6
@@ -358,6 +358,12 @@ let
     (import ../upstart-jobs/bitlbee.nix {
       inherit (pkgs) bitlbee;
       inherit (config.services.bitlbee) portNumber interface;
+    })
+
+  # ACPI daemon.
+  ++ optional config.powerManagement.enable
+    (import ../upstart-jobs/acpid.nix {
+      inherit config pkgs;
     })
 
   # Postfix mail server.

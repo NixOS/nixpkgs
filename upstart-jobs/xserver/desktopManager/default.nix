@@ -10,6 +10,7 @@ in
 {
   require = [
     (import ./kde.nix)
+    (import ./kde4.nix)
     (import ./gnome.nix)
     (import ./xterm.nix)
     (import ./none.nix)

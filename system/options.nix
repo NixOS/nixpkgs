@@ -34,7 +34,7 @@ in
       example = "0:0";
       description = "
         Device for manual resume attempt during boot. Looks like 
-        major:minor .
+        major:minor. ls -l /dev/SWAP_PARTION shows them.
       ";
     };
 
@@ -1933,6 +1933,16 @@ in
         on the remote machine.
       ";
     };
+ 
+    proxy = mkOption {
+      default = "";
+      description = "
+        This option specifies the proxy to use for fetchurl. The real effect 
+        is just exporting http_proxy, https_proxy and ftp_proxy with that
+        value.
+      ";
+      example = "http://127.0.0.1:3128";
+    };
 
     # Environment variables for running Nix.
     envVars = mkOption {
@@ -1962,7 +1972,16 @@ in
           export NIX_REMOTE_SYSTEMS=/etc/nix.machines
           export NIX_CURRENT_LOAD=/var/run/nix/current-load
         ''
-      else "") + conf;
+      else "")
+      +
+      (if config.nix.proxy != "" then
+        ''
+          export http_proxy=${config.nix.proxy}
+          export https_proxy=${config.nix.proxy}
+          export ftp_proxy=${config.nix.proxy}
+        ''
+      else "")
+      + conf;
     };
   };
 
@@ -2108,7 +2127,7 @@ in
   environment = {
 
     pathsToLink = mkOption {
-      default = ["/bin" "/sbin" "/lib" "/share" "/man" "/info"];
+      default = ["/bin" "/sbin" "/lib" "/share" "/man" "/info" "/etc"];
       example = ["/"];
       description = "
         Lists directories to be symlinked in `/var/run/current-system/sw'.
@@ -2167,7 +2186,20 @@ in
     };
 
   };
+
+    
+  powerManagement = {
+    
+    enable = mkOption {
+      default = false;
+      description = "
+        Whether to enable power management.
+      ";
+    };
+
+  };
   
+
   nesting = {
     children = mkOption {
       default = [];
@@ -2177,6 +2209,7 @@ in
     };
   };
 
+  
   passthru = mkOption {
     default = {};
     description = "
@@ -2226,6 +2259,10 @@ in
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)
+    (import ../upstart-jobs/manual.nix)
+    (import ../upstart-jobs/rogue.nix)
+    (import ../upstart-jobs/guest-users.nix)
+    (import ../upstart-jobs/pulseaudio.nix)
 
     # fonts
     (import ../system/fonts.nix)

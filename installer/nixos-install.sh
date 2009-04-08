@@ -131,7 +131,7 @@ export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
 
 
 # Do a nix-pull to speed up building.
-if test -n "@nixpkgsURL@"; then
+if test -n "@nixpkgsURL@" -a ${NIXOS_PULL:-1} != 0; then
     chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
 fi
 

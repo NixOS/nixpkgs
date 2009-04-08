@@ -297,6 +297,7 @@ let
     intel = { modules = [xorg.xf86videointel]; };
     nv =    { modules = [xorg.xf86videonv]; };
     ati =   { modules = [xorg.xf86videoati]; };
+    via =   { modules = [xorg.xf86videovia]; };
   };
 
   # Get a bunch of user settings.
@@ -545,7 +546,9 @@ mkIf cfg.enable {
            }
 
           ${cfg.displayManager.job.beforeScript}
-          
+
+          rm -f /tmp/.X0-lock
+
         end script
 
         ${cfg.displayManager.job.env}

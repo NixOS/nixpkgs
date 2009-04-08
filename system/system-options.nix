@@ -64,6 +64,16 @@ let
           inherit (config.environment) pathsToLink;
 
           ignoreCollisions = true;
+
+          # TODO: move this to upstart-jobs/xserver/desktopManager/kde4.nix
+          postBuild =
+            if config.services.xserver.desktopManager.kde4.enable then
+              # Rebuild the MIME database.  Otherwise KDE won't be able to
+              # find many MIME types.
+              ''
+                ${pkgs.shared_mime_info}/bin/update-mime-database $out/share/mime
+              ''
+            else "";
         };
       };
 

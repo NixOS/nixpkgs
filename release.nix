@@ -54,6 +54,7 @@ let
           platform = system;
           compressImage = true;
           nixpkgsPath = nixpkgs.path;
+          relName = "nixos-${builtins.readFile ./VERSION}${if !officialRelease then "pre${toString nixosSrc.rev}" else ""}";
         }).rescueCD;
 
       in
