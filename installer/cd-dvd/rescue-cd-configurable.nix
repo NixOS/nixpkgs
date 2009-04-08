@@ -137,7 +137,7 @@ rec {
 
   nixpkgsRel = "nixpkgs" + (if networkNixpkgs != "" then "-" + networkNixpkgs else "");
  
-  configuration = pkgs: final_configuration: let preConfiguration ={
+  configuration = {pkgs, config, ...}: let preConfiguration ={
     boot = {
       isLiveCD = true;
       # The label used to identify the installation CD.
@@ -164,8 +164,8 @@ rec {
 
       udev = {
         addFirmware = []
-	  ++ (pkgs.lib.optional intel3945FWEnable pkgs.iwlwifi3945ucode)
-	  ++ (pkgs.lib.optional intel4965FWEnable pkgs.iwlwifi4965ucode)
+	  #++ (pkgs.lib.optional intel3945FWEnable pkgs.iwlwifi3945ucode)
+	  #++ (pkgs.lib.optional intel4965FWEnable pkgs.iwlwifi4965ucode)
 	  ;
       };
    

@@ -191,6 +191,7 @@ let
       "chsh"
       "xlock"
       "cups"
+      "ftp"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]

@@ -41,7 +41,7 @@ let
         ./manual.xml
       cp ${./style.css} $out/style.css
       ensureDir $out/nix-support
-      echo "doc manual $out" >> $out/nix-support/hydra-build-products
+      echo "doc manual $out manual.html" >> $out/nix-support/hydra-build-products
     '';
   };
 

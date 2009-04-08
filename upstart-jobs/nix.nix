@@ -190,17 +190,23 @@ in
             # other paths in the store, we need the closure of /bin/sh
             # in `build-chroot-dirs' - otherwise any builder that uses
             # /bin/sh won't work.
-            refs = pkgs.writeReferencesToFile binsh;
+            binshDeps = pkgs.writeReferencesToFile binsh;
+  
+            # Likewise, if chroots are turned on, we need Nix's own
+            # closure in the chroot.  Otherwise nix-channel and nix-env
+            # won't work because the dependencies of its builders (like
+            # coreutils and Perl) aren't visible.  Sigh.
+            nixDeps = pkgs.writeReferencesToFile config.environment.nix;
           in 
-            pkgs.runCommand "nix.conf" {} ''
-              binshDeps=$(for i in $(cat ${refs}); do if test -d $i; then echo $i; fi; done)
+            pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
+              extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
               cat > $out <<END
               # WARNING: this file is generated.
               build-users-group = nixbld
               build-max-jobs = ${toString (config.nix.maxJobs)}
               build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-              build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $binshDeps)
-              ${config.nix.extraOptions}
+              build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths)
+              $extraOptions
               END
             '';
         target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.

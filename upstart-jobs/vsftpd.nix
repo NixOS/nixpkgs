@@ -20,6 +20,13 @@ let
             Whether to enable the anonymous FTP user.
           ";
         };
+ 
+        localUsers = mkOption {
+          default = false;
+          description = "
+            Whether to enable FTP for the local users.
+          ";
+        };
 
         writeEnable = mkOption {
           default = false;
@@ -50,7 +57,7 @@ in
 
 let 
 
-  inherit (config.services.vsftpd) anonymousUser writeEnable anonymousUploadEnable anonymousMkdirEnable;
+  inherit (config.services.vsftpd) anonymousUser localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable;
   inherit (pkgs) vsftpd;
 
   yesNoOption = p : name :
@@ -99,6 +106,7 @@ mkIf config.services.vsftpd.enable {
         start script
         cat > /etc/vsftpd.conf <<EOF
         ${yesNoOption anonymousUser "anonymous_enable"}
+        ${yesNoOption localUsers "local_enable"}
         ${yesNoOption writeEnable "write_enable"}
         ${yesNoOption anonymousUploadEnable "anon_upload_enable"}
         ${yesNoOption anonymousMkdirEnable "anon_mkdir_write_enable"}

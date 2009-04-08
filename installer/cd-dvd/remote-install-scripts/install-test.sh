@@ -17,7 +17,7 @@ set -x
 echo "Installation starting.." > report
 
 nix-build -o socat /etc/nixos/nixpkgs -A socat || { echo "Failed to build socat" >&2 ;  exit 2; };
-nix-build -o qemu /etc/nixos/nixpkgs -A qemu || { echo "Failed to build qemu" >&2 ;  exit 2; };
+nix-build -o qemu /etc/nixos/nixpkgs -A ${QEMU_PACKAGE:-qemu} || { echo "Failed to build qemu" >&2 ;  exit 2; };
 
 echo "reboot" | ./socat/bin/socat tcp-listen:4424 stdio >> report &  
 

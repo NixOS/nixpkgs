@@ -22,7 +22,7 @@ let
 in 
 (isoFun (rec {
 	inherit platform;
-	lib = (import ../pkgs/lib);
+	lib = (import ../../pkgs/lib);
 
 	networkNixpkgs = "";
 	manualEnabled = true;
@@ -171,40 +171,40 @@ in
 	configList = configuration : [
 	{
 		suffix = "X-vesa";
-		configuration = (configuration // 
+		configuration = args: ((configuration args) // 
 		{
-			boot=configuration.boot // {configurationName = "X with vesa";};
-			services = configuration.services // {
+			boot=(configuration args).boot // {configurationName = "X with vesa";};
+			services = (configuration args).services // {
 				xserver = xConfiguration // {videoDriver = "vesa";};
 			};
 		});
 	}
 	{
 		suffix = "X-Intel";
-		configuration = (configuration // 
+		configuration = args: ((configuration args) // 
 		{
-			boot=configuration.boot // {configurationName = "X with Intel graphic card";};
-			services = configuration.services // {
+			boot=(configuration args).boot // {configurationName = "X with Intel graphic card";};
+			services = (configuration args).services // {
 				xserver = xConfiguration // {videoDriver = "intel"; driSupport = true;};
 			};
 		});
 	}
 	{
 		suffix = "X-ATI";
-		configuration = (configuration // 
+		configuration = args: ((configuration args) // 
 		{
-			boot=configuration.boot // {configurationName = "X with ATI graphic card";};
-			services = configuration.services // {
+			boot=(configuration args).boot // {configurationName = "X with ATI graphic card";};
+			services = (configuration args).services // {
 				xserver = xConfiguration // {videoDriver = "ati"; driSupport = true;};
 			};
 		});
 	}
         {
                 suffix = "X-NVIDIA";
-                configuration = (configuration //
+		configuration = args: ((configuration args) // 
                 {
-                        boot=configuration.boot // {configurationName = "X with NVIDIA graphic card";};
-                        services = configuration.services // {
+                        boot=(configuration args).boot // {configurationName = "X with NVIDIA graphic card";};
+                        services = (configuration args).services // {
                                 xserver = xConfiguration // {videoDriver = "nvidia"; driSupport = true;};
                         };
                 });
