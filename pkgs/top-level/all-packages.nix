@@ -422,7 +422,7 @@ let
   };
 
   bc = import ../tools/misc/bc {
-    inherit fetchurl stdenv flex;
+    inherit fetchurl stdenv flex readline;
   };
 
   bfr = import ../tools/misc/bfr {
