@@ -1,33 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption;
-  inherit (builtins) head tail;
-
-  obsolete = what: f: name:
-    if builtins ? trace then
-      builtins.trace "${name}: Obsolete ${what}." f name
-    else f name;
-
-  obsoleteMerge =
-    obsolete "option" pkgs.lib.mergeDefaultOption;
-
-  # temporary modifications.
-  # backward here means that expression could either be a value or a
-  # function which expects to have a pkgs argument.
-  optionalPkgs = name: x:
-    if builtins.isFunction x
-    then obsolete "notation" (name: x pkgs) name
-    else x;
-
-  backwardPkgsFunListMerge = name: list:
-    pkgs.lib.concatMap (optionalPkgs name) list;
-
-  backwardPkgsFunMerge = name: list:
-    if list != [] && tail list == []
-    then optionalPkgs name (head list)
-    else abort "${name}: Defined at least twice.";
-
+  inherit (pkgs.lib) mkOption mergeOneOption;
 in
 
 {
@@ -64,51 +38,6 @@ in
       ";
     };
 
-    kernelPackages = mkOption {
-      default = pkgs.kernelPackages;
-      example = pkgs.kernelPackages_2_6_25;
-      merge = backwardPkgsFunMerge;
-      description = "
-        This option allows you to override the Linux kernel used by
-        NixOS.  Since things like external kernel module packages are
-        tied to the kernel you're using, it also overrides those.
-        This option is a function that takes Nixpkgs as an argument
-        (as a convenience), and returns an attribute set containing at
-        the very least an attribute <varname>kernel</varname>.
-        Additional attributes may be needed depending on your
-        configuration.  For instance, if you use the NVIDIA X driver,
-        then it also needs to contain an attribute
-        <varname>nvidiaDrivers</varname>.
-      ";
-    };
-
-    kernelParams = mkOption {
-      default = [
-        "selinux=0"
-        "apm=on"
-        "acpi=on"
-        "vga=0x317"
-        "console=tty1"
-        "splash=verbose"
-      ];
-      description = "
-        The kernel parameters.  If you want to add additional
-        parameters, it's best to set
-        <option>boot.extraKernelParams</option>.
-      ";
-    };
-
-    extraKernelParams = mkOption {
-      default = [
-      ];
-      example = [
-        "debugtrace"
-      ];
-      description = "
-        Additional user-defined kernel parameters.
-      ";
-    };
-
     hardwareScan = mkOption {
       default = true;
       description = "
@@ -121,88 +50,7 @@ in
       ";
     };
 
-    extraModulePackages = mkOption {
-      default = [];
-      # !!! example = [pkgs.aufs pkgs.nvidiaDrivers];
-      description = ''
-        A list of additional packages supplying kernel modules.
-      '';
-      merge = backwardPkgsFunListMerge;
-    };
-
-    kernelModules = mkOption {
-      default = [];
-      description = "
-        The set of kernel modules to be loaded in the second stage of
-        the boot process.  That is, these modules are not included in
-        the initial ramdisk, so they'd better not be required for
-        mounting the root file system.  Add them to
-        <option>boot.initrd.extraKernelModules</option> if they are.
-      ";
-    };
-
     initrd = {
-
-      kernelModules = mkOption {
-        default = [
-          # Note: most of these (especially the SATA/PATA modules)
-          # shouldn't be included by default since nixos-hardware-scan
-          # detects them, but I'm keeping them for now for backwards
-          # compatibility.
-          
-          # Some SATA/PATA stuff.        
-          "ahci"
-          "sata_nv"
-          "sata_via"
-          "sata_sis"
-          "sata_uli"
-          "ata_piix"
-          "pata_marvell"
-          
-          # Standard SCSI stuff.
-          "sd_mod"
-          "sr_mod"
-          
-          # Standard IDE stuff.
-          "ide_cd"
-          "ide_disk"
-          "ide_generic"
-          
-          # Filesystems.
-          "ext3"
-          
-          # Support USB keyboards, in case the boot fails and we only have
-          # a USB keyboard.
-          "ehci_hcd"
-          "ohci_hcd"
-          "usbhid"
-
-          # LVM.
-          "dm_mod"
-        ];
-        description = "
-          The set of kernel modules in the initial ramdisk used during the
-          boot process.  This set must include all modules necessary for
-          mounting the root device.  That is, it should include modules
-          for the physical device (e.g., SCSI drivers) and for the file
-          system (e.g., ext3).  The set specified here is automatically
-          closed under the module dependency relation, i.e., all
-          dependencies of the modules list here are included
-          automatically.  If you want to add additional
-          modules, it's best to set
-          <option>boot.initrd.extraKernelModules</option>.
-        ";
-      };
-
-      extraKernelModules = mkOption {
-        default = [];
-        description = "
-          Additional kernel modules for the initial ramdisk.  These are
-          loaded before the modules listed in
-          <option>boot.initrd.kernelModules</option>, so they take
-          precedence.
-        ";
-      };
 
       allowMissing = mkOption {
         default = false;
@@ -295,17 +143,7 @@ in
       merge = pkgs.lib.mergeListOption;
 
       # Convert the list of path to only one path.
-      apply = list: pkgs.aggregateModules (
-        let
-          kernelPackages = config.boot.kernelPackages;
-          kernel = kernelPackages.kernel;
-        in
-        [ kernel ]
-        ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
-        ++ config.boot.extraModulePackages
-        # should only keep this one, other have to be set by the option owners.
-        ++ list
-      );
+      apply = pkgs.aggregateModules;
     };
 
     sbin = {
@@ -343,21 +181,6 @@ in
         ";
       };
     };
-  };
-
-  # Hm, this sounds like a catch-all...
-  hardware = {
-
-    enableGo7007 = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = ''
-        Enable this option to get support for the WIS GO7007SB
-        multi-format video encoder, which is used in a number of
-        devices such as the Plextor ConvertX TV402U USB TV device.
-      '';
-    };
-  
   };
 
 
@@ -408,45 +231,6 @@ in
       example = "home";
       description = "
         The domain.  It can be left empty if it is auto-detected through DHCP.
-      ";
-    };
-
-    enableIntel2200BGFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        Turn on this option if you want firmware for the Intel
-        PRO/Wireless 2200BG to be loaded automatically.  This is
-        required if you want to use this device.  Intel requires you to
-        accept the license for this firmware, see
-        <link xlink:href='http://ipw2200.sourceforge.net/firmware.php?fid=7'/>.
-      ";
-    };
-
-    enableIntel3945ABGFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Intel
-        PRO/Wireless 3945ABG.
-      ";
-    };
-
-    enableIntel4965AGNFirmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Intel
-        PRO/Wireless 4965AGN.
-      ";
-    };
-
-    enableZydasZD1211Firmware = mkOption {
-      default = false;
-      merge = obsoleteMerge;
-      description = "
-        This option enables automatic loading of the firmware for the Zydas
-        ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip.
       ";
     };
 
@@ -2346,7 +2130,6 @@ in
     extraPackages = mkOption {
       default = [];
       example = [pkgs.firefox pkgs.thunderbird];
-      merge = backwardPkgsFunListMerge;
       description = "
         This option allows you to add additional packages to the system
         path.  These packages are automatically available to all users,
@@ -2363,7 +2146,7 @@ in
     nix = mkOption {
       default = pkgs.nixUnstable;
       example = pkgs.nixCustomFun /root/nix.tar.gz;
-      merge = backwardPkgsFunMerge;
+      merge = mergeOneOption;
       description = "
         Use non-default Nix easily. Be careful, though, not to break everything.
       ";
@@ -2405,6 +2188,7 @@ in
 
   require = [
     # boot (is it the right place ?)
+    (import ../system/kernel.nix)
     (import ../boot/boot-stage-2.nix)
     (import ../installer/grub.nix)
 
@@ -2435,7 +2219,7 @@ in
     (import ../upstart-jobs/hal.nix)
     (import ../upstart-jobs/gpm.nix)
     (import ../upstart-jobs/nagios/default.nix)
-    (import ../upstart-jobs/xserver.nix)
+    (import ../upstart-jobs/xserver/default.nix)
     (import ../upstart-jobs/zabbix-agent.nix)
     (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)

@@ -1,5 +1,5 @@
 # Zabbix server daemon.
-{config, pkgs}:
+{config, pkgs, ...}:
 
 ###### interface
 let

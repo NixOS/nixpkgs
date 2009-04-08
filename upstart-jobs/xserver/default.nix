@@ -66,6 +66,7 @@ let
           ";
         };
 
+/*
         sessionType = mkOption {
           default = "gnome";
           example = "xterm";
@@ -91,14 +92,6 @@ let
           ";
         };
 
-        renderingFlag = mkOption {
-          default = "";
-          example = "--indirect-rendering";
-          description = "
-            Possibly pass --indierct-rendering to Compiz.
-          ";
-        };
-
         sessionStarter = mkOption {
           example = "${pkgs.xterm}/bin/xterm -ls";
           description = "
@@ -107,6 +100,7 @@ let
             <option>services.xserver.sessionType</option> is empty.
           ";
         };
+*/
 
         startSSHAgent = mkOption {
           default = true;
@@ -116,41 +110,6 @@ let
             passphrases every time you make an SSH connection.  Use
             <command>ssh-add</command> to add a key to the agent.
           ";
-        };
-
-        slim = {
-
-          theme = mkOption {
-            default = null;
-            example = pkgs.fetchurl {
-              url = http://download.berlios.de/slim/slim-wave.tar.gz;
-              sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
-            };
-            description = "
-              The theme for the SLiM login manager.  If not specified, SLiM's
-              default theme is used.  See <link
-              xlink:href='http://slim.berlios.de/themes01.php'/> for a
-              collection of themes.
-            ";
-          };
-
-          defaultUser = mkOption {
-            default = "";
-            example = "login";
-            description = "
-              The default user to load. If you put a username here you
-              get it automatically loaded into the username field, and
-              the focus is placed on the password.
-            ";
-          };
-
-          hideCursor = mkOption {
-            default = false;
-            example = true;
-            description = "
-              Hide the mouse cursor on the login screen.
-            ";
-          };
         };
 
         isClone = mkOption {
@@ -327,7 +286,6 @@ let
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = cfg.package;
-  gnome = pkgs.gnome;
   stdenv = pkgs.stdenv;
 
   knownVideoDrivers = {
@@ -344,25 +302,9 @@ let
   # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
-  sessionType = cfg.sessionType;
 
   videoDriverModules = getAttr [ videoDriver ] (throw "unkown video driver : \"${videoDriver}\"") knownVideoDrivers;
 
-  sessionCmd =
-    if sessionType == "" then cfg.sessionStarter else
-    if sessionType == "xterm" then "${pkgs.xterm}/bin/xterm -ls" else
-    if sessionType == "gnome" then "${gnome.gnometerminal}/bin/gnome-terminal -ls" else
-    abort ("unknown session type ${sessionType}");
-
-
-  windowManager =
-    let wm = cfg.windowManager; in
-    if wm != "" then wm else
-    if sessionType == "gnome" then "metacity" else
-    if sessionType == "kde" then "none" /* started by startkde */ else
-    "twm";
-
-    
   modules = 
 
     getAttr ["modulesFirst"] [] videoDriverModules
@@ -518,240 +460,7 @@ let
   };
 
 
-  clientScript = pkgs.writeText "xclient" ''
-
-    source /etc/profile
-
-    exec > $HOME/.Xerrors 2>&1
-
-
-    ### Load X defaults.
-    if test -e ~/.Xdefaults; then
-      ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
-    fi
-
-
-    ${if cfg.startSSHAgent then ''
-      ### Start the SSH agent.
-      export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
-      eval $(${pkgs.openssh}/bin/ssh-agent)
-    '' else ""}
-
-    ### Allow user to override system-wide configuration
-    if test -f ~/.xsession; then
-        source ~/.xsession;
-    fi
-  
-
-    ### Start a window manager.
-  
-    ${if windowManager == "twm" then ''
-      ${xorg.twm}/bin/twm &
-    ''
-
-    else if windowManager == "metacity" then ''
-      env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
-      # !!! Hack: load the schemas for Metacity.
-      GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-        --makefile-install-rule ${gnome.metacity}/etc/gconf/schemas/*.schemas # */
-      ${gnome.metacity}/bin/metacity &
-    ''
-
-    else if windowManager == "kwm" then ''
-      ${pkgs.kdebase}/bin/kwin &
-    ''
-
-    else if windowManager == "compiz" then ''
-      # !!! Hack: load the schemas for Compiz.
-      GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-        --makefile-install-rule ${pkgs.compiz}/etc/gconf/schemas/*.schemas # */
-
-      # !!! Hack: turn on most Compiz modules.
-      ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \
-        --set /apps/compiz/general/allscreens/options/active_plugins \
-        [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
-
-      # Start Compiz and the GTK-style window decorator.
-      env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
-      ${pkgs.compiz}/bin/compiz gconf ${cfg.renderingFlag} &
-      ${pkgs.compiz}/bin/gtk-window-decorator --sync &
-    ''
-
-    else if windowManager == "xmonad" then ''
-      ${pkgs.xmonad}/bin/xmonad &
-    ''
-    
-    else if windowManager == "none" then ''
-      # The session starter will start the window manager.
-    ''
-
-    else abort ("unknown window manager " + windowManager)}
-
-
-    ### Show a background image.
-    # (but not if we're starting a full desktop environment that does it for us)
-    ${if sessionType != "kde" then ''
-    
-      if test -e $HOME/.background-image; then
-        ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
-      fi
-      
-    '' else ""}
-    
-
-    ### Start the session.
-    ${if sessionType == "kde" then ''
-
-      # Start KDE.
-      export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kdebase}:${pkgs.kdelibs}
-      export XDG_CONFIG_DIRS=${pkgs.kdebase}/etc/xdg:${pkgs.kdelibs}/etc/xdg
-      export XDG_DATA_DIRS=${pkgs.kdebase}/share
-      exec ${pkgs.kdebase}/bin/startkde
-
-    '' else ''
-
-      # For all other session types, we currently just start a
-      # terminal of the kind indicated by sessionCmd.
-      # !!! yes, this means that you 'log out' by killing the X server.
-      while ${sessionCmd}; do
-        sleep 1
-      done
-
-    ''}
-    
-  '';
-
-
-  xserverArgs = [
-    "-ac"
-    "-logverbose"
-    "-verbose"
-    "-terminate"
-    "-logfile" "/var/log/X.${toString cfg.display}.log"
-    "-config ${configFile}"
-    ":${toString cfg.display}" "vt${toString cfg.tty}"
-    "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
-  ] ++ optional (!config.services.xserver.tcpEnable) "-nolisten tcp";
-
-  
-  slimConfig = pkgs.writeText "slim.cfg" ''
-    xauth_path ${xorg.xauth}/bin/xauth
-    default_xserver ${xorg.xorgserver}/bin/X
-    xserver_arguments ${toString xserverArgs}
-    login_cmd exec ${stdenv.bash}/bin/sh ${clientScript}
-    halt_cmd ${pkgs.upstart}/sbin/shutdown -h now
-    reboot_cmd ${pkgs.upstart}/sbin/shutdown -r now
-    ${if cfg.slim.defaultUser != "" then "default_user " + cfg.slim.defaultUser else ""}
-    ${if cfg.slim.hideCursor then "hidecursor true" else ""}
-  '';
-
-
-  # Unpack the SLiM theme, or use the default.
-  slimThemesDir =
-    let
-      unpackedTheme = stdenv.mkDerivation {
-        name = "slim-theme";
-        buildCommand = ''
-          ensureDir $out
-          cd $out
-          unpackFile ${cfg.slim.theme}
-          ln -s * default
-        '';
-      };
-    in if cfg.slim.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;       
-
-    nvidiaDrivers = (config.boot.kernelPackages pkgs).nvidiaDrivers;
-
-  oldJob = rec {
-  # Warning the indentation is wrong since here in order to don't produce noise in diffs.
-
-  name = "xserver";
-
-  
-  extraPath = [
-    xorg.xrandr
-    xorg.xrdb
-    xorg.setxkbmap
-    xorg.iceauth # required for KDE applications (it's called by dcopserver)
-    pkgs.feh
-  ]
-  ++ optional (windowManager == "twm") [
-    xorg.twm
-  ]
-  ++ optional (windowManager == "metacity") [
-    gnome.metacity
-  ]
-  ++ optional (windowManager == "compiz") [
-    pkgs.compiz
-  ]
-  ++ optional (sessionType == "xterm") [
-    pkgs.xterm
-  ]
-  ++ optional (sessionType == "gnome") [
-    gnome.gnometerminal
-    gnome.GConf
-    gnome.gconfeditor
-  ]
-  ++ optional (sessionType == "kde") [
-    pkgs.kdelibs
-    pkgs.kdebase
-    xorg.xset # used by startkde, non-essential
-  ]
-  ++ optional (videoDriver == "nvidia") [
-    kernelPackages.nvidiaDrivers
-  ];
-
-
-  extraEtc =
-    optional (sessionType == "kde")
-      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        target = "X11/xkb";
-      }
-    ++
-    optional cfg.exportConfiguration
-      { source = "${configFile}";
-        target = "X11/xorg.conf";
-      };
-
-    
-  job = ''
-    start on ${if cfg.autorun then "network-interfaces" else "never"}
-
-    start script
-    
-      rm -f /var/run/opengl-driver
-      ${if videoDriver == "nvidia"        
-        then ''
-          ln -sf ${kernelPackages.nvidiaDrivers} /var/run/opengl-driver
-        ''
-        else if cfg.driSupport
-        then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
-        else ""
-       }
-
-      rm -f /var/log/slim.log
-       
-    end script
-
-    env SLIM_CFGFILE=${slimConfig}
-    env SLIM_THEMESDIR=${slimThemesDir}
-    env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
-    env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
-
-    ${if videoDriver == "nvidia" 
-      then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidiaDrivers}/lib" 
-      else ""
-    }
-
-    ${if videoDriver != "nvidia"
-      then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/modules/dri"
-      else ""
-    }
-
-    exec ${pkgs.slim}/bin/slim
-  '';
-  
-};
+  nvidiaDrivers = (config.boot.kernelPackages pkgs).nvidiaDrivers;
 
 in
 
@@ -759,14 +468,19 @@ mkIf cfg.enable {
   require = [
     options
 
+    # services.xserver.*Manager
+    (import ./displayManager/default.nix)
+    (import ./windowManager/default.nix)
+    (import ./desktopManager/default.nix)
+
     # services.extraJobs
-    (import ../upstart-jobs/default.nix)
+    (import ../../upstart-jobs/default.nix)
 
     # environment.etc
-    (import ../etc/default.nix)
+    (import ../../etc/default.nix)
 
     # fonts.fonts
-    (import ../system/fonts.nix)
+    (import ../../system/fonts.nix)
 
     # boot.extraModulePackages
     # security.extraSetuidPrograms
@@ -779,29 +493,77 @@ mkIf cfg.enable {
     ];
   };
 
-  security = {
-    extraSetuidPrograms = mkIf (cfg.sessionType == "kde") [
-      "kcheckpass"
+  environment = {
+    etc = mkIf cfg.exportConfiguration [
+      { source = "${configFile}";
+        target = "X11/xorg.conf";
+      }
+    ];
+
+    extraPackages = [
+      xorg.xrandr
+      xorg.xrdb
+      xorg.setxkbmap
+      xorg.iceauth # required for KDE applications (it's called by dcopserver)
+    ]
+    ++ optional (videoDriver == "nvidia") [
+      kernelPackages.nvidiaDrivers
     ];
   };
 
-  environment = {
-    etc = [
-      { source = ../etc/pam.d/kde;
-        target = "pam.d/kde";
-      }
-      { source = ../etc/pam.d/slim;
-        target = "pam.d/slim";
-      }
-    ] ++ oldJob.extraEtc;
-
-    extraPackages =
-      oldJob.extraPath;
-  };
-
   services = {
+    xserver = {
+      displayManager = {
+        xserverArgs = [
+          "-ac"
+          "-logverbose"
+          "-verbose"
+          "-terminate"
+          "-logfile" "/var/log/X.${toString cfg.display}.log"
+          "-config ${configFile}"
+          ":${toString cfg.display}" "vt${toString cfg.tty}"
+          "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
+        ] ++ optional (!cfg.tcpEnable) "-nolisten tcp";
+      };
+    };
+
     extraJobs = [{
-      inherit (oldJob) name job;
+      name = "xserver";
+      job = ''
+        start on ${if cfg.autorun then "network-interfaces" else "never"}
+
+        start script
+        
+          rm -f /var/run/opengl-driver
+          ${if videoDriver == "nvidia"
+            then ''
+              ln -sf ${kernelPackages.nvidiaDrivers} /var/run/opengl-driver
+            ''
+            else if cfg.driSupport
+            then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
+            else ""
+           }
+
+          ${cfg.displayManager.job.beforeScript}
+          
+        end script
+
+        ${cfg.displayManager.job.env}
+        env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
+        env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
+
+        ${if videoDriver == "nvidia" 
+          then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidiaDrivers}/lib"
+          else ""
+        }
+
+        ${if videoDriver != "nvidia"
+          then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/modules/dri"
+          else ""
+        }
+
+        exec ${cfg.displayManager.job.execCmd}
+      '';
     }];
   };
 }

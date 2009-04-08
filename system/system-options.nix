@@ -287,7 +287,7 @@ in
         # Set the host name.  Don't clear it if it's not configured in the
         # NixOS configuration, since it may have been set by dhclient in the
         # meantime.
-        ${if config.networking.hostName == "" then
+        ${if config.networking.hostName != "" then
             ''hostname "${config.networking.hostName}"''
         else ''
             # dhclient won't do anything if the hostname isn't empty.

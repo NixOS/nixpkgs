@@ -1,5 +1,5 @@
 # Zabbix agent daemon.
-{config, pkgs}:
+{config, pkgs, ...}:
 
 ###### interface
 let

@@ -9,6 +9,230 @@ NixOS.</para>
 
 <section>
 
+<title>Extending NixOS</title>
+
+<para>A unique syntax is used to express all system, hardware, computer and
+  service configurations.  This syntax helps for reading and writing new
+  configuration files.  It is coming with some extra strategies defined in
+  NixPkgs which are used to merge and evaluate all configuration files.</para>
+
+  <para>A configuration file is the same as your own computer
+  configuration.</para>
+
+<example xml:id='conf-syntax'><title>Usual configuration file</title>
+<programlisting>
+{pkgs, config, ...}: <co xml:id='conf-syntax-1' />
+
+###### interface
+let
+  inherit (pkgs.lib) mkOption; <co xml:id='conf-syntax-2' />
+
+  options = { <co xml:id='conf-syntax-3' />
+    services = {
+      locate = {
+
+        enable = mkOption {
+          default = false;
+          example = true;
+          description = ''
+            If enabled, NixOS will periodically update the database of
+            files used by the <command>locate</command> command.
+          '';
+        };
+
+        period = mkOption {
+          default = "15 02 * * *";
+          description = ''
+            This option defines (in the format used by cron) when the
+            locate database is updated.
+            The default is to update at 02:15 (at night) every day.
+          '';
+        };
+
+      };
+
+    };
+  };
+in
+
+###### implementation
+let
+  cfg = config.services.locate; <co xml:id='conf-syntax-4' />
+  inherit (pkgs.lib) mkIf mkThenElse;
+
+  locatedb = "/var/cache/locatedb";
+  logfile = "/var/log/updatedb";
+  cmd = "root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}";
+in
+
+mkIf cfg.enable {<co xml:id='conf-syntax-5' />
+  require = [ <co xml:id='conf-syntax-6' />
+    options
+
+    # config.services.cron
+    (import ../../upstart-jobs/cron.nix)
+  ];
+
+  services = {
+    cron = {
+      systemCronJobs = mkThenElse { <co xml:id='conf-syntax-7' />
+        thenPart = "${cfg.period}  root ${cmd}";
+        elsePart = "";
+      };
+    };
+  };
+}</programlisting>
+</example>
+
+<para><xref linkend='conf-syntax' /> shows the <emphasis>configuration
+  file</emphasis> for the locate service which uses cron to update the
+  database at some dates which can be defined by the user.  This nix
+  expression is coming
+  from <filename>upstart-jobs/cron/locate.nix</filename>.  It shows a simple
+  example of a service that can be either distributed on many computer that
+  are using the same configuration or to shared with the community.  This
+  file is divided in two with the interface and the implementation.  Both
+  the interface and the implementation declare a <emphasis>configuration
+  set</emphasis>.
+
+<calloutlist>
+
+  <callout arearefs='conf-syntax-1'>
+
+    <para>This line declares the arguments of the configuration file.  You
+    can omit this line if there is no reference to <varname>pkgs</varname>
+    and <varname>config</varname> inside the configuration file.</para>
+
+    <para>The argument <varname>pkgs</varname> refers to NixPkgs and allow
+    you to access all attributes contained inside it.  In this
+    example <varname>pkgs</varname> is used to retrieve common functions to
+    ease the writing of configuration files
+    like <varname>mkOption</varname>, <varname>mkIf</varname>
+    and <varname>mkThenElse</varname>.</para>
+
+    <para>The argument <varname>config</varname> corresponds to the whole
+    NixOS configuration.  This is a set which is build by merging all
+    configuration files imported to set up the system.  Thus all options
+    declared are contained inside this variable.  In this
+    example <varname>config</varname> is used to retrieve the status of
+    the <varname>enable</varname> flag.  The important point of this
+    argument is that it contains either the result of the merge of different
+    settings or the default value, therefore you cannot assume
+    that <option>config.services.locate.enable</option> is always false
+    because it may have been defined in another configuration file.</para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-2'>
+
+    <para>This line is used to import a function that is useful for
+    writing this configuration file.</para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-3'>
+
+    <para>The variable <varname>options</varname> is
+    a <emphasis>configuration set</emphasis> which is only used to declare
+    options with the function <varname>mkOption</varname> imported
+    from <filename>pkgs/lib/default.nix</filename>.  Options may contained
+    any attribute but only the following have a special
+    meaning: <varname>default</varname>, <varname>example</varname>,
+    <varname>description</varname>, <varname>merge</varname>
+    and <varname>apply</varname>.</para>
+
+    <para>The <varname>merge</varname> attribute is used to merge all values
+    defined in all configuration files and this function return a value
+    which has the same type as the default value.  If the merge function is
+    not defined, then a default function
+    (<varname>pkgs.lib.mergeDefaultOption</varname>) is used to merge
+    values.  The <varname>merge</varname> attribute is a function which
+    expect two arguments: the location of the option and the list of values
+    which have to be merged.</para>
+
+    <para>The <varname>apply</varname> attribute is a function used to
+    process the option.  Thus the value return
+    by <option>config.<replaceable>option</replaceable></option> would be
+    the result of the <varname>apply</varname> function called with either
+    the <varname>default</varname> value or the result of
+    the <varname>merge</varname> function.</para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-4'>
+
+    <para>This line is a common trick used to reduce the amount of
+    writing.  In this case <varname>cfg</varname> is just a sugar over
+    <option>config.services.locate</option></para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-5'>
+
+    <para>This line is used to declare a special <emphasis>IF</emphasis>
+    statement.  If you had put a usual <emphasis>IF</emphasis> statement
+    here, with the same condition, then you will get an infinite loop.  The
+    reason is that your condition ask for the value of the
+    option <option>config.services.locate.enable</option> but in order to
+    get this value you have to evaluate all configuration sets including the
+    configuration set contained inside your file.</para>
+
+    <para>To remove this extra complexity, <varname>mkIf</varname> has been
+    introduced to get rid of possible infinite loop and to factor your
+    writing.</para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-6'>
+
+    <para>The attribute <varname>require</varname> is the only special
+    option that exists.  It is used to embed all option declarations that
+    are required by your configuration file and it is also used to provide
+    the options that you are declaring.</para>
+
+    <para>This attribute is processed
+    with <varname>pkgs.lib.uniqFlatten</varname> to collect all
+    configuration files that are used by your system and it avoid the
+    insertion of duplicated elements by comparing the configuration set codes.</para>
+
+    <para>Currently, the file <filename>configuration.nix</filename>
+    implicitly embeds <filename>system/options.nix</filename>.  If you need
+    a special configuration file, then you will have to add similar lines
+    to your computer configuration.</para>
+
+  </callout>
+
+  <callout arearefs='conf-syntax-7'>
+
+    <para>As <varname>mkIf</varname> does not need
+    any <emphasis>then</emphasis> part or <emphasis>else</emphasis> part,
+    then you can specify one on each option definition with the
+    function <varname>mkThenElse</varname>.</para>
+
+    <para>To avoid a lot of <varname>mkThenElse</varname> with empty
+    <emphasis>else</emphasis> part, a sugar has been added to infer the
+    corresponding <emphasis>empty</emphasis>-value of your option when the
+    function <varname>mkThenElse</varname> is not used.</para>
+
+    <para>If your <emphasis>then</emphasis> part
+    and <emphasis>else</emphasis> part are identical, then you should use
+    the function <varname>mkAlways</varname> to ignore the condition.</para>
+
+    <para>If you need to add another condition, then you can add <varname>mkIf</varname> to on
+    the appropriate location.  Thus the <emphasis>then</emphasis> part will
+    only be used if all conditions declared with <varname>mkIf</varname>
+    are satisfied.</para>
+
+  </callout>
+
+</calloutlist>
+
+</para>
+
+</section>
+
+<section>
+
 <title>Building specific parts of NixOS</title>
 
 <para>
