@@ -170,7 +170,7 @@ in
 let 
   binsh = config.system.build.binsh;
   nixEnvVars = config.nix.envVars;
-  inherit (pkgs) nix;
+  inherit (config.environment) nix;
 in
 
 {
