@@ -480,7 +480,7 @@ let
   };
 
   cdecl = import ../development/tools/cdecl {
-    inherit fetchurl stdenv yacc flex readline;
+    inherit fetchurl stdenv yacc flex readline ncurses;
   };
 
   cdrdao = import ../tools/cd-dvd/cdrdao {
