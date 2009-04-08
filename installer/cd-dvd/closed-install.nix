@@ -70,4 +70,5 @@ in
           ""
           ["nix-reduce-build" "nix-http-export.cgi"]
           ["--with-docbook-xsl=\\\${pkgs.docbook5_xsl}/xml/xsl/docbook/"];
+	extraInitrdKernelModules = ["usb_storage" "ehci_hcd" "ohci_hcd" "iso9660" "ext3"];
 }).rescueCD

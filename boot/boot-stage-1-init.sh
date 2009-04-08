@@ -138,6 +138,26 @@ fi
 if test -n "$debug1devices"; then fail; fi
 
 
+# Return true if the machine is on AC power, or if we can't determine
+# whether it's on AC power.
+onACPower () {
+    if test -d "/proc/acpi/battery"; then
+	if ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1; then
+	    if cat /proc/acpi/battery/BAT*/state	\
+	       | grep "^charging state"			\
+	       | grep -q "discharg" ; then
+		false
+	    else
+		true
+	    fi
+	else
+	    true
+	fi
+    else
+	true
+    fi
+}
+
 # Function for mounting a file system.
 mountFS() {
     local device="$1"
@@ -158,24 +178,29 @@ mountFS() {
     fi
 
     if test -n "$mustCheck"; then
-        FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
-        fsckResult=$?
+	if onACPower; then
+            FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
+            fsckResult=$?
 
-        if test $(($fsckResult | 2)) = $fsckResult; then
-            echo "fsck finished, rebooting..."
-            sleep 3
-            reboot
-        fi
+            if test $(($fsckResult | 2)) = $fsckResult; then
+		echo "fsck finished, rebooting..."
+		sleep 3
+		reboot
+            fi
 
-        if test $(($fsckResult | 4)) = $fsckResult; then
-            echo "$device has unrepaired errors, please fix them manually."
-            fail
-        fi
+            if test $(($fsckResult | 4)) = $fsckResult; then
+		echo "$device has unrepaired errors, please fix them manually."
+		fail
+            fi
 
-        if test $fsckResult -ge 8; then
-            echo "fsck on $device failed."
-            fail
-        fi
+            if test $fsckResult -ge 8; then
+		echo "fsck on $device failed."
+		fail
+            fi
+	else
+            # Don't run `fsck' if the machine is on battery power.
+	    echo "on battery power, so \`fsck' not run on \`$device'"
+	fi
     fi
 
     # Mount read-writable.

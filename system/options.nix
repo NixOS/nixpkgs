@@ -301,7 +301,6 @@ in
           kernel = kernelPackages.kernel;
         in
         [ kernel ]
-        ++ pkgs.lib.optional ((config.networking.enableIntel3945ABGFirmware || config.networking.enableIntel4965AGNFirmware) && !kernel.features ? iwlwifi) kernelPackages.iwlwifi
         ++ pkgs.lib.optional config.hardware.enableGo7007 kernelPackages.wis_go7007
         ++ config.boot.extraModulePackages
         # should only keep this one, other have to be set by the option owners.
@@ -818,6 +817,13 @@ in
           <command>no</command>
         ";
       };
+
+      gatewayPorts = mkOption {
+        default = "no";
+        description = "
+           Specifies  whether  remote hosts are allowed to connect to ports forwarded for the client. See man sshd_conf.
+          ";
+        };
     };
 
     lshd = {
@@ -1255,9 +1261,11 @@ in
         default = [];
         example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
         description = ''
-          Loads additional modules either beeing distributed with apache.
-          If the module is contained in a foreign package (such as php5_module)
-          kse an attrset as given in the example.
+          Specifies additional Apache modules.  These can be specified
+          as a string in the case of modules distributed with Apache,
+          or as an attribute set specifying the
+          <varname>name</varname> and <varname>path</varname> of the
+          module.
         '';
       };
 
@@ -1996,25 +2004,29 @@ in
         example = [ { type = "svn"; url = "https://svn.nixos.org/repos/nix/nixos/branches/stdenv-updates"; target = "/etc/nixos/nixos-stdenv-updates"; }
                     { type = "git"; initialize = ''git clone git://mawercer.de/nixos $target''; update = "git pull origin"; target = "/etc/nixos/nixos-git"; }
                   ];
-        description = "The NixOS repository from which the system will be build. 
-                       nixos-checkout will update all working copies of the given repositories,
-                       nixos-rebuild will use the first item which has
-                       the attribute default = true falling back to the
-                       first item. The type defines the repository tool added
-                       to the path. It also defines a \"valid\" repository.
-                       If the target directory already exists and it's not
-                       valid it will be moved to the backup location
-                       <filename>\${dir}-date</filename>.
-                       For svn the default target and repositories are
-                       <filename>/etc/nixos/nixos</filename> and
-                       <filename>https://svn.nixos.org/repos/nix/nixos/trunk</filename>.
-                       For git repositories update is called after
-                       initialization when the repo is initialized.
-                       The initialize code is run from working directory
-                       dirname \$target and should create the directory
-                       <filename>\$target<filename>. (<command>git clone url nixos/nixpkgs/services</command> should do)
-                       For the executables beeing used see <option>repoTypes</option>
-                       ";
+        description = ''
+          The NixOS repository from which the system will be built.
+          <command>nixos-checkout</command> will update all working
+          copies of the given repositories,
+          <command>nixos-rebuild</command> will use the first item
+          which has the attribute <literal>default = true</literal>
+          falling back to the first item. The type defines the
+          repository tool added to the path. It also defines a "valid"
+          repository.  If the target directory already exists and it's
+          not valid it will be moved to the backup location
+          <filename><replaceable>dir</replaceable>-date</filename>.
+          For svn the default target and repositories are
+          <filename>/etc/nixos/nixos</filename> and
+          <filename>https://svn.nixos.org/repos/nix/nixos/trunk</filename>.
+          For git repositories update is called after initialization
+          when the repo is initialized.  The initialize code is run
+          from working directory dirname
+          <replaceable>target</replaceable> and should create the
+          directory
+          <filename><replaceable>dir</replaceable></filename>. (<command>git
+          clone url nixos/nixpkgs/services</command> should do) For
+          the executables used see <option>repoTypes</option>.
+        '';
       };
 
       nixpkgs = mkOption {
@@ -2029,12 +2041,17 @@ in
     };
 
     repoTypes = mkOption {
-        default = {
-          svn = { valid = "[ -d .svn ]"; env = [ pkgs.coreutils pkgs.subversion ]; };
-          git = { valid = "[ -d .git ]"; env = [ pkgs.coreutils pkgs.git pkgs.gnused /*  FIXME: use full path to sed in nix-pull */ ]; };
-        };
-        description = "defines PATH environment and when directory is considered beeing a valid repository.
-              If it's not it's moved to a backup directory";
+      default = {
+        svn = { valid = "[ -d .svn ]"; env = [ pkgs.coreutils pkgs.subversion ]; };
+        git = { valid = "[ -d .git ]"; env = [ pkgs.coreutils pkgs.git pkgs.gnused /*  FIXME: use full path to sed in nix-pull */ ]; };
+      };
+      description = ''
+        Defines, for each supported version control system
+        (e.g. <literal>git</literal>), the dependencies for the
+        mechanism, as well as a test used to determine whether a
+        directory is a checkout created by that version control
+        system.
+      '';
     };
 
     manifests = mkOption {
@@ -2423,6 +2440,7 @@ in
     (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)
     (import ../upstart-jobs/cron.nix)
+    (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)
 
     # fonts

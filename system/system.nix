@@ -184,6 +184,9 @@ rec {
   # at boot time (such as start `init').
   activateConfiguration = config.system.activationScripts.script;
 
+  # The shell that we want to use for /bin/sh.
+  binsh = pkgs.bashInteractive;
+
 
   # The init script of boot stage 2, which is supposed to do
   # everything else to bring up the system.

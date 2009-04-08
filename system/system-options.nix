@@ -88,6 +88,10 @@ in
   ];
 
   system = {
+    build = {
+      binsh = pkgs.bashInteractive;
+    };
+
     activationScripts = {
       systemConfig = noDepEntry ''
         systemConfig="$1"
@@ -122,7 +126,7 @@ in
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
         mkdir -m 0755 -p $mountPoint/bin
-        ln -sfn ${pkgs.bash}/bin/sh $mountPoint/bin/sh
+        ln -sfn ${config.system.build.binsh}/bin/sh $mountPoint/bin/sh
       '' [
         activateLib.defaultPath # path to ln & mkdir
         activateLib.stdio # ?

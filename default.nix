@@ -1,6 +1,6 @@
 let
 
-  fromEnv = name : default :
+  fromEnv = name: default:
     let env = builtins.getEnv name; in
     if env == "" then default else env;
   configuration = import (fromEnv "NIXOS_CONFIG" /etc/nixos/configuration.nix);

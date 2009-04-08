@@ -150,7 +150,7 @@ let
       firmwareDirs =
            pkgs.lib.optional config.networking.enableIntel2200BGFirmware pkgs.ipw2200fw
         ++ pkgs.lib.optional config.networking.enableIntel3945ABGFirmware pkgs.iwlwifi3945ucode
-        ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware pkgs.iwlwifi4965ucode
+        ++ pkgs.lib.optional config.networking.enableIntel4965AGNFirmware kernelPackages.iwlwifi4965ucode
         ++ pkgs.lib.optional config.networking.enableZydasZD1211Firmware pkgs.zd1211fw
         ++ pkgs.lib.optional config.hardware.enableGo7007 "${kernelPackages.wis_go7007}/firmware"
         ++ config.services.udev.addFirmware;
@@ -239,9 +239,7 @@ let
       inherit (pkgs) writeText openssh glibc;
       inherit (pkgs.xorg) xauth;
       inherit nssModulesPath;
-      forwardX11 = config.services.sshd.forwardX11;
-      allowSFTP = config.services.sshd.allowSFTP;
-      permitRootLogin = config.services.sshd.permitRootLogin;
+      inherit (config.services.sshd) forwardX11 allowSFTP permitRootLogin gatewayPorts;
     })
 
   # GNU lshd SSH2 deamon.

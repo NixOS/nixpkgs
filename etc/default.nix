@@ -30,13 +30,12 @@ let
   nssModulesPath = config.system.nssModules.path;
   wrapperDir = config.system.wrapperDir;
   systemPath = config.system.path;
+  binsh = config.system.build.binsh;
 
   optional = pkgs.lib.optional;
 
 
   # !!! ugh, these files shouldn't be created here.
-
-
   pamConsoleHandlers = pkgs.writeText "console.handlers" ''
     console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
     ${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
@@ -131,14 +130,28 @@ let
     }
 
     { # Nix configuration.
-      source = pkgs.writeText "nix.conf" ''
-        # WARNING: this file is generated.
-        build-users-group = nixbld
-        build-max-jobs = ${toString (config.nix.maxJobs)}
-        build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-        build-chroot-dirs = /dev /dev/pts /proc /bin
-        ${config.nix.extraOptions}
-      '';
+      source =
+        let
+          # Tricky: if we're using a chroot for builds, then we need
+          # /bin/sh in the chroot (our own compromise to purity).
+          # However, since /bin/sh is a symlink to some path in the
+          # Nix store, which furthermore has runtime dependencies on
+          # other paths in the store, we need the closure of /bin/sh
+          # in `build-chroot-dirs' - otherwise any builder that uses
+          # /bin/sh won't work.
+          refs = pkgs.writeReferencesToFile binsh;
+        in 
+          pkgs.runCommand "nix.conf" {} ''
+            binshDeps=$(for i in $(cat ${refs}); do if test -d $i; then echo $i; fi; done)
+            cat > $out <<END
+            # WARNING: this file is generated.
+            build-users-group = nixbld
+            build-max-jobs = ${toString (config.nix.maxJobs)}
+            build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
+            build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $binshDeps)
+            ${config.nix.extraOptions}
+            END
+          '';
       target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
     }
 
@@ -209,7 +222,6 @@ let
       "shadow"
       "sshd"
       "lshd"
-      "lsh-pam-checkpw"
       "useradd"
       "chsh"
       "xlock"
