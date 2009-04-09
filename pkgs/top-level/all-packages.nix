@@ -3649,7 +3649,7 @@ let
   };
 
   loudmouth = import ../development/libraries/loudmouth {
-    inherit fetchurl stdenv libidn gnutls pkgconfig;
+    inherit fetchurl stdenv libidn gnutls pkgconfig zlib;
     inherit (gtkLibs) glib;
   };
 

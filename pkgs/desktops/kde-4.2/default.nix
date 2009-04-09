@@ -176,4 +176,12 @@ rec {
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon;
   };
+
+#### EXTRA GEAR
+
+  amarok = import ./extragear/amarok {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext curl mysql libxml2 taglib loudmouth;
+    inherit kdelibs;
+    inherit automoc4 phonon strigi soprano;
+  };
 }

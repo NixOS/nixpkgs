@@ -1,14 +1,15 @@
-args: with args;
-stdenv.mkDerivation rec {
-	name = "loudmouth-1.3.3";
+{stdenv, fetchurl, gnutls, libidn, glib, pkgconfig, zlib}:
 
-	src = fetchurl {
-		url = "http://ftp.imendio.com/pub/imendio/loudmouth/src/${name}.tar.bz2";
-		sha256 = "0f3xpp3pf5bxcp0kcmqa0g28vfl5gg8mj0hxhs2cx75hwgikd26x";
-	};
+stdenv.mkDerivation {
+  name = "loudmouth-1.4.3";
+    
+  src = fetchurl {
+    url = http://ftp.gnome.org/pub/GNOME/sources/loudmouth/1.4/loudmouth-1.4.3.tar.bz2;
+    md5 = "55339ca42494690c3942ee1465a96937";
+  };
+    
+  propagatedBuildInputs = [gnutls libidn glib zlib];
+  buildInputs = [pkgconfig];
 
-	propagatedBuildInputs = [gnutls libidn glib];
-	buildInputs = [pkgconfig];
-
-	configureFlags = "--enable-shared --disable-static";
+  configureFlags = "--enable-shared --disable-static";
 }
