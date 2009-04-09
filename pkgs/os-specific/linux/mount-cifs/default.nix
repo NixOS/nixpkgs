@@ -4,9 +4,8 @@ stdenv.mkDerivation {
   name = "mount.cifs";
   
   src = fetchurl {
-    name = "mount.cifs.c";
-    url = "http://websvn.samba.org/cgi-bin/viewcvs.cgi/*checkout*/branches/SAMBA_3_0/source/client/mount.cifs.c?rev=6103";
-    sha256 = "19205gd3pv8g519hlbjaw559wqgf0h2vkln9xgqaqip2h446qarp";
+    url = http://nixos.org/tarballs/mount_cifs-20090330.c;
+    sha256 = "1d9v3qzic3d12vna8g7d1zsl1piwm20f6xhck319rbfkrdg0smnl";
   };
  
   buildCommand = ''
