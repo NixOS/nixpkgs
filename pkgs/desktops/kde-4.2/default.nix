@@ -184,4 +184,10 @@ rec {
     inherit kdelibs;
     inherit automoc4 phonon strigi soprano;
   };
+  
+  ktorrent = import ./extragear/ktorrent {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp taglib boost gettext;
+    inherit kdelibs kdepimlibs kdebase_workspace;
+    inherit automoc4 phonon qca2;
+  };
 }

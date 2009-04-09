@@ -349,6 +349,7 @@ in {
     kdetoys = linux;
     kdeutils = linux;
     kdewebdev = linux;
+    ktorrent = linux;
   };
 
   kernelPackages_2_6_26 = {
