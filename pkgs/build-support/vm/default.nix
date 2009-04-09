@@ -817,7 +817,7 @@ rec {
       };
       urlPrefix = mirror://ubuntu;
     } // args);
-         
+ 
     ubuntu810x86_64 = args: makeImageFromDebDist ({
       name = "ubuntu-8.10-intrepid-amd64";
       fullName = "Ubuntu 8.10 Intrepid (amd64)";
@@ -827,7 +827,27 @@ rec {
       };
       urlPrefix = mirror://ubuntu;
     } // args);
-         
+
+    ubuntu904i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-jaunty-i386";
+      fullName = "Ubuntu 8.10 Jaunty (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/jaunty/main/binary-i386/Packages.bz2;
+        sha256 = "7a82d30716a96a98eaa56843f3dfc1a0e706f26c9ea2e1d1dc1cbaadfa352e1f";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+ 
+    ubuntu904x86_64 = args: makeImageFromDebDist ({
+      name = "ubuntu-8.10-jaunty-amd64";
+      fullName = "Ubuntu 8.10 Jaunty (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/jaunty/main/binary-amd64/Packages.bz2;
+        sha256 = "794e080413580f6b94318d495672c8f7e54cf087d08d1fd748a612da0f2e4538";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+
     debian40i386 = args: makeImageFromDebDist ({
       name = "debian-4.0r7-etch-i386";
       fullName = "Debian 4.0r7 Etch (i386)";
@@ -998,6 +1018,8 @@ rec {
     ubuntu804x86_64 = diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages; };
     ubuntu810i386 = diskImageFuns.ubuntu810i386 { packages = commonDebianPackages; };
     ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
+    ubuntu904i386 = diskImageFuns.ubuntu904i386 { packages = commonDebianPackages; };
+    ubuntu904x86_64 = diskImageFuns.ubuntu904x86_64 { packages = commonDebianPackages; };
     debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
     debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
     debian50i386 = diskImageFuns.debian50i386 { packages = commonDebianPackages; };
