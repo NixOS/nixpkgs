@@ -26,7 +26,7 @@ EOF
     if test -n "$langCC"; then
         langs="$langs,c++"
     fi
-    if test -n "$langF77"; then
+    if test -n "$langFortran"; then
         langs="$langs,f77"
     fi
 

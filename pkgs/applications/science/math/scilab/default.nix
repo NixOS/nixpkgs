@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, g77
+{stdenv, fetchurl, lib, gfortran
 , ncurses
 , Xaw3d, withXaw3d ? false
 #, withPVMlib ? false
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     md5 = "17a7a6aa52918f33d96777a0dc423658";
   };
 
-  buildInputs = [g77 ncurses]
+  buildInputs = [gfortran ncurses]
   ++ lib.optionals withGtk [gtk]
   ++ lib.optionals withOCaml [ocaml]
   ++ lib.optionals withX [x11]

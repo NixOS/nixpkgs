@@ -6,17 +6,18 @@
 , gmp, mpfr
 , bison ? null, flex ? null
 , enableMultilib ? false
+, name ? "gcc"
 }:
 
-assert langC;
 assert langTreelang -> bison != null && flex != null;
 
-with import ../../../lib;
+with stdenv.lib;
 
 let version = "4.3.3"; in
 
 stdenv.mkDerivation {
-  name = "gcc-${version}";
+  name = "${name}-${version}";
+  
   builder = ./builder.sh;
   
   src =

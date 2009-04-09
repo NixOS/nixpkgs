@@ -1,8 +1,9 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langF77 ? false
+, langC ? true, langCC ? true, langFortran ? false
 , profiledCompiler ? false
 , gmp ? null , mpfr ? null
 , texinfo ? null
+, name ? "gcc"
 }:
 
 assert langC;
@@ -10,8 +11,10 @@ assert langC;
 with import ../../../lib;
 
 stdenv.mkDerivation {
-  name = "gcc-4.0.4";
+  name = "${name}-4.0.4";
+  
   builder = ./builder.sh;
+  
   src = fetchurl {
     url = ftp://ftp.nluug.nl/mirror/languages/gcc/releases/gcc-4.0.4/gcc-4.0.4.tar.bz2;
     sha256 = "0izwr8d69ld3a1yr8z94s7y7k861wi613mplys2c0bvdr58y1zgk";
@@ -20,7 +23,7 @@ stdenv.mkDerivation {
   patches =
     optional noSysDirs [./no-sys-dirs.patch];
     
-  inherit noSysDirs langC langCC langF77 profiledCompiler;
+  inherit noSysDirs langC langCC langFortran profiledCompiler;
 
   buildInputs = [gmp mpfr texinfo];
 
@@ -31,9 +34,9 @@ stdenv.mkDerivation {
     --with-system-zlib
     --enable-languages=${
       concatStrings (intersperse ","
-        (  optional langC   "c"
-        ++ optional langCC  "c++"
-        ++ optional langF77 "f95"
+        (  optional langC       "c"
+        ++ optional langCC      "c++"
+        ++ optional langFortran "f95"
         )
       )
     }

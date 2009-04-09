@@ -1,10 +1,7 @@
-{stdenv, fetchurl, g77, readline, ncurses, perl, flex,
+{stdenv, fetchurl, gfortran, readline, ncurses, perl, flex,
  bison, autoconf, automake, sourceByName, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive, qhull, libX11}:
 
-assert readline != null && ncurses != null && flex != null;
-assert g77.langFortran;
-
-let commonBuildInputs = [g77 readline ncurses perl glibc qhull libX11 texinfo]; in
+let commonBuildInputs = [gfortran readline ncurses perl glibc qhull libX11 texinfo]; in
 
 stdenv.mkDerivation ({
   NIX_LDFLAGS = "-lpthread";

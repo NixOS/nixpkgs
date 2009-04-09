@@ -5,7 +5,7 @@
 # stdenv.mkDerivation provides a wrapper that sets up the right environment
 # variables so that the compiler and the linker just "work".
 
-{ name ? "gcc-wrapper", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
+{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , gcc ? null, libc ? null, binutils ? null, shell ? ""
 }:
 
@@ -13,10 +13,17 @@ assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
 assert !nativeLibc -> libc != null;
 
-let gccVersion = (builtins.parseDrvName gcc.name).version; in
+let
+
+  gccVersion = (builtins.parseDrvName gcc.name).version;
+  gccName = (builtins.parseDrvName gcc.name).name;
+  
+in
 
 stdenv.mkDerivation {
-  name = name + (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
+  name =
+    (if name != "" then name else gccName + "-wrapper") +
+    (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
   
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;

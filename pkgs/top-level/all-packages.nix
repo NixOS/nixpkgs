@@ -1520,63 +1520,6 @@ let
     inherit fetchurl stdenv gawk system;
   };
 
-  g77 = import ../build-support/gcc-wrapper {
-    name = "g77-wrapper";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-3.3 {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = true;
-      langCC = false;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-
-  g77_40 = import ../build-support/gcc-wrapper {
-    name = "g77-wrapper";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-4.0 {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = true;
-      langCC = false;
-      inherit gmp mpfr;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-
-  g77_41 = import ../build-support/gcc-wrapper {
-    name = "g77-wrapper";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-4.1 {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = true;
-      langCC = false;
-      langC = false;
-      inherit gmp mpfr;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-
-  gfortran = import ../build-support/gcc-wrapper {
-    name = "gfortran-wrapper";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-4.2/fortran.nix {
-      inherit fetchurl stdenv noSysDirs;
-      langF77 = true;
-      langCC = false;
-      langC = false;
-      inherit gmp mpfr;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-
   gcc = gcc43;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
@@ -1596,27 +1539,29 @@ let
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
 
-  gcc40 = wrapGCC (import ../development/compilers/gcc-4.0 {
+  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.0) {
     inherit fetchurl stdenv noSysDirs;
     texinfo = texinfo49;
     profiledCompiler = true;
   });
 
-  gcc41 = wrapGCC (import ../development/compilers/gcc-4.1 {
+  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.1) {
     inherit fetchurl stdenv noSysDirs;
     texinfo = texinfo49;
     profiledCompiler = false;
   });
 
-  gcc42 = wrapGCC (import ../development/compilers/gcc-4.2 {
+  gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.2) {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
   });
 
-  gcc43 = useFromStdenv "gcc" (wrapGCC (import ../development/compilers/gcc-4.3 {
+  gcc43 = useFromStdenv "gcc" gcc43_real;
+
+  gcc43_real = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
-  }));
+  });
 
   gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (import ../development/compilers/gcc-4.3 {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
@@ -1633,6 +1578,39 @@ let
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
     texinfo = texinfo49;
+  });
+
+  gfortran = gfortran43;
+
+  gfortran40 = wrapGCC (gcc40.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    inherit gmp mpfr;
+  });
+
+  gfortran41 = wrapGCC (gcc41.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    inherit gmp mpfr;
+  });
+
+  gfortran42 = wrapGCC (gcc42.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    inherit gmp mpfr;
+  });
+
+  gfortran43 = wrapGCC (gcc43_real.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
   });
 
   # This new ghc stuff is under heavy development and will change !
@@ -2093,12 +2071,11 @@ let
 
   # mercurial (hg) bleeding edge version
   octaveHG = import ../development/interpreters/octave/hg.nix {
-    inherit fetchurl readline ncurses perl flex atlas getConfig glibc qhull;
+    inherit fetchurl readline ncurses perl flex atlas getConfig glibc qhull gfortran;
     inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
     inherit stdenv;
     inherit (xlibs) libX11;
     #stdenv = overrideGCC stdenv gcc40;
-    g77 = gfortran;
     inherit (bleedingEdgeRepos) sourceByName;
   };
 
@@ -9513,7 +9490,7 @@ let
   };
 
   scilab = (import ../applications/science/math/scilab) {
-    inherit stdenv fetchurl lib g77;
+    inherit stdenv fetchurl lib gfortran;
     inherit (gtkLibs) gtk;
     inherit ncurses Xaw3d tcl tk ocaml x11;
 

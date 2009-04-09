@@ -1,19 +1,21 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langF77 ? false
+, langC ? true, langCC ? true, langFortran ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , gmp ? null
 , mpfr ? null
 , texinfo ? null
+, name ? "gcc"
 }:
 
-assert langC || langF77;
+assert langC || langFortran;
 
 with import ../../../lib;
 
 stdenv.mkDerivation {
-  name = "gcc-4.1.2";
-  builder = if langF77 then ./fortran.sh else  ./builder.sh;
+  name = "${name}-4.1.2";
+  
+  builder = ./builder.sh;
   
   src =
     optional /*langC*/ true (fetchurl {
@@ -24,7 +26,7 @@ stdenv.mkDerivation {
       url = mirror://gnu/gcc/gcc-4.1.2/gcc-g++-4.1.2.tar.bz2;
       sha256 = "1qm2izcxna10jai0v4s41myki0xkw9174qpl6k1rnrqhbx0sl1hc";
     }) ++
-    optional langF77 (fetchurl {
+    optional langFortran (fetchurl {
       url = mirror://gnu/gcc/gcc-4.1.2/gcc-fortran-4.1.2.tar.bz2;
       sha256 = "0772dhmm4gc10420h0d0mfkk2sirvjmjxz8j0ywm8wp5qf8vdi9z";
     });
@@ -42,9 +44,9 @@ stdenv.mkDerivation {
     --with-system-zlib
     --enable-languages=${
       concatStrings (intersperse ","
-        (  optional langC   "c"
-        ++ optional langCC  "c++"
-        ++ optional langF77 "fortran"
+        (  optional langC       "c"
+        ++ optional langCC      "c++"
+        ++ optional langFortran "fortran"
         )
       )
     }
@@ -53,7 +55,7 @@ stdenv.mkDerivation {
 
   makeFlags = if staticCompiler then "LDFLAGS=-static" else "";
 
-  passthru = { inherit langC langCC langF77; };
+  passthru = { inherit langC langCC langFortran; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";
