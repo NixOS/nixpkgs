@@ -829,8 +829,8 @@ rec {
     } // args);
 
     ubuntu904i386 = args: makeImageFromDebDist ({
-      name = "ubuntu-8.10-jaunty-i386";
-      fullName = "Ubuntu 8.10 Jaunty (i386)";
+      name = "ubuntu-9.04-jaunty-i386";
+      fullName = "Ubuntu 9.04 Jaunty (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-i386/Packages.bz2;
         sha256 = "7a82d30716a96a98eaa56843f3dfc1a0e706f26c9ea2e1d1dc1cbaadfa352e1f";
@@ -839,8 +839,8 @@ rec {
     } // args);
  
     ubuntu904x86_64 = args: makeImageFromDebDist ({
-      name = "ubuntu-8.10-jaunty-amd64";
-      fullName = "Ubuntu 8.10 Jaunty (amd64)";
+      name = "ubuntu-9.04-jaunty-amd64";
+      fullName = "Ubuntu 9.04 Jaunty (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-amd64/Packages.bz2;
         sha256 = "794e080413580f6b94318d495672c8f7e54cf087d08d1fd748a612da0f2e4538";
