@@ -3,6 +3,10 @@ source $stdenv/setup
 
 configurePhase=configurePhase
 configurePhase() {
+    if test -n "$preConfigure"; then 
+        eval "$preConfigure"; 
+    fi
+
     export INSTALL_PATH=$out
     export INSTALL_MOD_PATH=$out
 

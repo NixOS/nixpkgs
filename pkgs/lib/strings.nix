@@ -29,9 +29,16 @@ rec {
     concatStrings (intersperse separator list);
 
 
-  # Construct an RPATH containing the libraries for a set of packages,
-  # e.g. "${pkg1}/lib:${pkg2}/lib:...".
-  makeLibraryPath = paths: concatStringsSep ":" (map (path: path + "/lib") paths);
+  # Construct a Unix-style search path consisting of each `subDir"
+  # directory of the given list of packages.  For example,
+  # `makeSearchPath "bin" ["x" "y" "z"]' returns "x/bin:y/bin:z/bin".
+  makeSearchPath = subDir: packages: 
+    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+
+
+  # Construct a library search path (such as RPATH) containing the
+  # libraries for a set of packages, e.g. "${pkg1}/lib:${pkg2}/lib:...".
+  makeLibraryPath = makeSearchPath "lib";
 
 
   # Dependening on the boolean `cond', return either the given string

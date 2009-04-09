@@ -1,4 +1,4 @@
-{stdenv, fetchurl, yacc, flex, readline}:
+{stdenv, fetchurl, yacc, flex, readline, ncurses}:
 
 stdenv.mkDerivation {
   name = "cdecl-2.5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   preBuild = "
     makeFlags=\"PREFIX=$out\"
   ";
-  buildInputs = [yacc flex readline];
+  buildInputs = [yacc flex readline ncurses];
 
   meta = {
     description = "Translator English -- C/C++ declarations";

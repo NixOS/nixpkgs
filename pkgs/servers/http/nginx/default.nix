@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   FullDepEntry = args.FullDepEntry;
 
-  version = lib.getAttr ["version"] "0.7.23" args; 
+  version = lib.getAttr ["version"] "0.7.47" args; 
   buildInputs = with args; [
     openssl zlib pcre libxml2 libxslt
   ];
@@ -12,7 +12,7 @@ in
 rec {
   src = fetchurl {
     url = "http://sysoev.ru/nginx/nginx-${version}.tar.gz";
-    sha256 = "1fygkagzclfqygipgi140jf3aiwqn8yqxjmk181i31p4di5m46rk";
+    sha256 = "0wcb5qmvlp2b9vfz8b897gk783bwp55kprxg4gss1i9r72jdp16a";
   };
 
   inherit buildInputs;

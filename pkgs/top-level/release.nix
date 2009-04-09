@@ -12,7 +12,7 @@ let
   prio = level: job: toJob job // { schedulingPriority = level; };
 
   toJob = x: if builtins.isAttrs x then x else
-    { type = "job"; systems = x; schedulingPriority = 100; };
+    { type = "job"; systems = x; schedulingPriority = 20; };
 
   /* Perform a job on the given set of platforms.  The function `f' is
      called by Hydra for each platform, and should return some job
@@ -89,6 +89,7 @@ in {
   cups = linux;
   db4 = all;
   dhcp = linux;
+  dico = linux;
   dietlibc = linux;
   diffutils = all;
   docbook5 = all;
@@ -180,6 +181,7 @@ in {
   manpages = linux;
   maxima = linux;
   mc = all;
+  mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
   mesa = linux;
@@ -225,6 +227,7 @@ in {
   portmap = linux;
   postgresql = all;
   procps = linux;
+  pthreadmanpages = all;
   python = allBut "i686-cygwin";
   pythonFull = linux;
   qt3 = allBut "i686-cygwin";
@@ -380,6 +383,7 @@ in {
     fontmiscmisc = linux;
     iceauth = linux;
     libX11 = linux;
+    lndir = all;
     setxkbmap = linux;
     xauth = linux;
     xf86inputkeyboard = linux;

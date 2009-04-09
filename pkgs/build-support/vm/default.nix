@@ -13,14 +13,11 @@ rec {
     rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
   };
 
-  
+
+  # !!! should use the mount_cifs package in all-packages.nix here.
   mountCifs = (makeStaticBinaries stdenv).mkDerivation {
     name = "mount.cifs";
-    src = fetchurl {
-      name = "mount.cifs.c";
-      url = "http://websvn.samba.org/cgi-bin/viewcvs.cgi/*checkout*/branches/SAMBA_3_0/source/client/mount.cifs.c?rev=6103";
-      sha256 = "19205gd3pv8g519hlbjaw559wqgf0h2vkln9xgqaqip2h446qarp";
-    };
+    src = mount_cifs.src;
     buildInputs = [nukeReferences];
     buildCommand = ''
       ensureDir $out/bin

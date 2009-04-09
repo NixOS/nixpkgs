@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex}:
+{stdenv, fetchurl, flex, readline}:
 
 stdenv.mkDerivation {
   name = "bc-1.0.6";
@@ -7,5 +7,9 @@ stdenv.mkDerivation {
     md5 = "d44b5dddebd8a7a7309aea6c36fda117";
   };
 
-  buildInputs = [flex];
+  patches = [ ./readlinefix.patch ];
+
+  configureFlags = "--with-readline";
+
+  buildInputs = [flex readline];
 }

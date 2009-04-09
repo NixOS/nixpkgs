@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "vlc-0.9.8a";
+  name = "vlc-0.9.9";
 
   src = fetchurl {
-    url = http://download.videolan.org/pub/videolan/vlc/0.9.8a/vlc-0.9.8a.tar.bz2;
-    sha256 = "0kw2d7yh8rzb61j1q2cvnjinj1wxc9a7smxl7ckw1vwh6y02jz0r";
+    url = http://download.videolan.org/pub/videolan/vlc/0.9.9/vlc-0.9.9.tar.bz2;
+    sha256 = "0jg9sgwzz1p9mwnzrnfg9gpkcjd549gnkw0zjp9v2q2cclg2jknh";
   };
 
   buildInputs = [

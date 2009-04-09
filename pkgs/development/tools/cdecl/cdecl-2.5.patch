@@ -7,10 +7,10 @@ index 9e85686..b8e6e02 100644
  # add -DUSE_READLINE	To compile in support for the GNU readline library.
  
 -CFLAGS= -s -O2 -DUSE_READLINE
-+
++CFLAGS=-DUSE_READLINE
  CC= gcc
 -LIBS= -lreadline -ltermcap
-+
++LIBS= -lreadline -lncursesw
  ALLFILES= makefile cdgram.y cdlex.l cdecl.c cdecl.1 testset testset++
 -BINDIR= /usr/bin
 -MANDIR= /usr/man/man1

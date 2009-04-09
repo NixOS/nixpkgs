@@ -6,12 +6,12 @@ assert pythonSupport -> python != null;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation {
-  name = "swig-1.3.33";
+  name = "swig-1.3.39";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/swig/swig-1.3.33.tar.gz;
-    sha256 = "02rz31i642sbsngny7k98d9hxlkcb9snvbzlnz3sh0qiyr3ciggv";
+    url = mirror://sourceforge/swig/swig-1.3.39.tar.gz;
+    sha256 = "1p0i5c52y8d7wvn5h3qf62q5ic7kgbj2vc5dm8zy07ygff9msbdv";
   };
 
   inherit perlSupport pythonSupport javaSupport;

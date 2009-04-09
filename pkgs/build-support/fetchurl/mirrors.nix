@@ -165,6 +165,7 @@ rec {
     ftp://download.xs4all.nl/pub/mirror/CPAN/
     ftp://ftp.nl.uu.net/pub/CPAN/
     http://ftp.funet.fi/pub/CPAN/
+    http://cpan.perl.org/
   ];
 
   # Debian.

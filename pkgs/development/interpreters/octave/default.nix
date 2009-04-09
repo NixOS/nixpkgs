@@ -1,13 +1,11 @@
-{stdenv, fetchurl, gfortran, readline, ncurses, perl, flex}:
-
-assert readline != null && ncurses != null && flex != null;
+{stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull}:
 
 stdenv.mkDerivation {
-  name = "octave-2.9.6";
+  name = "octave-3.0.4";
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/bleeding-edge/octave-2.9.6.tar.bz2;
-    md5 = "10f07dbc0951a7318502a9f1e51e6388";
+    url = ftp://ftp.octave.org/pub/octave/octave-3.0.4.tar.bz2;
+    sha256 = "1rkpzig0r0zrm73avxgai0zqkz9hv4js57i1xxdzcm22qw22szaj";
   };
-  buildInputs = [gfortran readline ncurses perl flex];
+  buildInputs = [gfortran readline ncurses perl flex texinfo qhull];
   configureFlags = "--enable-readline --enable-dl --disable-static --enable-shared";
 }

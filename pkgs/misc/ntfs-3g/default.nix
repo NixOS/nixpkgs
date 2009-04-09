@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs-3g";
-  version = "2009.2.1";
+  version = "2009.4.4";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tgz";
-    sha256 = "1c3qhn0i5hlyk9dky5a4jnbfkyz73d3qpymblc8mhhx642nigbj7";
+    sha256 = "03qdbv0c6gfssmb2s0zzqhwp447n2hgr2qjvc0p527slj2z9xlxw";
   };
 
   preConfigure = ''
