@@ -2787,9 +2787,16 @@ let
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
   
-  boost = import ../development/libraries/boost/1.38.0.nix {
+  boost = makeOverridable (import ../development/libraries/boost/1.38.0.nix) {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
+
+  # A Boost build with all library variants enabled.  Very large (about 250 MB).
+  boostFull = appendToName "full" (boost.override {
+    enableDebug = true;
+    enableSingleThreaded = true;
+    enableStatic = true;
+  });
 
   botan = builderDefsPackage (import ../development/libraries/botan) {
     inherit perl;

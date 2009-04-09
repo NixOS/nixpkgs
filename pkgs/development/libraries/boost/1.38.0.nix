@@ -1,4 +1,27 @@
-{stdenv, fetchurl, icu, expat, zlib, bzip2, python}:
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python
+, enableRelease ? true
+, enableDebug ? false
+, enableSingleThreaded ? false
+, enableMultiThreaded ? true
+, enableShared ? true
+, enableStatic ? false
+}:
+
+let
+
+  variant = stdenv.lib.concatStringsSep ","
+    (stdenv.lib.optional enableRelease "release" ++
+     stdenv.lib.optional enableDebug "debug");
+
+  threading = stdenv.lib.concatStringsSep ","
+    (stdenv.lib.optional enableSingleThreaded "single" ++
+     stdenv.lib.optional enableMultiThreaded "multi");
+
+  link = stdenv.lib.concatStringsSep ","
+    (stdenv.lib.optional enableShared "shared" ++
+     stdenv.lib.optional enableStatic "static");
+
+in
 
 stdenv.mkDerivation {
   name = "boost-1.38.0";
@@ -17,7 +40,7 @@ stdenv.mkDerivation {
   buildInputs = [icu expat zlib bzip2 python];
 
   preBuild = ''
-    makeFlagsArray=(BJAM_CONFIG="-sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=system variant=release threading=multi link=shared")
+    makeFlagsArray=(BJAM_CONFIG="-sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=system variant=${variant} threading=${threading} link=${link}")
   '';
     
   configureFlags = "--with-icu=${icu} --with-python=${python}";
