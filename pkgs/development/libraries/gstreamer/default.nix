@@ -1,7 +1,9 @@
 args: with args;
 rec {
-  gstreamerFun = lib.sumArgs (selectVersion ./gstreamer "0.10.21") args;
-  gstreamer = gstreamerFun null;
+  gstreamer = import ./gstreamer {
+    inherit (args) fetchurl stdenv perl bison flex
+       pkgconfig python which gtkdoc glib libxml2;
+  };
 
   gstPluginsBaseFun = lib.sumArgs (selectVersion ./gst-plugins-base "0.10.21")
     args { inherit gstreamer; };
