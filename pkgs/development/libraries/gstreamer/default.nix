@@ -12,9 +12,12 @@ rec {
       libvorbis freetype pango liboil gtk which gtkdoc;
   };
 
-  gstPluginsGoodFun = lib.sumArgs (selectVersion ./gst-plugins-good "0.10.11")
-    args { inherit gstPluginsBase; };
-  gstPluginsGood = gstPluginsGoodFun null;
+  gstPluginsGood = import ./gst-plugins-good {
+    inherit gstPluginsBase;
+    inherit (args) fetchurl stdenv pkgconfig aalib cairo flac hal
+      libjpeg zlib speex libpng libdv libcaca dbus libiec61883
+      libavc1394 ladspaH taglib gdbm pulseaudio;
+  };
 
   gstFfmpeg = import ./gst-ffmpeg {
     inherit fetchurl stdenv pkgconfig gstPluginsBase bzip2;

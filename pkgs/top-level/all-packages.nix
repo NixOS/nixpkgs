@@ -3095,7 +3095,7 @@ let
     inherit lib selectVersion stdenv fetchurl perl bison pkgconfig libxml2
       python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
       libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
-      dbus libavc1394 ladspaH taglib bzip2 which;
+      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which;
     flex = flex2535;
     inherit (xorg) libX11 libXv libXext;
     inherit (gtkLibs) glib pango gtk;

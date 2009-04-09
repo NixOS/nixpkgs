@@ -1,23 +1,27 @@
-args: with args;
+{ fetchurl, stdenv, pkgconfig, gstPluginsBase, aalib, cairo
+, flac , hal, libjpeg, zlib, speex, libpng, libdv, libcaca, dbus
+, libiec61883, libavc1394, ladspaH, taglib, gdbm, pulseaudio }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-" + version;
+  name = "gst-plugins-good-0.10.14";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2";
-    sha256 = "0rid0gjj8nsk0r5yn4bz1xfsbp446r92wc6wp4099hilw6jxd74y";
+    sha256 = "12kq60zdqxkshpjr76iwzykzhjaq3g1rm81nz7b0x44rrc0ms80j";
   };
 
   propagatedBuildInputs = [gstPluginsBase aalib cairo flac hal libjpeg
     zlib speex libpng libdv libcaca dbus.libs libiec61883 libavc1394 ladspaH
-    taglib ];
+    taglib gdbm pulseaudio];
   buildInputs = [pkgconfig];
 
   configureFlags = "--enable-shared --disable-static --enable-ladspa";
 
-  patches = [ ./tag_defines.patch ];
-
   meta = {
     homepage = http://gstreamer.freedesktop.org;
+
+    description = "`Good' plug-ins for GStreamer";
+
+    license = "LGPLv2+";
   };
 }
