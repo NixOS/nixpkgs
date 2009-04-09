@@ -5,9 +5,12 @@ rec {
        pkgconfig python which gtkdoc glib libxml2;
   };
 
-  gstPluginsBaseFun = lib.sumArgs (selectVersion ./gst-plugins-base "0.10.21")
-    args { inherit gstreamer; };
-  gstPluginsBase = gstPluginsBaseFun null;
+  gstPluginsBase = import ./gst-plugins-base {
+    inherit gstreamer;
+    inherit (args) fetchurl stdenv pkgconfig python
+      libX11 libXv libXext alsaLib cdparanoia libogg libtheora
+      libvorbis freetype pango liboil gtk which gtkdoc;
+  };
 
   gstPluginsGoodFun = lib.sumArgs (selectVersion ./gst-plugins-good "0.10.11")
     args { inherit gstPluginsBase; };
