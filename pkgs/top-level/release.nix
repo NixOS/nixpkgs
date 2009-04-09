@@ -331,6 +331,7 @@ in {
   };
 
   kde42 = {
+    amarok = linux;
     kdeadmin = linux;
     kdeartwork = linux;
     kdebase = linux;
