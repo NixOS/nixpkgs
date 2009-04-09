@@ -179,7 +179,7 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
-      name = "gcc-wrapper";
+      name = "";
     };
     inherit fetchurl;
   };
@@ -215,7 +215,7 @@ rec {
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
-      name = "gcc-wrapper";
+      name = "";
     };
 
     shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
