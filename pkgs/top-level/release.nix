@@ -170,7 +170,7 @@ in {
   lhs2tex = ghcSupported;
   libsmbios = linux;
   libtool = all;
-  libtool2 = all;
+  libtool_2 = all;
   libxml2 = all;
   libxslt = all;
   lout = linux;
@@ -366,7 +366,7 @@ in {
     sdf = all;
     strategoxt = all;
     javafront = all;
-    dryad = all;
+    dryad = linux;
   };
   
   xorg = {
@@ -384,7 +384,7 @@ in {
     xauth = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
-    xf86videoi810 = linux;
+    xf86videointel = linux;
     xf86videovesa = linux;
     xkbcomp = linux;
     xorgserver = linux;

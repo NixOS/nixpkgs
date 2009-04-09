@@ -2053,8 +2053,7 @@ let
   };
 
   octave = import ../development/interpreters/octave {
-    inherit stdenv fetchurl readline ncurses perl flex;
-    g77 = gfortran;
+    inherit stdenv fetchurl readline ncurses perl flex gfortran;
   };
 
   # mercurial (hg) bleeding edge version
