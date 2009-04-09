@@ -185,6 +185,12 @@ rec {
     inherit automoc4 phonon strigi soprano;
   };
   
+  kdesvn = import ./extragear/kdesvn {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext apr aprutil subversion db4;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   ktorrent = import ./extragear/ktorrent {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp taglib boost gettext;
     inherit kdelibs kdepimlibs kdebase_workspace;

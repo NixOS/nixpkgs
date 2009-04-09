@@ -350,6 +350,7 @@ in {
     kdeutils = linux;
     kdewebdev = linux;
     ktorrent = linux;
+    kdesvn = linux;
   };
 
   kernelPackages_2_6_26 = {
