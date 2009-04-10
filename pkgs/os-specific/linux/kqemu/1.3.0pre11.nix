@@ -2,7 +2,7 @@ args : with args;
 rec {
   name = "kqemu-"+version;
   src = fetchurl {
-    url = http://bellard.org/qemu/kqemu-1.3.0pre11.tar.gz;
+    url = http://www.nongnu.org/qemu/kqemu-1.3.0pre11.tar.gz;
     sha256 = "03svg2x52ziglf9r9irf6ziiz8iwa731fk1mdskwdip5jxbyy6jl";
   };
 
