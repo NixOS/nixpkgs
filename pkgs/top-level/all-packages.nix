@@ -1068,6 +1068,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  panomatic = import ../tools/graphics/panomatic {
+    inherit fetchurl stdenv boost zlib;
+  };
+
   par2cmdline = import ../tools/networking/par2cmdline {
     inherit fetchurl stdenv;
   };
