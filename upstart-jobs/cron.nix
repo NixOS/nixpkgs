@@ -24,6 +24,10 @@ let
             crontab.  See the manual page for crontab for the expected
             format. If you want to get the results mailed you must setuid
             sendmail. See <option>security.setuidOwners</option>
+
+            If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
+            will is allowed to have its own crontab file. The /var/cron/cron.deny file
+            is created automatically for you. So every user can use a crontab.
           '';
         };
 
@@ -85,6 +89,16 @@ in
 
         # Needed to interpret times in the local timezone.
         env TZ=${config.time.timeZone}
+
+        start script
+            mkdir -m 710 -p /var/cron
+
+            # By default, allow all users to create a crontab.  This
+            # is denoted by the existence of an empty cron.deny file.
+            if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
+                touch /var/cron/cron.deny
+            fi
+        end script
 
         respawn ${pkgs.cron}/sbin/cron -n
       '';

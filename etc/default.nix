@@ -19,12 +19,23 @@ let
           List of files that have to be linked in /etc.
         ";
       };
+
+      # !!! This should be moved outside of /etc/default.nix.
+      shellInit = mkOption {
+        default = "";
+        example = ''export PATH=/godi/bin/:$PATH'';
+        description = "
+          Script used to initialized user shell environments.
+        ";
+        merge = pkgs.lib.mergeStringOption;
+      };
     };
   };
 in
 
 ###### implementation
 let
+  shellInit = config.environment.shellInit;
   nixEnvVars = config.nix.envVars;
   modulesTree = config.system.modulesTree;
   nssModulesPath = config.system.nssModules.path;
@@ -114,7 +125,7 @@ let
         inherit (pkgs) glibc;
         timeZone = config.time.timeZone;
         defaultLocale = config.i18n.defaultLocale;
-        inherit nixEnvVars;
+        inherit nixEnvVars shellInit;
       };
       target = "bashrc";      
     }

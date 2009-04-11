@@ -19,7 +19,12 @@ let
 in
 
 mkIf cfg.enable {
-  require = options;
+  require = [
+    options
+
+    # environment.kdePackages
+    (import ./kdeEnvironment.nix)
+  ];
 
   services = {
     xserver = {
@@ -29,9 +34,6 @@ mkIf cfg.enable {
           name = "kde";
           start = ''
             # Start KDE.
-            export KDEDIRS=$HOME/.nix-profile:/nix/var/nix/profiles/default:${pkgs.kdebase}:${pkgs.kdelibs}
-            export XDG_CONFIG_DIRS=${pkgs.kdebase}/etc/xdg:${pkgs.kdelibs}/etc/xdg
-            export XDG_DATA_DIRS=${pkgs.kdebase}/share
             exec ${pkgs.kdebase}/bin/startkde
           '';
         }];
@@ -47,9 +49,12 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [
+    kdePackages = [
       pkgs.kdelibs
       pkgs.kdebase
+    ];
+
+    extraPackages = [
       xorg.xset # used by startkde, non-essential
     ];
 

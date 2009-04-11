@@ -224,7 +224,11 @@ rec {
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
-    # !!! wtf does this do???
+    # This attribute is responsible for creating boot entries for 
+    # child configuration. They are only (directly) accessible
+    # when the parent configuration is boot default. For example,
+    # you can provide an easy way to boot the same configuration 
+    # as you use, but with another kernel
     children = map (x: ((import ./system.nix) 
       { inherit platform; 
         configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 

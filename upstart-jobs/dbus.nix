@@ -44,8 +44,7 @@ let
     name = "dbus-conf";
     buildCommand = "
       ensureDir $out
-      substitute ${dbus}/etc/dbus-1/system.conf $out/system.conf \\
-        --replace '<fork/>' ''
+      ln -s ${dbus}/etc/dbus-1/system.conf $out/system.conf
 
       ensureDir $out/system.d
       for i in ${toString services}; do
@@ -77,14 +76,18 @@ let
 
           mkdir -m 0755 -p /var/lib/dbus
           ${dbus.tools}/bin/dbus-uuidgen --ensure
-
+ 
+          rm -f ${homeDir}/pid
+          ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
       end script
 
-      respawn
+      respawn sleep 1000000
 
-      script
-          rm -f ${homeDir}/pid
-          exec ${dbus}/bin/dbus-daemon --config-file=${configFile}/system.conf
+      stop script
+          pid=$(cat ${homeDir}/pid)
+          if test -n "$pid"; then
+              kill -9 $pid
+          fi
       end script
     '';
   };

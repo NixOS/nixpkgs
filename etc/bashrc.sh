@@ -15,9 +15,7 @@ export LANG=@defaultLocale@
 export EDITOR=nano
 export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
 export LOCATE_PATH=/var/cache/locatedb
-export KDEDIRS=/var/run/current-system/sw
-export XDG_CONFIG_DIRS=/var/run/current-system/sw/etc/xdg
-export XDG_DATA_DIRS=/var/run/current-system/sw/share
+@shellInit@
 
 # Set up secure multi-user builds: non-root users build through the
 # Nix daemon.
@@ -43,11 +41,11 @@ for i in $NIX_PROFILES; do # !!! reverse
     export PKG_CONFIG_PATH="$i/lib/pkgconfig:$PKG_CONFIG_PATH"
 
     # Automake's `aclocal' bails out if it finds non-existent directories
-    # in its path.  !!! We should fix aclocal instead.
-    if [ -d "$i/share/aclocal" ]
-    then
-	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
+    # in its path.  !!! This has been fixed in the stdenv branch.
+    if [ -d "$i/share/aclocal" ]; then
+        export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
     fi
+
     export PERL5LIB="$i/lib/site_perl:$PERL5LIB"
 
     # GStreamer.

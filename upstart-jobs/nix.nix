@@ -98,6 +98,7 @@ let
       };
 
       # Environment variables for running Nix.
+      # !!! Fix description.
       envVars = mkOption {
         internal = true;
         default = "";

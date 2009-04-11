@@ -162,6 +162,7 @@ in
         ";
       };
 
+      # !!! The mount option should not stay in /system/option.nix
       mount = mkOption {
         internal = true;
         default = pkgs.utillinuxng.override {
@@ -171,6 +172,7 @@ in
             paths = [
               pkgs.ntfs3g
               pkgs.mount_cifs
+              pkgs.nfsUtils
             ];
             pathsToLink = "/sbin";
           } + "/sbin";
@@ -442,6 +444,7 @@ in
     (import ../upstart-jobs/zabbix-agent.nix)
     (import ../upstart-jobs/zabbix-server.nix)
     (import ../upstart-jobs/disnix.nix)
+    (import ../upstart-jobs/consolekit.nix)
     (import ../upstart-jobs/cron.nix)
     (import ../upstart-jobs/fcron.nix)
     (import ../upstart-jobs/cron/locate.nix)

@@ -19,7 +19,12 @@ let
 in
 
 mkIf cfg.enable {
-  require = options;
+  require = [
+    options
+
+    # environment.kdePackages
+    (import ./kdeEnvironment.nix)
+  ];
 
   services = {
     xserver = {
@@ -44,15 +49,17 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [
-      xorg.xmessage # so that startkde can show error messages
-      pkgs.qt4 # needed for qdbus
+    kdePackages = [
       pkgs.kde42.kdelibs
       pkgs.kde42.kdebase
       pkgs.kde42.kdebase_runtime
       pkgs.kde42.kdebase_workspace
-      pkgs.kde42.kdegames
       pkgs.shared_mime_info
+    ];
+
+    extraPackages = [
+      xorg.xmessage # so that startkde can show error messages
+      pkgs.qt4 # needed for qdbus
       xorg.xset # used by startkde, non-essential
     ];
 

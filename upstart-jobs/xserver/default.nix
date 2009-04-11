@@ -290,14 +290,14 @@ let
 
   knownVideoDrivers = {
     nvidia = { modulesFirst = [ kernelPackages.nvidia_x11 ]; };  #make sure it first loads the nvidia libs
-    vesa =  { modules = [xorg.xf86videovesa]; };
-    vga =   { modules = [xorg.xf86videovga]; };
-    sis =   { modules = [xorg.xf86videosis]; };
-    i810 =  { modules = [xorg.xf86videoi810]; };
-    intel = { modules = [xorg.xf86videointel]; };
-    nv =    { modules = [xorg.xf86videonv]; };
-    ati =   { modules = [xorg.xf86videoati]; };
-    via =   { modules = [xorg.xf86videovia]; };
+    vesa =   { modules = [xorg.xf86videovesa]; };
+    vga =    { modules = [xorg.xf86videovga]; };
+    sis =    { modules = [xorg.xf86videosis]; };
+    i810 =   { modules = [xorg.xf86videoi810]; };
+    intel =  { modules = [xorg.xf86videointel]; };
+    nv =     { modules = [xorg.xf86videonv]; };
+    ati =    { modules = [xorg.xf86videoati]; };
+    via =    { modules = [xorg.xf86videovia]; };
     cirrus = { modules = [xorg.xf86videocirrus]; };
   };
 
