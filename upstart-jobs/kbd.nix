@@ -29,6 +29,10 @@ in
     {
       requiredTTYs = mkOption {
         default = [];
+        description = "
+          FIXME: find another place for this option.
+          FIXME: find a good description.
+        ";
       };
     }
   ];
