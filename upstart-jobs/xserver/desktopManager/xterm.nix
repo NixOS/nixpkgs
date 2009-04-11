@@ -8,8 +8,8 @@ let
 
     xterm = {
       enable = mkOption {
-        default = false;
-        example = true;
+        default = true;
+        example = false;
         description = "Enable a xterm terminal as a desktop manager.";
       };
     };

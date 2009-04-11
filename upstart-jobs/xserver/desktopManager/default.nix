@@ -57,12 +57,12 @@ in
           description = "
             Default desktop manager loaded if none have been chosen.
           ";
-          merge = list:
-            let defaultDM = mergeOneOption list; in
+          merge = mergeOneOption;
+          apply = defaultDM:
             if any (w: w.name == defaultDM) cfg.session.list then
               defaultDM
             else
-              throw "Default desktop manager not found.";
+              throw "Default desktop manager ($(defaultDM)) not found.";
         };
       };
     };
