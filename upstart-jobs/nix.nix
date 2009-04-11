@@ -226,7 +226,7 @@ in
         script
           export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
           ${nixEnvVars}
-          exec ${pkgs.nix}/bin/nix-worker --daemon > /dev/null 2>&1
+          exec ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
         end script
       '';
     }];
