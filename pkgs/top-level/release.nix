@@ -163,6 +163,7 @@ in {
   kbd = linux;
   kcachegrind = linux;
   keen4 = ["i686-linux"];
+  kile = linux;
   klibc = linux;
   ktorrent = linux;
   kvm = linux;
