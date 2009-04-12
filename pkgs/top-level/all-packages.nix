@@ -8476,7 +8476,7 @@ let
 
   konversation = import ../applications/networking/irc/konversation {
     inherit fetchurl stdenv perl arts kdelibs zlib libpng libjpeg expat;
-    inherit (xlibs) libX11 libXt libXext;
+    inherit (xlibs) libX11 libXt libXext libXrender libXft;
     qt = qt3;
   };
 
