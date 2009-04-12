@@ -165,6 +165,7 @@ in {
   keen4 = ["i686-linux"];
   kile = linux;
   klibc = linux;
+  konversation = linux;
   ktorrent = linux;
   kvm = linux;
   less = all;
