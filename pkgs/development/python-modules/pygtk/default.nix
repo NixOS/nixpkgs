@@ -1,4 +1,5 @@
-{stdenv, fetchurl, python, pkgconfig, glib, gtk, pygobject, pycairo}:
+{stdenv, fetchurl, python, pkgconfig, glib, gtk, pygobject, pycairo
+  , libglade ? null}:
 
 stdenv.mkDerivation {
   name = "pygtk-2.10.4";
@@ -8,7 +9,9 @@ stdenv.mkDerivation {
     sha256 = "1xg8vng42lql29aa5ryva8icc8dwdc7h2y3yn96qjdgl394d96mb";
   };
   
-  buildInputs = [python pkgconfig glib gtk];
+  buildInputs = [python pkgconfig glib gtk]
+    ++ (if libglade != null then [libglade] else [])
+  ;
 
   propagatedBuildInputs = [pygobject pycairo];
 }

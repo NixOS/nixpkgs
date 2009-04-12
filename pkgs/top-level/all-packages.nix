@@ -1156,6 +1156,16 @@ let
     inherit stdenv fetchurl python antlr;
   };
 
+  pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
+    inherit python pkgconfig dbus_glib;
+    dbus = dbus.libs;
+  };
+
+  pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
+    inherit python libsexy pkgconfig libxml2 pygtk;
+    inherit (gtkLibs) pango gtk glib; 
+  };
+
   qhull = import ../development/libraries/qhull {
     inherit stdenv fetchurl;
   };
@@ -2424,6 +2434,10 @@ let
   ddd = import ../development/tools/misc/ddd {
     inherit fetchurl stdenv lesstif ncurses;
     inherit (xlibs) libX11 libXt;
+  };
+
+  docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
+    inherit python pil makeWrapper;
   };
 
   doxygen = import ../development/tools/documentation/doxygen {
@@ -6414,8 +6428,18 @@ let
     inherit (gtkLibs) glib gtk;
   };
 
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) libglade;
+  };
+
   pyopengl = import ../development/python-modules/pyopengl {
     inherit fetchurl stdenv setuptools mesa freeglut pil python;
+  };
+
+  pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
+    inherit python openssl;
   };
 
   pysqlite = import ../development/python-modules/pysqlite {
@@ -9609,6 +9633,17 @@ let
     inherit (xlibs) libXi;
     #stdenv = overrideGCC stdenv gcc41;
     inherit stdenv python;
+  };
+
+  gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
+    inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
+      pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy 
+      docutils;
+    dbus = dbus.libs;
+    inherit (gnome) gtk libglade;
+    inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11 
+      scrnsaverproto;
+    python = pythonFull;
   };
 
   generator = import ../misc/emulators/generator {
