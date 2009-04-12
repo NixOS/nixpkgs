@@ -351,6 +351,7 @@ in {
     kdewebdev = linux;
     ktorrent = linux;
     kdesvn = linux;
+    krusader = linux;
   };
 
   kernelPackages_2_6_26 = {

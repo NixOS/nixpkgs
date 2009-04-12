@@ -7212,9 +7212,9 @@ let
     };
 
     # Broken build, still. The install step fails, and I never tried to run that compiled.
-    virtualbox = import ../applications/virtualization/virtualbox/2.1.2.nix {
+    virtualbox = import ../applications/virtualization/virtualbox/2.2.0.nix {
       inherit stdenv fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
-          libcap libpng zlib kernel;
+          libcap libpng zlib kernel python;
       inherit (gtkLibs) glib;
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
