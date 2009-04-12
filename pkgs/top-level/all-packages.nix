@@ -8589,8 +8589,9 @@ let
     };
 
   mrxvt = import ../applications/misc/mrxvt {
-    inherit lib fetchurl stdenv;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+    inherit lib fetchurl stdenv freetype pkgconfig which;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXft
+      libXi inputproto;
   };
 
   multisync = import ../applications/misc/multisync {
