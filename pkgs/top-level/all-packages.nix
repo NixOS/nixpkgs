@@ -6630,7 +6630,7 @@ let
     inherit fetchurl stdenv openssh;
   };
 
-  openfire = composedArgsAndFun (selectVersion ../servers/xmpp/openfire "3.5.2") {
+  openfire = composedArgsAndFun (import ../servers/xmpp/openfire) {
     inherit builderDefs jre;
   };
 
