@@ -1161,6 +1161,10 @@ let
     dbus = dbus.libs;
   };
 
+  pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
+    inherit python;
+  };
+
   pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
     inherit python libsexy pkgconfig libxml2 pygtk;
     inherit (gtkLibs) pango gtk glib; 
@@ -1448,6 +1452,10 @@ let
     inherit fetchurl perl perlTermReadKey perlXMLTwig perlXMLWriter
       perlDateManip perlHTMLTree perlHTMLParser perlHTMLTagset
       perlURI perlLWP;
+  };
+
+  xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
+    inherit python setuptools;
   };
 
   xpf = import ../tools/text/xml/xpf {
@@ -6640,6 +6648,14 @@ let
 
   postgresql_jdbc = import ../servers/sql/postgresql/jdbc {
     inherit fetchurl stdenv ant;
+  };
+
+  pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
+    inherit xmpppy pythonIRClib python makeWrapper;
+  };
+
+  pyMAILt = builderDefsPackage (import ../servers/xmpp/pyMAILt) {
+    inherit xmpppy python makeWrapper fetchcvs;
   };
 
   samba = import ../servers/samba {
