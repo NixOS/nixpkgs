@@ -191,6 +191,12 @@ rec {
     inherit automoc4 phonon;
   };
   
+  krusader = import ./extragear/krusader {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   ktorrent = import ./extragear/ktorrent {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp taglib boost gettext;
     inherit kdelibs kdepimlibs kdebase_workspace;
