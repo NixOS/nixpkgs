@@ -72,6 +72,7 @@ in
 {
   # list of display managers.
   require = [
+    (import ./kdm.nix)
     (import ./slim.nix)
   ];
 
