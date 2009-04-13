@@ -3443,6 +3443,11 @@ let
     inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
   };
 
+  libgpod = import ../development/libraries/libgpod {
+    inherit fetchurl stdenv gettext perl perlXMLParser pkgconfig libxml2;
+    inherit (gtkLibs) glib;
+  };
+
   libical = import ../development/libraries/libical {
     inherit stdenv fetchurl perl;
   };
