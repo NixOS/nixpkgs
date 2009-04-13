@@ -31,6 +31,7 @@ let
 
   kdmrc = stdenv.mkDerivation {
     name = "kdmrc";
+# 	     -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
     buildCommand = ''
       cp ${kdebase_workspace}/share/config/kdm/kdmrc .
       sed -i -e "s|#HaltCmd=|HaltCmd=${pkgs.upstart}/sbin/halt|" \
@@ -38,7 +39,7 @@ let
 	     -e "s|#Xrdb=|Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb|" \
 	     -e "s|#HiddenUsers=root|HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10|" \
 	     -e "s|ServerCmd=/FOO/bin/X|ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}|" \
-	     -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
+ 	     -e "s|^SessionsDirs=.*$|SessionsDirs=${dmcfg.session.desktops}|" \
 	     -e "s|#FailsafeClient=|FailsafeClient=${pkgs.xterm}/bin/xterm|" \
 	     -e "s|#PluginsLogin=sign|PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so|" \
       kdmrc

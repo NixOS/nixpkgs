@@ -6,7 +6,7 @@ let
   xorg = cfg.package;
 
   # file provided by services.xserver.displayManager.session.script
-  xsession = wm: dm: pkgs.writeText "xsession" ''
+  xsession = wm: dm: pkgs.writeScript "xsession" ''#!/bin/sh
 
     source /etc/profile
 
@@ -65,6 +65,21 @@ let
 
     test "$waitPID" != 0 && wait "$waitPID"
     exit
+  '';
+
+  mkDesktops = names: pkgs.runCommand "desktops" {} ''
+    ensureDir $out
+    ${concatMapStrings (n: ''
+      cat - > "$out/${n}.desktop" << EODESKTOP
+      [Desktop Entry]
+      Version=1.0
+      Type=XSession
+      TryExec=${cfg.displayManager.session.script}
+      Exec=${cfg.displayManager.session.script} '${n}'
+      Name=${n}
+      Comment=
+      EODESKTOP
+    '') names}
   '';
 
 in
@@ -138,6 +153,7 @@ in
             wm = filter (s: s.manage == "window") list;
             dm = filter (s: s.manage == "desktop") list;
             names = concatMap (d: map (w: d.name + " + " + w.name) wm) dm;
+            desktops = mkDesktops names;
             script = xsession wm dm;
           };
         };
