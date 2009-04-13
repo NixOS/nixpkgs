@@ -1454,13 +1454,14 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (useFromStdenv "bash"
-    (import ../shells/bash {
-      inherit fetchurl stdenv;
-    }));
+  bash = lowPrio (useFromStdenv "bash" bashReal);
 
-  bashInteractive = appendToName "interactive" (import ../shells/bash {
-    inherit fetchurl stdenv readline;
+  bashReal = makeOverridable (import ../shells/bash) {
+    inherit fetchurl stdenv bison;
+  };
+
+  bashInteractive = appendToName "interactive" (bashReal.override {
+    inherit readline;
     interactive = true;
   });
 
