@@ -15,9 +15,7 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-readline=${readline}";
   
-  NIX_LDFLAGS = "-L${xlibs.libXext}/lib -lXext -rpath ${stdenv.gcc.gcc}/lib";
-
-  dontPatchELF = true;
+  NIX_LDFLAGS = "-lXext -lgcc_s";
 
   meta = {
     description = "Xlib-based interface to Xine, a video player";
