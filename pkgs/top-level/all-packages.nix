@@ -8379,6 +8379,12 @@ let
       libjpeg readline libtool;
   };
 
+  gtkpod = import ../applications/audio/gtkpod {
+    inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) libglade;
+  };
+
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
     inherit libpng libcv;
   };

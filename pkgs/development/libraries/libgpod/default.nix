@@ -8,4 +8,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ gettext perl perlXMLParser pkgconfig glib libxml2 ];
+
+  meta = {
+    homepage = http://gtkpod.sourceforge.net/;
+    description = "Library used by gtkpod to access the contents of an ipod";
+    license = "LGPL";
+  };
 }
