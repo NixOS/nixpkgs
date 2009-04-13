@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   name = "xulrunner-${version}";
 
   src = fetchurl {
-    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.7/source/firefox-3.0.7-source.tar.bz2;
-    sha1 = "03c078d9c2d047d7cdc25f7823c6e647cb8d8f8b";
+    url = http://releases.mozilla.org/pub/mozilla.org/firefox/releases/3.0.8/source/firefox-3.0.8-source.tar.bz2;
+    sha1 = "93f82c64ae9c805964fb6459223a1061e2d328fd";
   };
 
   buildInputs = [
