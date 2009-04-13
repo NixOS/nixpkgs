@@ -4,41 +4,65 @@
 let
   inherit (pkgs.lib) mkOption;
 
-  options = { services = { xserver = {
+  slimOptions = {
 
-    slim = {
+    theme = mkOption {
+      default = null;
+      example = pkgs.fetchurl {
+        url = http://download.berlios.de/slim/slim-wave.tar.gz;
+        sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
+      };
+      description = "
+        The theme for the SLiM login manager.  If not specified, SLiM's
+        default theme is used.  See <link
+        xlink:href='http://slim.berlios.de/themes01.php'/> for a
+        collection of themes.
+      ";
+    };
 
-      theme = mkOption {
-        default = null;
-        example = pkgs.fetchurl {
-          url = http://download.berlios.de/slim/slim-wave.tar.gz;
-          sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
-        };
+    defaultUser = mkOption {
+      default = "";
+      example = "login";
+      description = "
+        The default user to load. If you put a username here you
+        get it automatically loaded into the username field, and
+        the focus is placed on the password.
+      ";
+    };
+
+    hideCursor = mkOption {
+      default = false;
+      example = true;
+      description = "
+        Hide the mouse cursor on the login screen.
+      ";
+    };
+
+  };
+
+  options = { services = { xserver = { displayManager = {
+
+    slim = slimOptions // {
+
+      enable = mkOption {
+        default = true;
         description = "
-          The theme for the SLiM login manager.  If not specified, SLiM's
-          default theme is used.  See <link
-          xlink:href='http://slim.berlios.de/themes01.php'/> for a
-          collection of themes.
+          Whether to enable slim as the display manager.
         ";
       };
 
-      defaultUser = mkOption {
-        default = "";
-        example = "login";
-        description = "
-          The default user to load. If you put a username here you
-          get it automatically loaded into the username field, and
-          the focus is placed on the password.
-        ";
-      };
+    };
 
-      hideCursor = mkOption {
-        default = false;
-        example = true;
-        description = "
-          Hide the mouse cursor on the login screen.
-        ";
-      };
+  }; /* displayManager */ }; /* xserver */ }; /* services */ };
+
+  copyOldOptions = { services = { xserver = {
+
+    # Declare old options.
+    slim = slimOptions;
+
+    # Copy the old options into the new options.
+    displayManager = {
+      slim = config.services.xserver.slim;
     };
 
   }; /* xserver */ }; /* services */ };
@@ -49,7 +73,9 @@ in
 let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
-  cfg = xcfg.slim;
+  cfg = dmcfg.slim;
+
+  inherit (pkgs.lib) mkIf;
 
   slimConfig = pkgs.writeText "slim.cfg" ''
     xauth_path ${dmcfg.xauthBin}
@@ -80,9 +106,10 @@ let
 
 in
 
-{
+mkIf cfg.enable {
   require = [
     options
+    copyOldOptions
   ];
 
   services = {
