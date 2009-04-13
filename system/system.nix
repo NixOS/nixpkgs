@@ -108,6 +108,8 @@ rec {
       ];
       path =
         pkgs.lib.optionals (!config.environment.cleanStart) [
+        pkgs.acl
+        pkgs.attr
         pkgs.bashInteractive # bash with ncurses support
         pkgs.bzip2
         pkgs.coreutils
@@ -123,6 +125,7 @@ rec {
         pkgs.gzip
         pkgs.iputils
         pkgs.less
+        pkgs.libcap
         pkgs.lvm2
         pkgs.man
         pkgs.mdadm

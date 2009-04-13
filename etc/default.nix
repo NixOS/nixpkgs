@@ -204,6 +204,7 @@ let
       "samba"
       "cups"
       "ftp"
+      "ejabberd"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
