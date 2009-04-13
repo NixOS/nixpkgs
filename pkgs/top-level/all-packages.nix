@@ -8387,6 +8387,13 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  googleearth = import ../applications/misc/googleearth {
+    inherit stdenv fetchurl glibc mesa freetype;
+    inherit (gtkLibs) glib;
+    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
+      libXcursor libXinerama libXext libX11 ;
+  };
+
   gv = import ../applications/misc/gv {
     inherit fetchurl stdenv Xaw3d ghostscriptX;
   };
