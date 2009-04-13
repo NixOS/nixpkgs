@@ -259,6 +259,7 @@ import ../helpers/make-etc.nix {
       "kde"
       "cups"
       "ftp"
+      "ejabberd"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
