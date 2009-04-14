@@ -5,10 +5,10 @@
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-0.6.24";
+  name = "avahi-0.6.25";
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "0l5rsi4s7az7cs9p4aqs77v7jrh95iiwwx0ivksmivc8c7a70016";
+    sha256 = "0ndsrd357igp0m2cd8vwr16gmh6axlndf34hlg7qqnsiymsdj84j";
   };
 
   buildInputs = [
