@@ -356,18 +356,26 @@ in {
     krusader = linux;
   };
 
+  kernelPackages_2_6_25 = {
+    kernel = linux;
+    virtualbox = linux;
+  };
+
   kernelPackages_2_6_26 = {
     kernel = linux;
+    virtualbox = linux;
   };
   
   kernelPackages_2_6_27 = {
     # aufs = linux; # kernel seems to be too old for that package 
     kernel = linux;
+    virtualbox = linux;
   };
   
   kernelPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
+    virtualbox = linux;
   };
   
   xorg = {
