@@ -4,6 +4,7 @@
 , alsa ? null, libX11, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
+, mesa
 }:
 
 assert alsaSupport -> alsa != null;
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [x11 libXv freetype zlib]
+    [x11 libXv freetype zlib mesa]
     ++ stdenv.lib.optional alsaSupport alsa
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
