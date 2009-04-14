@@ -9,7 +9,7 @@
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
-  system ? __currentSystem
+  system ? builtins.currentSystem
 
   # Usually, the system type uniquely determines the stdenv and thus
   # how to build the packages.  But on some platforms we have
