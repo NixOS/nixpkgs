@@ -74,6 +74,7 @@ in {
   bitlbee = linux; 
   bittorrent = linux;
   boost = all;
+  boostFull = all;
   bsdiff = all;
   bzip2 = all;
   cabextract = all;
