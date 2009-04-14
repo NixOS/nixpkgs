@@ -1,5 +1,7 @@
-{stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext, libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel, python}:
+{stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext, libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel, python, which}:
 
+let vboxScript = ./VBox.sh;
+in
 stdenv.mkDerivation {
   name = "virtualbox-2.2.0";
 
@@ -34,14 +36,14 @@ stdenv.mkDerivation {
     END_PATHS
   '';
 
-  buildPhase = "
+  buildPhase = ''
     source env.sh
     kmk
     cd out/linux.*/release/bin/src
     export KERN_DIR=${kernel}/lib/modules/*/build
     make
     cd ../../../../..
-  ";
+  '';
     
   installPhase = ''
     cd out/linux.*/release/bin
@@ -50,8 +52,22 @@ stdenv.mkDerivation {
     cd src
     kernelVersion=$(cd ${kernel}/lib/modules; ls)
     export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-    ensureDir $MODULE_DIR
+    ensureDir $MODULE_DIR    
     make install
+    ensureDir $out/bin
+    cp -v ${vboxScript} $out/bin/VBox.sh
+    sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
+           -e "s|@QT4_PATH@|${qt4}/lib|" \
+	   -e "s|which|${which}/bin/which|" \
+	   -e "s|gawk|${stdenv.gawk}/bin/gawk|" \
+	   $out/bin/VBox.sh
+    chmod 755 $out/bin/VBox.sh
+    for file in VirtualBox VBoxManage VBoxSDL
+    do
+        [ -f "$out/virtualbox/$file" ] && ln -sfv $out/bin/VBox.sh $out/bin/$file
+    done
+    ensureDir $out/share/applications
+    ln -sfv $out/virtualbox/VirtualBox.desktop $out/share/applications
   '';
   
   meta = {
