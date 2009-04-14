@@ -11,7 +11,7 @@
 
 let
 
-  version = "1.9.0.7"; # this attribute is used by other packages
+  version = "1.9.0.8"; # this attribute is used by other packages
 
 in  
 
