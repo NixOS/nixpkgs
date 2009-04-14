@@ -833,7 +833,7 @@ rec {
       fullName = "Ubuntu 9.04 Jaunty (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-i386/Packages.bz2;
-        sha256 = "7a82d30716a96a98eaa56843f3dfc1a0e706f26c9ea2e1d1dc1cbaadfa352e1f";
+        sha256 = "6378e8707f9f1324aac8bbc67daf56eee27f2e0a4a4c96792be032d1ca706a38";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
@@ -843,7 +843,7 @@ rec {
       fullName = "Ubuntu 9.04 Jaunty (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-amd64/Packages.bz2;
-        sha256 = "794e080413580f6b94318d495672c8f7e54cf087d08d1fd748a612da0f2e4538";
+        sha256 = "adc46fec04a5d87571c60fa1a29dfb73ca69ad6eb0276615b28595a3f06988e1";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
@@ -853,7 +853,7 @@ rec {
       fullName = "Debian 4.0r7 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "155c1d1b4ce54de6c8134ab0154c2a476ae40cc5899109f3f95fecd5e002c50d";
+        sha256 = "80ea57a7f106086c74470229998b07885d185dc62fe4a3200d2fffc5b2371f3d";
       };
       urlPrefix = mirror://debian;
     } // args);
@@ -863,7 +863,7 @@ rec {
       fullName = "Debian 4.0r7 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
-        sha256 = "3ab73a45781651a78c824b4f281de91b1aa6974d63470f40525933d848183e44";
+        sha256 = "d00114ef5e0c287273eebff7e7c4ca1aa0388a56c7d980a0a031e7782741e5ba";
       };
       urlPrefix = mirror://debian;
     } // args);
@@ -873,7 +873,7 @@ rec {
       fullName = "Debian 5.0 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "afbead64fb4820e50294686cd3ccdff91026b214aabec3f212f9001482001061";
+        sha256 = "a8257890a83302ebe8e4413cbec83bea1ac6b7345646465566d625d70558aeb6";
       };
       urlPrefix = mirror://debian;
     } // args);
@@ -883,7 +883,7 @@ rec {
       fullName = "Debian 5.0 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "73d74454d687dfbdfef1abbe4bd9c251119f38ab8d371a593aa271bfa227ed2b";
+        sha256 = "6812c7462f4b2b767c157d01139e0fc9e17f99c492dcc59361dbd48ed8ec0e63";
       };
       urlPrefix = mirror://debian;
     } // args);
