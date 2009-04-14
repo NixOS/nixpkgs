@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "bash-4.0-p17";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/${name}.tar.gz";
+    url = "mirror://gnu/bash/bash-4.0.tar.gz";
     sha256 = "0605ql0ih55gpi0vfvcm45likzjafa4wjnkxqwq51aa0ysad74wp";
   };
 
