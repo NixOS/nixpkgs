@@ -9366,6 +9366,10 @@ let
     flex = flex2535;
   };
 
+  hexen = import ../games/hexen {
+    inherit stdenv fetchurl SDL;
+  };
+
   kobodeluxe = import ../games/kobodeluxe {
     inherit stdenv fetchurl SDL SDL_image;
   };
