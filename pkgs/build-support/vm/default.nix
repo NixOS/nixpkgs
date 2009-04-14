@@ -849,8 +849,8 @@ rec {
     } // args);
 
     debian40i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r7-etch-i386";
-      fullName = "Debian 4.0r7 Etch (i386)";
+      name = "debian-4.0r8-etch-i386";
+      fullName = "Debian 4.0r8 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
         sha256 = "80ea57a7f106086c74470229998b07885d185dc62fe4a3200d2fffc5b2371f3d";
@@ -859,8 +859,8 @@ rec {
     } // args);
         
     debian40x86_64 = args: makeImageFromDebDist ({
-      name = "debian-4.0r7-etch-amd64";
-      fullName = "Debian 4.0r7 Etch (amd64)";
+      name = "debian-4.0r8-etch-amd64";
+      fullName = "Debian 4.0r8 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
         sha256 = "d00114ef5e0c287273eebff7e7c4ca1aa0388a56c7d980a0a031e7782741e5ba";
@@ -869,8 +869,8 @@ rec {
     } // args);
 
     debian50i386 = args: makeImageFromDebDist ({
-      name = "debian-5.0-lenny-i386";
-      fullName = "Debian 5.0 Lenny (i386)";
+      name = "debian-5.0.1-lenny-i386";
+      fullName = "Debian 5.0.1 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
         sha256 = "a8257890a83302ebe8e4413cbec83bea1ac6b7345646465566d625d70558aeb6";
@@ -879,8 +879,8 @@ rec {
     } // args);
         
     debian50x86_64 = args: makeImageFromDebDist ({
-      name = "debian-5.0-lenny-amd64";
-      fullName = "Debian 5.0 Lenny (amd64)";
+      name = "debian-5.0.1-lenny-amd64";
+      fullName = "Debian 5.0.1 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
         sha256 = "6812c7462f4b2b767c157d01139e0fc9e17f99c492dcc59361dbd48ed8ec0e63";
