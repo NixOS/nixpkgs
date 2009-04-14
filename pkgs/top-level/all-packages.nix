@@ -9366,6 +9366,10 @@ let
     flex = flex2535;
   };
 
+  kobodeluxe = import ../games/kobodeluxe {
+    inherit stdenv fetchurl SDL SDL_image;
+  };
+
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
       libICE libSM xproto;
