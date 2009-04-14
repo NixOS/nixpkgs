@@ -1385,6 +1385,10 @@ let
     wxGTK = wxGTK28;
   };
 
+  ttf2pt1 = import ../applications/msic/ttf2pt1 {
+    inherit fetchurl stdenv perl freetype;
+  };
+
   ttmkfdir = import ../tools/misc/ttmkfdir {
     inherit debPackage freetype fontconfig libunwind libtool bison;
     flex = flex2534;
