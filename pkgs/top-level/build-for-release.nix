@@ -332,7 +332,7 @@ let
   x86_64LinuxPkgs = commonLinuxPkgs "x86_64-linux" // {
     inherit (allPackages {system = "x86_64-linux";})
       aterm242fixes
-      gcc43multi
+      gcc43_multi
       ;    
   };
   

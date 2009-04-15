@@ -119,7 +119,7 @@ in {
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;
-  gcc43multi = ["x86_64-linux"];
+  gcc43_multi = ["x86_64-linux"];
   gdb = all;
   ghc = ghcSupported;
   ghostscript = linux;
