@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \\
         -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
     export USER=nix
     set +x
   ";
