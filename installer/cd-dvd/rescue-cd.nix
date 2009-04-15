@@ -20,7 +20,7 @@ rec {
       extraTTYs = [7 8]; # manual, rogue
       extraModulePackages = [system.kernelPackages.aufs];
       
-      kernelPackages = pkgs.kernelPackages_2_6_25;
+      kernelPackages = pkgs.kernelPackages_2_6_28;
       
       initrd = {
         extraKernelModules = [
