@@ -239,7 +239,10 @@ rec {
 
   libgweather = stdenv.mkDerivation {
     inherit (desktop.libgweather) name src;
-    buildInputs = [gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs intltool];
+    buildInputs = [
+      gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs
+      intltool libsoup
+    ];
   };
 
   gnomepanel = stdenv.mkDerivation {
@@ -288,17 +291,22 @@ rec {
     input = desktop.gnomedocutils;
   };
 
-  gconfeditor = import ./gconf-editor.nix {
-    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
-      gettext libxslt;
-    input = desktop.gconfeditor;
+  gconfeditor = stdenv.mkDerivation {
+    inherit (desktop.gconfeditor) name src;
+  
+    buildInputs = [
+      pkgconfig perl perlXMLParser GConf gnomedocutils
+      gtk libgnome libgnomeui gettext libxslt intltool
+    ];
+
+    configureFlags = "--disable-scrollkeeper";
   };
 
   vte = stdenv.mkDerivation {
     inherit (desktop.vte) name src;
   
     buildInputs = [
-      pkgconfig perl perlXMLParser gnome.glib gnome.gtk python gettext intltool
+      pkgconfig perl perlXMLParser glib gtk python gettext intltool
     ];
   
     propagatedBuildInputs = [ncurses];
@@ -308,28 +316,34 @@ rec {
     inherit (desktop.gnometerminal) name src;
 
     buildInputs = [
-      pkgconfig perl perlXMLParser gtk GConf libglade
-      libgnomeui startupnotification gnomevfs vte
-      gnomedocutils gettext which scrollkeeper
-      python libxml2Python libxslt
+      pkgconfig perl perlXMLParser gtk GConf libglade libgnomeui
+      startupnotification gnomevfs vte gnomedocutils gettext which
+      scrollkeeper python libxml2Python libxslt intltool
     ];
 
     configureFlags = "--disable-scrollkeeper";
   };
 
-  libgtop = import ./libgtop.nix {
-    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
-      popt gettext;
-    input = desktop.libgtop;
+  libgtop = stdenv.mkDerivation {
+    inherit (desktop.libgtop) name src;
+  
+    buildInputs = [
+      pkgconfig perl perlXMLParser glib popt gettext intltool
+    ];
   };
   
-  gnomeutils = import ./gnome-utils.nix {
-    inherit stdenv fetchurl pkgconfig gnome perl perlXMLParser
-      gettext libxslt /*  which python libxml2Python libxslt */;
-    inherit (xlibs) libXmu;
-    input = desktop.gnomeutils;
-  };
+  gnomeutils = stdenv.mkDerivation {
+    inherit (desktop.gnomeutils) name src;
+  
+    buildInputs = [
+      pkgconfig perl perlXMLParser glib gtk libgnome libgnomeui
+      libglade libgnomeprintui gnomedesktop gnomepanel libgtop
+      scrollkeeper gnomedocutils gettext libxslt xlibs.libXmu intltool
+    ]; 
 
+    configureFlags = "--disable-scrollkeeper";
+  };
+  
   gtkdoc = import ./gtkdoc.nix {
     inherit (platform) gtkdoc;
     inherit stdenv pkgconfig gnomedocutils perl python libxml2
