@@ -1,15 +1,12 @@
 { stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv,
 libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11 }:
 
+/* I haven't found any x86_64 package from them */
+assert stdenv.system == "i686-linux";
+
 stdenv.mkDerivation {
   name = "googleearth-5.11337.1968";
 
-/*
-  src = fetchurl {
-    url = http://dl.google.com/earth/client/ge4/release_4_3/googleearth-linux-plus-4.3.7284.3916.bin;
-    sha256 = "0zi7d1708ni6vgm2vy9q0y8w7dxl8qinnpplkrlb7x0x3671rdxf";
-  };
-*/
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
     sha256 = "1h090rbdkp3pa97xkkjzj71k343ic8dlngj2cihw5cd1hh3f9idc";
