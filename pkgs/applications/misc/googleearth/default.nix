@@ -67,6 +67,6 @@ stdenv.mkDerivation {
   meta = {
       description = "A world sphere viewer";
       homepage = http://earth.google.com;
-      license = "Google";
+      license = "unfree";
   };
 }
