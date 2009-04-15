@@ -358,17 +358,19 @@ in {
   };
 
   kernelPackages_2_6_25 = {
+    aufs = linux;
     kernel = linux;
     virtualbox = linux;
   };
 
   kernelPackages_2_6_26 = {
+    aufs = linux;
     kernel = linux;
     virtualbox = linux;
   };
   
   kernelPackages_2_6_27 = {
-    # aufs = linux; # kernel seems to be too old for that package 
+    aufs = linux;
     kernel = linux;
     virtualbox = linux;
   };
