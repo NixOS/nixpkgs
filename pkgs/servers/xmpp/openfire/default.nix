@@ -1,10 +1,12 @@
 args : with args; with builderDefs;
-  let localDefs = builderDefs.passthru.function (rec {
+  let 
+    version="3_6_3";
+    localDefs = builderDefs.passthru.function (rec {
     src = /* put a fetchurl here */
-    fetchurl {
-      url = http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_3_5_2.tar.gz;
-      sha256 = "13xzwl8kc8i8xgdv7fpwgkj1wjhzagx4b03fkkj2hcfgdkp1978q";
-    };
+      fetchurl {
+        url = "http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_${version}.tar.gz";
+        sha256 = "0ibzhmh9qw4lmx45ir1i280p30npgwnj7vrkl432kj3zi7hp79q2";
+      };
 
     buildInputs = [jre];
     configureFlags = [];

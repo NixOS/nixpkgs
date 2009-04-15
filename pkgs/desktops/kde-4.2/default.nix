@@ -176,4 +176,30 @@ rec {
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon;
   };
+
+#### EXTRA GEAR
+
+  amarok = import ./extragear/amarok {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext curl mysql libxml2 taglib loudmouth;
+    inherit kdelibs;
+    inherit automoc4 phonon strigi soprano;
+  };
+  
+  kdesvn = import ./extragear/kdesvn {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext apr aprutil subversion db4;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
+  krusader = import ./extragear/krusader {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
+  ktorrent = import ./extragear/ktorrent {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp taglib boost gettext;
+    inherit kdelibs kdepimlibs kdebase_workspace;
+    inherit automoc4 phonon qca2;
+  };
 }

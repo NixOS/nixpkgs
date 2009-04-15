@@ -74,6 +74,7 @@ in {
   bitlbee = linux; 
   bittorrent = linux;
   boost = all;
+  boostFull = all;
   bsdiff = all;
   bzip2 = all;
   cabextract = all;
@@ -163,7 +164,9 @@ in {
   kbd = linux;
   kcachegrind = linux;
   keen4 = ["i686-linux"];
+  kile = linux;
   klibc = linux;
+  konversation = linux;
   ktorrent = linux;
   kvm = linux;
   less = all;
@@ -332,6 +335,7 @@ in {
   };
 
   kde42 = {
+    amarok = linux;
     kdeadmin = linux;
     kdeartwork = linux;
     kdebase = linux;
@@ -349,20 +353,33 @@ in {
     kdetoys = linux;
     kdeutils = linux;
     kdewebdev = linux;
+    ktorrent = linux;
+    kdesvn = linux;
+    krusader = linux;
+  };
+
+  kernelPackages_2_6_25 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
   };
 
   kernelPackages_2_6_26 = {
+    aufs = linux;
     kernel = linux;
+    virtualbox = linux;
   };
   
   kernelPackages_2_6_27 = {
-    # aufs = linux; # kernel seems to be too old for that package 
+    aufs = linux;
     kernel = linux;
+    virtualbox = linux;
   };
   
   kernelPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
+    virtualbox = linux;
   };
 
   strategoPackages = {

@@ -6,7 +6,10 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced;
     rev = 844;
+    sha256 = "8729e63bb5cc9fd500a68d5aed91fa4b973ebc068e3014b47390ba7b4d85968e";
   };
+
+  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
   buildInputs = [ flex zlib perl libpng libjpeg libxml2 ];
 

@@ -20,6 +20,9 @@ stdenv.mkDerivation {
     # Implement the getxattr(), lgetxattr(), __open_2() and
     # __open64_2() functions.  Needed for doing builds on Ubuntu 8.10.
     ./missing-functions.patch
+
+    # Don't include directories in the Debian `conffiles' file.
+    ./etc-dirs.patch
   ];
 
   buildInputs = [gettext];

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, SDL, mesa, libpng, libjpeg, SDL_ttf, libvorbis, gettext} :
 
 stdenv.mkDerivation {
-  name = "neverball-1.5.0";
+  name = "neverball-1.5.1";
   src = fetchurl {
-    url = http://neverball.org/neverball-1.5.0.tar.gz;
-    sha256 = "8e6f6946cf2b08c13e4956a14f46d74c5a40735965f8fa876668c52d1877ec6a";
+    url = http://neverball.org/neverball-1.5.1.tar.gz;
+    sha256 = "0cqi6q829p1wx4471ab74xd7hmcvjg4fvj40rdc3342rvfqpijv5";
   };
 
   buildInputs = [ SDL mesa libpng libjpeg SDL_ttf libvorbis gettext ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     sed -i -e 's@\./data@'$out/data@ share/base_config.h
     sed -i -e 's@\./locale@'$out/locale@ share/base_config.h
-    sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11@' Makefile
+    sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11 -lgcc_s@' Makefile
   '';
 
   installPhase = ''

@@ -9,7 +9,7 @@
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
-  system ? __currentSystem
+  system ? builtins.currentSystem
 
   # Usually, the system type uniquely determines the stdenv and thus
   # how to build the packages.  But on some platforms we have
@@ -1057,6 +1057,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  panomatic = import ../tools/graphics/panomatic {
+    inherit fetchurl stdenv boost zlib;
+  };
+
   par2cmdline = import ../tools/networking/par2cmdline {
     inherit fetchurl stdenv;
   };
@@ -1139,6 +1143,20 @@ let
 
   pystringtemplate = import ../development/python-modules/stringtemplate {
     inherit stdenv fetchurl python antlr;
+  };
+
+  pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
+    inherit python pkgconfig dbus_glib;
+    dbus = dbus.libs;
+  };
+
+  pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
+    inherit python;
+  };
+
+  pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
+    inherit python libsexy pkgconfig libxml2 pygtk;
+    inherit (gtkLibs) pango gtk glib; 
   };
 
   qhull = import ../development/libraries/qhull {
@@ -1356,6 +1374,10 @@ let
     wxGTK = wxGTK28;
   };
 
+  ttf2pt1 = import ../applications/msic/ttf2pt1 {
+    inherit fetchurl stdenv perl freetype;
+  };
+
   ttmkfdir = import ../tools/misc/ttmkfdir {
     inherit debPackage freetype fontconfig libunwind libtool bison;
     flex = flex2534;
@@ -1423,6 +1445,10 @@ let
     inherit fetchurl perl perlTermReadKey perlXMLTwig perlXMLWriter
       perlDateManip perlHTMLTree perlHTMLParser perlHTMLTagset
       perlURI perlLWP;
+  };
+
+  xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
+    inherit python setuptools;
   };
 
   xpf = import ../tools/text/xml/xpf {
@@ -2365,6 +2391,10 @@ let
   ddd = import ../development/tools/misc/ddd {
     inherit fetchurl stdenv lesstif ncurses;
     inherit (xlibs) libX11 libXt;
+  };
+
+  docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
+    inherit python pil makeWrapper;
   };
 
   doxygen = import ../development/tools/documentation/doxygen {
@@ -3352,6 +3382,11 @@ let
     inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
   };
 
+  libgpod = import ../development/libraries/libgpod {
+    inherit fetchurl stdenv gettext perl perlXMLParser pkgconfig libxml2;
+    inherit (gtkLibs) glib;
+  };
+
   libical = import ../development/libraries/libical {
     inherit stdenv fetchurl perl;
   };
@@ -3586,7 +3621,7 @@ let
   };
 
   loudmouth = import ../development/libraries/loudmouth {
-    inherit fetchurl stdenv libidn gnutls pkgconfig;
+    inherit fetchurl stdenv libidn gnutls pkgconfig zlib;
     inherit (gtkLibs) glib;
   };
 
@@ -6347,8 +6382,18 @@ let
     inherit (gtkLibs) glib gtk;
   };
 
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) libglade;
+  };
+
   pyopengl = import ../development/python-modules/pyopengl {
     inherit fetchurl stdenv setuptools mesa freeglut pil python;
+  };
+
+  pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
+    inherit python openssl;
   };
 
   pysqlite = import ../development/python-modules/pysqlite {
@@ -6452,7 +6497,8 @@ let
   };
 
   ejabberd = import ../servers/xmpp/ejabberd {
-    inherit fetchurl stdenv expat erlang zlib openssl;
+    inherit fetchurl stdenv expat erlang zlib openssl 
+      pam;
   };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
@@ -6542,7 +6588,7 @@ let
     inherit fetchurl stdenv openssh;
   };
 
-  openfire = composedArgsAndFun (selectVersion ../servers/xmpp/openfire "3.5.2") {
+  openfire = composedArgsAndFun (import ../servers/xmpp/openfire) {
     inherit builderDefs jre;
   };
 
@@ -6552,6 +6598,14 @@ let
 
   postgresql_jdbc = import ../servers/sql/postgresql/jdbc {
     inherit fetchurl stdenv ant;
+  };
+
+  pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
+    inherit xmpppy pythonIRClib python makeWrapper;
+  };
+
+  pyMAILt = builderDefsPackage (import ../servers/xmpp/pyMAILt) {
+    inherit xmpppy python makeWrapper fetchcvs;
   };
 
   samba = import ../servers/samba {
@@ -7135,10 +7189,10 @@ let
       inherit (gnome) gtk glib pango libglade;
     };
 
-    # Broken build, still. The install step fails, and I never tried to run that compiled.
-    virtualbox = import ../applications/virtualization/virtualbox/2.1.2.nix {
-      inherit stdenv fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
-          libcap libpng zlib kernel;
+    virtualbox = import ../applications/virtualization/virtualbox/2.2.0.nix {
+      stdenv = stdenv_32bit;
+      inherit fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
+          libcap libpng zlib kernel python which;
       inherit (gtkLibs) glib;
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
@@ -8260,6 +8314,12 @@ let
       libjpeg readline libtool;
   };
 
+  gtkpod = import ../applications/audio/gtkpod {
+    inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) libglade;
+  };
+
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
     inherit libpng libcv;
   };
@@ -8271,6 +8331,13 @@ let
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
+  };
+
+  googleearth = import ../applications/misc/googleearth {
+    inherit stdenv fetchurl glibc mesa freetype;
+    inherit (gtkLibs) glib;
+    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
+      libXcursor libXinerama libXext libX11 ;
   };
 
   gv = import ../applications/misc/gv {
@@ -8402,7 +8469,7 @@ let
 
   konversation = import ../applications/networking/irc/konversation {
     inherit fetchurl stdenv perl arts kdelibs zlib libpng libjpeg expat;
-    inherit (xlibs) libX11 libXt libXext;
+    inherit (xlibs) libX11 libXt libXext libXrender libXft;
     qt = qt3;
   };
 
@@ -8495,7 +8562,7 @@ let
 
   MPlayer = import ../applications/video/MPlayer {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
-      cdparanoia;
+      cdparanoia mesa;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -8515,8 +8582,9 @@ let
     };
 
   mrxvt = import ../applications/misc/mrxvt {
-    inherit lib fetchurl stdenv;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE;
+    inherit lib fetchurl stdenv freetype pkgconfig which;
+    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXft
+      libXi inputproto;
   };
 
   multisync = import ../applications/misc/multisync {
@@ -9235,6 +9303,14 @@ let
     flex = flex2535;
   };
 
+  hexen = import ../games/hexen {
+    inherit stdenv fetchurl SDL;
+  };
+
+  kobodeluxe = import ../games/kobodeluxe {
+    inherit stdenv fetchurl SDL SDL_image;
+  };
+
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
       libICE libSM xproto;
@@ -9541,6 +9617,17 @@ let
     inherit (xlibs) libXi;
     #stdenv = overrideGCC stdenv gcc41;
     inherit stdenv python;
+  };
+
+  gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
+    inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
+      pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy 
+      docutils;
+    dbus = dbus.libs;
+    inherit (gnome) gtk libglade;
+    inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11 
+      scrnsaverproto;
+    python = pythonFull;
   };
 
   generator = import ../misc/emulators/generator {

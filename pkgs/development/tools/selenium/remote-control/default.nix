@@ -28,10 +28,10 @@ in stdenv.mkDerivation {
     # this snapshot version starts a firefox from a script file. It only issues a warning about it
     # you still have to pass -DfirefoxDefaultPath=/home/marc/.nix-profile/bin/firefox or such..
     name = "selenium-remote-control-${version}-dist";
-    # this dist file has been created using  mvn package  -Dmaven.test.skip=true based on svn rev 2639 
+    # this dist file has been created using  mvn package  -Dmaven.test.skip=true based on svn rev 2450
     src = fetchurl {
       url = "http://mawercer.de/~nix/selenium-server-1.0-SNAPSHOT-standalone.jar";
-      sha256 = "1g59g5y8lyjjj3fda30cm9gmjncdz70slrp03rqmnrkzp7z6khnc";
+      sha256 = "1lqr72a3lmmww1psl19pzp91c9q1dm0314b7y7mz1gnfpwc49y38";
     };
     phases = "buildPhase";
     buildPhase = ''
