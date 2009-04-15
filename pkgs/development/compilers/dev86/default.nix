@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     md5 = "e7bbfdbe61c2fb964994a087e29b0087";
   };
 
+  patches = [ ./dev86-0.16.17-noelks-1.patch ];
+  
   preBuild = "
     makeFlags=\"PREFIX=$out\"
   ";
