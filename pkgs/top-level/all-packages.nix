@@ -213,7 +213,7 @@ let
   # just the plain stdenv.
   stdenv_32bit =
     if system == "x86_64-linux" then
-      overrideGCC stdenv gcc43multi
+      overrideGCC stdenv gcc43_multi
     else
       stdenv;
 
@@ -1590,9 +1590,8 @@ let
     profiledCompiler = true;
   });
 
-  gcc43multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (import ../development/compilers/gcc-4.3 {
+  gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43_real.gcc.override {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
-    inherit fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = false;
     enableMultilib = true;
   }));
