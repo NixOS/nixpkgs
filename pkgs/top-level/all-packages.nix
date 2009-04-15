@@ -7261,7 +7261,7 @@ let
       inherit (gnome) gtk glib pango libglade;
     };
 
-    virtualbox = import ../applications/virtualization/virtualbox/2.2.0.nix {
+    virtualbox = import ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
           libcap libpng zlib kernel python which;
@@ -9073,15 +9073,6 @@ let
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now
   };
-
-  /*virtualboxFun = lib.sumArgs (selectVersion ../applications/virtualization/virtualbox "1.5.2") {
-    inherit stdenv fetchurl builderDefs bridge_utils umlutilities kernelHeaders
-      wine jre libxslt SDL qt3 openssl zlib;
-    inherit (xorg) libXcursor;
-    inherit (gnome) libIDL;
-  };
-
-  virtualbox = virtualboxFun null;*/
 
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl xlibs zlib a52dec libmad faad2
