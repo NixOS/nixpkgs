@@ -7262,7 +7262,8 @@ let
     };
 
     virtualbox = import ../applications/virtualization/virtualbox/2.2.0.nix {
-      inherit stdenv fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
+      stdenv = stdenv_32bit;
+      inherit fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
           libcap libpng zlib kernel python which;
       inherit (gtkLibs) glib;
       inherit (xlibs) xproto libX11 libXext libXcursor;
