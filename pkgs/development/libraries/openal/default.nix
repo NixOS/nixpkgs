@@ -1,18 +1,34 @@
 { stdenv, fetchurl, alsaLib, cmake }:
 
-let version = "1.5.304"; in
+let version = "1.7.411"; in
 stdenv.mkDerivation rec {
   name = "openal-${version}";
 
   src = fetchurl {
-    url = "http://connect.creativelabs.com/openal/Downloads/openal-soft-${version}.tar.bz2";
-    sha256 = "0k26ycprmpynvfkqkqsbaahl6avn033z2c03sp21vhpqbyms50ks";
+    url = "http://connect.creativelabs.com/openal/Downloads/openal-soft-${version}.bz2";
+    sha256 = "1nbqvg08hy5p2cxy2i2mmh2szmbpsg2dcvhr61iplyisw04rwc8i";
+    name = "openal-soft-${version}.tar.bz2";
   };
 
-  # FIXME: The `$out/bin/openal-info' executable doesn't have the
-  # right RPATH, so it can't find `libopenal.so'.  This must be fixed
-  # by tweaking the CMake crap.
   buildInputs = [ cmake alsaLib ];
+
+  cmakeFlags = "-DCMAKE_SHARED_LINKER_FLAGS=\"-Wl,-rpath,$out/lib/\"" +
+    " -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-rpath,$out/lib\"" +
+    " -DCMAKE_SKIP_BUILD_RPATH=ON" +
+    " -DCMAKE_BUILD_TYPE=Release" +
+    " -DCMAKE_INSTALL_PREFIX=$out";
+
+  dontUseCmakeConfigure = true;
+
+  # I rewrote the configure phase to get the $out references evaluated in
+  # cmakeFlags
+  configurePhase = ''
+    set -x
+    mkdir -p build;
+    cd build
+    eval -- "cmake .. $cmakeFlags"
+    set +x
+    '';
 
   meta = {
     description = "OpenAL, a cross-platform 3D audio API";
