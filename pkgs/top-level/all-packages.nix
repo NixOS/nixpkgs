@@ -1831,11 +1831,6 @@ let
       inherit ghc;
   };
 
-  # ghc66boot = import ../development/compilers/ghc-6.6-boot {
-  #  inherit fetchurl stdenv perl readline;
-  #  m4 = gnum4;
-  #};
-
   ghc = ghc683;
 
   ghc682 = import ../development/compilers/ghc-6.8/ghc-6.8.2.nix {
@@ -1849,18 +1844,8 @@ let
     haddock = haddockboot;
   };
 
-  ghc69snapshot = lowPrio (import ../development/compilers/ghc-6.8/head.nix {
-    inherit fetchurl stdenv readline perl gmp ncurses m4 happy alex haskellEditline;
-    ghc = ghc683;
-  });
-
   ghc661 = import ../development/compilers/ghc-6.6.1 {
     inherit fetchurl stdenv readline perl58 gmp ncurses m4;
-    ghc = ghcboot;
-  };
-
-  ghc66 = import ../development/compilers/ghc-6.6 {
-    inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
   };
 
@@ -1881,13 +1866,6 @@ let
     # readline = if stdenv.system == "i686-linux" then readline4 else readline;
     perl = perl58;
   }));
-  /*
-  ghcWrapper = assert uulib.ghc == ghc;
-    import ../development/compilers/ghc-wrapper {
-      inherit stdenv ghc;
-      libraries = [];
-    };
-  */
 
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
@@ -4212,7 +4190,7 @@ let
     inherit stdenv fetchurl;
     ghc = ghc682;
   };
-
+  
   cabal683 = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit stdenv fetchurl;
     ghc = ghc683;
