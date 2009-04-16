@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, glib, kdelibs, libX11, libXext, zlib, libjpeg, libpng, perl, qt}:
 
 stdenv.mkDerivation {
-  name = "arts-1.5.4";
+  name = "arts-1.5.10";
 
   KDEDIR = kdelibs;
   configureFlags = "
@@ -11,8 +11,8 @@ stdenv.mkDerivation {
     --x-libraries=${libX11}/lib";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/arts-1.5.4.tar.bz2;
-    md5 = "886ba4a13dc0da312d94c09f50c3ffe6";
+    url = mirror://kde/stable/3.5.10/src/arts-1.5.10.tar.bz2;
+    md5 = "6da172aab2a4a44929b5fdfc30fa3efc";
   };
 
   buildInputs = [pkgconfig glib kdelibs libX11 libXext zlib libjpeg libpng perl qt];
