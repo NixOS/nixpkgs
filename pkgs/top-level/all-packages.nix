@@ -9395,6 +9395,11 @@ let
     inherit fetchurl stdenv SDL zlib mpeg2dec;
   };
 
+  scorched3d = import ../games/scorched3d {
+    inherit stdenv fetchurl mesa openal autoconf automake libtool freealut freetype fftw SDL SDL_net zlib libpng libjpeg;
+    wxGTK = wxGTK28;
+  };
+
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
     inherit (gtkLibs) gtk glib;
     inherit pkgconfig;
