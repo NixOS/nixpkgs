@@ -7467,8 +7467,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  sdparm = composedArgsAndFun (selectVersion ../os-specific/linux/sdparm "1.03") {
-    inherit fetchurl stdenv builderDefs;
+  sdparm = import ../os-specific/linux/sdparm {
+    inherit fetchurl stdenv;
   };
 
   shadowutils = import ../os-specific/linux/shadow {
