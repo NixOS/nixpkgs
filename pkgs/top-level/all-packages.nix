@@ -1851,7 +1851,6 @@ let
 
   ghc64 = import ../development/compilers/ghc/6.4.2.nix {
     inherit fetchurl stdenv perl ncurses readline m4 gmp;
-    gcc = stdenv.gcc;
     ghc = ghcboot;
   };
 
