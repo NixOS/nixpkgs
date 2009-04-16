@@ -1833,23 +1833,23 @@ let
 
   ghc = ghc683;
 
-  ghc682 = import ../development/compilers/ghc-6.8/ghc-6.8.2.nix {
+  ghc682 = import ../development/compilers/ghc/6.8.2.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
   };
 
-  ghc683 = import ../development/compilers/ghc-6.8/ghc-6.8.3.nix {
+  ghc683 = import ../development/compilers/ghc/6.8.3.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghcboot;
     haddock = haddockboot;
   };
 
-  ghc661 = import ../development/compilers/ghc-6.6.1 {
+  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
     inherit fetchurl stdenv readline perl58 gmp ncurses m4;
     ghc = ghcboot;
   };
 
-  ghc64 = import ../development/compilers/ghc {
+  ghc64 = import ../development/compilers/ghc/6.4.2.nix {
     inherit fetchurl stdenv perl ncurses readline m4 gmp;
     gcc = stdenv.gcc;
     ghc = ghcboot;
