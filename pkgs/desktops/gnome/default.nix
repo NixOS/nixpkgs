@@ -319,6 +319,7 @@ rec {
       pkgconfig perl perlXMLParser gtk GConf libglade libgnomeui
       startupnotification gnomevfs vte gnomedocutils gettext which
       scrollkeeper python libxml2Python libxslt intltool
+      dbus_glib
     ];
 
     configureFlags = "--disable-scrollkeeper";
