@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, libedit, ncurses, gmp, makeWrapper}:
+{stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       }
     else throw "cannot bootstrap GHC on this platform"; 
 
-  buildInputs = [perl makeWrapper];
+  buildInputs = [perl];
 
   postUnpack =
     # Strip is harmful, see also below. It's important that this happens

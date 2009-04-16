@@ -1868,9 +1868,7 @@ let
   });
 
   ghc6103Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
-    inherit fetchurl stdenv ncurses gmp libedit makeWrapper;
-    # readline = if stdenv.system == "i686-linux" then readline4 else readline;
-    perl = perl58;
+    inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 
   gprolog = import ../development/compilers/gprolog {
