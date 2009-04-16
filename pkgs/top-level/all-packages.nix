@@ -6382,6 +6382,10 @@ let
     setuptools = setuptools.passthru.function {inherit python;};
   });
 
+  foolscap = import ../development/python-modules/foolscap {
+    inherit fetchurl stdenv python setuptools twisted pyopenssl;
+  };
+
   nevow = import ../development/python-modules/nevow {
     inherit fetchurl stdenv python setuptools twisted makeWrapper lib;
   };
