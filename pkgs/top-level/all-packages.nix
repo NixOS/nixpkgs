@@ -6377,6 +6377,10 @@ let
     setuptools = setuptools.passthru.function {inherit python;};
   });
 
+  nevow = import ../development/python-modules/nevow {
+    inherit fetchurl stdenv python setuptools twisted makeWrapper lib;
+  };
+
   numeric = import ../development/python-modules/numeric {
     inherit fetchurl stdenv python;
   };
