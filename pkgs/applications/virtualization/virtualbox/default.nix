@@ -1,9 +1,10 @@
-{stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext, libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel, python, which}:
+{ stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
+, libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
+, python, which
+}:
 
-let vboxScript = ./VBox.sh;
-in
 stdenv.mkDerivation {
-  name = "virtualbox-2.2.0";
+  name = "virtualbox-2.2.0-${kernel.version}";
 
   src = fetchurl {
     url = http://download.virtualbox.org/virtualbox/2.2.0/VirtualBox-2.2.0-OSE.tar.bz2;
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
     ensureDir $MODULE_DIR    
     make install
     ensureDir $out/bin
-    cp -v ${vboxScript} $out/bin/VBox.sh
+    cp -v ${./VBox.sh} $out/bin/VBox.sh
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
 	   -e "s|which|${which}/bin/which|" \
