@@ -8668,6 +8668,10 @@ let
     motif = lesstif;
   };
 
+  nvi = import ../applications/editors/nvi {
+    inherit fetchurl stdenv ncurses;
+  };
+
   nxml = import ../applications/editors/emacs-modes/nxml {
     inherit fetchurl stdenv;
   };
