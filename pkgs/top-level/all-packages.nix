@@ -8124,6 +8124,10 @@ let
       guile bzip2;
   };
 
+  elvis = import ../applications/editors/elvis {
+    inherit fetchurl stdenv ncurses;
+  };
+
   emacs = emacs22;
 
   emacs21 = import ../applications/editors/emacs-21 {
