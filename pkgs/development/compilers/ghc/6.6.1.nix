@@ -14,8 +14,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ghc readline perl58 m4 gmp];
 
-  setupHook = ./setup-hook.sh;
-
   meta = {
     description = "The Glasgow Haskell Compiler";
   };

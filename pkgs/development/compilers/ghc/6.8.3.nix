@@ -15,11 +15,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ghc readline perl m4 gmp haddock];
 
-  # The setup hook is executed by other packages building with ghc.
-  # It then looks for package configurations that are available and
-  # build a package database on the fly.
-  setupHook = ./setup-hook.sh;
-
   meta = {
     description = "The Glasgow Haskell Compiler";
   };
