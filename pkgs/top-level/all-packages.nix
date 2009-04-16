@@ -3296,7 +3296,7 @@ let
 
   libcanberra = import ../development/libraries/libcanberra {
     inherit fetchurl stdenv pkgconfig libtool alsaLib pulseaudio libvorbis;
-    inherit (gtkLibs214) gtk gthread;
+    inherit (gtkLibs) gtk gthread;
     gstreamer = gst_all.gstreamer;
   };
 
