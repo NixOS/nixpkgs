@@ -1,9 +1,9 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  version = "6.10.2-binary";
+  version = "6.10.2";
 
-  name = "ghc-${version}";
+  name = "ghc-${version}-binary";
 
   src =
     if stdenv.system == "i686-linux" then
