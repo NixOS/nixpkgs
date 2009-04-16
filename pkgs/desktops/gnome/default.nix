@@ -153,7 +153,7 @@ rec {
 
     buildInputs = [
       perl perlXMLParser pkgconfig gtk libgnomecanvas gnomeicontheme
-      gettext
+      gettext intltool
     ];
 
     propagatedBuildInputs = [
