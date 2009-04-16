@@ -18,11 +18,6 @@ stdenv.mkDerivation rec {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
       }
-    else if stdenv.system == "i686-darwin" then
-      fetchurl {
-        # update
-        # untested
-      }
     else throw "cannot bootstrap GHC on this platform"; 
 
   buildInputs = [perl makeWrapper];
@@ -90,8 +85,7 @@ stdenv.mkDerivation rec {
         # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
         sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
 
-        wrapProgram $out/bin/ghc --set LDPATH "${gmp}/lib"
-        # sanity check, can ghc create executables?
+        # Sanity check, can ghc create executables?
         cd $TMP
         mkdir test-ghc; cd test-ghc
         cat > main.hs << EOF
