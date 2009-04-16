@@ -85,5 +85,3 @@ if test "$action" = "switch" -o "$action" = "test"; then
         fi
     done
 fi
-
-sync
