@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, readline, ncurses, gmp}:
 
 stdenv.mkDerivation {
-  name = if stdenv.system == "i686-darwin" then "ghc-6.6.1" else "ghc-6.4.2";
+  name = if stdenv.system == "i686-darwin" then "ghc-6.6.1-binary" else "ghc-6.4.2-binary";
 
   src =
     if stdenv.system == "i686-linux" then
@@ -15,6 +15,9 @@ stdenv.mkDerivation {
         md5 = "8f5fe48798f715cd05214a10987bf6d5";
       }
     else if stdenv.system == "i686-darwin" then
+      /* Yes, this isn't GHC 6.4.2.  But IIRC either there was no
+         6.4.2 binary for Darwin, or it didn't work.  In any case, in
+         Nixpkgs we just need this bootstrapping a "real" GHC. */
       fetchurl {
         url = http://www.haskell.org/ghc/dist/6.6.1/ghc-6.6.1-i386-apple-darwin.tar.bz2;
         sha256 = "1drbsicanr6jlykvs4vs6gbi2q9ac1bcaxz2vzwh3pfv3lfibwia";
@@ -38,7 +41,7 @@ stdenv.mkDerivation {
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
-  postInstall = if stdenv.isDarwin then "
+  postInstall = if stdenv.isDarwin then ''
 
     ensureDir $out/frameworks/GMP.framework/Versions/A
     ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
@@ -50,13 +53,13 @@ stdenv.mkDerivation {
     mkdir $out/bin-orig
     for i in $(cd $out/bin && ls *); do
         mv $out/bin/$i $out/bin-orig/$i
-        echo \"#! $SHELL -e\" >> $out/bin/$i
+        echo "#! $SHELL -e" >> $out/bin/$i
         extraFlag=
-        if test $i != ghc-pkg; then extraFlag=\"-framework-path $out/frameworks\"; fi
-        echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i $extraFlag \\\"\\$@\\\"\" >> $out/bin/$i
+        if test $i != ghc-pkg; then extraFlag="-framework-path $out/frameworks"; fi
+        echo "DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i $extraFlag \"\$@\"" >> $out/bin/$i
         chmod +x $out/bin/$i
     done
 
-  " else "";
+  '' else "";
 
 }

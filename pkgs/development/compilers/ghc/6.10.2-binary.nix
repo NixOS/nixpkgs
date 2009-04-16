@@ -1,22 +1,22 @@
-{stdenv, fetchurl, perl, editline, ncurses, gmp, makeWrapper}:
+{stdenv, fetchurl, perl, libedit, ncurses, gmp, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  version = "6.10.1";
+  version = "6.10.2-binary";
 
   name = "ghc-${version}";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        # libedit .so.0
+        # This binary requires libedit.so.0 (rather than libedit.so.2).
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-        sha256 = "18l0vwlf7y86s65klpdvz4ccp8kydvcmyh03c86hld8jvx16q7zz";
+        sha256 = "1fw0zr2qshlpk8s0d16k27zcv5263nqdg2xds5ymw8ff6qz9rz9b";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        # libedit .so.0
+        # Idem.
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-        sha256 = "14jvvn333i36wm7mmvi47jr93f5hxrw1h2dpjvqql0rp00svhzzg";
+        sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
       }
     else if stdenv.system == "i686-darwin" then
       fetchurl {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     (if stdenv.isLinux then ''
       find . -type f -perm +100 \
           -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-          --set-rpath "${editline}/lib:${ncurses}/lib:${gmp}/lib" {} \;
+          --set-rpath "${libedit}/lib:${ncurses}/lib:${gmp}/lib" {} \;
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done
@@ -61,46 +61,46 @@ stdenv.mkDerivation rec {
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
-  buildPhase = ":";
+  buildPhase = "true";
 
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
-  postInstall = (if stdenv.isDarwin then "
+  postInstall =
+    (if stdenv.isDarwin then
+      ''
+        ensureDir $out/frameworks/GMP.framework/Versions/A
+        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
+        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
+        # !!! fix this
+        ensureDir $out/frameworks/GNUeditline.framework/Versions/A
+        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/GNUeditline
+        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/Versions/A/GNUeditline
 
-    ensureDir $out/frameworks/GMP.framework/Versions/A
-    ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
-    ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
-    ensureDir $out/frameworks/GNUeditline.framework/Versions/A
-    ln -s ${editline}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/GNUeditline
-    ln -s ${editline}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/Versions/A/GNUeditline
+        mv $out/bin $out/bin-orig
+        mkdir $out/bin
+        for i in $(cd $out/bin-orig && ls); do
+            echo \"#! $SHELL -e\" >> $out/bin/$i
+            echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
+            chmod +x $out/bin/$i
+        done
+      '' else "")
+    +
+      ''
+        # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
+        sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
 
-    mv $out/bin $out/bin-orig
-    mkdir $out/bin
-    for i in $(cd $out/bin-orig && ls); do
-        echo \"#! $SHELL -e\" >> $out/bin/$i
-        echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
-        chmod +x $out/bin/$i
-    done
-
-  " else "")
-  +
-  ''
-  # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
-  sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
-
-  wrapProgram $out/bin/ghc --set LDPATH "${gmp}/lib"
-  # sanity check, can ghc create executables?
-  cd $TMP
-  mkdir test-ghc; cd test-ghc
-  cat > main.hs << EOF
-  module Main where
-  main = putStrLn "yes"
-  EOF
-  $out/bin/ghc --make main.hs
-  echo compilation ok
-  [ $(./main) == "yes" ]
-  ''
-  ;
+        wrapProgram $out/bin/ghc --set LDPATH "${gmp}/lib"
+        # sanity check, can ghc create executables?
+        cd $TMP
+        mkdir test-ghc; cd test-ghc
+        cat > main.hs << EOF
+          module Main where
+          main = putStrLn "yes"
+        EOF
+        $out/bin/ghc --make main.hs
+        echo compilation ok
+        [ $(./main) == "yes" ]
+      '';
 
 }

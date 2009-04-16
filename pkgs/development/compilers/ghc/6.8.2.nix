@@ -24,14 +24,11 @@ stdenv.mkDerivation (rec {
     "--with-gmp-libraries=${gmp}/lib"
     "--with-gmp-includes=${gmp}/include"
     "--with-readline-libraries=${readline}/lib"
-    "--with-gcc=${gcc}/bin/gcc"
+    "--with-gcc=${stdenv.gcc}/bin/gcc"
   ];
 
   preConfigure = "
     # still requires a hack for ncurses
     sed -i \"s|^\\\(ld-options.*$\\\)|\\\1 -L${ncurses}/lib|\" libraries/readline/readline.buildinfo.in
   ";
-
-  inherit (stdenv) gcc;
-  inherit readline gmp ncurses;
 })

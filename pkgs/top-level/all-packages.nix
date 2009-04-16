@@ -1705,7 +1705,8 @@ let
   ghcsAndLibs =
     assert builtins ? listToAttrs;
     recurseIntoAttrs (import ../development/compilers/ghcs {
-      inherit ghcboot fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
+      ghcboot = ghc642Binary;
+      inherit fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
       inherit ghcPkgUtil ctags autoconf automake getConfig;
       inherit (ghc68executables) hasktags;
       inherit (bleedingEdgeRepos) sourceByName;
@@ -1835,36 +1836,42 @@ let
 
   ghc682 = import ../development/compilers/ghc/6.8.2.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
-    ghc = ghcboot;
+    ghc = ghc642Binary;
   };
 
   ghc683 = import ../development/compilers/ghc/6.8.3.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
-    ghc = ghcboot;
-    haddock = haddockboot;
+    ghc = ghc642Binary;
+    haddock = import ../development/tools/documentation/haddock/boot.nix {
+      inherit gmp;
+      cabal = import ../development/libraries/haskell/cabal/cabal.nix {
+        inherit stdenv fetchurl;
+        ghc = ghc642Binary;
+      };
+    };
   };
 
   ghc661 = import ../development/compilers/ghc/6.6.1.nix {
     inherit fetchurl stdenv readline perl58 gmp ncurses m4;
-    ghc = ghcboot;
+    ghc = ghc642Binary;
   };
 
-  ghc64 = import ../development/compilers/ghc/6.4.2.nix {
+  ghc642 = import ../development/compilers/ghc/6.4.2.nix {
     inherit fetchurl stdenv perl ncurses readline m4 gmp;
-    ghc = ghcboot;
+    ghc = ghc642Binary;
   };
 
-  ghcboot = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot.nix {
+  ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
     readline = if stdenv.system == "i686-linux" then readline4 else readline;
     perl = perl58;
-  }));
+  });
 
-  ghcboot610 = lowPrio (appendToName "boot" (import ../development/compilers/ghc/boot610.nix {
-    inherit fetchurl stdenv ncurses gmp editline makeWrapper;
+  ghc6103Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
+    inherit fetchurl stdenv ncurses gmp libedit makeWrapper;
     # readline = if stdenv.system == "i686-linux" then readline4 else readline;
     perl = perl58;
-  }));
+  });
 
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
@@ -2103,7 +2110,7 @@ let
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
       libpng libtiff libjpeg readline libsndfile libxml2
-      freeglut e2fsprogs libsamplerate pcre libevent editline;
+      freeglut e2fsprogs libsamplerate pcre libevent libedit;
   };
 
   kaffe =  import ../development/interpreters/kaffe {
@@ -2496,12 +2503,6 @@ let
   gperf = import ../development/tools/misc/gperf {
     inherit fetchurl stdenv;
   };
-
-  # used to bootstrap ghc with
-  haddockboot = lowPrio (appendToName "boot" (import ../development/tools/documentation/haddock/boot.nix {
-    inherit gmp;
-    cabal = cabalboot;
-  }));
 
   # old version of haddock, still more stable than 2.0
   haddock09 = import ../development/tools/documentation/haddock/haddock-0.9.nix {
@@ -2913,10 +2914,6 @@ let
 
   directfb = import ../development/libraries/directfb {
     inherit fetchurl stdenv perl;
-  };
-
-  editline = import ../development/libraries/editline {
-    inherit fetchurl stdenv ncurses;
   };
 
   enchant = selectVersion ../development/libraries/enchant "1.3.0" {
@@ -3394,6 +3391,10 @@ let
 
   libdvdread = import ../development/libraries/libdvdread {
     inherit fetchurl stdenv libdvdcss;
+  };
+
+  libedit = import ../development/libraries/libedit {
+    inherit fetchurl stdenv ncurses;
   };
 
   libevent = import ../development/libraries/libevent {
@@ -4195,11 +4196,6 @@ let
     ghc = ghc683;
   };
 
-  cabalboot = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit stdenv fetchurl;
-    ghc = ghcboot;
-  };
-
   cabal = cabal683;
 
   Crypto = import ../development/libraries/haskell/Crypto {
@@ -4224,7 +4220,7 @@ let
   };
 
   haskellEditline = import ../development/libraries/haskell/editline {
-    inherit cabal editline;
+    inherit cabal libedit;
   };
 
   HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {

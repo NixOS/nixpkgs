@@ -23,7 +23,7 @@ stdenv.mkDerivation (rec {
     "--with-gmp-libraries=${gmp}/lib"
     "--with-gmp-includes=${gmp}/include"
     "--with-readline-libraries=${readline}/lib"
-    "--with-gcc=${gcc}/bin/gcc"
+    "--with-gcc=${stdenv.gcc}/bin/gcc"
   ];
 
   preConfigure = ''
@@ -34,7 +34,4 @@ stdenv.mkDerivation (rec {
   '';
 
   installTargets = ["install" "install-docs"];
-
-  inherit (stdenv) gcc;
-  inherit readline gmp ncurses;
 })
