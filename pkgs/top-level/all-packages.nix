@@ -1867,7 +1867,12 @@ let
     perl = perl58;
   });
 
-  ghc6103Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
+  ghc6102 = import ../development/compilers/ghc/6.10.2.nix {
+    inherit fetchurl stdenv perl ncurses gmp libedit;
+    ghc = ghc6102Binary;
+  };
+
+  ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 

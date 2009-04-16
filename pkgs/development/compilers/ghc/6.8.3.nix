@@ -1,6 +1,6 @@
 {stdenv, fetchurl, readline, ghc, perl, m4, gmp, ncurses, haddock}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "ghc-6.8.3";
   homepage = "http://www.haskell.org/ghc";
 
@@ -32,6 +32,4 @@ stdenv.mkDerivation (rec {
     # build haddock docs
     echo "HADDOCK_DOCS = YES" >> mk/build.mk
   '';
-
-  installTargets = ["install" "install-docs"];
-})
+}
