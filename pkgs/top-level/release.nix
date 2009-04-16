@@ -121,7 +121,8 @@ in {
   gcc34 = linux;
   gcc43multi = ["x86_64-linux"];
   gdb = all;
-  ghc = ghcSupported;
+  ghc683 = ghcSupported;
+  ghc6102 = ghcSupported;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;

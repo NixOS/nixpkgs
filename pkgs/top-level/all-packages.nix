@@ -1832,10 +1832,26 @@ let
       inherit ghc;
   };
 
-  ghc = ghc683;
+  ghc = ghc6102;
+
+  ghc642 = import ../development/compilers/ghc/6.4.2.nix {
+    inherit fetchurl stdenv perl ncurses readline m4 gmp;
+    ghc = ghc642Binary;
+  };
+
+  ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
+    inherit fetchurl stdenv ncurses gmp;
+    readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    perl = perl58;
+  });
 
   ghc682 = import ../development/compilers/ghc/6.8.2.nix {
     inherit fetchurl stdenv readline perl gmp ncurses m4;
+    ghc = ghc642Binary;
+  };
+
+  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
+    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
     ghc = ghc642Binary;
   };
 
@@ -1850,22 +1866,6 @@ let
       };
     };
   };
-
-  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
-    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
-    ghc = ghc642Binary;
-  };
-
-  ghc642 = import ../development/compilers/ghc/6.4.2.nix {
-    inherit fetchurl stdenv perl ncurses readline m4 gmp;
-    ghc = ghc642Binary;
-  };
-
-  ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
-    inherit fetchurl stdenv ncurses gmp;
-    readline = if stdenv.system == "i686-linux" then readline4 else readline;
-    perl = perl58;
-  });
 
   ghc6102 = import ../development/compilers/ghc/6.10.2.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
