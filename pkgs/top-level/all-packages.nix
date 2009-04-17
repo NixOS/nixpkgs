@@ -1845,13 +1845,13 @@ let
     perl = perl58;
   });
 
-  ghc682 = import ../development/compilers/ghc/6.8.2.nix {
-    inherit fetchurl stdenv readline perl gmp ncurses m4;
+  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
+    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
     ghc = ghc642Binary;
   };
 
-  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
-    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
+  ghc682 = import ../development/compilers/ghc/6.8.2.nix {
+    inherit fetchurl stdenv readline perl gmp ncurses m4;
     ghc = ghc642Binary;
   };
 
@@ -1867,9 +1867,13 @@ let
     };
   };
 
+  ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
+    inherit fetchurl stdenv perl ncurses gmp libedit;
+  });
+
   ghc6102 = import ../development/compilers/ghc/6.10.2.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
-    ghc = ghc6102Binary;
+    ghc = ghc6101Binary;
   };
 
   ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
