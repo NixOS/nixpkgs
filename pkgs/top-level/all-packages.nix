@@ -1167,7 +1167,7 @@ let
 
   pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
     inherit python libsexy pkgconfig libxml2 pygtk;
-    inherit (gtkLibs) pango gtk glib; 
+    inherit (gtkLibs) pango gtk glib;
   };
 
   qhull = import ../development/libraries/qhull {
@@ -1960,7 +1960,7 @@ let
 
   monotone = import ../applications/version-management/monotone {
     inherit stdenv fetchurl boost zlib botan libidn pcre
-      sqlite; 
+      sqlite;
     lua = lua5;
   };
 
@@ -2043,7 +2043,7 @@ let
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
     inherit fetchurl stdenv ;
-  }; 
+  };
 
   swiProlog = composedArgsAndFun (selectVersion ../development/compilers/swi-prolog "5.6.51") {
     inherit fetchurl stdenv;
@@ -2409,10 +2409,6 @@ let
   cmake = import ../development/tools/build-managers/cmake {
     inherit fetchurl stdenv replace ncurses;
   };
-
-  cmakeUnstable = lowPrio (import ../development/tools/build-managers/cmake/2.6.3.nix {
-    inherit fetchurl stdenv replace ncurses;
-  });
 
   cproto = import ../development/tools/misc/cproto {
     inherit fetchurl stdenv flex bison;
@@ -2797,7 +2793,7 @@ let
   boost_1_36_0 = import ../development/libraries/boost/1.36.0.nix {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
-  
+
   boost = makeOverridable (import ../development/libraries/boost/1.38.0.nix) {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
@@ -4193,7 +4189,7 @@ let
     inherit stdenv fetchurl;
     ghc = ghc682;
   };
-  
+
   cabal683 = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit stdenv fetchurl;
     ghc = ghc683;
@@ -6548,7 +6544,7 @@ let
   };
 
   ejabberd = import ../servers/xmpp/ejabberd {
-    inherit fetchurl stdenv expat erlang zlib openssl 
+    inherit fetchurl stdenv expat erlang zlib openssl
       pam;
   };
 
@@ -9543,7 +9539,7 @@ let
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
 
-  
+
   ### SCIENCE/BIOLOGY
 
   alliance = import ../applications/science/electronics/alliance {
@@ -9588,7 +9584,7 @@ let
     inherit fetchurl stdenv perl paml;
   };
 
-  
+
   ### SCIENCE/MATH
 
   atlas = import ../development/libraries/science/math/atlas {
@@ -9599,21 +9595,21 @@ let
     inherit fetchurl stdenv gfortran;
   }; */
 
-  
+
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
     inherit fetchurl stdenv ocaml ncurses;
   };
 
-  
+
   ### SCIENCE / ELECTRONICS
 
   ngspice = import ../applications/science/electronics/ngspice {
     inherit fetchurl stdenv readline;
   };
 
-  
+
   ### SCIENCE / MATH
 
   maxima = import ../applications/science/math/maxima {
@@ -9632,7 +9628,7 @@ let
     withX = true;
   };
 
-  
+
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
@@ -9676,11 +9672,11 @@ let
 
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
-      pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy 
+      pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy
       docutils;
     dbus = dbus.libs;
     inherit (gnome) gtk libglade;
-    inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11 
+    inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11
       scrnsaverproto;
     python = pythonFull;
   };
@@ -9957,5 +9953,5 @@ let
     inherit (stdenv) mkDerivation;
   };
 
-  
+
 }; in pkgs
