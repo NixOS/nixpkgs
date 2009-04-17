@@ -3274,6 +3274,10 @@ let
       perl perlXMLParser;
   };
 
+  isocodes = import ../development/libraries/iso-codes {
+    inherit stdenv fetchurl gettext python;
+  };
+  
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip xlibs libjpeg;
   };
