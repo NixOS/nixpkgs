@@ -9671,6 +9671,10 @@ let
     inherit fetchurl stdenv perl zlib bzip2;
   };
 
+  foldingathome = import ../misc/foldingathome {
+    inherit fetchurl stdenv;
+  };
+
   freestyle = import ../misc/freestyle {
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
     inherit (xlibs) libXi;
