@@ -6482,6 +6482,10 @@ let
     inherit python;
   };
 
+  simplejson = import ../development/python-modules/simplejson {
+    inherit fetchsvn stdenv python setuptools;
+  };
+
   wxPython = wxPython26;
 
   wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
