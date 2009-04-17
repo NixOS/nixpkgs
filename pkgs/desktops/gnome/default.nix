@@ -162,7 +162,7 @@ rec {
   };
 
   gtkhtml = import ./gtkhtml.nix {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libjpeg gettext intltool;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libjpeg gettext intltool enchant;
     inherit gtk atk gail libgnomeprint libgnomeprintui libgnomeui libglade gnomeicontheme;
     input = desktop.gtkhtml;
   };
