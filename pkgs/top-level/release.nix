@@ -151,6 +151,7 @@ in {
   hal = linux;
   hello = all;
   host = linux;
+  hugin = linux;
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
