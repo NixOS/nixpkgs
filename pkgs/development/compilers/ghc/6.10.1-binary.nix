@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "14jvvn333i36wm7mmvi47jr93f5hxrw1h2dpjvqql0rp00svhzzg";
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.system == "i686-darwin" then
       fetchurl {
         # Idem.
         url = "http://haskell.org/ghc/dist/${version}/maeder/ghc-${version}-i386-apple-darwin.tar.bz2";
