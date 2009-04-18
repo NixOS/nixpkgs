@@ -60,17 +60,13 @@ trap "exitHandler" EXIT
 addToSearchPathWithCustomDelimiter() {
     local delimiter=$1
     local varName=$2
-    local needDir=$3
-    local addDir=${4:-$needDir}
-    local prefix=$5
-    if [ -d $prefix$needDir ]; then
-        if [ -z ${!varName} ]; then
-            eval export ${varName}=${prefix}$addDir
-        else
-            eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
-        fi
+    local dir=$3
+    if [ -d "$dir" ]; then
+        eval export ${varName}=${!varName}${!varName:+$delimiter}${dir}
     fi
 }
+
+PATH_DELIMITER=':'
 
 addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
@@ -85,11 +81,17 @@ set -e
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
 
+# Wildcard expansions that don't match should expand to an empty list.
+# This ensures that, for instance, "for i in *; do ...; done" does the
+# right thing.
+shopt -s nullglob
+
+
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
     if test "$i" = /; then i=; fi
-    PATH=$PATH${PATH:+:}$i/bin
+    addToSearchPath PATH $i/bin
 done
 
 if test "$NIX_DEBUG" = "1"; then
@@ -99,7 +101,6 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
-PATH_DELIMITER=':'
 if test -z "$shell"; then
     export shell=@shell@
 fi
@@ -132,15 +133,8 @@ ensureDir() {
 }
 
 installBin() {
-  ensureDir $out/bin
-  cp "$@" $out/bin
-}
-
-assertEnvExists(){
-  if test -z "${!1}"; then
-      msg=${2:-error: assertion failed: env var $1 is required}
-      echo $msg >&2; exit 1
-  fi
+    ensureDir $out/bin
+    cp "$@" $out/bin
 }
 
 
@@ -184,15 +178,11 @@ done
 addToEnv() {
     local pkg=$1
 
-    if test "$ignoreFailedInputs" != "1" -a -e $1/nix-support/failed; then
-        echo "failed input $1" >&2
-        exit 1
-    fi
-
     if test -d $1/bin; then
-        export _PATH=$_PATH${_PATH:+:}$1/bin
+        addToSearchPath _PATH $1/bin
     fi
 
+    # Run the package-specific hooks set by the setup-hook scripts.
     for i in "${envHooks[@]}"; do
         $i $pkg
     done
@@ -217,17 +207,6 @@ if test -z "$NIX_STRIP_DEBUG"; then
     export NIX_STRIP_DEBUG=1
     export NIX_CFLAGS_STRIP="-g0 -Wl,--strip-debug"
 fi
-
-
-assertEnvExists NIX_STORE \
-    "Error: you have an old version of Nix that does not set the
-     NIX_STORE variable. This is required for purity checking.
-     Please upgrade."
-
-assertEnvExists NIX_BUILD_TOP \
-    "Error: you have an old version of Nix that does not set the
-     NIX_BUILD_TOP variable. This is required for purity checking.
-     Please upgrade."
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -393,58 +372,6 @@ closeNest() {
 dumpVars() {
     if test "$noDumpEnvVars" != "1"; then
         export > $NIX_BUILD_TOP/env-vars
-    fi
-}
-
-
-# Redirect stdout/stderr to a named pipe connected to a `tee' process
-# that writes the specified file (and also to our original stdout).
-# The original stdout is saved in descriptor 3.
-startLog() {
-    local logFile=${logNr}_$1
-    logNr=$((logNr + 1))
-    if test "$logPhases" = 1; then
-        ensureDir $logDir
-
-        exec 3>&1
-
-        if test "$dontLogThroughTee" != 1; then
-            # This required named pipes (fifos).
-            logFifo=$NIX_BUILD_TOP/log_fifo
-            test -p $logFifo || mkfifo $logFifo
-            startLogWrite "$logDir/$logFile" "$logFifo"
-            exec > $logFifo 2>&1
-        else
-            exec > $logDir/$logFile 2>&1
-        fi
-    fi
-}
-
-# Factored into a separate function so that it can be overriden.
-startLogWrite() {
-    tee "$1" < "$2" &
-    logWriterPid=$!
-}
-
-
-if test -z "$logDir"; then
-    logDir=$out/log
-fi
-
-logNr=0
-
-# Restore the original stdout/stderr.
-stopLog() {
-    if test "$logPhases" = 1; then
-        exec >&3 2>&1
-
-        # Wait until the tee process has died.  Otherwise output from
-        # different phases may be mixed up.
-        if test -n "$logWriterPid"; then
-            wait $logWriterPid
-            logWriterPid=
-            rm $logFifo
-        fi
     fi
 }
 
@@ -823,7 +750,6 @@ genericBuild() {
         if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
         
         showPhaseHeader "$curPhase"
-        startLog "$curPhase"
         dumpVars
         
         # Evaluate the variable named $curPhase if it exists, otherwise the
@@ -834,7 +760,6 @@ genericBuild() {
             cd "${sourceRoot:-.}"
         fi
         
-        stopLog
         stopNest
     done
 
