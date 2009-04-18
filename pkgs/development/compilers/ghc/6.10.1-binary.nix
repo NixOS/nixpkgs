@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
         mv $out/bin $out/bin-orig
         mkdir $out/bin
         for i in $(cd $out/bin-orig && ls); do
-            echo \"#! $SHELL -e\" >> $out/bin/$i
-            echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
+            echo "#! $SHELL -e" >> $out/bin/$i
+            echo "DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \"\$@\"" >> $out/bin/$i
             chmod +x $out/bin/$i
         done
       '' else "")
