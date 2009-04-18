@@ -143,6 +143,10 @@ rec {
 
   # Applications.
 
+  darcs = import ../applications/version-management/darcs/darcs-2.nix {
+    inherit cabal;
+  };
+
   xmobar = import ../applications/misc/xmobar {
     inherit cabal;
     inherit (pkgs) X11;

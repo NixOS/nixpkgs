@@ -250,13 +250,6 @@ let
     inherit stdenv darcs nix;
   };
 
-  # only temporarely  / don't know yet wether it's save to switch
-  # but I have trouble getting HAppS repos
-  fetchdarcs2 = import ../build-support/fetchdarcs {
-    inherit stdenv nix;
-    darcs = darcs2;
-  };
-
   fetchsvn = import ../build-support/fetchsvn {
     inherit stdenv subversion openssh;
     sshSupport = true;
@@ -2305,7 +2298,7 @@ let
   */
 
   bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos {
-    inherit getConfig fetchdarcs2 fetchurl lib;
+    inherit getConfig fetchurl lib;
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -7932,15 +7925,7 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  darcs = import ../applications/version-management/darcs {
-    inherit fetchurl stdenv zlib ncurses curl getConfig;
-    ghc = ghc661;
-  };
-
-  # some speed bottle necks are resolved in this version I think .. perhaps you like to try it?
-  darcs2 = import ../applications/version-management/darcs/darcs-2.nix {
-    inherit fetchurl stdenv zlib ncurses curl ghc perl;
-  };
+  darcs = haskellPackages.darcs;
 
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser
