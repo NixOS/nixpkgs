@@ -7,10 +7,11 @@ export GHC_PACKAGE_PATH=$packages_db
 
 # Env hook to add packages to the package config
 addLibToPackageConf () {
-    local confFile=$1/nix-support/ghc-package.conf
-    if test -f $confFile; then
-        @ghc@/bin/ghc-pkg register $confFile
-    fi
+    local fn
+    shopt -s nullglob
+    for fn in $1/lib/ghc-pkgs/ghc-@ghcVersion@/*.conf; do
+        @ghc@/bin/ghc-pkg register $fn
+    done
 }
 
 envHooks=(${envHooks[@]} addLibToPackageConf)

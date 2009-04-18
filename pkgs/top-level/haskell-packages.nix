@@ -1,12 +1,18 @@
 {pkgs, ghc}:
 
-let ghcOrig = ghc; in
+let ghcReal = ghc; in
 
 rec {
 
+  inherit ghcReal;
+
+  # In the remainder, `ghc' refers to the wrapper.  This is because
+  # it's never useful to use the wrapped GHC (`ghcReal'), as the
+  # wrapper provides essential functionality: the ability to find
+  # Haskell packages in the buildInputs automatically.
   ghc = import ../development/compilers/ghc/wrapper.nix {
     inherit (pkgs) stdenv;
-    ghc = ghcOrig;
+    ghc = ghcReal;
   };
 
   cabal = import ../development/libraries/haskell/cabal/cabal.nix {

@@ -11,4 +11,5 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   inherit ghc;
+  ghcVersion = ghc.version;
 }

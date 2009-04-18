@@ -79,8 +79,9 @@ attrs :
 
               ./Setup copy
 
-              ensureDir $out/nix-support              
-              ./Setup register --gen-pkg-config=$out/nix-support/ghc-package.conf
+              local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
+              ensureDir $confDir
+              ./Setup register --gen-pkg-config=$confDir/${self.fname}.conf
               
               eval "$postInstall"
             '';
