@@ -293,7 +293,6 @@ in {
   wget = all;
   wine = ["i686-linux"];
   wirelesstools = linux;
-  wxHaskell = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;

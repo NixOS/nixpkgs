@@ -78,16 +78,10 @@ attrs :
               eval "$preInstall"
 
               ./Setup copy
-              ./Setup register --gen-script
-              mkdir -p $out/nix-support
-              if test -f register.sh; then
-                sed -i 's/|.*\(ghc-pkg update\)/| \1/' register.sh
-                cp register.sh $out/nix-support/register-ghclib.sh
-                sed -i 's/\(ghc-pkg update\)/\1 --user/' register.sh
-                mkdir -p $out/bin
-                cp register.sh $out/bin/register-${self.name}.sh
-              fi
 
+              ensureDir $out/nix-support              
+              ./Setup register --gen-pkg-config=$out/nix-support/ghc-package.conf
+              
               eval "$postInstall"
             '';
           };

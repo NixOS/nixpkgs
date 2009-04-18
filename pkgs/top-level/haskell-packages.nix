@@ -113,8 +113,8 @@ rec {
   # Compilers.
 
   ehc = import ../development/compilers/ehc {
-    inherit ghc;
-    inherit (pkgs) fetchsvn stdenv coreutils m4 libtool uulib uuagc llvm;
+    inherit ghc uulib uuagc;
+    inherit (pkgs) fetchsvn stdenv coreutils m4 libtool llvm;
   };
 
 
