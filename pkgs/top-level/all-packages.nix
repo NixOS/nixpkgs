@@ -1550,11 +1550,6 @@ let
       };
   };
 
-  # Essential Haskell Compiler -- nix expression is work in progress
-  ehc = import ../development/compilers/ehc {
-    inherit fetchsvn stdenv coreutils m4 libtool ghc uulib uuagc llvm;
-  };
-
   adobeFlexSDK33 = import ../development/compilers/adobe-flex-sdk {
     inherit fetchurl stdenv unzip jre;
   };
@@ -1804,7 +1799,7 @@ let
   # Executables compiled by this ghc68 - I'm too lazy to add them all as additional file in here
   ghc68executables = recurseIntoAttrs (import ../misc/ghc68executables {
     inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib getConfig;
-    inherit X11;
+    #inherit X11;
     inherit (xlibs) xmessage;
     inherit pkgs; # passing pkgs to add the possibility for the user to add his own executables. pkgs is passed.
   });
@@ -1879,6 +1874,18 @@ let
   ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
+
+  haskellPackages = haskellPackages_ghc6102;
+
+  haskellPackages_ghc6102 = import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = ghc6102;
+  };
+
+  haskellPackages_ghc683 = import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = ghc683;
+  };
 
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
@@ -2321,10 +2328,6 @@ let
   ### DEVELOPMENT / TOOLS
 
 
-  alex = import ../development/tools/parsing/alex {
-    inherit cabal perl;
-  };
-
   antlr = import ../development/tools/parsing/antlr/2.7.7.nix {
     inherit fetchurl stdenv jdk python;
   };
@@ -2507,21 +2510,13 @@ let
     inherit fetchurl stdenv;
   };
 
-  # old version of haddock, still more stable than 2.0
-  haddock09 = import ../development/tools/documentation/haddock/haddock-0.9.nix {
-    inherit cabal;
-  };
-
-  # does not compile with ghc-6.8.3
-  haddock210 = lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
-    cabal = cabal682;
-  });
-
+  /*
   hsc2hs = import ../development/tools/misc/hsc2hs {
     inherit bleedingEdgeRepos stdenv;
     ghc = ghcsAndLibs.ghc68.ghc;
     libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ base directory process cabal_darcs ];
   };
+  */
 
   guileLint = import ../development/tools/guile/guile-lint {
     inherit fetchurl stdenv guile;
@@ -2530,16 +2525,6 @@ let
   gwrap = import ../development/tools/guile/g-wrap {
     inherit fetchurl stdenv guile libffi pkgconfig guileLib;
     inherit (gtkLibs) glib;
-  };
-
-  /*
-  happy = import ../development/tools/parsing/happy {
-    inherit fetchurl stdenv perl ghc;
-  };
-  */
-
-  happy = import ../development/tools/parsing/happy/happy-1.17.nix {
-    inherit cabal perl;
   };
 
   help2man = import ../development/tools/misc/help2man {
@@ -2678,10 +2663,6 @@ let
 
   uisp = import ../development/tools/misc/uisp {
     inherit fetchurl stdenv;
-  };
-
-  uuagc = import ../development/tools/haskell/uuagc {
-    inherit cabal uulib;
   };
 
   gdb = import ../development/tools/misc/gdb {
@@ -4174,113 +4155,6 @@ let
 
   xalanj = import ../development/libraries/java/xalanj {
     inherit stdenv fetchurl;
-  };
-
-
-  ### DEVELOPMENT / LIBRARIES / HASKELL
-
-  benchpress = import ../development/libraries/haskell/benchpress {
-    inherit cabal;
-  };
-
-  maybench = import ../development/libraries/haskell/maybench {
-    inherit cabal benchpress;
-  };
-
-  binary = import ../development/libraries/haskell/binary {
-    inherit cabal;
-  };
-
-  # cabal is a utility function to build cabal-based
-  # Haskell packages
-  cabal682 = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit stdenv fetchurl;
-    ghc = ghc682;
-  };
-
-  cabal683 = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit stdenv fetchurl;
-    ghc = ghc683;
-  };
-
-  cabal = cabal683;
-
-  Crypto = import ../development/libraries/haskell/Crypto {
-    inherit cabal;
-  };
-
-  gtk2hs = import ../development/libraries/haskell/gtk2hs {
-    inherit pkgconfig stdenv fetchurl cairo ghc;
-    inherit (gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
-  };
-
-  haxr = import ../development/libraries/haskell/haxr {
-    inherit cabal HaXml HTTP;
-  };
-
-  haxr_th = import ../development/libraries/haskell/haxr-th {
-    inherit cabal haxr HaXml HTTP;
-  };
-
-  HaXml = import ../development/libraries/haskell/HaXml {
-    inherit cabal;
-  };
-
-  haskellEditline = import ../development/libraries/haskell/editline {
-    inherit cabal libedit;
-  };
-
-  HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
-    inherit cabal;
-  };
-
-  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql-1.1.4.0.nix {
-    inherit cabal HDBC postgresql;
-  };
-
-  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
-    inherit cabal HDBC sqlite;
-  };
-
-  HTTP = import ../development/libraries/haskell/HTTP {
-    inherit cabal;
-  };
-
-  monadlab = import ../development/libraries/haskell/monadlab {
-    inherit cabal;
-  };
-
-  pcreLight = import ../development/libraries/haskell/pcre-light {
-    inherit cabal pcre;
-  };
-
-  uulib = import ../development/libraries/haskell/uulib {
-    inherit cabal;
-  };
-
-  wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip wxGTK ghc;
-  };
-
-  /*
-  wxHaskell68 = lowPrio (appendToName "ghc68" (import ../development/libraries/haskell/wxHaskell {
-    inherit stdenv fetchurl unzip wxGTK;
-    ghc = ghc68;
-  }));
-  */
-
-  X11 = import ../development/libraries/haskell/X11 {
-    inherit cabal;
-    inherit (xlibs) libX11 libXinerama libXext;
-    xineramaSupport = true;
-  };
-
-  vty = import ../development/libraries/haskell/vty {
-    inherit cabal;
-  };
-
-  zlibHaskell = import ../development/libraries/haskell/zlib {
-    inherit cabal zlib;
   };
 
 
@@ -7932,7 +7806,7 @@ let
       automake autoconf libtool
       a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
       libvorbis libogg libjpeg libtiff freetype mjpegtools x264
-      gettext X11 faad2 faac libtheora libpng libdv perl nasm e2fsprogs
+      gettext faad2 faac libtheora libpng libdv perl nasm e2fsprogs
       pkgconfig;
       openexr = openexr_1_6_1;
     fftw = fftwSinglePrec;
@@ -9188,19 +9062,6 @@ let
     inherit (gnome) esound;
     inherit (gtkLibs1x) glib gtk;
     stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
-  };
-
-  xmobar = import ../applications/misc/xmobar {
-    inherit cabal X11;
-  };
-
-  xmonad = import ../applications/window-managers/xmonad {
-    inherit cabal X11;
-    inherit (xlibs) xmessage;
-  };
-
-  xmonadContrib = import ../applications/window-managers/xmonad/xmonad-contrib.nix {
-    inherit cabal xmonad X11;
   };
 
   xneur = import ../applications/misc/xneur {

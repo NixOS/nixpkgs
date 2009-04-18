@@ -14,7 +14,7 @@ args.stdenv.mkDerivation {
 
   buildInputs =(with args; [
       automake autoconf libtool pkgconfig
-      X11 faad2 faac
+      faad2 faac
       a52dec alsaLib   fftw lame libavc1394 libiec61883
       libraw1394 libsndfile libvorbis libogg libjpeg libtiff freetype
       mjpegtools x264 gettext openexr esound 
