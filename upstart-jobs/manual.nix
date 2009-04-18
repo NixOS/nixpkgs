@@ -54,6 +54,7 @@ in
 
 let
   cfg = config.services.showManual;
+in let # !!! Bug in Nix 0.13pre14722, otherwise the following line is not aware of cfg.
   inherit (cfg) enable ttyNumber browserPackage browserCommand manualFile;
 
   realManualFile =
