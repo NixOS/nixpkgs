@@ -9430,7 +9430,7 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool;
+      xmlto docbook2x docbook_xsl intltool enchant;
   });
 
   kde3 = {
