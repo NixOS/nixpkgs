@@ -1416,7 +1416,7 @@ let
   };
 
   wget = import ../tools/networking/wget {
-    inherit fetchurl stdenv gettext;
+    inherit fetchurl stdenv gettext openssl;
   };
 
   which = import ../tools/system/which {
