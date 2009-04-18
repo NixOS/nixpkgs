@@ -17,7 +17,7 @@ attrs :
 	    # all packages with haskell- to avoid name clashes for libraries;
 	    # if that is not desired (for applications), name can be set to
 	    # fname.
-            name = "haskell-${self.fname}"; 
+            name = "haskell-${self.pname}-ghc${attrs.ghc.ghc.version}-${self.version}"; 
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum

@@ -1868,7 +1868,7 @@ let
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 
-  haskellPackages = haskellPackages_ghc6102;
+  haskellPackages = recurseIntoAttrs haskellPackages_ghc6102;
 
   haskellPackages_ghc6102 = import ./haskell-packages.nix {
     inherit pkgs;
