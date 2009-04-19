@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
        does work because "status" will contain UNAVAIL after the
        failure to find mdns4_minimal. */
     ./nss-skip-unavail.patch
+
+    /* Make it possible to override the locale-archive in NixOS. */
+    # ./locale-override.patch
   ];
 
   # `--with-tls --without-__thread' enables support for TLS but causes

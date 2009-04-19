@@ -3052,6 +3052,10 @@ let
     installLocales = getPkgConfig "glibc" "locales" true;
   };
 
+  glibcLocales = import ../development/libraries/glibc-2.9/locales.nix {
+    inherit fetchurl stdenv;
+  };
+
   glibc_multi =
     assert system == "x86_64-linux";
     runCommand "${glibc.name}-multi"
