@@ -42,13 +42,12 @@ stdenv.mkDerivation {
   shell = if shell == "" then stdenv.shell else shell;
   
   meta =
-    if gcc != null && (gcc ? meta) then
-      removeAttrs gcc.meta ["priority"] //
-      { description = gcc.meta.description + " (wrapper script)";
-      }
-    else
-      { description = "System C compiler (wrapper script)";
-      };
+    let gcc_ = if gcc != null then gcc else {}; in
+    (if gcc_ ? meta then removeAttrs gcc.meta ["priority"] else {}) //
+    { description =
+        stdenv.lib.getAttr ["meta" "description"] "System C compiler" gcc_
+        + " (wrapper script)";
+    };
 
   # The dynamic linker has different names on different Linux platforms.
   dynamicLinker =
