@@ -543,7 +543,6 @@ in
       sed -i 's/$PYTHON/true/' istanbul-0.2.2/configure
       mkdir -p $out/bin
       export DESTDIR="$out"
-      shopt -s nullglob
     '';
     src = fetchurl {
       url = http://zaheer.merali.org/istanbul-0.2.2.tar.bz2;

@@ -49,7 +49,6 @@ stdenv.mkDerivation (
     
     postHook = ''
       ensureDir $out/nix-support
-      shopt -s nullglob
     '';  
 
     postUnpack = ''

@@ -26,7 +26,6 @@ vmTools.buildRPM (
     ''; # */
 
     postInstall = ''
-      shopt -s nullglob
       for i in $out/rpms/*/*.rpm; do
         echo "file rpm $i" >> $out/nix-support/hydra-build-products
       done
