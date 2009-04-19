@@ -51,6 +51,11 @@ rec {
   ghcPaths = import ../development/libraries/haskell/ghc-paths {
     inherit cabal;
   };
+
+  GLUT = import ../development/libraries/haskell/GLUT {
+    inherit cabal OpenGL;
+    glut = pkgs.freeglut;
+  };
   
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit ghc mtl;
@@ -113,6 +118,11 @@ rec {
 
   network = import ../development/libraries/haskell/network {
     inherit cabal parsec;
+  };
+
+  OpenAL = import ../development/libraries/haskell/OpenAL {
+    inherit cabal OpenGL;
+    inherit (pkgs) openal;
   };
 
   OpenGL = import ../development/libraries/haskell/OpenGL {
