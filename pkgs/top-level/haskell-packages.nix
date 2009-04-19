@@ -266,7 +266,7 @@ rec {
 
   leksah = import ../applications/editors/leksah {
     inherit cabal gtk2hs binary parsec regexPosix utf8_string;
-    inherit (pkgs) libedit;
+    inherit (pkgs) libedit makeWrapper;
   };
   
   xmobar = import ../applications/misc/xmobar {
