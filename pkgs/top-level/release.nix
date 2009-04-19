@@ -126,6 +126,8 @@ in {
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
+  glibc = linux;
+  glibcLocales = linux;
   gnash = linux;
   gnugrep = all;
   gnum4 = all;

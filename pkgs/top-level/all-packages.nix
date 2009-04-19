@@ -3049,10 +3049,10 @@ let
 
   glibc29 = import ../development/libraries/glibc-2.9 {
     inherit fetchurl stdenv kernelHeaders;
-    installLocales = getPkgConfig "glibc" "locales" true;
+    installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibcLocales = import ../development/libraries/glibc-2.9/locales.nix {
+  glibcLocales = makeOverridable (import ../development/libraries/glibc-2.9/locales.nix) {
     inherit fetchurl stdenv;
   };
 

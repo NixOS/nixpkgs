@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./nss-skip-unavail.patch
 
     /* Make it possible to override the locale-archive in NixOS. */
-    # ./locale-override.patch
+    ./locale-override.patch
   ];
 
   # `--with-tls --without-__thread' enables support for TLS but causes
