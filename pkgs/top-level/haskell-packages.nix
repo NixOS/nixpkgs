@@ -47,6 +47,10 @@ rec {
   fgl = import ../development/libraries/haskell/fgl {
     inherit cabal mtl;
   };
+
+  ghcPaths = import ../development/libraries/haskell/ghc-paths {
+    inherit cabal;
+  };
   
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit (pkgs) pkgconfig stdenv fetchurl cairo ghc;
@@ -215,6 +219,10 @@ rec {
   haddock210 = pkgs.stdenv.lib.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
     inherit cabal;
   });
+
+  haddock242 = import ../development/tools/documentation/haddock/haddock-2.4.2.nix {
+    inherit cabal ghcPaths;
+  };
 
   happy = happy1182;
 
