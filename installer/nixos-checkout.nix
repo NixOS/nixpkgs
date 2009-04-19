@@ -1,6 +1,6 @@
 args : with args;
 let 
-    inherit (pkgs.lib) id all whatis escapeShellArg concatMapStrings concatMap
+    inherit (pkgs.lib) id all showVal escapeShellArg concatMapStrings concatMap
       mapAttrs concatLists flattenAttrs filter;
     inherit (builtins) getAttr hasAttr head isAttrs;
 in
@@ -18,7 +18,7 @@ rec {
     assert (isAttrs attrs);
     assert (repo + "" == repo); # assert repo is a string
     if (! (attrs ? type)) then 
-      throw "repo type is missing of : ${whatis attrs}"
+      throw "repo type is missing of : ${showVal attrs}"
     # prepare svn repo
     else if attrs.type == "svn" then
       let a = { # add svn defaults
