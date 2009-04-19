@@ -886,10 +886,6 @@ let
     inherit fetchurl stdenv readline;
   };
 
-  lhs2tex = import ../tools/typesetting/lhs2tex {
-    inherit fetchurl stdenv ghc tetex polytable;
-  };
-
   libtorrent = import ../tools/networking/p2p/libtorrent {
     inherit fetchurl stdenv pkgconfig openssl libsigcxx;
   };
@@ -1692,7 +1688,7 @@ let
 
   ghcsAndLibs =
     assert builtins ? listToAttrs;
-    recurseIntoAttrs (import ../development/compilers/ghcs {
+    import ../development/compilers/ghcs {
       ghcboot = ghc642Binary;
       inherit fetchurl stdenv recurseIntoAttrs perl gnum4 gmp readline lib;
       inherit ghcPkgUtil ctags autoconf automake getConfig;
@@ -1702,7 +1698,7 @@ let
       # needed for install darcs ghc version
       happy = ghc68executables.happy;
       alex = ghc68executables.alex;
-    });
+    };
 
   # creates ghc-X-wl wich adds the passed libraries to the env var GHC_PACKAGE_PATH
   ghcWrapper = { ghcPackagedLibs ? false, ghc, libraries, name, suffix ? "ghc_wrapper_${ghc.name}" } :
@@ -1790,12 +1786,12 @@ let
 
 
   # Executables compiled by this ghc68 - I'm too lazy to add them all as additional file in here
-  ghc68executables = recurseIntoAttrs (import ../misc/ghc68executables {
+  ghc68executables = import ../misc/ghc68executables {
     inherit ghcCabalExecutableFun fetchurl lib bleedingEdgeRepos autoconf zlib getConfig;
     #inherit X11;
     inherit (xlibs) xmessage;
     inherit pkgs; # passing pkgs to add the possibility for the user to add his own executables. pkgs is passed.
-  });
+  };
 
   # the wrappers basically does one thing: It defines GHC_PACKAGE_PATH before calling ghc{i,-pkg}
   # So you can have different wrappers with different library combinations
@@ -1820,12 +1816,7 @@ let
       inherit ghc;
   };
 
-  ghc = ghc6102;
-
-  ghc642 = import ../development/compilers/ghc/6.4.2.nix {
-    inherit fetchurl stdenv perl ncurses readline m4 gmp;
-    ghc = ghc642Binary;
-  };
+  #ghc = haskellPackages.ghc;
 
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
@@ -1833,52 +1824,62 @@ let
     perl = perl58;
   });
 
-  ghc661 = import ../development/compilers/ghc/6.6.1.nix {
-    inherit fetchurl stdenv readline perl58 gmp ncurses m4;
-    ghc = ghc642Binary;
-  };
-
-  ghc682 = import ../development/compilers/ghc/6.8.2.nix {
-    inherit fetchurl stdenv readline perl gmp ncurses m4;
-    ghc = ghc642Binary;
-  };
-
-  ghc683 = import ../development/compilers/ghc/6.8.3.nix {
-    inherit fetchurl stdenv readline perl gmp ncurses m4;
-    ghc = ghc642Binary;
-    haddock = import ../development/tools/documentation/haddock/boot.nix {
-      inherit gmp;
-      cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-        inherit stdenv fetchurl;
-        ghc = ghc642Binary;
-      };
-    };
-  };
-
   ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
-
-  ghc6102 = import ../development/compilers/ghc/6.10.2.nix {
-    inherit fetchurl stdenv perl ncurses gmp libedit;
-    ghc = ghc6101Binary;
-  };
 
   ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 
-  haskellPackages = recurseIntoAttrs haskellPackages_ghc6102;
+  haskellPackages = haskellPackages_ghc6102;
 
-  haskellPackages_ghc6102 = import ./haskell-packages.nix {
+  haskellPackages_ghc642 = import ./haskell-packages.nix {
     inherit pkgs;
-    ghc = ghc6102;
+    ghc = import ../development/compilers/ghc/6.4.2.nix {
+      inherit fetchurl stdenv perl ncurses readline m4 gmp;
+      ghc = ghc642Binary;
+    };
   };
 
-  haskellPackages_ghc683 = import ./haskell-packages.nix {
+  haskellPackages_ghc661 = import ./haskell-packages.nix {
     inherit pkgs;
-    ghc = ghc683;
+    ghc = import ../development/compilers/ghc/6.6.1.nix {
+      inherit fetchurl stdenv readline perl58 gmp ncurses m4;
+      ghc = ghc642Binary;
+    };
   };
+
+  haskellPackages_ghc682 = import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.8.2.nix {
+      inherit fetchurl stdenv readline perl gmp ncurses m4;
+      ghc = ghc642Binary;
+    };
+  };
+  
+  haskellPackages_ghc683 = recurseIntoAttrs (import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.8.3.nix {
+      inherit fetchurl stdenv readline perl gmp ncurses m4;
+      ghc = ghc642Binary;
+      haddock = import ../development/tools/documentation/haddock/boot.nix {
+        inherit gmp;
+        cabal = import ../development/libraries/haskell/cabal/cabal.nix {
+          inherit stdenv fetchurl;
+          ghc = ghc642Binary;
+        };
+      };
+    };
+  });
+
+  haskellPackages_ghc6102 = recurseIntoAttrs (import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.10.2.nix {
+      inherit fetchurl stdenv perl ncurses gmp libedit;
+      ghc = ghc6101Binary;
+    };
+  });
 
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
@@ -1889,10 +1890,6 @@ let
     inherit (gtkLibs) glib gtk pango atk;
     inherit (xlibs) libX11 libXt;
     libstdcpp5 = gcc33.gcc;
-  };
-
-  helium = import ../development/compilers/helium {
-    inherit fetchurl stdenv ghc;
   };
 
   ikarus = builderDefsPackage (selectVersion ../development/compilers/ikarus "0.0.3") {
@@ -2474,10 +2471,6 @@ let
 
   flex254a = import ../development/tools/parsing/flex/flex-2.5.4a.nix {
     inherit fetchurl stdenv yacc;
-  };
-
-  frown = import ../development/tools/parsing/frown {
-    inherit fetchurl stdenv ghc;
   };
 
   m4 = gnum4;

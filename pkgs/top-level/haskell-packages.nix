@@ -147,12 +147,22 @@ rec {
     inherit (pkgs) fetchsvn stdenv coreutils m4 libtool llvm;
   };
 
+  helium = import ../development/compilers/helium {
+    inherit ghc;
+    inherit (pkgs) fetchurl stdenv;
+  };
+
 
   # Development tools.
 
   alex = import ../development/tools/parsing/alex {
     inherit cabal;
     inherit (pkgs) perl;
+  };
+
+  frown = import ../development/tools/parsing/frown {
+    inherit ghc;
+    inherit (pkgs) fetchurl stdenv;
   };
 
   # old version of haddock, still more stable than 2.0
@@ -190,6 +200,14 @@ rec {
 
   xmonadContrib = import ../applications/window-managers/xmonad/xmonad-contrib.nix {
     inherit cabal xmonad X11;
+  };
+
+
+  # Tools.
+
+  lhs2tex = import ../tools/typesetting/lhs2tex {
+    inherit ghc;
+    inherit (pkgs) fetchurl stdenv tetex polytable;
   };
 
 }
