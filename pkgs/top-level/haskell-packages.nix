@@ -66,6 +66,13 @@ rec {
     inherit cabal happy;
   };
   
+  haskellPlatform = import ../development/libraries/haskell/haskell-platform {
+    inherit cabal GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
+      haskellSrc html parallel regexBase regexCompat regexPosix
+      stm time xhtml zlib cabalInstall alex happy haddock;
+    inherit (pkgs) fetchurl;
+  };
+
   HTTP = import ../development/libraries/haskell/HTTP {
     inherit cabal mtl network parsec;
   };
@@ -230,6 +237,8 @@ rec {
     inherit (pkgs) fetchurl stdenv;
   };
 
+  haddock = haddock242;
+
   # old version of haddock, still more stable than 2.0
   haddock09 = import ../development/tools/documentation/haddock/haddock-0.9.nix {
     inherit cabal;
@@ -242,6 +251,7 @@ rec {
 
   haddock242 = import ../development/tools/documentation/haddock/haddock-2.4.2.nix {
     inherit cabal ghcPaths;
+    inherit (pkgs) libedit;
   };
 
   happy = happy1182;
