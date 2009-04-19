@@ -1326,6 +1326,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  ttf2pt1 = import ../tools/misc/ttf2pt1 {
+    inherit fetchurl stdenv perl freetype;
+  };
+
   ucl = import ../development/libraries/ucl {
     inherit fetchurl stdenv;
   };
@@ -1372,10 +1376,6 @@ let
   truecrypt = import ../applications/misc/truecrypt {
     inherit fetchurl stdenv pkgconfig fuse devicemapper;
     wxGTK = wxGTK28;
-  };
-
-  ttf2pt1 = import ../applications/msic/ttf2pt1 {
-    inherit fetchurl stdenv perl freetype;
   };
 
   ttmkfdir = import ../tools/misc/ttmkfdir {
