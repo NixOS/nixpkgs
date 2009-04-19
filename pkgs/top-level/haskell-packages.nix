@@ -123,6 +123,10 @@ rec {
     inherit cabal;
   };
 
+  multirec = import ../development/libraries/haskell/multirec {
+    inherit cabal;
+  };
+
   network = import ../development/libraries/haskell/network {
     inherit cabal parsec;
   };
@@ -177,10 +181,6 @@ rec {
 
   utf8_string = import ../development/libraries/haskell/utf8-string {
     inherit cabal;
-  };
-
-  uuagc = import ../development/tools/haskell/uuagc {
-    inherit cabal uulib;
   };
 
   uulib = import ../development/libraries/haskell/uulib {
@@ -264,6 +264,10 @@ rec {
   happy1182 = import ../development/tools/parsing/happy/happy-1.18.2.nix {
     inherit cabal mtl;
     inherit (pkgs) perl;
+  };
+
+  uuagc = import ../development/tools/haskell/uuagc {
+    inherit cabal uulib;
   };
 
   
