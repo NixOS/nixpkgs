@@ -49,7 +49,7 @@ attrs :
 
               for i in ${toString self.patchLibFiles}; do
                 echo "patching $i"
-                test -f $i && sed -i '/[eE]xtra-[lL]ibraries/ { s|\( *\)[eE]xtra-[lL]ibraries.*|&\n\1extra-lib-dirs: ${toString self.extraLibDirs}| }' $i
+                test -f $i && sed -i '/[eE]xtra-[lL]ibraries/ { s|^\( *\)[eE]xtra-[lL]ibraries.*|&\n\1extra-lib-dirs: ${toString self.extraLibDirs}| }' $i
               done
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i

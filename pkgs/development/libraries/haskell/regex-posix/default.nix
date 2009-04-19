@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self : {
   pname = "regex-posix";
-  version = "0.94.1";
-  sha256 = "63e76de0610d35f1b576ae65a25a38e04e758ed64b9b3512de95bdffd649485c";
+  version = "0.72.0.3"; # Haskell Platform 2009.0.0
+  sha256 = "327ab87f3d4f5315a9414331eb382b8b997de8836d577c3f7d232c574606feb1";
   extraBuildInputs = [regexBase];
   meta = {
-    description = "Replaces/Ehances Text.Regex";
+    description = "Replaces/Enhances Text.Regex";
   };
 })  
 

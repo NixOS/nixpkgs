@@ -27,12 +27,12 @@ rec {
     inherit cabal;
   };
 
-  maybench = import ../development/libraries/haskell/maybench {
-    inherit cabal benchpress;
-  };
-
   binary = import ../development/libraries/haskell/binary {
     inherit cabal;
+  };
+
+  cgi = import ../development/libraries/haskell/cgi {
+    inherit cabal mtl network parsec xhtml;
   };
 
   Crypto = import ../development/libraries/haskell/Crypto {
@@ -43,10 +43,18 @@ rec {
     inherit (pkgs) libedit;
     inherit cabal;
   };
+
+  fgl = import ../development/libraries/haskell/fgl {
+    inherit cabal mtl;
+  };
   
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit (pkgs) pkgconfig stdenv fetchurl cairo ghc;
     inherit (pkgs.gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
+  };
+
+  haskellSrc = import ../development/libraries/haskell/haskell-src {
+    inherit cabal happy;
   };
   
   HTTP = import ../development/libraries/haskell/HTTP {
@@ -83,11 +91,27 @@ rec {
     inherit cabal;
   };
 
+  HUnit = import ../development/libraries/haskell/HUnit {
+    inherit cabal;
+  };
+
+  maybench = import ../development/libraries/haskell/maybench {
+    inherit cabal benchpress;
+  };
+
   monadlab = import ../development/libraries/haskell/monadlab {
     inherit cabal;
   };
 
   mtl = import ../development/libraries/haskell/mtl {
+    inherit cabal;
+  };
+
+  network = import ../development/libraries/haskell/network {
+    inherit cabal parsec;
+  };
+
+  parallel = import ../development/libraries/haskell/parallel {
     inherit cabal;
   };
 
@@ -100,6 +124,10 @@ rec {
     inherit (pkgs) pcre;
   };
 
+  QuickCheck = import ../development/libraries/haskell/QuickCheck {
+    inherit cabal;
+  };
+
   regexBase = import ../development/libraries/haskell/regex-base {
     inherit cabal mtl;
   };
@@ -110,6 +138,10 @@ rec {
 
   regexPosix = import ../development/libraries/haskell/regex-posix {
     inherit cabal regexBase;
+  };
+
+  stm = import ../development/libraries/haskell/stm {
+    inherit cabal;
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
@@ -133,6 +165,10 @@ rec {
     inherit cabal;
     inherit (pkgs.xlibs) libX11 libXinerama libXext;
     xineramaSupport = true;
+  };
+
+  xhtml = import ../development/libraries/haskell/xhtml {
+    inherit cabal;
   };
 
   zlib = import ../development/libraries/haskell/zlib {
@@ -175,11 +211,17 @@ rec {
     inherit cabal;
   });
 
-  happy = import ../development/tools/parsing/happy/happy-1.17.nix {
+  happy = happy1182;
+
+  happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
     inherit cabal;
     inherit (pkgs) perl;
   };
 
+  happy1182 = import ../development/tools/parsing/happy/happy-1.18.2.nix {
+    inherit cabal mtl;
+    inherit (pkgs) perl;
+  };
 
   # Applications.
 
