@@ -115,6 +115,12 @@ rec {
     inherit cabal parsec;
   };
 
+  OpenGL = import ../development/libraries/haskell/OpenGL {
+    inherit cabal;
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libX11;
+  };
+
   parallel = import ../development/libraries/haskell/parallel {
     inherit cabal;
   };
