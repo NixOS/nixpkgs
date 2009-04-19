@@ -1873,6 +1873,14 @@ let
     };
   });
 
+  haskellPackages_ghc6101 = recurseIntoAttrs (import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.10.1.nix {
+      inherit fetchurl stdenv perl ncurses gmp libedit;
+      ghc = ghc6101Binary;
+    };
+  });
+
   haskellPackages_ghc6102 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.10.2.nix {
