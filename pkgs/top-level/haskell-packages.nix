@@ -53,8 +53,8 @@ rec {
   };
   
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
-    inherit (pkgs) pkgconfig stdenv fetchurl cairo ghc;
-    inherit (pkgs.gnome) gtk glib GConf libglade libgtkhtml gtkhtml;
+    inherit ghc mtl;
+    inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
   };
 
   haskellSrc = import ../development/libraries/haskell/haskell-src {
@@ -152,6 +152,10 @@ rec {
     inherit cabal;
   };
 
+  utf8_string = import ../development/libraries/haskell/utf8-string {
+    inherit cabal;
+  };
+
   uuagc = import ../development/tools/haskell/uuagc {
     inherit cabal uulib;
   };
@@ -236,6 +240,7 @@ rec {
     inherit (pkgs) perl;
   };
 
+  
   # Applications.
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
@@ -243,6 +248,11 @@ rec {
     inherit (pkgs) zlib curl;
   };
 
+  leksah = import ../applications/editors/leksah {
+    inherit cabal gtk2hs binary parsec regexPosix utf8_string;
+    inherit (pkgs) libedit;
+  };
+  
   xmobar = import ../applications/misc/xmobar {
     inherit cabal;
     inherit (pkgs) X11;

@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self : {
   pname = "binary";
-  version = "0.4.1";
-  sha256 = "bb74824306843da25f6d97c271e2a06ee3a7e05fc529156fb81d7c576688e549";
+  version = "0.5.0.1";
+  sha256 = "1j5injgrwkjwl7lv6sqx4m033s3rrkspq690cb0ckfh267vsyig1";
   meta = {
     description = "Efficient, pure binary serialisation using lazy ByteStrings";
   };
 })  
-

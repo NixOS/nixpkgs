@@ -121,8 +121,6 @@ in {
   gcc34 = linux;
   gcc43multi = ["x86_64-linux"];
   gdb = all;
-  ghc683 = ghcSupported;
-  ghc6102 = ghcSupported;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
@@ -327,6 +325,23 @@ in {
 
   gtkLibs = {
     gtk = linux;
+  };
+
+  haskellPackages_ghc683 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc6101 = {
+    ghc = ghcSupported;
+    leksah = ghcSupported;
+  };
+
+  haskellPackages_ghc6102 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    gtk2hs = ghcSupported;
+    lhs2tex = ghcSupported;
+    xmonad = ghcSupported;
   };
 
   kde3 = {
