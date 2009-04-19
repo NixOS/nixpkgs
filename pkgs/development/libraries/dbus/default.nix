@@ -20,7 +20,7 @@ in rec {
     inherit src configureFlags;
     
     patchPhase = ''
-      sed -i /mkinstalldirs.*localstatedir/d bus/Makefile.in
+      sed -i '/mkinstalldirs.*localstatedir/d' bus/Makefile.in
       sed -i '/SUBDIRS/s/ tools//' Makefile.in
     '';
   };
