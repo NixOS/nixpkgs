@@ -36,6 +36,8 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/boost/boost_1_38_0.tar.bz2";
     sha256 = "0rk044s4m7l4sma6anml34vxcd9w0fzcy1cy7csbzynjyida9qry";
   };
+
+  patches = [ ./classr.patch ];
   
   buildInputs = [icu expat zlib bzip2 python];
 
