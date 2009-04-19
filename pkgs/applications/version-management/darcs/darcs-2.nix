@@ -1,4 +1,4 @@
-{cabal, html, mtl, parsec, regexCompat, zlib, curl} : /* , ghc, zlib, ncurses, curl, perl */
+{cabal, html, mtl, parsec, regexCompat, zlib, curl} :
 
 cabal.mkDerivation (self : {
   pname = "darcs";
@@ -7,9 +7,6 @@ cabal.mkDerivation (self : {
   sha256 = "0iy4d4qls6yhwmgv87pz4kmr5jh4bwigz1wfwzns71b68csynnsp";
 
   extraBuildInputs = [html mtl parsec regexCompat zlib curl];
-  #buildInputs = [ghc zlib ncurses curl perl];
-
-  #NIX_LDFLAGS = "-lz";
 
   meta = {
     homepage = http://darcs.net/;

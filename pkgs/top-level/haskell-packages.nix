@@ -58,7 +58,7 @@ rec {
   };
   
   HTTP = import ../development/libraries/haskell/HTTP {
-    inherit cabal;
+    inherit cabal mtl network parsec;
   };
 
   haxr = import ../development/libraries/haskell/haxr {
@@ -144,6 +144,10 @@ rec {
     inherit cabal;
   };
 
+  time = import ../development/libraries/haskell/time {
+    inherit cabal;
+  };
+
   uuagc = import ../development/tools/haskell/uuagc {
     inherit cabal uulib;
   };
@@ -172,7 +176,8 @@ rec {
   };
 
   zlib = import ../development/libraries/haskell/zlib {
-    inherit cabal zlib;
+    inherit cabal;
+    inherit (pkgs) zlib;
   };
 
 
@@ -246,6 +251,10 @@ rec {
 
 
   # Tools.
+
+  cabalInstall = import ../tools/package-management/cabal-install {
+    inherit cabal HTTP network zlib;
+  };
 
   lhs2tex = import ../tools/typesetting/lhs2tex {
     inherit ghc;
