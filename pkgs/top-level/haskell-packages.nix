@@ -79,13 +79,37 @@ rec {
     inherit (pkgs) sqlite;
   };
 
+  html = import ../development/libraries/haskell/html {
+    inherit cabal;
+  };
+
   monadlab = import ../development/libraries/haskell/monadlab {
+    inherit cabal;
+  };
+
+  mtl = import ../development/libraries/haskell/mtl {
+    inherit cabal;
+  };
+
+  parsec = import ../development/libraries/haskell/parsec {
     inherit cabal;
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {
     inherit cabal;
     inherit (pkgs) pcre;
+  };
+
+  regexBase = import ../development/libraries/haskell/regex-base {
+    inherit cabal mtl;
+  };
+
+  regexCompat = import ../development/libraries/haskell/regex-compat {
+    inherit cabal regexBase regexPosix;
+  };
+
+  regexPosix = import ../development/libraries/haskell/regex-posix {
+    inherit cabal regexBase;
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
@@ -101,14 +125,18 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip wxGTK;
   };
 
-  X11 = import ../development/libraries/haskell/X11 {
+  unix = import ../development/libraries/haskell/unix {
     inherit cabal;
-    inherit (pkgs.xlibs) libX11 libXinerama libXext;
-    xineramaSupport = true;
   };
 
   vty = import ../development/libraries/haskell/vty {
     inherit cabal;
+  };
+
+  X11 = import ../development/libraries/haskell/X11 {
+    inherit cabal;
+    inherit (pkgs.xlibs) libX11 libXinerama libXext;
+    xineramaSupport = true;
   };
 
   zlib = import ../development/libraries/haskell/zlib {
@@ -150,7 +178,8 @@ rec {
   # Applications.
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
-    inherit cabal;
+    inherit cabal html mtl parsec regexCompat;
+    inherit (pkgs) zlib curl;
   };
 
   xmobar = import ../applications/misc/xmobar {

@@ -10,7 +10,7 @@ addLibToPackageConf () {
     local fn
     shopt -s nullglob
     for fn in $1/lib/ghc-pkgs/ghc-@ghcVersion@/*.conf; do
-        @ghc@/bin/ghc-pkg register $fn
+        @ghc@/bin/ghc-pkg register --force $fn
     done
 }
 
