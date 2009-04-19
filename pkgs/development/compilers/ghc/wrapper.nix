@@ -1,7 +1,7 @@
 {stdenv, ghc}:
 
 stdenv.mkDerivation {
-  name = "${ghc.name}-wrapper";
+  name = "ghc-wrapper-${ghc.version}";
 
   propagatedBuildInputs = [ghc];
 
