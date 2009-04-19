@@ -125,10 +125,6 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip wxGTK;
   };
 
-  unix = import ../development/libraries/haskell/unix {
-    inherit cabal;
-  };
-
   vty = import ../development/libraries/haskell/vty {
     inherit cabal;
   };
