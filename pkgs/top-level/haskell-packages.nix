@@ -299,8 +299,7 @@ rec {
   };
   
   xmobar = import ../applications/misc/xmobar {
-    inherit cabal;
-    inherit (pkgs) X11;
+    inherit cabal X11;
   };
 
   xmonad = import ../applications/window-managers/xmonad {

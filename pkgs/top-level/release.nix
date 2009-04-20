@@ -171,7 +171,6 @@ in {
   kvm = linux;
   less = all;
   lftp = all;
-  lhs2tex = ghcSupported;
   libsmbios = linux;
   libtool = all;
   libtool2 = all;
