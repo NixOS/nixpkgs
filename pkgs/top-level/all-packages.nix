@@ -7313,7 +7313,7 @@ let
 
   aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
-      inherit stdenv module_init_tools modules;
+      inherit stdenv module_init_tools modules buildEnv;
     };
 
   modutils = import ../os-specific/linux/modutils {

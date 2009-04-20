@@ -1,28 +1,27 @@
-{stdenv, module_init_tools, modules}:
+{stdenv, module_init_tools, modules, buildEnv}:
 
-stdenv.mkDerivation {
+buildEnv {
   name = "kernel-modules";
 
-  buildCommand = ''
-    ensureDir $out/lib/modules
-    cd $out/
-    modules="${toString modules}"
-    for i in $modules; do 
-        cp -rfs $i/* .
-        chmod -R u+w .
-        v=$(cd $i/lib/modules && ls -d *)
-        if test -n "$version" -a "$v" != "$version"; then
-            echo "kernel version mismatch: $version versus $v (in the module paths $modules)";
-            exit 1
-        fi
-        version=$v
-    done
-    echo "kernel version is $version"
-    rm -rf nix-support
-    cd lib/modules/
-    rm */modules.*
-    #  linux-* will pass the new kernel version to depmod to take rather than `uname -r` (see man page)
-    MODULE_DIR=$PWD/ ${module_init_tools}/sbin/depmod -a $(basename lib/modules/2.*)
-    cd $out/
-  '';
+  paths = modules;
+
+  postBuild =
+    ''
+      source ${stdenv}/setup
+    
+      kernelVersion=$(cd $out/lib/modules && ls -d *)
+      if test "$(echo $kernelVersion | wc -w)" != 1; then
+         echo "inconsistent kernel versions: $kernelVersion"
+         exit 1
+      fi
+    
+      echo "kernel version is $kernelVersion"
+
+      # Regenerate the depmod map files.  Be sure to pass an explicit
+      # kernel version number, otherwise depmod will use `uname -r'.
+      if test -w $out/lib/modules/$kernelVersion; then
+          rm -f $out/lib/modules/$kernelVersion/modules.*
+          MODULE_DIR=$out/lib/modules/ ${module_init_tools}/sbin/depmod -a $kernelVersion
+      fi
+    '';
 }
