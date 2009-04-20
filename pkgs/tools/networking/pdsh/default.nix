@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
                  + " " + (if readline == null then "--without-readline" else "--with-readline")
                  + " " + (if ssh == null then "--without-ssh" else "--with-ssh")
                  + " " + (if pam == null then "--without-pam" else "--with-pam")
-                 + " " + (if rsh == null then "--without-rsh" else "--with-rsh")
+                 + " " + (if rsh == false then "--without-rsh" else "--with-rsh")
                  + " --with-dshgroups"
                  + " --with-xcpu"
                  + " --without-genders"
