@@ -37,9 +37,9 @@ fi
 
 configurationCounter=0
 configurationLimit="@configurationLimit@"
-numAlienEntries=$(cat <<EOF | egrep '^[[:space:]]*title' | wc -l
+numAlienEntries=`cat <<EOF | egrep '^[[:space:]]*title' | wc -l
 @extraGrubEntries@
-EOF)
+EOF`
 
 if test $((configurationLimit+numAlienEntries)) -gt 190; then
 	configurationLimit=$((190-numAlienEntries));
@@ -114,10 +114,10 @@ if test -n "@copyKernels@"; then
 fi
 
 # Additional entries specified verbatim by the configuration.
-extraGrubEntries=$(cat <<EOF
+extraGrubEntries=`cat <<EOF
 @extraGrubEntries@
-EOF
-)
+EOF`
+
 
 if test -n "@extraGrubEntriesBeforeNixos@"; then 
     echo "$extraGrubEntries" >> $tmp
