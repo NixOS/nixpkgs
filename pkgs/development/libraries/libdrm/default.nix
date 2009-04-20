@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "libdrm-2.3.1";
+stdenv.mkDerivation rec {
+  name = "libdrm-2.4.9";
   
   src = fetchurl {
-    url = http://dri.freedesktop.org/libdrm/libdrm-2.3.1.tar.bz2;
-    sha256 = "133iz3fma30diwn66ni59wp6gg5kmklqj5hzds20g5vjhf1kkzfx";
+    url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
+    sha256 = "18i1c4pcy2db2alali1yxg1s72vdpikivahmbrp7wf204kn236zd";
   };
 
   meta = {
