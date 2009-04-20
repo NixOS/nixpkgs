@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, pkgconfig, pthread_stubs}:
 
 stdenv.mkDerivation rec {
   name = "libdrm-2.4.9";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
     sha256 = "18i1c4pcy2db2alali1yxg1s72vdpikivahmbrp7wf204kn236zd";
   };
+
+  buildInputs = [ pkgconfig pthread_stubs ];
 
   meta = {
     homepage = http://dri.freedesktop.org/libdrm/;

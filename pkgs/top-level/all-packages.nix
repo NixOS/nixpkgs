@@ -3353,7 +3353,7 @@ let
   };
 
   libdrm = import ../development/libraries/libdrm {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv pkgconfig pthread_stubs;
   };
 
   libdvdcss = import ../development/libraries/libdvdcss {
