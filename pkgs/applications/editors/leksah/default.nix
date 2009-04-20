@@ -1,4 +1,4 @@
-{cabal, gtk2hs, binary, parsec, regexPosix, utf8_string, libedit, makeWrapper}:
+{cabal, gtk2hs, binary, parsec, regexPosix, utf8String, libedit, makeWrapper}:
 
 cabal.mkDerivation (self : {
   pname = "leksah";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self : {
   sha256 = "092a8gi73jhalgs4ppg8ki761vwk3gdnjwlyd4chnahbv5i1wrjw";
 
   # !!! The explicit libedit dependency shouldn't be necessary.
-  extraBuildInputs = [gtk2hs binary parsec regexPosix utf8_string libedit makeWrapper];
+  extraBuildInputs = [gtk2hs binary parsec regexPosix utf8String libedit makeWrapper];
 
   preConfigure =
     ''
