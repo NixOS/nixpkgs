@@ -114,7 +114,7 @@ mirror://xorg/X11R7.4/src/everything/xcursor-themes-1.0.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xdpyinfo-1.0.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xdriinfo-1.0.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xev-1.0.3.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xextproto-7.0.3.tar.bz2
+mirror://xorg/individual/proto/xextproto-7.0.5.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86bigfontproto-1.1.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86dga-1.0.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86dgaproto-2.0.3.tar.bz2
@@ -194,7 +194,7 @@ mirror://xorg/individual/xserver/xorg-server-1.5.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xorg-sgml-doctools-1.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xpr-1.0.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xprop-1.0.4.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xproto-7.0.13.tar.bz2
+mirror://xorg/individual/proto/xproto-7.0.15.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xrandr-1.2.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xrdb-1.0.5.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xrefresh-1.0.2.tar.bz2

@@ -1285,11 +1285,11 @@ rec {
   }) // {inherit libX11 ;};
     
   xextproto = (stdenv.mkDerivation {
-    name = "xextproto-7.0.3";
+    name = "xextproto-7.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.4/src/everything/xextproto-7.0.3.tar.bz2;
-      sha256 = "1d2d7pbxahsjxhcw4snnwcy0qli88xwrqp35zyd1bjai6s744wir";
+      url = mirror://xorg/individual/proto/xextproto-7.0.5.tar.bz2;
+      sha256 = "0hmhlmn6jv6ybv6q57s0377bvqrfrshi9z1dgdk7ibfsjqy1ygnk";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2118,11 +2118,11 @@ rec {
   }) // {inherit libX11 ;};
     
   xproto = (stdenv.mkDerivation {
-    name = "xproto-7.0.13";
+    name = "xproto-7.0.15";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.4/src/everything/xproto-7.0.13.tar.bz2;
-      sha256 = "14nmxjbm1cmipdn7m2mm9jjsgchd04fsynrsa4lxxxb95n92hqvg";
+      url = mirror://xorg/individual/proto/xproto-7.0.15.tar.bz2;
+      sha256 = "1vkbqy2vs0jf1z043fyjw1345rmh16lxzvgrd9p43mwl7syd137x";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
