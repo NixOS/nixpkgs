@@ -54,7 +54,7 @@ attrs :
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --verbose --prefix="$out"
+              ./Setup configure --verbose --prefix="$out" $configureFlags
 
               eval "$postConfigure"
             '';
@@ -70,10 +70,7 @@ attrs :
 
 	    # installs via Cabal; creates a registration file for nix-support
 	    # so that the package can be used in other Haskell-builds; also
-	    # creates a register-${name}.sh in userspace that can be used to
-	    # register the library in a user environment (but this scheme
-	    # should sooner or later be deprecated in favour of using a
-	    # ghc-wrapper).
+	    # adds all propagated build inputs to the user environment packages
             installPhase = ''
               eval "$preInstall"
 
@@ -82,6 +79,9 @@ attrs :
               local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
               ensureDir $confDir
               ./Setup register --gen-pkg-config=$confDir/${self.fname}.conf
+
+              ensureDir $out/nix-support
+              ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
               
               eval "$postInstall"
             '';

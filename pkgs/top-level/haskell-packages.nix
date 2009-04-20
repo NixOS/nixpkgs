@@ -78,6 +78,7 @@ rec {
     inherit cabal GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
+    ghc = ghcReal;
     inherit (pkgs) fetchurl;
   };
 
@@ -191,7 +192,7 @@ rec {
     inherit cabal;
   };
 
-  utf8_string = import ../development/libraries/haskell/utf8-string {
+  utf8String = import ../development/libraries/haskell/utf8-string {
     inherit cabal;
   };
 
@@ -302,7 +303,7 @@ rec {
   };
 
   leksah = import ../applications/editors/leksah {
-    inherit cabal gtk2hs binary parsec regexPosix utf8_string;
+    inherit cabal gtk2hs binary parsec regexPosix utf8String;
     inherit (pkgs) libedit makeWrapper;
   };
   
@@ -327,8 +328,8 @@ rec {
   };
 
   lhs2tex = import ../tools/typesetting/lhs2tex {
-    inherit ghc;
-    inherit (pkgs) fetchurl stdenv tetex polytable;
+    inherit cabal regexCompat utf8String;
+    inherit (pkgs) tetex polytable;
   };
 
 }

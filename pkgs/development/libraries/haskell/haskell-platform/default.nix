@@ -1,6 +1,6 @@
 {cabal, fetchurl, GLUT, HTTP, HUnit, OpenAL, OpenGL, QuickCheck, cgi, fgl,
  haskellSrc, html, parallel, regexBase, regexCompat, regexPosix,
- stm, time, xhtml, zlib, cabalInstall, alex, happy, haddock}:
+ stm, time, xhtml, zlib, cabalInstall, alex, happy, haddock, ghc}:
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
@@ -20,13 +20,8 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
     haskellSrc html parallel regexBase regexCompat regexPosix
-    stm time xhtml zlib cabalInstall alex happy
+    stm time xhtml zlib cabalInstall alex happy ghc
   ];
-  /*
-  postFixup = ''
-    ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-  '';
-  */
   meta = {
     description = "Haskell Platform meta package";
   };
