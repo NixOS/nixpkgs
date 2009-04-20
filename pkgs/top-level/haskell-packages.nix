@@ -192,7 +192,7 @@ rec {
     inherit cabal;
   };
 
-  utf8String = import ../development/libraries/haskell/utf8-string {
+  utf8String = import ../development/libraries/haskell/utf8String {
     inherit cabal;
   };
 
