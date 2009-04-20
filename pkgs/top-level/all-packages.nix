@@ -1310,7 +1310,7 @@ let
   };
 
   system_config_printer = import ../tools/misc/system-config-printer {
-    inherit stdenv fetchurl perl perlXMLParser autoconf automake intltool gettext desktop_file_utils;
+    inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
   };
 
   tcpdump = import ../tools/networking/tcpdump {
