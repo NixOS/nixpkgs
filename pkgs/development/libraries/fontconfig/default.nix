@@ -1,7 +1,5 @@
 {stdenv, fetchurl, freetype, expat}:
 
-assert freetype != null && expat != null;
-
 stdenv.mkDerivation {
   name = "fontconfig-2.6.0";
   

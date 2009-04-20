@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "freetype-2.3.7";
+stdenv.mkDerivation rec {
+  name = "freetype-2.3.9";
   
   src = fetchurl {
-    url = mirror://sourceforge/freetype/freetype-2.3.7.tar.bz2;
-    sha256 = "12787v5q083zwrpfh0sk87g4ac0yzzmjmw41k5k27hwznsg8gksf";
+    url = "mirror://sourceforge/freetype/${name}.tar.bz2";
+    sha256 = "1dia4j01aqdcrkpfkcniswcrccdx4jx2p3hyhbh76kchx6y3782i";
   };
 
   meta = {

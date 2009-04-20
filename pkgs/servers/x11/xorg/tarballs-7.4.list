@@ -56,17 +56,17 @@ mirror://xorg/X11R7.4/src/everything/libdmx-1.0.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libfontenc-1.0.4.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libFS-1.0.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libICE-1.0.4.tar.bz2
-mirror://xorg/X11R7.4/src/everything/libpciaccess-0.10.3.tar.bz2
+mirror://xorg/individual/lib/libpciaccess-0.10.5.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libSM-1.1.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libWindowsWM-1.0.0.tar.bz2
-mirror://xorg/X11R7.4/src/everything/libX11-1.1.5.tar.bz2
+mirror://xorg/individual/lib/libX11-1.2.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXau-1.0.4.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXaw-1.0.4.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXcomposite-0.4.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXcursor-1.1.9.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXdamage-1.1.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXdmcp-1.0.2.tar.bz2
-mirror://xorg/X11R7.4/src/everything/libXext-1.0.4.tar.bz2
+mirror://xorg/individual/lib/libXext-1.0.5.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXfixes-4.0.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXfont-1.3.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/libXfontcache-1.0.4.tar.bz2
@@ -143,7 +143,7 @@ mirror://xorg/X11R7.4/src/everything/xf86-video-glint-1.2.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-i128-1.3.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-i740-1.2.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-impact-0.2.0.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xf86-video-intel-2.4.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-intel-2.7.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-mach64-6.8.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-mga-1.4.9.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-neomagic-1.2.1.tar.bz2
@@ -171,7 +171,7 @@ mirror://xorg/X11R7.4/src/everything/xf86-video-trident-1.3.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-tseng-1.2.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-v4l-0.2.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-vermilion-1.0.1.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xf86-video-vesa-2.0.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-vesa-2.2.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-vmware-10.16.5.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-voodoo-1.2.0.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-video-wsfb-0.2.1.tar.bz2
@@ -190,7 +190,7 @@ mirror://xorg/X11R7.4/src/everything/xlsatoms-1.0.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xlsclients-1.0.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xmodmap-1.0.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xorg-docs-1.4.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xorg-server-1.5.1.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.5.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xorg-sgml-doctools-1.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xpr-1.0.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xprop-1.0.4.tar.bz2

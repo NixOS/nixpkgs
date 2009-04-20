@@ -67,7 +67,7 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
-    #next unless $pkg eq "xorgserver";
+    #next unless $pkg eq "printproto";
     #print "$pkg\n";
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
@@ -95,16 +95,36 @@ while (<>) {
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
-    my $provides = `cd '$tmpDir'/* && ls *.pc.in`;
+    my $pkgDir = `echo $tmpDir/*`;
+    chomp $pkgDir;
+
+    my $provides = `cd $pkgDir && ls *.pc.in`;
     my @provides2 = split '\n', $provides;
+    my @requires = ();
+    
     print "PROVIDES @provides2\n\n";
-    foreach my $pc (@provides2) {
+    foreach my $pcFile (@provides2) {
+        my $pc = $pcFile;
         $pc =~ s/.pc.in//;
         die "collission with $pcMap{$pc}" if defined $pcMap{$pc};
         $pcMap{$pc} = $pkg;
+
+        print "$pkgDir/$pcFile\n";
+        open FOO, "<$pkgDir/$pcFile" or die;
+        while (<FOO>) {
+            if (/Requires:(.*)/) {
+                my @reqs = split ' ', $1;
+                foreach my $req (@reqs) {
+                    next unless $req =~ /^[a-z]+$/;
+                    print "REQUIRE (from $pcFile): $req\n";
+                    push @requires, $req;
+                }
+            }
+        }
+        close FOO;
+        
     }
 
-    my @requires = ();
     my $file;
     {
         local $/;
@@ -185,7 +205,7 @@ while (<>) {
     push @requires, "libxslt" if $pkg =~ /libxcb/;
     push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
     
-    print "REQUIRES @requires => $pkg\n";
+    print "REQUIRES $pkg => @requires\n";
     $pkgRequires{$pkg} = \@requires;
 
     print "done\n";
@@ -213,6 +233,8 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $inputs = "";
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
             if (!defined $requires{$pcMap{$req}}) {
                 $inputs .= "$pcMap{$req} ";
                 $requires{$pcMap{$req}} = 1;
