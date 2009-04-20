@@ -65,6 +65,14 @@ rec {
   haskellSrc = import ../development/libraries/haskell/haskell-src {
     inherit cabal happy;
   };
+
+  haskellSrcExts = import ../development/libraries/haskell/haskell-src-exts {
+    inherit cabal cpphs happy;
+  };
+
+  haskellSrcMeta = import ../development/libraries/haskell/haskell-src-meta {
+    inherit cabal haskellSrcExts;
+  };
   
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
     inherit cabal GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
@@ -232,6 +240,10 @@ rec {
     inherit (pkgs) perl;
   };
 
+  cpphs = import ../development/tools/misc/cpphs {
+    inherit cabal;
+  };
+
   frown = import ../development/tools/parsing/frown {
     inherit ghc;
     inherit (pkgs) fetchurl stdenv;
@@ -270,6 +282,9 @@ rec {
     inherit cabal uulib;
   };
 
+  vacuum = import ../development/libraries/haskell/vacuum {
+    inherit cabal ghcPaths haskellSrcMeta;
+  };
   
   # Applications.
 
