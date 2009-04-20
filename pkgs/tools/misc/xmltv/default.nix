@@ -1,7 +1,4 @@
-{ fetchurl, perl, perlTermReadKey, perlXMLTwig, perlXMLWriter
-, perlDateManip, perlHTMLTree, perlHTMLParser, perlHTMLTagset
-, perlURI, perlLWP
-}:
+{ fetchurl, perl, perlPackages }:
 
 import ../../../development/perl-modules/generic perl {
   name = "xmltv-0.5.51";
@@ -11,7 +8,8 @@ import ../../../development/perl-modules/generic perl {
   };
   #makeMakerFlags = "-components tv_grab_nl";
   buildInputs = [
-    perlTermReadKey perlXMLTwig perlXMLWriter perlDateManip
-    perlHTMLTree perlHTMLParser perlHTMLTagset perlURI perlLWP
+    perlPackages.TermReadKey perlPackages.XMLTwig perlPackages.XMLWriter
+    perlPackages.DateManip perlPackages.HTMLTree perlPackages.HTMLParser
+    perlPackages.HTMLTagset perlPackages.URI perlPackages.LWP
   ];
 }

@@ -218,7 +218,6 @@ in {
   par2cmdline = all;
   pciutils = linux;
   perl = all;
-  perlTaskCatalystTutorial = linux;
   php = linux;
   pidgin = linux;
   pinentry = linux;
@@ -397,7 +396,7 @@ in {
   };
 
   perlPackages = {
-    perlTaskCatalystTutorial = linux;
+    TaskCatalystTutorial = linux;
   };
   
   xorg = {

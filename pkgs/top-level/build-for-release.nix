@@ -215,7 +215,7 @@ let
       zip
       ;
     inherit (pkgs.perlPackages)
-      perlTaskCatalystTutorial
+      TaskCatalystTutorial
       ;    
     inherit (pkgs.xorg)
       fontbh100dpi

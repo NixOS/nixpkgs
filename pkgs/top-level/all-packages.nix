@@ -588,7 +588,7 @@ let
   docbook2x = import ../tools/typesetting/docbook2x {
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
-    inherit (perlPackages) perlXMLSAX perlXMLParser perlXMLNamespaceSupport;
+    inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
   };
 
   dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
@@ -1442,10 +1442,7 @@ let
   };
 
   xmltv = import ../tools/misc/xmltv {
-    inherit fetchurl perl;
-    inherit (perlPackages)
-      perlTermReadKey perlXMLTwig perlXMLWriter perlDateManip
-      perlHTMLTree perlHTMLParser perlHTMLTagset perlURI perlLWP;
+    inherit fetchurl perl perlPackages;
   };
 
   xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
@@ -2524,12 +2521,12 @@ let
 
   help2man = import ../development/tools/misc/help2man {
     inherit fetchurl stdenv perl gettext;
-    inherit (perlPackages) perlLocaleGettext;
+    inherit (perlPackages) LocaleGettext;
   };
 
   iconnamingutils = import ../development/tools/misc/icon-naming-utils {
     inherit fetchurl stdenv perl;
-    inherit (perlPackages) perlXMLSimple;
+    inherit (perlPackages) XMLSimple;
   };
 
   indent = composedArgsAndFun (selectVersion ../development/tools/misc/indent "2.2.9") {
@@ -4163,7 +4160,7 @@ let
     inherit pkgs;
   });
 
-  perlXMLParser = perlPackages.perlXMLParser;
+  perlXMLParser = perlPackages.XMLParser;
 
 
   ### DEVELOPMENT / PYTHON MODULES
@@ -5417,7 +5414,7 @@ let
 
   dejavu_fonts = import ../data/fonts/dejavu-fonts {
     inherit fetchurl stdenv fontforge perl fontconfig;
-    inherit (perlPackages) perlFontTTF;
+    inherit (perlPackages) FontTTF;
   };
 
   docbook5 = import ../data/sgml+xml/schemas/docbook-5.0 {
@@ -6493,7 +6490,7 @@ let
     boost = boost_1_36_0;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
-    inherit (perlPackages) perlArchiveZip perlCompressZlib;
+    inherit (perlPackages) ArchiveZip CompressZlib;
   };
 
   opera = import ../applications/networking/browsers/opera {
@@ -6740,7 +6737,7 @@ let
     static = true;
   }));
 
-  svk = perlPackages.perlSVK;
+  svk = perlPackages.SVK;
 
   sylpheed = import ../applications/networking/mailreaders/sylpheed {
     inherit fetchurl stdenv pkgconfig openssl gpgme;

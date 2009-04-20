@@ -31,7 +31,7 @@ complicated packages should be put in a separate file, typically in
 example of the former:
 
 <programlisting>
-perlClassC3 = buildPerlPackage rec {
+ClassC3 = buildPerlPackage rec {
   name = "Class-C3-0.21";
   src = fetchurl {
     url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
@@ -46,12 +46,12 @@ name attribute is consistent with the source that we’re actually
 downloading.  Perl packages are made available in
 <filename>all-packages.nix</filename> through the variable
 <varname>perlPackages</varname>.  For instance, if you have a package
-that needs <varname>perlClassC3</varname>, you would typically write
+that needs <varname>ClassC3</varname>, you would typically write
 
 <programlisting>
 foo = import ../path/to/foo.nix {
   inherit stdenv fetchurl ...;
-  inherit (perlPackages) perlClassC3;
+  inherit (perlPackages) ClassC3;
 };
 </programlisting>
 
@@ -59,7 +59,7 @@ in <filename>all-packages.nix</filename>.  You can test building a
 Perl package as follows:
 
 <screen>
-$ nix-build -A perlPackages.perlClassC3
+$ nix-build -A perlPackages.ClassC3
 </screen>
 
 <varname>buildPerlPackage</varname> adds <literal>perl-</literal> to
@@ -72,7 +72,7 @@ $ nix-env -i perl-Class-C3
 </screen>
 
 (Of course you can also install using the attribute name:
-<literal>nix-env -i -A perlPackages.perlClassC3</literal>.)</para>
+<literal>nix-env -i -A perlPackages.ClassC3</literal>.)</para>
 
 <para>So what does <varname>buildPerlPackage</varname> do?  It does
 the following:
@@ -137,14 +137,14 @@ builds a Perl module that has runtime dependencies on a bunch of other
 modules:
 
 <programlisting>
-perlClassC3Componentised = buildPerlPackage rec {
+ClassC3Componentised = buildPerlPackage rec {
   name = "Class-C3-Componentised-1.0004";
   src = fetchurl {
     url = "mirror://cpan/authors/id/A/AS/ASH/${name}.tar.gz";
     sha256 = "0xql73jkcdbq4q9m0b0rnca6nrlvf5hyzy8is0crdk65bynvs8q1";
   };
   propagatedBuildInputs = [
-    perlClassC3 perlClassInspector perlTestException perlMROCompat
+    ClassC3 ClassInspector TestException MROCompat
   ];
 };
 </programlisting>

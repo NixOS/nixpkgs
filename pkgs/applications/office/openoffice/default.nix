@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pam, python, tcsh, libxslt, perl, perlArchiveZip
-, perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
+{ stdenv, fetchurl, pam, python, tcsh, libxslt, perl, ArchiveZip
+, CompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi, cups
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   LD_LIBRARY_PATH = "${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib:${libjpeg}/lib";
 
   buildInputs = [
-    pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 
+    pam python tcsh libxslt perl ArchiveZip CompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
