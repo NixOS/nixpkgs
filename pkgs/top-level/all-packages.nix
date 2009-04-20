@@ -700,7 +700,7 @@ let
     inherit (xlibs) xproto libXt libX11;
   };
 
-  glxinfo = assert mesaSupported; import ../tools/graphics/glxinfo {
+  glxinfo = import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
   };
 
@@ -2972,7 +2972,7 @@ let
     inherit fetchurl stdenv openal;
   };
 
-  freeglut = assert mesaSupported; import ../development/libraries/freeglut {
+  freeglut = import ../development/libraries/freeglut {
     inherit fetchurl stdenv x11 mesa;
   };
 
@@ -3320,7 +3320,7 @@ let
     inherit fetchurl stdenv libcddb pkgconfig ncurses help2man;
   };
 
-  libcm = assert mesaSupported; import ../development/libraries/libcm {
+  libcm = import ../development/libraries/libcm {
     inherit fetchurl stdenv pkgconfig xlibs mesa;
     inherit (gtkLibs) glib;
   };
@@ -3654,7 +3654,7 @@ let
     system == "i686-linux" ||
     system == "x86_64-linux";
 
-  mesa = assert mesaSupported; import ../development/libraries/mesa {
+  mesa = import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig expat x11 xlibs libdrm;
   };
 
@@ -7886,7 +7886,7 @@ let
     inherit (gnome) esound;
   };
 
-  compiz_050 = assert mesaSupported; import ../applications/window-managers/compiz/0.5.0.nix {
+  compiz_050 = import ../applications/window-managers/compiz/0.5.0.nix {
     inherit fetchurl stdenv pkgconfig libpng mesa;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto;
@@ -7903,7 +7903,7 @@ let
     version = "0.6.2";
   };
 
-  compizBase = composedArgsAndFun (assert mesaSupported; selectVersion ../applications/window-managers/compiz "0.8.0") {
+  compizBase = composedArgsAndFun (selectVersion ../applications/window-managers/compiz "0.8.0") {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
       intltool;
@@ -7926,7 +7926,7 @@ let
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   };
 
-  compizFusion = assert mesaSupported; import ../applications/window-managers/compiz-fusion {
+  compizFusion = import ../applications/window-managers/compiz-fusion {
     version = getConfig ["compizFusion" "version"] "0.7.8";
     inherit compiz;
     inherit stringsWithDeps lib builderDefs;
@@ -8296,7 +8296,7 @@ let
     inherit (xlibs) libX11 libICE libSM;
   };
 
-  gnash = assert mesaSupported; import ../applications/video/gnash {
+  gnash = import ../applications/video/gnash {
     inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
             boost freetype agg dbus curl pkgconfig x11 libtool lib libungif
             gettext makeWrapper ming dejagnu python;

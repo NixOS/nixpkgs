@@ -1,13 +1,8 @@
 {stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, expat}:
 
-let
-
-  target =
-    if stdenv.system == "i686-linux" then "linux-dri-x86" else
-    if stdenv.system == "x86_64-linux" then "linux-dri-x86-64" else
-    abort "unsupported platform for Mesa"; # !!! change to throw, remove all the mesa asserts in all-packages.nix
-
-in
+if stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux" then
+  throw "unsupported platform for Mesa"
+else
 
 stdenv.mkDerivation {
   name = "mesa-7.4.1";
