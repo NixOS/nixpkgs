@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mesa-7.2";
+  name = "mesa-7.4.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/mesa3d/MesaLib-7.2.tar.bz2;
-    md5 = "04d379292e023df0b0266825cb0dbde5";
+    url = mirror://sourceforge/mesa3d/MesaLib-7.4.1.tar.bz2;
+    md5 = "423260578b653818ba66c2fcbde6d7ad";
   };
   
   buildInputs = [
