@@ -20,9 +20,15 @@ a generic package builder function for any Perl package that has a
 standard <varname>Makefile.PL</varname>.  It’s implemented in <link
 xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/development/perl-modules/generic"><filename>pkgs/development/perl-modules/generic</filename></link>.</para>
 
-<para>Most Perl packages from CPAN are so straight-forward to build
-that they are defined in <filename>pkgs/all-packages.nix</filename>
-itself.  Here is an example:
+<para>Perl packages from CPAN are defined in <link
+xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/perl-packages.nix"><filename>pkgs/perl-packages.nix</filename></link>,
+rather than <filename>pkgs/all-packages.nix</filename>.  Most Perl
+packages are so straight-forward to build that they are defined here
+directly, rather than having a separate function for each package
+called from <filename>perl-packages.nix</filename>.  However, more
+complicated packages should be put in a separate file, typically in
+<filename>pkgs/development/perl-modules</filename>.  Here is an
+example of the former:
 
 <programlisting>
 perlClassC3 = buildPerlPackage rec {
@@ -37,10 +43,23 @@ perlClassC3 = buildPerlPackage rec {
 Note the use of <literal>mirror://cpan/</literal>, and the
 <literal>${name}</literal> in the URL definition to ensure that the
 name attribute is consistent with the source that we’re actually
-downloading.  As usual, you can test this package as follows:
+downloading.  Perl packages are made available in
+<filename>all-packages.nix</filename> through the variable
+<varname>perlPackages</varname>.  For instance, if you have a package
+that needs <varname>perlClassC3</varname>, you would typically write
+
+<programlisting>
+foo = import ../path/to/foo.nix {
+  inherit stdenv fetchurl ...;
+  inherit (perlPackages) perlClassC3;
+};
+</programlisting>
+
+in <filename>all-packages.nix</filename>.  You can test building a
+Perl package as follows:
 
 <screen>
-$ nix-build -A perlClassC3
+$ nix-build -A perlPackages.perlClassC3
 </screen>
 
 <varname>buildPerlPackage</varname> adds <literal>perl-</literal> to
@@ -53,7 +72,7 @@ $ nix-env -i perl-Class-C3
 </screen>
 
 (Of course you can also install using the attribute name:
-<literal>nix-env -i -A perlClassC3</literal>.)</para>
+<literal>nix-env -i -A perlPackages.perlClassC3</literal>.)</para>
 
 <para>So what does <varname>buildPerlPackage</varname> do?  It does
 the following:
