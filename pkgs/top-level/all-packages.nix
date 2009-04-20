@@ -4159,9 +4159,9 @@ let
 
   buildPerlPackage = import ../development/perl-modules/generic perl;
 
-  perlPackages = import ./perl-packages.nix {
+  perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
     inherit pkgs;
-  };
+  });
 
   perlXMLParser = perlPackages.perlXMLParser;
 
