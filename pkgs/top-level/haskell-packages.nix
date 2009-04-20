@@ -307,11 +307,11 @@ rec {
   };
   
   xmobar = import ../applications/misc/xmobar {
-    inherit cabal X11;
+    inherit cabal X11 mtl parsec stm;
   };
 
   xmonad = import ../applications/window-managers/xmonad {
-    inherit cabal X11;
+    inherit cabal X11 mtl;
     inherit (pkgs.xlibs) xmessage;
   };
 
