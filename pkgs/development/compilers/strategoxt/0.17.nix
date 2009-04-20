@@ -30,11 +30,11 @@ rec {
 
   
   strategoxt = stdenv.mkDerivation rec {
-    name = "strategoxt-0.17pre18269";
+    name = "strategoxt-0.17pre18583";
 
     src = fetchurl {
-      url = "http://releases.strategoxt.org/strategoxt/${name}-a0f0wy0j/${name}.tar.gz";
-      sha256 = "7c51c2452bd45f34cd480b6b3cbaac50e0fc53fbb1a884d97cf4e2c2b5330577";
+      url = "http://releases.strategoxt.org/strategoxt/strategoxt-0.17pre18583-i573smdl/strategoxt-0.17pre18583.tar.gz";
+      sha256 = "4769d82a62d1c53fc3f4631ddef489e638ff2361a2eceb1226f2b56ab45b7784";
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
