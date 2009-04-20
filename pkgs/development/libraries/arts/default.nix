@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     --with-extra-libs=${libjpeg}/lib
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib
+    --disable-dependency-tracking
+    --enable-final
   '';
 
   buildInputs = [pkgconfig glib kdelibs libX11 libXext zlib libjpeg libpng perl qt];
