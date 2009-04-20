@@ -1021,7 +1021,7 @@ rec {
       url = mirror://xorg/individual/proto/printproto-1.0.4.tar.bz2;
       sha256 = "1gnkpz8iyl27gyjvy8rhm9v6g5qvz3632pn5djxks577i0qsjngh";
     };
-    buildInputs = [pkgconfig ];
+    buildInputs = [pkgconfig libXau ];
   }) // {inherit ;};
     
   randrproto = (stdenv.mkDerivation {
