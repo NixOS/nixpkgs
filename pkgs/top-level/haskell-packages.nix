@@ -183,6 +183,10 @@ rec {
     inherit cabal;
   };
 
+  strictConcurrency = import ../development/libraries/haskell/strictConcurrency {
+    inherit cabal parallel;
+  };
+
   time = import ../development/libraries/haskell/time {
     inherit cabal;
   };
@@ -195,13 +199,21 @@ rec {
     inherit cabal;
   };
 
-  wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit ghc;
-    inherit (pkgs) stdenv fetchurl unzip wxGTK;
+  vacuum = import ../development/libraries/haskell/vacuum {
+    inherit cabal ghcPaths haskellSrcMeta;
+  };
+
+  vacuumCairo = import ../development/libraries/haskell/vacuumCairo {
+    inherit cabal vacuum gtk2hs parallel strictConcurrency;
   };
 
   vty = import ../development/libraries/haskell/vty {
     inherit cabal;
+  };
+
+  wxHaskell = import ../development/libraries/haskell/wxHaskell {
+    inherit ghc;
+    inherit (pkgs) stdenv fetchurl unzip wxGTK;
   };
 
   X11 = import ../development/libraries/haskell/X11 {
@@ -282,10 +294,6 @@ rec {
     inherit cabal uulib;
   };
 
-  vacuum = import ../development/libraries/haskell/vacuum {
-    inherit cabal ghcPaths haskellSrcMeta;
-  };
-  
   # Applications.
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
