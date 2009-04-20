@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   
   buildInputs = [
     pkgconfig expat x11 libdrm xlibs.glproto
-    xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage
+    xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
   ];
   
   passthru = {inherit libdrm;};

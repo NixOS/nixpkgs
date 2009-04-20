@@ -2084,7 +2084,7 @@ rec {
       url = mirror://xorg/individual/xserver/xorg-server-1.5.3.tar.bz2;
       sha256 = "1fymhb0v83hmbka1sdg9z2vfkjagskawaxajks0n6xxyai7ig056";
     };
-    buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ]; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; 
+    buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib dri2proto ]; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; 
   }) // {inherit renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation {
@@ -2236,5 +2236,15 @@ rec {
     };
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
+
+  dri2proto = (stdenv.mkDerivation {
+    name = "dri2proto-1.99.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xorg.freedesktop.org/releases/individual/proto/dri2proto-1.99.3.tar.bz2;
+      sha256 = "053rrg8k4fs6rk82b7npc9wbj9591ir4gnlzjpwwciqmzhkxaj7f";
+    };
+    buildInputs = [pkgconfig ];
+  }) // {inherit ;};
     
 }
