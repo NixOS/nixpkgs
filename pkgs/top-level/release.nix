@@ -395,6 +395,10 @@ in {
     kernel = linux;
     virtualbox = linux;
   };
+
+  perlPackages = {
+    perlTaskCatalystTutorial = linux;
+  };
   
   xorg = {
     fontadobe100dpi = linux;

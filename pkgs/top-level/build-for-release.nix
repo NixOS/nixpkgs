@@ -142,7 +142,6 @@ let
       par2cmdline
       pciutils
       perl
-      perlTaskCatalystTutorial
       php
       pinentry
       pkgconfig
@@ -215,6 +214,9 @@ let
       zile
       zip
       ;
+    inherit (pkgs.perlPackages)
+      perlTaskCatalystTutorial
+      ;    
     inherit (pkgs.xorg)
       fontbh100dpi
       fontbhlucidatypewriter100dpi
