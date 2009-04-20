@@ -333,13 +333,13 @@ in {
 
   haskellPackages_ghc6101 = {
     ghc = ghcSupported;
-    leksah = ghcSupported;
   };
 
   haskellPackages_ghc6102 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
     gtk2hs = ghcSupported;
+    leksah = ghcSupported;
     lhs2tex = ghcSupported;
     xmonad = ghcSupported;
   };
