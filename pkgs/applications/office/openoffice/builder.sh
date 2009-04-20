@@ -39,7 +39,6 @@ postConfigure() {
 buildPhase=buildPhase
 buildPhase() {
     source LinuxX86*Env.Set.sh
-    export JOBS=2
     ./bootstrap
     dmake # wait a few hours...
 }
