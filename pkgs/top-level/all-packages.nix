@@ -159,7 +159,7 @@ let
       abort ("Unknown option specified: " + result))
     else x);
 
-  builderDefs = composedArgsAndFun (import ./builder-defs.nix) {
+  builderDefs = composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript fetchurl;
   };
 
