@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0flrjqa68vnnn8lrhj86xpa6h2cyzrvjy6873v9id092f86ix1li";
   };
 
-  patches = [ ./configure-python-libs.patch ./libpng-setjmp.patch ]; 
+  patches = [ ./configure-python-libs.patch ./libpng-setjmp.patch ./gtk-clist.patch ]; 
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
@@ -23,6 +23,14 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = "--with-python";
+
+  # Fix compilation on glibc 2.9 by adding missing string header
+  preConfigure = ''
+    echo "#include <string.h>" > tmp.cpp
+    cat tmp.cpp src/dom/io/uristream.cpp > src/dom/io/uristream.cpp.new
+    rm tmp.cpp
+    mv src/dom/io/uristream.cpp.new src/dom/io/uristream.cpp
+  '';
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I./extension/script"
