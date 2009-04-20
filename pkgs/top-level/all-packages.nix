@@ -3805,16 +3805,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  qt3gcc33 = import ../development/libraries/qt-3 {
-    stdenv = overrideGCC stdenv gcc33;
-    inherit fetchurl x11 zlib libjpeg libpng which mysql mesa;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor;
-    openglSupport = false;
-    mysqlSupport = false;
-  };
-
-  qt3 = import ../development/libraries/qt-3 {
+  qt3 = makeOverridable (import ../development/libraries/qt-3) {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto libXcursor;
@@ -3822,11 +3813,13 @@ let
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
 
-  qt3mysql = import ../development/libraries/qt-3 {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor;
-    openglSupport = mesaSupported;
+  qt3gcc33 = qt3.override {
+    stdenv = overrideGCC stdenv gcc33;
+    openglSupport = false;
+    mysqlSupport = false;
+  };
+
+  qt3mysql = qt3.override {
     mysqlSupport = true;
   };
 
