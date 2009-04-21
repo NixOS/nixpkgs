@@ -4,6 +4,7 @@ stdenv.mkDerivation {
   name = "perl-5.10.0";
 
   builder = ./builder.sh;
+  
   src = fetchurl {
     url = mirror://cpan/src/perl-5.10.0.tar.gz;
     sha256 = "0bivbz15x02m02gqs6hs77cgjr2msfrhnvp5xqk359jg6w6llill";
@@ -18,6 +19,11 @@ stdenv.mkDerivation {
     #    systems.  (This actually appears to be due to a bug in Perl.)
     ./no-sys-dirs.patch
   ];
+
+  configureFlags = ''
+    -de -Dcc=gcc -Uinstallusrbinperl -Duseshrplib
+    -Dprefix=''${out} -Dman1dir=''${out}/share/man/man1 -Dman3dir=''${out}/share/man/man3
+  '';
 
   setupHook = ./setup-hook.sh;
 }
