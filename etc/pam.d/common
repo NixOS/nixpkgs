@@ -6,7 +6,8 @@ auth     required       pam_deny.so
 account  required       @pam_unix2@/lib/security/pam_unix2.so
 
 @isLDAPEnabled@  password sufficient     @pam_ldap@/lib/security/pam_ldap.so 
-password sufficient     @pam_unix2@/lib/security/pam_unix2.so nullok
+password requisite     @pam_unix2@/lib/security/pam_unix2.so nullok
+@syncSambaPasswords@
 
 @isLDAPEnabled@  session  optional       @pam_ldap@/lib/security/pam_ldap.so 
 session  required       @pam_unix2@/lib/security/pam_unix2.so

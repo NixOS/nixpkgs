@@ -186,6 +186,9 @@ let
           inherit (pkgs.xorg) xauth;
           inherit pamConsoleHandlers;
           isLDAPEnabled = if isLDAPEnabled then "" else "#";
+          syncSambaPasswords = if config.services.samba.syncPasswordsByPam
+            then "password   optional     ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"
+            else "# change samba configuration options to make passwd sync the samba auth database as well here..";
         };
         target = "pam.d/" + program;
       }
