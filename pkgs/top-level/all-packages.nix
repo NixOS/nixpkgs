@@ -2604,6 +2604,14 @@ let
       inherit fetchurl stdenv;
     });
 
+  radare = import ../development/tools/analysis/radare {
+    inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python
+      ruby libewf;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) vte;
+    lua = lua5;
+  };
+
   ragel = import ../development/tools/parsing/ragel {
     inherit composableDerivation fetchurl transfig texLive;
   };
