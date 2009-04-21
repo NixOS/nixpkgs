@@ -339,6 +339,7 @@ in {
     gtk2hs = ghcSupported;
     leksah = ghcSupported;
     lhs2tex = ghcSupported;
+    haskellPlatform = ghcSupported;
     xmonad = ghcSupported;
   };
 
