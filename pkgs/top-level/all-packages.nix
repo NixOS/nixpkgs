@@ -3388,6 +3388,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libewf = import ../development/libraries/libewf {
+    inherit fetchurl stdenv zlib openssl libuuid;
+  };
+
   libexif = import ../development/libraries/libexif {
     inherit fetchurl stdenv gettext;
   };
