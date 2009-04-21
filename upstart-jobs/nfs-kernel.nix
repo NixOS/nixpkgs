@@ -59,7 +59,7 @@ let
 in
 
 
-mkIf config.services.sshd.enable {
+mkIf config.services.nfsKernel.enable {
   require = [
     options
   ];
