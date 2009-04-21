@@ -193,6 +193,11 @@ rec {
     inherit cabal mtl;
   };
 
+  readline = import ../development/libraries/haskell/readline {
+    inherit cabal;
+    inherit (pkgs) readline;
+  };
+
   regexBase = import ../development/libraries/haskell/regex-base {
     inherit cabal mtl;
   };
