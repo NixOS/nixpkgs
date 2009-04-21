@@ -98,6 +98,7 @@ in {
   docbook_xml_dtd_42 = all;
   docbook_xml_dtd_43 = all;
   docbook_xsl = all;
+  dosbox = linux;
   doxygen = linux;
   e2fsprogs = linux;
   emacs22 = all;
