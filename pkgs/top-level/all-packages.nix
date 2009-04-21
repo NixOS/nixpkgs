@@ -2606,7 +2606,7 @@ let
 
   radare = import ../development/tools/analysis/radare {
     inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python
-      ruby libewf;
+      ruby libewf perl;
     inherit (gtkLibs) gtk;
     inherit (gnome) vte;
     lua = lua5;
