@@ -548,6 +548,13 @@ configurePhase() {
         fi
     fi
 
+    # By default, disable static builds.
+    if test -z "$dontDisableStatic"; then
+        if grep -q enable-static $configureScript; then
+            configureFlags="--disable-static $configureFlags"
+        fi
+    fi
+
     echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
     $configureScript $configureFlags "${configureFlagsArray[@]}"
 
