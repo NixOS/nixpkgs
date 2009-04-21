@@ -129,6 +129,10 @@ rec {
     inherit (pkgs) sqlite;
   };
 
+  hscolour = import ../development/libraries/haskell/hscolour {
+    inherit cabal;
+  };
+
   html = import ../development/libraries/haskell/html {
     inherit cabal;
   };
@@ -220,6 +224,10 @@ rec {
 
   time = import ../development/libraries/haskell/time {
     inherit cabal;
+  };
+
+  uniplate = import ../development/libraries/haskell/uniplate {
+    inherit cabal mtl;
   };
 
   utf8String = import ../development/libraries/haskell/utf8-string {
@@ -319,6 +327,10 @@ rec {
   happy1182 = import ../development/tools/parsing/happy/happy-1.18.2.nix {
     inherit cabal mtl;
     inherit (pkgs) perl;
+  };
+
+  hlint = import ../development/tools/haskell/hlint {
+    inherit cabal haskellSrcExts mtl uniplate hscolour;
   };
 
   uuagc = import ../development/tools/haskell/uuagc {
