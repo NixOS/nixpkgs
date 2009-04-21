@@ -2502,6 +2502,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  gtkdialog = import ../development/tools/misc/gtkdialog {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+  };
+
   /*
   hsc2hs = import ../development/tools/misc/hsc2hs {
     inherit bleedingEdgeRepos stdenv;
