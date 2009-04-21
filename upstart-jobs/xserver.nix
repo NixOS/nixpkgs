@@ -265,7 +265,7 @@ let
     ''
 
     else if windowManager == "xmonad" then ''
-      ${pkgs.xmonad}/bin/xmonad &
+      ${pkgs.haskellPackages.xmonad}/bin/xmonad &
     ''
     
     else if windowManager == "none" then ''
