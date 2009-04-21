@@ -29,7 +29,6 @@ stdenv.mkDerivation {
 
     "--enable-optimize"
     "--disable-debug"
-    "--disable-static"  # needed for `libxul'
     "--enable-strip"
     "--with-system-jpeg"
     "--with-system-zlib"

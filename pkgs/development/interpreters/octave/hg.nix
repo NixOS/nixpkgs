@@ -5,7 +5,7 @@ let commonBuildInputs = [gfortran readline ncurses perl glibc qhull libX11 texin
 
 stdenv.mkDerivation ({
   NIX_LDFLAGS = "-lpthread";
-  configureFlags = "--enable-readline --enable-dl --disable-static --enable-shared";
+  configureFlags = "--enable-readline --enable-dl";
   meta = { 
       description = "High-level interactive language for numerical computations";
       homepage = http://www.octave.org;

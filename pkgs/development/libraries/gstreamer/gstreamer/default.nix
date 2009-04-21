@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [perl bison flex pkgconfig python which  gtkdoc ];
   propagatedBuildInputs = [glib libxml2];
 
-  configureFlags = "--enable-shared --disable-static --enable-failing-tests
-    --localstatedir=/var --disable-gtk-doc --disable-docbook";
+  configureFlags = ''
+    --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
+  '';
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

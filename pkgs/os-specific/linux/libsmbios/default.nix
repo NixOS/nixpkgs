@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
   
   buildInputs = [libxml2];
   
-  configureFlags = "--disable-static"; # bloated enough as it is...
-
   meta = {
     homepage = http://linux.dell.com/libsmbios/main/index.html;
     description = "A library to obtain BIOS information";

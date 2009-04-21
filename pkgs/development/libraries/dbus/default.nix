@@ -8,7 +8,7 @@ let
     sha256 = "1f7v79ws34mh6j75fk6w4w9v441vffll0fwf5vk94mwa0bc28g5b";
   };
   
-  configureFlags = "--disable-static --localstatedir=/var --with-session-socket-dir=/tmp";
+  configureFlags = "--localstatedir=/var --with-session-socket-dir=/tmp";
   
 in rec {
 

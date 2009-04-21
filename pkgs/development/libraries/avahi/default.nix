@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --disable-qt3 --disable-gdbm --disable-gtk --disable-mono
     --${if qt4Support then "enable" else "disable"}-qt4
-    --with-distro=none --enable-shared --disable-static --disable-python
+    --with-distro=none --disable-python
   '';
 
   meta = {

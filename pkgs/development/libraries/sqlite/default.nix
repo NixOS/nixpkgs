@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [readline];
 
   configureFlags = ''
-    ${if static then "--disable-shared --enable-static" else "--disable-static"}
+    ${if static then "--disable-shared --enable-static" else ""}
     --with-readline-inc=-I${readline}/include
   '';
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [zlib];
   
-  configureFlags = "--with-zlib=${zlib} --enable-shared --disable-static --disable-xmp";
+  configureFlags = "--with-zlib=${zlib} --disable-xmp";
 
   meta = {
     homepage = http://www.exiv2.org/;

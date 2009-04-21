@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [pkgconfig zlib glib cairo freetype fontconfig libjpeg gtk]
     ++ (if qt4Support then [qt4] else []);
 
-  configureFlags = "--enable-shared --disable-static --enable-exceptions
-    --enable-cairo --enable-splash --enable-poppler-glib --enable-zlib
-    --enable-xpdf-headers "
+  configureFlags =
+    ''
+      --enable-exceptions --enable-cairo --enable-splash
+      --enable-poppler-glib --enable-zlib --enable-xpdf-headers
+    ''
     + (if qt4Support then "--enable-qt-poppler" else "--disable-qt-poppler");
 
   patches = [ ./GDir-const.patch ./use_exceptions.patch ];

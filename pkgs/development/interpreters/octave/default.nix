@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     sha256 = "1rkpzig0r0zrm73avxgai0zqkz9hv4js57i1xxdzcm22qw22szaj";
   };
   buildInputs = [gfortran readline ncurses perl flex texinfo qhull];
-  configureFlags = "--enable-readline --enable-dl --disable-static --enable-shared";
+  configureFlags = "--enable-readline --enable-dl";
 }

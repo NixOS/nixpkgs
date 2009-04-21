@@ -10,8 +10,6 @@ stdenv.mkDerivation {
   
   buildInputs = [openssl cyrus_sasl db4 groff];
   
-  configureFlags = "--disable-static";
-
   dontPatchELF = 1; # !!!
 
   # Build on Glibc 2.9.

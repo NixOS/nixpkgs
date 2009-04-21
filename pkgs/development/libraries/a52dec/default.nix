@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0czccp4fcpf2ykp16xcrzdfmnircz1ynhls334q374xknd5747d2";
   };
 
-  configureFlags = "--enable-shared --disable-static";
-
   NIX_CFLAGS_COMPILE = "-fpic";
 
   meta = {

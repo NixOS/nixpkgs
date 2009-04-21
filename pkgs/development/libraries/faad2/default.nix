@@ -8,8 +8,6 @@ stdenv.mkDerivation {
     sha256 = "1db37ydb6mxhshbayvirm5vz6j361bjim4nkpwjyhmy4ddfinmhl";
   };
 
-  configureFlags = "--disable-static";
-
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
     homepage = http://www.audiocoding.com/faad2.html;

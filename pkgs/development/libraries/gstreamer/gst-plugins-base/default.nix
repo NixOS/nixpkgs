@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = "sed -i 's@/bin/echo@echo@g' configure";
 
-  configureFlags = "--enable-shared --disable-static";
-
 # TODO : v4l, libvisual
   propagatedBuildInputs = [gstreamer libX11 libXv libXext alsaLib cdparanoia
     libogg libtheora libvorbis freetype pango liboil gtk which gtkdoc];

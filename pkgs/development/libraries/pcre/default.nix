@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   
   configureFlags = ''
-    ${if unicodeSupport then "--enable-unicode-properties --enable-shared --disable-static" else ""}
+    ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
   '';
 

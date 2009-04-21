@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [pkgconfig];
+  
   propagatedBuildInputs = [ cairo x11 fontconfig freetype libsigcxx ];
-
-  configureFlags = "--enable-shared --disable-static";
 
   meta = {
     description = "A 2D graphics library with support for multiple output devices";

@@ -20,8 +20,6 @@ rec {
         --replace getopt ${getopt}/bin/getopt
     '';
 
-    configureFlags = "--disable-static";
-
     meta = {
       homepage = http://www.program-transformation.org/Sdf/SdfBundle;
       meta = "Tools for the SDF2 Syntax Definition Formalism, including the `pgen' parser generator and `sglr' parser";
@@ -38,8 +36,6 @@ rec {
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
-
-    configureFlags = "--disable-static";
 
     meta = {
       homepage = http://strategoxt.org/;

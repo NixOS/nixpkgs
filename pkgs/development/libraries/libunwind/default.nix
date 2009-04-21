@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1qfxqkyx4r5dmwajyhvsyyl8zwxs6n2rcg7a61fgfdfp0gxvpzgx";
   };
   
-  configureFlags = "--enable-shared --disable-static";
-
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
   
   meta = {

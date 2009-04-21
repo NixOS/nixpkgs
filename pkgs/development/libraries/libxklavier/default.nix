@@ -1,7 +1,7 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "libxklavier-" + version;
+  name = "libxklavier-3.4";
 
   src = fetchurl {
     url = "mirror://sf/gswitchit/${name}.tar.gz";
@@ -10,10 +10,13 @@ stdenv.mkDerivation rec {
 
 # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = [libX11 xkeyboard_config libxml2 libICE glib libxkbfile];
+  
   buildInputs = [pkgconfig];
-  configureFlags = "--enable-shared --disable-static
+  
+  configureFlags = ''
     --with-xkb-base=${xkeyboard_config}/etc/X11/xkb
-    --disable-xmodmap-support";
+    --disable-xmodmap-support
+  '';
 
   meta = {
     homepage = http://freedesktop.org/wiki/Software/LibXklavier;

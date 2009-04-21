@@ -3013,7 +3013,7 @@ let
     use_svn = stdenv.system == "x86_64-linux";
   };
 
-  gettext = composedArgsAndFun (selectVersion ../development/libraries/gettext "0.17") {
+  gettext = import ../development/libraries/gettext {
     inherit fetchurl stdenv;
   };
 
@@ -3286,7 +3286,7 @@ let
     inherit stdenv fetchurl pkgconfig pulseaudio;
   };
 
-  libarchive = selectVersion ../development/libraries/libarchive "2.4.12" {
+  libarchive = import ../development/libraries/libarchive {
     inherit fetchurl stdenv zlib bzip2 e2fsprogs sharutils;
   };
 
@@ -3491,8 +3491,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  liboil = composedArgsAndFun
-    (selectVersion ../development/libraries/liboil "0.3.15") {
+  liboil = import ../development/libraries/liboil {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
   };
@@ -3523,7 +3522,7 @@ let
     inherit fetchurl stdenv pkgconfig;
   };
 
-  libsigsegv = selectVersion ../development/libraries/libsigsegv "2.5" {
+  libsigsegv = import ../development/libraries/libsigsegv/2.5.nix {
     inherit fetchurl stdenv;
   };
 
@@ -3593,7 +3592,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  libxklavier = selectVersion ../development/libraries/libxklavier "3.4" {
+  libxklavier = import ../development/libraries/libxklavier {
     inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2;
     inherit (xorg) libX11 libICE libxkbfile;
     inherit (gtkLibs) glib;
@@ -3755,7 +3754,7 @@ let
     inherit stdenv perl;
   };
 
-  ortp = selectVersion ../development/libraries/ortp "0.13.1" {
+  ortp = import ../development/libraries/ortp {
     inherit fetchurl stdenv;
   };
 

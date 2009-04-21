@@ -8,7 +8,6 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [cfitsio libusb zlib];
-  configureFlags = "--enable-shared --disable-static";
 
   meta = {
     homepage = http://indi.sf.net;

@@ -1,4 +1,5 @@
 args: with args;
+
 stdenv.mkDerivation {
   name = "ilbc-rfc3951";
 
@@ -12,6 +13,4 @@ stdenv.mkDerivation {
     phases = "unpackPhase installPhase";
     installPhase = "cp ilbc-rfc3951.tar.gz \${out}";
   };
-
-  configureFlags = "--enable-shared --disable-static";
 }

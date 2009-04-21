@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "07p7cnmfnq7ds8a56iqmxps46bzznn92xxpdlnnp3n6pwcnidmn7";
   };
 
-  configureFlags = "--disable-static";
-
   doCheck = true;
 
   meta = {

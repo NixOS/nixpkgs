@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ncurses];
-  configureFlags = "--enable-shared --disable-static";
-
+  
   meta = {
     description = "GNU Readline, a library for interactive line editing";
 

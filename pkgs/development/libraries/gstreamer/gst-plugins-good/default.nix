@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     taglib gdbm pulseaudio];
   buildInputs = [pkgconfig];
 
-  configureFlags = "--enable-shared --disable-static --enable-ladspa";
+  configureFlags = "--enable-ladspa";
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

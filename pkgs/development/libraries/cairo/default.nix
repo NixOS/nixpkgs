@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
-  configureFlags = ["--disable-static" "--enable-xcb"] ++
+  configureFlags = ["--enable-xcb"] ++
     stdenv.lib.optional pdfSupport "--enable-pdf";
 
   preConfigure = ''

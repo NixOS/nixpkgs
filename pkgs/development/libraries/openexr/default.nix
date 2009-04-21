@@ -11,5 +11,5 @@ stdenv.mkDerivation {
   };
   buildInputs = [pkgconfig zlib] ++ (lib.optional (args ? ctl) (args.ctl));
   propagatedBuildInputs = [pkgconfig zlib ilmbase];
-  configureFlags = "--enable-shared --disable-static --enable-imfexamples";
+  configureFlags = "--enable-imfexamples";
 }
