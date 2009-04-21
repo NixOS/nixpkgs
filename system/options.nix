@@ -485,6 +485,8 @@ in
 
     (import ../upstart-jobs/synergy.nix)
 
+    (import ../upstart-jobs/nfs-kernel.nix)
+
     # nix
     (import ../upstart-jobs/nix.nix) # nix options and daemon
     (import ../system/nixos-installer.nix)
