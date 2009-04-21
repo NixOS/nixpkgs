@@ -54,9 +54,11 @@ let
     
     # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
     perlFlags = map (x: "-I${x}/lib/site_perl") [
-      pkgs.perlBerkeleyDB pkgs.perlEmailSend pkgs.perlEmailSimple
-      pkgs.perlModulePluggable pkgs.perlReturnValue pkgs.perlEmailAddress
-      pkgs.perlCryptPasswordMD5 pkgs.perlStringMkPasswd
+      pkgs.perlPackages.BerkeleyDB pkgs.perlPackages.EmailSend
+      pkgs.perlPackages.EmailSimple pkgs.perlPackages.ModulePluggable
+      pkgs.perlPackages.ReturnValue pkgs.perlPackages.EmailAddress
+      pkgs.perlPackages.CryptPasswordMD5
+      pkgs.perlPackages.StringMkPasswd
     ];
 
     # Do a syntax check on the generated file.
