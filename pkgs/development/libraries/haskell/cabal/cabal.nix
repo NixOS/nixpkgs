@@ -39,22 +39,14 @@ attrs :
             # library directories that have to be added to the Cabal files
             extraLibDirs = map (x : x + "/lib") self.propagatedBuildInputs;
 
-            # file(s) that have to be patched with information about extra libraries;
-            # can be redefined to the empty list by the client if this is not desired
-            patchLibFiles = [ "${self.pname}.cabal" ];
-
-            # patches files, compiles Setup, and configures
+            # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
-              for i in ${toString self.patchLibFiles}; do
-                echo "patching $i"
-                test -f $i && sed -i '/[eE]xtra-[lL]ibraries/ { s|^\( *\)[eE]xtra-[lL]ibraries.*|&\n\1extra-lib-dirs: ${toString self.extraLibDirs}| }' $i
-              done
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --verbose --prefix="$out" $configureFlags
+              ./Setup configure --verbose --prefix="$out" ${toString (map (x : "--extra-lib-dir=" + x) self.extraLibDirs)} $configureFlags
 
               eval "$postConfigure"
             '';

@@ -23,6 +23,13 @@ rec {
 
   # Haskell libraries.
 
+  # Agda depends on a specific version of QuickCheck
+  Agda = import ../development/libraries/haskell/Agda {
+    inherit cabal binary haskeline haskellSrc mtl utf8String xhtml zlib
+      happy alex;
+    QuickCheck = QuickCheck2101;
+  };
+
   benchpress = import ../development/libraries/haskell/benchpress {
     inherit cabal;
   };
@@ -44,6 +51,10 @@ rec {
     inherit cabal;
   };
 
+  extensibleExceptions = import ../development/libraries/haskell/extensible-exceptions {
+    inherit cabal;
+  };
+
   fgl = import ../development/libraries/haskell/fgl {
     inherit cabal mtl;
   };
@@ -55,11 +66,17 @@ rec {
   GLUT = import ../development/libraries/haskell/GLUT {
     inherit cabal OpenGL;
     glut = pkgs.freeglut;
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
   
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit ghc mtl;
     inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
+  };
+
+  haskeline = import ../development/libraries/haskell/haskeline {
+    inherit cabal extensibleExceptions mtl utf8String;
   };
 
   haskellSrc = import ../development/libraries/haskell/haskell-src {
@@ -164,8 +181,16 @@ rec {
     inherit (pkgs) pcre;
   };
 
-  QuickCheck = import ../development/libraries/haskell/QuickCheck {
+  QuickCheck  = QuickCheck1;
+  QuickCheck1 = QuickCheck1200;
+  QuickCheck2 = QuickCheck2101;
+
+  QuickCheck1200 = import ../development/libraries/haskell/QuickCheck {
     inherit cabal;
+  };
+
+  QuickCheck2101 = import ../development/libraries/haskell/QuickCheck/2.1.0.1.nix {
+    inherit cabal mtl;
   };
 
   regexBase = import ../development/libraries/haskell/regex-base {
