@@ -6554,7 +6554,7 @@ let
       intltool gettext;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11 libICE libSM;
-    inherit (alsa) alsaLib;    # Needs ALSA >= 1.0.17.
+    inherit alsaLib;    # Needs ALSA >= 1.0.17.
     gconf = gnome.GConf;
 
     # Work around Libtool 1.5 interaction with Ltdl 2.x
@@ -6695,12 +6695,13 @@ let
     inherit fetchurl stdenv;
   };
 
-  alsa = import ../os-specific/linux/alsa/1.0.19.nix {
-    inherit fetchurl stdenv ncurses gettext;
+  alsaLib = import ../os-specific/linux/alsa-lib {
+    inherit stdenv fetchurl;
   };
-
-  alsaLib = alsa.alsaLib;
-  alsaUtils = alsa.alsaUtils;
+  
+  alsaUtils = import ../os-specific/linux/alsa-utils {
+    inherit stdenv fetchurl alsaLib gettext ncurses;
+  };
 
   blcr = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
@@ -8205,7 +8206,7 @@ let
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-    inherit (alsa) alsaLib;
+    inherit alsaLib;
     #enableOfficialBranding = true;
     xulrunner = xulrunner3_1;
     autoconf = autoconf213;
@@ -8216,7 +8217,7 @@ let
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-    inherit (alsa) alsaLib;
+    inherit alsaLib;
     autoconf = autoconf213;
     #enableOfficialBranding = true;
   });
