@@ -1238,7 +1238,7 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  seccure = composedArgsAndFun (selectVersion ../tools/security/seccure "0.3") {
+  seccure = composedArgsAndFun (selectVersion ../tools/security/seccure "0.4") {
     inherit builderDefs libgcrypt;
   };
 

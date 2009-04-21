@@ -2,8 +2,8 @@ args : with args; with builderDefs;
 	let localDefs = builderDefs.passthru.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
-			url = http://freshmeat.net/redir/seccure/65485/url_tgz/seccure-0.3.tar.gz;
-			sha256 = "0isah96p35yxm86dklmgmdkvpflqi2aj4k344jp57chrhg5av74d";
+			url = http://point-at-infinity.org/seccure/seccure-0.4.tar.gz;
+			sha256 = "33d690a7034ee349bce4911a8b7c73e6e3cd13a140f429e9e628d5cd5a3bb955";
 		};
 
 		buildInputs = [libgcrypt];
