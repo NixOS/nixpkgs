@@ -78,7 +78,7 @@ mkIf config.services.portmap.enable {
           start on network-interfaces/started
           stop on network-interfaces/stop
 
-          respawn ${portmap}/sbin/portmap \
+          respawn ${portmap}/sbin/portmap -f \
             ${if config.services.portmap.chroot == ""
               then ""
               else "-t \"${config.services.portmap.chroot}\""} \
