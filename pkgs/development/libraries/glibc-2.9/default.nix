@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
 
     /* Make it possible to override the locale-archive in NixOS. */
     ./locale-override.patch
+
+    /* Have rpcgen(1) look for cpp(1) in $PATH.  */
+    ./rpcgen-path.patch
   ];
 
   # `--with-tls --without-__thread' enables support for TLS but causes
