@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     --disable-ffserver
     --disable-ffplay
     --enable-libfaad
+    --enable-shared
   '';
 
   buildInputs = [faad2];
