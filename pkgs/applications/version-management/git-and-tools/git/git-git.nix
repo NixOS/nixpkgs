@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
    + (if svnSupport then
 
       ''# wrap git-svn
-        gitperllib=$out/lib/site_perl
+        gitperllib=$out/lib/perl5/site_perl
         for i in ${builtins.toString perlLibs}; do
-          gitperllib=$gitperllib:$i/lib/site_perl
+          gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
 #cp git-svn "$out/bin"
         wrapArgs="$wrapArgs --set GITPERLLIB $gitperllib"

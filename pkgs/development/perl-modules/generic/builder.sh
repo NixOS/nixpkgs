@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/site_perl"
+PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlFlags=
 for i in $(IFS=:; echo $PERL5LIB); do

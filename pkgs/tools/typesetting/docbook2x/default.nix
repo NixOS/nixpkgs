@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       # XXX: We work around the fact that `wrapProgram' doesn't support
       # spaces below by inserting escaped backslashes.
       wrapProgram $out/bin/$i --prefix PERL5LIB :			\
-        "${perlXMLSAX}/lib/site_perl:${perlXMLParser}/lib/site_perl"	\
+        "${perlXMLSAX}/lib/perl5/site_perl:${perlXMLParser}/lib/perl5/site_perl" \
 	--prefix PERL5LIB :						\
-	"${perlXMLNamespaceSupport}/lib/site_perl"			\
+	"${perlXMLNamespaceSupport}/lib/perl5/site_perl"		\
 	--prefix XML_CATALOG_FILES "\ "					\
 	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml"
     done
