@@ -3789,7 +3789,7 @@ let
   };
 
   popt = import ../development/libraries/popt {
-    inherit fetchurl stdenv gettext;
+    inherit fetchurl stdenv;
   };
 
   proj = import ../development/libraries/proj.4 {
