@@ -23,7 +23,8 @@ stdenv.mkDerivation {
   # $out/lib/perl5 - this is the general default, but because $out
   # contains the string "perl", Configure would select $out/lib.
   configureFlags = ''
-    -de -Dcc=gcc -Uinstallusrbinperl -Dinstallstyle=lib/perl5 -Duseshrplib -Dusethreads
+    -de -Dcc=gcc -Uinstallusrbinperl -Dinstallstyle=lib/perl5 -Duseshrplib
+    ${if stdenv ? glibc then "-Dusethreads" else ""}
   '';
 
   configureScript = "./Configure";
