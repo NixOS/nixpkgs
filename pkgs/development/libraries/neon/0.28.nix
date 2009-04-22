@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     ${if static then "--enable-static" else "--disable-static"}
     ${if compressionSupport then "--with-zlib" else "--without-zlib"}
     ${if sslSupport then "--with-ssl --with-libs=${openssl}" else "--without-ssl"}
+    --enable-shared
   '';
 
   passthru = {inherit compressionSupport sslSupport;};
