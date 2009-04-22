@@ -1,6 +1,6 @@
 {stdenv, fetchurl, gettext}:
 
-assert stdenv.isLinux;
+assert stdenv.isLinux && stdenv ? glibc;
 
 stdenv.mkDerivation {
   name = "checkinstall-1.6.2pre20081116";
