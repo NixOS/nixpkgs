@@ -2105,12 +2105,17 @@ let
     inherit (bleedingEdgeRepos) sourceByName;
   };
 
-  perl = if !stdenv.isLinux then sysPerl else realPerl;
+  perl = if !stdenv.isLinux then sysPerl else perlReal;
 
   perl58 = if !stdenv.isLinux then sysPerl else
     import ../development/interpreters/perl-5.8 {
       inherit fetchurl stdenv;
     };
+
+  perlReal = import ../development/interpreters/perl-5.10 {
+    fetchurl = fetchurlBoot;
+    inherit stdenv;
+  };
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
@@ -2180,11 +2185,6 @@ let
 
   Qi = composedArgsAndFun (selectVersion ../development/compilers/qi "9.1") {
     inherit clisp stdenv fetchurl builderDefs unzip;
-  };
-
-  realPerl = import ../development/interpreters/perl-5.10 {
-    fetchurl = fetchurlBoot;
-    inherit stdenv;
   };
 
   ruby = import ../development/interpreters/ruby {
