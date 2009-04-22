@@ -3539,6 +3539,11 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  libpseudo = import ../development/libraries/libpseudo {
+    inherit fetchurl stdenv pkgconfig ncurses;
+    inherit (gtkLibs) glib;
+  };
+
   /*libscdFun = lib.sumArgs (selectVersion ../development/libraries/libscd "0.4.2") {
     inherit stdenv fetchurl builderDefs libextractor perl pkgconfig;
   };
@@ -3598,6 +3603,11 @@ let
     inherit (xlibs) xproto libX11 damageproto libXdamage
       libXext xextproto fixesproto libXfixes xineramaproto
       libXinerama libXrandr randrproto libXtst;
+  };
+
+  libviper = import ../development/libraries/libviper {
+    inherit fetchurl stdenv pkgconfig ncurses gpm;
+    inherit (gtkLibs) glib;
   };
 
   libvorbis = import ../development/libraries/libvorbis {
@@ -6886,6 +6896,11 @@ let
   vorbisTools = import ../applications/audio/vorbis-tools {
     inherit fetchurl stdenv libogg libvorbis libao pkgconfig curl glibc
       speex flac;
+  };
+
+  vwm = import ../applications/window-managers/vwm {
+    inherit fetchurl stdenv ncurses pkgconfig libviper libpseudo gpm;
+    inherit (gtkLibs) glib;
   };
 
   w3m = import ../applications/networking/browsers/w3m {
