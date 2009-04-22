@@ -250,6 +250,7 @@ in {
   sqlite = allBut "i686-cygwin";
   ssmtp = linux;
   stdenv = prio 175 all;
+  stlport = linux;
   strace = linux;
   su = linux;
   subversion = all;
