@@ -25,10 +25,9 @@ preConfigure() {
         fi
     done
 
-    perl Makefile.PL PREFIX=$out $makeMakerFlags
+    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
 }
 
-postFixup=postFixup
 postFixup() {
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't
@@ -36,15 +35,6 @@ postFixup() {
     # dependencies is to have them in the PERL5LIB variable).
     if test -e $out/nix-support/propagated-build-inputs; then
         ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-
-    # Some (broken?) packages install in $out/lib/${perlVersion}
-    # instead of $out/lib/site_perl/${perlVersion}.  Try to fix that
-    # automatically.
-    if ! test -e $out/lib/site_perl; then
-        echo "fixing wrong Perl installation path..."
-        ensureDir $out/lib/site_perl
-        for i in $out/lib/5.*; do mv $i $out/lib/site_perl; done
     fi
 }
 
