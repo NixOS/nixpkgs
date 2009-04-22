@@ -12,6 +12,8 @@ stdenv.mkDerivation {
   
   configureFlags = "--without-ttf --without-png --without-gpm --with-themedir=/etc/splash";
 
+  dontDisableStatic = true;
+
   preConfigure = ''
     configureFlags="$configureFlags --with-essential-prefix=$out"
     substituteInPlace src/common.h \
