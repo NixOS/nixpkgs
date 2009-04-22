@@ -8,7 +8,6 @@ for i in $(IFS=:; echo $PERL5LIB); do
 done
 
 oldPreConfigure="$preConfigure"
-preConfigure=preConfigure
 preConfigure() {
 
     eval "$oldPreConfigure"
@@ -45,7 +44,7 @@ postFixup() {
     if ! test -e $out/lib/site_perl; then
         echo "fixing wrong Perl installation path..."
         ensureDir $out/lib/site_perl
-        mv $out/lib/5.* $out/lib/site_perl
+        for i in $out/lib/5.*; do mv $i $out/lib/site_perl; done
     fi
 }
 
