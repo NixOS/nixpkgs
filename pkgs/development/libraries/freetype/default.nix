@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dia4j01aqdcrkpfkcniswcrccdx4jx2p3hyhbh76kchx6y3782i";
   };
 
+  configureFlags = "--disable-static";
+
   meta = {
     description = "A font rendering engine";
     homepage = http://www.freetype.org/;
