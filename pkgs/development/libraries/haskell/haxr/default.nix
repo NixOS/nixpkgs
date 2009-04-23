@@ -1,12 +1,12 @@
-{cabal, HaXml, HTTP}:
+{cabal, HaXml, HTTP, dataenc, time}:
 
 cabal.mkDerivation (self : {
   pname = "haxr";
-  version = "3000.0.1";
-  sha256 = "1sppfd8qyqggfh5m8phxdn40x17g97q6j3a8d5wspy7kcmg2qaci";
+  version = "3000.1.1.2";
+  sha256 = "c24741a92e27d851a3376158230a52782c1e2b494405ebdde1d256819598c8e8";
   meta = {
     description = "a Haskell library for writing XML-RPC client and server applications";
   };
-  propagatedBuildInputs = [HaXml HTTP];
+  propagatedBuildInputs = [HaXml HTTP dataenc time];
 })
 

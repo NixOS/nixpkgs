@@ -46,6 +46,10 @@ rec {
     inherit cabal;
   };
 
+  dataenc = import ../development/libraries/haskell/dataenc {
+    inherit cabal;
+  };
+
   editline = import ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
     inherit cabal;
@@ -104,7 +108,7 @@ rec {
   };
 
   haxr = import ../development/libraries/haskell/haxr {
-    inherit cabal HaXml HTTP;
+    inherit cabal HaXml HTTP dataenc time;
   };
 
   haxr_th = import ../development/libraries/haskell/haxr-th {
