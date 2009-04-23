@@ -1864,7 +1864,7 @@ let
       haddock = import ../development/tools/documentation/haddock/boot.nix {
         inherit gmp;
         cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-          inherit stdenv fetchurl;
+          inherit stdenv fetchurl lib;
           ghc = ghc642Binary;
         };
       };
