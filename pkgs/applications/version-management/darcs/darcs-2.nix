@@ -1,19 +1,17 @@
-{stdenv, fetchurl, ghc, zlib, ncurses, curl, perl}:
+{cabal, html, mtl, parsec, regexCompat, zlib, curl} :
 
-stdenv.mkDerivation {
-  name = "darcs-2.1.0";
-  src = fetchurl {
-    url = http://www.darcs.net/darcs-2.1.0.tar.gz;
-    sha256 = "d5a63e62bceb45905163d508c6b25158dab6aca367015566d8c539ec37107ab4";
-  };
+cabal.mkDerivation (self : {
+  pname = "darcs";
+  name = self.fname;
+  version = "2.2.1";
+  sha256 = "0iy4d4qls6yhwmgv87pz4kmr5jh4bwigz1wfwzns71b68csynnsp";
 
-  buildInputs = [ghc zlib ncurses curl perl];
-
-  NIX_LDFLAGS = "-lz";
+  extraBuildInputs = [html mtl parsec regexCompat zlib curl];
 
   meta = {
+    homepage = http://darcs.net/;
     description = "Patch-based version management system";
   };
 
   patches = ./bash-completion.patch; # I didn't have "have"
-}
+})

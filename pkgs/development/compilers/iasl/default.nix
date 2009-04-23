@@ -1,7 +1,7 @@
 {stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation {
-  name = "iasl-20090123.tar.gz";
+  name = "iasl-20090123";
   src = fetchurl {
     url = http://www.acpica.org/download/acpica-unix-20090123.tar.gz;
     md5 = "4ca6484acbf16cf67fd4ba91d32fd0a0";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, gettext, perlLocaleGettext}:
+{stdenv, fetchurl, perl, gettext, LocaleGettext}:
 
 stdenv.mkDerivation {
   name = "help2man-1.35.1";
@@ -11,11 +11,11 @@ stdenv.mkDerivation {
   buildInputs = [
     perl
     gettext
-    perlLocaleGettext
+    LocaleGettext
   ];
 
   # So that configure can find `preloadable_libintl.so'.
-  LD_LIBRARY_PATH = gettext + "/lib";
+  LD_LIBRARY_PATH = "${gettext}/lib";
 
   inherit gettext;
 }

@@ -1,4 +1,4 @@
-{fetchurl, buildPerlPackage, perlDBI, sqlite}:
+{fetchurl, buildPerlPackage, DBI, sqlite}:
 
 buildPerlPackage {
   name = "DBD-SQLite-1.14";
@@ -8,7 +8,7 @@ buildPerlPackage {
     sha256 = "01qd5xfx702chg3bv2k727kfdp84zy5xh31y6njvivkp78vrs624";
   };
   
-  propagatedBuildInputs = [perlDBI];
+  propagatedBuildInputs = [DBI];
   
   makeMakerFlags = "SQLITE_LOCATION=${sqlite}";
 

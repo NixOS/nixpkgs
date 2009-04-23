@@ -15,7 +15,7 @@ rec {
       cpio tcl tk makeWrapper subversion;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
   gitGit = import ./git/git-git.nix {
@@ -26,7 +26,7 @@ rec {
     inherit (bleedingEdgeRepos) sourceByName;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlLWP perlURI perlTermReadKey subversion];
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
   qgit = import ./qgit {

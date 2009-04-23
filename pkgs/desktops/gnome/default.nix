@@ -192,6 +192,21 @@ rec {
     input = desktop.gtksourceview;
   };
 
+  gtksourceview_24 = stdenv.mkDerivation {
+    name = "gtksourceview-2.4.2";
+
+    src = fetchurl {
+      url = http://ftp.gnome.org/pub/gnome/sources/gtksourceview/2.4/gtksourceview-2.4.2.tar.bz2;
+      sha256 = "1grc2y817c0xd225l0m92ja35x2bgld5npa4w3g21amkqhdnpka9";
+    };
+    
+    buildInputs = [
+      perl perlXMLParser pkgconfig gnomevfs libbonobo GConf
+      libgnomeprintui libgnomecanvas gettext intltool
+    ];
+    propagatedBuildInputs = [gtk libxml2 libgnomeprint];
+  };
+
   scrollkeeper = import ./scrollkeeper.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser
             libxml2 libxslt docbook_xml_dtd_42;

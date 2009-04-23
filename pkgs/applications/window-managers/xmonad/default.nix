@@ -1,11 +1,11 @@
-{cabal, X11, xmessage}:
+{cabal, X11, mtl, xmessage}:
 
 cabal.mkDerivation (self : {
   pname = "xmonad";
   name = "${self.fname}";
-  version = "0.7";
-  sha256 = "d5ee338eb6d0680082e20eaafa0b23b32358fffe69e2ec4ad7bdf6e03c751d67";
-  extraBuildInputs = [X11];
+  version = "0.8.1";
+  sha256 = "9d58789a0bc08d40b9d14097b079822c7b8290d60efc6aa79144abf47d5db32c";
+  propagatedBuildInputs = [X11 mtl];
   meta = {
     description = "xmonad is a tiling window manager for X";
   };

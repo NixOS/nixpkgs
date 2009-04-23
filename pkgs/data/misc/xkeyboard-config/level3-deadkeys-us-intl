@@ -62,8 +62,8 @@ xkb_symbols "altgr-intl" {
     key <AD08> { [	  i,	I,		iacute,		Iacute		] };
     key <AD09> { [	  o,	O,		oacute,		Oacute		] };
     key <AD10> { [	  p,	P,		odiaeresis,	Odiaeresis	] };
-    key <AD11> { [ bracketleft,	braceleft,		guillemotleft		] };
-    key <AD12> { [ bracketright,braceright,		guillemotright		] };
+    key <AD11> { [ bracketleft,	braceleft,	guillemotleft,	lessthanequal	] };
+    key <AD12> { [ bracketright,braceright,	guillemotright,	greaterthanequal] };
 
     key <AC01> { [	  a,	A,		aacute,		Aacute		] };
     key <AC02> { [	  s,	S,		ssharp,		section		] };

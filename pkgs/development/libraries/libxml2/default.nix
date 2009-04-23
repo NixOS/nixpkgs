@@ -2,7 +2,7 @@
 
 assert pythonSupport -> python != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "libxml2-2.7.3";
 
   src = fetchurl {
@@ -31,4 +31,8 @@ stdenv.mkDerivation {
     homepage = http://xmlsoft.org/;
     description = "A XML parsing library for C";
   };
-}
+} // (if pythonSupport then {
+  preConfigure = ''
+    sed -e "s^pythondir=.*$^pythondir=$(toPythonPath $out)^" < configure.old > configure
+  '';
+} else {}))

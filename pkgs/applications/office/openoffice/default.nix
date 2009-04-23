@@ -1,21 +1,28 @@
-{ stdenv, fetchurl, pam, python, tcsh, libxslt, perl, perlArchiveZip
-, perlCompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
+{ stdenv, fetchurl, pam, python, tcsh, libxslt, perl, ArchiveZip
+, CompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, hsqldb, libXext, libX11, libXtst, libXi, cups
-, libXinerama, openssl
+, icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
+, libXinerama, openssl, gperf, cppunit
 }:
 
-let version = "2.4.1"; in
+let version = "3.0.1"; in
 stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
 
-  src =
-    fetchurl {
+  src = fetchurl {
       url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=core&version=${version}";
       name = "OOo_${version}_src_core.tar.bz2";
-      sha256 = "1405l6xb1qy6l43n9nli8hhay917nyr8a69agj483aaiskrpdxdb";
+      sha256 = "0fgk7n766lzsxn09p8g5ddabw568jw56k9bcdc02nlmk6k3a9qq0";
+    };
+
+  patches = [ ./oo.patch ];
+
+  src_system = fetchurl {
+      url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=system&version=${version}";
+      name = "OOo_${version}_src_system.tar.bz2";
+      sha256 = "1zp8lbn5x9wwbv82inqkanaip4l2jyiybjqv1dpx7wbh6nrasgdv";
     };
 
   configureFlags = "
@@ -28,7 +35,6 @@ stdenv.mkDerivation rec {
     --disable-mozilla
     --disable-odk
     --disable-pasf
-    --disable-qadevooo
     --with-cairo
     --with-system-libs
     --with-system-python
@@ -49,23 +55,23 @@ stdenv.mkDerivation rec {
     --without-system-xml-apis
     --without-system-xt
     --without-system-db
-    --with-system-hsqldb
-    --with-hsqldb-jar=${hsqldb}/lib/hsqldb.jar
+    --without-system-jars
+    --without-system-hunspell
+    --without-system-altlinuxhyph
+    --without-system-lpsolve
   ";
 
   LD_LIBRARY_PATH = "${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib:${libjpeg}/lib";
 
   buildInputs = [
-    pam python tcsh libxslt perl perlArchiveZip perlCompressZlib zlib 
+    pam python tcsh libxslt perl ArchiveZip CompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
-    cups libXinerama openssl
+    cups libXinerama openssl gperf
   ];
 
   inherit icu fontconfig libjpeg jdk cups;
-
-  patches = [./ooo-libtextcat.patch ];
 
   meta = {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";

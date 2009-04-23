@@ -5,6 +5,11 @@ export NO_HIDS=TRUE
 
 export PATH=$icu/sbin:$PATH
 
+postUnpack=postUnpack
+postUnpack() {
+  tar xvjf $src_system
+}
+
 preConfigure=preConfigure
 preConfigure() {
     for i in sysui/desktop/share/makefile.mk; do 
@@ -51,7 +56,7 @@ wrapSOffice() {
 # looks for it at runtime.
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH\${LD_LIBRARY_PATH:+:}$fontconfig/lib:$libjpeg/lib:$cups/lib
 export JAVA_HOME=$jdk
-exec $ooFiles/program/soffice $arg "\$@"
+exec $ooFiles/openoffice.org3/program/soffice $arg "\$@"
 EOF
     chmod +x $out/bin/$fn
 }

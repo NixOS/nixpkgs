@@ -9,7 +9,7 @@ let
   buildInputs = with args; [
     zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut e2fsprogs libsamplerate pcre libevent editline
+    freeglut e2fsprogs libsamplerate pcre libevent libedit
   ];
 in
 rec {

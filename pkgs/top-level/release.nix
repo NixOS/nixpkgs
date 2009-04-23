@@ -122,7 +122,6 @@ in {
   gcc34 = linux;
   gcc43_multi = ["x86_64-linux"];
   gdb = all;
-  ghc = ghcSupported;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
@@ -153,6 +152,7 @@ in {
   hal = linux;
   hello = all;
   host = linux;
+  hugin = linux;
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
@@ -174,7 +174,6 @@ in {
   kvm = linux;
   less = all;
   lftp = all;
-  lhs2tex = ghcSupported;
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
@@ -223,7 +222,6 @@ in {
   pavucontrol = linux;
   pciutils = linux;
   perl = all;
-  perlTaskCatalystTutorial = linux;
   php = linux;
   pidgin = linux;
   pinentry = linux;
@@ -256,6 +254,7 @@ in {
   sqlite = allBut "i686-cygwin";
   ssmtp = linux;
   stdenv = prio 175 all;
+  stlport = linux;
   strace = linux;
   su = linux;
   subversion = all;
@@ -295,7 +294,6 @@ in {
   wget = all;
   wine = ["i686-linux"];
   wirelesstools = linux;
-  wxHaskell = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
@@ -330,6 +328,24 @@ in {
 
   gtkLibs = {
     gtk = linux;
+  };
+
+  haskellPackages_ghc683 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc6101 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc6102 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    gtk2hs = ghcSupported;
+    leksah = ghcSupported;
+    lhs2tex = ghcSupported;
+    haskellPlatform = ghcSupported;
+    xmonad = ghcSupported;
   };
 
   kde3 = {
@@ -390,6 +406,10 @@ in {
     strategoxt = all;
     javafront = all;
     dryad = linux;
+  };
+
+  perlPackages = {
+    TaskCatalystTutorial = linux;
   };
   
   xorg = {

@@ -582,7 +582,7 @@ rec {
   rpmClosureGenerator =
     {name, packagesList, urlPrefix, packages, archs ? []}:
     
-    runCommand "${name}.nix" {buildInputs = [perl perlXMLSimple]; inherit archs;} ''
+    runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
       gunzip < ${packagesList} > ./packages.xml
       perl -w ${rpm/rpm-closure.pl} \
         ./packages.xml ${urlPrefix} ${toString packages} > $out

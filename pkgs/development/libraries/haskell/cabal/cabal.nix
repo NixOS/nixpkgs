@@ -17,7 +17,7 @@ attrs :
 	    # all packages with haskell- to avoid name clashes for libraries;
 	    # if that is not desired (for applications), name can be set to
 	    # fname.
-            name = "haskell-${self.fname}"; 
+            name = "haskell-${self.pname}-ghc${attrs.ghc.ghc.version}-${self.version}"; 
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
@@ -39,22 +39,14 @@ attrs :
             # library directories that have to be added to the Cabal files
             extraLibDirs = map (x : x + "/lib") self.propagatedBuildInputs;
 
-            # file(s) that have to be patched with information about extra libraries;
-            # can be redefined to the empty list by the client if this is not desired
-            patchLibFiles = [ "${self.pname}.cabal" ];
-
-            # patches files, compiles Setup, and configures
+            # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
-              for i in ${toString self.patchLibFiles}; do
-                echo "patching $i"
-                test -f $i && sed -i '/[eE]xtra-[lL]ibraries/ { s|\( *\)[eE]xtra-[lL]ibraries.*|&\n\1extra-lib-dirs: ${toString self.extraLibDirs}| }' $i
-              done
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --verbose --prefix="$out"
+              ./Setup configure --verbose --prefix="$out" ${toString (map (x : "--extra-lib-dir=" + x) self.extraLibDirs)} $configureFlags
 
               eval "$postConfigure"
             '';
@@ -70,24 +62,19 @@ attrs :
 
 	    # installs via Cabal; creates a registration file for nix-support
 	    # so that the package can be used in other Haskell-builds; also
-	    # creates a register-${name}.sh in userspace that can be used to
-	    # register the library in a user environment (but this scheme
-	    # should sooner or later be deprecated in favour of using a
-	    # ghc-wrapper).
+	    # adds all propagated build inputs to the user environment packages
             installPhase = ''
               eval "$preInstall"
 
               ./Setup copy
-              ./Setup register --gen-script
-              mkdir -p $out/nix-support
-              if test -f register.sh; then
-                sed -i 's/|.*\(ghc-pkg update\)/| \1/' register.sh
-                cp register.sh $out/nix-support/register-ghclib.sh
-                sed -i 's/\(ghc-pkg update\)/\1 --user/' register.sh
-                mkdir -p $out/bin
-                cp register.sh $out/bin/register-${self.name}.sh
-              fi
 
+              local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
+              ensureDir $confDir
+              ./Setup register --gen-pkg-config=$confDir/${self.fname}.conf
+
+              ensureDir $out/nix-support
+              ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+              
               eval "$postInstall"
             '';
           };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext}:
+{stdenv, fetchurl, gettext, openssl ? null}:
 
 stdenv.mkDerivation rec {
   name = "wget-1.11.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yr7w182n7lvkajvq07wnw65sw2vmxjkc3611kpc728vhvi54zwb";
   };
 
-  buildInputs = [gettext];
+  buildInputs = [gettext openssl];
 
   meta = {
     description = "A console downloading program. Has some features for mirroring sites.";

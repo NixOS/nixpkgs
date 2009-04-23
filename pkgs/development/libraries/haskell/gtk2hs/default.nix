@@ -1,20 +1,31 @@
-{stdenv, fetchurl, pkgconfig, ghc, gtk, cairo, GConf, libglade
-, glib, libgtkhtml, gtkhtml}:
+{ stdenv, fetchurl, pkgconfig, gnome, cairo, ghc, mtl }:
 
-stdenv.mkDerivation (rec {
+let gtksourceview = gnome.gtksourceview_24; in
+
+stdenv.mkDerivation rec {
   pname = "gtk2hs";
-  version = "0.9.12.1";
+  version = "0.10.0";
   fname = "${pname}-${version}";
-  name = "haskell-${fname}";
+  name = "haskell-${pname}-ghc${ghc.ghc.version}-${version}";
+  
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${fname}.tar.gz";
-    sha256 = "110z6v9gzhg6nzlz5gs8aafmipbva6rc50b8z1jgq0k2g25hfy22";
+    url = http://nixos.org/tarballs/gtk2hs-0.10.0-20090419.tar.gz;
+    sha256 = "18a7cfph83yvv91ks37nrgqrn21fvww8bhb8nd8xy1mgb8lnfds1";
   };
+  
+  propagatedBuildInputs = [mtl];
 
-  buildInputs = [pkgconfig ghc gtk glib cairo GConf libglade libgtkhtml gtkhtml];
-
-  configureFlags = [
-    "--enable-cairo"
+  buildInputs = [
+    pkgconfig cairo ghc gnome.glib gnome.gtk gnome.libglade
+    gnome.GConf gtksourceview gnome.librsvg
   ];
 
-})
+  postInstall =
+    ''
+      local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
+      ensureDir $confDir
+      cp $out/lib/gtk2hs/*.conf $confDir/
+    ''; # */
+
+  passthru = { inherit gtksourceview; };
+}

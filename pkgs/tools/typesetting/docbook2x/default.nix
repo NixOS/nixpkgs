@@ -1,5 +1,5 @@
 { fetchurl, stdenv, texinfo, perl
-, perlXMLSAX, perlXMLParser, perlXMLNamespaceSupport
+, XMLSAX, XMLParser, XMLNamespaceSupport
 , groff, libxml2, libxslt, gnused
 , makeWrapper }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
   buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
-                  perlXMLSAX perlXMLParser perlXMLNamespaceSupport ];
+                  XMLSAX XMLParser XMLNamespaceSupport ];
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       # XXX: We work around the fact that `wrapProgram' doesn't support
       # spaces below by inserting escaped backslashes.
       wrapProgram $out/bin/$i --prefix PERL5LIB :			\
-        "${perlXMLSAX}/lib/perl5/site_perl:${perlXMLParser}/lib/perl5/site_perl" \
+        "${XMLSAX}/lib/perl5/site_perl:${XMLParser}/lib/perl5/site_perl" \
 	--prefix PERL5LIB :						\
-	"${perlXMLNamespaceSupport}/lib/perl5/site_perl"		\
+	"${XMLNamespaceSupport}/lib/perl5/site_perl"			\
 	--prefix XML_CATALOG_FILES "\ "					\
 	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml"
     done

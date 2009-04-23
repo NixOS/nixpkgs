@@ -1,0 +1,72 @@
+diff --git a/libtextcat/makefile.mk b/libtextcat/makefile.mk
+index 602b9b1..6be8427 100644
+--- a/libtextcat/makefile.mk
++++ b/libtextcat/makefile.mk
+@@ -57,7 +57,7 @@ ADDITIONAL_FILES= \
+ #CONFIGURE_DIR=$(BUILD_DIR)
+ 
+ #relative to CONFIGURE_DIR
+-CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
++CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" --prefix=$(TMPDIR)
+ CONFIGURE_FLAGS=
+ 
+ BUILD_ACTION=make
+diff --git a/redland/raptor/makefile.mk b/redland/raptor/makefile.mk
+index 0e64d50..547d66b 100644
+--- a/redland/raptor/makefile.mk
++++ b/redland/raptor/makefile.mk
+@@ -104,7 +104,7 @@ XSLTLIB:=$(XSLTLIB)
+ 
+ CONFIGURE_DIR=
+ CONFIGURE_ACTION=.$/configure
+-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
++CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
+ BUILD_ACTION=$(GNUMAKE)
+ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+ BUILD_DIR=$(CONFIGURE_DIR)
+diff --git a/redland/rasqal/makefile.mk b/redland/rasqal/makefile.mk
+index 850ee9c..3293a79 100644
+--- a/redland/rasqal/makefile.mk
++++ b/redland/rasqal/makefile.mk
+@@ -104,7 +104,7 @@ XSLTLIB:=$(XSLTLIB)
+ 
+ CONFIGURE_DIR=
+ CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
+-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
++CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
+ BUILD_ACTION=$(GNUMAKE)
+ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+ BUILD_DIR=$(CONFIGURE_DIR)
+diff --git a/redland/redland/makefile.mk b/redland/redland/makefile.mk
+index 5719272..75c31b7 100644
+--- a/redland/redland/makefile.mk
++++ b/redland/redland/makefile.mk
+@@ -108,7 +108,7 @@ XSLTLIB:=$(XSLTLIB)
+ 
+ CONFIGURE_DIR=
+ CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
+-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
++CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
+ BUILD_ACTION=$(GNUMAKE)
+ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+ BUILD_DIR=$(CONFIGURE_DIR)
+diff --git a/hunspell/hunspell-1.1.12.patch b/hunspell/hunspell-1.1.12.patch
+index 37b7964..e6fd962 100644
+--- a/hunspell/hunspell-1.1.12.patch
++++ b/hunspell/hunspell-1.1.12.patch
+@@ -487,3 +487,15 @@
+  i68568utf.test \
+  1706659.test \
+  digits_in_words.test \
++diff --git a/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh b/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
++index 90080f6..f069517 100755
++--- a/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
+++++ b/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
++--- misc/hunspell-1.1.12/tests/test.sh	Sep  4 01:25:35 2007
+++++ misc/build/hunspell-1.1.12/tests/test.sh	Jun 18 11:53:11 2008
++@@ -1,4 +1,4 @@
++-#!/bin/bash
+++#!/bin/sh
++ export LC_ALL="C"
++ 
++ function check_valgrind_log () {

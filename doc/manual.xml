@@ -32,41 +32,7 @@
   <xi:include href="quick-start.xml" />
   <xi:include href="stdenv.xml" />
   <xi:include href="meta.xml" />
-
-
-  <!-- outline -->
-  
-  <chapter>
-    <title>Language Support</title>
-
-    <section>
-      <title>Perl</title>
-      <para>* Generic Perl builder</para>
-    </section>
-
-    <section>
-      <title>Python</title>
-      <para>* Wrapper generation</para>
-    </section>
-
-    <section>
-      <title>Haskell</title>
-      <para>TODO</para>
-    </section>
-
-    <section>
-      <title>Java</title>
-      <para>TODO; Java support needs lots of improvement</para>
-    </section>
-
-    <section>
-      <title>TeX / LaTeX</title>
-      <para>* Special support for building TeX documents</para>
-    </section>
-
-  </chapter>
-
-
+  <xi:include href="language-support.xml" />
   <xi:include href="package-notes.xml" />
   
         

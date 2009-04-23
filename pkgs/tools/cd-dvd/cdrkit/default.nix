@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cmake libcap zlib bzip2];
 
+  postInstall = ''
+    # file name compatibility with the old cdrecord (growisofs wants this name)
+    ln -s $out/bin/genisoimage $out/bin/mkisofs
+    ln -s $out/bin/devdump $out/bin/cdrecord
+  '';
+
   makeFlags = "PREFIX=\$(out)";
 
   meta = {

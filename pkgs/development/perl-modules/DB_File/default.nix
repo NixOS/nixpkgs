@@ -1,6 +1,6 @@
-{fetchurl, perl, db4}:
+{fetchurl, buildPerlPackage, db4}:
 
-import ../generic perl {
+buildPerlPackage {
   name = "DB_File-1.816";
   
   src = fetchurl {
@@ -16,6 +16,4 @@ import ../generic perl {
     INCLUDE = ${db4}/include
     EOF
   '';
-  
-  inherit db4;
 }

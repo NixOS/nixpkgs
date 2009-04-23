@@ -1,0 +1,58 @@
+diff -ru scorched.orig/configure-al.m4 scorched/configure-al.m4
+--- scorched.orig/configure-al.m4	2008-03-03 16:17:18.000000000 -0500
++++ scorched/configure-al.m4	2009-02-15 20:43:35.000000000 -0500
+@@ -7,25 +7,9 @@
+ 	[  --disable-openaltest    Do not try to compile and run a test OpenAL program],
+ 		    , enable_openaltest=yes)
+ AC_MSG_CHECKING(for OpenAL support)
+-AC_PATH_PROG(OPENAL_CONFIG, openal-config, no)
+-if test x$OPENAL_CONFIG = xno; then
+-	echo "*** The openal-config script installed by OpenAL could not be found"
+-	echo "*** Make sure openal-config is in your path, or set the OPENAL_CONFIG"
+-	echo "*** environment variable to the full path to openal-config."
+-
+-	AC_MSG_ERROR([*** Can't find the openal library. Try: http://www.openal.org/])
+-else
+-
+-	if test x"$use_static_openal" = x"yes"; then
+-		AL_LIBS="/usr/local/lib/libopenal.a"
+-	else
+-		AL_LIBS="`$OPENAL_CONFIG --libs`"
+-	fi
+-	
+-	AL_CFLAGS="`$OPENAL_CONFIG --cflags`"
+-
+-	AC_MSG_RESULT(yes)
+-fi
++AL_LIBS="-lopenal"
++AL_CFLAGS="-I/usr/include/AL"
++AC_MSG_RESULT(yes)
+ 
+ AC_MSG_CHECKING(for Freealut support)
+ AC_PATH_PROG(FREEALUT_CONFIG, freealut-config, no)
+diff -ru scorched.orig/configure.ac scorched/configure.ac
+--- scorched.orig/configure.ac	2008-03-03 16:17:18.000000000 -0500
++++ scorched/configure.ac	2009-02-15 20:40:30.000000000 -0500
+@@ -13,22 +13,6 @@
+ AC_PROG_INSTALL
+ AC_PROG_RANLIB
+ 
+-LDFLAGS="-L/usr/X11R6/lib -L/usr/X11R6"
+-CPPFLAGS="-I/usr/X11R6/include -I/usr/X11R6"
+-
+-if test `uname` == Darwin; then
+-LDFLAGS="$LDFLAGS -lmx"
+-CPPFLAGS="$CPPFLAGS -DFFTW_USE_DOUBLE -D__DARWIN__ -D__MACOSX__"
+-else
+-LDFLAGS="$LDFLAGS -L/usr/local/lib"
+-CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+-fi
+-
+-AC_CHECK_LIB(fridge, beer, echo "Hmm?!",[
+-	echo "Warning: No beer found in fridge!";
+-	echo "We highly suggest that you rectify this situation immediately."
+-])
+-
+ AC_ARG_ENABLE(serveronly, 
+ 	[  --enable-serveronly Enable server only compilation],
+ 		    , enable_serveronly=no,

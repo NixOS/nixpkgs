@@ -66,7 +66,6 @@ let
       gcc34
       gcc43
       gdb
-      ghc
       ghostscript
       gimp
       git
@@ -106,7 +105,6 @@ let
       kvm
       less
       lftp
-      lhs2tex
       libtool
       libxml2
       libxslt
@@ -144,7 +142,6 @@ let
       par2cmdline
       pciutils
       perl
-      perlTaskCatalystTutorial
       php
       pinentry
       pkgconfig
@@ -202,7 +199,6 @@ let
       w3m
       wget
       wirelesstools
-      wxHaskell
       x11_ssh_askpass
       xchm
       xfig
@@ -218,6 +214,9 @@ let
       zile
       zip
       ;
+    inherit (pkgs.perlPackages)
+      TaskCatalystTutorial
+      ;    
     inherit (pkgs.xorg)
       fontbh100dpi
       fontbhlucidatypewriter100dpi
@@ -385,7 +384,6 @@ let
       autoconf
       automake110x
       automake19x
-      ghc
       libtool
       libxml2
       libxslt

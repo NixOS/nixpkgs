@@ -1,21 +1,12 @@
-{ cabal, editline } :
+{ cabal, libedit } :
 
 cabal.mkDerivation (self : {
   pname = "editline";
-  version = "0.2";
-  sha256 = "6ee0b553cc8d7542c096730ceebabdcb9b2951d7b00a5a0ddbf47b5436a77ce4";
-  propagatedBuildInputs = [ editline ];
-  patchLibFiles = [ "editline.buildinfo.in" ];
-  preConfigure = ''
-    sed -i -e '/el_get/d' include/HsEditline.h
-  '';
-  # I don't quite understand why ncurses as an extra-library is harmful, but
-  # it works only if we remove it ...
-  postConfigure = ''
-    sed -i -e 's/ncurses//' editline.buildinfo
-  '';
+  version = "0.2.1.0";
+  sha256 = "83618e5f86074fdc11d7f5033aa2886284462941be38fa02966acc92712c46e1";
+  propagatedBuildInputs = [ libedit ];
   meta = {
-    description = "Binding to the BSD editline library";
+    description = "Binding to the BSD editline library (libedit)";
   };
 })  
 
