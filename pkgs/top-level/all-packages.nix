@@ -4615,11 +4615,6 @@ let
     inherit fetchurl stdenv pkgconfig libdaemon;
   };
 
-  initscripts = import ../os-specific/linux/initscripts {
-    inherit fetchurl stdenv popt pkgconfig;
-    inherit (gtkLibs) glib;
-  };
-
   iproute = import ../os-specific/linux/iproute {
     inherit fetchurl stdenv flex bison db4;
   };

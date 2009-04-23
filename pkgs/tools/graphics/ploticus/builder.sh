@@ -4,13 +4,9 @@ preBuild() {
   cd src
 }
 
-preBuild=preBuild
-
 preInstall() {
   ensureDir $out/bin
 }
-
-preInstall=preInstall
 
 postInstall() {
   # Install the "prefabs".
@@ -33,8 +29,5 @@ EOF
   cp -rv man $out
   ln -s "$out/man/man1/pl.1" "$out/man/man1/ploticus.1"
 }
-
-postInstall=postInstall
-
 
 genericBuild

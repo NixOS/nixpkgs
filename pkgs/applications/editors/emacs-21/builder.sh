@@ -8,6 +8,5 @@ postConfigure() {
   cp $myglibc/lib/crti.o src
   cp $myglibc/lib/crtn.o src
 }
-postConfigure=postConfigure
 
 genericBuild

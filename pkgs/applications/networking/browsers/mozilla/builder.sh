@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-preConfigure=preConfigure
 preConfigure() {
     cat > .mozconfig <<EOF
 #. \$topsrcdir/browser/config/mozconfig
@@ -20,7 +19,6 @@ ac_add_options --enable-default-toolkit=gtk2
 EOF
 }
 
-#postInstall=postInstall
 postInstall() {
 
     # Strip some more stuff

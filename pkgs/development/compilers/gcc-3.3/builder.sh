@@ -38,8 +38,6 @@ EOF
     configureFlags="--enable-languages=$langs"
 }
 
-preConfigure=preConfigure
-
 
 postConfigure() {
     if test "$noSysDirs" = "1"; then
@@ -81,8 +79,6 @@ postConfigure() {
         mv $mf.tmp $mf
     fi
 }
-
-postConfigure=postConfigure
 
 
 buildFlags="bootstrap"

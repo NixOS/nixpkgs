@@ -8,7 +8,6 @@ source $stdenv/setup
 export PWD_P=$(type -tP pwd)
 
 
-postUnpack=postUnpack
 postUnpack() {
     cd $sourceRoot
     unpackFile $linuxthreadsSrc
@@ -16,7 +15,6 @@ postUnpack() {
 }
 
 
-preConfigure=preConfigure
 preConfigure() {
 
     # Use Linuxthreads instead of NPTL.
@@ -34,7 +32,6 @@ preConfigure() {
 }
 
 
-postConfigure=postConfigure
 postConfigure() {
     # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
     # This has to be done *after* `configure' because it builds some
@@ -44,7 +41,6 @@ postConfigure() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales

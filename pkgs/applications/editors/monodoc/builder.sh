@@ -1,7 +1,6 @@
 source $stdenv/setup
 source $makeWrapper
 
-postInstall=postInstall
 postInstall() {
     mv $out/bin $out/bin-orig
     mkdir $out/bin

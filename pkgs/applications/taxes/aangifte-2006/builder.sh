@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-buildPhase=buildPhase
 buildPhase() {
     for i in bin/*; do
         patchelf \
@@ -10,7 +9,6 @@ buildPhase() {
     done
 }
 
-installPhase=installPhase
 installPhase() {
     ensureDir $out
     cp -prvd * $out/

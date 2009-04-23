@@ -1,7 +1,6 @@
 source $stdenv/setup
 
 
-configurePhase=configurePhase
 configurePhase() {
     if test -n "$preConfigure"; then 
         eval "$preConfigure"; 
@@ -56,7 +55,6 @@ configurePhase() {
 }
 
 
-installPhase=installPhase
 installPhase() {
 
     ensureDir $out

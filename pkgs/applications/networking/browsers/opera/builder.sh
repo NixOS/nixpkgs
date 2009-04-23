@@ -1,11 +1,9 @@
 source $stdenv/setup
 
-buildPhase=buildPhase
 buildPhase() {
     true
 }
 
-installPhase=installPhase
 installPhase() {
   set -x
 

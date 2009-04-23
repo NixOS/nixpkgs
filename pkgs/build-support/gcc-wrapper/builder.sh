@@ -115,8 +115,6 @@ test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 
 doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
-doSubstitute "$setupHook" "$out/nix-support/setup-hook"
-
 cp -p $utils $out/nix-support/utils.sh
 
 

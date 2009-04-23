@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-preConfigure=preConfigure
 preConfigure() {
     # Workarounds for the ancient libtool shipped by libjpeg.
     ln -s $libtool/bin/libtool .
@@ -8,7 +7,6 @@ preConfigure() {
     cp $libtool/share/libtool/config.sub .
 }
 
-preInstall=preInstall
 preInstall() {
     mkdir $out
     mkdir $out/bin
@@ -18,7 +16,6 @@ preInstall() {
     mkdir $out/man/man1
 }
 
-patchPhase=patchPhase
 patchPhase() {
     for i in $patches; do
 	patch < $i

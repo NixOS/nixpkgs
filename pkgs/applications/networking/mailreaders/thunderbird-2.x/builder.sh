@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-postInstall=postInstall
 postInstall() {
 
     # Strip some more stuff

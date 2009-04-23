@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-preBuild=preBuild
 preBuild() {
     mkdir -p linux/include
     cp -prd $kernel/lib/modules/*/build/include/* linux/include/

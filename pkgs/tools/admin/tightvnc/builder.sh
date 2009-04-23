@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-buildPhase=buildPhase
 buildPhase() {
     xmkmf
     make World
@@ -18,7 +17,6 @@ buildPhase() {
 	cd ..
 }
 
-installPhase=installPhase
 installPhase() {
     ensureDir $out/bin
     ensureDir $out/man/man1

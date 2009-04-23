@@ -3,7 +3,6 @@ source $makeWrapper
 
 export MONO_GAC_PREFIX=$monodoc:$gtksharp
 
-postInstall=postInstall
 postInstall() {
     mv $out/bin $out/bin-orig
     mkdir $out/bin

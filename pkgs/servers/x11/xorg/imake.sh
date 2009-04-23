@@ -1,4 +1,3 @@
-preInstall=preInstall
 preInstall() {
     ensureDir $out/lib/X11/config
     ln -s $xorgcffiles/lib/X11/config/* $out/lib/X11/config

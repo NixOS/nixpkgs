@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-preConfigure=preConfigure
 preConfigure() {
     libc=$(cat ${NIX_GCC}/nix-support/orig-libc)
     echo "libc: $libc"

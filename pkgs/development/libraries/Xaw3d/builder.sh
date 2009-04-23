@@ -1,13 +1,11 @@
 source $stdenv/setup
 
-configurePhase=configurePhase
 configurePhase() {
     cd lib/Xaw3d
     (mkdir X11 && cd X11 && ln -fs .. Xaw3d)
     xmkmf
 }
 
-buildPhase=buildPhase
 buildPhase() {
     make depend $makeFlags
     make $makeFlags

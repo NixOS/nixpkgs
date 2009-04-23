@@ -3,7 +3,6 @@
 # NixOS, so force Make to search in our own Glibc.
 export VPATH=$(cat ${NIX_GCC}/nix-support/orig-libc)/lib
 
-preConfigure=preConfigure
 preConfigure() {
     unpackFile $mesaSrc
     configureFlags="$configureFlags --with-mesa-source=$(ls -d $(pwd)/Mesa-*)"
