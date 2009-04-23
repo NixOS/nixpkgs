@@ -189,6 +189,7 @@ rec {
         pkgs.testdisk # useful for repairing boot problems
         pkgs.mssys # for writing Microsoft boot sectors / MBRs
         pkgs.ntfsprogs # for resizing NTFS partitions
+        pkgs.parted
         pkgs.sshfsFuse
       ];
     };
