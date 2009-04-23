@@ -3,7 +3,7 @@
 assert zlib != null;
 assert pythonSupport -> python != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "libxml2-2.6.32";
   builder = ./builder.sh;
 
@@ -19,4 +19,8 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [zlib];
 
   postInstall = "ensureDir $out/nix-support; cp ${./setup-hook.sh} $out/nix-support/setup-hook";
-}
+} // (if pythonSupport then {
+  preConfigure = ''
+    sed -e "s^pythondir=.*$^pythondir=$(toPythonPath $out)^" < configure.old > configure
+  '';
+} else {}))
