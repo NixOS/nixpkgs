@@ -341,11 +341,11 @@ in {
   haskellPackages_ghc6102 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    gtk2hs = ghcSupported;
-    leksah = ghcSupported;
+    gtk2hs = linux;
+    leksah = linux;
     lhs2tex = ghcSupported;
     haskellPlatform = ghcSupported;
-    xmonad = ghcSupported;
+    xmonad = linux;
   };
 
   kde3 = {

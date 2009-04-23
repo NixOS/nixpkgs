@@ -1440,11 +1440,7 @@ let
 
   xpf = import ../tools/text/xml/xpf {
     inherit fetchurl stdenv python;
-
-    libxml2 = import ../development/libraries/libxml2 {
-      inherit fetchurl stdenv zlib python;
-      pythonSupport = true;
-    };
+    libxml2 = libxml2Python;
   };
 
   xsel = import ../tools/misc/xsel {
@@ -3585,15 +3581,14 @@ let
     inherit fetchurl stdenv libtool;
   };
 
-  libxml2 = import ../development/libraries/libxml2 {
+  libxml2 = makeOverridable (import ../development/libraries/libxml2) {
     inherit fetchurl stdenv zlib python;
     pythonSupport = false;
   };
 
-  libxml2Python = lowPrio (appendToName "with-python" (import ../development/libraries/libxml2 {
-    inherit fetchurl stdenv zlib python;
+  libxml2Python = libxml2.override {
     pythonSupport = true;
-  }));
+  };
 
   libxslt = import ../development/libraries/libxslt {
     inherit fetchurl stdenv libxml2;
