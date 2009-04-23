@@ -7155,7 +7155,8 @@ let
     };
 
     splashutils =
-      if kernel.features ? fbSplash then splashutils_13 else
+      # Splashutils 1.3 is broken, so disable splash on older kernels.
+      if kernel.features ? fbSplash then /* splashutils_13 */ null else
       if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
       null;
 
@@ -7214,7 +7215,7 @@ let
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
 
   # The current default kernel / kernel modules.
-  kernelPackages = kernelPackages_2_6_25;
+  kernelPackages = kernelPackages_2_6_28;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
