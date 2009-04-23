@@ -83,6 +83,7 @@ in {
   cedet = linux;
   chatzilla = linux;
   cksfv = all;
+  cmake = all;
   compiz = linux;
   coreutils = all;
   cpio = all;
@@ -153,6 +154,7 @@ in {
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
+  ifplugd = linux;
   imagemagick = allBut "i686-cygwin";
   impressive = linux;
   inetutils = linux;
@@ -171,6 +173,7 @@ in {
   kvm = linux;
   less = all;
   lftp = all;
+  libarchive = linux;
   libsmbios = linux;
   libtool = all;
   libtool2 = all;
@@ -242,6 +245,7 @@ in {
   ruby = all;
   screen = linux ++ darwin;
   seccure = linux;
+  sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
   spidermonkey = linux;
@@ -420,6 +424,7 @@ in {
     xf86videoi810 = linux;
     xf86videovesa = linux;
     xkbcomp = linux;
+    xmessage = linux;
     xorgserver = linux;
     xrandr = linux;
     xrdb = linux;
