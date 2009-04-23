@@ -5,14 +5,34 @@
 <title>Nixpkgs Release Notes</title>
 
 
-<section><title>Release 0.12 (TBA)</title>
+<section><title>Release 0.12 (April 23, 2009)</title>
 
-<para>This release has the following improvements:
+<para>There are way too many additions to Nixpkgs since the last
+release to list here: for example, the number of packages on Linux has
+increased from 1002 to 2159.  However, some specific improvements are
+worth listing:
 
 <itemizedlist>
 
-  <listitem><para>TODO: simplified and expanded stdenv hook
-  handling.</para></listitem>
+  <listitem><para>Nixpkgs now has a manual.  In particular, it
+  describes the standard build environment in
+  detail.</para></listitem>
+
+  <listitem><para>Major new packages:
+
+    <itemizedlist>
+
+      <listitem><para>KDE 4.</para></listitem>
+
+      <listitem><para>TeXLive.</para></listitem>
+
+      <listitem><para>VirtualBox.</para></listitem>
+
+    </itemizedlist>
+
+    … and many others.
+
+  </para></listitem>
 
   <listitem><para>Important updates:
 
@@ -22,15 +42,53 @@
       
       <listitem><para>GCC 4.2.4.</para></listitem>
 
-      <listitem><para>Linux 2.6.25.</para></listitem>
+      <listitem><para>Linux 2.6.25 — 2.6.28.</para></listitem>
+
+      <listitem><para>Firefox 3.</para></listitem>
+
+      <listitem><para>X.org 7.3.</para></listitem>
 
     </itemizedlist>
 
   </para></listitem>
 
+  <listitem><para>Support for building derivations in a virtual
+  machine, including RPM and Debian builds in automatically generated
+  VM images.  See
+  <filename>pkgs/build-support/vm.default.nix</filename> for
+  details.</para></listitem>
+
+  <listitem><para>Improved support for building Haskell
+  packages.</para></listitem>
+  
 </itemizedlist>
 
 </para>
+
+<para>The following people contributed to this release:
+
+Andres Löh,
+Arie Middelkoop,
+Armijn Hemel,
+Eelco Dolstra,
+Lluís Batlle,
+Ludovic Courtès,
+Marc Weber,
+Mart Kolthof,
+Martin Bravenboer,
+Michael Raskin,
+Nicolas Pierron,
+Peter Simons,
+Pjotr Prins,
+Rob Vermaas,
+Sander van der Burg,
+Tobias Hammerschmidt,
+Valentin David,
+Wouter den Breejen and
+Yury G. Kudryashov.
+
+In addition, several people contributed patches on the
+<literal>nix-dev</literal> mailing list.</para>
 
 </section>
   
