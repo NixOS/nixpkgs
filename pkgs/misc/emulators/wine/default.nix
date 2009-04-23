@@ -4,6 +4,7 @@
 }:
 
 assert stdenv.isLinux;
+assert stdenv.gcc.gcc != null;
 
 let lib = import ../../../lib/default.nix; in
 
