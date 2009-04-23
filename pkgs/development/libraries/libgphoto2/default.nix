@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1pipdwjxbjg7y9n5ldz6qlpiiiqyba6jx315277ams5d8jxg2bfk";
   };
   
-  buildInputs = [pkgconfig libusb libtool libexif libjpeg gettext];
+  buildInputs = [pkgconfig libtool libjpeg gettext];
+
+  # These are mentioned in the Requires line of libgphoto's pkg-config file.
+  propagatedBuildInputs = [libusb libexif];
 
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;
