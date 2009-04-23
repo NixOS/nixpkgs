@@ -1,7 +1,5 @@
 source $stdenv/setup
 
-configureFlags="--enable-shared"
-
 preConfigure=preConfigure
 preConfigure() {
     # Workarounds for the ancient libtool shipped by libjpeg.
