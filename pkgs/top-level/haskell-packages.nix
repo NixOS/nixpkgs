@@ -16,7 +16,7 @@ rec {
   };
 
   cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit (pkgs) stdenv fetchurl;
+    inherit (pkgs) stdenv fetchurl lib;
     inherit ghc;
   };
 

@@ -37,7 +37,7 @@ attrs :
             propagatedBuildInputs = [];
 
             # library directories that have to be added to the Cabal files
-            extraLibDirs = map (x : x + "/lib") self.propagatedBuildInputs;
+            extraLibDirs = attrs.lib.lists.concatMap (x : [ (x + "/lib64") (x + "/lib") ]) self.propagatedBuildInputs;
 
             # compiles Setup and configures
             configurePhase = ''
