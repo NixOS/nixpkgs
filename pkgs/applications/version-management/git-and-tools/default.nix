@@ -32,7 +32,7 @@ rec {
   qgit = import ./qgit {
     inherit fetchurl stdenv;
     inherit (xlibs) libXext libX11;
-    qt = qt3;
+    qt = qt4;
   };
 
   qgitGit = import ./qgit/qgit-git.nix {
