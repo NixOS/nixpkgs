@@ -6778,7 +6778,7 @@ let
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
-  tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.35") {
+  tailor = builderDefsPackage (import ../applications/version-management/tailor) {
     inherit makeWrapper python;
   };
 
