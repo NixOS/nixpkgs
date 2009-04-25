@@ -68,9 +68,17 @@ attrs :
 
               ./Setup copy
 
+              ensureDir $out/bin # necessary to get it added to PATH
+
               local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
+              local installedPkgConf=$confDir/${self.fname}.installedconf
+              local pkgConf=$confDir/${self.fname}.conf
               ensureDir $confDir
-              ./Setup register --gen-pkg-config=$confDir/${self.fname}.conf
+              ./Setup register --gen-pkg-config=$pkgConf
+              if test -f $pkgConf; then
+                echo '[]' > $installedPkgConf
+                GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
+              fi
 
               ensureDir $out/nix-support
               ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages

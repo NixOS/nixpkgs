@@ -1,6 +1,6 @@
 {pkgs, ghc}:
 
-let ghcReal = ghc; in
+let ghcReal = pkgs.lowPrio ghc; in
 
 rec {
 
@@ -11,7 +11,7 @@ rec {
   # wrapper provides essential functionality: the ability to find
   # Haskell packages in the buildInputs automatically.
   ghc = import ../development/compilers/ghc/wrapper.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) stdenv makeWrapper;
     ghc = ghcReal;
   };
 
