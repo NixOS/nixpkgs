@@ -344,7 +344,7 @@ in {
     gtk2hs = ghcSupported;
     leksah = ghcSupported;
     lhs2tex = ghcSupported;
-    haskellPlatform = ghcSupported;
+    haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = ghcSupported;
   };
 
