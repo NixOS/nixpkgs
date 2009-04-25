@@ -205,10 +205,9 @@ rec {
     
     preHook = builtins.toFile "prehook.sh" commonPreHook;
     
-    initialPath = [
+    initialPath = 
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
-      stdenvLinuxBoot3Pkgs.patchelf
-    ];
+      ++ [stdenvLinuxBoot3Pkgs.patchelf];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;

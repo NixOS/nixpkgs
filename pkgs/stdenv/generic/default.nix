@@ -7,7 +7,9 @@
   fetchurlBoot
 }:
 
-let {
+let
+
+  lib = import ../../lib;
 
   stdenvGenerator = setupScript: rec {
 
@@ -27,6 +29,9 @@ let {
 
         # TODO: make this more elegant.
         inherit param1 param2 param3 param4 param5;
+
+        propagatedUserEnvPkgs = [gcc] ++
+          lib.filter lib.isDerivation initialPath;
       }
 
       // {
@@ -79,7 +84,7 @@ let {
 
         # For convenience, bring in the library functions in lib/ so
         # packages don't have to do that themselves.
-        lib = import ../../lib;
+        inherit lib;
 
         inherit fetchurlBoot;
 
@@ -94,6 +99,4 @@ let {
   }.result;
 
   
-  body = stdenvGenerator ./setup.sh;
-
-}
+in stdenvGenerator ./setup.sh
