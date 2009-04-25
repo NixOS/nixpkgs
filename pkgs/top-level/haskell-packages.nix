@@ -1,6 +1,6 @@
 {pkgs, ghc}:
 
-let ghcReal = ghc; in
+let ghcReal = pkgs.lowPrio ghc; in
 
 rec {
 
@@ -11,12 +11,12 @@ rec {
   # wrapper provides essential functionality: the ability to find
   # Haskell packages in the buildInputs automatically.
   ghc = import ../development/compilers/ghc/wrapper.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) stdenv makeWrapper;
     ghc = ghcReal;
   };
 
   cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit (pkgs) stdenv fetchurl;
+    inherit (pkgs) stdenv fetchurl lib;
     inherit ghc;
   };
 
@@ -43,6 +43,10 @@ rec {
   };
 
   Crypto = import ../development/libraries/haskell/Crypto {
+    inherit cabal;
+  };
+
+  dataenc = import ../development/libraries/haskell/dataenc {
     inherit cabal;
   };
 
@@ -104,7 +108,7 @@ rec {
   };
 
   haxr = import ../development/libraries/haskell/haxr {
-    inherit cabal HaXml HTTP;
+    inherit cabal HaXml HTTP dataenc time;
   };
 
   haxr_th = import ../development/libraries/haskell/haxr-th {
@@ -147,6 +151,10 @@ rec {
 
   monadlab = import ../development/libraries/haskell/monadlab {
     inherit cabal;
+  };
+
+  MonadRandom = import ../development/libraries/haskell/MonadRandom {
+    inherit cabal mtl;
   };
 
   mtl = import ../development/libraries/haskell/mtl {
@@ -212,6 +220,26 @@ rec {
 
   regexPosix = import ../development/libraries/haskell/regex-posix {
     inherit cabal regexBase;
+  };
+
+  SDLImage = import ../development/libraries/haskell/SDL-image {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_image;
+  };
+
+  SDLMixer = import ../development/libraries/haskell/SDL-mixer {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_mixer;
+  };
+
+  SDLTtf = import ../development/libraries/haskell/SDL-ttf {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_ttf;
+  };
+
+  SDL = import ../development/libraries/haskell/SDL {
+    inherit cabal;
+    inherit (pkgs) SDL;
   };
 
   stm = import ../development/libraries/haskell/stm {

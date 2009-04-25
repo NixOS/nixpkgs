@@ -37,7 +37,7 @@ attrs :
             propagatedBuildInputs = [];
 
             # library directories that have to be added to the Cabal files
-            extraLibDirs = map (x : x + "/lib") self.propagatedBuildInputs;
+            extraLibDirs = attrs.lib.lists.concatMap (x : [ (x + "/lib64") (x + "/lib") ]) self.propagatedBuildInputs;
 
             # compiles Setup and configures
             configurePhase = ''
@@ -68,9 +68,17 @@ attrs :
 
               ./Setup copy
 
+              ensureDir $out/bin # necessary to get it added to PATH
+
               local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
+              local installedPkgConf=$confDir/${self.fname}.installedconf
+              local pkgConf=$confDir/${self.fname}.conf
               ensureDir $confDir
-              ./Setup register --gen-pkg-config=$confDir/${self.fname}.conf
+              ./Setup register --gen-pkg-config=$pkgConf
+              if test -f $pkgConf; then
+                echo '[]' > $installedPkgConf
+                GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
+              fi
 
               ensureDir $out/nix-support
               ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages

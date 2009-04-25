@@ -1,7 +1,7 @@
 {stdenv, fetchurl, qt, libXext, libX11}:
 
 stdenv.mkDerivation rec {
-  name = "qgit-1.5.8";
+  name = "qgit-2.2";
   meta =
   {
     license = "GPLv2";
@@ -11,8 +11,11 @@ stdenv.mkDerivation rec {
   src = fetchurl
   {
     url = "mirror://sourceforge/qgit/${name}.tar.bz2";
-    sha256 = "0qmgd1cjny5aciljpvn2bczgdvlpgd2f7wzafda24zj4mzqnppsq";
+    sha256 = "82adcc59b2a9d3a3e54eef9e6a76ac6583e459b6f5c97050d26b0593d11c3d32";
   };
   buildInputs = [qt libXext libX11];
-  configureFlags = "CXXFLAGS=-O3";
+  configurePhase = "qmake PREFIX=$out";
+  installPhase = ''
+    install -s -D -m 755 bin/qgit "$out/bin/qgit"
+  '';
 }

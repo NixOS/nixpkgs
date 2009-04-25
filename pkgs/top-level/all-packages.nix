@@ -1806,7 +1806,7 @@ let
       haddock = import ../development/tools/documentation/haddock/boot.nix {
         inherit gmp;
         cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-          inherit stdenv fetchurl;
+          inherit stdenv fetchurl lib;
           ghc = ghc642Binary;
         };
       };
@@ -6707,7 +6707,7 @@ let
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
-  tailor = builderDefsPackage (selectVersion ../applications/version-management/tailor "0.9.35") {
+  tailor = builderDefsPackage (import ../applications/version-management/tailor) {
     inherit makeWrapper python;
   };
 

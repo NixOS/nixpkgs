@@ -4,8 +4,7 @@ stdenv.mkDerivation {
   name = "acl-2.2.47";
 
   src = fetchurl {
-    # The SGI site throws away old versions, so don't use it.
-    url = mirror://gentoo/distfiles/acl_2.2.47-1.tar.gz;
+    url = http://nixos.org/tarballs/acl_2.2.47-1.tar.gz;
     sha256 = "1j39g62fki0iyji9s62slgwdfskpkqy7rmjlqcnmsvsnxbxhc294";
   };
 

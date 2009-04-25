@@ -14,11 +14,13 @@ stdenv.mkDerivation {
     description = "FUSE Compressed ROM filesystem with lzma"  ;
 	  homepage = http://bisqwit.iki.fi/source/cromfs.html;
   };
+
+  # Removing the static linking, as it doesn't compile in x86_64.
+  makeFlags = "cromfs-driver util/mkcromfs util/unmkcromfs util/cvcromfs";
   
   installPhase = ''
     install -d $out/bin
     install cromfs-driver $out/bin
-    install cromfs-driver-static $out/bin
     install util/cvcromfs $out/bin
     install util/mkcromfs $out/bin
     install util/unmkcromfs $out/bin

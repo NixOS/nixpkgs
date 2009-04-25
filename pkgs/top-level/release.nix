@@ -83,6 +83,7 @@ in {
   cedet = linux;
   chatzilla = linux;
   cksfv = all;
+  cmake = all;
   compiz = linux;
   coreutils = all;
   cpio = all;
@@ -156,6 +157,7 @@ in {
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
   idutils = all;
+  ifplugd = linux;
   imagemagick = allBut "i686-cygwin";
   impressive = linux;
   inetutils = linux;
@@ -174,6 +176,7 @@ in {
   kvm = linux;
   less = all;
   lftp = all;
+  libarchive = linux;
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
@@ -246,6 +249,7 @@ in {
   ruby = all;
   screen = linux ++ darwin;
   seccure = linux;
+  sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
   spidermonkey = linux;
@@ -344,7 +348,7 @@ in {
     gtk2hs = linux;
     leksah = linux;
     lhs2tex = ghcSupported;
-    haskellPlatform = ghcSupported;
+    haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = linux;
   };
 
@@ -431,6 +435,7 @@ in {
     xf86videointel = linux;
     xf86videovesa = linux;
     xkbcomp = linux;
+    xmessage = linux;
     xorgserver = linux;
     xrandr = linux;
     xrdb = linux;
