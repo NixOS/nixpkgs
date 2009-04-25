@@ -35,6 +35,18 @@ fi
 
 if test "$action" = "switch" -o "$action" = "test"; then
 
+    oldVersion=$(cat /var/run/current-system/upstart-interface-version 2> /dev/null || echo 0)
+    newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
+
+    if test "$oldVersion" -ne "$newVersion"; then
+        cat <<EOF
+Warning: the new NixOS configuration has an Upstart version that is
+incompatible with the current version.  The new configuration won't
+take effect until you reboot the system.
+EOF
+        exit 1
+    fi
+
     oldEvents=$(readlink -f /etc/event.d || true)
     newEvents=$(readlink -f @out@/etc/event.d)
 

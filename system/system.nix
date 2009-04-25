@@ -408,6 +408,7 @@ rec {
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
+    upstartInterfaceVersion = pkgs.upstart.interfaceVersion;
     # This attribute is responsible for creating boot entries for 
     # child configuration. They are only (directly) accessible
     # when the parent configuration is boot default. For example,
