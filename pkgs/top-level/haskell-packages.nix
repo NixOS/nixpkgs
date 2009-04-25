@@ -153,6 +153,10 @@ rec {
     inherit cabal;
   };
 
+  MonadRandom = import ../development/libraries/haskell/MonadRandom {
+    inherit cabal mtl;
+  };
+
   mtl = import ../development/libraries/haskell/mtl {
     inherit cabal;
   };
