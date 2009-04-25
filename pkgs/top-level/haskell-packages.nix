@@ -218,6 +218,26 @@ rec {
     inherit cabal regexBase;
   };
 
+  SDLImage = import ../development/libraries/haskell/SDL-image {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_image;
+  };
+
+  SDLMixer = import ../development/libraries/haskell/SDL-mixer {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_mixer;
+  };
+
+  SDLTtf = import ../development/libraries/haskell/SDL-ttf {
+    inherit cabal SDL;
+    inherit (pkgs) SDL_ttf;
+  };
+
+  SDL = import ../development/libraries/haskell/SDL {
+    inherit cabal;
+    inherit (pkgs) SDL;
+  };
+
   stm = import ../development/libraries/haskell/stm {
     inherit cabal;
   };
