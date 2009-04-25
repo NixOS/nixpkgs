@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   # Upstart builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru = {
-    interfaceVersion = 0;
+    interfaceVersion = 1;
   };
 
   meta = {
