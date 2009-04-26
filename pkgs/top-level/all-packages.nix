@@ -599,6 +599,10 @@ let
     inherit fetchurl stdenv emacs;
   };
 
+  emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
+    inherit fetchurl stdenv emacs;
+  };
+
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
@@ -626,6 +630,10 @@ let
 
   fcron = import ../tools/system/fcron { # see also cron
     inherit fetchurl stdenv perl;
+  };
+
+  figlet = import ../tools/misc/figlet {
+    inherit fetchurl stdenv;
   };
 
   file = import ../tools/misc/file {
@@ -1128,6 +1136,10 @@ let
 
   pwgen = import ../tools/security/pwgen {
     inherit stdenv fetchurl;
+  };
+
+  pydb = import ../tools/pydb {
+    inherit fetchurl stdenv python emacs;
   };
 
   pystringtemplate = import ../development/python-modules/stringtemplate {
@@ -4417,7 +4429,7 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
-  samba = import ../servers/samba {
+  samba = makeOverridable (import ../servers/samba) {
     inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
   libunwind acl fam;
   };
