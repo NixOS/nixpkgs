@@ -12,7 +12,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ps ncurses zlib perl openssl];
   
-  configureFlags = "--enable-thread-safe-client --disable-static --with-openssl=${openssl} --with-berkeley-db --with-embedded-server";
+  configureFlags = "--enable-thread-safe-client --with-openssl=${openssl} --with-berkeley-db --with-embedded-server" +
+    (if stdenv.system == "x86_64-linux" then " --with-lib-ccflags=-fPIC" else "");
+
+  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
+  
+  NIX_CFLAGS_CXXFLAGS = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
   postInstall =
     ''

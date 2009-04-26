@@ -9,11 +9,15 @@ if test -z "$nativeLibc"; then
     dynamicLinker="$libc/lib/$dynamicLinker"
     echo $dynamicLinker > $out/nix-support/dynamic-linker
 
+    if test -e $libc/lib/32/ld-linux.so.2; then
+        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+    fi
+
     # The "-B$libc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  (This is only an issue when using an `impure'
     # compiler/linker, i.e., one that searches /usr/lib and so on.)
-    echo "-B$libc/lib/ -isystem $libc/include" > $out/nix-support/libc-cflags
+    echo "-B$libc/lib/ -idirafter $libc/include" > $out/nix-support/libc-cflags
     
     echo "-L$libc/lib" > $out/nix-support/libc-ldflags
 
@@ -64,7 +68,7 @@ doSubstitute() {
 }
 
 
-# Make wrapper scripts around gcc, g++, and g77.  Also make symlinks
+# Make wrapper scripts around gcc, g++, and gfortran.  Also make symlinks
 # cc, c++, and f77.
 mkGccWrapper() {
     local dst=$1
@@ -86,8 +90,11 @@ ln -s gcc $out/bin/cc
 mkGccWrapper $out/bin/g++ $gccPath/g++
 ln -s g++ $out/bin/c++
 
-mkGccWrapper $out/bin/g77 $gccPath/g77
-ln -s g77 $out/bin/f77
+if test -e $gccPath/gfortran; then
+    mkGccWrapper $out/bin/gfortran $gccPath/gfortran
+    ln -s gfortran $out/bin/g77
+    ln -s gfortran $out/bin/f77
+fi
 
 
 # Create a symlink to as (the assembler).  This is useful when a

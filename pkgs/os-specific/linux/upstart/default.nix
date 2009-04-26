@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     url = http://nixos.org/tarballs/upstart-0.3.0.tar.bz2;
     md5 = "269046f41c6418225306280044a799eb";
   };
+
+  dontDisableStatic = true;
   
   configureFlags = "--enable-compat";
   
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
   # Upstart builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru = {
-    interfaceVersion = 0;
+    interfaceVersion = 1;
   };
 
   meta = {

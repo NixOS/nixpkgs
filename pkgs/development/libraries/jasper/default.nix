@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [unzip libjpeg];
-  
-  configureFlags = "--enable-shared --disable-static";
 
+  configureFlags = "--enable-shared";
+  
   meta = {
     homepage = http://www.ece.uvic.ca/~mdadams/jasper/;
     description = "JasPer JPEG2000 Library";

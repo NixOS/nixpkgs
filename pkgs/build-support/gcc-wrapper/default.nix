@@ -13,7 +13,18 @@ assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
 assert !nativeLibc -> libc != null;
 
+let
+
+  gccVersion = (builtins.parseDrvName gcc.name).version;
+  gccName = (builtins.parseDrvName gcc.name).name;
+  
+in
+
 stdenv.mkDerivation {
+  name =
+    (if name != "" then name else gccName + "-wrapper") +
+    (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
+  
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
@@ -25,14 +36,17 @@ stdenv.mkDerivation {
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;
   
-  name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
-  langF77 = if nativeTools then false else gcc.langF77;
+  langFortran = if nativeTools then false else gcc ? langFortran;
   shell = if shell == "" then stdenv.shell else shell;
   
-  meta = if gcc != null && (gcc ? meta) then removeAttrs gcc.meta ["priority"] else
-    { description = "System C compiler wrapper";
+  meta =
+    let gcc_ = if gcc != null then gcc else {}; in
+    (if gcc_ ? meta then removeAttrs gcc.meta ["priority"] else {}) //
+    { description =
+        stdenv.lib.getAttr ["meta" "description"] "System C compiler" gcc_
+        + " (wrapper script)";
     };
 
   # The dynamic linker has different names on different Linux platforms.

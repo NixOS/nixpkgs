@@ -18,5 +18,5 @@ stdenv.mkDerivation rec {
 
   patches = [ ./h264.patch ./plugins.patch ];
 
-  configureFlags = "--enable-external-ortp --enable-shared --disable-static";
+  configureFlags = "--enable-external-ortp";
 }

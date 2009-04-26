@@ -32,18 +32,18 @@ stdenv.mkDerivation {
   
   configureFlags = "--enable-shared";
   
-  preConfigure = "
+  preConfigure = ''
     # Purity.
     for i in /usr /sw /opt /pkg; do 
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-  ";
+  '';
+
+  setupHook = ./setup-hook.sh;
   
-  postInstall = "
-    ensureDir $out/nix-support
-    cp ${./setup-hook.sh} $out/nix-support/setup-hook
+  postInstall = ''
     rm -rf $out/lib/python2.4/test
-  ";
+  '';
 
   passthru = {
     inherit zlibSupport;

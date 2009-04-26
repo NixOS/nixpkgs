@@ -3,7 +3,6 @@ source $stdenv/setup
 echo $xlibs2
 echo $x_libraries_env
 
-postConfigure=postConfigure
 postConfigure() {
   pwd;
   ls -l super*/src/Makefile;

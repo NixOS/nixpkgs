@@ -1,6 +1,6 @@
 { input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gtk
 , GConf, startupnotification, libXinerama, libXrandr, libXcursor
-, gettext
+, gettext, intltool
 
 , enableCompositor ? false
 , libXcomposite ? null, libXfixes ? null, libXdamage ? null, libcm ? null
@@ -14,11 +14,11 @@ stdenv.mkDerivation {
   
   buildInputs = [
     pkgconfig perl perlXMLParser glib gtk GConf startupnotification
-    libXinerama libXrandr libXcursor gettext
+    libXinerama libXrandr libXcursor gettext intltool
   ]
-  ++ (if enableCompositor then [libXcomposite libXfixes libXdamage libcm] else []);
+  ++ stdenv.lib.optionals enableCompositor [libXcomposite libXfixes libXdamage libcm];
   
-  configureFlags = "
+  configureFlags = ''
     ${if enableCompositor then "--enable-compositor" else ""}
-  ";
+  '';
 }

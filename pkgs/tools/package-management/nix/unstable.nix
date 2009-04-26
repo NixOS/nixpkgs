@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     --disable-init-state
   '';
 
+  doCheck = true;
+
   passthru = { inherit aterm; };
 
   meta = {

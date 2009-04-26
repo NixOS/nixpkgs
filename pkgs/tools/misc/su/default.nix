@@ -5,23 +5,28 @@
 # coreutils a dependency on PAM.
 
 stdenv.mkDerivation {
-  name = "su-6.7";
+  name = "su-7.0";
+  
   src = fetchurl {
-    url = mirror://gnu/coreutils/coreutils-6.7.tar.bz2;
-    md5 = "a16465d0856cd011a1acc1c21040b7f4";
+    url = "ftp://alpha.gnu.org/gnu/coreutils/coreutils-7.0.tar.gz";
+    sha256 = "00cwf8rqbj89ikv8fhdhv26dpc2ghzw1hn48pk1vg3nnmxj55nr7";
   };
+  
   patches = [
     # PAM patch taken from SUSE's coreutils-6.7-5.src.rpm.
     ./su-pam.patch
-	../coreutils/gnulib-futimens.patch
   ];
+  
   buildInputs = [pam];
-  buildPhase = "
+  
+  buildPhase = ''
     make -C lib
-    make -C src su su_OBJECTS=\"su.o getdef.o\" CFLAGS=\"-DUSE_PAM\" LDFLAGS=\"-lpam -lpam_misc -ldl\"
-  ";
-  installPhase = "
+    make -C src version.h
+    make -C src su su_OBJECTS="su.o getdef.o" CFLAGS="-DUSE_PAM" LDFLAGS="-lpam -lpam_misc -ldl"
+  '';
+  
+  installPhase = ''
     ensureDir $out/bin
     cp src/su $out/bin
-  ";
+  '';
 }

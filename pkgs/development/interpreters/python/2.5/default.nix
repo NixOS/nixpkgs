@@ -53,20 +53,20 @@ stdenv.mkDerivation {
   
   configureFlags = "--enable-shared --with-wctype-functions";
   
-  preConfigure = "
+  preConfigure = ''
     # Purity.
     for i in /usr /sw /opt /pkg; do 
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-  " + (if readline != null then ''
+  '' + (if readline != null then ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"
   '' else "");
+
+  setupHook = ./setup-hook.sh;
   
-  postInstall = "
-    ensureDir $out/nix-support
-    cp ${./setup-hook.sh} $out/nix-support/setup-hook
+  postInstall = ''
     rm -rf $out/lib/python2.5/test
-  ";
+  '';
 
   passthru = {
     inherit zlibSupport;

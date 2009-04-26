@@ -17,13 +17,13 @@ envHooks=(${envHooks[@]} addCVars)
 # Note: these come *after* $out in the PATH (see setup.sh).
 
 if test -n "@gcc@"; then
-    PATH=$PATH:@gcc@/bin
+    addToSearchPath PATH @gcc@/bin
 fi
 
 if test -n "@binutils@"; then
-    PATH=$PATH:@binutils@/bin
+    addToSearchPath PATH @binutils@/bin
 fi
 
 if test -n "@libc@"; then
-    PATH=$PATH:@libc@/bin
+    addToSearchPath PATH @libc@/bin
 fi

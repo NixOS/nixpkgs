@@ -1,14 +1,14 @@
-{stdenv, fetchurl, zlibSupport ? false, zlib, sslSupport ? false, openssl ? null}:
+{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null}:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
-stdenv.mkDerivation {
-  name = "curl-7.18.1";
+stdenv.mkDerivation rec {
+  name = "curl-7.19.4";
   
   src = fetchurl {
-    url = http://curl.haxx.se/download/curl-7.18.1.tar.bz2;
-    sha256 = "0v5fpr4bsdlg262nsgrijlfhp3vgr1ypir1rrkmhxcsnpv4frw6c";
+    url = "http://curl.haxx.se/download/${name}.tar.bz2";
+    sha256 = "11myjjvx1bjl709bgibv8pb1sjf4cicim16k860qzg7d1ll3cd7v";
   };
   
   buildInputs =

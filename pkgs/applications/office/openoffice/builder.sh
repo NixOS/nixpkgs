@@ -5,12 +5,10 @@ export NO_HIDS=TRUE
 
 export PATH=$icu/sbin:$PATH
 
-postUnpack=postUnpack
 postUnpack() {
   tar xvjf $src_system
 }
 
-preConfigure=preConfigure
 preConfigure() {
     for i in sysui/desktop/share/makefile.mk; do 
 	substituteInPlace $i --replace /bin/bash $shell
@@ -23,8 +21,6 @@ preConfigure() {
     cd config_office/
 }
 
-
-postConfigure=postConfigure
 postConfigure() {
     cd ..
     for i in LinuxX86*Env.Set; do
@@ -35,14 +31,11 @@ postConfigure() {
 	--replace /usr/lib64/libjpeg.so $libjpeg/lib/libjpeg.so
 }
 
-
-buildPhase=buildPhase
 buildPhase() {
     source LinuxX86*Env.Set.sh
     ./bootstrap
     dmake # wait a few hours...
 }
-
 
 wrapSOffice() {
     local fn=$1
@@ -61,8 +54,6 @@ EOF
     chmod +x $out/bin/$fn
 }
 
-
-installPhase=installPhase
 installPhase() {
     ooFiles=$out/lib/openoffice
 
@@ -84,7 +75,6 @@ installPhase() {
     # Create some wrappers to start individual OpenOffice components.
     for i in writer calc draw impress base math web; do wrapSOffice oo$i -$i; done
 }
-
 
 genericBuild
 

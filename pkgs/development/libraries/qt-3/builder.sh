@@ -1,10 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out/nix-support
-substitute "$hook" "$out/nix-support/setup-hook" --subst-var out
 
-
-preConfigure=preConfigure
 preConfigure() {
 
     # Patch some of the configure files a bit to get of global paths.
@@ -30,7 +26,6 @@ configureScript() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     # Qt's `make install' is broken; it copies ./bin/qmake, which
     # is a symlink to ./qmake/qmake.  So we end up with a dangling

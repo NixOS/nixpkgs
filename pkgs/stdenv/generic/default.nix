@@ -1,20 +1,27 @@
-{ stdenv, name, preHook ? null, postHook ? null, initialPath, gcc, shell
+{ system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
-, fetchurlBoot, forceFetchurlBoot
+
+, # The `fetchurl' to use for downloading curl and its dependencies
+  # (see all-packages.nix).
+  fetchurlBoot
 }:
 
-let {
+let
+
+  lib = import ../../lib;
 
   stdenvGenerator = setupScript: rec {
 
     # The stdenv that we are producing.
     result =
 
-      stdenv.mkDerivation {
-        inherit name;
+      derivation {
+        inherit system name;
 
-        builder = ./builder.sh;
+        builder = shell;
+
+        args = ["-e" ./builder.sh];
 
         setup = setupScript;
 
@@ -22,9 +29,16 @@ let {
 
         # TODO: make this more elegant.
         inherit param1 param2 param3 param4 param5;
+
+        propagatedUserEnvPkgs = [gcc] ++
+          lib.filter lib.isDerivation initialPath;
       }
 
       // {
+
+        meta = {
+          description = "The default build environment for Unix packages in Nixpkgs";
+        };
     
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
@@ -70,7 +84,7 @@ let {
 
         # For convenience, bring in the library functions in lib/ so
         # packages don't have to do that themselves.
-        lib = import ../../lib;
+        inherit lib;
 
         inherit fetchurlBoot;
 
@@ -80,13 +94,9 @@ let {
       # "lift" packages like curl from the final stdenv for Linux to
       # all-packages.nix for that platform (meaning that it has a line
       # like curl = if stdenv ? curl then stdenv.curl else ...).
-      // extraAttrs
-
-      // (if forceFetchurlBoot then {fetchurl = fetchurlBoot;} else {});
+      // extraAttrs;
 
   }.result;
 
   
-  body = stdenvGenerator ./setup.sh;
-
-}
+in stdenvGenerator ./setup.sh

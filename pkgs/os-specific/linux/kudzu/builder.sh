@@ -10,6 +10,4 @@ preInstall() {
   make install-program
 }
 
-preInstall=preInstall
-
 genericBuild

@@ -17,9 +17,9 @@ stdenv.mkDerivation {
   buildInputs = [libxml2] ++ stdenv.lib.optional compressionSupport zlib;
 
   configureFlags = ''
-    --enable-shared --disable-static
     ${if compressionSupport then "--with-zlib" else "--without-zlib"}
     ${if sslSupport then "--with-ssl --with-libs=${openssl}" else "--without-ssl"}
+    --enable-shared
   '';
 
   passthru = {inherit compressionSupport sslSupport;};

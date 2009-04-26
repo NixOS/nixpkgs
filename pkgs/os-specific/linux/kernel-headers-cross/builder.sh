@@ -5,8 +5,6 @@ buildPhase() {
     make include/linux/version.h
 }
 
-buildPhase=buildPhase
-
 
 installPhase() {
     mkdir $out
@@ -28,8 +26,6 @@ installPhase() {
     cp -prvd include/linux include/asm include/asm-$arch include/asm-generic $out/include
     echo -n > $out/include/linux/autoconf.h
 }
-
-installPhase=installPhase
 
 
 genericBuild

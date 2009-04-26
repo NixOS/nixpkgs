@@ -13,4 +13,9 @@ stdenv.mkDerivation {
   configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
+
+  meta = {
+    homepage = ftp://oss.sgi.com/projects/xfs/cmd_tars/;
+    description = "Library and tools for manipulating access control lists";
+  };
 }

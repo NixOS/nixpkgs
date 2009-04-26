@@ -57,7 +57,6 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
 
-      shopt -s nullglob
       for i in $out/debs/*.deb; do
         header "Generated DEB package: $i"
         dpkg-deb --info "$i"

@@ -123,5 +123,9 @@ rec {
               else f (path ++ [name]) value;
         in mapAttrs g set;
     in recurse [] set;
-  
+
+
+  /* Check whether the argument is a derivation. */
+  isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
+
 }

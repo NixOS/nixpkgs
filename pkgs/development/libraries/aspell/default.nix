@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
-stdenv.mkDerivation {
-  name = "aspell-0.60.5";
+stdenv.mkDerivation rec {
+  name = "aspell-0.60.6";
   
   src = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/aspell/aspell-0.60.5.tar.gz;
-    md5 = "17fd8acac6293336bcef44391b71e337";
+    url = "ftp://ftp.gnu.org/gnu/aspell/${name}.tar.gz";
+    sha256 = "0dhfgkp2y16z0agdvhn4iaikr34l4agjz2nannqvpxkcw8h1ansg";
   };
   
   buildInputs = [perl];

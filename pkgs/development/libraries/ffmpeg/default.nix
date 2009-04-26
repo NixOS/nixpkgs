@@ -12,14 +12,13 @@ stdenv.mkDerivation {
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
   # applications.
   configureFlags = ''
-    --enable-shared
-    --disable-static
     --enable-gpl
     --enable-postproc
     --enable-swscale
     --disable-ffserver
     --disable-ffplay
     --enable-libfaad
+    --enable-shared
   '';
 
   buildInputs = [faad2];

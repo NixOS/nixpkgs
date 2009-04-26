@@ -1,5 +1,5 @@
 addAclocals () {
-    addToSearchPathWithCustomDelimiter : ACLOCAL_PATH /share/aclocal "" $1
+    addToSearchPathWithCustomDelimiter : ACLOCAL_PATH $1/share/aclocal
 }
 
 envHooks=(${envHooks[@]} addAclocals)

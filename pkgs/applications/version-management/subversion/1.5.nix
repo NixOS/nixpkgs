@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --disable-keychain
-    ${if static then "--disable-shared --enable-all-static" else "--disable-static"}
+    ${if static then "--disable-shared --enable-all-static" else ""}
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}

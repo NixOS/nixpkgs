@@ -16,19 +16,14 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
 
-  preConfigure = "
+  preConfigure = ''
     rm -rf zlib file sqlite
-
-    # Grrr, rpcgen can't find cpp. (NIXPKGS-48)
-    mkdir rpcgen
-    echo \"#! $shell\" > rpcgen/rpcgen
-    echo \"exec $(type -tp rpcgen) -Y $(dirname $(type -tp cpp)) \\\"\\$@\\\"\" >> rpcgen/rpcgen
-    chmod +x rpcgen/rpcgen
-    export PATH=$(pwd)/rpcgen:$PATH
 
     substituteInPlace ./installplatform --replace /usr/bin/env $(type -tp env)
     substituteInPlace Makefile.in --replace /var/tmp $(pwd)/dummy
-  ";
+  '';
+
+  dontDisableStatic = true;
 
   configureFlags = "--without-selinux --without-lua --without-python --without-perl";
 

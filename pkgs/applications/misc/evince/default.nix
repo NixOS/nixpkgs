@@ -1,26 +1,26 @@
-{ fetchurl, stdenv, perl, perlXMLParser, gettext
+{ fetchurl, stdenv, perl, perlXMLParser, gettext, intltool
 , pkgconfig, glib, gtk, gnomedocutils, gnomeicontheme
 , libgnome, libgnomeui, scrollkeeper, libxslt
 , libglade, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
-, makeWrapper }:
+, makeWrapper, which }:
 
 stdenv.mkDerivation rec {
-  name = "evince-2.23.4";
+  name = "evince-2.26.0";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/evince/2.23/${name}.tar.bz2";
-    sha256 = "0svdpx9vkh99vbxsfk5ppi6xl0wqvqsrii7m26irinf0bkfyc964";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/evince/2.26/${name}.tar.bz2";
+    sha256 = "1wsl5vdrj0829wq223dryq5p7izgzsz6mfl4igix7b5wga42zff1";
   };
 
   buildInputs = [
-    perl perlXMLParser gettext
+    perl perlXMLParser gettext intltool
     pkgconfig glib gtk gnomedocutils gnomeicontheme
     libgnome libgnomeui libglade scrollkeeper
     libxslt  # for `xsltproc'
     dbus dbus_glib
     poppler libspectre djvulibre
-    makeWrapper
+    makeWrapper which
   ];
 
   configureFlags = "--with-libgnome --enable-dbus --enable-pixbuf "

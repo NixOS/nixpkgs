@@ -13,6 +13,12 @@ stdenv.mkDerivation {
     sha256 = "0wjw51r96h6rngbsrzndw890xggzvrakydsbaldlrvbh3jq9qzk1";
   };
 
+  patches = [
+    # We're not supposed to use linux/inotify.h, use sys/inotify.h instead.
+    # Adapted from Gentoo.
+    ./inotify.patch
+  ];
+
   passthru = {inherit openssl libjpeg qt; inherit (xlibs) libX11;};
   
   buildInputs = [

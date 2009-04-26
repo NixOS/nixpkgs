@@ -1,15 +1,17 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "freetype-2.3.6";
+stdenv.mkDerivation rec {
+  name = "freetype-2.3.9";
   
   src = fetchurl {
-    url = mirror://sourceforge/freetype/freetype-2.3.6.tar.bz2;
-    sha256 = "0xqf24d42qj5x8h6cmwpdqg455kpcbaxc3jlwqf4rlbn0g1ri9nm";
+    url = "mirror://sourceforge/freetype/${name}.tar.bz2";
+    sha256 = "1dia4j01aqdcrkpfkcniswcrccdx4jx2p3hyhbh76kchx6y3782i";
   };
 
+  configureFlags = "--disable-static";
+
   meta = {
-    description = "A font engine";
+    description = "A font rendering engine";
     homepage = http://www.freetype.org/;
   };
 }

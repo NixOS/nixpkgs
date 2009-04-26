@@ -1,5 +1,5 @@
-args:
-with args;
+args: with args;
+
 stdenv.mkDerivation rec {
   name = "redland-1.0.7";
 
@@ -7,9 +7,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sf/librdf/${name}.tar.gz";
     sha256 = "1z160hhrnlyy5c8vh2hjza6kdfmzml8mg9dk8yffifkhnxjq5r2z";
   };
+  
   buildInputs = [pkgconfig];
-  propagatedBuildInputs = [ bdb openssl libxslt perl mysql postgresql sqlite
-    curl pcre libxml2];
-  configureFlags = "--disable-static --with-threads --with-bdb=${bdb}";
-  patchPhase="sed -e 1s@/usr@${perl}@ -i utils/touch-mtime.pl";
+  
+  propagatedBuildInputs = [
+    bdb openssl libxslt perl mysql postgresql sqlite curl pcre libxml2
+  ];
+    
+  configureFlags = "--with-threads --with-bdb=${bdb}";
+  
+  patchPhase = "sed -e 1s@/usr@${perl}@ -i utils/touch-mtime.pl";
 }

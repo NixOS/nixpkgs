@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wl2hd8zqwzbbp4icng6siim85jb6hvczy9c6m92lh85wrcwpqxh";
   };
 
-  buildInputs = [ pkgconfig libtool gtk alsaLib pulseaudio gstreamer libvorbis ];
+  buildInputs = [ pkgconfig libtool alsaLib pulseaudio gstreamer libvorbis ];
+  propagatedBuildInputs = [ gtk ];
 
   configureFlags = "--disable-oss";
 

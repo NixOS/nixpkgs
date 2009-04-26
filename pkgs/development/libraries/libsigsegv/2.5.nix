@@ -1,7 +1,8 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-" + version;
+  name = "libsigsegv-2.5";
+  
   src = fetchurl {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
     sha256 = "0fvcsq9msi63vrbpvks6mqkrnls5cfy6bzww063sqhk2h49vsyyg";
@@ -12,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "A library for handling page faults in user mode";
   };
 
-  configureFlags = "--enable-shared --disable-static";
   doCheck = true;
 }

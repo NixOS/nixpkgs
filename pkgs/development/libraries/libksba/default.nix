@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [libgpgerror];
 
-  configureFlags = "--enable-shared --disable-static";
-
   meta = {
     homepage = http://www.gnupg.org;
     description = "Libksba is a CMS and X.509 access library under development";

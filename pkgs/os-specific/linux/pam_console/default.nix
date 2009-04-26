@@ -20,8 +20,6 @@ stdenv.mkDerivation {
 
   makeFlags = "LEX=flex";
 
-  configureFlags = "--disable-static";
-
   preConfigure = "
     cd pam_console
     cp ${configure} configure.ac

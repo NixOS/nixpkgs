@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig}:
+{ stdenv, fetchurl, pkgconfig, pulseaudio }:
 
 stdenv.mkDerivation {
   name = "libao-0.8.8";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "e52e05af6b10f42d2ee9845df1a581bf2b352060eabf7946aee0a600c3878954";
   };
 
-  buildInputs = [pkgconfig];
+  buildInputs = [ pkgconfig pulseaudio ];
 
   meta = {
     longDescription = ''
@@ -16,6 +16,6 @@ stdenv.mkDerivation {
       platforms.
     '';
     homepage = http://xiph.org/ao/;
-    license = "GPL";
+    license = "GPLv2+";
   };
 }

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lzma-4.32.5";
+  name = "lzma-4.32.7";
   
   src = fetchurl {
-    url = http://tukaani.org/lzma/lzma-4.32.5.tar.gz;
-    sha256 = "1mqy1biy46gqky6n3gyr2l395hwckh0xyi96waz5p5x8mgp372ch";
+    url = http://tukaani.org/lzma/lzma-4.32.7.tar.gz;
+    sha256 = "0b03bdvm388kwlcz97aflpr3ir1zpa3m0bq3s6cd3pp5a667lcwz";
   };
 
   CFLAGS = "-O3";

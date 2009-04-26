@@ -33,7 +33,8 @@ stdenv.mkDerivation {
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
   programPath = stdenv.lib.makeLibraryPath [
-    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv
+    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib
+    xlibs.libXv xlibs.libXrandr
   ];
 
   meta = {

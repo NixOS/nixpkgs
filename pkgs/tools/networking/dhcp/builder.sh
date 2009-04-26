@@ -9,7 +9,6 @@ makeFlagsArray=(CLIENT_PATH='\"FAKE_PATH=/nothing\"' \
     LIBDIR=$out/lib INCDIR=$out/include VARDB=$OUT/var/run \
 )
 
-configurePhase=configurePhase
 configurePhase() {
     # Patch the header that contains absolute paths to the tools.
     sed -i "includes/dhcpd.h" \
@@ -18,7 +17,6 @@ configurePhase() {
     ./configure
 }
 
-preBuild=preBuild
 preBuild() {
     substituteInPlace client/scripts/linux --replace /bin/bash $shell
 }

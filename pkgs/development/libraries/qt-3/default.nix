@@ -21,7 +21,9 @@ stdenv.mkDerivation {
   name = "qt-3.3.8";
 
   builder = ./builder.sh;
-  hook = ./setup-hook.sh;  
+
+  setupHook = ./setup-hook.sh;
+
   src = fetchurl {
     url = ftp://ftp.trolltech.com/qt/source/qt-x11-free-3.3.8.tar.bz2;
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";

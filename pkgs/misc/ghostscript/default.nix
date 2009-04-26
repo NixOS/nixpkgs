@@ -34,10 +34,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x11Support x11
     ++ stdenv.lib.optional cupsSupport cups;
 
-  configureFlags = "
-    --disable-static
+  configureFlags = ''
     ${if x11Support then "--with-x" else "--without-x"}
-  ";
+  '';
 
   NIX_CFLAGS_COMPILE = "-fpic";
 

@@ -2,10 +2,9 @@
 
 # Typical command to generate the list of tarballs:
 
-# export i="http://mirror.switch.ch/ftp/mirror/X11/pub/X11R7.2/src/everything/"; curl $i | perl -e 'while (<>) { if (/href="([^"]*.bz2)"/) { print "$ENV{'i'}$1\n"; }; }' > tarballs
-# manually added xcb tarballs from http://xcb.freedesktop.org/dist/
-# then run: perl ./generate-expr-from-tarballs.pl < tarballs
-
+# export i="mirror://xorg/X11R7.4/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.4.list
+# manually update extra.list
+# then run: cat tarballs-7.4.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
 
 use strict;
 
@@ -22,27 +21,18 @@ my %pcMap;
 my %extraAttrs;
 
 
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "hal", "openssl", "gperf", "m4");
+$pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
-$pcMap{"fontconfig"} = "fontconfig";
 $pcMap{"libpng12"} = "libpng";
-$pcMap{"libdrm"} = "libdrm";
-$pcMap{"libXaw"} = "libXaw";
-$pcMap{"zlib"} = "zlib";
-$pcMap{"perl"} = "perl";
-$pcMap{"mesa"} = "mesa";
-$pcMap{"mesaHeaders"} = "mesaHeaders";
-$pcMap{"mkfontscale"} = "mkfontscale";
-$pcMap{"mkfontdir"} = "mkfontdir";
-$pcMap{"bdftopcf"} = "bdftopcf";
-$pcMap{"libxslt"} = "libxslt";
 $pcMap{"dbus-1"} = "dbus";
-$pcMap{"hal"} = "hal";
-
+$pcMap{"uuid"} = "e2fsprogs";
+$pcMap{"gl"} = "mesa";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 
 
-$extraAttrs{"xorgserver"} = " mesaSrc = mesa.src; x11BuildHook = ./xorgserver.sh; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver-xkb-leds.patch ]; ";
+$extraAttrs{"xorgserver"} = " patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; ";
 
 $extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
 
@@ -60,6 +50,9 @@ $extraAttrs{"xf86inputevdev"} = "
 $extraAttrs{"libXpm"} = "
     patchPhase = \"sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in\";";
 
+$extraAttrs{"xkbcomp"} = " NIX_CFLAGS_COMPILE = \"-DDFLT_XKB_CONFIG_ROOT=\\\"/etc/X11/xkb\\\"\"; ";
+
+
 my $downloadCache = "./download-cache";
 $ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
@@ -74,7 +67,7 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
-    #next unless $pkg eq "xorgserver";
+    #next unless $pkg eq "printproto";
     #print "$pkg\n";
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
@@ -102,16 +95,36 @@ while (<>) {
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
-    my $provides = `cd '$tmpDir'/* && ls *.pc.in`;
+    my $pkgDir = `echo $tmpDir/*`;
+    chomp $pkgDir;
+
+    my $provides = `cd $pkgDir && ls *.pc.in`;
     my @provides2 = split '\n', $provides;
+    my @requires = ();
+    
     print "PROVIDES @provides2\n\n";
-    foreach my $pc (@provides2) {
+    foreach my $pcFile (@provides2) {
+        my $pc = $pcFile;
         $pc =~ s/.pc.in//;
         die "collission with $pcMap{$pc}" if defined $pcMap{$pc};
         $pcMap{$pc} = $pkg;
+
+        print "$pkgDir/$pcFile\n";
+        open FOO, "<$pkgDir/$pcFile" or die;
+        while (<FOO>) {
+            if (/Requires:(.*)/) {
+                my @reqs = split ' ', $1;
+                foreach my $req (@reqs) {
+                    next unless $req =~ /^[a-z]+$/;
+                    print "REQUIRE (from $pcFile): $req\n";
+                    push @requires, $req;
+                }
+            }
+        }
+        close FOO;
+        
     }
 
-    my @requires = ();
     my $file;
     {
         local $/;
@@ -142,6 +155,10 @@ while (<>) {
 
     if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
         push @requires, "mkfontdir";
+    }
+
+    if ($file =~ /AM_PATH_PYTHON/) {
+        push @requires, "python";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -181,14 +198,14 @@ while (<>) {
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videoi810/;
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videosis/;
-    push @requires, "glproto", "mesaHeaders" if $pkg =~ /xf86videointel/;
+    push @requires, "glproto", "gl" if $pkg =~ /xf86videosis/;
+    push @requires, "glproto", "gl" if $pkg =~ /xf86videointel/;
     push @requires, "zlib" if $pkg =~ /xorgserver/;
     push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
     
-    print "REQUIRES @requires => $pkg\n";
+    print "REQUIRES $pkg => @requires\n";
     $pkgRequires{$pkg} = \@requires;
 
     print "done\n";
@@ -197,7 +214,7 @@ while (<>) {
 
 print "\nWRITE OUT\n";
 
-open OUT, ">default2.nix";
+open OUT, ">default.nix";
 
 print OUT "";
 print OUT <<EOF;
@@ -216,6 +233,8 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $inputs = "";
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
             if (!defined $requires{$pcMap{$req}}) {
                 $inputs .= "$pcMap{$req} ";
                 $requires{$pcMap{$req}} = 1;

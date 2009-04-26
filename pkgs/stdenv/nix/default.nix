@@ -5,7 +5,7 @@ import ../generic {
   preHook = ./prehook.sh;
   initialPath = (import ../common-path.nix) {pkgs = pkgs;};
 
-  inherit stdenv;
+  system = stdenv.system;
 
   gcc = import ../../build-support/gcc-wrapper {
     nativeTools = false;
@@ -23,5 +23,4 @@ import ../generic {
   shell = pkgs.bash + "/bin/sh";
 
   fetchurlBoot = stdenv.fetchurlBoot;
-  forceFetchurlBoot = false;
 }

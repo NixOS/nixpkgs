@@ -47,7 +47,6 @@ else
 fi
 
 
-preConfigure=preConfigure
 preConfigure() {
     
     # Determine the frontends to build.

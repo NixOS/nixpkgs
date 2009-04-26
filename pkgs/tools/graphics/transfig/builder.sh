@@ -1,6 +1,5 @@
 source $stdenv/setup
 
-patchPhase=patchPhase
 patchPhase() {
     for i in $patches; do
         header "applying patch $i" 3
@@ -25,14 +24,12 @@ configureImakefiles() {
     cp tmpsed transfig/Imakefile
 }
 
-buildPhase=buildPhase
 buildPhase() {
     xmkmf
     make Makefiles
     make
 }
 
-preInstall=preInstall
 preInstall() {
     ensureDir $out
     ensureDir $out/lib

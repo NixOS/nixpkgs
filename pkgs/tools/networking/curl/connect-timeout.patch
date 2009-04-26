@@ -1,8 +1,8 @@
-diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
-*** curl-7.18.1-orig/lib/connect.c	2008-02-07 23:25:04.000000000 +0100
---- curl-7.18.1/lib/connect.c	2008-04-23 11:25:30.000000000 +0200
+diff -rc curl-7.19.3-orig/lib/connect.c curl-7.19.3/lib/connect.c
+*** curl-7.19.3-orig/lib/connect.c	2009-01-02 23:30:50.000000000 +0100
+--- curl-7.19.3/lib/connect.c	2009-01-21 15:04:08.000000000 +0100
 ***************
-*** 99,105 ****
+*** 115,121 ****
   singleipconnect(struct connectdata *conn,
                   const Curl_addrinfo *ai, /* start connecting to this */
                   long timeout_ms,
@@ -10,7 +10,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
   
   /*
    * Curl_timeleft() returns the amount of milliseconds left allowed for the
---- 99,106 ----
+--- 115,122 ----
   singleipconnect(struct connectdata *conn,
                   const Curl_addrinfo *ai, /* start connecting to this */
                   long timeout_ms,
@@ -20,8 +20,8 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
   /*
    * Curl_timeleft() returns the amount of milliseconds left allowed for the
 ***************
-*** 552,557 ****
---- 553,559 ----
+*** 541,546 ****
+--- 542,548 ----
   {
     curl_socket_t sockfd;
     Curl_addrinfo *ai;
@@ -30,7 +30,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
     /* first close the failed socket */
     sclose(conn->sock[sockindex]);
 ***************
-*** 565,571 ****
+*** 554,560 ****
     ai = conn->ip_addr->ai_next;
   
     while(ai) {
@@ -38,7 +38,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
       if(sockfd != CURL_SOCKET_BAD) {
         /* store the new socket descriptor */
         conn->sock[sockindex] = sockfd;
---- 567,573 ----
+--- 556,562 ----
     ai = conn->ip_addr->ai_next;
   
     while(ai) {
@@ -47,36 +47,36 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
         /* store the new socket descriptor */
         conn->sock[sockindex] = sockfd;
 ***************
-*** 720,726 ****
+*** 714,720 ****
   singleipconnect(struct connectdata *conn,
                   const Curl_addrinfo *ai,
                   long timeout_ms,
 !                 bool *connected)
   {
+    struct Curl_sockaddr_ex addr;
     char addr_buf[128];
-    int rc;
---- 722,729 ----
+--- 716,723 ----
   singleipconnect(struct connectdata *conn,
                   const Curl_addrinfo *ai,
                   long timeout_ms,
 !                 bool *connected,
 !                 bool *timed_out)
   {
+    struct Curl_sockaddr_ex addr;
     char addr_buf[128];
-    int rc;
 ***************
-*** 740,745 ****
---- 743,750 ----
-    struct curl_sockaddr *addr=(struct curl_sockaddr*)&addr_storage;
-    const void *iptoprint;
+*** 730,735 ****
+--- 733,740 ----
+    struct sockaddr_in6 * const sa6 = (void *)&addr.sa_addr;
+  #endif
   
 +   *timed_out = FALSE;
 + 
-    addr->family=ai->ai_family;
-    addr->socktype=conn->socktype;
-    addr->protocol=ai->ai_protocol;
+    /*
+     * The Curl_sockaddr_ex structure is basically libcurl's external API
+     * curl_sockaddr structure with enough space available to directly hold
 ***************
-*** 841,848 ****
+*** 880,887 ****
       infof(data, "connected\n");
       return sockfd;
     }
@@ -85,7 +85,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
     else {
       data->state.os_errno = error;
       infof(data, "%s\n", Curl_strerror(conn, error));
---- 846,855 ----
+--- 885,894 ----
       infof(data, "connected\n");
       return sockfd;
     }
@@ -97,7 +97,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
       data->state.os_errno = error;
       infof(data, "%s\n", Curl_strerror(conn, error));
 ***************
-*** 872,879 ****
+*** 911,918 ****
     int num_addr;
     Curl_addrinfo *ai;
     Curl_addrinfo *curr_addr;
@@ -106,7 +106,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
     struct timeval before = Curl_tvnow();
   
     /*************************************************************
---- 879,886 ----
+--- 918,925 ----
     int num_addr;
     Curl_addrinfo *ai;
     Curl_addrinfo *curr_addr;
@@ -116,7 +116,7 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
   
     /*************************************************************
 ***************
-*** 915,933 ****
+*** 955,973 ****
          curr_addr = curr_addr->ai_next, aliasindex++) {
   
       /* start connecting to the IP curr_addr points to */
@@ -135,8 +135,8 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
 -     before = after;
     }  /* end of connect-to-each-address loop */
   
-    if(sockfd == CURL_SOCKET_BAD) {
---- 922,938 ----
+    *sockconn = sockfd;    /* the socket descriptor we've connected */
+--- 962,978 ----
          curr_addr = curr_addr->ai_next, aliasindex++) {
   
       /* start connecting to the IP curr_addr points to */
@@ -153,4 +153,4 @@ diff -rc curl-7.18.1-orig/lib/connect.c curl-7.18.1/lib/connect.c
       }
     }  /* end of connect-to-each-address loop */
   
-    if(sockfd == CURL_SOCKET_BAD) {
+    *sockconn = sockfd;    /* the socket descriptor we've connected */

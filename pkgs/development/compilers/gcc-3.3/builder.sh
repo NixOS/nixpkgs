@@ -26,7 +26,7 @@ EOF
     if test -n "$langCC"; then
         langs="$langs,c++"
     fi
-    if test -n "$langF77"; then
+    if test -n "$langFortran"; then
         langs="$langs,f77"
     fi
 
@@ -37,8 +37,6 @@ EOF
     configureScript=../$sourceRoot/configure
     configureFlags="--enable-languages=$langs"
 }
-
-preConfigure=preConfigure
 
 
 postConfigure() {
@@ -81,8 +79,6 @@ postConfigure() {
         mv $mf.tmp $mf
     fi
 }
-
-postConfigure=postConfigure
 
 
 buildFlags="bootstrap"

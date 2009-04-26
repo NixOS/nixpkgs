@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace /bin/umount ${utillinux}/bin/umount
   '';
 
-  configureFlags = "--enable-shared --disable-static --disable-ldconfig --exec-prefix=\${prefix} --enable-mount-helper";
+  configureFlags = "--disable-ldconfig --exec-prefix=\${prefix} --enable-mount-helper";
 
   meta = {
     homepage = http://www.ntfs-3g.org;

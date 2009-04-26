@@ -85,9 +85,11 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         n=$((n + 1))
     done
 
-    # Second, for each -l... switch, find the directory containing the
-    # library and add it to the rpath.
+    # Second, for each directory in the library search path (-L...),
+    # see if it contains a dynamic library used by a -l... flag.  If
+    # so, add the directory to the rpath.
     rpath=""
+    
     addToRPath() {
         # If the path is not in the store, don't add it to the rpath.
         # This typically happens for libraries in /tmp that are later
@@ -98,26 +100,25 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         esac
         rpath="$rpath $1 "
     }
-    findLib() {
-        for i in $libPath; do
-            if test -f $i/lib$1.so; then
+
+    for i in $libPath; do
+        n=0
+        while test $n -lt ${#allParams[*]}; do
+            p=${allParams[n]}
+            p2=${allParams[$((n+1))]}
+            if test "${p:0:2}" = "-l" -a -f "$i/lib${p:2}.so"; then
                 addToRPath $i
+                break
+            elif test "$p" = "-l" -a -f "$i/lib${p2}"; then
+                # I haven't seen `-l foo', but you never know...
+                addToRPath $i
+                break
             fi
-        done
-    }
-    n=0
-    while test $n -lt ${#allParams[*]}; do
-        p=${allParams[n]}
-        p2=${allParams[$((n+1))]}
-        if test "${p:0:2}" = "-l"; then
-            findLib ${p:2}
-        elif test "$p" = "-l"; then
-            # I haven't seen `-l foo', but you never know...
-            findLib ${p2}
             n=$((n + 1))
-        fi
-        n=$((n + 1))
+        done
+            
     done
+    
 
     # Finally, add `-rpath' switches.
     for i in $rpath; do

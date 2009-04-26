@@ -99,6 +99,7 @@ in {
   docbook_xml_dtd_42 = all;
   docbook_xml_dtd_43 = all;
   docbook_xsl = all;
+  dosbox = linux;
   doxygen = linux;
   e2fsprogs = linux;
   emacs22 = all;
@@ -120,12 +121,14 @@ in {
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;
-  gcc43multi = ["x86_64-linux"];
+  gcc43_multi = ["x86_64-linux"];
   gdb = all;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
+  glibc = linux;
+  glibcLocales = linux;
   gnash = linux;
   gnugrep = all;
   gnum4 = all;
@@ -176,7 +179,7 @@ in {
   libarchive = linux;
   libsmbios = linux;
   libtool = all;
-  libtool2 = all;
+  libtool_2 = all;
   libxml2 = all;
   libxslt = all;
   lout = linux;
@@ -219,6 +222,7 @@ in {
   pam_unix2 = linux;
   pan = gtkSupported;
   par2cmdline = all;
+  pavucontrol = linux;
   pciutils = linux;
   perl = all;
   php = linux;
@@ -341,11 +345,11 @@ in {
   haskellPackages_ghc6102 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    gtk2hs = ghcSupported;
-    leksah = ghcSupported;
+    gtk2hs = linux;
+    leksah = linux;
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
-    xmonad = ghcSupported;
+    xmonad = linux;
   };
 
   kde3 = {
@@ -401,6 +405,13 @@ in {
     virtualbox = linux;
   };
 
+  strategoPackages = {
+    sdf = all;
+    strategoxt = all;
+    javafront = all;
+    dryad = linux;
+  };
+
   perlPackages = {
     TaskCatalystTutorial = linux;
   };
@@ -421,7 +432,7 @@ in {
     xauth = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
-    xf86videoi810 = linux;
+    xf86videointel = linux;
     xf86videovesa = linux;
     xkbcomp = linux;
     xmessage = linux;

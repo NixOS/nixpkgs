@@ -55,6 +55,7 @@ stdenv.mkDerivation {
     --enable-runtime-cpudetection
     --enable-x11 --with-extraincdir=${libX11}/include
     --disable-xanim
+    --disable-ivtv
   '';
 
   NIX_LDFLAGS = "-lX11 -lXext";

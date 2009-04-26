@@ -51,7 +51,6 @@ if test "$noSysDirs" = "1"; then
 fi
 
 
-preConfigure=preConfigure
 preConfigure() {
     # Perform the build in a different directory.
     mkdir ../build
@@ -60,7 +59,6 @@ preConfigure() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.

@@ -2,14 +2,14 @@
 
 assert stdenv.isLinux;
 
-let version = "2.6.28"; in 
+let version = "2.6.28.5"; in 
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
   
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "1023nl992s4qmnwzbfz385azzpph58azi5rw4w0wwzzybv2rf3df";
+    sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
   platform = 

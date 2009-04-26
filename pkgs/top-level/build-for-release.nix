@@ -231,7 +231,7 @@ let
       xauth
       xf86inputkeyboard
       xf86inputmouse
-      xf86videoi810
+      xf86videointel
       xf86videovesa
       xkbcomp
       xorgserver
@@ -331,7 +331,7 @@ let
   x86_64LinuxPkgs = commonLinuxPkgs "x86_64-linux" // {
     inherit (allPackages {system = "x86_64-linux";})
       aterm242fixes
-      gcc43multi
+      gcc43_multi
       ;    
   };
   
@@ -395,9 +395,15 @@ let
   cygwinPkgs = {
     inherit (allPackages {system = "i686-cygwin";})
       aterm
+      autoconf
+      automake110x
+      automake19x
       gnum4
-      readline
+      libtool
       ncurses
+      nixUnstable
+      readline
+      subversion
       ;
   };
 
@@ -407,5 +413,5 @@ in [
   #i686FreeBSDPkgs
   #powerpcDarwinPkgs
   i686DarwinPkgs
-  #cygwinPkgs
+  cygwinPkgs
 ]

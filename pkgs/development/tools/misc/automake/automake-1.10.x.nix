@@ -1,9 +1,10 @@
-{stdenv, fetchurl, perl, autoconf}:
+{stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? false}:
 
 stdenv.mkDerivation rec {
   name = "automake-1.10.2";
 
   builder = ./builder.sh;
+  
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
@@ -11,12 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "03v4gsvi71nhqvnxxbhkrksdg5icrn8yda021852njfragzck2n3";
   };
 
-  patches = [ ./test-broken-make.patch ];
+  buildInputs = [perl autoconf makeWrapper];
 
-  buildInputs = [perl autoconf];
+  inherit doCheck;
 
-  doCheck = true;
-
+  # Disable indented log output from Make, otherwise "make.test" will
+  # fail.
+  preCheck = "unset NIX_INDENT_MAKE";
+  
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;

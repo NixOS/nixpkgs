@@ -6,31 +6,32 @@
 , gmp, mpfr
 , bison ? null, flex ? null
 , enableMultilib ? false
+, name ? "gcc"
 }:
 
-assert langC;
 assert langTreelang -> bison != null && flex != null;
 
-with import ../../../lib;
+with stdenv.lib;
 
-let version = "4.3.1"; in
+let version = "4.3.3"; in
 
 stdenv.mkDerivation {
-  name = "gcc-${version}";
+  name = "${name}-${version}";
+  
   builder = ./builder.sh;
   
   src =
     optional /*langC*/ true (fetchurl {
-      url = "mirror://gnu/gcc/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "18spk152j1vqa9bzhi93i7cgrmf7gncv0h1lm1mxxgn1ahrnnw67";
+      url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
+      sha256 = "08yksvipnqmqbmif30rwjkg3y0m6ray5r84wa2argv8q0bpz9426";
     }) ++
     optional langCC (fetchurl {
-      url = "mirror://gnu/gcc/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "0r74s60hylr8xrnb2j3x0dmf3cnxxg609g4h07r6ida8vk33bd25";
+      url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
+      sha256 = "12z2zh03yq214qs2cqzh8c64jjfz544nk1lzi9rygjwm8yjsvzm9";
     }) ++
     optional langFortran (fetchurl {
-      url = "mirror://gnu/gcc/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "1fl76sajlz1ihnsmqsbs3i8g0h77w9hm35pwb1s2w6p4h5xy5dnb";
+      url = "mirror://gcc/releases/gcc-${version}/gcc-fortran-${version}.tar.bz2";
+      sha256 = "1b2wbysviyh7l9fqbd6zy5y6y89xgysy99gr8wx8xkc1hy2nwdsq";
     });
     
   patches =

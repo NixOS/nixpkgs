@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   # First install the `File::MMagic' Perl module.
+  # !!! this shouldn't refer to Perl 5.10.0!
   preConfigure = ''
     ( cd File-MMagic &&				\
       perl Makefile.PL				\
-        LIB="$out/lib/site_perl/5.10.0"		\
+        LIB="$out/lib/perl5/site_perl/5.10.0"	\
         INSTALLSITEMAN3DIR="$out/man" &&	\
       make && make install )
     export PERL5LIB="$out/lib/site_perl/5.10.0:$PERL5LIB"

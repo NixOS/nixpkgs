@@ -20,8 +20,6 @@ rec {
         --replace getopt ${getopt}/bin/getopt
     '';
 
-    configureFlags = "--disable-static";
-
     meta = {
       homepage = http://www.program-transformation.org/Sdf/SdfBundle;
       meta = "Tools for the SDF2 Syntax Definition Formalism, including the `pgen' parser generator and `sglr' parser";
@@ -38,8 +36,6 @@ rec {
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
-
-    configureFlags = "--disable-static";
 
     meta = {
       homepage = http://strategoxt.org/;
@@ -60,7 +56,7 @@ rec {
 
     # !!! The explicit `--with-strategoxt' is necessary; otherwise we
     # get an XTC registration that refers to "/share/strategoxt/XTC".
-    configureFlags = "--disable-static --enable-xtc --with-strategoxt=${strategoxt}";
+    configureFlags = "--enable-xtc --with-strategoxt=${strategoxt}";
 
     meta = {
       homepage = http://strategoxt.org/Stratego/JavaFront;
@@ -78,8 +74,6 @@ rec {
     };
 
     buildInputs = [jdk pkgconfig aterm sdf strategoxt javafront];
-
-    configureFlags = "--disable-static";
 
     meta = {
       homepage = http://strategoxt.org/Stratego/TheDryad;

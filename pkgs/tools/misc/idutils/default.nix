@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "idutils-4.2";
+  
   src = fetchurl {
     url = "mirror://gnu/idutils/${name}.tar.gz";
     sha256 = "16gsy7vrjax2zl4galwq03l0y97d18p0pyd5cccyc4i8y3mhwx65";
   };
 
-  buildInputs = [ emacs ];
+  buildInputs = stdenv.lib.optional stdenv.isLinux emacs;
 
   doCheck = true;
 

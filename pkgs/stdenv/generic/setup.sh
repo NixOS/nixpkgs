@@ -1,3 +1,17 @@
+# Run the named hook, either by calling the function with that name or
+# by evaluating the variable with that name.  This allows convenient
+# setting of hooks both from Nix expressions (as attributes /
+# environment variables) and from shell scripts (as functions). 
+runHook() {
+    local hookName="$1"
+    if test "$(type -t $hookName)" = function; then
+        $hookName
+    else
+        eval "${!hookName}"
+    fi
+}
+
+
 exitHandler() {
     exitCode=$?
     set +e
@@ -16,7 +30,7 @@ exitHandler() {
     fi
     
     if test $exitCode != 0; then
-        eval "$failureHook"
+        runHook failureHook
     
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
@@ -30,7 +44,7 @@ exitHandler() {
         fi
         
     else
-        eval "$exitHook"
+        runHook exitHook
     fi
     
     exit $exitCode
@@ -46,17 +60,13 @@ trap "exitHandler" EXIT
 addToSearchPathWithCustomDelimiter() {
     local delimiter=$1
     local varName=$2
-    local needDir=$3
-    local addDir=${4:-$needDir}
-    local prefix=$5
-    if [ -d $prefix$needDir ]; then
-        if [ -z ${!varName} ]; then
-            eval export ${varName}=${prefix}$addDir
-        else
-            eval export ${varName}=${!varName}${delimiter}${prefix}$addDir
-        fi
+    local dir=$3
+    if [ -d "$dir" ]; then
+        eval export ${varName}=${!varName}${!varName:+$delimiter}${dir}
     fi
 }
+
+PATH_DELIMITER=':'
 
 addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
@@ -71,11 +81,17 @@ set -e
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
 
+# Wildcard expansions that don't match should expand to an empty list.
+# This ensures that, for instance, "for i in *; do ...; done" does the
+# right thing.
+shopt -s nullglob
+
+
 # Set up the initial path.
 PATH=
 for i in $NIX_GCC @initialPath@; do
     if test "$i" = /; then i=; fi
-    PATH=$PATH${PATH:+:}$i/bin
+    addToSearchPath PATH $i/bin
 done
 
 if test "$NIX_DEBUG" = "1"; then
@@ -85,7 +101,6 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
-PATH_DELIMITER=':'
 if test -z "$shell"; then
     export shell=@shell@
 fi
@@ -95,7 +110,7 @@ param3=@param3@
 param4=@param4@
 param5=@param5@
 if test -n "@preHook@"; then source @preHook@; fi
-eval "$preHook"
+runHook preHook
 
 
 # Check that the pre-hook initialised SHELL.
@@ -118,22 +133,15 @@ ensureDir() {
 }
 
 installBin() {
-  ensureDir $out/bin
-  cp "$@" $out/bin
-}
-
-assertEnvExists(){
-  if test -z "${!1}"; then
-      msg=${2:-error: assertion failed: env var $1 is required}
-      echo $msg >&2; exit 1
-  fi
+    ensureDir $out/bin
+    cp "$@" $out/bin
 }
 
 
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
-eval "$addInputsHook"
+runHook addInputsHook
 
 
 # Recursively find all build inputs.
@@ -160,9 +168,6 @@ findInputs() {
 }
 
 pkgs=""
-if test -n "$buildinputs"; then
-    buildInputs="$buildinputs" # compatibility
-fi
 for i in $buildInputs $propagatedBuildInputs; do
     findInputs $i
 done
@@ -173,15 +178,11 @@ done
 addToEnv() {
     local pkg=$1
 
-    if test "$ignoreFailedInputs" != "1" -a -e $1/nix-support/failed; then
-        echo "failed input $1" >&2
-        exit 1
-    fi
-
     if test -d $1/bin; then
-        export _PATH=$_PATH${_PATH:+:}$1/bin
+        addToSearchPath _PATH $1/bin
     fi
 
+    # Run the package-specific hooks set by the setup-hook scripts.
     for i in "${envHooks[@]}"; do
         $i $pkg
     done
@@ -195,6 +196,9 @@ done
 # Add the output as an rpath.
 if test "$NIX_NO_SELF_RPATH" != "1"; then
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+    if test -n "$NIX_LIB64_IN_SELF_RPATH"; then
+        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
+    fi
 fi
 
 
@@ -203,17 +207,6 @@ if test -z "$NIX_STRIP_DEBUG"; then
     export NIX_STRIP_DEBUG=1
     export NIX_CFLAGS_STRIP="-g0 -Wl,--strip-debug"
 fi
-
-
-assertEnvExists NIX_STORE \
-    "Error: you have an old version of Nix that does not set the
-     NIX_STORE variable. This is required for purity checking.
-     Please upgrade."
-
-assertEnvExists NIX_BUILD_TOP \
-    "Error: you have an old version of Nix that does not set the
-     NIX_BUILD_TOP variable. This is required for purity checking.
-     Please upgrade."
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -240,6 +233,10 @@ if test "$NIX_DEBUG" = "1"; then
 fi
 
 
+# Make GNU Make produce nested output.
+export NIX_INDENT_MAKE=1
+
+
 ######################################################################
 # Misc. helper functions.
 
@@ -258,7 +255,7 @@ stripDirs() {
 
     if test -n "${dirs}"; then
         header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 strip $stripFlags || true
+        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
 }
@@ -379,58 +376,6 @@ dumpVars() {
 }
 
 
-# Redirect stdout/stderr to a named pipe connected to a `tee' process
-# that writes the specified file (and also to our original stdout).
-# The original stdout is saved in descriptor 3.
-startLog() {
-    local logFile=${logNr}_$1
-    logNr=$((logNr + 1))
-    if test "$logPhases" = 1; then
-        ensureDir $logDir
-
-        exec 3>&1
-
-        if test "$dontLogThroughTee" != 1; then
-            # This required named pipes (fifos).
-            logFifo=$NIX_BUILD_TOP/log_fifo
-            test -p $logFifo || mkfifo $logFifo
-            startLogWrite "$logDir/$logFile" "$logFifo"
-            exec > $logFifo 2>&1
-        else
-            exec > $logDir/$logFile 2>&1
-        fi
-    fi
-}
-
-# Factored into a separate function so that it can be overriden.
-startLogWrite() {
-    tee "$1" < "$2" &
-    logWriterPid=$!
-}
-
-
-if test -z "$logDir"; then
-    logDir=$out/log
-fi
-
-logNr=0
-
-# Restore the original stdout/stderr.
-stopLog() {
-    if test "$logPhases" = 1; then
-        exec >&3 2>&1
-
-        # Wait until the tee process has died.  Otherwise output from
-        # different phases may be mixed up.
-        if test -n "$logWriterPid"; then
-            wait $logWriterPid
-            logWriterPid=
-            rm $logFifo
-        fi
-    fi
-}
-
-
 # Utility function: return the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
@@ -442,37 +387,34 @@ stripHash() {
 
 
 unpackFile() {
-    local file="$1"
+    curSrc="$1"
     local cmd
 
-    header "unpacking source archive $file" 3
+    header "unpacking source archive $curSrc" 3
 
-    case "$file" in
+    case "$curSrc" in
         *.tar)
-            tar xvf $file
+            tar xvf $curSrc
             ;;
         *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $file | tar xvf -
+            gzip -d < $curSrc | tar xvf -
             ;;
         *.tar.bz2 | *.tbz2)
-            bzip2 -d < $file | tar xvf -
+            bzip2 -d < $curSrc | tar xvf -
             ;;
         *.zip)
-            unzip $file
+            unzip $curSrc
             ;;
         *)
-            if test -d "$file"; then
-                stripHash $file
-                cp -prvd $file $strippedName
+            if test -d "$curSrc"; then
+                stripHash $curSrc
+                cp -prvd $curSrc $strippedName
             else
-                if test -n "$findUnpacker"; then
-                    $findUnpacker $1;
-                fi
                 if test -z "$unpackCmd"; then
-                    echo "source archive $file has unknown type"
+                    echo "source archive $curSrc has unknown type"
                     exit 1
                 fi
-                eval "$unpackCmd"
+                runHook unpackCmd
             fi
             ;;
     esac
@@ -482,12 +424,7 @@ unpackFile() {
 
 
 unpackPhase() {
-    if test -n "$unpackPhase"; then
-        eval "$unpackPhase"
-        return
-    fi
-
-    eval "$preUnpack"
+    runHook preUnpack
     
     if test -z "$srcs"; then
         if test -z "$src"; then
@@ -515,8 +452,8 @@ unpackPhase() {
 
     # Find the source directory.
     if test -n "$setSourceRoot"; then
-        eval "$setSourceRoot"
-    else
+        runHook setSourceRoot
+    elif test -z "$sourceRoot"; then
         sourceRoot=
         for i in *; do
             if test -d "$i"; then
@@ -528,7 +465,7 @@ unpackPhase() {
                             echo "unpacker produced multiple directories"
                             exit 1
                         fi
-                        sourceRoot=$i
+                        sourceRoot="$i"
                         ;;
                 esac
             fi
@@ -546,27 +483,18 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if test "dontMakeSourcesWritable" != 1; then
-        chmod -R +w $sourceRoot
+        chmod -R u+w "$sourceRoot"
     fi
 
-    eval "$postUnpack"
+    runHook postUnpack
 }
 
 
 patchPhase() {
-    if test -n "$patchPhase"; then
-        eval "$patchPhase"
-        return
-    fi
-
-    eval "$prePatch"
+    runHook prePatch
     
     if test -z "$patchPhase" -a -z "$patches"; then return; fi
     
-    if test -z "$patchFlags"; then
-        patchFlags="-p1"
-    fi
-
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -578,11 +506,11 @@ patchPhase() {
                 uncompress="bzip2 -d"
                 ;;
         esac
-        $uncompress < $i | patch $patchFlags
+        $uncompress < $i | patch ${patchFlags:--p1}
         stopNest
     done
 
-    eval "$postPatch"
+    runHook postPatch
 }
 
 
@@ -592,12 +520,7 @@ fixLibtool() {
 
 
 configurePhase() {
-    if test -n "$configurePhase"; then
-        eval "$configurePhase"
-        return
-    fi
-
-    eval "$preConfigure"
+    runHook preConfigure
 
     if test -z "$configureScript"; then
         configureScript=./configure
@@ -625,20 +548,22 @@ configurePhase() {
         fi
     fi
 
-    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags"${configureFlagsArray[@]}"
+    # By default, disable static builds.
+    if test -z "$dontDisableStatic"; then
+        if grep -q enable-static $configureScript; then
+            configureFlags="--disable-static $configureFlags"
+        fi
+    fi
 
-    eval "$postConfigure"
+    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
+    $configureScript $configureFlags "${configureFlagsArray[@]}"
+
+    runHook postConfigure
 }
 
 
 buildPhase() {
-    if test -n "$buildPhase"; then
-        eval "$buildPhase"
-        return
-    fi
-
-    eval "$preBuild"
+    runHook preBuild
 
     if test -z "$makeFlags" && ! test -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile"; then
         echo "no Makefile, doing nothing"
@@ -650,28 +575,19 @@ buildPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}"
 
-    eval "$postBuild"
+    runHook postBuild
 }
 
 
 checkPhase() {
-    if test -n "$checkPhase"; then
-        eval "$checkPhase"
-        return
-    fi
-
-    eval "$preCheck"
-
-    if test -z "$checkTarget"; then
-        checkTarget="check"
-    fi
+    runHook preCheck
 
     echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" $checkTarget
+        $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
-    eval "$postCheck"
+    runHook postCheck
 }
 
 
@@ -711,28 +627,17 @@ patchShebangs() {
 
 
 installPhase() {
-    if test -n "$installPhase"; then
-        eval "$installPhase"
-        return
-    fi
-
-    eval "$preInstall"
+    runHook preInstall
 
     ensureDir "$prefix"
 
-    if test -z "$installCommand"; then
-        if test -z "$installTargets"; then
-            installTargets=install
-        fi
-        echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-        make ${makefile:+-f $makefile} $installTargets \
-            $makeFlags "${makeFlagsArray[@]}" \
-            $installFlags "${installFlagsArray[@]}"
-    else
-        eval "$installCommand"
-    fi
+    installTargets=${installTargets:-install}
+    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+    make ${makefile:+-f $makefile} $installTargets \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $installFlags "${installFlagsArray[@]}"
 
-    eval "$postInstall"
+    runHook postInstall
 }
 
 
@@ -740,12 +645,7 @@ installPhase() {
 # stuff, like running patchelf and setting the
 # propagated-build-inputs.  It should rarely be overriden.
 fixupPhase() {
-    if test -n "$fixupPhase"; then
-        eval "$fixupPhase"
-        return
-    fi
-
-    eval "$preFixup"
+    runHook preFixup
 
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
@@ -768,7 +668,7 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
-        stripDebugList=${stripDebugList:-lib bin sbin}
+        stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
         if test -n "$stripDebugList"; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
@@ -797,38 +697,25 @@ fixupPhase() {
         substituteAll "$setupHook" "$out/nix-support/setup-hook"
     fi
 
-    eval "$postFixup"
+    runHook postFixup
 }
 
 
 distPhase() {
-    if test -n "$distPhase"; then
-        eval "$distPhase"
-        return
-    fi
-
-    eval "$preDist"
-
-    if test -z "$distTarget"; then
-        distTarget="dist"
-    fi
+    runHook preDist
 
     echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" $distTarget
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
 
-        if test -z "$tarballs"; then
-            tarballs="*.tar.gz"
-        fi
-
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
-        cp -pvd $tarballs $out/tarballs
+        cp -pvd ${tarballs:-*.tar.gz} $out/tarballs
     fi
 
-    eval "$postDist"
+    runHook postDist
 }
 
 
@@ -870,7 +757,6 @@ genericBuild() {
         if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
         
         showPhaseHeader "$curPhase"
-        startLog "$curPhase"
         dumpVars
         
         # Evaluate the variable named $curPhase if it exists, otherwise the
@@ -881,7 +767,6 @@ genericBuild() {
             cd "${sourceRoot:-.}"
         fi
         
-        stopLog
         stopNest
     done
 
@@ -891,7 +776,7 @@ genericBuild() {
 
 # Execute the post-hook.
 if test -n "@postHook@"; then source @postHook@; fi
-eval "$postHook"
+runHook postHook
 
 
 dumpVars

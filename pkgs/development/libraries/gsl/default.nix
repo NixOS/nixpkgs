@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  configureFlags = "--disable-static";
-
   meta = { 
     description = "The GNU Scientific Library, a large numerical library";
 

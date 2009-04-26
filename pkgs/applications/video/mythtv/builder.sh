@@ -15,7 +15,6 @@ buildPhase() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     sqlDir="$out/share/mythtv/sql"
     ensureDir $sqlDir

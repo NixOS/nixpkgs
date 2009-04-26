@@ -2,7 +2,7 @@
 , pdfSupport ? true
 , pngSupport ? true
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype
-, zlib, libpng, pixman
+, zlib, libpng, pixman, libxcb, xcbutil
 }:
 
 assert postscriptSupport -> zlib != null;
@@ -17,16 +17,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig x11 fontconfig pixman
+    pkgconfig x11 fontconfig pixman libxcb xcbutil
   ];
-  
+
   propagatedBuildInputs =
     [ freetype ] ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
-  configureFlags =
-    (if pdfSupport then ["--enable-pdf"] else []);
+  configureFlags = ["--enable-xcb"] ++
+    stdenv.lib.optional pdfSupport "--enable-pdf";
 
   preConfigure = ''
     # Work around broken `Requires.private' that prevents Freetype

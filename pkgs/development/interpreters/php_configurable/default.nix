@@ -112,7 +112,7 @@ composableDerivation {} ( fixed : {
     apxs2Support = true;
     bcmathSupport = true;
     socketsSupport = true;
-    curlSupport = true;
+    curlSupport = false;
     gettextSupport = true;
     postgresqlSupport = true;
     zlibSupport = true;

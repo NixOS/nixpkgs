@@ -9,7 +9,6 @@ stdenv.mkDerivation {
   };
     
   propagatedBuildInputs = [gnutls libidn glib zlib];
+  
   buildInputs = [pkgconfig];
-
-  configureFlags = "--enable-shared --disable-static";
 }

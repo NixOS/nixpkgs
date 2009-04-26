@@ -11,7 +11,6 @@ export PWD_P=$(type -tP pwd)
 export BASH_SHELL=$SHELL
 
 
-preConfigure=preConfigure
 preConfigure() {
 
     for i in configure io/ftwtest-sh; do
@@ -34,7 +33,6 @@ preConfigure() {
 }
 
 
-postConfigure=postConfigure
 postConfigure() {
     # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
     # This has to be done *after* `configure' because it builds some
@@ -44,7 +42,6 @@ postConfigure() {
 }
 
 
-postInstall=postInstall
 postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales

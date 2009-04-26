@@ -1,11 +1,11 @@
 {stdenv, fetchurl, x11, mesa}:
 
 stdenv.mkDerivation {
-  name = "glxinfo-6.5.2";
+  name = "glxinfo-7.4.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/mesa3d/MesaDemos-6.5.2.tar.bz2;
-    sha256 = "1shfwy0sy3kdk3nykp1gv6s0lafqgqnadwarw5cbpw7mkfap8kw0";
+    url = mirror://sourceforge/mesa3d/MesaDemos-7.4.1.tar.bz2;
+    md5 = "1e169fb6abc2b45613f1c98a82dfe690";
   };
 
   buildInputs = [x11 mesa];
