@@ -166,6 +166,7 @@ in {
   irssi = linux;
   jnettop = linux;
   jwhois = linux;
+  k3b = linux;
   kbd = linux;
   kcachegrind = linux;
   keen4 = ["i686-linux"];
@@ -234,6 +235,7 @@ in {
   portmap = linux;
   postgresql = all;
   procps = linux;
+  pwdutils = linux;
   pthreadmanpages = all;
   python = allBut "i686-cygwin";
   pythonFull = linux;
