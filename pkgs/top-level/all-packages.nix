@@ -4482,7 +4482,7 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
-  samba = import ../servers/samba {
+  samba = makeOverridable (import ../servers/samba) {
     inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
   libunwind acl fam;
   };
