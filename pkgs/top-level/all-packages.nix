@@ -1145,6 +1145,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  pydb = import ../tools/pydb {
+    inherit fetchurl stdenv python emacs;
+  };
+
   pystringtemplate = import ../development/python-modules/stringtemplate {
     inherit stdenv fetchurl python antlr;
   };
