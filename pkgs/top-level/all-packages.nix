@@ -603,6 +603,10 @@ let
     inherit fetchurl stdenv emacs;
   };
 
+  emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
+    inherit fetchurl stdenv emacs;
+  };
+
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
