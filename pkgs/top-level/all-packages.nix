@@ -632,6 +632,10 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  figlet = import ../tools/misc/figlet {
+    inherit fetchurl stdenv;
+  };
+
   file = import ../tools/misc/file {
     inherit fetchurl stdenv;
   };
