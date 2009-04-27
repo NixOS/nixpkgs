@@ -30,6 +30,8 @@
 
         mkdir -m 0755 -p /var/cache/hald
 
+        rm -f /var/cache/hald/fdi-cache
+
     end script
 
     respawn ${hal}/sbin/hald --daemon=no
