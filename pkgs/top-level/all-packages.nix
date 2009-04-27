@@ -4609,7 +4609,7 @@ let
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libvolume_id perl perlXMLParser
-      gettext zlib eject libsmbios udev;
+      gettext zlib eject libsmbios udev gperf;
     inherit (gtkLibs) glib;
   };
 
