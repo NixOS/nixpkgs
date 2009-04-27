@@ -48,19 +48,21 @@ rec {
   };
 
   topGit = stdenv.mkDerivation {
-      name = "TopGit-git-patched";
-      src = sourceByName "topGit"; # destination directory is patched
-      installPhase = ''
-        mkdir -p $out/etc/bash_completion.d
-        make install
-        mv contrib/tg-completion.bash $out/etc/bash_completion.d
-      '';
-      dontPatchELF = 1;
-      meta = {
-        description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-        homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
-        license = "GPLv2";
+    name = "TopGit-git-patched";
+    src = sourceByName "topGit"; # destination directory is patched
+    phases="unpackPhase patchPhase installPhase";
+    installPhase = ''
+      mkdir -p $out/etc/bash_completion.d
+      make prefix=$out \
+        install
+      mv contrib/tg-completion.bash $out/etc/bash_completion.d
+    '';
+    meta = {
+      description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
+      homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
+      license = "GPLv2";
     };
+    patches = [ ./print-update-ranges.patch ./tg-push.patch ];
   };
 
   tig = stdenv.mkDerivation {

@@ -231,9 +231,9 @@
     url = "http://mawercer.de/~nix/repos/zsh-2008-12-21_12-50-23.tar.gz";
     sha256 = "9af16f89205759d7ade51268dbdfa02cec3db10b35dc7a56ffe8e1fde2074ae7";
   };
-  topGit = args: with args; fetchurl { # Tue Jan 20 21:29:50 UTC 2009
-    url = "http://mawercer.de/~nix/repos/topGit-5b823563a678fe46ddf768977ab9d00525945ec6.tar.gz";
-    sha256 = "e027311b2b058bab05a7175546854d61325bba591109e68c59209edc6939e5cb";
+  topGit = args: with args; fetchurl { # Thu Apr 16 17:11:03 CEST 2009
+    url = "http://mawercer.de/~nix/repos/topGit-9f685cd79b36ff9459f2d1d8ba0c21fa8875ffad.tar.gz";
+    sha256 = "e2c82e8812a3f019e23b052c03000a5752a446dbea26cbfe91ef68a552c4c429";
   };
   qgit = args: with args; fetchurl { # Tue Jan 20 21:35:00 UTC 2009
     url = "http://mawercer.de/~nix/repos/qgit-b5dd5fd691e9423124cf356abe26e641bc33d159.tar.gz";
