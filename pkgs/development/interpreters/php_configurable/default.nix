@@ -25,7 +25,7 @@ composableDerivation {} ( fixed : {
 
       curl = {
         configureFlags = ["--with-curl=${args.curl}" "--with-curlwrappers"];
-        buildInputs = [curl];
+        buildInputs = [curl openssl];
       };
       
       zlib = {
@@ -112,7 +112,7 @@ composableDerivation {} ( fixed : {
     apxs2Support = true;
     bcmathSupport = true;
     socketsSupport = true;
-    curlSupport = false;
+    curlSupport = true;
     gettextSupport = true;
     postgresqlSupport = true;
     zlibSupport = true;
