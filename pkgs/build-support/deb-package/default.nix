@@ -46,8 +46,9 @@ stdenv.mkDerivation rec {
 	name = localDefs.name + "deb";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs ([debPatch] ++ 
-		(lib.optional (! (checkFlag "omitConfigure")) "doConfigure")
-		++ [doInstall doForceShare]));
+		(lib.optional (patches != []) "doPatch") ++
+		(lib.optional (! (checkFlag "omitConfigure")) "doConfigure") ++
+    [doInstall doForceShare]));
 	inherit meta;
 	inherit src;
 }
