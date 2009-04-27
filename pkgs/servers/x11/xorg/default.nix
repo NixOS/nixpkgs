@@ -1946,6 +1946,16 @@ rec {
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
+
+  xfs = (stdenv.mkDerivation {
+    name = "xfs-1.0.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://de.archive.ubuntu.com/ubuntu/pool/universe/x/xfs/xfs_1.0.8.orig.tar.gz;
+      sha256 = "0xdkfgx8m70mgzshlk8qwxhw5wzshc8b1hp9a8047v2nclic08l7";
+    };
+    buildInputs = [pkgconfig libFS libXfont xtrans ];
+  }) // {inherit libFS libXfont xtrans ;};
     
   xgamma = (stdenv.mkDerivation {
     name = "xgamma-1.0.2";
