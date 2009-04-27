@@ -90,6 +90,7 @@ rec {
       url = mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.28.tar.gz;
       sha256 = "1m851bz5025wy24mzsi1i8hdyg8bm7lszx9rnn47llsv6hb9v0da";
     };
+    doCheck = false;
   };
 
   CaptchaReCAPTCHA = buildPerlPackage rec {
