@@ -18,6 +18,7 @@ export LOCATE_PATH=/var/cache/locatedb
 export KDEDIRS=@kdeDirs@
 export XDG_CONFIG_DIRS=@xdgConfigDirs@
 export XDG_DATA_DIRS=@xdgDataDirs@
+export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
 
 
 # Set up secure multi-user builds: non-root users build through the
