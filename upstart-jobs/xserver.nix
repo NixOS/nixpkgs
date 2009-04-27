@@ -32,8 +32,9 @@ let
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
   sessionType = cfg.sessionType;
 
-  videoDriverModules = getAttr [ videoDriver ] (throw "unkown video driver : \"${videoDriver}\"") knownVideoDrivers;
+  videoDriverModules = getAttr [ videoDriver ] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
 
+  
   sessionCmd =
     if sessionType == "" then cfg.sessionStarter else
     if sessionType == "xterm" then "${pkgs.xterm}/bin/xterm -ls" else
@@ -51,13 +52,11 @@ let
 
     
   modules = 
-
     getAttr ["modulesFirst"] [] videoDriverModules
     ++ [
       xorg.xorgserver
-      xorg.xf86inputkeyboard
-      xorg.xf86inputmouse
-    ] 
+      xorg.xf86inputevdev
+    ]
     ++ getAttr ["modules"] [] videoDriverModules
     ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
 
@@ -113,10 +112,10 @@ let
       Option "XkbOptions" "${cfg.xkbOptions}"
     '';
 
-    xkbModel = cfg.xkbModel;
-    layout = cfg.layout;
-
-    corePointer = if cfg.synaptics.enable then "Touchpad[0]" else "Mouse[0]";
+    setCorePointer = 
+      if cfg.synaptics.enable then ''
+        InputDevice "Touchpad[0]" "CorePointer"
+      '' else "";
 
     internalAGPGART =
       if cfg.useInternalAGPGART == "yes" then
