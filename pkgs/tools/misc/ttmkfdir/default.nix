@@ -9,7 +9,9 @@ debBuild ({
 		url = http://ftp.de.debian.org/debian/pool/main/t/ttmkfdir/ttmkfdir_3.0.9-5.1.diff.gz;
 		sha256 = "1500kwvhxfq85zg7nwnn9dlvjxyg2ni7as17gdfm67pl9a45q3w4";
 	};
-  patches = [ ./cstring.patch ];
+  patches = [ 
+    /* also fixes some other compilation issues (freetype includes) */ 
+    ./cstring.patch ];
   name = "ttf-mkfontdir-3.0.9-5.1";
   buildInputs = [fontconfig freetype libunwind libtool 
   	flex bison];
