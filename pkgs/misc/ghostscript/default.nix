@@ -7,15 +7,13 @@ assert x11Support -> x11 != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "ghostscript-8.62.0";
+  name = "ghostscript-8.64.0";
   
   builder = ./builder.sh;
 
-  x = true;
-  
   src = fetchurl {
     url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2"; 
-    sha256 = "0zgvmhrxzdxc3lp7im7qcdmv0jlmbnp1fk0zs0hr3fqa943ywyg2";
+    sha256 = "0b94vlf03saa8vm9drz1kishh527g0brw2cg3jcy9mgpp764x2v1";
   };
 
   fonts = [
@@ -40,16 +38,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fpic";
 
-  patches = [
-
-    # This patch is required to make Ghostscript at least build in a
-    # pure environment (like NixOS).  Ghostscript's build process
-    # performs various tests for the existence of files in
-    # /usr/include.
-    ./purity.patch
-
-    ./mkromfs-zlib.patch
-  ];
+  patches = [ ./purity.patch ./mkromfs-zlib.patch ];
 
   doCheck = true;
 

@@ -1,7 +1,7 @@
 Current makefiles stupidly omit `-lz' when building `mkromfs'.
 
---- gnu-ghostscript-8.62.0/src/unix-aux.mak	2008-05-04 16:34:47.000000000 +0200
-+++ gnu-ghostscript-8.62.0/src/unix-aux.mak	2008-07-17 17:58:20.000000000 +0200
+--- gnu-ghostscript-8.64.0/base/unix-aux.mak	2008-05-04 16:34:47.000000000 +0200
++++ gnu-ghostscript-8.64.0/base/unix-aux.mak	2008-07-17 17:58:20.000000000 +0200
 @@ -97,7 +97,7 @@ MKROMFS_OBJS= $(MKROMFS_ZLIB_OBJS) $(GLO
  endif
  
