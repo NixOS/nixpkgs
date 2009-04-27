@@ -1375,13 +1375,14 @@ rec {
   }) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputevdev = (stdenv.mkDerivation {
-    name = "xf86-input-evdev-2.0.4";
+    name = "xf86-input-evdev-2.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.4/src/everything/xf86-input-evdev-2.0.4.tar.bz2;
-      sha256 = "1jhmq1fl8dnrdqcbzrzq29gqjfxzcz7ivlhb3p5x942cmynxqnl2";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.2.1.tar.bz2  ;
+      sha256 = "19z27qikxc8dqxrfz3y6xiaf23hfaa1s79r0x0wvqjb2532bwmy3";
     };
-    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
+    buildInputs = [pkgconfig inputproto kbproto libxkbfile randrproto xorgserver xproto ];
+    configureFlags = "--with-sdkdir=\${out}/include/xorg";
     preBuild = "
     sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
     ";
