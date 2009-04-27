@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "qt-4.5.1";
+  name = "qt-4.4.3";
   
   src = fetchurl {
-    url = ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.5.1.tar.bz2;
-    sha256 = "b994c40e41386c9d82f025dd9198e1161717021216680adef97da3f1b8947c75";
+    url = ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.5.0.tar.bz2;
+    sha256 = "e1b356a54e65781ed94f19d785356a88daa8d38b9dbbca35439b80ca8c4a5be9";
   };
   
   setupHook = ./setup-hook.sh;
