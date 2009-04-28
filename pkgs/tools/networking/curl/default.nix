@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "11myjjvx1bjl709bgibv8pb1sjf4cicim16k860qzg7d1ll3cd7v";
   };
   
-  buildInputs =
+  # Zlib and OpenSSL must be propagated because `libcurl.la' contains
+  # "-lz -lssl", which aren't necessary direct build inputs of
+  # applications that use Curl.
+  propagatedBuildInputs =
     stdenv.lib.optional zlibSupport zlib ++
     stdenv.lib.optional sslSupport openssl;
     
