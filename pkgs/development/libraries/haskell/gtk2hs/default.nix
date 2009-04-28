@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
+      local installedPkgConf=$confDir/${fname}.installedconf
       ensureDir $confDir
-      cp $out/lib/gtk2hs/*.conf $confDir/
+      echo $installedPkgConf
+      echo '[]' > $installedPkgConf
+      for pkgConf in $out/lib/gtk2hs/*.conf; do
+        cp $pkgConf $confDir/
+        GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
+      done
     ''; # */
 
   passthru = { inherit gtksourceview; };
