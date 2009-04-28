@@ -13,6 +13,7 @@ ln -s $upstart $out/upstart
 
 echo "$kernelParams" > $out/kernel-params
 echo "$configurationName" > $out/configuration-name
+echo "$upstartInterfaceVersion" > $out/upstart-interface-version
 
 mkdir $out/fine-tune
 ChildCount=0;
