@@ -1674,7 +1674,7 @@ let
       url = mirror://xorg/X11R7.4/src/everything/xf86-video-openchrome-0.2.903.tar.bz2;
       sha256 = "043lvcvdkhyb5jp2m0ggd0r0gxndjwh2qnj8wbx2hr2wdf6qbr5p";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
+    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 xextproto xf86driproto xorgserver xproto libXvMC glproto mesa];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
     
   xf86videor128 = (stdenv.mkDerivation ((if overrides ? xf86videor128 then overrides.xf86videor128 else x: x) {
