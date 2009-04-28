@@ -379,6 +379,9 @@ in
   };
 
   require = [
+
+    (import ../system/assertion.nix)
+
     # boot (is it the right place ?)
     (import ../system/kernel.nix)
     (import ../boot/boot-stage-2.nix)
