@@ -4614,6 +4614,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  hal_info = import ../os-specific/linux/hal/info.nix {
+    inherit fetchurl stdenv pkgconfig hal;
+  };
+
   hdparm = import ../os-specific/linux/hdparm {
     inherit fetchurl stdenv;
   };
