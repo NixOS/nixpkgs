@@ -33,6 +33,15 @@ mkIf cfg.enable {
         session = [{
           name = "kde";
           start = ''
+            # A quick hack to make KDE screen locking work.  It calls
+            # kcheckpass, which needs to be setuid in order to read the
+            # shadow password file.  We have a setuid wrapper around
+            # kcheckpass.  However, startkde adds $kdebase/bin to the start
+            # of $PATH if it's not already in $PATH, thus overriding the
+            # setuid wrapper directory.  So here we add $kdebase/bin to the
+            # end of $PATH to keep startkde from doing that.
+            export PATH=$PATH:${pkgs.kdebase}/bin
+            
             # Start KDE.
             exec ${pkgs.kdebase}/bin/startkde
           '';
