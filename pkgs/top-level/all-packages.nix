@@ -2668,7 +2668,8 @@ let
 
   agg = import ../development/libraries/agg {
     inherit fetchurl stdenv autoconf automake libtool pkgconfig
-            freetype SDL;
+      freetype SDL;
+    inherit (xlibs) libX11;
   };
 
   apr = import ../development/libraries/apr {
