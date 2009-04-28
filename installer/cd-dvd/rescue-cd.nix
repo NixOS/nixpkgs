@@ -187,7 +187,6 @@ rec {
         pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
-        pkgs.gdb # for debugging Nix
         pkgs.testdisk # useful for repairing boot problems
         pkgs.mssys # for writing Microsoft boot sectors / MBRs
         pkgs.ntfsprogs # for resizing NTFS partitions
