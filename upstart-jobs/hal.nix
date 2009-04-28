@@ -52,6 +52,8 @@ let
       start script
 
           mkdir -m 0755 -p /var/cache/hald
+          
+          rm -f /var/cache/hald/fdi-cache
 
       end script
 
