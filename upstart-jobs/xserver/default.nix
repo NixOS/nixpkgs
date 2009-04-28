@@ -315,7 +315,7 @@ let
       xorg.xf86inputevdev
     ] 
     ++ getAttr ["modules"] [] videoDriverModules
-    ++ (optional cfg.synaptics.enable ["${pkgs.synaptics}/${xorg.xorgserver}" /*xorg.xf86inputevdev*/]);
+    ++ (optional cfg.synaptics.enable ["${xorg.xf86inputsynaptics}"]);
 
 
   fontsForXServer =
@@ -560,7 +560,7 @@ mkIf cfg.enable {
         }
 
         ${if videoDriver != "nvidia"
-          then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/modules/dri"
+          then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/dri"
           else ""
         }
 
