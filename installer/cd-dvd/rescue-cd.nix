@@ -184,14 +184,12 @@ rec {
  
     environment = {
       extraPackages = [
-        pkgs.vim
         pkgs.subversion # for nixos-checkout
         pkgs.w3m # needed for the manual anyway
         pkgs.testdisk # useful for repairing boot problems
         pkgs.mssys # for writing Microsoft boot sectors / MBRs
         pkgs.ntfsprogs # for resizing NTFS partitions
         pkgs.sshfsFuse
-        pkgs.screen
       ];
     };
    
