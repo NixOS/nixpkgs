@@ -251,6 +251,7 @@ in {
   ruby = all;
   screen = linux ++ darwin;
   seccure = linux;
+  seccureUser = linux;
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
@@ -434,6 +435,7 @@ in {
     xauth = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
+    xf86inputevdev = linux;
     xf86videointel = linux;
     xf86videovesa = linux;
     xkbcomp = linux;
