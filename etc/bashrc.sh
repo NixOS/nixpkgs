@@ -49,8 +49,10 @@ for i in $NIX_PROFILES; do # !!! reverse
     if [ -d "$i/share/aclocal" ]; then
 	export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
     fi
-    
-    export PERL5LIB="$i/lib/site_perl:$PERL5LIB"
+
+    # "lib/site_perl" is for backwards compatibility with packages
+    # from Nixpkgs <= 0.12.
+    export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl:$PERL5LIB"
 
     # GStreamer.
     export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10:$GST_PLUGIN_PATH"
