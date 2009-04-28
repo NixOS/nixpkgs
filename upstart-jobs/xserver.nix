@@ -416,7 +416,7 @@ rec {
 
     
   job = ''
-    start on ${if cfg.autorun then "network-interfaces" else "never"}
+    start on ${if cfg.autorun then "hal" else "never"}
 
     start script
     
