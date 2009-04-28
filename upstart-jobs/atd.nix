@@ -67,7 +67,7 @@ start script
    do
      if [ ! -d "$dir" ]
      then
-         mkdir "$dir" && chown atd:atd "$dir"
+         mkdir -p "$dir" && chown atd:atd "$dir"
      fi
    done
    chmod 1770 "$spooldir" "$jobdir"
