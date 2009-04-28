@@ -1047,7 +1047,7 @@ let
   };
 
   openvpn = import ../tools/networking/openvpn {
-    inherit fetchurl stdenv iproute lzo openssl;
+    inherit fetchurl stdenv iproute lzo openssl nettools;
   };
 
   p7zip = import ../tools/archivers/p7zip {

@@ -7,7 +7,13 @@ stdenv.mkDerivation {
     sha256 = "198k5lbw0bnx67hgflzlzncmdnww0wa7fll0kkirmckav93y7kv6";
   };
 
-  buildInputs = [ iproute lzo openssl];
+  buildInputs = [ iproute lzo openssl ];
+
+  configureFlags = ''
+    --with-ifconfig-path=${nettools}/sbin/ifconfig
+    --with-iproute-path=${iproute}/sbin/ip
+    --with-route-path=${nettools}/sbin/route
+  '';
 
   meta = { 
       description="OpenVPN is a robust and highly flexible tunneling application compatible with many OSes.";
