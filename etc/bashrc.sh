@@ -16,6 +16,7 @@ export EDITOR=nano
 export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
 export LOCATE_PATH=/var/cache/locatedb
 @shellInit@
+export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
 
 # Set up secure multi-user builds: non-root users build through the
 # Nix daemon.

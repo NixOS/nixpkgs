@@ -104,6 +104,7 @@ in
         let path = [
           pkgs.coreutils pkgs.gnugrep pkgs.findutils
           pkgs.glibc # needed for getent
+          pkgs.glibcLocals # needed for getent
           pkgs.pwdutils
         ]; in noDepEntry ''
         export PATH=/empty
