@@ -170,9 +170,12 @@ splashutils_15 = ...;</programlisting>
 
 <para>The Nix expressions for the X.org packages reside in
 <filename>pkgs/servers/x11/xorg/default.nix</filename>.  This file is
-automatically generated from lists of tarballs in an X.org
-release.  As such it should not be modified directly; rather, you
-should modify the lists or the generator script.</para>
+automatically generated from lists of tarballs in an X.org release.
+As such it should not be modified directly; rather, you should modify
+the lists, the generator script or the file
+<filename>pkgs/servers/x11/xorg/overrides.nix</filename>, in which you
+can override or add to the derivations produced by the
+generator.</para>
 
 <para>The generator is invoked as follows:
 
@@ -212,8 +215,8 @@ some people or by other packages (such as
 <para>If the expression for a package requires derivation attributes
 that the generator cannot figure out automatically (say,
 <varname>patches</varname> or a <varname>postInstall</varname> hook),
-you should modify the generator script
-(<varname>generate-expr-from-tarballs.pl</varname>).</para>
+you should modify
+<filename>pkgs/servers/x11/xorg/overrides.nix</filename>.</para>
 
 </section>
 

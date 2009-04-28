@@ -32,27 +32,6 @@ $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 
 
-$extraAttrs{"xorgserver"} = " patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; ";
-
-$extraAttrs{"imake"} = " inherit xorgcffiles; x11BuildHook = ./imake.sh; patches = [./imake.patch]; ";
-
-$extraAttrs{"setxkbmap"} = " postInstall = \"ensureDir \$out/share; ln -sfn \${xkeyboard_config}/etc/X11 \$out/share/X11\";";
-
-$extraAttrs{"fontmiscmisc"} = " postInstall = \"ln -s \${fontalias}/lib/X11/fonts/misc/fonts.alias \$out/lib/X11/fonts/misc/fonts.alias\"; ";
-
-$extraAttrs{"mkfontdir"} = " preBuild = \"substituteInPlace mkfontdir.cpp --replace BINDIR \${mkfontscale}/bin\"; ";
-
-$extraAttrs{"xf86inputevdev"} = "
-    preBuild = \"
-    sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c
-    \";";
-
-$extraAttrs{"libXpm"} = "
-    patchPhase = \"sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in\";";
-
-$extraAttrs{"xkbcomp"} = " NIX_CFLAGS_COMPILE = \"-DDFLT_XKB_CONFIG_ROOT=\\\"/etc/X11/xkb\\\"\"; ";
-
-
 my $downloadCache = "./download-cache";
 $ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
@@ -198,10 +177,6 @@ while (<>) {
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
-    push @requires, "glproto", "gl" if $pkg =~ /xf86videosis/;
-    push @requires, "glproto", "gl" if $pkg =~ /xf86videointel/;
-    push @requires, "zlib" if $pkg =~ /xorgserver/;
-    push @requires, "xf86bigfontproto" if $pkg =~ /xorgserver/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
     push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
     
@@ -218,10 +193,14 @@ open OUT, ">default.nix";
 
 print OUT "";
 print OUT <<EOF;
-# This is a generated file.  Do not edit!
+# THIS IS A GENERATED FILE.  DO NOT EDIT!
 args: with args;
 
-rec {
+let
+
+  overrides = import ./overrides.nix {inherit args xorg;};
+
+  xorg = rec {
 
 EOF
 
@@ -248,7 +227,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     $extraAttrs = "" unless defined $extraAttrs;
     
     print OUT <<EOF
-  $pkg = (stdenv.mkDerivation {
+  $pkg = (stdenv.mkDerivation ((if overrides ? $pkg then overrides.$pkg else x: x) {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
@@ -256,11 +235,11 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     buildInputs = [pkgconfig $inputs];$extraAttrs
-  }) // {inherit $inputs;};
+  })) // {inherit $inputs;};
     
 EOF
 }
 
-print OUT "}\n";
+print OUT "}; in xorg\n";
 
 close OUT;

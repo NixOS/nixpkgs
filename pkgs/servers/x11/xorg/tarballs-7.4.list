@@ -121,7 +121,7 @@ mirror://xorg/X11R7.4/src/everything/xf86dgaproto-2.0.3.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86driproto-2.0.4.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-input-acecad-1.2.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-input-aiptek-1.1.1.tar.bz2
-mirror://xorg/X11R7.4/src/everything/xf86-input-evdev-2.0.4.tar.bz2
+mirror://xorg/individual/driver/xf86-input-evdev-2.2.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-input-joystick-1.3.2.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-input-keyboard-1.3.1.tar.bz2
 mirror://xorg/X11R7.4/src/everything/xf86-input-mouse-1.3.0.tar.bz2
