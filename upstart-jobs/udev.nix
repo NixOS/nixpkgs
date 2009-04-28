@@ -85,6 +85,7 @@ let
     KERNEL=="sonypi",               MODE="0666"
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                NAME="%k", MODE="0666"
+    KERNEL=="vboxdrv", NAME="vboxdrv", OWNER="root", GROUP="root", MODE="0666"
 
     # Create symlinks for CD/DVD devices.
     ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM}=="?*", SYMLINK+="cdrom cdrom-%k"
