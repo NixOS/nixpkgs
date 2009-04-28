@@ -21,7 +21,7 @@ in
         session = mkIf cfg.enable [{
           name = "xmonad";
           start = "
-            ${pkgs.xmonad}/bin/xmonad &
+            ${pkgs.haskellPackages.xmonad}/bin/xmonad &
             waitPID=$!
           ";
         }];
