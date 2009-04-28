@@ -45,7 +45,7 @@ mkDerivation {
   name = "env-${name}";
   phases = "buildPhase";
   setupNew = substituteAll {
-    src = ../../stdenv/generic/setup-new.sh;
+    src = ../../stdenv/generic/setup.sh;
     preHook="";
     postHook="";
     initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
