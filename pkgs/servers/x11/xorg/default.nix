@@ -2105,6 +2105,10 @@ rec {
       url = mirror://xorg/individual/xserver/xorg-server-1.5.3.tar.bz2;
       sha256 = "1fymhb0v83hmbka1sdg9z2vfkjagskawaxajks0n6xxyai7ig056";
     };
+    configureFlags = "--with-xkb-output=/var/tmp";
+    postPatch = ''
+      sed -i -e 's@ -w @ -I${xkeyboard_config}/etc/X11/xkb -w @' xkb/ddxLoad.c
+    '';
     buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto dri2proto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ]; patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ]; propagatedBuildInputs = [libpciaccess]; 
   }) // {inherit renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto dri2proto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm zlib ;};
     
