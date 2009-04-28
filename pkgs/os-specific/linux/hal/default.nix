@@ -1,5 +1,7 @@
 args: with args;
 
+assert stdenv ? glibc;
+
 stdenv.mkDerivation rec {
   name = "hal-0.5.11";
   
