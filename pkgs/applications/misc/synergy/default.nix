@@ -14,6 +14,11 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 xextproto libXtst inputproto];
 
+  patches = [ (fetchurl {
+    url = http://mawercer.de/~nix/syncergy-gcc43.patch.gz;
+    sha256 = "12kla0nii6qc9fy5x4dc4qisfcyl9dqnrj5y911davnvwkwlj18h";
+  }) ];
+
   meta= { 
       description = "share mouse keyboard and clipboard between computers";
       homepage = http://synergy2.sourceforge.net;
