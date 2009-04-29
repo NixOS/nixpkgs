@@ -7266,30 +7266,6 @@ let
 
   };
 
-  /*
-  kde4 = recurseIntoAttrs (import ../desktops/kde-4-old {
-    inherit
-      fetchurl fetchsvn zlib perl openssl pcre pkgconfig libjpeg libpng libtiff
-      libxml2 libxslt libtool libusb expat freetype bzip2 cmake cluceneCore libgcrypt gnupg
-      cppunit cyrus_sasl openldap enchant exiv2 samba nss log4cxx aspell
-      shared_mime_info alsaLib libungif cups mesa boost gpgme gettext redland
-      xineLib libgphoto2 djvulibre libogg flac lame libvorbis poppler readline
-      saneBackends chmlib python libzip gmp sqlite libidn runCommand lib
-      openbabel ocaml facile stdenv jasper fam indilib libnova
-      libarchive dbus bison;
-    cdparanoia = cdparanoiaIII;
-    inherit (xlibs)
-      inputproto kbproto scrnsaverproto xextproto xf86miscproto
-      xf86vidmodeproto xineramaproto xproto libICE libX11 libXau libXcomposite
-      libXcursor libXdamage libXdmcp libXext libXfixes libXft libXi libXpm
-      libXrandr libXrender libXScrnSaver libXt libXtst libXv libXxf86misc
-      libxkbfile libXinerama;
-    inherit (gtkLibs) glib;
-    qt = qt4;
-    openexr = openexr_1_6_1 ;
-  });
-  */
-
   kde4 = kde42;
 
   kde42 = import ../desktops/kde-4.2 (pkgs // {
