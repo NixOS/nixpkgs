@@ -8,7 +8,6 @@
 stdenv.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
-  inherit kernel rootModules module_init_tools;
+  inherit kernel rootModules module_init_tools allowMissing;
   allowedReferences = ["out"];
-  allowMissing = if allowMissing then "true" else "";
 }
