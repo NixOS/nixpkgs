@@ -3,10 +3,9 @@
 let
 
   inherit (pkgs.lib) mkOption;
-  inherit (config) urlPrefix distDir;
 
-  dataDir = "/data/pt-wiki/data";
-  pubDir = "/data/pt-wiki/pub";
+  dataDir = config.dataDir; # "/data/pt-wiki/data";
+  pubDir = config.pubDir; # "/data/pt-wiki/pub";
 
   scriptUrlPath = "/bin";
   pubUrlPath    = "/pub";
@@ -17,19 +16,18 @@ let
   dispScriptUrlPath = "";
   dispViewPath      = "";
 
-  twikiName = "Program Transformation Wiki";
   startWeb = config.startWeb;
-  registrationDomain = "ewi.tudelft.nl";
   defaultUrlHost = "";
 
   # Build the TWiki CGI and configuration files.
   twikiRoot = (import /etc/nixos/services/twiki/twiki-instance.nix).twiki {
-    name = "pt-wiki";
+    name = "wiki-instance";
     pubdir = pubDir;
     datadir = dataDir;
-    inherit twikiName scriptUrlPath pubUrlPath absHostPath
-      dispPubUrlPath dispScriptUrlPath dispViewPath
-      registrationDomain defaultUrlHost;
+    inherit scriptUrlPath pubUrlPath absHostPath
+      dispPubUrlPath dispScriptUrlPath dispViewPath defaultUrlHost;
+    twikiName = config.twikiName;
+    registrationDomain = config.registrationDomain;
   };
 
   plugins = import /etc/nixos/services/twiki/server-pkgs/twiki-plugins.nix;
@@ -110,5 +108,39 @@ in {
     Disallow: /attach/
     Disallow: /pt/bin/
   '';
+
+  options = {
+
+    dataDir = mkOption {
+      example = "/data/wiki/data";
+      description = "
+        Path to the directory that holds the Wiki data.
+      ";
+    };
+
+    pubDir = mkOption {
+      example = "/data/wiki/pub";
+      description = "
+        Path to the directory that holds uploaded files.
+      ";
+    };
+
+    twikiName = mkOption {
+      default = "Wiki";
+      example = "Foobar Wiki";
+      description = "
+        Name of this Wiki.
+      ";
+    };
+
+    registrationDomain = mkOption {
+      example = "example.org";
+      description = "
+        Domain from which registrations are permitted.  Use `all' to
+        permit registrations from anywhere.
+      ";
+    };
+
+  };  
 
 }
