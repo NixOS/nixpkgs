@@ -5869,6 +5869,10 @@ let
     inherit (xlibs) libX11 libXinerama;
   };
 
+  eaglemode = import ../applications/misc/eaglemode {
+    inherit fetchurl stdenv perl xineLib libjpeg libpng libtiff;
+    inherit (xlibs) libX11;
+  };
 
   # put something like this into your ~/.nixpkgs/config.nix file
   #eclipse = {
