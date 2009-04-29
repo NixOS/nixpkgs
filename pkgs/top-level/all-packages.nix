@@ -4985,7 +4985,7 @@ let
     splashutils =
       # Splashutils 1.3 is broken, so disable splash on older kernels.
       if kernel.features ? fbSplash then /* splashutils_13 */ null else
-      if kernel.features ? fbConDecor && system != "x86_64-linux" then splashutils_15 else
+      if kernel.features ? fbConDecor then splashutils_15 else
       null;
 
     ext3cowtools = import ../os-specific/linux/ext3cow-tools {
