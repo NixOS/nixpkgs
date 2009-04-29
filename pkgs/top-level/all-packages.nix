@@ -4668,6 +4668,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  iwlwifi5000ucode = import ../os-specific/linux/firmware/iwlwifi-5000-ucode {
+    inherit fetchurl stdenv;
+  };
+
   jfsrec = builderDefsPackage (selectVersion ../os-specific/linux/jfsrec "svn-7"){
     inherit boost;
   };
