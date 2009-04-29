@@ -4721,13 +4721,6 @@ let
     cross = "sparc-linux";
   };
 
-  /*
-  systemKernel =
-    if getConfig ["kernel" "version"] "2.6.21" == "2.6.22" then kernel_2_6_22 else
-    if getConfig ["kernel" "version"] "2.6.21" == "2.6.23" then kernel_2_6_23 else
-    kernel;
-  */
-
   kernel_2_6_20 = import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5099,12 +5092,12 @@ let
 
   kvm76 = import ../os-specific/linux/kvm/76.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    kernelHeaders = kernelHeaders_2_6_26;
+    inherit (glibc) kernelHeaders;
   };
 
   kvm84 = import ../os-specific/linux/kvm/84.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    kernelHeaders = kernelHeaders_2_6_28;
+    inherit (glibc) kernelHeaders;
   };
 
   libcap = import ../os-specific/linux/libcap {
