@@ -13,7 +13,7 @@ let
 
 in
 
-{
+rec {
   name = "postgresql";
 
   users = [
@@ -27,6 +27,9 @@ in
   ];
 
   extraPath = [postgresql];
+
+  flags = 
+    if cfg.enableTCPIP then ["-i"] else [] ;
 
   job = ''
     description "PostgreSQL server"
@@ -43,6 +46,6 @@ in
         cp -f ${pkgs.writeText "pg_hba.conf" cfg.authentication} ${cfg.dataDir}/pg_hba.conf
     end script
 
-    respawn ${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir}'
+    respawn ${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir} ${toString flags}'
   '';
 }

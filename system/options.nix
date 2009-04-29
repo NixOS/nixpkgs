@@ -2286,6 +2286,12 @@ in
           How to authorize users. 
           Note: ident needs absolute trust to all allowed client hosts.";
       };
+      enableTCPIP = mkOption {
+        default = false;
+        description = "
+          Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
+        ";
+      };
     };
 
     
