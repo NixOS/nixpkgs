@@ -429,6 +429,15 @@ in
       ";
     };
 
+    enableIntel5000Firmware = mkOption {
+      default = false;
+      merge = obsoleteMerge;
+      description = "
+        This option enables automatic loading of the firmware for the Intel
+        PRO/Wireless 5000.
+      ";
+    };
+
     enableZydasZD1211Firmware = mkOption {
       default = false;
       merge = obsoleteMerge;
