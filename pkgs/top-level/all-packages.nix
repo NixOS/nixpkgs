@@ -4924,6 +4924,13 @@ let
         patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
         features = { secPermPatch = true; };
       }
+      { # http://patchwork.kernel.org/patch/19495/
+        name = "ext4-softlockups-fix";
+        patch = fetchurl {
+          url = http://patchwork.kernel.org/patch/19495/raw;
+          sha256 = "0vqcj9qs7jajlvmwm97z8cljr4vb277aqhsjqrakbxfdiwlhrzzf";
+        };
+      }
     ];
     extraConfig =
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
