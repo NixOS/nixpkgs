@@ -19,7 +19,7 @@ let
 
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
-  subversion = pkgs.subversion15.override (origArgs: {
+  subversion = pkgs.subversion.override (origArgs: {
     bdbSupport = true;
     httpServer = true;
     sslSupport = true;
@@ -53,7 +53,7 @@ let
     inherit (serverInfo.serverConfig) user group;    
     
     # Urgh, most of these are dependencies of Email::Send, should figure them out automatically.
-    perlFlags = map (x: "-I${x}/lib/site_perl") [
+    perlFlags = map (x: "-I${x}/lib/perl5/site_perl") [
       pkgs.perlPackages.BerkeleyDB pkgs.perlPackages.EmailSend
       pkgs.perlPackages.EmailSimple pkgs.perlPackages.ModulePluggable
       pkgs.perlPackages.ReturnValue pkgs.perlPackages.EmailAddress
