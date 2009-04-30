@@ -26,8 +26,6 @@ in
 
 ###### implementation
 
-# FIXME (see xfs)
-# if (!(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable)) then throw "openfire assertion failed" else
 let
   inherit (pkgs) jre openfire coreutils which gnugrep gawk gnused;
     
@@ -41,6 +39,12 @@ let
 in
 
 mkIf config.services.openfire.enable {
+
+  assertions = [ {
+    assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
+    message = "openfire assertion failed";
+  } ];
+
   require = [
     options
   ];

@@ -3,13 +3,6 @@
 ###### implementation
 
 
-/* FIXME
-assert event == "reboot"
-    || event == "halt"
-    || event == "system-halt"
-    || event == "power-off";
-*/
-
 let
 
   inherit (pkgs) bash utillinux;

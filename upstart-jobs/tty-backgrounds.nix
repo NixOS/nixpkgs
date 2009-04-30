@@ -112,10 +112,10 @@ let
 
 in
 
-# FIXME see xfs
-# assert splashutils != null;
+mkIf (config.services.ttyBackgrounds.enable) {
 
-mkIf (config.services.ttyBackgrounds.enable && kernelPackages.splashutils != null) {
+  assertions = [ { assertion = kernelPackages.splashutils != null; message = "kernelPackages.splashutils may not be false"; } ];
+
   require = [
     options
   ];
