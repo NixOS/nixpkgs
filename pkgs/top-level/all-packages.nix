@@ -4469,7 +4469,13 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config dbus hal python e2fsprogs openssl gperf m4;
+      xkeyboard_config dbus hal e2fsprogs openssl gperf m4;
+
+    # !!! pythonBase is use instead of python because this cause an infinite
+    # !!! recursion when the flag python.full is set to true.  Packages
+    # !!! contained in the loop are python, tk, xlibs-wrapper, libX11,
+    # !!! libxcd (and xcb-proto).
+    python =  pythonBase;
   });
 
   xorgReplacements = composedArgsAndFun (import ../servers/x11/xorg/replacements.nix) {
