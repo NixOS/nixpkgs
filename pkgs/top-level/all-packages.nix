@@ -7421,6 +7421,10 @@ let
     inherit fetchurl stdenv perl zlib bzip2;
   };
 
+  electricsheep = import ../misc/screensavers/electricsheep {
+    inherit fetchurl stdenv pkgconfig expat zlib libpng libjpeg xlibs;
+  };
+
   foldingathome = import ../misc/foldingathome {
     inherit fetchurl stdenv;
   };
