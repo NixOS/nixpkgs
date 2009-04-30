@@ -5,17 +5,20 @@ assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-2.6.5";
+  name = "gnutls-2.6.6";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.bz2";
-    sha256 = "1jq1alccg4fzr3xnq5j3igwsyypw855jqx7iri4bf2ic0wvfd2z7";
+    sha256 = "17nwmf7hfcjpwi1hmnkjjrygwn1wjripdf391is8ay6aa65mpn03";
   };
 
   patches = [ ./tmpdir.patch ];
 
   configurePhase = ''
-    ./configure --prefix="$out" --enable-guile --with-guile-site-dir="$out/share/guile/site"
+    ./configure --prefix="$out" \
+      ${if guileBindings
+        then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
+        else ""}
   '';
 
   buildInputs = [zlib lzo]

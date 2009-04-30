@@ -3101,7 +3101,7 @@ let
 
   gnutls = import ../development/libraries/gnutls {
     inherit fetchurl stdenv libgcrypt zlib lzo guile;
-    guileBindings = getConfig ["gnutls" "guile"] false;
+    guileBindings = getConfig ["gnutls" "guile"] true;
   };
 
   gpgme = import ../development/libraries/gpgme {
