@@ -4489,6 +4489,10 @@ let
 
   ### OS-SPECIFIC
 
+  autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
+    inherit fetchurl stdenv flex bison kernelHeaders;
+  };
+
   # this creates a patch which can be applied to the kernel to integrate this module..
   kernel_module_acerhk = import ../os-specific/linux/kernel/acerhk {
     inherit fetchurl stdenv gnupatch;
