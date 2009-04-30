@@ -742,6 +742,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  gnused_4_2 = import ../tools/text/gnused/4.2.nix {
+    inherit fetchurl stdenv;
+  };
+
   gnutar = useFromStdenv "gnutar"
     (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;
