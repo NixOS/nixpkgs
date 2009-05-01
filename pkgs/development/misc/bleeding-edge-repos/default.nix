@@ -69,6 +69,8 @@ args:
 
       cinelerra =  { type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; };
 
+      autofs = { type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; };
+
       # git repositories 
       hypertable =  { type="git"; url="git://scm.hypertable.org/pub/repos/hypertable.git"; groups=""; };
     } // kde4support // getConfig [ "bleedingEdgeRepos" "repos" ] {};

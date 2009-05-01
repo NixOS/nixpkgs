@@ -239,4 +239,8 @@
     url = "http://mawercer.de/~nix/repos/qgit-b5dd5fd691e9423124cf356abe26e641bc33d159.tar.gz";
     sha256 = "e04de308feb40716a6b02d1f69dc834f4fa859865b64e8f91beb6018fa953f96";
   };
+  autofs = args: with args; fetchurl { # Thu Apr 30 04:42:28 CEST 2009
+    url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz";
+    sha256 = "0260817c5deb87210a4cea340d0ef0f35577ef14f37bd7da05a2f08be385ac2f";
+  };
 }

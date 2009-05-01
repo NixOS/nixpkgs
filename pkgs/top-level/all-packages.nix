@@ -4500,7 +4500,7 @@ let
   ### OS-SPECIFIC
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit fetchurl stdenv flex bison kernelHeaders;
+    inherit bleedingEdgeRepos fetchurl stdenv flex bison kernelHeaders;
   };
 
   # this creates a patch which can be applied to the kernel to integrate this module..
