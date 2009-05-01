@@ -13,18 +13,18 @@ assert swingSupport -> xlibs != null;
 
 stdenv.mkDerivation ({
   name =
-    if installjdk then "jdk-1.6.0_11" else "jre-1.6.0_11";
+    if installjdk then "jdk-1.6.0_13" else "jre-1.6.0_13";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u11-dlj-linux-i586.bin;
-        md5 = "e5eef98bc477675c66e053fc3635e645";
+        url = http://download.java.net/dlj/binaries/jdk-6u13-dlj-linux-i586.bin;
+        md5 = "b95c9cab85d92b6bbfa2c5b825a478af";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u11-dlj-linux-amd64.bin;
-        md5 = "0f687b6dbfe54e117bb0d9e090fda20b";
+        url = http://download.java.net/dlj/binaries/jdk-6u13-dlj-linux-amd64.bin;
+        md5 = "37180c40b18bb1cc23620c0da52d0be4";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
@@ -64,7 +64,10 @@ stdenv.mkDerivation ({
 
 } // 
   /**
-   * The mozilla plugin is not available in the amd64 distribution (?)
+   * comment: there is a plugin for amd64 since 0_13. However it's located in 
+   * JRE_STORE_PATH/lib/amd64/libnpjp2.so. I don't know yet how to add it to
+   * MOZ_PLUGIN_PATH so that it's found. Put a symlink into ~/.mozilla/plugins
+   * instead.
    */
   ( if stdenv.system == "i686-linux" then
       {
