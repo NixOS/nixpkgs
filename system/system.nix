@@ -379,6 +379,11 @@ rec {
       grubSplashImage bootMount configurationLimit;
   };
 
+  children = map (x: ((import ./system.nix) 
+    { inherit platform; 
+      configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
+    config.nesting.children; 
+  configurationName = config.boot.configurationName;
 
   # Putting it all together.  This builds a store object containing
   # symlinks to the various parts of the built configuration (the
@@ -398,6 +403,8 @@ rec {
     inherit grubMenuBuilder;
     inherit etc;
     inherit systemPath;
+    inherit children;
+    inherit configurationName;
     kernel = kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.
@@ -415,11 +422,6 @@ rec {
     # when the parent configuration is boot default. For example,
     # you can provide an easy way to boot the same configuration 
     # as you use, but with another kernel
-    children = map (x: ((import ./system.nix) 
-      { inherit platform; 
-        configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
-      config.nesting.children; 
-    configurationName = config.boot.configurationName;
   }) config.environment.checkConfigurationOptions
      optionDeclarations config;
 
