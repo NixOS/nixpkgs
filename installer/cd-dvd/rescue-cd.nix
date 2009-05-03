@@ -5,6 +5,13 @@
     else "nixos-${builtins.readFile ../../VERSION}"
 , compressImage ? false
 , nixpkgs ? ../../../nixpkgs
+# This option allows easy building of Rescue CD with 
+# modified package set / driver set / anything.
+# For easier maitenance, let overrider know the current
+# options
+, configurationOverrides ? (config: {})
+# Whether to put all the build-time dependencies on DVD
+, includeBuildDeps ? false
 }:
 
 rec {
@@ -13,7 +20,7 @@ rec {
   cdLabel = "NIXOS_INSTALLATION_CD";
 
   
-  configuration = {
+  baseConfiguration = {
   
     boot = {
       isLiveCD = true;
@@ -94,6 +101,15 @@ rec {
         enable = false;
       };
 
+      showManual = {
+        enable = true;
+	manualFile = manual;
+      };
+
+      rogue = {
+        enable = true;
+      };
+
       extraJobs = [
         # Unpack the NixOS/Nixpkgs sources to /etc/nixos.
         # !!! run this synchronously
@@ -116,49 +132,7 @@ rec {
           ";
         }
       
-        # Show the NixOS manual on tty7.
-        { name = "manual";
-          job = "
-            env HOME=/root
-            start on udev
-            stop on shutdown
-            respawn ${pkgs.w3m}/bin/w3m ${manual} < /dev/tty7 > /dev/tty7 2>&1
-          ";
-        }
-
-        # Allow the user to do something useful on tty8 while waiting
-        # for the installation to finish.
-        { name = "rogue";
-          job = "
-            env HOME=/root
-            chdir /root
-            start on udev
-            stop on shutdown
-            respawn ${pkgs.rogue}/bin/rogue < /dev/tty8 > /dev/tty8 2>&1
-          ";
-        }
       ];
-
-      # And a background to go with that.
-      ttyBackgrounds = {
-        specificThemes = [
-          { tty = 7;
-            # Theme is GPL according to http://kde-look.org/content/show.php/Green?content=58501.
-            theme = pkgs.fetchurl {
-              url = http://www.kde-look.org/CONTENT/content-files/58501-green.tar.gz;
-              sha256 = "0sdykpziij1f3w4braq8r8nqg4lnsd7i7gi1k5d7c31m2q3b9a7r";
-            };
-          }
-          /* url is broken
-          { tty = 8;
-            theme = pkgs.fetchurl {
-              url = http://www.bootsplash.de/files/themes/Theme-GNU.tar.bz2;
-              md5 = "61969309d23c631e57b0a311102ef034";
-            };
-          }
-          */
-        ];
-      };
 
       mingetty = {
         helpLine = ''
@@ -197,11 +171,11 @@ rec {
    
   };
 
+  configuration = baseConfiguration // (configurationOverrides baseConfiguration);
 
   system = import ../../system/system.nix {
     inherit configuration platform nixpkgs;
   };
-
 
   pkgs = system.pkgs;
 
@@ -233,7 +207,7 @@ rec {
 
 
   # The configuration file for Grub.
-  grubCfg = pkgs.writeText "menu.lst" ''
+  grubCfg = pkgs.writeText "menu.lst" (''
     default 0
     timeout 10
     splashimage /boot/background.xpm.gz
@@ -248,7 +222,14 @@ rec {
 
     title Memtest86+
       kernel /boot/memtest.bin
-  '';
+  '' 
+    + (pkgs.lib.concatStringsSep "\n\n" 
+        (map (x: ''
+	  title NixOS: ${x.configurationName}
+	    kernel ${x.kernel} systemConfig=${x} init=${x.bootStage2} ${toString system.config.boot.kernelParams}
+	    initrd ${x.initrd}
+	'') system.children)))
+    ;
 
 
   # Create an ISO image containing the Grub boot loader, the kernel,
@@ -298,7 +279,12 @@ rec {
       { object = pkgs.stdenv;
         symlink = "none";
       }
-    ];
+    ]
+      ++ pkgs.lib.optional includeBuildDeps {
+          object = system.system.drvPath;
+          symlink = "none";
+        }
+      ;
     
     bootable = true;
     bootImage = "boot/grub/stage2_eltorito";
@@ -307,6 +293,4 @@ rec {
 
     volumeID = cdLabel;
   };
-
-
 }
