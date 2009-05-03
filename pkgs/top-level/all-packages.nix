@@ -3939,7 +3939,7 @@ let
     inherit stdenv fetchurl cmake qt4;
   };
 
-  tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.4.18") {
+  tk = composedArgsAndFun (selectVersion ../development/libraries/tk "8.5.7") {
     inherit fetchurl stdenv tcl x11;
   };
 

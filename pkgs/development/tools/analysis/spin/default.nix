@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installPhase = ''
     ensureDir $out/bin
     cp ../Xspin*/xsp* $out/bin/xspin
-    sed -i -e '1s@^#!/bin/sh@#!${tk}/bin/wish8.4@' \
+    sed -i -e '1s@^#!/bin/sh@#!${tk}/bin/wish@' \
       -e '/exec wish/d' $out/bin/xspin
     cp spin $out/bin
   '';
