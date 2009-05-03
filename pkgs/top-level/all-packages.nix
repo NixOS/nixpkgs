@@ -2588,6 +2588,10 @@ let
     inherit fetchurl stdenv pkgconfig;
   };
 
+  spin = import ../development/tools/analysis/spin {
+    inherit fetchurl stdenv flex yacc tk;
+  };
+
   splint = import ../development/tools/analysis/splint {
     inherit fetchurl stdenv flex;
   };
