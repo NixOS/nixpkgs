@@ -7,7 +7,8 @@ Add support for Kernel 2.6.29.
 Changes we are affected by:
  1. dentry_open() receives a new argument for passing the cred
  2. current->fsuid is now current_fsuid()
- 
+ 3. disable security_inode_* calls, as they are not exported normally. Enable
+    them only if CONFIG_AUFS_SEC_PERM_PATCH is defined
 --- a/fs/aufs25/export.c
 +++ b/fs/aufs25/export.c
 @@ -384,7 +384,11 @@ static struct dentry *au_lkup_by_ino(str
@@ -99,3 +100,34 @@ Changes we are affected by:
  	if (IS_ERR(file)) {
  		AuErr("%.*s open err %ld\n", AuLNPair(name), PTR_ERR(file));
  		goto out_dput;
+--- a/fs/aufs25/i_op.c
++++ b/fs/aufs25/i_op.c
+@@ -61,7 +61,7 @@ static int h_permission(struct inode *h_
+ 		AuTraceErr(err);
+ 	}
+ 
+-#if 1 /* todo: export? */
++#ifdef CONFIG_AUFS_SEC_PERM_PATCH
+ 	if (!err)
+ 		err = au_security_inode_permission(h_inode, mask, NULL,
+ 						   dlgt);
+@@ -221,7 +221,7 @@ static int h_permission(struct inode *h_
+ 		AuTraceErr(err);
+ 	}
+ 
+-#if 1 /* todo: export? */
++#ifdef CONFIG_AUFS_SEC_PERM_PATCH
+ 	if (!err)
+ 		err = au_security_inode_permission(h_inode, mask, fake_nd,
+ 						   dlgt);
+--- a/fs/aufs25/inode.h
++++ b/fs/aufs25/inode.h
+@@ -148,7 +148,7 @@ int aufs_rename(struct inode *src_dir, s
+ /* dlgt.c */
+ int au_security_inode_permission(struct inode *h_inode, int mask,
+ 				 struct nameidata *fake_nd, int dlgt);
+-#else
++#elif defined(CONFIG_AUFS_SEC_PERM_PATCH)
+ static inline
+ int au_security_inode_permission(struct inode *h_inode, int mask,
+ 				 struct nameidata *fake_nd, int dlgt)
