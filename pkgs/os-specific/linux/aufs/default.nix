@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     tar xvfj ${kernel.src}
     kernelSource=$(echo $(pwd)/linux-*)
     cp -prd $kernelBuild/* $kernelSource
+
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$PWD/include"
   
     make KDIR=$kernelSource -f local.mk
   '';
@@ -28,6 +30,11 @@ stdenv.mkDerivation {
     ensureDir $out/lib/modules/$kernelVersion/misc
     cp aufs.ko $out/lib/modules/$kernelVersion/misc
   '';
+
+  patches = [
+    # Debian patch to build AUFS on 2.6.29+
+    ./debian-2.6.29.diff
+  ];
 
   meta = {
     description = "Another Unionfs implementation for Linux";
