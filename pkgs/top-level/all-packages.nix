@@ -7048,10 +7048,10 @@ let
   };
 
   xvidcap = import ../applications/video/xvidcap {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext lame;
     inherit (gtkLibs) gtk;
     inherit (gnome) scrollkeeper libglade;
-    inherit (xlibs) libXmu libXext;
+    inherit (xlibs) libXmu libXext libXfixes libXdamage libX11;
   };
 
   # doesn't compile yet - in case someone else want's to continue ..
