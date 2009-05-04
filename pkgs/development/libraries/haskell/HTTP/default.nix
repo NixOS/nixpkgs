@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "HTTP";
-  version = "4000.0.5"; # Haskell Platform 2009.0.0
-  sha256 = "54cbb211e73f183aa91780afd6cc7c830edef1b2eb5ce8dc05e5fa539bb685d8";
+  version = "4000.0.6"; # Haskell Platform 2009.1.1
+  sha256 = "75af1ac4dc21b10c8a1a54a33179ea822e591887bab7278360a3d6b38304d39b";
   propagatedBuildInputs = [mtl network parsec];
   meta = {
     description = "a Haskell library for client-side HTTP";

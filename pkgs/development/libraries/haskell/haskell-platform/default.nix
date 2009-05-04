@@ -1,13 +1,13 @@
-{cabal, fetchurl, GLUT, HTTP, HUnit, OpenAL, OpenGL, QuickCheck, cgi, fgl,
+{cabal, fetchurl, GLUT, HTTP, HUnit, OpenGL, QuickCheck, cgi, fgl,
  haskellSrc, html, parallel, regexBase, regexCompat, regexPosix,
  stm, time, xhtml, zlib, cabalInstall, alex, happy, haddock, ghc}:
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
-  version = "2009.0.0";
+  version = "2009.1.1";
   src = fetchurl {
     url = http://code.haskell.org/haskell-platform/haskell-platform.cabal;
-    sha256 = "cefe19076bed6450d3d8611ff1b29fd0966106787003abedec90544968f30d9c";
+    sha256 = "755f8fd3c0fa399a27b1520f5366e4dbe5b505a3a229deac9d2cdfa4cc595137";
   };
   unpackPhase = ''
     cp $src haskell-platform.cabal
@@ -18,7 +18,7 @@ cabal.mkDerivation (self : {
     touch LICENSE
   '';
   propagatedBuildInputs = [
-    GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
+    GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
     haskellSrc html parallel regexBase regexCompat regexPosix
     stm time xhtml zlib cabalInstall alex happy ghc
   ];

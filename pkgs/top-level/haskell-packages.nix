@@ -96,7 +96,7 @@ rec {
   };
   
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
-    inherit cabal GLUT HTTP HUnit OpenAL OpenGL QuickCheck cgi fgl
+    inherit cabal GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
     ghc = ghcReal;
