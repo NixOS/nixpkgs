@@ -278,9 +278,18 @@ rec {
     inherit cabal;
   };
 
+  /*
   wxHaskell = import ../development/libraries/haskell/wxHaskell {
     inherit ghc;
     inherit (pkgs) stdenv fetchurl unzip wxGTK;
+  };
+  */
+
+  wxcore = import ../development/libraries/haskell/wxHaskell/wxcore.nix {
+    inherit cabal time parsec stm;
+    wxGTK = pkgs.wxGTK28;
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libX11;
   };
 
   X11 = import ../development/libraries/haskell/X11 {
