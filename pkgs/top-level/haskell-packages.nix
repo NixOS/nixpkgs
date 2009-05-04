@@ -133,6 +133,10 @@ rec {
     inherit (pkgs) sqlite;
   };
 
+  Hipmunk = import ../development/libraries/haskell/Hipmunk {
+    inherit cabal;
+  };
+
   hscolour = import ../development/libraries/haskell/hscolour {
     inherit cabal;
   };
