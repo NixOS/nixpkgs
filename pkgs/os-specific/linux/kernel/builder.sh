@@ -126,7 +126,7 @@ installPhase() {
         # copy include files
         includeDir=$out/lib/modules/$version/build/include
         mkdir -p $includeDir
-        (cd include && cp -a */ $includeDir)
+        (cd include && cp -a * $includeDir)
 	(cd arch/$archDir/include && cp -a * $includeDir || true)
 	(cd arch/$archDir/include && cp -a asm/* $includeDir/asm/ || true)
 	(cd arch/$archDir/include/asm/mach-generic && cp -a * $includeDir/ || true)
