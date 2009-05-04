@@ -303,6 +303,7 @@ in {
   webkit = linux;
   wget = all;
   wine = ["i686-linux"];
+  wireshark = linux;
   wirelesstools = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
