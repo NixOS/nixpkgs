@@ -282,12 +282,9 @@ rec {
     inherit cabal;
   };
 
-  /*
-  wxHaskell = import ../development/libraries/haskell/wxHaskell {
-    inherit ghc;
-    inherit (pkgs) stdenv fetchurl unzip wxGTK;
+  wx = import ../development/libraries/haskell/wxHaskell/wx.nix {
+    inherit cabal stm wxcore;
   };
-  */
 
   wxcore = import ../development/libraries/haskell/wxHaskell/wxcore.nix {
     inherit cabal time parsec stm;
