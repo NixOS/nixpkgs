@@ -102,6 +102,7 @@ in {
   dosbox = linux;
   doxygen = linux;
   e2fsprogs = linux;
+  ejabberd = linux;
   emacs22 = all;
   emacsUnicode = all;
   emms = linux;
@@ -117,6 +118,7 @@ in {
   firefox3 = prio 150 linux;
   flex = all;
   flex2535 = all;
+  gajim = linux;
   gawk = all;
   gcc = all;
   gcc33 = linux;
