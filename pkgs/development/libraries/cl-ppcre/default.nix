@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = http://weitz.de/files/cl-ppcre.tar.gz;
-    sha256 = "14zxrmc4b4q9kg505y9lb0nqp80fpmpwn51xwkqiwkm361n6h23p";
+    sha256 = "10698b7cmap4hk1lmlsvx2adcgsni5gly98qpj19fsdgy9ic7dhv";
   };
 
   inherit buildInputs;
