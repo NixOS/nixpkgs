@@ -1179,6 +1179,15 @@ rec {
     };
   };
 
+  libxml_perl = buildPerlPackage rec {
+    name = "libxml-perl-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
+      sha256 = "1jy9af0ljyzj7wakqli0437zb2vrbplqj4xhab7bfj2xgfdhawa5";
+    };
+    propagatedBuildInputs = [XMLParser];
+  };
+
   LinguaENInflect = buildPerlPackage {
     name = "Lingua-EN-Inflect-1.89";
     src = fetchurl {
@@ -2004,8 +2013,7 @@ rec {
       url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
       sha256 = "1r0ampc88ni3sjpzr583k86076qg399arfm9xirv3cw49k3k5bzn";
     };
-    #buildInputs = [libxml2];
-    propagatedBuildInputs = [XMLRegExp XMLParser LWP];
+    propagatedBuildInputs = [XMLRegExp XMLParser LWP libxml_perl];
   };
 
   XMLLibXML = buildPerlPackage {
