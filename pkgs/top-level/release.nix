@@ -69,6 +69,7 @@ in {
   bashInteractive = all;
   bazaar = linux; # first let sqlite3 work on darwin
   binutils = linux;
+  bind = linux;
   bison23 = all;
   bison24 = all;
   bitlbee = linux; 
@@ -100,6 +101,7 @@ in {
   docbook_xml_dtd_43 = all;
   docbook_xsl = all;
   dosbox = linux;
+  dovecot = linux;
   doxygen = linux;
   e2fsprogs = linux;
   ejabberd = linux;
@@ -147,6 +149,7 @@ in {
   gnutar = all;
   gnutls = linux;
   gphoto2 = linux;
+  gpm = linux;
   gprolog = linux;
   gqview = gtkSupported;
   graphviz = all;
@@ -155,10 +158,12 @@ in {
   guile = linux;  # tests fail on Cygwin
   guileLib = linux;
   gv = linux;
+  gw6c = linux;
   gzip = all;
   hal = linux;
   hello = all;
   host = linux;
+  httpd = linux;
   hugin = linux;
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
@@ -257,6 +262,7 @@ in {
   rubber = allBut "i686-cygwin";
   ruby = all;
   rxvt_unicode = all;
+  samba = linux;
   screen = linux ++ darwin;
   seccure = linux;
   seccureUser = linux;
@@ -306,6 +312,7 @@ in {
   vlc = linux;
   vorbisTools = linux;
   vpnc = linux;
+  vsftpd = linux;
   w3m = all;
   webkit = linux;
   wget = all;
@@ -451,6 +458,7 @@ in {
     xf86inputevdev = linux;
     xf86videointel = linux;
     xf86videovesa = linux;
+    xfs = linux;
     xkbcomp = linux;
     xmessage = linux;
     xorgserver = linux;
