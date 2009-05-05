@@ -1,11 +1,13 @@
 {stdenv, fetchurl, perl, perlXMLParser, xkbcomp, gettext, intltool}:
 
+let version = "1.5"; in 
+
 stdenv.mkDerivation {
-  name = "xkeyboard-config-1.4";
+  name = "xkeyboard-config-${version}";
 
   src = fetchurl {
-    url = http://xlibs.freedesktop.org/xkbdesc/xkeyboard-config-1.4.tar.bz2;
-    sha256 = "1qdhhc5ji8677dna9qj6kisgpfzhpjmaavdjzvvrv9chrxyqa6lj";
+    url = "http://xlibs.freedesktop.org/xkbdesc/xkeyboard-config-${version}.tar.bz2";
+    sha256 = "1r276ik3x0jg77zza37ggrnp7zbdvmjyrm9mwxxgzh3bmligy5ff";
   };
 
   buildInputs = [perl perlXMLParser xkbcomp gettext intltool];
@@ -14,6 +16,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlags="--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86"
+    sed -e 's@#!\s*/bin/bash@#! /bin/sh@' -i rules/merge.sh
   '';
 
   postInstall = ''
