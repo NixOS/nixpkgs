@@ -2073,7 +2073,7 @@ let
       libXpm libXext xextproto;
   };
 
-  erlang = selectVersion ../development/interpreters/erlang "R12B-1" {
+  erlang = import ../development/interpreters/erlang {
     inherit fetchurl stdenv perl gnum4 ncurses openssl;
   };
 
@@ -6056,6 +6056,27 @@ let
   });
 
   xulrunner3_1 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.1.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit alsaLib;
+    autoconf = autoconf213;
+    #enableOfficialBranding = true;
+  });
+
+  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/3.5.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+    inherit alsaLib;
+    #enableOfficialBranding = true;
+    xulrunner = xulrunner3_5;
+    autoconf = autoconf213;
+  });
+
+  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
