@@ -4,10 +4,10 @@
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
-  version = "2009.1.1";
+  version = "2009.2.0";
   src = fetchurl {
     url = http://code.haskell.org/haskell-platform/haskell-platform.cabal;
-    sha256 = "755f8fd3c0fa399a27b1520f5366e4dbe5b505a3a229deac9d2cdfa4cc595137";
+    sha256 = "04b50748554ed3b6ed41997798c0ef4f5423bd2c84ea966d8e27cff3c5d0e581";
   };
   unpackPhase = ''
     cp $src haskell-platform.cabal
