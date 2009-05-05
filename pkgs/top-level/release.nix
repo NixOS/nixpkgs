@@ -117,7 +117,7 @@ in {
   findutils = all;
   firefox2 = linux;
   firefox3 = prio 150 linux;
-  firefox3_5 = prio 90 linux;
+  firefox3_5 = prio 15 linux;
   flex = all;
   flex2535 = all;
   gajim = linux;
