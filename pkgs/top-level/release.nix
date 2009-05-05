@@ -103,6 +103,7 @@ in {
   doxygen = linux;
   e2fsprogs = linux;
   ejabberd = linux;
+  elinks = linux;
   emacs22 = all;
   emacsUnicode = all;
   emms = linux;
@@ -116,6 +117,7 @@ in {
   findutils = all;
   firefox2 = linux;
   firefox3 = prio 150 linux;
+  firefox3_5 = prio 90 linux;
   flex = all;
   flex2535 = all;
   gajim = linux;
@@ -132,6 +134,7 @@ in {
   git = linux;
   glibc = linux;
   glibcLocales = linux;
+  glxinfo = linux;
   gnash = linux;
   gnugrep = all;
   gnum4 = all;
@@ -166,6 +169,7 @@ in {
   inetutils = linux;
   inkscape = linux;
   iputils = linux;
+  iproute = linux;
   irssi = linux;
   jnettop = linux;
   jwhois = linux;
@@ -252,6 +256,7 @@ in {
   rsync = linux;
   rubber = allBut "i686-cygwin";
   ruby = all;
+  rxvt_unicode = all;
   screen = linux ++ darwin;
   seccure = linux;
   seccureUser = linux;
@@ -262,6 +267,7 @@ in {
   splashutils_13 = linux;
   splashutils_15 = linux;
   sqlite = allBut "i686-cygwin";
+  squid = linux;
   ssmtp = linux;
   stdenv = prio 175 all;
   stlport = linux;
@@ -293,6 +299,7 @@ in {
   unzip = all;
   upstart = linux;
   utillinux = linux;
+  utillinuxCurses = linux;
   valgrind = linux;
   vim = linux;
   vimHugeX = linux;
@@ -305,6 +312,7 @@ in {
   wine = ["i686-linux"];
   wireshark = linux;
   wirelesstools = linux;
+  wpa_supplicant = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
@@ -319,6 +327,7 @@ in {
   zdelta = linux;
   zile = linux;
   zip = all;
+  zsh = linux;
 
   aspellDicts = {
     de = all;
