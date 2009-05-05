@@ -149,6 +149,10 @@ rec {
     inherit cabal;
   };
 
+  json = import ../development/libraries/haskell/json {
+    inherit cabal mtl;
+  };
+
   maybench = import ../development/libraries/haskell/maybench {
     inherit cabal benchpress;
   };

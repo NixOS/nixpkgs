@@ -20,10 +20,19 @@ stdenv.mkDerivation rec {
     gnome.GConf gtksourceview gnome.librsvg
   ];
 
+  preConfigure =
+    ''
+      sed -i gio/gio.package.conf.in -e 's|@GIO_LIBDIR_CQ@|"${gnome.glib}/lib", "${gnome.glib}/lib64", @GIO_LIBDIR_CQ@|'
+      sed -i gtk/gtk.package.conf.in -e 's|@GTK_LIBDIR_CQ@|"${gnome.glib}/lib", "${gnome.glib}/lib64", @GTK_LIBDIR_CQ@|'
+    '';
+
+  configureFlags = ["--without-pkgreg"];
+
   postInstall =
     ''
       local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
       local installedPkgConf=$confDir/${fname}.installedconf
+      ensureDir $out/bin # necessary to get it added to PATH
       ensureDir $confDir
       echo $installedPkgConf
       echo '[]' > $installedPkgConf
