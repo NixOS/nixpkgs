@@ -28,13 +28,13 @@
     "--exclude=\.svn"
     "--exclude=\.hg"
     "--exclude=\.git"
-    "--exclude=\_darcs" 
+    "--exclude=\_darcs"
     "--sort=yes"
   ];
 
   # actionscript
   asLang = [
-    "--langdef=ActionScript"  
+    "--langdef=ActionScript"
     "--langmap=ActionScript:.as"
     "--regex-ActionScript=/function[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\1/f,function,functions/"
     "--regex-ActionScript=/function[ \\t]+(set|get)[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\2/p,property,properties/"
@@ -62,7 +62,7 @@
 
   # find foo in "foo =", don't think we can do a lot better
   nixLang = [
-    "--langdef=NIX"  
+    "--langdef=NIX"
     "--langmap=NIX:.nix"
     "--regex-NIX=/\([^ \\t*]*\)[ \\t]*=/\\1/f/"
   ];
