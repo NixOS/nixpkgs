@@ -77,7 +77,8 @@ rec {
       param1 = bootstrapTools;
       preHook = builtins.toFile "prehook.sh"
         ''
-          export LD_LIBRARY_PATH=$param1/lib
+          # Put libpthread.so in LD_LIBRARY_PATH; some libraries need it.
+          export LD_LIBRARY_PATH=$param1/lib2
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1

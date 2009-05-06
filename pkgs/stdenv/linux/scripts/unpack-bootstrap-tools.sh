@@ -33,3 +33,16 @@ ln -s bzip2 $out/bin/bunzip2
 # fetchurl needs curl.
 bzip2 -d < $curl > $out/bin/curl
 chmod +x $out/bin/curl
+
+# Some libraries have libpthread in their DT_RUNPATH.  PatchELF
+# doesn't work on libraries, so we need to set LD_LIBRARY_PATH.
+# However, setting LD_LIBRARY_PATH to $out/lib will confuse /bin/sh,
+# since it might end up loading libraries from a different Glibc.  So
+# put *only* libpthread in LD_LIBRARY_PATH (via $out/lib2).  !!! This
+# is a temporary fix (since /bin/sh could have a dependency on
+# libpthread as well).  A better fix would be to make patchelf work on
+# libraries, or to set the RPATH rather than the RUNPATH in the
+# binaries in $out/bin (patchelf --force-rpath doesn't quite work,
+# since it doesn't discard the existing RUNPATH).
+mkdir $out/lib2
+ln -s $out/lib/libpthread* $out/lib2
