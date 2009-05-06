@@ -2980,7 +2980,8 @@ let
   };
 
   gav = import ../games/gav {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net;
+    inherit fetchurl SDL SDL_image SDL_mixer SDL_net;
+    stdenv = overrideGCC stdenv gcc41;
   };
 
   gdbm = import ../development/libraries/gdbm {

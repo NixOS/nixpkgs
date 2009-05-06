@@ -1,0 +1,25 @@
+diff --git a/exrenvmap/main.cpp b/exrenvmap/main.cpp
+index c5afcc5..5e993b3 100644
+--- a/exrenvmap/main.cpp
++++ b/exrenvmap/main.cpp
+@@ -45,6 +45,7 @@
+ #include <iostream>
+ #include <exception>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ using namespace Imf;
+ using namespace std;
+diff --git a/exrmaketiled/main.cpp b/exrmaketiled/main.cpp
+index 5ce4e95..f93ec08 100644
+--- a/exrmaketiled/main.cpp
++++ b/exrmaketiled/main.cpp
+@@ -44,7 +44,7 @@
+ 
+ #include <iostream>
+ #include <exception>
+-#include <string>
++#include <string.h>
+ #include <stdlib.h>
+ 
+ using namespace Imf;

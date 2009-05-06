@@ -1,0 +1,24 @@
+diff --git a/IlmCtl/CtlLex.cpp b/IlmCtl/CtlLex.cpp
+index e662d22..a47311a 100644
+--- a/IlmCtl/CtlLex.cpp
++++ b/IlmCtl/CtlLex.cpp
+@@ -57,6 +57,7 @@
+ #include <CtlLContext.h>
+ #include <iomanip>
+ #include <cassert>
++#include <stdlib.h>
+ 
+ 
+ #if 0
+diff --git a/IlmCtlSimd/CtlSimdReg.h b/IlmCtlSimd/CtlSimdReg.h
+index 6b000b2..8a39f7c 100644
+--- a/IlmCtlSimd/CtlSimdReg.h
++++ b/IlmCtlSimd/CtlSimdReg.h
+@@ -52,6 +52,7 @@
+ #include <typeinfo>
+ #include <CtlExc.h>
+ #include <Iex.h>
++#include <memory.h>
+ 
+ //-----------------------------------------------------------------------------
+ //
