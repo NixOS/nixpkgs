@@ -127,6 +127,7 @@ in {
   firefox3_5 = prio 15 linux;
   flex = all;
   flex2535 = all;
+  fontforge = linux;
   fuse = linux;
   gajim = linux;
   gawk = all;
