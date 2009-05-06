@@ -2371,6 +2371,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
+    inherit pkgs ctags writeScriptBin lib makeOverridable;
+  };
+
   cmake = import ../development/tools/build-managers/cmake {
     inherit fetchurl stdenv replace ncurses;
   };
