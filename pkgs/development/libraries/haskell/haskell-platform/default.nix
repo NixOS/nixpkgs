@@ -6,17 +6,9 @@ cabal.mkDerivation (self : {
   pname = "haskell-platform";
   version = "2009.2.0";
   src = fetchurl {
-    url = http://code.haskell.org/haskell-platform/haskell-platform.cabal;
-    sha256 = "04b50748554ed3b6ed41997798c0ef4f5423bd2c84ea966d8e27cff3c5d0e581";
+    url = "http://hackage.haskell.org/platform/${self.version}/cabal/${self.pname}-${self.version}.tar.gz";
+    sha256 = "d2b8cad09128ca6ea62ddf0f56dd7874603623aae243411a74d6d1c5be38d38b";
   };
-  unpackPhase = ''
-    cp $src haskell-platform.cabal
-  '';
-  preConfigure = ''
-    sed -i 's/^.*cabal-install ==.*$//' haskell-platform.cabal
-    echo 'import Distribution.Simple; main = defaultMain' > Setup.hs
-    touch LICENSE
-  '';
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
     haskellSrc html parallel regexBase regexCompat regexPosix
