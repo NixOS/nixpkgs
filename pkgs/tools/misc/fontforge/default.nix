@@ -3,12 +3,17 @@
 , libX11 ? null, lib, xproto ? null, libXt ? null
 }:
 
+let 
+  version = "20090408";
+  name = "fontforge-${version}";
+  in
+
 stdenv.mkDerivation {
-  name = "fontforge-20070808";
+  inherit name;
   
   src = fetchurl {
-    url = mirror://sourceforge/fontforge/fontforge_full-20070808.tar.bz2;
-    sha256 = "1b3x5djn9ifvszwmgwmn1jwl50pbq6fzvbmgx0qjg0m60m3v44nx";
+    url = "mirror://sourceforge/fontforge/fontforge_full-${version}.tar.bz2";
+    sha256 = "1s9a1mgbr5sv5jx6rdj2v3p6s52hgjr9wqd1aq57kn9whc8ny8y4";
   };
     
   configureFlags = if libX11 != null then "--with-gui=gdraw" else "";
