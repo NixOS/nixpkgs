@@ -1262,7 +1262,7 @@ in
       };
 
       sessionType = mkOption {
-        default = "gnome";
+        default = "kde";
         example = "xterm";
         description = "
           The kind of session to start after login.  Current possibilies
