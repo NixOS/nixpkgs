@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     ${if stdenv ? glibc then "-Dusethreads" else ""}
   '';
 
-  configureScript = "./Configure";
+  configureScript = "${stdenv.shell} ./Configure";
 
   dontAddPrefix = true;
 
