@@ -66,11 +66,14 @@ rec {
     else [(substring 0 1 s)] ++ stringToCharacters (substring 1 (builtins.sub l 1) s);
 
     
-  # !!! this function seems broken - it doesn't escape all special
-  # characters, and in any case this should be done in a builder.
-  escapeShellArg = s:
-    let escapeChar = x: if x == "'" then "'\"'\"'" else x;
-    in "'" + concatStrings (map escapeChar (stringToCharacters s)) + "'";
+  # same as vim escape function.
+  # Each character contained in list is prefixed by "\"
+  escape = list : string :
+    lib.concatStrings (map (c: if lib.elem c list then "\\${c}" else c) (stringToCharacters string));
+
+  # still ugly slow. But more correct now
+  # [] for zsh
+  escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
     
   # !!! what is this for?
