@@ -68,6 +68,7 @@ in {
   bash = all;
   bashInteractive = all;
   bazaar = linux; # first let sqlite3 work on darwin
+  bc = all;
   binutils = linux;
   bind = linux;
   bison23 = all;
@@ -478,6 +479,7 @@ in {
     lndir = all;
     setxkbmap = linux;
     xauth = linux;
+    xev = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
     xf86inputevdev = linux;
