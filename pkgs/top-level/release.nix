@@ -290,6 +290,7 @@ in {
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
+  smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
   splashutils_13 = linux;
