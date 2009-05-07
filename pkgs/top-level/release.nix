@@ -244,6 +244,7 @@ in {
   ntfs3g = linux;
   ntp = linux;
   nxml = all;
+  ocaml = linux;
   octave = linux;
   openoffice = linux;
   openssh = linux;
