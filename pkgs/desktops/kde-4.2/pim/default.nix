@@ -3,10 +3,10 @@
  kdelibs, kdepimlibs, automoc4, phonon, akonadi, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdepim-4.2.2";
+  name = "kdepim-4.2.3";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.2/src/kdepim-4.2.2.tar.bz2;
-    sha1 = "abd6d9e7777cf192aa7919dce56644e942d8e2e9";
+    url = mirror://kde/stable/4.2.3/src/kdepim-4.2.3.tar.bz2;
+    sha1 = "9d46fe2ce1bf183cce82d0d60a9a29ec3c53832f";
   };
   CMAKE_PREFIX_PATH=kdepimlibs;
   builder = ./builder.sh;  

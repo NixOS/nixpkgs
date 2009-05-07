@@ -5,10 +5,10 @@
 # some bindings are even broken.
 
 stdenv.mkDerivation {
-  name = "kdebindings-4.2.2";
+  name = "kdebindings-4.2.3";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.2/src/kdebindings-4.2.2.tar.bz2;
-    sha1 = "1d5eb1bb92f68172d0a0345070b1120c2601ab8c";
+    url = mirror://kde/stable/4.2.3/src/kdebindings-4.2.3.tar.bz2;
+    sha1 = "d8e5ddf5e993124e0250c3e9a9de52264ca5ca7c";
   };
   builder = ./builder.sh;
   buildInputs = [ python sip pyqt4 zlib libpng freetype fontconfig qt4
