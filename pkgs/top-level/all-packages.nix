@@ -5662,12 +5662,15 @@ let
   };
 
   blender = import ../applications/misc/blender {
-    inherit stdenv cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
+    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
       libjpeg libpng zlib /* smpeg sdl */ python;
     inherit (xlibs) inputproto libXi;
     freealut = freealut_soft;
     openal = openalSoft;
     openexr = openexr_1_4_0;
+    # using gcc43 makes blender segfault when pressing p then esc.
+    # is this related to the PHP bug? I'm to lazy to try recompilng it without optimizations
+    stdenv = overrideGCC stdenv gcc42;
   };
 
   bmp = import ../applications/audio/bmp {

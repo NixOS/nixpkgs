@@ -13,7 +13,6 @@ stdenv.mkDerivation {
 
   buildInputs = [python scons
          gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff libXi 
-         ffmpeg
          ];
 
   # patch SConstruct so that we can pass on additional include.  Either blender
