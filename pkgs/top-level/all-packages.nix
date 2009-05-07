@@ -2368,7 +2368,7 @@ let
   };
 
   ctags = import ../development/tools/misc/ctags {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv bleedingEdgeRepos automake autoconf;
   };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {

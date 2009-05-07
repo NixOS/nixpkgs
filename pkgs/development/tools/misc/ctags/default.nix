@@ -1,12 +1,15 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, bleedingEdgeRepos, automake, autoconf}:
 
 stdenv.mkDerivation rec {
-  name = "ctags-5.7";
-  src = fetchurl {
-    url = "mirror://sourceforge/ctags/${name}.tar.gz";
-    sha256 = "10623bbcc9b0cb60124271ce83111733a1043ab022d51cfcd2c0e0c953bd8b58";
-  };
+  name = "ctags-svn";
+  src = bleedingEdgeRepos.sourceByName "ctags";
 
+  preConfigure = ''
+    autoheader
+    autoconf
+  '';
+
+  buildInputs = [ automake autoconf ];
   meta = {
     description = "Exuberant Ctags, a tool for fast source code browsing";
 

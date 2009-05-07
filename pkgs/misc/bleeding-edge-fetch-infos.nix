@@ -243,4 +243,8 @@
     url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz";
     sha256 = "0260817c5deb87210a4cea340d0ef0f35577ef14f37bd7da05a2f08be385ac2f";
   };
+  ctags = args: with args; fetchurl { # Thu May  7 20:12:55 CEST 2009
+    url = "http://mawercer.de/~nix/repos/ctags-703.tar.gz";
+    sha256 = "3f897b303f446aa8b52832d2aef280d359979bb2cd8768a2e70b6475adc64d61";
+  };
 }
