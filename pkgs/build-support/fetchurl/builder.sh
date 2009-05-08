@@ -73,6 +73,9 @@ tryHashedMirrors() {
 }
 
 
+# URL list may contain ?. No glob expansion for that, please
+set -o noglob
+
 urls2=
 for url in $urls; do
     if test "${url:0:9}" != "mirror://"; then
@@ -102,6 +105,8 @@ for url in $urls; do
 done
 urls="$urls2"
 
+# Restore globbing settings
+set +o noglob
 
 if test -n "$showURLs"; then
     echo "$urls" > $out
@@ -113,11 +118,17 @@ if test -n "$preferHashedMirrors"; then
     tryHashedMirrors
 fi
 
+# URL list may contain ?. No glob expansion for that, please
+set -o noglob
+
 success=
 for url in $urls; do
     tryDownload "$url"
     if test -n "$success"; then finish; fi
 done
+
+# Restore globbing settings
+set +o noglob
 
 if test -z "$preferHashedMirrors"; then
     tryHashedMirrors
