@@ -173,7 +173,6 @@ in {
   hdparm = linux;
   hello = all;
   host = linux;
-  httpd = linux;
   hugin = linux;
   iana_etc = linux;
   icecat3Xul = [ "i686-linux" ];
