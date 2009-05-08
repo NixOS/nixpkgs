@@ -50,8 +50,8 @@ EOF
     oldEvents=$(readlink -f /etc/event.d || true)
     newEvents=$(readlink -f @out@/etc/event.d)
 
-    echo "old: $oldEvents"
-    echo "new: $newEvents"
+    #echo "old: $oldEvents"
+    #echo "new: $newEvents"
 
     stopJob() {
         local job=$1
@@ -73,7 +73,7 @@ EOF
 
     # Activate the new configuration (i.e., update /etc, make
     # accounts, and so on).
-    echo "Activating the configuration..."
+    echo "activating the configuration..."
     @out@/activate @out@
 
     # Make Upstart reload its events.  !!! Should wait until it has
