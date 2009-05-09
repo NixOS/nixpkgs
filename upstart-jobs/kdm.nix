@@ -3,7 +3,7 @@
 let
   # Abbreviations.
   cfg = config.services.xserver;
-  xorg = pkgs.xlibs;
+  xorg = cfg.package;
   
   inherit (pkgs.lib) optional isInList getAttr;
   stdenv = pkgs.stdenv;
@@ -26,7 +26,7 @@ let
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
   sessionType = cfg.sessionType;
 
-  videoDriverModules = getAttr [ videoDriver ] (throw "unkown video driver : \"${videoDriver}\"") knownVideoDrivers;
+  videoDriverModules = getAttr [ videoDriver ] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
 
   modules = 
 
@@ -90,10 +90,10 @@ let
       Option "XkbOptions" "${cfg.xkbOptions}"
     '';
 
-    xkbModel = cfg.xkbModel;
-    layout = cfg.layout;
-
-    corePointer = if cfg.synaptics.enable then "Touchpad[0]" else "Mouse[0]";
+    setCorePointer = 
+      if cfg.synaptics.enable then ''
+        InputDevice "Touchpad[0]" "CorePointer"
+      '' else "";
 
     internalAGPGART =
       if cfg.useInternalAGPGART == "yes" then
@@ -181,30 +181,32 @@ let
     ''; # */
   };
 
+
   xsession = pkgs.writeText "Xsession" ''
     source /etc/profile
     
     session=$1
     
-    export PATH=$PATH:${pkgs.xterm}/bin:${pkgs.qt4}/bin:${pkgs.dbus.libs}/bin:${pkgs.kde42.kdelibs}/bin:${pkgs.xlibs.xset}/bin:${pkgs.xlibs.xsetroot}/bin:${pkgs.xlibs.xmessage}/bin:${pkgs.xlibs.xprop}/bin
+    export PATH=$PATH:${pkgs.xterm}/bin:${pkgs.qt4}/bin:${pkgs.dbus.libs}/bin:${pkgs.kde42.kdelibs}/bin:${pkgs.kde42.kdebase_workspace}/bin:${pkgs.xlibs.xset}/bin:${pkgs.xlibs.xsetroot}/bin:${pkgs.xlibs.xmessage}/bin:${pkgs.xlibs.xprop}/bin
     export XDG_CONFIG_DIRS=
     export XDG_DATA_DIRS=${pkgs.shared_mime_info}/share
+    export KDEDIRS=${pkgs.kde42.kdelibs}:${pkgs.kde42.kdebase_workspace}
     
     case $session in
       "")
-        exec xmessage -center -buttons OK:0 -default OK "Sorry, $DESKTOP_SESSION is no valid session."
+        xmessage -center -buttons OK:0 -default OK "Sorry, $DESKTOP_SESSION is no valid session."
         ;;
       failsafe)
-        exec xterm -geometry 80x24-0-0
+        xterm -geometry 80x24-0-0
         ;;
       custom)
-        exec $HOME/.xsession
+        $HOME/.xsession
       ;;
       default)
-        exec ${pkgs.kde42.kdebase_workspace}/bin/startkde
+        startkde
         ;;
       *)
-      eval exec "$session"
+      eval "$session"
       ;;
     esac
 
@@ -231,7 +233,7 @@ let
 in
 {
   name = "kdm";
-    
+      
   job = ''
     description "KDE Display Manager"
 
