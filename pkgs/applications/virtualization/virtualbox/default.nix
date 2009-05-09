@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-2.2.0-${kernel.version}";
+  name = "virtualbox-2.2.2-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/2.2.0/VirtualBox-2.2.0-OSE.tar.bz2;
-    sha256 = "8bf621cfcb61f2b0a71be53f072e58c3fb4f3183324faa3947346ff973314c71";
+    url = http://download.virtualbox.org/virtualbox/2.2.2/VirtualBox-2.2.2-OSE.tar.bz2;
+    sha256 = "868ccdfaa9f2d364ba1cf407234d59713a464837e4012104e5a2a5b2ad4c2d5d";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python];
