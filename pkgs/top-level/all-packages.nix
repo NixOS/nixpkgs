@@ -5895,7 +5895,7 @@ let
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
-      pkgconfig bzip2 zlib;
+      pkgconfig bzip2 zlib libtool;
     inherit (xlibs) libX11;
   };
 
