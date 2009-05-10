@@ -17,7 +17,7 @@ rec {
     fetchurl {
       url = "http://github.com/stevedekorte/io/tarball/${version}";
       name = "io-${version}.tar.gz";
-      sha256 = "1vdjyqv86l290kzhyw8mwzfqgb279dl9nqmy6bih6g8n4yz36ady";
+      sha256 = "0mn7vm2q1r5l3la5k4hdx5cqrp3nhpw01ywnx43k9gfxkdbajn9g";
     };
 
   inherit buildInputs;
