@@ -625,7 +625,8 @@ let
   };
 
   expect = import ../tools/misc/expect {
-    inherit fetchurl stdenv tcl;
+    inherit fetchurl stdenv tcl tk autoconf;
+    inherit (xorg) xproto libX11;
   };
 
   fcron = import ../tools/system/fcron { # see also cron
