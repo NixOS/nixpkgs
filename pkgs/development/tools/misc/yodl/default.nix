@@ -3,15 +3,18 @@
 # latest release is newer though
 args: with args;
 stdenv.mkDerivation {
-  name = "yodl-2.13.2";
+  name = "yodl-2.14.3";
 
   buildInputs = [perl];
 
   src = fetchurl {
-    url = "mirror://sourceforge/sourceforge/yodl/yodl_2.13.2.orig.tar.gz";
-    sha256 = "07zzyx8vf27y3p549qza0pqrb61hfh0gynxqb8i1cghjmxhrlxj3";
+    url = "mirror://sourceforge/yodl/yodl_2.14.3.orig.tar.gz";
+    sha256 = "0paypm76p34hap3d18vvks5rrilchcw6q56rvq6pjf9raqw8ynd4";
   };
-  # maybe apply diff?
+  patches = [(fetchurl {
+    url = "mirror://sourceforge/yodl/yodl_2.14.3-1.diff.gz";
+    sha256 = "176hlbiidv7p9051f04anzj4sr9dwlp9439f9mjvvgks47ac0qx4";
+  })];
 
   # This doesn't isntall docs yet, do you need them?
   installPhase = ''
