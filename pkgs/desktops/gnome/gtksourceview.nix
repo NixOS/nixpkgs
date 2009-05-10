@@ -1,7 +1,7 @@
 { input, stdenv, fetchurl, perl, perlXMLParser, pkgconfig
 , gtk, libxml2, libgnomeprint, gnomevfs, libbonobo, GConf
 , libgnomeprintui, libgnomecanvas
-, gettext
+, gettext, intltool
 }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   buildInputs = [
     perl perlXMLParser pkgconfig gnomevfs
     libbonobo GConf libgnomeprintui libgnomecanvas
-    gettext
+    gettext intltool
   ];
   propagatedBuildInputs = [gtk libxml2 libgnomeprint];
 }
