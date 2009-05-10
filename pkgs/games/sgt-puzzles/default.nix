@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "r8419" a; 
+  version = a.lib.getAttr ["version"] "r8541" a; 
   buildInputs = with a; [
     gtk glib pkgconfig libX11 
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    sha256 = "0lm6d34i9g8krwvchqkq433gmpy4d7c4423h8855rvd3jxga82qa";
+    sha256 = "1k42b7dp53mknn4hcra5kln23y0wscbmki0gl5gnnl1qk5a9ls58";
   };
 
   inherit buildInputs;
