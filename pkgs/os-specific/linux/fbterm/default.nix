@@ -16,8 +16,12 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
+  fixInc = a.FullDepEntry (''
+    sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
+  '') ["doUnpack" "minInit"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["fixInc" "doConfigure" "doMakeInstall"];
       
   name = "fbterm-" + version;
   meta = {
