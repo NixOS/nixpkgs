@@ -19,6 +19,7 @@ args: with args; with stringsWithDeps; with lib;
                 else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
                 else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) || 
 			(hasSuffixHack ".tbz" s) then "tbz2"
+                else if (hasSuffixHack ".tar.Z" s) then "tZ" 
                 else if (hasSuffixHack ".tar.lzma" s) then "tar.lzma"
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
@@ -29,6 +30,7 @@ args: with args; with stringsWithDeps; with lib;
 
                 # Last block - for single files!! It should be always after .tar.*
                 else if (hasSuffixHack ".bz2" s) then "plain-bz2"
+                else if (hasSuffixHack ".gz" s) then "plain-gz"
 
                 else (abort "unknown archive type : ${s}"));
 
@@ -197,6 +199,9 @@ args: with args; with stringsWithDeps; with lib;
         " else if (archiveType s) == "tbz2" then "
                 tar xvjf '${s}'
                 cd \"\$(tar tjf '${s}' | head -1 | sed -e 's@/.*@@' )\"
+        " else if (archiveType s) == "tZ" then "
+                uncompress < '${s}' | tar x
+                cd \"\$(uncompress < '${s}' | tar t | head -1 | sed -e 's@/.*@@' )\"
         " else if (archiveType s) == "tar.lzma" then "
                 unlzma -d -c <'${s}' | tar xv
                 cd \"\$(unlzma -d -c <'${s}' | tar t | head -1 | sed -e 's@/.*@@' )\"
@@ -220,6 +225,11 @@ args: with args; with stringsWithDeps; with lib;
                 NAME=\$(basename ${s} .bz2)
                 bzip2 -d <${s} > \$PWD/\$(basename ${s} .bz2)/\${NAME#*-}
                 cd \$(basename ${s} .bz2)
+        " else if (archiveType s) == "plain-gz" then "
+                mkdir \$PWD/\$(basename ${s} .gz)
+                NAME=\$(basename ${s} .gz)
+                gzip -d <${s} > \$PWD/\$(basename ${s} .gz)/\${NAME#*-}
+                cd \$(basename ${s} .gz)
         " else (abort "unknown archive type : ${s}"))+
                 # goSrcDir is typically something like "cd mysubdir" .. but can be anything else 
                 (if args ? goSrcDir then args.goSrcDir else "")
