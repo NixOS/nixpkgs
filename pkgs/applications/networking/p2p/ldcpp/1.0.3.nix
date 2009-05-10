@@ -2,8 +2,8 @@ args : with args; with builderDefs;
 	let localDefs = builderDefs.passthru.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
-			url = http://download2.berlios.de/linuxdcpp/linuxdcpp-1.0.1.tar.bz2;
-			sha256 = "0f0vvsa3x3nirqnf2lagpmbbj3pgdcp6wa2gvadj294b3va4hx34";
+			url = http://launchpad.net/linuxdcpp/1.0/1.0.3/+download/linuxdcpp-1.0.3.tar.bz2;
+			sha256 = "0w9c8k13cl85y4v4av8ic6w4zkdivcj6p5q86llfh3sz077vckiv";
 		};
 
 		buildInputs = [scons pkgconfig gtk bzip2 pkgconfig libglade
