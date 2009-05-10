@@ -8,7 +8,7 @@ assert motif != null -> libXt != null;
 # Hm, does Opera 9.x still use Motif for anything?
 
 stdenv.mkDerivation rec {
-  version = "9.62-20081029";
+  version = "9.64";
   name = "opera-${version}";
 
   inherit libstdcpp5;
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
     src = if (stdenv.system == "i686-linux") then
       fetchurl {
-        url = ftp://ftp.task.gda.pl/pub/opera/linux/962/final/en/i386/shared/opera-9.62.gcc3-shared-qt3.i386.tar.gz;
-        sha256 = "9b204cce912450886cbc49d1cadc3f5907b044626b100c05e07c6bfec74c56f4";
+	url = ftp://mirror.liteserver.nl/pub/opera/linux/964/final/en/i386/static/opera-9.64.gcc295-static-qt3.i386.tar.gz;
+        sha256 = "0ryza8wrqhlcs9hs3vs38ig3pjwifymxi8jsx83kvxg963p2k825";
       } else if (stdenv.system == "x86_64-linux") then
       fetchurl {
         url = http://snapshot.opera.com/unix/snapshot-1754/x86_64-linux/opera-9.50-20080110.2-shared-qt.x86_64-1754.tar.bz2;
