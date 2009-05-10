@@ -101,6 +101,7 @@ in {
   dico = linux;
   dietlibc = linux;
   diffutils = all;
+  dmtx = all;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
@@ -120,6 +121,7 @@ in {
   evince = linux;
   expect = linux;
   exult = linux;
+  fbterm = linux;
   feh = linux;
   file = all;
   findutils = all;
@@ -265,6 +267,7 @@ in {
   pmccabe = linux;
   portmap = linux;
   postgresql = all;
+  postfix = linux;
   procps = linux;
   pwdutils = linux;
   pthreadmanpages = all;
@@ -358,6 +361,7 @@ in {
   xscreensaver = linux;
   xsel = linux;
   xterm = linux;
+  xxdiff = linux;
   zdelta = linux;
   zile = linux;
   zip = all;
