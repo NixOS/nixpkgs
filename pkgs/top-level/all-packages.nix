@@ -284,6 +284,10 @@ let
     inherit url;
   };
 
+  makeDesktopItem = import ../build-support/make-desktopitem {
+    inherit stdenv;
+  };
+  
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents;
   };
@@ -6948,7 +6952,7 @@ let
   };
 
   wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
-    inherit stdenv nameSuffix makeWrapper browser browserName;
+    inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
     plugins =
       let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
       in
