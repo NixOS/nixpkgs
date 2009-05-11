@@ -6396,7 +6396,7 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps fftw ladspaH pkgconfig;
   };
 
-  ldcpp = composedArgsAndFun (selectVersion ../applications/networking/p2p/ldcpp "1.0.1") {
+  ldcpp = composedArgsAndFun (import ../applications/networking/p2p/ldcpp/1.0.3.nix) {
     inherit builderDefs scons pkgconfig bzip2 openssl;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
@@ -7675,15 +7675,6 @@ let
   tetex = import ../misc/tex/tetex {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
-
-  /*
-  tetexX11 = import ../misc/tex/tetex {
-    inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
-    inherit (xlibs) libX11 libXext libXmu libXaw libXt libXpm;
-    inherit freetype t1lib;
-    builderX11 = true;
-  };
-  */
 
   texFunctions = import ../misc/tex/nix {
     inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick;

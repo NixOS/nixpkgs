@@ -18,7 +18,7 @@ args : with args; with builderDefs;
 	}) //  args);
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "ldcpp-"+version;
+	name = "ldcpp-1.0.3";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doScons doForceShare doPropagate]);
