@@ -15,7 +15,7 @@ bootMount="@bootMount@"
 if test -z "$bootMount"; then bootMount=/boot; fi
 
 
-echo "updating the Grub menu..."
+echo "updating the GRUB menu..."
 
 
 target=/boot/grub/menu.lst
@@ -176,7 +176,7 @@ mv $tmp $target
 
 
 # Remove obsolete files from /boot/kernels.
-for fn in $(ls /boot/kernels/*); do
+for fn in /boot/kernels/*; do
     if ! test "${filesCopied[$fn]}" = 1; then
         rm -vf -- "$fn"
     fi
