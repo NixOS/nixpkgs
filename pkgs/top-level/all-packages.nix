@@ -3040,10 +3040,10 @@ let
   };
 
   gdal = stdenv.mkDerivation {
-    name = "gdal-1.4.2";
+    name = "gdal-1.6.1-rc1";
     src = fetchurl {
-      url = http://download.osgeo.org/gdal/gdal-1.4.2.tar.gz;
-      sha256 = "1vl8ym9y7scm0yd4vghjfqims69b9h1gn9l4zvy2jyglh35p8vpf";
+      url = ftp://ftp.remotesensing.org/gdal/gdal-1.6.1-RC1.tar.gz;
+      sha256 = "0f7da588yvb1d3l3gk5m0hrqlhg8m4gw93aip3dwkmnawz9r0qcw";
     };
   };
 
@@ -7113,7 +7113,7 @@ let
   };
 
   # doesn't compile yet - in case someone else want's to continue ..
-  qgis =  (selectVersion ../applications/misc/qgis "0.11.0") {
+  qgis =  (selectVersion ../applications/misc/qgis "1.0.1-2") {
     inherit composableDerivation fetchsvn stdenv flex lib
             ncurses fetchurl perl cmake gdal geos proj x11
             gsl libpng zlib bison

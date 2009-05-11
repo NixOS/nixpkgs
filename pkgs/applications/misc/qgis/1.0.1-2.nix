@@ -17,18 +17,18 @@ composableDerivation.composableDerivation {} {
   #                md5="ac0560e0a2d4e6258c8639f1e9b56df3"; rev="7704"; };
   src = fetchurl {
     url = "http://download.osgeo.org/qgis/src/qgis_${version}.tar.gz";
-    sha256 = "17vqbld4wr9jyn1s5n0bkpaminsgc2dzcgdfk8ic168xydnwa7b3";
+    sha256 = "07yyic9sn1pz20wjk7k560jwqz6b19rhf2gawybz38xq1f8rjwd4";
   };
 
   meta = {
     description = "user friendly Open Source Geographic Information System";
-    homepage = http://www.qgis.org;
+    homepage = ttp://www.qgis.org;
     # you can choose one of the following licenses:
     license = [ "GPL" ];
   };
 
   phases = "unpackPhase buildPhase installPhase";
-  buildPhase = ''pwd;echo XXXXXXXXX; VERBOSE=1 cmake -DCMAKE_INSTALL_PREFIX=$out ''${cfgOption} ..'';
+  buildPhase = ''pwd; mkdir build; cd build;  VERBOSE=1 cmake -DCMAKE_INSTALL_PREFIX=$out ''${cfgOption} ..'';
 
   postUnpack = ''
     export CMAKE_SYSTEM_LIBRARY_PATH=
