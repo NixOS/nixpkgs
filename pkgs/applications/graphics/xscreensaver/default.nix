@@ -26,12 +26,12 @@ let
 	preConfigure = FullDepEntry ("
 		sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' "+
 		"-i driver/Makefile.in po/Makefile.in.in;
-	") [minInit doUnpack];
+	") ["minInit" "doUnpack"];
 in
 stdenv.mkDerivation rec {
 	name = "xscreensaver-5.07";
-	builder = writeScript (name + "-builder")
-		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+	buildCommand = textClosure localDefs
+          [preConfigure doConfigure doMakeInstall doForceShare doPropagate];
 	meta = {
 		description = "A set of screensavers";
 		inherit src;
