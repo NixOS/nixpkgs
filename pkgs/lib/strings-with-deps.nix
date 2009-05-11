@@ -13,38 +13,35 @@ Usage:
   See trace/nixpkgs/trunk/pkgs/top-level/builder-defs.nix for some predefined build steps
 
 */
-args:
 
-with args;
+{stdenv, lib}:
+
 with lib;
-
-let
-  inherit (builtins) head tail isList isAttrs;
-in
 
 rec {
 
-  textClosureDupList = arg:
-    if isList arg then 
-      textClosureDupList {text = ""; deps = arg;} 
-    else
-      concatLists (map textClosureDupList arg.deps) ++ [arg];
+  /* !!! The interface of this function is kind of messed up, since
+     it's way too overloaded and almost but not quite computes a
+     topological sort of the depstrings. */
 
-  textClosureDupListOverridable = predefined: arg:
-    if isList arg then 
-      textClosureDupListOverridable predefined {text = ""; deps = arg;} 
-    else if isAttrs arg then
-      concatLists (map (textClosureDupListOverridable predefined) arg.deps) ++ [arg]
-    else
-      textClosureDupListOverridable predefined (getAttr [arg] [] predefined);
-
-  textClosureListOverridable = predefined: arg:
-    map (x: x.text) (uniqList {inputList = textClosureDupListOverridable predefined arg;});
-      
-  textClosureOverridable = predefined: arg: concatStringsSep "\n" (textClosureListOverridable predefined arg);
-  
-  textClosureMapOveridable = f: predefined: arg:
-    concatStringsSep "\n" (map f (textClosureListOverridable predefined arg));
+  textClosureList = predefined: arg:
+    let
+      f = done: todo:
+        if todo == [] then {result = []; inherit done;}
+        else
+          let entry = head todo; in
+          if isAttrs entry then
+            let x = f done entry.deps;
+                y = f x.done (tail todo);
+            in { result = x.result ++ [entry.text] ++ y.result;
+                 done = y.done;
+               }
+          else if hasAttr entry done then f done (tail todo)
+          else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
+    in (f {} arg).result;
+    
+  textClosureMap = f: predefined: names:
+    concatStringsSep "\n" (map f (textClosureList predefined names));
 
   noDepEntry = text: {inherit text; deps = [];};
   fullDepEntry = text: deps: {inherit text deps;};

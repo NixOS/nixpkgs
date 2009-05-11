@@ -160,7 +160,8 @@ rec {
 		(val!=null) && (val!=false)) 
 	(tail x))))) condList)) ;
 	
-   
+
+  # !!! This function has O(n^2) performance, so you probably don't want to use it!
   uniqList = {inputList, outputList ? []}:
 	if (inputList == []) then outputList else
 	let x=head inputList; 

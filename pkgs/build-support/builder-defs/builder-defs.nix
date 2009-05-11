@@ -90,8 +90,7 @@ args: with args; with stringsWithDeps; with lib;
                 NIX_GCC=${stdenv.gcc}
                 export SHELL=${stdenv.shell}
                 PATH_DELIMITER=':'
-        " + (if ((stdenv ? preHook) && (stdenv.preHook != null) && 
-                        ((toString stdenv.preHook) != "")) then 
+        " + (if stdenv ? preHook && stdenv.preHook != null && toString stdenv.preHook != "" then 
                 "
                 param1=${stdenv.param1}
                 param2=${stdenv.param2}
@@ -354,24 +353,24 @@ args: with args; with stringsWithDeps; with lib;
         /*debug = x:(__trace x x);
         debugX = x:(__trace (__toXML x) x);*/
 
-        replaceScriptVar = file: name: value: ("sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}");
-        replaceInScript = file: l: (concatStringsSep "\n" ((pairMap (replaceScriptVar file) l)));
-        replaceScripts = l:(concatStringsSep "\n" (pairMap replaceInScript l));
-        doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) [minInit];
-        makeNest = x:(if x==defNest.text then x else "startNest\n" + x + "\nstopNest\n");
-        textClosure = a : steps : textClosureMapOveridable makeNest a (["defNest"] ++ steps);
+        replaceScriptVar = file: name: value: "sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}";
+        replaceInScript = file: l: concatStringsSep "\n" ((pairMap (replaceScriptVar file) l));
+        replaceScripts = l: concatStringsSep "\n" (pairMap replaceInScript l);
+        doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) ["minInit"];
+        makeNest = x: if x == defNest.text then x else "startNest\n" + x + "\nstopNest\n";
+        textClosure = a: steps: textClosureMap makeNest a (["defNest"] ++ steps);
 
         inherit noDepEntry FullDepEntry PackEntry;
 
-        defList = (getAttr ["defList"] [] args);
+        defList = getAttr ["defList"] [] args;
         getVal = getValue args defList;
         check = checkFlag args;
         reqsList = getAttr ["reqsList"] [] args;
-        buildInputsNames = filter (x: (null != getVal x))
+        buildInputsNames = filter (x: null != getVal x)
                 (uniqList {inputList = 
-                (concatLists (map 
-                (x:(if (x==[]) then [] else builtins.tail x)) 
-                reqsList));});
+                  (concatLists (map 
+                    (x: if x==[] then [] else builtins.tail x) 
+                  reqsList));});
         configFlags = getAttr ["configFlags"] [] args;
         buildFlags = getAttr ["buildFlags"] [] args;
         nameSuffixes = getAttr ["nameSuffixes"] [] args;
@@ -440,8 +439,7 @@ args: with args; with stringsWithDeps; with lib;
 
         stdenv.mkDerivation ((rec {
           inherit (localDefs) name;
-          builder = writeScript (name + "-builder")
-            (textClosure localDefs localDefs.realPhaseNames);
+          buildCommand = textClosure localDefs localDefs.realPhaseNames;
           meta = localDefs.meta;
 	  passthru = localDefs.passthru // {inherit (localDefs) src; };
         }) // (if localDefs ? propagatedBuildInputs then {
