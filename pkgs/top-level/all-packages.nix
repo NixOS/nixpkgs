@@ -3894,7 +3894,7 @@ let
   };
 
   SDL = import ../development/libraries/SDL {
-    inherit fetchurl stdenv x11 mesa alsaLib;
+    inherit fetchurl stdenv pkgconfig x11 mesa alsaLib pulseaudio;
     inherit (xlibs) libXrandr;
     openglSupport = mesaSupported;
     alsaSupport = true;

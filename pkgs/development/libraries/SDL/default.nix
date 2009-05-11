@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, x11, libXrandr, openglSupport ? false, mesa ? null
+{ stdenv, fetchurl, x11, libXrandr, pkgconfig
+, openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
+, pulseaudioSupport ? true, pulseaudio ? null
 }:
 
 assert openglSupport -> mesa != null;
 assert alsaSupport -> alsaLib != null;
+assert pulseaudioSupport -> pulseaudio != null;
 
 stdenv.mkDerivation {
   name = "SDL-1.2.13";
@@ -15,12 +18,16 @@ stdenv.mkDerivation {
   
   propagatedBuildInputs = [x11 libXrandr];
   
-  buildInputs =
+  buildInputs = [ pkgconfig ] ++
     stdenv.lib.optional openglSupport mesa ++
-    stdenv.lib.optional alsaSupport alsaLib;
-    
+    stdenv.lib.optional alsaSupport alsaLib ++
+    stdenv.lib.optional pulseaudioSupport pulseaudio;
+
+  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
+  # we must arrange to add it to its RPATH; however, `patchelf' seems
+  # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlags = ''
-    --disable-x11-shared --disable-alsa-shared --enable-rpath
+    --disable-x11-shared --disable-alsa-shared --enable-rpath --disable-pulseaudio-shared
     ${if alsaSupport then "--with-alsa-prefix=${alsaLib}/lib" else ""}
   '';
 
