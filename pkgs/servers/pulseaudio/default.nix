@@ -10,8 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0lwd5rcppyvcvy9n2j074k5mydgqszfvw6fnsjlz46gkda9vgydq";
   };
 
+  # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
+  propagatedBuildInputs = [ gdbm ];
+
   buildInputs = [
-    pkgconfig gnum4 gdbm libtool glib dbus hal avahi gconf liboil
+    pkgconfig gnum4 libtool glib dbus hal avahi gconf liboil
     libsamplerate libsndfile speex alsaLib
     libX11 libICE libSM
     intltool gettext

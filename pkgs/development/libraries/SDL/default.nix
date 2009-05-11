@@ -16,12 +16,13 @@ stdenv.mkDerivation {
     sha256 = "0cp155296d6fy3w31jj481jxl9b43fkm01klyibnna8gsvqrvycl";
   };
   
-  propagatedBuildInputs = [x11 libXrandr];
-  
+  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
+  propagatedBuildInputs = [ x11 libXrandr ] ++
+    stdenv.lib.optional pulseaudioSupport pulseaudio;
+
   buildInputs = [ pkgconfig ] ++
     stdenv.lib.optional openglSupport mesa ++
-    stdenv.lib.optional alsaSupport alsaLib ++
-    stdenv.lib.optional pulseaudioSupport pulseaudio;
+    stdenv.lib.optional alsaSupport alsaLib;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
