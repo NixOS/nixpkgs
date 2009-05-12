@@ -40,7 +40,7 @@ rec {
 	mkdir -p "$(dirname "$REL_PATH")"
 	ln -s "$i" "$REL_PATH" &>/dev/null
       done
-      mkdir lib/user
+      mkdir -p lib/user lib/save
       for i in lib/*/*.raw; do
         test -L "$i" && rm "$i"; 
       done
