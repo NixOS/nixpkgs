@@ -5402,6 +5402,10 @@ let
     inherit fetchurl stdenv openssl;
   };
 
+  wpa_supplicant_gui_qt4 = import ../os-specific/linux/wpa_supplicant/gui-qt4.nix {
+    inherit fetchurl stdenv qt4;
+  };
+
   xfsProgs = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
     inherit libtool gettext e2fsprogs;
   };
