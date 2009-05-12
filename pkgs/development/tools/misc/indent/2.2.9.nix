@@ -1,4 +1,5 @@
 args : with args;
+	let bd = builderDefs; in
 	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
@@ -8,19 +9,17 @@ args : with args;
 
 		buildInputs = [];
 		configureFlags = [];
+		preBuild = bd.stringsWithDeps.fullDepEntry ("
+			sed -e '/extern FILE [*]output/i#ifndef OUTPUT_DEFINED_ELSEWHERE' -i src/indent.h
+			sed -e '/extern FILE [*]output/a#endif' -i src/indent.h
+			sed -e '1i#define OUTPUT_DEFINED_ELSEWHERE 1' -i src/output.c
+		") ["minInit" "doUnpack"];
 	};
 	in with localDefs;
-let 
-	preBuild = FullDepEntry ("
-		sed -e '/extern FILE [*]output/i#ifndef OUTPUT_DEFINED_ELSEWHERE' -i src/indent.h
-		sed -e '/extern FILE [*]output/a#endif' -i src/indent.h
-		sed -e '1i#define OUTPUT_DEFINED_ELSEWHERE 1' -i src/output.c
-	") [minInit doUnpack];
-in
 stdenv.mkDerivation rec {
 	name = "indent";
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doConfigure preBuild doMakeInstall doForceShare doPropagate]);
+		(textClosure localDefs ["doConfigure" "preBuild" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {
 		description = "GNU Indent - a source text formatter";
 		inherit src;
