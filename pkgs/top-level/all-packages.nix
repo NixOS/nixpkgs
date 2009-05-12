@@ -5607,13 +5607,10 @@ let
     inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  acroread = import ../applications/misc/acrobat-reader {
-    inherit fetchurl stdenv zlib;
-    inherit (xlibs) libXt libXp libXext libX11 libXinerama;
+  adobeReader = import ../applications/misc/adobe-reader {
+    inherit fetchurl stdenv zlib libxml2 cups;
+    inherit (xlibs) libX11;
     inherit (gtkLibs) glib pango atk gtk;
-    libstdcpp5 = gcc33.gcc;
-    xineramaSupport = true;
-    fastStart = getConfig ["acroread" "fastStart"] true;
   };
 
   amsn = import ../applications/networking/instant-messengers/amsn {
