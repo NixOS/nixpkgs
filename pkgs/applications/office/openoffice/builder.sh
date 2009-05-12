@@ -74,6 +74,11 @@ installPhase() {
     
     # Create some wrappers to start individual OpenOffice components.
     for i in writer calc draw impress base math web; do wrapSOffice oo$i -$i; done
+    
+    # Create symlinks to desktop files, so that openoffice.org apps can be picked from
+    # the application menu in KDE and GNOME
+    ensureDir $out/share
+    ln -s $out/lib/openoffice/openoffice.org3/share/xdg $out/share/applications
 }
 
 genericBuild
