@@ -55,6 +55,10 @@ rec {
     inherit cabal;
   };
 
+  emgm = import ../development/libraries/haskell/emgm {
+    inherit cabal;
+  };
+
   extensibleExceptions = import ../development/libraries/haskell/extensible-exceptions {
     inherit cabal;
   };
@@ -305,6 +309,10 @@ rec {
 
   xhtml = import ../development/libraries/haskell/xhtml {
     inherit cabal;
+  };
+
+  zipper = import ../development/libraries/haskell/zipper {
+    inherit cabal multirec;
   };
 
   zlib = import ../development/libraries/haskell/zlib {
