@@ -12,7 +12,7 @@
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
-assert httpServer -> httpd != null && httpd.apr == apr && httpd.aprutil == aprutil;
+assert httpServer -> httpd != null;
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javahlBindings -> jdk != null;
 assert sslSupport -> neon.sslSupport;

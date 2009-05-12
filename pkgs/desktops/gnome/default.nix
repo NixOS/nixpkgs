@@ -1,6 +1,6 @@
 args: with args;
 
-assert dbus_glib.glib == gtkLibs.glib;
+#assert dbus_glib.glib == gtkLibs.glib;
 
 let gnome = 
 
