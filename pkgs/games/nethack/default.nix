@@ -40,9 +40,10 @@ rec {
     ln -s $out/games/nethack $out/bin/nethack
     sed -i $out/bin/nethack -e '5aNEWHACKDIR="$HOME/.nethack"'
     sed -i $out/bin/nethack -e '6amkdir -p "$NEWHACKDIR/save"'
-    sed -i $out/bin/nethack -e '7aln -s "$HACKDIR"/* "$NEWHACKDIR" &>/dev/null'
-    sed -i $out/bin/nethack -e '8atest -L "$NEWHACKDIR/record" && rm "$NEWHACKDIR"/record'
-    sed -i $out/bin/nethack -e '9aexport HACKDIR="$NEWHACKDIR"'
+    sed -i $out/bin/nethack -e '7afor i in $(find "$NEWHACKDIR" -type l); do if ! test -e $(readlink "$i"); then rm "$i"; fi; done;'
+    sed -i $out/bin/nethack -e '8aln -s "$HACKDIR"/* "$NEWHACKDIR" &>/dev/null'
+    sed -i $out/bin/nethack -e '9atest -L "$NEWHACKDIR/record" && rm "$NEWHACKDIR"/record'
+    sed -i $out/bin/nethack -e '10aexport HACKDIR="$NEWHACKDIR"'
   '') ["minInit" "defEnsureDir"];
 
   makeFlags = [

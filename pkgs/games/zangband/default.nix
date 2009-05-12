@@ -44,6 +44,7 @@ rec {
       for i in lib/*/*.raw; do
         test -L "$i" && rm "$i"; 
       done
+      for i in $(find lib -type l); do if ! test -e $(readlink "$i"); then rm "$i"; fi; done;
       export ANGBAND_PATH="$PWD"
       "'$out'/bin/.zangband.real" "$@"
     ' > $out/bin/zangband
