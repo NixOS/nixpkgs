@@ -265,6 +265,7 @@ let
 	kdenetwork
 	kdepim
 	kdeplasma_addons
+	kmplayer
         ;
     };
     kernelPackages_2_6_23 = pkgs.recurseIntoAttrs {

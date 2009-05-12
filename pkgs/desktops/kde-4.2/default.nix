@@ -191,6 +191,13 @@ rec {
     inherit automoc4 phonon;
   };
   
+  kmplayer = import ./extragear/kmplayer {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext dbus_glib;
+    inherit (pkgs.gtkLibs) pango gtk;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   krusader = import ./extragear/krusader {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
     inherit kdelibs;
