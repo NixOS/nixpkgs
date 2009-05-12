@@ -4058,7 +4058,7 @@ let
   };
 
   zangband = builderDefsPackage (import ../games/zangband) {
-    inherit ncurses flex bison autoconf automake m4;
+    inherit ncurses flex bison autoconf automake m4 coreutils;
   };
 
   zlib = import ../development/libraries/zlib {

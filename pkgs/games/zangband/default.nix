@@ -29,7 +29,7 @@ rec {
   postInstall = a.FullDepEntry (''
     mv $out/bin/zangband $out/bin/.zangband.real
     echo '#! /bin/sh
-      PATH="$PATH:${a.stdenv.coreutils}/bin"
+      PATH="$PATH:${a.coreutils}/bin"
 
       ZANGBAND_PATH="$HOME/.zangband"
       ORIG_PATH="'$out'"/share/games/zangband
