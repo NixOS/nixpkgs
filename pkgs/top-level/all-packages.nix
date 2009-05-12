@@ -3735,6 +3735,10 @@ let
     sslSupport = true;
   };
 
+  nethack = builderDefsPackage (import ../games/nethack) {
+    inherit ncurses flex bison;
+  };
+
   nss = import ../development/libraries/nss {
     inherit fetchurl stdenv perl zip;
   };
@@ -4051,6 +4055,10 @@ let
       xlibs.libXft xlibs.libXext xlibs.libSM xlibs.libICE
       xlibs.xextproto
     ];
+  };
+
+  zangband = builderDefsPackage (import ../games/zangband) {
+    inherit ncurses flex bison autoconf automake m4;
   };
 
   zlib = import ../development/libraries/zlib {
@@ -5023,7 +5031,7 @@ let
       inherit fetchurl stdenv kernel ncurses fxload;
     };
 
-    kqemu = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.3.0pre11") {
+    kqemu = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.4.0pre1") {
       inherit kernel;
     };
 
@@ -5626,7 +5634,8 @@ let
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv gettext pkgconfig zlib;
+    inherit fetchurl stdenv gettext pkgconfig zlib perl intltool libogg 
+      libvorbis libmad;
     inherit (gtkLibs) gtk glib;
     wxGTK = wxGTK28;
   };
@@ -6625,7 +6634,7 @@ let
     inherit fetchurl stdenv pkgconfig imagemagick boost python;
   };
 
-  qemu = import ../applications/virtualization/qemu/0.9.1.nix {
+  qemu = import ../applications/virtualization/qemu/0.10.3.nix {
     inherit fetchurl SDL zlib which;
     stdenv = overrideGCC stdenv gcc34;
   };
