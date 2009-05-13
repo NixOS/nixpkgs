@@ -2298,7 +2298,7 @@ let
   jdtsdk = import ../development/eclipse/jdt-sdk {
     inherit fetchurl stdenv unzip;
   };
-
+  
   guileLib = import ../development/guile-modules/guile-lib {
     inherit fetchurl stdenv guile texinfo;
   };
@@ -5953,6 +5953,12 @@ let
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libXtst;
   });
+
+  eclipseNewer = import ../applications/editors/eclipse-classic {
+    inherit stdenv fetchurl patchelf makeDesktopItem freetype fontconfig jre;
+    inherit (gtkLibs) glib gtk;
+    inherit (xlibs) libX11 libXext libXrender libXtst;
+  };
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
