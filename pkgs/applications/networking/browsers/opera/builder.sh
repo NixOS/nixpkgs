@@ -33,6 +33,10 @@ installPhase() {
     done
     # substitute pwd as late as possible so that the md5 checkusm check of opera passes
     sed -i 's=/bin/pwd=pwd=' $out/bin/opera
+
+    ensureDir $out/share/applications
+    cp $desktopItem/share/applications/* $out/share/applications
+
 }
 
 genericBuild

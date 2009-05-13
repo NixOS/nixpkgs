@@ -6570,7 +6570,7 @@ let
   };
 
   opera = import ../applications/networking/browsers/opera {
-    inherit fetchurl zlib glibc stdenv;
+    inherit fetchurl zlib glibc stdenv makeDesktopItem;
 # stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
     #33motif = lesstif;
