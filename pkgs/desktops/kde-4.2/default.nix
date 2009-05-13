@@ -209,4 +209,13 @@ rec {
     inherit kdelibs kdepimlibs kdebase_workspace;
     inherit automoc4 phonon qca2;
   };
+  
+  gtk_qt_engine = import ./extragear/gtk-qt-engine {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
+    inherit (pkgs.xlibs) libX11;
+    inherit (pkgs.gtkLibs) gtk;
+    inherit (pkgs.gnome) libbonoboui;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
 }
