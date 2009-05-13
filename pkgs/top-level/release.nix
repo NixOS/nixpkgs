@@ -292,6 +292,7 @@ in {
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
+  smartmontools = all;
   smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
