@@ -1,4 +1,4 @@
-let version = "5.2.6"; in
+let version = "5.2.9"; in
 
 args: with args;
 
@@ -36,6 +36,11 @@ composableDerivation {} ( fixed : {
       libxml2 = {
         configureFlags = ["--with-libxml-dir=${libxml2}"];
         buildInputs = [ libxml2 ];
+      };
+    
+      sqlite = {
+        configureFlags = ["--with-pdo-sqlite=${sqlite}"];
+        buildInputs = [ sqlite ];
       };
     
       postgresql = {
@@ -115,6 +120,7 @@ composableDerivation {} ( fixed : {
     curlSupport = true;
     gettextSupport = true;
     postgresqlSupport = true;
+    sqliteSupport = true;
     zlibSupport = true;
     opnesslSupport = true;
     xdebugSupport = true;
@@ -164,7 +170,7 @@ composableDerivation {} ( fixed : {
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    md5 = "7380ffecebd95c6edb317ef861229ebd";
+    md5 = "280d6cda7f72a4fc6de42fda21ac2db7";
     name = "php-${version}.tar.bz2";
   };
 
