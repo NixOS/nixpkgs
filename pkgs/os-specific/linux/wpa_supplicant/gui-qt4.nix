@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4}:
+{stdenv, fetchurl, qt4, imagemagick, inkscape}:
 
 stdenv.mkDerivation rec {
   pkgname = "wpa_supplicant";
@@ -10,6 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "0w7mf3nyilkjsn5v7p15v5fxnh0klgm8c979z80y0mkw7zx88lkf";
   };
 
-  buildInputs = [qt4];  
+  buildInputs = [qt4 imagemagick inkscape];
   builder = ./builder-gui-qt4.sh;  
 }
