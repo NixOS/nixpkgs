@@ -153,6 +153,15 @@ rec {
     inherit cabal;
   };
 
+  idris = import ../development/compilers/idris {
+    inherit cabal mtl parsec readline ivor happy;
+    inherit (pkgs) fetchdarcs;
+  };
+
+  ivor = import ../development/libraries/haskell/ivor {
+    inherit cabal mtl parsec;
+  };
+
   json = import ../development/libraries/haskell/json {
     inherit cabal mtl;
   };
