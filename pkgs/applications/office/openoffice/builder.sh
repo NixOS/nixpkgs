@@ -79,6 +79,9 @@ installPhase() {
     # the application menu in KDE and GNOME
     ensureDir $out/share
     ln -s $out/lib/openoffice/openoffice.org3/share/xdg $out/share/applications
+    
+    # The desktop files expect a openoffice.org3 executable in the PATH, which is a symlink to soffice
+    ln -s $out/bin/soffice $out/bin/openoffice.org3
 }
 
 genericBuild
