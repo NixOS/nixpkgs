@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     export PATH=${jre}/bin
     export LD_LIBRARY_PATH=${glib}/lib:${gtk}/lib:${libXtst}/lib
     
-    $out/eclipse/eclipse "$@"
+    $out/eclipse/eclipse "\$@"
     EOF
     
     chmod 755 $out/bin/eclipse
