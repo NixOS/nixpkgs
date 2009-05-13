@@ -3711,6 +3711,10 @@ let
     inherit fetchurl stdenv python;
   };
 
+  muparser = import ../development/libraries/muparser {
+    inherit fetchurl stdenv;
+  };
+
   ncurses = composedArgsAndFun (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = (system != "i686-cygwin");
@@ -6433,6 +6437,11 @@ let
   mercurial = import ../applications/version-management/mercurial {
     inherit fetchurl stdenv python makeWrapper getConfig tk;
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
+  };
+
+  meshlab = import ../applications/graphics/meshlab {
+    inherit fetchurl stdenv bzip2;
+    qt = qt4;
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
