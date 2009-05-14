@@ -7188,6 +7188,11 @@ let
     inherit mesa freeglut;
   };
 
+  eduke32 = import ../games/eduke32 {
+    inherit stdenv fetchurl SDL SDL_mixer unzip libvorbis mesa pkgconfig makeDesktopItem;
+    inherit (gtkLibs) gtk;
+  };
+
   exult = import ../games/exult {
     inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip;
   };
