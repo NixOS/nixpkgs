@@ -1,13 +1,18 @@
-{stdenv, fetchurl, SDL, SDL_mixer, unzip, libvorbis, mesa, gtk, pkgconfig, makeDesktopItem}:
+{stdenv, fetchurl, SDL, SDL_mixer, unzip, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
 
 stdenv.mkDerivation rec {
   name = "eduke32";
+  
   src = fetchurl {
     url = http://wiki.eduke32.com/stuff/source_code/eduke32_src_20090131.zip;
     sha256 = "e6b8cc2c7e0c32a6aa5a64359be8b8c494dcae08dda87e1de718c030426ef74d";
   };
-  buildInputs = [ unzip SDL SDL_mixer libvorbis mesa gtk pkgconfig ];
+  
+  buildInputs = [ unzip SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
+    ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
+  
   NIX_LDFLAGS = "-lgcc_s";
+  
   desktopItem = makeDesktopItem {
     name = "eduke32";
     exec = "eduke32-wrapper";

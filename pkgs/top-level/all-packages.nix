@@ -7189,7 +7189,7 @@ let
   };
 
   eduke32 = import ../games/eduke32 {
-    inherit stdenv fetchurl SDL SDL_mixer unzip libvorbis mesa pkgconfig makeDesktopItem;
+    inherit stdenv fetchurl SDL SDL_mixer unzip libvorbis mesa pkgconfig nasm makeDesktopItem;
     inherit (gtkLibs) gtk;
   };
 

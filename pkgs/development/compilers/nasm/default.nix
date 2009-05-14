@@ -1,10 +1,17 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "nasm-0.98.39";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  name = "nasm-2.05.01";
+  
+  #builder = ./builder.sh;
+  
   src = fetchurl {
-    url = mirror://sourceforge/nasm/nasm-0.98.39.tar.bz2;
-    md5 = "2032ad44c7359f7a9a166a40a633e772";
+    url = "mirror://sourceforge/nasm/${name}.tar.bz2";
+    sha256 = "0p2rlshd68m2h7psyjz4440grxwryxppqzchx7cbmzahqr2yy1lj";
+  };
+
+  meta = {
+    homepage = http://www.nasm.us/;
+    description = "An 80x86 and x86-64 assembler designed for portability and modularity";
   };
 }
