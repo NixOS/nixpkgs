@@ -1123,6 +1123,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  povray = import ../tools/graphics/povray {
+    inherit fetchurl stdenv;
+  };
+
   /* WARNING: this version is unsuitable for using with a setuid wrapper */
   ppp = builderDefsPackage (import ../tools/networking/ppp) {
   };
