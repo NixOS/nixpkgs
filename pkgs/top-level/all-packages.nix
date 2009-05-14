@@ -7505,7 +7505,7 @@ let
   };
 
   dosbox = import ../misc/emulators/dosbox {
-    inherit fetchurl stdenv SDL;
+    inherit fetchurl stdenv SDL makeDesktopItem;
   };
 
   dpkg = import ../tools/package-management/dpkg {
