@@ -3,8 +3,6 @@
 stdenv.mkDerivation rec {
   name = "nasm-2.05.01";
   
-  #builder = ./builder.sh;
-  
   src = fetchurl {
     url = "mirror://sourceforge/nasm/${name}.tar.bz2";
     sha256 = "0p2rlshd68m2h7psyjz4440grxwryxppqzchx7cbmzahqr2yy1lj";
