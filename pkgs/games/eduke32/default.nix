@@ -26,17 +26,21 @@ stdenv.mkDerivation rec {
     cat > $out/bin/eduke32-wrapper <<EOF
     #!/bin/sh
     
-    if [ -f ~/.eduke32-settings ]
+    if [ "$EDUKE32_DATA_DIR" = "" ]
+    then 
+        EDUKE32_DATA_DIR=/var/games/eduke32
+    fi
+    if [ "$EDUKE32_CON_FILE" = "" ]
     then
-        .  ~/.eduke32-settings
-    else
-       EDUKE32_DATA_DIR=/var/eduke32
-       CON_FILE=\$EDUKE32_DATA_DIR/GAME.CON
-       GRP_FILE=\$EDUKE32_DATA_DIR/DUKE3D.GRP
+        EDUKE32_CON_FILE=\$EDUKE32_DATA_DIR/GAME.CON
+    fi
+    if [ "$EDUKE32_GRP_FILE" = "" ]
+    then
+        EDUKE32_GRP_FILE=\$EDUKE32_DATA_DIR/DUKE3D.GRP
     fi
     
     cd \$EDUKE32_DATA_DIR
-    eduke32 /x\$CON_FILE /g\$GRP_FILE    
+    eduke32 /x\$EDUKE32_CON_FILE /g\$EDUKE32_GRP_FILE    
     EOF
     chmod 755 $out/bin/eduke32-wrapper
     
