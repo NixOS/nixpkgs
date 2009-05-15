@@ -185,6 +185,14 @@ rec {
     inherit cabal parsec;
   };
 
+  nonNegative = import ../development/libraries/haskell/non-negative {
+    inherit cabal QuickCheck;
+  };
+
+  numericPrelude = import ../development/libraries/haskell/numeric-prelude {
+    inherit cabal HUnit QuickCheck parsec nonNegative utilityHt;
+  };
+
   OpenAL = import ../development/libraries/haskell/OpenAL {
     inherit cabal OpenGL;
     inherit (pkgs) openal;
@@ -262,6 +270,10 @@ rec {
     inherit cabal;
   };
 
+  storableComplex = import ../development/libraries/haskell/storable-complex {
+    inherit cabal;
+  };
+
   strictConcurrency = import ../development/libraries/haskell/strictConcurrency {
     inherit cabal parallel;
   };
@@ -275,6 +287,10 @@ rec {
   };
 
   utf8String = import ../development/libraries/haskell/utf8-string {
+    inherit cabal;
+  };
+
+  utilityHt = import ../development/libraries/haskell/utility-ht {
     inherit cabal;
   };
 
