@@ -415,7 +415,8 @@ rec {
       };
 
     
-  job = ''
+  # The X server needs HAL running
+  job = assert config.services.hal.enable; ''
     start on ${if cfg.autorun then "hal" else "never"}
 
     start script
