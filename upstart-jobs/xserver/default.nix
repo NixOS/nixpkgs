@@ -465,6 +465,9 @@ let
 in
 
 mkIf cfg.enable {
+
+  assertions = [ { assertion = config.services.hal.enable == true; message = "The X server needs HAL running. Set services.hal.enable to true"; } ];
+
   require = [
     options
 
@@ -530,7 +533,7 @@ mkIf cfg.enable {
     extraJobs = [{
       name = "xserver";
       job = ''
-        start on ${if cfg.autorun then "network-interfaces" else "never"}
+        start on ${if cfg.autorun then "hal" else "never"}
 
         start script
         
