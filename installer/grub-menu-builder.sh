@@ -147,4 +147,6 @@ for generation in $(
 done
 
 
-cp $tmp $target
+# Atomically update /boot/grub/menu.lst.  !!! should do an fsync()
+# here on $tmp, especially on ext4.
+mv $tmp $target
