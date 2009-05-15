@@ -153,11 +153,6 @@ rec {
     inherit cabal;
   };
 
-  idris = import ../development/compilers/idris {
-    inherit cabal mtl parsec readline ivor happy;
-    inherit (pkgs) fetchdarcs;
-  };
-
   ivor = import ../development/libraries/haskell/ivor {
     inherit cabal mtl parsec;
   };
@@ -287,6 +282,10 @@ rec {
     inherit cabal;
   };
 
+  uuParsingLib = import ../development/libraries/haskell/uu-parsinglib {
+    inherit cabal;
+  };
+
   vacuum = import ../development/libraries/haskell/vacuum {
     inherit cabal ghcPaths haskellSrcMeta;
   };
@@ -340,6 +339,11 @@ rec {
   helium = import ../development/compilers/helium {
     inherit ghc;
     inherit (pkgs) fetchurl stdenv;
+  };
+
+  idris = import ../development/compilers/idris {
+    inherit cabal mtl parsec readline ivor happy;
+    inherit (pkgs) fetchdarcs;
   };
 
 
@@ -431,6 +435,12 @@ rec {
   lhs2tex = import ../tools/typesetting/lhs2tex {
     inherit cabal regexCompat utf8String;
     inherit (pkgs) tetex polytable;
+  };
+
+  # Games.
+
+  MazesOfMonad = import ../games/MazesOfMonad {
+    inherit cabal HUnit mtl regexPosix time;
   };
 
 }
