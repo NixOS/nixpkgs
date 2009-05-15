@@ -379,6 +379,11 @@ rec {
       grubSplashImage bootMount configurationLimit;
   };
 
+  # This attribute is responsible for creating boot entries for 
+  # child configuration. They are only (directly) accessible
+  # when the parent configuration is boot default. For example,
+  # you can provide an easy way to boot the same configuration 
+  # as you use, but with another kernel
   children = map (x: ((import ./system.nix) 
     { inherit platform; 
       configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
@@ -417,11 +422,6 @@ rec {
       pkgs.upstart # for initctl
     ];
     upstartInterfaceVersion = pkgs.upstart.interfaceVersion;
-    # This attribute is responsible for creating boot entries for 
-    # child configuration. They are only (directly) accessible
-    # when the parent configuration is boot default. For example,
-    # you can provide an easy way to boot the same configuration 
-    # as you use, but with another kernel
   }) config.environment.checkConfigurationOptions
      optionDeclarations config;
 
