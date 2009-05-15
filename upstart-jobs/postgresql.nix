@@ -61,6 +61,12 @@ let
             How to authorize users. 
             Note: ident needs absolute trust to all allowed client hosts.";
         };
+        enableTCPIP = mkOption {
+          default = false;
+          description = "
+            Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
+          ";
+        };
       };
     };
   };
@@ -78,6 +84,8 @@ let
     "gw6c" else "network-interfaces";
 
   run = "${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh postgres";
+
+  flags = if cfg.enableTCPIP then ["-i"] else [];
 
 in
 
@@ -120,7 +128,7 @@ mkIf config.services.postgresql.enable {
             cp -f ${pkgs.writeText "pg_hba.conf" cfg.authentication} ${cfg.dataDir}/pg_hba.conf
         end script
 
-        respawn ${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir}'
+        respawn ${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir} ${toString flags}'
       '';
       }];
   };
