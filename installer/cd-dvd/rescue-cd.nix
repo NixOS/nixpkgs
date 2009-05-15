@@ -54,6 +54,7 @@ rec {
           # something goes wrong in stage 1.
           "ehci_hcd"
           "ohci_hcd"
+          "uhci_hcd"
           "usbhid"
           "usb_storage"
 
