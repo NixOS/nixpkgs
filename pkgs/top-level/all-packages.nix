@@ -5353,6 +5353,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  trackballs = import ../games/trackballs {
+    inherit stdenv fetchurl SDL mesa SDL_ttf gettext zlib SDL_mixer SDL_image guile;
+    debug = false;
+  };
+
   tunctl = import ../os-specific/linux/tunctl {
     inherit stdenv fetchurl;
   };
