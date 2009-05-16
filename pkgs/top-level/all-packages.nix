@@ -1364,6 +1364,8 @@ let
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg perl;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
+    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
+      xorg.fontbhlucidatypewriter75dpi ];
   };
 
   time = import ../tools/misc/time {
