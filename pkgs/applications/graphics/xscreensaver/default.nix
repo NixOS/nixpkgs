@@ -7,7 +7,7 @@ args : with args; let localDefs = builderDefs.passthru.function (args // rec {
 		};
 		useConfig = true;
 		reqsList = [
-			["true" "libX11" "gtk" "pkgconfig" "bc" "perl" "intltool" "libXmu"]
+			["true" "libX11" "pkgconfig" "bc" "perl" "intltool" "libXmu"]
 			["GL" "mesa"]
 			["GUI" "gtk" "libxml2" "libglade"]
 			["jpeg" "libjpeg"]
