@@ -2,12 +2,12 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.stringsWithDeps) textClosureOverridable noDepEntry;
+  inherit (pkgs.stringsWithDeps) textClosureMap noDepEntry;
   inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten
-    mapAttrs addErrorContext fold;
+    mapAttrs addErrorContext fold id;
 
   textClosure = steps:
-    textClosureOverridable steps (
+    textClosureMap id steps (
        [(noDepEntry "#!/bin/sh")]
     ++ (mapRecordFlatten (a: v: v) steps)
     );
