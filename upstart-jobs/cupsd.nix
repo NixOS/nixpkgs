@@ -47,6 +47,9 @@ let
     ln -s ${cups}/lib/cups/backend/* $out/lib/cups/backend/
     ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
 
+    # Provide support for printing via HTTPS.
+    ln -s ipp $out/lib/cups/backend/https
+
     # Provide Ghostscript rasterisation, necessary for non-Postscript
     # printers.
     rm $out/lib/cups/filter
