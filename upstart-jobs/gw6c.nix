@@ -103,7 +103,7 @@ let
         gw6cService = import ../../services/gw6c {
                 inherit (pkgs) stdenv gw6c coreutils 
                 procps upstart iputils gnused 
-                gnugrep seccureUser writeScript;
+                gnugrep seccure writeScript;
                 username = cfg.username;
                 password = cfg.password;
                 server = cfg.server;

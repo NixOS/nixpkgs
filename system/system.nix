@@ -142,7 +142,7 @@ rec {
         pkgs.pwdutils
         pkgs.reiserfsprogs
         pkgs.rsync
-        pkgs.seccureUser
+        pkgs.seccure
         pkgs.strace
         pkgs.su
         pkgs.sysklogd
