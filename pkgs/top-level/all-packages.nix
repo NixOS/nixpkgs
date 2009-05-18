@@ -287,7 +287,7 @@ let
   makeDesktopItem = import ../build-support/make-desktopitem {
     inherit stdenv;
   };
-  
+
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents;
   };
@@ -1835,7 +1835,7 @@ let
       ghc = ghc642Binary;
     };
   };
-  
+
   haskellPackages_ghc683 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.8.3.nix {
@@ -2297,7 +2297,7 @@ let
   jdtsdk = import ../development/eclipse/jdt-sdk {
     inherit fetchurl stdenv unzip;
   };
-  
+
   guileLib = import ../development/guile-modules/guile-lib {
     inherit fetchurl stdenv guile texinfo;
   };
@@ -3266,7 +3266,7 @@ let
   isocodes = import ../development/libraries/iso-codes {
     inherit stdenv fetchurl gettext python;
   };
-  
+
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip xlibs libjpeg;
   };
@@ -4578,7 +4578,7 @@ let
   alsaLib = import ../os-specific/linux/alsa-lib {
     inherit stdenv fetchurl;
   };
-  
+
   alsaUtils = import ../os-specific/linux/alsa-utils {
     inherit stdenv fetchurl alsaLib gettext ncurses;
   };
@@ -5643,7 +5643,7 @@ let
   };
 
   audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv gettext pkgconfig zlib perl intltool libogg 
+    inherit fetchurl stdenv gettext pkgconfig zlib perl intltool libogg
       libvorbis libmad;
     inherit (gtkLibs) gtk glib;
     wxGTK = wxGTK28;
@@ -6591,7 +6591,7 @@ let
   panotools = import ../applications/graphics/panotools {
     inherit stdenv fetchsvn libpng libjpeg libtiff automake libtool autoconf;
   };
-  
+
   pavucontrol = import ../applications/audio/pavucontrol {
     inherit fetchurl stdenv pkgconfig pulseaudio libsigcxx
       libcanberra intltool gettext;
@@ -7772,12 +7772,12 @@ let
       sqlite subversion pysqlite;
   };
 
-  vice = import ../misc/emulators/vice {
-    inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
-    inherit pkgconfig SDL makeDesktopItem autoconf automake;
-    inherit (gtkLibs) gtk;
-  };
-  
+#   vice = import ../misc/emulators/vice {
+#     inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
+#     inherit pkgconfig SDL makeDesktopItem autoconf automake;
+#     inherit (gtkLibs) gtk;
+#   };
+
   wine =
     if system == "x86_64-linux" then
       # Can't build this in 64-bit; use a 32-bit build instead.
