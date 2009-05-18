@@ -129,6 +129,7 @@ rec {
         --replace scsi_id ${extraUtils}/bin/scsi_id \
         --replace path_id ${extraUtils}/bin/path_id \
         --replace vol_id ${extraUtils}/bin/vol_id
+      sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules 
     ''; # */
   };
 
