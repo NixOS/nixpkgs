@@ -166,15 +166,6 @@ checkFS() {
     # Only check block devices.
     if ! test -b "$device"; then return 0; fi
 
-    # For unclean ext3 file systems, fsck.ext3 should just replay the
-    # journal and exit, but in practice this takes *much* longer than
-    # letting the kernel recover the FS.  So, don't run fsck on
-    # journalling file systems.
-    eval $(fstype "$device")
-    if test "$FSTYPE" = ext3 -o "$FSTYPE" = ext4 -o "$FSTYPE" = reiserfs -o "$FSTYPE" = xfs -o "$FSTYPE" = jfs; then
-        return 0;
-    fi
-    
     # Don't run `fsck' if the machine is on battery power.  !!! Is
     # this a good idea?
     if ! onACPower; then
