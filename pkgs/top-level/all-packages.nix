@@ -1252,16 +1252,9 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  seccure = composedArgsAndFun (selectVersion ../tools/security/seccure "0.4") {
-    inherit builderDefs libgcrypt;
+  seccure = import ../tools/security/seccure/0.4.nix {
+    inherit fetchurl stdenv libgcrypt;
   };
-
-  # seccure will override it (it is root-only, but
-  # more secure because of memory locking), but this
-  # can be added to default system
-  seccureUser = lowPrio (seccure.passthru.function {
-    makeFlags = [" CFLAGS+=-DNOMEMLOCK "];
-  });
 
   semantic = import ../applications/editors/emacs-modes/semantic {
     inherit fetchurl stdenv emacs eieio;

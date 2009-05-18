@@ -288,7 +288,6 @@ in {
   screen = linux ++ darwin;
   sdparm = linux;
   seccure = linux;
-  seccureUser = linux;
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
