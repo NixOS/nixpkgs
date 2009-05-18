@@ -135,6 +135,10 @@ if test -n "@nixpkgsURL@" -a ${NIXOS_PULL:-1} != 0; then
     chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
 fi
 
+if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
+    echo "User requested only to prepare chroot. Exiting."
+    exit 0;
+fi
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
