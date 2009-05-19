@@ -20,7 +20,7 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pyGtkGlade})/gtk-2.0"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pygobject})/gtk-2.0"
     sed -e '/-L[$]x_libraries/d' -i configure

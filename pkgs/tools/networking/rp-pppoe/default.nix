@@ -26,12 +26,12 @@ rec {
     export PPPD=${a.ppp}/sbin/pppd
   '');
 
-  patchInstall = a.FullDepEntry(''
+  patchInstall = a.fullDepEntry(''
     sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/share/${name}/etc/ppp@'
     sed -i Makefile -e 's@PPPOESERVER_PPPD_OPTIONS=@&$(out)/share/${name}@'
   '') ["minInit" "doUnpack"];
 
-  makeDirs = a.FullDepEntry(''
+  makeDirs = a.fullDepEntry(''
     ensureDir $out/share/${name}/etc/ppp
   '') ["minInit" "defEnsureDir"];
 

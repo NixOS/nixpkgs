@@ -7,7 +7,7 @@ args : with args; with builderDefs;
 		};
 		buildInputs = [mkfontdir mkfontscale];
 		configureFlags = [];
-		doInstall = FullDepEntry (''
+		doInstall = fullDepEntry (''
 			tar xf ${src}
 			ensureDir $out/share/fonts/
 			cp *.bdf $out/share/fonts

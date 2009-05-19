@@ -2,7 +2,7 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
   version = lib.getAttr ["version"] "3.3.0" args; 
   _buildInputs = with args; [
@@ -23,10 +23,10 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["makeTools" "makeXen"];
 
-  makeTools = FullDepEntry (''make -C tools install PREFIX=$out '') 
+  makeTools = fullDepEntry (''make -C tools install PREFIX=$out '') 
     ["minInit" "addInputs" "doUnpack"];
       
-  makeXen = FullDepEntry (''make -C xen install PREFIX=$out '') 
+  makeXen = fullDepEntry (''make -C xen install PREFIX=$out '') 
     ["minInit" "addInputs" "doUnpack"];
       
   name = "xen-" + version;

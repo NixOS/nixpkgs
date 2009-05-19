@@ -9,13 +9,13 @@ args: with args;
 	};
 	in with localDefs;
 let 
-	preBuild = FullDepEntry "
+	preBuild = fullDepEntry "
 		sed -e '
 		s@currentProbIndex != 100@0@;
 		' -i MainFrame.cpp;
 	" [minInit];
 
-  installPhase = FullDepEntry "
+  installPhase = fullDepEntry "
 		ensureDir \$out/bin \$out/libexec;
 		cp sand \$out/libexec;
 		echo -e '#! /bin/sh\nLC_ALL=C '\$out'/libexec/sand \"$@\"' >\$out/bin/fsg;

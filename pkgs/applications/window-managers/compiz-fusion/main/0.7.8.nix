@@ -11,7 +11,7 @@ args : with args;
 	} ;
 	in with localDefs;
 let
-	sharePlugins = FullDepEntry ("
+	sharePlugins = fullDepEntry ("
 		ensureDir \$out/share/compiz-plugins
 		ln -vsf \$out/lib/compiz \$out/share/compiz-plugins
 	") [minInit doMakeInstall defEnsureDir];

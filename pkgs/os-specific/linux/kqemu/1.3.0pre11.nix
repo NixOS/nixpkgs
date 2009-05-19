@@ -8,10 +8,10 @@ rec {
 
   buildInputs = [];
   configureFlags = [''--PREFIx=$out'' ''--kernel-path=$(ls -d ${kernel}/lib/modules/*/build)''];
-  debugStep = FullDepEntry (''
+  debugStep = fullDepEntry (''
   	cat config-host.mak
   '') ["minInit"];
-  preConfigure = FullDepEntry ('' 
+  preConfigure = fullDepEntry ('' 
     sed -e 's/`uname -r`/'"$(basename ${kernel}/lib/modules/*)"'/' -i install.sh
     sed -e '/kernel_path=/akernel_path=$out$kernel_path' -i install.sh
     sed -e '/depmod/d' -i install.sh

@@ -8,7 +8,7 @@ rec {
   buildInputs = [libtool gettext e2fsprogs];
   configureFlags = [];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sp_path=$(echo $PATH | sed -e 's/:/ /g');
     sed -e 's@/usr/bin@'"$PATH: $sp_path"'@g' -i configure
     sed -e 's@/usr/local/bin@'"$PATH: sp_path"'@g' -i configure

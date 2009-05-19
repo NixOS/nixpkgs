@@ -2,7 +2,7 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
   version = lib.getAttr ["version"] "" args; 
   buildInputs = with args; [
@@ -21,7 +21,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doMakeInstall"];
 
-  doUnpack = FullDepEntry (''
+  doUnpack = fullDepEntry (''
     mkdir bmrsa
     cd bmrsa 
     unzip ${src}

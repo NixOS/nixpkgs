@@ -16,7 +16,7 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     chmod a+rwX -R . 
     sed -re 's/ch(own|grp|mod)/true/' -i lib/*/makefile.zb makefile.in
     sed -e '/FIXED_PATHS/d' -i src/z-config.h
@@ -26,7 +26,7 @@ rec {
     ensureDir $out/bin
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
-  postInstall = a.FullDepEntry (''
+  postInstall = a.fullDepEntry (''
     mv $out/bin/zangband $out/bin/.zangband.real
     echo '#! /bin/sh
       PATH="$PATH:${a.coreutils}/bin"

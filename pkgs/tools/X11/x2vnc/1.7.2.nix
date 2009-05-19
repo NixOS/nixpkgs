@@ -8,7 +8,7 @@ args : with args; with builderDefs.passthru.function {src="";};
 		};
 
 		buildInputs = [libX11 xproto xextproto libXext libXrandr randrproto];
-		doCreatePrefix = FullDepEntry (''
+		doCreatePrefix = fullDepEntry (''
 			ensureDir $out
 		'') ["defEnsureDir"];
 		configureFlags = [];

@@ -23,7 +23,7 @@ args : with args; let localDefs = builderDefs.passthru.function (args // rec {
 	});
 	in with localDefs;
 let 
-	preConfigure = FullDepEntry ("
+	preConfigure = fullDepEntry ("
 		sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' "+
 		"-i driver/Makefile.in po/Makefile.in.in;
 	") ["minInit" "doUnpack"];

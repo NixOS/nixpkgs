@@ -17,13 +17,13 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" (doPatchShebangs ".") "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
-  doReplaceUsrBin = FullDepEntry (''
+  doReplaceUsrBin = fullDepEntry (''
     for i in $(find . -name '*.pl') $(find . -name '*.pm'); do 
         sed -e 's@/usr/bin/gcc@gcc@' -i $i
     done
   '') ["minInit" "doUnpack"];
 
-  doAddPrograms = FullDepEntry (''
+  doAddPrograms = fullDepEntry (''
     for i in Programs/.libs/*; do 
         cp $i $out/bin/webkit-program-$(basename $i)
     done

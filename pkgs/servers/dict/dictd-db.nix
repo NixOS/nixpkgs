@@ -4,7 +4,7 @@ let makeDictdDB = _src: _name: _subdir: _locale:
 with builderDefs;
 	let localDefs = builderDefs.passthru.function (rec {
 		src=_src;
-		doInstall = FullDepEntry (''
+		doInstall = fullDepEntry (''
 			ensureDir $out/share/dictd
 			tar xf  ${src}
 			cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd 

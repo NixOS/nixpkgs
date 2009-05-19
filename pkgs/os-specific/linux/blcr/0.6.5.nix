@@ -13,7 +13,7 @@ rec {
     "--with-system-map=${args.kernel}/System.map"
   ];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sed -e 's/FASTCALL//' -i configure configure.ac
     sed -e 's/int (attach_pid/void (attach_pid/' -i configure configure.ac
   '')["doUnpack" "minInit"];

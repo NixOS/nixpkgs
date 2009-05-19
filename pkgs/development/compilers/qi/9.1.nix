@@ -13,7 +13,7 @@ let
 	shell=stdenv.shell;
 in
 let 
-	allBuild = FullDepEntry ("
+	allBuild = fullDepEntry ("
 		(sleep 0.1; echo ) | clisp install.txt;
 		(sleep 0.1; echo -e '1\n(quit)\n' ) | sh Qi-Linux-CLisp 
 		ensureDir \$out/share

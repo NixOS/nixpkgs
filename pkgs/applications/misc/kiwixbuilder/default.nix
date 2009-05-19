@@ -7,7 +7,7 @@ args : with args; with builderDefs {src="";} null;
 		};
 		buildInputs = [glib zlib];
 		configureFlags = [" --prefix=$out "];
-		preConfigure = FullDepEntry (''
+		preConfigure = fullDepEntry (''
 			export NIX_CFLAGS_COMPILE=$NIX_CFLAGS_COMPILE' -I${glib}/include/glib-2.0/ -I${glib}/lib/glib-2.0/include/ '
 			export NIX_LDFLAGS=$NIX_LDFLAGS' -lglib-2.0 '
 			sed -e 's@/usr/local/lib/libz\.a@${zlib}/lib/libz.a@' -i configure

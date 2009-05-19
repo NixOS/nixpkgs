@@ -7,7 +7,7 @@ rec {
   };
 
   phaseNames = ["doCopy"];
-  doCopy = FullDepEntry (''
+  doCopy = fullDepEntry (''
     ensureDir $out/share/texmf/fonts/enc
     ensureDir $out/share/texmf/fonts/map
     ensureDir $out/share/texmf/fonts/type1/public/cm-super

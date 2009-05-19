@@ -24,7 +24,7 @@ args : with args;
 	};
 	in with localDefs;
 let
-	postAll = FullDepEntry ("
+	postAll = fullDepEntry ("
     for i in $out/bin/*; do
      patchelf --set-rpath /var/run/opengl-driver/lib:$(patchelf --print-rpath $i) $i
     done

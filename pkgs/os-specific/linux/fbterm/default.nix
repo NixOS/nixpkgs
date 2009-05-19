@@ -16,7 +16,7 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
-  fixInc = a.FullDepEntry (''
+  fixInc = a.fullDepEntry (''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
   '') ["doUnpack" "minInit"];
 

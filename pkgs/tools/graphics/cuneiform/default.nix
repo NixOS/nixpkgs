@@ -21,14 +21,14 @@ rec {
 
   libc = if a.stdenv ? glibc then a.stdenv.glibc else "";
 
-  doCmake = a.FullDepEntry(''
+  doCmake = a.fullDepEntry(''
     ensureDir $PWD/builddir
     cd builddir
     export NIX_LDFLAGS="$NIX_LDFLAGS -ldl -L$out/lib"
     cmake .. -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=$out -DDL_LIB=${libc}/lib
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
       
-  postInstall = a.FullDepEntry(''
+  postInstall = a.fullDepEntry(''
     patchelf --set-rpath $out/lib${if a.stdenv.gcc.gcc != null then ":${a.stdenv.gcc.gcc}/lib" else ""} $out/bin/cuneiform
   '') ["minInit" "addInputs" "doMakeInstall"];
 

@@ -13,7 +13,7 @@ args : with args;
 		configureFlags = [];
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
-let build = FullDepEntry ("
+let build = fullDepEntry ("
 	cd deps 
 	sed -e 's/^CPP/#&/ ; s/^# CPP=gcc/CPP=gcc/' -i Makefile.camlidl
 	make 

@@ -21,7 +21,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall" "postInstall"];
-  postInstall = a.FullDepEntry (''
+  postInstall = a.fullDepEntry (''
     ln -s $out/lib/python*/site-packages/gtk-2.0/* $out/lib/python*/site-packages/
   '') ["minInit"];
 

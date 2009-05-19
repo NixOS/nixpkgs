@@ -16,13 +16,13 @@ args : with args;
 	};
 	in with localDefs;
 let
-preBuild = FullDepEntry (''
+preBuild = fullDepEntry (''
 	echo Replacing HAL.
 	tar xvf ${hal20080528}
 	rm -r hal
 	mv ath_hal-* hal
 '') ["minInit" "doUnpack"];
-postInstall = FullDepEntry (''
+postInstall = fullDepEntry (''
 	ln -s $out/usr/local/bin $out/bin
 '') [minInit doMakeInstall];
 in

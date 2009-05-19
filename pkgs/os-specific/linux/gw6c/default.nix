@@ -17,7 +17,7 @@ rec {
 
   goSrcDir = "cd tspc-advanced";
 
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     sed -e 's@/dev/net/tun@/dev/tun@' -i platform/linux/tsp_tun.c;
     sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@' -i template/linux.sh
     sed -e 's@/sbin/route@${nettools}/sbin/route@' -i template/linux.sh

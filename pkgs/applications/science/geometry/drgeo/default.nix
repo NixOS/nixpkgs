@@ -13,7 +13,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "doPreBuild" "doMakeInstall"];
 
-  doPreBuild = FullDepEntry (''
+  doPreBuild = fullDepEntry (''
     cp drgeo.desktop.in drgeo.desktop
   '') ["minInit" "doUnpack"];
       

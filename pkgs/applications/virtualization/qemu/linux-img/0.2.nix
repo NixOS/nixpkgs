@@ -11,7 +11,7 @@ args : with args;
 	};
 	in with localDefs;
 let 
-doCopy = FullDepEntry ("
+doCopy = fullDepEntry ("
   ensureDir \$out/share/qemu-images
   cp linux-${version}.img  \$out/share/qemu-images/
 ") [minInit doUnpack defEnsureDir];

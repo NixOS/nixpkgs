@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
      
-  preBuild = a.FullDepEntry (''
+  preBuild = a.fullDepEntry (''
     ( cd sys/unix ; sh setup.sh )
     sed -e 's@.*define HACKDIR.*@\#define HACKDIR "/tmp/nethack"@' -i include/config.h
     sed -e '/define COMPRESS/d' -i include/config.h
@@ -35,7 +35,7 @@ rec {
     sed -re 's@^(CH...).*@\1 = true@' -i Makefile
   '') ["minInit" "doUnpack"];
 
-  postInstall = a.FullDepEntry (''
+  postInstall = a.fullDepEntry (''
     ensureDir $out/bin
     ln -s $out/games/nethack $out/bin/nethack
     sed -i $out/bin/nethack -e '5aNEWHACKDIR="$HOME/.nethack"'

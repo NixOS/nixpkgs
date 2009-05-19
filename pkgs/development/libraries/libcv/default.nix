@@ -2,7 +2,7 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
   version = lib.getAttr ["version"] "" args; 
   buildInputs = with args; [
@@ -22,7 +22,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "doMakeInstall" "postInstall"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     ln -s $out/include/opencv/* $out/include
   '') ["doMakeInstall" "minInit"];
       

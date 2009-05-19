@@ -8,11 +8,11 @@ rec {
   buildInputs = [boost];
   configureFlags = [];
 
-  doFixBoost = FullDepEntry (''
+  doFixBoost = fullDepEntry (''
     sed -e 's/-lboost_[a-z_]*/&-mt/g' -i src/Makefile.in
   '') ["minInit" "doUnpack"];
 
-  doFixInc = FullDepEntry (''
+  doFixInc = fullDepEntry (''
     sed -e '/[#]include [<]config.h[>]/a\#include <string.h>' -i src/unicode_to_utf8.cpp
     cat src/unicode_to_utf8.cpp
   '') ["minInit" "doUnpack"];

@@ -11,11 +11,11 @@ args : with args;
 	} ;
 	in with localDefs;
 let
-	sharePlugins = FullDepEntry ("
+	sharePlugins = fullDepEntry ("
 		ensureDir \$out/share/compiz-plugins
 		ln -vsf \$out/lib/compiz \$out/share/compiz-plugins
 	") [minInit doMakeInstall defEnsureDir];
-	fixIncludes = FullDepEntry ("
+	fixIncludes = fullDepEntry ("
 sed -e 's@#include <compiz-text.h>@#include <compiz/compiz-text.h>@' -i src/group/group-internal.h;
 sed -e 's@#include <compiz-text.h>@#include <compiz/compiz-text.h>@' -i src/scalefilter/scalefilter.c;
 sed -e 's@#include <compiz-mousepoll.h>@#include <compiz/compiz-mousepoll.h>@' -i src/showmouse/showmouse.c;

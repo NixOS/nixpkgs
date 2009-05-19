@@ -18,7 +18,7 @@ rec {
       (pythonWrapperArguments + preservePathWrapperArguments)) 
   ];
       
-  doInstall = FullDepEntry (''
+  doInstall = fullDepEntry (''
     for i in dot mtn highlight; do 
         sed -e "s@/usr/bin/$i@$(which $i)@" -i config.py.example
     done

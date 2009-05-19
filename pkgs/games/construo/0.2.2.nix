@@ -10,7 +10,7 @@ args : with args;
 		++ (if args ? mesa then [args.mesa args.freeglut] else [])
 		;
 		configureFlags = [""];
-		preConfigure = builderDefs.stringsWithDeps.FullDepEntry (''
+		preConfigure = builderDefs.stringsWithDeps.fullDepEntry (''
 		  sed -e 's/math[.]h/cmath/' -i vector.cxx
 		  sed -e 's/games/bin/' -i Makefile.in
 		  sed -e '1i\#include <stdlib.h>' -i construo_main.cxx -i command_line.cxx -i config.hxx

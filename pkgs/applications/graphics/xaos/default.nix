@@ -20,7 +20,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     sed -e s@/usr/@"$out/"@g -i configure $(find . -name 'Makefile*')
     ensureDir $out/share/locale
   '') ["doUnpack" "minInit" "defEnsureDir"];

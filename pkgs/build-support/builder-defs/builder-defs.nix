@@ -34,7 +34,7 @@ args: with args; with stringsWithDeps; with lib;
 
                 else (abort "unknown archive type : ${s}"));
 
-        defAddToSearchPath = FullDepEntry ("
+        defAddToSearchPath = fullDepEntry ("
                 addToSearchPathWithCustomDelimiter() {
                         local delimiter=\$1
                         local varName=\$2
@@ -85,7 +85,7 @@ args: with args; with stringsWithDeps; with lib;
                 trap \"closeNest\" EXIT
         ");
 
-        minInit = FullDepEntry ("
+        minInit = fullDepEntry ("
                 set -e
                 NIX_GCC=${stdenv.gcc}
                 export SHELL=${stdenv.shell}
@@ -113,7 +113,7 @@ args: with args; with stringsWithDeps; with lib;
                 "
         else "")) ["defNest" "defAddToSearchPath"];
                 
-        addInputs = FullDepEntry ("
+        addInputs = fullDepEntry ("
                 # Recursively find all build inputs.
                 findInputs()
                 {
@@ -179,7 +179,7 @@ args: with args; with stringsWithDeps; with lib;
                 PATH=\$_PATH\${_PATH:+\"\${PATH_DELIMITER}\"}\$PATH
         ") ["minInit"];
         
-        defEnsureDir = FullDepEntry ("
+        defEnsureDir = fullDepEntry ("
                 # Ensure that the given directories exists.
                 ensureDir() {
                     local dir
@@ -189,7 +189,7 @@ args: with args; with stringsWithDeps; with lib;
                 }
         ") ["minInit"];
 
-        toSrcDir = s : FullDepEntry ((if (archiveType s) == "tar" then "
+        toSrcDir = s : fullDepEntry ((if (archiveType s) == "tar" then "
                 tar xvf '${s}'
                 cd \"\$(tar tf '${s}' | head -1 | sed -e 's@/.*@@' )\"
         " else if (archiveType s) == "tgz" then "
@@ -236,16 +236,16 @@ args: with args; with stringsWithDeps; with lib;
 
         configureCommand = getAttr ["configureCommand"] "./configure" args;
 
-        doConfigure = FullDepEntry ("
+        doConfigure = fullDepEntry ("
                 ${configureCommand} --prefix=\"\$prefix\" ${toString configureFlags}
         ") ["minInit" "addInputs" "doUnpack"];
 
-	doIntltool = FullDepEntry ("
+	doIntltool = fullDepEntry ("
 		mkdir -p config
 		intltoolize --copy --force
 	") ["minInit" "addInputs" "doUnpack"];
 
-        doAutotools = FullDepEntry ("
+        doAutotools = fullDepEntry ("
                 mkdir -p config
                 libtoolize --copy --force
                 aclocal --force
@@ -255,17 +255,17 @@ args: with args; with stringsWithDeps; with lib;
                 autoconf
         ")["minInit" "addInputs" "doUnpack"];
 
-        doMake = FullDepEntry ("        
+        doMake = fullDepEntry ("        
                 make ${toString makeFlags}
         ") ["minInit" "addInputs" "doUnpack"];
 
         doUnpack = toSrcDir (toString src);
 
-        installPythonPackage = FullDepEntry ("
+        installPythonPackage = fullDepEntry ("
                 python setup.py install --prefix=\"\$prefix\" 
                 ") ["minInit" "addInputs" "doUnpack"];
 
-        doPythonConfigure = FullDepEntry ('' 
+        doPythonConfigure = fullDepEntry ('' 
           pythonVersion=$(toPythonPath "$prefix")
           pythonVersion=''${pythonVersion#*/lib/python}
           pythonVersion=''${pythonVersion%%/site-packages}
@@ -275,11 +275,11 @@ args: with args; with stringsWithDeps; with lib;
           python configure.py -b "$prefix/bin" -d "$(toPythonPath "$prefix")" -v "$prefix/share/sip" ${toString configureFlags}
         '') ["minInit" "addInputs" "doUnpack"]; 
 
-        doMakeInstall = FullDepEntry ("
+        doMakeInstall = fullDepEntry ("
                 make ${toString (getAttr ["makeFlags"] "" args)} "+
                         "${toString (getAttr ["installFlags"] "" args)} install") ["doMake"];
 
-        doForceShare = FullDepEntry (" 
+        doForceShare = fullDepEntry (" 
                 ensureDir \"\$prefix/share\"
                 for d in ${toString forceShare}; do
                         if [ -d \"\$prefix/\$d\" -a ! -d \"\$prefix/share/\$d\" ]; then
@@ -289,7 +289,7 @@ args: with args; with stringsWithDeps; with lib;
                 done;
         ") ["minInit" "defEnsureDir"];
 
-        doForceCopy = FullDepEntry (''
+        doForceCopy = fullDepEntry (''
                 name="$(basename $out)"
                 name="''${name#*-}"
                 ensureDir "$prefix/share/$name"
@@ -306,7 +306,7 @@ args: with args; with stringsWithDeps; with lib;
 
         toPatchCommand = s: "cat ${s} | patch ${toString patchFlags}";
 
-        doPatch = FullDepEntry (concatStringsSep ";"
+        doPatch = fullDepEntry (concatStringsSep ";"
                 (map toPatchCommand patches)
         ) ["minInit" "doUnpack"];
 
@@ -326,9 +326,9 @@ args: with args; with stringsWithDeps; with lib;
                 (${envAdderList env}
                 echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
 
-        doWrap = cmd: FullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
+        doWrap = cmd: fullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
 
-        makeManyWrappers = wildcard : wrapperFlags : FullDepEntry (''
+        makeManyWrappers = wildcard : wrapperFlags : fullDepEntry (''
           for i in ${wildcard}; do
             wrapProgram "$i" ${wrapperFlags}
           done
@@ -345,7 +345,7 @@ args: with args; with stringsWithDeps; with lib;
 
         preservePathWrapperArguments = ''''${PATH:+ --prefix PATH : $PATH }'';
 
-        doPropagate = FullDepEntry ("
+        doPropagate = fullDepEntry ("
                 ensureDir \$out/nix-support
                 echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
@@ -356,11 +356,11 @@ args: with args; with stringsWithDeps; with lib;
         replaceScriptVar = file: name: value: "sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}";
         replaceInScript = file: l: concatStringsSep "\n" ((pairMap (replaceScriptVar file) l));
         replaceScripts = l: concatStringsSep "\n" (pairMap replaceInScript l);
-        doReplaceScripts = FullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) ["minInit"];
+        doReplaceScripts = fullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) ["minInit"];
         makeNest = x: if x == defNest.text then x else "startNest\n" + x + "\nstopNest\n";
         textClosure = a: steps: textClosureMap makeNest a (["defNest"] ++ steps);
 
-        inherit noDepEntry FullDepEntry PackEntry;
+        inherit noDepEntry fullDepEntry packEntry;
 
         defList = getAttr ["defList"] [] args;
         getVal = getValue args defList;
@@ -393,11 +393,11 @@ args: with args; with stringsWithDeps; with lib;
         surroundWithCommands = x : before : after : {deps=x.deps; text = before + "\n" +
                 x.text + "\n" + after ;};
 
-	createDirs = FullDepEntry (concatStringsSep ";"
+	createDirs = fullDepEntry (concatStringsSep ";"
 		(map (x: "ensureDir ${x}") (getAttr ["neededDirs"] [] args))
 	) ["minInit" "defEnsureDir"];
 
-	copyExtraDoc = FullDepEntry (''
+	copyExtraDoc = fullDepEntry (''
           name="$(basename $out)"
           name="''${name#*-}"
           ensureDir "$out/share/doc/$name"
@@ -425,7 +425,7 @@ args: with args; with stringsWithDeps; with lib;
           a() { return 127; } ; a ;
         ";
 
-        doMakeCheck = FullDepEntry (''
+        doMakeCheck = fullDepEntry (''
           make check
         '') ["minInit"];
 
@@ -453,7 +453,7 @@ args: with args; with stringsWithDeps; with lib;
             (innerBuilderDefsPackage bd)
 	    {};
 
-   generateFontsFromSFD = FullDepEntry (''
+   generateFontsFromSFD = fullDepEntry (''
            for i in *.sfd; do
                 fontforge -c \
                         'Open($1);
@@ -471,7 +471,7 @@ args: with args; with stringsWithDeps; with lib;
         done
    '') ["minInit" "addInputs" "doUnpack"];
 
-   installFonts = FullDepEntry (''
+   installFonts = fullDepEntry (''
            ensureDir $out/share/fonts/truetype/public/${args.name}
            ensureDir $out/share/fonts/opentype/public/${args.name}
            ensureDir $out/share/fonts/type1/public/${args.name}
@@ -485,12 +485,12 @@ args: with args; with stringsWithDeps; with lib;
            cp *.map $out/share/texmf/fonts/map/${args.name} || echo No fontmap data
    '') ["minInit" "defEnsureDir"];
 
-   simplyShare = shareName: FullDepEntry (''
+   simplyShare = shareName: fullDepEntry (''
      ensureDir $out/share
      cp -r . $out/share/${shareName}
    '') ["doUnpack" "defEnsureDir"];
 
-   doPatchShebangs = dir: FullDepEntry (''
+   doPatchShebangs = dir: fullDepEntry (''
      patchShebangFun() {
      # Rewrite all script interpreter file names (`#! /path') under the
      # specified  directory tree to paths found in $PATH.  E.g.,
@@ -512,7 +512,7 @@ args: with args; with stringsWithDeps; with lib;
      patchShebangFun;
    '') ["minInit"];
 
-   createPythonInstallationTarget = FullDepEntry (''
+   createPythonInstallationTarget = fullDepEntry (''
      ensureDir $(toPythonPath $out)
      export PYTHONPATH=$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath $out)
    '') ["minInit" "addInputs" "defEnsureDir"];

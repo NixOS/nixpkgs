@@ -6,7 +6,7 @@ Usage:
 	builder = writeScript "fsg-4.4-builder"
 		(textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
 
-  a step is defined by noDepEntry, FullDepEntry or PackEntry.
+  a step is defined by noDepEntry, fullDepEntry or packEntry.
   To ensure that prerequisite are met those are added before the task itself by
   textClosureDupList. Duplicated items are removed again.
 

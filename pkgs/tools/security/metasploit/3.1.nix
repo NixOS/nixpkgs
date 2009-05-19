@@ -8,7 +8,7 @@ rec {
   buildInputs = [makeWrapper];
   configureFlags = [];
 
-  doInstall = FullDepEntry(''
+  doInstall = fullDepEntry(''
     ensureDir $out/share/msf
     ensureDir $out/bin
 

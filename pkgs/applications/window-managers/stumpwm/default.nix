@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
   noDepEntry = args.noDepEntry;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
   buildInputs = lib.attrVals ["clisp" "texinfo"] args;
   version = lib.getAttr ["version"] "0.9.4.1" args; 
@@ -22,7 +22,7 @@ rec {
     export HOME="$NIX_BUILD_TOP";
   '');
 
-  installation = FullDepEntry (''
+  installation = fullDepEntry (''
     ensureDir $out/bin 
     ensureDir $out/share/stumpwm/doc
     ensureDir $out/share/info 

@@ -17,7 +17,7 @@ rec {
 
   setupHook = ./setup-hook.sh;
 
-  doPreConfigure = FullDepEntry (''
+  doPreConfigure = fullDepEntry (''
     ensureDir $out
     ensureDir $out/nix-support 
     cp ${setupHook} $out/nix-support/setup-hook.sh
@@ -35,7 +35,7 @@ rec {
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
-  doPostInstall = FullDepEntry(''
+  doPostInstall = fullDepEntry(''
     mv $out/bin $out/libexec
     ensureDir $out/bin
     for i in $out/libexec/*/*; do

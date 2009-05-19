@@ -11,7 +11,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sed -e 's/[$](MKDIR)/mkdir -p /' -i doc/Makefile.in
     sed -e 's/gpm2//' -i Makefile.in
   '') ["addInputs" "doUnpack" "minInit"];

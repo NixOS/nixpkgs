@@ -2,7 +2,7 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
   doPatchShebangs = args.doPatchShebangs;
 
   version = lib.getAttr ["version"] "2008.03.30" args; 
@@ -29,7 +29,7 @@ rec {
   phaseNames = ["preBuild" "doMakeInstall" "postInstall" (doPatchShebangs "$out/share/io/samples") 
     (doPatchShebangs "$out/lib/io")];
       
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     for i in $pkgs ${
         if args.stdenv ? glibc then args.stdenv.glibc else ""
       } ${
@@ -41,7 +41,7 @@ rec {
     done
   '') ["minInit" "addInputs" "doUnpack"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     ensureDir $out/share/io
 
     ln -s $out/lib/io/addons $out/share/io

@@ -9,7 +9,7 @@ args : with args; with builderDefs;
 		buildInputs = [scons pkgconfig gtk bzip2 pkgconfig libglade
 			openssl libX11];
 		configureFlags = [];
-		doScons = FullDepEntry (''
+		doScons = fullDepEntry (''
 			ensureDir $out
 			export NIX_LDFLAGS="$NIX_LDFLAGS -lX11";
 			scons PREFIX=$out 

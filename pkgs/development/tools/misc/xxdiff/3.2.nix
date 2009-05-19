@@ -18,17 +18,17 @@ rec {
       ''--prefix PYTHONPATH : $(toPythonPath $out):$PYTHONPATH'')
   ];
 
-  prepareMainBuild = FullDepEntry (''
+  prepareMainBuild = fullDepEntry (''
     cd src 
     export QTDIR=${qt}/
     make -f Makefile.bootstrap makefile
   '') ["minInit" "doUnpack"];
 
-  fixInc = FullDepEntry(''
+  fixInc = fullDepEntry(''
     sed -e '1i\#include <stdlib.h>' -i resources.inline.h
   '') ["minInit" "doUnpack"];
 
-  deploy = FullDepEntry (''
+  deploy = fullDepEntry (''
     ensureDir $out/bin/
     cp ../bin/xxdiff $out/bin
     cd ..

@@ -20,7 +20,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
 
-  preBuild = a.FullDepEntry(''
+  preBuild = a.fullDepEntry(''
     sed -e '/FIRST_CHESS_PROGRAM/s@gnuchessx@${a.gnuchess}/bin/gnuchessx@' -i xboard.h
     sed -e '/SECOND_CHESS_PROGRAM/s@gnuchessx@${a.gnuchess}/bin/gnuchessx@' -i xboard.h
   '') ["doUnpack" "minInit"];

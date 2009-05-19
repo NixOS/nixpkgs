@@ -22,7 +22,7 @@ args : with args;
 	};
 	in with localDefs;
 let
-	install = FullDepEntry ("
+	install = fullDepEntry ("
 		sed -e '/Checking for texture_from_pixmap:/areturn 0' -i compiz-manager
 		sed -e '/Checking for non power of two support: /areturn 0' -i compiz-manager
 		sed -e '/^\s*$/aPATH=\$PATH:${xvinfo}/bin:${xdpyinfo}/bin' -i compiz-manager

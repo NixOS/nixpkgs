@@ -6,7 +6,7 @@ args : with args;
 	};
 	in with localDefs;
 let
-	doInstall = FullDepEntry ("
+	doInstall = fullDepEntry ("
 		ensureDir \$out/share/fonts/
 		cd \$out/share/fonts
 		for i in ${toString paths}; do

@@ -11,7 +11,7 @@ args : with args; with builderDefs;
     buildInputs = [jre];
     configureFlags = [];
 
-    installPhase = FullDepEntry (''
+    installPhase = fullDepEntry (''
       sed -e 's@\(common_jvm_locations\)=.*@\1${jre}@' -i bin/openfire
       cp -r . $out
       rm -r $out/logs

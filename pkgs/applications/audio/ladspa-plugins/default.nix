@@ -10,7 +10,7 @@ args: with args;
 	};
 	in with localDefs;
 let
-	postInstall = FullDepEntry ("
+	postInstall = fullDepEntry ("
 		ensureDir \$out/share/ladspa/
 		ln -s \$out/lib/ladspa \$out/share/ladspa/lib
 	") [minInit defEnsureDir];

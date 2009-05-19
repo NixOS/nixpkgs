@@ -15,7 +15,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sed -e 's@/usr/bin/uname@'"$(which uname)"'@g' -i configure
   '') ["minInit" "addInputs" "doUnpack"];
       

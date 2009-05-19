@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["preConfigure" "doConfigure" "preBuild" "doMakeInstall"];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libXpm}/include/X11"
     for i in  $NIX_CFLAGS_COMPILE; do echo $i; ls ''${i#-I}; done
     chmod a+rw config.h
@@ -35,7 +35,7 @@ rec {
     sed -e '/if [(]owner[)]/iowner=1;' -i main.c
   '') ["minInit" "doUnpack"];
       
-  preBuild = a.FullDepEntry (''
+  preBuild = a.fullDepEntry (''
     sed -e "s@/usr/local/@$out/@" -i Makefile
     sed -e "s@ /bin/@ @" -i Makefile 
     ensureDir $out/bin $out/share $out/man/man1 $out/lib

@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
 
-  preBuild = a.FullDepEntry (''
+  preBuild = a.fullDepEntry (''
     sed -i src/input.c -e 's/static pthread_t/pthread_t/'
     sed -i "s@gnuchess@$out/bin/gnuchess@" -i src/gnuchessx
   '') ["minInit" "doUnpack"];

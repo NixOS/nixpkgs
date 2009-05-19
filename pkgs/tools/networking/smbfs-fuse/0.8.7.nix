@@ -8,7 +8,7 @@ args : with args; with builderDefs;
 
 		buildInputs = [samba fuse];
 		configureFlags = [];
-		postInstall = FullDepEntry 
+		postInstall = fullDepEntry 
 		(''
 		ensureDir $out/lib
 		ln -fs ${samba}/lib/libsmbclient.so $out/lib/libsmbclient.so.0
