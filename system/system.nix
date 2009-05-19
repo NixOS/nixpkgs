@@ -15,7 +15,7 @@ rec {
   # values.
   config =
     pkgs.lib.fixOptionSets
-      pkgs.lib.newMergeOptionSets
+      pkgs.lib.mergeOptionSets
       pkgs configComponents;
 
   optionDeclarations =
