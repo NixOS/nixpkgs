@@ -5,7 +5,7 @@ args : with args; with builderDefs;
     buildInputs = [mkfontdir mkfontscale ttmkfdir];
     configureFlags = [];
     fontDirs = import ./fonts.nix {inherit pkgs config;};
-    installPhase = FullDepEntry ("
+    installPhase = fullDepEntry ("
     list='';
     for i in ${toString fontDirs} ; do
       if [ -d \$i/ ]; then
