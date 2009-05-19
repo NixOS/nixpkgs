@@ -3126,19 +3126,19 @@ root        ALL=(ALL) SETENV: ALL
   
   require = [
     # newtworking
-    (import ../upstart-jobs/dhclient.nix)
+    ../upstart-jobs/dhclient.nix
 
     # hardware
-    (import ../upstart-jobs/pcmcia.nix)
+    ../upstart-jobs/pcmcia.nix
 
     # services
-    (import ../upstart-jobs/cron.nix)
-    (import ../upstart-jobs/fcron.nix)
-    (import ../upstart-jobs/cron/locate.nix)
-    (import ../upstart-jobs/manual.nix)
-    (import ../upstart-jobs/rogue.nix)
-    (import ../upstart-jobs/guest-users.nix)
-    (import ../upstart-jobs/pulseaudio.nix)
-    (import ../upstart-jobs/portmap.nix)
+    ../upstart-jobs/cron.nix
+    ../upstart-jobs/fcron.nix
+    ../upstart-jobs/cron/locate.nix
+    ../upstart-jobs/manual.nix
+    ../upstart-jobs/rogue.nix
+    ../upstart-jobs/guest-users.nix
+    ../upstart-jobs/pulseaudio.nix
+    ../upstart-jobs/portmap.nix
   ];
 }

@@ -55,7 +55,7 @@ in
 
 {
   require = [
-    # (import ../upstart-jobs/default.nix)
+    # ../upstart-jobs/default.nix
     options
   ];
 

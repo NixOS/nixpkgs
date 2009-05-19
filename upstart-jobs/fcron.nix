@@ -79,11 +79,11 @@ in
 
 {
   require = [
-    # (import ../upstart-jobs/default.nix) # config.services.extraJobs
-    # (import ?) # config.time.timeZone
-    # (import ?) # config.environment.etc
-    # (import ?) # config.environment.extraPackages
-    # (import ?) # config.environment.cleanStart
+    # ../upstart-jobs/default.nix # config.services.extraJobs
+    # ? # config.time.timeZone
+    # ? # config.environment.etc
+    # ? # config.environment.extraPackages
+    # ? # config.environment.cleanStart
     options
   ];
 
