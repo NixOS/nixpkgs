@@ -136,6 +136,16 @@ rec {
       notHandle = opts: {};
     };
 
+
+  # Unfortunately this can also be a string.
+  isPath = x: !(
+     builtins.isFunction x
+  || builtins.isAttrs x
+  || builtins.isInt x
+  || builtins.isBool x
+  || builtins.isList x
+  );
+
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
@@ -157,6 +167,10 @@ rec {
         else
           cfgSet1;
 
+      filenameHandler = cfg:
+        if isPath cfg then import cfg
+        else cfg;
+
       # call configuration "files" with one of the existing convention.
       argumentHandler = cfg:
         let
@@ -173,9 +187,10 @@ rec {
         else cfg0;
 
       preprocess = cfg0:
-        let cfg1 = argumentHandler cfg0;
-            cfg2 = noImportConditions cfg1;
-        in cfg2;
+        let cfg1 = filenameHandler cfg0;
+            cfg2 = argumentHandler cfg1;
+            cfg3 = noImportConditions cfg2;
+        in cfg3;
 
       getRequire = x:
         toList (getAttr ["require"] [] (preprocess x));
