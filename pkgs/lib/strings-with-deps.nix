@@ -3,8 +3,8 @@ Usage:
 
   You define you custom builder script by adding all build steps to a list.
   for example:
-	builder = writeScript "fsg-4.4-builder"
-		(textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
+       builder = writeScript "fsg-4.4-builder"
+               (textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
 
   a step is defined by noDepEntry, fullDepEntry or packEntry.
   To ensure that prerequisite are met those are added before the task itself by
@@ -12,6 +12,32 @@ Usage:
 
   See trace/nixpkgs/trunk/pkgs/top-level/builder-defs.nix for some predefined build steps
 
+  Attention:
+
+  let
+    pkgs = (import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix) {};
+  in let
+    inherit (pkgs.stringsWithDeps) fullDepEntry packEntry noDepEntry textClosureMap;
+    inherit (pkgs.lib) id;
+
+    nameA = noDepEntry "Text a";
+    nameB = fullDepEntry "Text b" ["nameA"];
+    nameC = fullDepEntry "Text c" ["nameA"];
+
+    stages = {
+      nameHeader = noDepEntry "#! /bin/sh \n";
+      inherit nameA nameB nameC;
+    };
+  in
+    textClosureMap id stages
+    [ "nameHeader" "nameA" "nameB" "nameC"
+      nameC # <- added twice. add a dep entry if you know that it will be added once only [1]
+      "nameB" # <- this will not be added again because the attr name (reference) is used
+    ]
+
+  # result: Str("#! /bin/sh \n\nText a\nText b\nText c\nText c",[])
+
+  [1] maybe this behaviour should be removed to keep things simple (?)
 */
 
 {stdenv, lib}:
@@ -39,7 +65,7 @@ rec {
           else if hasAttr entry done then f done (tail todo)
           else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
     in (f {} arg).result;
-    
+
   textClosureMap = f: predefined: names:
     concatStringsSep "\n" (map f (textClosureList predefined names));
 
@@ -47,7 +73,7 @@ rec {
   fullDepEntry = text: deps: {inherit text deps;};
   packEntry = deps: {inherit deps; text="";};
 
-  # Old names - don't use.
+  # Old names - don't use. Will be removed soon. There are no more occurences in nixpkgs/nixos
   FullDepEntry = fullDepEntry;
   PackEntry = packEntry;
   
