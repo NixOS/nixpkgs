@@ -194,37 +194,11 @@ rec {
 
       getRequire = x:
         toList (getAttr ["require"] [] (preprocess x));
-      getCleanRequire = x: map rmProperties (getRequire x);
       rmRequire = x: removeAttrs (preprocess x) ["require"];
-
-      duplicateIncludeProperties = list:
-        # iterate on all configurations
-        fold (cfg: l:
-          # iterate on all imported configuration from cfg
-          fold (include: l:
-            # clean up the included cfg to get the same result
-            let includedCfg = rmProperties include; in
-            # if the include has properties
-            if include != includedCfg then
-              # iterate on all configurations
-              map (cfg:
-                # if the imported configuration is seen
-                if (rmProperties cfg) == includedCfg then
-                  # copy the properties from the import to the configuration.
-                  delayProperties (copyProperties include cfg)
-                else
-                  cfg
-              ) l
-            else
-              l
-          ) l (getRequire cfg)
-        ) list list;
     in
       merge "" (
         map rmRequire (
-          duplicateIncludeProperties (
-            lib.uniqFlatten getCleanRequire [] [] (toList opts)
-          )
+          lib.uniqFlatten getRequire [] [] (toList opts)
         )
       );
 
