@@ -4375,7 +4375,7 @@ let
 
   ejabberd = import ../servers/xmpp/ejabberd {
     inherit fetchurl stdenv expat erlang zlib openssl
-      pam;
+      pam fetchsvn;
   };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
