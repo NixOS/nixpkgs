@@ -86,8 +86,8 @@ in
 
 {
   require = [
-    (import ../upstart-jobs/default.nix)
-    # (import ../system/user.nix) # users = { .. }
+    ../upstart-jobs/default.nix
+    # ../system/user.nix # users = { .. }
     options
   ];
 

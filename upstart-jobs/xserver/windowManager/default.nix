@@ -7,13 +7,13 @@ in
 
 {
   require = [
-    (import ./compiz.nix)
-    (import ./kwm.nix)
-    (import ./metacity.nix)
-    (import ./none.nix)
-    (import ./twm.nix)
-    (import ./wmii.nix)
-    (import ./xmonad.nix)
+    ./compiz.nix
+    ./kwm.nix
+    ./metacity.nix
+    ./none.nix
+    ./twm.nix
+    ./wmii.nix
+    ./xmonad.nix
   ];
 
   services = {

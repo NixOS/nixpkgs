@@ -37,10 +37,10 @@ in
     # config.boot.kernelPackages
 
     # config.system.activationScripts
-    (import ../system/activate-configuration.nix)
+    ../system/activate-configuration.nix
 
     # config.system.build
-    (import ../system/system-options.nix)
+    ../system/system-options.nix
   ];
 
   system = {

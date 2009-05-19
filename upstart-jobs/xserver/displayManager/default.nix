@@ -87,8 +87,8 @@ in
 {
   # list of display managers.
   require = [
-    (import ./kdm.nix)
-    (import ./slim.nix)
+    ./kdm.nix
+    ./slim.nix
   ];
 
   services = {

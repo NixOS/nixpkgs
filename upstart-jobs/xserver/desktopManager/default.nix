@@ -9,11 +9,11 @@ in
 
 {
   require = [
-    (import ./kde.nix)
-    (import ./kde4.nix)
-    (import ./gnome.nix)
-    (import ./xterm.nix)
-    (import ./none.nix)
+    ./kde.nix
+    ./kde4.nix
+    ./gnome.nix
+    ./xterm.nix
+    ./none.nix
   ];
 
   services = {

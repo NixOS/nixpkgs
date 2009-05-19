@@ -64,11 +64,11 @@ in
 
 mkIf cfg.enable {
   require = [
-    (import ../upstart-jobs/default.nix) # config.services.extraJobs
-    # (import ../system/user.nix) # users.*
-    # (import ../upstart-jobs/udev.nix) # services.udev.*
-    (import ../upstart-jobs/dbus.nix) # services.dbus.*
-    # (import ?) # config.environment.extraPackages
+    ../upstart-jobs/default.nix # config.services.extraJobs
+    # ../system/user.nix # users.*
+    # ../upstart-jobs/udev.nix # services.udev.*
+    ../upstart-jobs/dbus.nix # services.dbus.*
+    # ? # config.environment.extraPackages
     options
   ];
 

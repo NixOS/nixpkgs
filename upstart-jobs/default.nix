@@ -84,7 +84,7 @@ in
 {
   require = [
     options
-    (import ./lib/default.nix)
+    ./lib/default.nix
   ];
 
   environment = {

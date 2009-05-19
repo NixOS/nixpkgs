@@ -153,7 +153,7 @@ in
     options
 
     # config.system.activationScripts
-    (import ../system/activate-configuration.nix)
+    ../system/activate-configuration.nix
   ];
 
   system = {

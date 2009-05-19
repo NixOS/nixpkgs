@@ -52,10 +52,10 @@ mkIf cfg.enable {
     options
 
     # config.environment.etc
-    (import ../etc/default.nix)
+    ../etc/default.nix
 
-    # (import ?) # config.environment.extraPackages
-    # (import ?) # config.security.extraSetuidPrograms
+    # ? # config.environment.extraPackages
+    # ? # config.security.extraSetuidPrograms
   ];
 
   security = {

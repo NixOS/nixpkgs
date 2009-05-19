@@ -43,8 +43,8 @@ in
 
 mkIf cfg.enable {
   require = [
-    (import ../upstart-jobs/default.nix) # config.services.extraJobs
-    (import ../upstart-jobs/dbus.nix) # services.dbus.*
+    ../upstart-jobs/default.nix # config.services.extraJobs
+    ../upstart-jobs/dbus.nix # services.dbus.*
     options
   ];
 

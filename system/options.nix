@@ -380,132 +380,132 @@ in
 
   require = [
 
-    (import ../system/assertion.nix)
+    ../system/assertion.nix
 
     # boot (is it the right place ?)
-    (import ../system/kernel.nix)
-    (import ../boot/boot-stage-2.nix)
-    (import ../installer/grub.nix)
+    ../system/kernel.nix
+    ../boot/boot-stage-2.nix
+    ../installer/grub.nix
 
     # system
-    (import ../system/system-options.nix)
-    (import ../system/activate-configuration.nix)
-    (import ../upstart-jobs/default.nix)
+    ../system/system-options.nix
+    ../system/activate-configuration.nix
+    ../upstart-jobs/default.nix
 
-    (import ../upstart-jobs/acpid.nix) # ACPI daemon
+    ../upstart-jobs/acpid.nix # ACPI daemon
 
-    (import ../system/unix-odbc-drivers.nix)
+    ../system/unix-odbc-drivers.nix
 
-    (import ../upstart-jobs/klogd.nix)
+    ../upstart-jobs/klogd.nix
 
-    (import ../upstart-jobs/lvm.nix) # Makes LVM logical volumes available.
+    ../upstart-jobs/lvm.nix # Makes LVM logical volumes available.
 
-    (import ../upstart-jobs/swraid.nix) # Activate software RAID arrays.
+    ../upstart-jobs/swraid.nix # Activate software RAID arrays.
 
-    (import ../upstart-jobs/filesystems.nix) # Mount file systems.
+    ../upstart-jobs/filesystems.nix # Mount file systems.
 
-    (import ../upstart-jobs/swap.nix)
-    (import ../upstart-jobs/network-interfaces.nix)
-    (import ../upstart-jobs/nscd.nix) # Name service cache daemon.
-    (import ../upstart-jobs/maintenance-shell.nix) # Handles the maintenance/stalled event (single-user shell).
-    (import ../upstart-jobs/ctrl-alt-delete.nix) # Ctrl-alt-delete action.
-    (import ../upstart-jobs/halt.nix)
-    (import ../upstart-jobs/ifplugd.nix) # ifplugd daemon for monitoring Ethernet cables.
+    ../upstart-jobs/swap.nix
+    ../upstart-jobs/network-interfaces.nix
+    ../upstart-jobs/nscd.nix # Name service cache daemon.
+    ../upstart-jobs/maintenance-shell.nix # Handles the maintenance/stalled event (single-user shell).
+    ../upstart-jobs/ctrl-alt-delete.nix # Ctrl-alt-delete action.
+    ../upstart-jobs/halt.nix
+    ../upstart-jobs/ifplugd.nix # ifplugd daemon for monitoring Ethernet cables.
 
 
     # security
-    (import ../system/sudo.nix)
+    ../system/sudo.nix
 
     # i18n
-    (import ../system/i18n.nix)
+    ../system/i18n.nix
 
     # environment
-    (import ../etc/default.nix)
+    ../etc/default.nix
 
-    (import ../system/nixos-environment.nix)
+    ../system/nixos-environment.nix
 
     # users
-    (import ../system/users-groups.nix)
+    ../system/users-groups.nix
 
     # newtworking
-    (import ../upstart-jobs/dhclient.nix)
+    ../upstart-jobs/dhclient.nix
 
     # hardware
-    (import ../upstart-jobs/pcmcia.nix)
+    ../upstart-jobs/pcmcia.nix
 
     # security
-    (import ../system/nixos-security.nix)
+    ../system/nixos-security.nix
 
     # services
-    (import ../upstart-jobs/avahi-daemon.nix)
-    (import ../upstart-jobs/atd.nix)
-    (import ../upstart-jobs/dbus.nix)
-    (import ../upstart-jobs/hal.nix)
-    (import ../upstart-jobs/gpm.nix)
-    (import ../upstart-jobs/nagios/default.nix)
-    (import ../upstart-jobs/xserver/default.nix)
-    (import ../upstart-jobs/zabbix-agent.nix)
-    (import ../upstart-jobs/zabbix-server.nix)
-    (import ../upstart-jobs/disnix.nix)
-    (import ../upstart-jobs/consolekit.nix)
-    (import ../upstart-jobs/cron.nix)
-    (import ../upstart-jobs/fcron.nix)
-    (import ../upstart-jobs/cron/locate.nix)
-    (import ../upstart-jobs/manual.nix)
-    (import ../upstart-jobs/rogue.nix)
-    (import ../upstart-jobs/guest-users.nix)
-    (import ../upstart-jobs/pulseaudio.nix)
-    (import ../upstart-jobs/kbd.nix)
-    (import ../upstart-jobs/gw6c.nix) # Gateway6
-    (import ../upstart-jobs/syslogd.nix)
-    (import ../upstart-jobs/dhcpd.nix)
-    (import ../upstart-jobs/sshd.nix)
-    (import ../upstart-jobs/lshd.nix) # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
-    (import ../upstart-jobs/ntpd.nix)
-    (import ../upstart-jobs/portmap.nix)
-    (import ../upstart-jobs/bitlbee.nix)
-    (import ../upstart-jobs/gnunet.nix)
-    (import ../upstart-jobs/ejabberd.nix) # untested, dosen't compile on x86_64-linux
-    (import ../upstart-jobs/jboss.nix)
-    (import ../upstart-jobs/tomcat.nix) # untested, too lazy to get that jdk
-    (import ../upstart-jobs/httpd.nix) # Apache httpd (probably this can be removed ?)
-    (import ../upstart-jobs/apache-httpd) # Apache httpd (new style).
-    (import ../upstart-jobs/vsftpd.nix)
-    (import ../upstart-jobs/cupsd.nix) # CUPS printing daemon
-    (import ../upstart-jobs/udev.nix) # The udev daemon creates devices nodes and runs programs when hardware events occur.
-    (import ../upstart-jobs/samba.nix) # TODO: doesn't start here (?)
-    (import ../upstart-jobs/ircd-hybrid.nix) # TODO: doesn't compile on x86_64-linux, can't test
-    (import ../upstart-jobs/xfs.nix)
-    (import ../upstart-jobs/mysql.nix)
-    (import ../upstart-jobs/postgresql.nix)
-    (import ../upstart-jobs/openfire.nix)
-    (import ../upstart-jobs/postfix.nix)
-    (import ../upstart-jobs/dovecot.nix)
-    (import ../upstart-jobs/bind.nix)
+    ../upstart-jobs/avahi-daemon.nix
+    ../upstart-jobs/atd.nix
+    ../upstart-jobs/dbus.nix
+    ../upstart-jobs/hal.nix
+    ../upstart-jobs/gpm.nix
+    ../upstart-jobs/nagios/default.nix
+    ../upstart-jobs/xserver/default.nix
+    ../upstart-jobs/zabbix-agent.nix
+    ../upstart-jobs/zabbix-server.nix
+    ../upstart-jobs/disnix.nix
+    ../upstart-jobs/consolekit.nix
+    ../upstart-jobs/cron.nix
+    ../upstart-jobs/fcron.nix
+    ../upstart-jobs/cron/locate.nix
+    ../upstart-jobs/manual.nix
+    ../upstart-jobs/rogue.nix
+    ../upstart-jobs/guest-users.nix
+    ../upstart-jobs/pulseaudio.nix
+    ../upstart-jobs/kbd.nix
+    ../upstart-jobs/gw6c.nix # Gateway6
+    ../upstart-jobs/syslogd.nix
+    ../upstart-jobs/dhcpd.nix
+    ../upstart-jobs/sshd.nix
+    ../upstart-jobs/lshd.nix # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
+    ../upstart-jobs/ntpd.nix
+    ../upstart-jobs/portmap.nix
+    ../upstart-jobs/bitlbee.nix
+    ../upstart-jobs/gnunet.nix
+    ../upstart-jobs/ejabberd.nix # untested, dosen't compile on x86_64-linux
+    ../upstart-jobs/jboss.nix
+    ../upstart-jobs/tomcat.nix # untested, too lazy to get that jdk
+    ../upstart-jobs/httpd.nix # Apache httpd (probably this can be removed ?)
+    ../upstart-jobs/apache-httpd # Apache httpd (new style).
+    ../upstart-jobs/vsftpd.nix
+    ../upstart-jobs/cupsd.nix # CUPS printing daemon
+    ../upstart-jobs/udev.nix # The udev daemon creates devices nodes and runs programs when hardware events occur.
+    ../upstart-jobs/samba.nix # TODO: doesn't start here (?)
+    ../upstart-jobs/ircd-hybrid.nix # TODO: doesn't compile on x86_64-linux, can't test
+    ../upstart-jobs/xfs.nix
+    ../upstart-jobs/mysql.nix
+    ../upstart-jobs/postgresql.nix
+    ../upstart-jobs/openfire.nix
+    ../upstart-jobs/postfix.nix
+    ../upstart-jobs/dovecot.nix
+    ../upstart-jobs/bind.nix
 
-    (import ../upstart-jobs/mingetty.nix) # The terminals on ttyX.
-    (import ../upstart-jobs/tty-backgrounds.nix)
+    ../upstart-jobs/mingetty.nix # The terminals on ttyX.
+    ../upstart-jobs/tty-backgrounds.nix
 
-    (import ../upstart-jobs/synergy.nix)
-    (import ../upstart-jobs/openvpn.nix)
+    ../upstart-jobs/synergy.nix
+    ../upstart-jobs/openvpn.nix
 
-    (import ../upstart-jobs/nfs-kernel.nix)
-    (import ../upstart-jobs/autofs.nix)
+    ../upstart-jobs/nfs-kernel.nix
+    ../upstart-jobs/autofs.nix
 
     # nix
-    (import ../upstart-jobs/nix.nix) # nix options and daemon
-    (import ../system/nixos-installer.nix)
+    ../upstart-jobs/nix.nix # nix options and daemon
+    ../system/nixos-installer.nix
 
 
     #users
-    (import ../upstart-jobs/ldap)
+    ../upstart-jobs/ldap
 
 
 
     # fonts
-    (import ../system/fonts.nix)
+    ../system/fonts.nix
 
     # sound
-    (import ../upstart-jobs/alsa.nix)
+    ../upstart-jobs/alsa.nix
   ];
 }

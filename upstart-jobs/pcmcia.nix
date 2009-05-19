@@ -48,8 +48,8 @@ in
 
 mkIf config.hardware.pcmcia.enable {
   require = [
-    # (import ../upstart-jobs/udev.nix)
-    # (import ?) # config.environment.extraPackages
+    # ../upstart-jobs/udev.nix
+    # ? # config.environment.extraPackages
     options
   ];
 

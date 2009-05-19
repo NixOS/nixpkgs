@@ -47,7 +47,7 @@ in
 
 mkIf cfg.enable {
   require = [
-    (import ../upstart-jobs/default.nix) # config.services.extraJobs
+    ../upstart-jobs/default.nix # config.services.extraJobs
     # /etc/security/console.perms (should be generated ?)
     options
   ];

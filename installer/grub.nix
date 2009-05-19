@@ -100,7 +100,7 @@ in
     options
 
     # config.system.build
-    (import ../system/system-options.nix)
+    ../system/system-options.nix
   ];
 
   system = {

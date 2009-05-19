@@ -472,18 +472,18 @@ mkIf cfg.enable {
     options
 
     # services.xserver.*Manager
-    (import ./displayManager/default.nix)
-    (import ./windowManager/default.nix)
-    (import ./desktopManager/default.nix)
+    ./displayManager/default.nix
+    ./windowManager/default.nix
+    ./desktopManager/default.nix
 
     # services.extraJobs
-    (import ../../upstart-jobs/default.nix)
+    ../../upstart-jobs/default.nix
 
     # environment.etc
-    (import ../../etc/default.nix)
+    ../../etc/default.nix
 
     # fonts.fonts
-    (import ../../system/fonts.nix)
+    ../../system/fonts.nix
 
     # boot.extraModulePackages
     # security.extraSetuidPrograms

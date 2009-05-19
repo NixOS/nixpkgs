@@ -95,16 +95,16 @@ mkIf cfg.enable {
     options
 
     # config.services.extraJobs
-    (import ../upstart-jobs/default.nix)
+    ../upstart-jobs/default.nix
 
     # config.environment.etc
-    (import ../etc/default.nix)
+    ../etc/default.nix
 
     # users.*
-    (import ../system/users-groups.nix)
+    ../system/users-groups.nix
 
-    # (import ?) # config.environment.extraPackages
-    # (import ?) # config.security.extraSetuidPrograms
+    # ? # config.environment.extraPackages
+    # ? # config.security.extraSetuidPrograms
   ];
 
   security = {
