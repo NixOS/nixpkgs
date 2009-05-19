@@ -146,6 +146,7 @@ rec {
   || builtins.isList x
   );
 
+
   # Evaluate a list of option sets that would be merged with the
   # function "merge" which expects two arguments.  The attribute named
   # "require" is used to imports option declarations and bindings.
@@ -192,13 +193,27 @@ rec {
             cfg3 = noImportConditions cfg2;
         in cfg3;
 
-      getRequire = x:
-        toList (getAttr ["require"] [] (preprocess x));
+      getRequire = x: toList (getAttr ["require"] [] (preprocess x));
+      getRecusiveRequire = x:
+        fold (cfg: l:
+          if isPath cfg then
+            [ cfg ] ++ l
+          else
+            [ cfg ] ++ (getRecusiveRequire cfg) ++ l
+        ) [] (getRequire x);
+
+      getRequireSets = x: filter (x: ! isPath x) (getRecusiveRequire x);
+      getRequirePaths = x: filter isPath (getRecusiveRequire x);
       rmRequire = x: removeAttrs (preprocess x) ["require"];
+
+      inlineRequiredSets = cfgs:
+        fold (cfg: l: [ cfg ] ++ (getRequireSets cfg) ++ l) [] cfgs;
     in
       merge "" (
         map rmRequire (
-          lib.uniqFlatten getRequire [] [] (toList opts)
+          inlineRequiredSets (
+            lib.uniqFlatten getRequirePaths [] [] (toList opts)
+          )
         )
       );
 
