@@ -13,7 +13,7 @@ rec {
 
   mkOption = attrs: attrs // {_type = "option";};
 
-  hasType = x: __isAttrs x && x ? _type;
+  hasType = x: isAttrs x && x ? _type;
   typeOf = x: if hasType x then x._type else "";
 
   isOption = attrs: (typeOf attrs) == "option";
@@ -29,23 +29,23 @@ rec {
           if typeOf defValue == "option"
           then
             # `defValue' is an option.
-            if builtins.hasAttr defName opts
+            if hasAttr defName opts
             then builtins.getAttr defName opts
             else defValue.default
           else
             # `defValue' is an attribute set containing options.
             # So recurse.
-            if builtins.hasAttr defName opts && builtins.isAttrs optValue 
+            if hasAttr defName opts && isAttrs optValue 
             then addDefaultOptionValues defValue optValue
             else addDefaultOptionValues defValue {};
       }
-    ) (builtins.attrNames defs));
+    ) (attrNames defs));
 
   mergeDefaultOption = list:
     if list != [] && tail list == [] then head list
-    else if all __isFunction list then x: mergeDefaultOption (map (f: f x) list)
-    else if all __isList list then concatLists list
-    else if all __isAttrs list then fold lib.mergeAttrs {} list
+    else if all builtins.isFunction list then x: mergeDefaultOption (map (f: f x) list)
+    else if all isList list then concatLists list
+    else if all isAttrs list then fold lib.mergeAttrs {} list
     else if all (x: true == x || false == x) list then fold lib.or false list
     else if all (x: x == toString x) list then lib.concatStrings list
     else throw "Cannot merge values.";
@@ -57,15 +57,14 @@ rec {
   mergeEnableOption = mergeTypedOption "boolean"
     (x: true == x || false == x) (fold lib.or false);
 
-  mergeListOption = mergeTypedOption "list"
-    __isList concatLists;
+  mergeListOption = mergeTypedOption "list" isList concatLists;
 
   mergeStringOption = mergeTypedOption "string"
     (x: if builtins ? isString then builtins.isString x else x + "")
     lib.concatStrings;
 
   mergeOneOption = list:
-    if list == [] then abort "This case should never happens."
+    if list == [] then abort "This case should never happen."
     else if tail list != [] then throw "Multiple definitions. Only one is allowed for this option."
     else head list;
 
@@ -80,7 +79,7 @@ rec {
   # - notHandle is a function which takes the list of values are not handle
   # by this function.
   handleOptionSets = optionHandler@{export, notHandle, ...}: path: opts:
-    if all __isAttrs opts then
+    if all isAttrs opts then
       lib.zip (attr: opts:
         let
           # Compute the path to reach the attribute.
@@ -118,8 +117,7 @@ rec {
   # all options declare and defined.  If no values are defined for an
   # option, then the default value is used otherwise it use the merge
   # function of each option to get the result.
-  mergeOptionSets = noOption: newMergeOptionSets; # ignore argument
-  newMergeOptionSets =
+  mergeOptionSets =
     handleOptionSets {
       export = opt: values:
         opt.apply (
@@ -169,8 +167,8 @@ rec {
           # pkgs: config: {..}
           cfg2 = cfg {} {};
         in
-        if __isFunction cfg0 then
-          if builtins.isAttrs cfg1 then cfg1
+        if builtins.isFunction cfg0 then
+          if isAttrs cfg1 then cfg1
           else builtins.trace "Use '{pkgs, config, ...}:'." cfg2
         else cfg0;
 
@@ -231,7 +229,7 @@ rec {
       )]
       else (concatLists (map (s: (optionAttrSetToDocList 
         (l + (if l=="" then "" else ".") + s) (builtins.getAttr s attrs)))
-        (builtins.attrNames attrs)));
+        (attrNames attrs)));
 
   /* Option Properties */
   # Generalize the problem of delayable properties.  Any property can be created
@@ -396,7 +394,7 @@ rec {
 
   /* If. ThenElse. Always. */
 
-  # create "if" statement that can be dealyed on sets until a "then-else" or
+  # create "if" statement that can be delayed on sets until a "then-else" or
   # "always" set is reached.  When an always set is reached the condition
   # is ignore.
 
@@ -525,8 +523,8 @@ rec {
   # Otherwise, the property is kept on all sub-attribute definitions.
   onOverrideDelay = name: p@{property, content, ...}:
     let inherit (property) template; in
-    if builtins.isAttrs template && template != {} then
-      if builtins.hasAttr name template then
+    if isAttrs template && template != {} then
+      if hasAttr name template then
         p // {
           property = p.property // {
             template = builtins.getAttr name template;
