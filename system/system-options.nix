@@ -73,7 +73,7 @@ in
 
 ###### implementation
 let
-  inherit (pkgs.stringsWithDeps) noDepEntry FullDepEntry PackEntry;
+  inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
   inherit (pkgs.lib) mapRecordFlatten;
 
   activateLib = config.system.activationScripts.lib;
@@ -113,7 +113,7 @@ in
         done
       '';
 
-      stdio = FullDepEntry ''
+      stdio = fullDepEntry ''
         # Needed by some programs.
         ln -sfn /proc/self/fd /dev/fd
         ln -sfn /proc/self/fd/0 /dev/stdin
@@ -123,7 +123,7 @@ in
         activateLib.defaultPath # path to ln
       ];
 
-      binsh = FullDepEntry ''
+      binsh = fullDepEntry ''
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
         mkdir -m 0755 -p $mountPoint/bin
@@ -133,7 +133,7 @@ in
         activateLib.stdio # ?
       ];
 
-      modprobe = FullDepEntry ''
+      modprobe = fullDepEntry ''
         # Allow the kernel to find our wrapped modprobe (which searches in the
         # right location in the Nix store for kernel modules).  We need this
         # when the kernel (or some module) auto-loads a module.
@@ -144,7 +144,7 @@ in
         # ?
       ];
 
-      var = FullDepEntry ''
+      var = fullDepEntry ''
         # Various log/runtime directories.
         mkdir -m 0755 -p /var/run
         mkdir -m 0755 -p /var/run/console # for pam_console
@@ -172,7 +172,7 @@ in
         activateLib.defaultPath # path to mkdir & touch & chmod
       ];
 
-      rootPasswd = FullDepEntry ''
+      rootPasswd = fullDepEntry ''
         # If there is no password file yet, create a root account with an
         # empty password.
         if ! test -e /etc/passwd; then
@@ -192,7 +192,7 @@ in
         # ?
       ];
 
-      nix = FullDepEntry ''
+      nix = fullDepEntry ''
         # Set up Nix.
         mkdir -p /nix/etc/nix
         ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
@@ -221,7 +221,7 @@ in
         activateLib.users # nixbld group
       ];
 
-      path = FullDepEntry ''
+      path = fullDepEntry ''
         PATH=${config.system.path}/bin:${config.system.path}/sbin:$PATH
       '' [
         activateLib.defaultPath
@@ -249,7 +249,7 @@ in
             '')
             config.security.setuidOwners);
 
-        in FullDepEntry ''
+        in fullDepEntry ''
         # Make a few setuid programs work.
         save_PATH="$PATH"
 
@@ -284,7 +284,7 @@ in
         activateLib.users
       ];
 
-      hostname = FullDepEntry ''
+      hostname = fullDepEntry ''
         # Set the host name.  Don't clear it if it's not configured in the
         # NixOS configuration, since it may have been set by dhclient in the
         # meantime.
@@ -302,7 +302,7 @@ in
 
       # The activation have to be done at the end.  Therefore, this entry
       # depends on all scripts declared in the activation library.
-      activate = FullDepEntry ''
+      activate = fullDepEntry ''
         # Make this configuration the current configuration.
         # The readlink is there to ensure that when $systemConfig = /system
         # (which is a symlink to the store), /var/run/current-system is still

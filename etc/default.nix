@@ -227,7 +227,7 @@ let
 in
 
 let
-  inherit (pkgs.stringsWithDeps) noDepEntry FullDepEntry PackEntry;
+  inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
 
   activateLib = config.system.activationScripts.lib;
 
@@ -265,7 +265,7 @@ in
     };
 
     activationScripts = {
-      etc = FullDepEntry ''
+      etc = fullDepEntry ''
         # Set up the statically computed bits of /etc.
         staticEtc=/etc/static
         rm -f $staticEtc

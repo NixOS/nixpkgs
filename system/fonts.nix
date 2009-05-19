@@ -103,7 +103,7 @@ let
     buildInputs = [mkfontdir mkfontscale ttmkfdir];
     configureFlags = [];
     inherit fontDirs;
-    installPhase = FullDepEntry ("
+    installPhase = fullDepEntry ("
     list='';
     for i in ${toString fontDirs} ; do
       if [ -d \$i/ ]; then

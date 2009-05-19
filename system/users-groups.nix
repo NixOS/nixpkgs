@@ -140,7 +140,7 @@ let
 in
 
 let
-  inherit (pkgs.stringsWithDeps) FullDepEntry;
+  inherit (pkgs.stringsWithDeps) fullDepEntry;
 
   activateLib = config.system.activationScripts.lib;
 
@@ -159,7 +159,7 @@ in
   system = {
     activationScripts = {
 
-      users = FullDepEntry ''
+      users = fullDepEntry ''
         cat ${usersFile} | while true; do
             read name || break
             read description
@@ -206,7 +206,7 @@ in
         activateLib.groups
       ];
 
-      groups = FullDepEntry ''
+      groups = fullDepEntry ''
         while true; do
             read name || break
             read gid
