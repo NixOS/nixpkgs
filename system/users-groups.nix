@@ -142,8 +142,6 @@ in
 let
   inherit (pkgs.stringsWithDeps) fullDepEntry;
 
-  activateLib = config.system.activationScripts.lib;
-
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
   usersFile = pkgs.writeText "users" (concatStringsSep "\n" (map serializedUser users));
 in
@@ -202,9 +200,7 @@ in
                     --shell "$shell"
             fi
         done
-      '' [
-        activateLib.groups
-      ];
+      '' [ "groups" ];
 
       groups = fullDepEntry ''
         while true; do
@@ -227,12 +223,7 @@ in
         done <<EndOfGroupList
         ${concatStringsSep "\n" (map serializedGroup groups)}
         EndOfGroupList
-      '' [
-        activateLib.rootPasswd
-        activateLib.binsh
-        activateLib.etc
-        activateLib.var
-      ];
+      '' [ "rootPasswd" "binsh" "etc" "var" ];
 
     };
   };

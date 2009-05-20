@@ -229,8 +229,6 @@ in
 let
   inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
 
-  activateLib = config.system.activationScripts.lib;
-
   copyScript = {source, target, mode ? "644", own ? "root.root"}:
     assert target != "nixos"; ''
     source="${source}"
@@ -295,9 +293,9 @@ in
             fi
         done
       '' [
-        activateLib.systemConfig
-        activateLib.defaultPath # path to cp, chmod, chown
-        activateLib.stdio
+        "systemConfig"
+        "defaultPath" # path to cp, chmod, chown
+        "stdio"
       ];
     };
   };

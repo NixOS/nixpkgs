@@ -4,24 +4,15 @@
 let
   inherit (pkgs.stringsWithDeps) textClosureMap noDepEntry;
   inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten
-    mapAttrs addErrorContext fold id;
+    mapAttrs addErrorContext fold id filter;
+  inherit (builtins) attrNames;
 
-  textClosure = steps:
-    textClosureMap id steps (
-       [(noDepEntry "#!/bin/sh")]
-    ++ (mapRecordFlatten (a: v: v) steps)
-    );
-
-  aggregateScripts = name: steps:
-    pkgs.writeScript name (textClosure steps);
-
-  addAttributeName = mapAttrs (a: v: {
+  addAttributeName = mapAttrs (a: v: v // {
       text = ''
-        #### ${a} begin
+        #### actionScripts snippet ${a} :
+        #    ========================================
         ${v.text}
-        #### ${a} end
       '';
-      inherit (v) deps;
     });
 in
 
@@ -47,9 +38,15 @@ in
       '';
       merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
       apply = set:
-        let lib = addAttributeName set; in {
-        inherit lib; # used to fetch dependencies.
-        script = aggregateScripts "activationScript" lib;
+        let withHeadlines = addAttributeName set;
+            activateLib = removeAttrs withHeadlines ["activate"];
+            activateLibNames = attrNames activateLib;
+        in {
+        script = pkgs.writeScript "activationScript"
+          ("#!/bin/sh\n"
+           + textClosureMap id activateLib activateLibNames + "\n"
+             # make sure that the activate snippet is added last.
+           + withHeadlines.activate.text);
       };
     };
   };

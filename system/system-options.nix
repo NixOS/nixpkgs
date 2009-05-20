@@ -76,7 +76,6 @@ let
   inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
   inherit (pkgs.lib) mapRecordFlatten;
 
-  activateLib = config.system.activationScripts.lib;
 in
 
 {
@@ -120,7 +119,7 @@ in
         ln -sfn /proc/self/fd/1 /dev/stdout
         ln -sfn /proc/self/fd/2 /dev/stderr
       '' [
-        activateLib.defaultPath # path to ln
+        "defaultPath" # path to ln
       ];
 
       binsh = fullDepEntry ''
@@ -129,8 +128,8 @@ in
         mkdir -m 0755 -p $mountPoint/bin
         ln -sfn ${config.system.build.binsh}/bin/sh $mountPoint/bin/sh
       '' [
-        activateLib.defaultPath # path to ln & mkdir
-        activateLib.stdio # ?
+        "defaultPath" # path to ln & mkdir
+        "stdio" # ?
       ];
 
       modprobe = fullDepEntry ''
@@ -169,7 +168,7 @@ in
         # Empty, read-only home directory of many system accounts.
         mkdir -m 0555 -p /var/empty
       '' [
-        activateLib.defaultPath # path to mkdir & touch & chmod
+        "defaultPath" # path to mkdir & touch & chmod
       ];
 
       rootPasswd = fullDepEntry ''
@@ -187,8 +186,8 @@ in
             echo | passwd --stdin root
         fi
       '' [
-        activateLib.defaultPath # path to touch & passwd
-        activateLib.etc # for /etc
+        "defaultPath" # path to touch & passwd
+        "etc" # for /etc
         # ?
       ];
 
@@ -216,16 +215,14 @@ in
         ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
         ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
       '' [
-        activateLib.defaultPath
-        activateLib.etc # /etc/nix.conf
-        activateLib.users # nixbld group
+        "defaultPath"
+        "etc" # /etc/nix.conf
+        "users" # nixbld group
       ];
 
       path = fullDepEntry ''
         PATH=${config.system.path}/bin:${config.system.path}/sbin:$PATH
-      '' [
-        activateLib.defaultPath
-      ];
+      '' [ "defaultPath" ];
 
       setuid =
         let
@@ -279,10 +276,7 @@ in
         ${adjustSetuidOwner}
 
         PATH="$save_PATH"
-      '' [
-        activateLib.path
-        activateLib.users
-      ];
+      '' [ "path" "users" ];
 
       hostname = fullDepEntry ''
         # Set the host name.  Don't clear it if it's not configured in the
@@ -296,13 +290,11 @@ in
               hostname ""
             fi
         ''}
-      '' [
-        activateLib.path
-      ];
+      '' [ "path" ];
 
-      # The activation have to be done at the end.  Therefore, this entry
-      # depends on all scripts declared in the activation library.
-      activate = fullDepEntry ''
+      # The activation has to be done at the end. This is forced at the apply
+      # function of activationScripts option
+      activate = noDepEntry ''
         # Make this configuration the current configuration.
         # The readlink is there to ensure that when $systemConfig = /system
         # (which is a symlink to the store), /var/run/current-system is still
@@ -310,11 +302,8 @@ in
         ln -sfn "$(readlink -f "$systemConfig")" /var/run/current-system
 
         # Prevent the current configuration from being garbage-collected.
-        ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
-      '' (mapRecordFlatten (a: v: v)
-        # should be removed if this does not cause an infinite recursion.
-        (activateLib // { activate = { text = ""; deps = []; }; })
-      );
+       ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
+      '';
     };
   };
 }
