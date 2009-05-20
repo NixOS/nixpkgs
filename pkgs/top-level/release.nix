@@ -63,6 +63,7 @@ in {
   audacious_plugins = linux;
   autoconf = all;
   automake110x = all;
+  automake111x = all;
   automake19x = all;
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
