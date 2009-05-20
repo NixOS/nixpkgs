@@ -1350,6 +1350,10 @@ let
       nettools makeWrapper;
   };
 
+  vtun = import ../tools/networking/vtun {
+    inherit fetchurl stdenv lzo openssl zlib yacc flex;
+  };
+
   testdisk = import ../tools/misc/testdisk {
     inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
   };
