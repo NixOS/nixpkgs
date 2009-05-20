@@ -294,11 +294,23 @@ rec {
 
   metacity = import ./metacity.nix {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser glib gtk
-      GConf startupnotification gettext libcm intltool;
+      GConf startupnotification gettext libcm intltool zenity gnomedocutils;
     inherit (xlibs) libXinerama libXrandr libXcursor
       libXcomposite libXfixes libXdamage;
     enableCompositor = true;
     input = desktop.metacity;
+  };
+
+  zenity = stdenv.mkDerivation {
+    inherit (desktop.zenity) name src;
+  
+    buildInputs = [
+      pkgconfig glib gtk
+      gettext intltool gnomedocutils libglade
+      libxslt
+    ];
+
+    configureFlags = "--disable-scrollkeeper";
   };
 
   gnomedocutils = import ./gnome-doc-utils.nix {
@@ -313,6 +325,7 @@ rec {
     buildInputs = [
       pkgconfig perl perlXMLParser GConf gnomedocutils
       gtk libgnome libgnomeui gettext libxslt intltool
+      policyKit dbus_glib
     ];
 
     configureFlags = "--disable-scrollkeeper";

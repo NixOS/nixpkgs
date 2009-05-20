@@ -5267,6 +5267,12 @@ let
     inherit lib;
   };
 
+  policyKit = import ../os-specific/linux/polkit {
+    inherit fetchurl stdenv pkgconfig intltool expat dbus dbus_glib pam;
+    inherit gettext;
+    inherit (gtkLibs) glib;
+  };
+  
   powertop = import ../os-specific/linux/powertop {
     inherit fetchurl stdenv ncurses gettext;
   };
@@ -7357,7 +7363,7 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes;
+      xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit;
   });
 
   kde3 = {
