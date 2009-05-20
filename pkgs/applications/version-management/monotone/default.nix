@@ -2,12 +2,12 @@
   lua, pcre, sqlite}:
 
 let 
-  version = "0.43";
+  version = "0.44";
 in stdenv.mkDerivation {
   name = "monotone-${version}";
   src = fetchurl {
     url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.gz";
-    sha256 = "1vfvvk4flv6n7x1nrizjpwpsfhf3dv3b60h7cs4ysgvzb76s41mz";
+    sha256 = "1d1jck5dw210q99km5akz1bsk447sybypdwwi07v1836jkgk0wll";
   };
   buildInputs = [boost zlib botan libidn lua pcre sqlite];
   preConfigure = ''
