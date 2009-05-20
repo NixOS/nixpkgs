@@ -87,6 +87,7 @@ let
 
   sshdUid = (import ../system/ids.nix).uids.sshd;
 
+  # !!! is this assertion evaluated anywhere???
   assertion = cfg.permitRootLogin == "yes" ||
        cfg.permitRootLogin == "without-password" ||
        cfg.permitRootLogin == "forced-commands-only" ||

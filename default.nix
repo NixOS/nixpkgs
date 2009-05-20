@@ -3,8 +3,10 @@ let
   fromEnv = name: default:
     let env = builtins.getEnv name; in
     if env == "" then default else env;
+    
   configuration = import (fromEnv "NIXOS_CONFIG" /etc/nixos/configuration.nix);
-  nixpkgs   =         fromEnv "NIXPKGS"      /etc/nixos/nixpkgs;
+  
+  nixpkgs = fromEnv "NIXPKGS" /etc/nixos/nixpkgs;
 
   system = import system/system.nix { inherit configuration nixpkgs; };
 
