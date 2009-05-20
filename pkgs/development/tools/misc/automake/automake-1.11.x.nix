@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? false}:
+{stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? true}:
 
 stdenv.mkDerivation rec {
   name = "automake-1.11";
