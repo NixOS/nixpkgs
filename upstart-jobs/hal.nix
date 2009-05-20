@@ -14,6 +14,14 @@ let
             Whether to start the HAL daemon.
           ";
         };
+
+        extraFdi = mkOption {
+          default = [];
+          example = [ "/nix/store/.../fdi" ];
+          description = "
+            Extend HAL daemon configuration with additionnal paths.
+          ";
+        };
       };
     };
   };
@@ -37,6 +45,15 @@ let
     gid = (import ../system/ids.nix).gids.haldaemon;
   };
 
+  fdi =
+    if cfg.extraFdi == [] then
+      hal + "/share/hal/fdi"
+    else
+      pkgs.buildEnv {
+        name = "hal-fdi";
+        pathsToLink = [ "/preprobe" "/information" "/policy" ];
+        paths = [ (hal + "/share/hal/fdi") ] ++ cfg.extraFdi;
+      };
 
   job = {
     name = "hal";
@@ -56,6 +73,12 @@ let
           rm -f /var/cache/hald/fdi-cache
 
       end script
+
+      # HACK ? These environment variables manipulated inside
+      # 'src'/hald/mmap_cache.c are used for testing the daemon
+      env HAL_FDI_SOURCE_PREPROBE=${fdi}/preprobe
+      env HAL_FDI_SOURCE_INFORMATION=${fdi}/information
+      env HAL_FDI_SOURCE_POLICY=${fdi}/policy
 
       respawn ${hal}/sbin/hald --daemon=no
     '';
