@@ -18,7 +18,7 @@ let
         autoMaster = mkOption {
           example = ''
             autoMaster = let
-              map = pkgs.writeText "auto" '''
+              mapConf = pkgs.writeText "auto" '''
                kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
                boot      -fstype=ext2        :/dev/hda1
                windoze   -fstype=smbfs       ://windoze/c
@@ -30,7 +30,7 @@ let
                                              /home myserver.me.org:/home
               ''';
             in '''
-              /auto file:${map}
+              /auto file:''${mapConf}
             '''
           '';
           description = "
