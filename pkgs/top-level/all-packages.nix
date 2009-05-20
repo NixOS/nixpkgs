@@ -2356,6 +2356,10 @@ let
     inherit fetchurl stdenv perl autoconf makeWrapper;
   };
 
+  automake111x = import ../development/tools/misc/automake/automake-1.11.x.nix {
+    inherit fetchurl stdenv perl autoconf makeWrapper;
+  };
+
   avrdude = import ../development/tools/misc/avrdude {
     inherit lib fetchurl stdenv flex yacc composableDerivation texLive;
   };
