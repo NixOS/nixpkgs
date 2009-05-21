@@ -82,18 +82,7 @@ in
     pythonLibStub = composableDerivation {} {
         propagatedBuildInputs = [ t.pythonFull ]; # see [1]
         postPhases = ["postAll"]; # using new name so that you dno't override this phase by accident
-        prePhases = ["defineValidatingEval"];
         # ensure phases are run or a non zero exit status is caused (if there are any syntax errors such as eval "while")
-        defineValidatingEval = ''
-          eval(){
-            e="$(type eval | { read; while read line; do echo $line; done })"
-            unset eval;
-            local evalSucc="failure"
-            eval "evalSucc=ok;""$1"
-            eval "$e"
-            [ $evalSucc = "failure" ] && { echo "eval failed, snippet:"; echo "$1"; return 1; }
-          }
-        '';
         postAll = ''
           ensureDir $out/nix-support
           echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
@@ -495,6 +484,38 @@ in
       license = "MIT";
     };
   };
+
+  # unmantained ? (gentoo/ debian even do have python-3* patches)
+  pyxml = t.pythonLibSetup.merge {
+    name = "pyxml-0.8.4";
+    src = fetchurl {
+      url = mirror://sourceforge/pyxml/PyXML-0.8.4.tar.gz;
+      sha256 = "04wc8i7cdkibhrldy6j65qp5l75zjxf5lx6qxdxfdf2gb3wndawz";
+    };
+    meta = { 
+      description = "python xml package";
+      homepage = http://sourceforge.net/projects/pyxml/;
+      license = "Python License"; # (CNRI Python License);
+    };
+  };
+
+  /*
+  # untested
+  libxml2dom = t.pythonLibSetup.merge {
+    name = "libxml2dom-0.4.7";
+    buildInputs = [ p.libxml2 ];
+    src = fetchurl {
+      url = http://www.boddie.org.uk/python/downloads/libxml2dom-0.4.7.tar.gz;
+      sha256 = "0zh68adxn4l4b6q99jl1pi00171ah2marbbs8qfww4wpjavfw844";
+    };
+    pyCheck = "import libxml2dom.svg";
+    meta = {
+      description = "provides a traditional DOM wrapper around the Python bindings for libxml2";
+      homepage = http://www.boddie.org.uk/python/libxml2dom.html;
+      license = "LGPL3+";
+    };
+  };
+  */
 
   ### python applications
 
