@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "dbus-glib-0.74";
+  name = "dbus-glib-0.80";
   
   src = fetchurl {
     url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
-    sha256 = "1qmbnd9xgg7vahlfywd8sfd9yqhx8jdyczz3cshfsd4qc76xhw78";
+    sha256 = "0nv4gxcbpa9f0907dmzmfm222w8y45z19cx27l85f5qknf8hncxm";
   };
   
   buildInputs = [pkgconfig expat gettext];
