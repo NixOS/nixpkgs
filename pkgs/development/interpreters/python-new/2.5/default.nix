@@ -517,6 +517,36 @@ in
   };
   */
 
+  fpconst = t.pythonLibSetup.merge {
+    name = "fpconst-0.7.3";
+    pyCheck = "import fpconst";
+    src = fetchurl {
+      url="mirror://sourceforge/rsoap/fpconst-0.7.3.tar.gz";
+      sha256 = "1a5c2e4a1ecefd9981988cea15068699eccbc55e350af3471e782083d390c727";
+    };
+    meta = {
+      description="Python Module for handling IEEE 754 floating point special values";
+      homepage="http://chaco.bst.rochester.edu:8080/statcomp/projects/RStatServer/fpconst/";
+      license = "GPLv2";
+    };
+  };
+
+  soappy = t.pythonLibSetup.merge {
+    name = "soappy-0.12";
+    pyCheck = "from SOAPpy import WSDL";
+    propagatedBuildInputs = [ t.fpconst ];
+    src = fetchurl {
+      url = "http://switch.dl.sourceforge.net/sourceforge/pywebsvcs/SOAPpy-0.12.0.tar.gz";
+      sha256 = "02a0wpir0gl0n9cl7a5hxliwsywvcw847i5in7i14i57kk6dl7rd";
+    };
+    patches = [ ./gentoo-python-2.5-compat.patch ];
+    meta = {
+      description = "SOAP implementation for Python";
+      homepage="http://pywebsvcs.sourceforge.net/";
+      license = "BSD";
+    };
+  };
+
   ### python applications
 
   pythonExStub = composableDerivation {} {
