@@ -4312,8 +4312,8 @@ let
     inherit fetchurl stdenv python makeWrapper;
   };
 
-  setuptools = builderDefsPackage (selectVersion ../development/python-modules/setuptools "0.6c8") {
-    inherit python;
+  setuptools = import ../development/python-modules/setuptools {
+    inherit fetchurl stdenv python makeWrapper;
   };
 
   simplejson = import ../development/python-modules/simplejson {
