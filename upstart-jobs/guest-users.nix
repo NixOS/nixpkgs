@@ -54,6 +54,8 @@ in
 {
   require = options;
   services = {
+    # !!! Better to do this as an activation script plugin rather
+    # than an Upstart job.
     extraJobs = optional enable {
       name = "clear-passwords";
       job = ''
@@ -67,7 +69,7 @@ in
       '';
     };
     mingetty = {
-      helpLine = optionalString enable "\nThis users have empty passwords: ${nameString}";
+      helpLine = optionalString enable "\nThese users have empty passwords: ${nameString}";
     };
   };
   users = {
