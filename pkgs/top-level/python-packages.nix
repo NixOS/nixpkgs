@@ -3,6 +3,33 @@
 rec {
   inherit (pkgs) buildPythonPackage fetchurl fetchsvn stdenv python;
 
+  foolscap = buildPythonPackage (rec {
+    name = "foolscap-0.3.2";
+
+    src = fetchurl {
+      url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
+      sha256 = "1wkqgm6anlxvz8dnqx7ki008255nm1mlhak5n9xy6g1yf31fn3l0";
+    };
+
+    propagatedBuildInputs = [ pkgs.twisted pkgs.pyopenssl ];
+
+    meta = {
+      homepage = http://foolscap.lothar.com/;
+
+      description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
+
+      longDescription = ''
+        "Foolscap" is the name for the next-generation RPC protocol,
+        intended to replace Perspective Broker (part of Twisted).
+        Foolscap is a protocol to implement a distributed
+        object-capabilities model in Python.
+      '';
+
+      # See http://foolscap.lothar.com/trac/browser/LICENSE.
+      license = "MIT";
+    };
+  });
+
   nevow = buildPythonPackage (rec {
     name = "nevow-0.9.33";
 
@@ -90,32 +117,5 @@ rec {
       license = "MIT";
     };
   };
-
-  foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.3.2";
-
-    src = fetchurl {
-      url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "1wkqgm6anlxvz8dnqx7ki008255nm1mlhak5n9xy6g1yf31fn3l0";
-    };
-
-    propagatedBuildInputs = [ pkgs.twisted pkgs.pyopenssl ];
-
-    meta = {
-      homepage = http://foolscap.lothar.com/;
-
-      description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
-
-      longDescription = ''
-        "Foolscap" is the name for the next-generation RPC protocol,
-        intended to replace Perspective Broker (part of Twisted).
-        Foolscap is a protocol to implement a distributed
-        object-capabilities model in Python.
-      '';
-
-      # See http://foolscap.lothar.com/trac/browser/LICENSE.
-      license = "MIT";
-    };
-  });
 
 }
