@@ -68,6 +68,25 @@ rec {
     };
   });
 
+  setuptoolsDarcs = buildPythonPackage {
+    name = "setuptools-darcs-1.2.8";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.8.tar.gz";
+      sha256 = "0jg9q9mhsky444mm7lpmmlxai8hmjg4pc71viv4kni8gls0gk9n8";
+    };
+
+    propagatedBuildInputs = [ pkgs.darcs ];
+
+    meta = {
+      description = "setuptools plugin for the Darcs version control system";
+
+      homepage = http://allmydata.org/trac/setuptools_darcs;
+
+      license = "BSD";
+    };
+  };
+
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.0.9";
 
