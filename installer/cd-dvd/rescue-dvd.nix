@@ -1,7 +1,7 @@
 let 
-  rescueCDFun = import /etc/nixos/nixos/installer/cd-dvd/rescue-cd.nix;
-  pkgs = import /etc/nixos/nixpkgs {};
-  kernels = import /etc/nixos/configurations/misc/raskin/kernel-options.nix {inherit pkgs;};
+  rescueCDFun = import ./rescue-cd.nix;
+  pkgs = import ../../../nixpkgs {};
+  kernels = import ../../../configurations/misc/raskin/kernel-options.nix {inherit pkgs;};
   bootEntries = baseKernel: rec {
     kernelPackages = let 
       shippedKernelPackages = pkgs.kernelPackagesFor (baseKernel);
@@ -74,7 +74,7 @@ rescueCDFun {
 	pkgs.tcl
       ];
 
-      nix = pkgs.nixCustomFun ("" + /etc/nixos/nix + "/")
+      nix = pkgs.nixCustomFun ("" + ../../../nix + "/")
           ""
           ["nix-reduce-build" "nix-http-export.cgi"]
           ["--with-docbook-xsl=${pkgs.docbook5_xsl}/xml/xsl/docbook/"];
