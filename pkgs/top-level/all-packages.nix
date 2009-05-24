@@ -182,6 +182,10 @@ let
     in
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
 
+  # usage: (you can use override multiple times)
+  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
+  #     noBuildInputs = d.override { buildInputs = []; }
+  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   makeOverridable = f: origArgs: f origArgs //
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
