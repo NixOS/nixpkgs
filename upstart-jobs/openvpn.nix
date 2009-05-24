@@ -67,6 +67,9 @@ let
     };
   };
 
+
+  modprobe = config.system.sbin.modprobe;
+
 ###### implementation
 
   cfg = config.services.openvpn;
@@ -111,6 +114,7 @@ let
         respawn
         script
           exec &> /var/log/openvpn-${cfg.id}
+          ${modprobe} tun || true
           ${openvpn}/sbin/openvpn --config ${configFile}
         end script
       '';
