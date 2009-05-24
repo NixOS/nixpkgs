@@ -1,7 +1,7 @@
 # Operations on attribute sets.
 
 with {
-  inherit (builtins) head tail;
+  inherit (builtins) head tail isString;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
 };
@@ -18,13 +18,16 @@ rec {
     in
       if attrPath == [] then e
       else if builtins ? hasAttr && hasAttr attr e
-      then attrByPath (tail attrPath) default (builtins.getAttr attr e)
+      then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
   # keep compatibility for some time. will be removed soon (the name getAttr
   # should only be used for the builtins primop)
-  getAttr = a : b : c : builtins.trace "depreceated usage of lib.getAttr!"
-    (attrByPath a b c);
+  getAttr = a : b : if isString a
+    then
+      # should have been called from builtins scope. Don't mind. use builtin function
+      builtins.getAttr a b
+    else  c : builtins.trace "depreceated usage of lib.getAttr!" (attrByPath a b c);
 
 
   getAttrFromPath = attrPath: set:
@@ -39,7 +42,7 @@ rec {
        => [as.a as.b as.c]
   */
   attrVals = nameList: set:
-    map (x: builtins.getAttr x set) nameList;
+    map (x: getAttr x set) nameList;
 
 
   /* Return the values of all attributes in the given set, sorted by
@@ -59,7 +62,7 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(builtins.getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
 
 
   /* Utility function that creates a {name, value} pair as expected by
@@ -78,7 +81,7 @@ rec {
        => {x = "x-foo"; y = "y-bar";}
   */
   mapAttrs = f: set:
-    listToAttrs (map (attr: nameValuePair attr (f attr (builtins.getAttr attr set))) (attrNames set));
+    listToAttrs (map (attr: nameValuePair attr (f attr (getAttr attr set))) (attrNames set));
     
 
   /* Like `mapAttrs', except that it recursively applies itself to
