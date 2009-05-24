@@ -4204,6 +4204,10 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
+  buildPythonPackage =
+    import ../development/python-modules/generic {
+      inherit python setuptools makeWrapper lib;
+    };
 
   foursuite = import ../development/python-modules/4suite {
     inherit fetchurl stdenv python;
