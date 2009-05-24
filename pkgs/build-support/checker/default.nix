@@ -22,7 +22,7 @@ let
                        then ""
                        else checkAttrInclusion 
 			(s + "." + x) 
-			(__getAttr x a)
+			(builtins.getAttr x a)
 			(lib.attrByPath [x] null b)) 
 		(attrNames a)) ""
 	);

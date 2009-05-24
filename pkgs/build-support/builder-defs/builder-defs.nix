@@ -1,4 +1,5 @@
 args: with args; with stringsWithDeps; with lib;
+let inherit (builtins) head tail trace; in
 (rec
 {
         inherit writeScript; 
@@ -316,8 +317,8 @@ args: with args; with stringsWithDeps; with lib;
         envAdder = envAdderInner "";
 
         envAdderList = l:  if l==[] then "" else 
-        "echo export ${__head l}='\"'\"\\\$${__head l}:${__head (__tail l)}\"'\"';\n" +
-                envAdderList (__tail (__tail l));
+        "echo export ${head l}='\"'\"\\\$${head l}:${head (tail l)}\"'\"';\n" +
+                envAdderList (tail (tail l));
 
         wrapEnv = cmd: env: "
                 mv \"${cmd}\" \"${cmd}-orig\";
@@ -350,8 +351,8 @@ args: with args; with stringsWithDeps; with lib;
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
-        /*debug = x:(__trace x x);
-        debugX = x:(__trace (__toXML x) x);*/
+        /*debug = x:(trace x x);
+        debugX = x:(trace (toXML x) x);*/
 
         replaceScriptVar = file: name: value: "sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}";
         replaceInScript = file: l: concatStringsSep "\n" ((pairMap (replaceScriptVar file) l));

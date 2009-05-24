@@ -12,10 +12,11 @@
 
 p: # p = pkgs
 let 
+  inherit (builtins) isAttrs hasAttr;
   inherit (p) lib fetchurl stdenv getConfig;
   inherit (p.composableDerivation) composableDerivation;
   # withName prevents  nix-env -qa \* from aborting (pythonLibStub is a derivation but hasn't a name)
-  withName = lib.mapAttrs (n : v : if (__isAttrs v && (!__hasAttr "name" v)) then null else v);
+  withName = lib.mapAttrs (n : v : if (isAttrs v && (!hasAttr "name" v)) then null else v);
 in
   withName ( lib.fix ( t : { # t = this attrs
 
@@ -608,7 +609,7 @@ in
   };
 
   all = lib.filter (x:
-                   (__isAttrs x)
+                   (isAttrs x)
                 && ((lib.maybeAttr "libPython" false x) == t.version)
                 && (lib.maybeAttr "name" false x != false) # don't collect pythonLibStub etc
         ) (lib.flattenAttrs (removeAttrs t ["all"])); # nix is not yet lazy enough, so I've to remove all first

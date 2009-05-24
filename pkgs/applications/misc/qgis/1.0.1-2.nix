@@ -1,7 +1,8 @@
 args: with args;
-let edf = composableDerivation.edf;
-    optionIncLib = name : attr : " -D${name}_INCLUDE_DIR=${__getAttr attr args}/incclude"
-                               + " -D${name}_LIBRARY=${__getAttr attr args}/lib "; # lib 64?
+let inherit (builtins) getAttr;
+    edf = composableDerivation.edf;
+    optionIncLib = name : attr : " -D${name}_INCLUDE_DIR=${getAttr attr args}/incclude"
+                               + " -D${name}_LIBRARY=${getAttr attr args}/lib "; # lib 64?
 in
 composableDerivation.composableDerivation {} {
 

@@ -1794,11 +1794,11 @@ let
       libraries =
         # core_libs  distributed with this ghc version
         (lib.flattenAttrs ghcsAndLibs.ghc68.core_libs)
-        # (map ( a : __getAttr a ghcsAndLibs.ghc68.core_libs ) [ "cabal" "mtl" "base"  ]
+        # (map ( a : builtins.getAttr a ghcsAndLibs.ghc68.core_libs ) [ "cabal" "mtl" "base"  ]
 
         # some extra libs
            ++  (lib.flattenAttrs (ghc68extraLibs ghcsAndLibs.ghc68) );
-        # ++ map ( a : __getAttr a (ghc68extraLibs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
+        # ++ map ( a : builtins.getAttr a (ghc68extraLibs ghcsAndLibs.ghc68 ) ) [ "mtl" "parsec" ... ]
       inherit ghc;
   };
 

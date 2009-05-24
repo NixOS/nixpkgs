@@ -1,6 +1,10 @@
 /* String manipulation functions. */
 
-let lib = import ./default.nix; in
+let lib = import ./default.nix;
+
+inherit (builtins) substring add sub stringLength;
+
+in
 
 rec {
   inherit (builtins) stringLength substring head tail lessThan sub;
@@ -86,10 +90,10 @@ rec {
       if s == "" then "" else
       let takeTillSlash = left : c : s :
           if left == 0 then s
-          else if (__substring left 1 s == "/") then
-                  (__substring (__add left 1) (__sub c 1) s)
-          else takeTillSlash (__sub left 1) (__add c 1) s; in
-      takeTillSlash (__sub (__stringLength s) 1) 1 s;
+          else if (substring left 1 s == "/") then
+                  (substring (add left 1) (sub c 1) s)
+          else takeTillSlash (sub left 1) (add c 1) s; in
+      takeTillSlash (sub (stringLength s) 1) 1 s;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions

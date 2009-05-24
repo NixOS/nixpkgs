@@ -47,7 +47,7 @@ rec {
       inherit searchRelativeTo;
 
       # Forces rebuilds.
-      hack = __currentTime;
+      hack = builtins.currentTime;
     };
 
 

@@ -1,3 +1,4 @@
+let inherit (builtins) add; in
 with import ./default.nix;
 
 runTests {
@@ -69,14 +70,14 @@ runTests {
           res4 = let x = defaultOverridableDelayableArgs id { a = 7; };
                 in (x.merge) ( x: { b = 10; });
           res5 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { a = __add x.a 3; });
-          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = __add; }; };
+                in (x.merge) ( x: { a = add x.a 3; });
+          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
                      y = x.merge {};
                 in (y.merge) { a = 10; };
 
           resRem7 = res6.replace (a : removeAttrs a ["a"]);
 
-          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = __add; }; };
+          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
                             x2 = x.merge { a = 20; }; # now we have 27
                         in (x2.replace) { a = 10; }; # and override the value by 10
 
