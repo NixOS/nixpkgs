@@ -11,7 +11,7 @@ rec {
       sha256 = "1wkqgm6anlxvz8dnqx7ki008255nm1mlhak5n9xy6g1yf31fn3l0";
     };
 
-    propagatedBuildInputs = [ pkgs.twisted pkgs.pyopenssl ];
+    propagatedBuildInputs = [ twisted pkgs.pyopenssl ];
 
     meta = {
       homepage = http://foolscap.lothar.com/;
@@ -39,7 +39,7 @@ rec {
       name = "${name}.tar.gz";
     };
 
-    propagatedBuildInputs = [ pkgs.twisted ];
+    propagatedBuildInputs = [ twisted ];
 
     meta = {
       description = "Nevow, a web application construction kit for Python";
@@ -65,6 +65,35 @@ rec {
       homepage = http://divmod.org/trac/wiki/DivmodNevow;
 
       license = "BSD-style";
+    };
+  });
+
+  pyutil = buildPythonPackage (rec {
+    name = "pyutil-1.3.30";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyutil/${name}.tar.gz";
+      sha256 = "1ksb4gn8x53wcyddmjv1ma8cvvhjlmfxc6kpszyhb838i7xzla19";
+    };
+
+    buildInputs = [ setuptoolsDarcs zbase32 ];
+
+    meta = {
+      description = "Pyutil, a collection of mature utilities for Python programmers";
+
+      longDescription = ''
+        These are a few data structures, classes and functions which
+        we've needed over many years of Python programming and which
+        seem to be of general use to other Python programmers. Many of
+        the modules that have existed in pyutil over the years have
+        subsequently been obsoleted by new features added to the
+        Python language or its standard library, thus showing that
+        we're not alone in wanting tools like these.
+      '';
+
+      homepage = http://allmydata.org/trac/pyutil;
+
+      license = "GPLv2+";
     };
   });
 
@@ -136,5 +165,27 @@ rec {
       license = "MIT";
     };
   };
+
+  zbase32 = buildPythonPackage (rec {
+    name = "zbase32-1.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zbase32/${name}.tar.gz";
+      sha256 = "0n59l4rs26vrhxpsfrwybjjir68aj23f09k1yjnbxqy5n0khp8gm";
+    };
+
+    # Tests require `pyutil' so disable them to avoid circular references.
+    doCheck = false;
+
+    buildInputs = [ setuptoolsDarcs ];
+
+    meta = {
+      description = "zbase32, a base32 encoder/decoder";
+
+      homepage = http://pypi.python.org/pypi/zbase32;
+
+      license = "BSD";
+    };
+  });
 
 }
