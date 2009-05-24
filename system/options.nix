@@ -379,133 +379,89 @@ in
   };
 
   require = [
-
-    ../system/assertion.nix
-
-    # boot (is it the right place ?)
-    ../system/kernel.nix
+    #../modules/hardware/network/intel-3945abg.nix
     ../boot/boot-stage-2.nix
-    ../installer/grub.nix
-
-    # system
-    ../system/system-options.nix
-    ../system/activate-configuration.nix
-    ../upstart-jobs/default.nix
-
-    ../upstart-jobs/acpid.nix # ACPI daemon
-
-    ../system/unix-odbc-drivers.nix
-
-    ../upstart-jobs/klogd.nix
-
-    ../upstart-jobs/lvm.nix # Makes LVM logical volumes available.
-
-    ../upstart-jobs/swraid.nix # Activate software RAID arrays.
-
-    ../upstart-jobs/filesystems.nix # Mount file systems.
-
-    ../upstart-jobs/swap.nix
-    ../upstart-jobs/network-interfaces.nix
-    ../upstart-jobs/nscd.nix # Name service cache daemon.
-    ../upstart-jobs/maintenance-shell.nix # Handles the maintenance/stalled event (single-user shell).
-    ../upstart-jobs/ctrl-alt-delete.nix # Ctrl-alt-delete action.
-    ../upstart-jobs/halt.nix
-    ../upstart-jobs/ifplugd.nix # ifplugd daemon for monitoring Ethernet cables.
-
-
-    # security
-    ../system/sudo.nix
-
-    # i18n
-    ../system/i18n.nix
-
-    # environment
     ../etc/default.nix
-
-    ../system/nixos-environment.nix
-
-    # users
-    ../system/users-groups.nix
-
-    # newtworking
-    ../upstart-jobs/dhclient.nix
-
-    # hardware
-    ../upstart-jobs/pcmcia.nix
-
-    # security
-    ../system/nixos-security.nix
-
-    # services
-    ../upstart-jobs/avahi-daemon.nix
-    ../upstart-jobs/atd.nix
-    ../upstart-jobs/dbus.nix
-    ../upstart-jobs/hal.nix
-    ../upstart-jobs/gpm.nix
-    ../upstart-jobs/nagios/default.nix
-    ../upstart-jobs/xserver/default.nix
-    ../upstart-jobs/zabbix-agent.nix
-    ../upstart-jobs/zabbix-server.nix
-    ../upstart-jobs/disnix.nix
-    ../upstart-jobs/consolekit.nix
-    ../upstart-jobs/cron.nix
-    ../upstart-jobs/fcron.nix
-    ../upstart-jobs/cron/locate.nix
-    ../upstart-jobs/manual.nix
-    ../upstart-jobs/rogue.nix
-    ../upstart-jobs/guest-users.nix
-    ../upstart-jobs/pulseaudio.nix
-    ../upstart-jobs/kbd.nix
-    ../upstart-jobs/gw6c.nix # Gateway6
-    ../upstart-jobs/syslogd.nix
-    ../upstart-jobs/dhcpd.nix
-    ../upstart-jobs/sshd.nix
-    ../upstart-jobs/lshd.nix # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
-    ../upstart-jobs/ntpd.nix
-    ../upstart-jobs/portmap.nix
-    ../upstart-jobs/bitlbee.nix
-    ../upstart-jobs/gnunet.nix
-    ../upstart-jobs/ejabberd.nix # untested, dosen't compile on x86_64-linux
-    ../upstart-jobs/jboss.nix
-    ../upstart-jobs/tomcat.nix # untested, too lazy to get that jdk
-    ../upstart-jobs/httpd.nix # Apache httpd (probably this can be removed ?)
-    ../upstart-jobs/apache-httpd # Apache httpd (new style).
-    ../upstart-jobs/vsftpd.nix
-    ../upstart-jobs/cupsd.nix # CUPS printing daemon
-    ../upstart-jobs/udev.nix # The udev daemon creates devices nodes and runs programs when hardware events occur.
-    ../upstart-jobs/samba.nix # TODO: doesn't start here (?)
-    ../upstart-jobs/ircd-hybrid.nix # TODO: doesn't compile on x86_64-linux, can't test
-    ../upstart-jobs/xfs.nix
-    ../upstart-jobs/mysql.nix
-    ../upstart-jobs/postgresql.nix
-    ../upstart-jobs/openfire.nix
-    ../upstart-jobs/postfix.nix
-    ../upstart-jobs/dovecot.nix
-    ../upstart-jobs/bind.nix
-
-    ../upstart-jobs/mingetty.nix # The terminals on ttyX.
-    ../upstart-jobs/tty-backgrounds.nix
-
-    ../upstart-jobs/synergy.nix
-    ../upstart-jobs/openvpn.nix
-
-    ../upstart-jobs/nfs-kernel.nix
-    ../upstart-jobs/autofs.nix
-
-    # nix
-    ../upstart-jobs/nix.nix # nix options and daemon
-    ../system/nixos-installer.nix
-
-
-    #users
-    ../upstart-jobs/ldap
-
-
-
-    # fonts
+    ../installer/grub.nix
+    ../modules/services/audio/alsa.nix
+    ../modules/services/audio/pulseaudio.nix
+    ../modules/services/databases/mysql.nix
+    ../modules/services/databases/postgresql.nix
+    ../modules/services/hardware/acpid.nix
+    ../modules/services/hardware/hal.nix
+    ../modules/services/hardware/udev.nix
+    ../modules/services/logging/klogd.nix
+    ../modules/services/logging/syslogd.nix
+    ../modules/services/mail/dovecot.nix
+    ../modules/services/mail/postfix.nix
+    ../modules/services/misc/autofs.nix
+    ../modules/services/misc/disnix.nix
+    ../modules/services/misc/nix-daemon.nix
+    ../modules/services/misc/nixos-manual.nix
+    ../modules/services/misc/rogue.nix
+    ../modules/services/misc/synergy.nix
+    ../modules/services/monitoring/nagios/default.nix
+    ../modules/services/monitoring/zabbix-agent.nix
+    ../modules/services/monitoring/zabbix-server.nix
+    ../modules/services/network-filesystems/nfs-kernel.nix
+    ../modules/services/network-filesystems/samba.nix # TODO: doesn't start here (?)
+    ../modules/services/networking/avahi-daemon.nix
+    ../modules/services/networking/bind.nix
+    ../modules/services/networking/bitlbee.nix
+    ../modules/services/networking/dhclient.nix
+    ../modules/services/networking/dhcpd.nix
+    ../modules/services/networking/ejabberd.nix # untested, dosen't compile on x86_64-linux
+    ../modules/services/networking/gnunet.nix
+    ../modules/services/networking/gw6c.nix
+    ../modules/services/networking/ifplugd.nix
+    ../modules/services/networking/ircd-hybrid.nix # TODO: doesn't compile on x86_64-linux, can't test
+    ../modules/services/networking/ntpd.nix
+    ../modules/services/networking/openfire.nix
+    ../modules/services/networking/openvpn.nix
+    ../modules/services/networking/portmap.nix
+    ../modules/services/networking/ssh/lshd.nix # GNU lshd SSH2 deamon (TODO: does neither start nor generate seed file ?)
+    ../modules/services/networking/ssh/sshd.nix
+    ../modules/services/networking/vsftpd.nix
+    ../modules/services/printing/cupsd.nix
+    ../modules/services/scheduling/atd.nix
+    ../modules/services/scheduling/cron.nix
+    ../modules/services/scheduling/fcron.nix
+    ../modules/services/system/consolekit.nix
+    ../modules/services/system/dbus.nix
+    ../modules/services/system/nscd.nix
+    ../modules/services/ttys/gpm.nix
+    ../modules/services/ttys/mingetty.nix
+    ../modules/services/web-servers/apache-httpd
+    ../modules/services/web-servers/jboss.nix
+    ../modules/services/web-servers/tomcat.nix # untested, too lazy to get that jdk
+    ../modules/services/x11/xfs.nix
+    ../modules/services/x11/xserver/default.nix
+    ../system/activate-configuration.nix
+    ../system/assertion.nix
     ../system/fonts.nix
-
-    # sound
-    ../upstart-jobs/alsa.nix
+    ../system/i18n.nix
+    ../system/kernel.nix
+    ../system/nixos-environment.nix
+    ../system/nixos-installer.nix
+    ../system/nixos-security.nix
+    ../system/sudo.nix
+    ../system/system-options.nix
+    ../system/unix-odbc-drivers.nix
+    ../system/users-groups.nix
+    ../upstart-jobs/cron/locate.nix
+    ../upstart-jobs/ctrl-alt-delete.nix
+    ../upstart-jobs/default.nix
+    ../upstart-jobs/filesystems.nix
+    ../upstart-jobs/guest-users.nix
+    ../upstart-jobs/halt.nix
+    ../upstart-jobs/kbd.nix
+    ../upstart-jobs/ldap
+    ../upstart-jobs/lvm.nix
+    ../upstart-jobs/maintenance-shell.nix
+    ../upstart-jobs/network-interfaces.nix
+    ../upstart-jobs/pcmcia.nix
+    ../upstart-jobs/swap.nix
+    ../upstart-jobs/swraid.nix
+    ../upstart-jobs/tty-backgrounds.nix
   ];
 }

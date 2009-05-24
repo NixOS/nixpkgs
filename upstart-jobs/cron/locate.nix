@@ -45,7 +45,7 @@ in
 
 {
   require = [
-    ../../upstart-jobs/cron.nix # config.services.cron
+    # ../../upstart-jobs/cron.nix # config.services.cron
     options
   ];
 

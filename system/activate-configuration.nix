@@ -42,7 +42,7 @@ in
             activateLib = removeAttrs withHeadlines ["activate"];
             activateLibNames = attrNames activateLib;
         in {
-        script = pkgs.writeScript "activationScript"
+        script = pkgs.writeScript "nixos-activation-script"
           ("#!/bin/sh\n"
            + textClosureMap id activateLib activateLibNames + "\n"
              # make sure that the activate snippet is added last.
