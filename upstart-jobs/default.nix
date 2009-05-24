@@ -2,7 +2,7 @@
 
 ###### interface
 let
-  inherit (pkgs.lib) mkOption mapAttrs getAttr fold
+  inherit (pkgs.lib) mkOption mapAttrs fold
     mergeListOption mergeTypedOption mergeAttrsWithFunc;
 
   options = {

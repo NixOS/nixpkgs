@@ -1,12 +1,12 @@
 {config, pkgs, ...}:
 # TODO: this file need some make-up (Nicolas Pierron)
 
+with pkgs.lib;
+
 let
   kernelPackages = config.boot.kernelPackages;
   # List of font directories.
   fontDirectories = config.fonts.fonts;
-
-  inherit (pkgs.lib) mkOption;
 
   options = {
     services = {
@@ -282,7 +282,6 @@ in
 
 let
 
-  inherit (pkgs.lib) optional isInList getAttr mkIf;
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = cfg.package;
@@ -305,16 +304,15 @@ let
   videoDriver = cfg.videoDriver;
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
 
-  videoDriverModules = getAttr [ videoDriver ] (throw "unkown video driver : `${videoDriver}'") knownVideoDrivers;
+  videoDriverModules = attrByPath [videoDriver] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
 
   modules = 
-
-    getAttr ["modulesFirst"] [] videoDriverModules
+    attrByPath ["modulesFirst"] [] videoDriverModules
     ++ [
       xorg.xorgserver
       xorg.xf86inputevdev
     ] 
-    ++ getAttr ["modules"] [] videoDriverModules
+    ++ attrByPath ["modules"] [] videoDriverModules
     ++ (optional cfg.synaptics.enable ["${xorg.xf86inputsynaptics}"]);
 
 
