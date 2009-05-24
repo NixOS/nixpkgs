@@ -4228,14 +4228,6 @@ let
     setuptools = setuptools.passthru.function {inherit python;};
   });
 
-  foolscap = import ../development/python-modules/foolscap {
-    inherit fetchurl stdenv python setuptools twisted pyopenssl;
-  };
-
-  nevow = import ../development/python-modules/nevow {
-    inherit fetchurl stdenv python setuptools twisted makeWrapper lib;
-  };
-
   numeric = import ../development/python-modules/numeric {
     inherit fetchurl stdenv python;
   };
@@ -4328,10 +4320,6 @@ let
     inherit python makeWrapper;
   };
 
-  simplejson = import ../development/python-modules/simplejson {
-    inherit fetchsvn stdenv python setuptools;
-  };
-
   wxPython = wxPython26;
 
   wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
@@ -4344,9 +4332,7 @@ let
     wxGTK = wxGTK28;
   };
 
-  twisted = import ../development/python-modules/twisted {
-    inherit fetchurl stdenv python ZopeInterface makeWrapper;
-  };
+  twisted = pythonPackages.twisted;
 
   ZopeInterface = import ../development/python-modules/ZopeInterface {
     inherit fetchurl stdenv python;
