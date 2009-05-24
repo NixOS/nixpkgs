@@ -70,7 +70,7 @@
     };
   };
 
-  jobs = if (lib.getAttr ["services" "xfs" "enable"] false config) != true
+  jobs = if (lib.attrByPath ["services" "xfs" "enable"] false config) != true
     then abort "you need to enable xfs services = { xfs = { enable = true; }; } within your nixos/configuration.nix file"
     else
     [ ( rec {

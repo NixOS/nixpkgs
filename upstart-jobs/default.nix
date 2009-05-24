@@ -23,14 +23,14 @@ let
   newProposalJobs =
   (
   let
-    inherit (pkgs.lib) getAttr; 
+    inherit (pkgs.lib) attrByPath; 
     inherit (builtins) attrNames pathExists map;
-    services = getAttr [ "servicesProposal" ] {} config;
+    services = attrByPath [ "servicesProposal" ] {} config;
     nameToJobs = name : (
       (
       let p = ./new-proposal + "/${name}.nix";
           p2 = ./new-proposal + "/${name}/default.nix";
-          thisConfig = getAttr [ name ] {} services;
+          thisConfig = attrByPath [ name ] {} services;
           path = [name];
           args = confgiV : {
             inherit config pkgs thisConfig path;
@@ -60,7 +60,7 @@ let
                                 then let v = (__getAttr name thisConfig); in if opt ? apply then opt.apply v else v
                                 else if opt ? default then opt.default else abort "you need to specify the configuration option ${errorWhere name}"
                            else abort "unkown option ${errorWhere name}";
-          checkConfig = (pkgs.lib.getAttr ["environment" "checkConfigurationOptions"] 
+          checkConfig = (attrByPath ["environment" "checkConfigurationOptions"] 
                   optionDeclarations.environment.checkConfigurationOptions.default
                   config);
       in # TODO: pass path to checker so it can show full path in the abort case

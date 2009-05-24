@@ -6,7 +6,7 @@
 
 let
 
-  inherit (pkgs.lib) optional isInList getAttr;
+  inherit (pkgs.lib) optional isInList attrByPath;
   
   # Abbreviations.
   cfg = config.services.xserver;
@@ -32,7 +32,7 @@ let
   resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
   sessionType = cfg.sessionType;
 
-  videoDriverModules = getAttr [ videoDriver ] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
+  videoDriverModules = attrByPath [ videoDriver ] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
 
   
   sessionCmd =
@@ -52,12 +52,12 @@ let
 
     
   modules = 
-    getAttr ["modulesFirst"] [] videoDriverModules
+    attrByPath ["modulesFirst"] [] videoDriverModules
     ++ [
       xorg.xorgserver
       xorg.xf86inputevdev
     ]
-    ++ getAttr ["modules"] [] videoDriverModules
+    ++ attrByPath ["modules"] [] videoDriverModules
     ++ (optional cfg.synaptics.enable ["${xorg.xf86inputsynaptics}"]);
 
 
