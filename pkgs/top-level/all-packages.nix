@@ -4209,6 +4209,10 @@ let
       inherit python setuptools makeWrapper lib;
     };
 
+  pythonPackages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+  });
+
   foursuite = import ../development/python-modules/4suite {
     inherit fetchurl stdenv python;
   };
