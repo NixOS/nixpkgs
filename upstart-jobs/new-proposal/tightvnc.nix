@@ -1,4 +1,6 @@
-{ path, thisConfig, config, lib, pkgs, upstartHelpers } : with upstartHelpers; rec {
+{ path, thisConfig, config, lib, pkgs, upstartHelpers } : with upstartHelpers;
+let inherit (builtins) lessThan pathExists attrNames; in
+rec {
   options = {
     description = "tightvnc vnc server (share virtual desktop over network";
 
@@ -18,7 +20,7 @@
         value must be something between 8 and 32
         '';
       apply = x: "-depth '${x}'";
-      check = x: (__lessThan x 33) && (7 __lessThan x); # not yet used
+      check = x: (lessThan x 33) && (7 lessThan x); # not yet used
     };
     display = mkOption {
       default = ":8";
@@ -33,7 +35,7 @@
         Can be created using vncpasswd
       '';
       apply = x: "-auth '${x}'";
-      check = __pathExists;
+      check = pathExists;
     };
     httpPort = mkOption {
       default = "-httpport 5900";
@@ -82,7 +84,7 @@ description \"${name}\"
 start on network-interfaces/started and xserver/started
 stop on network-interfaces/stop or xserver/stop
 
-exec ${pkgs.tightvnc}/bin/Xvnc -fp unix/:7100 ${lib.concatStringsSep " " (lib.mapIf (x : x != "description") configV (__attrNames options ) ) }
+exec ${pkgs.tightvnc}/bin/Xvnc -fp unix/:7100 ${lib.concatStringsSep " " (lib.mapIf (x : x != "description") configV (attrNames options ) ) }
   ";
 } ) ];
 }

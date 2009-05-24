@@ -24,7 +24,7 @@ let
   (
   let
     inherit (pkgs.lib) attrByPath; 
-    inherit (builtins) attrNames pathExists map;
+    inherit (builtins) attrNames pathExists map hasAttr getAttr;
     services = attrByPath [ "servicesProposal" ] {} config;
     nameToJobs = name : (
       (
@@ -54,10 +54,10 @@ let
                         else abort "service ${name} requested but there is no ${p}.nix or ${p}/default.nix file!";
           options = (jobFunc (args (abort "you can't use configV within options!"))).options;
           errorWhere = name : "${name} of service ${builtins.toString path}";
-          configV = name : if (__hasAttr name options ) then
-                             let opt = (__getAttr name options ); # this config option description
-                             in if (__hasAttr name thisConfig )
-                                then let v = (__getAttr name thisConfig); in if opt ? apply then opt.apply v else v
+          configV = name : if (hasAttr name options ) then
+                             let opt = (getAttr name options ); # this config option description
+                             in if (hasAttr name thisConfig )
+                                then let v = (getAttr name thisConfig); in if opt ? apply then opt.apply v else v
                                 else if opt ? default then opt.default else abort "you need to specify the configuration option ${errorWhere name}"
                            else abort "unkown option ${errorWhere name}";
           checkConfig = (attrByPath ["environment" "checkConfigurationOptions"] 
