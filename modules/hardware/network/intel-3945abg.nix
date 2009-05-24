@@ -2,14 +2,15 @@
 
 let
   inherit (config.boot) kernelPackages;
-  inherit (kernelPackages) kernel;
 in
+
+# !!! make this optional
 
 {
   boot = {
     extraModulePackages =
       pkgs.lib.optional
-        (!kernel.features ? iwlwifi)
+        (!kernelPackages.kernel.features ? iwlwifi)
         kernelPackages.iwlwifi;
   };
 
