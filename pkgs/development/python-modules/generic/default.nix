@@ -32,6 +32,11 @@ python.stdenv.mkDerivation rec {
      then attrs.propagatedBuildInputs
      else []);
 
+  patches =
+    (if attrs ? patches
+     then attrs.patches
+     else []);
+
   buildPhase = "true";
 
   doCheck =
@@ -42,6 +47,8 @@ python.stdenv.mkDerivation rec {
   # Many packages, but not all, support this.
   checkPhase = "python setup.py test";
 
+  # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
+  # to have a noticeable impact on small scripts.
   installPhase = ''
     ensureDir "$out/lib/${python.libPrefix}/site-packages"
 
