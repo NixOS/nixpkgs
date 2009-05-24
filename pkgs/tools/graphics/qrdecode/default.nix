@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "0.9.3" args; 
+  version = lib.attrByPath ["version"] "0.9.3" args; 
   buildInputs = with args; [
     libpng libcv
   ];

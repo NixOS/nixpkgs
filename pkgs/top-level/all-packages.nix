@@ -66,7 +66,7 @@ let
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
-  getConfig = attrPath: default: lib.getAttr attrPath default config;
+  getConfig = attrPath: default: lib.attrByPath attrPath default config;
 
 
   # Allow packages to be overriden globally via the `packageOverrides'
@@ -5987,12 +5987,23 @@ let
       inherit fetchurl stdenv jdk;
       inherit (gtkLibs) gtk glib;
       inherit (xlibs) libXtst;
-      inherit plugins;
+      inherit plugins makeOverridable unzip;
     };
 
   eclipsesdk = eclipse [];
 
-  eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [spoofax]));
+  eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [eclipsePlugins.spoofax]));
+  eclipseCDT = import ../applications/editors/eclipse/eclipse-cdt.nix {
+    inherit fetchurl stdenv eclipse;
+  };
+  # quinox p2 installer
+  eclipseMinimal = import ../applications/editors/eclipse/eclipse-p2-installer.nix {
+    inherit fetchurl stdenv eclipse;
+  };
+
+  eclipsePlugins = import ../applications/editors/eclipse/plugins.nix {
+    inherit fetchurl stdenv;
+  };
 
   ed = import ../applications/editors/ed {
     inherit fetchurl stdenv;
@@ -6300,7 +6311,8 @@ let
   };
 
   hugin = import ../applications/graphics/hugin {
-    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig exiv2 gettext ilmbase;
+    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig
+      exiv2 gettext ilmbase enblendenfuse autopanosiftc;
     wxGTK = wxGTK28;
     openexr = openexr_1_6_1;
   };
@@ -6773,11 +6785,6 @@ let
     # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
     # That's why I'v added ffmpeg_svn
   };
-
-  spoofax = import ../applications/editors/eclipse/plugins/spoofax {
-    inherit fetchurl stdenv;
-  };
-
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit clisp texinfo;

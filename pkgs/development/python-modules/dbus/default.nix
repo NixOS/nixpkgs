@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.83.0" a; 
+  version = a.lib.attrByPath ["version"] "0.83.0" a; 
   buildInputs = with a; [
     pkgconfig
   ];

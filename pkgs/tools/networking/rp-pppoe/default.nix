@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "3.10" a; 
+  version = a.lib.attrByPath ["version"] "3.10" a; 
   buildInputs = with a; [
     ppp   
   ];

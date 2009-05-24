@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "r8541" a; 
+  version = a.lib.attrByPath ["version"] "r8541" a; 
   buildInputs = with a; [
     gtk glib pkgconfig libX11 
   ];

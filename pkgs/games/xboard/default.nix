@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "4.2.7" a; 
+  version = a.lib.attrByPath ["version"] "4.2.7" a; 
   buildInputs = with a; [
     libX11 xproto libXt libXaw libSM libICE libXmu 
     libXext gnuchess

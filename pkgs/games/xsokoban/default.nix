@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "3.3c" a; 
+  version = a.lib.attrByPath ["version"] "3.3c" a; 
   buildInputs = with a; [
     a.libX11 a.xproto a.libXpm a.libXt
   ];

@@ -2,7 +2,7 @@ args : with args;
 	let 
        	localDefs = with (builderDefs.passthru.function {src="";});
 	let 
-	  checkFlag = flag : lib.getAttr [flag] false args;
+	  checkFlag = flag : lib.attrByPath [flag] false args;
 	in
 	  builderDefs.passthru.function ({
 		inherit src;
@@ -18,7 +18,7 @@ args : with args;
 		(fullDepEntry 
 		  args.Install 
 		  (["doMake"] 
-		  ++ (lib.getAttr ["extraInstallDeps"] [] args))
+		  ++ (lib.attrByPath ["extraInstallDeps"] [] args))
 		)
 		else fullDepEntry "" ["doMakeInstall"];
 

@@ -6,7 +6,7 @@ let
   fullDepEntry = args.fullDepEntry;
 
   buildInputs = lib.attrVals ["clisp" "texinfo"] args;
-  version = lib.getAttr ["version"] "0.9.4.1" args; 
+  version = lib.attrByPath ["version"] "0.9.4.1" args; 
 
   pkgName = "stumpwm";
 in

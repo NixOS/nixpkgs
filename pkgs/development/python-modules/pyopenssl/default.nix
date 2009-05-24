@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.8" a; 
+  version = a.lib.attrByPath ["version"] "0.8" a; 
   propagatedBuildInputs = with a; [
     openssl python
   ];

@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   simplyShare = args.simplyShare;
 
-  version = lib.getAttr ["version"] "2.0.0" args; 
+  version = lib.attrByPath ["version"] "2.0.0" args; 
   buildInputs = with args; [ ];
 in
 rec {

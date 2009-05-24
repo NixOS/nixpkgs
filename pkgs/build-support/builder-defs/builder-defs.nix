@@ -3,14 +3,14 @@ args: with args; with stringsWithDeps; with lib;
 {
         inherit writeScript; 
 
-        src = getAttr ["src"] "" args;
+        src = attrByPath ["src"] "" args;
 
-        addSbinPath = getAttr ["addSbinPath"] false args;
+        addSbinPath = attrByPath ["addSbinPath"] false args;
 
         forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
         forceCopy = ["COPYING" "LICENSE" "DISTRIBUTION" "LEGAL" 
           "README" "AUTHORS" "ChangeLog" "CHANGES" "LICENCE" "COPYRIGHT"] ++ 
-          (optional (getAttr ["forceCopyDoc"] true args) "doc"); 
+          (optional (attrByPath ["forceCopyDoc"] true args) "doc"); 
 
         hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
         
@@ -234,7 +234,7 @@ args: with args; with stringsWithDeps; with lib;
                 (if args ? goSrcDir then args.goSrcDir else "")
         ) ["minInit"];
 
-        configureCommand = getAttr ["configureCommand"] "./configure" args;
+        configureCommand = attrByPath ["configureCommand"] "./configure" args;
 
         doConfigure = fullDepEntry ("
                 ${configureCommand} --prefix=\"\$prefix\" ${toString configureFlags}
@@ -276,8 +276,8 @@ args: with args; with stringsWithDeps; with lib;
         '') ["minInit" "addInputs" "doUnpack"]; 
 
         doMakeInstall = fullDepEntry ("
-                make ${toString (getAttr ["makeFlags"] "" args)} "+
-                        "${toString (getAttr ["installFlags"] "" args)} install") ["doMake"];
+                make ${toString (attrByPath ["makeFlags"] "" args)} "+
+                        "${toString (attrByPath ["installFlags"] "" args)} install") ["doMake"];
 
         doForceShare = fullDepEntry (" 
                 ensureDir \"\$prefix/share\"
@@ -302,7 +302,7 @@ args: with args; with stringsWithDeps; with lib;
 
         patchFlags = if args ? patchFlags then args.patchFlags else "-p1";
 
-        patches = getAttr ["patches"] [] args;
+        patches = attrByPath ["patches"] [] args;
 
         toPatchCommand = s: "cat ${s} | patch ${toString patchFlags}";
 
@@ -326,7 +326,7 @@ args: with args; with stringsWithDeps; with lib;
                 (${envAdderList env}
                 echo '\"'\"${cmd}-orig\"'\"' '\"'\\\$@'\"' \n)  > \"${cmd}\"";
 
-        doWrap = cmd: fullDepEntry (wrapEnv cmd (getAttr ["wrappedEnv"] [] args)) ["minInit"];
+        doWrap = cmd: fullDepEntry (wrapEnv cmd (attrByPath ["wrappedEnv"] [] args)) ["minInit"];
 
         makeManyWrappers = wildcard : wrapperFlags : fullDepEntry (''
           for i in ${wildcard}; do
@@ -347,7 +347,7 @@ args: with args; with stringsWithDeps; with lib;
 
         doPropagate = fullDepEntry ("
                 ensureDir \$out/nix-support
-                echo '${toString (getAttr ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
+                echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
         /*debug = x:(__trace x x);
@@ -356,37 +356,37 @@ args: with args; with stringsWithDeps; with lib;
         replaceScriptVar = file: name: value: "sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}";
         replaceInScript = file: l: concatStringsSep "\n" ((pairMap (replaceScriptVar file) l));
         replaceScripts = l: concatStringsSep "\n" (pairMap replaceInScript l);
-        doReplaceScripts = fullDepEntry (replaceScripts (getAttr ["shellReplacements"] [] args)) ["minInit"];
+        doReplaceScripts = fullDepEntry (replaceScripts (attrByPath ["shellReplacements"] [] args)) ["minInit"];
         makeNest = x: if x == defNest.text then x else "startNest\n" + x + "\nstopNest\n";
         textClosure = a: steps: textClosureMap makeNest a (["defNest"] ++ steps);
 
         inherit noDepEntry fullDepEntry packEntry;
 
-        defList = getAttr ["defList"] [] args;
+        defList = attrByPath ["defList"] [] args;
         getVal = getValue args defList;
         check = checkFlag args;
-        reqsList = getAttr ["reqsList"] [] args;
+        reqsList = attrByPath ["reqsList"] [] args;
         buildInputsNames = filter (x: null != getVal x)
                 (uniqList {inputList = 
                   (concatLists (map 
                     (x: if x==[] then [] else builtins.tail x) 
                   reqsList));});
-        configFlags = getAttr ["configFlags"] [] args;
-        buildFlags = getAttr ["buildFlags"] [] args;
-        nameSuffixes = getAttr ["nameSuffixes"] [] args;
+        configFlags = attrByPath ["configFlags"] [] args;
+        buildFlags = attrByPath ["buildFlags"] [] args;
+        nameSuffixes = attrByPath ["nameSuffixes"] [] args;
         autoBuildInputs = assert (checkReqs args defList reqsList);
                 filter (x: x!=null) (map getVal buildInputsNames);
         autoConfigureFlags = condConcat "" configFlags check;
         autoMakeFlags = condConcat "" buildFlags check;
-        useConfig = getAttr ["useConfig"] false args;
+        useConfig = attrByPath ["useConfig"] false args;
         realBuildInputs = 
                 lib.closePropagation ((if useConfig then 
                         autoBuildInputs else 
-                        getAttr ["buildInputs"] [] args)++
-                        (getAttr ["propagatedBuildInputs"] [] args));
+                        attrByPath ["buildInputs"] [] args)++
+                        (attrByPath ["propagatedBuildInputs"] [] args));
         configureFlags = if useConfig then autoConfigureFlags else 
-            getAttr ["configureFlags"] "" args;
-        makeFlags = if useConfig then autoMakeFlags else getAttr ["makeFlags"] "" args;
+            attrByPath ["configureFlags"] "" args;
+        makeFlags = if useConfig then autoMakeFlags else attrByPath ["makeFlags"] "" args;
 
         inherit lib;
 
@@ -394,7 +394,7 @@ args: with args; with stringsWithDeps; with lib;
                 x.text + "\n" + after ;};
 
 	createDirs = fullDepEntry (concatStringsSep ";"
-		(map (x: "ensureDir ${x}") (getAttr ["neededDirs"] [] args))
+		(map (x: "ensureDir ${x}") (attrByPath ["neededDirs"] [] args))
 	) ["minInit" "defEnsureDir"];
 
 	copyExtraDoc = fullDepEntry (''
@@ -404,20 +404,20 @@ args: with args; with stringsWithDeps; with lib;
 	'' + (concatStringsSep ";"
                (map 
 	         (x: ''cp "${x}" "$out/share/doc/$name" || true;'') 
-		 (getAttr ["extraDoc"] [] args)))) ["minInit" "defEnsureDir" "doUnpack"];
+		 (attrByPath ["extraDoc"] [] args)))) ["minInit" "defEnsureDir" "doUnpack"];
 
         realPhaseNames = 
-	  (optional ([] != getAttr ["neededDirs"] [] args) "createDirs")
+	  (optional ([] != attrByPath ["neededDirs"] [] args) "createDirs")
 	  ++
 	  args.phaseNames 
 	  ++ 
           ["doForceShare" "doPropagate" "doForceCopy"]
 	  ++
-	  (optional ([] != getAttr ["extraDoc"] [] args) "copyExtraDoc")
+	  (optional ([] != attrByPath ["extraDoc"] [] args) "copyExtraDoc")
           ++
-          (optional (getAttr ["doCheck"] false args) "doMakeCheck")
+          (optional (attrByPath ["doCheck"] false args) "doMakeCheck")
           ++
-          (optional (getAttr ["alwaysFail"] false args) "doFail")
+          (optional (attrByPath ["alwaysFail"] false args) "doFail")
           ;
 
         doFail = noDepEntry "
@@ -429,7 +429,7 @@ args: with args; with stringsWithDeps; with lib;
           make check
         '') ["minInit"];
 
-        extraDerivationAttrs = lib.getAttr ["extraDerivationAttrs"] {} args;
+        extraDerivationAttrs = lib.attrByPath ["extraDerivationAttrs"] {} args;
 
         # for overrides..
 	builderDefsArgs = args;
@@ -459,14 +459,14 @@ args: with args; with stringsWithDeps; with lib;
                         'Open($1);
                         ${optionalString (args ? extraFontForgeCommands) args.extraFontForgeCommands
                         }Reencode("unicode");
-                         ${optionalString (getAttr ["createTTF"] true args) ''Generate($1:r + ".ttf");''}
-                         ${optionalString (getAttr ["createOTF"] true args) ''Generate($1:r + ".otf");''}
+                         ${optionalString (attrByPath ["createTTF"] true args) ''Generate($1:r + ".ttf");''}
+                         ${optionalString (attrByPath ["createOTF"] true args) ''Generate($1:r + ".otf");''}
                          Reencode("TeX-Base-Encoding");
-                         ${optionalString (getAttr ["createAFM"] true args) ''Generate($1:r + ".afm");''}
-                         ${optionalString (getAttr ["createPFM"] true args) ''Generate($1:r + ".pfm");''}
-                         ${optionalString (getAttr ["createPFB"] true args) ''Generate($1:r + ".pfb");''}
-                         ${optionalString (getAttr ["createMAP"] true args) ''Generate($1:r + ".map");''}
-                         ${optionalString (getAttr ["createENC"] true args) ''Generate($1:r + ".enc");''}
+                         ${optionalString (attrByPath ["createAFM"] true args) ''Generate($1:r + ".afm");''}
+                         ${optionalString (attrByPath ["createPFM"] true args) ''Generate($1:r + ".pfm");''}
+                         ${optionalString (attrByPath ["createPFB"] true args) ''Generate($1:r + ".pfb");''}
+                         ${optionalString (attrByPath ["createMAP"] true args) ''Generate($1:r + ".map");''}
+                         ${optionalString (attrByPath ["createENC"] true args) ''Generate($1:r + ".enc");''}
                         ' $i; 
         done
    '') ["minInit" "addInputs" "doUnpack"];

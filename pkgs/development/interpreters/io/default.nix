@@ -5,7 +5,7 @@ let
   fullDepEntry = args.fullDepEntry;
   doPatchShebangs = args.doPatchShebangs;
 
-  version = lib.getAttr ["version"] "2008.03.30" args; 
+  version = lib.attrByPath ["version"] "2008.03.30" args; 
   buildInputs = with args; [
     zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2

@@ -5,7 +5,7 @@ let
   doPatchShebangs = args.doPatchShebangs;
   makeManyWrappers = args.makeManyWrappers;
 
-  version = lib.getAttr ["version"] "0.0.21" args; 
+  version = lib.attrByPath ["version"] "0.0.21" args; 
   buildInputs = with args; [
     intltool python imagemagick gtk glib webkit libxml2 
     gtksourceview pkgconfig which gettext makeWrapper 

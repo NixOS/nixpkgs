@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.getAttr ["version"] "0.5.1" args; 
+  version = lib.attrByPath ["version"] "0.5.1" args; 
   buildInputs = with args; [
     chipmunk sqlite curl zlib bzip2 libjpeg libpng
     freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf 

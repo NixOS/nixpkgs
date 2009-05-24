@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.getAttr ["version"] "0.10.1" args; 
+  version = lib.attrByPath ["version"] "0.10.1" args; 
   buildInputs = with args; [
     
   ];

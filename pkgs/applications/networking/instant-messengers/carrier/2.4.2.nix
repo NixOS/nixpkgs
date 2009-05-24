@@ -5,7 +5,7 @@ args : with args;
     (to use a fresher pidgin build)
 */
 let 
-  externalPurple2 = (lib.getAttr ["purple2Source"] null args) != null; 
+  externalPurple2 = lib.attrByPath ["purple2Source"] null args) != null; 
 in
 rec {
   src = fetchurl {

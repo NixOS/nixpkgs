@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.18" a; 
+  version = a.lib.attrByPath ["version"] "0.18" a; 
   buildInputs = with a; [
     zlib e2fsprogs acl 
   ];

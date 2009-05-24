@@ -16,14 +16,14 @@ let
   checkAttrInclusion = s: a: b:
 	(
 	if (! isAttrs b) then s else
-	if (lib.getAttr ["_type"] "" b) == "option" then "" else
+	if (lib.attrByPath ["_type"] "" b) == "option" then "" else
 	findInList (x : x != "") 
 		( map (x: if (x == "servicesProposal") # this attr will be checked at another place ( -> upstart-jobs/default.nix )
                        then ""
                        else checkAttrInclusion 
 			(s + "." + x) 
 			(__getAttr x a)
-			(lib.getAttr [x] null b)) 
+			(lib.attrByPath [x] null b)) 
 		(attrNames a)) ""
 	);
 in 	

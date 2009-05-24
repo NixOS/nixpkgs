@@ -111,7 +111,7 @@ rec {
   pairMap = innerPairMap [];
 
   
-  # shortcut for getAttr ["name"] default attrs
+  # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
     if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
@@ -131,14 +131,14 @@ rec {
   checkFlag = attrSet: name:
 	if (name == "true") then true else
 	if (name == "false") then false else
-	if (elem name (getAttr ["flags"] [] attrSet)) then true else
-	getAttr [name] false attrSet ;
+	if (elem name (attrByPath ["flags"] [] attrSet)) then true else
+	attrByPath [name] false attrSet ;
 
 
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
-  ( getAttr [name] (if checkFlag attrSet name then true else
+  ( attrByPath [name] (if checkFlag attrSet name then true else
 	if argList == [] then null else
 	let x = builtins.head argList; in
 		if (head x) == name then 

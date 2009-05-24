@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "3.3.0" args; 
+  version = lib.attrByPath ["version"] "3.3.0" args; 
   _buildInputs = with args; [
     python e2fsprogs gnutls pkgconfig libjpeg 
     ncurses SDL libvncserver zlib graphviz ghostscript 

@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "3.4.3" a; 
+  version = a.lib.attrByPath ["version"] "3.4.3" a; 
   buildInputs = with a; [
     ncurses flex bison
   ];

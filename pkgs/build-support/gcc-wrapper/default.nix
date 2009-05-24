@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     let gcc_ = if gcc != null then gcc else {}; in
     (if gcc_ ? meta then removeAttrs gcc.meta ["priority"] else {}) //
     { description =
-        stdenv.lib.getAttr ["meta" "description"] "System C compiler" gcc_
+        stdenv.lib.attrByPath ["meta" "description"] "System C compiler" gcc_
         + " (wrapper script)";
     };
 

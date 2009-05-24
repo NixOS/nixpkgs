@@ -3,7 +3,7 @@ let
   fetchurl = args.fetchurl;
   lib=args.lib;
 
-  version = lib.getAttr ["version"] "3.01" args; 
+  version = lib.attrByPath ["version"] "3.01" args; 
   buildInputs = with args; [
     libX11 xproto libXext xextproto libXtst gtk
     libXi inputproto pkgconfig recordproto 

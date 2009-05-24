@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			((lib.optional 
-				(lib.getAttr ["freshHAL"] false args)
+				(lib.attrByPath ["freshHAL"] false args)
 				preBuild)
 			++ [doMakeInstall postInstall
 			doForceShare doPropagate]));

@@ -1,5 +1,5 @@
 args : with args; 
-let version = lib.getAttr ["version"] "r34824" args; in
+let version = lib.attrByPath ["version"] "r34824" args; in
 rec {
   src = fetchurl {
     url = "http://nightly.webkit.org/files/trunk/src/WebKit-${version}.tar.bz2";

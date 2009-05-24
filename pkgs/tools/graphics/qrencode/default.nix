@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.getAttr ["version"] "3.0.3" args; 
+  version = lib.attrByPath ["version"] "3.0.3" args; 
   buildInputs = with args; [
     libpng pkgconfig
   ];

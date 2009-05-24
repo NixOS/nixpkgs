@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.61" a; 
+  version = a.lib.attrByPath ["version"] "0.61" a; 
   buildInputs = with a; [
     mesa libX11 xproto tcl freeglut
   ];

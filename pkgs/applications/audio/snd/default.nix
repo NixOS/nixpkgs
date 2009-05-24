@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "9.4" args; 
+  version = lib.attrByPath ["version"] "9.4" args; 
   buildInputs = with args; [gtk glib pkgconfig 
      libXpm gmp gettext libX11 fftw]
       ++ (lib.optional (args ? ruby) args.ruby)

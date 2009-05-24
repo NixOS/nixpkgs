@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "0.7.47" args; 
+  version = lib.attrByPath ["version"] "0.7.47" args; 
   buildInputs = with args; [
     openssl zlib pcre libxml2 libxslt
   ];

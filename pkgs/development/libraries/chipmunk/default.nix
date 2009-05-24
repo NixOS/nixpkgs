@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "4.1.0" args; 
+  version = lib.attrByPath ["version"] "4.1.0" args; 
   buildInputs = with args; [
     cmake freeglut mesa 
     libX11 xproto inputproto libXi libXmu

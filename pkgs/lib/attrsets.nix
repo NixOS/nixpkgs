@@ -12,21 +12,24 @@ rec {
 
   /* Return an attribute from nested attribute sets.  For instance
      ["x" "y"] applied to some set e returns e.x.y, if it exists.  The
-     default value is returned otherwise.  !!! there is also
-     builtins.getAttr (is there a better name for this function?)
-  */
-  getAttr = attrPath: default: e:
+     default value is returned otherwise.  */
+  attrByPath = attrPath: default: e:
     let attr = head attrPath;
     in
       if attrPath == [] then e
       else if builtins ? hasAttr && hasAttr attr e
-      then getAttr (tail attrPath) default (builtins.getAttr attr e)
+      then attrByPath (tail attrPath) default (builtins.getAttr attr e)
       else default;
+
+  # keep compatibility for some time. will be removed soon (the name getAttr
+  # should only be used for the builtins primop)
+  getAttr = a : b : c : builtins.trace "depreceated usage of lib.getAttr!"
+    (attrByPath a b c);
 
 
   getAttrFromPath = attrPath: set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in getAttr attrPath (abort errorMsg) set;
+    in attrByPath attrPath (abort errorMsg) set;
       
 
   /* Return the specified attributes from a set.

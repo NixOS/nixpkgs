@@ -1,4 +1,5 @@
-{stdenv, fetchurl, panotools, cmake, wxGTK, libtiff, libpng, openexr, boost, pkgconfig, exiv2, gettext, ilmbase }:
+{stdenv, fetchurl, panotools, cmake, wxGTK, libtiff, libpng, openexr, boost,
+  pkgconfig, exiv2, gettext, ilmbase, enblendenfuse, autopanosiftc }:
 
 stdenv.mkDerivation {
   name = "hugin-0.7.0";
@@ -35,6 +36,10 @@ stdenv.mkDerivation {
     eval -- "cmake .. $cmakeFlags"
     set +x
     '';
+  postInstall = ''
+    ensureDir $out/nix-support
+    echo ${enblendenfuse} ${autopanosiftc} > $out/nix-support/$out/nix-support/propagated-user-env-packages
+  '';
 
   meta = {
     homepage = http://hugin.sourceforge.net/;

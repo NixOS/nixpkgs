@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
   
-  version = a.lib.getAttr ["version"] "1.2" a; 
+  version = a.lib.attrByPath ["version"] "1.2" a; 
   buildInputs = with a; [
     gpm fontconfig freetype pkgconfig
   ];

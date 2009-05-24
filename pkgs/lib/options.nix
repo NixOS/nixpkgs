@@ -193,7 +193,7 @@ rec {
             cfg3 = noImportConditions cfg2;
         in cfg3;
 
-      getRequire = x: toList (getAttr ["require"] [] (preprocess x));
+      getRequire = x: toList (attrByPath ["require"] [] (preprocess x));
       getRecusiveRequire = x:
         fold (cfg: l:
           if isPath cfg then
@@ -221,7 +221,7 @@ rec {
     lib.fix (fixOptionSetsFun merge pkgs opts);
 
   optionAttrSetToDocList = l: attrs:
-    if (getAttr ["_type"] "" attrs) == "option" then
+    if (attrByPath ["_type"] "" attrs) == "option" then
       [({
 	#inherit (attrs) description;
         description = if attrs ? description then attrs.description else 

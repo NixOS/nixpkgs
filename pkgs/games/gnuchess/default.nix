@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "5.07" a; 
+  version = a.lib.attrByPath ["version"] "5.07" a; 
   buildInputs = with a; [
     flex
   ];
