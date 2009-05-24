@@ -118,6 +118,7 @@ rec {
         pkgs.e2fsprogs
         pkgs.findutils
         pkgs.glibc # for ldd, getent
+        pkgs.glibcLocales
         pkgs.gnugrep
         pkgs.gnused
         pkgs.gnutar
