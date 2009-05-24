@@ -21,13 +21,13 @@ rec {
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
-  # keep compatibility for some time. will be removed soon (the name getAttr
-  # should only be used for the builtins primop)
-  getAttr = a : b : if isString a
-    then
-      # should have been called from builtins scope. Don't mind. use builtin function
-      builtins.getAttr a b
-    else  c : builtins.trace "depreceated usage of lib.getAttr!" (attrByPath a b c);
+  /* Backwards compatibility hack: lib.attrByPath used to be called
+     lib.getAttr, which was confusing given that there was also a
+     builtins.getAttr.  Eventually we'll drop this hack and
+     lib.getAttr will just be an alias for builtins.getAttr. */
+  getAttr = a: b: if isString a
+    then builtins.getAttr a b
+    else c: builtins.trace "Deprecated use of lib.getAttr!" (attrByPath a b c);
 
 
   getAttrFromPath = attrPath: set:
