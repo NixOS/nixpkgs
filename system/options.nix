@@ -382,7 +382,7 @@ in
     #../modules/hardware/network/intel-3945abg.nix
     ../boot/boot-stage-2.nix
     ../etc/default.nix
-    ../installer/grub.nix
+    ../modules/installer/grub/grub.nix
     ../modules/services/audio/alsa.nix
     ../modules/services/audio/pulseaudio.nix
     ../modules/services/databases/mysql.nix
@@ -438,13 +438,13 @@ in
     ../modules/services/x11/xserver/default.nix
     ../system/activate-configuration.nix
     ../system/assertion.nix
-    ../system/fonts.nix
+    ../modules/config/fonts.nix
     ../system/i18n.nix
     ../system/kernel.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix
-    ../system/nixos-security.nix
-    ../system/sudo.nix
+    ../modules/security/setuid-wrappers.nix
+    ../modules/security/sudo.nix
     ../system/system-options.nix
     ../system/unix-odbc-drivers.nix
     ../system/users-groups.nix

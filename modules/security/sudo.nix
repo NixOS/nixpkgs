@@ -52,7 +52,7 @@ mkIf cfg.enable {
     options
 
     # config.environment.etc
-    ../etc/default.nix
+    # ../etc/default.nix
 
     # ? # config.environment.extraPackages
     # ? # config.security.extraSetuidPrograms
@@ -69,7 +69,7 @@ mkIf cfg.enable {
 
     etc = [
       {
-        source = ../etc/pam.d/sudo;
+        source = ./sudo.pam;
         target = "pam.d/sudo";
       }
       {

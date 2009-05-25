@@ -86,7 +86,7 @@ in
 let
 
   grubMenuBuilder = pkgs.substituteAll {
-    src = ../installer/grub-menu-builder.sh;
+    src = ./grub-menu-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
@@ -100,7 +100,7 @@ in
     options
 
     # config.system.build
-    ../system/system-options.nix
+    # ../system/system-options.nix
   ];
 
   system = {
