@@ -40,9 +40,9 @@ Usage:
   [1] maybe this behaviour should be removed to keep things simple (?)
 */
 
-{stdenv, lib}:
-
-with lib;
+with import ./lists.nix;
+with import ./attrsets.nix;
+with import ./strings.nix;
 
 rec {
 

@@ -165,9 +165,7 @@ let
 
   builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
 
-  stringsWithDeps = import ../lib/strings-with-deps.nix {
-    inherit stdenv lib;
-  };
+  stringsWithDeps = lib.stringsWithDeps;
 
   # Call a specific version of a Nix expression, that is,
   # `selectVersion ./foo {version = "0.1.2"; args...}' evaluates to
@@ -7232,10 +7230,7 @@ let
     inherit stdenv fetchurl mesa;
     wxGTK = wxGTK28deps {unicode = false;};
     inherit (xlibs) libX11 xproto;
-    stringsWithDeps = import ../lib/strings-with-deps.nix {
-      inherit stdenv lib;
-    };
-    inherit builderDefs;
+    inherit stringsWithDeps builderDefs;
   };
 
   gemrb = import ../games/gemrb {

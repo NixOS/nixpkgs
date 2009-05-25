@@ -21,6 +21,7 @@ rec {
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
+      
   /* Backwards compatibility hack: lib.attrByPath used to be called
      lib.getAttr, which was confusing given that there was also a
      builtins.getAttr.  Eventually we'll drop this hack and
