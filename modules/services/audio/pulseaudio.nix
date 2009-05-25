@@ -45,11 +45,7 @@ mkIf config.services.pulseaudio.enable {
   ];
 
   environment = {
-
-    extraPackages =
-      pkgs.lib.optional
-        (!config.environment.cleanStart)
-        pkgs.pulseaudio;
+    extraPackages = [pkgs.pulseaudio];
   };
 
   users = {

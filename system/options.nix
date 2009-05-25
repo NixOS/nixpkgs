@@ -157,9 +157,10 @@ in
           inherit (pkgs) module_init_tools;
           inherit (config.system) modulesTree;
         };
-        description = "
-          Path to the modprobe binary used by the system.
-        ";
+        description = ''
+          Wrapper around modprobe that sets the path to the modules
+          tree.
+        '';
       };
 
       # !!! The mount option should not stay in /system/option.nix
@@ -178,8 +179,9 @@ in
           } + "/sbin";
         };
         description = "
-          Install a special version of mount to search mount tools in
-          unusual path.
+          A patched `mount' command that looks in a directory in the Nix
+          store instead of in /sbin for mount helpers (like mount.ntfs-3g or
+          mount.cifs).
         ";
       };
     };
@@ -447,6 +449,7 @@ in
     ../modules/system/upstart-events/ctrl-alt-delete.nix
     ../modules/system/upstart-events/halt.nix
     ../modules/system/upstart-events/maintenance-shell.nix
+    ../modules/config/system-path.nix
     ../system/assertion.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix

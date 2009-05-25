@@ -107,10 +107,7 @@ in
       }
     ];
 
-    extraPackages = ifEnabled (
-      pkgs.lib.optional
-        (!config.environment.cleanStart)
-        pkgs.fcron);
+    extraPackages = ifEnabled [pkgs.fcron];
   };
 
   services = {

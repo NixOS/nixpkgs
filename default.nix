@@ -19,7 +19,6 @@ in
     grubMenuBuilder
     kernel
     modulesTree
-    nix
     system
     systemPath
     config
@@ -40,7 +39,9 @@ in
     modulesClosure
     ;
     
-  nixFallback = system.nix;
+  nix = system.config.environment.nix;
+  
+  nixFallback = (import nixpkgs {}).nixUnstable;
 
   manifests = system.config.installer.manifests; # exported here because nixos-rebuild uses it
 

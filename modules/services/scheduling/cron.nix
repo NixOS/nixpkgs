@@ -58,7 +58,6 @@ in
     # ? # config.time.timeZone
     # ? # config.environment.etc
     # ? # config.environment.extraPackages
-    # ? # config.environment.cleanStart
     options
   ];
 
@@ -71,10 +70,7 @@ in
       }
     ];
 
-    extraPackages =
-      pkgs.lib.optional
-        (!config.environment.cleanStart)
-        pkgs.cron;
+    extraPackages = [pkgs.cron];
   };
 
   services = {

@@ -34,31 +34,6 @@ let
           builtins.head list;
       };
 
-      overridePath = mkOption {
-        default = [];
-        description = ''
-          You should not redefine this option unless you have trouble with a
-          package define in <varname>path</varname>.
-        '';
-      };
-
-      path = mkOption {
-        default = [];
-        description = ''
-          The packages you want in the boot environment.
-        '';
-        apply = list: pkgs.buildEnv {
-          name = "system-path";
-          paths = config.system.overridePath ++ list;
-
-          # Note: We need `/lib' to be among `pathsToLink' for NSS modules
-          # to work.
-          inherit (config.environment) pathsToLink;
-
-          ignoreCollisions = true;
-        };
-      };
-
     };
   };
 in
