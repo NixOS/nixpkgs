@@ -39,7 +39,7 @@ let
   nixEnvVars = config.nix.envVars;
   modulesTree = config.system.modulesTree;
   nssModulesPath = config.system.nssModules.path;
-  wrapperDir = config.system.wrapperDir;
+  wrapperDir = config.security.wrapperDir;
   systemPath = config.system.path;
   binsh = config.system.build.binsh;
 

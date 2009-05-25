@@ -26,20 +26,12 @@ let
       shell = mkOption {
         default = "/var/run/current-system/sw/bin/bash";
         description = ''
-          You should not redefine this option unless you want to change the
-          bash version for security issues.
+          This option defines the path to the Bash shell.  It should
+          generally not be overriden.
         '';
         merge = list:
           assert list != [] && builtins.tail list == [];
           builtins.head list;
-      };
-
-      wrapperDir = mkOption {
-        default = "/var/setuid-wrappers";
-        description = ''
-          You should not redefine this option unless you want to change the
-          path for security issues.
-        '';
       };
 
       overridePath = mkOption {
@@ -75,7 +67,6 @@ in
 let
   inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
   inherit (pkgs.lib) mapRecordFlatten;
-
 in
 
 {
@@ -103,14 +94,14 @@ in
         let path = [
           pkgs.coreutils pkgs.gnugrep pkgs.findutils
           pkgs.glibc # needed for getent
-          pkgs.glibcLocales # needed for getent
           pkgs.pwdutils
+          pkgs.nettools # needed for hostname
         ]; in noDepEntry ''
-        export PATH=/empty
-        for i in ${toString path}; do
-          PATH=$PATH:$i/bin:$i/sbin;
-        done
-      '';
+          export PATH=/empty
+          for i in ${toString path}; do
+            PATH=$PATH:$i/bin:$i/sbin;
+          done
+        '';
 
       stdio = fullDepEntry ''
         # Needed by some programs.
@@ -220,64 +211,6 @@ in
         "users" # nixbld group
       ];
 
-      path = fullDepEntry ''
-        PATH=${config.system.path}/bin:${config.system.path}/sbin:$PATH
-      '' [ "defaultPath" ];
-
-      setuid =
-        let
-          setuidPrograms = builtins.toString (
-            config.security.setuidPrograms ++
-            config.security.extraSetuidPrograms ++
-            map (x: x.program) config.security.setuidOwners
-          );
-
-          adjustSetuidOwner = pkgs.lib.concatStrings (map
-            (_entry: let entry = {
-              owner = "nobody";
-              group = "nogroup";
-              setuid = false;
-              setgid = false;
-            } //_entry; in
-            ''
-              chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
-              chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
-              chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program}
-            '')
-            config.security.setuidOwners);
-
-        in fullDepEntry ''
-        # Make a few setuid programs work.
-        save_PATH="$PATH"
-
-        # Add the default profile to the search path for setuid executables.
-        PATH="/nix/var/nix/profiles/default/sbin:$PATH"
-        PATH="/nix/var/nix/profiles/default/bin:$PATH"
-
-        wrapperDir=${config.system.wrapperDir}
-        if test -d $wrapperDir; then rm -f $wrapperDir/*; fi # */
-        mkdir -p $wrapperDir
-        for i in ${setuidPrograms}; do
-            program=$(type -tp $i)
-            if test -z "$program"; then
-        	# XXX: It would be preferable to detect this problem before
-        	# `activate-configuration' is invoked.
-        	#echo "WARNING: No executable named \`$i' was found" >&2
-        	#echo "WARNING: but \`$i' was specified as a setuid program." >&2
-                true
-            else
-                cp "$(type -tp setuid-wrapper)" $wrapperDir/$i
-                echo -n "$program" > $wrapperDir/$i.real
-                chown root.root $wrapperDir/$i
-                chmod 4755 $wrapperDir/$i
-            fi
-        done
-
-        ${adjustSetuidOwner}
-
-        PATH="$save_PATH"
-      '' [ "path" "users" ];
-
       hostname = fullDepEntry ''
         # Set the host name.  Don't clear it if it's not configured in the
         # NixOS configuration, since it may have been set by dhclient in the
@@ -290,7 +223,7 @@ in
               hostname ""
             fi
         ''}
-      '' [ "path" ];
+      '' [ "defaultPath" ];
 
       # The activation has to be done at the end. This is forced at the apply
       # function of activationScripts option
@@ -302,7 +235,7 @@ in
         ln -sfn "$(readlink -f "$systemConfig")" /var/run/current-system
 
         # Prevent the current configuration from being garbage-collected.
-       ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
+        ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
       '';
     };
   };

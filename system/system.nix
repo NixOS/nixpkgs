@@ -34,8 +34,6 @@ rec {
 
   kernel = kernelPackages.kernel;
 
-  modulesTree = config.system.modulesTree;
-
 
   # The initial ramdisk.
   initialRamdiskStuff = import ../modules/system/boot/stage-1.nix {
@@ -61,10 +59,6 @@ rec {
   modprobe = config.system.sbin.modprobe;
 
 
-  # Environment variables for running Nix.
-  nixEnvVars = config.nix.envVars;
-
-
   # The static parts of /etc.
   etc = config.system.build.etc;
 
@@ -73,16 +67,6 @@ rec {
   fontDir = config.system.build.x11Fonts;
 
   
-  # The wrapper setuid programs (since we can't have setuid programs
-  # in the Nix store).
-  wrapperDir = config.system.wrapperDir;
-  
-  setuidWrapper = import ../helpers/setuid {
-    inherit (pkgs) stdenv;
-    inherit wrapperDir;
-  };
-
-
   # A patched `mount' command that looks in a directory in the Nix
   # store instead of in /sbin for mount helpers (like mount.ntfs-3g or
   # mount.cifs).
@@ -104,7 +88,6 @@ rec {
         nixosTools.nixosCheckout
         nixosTools.nixosHardwareScan
         nixosTools.nixosGenSeccureKeys
-        setuidWrapper
       ];
       path =
         pkgs.lib.optionals (!config.environment.cleanStart) [
