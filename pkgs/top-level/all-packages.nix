@@ -5274,7 +5274,7 @@ let
     inherit gettext;
     inherit (gtkLibs) glib;
   };
-  
+
   powertop = import ../os-specific/linux/powertop {
     inherit fetchurl stdenv ncurses gettext;
   };
@@ -5987,9 +5987,9 @@ let
   eclipsesdk = eclipse [];
 
   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [eclipsePlugins.spoofax]));
-  eclipseCDT = import ../applications/editors/eclipse/eclipse-cdt.nix {
-    inherit fetchurl stdenv eclipse;
-  };
+#   eclipseCDT = import ../applications/editors/eclipse/eclipse-cdt.nix {
+#     inherit fetchurl stdenv eclipse;
+#   };
   # quinox p2 installer
   eclipseMinimal = import ../applications/editors/eclipse/eclipse-p2-installer.nix {
     inherit fetchurl stdenv eclipse;
