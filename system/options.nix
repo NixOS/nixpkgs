@@ -380,9 +380,14 @@ in
 
   require = [
     #../modules/hardware/network/intel-3945abg.nix
-    ../boot/boot-stage-2.nix
     ../etc/default.nix
+    ../modules/config/fonts.nix
+    ../modules/config/i18n.nix
+    ../modules/config/unix-odbc-drivers.nix
+    ../modules/config/users-groups.nix
     ../modules/installer/grub/grub.nix
+    ../modules/security/setuid-wrappers.nix
+    ../modules/security/sudo.nix
     ../modules/services/audio/alsa.nix
     ../modules/services/audio/pulseaudio.nix
     ../modules/services/databases/mysql.nix
@@ -436,28 +441,23 @@ in
     ../modules/services/web-servers/tomcat.nix # untested, too lazy to get that jdk
     ../modules/services/x11/xfs.nix
     ../modules/services/x11/xserver/default.nix
-    ../system/activate-configuration.nix
+    ../modules/system/activation/activation-script.nix
+    ../modules/system/boot/kernel.nix
+    ../modules/system/boot/stage-2.nix
+    ../modules/system/upstart-events/ctrl-alt-delete.nix
+    ../modules/system/upstart-events/halt.nix
+    ../modules/system/upstart-events/maintenance-shell.nix
     ../system/assertion.nix
-    ../modules/config/fonts.nix
-    ../system/i18n.nix
-    ../system/kernel.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix
-    ../modules/security/setuid-wrappers.nix
-    ../modules/security/sudo.nix
     ../system/system-options.nix
-    ../system/unix-odbc-drivers.nix
-    ../system/users-groups.nix
     ../upstart-jobs/cron/locate.nix
-    ../upstart-jobs/ctrl-alt-delete.nix
     ../upstart-jobs/default.nix
     ../upstart-jobs/filesystems.nix
     ../upstart-jobs/guest-users.nix
-    ../upstart-jobs/halt.nix
     ../upstart-jobs/kbd.nix
     ../upstart-jobs/ldap
     ../upstart-jobs/lvm.nix
-    ../upstart-jobs/maintenance-shell.nix
     ../upstart-jobs/network-interfaces.nix
     ../upstart-jobs/pcmcia.nix
     ../upstart-jobs/swap.nix

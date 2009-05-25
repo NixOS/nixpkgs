@@ -144,7 +144,7 @@ rec {
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = pkgs.substituteAll {
-    src = ./boot-stage-1-init.sh;
+    src = ./stage-1-init.sh;
 
     shell = "${extraUtils}/bin/bash";
 
@@ -192,7 +192,7 @@ rec {
             suffix = "/bin/splash_helper";
             symlink = "/${kernelPackages.splashutils.helperName}";
           } # */
-          { object = import ../helpers/unpack-theme.nix {
+          { object = import ../../../helpers/unpack-theme.nix {
               inherit (pkgs) stdenv;
               theme = config.services.ttyBackgrounds.defaultTheme;
             };

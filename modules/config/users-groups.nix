@@ -41,7 +41,7 @@ in
 
 ###### implementation
 let
-  ids = import ./ids.nix;
+  ids = import ../../system/ids.nix;
   defaultShell = config.system.shell;
 
   # User accounts to be created/updated by NixOS.
@@ -151,7 +151,7 @@ in
     options
 
     # config.system.activationScripts
-    ../system/activate-configuration.nix
+    # ../system/activate-configuration.nix
   ];
 
   system = {

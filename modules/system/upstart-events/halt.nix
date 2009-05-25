@@ -92,7 +92,8 @@ let
           sync || true
       
       
-          # Right now all events above power off the system.
+          # Either reboot or power-off the system.  Note that the "halt"
+          # event also does a power-off.
           if test ${event} = reboot; then
               exec reboot -f
           else

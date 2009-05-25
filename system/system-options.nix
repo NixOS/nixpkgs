@@ -83,7 +83,7 @@ in
     option
 
     # config.system.activationScripts
-    ../system/activate-configuration.nix
+    # ../system/activate-configuration.nix
   ];
 
   system = {

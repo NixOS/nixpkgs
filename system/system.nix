@@ -38,7 +38,7 @@ rec {
 
 
   # The initial ramdisk.
-  initialRamdiskStuff = import ../boot/boot-stage-1.nix {
+  initialRamdiskStuff = import ../modules/system/boot/stage-1.nix {
     inherit pkgs config;
   };
 

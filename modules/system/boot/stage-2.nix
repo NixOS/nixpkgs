@@ -18,7 +18,7 @@ let
   bootLocal = config.boot.localCommands;
 
   bootStage2 = substituteAll {
-    src = ./boot-stage-2-init.sh;
+    src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel upstart isLiveCD activateConfiguration upstartPath;
     path = [
@@ -37,10 +37,10 @@ in
     # config.boot.kernelPackages
 
     # config.system.activationScripts
-    ../system/activate-configuration.nix
+    # ../system/activate-configuration.nix
 
     # config.system.build
-    ../system/system-options.nix
+    # ../system/system-options.nix
   ];
 
   system = {

@@ -251,10 +251,10 @@ in
     option
 
     # config.system.build
-    ../system/system-options.nix
+    # ../system/system-options.nix
 
     # config.system.activationScripts
-    ../system/activate-configuration.nix
+    # ../system/activate-configuration.nix
   ];
 
   system = {
