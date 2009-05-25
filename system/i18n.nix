@@ -39,9 +39,8 @@ in
 
 ###### implementation
 
-mkIf config.services.pulseaudio.enable {
+{
   require = [
     options
   ];
-
 }
