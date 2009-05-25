@@ -2,25 +2,18 @@
 # TODO: split it to make it readable.
 {pkgs, config, ...}:
 
+with pkgs.lib;
+
 ###### interface
 let
-  inherit (pkgs.lib) mkOption;
 
   option = {
     system = {
       build = mkOption {
         default = {};
         description = ''
-          Attribute set of derivation used to setup the system.  The system
-          is built by aggregating all derivations.
+          Attribute set of derivations used to setup the system.
         '';
-        apply = components: components // {
-          # all components have to build directories
-          result = pkgs.buildEnv {
-            name = "system";
-            paths = pkgs.lib.mapRecordFlatten (n: v: v) components;
-          };
-        };
       };
 
       shell = mkOption {
@@ -39,11 +32,6 @@ let
 in
 
 ###### implementation
-let
-  inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
-  inherit (pkgs.lib) mapRecordFlatten;
-in
-
 {
   require = [
     option
