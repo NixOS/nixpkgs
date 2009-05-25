@@ -129,7 +129,7 @@ let
 in
 
 
-mkIf config.services.pulseaudio.enable {
+mkIf config.services.printing.enable {
   require = [
     options
   ];
