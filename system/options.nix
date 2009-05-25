@@ -385,6 +385,7 @@ in
     ../etc/default.nix
     ../modules/config/fonts.nix
     ../modules/config/i18n.nix
+    ../modules/config/system-path.nix
     ../modules/config/unix-odbc-drivers.nix
     ../modules/config/users-groups.nix
     ../modules/installer/grub/grub.nix
@@ -449,7 +450,6 @@ in
     ../modules/system/upstart-events/ctrl-alt-delete.nix
     ../modules/system/upstart-events/halt.nix
     ../modules/system/upstart-events/maintenance-shell.nix
-    ../modules/config/system-path.nix
     ../system/assertion.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix

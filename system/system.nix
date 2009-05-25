@@ -43,7 +43,6 @@ rec {
     { inherit platform; 
       configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
     config.nesting.children; 
-  configurationName = config.boot.configurationName;
 
   
   # Putting it all together.  This builds a store object containing
@@ -55,7 +54,7 @@ rec {
     name = "system";
     builder = ./system.sh;
     switchToConfiguration = ./switch-to-configuration.sh;
-    inherit (pkgs) grub coreutils gnused gnugrep diffutils findutils upstart;
+    inherit (pkgs) grub upstart;
     grubDevice = config.boot.grubDevice;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
@@ -65,7 +64,7 @@ rec {
     etc = config.system.build.etc;
     systemPath = config.system.path;
     inherit children;
-    inherit configurationName;
+    configurationName = config.boot.configurationName;
     kernel = config.boot.kernelPackages.kernel + "/vmlinuz";
     initrd = initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.
