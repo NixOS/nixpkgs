@@ -23,7 +23,7 @@ mkIf cfg.enable {
     options
 
     # environment.kdePackages
-    ./kdeEnvironment.nix
+    ./kde-environment.nix
   ];
 
   services = {

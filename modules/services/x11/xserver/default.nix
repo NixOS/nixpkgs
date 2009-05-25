@@ -470,9 +470,9 @@ mkIf cfg.enable {
     options
 
     # services.xserver.*Manager
-    ./displayManager/default.nix
-    ./windowManager/default.nix
-    ./desktopManager/default.nix
+    ./display-managers/default.nix
+    ./window-managers/default.nix
+    ./desktop-managers/default.nix
 
     # services.extraJobs
     # ../../upstart-jobs/default.nix
