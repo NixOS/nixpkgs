@@ -399,6 +399,10 @@ let
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
 
+  autojump = import ../tools/misc/autojump {
+    inherit fetchurl stdenv python;
+  };
+
   avahi =
     let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
     in
