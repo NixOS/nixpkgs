@@ -201,6 +201,7 @@ in {
   konversation = linux;
   ktorrent = linux;
   kvm = linux;
+  qemu = linux;
   less = all;
   lftp = all;
   libarchive = linux;
