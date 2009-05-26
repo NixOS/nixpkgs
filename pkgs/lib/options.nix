@@ -194,16 +194,16 @@ rec {
         in cfg3;
 
       getRequire = x: toList (attrByPath ["require"] [] (preprocess x));
-      getRecusiveRequire = x:
+      getRecursiveRequire = x:
         fold (cfg: l:
           if isPath cfg then
             [ cfg ] ++ l
           else
-            [ cfg ] ++ (getRecusiveRequire cfg) ++ l
+            [ cfg ] ++ (getRecursiveRequire cfg) ++ l
         ) [] (getRequire x);
 
-      getRequireSets = x: filter (x: ! isPath x) (getRecusiveRequire x);
-      getRequirePaths = x: filter isPath (getRecusiveRequire x);
+      getRequireSets = x: filter (x: ! isPath x) (getRecursiveRequire x);
+      getRequirePaths = x: filter isPath (getRecursiveRequire x);
       rmRequire = x: removeAttrs (preprocess x) ["require"];
 
       inlineRequiredSets = cfgs:
@@ -211,9 +211,7 @@ rec {
     in
       merge "" (
         map rmRequire (
-          inlineRequiredSets (
-            lib.uniqFlatten getRequirePaths [] [] (toList opts)
-          )
+          inlineRequiredSets ((toList opts) ++ lib.uniqFlatten getRequirePaths [] [] (lib.concatMap getRequirePaths (toList opts)))
         )
       );
 
