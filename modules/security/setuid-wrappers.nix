@@ -92,7 +92,7 @@ in
             '')
             config.security.setuidOwners);
 
-        in fullDepEntry ''
+        in pkgs.stringsWithDeps.fullDepEntry ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.  However, having setuid programs
           # in a profile is problematic, since the NixOS activation
