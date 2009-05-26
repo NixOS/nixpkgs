@@ -5,7 +5,7 @@
 
 { python, setuptools, makeWrapper, lib }:
 
-attrs:
+{ name, src, meta, patches ? [], doCheck ? true, ... } @ attrs:
 
 let
     # Return the list of recursively propagated build inputs of PKG.
@@ -20,7 +20,7 @@ let
 in
 
 python.stdenv.mkDerivation rec {
-  inherit (attrs) src meta;
+  inherit src meta patches doCheck;
 
   name = "python-" + attrs.name;
 
@@ -32,17 +32,7 @@ python.stdenv.mkDerivation rec {
      then attrs.propagatedBuildInputs
      else []);
 
-  patches =
-    (if attrs ? patches
-     then attrs.patches
-     else []);
-
   buildPhase = "true";
-
-  doCheck =
-    (if attrs ? doCheck
-     then attrs.doCheck
-     else true);
 
   # Many packages, but not all, support this.
   checkPhase = "python setup.py test";
