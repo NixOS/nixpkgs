@@ -295,7 +295,7 @@ rec {
   # `onDelay' and `onGlobalDelay'.
   delayProperties = attrs:
     let cleanAttrs = rmProperties attrs; in
-    if cleanAttrs != attrs then
+    if isProperty attrs then
       lib.mapAttrs (a: v:
         lib.addErrorContext "while moving properties on the attribute `${a}'." (
           triggerPropertiesGlobalDelay a (
