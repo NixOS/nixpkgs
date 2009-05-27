@@ -34,7 +34,11 @@ in
 
 {
 
-  system = config.system.build.system;
+  # Optionally check wether all config values have corresponding
+  # option declarations.
+  system = pkgs.checker config.system.build.system
+    config.environment.checkConfigurationOptions
+    optionDeclarations config;
 
   nix = config.environment.nix;
   
