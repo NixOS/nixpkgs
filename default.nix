@@ -9,29 +9,14 @@ let
   nixpkgs = fromEnv "NIXPKGS" /etc/nixos/nixpkgs;
 
   pkgs = import nixpkgs {system = builtins.currentSystem;};
-  
-  configComponents = [
-    configuration
-    (import ./system/options.nix)
-  ];
 
-  # Make a configuration object from which we can retrieve option
-  # values.
-  config =
-    pkgs.lib.fixOptionSets
-      pkgs.lib.mergeOptionSets
-      pkgs configComponents;
+  inherit
+    (import ./lib/eval-config.nix {inherit configuration pkgs;})
+    config optionDeclarations;
 
-  optionDeclarations =
-    pkgs.lib.fixOptionSetsFun
-      pkgs.lib.filterOptionSets
-      pkgs configComponents
-      config;
-  
 in
 
 {
-
   # Optionally check wether all config values have corresponding
   # option declarations.
   system = pkgs.checker config.system.build.system
