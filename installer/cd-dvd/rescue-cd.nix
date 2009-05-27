@@ -184,12 +184,8 @@ rec {
   pkgs = system.pkgs;
 
 
-  # The NixOS manual, with a backward compatibility hack for Nix <=
-  # 0.11 (you won't get the manual).
-  manual =
-    if builtins ? unsafeDiscardStringContext
-    then "${import ../../doc/manual {inherit nixpkgs;}}/manual.html"
-    else pkgs.writeText "dummy-manual" "Manual not included in this build!";
+  # The NixOS manual.
+  manual = "${import ../../doc/manual {inherit nixpkgs;}}/manual.html";
 
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
