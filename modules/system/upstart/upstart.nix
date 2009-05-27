@@ -60,7 +60,7 @@ let
   modprobe = config.system.sbin.modprobe;
   mount = config.system.sbin.mount;
 
-  makeJob = import ../upstart-jobs/make-job.nix {
+  makeJob = import ./make-job.nix {
     inherit (pkgs) runCommand;
   };
 
@@ -73,18 +73,29 @@ let
   # User-defined events.
   ++ (map makeJob (config.services.extraJobs));
 
-
-  command = import ../upstart-jobs/gather.nix {
-    inherit (pkgs) runCommand;
-    inherit jobs;
-  };
+  
+  # Create an etc/event.d directory containing symlinks to the
+  # specified list of Upstart job files.
+  command = pkgs.runCommand "upstart-jobs" {inherit jobs;}
+    ''
+      ensureDir $out/etc/event.d
+      for i in $jobs; do
+        if ln -s $i . ; then
+          if test -d $i; then
+            ln -s $i/etc/event.d/* $out/etc/event.d/
+          fi
+        else
+          echo Duplicate entry: $i;
+        fi;
+      done
+    '';
 
 in 
 
 {
   require = [
     options
-    ./lib/default.nix
+    ./tools.nix # !!! doesn't seem to be used anywhere
   ];
 
   environment = {

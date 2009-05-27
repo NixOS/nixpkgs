@@ -1,5 +1,20 @@
 [ #./hardware/network/intel-3945abg.nix
   ../etc/default.nix
+  ../system/assertion.nix
+  ../system/nixos-environment.nix
+  ../system/nixos-installer.nix
+  ../system/system-options.nix
+  ../upstart-jobs/cron/locate.nix
+  ../upstart-jobs/filesystems.nix
+  ../upstart-jobs/guest-users.nix
+  ../upstart-jobs/kbd.nix
+  ../upstart-jobs/ldap
+  ../upstart-jobs/lvm.nix
+  ../upstart-jobs/network-interfaces.nix
+  ../upstart-jobs/pcmcia.nix
+  ../upstart-jobs/swap.nix
+  ../upstart-jobs/swraid.nix
+  ../upstart-jobs/tty-backgrounds.nix
   ./config/fonts.nix
   ./config/i18n.nix
   ./config/system-path.nix
@@ -69,20 +84,5 @@
   ./system/upstart-events/ctrl-alt-delete.nix
   ./system/upstart-events/halt.nix
   ./system/upstart-events/maintenance-shell.nix
-  ../system/assertion.nix
-  ../system/nixos-environment.nix
-  ../system/nixos-installer.nix
-  ../system/system-options.nix
-  ../upstart-jobs/cron/locate.nix
-  ../upstart-jobs/default.nix
-  ../upstart-jobs/filesystems.nix
-  ../upstart-jobs/guest-users.nix
-  ../upstart-jobs/kbd.nix
-  ../upstart-jobs/ldap
-  ../upstart-jobs/lvm.nix
-  ../upstart-jobs/network-interfaces.nix
-  ../upstart-jobs/pcmcia.nix
-  ../upstart-jobs/swap.nix
-  ../upstart-jobs/swraid.nix
-  ../upstart-jobs/tty-backgrounds.nix
+  ./system/upstart/upstart.nix
 ]
