@@ -134,32 +134,7 @@ let
       target = "skel/.bashrc";      
     }
 
-    { # SSH configuration.  Slight duplication of the sshd_config
-      # generation in the sshd service.
-      source = pkgs.writeText "ssh_config" ''
-        ${if config.services.sshd.forwardX11 then ''
-          ForwardX11 yes
-          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        '' else ''
-          ForwardX11 no
-        ''}
-      '';
-      target = "ssh/ssh_config";
-    }
   ]
-
-  # Configuration for ssmtp.
-  ++ optional config.networking.defaultMailServer.directDelivery { 
-    source = let cfg = config.networking.defaultMailServer; in pkgs.writeText "ssmtp.conf" ''
-      MailHub=${cfg.hostName}
-      FromLineOverride=YES
-      ${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
-      UseTLS=${if cfg.useTLS then "YES" else "NO"}
-      UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
-      #Debug=YES
-    '';
-    target = "ssmtp/ssmtp.conf";
-  }
 
   # A bunch of PAM configuration files for various programs.
   ++ (map

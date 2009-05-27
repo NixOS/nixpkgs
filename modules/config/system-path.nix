@@ -71,7 +71,6 @@ let
       (import ../../helpers/info-wrapper.nix {inherit (pkgs) bash texinfo writeScriptBin;})
     ]
     ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
-    ++ pkgs.lib.optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp 
     ++ config.environment.extraPackages
     ++ pkgs.lib.optional config.fonts.enableFontDir config.system.build.x11Fonts
 
