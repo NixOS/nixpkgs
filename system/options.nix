@@ -6,57 +6,7 @@ in
 
 {
 
-  time = {
-
-    timeZone = mkOption {
-      default = "CET";
-      example = "America/New_York";
-      description = "The time zone used when displaying times and dates.";
-    };
-
-  };
-
-  
   boot = {
-
-    isLiveCD = mkOption {
-      default = false;
-      description = "
-        If set to true, the root device will be mounted read-only and
-        a ramdisk will be mounted on top of it using unionfs to
-        provide a writable root.  This is used for the NixOS
-        Live-CD/DVD.
-      ";
-    };
-
-    hardwareScan = mkOption {
-      default = true;
-      description = "
-        Whether to try to load kernel modules for all detected hardware.
-        Usually this does a good job of providing you with the modules
-        you need, but sometimes it can crash the system or cause other
-        nasty effects.  If the hardware scan is turned on, it can be
-        disabled at boot time by adding the <literal>safemode</literal>
-        parameter to the kernel command line.
-      ";
-    };
-
-    copyKernels = mkOption {
-      default = false;
-      description = "
-        Whether the Grub menu builder should copy kernels and initial
-        ramdisks to /boot.  This is necessary when /nix is on a
-        different file system than /boot.
-      ";
-    };
-
-    localCommands = mkOption {
-      default = "";
-      example = "text=anything; echo You can put $text here.";
-      description = "
-        Shell commands to be executed just before Upstart is started.
-      ";
-    };
 
     extraTTYs = mkOption {
       default = [];
@@ -71,53 +21,6 @@ in
       ";
     };
 
-  };
-
-  system = {
-    # NSS modules.  Hacky!
-    nssModules = mkOption {
-      internal = true;
-      default = [];
-      description = "
-        Search path for NSS (Name Service Switch) modules.  This allows
-        several DNS resolution methods to be specified via
-        <filename>/etc/nsswitch.conf</filename>.
-      ";
-      merge = pkgs.lib.mergeListOption;
-      apply = list:
-        let
-          list2 =
-             list
-          ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap;
-        in {
-          list = list2;
-          path = pkgs.lib.makeLibraryPath list2;
-        };
-    };
-
-    sbin = {
-      # !!! The mount option should not stay in /system/option.nix
-      mount = mkOption {
-        internal = true;
-        default = pkgs.utillinuxng.override {
-          buildMountOnly = true;
-          mountHelpers = pkgs.buildEnv {
-            name = "mount-helpers";
-            paths = [
-              pkgs.ntfs3g
-              pkgs.mount_cifs
-              pkgs.nfsUtils
-            ];
-            pathsToLink = "/sbin";
-          } + "/sbin";
-        };
-        description = "
-          A patched `mount' command that looks in a directory in the Nix
-          store instead of in /sbin for mount helpers (like mount.ntfs-3g or
-          mount.cifs).
-        ";
-      };
-    };
   };
 
 
@@ -239,61 +142,6 @@ in
   };
 
 
-  fileSystems = mkOption {
-    default = null;
-    example = [
-      { mountPoint = "/";
-        device = "/dev/hda1";
-      }
-      { mountPoint = "/data";
-        device = "/dev/hda2";
-        fsType = "ext3";
-        options = "data=journal";
-      }
-      { mountPoint = "/bigdisk";
-        label = "bigdisk";
-      }
-    ];
-    description = "
-      The file systems to be mounted.  It must include an entry for
-      the root directory (<literal>mountPoint = \"/\"</literal>).  Each
-      entry in the list is an attribute set with the following fields:
-      <literal>mountPoint</literal>, <literal>device</literal>,
-      <literal>fsType</literal> (a file system type recognised by
-      <command>mount</command>; defaults to
-      <literal>\"auto\"</literal>), and <literal>options</literal>
-      (the mount options passed to <command>mount</command> using the
-      <option>-o</option> flag; defaults to <literal>\"defaults\"</literal>).
-
-      Instead of specifying <literal>device</literal>, you can also
-      specify a volume label (<literal>label</literal>) for file
-      systems that support it, such as ext2/ext3 (see <command>mke2fs
-      -L</command>).
-
-      <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with 
-      <command>mkdir -p</command> .
-    ";
-  };
-
-
-  swapDevices = mkOption {
-    default = [];
-    example = [
-      { device = "/dev/hda7"; }
-      { device = "/var/swapfile"; }
-      { label = "bigswap"; }
-    ];
-    description = "
-      The swap devices and swap files.  These must have been
-      initialised using <command>mkswap</command>.  Each element
-      should be an attribute set specifying either the path of the
-      swap device or file (<literal>device</literal>) or the label
-      of the swap device (<literal>label</literal>, see
-      <command>mkswap -L</command>).  Using a label is
-      recommended.
-    ";
-  };
-
   nesting = {
     children = mkOption {
       default = [];
@@ -304,14 +152,5 @@ in
   };
 
   
-  passthru = mkOption {
-    default = {};
-    description = "
-      Additional parameters. Ignored. When you want to be sure that 
-      /etc/nixos/nixos -A config.passthru.* is that same thing the 
-      system rebuild will use.
-    ";
-  };
-
   require = import ../modules/module-list.nix;
 }

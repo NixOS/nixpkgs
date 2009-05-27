@@ -136,22 +136,6 @@ mkIf cfg.enable {
 
   environment = {
     extraPackages = [avahi];
-
-    # Name Service Switch configuration file.  Required by the C library.
-    # !!! This should be done in some other way, e.g., this module
-    # should define an option used by the hypothetical module that
-    # generates nsswitch.conf.
-    etc = mkIf cfg.nssmdns (mkThenElse {
-      thenPart = [{
-        source = ../../../etc/nsswitch-mdns.conf;
-        target = "nsswitch.conf";
-      }];
-
-      elsePart = [{
-        source = ../../../etc/nsswitch.conf;
-        target = "nsswitch.conf";
-      }];
-    });
   };
 
   users = {

@@ -5,6 +5,19 @@ let
   inherit (pkgs.lib) mkOption mkIf;
 
   options = {
+
+    boot.hardwareScan = mkOption {
+      default = true;
+      description = "
+        Whether to try to load kernel modules for all detected hardware.
+        Usually this does a good job of providing you with the modules
+        you need, but sometimes it can crash the system or cause other
+        nasty effects.  If the hardware scan is turned on, it can be
+        disabled at boot time by adding the <literal>safemode</literal>
+        parameter to the kernel command line.
+      ";
+    };
+  
     services = {
       udev = {
 

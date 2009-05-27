@@ -1,15 +1,10 @@
 # Initialise a bunch of environment variables.
 export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
-if test -n "@nssModulesPath@"; then
-    LD_LIBRARY_PATH=@nssModulesPath@:$LD_LIBRARY_PATH
-fi
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
-export TZ=@timeZone@
-export TZDIR=@glibc@/share/zoneinfo
 export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 export LANG=@defaultLocale@
 export EDITOR=nano
@@ -17,6 +12,7 @@ export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share
 export LOCATE_PATH=/var/cache/locatedb
 @shellInit@
 export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
+
 
 # Set up secure multi-user builds: non-root users build through the
 # Nix daemon.

@@ -38,7 +38,6 @@ let
   shellInit = config.environment.shellInit;
   nixEnvVars = config.nix.envVars;
   modulesTree = config.system.modulesTree;
-  nssModulesPath = config.system.nssModules.path;
   wrapperDir = config.security.wrapperDir;
   systemPath = config.system.path;
   binsh = config.system.build.binsh;
@@ -121,9 +120,7 @@ let
     { # Script executed when the shell starts as a non-login shell (system-wide version).
       source = pkgs.substituteAll {
         src = ./bashrc.sh;
-        inherit systemPath wrapperDir modulesTree nssModulesPath;
-        inherit (pkgs) glibc;
-        timeZone = config.time.timeZone;
+        inherit systemPath wrapperDir modulesTree;
         defaultLocale = config.i18n.defaultLocale;
         inherit nixEnvVars shellInit;
       };

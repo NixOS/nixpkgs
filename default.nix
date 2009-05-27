@@ -23,11 +23,9 @@ in
     config.environment.checkConfigurationOptions
     optionDeclarations config;
 
-  nix = config.environment.nix;
-  
+  # The following are used by nixos-rebuild.
   nixFallback = pkgs.nixUnstable;
-
-  manifests = config.installer.manifests; # exported here because nixos-rebuild uses it
+  manifests = config.installer.manifests;
 
   tests = config.tests;
 }

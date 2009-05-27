@@ -52,14 +52,6 @@ in
 
 ###### implementation
 let
-  # should be moved to the corresponding jobs.
-  nix = config.environment.nix;
-  nixEnvVars = config.nix.envVars;
-  kernelPackages = config.boot.kernelPackages;
-  nssModulesPath = config.system.nssModules.path;
-  modprobe = config.system.sbin.modprobe;
-  mount = config.system.sbin.mount;
-
   makeJob = import ./make-job.nix {
     inherit (pkgs) runCommand;
   };
