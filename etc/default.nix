@@ -109,14 +109,6 @@ let
       target = "default/useradd";
     }
 
-    { # Dhclient hooks for emitting ip-up/ip-down events.
-      source = pkgs.substituteAll {
-        src = ./dhclient-exit-hooks;
-        inherit (pkgs) upstart glibc;
-      };
-      target = "dhclient-exit-hooks";
-    }
-
     { # Script executed when the shell starts as a non-login shell (system-wide version).
       source = pkgs.substituteAll {
         src = ./bashrc.sh;
@@ -140,7 +132,7 @@ let
     { # Script executed when the shell starts as a non-login shell (user version).
       source = ./skel/bashrc;
       target = "skel/.bashrc";      
-    }    
+    }
 
     { # SSH configuration.  Slight duplication of the sshd_config
       # generation in the sshd service.

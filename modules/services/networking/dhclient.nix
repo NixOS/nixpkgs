@@ -38,6 +38,7 @@ in
 
 ###### implementation
 let
+
   ifEnable = arg:
     if config.networking.useDHCP then arg
     else if builtins.isList arg then []
@@ -51,6 +52,22 @@ let
     map (i: i.name) (lib.filter (i: i ? ipAddress) config.networking.interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
+
+  dhclientExitHooks = pkgs.writeText "dhclient-exit-hooks"
+    ''
+      echo "$reason" >> /tmp/dhcp-exit
+      echo "$exit_status" >> /tmp/dhcp-exit
+
+      if test "$reason" = BOUND -o "$reason" = REBOOT; then
+          ${pkgs.glibc}/sbin/nscd --invalidate hosts
+          ${pkgs.upstart}/sbin/initctl emit ip-up
+      fi
+
+      if test "$reason" = EXPIRE -o "$reason" = RELEASE; then
+          ${pkgs.upstart}/sbin/initctl emit ip-down
+      fi
+    '';
+  
 in
 
 {
@@ -59,44 +76,50 @@ in
     options
   ];
 
-  services = {
-    extraJobs = ifEnable [{
-      name = "dhclient";
+  services.extraJobs = ifEnable [{
+    name = "dhclient";
 
-      extraPath = [dhcp];
+    extraPath = [dhcp];
+
+    job = ''
+      description "DHCP client"
+
+      start on network-interfaces/started
+      stop on network-interfaces/stop
+
+      env PATH_DHCLIENT_SCRIPT=${dhcp}/sbin/dhclient-script
+
+      script
+          export PATH=${nettools}/sbin:$PATH
+
+          # Determine the interface on which to start dhclient.
+          interfaces=
+
+          for i in $(cd /sys/class/net && ls -d *); do
+              if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i"; then
+                  echo "Running dhclient on $i"
+                  interfaces="$interfaces $i"
+              fi
+          done
+
+          if test -z "$interfaces"; then
+              echo 'No interfaces on which to start dhclient!'
+              exit 1
+          fi
+
+          mkdir -m 755 -p ${stateDir}
+
+          exec ${dhcp}/sbin/dhclient -d $interfaces -e "PATH=$PATH" -lf ${stateDir}/dhclient.leases
+      end script
+    '';
+  }];
+
+  environment.etc = ifEnable
+    [ # Dhclient hooks for emitting ip-up/ip-down events.
+      { source = dhclientExitHooks;
+        target = "dhclient-exit-hooks";
+      }
+    ];
   
-      job = "
-description \"DHCP client\"
-
-start on network-interfaces/started
-stop on network-interfaces/stop
-
-env PATH_DHCLIENT_SCRIPT=${dhcp}/sbin/dhclient-script
-
-script
-    export PATH=${nettools}/sbin:$PATH
-
-    # Determine the interface on which to start dhclient.
-    interfaces=
-
-    for i in $(cd /sys/class/net && ls -d *); do
-        if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q \"$i\"; then
-            echo \"Running dhclient on $i\"
-            interfaces=\"$interfaces $i\"
-        fi
-    done
-
-    if test -z \"$interfaces\"; then
-        echo 'No interfaces on which to start dhclient!'
-        exit 1
-    fi
-
-    mkdir -m 755 -p ${stateDir}
-
-    exec ${dhcp}/sbin/dhclient -d $interfaces -e \"PATH=$PATH\" -lf ${stateDir}/dhclient.leases
-end script
-      ";
-    }];
-  };
 }
 
