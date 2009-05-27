@@ -6,6 +6,47 @@
 {pkgs, config, ...}:
 
 let
+
+  inherit (pkgs.lib) mkOption;
+
+  options = {
+
+    boot.resumeDevice = mkOption {
+      default = "";
+      example = "0:0";
+      description = "
+        Device for manual resume attempt during boot. Looks like 
+        major:minor. ls -l /dev/SWAP_PARTION shows them.
+      ";
+    };
+
+    boot.initrd.allowMissing = mkOption {
+      default = false;
+      description = ''
+        Allow some initrd components to be missing. Useful for
+        custom kernel that are changed too often to track needed
+        kernelModules.
+      '';
+    };
+
+    boot.initrd.lvm = mkOption {
+      default = true;
+      description = "
+        Whether to include lvm in the initial ramdisk. You should use this option
+        if your ROOT device is on lvm volume.
+      ";
+    };
+
+    boot.initrd.enableSplashScreen = mkOption {
+      default = true;
+      description = "
+        Whether to show a nice splash screen while booting.
+      ";
+    };
+  
+  };
+
+
   kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
 
@@ -198,6 +239,8 @@ let
   };
   
 in {
+
+  require = [options];
 
   system.build.bootStage1 = bootStage1;
   system.build.initialRamdisk = initialRamdisk;
