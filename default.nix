@@ -10,8 +10,6 @@ let
 
   pkgs = import nixpkgs {system = builtins.currentSystem;};
   
-  #system = import system/system.nix { inherit configuration nixpkgs; };
-
   configComponents = [
     configuration
     (import ./system/options.nix)
