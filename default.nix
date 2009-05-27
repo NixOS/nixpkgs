@@ -24,21 +24,6 @@ in
     config
     ;
 
-  inherit (system.nixosTools)
-    nixosCheckout
-    nixosHardwareScan
-    nixosInstall
-    nixosRebuild
-    nixosGenSeccureKeys
-    ;
-
-  inherit (system.initialRamdiskStuff)
-    bootStage1
-    extraUtils
-    initialRamdisk
-    modulesClosure
-    ;
-    
   nix = system.config.environment.nix;
   
   nixFallback = (import nixpkgs {}).nixUnstable;

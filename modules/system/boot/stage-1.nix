@@ -1,17 +1,13 @@
-# This Nix expression builds the initial ramdisk, which contains an
-# init script that performs the first stage of booting the system: it
-# loads the modules necessary to mount the root file system, then
-# calls the init in the root file system to start the second boot
-# stage.
+# This module builds the initial ramdisk, which contains an init
+# script that performs the first stage of booting the system: it loads
+# the modules necessary to mount the root file system, then calls the
+# init in the root file system to start the second boot stage.
 
-{pkgs, config}:
+{pkgs, config, ...}:
 
 let
   kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
-in
-
-rec {
 
 
   # Determine the set of modules that we need to mount the root FS.
@@ -201,4 +197,9 @@ rec {
         ];
   };
   
+in {
+
+  system.build.bootStage1 = bootStage1;
+  system.build.initialRamdisk = initialRamdisk;
+
 }

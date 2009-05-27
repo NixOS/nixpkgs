@@ -26,14 +26,6 @@ rec {
   pkgs = import nixpkgs {system = platform;};
 
 
-  # The initial ramdisk.
-  initialRamdiskStuff = import ../modules/system/boot/stage-1.nix {
-    inherit pkgs config;
-  };
-
-  initialRamdisk = initialRamdiskStuff.initialRamdisk;
-
-
   # This attribute is responsible for creating boot entries for 
   # child configuration. They are only (directly) accessible
   # when the parent configuration is boot default. For example,
@@ -66,7 +58,7 @@ rec {
     inherit children;
     configurationName = config.boot.configurationName;
     kernel = config.boot.kernelPackages.kernel + "/vmlinuz";
-    initrd = initialRamdisk + "/initrd";
+    initrd = config.system.build.initialRamdisk + "/initrd";
     # Most of these are needed by grub-install.
     path = [
       pkgs.coreutils

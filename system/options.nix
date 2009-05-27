@@ -446,6 +446,7 @@ in
     ../modules/services/x11/xserver/default.nix
     ../modules/system/activation/activation-script.nix
     ../modules/system/boot/kernel.nix
+    ../modules/system/boot/stage-1.nix
     ../modules/system/boot/stage-2.nix
     ../modules/system/upstart-events/ctrl-alt-delete.nix
     ../modules/system/upstart-events/halt.nix
