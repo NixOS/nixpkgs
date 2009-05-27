@@ -1,0 +1,83 @@
+{pkgs, config, ...}:
+
+let
+
+  # This attribute is responsible for creating boot entries for 
+  # child configuration. They are only (directly) accessible
+  # when the parent configuration is boot default. For example,
+  # you can provide an easy way to boot the same configuration 
+  # as you use, but with another kernel
+  # !!! fix this
+  children = map (x: ((import ./system.nix)
+    { platform = pkgs.system;
+      configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
+    config.nesting.children;
+
+
+  systemBuilder =
+    ''
+      ensureDir $out
+
+      ln -s ${config.boot.kernelPackages.kernel}/vmlinuz $out/kernel
+      ln -s $grub $out/grub
+      ln -s ${config.system.build.bootStage2} $out/init
+      ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+      ln -s ${config.system.activationScripts.script} $out/activate
+      ln -s ${config.system.build.etc}/etc $out/etc
+      ln -s ${config.system.path} $out/sw
+      ln -s ${pkgs.upstart} $out/upstart
+
+      echo "$kernelParams" > $out/kernel-params
+      echo "$configurationName" > $out/configuration-name
+      echo "${toString pkgs.upstart.interfaceVersion}" > $out/upstart-interface-version
+
+      mkdir $out/fine-tune
+      childCount=0;
+      for i in $children; do 
+        childCount=$(( childCount + 1 ));
+        ln -s $i $out/fine-tune/child-$childCount;
+      done
+
+      cat > $out/menu.lst << GRUBEND
+      kernel $kernel init=$bootStage2 $kernelParams
+      initrd $initrd
+      GRUBEND
+
+      ensureDir $out/bin
+      substituteAll ${./switch-to-configuration.sh} $out/bin/switch-to-configuration
+      chmod +x $out/bin/switch-to-configuration
+    '';
+
+  
+  # Putting it all together.  This builds a store path containing
+  # symlinks to the various parts of the built configuration (the
+  # kernel, the Upstart services, the init scripts, etc.) as well as a
+  # script `switch-to-configuration' that activates the configuration
+  # and makes it bootable.
+  system = pkgs.stdenv.mkDerivation {
+    name = "system";
+    buildCommand = systemBuilder;
+    inherit children;
+    inherit (pkgs) grub;
+    grubDevice = config.boot.grubDevice;
+    kernelParams =
+      config.boot.kernelParams ++ config.boot.extraKernelParams;
+    grubMenuBuilder = config.system.build.grubMenuBuilder;
+    configurationName = config.boot.configurationName;
+    # Most of these are needed by grub-install.
+    path = [
+      pkgs.coreutils
+      pkgs.gnused
+      pkgs.gnugrep
+      pkgs.findutils
+      pkgs.diffutils
+      pkgs.upstart # for initctl
+    ];
+  };
+
+
+in {
+
+  system.build.system = system;
+
+}

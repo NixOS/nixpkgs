@@ -445,6 +445,7 @@ in
     ../modules/services/x11/xfs.nix
     ../modules/services/x11/xserver/default.nix
     ../modules/system/activation/activation-script.nix
+    ../modules/system/activation/top-level.nix
     ../modules/system/boot/kernel.nix
     ../modules/system/boot/stage-1.nix
     ../modules/system/boot/stage-2.nix
