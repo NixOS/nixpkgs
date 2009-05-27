@@ -6,7 +6,7 @@ usage(){
   echo 1>&2 "
 $prog module-dir
 
-This script generates the `module-list.nix' index file inside the
+This script generates the \`module-list.nix' index file inside the
 module directory.
 "
   exit 1
