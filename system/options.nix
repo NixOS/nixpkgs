@@ -95,37 +95,7 @@ in
         };
     };
 
-    modulesTree = mkOption {
-      internal = true;
-      default = [];
-      description = "
-        Tree of kernel modules.  This includes the kernel, plus modules
-        built outside of the kernel.  Combine these into a single tree of
-        symlinks because modprobe only supports one directory.
-      ";
-      merge = pkgs.lib.mergeListOption;
-
-      # Convert the list of path to only one path.
-      apply = pkgs.aggregateModules;
-    };
-
     sbin = {
-      modprobe = mkOption {
-        # should be moved in module-init-tools
-        internal = true;
-        default = pkgs.substituteAll {
-          dir = "sbin";
-          src = ./modprobe;
-          isExecutable = true;
-          inherit (pkgs) module_init_tools;
-          inherit (config.system) modulesTree;
-        };
-        description = ''
-          Wrapper around modprobe that sets the path to the modules
-          tree.
-        '';
-      };
-
       # !!! The mount option should not stay in /system/option.nix
       mount = mkOption {
         internal = true;

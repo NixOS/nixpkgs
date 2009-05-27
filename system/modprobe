@@ -1,3 +1,0 @@
-#! @shell@
-export MODULE_DIR=@modulesTree@/lib/modules
-exec @module_init_tools@/sbin/modprobe "$@"
