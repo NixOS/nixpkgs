@@ -499,6 +499,10 @@ mkIf cfg.enable {
       { source = "${configFile}";
         target = "X11/xorg.conf";
       }
+      # -xkbdir command line option does not seems to be passed to xkbcomp.
+      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        target = "X11/xkb";
+      }
     ];
 
     extraPackages = [
