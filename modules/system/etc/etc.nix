@@ -6,41 +6,23 @@ let
   inherit (pkgs.lib) mkOption;
 
   option = {
-    environment = {
-      etc = mkOption {
-        default = [];
-        example = [
-          { source = "/nix/store/.../etc/dir/file.conf.example";
-            target = "dir/file.conf";
-            mode = "0440";
-          }
-        ];
-        description = "
-          List of files that have to be linked in /etc.
-        ";
-      };
-
-      # !!! This should be moved outside of /etc/default.nix.
-      shellInit = mkOption {
-        default = "";
-        example = ''export PATH=/godi/bin/:$PATH'';
-        description = "
-          Script used to initialized user shell environments.
-        ";
-        merge = pkgs.lib.mergeStringOption;
-      };
+    environment.etc = mkOption {
+      default = [];
+      example = [
+        { source = "/nix/store/.../etc/dir/file.conf.example";
+          target = "dir/file.conf";
+          mode = "0440";
+        }
+      ];
+      description = ''
+        List of files that have to be linked in /etc.
+      '';
     };
   };
 in
 
 ###### implementation
 let
-  optional = pkgs.lib.optional;
-
-in
-
-let
-  inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
 
   copyScript = {source, target, mode ? "644", own ? "root.root"}:
     assert target != "nixos";
@@ -54,22 +36,15 @@ let
       chmod ${mode} "$target"
     '';
 
-  makeEtc = import ../helpers/make-etc.nix {
+  makeEtc = import ./make-etc.nix {
     inherit (pkgs) stdenv;
     configFiles = config.environment.etc;
   };
+  
 in
 
 {
-  require = [
-    option
-
-    # config.system.build
-    # ../system/system-options.nix
-
-    # config.system.activationScripts
-    # ../system/activate-configuration.nix
-  ];
+  require = [option];
 
   system = {
     build = {
@@ -77,7 +52,7 @@ in
     };
 
     activationScripts = {
-      etc = fullDepEntry ''
+      etc = pkgs.lib.fullDepEntry ''
         # Set up the statically computed bits of /etc.
         staticEtc=/etc/static
         rm -f $staticEtc

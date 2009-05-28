@@ -3,7 +3,26 @@
 
 {config, pkgs, ...}:
 
+let
+
+  options = {
+
+    environment.shellInit = pkgs.lib.mkOption {
+        default = "";
+        example = ''export PATH=/godi/bin/:$PATH'';
+        description = "
+          Script used to initialized user shell environments.
+        ";
+        merge = pkgs.lib.mergeStringOption;
+      };
+
+  };
+
+in    
+   
 {
+  require = [options];
+
   environment.etc =
     [ { # /etc/bashrc: script executed when the shell starts as a
         # non-login shell.  /etc/profile also sources this file, so

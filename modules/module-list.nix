@@ -117,6 +117,7 @@
   ./system/boot/kernel.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
+  ./system/etc/etc.nix
   ./system/upstart-events/ctrl-alt-delete.nix
   ./system/upstart-events/halt.nix
   ./system/upstart-events/maintenance-shell.nix

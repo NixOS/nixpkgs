@@ -1,6 +1,5 @@
 {
   require = [
-    ../etc/default.nix
     ../system/assertion.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix
