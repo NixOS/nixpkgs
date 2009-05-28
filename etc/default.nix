@@ -35,13 +35,6 @@ in
 
 ###### implementation
 let
-  shellInit = config.environment.shellInit;
-  nixEnvVars = config.nix.envVars;
-  modulesTree = config.system.modulesTree;
-  wrapperDir = config.security.wrapperDir;
-  systemPath = config.system.path;
-  binsh = config.system.build.binsh;
-
   optional = pkgs.lib.optional;
 
 
@@ -97,31 +90,6 @@ let
         defaultShell = config.system.shell;
       };
       target = "default/useradd";
-    }
-
-    { # Script executed when the shell starts as a non-login shell (system-wide version).
-      source = pkgs.substituteAll {
-        src = ./bashrc.sh;
-        inherit systemPath wrapperDir modulesTree;
-        defaultLocale = config.i18n.defaultLocale;
-        inherit nixEnvVars shellInit;
-      };
-      target = "bashrc";      
-    }
-
-    { # Script executed when the shell starts as a login shell.
-      source = ./profile.sh;
-      target = "profile";
-    }
-
-    { # Configuration for readline in bash.
-      source = ./inputrc;
-      target = "inputrc";
-    }
-
-    { # Script executed when the shell starts as a non-login shell (user version).
-      source = ./skel/bashrc;
-      target = "skel/.bashrc";      
     }
 
   ]
@@ -184,15 +152,16 @@ let
   inherit (pkgs.stringsWithDeps) noDepEntry fullDepEntry packEntry;
 
   copyScript = {source, target, mode ? "644", own ? "root.root"}:
-    assert target != "nixos"; ''
-    source="${source}"
-    target="/etc/${target}"
-    mkdir -p $(dirname "$target")
-    test -e "$target" && rm -f "$target"
-    cp "$source" "$target"
-    chown ${own} "$target"
-    chmod ${mode} "$target"
-  '';
+    assert target != "nixos";
+    ''
+      source="${source}"
+      target="/etc/${target}"
+      mkdir -p $(dirname "$target")
+      test -e "$target" && rm -f "$target"
+      cp "$source" "$target"
+      chown ${own} "$target"
+      chmod ${mode} "$target"
+    '';
 
   makeEtc = import ../helpers/make-etc.nix {
     inherit (pkgs) stdenv;

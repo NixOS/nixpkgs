@@ -5,7 +5,6 @@ export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
-export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 export LANG=@defaultLocale@
 export EDITOR=nano
 export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info

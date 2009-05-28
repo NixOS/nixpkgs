@@ -39,10 +39,4 @@ in
     # config.system.activationScripts
     # ../system/activate-configuration.nix
   ];
-
-  system = {
-    build = {
-      binsh = pkgs.bashInteractive;
-    };
-  };
 }

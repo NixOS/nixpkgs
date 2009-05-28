@@ -8,6 +8,7 @@
   ./config/users-groups.nix
   ./installer/grub/grub.nix
   ./legacy.nix
+  ./programs/bash/bash.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./security/setuid-wrappers.nix

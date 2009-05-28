@@ -155,24 +155,22 @@ let
 in
 
 {
-  require = [
-    options
-  ];
+  require = [options];
 
-  system = {
-    build = {
-      inherit x11Fonts;
-    };
-  };
+  system.build.x11Fonts = x11Fonts;
 
-  environment = {
-    # Configuration file for fontconfig used to locate
-    # (X11) client-rendered fonts.
-    etc = mkIf config.fonts.enableFontConfig [{
-      source = pkgs.makeFontsConf {
-        fontDirectories = config.fonts.fonts;
-      };
-      target = "fonts/fonts.conf";
-    }];
-  };
+  environment.etc = mkIf config.fonts.enableFontConfig
+    [ { # Configuration file for fontconfig used to locate
+        # (X11) client-rendered fonts.
+        source = pkgs.makeFontsConf {
+          fontDirectories = config.fonts.fonts;
+        };
+        target = "fonts/fonts.conf";
+      }
+    ];
+
+  environment.shellInit =
+    '' 
+      export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+    '';
 }
