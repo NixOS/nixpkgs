@@ -2,6 +2,25 @@
 
 let
 
+  options = {
+  
+    system.build = pkgs.lib.mkOption {
+      default = {};
+      description = ''
+        Attribute set of derivations used to setup the system.
+      '';
+    };
+
+    nesting.children = pkgs.lib.mkOption {
+      default = [];
+      description = ''
+        Additional configurations to build.
+      '';
+    };
+    
+  };
+
+    
   # This attribute is responsible for creating boot entries for 
   # child configuration. They are only (directly) accessible
   # when the parent configuration is boot default. For example,
@@ -77,7 +96,7 @@ let
 
 
 in {
+  require = [options];
 
   system.build.system = system;
-
 }

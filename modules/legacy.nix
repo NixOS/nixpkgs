@@ -3,7 +3,6 @@
     ../system/assertion.nix
     ../system/nixos-environment.nix
     ../system/nixos-installer.nix
-    ../system/system-options.nix
     ../upstart-jobs/cron/locate.nix
     ../upstart-jobs/filesystems.nix
     ../upstart-jobs/guest-users.nix

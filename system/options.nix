@@ -80,15 +80,5 @@ in
   };
 
 
-  nesting = {
-    children = mkOption {
-      default = [];
-      description = "
-        Additional configurations to build.
-      ";
-    };
-  };
-
-  
   require = import ../modules/module-list.nix;
 }
