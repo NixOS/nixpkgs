@@ -1,6 +1,7 @@
-{pkgs, config, ...}: 
+{pkgs, config, ...}:
+
 let
-  inherit(pkgs.lib) mkOption;
+  inherit (pkgs.lib) mkOption;
 
   options = {
     services = {
@@ -53,26 +54,15 @@ in
 
 {
   require = options;
-  services = {
-    # !!! Better to do this as an activation script plugin rather
-    # than an Upstart job.
-    extraJobs = optional enable {
-      name = "clear-passwords";
-      job = ''
-        description "Clear guest passwords"
-	start on startup
-	script
-	  for i in ${nameString}; do
-	      echo | ${pkgs.pwdutils}/bin/passwd --stdin $i
-	  done
-	end script
-      '';
-    };
-    mingetty = {
-      helpLine = optionalString enable "\nThese users have empty passwords: ${nameString}";
-    };
-  };
-  users = {
-    extraUsers = map userEntry users;
-  };
+
+  system.activationScripts = pkgs.lib.fullDepEntry
+    ''
+      for i in ${nameString}; do
+          echo | ${pkgs.pwdutils}/bin/passwd --stdin $i
+      done
+    '' ["defaultPath" "users" "groups"];
+
+  services.mingetty.helpLine = optionalString enable "\nThese users have empty passwords: ${nameString}";
+  
+  users.extraUsers = map userEntry users;
 }

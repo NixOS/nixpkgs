@@ -4,9 +4,9 @@
 let
   inherit (pkgs.lib) mkOption;
 
-  options = { services = { xserver = { displayManager = {
+  options = {
 
-    kdm = {
+    services.xserver.displayManager.kdm = {
       enable = mkOption {
         default = false;
         description = "
@@ -15,7 +15,7 @@ let
       };
     };
 
-  }; /* displayManager */ }; /* xserver */ }; /* services */ };
+  };
 
 in
 
@@ -31,7 +31,7 @@ let
 
   kdmrc = stdenv.mkDerivation {
     name = "kdmrc";
-# 	     -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
+    # -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
     buildCommand = ''
       cp ${kdebase_workspace}/share/config/kdm/kdmrc .
       sed -i -e "s|#HaltCmd=|HaltCmd=${pkgs.upstart}/sbin/halt|" \

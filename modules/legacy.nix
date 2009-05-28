@@ -5,7 +5,6 @@
     ../system/nixos-installer.nix
     ../upstart-jobs/cron/locate.nix
     ../upstart-jobs/filesystems.nix
-    ../upstart-jobs/guest-users.nix
     ../upstart-jobs/kbd.nix
     ../upstart-jobs/ldap
     ../upstart-jobs/lvm.nix
