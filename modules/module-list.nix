@@ -10,6 +10,7 @@
   ./config/users-groups.nix
   ./installer/grub/grub.nix
   ./legacy.nix
+  ./misc/assertions.nix
   ./programs/bash/bash.nix
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
