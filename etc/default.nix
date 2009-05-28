@@ -72,26 +72,6 @@ let
       target = "hosts";
     }
 
-    { # Configuration for pwdutils (login, passwd, useradd, etc.).
-      # You cannot login without it!
-      source = ./login.defs;
-      target = "login.defs";
-    } 
-
-    { # Configuration for passwd and friends (e.g., hash algorithm
-      # for /etc/passwd).
-      source = ./default/passwd;
-      target = "default/passwd";
-    }
-
-    { # Configuration for useradd.
-      source = pkgs.substituteAll {
-        src = ./default/useradd;
-        defaultShell = config.system.shell;
-      };
-      target = "default/useradd";
-    }
-
   ]
 
   # A bunch of PAM configuration files for various programs.

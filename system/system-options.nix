@@ -15,18 +15,6 @@ let
           Attribute set of derivations used to setup the system.
         '';
       };
-
-      shell = mkOption {
-        default = "/var/run/current-system/sw/bin/bash";
-        description = ''
-          This option defines the path to the Bash shell.  It should
-          generally not be overriden.
-        '';
-        merge = list:
-          assert list != [] && builtins.tail list == [];
-          builtins.head list;
-      };
-
     };
   };
 in

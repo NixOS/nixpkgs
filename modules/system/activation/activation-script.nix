@@ -106,7 +106,7 @@ let
           touch /etc/shadow; chmod 0600 /etc/shadow
           # Can't use useradd, since it complains that it doesn't know us
           # (bootstrap problem!).
-          echo "root:x:0:0:System administrator:$rootHome:${config.system.shell}" >> /etc/passwd
+          echo "root:x:0:0:System administrator:$rootHome:${config.users.defaultUserShell}" >> /etc/passwd
           echo "root::::::::" >> /etc/shadow
           echo | passwd --stdin root
       fi

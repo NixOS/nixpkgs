@@ -42,7 +42,6 @@ in
 ###### implementation
 let
   ids = import ../../system/ids.nix;
-  defaultShell = config.system.shell;
 
   # User accounts to be created/updated by NixOS.
   users =
@@ -53,7 +52,7 @@ let
             uid = ids.uids.root;
             description = "System administrator";
             home = "/root";
-            shell = defaultShell;
+            shell = config.users.defaultUserShell;
             group = "root";
           }
           { name = "nobody";
@@ -78,7 +77,7 @@ let
         , group ? "nogroup"
         , extraGroups ? []
         , home ? "/var/empty"
-        , shell ? (if useDefaultShell then defaultShell else "/noshell")
+        , shell ? (if useDefaultShell then config.users.defaultUserShell else "/noshell")
         , createHome ? false
         , useDefaultShell ? false
         }:
