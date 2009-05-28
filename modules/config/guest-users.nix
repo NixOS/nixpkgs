@@ -33,9 +33,10 @@ let
       };
     };
   };
-  inherit (pkgs.lib) concatStringsSep optional optionalString;
+  
+  inherit (pkgs.lib) concatStringsSep optionalString;
 
-  inherit (config.services.guestUsers) enable users includeRoot extraGroups;
+  cfg = config.services.guestUsers;
 
   userEntry = user:
   {
@@ -44,25 +45,29 @@ let
     home = "/home/${user}";
     createHome = true;
     group = "users";
-    extraGroups = extraGroups;
+    extraGroups = cfg.extraGroups;
     shell = "/bin/sh";
   };
 
-  nameString = (concatStringsSep " " users) + optionalString includeRoot " root";
+  nameString = (concatStringsSep " " cfg.users) + optionalString cfg.includeRoot " root";
 
 in 
 
-{
+pkgs.lib.mkIf cfg.enable {
   require = options;
 
-  system.activationScripts = pkgs.lib.fullDepEntry
-    ''
-      for i in ${nameString}; do
-          echo | ${pkgs.pwdutils}/bin/passwd --stdin $i
-      done
-    '' ["defaultPath" "users" "groups"];
+  system.activationScripts = {
 
-  services.mingetty.helpLine = optionalString enable "\nThese users have empty passwords: ${nameString}";
+    clearPasswords = pkgs.lib.fullDepEntry
+      ''
+        for i in ${nameString}; do
+            echo | ${pkgs.pwdutils}/bin/passwd --stdin $i
+        done
+      '' ["defaultPath" "users" "groups"];
+
+  };
+
+  services.mingetty.helpLine = "\nThese users have empty passwords: ${nameString}";
   
-  users.extraUsers = map userEntry users;
+  users.extraUsers = map userEntry cfg.users;
 }
