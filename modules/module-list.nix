@@ -134,4 +134,11 @@
 # the argument named `runCommand' required by the function is missing
   ./system/upstart/tools.nix
   ./system/upstart/upstart.nix
+  ./tasks/filesystems.nix
+  ./tasks/kbd.nix
+  ./tasks/lvm.nix
+  ./tasks/network-interfaces.nix
+  ./tasks/swap.nix
+  ./tasks/swraid.nix
+  ./tasks/tty-backgrounds.nix
 ]
