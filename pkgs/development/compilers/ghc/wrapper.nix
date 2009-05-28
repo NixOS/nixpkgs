@@ -11,8 +11,11 @@ stdenv.mkDerivation {
     ensureDir $out/bin
     cp $GHCGetPackages $out/bin/ghc-get-packages.sh
     chmod 755 $out/bin/ghc-get-packages.sh
-    for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version} runghc runhaskell; do
+    for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
       makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\")"
+    done
+    for prg in runghc runhaskell; do
+      makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" \" -package-conf --ghc-arg=\")"
     done
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
       makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" --package-conf=)"
