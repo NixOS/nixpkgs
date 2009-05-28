@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fpic";
 
-  patches = [ ./purity.patch ./mkromfs-zlib.patch ];
+  patches = [ ./purity.patch ./mkromfs-zlib.patch ./urw-font-files.patch ];
 
   doCheck = true;
 
