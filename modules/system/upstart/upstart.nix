@@ -58,13 +58,7 @@ let
 
   optional = cond: service: pkgs.lib.optional cond (makeJob service);
 
-  requiredTTYs = config.requiredTTYs;
-
-  jobs = map makeJob []
-
-  # User-defined events.
-  ++ (map makeJob (config.services.extraJobs));
-
+  jobs = map makeJob config.services.extraJobs;
   
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.

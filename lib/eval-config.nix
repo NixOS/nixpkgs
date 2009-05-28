@@ -7,7 +7,7 @@
 rec {
   configComponents = [
     configuration
-    (import ../system/options.nix)
+    { require = import ../modules/module-list.nix; }
   ];
 
   config =

@@ -1,7 +1,39 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption;
+
+###### interface
+
+  # most options are defined in i18n.nix
+
+  options = {
+
+    boot.extraTTYs = pkgs.lib.mkOption {
+      default = [];
+      example = [8 9];
+      description = "
+        Tty (virtual console) devices, in addition to the consoles on
+        which mingetty and syslogd run, that must be initialised.
+        Only useful if you have some program that you want to run on
+        some fixed console.  For example, the NixOS installation CD
+        opens the manual in a web browser on console 7, so it sets
+        <option>boot.extraTTYs</option> to <literal>[7]</literal>.
+      ";
+    };
+    
+    # dummy option so that requiredTTYs can be passed
+    requiredTTYs = pkgs.lib.mkOption {
+      default = [];
+      description = "
+        FIXME: find another place for this option.
+        FIXME: find a good description.
+      ";
+    };
+
+  };
+
+  
+###### implementation
 
   # think about where to put this chunk of code!
   # required by other pieces as well
@@ -16,26 +48,10 @@ let
 
 in
 
-###### implementation
-
-# most options are defined in i18n.nix
-
 {
+  require = [options];
 
-  inherit requiredTTYs; # pass them to upstart-job/default.nix
-
-  # dummy option so that requiredTTYs can be passed, see above (FIXME)
-  require = [
-    {
-      requiredTTYs = mkOption {
-        default = [];
-        description = "
-          FIXME: find another place for this option.
-          FIXME: find a good description.
-        ";
-      };
-    }
-  ];
+  inherit requiredTTYs; # pass them to ./modules/tasks/tty-backgrounds.nix
 
   services = {
     extraJobs = [{
