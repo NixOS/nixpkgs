@@ -1,35 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, gtk, freetype, fontconfig, lcms, fltk,
+{ stdenv, fetchcvs, cmake, pkgconfig, gtk, freetype, fontconfig, lcms, fltk,
   flex, libtiff, libjpeg, libpng, libexif, zlib, perl, libX11,
   perlXMLParser, python, pygtk, gettext, intltool, babl, gegl,
   glib, makedepend, xf86vidmodeproto, xineramaproto, libXmu, openexr,
-  mesa, libXext, libXpm, libXxf86vm } :
+  mesa, libXext, libXpm, libXxf86vm, automake, autoconf, libtool } :
 
 stdenv.mkDerivation {
-  name = "cinepaint-0.22-1";
+  name = "cinepaint-0.25.0";
 
-  src = fetchurl {
-    url = mirror://sourceforge/cinepaint/cinepaint-0.22-1.tar.gz;
-    sha256 = "bb08a9210658959772df12408769d660999ede168b7431514e1f3cead07c0fea";
+  # The developer told me this cvs fetch is 0.25.0
+  src = fetchcvs {
+    cvsRoot = ":pserver:anonymous@cinepaint.cvs.sourceforge.net:/cvsroot/cinepaint";
+    module = "cinepaint-project";
+    date = "2004-03-01";
+    sha256 = "bf6dc04f3ea2094b7ef6f87f40f2c90d75a557e40a773f8eb76e8a71f14362cf";
   };
 
-  buildInputs = [ pkgconfig gtk freetype fontconfig lcms fltk flex libtiff
+  buildInputs = [ cmake pkgconfig gtk freetype fontconfig lcms fltk flex libtiff
     libjpeg libpng libexif zlib perl libX11 perlXMLParser python pygtk gettext
     intltool babl gegl glib makedepend xf86vidmodeproto xineramaproto libXmu
-    openexr mesa libXext libXpm libXxf86vm ];
+    openexr mesa libXext libXpm libXxf86vm automake autoconf libtool ];
 
-  patches = [ ./fltk.patch ];
+  dontUseCmakeConfigure = 1;
 
-  prePatch = ''
-    sed -i -e s@/usr/X11R6/bin/makedepend@${makedepend}/bin/makedepend@ \
-      -e s@/usr/X11R6/include/X11/extensions/xf86vmode@${xf86vidmodeproto}/include/X11/extensions/xf86vmode@ \
-      -e s@/usr/X11R6/include/X11/Xlib.h@${libX11}/include/X11/Xlib.h@ \
-      -e s@/usr/X11R6/include/X11/extensions/Xinerama.h@${xineramaproto}/include/X11/extensions/Xinerama.h@ \
-      -e s@/usr/X11R6/lib/libfreetype.a@${freetype}/lib/libfreetype.a@ \
-      plug-ins/icc_examin/icc_examin/configure \
-      plug-ins/icc_examin/icc_examin/configure.sh
+  NIX_CFLAGS_COMPILE = "-I.";
+
+  configurePhase = ''
+    cd cinepaint
+    chmod 0777 autogen.sh
+    ./autogen.sh
+    ./configure --prefix=$out
   '';
-
-  configureFlags = [ "--disable-print" "--enable-gtk2" ];
 
   meta = {
     homepage = http://www.cinepaint.org/;

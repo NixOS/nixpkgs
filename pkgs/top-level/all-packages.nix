@@ -5871,9 +5871,9 @@ let
   };
 
   cinepaint = import ../applications/graphics/cinepaint {
-    inherit stdenv fetchurl pkgconfig freetype fontconfig lcms flex libtiff
+    inherit stdenv fetchcvs cmake pkgconfig freetype fontconfig lcms flex libtiff
       libjpeg libpng libexif zlib perl mesa perlXMLParser python pygtk gettext
-      intltool babl gegl;
+      intltool babl gegl automake autoconf libtool;
     inherit (xlibs) makedepend libX11 xf86vidmodeproto xineramaproto libXmu
       libXext libXpm libXxf86vm;
     inherit (gtkLibs) gtk glib;
