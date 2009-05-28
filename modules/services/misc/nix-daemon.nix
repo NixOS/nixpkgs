@@ -178,13 +178,12 @@ let
       };
     };
   };
+
 in
 
 ###### implementation
 
 let 
-  binsh = config.system.build.binsh;
-  nixEnvVars = config.nix.envVars;
   inherit (config.environment) nix;
 in
 
@@ -193,9 +192,8 @@ in
     options
   ];
 
-  environment = {
-    etc = [
-      { # Nix configuration.
+  environment.etc =
+    [ { # Nix configuration.
         source =
           let
             # Tricky: if we're using a chroot for builds, then we need
@@ -205,7 +203,7 @@ in
             # other paths in the store, we need the closure of /bin/sh
             # in `build-chroot-dirs' - otherwise any builder that uses
             # /bin/sh won't work.
-            binshDeps = pkgs.writeReferencesToFile binsh;
+            binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
   
             # Likewise, if chroots are turned on, we need Nix's own
             # closure in the chroot.  Otherwise nix-channel and nix-env
@@ -226,23 +224,45 @@ in
             '';
         target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
       }
-    ];
-  };
+    ]
 
-  services = {
-    extraJobs = [{
-      name = "nix-daemon";
-      
+    ++ optional config.nix.distributedBuilds
+      { # List of machines for distributed Nix builds in the format expected
+        # by build-remote.pl.
+        source = pkgs.writeText "nix.machines"
+          (pkgs.lib.concatStrings (map (machine:
+            "${machine.sshUser}@${machine.hostName} ${machine.system} ${machine.sshKey} ${toString machine.maxJobs}\n"
+          ) config.nix.buildMachines));
+        target = "nix.machines";
+      };
+
+  services.extraJobs = [
+    { name = "nix-daemon";
+
       job = ''
         start on startup
         stop on shutdown
         respawn
         script
           export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
-          ${nixEnvVars}
+          ${config.nix.envVars}
           exec ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
         end script
       '';
-    }];
-  };
+    }
+  ];
+
+  environment.shellInit =
+    ''
+      # Set up the environment variables for running Nix.
+      ${config.nix.envVars}
+      
+      # Set up secure multi-user builds: non-root users build through the
+      # Nix daemon.
+      if test "$USER" != root; then
+          export NIX_REMOTE=daemon
+      else
+          export NIX_REMOTE=
+      fi
+    '';
 }

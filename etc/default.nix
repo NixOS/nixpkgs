@@ -88,19 +88,8 @@ let
       "common"
       "common-console" # shared stuff for interactive local sessions
     ]
-  )
+  );
 
-  # List of machines for distributed Nix builds in the format expected
-  # by build-remote.pl.
-  ++ optional config.nix.distributedBuilds {
-    source = pkgs.writeText "nix.machines"
-      (pkgs.lib.concatStrings (map (machine:
-        "${machine.sshUser}@${machine.hostName} ${machine.system} ${machine.sshKey} ${toString machine.maxJobs}\n"
-      ) config.nix.buildMachines));
-    target = "nix.machines";
-  }
-    
-  ;
 in
 
 let

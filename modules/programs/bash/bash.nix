@@ -15,7 +15,6 @@
           wrapperDir = config.security.wrapperDir;
           modulesTree = config.system.modulesTree;
           defaultLocale = config.i18n.defaultLocale;
-          nixEnvVars = config.nix.envVars;
           shellInit = config.environment.shellInit;
         };
         target = "bashrc";      
