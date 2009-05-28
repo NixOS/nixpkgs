@@ -13,6 +13,7 @@
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./security/pam.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
   ./services/audio/alsa.nix
