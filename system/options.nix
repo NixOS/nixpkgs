@@ -42,14 +42,6 @@ in
       ";
     };
 
-    extraHosts = mkOption {
-      default = "";
-      example = "192.168.0.1 lanlocalhost";
-      description = ''
-        Additional entries to be appended to <filename>/etc/hosts</filename>.
-      '';
-    };
-
     defaultGateway = mkOption {
       default = "";
       example = "131.211.84.1";

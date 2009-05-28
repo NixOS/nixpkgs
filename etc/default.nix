@@ -47,35 +47,10 @@ let
 
   pamConsolePerms = ./security/console.perms;
 
-  # These should be moved into the corresponding configuration files.
-  configFiles = [
-    { # TCP/UDP port assignments.
-      source = pkgs.iana_etc + "/etc/services";
-      target = "services";
-    }
-
-    { # IP protocol numbers.
-      source = pkgs.iana_etc + "/etc/protocols";
-      target = "protocols";
-    }
-
-    { # RPC program numbers.
-      source = pkgs.glibc + "/etc/rpc";
-      target = "rpc";
-    }
-
-    { # Hostname-to-IP mappings.
-      source = pkgs.substituteAll {
-        src = ./hosts;
-        extraHosts = config.networking.extraHosts;
-      };
-      target = "hosts";
-    }
-
-  ]
+  configFiles = 
 
   # A bunch of PAM configuration files for various programs.
-  ++ (map
+  (map
     (program:
       let isLDAPEnabled = config.users.ldap.enable; in
       { source = pkgs.substituteAll {
