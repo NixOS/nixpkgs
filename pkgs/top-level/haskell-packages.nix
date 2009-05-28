@@ -231,7 +231,7 @@ rec {
 
   readline = import ../development/libraries/haskell/readline {
     inherit cabal;
-    inherit (pkgs) readline;
+    inherit (pkgs) readline ncurses;
   };
 
   regexBase = import ../development/libraries/haskell/regex-base {
@@ -264,6 +264,18 @@ rec {
   SDL = import ../development/libraries/haskell/SDL {
     inherit cabal;
     inherit (pkgs) SDL;
+  };
+
+  Shellac = import ../development/libraries/haskell/Shellac/Shellac.nix {
+    inherit cabal mtl;
+  };
+
+  ShellacHaskeline = import ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {
+    inherit cabal Shellac haskeline;
+  };
+
+  ShellacReadline = import ../development/libraries/haskell/Shellac/Shellac-readline.nix {
+    inherit cabal Shellac readline;
   };
 
   stm = import ../development/libraries/haskell/stm {
