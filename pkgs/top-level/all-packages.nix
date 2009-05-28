@@ -1443,6 +1443,11 @@ let
     inherit (gtkLibs) glib;
   };
 
+  wv2 = import ../tools/misc/wv2 {
+    inherit stdenv fetchurl pkgconfig libgsf libxml2;
+    inherit (gtkLibs) glib;
+  };
+
   x11_ssh_askpass = import ../tools/networking/x11-ssh-askpass {
     inherit fetchurl stdenv x11;
     inherit (xorg) imake;
