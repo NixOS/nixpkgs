@@ -79,16 +79,6 @@ let
       target = "hosts";
     }
 
-    { # Friendly greeting on the virtual consoles.
-      source = pkgs.writeText "issue" ''
-      
-        [1;32m${config.services.mingetty.greetingLine}[0m
-        ${config.services.mingetty.helpLine}
-        
-      '';
-      target = "issue";
-    }
-
     { # Configuration for pwdutils (login, passwd, useradd, etc.).
       # You cannot login without it!
       source = ./login.defs;

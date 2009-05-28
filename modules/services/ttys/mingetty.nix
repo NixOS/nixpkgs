@@ -61,14 +61,24 @@ in
     options
   ];
 
-  services = {
-    extraJobs = map (ttyNumber : {
-        name = "tty" + toString ttyNumber;
-        job = "
-          start on udev
-          stop on shutdown
-          respawn ${mingetty}/sbin/mingetty --loginprog=${loginProgram} --noclear tty${toString ttyNumber}
-        ";
-    }) ttyNumbers;
-  };
+  services.extraJobs = map (ttyNumber : {
+    name = "tty" + toString ttyNumber;
+    job = ''
+      start on udev
+      stop on shutdown
+      respawn ${mingetty}/sbin/mingetty --loginprog=${loginProgram} --noclear tty${toString ttyNumber}
+    '';
+  }) ttyNumbers;
+
+  environment.etc =
+    [ { # Friendly greeting on the virtual consoles.
+        source = pkgs.writeText "issue" ''
+      
+          [1;32m${config.services.mingetty.greetingLine}[0m
+          ${config.services.mingetty.helpLine}
+        
+        '';
+        target = "issue";
+      }
+    ];
 }
