@@ -9,11 +9,12 @@
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
+  ./hardware/pcmcia.nix
   ./installer/grub/grub.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
-  ./legacy.nix
   ./misc/assertions.nix
+  ./misc/locate.nix
   ./programs/bash/bash.nix
   ./programs/info.nix
   ./programs/pwdutils/pwdutils.nix
