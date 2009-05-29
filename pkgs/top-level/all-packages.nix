@@ -762,6 +762,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  gpsbabel = import ../applications/misc/gpsbabel {
+    inherit fetchurl stdenv zlib expat;
+  };
+
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
       libtool fontconfig gd;
