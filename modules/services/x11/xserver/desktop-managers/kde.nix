@@ -68,9 +68,6 @@ mkIf cfg.enable {
     ];
 
     etc = [
-      { source = ./kde.pam;
-        target = "pam.d/kde";
-      }
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
       }

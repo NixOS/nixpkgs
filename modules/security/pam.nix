@@ -51,6 +51,7 @@ in
       "cups"
       "ftp"
       "ejabberd"
+      "kde"
       "common"
       "common-console" # shared stuff for interactive local sessions
     ];
