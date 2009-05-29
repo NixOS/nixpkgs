@@ -1,6 +1,6 @@
 { stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
-, python, which
+, python, which, alsaLib
 }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "868ccdfaa9f2d364ba1cf407234d59713a464837e4012104e5a2a5b2ad4c2d5d";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python];
+  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib];
 
   patchPhase = "
     set -x
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     # It wants the qt utils from qt3, and it takes them from QTDIR
     export QTDIR=${qt3}
-    ./configure --with-qt-dir=${qt3} --with-qt4-dir=${qt4} --disable-python --disable-alsa --disable-pulse --disable-hardening
+    ./configure --with-qt-dir=${qt3} --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
