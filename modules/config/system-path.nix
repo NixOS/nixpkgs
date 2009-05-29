@@ -7,7 +7,7 @@ with pkgs.lib;
 
 let
 
-  systemPackages =
+  requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
       config.environment.nix
@@ -58,16 +58,7 @@ let
       pkgs.utillinux
       pkgs.wirelesstools
       (import ../../helpers/info-wrapper.nix {inherit (pkgs) bash texinfo writeScriptBin;})
-    ]
-    ++ pkgs.lib.optional config.services.bitlbee.enable pkgs.bitlbee
-    ++ config.environment.extraPackages
-    ++ pkgs.lib.optional config.fonts.enableFontDir config.system.build.x11Fonts
-
-    # NSS modules need to be in `systemPath' so that (i) the builder
-    # chroot gets to seem them, and (ii) applications can benefit from
-    # changes in the list of NSS modules at run-time, without requiring
-    # a reboot.
-    ++ config.system.nssModules.list;
+    ] ++ config.environment.extraPackages;
 
       
   options = {
@@ -75,7 +66,6 @@ let
     environment = {
 
       systemPackages = mkOption {
-        default = systemPackages;
         description = ''
           The set of packages that appear in
           /var/run/current-system/sw.  These packages are
@@ -135,4 +125,6 @@ in
 
 {
   require = [options];
+
+  environment.systemPackages = requiredPackages;
 }

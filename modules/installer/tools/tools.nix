@@ -76,7 +76,7 @@ in
 {
   require = options;
 
-  environment.extraPackages =
+  environment.systemPackages =
     [ nixosInstall
       nixosRebuild
       nixosHardwareScan

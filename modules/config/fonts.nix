@@ -173,4 +173,7 @@ in
     '' 
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
     '';
+
+  environment.systemPackages =
+    pkgs.lib.optional config.fonts.enableFontDir config.system.build.x11Fonts;
 }
