@@ -148,10 +148,10 @@ rec {
   };
 
 
-  type = {
+  types = {
 
-    infere = mkOptionType {
-      name = "infered type";
+    inferred = mkOptionType {
+      name = "inferred type";
     };
 
     enable = mkOptionType {
