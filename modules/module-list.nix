@@ -15,6 +15,7 @@
   ./legacy.nix
   ./misc/assertions.nix
   ./programs/bash/bash.nix
+  ./programs/info.nix
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix

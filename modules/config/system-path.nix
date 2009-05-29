@@ -57,7 +57,6 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-      (import ../../helpers/info-wrapper.nix {inherit (pkgs) bash texinfo writeScriptBin;})
     ] ++ config.environment.extraPackages;
 
       
