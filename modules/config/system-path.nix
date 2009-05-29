@@ -7,20 +7,10 @@ with pkgs.lib;
 
 let
 
-  # NixOS installation/updating tools.
-  nixosTools = import ../../installer {
-    inherit pkgs config;
-  };
-
-  
   systemPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
       config.environment.nix
-      nixosTools.nixosInstall
-      nixosTools.nixosRebuild
-      nixosTools.nixosHardwareScan
-      nixosTools.nixosGenSeccureKeys
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
