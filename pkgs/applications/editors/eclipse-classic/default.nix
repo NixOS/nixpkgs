@@ -4,6 +4,8 @@
 , jre
 }:
 
+assert stdenv ? glibc;
+
 stdenv.mkDerivation rec {
   name = "eclipse-3.4.2";
   src = if stdenv.system == "x86_64-linux" then
