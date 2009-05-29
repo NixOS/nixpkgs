@@ -10,6 +10,7 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./installer/grub/grub.nix
+  ./installer/nixos-checkout.nix
   ./legacy.nix
   ./misc/assertions.nix
   ./programs/bash/bash.nix

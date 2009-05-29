@@ -19,7 +19,6 @@ let
       config.environment.nix
       nixosTools.nixosInstall
       nixosTools.nixosRebuild
-      nixosTools.nixosCheckout
       nixosTools.nixosHardwareScan
       nixosTools.nixosGenSeccureKeys
       pkgs.acl

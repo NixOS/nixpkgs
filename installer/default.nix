@@ -9,12 +9,6 @@ let
     isExecutable = true;
   });
 
-
-  nixosCheckout = (import ./nixos-checkout.nix) {
-    inherit pkgs config makeProg;
-  };
-
-
 in
 
 {
@@ -34,10 +28,7 @@ in
       "cp refs $out";
   };
 
-  nixosRebuild = let inherit (nixosCheckout) repos defaultRepo;
-                 in makeProg {
-    defaultNIXOS   = (defaultRepo repos.nixos  ).target;
-    defaultNIXPKGS = (defaultRepo repos.nixpkgs).target;
+  nixosRebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
   };
@@ -46,8 +37,6 @@ in
     name = "nixos-gen-seccure-keys";
     src = ./nixos-gen-seccure-keys.sh;
   };
-
-  inherit (nixosCheckout) nixosCheckout;
 
   nixosHardwareScan = makeProg {
     name = "nixos-hardware-scan";

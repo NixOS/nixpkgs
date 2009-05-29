@@ -2,8 +2,8 @@
 
 # Allow the location of NixOS sources and the system configuration
 # file to be overridden.
-NIXOS=${NIXOS:-@defaultNIXOS@}
-NIXPKGS=${NIXPKGS:-@defaultNIXPKGS@}
+NIXOS=${NIXOS:-/etc/nixos/nixos}
+NIXPKGS=${NIXPKGS:-/etc/nixos/nixpkgs}
 NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 export NIXPKGS # must be exported so that a non default location is passed to nixos/default.nix
 
