@@ -162,6 +162,7 @@ in {
   gphoto2 = linux;
   gpm = linux;
   gprolog = linux;
+  gpsbabel = all;
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
