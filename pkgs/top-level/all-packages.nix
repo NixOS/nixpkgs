@@ -1511,7 +1511,7 @@ let
   };
 
   bashInteractive = appendToName "interactive" (bashReal.override {
-    inherit readline;
+    inherit readline texinfo;
     interactive = true;
   });
 
