@@ -36,13 +36,13 @@ let
 
   user = {
     name = "haldaemon";
-    uid = (import ../../../system/ids.nix).uids.haldaemon;
+    uid = config.ids.uids.haldaemon;
     description = "HAL daemon user";
   };
 
   group = {
     name = "haldaemon";
-    gid = (import ../../../system/ids.nix).gids.haldaemon;
+    gid = config.ids.gids.haldaemon;
   };
 
   fdi =

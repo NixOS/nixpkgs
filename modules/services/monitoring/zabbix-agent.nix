@@ -52,7 +52,7 @@ let
 
   user = {
     name = "zabbix";
-    uid = (import ../../../system/ids.nix).uids.zabbix;
+    uid = config.ids.uids.zabbix;
     description = "Zabbix daemon user";
   };
 

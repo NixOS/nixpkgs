@@ -137,7 +137,7 @@ let
 
   user = {
     name = nagiosUser;
-    uid = (import ../../../../system/ids.nix).uids.nagios;
+    uid = config.ids.uids.nagios;
     description = "Nagios monitoring daemon";
     home = nagiosState;
   };

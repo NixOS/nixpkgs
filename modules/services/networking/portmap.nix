@@ -37,8 +37,8 @@ in
 
 ###### implementation
 
-let uid = (import ../../../system/ids.nix).uids.portmap;
-    gid = (import ../../../system/ids.nix).gids.portmap;
+let uid = config.ids.uids.portmap;
+    gid = config.ids.gids.portmap;
 in
 
 mkIf config.services.portmap.enable {

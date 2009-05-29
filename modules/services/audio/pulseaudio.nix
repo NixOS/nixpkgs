@@ -4,8 +4,8 @@
 let
   inherit (pkgs.lib) mkOption mkIf;
 
-  uid = (import ../../../system/ids.nix).uids.pulseaudio;
-  gid = (import ../../../system/ids.nix).gids.pulseaudio;
+  uid = config.ids.uids.pulseaudio;
+  gid = config.ids.gids.pulseaudio;
 
   options = {
     services = {
@@ -36,8 +36,6 @@ in
 
 ###### implementation
 
-# For some reason, PulseAudio wants UID == GID.
-assert uid == gid;
 
 mkIf config.services.pulseaudio.enable {
   require = [
@@ -51,7 +49,8 @@ mkIf config.services.pulseaudio.enable {
   users = {
     extraUsers = [
       { name = "pulse";
-        inherit uid;
+        # For some reason, PulseAudio wants UID == GID.
+        uid = assert uid == gid; uid;
         group = "pulse";
         description = "PulseAudio system-wide daemon";
         home = "/var/run/pulse";

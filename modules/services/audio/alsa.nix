@@ -34,7 +34,7 @@ let
   # not used (e.g., doesn't own any devices).
   group = {
     name = "audio";
-    gid = (import ../../../system/ids.nix).gids.audio;
+    gid = config.ids.gids.audio;
   };
 
   job = {

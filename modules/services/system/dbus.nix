@@ -55,7 +55,7 @@ let
 
   user = {
     name = "messagebus";
-    uid = (import ../../../system/ids.nix).uids.messagebus;
+    uid = config.ids.uids.messagebus;
     description = "D-Bus system message bus daemon user";
     home = homeDir;
   };

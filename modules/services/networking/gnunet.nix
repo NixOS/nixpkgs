@@ -154,7 +154,7 @@ mkIf config.services.gnunet.enable {
   users = {
     extraUsers = [
       { name = "gnunetd";
-        uid = (import ../system/ids.nix).uids.gnunetd;
+        uid = config.ids.uids.gnunetd;
         description = "GNUnet Daemon User";
         home = "/var/empty";
       }

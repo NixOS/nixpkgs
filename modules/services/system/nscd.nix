@@ -13,7 +13,7 @@ in
         
         users = [
           { name = "nscd";
-            uid = (import ../../../system/ids.nix).uids.nscd;
+            uid = config.ids.uids.nscd;
             description = "Name service cache daemon user";
           }
         ];

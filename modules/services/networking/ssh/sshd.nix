@@ -85,8 +85,6 @@ let
     
   '';
 
-  sshdUid = (import ../../../../system/ids.nix).uids.sshd;
-
   # !!! is this assertion evaluated anywhere???
   assertion = cfg.permitRootLogin == "yes" ||
        cfg.permitRootLogin == "without-password" ||
@@ -104,7 +102,7 @@ mkIf config.services.sshd.enable {
   users = {
     extraUsers = [
       { name = "sshd";
-        uid = (import ../../../../system/ids.nix).uids.sshd;
+        uid = config.ids.uids.sshd;
         description = "SSH privilege separation user";
         home = "/var/empty";
       }

@@ -37,14 +37,14 @@ let
 
   user = {
     name = "atd";
-    uid = (import ../../../system/ids.nix).uids.atd;
+    uid = config.ids.uids.atd;
     description = "atd user";
     home = "/var/empty";
   };
 
   group = {
     name = "atd";
-    gid = (import ../../../system/ids.nix).gids.atd;
+    gid = config.ids.gids.atd;
   };
 
   job = ''

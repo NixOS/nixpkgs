@@ -95,13 +95,13 @@ mkIf config.services.vsftpd.enable {
   users = {
     extraUsers = [
         { name = "vsftpd";
-          uid = (import ../../../system/ids.nix).uids.vsftpd;
+          uid = config.ids.uids.vsftpd;
           description = "VSFTPD user";
           home = "/homeless-shelter";
         }
       ] ++ pkgs.lib.optional anonymousUser
         { name = "ftp";
-          uid = (import ../../../system/ids.nix).uids.ftp;
+          uid = config.ids.uids.ftp;
           group = "ftp";
           description = "Anonymous ftp user";
           home = "/home/ftp";
@@ -109,7 +109,7 @@ mkIf config.services.vsftpd.enable {
 
     extraGroups = [
       { name = "ftp";
-        gid = (import ../../../system/ids.nix).gids.ftp;
+        gid = config.ids.gids.ftp;
       }
     ];
       

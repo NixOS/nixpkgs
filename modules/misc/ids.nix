@@ -1,6 +1,32 @@
-{
+# This module defines the global list of uids and gids.  We keep a
+# central list to prevent id collissions.
 
-  uids = {
+{config, pkgs, ...}:
+
+let
+
+  options = {
+
+    ids.uids = pkgs.lib.mkOption {
+      description = ''
+        The user IDs used in NixOS.
+      '';
+    };
+
+    ids.gids = pkgs.lib.mkOption {
+      description = ''
+        The group IDs used in NixOS.
+      '';
+    };
+
+  };
+
+in
+  
+{
+  require = options;
+
+  ids.uids = {
     root = 0;
     nscd = 1;
     sshd = 2;
@@ -25,7 +51,7 @@
     nobody = 65534;
   };
 
-  gids = {
+  ids.gids = {
     root = 0;
     wheel = 1;
     kmem = 2;

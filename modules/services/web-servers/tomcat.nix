@@ -73,13 +73,13 @@ mkIf config.services.tomcat.enable {
       
       groups = [
         { name = "tomcat";
-          gid = (import ../../../system/ids.nix).gids.tomcat;
+          gid = config.ids.gids.tomcat;
         }
       ];
       
       users = [
         { name = "tomcat";
-          uid = (import ../../../system/ids.nix).uids.tomcat;
+          uid = config.ids.uids.tomcat;
           description = "Tomcat user";
           home = "/homeless-shelter";
         }

@@ -41,7 +41,7 @@ in
 
 ###### implementation
 let
-  ids = import ../../system/ids.nix;
+  ids = config.ids;
 
   # User accounts to be created/updated by NixOS.
   users =

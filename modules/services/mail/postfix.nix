@@ -156,7 +156,6 @@ let
   user = cfg.user;
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
-  idList = import ../../../system/ids.nix;
 
   optionalString = pkgs.lib.optionalString;
   concatStringsSep = pkgs.lib.concatStringsSep;
@@ -270,17 +269,17 @@ mkIf config.services.postfix.enable {
     extraUsers = [
       { name = user;
         description = "Postfix mail server user";
-        uid = idList.uids.postfix;
+        uid = config.ids.uids.postfix;
         group = group;
       }
     ];
 
     extraGroups = [
       { name = group; 
-        gid = idList.gids.postfix;
+        gid = config.ids.gids.postfix;
       }
       { name = setgidGroup; 
-        gid = idList.gids.postdrop;
+        gid = config.ids.gids.postdrop;
       }
     ];
   };

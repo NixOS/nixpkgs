@@ -41,15 +41,13 @@ in
 ###### implementation
 
 let
-  bitlbeeUid = (import ../system/ids.nix).uids.bitlbee;
+  bitlbeeUid = config.ids.uids.bitlbee;
   inherit (config.services.bitlbee) portNumber interface;
 in
 
 mkIf config.services.bitlbee.enable {
 
-  require = [ 
-    options
-  ];
+  require = options;
 
   users = {
     extraUsers = [
@@ -62,32 +60,31 @@ mkIf config.services.bitlbee.enable {
     
     extraGroups = [
       { name = "bitlbee";
-        gid = (import ../system/ids.nix).gids.bitlbee;
+        gid = config.ids.gids.bitlbee;
       }
     ];
   };
 
-  services = {
-    extraJobs = [{
-      name = "bitlbee";
+  services.extraJobs = [{
+    name = "bitlbee";
 
-      job = ''
-    description "BitlBee IRC to other chat networks gateway"
+    job = ''
+      description "BitlBee IRC to other chat networks gateway"
 
-    start on network-interfaces/started
-    stop on network-interfaces/stop
+      start on network-interfaces/started
+      stop on network-interfaces/stop
 
-    start script
-        if ! test -d /var/lib/bitlbee
-        then
-            mkdir -p /var/lib/bitlbee
-        fi
-    end script
+      start script
+          if ! test -d /var/lib/bitlbee
+          then
+              mkdir -p /var/lib/bitlbee
+          fi
+      end script
 
-    respawn ${pkgs.bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
-            -i ${interface} -u bitlbee
-      '';
-  
-    }];
-  };
+      respawn ${pkgs.bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
+              -i ${interface} -u bitlbee
+    '';
+  }];
+
+  environment.systemPackages = pkgs.bitlbee;  
 }

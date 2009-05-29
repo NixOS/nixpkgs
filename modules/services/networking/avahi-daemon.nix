@@ -93,14 +93,14 @@ let
 
   user = {
     name = "avahi";
-    uid = (import ../system/ids.nix).uids.avahi;
+    uid = config.ids.uids.avahi;
     description = "`avahi-daemon' privilege separation user";
     home = "/var/empty";
   };
 
   group = {
     name = "avahi";
-    gid = (import ../system/ids.nix).gids.avahi;
+    gid = config.ids.gids.avahi;
   };
 
   job = {

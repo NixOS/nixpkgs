@@ -44,7 +44,6 @@ let
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
   cfg = config.services.dovecot;
-  idList = import ../../../system/ids.nix;
 
   dovecotConf = 
   ''
@@ -112,13 +111,13 @@ mkIf config.services.dovecot.enable {
   users = {
     extraUsers = [{
       name = cfg.user;
-      uid = idList.uids.dovecot;
+      uid = config.ids.uids.dovecot;
       description = "Dovecot user";
       group = cfg.group;
     }];
     extraGroups = [{
       name = cfg.group;
-      gid = idList.gids.dovecot;
+      gid = config.ids.gids.dovecot;
     }];
   };
 

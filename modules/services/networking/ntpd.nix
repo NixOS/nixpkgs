@@ -72,7 +72,7 @@ mkIf config.services.ntp.enable {
       
       users = [
         { name = ntpUser;
-          uid = (import ../../../system/ids.nix).uids.ntp;
+          uid = config.ids.uids.ntp;
           description = "NTP daemon user";
           home = stateDir;
         }

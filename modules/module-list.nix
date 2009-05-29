@@ -14,6 +14,7 @@
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
+  ./misc/ids.nix
   ./misc/locate.nix
   ./programs/bash/bash.nix
   ./programs/info.nix
