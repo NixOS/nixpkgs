@@ -239,7 +239,7 @@ let
             suffix = "/bin/splash_helper";
             symlink = "/${kernelPackages.splashutils.helperName}";
           } # */
-          { object = import ../../../helpers/unpack-theme.nix {
+          { object = import ../../../lib/unpack-theme.nix {
               inherit (pkgs) stdenv;
               theme = config.services.ttyBackgrounds.defaultTheme;
             };

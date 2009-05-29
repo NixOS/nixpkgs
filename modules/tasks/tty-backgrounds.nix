@@ -100,7 +100,7 @@ let
     themes = map (x: if x ? theme then (unpackTheme x.theme) else "default") backgrounds;
   };
 
-  unpackTheme = theme: import ../../helpers/unpack-theme.nix {
+  unpackTheme = theme: import ../../lib/unpack-theme.nix {
       inherit stdenv theme;
     };
 
