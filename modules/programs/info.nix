@@ -8,7 +8,7 @@ let
   # update some global "dir" file).  So this wrapper script around
   # "info" builds a temporary "dir" file on the fly.  This is a bit
   # slow (on a cold cache) but not unacceptably so.
-  infoWrapper = pkgs.writeScriptBin "info"
+  infoWrapper = pkgs.writeScriptBin "info-wrapper"
     ''
       #! ${pkgs.stdenv.shell}
 
