@@ -1355,6 +1355,11 @@ let
     inherit fetchurl stdenv ucl zlib;
   };
 
+  viking = import ../applications/misc/viking {
+    inherit fetchurl stdenv pkgconfig intltool gettext expat curl;
+    inherit (gtkLibs) gtk;
+  };
+
   vpnc = import ../tools/networking/vpnc {
     inherit fetchurl stdenv libgcrypt perl gawk
       nettools makeWrapper;
