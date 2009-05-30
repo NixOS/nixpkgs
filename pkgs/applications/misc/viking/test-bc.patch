@@ -1,0 +1,22 @@
+For some reason, `bc -l' yields no output.
+
+--- viking-0.9.8/test/check_degrees_conversions.sh	2008-03-15 23:01:48.000000000 +0100
++++ viking-0.9.8/test/check_degrees_conversions.sh	2009-05-30 23:23:27.000000000 +0200
+@@ -7,7 +7,7 @@ function check_success()
+   for value in "$@"
+   do
+     result=`./degrees_converter "$value" | cut -d' ' -f3`
+-    diff=`echo "$result - $expected" | bc -l`
++    diff=`echo "$result - $expected" | bc`
+     if [ $diff != 0 ]
+     then
+       echo "$value -> $result != $expected"
+@@ -23,7 +23,7 @@ function check_failure()
+   for value in "$@"
+   do
+     result=`./degrees_converter "$value" | cut -d' ' -f3`
+-    diff=`echo "$result - $expected" | bc -l`
++    diff=`echo "$result - $expected" | bc`
+     if [ $diff = 0 ]
+     then
+       echo "$value -> $result = $expected"
