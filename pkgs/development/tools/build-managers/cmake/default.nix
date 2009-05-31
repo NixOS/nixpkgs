@@ -1,7 +1,7 @@
 {fetchurl, stdenv, replace, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "cmake-2.6.3";
+  name = "cmake-2.6.4";
 
   # We look for cmake modules in .../share/cmake-${majorVersion}/Modules.
   majorVersion = "2.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.cmake.org/files/v${majorVersion}/${name}.tar.gz";
-    sha256 = "3c3af80526a32bc2afed616e8f486b847144f2fa3a8e441908bd39c38b146450";
+    sha256 = "1wpxr5x4aggaqrqzjq3kg4hh09f0vyr1njik1pad01bvwd923pcw";
   };
 
   postUnpack = ''
