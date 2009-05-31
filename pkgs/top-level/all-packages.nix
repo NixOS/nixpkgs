@@ -6327,6 +6327,12 @@ let
       libXcursor libXinerama libXext libX11 ;
   };
 
+  gpsd = import ../servers/gpsd {
+    inherit fetchurl stdenv python pkgconfig dbus dbus_glib
+      ncurses libxslt xmlto;
+    inherit (xlibs) libXt libXpm;
+  };
+
   gv = import ../applications/misc/gv {
     inherit fetchurl stdenv Xaw3d ghostscriptX;
   };
