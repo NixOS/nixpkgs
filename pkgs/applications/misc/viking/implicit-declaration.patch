@@ -1,0 +1,13 @@
+Debian patch that fixes an implicat declaration.
+
+diff -urNad trunk~/src/util.c trunk/src/util.c
+--- trunk~/src/util.c	2009-02-08 14:47:01.000000000 +0100
++++ trunk/src/util.c	2009-04-15 17:23:44.000000000 +0200
+@@ -26,6 +26,7 @@
+ #endif
+ 
+ #include <glib/gi18n.h>
++#include <glib/gprintf.h>
+ 
+ #include "dialog.h"
+ 

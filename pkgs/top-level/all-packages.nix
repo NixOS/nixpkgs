@@ -1357,7 +1357,7 @@ let
 
   viking = import ../applications/misc/viking {
     inherit fetchurl stdenv pkgconfig intltool gettext expat curl
-      bc file;
+      gpsd bc file;
     inherit (gtkLibs) gtk;
   };
 

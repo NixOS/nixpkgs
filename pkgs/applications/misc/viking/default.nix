@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, gtk, expat, curl
-, bc, file }:
+, gpsd, bc, file }:
 
 stdenv.mkDerivation rec {
   name = "viking-0.9.8";
@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1is8g6ld5pd13iiv9qm8526q1cblg01pqyakg52sd6k7fys7dz2d";
   };
 
-  patches = [ ./test-bc.patch ];
+  patches = [
+    ./test-bc.patch ./gpsdclient.patch ./implicit-declaration.patch
+  ];
 
-  buildInputs = [ pkgconfig intltool gettext gtk expat curl bc file ];
-
-  # XXX: Remove this once we have `gpsd' (http://gpsd.berlios.de/).
-  configureFlags = "--disable-realtime-gps-tracking";
+  buildInputs = [ pkgconfig intltool gettext gtk expat curl gpsd bc file ];
 
   doCheck = true;
 
