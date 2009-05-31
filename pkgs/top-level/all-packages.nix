@@ -2041,6 +2041,11 @@ let
     inherit mysql libxml2 fcgi;
   };
 
+  sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
+    inherit makeWrapper;
+    clisp = clisp_2_44_1;
+  };
+
   scala = import ../development/compilers/scala {
     inherit stdenv fetchurl;
   };
@@ -2117,7 +2122,16 @@ let
 
   clisp = import ../development/interpreters/clisp {
     inherit fetchurl stdenv libsigsegv gettext
-      readline ncurses coreutils pcre zlib;
+      readline ncurses coreutils pcre zlib libffi libffcall;
+    inherit (xlibs) libX11 libXau libXt xproto
+      libXpm libXext xextproto;
+  };
+
+  # compatibility issues in 2.47 - at list 2.44.1 is known good
+  # for sbcl bootstrap
+  clisp_2_44_1 = import ../development/interpreters/clisp/2.44.1.nix {
+    inherit fetchurl stdenv libsigsegv gettext
+      readline ncurses coreutils pcre zlib libffi libffcall;
     inherit (xlibs) libX11 libXau libXt xproto
       libXpm libXext xextproto;
   };
@@ -3432,6 +3446,10 @@ let
 
   libextractor = composedArgsAndFun (selectVersion ../development/libraries/libextractor "0.5.18") {
     inherit fetchurl stdenv builderDefs zlib;
+  };
+
+  libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
+    inherit fetchcvs;
   };
 
   libffi = import ../development/libraries/libffi {
@@ -6798,7 +6816,8 @@ let
   };
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
-    inherit clisp texinfo;
+    inherit texinfo;
+    clisp = clisp_2_44_1;
   };
 
   subversion = subversion16;
