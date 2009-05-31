@@ -3137,6 +3137,7 @@ root        ALL=(ALL) SETENV: ALL
     ../upstart-jobs/cron/locate.nix
     ../upstart-jobs/manual.nix
     ../upstart-jobs/rogue.nix
+    ../upstart-jobs/gpsd.nix
     ../upstart-jobs/guest-users.nix
     ../upstart-jobs/pulseaudio.nix
     ../upstart-jobs/portmap.nix
