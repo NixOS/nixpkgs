@@ -762,10 +762,6 @@ let
       inherit fetchurl stdenv;
     });
 
-  gpsbabel = import ../applications/misc/gpsbabel {
-    inherit fetchurl stdenv zlib expat;
-  };
-
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
       libtool fontconfig gd;
@@ -6326,6 +6322,16 @@ let
     inherit (gtkLibs) glib;
     inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
       libXcursor libXinerama libXext libX11 ;
+  };
+
+  gpsbabel = import ../applications/misc/gpsbabel {
+    inherit fetchurl stdenv zlib expat;
+  };
+
+  gpscorrelate = import ../applications/misc/gpscorrelate {
+    inherit fetchurl stdenv pkgconfig exiv2 libxml2
+      libxslt docbook_xsl docbook_xml_dtd_42;
+    inherit (gtkLibs) gtk;
   };
 
   gpsd = import ../servers/gpsd {
