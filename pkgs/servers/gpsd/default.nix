@@ -1,5 +1,6 @@
 { fetchurl, stdenv, python, pkgconfig, dbus, dbus_glib
-, ncurses, libXt, libXpm, libxslt, xmlto, gpsdUser ? "gpsd" }:
+, ncurses, libX11, libXt, libXpm, libXaw, libXext, makeWrapper
+, libxslt, xmlto, gpsdUser ? "gpsd" }:
 
 stdenv.mkDerivation rec {
   name = "gpsd-2.39";
@@ -10,13 +11,30 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python pkgconfig dbus dbus_glib ncurses libXt libXpm
-    libxslt xmlto
+    python pkgconfig dbus dbus_glib ncurses
+    libX11 libXt libXpm libXaw libXext
+    makeWrapper libxslt xmlto
   ];
 
-  configureFlags = "--enable-dbus --enable-gpsd-user=${gpsdUser}";
+  configureFlags = "--enable-dbus --enable-gpsd-user=${gpsdUser} "
+
+    # Make sure `xgpsspeed' has libXt and libX11 in its RPATH.
+    + "LDFLAGS=-Wl,--rpath=${libXt}/lib:${libX11}/lib";
 
   doCheck = true;
+
+  postInstall = ''
+    for prog in "$out/bin"/*
+    do
+      if grep -q python "$prog"
+      then
+          echo "patching \`$prog'..."
+          wrapProgram "$prog"                                                   \
+            --prefix PATH ":" "${python}/bin"                                   \
+            --prefix PYTHONPATH ":" "$out/lib/${python.libPrefix}/site-packages"
+      fi
+    done
+  '';
 
   meta = {
     description = "`gpsd', a GPS service daemon";

@@ -2228,6 +2228,7 @@ let
   };
 
   python25Full = python25Base.passthru.function {
+    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
     readline = if getConfig ["python" "readlineSupport"] true then readline else null;
@@ -6328,9 +6329,12 @@ let
   };
 
   gpsd = import ../servers/gpsd {
-    inherit fetchurl stdenv python pkgconfig dbus dbus_glib
-      ncurses libxslt xmlto;
-    inherit (xlibs) libXt libXpm;
+    inherit fetchurl stdenv pkgconfig dbus dbus_glib
+      ncurses makeWrapper libxslt xmlto;
+    inherit (xlibs) libX11 libXt libXpm libXaw libXext;
+
+    # We need a Python with NCurses bindings.
+    python = pythonFull;
   };
 
   gv = import ../applications/misc/gv {
