@@ -50,6 +50,10 @@ rec {
     inherit cabal;
   };
 
+  dotgen = import ../development/libraries/haskell/dotgen {
+    inherit cabal;
+  };
+
   editline = import ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
     inherit cabal;
