@@ -163,6 +163,8 @@ in {
   gpm = linux;
   gprolog = linux;
   gpsbabel = all;
+  gpscorrelate = linux;
+  gpsd = all;
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
@@ -338,6 +340,7 @@ in {
   utillinux = linux;
   utillinuxCurses = linux;
   valgrind = linux;
+  viking = linux;
   vim = linux;
   vimHugeX = linux;
   vlc = linux;
