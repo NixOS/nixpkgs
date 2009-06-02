@@ -5179,7 +5179,7 @@ let
     inherit stdenv klibc;
   };
 
-  kvm = kvm76;
+  kvm = kvm86;
 
   kvm57 = import ../os-specific/linux/kvm/57.nix {
     inherit fetchurl zlib e2fsprogs SDL alsaLib;
