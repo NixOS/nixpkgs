@@ -93,11 +93,16 @@ mkIf config.services.ntp.enable {
             # Needed to run ntpd as an unprivileged user.
             ${modprobe}/sbin/modprobe capability || true
 
-            ${ntp}/bin/ntpd -q -g ${ntpFlags}
+            # !!! This can hang indefinitely if the network is down or
+            # the servers are unreachable.  This is particularly bad
+            # because Upstart cannot kill jobs stuck in the start
+            # phase.  Thus a hanging ntpd job can block system
+            # shutdown.
+            # ${ntp}/bin/ntpd -q -g ${ntpFlags}
 
         end script
 
-        respawn ${ntp}/bin/ntpd -n ${ntpFlags}
+        respawn ${ntp}/bin/ntpd -g -n ${ntpFlags}
       '';
     }];
   };
