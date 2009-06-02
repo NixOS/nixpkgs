@@ -274,15 +274,15 @@ rec {
   # The list of packages that need to appear in KDEDIRS,
   # XDG_CONFIG_DIRS and XDG_DATA_DIRS.
   # !!! This should be defined somewhere else.  
-  kdePackages = 
-    pkgs.lib.optionals (config.services.xserver.sessionType == "kde4")
+  kdePackages =
+    pkgs.lib.optionals (config.services.xserver.enable && config.services.xserver.sessionType == "kde4")
       [ pkgs.kde42.kdelibs
         pkgs.kde42.kdebase
         pkgs.kde42.kdebase_runtime
         pkgs.kde42.kdebase_workspace
         pkgs.shared_mime_info
       ]
-    ++ pkgs.lib.optionals (config.services.xserver.sessionType == "kde")
+    ++ pkgs.lib.optionals (config.services.xserver.enable && config.services.xserver.sessionType == "kde")
       [ pkgs.kdebase
         pkgs.kdelibs
       ]
