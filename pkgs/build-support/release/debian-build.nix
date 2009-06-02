@@ -49,7 +49,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       stopNest
     '';
 
-    installCommand = ''
+    installPhase = ''
       export LOGNAME=root
 
       ${checkinstall}/sbin/checkinstall --nodoc -y -D make install
