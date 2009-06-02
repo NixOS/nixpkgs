@@ -60,6 +60,15 @@ let
 
       if test "$reason" = BOUND -o "$reason" = REBOOT; then
           ${pkgs.glibc}/sbin/nscd --invalidate hosts
+
+          # Restart ntpd.  (The "ip-up" event below will trigger the
+          # restart.)  We need to restart it to make sure that it will
+          # actually do something: if ntpd cannot resolve the server
+          # hostnames in its config file, then it will never do
+          # anything ever again ("couldn't resolve ..., giving up on
+          # it"), so we silently lose time synchronisation.
+          ${pkgs.upstart}/sbin/initctl stop ntpd
+          
           ${pkgs.upstart}/sbin/initctl emit ip-up
       fi
 
