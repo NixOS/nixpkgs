@@ -5192,8 +5192,8 @@ let
     inherit (glibc) kernelHeaders;
   };
 
-  kvm84 = import ../os-specific/linux/kvm/84.nix {
-    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
+  kvm86 = import ../os-specific/linux/kvm/86.nix {
+    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
     inherit (glibc) kernelHeaders;
   };
 
