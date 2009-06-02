@@ -25,7 +25,7 @@ rec {
   
     boot = {
       isLiveCD = true;
-      extraTTYs = [7 8]; # manual, rogue
+
       extraModulePackages = [system.kernelPackages.aufs];
       
       kernelPackages = pkgs.kernelPackages_2_6_28;
