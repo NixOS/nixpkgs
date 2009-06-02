@@ -5,11 +5,11 @@
 assert libpng != null && libjpeg != null && expat != null;
 
 stdenv.mkDerivation rec {
-  name = "graphviz-2.20.3";
+  name = "graphviz-2.22.2";
 
   src = fetchurl {
     url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
-    sha256 = "0grrijj3ryacnc0qj8l6xp5nqnmff5nvx6ziij1r9lghzb17cdjq";
+    sha256 = "1yzda1al32la3wyrxwc1hs83sx9p84zh6xlpcpkx90xvjaav827v";
   };
 
   buildInputs = [pkgconfig x11 libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
