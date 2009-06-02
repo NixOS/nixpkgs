@@ -9,7 +9,7 @@ import ./generic.nix (
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "09rpfghjl2h50ccnp1yr9i466kfgh868g3433c0fqwf7kaqlalwc";
+      sha256 = "10vryshzpgk7vqmb3f0z981r5nci722kfqbjd274qwjyanxlj60b";
     };
 
     features = {
