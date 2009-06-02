@@ -149,7 +149,7 @@ rec {
     };
     
     installer = {
-      nixpkgsURL = http://nixos.org/releases/nixpkgs/unstable;
+      nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
     };
 
     security = {
