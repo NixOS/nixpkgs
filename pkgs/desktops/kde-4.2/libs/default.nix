@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     sha1 = "c4cde3ea347d89d79ffdead203c85b1c2d1f8757";
   };
   
+  includeAllQtDirs = true;
+
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper /* openexr */ aspell avahi

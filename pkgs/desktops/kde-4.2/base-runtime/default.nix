@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     sha1 = "f3adc26e6b313a14af1e4208bc539017c8dcccd7";
   };
 /*  CLUCENE_HOME=cluceneCore;*/
+  includeAllQtDirs=true;
   buildInputs = [ cmake perl bzip2 qt4 alsaLib xineLib samba stdenv.gcc.libc kdelibs
                   automoc4 phonon strigi soprano cluceneCore ];
 }

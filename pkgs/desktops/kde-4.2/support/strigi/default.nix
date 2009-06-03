@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/strigi/strigi-0.6.4.tar.bz2;
     md5 = "324fd9606ac77765501717ff92c04f9a";
   };
+
+  includeAllQtDirs = true;
   
   CLUCENE_HOME = cluceneCore;
   

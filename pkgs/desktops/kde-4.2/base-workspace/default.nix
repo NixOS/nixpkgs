@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.2.3/src/kdebase-workspace-4.2.3.tar.bz2;
     sha1 = "0c92579c651c5a08ff6440762eb5c2ad9d5bc0ad";
   };
+  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdepimlibs /*kdebindings*/ pthread_stubs boost libusb stdenv.gcc.libc
                   libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver

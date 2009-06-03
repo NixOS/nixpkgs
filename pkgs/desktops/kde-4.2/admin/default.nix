@@ -10,6 +10,7 @@ stdenv.mkDerivation {
   };
   builder = ./builder.sh;
   inherit system_config_printer;
+  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 pkgconfig perl python sip pyqt4 pycups system_config_printer rhpl
                   kdelibs kdepimlibs kdebindings automoc4 phonon ];
