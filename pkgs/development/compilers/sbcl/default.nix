@@ -17,11 +17,26 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doFixTests" "doBuild" "doInstall" "doWrap"];
+  phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
       
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
   '') ["minInit"];
+
+  setVersion = a.fullDepEntry (''
+    echo '"${version}.nixos"' > version.lisp-expr
+    echo "
+    (lambda (features)
+      (flet ((enable (x)
+               (pushnew x features))
+             (disable (x)
+               (setf features (remove x features))))
+        (enable :sb-thread))) " > customize-target-features.lisp
+  '') ["minInit" "doUnpack"];
+
+  doFixNewer = a.fullDepEntry(''
+    sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
+  '') ["minInit" "doUnpack"];
 
   doWrap = a.fullDepEntry (''
     wrapProgram "$out/bin/sbcl" --set "SBCL_HOME" "$out/lib/sbcl"
