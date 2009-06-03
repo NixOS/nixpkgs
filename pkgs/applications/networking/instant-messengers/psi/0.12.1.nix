@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [aspell qt4 zlib sox libX11 xproto libSM libICE qca2];
 
   NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
+  NIX_LDFLAGS="-lqca";
 
   configureFlags = [ " --with-zlib-inc=${zlib}/include "
     " --disable-bundled-qca" ];
