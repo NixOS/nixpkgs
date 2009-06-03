@@ -833,7 +833,7 @@ rec {
       fullName = "Ubuntu 9.04 Jaunty (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-i386/Packages.bz2;
-        sha256 = "6378e8707f9f1324aac8bbc67daf56eee27f2e0a4a4c96792be032d1ca706a38";
+        sha256 = "72c95e4901ad56ce8791723e2ae40bce2399f306f9956cac80e964011e1948d0;
       };
       urlPrefix = mirror://ubuntu;
     } // args);
