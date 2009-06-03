@@ -538,6 +538,14 @@ mkIf cfg.enable {
         start on ${if cfg.autorun then "hal" else "never"}
 
         start script
+
+          # Ugly hack: wait until udev has started since the X server
+          # needs various devices.  This would more properly be
+          # expressed as an Upstart dependency, but AFAIK in "start
+          # on" we can't express a logical AND.
+          while ! initctl status udev 2>&1 | grep -q running; do
+              sleep 1
+          done
         
           rm -f /var/run/opengl-driver
           ${if videoDriver == "nvidia"
