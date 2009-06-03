@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [perl perlXMLParser xkbcomp gettext intltool];
 
+  patches = [ ./eo.patch ];
+
   ICONV = "iconv";
 
   preConfigure = ''

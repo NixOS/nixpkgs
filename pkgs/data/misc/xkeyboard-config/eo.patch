@@ -1,15 +1,3 @@
-diff --git a/rules/base.lst b/rules/base.lst
-index 7004bcd..804f9f0 100644
---- a/rules/base.lst
-+++ b/rules/base.lst
-@@ -168,6 +168,7 @@
-   nl              Netherlands
-   bt              Bhutan
-   ee              Estonia
-+  eo              Esperanto
-   ir              Iran
-   iq              Iraq
-   fo              Faroe Islands
 diff --git a/rules/base.xml.in b/rules/base.xml.in
 index ec321f8..e9c3546 100644
 --- a/rules/base.xml.in
