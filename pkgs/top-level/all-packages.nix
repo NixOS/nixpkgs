@@ -7743,12 +7743,11 @@ let
     inherit fetchurl stdenv tetex lazylist;
   };
 
-  psi = builderDefsPackage
-    (selectVersion ../applications/networking/instant-messengers/psi "0.12")
+  psi = (selectVersion ../applications/networking/instant-messengers/psi "0.12.1")
     {
-      inherit builderDefs zlib aspell sox openssl;
+      inherit stdenv fetchurl zlib aspell sox openssl qt4;
       inherit (xlibs) xproto libX11 libSM libICE;
-      qt = qt4;
+      qca2 = kde42.qca2;
     };
 
   putty = import ../applications/networking/remote/putty {
