@@ -104,7 +104,7 @@ rec {
   };
   
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
-    inherit cabal GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
+    inherit cabal GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
     ghc = ghcReal;
@@ -412,14 +412,14 @@ rec {
     inherit (pkgs) libedit;
   };
 
-  happy = happy1182;
+  happy = happy1184;
 
   happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
     inherit cabal;
     inherit (pkgs) perl;
   };
 
-  happy1182 = import ../development/tools/parsing/happy/happy-1.18.2.nix {
+  happy1184 = import ../development/tools/parsing/happy/happy-1.18.4.nix {
     inherit cabal mtl;
     inherit (pkgs) perl;
   };
