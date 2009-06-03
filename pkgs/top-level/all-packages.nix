@@ -6918,6 +6918,12 @@ let
     inherit makeWrapper python;
   };
 
+  tangogps = import ../applications/misc/tangogps {
+    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite;
+    inherit (gtkLibs) gtk;
+    gconf = gnome.GConf;
+  };
+
   /* does'nt work yet i686-linux only (32bit version)
   teamspeak_client = import ../applications/networking/instant-messengers/teamspeak/client.nix {
     inherit fetchurl stdenv;
