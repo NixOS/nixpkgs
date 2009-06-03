@@ -2,14 +2,14 @@
   python, ruby, libewf, vte, perl}:
 
 stdenv.mkDerivation {
-  name = "radare-1.3";
+  name = "radare-1.4";
 
   src = fetchurl {
-    url = http://radare.org/get/radare-1.3.tar.gz;
-    sha256 = "0r2yl24ywyqzi7wn82hr6rkn3dgf9bl9m662hswszx44pd0cxarx";
+    url = http://radare.org/get/radare-1.4.tar.gz;
+    sha256 = "1hx9xvcyvvbbbq39kkim3ajli1hqadld9vfzcxz7iz5pgp15mc3b";
   };
 
-  patches = [ ./lua.patch ];
+#  patches = [ ./lua.patch ];
 
   buildInputs = [pkgconfig gtk readline libusb lua gtkdialog python
     ruby libewf vte perl];
