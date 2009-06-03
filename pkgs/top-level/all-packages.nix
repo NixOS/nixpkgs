@@ -3579,6 +3579,10 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  libproxy = import ../development/libraries/libproxy {
+    inherit stdenv fetchurl;
+  };
+  
   libpseudo = import ../development/libraries/libpseudo {
     inherit fetchurl stdenv pkgconfig ncurses;
     inherit (gtkLibs) glib;
@@ -7423,6 +7427,8 @@ let
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
       xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit;
   });
+  
+  gnome26 = import ../desktops/gnome-2.26 pkgs;
 
   kde3 = {
 
