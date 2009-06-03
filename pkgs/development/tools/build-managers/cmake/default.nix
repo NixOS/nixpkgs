@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wpxr5x4aggaqrqzjq3kg4hh09f0vyr1njik1pad01bvwd923pcw";
   };
 
+  patches = [ ./findqt4.patch ];
+
   postUnpack = ''
     dontUseCmakeConfigure=1
     source $setupHook
