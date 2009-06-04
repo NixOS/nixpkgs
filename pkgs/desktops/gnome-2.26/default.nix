@@ -160,6 +160,12 @@ rec {
     inherit intltool GConf gnome_keyring libsoup;
   };
   
+  libgnomekbd = import ./desktop/libgnomekbd {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxklavier;
+    inherit (pkgs.gtkLibs) glib gtk;
+    inherit intltool GConf libglade;
+  };
+  
   # Removed from recent GNOME releases, but still required
   scrollkeeper = import ./desktop/scrollkeeper {
     inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42;
@@ -211,6 +217,22 @@ rec {
     inherit (pkgs.gtkLibs) gtk pango atk;
     inherit (pkgs.xlibs) libXau libXtst inputproto;
     inherit intltool libglade startup_notification GConf;
+  };
+  
+  gnome_settings_daemon = import ./desktop/gnome-settings-daemon {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxklavier;
+    inherit (pkgs.gtkLibs) gtk;
+    inherit intltool GConf gnome_desktop libglade libgnomekbd;
+  };
+  
+  gnome_control_center = import ./desktop/gnome-control-center {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxklavier hal;
+    inherit (pkgs) cairo popt which python libxslt shared_mime_info desktop_file_utils;
+    inherit (pkgs.gtkLibs) glib gtk pango atk;
+    inherit gnome_doc_utils intltool GConf libglade libgnome libgnomeui libgnomekbd;
+    inherit librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon;
+    inherit libbonobo libbonoboui libgnomecanvas libart_lgpl gnome_vfs ORBit2;
+    libxml2 = pkgs.libxml2Python;
   };
   
   nautilus = import ./desktop/nautilus {
