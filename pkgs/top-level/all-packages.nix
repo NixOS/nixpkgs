@@ -4050,7 +4050,7 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    inherit (gnome) gtk atk pango libsoup gtkdoc;
+    inherit (gnome26) gtk atk pango libsoup gtkdoc;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
