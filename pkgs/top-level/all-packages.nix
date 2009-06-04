@@ -6541,7 +6541,8 @@ let
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify;
     inherit (gtkLibs) gtk glib;
-    inherit (gnome) gtksourceview libsoup;
+    inherit (gnome) gtksourceview;
+    inherit (gnome26) libsoup;
   };
 
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
