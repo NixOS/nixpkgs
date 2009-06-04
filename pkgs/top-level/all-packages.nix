@@ -3674,8 +3674,8 @@ let
   };
 
   libxklavier = import ../development/libraries/libxklavier {
-    inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2;
-    inherit (xorg) libX11 libICE libxkbfile;
+    inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2 isocodes;
+    inherit (xorg) libX11 libICE libXi libxkbfile;
     inherit (gtkLibs) glib;
   };
 
