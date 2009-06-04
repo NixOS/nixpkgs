@@ -275,7 +275,8 @@ rec {
   };
 
   libsoup = import ./libsoup.nix {
-    inherit stdenv fetchurl pkgconfig libxml2 glib;
+    inherit stdenv fetchurl pkgconfig libxml2 glib 
+      libproxy GConf sqlite;
     input = desktop.libsoup;
   };
   

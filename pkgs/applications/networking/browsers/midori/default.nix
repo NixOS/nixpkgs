@@ -5,18 +5,18 @@ let
   doPatchShebangs = args.doPatchShebangs;
   makeManyWrappers = args.makeManyWrappers;
 
-  version = lib.attrByPath ["version"] "0.0.21" args; 
+  version = lib.attrByPath ["version"] "0.1.7" args; 
   buildInputs = with args; [
     intltool python imagemagick gtk glib webkit libxml2 
     gtksourceview pkgconfig which gettext makeWrapper 
-    file
+    file libidn sqlite docutils libnotify libsoup
   ];
 in
 rec {
   src = fetchurl {
     url = "http://goodies.xfce.org/releases/midori/midori-${version}.tar.bz2";
-    sha256 = if version == "0.0.21" then 
-      "0cbpvjdfzgbqwn8rfkp3l35scfvz9cc8hip8v35vkxpac9igcqg5"
+    sha256 = if version == "0.1.7" then 
+      "1bxs4nlwvhzwiq73lf1gvx7qqdm1hm4x1hym1b0q0dhwhdvafx4v"
     else null;
   };
 

@@ -3579,6 +3579,9 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  libproxy = builderDefsPackage (import ../development/libraries/libproxy) {
+  };
+
   libproxy = import ../development/libraries/libproxy {
     inherit stdenv fetchurl;
   };
@@ -4047,12 +4050,14 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    inherit (gtkLibs) gtk atk pango;
+    inherit (gnome) gtk atk pango libsoup gtkdoc;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
-      pkgconfig autoconf bison;
+      pkgconfig autoconf bison libproxy enchant;
+    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg;
     flex = flex2535;
+    inherit (xlibs) libXt;
   };
 
   wxGTK = wxGTK26;
@@ -6535,9 +6540,9 @@ let
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
-      which gettext makeWrapper file;
+      which gettext makeWrapper file libidn sqlite docutils libnotify;
     inherit (gtkLibs) gtk glib;
-    inherit (gnome) gtksourceview;
+    inherit (gnome) gtksourceview libsoup;
   };
 
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
@@ -7431,7 +7436,8 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit;
+      xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit
+      libproxy sqlite;
   });
   
   gnome26 = import ../desktops/gnome-2.26 pkgs;
