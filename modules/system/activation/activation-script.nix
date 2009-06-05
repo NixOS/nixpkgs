@@ -205,7 +205,7 @@ in
               activateLibNames = attrNames activateLib;
           in {
           script = pkgs.writeScript "nixos-activation-script"
-            ("#!/bin/sh\n"
+            ("#! ${pkgs.stdenv.shell}\n"
              + textClosureMap id activateLib activateLibNames + "\n"
                # make sure that the activate snippet is added last.
              + withHeadlines.activate.text);
