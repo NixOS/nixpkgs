@@ -5,7 +5,6 @@
     else "nixos-${builtins.readFile ../../VERSION}"
 , compressImage ? false
 , nixpkgs ? ../../../nixpkgs
-, services ? ../../../services
 # This option allows easy building of Rescue CD with 
 # modified package set / driver set / anything.
 # For easier maitenance, let overrider know the current
@@ -26,7 +25,7 @@ rec {
   
     boot = {
       isLiveCD = true;
-      extraTTYs = [7 8]; # manual, rogue
+
       extraModulePackages = [system.kernelPackages.aufs];
       
       kernelPackages = pkgs.kernelPackages_2_6_28;
@@ -129,8 +128,6 @@ rec {
               tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
               mkdir -p /etc/nixos/nixpkgs
               tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
-              mkdir -p /etc/nixos/services
-              tar xjf /install/services.tar.bz2 -C /etc/nixos/services
               chown -R root.root /etc/nixos
             end script
           ";
@@ -152,7 +149,7 @@ rec {
     };
     
     installer = {
-      nixpkgsURL = http://nixos.org/releases/nixpkgs/unstable;
+      nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
     };
 
     security = {
@@ -200,10 +197,6 @@ rec {
   
   # Put the current directory in a tarball.
   nixosTarball = makeTarball "nixos.tar.bz2" ../..;
-
-
-  # Put Services in a tarball.
-  servicesTarball = makeTarball "services.tar.bz2" services;
 
 
   # Put Nixpkgs in a tarball.
@@ -271,9 +264,6 @@ rec {
       }
       { source = nixpkgsTarball + "/nixpkgs.tar.bz2";
         target = "/install/nixpkgs.tar.bz2";
-      }
-      { source = servicesTarball + "/services.tar.bz2";
-        target = "/install/services.tar.bz2";
       }
     ];
 
