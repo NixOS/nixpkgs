@@ -1,4 +1,4 @@
-{ configuration ? import (import ./lib/from-env.nix "NIXOS_CONFIG" /etc/nixos/configuration.nix)
+{ configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" /etc/nixos/configuration.nix
 }:
 
 let
