@@ -57,6 +57,7 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
+      pkgs.host
     ] ++ config.environment.extraPackages;
 
       
