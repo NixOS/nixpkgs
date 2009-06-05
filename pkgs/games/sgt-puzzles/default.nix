@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    sha256 = "08p1r8r6v3c7lgc1spnji89axr76b859alnw04sg4m7hbd6s2n7v";
+    sha256 = "1m6fybbvlx33786hmgraqxgm1hakfj9bqqszzzpi2ka4spfzj3xl";
   };
 
   inherit buildInputs;
