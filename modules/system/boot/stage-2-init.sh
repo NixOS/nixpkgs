@@ -131,7 +131,7 @@ export MODULE_DIR=@kernel@/lib/modules/
 
 
 # Run any user-specified commands.
-@shell@ @bootLocal@
+@shell@ @postBootCommands@
 
 
 # Start Upstart's init.  We start it through the

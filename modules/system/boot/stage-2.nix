@@ -4,12 +4,13 @@ let
 
   options = {
 
-    boot.localCommands = pkgs.lib.mkOption {
+    boot.postBootCommands = pkgs.lib.mkOption {
       default = "";
-      example = "text=anything; echo You can put $text here.";
-      description = "
+      example = "rm -f /var/log/messages";
+      merge = pkgs.lib.mergeStringOption;
+      description = ''
         Shell commands to be executed just before Upstart is started.
-      ";
+      '';
     };
 
   };
@@ -19,28 +20,27 @@ let
   activateConfiguration = config.system.activationScripts.script;
 
   # Path for Upstart jobs.  Should be quite minimal.
-  upstartPath = [
-    pkgs.coreutils
-    pkgs.findutils
-    pkgs.gnugrep
-    pkgs.gnused
-    pkgs.upstart
-  ];
-
-  bootLocal = config.boot.localCommands;
+  upstartPath =
+    [ pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      pkgs.upstart
+    ];
 
   bootStage2 = substituteAll {
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel upstart activateConfiguration upstartPath;
-    path = [
-      coreutils
-      utillinux
-      udev
-      upstart
-    ];
-    bootLocal = writeText "local-cmds" bootLocal;
+    path =
+      [ coreutils
+        utillinux
+        udev
+        upstart
+      ];
+    postBootCommands = writeText "local-cmds" config.boot.postBootCommands;
   };
+  
 in
 
 {

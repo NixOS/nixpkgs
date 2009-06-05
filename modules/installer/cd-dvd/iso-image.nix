@@ -85,4 +85,12 @@ in
         }
       ];
   };
+
+  # After booting, register the contents of the Nix store on the CD in
+  # the Nix database in the tmpfs.
+  boot.postBootCommands =
+    ''
+      ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration
+      rm /nix-path-registration
+    '';
 }
