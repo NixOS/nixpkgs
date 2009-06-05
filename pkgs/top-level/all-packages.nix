@@ -306,6 +306,8 @@ let
       inherit stdenv module_init_tools kernel rootModules allowMissing;
     };
 
+  pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
+
   # Run the shell command `buildCommand' to produce a store object
   # named `name'.  The attributes in `env' are added to the
   # environment prior to running the command.
