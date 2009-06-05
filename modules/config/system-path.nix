@@ -57,11 +57,10 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-    ] ++ config.environment.extraPackages
-    ++ [ pkgs.host ]
-    ;
+      pkgs.host
+    ] ++ config.environment.extraPackages;
 
-      
+
   options = {
 
     environment = {
