@@ -7,7 +7,6 @@ let
   options = {
 
     fileSystems = pkgs.lib.mkOption {
-      default = null;
       example = [
         { mountPoint = "/";
           device = "/dev/hda1";
