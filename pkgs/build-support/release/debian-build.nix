@@ -53,7 +53,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       eval "$preInstall" 
       export LOGNAME=root
 
-      ${checkinstall}/sbin/checkinstall --nodoc -y -D make install
+      ${checkinstall}/sbin/checkinstall --nodoc -y -D --fstrans=no make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
