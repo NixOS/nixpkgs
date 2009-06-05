@@ -2,9 +2,15 @@
 # configuration object (`config') from which we can retrieve option
 # values.
 
-{configuration, pkgs}:
+{ configuration
+, system ? builtins.currentSystem
+, nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
+, pkgs ? import nixpkgs {inherit system;}
+}:
 
 rec {
+  inherit nixpkgs pkgs;
+
   configComponents = [
     configuration
     {
@@ -19,7 +25,7 @@ rec {
     }
   ];
 
-  config =
+  config_ =
     pkgs.lib.fixOptionSets
       pkgs.lib.mergeOptionSets
       pkgs configComponents;
@@ -28,5 +34,11 @@ rec {
     pkgs.lib.fixOptionSetsFun
       pkgs.lib.filterOptionSets
       pkgs configComponents
-      config;
+      config_;
+      
+  # Optionally check wether all config values have corresponding
+  # option declarations.
+  config = pkgs.checker config_
+    config_.environment.checkConfigurationOptions
+    optionDeclarations config_;
 }
