@@ -1,12 +1,14 @@
-{nixpkgs ? ../../../nixpkgs}:
+{pkgs}:
 
 let
 
-  pkgs = import nixpkgs {};
+  manualConfig =
+    { environment.checkConfigurationOptions = false;
+    };
 
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList ""
-      (import ../../system/system.nix {inherit nixpkgs; configuration = {};}).optionDeclarations)));
+      (import ../../lib/eval-config.nix {inherit pkgs; configuration = manualConfig;}).optionDeclarations)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${options} 

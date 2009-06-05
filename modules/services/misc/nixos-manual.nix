@@ -40,7 +40,9 @@ let
         };
 
         manualFile = mkOption {
-          default = null;
+          # Note: we can't use a default here (see below), since it
+          # causes an infinite recursion building the manual.
+          default = null; 
           description = "
             NixOS manual HTML file
           ";
@@ -59,7 +61,10 @@ in let # !!! Bug in Nix 0.13pre14722, otherwise the following line is not aware 
 
   realManualFile =
     if manualFile == null then
-      (import ../doc/manual {nixpkgs = pkgs;})+"/manual.html"
+      # We could speed up the evaluation of the manual expression by
+      # providing it the optionDeclarations of the current
+      # configuration.
+      "${import ../../../doc/manual {inherit pkgs;}}/manual.html"
     else
       manualFile;
 
