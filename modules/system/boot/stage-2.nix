@@ -46,9 +46,5 @@ in
 {
   require = [options];
 
-  system = {
-    build = {
-      inherit bootStage2;
-    };
-  };
+  system.build.bootStage2 = bootStage2;
 }
