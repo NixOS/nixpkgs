@@ -321,6 +321,7 @@ in {
   syslinux = ["i686-linux"];
   sysvinit = linux;
   sysvtools = linux;
+  tangogps = linux;
   tcl = linux;
   tcpdump = linux;
   teeworlds = linux;
