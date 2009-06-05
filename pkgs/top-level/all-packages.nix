@@ -432,6 +432,16 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  mcrl = import ../tools/misc/mcrl {
+    inherit fetchurl stdenv coreutils;
+  };
+
+  mcrl2 = import ../tools/misc/mcrl2 {
+    inherit fetchurl stdenv mesa ;
+    inherit (xorg) libX11;
+    wxGTK = wxGTK28 ;
+  };
+
   syslogng = import ../tools/misc/syslog-ng {
     inherit fetchurl stdenv eventlog pkgconfig;
     inherit (gtkLibs) glib;
@@ -1179,6 +1189,10 @@ let
   pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
     inherit python libsexy pkgconfig libxml2 pygtk;
     inherit (gtkLibs) pango gtk glib;
+  };
+
+  openmpi = import ../development/libraries/openmpi {
+    inherit fetchurl stdenv;
   };
 
   qhull = import ../development/libraries/qhull {
