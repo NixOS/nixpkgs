@@ -1,4 +1,4 @@
-{ stdenv, perl, cdrkit, nixpkgs
+{ stdenv, perl, cdrkit, pathsFromGraph
 
 , # The file name of the resulting ISO image.
   isoName ? "cd.iso"
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl cdrkit];
   
-  inherit isoName bootable bootImage compressImage volumeID;
+  inherit isoName bootable bootImage compressImage volumeID pathsFromGraph;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
@@ -50,5 +50,4 @@ stdenv.mkDerivation {
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
-  pathsFromGraph = "${nixpkgs}/pkgs/build-support/kernel/paths-from-graph.pl";
 }
