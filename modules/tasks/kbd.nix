@@ -61,14 +61,15 @@ in
         pkgs.kbd
       ];
       
-      job = "
-        description \"Keyboard / console initialisation\"
+      job = ''
+        description "Keyboard / console initialisation"
 
         start on udev
 
         script
 
           export LANG=${defaultLocale}
+          export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
           export PATH=${pkgs.gzip}/bin:$PATH # Needed by setfont
 
           set +e # continue in case of errors
@@ -80,13 +81,13 @@ in
 
           charMap=$(${pkgs.glibc}/bin/locale charmap)
 
-          if test \"$charMap\" = UTF-8; then
+          if test "$charMap" = UTF-8; then
 
             for tty in ${toString ttys}; do
 
               # Tell the console output driver that the bytes arriving are
               # UTF-8 encoded multibyte sequences. 
-              echo -n -e '\\033%G' > $tty
+              echo -n -e '\033%G' > $tty
 
             done
 
@@ -99,7 +100,7 @@ in
 
               # Tell the console output driver that the bytes arriving are
               # UTF-8 encoded multibyte sequences. 
-              echo -n -e '\\033%@' > $tty
+              echo -n -e '\033%@' > $tty
 
             done
 
@@ -119,9 +120,8 @@ in
           # Set the keymap.
           ${pkgs.kbd}/bin/loadkeys '${consoleKeyMap}'
 
-
         end script
-      ";
+      '';
     
     }];
   };
