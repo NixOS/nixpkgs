@@ -294,6 +294,7 @@ in {
   screen = linux ++ darwin;
   sdparm = linux;
   seccure = linux;
+  sgtpuzzles = linux;
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
