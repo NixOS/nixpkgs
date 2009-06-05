@@ -33,7 +33,6 @@ in
           systemPath = config.system.path;
           wrapperDir = config.security.wrapperDir;
           modulesTree = config.system.modulesTree;
-          defaultLocale = config.i18n.defaultLocale;
           shellInit = config.environment.shellInit;
         };
         target = "bashrc";      

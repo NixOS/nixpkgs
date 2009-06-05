@@ -5,11 +5,8 @@ export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
-export LANG=@defaultLocale@
 export EDITOR=nano
-export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info
 export LOCATE_PATH=/var/cache/locatedb
-export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
 @shellInit@
 
 

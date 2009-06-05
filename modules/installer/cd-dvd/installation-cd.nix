@@ -18,6 +18,10 @@
   # Disable some other stuff we don't need.
   security.sudo.enable = false;
 
+  # Include only the en_US locale.  This saves 75 MiB or so compared to
+  # the full glibcLocales package.
+  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages =
@@ -77,4 +81,20 @@
   # nixos-install will do a pull from this channel to speed up the
   # installation.
   installer.nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
+
+  # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
+  # for nixos-install.
+  boot.postBootCommands =
+    ''
+      export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
+
+      mkdir -p /mnt
+
+      echo "unpacking the NixOS/Nixpkgs sources..."
+      mkdir -p /etc/nixos/nixos
+      tar xjf /install/nixos.tar.bz2 -C /etc/nixos/nixos
+      mkdir -p /etc/nixos/nixpkgs
+      tar xjf /install/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
+      chown -R root.root /etc/nixos
+    '';
 }
