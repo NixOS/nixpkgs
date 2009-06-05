@@ -37,7 +37,7 @@ let
       ln -s ${optionsDocBook} options-db.xml
       xsltproc $xsltFlags --nonet --xinclude \
         --output $out/manual.html \
-        ${pkgs.docbook5_xsl}/xml/xsl/docbook/html/docbook.xsl \
+        ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
       cp ${./style.css} $out/style.css
       ensureDir $out/nix-support
