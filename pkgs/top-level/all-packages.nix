@@ -5055,6 +5055,24 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
+  kernel_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "fbcondecor-0.9.5-2.6.28";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.29.2.patch;
+          sha256 = "1yppvji13sgnql62h4wmskzl9l198pp1pbixpbymji7mr4a0ylx1";
+        };
+        extraConfig = "CONFIG_FB_CON_DECOR=y";
+        features = { fbConDecor = true; };
+      }
+      { name = "sec_perm-2.6.24";
+        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+        features = { secPermPatch = true; };
+      }
+    ];
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages

@@ -472,6 +472,12 @@ in {
     virtualbox = linux;
   };
 
+  kernelPackages_2_6_29 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
