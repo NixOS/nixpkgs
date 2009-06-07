@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, wxGTK}:
+{stdenv, fetchurl, mesa, wxGTK, libX11}:
 
 stdenv.mkDerivation {
   name = "mcrl2-200901";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0lji31d7dv15q8092b8g01j023dd7miq3nw8klgc8jd136xpwdp9";
   };
 
-  buildInputs = [ mesa wxGTK ] ;
+  buildInputs = [ mesa wxGTK libX11 ] ;
 }
 
 
