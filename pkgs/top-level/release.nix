@@ -76,6 +76,7 @@ in {
   bison24 = all;
   bitlbee = linux; 
   bittorrent = linux;
+  blender = linux;
   boost = all;
   boostFull = all;
   bsdiff = all;
