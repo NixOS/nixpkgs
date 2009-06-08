@@ -93,7 +93,7 @@ let
 
 
   # For convenience, allow callers to get the path to Nixpkgs.
-  path = ./..;
+  path = ../..;
 
 
   ### Symbolic names.
