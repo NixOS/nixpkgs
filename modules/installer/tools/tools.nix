@@ -44,11 +44,9 @@ let
     name = "nixos-install";
     src = ./nixos-install.sh;
 
-    inherit (pkgs) perl;
+    inherit (pkgs) perl pathsFromGraph;
     nix = config.environment.nix;
     nixpkgsURL = config.installer.nixpkgsURL;
-
-    pathsFromGraph = "${pkgs.path}/build-support/kernel/paths-from-graph.pl";
 
     nixClosure = pkgs.runCommand "closure"
       {exportReferencesGraph = ["refs" config.environment.nix];}
