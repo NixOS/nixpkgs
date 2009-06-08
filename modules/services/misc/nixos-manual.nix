@@ -55,9 +55,7 @@ let
 in
 
 let
-  cfg = config.services.showManual;
-in let # !!! Bug in Nix 0.13pre14722, otherwise the following line is not aware of cfg.
-  inherit (cfg) enable ttyNumber browserPackage browserCommand manualFile;
+  inherit (config.services.showManual) enable ttyNumber browserPackage browserCommand manualFile;
 
   realManualFile =
     if manualFile == null then
@@ -103,7 +101,7 @@ mkIf enable {
 
     mingetty = {
       helpLine = mkThenElse {
-        thenPart = "\nPress <Alt-F${toString ttyNumber}> for NixOS manual.";
+        thenPart = "\nPress <Alt-F${toString ttyNumber}> for the NixOS manual.";
         elsePart = "";
       };
     };
