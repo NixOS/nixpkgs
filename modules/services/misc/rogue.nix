@@ -24,41 +24,31 @@ let
     };
   };
 
-inherit (pkgs.lib) optional;
-
-inherit (config.services.rogue) enable ttyNumber;
+  cfg = config.services.rogue;
 
 in
 
-{
-  require = [
-    options
-  ];
+pkgs.lib.mkIf cfg.enable {
+  require = [options];
 
-  boot = {
-    extraTTYs = optional enable ttyNumber;
-  };
+  boot.extraTTYs = [cfg.ttyNumber];
   
-  services = {
-    extraJobs = optional enable {
-      name = "rogue";
+  services.extraJobs = pkgs.lib.singleton
+    { name = "rogue";
 
       job = ''
         description "rogue game"
 	
-	start on udev
-	stop on shutdown
-	respawn ${pkgs.rogue}/bin/rogue < /dev/tty${toString ttyNumber} > /dev/tty${toString ttyNumber} 2>&1
+        start on udev
+        stop on shutdown
+        respawn ${pkgs.rogue}/bin/rogue < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
       '';
     };
-    ttyBackgrounds = {
-      specificThemes = optional enable {
-        tty = ttyNumber;
-	theme = pkgs.themes "theme-gnu";
-      };
+
+  services.ttyBackgrounds.specificThemes = pkgs.lib.singleton
+    { tty = cfg.ttyNumber;
+      theme = pkgs.themes "theme-gnu";
     };
-    mingetty = {
-      helpLine = if enable then "\nPress <Alt-F${toString ttyNumber}> to play rogue." else "";
-    };
-  };
+
+  services.mingetty.helpLine = "\nPress <Alt-F${toString cfg.ttyNumber}> to play Rogue.";
 }
