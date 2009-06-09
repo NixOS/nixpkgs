@@ -749,6 +749,7 @@ rec {
         sha256 = "09947kjggmillb1zvb3n1i8his5qhdh1598lv39hyxsb4641vbrn";
       };
       urlPrefix = mirror://fedora/linux/releases/11/Fedora/i386/os;
+      archs = ["noarch" "i386" "i586"];
     } // args);
 
     fedora11x86_64 = args: makeImageFromRPMDist ({
