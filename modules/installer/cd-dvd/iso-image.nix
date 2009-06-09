@@ -15,8 +15,20 @@ let
           }
         ];
       description = ''
-        This option lists files that have to be copied to fixed
-        locations in the generated ISO image.
+        This option lists files to be copied to fixed locations in the
+        generated ISO image.
+      '';
+    };
+
+    isoImage.storeContents = pkgs.lib.mkOption {
+      example =
+        [ { object = pkgs.stdenv;
+            symlink = "/stdenv";
+          }
+        ];
+      description = ''
+        This option lists additional derivations to be included in the
+        Nix store in the generated ISO image.
       '';
     };
 
@@ -77,6 +89,17 @@ in
       }
     ];
 
+  # Closures to be copied to the Nix store on the CD, namely the init
+  # script and the top-level system configuration directory.
+  isoImage.storeContents =
+    [ { object = config.system.build.bootStage2;
+        symlink = "/init";
+      }
+      { object = config.system.build.system;
+        symlink = "/system";
+      }
+    ];
+
   # The Grub menu.
   boot.extraGrubEntries =
     ''
@@ -101,18 +124,8 @@ in
 
     volumeID = cdLabel;
 
-    # Single files to be copied to fixed locations on the CD.
     contents = config.isoImage.contents;
-
-    # Closures to be copied to the Nix store on the CD.
-    storeContents =
-      [ { object = config.system.build.bootStage2;
-          symlink = "/init";
-        }
-        { object = config.system.build.system;
-          symlink = "/system";
-        }
-      ];
+    storeContents = config.isoImage.storeContents;
   };
 
   # After booting, register the contents of the Nix store on the CD in

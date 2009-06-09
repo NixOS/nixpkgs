@@ -126,9 +126,18 @@ in
       chown -R root.root /etc/nixos
     '';
 
+  # Some more help text.
   services.mingetty.helpLine =
     ''
         
       Log in as "root" with an empty password.
     '';
+
+  # To speed up installation a little bit, include the complete stdenv
+  # in the Nix store on the CD.
+  isoImage.storeContents =
+    [ { object = pkgs.stdenv;
+        symlink = "none";
+      }
+    ];
 }
