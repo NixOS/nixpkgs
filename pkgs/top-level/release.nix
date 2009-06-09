@@ -229,7 +229,7 @@ in {
   mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
-  mesa = linux;
+  mesa = linux ++ darwin;
   midori = linux;
   mingetty = linux;
   mk = linux;
