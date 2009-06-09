@@ -4,6 +4,18 @@
 
 let
 
+  options = {
+
+    system.nixosVersion = pkgs.lib.mkOption {
+      default = "${builtins.readFile ../../../VERSION}";
+      description = ''
+        NixOS version number.
+      '';
+    };
+  
+  };
+
+
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  We put them in a tarball because accessing that many small
   # files from a slow device like a CD-ROM takes too long.  !!! Once
@@ -25,11 +37,17 @@ in
 
 {
   require =
-    [ ./iso-image.nix
+    [ options
+      ./iso-image.nix
       ./memtest.nix
       ../../../hardware/network/intel-3945abg.nix
     ];
 
+  # ISO naming.
+  isoImage.isoName = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
+    
+  isoImage.volumeID = "NIXOS_INSTALLATION_CD_${config.system.nixosVersion}";
+  
   # Use Linux 2.6.29.
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
 

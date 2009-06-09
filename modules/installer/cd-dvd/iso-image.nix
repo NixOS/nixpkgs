@@ -8,6 +8,30 @@ let
 
   options = {
 
+    isoImage.isoName = pkgs.lib.mkOption {
+      default = "cd.iso";
+      description = ''
+        Name of the generated ISO image file.
+      '';
+    };
+
+    isoImage.compressImage = pkgs.lib.mkOption {
+      default = false;
+      description = ''
+        Whether the ISO image should be compressed using
+        <command>bzip2</command>.
+      '';
+    };
+
+    isoImage.volumeID = pkgs.lib.mkOption {
+      default = "NIXOS_BOOT_CD";
+      description = ''
+        Specifies the label or volume ID of the generated ISO image.
+        Note that the label is used by stage 1 of the boot process to
+        mount the CD, so it should be reasonably distinctive.
+      '';
+    };
+
     isoImage.contents = pkgs.lib.mkOption {
       example =
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -34,8 +58,6 @@ let
 
   };
 
- 
-  cdLabel = "NIXOS_INSTALLATION_CD";
 
   # The configuration file for Grub.
   grubCfg = 
@@ -56,7 +78,7 @@ in
   # so that we don't need to know its device.
   fileSystems =
     [ { mountPoint = "/";
-        label = cdLabel;
+        label = config.isoImage.volumeID;
       }
     ];
 
@@ -115,17 +137,11 @@ in
   # Create the ISO image.
   system.build.isoImage = import ../../../lib/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
-    #isoName = "${relName}-${platform}.iso";
+    
+    inherit (config.isoImage) isoName compressImage volumeID contents storeContents;
 
     bootable = true;
     bootImage = "/boot/grub/stage2_eltorito";
-
-    #compressImage = ...;
-
-    volumeID = cdLabel;
-
-    contents = config.isoImage.contents;
-    storeContents = config.isoImage.storeContents;
   };
 
   # After booting, register the contents of the Nix store on the CD in
