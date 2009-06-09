@@ -7896,11 +7896,11 @@ let
       sqlite subversion pysqlite;
   };
 
-#   vice = import ../misc/emulators/vice {
-#     inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
-#     inherit pkgconfig SDL makeDesktopItem autoconf automake;
-#     inherit (gtkLibs) gtk;
-#   };
+   vice = import ../misc/emulators/vice {
+     inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
+     inherit pkgconfig SDL makeDesktopItem autoconf automake;
+     inherit (gtkLibs) gtk;
+   };
 
   wine =
     if system == "x86_64-linux" then
