@@ -5,6 +5,23 @@
 {config, pkgs, ...}:
 
 let
+
+  options = {
+
+    isoImage.contents = pkgs.lib.mkOption {
+      example =
+        [ { source = pkgs.memtest86 + "/memtest.bin";
+            target = "boot/memtest.bin";
+          }
+        ];
+      description = ''
+        This option lists files that have to be copied to fixed
+        locations in the generated ISO image.
+      '';
+    };
+
+  };
+
  
   cdLabel = "NIXOS_INSTALLATION_CD";
 
@@ -15,18 +32,14 @@ let
       timeout 10
       splashimage /boot/background.xpm.gz
 
-      title Boot from hard disk
-        root (hd0)
-        chainloader +1
-    
-      title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=/init ${toString config.boot.kernelParams}
-        initrd /boot/initrd
+      ${config.boot.extraGrubEntries}
     '';
   
 in
 
 {
+  require = options;
+
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
   fileSystems =
@@ -44,36 +57,52 @@ in
   # and move that bit of code here.
   boot.isLiveCD = true;
 
+  # Individual files to be included on the CD, outside of the Nix
+  # store on the CD.
+  isoImage.contents =
+    [ { source = "${pkgs.grub}/lib/grub/${if pkgs.stdenv.system == "i686-linux" then "i386-pc" else "x86_64-unknown"}/stage2_eltorito";
+        target = "/boot/grub/stage2_eltorito";
+      }
+      { source = pkgs.writeText "menu.lst" grubCfg;
+        target = "/boot/grub/menu.lst";
+      }
+      { source = config.boot.kernelPackages.kernel + "/vmlinuz";
+        target = "/boot/vmlinuz";
+      }
+      { source = config.system.build.initialRamdisk + "/initrd";
+        target = "/boot/initrd";
+      }
+      { source = config.boot.grubSplashImage;
+        target = "/boot/background.xpm.gz";
+      }
+    ];
+
+  # The Grub menu.
+  boot.extraGrubEntries =
+    ''
+      title Boot from hard disk
+        root (hd0)
+        chainloader +1
+    
+      title NixOS Installer / Rescue
+        kernel /boot/vmlinuz init=/init ${toString config.boot.kernelParams}
+        initrd /boot/initrd
+    '';
+
   # Create the ISO image.
   system.build.isoImage = import ../../../lib/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
     #isoName = "${relName}-${platform}.iso";
 
     bootable = true;
-    bootImage = "boot/grub/stage2_eltorito";
+    bootImage = "/boot/grub/stage2_eltorito";
 
     #compressImage = ...;
 
     volumeID = cdLabel;
 
     # Single files to be copied to fixed locations on the CD.
-    contents =
-      [ { source = "${pkgs.grub}/lib/grub/${if pkgs.stdenv.system == "i686-linux" then "i386-pc" else "x86_64-unknown"}/stage2_eltorito";
-          target = "boot/grub/stage2_eltorito";
-        }
-        { source = pkgs.writeText "menu.lst" grubCfg;
-          target = "boot/grub/menu.lst";
-        }
-        { source = config.boot.kernelPackages.kernel + "/vmlinuz";
-          target = "boot/vmlinuz";
-        }
-        { source = config.system.build.initialRamdisk + "/initrd";
-          target = "boot/initrd";
-        }
-        { source = config.boot.grubSplashImage;
-          target = "boot/background.xpm.gz";
-        }
-      ];
+    contents = config.isoImage.contents;
 
     # Closures to be copied to the Nix store on the CD.
     storeContents =

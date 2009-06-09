@@ -6,13 +6,24 @@ targets_=($targets)
 objects=($objects)
 symlinks=($symlinks)
 
+
+# Remove the initial slash from a path, since genisofs likes it that way.
+stripSlash() {
+    res="$1"
+    if test "${res:0:1}" = /; then res=${res:1}; fi
+}
+
+stripSlash "$bootImage"; bootImage="$res"
+
+
 if test -n "$bootable"; then
 
     # The -boot-info-table option modifies the $bootImage file, so
     # find it in `contents' and make a copy of it (since the original
     # is read-only in the Nix store...).
     for ((i = 0; i < ${#targets_[@]}; i++)); do
-        if test "${targets_[$i]}" = "$bootImage"; then
+        stripSlash "${targets_[$i]}"
+        if test "$res" = "$bootImage"; then
             echo "copying the boot image ${sources_[$i]}"
             cp "${sources_[$i]}" boot.img
             chmod u+w boot.img
@@ -23,11 +34,14 @@ if test -n "$bootable"; then
     bootFlags="-b $bootImage -c .boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
 fi
 
+
 touch pathlist
+
 
 # Add the individual files.
 for ((i = 0; i < ${#targets_[@]}; i++)); do
-    echo "${targets_[$i]}=$(readlink -f ${sources_[$i]})" >> pathlist
+    stripSlash "${targets_[$i]}"
+    echo "$res=$(readlink -f ${sources_[$i]})" >> pathlist
 done
 
 
@@ -54,6 +68,7 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     fi
 done
 
+# !!! what does this do?
 cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
 
 
