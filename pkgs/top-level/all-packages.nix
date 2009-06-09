@@ -1282,6 +1282,10 @@ let
     inherit fetchurl stdenv emacs eieio;
   };
 
+  setserial = builderDefsPackage (import ../tools/system/setserial) {
+    inherit groff;
+  };
+
   sharutils = selectVersion ../tools/archivers/sharutils "4.6.3" {
     inherit fetchurl stdenv;
   };
