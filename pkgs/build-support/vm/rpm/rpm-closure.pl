@@ -103,10 +103,15 @@ print "[\n\n";
 
 foreach my $pkgName (@needed) {
     my $pkg = $pkgs{$pkgName};
-    die if $pkg->{checksum}->{type} ne "sha";
     print "  (fetchurl {\n";
     print "    url = $urlPrefix/$pkg->{location}->{href};\n";
-    print "    sha1 = \"$pkg->{checksum}->{content}\";\n";
+    if ($pkg->{checksum}->{type} eq "sha") {
+        print "    sha1 = \"$pkg->{checksum}->{content}\";\n";
+    } elsif ($pkg->{checksum}->{type} eq "sha256") {
+        print "    sha256 = \"$pkg->{checksum}->{content}\";\n";
+    } else {
+        die "unsupported hash type";
+    }
     print "  })\n";
     print "\n";
 }
