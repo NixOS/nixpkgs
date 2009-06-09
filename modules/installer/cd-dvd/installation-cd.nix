@@ -24,7 +24,7 @@ let
 in
 
 {
-  require = [./iso-image.nix];
+  require = [./iso-image.nix ./memtest.nix];
 
   # Use Linux 2.6.29.
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
@@ -122,5 +122,9 @@ in
       chown -R root.root /etc/nixos
     '';
 
-  
+  services.mingetty.helpLine =
+    ''
+        
+      Log in as "root" with an empty password.
+    '';
 }
