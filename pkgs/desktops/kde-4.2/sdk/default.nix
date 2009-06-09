@@ -2,10 +2,10 @@
  kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdesdk-4.2.3";
+  name = "kdesdk-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.3/src/kdesdk-4.2.3.tar.bz2;
-    sha1 = "cf24ae63e6ee4ed875f580a7dfd8aa6d822d9b47";
+    url = mirror://kde/stable/4.2.4/src/kdesdk-4.2.4.tar.bz2;
+    sha1 = "ad5a00f5ee4ae0f627b971b7413edb0550e92db1";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;

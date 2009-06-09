@@ -5,10 +5,10 @@
 # some bindings are even broken.
 
 stdenv.mkDerivation {
-  name = "kdebindings-4.2.3";
+  name = "kdebindings-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.3/src/kdebindings-4.2.3.tar.bz2;
-    sha1 = "d8e5ddf5e993124e0250c3e9a9de52264ca5ca7c";
+    url = mirror://kde/stable/4.2.4/src/kdebindings-4.2.4.tar.bz2;
+    sha1 = "5550b690d1c63fc63b3603ad73ba2b911158fe96";
   };
   builder = ./builder.sh;
   includeAllQtDirs=true;

@@ -2,10 +2,10 @@
  kdelibs, kdebase_workspace, kdepimlibs, kdegraphics, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdeplasma-addons-4.2.3";
+  name = "kdeplasma-addons-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.3/src/kdeplasma-addons-4.2.3.tar.bz2;
-    sha1 = "9c825fe7b93fcccd6de44f168438f67cf0066f22";
+    url = mirror://kde/stable/4.2.4/src/kdeplasma-addons-4.2.4.tar.bz2;
+    sha1 = "500d05cc6eeb218b8615b1a49e69e3b9e88f3997";
   };
   inherit kdebase_workspace;
   builder = ./builder.sh;

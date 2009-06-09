@@ -1,10 +1,10 @@
 {stdenv, fetchurl, cmake, qt4, perl, kdelibs, kdebase_workspace, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdetoys-4.2.3";
+  name = "kdetoys-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.3/src/kdetoys-4.2.3.tar.bz2;
-    sha1 = "cb84d7b8da85ed82972a4c99065644532cf12d6d";
+    url = mirror://kde/stable/4.2.4/src/kdetoys-4.2.4.tar.bz2;
+    sha1 = "3f05154f85d0a01ceb97854e31adff03a7b5fdda";
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl kdelibs kdebase_workspace automoc4 phonon ];

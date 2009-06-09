@@ -2,10 +2,10 @@
  kdelibs, kdepimlibs, kdebindings, automoc4, phonon, qimageblitz}:
 
 stdenv.mkDerivation {
-  name = "kdeutils-4.2.3";
+  name = "kdeutils-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.3/src/kdeutils-4.2.3.tar.bz2;
-    sha1 = "3c312d12b75f1064085ee4ea200a5f7278bce0e0";
+    url = mirror://kde/stable/4.2.4/src/kdeutils-4.2.4.tar.bz2;
+    sha1 = "59bb17463bec48c77768e50fb0e9ec3c1b0827af";
   };
   builder = ./builder.sh;
   inherit system_config_printer;
