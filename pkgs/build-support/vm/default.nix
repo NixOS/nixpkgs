@@ -741,6 +741,27 @@ rec {
       archs = ["noarch" "x86_64"];
     } // args);
 
+    fedora11i386 = args: makeImageFromRPMDist ({
+      name = "fedora-11-i386";
+      fullName = "Fedora 11 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/11/Fedora/i386/os/repodata/36af1d88214b770fd3d814a5126083b8e808510c76acfdc3a234d6f7e43c2425-primary.xml.gz;
+        sha256 = "09947kjggmillb1zvb3n1i8his5qhdh1598lv39hyxsb4641vbrn";
+      };
+      urlPrefix = mirror://fedora/linux/releases/11/Fedora/i386/os;
+    } // args);
+
+    fedora11x86_64 = args: makeImageFromRPMDist ({
+      name = "fedora-11-x86_64";
+      fullName = "Fedora 11 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/11/Fedora/x86_64/os/repodata/c792495863f5314329c463d51860fc74c6367f72c3cb1c132f6c3290102d68da-primary.xml.gz;
+        sha256 = "1nk85l890ckc5w9irjy3f9zkdiklzih1imb3qhll6cgmcdc4k4n7";
+      };
+      urlPrefix = mirror://fedora/linux/releases/11/Fedora/x86_64/os;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     opensuse103i386 = args: makeImageFromRPMDist ({
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1009,6 +1030,8 @@ rec {
     fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages; };
     fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages; };
     fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages; };
+    fedora11i386 = diskImageFuns.fedora11i386 { packages = commonFedoraPackages; };
+    fedora11x86_64 = diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages; };
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"]; };
     opensuse110i386 = diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages; };
     opensuse110x86_64 = diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages; };
