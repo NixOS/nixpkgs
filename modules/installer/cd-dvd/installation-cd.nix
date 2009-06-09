@@ -24,7 +24,11 @@ let
 in
 
 {
-  require = [./iso-image.nix ./memtest.nix];
+  require =
+    [ ./iso-image.nix
+      ./memtest.nix
+      ../../../hardware/network/intel-3945abg.nix
+    ];
 
   # Use Linux 2.6.29.
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
