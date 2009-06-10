@@ -1,29 +1,31 @@
 {pkgs, config, ...}: 
 
-# Show rogue game on tty8
+# Show rogue game on tty9
 # Originally used only by installation CD
 
 let
-  inherit (pkgs.lib) mkOption;
-  options = {
-    services = {
-      rogue = {
-        enable = mkOption {
-	  default = false;
-	  description = "
-	    Whether to run rogue
-	  ";
-	};
-	ttyNumber = mkOption {
-	  default = "8";
-	  description = "
-	    TTY number name to show the manual on
-	  ";
-	};
-      };
-    };
-  };
 
+  inherit (pkgs.lib) mkOption;
+  
+  options = {
+  
+    services.rogue.enable = mkOption {
+      default = false;
+      description = ''
+        Whether to enable the Rogue game on one of the virtual
+        consoles.
+      '';
+    };
+
+    services.rogue.ttyNumber = mkOption {
+      default = "9";
+      description = ''
+        Virtual console on which to run Rogue.
+      '';
+    };
+
+  };
+  
   cfg = config.services.rogue;
 
 in
@@ -37,10 +39,12 @@ pkgs.lib.mkIf cfg.enable {
     { name = "rogue";
 
       job = ''
-        description "rogue game"
+        description "Rogue dungeon crawling game"
 	
         start on udev
         stop on shutdown
+
+        chdir /root
 
         respawn ${pkgs.rogue}/bin/rogue < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
       '';

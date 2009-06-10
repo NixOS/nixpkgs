@@ -1,6 +1,6 @@
 {pkgs, config, ...}:
 
-# Show the NixOS manual on tty7
+# Show the NixOS manual on tty8
 # Originally used only by installation CD
 
 let
@@ -14,29 +14,23 @@ let
         enable = mkOption {
           default = false;
           description = "
-            Whether to show the NixOS manual on the tty7
+            Whether to show the NixOS manual on one of the virtual
+            consoles.
           ";
         };
 
         ttyNumber = mkOption {
-          default = "7";
+          default = "8";
           description = "
-            TTY number name to show the manual on
+            Virtual console on which to show the manual.
           ";
         };
 
-        browserPackage = mkOption {
-          default = pkgs.w3m;
-          description = "
-            Package containing the browser to be used
-          ";
-        };
-
-        browserCommand = mkOption {
-          default = "bin/w3m";
-          description = "
-            Command (command path is relative to browserPackage) to run the browser
-          ";
+        browser = mkOption {
+          default = "${pkgs.w3m}/bin/w3m";
+          description = ''
+            Browser used to show the manual.
+          '';
         };
 
         manualFile = mkOption {
@@ -55,7 +49,7 @@ let
 in
 
 let
-  inherit (config.services.showManual) enable ttyNumber browserPackage browserCommand manualFile;
+  inherit (config.services.showManual) enable ttyNumber browser manualFile;
 
   realManualFile =
     if manualFile == null then
@@ -88,7 +82,7 @@ mkIf enable {
 
         start on udev
         stop on shutdown
-        respawn ${browserPackage}/${browserCommand} ${realManualFile} < /dev/tty${toString ttyNumber} > /dev/tty${toString ttyNumber} 2>&1
+        respawn ${browser} ${realManualFile} < /dev/tty${toString ttyNumber} > /dev/tty${toString ttyNumber} 2>&1
       '';
     }];
 
