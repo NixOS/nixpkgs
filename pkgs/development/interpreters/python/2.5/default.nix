@@ -34,7 +34,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ( {
   name = "python-2.5.4";
   
   src = fetchurl {
@@ -50,7 +50,6 @@ stdenv.mkDerivation {
   inherit buildInputs;
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-  
   configureFlags = "--enable-shared --with-wctype-functions";
   
   preConfigure = ''
@@ -76,5 +75,5 @@ stdenv.mkDerivation {
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null);
     libPrefix = "python2.5";
-  };
-}
+  } ;
+} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; } else {} ) )
