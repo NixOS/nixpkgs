@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     cd squashfs-tools
   '';
 
+  NIX_LDFLAGS = "-lgcc_s"; # for pthread_cancel
+
   installFlags = "INSTALL_DIR=\${out}/bin";
 
   meta = {
