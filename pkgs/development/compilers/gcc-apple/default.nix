@@ -9,11 +9,11 @@ assert stdenv.isDarwin;
 assert langF77 -> gmp != null;
 
 stdenv.mkDerivation ({
-  name = "gcc-4.0.1-apple-5341";
+  name = "gcc-4.2.1-apple-5531";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.opensource.apple.com/darwinsource/tarballs/other/gcc-5341.tar.gz;
-    md5 = "a135f107ddc55b773b40dfff4f049640";
+    url = http://www.opensource.apple.com/tarballs/gcc_42/gcc_42-5531.tar.gz ;
+    sha256 = "0bk37axx202x0ll1f8q00p233n3j8zga09ljxia1g89g17i64j4j";
   };
   patches =
     [./pass-cxxcpp.patch]
