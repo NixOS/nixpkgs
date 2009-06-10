@@ -41,7 +41,7 @@ touch pathlist
 # Add the individual files.
 for ((i = 0; i < ${#targets_[@]}; i++)); do
     stripSlash "${targets_[$i]}"
-    echo "$res=$(readlink -f ${sources_[$i]})" >> pathlist
+    echo "$res=${sources_[$i]}" >> pathlist
 done
 
 

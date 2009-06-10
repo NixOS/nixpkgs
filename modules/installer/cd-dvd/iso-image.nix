@@ -132,6 +132,14 @@ in
         source = pkgs.runCommand "empty" {} "ensureDir $out";
         target = "/nix/store";
       }
+      { # Another quick hack: the kernel needs a systemConfig
+        # parameter in menu.lst, but the system config depends on
+        # menu.lst.  Break the cyclic dependency by having a /system
+        # symlink on the CD, and having menu.lst refer to /system.
+        source = pkgs.runCommand "system" {}
+          "ln -s ${config.system.build.system} $out";
+        target = "/system";
+      }
     ];
 
   # The Grub menu.
@@ -142,7 +150,7 @@ in
         chainloader +1
     
       title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.system} ${toString config.boot.kernelParams}
+        kernel /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=/system ${toString config.boot.kernelParams}
         initrd /boot/initrd
     '';
 
