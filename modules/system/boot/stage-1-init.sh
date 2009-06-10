@@ -1,6 +1,6 @@
 #! @shell@
 
-targetRoot=/mnt/root
+targetRoot=/mnt-root
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
 
@@ -236,13 +236,17 @@ done
 
 # If this is a live-CD/DVD, then union-mount a tmpfs on top of the
 # original root.
-targetRoot=/mnt-root
 if test -n "@isLiveCD@"; then
-    mkdir /mnt-tmpfs
-    mount -t tmpfs -o "mode=755" none /mnt-tmpfs
-    mkdir /mnt-union
-    mount -t aufs -o dirs=/mnt-tmpfs=rw:$targetRoot=ro none /mnt-union
-    targetRoot=/mnt-union
+    mkdir /mnt-root-tmpfs
+    mount -t tmpfs -o "mode=755" none /mnt-root-tmpfs
+    mkdir /mnt-root-union
+    mount -t aufs -o dirs=/mnt-root-tmpfs=rw:$targetRoot=ro none /mnt-root-union
+    targetRoot=/mnt-root-union
+
+    mkdir /mnt-store-tmpfs
+    mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
+    mkdir -p $targetRoot/nix/store
+    mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
 fi
 
 

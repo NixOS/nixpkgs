@@ -5,11 +5,7 @@
 
   # Build the build-time dependencies of this configuration on the DVD
   # to speed up installation.
-  isoImage.storeContents =
-    [ { object = config.system.build.system.drvPath;
-        symlink = "none";
-      }
-    ];
+  isoImage.storeContents = [config.system.build.system.drvPath];
 
   # Include lots of packages.
   environment.systemPackages =

@@ -45,11 +45,7 @@ let
     };
 
     isoImage.storeContents = pkgs.lib.mkOption {
-      example =
-        [ { object = pkgs.stdenv;
-            symlink = "/stdenv";
-          }
-        ];
+      example = [pkgs.stdenv];
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
@@ -80,16 +76,36 @@ in
     [ { mountPoint = "/";
         label = config.isoImage.volumeID;
       }
+      { mountPoint = "/nix/store";
+        fsType = "squashfs";
+        device = "/nix-store.squashfs";
+        options = "loop";
+        neededForBoot = true;
+      }
     ];
 
-  # We need AUFS in the initrd to make the CD appear writable.
+  # We need squashfs in the initrd to mount the compressed Nix store,
+  # and aufs to make the root filesystem appear writable.
   boot.extraModulePackages = [config.boot.kernelPackages.aufs];
-  boot.initrd.extraKernelModules = ["aufs"];
+  boot.initrd.extraKernelModules = ["aufs" "squashfs"];
 
   # Tell stage 1 of the boot to mount a tmpfs on top of the CD using
   # AUFS.  !!! It would be nicer to make the stage 1 init pluggable
   # and move that bit of code here.
   boot.isLiveCD = true;
+
+  # Closures to be copied to the Nix store on the CD, namely the init
+  # script and the top-level system configuration directory.
+  isoImage.storeContents =
+    [ config.system.build.bootStage2
+      config.system.build.system
+    ];
+
+  # Create the squashfs image that contains the Nix store.
+  system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
+    inherit (pkgs) stdenv squashfsTools perl pathsFromGraph;
+    storeContents = config.isoImage.storeContents;
+  };
 
   # Individual files to be included on the CD, outside of the Nix
   # store on the CD.
@@ -109,16 +125,12 @@ in
       { source = config.boot.grubSplashImage;
         target = "/boot/background.xpm.gz";
       }
-    ];
-
-  # Closures to be copied to the Nix store on the CD, namely the init
-  # script and the top-level system configuration directory.
-  isoImage.storeContents =
-    [ { object = config.system.build.bootStage2;
-        symlink = "/init";
+      { source = config.system.build.squashfsStore;
+        target = "/nix-store.squashfs";
       }
-      { object = config.system.build.system;
-        symlink = "/system";
+      { # Quick hack: need a mount point for the store.
+        source = pkgs.runCommand "empty" {} "ensureDir $out";
+        target = "/nix/store";
       }
     ];
 
@@ -130,7 +142,7 @@ in
         chainloader +1
     
       title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=/init ${toString config.boot.kernelParams}
+        kernel /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.system} ${toString config.boot.kernelParams}
         initrd /boot/initrd
     '';
 
@@ -138,18 +150,17 @@ in
   system.build.isoImage = import ../../../lib/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
     
-    inherit (config.isoImage) isoName compressImage volumeID contents storeContents;
+    inherit (config.isoImage) isoName compressImage volumeID contents;
 
     bootable = true;
     bootImage = "/boot/grub/stage2_eltorito";
   };
 
-  # After booting, register the contents of the Nix store on the CD in
-  # the Nix database in the tmpfs.
   boot.postBootCommands =
     ''
-      ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration
-      rm /nix-path-registration
+      # After booting, register the contents of the Nix store on the
+      # CD in the Nix database in the tmpfs.
+      ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
