@@ -57,11 +57,6 @@ let
         ln -s $i $out/fine-tune/child-$childCount;
       done
 
-      cat > $out/menu.lst << GRUBEND
-      kernel $kernel init=$bootStage2 $kernelParams
-      initrd $initrd
-      GRUBEND
-
       ensureDir $out/bin
       substituteAll ${./switch-to-configuration.sh} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
