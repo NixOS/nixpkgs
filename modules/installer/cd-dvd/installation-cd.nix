@@ -170,11 +170,6 @@ in
       # to run nixos-rebuild to change the configuration of the
       # running system on the CD/DVD.
       cp ${dummyConfiguration} /etc/nixos/configuration.nix
-
-      # nixos-rebuild also requires a "system" profile and an
-      # /etc/NIXOS tag.
-      touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
     '';
 
   # Some more help text.

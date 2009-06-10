@@ -150,5 +150,10 @@ in
     ''
       ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration
       rm /nix-path-registration
+
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
     '';
 }
