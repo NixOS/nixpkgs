@@ -731,6 +731,10 @@ let
     inherit fetchurl stdenv x11 mesa;
   };
 
+  gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
+    inherit intltool perl gettext;
+  };
+
   gnugrep = useFromStdenv "gnugrep"
     (import ../tools/text/gnugrep {
       inherit fetchurl stdenv pcre;
