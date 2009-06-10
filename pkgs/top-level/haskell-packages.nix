@@ -294,6 +294,11 @@ rec {
     inherit cabal parallel;
   };
 
+  terminfo = import ../development/libraries/haskell/terminfo {
+    inherit cabal;
+    inherit (pkgs) ncurses;
+  };
+
   time = import ../development/libraries/haskell/time {
     inherit cabal;
   };
@@ -327,7 +332,7 @@ rec {
   };
 
   vty = import ../development/libraries/haskell/vty {
-    inherit cabal;
+    inherit cabal utf8String terminfo;
   };
 
   wx = import ../development/libraries/haskell/wxHaskell/wx.nix {
