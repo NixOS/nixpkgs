@@ -52,7 +52,8 @@ for i in $storePaths; do
 done
 
 
-# Also put a nix-pull manifest of the closures on the CD.
+# Also include a manifest of the closures in a format suitable for
+# nix-store --load-db.
 printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
 echo "nix-path-registration=nix-path-registration" >> pathlist
 
