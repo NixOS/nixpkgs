@@ -5,50 +5,37 @@ targetRoot=/mnt/root
 export LD_LIBRARY_PATH=@extraUtils@/lib
 
 
-errorDialog() {
+fail() {
+    # If starting stage 2 failed, allow the user to repair the problem
+    # in an interactive shell.
     timeout=15
-    echo
-    echo "Press within $timeout seconds:"
-    echo "  i) to launch an interactive shell"
-    echo "  f) to start an interactive shell having pid 1"
-    echo "     (needed if you want to start Stage 2 manually)"
-    echo "  *) to continue immediately (ignoring the failing command)"
+    cat <<EOF
+
+An error occured in stage 1 of the boot process, which must mount the
+root filesystem on \`$targetRoot' and then start stage 2.  Press one
+of the following keys within $timeout seconds:
+
+  i) to launch an interactive shell;
+  f) to start an interactive shell having pid 1 (needed if you want to
+     start stage 2's init manually); or
+  *) to ignore the error and continue.
+EOF
+
     read -t $timeout reply
+    
     case $reply in
         f)
             exec @shell@;;
         i)
-            echo
-            echo "Quit interactive shell with exit status of"
-            echo "  0        : to continue"
-            echo "  non-zero : to get this dialog again"
+            echo "Starting interactive shell..."
             @shell@ || fail
             ;;
         *)
-            echo continuing ignoring error;;
+            echo "Continuing...";;
     esac
 }
 
-
-fail() {
-    # If starting stage 2 failed, start an interactive shell.
-    echo "error while running Stage 1"
-    echo "Stage 1 should mount the root partition containing the nix store on \`$targetRoot'";
-    echo
-    errorDialog
-}
-trap 'fail' ERR;
-
-
-
-# Poor man's `basename'.
-basename() {
-    local s="$1"
-    set -- $(IFS=/; echo $s)
-    local res
-    while test $# != 0; do res=$1; shift; done
-    echo $res
-}
+trap 'fail' ERR
 
 
 # Print a greeting.
@@ -116,11 +103,11 @@ mknod /dev/null c 1 3
 if test -e /sys/power/tuxonice/resume; then
     if test -n "$(cat /sys/power/tuxonice/resume)"; then
         echo 0 > /sys/power/tuxonice/user_interface/enabled
-        echo 1 > /sys/power/tuxonice/do_resume || echo "Failed to resume..."
+        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
     fi
 fi
 
-echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "Failed to resume..."
+echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
 echo shutdown > /sys/power/disk
 
 
@@ -131,7 +118,7 @@ udevadm trigger
 udevadm settle
 
 if type -p dmsetup > /dev/null; then
-  echo "dmsetup found, starting device mapper and lvm"
+  echo "starting device mapper and LVM..."
   dmsetup mknodes
   lvm vgscan --ignorelockingfailure
   lvm vgchange -ay --ignorelockingfailure
@@ -143,21 +130,9 @@ if test -n "$debug1devices"; then fail; fi
 # Return true if the machine is on AC power, or if we can't determine
 # whether it's on AC power.
 onACPower() {
-    if test -d "/proc/acpi/battery"; then
-        if ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1; then
-            if cat /proc/acpi/battery/BAT*/state \
-                | grep "^charging state" \
-                | grep -q "discharg" ; then
-                false
-            else
-                true
-            fi
-        else
-            true
-        fi
-    else
-        true
-    fi
+    ! test -d "/proc/acpi/battery" ||
+    ! ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1 ||
+    ! cat /proc/acpi/battery/BAT*/state | grep "^charging state" | grep -q "discharg"
 }
 
 
@@ -169,7 +144,7 @@ checkFS() {
     # Don't run `fsck' if the machine is on battery power.  !!! Is
     # this a good idea?
     if ! onACPower; then
-        echo "on battery power, so \`fsck' not run on \`$device'"
+        echo "on battery power, so no \`fsck' will be performed on \`$device'"
         return 0
     fi
     
@@ -204,8 +179,9 @@ mountFS() {
     local fsType="$4"
 
     checkFS "$device"
+
+    mkdir -p "/mnt-root$mountPoint" || true
     
-    # Mount read-writable.
     mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint || fail
 }
 
@@ -286,12 +262,13 @@ fi
 
 # Start stage 2.  `run-init' deletes all files in the ramfs on the
 # current /.
-if test -z "$stage2Init"; then fail; fi
+if test -z "$stage2Init" -o ! -e "$targetRoot/$stage2Init"; then
+    echo "stage 2 init script not found"
+    fail
+fi
+
 umount /sys
 umount /proc
 exec run-init "$targetRoot" "$stage2Init"
 
-echo
-echo "$1: failed running $stage2Init"
-echo "Dropping into a root shell..."
-export $stage2Init; exec @shell@
+fail # should never be reached

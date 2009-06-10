@@ -96,6 +96,9 @@ let
       # Copy some utillinux stuff.
       cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount ${pkgs.utillinux}/sbin/pivot_root $out/bin
 
+      # Copy some coreutils.
+      cp ${pkgs.coreutils}/bin/basename $out/bin
+
       # Copy e2fsck and friends.      
       cp ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
       cp ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
@@ -154,6 +157,7 @@ let
       fi
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
+      $out/bin/basename --version
     ''; # */
   
 
