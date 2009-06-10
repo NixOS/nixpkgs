@@ -41,6 +41,7 @@ pkgs.lib.mkIf cfg.enable {
 	
         start on udev
         stop on shutdown
+
         respawn ${pkgs.rogue}/bin/rogue < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
       '';
     };

@@ -33,6 +33,27 @@ let
   # Put Nixpkgs in a tarball.
   nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (pkgs.lib.cleanSource pkgs.path);
 
+
+  # A dummy /etc/nixos/configuration.nix in the booted CD that
+  # rebuilds the CD's configuration (and allows the configuration to
+  # be modified, of course, providing a true live CD).  Problem is
+  # that we don't really know how the CD was built - the Nix
+  # expression language doesn't allow us to query the expression being
+  # evaluated.  So we'll just hope for the best.
+  dummyConfiguration = pkgs.writeText "configuration.nix"
+    ''
+      {config, pkgs, ...}:
+
+      {
+        require = [./nixos/modules/installer/cd-dvd/installation-cd.nix];
+
+        # Add your own options below and run "nixos-rebuild switch".
+        # E.g.,
+        #   services.sshd.enable = true;
+      }
+    '';
+  
+  
 in
 
 {
@@ -54,6 +75,7 @@ in
   # Don't include X libraries.
   services.sshd.forwardX11 = false;
   fonts.enableFontConfig = false;
+  fonts.enableCoreFonts = false;
 
   # Show the manual.
   services.showManual.enable = true;
@@ -128,20 +150,31 @@ in
   # installation.
   installer.nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
 
-  # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
-  # for nixos-install.
   boot.postBootCommands =
     ''
       export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
 
+      # Provide a mount point for nixos-install.
       mkdir -p /mnt
 
+      # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
+      # for nixos-install.
       echo "unpacking the NixOS/Nixpkgs sources..."
       mkdir -p /etc/nixos/nixos
       tar xjf ${nixosTarball}/nixos.tar.bz2 -C /etc/nixos/nixos
       mkdir -p /etc/nixos/nixpkgs
       tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
       chown -R root.root /etc/nixos
+
+      # Provide a configuration for the CD/DVD itself, to allow users
+      # to run nixos-rebuild to change the configuration of the
+      # running system on the CD/DVD.
+      cp ${dummyConfiguration} /etc/nixos/configuration.nix
+
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
     '';
 
   # Some more help text.
