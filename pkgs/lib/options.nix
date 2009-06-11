@@ -70,14 +70,21 @@ rec {
 
       handleOptionSets = opt:
         if decl ? type && decl.type.hasOptions then
-          opt // {
-            merge = list:
-              decl.type.iter
-                (path: opts: recurseInto path (decl.options ++ [opts]))
-                opt.name
-                (opt.merge list);
-            options = recurseInto (decl.type.docPath opt.name) decl.options;
-          }
+          let
+            optionConfig = opts: config:
+               map (f: applyIfFunction f config)
+                 (decl.options ++ [opts]);
+          in
+            opt // {
+              merge = list:
+                decl.type.iter
+                  (path: opts:
+                     fixMergeFun (recurseInto path) (optionConfig opts)
+                  )
+                  opt.name
+                  (opt.merge list);
+              options = recurseInto (decl.type.docPath opt.name) decl.options;
+            }
         else
           opt;
     in
@@ -360,6 +367,56 @@ rec {
   || builtins.isBool x
   || builtins.isList x
   );
+
+  applyIfFunction = f: arg:
+    if builtins.isFunction f then
+      f arg
+    else
+      f;
+
+  moduleClosure = initModules: args:
+    let
+      moduleImport = path:
+        (applyIfFunction (import path) args) // {
+          # used by generic closure to avoid duplicated imports.
+          key = path;
+        };
+    in
+      builtins.genericClosure {
+        startSet = map moduleImport initModules;
+        operator = m:
+          map moduleImport (attrByPath ["imports"] [] m);
+      };
+
+  selectDeclsAndDefs = modules:
+    lib.concatMap (m:
+       attrByPath ["options"] [] m
+    ++ attrByPath ["config"] [] m
+    ) modules;
+
+  fixMergeFun = merge: optFun:
+    lib.fix (config:
+      merge (
+        # Delay top-level properties like mkIf
+        map delayProperties (
+          # generate the list of option sets.
+          optFun config
+        )
+      )
+    );
+
+  fixMergeModules = merge: initModules: {...}@args:
+    fixMergeFun (config:
+      selectDeclsAndDefs (
+        moduleClosure initModules (args // { inherit config; })
+      )
+    );
+
+  fixModulesConfig = initModules: {...}@args:
+    fixMergeModules (mergeOptionSets "") initModules args;
+
+  fixOptionsConfig = initModules: {...}@args:
+    fixMergeModules (filterOptionSets "") initModules args;
 
 
   # Evaluate a list of option sets that would be merged with the
