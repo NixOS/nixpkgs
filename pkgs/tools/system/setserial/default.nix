@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "ftp://ftp.mcc.ac.uk/pub/linux/sources/sbin/setserial-${version}.tar.gz";
+    url = "mirror://sourceforge/setserial/setserial-${version}.tar.gz";
     sha256 = "0jkrnn3i8gbsl48k3civjmvxyv9rbm1qjha2cf2macdc439qfi3y";
   };
 
