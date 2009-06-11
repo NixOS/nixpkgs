@@ -490,20 +490,31 @@ rec {
   fixOptionSets = merge: pkgs: opts:
     lib.fix (fixOptionSetsFun merge pkgs opts);
 
-  optionAttrSetToDocList = l: attrs:
-    if (attrByPath ["_type"] "" attrs) == "option" then
-      [({
-	#inherit (attrs) description;
-        description = if attrs ? description then attrs.description else 
-          throw ("No description ${toString l} : ${lib.whatis attrs}");
-      }
-      // (if attrs ? example then {inherit(attrs) example;} else {} )
-      // (if attrs ? default then {inherit(attrs) default;} else {} )
-      // {name = l;}
-      )]
-      else (concatLists (map (s: (optionAttrSetToDocList 
-        (l + (if l=="" then "" else ".") + s) (builtins.getAttr s attrs)))
-        (attrNames attrs)));
+
+  # Generate documentation template from the list of option declaration like
+  # the set generated with filterOptionSets.
+  optionAttrSetToDocList = ignore: newOptionAttrSetToDocList;
+  newOptionAttrSetToDocList = attrs:
+    let options = collect isOption attrs; in
+      fold (opt: rest:
+        let
+          docOption = {
+            inherit (opt) name;
+            description = if opt ? description then opt.description else
+              throw "Option ${opt.name}: No description.";
+          }
+          // (if opt ? example then {inherit(opt) example;} else {})
+          // (if opt ? default then {inherit(opt) default;} else {});
+
+          subOptions =
+            if opt ? options then
+              newOptionAttrSetToDocList opt.options
+            else
+              [];
+        in
+          [ docOption ] ++ subOptions ++ rest
+      ) [] options;
+
 
   /* Option Properties */
   # Generalize the problem of delayable properties.  Any property can be created
