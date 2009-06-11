@@ -1,4 +1,5 @@
-# This module contains the configuration for the NixOS installation CD.
+# This module contains the basic configuration for building a NixOS
+# installation CD.
 
 {config, pkgs, ...}:
 
@@ -71,11 +72,6 @@ in
   
   # Use Linux 2.6.29.
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
-
-  # Don't include X libraries.
-  services.sshd.forwardX11 = false;
-  fonts.enableFontConfig = false;
-  fonts.enableCoreFonts = false;
 
   # Show the manual.
   services.showManual.enable = true;
@@ -176,7 +172,11 @@ in
   services.mingetty.helpLine =
     ''
         
-      Log in as "root" with an empty password.
+      Log in as "root" with an empty password.  ${
+        if config.services.xserver.enable then
+          "Type `start xserver' to start\nthe graphical user interface."
+        else ""
+      }
     '';
 
   # To speed up installation a little bit, include the complete stdenv
