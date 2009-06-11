@@ -197,7 +197,7 @@ rec {
       merge = concatLists;
       iter = f: path: list: map (elemType.iter f (path + ".*")) list;
       fold = op: nul: list: lib.fold (e: l: elemType.fold op l e) nul list;
-      docPath = path: elemType (path + ".*");
+      docPath = path: elemType.docPath (path + ".*");
       inherit (elemType) hasOptions;
     };
 
@@ -208,7 +208,7 @@ rec {
       merge = fold lib.mergeAttrs {};
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
-      docPath = path: elemType (path + ".<name>");
+      docPath = path: elemType.docPath (path + ".<name>");
       inherit (elemType) hasOptions;
     };
 
