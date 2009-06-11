@@ -4,6 +4,7 @@ with {
   inherit (builtins) head tail isString;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
+  inherit (import ./lists.nix) concatMap;
 };
 
 rec {
@@ -64,6 +65,31 @@ rec {
        => [1 2]
   */
   catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
+
+
+  /* Recursively collect sets that verify a given predicate named `pred'
+     from the set `attrs'.  The recursion is stopped when the predicate is
+     verified.
+
+     Type:
+       collect ::
+         (AttrSet -> Bool) -> AttrSet -> AttrSet
+
+     Example:
+       collect builtins.isList { a = { b = ["b"]; }; c = [1]; }
+       => ["b" 1]
+
+       collect (x: x ? outPath)
+          { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+       => [{ outPath = "a/"; } { outPath = "b/"; }]
+  */
+  collect = pred: attrs:
+    if pred attrs then
+      [ attrs ]
+    else if builtins.isAttrs attrs then
+      concatMap (collect pred) (attrValues attrs)
+    else
+      [];
 
 
   /* Utility function that creates a {name, value} pair as expected by
