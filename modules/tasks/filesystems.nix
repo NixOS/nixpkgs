@@ -97,16 +97,6 @@ let
             <option>fileSystems.*.mountPoint</option>.
           ";
         };
-
-        # Should be moved inside boot-stage-1.nix
-        neededForBoot = mkOption {
-          default = false;
-          type = types.enable;
-          description = "
-            Mount this file system to boot on NixOS.
-          ";
-        };
-
       };
     };
   

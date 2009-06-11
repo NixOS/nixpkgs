@@ -7,7 +7,7 @@
 
 let
 
-  inherit (pkgs.lib) mkOption;
+  inherit (pkgs.lib) mkOption types;
 
   options = {
 
@@ -52,6 +52,16 @@ let
       description = "
         Whether to show a nice splash screen while booting.
       ";
+    };
+
+    fileSystems = mkOption {
+      options.neededForBoot = mkOption {
+        default = false;
+        type = types.enable;
+        description = "
+          Mount this file system to boot on NixOS.
+        ";
+      };
     };
   
   };
@@ -165,7 +175,7 @@ let
   # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
   fileSystems = pkgs.lib.filter
-    (fs: fs.mountPoint == "/" || (fs ? neededForBoot && fs.neededForBoot))
+    (fs: fs.mountPoint == "/" || fs.neededForBoot)
     config.fileSystems;
 
 
