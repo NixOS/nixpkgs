@@ -3,10 +3,11 @@
 let
 
 ###### interface
+  inherit (pkgs.lib) mkOption types;
 
   options = {
 
-    fileSystems = pkgs.lib.mkOption {
+    fileSystems = mkOption {
       example = [
         { mountPoint = "/";
           device = "/dev/hda1";
@@ -39,9 +40,77 @@ let
         <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with 
         <command>mkdir -p</command> .
       ";
+      type = types.nullOr (types.list types.optionSet);
+
+      options =  {
+
+        mountPoint = mkOption {
+          example = "/mnt/usb";
+          type = types.uniq types.string;
+          description = "
+            Location of the mounted the file system.
+          ";
+        };
+
+        device = mkOption {
+          default = null;
+          example = "/dev/sda";
+          type = types.uniq (types.nullOr types.string);
+          description = "
+            Location of the device.
+          ";
+        };
+
+        label = mkOption {
+          default = null;
+          example = "root-partition";
+          type = types.uniq (types.nullOr types.string);
+          description = "
+            Label of the device (if any).
+          ";
+        };
+
+        fsType = mkOption {
+          default = "auto";
+          example = "ext3";
+          type = types.uniq types.string;
+          description = "
+            Type of the file system.
+          ";
+        };
+
+        options = mkOption {
+          default = "defaults";
+          example = "data=journal";
+          type = types.string;
+          merge = pkgs.lib.concatStringsSep ",";
+          description = "
+            Option used to mount the file system.
+          ";
+        };
+
+        autocreate = mkOption {
+          default = "0";
+          type = types.uniq types.string;
+          description = "
+            Automatically create the mount point defined in
+            <option>fileSystems.*.mountPoint</option>.
+          ";
+        };
+
+        # Should be moved inside boot-stage-1.nix
+        neededForBoot = mkOption {
+          default = false;
+          type = types.enable;
+          description = "
+            Mount this file system to boot on NixOS.
+          ";
+        };
+
+      };
     };
   
-    system.sbin.mount = pkgs.lib.mkOption {
+    system.sbin.mount = mkOption {
       internal = true;
       default = pkgs.utillinuxng.override {
         buildMountOnly = true;
@@ -69,10 +138,10 @@ let
   inherit (pkgs) e2fsprogs;
   fileSystems = config.fileSystems;
   mountPoints = map (fs: fs.mountPoint) fileSystems;
-  devices = map (fs: if fs ? device then fs.device else "LABEL=" + fs.label) fileSystems;
-  fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
-  optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
-  autocreates = map (fs: if fs ? autocreate then fs.autocreate else "0") fileSystems;
+  devices = map (fs: if fs.device != null then fs.device else "LABEL=" + fs.label) fileSystems;
+  fsTypes = map (fs: fs.fsType) fileSystems;
+  optionss = map (fs: fs.options) fileSystems;
+  autocreates = map (fs: fs.autocreate) fileSystems;
   mount = config.system.sbin.mount;
 
   job = ''
