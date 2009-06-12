@@ -327,7 +327,7 @@ rec {
     inherit cabal ghcPaths haskellSrcMeta;
   };
 
-  vacuumCairo = import ../development/libraries/haskell/vacuumCairo {
+  vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
     inherit cabal vacuum gtk2hs parallel strictConcurrency;
   };
 
