@@ -18,14 +18,18 @@ let
       pkgs.coreutils
       pkgs.cpio
       pkgs.curl
+      pkgs.diffutils
       pkgs.e2fsprogs
       pkgs.findutils
+      pkgs.gawk
       pkgs.glibc # for ldd, getent
       pkgs.gnugrep
+      pkgs.gnupatch
       pkgs.gnused
       pkgs.gnutar
       pkgs.grub
       pkgs.gzip
+      pkgs.host
       pkgs.iputils
       pkgs.less
       pkgs.libcap
@@ -56,7 +60,6 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-      pkgs.host
     ] ++ config.environment.extraPackages;
 
 
