@@ -42,6 +42,11 @@ rec {
     inherit cabal mtl network parsec xhtml;
   };
 
+  convertible = import ../development/libraries/haskell/convertible {
+    inherit cabal mtl;
+    time = time113;
+  };
+
   Crypto = import ../development/libraries/haskell/Crypto {
     inherit cabal;
   };
@@ -127,16 +132,16 @@ rec {
     inherit cabal;
   };
 
-  HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
-    inherit cabal;
+  HDBC = import ../development/libraries/haskell/HDBC/HDBC.nix {
+    inherit cabal HUnit QuickCheck mtl time utf8String convertible testpack;
   };
 
-  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql-1.1.4.0.nix {
-    inherit cabal HDBC;
+  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
+    inherit cabal HDBC parsec;
     inherit (pkgs) postgresql;
   };
 
-  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
+  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {
     inherit cabal HDBC;
     inherit (pkgs) sqlite;
   };
@@ -299,7 +304,16 @@ rec {
     inherit (pkgs) ncurses;
   };
 
+  testpack = import ../development/libraries/haskell/testpack {
+    inherit cabal HUnit QuickCheck mtl;
+  };
+
+  /* time is Haskell Platform default, time113 is more recent but incompatible */
   time = import ../development/libraries/haskell/time {
+    inherit cabal;
+  };
+
+  time113 = import ../development/libraries/haskell/time/1.1.3.nix {
     inherit cabal;
   };
 
