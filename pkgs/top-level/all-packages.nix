@@ -2640,6 +2640,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  patchelf05 = import ../development/tools/misc/patchelf/0.5.nix {
+    inherit fetchurl stdenv;
+  };
+
   pmccabe = import ../development/tools/misc/pmccabe {
     inherit fetchurl stdenv;
   };
