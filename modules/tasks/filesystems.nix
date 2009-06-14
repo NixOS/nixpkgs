@@ -90,8 +90,8 @@ let
         };
 
         autocreate = mkOption {
-          default = "0";
-          type = types.uniq types.string;
+          default = false;
+          type = types.bool;
           description = "
             Automatically create the mount point defined in
             <option>fileSystems.*.mountPoint</option>.
