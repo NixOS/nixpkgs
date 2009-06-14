@@ -161,7 +161,7 @@ rec {
       name = "inferred type";
     };
 
-    enable = mkOptionType {
+    bool = mkOptionType {
       name = "boolean";
       check = builtins.isBool;
       merge = fold lib.or false;
