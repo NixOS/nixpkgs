@@ -57,7 +57,7 @@ let
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
-        type = types.enable;
+        type = types.bool;
         description = "
           Mount this file system to boot on NixOS.
         ";
@@ -220,9 +220,9 @@ let
       if fileSystems == null
       then abort "You must specify the fileSystems option!"
       else map (fs: fs.mountPoint) fileSystems;
-    devices = map (fs: if fs ? device then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
-    fsTypes = map (fs: if fs ? fsType then fs.fsType else "auto") fileSystems;
-    optionss = map (fs: if fs ? options then fs.options else "defaults") fileSystems;
+    devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
+    fsTypes = map (fs: fs.fsType) fileSystems;
+    optionss = map (fs: fs.options) fileSystems;
 
     path = [
       # `extraUtils' comes first because it overrides the `mount'
