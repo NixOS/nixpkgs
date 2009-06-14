@@ -78,6 +78,10 @@ composableDerivation {} ( fixed : {
         buildInputs = [gd];
       };
 
+      soap = {
+        configureFlags = ["--enable-soap"];
+      };
+
       sockets = {
         configureFlags = ["--enable-sockets"];
       };
@@ -121,8 +125,9 @@ composableDerivation {} ( fixed : {
     gettextSupport = true;
     postgresqlSupport = true;
     sqliteSupport = true;
+    soapSupport = true;
     zlibSupport = true;
-    opnesslSupport = true;
+    opensslSupport = true;
     xdebugSupport = true;
     mbstringSupport = true;
     gdSupport = true;
