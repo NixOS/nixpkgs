@@ -6309,6 +6309,7 @@ let
       python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
+  gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
     inherit pkgs;
