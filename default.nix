@@ -10,6 +10,8 @@ let
 in
 
 {
+  inherit config;
+
   system = config.system.build.system;
 
   # The following are used by nixos-rebuild.

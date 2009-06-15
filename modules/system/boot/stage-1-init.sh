@@ -141,13 +141,18 @@ checkFS() {
     # Only check block devices.
     if ! test -b "$device"; then return 0; fi
 
+    eval $(fstype "$device")
+
+    # Don't check ROM filesystems.
+    if test "$FSTYPE" = iso9660 -o "$FSTYPE" = udf; then return 0; fi
+
     # Don't run `fsck' if the machine is on battery power.  !!! Is
     # this a good idea?
     if ! onACPower; then
         echo "on battery power, so no \`fsck' will be performed on \`$device'"
         return 0
     fi
-    
+
     FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
     fsckResult=$?
 
