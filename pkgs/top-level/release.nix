@@ -165,7 +165,7 @@ in {
   gprolog = linux;
   gpsbabel = all;
   gpscorrelate = linux;
-  gpsd = all;
+  gpsd = linux;
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
