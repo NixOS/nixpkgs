@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses ? null
 
 , # Util-linux-ng requires libuuid and libblkid.
-  e2fsprogs
+  libuuid
 
 , # Build mount/umount only.
   buildMountOnly ? false
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
-  buildInputs = [e2fsprogs]
+  buildInputs = [libuuid]
     ++ stdenv.lib.optional (ncurses != null) ncurses;
 
   inherit mountHelpers;

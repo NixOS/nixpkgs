@@ -614,8 +614,8 @@ let
       url = mirror://xorg/X11R7.4/src/everything/libSM-1.1.0.tar.bz2;
       sha256 = "10iap6ydxmk0g5qcfnsf9yc30fhvqshgppm0sca21y0z5qwaqdkm";
     };
-    buildInputs = [pkgconfig libICE e2fsprogs xproto xtrans ];
-  })) // {inherit libICE e2fsprogs xproto xtrans ;};
+    buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
+  })) // {inherit libICE libuuid xproto xtrans ;};
     
   libWindowsWM = (stdenv.mkDerivation ((if overrides ? libWindowsWM then overrides.libWindowsWM else x: x) {
     name = "libWindowsWM-1.0.0";

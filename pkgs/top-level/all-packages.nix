@@ -4595,7 +4595,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config dbus hal e2fsprogs openssl gperf m4;
+      xkeyboard_config dbus hal libuuid openssl gperf m4;
 
     # !!! pythonBase is use instead of python because this cause an infinite
     # !!! recursion when the flag python.full is set to true.  Packages
@@ -4637,7 +4637,7 @@ let
   };
 
   nfsUtils = import ../os-specific/linux/nfs-utils {
-   inherit fetchurl stdenv tcpWrapper e2fsprogs;
+    inherit fetchurl stdenv tcpWrapper e2fsprogs;
   };
 
   acpi = import ../os-specific/linux/acpi {
@@ -4708,11 +4708,18 @@ let
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
 
-  e2fsprogs = import ../os-specific/linux/e2fsprogs {
+  # libuuid is used as an (indirect) dependency for lots of other
+  # packages such as X and KDE, which we don't want to rebuild every
+  # time we update e2fsprogs.
+  e2fsprogsOld = import ../os-specific/linux/e2fsprogs/1.41.5.nix {
     inherit fetchurl stdenv;
   };
 
-  libuuid = e2fsprogs;
+  libuuid = e2fsprogsOld;
+
+  e2fsprogs = import ../os-specific/linux/e2fsprogs/1.41.6.nix {
+    inherit fetchurl stdenv;
+  };
 
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
@@ -5493,7 +5500,7 @@ let
   utillinuxCurses = utillinuxngCurses;
 
   utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv e2fsprogs;
+    inherit fetchurl stdenv libuuid;
   };
 
   utillinuxngCurses = utillinuxng.override {
