@@ -1256,6 +1256,15 @@ rec {
     propagatedBuildInputs = [URI HTMLParser HTMLTagset];
   };
 
+  MailIMAPClient = buildPerlPackage {
+    name = "Mail-IMAPClient-2.2.9";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DJ/DJKERNEN/Mail-IMAPClient-2.2.9.tar.gz;
+      sha256 = "1jb04mn66d6022xjqmax49cdn55f2fdzp6knfnchmrcmf90a8rzs";
+    };
+    buildInputs = [ParseRecDescent];
+  };
+
   MailTools = buildPerlPackage {
     name = "MailTools-2.04";
     src = fetchurl {
@@ -1393,6 +1402,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CO/CORION/parent-0.221.tar.gz;
       sha256 = "17jhscpa5p5szh1173pd6wvh2m05an1l941zqq9jkw9bzgk12hm0";
+    };
+  };
+
+  ParseRecDescent = buildPerlPackage {
+    name = "ParseRecDescent-1.96.0";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/Parse-RecDescent-1.96.0.tar.gz;
+      sha256 = "1hnsnpzdwcwpbnsspaz55gx7x7h1rpxdk7k1ninnqk1jximl3y9n";
     };
   };
 
