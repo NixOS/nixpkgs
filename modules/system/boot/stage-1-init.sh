@@ -146,6 +146,17 @@ checkFS() {
     # Don't check ROM filesystems.
     if test "$FSTYPE" = iso9660 -o "$FSTYPE" = udf; then return 0; fi
 
+    # Optionally, skip fsck on journaling filesystems.  This option is
+    # a hack - it's mostly because e2fsck on ext3 takes much longer to
+    # recover the journal than the ext3 implementation in the kernel
+    # does (minutes versus seconds).
+    if test -z "@checkJournalingFS@" -a \
+        \( "$FSTYPE" = ext3 -o "$FSTYPE" = ext4 -o "$FSTYPE" = reiserfs \
+        -o "$FSTYPE" = xfs -o "$FSTYPE" = jfs \)
+    then
+        return 0
+    fi
+    
     # Don't run `fsck' if the machine is on battery power.  !!! Is
     # this a good idea?
     if ! onACPower; then

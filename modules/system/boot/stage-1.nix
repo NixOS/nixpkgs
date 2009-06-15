@@ -54,6 +54,14 @@ let
       ";
     };
 
+    boot.initrd.checkJournalingFS = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to run fsck on journaling filesystems such as ext3.
+      '';
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -214,6 +222,8 @@ let
     inherit modulesClosure udevConf extraUtils;
     
     inherit (config.boot) isLiveCD resumeDevice;
+
+    inherit (config.boot.initrd) checkJournalingFS;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =
