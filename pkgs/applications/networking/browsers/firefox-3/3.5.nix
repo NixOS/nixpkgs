@@ -10,14 +10,14 @@
     
 }:
 
-let version = "3.5b4"; in
+let version = "3.5b99"; in
 
 stdenv.mkDerivation {
   name = "firefox-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/firefox/releases/${version}/source/firefox-${version}-source.tar.bz2";
-    sha256 = "0pfrcqbsa88p6nfqx7xhlr603ycwf5lnfmwcdd5abl7xipxg4lxn";
+    sha256 = "05vyksprh00asvir3wskjzgxmyvhr89fdh0dwi8s0vknbcbx6hvr";
   };
 
   buildInputs = [
