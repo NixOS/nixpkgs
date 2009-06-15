@@ -11,8 +11,8 @@
 
 let
 
-  version = "1.9.1b4"; # this attribute is used by other packages
-  ffversion = "3.5b4";
+  version = "1.9.1b99"; # this attribute is used by other packages
+  ffversion = "3.5b99";
 
 in  
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/firefox/releases/${ffversion}/source/firefox-${ffversion}-source.tar.bz2";
-    sha256 = "0pfrcqbsa88p6nfqx7xhlr603ycwf5lnfmwcdd5abl7xipxg4lxn";
+    sha256 = "05vyksprh00asvir3wskjzgxmyvhr89fdh0dwi8s0vknbcbx6hvr";
   };
 
   buildInputs = [
