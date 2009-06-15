@@ -2,11 +2,11 @@
   python, ruby, libewf, vte, perl}:
 
 stdenv.mkDerivation {
-  name = "radare-1.4";
+  name = "radare-1.4.1";
 
   src = fetchurl {
-    url = http://radare.org/get/radare-1.4.tar.gz;
-    sha256 = "1hx9xvcyvvbbbq39kkim3ajli1hqadld9vfzcxz7iz5pgp15mc3b";
+    url = http://radare.org/get/radare-1.4.1.tar.gz;
+    sha256 = "1q5hajhvp7nfyrj83gk7x6cbg520nvg39wbyq21bfncxk28rkmxh";
   };
 
 #  patches = [ ./lua.patch ];
