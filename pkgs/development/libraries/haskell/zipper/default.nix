@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "zipper";
-  version = "0.2";
-  sha256 = "174d2e19d2186511b190bd483f20492751262a6ea88f343fbacf7b40724fa222";
+  version = "0.3";
+  sha256 = "3f6cc0ea69734d0523f1bf74d14953f88a196e728f89a7cc91f394d9e0c13c15";
   propagatedBuildInputs = [multirec];
   meta = {
     description = "Generic zipper for systems of recursive datatypes";
