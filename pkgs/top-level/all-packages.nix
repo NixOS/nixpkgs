@@ -1638,10 +1638,10 @@ let
 
   gcc43 = useFromStdenv "gcc" gcc43_real;
 
-  gcc43_real = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
-  });
+  }));
 
   gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43_real.gcc.override {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
