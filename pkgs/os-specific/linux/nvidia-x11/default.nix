@@ -28,13 +28,13 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11];
+  glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
 
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
   programPath = stdenv.lib.makeLibraryPath [
     gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib
-    xlibs.libXv xlibs.libXrandr
+    xlibs.libXv
   ];
 
   meta = {
