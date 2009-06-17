@@ -96,19 +96,19 @@ sub pciCheck {
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
-    push @requireList, "(import ./configurations/hardware/network/Intel2200BG.nix)" if
+    push @requireList, "./nixos/hardware/network/intel-2200bg.nix" if
         $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
 
-    push @requireList, "(import ./configurations/hardware/network/Intel3945ABG.nix)" if
+    push @requireList, "./nixos/hardware/network/intel-3945abg.nix" if
         $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
 
     # Hm, can we extract the PCI ids supported by X drivers somehow?
     # cf. http://www.calel.org/pci-devices/xorg-device-list.html
-    $videoDriver = "i810" if $vendor eq "0x8086" &&
+    $videoDriver = "intel" if $vendor eq "0x8086" &&
         ($device eq "0x1132" ||
          $device eq "0x2572" ||
          $device eq "0x2592" ||
@@ -204,7 +204,7 @@ sub multiLineList {
     foreach my $s (@_) {
         $res .= "\n$indent  $s";
     }
-    $res .= "\nindent";
+    $res .= "\n$indent";
     return $res;
 }
 
@@ -212,40 +212,17 @@ my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
 my $requireList = multiLineList("  ", removeDups @requireList);
 
-## This is a generated file.  Do not modify!
-## Make changes to /etc/nixos/configuration.nix instead.
 print <<EOF ;
+# This is a generated file.  Do not modify!
+# Make changes to /etc/nixos/configuration.nix instead.
 {
   require = [$requireList];
 
-  boot = {
-    initrd = {
-      extraKernelModules = [ $initrdKernelModules ];
-    };
-    kernelModules = [ $kernelModules ];
-  };
+  boot.initrd.extraKernelModules = [ $initrdKernelModules ];
+  boot.kernelModules = [ $kernelModules ];
 
-  nix = {
-    maxJobs = $cpus;
-  };
+  nix.maxJobs = $cpus;
 
-  # list of file systems which can be mounted.
-  fileSystems = [
-  ];
-
-  # list of swap devices.
-  swapDevices = [
-  ];
-
-  networking = {
-  };
-
-  services = {
-
-    xserver = {
-      videoDriver = "$videoDriver";
-    };
-
-  };
+  services.xserver.videoDriver = "$videoDriver";
 }
 EOF
