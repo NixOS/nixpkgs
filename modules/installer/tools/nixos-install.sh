@@ -110,6 +110,10 @@ for i in $storePaths; do
 done
 
 
+# We don't have locale-archive in the chroot, so clear $LANG.
+export LANG=
+
+
 # Register the paths in the Nix closure as valid.  This is necessary
 # to prevent them from being deleted the first time we install
 # something.  (I.e., Nix will see that, e.g., the glibc path is not
@@ -143,9 +147,9 @@ fi
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-chroot $mountPoint @nix@/bin/nix-env \
+NIXPKGS=/mnt/etc/nixos/nixpkgs chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
-    -f "/mnt$NIXOS/system/system.nix" \
+    -f "/mnt$NIXOS" \
     --arg configuration "import $NIXOS_CONFIG" \
     --set -A system
 
