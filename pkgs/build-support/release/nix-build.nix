@@ -24,6 +24,15 @@ stdenv.mkDerivation (
 
     # Hack - swap checkPhase and installPhase (otherwise Stratego barfs).
     phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""} finalPhase";
+
+    finalPhase =
+      ''
+        # Propagate the release name of the source tarball.  This is
+        # to get nice package names in channels.
+        if test -e $origSrc/nix-support/hydra-release-name; then
+          cp $origSrc/nix-support/hydra-release-name $out/nix-support/hydra-release-name
+        fi
+      '';
   }
 
   // args // 
@@ -76,16 +85,6 @@ stdenv.mkDerivation (
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
-
-    finalPhase =
-      ''
-        # Propagate the release name of the source tarball.  This is
-        # to get nice package names in channels.
-        if test -e $origSrc/nix-support/hydra-release-name; then
-          cp $origSrc/nix-support/hydra-release-name $out/nix-support/hydra-release-name
-        fi
-      '';
-    
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
