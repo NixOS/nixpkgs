@@ -62,12 +62,22 @@ let
       '';
     };
 
+    boot.initrd.postDeviceCommands = mkOption {
+      default = "";
+      merge = pkgs.lib.mergeStringOption;
+      description = ''
+        Shell commands to be executed immediately after stage 1 of the
+        boot has loaded kernel modules and created device nodes in
+        /dev.
+      '';
+    };
+
     boot.initrd.postMountCommands = mkOption {
       default = "";
       merge = pkgs.lib.mergeStringOption;
       description = ''
         Shell commands to be executed immediately after the stage 1
-        filesystems has been mounted.
+        filesystems have been mounted.
       '';
     };
 
@@ -232,7 +242,8 @@ let
     
     inherit (config.boot) isLiveCD resumeDevice;
 
-    inherit (config.boot.initrd) checkJournalingFS postMountCommands;
+    inherit (config.boot.initrd) checkJournalingFS
+      postDeviceCommands postMountCommands;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =

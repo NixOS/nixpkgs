@@ -16,24 +16,29 @@
   boot.initrd.extraKernelModules =
     ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
 
+  boot.initrd.postDeviceCommands =
+    ''
+      ipconfig 10.0.2.15:::::eth0:none
+    '';
+
+  # Mount the host filesystem via CIFS, and bind-mount the Nix store
+  # of the host into our own filesystem.
   fileSystems =
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
+      { mountPoint = "/hostfs";
+        device = "//10.0.2.4/qemu";
+        fsType = "cifs";
+        options = "guest,username=nobody";
+        neededForBoot = true;
+      }
+      { mountPoint = "/nix/store";
+        device = "/hostfs/nix/store";
+        options = "bind";
+        neededForBoot = true;
+      }
     ];
-
-  # Mount the host filesystem and bind-mount its Nix store into our
-  # own root FS.
-  boot.initrd.postMountCommands =
-    ''
-      ipconfig 10.0.2.15:::::eth0:none
-      
-      mkdir /hostfs
-      ${pkgs.vmTools.mountCifs}/bin/mount.cifs //10.0.2.4/qemu /hostfs -o guest,username=nobody
-
-      mkdir -p $targetRoot/nix/store
-      mount --bind /hostfs/nix/store $targetRoot/nix/store
-    '';
 
   # Starting DHCP brings down eth0, which kills the connection to the
   # host filesystem and thus deadlocks the system.

@@ -127,6 +127,9 @@ fi
 if test -n "$debug1devices"; then fail; fi
 
 
+@postDeviceCommands@
+
+
 # Return true if the machine is on AC power, or if we can't determine
 # whether it's on AC power.
 onACPower() {
@@ -222,6 +225,9 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
     # is a bind mount.
     case $device in
         /dev/*)
+            ;;
+        //*)
+            # Don't touch SMB/CIFS paths.
             ;;
         /*)
             device=/mnt-root$device
