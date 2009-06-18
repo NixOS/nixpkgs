@@ -11,7 +11,9 @@
 
 let
 
-  version = "1.9.1rc1"; # this attribute is used by other packages
+  version = "1.9.1rc1"; 
+  shownVersion = "1.9.1"; # this attribute is used by other packages
+                          # _usually_ it is the same as version
   ffversion = "3.5rc1";
 
 in  
@@ -92,7 +94,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru = { 
-    inherit gtk version ffversion src;
+    inherit gtk ffversion src;
+    version = shownVersion;
   };
 }
 
