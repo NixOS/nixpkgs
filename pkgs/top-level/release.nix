@@ -112,6 +112,7 @@ in {
   dosbox = linux;
   dovecot = linux;
   doxygen = linux;
+  dpkg = linux;
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
