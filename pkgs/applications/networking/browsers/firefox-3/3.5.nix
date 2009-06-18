@@ -10,15 +10,12 @@
     
 }:
 
-let version = "3.5b99"; in
+let version = xulrunner.ffversion; in
 
 stdenv.mkDerivation {
   name = "firefox-${version}";
 
-  src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/firefox/releases/${version}/source/firefox-${version}-source.tar.bz2";
-    sha256 = "05vyksprh00asvir3wskjzgxmyvhr89fdh0dwi8s0vknbcbx6hvr";
-  };
+  src = xulrunner.src;
 
   buildInputs = [
     pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2
