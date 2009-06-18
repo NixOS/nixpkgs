@@ -62,6 +62,15 @@ let
       '';
     };
 
+    boot.initrd.postMountCommands = mkOption {
+      default = "";
+      merge = pkgs.lib.mergeStringOption;
+      description = ''
+        Shell commands to be executed immediately after the stage 1
+        filesystems has been mounted.
+      '';
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -223,7 +232,7 @@ let
     
     inherit (config.boot) isLiveCD resumeDevice;
 
-    inherit (config.boot.initrd) checkJournalingFS;
+    inherit (config.boot.initrd) checkJournalingFS postMountCommands;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =

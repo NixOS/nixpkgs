@@ -266,6 +266,9 @@ if test -n "@isLiveCD@"; then
 fi
 
 
+@postMountCommands@
+
+
 # Stop udevd.
 kill $(minips -C udevd -o pid=)
 
