@@ -47,10 +47,10 @@
 
   xf86videoati = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
-    src = args.fetchurl {
-      url = ftp://ftp.x.org/pub/individual/driver/xf86-video-ati-6.12.2.tar.bz2;
-      sha256 = "0l17mv7ljw9cnvfblms62vnjkpd26gf5dqgdpfzvkxqrfyhvpvhv";
-    };
+  };
+
+  xf86videoopenchrome = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
 
   xkbcomp = attrs: attrs // {
