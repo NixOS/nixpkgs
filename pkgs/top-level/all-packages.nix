@@ -2518,6 +2518,18 @@ let
     inherit fetchurl stdenv;
   };
 
+  pmd = import ../development/tools/analysis/pmd {
+    inherit fetchurl stdenv unzip;
+  };
+
+  jdepend = import ../development/tools/analysis/jdepend {
+    inherit fetchurl stdenv unzip;
+  };
+
+  checkstyle = import ../development/tools/analysis/checkstyle {
+    inherit fetchurl stdenv unzip;
+  };
+
   flex = flex254a;
 
   flex2535 = import ../development/tools/parsing/flex/flex-2.5.35.nix {
