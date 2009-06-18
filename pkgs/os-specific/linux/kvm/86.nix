@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
   patches = [
     # Allow setting the path to Samba through $QEMU_SMBD_COMMAND.
     ./smbd-path-r3.patch
+
+    # Support the "vga" kernel command line option when using the
+    # -kernel option.
+    (fetchurl {
+      url = http://www.mail-archive.com/qemu-commits@nongnu.org/msg00202/qemu.x86_boot_vidmode.patch;
+      sha256 = "0vf7l0mh0hr7yakxkrz681phmbkav7sa2fw3gf6h56gr28cid5l6";
+    })
   ];
 
   configureFlags = "--enable-io-thread";
