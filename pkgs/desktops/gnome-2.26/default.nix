@@ -180,6 +180,7 @@ rec {
     inherit (pkgs) stdenv fetchurl pkgconfig cairo libxml2 libxslt;
     inherit (pkgs.gtkLibs) glib gtk pango atk;
     inherit gnome_doc_utils intltool libglade;
+    inherit (pkgs.xlibs) libX11;
   };
   
   metacity = import ./desktop/metacity {
