@@ -81,6 +81,16 @@ let
       '';
     };
 
+    boot.initrd.extraUtilsCommands = mkOption {
+      default = "";
+      merge = pkgs.lib.mergeStringOption;
+      description = ''
+        Shell commands to be executed in the builder of the
+        extra-utils derivation.  This can be used to provide
+        additional utilities in the initial ramdisk.
+      '';
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -166,6 +176,8 @@ let
       # Copy bash.
       cp ${pkgs.bash}/bin/bash $out/bin
       ln -s bash $out/bin/sh
+
+      ${config.boot.initrd.extraUtilsCommands}
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done

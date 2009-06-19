@@ -9,16 +9,75 @@
 
 {config, pkgs, ...}:
 
+let
+
+  options = {
+
+    virtualisation.diskImage =
+      pkgs.lib.mkOption {
+        default = "./${config.networking.hostName}.qcow2";
+        description =
+          ''
+            Path to the disk image containing the root filesystem.
+            The image will be created on startup if it does not
+            exist.
+          '';
+      };
+
+  };
+
+
+  # Shell script to start the VM.
+  startVM =
+    ''
+      #! ${pkgs.stdenv.shell}
+      
+      export PATH=${pkgs.samba}/sbin:$PATH
+
+      NIX_DISK_IMAGE=''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}
+
+      if ! test -e "$NIX_DISK_IMAGE"; then
+          ${pkgs.kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" 512M || exit 1
+      fi
+      
+      ${pkgs.kvm}/bin/qemu-system-x86_64 \
+          -net nic,model=virtio -net user -smb / \
+          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
+          -kernel ${config.system.build.system}/kernel \
+          -initrd ${config.system.build.system}/initrd \
+          -redir tcp:8080::80 \
+          -redir tcp:8022::22 \
+          -append "$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system}"
+    '';
+
+in
+
 {
+  require = options;
+
   # All the modules the initrd needs to mount the host filesystem via
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.extraKernelModules =
     ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
 
+  boot.initrd.extraUtilsCommands =
+    ''
+      # We need mke2fs in the initrd.
+      cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
+    '';
+      
   boot.initrd.postDeviceCommands =
     ''
+      # Set up networking.  Needed for CIFS mounting.
       ipconfig 10.0.2.15:::::eth0:none
+
+      # If the disk image appears to be empty (fstype "unknown";
+      # hacky!!!), run mke2fs to initialise.
+      eval $(fstype /dev/vda)
+      if test "$FSTYPE" = unknown; then
+          mke2fs -t ext3 /dev/vda
+      fi
     '';
 
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
@@ -46,21 +105,9 @@
 
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
-      ensureDir $out
-      ln -s ${config.system.build.system} $out/system
-
       ensureDir $out/bin
-      cat > $out/bin/run-nixos-vm <<EOF
-      #! ${pkgs.stdenv.shell}
-      export PATH=${pkgs.samba}/sbin:\$PATH
-      ${pkgs.kvm}/bin/qemu-system-x86_64 \
-        -net nic,model=virtio -net user -smb / \
-        -drive file=\$diskImage,if=virtio,boot=on \
-        -kernel ${config.system.build.system}/kernel \
-        -initrd ${config.system.build.system}/initrd \
-        -append "\$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system}"
-      EOF
-      chmod u+x $out/bin/run-nixos-vm
+      ln -s ${config.system.build.system} $out/system
+      ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-nixos-vm
     '';
 
   # sendfile() is currently broken over CIFS, so fix it here for all
