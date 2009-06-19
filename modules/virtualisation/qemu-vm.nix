@@ -63,4 +63,7 @@
       chmod u+x $out/bin/run-nixos-vm
     '';
 
+  # sendfile() is currently broken over CIFS, so fix it here for all
+  # configurations that use Apache.
+  services.httpd.extraConfig = "EnableSendFile Off";
 }
