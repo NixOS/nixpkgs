@@ -16,10 +16,7 @@ stdenv.mkDerivation rec {
 
     # Support the "vga" kernel command line option when using the
     # -kernel option.
-    (fetchurl {
-      url = http://www.mail-archive.com/qemu-commits@nongnu.org/msg00202/qemu.x86_boot_vidmode.patch;
-      sha256 = "0vf7l0mh0hr7yakxkrz681phmbkav7sa2fw3gf6h56gr28cid5l6";
-    })
+    ./x86_boot_vidmode.patch
   ];
 
   configureFlags = "--enable-io-thread";
