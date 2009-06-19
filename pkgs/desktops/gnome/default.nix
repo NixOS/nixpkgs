@@ -309,8 +309,10 @@ rec {
       pkgconfig glib gtk
       gettext intltool gnomedocutils libglade
       libxslt
+      xlibs.libX11
     ];
 
+    preConfigure = ''export NIX_LDFLAGS="$NIX_LDFLAGS -lX11";'';
     configureFlags = "--disable-scrollkeeper";
   };
 
