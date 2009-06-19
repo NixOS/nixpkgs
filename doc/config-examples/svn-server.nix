@@ -17,7 +17,6 @@
 
     httpd = {
       enable = true;
-      experimental = true;
       adminAddr = "admin@example.org";
 
       subservices = {

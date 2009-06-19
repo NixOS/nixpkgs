@@ -15,13 +15,6 @@ let
           ";
         };
 
-        experimental = mkOption {
-          default = false;
-          description = "
-            Whether to use the new-style Apache configuration.
-          ";
-        };
-
         extraConfig = mkOption {
           default = "";
           description = "
@@ -565,7 +558,7 @@ let
 in
 
 
-mkIf (config.services.httpd.enable && config.services.httpd.experimental) {
+mkIf config.services.httpd.enable {
   require = [
     options
   ];
