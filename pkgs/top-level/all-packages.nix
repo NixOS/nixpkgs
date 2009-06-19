@@ -7062,6 +7062,12 @@ let
   uucp = builderDefsPackage (selectVersion ../tools/misc/uucp "1.07") {
   };
 
+  uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
+    inherit pkgconfig webkit;
+    inherit (gtkLibs) gtk;
+    inherit (gnome26) libsoup;
+  };
+
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
     qt = qt3;
