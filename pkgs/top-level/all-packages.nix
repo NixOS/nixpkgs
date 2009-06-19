@@ -7050,6 +7050,10 @@ let
     inherit fetchurl stdenv alsaLib;
   };
 
+  tkcvs = import ../applications/version-management/tkcvs {
+    inherit stdenv fetchurl tcl tk;
+  };
+
   tla = import ../applications/version-management/arch {
     inherit fetchurl stdenv diffutils gnutar gnupatch which;
   };
