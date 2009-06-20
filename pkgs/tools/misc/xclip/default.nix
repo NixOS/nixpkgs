@@ -9,8 +9,6 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 libXmu];
 
-  installPhase="make install DESTDIR=\$out";
-
   meta = { 
       description = "access X clipboard from this console application";
       homepage = http://people.debian.org/~kims/xclip/;
