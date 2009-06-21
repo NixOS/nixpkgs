@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   };
   
   configureFlags =
-    if stdenv ? isDietLibC
+    (if stdenv ? isDietLibC
     then "--with-diet-libc"
-    else "--enable-elf-shlibs";
+    else (if stdenv.system == "i686-darwin" then " --enable-bsd-shlibs" else "--enable-elf-shlibs" ) ) ;
 
   preBuild = if stdenv ? isDietLibC then ''
     sed -e 's/-lpthread//' -i Makefile */Makefile */*/Makefile
