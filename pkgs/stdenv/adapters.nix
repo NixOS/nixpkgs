@@ -57,7 +57,7 @@ rec {
         NIX_GCC = import ../build-support/gcc-wrapper {
           inherit stdenv;
           libc = dietlibc;
-          inherit (stdenv.gcc) gcc binutils name nativeTools nativePrefix;
+          inherit (stdenv.gcc) gcc binutils nativeTools nativePrefix;
           nativeLibc = false;
         };
       });
