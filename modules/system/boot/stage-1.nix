@@ -177,6 +177,9 @@ let
       cp ${pkgs.bash}/bin/bash $out/bin
       ln -s bash $out/bin/sh
 
+      # Copy insmod.
+      cp ${pkgs.module_init_tools}/sbin/insmod $out/bin
+      
       ${config.boot.initrd.extraUtilsCommands}
 
       # Run patchelf to make the programs refer to the copied libraries.
@@ -207,6 +210,7 @@ let
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
+      $out/bin/insmod --version
     ''; # */
   
 
