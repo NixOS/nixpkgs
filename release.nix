@@ -55,12 +55,13 @@ let
 
         version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
-        iso = (import "${nixosSrc}/installer/cd-dvd/rescue-cd.nix" {
-          platform = system;
-          compressImage = true;
-          relName = "nixos-${version}";
-          inherit nixpkgs;
-        }).rescueCD;
+        iso = (import lib/eval-config.nix {
+          inherit system nixpkgs;        
+          configuration =
+            { require = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
+              system.nixosVersion = version;
+            };
+        }).config.system.build.isoImage;
 
       in
         # Declare the ISO as a build product so that it shows up in Hydra.
