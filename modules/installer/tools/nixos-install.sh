@@ -169,19 +169,11 @@ if test -e $targetNixpkgs; then
     mv $targetNixpkgs $targetNixpkgs.backup-$backupTimestamp
 fi
 
-targetServices=$mountPoint/etc/nixos/services
-if test -e $targetServices; then
-    mv $targetServices $targetServices.backup-$backupTimestamp
-fi
-
 
 # Copy the NixOS/Nixpkgs sources to the target.
 cp -prd $NIXOS $targetNixos
 if test -e /etc/nixos/nixpkgs; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
-fi
-if test -e /etc/nixos/services; then
-    cp -prd /etc/nixos/services $targetServices
 fi
 
 

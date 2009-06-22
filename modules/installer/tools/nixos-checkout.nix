@@ -41,19 +41,13 @@ let
         from working directory dirname
         <replaceable>target</replaceable> and should create the
         directory
-        <filename><replaceable>dir</replaceable></filename>. (<command>git
-        clone url nixos/nixpkgs/services</command> should do) For
+        <filename><replaceable>dir</replaceable></filename>.  For
         the executables used see <option>repoTypes</option>.
       '';
     };
 
     installer.repos.nixpkgs = mkOption {
       default = [ { type  = "svn"; }  ];
-      description = "same as <option>repos.nixos</option>";
-    };
-
-    installer.repos.services = mkOption {
-      default = [ { type  = "svn"; } ];
       description = "same as <option>repos.nixos</option>";
     };
 
