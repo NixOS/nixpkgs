@@ -1,11 +1,11 @@
 {stdenv, fetchurl, m4, cxx ? true}:
 
-stdenv.mkDerivation {
-  name = "gmp-4.2.4";
+stdenv.mkDerivation rec {
+  name = "gmp-4.3.1";
 
   src = fetchurl {
-    url = mirror://gnu/gmp/gmp-4.2.4.tar.bz2;
-    sha256 = "0s73xzhwrfqcr1gmhsink1fhfzjlkyk70b1bdyrm76m6b3jv082l";
+    url = "mirror://gnu/gmp/${name}.tar.bz2";
+    sha256 = "1j5pklq36ivg2cim5wfysns229a544lqkimp3mlzkwjl513ra0ma";
   };
 
   buildInputs = [m4];
