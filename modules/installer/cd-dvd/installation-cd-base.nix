@@ -77,7 +77,7 @@ in
   # ISO naming.
   isoImage.isoName = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
     
-  isoImage.volumeID = "NIXOS_INSTALLATION_CD_${config.system.nixosVersion}";
+  isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
   
   # Use Linux 2.6.29.
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
