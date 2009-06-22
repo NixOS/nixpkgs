@@ -11,11 +11,13 @@
 
 let
 
+  vmName = config.networking.hostName;
+
   options = {
 
     virtualisation.diskImage =
       pkgs.lib.mkOption {
-        default = "./${config.networking.hostName}.qcow2";
+        default = "./${vmName}.qcow2";
         description =
           ''
             Path to the disk image containing the root filesystem.
@@ -45,8 +47,7 @@ let
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
           -kernel ${config.system.build.system}/kernel \
           -initrd ${config.system.build.system}/initrd \
-          -redir tcp:8080::80 \
-          -redir tcp:8022::22 \
+          $QEMU_OPTS \
           -append "$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system}"
     '';
 
@@ -107,7 +108,7 @@ in
     ''
       ensureDir $out/bin
       ln -s ${config.system.build.system} $out/system
-      ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-nixos-vm
+      ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
     '';
 
   # sendfile() is currently broken over CIFS, so fix it here for all
