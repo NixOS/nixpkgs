@@ -39,7 +39,7 @@ let
       }:
 
       import "${nixosSrc}/doc/manual" {
-        inherit nixpkgs;
+        pkgs = import nixpkgs {};
       };
 
 
