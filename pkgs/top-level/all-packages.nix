@@ -5248,12 +5248,12 @@ let
     inherit fetchurl stdenv bison flex perl;
   };
 
-  klibc = composedArgsAndFun (import ../os-specific/linux/klibc) {
+  klibc = makeOverridable (import ../os-specific/linux/klibc) {
     inherit fetchurl stdenv perl bison mktemp;
     kernelHeaders = glibc.kernelHeaders;
   };
 
-  klibcShrunk = composedArgsAndFun (import ../os-specific/linux/klibc/shrunk.nix) {
+  klibcShrunk = makeOverridable (import ../os-specific/linux/klibc/shrunk.nix) {
     inherit stdenv klibc;
   };
 
