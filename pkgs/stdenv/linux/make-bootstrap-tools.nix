@@ -6,12 +6,9 @@ rec {
 
 
   # We want coreutils without ACL support.
-  coreutils_ = coreutils.function (args: {
+  coreutils_ = coreutils.override (args: {
     aclSupport = false;
   });
-
-
-  gcc = gcc43;
 
 
   curlDiet = import ../../tools/networking/curl {
@@ -55,6 +52,8 @@ rec {
         
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+        find $out/include -name .install -exec rm {} \;
+        find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
         
         # Copy coreutils, bash, etc.
@@ -74,7 +73,7 @@ rec {
         cp ${bzip2}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
-        cp ${patchelf}/bin/* $out/bin
+        cp ${patchelf05}/bin/* $out/bin
         cp ${replace}/bin/* $out/bin
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
@@ -90,6 +89,7 @@ rec {
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
         rm -rf $out/lib/gcc/*/*/include*/root
+        rm -f $out/lib/gcc/*/*/include-fixed/asm
         #rm -f $out/lib/gcc/*/*/*.a
         cp -rd ${gcc.gcc}/libexec/* $out/libexec
         mkdir $out/include
@@ -160,7 +160,7 @@ rec {
             echo patching $i
             if ! test -L $i; then
                 LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
-                    $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib $i
+                    $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath $i
             fi
         done
 
@@ -179,8 +179,6 @@ rec {
 
     stdenv.mkDerivation {
       name = "test";
-
-      LD_LIBRARY_PATH = "${unpack}/lib";
 
       realBuilder = "${unpack}/bin/bash";
       
