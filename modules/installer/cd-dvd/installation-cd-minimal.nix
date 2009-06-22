@@ -6,6 +6,8 @@
 {
   require = [./installation-cd-base.nix];
 
+  installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal.nix";
+
   # Don't include X libraries.
   services.sshd.forwardX11 = false;
   fonts.enableFontConfig = false;

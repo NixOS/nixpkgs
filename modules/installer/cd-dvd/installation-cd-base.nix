@@ -13,6 +13,15 @@ let
         NixOS version number.
       '';
     };
+
+    installer.configModule = pkgs.lib.mkOption {
+      example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
+      description = ''
+        Filename of the configuration module that builds the CD
+        configuration.  Must be specified to support reconfiguration
+        in live CDs.
+      '';
+    };
   
   };
 
@@ -46,7 +55,7 @@ let
       {config, pkgs, ...}:
 
       {
-        require = [./nixos/modules/installer/cd-dvd/installation-cd.nix];
+        require = [${config.installer.configModule}];
 
         # Add your own options below and run "nixos-rebuild switch".
         # E.g.,
