@@ -7,7 +7,7 @@
   curl = ./curl.bz2;
 
   bootstrapTools = {
-    url = http://nixos.org/tarballs/stdenv-linux/i686/r13932/bootstrap-tools.cpio.bz2;
-    sha256 = "12z35wnpcbjwczsr9fldp6bjpz7wh5qwylw6xfrr9l4s7gmk3m8a";
+    url = http://nixos.org/tarballs/stdenv-linux/i686/r16022/bootstrap-tools.cpio.bz2;
+    sha256 = "1x014icv3dxfs55qzshxjs9gaczmhwlrn144p4314zvl4xz6wq3f";
   };
 }
