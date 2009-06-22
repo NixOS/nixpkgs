@@ -223,14 +223,21 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
     # "device" should be taken relative to /mnt-root, not /.  Assume
     # that every device that starts with / but doesn't start with /dev
     # is a bind mount.
+    pseudoDevice=
     case $device in
         /dev/*)
             ;;
         //*)
             # Don't touch SMB/CIFS paths.
+            pseudoDevice=1
             ;;
         /*)
             device=/mnt-root$device
+            ;;
+        *)
+            # Not an absolute path; assume that it's a pseudo-device
+            # like an NFS path (e.g. "server:/path").
+            pseudoDevice=1
             ;;
     esac
 
@@ -239,8 +246,8 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
     # alas...  So just wait for a few seconds for the device to
     # appear.  If it doesn't appear, try to mount it anyway (and
     # probably fail).  This is a fallback for non-device "devices"
-    # that we don't properly recognise (like NFS mounts).
-    if ! test -e $device; then
+    # that we don't properly recognise.
+    if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
         for ((try = 0; try < 10; try++)); do
             sleep 1
