@@ -4,6 +4,8 @@ let
   inherit (pkgs.lib) mkOption mergeOneOption mkIf filter optionalString any;
   cfg = config.services.xserver.desktopManager;
 
+  # Whether desktop manager `d' is capable of setting a background.
+  # If it isn't, the `feh' program is used as a fallback.
   needBGCond = d: ! (d ? bgSupport && d.bgSupport);
 in
 
@@ -50,7 +52,6 @@ in
         };
 
 
-
         default = mkOption {
           default = "xterm";
           example = "none";
@@ -68,7 +69,7 @@ in
     };
   };
 
-  environment = mkIf cfg.session.needBGPackages {
+  environment = mkIf (config.services.xserver.enable && cfg.session.needBGPackages) {
     extraPackages = [ pkgs.feh ];
   };
 }
