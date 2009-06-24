@@ -159,10 +159,10 @@ in
       respawn sleep 100000
 
       stop script
-          for i in $(cd /sys/class/net && ls -d *); do
-              echo "Taking down network device $i..."
-              ${nettools}/sbin/ifconfig $i down || true
-          done
+          #for i in $(cd /sys/class/net && ls -d *); do
+          #    echo "Taking down network device $i..."
+          #    ${nettools}/sbin/ifconfig $i down || true
+          #done
       end script
     '';
   }];

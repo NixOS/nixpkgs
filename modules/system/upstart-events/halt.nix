@@ -69,7 +69,12 @@ let
               for mp in $(getMountPoints); do
                   device=$(getDevice $mp)
                   echo "unmounting $mp..."
-                  if umount -f -n "$mp"; then
+                  # !!! Don't unmount /nix/store or /hostfs.  This is
+                  # a quick hack to cleanly shutdown VMs that mount
+                  # the Nix store via CIFS.  "mount -f" will actually
+                  # work on such filesystems, which makes all commands
+                  # needed below disappear.
+                  if test "$mp" != /nix/store -a "$mp" != /hostfs && umount -f -n "$mp"; then
                       if test "$mp" != /; then tryAgain=1; fi
                   else
                       mount -n -o remount,ro "$mp" || true
