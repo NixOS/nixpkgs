@@ -17,8 +17,15 @@ if test -z "$nativeLibc"; then
     # against the crt1.o from our own glibc, rather than the one in
     # /usr/lib.  (This is only an issue when using an `impure'
     # compiler/linker, i.e., one that searches /usr/lib and so on.)
-    echo "-B$libc/lib/ -idirafter $libc/include" > $out/nix-support/libc-cflags
-    
+    #
+    # Unfortunately, setting -B appears to override the default search
+    # path. Thus, the gcc-specific "../includes-fixed" directory is
+    # now longer searched and glibc's <limits.h> header fails to
+    # compile, because it uses "#include_next <limits.h>" to find the
+    # limits.h file in ../includes-fixed. To remedy the problem,
+    # another -idirafter is necessary to add that directory again.
+    echo "-B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+
     echo "-L$libc/lib" > $out/nix-support/libc-ldflags
 
     # The dynamic linker is passed in `ldflagsBefore' to allow

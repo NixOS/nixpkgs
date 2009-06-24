@@ -4,12 +4,12 @@
 , supportOldDBs ? true
 }:
 
-stdenv.mkDerivation {
-  name = "nix-0.13pre15214";
+stdenv.mkDerivation rec {
+  name = "nix-0.13pre15614";
   
   src = fetchurl {
-    url = http://hydra.nixos.org/build/17407/download/1/nix-0.13pre15214.tar.bz2;
-    sha256 = "b2423eebb0c70fa2c38d11b5d5e6d8794ebc7283dfde8d1f1c02c54846014ab2";
+    url = "http://hydra.nixos.org/build/32581/download/4/${name}.tar.bz2";
+    sha256 = "236c84cf85739fe1deddd8f98f634eac03df9c7a588f4c1e234e80e84a471d00";
   };
 
   buildInputs = [perl curl openssl];

@@ -3028,7 +3028,12 @@ let
     inherit fetchurl stdenv pkgconfig gettext;
   };
 
-  glibc = useFromStdenv "glibc" glibc29;
+  glibc = useFromStdenv "glibc" (if getConfig ["brokenRedHatKernel"] false then glibc25 else glibc29);
+
+  glibc25 = import ../development/libraries/glibc-2.5 {
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
 
   glibc27 = import ../development/libraries/glibc-2.7 {
     inherit fetchurl stdenv kernelHeaders;
