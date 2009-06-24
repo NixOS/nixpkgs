@@ -104,6 +104,8 @@ in
   # host filesystem and thus deadlocks the system.
   networking.useDHCP = false;
 
+  networking.defaultGateway = "10.0.2.2";
+
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin
