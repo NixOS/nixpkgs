@@ -252,6 +252,10 @@ let
     inherit stdenv darcs nix;
   };
 
+  fetchgit = import ../build-support/fetchgit {
+    inherit stdenv git;
+  };
+
   fetchsvn = import ../build-support/fetchsvn {
     inherit stdenv subversion openssh;
     sshSupport = true;
