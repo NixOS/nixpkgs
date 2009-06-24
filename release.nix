@@ -1,6 +1,40 @@
 { nixpkgs ? ../nixpkgs-wc }:
 
-let 
+let
+
+
+  makeIso =
+    { module, description }:
+    { nixosSrc ? {outPath = ./.; rev = 1234;}
+    , officialRelease ? false
+    , system ? "i686-linux"
+    }:
+
+    with import nixpkgs {inherit system;};
+
+    let
+
+      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
+
+      iso = (import lib/eval-config.nix {
+        inherit system nixpkgs;        
+        configuration =
+          { require = module;
+            system.nixosVersion = version;
+          };
+      }).config.system.build.isoImage;
+
+    in
+      # Declare the ISO as a build product so that it shows up in Hydra.
+      runCommand "nixos-iso-${version}"
+        { meta = {
+            description = "NixOS installation CD (${description}) - ISO image for ${system}";
+          };
+        }
+        ''
+          ensureDir $out/nix-support
+          echo "file iso" ${iso}/iso/*.iso* >> $out/nix-support/hydra-build-products
+        ''; # */
 
 
   jobs = rec {
@@ -43,38 +77,16 @@ let
       };
 
 
-    iso = 
-      { nixosSrc ? {outPath = ./.; rev = 1234;}
-      , officialRelease ? false
-      , system ? "i686-linux"
-      }:
-
-      with import nixpkgs {inherit system;};
-
-      let
-
-        version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
-
-        iso = (import lib/eval-config.nix {
-          inherit system nixpkgs;        
-          configuration =
-            { require = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
-              system.nixosVersion = version;
-            };
-        }).config.system.build.isoImage;
-
-      in
-        # Declare the ISO as a build product so that it shows up in Hydra.
-        runCommand "nixos-iso-${version}"
-          { meta = {
-              description = "NixOS installation CD ISO image for ${system}";
-            };
-          }
-          ''
-            ensureDir $out/nix-support
-            echo "file iso" ${iso}/iso/*.iso* >> $out/nix-support/hydra-build-products
-          ''; # */
-      
+    iso_minimal = makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
+      description = "minimal";
+    };
+    
+    iso_graphical = makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
+      description = "graphical";
+    };
+    
 
   };
   
