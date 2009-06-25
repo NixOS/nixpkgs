@@ -44,6 +44,6 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [ gnome.metacity ];
+    x11Packages = [ gnome.metacity ];
   };
 }

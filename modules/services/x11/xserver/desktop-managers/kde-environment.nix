@@ -1,7 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+  inherit (pkgs.lib) mkOption mkIf types;
   kdePackages = config.environment.kdePackages;
 
   options = {
@@ -25,6 +25,7 @@ let
       kdePackages = mkOption {
         default = [];
         example = [ pkgs.kde42.kdegames ];
+        type = types.list types.packages;
         description = ''
           Additional KDE packages to be used when you use KDE as a desktop
           manager.  By default, you only get the KDE base packages.
@@ -36,11 +37,11 @@ let
   };
 in
 
-mkIf (kdePackages != []) {
+mkIf (kdePackages != [] && config.services.xserver.enable) {
   require = options;
 
   environment = {
-    extraPackages = kdePackages;
+    x11Packages = kdePackages;
 
     shellInit = ''
       export KDEDIRS="${pkgs.lib.concatStringsSep ":" kdePackages}"

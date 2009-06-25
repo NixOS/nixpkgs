@@ -277,6 +277,15 @@ let
       };
 
     };
+
+    environment.x11Packages = mkOption {
+      default = [];
+      type = types.list types.packages;
+      description = "
+        List of packages added to the system when the xserver is
+        activated. (<option>services.xserver.enable</option>).
+      ";
+    };
   };
 in
 
@@ -505,7 +514,7 @@ mkIf cfg.enable {
       }
     ];
 
-    extraPackages = [
+    x11Packages = [
       xorg.xrandr
       xorg.xrdb
       xorg.setxkbmap
@@ -514,6 +523,8 @@ mkIf cfg.enable {
     ++ optional (videoDriver == "nvidia") [
       kernelPackages.nvidia_x11
     ];
+
+    extraPackages = config.environment.x11Packages;
   };
 
   services = {

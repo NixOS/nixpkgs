@@ -59,6 +59,6 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [ pkgs.compiz ];
+    x11Packages = [ pkgs.compiz ];
   };
 }

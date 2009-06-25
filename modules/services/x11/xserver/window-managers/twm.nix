@@ -39,6 +39,6 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [ xorg.twm ];
+    x11Packages = [ xorg.twm ];
   };
 }

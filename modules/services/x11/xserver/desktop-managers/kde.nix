@@ -2,8 +2,9 @@
 
 let
   inherit (pkgs.lib) mkOption mkIf;
-  cfg = config.services.xserver.desktopManager.kde;
-  xorg = config.services.xserver.package;
+  xcfg = config.services.xserver;
+  cfg = xcfg.desktopManager.kde;
+  xorg = xcfg.package;
 
   options = { services = { xserver = { desktopManager = {
 
@@ -18,7 +19,7 @@ let
   }; }; }; };
 in
 
-mkIf cfg.enable {
+mkIf (xcfg.enable && cfg.enable) {
   require = [
     options
 
@@ -63,7 +64,7 @@ mkIf cfg.enable {
       pkgs.kdebase
     ];
 
-    extraPackages = [
+    x11Packages = [
       xorg.xset # used by startkde, non-essential
     ];
 

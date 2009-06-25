@@ -17,7 +17,7 @@ let
   
 in
 
-mkIf (config.services.xserver.enable && cfg.enable) {
+mkIf cfg.enable {
   require = options;
 
   services = {
@@ -37,7 +37,7 @@ mkIf (config.services.xserver.enable && cfg.enable) {
   };
 
   environment = {
-    extraPackages = [
+    x11Packages = [
       pkgs.xterm
     ];
   };

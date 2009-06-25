@@ -38,7 +38,7 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [
+    x11Packages = [
       pkgs.kdelibs
       pkgs.kdebase
     ];

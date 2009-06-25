@@ -2,8 +2,9 @@
 
 let
   inherit (pkgs.lib) mkOption mkIf;
-  cfg = config.services.xserver.desktopManager.kde4;
-  xorg = config.services.xserver.package;
+  xcfg = config.services.xserver;
+  cfg = xcfg.desktopManager.kde4;
+  xorg = xcfg.package;
 
   options = { services = { xserver = { desktopManager = {
 
@@ -18,7 +19,7 @@ let
   }; }; }; };
 in
 
-mkIf cfg.enable {
+mkIf (xcfg.enable && cfg.enable) {
   require = [
     options
 
@@ -57,7 +58,7 @@ mkIf cfg.enable {
       pkgs.shared_mime_info
     ];
 
-    extraPackages = [
+    x11Packages = [
       xorg.xmessage # so that startkde can show error messages
       pkgs.qt4 # needed for qdbus
       xorg.xset # used by startkde, non-essential
