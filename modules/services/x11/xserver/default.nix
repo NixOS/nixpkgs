@@ -336,7 +336,31 @@ let
     [ pkgs.xorg.fontadobe100dpi
       pkgs.xorg.fontadobe75dpi
     ];
-    
+
+
+  halConfigFiles = [
+    (pkgs.writeTextFile {
+      name = "hal-policy-keymap";
+      destination = "/policy/30-keymap.fdi";
+      text = ''
+        <?xml version="1.0" encoding="ISO-8859-1"?>
+        <deviceinfo version="0.2">
+          <device>
+            <match key="info.capabilities" contains="input.keymap">
+              <append key="info.callouts.add" type="strlist">hal-setup-keymap</append>
+            </match>
+
+            <match key="info.capabilities" contains="input.keys">
+              <merge key="input.x11_options.XkbRules" type="string">base</merge>
+              <merge key="input.x11_options.XkbModel" type="string">${cfg.xkbModel}</merge>
+              <merge key="input.x11_options.XkbLayout" type="string">${cfg.layout}</merge>
+              <append key="input.x11_options.XkbOptions" type="strlist">${cfg.xkbOptions}</append>
+            </match>
+          </device>
+        </deviceinfo>
+      '';
+    })
+  ];
 
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
@@ -541,6 +565,10 @@ mkIf cfg.enable {
           "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
         ] ++ optional (!cfg.tcpEnable) "-nolisten tcp";
       };
+    };
+
+    hal = {
+      extraFdi = halConfigFiles;
     };
 
     extraJobs = [{
