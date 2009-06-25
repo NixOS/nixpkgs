@@ -224,7 +224,7 @@ let
     useDietLibC useKlibc makeStaticBinaries;
 
   stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
-    
+
 
   ### BUILD SUPPORT
 
@@ -3630,7 +3630,7 @@ let
   libproxy = import ../development/libraries/libproxy {
     inherit stdenv fetchurl;
   };
-  
+
   libpseudo = import ../development/libraries/libpseudo {
     inherit fetchurl stdenv pkgconfig ncurses;
     inherit (gtkLibs) glib;
@@ -6340,7 +6340,7 @@ let
       python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
-  gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
+  # gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
     inherit pkgs;
@@ -7531,7 +7531,7 @@ let
       xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit
       libproxy sqlite;
   });
-  
+
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
   kde3 = {
