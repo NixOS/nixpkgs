@@ -311,8 +311,8 @@ rec {
 
           # Divide the definitions of the attribute "attr" between
           # declaration (isOption) and definitions (!isOption).
-          test = partition isOption opts;
-          decls = test.right; defs = test.wrong;
+          test = partition (x: isOption (rmProperties x)) opts;
+          decls = map rmProperties test.right; defs = test.wrong;
 
           # Make the option declaration more user-friendly by adding default
           # settings and some verifications based on the declaration content
