@@ -7,6 +7,8 @@ rec {
 
   inherit (kernelPackages_2_6_26) kernel;
 
+  klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
+
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
