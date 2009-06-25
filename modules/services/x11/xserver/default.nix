@@ -280,7 +280,7 @@ let
 
     environment.x11Packages = mkOption {
       default = [];
-      type = types.list types.packages;
+      type = types.list types.package;
       description = "
         List of packages added to the system when the xserver is
         activated. (<option>services.xserver.enable</option>).

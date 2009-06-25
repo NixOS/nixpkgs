@@ -25,7 +25,7 @@ let
       kdePackages = mkOption {
         default = [];
         example = [ pkgs.kde42.kdegames ];
-        type = types.list types.packages;
+        type = types.list types.package;
         description = ''
           Additional KDE packages to be used when you use KDE as a desktop
           manager.  By default, you only get the KDE base packages.
