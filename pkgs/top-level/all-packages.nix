@@ -946,6 +946,10 @@ let
     inherit fetchurl stdenv lzo;
   };
 
+  magit = import ../applications/editors/emacs-modes/magit {
+    inherit fetchurl stdenv emacs texinfo;
+  };
+
   man = import ../tools/misc/man {
     inherit fetchurl stdenv groff less;
   };
