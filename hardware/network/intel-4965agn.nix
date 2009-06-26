@@ -15,7 +15,7 @@ in
 
   services = {
     udev = {
-      addFirmware = [ pkgs.iwlwifi4965ucode ];
+      addFirmware = [ kernelPackages.iwlwifi4965ucode ];
     };
   };
 }
