@@ -37,6 +37,7 @@
   ./services/mail/postfix.nix
   ./services/misc/autofs.nix
   ./services/misc/disnix.nix
+  ./services/misc/gpsd.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/rogue.nix

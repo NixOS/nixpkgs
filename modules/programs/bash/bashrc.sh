@@ -1,3 +1,7 @@
+if [ -n "$NOSYSBASHRC" ]; then
+    return
+fi
+
 # Initialise a bunch of environment variables.
 export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
