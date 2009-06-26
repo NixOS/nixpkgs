@@ -2370,6 +2370,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  jruby116 = import ../development/interpreters/jruby {
+    inherit fetchurl stdenv;
+  };
+
   guileLib = import ../development/guile-modules/guile-lib {
     inherit fetchurl stdenv guile texinfo;
   };
