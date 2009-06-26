@@ -247,4 +247,12 @@
     url = "http://mawercer.de/~nix/repos/ctags-703.tar.gz";
     sha256 = "3f897b303f446aa8b52832d2aef280d359979bb2cd8768a2e70b6475adc64d61";
   };
+  sqlalchemy05 = args: with args; fetchurl { # Fri Jun 26 00:00:40 CEST 2009
+    url = "http://mawercer.de/~nix/repos/sqlalchemy05-6076.tar.gz";
+    sha256 = "7baad2cda5a61bcbc4093a6026727d69bc7bd7c0399e25e479eaa2e2000f69b1";
+  };
+  sqlalchemyMigrate = args: with args; fetchurl { # Fri Jun 26 00:22:43 CEST 2009
+    url = "http://mawercer.de/~nix/repos/sqlalchemyMigrate-569.tar.gz";
+    sha256 = "7775d9bf7e25a8270ac112d9b1d916a36691a73beb9a87a6473d005d3ee0f0bf";
+  };
 }

@@ -103,6 +103,7 @@ in
           libPython = t.version; # used to find all python libraries fitting this version (-> see name all below)
         };
         mergeAttrBy = {
+          postPhases = lib.concat;
           pyCheck = x : y : "${x}\n${y}";
         };
     };
@@ -547,6 +548,67 @@ in
       license = "BSD";
     };
   };
+
+  sqlalchemy05 = t.pythonLibSetup.merge {
+    name = "sqlalchemy-0.5.5-svn-trunk";
+    pyCheck = ''
+      import sqlalchemy
+      import sqlalchemy.orm
+      import sqlalchemy.orm.collections
+    '';
+    src = p.bleedingEdgeRepos.sourceByName "sqlalchemy05";
+    meta = { 
+      description = "sql orm wrapper for python";
+      homepage = http://www.sqlalchemy.org;
+      license = "MIT";
+    };
+    postPhases = ["installMigration"];
+
+    buildInputs = [ t.setuptools /* required for migration lib */ ];
+
+    /* impure ? I don't care right now
+      Reading http://pypi.python.org/simple/decorator/
+      Reading http://www.phyast.pitt.edu/~micheles/python/documentation.html
+      Best match: decorator 3.0.1
+      Downloading http://pypi.python.org/packages/source/d/decorator/decorator-3.0.1.tar.gz#md5=c4130a467be7f71154976c84af4a04c6
+
+      iElectric: column.alter could be broken ..
+    */
+    installMigration = ''
+      cd $TMP
+      mkdir migrate
+      cd migrate
+      unpackFile ${p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate"}
+      cd *
+      python setup.py $setupFlags build
+      python setup.py $setupFlags install --prefix=$out
+      echo "import migrate.changeset.schema" | python
+    '';
+
+      /*
+
+      mv $out/lib/python2.5/site-packages/sqlalchemy_migrate-0.5.5.dev_r0-py2.5.egg/* \
+         $out/lib/python2.5/site-packages
+         */
+  };
+
+  /* doesn't work on its own, its included in sqlalchemy05 for that reason.
+  sqlalchemyMigrate = t.pythonLibSetup.merge {
+    name = "sqlalchemy-migrate-svn";
+    buildInputs = [ t.setuptools t.sqlalchemy05 ];
+    pyCheck = ''
+      import migrate
+      import migrate.changeset
+      import migrate.changeset.schema
+    '';
+    src = p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate";
+    meta = { 
+      description = "sqlalchemy database versioning and scheme migration";
+      homepage = http://packages.python.org/sqlalchemy-migrate/download.html;
+      license = "MIT";
+    };
+  };
+  */
 
   ### python applications
 
