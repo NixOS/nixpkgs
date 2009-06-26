@@ -16,7 +16,7 @@
   exec ${pkgs.ctags}/bin/ctags ${lib.concatStringsSep " " (map lib.escapeShellArg args)} "$@"
   '') {
     args = let x = pkgs.ctagsWrapped; in lib.concatLists [
-      x.defaultArgs x.phpLang x.jsLang x.nixLang x.asLang
+      x.defaultArgs x.phpLang x.jsLang x.nixLang x.asLang x.rubyLang
     ];
     name = "${ctags.name}-wrapped";
   };
@@ -65,5 +65,10 @@
     "--langdef=NIX"
     "--langmap=NIX:.nix"
     "--regex-NIX=/\([^ \\t*]*\)[ \\t]*=/\\1/f/"
+  ];
+
+  rubyLang = [
+    "--langmap=RUBY:.rb"
+    "--regex-RUBY=/class ([^ ]*)/\\1/c/"
   ];
 }
