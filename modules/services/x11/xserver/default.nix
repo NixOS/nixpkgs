@@ -322,7 +322,7 @@ let
       xorg.xf86inputevdev
     ] 
     ++ attrByPath ["modules"] [] videoDriverModules
-    ++ (optional cfg.synaptics.enable ["${xorg.xf86inputsynaptics}"]);
+    ++ optional cfg.synaptics.enable xorg.xf86inputsynaptics;
 
 
   fontsForXServer =
@@ -544,9 +544,7 @@ mkIf cfg.enable {
       xorg.setxkbmap
       xorg.iceauth # required for KDE applications (it's called by dcopserver)
     ]
-    ++ optional (videoDriver == "nvidia") [
-      kernelPackages.nvidia_x11
-    ];
+    ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11;
 
     extraPackages = config.environment.x11Packages;
   };
