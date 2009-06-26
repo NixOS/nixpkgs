@@ -118,6 +118,33 @@ rec {
     installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
+  # this is more than a gimp plugin !
+  # it can be made to compile the gimp plugin only though..
+  gmic =
+  let imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
+  in pluginDerivation {
+      name = "gmic-1.3.2.0";
+      buildInputs = [ imagemagick pkgconfig gimp pkgs.fftwSinglePrec ] ++ gimp.buildInputs;
+      src = fetchurl {
+        url = http://dfn.dl.sourceforge.net/sourceforge/gmic/gmic_1.3.2.0.tar.gz;
+        sha256 = "0mxq664vzzc2l6k6sqm9syp34mihhi262i6fixk1g12lmc28797h";
+      };
+      preConfigure = ''
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${imagemagick}/include/ImageMagick"
+      '';
+      installPhase = "installPlugins src/gmic4gimp";
+      meta = { 
+        description = "script language for image processing which comes with its open-source interpreter";
+        homepage = http://gmic.sourceforge.net/repository.shtml;
+        license = "CeCILL FREE SOFTWARE LICENSE AGREEMENT";
+        /*
+        The purpose of this Free Software license agreement is to grant users
+        the right to modify and redistribute the software governed by this
+        license within the framework of an open source distribution model.
+        [ ... ] */
+      };
+  };
+
   /* =============== simple script files ==================== */
 
   lightning = scriptDerivation {
