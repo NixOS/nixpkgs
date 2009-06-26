@@ -1327,7 +1327,7 @@ let
   };
 
   sudo = import ../tools/security/sudo {
-    inherit fetchurl stdenv coreutils pam;
+    inherit fetchurl stdenv coreutils pam groff;
   };
 
   superkaramba = import ../desktops/superkaramba {

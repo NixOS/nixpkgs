@@ -1,11 +1,11 @@
-{stdenv, fetchurl, coreutils, pam}:
+{stdenv, fetchurl, coreutils, pam, groff}:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.7.0";
+  name = "sudo-1.7.1";
 
   src = fetchurl {
     url = "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz";
-    sha256 = "0y0r74vvcn1q4c220ha0azs8d4kyjr3x3bl6ilxqp77khx1fjzaz";
+    sha256 = "1nz1mgnyrz4ibmywh379vic941qbxy7ca71cn0l1p66a9zmkj775";
   };
 
   # `--with-stow' allows /etc/sudoers to be a symlink.  Only it
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     installFlags=\"sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc\"
   ";
 
-  buildInputs = [coreutils pam];
+  buildInputs = [coreutils pam groff];
 
   meta = {
     description = "sudo, a command to run commands as root";
