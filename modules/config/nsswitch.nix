@@ -58,5 +58,5 @@ in
   # chroot gets to seem them, and (ii) applications can benefit from
   # changes in the list of NSS modules at run-time, without requiring
   # a reboot.
-  environment.systemPackages = [config.system.nssModules];
+  environment.systemPackages = [config.system.nssModules.list];
 }
