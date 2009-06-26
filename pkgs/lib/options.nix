@@ -163,37 +163,37 @@ rec {
 
     bool = mkOptionType {
       name = "boolean";
-      check = builtins.isBool;
+      check = lib.traceValIfNot builtins.isBool;
       merge = fold lib.or false;
     };
 
     int = mkOptionType {
       name = "integer";
-      check = builtins.isInt;
+      check = lib.traceValIfNot builtins.isInt;
     };
 
     string = mkOptionType {
       name = "string";
-      check = x: builtins ? isString -> builtins.isString x;
+      check = lib.traceValIfNot (x: builtins ? isString -> builtins.isString x);
       merge = lib.concatStrings;
     };
 
     attrs = mkOptionType {
       name = "attribute set";
-      check = builtins.isAttrs;
+      check = lib.traceValIfNot builtins.isAttrs;
       merge = fold lib.mergeAttrs {};
     };
 
     # derivation is a reserved keyword.
     package = mkOptionType {
       name = "derivation";
-      check = x: builtins.isAttrs x && x ? outPath;
+      check = lib.traceValIfNot isDerivation;
     };
 
 
     list = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
-      check = value: isList value && all elemType.check value;
+      check = value: lib.traceValIfNot isList value && all elemType.check value;
       merge = concatLists;
       iter = f: path: list: map (elemType.iter f (path + ".*")) list;
       fold = op: nul: list: lib.fold (e: l: elemType.fold op l e) nul list;
@@ -203,7 +203,7 @@ rec {
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType}s";
-      check = x: builtins.isAttrs x
+      check = x: lib.traceValIfNot builtins.isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
       merge = fold lib.mergeAttrs {};
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
@@ -230,7 +230,7 @@ rec {
 
     optionSet = mkOptionType {
       name = "option set";
-      check = x: builtins.isAttrs x;
+      check = x: lib.traceValIfNot builtins.isAttrs x;
       hasOptions = true;
     };
 
