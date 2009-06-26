@@ -863,6 +863,10 @@ let
     inherit fetchurl stdenv bison flex;
   };
 
+  idutils = import ../tools/misc/idutils {
+    inherit fetchurl stdenv emacs;
+  };
+
   imapsync = import ../tools/networking/imapsync {
     inherit fetchurl stdenv perl openssl;
     inherit (perlPackages) MailIMAPClient;
