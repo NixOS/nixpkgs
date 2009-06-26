@@ -36,7 +36,7 @@ if test -z "$finalPath"; then
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    git clone "$url" $tmpFile
+    git clone --depth 1 "$url" $tmpFile
     if test -n "$rev"; then
       cd $tmpFile
       echo $tmpFile
