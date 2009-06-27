@@ -6165,7 +6165,7 @@ let
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
   };
 
-  emacsUnicode = lowPrio (import ../applications/editors/emacs-unicode {
+  emacs23 = lowPrio (import ../applications/editors/emacs-23-snapshot {
     inherit fetchcvs stdenv ncurses pkgconfig x11 Xaw3d
       libpng libjpeg libungif libtiff texinfo dbus
       autoconf automake;
@@ -6177,6 +6177,9 @@ let
     xftSupport = getPkgConfig "emacs" "xftSupport" true;
     dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
   });
+
+  # The forthcoming GNU Emacs 23 used to be referred to as `emacsUnicode' here.
+  emacsUnicode = emacs23;
 
   emms = import ../applications/editors/emacs-modes/emms {
     inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
