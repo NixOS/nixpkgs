@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
         LIB="$out/lib/perl5/site_perl/5.10.0"	\
         INSTALLSITEMAN3DIR="$out/man" &&	\
       make && make install )
-    export PERL5LIB="$out/lib/site_perl/5.10.0:$PERL5LIB"
+    export PERL5LIB="$out/lib/perl5/site_perl/5.10.0:$PERL5LIB"
   '';
 
   doCheck = true;
