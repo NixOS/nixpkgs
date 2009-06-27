@@ -1,12 +1,12 @@
 { fetchurl, stdenv, emacs }:
 
 stdenv.mkDerivation {
-  name = "quack-0.30";
+  name = "quack-0.36";
 
   src = fetchurl {
     # XXX: Upstream URL is not versioned, which might eventually break this.
     url = "http://www.neilvandyke.org/quack/quack.el";
-    sha256 = "1xmpbdb064s3l3cv4agf03ir1g7xfzyvlqayr3yy5f8z3i6pf7mi";
+    sha256 = "0y9l35a8v56ldy4dap0816i80q9lnfpp27pl2a12d5hzb84hq8nr";
   };
 
   buildInputs = [ emacs ];
