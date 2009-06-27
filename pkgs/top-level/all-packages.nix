@@ -3682,6 +3682,10 @@ let
     inherit fetchurl stdenv libtool;
   };
 
+  libunistring = import ../development/libraries/libunistring {
+    inherit fetchurl stdenv;
+  };
+
   libupnp = import ../development/libraries/pupnp {
     inherit fetchurl stdenv;
   };
