@@ -1,7 +1,7 @@
 {stdenv, fetchurl, emacs, texinfo}:
 
 stdenv.mkDerivation {
-  name = "magit-mode-0.7";
+  name = "magit-0.7";
 
   src = fetchurl {
     url = "http://zagadka.vm.bytemark.co.uk/magit/magit-0.7.tar.gz";
