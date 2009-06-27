@@ -17,7 +17,7 @@ assert xaw3dSupport -> Xaw3d != null;
 assert gtkGUI -> pkgconfig != null && gtk != null;
 assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 
-let date = "2009-02-16"; in
+let date = "2009-06-26"; in
 stdenv.mkDerivation {
   name = "emacs-snapshot-23-${date}";
   
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     inherit date;
     cvsRoot = ":pserver:anonymous@cvs.savannah.gnu.org:/sources/emacs";
     module = "emacs";
-    sha256 = "6ec63da94a199c5f95bf4a9aa578cf14b3d85800fd37b3562d9a446b144b0d47";
+    sha256 = "bf9b21a0634f45474a1ce91e6153ced69194f1e9c0acd6626a931198f4a5972f";
   };
 
   preConfigure = "autoreconf -vfi";
