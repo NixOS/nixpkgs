@@ -242,6 +242,7 @@ in {
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
+  namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;
   netcat = all;
