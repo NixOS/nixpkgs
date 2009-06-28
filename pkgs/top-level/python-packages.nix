@@ -3,6 +3,37 @@
 rec {
   inherit (pkgs) buildPythonPackage fetchurl fetchsvn stdenv python;
 
+  argparse = buildPythonPackage (rec {
+    name = "argparse-0.9.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
+      sha256 = "00jw32wwccpf9smraywjk869b93w7f99rw8gi63yfhw6379fnq6m";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # How do we run the tests?
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/argparse/;
+
+      license = "Apache License 2.0";
+
+      description = "argparse: Python command line parser";
+
+      longDescription = ''
+        The argparse module makes writing command line tools in Python
+        easy.  Just briefly describe your command line interface and
+        argparse will take care of the rest, including: parsing the
+        arguments and flags from sys.argv, converting arg strings into
+        objects for your program, formatting and printing any help
+        messages, and much more.
+      '';
+    };
+  });
+
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.3.2";
 
@@ -186,37 +217,6 @@ rec {
       homepage = http://pypi.python.org/pypi/zbase32;
 
       license = "BSD";
-    };
-  });
-
-  argparse = buildPythonPackage (rec {
-    name = "argparse-0.9.1";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "00jw32wwccpf9smraywjk869b93w7f99rw8gi63yfhw6379fnq6m";
-    };
-
-    buildInputs = [ pkgs.unzip ];
-
-    # How do we run the tests?
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/argparse/;
-
-      license = "Apache License 2.0";
-
-      description = "argparse: Python command line parser";
-
-      longDescription = ''
-        The argparse module makes writing command line tools in Python
-        easy.  Just briefly describe your command line interface and
-        argparse will take care of the rest, including: parsing the
-        arguments and flags from sys.argv, converting arg strings into
-        objects for your program, formatting and printing any help
-        messages, and much more.
-      '';
     };
   });
 
