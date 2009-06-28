@@ -34,6 +34,25 @@ rec {
     };
   });
 
+  darcsver = buildPythonPackage (rec {
+    name = "darcsver-1.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
+      sha256 = "1a5cl2yhnd88a4vkc9r381cbjkcvga87dp9zx5av68857q1nvvvq";
+    };
+
+    buildInputs = [ pkgs.darcs ];
+
+    meta = {
+      description = "Darcsver, generate a version number from Darcs history";
+
+      homepage = http://pypi.python.org/pypi/darcsver;
+
+      license = "BSD-style";
+    };
+  });
+
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.3.2";
 
@@ -96,6 +115,25 @@ rec {
       homepage = http://divmod.org/trac/wiki/DivmodNevow;
 
       license = "BSD-style";
+    };
+  });
+
+  pycryptopp = buildPythonPackage (rec {
+    name = "pycryptopp-0.5.14";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
+      sha256 = "1xvxyvqdi1223pkx0d6idzzlprmkk3hp9fr5r8jlib73cl0vh7rl";
+    };
+
+    buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/pycryptopp/0.5.14;
+
+      description = "Python wrappers for the Crypto++ library";
+
+      license = "GPLv2+";
     };
   });
 
