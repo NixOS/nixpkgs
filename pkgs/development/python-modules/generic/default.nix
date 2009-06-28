@@ -62,13 +62,27 @@ python.stdenv.mkDerivation (
       if head -n1 "$i" | grep -q "${python}"
       then
           echo "wrapping \`$i'..."
+
+          # Compute a $PATH prefix for the program.
+          program_PATH=""
+          ${lib.concatStrings
+            (map (path:
+                  ''if [ -d "${path}/bin" ]
+                    then
+                        program_PATH="${path}/bin'' + "\$" + ''{program_PATH:+:}$program_PATH"
+                    fi
+                   '')
+                 (lib.concatMap recursiveBuildInputs propagatedBuildInputs))}
+
           wrapProgram "$i"                          \
             --prefix PYTHONPATH ":"                 \
             ${lib.concatStringsSep ":"
                ([ "$out/lib/${python.libPrefix}/site-packages" ] ++
                 (map (path: path + "/lib/${python.libPrefix}/site-packages")
                      (lib.concatMap recursiveBuildInputs
-                                    propagatedBuildInputs)))}
+                                    propagatedBuildInputs)))} \
+            --prefix PATH ":" "$program_PATH"
+
       fi
     done
 
