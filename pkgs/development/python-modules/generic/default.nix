@@ -5,7 +5,8 @@
 
 { python, setuptools, makeWrapper, lib }:
 
-{ name, src, meta, patches ? [], doCheck ? true, ... } @ attrs:
+{ name, namePrefix ? "python-", src, meta, patches ? []
+, doCheck ? true, ... } @ attrs:
 
 let
     # Return the list of recursively propagated build inputs of PKG.
@@ -22,7 +23,7 @@ in
 python.stdenv.mkDerivation rec {
   inherit src meta patches doCheck;
 
-  name = "python-" + attrs.name;
+  name = namePrefix + attrs.name;
 
   buildInputs = [ python setuptools makeWrapper ] ++
     (if attrs ? buildInputs then attrs.buildInputs else []);
