@@ -7020,6 +7020,12 @@ let
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
+  tahoe = import ../tools/networking/p2p/tahoe {
+    inherit fetchurl unzip nettools buildPythonPackage;
+    inherit (pythonPackages) twisted foolscap simplejson nevow zfec
+      pycryptopp;
+  };
+
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {
     inherit makeWrapper python;
   };
