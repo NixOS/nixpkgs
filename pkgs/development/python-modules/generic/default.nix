@@ -20,7 +20,13 @@ let
 
 in
 
-python.stdenv.mkDerivation rec {
+python.stdenv.mkDerivation (
+  # Keep extra attributes from ATTR, e.g., `patchPhase', etc.
+  attrs
+
+  //
+
+  (rec {
   inherit src meta patches doCheck;
 
   name = namePrefix + attrs.name;
@@ -74,4 +80,4 @@ python.stdenv.mkDerivation rec {
         ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
   '';
-}
+}))
