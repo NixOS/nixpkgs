@@ -183,7 +183,7 @@ in {
   host = linux;
   hugin = linux;
   iana_etc = linux;
-  icecat3Xul = [ "i686-linux" ];
+  icecat3Xul = linux;
   idutils = all;
   ifplugd = linux;
   imagemagick = allBut "i686-cygwin";
@@ -490,6 +490,10 @@ in {
 
   perlPackages = {
     TaskCatalystTutorial = linux;
+  };
+
+  pythonPackages = {
+    zfec = linux;
   };
   
   xorg = {
