@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [m4];
-  
+
+  preConfigure = "ln -sf configfsf.guess config.guess";
+
   configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
-  
+
   doCheck = true;
 
   meta = {
