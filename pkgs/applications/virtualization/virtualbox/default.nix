@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
 	   -e "s|which|${which}/bin/which|" \
-	   -e "s|gawk|${stdenv.gawk}/bin/gawk|" \
+	   -e "s|awk|${stdenv.gawk}/bin/awk|" \
 	   $out/bin/VBox.sh
     chmod 755 $out/bin/VBox.sh
     for file in VirtualBox VBoxManage VBoxSDL
