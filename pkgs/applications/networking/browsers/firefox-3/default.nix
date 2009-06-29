@@ -13,12 +13,12 @@
 stdenv.mkDerivation rec {
   name = "firefox-${version}";
   
-  version = "3.0.9";
+  version = "3.0.11";
 
   src = fetchurl {
     # Don't forget to update xulrunner.nix as well!
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}-source.tar.bz2";
-    sha1 = "e2d80d6d445b62268fedc43f757918dd5c1ef83a";
+    sha1 = "ca792dcdb67af40c91a4fcece25d6adfb6fef2c3";
   };
 
   buildInputs = [
