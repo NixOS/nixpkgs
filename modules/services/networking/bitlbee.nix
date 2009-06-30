@@ -86,5 +86,5 @@ mkIf config.services.bitlbee.enable {
     '';
   }];
 
-  environment.systemPackages = pkgs.bitlbee;  
+  environment.systemPackages = [ pkgs.bitlbee ];
 }
