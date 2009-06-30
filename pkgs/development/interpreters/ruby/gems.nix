@@ -25,12 +25,11 @@ rec {
   meta = {
     description = "Ruby gems package collection";
     longDescription = ''
-      Example usage:
-      export GEM_HOME=~/.gem_home
-      export RUBYLIB=~/.nix-profile/lib
-      gem install -i .ruby-gems json
-      ruby -I ~/.ruby-gems/gems/json-1.1.3/lib your-script.rb
-      Probably there are better ways to handle this all. Go on and fix it.
+      see comment in rubyLibs to get to know how to use ruby gems in nix
     '';
   };
+
+  # TODO don't resolve 302 redirects but make nix resolve in fetchurl and
+  # nix-prefetch-url. This should be done on stdenv-updates.
+  patches = [ ./gem_nix_command.patch /* see longDescription above */ ];
 }

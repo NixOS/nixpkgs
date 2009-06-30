@@ -2305,6 +2305,15 @@ let
   ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
 
+  rubyLibs = recurseIntoAttrs (import ../development/interpreters/ruby/libs.nix {
+    inherit pkgs stdenv;
+  });
+
+  rubyDebug = import ../development/interpreters/ruby/ruby-debug.nix {
+    inherit fetchurl stdenv;
+    ruby = ruby18;
+  };
+
   rake = import ../development/ruby-modules/rake {
     inherit fetchurl stdenv ruby ;
   };
@@ -2319,9 +2328,10 @@ let
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
-  rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygemsFun = ruby : builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
+  rubygems = rubygemsFun ruby;
 
   rq = import ../applications/networking/cluster/rq {
     inherit fetchurl stdenv sqlite ruby ;

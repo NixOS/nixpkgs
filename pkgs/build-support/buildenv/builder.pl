@@ -21,7 +21,9 @@ sub isInPathsToLink {
     my $path = shift;
     $path = "/" if $path eq "";
     foreach my $elem (@pathsToLink) {
+        print "isInPathsToLink elem, path $elem , $path\n";
         return 1 if substr($path, 0, length($elem)) eq $elem;
+        print "no\n";
     }
     return 0;
 }
@@ -47,12 +49,14 @@ sub createLinks {
     my $ignoreCollisions = shift;
 
     my @srcFiles = glob("$srcDir/*");
+    print "in createLinks $relName, $srcDir, $dstDir, $ignoreCollisions, @srcFiles\n";
 
     foreach my $srcFile (@srcFiles) {
         my $baseName = $srcFile;
         $baseName =~ s/^.*\///g; # strip directory
         my $dstFile = "$dstDir/$baseName";
         my $relName2 = "$relName/$baseName";
+        print "foreach source file $srcFile ...\n";
 
         # Urgh, hacky...
 	if ($srcFile =~ /\/propagated-build-inputs$/ ||
@@ -61,12 +65,15 @@ sub createLinks {
             $srcFile =~ /\/info\/dir$/ ||
             $srcFile =~ /\/log$/)
         {
+          print "do nothing\n";
             # Do nothing.
 	}
 
         elsif (-d $srcFile) {
 
+          print "-d !\n";
             if (!isInPathsToLink($relName2)) {
+                print "not isInPathsToLink, recurse\n";
                 # This path is not in the list of paths to link, but
                 # some of its children may be.
                 createLinks($relName2, $srcFile, $dstFile, $ignoreCollisions);
@@ -76,11 +83,13 @@ sub createLinks {
             lstat $dstFile;
 
             if (-d _) {
+                print "-d _\n";
                 createLinks($relName2, $srcFile, $dstFile, $ignoreCollisions);
             }
 
             elsif (-l _) {
                 my $target = readlink $dstFile or die;
+                print "-l $target\n";
                 if (!-d $target) {
                     die "collission between directory `$srcFile' and non-directory `$target'";
                 }
@@ -91,6 +100,7 @@ sub createLinks {
             }
 
             else {
+                print "symLinkMkdir \n";
                 symLinkMkdir $srcFile, $dstFile;
             }
         }
@@ -103,7 +113,9 @@ sub createLinks {
         }
 
         else {
+            print "next unless relName2 $relName2 \n";
             next unless isInPathsToLink($relName2);
+            print "passed \n";
             symLinkMkdir $srcFile, $dstFile;
         }
     }
@@ -117,6 +129,7 @@ sub addPkg;
 sub addPkg {
     my $pkgDir = shift;
     my $ignoreCollisions = shift;
+    print "adding $pkgDir\n";
 
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
