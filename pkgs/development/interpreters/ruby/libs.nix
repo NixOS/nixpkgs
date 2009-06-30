@@ -407,8 +407,8 @@ let libs =
     };
 
     gettext_2_0_4 = rubyDerivation {
-       name = "gettext-2.0.4"; # full_name
-       nameNoVersion = "gettext";
+       name = "ruby-gettext-2.0.4"; # full_name
+       nameNoVersion = "ruby-gettext";
        propagatedBuildInputs = [ locale_2_0_4 ];
        src = fetchurl {
          url = "http://rubyforge-gems.ruby-forum.com/gems/gettext-2.0.4.gem";
