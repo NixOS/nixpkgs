@@ -120,7 +120,7 @@ index 0000000..1d4ec58
 +         out = "
 +         #{out}
 +  #{nixname spec} = rubyDerivation {
-+     name = \"#{spec.full_name}\"; # full_name
++     name = \"ruby-#{spec.full_name}\"; # full_name
 +     nameNoVersion = \"#{spec.name}\";
 +     propagatedBuildInputs = [ #{deps.map {|n| n.nil? ? "" : (nixname n) }.join(" ")} ];
 +     src = fetchurl {

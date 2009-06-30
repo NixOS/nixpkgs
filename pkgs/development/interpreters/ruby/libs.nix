@@ -85,7 +85,7 @@ let libs =
            # the gem nix command has been added by a nix patch to ruby gems
         
     rubygems_update_1_3_4 = rubyDerivation {
-       name = "rubygems-update-1.3.4"; # full_name
+       name = "ruby-rubygems-update-1.3.4"; # full_name
        nameNoVersion = "rubygems-update";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -108,7 +108,7 @@ let libs =
     };
 
     ferret_0_11_6 = rubyDerivation {
-       name = "ferret-0.11.6"; # full_name
+       name = "ruby-ferret-0.11.6"; # full_name
        nameNoVersion = "ferret";
        propagatedBuildInputs = [ rake_0_8_7 ];
        src = fetchurl {
@@ -124,7 +124,7 @@ let libs =
     };
 
     rake_0_8_7 = rubyDerivation {
-       name = "rake-0.8.7"; # full_name
+       name = "ruby-rake-0.8.7"; # full_name
        nameNoVersion = "rake";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -140,7 +140,7 @@ let libs =
     };
 
     racc_1_4_6 = rubyDerivation {
-       name = "racc-1.4.6"; # full_name
+       name = "ruby-racc-1.4.6"; # full_name
        nameNoVersion = "racc";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -156,7 +156,7 @@ let libs =
     };
 
     nokogiri_1_3_2 = rubyDerivation {
-       name = "nokogiri-1.3.2"; # full_name
+       name = "ruby-nokogiri-1.3.2"; # full_name
        nameNoVersion = "nokogiri";
        propagatedBuildInputs = [ racc_1_4_6 rexical_1_0_3 rake_compiler_0_5_0  ];
        src = fetchurl {
@@ -177,7 +177,7 @@ let libs =
     };
 
     hoe_2_3_1 = rubyDerivation {
-       name = "hoe-2.3.1"; # full_name
+       name = "ruby-hoe-2.3.1"; # full_name
        nameNoVersion = "hoe";
        propagatedBuildInputs = [   ];
        src = fetchurl {
@@ -213,7 +213,7 @@ let libs =
     };
 
     archive_tar_minitar_0_5_2 = rubyDerivation {
-       name = "archive-tar-minitar-0.5.2"; # full_name
+       name = "ruby-archive-tar-minitar-0.5.2"; # full_name
        nameNoVersion = "archive-tar-minitar";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -229,7 +229,7 @@ let libs =
     };
 
     rubyforge_1_0_3 = rubyDerivation {
-       name = "rubyforge-1.0.3"; # full_name
+       name = "ruby-rubyforge-1.0.3"; # full_name
        nameNoVersion = "rubyforge";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -245,7 +245,7 @@ let libs =
     };
 
     ncurses_0_9_1 = rubyDerivation {
-       name = "ncurses-0.9.1"; # full_name
+       name = "ruby-ncurses-0.9.1"; # full_name
        nameNoVersion = "ncurses";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -261,7 +261,7 @@ let libs =
     };
 
     fastthread_1_0_7 = rubyDerivation {
-       name = "fastthread-1.0.7"; # full_name
+       name = "ruby-fastthread-1.0.7"; # full_name
        nameNoVersion = "fastthread";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -277,7 +277,7 @@ let libs =
     };
 
     rake_compiler_0_5_0 = rubyDerivation {
-       name = "rake-compiler-0.5.0"; # full_name
+       name = "ruby-rake-compiler-0.5.0"; # full_name
        nameNoVersion = "rake-compiler";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -295,7 +295,7 @@ let libs =
     };
 
     lockfile_1_4_3 = rubyDerivation {
-       name = "lockfile-1.4.3"; # full_name
+       name = "ruby-lockfile-1.4.3"; # full_name
        nameNoVersion = "lockfile";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -311,7 +311,7 @@ let libs =
     };
 
     locale_2_0_4 = rubyDerivation {
-       name = "locale-2.0.4"; # full_name
+       name = "ruby-locale-2.0.4"; # full_name
        nameNoVersion = "locale";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -327,7 +327,7 @@ let libs =
     };
 
     rcov_0_8_1_2_0 = rubyDerivation {
-       name = "rcov-0.8.1.2.0"; # full_name
+       name = "ruby-rcov-0.8.1.2.0"; # full_name
        nameNoVersion = "rcov";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -343,7 +343,7 @@ let libs =
     };
 
     echoe_3_1_1 = rubyDerivation {
-       name = "echoe-3.1.1"; # full_name
+       name = "ruby-echoe-3.1.1"; # full_name
        nameNoVersion = "echoe";
        propagatedBuildInputs = [ rubyforge_1_0_3  ];
        src = fetchurl {
@@ -359,7 +359,7 @@ let libs =
     };
 
     mime_types_1_16 = rubyDerivation {
-       name = "mime-types-1.16"; # full_name
+       name = "ruby-mime-types-1.16"; # full_name
        nameNoVersion = "mime-types";
        propagatedBuildInputs = [ archive_tar_minitar_0_5_2 nokogiri_1_3_2 rcov_0_8_1_2_0  ];
        src = fetchurl {
@@ -375,7 +375,7 @@ let libs =
     };
 
     net_ssh_2_0_11 = rubyDerivation {
-       name = "net-ssh-2.0.11"; # full_name
+       name = "ruby-net-ssh-2.0.11"; # full_name
        nameNoVersion = "net-ssh";
        propagatedBuildInputs = [ echoe_3_1_1 ];
        src = fetchurl {
@@ -391,7 +391,7 @@ let libs =
     };
 
     highline_1_5_1 = rubyDerivation {
-       name = "highline-1.5.1"; # full_name
+       name = "ruby-highline-1.5.1"; # full_name
        nameNoVersion = "highline";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -423,7 +423,7 @@ let libs =
     };
 
     sup_0_8_1 = rubyDerivation {
-       name = "sup-0.8.1"; # full_name
+       name = "ruby-sup-0.8.1"; # full_name
        nameNoVersion = "sup";
        propagatedBuildInputs = [ ferret_0_11_6 ncurses_0_9_1 rmail_1_0_0 highline_1_5_1 net_ssh_2_0_11 trollop_1_14 lockfile_1_4_3 mime_types_1_16 gettext_2_0_4 fastthread_1_0_7 ];
        src = fetchurl {
@@ -439,7 +439,7 @@ let libs =
     };
 
     trollop_1_14 = rubyDerivation {
-       name = "trollop-1.14"; # full_name
+       name = "ruby-trollop-1.14"; # full_name
        nameNoVersion = "trollop";
        propagatedBuildInputs = [  ];
        src = fetchurl {
@@ -455,7 +455,7 @@ let libs =
     };
 
     rexical_1_0_3 = rubyDerivation {
-       name = "rexical-1.0.3"; # full_name
+       name = "ruby-rexical-1.0.3"; # full_name
        nameNoVersion = "rexical";
        propagatedBuildInputs = [ hoe_2_3_1 ];
        src = fetchurl {
@@ -475,7 +475,7 @@ let libs =
     };
 
     rmail_1_0_0 = rubyDerivation {
-       name = "rmail-1.0.0"; # full_name
+       name = "ruby-rmail-1.0.0"; # full_name
        nameNoVersion = "rmail";
        propagatedBuildInputs = [  ];
        src = fetchurl {
