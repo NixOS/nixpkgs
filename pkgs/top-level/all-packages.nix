@@ -2323,9 +2323,10 @@ let
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
-  rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
+  rubygems = rubygemsFun ruby;
 
   rq = import ../applications/networking/cluster/rq {
     inherit fetchurl stdenv sqlite ruby ;
