@@ -1,9 +1,13 @@
 args : with args; 
 rec {
-  version = "1.2.0";
+
+  # some packages (eg ruby-debug) still require 1.8. So let's stick to that for
+  # now if nobody has different requirements
+
+  version = "1.3.4";
   src = fetchurl {
-    url = "http://rubyforge.org/frs/download.php/38646/rubygems-${version}.tgz";
-    sha256 = "0b9ppgs9av4z344s13wp40ki72prxyz3q0hmsf5swx7xhl54bbr8";
+    url = "http://rubyforge.org/frs/download.php/57643/rubygems-1.3.4.tgz";
+    sha256 = "1z5vvwdf7cwiq669amfxzqd88bn576yq6d9c5c6c92fm9sib1d0y";
   };
 
   buildInputs = [ruby makeWrapper];
@@ -22,6 +26,8 @@ rec {
     description = "Ruby gems package collection";
     longDescription = ''
       Example usage:
+      export GEM_HOME=~/.gem_home
+      export RUBYLIB=~/.nix-profile/lib
       gem install -i .ruby-gems json
       ruby -I ~/.ruby-gems/gems/json-1.1.3/lib your-script.rb
       Probably there are better ways to handle this all. Go on and fix it.

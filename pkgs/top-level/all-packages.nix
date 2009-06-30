@@ -2299,9 +2299,11 @@ let
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
 
-  ruby = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib lib openssl;
+  ruby18 = import ../development/interpreters/ruby {
+    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable;
   };
+  ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  ruby = ruby18;
 
   rake = import ../development/ruby-modules/rake {
     inherit fetchurl stdenv ruby ;
