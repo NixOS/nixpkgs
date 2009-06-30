@@ -1,6 +1,6 @@
 args: with args;
 
-assert dbus_glib.glib == gtkLibs.glib;
+#assert dbus_glib.glib == gtkLibs.glib;
 
 let gnome = 
 
@@ -188,7 +188,8 @@ rec {
   gtksourceview = import ./gtksourceview.nix {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser gtk libxml2 gettext
             libgnomeprint gnomevfs libbonobo /* !!! <- should be propagated in gnomevfs */
-            GConf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */;
+            GConf /* idem */ libgnomeprintui libgnomecanvas /* !!! through printui */ 
+	    intltool;
     input = desktop.gtksourceview;
   };
 
@@ -274,7 +275,8 @@ rec {
   };
 
   libsoup = import ./libsoup.nix {
-    inherit stdenv fetchurl pkgconfig libxml2 glib;
+    inherit stdenv fetchurl pkgconfig libxml2 glib 
+      libproxy GConf sqlite;
     input = desktop.libsoup;
   };
   
@@ -293,11 +295,25 @@ rec {
 
   metacity = import ./metacity.nix {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser glib gtk
-      GConf startupnotification gettext libcm intltool;
+      GConf startupnotification gettext libcm intltool zenity gnomedocutils;
     inherit (xlibs) libXinerama libXrandr libXcursor
       libXcomposite libXfixes libXdamage;
     enableCompositor = true;
     input = desktop.metacity;
+  };
+
+  zenity = stdenv.mkDerivation {
+    inherit (desktop.zenity) name src;
+  
+    buildInputs = [
+      pkgconfig glib gtk
+      gettext intltool gnomedocutils libglade
+      libxslt
+      xlibs.libX11
+    ];
+
+    preConfigure = ''export NIX_LDFLAGS="$NIX_LDFLAGS -lX11";'';
+    configureFlags = "--disable-scrollkeeper";
   };
 
   gnomedocutils = import ./gnome-doc-utils.nix {
@@ -312,6 +328,7 @@ rec {
     buildInputs = [
       pkgconfig perl perlXMLParser GConf gnomedocutils
       gtk libgnome libgnomeui gettext libxslt intltool
+      policyKit dbus_glib
     ];
 
     configureFlags = "--disable-scrollkeeper";

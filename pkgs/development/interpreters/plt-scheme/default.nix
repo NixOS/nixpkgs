@@ -1,5 +1,5 @@
 args: with args; 
-let version = lib.getAttr ["version"] "4.0.1" args; in
+let version = lib.attrByPath ["version"] "4.0.1" args; in
 rec {
   src = fetchurl {
     url = "ftp://infogroep.be/pub/plt/bundles/${version}/plt/plt-${version}-src-unix.tgz";
@@ -15,7 +15,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sed -e 's@/usr/bin/uname@'"$(which uname)"'@g' -i configure
   '') ["minInit" "addInputs" "doUnpack"];
       

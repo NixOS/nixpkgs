@@ -1,17 +1,17 @@
 { stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
-, python, which
+, python, which, alsaLib
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-2.2.0-${kernel.version}";
+  name = "virtualbox-2.2.4-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/2.2.0/VirtualBox-2.2.0-OSE.tar.bz2;
-    sha256 = "8bf621cfcb61f2b0a71be53f072e58c3fb4f3183324faa3947346ff973314c71";
+    url = http://download.virtualbox.org/virtualbox/2.2.4/VirtualBox-2.2.4-OSE.tar.bz2;
+    sha256 = "b5d52a67b94510275eb3dc8649eb7d3063446da4f3ac038f821d598c62b5d6c5";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python];
+  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib];
 
   patchPhase = "
     set -x
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     # It wants the qt utils from qt3, and it takes them from QTDIR
     export QTDIR=${qt3}
-    ./configure --with-qt-dir=${qt3} --with-qt4-dir=${qt4} --disable-python --disable-alsa --disable-pulse --disable-hardening
+    ./configure --with-qt-dir=${qt3} --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
 	   -e "s|which|${which}/bin/which|" \
-	   -e "s|gawk|${stdenv.gawk}/bin/gawk|" \
+	   -e "s|awk|${stdenv.gawk}/bin/awk|" \
 	   $out/bin/VBox.sh
     chmod 755 $out/bin/VBox.sh
     for file in VirtualBox VBoxManage VBoxSDL

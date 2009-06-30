@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "1.12.0" a; 
+  version = a.lib.attrByPath ["version"] "1.12.0" a; 
   buildInputs = with a; [
     firefox libX11 xproto
   ];
@@ -17,11 +17,11 @@ rec {
   configureFlags = [];
   makeFlags = ["linux" "prefix=" "root=$out"];
 
-  preBuild = a.FullDepEntry(''
+  preBuild = a.fullDepEntry(''
     sed -e s@/usr/@"$out/"@g -i mozplugger.c
   '') ["doUnpack" "minInit"];
 
-  postInstall = a.FullDepEntry(''
+  postInstall = a.fullDepEntry(''
     ensureDir $out/share/${name}/plugin
     ln -s $out/lib/mozilla/plugins/mozplugger.so $out/share/${name}/plugin
   '') ["doMakeInstall" "minInit" "defEnsureDir"];

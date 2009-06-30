@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, wxGTK, pkgconfig, gettext, gtk, glib, zlib }:
+{ stdenv, fetchurl, wxGTK, pkgconfig, gettext, gtk, glib, zlib, perl, intltool,
+  libogg, libvorbis, libmad
+  }:
 
 stdenv.mkDerivation {
   name = "audacity-1.3.7";
@@ -7,9 +9,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://sourceforge/audacity/audacity-fullsrc-1.3.7.tar.bz2;
-    sha256 = "1kashc6cc6d5g6i59nqcrl795x1jqdh0lpg3msa1wckfj3hpljmy";
+    sha256 = "0b4arafpdyjjk52l6n7aw518hzm65iv9w5g39jqr2bmvn6a9qivi";
   };
-  buildInputs = [ wxGTK pkgconfig gettext gtk glib zlib ];
+  buildInputs = [ wxGTK pkgconfig gettext gtk glib zlib intltool perl 
+    libogg libvorbis libmad];
 
   meta = {
     description = "Sound editor with graphical UI";

@@ -12,7 +12,7 @@ args : with args;
 	};
 	in with localDefs;
 let 
-postInstall = FullDepEntry (''
+postInstall = fullDepEntry (''
 	ln -s $out/usr/local/bin $out/bin
 '') [minInit doMakeInstall];
 in

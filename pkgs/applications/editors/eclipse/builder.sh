@@ -22,7 +22,7 @@ cat >> $out/bin/eclipse << EOF
 #! /bin/sh -e
 export PATH=${jdk}/bin\${PATH:+:}\$PATH
 export LD_LIBRARY_PATH=$rpath\${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH
-exec \$(dirname $0)/../eclipse/eclipse $@
+exec \$(dirname \$0)/../eclipse/eclipse $@
 EOF
 chmod +x $out/bin/eclipse
 

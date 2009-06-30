@@ -1,5 +1,5 @@
 args : with args; 
-let version = lib.getAttr ["version"] "2.04" args; in
+let version = lib.attrByPath ["version"] "2.04" args; in
 rec {
   src = fetchurl {
     url = "http://www.users.bigpond.net.au/gavindi/ttf-arkpandora-${version}.tgz";

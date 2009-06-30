@@ -1,11 +1,11 @@
 {stdenv, fetchurl, bison, flex}:
 
-stdenv.mkDerivation {
-  name = "kbd-1.12";
+stdenv.mkDerivation rec {
+  name = "kbd-1.15";
 
   src = fetchurl {
-    url = ftp://ftp.win.tue.nl/pub/linux-local/utils/kbd/kbd-1.12.tar.gz;
-    sha256 = "00z89kscfhvbsd3pxkqiw95p124zcka0pji5s5fa7ld7vd3ngg7k";
+    url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
+    sha256 = "1h2klv4sxf0j08fzlpki2zf7f4k7m0j1d0ca01a1bsd8yza0l39d";
   };
 
   buildInputs = [bison flex];

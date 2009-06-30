@@ -2,7 +2,7 @@ args : with args;
 	let 
        	localDefs = with (builderDefs.passthru.function {src="";});
 	let 
-	  checkFlag = flag : lib.getAttr [flag] false args;
+	  checkFlag = flag : lib.attrByPath [flag] false args;
 	in
 	  builderDefs.passthru.function ({
 		inherit src;
@@ -15,14 +15,14 @@ args : with args;
 		patch = null;
 		meta = {};
 		doInstall = if args ? Install then 
-		(FullDepEntry 
+		(fullDepEntry 
 		  args.Install 
 		  (["doMake"] 
-		  ++ (lib.getAttr ["extraInstallDeps"] [] args))
+		  ++ (lib.attrByPath ["extraInstallDeps"] [] args))
 		)
-		else FullDepEntry "" ["doMakeInstall"];
+		else fullDepEntry "" ["doMakeInstall"];
 
-		debPatch = FullDepEntry ((if args ? patch then ''
+		debPatch = fullDepEntry ((if args ? patch then ''
 		  gunzip < ${args.patch} | patch -Np1
 		'' else "")
 		+''

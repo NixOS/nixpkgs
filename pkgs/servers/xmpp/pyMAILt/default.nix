@@ -19,7 +19,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/mail.py" a.pythonWrapperArguments)];
-  deploy = a.FullDepEntry (''
+  deploy = a.fullDepEntry (''
     cd mail-transport
     ensureDir $out/bin $out/share/${name}
     sed -e 's@/usr/bin/@${a.python}/bin/@' -i mail.py

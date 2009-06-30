@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "1.8.1" a; 
+  version = a.lib.attrByPath ["version"] "1.8.1" a; 
   buildInputs = with a; [
     perl
   ];

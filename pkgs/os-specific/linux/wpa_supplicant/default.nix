@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchurl, openssl, qt4 ? null}:
 
 stdenv.mkDerivation rec {
   name = "wpa_supplicant-0.6.9";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     cd wpa_supplicant
     cp defconfig .config
     substituteInPlace Makefile --replace /usr/local $out
-    makeFlagsArray=(ALL="wpa_supplicant wpa_passphrase wpa_cli")
+    makeFlagsArray=(ALL="wpa_supplicant wpa_passphrase wpa_cli ${if qt4 == null then "" else "wpa_gui-qt4"}")
   '';
 
-  buildInputs = [openssl];
+  buildInputs = [openssl qt4];
 
   postInstall = ''
     ensureDir $out/share/man/man5 $out/share/man/man8

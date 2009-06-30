@@ -1,6 +1,10 @@
 /* String manipulation functions. */
 
-let lib = import ./default.nix; in
+let lib = import ./default.nix;
+
+inherit (builtins) substring add sub stringLength;
+
+in
 
 rec {
   inherit (builtins) stringLength substring head tail lessThan sub;
@@ -66,11 +70,14 @@ rec {
     else [(substring 0 1 s)] ++ stringToCharacters (substring 1 (builtins.sub l 1) s);
 
     
-  # !!! this function seems broken - it doesn't escape all special
-  # characters, and in any case this should be done in a builder.
-  escapeShellArg = s:
-    let escapeChar = x: if x == "'" then "'\"'\"'" else x;
-    in "'" + concatStrings (map escapeChar (stringToCharacters s)) + "'";
+  # same as vim escape function.
+  # Each character contained in list is prefixed by "\"
+  escape = list : string :
+    lib.concatStrings (map (c: if lib.elem c list then "\\${c}" else c) (stringToCharacters string));
+
+  # still ugly slow. But more correct now
+  # [] for zsh
+  escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
     
   # !!! what is this for?
@@ -83,10 +90,10 @@ rec {
       if s == "" then "" else
       let takeTillSlash = left : c : s :
           if left == 0 then s
-          else if (__substring left 1 s == "/") then
-                  (__substring (__add left 1) (__sub c 1) s)
-          else takeTillSlash (__sub left 1) (__add c 1) s; in
-      takeTillSlash (__sub (__stringLength s) 1) 1 s;
+          else if (substring left 1 s == "/") then
+                  (substring (add left 1) (sub c 1) s)
+          else takeTillSlash (sub left 1) (add c 1) s; in
+      takeTillSlash (sub (stringLength s) 1) 1 s;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions

@@ -11,7 +11,7 @@ rec {
   propagatedBuildInputs = [texLiveLatexXColor texLive];
 
   phaseNames = ["doCopy"];
-  doCopy = FullDepEntry (''
+  doCopy = fullDepEntry (''
     ensureDir $out/share/texmf/tex/generic/pgf
     cp -r * $out/share/texmf/tex/generic/pgf
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];

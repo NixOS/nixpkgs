@@ -9,7 +9,7 @@ rec {
   buildInputs = [ruby makeWrapper];
   configureFlags = [];
 
-  doInstall = FullDepEntry (''
+  doInstall = fullDepEntry (''
     ruby setup.rb --prefix=$out/
     wrapProgram $out/bin/gem --prefix RUBYLIB : $out/lib:$out/lib
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];

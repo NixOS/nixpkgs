@@ -13,7 +13,7 @@ args : with args; with builderDefs;
 			url = http://ftp.de.debian.org/debian/pool/main/s/space-orbit/space-orbit_1.01-9.diff.gz;
 			sha256 = "1v3s97day6fhv08l2rn81waiprhi1lfyjjsj55axfh6n6zqfn1w2";
 		};
-		customBuild = FullDepEntry (''
+		customBuild = fullDepEntry (''
 			gunzip < ${debianPatch} | patch -Np1
                         cd src
 			sed -e 's@/usr/share/games/orbit/@'$out'/dump/@g' -i *.c

@@ -2,9 +2,9 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "9.4" args; 
+  version = lib.attrByPath ["version"] "9.4" args; 
   buildInputs = with args; [gtk glib pkgconfig 
      libXpm gmp gettext libX11 fftw]
       ++ (lib.optional (args ? ruby) args.ruby)
@@ -38,14 +38,14 @@ rec {
   phaseNames = ["doConfigure" "preBuild" "makeDocsWork" 
     "doMakeInstall" "doForceShare"];
 
-  makeDocsWork = FullDepEntry ''
+  makeDocsWork = fullDepEntry ''
                 # hackish way to make html docs work
                 h="$out/share/snd/html"; ensureDir "$h"; cp *.html "$h"
                 patch -p1 < ${./doc.patch}
                 sed "s@HTML-DIR@$h@" -i index.scm snd-help.c
             '' ["defEnsureDir"];
 
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
 		cp config.log /tmp/snd-config.log
 		export NIX_LDFLAGS="$NIX_LDFLAGS -L${args.libX11}/lib -lX11"
                 

@@ -49,10 +49,11 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       stopNest
     '';
 
-    installCommand = ''
+    installPhase = ''
+      eval "$preInstall" 
       export LOGNAME=root
 
-      ${checkinstall}/sbin/checkinstall --nodoc -y -D make install
+      ${checkinstall}/sbin/checkinstall --nodoc -y -D --fstrans=no make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
@@ -66,6 +67,8 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done
+ 
+      eval "$postInstall" 
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {

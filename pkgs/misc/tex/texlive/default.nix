@@ -1,13 +1,13 @@
 args : with args; 
 rec {
   src = fetchurl { 
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2007.dfsg.1.orig.tar.gz;
-    sha256 = "17wdn9vl4pa897046jpzxl6bl2ppr7swwb8x0jafwvbcnmywndag";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2007.dfsg.2.orig.tar.gz;
+    sha256 = "0gqdz3sxpr6ibmasn847fg7q4m5rs4a370vld57kyl5djfrk33mq";
   };
   
   texmfSrc = fetchurl { 
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2007.orig.tar.gz;
-    sha256 = "16a4dyliidk43qj0m4gpsl9ln7nqsdcdx1lkbk4wrm03xpx87zvh";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2007.dfsg.2.orig.tar.gz;
+    sha256 = "0qmwcz7d09ksrq26x4bqy5v3xjc4w2qkzfc1h6y9hs0gds6n8lnq";
   };
 
   langTexmfSrc = fetchurl {
@@ -17,7 +17,7 @@ rec {
 
   setupHook = ./setup-hook.sh;
 
-  doPreConfigure = FullDepEntry (''
+  doPreConfigure = fullDepEntry (''
     ensureDir $out
     ensureDir $out/nix-support 
     cp ${setupHook} $out/nix-support/setup-hook.sh
@@ -29,12 +29,13 @@ rec {
     sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
     sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . ) 
+    sed -e '1i\#include <string.h>\n\#include <stdlib.h>' -i $( find libs/teckit -name '*.cpp' -o -name '*.c' )
 
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
-  doPostInstall = FullDepEntry(''
+  doPostInstall = fullDepEntry(''
     mv $out/bin $out/libexec
     ensureDir $out/bin
     for i in $out/libexec/*/*; do

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec{
   --with-pythondir=${python}
   ";
 
-  #xlibs2 = map (attrName: builtins.getAttr attrName xlibs) (builtins.attrNames xlibs);
+  #xlibs2 attrByPath (attrName: builtins.getAttr attrName xlibs) (builtins.attrNames xlibs);
   #x_libraries_env = concatStringsSep ":" (map (p: "${p}/lib") xlibs2);
 
   x_libraries_env = concatStringsSep ":" (map (p: "${p}/lib") xlibs);

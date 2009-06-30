@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "5.07" a; 
+  version = a.lib.attrByPath ["version"] "5.07" a; 
   buildInputs = with a; [
     flex
   ];
@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
 
-  preBuild = a.FullDepEntry (''
+  preBuild = a.fullDepEntry (''
     sed -i src/input.c -e 's/static pthread_t/pthread_t/'
     sed -i "s@gnuchess@$out/bin/gnuchess@" -i src/gnuchessx
   '') ["minInit" "doUnpack"];

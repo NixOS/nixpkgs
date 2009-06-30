@@ -8,6 +8,8 @@ preBuild() {
     cat Imakefile >> Imakefile.tmp
     mv Imakefile.tmp Imakefile
     xmkmf
+
+    sed -e 's@[$][$]m@-- &@g' -i Makefile
 }
 
 installPhase() {

@@ -1,10 +1,11 @@
 {stdenv, fetchurl, cmake, qt4, perl, kdelibs, automoc4, phonon, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdegames-4.2.2";
+  name = "kdegames-4.2.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.2.2/src/kdegames-4.2.2.tar.bz2;
-    sha1 = "ffd4dde8c10f14de9da4e44d22b2ac19c8bfce9b";
+    url = mirror://kde/stable/4.2.4/src/kdegames-4.2.4.tar.bz2;
+    sha1 = "c940d73616734fabdfcd0c5961459ba168494b16";
   };
+  includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon qca2 ];
 }

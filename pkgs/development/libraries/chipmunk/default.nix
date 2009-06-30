@@ -2,9 +2,9 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "4.1.0" args; 
+  version = lib.attrByPath ["version"] "4.1.0" args; 
   buildInputs = with args; [
     cmake freeglut mesa 
     libX11 xproto inputproto libXi libXmu
@@ -22,11 +22,11 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["genMakefile" "doMakeInstall" "demoInstall"];
 
-  genMakefile = FullDepEntry ''
+  genMakefile = fullDepEntry ''
     cmake -D CMAKE_INSTALL_PREFIX=$out . 
   '' ["minInit" "addInputs" "doUnpack"];
 
-  demoInstall = FullDepEntry(''
+  demoInstall = fullDepEntry(''
     ensureDir $out/bin
     cp chipmunk_demos $out/bin
   '') ["doMakeInstall" "defEnsureDir"];

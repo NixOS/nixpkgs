@@ -1,16 +1,17 @@
 args: with args;
 stdenv.mkDerivation rec {
-  v = "2.43";
+  v = "2.47";
   name = "clisp-${v}";
   src =
 	fetchurl {
-		url = "mirror://gnu/clisp/release/${v}/${name}.tar.bz2";
-		sha256 = "10qyn6wccnayf1cyvrcanay6c6laar6z1r608w7ijp6nb763q8dm";
+		url = "mirror://gnu/clisp/release/${v}/${name}.tar.gz";
+		sha256 = "0slfx519pk75y5rf7wfna7jgyhkr4qp29z9zd1rcnnrhps11bpn7";
 	};
 
   inherit libsigsegv gettext coreutils;
   buildInputs = [libsigsegv gettext ncurses readline libX11 libXau
-	libXt pcre zlib libXpm xproto libXext xextproto];
+	libXt pcre zlib libXpm xproto libXext xextproto libffi
+	libffcall];
  
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
   --with-module=pcre --with-module=rawsock --with-module=readline
   --with-module=syscalls --with-module=wildcard --with-module=zlib";
 
-  preBuild = "cd builddir";
+  preBuild = ''
+    sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
+    cd builddir
+  '';
 
   NIX_CFLAGS_COMPILE="-O0";
 

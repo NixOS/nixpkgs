@@ -14,7 +14,7 @@ rec {
 
   patches = [ ./no-sys-dirs.patch ];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
 
     sed -e 's,^LLVMSRCDIR.*,LLVMSRCDIR := dummy,' \
         -e 's,\$(LLVMSRCDIR)/include,${llvm}/include,g' \
@@ -53,7 +53,7 @@ rec {
   '') ["doUnpack" "minInit"];
   configureCommand = "$(ls ../llvm-gcc*.*.source/configure)";
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     mv $out/bin/gcc $out/bin/llvm-gcc
     mv $out/bin/g++ $out/bin/llvm-g++
   '')["doMakeInstall" "minInit"];

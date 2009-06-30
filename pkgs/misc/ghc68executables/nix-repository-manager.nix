@@ -12,8 +12,9 @@
 
 args: with args; with args.lib;
 let 
+  inherit (builtins) getAttr attrNames;
   toConfigLine = name : set : 
-    "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${__getAttr a set}\")" ) (__attrNames set)))+"]";
+    "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${getAttr a set}\")" ) (attrNames set)))+"]";
   config = pkgs.writeText "nix-repository-manager_config"
         (bleedingEdgeRepos.managedRepoDir+"\n" +
         concatStringsSep "\n" (mapRecordFlatten toConfigLine (bleedingEdgeRepos.repos)));

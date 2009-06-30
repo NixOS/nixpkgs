@@ -8,7 +8,7 @@ args : with args; with builderDefs;
 
 		buildInputs = [unzip];
 		configureFlags = [];
-		doInstall = FullDepEntry (''
+		doInstall = fullDepEntry (''
 			unzip ${src}
 			ensureDir $out/share/fonts/junicode-ttf
 			cp *.ttf $out/share/fonts/junicode-ttf

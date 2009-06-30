@@ -1,5 +1,5 @@
 args : with args; 
-let version = lib.getAttr ["version"] "1.1.0" args; in
+let version = lib.attrByPath ["version"] "1.1.0" args; in
 rec {
   src = fetchurl {
     url = http://downloads.sourceforge.net/ofset/drgeo-1.1.0.tar.gz;
@@ -13,7 +13,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "doPreBuild" "doMakeInstall"];
 
-  doPreBuild = FullDepEntry (''
+  doPreBuild = fullDepEntry (''
     cp drgeo.desktop.in drgeo.desktop
   '') ["minInit" "doUnpack"];
       

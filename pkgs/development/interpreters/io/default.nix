@@ -2,10 +2,10 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
   doPatchShebangs = args.doPatchShebangs;
 
-  version = lib.getAttr ["version"] "2008.03.30" args; 
+  version = lib.attrByPath ["version"] "2008.03.30" args; 
   buildInputs = with args; [
     zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2
@@ -17,7 +17,7 @@ rec {
     fetchurl {
       url = "http://github.com/stevedekorte/io/tarball/${version}";
       name = "io-${version}.tar.gz";
-      sha256 = "1vdjyqv86l290kzhyw8mwzfqgb279dl9nqmy6bih6g8n4yz36ady";
+      sha256 = "0mn7vm2q1r5l3la5k4hdx5cqrp3nhpw01ywnx43k9gfxkdbajn9g";
     };
 
   inherit buildInputs;
@@ -29,7 +29,7 @@ rec {
   phaseNames = ["preBuild" "doMakeInstall" "postInstall" (doPatchShebangs "$out/share/io/samples") 
     (doPatchShebangs "$out/lib/io")];
       
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     for i in $pkgs ${
         if args.stdenv ? glibc then args.stdenv.glibc else ""
       } ${
@@ -41,7 +41,7 @@ rec {
     done
   '') ["minInit" "addInputs" "doUnpack"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     ensureDir $out/share/io
 
     ln -s $out/lib/io/addons $out/share/io

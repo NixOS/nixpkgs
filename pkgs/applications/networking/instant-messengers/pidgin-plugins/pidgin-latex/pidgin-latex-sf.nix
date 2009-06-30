@@ -11,7 +11,7 @@ rec {
     "PREFIX=$out"
   ];
 
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     ensureDir $out/bin
     ln -s $(which convert) $out/bin
     ln -s $(which xelatex) $out/bin
@@ -25,7 +25,7 @@ rec {
     sed -e 's/\(#define HEADER ".*\)12pt\(.*\)"/\116pt\2\\\\usepackage{fontspec}\\\\usepackage{xunicode}"/' -i LaTeX.h
   '') ["minInit" "addInputs" "defEnsureDir" "doUnpack"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     ensureDir $out/lib
     ensureDir $out/share/pidgin-latex
     ln -s ../../lib/pidgin/LaTeX.so  $out/share/pidgin-latex 

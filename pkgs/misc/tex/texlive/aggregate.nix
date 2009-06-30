@@ -5,7 +5,7 @@ rec {
 
   buildInputs = lib.closePropagation paths;
 
-  doAggregate = FullDepEntry (''
+  doAggregate = fullDepEntry (''
 
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"

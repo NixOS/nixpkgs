@@ -1,17 +1,13 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "xclip-0.08";
+  name = "xclip-0.11";
 
   src = fetchurl {
-    url = http://people.debian.org/~kims/xclip/xclip-0.08.tar.gz;
-    sha256 = "0py6ijw7ln892gzxxm2w47nn97nb6psb8g6clkpz86gg706yjxpf";
+    url = "mirror://sourceforge/xclip/xclip-0.11.tar.gz";
+    sha256 = "0ipwxkfqz66fz6jlln1v46sd2kr6bkqzq6j5hkzn6pb3grmzsacg";
   };
 
-  patchPhase = "sed -i s=/usr/X11R6/bin=/bin=  Makefile";
-
   buildInputs = [x11 libXmu];
-
-  installPhase="make install DESTDIR=\$out";
 
   meta = { 
       description = "access X clipboard from this console application";

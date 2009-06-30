@@ -1,15 +1,15 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "libxklavier-3.4";
+  name = "libxklavier-3.9";
 
   src = fetchurl {
-    url = "mirror://sf/gswitchit/${name}.tar.gz";
-    sha256 = "07pq74ygmnr3vgfp86dbjnqsp3v67fww6d3a1vqbif9wzbk70195";
+    url = "mirror://sf/gswitchit/${name}.tar.bz2";
+    sha256 = "462a4e427f201a23de194f824dce70c84867464956f2f6c8dd4a5e07f1f4a554";
   };
 
 # TODO: enable xmodmap support, needs xmodmap DB
-  propagatedBuildInputs = [libX11 xkeyboard_config libxml2 libICE glib libxkbfile];
+  propagatedBuildInputs = [libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes];
   
   buildInputs = [pkgconfig];
   

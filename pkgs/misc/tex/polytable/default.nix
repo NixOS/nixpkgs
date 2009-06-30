@@ -1,6 +1,6 @@
 {stdenv, fetchurl, tetex, lazylist}:
 
-assert tetex == lazylist.tetex;
+#assert tetex == lazylist.tetex;
 
 stdenv.mkDerivation {
   name = "polytable-0.8.2";

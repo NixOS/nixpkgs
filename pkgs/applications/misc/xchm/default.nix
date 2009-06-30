@@ -8,6 +8,11 @@ stdenv.mkDerivation {
   };
   buildInputs = [wxGTK chmlib];
 
+  postConfigure = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS $(${wxGTK}/lib/wx/config/* --libs | sed -e s@-pthread@@)"
+    echo $NIX_LDFLAGS
+  '';
+
   meta = {
     description = "A viewer for Microsoft HTML Help files";
     homepage = http://xchm.sourceforge.net;

@@ -1,5 +1,5 @@
 args : with args; let localDefs = builderDefs.passthru.function (args // rec {
-                version = lib.getAttr ["version"] "5.07" args;
+                version = lib.attrByPath ["version"] "5.07" args;
 		src = /* put a fetchurl here */
 		fetchurl {
 		    url = "http://www.jwz.org/xscreensaver/xscreensaver-${version}.tar.gz";
@@ -7,7 +7,7 @@ args : with args; let localDefs = builderDefs.passthru.function (args // rec {
 		};
 		useConfig = true;
 		reqsList = [
-			["true" "libX11" "gtk" "pkgconfig" "bc" "perl" "intltool" "libXmu"]
+			["true" "libX11" "pkgconfig" "bc" "perl" "intltool" "libXmu"]
 			["GL" "mesa"]
 			["GUI" "gtk" "libxml2" "libglade"]
 			["jpeg" "libjpeg"]
@@ -23,15 +23,15 @@ args : with args; let localDefs = builderDefs.passthru.function (args // rec {
 	});
 	in with localDefs;
 let 
-	preConfigure = FullDepEntry ("
+	preConfigure = fullDepEntry ("
 		sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' "+
 		"-i driver/Makefile.in po/Makefile.in.in;
-	") [minInit doUnpack];
+	") ["minInit" "doUnpack"];
 in
 stdenv.mkDerivation rec {
 	name = "xscreensaver-5.07";
-	builder = writeScript (name + "-builder")
-		(textClosure localDefs [preConfigure doConfigure doMakeInstall doForceShare doPropagate]);
+	buildCommand = textClosure localDefs
+          [preConfigure doConfigure doMakeInstall doForceShare doPropagate];
 	meta = {
 		description = "A set of screensavers";
 		inherit src;

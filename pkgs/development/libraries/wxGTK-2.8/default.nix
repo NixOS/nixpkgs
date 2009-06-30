@@ -34,10 +34,7 @@ stdenv.mkDerivation {
   SEARCH_INCLUDE =
     "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
 
-  SEARCH_LIB = if (stdenv.system == "x86_64-linux") then
-    "${mesa}/lib64"
-    else 
-    "${mesa}/lib";
+  SEARCH_LIB = "${mesa}/lib";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1";

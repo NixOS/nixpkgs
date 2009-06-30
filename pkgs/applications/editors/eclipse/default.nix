@@ -9,25 +9,29 @@
 # Why use a local copy? This way it's easier to use the update manager to get plugins :-)
 
 
-{fetchurl, stdenv, jdk, gtk, glib, libXtst, plugins ? []}:
+{fetchurl, stdenv, jdk, gtk, glib, libXtst, makeOverridable, plugins ? [], unzip}:
 
-let {
-  body =
+let eclipseFun = 
+  makeOverridable ({name, bindist} :
     stdenv.mkDerivation {
-      name = "eclipse-sdk-3.5M6";
+      inherit name;
       builder = ./builder.sh;
       src = bindist;
-      buildInputs = [];
+      buildInputs = [ unzip /* unzip required by eclipseCDT */ ];
       inherit jdk plugins;
       libraries = [gtk glib libXtst];
-   };
+   }); in
 
-  bindist = 
-    if (stdenv.system == "x86_64-linux") then fetchurl {
-      url = ftp://sunsite.informatik.rwth-aachen.de/pub/mirror/eclipse/S-3.5M6-200903130100/eclipse-SDK-3.5M6-linux-gtk-x86_64.tar.gz;
-      sha256 = "10p4idp5rcdf7xqwfk3kvmjxhi8x1v835m0y4pn9q4nhfb5643pi";
-    } else fetchurl {
-      url = ftp://mirror.micromata.de/eclipse/eclipse/downloads/drops/S-3.5M6-200903130100/eclipse-SDK-3.5M6-linux-gtk.tar.gz;
-      sha256 = "1z8j26b632ydhqrmwgbcqgiq7f1a542jam06z2h62mcbqazrcyah";
-    };
-}
+  eclipseFun {
+    # you can override these settings usnig .override {...} 
+    name = "eclipse-sdk-3.5M6";
+
+    bindist = 
+      if (stdenv.system == "x86_64-linux") then fetchurl {
+        url = ftp://sunsite.informatik.rwth-aachen.de/pub/mirror/eclipse/S-3.5M6-200903130100/eclipse-SDK-3.5M6-linux-gtk-x86_64.tar.gz;
+        sha256 = "10p4idp5rcdf7xqwfk3kvmjxhi8x1v835m0y4pn9q4nhfb5643pi";
+      } else fetchurl {
+        url = ftp://mirror.micromata.de/eclipse/eclipse/downloads/drops/S-3.5M6-200903130100/eclipse-SDK-3.5M6-linux-gtk.tar.gz;
+        sha256 = "1z8j26b632ydhqrmwgbcqgiq7f1a542jam06z2h62mcbqazrcyah";
+      };
+  }

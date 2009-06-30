@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.12.1" a; 
+  version = a.lib.attrByPath ["version"] "0.12.1" a; 
   buildInputs = with a; [
     python pyGtkGlade gtk perl intltool dbus gettext
     pkgconfig makeWrapper libglade pyopenssl libXScrnSaver
@@ -20,7 +20,7 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pyGtkGlade})/gtk-2.0"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pygobject})/gtk-2.0"
     sed -e '/-L[$]x_libraries/d' -i configure

@@ -68,7 +68,7 @@ args:
       kdebase = { type="svn"; url="svn://anonsvn.kde.org/home/kde/trunk/KDE/kdebase"; groups = "kde"; };
 
       cinelerra =  { type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; };
-
+      ctags = { type = "svn"; url = "https://ctags.svn.sourceforge.net/svnroot/ctags/trunk"; };
       autofs = { type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; };
 
       # git repositories 

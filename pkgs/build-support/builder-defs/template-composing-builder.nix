@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "" a; 
+  version = a.lib.attrByPath ["version"] "" a; 
   buildInputs = with a; [
     
   ];

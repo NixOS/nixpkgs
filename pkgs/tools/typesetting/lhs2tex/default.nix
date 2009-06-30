@@ -1,6 +1,6 @@
 {cabal, tetex, polytable, regexCompat, utf8String}:
 
-assert tetex == polytable.tetex;
+#assert tetex == polytable.tetex;
 
 cabal.mkDerivation (self : {
   pname = "lhs2tex";

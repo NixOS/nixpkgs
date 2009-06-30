@@ -1,11 +1,13 @@
 {stdenv, fetchurl, zlib, libjpeg, libpng, libtiff, pam, openssl}:
 
+let version = "1.3.10"; in
+
 stdenv.mkDerivation {
-  name = "cups-1.3.9";
+  name = "cups-${version}";
   
   src = fetchurl {
-    url = http://ftp.easysw.com/pub/cups/1.3.9/cups-1.3.9-source.tar.bz2;
-    sha256 = "0svb5alfsj9bfraw0yb9i92g5hc9h36m9xfipvi1pxdwp2s6m19q";
+    url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
+    sha256 = "0rmm1dj8ha8d5c9lpdsfpfyw6l6lnkxl36xlxqdrjnm0lr2sa0cp";
   };
 
   buildInputs = [zlib libjpeg libpng libtiff pam openssl];

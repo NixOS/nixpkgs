@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth}:
+{stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth, fontDirectories}:
 
 stdenv.mkDerivation {
   name = "tightvnc-1.3.10";
@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   # for the builder script
   inherit xauth;
+
+  inherit fontDirectories;
 
   buildInputs = [x11 zlib libjpeg imake gccmakedep libXmu libXaw libXpm libXp
   	xauth];

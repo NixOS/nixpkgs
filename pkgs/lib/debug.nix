@@ -1,4 +1,8 @@
-let lib = import ./default.nix; in
+let lib = import ./default.nix;
+
+inherit (builtins) trace attrNamesToStr isAttrs isFunction isList head substring attrNames;
+
+in
 
 rec {
 
@@ -20,25 +24,27 @@ rec {
 
   
   # this can help debug your code as well - designed to not produce thousands of lines
-  traceShowVal = x : __trace (showVal x) x;
-  traceShowValMarked = str: x: __trace (str + showVal x) x;
-  attrNamesToStr = a : lib.concatStringsSep "; " (map (x : "${x}=") (__attrNames a));
+  traceShowVal = x : trace (showVal x) x;
+  traceShowValMarked = str: x: trace (str + showVal x) x;
+  attrNamesToStr = a : lib.concatStringsSep "; " (map (x : "${x}=") (attrNames a));
   showVal = x :
-      if __isAttrs x then
+      if isAttrs x then
           if x ? outPath then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
           else "x is attr set { ${attrNamesToStr x} }"
-      else if __isFunction x then "x is a function"
+      else if isFunction x then "x is a function"
       else if x == [] then "x is an empty list"
-      else if __isList x then "x is a list, first item is : ${showVal (__head x)}"
+      else if isList x then "x is a list, first item is : ${showVal (head x)}"
       else if x == true then "x is boolean true"
       else if x == false then "x is boolean false"
       else if x == null then "x is null"
-      else "x is probably a string starting, starting characters: ${__substring 0 50 x}..";
+      else "x is probably a string starting, starting characters: ${substring 0 50 x}..";
   # trace the arguments passed to function and its result 
   traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
   traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
+  traceValIfNot = c: x:
+    if c x then true else trace (showVal x) false;
 
   /* Evaluate a set of tests.  A test is an attribute set {expr,
      expected}, denoting an expression and its expected result.  The

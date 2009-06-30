@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "3.4" a; 
+  version = a.lib.attrByPath ["version"] "3.4" a; 
   buildInputs = with a; [
     aalib gsl libpng libX11 xproto libXext xextproto 
     libXt zlib gettext intltool perl
@@ -20,7 +20,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
-  preConfigure = a.FullDepEntry (''
+  preConfigure = a.fullDepEntry (''
     sed -e s@/usr/@"$out/"@g -i configure $(find . -name 'Makefile*')
     ensureDir $out/share/locale
   '') ["doUnpack" "minInit" "defEnsureDir"];

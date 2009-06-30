@@ -1,23 +1,25 @@
 args: with args; with debPackage;
 debBuild ({
   src = fetchurl {
-    url = mirror://debian/pool/main/u/unifont/unifont_1.0.orig.tar.gz;
-    sha256 = "0bg8d6c7w51n5409g0n7vqk3aagbzb5aird5r02vw0yz7w6i729l";
+    url = mirror://debian/pool/main/u/unifont/unifont_5.1.20080914.orig.tar.gz;
+    sha256 = "1p8f3dkg0zy9f5hwn1q728hps258ll84xg9a7xqbhj2csvnsyajd";
   };
   patch = fetchurl {
-    url = mirror://debian/pool/main/u/unifont/unifont_1.0-4.diff.gz;
-    sha256 = "08j0rrf7hc05izchmsx9f9hg7vnyqdvbmba4b9jl8wfhvd1b09fd";
+    url = mirror://debian/pool/main/u/unifont/unifont_5.1.20080914-1.diff.gz;
+    sha256 = "0faicwbjlgy78zrc94ffg52f71msll8kxc43bks40z8qb02nr7qx";
   };
-  name = "unifont-1.0-4";
+  name = "unifont-5.1-20080914";
   buildInputs = [mkfontscale mkfontdir bdftopcf fontutil perl];
   meta = {
     description = "Unicode font for Base Multilingual Plane.";
   };
-  extraReplacements = ''sed -e s@/usr/bin/perl@${perl}/bin/perl@ -i hex2bdf.unsplit'';
+  #extraReplacements = ''sed -e s@/usr/bin/perl@${perl}/bin/perl@ -i hex2bdf.unsplit'';
   omitConfigure = true;
   Install = ''
-    ensureDir $out/share/fonts
-    cp unifont.pcf $out/share/fonts
+    ensureDir $out/share/fonts $out/share/fonts/truetype
+    cd font/precompiled
+    cp unifont.pcf.gz $out/share/fonts
+    cp unifont.ttf $out/share/fonts/truetype 
     cd $out/share/fonts
     mkfontdir 
     mkfontscale

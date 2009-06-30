@@ -12,10 +12,11 @@
 
 p: # p = pkgs
 let 
+  inherit (builtins) isAttrs hasAttr;
   inherit (p) lib fetchurl stdenv getConfig;
   inherit (p.composableDerivation) composableDerivation;
   # withName prevents  nix-env -qa \* from aborting (pythonLibStub is a derivation but hasn't a name)
-  withName = lib.mapAttrs (n : v : if (__isAttrs v && (!__hasAttr "name" v)) then null else v);
+  withName = lib.mapAttrs (n : v : if (isAttrs v && (!hasAttr "name" v)) then null else v);
 in
   withName ( lib.fix ( t : { # t = this attrs
 
@@ -82,18 +83,7 @@ in
     pythonLibStub = composableDerivation {} {
         propagatedBuildInputs = [ t.pythonFull ]; # see [1]
         postPhases = ["postAll"]; # using new name so that you dno't override this phase by accident
-        prePhases = ["defineValidatingEval"];
         # ensure phases are run or a non zero exit status is caused (if there are any syntax errors such as eval "while")
-        defineValidatingEval = ''
-          eval(){
-            e="$(type eval | { read; while read line; do echo $line; done })"
-            unset eval;
-            local evalSucc="failure"
-            eval "evalSucc=ok;""$1"
-            eval "$e"
-            [ $evalSucc = "failure" ] && { echo "eval failed, snippet:"; echo "$1"; return 1; }
-          }
-        '';
         postAll = ''
           ensureDir $out/nix-support
           echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
@@ -113,6 +103,7 @@ in
           libPython = t.version; # used to find all python libraries fitting this version (-> see name all below)
         };
         mergeAttrBy = {
+          postPhases = lib.concat;
           pyCheck = x : y : "${x}\n${y}";
         };
     };
@@ -496,6 +487,129 @@ in
     };
   };
 
+  # unmantained ? (gentoo/ debian even do have python-3* patches)
+  pyxml = t.pythonLibSetup.merge {
+    name = "pyxml-0.8.4";
+    src = fetchurl {
+      url = mirror://sourceforge/pyxml/PyXML-0.8.4.tar.gz;
+      sha256 = "04wc8i7cdkibhrldy6j65qp5l75zjxf5lx6qxdxfdf2gb3wndawz";
+    };
+    meta = { 
+      description = "python xml package";
+      homepage = http://sourceforge.net/projects/pyxml/;
+      license = "Python License"; # (CNRI Python License);
+    };
+  };
+
+  /*
+  # untested
+  libxml2dom = t.pythonLibSetup.merge {
+    name = "libxml2dom-0.4.7";
+    buildInputs = [ p.libxml2 ];
+    src = fetchurl {
+      url = http://www.boddie.org.uk/python/downloads/libxml2dom-0.4.7.tar.gz;
+      sha256 = "0zh68adxn4l4b6q99jl1pi00171ah2marbbs8qfww4wpjavfw844";
+    };
+    pyCheck = "import libxml2dom.svg";
+    meta = {
+      description = "provides a traditional DOM wrapper around the Python bindings for libxml2";
+      homepage = http://www.boddie.org.uk/python/libxml2dom.html;
+      license = "LGPL3+";
+    };
+  };
+  */
+
+  fpconst = t.pythonLibSetup.merge {
+    name = "fpconst-0.7.3";
+    pyCheck = "import fpconst";
+    src = fetchurl {
+      url="mirror://sourceforge/rsoap/fpconst-0.7.3.tar.gz";
+      sha256 = "1a5c2e4a1ecefd9981988cea15068699eccbc55e350af3471e782083d390c727";
+    };
+    meta = {
+      description="Python Module for handling IEEE 754 floating point special values";
+      homepage="http://chaco.bst.rochester.edu:8080/statcomp/projects/RStatServer/fpconst/";
+      license = "GPLv2";
+    };
+  };
+
+  soappy = t.pythonLibSetup.merge {
+    name = "soappy-0.12";
+    pyCheck = "from SOAPpy import WSDL";
+    propagatedBuildInputs = [ t.fpconst ];
+    src = fetchurl {
+      url = "http://switch.dl.sourceforge.net/sourceforge/pywebsvcs/SOAPpy-0.12.0.tar.gz";
+      sha256 = "02a0wpir0gl0n9cl7a5hxliwsywvcw847i5in7i14i57kk6dl7rd";
+    };
+    patches = [ ./gentoo-python-2.5-compat.patch ];
+    meta = {
+      description = "SOAP implementation for Python";
+      homepage="http://pywebsvcs.sourceforge.net/";
+      license = "BSD";
+    };
+  };
+
+  sqlalchemy05 = t.pythonLibSetup.merge {
+    name = "sqlalchemy-0.5.5-svn-trunk";
+    pyCheck = ''
+      import sqlalchemy
+      import sqlalchemy.orm
+      import sqlalchemy.orm.collections
+    '';
+    src = p.bleedingEdgeRepos.sourceByName "sqlalchemy05";
+    meta = { 
+      description = "sql orm wrapper for python";
+      homepage = http://www.sqlalchemy.org;
+      license = "MIT";
+    };
+    postPhases = ["installMigration"];
+
+    buildInputs = [ t.setuptools /* required for migration lib */ ];
+
+    /* impure ? I don't care right now
+      Reading http://pypi.python.org/simple/decorator/
+      Reading http://www.phyast.pitt.edu/~micheles/python/documentation.html
+      Best match: decorator 3.0.1
+      Downloading http://pypi.python.org/packages/source/d/decorator/decorator-3.0.1.tar.gz#md5=c4130a467be7f71154976c84af4a04c6
+
+      iElectric: column.alter could be broken ..
+    */
+    installMigration = ''
+      cd $TMP
+      mkdir migrate
+      cd migrate
+      unpackFile ${p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate"}
+      cd *
+      python setup.py $setupFlags build
+      python setup.py $setupFlags install --prefix=$out
+      echo "import migrate.changeset.schema" | python
+    '';
+
+      /*
+
+      mv $out/lib/python2.5/site-packages/sqlalchemy_migrate-0.5.5.dev_r0-py2.5.egg/* \
+         $out/lib/python2.5/site-packages
+         */
+  };
+
+  /* doesn't work on its own, its included in sqlalchemy05 for that reason.
+  sqlalchemyMigrate = t.pythonLibSetup.merge {
+    name = "sqlalchemy-migrate-svn";
+    buildInputs = [ t.setuptools t.sqlalchemy05 ];
+    pyCheck = ''
+      import migrate
+      import migrate.changeset
+      import migrate.changeset.schema
+    '';
+    src = p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate";
+    meta = { 
+      description = "sqlalchemy database versioning and scheme migration";
+      homepage = http://packages.python.org/sqlalchemy-migrate/download.html;
+      license = "MIT";
+    };
+  };
+  */
+
   ### python applications
 
   pythonExStub = composableDerivation {} {
@@ -557,7 +671,7 @@ in
   };
 
   all = lib.filter (x:
-                   (__isAttrs x)
+                   (isAttrs x)
                 && ((lib.maybeAttr "libPython" false x) == t.version)
                 && (lib.maybeAttr "name" false x != false) # don't collect pythonLibStub etc
         ) (lib.flattenAttrs (removeAttrs t ["all"])); # nix is not yet lazy enough, so I've to remove all first

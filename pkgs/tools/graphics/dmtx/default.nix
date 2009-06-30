@@ -3,10 +3,10 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.getAttr ["version"] "0.7.0" args; 
+  version = lib.attrByPath ["version"] "0.7.0" args; 
   buildInputs = with args; [
     libpng libtiff libjpeg librsvg imagemagick pkgconfig
-    zlib libX11 bzip2
+    zlib libX11 bzip2 libtool
   ];
 in
 rec {

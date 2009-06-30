@@ -1,8 +1,12 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = http://oandrieu.nerim.net/monotone-viz/monotone-viz-1.0.1-nolablgtk.tar.gz;
-    sha256 = "0aqz65mlqplj5ccr8czcr6hvliclf9y1xi1rrs2z2s3fvahasxnp";
+    name = "monotone-viz-1.0.1-nolablgtk.tar.gz";
+    urls = [
+      http://ftp.debian.org/debian/pool/main/m/monotone-viz/monotone-viz_1.0.1.orig.tar.gz
+      #http://oandrieu.nerim.net/monotone-viz/monotone-viz-1.0.1-nolablgtk.tar.gz
+    ];
+    sha256 = "066qwrknjk5hwk9jblnf0bzvbmfbabq0zhsxkd3nzk469zkpvhl2";
   };
 
   buildInputs = [ocaml lablgtk libgnomecanvas gtk graphviz glib pkgconfig];

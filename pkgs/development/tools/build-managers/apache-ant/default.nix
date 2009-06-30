@@ -11,8 +11,8 @@ let {
       inherit antContrib jdk;
 
       src = fetchurl {
-        url = http://apache.surfnet.nl/ant/binaries/apache-ant-1.6.5-bin.tar.bz2;
-        md5 = "26031ee1a2fd248ad0cc2e7f17c44c39";
+        url = http://apache.mirror.transip.nl/ant/binaries/apache-ant-1.7.1-bin.tar.bz2 ;
+        sha256 = "15rgkini0g100jygp7z9hgc3yfb9m62q4nk989rin7dqj2flrr94";
       };
     };
 

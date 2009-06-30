@@ -4,12 +4,12 @@ let
 srcA=
 	fetchurl {
 		url = http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz;
-		sha256 = "11vripxw9dgasbgcgs1z4hc1yjdypby2grj6y3c1a0c9w3v40kix";
+		sha256 = "12hgizg25fzmk10wjl0c88x97h3pg5r9ga122s3y28wixz6x2bvh";
 	};
 srcB=
 	fetchurl {
 		url = http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts-asian.tar.gz;
-		sha256 = "0fgka3vy8agbkp6xjq7igilbv88p8m9hh2qyikqhcm2qajdvzc4j";
+		sha256 = "0ibjy4xpz5j373hsdr8bx99czfpclqmviwwv768j8n7z12z3wa51";
 	};
 srcC=
 	fetchurl {

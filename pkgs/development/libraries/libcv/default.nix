@@ -2,9 +2,9 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "" args; 
+  version = lib.attrByPath ["version"] "" args; 
   buildInputs = with args; [
     libtiff libpng libjpeg pkgconfig 
     gtk glib
@@ -22,7 +22,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "doMakeInstall" "postInstall"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     ln -s $out/include/opencv/* $out/include
   '') ["doMakeInstall" "minInit"];
       

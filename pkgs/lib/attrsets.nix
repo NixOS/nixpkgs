@@ -1,9 +1,10 @@
 # Operations on attribute sets.
 
 with {
-  inherit (builtins) head tail;
+  inherit (builtins) head tail isString;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
+  inherit (import ./lists.nix) concatMap;
 };
 
 rec {
@@ -12,21 +13,28 @@ rec {
 
   /* Return an attribute from nested attribute sets.  For instance
      ["x" "y"] applied to some set e returns e.x.y, if it exists.  The
-     default value is returned otherwise.  !!! there is also
-     builtins.getAttr (is there a better name for this function?)
-  */
-  getAttr = attrPath: default: e:
+     default value is returned otherwise.  */
+  attrByPath = attrPath: default: e:
     let attr = head attrPath;
     in
       if attrPath == [] then e
       else if builtins ? hasAttr && hasAttr attr e
-      then getAttr (tail attrPath) default (builtins.getAttr attr e)
+      then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
+
+      
+  /* Backwards compatibility hack: lib.attrByPath used to be called
+     lib.getAttr, which was confusing given that there was also a
+     builtins.getAttr.  Eventually we'll drop this hack and
+     lib.getAttr will just be an alias for builtins.getAttr. */
+  getAttr = a: b: if isString a
+    then builtins.getAttr a b
+    else c: builtins.trace "Deprecated use of lib.getAttr!" (attrByPath a b c);
 
 
   getAttrFromPath = attrPath: set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in getAttr attrPath (abort errorMsg) set;
+    in attrByPath attrPath (abort errorMsg) set;
       
 
   /* Return the specified attributes from a set.
@@ -36,7 +44,7 @@ rec {
        => [as.a as.b as.c]
   */
   attrVals = nameList: set:
-    map (x: builtins.getAttr x set) nameList;
+    map (x: getAttr x set) nameList;
 
 
   /* Return the values of all attributes in the given set, sorted by
@@ -56,7 +64,32 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(builtins.getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
+
+
+  /* Recursively collect sets that verify a given predicate named `pred'
+     from the set `attrs'.  The recursion is stopped when the predicate is
+     verified.
+
+     Type:
+       collect ::
+         (AttrSet -> Bool) -> AttrSet -> AttrSet
+
+     Example:
+       collect builtins.isList { a = { b = ["b"]; }; c = [1]; }
+       => ["b" 1]
+
+       collect (x: x ? outPath)
+          { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+       => [{ outPath = "a/"; } { outPath = "b/"; }]
+  */
+  collect = pred: attrs:
+    if pred attrs then
+      [ attrs ]
+    else if builtins.isAttrs attrs then
+      concatMap (collect pred) (attrValues attrs)
+    else
+      [];
 
 
   /* Utility function that creates a {name, value} pair as expected by
@@ -75,7 +108,7 @@ rec {
        => {x = "x-foo"; y = "y-bar";}
   */
   mapAttrs = f: set:
-    listToAttrs (map (attr: nameValuePair attr (f attr (builtins.getAttr attr set))) (attrNames set));
+    listToAttrs (map (attr: nameValuePair attr (f attr (getAttr attr set))) (attrNames set));
     
 
   /* Like `mapAttrs', except that it recursively applies itself to

@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "blender-2.46";
+  name = "blender-2.48";
 
   src = fetchurl {
-    url = http://download.blender.org/source/blender-2.46.tar.gz;
-    sha256 = "1l95lcrp5snmvzabw46qpnkxmqls3fc24b2qjkghfasvaq7km7rr";
+    url = http://download.blender.org/source/blender-2.48a.tar.gz;
+    sha256 = "0ijfpy510ls8xq1i8fb6j6wd0vac1jvnzmpiga4g7x1j4fg4s7bq";
   };
 
   phases="unpackPhase buildPhase";
@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   inherit scons SDL freetype openal python openexr mesa;
 
   buildInputs = [python scons
-         gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff libXi ];
+         gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff libXi 
+         ];
 
   # patch SConstruct so that we can pass on additional include.  Either blender
   # or openEXR is broken. I think OpenEXR should use include "" isntead of <> to

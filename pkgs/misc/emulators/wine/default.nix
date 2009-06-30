@@ -9,11 +9,11 @@ assert stdenv.gcc.gcc != null;
 let lib = import ../../../lib/default.nix; in
 
 stdenv.mkDerivation rec {
-  name = "wine-1.1.20";
+  name = "wine-1.1.23";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "1g6js3zszn91jz0fb3h612m426ih1132s36ggqldvl37rxx4kfys";
+    sha256 = "0fg8s3y8975bwjyfw705q0sjch56vsndw3pc8n0j8dshhcbbrv5p";
   };
 
   buildInputs = [

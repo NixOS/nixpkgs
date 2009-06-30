@@ -20,4 +20,6 @@ stdenv.mkDerivation {
       homepage = http://ampasctl.sourceforge.net;
       license = "SOME OPEN SOURCE LICENSE"; # TODO which exactly is this?
   };
+
+  patches = [ ./patch.patch ];
 }

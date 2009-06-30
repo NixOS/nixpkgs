@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
 
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     export NIX_LDFLAGS='-lXi -lX11 -lglib -lgtk -lgdk -lgdk_pixbuf -lc -lXext'
     ensureDir $out/share
     tar xf ${fpc.src} --strip-components=1 -C $out/share
@@ -27,7 +27,7 @@ rec {
   '') 
   ["minInit" "defEnsureDir" "doUnpack"];
 
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
     wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'"
   '') ["doMakeInstall" "minInit" "defEnsureDir"];
 

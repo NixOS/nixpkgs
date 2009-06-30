@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   
   doCheck = true;
 
+  dontDisableStatic = true; 
+
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";

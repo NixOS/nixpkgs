@@ -8,7 +8,7 @@ args : with args; with builderDefs;
 
 		buildInputs = [];
 		configureFlags = [];
-		doInstall = FullDepEntry (''
+		doInstall = fullDepEntry (''
 			ensureDir $out/share/fonts
 			cp *.ttf $out/share/fonts
 		'') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];

@@ -13,14 +13,14 @@ args : with args;	let
 		goSrcDir = "
 			cd ltrace-*;
 		";
-		preBuild = FullDepEntry (''
+		preBuild = fullDepEntry (''
 		  gunzip < ${patch} | patch -Np1
 		  sed -e s@-Werror@@ -i Makefile.in
 		'')["minInit" "doUnpack"];
 	};
 	in with localDefs;
 let
-	preConfigure = FullDepEntry ("
+	preConfigure = fullDepEntry ("
 		sed -e 's@-o root -g root@@' -i Makefile.in;
 	") [doUnpack minInit];
 in

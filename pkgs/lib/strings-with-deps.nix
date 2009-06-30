@@ -3,74 +3,78 @@ Usage:
 
   You define you custom builder script by adding all build steps to a list.
   for example:
-	builder = writeScript "fsg-4.4-builder"
-		(textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
+       builder = writeScript "fsg-4.4-builder"
+               (textClosure [doUnpack addInputs preBuild doMake installPhase doForceShare]);
 
-  a step is defined by noDepEntry, FullDepEntry or PackEntry.
+  a step is defined by noDepEntry, fullDepEntry or packEntry.
   To ensure that prerequisite are met those are added before the task itself by
   textClosureDupList. Duplicated items are removed again.
 
   See trace/nixpkgs/trunk/pkgs/top-level/builder-defs.nix for some predefined build steps
 
+  Attention:
+
+  let
+    pkgs = (import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix) {};
+  in let
+    inherit (pkgs.stringsWithDeps) fullDepEntry packEntry noDepEntry textClosureMap;
+    inherit (pkgs.lib) id;
+
+    nameA = noDepEntry "Text a";
+    nameB = fullDepEntry "Text b" ["nameA"];
+    nameC = fullDepEntry "Text c" ["nameA"];
+
+    stages = {
+      nameHeader = noDepEntry "#! /bin/sh \n";
+      inherit nameA nameB nameC;
+    };
+  in
+    textClosureMap id stages
+    [ "nameHeader" "nameA" "nameB" "nameC"
+      nameC # <- added twice. add a dep entry if you know that it will be added once only [1]
+      "nameB" # <- this will not be added again because the attr name (reference) is used
+    ]
+
+  # result: Str("#! /bin/sh \n\nText a\nText b\nText c\nText c",[])
+
+  [1] maybe this behaviour should be removed to keep things simple (?)
 */
-args: 
-	with args;
-	with lib;
-	let 
-		inherit (builtins)	
-			head tail isList isAttrs;
-in
+
+with import ./lists.nix;
+with import ./attrsets.nix;
+with import ./strings.nix;
+
 rec {
 
-/*
-	let  shelllib = rec {
-		a= {
-			text = "aaaa";
-			deps = [b c];
-		};
-		b = {
-			text = "b";
-		};
-		c = {
-			text = "c";
-			deps = [];
-		};
-	};
-	in
-	
-	[textClosure [shelllib.a]
-		textclosure shelllib.a];
+  /* !!! The interface of this function is kind of messed up, since
+     it's way too overloaded and almost but not quite computes a
+     topological sort of the depstrings. */
 
-	
-*/
-	
-	textClosureDupList = arg: 
-	(
-		if isList arg then 
-			textClosureDupList {text = ""; deps = arg;} 
-		else
-			(concatLists (map textClosureDupList arg.deps)) ++ [arg]
-	);
+  textClosureList = predefined: arg:
+    let
+      f = done: todo:
+        if todo == [] then {result = []; inherit done;}
+        else
+          let entry = head todo; in
+          if isAttrs entry then
+            let x = f done entry.deps;
+                y = f x.done (tail todo);
+            in { result = x.result ++ [entry.text] ++ y.result;
+                 done = y.done;
+               }
+          else if hasAttr entry done then f done (tail todo)
+          else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
+    in (f {} arg).result;
 
-	textClosureDupListOverridable = predefined: arg:
-	(
-		if isList arg then 
-			textClosureDupListOverridable predefined {text = ""; deps = arg;} 
-		else if isAttrs arg then
-			(concatLists (map (textClosureDupListOverridable predefined) arg.deps)) ++ [arg]
-		else
-			textClosureDupListOverridable predefined (getAttr [arg] [] predefined)
-	);
+  textClosureMap = f: predefined: names:
+    concatStringsSep "\n" (map f (textClosureList predefined names));
 
-	textClosureListOverridable = predefined: arg:
-		(map	(x : x.text) 
-			(uniqList {inputList = textClosureDupListOverridable predefined arg;}));
-	textClosureOverridable = predefined: arg: concatStringsSep "\n" (textClosureListOverridable predefined arg);
-	
-	textClosureMapOveridable = f: predefined: arg: 
-		concatStringsSep "\n" (map f (textClosureListOverridable predefined arg));
+  noDepEntry = text: {inherit text; deps = [];};
+  fullDepEntry = text: deps: {inherit text deps;};
+  packEntry = deps: {inherit deps; text="";};
 
-	noDepEntry = text : {inherit text;deps = [];};
-	FullDepEntry = text : deps: {inherit text deps;};
-	PackEntry = deps: {inherit deps; text="";};
+  # Old names - don't use. Will be removed soon. There are no more occurences in nixpkgs/nixos
+  FullDepEntry = fullDepEntry;
+  PackEntry = packEntry;
+  
 }

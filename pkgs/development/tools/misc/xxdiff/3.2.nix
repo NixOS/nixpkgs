@@ -10,7 +10,7 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["prepareMainBuild"
+  phaseNames = ["prepareMainBuild" "fixInc"
     "deploy"
     "installPythonPackage" 
     (makeManyWrappers 
@@ -18,13 +18,17 @@ rec {
       ''--prefix PYTHONPATH : $(toPythonPath $out):$PYTHONPATH'')
   ];
 
-  prepareMainBuild = FullDepEntry (''
+  prepareMainBuild = fullDepEntry (''
     cd src 
     export QTDIR=${qt}/
     make -f Makefile.bootstrap makefile
   '') ["minInit" "doUnpack"];
 
-  deploy = FullDepEntry (''
+  fixInc = fullDepEntry(''
+    sed -e '1i\#include <stdlib.h>' -i resources.inline.h
+  '') ["minInit" "doUnpack"];
+
+  deploy = fullDepEntry (''
     ensureDir $out/bin/
     cp ../bin/xxdiff $out/bin
     cd ..

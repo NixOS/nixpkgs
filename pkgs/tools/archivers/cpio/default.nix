@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   patches = [
     # Make it compile on GCC 4.3.
     (fetchurl {
+      name = "cpio-2.9-gnu-inline.patch";
       url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/app-arch/cpio/files/cpio-2.9-gnu-inline.patch?rev=1.1";
       sha256 = "1167hrq64h9lh3qhgasm2rivfzkkgx6fik92b017qfa0q61ff8c3";
     })

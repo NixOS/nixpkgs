@@ -12,7 +12,7 @@ args : with args;
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
 let
-postInstall = FullDepEntry (''
+postInstall = fullDepEntry (''
 	ln -s $out/usr/local/bin $out/bin
 '') [minInit doMakeInstall];
 in

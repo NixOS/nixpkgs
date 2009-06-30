@@ -5,7 +5,7 @@ args : with args;
     (to use a fresher pidgin build)
 */
 let 
-  externalPurple2 = (lib.getAttr ["purple2Source"] null args) != null; 
+  externalPurple2 = lib.attrByPath ["purple2Source"] null args) != null; 
 in
 rec {
   src = fetchurl {
@@ -30,7 +30,7 @@ rec {
     + " --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include"
     + " --enable-screensaver --disable-meanwhile --disable-nm --disable-tcl";
 
-  preBuild = FullDepEntry (''
+  preBuild = fullDepEntry (''
     export echo=echo
   '') [];
 
@@ -45,7 +45,7 @@ rec {
     homepage = http://funpidgin.sf.net; 
   };
 } // (if externalPurple2 then {
-  postInstall = FullDepEntry (''
+  postInstall = fullDepEntry (''
       ensureDir $out/lib/purple-2
       cp ${args.purple2Source}/lib/purple-2/* $out/lib/purple-2/
     '') ["minInit" "defEnsureDir"]; }

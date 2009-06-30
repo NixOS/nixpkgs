@@ -2,9 +2,9 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "0.9.3" args; 
+  version = lib.attrByPath ["version"] "0.9.3" args; 
   buildInputs = with args; [
     libpng libcv
   ];
@@ -22,15 +22,15 @@ rec {
   phaseNames = ["preConfigure" "doConfigure" "doMake" 
   "createDirs"  "doMakeInstall" "postInstall"];
 
-  preConfigure = FullDepEntry ''
+  preConfigure = fullDepEntry ''
     cd src
     sed -e /LDCONFIG/d -i libdecodeqr/Makefile.in
   '' ["doUnpack"];
-  postInstall = FullDepEntry ''
+  postInstall = fullDepEntry ''
     cp sample/simple/simpletest $out/bin/qrdecode 
     cd ..
   '' ["doMake"];
-  createDirs = FullDepEntry ''
+  createDirs = fullDepEntry ''
     ensureDir $out/bin $out/lib $out/include $out/share
   '' ["defEnsureDir"];
 

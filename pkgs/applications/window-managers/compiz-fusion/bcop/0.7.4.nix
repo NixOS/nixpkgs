@@ -11,11 +11,11 @@ args : with args;
 	} ;
 	in with localDefs;
 let 
-	fixPkgconfig = FullDepEntry ("
+	fixPkgconfig = fullDepEntry ("
 		ensureDir \$out/lib
 		ln -fs \$out/share/pkgconfig \$out/lib/pkgconfig
 	") [minInit doMakeInstall defEnsureDir];
-	fixInterpreter = FullDepEntry ("
+	fixInterpreter = fullDepEntry ("
 		sed -e 's@^#!/bin/bash@#! ${stdenv.bash}/bin/bash@' -i \$out/bin/bcop
 	") [minInit doMakeInstall];
 in

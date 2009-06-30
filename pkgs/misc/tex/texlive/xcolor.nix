@@ -8,7 +8,7 @@ rec {
 
   buildInputs = [texLive];
   phaseNames = ["doCopy"];
-  doCopy = FullDepEntry (''
+  doCopy = fullDepEntry (''
     export HOME=$PWD
 
     ensureDir $out/share/texmf/tex/latex/xcolor

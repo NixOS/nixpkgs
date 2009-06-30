@@ -11,17 +11,19 @@
 
 let
 
-  version = "1.9.1b4"; # this attribute is used by other packages
-  ffversion = "3.5b4";
+  version = "1.9.1rc1"; 
+  shownVersion = "1.9.1"; # this attribute is used by other packages
+                          # _usually_ it is the same as version
+  ffversion = "3.5rc1";
 
 in  
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "xulrunner-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/firefox/releases/${ffversion}/source/firefox-${ffversion}-source.tar.bz2";
-    sha256 = "0pfrcqbsa88p6nfqx7xhlr603ycwf5lnfmwcdd5abl7xipxg4lxn";
+    sha256 = "14yrkvk0kibfpkcvbb44ww89plhm8iikbqmnc0jbkjr4k70a7gcl";
   };
 
   buildInputs = [
@@ -91,7 +93,10 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.com/en-US/firefox/;
   };
 
-  passthru = { inherit gtk version; };
+  passthru = { 
+    inherit gtk ffversion src;
+    version = shownVersion;
+  };
 }
 
 

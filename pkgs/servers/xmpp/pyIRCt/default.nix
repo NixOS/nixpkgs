@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.4" a; 
+  version = a.lib.attrByPath ["version"] "0.4" a; 
   buildInputs = with a; [
     xmpppy pythonIRClib python makeWrapper
   ];
@@ -18,7 +18,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
-  deploy = a.FullDepEntry (''
+  deploy = a.fullDepEntry (''
     ensureDir $out/bin $out/share/${name}
     sed -e 's@/usr/bin/@${a.python}/bin/@' -i irc.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyIRCt.xml"]' -i config.py

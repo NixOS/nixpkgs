@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 stdenv.mkDerivation {
-  name = "freeimage-3.11.0";
+  name = "freeimage-3.12.0";
   src = fetchurl {
     url = mirror://sourceforge/freeimage/FreeImage3120.zip;
     sha256 = "1hvcmv8hnv3h24zcl324g3l0ww8aa8fkcfav2lrgs1kwzp5zqcd4";

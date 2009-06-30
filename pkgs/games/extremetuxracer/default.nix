@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.5beta" a; 
+  version = a.lib.attrByPath ["version"] "0.5beta" a; 
   buildInputs = with a; [
     mesa libX11 xproto tcl freeglut
     SDL SDL_mixer libXi inputproto

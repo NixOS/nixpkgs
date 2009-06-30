@@ -1,0 +1,51 @@
+Debian patch that allows compilation with libgps (from `gpsd').
+Failing to apply this patch, we get the following error:
+
+  vikgpslayer.c:237: error: field 'realtime_gpsd_unit' has incomplete type
+  vikgpslayer.c: In function 'vik_gps_layer_new':
+  vikgpslayer.c:473: warning: implicit declaration of function 'gpsd_units'
+  vikgpslayer.c: In function 'rt_gpsd_try_connect':
+  vikgpslayer.c:1321: warning: passing argument 2 of 'gps_set_raw_hook' from incompatible pointer type
+
+diff -urNad trunk~/src/gpsdclient.h trunk/src/gpsdclient.h
+--- trunk~/src/gpsdclient.h	1970-01-01 01:00:00.000000000 +0100
++++ trunk/src/gpsdclient.h	2009-04-15 14:30:22.000000000 +0200
+@@ -0,0 +1,25 @@
++/* $Id: gpsdclient.h 5330 2009-03-03 04:05:42Z ckuethe $ */
++/* gpsdclient.h -- common functions for GPSD clients */
++
++#ifndef _GPSD_GPSDCLIENT_H_
++#define _GPSD_GPSDCLIENT_H_
++struct fixsource_t 
++/* describe a data source */
++{
++    char *spec;		/* pointer to actual storage */
++    char *server;
++    char *port;
++    char *device;
++};
++
++enum unit {unspecified, imperial, nautical, metric};
++enum unit gpsd_units(void);
++enum deg_str_type { deg_dd, deg_ddmm, deg_ddmmss };
++
++extern /*@observer@*/ char *deg_to_str( enum deg_str_type type,  double f);
++
++extern void gpsd_source_spec(/*@null@*/const char *fromstring, 
++			     /*@out@*/struct fixsource_t *source);
++
++#endif /* _GPSDCLIENT_H_ */
++/* gpsdclient.h ends here */
+diff -urNad trunk~/src/vikgpslayer.c trunk/src/vikgpslayer.c
+--- trunk~/src/vikgpslayer.c	2009-02-08 14:47:01.000000000 +0100
++++ trunk/src/vikgpslayer.c	2009-04-15 14:30:55.000000000 +0200
+@@ -39,6 +39,9 @@
+ #include <glib/gi18n.h>
+ #ifdef VIK_CONFIG_REALTIME_GPS_TRACKING
+ #include <gps.h>
++#ifndef gpsd_units
++#include "gpsdclient.h"
++#endif
+ #endif
+ 
+ #if ! GLIB_CHECK_VERSION(2,14,0)

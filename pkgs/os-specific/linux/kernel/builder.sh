@@ -79,7 +79,7 @@ installPhase() {
     # /lib/modules).  The depmod_opts= is to prevent the kernel
     # from passing `-b PATH' to depmod.
     export MODULE_DIR=$out/lib/modules/
-    substituteInPlace Makefile --replace '-b $(INSTALL_MOD_PATH) -r' ''
+    substituteInPlace Makefile --replace '-b $(INSTALL_MOD_PATH)' ''
     make modules_install \
         DEPMOD=$module_init_tools/sbin/depmod depmod_opts= \
         $makeFlags "${makeFlagsArray[@]}" \

@@ -12,7 +12,7 @@
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
-assert httpServer -> httpd != null && httpd.apr == apr && httpd.aprutil == aprutil;
+assert httpServer -> httpd != null;
 assert pythonBindings -> swig != null && swig.pythonSupport;
 assert javahlBindings -> jdk != null;
 assert sslSupport -> neon.sslSupport;
@@ -20,13 +20,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.1";
+  version = "1.6.2";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "http://subversion.tigris.org/downloads/${name}.tar.bz2";
-    sha256 = "1jp6i7vmz0vd1zf4y896f7jzabwv81x8brwzp5kpkrn6wajagm6d";
+    sha256 = "0xa07jrbg5jdk6v5scv900ccdq1fnx02yijgnl8pfaq3knhsb24p";
   };
 
   buildInputs = [zlib apr aprutil sqlite]

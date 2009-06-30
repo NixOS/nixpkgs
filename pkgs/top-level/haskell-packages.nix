@@ -42,6 +42,11 @@ rec {
     inherit cabal mtl network parsec xhtml;
   };
 
+  convertible = import ../development/libraries/haskell/convertible {
+    inherit cabal mtl;
+    time = time113;
+  };
+
   Crypto = import ../development/libraries/haskell/Crypto {
     inherit cabal;
   };
@@ -50,8 +55,21 @@ rec {
     inherit cabal;
   };
 
+  digest = import ../development/libraries/haskell/digest {
+    inherit cabal;
+    inherit (pkgs) zlib;
+  };
+
+  dotgen = import ../development/libraries/haskell/dotgen {
+    inherit cabal;
+  };
+
   editline = import ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
+    inherit cabal;
+  };
+
+  emgm = import ../development/libraries/haskell/emgm {
     inherit cabal;
   };
 
@@ -96,7 +114,7 @@ rec {
   };
   
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
-    inherit cabal GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
+    inherit cabal GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
     ghc = ghcReal;
@@ -119,16 +137,16 @@ rec {
     inherit cabal;
   };
 
-  HDBC = import ../development/libraries/haskell/HDBC/HDBC-1.1.4.nix {
-    inherit cabal;
+  HDBC = import ../development/libraries/haskell/HDBC/HDBC.nix {
+    inherit cabal HUnit QuickCheck mtl time utf8String convertible testpack;
   };
 
-  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql-1.1.4.0.nix {
-    inherit cabal HDBC;
+  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
+    inherit cabal HDBC parsec;
     inherit (pkgs) postgresql;
   };
 
-  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3-1.1.4.0.nix {
+  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {
     inherit cabal HDBC;
     inherit (pkgs) sqlite;
   };
@@ -147,6 +165,10 @@ rec {
 
   HUnit = import ../development/libraries/haskell/HUnit {
     inherit cabal;
+  };
+
+  ivor = import ../development/libraries/haskell/ivor {
+    inherit cabal mtl parsec;
   };
 
   json = import ../development/libraries/haskell/json {
@@ -177,6 +199,14 @@ rec {
     inherit cabal parsec;
   };
 
+  nonNegative = import ../development/libraries/haskell/non-negative {
+    inherit cabal QuickCheck;
+  };
+
+  numericPrelude = import ../development/libraries/haskell/numeric-prelude {
+    inherit cabal HUnit QuickCheck parsec nonNegative utilityHt;
+  };
+
   OpenAL = import ../development/libraries/haskell/OpenAL {
     inherit cabal OpenGL;
     inherit (pkgs) openal;
@@ -186,6 +216,10 @@ rec {
     inherit cabal;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
+  };
+
+  pandoc = import ../development/libraries/haskell/pandoc {
+    inherit cabal mtl network parsec utf8String xhtml zipArchive;
   };
 
   parallel = import ../development/libraries/haskell/parallel {
@@ -215,7 +249,7 @@ rec {
 
   readline = import ../development/libraries/haskell/readline {
     inherit cabal;
-    inherit (pkgs) readline;
+    inherit (pkgs) readline ncurses;
   };
 
   regexBase = import ../development/libraries/haskell/regex-base {
@@ -250,7 +284,23 @@ rec {
     inherit (pkgs) SDL;
   };
 
+  Shellac = import ../development/libraries/haskell/Shellac/Shellac.nix {
+    inherit cabal mtl;
+  };
+
+  ShellacHaskeline = import ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {
+    inherit cabal Shellac haskeline;
+  };
+
+  ShellacReadline = import ../development/libraries/haskell/Shellac/Shellac-readline.nix {
+    inherit cabal Shellac readline;
+  };
+
   stm = import ../development/libraries/haskell/stm {
+    inherit cabal;
+  };
+
+  storableComplex = import ../development/libraries/haskell/storable-complex {
     inherit cabal;
   };
 
@@ -258,7 +308,21 @@ rec {
     inherit cabal parallel;
   };
 
+  terminfo = import ../development/libraries/haskell/terminfo {
+    inherit cabal;
+    inherit (pkgs) ncurses;
+  };
+
+  testpack = import ../development/libraries/haskell/testpack {
+    inherit cabal HUnit QuickCheck mtl;
+  };
+
+  /* time is Haskell Platform default, time113 is more recent but incompatible */
   time = import ../development/libraries/haskell/time {
+    inherit cabal;
+  };
+
+  time113 = import ../development/libraries/haskell/time/1.1.3.nix {
     inherit cabal;
   };
 
@@ -270,7 +334,15 @@ rec {
     inherit cabal;
   };
 
+  utilityHt = import ../development/libraries/haskell/utility-ht {
+    inherit cabal;
+  };
+
   uulib = import ../development/libraries/haskell/uulib {
+    inherit cabal;
+  };
+
+  uuParsingLib = import ../development/libraries/haskell/uu-parsinglib {
     inherit cabal;
   };
 
@@ -278,12 +350,12 @@ rec {
     inherit cabal ghcPaths haskellSrcMeta;
   };
 
-  vacuumCairo = import ../development/libraries/haskell/vacuumCairo {
+  vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
     inherit cabal vacuum gtk2hs parallel strictConcurrency;
   };
 
   vty = import ../development/libraries/haskell/vty {
-    inherit cabal;
+    inherit cabal utf8String terminfo;
   };
 
   wx = import ../development/libraries/haskell/wxHaskell/wx.nix {
@@ -307,6 +379,14 @@ rec {
     inherit cabal;
   };
 
+  zipArchive = import ../development/libraries/haskell/zip-archive {
+    inherit cabal binary mtl utf8String zlib digest;
+  };
+
+  zipper = import ../development/libraries/haskell/zipper {
+    inherit cabal multirec;
+  };
+
   zlib = import ../development/libraries/haskell/zlib {
     inherit cabal;
     inherit (pkgs) zlib;
@@ -323,6 +403,11 @@ rec {
   helium = import ../development/compilers/helium {
     inherit ghc;
     inherit (pkgs) fetchurl stdenv;
+  };
+
+  idris = import ../development/compilers/idris {
+    inherit cabal mtl parsec readline ivor happy;
+    inherit (pkgs) fetchdarcs;
   };
 
 
@@ -359,14 +444,14 @@ rec {
     inherit (pkgs) libedit;
   };
 
-  happy = happy1182;
+  happy = happy1184;
 
   happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
     inherit cabal;
     inherit (pkgs) perl;
   };
 
-  happy1182 = import ../development/tools/parsing/happy/happy-1.18.2.nix {
+  happy1184 = import ../development/tools/parsing/happy/happy-1.18.4.nix {
     inherit cabal mtl;
     inherit (pkgs) perl;
   };
@@ -414,6 +499,12 @@ rec {
   lhs2tex = import ../tools/typesetting/lhs2tex {
     inherit cabal regexCompat utf8String;
     inherit (pkgs) tetex polytable;
+  };
+
+  # Games.
+
+  MazesOfMonad = import ../games/MazesOfMonad {
+    inherit cabal HUnit mtl regexPosix time;
   };
 
 }

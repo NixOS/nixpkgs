@@ -19,6 +19,8 @@ stdenv.mkDerivation {
   
   NIX_CFLAGS_CXXFLAGS = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
+  NIX_LDFLAGS = if stdenv.system == "x86_64-linux" then "-lgcc_s" else "";
+
   postInstall =
     ''
       ln -s mysqld_safe $out/bin/mysqld

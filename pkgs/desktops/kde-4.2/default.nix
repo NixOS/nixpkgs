@@ -191,15 +191,39 @@ rec {
     inherit automoc4 phonon;
   };
   
+  kmplayer = import ./extragear/kmplayer {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext dbus_glib;
+    inherit (pkgs.gtkLibs) pango gtk;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   krusader = import ./extragear/krusader {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
     inherit kdelibs;
     inherit automoc4 phonon;
   };
   
+  koffice = import ./extragear/koffice {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl lcms exiv2 libxml2 libxslt boost glew;
+    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon qimageblitz qca2 eigen;
+    poppler = pkgs.popplerQt4;
+  };
+  
   ktorrent = import ./extragear/ktorrent {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp taglib boost gettext;
     inherit kdelibs kdepimlibs kdebase_workspace;
     inherit automoc4 phonon qca2;
+  };
+  
+  gtk_qt_engine = import ./extragear/gtk-qt-engine {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
+    inherit (pkgs.xlibs) libX11;
+    inherit (pkgs.gtkLibs) gtk;
+    inherit (pkgs.gnome) libbonoboui;
+    inherit kdelibs;
+    inherit automoc4 phonon;
   };
 }

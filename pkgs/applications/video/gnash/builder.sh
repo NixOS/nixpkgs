@@ -1,5 +1,5 @@
-source "$stdenv/setup" || exit 1
+source "$stdenv/setup"
 
-configureFlags="--with-sdl-mixer-incl=$SDL_mixer/include/SDL --with-sdl-incl=$SDL/include/SDL --with-npapi-plugindir=$out/plugins --enable-gui=gtk"
+configureFlags="--with-sdl-incl=$SDL/include/SDL --with-npapi-plugindir=$out/plugins --enable-gui=gtk"
 
 genericBuild

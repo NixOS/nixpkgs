@@ -8,7 +8,7 @@ rec {
 
   buildInputs = [texLive];
   phaseNames = ["doCopy"];
-  doCopy = FullDepEntry (''
+  doCopy = fullDepEntry (''
     ensureDir $out/share/texmf
     cp -r * $out/share/texmf
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];

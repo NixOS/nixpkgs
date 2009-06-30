@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -DHAS_DB -I${cyrus_sasl}/include/sasl' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb'
   '';
 
-  buildinputs = [db4 openssl cyrus_sasl];
+  buildInputs = [db4 openssl cyrus_sasl];
   
   patches = [./postfix-2.2.9-db.patch ./postfix-2.2.9-lib.patch];
   

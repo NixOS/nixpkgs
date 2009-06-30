@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.16.1";
+  name = "gtk+-2.16.2";
   
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.16/${name}.tar.bz2";
-    sha256 = "0l3dfznv07nmzavqp0shr5qf66alb6xyzmiq728hgygmnayky7rg";
+    sha256 = "07gdsl3ialpwfcd0z3w108r60dn0agj12s21fpkpcx44lzknnbm3";
   };
   
   buildInputs = [ pkgconfig perl jasper ];

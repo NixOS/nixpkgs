@@ -1,11 +1,11 @@
 {stdenv, fetchurl, python, libxslt, tetex}:
 
-stdenv.mkDerivation {
-  name = "dblatex-0.2.7";
+stdenv.mkDerivation rec {
+  name = "dblatex-0.2.8";
   
   src = fetchurl {
-    url = mirror://sourceforge/dblatex/dblatex-0.2.7.tar.bz2;
-    sha256 = "0wcsfr2arcayq10fp06h2l7zlbn7l4ffrvzc2qs86103q5xismmr";
+    url = "mirror://sourceforge/dblatex/${name}.tar.bz2";
+    sha256 = "00slxwd1z9sajpxjvrqqgl3fnf9hwh17shg66pg2k2mnbgagxyr0";
   };
 
   buildPhase = "true";

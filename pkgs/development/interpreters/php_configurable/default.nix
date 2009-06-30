@@ -1,4 +1,4 @@
-let version = "5.2.6"; in
+let version = "5.2.9"; in
 
 args: with args;
 
@@ -38,6 +38,11 @@ composableDerivation {} ( fixed : {
         buildInputs = [ libxml2 ];
       };
     
+      sqlite = {
+        configureFlags = ["--with-pdo-sqlite=${sqlite}"];
+        buildInputs = [ sqlite ];
+      };
+    
       postgresql = {
         configureFlags = ["--with-pgsql=${postgresql}"];
         buildInputs = [ postgresql ];
@@ -71,6 +76,10 @@ composableDerivation {} ( fixed : {
       gd = {
         configureFlags = ["--with-gd=${args.gd}"];
         buildInputs = [gd];
+      };
+
+      soap = {
+        configureFlags = ["--enable-soap"];
       };
 
       sockets = {
@@ -115,18 +124,22 @@ composableDerivation {} ( fixed : {
     curlSupport = true;
     gettextSupport = true;
     postgresqlSupport = true;
+    sqliteSupport = true;
+    soapSupport = true;
     zlibSupport = true;
-    opnesslSupport = true;
+    opensslSupport = true;
     xdebugSupport = true;
     mbstringSupport = true;
     gdSupport = true;
   };
 
+  # only -O1
   configurePhase = ''
     iniFile=$out/etc/$name.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out  $configureFlags
     echo configurePhase end
+    sed -e 's/-O2/-O1/g' -i Makefile # http://bugs.php.net/bug.php?id=47730&edit=3
   '';
 
   installPhase = ''
@@ -162,7 +175,7 @@ composableDerivation {} ( fixed : {
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    md5 = "7380ffecebd95c6edb317ef861229ebd";
+    md5 = "280d6cda7f72a4fc6de42fda21ac2db7";
     name = "php-${version}.tar.bz2";
   };
 

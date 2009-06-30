@@ -13,7 +13,7 @@ in Nixpkgs to easily build packages for other programming languages,
 such as Perl or Haskell.  These are described in this chapter.</para>
 
 
-<section><title>Perl</title>
+<section xml:id="ssec-language-perl"><title>Perl</title>
 
 <para>Nixpkgs provides a function <varname>buildPerlPackage</varname>,
 a generic package builder function for any Perl package that has a
@@ -156,7 +156,42 @@ ClassC3Componentised = buildPerlPackage rec {
 
 <section><title>Python</title>
 
-<para>TODO</para>
+<para>
+  Python packages that
+  use <link xlink:href="http://pypi.python.org/pypi/setuptools/"><literal>setuptools</literal></link>,
+  which many Python packages do nowadays, can be built very simply using
+  the <varname>buildPythonPackage</varname> function.  This function is
+  implemented
+  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/development/python-modules/generic/default.nix"><filename>pkgs/development/python-modules/generic/default.nix</filename></link>
+  and works similarly to <varname>buildPerlPackage</varname>. (See
+  <xref linkend="ssec-language-perl"/> for details.)
+</para>
+
+<para>
+  Python packages that use <varname>buildPythonPackage</varname> are
+  defined
+  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/python-packages.nix"><filename>pkgs/python-packages.nix</filename></link>.
+  Most of them are simple.  For example:
+
+  <programlisting>
+twisted = buildPythonPackage {
+  name = "twisted-8.1.0";
+
+  src = fetchurl {
+    url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
+    sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
+  };
+
+  propagatedBuildInputs = [ pkgs.ZopeInterface ];
+
+  meta = {
+    homepage = http://twistedmatrix.com/;
+    description = "Twisted, an event-driven networking engine written in Python";
+    license = "MIT";
+  };
+};
+  </programlisting>
+</para>
 
 </section>
 

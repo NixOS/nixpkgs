@@ -2,9 +2,9 @@ args :
 let 
   lib = args.lib;
   fetchurl = args.fetchurl;
-  FullDepEntry = args.FullDepEntry;
+  fullDepEntry = args.fullDepEntry;
 
-  version = lib.getAttr ["version"] "0.7.47" args; 
+  version = lib.attrByPath ["version"] "0.7.47" args; 
   buildInputs = with args; [
     openssl zlib pcre libxml2 libxslt
   ];
@@ -25,7 +25,7 @@ rec {
     "--with-http_secure_link_module"
   ];
 
-  preConfigure = FullDepEntry ''
+  preConfigure = fullDepEntry ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${args.libxml2}/include/libxml2"
   '' [];
 

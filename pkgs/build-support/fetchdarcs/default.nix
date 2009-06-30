@@ -1,17 +1,13 @@
-{stdenv, darcs, nix}: {url, tag ? null, md5, partial ? true}:
+{stdenv, darcs, nix}: {url, tag ? null, context ? null, md5 ? "", sha256 ? ""}:
 
 stdenv.mkDerivation {
   name = "fetchdarcs";
   builder = ./builder.sh;
-  buildInputs = [darcs nix];
-  partial = if partial then "--partial" else "";
+  buildInputs = [darcs];
 
-  # Nix <= 0.7 compatibility.
-  id = md5;
-
-  outputHashAlgo = "md5";
+  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = md5;
+  outputHash = if sha256 == "" then md5 else sha256;
   
-  inherit url tag;
+  inherit url tag context;
 }

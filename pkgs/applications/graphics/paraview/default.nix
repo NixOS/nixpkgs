@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     sha256 = "27544f442e957e9aa60b32c674f2dcd84fffeecc9a40071ef6e305333413187d";
   };
 
+  patches = [ ./include-qobject.patch ];
+
   # I added these flags to get all the rpaths right, which I guess they are
   # taken from the qt4 sources. Not very nice.
   cmakeFlags = "-DCMAKE_SHARED_LINKER_FLAGS=\"-Wl,-rpath,$out/lib/paraview-3.4\"" +

@@ -11,11 +11,11 @@ args : with args;
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
 let
-	sharePlugins = FullDepEntry ("
+	sharePlugins = fullDepEntry ("
 		ensureDir \$out/share/compiz-plugins
 		ln -vsf \$out/lib/compiz \$out/share/compiz-plugins
 	") [minInit doMakeInstall defEnsureDir];
-	fixIncludes = FullDepEntry ("
+	fixIncludes = fullDepEntry ("
 sed -e 's@#include <text.h>@#include <compiz/text.h>@' -i src/group/group-internal.h;
 sed -e 's@#include <text.h>@#include <compiz/text.h>@' -i src/scalefilter/scalefilter.c;
 	") [minInit doUnpack];

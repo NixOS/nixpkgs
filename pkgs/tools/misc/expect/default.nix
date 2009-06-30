@@ -1,14 +1,14 @@
-{stdenv, fetchurl, tcl}:
+{stdenv, fetchurl, tcl, tk, autoconf, xproto, libX11}:
 
 stdenv.mkDerivation {
-  name = "expect-5.43.0";
+  name = "expect-5.44.1";
   
   src = fetchurl {
-    url = http://expect.nist.gov/old/expect-5.43.0.tar.bz2;
-    sha256 = "1j6vyr8lx1fbl641hkkd6hhh9ifniklskfv00pbvy33h86a3mrvn";
+    url = http://expect.nist.gov/old/expect-5.44.1.tar.gz;
+    sha256 = "13zxqiclzk1paxc0mr2vwp9nhfyr2mkwk9gs73fg0l3iss16n6p4";
   };
 
-  buildInputs = [tcl];
+  buildInputs = [tcl tk autoconf xproto libX11];
 
   #NIX_CFLAGS_COMPILE = "-DHAVE_UNISTD_H";
 
@@ -19,9 +19,13 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
+    sed -e '1i\#include <tclInt.h>' -i exp_inter.c
   '';
   
-  configureFlags = "--with-tcl=${tcl}/lib --with-tclinclude=${tcl}/include";
+  configureFlags = ["--with-tcl=${tcl}/lib" 
+    "--with-tclinclude=${tcl}/include" 
+    "--with-tk=${tk}/lib"
+    "--exec-prefix=$out"];
 
   meta = {
     description = "A tool for automating interactive applications";

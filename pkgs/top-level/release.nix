@@ -63,17 +63,20 @@ in {
   audacious_plugins = linux;
   autoconf = all;
   automake110x = all;
+  automake111x = all;
   automake19x = all;
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
   bashInteractive = all;
   bazaar = linux; # first let sqlite3 work on darwin
+  bc = all;
   binutils = linux;
   bind = linux;
   bison23 = all;
   bison24 = all;
   bitlbee = linux; 
   bittorrent = linux;
+  blender = linux;
   boost = all;
   boostFull = all;
   bsdiff = all;
@@ -100,6 +103,7 @@ in {
   dico = linux;
   dietlibc = linux;
   diffutils = all;
+  dmtx = all;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
@@ -108,6 +112,7 @@ in {
   dosbox = linux;
   dovecot = linux;
   doxygen = linux;
+  dpkg = linux;
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
@@ -119,6 +124,7 @@ in {
   evince = linux;
   expect = linux;
   exult = linux;
+  fbterm = linux;
   feh = linux;
   file = all;
   findutils = all;
@@ -158,6 +164,9 @@ in {
   gphoto2 = linux;
   gpm = linux;
   gprolog = linux;
+  gpsbabel = all;
+  gpscorrelate = linux;
+  gpsd = linux;
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
@@ -172,10 +181,9 @@ in {
   hdparm = linux;
   hello = all;
   host = linux;
-  httpd = linux;
   hugin = linux;
   iana_etc = linux;
-  icecat3Xul = [ "i686-linux" ];
+  icecat3Xul = linux;
   idutils = all;
   ifplugd = linux;
   imagemagick = allBut "i686-cygwin";
@@ -198,6 +206,7 @@ in {
   konversation = linux;
   ktorrent = linux;
   kvm = linux;
+  qemu = linux;
   less = all;
   lftp = all;
   libarchive = linux;
@@ -221,7 +230,8 @@ in {
   mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
-  mesa = linux;
+  mesa = linux ++ darwin;
+  midori = linux;
   mingetty = linux;
   mk = linux;
   mktemp = all;
@@ -232,6 +242,7 @@ in {
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
+  namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;
   netcat = all;
@@ -243,6 +254,7 @@ in {
   ntfs3g = linux;
   ntp = linux;
   nxml = all;
+  ocaml = linux;
   octave = linux;
   openoffice = linux;
   openssh = linux;
@@ -264,6 +276,7 @@ in {
   pmccabe = linux;
   portmap = linux;
   postgresql = all;
+  postfix = linux;
   procps = linux;
   pwdutils = linux;
   pthreadmanpages = all;
@@ -284,10 +297,12 @@ in {
   screen = linux ++ darwin;
   sdparm = linux;
   seccure = linux;
-  seccureUser = linux;
+  sgtpuzzles = linux;
   sharutils = all;
   slim = linux;
   sloccount = allBut "i686-cygwin";
+  smartmontools = all;
+  smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
   splashutils_13 = linux;
@@ -309,6 +324,7 @@ in {
   syslinux = ["i686-linux"];
   sysvinit = linux;
   sysvtools = linux;
+  tangogps = linux;
   tcl = linux;
   tcpdump = linux;
   teeworlds = linux;
@@ -330,6 +346,7 @@ in {
   utillinux = linux;
   utillinuxCurses = linux;
   valgrind = linux;
+  viking = linux;
   vim = linux;
   vimHugeX = linux;
   vlc = linux;
@@ -356,6 +373,7 @@ in {
   xscreensaver = linux;
   xsel = linux;
   xterm = linux;
+  xxdiff = linux;
   zdelta = linux;
   zile = linux;
   zip = all;
@@ -398,6 +416,10 @@ in {
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = linux;
+  };
+
+  haskellPackages_ghc6103 = {
+    ghc = ghcSupported;
   };
 
   kde3 = {
@@ -453,6 +475,12 @@ in {
     virtualbox = linux;
   };
 
+  kernelPackages_2_6_29 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
@@ -462,6 +490,10 @@ in {
 
   perlPackages = {
     TaskCatalystTutorial = linux;
+  };
+
+  pythonPackages = {
+    zfec = linux;
   };
   
   xorg = {
@@ -478,6 +510,7 @@ in {
     lndir = all;
     setxkbmap = linux;
     xauth = linux;
+    xev = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
     xf86inputevdev = linux;

@@ -8,7 +8,7 @@ rec {
   buildInputs = [glib readline bison flex pkgconfig];
   configureFlags = [];
 
-  preConfigure = FullDepEntry (''
+  preConfigure = fullDepEntry (''
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c
   '') ["doUnpack" "minInit"];
 

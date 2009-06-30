@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
   
-  version = a.lib.getAttr ["version"] "1.2" a; 
+  version = a.lib.attrByPath ["version"] "1.2" a; 
   buildInputs = with a; [
     gpm fontconfig freetype pkgconfig
   ];
@@ -16,8 +16,12 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
+  fixInc = a.fullDepEntry (''
+    sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
+  '') ["doUnpack" "minInit"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["fixInc" "doConfigure" "doMakeInstall"];
       
   name = "fbterm-" + version;
   meta = {

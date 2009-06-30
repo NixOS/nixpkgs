@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.getAttr ["version"] "0.9.1" args; 
+  version = lib.attrByPath ["version"] "0.9.1" args; 
   buildInputs = with args; [
     libtool libjpeg openssl libX11 libXdamage xproto damageproto
     xextproto libXext fixesproto libXfixes xineramaproto libXinerama

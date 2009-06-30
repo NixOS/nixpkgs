@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
 stdenv.mkDerivation {
-  name = "vxl-1.11.0";
+  name = "vxl-1.12.0";
 
   src = fetchurl {
     url = mirror://sourceforge/vxl/vxl-1.12.0.zip;

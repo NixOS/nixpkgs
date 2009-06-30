@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.getAttr ["version"] "0.5.0rc1" a; 
+  version = a.lib.attrByPath ["version"] "0.5.0rc1" a; 
   buildInputs = with a; [
     python setuptools
   ];
@@ -18,7 +18,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["mkDirs" "installPythonPackage"];
-  mkDirs = a.FullDepEntry(''
+  mkDirs = a.fullDepEntry(''
     ensureDir $out/bin $out/lib $out/share $(toPythonPath $out)
     export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out)
   '') ["defEnsureDir" "addInputs"];

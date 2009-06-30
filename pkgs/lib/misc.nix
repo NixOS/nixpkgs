@@ -1,4 +1,7 @@
-let lib = import ./default.nix; in
+let lib = import ./default.nix;
+    inherit (builtins) isFunction hasAttr getAttr head tail isList isAttrs attrNames;
+
+in
 
 with import ./lists.nix;
 with import ./attrsets.nix;
@@ -53,7 +56,7 @@ rec {
           f :        # the function applied to the arguments
           initial :  # you pass attrs, the functions below are passing a function taking the fix argument
     let
-        takeFixed = if (__isFunction initial) then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
+        takeFixed = if (isFunction initial) then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
         tidy = args : 
             let # apply all functions given in "applyPreTidy" in sequence
                 applyPreTidyFun = fold ( n : a : x : n ( a x ) ) lib.id (maybeAttr "applyPreTidy" [] args);
@@ -61,9 +64,9 @@ rec {
         fun = n : x :
              let newArgs = fixed :
                      let args = takeFixed fixed; 
-                         mergeFun = __getAttr n args;
-                     in if __isAttrs x then (mergeFun args x)
-                        else assert __isFunction x;
+                         mergeFun = getAttr n args;
+                     in if isAttrs x then (mergeFun args x)
+                        else assert isFunction x;
                              mergeFun args (x ( args // { inherit fixed; }));
              in overridableDelayableArgs f newArgs;
     in
@@ -111,7 +114,7 @@ rec {
   pairMap = innerPairMap [];
 
   
-  # shortcut for getAttr ["name"] default attrs
+  # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
     if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
@@ -131,14 +134,14 @@ rec {
   checkFlag = attrSet: name:
 	if (name == "true") then true else
 	if (name == "false") then false else
-	if (elem name (getAttr ["flags"] [] attrSet)) then true else
-	getAttr [name] false attrSet ;
+	if (elem name (attrByPath ["flags"] [] attrSet)) then true else
+	attrByPath [name] false attrSet ;
 
 
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
-  ( getAttr [name] (if checkFlag attrSet name then true else
+  ( attrByPath [name] (if checkFlag attrSet name then true else
 	if argList == [] then null else
 	let x = builtins.head argList; in
 		if (head x) == name then 
@@ -160,7 +163,8 @@ rec {
 		(val!=null) && (val!=false)) 
 	(tail x))))) condList)) ;
 	
-   
+
+  # !!! This function has O(n^2) performance, so you probably don't want to use it!
   uniqList = {inputList, outputList ? []}:
 	if (inputList == []) then outputList else
 	let x=head inputList; 
@@ -301,15 +305,15 @@ rec {
     fold lib.mergeAttrs {} [
       x y
       (mapAttrs ( a : v : # merge special names using given functions
-          if (__hasAttr a x)
-             then if (__hasAttr a y)
-               then v (__getAttr a x) (__getAttr a y) # both have attr, use merge func
-               else (__getAttr a x) # only x has attr
-             else (__getAttr a y) # only y has attr)
+          if (hasAttr a x)
+             then if (hasAttr a y)
+               then v (getAttr a x) (getAttr a y) # both have attr, use merge func
+               else (getAttr a x) # only x has attr
+             else (getAttr a y) # only y has attr)
           ) (removeAttrs mergeAttrBy2
                          # don't merge attrs which are neither in x nor y
-                         (filter (a : (! __hasAttr a x) && (! __hasAttr a y) )
-                                 (__attrNames mergeAttrBy2))
+                         (filter (a : (! hasAttr a x) && (! hasAttr a y) )
+                                 (attrNames mergeAttrBy2))
             )
       )
     ];
@@ -325,8 +329,8 @@ rec {
 
   # pick attrs subset_attr_names and apply f 
   subsetmap = f : attrs : subset_attr_names : 
-    listToAttrs (fold ( attr : r : if __hasAttr attr attrs
-          then r ++ [ ( nameValuePair attr ( f (__getAttr attr attrs) ) ) ] else r ) []
+    listToAttrs (fold ( attr : r : if hasAttr attr attrs
+          then r ++ [ ( nameValuePair attr ( f (getAttr attr attrs) ) ) ] else r ) []
       subset_attr_names );
 
   # prepareDerivationArgs tries to make writing configurable derivations easier
@@ -370,7 +374,7 @@ rec {
                           // args2.cfg;
         opts = flattenAttrs (mapAttrs (a : v :
                 let v2 = if (v ? set || v ? unset) then v else { set = v; };
-                    n = if (__getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
+                    n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
                     attr = maybeAttr n {} v2; in
                 if (maybeAttr "assertion" true attr)
                   then attr
@@ -386,11 +390,11 @@ rec {
     let eqListStrict = a : b :
       if (a == []) != (b == []) then false
       else if a == [] then true
-      else eqStrict (__head a) (__head b) && eqListStrict (__tail a) (__tail b);
+      else eqStrict (head a) (head b) && eqListStrict (tail a) (tail b);
     in
-    if __isList a && __isList b then eqListStrict a b
-    else if __isAttrs a && isAttrs b then
-      (eqListStrict (__attrNames a) (__attrNames b))
+    if isList a && isList b then eqListStrict a b
+    else if isAttrs a && isAttrs b then
+      (eqListStrict (attrNames a) (attrNames b))
       && (eqListStrict (lib.attrValues a) (lib.attrValues b))
     else a == b; # FIXME !
 }

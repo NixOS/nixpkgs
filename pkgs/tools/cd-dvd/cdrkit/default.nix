@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
     ln -s $out/bin/genisoimage $out/bin/mkisofs
-    ln -s $out/bin/devdump $out/bin/cdrecord
+    ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
   makeFlags = "PREFIX=\$(out)";

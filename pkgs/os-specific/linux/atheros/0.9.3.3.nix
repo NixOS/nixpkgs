@@ -18,11 +18,11 @@ args : with args;
 	} null; /* null is a terminator for sumArgs */
 	in with localDefs;
 let 
-doPatch = FullDepEntry (if patchAR2425x86 !="" then ''
+doPatch = fullDepEntry (if patchAR2425x86 !="" then ''
 	cd hal
 	patch -Np1 -i ${patchAR2425x86}
 '' else "") [minInit doUnpack];
-postInstall = FullDepEntry (''
+postInstall = fullDepEntry (''
 	ln -s $out/usr/local/bin $out/bin
 '') [minInit doMakeInstall];
 in

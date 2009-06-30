@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "vacuum";
-  version = "0.0.91";
-  sha256 = "9240ec35b39d60928a73469893adf1d2aa742b9a781dbc6dcdaa54e96d9bf1af";
+  version = "0.0.94";
+  sha256 = "7056dfa38a9f579ee897d2980938fd484ddfa93c472014ad7ea5a5cd9100bfad";
   propagatedBuildInputs = [ghcPaths haskellSrcMeta];
   meta = {
     description = "Extract graph representations of ghc heap values";

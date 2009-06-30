@@ -8,7 +8,7 @@ args : with args; with builderDefs;
 
 		buildInputs = [gmp];
 		configureFlags = [];
-		doPatch = FullDepEntry (''
+		doPatch = fullDepEntry (''
 			sed -e s@/usr/@$out/@g -i Makefile
 			cp ssss.manpage.xml ssss.1
 			cp ssss.manpage.xml ssss.1.html

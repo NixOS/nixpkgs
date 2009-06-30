@@ -1,10 +1,11 @@
 {stdenv, fetchurl, cmake, qt4, shared_mime_info, libxslt, boost, mysql, automoc4}:
 
 stdenv.mkDerivation {
-  name = "akonadi-1.1.1";
+  name = "akonadi-1.1.2";
   src = fetchurl {
-    url = http://akonadi.omat.nl/akonadi-1.1.1.tar.bz2;
-    md5 = "2e98b42cec9ec4e60a2e3c096f1a3106";
+    url = http://download.akonadi-project.org/akonadi-1.1.2.tar.bz2;
+    sha256 = "1km5mbcsx8xbb327lbva1pm8a8mjai64kqxww1qzbxz9a20w3css";
   };
+  includeAllQtDirs=true;
   buildInputs = [ cmake qt4 shared_mime_info libxslt boost mysql automoc4 ];
 }

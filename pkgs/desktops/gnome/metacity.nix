@@ -1,6 +1,6 @@
 { input, stdenv, fetchurl, pkgconfig, perl, perlXMLParser, glib, gtk
 , GConf, startupnotification, libXinerama, libXrandr, libXcursor
-, gettext, intltool
+, gettext, intltool, zenity, gnomedocutils
 
 , enableCompositor ? false
 , libXcomposite ? null, libXfixes ? null, libXdamage ? null, libcm ? null
@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig perl perlXMLParser glib gtk GConf startupnotification
     libXinerama libXrandr libXcursor gettext intltool
+    zenity gnomedocutils
   ]
   ++ stdenv.lib.optionals enableCompositor [libXcomposite libXfixes libXdamage libcm];
   

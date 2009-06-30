@@ -11,11 +11,11 @@ args : with args;
 	} ;
 	in with localDefs;
 let
-	sharePlugins = FullDepEntry ("
+	sharePlugins = fullDepEntry ("
 		ensureDir \$out/share/compiz-plugins
 		ln -vsf \$out/lib/compiz \$out/share/compiz-plugins
 	") [minInit doMakeInstall defEnsureDir];
-	fixIncludes = FullDepEntry (''
+	fixIncludes = fullDepEntry (''
 		export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pluginsMain}/include/compiz"
 	'') [minInit doUnpack];
 in

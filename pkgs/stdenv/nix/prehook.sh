@@ -7,4 +7,5 @@ if test "$system" = "i686-darwin" -o "$system" = "powerpc-darwin"; then
     dontFixLibtool=1
     NIX_STRIP_DEBUG=0 # !!! do we still need this?
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s" 
+    xargsFlags=" "
 fi
