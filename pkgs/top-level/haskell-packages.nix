@@ -55,6 +55,11 @@ rec {
     inherit cabal;
   };
 
+  digest = import ../development/libraries/haskell/digest {
+    inherit cabal;
+    inherit (pkgs) zlib;
+  };
+
   dotgen = import ../development/libraries/haskell/dotgen {
     inherit cabal;
   };
@@ -213,6 +218,10 @@ rec {
     inherit (pkgs.xlibs) libX11;
   };
 
+  pandoc = import ../development/libraries/haskell/pandoc {
+    inherit cabal mtl network parsec utf8String xhtml zipArchive;
+  };
+
   parallel = import ../development/libraries/haskell/parallel {
     inherit cabal;
   };
@@ -368,6 +377,10 @@ rec {
 
   xhtml = import ../development/libraries/haskell/xhtml {
     inherit cabal;
+  };
+
+  zipArchive = import ../development/libraries/haskell/zip-archive {
+    inherit cabal binary mtl utf8String zlib digest;
   };
 
   zipper = import ../development/libraries/haskell/zipper {
