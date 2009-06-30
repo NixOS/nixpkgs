@@ -4,8 +4,8 @@
 let
   inherit (pkgs.lib) mkOption mkIf;
 
-  uid = (import ../system/ids.nix).uids.gpsd;
-  gid = (import ../system/ids.nix).gids.gpsd;
+  uid = config.ids.uids.gpsd;
+  gid = config.ids.gids.gpsd;
 
   options = {
     services = {
