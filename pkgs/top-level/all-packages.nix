@@ -2309,11 +2309,6 @@ let
     inherit pkgs stdenv;
   });
 
-  rubyDebug = import ../development/interpreters/ruby/ruby-debug.nix {
-    inherit fetchurl stdenv;
-    ruby = ruby18;
-  };
-
   rake = import ../development/ruby-modules/rake {
     inherit fetchurl stdenv ruby ;
   };
@@ -2328,10 +2323,9 @@ let
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
-  rubygemsFun = ruby : builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
-  rubygems = rubygemsFun ruby;
 
   rq = import ../applications/networking/cluster/rq {
     inherit fetchurl stdenv sqlite ruby ;
