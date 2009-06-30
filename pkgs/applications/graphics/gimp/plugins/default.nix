@@ -145,7 +145,43 @@ rec {
       };
   };
 
+  # this is more than a gimp plugin !
+  # either load the raw image with gimp (and the import dialog will popup)
+  # or use the binary
+  ufraw = pluginDerivation {
+    name = "ufraw-0.15";
+    buildInputs = [pkgs.lcms gimp] ++ gimp.buildInputs;
+      # --enable-mime - install mime files, see README for more information
+      # --enable-extras - build extra (dcraw, nikon-curve) executables
+      # --enable-dst-correction - enable DST correction for file timestamps.
+      # --enable-contrast - enable the contrast setting option.
+      # --enable-interp-none: enable 'None' interpolation (mostly for debugging).
+      # --with-lensfun: use the lensfun library - experimental feature, read this before using it. 
+      # --with-prefix=PREFIX - use also PREFIX as an input prefix for the build
+      # --with-dosprefix=PREFIX - PREFIX in the the prefix in dos format (needed only for ms-window
+    configureFlags = "--enable-extras --enable-dst-correction --enable-contrast";
+
+    src = fetchurl {
+      url = mirror://sourceforge/ufraw/ufraw-0.15.tar.gz;
+      sha256 = "0cf3csksjkyl91zxhjnn74vc31l14nm6n1i02s76xdvvkk9ics8k";
+    };
+    installPhase = "
+      installPlugins ufraw-gimp
+      ensureDir $out/bin
+      cp ufraw $out/bin
+    ";
+  };
+
   /* =============== simple script files ==================== */
+
+  # also have a look at enblendenfuse in all-packages.nix
+  exposureBlend = scriptDerivation {
+    name = "exposure-blend";
+    src = fetchurl {
+      url = http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm;
+      sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
+    };
+  };
 
   lightning = scriptDerivation {
     name = "Lightning";
