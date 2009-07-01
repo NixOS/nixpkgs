@@ -112,6 +112,11 @@ let
       respawn
       script
         export PATH="${avahi}/bin:${avahi}/sbin:$PATH"
+
+        # Make NSS modules visible so that `avahi_nss_support ()' can
+        # return a sensible value.
+        export LD_LIBRARY_PATH="${config.system.nssModules.path}"
+
         exec ${avahi}/sbin/avahi-daemon --daemonize -f "${avahiDaemonConf}"
       end script
     '';
