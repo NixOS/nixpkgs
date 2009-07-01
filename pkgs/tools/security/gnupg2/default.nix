@@ -5,15 +5,25 @@
 , pth, libgcrypt, libassuan, libksba, libusb, curl }:
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.11";
+  name = "gnupg-2.0.12";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0z5lm0zz8l8yn61jbbyy0frrbhsjyvmq8pxwhgjsgx3isj518h4c";
+    sha256 = "1klw3m32s6d81qkslin4pibb2f84yz8l6n6fkwfdxyhrql2f2cwn";
   };
 
   buildInputs = [ readline openldap bzip2 zlib libgpgerror pth libgcrypt
     libassuan libksba libusb curl ];
+
+  patchPhase = ''
+    for file in tests/pkits/*
+    do
+      if [ -f "$file" ]
+      then
+          sed -i "$file" -es'|/bin/pwd|pwd|g'
+      fi
+    done
+  '';
 
   doCheck = true;
 
@@ -35,5 +45,7 @@ stdenv.mkDerivation rec {
     homepage = http://gnupg.org/;
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
