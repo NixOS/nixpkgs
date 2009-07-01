@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
      license = "GPLv2+";
 
+     homepage = http://www.lysator.liu.se/~nisse/nettle/;
+
      maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
