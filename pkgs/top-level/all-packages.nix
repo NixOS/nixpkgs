@@ -3861,6 +3861,10 @@ let
     inherit ncurses flex bison;
   };
 
+  nettle = import ../development/libraries/nettle {
+    inherit fetchurl stdenv;
+  };
+
   nss = import ../development/libraries/nss {
     inherit fetchurl stdenv perl zip;
   };
