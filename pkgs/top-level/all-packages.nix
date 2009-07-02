@@ -6243,7 +6243,7 @@ let
 
   firefoxWrapper = firefox3Wrapper;
 
-  firefox2 = lowPrio (import ../applications/networking/browsers/firefox-2 {
+  firefox2 = lowPrio (import ../applications/networking/browsers/firefox/2.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
@@ -6253,7 +6253,7 @@ let
 
   firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
 
-  firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
+  firefox3 = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
@@ -6262,7 +6262,7 @@ let
     xulrunner = xulrunner3;
   });
 
-  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner.nix {
+  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
@@ -6270,7 +6270,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/3.5.nix {
+  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
@@ -6281,7 +6281,7 @@ let
     autoconf = autoconf213;
   });
 
-  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.5.nix {
+  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner-3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
@@ -6291,7 +6291,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
+  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python curl coreutils freetype fontconfig;
     inherit (gtkLibs) gtk atk pango glib;
@@ -7164,7 +7164,7 @@ let
     inherit stdenv fetchurl tcl tk x11 makeWrapper;
   };
 
-  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
+  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox/wrapper.nix {
     inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
     plugins =
       let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
