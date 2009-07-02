@@ -2895,7 +2895,7 @@ let
   };
 
   buddy = import ../development/libraries/buddy {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv bison;
   };
 
   cairo = import ../development/libraries/cairo {
