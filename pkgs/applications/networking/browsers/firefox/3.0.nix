@@ -67,5 +67,3 @@ stdenv.mkDerivation rec {
     isFirefox3Like = true;
   };
 }
-
-
