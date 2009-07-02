@@ -1,3 +1,7 @@
+This patch does two things: (1) use the right name for `docbook2texi',
+and (2) make sure `gitman.info' isn't produced since it's broken (duplicate
+node names).
+
 diff -u -r -w git-1.6.3.3.orig/Documentation/Makefile git-1.6.3.3/Documentation/Makefile
 --- git-1.6.3.3.orig/Documentation/Makefile	2009-07-02 17:07:17.000000000 +0200
 +++ git-1.6.3.3/Documentation/Makefile	2009-07-02 17:08:49.000000000 +0200
