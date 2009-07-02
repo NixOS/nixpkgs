@@ -137,7 +137,10 @@ mkIf config.services.lshd.enable {
             test -d /var/spool/lsh || mkdir -m 0755 -p /var/spool/lsh
 
             if ! test -f /var/spool/lsh/yarrow-seed-file
-            the
+            then
+                # XXX: It would be nice to provide feedback to the
+                # user when this fails, so that they can retry it
+                # manually.
                 ${lsh}/bin/lsh-make-seed -o /var/spool/lsh/yarrow-seed-file
             fi
 
