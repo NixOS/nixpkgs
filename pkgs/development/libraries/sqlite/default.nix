@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
   buildInputs = [readline];
 
   configureFlags = ''
+    --enable-load-extension
     ${if static then "--disable-shared --enable-static" else ""}
     --with-readline-inc=-I${readline}/include
   '';
+
+  NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
+  NIX_CFLAGS_LINK = "-ldl"; # needed for --enable-load-extension
 
   meta = {
     homepage = http://www.sqlite.org/;
