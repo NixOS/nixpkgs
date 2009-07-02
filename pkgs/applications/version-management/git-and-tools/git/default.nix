@@ -8,16 +8,15 @@
 # `git-svn' support requires Subversion and various Perl libraries.
 assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBindings);
 
-
 stdenv.mkDerivation rec {
-  name = "git-1.6.1.3";
+  name = "git-1.6.3.3";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "aef4814634ac9ce8119fabc4bd1c363bb946f73ed34475a4baaad09a3fb23682";
+    sha256 = "f94bc0d1fc861a12c7fb821b27a4e6a80901e84432cdb7894cb7a437d4c939ad";
   };
 
-  patches = [ ./docbook2texi.patch ./fill-paragraph.patch ];
+  patches = [ ./docbook2texi.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
