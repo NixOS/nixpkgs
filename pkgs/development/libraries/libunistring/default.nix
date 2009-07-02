@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libunistring-0.9";
+  name = "libunistring-0.9.1";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "0j5f9nd6i5irvc9gk4ffgx3kgii3izhbm9adzv6svvkzwfiqsyrx";
+    sha256 = "0cisnd4psxhgwlb8ak4hn74zdayp9s48i5rzrl6xmni1dqz6j6y5";
   };
 
   doCheck = true;
@@ -37,5 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "LGPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
