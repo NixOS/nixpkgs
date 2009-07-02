@@ -3838,11 +3838,6 @@ let
     unicode = (system != "i686-cygwin");
   };
 
-  ncursesDiet = import ../development/libraries/ncurses-diet {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  };
-
   neon = neon026;
 
   neon026 = import ../development/libraries/neon/0.26.nix {
@@ -6739,12 +6734,6 @@ let
     inherit fetchurl stdenv ncurses gettext;
   };
 
-  nanoDiet = lowPrio (appendToName "diet" (import ../applications/editors/nano {
-    inherit fetchurl gettext;
-    ncurses = ncursesDiet;
-    stdenv = useDietLibC stdenv;
-  }));
-
   nedit = import ../applications/editors/nedit {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXpm;
@@ -7127,12 +7116,6 @@ let
   vim = import ../applications/editors/vim {
     inherit fetchurl stdenv ncurses lib;
   };
-
-  vimDiet = lowPrio (appendToName "diet" (import ../applications/editors/vim-diet {
-    inherit fetchurl;
-    ncurses = ncursesDiet;
-    stdenv = useDietLibC stdenv;
-  }));
 
   vimHugeX = import ../applications/editors/vim {
     inherit fetchurl stdenv lib ncurses pkgconfig
