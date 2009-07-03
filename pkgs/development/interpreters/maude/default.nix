@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmp, makeWrapper }:
+{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "maude-2.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     url = "http://mirror.switch.ch/mirror/gentoo/distfiles/maude-2.3.0-extras.tar.bz2";
     sha256 = "0kd5623k1wwj1rk4b6halrm3sdvd9kbiwg1hi2c3qim1nlfdgl0d";
   };
-  buildInputs = [flex bison ncurses buddy tecla gmp libsigsegv makeWrapper];
+  buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
   configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
   doCheck = true;
   postInstall =

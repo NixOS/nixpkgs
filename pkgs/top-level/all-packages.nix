@@ -2199,7 +2199,7 @@ let
   };
 
   maude = import ../development/interpreters/maude {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv makeWrapper;
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper;
   };
 
   octave = import ../development/interpreters/octave {
