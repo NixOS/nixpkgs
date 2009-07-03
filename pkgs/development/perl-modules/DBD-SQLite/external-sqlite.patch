@@ -1,0 +1,39 @@
+diff -rc DBD-SQLite-1.25-orig/Makefile.PL DBD-SQLite-1.25/Makefile.PL
+*** DBD-SQLite-1.25-orig/Makefile.PL	2009-04-23 12:12:04.000000000 +0200
+--- DBD-SQLite-1.25/Makefile.PL	2009-07-02 14:07:25.000000000 +0200
+***************
+*** 79,85 ****
+  # Let's find out the full story first, so we can make an informed
+  # decision to whether to do this. -- ADAMK
+  my ($force_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
+! if ( 0 ) {
+  	require File::Spec;
+  	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
+  		$sqlite_base =~ /=(.*)/;
+--- 79,85 ----
+  # Let's find out the full story first, so we can make an informed
+  # decision to whether to do this. -- ADAMK
+  my ($force_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
+! if ( 1 ) {
+  	require File::Spec;
+  	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
+  		$sqlite_base =~ /=(.*)/;
+***************
+*** 141,148 ****
+  
+  # Use always the bundled one.
+  # XXX: ... and this message should be more informative.
+! $force_local = 1;
+! print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
+  
+  @ARGV = grep( ! /SQLITE_LOCATION|USE_LOCAL_SQLITE/, @ARGV );
+  
+--- 141,148 ----
+  
+  # Use always the bundled one.
+  # XXX: ... and this message should be more informative.
+! #$force_local = 1;
+! #print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
+  
+  @ARGV = grep( ! /SQLITE_LOCATION|USE_LOCAL_SQLITE/, @ARGV );
+  

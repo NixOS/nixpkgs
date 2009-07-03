@@ -2,9 +2,10 @@
   , lib
   , zlib ? null
   , openssl ? null
+  , makeOverridable
 }:
 
-stdenv.mkDerivation rec {
+makeOverridable (stdenv.mkDerivation) rec {
   version = "1.8.7-p72";
   name = "ruby-${version}";
   src = fetchurl {

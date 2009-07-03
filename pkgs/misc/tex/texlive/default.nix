@@ -76,7 +76,6 @@ rec {
   name = "texlive-core-2007";
   meta = {
     description = "A TeX distribution";
-    srcs = [texmfSrc langTexmfSrc];
   };
 }
 

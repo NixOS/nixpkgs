@@ -364,7 +364,7 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 2048, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
+    {size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
@@ -503,7 +503,7 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    {size ? 2048, debs, name, fullName, postInstall ? null}:
+    {size ? 4096, debs, name, fullName, postInstall ? null}:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
@@ -596,11 +596,11 @@ rec {
      names. */
      
   makeImageFromRPMDist =
-    { name, fullName, size ? 2048, urlPrefix, packagesList, packages
-    , postInstall ? "", archs ? ["noarch" "i386"], runScripts ? true}:
+    { name, fullName, size ? 4096, urlPrefix, packagesList, packages
+    , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"], runScripts ? true}:
 
     fillDiskWithRPMs {
-      inherit name fullName size postInstall runScripts;
+      inherit name fullName size preInstall postInstall runScripts;
       rpms = import (rpmClosureGenerator {
         inherit name packagesList urlPrefix packages archs;
       }) {inherit fetchurl;};
@@ -629,7 +629,7 @@ rec {
      names. */
      
   makeImageFromDebDist =
-    {name, fullName, size ? 2048, urlPrefix, packagesList, packages, postInstall ? ""}:
+    {name, fullName, size ? 4096, urlPrefix, packagesList, packages, postInstall ? ""}:
 
     let
       expr = debClosureGenerator {
@@ -938,7 +938,6 @@ rec {
     "unzip"
   ];
 
-
   /* Common packages for openSUSE images. */
   commonOpenSUSEPackages = [
     "aaa_base"
@@ -959,6 +958,7 @@ rec {
     "tar"
     "unzip"
     "util-linux"
+    "gnu-getopt"
   ];
 
 
@@ -985,6 +985,7 @@ rec {
     "util-linux" 
     "file"
     "dpkg-dev"
+    "pkg-config"
     # Needed because it provides /etc/login.defs, whose absence causes
     # the "passwd" post-installs script to fail.
     "login"
@@ -1026,15 +1027,15 @@ rec {
     
     fedora2i386 = diskImageFuns.fedora2i386 { packages = commonFedoraPackages; };
     fedora3i386 = diskImageFuns.fedora3i386 { packages = commonFedoraPackages; };
-    fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages; };
+    fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages ++ ["util-linux"]; };
     fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
     fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
-    fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages; };
-    fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages; };
-    fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages; };
-    fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages; };
-    fedora11i386 = diskImageFuns.fedora11i386 { packages = commonFedoraPackages; };
-    fedora11x86_64 = diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages; };
+    fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages       ++ [ "cronie" "util-linux-ng" ]; };
+    fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages   ++ [ "cronie" "util-linux-ng" ]; };
+    fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ]; };
+    fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ]; };
+    fedora11i386 = diskImageFuns.fedora11i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ]; };
+    fedora11x86_64 = diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ]; };
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"]; };
     opensuse110i386 = diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages; };
     opensuse110x86_64 = diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages; };

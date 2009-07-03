@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   configureScript = "./config";
   
   configureFlags = "shared";
+  
+  #patches = if stdenv.system == "i686-darwin" then [ ./darwin-arch.patch ] else [];
 
   meta = {
     homepage = http://www.openssl.org/;

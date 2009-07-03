@@ -23,9 +23,10 @@ stdenv.mkDerivation {
     description = "Sample Rate Converter for audio";
     homepage = http://www.mega-nerd.com/SRC/index.html;
     # you can choose one of the following licenses:
-    license = [ "GPL"
-                { url=http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf;
-                  name="libsamplerate Commercial Use License";
-                } ];
+    license = [
+      "GPL"
+      # http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf
+      "libsamplerate Commercial Use License"
+    ];
   };
 }

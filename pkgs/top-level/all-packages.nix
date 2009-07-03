@@ -2196,7 +2196,7 @@ let
   };
 
   maude = import ../development/interpreters/maude {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmp libsigsegv makeWrapper;
+    inherit fetchurl stdenv flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper;
   };
 
   octave = import ../development/interpreters/octave {
@@ -2296,9 +2296,15 @@ let
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
 
-  ruby = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib lib openssl;
+  ruby18 = import ../development/interpreters/ruby {
+    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable;
   };
+  ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  ruby = ruby18;
+
+  rubyLibs = recurseIntoAttrs (import ../development/interpreters/ruby/libs.nix {
+    inherit pkgs stdenv;
+  });
 
   rake = import ../development/ruby-modules/rake {
     inherit fetchurl stdenv ruby ;
@@ -2314,9 +2320,10 @@ let
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
-  rubygems = builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
     inherit ruby makeWrapper;
   };
+  rubygems = rubygemsFun ruby;
 
   rq = import ../applications/networking/cluster/rq {
     inherit fetchurl stdenv sqlite ruby ;
@@ -2885,7 +2892,7 @@ let
   };
 
   buddy = import ../development/libraries/buddy {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv bison;
   };
 
   cairo = import ../development/libraries/cairo {
@@ -3209,6 +3216,11 @@ let
   gmp = import ../development/libraries/gmp {
     inherit fetchurl stdenv m4;
     cxx = false;
+  };
+
+  gmpxx = import ../development/libraries/gmp {
+    inherit fetchurl stdenv m4;
+    cxx = true;
   };
 
   goocanvas = import ../development/libraries/goocanvas {
@@ -3833,11 +3845,6 @@ let
     unicode = (system != "i686-cygwin");
   };
 
-  ncursesDiet = import ../development/libraries/ncurses-diet {
-    inherit fetchurl;
-    stdenv = useDietLibC stdenv;
-  };
-
   neon = neon026;
 
   neon026 = import ../development/libraries/neon/0.26.nix {
@@ -3854,6 +3861,10 @@ let
 
   nethack = builderDefsPackage (import ../games/nethack) {
     inherit ncurses flex bison;
+  };
+
+  nettle = import ../development/libraries/nettle {
+    inherit fetchurl stdenv;
   };
 
   nss = import ../development/libraries/nss {
@@ -6239,7 +6250,7 @@ let
 
   firefoxWrapper = firefox3Wrapper;
 
-  firefox2 = lowPrio (import ../applications/networking/browsers/firefox-2 {
+  firefox2 = lowPrio (import ../applications/networking/browsers/firefox/2.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
@@ -6249,7 +6260,7 @@ let
 
   firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
 
-  firefox3 = lowPrio (import ../applications/networking/browsers/firefox-3 {
+  firefox3 = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
@@ -6258,7 +6269,7 @@ let
     xulrunner = xulrunner3;
   });
 
-  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner.nix {
+  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
@@ -6266,28 +6277,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3_1 = lowPrio (import ../applications/networking/browsers/firefox-3/3.1.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-    inherit alsaLib;
-    #enableOfficialBranding = true;
-    xulrunner = xulrunner3_1;
-    autoconf = autoconf213;
-  });
-
-  xulrunner3_1 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.1.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-    inherit alsaLib;
-    autoconf = autoconf213;
-    #enableOfficialBranding = true;
-  });
-
-  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/3.5.nix {
+  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
@@ -6298,7 +6288,7 @@ let
     autoconf = autoconf213;
   });
 
-  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox-3/xulrunner-3.5.nix {
+  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner-3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
@@ -6308,7 +6298,7 @@ let
     #enableOfficialBranding = true;
   });
 
-  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox-3/binary.nix {
+  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox/binary.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python curl coreutils freetype fontconfig;
     inherit (gtkLibs) gtk atk pango glib;
@@ -6361,7 +6351,7 @@ let
       python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libgtkhtml libart_lgpl;
   };
-  # gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
+  gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
     inherit pkgs;
@@ -6730,12 +6720,6 @@ let
     inherit fetchurl stdenv ncurses gettext;
   };
 
-  nanoDiet = lowPrio (appendToName "diet" (import ../applications/editors/nano {
-    inherit fetchurl gettext;
-    ncurses = ncursesDiet;
-    stdenv = useDietLibC stdenv;
-  }));
-
   nedit = import ../applications/editors/nedit {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXpm;
@@ -6901,7 +6885,7 @@ let
 
   # = urxvt
   rxvt_unicode = import ../applications/misc/rxvt_unicode {
-    inherit lib fetchurl stdenv perl;
+    inherit lib fetchurl stdenv perl ncurses;
     inherit (xlibs) libXt libX11 libXft;
   };
 
@@ -7119,12 +7103,6 @@ let
     inherit fetchurl stdenv ncurses lib;
   };
 
-  vimDiet = lowPrio (appendToName "diet" (import ../applications/editors/vim-diet {
-    inherit fetchurl;
-    ncurses = ncursesDiet;
-    stdenv = useDietLibC stdenv;
-  }));
-
   vimHugeX = import ../applications/editors/vim {
     inherit fetchurl stdenv lib ncurses pkgconfig
       perl python tcl;
@@ -7193,7 +7171,7 @@ let
     inherit stdenv fetchurl tcl tk x11 makeWrapper;
   };
 
-  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox-wrapper {
+  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox/wrapper.nix {
     inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
     plugins =
       let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;

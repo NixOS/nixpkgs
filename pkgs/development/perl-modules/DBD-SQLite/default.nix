@@ -1,11 +1,11 @@
 {fetchurl, buildPerlPackage, DBI, sqlite}:
 
-buildPerlPackage {
-  name = "DBD-SQLite-1.14";
+buildPerlPackage rec {
+  name = "DBD-SQLite-1.25";
   
   src = fetchurl {
-    url = mirror://cpan/authors/id/M/MS/MSERGEANT/DBD-SQLite-1.14.tar.gz;
-    sha256 = "01qd5xfx702chg3bv2k727kfdp84zy5xh31y6njvivkp78vrs624";
+    url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
+    sha256 = "17dd09jhf2kk33rqlsg74c1sb049qabmyh857alqc9fhffd1yb43";
   };
   
   propagatedBuildInputs = [DBI];
@@ -13,11 +13,11 @@ buildPerlPackage {
   makeMakerFlags = "SQLITE_LOCATION=${sqlite}";
 
   patches = [
-    # Prevent segfaults in case of timeouts.
-    ./reset.patch
+    # Support building against our own sqlite.
+    ./external-sqlite.patch
   ];
 
   # Disabled because the tests can randomly fail due to timeouts
   # (e.g. "database is locked(5) at dbdimp.c line 402 at t/07busy.t").
-  doCheck = false;
+  #doCheck = false;
 }

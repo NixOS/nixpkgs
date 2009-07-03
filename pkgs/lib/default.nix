@@ -11,9 +11,12 @@ let
   meta = import ./meta.nix;
   debug = import ./debug.nix;
   misc = import ./misc.nix;
+  maintainers = import ./maintainers.nix;
 
 in
-  { inherit trivial lists strings stringsWithDeps attrsets sources options types meta debug; }
+  { inherit trivial lists strings stringsWithDeps attrsets sources options
+      types meta debug maintainers;
+  }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
