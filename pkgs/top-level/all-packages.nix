@@ -6283,42 +6283,18 @@ let
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-    #enableOfficialBranding = true;
   });
 
   firefox3 = firefox3Pkgs.firefox;
-
   xulrunner3 = firefox3Pkgs.xulrunner;
-
-  firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-    inherit alsaLib;
-    xulrunner = xulrunner3_5;
-    autoconf = autoconf213;
-  });
-
-  xulrunner3_5 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner-3.5.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-    inherit alsaLib;
-    autoconf = autoconf213;
-  });
-
-  firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox/binary.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python curl coreutils freetype fontconfig;
-    inherit (gtkLibs) gtk atk pango glib;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi libX11 libXrender libXft libXt;
-  });
-
   firefox3Wrapper = wrapFirefox firefox3 "firefox" "";
-  firefox3b1BinWrapper = lowPrio (wrapFirefox firefox3b1Bin "firefox" "");
+
+  firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  });
 
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
