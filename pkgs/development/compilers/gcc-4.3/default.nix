@@ -43,7 +43,8 @@ stdenv.mkDerivation ({
   patches =
     [./pass-cxxcpp.patch]
     ++ optional noSysDirs ./no-sys-dirs.patch
-    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
+    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
+    ++ optional langJava ./java-jvgenmain-link.patch;
     
   inherit noSysDirs profiledCompiler staticCompiler;
 
