@@ -6255,21 +6255,11 @@ let
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
-    #enableOfficialBranding = true;
   });
 
   firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
 
-  firefox3 = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-    #enableOfficialBranding = true;
-    xulrunner = xulrunner3;
-  });
-
-  xulrunner3 = lowPrio (import ../applications/networking/browsers/firefox/xulrunner.nix {
+  firefox3Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
     inherit (gtkLibs) gtk pango;
@@ -6277,13 +6267,16 @@ let
     #enableOfficialBranding = true;
   });
 
+  firefox3 = firefox3Pkgs.firefox;
+
+  xulrunner3 = firefox3Pkgs.xulrunner;
+
   firefox3_5 = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
     inherit alsaLib;
-    #enableOfficialBranding = true;
     xulrunner = xulrunner3_5;
     autoconf = autoconf213;
   });
@@ -6295,7 +6288,6 @@ let
     inherit (gnome) libIDL;
     inherit alsaLib;
     autoconf = autoconf213;
-    #enableOfficialBranding = true;
   });
 
   firefox3b1Bin = lowPrio (import ../applications/networking/browsers/firefox/binary.nix {
