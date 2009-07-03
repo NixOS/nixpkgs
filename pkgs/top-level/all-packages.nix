@@ -223,8 +223,6 @@ let
     overrideGCC overrideInStdenv overrideSetup
     useDietLibC useKlibc makeStaticBinaries;
 
-  stdenvNew = overrideSetup stdenv ../stdenv/generic/setup-new.sh;
-
 
   ### BUILD SUPPORT
 
@@ -277,8 +275,7 @@ let
   # from being built.
   fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
-      inherit curl;
-      stdenv = stdenvNew;
+      inherit curl stdenv;
     });
 
   # fetchurlBoot is used for curl and its dependencies in order to
@@ -3164,7 +3161,12 @@ let
     inherit fetchurl stdenv pkgconfig gettext;
   };
 
-  glibc = useFromStdenv "glibc" glibc29;
+  glibc = useFromStdenv "glibc" (if getConfig ["brokenRedHatKernel"] false then glibc25 else glibc29);
+
+  glibc25 = import ../development/libraries/glibc-2.5 {
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
 
   glibc27 = import ../development/libraries/glibc-2.7 {
     inherit fetchurl stdenv kernelHeaders;

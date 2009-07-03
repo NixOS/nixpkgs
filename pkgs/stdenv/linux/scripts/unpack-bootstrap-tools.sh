@@ -16,7 +16,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     echo patching $i
     if ! test -L $i; then
          LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
-             ./patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib $i
+             ./patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath $i
     fi
 done
 

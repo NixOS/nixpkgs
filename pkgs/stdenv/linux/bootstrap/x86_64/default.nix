@@ -4,7 +4,7 @@
 
 {
   bootstrapTools = {
-    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r13932/bootstrap-tools.cpio.bz2;
-    sha256 = "135lx2945cxf43g9n39dxcamw6f6n8qp5iqbh4xma575rf2bx5js";
+    url = http://nixos.org/tarballs/stdenv-linux/x86_64/r16022/bootstrap-tools.cpio.bz2;
+    sha256 = "1hwmyd9x9lhmb1ckwap2lvf7wi34p1j23v5bw41drym4mfp97ynz";
   };
-} 
+}

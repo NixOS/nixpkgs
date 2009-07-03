@@ -19,8 +19,8 @@ exitHandler() {
     closeNest
 
     if test -n "$showBuildStats"; then
-        times > $NIX_BUILD_TOP/.times
-        local -a times=($(cat $NIX_BUILD_TOP/.times))
+        times > "$NIX_BUILD_TOP/.times"
+        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
         # Print the following statistics:
         # - user time for the shell
         # - system time for the shell
@@ -371,7 +371,7 @@ closeNest() {
 # the environment used for building.
 dumpVars() {
     if test "$noDumpEnvVars" != "1"; then
-        export > $NIX_BUILD_TOP/env-vars
+        export > "$NIX_BUILD_TOP/env-vars"
     fi
 }
 
@@ -482,7 +482,7 @@ unpackPhase() {
     # By default, add write permission to the sources.  This is often
     # necessary when sources have been copied from other store
     # locations.
-    if test "dontMakeSourcesWritable" != 1; then
+    if test "$dontMakeSourcesWritable" != 1; then
         chmod -R u+w "$sourceRoot"
     fi
 

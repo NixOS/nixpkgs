@@ -5,9 +5,9 @@
 
 stdenv.mkDerivation rec {
   name = "glibc-2.9";
-  
+
   builder = ./builder.sh;
-  
+
   src = fetchurl {
     url = http://nixos.org/tarballs/glibc-2.9-20081208.tar.bz2;
     sha256 = "0zhxbgcsl97pf349m0lz8d5ljvvzrcqc23yf08d888xlk4ms8m3h";
@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
     ./rpcgen-path.patch
   ];
 
-  # `--with-tls --without-__thread' enables support for TLS but causes
-  # it not to be used.  Required if we don't want to barf on 2.4
-  # kernels.  Or something.
   configureFlags = ''
     --enable-add-ons
     --with-headers=${kernelHeaders}/include

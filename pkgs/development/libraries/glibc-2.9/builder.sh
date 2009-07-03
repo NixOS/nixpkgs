@@ -1,6 +1,5 @@
-# glibc cannot have itself in its rpath.
+# Glibc cannot have itself in its RPATH.
 export NIX_NO_SELF_RPATH=1
-export NIX_DONT_SET_RPATH=1
 
 source $stdenv/setup
 
@@ -41,6 +40,8 @@ postConfigure() {
     # test binaries.
     export NIX_CFLAGS_LINK=
     export NIX_LDFLAGS_BEFORE=
+
+    export NIX_DONT_SET_RPATH=1
 }
 
 
