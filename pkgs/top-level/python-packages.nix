@@ -54,11 +54,11 @@ rec {
   });
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.3.2";
+    name = "foolscap-0.4.2";
 
     src = fetchurl {
       url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "1wkqgm6anlxvz8dnqx7ki008255nm1mlhak5n9xy6g1yf31fn3l0";
+      sha256 = "14g89kjxxci3ssl9jgvpkyrcq62g361aw8pamlkclk8nnrh4f776";
     };
 
     propagatedBuildInputs = [ twisted pkgs.pyopenssl ];
@@ -77,6 +77,8 @@ rec {
 
       # See http://foolscap.lothar.com/trac/browser/LICENSE.
       license = "MIT";
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
     };
   });
 
