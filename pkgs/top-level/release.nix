@@ -142,6 +142,7 @@ in {
   gcc34 = linux;
   gcc42 = linux;
   gcc43_multi = ["x86_64-linux"];
+  gcj43 = linux;
   gdb = all;
   ghostscript = linux;
   ghostscriptX = linux;
