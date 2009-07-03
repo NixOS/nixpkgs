@@ -3711,6 +3711,10 @@ let
     inherit fetchurl stdenv libtool;
   };
 
+  libtopology = import ../development/libraries/libtopology {
+    inherit fetchurl stdenv pkgconfig cairo;
+  };
+
   libunistring = import ../development/libraries/libunistring {
     inherit fetchurl stdenv;
   };
