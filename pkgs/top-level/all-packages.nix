@@ -3216,6 +3216,11 @@ let
     cxx = false;
   };
 
+  gmpxx = import ../development/libraries/gmp {
+    inherit fetchurl stdenv m4;
+    cxx = true;
+  };
+
   goocanvas = import ../development/libraries/goocanvas {
     inherit fetchurl stdenv pkgconfig cairo;
     inherit (gnome) gtk glib;
