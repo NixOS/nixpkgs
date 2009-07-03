@@ -1658,6 +1658,11 @@ let
     enableMultilib = true;
   }));
 
+  gcc44 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
+    profiledCompiler = true;
+  });
+
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = true;
@@ -1704,6 +1709,16 @@ let
   gcj = gcj43;
 
   gcj43 = wrapGCC (gcc43_real.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zlib boehmgc;
+  });
+
+  gcj44 = wrapGCC (gcc44.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
