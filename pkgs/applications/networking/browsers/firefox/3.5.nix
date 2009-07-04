@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig, file, alsaLib
+, freetype, fontconfig, file, alsaLib, nspr
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Deer Park", enable this option.  However, those binaries may
@@ -29,10 +29,12 @@ rec {
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
+      "--with-system-nspr"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
       "--enable-system-cairo"
       #"--enable-system-sqlite" # <-- this seems to be discouraged
       "--disable-crashreporter"
+      "--disable-tests"
     ];
 
 
@@ -45,7 +47,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib
+        alsaLib nspr
       ];
 
     configureFlags =
@@ -62,8 +64,6 @@ rec {
 
     postInstall = ''
       export dontPatchELF=1
-
-      make -C nsprpub install
 
       # Fix some references to /bin paths in the Xulrunner shell script.
       substituteInPlace $out/bin/xulrunner \
@@ -102,7 +102,7 @@ rec {
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
-        dbus dbus_glib pango freetype fontconfig alsaLib
+        dbus dbus_glib pango freetype fontconfig alsaLib nspr
       ];
 
     propagatedBuildInputs = [xulrunner];
@@ -110,7 +110,6 @@ rec {
     configureFlags =
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
-        "--with-system-nspr"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";

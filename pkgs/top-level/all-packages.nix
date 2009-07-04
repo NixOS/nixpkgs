@@ -3886,6 +3886,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  nspr = import ../development/libraries/nspr {
+    inherit fetchurl stdenv;
+  };
+
   nss = import ../development/libraries/nss {
     inherit fetchurl stdenv perl zip;
   };
@@ -6291,7 +6295,8 @@ let
 
   firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib;
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
+      nspr;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   });
