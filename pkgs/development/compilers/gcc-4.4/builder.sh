@@ -23,13 +23,23 @@ if test "$noSysDirs" = "1"; then
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
         export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
+
+	# The path to the Glibc binaries such as `crti.o'.
+	glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
         
     else
         # Hack: support impure environments.
         extraCFlags="-isystem /usr/include"
         extraLDFlags="-L/usr/lib64 -L/usr/lib"
+	glibc_libdir="/usr/lib"
         export NIX_FIXINC_DUMMY=/usr/include
     fi
+
+    # Setting $C_INCLUDE_PATH helps `xgcc' find the C library headers.
+    export C_INCLUDE_PATH="$NIX_FIXINC_DUMMY"
+
+    # Likewise, to help it find `crti.o' and similar files.
+    export LIBRARY_PATH="$glibc_libdir"
 
     extraCFlags="-g0 -I$gmp/include -I$mpfr/include $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
