@@ -184,6 +184,7 @@ in {
   hdparm = linux;
   hello = all;
   host = linux;
+  htmlTidy = all;
   hugin = linux;
   iana_etc = linux;
   icecat3Xul = linux;
