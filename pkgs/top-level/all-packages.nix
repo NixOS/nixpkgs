@@ -1407,6 +1407,10 @@ let
     inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
   };
 
+  htmlTidy = import ../tools/text/html-tidy {
+    inherit fetchcvs stdenv autoconf automake libtool;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg perl;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
