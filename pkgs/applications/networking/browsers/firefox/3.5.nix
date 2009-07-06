@@ -95,7 +95,7 @@ rec {
 
 
   firefox = stdenv.mkDerivation rec {
-    name = "firefox-3.0.11";
+    name = "firefox-${firefoxVersion}";
 
     inherit src;
 
