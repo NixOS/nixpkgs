@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
+    --with-zlib=${zlib}
+    --with-sqlite=${sqlite}
     --disable-neon-version-check
   '';
 
