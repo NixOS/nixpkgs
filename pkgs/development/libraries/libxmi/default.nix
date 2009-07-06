@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   # For the x86_64 linux arch to be recognized by 'configure'
-  preConfigure = "cp ${libtool}/share/libtool/config.sub .";
+  preConfigure = "cp ${libtool}/share/libtool/config/config.sub .";
   
   meta = {
     description = "Library for rasterizing 2-D vector graphics";
