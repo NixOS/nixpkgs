@@ -17,16 +17,17 @@ rec {
   ] ++ (import ../modules/module-list.nix);
 
   config_ =
-    pkgs.lib.fixOptionSets
-      pkgs.lib.mergeOptionSets
-      { inherit pkgs; } configComponents;
+    pkgs.lib.definitionsOf configComponents {
+      inherit pkgs;
+    };
 
+  # "fixableDeclarationsOf" is used instead of "declarationsOf" because some
+  # option default values may depends on the definition of other options.
   optionDeclarations =
-    pkgs.lib.fixOptionSetsFun
-      pkgs.lib.filterOptionSets
-      { inherit pkgs; } configComponents
-      config_;
-      
+    pkgs.lib.fixableDeclarationsOf configComponents {
+      inherit pkgs;
+    } config_;
+
   # Optionally check wether all config values have corresponding
   # option declarations.
   config = pkgs.checker config_
