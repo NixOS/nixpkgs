@@ -13,17 +13,8 @@ rec {
 
   configComponents = [
     configuration
-    {
-      require = import ../modules/module-list.nix;
-      environment.checkConfigurationOptions = pkgs.lib.mkOption {
-        default = true;
-        example = false;
-        description = ''
-          Whether to check the validity of the entire configuration.
-        '';
-      };
-    }
-  ];
+    ./check-config.nix
+  ] ++ (import ../modules/module-list.nix);
 
   config_ =
     pkgs.lib.fixOptionSets
