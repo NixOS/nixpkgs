@@ -208,20 +208,24 @@ rec {
             (filter (__hasAttr name) sets));
     }) (concatMap builtins.attrNames sets));
 
-  # flatten a list of elements by following the properties of the elements.
-  # next   : return the list of following elements.
-  # seen   : lists of elements already visited.
-  # default: result if 'x' is empty.
-  # x      : list of values that have to be processed.
-  uniqFlatten = next: seen: default: x:
-    if x == []
-    then default
-    else
-      let h = head x; t = tail x; n = next h; in
-      if elem h seen
-      then uniqFlatten next seen default t
-      else uniqFlatten next (seen ++ [h]) (default ++ [h]) (n ++ t)
-    ;
+
+  lazyGenericClosure = {startSet, operator}:
+    let
+      work = list: doneKeys: result:
+        if list == [] then
+          result
+        else
+          let x = head list; key = x.key; in
+          if elem key doneKeys then
+            work (tail list) doneKeys result
+          else
+            work (tail list ++ operator x) ([key] ++ doneKeys) ([x] ++ result);
+    in
+      work startSet [] [];
+
+  genericClosure =
+    if builtins ? genericClosure then builtins.genericClosure
+    else lazyGenericClosure;
 
   innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
 	innerModifySumArgs f x (a // b);

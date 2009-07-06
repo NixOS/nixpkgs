@@ -78,7 +78,7 @@ rec {
               merge = list:
                 decl.type.iter
                   (path: opts:
-                     fixMergeFun (recurseInto path) (optionConfig opts)
+                     lib.fix (fixableMergeFun (recurseInto path) (optionConfig opts))
                   )
                   opt.name
                   (opt.merge list);
@@ -262,6 +262,12 @@ rec {
   || builtins.isList x
   );
 
+  importIfPath = path:
+    if isPath path then
+      import path
+    else
+      path;
+
   applyIfFunction = f: arg:
     if builtins.isFunction f then
       f arg
@@ -270,106 +276,87 @@ rec {
 
   moduleClosure = initModules: args:
     let
-      moduleImport = path:
-        (applyIfFunction (import path) args) // {
+      moduleImport = m:
+        (applyIfFunction (importIfPath m) args) // {
           # used by generic closure to avoid duplicated imports.
-          key = path;
+          key = m;
         };
+
+      removeKeys = list: map (m: removeAttrs m ["key"]) list;
+
+      getImports = m:
+        if m ? config || m ? options then
+          attrByPath ["imports"] [] m
+        else
+          toList (rmProperties (attrByPath ["require"] [] (delayProperties m)));
+
+      getImportedPaths = m: filter isPath (getImports m);
+      getImportedSets = m: filter (x: !isPath x) (getImports m);
+
+      inlineImportedSets = list:
+        lib.concatMap (m:[m] ++ map moduleImport (getImportedSets m)) list;
     in
-      builtins.genericClosure {
+      inlineImportedSets (removeKeys (lazyGenericClosure {
         startSet = map moduleImport initModules;
-        operator = m:
-          map moduleImport (attrByPath ["imports"] [] m);
-      };
+        operator = m: map moduleImport (getImportedPaths m);
+      }));
 
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
-       attrByPath ["options"] [] m
-    ++ attrByPath ["config"] [] m
+      if m ? config || m ? options then
+         attrByPath ["options"] [] m
+      ++ attrByPath ["config"] [] m
+      else
+        [ m ]
     ) modules;
 
-  fixMergeFun = merge: optFun:
-    lib.fix (config:
-      merge (
+
+  fixableMergeFun = merge: f: config:
+    merge (
+      # remove require because this is not an option.
+      map (m: removeAttrs m ["require"]) (
         # Delay top-level properties like mkIf
         map delayProperties (
           # generate the list of option sets.
-          optFun config
+          f config
         )
       )
     );
 
-  fixMergeModules = merge: initModules: {...}@args:
-    fixMergeFun (config:
+  fixableMergeModules = merge: initModules: {...}@args: config:
+    fixableMergeFun merge (config:
+      # filter the list of option sets.
       selectDeclsAndDefs (
+        # generate the list of modules from a closure of imports/require
+        # attribtues.
         moduleClosure initModules (args // { inherit config; })
       )
-    );
-
-  fixModulesConfig = initModules: {...}@args:
-    fixMergeModules (mergeOptionSets "") initModules args;
-
-  fixOptionsConfig = initModules: {...}@args:
-    fixMergeModules (filterOptionSets "") initModules args;
+    ) config;
 
 
-  # Evaluate a list of option sets that would be merged with the
-  # function "merge" which expects two arguments.  The attribute named
-  # "require" is used to imports option declarations and bindings.
-  #
-  # * cfg[0-9]: configuration
-  # * cfgSet[0-9]: configuration set
-  #
-  # merge: the function used to merge options sets.
-  # args: is the set of packages available. (nixpkgs)
-  # opts: list of option sets or option set functions.
-  # config: result of this evaluation.
-  fixOptionSetsFun = merge: args: opts: config:
-    let
-      # remove possible mkIf to access the require attribute.
-      noImportConditions = cfgSet0:
-        let cfgSet1 = delayProperties cfgSet0; in
-        if cfgSet1 ? require then
-          cfgSet1 // { require = rmProperties cfgSet1.require; }
-        else
-          cfgSet1;
+  fixableDefinitionsOf = initModules: {...}@args:
+    fixableMergeModules (mergeOptionSets "") initModules args;
 
-      filenameHandler = cfg:
-        if isPath cfg then import cfg else cfg;
+  fixableDeclarationsOf = initModules: {...}@args:
+    fixableMergeModules (filterOptionSets "") initModules args;
 
-      argumentHandler = cfg:
-        applyIfFunction cfg (args // { inherit config; });
+  definitionsOf = initModules: {...}@args:
+    lib.fix (fixableDefinitionsOf initModules args);
 
-      preprocess = cfg0:
-        let cfg1 = filenameHandler cfg0;
-            cfg2 = argumentHandler cfg1;
-            cfg3 = noImportConditions cfg2;
-        in cfg3;
+  declarationsOf = initModules: {...}@args:
+    lib.fix (fixableDeclarationsOf initModules args);
 
-      getRequire = x: toList (attrByPath ["require"] [] (preprocess x));
-      getRecursiveRequire = x:
-        fold (cfg: l:
-          if isPath cfg then
-            [ cfg ] ++ l
-          else
-            [ cfg ] ++ (getRecursiveRequire cfg) ++ l
-        ) [] (getRequire x);
 
-      getRequireSets = x: filter (x: ! isPath x) (getRecursiveRequire x);
-      getRequirePaths = x: filter isPath (getRecursiveRequire x);
-      rmRequire = x: removeAttrs (preprocess x) ["require"];
+  fixMergeModules = merge: initModules: {...}@args:
+    lib.fix (fixableMergeModules merge initModules args);
 
-      inlineRequiredSets = cfgs:
-        fold (cfg: l: [ cfg ] ++ (getRequireSets cfg) ++ l) [] cfgs;
-    in
-      merge "" (
-        map rmRequire (
-          inlineRequiredSets ((toList opts) ++ lib.uniqFlatten getRequirePaths [] [] (lib.concatMap getRequirePaths (toList opts)))
-        )
-      );
 
-  fixOptionSets = merge: args: opts:
-    lib.fix (fixOptionSetsFun merge args opts);
+  # old interface.
+  fixOptionSetsFun = merge: {...}@args: initModules: config:
+    fixableMergeModules (merge "") initModules args config;
+
+  fixOptionSets = merge: args: initModules:
+    fixMergeModules (merge "") initModules args;
 
 
   # Generate documentation template from the list of option declaration like
