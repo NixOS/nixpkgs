@@ -296,7 +296,7 @@ rec {
       inlineImportedSets = list:
         lib.concatMap (m:[m] ++ map moduleImport (getImportedSets m)) list;
     in
-      inlineImportedSets (removeKeys (lazyGenericClosure {
+      removeKeys (inlineImportedSets (lazyGenericClosure {
         startSet = map moduleImport initModules;
         operator = m: map moduleImport (getImportedPaths m);
       }));
