@@ -6300,10 +6300,14 @@ let
   firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
-      nspr;
+      nspr nss;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   });
+
+  firefox35 = firefox35Pkgs.firefox;
+  xulrunner35 = firefox35Pkgs.xulrunner;
+  firefox35Wrapper = wrapFirefox firefox35 "firefox" "";
 
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;

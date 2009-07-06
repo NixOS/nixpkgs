@@ -1,5 +1,14 @@
 {stdenv, fetchurl, nspr, perl, zlib}:
 
+let
+
+  nssConfig = fetchurl {
+    url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/dev-libs/nss/files/3.12-nss-config.in?rev=1.2";
+    sha256 = "1ck9q68fxkjq16nflixbqi4xc6bmylmj994h3f1j42g8mp0xf0vd";
+  };
+
+in
+
 stdenv.mkDerivation {
   name = "nss-3.12.3";
   
@@ -34,10 +43,28 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      find $out -name "*.a" | xargs rm
+      #find $out -name "*.a" | xargs rm
       rm -rf $out/private
       mv $out/public $out/include
       mv $out/*.OBJ/* $out/
       rmdir $out/*.OBJ
+
+      # Borrowed from Gentoo.  Firefox expects an nss-config script,
+      # but NSS doesn't provide it.
+      
+      NSS_VMAJOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
+      NSS_VMINOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
+      NSS_VPATCH=`cat lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
+
+      cp ${nssConfig} $out/bin/nss-config
+      chmod u+x $out/bin/nss-config
+      substituteInPlace $out/bin/nss-config \
+        --subst-var-by MOD_MAJOR_VERSION $NSS_VMAJOR \
+        --subst-var-by MOD_MINOR_VERSION $NSS_VMINOR \
+        --subst-var-by MOD_PATCH_VERSION $NSS_VPATCH \
+        --subst-var-by prefix $out \
+        --subst-var-by exec_prefix $out \
+        --subst-var-by includedir $out/include/nss \
+        --subst-var-by libdir $out/lib
     ''; # */
 }

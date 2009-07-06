@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig, file, alsaLib, nspr
+, freetype, fontconfig, file, alsaLib, nspr, nss
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Deer Park", enable this option.  However, those binaries may
@@ -30,6 +30,7 @@ rec {
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
+      "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
       "--enable-system-cairo"
       #"--enable-system-sqlite" # <-- this seems to be discouraged
@@ -47,7 +48,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr
+        alsaLib nspr nss
       ];
 
     configureFlags =
@@ -63,8 +64,6 @@ rec {
     installFlags = "SKIP_GRE_REGISTRATION=1";
 
     postInstall = ''
-      export dontPatchELF=1
-
       # Fix some references to /bin paths in the Xulrunner shell script.
       substituteInPlace $out/bin/xulrunner \
           --replace /bin/pwd "$(type -tP pwd)" \
@@ -83,7 +82,7 @@ rec {
               ln -s $i $out/bin
           fi;
       done;
-      rm $out/bin/run-mozilla.sh || true
+      rm -f $out/bin/run-mozilla.sh
     ''; # */
 
     meta = {
