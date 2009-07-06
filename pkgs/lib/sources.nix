@@ -10,7 +10,7 @@ rec {
   cleanSource =
     let filter = name: type: let baseName = baseNameOf (toString name); in ! (
       # Filter out Subversion and CVS directories.
-      (type == "directory" && (baseName == ".svn" || baseName == "CVS")) ||
+      (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS")) ||
       # Filter out backup files.
       (lib.hasSuffix "~" baseName)
     );
