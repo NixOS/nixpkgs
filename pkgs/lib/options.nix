@@ -321,10 +321,10 @@ rec {
   # * cfgSet[0-9]: configuration set
   #
   # merge: the function used to merge options sets.
-  # pkgs: is the set of packages available. (nixpkgs)
+  # args: is the set of packages available. (nixpkgs)
   # opts: list of option sets or option set functions.
   # config: result of this evaluation.
-  fixOptionSetsFun = merge: pkgs: opts: config:
+  fixOptionSetsFun = merge: args: opts: config:
     let
       # remove possible mkIf to access the require attribute.
       noImportConditions = cfgSet0:
@@ -335,23 +335,10 @@ rec {
           cfgSet1;
 
       filenameHandler = cfg:
-        if isPath cfg then import cfg
-        else cfg;
+        if isPath cfg then import cfg else cfg;
 
-      # call configuration "files" with one of the existing convention.
       argumentHandler = cfg:
-        let
-          # {..}
-          cfg0 = cfg;
-          # {pkgs, config, ...}: {..}
-          cfg1 = cfg { inherit pkgs config merge; };
-          # pkgs: config: {..}
-          cfg2 = cfg {} {};
-        in
-        if builtins.isFunction cfg0 then
-          if isAttrs cfg1 then cfg1
-          else builtins.trace "Use '{pkgs, config, ...}:'." cfg2
-        else cfg0;
+        applyIfFunction cfg (args // { inherit config; });
 
       preprocess = cfg0:
         let cfg1 = filenameHandler cfg0;
@@ -381,8 +368,8 @@ rec {
         )
       );
 
-  fixOptionSets = merge: pkgs: opts:
-    lib.fix (fixOptionSetsFun merge pkgs opts);
+  fixOptionSets = merge: args: opts:
+    lib.fix (fixOptionSetsFun merge args opts);
 
 
   # Generate documentation template from the list of option declaration like
