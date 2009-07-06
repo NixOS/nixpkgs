@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --enable-load-extension
     ${if static then "--disable-shared --enable-static" else ""}
+    --disable-amalgamation
+    --enable-threadsafe
+    --disable-cross-thread-connections
+    --disable-tcl
+    --disable-tempstore
     --with-readline-inc=-I${readline}/include
   '';
 
