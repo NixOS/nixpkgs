@@ -3895,7 +3895,7 @@ let
   };
 
   nss = import ../development/libraries/nss {
-    inherit fetchurl stdenv perl zip;
+    inherit fetchurl stdenv nspr perl zlib;
   };
 
   ode = builderDefsPackage (import ../development/libraries/ode) {

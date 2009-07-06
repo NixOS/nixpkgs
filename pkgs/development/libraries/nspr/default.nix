@@ -14,6 +14,11 @@ stdenv.mkDerivation {
 
   configureFlags = "--enable-optimize --disable-debug";
 
+  postInstall =
+    ''
+      find $out -name "*.a" | xargs rm
+    '';
+    
   meta = {
     homepage = http://www.mozilla.org/projects/nspr/;
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
