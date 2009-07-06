@@ -28,12 +28,12 @@ rec {
   config_ =
     pkgs.lib.fixOptionSets
       pkgs.lib.mergeOptionSets
-      pkgs configComponents;
+      { inherit pkgs; } configComponents;
 
   optionDeclarations =
     pkgs.lib.fixOptionSetsFun
       pkgs.lib.filterOptionSets
-      pkgs configComponents
+      { inherit pkgs; } configComponents
       config_;
       
   # Optionally check wether all config values have corresponding
