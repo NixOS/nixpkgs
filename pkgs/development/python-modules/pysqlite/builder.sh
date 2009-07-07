@@ -8,11 +8,14 @@ configurePhase() {
 }
 
 buildPhase() {
-	$python/bin/python setup.py build
+	python setup.py build
 }
 
 installPhase() {
-	$python/bin/python setup.py install --prefix=$out
+	python setup.py install --prefix=$out
+
+	ensureDir "$out/doc"
+	mv -v "$out/pysqlite2-doc" "$out/doc/$name"
 }
 
 genericBuild
