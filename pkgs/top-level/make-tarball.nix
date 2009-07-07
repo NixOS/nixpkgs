@@ -46,12 +46,6 @@ releaseTools.makeSourceTarball {
         exit 1
     fi
   
-    # Check that we can fully evaluate build-for-release.nix.
-    header "checking pkgs/top-level/build-for-release.nix"
-    nix-env --readonly-mode -f pkgs/top-level/build-for-release.nix \
-        -qa \* --drv-path --system-filter \* --system
-    stopNest
-
     # Check that all-packages.nix evaluates on a number of platforms.
     for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd powerpc-darwin i686-darwin; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
