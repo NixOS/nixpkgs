@@ -7020,7 +7020,7 @@ let
   tahoe = import ../tools/networking/p2p/tahoe {
     inherit fetchurl unzip nettools buildPythonPackage;
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
-      pycryptopp;
+      pycryptopp pysqlite;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {

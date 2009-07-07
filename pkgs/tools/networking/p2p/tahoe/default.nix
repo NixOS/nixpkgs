@@ -1,5 +1,5 @@
 { fetchurl, unzip, buildPythonPackage, twisted, foolscap, nevow
-, simplejson, zfec, pycryptopp, nettools }:
+, simplejson, zfec, pycryptopp, pysqlite, nettools }:
 
 buildPythonPackage (rec {
   name = "tahoe-1.4.1";
@@ -29,8 +29,10 @@ buildPythonPackage (rec {
   '';
 
   buildInputs = [ unzip ];
+
+  # The `backup' command works best with `pysqlite'.
   propagatedBuildInputs = [
-    twisted foolscap nevow simplejson zfec pycryptopp
+    twisted foolscap nevow simplejson zfec pycryptopp pysqlite
   ];
 
   # FIXME: Many tests try to write to the Nix store or to $HOME, which
