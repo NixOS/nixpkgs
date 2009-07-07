@@ -1082,8 +1082,8 @@ let
 
   nmap = import ../tools/security/nmap {
     inherit fetchurl stdenv libpcap pkgconfig openssl
-      python pygtk makeWrapper pygobject pycairo
-      pythonPackages.pysqlite;
+      python pygtk makeWrapper pygobject pycairo;
+    inherit (pythonPackages) pysqlite;
     inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
   };
@@ -7962,7 +7962,8 @@ let
 
   trac = import ../misc/trac {
     inherit stdenv fetchurl python clearsilver makeWrapper
-      sqlite subversion pythonPackages.pysqlite;
+      sqlite subversion;
+    inherit (pythonPackages) pysqlite;
   };
 
    vice = import ../misc/emulators/vice {
