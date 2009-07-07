@@ -8009,5 +8009,6 @@ let
     inherit (stdenv) mkDerivation;
   };
 
+  misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
 }; in pkgs
