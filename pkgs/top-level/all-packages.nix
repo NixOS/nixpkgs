@@ -1083,7 +1083,7 @@ let
   nmap = import ../tools/security/nmap {
     inherit fetchurl stdenv libpcap pkgconfig openssl
       python pygtk makeWrapper pygobject pycairo
-      pysqlite;
+      pythonPackages.pysqlite;
     inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
   };
@@ -4438,10 +4438,6 @@ let
 
   pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
     inherit python openssl;
-  };
-
-  pysqlite = import ../development/python-modules/pysqlite {
-    inherit stdenv fetchurl python sqlite;
   };
 
   pythonSip = builderDefsPackage (selectVersion ../development/python-modules/python-sip "4.7.4") {
@@ -7966,7 +7962,7 @@ let
 
   trac = import ../misc/trac {
     inherit stdenv fetchurl python clearsilver makeWrapper
-      sqlite subversion pysqlite;
+      sqlite subversion pythonPackages.pysqlite;
   };
 
    vice = import ../misc/emulators/vice {
