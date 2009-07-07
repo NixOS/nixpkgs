@@ -158,7 +158,8 @@ let
     else x);
 
   builderDefs = composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
-    inherit stringsWithDeps lib stdenv writeScript fetchurl;
+    inherit stringsWithDeps lib stdenv writeScript 
+      fetchurl fetchmtn fetchgit;
   };
 
   composedArgsAndFun = lib.composedArgsAndFun;
@@ -252,6 +253,12 @@ let
 
   fetchgit = import ../build-support/fetchgit {
     inherit stdenv git;
+  };
+
+  fetchmtn = import ../build-support/fetchmtn {
+    inherit monotone stdenv;
+    cacheDB = getConfig ["fetchmtn" "cacheDB"] "";
+    defaultDBMirrors = getConfig ["fetchmtn" "defaultDBMirrors"] [];
   };
 
   fetchsvn = import ../build-support/fetchsvn {
@@ -567,6 +574,9 @@ let
   curlftpfs = import ../tools/networking/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib;
     inherit (gtkLibs) glib;
+  };
+
+  dadadodo = builderDefsPackage (import ../tools/text/dadadodo) {
   };
 
   dar = import ../tools/archivers/dar {
@@ -2036,8 +2046,8 @@ let
     lua = lua5;
   };
 
-  monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "1.0.1") {
-    inherit ocaml lablgtk graphviz pkgconfig;
+  monotoneViz = builderDefsPackage (selectVersion ../applications/version-management/monotone-viz "mtn-head") {
+    inherit ocaml lablgtk graphviz pkgconfig autoconf automake libtool;
     inherit (gnome) gtk libgnomecanvas glib;
   };
 
