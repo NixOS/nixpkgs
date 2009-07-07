@@ -27,7 +27,9 @@ stdenv.mkDerivation {
   BUILD_OPT = "1";
 
   makeFlags =
-    ["NSPR_CONFIG_STATUS=" "NSDISTMODE=copy" "BUILD_OPT=1" "SOURCE_PREFIX=\$(out)"]
+    [ "NSPR_CONFIG_STATUS=" "NSDISTMODE=copy" "BUILD_OPT=1" "SOURCE_PREFIX=\$(out)"
+      "NSS_ENABLE_ECC=1"
+    ]
     ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
 
   buildFlags = "nss_build_all";
