@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "2009.06.06" a; 
+  version = a.lib.attrByPath ["version"] "2009.07.03" a; 
   buildInputs = with a; [
     pkgconfig webkit libsoup gtk 
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://github.com/Dieterbe/uzbl/tarball/${version}";
-    sha256 = "1bgajpcsv0a8nmliqkrk99d3k5s60acjgvh0sx7znsnjajbfv3yz";
+    sha256 = "18lsrylkgicqrlw03978v71cycyyba1d4lbiszw7dk89hd4ziqv2";
     name = "uzbl-master-${version}.tar.gz";
   };
 
