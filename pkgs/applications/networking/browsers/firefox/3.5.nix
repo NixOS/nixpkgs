@@ -3,9 +3,10 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss
 
 , # If you want the resulting program to call itself "Firefox" instead
-  # of "Deer Park", enable this option.  However, those binaries may
-  # not be distributed without permission from the Mozilla Foundation,
-  # see http://www.mozilla.org/foundation/trademarks/.
+  # of "Shiretoko" or whatever, enable this option.  However, those
+  # binaries may not be distributed without permission from the
+  # Mozilla Foundation, see
+  # http://www.mozilla.org/foundation/trademarks/.
   enableOfficialBranding ? false
 }:
 

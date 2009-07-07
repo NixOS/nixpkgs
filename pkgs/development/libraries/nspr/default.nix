@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   preConfigure = "cd mozilla/nsprpub";
 
-  configureFlags = "--enable-optimize --disable-debug";
+  configureFlags = "--enable-optimize --disable-debug ${if stdenv.is64bit then "--enable-64bit" else ""}";
 
   postInstall =
     ''

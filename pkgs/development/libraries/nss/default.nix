@@ -26,7 +26,11 @@ stdenv.mkDerivation {
 
   BUILD_OPT = "1";
 
-  makeFlags = "NSPR_CONFIG_STATUS= NSDISTMODE=copy BUILD_OPT=1 SOURCE_PREFIX=\$(out)";
+  makeFlags =
+    ''
+      NSPR_CONFIG_STATUS= NSDISTMODE=copy BUILD_OPT=1 SOURCE_PREFIX=\$(out)
+      ${if stdenv.is64bit then "USE_64=1" else ""}
+    '';
 
   buildFlags = "nss_build_all";
 
@@ -48,6 +52,7 @@ stdenv.mkDerivation {
       mv $out/public $out/include
       mv $out/*.OBJ/* $out/
       rmdir $out/*.OBJ
+      rm -rf $out/bin
 
       # Borrowed from Gentoo.  Firefox expects an nss-config script,
       # but NSS doesn't provide it.
@@ -56,6 +61,7 @@ stdenv.mkDerivation {
       NSS_VMINOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
       NSS_VPATCH=`cat lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
 
+      mkdir $out/bin
       cp ${nssConfig} $out/bin/nss-config
       chmod u+x $out/bin/nss-config
       substituteInPlace $out/bin/nss-config \
