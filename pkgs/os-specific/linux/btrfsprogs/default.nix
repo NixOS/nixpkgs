@@ -17,9 +17,14 @@ rec {
   configureFlags = [];
   makeFlags = ["prefix=$out"];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMakeInstall"];
+  phaseNames = ["doEnsureBtrfsImage" "doMakeInstall"];
       
+  doEnsureBtrfsImage = a.fullDepEntry (''
+    if ! grep 'progs = ' Makefile | grep btrfs-image; then 
+      sed -e 's/progs = .*/& btrfs-image/' -i Makefile
+    fi
+  '') ["minInit" "doUnpack"];
+
   name = "btrfs-progs-" + version;
   meta = {
     description = "BTRFS utilities";
