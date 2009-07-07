@@ -34,8 +34,20 @@ rec {
         (enable :sb-thread))) " > customize-target-features.lisp
   '') ["minInit" "doUnpack"];
 
+  /* SBCL checks whether files are up-to-date in many places.. Unfortunately, same timestamp 
+     is not good enought
+  */
   doFixNewer = a.fullDepEntry(''
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
+    sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
+    sed -i src/cold/slam.lisp -e \
+      '/file-write-date input/a)'
+    sed -i src/cold/slam.lisp -e \
+      '/file-write-date output/i(or (and (= 2208988801 (file-write-date output)) (= 2208988801 (file-write-date input)))'
+    sed -i src/code/target-load.lisp -e \
+      '/date defaulted-fasl/a)'
+    sed -i src/code/target-load.lisp -e \
+      '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
   '') ["minInit" "doUnpack"];
 
   doWrap = a.fullDepEntry (''

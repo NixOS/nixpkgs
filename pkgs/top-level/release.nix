@@ -287,6 +287,7 @@ in {
   pthreadmanpages = all;
   python = allBut "i686-cygwin";
   pythonFull = linux;
+  sbcl = all;
   qt3 = allBut "i686-cygwin";
   qt4 = linux;
   quake3demo = linux;
