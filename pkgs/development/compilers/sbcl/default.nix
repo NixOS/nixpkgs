@@ -69,5 +69,6 @@ rec {
   name = "sbcl-" + version;
   meta = {
     description = "Lisp compiler";
+    maintainers = [a.lib.maintainers.raskin];
   };
 }

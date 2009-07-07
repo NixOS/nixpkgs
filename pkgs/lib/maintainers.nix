@@ -6,4 +6,5 @@
      alphabetically sorted.  */
 
   ludo = "Ludovic Courtès <ludo@gnu.org>";
+  raskin = "Michael Raskin <7c6f434c@mail.ru>";
 }

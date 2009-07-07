@@ -2042,7 +2042,7 @@ let
 
   monotone = import ../applications/version-management/monotone {
     inherit stdenv fetchurl boost zlib botan libidn pcre
-      sqlite;
+      sqlite lib;
     lua = lua5;
   };
 

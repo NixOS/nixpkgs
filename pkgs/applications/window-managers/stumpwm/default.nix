@@ -54,5 +54,6 @@ rec {
   name = "${pkgName}-" + version;
   meta = {
     description = "Common Lisp-based ratpoison-like window manager.";
+    maintainers = [args.lib.maintainers.raskin];
   };
 }

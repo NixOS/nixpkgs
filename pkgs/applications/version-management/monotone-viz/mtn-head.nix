@@ -23,6 +23,7 @@ rec {
   name = "monotone-viz-" + version;
   meta = {
     description = "Monotone commit tree visualizer";
+    maintainers = [args.lib.maintainers.raskin];
   };
 }
 

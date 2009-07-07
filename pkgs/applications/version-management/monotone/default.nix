@@ -1,5 +1,5 @@
 {stdenv, fetchurl, boost, zlib, botan, libidn,
-  lua, pcre, sqlite}:
+  lua, pcre, sqlite, lib}:
 
 let 
   version = "0.44";
@@ -14,4 +14,7 @@ in stdenv.mkDerivation {
     export sqlite_LIBS=-lsqlite3
     export NIX_LDFLAGS="$NIX_LDFLAGS -ldl"
   '';
+  meta = {
+    maintainers = [lib.maintainers.raskin];
+  };
 }
