@@ -1,0 +1,15 @@
+JDEE refers to the `avltree' module from GNU Elib, but GNU Elib
+no longer exists (see http://www.gnu.org/software/elib/).  This
+patch updates the module names to what's current in Emacs.
+
+--- jde/lisp/jde-parse.el	(revision 90)
++++ jde/lisp/jde-parse.el	(working copy)
+@@ -24,7 +24,7 @@
+ 
+ (require 'semantic-sb)
+ (require 'semantic-ctxt)
+-(require 'avltree)
++(require 'avl-tree)
+ (require 'thingatpt)
+ (require 'eieio)
+ (require 'jde-imenu)                    ; All the imenu stuff is here now!

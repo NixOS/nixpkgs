@@ -1,0 +1,19 @@
+The `build.xml' makes it impossible to override some settings.  This
+patch deletes their definition from here so we can use our value from
+`build.properties'.
+
+--- jde/build.xml	(revision 90)
++++ jde/build.xml	(working copy)
+@@ -30,12 +30,7 @@
+ 
+   <!-- staging  -->
+   <property name="dist.dir" location="./dist"/>
+-  <property name="dist.lisp.dir" location="${dist.dir}/lisp"/>
+   <property name="dist.java.dir" location="${dist.dir}/java"/>
+-  <property name="dist.java.lib.dir" location="${dist.java.dir}/lib"/>
+-  <property name="dist.java.src.dir" location="${dist.java.dir}/src"/>
+-  <property name="dist.java.doc.dir" location="${dist.dir}/java/doc"/>
+-  <property name="dist.jar.jde.file" location="${dist.java.lib.dir}/jde.jar"/>
+ 
+   <property name="dist.doc.dir" location="${dist.dir}/doc"/>
+   <property name="dist.doc.java.api.dir" location="${dist.doc.dir}/java/api"/>

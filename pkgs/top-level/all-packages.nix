@@ -891,6 +891,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  jdee = import ../applications/editors/emacs-modes/jdee {
+    inherit fetchsvn stdenv cedet ant;
+    emacs = emacs23;  # for `avl-tree'
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
