@@ -631,6 +631,10 @@ let
     inherit fetchurl stdenv cdrkit m4;
   };
 
+  ecb = import ../applications/editors/emacs-modes/ecb {
+    inherit fetchurl stdenv emacs cedet jdee texinfo;
+  };
+
   eieio = import ../applications/editors/emacs-modes/eieio {
     inherit fetchurl stdenv emacs;
   };
