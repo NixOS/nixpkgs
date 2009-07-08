@@ -30,7 +30,7 @@ in
 
 mkIf config.services.xfs.enable {
 
-  assertions = [ { assertion = ! config.fonts.enableFontDir; message = "Please enable fontDir (fonts.enableFontDir) to use xfs."; } ];
+  assertions = [ { assertion = config.fonts.enableFontDir; message = "Please enable fontDir (fonts.enableFontDir) to use xfs."; } ];
 
   require = [
     options
