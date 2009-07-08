@@ -97,6 +97,18 @@ interpretation:</para>
   </varlistentry>
 
   <varlistentry>
+    <term><varname>maintainers</varname></term>
+    <listitem><para>A list of names and e-mail addresses of the
+    maintainers of this Nix expression, e.g. <literal>["Alice
+    &lt;alice@example.org>" "Bob &lt;bob@example.com>"]</literal>.  If
+    you are the maintainer of multiple packages, you may want to add
+    yourself to <link
+    xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
+    and write something like <literal>[stdenv.lib.maintainers.alice
+    stdenv.lib.maintainers.bob]</literal>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>priority</varname></term>
     <listitem><para>The <emphasis>priority</emphasis> of the package,
     used by <command>nix-env</command> to resolve file name conflicts
