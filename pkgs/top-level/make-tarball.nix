@@ -73,4 +73,8 @@ releaseTools.makeSourceTarball {
     cp doc/style.css $out/manual/
     echo "doc manual $out/manual" >> $out/nix-support/hydra-build-products
   '';
+
+  meta = {
+    maintainers = lib.eelco;
+  };
 }
