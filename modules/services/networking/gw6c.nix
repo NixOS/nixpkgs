@@ -100,7 +100,7 @@ in
 let
         cfg = config.services.gw6c;
         procps = pkgs.procps;
-        gw6cService = import ../../services/gw6c {
+        gw6cService = import ../../../../services/gw6c {
                 inherit (pkgs) stdenv gw6c coreutils 
                 procps upstart iputils gnused 
                 gnugrep seccure writeScript;

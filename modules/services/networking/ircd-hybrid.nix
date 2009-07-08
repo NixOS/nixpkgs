@@ -84,7 +84,7 @@ in
 
 let
   cfg = config.services.ircdHybrid;
-  ircdService = import ../../services/ircd-hybrid {
+  ircdService = import ../../../../services/ircd-hybrid {
     stdenv = pkgs.stdenv;
     inherit (pkgs) ircdHybrid coreutils 
             su iproute gnugrep procps;
