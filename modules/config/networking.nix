@@ -41,6 +41,9 @@ in
         source = pkgs.writeText "hosts"
           ''
             ${config.networking.extraHosts}
+            ${if config.networking.hostName != ""
+              then "127.0.0.1 ${config.networking.hostName}"
+              else ""}
             127.0.0.1 localhost
           '';
         target = "hosts";
