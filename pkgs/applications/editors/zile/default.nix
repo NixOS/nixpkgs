@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ncurses, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "zile-2.3.7";
+  name = "zile-2.3.8";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${name}.tar.gz";
-    sha256 = "04fiqy4nwhm42pdl839av7xgmpps9wfm4srpmhgwaydvjv79dgs1";
+    sha256 = "0xn1nf8y8d5h70h01ivn5vvrrfyifd21j1aqlsks8nlb4yg7vssc";
   };
 
   buildInputs = [ ncurses help2man ];
@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/zile/;
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
