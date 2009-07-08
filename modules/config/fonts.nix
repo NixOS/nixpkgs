@@ -72,16 +72,19 @@ let
 
       extraFonts = mkOption {
         default = [];
-        description = "
+        description = ''
           List of additional fonts.
-        ";
+        '';
       };
 
       enableCoreFonts = mkOption {
-        default = true;
-        description = "
-          Whether to include MS Core Fonts (redistributable, but only verbatim).
-        ";
+        default = false;
+        description = ''
+          Whether to include Microsoft's proprietary Core Fonts.  These fonts
+          are redistributable, but only verbatim, among other restrictions.
+          See <link xlink:href="http://corefonts.sourceforge.net/eula.htm"/>
+          for details.
+       '';
       };
 
     };
