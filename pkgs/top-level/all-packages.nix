@@ -2382,7 +2382,7 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = xulrunner3;
+      xulrunner = xulrunner35;
     };
 
 

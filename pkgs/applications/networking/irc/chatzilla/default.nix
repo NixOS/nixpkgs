@@ -1,12 +1,12 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "chatzilla-0.9.84";
+  name = "chatzilla-0.9.85";
   
   src = fetchurl {
     # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
-    url = http://chatzilla.rdmsoft.com/xulrunner/download/chatzilla-0.9.84-xr.zip;
-    sha256 = "0v1xakdgjjwwh0azxbh7y9yi99gcn0d37sfxrdzw78lbag3fh0k8";
+    url = http://chatzilla.rdmsoft.com/xulrunner/download/chatzilla-0.9.85-xr.zip;
+    sha256 = "0jd7mq05715vad82sl4ycr7ga587k53dijxz371y3zwpf8479hqx";
   };
 
   buildInputs = [unzip];
@@ -14,9 +14,6 @@ stdenv.mkDerivation {
   buildCommand = ''
     ensureDir $out
     unzip $src -d $out
-
-    # Fix overly restrictive version specification.    
-    substituteInPlace $out/application.ini --replace 'MaxVersion=1.9' 'MaxVersion=1.9.0.999'
   '';
 
   meta = {
