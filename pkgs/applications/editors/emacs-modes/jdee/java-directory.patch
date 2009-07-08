@@ -40,7 +40,7 @@ Tell the elisp code about the right Java directory.
  	 (args (append
  		(unless jde-checkstyle-expanded-properties-file
  		  (jde-checkstyle-get-property-args this))
-@@ -328,7 +325,7 @@ string describing how the compilation fi
+@@ -328,12 +325,12 @@ string describing how the compilation fi
  		      (if jde-checkstyle-classpath
  			  (jde-build-classpath jde-checkstyle-classpath)
  			(jde-normalize-path
@@ -49,6 +49,12 @@ Tell the elisp code about the right Java directory.
  		(list jde-checkstyle-class)		
  		(list "-c" 
  		      (if jde-checkstyle-style
+ 			  (jde-normalize-path jde-checkstyle-style)
+-			(concat (jde-find-jde-data-directory) "java/lib/sun_checks.xml")))
++			"@out@/lib/java/sun_checks.xml"))
+ 		(if jde-checkstyle-expanded-properties-file
+                     (list "-p" (jde-normalize-path jde-checkstyle-expanded-properties-file)))
+ 		(if jde-checkstyle-module-package-names-file
 
 --- jde/lisp/jde-dbs.el	(revision 90)
 +++ jde/lisp/jde-dbs.el	(working copy)
