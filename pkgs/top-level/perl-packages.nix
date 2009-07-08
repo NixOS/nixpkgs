@@ -920,6 +920,14 @@ rec {
     };
   };
 
+  EmailDateFormat = buildPerlPackage rec {
+    name = "Email-Date-Format-1.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "114fqcnmvzi0z100yx89j6rgwbicb0bslswhyr8z2pzsvwv3czqc";
+    };
+  };
+
   EmailSend = buildPerlPackage {
     name = "Email-Send-2.185";
     src = fetchurl {
@@ -952,6 +960,15 @@ rec {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "1dh2qgwss1wm6ypvr6m2z01gz19g73kmlk7wa25wxd2gspsq9qck";
     };
+  };
+
+  EmailSimpleCreator = buildPerlPackage rec {
+    name = "Email-Simple-Creator-1.424";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "16i15sarncacg86wl60dbddlv4p75i8xq6jqp1isj9plp60538ph";
+    };
+    propagatedBuildInputs = [EmailDateFormat EmailSimple];
   };
 
   EmailValid = buildPerlPackage {
