@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "hscolour";
-  version = "1.10.1";
-  sha256 = "293f24b8373be1d70d9e5a4b8d3c527166ad645b4ac983c1a6fc5999c44a2d36";
+  version = "1.11";
+  sha256 = "ebe26f1911e8796de45350014404c5e31cc2701dae9a87ba58fe0d0d37a5d41b";
   meta = {
     description = "Colourise Haskell code";
   };

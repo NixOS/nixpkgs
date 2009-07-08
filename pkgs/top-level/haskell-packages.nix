@@ -81,6 +81,10 @@ rec {
     inherit cabal mtl;
   };
 
+  ghcCore = import ../development/libraries/haskell/ghc-core {
+    inherit cabal pcreLight hscolour;
+  };
+
   ghcPaths = import ../development/libraries/haskell/ghc-paths {
     inherit cabal;
   };
