@@ -17,6 +17,7 @@ in
 
     patches = [
       ./installation-layout.patch ./cedet-paths.patch ./elib-avltree.patch
+      ./java-directory.patch
     ];
 
     configurePhase = ''
@@ -31,6 +32,11 @@ in
         cedet.dir = ${cedet}/share/emacs/site-lisp
         build.bin.emacs = ${emacs}/bin/emacs
       EOF
+
+      for i in lisp/*.el
+      do
+        sed -i "$i" -e"s|@out@|$out|g"
+      done
     '';
 
     buildPhase = "ant dist";
