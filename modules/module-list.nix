@@ -16,6 +16,7 @@
   ./misc/assertions.nix
   ./misc/ids.nix
   ./misc/locate.nix
+  ./misc/passthru.nix
   ./programs/bash/bash.nix
   ./programs/info.nix
   ./programs/pwdutils/pwdutils.nix
