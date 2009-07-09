@@ -29,6 +29,7 @@ let
       runCommand "nixos-iso-${version}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
+            maintainers = [lib.maintainers.eelco];
           };
         }
         ''
