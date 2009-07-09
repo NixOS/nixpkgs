@@ -19,7 +19,7 @@ args:
                      "run NO_FETCH=1 nix-repository-manager <path to nixpkgs> --update <reponame> to add it automatically";
         localTarGZ = managedRepoDir+"/dist/${ lib.dropPath (head fetchinfo.urls) }"; # hack, dropPath should be implemented as primop
         fetchInfos = import ../../../misc/bleeding-edge-fetch-infos.nix; in
-    if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false )
+    if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false && builtins.pathExists localTarGZ)
         then localTarGZ else fetchinfo;
 
   repos = 
@@ -31,7 +31,7 @@ args:
     # each repository has 
     # a type, url and maybe a tag
     # you can add groups names to update some repositories at once
-    # see nix_repository_manager expression in all-packages.nix
+    # see nix-repository-manager expression in haskellPackages
 
       nix_repository_manager = { type = "darcs"; url = "http://mawercer.de/~marc/repos/nix-repository-manager"; };
 
