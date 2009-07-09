@@ -7898,7 +7898,7 @@ let
 
   sourceAndTags = import ../misc/source-and-tags {
     inherit pkgs stdenv unzip lib ctags;
-    inherit (ghc68executables) hasktags;
+    hasktags = haskellPackages.myhasktags;
   };
 
   synaptics = import ../misc/synaptics {
