@@ -1824,6 +1824,10 @@ let
     };
   });
 
+  falcon = builderDefsPackage (import ../development/interpreters/falcon) {
+    inherit cmake;
+  };
+
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
   };
