@@ -5,7 +5,7 @@ rec {
   inherit aterm;
 
   
-  sdf = stdenv.mkDerivation rec {
+  sdf = stdenv.mkDerivation ( rec {
     name = "sdf2-bundle-2.4";
 
     src = fetchurl {
@@ -24,7 +24,7 @@ rec {
       homepage = http://www.program-transformation.org/Sdf/SdfBundle;
       meta = "Tools for the SDF2 Syntax Definition Formalism, including the `pgen' parser generator and `sglr' parser";
     };
-  };
+  } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2 -Wl,--stack=0x2300000"; } else {} ) ) ;
 
   
   strategoxt = stdenv.mkDerivation rec {
