@@ -3974,7 +3974,7 @@ let
     inherit (gtkLibs) glib pango;
   };
 
-  pcre = import ../development/libraries/pcre {
+  pcre = makeOverridable (import ../development/libraries/pcre) {
     inherit fetchurl stdenv;
     unicodeSupport = getConfig ["pcre" "unicode"] false;
     cplusplusSupport = !stdenv ? isDietLibC;
@@ -4603,6 +4603,11 @@ let
 
   portmap = makeOverridable (import ../servers/portmap) {
     inherit fetchurl stdenv lib tcpWrapper;
+  };
+
+  monetdb = import ../servers/sql/monetdb {
+    inherit composableDerivation;
+    inherit fetchurl stdenv pcre openssl readline libxml2 geos;
   };
 
   mysql4 = import ../servers/sql/mysql {
