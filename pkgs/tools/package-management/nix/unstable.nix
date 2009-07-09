@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.13pre15614";
+  name = "nix-0.13pre16130";
   
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/32581/download/4/${name}.tar.bz2";
-    sha256 = "236c84cf85739fe1deddd8f98f634eac03df9c7a588f4c1e234e80e84a471d00";
+    url = "http://hydra.nixos.org/build/41395/download/4/nix-0.13pre16130.tar.bz2";
+    sha256 = "8b259827e39d1dcaf749cbccb1a95a6d9086f9b7288503ec4ec9e204bda3cf96";
   };
 
   buildInputs = [perl curl openssl];
