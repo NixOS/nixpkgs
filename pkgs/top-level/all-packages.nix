@@ -635,10 +635,6 @@ let
     inherit fetchurl stdenv emacs cedet jdee texinfo;
   };
 
-  eieio = import ../applications/editors/emacs-modes/eieio {
-    inherit fetchurl stdenv emacs;
-  };
-
   emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
     inherit fetchurl stdenv emacs;
   };
@@ -1312,10 +1308,6 @@ let
 
   seccure = import ../tools/security/seccure/0.4.nix {
     inherit fetchurl stdenv libgcrypt;
-  };
-
-  semantic = import ../applications/editors/emacs-modes/semantic {
-    inherit fetchurl stdenv emacs eieio;
   };
 
   setserial = builderDefsPackage (import ../tools/system/setserial) {
