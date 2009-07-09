@@ -200,8 +200,8 @@ in
         unset installPhase
         export G2CONF="--enable-gconf" # hack, should be specified somewhere else
         for srcs in $pygobjectSrc $pygtkSrc $pySrcs; do
-          cd $TMP; mkdir "$(basename $srcs)"; cd "$(basename $srcs)"; unpackPhase
-          cd $sourceRoot
+          cd $TMP; mkdir "$(basename $srcs)"; cd "$(basename $srcs)"; unpackFile $srcs
+          cd *
           configurePhase; buildPhase; installPhase
             addToEnv $out # pygtk has to know about pygobject
             PATH=$out/bin:$PATH # gnome-python nees pygtk-codegen
