@@ -5513,6 +5513,9 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
+  };
+
   sysfsutils = import ../os-specific/linux/sysfsutils {
     inherit fetchurl stdenv;
   };
