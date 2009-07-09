@@ -48,7 +48,7 @@ rec {
   };
 
   Crypto = import ../development/libraries/haskell/Crypto {
-    inherit cabal;
+    inherit cabal HUnit QuickCheck;
   };
 
   dataenc = import ../development/libraries/haskell/dataenc {
@@ -184,7 +184,7 @@ rec {
   };
 
   monadlab = import ../development/libraries/haskell/monadlab {
-    inherit cabal;
+    inherit cabal parsec;
   };
 
   MonadRandom = import ../development/libraries/haskell/MonadRandom {

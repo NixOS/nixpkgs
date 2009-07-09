@@ -1,4 +1,4 @@
-{cabal}:
+{cabal, parsec}:
 
 cabal.mkDerivation (self : {
   pname = "MonadLab";
@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Automatically generate layered monads.";
   };
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [parsec];
 })
