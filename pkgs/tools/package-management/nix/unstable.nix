@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "nix-0.13pre16130";
   
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/41395/download/4/nix-0.13pre16130.tar.bz2";
+    url = "http://hydra.nixos.org/build/41395/download/4/${name}.tar.bz2";
     sha256 = "8b259827e39d1dcaf749cbccb1a95a6d9086f9b7288503ec4ec9e204bda3cf96";
   };
 
