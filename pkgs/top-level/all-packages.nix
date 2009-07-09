@@ -6233,6 +6233,10 @@ let
   # The forthcoming GNU Emacs 23 used to be referred to as `emacsUnicode' here.
   emacsUnicode = emacs23;
 
+  emacsw3m = import ../applications/editors/emacs-modes/emacs-w3m {
+    inherit fetchurl stdenv emacs w3m texinfo;
+  };
+
   emms = import ../applications/editors/emacs-modes/emms {
     inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
       alsaUtils;
