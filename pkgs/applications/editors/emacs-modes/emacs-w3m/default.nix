@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, w3m, texinfo }:
+{ fetchurl, stdenv, emacs, w3m, imagemagick, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "emacs-w3m-1.4.4";
@@ -10,9 +10,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ emacs w3m texinfo ];
 
+  # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
   patchPhase = ''
     sed -i "w3m.el" \
-        -e 's|defcustom w3m-command nil|defcustom w3m-command "${w3m}/bin/w3m"|g'
+        -e 's|defcustom w3m-command nil|defcustom w3m-command "${w3m}/bin/w3m"|g ;
+            s|(w3m-which-command "display")|"${imagemagick}/bin/display"|g'
+
+    sed -i "w3m-image.el" \
+        -e 's|defcustom w3m-imagick-convert-program.*$|defcustom w3m-imagick-convert-program "${imagemagick}/bin/convert"|g'
   '';
 
   configurePhase = ''
