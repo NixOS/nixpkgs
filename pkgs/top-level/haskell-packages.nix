@@ -505,6 +505,11 @@ rec {
     inherit (pkgs) tetex polytable;
   };
 
+  myhasktags = import ../tools/misc/myhasktags {
+    inherit ghcReal;
+    inherit (pkgs) stdenv fetchurl;
+  };
+
   # Games.
 
   MazesOfMonad = import ../games/MazesOfMonad {

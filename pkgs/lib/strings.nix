@@ -79,11 +79,6 @@ rec {
   # [] for zsh
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
-    
-  # !!! what is this for?
-  defineShList = name: list: "\n${name}=(${concatStringsSep " " (map escapeShellArg list)})\n";
-
-
   # arg: http://foo/bar/bz.ext returns bz.ext
   # !!! isn't this what the `baseNameOf' primop does?
   dropPath = s : 

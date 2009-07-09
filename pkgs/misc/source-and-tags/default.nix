@@ -19,22 +19,23 @@ args: with args; {
     # using separate tag directory so that you don't have to glob that much files when starting your editor
     # is this a good choice?
     buildPhase =
-      lib.defineShList "sh_list_names" (lib.catAttrs "name" createTagFiles)
-    + lib.defineShList "sh_list_cmds" (lib.catAttrs "tagCmd" createTagFiles)
-    + "SRC_DEST=\$out/src/\$name
-      ensureDir \$SRC_DEST
-      cp -r \$srcDir \$SRC_DEST
-      cd \$SRC_DEST
-      for a in `seq 0 \${#sh_list}`; do
-          TAG_FILE=\"\$SRC_DEST/\"\${sh_list_names[$a]}$tagSuffix
-          cmd=\"\${sh_list_cmds[$a]}\"
-          echo running tag cmd \"$cmd\" in `pwd`
-          eval \"\$cmd\";
-          TAG_FILES=\"\$TAG_FILES\${TAG_FILES:+:}\$TAG_FILE\"
-       done
-       ensureDir $out/nix-support
-       echo \"TAG_FILES=\\\"\\\$TAG_FILES\\\${TAG_FILES:+:}$TAG_FILES\\\"\" >> $out/nix-support/setup-hook
-    ";
+      let createTags = lib.concatStringsSep "\n"
+          (map (a: ''
+            TAG_FILE="$SRC_DEST/${a.name}$tagSuffix"
+            echo running tag cmd "${a.tagCmd}" in `pwd`
+            ${a.tagCmd}
+            TAG_FILES="$TAG_FILES\''${TAG_FILES:+:}$TAG_FILE"
+           '') createTagFiles );
+      in ''
+      SRC_DEST=$out/src/$name
+      ensureDir $SRC_DEST
+      cp -r $srcDir $SRC_DEST
+      cd $SRC_DEST
+      ${createTags}
+
+      ensureDir $out/nix-support
+      echo "TAG_FILES=\"\$TAG_FILES\\''${TAG_FILES:+:}$TAG_FILES\"" >> $out/nix-support/setup-hook
+    '';
   };
   # example usage
   #testSourceWithTags = sourceWithTagsDerivation (ghc68extraLibs ghcsAndLibs.ghc68).happs_server_darcs.passthru.sourceWithTags;
