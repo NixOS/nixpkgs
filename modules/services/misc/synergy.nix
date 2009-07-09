@@ -92,7 +92,7 @@ let
 in
 
 
-mkIf config.services.sshd.enable {
+{
   require = [
     options
   ];
