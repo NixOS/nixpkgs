@@ -38,6 +38,14 @@ rec {
     inherit cabal;
   };
 
+  bytestring = import ../development/libraries/haskell/bytestring {
+    inherit cabal;
+  };
+
+  networkBytestring = import ../development/libraries/haskell/network-bytestring {
+    inherit cabal bytestring network;
+  };
+
   cgi = import ../development/libraries/haskell/cgi {
     inherit cabal mtl network parsec xhtml;
   };
@@ -81,12 +89,20 @@ rec {
     inherit cabal mtl;
   };
 
+  getOptions = import ../development/libraries/haskell/get-options {
+    inherit cabal mtl; inherit (pkgs.bleedingEdgeRepos) sourceByName;
+  };
+
   ghcCore = import ../development/libraries/haskell/ghc-core {
     inherit cabal pcreLight hscolour;
   };
 
   ghcPaths = import ../development/libraries/haskell/ghc-paths {
     inherit cabal;
+  };
+
+  ghcSyb = import ../development/libraries/haskell/ghc-syb {
+    inherit cabal syb; inherit (pkgs.bleedingEdgeRepos) sourceByName;
   };
 
   GLUT = import ../development/libraries/haskell/GLUT {
@@ -266,6 +282,10 @@ rec {
 
   regexPosix = import ../development/libraries/haskell/regex-posix {
     inherit cabal regexBase;
+  };
+
+  syb = import ../development/libraries/haskell/syb {
+    inherit cabal;
   };
 
   SDLImage = import ../development/libraries/haskell/SDL-image {
@@ -462,6 +482,14 @@ rec {
 
   hlint = import ../development/tools/haskell/hlint {
     inherit cabal haskellSrcExts mtl uniplate hscolour;
+  };
+
+  hslogger = import ../development/tools/haskell/hslogger {
+    inherit cabal mtl network time;
+  };
+
+  tar = import ../development/tools/haskell/tar {
+    inherit cabal binary;
   };
 
   uuagc = import ../development/tools/haskell/uuagc {

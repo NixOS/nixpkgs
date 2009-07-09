@@ -7,9 +7,9 @@
     url = http://mawercer.de/~nix/repos/cabal.tar.gz;
     sha256 = "2c370636ef30593325b1c01eed37eb0e993923acb6387724d97a5eed51b00887";
   };
-  getOptions = args: with args; fetchurl {
-    url = http://mawercer.de/~nix/repos/getOptions.tar.gz;
-    sha256 = "6475f2e5762cee2b8544d051c2b831ed5bd22a5711eca86fd6e0f0e95ac8b8b0";
+  getOptions = args: with args; fetchurl { # Thu Jul  9 23:31:53 CEST 2009
+    url = "http://mawercer.de/~nix/repos/getOptions-nrmtag1.tar.gz";
+    sha256 = "5ec39b43a58a507ed3652bc53d57d9b785a6fbb72a8824b951590e076c704589";
   };
   ghc_lambdavm = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/ghc_lambdavm.tar.gz;
@@ -254,5 +254,9 @@
   sqlalchemyMigrate = args: with args; fetchurl { # Fri Jun 26 00:22:43 CEST 2009
     url = "http://mawercer.de/~nix/repos/sqlalchemyMigrate-569.tar.gz";
     sha256 = "7775d9bf7e25a8270ac112d9b1d916a36691a73beb9a87a6473d005d3ee0f0bf";
+  };
+  ghc_syb = args: with args; fetchurl { # Thu Jul  9 23:41:34 CEST 2009
+    url = "http://mawercer.de/~nix/repos/ghc_syb-876b121e73f1b5ca4b17b0c6908b27ba7efb0374.tar.gz";
+    sha256 = "325a19962e90dc5fb07845d2ac4df6e332061cda4b8950b95bcb782706ed3e31";
   };
 }

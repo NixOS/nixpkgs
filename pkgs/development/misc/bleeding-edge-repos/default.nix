@@ -73,5 +73,8 @@ args:
 
       # git repositories 
       hypertable =  { type="git"; url="git://scm.hypertable.org/pub/repos/hypertable.git"; groups=""; };
+
+      getOptions = { type="darcs"; url="http://repetae.net/john/repos/GetOptions"; groups=""; };
+      ghc_syb = { type = "git"; url = "git://github.com/nominolo/ghc-syb.git"; groups="haskell scien"; };
     } // kde4support // getConfig [ "bleedingEdgeRepos" "repos" ] {};
 }
