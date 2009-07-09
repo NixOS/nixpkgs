@@ -61,6 +61,7 @@ let
           pkgs.xorg.fontbhlucidatypewriter75dpi
           pkgs.ttf_bitstream_vera
           pkgs.freefont_ttf
+          pkgs.liberation_ttf
           pkgs.xorg.fontbh100dpi
           pkgs.xorg.fontmiscmisc
           pkgs.xorg.fontcursormisc
