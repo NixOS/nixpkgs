@@ -2,11 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "dblatex-0.2.11";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/dblatex/${name}.tar.bz2";
     sha256 = "cc1bd2c1aca5f6d03ef8516437321f75eba604d2067efe65f2d07815f56f7205";
   };
+
+  patches =
+    [ # Fix xrefs and callouts that refer to xml:ids (rather than ids).
+      ./xmlid.patch
+    ];
 
   buildPhase = "true";
   
