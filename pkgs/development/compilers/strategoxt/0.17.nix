@@ -62,7 +62,7 @@ rec {
       homepage = http://strategoxt.org/Stratego/JavaFront;
       meta = "Tools for generating or transforming Java code";
     };
-  };
+  } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2"; } else {} ) ) ;
 
 
   dryad = stdenv.mkDerivation rec {
