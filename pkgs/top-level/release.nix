@@ -49,7 +49,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // mapTestOn {
+} // mapTestOn rec {
 
   MPlayer = linux;
   abcde = linux;
@@ -86,7 +86,6 @@ in {
   cabextract = all;
   castleCombat = linux;
   cdrkit = linux;
-  cedet = linux;
   chatzilla = linux;
   cksfv = all;
   clisp = linux;
@@ -117,8 +116,7 @@ in {
   ejabberd = linux;
   elinks = linux;
   emacs22 = all;
-  emacsUnicode = all;
-  emms = linux;
+  emacs23 = all;
   enscript = all;
   eprover = linux;
   evince = linux;
@@ -394,7 +392,19 @@ in {
     nl = all;
     ru = all;
   };
-  
+
+  emacs22Packages = {
+    bbdb = linux;
+    cedet = linux;
+    ecb = linux;
+    emacsw3m = linux;
+    emms = linux;
+  };
+
+  emacs23Packages = emacs22Packages // {
+    jdee = linux;
+  };
+
   gnome = {
     gconfeditor = linux;
     gnomepanel = linux;

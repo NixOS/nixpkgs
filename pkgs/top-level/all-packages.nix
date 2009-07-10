@@ -515,10 +515,6 @@ let
     inherit fetchurl stdenv cmake libcap zlib bzip2;
   };
 
-  cedet = import ../applications/editors/emacs-modes/cedet {
-    inherit fetchurl stdenv emacs;
-  };
-
   checkinstall = import ../tools/package-management/checkinstall {
     inherit fetchurl stdenv gettext;
   };
@@ -629,14 +625,6 @@ let
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
-  };
-
-  ecb = import ../applications/editors/emacs-modes/ecb {
-    inherit fetchurl stdenv emacs cedet jdee texinfo;
-  };
-
-  emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
-    inherit fetchurl stdenv emacs;
   };
 
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
@@ -891,11 +879,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  jdee = import ../applications/editors/emacs-modes/jdee {
-    inherit fetchsvn stdenv cedet ant;
-    emacs = emacs23;  # for `avl-tree'
-  };
-
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
@@ -960,10 +943,6 @@ let
 
   lzop = import ../tools/compression/lzop {
     inherit fetchurl stdenv lzo;
-  };
-
-  magit = import ../applications/editors/emacs-modes/magit {
-    inherit fetchurl stdenv emacs texinfo;
   };
 
   man = import ../tools/misc/man {
@@ -5916,10 +5895,6 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  bbdb = import ../applications/editors/emacs-modes/bbdb {
-    inherit fetchurl stdenv emacs texinfo ctags;
-  };
-
   cinepaint = import ../applications/graphics/cinepaint {
     inherit stdenv fetchcvs cmake pkgconfig freetype fontconfig lcms flex libtiff
       libjpeg libpng libexif zlib perl mesa perlXMLParser python pygtk gettext
@@ -5939,10 +5914,6 @@ let
   comical = import ../applications/graphics/comical {
     inherit stdenv fetchurl utillinux zlib;
     inherit wxGTK;
-  };
-
-  cua = import ../applications/editors/emacs-modes/cua {
-    inherit fetchurl stdenv;
   };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
@@ -6098,17 +6069,71 @@ let
     dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
   });
 
+  emacsPackages = emacs: rec {
+    bbdb = import ../applications/editors/emacs-modes/bbdb {
+      inherit fetchurl stdenv emacs texinfo ctags;
+    };
+
+    cedet = import ../applications/editors/emacs-modes/cedet {
+      inherit fetchurl stdenv emacs;
+    };
+
+    cua = import ../applications/editors/emacs-modes/cua {
+      inherit fetchurl stdenv;
+    };
+
+    ecb = import ../applications/editors/emacs-modes/ecb {
+      inherit fetchurl stdenv emacs cedet jdee texinfo;
+    };
+
+    emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
+      inherit fetchurl stdenv emacs;
+    };
+
+    emacsw3m = import ../applications/editors/emacs-modes/emacs-w3m {
+      inherit fetchcvs stdenv emacs w3m imagemagick texinfo autoconf;
+    };
+
+    emms = import ../applications/editors/emacs-modes/emms {
+      inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
+        alsaUtils;
+    };
+
+    jdee = import ../applications/editors/emacs-modes/jdee {
+      # Requires Emacs 23, for `avl-tree'.
+      inherit fetchsvn stdenv cedet ant emacs;
+    };
+
+    haskellMode = import ../applications/editors/emacs-modes/haskell {
+      inherit fetchurl stdenv emacs;
+    };
+
+    magit = import ../applications/editors/emacs-modes/magit {
+      inherit fetchurl stdenv emacs texinfo;
+    };
+
+    maudeMode = import ../applications/editors/emacs-modes/maude {
+      inherit fetchurl stdenv emacs;
+    };
+
+    nxml = import ../applications/editors/emacs-modes/nxml {
+      inherit fetchurl stdenv;
+    };
+
+    quack = import ../applications/editors/emacs-modes/quack {
+      inherit fetchurl stdenv emacs;
+    };
+
+    remember = import ../applications/editors/emacs-modes/remember {
+      inherit fetchurl stdenv texinfo emacs bbdb;
+    };
+  };
+
+  emacs22Packages = emacsPackages emacs22;
+  emacs23Packages = emacsPackages emacs23;
+
   # The forthcoming GNU Emacs 23 used to be referred to as `emacsUnicode' here.
   emacsUnicode = emacs23;
-
-  emacsw3m = import ../applications/editors/emacs-modes/emacs-w3m {
-    inherit fetchcvs stdenv emacs w3m imagemagick texinfo autoconf;
-  };
-
-  emms = import ../applications/editors/emacs-modes/emms {
-    inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
-      alsaUtils;
-  };
 
   evince = import ../applications/misc/evince {
     inherit fetchurl stdenv perl perlXMLParser gettext intltool
@@ -6332,10 +6357,6 @@ let
     inherit fetchurl stdenv Xaw3d ghostscriptX;
   };
 
-  haskellMode = import ../applications/editors/emacs-modes/haskell {
-    inherit fetchurl stdenv emacs;
-  };
-
   hello = import ../applications/misc/hello/ex-2 {
     inherit fetchurl stdenv;
   };
@@ -6500,10 +6521,6 @@ let
    qt = qt4;
   };
 
-  maudeMode = import ../applications/editors/emacs-modes/maude {
-    inherit fetchurl stdenv emacs;
-  };
-
   mercurial = import ../applications/version-management/mercurial {
     inherit fetchurl stdenv python makeWrapper getConfig tk;
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
@@ -6614,10 +6631,6 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  nxml = import ../applications/editors/emacs-modes/nxml {
-    inherit fetchurl stdenv;
-  };
-
   openoffice = import ../applications/office/openoffice {
     inherit fetchurl stdenv pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
@@ -6723,10 +6736,6 @@ let
     inherit builderDefs fetchurl stdenv;
   };
 
-  quack = import ../applications/editors/emacs-modes/quack {
-    inherit fetchurl stdenv emacs;
-  };
-
   qtpfsgui = import ../applications/graphics/qtpfsgui {
     inherit fetchurl stdenv exiv2 libtiff fftw qt4 ilmbase;
     openexr = openexr_1_6_1;
@@ -6752,10 +6761,6 @@ let
     inherit (gtkLibs) glib pango atk gtk;
     inherit (xlibs) libX11;
     libstdcpp5 = gcc33.gcc;
-  };
-
-  remember = import ../applications/editors/emacs-modes/remember {
-    inherit fetchurl stdenv texinfo emacs bbdb;
   };
 
   rsync = import ../applications/networking/sync/rsync {
