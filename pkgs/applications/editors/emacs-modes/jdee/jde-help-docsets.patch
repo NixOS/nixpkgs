@@ -1,0 +1,16 @@
+Provide a sensible default for `jde-help-docsets'.
+
+--- jde/lisp/jde-help.el	(revision 90)
++++ jde/lisp/jde-help.el	(working copy)
+@@ -28,7 +28,10 @@
+ (require 'jde-util)
+ 
+ ;; (makunbound 'jde-help-docsets)
+-(defcustom jde-help-docsets (list (list "JDK API" "" nil))
++(defcustom jde-help-docsets (list
++			     (list "JDK API"
++				   "http://java.sun.com/javase/6/docs/api"
++				   nil))
+   "*Lists collections of HTML files documenting Java classes. 
+ This list is used by the `jde-help-class' command to find help for 
+ a class. You can specify the following information for each docset:
