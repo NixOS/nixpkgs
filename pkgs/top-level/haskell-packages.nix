@@ -63,6 +63,10 @@ rec {
     inherit cabal;
   };
 
+  dataReify = import ../development/libraries/haskell/data-reify {
+    inherit cabal;
+  };
+
   digest = import ../development/libraries/haskell/digest {
     inherit cabal;
     inherit (pkgs) zlib;
