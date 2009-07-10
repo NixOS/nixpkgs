@@ -1898,7 +1898,7 @@ let
   };
 
   mono = import ../development/compilers/mono {
-    inherit fetchurl stdenv bison pkgconfig;
+    inherit fetchurl stdenv bison pkgconfig gettext perl;
     inherit (gtkLibs) glib;
   };
 

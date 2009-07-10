@@ -1,16 +1,17 @@
-{stdenv, fetchurl, bison, pkgconfig, glib}:
+{stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl}:
 
 stdenv.mkDerivation {
-  name = "mono-1.1.4";
+  name = "mono-2.4.2.1";
   src = fetchurl {
-    url = http://nixos.org/tarballs/mono-1.1.4.tar.gz;
-    md5 = "66755e5f201e912cecdd19807ba62487";
+    url = http://ftp.novell.com/pub/mono/sources/mono/mono-2.4.2.1.tar.bz2;
+    sha256 = "0cbg29fz5xnyjmznwzsmaxrr0cxqisyxk7jx7m56p3zzr379f0f5";
   };
 
-  buildInputs = [bison pkgconfig glib];
+  buildInputs = [bison pkgconfig glib gettext perl];
   propagatedBuildInputs = [glib];
 
   preBuild = "
     makeFlagsArray=(INSTALL=`type -tp install`)
+    patchShebangs ./
   ";
 }
