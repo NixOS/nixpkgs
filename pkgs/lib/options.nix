@@ -670,6 +670,10 @@ rec {
     inherit content;
   };
 
+  # Sugar to override the default value of the option by making a new
+  # default value based on the configuration.
+  mkDefaultValue = content: mkOverride 1000 {} content;
+
   # Make the template traversal in function of the property traversal.  If
   # the template define a non-empty attribute set, then the property is
   # copied only on all mentionned attributes inside the template.
@@ -701,7 +705,7 @@ rec {
         foldProperty
           (foldFilter isOverride
             (p@{property, content, ...}:
-              if lessThan content.priority property.priority then
+              if content ? priority && lessThan content.priority property.priority then
                 content
               else
                 content // {
@@ -713,16 +717,24 @@ rec {
                 value = p // { content = content.value; };
               }
             )
-          ) (value: { priority = defaultPrio; inherit value; });
+          ) (value: { inherit value; });
 
-      prioValList = map getPrioVal valList;
+      addDefaultPrio = x:
+        if x ? priority then x
+        else x // { priority = defaultPrio; };
 
-      higherPrio = fold (x: y:
-        if lessThan x.priority y then
-          x.priority
+      prioValList = map (x: addDefaultPrio (getPrioVal x)) valList;
+
+      higherPrio =
+        if prioValList == [] then
+          defaultPrio
         else
-          y
-      ) defaultPrio prioValList;
+          fold (x: min:
+            if lessThan x.priority min then
+              x.priority
+            else
+              min
+          ) (head prioValList).priority (tail prioValList);
     in
       map (x:
         if x.priority == higherPrio then
