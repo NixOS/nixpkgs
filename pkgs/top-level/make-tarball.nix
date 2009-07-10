@@ -19,6 +19,7 @@ releaseTools.makeSourceTarball {
     libxslt
     w3m
     nixUnstable # Needed to check whether the expressions are valid.
+    tetex dblatex
   ];
 
   configurePhase = ''
@@ -32,7 +33,8 @@ releaseTools.makeSourceTarball {
 
   buildPhase = ''
     echo "building docs..."
-    (cd doc && make docbookxsl=${docbook5_xsl}/xml/xsl/docbook) || false
+    export VARTEXFONTS=$TMPDIR/texfonts
+    make -C doc docbookxsl=${docbook5_xsl}/xml/xsl/docbook
     ln -s doc/NEWS.txt NEWS
   '';
 
@@ -72,6 +74,9 @@ releaseTools.makeSourceTarball {
     cp doc/manual.html $out/manual/index.html
     cp doc/style.css $out/manual/
     echo "doc manual $out/manual" >> $out/nix-support/hydra-build-products
+
+    cp doc/manual.pdf $out/manual.pdf
+    echo "doc-pdf manual $out/manual.pdf" >> $out/nix-support/hydra-build-products
   '';
 
   meta = {

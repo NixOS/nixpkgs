@@ -1,5 +1,6 @@
 # You may need to override this.
 docbookxsl = $(HOME)/.nix-profile/xml/xsl/docbook
+dblatex = dblatex
 
 XMLLINT = xmllint --catalogs
 XSLTPROC = xsltproc --catalogs \
@@ -16,7 +17,7 @@ NEWS_OPTS = \
  --stringparam section.autolabel.max.depth 0 \
  --stringparam header.rule 0
 
-all: NEWS.html NEWS.txt manual.html
+all: NEWS.html NEWS.txt manual.html manual.pdf
 
 NEWS.html: release-notes.xml
 	$(XSLTPROC) --nonet --xinclude --output $@ $(NEWS_OPTS) \
@@ -34,4 +35,7 @@ manual.html: *.xml
 	  $(docbookxsl)/html/docbook.xsl manual.xml
 
 manual.pdf: *.xml
-	dblatex manual.xml
+	$(dblatex) \
+	  -P doc.collab.show=0 \
+	  -P latex.output.revhistory=0 \
+	  manual.xml
