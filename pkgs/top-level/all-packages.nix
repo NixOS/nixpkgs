@@ -6102,7 +6102,7 @@ let
   emacsUnicode = emacs23;
 
   emacsw3m = import ../applications/editors/emacs-modes/emacs-w3m {
-    inherit fetchurl stdenv emacs w3m imagemagick texinfo;
+    inherit fetchcvs stdenv emacs w3m imagemagick texinfo autoconf;
   };
 
   emms = import ../applications/editors/emacs-modes/emms {

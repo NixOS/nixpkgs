@@ -1,14 +1,19 @@
-{ fetchurl, stdenv, emacs, w3m, imagemagick, texinfo }:
+{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoconf }:
 
+let date = "2009-07-09"; in
 stdenv.mkDerivation rec {
-  name = "emacs-w3m-1.4.4";
+  name = "emacs-w3m-cvs${date}";
 
-  src = fetchurl {
-    url = "http://emacs-w3m.namazu.org/${name}.tar.gz";
-    sha256 = "193p3kkjk1glhlgfqb9hz99av2i4b53civkz23ayvz3w9wvyird3";
+  # Get the source from CVS because the previous release (1.4.4) is old and
+  # doesn't work with GNU Emacs 23.
+  src = fetchcvs {
+    inherit date;
+    cvsRoot = ":pserver:anonymous@cvs.namazu.org:/storage/cvsroot";
+    module = "emacs-w3m";
+    sha256 = "ad46592d4fe3cdaadc02ce6d3fb1ac237e200beecd2ad11a04c1395a38a70a0a";
   };
 
-  buildInputs = [ emacs w3m texinfo ];
+  buildInputs = [ emacs w3m texinfo autoconf ];
 
   # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
   patchPhase = ''
@@ -17,10 +22,11 @@ stdenv.mkDerivation rec {
             s|(w3m-which-command "display")|"${imagemagick}/bin/display"|g'
 
     sed -i "w3m-image.el" \
-        -e 's|defcustom w3m-imagick-convert-program.*$|defcustom w3m-imagick-convert-program "${imagemagick}/bin/convert"|g'
+        -e 's|(w3m-which-command "convert")$|"${imagemagick}/bin/convert"|g'
   '';
 
   configurePhase = ''
+    autoreconf -vfi && \
     ./configure --prefix="$out" --with-lispdir="$out/share/emacs/site-lisp" \
                 --with-icondir="$out/share/emacs/site-lisp/images/w3m"
   '';
