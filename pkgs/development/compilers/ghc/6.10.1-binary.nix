@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
+    cp $(type -P pwd) utils/pwd/pwd
     ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include
   '';
 
