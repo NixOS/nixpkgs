@@ -1,0 +1,46 @@
+Fix `jde-help-find-javadoc' so that it correctly infers whether
+an HTML page exists.
+
+Previously it would consider that Wget succeeded if its output
+contained the string "200".  This doesn't work as Wget's output
+starts with something like:
+
+  --2009-07-10 16:15:37--  http://java.sun.com/javase/6/docs/api/foobar
+
+This patch makes it check the exit code of Wget instead, which is
+more reliable.
+
+--- jde/lisp/jde-help.el	(revision 90)
++++ jde/lisp/jde-help.el	(working copy)
+@@ -138,7 +138,7 @@ one of the the sites in `jde-help-docset
+ 		 (const :tag "Disable timeout checking" :value 0)
+                  (integer :tag "Timeout (seconds)" :value 900)))
+ 
+-(defcustom jde-help-wget-command-line-options nil
++(defcustom jde-help-wget-command-line-options "--quiet"
+   "Specifies additional options (beyond --spider, --tries and
+ --timeout) to pass to wget, if wget is used for
+ `jde-help-remote-file-exists-function'."
+@@ -208,18 +208,15 @@ to verify the existence of pages located
+ 	    (error "Cannot find url-file-exists function"))
+         (if (executable-find 
+ 	     (if (eq system-type 'windows-nt) "wget.exe" "wget"))
+-            (if (not
+-                 (string-match
+-                  "200"
+-                  (shell-command-to-string
+-                   (concat "wget --spider "
++	    (let ((cmd (concat "wget --spider "
+ 			   (if jde-help-wget-tries
+ 			       (concat "--tries=" jde-help-wget-tries))
+ 			   (if jde-help-wget-timeout
+ 			       (concat "--timeout=" jde-help-wget-timeout))
+ 			   jde-help-wget-command-line-options
+-			   " " url))))
+-                (setq url nil))
++			       " " url)))
++	      (unless (= 0 (shell-command cmd))
++		(setq url nil)))
+           (error
+            (concat "Cannot find wget. This utility is needed "
+                    "to access javadoc on remote systems.")))))

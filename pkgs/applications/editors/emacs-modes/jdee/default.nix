@@ -18,6 +18,7 @@ in
     patches = [
       ./installation-layout.patch ./cedet-paths.patch ./elib-avltree.patch
       ./java-directory.patch ./jde-directory-files-recurs.patch
+      ./jde-help-find-javadoc.patch
     ];
 
     configurePhase = ''
