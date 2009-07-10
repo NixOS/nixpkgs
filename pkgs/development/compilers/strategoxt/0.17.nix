@@ -44,12 +44,12 @@ rec {
   };
 
 
-  javafront = stdenv.mkDerivation rec {
+  javafront = stdenv.mkDerivation (rec {
     name = "java-front-0.9";
 
     src = fetchurl {
       url = "ftp://ftp.strategoxt.org/pub/stratego/java-front/java-front-0.9/java-front-0.9.tar.gz";
-      sha256 = "1h908pw3b147pbklm884bn3bff8jzzp3lyvjaqgg2l4bladya757";
+      sha256 = "96f40bf31486d3ced3ecebdcc0067e83ce6acbdbe57e3c847136ac3d7b62cc3c";
     };
 
     buildInputs = [pkgconfig aterm sdf strategoxt];
