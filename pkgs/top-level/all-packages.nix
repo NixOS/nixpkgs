@@ -4522,9 +4522,10 @@ let
   };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
-    inherit fetchurl stdenv pkgconfig freetype fontconfig
+    inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
-      xkeyboard_config dbus hal libuuid openssl gperf m4;
+      xkeyboard_config dbus hal libuuid openssl gperf m4
+      automake autoconf libtool;
 
     # !!! pythonBase is use instead of python because this cause an infinite
     # !!! recursion when the flag python.full is set to true.  Packages

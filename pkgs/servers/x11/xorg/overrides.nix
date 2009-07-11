@@ -50,7 +50,14 @@
   };
 
   xf86videoopenchrome = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
+    src = args.fetchsvn {
+      url = http://svn.openchrome.org/svn/trunk;
+      md5 = "9a64a317d1f0792c5709e516c14f383b";
+      rev = 754;
+      };
+    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa args.automake args.autoconf args.libtool xorg.libXext];
+    preConfigure = "chmod +x autogen.sh";
+    configureScript = "./autogen.sh";
   };
 
   xkbcomp = attrs: attrs // {
