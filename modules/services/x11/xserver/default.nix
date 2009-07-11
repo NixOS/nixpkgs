@@ -305,7 +305,7 @@ let
     intel =  { modules = [xorg.xf86videointel]; };
     nv =     { modules = [xorg.xf86videonv]; };
     ati =    { modules = [xorg.xf86videoati]; };
-    via =    { modules = [xorg.xf86videovia]; };
+    openchrome = { modules = [xorg.xf86videoopenchrome]; };
     cirrus = { modules = [xorg.xf86videocirrus]; };
   };
 
