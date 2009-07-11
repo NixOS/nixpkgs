@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
             s|(w3m-which-command "display")|"${imagemagick}/bin/display"|g'
 
     sed -i "w3m-image.el" \
-        -e 's|(w3m-which-command "convert")|"${imagemagick}/bin/convert"|g'
+        -e 's|(w3m-which-command "convert")|"${imagemagick}/bin/convert"|g ;
+            s|(w3m-which-command "identify")|"${imagemagick}/bin/identify"|g'
   '';
 
   configurePhase = ''
