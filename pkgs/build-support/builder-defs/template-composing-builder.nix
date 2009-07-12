@@ -19,5 +19,8 @@ rec {
   name = "${abort "Specify name"}-" + version;
   meta = {
     description = "${abort "Specify description"}";
+    maintainers = [
+      a.lib.maintainers.(abort "Specify maintainer")
+    ];
   };
 }

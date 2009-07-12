@@ -1321,6 +1321,9 @@ let
     inherit fetchurl stdenv coreutils pam groff;
   };
 
+  suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) {
+  };
+
   superkaramba = import ../desktops/superkaramba {
     inherit stdenv fetchurl kdebase kdelibs zlib libjpeg
       perl qt3 python libpng freetype expat;
