@@ -37,8 +37,8 @@ stdenv.mkDerivation {
     set +x
     '';
   postInstall = ''
-    ensureDir $out/nix-support
-    echo ${enblendenfuse} ${autopanosiftc} > $out/nix-support/$out/nix-support/propagated-user-env-packages
+    ensureDir "$out/nix-support"
+    echo "${enblendenfuse} ${autopanosiftc}" > $out/nix-support/propagated-user-env-packages
   '';
 
   meta = {
