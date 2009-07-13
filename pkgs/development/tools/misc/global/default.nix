@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0fdkkg5qs76cjdnig54bhw97dgwg2rm2dg8k8r7hz836pk838540";
   };
 
+  postInstall = ''
+    ensureDir "$out/share/emacs/site-lisp"
+    cp -v *.el "$out/share/emacs/site-lisp"
+  '';
+
   meta = {
     description = "GNU GLOBAL source code tag system";
 
