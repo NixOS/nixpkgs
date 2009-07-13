@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake}:
+{stdenv, fetchurl, autoconf, automake, buggyBiosCDSupport ? false}:
 
 stdenv.mkDerivation {
   name = "grub-0.97-patch-1.9";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     # /dev/disk/by-label/bla.  The symlink resolution code in
     # grub-install isn't smart enough.
     ./symlink.patch
-  ];
+  ] ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch);
 
   # Autoconf/automake required for the splashimage patch.
   buildInputs = [autoconf automake];

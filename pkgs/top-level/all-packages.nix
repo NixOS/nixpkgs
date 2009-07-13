@@ -795,6 +795,7 @@ let
   grub = import ../tools/misc/grub {
     inherit fetchurl autoconf automake;
     stdenv = stdenv_32bit;
+    buggyBiosCDSupport = (getConfig ["grub" "buggyBiosCDSupport"] false);
   };
 
   gssdp = import ../development/libraries/gssdp {
