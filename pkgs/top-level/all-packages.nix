@@ -2447,6 +2447,10 @@ let
 
   m4 = gnum4;
 
+  global = import ../development/tools/misc/global {
+    inherit fetchurl stdenv;
+  };
+
   gnum4 = import ../development/tools/misc/gnum4 {
     inherit fetchurl stdenv;
   };
