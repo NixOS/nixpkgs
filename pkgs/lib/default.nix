@@ -6,7 +6,9 @@ let
   stringsWithDeps = import ./strings-with-deps.nix;
   attrsets = import ./attrsets.nix;
   sources = import ./sources.nix;
+  modules = import ./modules.nix;
   options = import ./options.nix;
+  properties = import ./properties.nix;
   types = import ./types.nix;
   meta = import ./meta.nix;
   debug = import ./debug.nix;
@@ -15,9 +17,9 @@ let
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
-      types meta debug maintainers;
+      properties modules types meta debug maintainers;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
-  // options // types // meta // debug // misc
+  // properties // options // types // meta // debug // misc
