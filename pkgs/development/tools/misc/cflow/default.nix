@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "cflow-1.2";
+  name = "cflow-1.3";
 
   src = fetchurl {
     url = "mirror://gnu/cflow/${name}.tar.bz2";
-    sha256 = "0b45b1x1g9i23mv68pjl008qm4lkbd62hka2bf2gkjd2n4nalc6v";
+    sha256 = "1nlmgcjsy1rl5zpqz9f8mf74faq3rm725hhpf11b8w80sniqgnnk";
   };
 
   patchPhase = ''
@@ -37,5 +37,7 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/cflow/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
