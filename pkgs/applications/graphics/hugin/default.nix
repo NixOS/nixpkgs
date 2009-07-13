@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0nbrvzz94gqgk2v1900lly101g0wjz4zksnh5718226n2g8zlccf";
   };
 
+  patches = [ ./levmar-64-bit-alignment.patch ];
+
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
   NIX_LDFLAGS = "-lrt";
