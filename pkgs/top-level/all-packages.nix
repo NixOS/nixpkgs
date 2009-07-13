@@ -6077,7 +6077,7 @@ let
     dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
   });
 
-  emacsPackages = emacs: rec {
+  emacsPackages = emacs: recurseIntoAttrs (rec {
     bbdb = import ../applications/editors/emacs-modes/bbdb {
       inherit fetchurl stdenv emacs texinfo ctags;
     };
@@ -6135,7 +6135,7 @@ let
     remember = import ../applications/editors/emacs-modes/remember {
       inherit fetchurl stdenv texinfo emacs bbdb;
     };
-  };
+  });
 
   emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
