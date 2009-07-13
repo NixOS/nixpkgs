@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [python makeWrapper];
   buildPhase = "python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) --hardlink-scons -O1";
-  installPhase = "for n in $out/bin/*; do wrapProgram $n --set PYTHONPATH \"$(toPythonPath $out):$PYTHONPATH:\$PYTHONPATH\"; done";
+  installPhase = "for n in $out/bin/*; do wrapProgram $n --suffix PYTHONPATH ':' \"$(toPythonPath $out)\"; done";
 
   meta = {
     homepage = "http://scons.org/";
