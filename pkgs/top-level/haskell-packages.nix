@@ -312,6 +312,10 @@ rec {
     inherit (pkgs) SDL;
   };
 
+  SHA = import ../development/libraries/haskell/SHA {
+    inherit cabal binary;
+  };
+
   Shellac = import ../development/libraries/haskell/Shellac/Shellac.nix {
     inherit cabal mtl;
   };
