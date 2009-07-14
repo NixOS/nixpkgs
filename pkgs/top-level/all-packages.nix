@@ -1867,7 +1867,7 @@ let
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit fpc makeWrapper;
-    inherit (gtkLibs1x) gtk glib gdkpixbuf;
+    inherit (gtkLibs) gtk glib pango atk;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
   };
 

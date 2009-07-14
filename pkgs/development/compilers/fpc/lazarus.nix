@@ -7,7 +7,7 @@ rec {
   };
 
   buildInputs = [fpc gtk glib libXi inputproto 
-    libX11 xproto libXext xextproto gdkpixbuf 
+    libX11 xproto libXext xextproto pango atk
     stdenv.gcc makeWrapper];
   configureFlags = [];
   makeFlags = [
@@ -21,7 +21,8 @@ rec {
   phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
 
   preBuild = fullDepEntry (''
-    export NIX_LDFLAGS='-lXi -lX11 -lglib -lgtk -lgdk -lgdk_pixbuf -lc -lXext'
+    export NIX_LDFLAGS='-lXi -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0 -lc -lXext -lpango-1.0 -latk-1.0'
+    export LCL_PLATFORM=gtk2
     ensureDir $out/share
     tar xf ${fpc.src} --strip-components=1 -C $out/share
     sed -e 's@/usr/fpcsrc@'"$out/share/fpcsrc@" -i ide/include/unix/lazbaseconf.inc
@@ -29,7 +30,8 @@ rec {
   ["minInit" "defEnsureDir" "doUnpack"];
 
   postInstall = fullDepEntry (''
-    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'"
+    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'" \
+    	--prefix LCL_PLATFORM ' ' "'$LCL_PLATFORM'"
   '') ["doMakeInstall" "minInit" "defEnsureDir"];
 
   name = "lazarus-${version}";
