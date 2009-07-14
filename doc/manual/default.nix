@@ -4,6 +4,7 @@ let
 
   manualConfig =
     { environment.checkConfigurationOptions = false;
+      services.nixosManual.enable = false;
     };
 
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext

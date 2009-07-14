@@ -83,7 +83,7 @@ in
   boot.kernelPackages = pkgs.kernelPackages_2_6_29;
 
   # Show the manual.
-  services.showManual.enable = true;
+  services.nixosManual.showManual = true;
 
   # Let the user play Rogue on TTY 8 during the installation.
   services.rogue.enable = true;
