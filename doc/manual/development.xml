@@ -65,7 +65,7 @@ let
   cmd = "root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}";
 in
 
-mkIf cfg.enable {<co xml:id='conf-syntax-5' />
+mkIf cfg.enable { <co xml:id='conf-syntax-5' />
   require = [ <co xml:id='conf-syntax-6' />
     options
 

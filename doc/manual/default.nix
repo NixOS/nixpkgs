@@ -39,7 +39,9 @@ let
         --output $out/manual.html \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
+      ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $out/
       cp ${./style.css} $out/style.css
+      
       ensureDir $out/nix-support
       echo "doc manual $out manual.html" >> $out/nix-support/hydra-build-products
     '';
