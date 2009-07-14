@@ -13,9 +13,6 @@
   
   <xsl:template match="/expr/list">
 
-    <chapter xml:id="ch-options">
-      <title>List of Options</title>
-
       <variablelist>
 
         <xsl:for-each select="attrs">
@@ -39,6 +36,7 @@
 
                <para>
                  <emphasis>Default:</emphasis>
+                 <xsl:text> </xsl:text>
                  <xsl:choose>
                    <xsl:when test="attr[@name = 'default']">
                      <literal>
@@ -54,6 +52,7 @@
                <xsl:if test="attr[@name = 'example']">
                  <para>
                    <emphasis>Example:</emphasis>
+                   <xsl:text> </xsl:text>
                    <literal>
                      <xsl:apply-templates select="attr[@name = 'example']" />
                    </literal>
@@ -67,8 +66,6 @@
         </xsl:for-each>
 
       </variablelist>
-
-    </chapter>
 
   </xsl:template>
 

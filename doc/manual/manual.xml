@@ -35,7 +35,7 @@
     problems here and there.  Extensive familiarity with Linux is
     recommended.  If you encounter problems, please report them on the
     <literal>nix-dev@cs.uu.nl</literal> mailing list or on <link
-    xlink:href="irc://irc.freenode.net/#trace" />.</para>
+    xlink:href="irc://irc.freenode.net/#nixos" />.</para>
     
   </preface>
   
@@ -44,6 +44,9 @@
   <xi:include href="userconfiguration.xml" />
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
-  <xi:include href="options-db.xml" />
+  <chapter xml:id="ch-options">
+    <title>List of Options</title>
+    <xi:include href="options-db.xml" />
+  </chapter>
 
 </book>

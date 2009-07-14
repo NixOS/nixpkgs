@@ -246,7 +246,7 @@ $ nix-env -qa \*</screen>
 
     shows what packages are available, and
 
-<screen>    
+<screen>
 $ nix-env -i w3m</screen>
 
     install the <literal>w3m</literal> browser.</para>
