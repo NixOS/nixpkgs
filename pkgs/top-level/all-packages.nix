@@ -6410,7 +6410,8 @@ let
   });
 
   icecat3Xul =
-    (symlinkJoin "icecat-3-with-xulrunner" [ icecat3 icecatXulrunner3 ])
+    (symlinkJoin "icecat-with-xulrunner-${icecat3.version}"
+       [ icecat3 icecatXulrunner3 ])
     // { inherit (icecat3) gtk isFirefox3Like meta; };
 
   icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
