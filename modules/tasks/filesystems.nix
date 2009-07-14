@@ -80,7 +80,7 @@ let
         };
 
         options = mkOption {
-          default = "defaults";
+          default = "defaults,relatime";
           example = "data=journal";
           type = types.string;
           merge = pkgs.lib.concatStringsSep ",";
