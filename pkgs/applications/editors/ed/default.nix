@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.3";
+  name = "ed-1.4";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "11xyrzm21l2hhvbc0yanx2acsg1dp3ckmcwq2yl6cbymzvzzfrim";
+    sha256 = "1njgcghms1377csldi1yqjhcpghiii6bshdhnjpqp78sxs2xldnv";
   };
 
   doCheck = true;
@@ -27,5 +27,7 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/ed/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
