@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, buggyBiosCDSupport ? false}:
+{stdenv, fetchurl, autoconf, automake, buggyBiosCDSupport ? true}:
 
 stdenv.mkDerivation {
   name = "grub-0.97-patch-1.9";
