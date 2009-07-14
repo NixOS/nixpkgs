@@ -1,8 +1,9 @@
 args : with args; 
 rec {
+  version = "0.9.26.2-0";
   src = fetchurl {
-    url = http://downloads.sourceforge.net/lazarus/lazarus-0.9.26-0.tgz;
-    sha256 = "1pb6h35axdmg552pvazgi7jclkx93vssy08cbpa4jw3rij7drhnl";
+    url = "http://downloads.sourceforge.net/lazarus/lazarus-${version}.tgz";
+    sha256 = "5b582685c0447034580fe17c60b8fc84a8b097b6f31ff9b4583cf0eb741297cc";
   };
 
   buildInputs = [fpc gtk glib libXi inputproto 
@@ -31,7 +32,7 @@ rec {
     wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'"
   '') ["doMakeInstall" "minInit" "defEnsureDir"];
 
-  name = "lazarus-0.9.26-0";
+  name = "lazarus-${version}";
   meta = {
     description = "Lazarus graphical IDE for FreePascal language";
     homepage = http://www.lazarus.freepascal.org ;

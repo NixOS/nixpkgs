@@ -4,12 +4,13 @@ if args ? startFPC && args.startFPC != null then
 
 with args;
 
-stdenv.mkDerivation {
-  name = "fpc-2.2.2";
+stdenv.mkDerivation rec {
+  version = "2.2.4";
+  name = "fpc-${version}";
 
   src = fetchurl {
-    url = ftp://freepascal.stack.nl/pub/fpc/dist/source-2.2.2/fpcbuild-2.2.2.tar.gz;
-    sha256 = "0d73b119e029382052fc6615034c4b5ee3ec66fa6cc45648f1f07cfb2c1058f1";
+    url = "http://downloads.sourceforge.net/sourceforge/freepascal/fpcbuild-${version}.tar.gz";
+    sha256 = "1kxljnivww4riqff8vxann7s135cv634ly3i61rfs1wzwc4lz9bp";
   };
 
   buildInputs = [startFPC gawk];
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   postInstall = ''
     ln -fs $out/lib/fpc/*/ppc386 $out/bin
     mkdir -p $out/lib/fpc/etc/
-    $out/lib/fpc/*/samplecfg $out/lib/fpc/2.2.0 $out/lib/fpc/etc/
+    $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/lib/fpc/etc/
   '';
 
   meta = {
