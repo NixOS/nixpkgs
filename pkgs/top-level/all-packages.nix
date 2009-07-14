@@ -5033,6 +5033,18 @@ let
     ];
   };
 
+  kernel_2_6_31_rc3 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc3.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [ 
+      { name = "rc3 patch";
+        patch = fetchurl {
+          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc3.bz2";
+          sha256 =  "0659p61w8pgl00wh06vmmnkmpjy1ybhi6xnffq695nvsckcgjx79";
+	};
+      }
+    ];
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5138,6 +5150,7 @@ let
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
+  kernelPackages_2_6_31_rc3 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;

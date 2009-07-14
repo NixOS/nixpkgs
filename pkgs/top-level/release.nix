@@ -498,6 +498,11 @@ in {
     virtualbox = linux;
   };
 
+  kernelPackages_2_6_31_rc3 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
