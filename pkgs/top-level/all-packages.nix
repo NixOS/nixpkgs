@@ -5552,11 +5552,13 @@ let
 
   docbook_xml_xslt = docbook_xsl;
 
-  docbook_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook {
+  docbook_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook-xsl {
     inherit fetchurl stdenv;
   };
 
-  docbook5_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook5 {
+  docbook5_xsl = docbook_xsl_ns;
+
+  docbook_xsl_ns = import ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns {
     inherit fetchurl stdenv;
   };
 
