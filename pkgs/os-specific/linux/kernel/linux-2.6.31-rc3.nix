@@ -22,7 +22,7 @@ import ./generic.nix (
  
     config =
       if stdenv.system == "i686-linux" then ./config-2.6.31-rc3-all-mod-i686 else
-      #if stdenv.system == "x86_64-linux" then ./config-2.6.29-x86_64-smp else
+      if stdenv.system == "x86_64-linux" then ./config-2.6.31-rc3-all-mod-amd64 else
       abort "No kernel configuration for your platform!";
   }
 
