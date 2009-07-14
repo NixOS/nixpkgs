@@ -1,26 +1,26 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
-, libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
+, libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
 , gnomevfs, libgnomeui
 , freetype, fontconfig
 , application ? "browser" }:
 
-let version = "3.0.11-g1"; in
+let version = "3.5"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
-    sha256 = "1kzsjlyi41lglsfnfsqdbs75b279pwi742cp19h6c2410gvsb9km";
+    sha256 = "1i2sc30j8zxq7p7wcsn7c5pcz4xny97vra13f2wbyzlky7hx6jkz";
   };
 
   buildInputs = [
-    libgnomeui gnomevfs
+    libgnomeui gnomevfs alsaLib
     pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
     python dbus dbus_glib pango freetype fontconfig
     xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
   ];
 
-  patches = [ ./skip-gre-registration.patch ];
+  patches = [ ./skip-gre-registration.patch ./rpath-link.patch ];
 
   configureFlags = [
     "--enable-application=${application}"
@@ -97,6 +97,8 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/gnuzilla/;
     licenses = [ "GPLv2+" "LGPLv2+" "MPLv1+" ];
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 
   passthru = {
