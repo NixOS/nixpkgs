@@ -62,8 +62,8 @@ rec {
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
       if m ? config || m ? options then
-         attrByPath ["options"] [] m
-      ++ attrByPath ["config"] [] m
+         [ (attrByPath ["options"] {} m) ]
+      ++ [ (attrByPath ["config"] {} m) ]
       else
         [ m ]
     ) modules;
