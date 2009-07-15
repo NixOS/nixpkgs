@@ -5046,7 +5046,7 @@ let
   };
 
   # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc3_old_i686 = kernelPackages_2_6_31_rc3.override {
+  kernel_2_6_31_rc3_old_i686 = kernel_2_6_31_rc3.override {
     oldI686 = true;
   };
 

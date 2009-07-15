@@ -36,6 +36,7 @@
   extraConfig ? []
 
 , preConfigure ? ""
+, ...
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
