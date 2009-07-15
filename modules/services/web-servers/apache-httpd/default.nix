@@ -1,202 +1,8 @@
 {pkgs, config, ...}:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      httpd = {
-      
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the Apache httpd server.
-          ";
-        };
-
-        extraConfig = mkOption {
-          default = "";
-          description = "
-            These configuration lines will be passed verbatim to the apache config
-          ";
-        };
-
-        extraModules = mkOption {
-          default = [];
-          example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
-          description = ''
-            Specifies additional Apache modules.  These can be specified
-            as a string in the case of modules distributed with Apache,
-            or as an attribute set specifying the
-            <varname>name</varname> and <varname>path</varname> of the
-            module.
-          '';
-        };
-
-        logPerVirtualHost = mkOption {
-          default = false;
-          description = "
-            If enabled, each virtual host gets its own
-            <filename>access_log</filename> and
-            <filename>error_log</filename>, namely suffixed by the
-            <option>hostName</option> of the virtual host.
-          ";
-        };
-
-        user = mkOption {
-          default = "wwwrun";
-          description = "
-            User account under which httpd runs.  The account is created
-            automatically if it doesn't exist.
-          ";
-        };
-
-        group = mkOption {
-          default = "wwwrun";
-          description = "
-            Group under which httpd runs.  The account is created
-            automatically if it doesn't exist.
-          ";
-        };
-
-        logDir = mkOption {
-          default = "/var/log/httpd";
-          description = "
-            Directory for Apache's log files.  It is created automatically.
-          ";
-        };
-
-        stateDir = mkOption {
-          default = "/var/run/httpd";
-          description = "
-            Directory for Apache's transient runtime state (such as PID
-            files).  It is created automatically.  Note that the default,
-            <filename>/var/run/httpd</filename>, is deleted at boot time.
-          ";
-        };
-
-        mod_php = mkOption {
-          default = false;
-          description = "Whether to enable the PHP module.";
-        };
-
-        mod_jk = {
-          enable = mkOption {
-            default = false;
-            description = "Whether to enable the Apache Tomcat connector.";
-          };
-          
-          applicationMappings = mkOption {
-            default = [];
-            description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
-          };
-        };
-
-        virtualHosts = mkOption {
-          default = [];
-          example = [
-            { hostName = "foo";
-              documentRoot = "/data/webroot-foo";
-            }
-            { hostName = "bar";
-              documentRoot = "/data/webroot-bar";
-            }
-          ];
-          description = ''
-            Specification of the virtual hosts served by Apache.  Each
-            element should be an attribute set specifying the
-            configuration of the virtual host.  The available options
-            are the non-global options permissible for the main host.
-          '';
-        };
-
-        subservices = {
-
-          # !!! remove this
-          subversion = {
-
-            enable = mkOption {
-              default = false;
-              description = "
-                Whether to enable the Subversion subservice in the webserver.
-              ";
-            };
-
-            notificationSender = mkOption {
-              default = "svn-server@example.org";
-              example = "svn-server@example.org";
-              description = "
-                The email address used in the Sender field of commit
-                notification messages sent by the Subversion subservice.
-              ";
-            };
-
-            userCreationDomain = mkOption {
-              default = "example.org"; 
-              example = "example.org";
-              description = "
-                The domain from which user creation is allowed.  A client can
-                only create a new user account if its IP address resolves to
-                this domain.
-              ";
-            };
-
-            autoVersioning = mkOption {
-              default = false;
-              description = "
-                Whether you want the Subversion subservice to support
-                auto-versioning, which enables Subversion repositories to be
-                mounted as read/writable file systems on operating systems that
-                support WebDAV.
-              ";
-            };
-            
-            dataDir = mkOption {
-              default = "/no/such/path/exists";
-              description = "
-                Place to put SVN repository.
-              ";
-            };
-
-            organization = {
-
-              name = mkOption {
-                default = null;
-                description = "
-                  Name of the organization hosting the Subversion service.
-                ";
-              };
-
-              url = mkOption {
-                default = null;
-                description = "
-                  URL of the website of the organization hosting the Subversion service.
-                ";
-              };
-
-              logo = mkOption {
-                default = null;
-                description = "
-                  Logo the organization hosting the Subversion service.
-                ";
-              };
-
-            };
-
-          };
-
-        };
-      } // # Include the options shared between the main server and virtual hosts.
-          (import ./per-server-options.nix {
-           inherit mkOption;
-           forMainServer = true;
-        });
-    };
-  };
-
-
-###### implementation
 
   mainCfg = config.services.httpd;
   
@@ -204,15 +10,13 @@ let
 
   httpd = pkgs.apacheHttpd;
 
-  inherit (pkgs.lib) addDefaultOptionValues optional concatMap concatMapStrings;
-
-
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
-  extraModules = pkgs.lib.attrByPath ["extraModules"] [] mainCfg;
-  extraForeignModules = pkgs.lib.filter builtins.isAttrs extraModules;
-  extraApacheModules = pkgs.lib.filter (x: !(builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
+  extraModules = attrByPath ["extraModules"] [] mainCfg;
+  extraForeignModules = filter builtins.isAttrs extraModules;
+  extraApacheModules = filter (x: !(builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
 
+  
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
     canonicalName =
@@ -231,7 +35,7 @@ let
 
 
   vhostOptions = import ./per-server-options.nix {
-    inherit (pkgs.lib) mkOption;
+    inherit mkOption;
     forMainServer = false;
   };
 
@@ -276,7 +80,7 @@ let
 
   mainSubservices = subservicesFor mainCfg;
 
-  allSubservices = mainSubservices ++ pkgs.lib.concatMap subservicesFor vhosts;
+  allSubservices = mainSubservices ++ concatMap subservicesFor vhosts;
 
 
   # !!! should be in lib
@@ -284,7 +88,7 @@ let
     pkgs.runCommand name {inherit text;} "ensureDir $out; echo -n \"$text\" > $out/$name";
 
 
-  enableSSL = pkgs.lib.any (vhost: vhost.enableSSL) allHosts;
+  enableSSL = any (vhost: vhost.enableSSL) allHosts;
   
 
   # Names of modules from ${httpd}/modules that we want to load.
@@ -484,7 +288,7 @@ let
 
     ${let
         ports = map getPort allHosts;
-        uniquePorts = pkgs.lib.uniqList {inputList = ports;};
+        uniquePorts = uniqList {inputList = ports;};
       in concatMapStrings (port: "Listen ${toString port}\n") uniquePorts
     }
 
@@ -540,7 +344,7 @@ let
     # Always enable virtual hosts; it doesn't seem to hurt.
     ${let
         ports = map getPort allHosts;
-        uniquePorts = pkgs.lib.uniqList {inputList = ports;};
+        uniquePorts = uniqList {inputList = ports;};
       in concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts
     }
 
@@ -558,28 +362,222 @@ let
 in
 
 
-mkIf config.services.httpd.enable {
-  require = [
-    options
-  ];
+{
 
-  users = {
-    extraUsers = [
-      { name = mainCfg.user;
-        description = "Apache httpd user";
-      }
-    ];
-    extraGroups = [
-      { name = mainCfg.group;
-      }
-    ];
+  ###### interface
+
+  options = {
+  
+    services.httpd = {
+      
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to enable the Apache httpd server.
+        ";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          These configuration lines will be passed verbatim to the apache config
+        ";
+      };
+
+      extraModules = mkOption {
+        default = [];
+        example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+        description = ''
+          Specifies additional Apache modules.  These can be specified
+          as a string in the case of modules distributed with Apache,
+          or as an attribute set specifying the
+          <varname>name</varname> and <varname>path</varname> of the
+          module.
+        '';
+      };
+
+      logPerVirtualHost = mkOption {
+        default = false;
+        description = "
+          If enabled, each virtual host gets its own
+          <filename>access_log</filename> and
+          <filename>error_log</filename>, namely suffixed by the
+          <option>hostName</option> of the virtual host.
+        ";
+      };
+
+      user = mkOption {
+        default = "wwwrun";
+        description = "
+          User account under which httpd runs.  The account is created
+          automatically if it doesn't exist.
+        ";
+      };
+
+      group = mkOption {
+        default = "wwwrun";
+        description = "
+          Group under which httpd runs.  The account is created
+          automatically if it doesn't exist.
+        ";
+      };
+
+      logDir = mkOption {
+        default = "/var/log/httpd";
+        description = "
+          Directory for Apache's log files.  It is created automatically.
+        ";
+      };
+
+      stateDir = mkOption {
+        default = "/var/run/httpd";
+        description = "
+          Directory for Apache's transient runtime state (such as PID
+          files).  It is created automatically.  Note that the default,
+          <filename>/var/run/httpd</filename>, is deleted at boot time.
+        ";
+      };
+
+      mod_php = mkOption {
+        default = false;
+        description = "Whether to enable the PHP module.";
+      };
+
+      mod_jk = {
+        enable = mkOption {
+          default = false;
+          description = "Whether to enable the Apache Tomcat connector.";
+        };
+
+        applicationMappings = mkOption {
+          default = [];
+          description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
+        };
+      };
+
+      virtualHosts = mkOption {
+        default = [];
+        example = [
+          { hostName = "foo";
+            documentRoot = "/data/webroot-foo";
+          }
+          { hostName = "bar";
+            documentRoot = "/data/webroot-bar";
+          }
+        ];
+        description = ''
+          Specification of the virtual hosts served by Apache.  Each
+          element should be an attribute set specifying the
+          configuration of the virtual host.  The available options
+          are the non-global options permissible for the main host.
+        '';
+      };
+
+      subservices = {
+
+        # !!! remove this
+        subversion = {
+
+          enable = mkOption {
+            default = false;
+            description = "
+              Whether to enable the Subversion subservice in the webserver.
+            ";
+          };
+
+          notificationSender = mkOption {
+            default = "svn-server@example.org";
+            example = "svn-server@example.org";
+            description = "
+              The email address used in the Sender field of commit
+              notification messages sent by the Subversion subservice.
+            ";
+          };
+
+          userCreationDomain = mkOption {
+            default = "example.org"; 
+            example = "example.org";
+            description = "
+              The domain from which user creation is allowed.  A client can
+              only create a new user account if its IP address resolves to
+              this domain.
+            ";
+          };
+
+          autoVersioning = mkOption {
+            default = false;
+            description = "
+              Whether you want the Subversion subservice to support
+              auto-versioning, which enables Subversion repositories to be
+              mounted as read/writable file systems on operating systems that
+              support WebDAV.
+            ";
+          };
+
+          dataDir = mkOption {
+            default = "/no/such/path/exists";
+            description = "
+              Place to put SVN repository.
+            ";
+          };
+
+          organization = {
+
+            name = mkOption {
+              default = null;
+              description = "
+                Name of the organization hosting the Subversion service.
+              ";
+            };
+
+            url = mkOption {
+              default = null;
+              description = "
+                URL of the website of the organization hosting the Subversion service.
+              ";
+            };
+
+            logo = mkOption {
+              default = null;
+              description = "
+                Logo the organization hosting the Subversion service.
+              ";
+            };
+
+          };
+
+        };
+
+      };
+
+    }
+
+    # Include the options shared between the main server and virtual hosts.
+    // (import ./per-server-options.nix {
+      inherit mkOption;
+      forMainServer = true;
+    });
+
   };
 
-  services = {
-    extraJobs = [{
-      name = "httpd";
 
-      extraPath = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
+  ###### implementation
+
+  config = mkIf config.services.httpd.enable {
+
+    users.extraUsers = singleton
+      { name = mainCfg.user;
+        description = "Apache httpd user";
+      };
+
+    users.extraGroups = singleton
+      { name = mainCfg.group;
+      };
+
+    environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
+
+    jobs = singleton {
+      name = "httpd";
 
       # Statically verify the syntactic correctness of the generated
       # httpd.conf.  !!! this is impure!  It doesn't just check for
@@ -617,15 +615,16 @@ mkIf config.services.httpd.enable {
 
         ${
           let f = {name, value}: "env ${name}=${value}\n";
-          in concatMapStrings f (pkgs.lib.concatMap (svc: svc.globalEnvVars) allSubservices)
+          in concatMapStrings f (concatMap (svc: svc.globalEnvVars) allSubservices)
         }
 
-        env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.lib.concatStringsSep ":" (pkgs.lib.concatMap (svc: svc.extraServerPath) allSubservices)}
+        env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}
 
         respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
       '';
-
-    }];
+    };
+    
   };
+  
 }
 

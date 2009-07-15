@@ -2,11 +2,25 @@
 
 let
 
-###### interface
+  # think about where to put this chunk of code!
+  # required by other pieces as well
+  requiredTTYs = config.services.mingetty.ttys
+    ++ config.boot.extraTTYs
+    ++ [config.services.syslogd.tty];
+  ttyNumbers = requiredTTYs;
+  ttys = map (nr: "/dev/tty" + toString nr) ttyNumbers;
+  defaultLocale = config.i18n.defaultLocale;
+  consoleFont = config.i18n.consoleFont;
+  consoleKeyMap = config.i18n.consoleKeyMap;
 
-  # most options are defined in i18n.nix
+in
+
+{
+  ###### interface
 
   options = {
+
+    # most options are defined in i18n.nix
 
     boot.extraTTYs = pkgs.lib.mkOption {
       default = [];
@@ -29,38 +43,21 @@ let
         FIXME: find a good description.
       ";
     };
-
+  
   };
 
+
+  ###### implementation
+
+  config = {  
   
-###### implementation
+    inherit requiredTTYs; # pass it to ./modules/tasks/tty-backgrounds.nix
 
-  # think about where to put this chunk of code!
-  # required by other pieces as well
-  requiredTTYs = config.services.mingetty.ttys
-    ++ config.boot.extraTTYs
-    ++ [config.services.syslogd.tty];
-  ttyNumbers = requiredTTYs;
-  ttys = map (nr: "/dev/tty" + toString nr) ttyNumbers;
-  defaultLocale = config.i18n.defaultLocale;
-  consoleFont = config.i18n.consoleFont;
-  consoleKeyMap = config.i18n.consoleKeyMap;
-
-in
-
-{
-  require = [options];
-
-  inherit requiredTTYs; # pass them to ./modules/tasks/tty-backgrounds.nix
-
-  services = {
-    extraJobs = [{
+    environment.systemPackages = [pkgs.kbd];
+  
+    jobs = pkgs.lib.singleton {
       name = "kbd";
 
-      extraPath = [
-        pkgs.kbd
-      ];
-      
       job = ''
         description "Keyboard / console initialisation"
 
@@ -74,7 +71,7 @@ in
 
           set +e # continue in case of errors
 
-          
+
           # Enable or disable UTF-8 mode.  This is based on
           # unicode_{start,stop}.
           echo 'Enabling or disabling Unicode mode...'
@@ -122,8 +119,8 @@ in
 
         end script
       '';
-    
-    }];
+    };
+
   };
 
 }

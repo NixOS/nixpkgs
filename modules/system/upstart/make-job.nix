@@ -17,10 +17,6 @@
 //
 
 {
-  # Allow jobs to declare extra packages that should be added to the
-  # system path.
-  extraPath = if job ? extraPath then job.extraPath else [];
-
   # Allow jobs to declare user accounts that should be created.
   users = if job ? users then job.users else [];
   

@@ -8,7 +8,7 @@ let
 
   inherit (pkgs.lib) mkOption mergeListOption;
   
-  jobs = map makeJob config.services.extraJobs;
+  jobs = map makeJob (config.jobs ++ config.services.extraJobs);
   
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
@@ -34,7 +34,7 @@ in
   
   options = {
   
-    services.extraJobs = mkOption {
+    jobs = mkOption {
       default = [];
       example =
         [ { name = "test-job";
@@ -50,7 +50,16 @@ in
       # should have some checks to verify the syntax
       merge = pkgs.lib.mergeListOption;
       description = ''
-        Additional Upstart jobs.
+        This option defines the system jobs started and managed by the
+        Upstart daemon.
+      '';
+    };
+
+    services.extraJobs = mkOption {
+      default = [];
+      merge = pkgs.lib.mergeListOption;
+      description = ''
+        Obsolete - don't use.
       '';
     };
 
@@ -77,9 +86,6 @@ in
           target = "event.d";
         }
       ];
-
-    environment.extraPackages =
-      pkgs.lib.concatLists (map (job: job.extraPath) jobs);
 
     users.extraUsers =
       pkgs.lib.concatLists (map (job: job.users) jobs);

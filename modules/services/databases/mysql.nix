@@ -1,51 +1,7 @@
 {pkgs, config, ...}:
 
-###### interface
 let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      mysql = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the MySQL server.
-          ";
-        };
-        
-        port = mkOption {
-          default = "3306";
-          description = "Port of MySQL"; 
-        };
-        
-        user = mkOption {
-          default = "mysql";
-          description = "User account under which MySQL runs";
-        };
-        
-        dataDir = mkOption {
-          default = "/var/mysql";
-          description = "Location where MySQL stores its table files";
-        };
-        
-        logError = mkOption {
-          default = "/var/log/mysql_err.log";
-          description = "Location of the MySQL error logfile";
-        };
-        
-        pidDir = mkOption {
-          default = "/var/run/mysql";
-          description = "Location of the file which stores the PID of the MySQL server";
-        };
-      };
-    };
-  };
-in
-
-###### implementation
-
-let
+  inherit (pkgs.lib) mkOption mkIf singleton;
 
   cfg = config.services.mysql;
 
@@ -59,26 +15,64 @@ let
 
 in
 
+{
 
-mkIf config.services.mysql.enable {
-  require = [
-    options
-  ];
+  ###### interface
 
-  users = {
-    extraUsers = [
-      { name = "mysql";
-        description = "MySQL server user";
-      }
-    ];
+  options = {
+  
+    services.mysql = {
+    
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to enable the MySQL server.
+        ";
+      };
+
+      port = mkOption {
+        default = "3306";
+        description = "Port of MySQL"; 
+      };
+
+      user = mkOption {
+        default = "mysql";
+        description = "User account under which MySQL runs";
+      };
+
+      dataDir = mkOption {
+        default = "/var/mysql";
+        description = "Location where MySQL stores its table files";
+      };
+
+      logError = mkOption {
+        default = "/var/log/mysql_err.log";
+        description = "Location of the MySQL error logfile";
+      };
+
+      pidDir = mkOption {
+        default = "/var/run/mysql";
+        description = "Location of the file which stores the PID of the MySQL server";
+      };
+
+    };
+    
   };
 
-  services = {
-    extraJobs = [{
-      name = "mysql";
-      
 
-      extraPath = [mysql];
+  ###### implementation
+
+  config = mkIf config.services.mysql.enable {
+
+    users.extraUsers = singleton
+      { name = "mysql";
+        description = "MySQL server user";
+      };
+
+    environment.systemPackages = [mysql];
+
+    jobs = singleton {
+      name = "mysql";
       
       job = ''
         description "MySQL server"
@@ -104,6 +98,8 @@ mkIf config.services.mysql.enable {
             ${mysql}/bin/mysql_waitpid "$pid" 1000
         end script
       '';
-    }];
+    };
+
   };
+
 }
