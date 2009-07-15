@@ -4,22 +4,20 @@ let
 
   inherit (pkgs.lib) mkOption mergeListOption;
   
-  makeJob = job:
-    if job ? jobDrv then
-      job.jobDrv
-    else
-      pkgs.runCommand ("upstart-" + job.name)
-        { inherit (job) job;
-          jobName = job.name;
-          buildHook = if job ? buildHook then job.buildHook else "true";
-        }
-        ''
-          eval "$buildHook"
-          ensureDir $out/etc/event.d
-          echo "$job" > $out/etc/event.d/$jobName
-        '';
+  makeJob =
+    {name, job, buildHook ? "true", passthru ? null}:
+    
+    pkgs.runCommand ("upstart-" + name)
+      { inherit buildHook job; }
+      ''
+        eval "$buildHook"
+        ensureDir $out/etc/event.d
+        echo "$job" > $out/etc/event.d/${name}
+      '';
 
-  jobs = map makeJob (config.jobs ++ config.services.extraJobs);
+  jobs =
+    [pkgs.upstart] # for the built-in logd job
+    ++ map makeJob (config.jobs ++ config.services.extraJobs);
   
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
@@ -96,11 +94,6 @@ in
           source = "${jobsDir}/etc/event.d";
           target = "event.d";
         }
-      ];
-
-    services.extraJobs =
-      [ # For the built-in logd job.
-        { jobDrv = pkgs.upstart; }
       ];
 
     # see test/test-upstart-job.sh (!!! check whether this still works)
