@@ -72,7 +72,7 @@
 
   <xsl:template match="string">
     <!-- !!! escaping -->
-    <xsl:text>"</xsl:text><xsl:value-of select="@value" /><xsl:text>"</xsl:text>
+    <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n')" /><xsl:text>"</xsl:text>
   </xsl:template>
   
   
