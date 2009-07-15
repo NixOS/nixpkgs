@@ -1,9 +1,9 @@
 args : with args; 
-let version = lib.attrByPath ["version"] "r44341" args; in
+let version = lib.attrByPath ["version"] "r45934" args; in
 rec {
   src = fetchurl {
     url = "http://nightly.webkit.org/files/trunk/src/WebKit-${version}.tar.bz2";
-    sha256 = "17byp4v47xk6xdxq6adpf0b9vswasrhj4f5pw0y2z80lgd1sxcly";
+    sha256 = "0cc169ndbxmcdrhrjbll9jnxmfwyrbvwxzf95q1hjcn9v9naq0ck";
   };
 
   buildInputs = [gtk atk cairo curl fontconfig freetype
