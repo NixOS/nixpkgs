@@ -37,7 +37,6 @@ if test ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr; then
     rm -f $HOME/.nix-defexpr
     mkdir $HOME/.nix-defexpr
     ln -s /etc/nixos/nixpkgs $HOME/.nix-defexpr/nixpkgs_sys
-    ln -s /etc/nixos/nixos $HOME/.nix-defexpr/nixos
     if test "$USER" != root; then
         ln -s /nix/var/nix/gcroots/per-user/root/channels $HOME/.nix-defexpr/channels_root
     fi
