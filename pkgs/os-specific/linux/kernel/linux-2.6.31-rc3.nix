@@ -1,4 +1,4 @@
-args @ {stdenv, fetchurl, userModeLinux ? false, ...}:
+args @ {stdenv, fetchurl, userModeLinux ? false, oldI686 ? false, ...}:
 
 assert !userModeLinux;
 
@@ -21,7 +21,8 @@ import ./generic.nix (
     };
  
     config =
-      if stdenv.system == "i686-linux" then ./config-2.6.31-rc3-all-mod-i686 else
+      if stdenv.system == "i686-linux" then if oldI686 then ./config-2.6.31-rc3-all-mod-i686-older else 
+        ./config-2.6.31-rc3-all-mod-i686 else
       if stdenv.system == "x86_64-linux" then ./config-2.6.31-rc3-all-mod-amd64 else
       abort "No kernel configuration for your platform!";
   }

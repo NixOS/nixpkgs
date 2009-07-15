@@ -5045,6 +5045,11 @@ let
     ];
   };
 
+  # For older x86 processors without PAE/PAT
+  kernel_2_6_31_rc3_old_i686 = kernelPackages_2_6_31_rc3.override {
+    oldI686 = true;
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5151,6 +5156,7 @@ let
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
   kernelPackages_2_6_31_rc3 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3);
+  kernelPackages_2_6_31_rc3_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3_old_i686);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;

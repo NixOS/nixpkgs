@@ -503,6 +503,11 @@ in {
     kernel = linux;
   };
 
+  kernelPackages_2_6_31_rc3_old_i686 = {
+    aufs = ["i686-linux"];
+    kernel = ["i686-linux"];
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
