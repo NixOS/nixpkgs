@@ -1,42 +1,10 @@
 {pkgs, config, ...}:
 
-###### interface
-let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      ntp = {
-
-        enable = mkOption {
-          default = true;
-          description = "
-            Whether to synchronise your machine's time using the NTP
-            protocol.
-          ";
-        };
-
-        servers = mkOption {
-          default = [
-            "0.pool.ntp.org"
-            "1.pool.ntp.org"
-            "2.pool.ntp.org"
-          ];
-          description = "
-            The set of NTP servers from which to synchronise.
-          ";
-        };
-
-      };
-    };
-  };
-in
-
-###### implementation
-
 let
 
-  inherit (pkgs) writeText ntp;
+  inherit (pkgs.lib) mkOption mkIf singleton;
+
+  inherit (pkgs) ntp;
 
   stateDir = "/var/lib/ntp";
 
@@ -46,7 +14,7 @@ let
 
   modprobe = config.system.sbin.modprobe;
 
-  configFile = writeText "ntp.conf" ''
+  configFile = pkgs.writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
     # Keep the drift file in ${stateDir}/ntp.drift.  However, since we
     # chroot to ${stateDir}, we have to specify it as /ntp.drift.
@@ -59,24 +27,52 @@ let
 
 in
 
+{
 
-mkIf config.services.ntp.enable {
-  require = [
-    options
-  ];
+  ###### interface
+  
+  options = {
+  
+    services.ntp = {
 
-  services = {
-    extraJobs = [{
+      enable = mkOption {
+        default = true;
+        description = ''
+          Whether to synchronise your machine's time using the NTP
+          protocol.
+        '';
+      };
+
+      servers = mkOption {
+        default = [
+          "0.pool.ntp.org"
+          "1.pool.ntp.org"
+          "2.pool.ntp.org"
+        ];
+        description = ''
+          The set of NTP servers from which to synchronise.
+        '';
+      };
+
+    };
+
+  };
+
+
+  ###### implementation
+
+  config = mkIf config.services.ntp.enable {
+  
+    users.extraUsers = singleton
+      { name = ntpUser;
+        uid = config.ids.uids.ntp;
+        description = "NTP daemon user";
+        home = stateDir;
+      };
+
+    jobs = singleton {
 
       name = "ntpd";
-      
-      users = [
-        { name = ntpUser;
-          uid = config.ids.uids.ntp;
-          description = "NTP daemon user";
-          home = stateDir;
-        }
-      ];
       
       job = ''
         description "NTP daemon"
@@ -104,6 +100,9 @@ mkIf config.services.ntp.enable {
 
         respawn ${ntp}/bin/ntpd -g -n ${ntpFlags}
       '';
-    }];
+
+    };
+    
   };
+  
 }

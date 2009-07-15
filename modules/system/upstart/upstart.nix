@@ -87,12 +87,6 @@ in
         }
       ];
 
-    users.extraUsers =
-      pkgs.lib.concatLists (map (job: job.users) jobs);
-
-    users.extraGroups =
-      pkgs.lib.concatLists (map (job: job.groups) jobs);
-
     services.extraJobs =
       [ # For the built-in logd job.
         { jobDrv = pkgs.upstart; }
