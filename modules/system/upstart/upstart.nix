@@ -2,17 +2,28 @@
 
 let
 
-  makeJob = import ./make-job.nix {
-    inherit (pkgs) runCommand;
-  };
-
   inherit (pkgs.lib) mkOption mergeListOption;
   
+  makeJob = job:
+    if job ? jobDrv then
+      job.jobDrv
+    else
+      pkgs.runCommand ("upstart-" + job.name)
+        { inherit (job) job;
+          jobName = job.name;
+          buildHook = if job ? buildHook then job.buildHook else "true";
+        }
+        ''
+          eval "$buildHook"
+          ensureDir $out/etc/event.d
+          echo "$job" > $out/etc/event.d/$jobName
+        '';
+
   jobs = map makeJob (config.jobs ++ config.services.extraJobs);
   
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
-  command = pkgs.runCommand "upstart-jobs" {inherit jobs;}
+  jobsDir = pkgs.runCommand "upstart-jobs" {inherit jobs;}
     ''
       ensureDir $out/etc/event.d
       for i in $jobs; do
@@ -82,7 +93,7 @@ in
 
     environment.etc =
       [ { # The Upstart events defined above.
-          source = command + "/etc/event.d";
+          source = "${jobsDir}/etc/event.d";
           target = "event.d";
         }
       ];
