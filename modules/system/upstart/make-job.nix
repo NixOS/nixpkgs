@@ -21,10 +21,6 @@
   # system path.
   extraPath = if job ? extraPath then job.extraPath else [];
 
-  # Allow jobs to declare extra configuration for Apache (e.g. Nagios
-  # declaring its web interface).
-  extraHttpdConfig = if job ? extraHttpdConfig then job.extraHttpdConfig else "";
-
   # Allow jobs to declare user accounts that should be created.
   users = if job ? users then job.users else [];
   

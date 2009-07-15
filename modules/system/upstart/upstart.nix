@@ -81,7 +81,6 @@ in
     environment.extraPackages =
       pkgs.lib.concatLists (map (job: job.extraPath) jobs);
 
-
     users.extraUsers =
       pkgs.lib.concatLists (map (job: job.users) jobs);
 
