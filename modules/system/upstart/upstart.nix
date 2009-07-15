@@ -1,20 +1,44 @@
 {config, pkgs, ...}:
 
+with pkgs.lib;
+
 let
 
-  inherit (pkgs.lib) mkOption mergeListOption types;
-  
-  makeJob =
-    {name, job, buildHook ? "true", passthru ? null}:
-    
-    pkgs.runCommand ("upstart-" + name)
-      { inherit buildHook job; }
-      ''
-        eval "$buildHook"
-        ensureDir $out/etc/event.d
-        echo "$job" > $out/etc/event.d/${name}
-      '';
+  # From a job description, generate an Upstart job file.
+  makeJob = job@{buildHook ? "", ...}:
 
+    let
+
+      jobText = if job.job != "" then job.job else
+        ''
+          description "${job.description}"
+
+          ${if job.startOn != "" then "start on ${job.startOn}" else ""}
+          ${if job.stopOn != "" then "start on ${job.stopOn}" else ""}
+
+          ${concatMapStrings (n: "env ${n}=${getAttr n job.environment}\n") (attrNames job.environment)}
+          
+          ${if job.preStart != "" then ''
+            start script
+              ${job.preStart}
+            end script
+          '' else ""}
+          
+          ${if job.exec != "" then ''
+            exec ${job.exec}
+          '' else ""}
+        '';
+
+    in
+      pkgs.runCommand ("upstart-" + job.name)
+        { inherit buildHook; inherit jobText; }
+        ''
+          eval "$buildHook"
+          ensureDir $out/etc/event.d
+          echo "$jobText" > $out/etc/event.d/${job.name}
+        '';
+
+        
   jobs =
     [pkgs.upstart] # for the built-in logd job
     ++ map makeJob (config.jobs ++ config.services.extraJobs);
@@ -63,6 +87,7 @@ in
         };
 
         job = mkOption {
+          default = "";
           type = types.string;
           example =
             ''
@@ -85,6 +110,57 @@ in
             to perform simple regression tests (e.g., the Apache
             Upstart job uses it to check the syntax of the generated
             <filename>httpd.conf</filename>.
+          '';
+        };
+
+        description = mkOption {
+          type = types.string;
+          default = "(no description given)";
+          description = ''
+            A short description of this job.
+          '';
+        };
+
+        startOn = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            The Upstart event that triggers this job to be started.
+            If empty, the job will not start automatically.
+          '';
+        };
+
+        stopOn = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            The Upstart event that triggers this job to be stopped.
+          '';
+        };
+
+        preStart = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            Shell commands executed before the job is started
+            (i.e. before the <varname>exec</varname> command is run).
+          '';
+        };
+
+        exec = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            Command to start the job.
+          '';
+        };
+
+        environment = mkOption {
+          type = types.attrs;
+          default = {};
+          example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
+          description = ''
+            Environment variables passed to the job's processes.
           '';
         };
 
