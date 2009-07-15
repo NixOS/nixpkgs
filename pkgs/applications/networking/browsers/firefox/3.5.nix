@@ -131,7 +131,7 @@ rec {
     };
 
     passthru = {
-      inherit gtk;
+      inherit gtk xulrunner nspr;
       isFirefox3Like = true;
     };
   };

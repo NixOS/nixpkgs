@@ -6315,6 +6315,12 @@ let
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg;
   };
 
+  gnome_mplayer = import ../applications/video/gnome-mplayer {
+    inherit fetchurl stdenv pkgconfig dbus dbus_glib;
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) GConf;
+  };
+
   gnunet = import ../applications/networking/p2p/gnunet {
     inherit fetchurl stdenv libextractor libmicrohttpd libgcrypt
       gmp curl libtool guile adns sqlite gettext zlib pkgconfig
@@ -6346,6 +6352,13 @@ let
     inherit libpng pkgconfig;
   };
 
+  gecko_mediaplayer = import ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
+    inherit fetchurl stdenv pkgconfig dbus dbus_glib x11 gnome_mplayer MPlayer;
+    inherit (gtkLibs) glib;
+    inherit (gnome) GConf;
+    browser = firefox35;
+  };
+
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
@@ -6355,7 +6368,7 @@ let
     inherit stdenv fetchurl glibc mesa freetype;
     inherit (gtkLibs) glib;
     inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
-      libXcursor libXinerama libXext libX11 ;
+      libXcursor libXinerama libXext libX11;
   };
 
   gpsbabel = import ../applications/misc/gpsbabel {
@@ -6981,7 +6994,6 @@ let
     autoconf = autoconf213;
   });*/
 
-
   timidity = import ../tools/misc/timidity {
     inherit fetchurl stdenv alsaLib;
   };
@@ -7092,10 +7104,11 @@ let
       in
        ([]
         ++ lib.optional (!enableAdobeFlash) gnash
-        ++ lib.optional (enableAdobeFlash)  flashplayer
+        ++ lib.optional enableAdobeFlash flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
         ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
+        ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
        );
   };
