@@ -27,6 +27,8 @@ let
           ${if job.exec != "" then ''
             exec ${job.exec}
           '' else ""}
+
+          ${if job.respawn then "respawn" else ""}
         '';
 
     in
@@ -152,6 +154,15 @@ in
           default = "";
           description = ''
             Command to start the job.
+          '';
+        };
+
+        respawn = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to restart the job automatically if its process
+            ends unexpectedly.
           '';
         };
 
