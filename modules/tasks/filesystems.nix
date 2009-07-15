@@ -42,7 +42,7 @@ let
       ";
       type = types.nullOr (types.list types.optionSet);
 
-      options =  {
+      options = {
 
         mountPoint = mkOption {
           example = "/mnt/usb";

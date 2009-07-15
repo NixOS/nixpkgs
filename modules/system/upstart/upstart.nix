@@ -2,7 +2,7 @@
 
 let
 
-  inherit (pkgs.lib) mkOption mergeListOption;
+  inherit (pkgs.lib) mkOption mergeListOption types;
   
   makeJob =
     {name, job, buildHook ? "true", passthru ? null}:
@@ -45,28 +45,55 @@ in
   
     jobs = mkOption {
       default = [];
-      example =
-        [ { name = "test-job";
-            job = ''
+      description = ''
+        This option defines the system jobs started and managed by the
+        Upstart daemon.
+      '';
+
+      type = types.list types.optionSet;
+
+      options = {
+
+        name = mkOption {
+          type = types.string;
+          example = "sshd";
+          description = ''
+            Name of the Upstart job.
+          '';
+        };
+
+        job = mkOption {
+          type = types.string;
+          example =
+            ''
               description "nc"
               start on started network-interfaces
               respawn
               env PATH=/var/run/current-system/sw/bin
               exec sh -c "echo 'hello world' | ${pkgs.netcat}/bin/nc -l -p 9000"
-             '';
-          }
-        ];
-      # should have some checks to verify the syntax
-      merge = pkgs.lib.mergeListOption;
-      description = ''
-        This option defines the system jobs started and managed by the
-        Upstart daemon.
-      '';
+            '';
+          description = ''
+            Contents of the Upstart job.
+          '';
+        };
+
+        buildHook = mkOption {
+          type = types.string;
+          default = "true";
+          description = ''
+            Command run while building the Upstart job.  Can be used
+            to perform simple regression tests (e.g., the Apache
+            Upstart job uses it to check the syntax of the generated
+            <filename>httpd.conf</filename>.
+          '';
+        };
+
+      };
+      
     };
 
     services.extraJobs = mkOption {
       default = [];
-      merge = pkgs.lib.mergeListOption;
       description = ''
         Obsolete - don't use.
       '';
