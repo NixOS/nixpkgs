@@ -134,22 +134,21 @@ mkIf config.services.printing.enable {
     options
   ];
 
-  services = {
-    extraJobs = [{
-      name = "cupsd";
+  environment.systemPackages = [cups];
 
-      extraPath = [cups];
+  environment.etc =
+    [ # CUPS expects the following files in its ServerRoot.
+      { source = "${cups}/etc/cups/mime.convs";
+        target = "cups/mime.convs";
+      }
+      { source = "${cups}/etc/cups/mime.types";
+        target = "cups/mime.types";
+      }
+    ];
 
-      extraEtc = [
-        # CUPS expects the following files in its ServerRoot.
-        { source = "${cups}/etc/cups/mime.convs";
-          target = "cups/mime.convs";
-        }
-        { source = "${cups}/etc/cups/mime.types";
-          target = "cups/mime.types";
-        }
-      ];
-      
+  services.extraJobs = pkgs.lib.singleton
+    { name = "cupsd";
+
       job = ''
         description "CUPS printing daemon"
 
@@ -167,6 +166,5 @@ mkIf config.services.printing.enable {
 
         respawn ${cups}/sbin/cupsd -c ${cupsdConfig} -F
       '';
-    }];
-  };
+    };
 }

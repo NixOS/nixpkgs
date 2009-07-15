@@ -21,9 +21,6 @@
   # system path.
   extraPath = if job ? extraPath then job.extraPath else [];
 
-  # Allow jobs to declare extra files that should be added to /etc.
-  extraEtc = if job ? extraEtc then job.extraEtc else [];
-
   # Allow jobs to declare extra configuration for Apache (e.g. Nagios
   # declaring its web interface).
   extraHttpdConfig = if job ? extraHttpdConfig then job.extraHttpdConfig else "";
