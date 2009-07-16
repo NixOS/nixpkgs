@@ -115,5 +115,8 @@ in
 
   # sendfile() is currently broken over CIFS, so fix it here for all
   # configurations that use Apache.
-  services.httpd.extraConfig = "EnableSendFile Off";
+  services.httpd.extraConfig =
+    ''
+      EnableSendFile Off
+    '';
 }
