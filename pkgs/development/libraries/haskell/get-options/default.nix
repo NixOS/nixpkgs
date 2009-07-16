@@ -7,6 +7,6 @@ cabal.mkDerivation (self : {
   src = sourceByName "getOptions";
   extraBuildInputs = [ mtl ];
   meta = {
-    description = "simple to use get option library";
+    description = "Simple to use get option library";
   };
 })
