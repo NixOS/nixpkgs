@@ -1,7 +1,7 @@
 # Argh, this thing is duplicated (more-or-less) in Nix (in corepkgs).
 # Need to find a way to combine them.
 
-{stdenv, curl, getConfig ? (x: y : "")}: # Note that `curl' may be `null', in case of the native stdenv.
+{stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
 
 let
 
@@ -86,18 +86,6 @@ stdenv.mkDerivation {
       if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
-
-
- 
-  # set this to any value to make nix dowload into /var/nix-downloads/$hash
-  # so that it can continue a half finished download after a shudown,
-  # susupend to disk, shutdown etc
-  # for this to work you have to run
-  # d=/var/nix-downloads; mkdir $d; chgrp nixbld $d; chmod g+x $d;
-  # once
-  # defaulting to enabled because continuing takes place only if $d exists
-  # and has proper permissions
-  NIX_CONTINUE_DOWNLOADS = getConfig ["NIX_CONTINUE_DOWNLOADS"] "1";
   
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

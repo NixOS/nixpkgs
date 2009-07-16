@@ -282,7 +282,7 @@ let
   # from being built.
   fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
-      inherit curl stdenv getConfig;
+      inherit curl stdenv;
     });
 
   # fetchurlBoot is used for curl and its dependencies in order to
