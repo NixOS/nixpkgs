@@ -23,8 +23,19 @@ tryDownload() {
     echo
     header "trying $url"
     success=
-    if $curl --fail "$url" --output "$out"; then
-        success=1
+    cache_file="/var/nix-downloads/$outputHash"
+    if { test -n "$NIX_CONTINUE_DOWNLOADS" && touch "$cache_file";}; then
+      chmod g+w $cache_file # ensure another nixbld user can continue!
+      # no locking is taking place. I think nix builder locking is enough
+      if $curl --fail "$url" -C - --output "$cache_file"; then
+          mv "$cache_file" "$out"
+          chmod g-w $out # ensure another nixbld user can continue!
+          success=1
+      fi
+    else
+      if $curl --fail "$url" --output "$out"; then
+          success=1
+      fi
     fi
     stopNest
 }
