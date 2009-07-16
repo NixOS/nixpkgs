@@ -1,11 +1,11 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "aufs-20090414-${kernel.version}";
+  name = "aufs-snap-2.6.30-${kernel.version}";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/aufs-20090414.tar.bz2;
-    sha256 = "1jhf3kccx0m84frlgx2d0ysn1c4272dgci59dsk7vsfrf7yik526";
+    url = "mirror://debian/pool/main/l/linux-modules-extra-2.6/linux-modules-extra-2.6_2.6.30-1.tar.gz";
+    sha256 = "19llmha4ynvnk5jgvf9iabl1kk7qhliyq7s3y2a9dna3kbkpw2vw";
   };
 
   buildPhase = ''
@@ -32,8 +32,6 @@ stdenv.mkDerivation {
   '';
 
   patches = [
-    # Debian patch to build AUFS on 2.6.29+
-    ./debian-2.6.29.diff
   ];
 
   meta = {
