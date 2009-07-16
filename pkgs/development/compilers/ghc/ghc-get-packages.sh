@@ -11,11 +11,10 @@ else
 fi
 PATH="$2:$PATH"
 IFS=":"
-PKGS=()
 for p in $PATH; do
   PkgDir="$p/../lib/ghc-pkgs/ghc-$version"
   for i in $PkgDir/*.installedconf; do
-    test -f $i && PKGS[${#PKGS[*]}]="$prefix$i"
+    # output takes place here
+    test -f $i && echo -n " $prefix$i"
   done
 done
-echo ${PKGS[*]}
