@@ -1,12 +1,11 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "aufs-20090716-${kernel.version}";
+  name = "aufs-20090414-${kernel.version}";
 
-  src = fetchgit {
-    url = http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-standalone.git;
-    md5 = "3945dd258f7c3baede49893b42073c42";
-    rev = "c5a75e75865debfc781b4cc2ddd2bf7aae3736e7";
+  src = fetchurl {
+    url = http://nixos.org/tarballs/aufs-20090414.tar.bz2;
+    sha256 = "1jhf3kccx0m84frlgx2d0ysn1c4272dgci59dsk7vsfrf7yik526";
   };
 
   buildPhase = ''
@@ -33,6 +32,8 @@ stdenv.mkDerivation {
   '';
 
   patches = [
+    # Debian patch to build AUFS on 2.6.29+
+    ./debian-2.6.29.diff
   ];
 
   meta = {
