@@ -144,7 +144,7 @@ in
 
         stopOn = mkOption {
           type = types.string;
-          default = "";
+          default = "shutdown";
           description = ''
             The Upstart event that triggers this job to be stopped.
           '';

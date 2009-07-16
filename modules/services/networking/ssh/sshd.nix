@@ -129,8 +129,6 @@ in
           '';
 
         exec = "${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
-
-        respawn = true;
       };
 
   };
