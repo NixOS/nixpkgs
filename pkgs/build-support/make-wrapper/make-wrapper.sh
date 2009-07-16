@@ -49,13 +49,17 @@ makeWrapper() {
             done
         fi
 
-        if test "$p" = "--suffix-contents"; then
+        if test "$p" = "--suffix-contents" -o "$p" = "--prefix-contents"; then
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             fileNames=${params[$((n + 3))]}
             n=$((n + 3))
             for fileName in $fileNames; do
-                echo "export $varName=\$$varName\${$varName:+$separator}$(cat $fileName)" >> $wrapper
+                if test "$p" = "--suffix-contents"; then
+                    echo "export $varName=\$$varName\${$varName:+$separator}$(cat $fileName)" >> $wrapper
+                else
+                    echo "export $varName=$(cat $fileName)\${$varName:+$separator}\$$varName" >> $wrapper
+                fi
             done
         fi
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     makeWrapper "${browser}/bin/${browserName}" \
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
-        --suffix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
+        --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
 
     ensureDir $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
