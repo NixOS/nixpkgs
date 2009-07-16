@@ -81,6 +81,10 @@ rec {
     inherit cabal;
   };
 
+  filepath = import ../development/libraries/haskell/filepath {
+    inherit cabal;
+  };
+
   emgm = import ../development/libraries/haskell/emgm {
     inherit cabal;
   };
@@ -217,6 +221,10 @@ rec {
 
   multirec = import ../development/libraries/haskell/multirec {
     inherit cabal;
+  };
+
+  multiset = import ../development/libraries/haskell/multiset {
+    inherit cabal syb;
   };
 
   network = import ../development/libraries/haskell/network {
