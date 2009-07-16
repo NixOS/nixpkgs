@@ -1,11 +1,12 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "aufs-snap-2.6.30-${kernel.version}";
+  name = "aufs-20090716-${kernel.version}";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/l/linux-modules-extra-2.6/linux-modules-extra-2.6_2.6.30-1.tar.gz";
-    sha256 = "19llmha4ynvnk5jgvf9iabl1kk7qhliyq7s3y2a9dna3kbkpw2vw";
+  src = fetchgit {
+    url = http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-standalone.git;
+    md5 = "3945dd258f7c3baede49893b42073c42";
+    rev = "c5a75e75865debfc781b4cc2ddd2bf7aae3736e7";
   };
 
   buildPhase = ''
