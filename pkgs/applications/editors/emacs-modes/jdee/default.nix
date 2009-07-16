@@ -18,7 +18,7 @@ in
     patches = [
       ./installation-layout.patch ./cedet-paths.patch ./elib-avltree.patch
       ./java-directory.patch ./jde-directory-files-recurs.patch
-      ./jde-help-find-javadoc.patch
+      ./jde-help-find-javadoc.patch ./jde-wiz-update-implements-clause.patch
     ];
 
     configurePhase = ''
@@ -45,7 +45,7 @@ in
 
     buildInputs = [ emacs ant ];
     propagatedBuildInputs = [ cedet ];
-    propagatedUserEnvPkgs = propagatedBuildInputs;
+    propagatedUserEnvPkgs = propagatedBuildInputs; # FIXME: Not honored
 
     meta = {
       description = "JDEE, a Java development environment for Emacs";
