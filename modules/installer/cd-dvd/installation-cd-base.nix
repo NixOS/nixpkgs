@@ -71,7 +71,7 @@ in
     [ options
       ./iso-image.nix
       ./memtest.nix
-      ../../../hardware/network/intel-3945abg.nix
+      ../../hardware/network/intel-3945abg.nix
     ];
 
   # ISO naming.
