@@ -5050,6 +5050,23 @@ let
     oldI686 = true;
   };
 
+  kernel_2_6_31_rc2 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc2.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [ 
+      { name = "rc2 patch";
+        patch = fetchurl {
+          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc2.bz2";
+          sha256 =  "1xwsa9z4saz2yrsj44lcabcvqarmvrc6mgpi4xf9vlfq3pn0bfvr";
+	};
+      }
+    ];
+  };
+
+  # For older x86 processors without PAE/PAT
+  kernel_2_6_31_rc2_old_i686 = kernel_2_6_31_rc2.override {
+    oldI686 = true;
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5157,6 +5174,8 @@ let
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
   kernelPackages_2_6_31_rc3 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3);
   kernelPackages_2_6_31_rc3_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3_old_i686);
+  kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
+  kernelPackages_2_6_31_rc2_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2_old_i686);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;
