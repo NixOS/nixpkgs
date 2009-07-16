@@ -12,10 +12,10 @@ index 0a19016..ef66d30 100644
    ##
 diff --git a/lib/rubygems/commands/nix_command.rb b/lib/rubygems/commands/nix_command.rb
 new file mode 100644
-index 0000000..1d4ec58
+index 0000000..005d5a9
 --- /dev/null
 +++ b/lib/rubygems/commands/nix_command.rb
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,226 @@
 +require 'net/http'
 +require 'rubygems/command'
 +require 'rubygems/doc_manager'
@@ -30,8 +30,18 @@ index 0000000..1d4ec58
 +
 +
 +def nixname(gem)
-+  s = gem.kind_of? String ? gem : gem.full_name
++  s = "#{gem}" == gem ? gem : gem.full_name
 +  s.gsub(/[.-]/,'_')
++end
++
++def nixdescription(spec)
++  desc_from_spec = spec.description
++  desc = desc_from_spec.sub(/[.].*/,'') # only keep first sentence
++  desc = desc.length > 120 \
++    ? "description = \"#{ desc[0..120] }\"; # cut to 120 chars" \
++    : "description = \"#{ desc }\";"
++  desc = desc.sub(/";$/,"[...]\";") if desc != desc_from_spec
++  desc.gsub("\n"," ") # no \ns in description
 +end
 +
 +##
@@ -111,17 +121,28 @@ index 0000000..1d4ec58
 +        aliases[spec.name] = spec \
 +          if aliases[spec.name].nil? || aliases[spec.name].version < spec.version
 +
-+        # get true mirror url reading redirect contents
-+         h = Net::HTTP.new('gems.rubyforge.org', 80)
-+         resp, data = h.get("/gems/#{spec.full_name}.gem", nil)
-+         src_url = resp['location']
-+         print "redirection: http://gems.rubyforge.org/gems/#{spec.full_name}.gem -> #{src_url}\n"
++           src_url = "http://gems.rubyforge.org/gems/#{spec.full_name}.gem"
++
++         # [> get true mirror url reading redirect contents
++         #  h = Net::HTTP.new('gems.rubyforge.org', 80)
++         #  resp, data = h.get("/gems/#{spec.full_name}.gem", nil)
++         #  if resp.code == "200" then
++         #    src_url = "http://gems.rubyforge.org/gems/#{spec.full_name}.gem"
++         #  else if resp.code == "302" then
++         #      src_url = resp['location']
++         #      print "redirection: http://gems.rubyforge.org/gems/#{spec.full_name}.gem -> #{src_url}\n"
++         #    else
++         #      raise Gem::DependencyError.new("unkown http return code #{resp} #{data}")
++         #    end
++         #  end
++
++         #raise Gem::DependencyError("src_url is nil, 302 redirection failed?") if src_url.nil?
 +
 +         out = "
 +         #{out}
 +  #{nixname spec} = rubyDerivation {
 +     name = \"ruby-#{spec.full_name}\"; # full_name
-+     nameNoVersion = \"#{spec.name}\";
++     nameNoVersion = \"#{nixname spec.name}\";
 +     propagatedBuildInputs = [ #{deps.map {|n| n.nil? ? "" : (nixname n) }.join(" ")} ];
 +     src = fetchurl {
 +       url = \"#{src_url}\";
@@ -130,7 +151,7 @@ index 0000000..1d4ec58
 +     meta = {
 +       homepage = \"#{spec.homepage}\";
 +       license = [#{spec.licenses.map{|l| "\"#{l}\""}.join(" ") }]; # one of ?
-+       description = \"#{ spec.description[0..120] }\"; # cut to 120 chars
++       #{nixdescription spec}
 +       longDescription = \"#{ spec.description }\";
 +     };
 +  };\n"
