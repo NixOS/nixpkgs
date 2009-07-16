@@ -6,7 +6,7 @@ let
   inherit (pkgs) nettools dhcp lib;
 
   # Don't start dhclient on explicitly configured interfaces.
-  ignoredInterfaces = ["lo"] ++
+  ignoredInterfaces = ["lo" "wmaster0"] ++
     map (i: i.name) (lib.filter (i: i ? ipAddress) config.networking.interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
