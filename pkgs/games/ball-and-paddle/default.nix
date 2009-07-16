@@ -1,16 +1,18 @@
 { fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "ballandpaddle-0.8.0";
+  name = "ballandpaddle-0.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/ballandpaddle/${name}.tar.gz";
-    sha256 = "0m81vvwibisaxrqmzlq6k8r5qxv4hpsq2hi6xjmfm1ffzaayplsh";
+    sha256 = "0zgpydad0mj7fbkippw3n9hlda6nac084dq5xfbsks9jn1xd30ny";
   };
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_ttf guile gettext ];
 
-  patchPhase = ''
+  patches = [ ./getenv-decl.patch ];
+
+  preConfigure = ''
     sed -i "Makefile.in" \
         -e "s|desktopdir *=.*$|desktopdir = $out/share/applications|g ;
             s|pixmapsdir *=.*$|pixmapsdir = $out/share/pixmaps|g"
@@ -32,5 +34,7 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     homepage = http://www.gnu.org/software/ballandpaddle/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
