@@ -53,22 +53,6 @@ in
       ";
     };
   
-    networking.interfaces = mkOption {
-      default = [];
-      merge = mergeListOption;
-      example = [
-        { name = "eth0";
-          ipAddress = "131.211.84.78";
-          subnetMask = "255.255.255.128";
-        }
-      ];
-      description = "
-        The configuration for each network interface.  If
-        <option>networking.useDHCP</option> is true, then each interface
-        not listed here will be configured using DHCP.
-      ";
-    };
-
   };
 
 
