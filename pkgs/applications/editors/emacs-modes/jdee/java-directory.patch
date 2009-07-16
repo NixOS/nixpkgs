@@ -10,11 +10,13 @@ Tell the elisp code about the right Java directory.
 -          (concat
 -           (jde-find-jde-data-directory)
 -           "java/")))
-+  (let* ((jde-java-directory "@out@/lib/java"))
- 
-     (oset this bsh-cmd-dir (expand-file-name "bsh-commands" jde-java-directory))
+-
+-    (oset this bsh-cmd-dir (expand-file-name "bsh-commands" jde-java-directory))
 -    (oset this checkstyle-jar  (expand-file-name "lib/checkstyle-all.jar" jde-java-directory))
 -    (oset this regexp-jar (expand-file-name "lib/jakarta-regexp.jar" jde-java-directory))
++  (let ((jde-java-directory "@out@/lib/java"))
++
++    (oset this bsh-cmd-dir "@datadir@/bsh-commands")
 +    (oset this checkstyle-jar  (expand-file-name "checkstyle-all.jar" jde-java-directory))
 +    (oset this regexp-jar (expand-file-name "jakarta-regexp.jar" jde-java-directory))
      (oset this jde-classes-dir (expand-file-name "classes" jde-java-directory))

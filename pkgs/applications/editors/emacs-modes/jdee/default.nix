@@ -34,14 +34,23 @@ in
         build.bin.emacs = ${emacs}/bin/emacs
       EOF
 
+      # Substitute variables, à la Autoconf.
       for i in lisp/*.el
       do
-        sed -i "$i" -e"s|@out@|$out|g"
+        sed -i "$i" -e "s|@out@|$out|g ;
+                        s|@javadir@|$out/lib/java|g ;
+                        s|@datadir@|$out/share/${name}|g"
       done
     '';
 
     buildPhase = "ant dist";
-    installPhase = "ant install";
+
+    installPhase = ''
+      ant install
+
+      ensureDir "$out/share/${name}"
+      cp -rv java/bsh-commands "$out/share/${name}"
+    '';
 
     buildInputs = [ emacs ant ];
     propagatedBuildInputs = [ cedet ];
