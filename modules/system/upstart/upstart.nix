@@ -24,11 +24,21 @@ let
             end script
           '' else ""}
           
-          ${if job.exec != "" then ''
-            exec ${job.exec}
-          '' else ""}
+          ${if true then
+            # Simulate jobs without a main process (which Upstart 0.3
+            # doesn't support) using a semi-infinite sleep.
+            ''
+              exec ${if job.exec != "" then job.exec else "sleep 1e100"}
+            ''
+            else ""}
 
           ${if job.respawn then "respawn" else ""}
+
+          ${if job.postStop != "" then ''
+            stop script
+              ${job.postStop}
+            end script
+          '' else ""}
         '';
 
     in
@@ -145,7 +155,16 @@ in
           default = "";
           description = ''
             Shell commands executed before the job is started
-            (i.e. before the <varname>exec</varname> command is run).
+            (i.e. before the job's main process is started).
+          '';
+        };
+
+        postStop = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            Shell commands executed after the job has stopped
+            (i.e. after the job's main process has terminated).
           '';
         };
 
@@ -153,7 +172,10 @@ in
           type = types.string;
           default = "";
           description = ''
-            Command to start the job.
+            Command to start the job's main process.  If empty, the
+            job has no main process, but can still have pre/post-start
+            and pre/post-stop scripts, and is considered "running"
+            until it is stopped.
           '';
         };
 
