@@ -2,18 +2,27 @@
 
 let
 
-###### interface
+  inherit (pkgs) utillinux;
+  inherit (pkgs.lib) mkOption filter types;
 
+  toPath = x: if x.device != null then x.device else "/dev/disk/by-label/${x.label}";
+  
+in
+
+{
+
+  ###### interface
+  
   options = {
 
-    swapDevices = pkgs.lib.mkOption {
+    swapDevices = mkOption {
       default = [];
       example = [
         { device = "/dev/hda7"; }
         { device = "/var/swapfile"; }
         { label = "bigswap"; }
       ];
-      description = "
+      description = ''
         The swap devices and swap files.  These must have been
         initialised using <command>mkswap</command>.  Each element
         should be an attribute set specifying either the path of the
@@ -21,59 +30,70 @@ let
         of the swap device (<literal>label</literal>, see
         <command>mkswap -L</command>).  Using a label is
         recommended.
-      ";
+      '';
+
+      type = types.list types.optionSet;
+
+      options = {
+
+        device = mkOption {
+          default = null;
+          example = "/dev/sda3";
+          type = types.nullOr types.string;
+          description = ''
+            Path of the device.
+          '';
+        };
+
+        label = mkOption {
+          default = null;
+          example = "swap";
+          type = types.nullOr types.string;
+          description = "
+            Label of the device.  Can be used instead of <varname>device</varname>.
+          ";
+        };
+
+      };
+      
     };
 
   };
+  
 
+  ###### implementation
 
-###### implementation
+  config = {
 
-  inherit (pkgs) utillinux lib;
+    jobs = pkgs.lib.singleton
+      { name = "swap";
 
-  swapDevices = config.swapDevices;
+        task = true;
+        
+        startOn = ["startup" "new-devices"];
 
-  devicesByPath =
-    map (x: x.device) (lib.filter (x: x ? device) swapDevices);
-    
-  devicesByLabel =
-    map (x: x.label) (lib.filter (x: x ? label) swapDevices);
+        script =
+          ''        
+            swapDevices=${toString (map toPath config.swapDevices)}
+          
+            for device in $swapDevices; do
+                ${utillinux}/sbin/swapon "$device" || true
+            done
 
-in
+            # Remove swap devices not listed in swapDevices.
+            for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
+                found=
+                for device in $swapDevices; do
+                    device=$(readlink -f $device)
+                    if test "$used" = "$device"; then found=1; fi
+                done
+                if test -z "$found"; then
+                    ${utillinux}/sbin/swapoff "$used" || true
+                fi
+            done
+          '';
+      };
 
+  };
 
-{
-  require = [options];
-
-  services.extraJobs = [{
-    name = "swap";
-
-    job = ''
-      start on startup
-      start on new-devices
-
-      script
-          for device in ${toString devicesByPath}; do
-              ${utillinux}/sbin/swapon "$device" || true
-          done
-
-          for label in ${toString devicesByLabel}; do
-              ${utillinux}/sbin/swapon -L "$label" || true
-          done
-
-          # Remove swap devices not listed in swapDevices.
-          # !!! disabled because it doesn't work with labels
-          #for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
-          #    found=
-          #    for device in $ {toString swapDevices}; do
-          #        if test "$used" = "$device"; then found=1; fi
-          #    done
-          #    if test -z "$found"; then
-          #        ${utillinux}/sbin/swapoff "$used" || true
-          #    fi
-          #done
-
-      end script
-    '';
-  }];
 }

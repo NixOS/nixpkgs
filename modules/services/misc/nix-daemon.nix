@@ -236,21 +236,18 @@ in
         target = "nix.machines";
       };
 
-  services.extraJobs = [
+  jobs = pkgs.lib.singleton
     { name = "nix-daemon";
 
-      job = ''
-        start on startup
-        stop on shutdown
-        respawn
-        script
+      startOn = "startup";
+
+      script =
+        ''
           export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
           ${config.nix.envVars}
           exec ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
-        end script
-      '';
-    }
-  ];
+        '';
+    };
 
   environment.shellInit =
     ''

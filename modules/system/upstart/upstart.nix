@@ -11,10 +11,19 @@ let
 
       jobText = if job.job != "" then job.job else
         ''
+          # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
+        
           description "${job.description}"
 
-          ${if job.startOn != "" then "start on ${job.startOn}" else ""}
-          ${if job.stopOn != "" then "start on ${job.stopOn}" else ""}
+          ${if isList job.startOn then
+              # This is a hack to support or-dependencies on Upstart 0.3.
+              concatMapStrings (x: "start on ${x}\n") job.startOn
+            else if job.startOn != "" then
+              "start on ${job.startOn}"
+            else ""
+          }
+          
+          ${if job.stopOn != "" then "stop on ${job.stopOn}" else ""}
 
           ${concatMapStrings (n: "env ${n}=${getAttr n job.environment}\n") (attrNames job.environment)}
           
@@ -24,15 +33,27 @@ let
             end script
           '' else ""}
           
-          ${if true then
-            # Simulate jobs without a main process (which Upstart 0.3
-            # doesn't support) using a semi-infinite sleep.
-            ''
-              exec ${if job.exec != "" then job.exec else "sleep 1e100"}
-            ''
-            else ""}
+          ${if job.script != "" && job.exec != "" then
+              abort "Job ${job.name} has both a `script' and `exec' attribute."
+            else if job.script != "" then
+              ''
+                script
+                  ${job.script}
+                end script
+              ''
+            else if job.exec != "" then
+              ''
+                exec ${job.exec}
+              ''
+            else
+              # Simulate jobs without a main process (which Upstart 0.3
+              # doesn't support) using a semi-infinite sleep.
+              ''
+                exec sleep 1e100
+              ''
+          }
 
-          ${if job.respawn then "respawn" else ""}
+          ${if job.respawn && !job.task then "respawn" else ""}
 
           ${if job.postStop != "" then ''
             stop script
@@ -134,7 +155,8 @@ in
         };
 
         startOn = mkOption {
-          type = types.string;
+          # !!! Re-enable this once we're on Upstart >= 0.6.
+          #type = types.string; 
           default = "";
           description = ''
             The Upstart event that triggers this job to be started.
@@ -179,12 +201,31 @@ in
           '';
         };
 
+        script = mkOption {
+          type = types.string;
+          default = "";
+          description = ''
+            Shell commands executed as the job's main process.  Can be
+            specified instead of the <varname>exec</varname> attribute.
+          '';
+        };
+
         respawn = mkOption {
           type = types.bool;
           default = true;
           description = ''
             Whether to restart the job automatically if its process
             ends unexpectedly.
+          '';
+        };
+
+        task = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether this job is a task rather than a service.  Tasks
+            are executed only once, while services are restarted when
+            they exit.
           '';
         };
 
