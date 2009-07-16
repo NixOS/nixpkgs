@@ -53,7 +53,7 @@ Tell the elisp code about the right Java directory.
  		      (if jde-checkstyle-style
  			  (jde-normalize-path jde-checkstyle-style)
 -			(concat (jde-find-jde-data-directory) "java/lib/sun_checks.xml")))
-+			"@out@/lib/java/sun_checks.xml"))
++			"@datadir@/sun_checks.xml"))
  		(if jde-checkstyle-expanded-properties-file
                      (list "-p" (jde-normalize-path jde-checkstyle-expanded-properties-file)))
  		(if jde-checkstyle-module-package-names-file

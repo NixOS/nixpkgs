@@ -50,6 +50,17 @@ in
 
       ensureDir "$out/share/${name}"
       cp -rv java/bsh-commands "$out/share/${name}"
+
+      # Move everything that's not a JAR to $datadir.  This includes
+      # `sun_checks.xml', license files, etc.
+      cd "$out/lib/java"
+      for i in *
+      do
+        if echo $i | grep -qv '\.jar''$'
+        then
+            mv -v "$i" "$out/share/${name}"
+        fi
+      done
     '';
 
     buildInputs = [ emacs ant ];
