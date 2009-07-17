@@ -604,6 +604,10 @@ let
             bash makeWrapper;
   };
 
+  dhcpcd = import ../tools/networking/dhcpcd {
+    inherit fetchurl stdenv;
+  };
+
   diffstat = import ../tools/text/diffstat {
     inherit fetchurl stdenv;
   };
