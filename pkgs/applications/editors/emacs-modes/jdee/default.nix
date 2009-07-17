@@ -19,6 +19,7 @@ in
       ./installation-layout.patch ./cedet-paths.patch ./elib-avltree.patch
       ./java-directory.patch ./jde-directory-files-recurs.patch
       ./jde-help-find-javadoc.patch ./jde-wiz-update-implements-clause.patch
+      ./jde-help-docsets.patch
     ];
 
     configurePhase = ''
