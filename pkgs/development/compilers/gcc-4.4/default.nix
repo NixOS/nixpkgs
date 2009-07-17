@@ -4,7 +4,7 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , texinfo ? null
-, gmp, mpfr
+, gmp, mpfr, gettext
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , enableMultilib ? false
@@ -50,12 +50,11 @@ stdenv.mkDerivation ({
   patches =
     [./pass-cxxcpp.patch]
     ++ optional noSysDirs ./no-sys-dirs.patch
-    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
-    ++ optional langJava ./java-jvgenmain-link.patch;
-    
+    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
+
   inherit noSysDirs profiledCompiler staticCompiler;
 
-  buildInputs = [texinfo gmp mpfr]
+  buildInputs = [ texinfo gmp mpfr gettext ]
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
@@ -64,6 +63,7 @@ stdenv.mkDerivation ({
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     --disable-libstdcxx-pch
+    --without-included-gettext
     --with-system-zlib
     --enable-languages=${
       concatStrings (intersperse ","
@@ -87,7 +87,12 @@ stdenv.mkDerivation ({
   meta = {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
-    description = "GNU Compiler Collection, 4.3.x";
+    description = "GNU Compiler Collection, version ${version}";
+
+    maintainers = [
+      # Add your name here!
+      stdenv.lib.maintainers.ludo
+    ];
   };
 } // (if langJava then {
   postConfigure = ''

@@ -1661,7 +1661,7 @@ let
   }));
 
   gcc44 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
-    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
+    inherit fetchurl stdenv texinfo gmp mpfr gettext noSysDirs;
     profiledCompiler = true;
   });
 
@@ -1727,7 +1727,7 @@ let
     langCC = true;
     langC = false;
     profiledCompiler = false;
-    inherit zlib boehmgc;
+    inherit zlib boehmgc gettext;
   });
 
   #ghc = haskellPackages.ghc;
