@@ -7851,7 +7851,7 @@ let
   };
 
   texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick;
+    inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick runCommand lib;
   };
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
