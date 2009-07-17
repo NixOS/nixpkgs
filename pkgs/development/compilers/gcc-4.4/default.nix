@@ -45,22 +45,25 @@ stdenv.mkDerivation ({
     optional langJava (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-java-${version}.tar.bz2";
       sha256 = "0i60llrllgm4sbplw2rc9b0gi0mxr88la07a72mvlbblzpxn22hb";
-    }) ++
-
-    optional langJava (fetchurl {
-      # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
-      # `configure' time.
-
-      # XXX: Eventually we might want to take it from upstream.
-      url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
-      name = "ecj.jar";
-      sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
     });
 
   patches =
     [./pass-cxxcpp.patch]
     ++ optional noSysDirs ./no-sys-dirs.patch
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
+
+  javaEcj =
+    if langJava
+    then fetchurl {
+        # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
+        # `configure' time.
+
+        # XXX: Eventually we might want to take it from upstream.
+        url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
+        sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
+      }
+    else "";
+
 
   inherit noSysDirs profiledCompiler staticCompiler;
 

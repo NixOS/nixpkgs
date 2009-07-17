@@ -62,6 +62,12 @@ fi
 
 
 preConfigure() {
+    # Copy `ecj.jar' to `$(top_srcdir)' when available.
+    if [ -f "$javaEcj" ]
+    then
+	cp -v "$javaEcj" "ecj.jar"
+    fi
+
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
