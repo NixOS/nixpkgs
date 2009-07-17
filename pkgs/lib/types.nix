@@ -110,6 +110,8 @@ rec {
       fold = op: nul: v: if v == null then nul else elemType.fold op nul v;
     };
 
+    # !!! this should be a type constructor that takes the options as
+    # an argument.
     optionSet = mkOptionType {
       name = "option set";
       check = x: lib.traceValIfNot builtins.isAttrs x;

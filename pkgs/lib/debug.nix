@@ -33,11 +33,11 @@ rec {
           else "x is attr set { ${attrNamesToStr x} }"
       else if isFunction x then "x is a function"
       else if x == [] then "x is an empty list"
-      else if isList x then "x is a list, first item is : ${showVal (head x)}"
+      else if isList x then "x is a list, first element is: ${showVal (head x)}"
       else if x == true then "x is boolean true"
       else if x == false then "x is boolean false"
       else if x == null then "x is null"
-      else "x is probably a string starting, starting characters: ${substring 0 50 x}..";
+      else "x is probably a string `${substring 0 50 x}...'";
   # trace the arguments passed to function and its result 
   traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
