@@ -1161,6 +1161,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ppl = import ../development/libraries/ppl {
+    inherit fetchurl stdenv gmpxx perl gnum4;
+  };
+
   /* WARNING: this version is unsuitable for using with a setuid wrapper */
   ppp = builderDefsPackage (import ../tools/networking/ppp) {
   };
