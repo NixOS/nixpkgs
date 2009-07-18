@@ -539,6 +539,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  cloogppl = import ../development/libraries/cloog-ppl {
+    inherit fetchurl stdenv ppl;
+  };
+
   coreutils = useFromStdenv "coreutils"
     (makeOverridable (if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
