@@ -63,6 +63,15 @@ let
         ";
       };
 
+
+      daemonNiceLevel = mkOption {
+        default = 2;
+        description = "
+          nix dameon process priority. This priority propagates to build processes.
+          0 is default unix process priority. 20 is lowest.
+        ";
+      };
+
       buildMachines = mkOption {
         example = [
           { hostName = "voila.labs.cs.uu.nl";
@@ -245,7 +254,7 @@ in
         ''
           export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
           ${config.nix.envVars}
-          exec ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
+          exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
         '';
     };
 
