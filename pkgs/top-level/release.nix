@@ -280,6 +280,7 @@ in {
   portmap = linux;
   postgresql = all;
   postfix = linux;
+  ppl = all;
   procps = linux;
   pwdutils = linux;
   pthreadmanpages = all;
