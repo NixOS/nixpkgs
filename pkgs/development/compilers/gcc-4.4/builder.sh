@@ -35,18 +35,18 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    # Setting $C_INCLUDE_PATH helps `xgcc' find the C library headers.
-    export C_INCLUDE_PATH="$NIX_FIXINC_DUMMY"
+    # Setting $CPATH makes sure both `gcc' and `xgcc' find the C
+    # library headers, regarless of the language being compiled.
+    export CPATH="$NIX_FIXINC_DUMMY:$gmp/include:$mpfr/include"
 
     # Likewise, to help it find `crti.o' and similar files.
     export LIBRARY_PATH="$glibc_libdir"
 
-    extraCFlags="-g0 -I$gmp/include -I$mpfr/include $extraCFlags"
+    extraCFlags="-g0 $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
 
-    export NIX_EXTRA_CFLAGS=$extraCFlags
     for i in $extraLDFlags; do
-        export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
+        export EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
     done
 
     makeFlagsArray=( \
@@ -54,9 +54,9 @@ if test "$noSysDirs" = "1"; then
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         LIMITS_H_TEST=true \
-        X_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        X_CFLAGS="$extraCflags $EXTRA_LDFLAGS" \
+        LDFLAGS="$extraCflags $EXTRA_LDFLAGS" \
+        LDFLAGS_FOR_TARGET="$extraCflags $EXTRA_LDFLAGS" \
         )
 fi
 
