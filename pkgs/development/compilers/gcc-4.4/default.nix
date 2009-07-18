@@ -5,6 +5,7 @@
 , staticCompiler ? false
 , texinfo ? null
 , gmp, mpfr, gettext
+, ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , enableMultilib ? false
@@ -68,6 +69,8 @@ stdenv.mkDerivation ({
   inherit noSysDirs profiledCompiler staticCompiler;
 
   buildInputs = [ texinfo gmp mpfr gettext ]
+    ++ (optional (ppl != null) ppl)
+    ++ (optional (cloogppl != null) cloogppl)
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
@@ -75,6 +78,8 @@ stdenv.mkDerivation ({
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
+    ${if ppl != null then "--with-ppl=${ppl}" else ""}
+    ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib

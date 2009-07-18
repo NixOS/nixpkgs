@@ -1669,7 +1669,8 @@ let
   }));
 
   gcc44 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
-    inherit fetchurl stdenv texinfo gmp mpfr gettext noSysDirs;
+    inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
+      gettext noSysDirs;
     profiledCompiler = true;
   });
 
