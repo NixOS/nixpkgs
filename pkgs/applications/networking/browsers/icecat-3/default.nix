@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
+{ stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
 , gnomevfs, libgnomeui
 , freetype, fontconfig
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libgnomeui gnomevfs alsaLib
     pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
-    python dbus dbus_glib pango freetype fontconfig
+    python ply dbus dbus_glib pango freetype fontconfig
     xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
   ];
 
