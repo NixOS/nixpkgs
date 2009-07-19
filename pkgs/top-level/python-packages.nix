@@ -120,6 +120,39 @@ rec {
     };
   });
 
+  ply = buildPythonPackage (rec {
+    name = "ply-3.2";
+
+    src = fetchurl {
+      url = "http://www.dabeaz.com/ply/${name}.tar.gz";
+      sha256 = "10z4xq8lc8c21v4g7z3zpnvpqbc0vidigrck1kqhwgkqi4gh0kfj";
+    };
+
+    meta = {
+      homepage = http://www.dabeaz.com/ply/;
+
+      description = "PLY (Python Lex-Yacc), an implementation of the lex and yacc parsing tools for Python";
+
+      longDescription = ''
+        PLY is an implementation of lex and yacc parsing tools for Python.
+        In a nutshell, PLY is nothing more than a straightforward lex/yacc
+        implementation.  Here is a list of its essential features: It's
+        implemented entirely in Python; It uses LR-parsing which is
+        reasonably efficient and well suited for larger grammars; PLY
+        provides most of the standard lex/yacc features including support for
+        empty productions, precedence rules, error recovery, and support for
+        ambiguous grammars; PLY is straightforward to use and provides very
+        extensive error checking; PLY doesn't try to do anything more or less
+        than provide the basic lex/yacc functionality.  In other words, it's
+        not a large parsing framework or a component of some larger system.
+      '';
+
+      license = "revised-BSD";
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
+    };
+  });
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.14";
 
