@@ -422,11 +422,15 @@ in {
     ghc = ghcSupported;
   };
 
-  haskellPackages_ghc6101 = {
+  haskellPackages_ghc6102 = {
     ghc = ghcSupported;
   };
 
-  haskellPackages_ghc6102 = {
+  haskellPackages_ghc6103 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc6104 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
     gtk2hs = linux;
@@ -434,10 +438,6 @@ in {
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = linux;
-  };
-
-  haskellPackages_ghc6103 = {
-    ghc = ghcSupported;
   };
 
   kde3 = {
