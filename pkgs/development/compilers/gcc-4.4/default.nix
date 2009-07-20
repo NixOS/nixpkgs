@@ -16,7 +16,17 @@ assert langTreelang -> bison != null && flex != null;
 
 with stdenv.lib;
 
-let version = "4.4.0"; in
+let version = "4.4.0";
+    javaEcj = fetchurl {
+      # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
+      # `configure' time.
+
+      # XXX: Eventually we might want to take it from upstream.
+      url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
+      sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
+    };
+
+in
 
 stdenv.mkDerivation ({
   name = "${name}-${version}";
@@ -53,19 +63,6 @@ stdenv.mkDerivation ({
     ++ optional noSysDirs ./no-sys-dirs.patch
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
 
-  javaEcj =
-    if langJava
-    then fetchurl {
-        # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
-        # `configure' time.
-
-        # XXX: Eventually we might want to take it from upstream.
-        url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
-        sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
-      }
-    else "";
-
-
   inherit noSysDirs profiledCompiler staticCompiler;
 
   buildInputs = [ texinfo gmp mpfr gettext ]
@@ -80,6 +77,7 @@ stdenv.mkDerivation ({
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
+    ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
