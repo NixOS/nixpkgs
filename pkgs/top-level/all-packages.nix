@@ -1755,7 +1755,7 @@ let
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 
-  haskellPackages = haskellPackages_ghc6103;
+  haskellPackages = haskellPackages_ghc6104;
 
   haskellPackages_ghc642 = import ./haskell-packages.nix {
     inherit pkgs;
@@ -1796,25 +1796,33 @@ let
     };
   });
 
-  haskellPackages_ghc6101 = recurseIntoAttrs (import ./haskell-packages.nix {
+  haskellPackages_ghc6101 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.10.1.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
-  });
+  };
 
-  haskellPackages_ghc6102 = recurseIntoAttrs (import ./haskell-packages.nix {
+  haskellPackages_ghc6102 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.10.2.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
-  });
+  };
 
   haskellPackages_ghc6103 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.10.3.nix {
+      inherit fetchurl stdenv perl ncurses gmp libedit;
+      ghc = ghc6101Binary;
+    };
+  });
+
+  haskellPackages_ghc6104 = recurseIntoAttrs (import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.10.4.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
