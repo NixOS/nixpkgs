@@ -1,0 +1,14 @@
+This patch makes sure $PYTHONPATH is not overridden so that the `ply'
+Python module is visible.
+
+--- icecat-3.5.1/js/src/xpconnect/src/Makefile.in	2009-07-18 14:33:08.000000000 +0200
++++ icecat-3.5.1/js/src/xpconnect/src/Makefile.in	2009-07-20 16:31:43.000000000 +0200
+@@ -209,7 +209,7 @@ dom_quickstubs.h dom_quickstubs.cpp: $(s
+                                      $(topsrcdir)/xpcom/idl-parser/header.py \
+                                      $(topsrcdir)/xpcom/idl-parser/xpidl.py \
+                                      $(DEPTH)/js/src/mozilla-config.h
+-	PYTHONPATH=$(topsrcdir)/xpcom/idl-parser \
++	PYTHONPATH="$$PYTHONPATH:$(topsrcdir)/xpcom/idl-parser" \
+ 	  $(PYTHON) $(srcdir)/qsgen.py \
+ 	  --idlpath=$(DEPTH)/dist/idl \
+ 	  --cachedir=$(DEPTH)/xpcom/idl-parser \

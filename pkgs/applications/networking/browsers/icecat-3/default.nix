@@ -20,7 +20,9 @@ stdenv.mkDerivation {
     xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
   ];
 
-  patches = [ ./skip-gre-registration.patch ./rpath-link.patch ];
+  patches = [
+    ./skip-gre-registration.patch ./rpath-link.patch ./pythonpath.patch
+  ];
 
   configureFlags = [
     "--enable-application=${application}"
