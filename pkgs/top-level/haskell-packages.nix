@@ -350,6 +350,10 @@ rec {
     inherit cabal regexBase;
   };
 
+  regular = import ../development/libraries/haskell/regular {
+    inherit cabal;
+  };
+
   syb = import ../development/libraries/haskell/syb {
     inherit cabal;
   };
