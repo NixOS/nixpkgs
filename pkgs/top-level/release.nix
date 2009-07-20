@@ -256,7 +256,6 @@ in {
   nssmdns = linux;
   ntfs3g = linux;
   ntp = linux;
-  nxml = all;
   ocaml = linux;
   octave = linux;
   openoffice = linux;
@@ -400,6 +399,7 @@ in {
     ecb = linux;
     emacsw3m = linux;
     emms = linux;
+    nxml = all;
   };
 
   emacs23Packages = emacs22Packages // {
