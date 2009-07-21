@@ -1263,6 +1263,35 @@ rec {
     doCheck = false; /* attempts a network connection to localhost */
   };
 
+  ImageExifTool = buildPerlPackage rec {
+      name = "Image-ExifTool-7.83";
+
+      src = fetchurl {
+        url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
+        sha256 = "1g3ah646w242649sy77wjff3ykjclihv8zvbs0ch1nwfbqprrbl2";
+      };
+
+      meta = {
+        description = "ExifTool, a tool to read, write and edit EXIF meta information";
+
+        longDescription = ''
+          ExifTool is a platform-independent Perl library plus a command-line
+          application for reading, writing and editing meta information in
+          image, audio and video files.  ExifTool supports many different types
+          of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
+          Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
+          notes of many digital cameras by Canon, Casio, FujiFilm, HP,
+          JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Nikon,
+          Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Ricoh, Sanyo,
+          Sigma/Foveon and Sony.
+        '';
+
+        licenses = [ "GPLv1+" "Artistic" ];
+
+        maintainers = [ stdenv.lib.maintainers.ludo ];
+      };
+    };
+
   JSON = buildPerlPackage rec {
     name = "JSON-2.15";
     src = fetchurl {
