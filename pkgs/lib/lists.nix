@@ -65,6 +65,13 @@ rec {
        else head found;
 
 
+  # Find the first element in the list matching the specified
+  # predicate or returns `default' if no such element exists.
+  findFirst = pred: default: list:
+    let found = filter pred list;
+    in if found == [] then default else head found;
+       
+
   # Return true iff function `pred' returns true for at least element
   # of `list'.
   any = pred: list:
