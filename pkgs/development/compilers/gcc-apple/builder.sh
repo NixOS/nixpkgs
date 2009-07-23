@@ -82,8 +82,6 @@ postInstall() {
 }
 
 postUnpack() {
-  pwd
-  ls -l
   mv libstdcxx-16/libstdcxx $sourceRoot/
 }
 
