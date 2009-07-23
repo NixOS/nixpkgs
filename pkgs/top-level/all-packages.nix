@@ -7871,6 +7871,7 @@ let
 
   texFunctions = import ../misc/tex/nix {
     inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick runCommand lib;
+    inherit (haskellPackages) lhs2tex;
   };
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {

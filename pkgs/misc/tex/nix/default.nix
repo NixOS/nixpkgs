@@ -76,6 +76,29 @@ rec {
     };
     
 
+  findLhs2TeXIncludes =
+    { rootFile
+    }:
+
+    builtins.genericClosure {
+      startSet = [{key = rootFile;}];
+      
+      operator =
+        {key, ...}:
+
+        let
+
+          trace = x: builtins.trace x x;
+
+          deps = import (pkgs.runCommand "lhs2tex-includes"
+            { src = trace key; }
+            "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
+
+        in pkgs.lib.concatMap (x : if builtins.pathExists x then [{key = x;}]
+                                   else builtins.trace ("not found: ${toString x}") [])
+                              (map (x : trace "${dirOf key}/${x}") deps);
+    };
+
   dot2pdf =
     { dotGraph
     }:
@@ -103,6 +126,17 @@ rec {
       ];
     };
 
+  lhs2tex =
+    { source, flags ? null } :
+    pkgs.stdenv.mkDerivation {
+      name = "tex";
+      builder = ./lhs2tex.sh;
+      inherit source flags;
+      buildInputs = [ pkgs.lhs2tex pkgs.perl ];
+      copyIncludes = ./copy-includes.pl;
+      includes = map (x: [x.key (baseNameOf (toString x.key))])
+        (findLhs2TeXIncludes {rootFile = source;});
+    };
   
   animateDot = dotGraph: nrFrames: pkgs.stdenv.mkDerivation {
     name = "dot-frames";
