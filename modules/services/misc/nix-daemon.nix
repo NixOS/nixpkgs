@@ -63,12 +63,11 @@ let
         ";
       };
 
-
       daemonNiceLevel = mkOption {
         default = 2;
         description = "
-          nix dameon process priority. This priority propagates to build processes.
-          0 is default unix process priority. 20 is lowest.
+          Nix daemon process priority. This priority propagates to build processes.
+          0 is the default Unix process priority, 20 is the lowest.
         ";
       };
 
@@ -160,31 +159,6 @@ let
         else "")
         + conf;
       };
-
-
-      services = {
-        pulseaudio = {
-          enable = mkOption {
-            default = false;
-            description = ''
-              Whether to enable the PulseAudio system-wide audio server.
-              Note that the documentation recommends running PulseAudio
-              daemons per-user rather than system-wide on desktop machines.
-            '';
-          };
-
-          logLevel = mkOption {
-            default = "notice";
-            example = "debug";
-            description = ''
-              A string denoting the log level: one of
-              <literal>error</literal>, <literal>warn</literal>,
-              <literal>notice</literal>, <literal>info</literal>,
-              or <literal>debug</literal>.
-            '';
-          };
-        };
-      };
     };
   };
 
@@ -252,7 +226,7 @@ in
 
       script =
         ''
-          export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
+          export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
           ${config.nix.envVars}
           exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
         '';
