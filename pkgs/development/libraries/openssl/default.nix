@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "openssl-0.9.8k";
   
   src = fetchurl {
@@ -13,11 +13,9 @@ stdenv.mkDerivation rec {
   configureScript = "./config";
   
   configureFlags = "shared";
-  
-  patches = if stdenv.system == "i686-darwin" then [ ./darwin-arch.patch ] else [];
 
   meta = {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
-}
+} // (if stdenv.system == "i686-darwin" then { patches = [ ./darwin-arch.patch ]; } else {}))
