@@ -1,0 +1,30 @@
+diff -rc libstdcxx-16-orig/libstdcxx/libstdc++-v3/src/Makefile.in libstdcxx-16/libstdcxx/libstdc++-v3/src/Makefile.in
+*** libstdcxx-16-orig/libstdcxx/libstdc++-v3/src/Makefile.in	Thu Jul 23 19:13:52 2009
+--- libstdcxx-16/libstdcxx/libstdc++-v3/src/Makefile.in	Thu Jul 23 19:38:23 2009
+***************
+*** 65,71 ****
+  	numeric_members.lo time_members.lo
+  am__objects_2 = basic_file.lo c++locale.lo
+  am__objects_3 = bitmap_allocator.lo pool_allocator.lo mt_allocator.lo \
+! 	codecvt.lo complex_io.lo ctype.lo debug.lo debug_list.lo \
+  	functexcept.lo globals_locale.lo globals_io.lo ios.lo \
+  	ios_failure.lo ios_init.lo ios_locale.lo limits.lo list.lo \
+  	locale.lo locale_init.lo locale_facets.lo localename.lo \
+--- 65,71 ----
+  	numeric_members.lo time_members.lo
+  am__objects_2 = basic_file.lo c++locale.lo
+  am__objects_3 = bitmap_allocator.lo pool_allocator.lo mt_allocator.lo \
+! 	codecvt.lo complex_io.lo ctype.lo debug.lo \
+  	functexcept.lo globals_locale.lo globals_io.lo ios.lo \
+  	ios_failure.lo ios_init.lo ios_locale.lo limits.lo list.lo \
+  	locale.lo locale_init.lo locale_facets.lo localename.lo \
+***************
+*** 315,321 ****
+  	complex_io.cc \
+  	ctype.cc \
+  	debug.cc \
+- 	debug_list.cc \
+  	functexcept.cc \
+  	globals_locale.cc \
+  	globals_io.cc \
+--- 315,320 ----
