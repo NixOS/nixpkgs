@@ -604,8 +604,7 @@ let
   };
 
   dhcp = import ../tools/networking/dhcp {
-    inherit fetchurl stdenv groff nettools coreutils iputils gnused
-            bash makeWrapper;
+    inherit fetchurl stdenv nettools iputils iproute makeWrapper;
   };
 
   dhcpcd = import ../tools/networking/dhcpcd {
