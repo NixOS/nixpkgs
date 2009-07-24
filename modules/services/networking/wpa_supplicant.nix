@@ -38,6 +38,9 @@ in
     jobs = pkgs.lib.singleton
       { name = "wpa_supplicant";
 
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
+
         preStart =
           ''
             touch -a ${configFile}
