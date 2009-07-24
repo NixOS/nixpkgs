@@ -60,20 +60,20 @@ in
   
   config = mkIf config.networking.useDHCP {
 
-    jobs = pkgs.lib.singleton {
-      name = "dhclient";
+    jobs = pkgs.lib.singleton
+      { name = "dhclient";
 
-      job = ''
-        description "DHCP client"
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
 
-        start on network-interfaces/started
-        stop on network-interfaces/stop
+        preStart =
+          ''
+            # dhclient barfs if /proc/net/if_inet6 doesn't exist.
+            ${config.system.sbin.modprobe}/sbin/modprobe ipv6 || true
+          '';
 
-        env PATH_DHCLIENT_SCRIPT=${dhcp}/sbin/dhclient-script
-
-        script
-            export PATH=${nettools}/sbin:$PATH
-
+        script =
+          ''
             # Determine the interface on which to start dhclient.
             interfaces=
 
@@ -91,10 +91,9 @@ in
 
             mkdir -m 755 -p ${stateDir}
 
-            exec ${dhcp}/sbin/dhclient -d $interfaces -e "PATH=$PATH" -lf ${stateDir}/dhclient.leases
-        end script
-      '';
-    };
+            exec ${dhcp}/sbin/dhclient -d $interfaces -e "PATH=$PATH" -lf ${stateDir}/dhclient.leases -sf ${dhcp}/sbin/dhclient-script
+          '';
+      };
 
     environment.systemPackages = [dhcp];
 
