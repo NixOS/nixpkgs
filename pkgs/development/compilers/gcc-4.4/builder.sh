@@ -9,6 +9,11 @@ mkdir $NIX_FIXINC_DUMMY
 # Thing.
 export CPP="gcc -E"
 
+if test "$staticCompiler" = "1"; then
+    EXTRA_LDFLAGS="-static"
+else
+    EXTRA_LDFLAGS=""
+fi
 
 if test "$noSysDirs" = "1"; then
 

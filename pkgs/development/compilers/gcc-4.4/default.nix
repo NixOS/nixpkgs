@@ -57,8 +57,7 @@ stdenv.mkDerivation ({
 
   patches =
     [./pass-cxxcpp.patch]
-    ++ optional noSysDirs ./no-sys-dirs.patch
-    ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch;
+    ++ optional noSysDirs ./no-sys-dirs.patch;
 
   inherit noSysDirs profiledCompiler staticCompiler;
 
@@ -90,8 +89,6 @@ stdenv.mkDerivation ({
     }
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
   ";
-
-  NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 
   inherit gmp mpfr;
   
