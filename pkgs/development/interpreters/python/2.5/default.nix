@@ -76,4 +76,4 @@ stdenv.mkDerivation ( {
     tkSupport = (tk != null) && (tcl != null);
     libPrefix = "python2.5";
   } ;
-} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; } else {} ) )
+} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch ./nolongdouble.patch]; } else {} ) )
