@@ -16,7 +16,7 @@ assert langTreelang -> bison != null && flex != null;
 
 with stdenv.lib;
 
-let version = "4.4.0";
+let version = "4.4.1";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -36,26 +36,23 @@ stdenv.mkDerivation ({
   src =
     optional /*langC*/ true (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "0p0gis4xrw363kf2yxlx2022cnhyy1dgngwvy1z1z2s0238av7v1";
+      sha256 = "0jgwa98i964jhnjg6acvvhz0wb51v00kk3gal8qbps8j09g2mgag";
     }) ++
 
 
     optional langCC (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "1rdv2fi1vif306yjlxx8a4lh7yc89fi54xyl2p6l60pj9v9xq291";
+      sha256 = "1pfgfgpvkq0i4023n4v1cghzmcq8c15xn4n967n29vmdrrwk8754";
     }) ++
-
-    /* FIXME: Fortran omitted for now.
 
     optional langFortran (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "";
+      sha256 = "1406r8ndl7pjyas5naw8ygqpfrl72ypyn71llfzf953j736kmi50";
     }) ++
 
-     */
     optional langJava (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-java-${version}.tar.bz2";
-      sha256 = "0i60llrllgm4sbplw2rc9b0gi0mxr88la07a72mvlbblzpxn22hb";
+      sha256 = "07lgph5zxskqqkzbq67wma2067dqr5my110l8rgzspqjq5rhgdil";
     });
 
   patches =
