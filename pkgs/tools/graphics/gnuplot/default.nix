@@ -4,6 +4,7 @@
 , libXpm ? null
 , libXaw ? null
 , x11Support ? false
+, readline
 }:
 
 assert x11Support -> ((libX11 != null) && 
@@ -24,6 +25,6 @@ stdenv.mkDerivation {
 
   configureFlags = if x11Support then ["--with-x"] else ["--without-x"];
 
-  buildInputs = [zlib gd texinfo] ++
+  buildInputs = [zlib gd texinfo readline] ++
     (if x11Support then [libX11 libXt libXpm libXaw] else []);
 }

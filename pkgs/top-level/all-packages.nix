@@ -764,11 +764,11 @@ let
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib gd texinfo;
+    inherit fetchurl stdenv zlib gd texinfo readline;
   };
 
   gnuplotX = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib gd texinfo;
+    inherit fetchurl stdenv zlib gd texinfo readline;
     inherit (xlibs) libX11 libXt libXaw libXpm;
     x11Support = true;
   };
