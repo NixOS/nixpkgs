@@ -1716,6 +1716,14 @@ let
     profiledCompiler = false;
   });
 
+  gfortran44 = wrapGCC (gcc44_real.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj43;
 
   gcj43 = wrapGCC (gcc43_real.gcc.override {
@@ -1733,7 +1741,7 @@ let
     langJava = true;
     langFortran = false;
     langCC = true;
-    langC = false;
+    langC = true;
     profiledCompiler = false;
     inherit zlib boehmgc gettext;
   });
