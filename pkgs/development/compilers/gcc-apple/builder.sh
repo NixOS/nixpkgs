@@ -67,7 +67,7 @@ preConfigure() {
     cd ../build
 
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs --disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib"
+    configureFlags="--enable-languages=$langs --disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR}"
 }
 
 
@@ -84,6 +84,8 @@ postInstall() {
 postUnpack() {
   mv libstdcxx-16/libstdcxx $sourceRoot/
 }
+
+STDCXX_INCDIR="$out/include/c++/4.2.1"
 
 genericBuild
 
@@ -103,7 +105,7 @@ preConfigure() {
     ln -s ../build/gcc gcc
     
     configureScript=../$sourceRoot/libstdcxx/configure
-    configureFlags="--disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib"
+    configureFlags="--disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR}"
 }
 
 unpackPhase () {
@@ -112,6 +114,8 @@ unpackPhase () {
 
 postInstall() {
   echo '-'
+  echo "cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/"
+  cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/
 }
 
 patchPhase() {
