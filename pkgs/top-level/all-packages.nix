@@ -1716,7 +1716,7 @@ let
     profiledCompiler = false;
   });
 
-  gfortran44 = wrapGCC (gcc44_real.gcc.override {
+  gfortran44 = wrapGCC (gcc44.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
