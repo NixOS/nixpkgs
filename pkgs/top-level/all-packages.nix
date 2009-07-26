@@ -1113,7 +1113,7 @@ let
   };
 
   parted = import ../tools/misc/parted {
-    inherit fetchurl stdenv e2fsprogs readline;
+    inherit fetchurl stdenv devicemapper e2fsprogs gettext readline;
   };
 
   patch = gnupatch;
