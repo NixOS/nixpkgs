@@ -53,6 +53,7 @@
   ./services/networking/dhclient.nix
   ./services/networking/dhcpd.nix
   ./services/networking/ejabberd.nix
+  ./services/networking/firewall.nix
   ./services/networking/gnunet.nix
   ./services/networking/gw6c.nix
   ./services/networking/ifplugd.nix
@@ -81,9 +82,9 @@
   ./services/x11/xserver/default.nix
   ./services/x11/xserver/desktop-managers/default.nix
   ./services/x11/xserver/desktop-managers/gnome.nix
-  ./services/x11/xserver/desktop-managers/kde4.nix
   ./services/x11/xserver/desktop-managers/kde-environment.nix
   ./services/x11/xserver/desktop-managers/kde.nix
+  ./services/x11/xserver/desktop-managers/kde4.nix
   ./services/x11/xserver/desktop-managers/none.nix
   ./services/x11/xserver/desktop-managers/xterm.nix
   ./services/x11/xserver/display-managers/default.nix

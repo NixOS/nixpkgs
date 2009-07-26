@@ -12,6 +12,14 @@ in
 
   options = {
   
+    networking.firewall.enable = pkgs.lib.mkOption {
+      default = false;
+      description =
+        ''
+          Whether to enable the firewall.
+        '';
+    };
+  
     networking.firewall.allowedTCPPorts = pkgs.lib.mkOption {
       default = [];
       example = [22 80];
@@ -27,13 +35,20 @@ in
 
 
   ###### implementation
-  
-  config = {
+
+  # !!! Maybe if `enable' is false, the firewall should still be built
+  # but not started by default.  However, currently nixos-rebuild
+  # doesn't deal with such Upstart jobs properly (it starts them if
+  # they are changed, regardless of whether the start condition
+  # holds).
+  config = pkgs.lib.mkIf config.networking.firewall.enable {
 
     environment.systemPackages = [pkgs.iptables];
 
     jobs = pkgs.lib.singleton
       { name = "firewall";
+
+        startOn = "network-interfaces/started";
 
         preStart =
           ''
@@ -63,8 +78,6 @@ in
           '';     
       };
 
-    networking.firewall.allowedTCPPorts = [22];
-    
   };
 
 }
