@@ -1,5 +1,12 @@
 {stdenv, fetchurl}:
 
+let
+  preBuildNoNative = ''
+      # Make Cwd work on NixOS (where we don't have a /bin/pwd).
+      substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
+    '';
+  preBuildNative = "";
+in
 stdenv.mkDerivation {
   name = "perl-5.10.0";
 
@@ -22,8 +29,10 @@ stdenv.mkDerivation {
   # "installstyle" option to ensure that modules are put under
   # $out/lib/perl5 - this is the general default, but because $out
   # contains the string "perl", Configure would select $out/lib.
+  # Miniperl needs -lm. perl needs -lrt.
   configureFlags = ''
     -de -Dcc=gcc -Uinstallusrbinperl -Dinstallstyle=lib/perl5 -Duseshrplib
+    -Dldflags='-lm -lrt'
     ${if stdenv ? glibc then "-Dusethreads" else ""}
   '';
 
@@ -41,11 +50,7 @@ stdenv.mkDerivation {
       fi
     '';
 
-  preBuild =
-    ''
-      # Make Cwd work on NixOS (where we don't have a /bin/pwd).
-      substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
-    '';
+  preBuild = if (stdenv.gcc.nativeTools) then preBuildNative else preBuildNoNative;
 
   setupHook = ./setup-hook.sh;
 }
