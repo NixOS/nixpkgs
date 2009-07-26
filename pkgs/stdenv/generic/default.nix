@@ -71,8 +71,7 @@ let
         isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
-               || result.system == "powerpc-linux"
-               || result.system == "armv5tel-linux";
+               || result.system == "powerpc-linux";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd";

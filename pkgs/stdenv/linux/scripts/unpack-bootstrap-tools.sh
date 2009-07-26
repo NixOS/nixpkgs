@@ -10,17 +10,15 @@ echo Patching the bootstrap tools...
 
 # On x86_64, ld-linux-x86-64.so.2 barfs on patchelf'ed programs.  So
 # use a copy of patchelf.
-LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
+LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 $out/bin/cp $out/bin/patchelf .
 
-set +e
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     echo patching $i
     if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             ./patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
+             ./patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath $i
     fi
 done
-set -e
 
 # Fix the libc linker script.
 export PATH=$out/bin
