@@ -1669,7 +1669,7 @@ let
 
   gcc44 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
-      gettext noSysDirs;
+      gettext which noSysDirs;
     profiledCompiler = true;
   });
 
@@ -1741,9 +1741,9 @@ let
     langJava = true;
     langFortran = false;
     langCC = true;
-    langC = true;
+    langC = false;
     profiledCompiler = false;
-    inherit fastjar zlib boehmgc gettext;
+    inherit fastjar zip unzip zlib boehmgc gettext;
   });
 
   #ghc = haskellPackages.ghc;

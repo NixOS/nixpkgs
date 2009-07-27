@@ -4,16 +4,17 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , texinfo ? null
-, gmp, mpfr, gettext
+, gmp, mpfr, gettext, which
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
 , bison ? null, flex ? null
 , fastjar ? null, zlib ? null, boehmgc ? null
+, zip ? null, unzip ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
 
 assert langTreelang -> bison != null && flex != null;
-assert langJava     -> fastjar != null;
+assert langJava     -> fastjar != null && zip != null && unzip != null;
 
 with stdenv.lib;
 
@@ -31,16 +32,6 @@ in
 
 stdenv.mkDerivation ({
   name = "${name}-${version}";
-
-  preConfigure =
-    if langJava
-    then ''
-      # Make sure a `jar' executable is in the search path.
-      ensureDir "bin"
-      ln -sv "${fastjar}/bin/fastjar" "bin/jar"
-      export PATH="$PWD/bin:$PATH"
-    ''
-    else "";
 
   builder = ./builder.sh;
   
@@ -72,13 +63,13 @@ stdenv.mkDerivation ({
 
   inherit noSysDirs profiledCompiler staticCompiler langJava;
 
-  buildInputs = [ texinfo gmp mpfr gettext ]
+  buildInputs = [ texinfo gmp mpfr gettext which ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
-    ++ (optional langJava fastjar)
+    ++ (optionals langJava [fastjar zip unzip])
     ;
 
   configureFlags = "
