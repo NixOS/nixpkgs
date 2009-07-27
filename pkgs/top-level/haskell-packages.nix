@@ -237,6 +237,10 @@ rec {
     inherit cabal binary network;
   };
 
+  hsloggerTemplate = import ../development/libraries/haskell/hslogger-template {
+    inherit cabal hslogger mtl;
+  };
+
   html = import ../development/libraries/haskell/html {
     inherit cabal;
   };
@@ -310,6 +314,10 @@ rec {
 
   parsec = import ../development/libraries/haskell/parsec {
     inherit cabal;
+  };
+
+  parsec3 = import ../development/libraries/haskell/parsec/3.nix {
+    inherit cabal mtl;
   };
 
   pcreLight = import ../development/libraries/haskell/pcre-light {
@@ -415,7 +423,7 @@ rec {
   };
 
   terminfo = import ../development/libraries/haskell/terminfo {
-    inherit cabal;
+    inherit cabal extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
 
