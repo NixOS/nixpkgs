@@ -10,13 +10,18 @@ composableDerivation {} {
       sha256 = "0r794snnwa4m0x57nv8cgfdxwb689946c1mi2s44wp4iljka2ryj";
     };
 
-    flags = edf { name = "geom"; enable = { buildInputs = [geos]; }; };
+    flags = edf { name = "geom"; enable = { buildInputs = [geos]; }; }
+            // {
+              java = { buildInputs = [ (apacheAnt.override {jdk = jdk5;}) jdk5 /* must be 1.5 */ ]; };
+              /* perl TODO export these (SWIG only if its present) HAVE_PERL=1 HAVE_PERL_DEVEL=1 HAVE_PERL_SWIG=1 */
+            };
 
     buildInputs = [ (pcre.override { unicodeSupport = true; })
                      openssl readline libxml2]; # optional python perl php java ?
 
     cfg = {
       geomSupport = true;
+      javaSupport = true;
     };
 
     configurePhase = ":";

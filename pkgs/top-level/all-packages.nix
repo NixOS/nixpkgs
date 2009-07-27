@@ -4482,8 +4482,8 @@ let
   };
 
   monetdb = import ../servers/sql/monetdb {
-    inherit composableDerivation;
-    inherit fetchurl stdenv pcre openssl readline libxml2 geos;
+    inherit composableDerivation getConfig;
+    inherit fetchurl stdenv pcre openssl readline libxml2 geos apacheAnt jdk5;
   };
 
   mysql4 = import ../servers/sql/mysql {
