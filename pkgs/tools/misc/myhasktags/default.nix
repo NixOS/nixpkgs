@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   version = "0.0"; # Haskell Platform 2009.0.0
   src = fetchurl {
     url = http://mawercer.de/~nix/hasktags.hs;
-    sha256 = "c68ece10a47fdab0ecab2865582ba49299d5d1acd26db95fe0dc7926e36eb1c1";
+    sha256 = "9bd8ed2cfe814b40215574e3e6ac5c1741f47ad610675c85354f19ce611d2c4a";
   };
   phases="buildPhase";
   buildPhase = ''
