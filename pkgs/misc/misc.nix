@@ -102,6 +102,8 @@ in
       link $target/include "$(echo "''${!INCLUDE_PATHS[@]}")"
       echo "''${!LIBS[@]}" > $target/libs
       echo "''${!CFLAGS_OTHER[@]}" > $target/cflags-other
+      echo "''${PKG_CONFIG_PATH}" > $target/PKG_CONFIG_PATH
+      echo "''${PATH}" > $target/PATH
     '';
   };
 }
