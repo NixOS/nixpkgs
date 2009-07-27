@@ -5190,7 +5190,7 @@ let
     virtualbox = import ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit fetchurl iasl dev86 libxslt libxml2 qt3 qt4 SDL hal
-          libcap libpng zlib kernel python which alsaLib;
+          libcap libpng zlib kernel python which alsaLib curl;
       inherit (gtkLibs) glib;
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;

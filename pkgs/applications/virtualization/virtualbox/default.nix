@@ -1,17 +1,17 @@
 { stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
-, python, which, alsaLib
+, python, which, alsaLib, curl
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-2.2.4-${kernel.version}";
+  name = "virtualbox-3.0.2-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/2.2.4/VirtualBox-2.2.4-OSE.tar.bz2;
-    sha256 = "b5d52a67b94510275eb3dc8649eb7d3063446da4f3ac038f821d598c62b5d6c5";
+    url = http://download.virtualbox.org/virtualbox/3.0.2/VirtualBox-3.0.2-OSE.tar.bz2;
+    sha256 = "1s4zwfwskmj1arvvjx2qbvqg0bv6b39payqz63lfmbh3f720zvj1";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib];
+  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib curl];
 
   patchPhase = "
     set -x
