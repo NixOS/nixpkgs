@@ -4139,6 +4139,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  fastjar = import ../development/tools/java/fastjar {
+    inherit fetchurl stdenv zlib;
+  };
+
   httpunit = import ../development/libraries/java/httpunit {
     inherit stdenv fetchurl unzip;
   };
