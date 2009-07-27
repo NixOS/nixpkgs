@@ -1743,7 +1743,7 @@ let
     langCC = true;
     langC = false;
     profiledCompiler = false;
-    inherit fastjar zip unzip zlib boehmgc gettext;
+    inherit zip unzip zlib boehmgc gettext;
   });
 
   #ghc = haskellPackages.ghc;

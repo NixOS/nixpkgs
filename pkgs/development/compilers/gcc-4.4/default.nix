@@ -7,14 +7,14 @@
 , gmp, mpfr, gettext, which
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
 , bison ? null, flex ? null
-, fastjar ? null, zlib ? null, boehmgc ? null
+, zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
 
 assert langTreelang -> bison != null && flex != null;
-assert langJava     -> fastjar != null && zip != null && unzip != null;
+assert langJava     -> zip != null && unzip != null;
 
 with stdenv.lib;
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
-    ++ (optionals langJava [fastjar zip unzip])
+    ++ (optionals langJava [zip unzip])
     ;
 
   configureFlags = "
