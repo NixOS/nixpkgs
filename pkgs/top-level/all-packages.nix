@@ -2309,7 +2309,7 @@ let
   };
 
   ant = apacheAnt;
-  apacheAnt = import ../development/tools/build-managers/apache-ant {
+  apacheAnt = makeOverridable (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv jdk;
     name = "ant-" + jdk.name;
   };
