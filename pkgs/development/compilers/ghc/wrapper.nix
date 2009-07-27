@@ -20,6 +20,24 @@ stdenv.mkDerivation {
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
       makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" --package-conf=)"
     done
+    cat >> $out/bin/ghc-packages << EOF
+    #! /bin/bash -e
+    declare -A GHC_PACKAGES_HASH # using bash4 hashs to get uniq paths
+
+    for arg in \$($out/bin/ghc-get-packages.sh 6.10.3 "$(dirname $0)"); do
+      case "\$arg" in
+        -package-conf) ;;
+        *)
+          CANONICALIZED="\$(readlink -f "\$arg")"
+          GHC_PACKAGES_HASH["\$CANONICALIZED"]= ;;
+      esac
+    done
+
+    for path in \''${!GHC_PACKAGES_HASH[@]}; do
+      echo -n "\$path:"
+    done
+    EOF
+    chmod +x $out/bin/ghc-packages
     ensureDir $out/nix-support
     ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
   ''; 
