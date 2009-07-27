@@ -31,7 +31,17 @@ in
 
 stdenv.mkDerivation ({
   name = "${name}-${version}";
-  
+
+  preConfigure =
+    if langJava
+    then ''
+      # Make sure a `jar' executable is in the search path.
+      ensureDir "bin"
+      ln -sv "${fastjar}/bin/fastjar" "bin/jar"
+      export PATH="$PWD/bin:$PATH"
+    ''
+    else "";
+
   builder = ./builder.sh;
   
   src =
@@ -60,7 +70,7 @@ stdenv.mkDerivation ({
     [./pass-cxxcpp.patch]
     ++ optional noSysDirs ./no-sys-dirs.patch;
 
-  inherit noSysDirs profiledCompiler staticCompiler;
+  inherit noSysDirs profiledCompiler staticCompiler langJava;
 
   buildInputs = [ texinfo gmp mpfr gettext ]
     ++ (optional (ppl != null) ppl)
@@ -92,7 +102,7 @@ stdenv.mkDerivation ({
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
   ";
 
-  inherit gmp mpfr;
+  inherit gmp mpfr zlib boehmgc;
   
   passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
 
@@ -106,10 +116,4 @@ stdenv.mkDerivation ({
       stdenv.lib.maintainers.ludo
     ];
   };
-} // (if langJava then {
-  postConfigure = ''
-    make configure-gcc
-    sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${zlib}/include@ ; s@^LDFLAGS = .*@& -L${zlib}/lib@'
-    sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${boehmgc}/include@ ; s@^LDFLAGS = .*@& -L${boehmgc}/lib -lgc@'
-  '';
-} else {}))
+})

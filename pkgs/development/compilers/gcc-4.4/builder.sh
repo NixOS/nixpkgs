@@ -47,6 +47,15 @@ if test "$noSysDirs" = "1"; then
     # Likewise, to help it find `crti.o' and similar files.
     export LIBRARY_PATH="$glibc_libdir"
 
+    if test "$langJava" = "1"; then
+	export CPATH="$CPATH:$zlib/include:$boehmgc/include"
+	export LIBRARY_PATH="$LIBRARY_PATH:$zlib/lib:$boehmgc/lib"
+    fi
+
+    echo "setting \$CPATH to \`$CPATH'"
+    echo "setting \$LIBRARY_PATH to \`$LIBRARY_PATH'"
+
+
     extraCFlags="-g0 $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
 
