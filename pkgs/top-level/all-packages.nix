@@ -1743,7 +1743,8 @@ let
     langCC = true;
     langC = false;
     profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext;
+    inherit zip unzip zlib boehmgc gettext pkgconfig;
+    inherit (gtkLibs) gtk;
   });
 
   #ghc = haskellPackages.ghc;

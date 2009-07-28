@@ -8,13 +8,14 @@
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null
+, zip ? null, unzip ? null, gtk ? null, pkgconfig ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
 
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null;
+assert gtk != null  -> pkgconfig != null;
 
 with stdenv.lib;
 
@@ -70,6 +71,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
+    ++ (optionals (gtk != null) [gtk pkgconfig])
     ;
 
   configureFlags = "
@@ -77,6 +79,7 @@ stdenv.mkDerivation ({
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
+    ${if (langJava && gtk != null) then "--enable-java-awt=gtk" else ""}
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
