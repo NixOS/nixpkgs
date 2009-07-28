@@ -2318,7 +2318,7 @@ let
   };
 
   autoconf = import ../development/tools/misc/autoconf {
-    inherit fetchurl stdenv perl m4 lzma;
+    inherit fetchurl stdenv perl m4;
   };
 
   autoconf213 = import ../development/tools/misc/autoconf/2.13.nix {
