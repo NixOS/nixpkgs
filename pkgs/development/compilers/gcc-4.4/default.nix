@@ -101,9 +101,18 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
 
   meta = {
-    homepage = "http://gcc.gnu.org/";
-    license = "GPL/LGPL";
+    homepage = http://gcc.gnu.org/;
+    license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}";
+
+    longDescription = ''
+      The GNU Compiler Collection includes compiler front ends for C, C++,
+      Objective-C, Fortran, OpenMP for C/C++/Fortran, Java, and Ada, as well
+      as libraries for these languages (libstdc++, libgcj, libgomp,...).
+
+      GCC development is a part of the GNU Project, aiming to improve the
+      compiler used in the GNU system including the GNU/Linux variant.
+    '';
 
     maintainers = [
       # Add your name here!
