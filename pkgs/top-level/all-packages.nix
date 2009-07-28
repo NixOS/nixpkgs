@@ -1724,17 +1724,7 @@ let
     profiledCompiler = false;
   });
 
-  gcj = gcj43;
-
-  gcj43 = wrapGCC (gcc43_real.gcc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = true;
-    langC = false;
-    profiledCompiler = false;
-    inherit zlib boehmgc;
-  });
+  gcj = gcj44;
 
   gcj44 = wrapGCC (gcc44.gcc.override {
     name = "gcj";
