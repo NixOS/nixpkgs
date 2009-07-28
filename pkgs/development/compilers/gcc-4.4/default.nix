@@ -8,14 +8,14 @@
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null, gtk ? null, pkgconfig ? null
+, zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
 
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null;
-assert gtk != null  -> pkgconfig != null;
+assert gtk != null  -> pkgconfig != null && libart_lgpl != null;
 
 with stdenv.lib;
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
-    ++ (optionals (gtk != null) [gtk pkgconfig])
+    ++ (optionals (gtk != null) [gtk pkgconfig libart_lgpl])
     ;
 
   configureFlags = "
