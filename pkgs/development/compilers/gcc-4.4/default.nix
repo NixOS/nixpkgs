@@ -9,13 +9,15 @@
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
+, libXtst ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
 
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null;
-assert gtk != null  -> pkgconfig != null && libart_lgpl != null;
+assert gtk != null  -> pkgconfig != null && libart_lgpl != null
+                       && libXtst != null;
 
 with stdenv.lib;
 
@@ -71,7 +73,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
-    ++ (optionals (gtk != null) [gtk pkgconfig libart_lgpl])
+    ++ (optionals (gtk != null) [gtk pkgconfig libart_lgpl libXtst])
     ;
 
   configureFlags = "

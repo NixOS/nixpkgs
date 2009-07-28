@@ -1736,6 +1736,7 @@ let
     inherit zip unzip zlib boehmgc gettext pkgconfig;
     inherit (gtkLibs) gtk;
     inherit (gnome) libart_lgpl;
+    inherit (xlibs) libXtst;
   });
 
   #ghc = haskellPackages.ghc;
