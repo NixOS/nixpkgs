@@ -5058,6 +5058,23 @@ let
     ];
   };
 
+  kernel_2_6_31_rc4 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [ 
+      { name = "rc4 patch";
+        patch = fetchurl {
+          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc4.bz2";
+          sha256 =  "1qyjh8gf0clj4a8aiblrn2p7244h7dp2psnidylxr2y53z2vg62s";
+	};
+      }
+    ];
+  };
+
+  # For older x86 processors without PAE/PAT
+  kernel_2_6_31_rc4_old_i686 = kernel_2_6_31_rc4.override {
+    oldI686 = true;
+  };
+
   kernel_2_6_31_rc3 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc3.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [ 
@@ -5197,6 +5214,8 @@ let
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
+  kernelPackages_2_6_31_rc4 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc4);
+  kernelPackages_2_6_31_rc4_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc4_old_i686);
   kernelPackages_2_6_31_rc3 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3);
   kernelPackages_2_6_31_rc3_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3_old_i686);
   kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
