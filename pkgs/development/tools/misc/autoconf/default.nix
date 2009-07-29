@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ m4 perl ];
 
-  doCheck = true;
+  # FIXME: The test suite fails on Darwin (see
+  # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6813) and on
+  # Cygwin (see http://hydra.nixos.org/build/53814; yet to be reported
+  # upstream).
+  doCheck =
+    (builtins.currentSystem != "i686-darwin")
+    && (builtins.currentSystem != "i686-cygwin");
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!
