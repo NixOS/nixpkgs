@@ -10,7 +10,7 @@
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, libXrender ? null, xproto ? null
+, libXrender ? null, xproto ? null, renderproto ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
@@ -30,7 +30,11 @@ let version = "4.4.1";
       url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
       sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
     };
-    xlibs = [ libX11 libXt libSM libICE libXtst libXrender xproto ];
+
+    xlibs = [
+      libX11 libXt libSM libICE libXtst libXrender xproto renderproto
+    ];
+
     javaAwtGtk = langJava && gtk != null;
 
 in
