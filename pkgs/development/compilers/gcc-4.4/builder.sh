@@ -48,8 +48,15 @@ if test "$noSysDirs" = "1"; then
     export LIBRARY_PATH="$glibc_libdir"
 
     if test "$langJava" = "1"; then
-	export CPATH="$CPATH:$zlib/include:$boehmgc/include"
-	export LIBRARY_PATH="$LIBRARY_PATH:$zlib/lib:$boehmgc/lib"
+	for lib in "$zlib" "$boehmgc" "$libX11" "$libXt" "$libSM" \
+	    "$libICE" "$libXtst"
+	do
+	    if test -n "$lib"
+	    then
+		export CPATH="$CPATH:$lib/include"
+		export LIBRARY_PATH="$LIBRARY_PATH:$lib/lib"
+	    fi
+	done
     fi
 
     echo "setting \$CPATH to \`$CPATH'"

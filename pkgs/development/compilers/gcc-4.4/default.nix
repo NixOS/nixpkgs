@@ -101,7 +101,8 @@ stdenv.mkDerivation ({
   ";
 
   inherit gmp mpfr zlib boehmgc;
-  
+  inherit libX11 libXt libSM libICE libXtst;
+
   passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
 
   meta = {
