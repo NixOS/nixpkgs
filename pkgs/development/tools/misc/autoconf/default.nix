@@ -8,15 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "11damk9x09616cjdfxx9y73igd96zzylgq0l4j57qzify6nlqbw7";
   };
 
+  patches = [ ./test-suite-fix.patch ];
+
   buildInputs = [ m4 perl ];
 
-  # FIXME: The test suite fails on Darwin (see
-  # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6813) and on
-  # Cygwin (see http://hydra.nixos.org/build/53814; yet to be reported
-  # upstream).
-  doCheck =
-    (builtins.currentSystem != "i686-darwin")
-    && (builtins.currentSystem != "i686-cygwin");
+  doCheck = true;
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!
