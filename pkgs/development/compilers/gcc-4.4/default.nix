@@ -10,7 +10,7 @@
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, xproto ? null
+, libXrender ? null, xproto ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
@@ -30,7 +30,8 @@ let version = "4.4.1";
       url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
       sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
     };
-    xlibs = [ libX11 libXt libSM libICE libXtst xproto ];
+    xlibs = [ libX11 libXt libSM libICE libXtst libXrender xproto ];
+    javaAwtGtk = langJava && gtk != null;
 
 in
 
@@ -77,15 +78,18 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
-    ++ (optionals (gtk != null) [gtk pkgconfig libart_lgpl] ++ xlibs)
+    ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ;
+
+  # TODO: Use a binary distribution of Antlr for Java, needed to build
+  # `gjdoc' (see `--with-antlr-jar=ANTLR').
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
-    ${if (langJava && gtk != null) then "--enable-java-awt=gtk" else ""}
+    ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     --with-gmp=${gmp}
     --with-mpfr=${mpfr}
     --disable-libstdcxx-pch
@@ -108,17 +112,24 @@ stdenv.mkDerivation ({
   # the library headers and binaries, regarless of the language being
   # compiled.
 
+  # Note: When building the Java AWT GTK+ peer, the build system doesn't
+  # honor `--with-gmp' et al., e.g., when building
+  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just
+  # add them to $CPATH and $LIBRARY_PATH in this case.
+
   CPATH = concatStrings
             (intersperse ":" (map (x: x + "/include")
                                   ([ zlib ]
                                    ++ optional  langJava boehmgc
-                                   ++ optionals (gtk != null) xlibs)));
+                                   ++ optionals javaAwtGtk xlibs
+                                   ++ optionals javaAwtGtk [ gmp mpfr ])));
 
   LIBRARY_PATH = concatStrings
                    (intersperse ":" (map (x: x + "/lib")
                                          ([ zlib ]
                                           ++ optional  langJava boehmgc
-                                          ++ optionals (gtk != null) xlibs)));
+                                          ++ optionals javaAwtGtk xlibs
+                                          ++ optionals javaAwtGtk [ gmp mpfr ])));
 
 
   passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
