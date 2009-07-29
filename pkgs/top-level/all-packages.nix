@@ -1737,7 +1737,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXrender
-      xproto renderproto xextproto;
+      xproto renderproto xextproto inputproto;
   });
 
   #ghc = haskellPackages.ghc;
