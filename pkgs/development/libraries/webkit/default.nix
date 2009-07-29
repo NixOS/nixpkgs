@@ -17,7 +17,7 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" "fixTypos" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''
@@ -38,6 +38,10 @@ rec {
       
   paranoidFixComments = fullDepEntry (''
     sed -re 's@( |^)//.*@/* & */@' -i $(find . -name '*.c' -o -name '*.h')
+  '') ["minInit" "doUnpack"];
+
+  fixTypos = fullDepEntry (''
+    sed -e 's@WebCore/workers/DedicatedWorkerThread.h$@& \@' -i WebCore/GNUMakefile
   '') ["minInit" "doUnpack"];
 
   name = "webkit-" + version;
