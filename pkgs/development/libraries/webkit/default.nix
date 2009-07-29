@@ -41,7 +41,7 @@ rec {
   '') ["minInit" "doUnpack"];
 
   fixTypos = fullDepEntry (''
-    sed -e 's@WebCore/workers/DedicatedWorkerThread.h$@& \\@' -i WebCore/GNUMakefile.am
+    sed -e 's@WebCore/workers/DedicatedWorkerThread.h$@& \\@' -i WebCore/GNUmakefile.am
   '') ["minInit" "doUnpack"];
 
   name = "webkit-" + version;
