@@ -21,8 +21,13 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/sbin/dhclient-script \
         --replace /sbin/ip ${iproute}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
-        "${nettools}/bin:${nettools}/sbin:${iputils}/bin"
+        "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${stdenv.coreutils}/bin:${stdenv.gnused}/bin"
     '';
+
+  preConfigure = ''
+      sed -i "includes/dhcpd.h" \
+	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+  '';
 
   meta = {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
