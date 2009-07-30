@@ -125,15 +125,13 @@ stdenv.mkDerivation ({
 
   CPATH = concatStrings
             (intersperse ":" (map (x: x + "/include")
-                                  ([ zlib ]
-                                   ++ optional  langJava boehmgc
+                                  (optionals langJava [ boehmgc zlib ]
                                    ++ optionals javaAwtGtk xlibs
                                    ++ optionals javaAwtGtk [ gmp mpfr ])));
 
   LIBRARY_PATH = concatStrings
                    (intersperse ":" (map (x: x + "/lib")
-                                         ([ zlib ]
-                                          ++ optional  langJava boehmgc
+                                         (optionals langJava [ boehmgc zlib ]
                                           ++ optionals javaAwtGtk xlibs
                                           ++ optionals javaAwtGtk [ gmp mpfr ])));
 
