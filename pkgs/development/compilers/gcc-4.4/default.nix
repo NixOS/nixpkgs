@@ -11,7 +11,7 @@
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
-, libXrandr ? null, inputproto ? null
+, libXrandr ? null, inputproto ? null, randrproto ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
@@ -34,7 +34,7 @@ let version = "4.4.1";
 
     xlibs = [
       libX11 libXt libSM libICE libXtst libXrender libXrandr
-      xproto renderproto xextproto inputproto
+      xproto renderproto xextproto inputproto randrproto
     ];
 
     javaAwtGtk = langJava && gtk != null;
