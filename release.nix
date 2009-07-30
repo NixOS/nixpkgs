@@ -85,7 +85,7 @@ let
     
     iso_rescue = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-rescue.nix;
-      description = "minimal";
+      description = "rescue";
     };
     
     iso_graphical = makeIso {

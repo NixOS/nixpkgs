@@ -33,7 +33,7 @@
     lsof
   ];
 
-  boot.kernelPackages = pkgs.kernelPackages_2_6_31_rc2_old_i686;
+  boot.kernelPackages = pkgs.kernelPackages_2_6_31_rc4_old_i686;
   boot.initrd.extraKernelModules = ["evdev" "i8042" "pcips2" "serio"
     "sd_mod" "libata" "unix" "usbhid" "uhci_hcd" "atkbd" "xtkbd" "fbdev"
     "iso9660" "udf" "loop"];
