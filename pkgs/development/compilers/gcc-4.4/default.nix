@@ -32,6 +32,13 @@ let version = "4.4.1";
       sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
     };
 
+    # Antlr (optional) allows the Java `gjdoc' tool to be built.  We want a
+    # binary distribution here to allow the whole chain to be bootstrapped.
+    javaAntlr = fetchurl {
+      url = http://www.antlr.org/download/antlr-3.1.3.jar;
+      sha256 = "1f41j0y4kjydl71lqlvr73yagrs2jsg1fjymzjz66mjy7al5lh09";
+    };
+
     xlibs = [
       libX11 libXt libSM libICE libXtst libXrender libXrandr
       xproto renderproto xextproto inputproto randrproto
@@ -87,15 +94,13 @@ stdenv.mkDerivation ({
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ;
 
-  # TODO: Use a binary distribution of Antlr for Java, needed to build
-  # `gjdoc' (see `--with-antlr-jar=ANTLR').
-
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
+    ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
     --with-gmp=${gmp}
     --with-mpfr=${mpfr}
     --disable-libstdcxx-pch
