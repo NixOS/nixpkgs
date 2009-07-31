@@ -61,9 +61,11 @@ let
       # Allow the kernel to find our wrapped modprobe (which searches in the
       # right location in the Nix store for kernel modules).  We need this
       # when the kernel (or some module) auto-loads a module.
-      # !!! maybe this should only happen at boot time, since we shouldn't
+      # this should only happen at boot time, since we shouldn't
       # use modules that don't match the running kernel.
-      echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
+      if [ "$(cat /proc/sys/kernel/modprobe)" = "/sbin/modprobe" ]; then
+        echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
+      fi
     '' [
       # ?
     ];
