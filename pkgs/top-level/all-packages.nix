@@ -4231,6 +4231,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  zziplib = import ../development/libraries/zziplib {
+    inherit fetchurl stdenv perl python zip xmlto zlib;
+  };
+
 
   ### DEVELOPMENT / PERL MODULES
 
