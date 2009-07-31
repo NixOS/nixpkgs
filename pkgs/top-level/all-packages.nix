@@ -6162,7 +6162,19 @@ let
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
   };
 
-  emacs23 = lowPrio (import ../applications/editors/emacs-23-snapshot {
+  emacs23 = import ../applications/editors/emacs-23 {
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
+      libpng libjpeg libungif libtiff texinfo dbus;
+    inherit (xlibs) libXaw libXpm libXft;
+    inherit (gtkLibs) gtk;
+    xawSupport = getPkgConfig "emacs" "xawSupport" false;
+    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
+    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
+    xftSupport = getPkgConfig "emacs" "xftSupport" true;
+    dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
+  };
+
+  emacsSnapshot = lowPrio (import ../applications/editors/emacs-snapshot {
     inherit fetchcvs stdenv ncurses pkgconfig x11 Xaw3d
       libpng libjpeg libungif libtiff texinfo dbus
       autoconf automake;
