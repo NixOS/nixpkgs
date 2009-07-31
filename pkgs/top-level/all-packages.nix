@@ -2831,6 +2831,14 @@ let
     inherit (xlibs) libX11 xf86vidmodeproto libXmu libXxf86vm;
   };
 
+  classpath = import ../development/libraries/java/classpath {
+    javac = gcj;
+    jvm = gcj;
+    inherit fetchurl stdenv pkgconfig antlr;
+    inherit (gtkLibs) gtk;
+    gconf = gnome.GConf;
+  };
+
   clearsilver = import ../development/libraries/clearsilver {
     inherit fetchurl stdenv python;
   };

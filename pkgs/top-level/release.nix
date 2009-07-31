@@ -88,6 +88,7 @@ in {
   cdrkit = linux;
   chatzilla = linux;
   cksfv = all;
+  classpath = linux;
   clisp = linux;
   cmake = all;
   compiz = linux;
