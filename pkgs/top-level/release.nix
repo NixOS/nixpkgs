@@ -351,6 +351,7 @@ in {
   usbutils = linux;
   utillinux = linux;
   utillinuxCurses = linux;
+  uzbl = allBut "i686-cygwin";
   valgrind = linux;
   viking = linux;
   vim = linux;
