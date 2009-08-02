@@ -18,7 +18,8 @@ rec {
     "--enable-3D-transforms"
     "--enable-filters"
     "--enable-web-sockets"
-    "--enable-shared-workers"
+    # Fails the build..
+    # "--enable-shared-workers"
     "--enable-wml"
     ];
 
