@@ -14,7 +14,11 @@ rec {
     ];
 
   configureCommand = "./autogen.sh ";
-  configureFlags = [];
+  configureFlags = [
+    "--enable-3d-transforms"
+    "--enable-filters"
+    "--enable-web-sockets"
+    ];
 
   /* doConfigure should be specified separately */
   phaseNames = ["setVars" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
