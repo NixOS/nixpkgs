@@ -7287,6 +7287,16 @@ let
     inherit (gtkLibs) glib;
   };
 
+  xournal = builderDefsPackage (import ../applications/graphics/xournal) {
+    inherit ghostscript fontconfig freetype zlib 
+      poppler popplerData autoconf automake
+      libtool pkgconfig;
+    inherit (xlibs) xproto libX11;
+    inherit (gtkLibs) gtk atk pango glib;
+    inherit (gnome) libgnomeprint libgnomeprintui 
+      libgnomecanvas;
+  };
+
   xpdf = import ../applications/misc/xpdf {
     inherit fetchurl stdenv x11 freetype t1lib;
     motif = lesstif;
