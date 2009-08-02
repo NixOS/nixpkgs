@@ -1,10 +1,12 @@
 args: with args;
 stdenv.mkDerivation rec {
-  name = "libiec61883-1.1.0";
+  version = "1.2.0";
+  name = "libiec61883-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/dl/${name}.tar.gz";
-    sha256 = "09f0ca7bp6lqlz6601gnyl04mfabv0azg49n1cmjyqpzh35cgxkq";
+    url = "mirror://debian/pool/main/libi/libiec61883/libiec61883_${version}.orig.tar.gz";
+    name = "libiec61883-${version}.tar.gz";
+    sha256 = "7c7879c6b9add3148baea697dfbfdcefffbc8ac74e8e6bcf46125ec1d21b373a";
   };
 
   buildInputs = [pkgconfig];
