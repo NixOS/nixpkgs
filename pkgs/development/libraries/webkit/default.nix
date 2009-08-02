@@ -15,7 +15,7 @@ rec {
 
   configureCommand = "./autogen.sh ";
   configureFlags = [
-    "--enable-3d-transforms"
+    "--enable-3D-transforms"
     "--enable-filters"
     "--enable-web-sockets"
     ];
