@@ -1,9 +1,9 @@
 args : with args; 
-let version = lib.attrByPath ["version"] "r46507" args; in
+let version = lib.attrByPath ["version"] "r46684" args; in
 rec {
   src = fetchurl {
     url = "http://nightly.webkit.org/files/trunk/src/WebKit-${version}.tar.bz2";
-    sha256 = "18l435dgg3spgz10z05gw6cyxcm71y01l3qxy38ik43brws1hsvy";
+    sha256 = "0rvmz1w83slkp8khvnq8akjbd2nfwz4miq6fg0d6nkxd83d9i7d3";
   };
 
   buildInputs = [gtk atk cairo curl fontconfig freetype
@@ -17,7 +17,7 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "fixTypos" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''
@@ -38,10 +38,6 @@ rec {
       
   paranoidFixComments = fullDepEntry (''
     sed -re 's@( |^)//.*@/* & */@' -i $(find . -name '*.c' -o -name '*.h')
-  '') ["minInit" "doUnpack"];
-
-  fixTypos = fullDepEntry (''
-    sed -e 's@WebCore/workers/DedicatedWorkerThread.h$@& \\@' -i WebCore/GNUmakefile.am
   '') ["minInit" "doUnpack"];
 
   name = "webkit-" + version;
