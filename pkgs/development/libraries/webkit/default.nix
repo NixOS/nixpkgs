@@ -42,7 +42,7 @@ rec {
   '') ["minInit" "doUnpack"];
 
   doAddPrograms = fullDepEntry (''
-    for i in Programs/.libs/*; do 
+    for i in Programs/.libs/* Programs/*; do 
         cp $i $out/bin/webkit-program-$(basename $i)
     done
   '') ["minInit" "doMake" "defEnsureDir"];
