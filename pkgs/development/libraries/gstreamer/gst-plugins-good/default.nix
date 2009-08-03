@@ -1,6 +1,8 @@
 { fetchurl, stdenv, pkgconfig, gstPluginsBase, aalib, cairo
 , flac , hal, libjpeg, zlib, speex, libpng, libdv, libcaca, dbus
-, libiec61883, libavc1394, ladspaH, taglib, gdbm, pulseaudio }:
+, libiec61883, libavc1394, ladspaH, taglib, gdbm, pulseaudio
+, libsoup
+}:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-0.10.14";
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [gstPluginsBase aalib cairo flac hal libjpeg
     zlib speex libpng libdv libcaca dbus.libs libiec61883 libavc1394 ladspaH
-    taglib gdbm pulseaudio];
+    taglib gdbm pulseaudio libsoup];
   buildInputs = [pkgconfig];
 
   configureFlags = "--enable-ladspa";

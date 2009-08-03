@@ -3155,6 +3155,7 @@ let
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
              it is depreceated and didn't build on amd64 due to samba dependenccy */ gtkdoc;
+    inherit (gnome26) libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
