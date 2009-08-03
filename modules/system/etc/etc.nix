@@ -54,7 +54,7 @@ in
     activationScripts = {
       etc = pkgs.lib.fullDepEntry ''
         # Set up the statically computed bits of /etc.
-	echo "setting up /etc..."
+        echo "setting up /etc..."
         staticEtc=/etc/static
         rm -f $staticEtc
         ln -s ${makeEtc}/etc $staticEtc

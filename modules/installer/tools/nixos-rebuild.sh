@@ -11,20 +11,34 @@ showSyntax() {
     # !!! more or less cut&paste from
     # system/switch-to-configuration.sh (which we call, of course).
     cat <<EOF
-Usage: $0 [switch|boot|test|build|dry-run]
+Usage: $0 [OPTIONS...] OPERATION
 
-switch:  make the configuration the boot default and activate now
-boot:    make the configuration the boot default
-test:    activate the configuration, but don't make it the boot default
-build:   build the configuration, but don't make it the default or
-         activate it
-dry-run: just show what store paths would be built/downloaded
+The operation is one of the following:
 
+  switch:  make the configuration the boot default and activate now
+  boot:    make the configuration the boot default
+  test:    activate the configuration, but don't make it the boot default
+  build:   build the configuration, but don't make it the default or
+           activate it
+  dry-run: just show what store paths would be built/downloaded
+
+Options:
+
+  --install-grub         (re-)install the Grub bootloader
+  --no-pull              don't do a nix-pull to get the latest Nixpkgs
+                         channel manifest
+  --no-build-nix         don't build the latest Nix from Nixpkgs before
+                         building NixOS
+
+Various nix-build options are also accepted, in particular:
+
+  --show-trace           show a detailed stack trace for evaluation errors
+ 
 Environment variables affecting nixos-rebuild:
 
-  Path to NixOS:         NIXOS=${NIXOS}
-  Path to Nixpkgs:       NIXPKGS=${NIXPKGS}
-  Path to configuration: NIXOS_CONFIG=${NIXOS_CONFIG}
+  \$NIXOS                 path to the NixOS source tree
+  \$NIXPKGS               path to the Nixpkgs source tree
+  \$NIXOS_CONFIG          path to the NixOS system configuration specification
 EOF
     exit 1
 }
@@ -33,12 +47,27 @@ EOF
 # Parse the command line.
 extraBuildFlags=
 action=
+pullManifest=1
+buildNix=1
 
-for i in "$@"; do
+while test "$#" -gt 0; do
+    i="$1"; shift 1
     if test "$i" = "--help"; then
         showSyntax
     elif test "$i" = switch -o "$i" = boot -o "$i" = test -o "$i" = build -o "$i" = dry-run; then
         action="$i"
+    elif test "$i" = --install-grub; then
+        export NIXOS_INSTALL_GRUB=1
+    elif test "$i" = --no-pull; then
+        pullManifest=
+    elif test "$i" = --no-build-nix; then
+        buildNix=
+    elif test "$i" = --show-trace -o "$i" = --no-build-hook -o "$i" = --keep-failed -o "$i" = -K \
+        -o "$i" = --keep-going -o "$i" = -k -o "$i" = --verbose -o "$i" = -v; then
+        extraBuildFlags="$extraBuildFlags $i"
+    elif test "$i" = --max-jobs -o "$i" = -j; then
+        j="$1"; shift 1
+        extraBuildFlags="$extraBuildFlags $i $j"
     else
         echo "$0: unknown option \`$i'"
         exit 1
@@ -65,7 +94,7 @@ fi
 
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
-if test "${NIXOS_PULL:-1}" != 0; then
+if test -n "$pullManifest"; then
     manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 
@@ -79,7 +108,7 @@ fi
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if test "${NIXOS_BUILD_NIX:-1}" != 0; then
+if test -n "$buildNix"; then
     if ! nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp; then
         nix-build $NIXPKGS -A nixUnstable -o $HOME/nix-tmp
     fi
