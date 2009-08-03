@@ -218,6 +218,7 @@ in {
   libtopology = all;
   libxml2 = all;
   libxslt = all;
+  linuxwacom = linux;
   lout = linux;
   lsh = linux;
   lsof = linux;

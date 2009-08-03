@@ -7802,8 +7802,9 @@ let
   };
 
   linuxwacom = import ../misc/linuxwacom {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXi;
+    inherit fetchurl stdenv ncurses pkgconfig;
+    inherit (xorg) libX11 libXi xproto inputproto
+      xorgserver;
   };
 
   martyr = import ../development/libraries/martyr {
