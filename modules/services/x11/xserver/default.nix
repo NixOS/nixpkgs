@@ -148,6 +148,25 @@ let
           };
         };
 
+        wacom = {
+	  enable = mkOption {
+	    default = false;
+	    description = "Whether to enable Wacom touchscreen/digitizer";
+	  };
+
+          device = mkOption {
+	    default = "/dev/ttyS0";
+	    description = "Device to use";
+	  };
+
+	  forceDeviceType = mkOption {
+	    default = "ISDV4";
+	    example = null;
+	    description = "Some models (think touchscreen) require forcing device type";
+	  };
+
+	};
+
         layout = mkOption {
           default = "us";
           description = "
@@ -322,7 +341,9 @@ let
       xorg.xf86inputevdev
     ] 
     ++ attrByPath ["modules"] [] videoDriverModules
-    ++ optional cfg.synaptics.enable xorg.xf86inputsynaptics;
+    ++ optional cfg.synaptics.enable xorg.xf86inputsynaptics
+    ++ (optional cfg.wacom.enable ["${pkgs.linuxwacom}"])
+    ;
 
 
   fontsForXServer =
@@ -396,6 +417,32 @@ let
       EndSection
     '' else "";
 
+    wacomInputDevice = if cfg.wacom.enable then ''
+      Section "InputDevice"
+        Driver "wacom"
+        Identifier "Wacom_stylus"
+        Option "Device" "${cfg.wacom.device}"
+        Option "Type" "stylus"
+        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
+        Option "Button2" "3"
+      EndSection
+      Section "InputDevice"
+        Driver "wacom"
+        Identifier "Wacom_eraser"
+        Option "Device" "${cfg.wacom.device}"
+        Option "Type" "eraser"
+        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
+        Option "Button1" "2"
+      EndSection
+      Section "InputDevice"
+        Driver "wacom"
+        Identifier "Wacom_cursor"
+        Option "Device" "${cfg.wacom.device}"
+        Option "Type" "cursor"
+        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
+      EndSection
+    '' else "";
+
     xkbOptions = if cfg.xkbOptions == "" then "" else  ''
       Option "XkbOptions" "${cfg.xkbOptions}"
     '';
@@ -416,7 +463,13 @@ let
     extraMonitorSettings = cfg.extraMonitorSettings; 
     extraDisplaySettings = cfg.extraDisplaySettings;
     extraModules = cfg.extraModules; 
-    serverLayoutOptions = cfg.serverLayoutOptions; 
+    serverLayoutOptions = cfg.serverLayoutOptions +
+    (if cfg.wacom.enable then ''
+      InputDevice "Wacom_stylus"
+      InputDevice "Wacom_cursor"
+      InputDevice "Wacom_eraser"
+    '' else "")
+    ; 
     defaultDepth = cfg.defaultDepth; 
     virtualScreen = if cfg.virtualScreen != null then 
         "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}" 
