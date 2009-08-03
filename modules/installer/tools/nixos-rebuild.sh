@@ -81,6 +81,10 @@ if test "$action" = dry-run; then
 fi
 
 
+tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+trap 'rm -rf "$tmpDir"' EXIT
+
+
 # If the Nix daemon is running, then use it.  This allows us to use
 # the latest Nix from Nixpkgs (below) for expression evaluation, while
 # still using the old Nix (via the daemon) for actual store access.
@@ -109,10 +113,10 @@ fi
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
 if test -n "$buildNix"; then
-    if ! nix-build $NIXOS -A nixFallback -o $HOME/nix-tmp; then
-        nix-build $NIXPKGS -A nixUnstable -o $HOME/nix-tmp
+    if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix; then
+        nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix
     fi
-    PATH=$HOME/nix-tmp/bin:$PATH
+    PATH=$tmpDir/nix/bin:$PATH
 fi
 
 
@@ -145,6 +149,3 @@ active system configuration may be garbage collected!  This may render
 the system inoperable (though a reboot will fix things).
 EOF
 fi
-
-
-rm -f $HOME/nix-tmp
