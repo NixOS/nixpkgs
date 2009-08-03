@@ -2,6 +2,11 @@ source $stdenv/setup
 
 set -x
 
+if ! [ -f "$cacheDB" ]; then 
+	echo "Creating cache DB $cacheDB"
+	mtn --db "$cacheDB" db init
+fi
+
 header "getting revision $selector";
 
 done=;
