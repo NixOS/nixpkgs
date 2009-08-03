@@ -55,4 +55,7 @@ rec {
   meta = {
     description = "WebKit - a fast and correct HTML renderer";
   };
+  passthru = {
+    inherit gstreamer gstPluginsBase gstPluginsGood gstFfmpeg;
+  };
 }
