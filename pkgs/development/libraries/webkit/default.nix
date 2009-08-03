@@ -10,7 +10,11 @@ rec {
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant gstreamer gstPluginsBase gstFfmpeg
+    enchant 
+    ];
+
+  propagatedBuildInputs = [
+    gstreamer gstPluginsBase gstFfmpeg gstPluginsGood
     ];
 
   configureCommand = "./autogen.sh ";

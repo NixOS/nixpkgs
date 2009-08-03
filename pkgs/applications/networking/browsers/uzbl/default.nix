@@ -18,7 +18,15 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doMakeInstall"];
+  phaseNames = ["doMakeInstall" "doWrap"];
+
+  doWrap = a.makeManyWrappers "$out/bin/uzbl" 
+    ''
+      --prefix GST_PLUGIN_PATH : ${webkit.gstreamer}/lib/gstreamer-*
+      --prefix GST_PLUGIN_PATH : ${webkit.gstPluginsBase}/lib/gstreamer-*
+      --prefix GST_PLUGIN_PATH : ${webkit.gstPluginsGood}/lib/gstreamer-*
+      --prefix GST_PLUGIN_PATH : ${webkit.gstFfmpeg}/lib/gstreamer-*
+    '';
 
   installFlags = "PREFIX=$out";
       
