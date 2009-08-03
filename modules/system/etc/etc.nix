@@ -54,7 +54,7 @@ in
     activationScripts = {
       etc = pkgs.lib.fullDepEntry ''
         # Set up the statically computed bits of /etc.
-	echo -n "Setting up /etc files .. "
+	echo "setting up /etc..."
         staticEtc=/etc/static
         rm -f $staticEtc
         ln -s ${makeEtc}/etc $staticEtc
@@ -71,7 +71,6 @@ in
                 ln -s $staticEtc/$i /etc/$i
             fi
         done
-	echo ".. done"
 
         # Remove dangling symlinks that point to /etc/static.  These are
         # configuration files that existed in a previous configuration but not
