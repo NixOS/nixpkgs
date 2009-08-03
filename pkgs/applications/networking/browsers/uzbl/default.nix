@@ -4,7 +4,7 @@ let
 
   version = a.lib.attrByPath ["version"] "2009.07.18" a; 
   buildInputs = with a; [
-    pkgconfig webkit libsoup gtk 
+    pkgconfig webkit libsoup gtk makeWrapper
   ];
 in
 rec {

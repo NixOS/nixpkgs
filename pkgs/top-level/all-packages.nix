@@ -7113,7 +7113,7 @@ let
   };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit;
+    inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk;
     inherit (gnome26) libsoup;
   };
