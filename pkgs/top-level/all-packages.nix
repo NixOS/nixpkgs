@@ -5288,17 +5288,6 @@ let
 
   kvm = kvm86;
 
-  kvm57 = import ../os-specific/linux/kvm/57.nix {
-    inherit fetchurl zlib e2fsprogs SDL alsaLib;
-    stdenv = overrideGCC stdenv gcc34;
-    kernelHeaders = kernelHeaders_2_6_23;
-  };
-
-  kvm76 = import ../os-specific/linux/kvm/76.nix {
-    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    inherit (glibc) kernelHeaders;
-  };
-
   kvm86 = import ../os-specific/linux/kvm/86.nix {
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
     inherit (glibc) kernelHeaders;
