@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   # e2fsprogs is needed for libuuid.
-  # rsync is a weird dependency used for copying kernel header files.
   buildInputs = [zlib SDL alsaLib pkgconfig pciutils];
 
   preBuild =
