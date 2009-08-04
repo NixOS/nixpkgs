@@ -6308,9 +6308,9 @@ let
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
   };
 
-  firefox = firefox3;
+  firefox = firefox35;
 
-  firefoxWrapper = firefox3Wrapper;
+  firefoxWrapper = firefox35Wrapper;
 
   firefox2 = lowPrio (import ../applications/networking/browsers/firefox/2.0.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
