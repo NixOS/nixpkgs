@@ -39,10 +39,10 @@ let
       NIX_DISK_IMAGE=''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${pkgs.kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" 512M || exit 1
+          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" 512M || exit 1
       fi
       
-      ${pkgs.kvm}/bin/qemu-system-x86_64 \
+      ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
           -net nic,model=virtio -net user -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
           -kernel ${config.system.build.system}/kernel \
