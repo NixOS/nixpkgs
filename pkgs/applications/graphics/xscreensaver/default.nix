@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "A set of screensavers";
 		inherit src;
+    		maintainers = [stdenv.lib.maintainers.raskin];
 	};
 }
 

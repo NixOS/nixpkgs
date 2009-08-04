@@ -55,6 +55,7 @@ rec {
   name = "webkit-" + version;
   meta = {
     description = "WebKit - a fast and correct HTML renderer";
+    maintainers = [stdenv.lib.maintainers.raskin];
   };
   passthru = {
     inherit gstreamer gstPluginsBase gstPluginsGood gstFfmpeg;

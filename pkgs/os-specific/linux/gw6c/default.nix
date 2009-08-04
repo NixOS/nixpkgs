@@ -36,5 +36,6 @@ rec {
       tun, ipv6 and sit modules.
     ";
     homepage = http://go6.net ;
+    maintainers = [stdenv.lib.maintainers.raskin];
   };
 }

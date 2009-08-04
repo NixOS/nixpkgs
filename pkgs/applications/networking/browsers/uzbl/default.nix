@@ -33,5 +33,6 @@ rec {
   name = "uzbl-" + version;
   meta = {
     description = "Tiny externally controllable webkit browser";
+    maintainers = [a.lib.maintainers.raskin];
   };
 }

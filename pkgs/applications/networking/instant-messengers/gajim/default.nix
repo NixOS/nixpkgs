@@ -32,5 +32,6 @@ rec {
   name = "gajim-" + version;
   meta = {
     description = "Jabber client with meta-contacts";
+    maintainers = [a.lib.maintainers.raskin];
   };
 }

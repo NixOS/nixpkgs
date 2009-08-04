@@ -28,5 +28,6 @@ rec {
   name = "btrfs-progs-" + version;
   meta = {
     description = "BTRFS utilities";
+    maintainers = [a.lib.maintainers.raskin];
   };
 }

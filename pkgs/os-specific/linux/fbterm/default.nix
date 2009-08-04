@@ -26,5 +26,6 @@ rec {
   name = "fbterm-" + version;
   meta = {
     description = "Framebuffer terminal emulator";
+    maintainers = [a.lib.maintainers.raskin];
   };
 }
