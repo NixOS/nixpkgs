@@ -6,14 +6,14 @@ let
   fullDepEntry = args.fullDepEntry;
 
   buildInputs = lib.attrVals ["clisp" "texinfo"] args;
-  version = lib.attrByPath ["version"] "0.9.4.1" args; 
+  version = lib.attrByPath ["version"] "0.9.6" args; 
 
   pkgName = "stumpwm";
 in
 rec {
   src = fetchurl {
     url = "http://download.savannah.gnu.org/releases/stumpwm/${pkgName}-${version}.tgz";
-    sha256 = "0wnkv3bgaj2bflh795ph6wiyhxzbhrif20vb40j6hjxxs9kywzqj";
+    sha256 = "0xzyd1ii2lfsadvyk7992xbzc7j6smnvjlsabr1fkgwb2ihm7xsz";
   };
 
   inherit buildInputs;
