@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "0gmz42ckjjv6p9fd767k1sqh319aplsddschjp86m526d082rik9";
   };
 
-  # e2fsprogs is needed for libuuid.
   buildInputs = [zlib SDL alsaLib pkgconfig pciutils];
 
   preBuild =
