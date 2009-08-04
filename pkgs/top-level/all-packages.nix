@@ -6294,6 +6294,12 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  fbida = builderDefsPackage ../applications/graphics/fbida {
+    inherit libjpeg libexif giflib libtiff libpng
+      imagemagick ghostscript which curl pkgconfig
+      freetype fontconfig;
+  };
+
   fdupes = import ../tools/misc/fdupes {
     inherit fetchurl stdenv;
   };

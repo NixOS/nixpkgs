@@ -449,10 +449,14 @@ let inherit (builtins) head tail trace; in
         );
 
 	builderDefsPackage = bd: func:
-	  foldArgs 
-	    (x: y: ((func (bd // x // y)) // y))
-            (innerBuilderDefsPackage bd)
-	    {};
+	  if (builtins.isFunction func) then 
+	    (foldArgs 
+	      (x: y: ((func (bd // x // y)) // y))
+              (innerBuilderDefsPackage bd)
+	      {})
+	  else
+	    (builderDefsPackage bd (import (toString func)))
+	    ;
 
    generateFontsFromSFD = fullDepEntry (''
            for i in *.sfd; do
