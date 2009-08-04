@@ -5415,6 +5415,10 @@ let
     inherit fetchurl stdenv pam openssl libnscd;
   };
 
+  qemu_kvm = import ../os-specific/linux/qemu-kvm {
+    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
+  };
+
   reiserfsprogs = import ../os-specific/linux/reiserfsprogs {
     inherit fetchurl stdenv;
   };
