@@ -4,7 +4,7 @@ use File::Spec;
 use File::Basename;
 
 
-my @requireList = ();
+my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 
@@ -96,12 +96,12 @@ sub pciCheck {
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
-    push @requireList, "./nixos/hardware/network/intel-2200bg.nix" if
+    push @attrs, "networking.enableIntel2200BGFirmware = true;" if
         $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
 
-    push @requireList, "./nixos/hardware/network/intel-3945abg.nix" if
+    push @attrs, "networking.enableIntel3945ABGFirmware = true;" if
         $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
@@ -202,7 +202,7 @@ sub multiLineList {
     my $indent = shift;
     my $res = "";
     foreach my $s (@_) {
-        $res .= "\n$indent  $s";
+        $res .= "\n$indent$s";
     }
     $res .= "\n$indent";
     return $res;
@@ -210,19 +210,18 @@ sub multiLineList {
 
 my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
-my $requireList = multiLineList("  ", removeDups @requireList);
+my $attrs = multiLineList("  ", removeDups @attrs);
 
 print <<EOF ;
 # This is a generated file.  Do not modify!
 # Make changes to /etc/nixos/configuration.nix instead.
 {
-  require = [$requireList];
-
   boot.initrd.extraKernelModules = [ $initrdKernelModules ];
   boot.kernelModules = [ $kernelModules ];
 
   nix.maxJobs = $cpus;
 
   services.xserver.videoDriver = "$videoDriver";
+  $attrs
 }
 EOF

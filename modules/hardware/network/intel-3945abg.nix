@@ -1,22 +1,29 @@
 {pkgs, config, ...}:
 
-let
-  inherit (config.boot) kernelPackages;
-in
-
-# !!! make this optional
-
 {
-  boot = {
-    extraModulePackages =
-      pkgs.lib.optional
-        (!kernelPackages.kernel.features ? iwlwifi)
-        kernelPackages.iwlwifi;
+
+  ###### interface
+
+  options = {
+  
+    networking.enableIntel3945ABGFirmware = pkgs.lib.mkOption {
+      default = false;
+      type = pkgs.lib.types.bool;
+      description = ''
+        This option enables automatic loading of the firmware for the Intel
+        PRO/Wireless 3945ABG.
+      '';
+    };
+
   };
 
-  services = {
-    udev = {
-      addFirmware = [ pkgs.iwlwifi3945ucode ];
-    };
+
+  ###### implementation
+  
+  config = pkgs.lib.mkIf config.networking.enableIntel3945ABGFirmware {
+  
+    services.udev.addFirmware = [ pkgs.iwlwifi3945ucode ];
+
   };
+  
 }

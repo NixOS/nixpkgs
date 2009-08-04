@@ -1,4 +1,0 @@
-# CD-DVD modules are not generic.
-# Avoid all modules from ./installer/cd-dvd/
-
-./installer/cd-dvd/*
