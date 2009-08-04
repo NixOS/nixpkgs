@@ -37,7 +37,12 @@ EOF
 			_display=\${_display:-:0}
 			_display=\${_display#:}
 			echo Using :\$_display
-			XCMD=\"\$(egrep \"^env\" /etc/event.d/xserver | sed -e \"s/env/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments// \\| sed -e s/:0/:\${_display}/ \\| sed -e s/vt7/vt\$((7+_display))/ \\) ; echo ${xorgserver}/bin/X \\\$_XARGS_ -noreset )\" 
+			if [ -n \"\$DO_X_RESET\" ]; then 
+			  RESET_OPTION=\"-once\"
+			else
+			  RESET_OPTION=\"-noreset\"
+			fi;
+			XCMD=\"\$(egrep \"^env\" /etc/event.d/xserver | sed -e \"s/env/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments// \\| sed -e s/:0/:\${_display}/ \\| sed -e s/vt7/vt\$((7+_display))/ \\) ; echo ${xorgserver}/bin/X \\\$_XARGS_ \$RESET_OPTION )\" 
 			echo \"\$XCMD\" 
 			echo \"\$XCMD\" | bash &
 			while ! test -e /tmp/.X11-unix/X\$_display &>/dev/null ; do sleep 0.5; done
