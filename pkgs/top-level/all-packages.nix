@@ -1087,6 +1087,18 @@ let
     inherit fetchurl stdenv libevent;
   };
 
+  obexfs = import ../tools/bluetooth/obexfs {
+    inherit fetchurl stdenv pkgconfig fuse obexftp;
+  };
+
+  obexftp = import ../tools/bluetooth/obexftp {
+    inherit fetchurl stdenv pkgconfig openobex bluez;
+  };
+
+  openobex = import ../tools/bluetooth/openobex {
+    inherit fetchurl stdenv pkgconfig bluez libusb;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
