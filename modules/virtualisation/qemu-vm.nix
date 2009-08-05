@@ -42,7 +42,10 @@ let
           ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" 512M || exit 1
       fi
       
+      # -no-kvm-irqchip is needed to prevent the CIFS mount from
+      # hanging the VM on x86_64.
       ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
+          -no-kvm-irqchip \
           -net nic,model=virtio -net user -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
           -kernel ${config.system.build.system}/kernel \
