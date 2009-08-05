@@ -1,0 +1,82 @@
+diff -rc qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-rc1/slirp/socket.c
+*** qemu-kvm-0.11.0-rc1-orig/slirp/socket.c	2009-08-02 15:38:42.000000000 +0200
+--- qemu-kvm-0.11.0-rc1/slirp/socket.c	2009-08-05 18:09:20.000000000 +0200
+***************
+*** 587,592 ****
+--- 587,593 ----
+             u_int lport, int flags)
+  {
+  	struct sockaddr_in addr;
++ 	struct sockaddr_un addr_un;
+  	struct socket *so;
+  	int s, opt = 1;
+  	socklen_t addrlen = sizeof(addr);
+***************
+*** 621,633 ****
+  	so->so_lport = lport; /* Kept in network format */
+  	so->so_laddr.s_addr = laddr; /* Ditto */
+  
+! 	addr.sin_family = AF_INET;
+! 	addr.sin_addr.s_addr = haddr;
+! 	addr.sin_port = hport;
+  
+! 	if (((s = socket(AF_INET,SOCK_STREAM,0)) < 0) ||
+  	    (setsockopt(s,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(int)) < 0) ||
+! 	    (bind(s,(struct sockaddr *)&addr, sizeof(addr)) < 0) ||
+  	    (listen(s,1) < 0)) {
+  		int tmperrno = errno; /* Don't clobber the real reason we failed */
+  
+--- 622,642 ----
+  	so->so_lport = lport; /* Kept in network format */
+  	so->so_laddr.s_addr = laddr; /* Ditto */
+  
+!         int unix_socket = hport >= 0xff00;
+  
+!         if (unix_socket) {
+!             addr_un.sun_family = AF_UNIX;
+!             sprintf(addr_un.sun_path, "./%d.socket", hport);
+!         } else {
+!             addr.sin_family = AF_INET;
+!             addr.sin_addr.s_addr = haddr;
+!             addr.sin_port = hport;
+!         }
+! 
+! 	if (((s = socket(unix_socket ? PF_UNIX : AF_INET, SOCK_STREAM, 0)) < 0) ||
+  	    (setsockopt(s,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(int)) < 0) ||
+!             (bind(s, unix_socket ? (struct sockaddr *) &addr_un : (struct sockaddr *) &addr,
+!                 unix_socket ? sizeof(addr_un) : sizeof(addr)) < 0) ||
+  	    (listen(s,1) < 0)) {
+  		int tmperrno = errno; /* Don't clobber the real reason we failed */
+  
+***************
+*** 643,654 ****
+  	}
+  	setsockopt(s,SOL_SOCKET,SO_OOBINLINE,(char *)&opt,sizeof(int));
+  
+! 	getsockname(s,(struct sockaddr *)&addr,&addrlen);
+! 	so->so_fport = addr.sin_port;
+! 	if (addr.sin_addr.s_addr == 0 || addr.sin_addr.s_addr == loopback_addr.s_addr)
+! 	   so->so_faddr = slirp->vhost_addr;
+! 	else
+! 	   so->so_faddr = addr.sin_addr;
+  
+  	so->s = s;
+  	return so;
+--- 652,668 ----
+  	}
+  	setsockopt(s,SOL_SOCKET,SO_OOBINLINE,(char *)&opt,sizeof(int));
+  
+!         if (unix_socket) {
+!             so->so_fport = haddr;
+!             so->so_faddr = slirp->vhost_addr;
+!         } else {
+!             getsockname(s,(struct sockaddr *)&addr,&addrlen);
+!             so->so_fport = addr.sin_port;
+!             if (addr.sin_addr.s_addr == 0 || addr.sin_addr.s_addr == loopback_addr.s_addr)
+!                 so->so_faddr = slirp->vhost_addr;
+!             else
+!                 so->so_faddr = addr.sin_addr;
+!         }
+  
+  	so->s = s;
+  	return so;
