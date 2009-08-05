@@ -4646,6 +4646,11 @@ let
     inherit kernel;
   });
 
+  bluez = import ../os-specific/linux/bluez {
+    inherit fetchurl stdenv pkgconfig dbus libusb alsaLib;
+    inherit (gtkLibs) glib;
+  };
+
   bridge_utils = import ../os-specific/linux/bridge_utils {
     inherit fetchurl stdenv autoconf automake;
   };
