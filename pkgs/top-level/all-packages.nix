@@ -7275,10 +7275,11 @@ let
   };
 
   xneur = import ../applications/misc/xneur {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd;
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2
+      xosd libnotify cairo;
     GStreamer=gst_all.gstreamer;
-    inherit (xlibs) libX11 libXpm libXt libXext;
-    inherit (gtkLibs) glib;
+    inherit (xlibs) libX11 libXpm libXt libXext libXi;
+    inherit (gtkLibs) glib gtk pango atk;
   };
 
   xneur_0_8 = import ../applications/misc/xneur/0.8.nix {
