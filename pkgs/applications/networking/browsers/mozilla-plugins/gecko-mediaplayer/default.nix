@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # !!! fix this
   preBuild =
     ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${browser.xulrunner}/include/xulrunner-1.9.1/stable/ -I${browser.nspr}/include/nspr"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${browser.xulrunner}/include/xulrunner-*/stable) -I${browser.nspr}/include/nspr"
       echo $NIX_CFLAGS_COMPILE
     '';
 
