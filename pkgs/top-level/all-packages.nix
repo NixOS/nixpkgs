@@ -1411,6 +1411,12 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  vncrec = builderDefsPackage ../tools/video/vncrec {
+    inherit (xlibs) imake libX11 xproto gccmakedep libXt
+      libXmu libXaw libXext xextproto libSM libICE libXpm
+      libXp;
+  };
+
   vpnc = import ../tools/networking/vpnc {
     inherit fetchurl stdenv libgcrypt perl gawk
       nettools makeWrapper;
