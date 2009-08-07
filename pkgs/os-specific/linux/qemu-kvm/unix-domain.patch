@@ -26,15 +26,16 @@ diff -rc qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-rc1/slirp/socke
   	    (listen(s,1) < 0)) {
   		int tmperrno = errno; /* Don't clobber the real reason we failed */
   
---- 622,642 ----
+--- 622,643 ----
   	so->so_lport = lport; /* Kept in network format */
   	so->so_laddr.s_addr = laddr; /* Ditto */
   
-!         int unix_socket = hport >= 0xff00;
+!         int unix_socket = ntohs(hport) >= 0xff00;
   
 !         if (unix_socket) {
 !             addr_un.sun_family = AF_UNIX;
-!             sprintf(addr_un.sun_path, "./%d.socket", hport);
+!             sprintf(addr_un.sun_path, "./%d.socket", ntohs(hport));
+!             unlink(addr_un.sun_path);
 !         } else {
 !             addr.sin_family = AF_INET;
 !             addr.sin_addr.s_addr = haddr;
