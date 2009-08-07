@@ -1,20 +1,20 @@
 {stdenv, fetchurl, zlib, alsaLib, curl}:
 
 stdenv.mkDerivation {
-  name = "flashplayer-10.0.22.87";
+  name = "flashplayer-10.0.32.18";
 
   builder = ./builder.sh;
   
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.macromedia.com/pub/labs/flashplayer10/libflashplayer-10.0.22.87.linux-x86_64.so.tar.gz;
-        sha256 = "eac1d05aa96036819fe8f14f293a2ccc9601e1e32e08ec33e6ed9ed698e76145";
+        url = http://download.macromedia.com/pub/labs/flashplayer10/libflashplayer-10.0.32.18.linux-x86_64.so.tar.gz;
+        sha256 = "006k3jvahlq2v34q5mf2y7ghczhy6spsdd69fj120i9yz9zklhpw";
       }
     else
       fetchurl {
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "0kirjpm77ynsp91z6jrbn7x2hry5c6xm3scgx11wkv3zr1kg2afd";
+        sha256 = "1nnswpivn8ymbvqywdw39xf26mn2i65hyqw8lcl77qsv7kbsbbl8";
       };
 
   inherit zlib alsaLib;
