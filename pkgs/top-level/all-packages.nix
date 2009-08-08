@@ -3853,6 +3853,12 @@ let
     inherit fetchurl stdenv openssl cyrus_sasl db4 groff;
   };
 
+  openlierox = builderDefsPackage ../games/openlierox {
+    inherit (xlibs) libX11 xproto;
+    inherit gd SDL SDL_image SDL_mixer zlib libxml2 
+      pkgconfig;
+  };
+
   openssl = import ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     inherit stdenv perl;
