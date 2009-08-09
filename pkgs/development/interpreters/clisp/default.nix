@@ -1,11 +1,11 @@
 args: with args;
 stdenv.mkDerivation rec {
-  v = "2.47";
+  v = "2.48";
   name = "clisp-${v}";
   src =
 	fetchurl {
 		url = "mirror://gnu/clisp/release/${v}/${name}.tar.gz";
-		sha256 = "0slfx519pk75y5rf7wfna7jgyhkr4qp29z9zd1rcnnrhps11bpn7";
+		sha256 = "1hix1j7zhbn37ld46d6pi6agwxski893l1zwriwkd8jr11b3zf05";
 	};
 
   inherit libsigsegv gettext coreutils;
@@ -43,3 +43,4 @@ stdenv.mkDerivation rec {
 	  maintainers = [stdenv.lib.maintainers.raskin];
   };
 }
+
