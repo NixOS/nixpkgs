@@ -3607,7 +3607,7 @@ let
     inherit fetchurl stdenv pkgconfig;
   };
 
-  libsigsegv = import ../development/libraries/libsigsegv/2.5.nix {
+  libsigsegv = import ../development/libraries/libsigsegv {
     inherit fetchurl stdenv;
   };
 
