@@ -22,10 +22,10 @@ let
           description = "User account under which Apache Tomcat runs.";
         };      
         
-        deployFrom = mkOption {
-          default = "";
-          description = "Location where webapplications are stored. Leave empty to use the baseDir.";
-        };
+	group = mkOption {
+          default = "tomcat";
+          description = "Group account under which Apache Tomcat runs.";
+        };      
         
         javaOpts = mkOption {
           default = "";
@@ -37,20 +37,32 @@ let
           description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
         };
         
-        sharedLibFrom = mkOption {
-          default = "";
-          description = "Location where shared libraries are stored. Leave empty to use the baseDir.";
+        sharedLibs = mkOption {
+          default = [];
+          description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
         };
         
-        commonLibFrom = mkOption {
-          default = "";
-          description = "Location where common libraries are stored. Leave empty to use the baseDir.";
+        commonLibs = mkOption {
+          default = [];
+          description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
         };
-        
-        contextXML = mkOption {
-          default = "";
-          description = "Location of the context.xml to use. Leave empty to use the default.";
-        };
+	
+	webapps = mkOption {
+	  default = [ pkgs.tomcat6 ];
+	  description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
+	};
+	
+	axis2 = {
+	  enable = mkOption {
+	    default = false;
+	    description = "Whether to enable an Apache Axis2 container";
+	  };
+	  
+	  services = mkOption {
+	    default = [];
+	    description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
+	  };
+	};
       };
     };
   };
@@ -92,75 +104,142 @@ mkIf config.services.tomcat.enable {
         stop on network-interfaces/stop
         
         start script
-            # Create initial state data
-            
-            if ! test -d ${cfg.baseDir}
-            then    
-                mkdir -p ${cfg.baseDir}/webapps
-                mkdir -p ${cfg.baseDir}/shared
-                mkdir -p ${cfg.baseDir}/lib
-                cp -av ${pkgs.tomcat6}/{conf,temp,logs} ${cfg.baseDir}
-            fi
-            
-            # Deploy context.xml
-            
-            if test "${cfg.contextXML}" = ""
-            then
-                cp ${pkgs.tomcat6}/conf/context.xml.default ${cfg.baseDir}/conf/context.xml
-            else
-                cp ${cfg.contextXML} ${cfg.baseDir}/conf/context.xml
-            fi
-                    
-            # Deploy all webapplications
-            
-            if ! test "${cfg.deployFrom}" = ""
-            then
-                rm -rf ${cfg.baseDir}/webapps
-                mkdir -p ${cfg.baseDir}/webapps
-                for i in ${cfg.deployFrom}/*
-                do
-                    cp -rL $i ${cfg.baseDir}/webapps
-                done
-            fi
-            
-            # Fix permissions
-            
-            chown -R ${cfg.user} ${cfg.baseDir}
-            
-            for i in `find ${cfg.baseDir} -type d`
-            do
-                chmod -v 755 $i
-            done
-            
-            for i in `find ${cfg.baseDir} -type f`
-            do
-                chmod -v 644 $i
-            done
+	    rm -Rf ${cfg.baseDir}
+	    
+	    # Create the base directory
+	    mkdir -p ${cfg.baseDir}
+	    
+	    # Create a symlink to the bin directory of the tomcat component
+	    ln -sf ${pkgs.tomcat6}/bin ${cfg.baseDir}/bin
+	    
+	    # Create a conf/ directory
+	    mkdir -p ${cfg.baseDir}/conf
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/conf
+	    
+	    # Symlink the config files in the conf/ directory (except for catalina.properties)
+	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties)
+	    do
+	        ln -sf ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
+	    done
+	    
+	    # Create a modified catalina.properties file 
+	    # Change all references from CATALINA_HOME to CATALINA_BASE and add support for shared libraries
+	    sed -e 's|''${catalina.home}|''${catalina.base}|g' \
+                -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
+		${pkgs.tomcat6}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
+	    	    
+	    # Create a logs/ directory
+	    mkdir -p ${cfg.baseDir}/logs
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs
+	    
+	    # Create a temp/ directory
+	    mkdir -p ${cfg.baseDir}/temp
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/temp
 
-            # Deploy all common libraries
-                    
-            rm -rf ${cfg.baseDir}/lib/*
-            
-            if test "${cfg.commonLibFrom}" = ""
-            then
-                commonLibFrom="${pkgs.tomcat6}/lib";
-            else
-                commonLibFrom="${cfg.commonLibFrom}";
-            fi
-            
-            for i in $commonLibFrom/*.jar
-            do
-                ln -s $i ${cfg.baseDir}/lib
-            done
+	    # Create a lib/ directory	    
+	    mkdir -p ${cfg.baseDir}/lib
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/lib
+	    	    
+	    # Create a shared/lib directory
+	    mkdir -p ${cfg.baseDir}/shared/lib
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/shared/lib
+	    
+	    # Create a webapps/ directory
+	    mkdir -p ${cfg.baseDir}/webapps
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps
+	    
+	    # Symlink all the given common libs files or paths into the lib/ directory
+	    for i in ${pkgs.tomcat6} ${toString cfg.commonLibs}
+	    do
+		if [ -f $i ]
+		then
+		    # If the given web application is a file, symlink it into the common/lib/ directory
+		    ln -sf $i ${cfg.baseDir}/lib/`basename $i`
+		elif [ -d $i ]
+		then
+		    # If the given web application is a directory, then iterate over the files
+		    # in the special purpose directories and symlink them into the tomcat tree
+		    
+		    for j in $i/lib/*
+		    do
+			ln -sf $j ${cfg.baseDir}/lib/`basename $j`
+		    done
+		fi
+	    done 
 
-            # Deploy all shared libraries
-            
-            if ! test "${cfg.sharedLibFrom}" = ""
-            then
-                rm -f ${cfg.baseDir}/shared/lib
-                ln -s ${cfg.sharedLibFrom} ${cfg.baseDir}/shared/lib
-            fi
-
+	    # Symlink all the given shared libs files or paths into the shared/lib/ directory
+	    for i in ${toString cfg.sharedLibs}
+	    do
+		if [ -f $i ]
+		then
+		    # If the given web application is a file, symlink it into the common/lib/ directory
+		    ln -sf $i ${cfg.baseDir}/shared/lib/`basename $i`
+		elif [ -d $i ]
+		then
+		    # If the given web application is a directory, then iterate over the files
+		    # in the special purpose directories and symlink them into the tomcat tree
+		    
+		    for j in $i/shared/lib/*
+		    do
+			ln -sf $j ${cfg.baseDir}/shared/lib/`basename $j`
+		    done
+		fi
+	    done 
+	    
+	    # Symlink all the given web applications files or paths into the webapps/ directory
+	    for i in ${toString cfg.webapps}
+	    do
+		if [ -f $i ]
+		then
+		    # If the given web application is a file, symlink it into the webapps/ directory
+		    ln -sf $i ${cfg.baseDir}/webapps/`basename $i`
+		elif [ -d $i ]
+		then
+		    # If the given web application is a directory, then iterate over the files
+		    # in the special purpose directories and symlink them into the tomcat tree
+		    
+		    for j in $i/webapps/*
+		    do
+		        ln -sf $j ${cfg.baseDir}/webapps/`basename $j`
+		    done
+		fi
+	    done 
+	    
+	    # Create a work/ directory
+	    mkdir -p ${cfg.baseDir}/work
+	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/work
+	    
+	    ${if cfg.axis2.enable == true then
+		''
+		# Copy the Axis2 web application
+		cp -av ${pkgs.axis2}/webapps/axis2 ${cfg.baseDir}/webapps
+		
+		# Turn off addressing, which causes many errors
+		sed -i -e 's%<module ref="addressing"/>%<!-- <module ref="addressing"/> -->%' ${cfg.baseDir}/webapps/axis2/WEB-INF/conf/axis2.xml
+		
+		# Modify permissions on the Axis2 application
+		chown -R ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps/axis2
+				
+		# Symlink all the given web service files or paths into the webapps/axis2/WEB-INF/services directory
+		for i in ${toString cfg.axis2.services}
+		do
+		    if [ -f $i ]
+		    then
+			# If the given web service is a file, symlink it into the webapps/axis2/WEB-INF/services
+			ln -sf $i ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $i`
+		    elif [ -d $i ]
+		    then
+			# If the given web application is a directory, then iterate over the files
+		        # in the special purpose directories and symlink them into the tomcat tree
+			
+			for j in $i/webapps/axis2/WEB-INF/services/*
+			do
+			    ln -sf $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
+			done
+		    fi
+		done    
+		''
+	    else ""}
         end script
         
         respawn ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1000d'
