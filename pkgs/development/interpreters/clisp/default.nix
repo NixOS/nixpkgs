@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "clisp-${v}";
   src =
 	fetchurl {
-		url = "mirror://gnu/clisp/release/${v}/${name}.tar.gz";
+		url = "mirror://gnu/clisp/release/${v}/${name}.tar.bz2";
 		sha256 = "1hix1j7zhbn37ld46d6pi6agwxski893l1zwriwkd8jr11b3zf05";
 	};
 
