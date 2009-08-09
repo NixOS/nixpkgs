@@ -664,6 +664,10 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  fdisk = import ../tools/system/fdisk {
+    inherit fetchurl stdenv parted e2fsprogs gettext;
+  };
+
   figlet = import ../tools/misc/figlet {
     inherit fetchurl stdenv;
   };
