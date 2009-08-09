@@ -1998,7 +1998,8 @@ let
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper;
-    clisp = clisp_2_44_1;
+    # clisp = clisp_2_44_1;
+    clisp = clisp;
   };
 
   scala = import ../development/compilers/scala {
