@@ -85,7 +85,7 @@ EOF
 
         # Hack: skip the sys-* and ctrl-alt-delete events.
         # Another hack: don't restart the X server (that would kill all the clients).
-        if echo "$event" | grep -q "^sys-\|^ctrl-\|^xserver\|^dbus"; then continue; fi
+        if echo "$event" | grep -q "^sys-\|^ctrl-\|^xserver"; then continue; fi
     
         if ! test -e "$oldEvents/$event"; then
             echo "starting $event..."
