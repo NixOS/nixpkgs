@@ -8,7 +8,6 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 fail() {
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
-    timeout=15
     cat <<EOF
 
 An error occured in stage 1 of the boot process, which must mount the
@@ -21,7 +20,7 @@ of the following keys within $timeout seconds:
   *) to ignore the error and continue.
 EOF
 
-    read -t $timeout reply
+    read reply
     
     case $reply in
         f)
