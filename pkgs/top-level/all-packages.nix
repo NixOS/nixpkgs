@@ -1998,8 +1998,7 @@ let
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper;
-    # clisp = clisp_2_44_1;
-    clisp = clisp;
+    clisp = clisp_2_44_1;
   };
 
   scala = import ../development/compilers/scala {
@@ -2086,10 +2085,11 @@ let
   # compatibility issues in 2.47 - at list 2.44.1 is known good
   # for sbcl bootstrap
   clisp_2_44_1 = import ../development/interpreters/clisp/2.44.1.nix {
-    inherit fetchurl stdenv libsigsegv gettext
+    inherit fetchurl stdenv gettext
       readline ncurses coreutils pcre zlib libffi libffcall;
     inherit (xlibs) libX11 libXau libXt xproto
       libXpm libXext xextproto;
+    libsigsegv = libsigsegv_25;
   };
 
   erlang = import ../development/interpreters/erlang {
@@ -3610,6 +3610,10 @@ let
 
   libsigsegv = import ../development/libraries/libsigsegv {
     inherit fetchurl stdenv;
+  };
+
+  # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
+  libsigsegv_25 =  builderDefsPackage ../development/libraries/libsigsegv/2.5.nix {
   };
 
   libsndfile = import ../development/libraries/libsndfile {
