@@ -598,7 +598,7 @@ rec {
   };
 
   leksah = import ../applications/editors/leksah {
-    inherit cabal gtk2hs binary parsec regexPosix utf8String;
+    inherit cabal gtk2hs binary parsec regexPosix regexCompat utf8String;
     inherit (pkgs) libedit makeWrapper;
   };
   
