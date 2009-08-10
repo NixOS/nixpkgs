@@ -19,6 +19,10 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
       
+  goSrcDir = ''
+    cd sbcl-${version}/
+  '';
+
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
   '') ["minInit"];
@@ -38,6 +42,7 @@ rec {
      is not good enought
   */
   doFixNewer = a.fullDepEntry(''
+
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
     sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
     sed -i src/cold/slam.lisp -e \
