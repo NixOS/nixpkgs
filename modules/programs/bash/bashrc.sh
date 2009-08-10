@@ -24,12 +24,6 @@ for i in $NIX_PROFILES; do # !!! reverse
     export INFOPATH=$i/info:$i/share/info:$INFOPATH
     export PKG_CONFIG_PATH="$i/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-    # Automake's `aclocal' bails out if it finds non-existent directories
-    # in its path.  !!! This has been fixed in the stdenv branch.
-    if [ -d "$i/share/aclocal" ]; then
-        export ACLOCAL_PATH="$i/share/aclocal:$ACLOCAL_PATH"
-    fi
-
     # "lib/site_perl" is for backwards compatibility with packages
     # from Nixpkgs <= 0.12.
     export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl:$PERL5LIB"
@@ -67,6 +61,3 @@ alias ll="ls -l"
 alias l="ls -alh"
 alias which="type -p"
 
-
-# Help `rpcgen' find `cpp', assuming it's installed in the user's environment.
-alias rpcgen="rpcgen -Y $HOME/.nix-profile/bin"
