@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "1.0.30" a; 
+  version = a.lib.attrByPath ["version"] "1.0.29" a; 
   buildInputs = with a; [
     clisp makeWrapper
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://prdownloads.sourceforge.net/sbcl/sbcl-${version}-source.tar.bz2";
-    sha256 = "0cs9671jgmn50835m8ccssmq86ssj3pvpd9cjkkq5c3ggm1zddnq";
+    sha256 = "1bdsn4rnrz289068f1bdnxyijs4r02if4p87fv726glp5wm20q1z";
   };
 
   inherit buildInputs;
@@ -72,4 +72,5 @@ rec {
     maintainers = [a.lib.maintainers.raskin];
   };
 }
+
 
