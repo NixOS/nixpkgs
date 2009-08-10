@@ -1,0 +1,13 @@
+Build position-independent code, for shared libraries.
+
+--- a/GNUmakefile	2009-03-15 02:48:02.000000000 +0100
++++ b/GNUmakefile	2009-08-11 00:13:43.000000000 +0200
+@@ -162,7 +162,7 @@ endif
+ 	$(CXX) $(CXXFLAGS) -DCRYPTOPP_IMPORTS -c $< -o $@
+ 
+ %.export.o : %.cpp
+-	$(CXX) $(CXXFLAGS) -DCRYPTOPP_EXPORTS -c $< -o $@
++	$(CXX) $(CXXFLAGS) -fPIC -DCRYPTOPP_EXPORTS -c $< -o $@
+ 
+ %.o : %.cpp
+ 	$(CXX) $(CXXFLAGS) -c $<

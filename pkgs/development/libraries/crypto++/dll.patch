@@ -1,0 +1,24 @@
+Get rid of Windows-specific stuff.
+
+--- crypto++/dll.cpp	2009-03-01 19:44:02.000000000 +0100
++++ crypto++/dll.cpp	2009-08-11 00:49:34.000000000 +0200
+@@ -39,7 +39,7 @@ NAMESPACE_END
+ 
+ #endif
+ 
+-#ifdef CRYPTOPP_EXPORTS
++#if defined CRYPTOPP_EXPORTS && defined _MSC_VER
+ 
+ USING_NAMESPACE(CryptoPP)
+ 
+--- crypto++/GNUmakefile	2009-03-15 02:48:02.000000000 +0100
++++ crypto++/GNUmakefile	2009-08-11 01:23:09.000000000 +0200
+@@ -136,7 +136,7 @@ nolib: $(OBJS)		# makes it faster to tes
+ dll: cryptest.import.exe dlltest.exe
+ 
+ cryptopp.dll: $(DLLOBJS)
+-	$(CXX) -shared -o $@ $(CXXFLAGS) $(DLLOBJS) $(LDFLAGS) $(LDLIBS) -Wl,--out-implib=libcryptopp.dll.a
++	$(CXX) -shared -o $@ $(CXXFLAGS) $(DLLOBJS) $(LDFLAGS) $(LDLIBS)
+ 
+ libcryptopp.import.a: $(LIBIMPORTOBJS)
+ 	$(AR) $(ARFLAGS) $@ $(LIBIMPORTOBJS)
