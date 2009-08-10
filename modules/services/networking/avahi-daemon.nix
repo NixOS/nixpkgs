@@ -153,7 +153,7 @@ mkIf cfg.enable {
 
     dbus = {
       enable = true;
-      services = [avahi];
+      packages = [avahi];
     };
   };
 }

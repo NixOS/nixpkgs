@@ -58,7 +58,7 @@ mkIf cfg.enable {
 
     dbus = {
       enable = true;
-      services = [pkgs.disnix];
+      packages = [pkgs.disnix];
     };
   };
 }

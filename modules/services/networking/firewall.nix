@@ -68,7 +68,12 @@ in
               ) config.networking.firewall.allowedTCPPorts
             }
 
-            # Drop everything else.              
+            # Accept multicast.  Not a big security risk since
+            # probably nobody is listening anyway.
+            ${iptables} -A INPUT -d 224.0.0.0/4 -j ACCEPT
+
+            # Drop everything else.
+            ${iptables} -A INPUT -j LOG --log-level info --log-prefix "firewall: "
             ${iptables} -A INPUT -j DROP
           '';
 

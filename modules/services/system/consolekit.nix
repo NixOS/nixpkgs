@@ -53,7 +53,7 @@ mkIf cfg.enable {
 
     dbus = {
       enable = true;
-      services = [ConsoleKit];
+      packages = [ConsoleKit];
     };
   };
 }
