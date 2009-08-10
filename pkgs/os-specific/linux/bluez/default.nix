@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig dbus.libs glib libusb alsaLib];
 
+  configureFlags = "--localstatedir=/var";
+
+  # Work around `make install' trying to create /var/lib/bluetooth.
+  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+
   meta = {
     homepage = http://www.bluez.org/;
     description = "Bluetooth support for Linux";
