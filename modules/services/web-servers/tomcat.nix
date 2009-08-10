@@ -52,6 +52,11 @@ let
 	  description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
 	};
 	
+	virtualHosts = mkOption {
+	  default = [];
+	  description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
+	};
+	
 	axis2 = {
 	  enable = mkOption {
 	    default = false;
@@ -116,8 +121,8 @@ mkIf config.services.tomcat.enable {
 	    mkdir -p ${cfg.baseDir}/conf
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/conf
 	    
-	    # Symlink the config files in the conf/ directory (except for catalina.properties)
-	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties)
+	    # Symlink the config files in the conf/ directory (except for catalina.properties and server.xml)
+	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties server.xml)
 	    do
 	        ln -sf ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
 	    done
@@ -127,7 +132,11 @@ mkIf config.services.tomcat.enable {
 	    sed -e 's|''${catalina.home}|''${catalina.base}|g' \
                 -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
 		${pkgs.tomcat6}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
-	    	    
+	    
+	    # Create a modified server.xml which also includes all virtual hosts
+	    sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" />'' ) cfg.virtualHosts)}" \
+	        ${pkgs.tomcat6}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
+	    
 	    # Create a logs/ directory
 	    mkdir -p ${cfg.baseDir}/logs
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs
@@ -165,7 +174,7 @@ mkIf config.services.tomcat.enable {
 			ln -sf $j ${cfg.baseDir}/lib/`basename $j`
 		    done
 		fi
-	    done 
+	    done	    	     
 
 	    # Symlink all the given shared libs files or paths into the shared/lib/ directory
 	    for i in ${toString cfg.sharedLibs}
@@ -203,7 +212,37 @@ mkIf config.services.tomcat.enable {
 		        ln -sf $j ${cfg.baseDir}/webapps/`basename $j`
 		    done
 		fi
-	    done 
+	    done	    	    
+	    
+	    ${toString (map (virtualHost: ''
+	      # Create webapps directory for the virtual host
+	      mkdir -p ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps
+	      
+	      # Modify ownership
+	      chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps
+	      
+	      # Symlink all the given web applications files or paths into the webapps/ directory
+	      # of this virtual host
+	      for i in ${toString virtualHost.webapps}
+	      do
+		  if [ -f $i ]
+		  then
+		      # If the given web application is a file, symlink it into the webapps/ directory
+		      ln -sf $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`
+		  elif [ -d $i ]
+		  then
+		      # If the given web application is a directory, then iterate over the files
+		      # in the special purpose directories and symlink them into the tomcat tree
+		    
+		      for j in $i/webapps/*
+		      do
+		          ln -sf $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
+		      done
+                  fi	                  
+	      done
+	      
+	      ''
+	    ) cfg.virtualHosts) }
 	    
 	    # Create a work/ directory
 	    mkdir -p ${cfg.baseDir}/work
